@@ -36,10 +36,12 @@ VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part,QWidget* parent, cons
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part(part)
 {
 	// add width/height-input:
-	m_widthLabel =new QLabel( i18n( "Width(%1):" ).arg(m_part->getUnitName()), this );
+	m_widthLabel =new QLabel( i18n( "Width:" ), this );
 	m_width = new KDoubleNumInput( 0, this );
-	m_heightLabel =new QLabel( i18n( "Height(%1):" ).arg(m_part->getUnitName()), this );
+	m_width->setSuffix( m_part->getUnitName() );
+	m_heightLabel =new QLabel( i18n( "Height:" ), this );
 	m_height = new KDoubleNumInput( 0, this );
+	m_height->setSuffix( m_part->getUnitName() );
 	new QLabel( i18n( "Periods:" ), this );
 	m_periods = new KIntSpinBox( this );
 	m_periods->setMinValue( 1 );
@@ -85,8 +87,8 @@ VSinusOptionsWidget::setPeriods( uint value )
 
 void VSinusOptionsWidget::refreshUnit ()
 {
-	m_widthLabel->setText( i18n( "Width(%1):" ).arg( m_part->getUnitName() ) );
-	m_heightLabel->setText( i18n( "Height(%1):" ).arg( m_part->getUnitName() ) );
+	m_width->setSuffix( m_part->getUnitName() );
+	m_height->setSuffix( m_part->getUnitName() );
 }
 
 VSinusTool::VSinusTool( KarbonView* view )

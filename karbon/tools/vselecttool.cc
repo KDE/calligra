@@ -38,7 +38,7 @@
 #include "vtransformcmd.h"
 
 VSelectOptionsWidget::VSelectOptionsWidget( KarbonView* view )
-	: QButtonGroup( 1, Qt::Horizontal, i18n( "Selection mode:" ) ), m_view( view )
+	: QButtonGroup( 1, Qt::Horizontal, i18n( "Selection Mode" ) ), m_view( view )
 {
 	new QRadioButton( i18n( "Select in current layer" ), this );
 	new QRadioButton( i18n( "Select in visible layers" ), this );

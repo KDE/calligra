@@ -120,7 +120,7 @@ VGradientTabWidget::~VGradientTabWidget()
 
 void VGradientTabWidget::setupUI()
 {
-	m_editGroup    = new QGroupBox( i18n( "Edit gradient:" ) );
+	m_editGroup    = new QGroupBox( i18n( "Edit Gradient" ) );
 	QGridLayout* editLayout = new QGridLayout( m_editGroup, 6, 3 );
 	editLayout->setSpacing( 3 );
 	editLayout->setMargin( 6 );
@@ -140,11 +140,11 @@ void VGradientTabWidget::setupUI()
 	editLayout->addWidget( m_gradientTarget = new KComboBox( false, m_editGroup ), 3, 2 );
 	m_gradientTarget->insertItem( i18n( "Stroke" ), 0 );
 	m_gradientTarget->insertItem( i18n( "Fill" ), 1 );
-	editLayout->addMultiCellWidget( m_addToPredefs = new QPushButton( i18n( "&Add to predefined gradients" ), m_editGroup ), 5, 5, 0, 2 );
+	editLayout->addMultiCellWidget( m_addToPredefs = new QPushButton( i18n( "&Add to Predefined Gradients" ), m_editGroup ), 5, 5, 0, 2 );
 	editLayout->addMultiCellWidget( m_gradientWidget = new VGradientWidget( m_gradient, m_editGroup ), 4, 4, 0, 2 );
 	addTab( m_editGroup, i18n( "Edit" ) );
 
-	QGroupBox* predefGroup  = new QGroupBox( 1, Qt::Horizontal, i18n( "Predefined gradients:" ) );
+	QGroupBox* predefGroup  = new QGroupBox( 1, Qt::Horizontal, i18n( "Predefined Gradients" ) );
 	QGridLayout* predefLayout = new QGridLayout( predefGroup );
 	predefLayout->addMultiCellWidget( m_predefGradientsView = new KListBox( predefGroup ), 0, 0, 0, 1 );
 	predefLayout->addWidget( m_predefDelete = new QPushButton( i18n( "&Delete" ), predefGroup ), 1, 0 );

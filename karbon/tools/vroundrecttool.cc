@@ -33,16 +33,19 @@ VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart* part, QWidget* par
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part)
 {
 	// add width/height-input:
-	m_widthLabel=new QLabel( i18n( "Width(%1):" ).arg(m_part->getUnitName()), this );
+	m_widthLabel=new QLabel( i18n( "Width:" ), this );
 
 	m_width = new KDoubleNumInput(0,this);
+	m_width->setSuffix(m_part->getUnitName());
 	m_width->setRange(0, 1000, 0.1);
 
-	m_heightLabel = new QLabel( i18n( "Height(%1):" ).arg(m_part->getUnitName()), this );
+	m_heightLabel = new QLabel( i18n( "Height:" ), this );
+
 	m_height = new KDoubleNumInput(0,this);
+	m_height->setSuffix(m_part->getUnitName());
 	m_height->setRange(0, 1000, 0.1);
 
-	new QLabel( i18n( "Edge Radius:" ), this );
+	new QLabel( i18n( "Edge radius:" ), this );
 	m_round = new KDoubleNumInput(0,this);
 	m_round->setRange(0, 1000, 0.1);
 	
@@ -88,8 +91,8 @@ VRoundRectOptionsWidget::setRound( double value )
 
 void VRoundRectOptionsWidget::refreshUnit ()
 {
-    m_widthLabel->setText(i18n( "Width(%1):" ).arg(m_part->getUnitName()));
-    m_heightLabel->setText( i18n( "Height(%1):" ).arg(m_part->getUnitName()));
+    m_width->setSuffix(m_part->getUnitName());
+    m_height->setSuffix(m_part->getUnitName());
 }
 
 VRoundRectTool::VRoundRectTool( KarbonView* view )

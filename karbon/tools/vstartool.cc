@@ -33,12 +33,14 @@ VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* pa
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
 {
 	// add width/height-input:
-	m_outerRLabel = new QLabel( i18n( "Outer Radius(%1):" ).arg( m_part->getUnitName() ), this );
+	m_outerRLabel = new QLabel( i18n( "Outer radius:" ), this );
 	m_outerR = new KDoubleNumInput( 0, this );
+	m_outerR->setSuffix(m_part->getUnitName());
 	m_outerR->setRange( 0, 1000, 0.1 );
 
-	m_innerRLabel = new QLabel( i18n( "Inner Radius(%1):" ).arg( m_part->getUnitName() ), this );
+	m_innerRLabel = new QLabel( i18n( "Inner radius:" ), this );
 	m_innerR = new KDoubleNumInput( 0, this );
+	m_innerR->setSuffix(m_part->getUnitName());
 	m_innerR->setRange( 0, 1000, 0.1 );
 
 	new QLabel( i18n( "Edges:" ), this );
@@ -51,8 +53,8 @@ VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* pa
 
 void VStarTool::VStarOptionsWidget::refreshUnit ()
 {
-	m_outerRLabel->setText( i18n( "Outer Radius(%1):" ).arg( m_part->getUnitName() ) );
-	m_innerRLabel->setText( i18n( "Inner Radius(%1):" ).arg( m_part->getUnitName() ) );
+	m_outerR->setSuffix( m_part->getUnitName() );
+	m_innerR->setSuffix( m_part->getUnitName() );
 }
 
 VStarTool::VStarTool( KarbonView* view )

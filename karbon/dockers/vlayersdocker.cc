@@ -91,7 +91,7 @@ VLayersDocker::VLayersDocker( KarbonView* view )
 {
 	KIconLoader il;
 	
-	setCaption( i18n( "Layers manager" ) );
+	setCaption( i18n( "Layers Manager" ) );
 
 	QFrame* mainWidget = new QFrame( this );
 	mainWidget->setFrameStyle( QFrame::Box | QFrame::Sunken );
