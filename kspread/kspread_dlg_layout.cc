@@ -372,7 +372,7 @@ void CellLayoutDlg::init()
         painter.end();
     }
 
-    tab = new QTabDialog( 0L, 0L, TRUE );
+    tab = new QTabDialog( (QWidget*)m_pView, 0L, TRUE );
     tab->setGeometry( tab->x(), tab->y(), 420, 400 );
 
     borderPage = new CellLayoutPageBorder( tab, this );

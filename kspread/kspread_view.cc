@@ -1562,15 +1562,23 @@ void KSpreadView::conditional()
 //  KSpreadconditional *dlg=new KSpreadconditional( this,"conditional",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
   
   QRect rect( activeTable()-> selectionRect() );
-  if ( rect.left() == 0 || rect.top() == 0 ||
+  
+  if((rect.right()==0x7FFF) ||(rect.bottom()==0x7FFF))
+  	{
+  	KMessageBox::error( this, i18n("Area too large!"));
+	}
+  else 
+  	{
+  	if ( rect.left() == 0 || rect.top() == 0 ||
 	 rect.right() == 0 || rect.bottom() == 0 )
-    {
-     rect.setCoords(  m_pCanvas->markerColumn(), m_pCanvas->markerRow(),m_pCanvas->markerColumn(), m_pCanvas->markerRow());
+    	   {
+     		rect.setCoords(  m_pCanvas->markerColumn(), m_pCanvas->markerRow(),m_pCanvas->markerColumn(), m_pCanvas->markerRow());
 
-    }
+    	   }
     
-  KSpreadconditional *dlg=new KSpreadconditional(this,"conditional",rect);
-  dlg->show();
+  	 KSpreadconditional *dlg=new KSpreadconditional(this,"conditional",rect);
+  	 dlg->show();
+  	 }
 
 }
 
@@ -2125,21 +2133,27 @@ void KSpreadView::showAreaName()
 void KSpreadView::layoutDlg()
 {
   QRect selection( m_pTable->selectionRect() );
-
-  m_pCanvas->hideMarker();
-
-  if ( selection.contains( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ) )
-    CellLayoutDlg dlg( this, m_pTable, selection.left(), selection.top(),
-		       selection.right(), selection.bottom() );
+  if((selection.right()==0x7FFF) ||(selection.bottom()==0x7FFF))
+  	{
+  	KMessageBox::error( this, i18n("Area too large!"));
+	}
   else
-    CellLayoutDlg dlg( this, m_pTable, m_pCanvas->markerColumn(), m_pCanvas->markerRow(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+  	{
+  	m_pCanvas->hideMarker();
 
-  m_pDoc->setModified( true );
+  	if ( selection.contains( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ) )
+    	   CellLayoutDlg dlg( this, m_pTable, selection.left(), selection.top(),
+		       selection.right(), selection.bottom() );
+  	else
+           CellLayoutDlg dlg( this, m_pTable, m_pCanvas->markerColumn(), m_pCanvas->markerRow(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
 
-  // Update the toolbar (bold/italic/font...)
-  updateEditWidget();
+  	m_pDoc->setModified( true );
 
-  m_pCanvas->showMarker();
+   	// Update the toolbar (bold/italic/font...)
+  	updateEditWidget();
+
+  	m_pCanvas->showMarker();
+  	}
 }
 
 void KSpreadView::paperLayoutDlg()

@@ -435,3 +435,5 @@ and atan2
 -Now when you change boder color in toolbar all borders into area selected
 changed (idea of jp.martin" <jpmartin@iroise.com>)
 =>thanks to jp.martin
+-Now undoLayout works 
+-Bug Fix

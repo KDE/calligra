@@ -411,9 +411,11 @@ void KSpreadUndoCellLayout::undo()
 	    KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
 	    cell->copy( *l );
 	    cell->setLayoutDirtyFlag();
+	    cell->setDisplayDirtyFlag();
+	    m_pTable->emit_updateCell( cell, x, y );	    
 	    l = m_lstLayouts.next();
 	}
-
+     
     // TODO
     /*
     if ( m_pTable->gui() )
@@ -436,6 +438,8 @@ void KSpreadUndoCellLayout::redo()
 	    KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
 	    cell->copy( *l );
 	    cell->setLayoutDirtyFlag();
+	    cell->setDisplayDirtyFlag();
+	    m_pTable->emit_updateCell( cell, x, y );
 	    l = m_lstRedoLayouts.next();
 	}
 

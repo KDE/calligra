@@ -1814,6 +1814,12 @@ void KSpreadTable::borderBottom( const QPoint &_marker,QColor _color )
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
 	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    KSpreadUndoCellLayout *undo;
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+	{
+	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+	    m_pDoc->undoBuffer()->appendUndo( undo );
+	}
     for ( int x = r.left(); x <= r.right(); x++ )
     {
 	int y = r.bottom();
@@ -1836,6 +1842,12 @@ void KSpreadTable::borderRight( const QPoint &_marker,QColor _color )
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
 	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    KSpreadUndoCellLayout *undo;
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+	{
+	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+	    m_pDoc->undoBuffer()->appendUndo( undo );
+	}
     for ( int y = r.top(); y <= r.bottom(); y++ )
     {
 	int x = r.right();
@@ -1859,6 +1871,12 @@ void KSpreadTable::borderLeft( const QPoint &_marker,QColor _color )
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
 	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    KSpreadUndoCellLayout *undo;
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+	{
+	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+	    m_pDoc->undoBuffer()->appendUndo( undo );
+	}
     for ( int y = r.top(); y <= r.bottom(); y++ )
     {
 	int x = r.left();
@@ -1881,6 +1899,12 @@ void KSpreadTable::borderTop( const QPoint &_marker,QColor _color )
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
 	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    KSpreadUndoCellLayout *undo;
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+	{
+	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+	    m_pDoc->undoBuffer()->appendUndo( undo );
+	}
     for ( int x = r.left(); x <= r.right(); x++ )
     {
 	int y = r.top();
@@ -1911,6 +1935,14 @@ void KSpreadTable::borderAll( const QPoint &_marker,QColor _color )
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
 	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    
+    KSpreadUndoCellLayout *undo;
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+	{
+	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+	    m_pDoc->undoBuffer()->appendUndo( undo );
+	}
+	
     for ( int x = r.left(); x <= r.right(); x++ )
     {
 	for(int y=r.top();y<=r.bottom();y++)
@@ -1944,12 +1976,18 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
 	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    KSpreadUndoCellLayout *undo;
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+	{
+	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+	    m_pDoc->undoBuffer()->appendUndo( undo );
+	}
+	
     for ( int x = r.left(); x <= r.right(); x++ )
     {
 	for(int y=r.top();y<=r.bottom();y++)
         {
 	    KSpreadCell *cell = cellAt( x, y );
-	
 	    cell->setBottomBorderStyle( NoPen );
 	    cell->setBottomBorderColor( black );
 	    cell->setBottomBorderWidth( 1 );
@@ -2783,7 +2821,12 @@ void KSpreadTable::defaultSelection( const QPoint &_marker )
 	if ( !selected )
 	    r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
 
-	
+	KSpreadUndoCellLayout *undo;
+	if ( !m_pDoc->undoBuffer()->isLocked() )
+	{
+	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+	    m_pDoc->undoBuffer()->appendUndo( undo );
+	}
 	for ( int x = r.left(); x <= r.right(); x++ )
 	    for ( int y = r.top(); y <= r.bottom(); y++ )
 	    {		
@@ -3358,13 +3401,7 @@ KSpreadConditional *tmpCondition=0;
 	if ( !selected )
 	    r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
 
-	KSpreadUndoCellLayout *undo;
-	if ( !m_pDoc->undoBuffer()->isLocked() )
-	{
-	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-	    m_pDoc->undoBuffer()->appendUndo( undo );
-	}
-
+	
 	for ( int x = r.left(); x <= r.right(); x++ )
 	    for ( int y = r.top(); y <= r.bottom(); y++ )
 	    {
