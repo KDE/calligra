@@ -80,7 +80,8 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 					m_tableCombo->setCurrentItem(i);
 					slotAddTable();
 				}
-			}
+						
+	}
 //
 //			slotAddTable();
 //			m_tableCombo->setCurrentText((*it).rcvTable);

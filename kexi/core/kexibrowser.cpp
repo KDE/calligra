@@ -49,6 +49,7 @@ KexiBrowser::KexiBrowser(QWidget *parent, QString mime, KexiProjectHandler *part
 {
 //	iconLoader = KGlobal::iconLoader();
 	m_mime = mime;
+	m_part = part;
 
 	header()->hide();
 
@@ -97,7 +98,9 @@ KexiBrowser::addItem(KexiProjectHandlerItem *item)
 	else if(m_mime == item->mime())
 	{
 		kdDebug() << "KexiBrowser::addItem() adding as parent" << endl;
-		(void*) new KexiBrowserItem(this, item);
+		KexiBrowserItem *bitem = new KexiBrowserItem(this, item);
+		if(m_part)
+			bitem->setPixmap(0, m_part->itemPixmap());
 	}
 }
 
