@@ -218,10 +218,10 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 				painter->setRasterOp( Qt::NotROP );
 
 				VStroke stroke;
-				stroke.setLineWidth( 1.0 / zoomFactor );
+				stroke.setLineWidth( 1.0 );
 				stroke.setColor( Qt::blue.light().rgb() );
 				painter->setPen( stroke );
-				painter->setBrush( Qt::blue.light() );
+				painter->setBrush( Qt::NoBrush );
 
 				if( jtr.current()->type() == VSegment::curve )
 				{
@@ -262,10 +262,9 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 						( jtr.current()->ctrlPoint1Selected() ||
 						  jtr.current()->prev()->knotSelected() ) )
 					{
+						drawNode( painter, jtr.current()->ctrlPoint1(), 3, zoomFactor );
 						painter->setBrush( Qt::blue.light() );
 						painter->fillPath();
-
-						drawNode( painter, jtr.current()->ctrlPoint1(), 3, zoomFactor );
 					}
 					else
 						painter->setBrush( Qt::NoBrush );
@@ -280,10 +279,10 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 						jtr.current()->ctrlPoint2Selected() ||
 						jtr.current()->knotSelected() )
 					{
+						drawNode( painter, jtr.current()->ctrlPoint2(), 3, zoomFactor );
+
 						painter->setBrush( Qt::blue.light() );
 						painter->fillPath();
-
-						drawNode( painter, jtr.current()->ctrlPoint2(), 3, zoomFactor );
 					}
 					else
 						painter->setBrush( Qt::NoBrush );
