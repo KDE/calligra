@@ -82,12 +82,12 @@ bool KPLineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, 
     float x1 = orig.x();
     float y1 = orig.y();
     float x2 = x1 + ext.width();
-    float y2 = y1;   
+    float y2 = y1;
 
     switch( lineType )
     {
     case LT_LD_RU:
-        y1 += ext.height();    
+        y1 += ext.height();
         break;
     case LT_HORZ:
         y1 += ext.height() / 2.0;
@@ -162,11 +162,11 @@ void KPLineObject::loadOasis(const QDomElement &element, KoOasisContext & contex
         lineType=LT_LD_RU;
 
     kdDebug()<<"KPLineObject::loadOasis(const QDomElement &element) : real position x :"<<orig.x()<<" y "<<orig.y()<< " width :"<<ext.width()<<" height :"<<ext.height()<<endl;
-    
-    QString attr = (x1 < x2) ?  "draw:marker-start" : "draw:marker-end";
+
+    QString attr = (x1 < x2) ?  "marker-start" : "marker-end";
     loadOasisMarkerElement( context, attr, lineBegin );
 
-    attr = (x1 < x2) ?  "draw:marker-end" : "draw:marker-start";
+    attr = (x1 < x2) ?  "marker-end" : "marker-start";
     loadOasisMarkerElement( context, attr, lineEnd );
 }
 

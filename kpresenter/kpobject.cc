@@ -123,9 +123,9 @@ void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QSt
 
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
-    if ( styleStack.hasAttribute( attr ) ) // TODO port to hasAttributeNS (what's the namespace?)
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw,attr.latin1() ) )
     {
-        QString style = styleStack.attribute( attr );
+        QString style = styleStack.attributeNS( KoXmlNS::draw, attr.latin1() );
         //kdDebug()<<" marker style is  : "<<style<<endl;
 
         //type not defined by default
