@@ -4,38 +4,45 @@
 #include <ustring.h>
 #include <word97_generated.h>
 #include <parser.h>
+#include <parserfactory.h>
 
 
 wvWare::U8 KWordCharacterHandler::hardLineBreak()
 {
-    kdDebug() << "KWordCharacterHandler::hardLineBreak" << endl;
     return '\n';
 }
 
 wvWare::U8 KWordCharacterHandler::nonBreakingHyphen()
 {
-    kdDebug() << "KWordCharacterHandler::nonBreakingHyphen" << endl;
     return '-'; // normal hyphen for now
 }
 
 wvWare::U8 KWordCharacterHandler::nonRequiredHyphen()
 {
-    kdDebug() << "KWordCharacterHandler::nonRequiredHyphen" << endl;
     return 0xad; // soft hyphen, according to kword.dtd
 }
 
 
 Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& mainFramesetElement )
-    : wvWare::LLDocument( fileName ), m_mainDocument( mainDocument ),
-      m_mainFramesetElement( mainFramesetElement ), m_index( 0 )
+    : m_mainDocument( mainDocument ), m_mainFramesetElement( mainFramesetElement ), m_index( 0 ),
+      m_charHandler( new KWordCharacterHandler ), m_parser( wvWare::ParserFactory::createParser( fileName ) )
 {
-    m_handler = new KWordCharacterHandler;
-    parser()->setSpecialCharacterHandler( m_handler );
+    if ( m_parser ) {
+        m_parser->setSpecialCharacterHandler( m_charHandler );
+        m_parser->setBodyTextHandler( this );
+    }
 }
 
 Document::~Document()
 {
-    delete m_handler;
+    delete m_charHandler;
+}
+
+bool Document::parse()
+{
+    if ( m_parser )
+        return m_parser->parse();
+    return false;
 }
 
 void Document::paragraphStart( wvWare::SharedPtr<const wvWare::Word97::PAP> pap )
