@@ -84,6 +84,7 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     grid1->addWidget( functions, 2, 0 );
 
     selectFunction = new QPushButton( page );
+    QToolTip::add(selectFunction, i18n("Insert function") );
     selectFunction->setPixmap( BarIcon( "down", KIcon::SizeSmall ) );
     grid1->addWidget( selectFunction, 3, 0 );
 
@@ -138,7 +139,7 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
 
     grid2->addStretch( 10 );
 
-    m_tabwidget->addTab( m_input, i18n("&Edit") );
+    m_tabwidget->addTab( m_input, i18n("&Parameters") );
     m_tabwidget->setTabEnabled( m_input, FALSE );
 
     m_tabwidget->setCurrentPage( index );

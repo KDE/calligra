@@ -132,6 +132,9 @@ static bool approx_equal (double a, double b)
  *
  * Module with global functions like "sin", "cos", "sum" etc.
  *
+ * Note: These modules must be registered in kspread_interpreter::kspreadCreateModule_KSpread
+ *       They should also be documented in KSPREAD/extensions/builtin.xml
+ *
  *********************************************************************/
 
 static bool kspreadfunc_sin( KSContext& context )
@@ -1370,6 +1373,16 @@ static bool kspreadfunc_PI( KSContext& context )
       return false;
 
     context.setValue( new KSValue(M_PI));
+    return true;
+}
+
+static bool kspreadfunc_eps( KSContext& context )
+{
+// #### This should adjust according to the actual number system used (float, double, long double, ...)
+    if( !KSUtil::checkArgumentsCount( context, 0, "eps", true ) )
+      return false;
+
+    context.setValue( new KSValue(DBL_EPSILON));
     return true;
 }
 
@@ -5175,6 +5188,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   //compatibility with kspread1.0
   module->addObject( "ENT", new KSValue( new KSBuiltinFunction( module, "ENT",kspreadfunc_INT) ) );
   module->addObject( "PI", new KSValue( new KSBuiltinFunction( module, "PI",kspreadfunc_PI) ) );
+  module->addObject( "eps", new KSValue( new KSBuiltinFunction( module, "eps",kspreadfunc_eps) ) );
   module->addObject( "rand", new KSValue( new KSBuiltinFunction( module, "rand",kspreadfunc_rand) ) );
   module->addObject( "REPT", new KSValue( new KSBuiltinFunction( module, "REPT",kspreadfunc_REPT) ) );
 
