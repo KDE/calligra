@@ -45,6 +45,7 @@
 #include <kmdcodec.h>
 #include <kfilterdev.h>
 #include <kgenericfactory.h>
+#include <kimageio.h>
 
 #include <koGlobal.h>
 #include <koFilterChain.h>
@@ -90,6 +91,9 @@ public:
     virtual bool doOpenStyles(void); // AbiWord's <styles>
     virtual bool doCloseStyles(void); // AbiWord's </styles>
     virtual bool doFullDefineStyle(LayoutData& layout); // AbiWord's <s></s>
+    virtual bool doOpenSpellCheckIgnoreList (void); // AbiWord's <ignorewords>
+    virtual bool doCloseSpellCheckIgnoreList (void); // AbiWord's </ignorewords>
+    virtual bool doFullSpellCheckIgnoreWord (const QString& ignoreword); // AbiWord's <iw>
 private:
     void processParagraphData (const QString& paraText,
         const TextFormatting& formatLayout,
@@ -113,6 +117,7 @@ private:
     void writeAbiProps(const TextFormatting& formatLayout, const TextFormatting& format);
     void writeImageData(const QString& koStoreName, const QString& keyName);
     void writeClipartData(const QString& koStoreName, const QString& keyName);
+
 private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
@@ -121,6 +126,7 @@ private:
     QMap<QString,KoPictureKey> m_mapClipartData;
     StyleMap m_styleMap;
     double m_paperBorderTop,m_paperBorderLeft,m_paperBorderBottom,m_paperBorderRight;
+    bool m_inIgnoreWords; // true if <ignorewords> has been written
 };
 
 AbiWordWorker::AbiWordWorker(void) : m_ioDevice(NULL), m_streamOut(NULL),
@@ -258,6 +264,8 @@ bool AbiWordWorker::convertUnknownImage(const QString& strName, QByteArray& imag
         // NO message error, as there must be already one
         return false;
     }
+
+    kdDebug(30506) << "Image " << strName << " has size: " << io->size() << endl;
 
     QImageIO imageIO(io,NULL);
 
@@ -774,6 +782,11 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
             props += layout.alignment;
             props += "; ";
         }
+        else if (layout.alignment == "auto")
+        {
+            // We assume a left alignment as AbiWord is not really bi-di (and this filter even less.)
+            props += "text-align:left; ";
+        }
         else
         {
             kdWarning(30506) << "Unknown alignment: " << layout.alignment << endl;
@@ -1082,6 +1095,34 @@ bool AbiWordWorker::doCloseHead(void)
     return true;
 }
 
+bool AbiWordWorker::doOpenSpellCheckIgnoreList (void)
+{
+    kdDebug(30506) << "AbiWordWorker::doOpenSpellCheckIgnoreList" << endl;
+    m_inIgnoreWords=false; // reset
+    return true;
+}
+
+bool AbiWordWorker::doCloseSpellCheckIgnoreList (void)
+{
+    kdDebug(30506) << "AbiWordWorker::doCloseSpellCheckIgnoreList" << endl;
+    if (m_inIgnoreWords)
+        *m_streamOut << "</ignorewords>\n";
+    return true;
+}
+
+bool AbiWordWorker::doFullSpellCheckIgnoreWord (const QString& ignoreword)
+{
+    kdDebug(30506) << "AbiWordWorker::doFullSpellCheckIgnoreWord: " << ignoreword << endl;
+    if (!m_inIgnoreWords)
+    {
+        *m_streamOut << "<ignorewords>\n";
+        m_inIgnoreWords=true;
+    }
+    *m_streamOut << " <iw>" << ignoreword << "</iw>\n";
+    return true;
+}
+
+
 ABIWORDExport::ABIWORDExport(KoFilter */*parent*/, const char */*name*/, const QStringList &) :
                      KoFilter() {
 }
@@ -1092,6 +1133,9 @@ KoFilter::ConversionStatus ABIWORDExport::convert( const QCString& from, const Q
     {
         return KoFilter::NotImplemented;
     }
+
+    // We need KimageIO's help in AbiWordWorker::convertUnknownImage
+    KImageIO::registerFormats();
 
     AbiWordWorker* worker=new AbiWordWorker();
 
