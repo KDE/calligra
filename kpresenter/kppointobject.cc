@@ -132,6 +132,8 @@ void KPPointObject::loadOasis( const QDomElement &element, const KoStyleStack & 
             lineBegin = L_DIMENSION_LINE;
         else if ( type == "Double Arrow" )
             lineBegin = L_DOUBLE_LINE_ARROW;
+        else
+            kdDebug()<<" begin line unknown :"<<type<<endl;
     }
     if ( styleStack.hasAttribute( "draw:marker-end" ) )
     {
@@ -150,6 +152,9 @@ void KPPointObject::loadOasis( const QDomElement &element, const KoStyleStack & 
             lineEnd = L_DIMENSION_LINE;
         else if ( type == "Double Arrow" )
             lineEnd = L_DOUBLE_LINE_ARROW;
+        else
+            kdDebug()<<"end line unknown :"<<type<<endl;
+        //todo ADD L_DOUBLE_ARROW;
     }
 }
 

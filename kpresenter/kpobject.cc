@@ -1409,6 +1409,8 @@ void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styl
             //todo
             //not implementer into kpresenter...
             //the drawing object is filled with the bitmap specified by the draw:fill-image-name attribute.
+            //QBrush implement setPixmap
+            //easy just add pixmap and store it.
         }
 
     }
