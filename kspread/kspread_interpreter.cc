@@ -5078,6 +5078,47 @@ static bool kspreadfunc_select( KSContext& context )
   return b;
 }
 
+static bool kspreadfunc_AsciiToChar( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  int val = -1;
+  QString str;
+
+  for (unsigned int i = 0; i < args.count(); i++)
+  {
+    if ( KSUtil::checkType( context, args[i], KSValue::IntType, false ) )
+    {
+      val = (int)args[i]->intValue();
+      QChar c(val);
+      str = str + c;
+    }
+    else return false;
+  }
+  
+  context.setValue( new KSValue(str));
+  return true;
+}
+
+static bool kspreadfunc_CharToAscii( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if (args.count() == 1)
+  {
+    if ( KSUtil::checkType( context, args.first(), KSValue::StringType, false ) )
+    {
+      QString val = args[0]->stringValue();
+      if (val.length() == 1)
+      {
+	QChar c = val[0];
+	context.setValue( new KSValue(c.unicode() ));
+	return true;
+      }
+    }
+  }
+  return false;
+}
+
 static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
 {
   KSModule::Ptr module = new KSModule( interp, "kspread" );
@@ -5267,6 +5308,8 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "TDIST", new KSValue( new KSBuiltinFunction( module, "TDIST", kspreadfunc_tdist) ) );
   module->addObject( "FDIST", new KSValue( new KSBuiltinFunction( module, "FDIST", kspreadfunc_fdist) ) );
   module->addObject( "CHIDIST", new KSValue( new KSBuiltinFunction( module, "CHIDIST", kspreadfunc_chidist) ) );
+  module->addObject( "CharToAscii", new KSValue( new KSBuiltinFunction( module, "CharToAscii", kspreadfunc_CharToAscii) ) );
+  module->addObject( "AsciiToChar", new KSValue( new KSBuiltinFunction( module, "AsciiToChar", kspreadfunc_AsciiToChar) ) );
 
   return module;
 }
