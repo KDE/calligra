@@ -2,7 +2,5 @@ Tue Dec 29 13:51:21 1998 Simon Hausmann <tronical@gmx.net>
 
 	* initial cvs version imported
 
-Tue Dec 29 19:47:04 1998 Simon Hausmann <tronical@gmx.net>
-
-        * disabled printing extension (::draw()) ... there might be
-          "deeper" bugs inside
+        * (aaaarghl, there are serious problems with 64 bit machines
+           ... and I have _NO_ clue how to solve this :-((((((((
