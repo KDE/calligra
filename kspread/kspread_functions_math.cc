@@ -92,6 +92,7 @@ bool kspreadfunc_randbernoulli( KSContext & context );
 bool kspreadfunc_randbinom( KSContext & context );
 bool kspreadfunc_randexp( KSContext & context );
 bool kspreadfunc_randnegbinom( KSContext & context );
+bool kspreadfunc_randnorm( KSContext & context );
 bool kspreadfunc_randpoisson( KSContext & context );
 bool kspreadfunc_rootn( KSContext& context );
 bool kspreadfunc_round( KSContext& context );
@@ -164,6 +165,7 @@ void KSpreadRegisterMathFunctions()
   repo->registerFunction( "RANDBINOM",     kspreadfunc_randbinom );
   repo->registerFunction( "RANDEXP",       kspreadfunc_randexp );
   repo->registerFunction( "RANDNEGBINOM",  kspreadfunc_randnegbinom );
+  repo->registerFunction( "RANDNORM",      kspreadfunc_randnorm );
   repo->registerFunction( "RANDPOISSON",   kspreadfunc_randpoisson );
   repo->registerFunction( "ROOTN",         kspreadfunc_rootn );
   repo->registerFunction( "ROUND",         kspreadfunc_round );
@@ -1241,6 +1243,41 @@ bool kspreadfunc_randbernoulli( KSContext & context )
   double r = (double) rand() / ( RAND_MAX + 1.0 );
 
   context.setValue( new KSValue( ( r <= d ) ? 1.0 : 0.0 ) );
+  return true;
+}
+
+bool kspreadfunc_randnorm( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "RANDNORM", true ) )
+    return false;
+
+  if( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+
+  double mu = args[0]->doubleValue();
+  double sigma = args[1]->doubleValue();
+
+  //using polar form of the Box-Muller transformation
+  //refer to http://www.taygeta.com/random/gaussian.html for more info
+
+  double x1, x2, w;
+  do {
+    x1 = (double) rand() / (RAND_MAX + 1.0);
+    x2 = (double) rand() / (RAND_MAX + 1.0);
+    x1 = 2.0 * x1 - 1.0;
+    x2 = 2.0 * x2 - 1.0;
+    w = x1 * x1 + x2 * x2;
+  } while (w >= 1.0);
+
+  w = sqrt ((-2.0 * log (w)) / w);
+  double res = x1 * w;
+
+  res = res * sigma + mu;
+  context.setValue( new KSValue( res ) );
   return true;
 }
 

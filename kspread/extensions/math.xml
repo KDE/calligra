@@ -876,6 +876,25 @@
     </Function>
 
     <Function>
+      <Name>RANDNORM</Name>
+      <Type>Float</Type>
+      <Parameter>
+       <Comment>Mean value of the normal distribution</Comment>
+       <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+       <Comment>Dispersion of the normal distribution</Comment>
+       <Type>Float</Type>
+      </Parameter>
+      <Help>
+       <Text>The RANDNORM() function returns a Normal(Gaussian)-distributed pseudo-random number.</Text>
+       <Syntax>RANDNORM(mu,sigma)</Syntax>
+       <Example>RANDNORM(0,1)</Example>
+        <Related>RAND</Related>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>RANDBETWEEN</Name>
       <Type>Float</Type>
       <Parameter>
