@@ -49,10 +49,11 @@ void KWAutoFormatDia::setupTab1()
   tab1 = new QVBox(this);
 
   tab1->setMargin(10);
-  
+
   cbTypographicQuotes = new QCheckBox(tab1);
   cbTypographicQuotes->setText(i18n("Replace &Quotes by Typographical Quotes:"));
   cbTypographicQuotes->resize(cbTypographicQuotes->sizeHint());
+  cbTypographicQuotes->setChecked(doc->getAutoFormat().getConfigTypographicQuotes().replace);
   
   QHBox *quotes = new QHBox(tab1);
   pbQuote1 = new QPushButton(quotes);
@@ -63,24 +64,26 @@ void KWAutoFormatDia::setupTab1()
   pbQuote2->resize(pbQuote2->sizeHint());
   (void)new QWidget(quotes);
   quotes->setMaximumHeight(pbQuote1->sizeHint().height());
-    
+
   (void)new QWidget(tab1);
 
   cbUpperCase = new QCheckBox(tab1);
   cbUpperCase->setText(i18n("Convert first letter from the first word of a sentence automatically\n"
 			    "to &Upper Case (e.g. \"bla. this is a Test\" to \"bla. This is a Test\")"));
   cbUpperCase->resize(cbUpperCase->sizeHint());
-  
+  cbUpperCase->setChecked(doc->getAutoFormat().getConfigUpperCase());
+
   (void)new QWidget(tab1);
 
   cbUpperUpper = new QCheckBox(tab1);
   cbUpperUpper->setText(i18n("Concert two Upper &Case letters to one Upper Case and one Lower Case letter.\n"
 			     "(e.g. HAllo to Hallo)"));
   cbUpperUpper->resize(cbUpperUpper->sizeHint());
+  cbUpperUpper->setChecked(doc->getAutoFormat().getConfigUpperUpper());
 
   (void)new QWidget(tab1);
-  
-  addTab(tab1,i18n("Simple Autoformat"));
+
+  addTab(tab1,i18n("Simple Autocorrection"));
 
   resize(minimumSize());
 }
@@ -88,4 +91,14 @@ void KWAutoFormatDia::setupTab1()
 /*================================================================*/
 void KWAutoFormatDia::applyConfig()
 {
+  KWAutoFormat::TypographicQuotes tq = doc->getAutoFormat().getConfigTypographicQuotes();
+  tq.replace = cbTypographicQuotes->isChecked();
+  doc->getAutoFormat().configTypographicQuotes(tq);
+
+  doc->getAutoFormat().configUpperCase(cbUpperCase->isChecked());
+  doc->getAutoFormat().configUpperUpper(cbUpperUpper->isChecked());
+
+  doc->getAutoFormat().setEnabled(true);
+  doc->updateAllViews(0L);
+  doc->getAutoFormat().setEnabled(false);
 }

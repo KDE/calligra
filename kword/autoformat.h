@@ -20,11 +20,11 @@
 #include <qcolor.h>
 
 #include "format.h"
-#include "char.h"
 
 class KWordDocument;
 class KWFormatContext;
 class KWParag;
+class KWString;
 
 /******************************************************************/
 /* Class: KWAutoFormatEntry                                       */
@@ -63,6 +63,14 @@ public:
     bool replace;
   };
 
+  enum AutoformatType {AT_TypographicQuotes,AT_UpperCase,AT_UpperUpper};
+  
+  struct AutoformatInfo
+  {
+    QChar c;
+    AutoformatType type;
+  };
+  
   KWAutoFormat(KWordDocument *_doc);
 
   void startAutoFormat(KWParag *parag,KWFormatContext *fc);
@@ -77,15 +85,16 @@ public:
   void configTypographicQuotes(TypographicQuotes _tq);
   void configUpperCase(bool _uc);
   void configUpperUpper(bool _uu);
-  
+
   TypographicQuotes getConfigTypographicQuotes()
   { return typographicQuotes; }
   bool getConfigUpperCase()
   { return convertUpperCase; }
   bool getConfigUpperUpper()
   { return convertUpperUpper; }
-  
+
   static bool isUpper(const QChar &c);
+  static bool isLower(const QChar &c);
 
 protected:
   KWordDocument *doc;

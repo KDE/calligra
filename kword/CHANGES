@@ -1121,7 +1121,7 @@ Reggie, 23.4.1999:
 
 Reggie, 24.4.1999:
 ------------------
-- Improvements in Upper-Upper -> Upper-Lower and 
+- Improvements in Upper-Upper -> Upper-Lower and
   automatical uppercase conversation
 - Started implementing dialog to configure autoformat
 - Implemented methodes for configuration of simple autoformat
@@ -1132,3 +1132,12 @@ Reggie, 26.4.1999:
 - More work on unicode
 - More work on configuration and config dialog of autoformat
 - Corrected some stuff in the templates
+
+Reggie, 27.4.1999:
+------------------
+- Renamed Autoformat to Autocorrection in menues and dialogs
+  (IMO this is a better name)
+- Improved autoformat (now each character knows if it was corrected
+  by autoformat, and if yes, it also knows it's original value which
+  can be restored if the autoformat gets switched off)
+- More work on autoformat configuration

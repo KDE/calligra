@@ -1111,7 +1111,7 @@ void KWordView::extraSpelling()
 void KWordView::extraAutoFormat()
 {
   KWAutoFormatDia dia(0L,"",m_pKWordDoc,gui->getPaperWidget());
-  dia.setCaption(i18n("Autoformat"));
+  dia.setCaption(i18n("Autocorrection"));
   dia.show();
 
   sendFocusEvent();
@@ -2117,7 +2117,7 @@ bool KWordView::mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar)
   pix = OPUIUtils::convertPixmap(ICON("spellcheck.xpm"));
   text = Q2C( i18n("&Spell Cheking...") );
   m_idMenuExtra_Spelling = m_vMenuExtra->insertItem6(pix,text,this,"extraSpelling",ALT + Key_C,-1,-1);
-  text = Q2C( i18n("&Autoformat...") );
+  text = Q2C( i18n("&Autocorrection...") );
   m_idMenuExtra_AutoFormat = m_vMenuExtra->insertItem4(text,this,"extraAutoFormat",0,-1,-1);
   text = Q2C( i18n("&Stylist...") );
   m_idMenuExtra_Stylist = m_vMenuExtra->insertItem4(text,this,"extraStylist",ALT + Key_S,-1,-1);

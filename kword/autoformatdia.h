@@ -42,13 +42,12 @@ public:
 
 protected:
   void setupTab1();
-  void closeEvent(QCloseEvent *e) { emit cancelButtonPressed(); }
 
   QVBox *tab1;
   QCheckBox *cbTypographicQuotes,*cbUpperCase,*cbUpperUpper;
   QPushButton *pbQuote1,*pbQuote2;
   KCharSelect *charselect;
-  
+
   KWordDocument *doc;
   KWPage *page;
 

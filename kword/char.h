@@ -6,6 +6,7 @@
 #include "searchdia.h"
 #include "variable.h"
 #include "footnote.h"
+#include "autoformat.h"
 
 #include <qimage.h>
 #include <qstring.h>
@@ -165,7 +166,11 @@ protected:
 
 struct KWChar
 {
+  KWChar() : c(), autoformat(0L), attrib(0L)
+  {}
+  
   kwchar c;
+  KWAutoFormat::AutoformatInfo *autoformat;
   KWCharAttribute* attrib;
 };
 
@@ -218,7 +223,7 @@ public:
 
   QString decoded();
   QCString utf8(bool _decoded = true);
-  
+
 protected:
   KWChar* alloc(unsigned int _size);
   void free(KWChar* _data,unsigned int _len);
