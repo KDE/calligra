@@ -1518,8 +1518,7 @@ void KSpreadView::changeTable( const QString& _name )
 
     updateEditWidget();
     //refresh toggle button
-    m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
-
+    m_showPageBorders->setChecked( m_pTable->isShowPageBorders() );
 }
 
 void KSpreadView::slotScrollToFirstTable()
@@ -1566,36 +1565,22 @@ void KSpreadView::showTable()
 
 void KSpreadView::copySelection()
 {
-  if ( m_pTable )
-  	{
-  	QRect rect( activeTable()-> selectionRect() );
-
-  	if((rect.right()==0x7FFF) ||(rect.bottom()==0x7FFF))
-  		{
-  		KMessageBox::error( this, i18n("Not supported"));
-		}
-  	else
-   	 	m_pTable->copySelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-   	}
-    	
+    if ( !m_pTable )
+	return;
+  
+    m_pTable->copySelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    
+    updateEditWidget();
 }
 
 void KSpreadView::cutSelection()
 {
     if ( !m_pTable )
 	return;
-    QRect rect( activeTable()-> selectionRect() );
-
-    // ###### Torben: TODO
-    if((rect.right()==0x7FFF) ||(rect.bottom()==0x7FFF))
-                {
-  		KMessageBox::error( this, i18n("Not supported"));
-		}
-  	else
-  		{
-    		m_pTable->cutSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-    		updateEditWidget();
-    		}
+    
+    m_pTable->cutSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    
+    updateEditWidget();
 }
 
 void KSpreadView::paste()
@@ -1614,11 +1599,11 @@ void KSpreadView::specialPaste()
 	return;
 
     KSpreadspecial dlg( this, "Special Paste" );
-    if(dlg.exec())
-        {
+    if( dlg.exec() )
+    {
         m_pTable->recalc(true);
         updateEditWidget();
-        }
+    }
 }
 
 void KSpreadView::removeComment()

@@ -31,16 +31,16 @@ public:
 
     bool shiftRow( const QPoint& marker );
     bool shiftColumn( const QPoint& marker );
-    
+
     void unshiftColumn( const QPoint& marker );
     void unshiftRow( const QPoint& marker );
-    
+
     bool insertColumn( int col );
     bool insertRow( int row );
-    
+
     void removeColumn( int col );
     void removeRow( int row );
-    
+
 private:
     /**
      * @param work is set to TRUE if the method found some clusters
@@ -48,7 +48,7 @@ private:
      */
     bool shiftRow( const QPoint& marker, bool& work );
     bool shiftColumn( const QPoint& marker, bool& work );
-    
+
     void unshiftColumn( const QPoint& marker, bool& work );
     void unshiftRow( const QPoint& marker, bool& work );
 
@@ -62,22 +62,22 @@ class KSpreadColumnCluster
 public:
     KSpreadColumnCluster();
     ~KSpreadColumnCluster();
-    
+
     ColumnLayout* lookup( int col );
-    
+
     void clear();
-    
+
     void insertElement( ColumnLayout*, int col );
     void removeElement( int col );
-    
-    int insertColumn( int col );
-    int removeColumn( int col );
+
+    bool insertColumn( int col );
+    bool removeColumn( int col );
 
     void setAutoDelete( bool );
     bool autoDelete() const;
 
     ColumnLayout* first() { return m_first; }
-    
+
 private:
     ColumnLayout*** m_cluster;
     ColumnLayout* m_first;
@@ -89,22 +89,22 @@ class KSpreadRowCluster
 public:
     KSpreadRowCluster();
     ~KSpreadRowCluster();
-    
+
     RowLayout* lookup( int col );
-    
+
     void clear();
-    
+
     void insertElement( RowLayout*, int row );
     void removeElement( int row );
-    
-    int insertRow( int row );
-    int removeRow( int row );
+
+    bool insertRow( int row );
+    bool removeRow( int row );
 
     void setAutoDelete( bool );
     bool autoDelete() const;
 
     RowLayout* first() { return m_first; }
-    
+
 private:
     RowLayout*** m_cluster;
     RowLayout* m_first;

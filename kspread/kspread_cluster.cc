@@ -75,6 +75,9 @@ void KSpreadCluster::clear()
 
 KSpreadCell* KSpreadCluster::lookup( int x, int y )
 {
+    if ( x >= KSPREAD_CLUSTER_MAX || x < 0 || y >= KSPREAD_CLUSTER_MAX || y < 0 )
+	return 0;
+    
     int cx = x / KSPREAD_CLUSTER_LEVEL2;
     int cy = y / KSPREAD_CLUSTER_LEVEL2;
     int dx = x % KSPREAD_CLUSTER_LEVEL2;
@@ -89,6 +92,9 @@ KSpreadCell* KSpreadCluster::lookup( int x, int y )
 
 void KSpreadCluster::insert( KSpreadCell* cell, int x, int y )
 {
+    if ( x >= KSPREAD_CLUSTER_MAX || x < 0 || y >= KSPREAD_CLUSTER_MAX || y < 0 )
+	return;
+
     int cx = x / KSPREAD_CLUSTER_LEVEL2;
     int cy = y / KSPREAD_CLUSTER_LEVEL2;
     int dx = x % KSPREAD_CLUSTER_LEVEL2;
@@ -120,6 +126,9 @@ void KSpreadCluster::insert( KSpreadCell* cell, int x, int y )
 
 void KSpreadCluster::remove( int x, int y )
 {
+    if ( x >= KSPREAD_CLUSTER_MAX || x < 0 || y >= KSPREAD_CLUSTER_MAX || y < 0 )
+	return;
+    
     int cx = x / KSPREAD_CLUSTER_LEVEL2;
     int cy = y / KSPREAD_CLUSTER_LEVEL2;
     int dx = x % KSPREAD_CLUSTER_LEVEL2;
@@ -165,7 +174,7 @@ bool KSpreadCluster::shiftColumn( const QPoint& marker )
     bool dummy;
     return shiftColumn( marker, dummy );
 }
-    
+
 void KSpreadCluster::unshiftColumn( const QPoint& marker )
 {
     bool dummy;
@@ -196,7 +205,11 @@ KSpreadCell* KSpreadCluster::firstCell()
 bool KSpreadCluster::shiftRow( const QPoint& marker, bool& work )
 {
     work = FALSE;
-    
+	
+    if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
+	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
+	return FALSE;
+
     int cx = marker.x() / KSPREAD_CLUSTER_LEVEL2;
     int cy = marker.y() / KSPREAD_CLUSTER_LEVEL2;
     int dx = marker.x() % KSPREAD_CLUSTER_LEVEL2;
@@ -207,10 +220,10 @@ bool KSpreadCluster::shiftRow( const QPoint& marker, bool& work )
     KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + KSPREAD_CLUSTER_LEVEL1 - 1 ];
     if ( cl && cl[ dy * KSPREAD_CLUSTER_LEVEL2 + KSPREAD_CLUSTER_LEVEL2 - 1 ] )
 	return FALSE;
-    
+
     bool a = autoDelete();
     setAutoDelete( FALSE );
-    
+
     // Move cells in this row one to the right.
     for( int i = KSPREAD_CLUSTER_LEVEL1 - 1; i >= cx ; --i )
     {
@@ -236,16 +249,20 @@ bool KSpreadCluster::shiftRow( const QPoint& marker, bool& work )
 	    }
 	}
     }
-    
+
     setAutoDelete( a );
-    
+
     return TRUE;
 }
 
 bool KSpreadCluster::shiftColumn( const QPoint& marker, bool& work )
 {
     work = FALSE;
-    
+	
+    if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
+	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
+	return FALSE;
+
     int cx = marker.x() / KSPREAD_CLUSTER_LEVEL2;
     int cy = marker.y() / KSPREAD_CLUSTER_LEVEL2;
     int dx = marker.x() % KSPREAD_CLUSTER_LEVEL2;
@@ -256,10 +273,10 @@ bool KSpreadCluster::shiftColumn( const QPoint& marker, bool& work )
     KSpreadCell** cl = m_cluster[ KSPREAD_CLUSTER_LEVEL1 * ( KSPREAD_CLUSTER_LEVEL1 - 1 ) + cx ];
     if ( cl && cl[ KSPREAD_CLUSTER_LEVEL2 * ( KSPREAD_CLUSTER_LEVEL2 - 1 ) + dx ] )
 	return FALSE;
-    
+
     bool a = autoDelete();
     setAutoDelete( FALSE );
-    
+
     // Move cells in this column one down.
     for( int i = KSPREAD_CLUSTER_LEVEL1 - 1; i >= cy ; --i )
     {
@@ -267,7 +284,7 @@ bool KSpreadCluster::shiftColumn( const QPoint& marker, bool& work )
 	if ( cl )
         {
 	    work = TRUE;
-	    
+	
 	    int top = 0;
 	    if ( i == cy )
 		top = dy;
@@ -286,14 +303,17 @@ bool KSpreadCluster::shiftColumn( const QPoint& marker, bool& work )
 	    }
 	}
     }
-    
+
     setAutoDelete( a );
-    
+
     return TRUE;
 }
 
 bool KSpreadCluster::insertColumn( int col )
 {
+    if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
+	return FALSE;
+
     // Is there a cell at the right most position ?
     // In this case the shift is impossible.
     for( int t1 = 0; t1 < KSPREAD_CLUSTER_LEVEL1; ++t1 )
@@ -304,19 +324,22 @@ bool KSpreadCluster::insertColumn( int col )
 		if ( cl[ t2 * KSPREAD_CLUSTER_LEVEL2 + KSPREAD_CLUSTER_LEVEL2 - 1 ] )
 		    return FALSE;
     }
-    
+
     for( int t1 = 0; t1 < KSPREAD_CLUSTER_LEVEL1; ++t1 )
     {
 	bool work = TRUE;
 	for( int t2 = 0; work && t2 < KSPREAD_CLUSTER_LEVEL2; ++t2 )
 	    shiftRow( QPoint( col, t1 * KSPREAD_CLUSTER_LEVEL2 + t2 ), work );
     }
-    
+
     return TRUE;
 }
 
 bool KSpreadCluster::insertRow( int row )
 {
+    if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
+	return FALSE;
+
     // Is there a cell at the bottom most position ?
     // In this case the shift is impossible.
     for( int t1 = 0; t1 < KSPREAD_CLUSTER_LEVEL1; ++t1 )
@@ -327,29 +350,33 @@ bool KSpreadCluster::insertRow( int row )
 		if ( cl[ KSPREAD_CLUSTER_LEVEL2 * ( KSPREAD_CLUSTER_LEVEL2 - 1 ) + t2 ] )
 		    return FALSE;
     }
-    
+
     for( int t1 = 0; t1 < KSPREAD_CLUSTER_LEVEL1; ++t1 )
     {
 	bool work = TRUE;
 	for( int t2 = 0; work && t2 < KSPREAD_CLUSTER_LEVEL2; ++t2 )
 	    shiftColumn( QPoint( t1 * KSPREAD_CLUSTER_LEVEL2 + t2, row ), work );
     }
-    
+
     return TRUE;
 }
 
 void KSpreadCluster::unshiftColumn( const QPoint& marker, bool& work )
 {
     work = FALSE;
-    
+
+    if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
+	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
+	return;
+
     int cx = marker.x() / KSPREAD_CLUSTER_LEVEL2;
     int cy = marker.y() / KSPREAD_CLUSTER_LEVEL2;
     int dx = marker.x() % KSPREAD_CLUSTER_LEVEL2;
     int dy = marker.y() % KSPREAD_CLUSTER_LEVEL2;
-    
+
     bool a = autoDelete();
     setAutoDelete( FALSE );
-    
+
     // Move cells in this column one up.
     for( int i = cy; i < KSPREAD_CLUSTER_LEVEL1; ++i )
     {
@@ -357,7 +384,7 @@ void KSpreadCluster::unshiftColumn( const QPoint& marker, bool& work )
 	if ( cl )
         {
 	    work = TRUE;
-	    
+	
 	    int top = 0;
 	    if ( i == cy )
 		top = dy + 1;
@@ -374,22 +401,26 @@ void KSpreadCluster::unshiftColumn( const QPoint& marker, bool& work )
 	    }
 	}
     }
-    
+
     setAutoDelete( a );
 }
 
 void KSpreadCluster::unshiftRow( const QPoint& marker, bool& work )
 {
     work = FALSE;
-    
+
+    if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
+	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
+	return;
+
     int cx = marker.x() / KSPREAD_CLUSTER_LEVEL2;
     int cy = marker.y() / KSPREAD_CLUSTER_LEVEL2;
     int dx = marker.x() % KSPREAD_CLUSTER_LEVEL2;
     int dy = marker.y() % KSPREAD_CLUSTER_LEVEL2;
-    
+
     bool a = autoDelete();
     setAutoDelete( FALSE );
-    
+
     // Move cells in this row one to the left.
     for( int i = cx; i < KSPREAD_CLUSTER_LEVEL1; ++i )
     {
@@ -397,7 +428,7 @@ void KSpreadCluster::unshiftRow( const QPoint& marker, bool& work )
 	if ( cl )
         {
 	    work = TRUE;
-	    
+	
 	    int left = 0;
 	    if ( i == cx )
 		left = dx + 1;
@@ -414,15 +445,18 @@ void KSpreadCluster::unshiftRow( const QPoint& marker, bool& work )
 	    }
 	}
     }
-    
-    setAutoDelete( a );    
+
+    setAutoDelete( a );
 }
 
 void KSpreadCluster::removeColumn( int col )
-{    
+{
+    if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
+	return;
+
     int cx = col / KSPREAD_CLUSTER_LEVEL2;
     int dx = col % KSPREAD_CLUSTER_LEVEL2;
-    
+
     for( int y1 = 0; y1 < KSPREAD_CLUSTER_LEVEL1; ++y1 )
     {
 	KSpreadCell** cl = m_cluster[ y1 * KSPREAD_CLUSTER_LEVEL2 + cx ];
@@ -441,7 +475,10 @@ void KSpreadCluster::removeColumn( int col )
 }
 
 void KSpreadCluster::removeRow( int row )
-{    
+{
+    if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
+	return;
+
     int cy = row / KSPREAD_CLUSTER_LEVEL2;
     int dy = row % KSPREAD_CLUSTER_LEVEL2;
 
@@ -503,9 +540,12 @@ KSpreadColumnCluster::~KSpreadColumnCluster()
 
     free( m_cluster );
 }
-    
+
 ColumnLayout* KSpreadColumnCluster::lookup( int col )
 {
+    if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
+	return 0;
+
     int cx = col / KSPREAD_CLUSTER_LEVEL2;
     int dx = col % KSPREAD_CLUSTER_LEVEL2;
 
@@ -515,7 +555,7 @@ ColumnLayout* KSpreadColumnCluster::lookup( int col )
 
     return cl[ dx ];
 }
-    
+
 void KSpreadColumnCluster::clear()
 {
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
@@ -541,9 +581,12 @@ void KSpreadColumnCluster::clear()
 
     m_first = 0;
 }
-    
+
 void KSpreadColumnCluster::insertElement( ColumnLayout* lay, int col )
 {
+    if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
+	return;
+
     int cx = col / KSPREAD_CLUSTER_LEVEL2;
     int dx = col % KSPREAD_CLUSTER_LEVEL2;
 
@@ -572,6 +615,9 @@ void KSpreadColumnCluster::insertElement( ColumnLayout* lay, int col )
 
 void KSpreadColumnCluster::removeElement( int col )
 {
+    if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
+	return;
+
     int cx = col / KSPREAD_CLUSTER_LEVEL2;
     int dx = col % KSPREAD_CLUSTER_LEVEL2;
 
@@ -603,9 +649,12 @@ void KSpreadColumnCluster::removeElement( int col )
 	c->setPrevious( 0 );
     }
 }
-    
-int KSpreadColumnCluster::insertColumn( int col )
+
+bool KSpreadColumnCluster::insertColumn( int col )
 {
+    if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
+	return FALSE;
+
     int cx = col / KSPREAD_CLUSTER_LEVEL2;
     int dx = col % KSPREAD_CLUSTER_LEVEL2;
 
@@ -614,10 +663,10 @@ int KSpreadColumnCluster::insertColumn( int col )
     ColumnLayout** cl = m_cluster[ KSPREAD_CLUSTER_LEVEL1 - 1 ];
     if ( cl && cl[ KSPREAD_CLUSTER_LEVEL2 - 1 ] )
 	return FALSE;
-    
+
     bool a = autoDelete();
     setAutoDelete( FALSE );
-    
+
     for( int i = KSPREAD_CLUSTER_LEVEL1 - 1; i >= cx ; --i )
     {
 	ColumnLayout** cl = m_cluster[ i ];
@@ -641,22 +690,25 @@ int KSpreadColumnCluster::insertColumn( int col )
 	    }
 	}
     }
-    
+
     setAutoDelete( a );
-    
+
     return TRUE;
 }
 
-int KSpreadColumnCluster::removeColumn( int column )
+bool KSpreadColumnCluster::removeColumn( int column )
 {
+    if ( column >= KSPREAD_CLUSTER_MAX || column < 0 )
+	return FALSE;
+
     int cx = column / KSPREAD_CLUSTER_LEVEL2;
     int dx = column % KSPREAD_CLUSTER_LEVEL2;
-    
+
     removeElement( column );
-    
+
     bool a = autoDelete();
     setAutoDelete( FALSE );
-    
+
     for( int i = cx; i < KSPREAD_CLUSTER_LEVEL1; ++i )
     {
 	ColumnLayout** cl = m_cluster[ i ];
@@ -678,9 +730,9 @@ int KSpreadColumnCluster::removeColumn( int column )
 	    }
 	}
     }
-    
+
     setAutoDelete( a );
-    
+
     return TRUE;
 }
 
@@ -734,9 +786,12 @@ KSpreadRowCluster::~KSpreadRowCluster()
 
     free( m_cluster );
 }
-    
+
 RowLayout* KSpreadRowCluster::lookup( int row )
 {
+    if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
+	return 0;
+
     int cx = row / KSPREAD_CLUSTER_LEVEL2;
     int dx = row % KSPREAD_CLUSTER_LEVEL2;
 
@@ -746,7 +801,7 @@ RowLayout* KSpreadRowCluster::lookup( int row )
 
     return cl[ dx ];
 }
-    
+
 void KSpreadRowCluster::clear()
 {
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
@@ -772,9 +827,12 @@ void KSpreadRowCluster::clear()
 
     m_first = 0;
 }
-    
+
 void KSpreadRowCluster::insertElement( RowLayout* lay, int row )
 {
+    if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
+	return;
+
     int cx = row / KSPREAD_CLUSTER_LEVEL2;
     int dx = row % KSPREAD_CLUSTER_LEVEL2;
 
@@ -803,6 +861,9 @@ void KSpreadRowCluster::insertElement( RowLayout* lay, int row )
 
 void KSpreadRowCluster::removeElement( int row )
 {
+    if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
+	return;
+
     int cx = row / KSPREAD_CLUSTER_LEVEL2;
     int dx = row % KSPREAD_CLUSTER_LEVEL2;
 
@@ -834,9 +895,12 @@ void KSpreadRowCluster::removeElement( int row )
 	c->setPrevious( 0 );
     }
 }
-    
-int KSpreadRowCluster::insertRow( int row )
+
+bool KSpreadRowCluster::insertRow( int row )
 {
+    if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
+	return FALSE;
+
     int cx = row / KSPREAD_CLUSTER_LEVEL2;
     int dx = row % KSPREAD_CLUSTER_LEVEL2;
 
@@ -845,10 +909,10 @@ int KSpreadRowCluster::insertRow( int row )
     RowLayout** cl = m_cluster[ KSPREAD_CLUSTER_LEVEL1 - 1 ];
     if ( cl && cl[ KSPREAD_CLUSTER_LEVEL2 - 1 ] )
 	return FALSE;
-    
+
     bool a = autoDelete();
     setAutoDelete( FALSE );
-    
+
     for( int i = KSPREAD_CLUSTER_LEVEL1 - 1; i >= cx ; --i )
     {
 	RowLayout** cl = m_cluster[ i ];
@@ -872,22 +936,25 @@ int KSpreadRowCluster::insertRow( int row )
 	    }
 	}
     }
-    
+
     setAutoDelete( a );
-    
+
     return TRUE;
 }
 
-int KSpreadRowCluster::removeRow( int row )
+bool KSpreadRowCluster::removeRow( int row )
 {
+    if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
+	return FALSE;
+
     int cx = row / KSPREAD_CLUSTER_LEVEL2;
     int dx = row % KSPREAD_CLUSTER_LEVEL2;
 
     removeElement( row );
-    
+
     bool a = autoDelete();
     setAutoDelete( FALSE );
-    
+
     for( int i = cx; i < KSPREAD_CLUSTER_LEVEL1; ++i )
     {
 	RowLayout** cl = m_cluster[ i ];
@@ -909,9 +976,9 @@ int KSpreadRowCluster::removeRow( int row )
 	    }
 	}
     }
-    
+
     setAutoDelete( a );
-    
+
     return TRUE;
 }
 

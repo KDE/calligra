@@ -381,10 +381,31 @@ public:
     void setSelectionbgColor( const QPoint &_marker, QColor bg_Color );
     void setSelectionBorderColor( const QPoint &_marker, QColor bd_Color );
 
+    /**
+     * @param _marker is used if there is no selection currently.
+     *                In this case the cell on which the marker is will
+     *                be deleted.
+     */
     void deleteSelection( const QPoint &_marker );
+    /**
+     * @param _marker is used if there is no selection currently.
+     *                In this case the cell on which the marker is will
+     *                be copied.
+     */
     void copySelection( const QPoint &_marker );
+    /**
+     * @param _marker is used if there is no selection currently.
+     *                In this case the cell on which the marker is will
+     *                be cut.
+     */
     void cutSelection( const QPoint &_marker );
+    /**
+     * @param _marker is used if there is no selection currently.
+     *                In this case the cell on which the marker is will
+     *                be cleared.
+     */
     void clearSelection(const QPoint &_marker );
+
     /**
      * A convenience function which retrieves the data to be pasted
      * from the clipboard.
@@ -607,7 +628,7 @@ public:
      *
      * @see #loadCells
      */
-    void deleteCells( int _left, int _top, int _right, int _bottom );
+    void deleteCells( const QRect& rect );
 
     /**
      * Assume that the retangle 'src' was already selected. Then the user clicked on the

@@ -79,7 +79,7 @@ public:
     virtual void redo();
 
 protected:
-    KSpreadTable *m_pTable;
+    QString m_tableName;
     int m_iColumn;
 };
 
@@ -92,14 +92,10 @@ public:
     virtual void undo();
     virtual void redo();
 
-    void appendCell( KSpreadCell *_cell );
-    void setRowLayout( RowLayout *l ) { m_pRowLayout = l; }
-
 protected:
-    KSpreadTable *m_pTable;
+    QString m_tableName;
+    QCString m_data;
     int m_iRow;
-    QList<KSpreadCell> m_lstCells;
-    RowLayout *m_pRowLayout;
 };
 
 class KSpreadUndoInsertRow : public KSpreadUndoAction
@@ -112,7 +108,7 @@ public:
     virtual void redo();
 
 protected:
-    KSpreadTable *m_pTable;
+    QString m_tableName;
     int m_iRow;
 };
 
@@ -126,7 +122,7 @@ public:
     virtual void redo();
 
 protected:
-    KSpreadTable *m_pTable;
+    QString m_tableName;
     int m_iRow;
     int m_iColumn;
     QString m_strText;
@@ -142,13 +138,13 @@ public:
     virtual void undo();
     virtual void redo();
 
-    void copyLayout( QList<KSpreadLayout> &list);
+    void copyLayout( QList<KSpreadLayout> &list, KSpreadTable* table );
 
 protected:
     QRect m_rctRect;
     QList<KSpreadLayout> m_lstLayouts;
     QList<KSpreadLayout> m_lstRedoLayouts;
-    KSpreadTable *m_pTable;
+    QString m_tableName;
 };
 
 class KSpreadUndoDelete : public KSpreadUndoAction
@@ -161,9 +157,9 @@ public:
     virtual void redo();
 
 protected:
-    QRect m_rctRect;
-    QByteArray m_array;
-    KSpreadTable *m_pTable;
+    QRect m_selection;
+    QCString m_data;
+    QString m_tableName;
 };
 
 class KSpreadUndoSetTableName : public KSpreadUndoAction
@@ -176,7 +172,7 @@ public:
     virtual void redo();
 
 protected:
-    KSpreadTable *m_pTable;
+    QString m_tableName;
     QString m_name;
     QString m_redoName;
 };

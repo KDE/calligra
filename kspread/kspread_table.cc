@@ -3436,7 +3436,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 {
     QDomElement e = doc.documentElement();
 
-    if ( !e.namedItem( "columns" ).isElement() )
+    if ( e.namedItem( "columns" ).isElement() )
     {
 	QDomElement columns = e.namedItem( "columns" ).toElement();
 		
@@ -3454,7 +3454,26 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 	    }
 	}
     }
-    
+
+    if ( e.namedItem( "rows" ).isElement() )
+    {
+	QDomElement columns = e.namedItem( "rows" ).toElement();
+		
+	// Insert row layouts
+	QDomElement c = e.firstChild().toElement();
+	for( ; !c.isNull(); c = c.nextSibling().toElement() )
+        {
+	    if ( c.tagName() == "row" )
+	    {
+		RowLayout *cl = new RowLayout( this, 0 );
+		if ( cl->load( c ) )
+		    insertRowLayout( cl );
+		else
+		    delete cl;
+	    }
+	}
+    }
+
     QDomElement c = e.firstChild().toElement();
     for( ; !c.isNull(); c = c.nextSibling().toElement() )
     {
@@ -3529,7 +3548,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
     return true;
 }
 
-void KSpreadTable::deleteCells( int _left, int _top, int _right, int _bottom )
+void KSpreadTable::deleteCells( const QRect& rect )
 {
     // A list of all cells we want to delete.
     QStack<KSpreadCell> cellStack;
@@ -3537,9 +3556,9 @@ void KSpreadTable::deleteCells( int _left, int _top, int _right, int _bottom )
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
     {
-	if ( !c->isDefault() && c->row() >= _top &&
-	     c->row() <= _bottom && c->column() >= _left &&
-	     c->column() <= _right )
+	if ( !c->isDefault() && c->row() >= rect.top() &&
+	     c->row() <= rect.bottom() && c->column() >= rect.left() &&
+	     c->column() <= rect.right() )
 	  cellStack.push( c );
     }
 
@@ -3568,7 +3587,7 @@ void KSpreadTable::deleteCells( int _left, int _top, int _right, int _bottom )
 	    c->forceExtraCells( c->column(), c->row(), c->extraXCells(), c->extraYCells() );
 }
 
-void KSpreadTable::deleteSelection( const QPoint &_marker )
+void KSpreadTable::deleteSelection( const QPoint& _marker )
 {
     m_pDoc->setModified( true );
 
@@ -3594,7 +3613,7 @@ void KSpreadTable::deleteSelection( const QPoint &_marker )
 	    m_pDoc->undoBuffer()->appendUndo( undo );
 	}
 
-	deleteCells( r.left(), r.top(), r.right(), r.bottom() );
+	deleteCells( r );
     }
 
     emit sig_updateView( this );
@@ -3948,15 +3967,62 @@ void KSpreadTable::printPage( QPainter &_painter, QRect *page_range, const QPen&
 
 QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 {
+    //
     // Entire rows selected ?
+    //
     if ( _rect.right() == 0x7fff )
     {
-	// ##### TODO
+	QDomDocument doc( "spreadsheet-snippet" );
+	doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+	QDomElement spread = doc.createElement( "spreadsheet-snippet" );
+	doc.appendChild( spread );
+
+	QDomElement rows = doc.createElement("rows");
+	rows.setAttribute( "top", _rect.top() );
+	rows.setAttribute( "bottom", _rect.bottom() );
+	spread.appendChild( rows );
+	
+	QRect rightMost( _rect.x(), _rect.y(), _rect.width() + 1, _rect.height() );
+	QRect bottomMost( _rect.x(), _rect.y(), _rect.width(), _rect.height() + 1 );
+
+	// Save all cells.
+	KSpreadCell* c = m_cells.firstCell();
+	for( ;c; c = c->nextCell() )
+        {
+	    if ( !c->isDefault() )
+            {
+		QPoint p( c->column(), c->row() );
+		if ( _rect.contains( p ) )
+		    spread.appendChild( c->save( doc, 0, _rect.top() - 1 ) );
+		else if ( rightMost.contains( p ) )
+		    spread.appendChild( c->saveRightMostBorder( doc, 0, _rect.top() - 1 ) );
+		else if ( bottomMost.contains( p ) )
+		    spread.appendChild( c->saveBottomMostBorder( doc, 0, _rect.top() - 1 ) );
+	    }
+	}
+
+	// ##### Inefficient
+	// Save the row layouts if there are any
+	for( int x = _rect.left(); x <= _rect.right(); ++x )
+        {
+	    RowLayout* lay = rowLayout( x );
+	    if ( lay && !lay->isDefault() )
+	    {
+		QDomElement e = lay->save( doc );
+		if ( !e.isNull() )
+		    spread.appendChild( e );
+	    }
+	}
+	
+	return doc;   
     }
+
+    //
     // Entire columns selected ?
-    else if ( _rect.bottom() == 0x7fff )
+    //
+    if ( _rect.bottom() == 0x7fff )
     {
-	QDomDocument doc( "spreadsheet-columns" );
+	QDomDocument doc( "spreadsheet-snippet" );
 	doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
 	QDomElement spread = doc.createElement( "spreadsheet-snippet" );
 	doc.appendChild( spread );
@@ -3985,6 +4051,7 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 	    }
 	}
 
+	// ##### Inefficient
 	// Save the column layouts if there are any
 	for( int x = _rect.left(); x <= _rect.right(); ++x )
         {
