@@ -12,4 +12,5 @@ messages: rc.cpp
 	$(EXTRACTRC) `find . -name \*.ui` >> rc.cpp
 	$(EXTRACTRC) `find . -name \*.rc` >> rc.cpp
 	$(EXTRACTRC) --tag=name --context=Stencils `find . -name \*.shape` >> rc.cpp
+	xlstproc kivio-extract-i18n-desc.xslt `find . -name "desc"` >> rc.cpp
 	$(XGETTEXT) `find . -name \*.cpp -not -name \*.moc.*` kiviopart/kivio_aboutdata.h kivio-sml-i18n.cpp kivio-desc-i18n.cpp -o $(podir)/kivio.pot
