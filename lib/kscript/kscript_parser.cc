@@ -11,7 +11,7 @@ extern int yylex();
 
 KSParser *theParser;
 
-QString idl_lexFile;
+const char* idl_lexFile;
 QString toplevelFile;
 int idl_line_no;
 
@@ -31,7 +31,8 @@ KSParser::~KSParser()
 
 bool KSParser::parse( FILE *inp_file, const char *filename )
 {
-  idl_lexFile = toplevelFile = (char *) filename;
+  idl_lexFile = filename;
+  toplevelFile = (char *) filename;
   yyin = inp_file;
 
   m_errorMessage = "";

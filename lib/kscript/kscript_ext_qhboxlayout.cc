@@ -66,7 +66,7 @@ bool KSObject_QHBoxLayout::ksQHBoxLayout( KSContext& context )
       return FALSE;
   }
 
-  setObject( new QHBoxLayout( parent, 6, 6, name ) );
+  setObject( new QHBoxLayout( parent, 6, 6, name.latin1() ) );
 
   return true;
 }

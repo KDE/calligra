@@ -159,7 +159,7 @@ void KS_Qt_Callback::emitSignal( const QValueList<KSValue::Ptr>& params, const c
 
 	context.scope()->popModule();
 	context.scope()->pushModule( module );
-	
+
 	if ( !theSender ) // it is possible that we have just been destroyed (Simon)
 	  return;
     }
@@ -282,7 +282,7 @@ KSValue::Ptr KS_Qt_Object::member( KSContext& context, const QString& name )
 
   QMetaObject* meta = m_object->metaObject();
   ASSERT( meta );
-  const QMetaProperty *property = meta->property( name, TRUE );
+  const QMetaProperty *property = meta->property( name.latin1(), TRUE );
   if ( !property )
   {
     return KSObject::member( context, name );
@@ -301,7 +301,7 @@ KSValue::Ptr KS_Qt_Object::member( KSContext& context, const QString& name )
     return ptr;
   }
 
-  QVariant var = m_object->property( name );
+  QVariant var = m_object->property( name.latin1() );
   return unpack( context, var );
 
 /*
@@ -332,7 +332,7 @@ bool KS_Qt_Object::setMember( KSContext& context, const QString& name, const KSV
 
   QMetaObject* meta = m_object->metaObject();
   ASSERT( meta );
-  const QMetaProperty *property = meta->property( name, TRUE );
+  const QMetaProperty *property = meta->property( name.latin1(), TRUE );
   if ( property )
   {
     QVariant var;
@@ -342,7 +342,7 @@ bool KS_Qt_Object::setMember( KSContext& context, const QString& name, const KSV
       context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( m_object->className() ) ) );
       return FALSE;
     }
-    return m_object->setProperty( name, var );
+    return m_object->setProperty( name.latin1(), var );
   }
 
   return KSObject::setMember( context, name, v );
@@ -469,7 +469,7 @@ KSValue::Ptr KS_Qt_Object::unpack( KSContext& context, QVariant& var )
     QString e( i18n("KScript does not understand the property type %1") );
     e = e.arg( var.typeName() );
     context.setException( new KSException( "Unsupported", e ) );
-	
+
     return KSValue::Ptr( 0 );
 }
 
@@ -494,7 +494,7 @@ bool KS_Qt_Object::KSQObject_destroy( KSContext& context )
   // In the constructor there is an extra reference count.
   // That is dropped upon calling "destroy".
   if ( deref() ) delete this;
-	
+
   return true;
 }
 

@@ -74,7 +74,7 @@ bool KSObject_QButtonGroup::ksQButtonGroup( KSContext& context )
       return FALSE;
   }
 
-  setObject( new QButtonGroup( 0, Qt::Vertical, parent, name ) );
+  setObject( new QButtonGroup( 0, Qt::Vertical, parent, name.latin1() ) );
 
   qDebug("QButtonGroup 2\n");
 
@@ -225,7 +225,7 @@ bool KSObject_QVButtonGroup::ksQVButtonGroup( KSContext& context )
       return FALSE;
   }
 
-  setObject( new QVButtonGroup( 0, parent, name ) );
+  setObject( new QVButtonGroup( 0, parent, name.latin1() ) );
 
   qDebug("QVButtonGroup 2\n");
 
@@ -305,7 +305,7 @@ bool KSObject_QHButtonGroup::ksQHButtonGroup( KSContext& context )
       return FALSE;
   }
 
-  setObject( new QHButtonGroup( 0, parent, name ) );
+  setObject( new QHButtonGroup( 0, parent, name.latin1() ) );
 
   qDebug("QHButtonGroup 2\n");
 

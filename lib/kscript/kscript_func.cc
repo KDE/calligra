@@ -50,16 +50,16 @@ static bool ksfunc_mid( KSContext& context )
     int pos = args[1]->intValue();
 
     QString tmp = args[0]->stringValue().mid( pos, len );
-    context.setValue( new KSValue(tmp)); 	
+    context.setValue( new KSValue(tmp));
     return true;
 }
 
 static bool ksfunc_time( KSContext& context )
 {
     KSUtil::checkArgs( context, "s", "time", TRUE );
-    
+
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
-      
+
     QTime t = KGlobal::locale()->readTime( args[0]->stringValue() );
     if ( !t.isValid() )
     {
@@ -67,18 +67,18 @@ static bool ksfunc_time( KSContext& context )
 	context.setException( new KSException( "ParsingError", tmp.arg( args[0]->stringValue() ), -1 ) );
 	return false;
     }
-    
+
     context.setValue( new KSValue( t ) );
-    
+
     return true;
 }
 
 static bool ksfunc_date( KSContext& context )
 {
     KSUtil::checkArgs( context, "s", "date", TRUE );
-    
+
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
-      
+
     QDate t = KGlobal::locale()->readDate( args[0]->stringValue() );
     if ( !t.isValid() )
     {
@@ -86,9 +86,9 @@ static bool ksfunc_date( KSContext& context )
 	context.setException( new KSException( "ParsingError", tmp.arg( args[0]->stringValue() ), -1 ) );
 	return false;
     }
-    
+
     context.setValue( new KSValue( t ) );
-    
+
     return true;
 }
 
@@ -332,7 +332,7 @@ static bool ksfunc_print( KSContext& context )
     cout << endl;
 
   for( ; it != end; ++it )
-    cout << (*it)->toString( context );
+    cout << (*it)->toString( context ).latin1();
 
   // context.value()->clear();
   context.setValue( 0 );
@@ -350,7 +350,7 @@ static bool ksfunc_println( KSContext& context )
     cout << endl;
 
   for( ; it != end; ++it )
-    cout << (*it)->toString( context ) << endl;
+    cout << (*it)->toString( context ).latin1() << endl;
 
   // context.value()->clear();
   context.setValue( 0 );
@@ -491,8 +491,8 @@ KSModule::Ptr ksCreateModule_KScript( KSInterpreter* interp )
   module->addObject( "length", new KSValue( new KSBuiltinFunction( module, "length", ksfunc_length ) ) );
   module->addObject( "arg", new KSValue( new KSBuiltinFunction( module, "arg", ksfunc_arg ) ) );
   module->addObject( "mid", new KSValue( new KSBuiltinFunction( module, "mid", ksfunc_mid ) ) );
-  module->addObject( "upper", new KSValue( new KSBuiltinFunction( module, "upper", ksfunc_upper ) ) );	
-  module->addObject( "lower", new KSValue( new KSBuiltinFunction( module, "lower", ksfunc_lower ) ) );	
+  module->addObject( "upper", new KSValue( new KSBuiltinFunction( module, "upper", ksfunc_upper ) ) );
+  module->addObject( "lower", new KSValue( new KSBuiltinFunction( module, "lower", ksfunc_lower ) ) );
   module->addObject( "isEmpty", new KSValue( new KSBuiltinFunction( module, "isEmpty", ksfunc_isEmpty ) ) );
   module->addObject( "toInt", new KSValue( new KSBuiltinFunction( module, "toInt", ksfunc_toInt ) ) );
   module->addObject( "toFloat", new KSValue( new KSBuiltinFunction( module, "toFloat", ksfunc_toFloat ) ) );

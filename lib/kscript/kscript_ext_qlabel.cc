@@ -57,7 +57,7 @@ bool KSObject_QLabel::ksQLabel( KSContext& context )
       return FALSE;
   }
 
-  setObject( new QLabel( parent, name ) );
+  setObject( new QLabel( parent, name.latin1() ) );
 
   qDebug("QLabel 2\n");
 

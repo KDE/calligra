@@ -71,7 +71,7 @@ bool KSObject_QComboBox::ksQComboBox( KSContext& context )
       return FALSE;
   }
 
-  setObject( new QComboBox( parent, name ) );
+  setObject( new QComboBox( parent, name.latin1() ) );
 
   qDebug("QComboBox 2\n");
 
@@ -148,12 +148,12 @@ bool KSObject_QComboBox::ksQComboBox_clear( KSContext &context )
 {
   if ( !checkLive( context, "QComboBox::clear" ) )
     return false;
-  
+
   QComboBox *w = static_cast<QComboBox *>( object() );
   w->clear();
 
   return true;
-} 
+}
 
 KSValue::Ptr KSObject_QComboBox::member( KSContext& context, const QString& name )
 {

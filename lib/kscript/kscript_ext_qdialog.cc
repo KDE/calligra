@@ -76,7 +76,7 @@ bool KSObject_QDialog::ksQDialog( KSContext& context )
       return FALSE;
   }
 
-  setObject( new QDialog( parent, name, modal ) );
+  setObject( new QDialog( parent, name.latin1(), modal ) );
 
   qDebug("QDialog 2\n");
 

@@ -57,7 +57,7 @@ bool KSObject_QCheckBox::ksQCheckBox( KSContext& context )
       return FALSE;
   }
 
-  setObject( new QCheckBox( parent, name ) );
+  setObject( new QCheckBox( parent, name.latin1() ) );
 
   qDebug("QCheckBox 2\n");
 

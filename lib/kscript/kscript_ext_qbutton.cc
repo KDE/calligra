@@ -70,7 +70,7 @@ bool KSObject_QButton::ksQButton( KSContext& context )
       return FALSE;
   }
 
-  setObject( new QButton( parent, name ) );
+  setObject( new QButton( parent, name.latin1() ) );
 
   qDebug("QButton 2\n");
 

@@ -59,7 +59,7 @@ bool KSObject_QWidget::ksQWidget( KSContext& context )
       return FALSE;
   }
 
-  setObject( new QWidget( parent, name ) );
+  setObject( new QWidget( parent, name.latin1() ) );
 
   qDebug("QWidget end count=%i\n", count);
 

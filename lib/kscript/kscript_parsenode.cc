@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-extern QString idl_lexFile;
+extern const char* idl_lexFile;
 extern QString toplevelFile;
 extern int idl_line_no;
 
@@ -227,7 +227,7 @@ KSParseNode::KSParseNode( KSParseNodeType aType, KSParseNode *one,
   b5 = five;
   fname = idl_lexFile;
   line_no = idl_line_no;
-  bIsToplevel = ( idl_lexFile == toplevelFile );
+  bIsToplevel = ( QString(idl_lexFile) == toplevelFile );
 }
 
 KSParseNode::~KSParseNode()
@@ -415,13 +415,13 @@ void KSParseNode::printBranch( int indent, const char *tag, bool detailed )
   case 0:
     break;
   case 1:
-    cout << " (" << ident << ")";
+    cout << " (" << ident.latin1() << ")";
     break;
   case 2:
     cout << " (" << getIntegerLiteral() << ")";
     break;
   case 3:
-    cout << " (" << getStringLiteral() << ")";
+    cout << " (" << getStringLiteral().latin1() << ")";
     break;
   case 4:
     cout << " (" << getCharacterLiteral() << ")";

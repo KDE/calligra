@@ -66,7 +66,7 @@ bool KSObject_QPushButton::ksQPushButton( KSContext& context )
       return FALSE;
   }
 
-  setObject( new QPushButton( parent, name ) );
+  setObject( new QPushButton( parent, name.latin1() ) );
 
   qDebug("QPushButton 2\n");
 

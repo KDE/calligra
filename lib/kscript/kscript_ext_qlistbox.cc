@@ -71,7 +71,7 @@ bool KSObject_QListBox::ksQListBox( KSContext& context )
       return FALSE;
   }
 
-  setObject( new QListBox( parent, name ) );
+  setObject( new QListBox( parent, name.latin1() ) );
 
   qDebug("QListBox 2\n");
 
@@ -150,7 +150,7 @@ bool KSObject_QListBox::ksQListBox_clear( KSContext& context )
     return false;
 
   qDebug("QListBox::clear\n");
-  
+
   if ( !KSUtil::checkArgumentsCount( context, 0, "QListBox::clear" ) )
       return false;
 

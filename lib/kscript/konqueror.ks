@@ -2,9 +2,11 @@ main
 {
   konq = findApplication( "konqueror" );
   win = konq.getWindows()[ 0 ];
+  println( win );
   actionmap = win.actionMap();
 
-//  print( actionmap );
+  print( actionmap );
+  println( "Hallo?" );
   actionmap{ "open_location" }.setText( "hiho" );
   actionmap{ "print" }.setIcon( "reload" );
 

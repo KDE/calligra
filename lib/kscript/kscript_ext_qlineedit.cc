@@ -70,7 +70,7 @@ bool KSObject_QLineEdit::ksQLineEdit( KSContext& context )
       return FALSE;
   }
 
-  setObject( new QLineEdit( parent, name ) );
+  setObject( new QLineEdit( parent, name.latin1() ) );
 
   return true;
 }
@@ -141,7 +141,7 @@ bool KSObject_QLineEdit::ksQLineEdit_returnPressed( KSContext& context )
 
 KSValue::Ptr KSObject_QLineEdit::member( KSContext& context, const QString& name )
 {
-/* 
+/*
   CHECK_LEFTEXPR( context, name );
 
   RETURN_LEFTEXPR( "text", new KSValue( WIDGET->text() ) );

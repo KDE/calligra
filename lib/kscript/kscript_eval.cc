@@ -397,7 +397,7 @@ bool KSEval_t_minus_sign( KSParseNode* node, KSContext& context )
 	  context.value()->setValue( (KScript::Long)diff );
 	  return TRUE;
       }
-      
+
       if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
 	  return false;
       QDate d = l.value()->dateValue();
@@ -405,7 +405,7 @@ bool KSEval_t_minus_sign( KSParseNode* node, KSContext& context )
       FILL_VALUE( context, l, r );
       context.value()->setValue( d );
       return TRUE;
-  }  
+  }
   // If we have double and int, then always convert to double
   else if ( l.value()->type() == KSValue::DoubleType )
   {
@@ -1321,7 +1321,7 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
 	    context.setException( l.exception() );
 	    return false;
 	}
-	
+
 	// Lets have at least a <none> as return value
 	if ( !l.value() )
 	    l.setValue( KSValue::null() );
@@ -1896,12 +1896,12 @@ bool KSEval_t_match( KSParseNode* node , KSContext& context )
 
     if ( !KSUtil::checkType( context, context.value(), KSValue::StringType, TRUE ) )
 	return FALSE;
-			
+
     KRegExp* exp = context.interpreter()->regexp();
-    exp->compile( node->getIdent() );
+    exp->compile( node->getIdent().latin1() );
 
     qDebug("Matching %s against %s",context.value()->stringValue().latin1(), node->getIdent().latin1() );
-	
+
     context.setValue( new KSValue( exp->match( context.value()->stringValue().latin1() ) ) );
 
     return TRUE;
@@ -1921,16 +1921,16 @@ bool KSEval_t_subst( KSParseNode* node, KSContext& context )
 
     if ( !KSUtil::checkType( l, l.value(), KSValue::StringType, TRUE ) )
 	return FALSE;
-			
+
     int pos = node->getIdent().find( '/' );
     ASSERT( pos != -1 );
     QString match = node->getIdent().left( pos );
     QString subst = node->getIdent().mid( pos + 1 );
     KRegExp* exp = context.interpreter()->regexp();
-    exp->compile( match );
+    exp->compile( match.latin1() );
 
     qDebug("Matching %s against %s",l.value()->stringValue().latin1(), node->getIdent().latin1() );
-	
+
     if ( !exp->match( l.value()->stringValue().latin1() ) )
     {
 	context.setValue( new KSValue( FALSE ) );
@@ -2440,7 +2440,7 @@ extern bool KSEval_from( KSParseNode* node, KSContext& context )
     {
 	// Import from this module
 	KSModule* m = d.value()->moduleValue();
-	
+
 	// Iterate over all symbols that we should import
 	QStringList::ConstIterator sit = lst.begin();
 	for( ; sit != lst.end(); ++sit )
@@ -2455,7 +2455,7 @@ extern bool KSEval_from( KSParseNode* node, KSContext& context )
 						       node->getLineNo() ) );
 		return false;
 	    }
-	
+
 	    // Add the symbol to the current namespace
 	    v->ref();
 	    context.scope()->module()->addObject( *sit, v );
@@ -2543,7 +2543,7 @@ bool KSEval_minus_assign( KSParseNode* node, KSContext& context )
 	context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in assignment"), node->getLineNo() ) );
 	return false;
     }
-    
+
     if ( l.value()->type() == KSValue::TimeType )
     {
 	if ( KSUtil::checkType( context, r.value(), KSValue::TimeType, false ) )
@@ -2615,7 +2615,7 @@ bool KSEval_minus_assign( KSParseNode* node, KSContext& context )
 	    return false;
 	}
     }
-    
+
     l.value()->setMode( KSValue::LeftExpr );
 
     context.setValue( l.shareValue() );
@@ -2686,9 +2686,9 @@ bool KSEval_t_match_line( KSParseNode* node, KSContext& context )
     KSValue::Ptr line = context.interpreter()->lastInputLine();
     if ( !KSUtil::checkType( context, line, KSValue::StringType, TRUE ) )
 	return FALSE;
-			
+
     KRegExp* exp = context.interpreter()->regexp();
-    exp->compile( node->getIdent() );
+    exp->compile( node->getIdent().latin1() );
 
     context.setValue( new KSValue( exp->match( line->stringValue().latin1() ) ) );
 

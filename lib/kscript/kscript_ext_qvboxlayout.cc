@@ -66,7 +66,7 @@ bool KSObject_QVBoxLayout::ksQVBoxLayout( KSContext& context )
       return FALSE;
   }
 
-  setObject( new QVBoxLayout( parent, 6, 6, name ) );
+  setObject( new QVBoxLayout( parent, 6, 6, name.latin1() ) );
 
   return true;
 }

@@ -8,7 +8,7 @@
 
 extern int yylex();
 
-extern QString idl_lexFile;
+extern const char* idl_lexFile;
 extern int idl_line_no;
 
 void kscriptInitFlex( const char *_code, int extension );

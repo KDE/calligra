@@ -102,7 +102,7 @@ bool KSInterpreter::runModule( KSContext& context, const QString& name )
     DIR *dp = 0L;
     struct dirent *ep;
 
-    dp = opendir( *it );
+    dp = opendir( ( *it ).latin1() );
     if ( dp == 0L )
       return false;
 
@@ -114,7 +114,7 @@ bool KSInterpreter::runModule( KSContext& context, const QString& name )
 	f += "/";
 	f += ep->d_name;
 	struct stat buff;
-	if ( ( stat( f, &buff ) == 0 ) && S_ISREG( buff.st_mode ) )
+	if ( ( stat( f.latin1(), &buff ) == 0 ) && S_ISREG( buff.st_mode ) )
 	{
 	  QStringList lst;
 	  qDebug("RUN MODULE %s %s", name.latin1(), f.latin1() );
@@ -156,7 +156,7 @@ bool KSInterpreter::runModule( KSContext& result, const QString& name, const QSt
 
   // s_current = this;
 
-  FILE* f = fopen( filename, "r" );
+  FILE* f = fopen( filename.latin1(), "r" );
   if ( !f )
   {
     QString tmp( i18n("Could not open file %1") );
@@ -332,7 +332,7 @@ QString KSInterpreter::readInput()
     }
 
     m_lastInputLine->setValue( tmp );
-	
+
     // Ended reading a file ...
 
     // Did we scan the last file ?

@@ -60,7 +60,7 @@ bool KSObject_QRadioButton::ksQRadioButton( KSContext& context )
       return FALSE;
   }
 
-  setObject( new QRadioButton( parent, name ) );
+  setObject( new QRadioButton( parent, name.latin1() ) );
 
   qDebug("QRadioButton 2\n");
 
