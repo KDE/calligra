@@ -34,8 +34,7 @@ KoApplication::KoApplication()
 {
     // Install some standard paths
     KGlobal::locale()->insertCatalogue("koffice");
-    KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/toolbar/");
-    KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/pics/");
+    KGlobal::dirs()->addResourceType("icons", KStandardDirs::kde_default("data") + "/koffice/icons/");
 
     kimgioRegister();
 
