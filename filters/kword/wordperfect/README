@@ -1,0 +1,29 @@
+NOTE: this information is newer than the code in this directory.
+Please take a look at this if you plan to work on this filter.
+
+====================
+
+Import filters for WordPerfect
+
+From: Pavel Pisa <pisa cmp felk cvut cz>
+To: koffice@kde.org
+Date: 2004-11-01 11:06
+
+Hello All,
+
+I would like to mention, that Jaroslav Fojtik's WP2LaTeX
+is really great tool which understands most
+of fuzziness of the WordPerfect. We have used it to convert
+AmiPro/WordPro documentes to Latex at university.
+We have exported documents as WordPerfect 6 format
+in WordPro. Result documents are not correct 
+enough that leads even to WordPerfect to crash.
+But WP2LaTeX has been able to convert them
+into usable Latex code, including images converted from
+WPG to EPS and equations.
+
+http://www.penguin.cz/~fojtik/wp2latex/wp2latex.htm
+
+It could be very helpful to use some pieces and knowledge
+from WP2LaTeX for Koffice WordPerfect import filter.
+
