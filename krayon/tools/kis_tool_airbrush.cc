@@ -39,10 +39,13 @@ AirBrushTool::AirBrushTool(KisDoc *doc, KisView *view, KisBrush *brush)
     m_Cursor = KisCursor::brushCursor();
     m_dragdist = 0;
     density = 64;
+    m_pDoc = doc;
 
-    opacity = 255;
-    usePattern = false;
-    useGradient = false;
+    // initialize airbrush tool settings
+    KisDoc::AirbrushToolSettings s = m_pDoc->getAirbrushToolSettings();
+    opacity           = s.opacity;
+    usePattern        = s.useCurrentPattern;
+    useGradient       = s.useCurrentGradient;
 
     setBrush(brush);
 
@@ -331,6 +334,10 @@ void AirBrushTool::optionsDialog()
     ts.useGradient      = useGradient;
     ts.opacity          = opacity;
 
+    bool old_usePattern   = usePattern;
+    bool old_useGradient  = useGradient;
+    int  old_opacity      = opacity;
+
     ToolOptionsDialog *pOptsDialog
         = new ToolOptionsDialog(tt_airbrushtool, ts);
 
@@ -338,10 +345,24 @@ void AirBrushTool::optionsDialog()
 
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
+    else {
+        opacity       = pOptsDialog->airBrushToolTab()->opacity();
+        usePattern    = pOptsDialog->airBrushToolTab()->usePattern();
+        useGradient   = pOptsDialog->airBrushToolTab()->useGradient();
 
-    opacity       = pOptsDialog->airBrushToolTab()->opacity();
-    usePattern    = pOptsDialog->airBrushToolTab()->usePattern();
-    useGradient   = pOptsDialog->airBrushToolTab()->useGradient();
+        // User change value ?
+        if ( old_usePattern != usePattern || old_useGradient != useGradient || old_opacity != opacity ) {
+            // set airbrush tool settings
+            KisDoc::AirbrushToolSettings s = m_pDoc->getAirbrushToolSettings();
+            s.useCurrentPattern   = usePattern;
+            s.useCurrentGradient  = useGradient;
+            s.opacity             = opacity;
+
+            m_pDoc->setAirbrushToolSettings( s );
+
+            m_pDoc->setModified( true );
+        }
+    }
 }
 
 #include "kis_tool_airbrush.moc"

@@ -3,6 +3,8 @@
  *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *  Copyright (c) 2000 John Califf  <jcaliff@compuzone.net>
+ *  Copyright (c) 2001 Toshitaka Fujioka  <fujioka@kde.org>
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -223,6 +225,9 @@ QDomElement KisDoc::saveImages( QDomDocument &doc )
 
     setImage( tmp_currentImageName );
 
+    // save tool settings
+    images.appendChild( saveToolSettings( doc ) );
+
     return images;
 }
 
@@ -302,6 +307,219 @@ QDomElement KisDoc::saveChannels( QDomDocument &doc, KisLayer *lay )
     } // end of channels loop
 
     return channels;
+}
+
+// save tool settings
+QDomElement KisDoc::saveToolSettings( QDomDocument &doc )
+{
+    // tool element
+    QDomElement tool = doc.createElement( "tool" );
+
+    //save pen tool settings
+    tool.appendChild( savePenToolSettings( doc ) );
+
+    // save brush tool settings
+    tool.appendChild( saveBrushToolSettings( doc ) );
+
+    // save airbrush tool settings
+    tool.appendChild( saveAirbrushToolSettings( doc ) );
+
+    // save eraser tool settings
+    tool.appendChild( saveEraserToolSettings( doc ) );
+
+    // save line tool settings
+    tool.appendChild( saveLineToolSettings( doc ) );
+
+    // save polyline tool settings
+    tool.appendChild( savePolylineToolSettings( doc ) );
+
+    // save rectangle tool settings
+    tool.appendChild( saveRectangleToolSettings( doc ) );
+
+    // save ellipse tool settings
+    tool.appendChild( saveEllipseToolSettings( doc ) );
+
+    // save filler tool settings
+    tool.appendChild( saveFillerToolSettings( doc ) );
+
+    // save Color changer settings
+    tool.appendChild( saveColorChangerSettings( doc ) );
+
+    // save Stamp (Pattern) tool settings
+    tool.appendChild( saveStampToolSettings( doc ) );
+
+    // save Gradients settings
+    tool.appendChild( saveGradientsSettings( doc ) );
+
+
+    return tool;
+}
+
+// save pen tool settings
+QDomElement KisDoc::savePenToolSettings( QDomDocument &doc )
+{
+    // pen tool element
+    QDomElement penTool = doc.createElement( "penTool" ); 
+
+    penTool.setAttribute( "opacity", penToolSettings.opacity );
+    penTool.setAttribute( "paintThreshold", penToolSettings.paintThreshold );
+    penTool.setAttribute( "paintWithPattern", static_cast<int>( penToolSettings.paintWithPattern ) );
+    penTool.setAttribute( "paintWithGradient", static_cast<int>( penToolSettings.paintWithGradient ) );
+
+    return penTool;
+}
+
+// save brush tool settings
+QDomElement KisDoc::saveBrushToolSettings( QDomDocument &doc )
+{
+    // brush tool element
+    QDomElement brushTool = doc.createElement( "brushTool" ); 
+
+    brushTool.setAttribute( "opacity", brushToolSettings.opacity );
+    brushTool.setAttribute( "blendWithCurrentGradient", static_cast<int>( brushToolSettings.blendWithCurrentGradient ) );
+    brushTool.setAttribute( "blendWithCurrentPattern", static_cast<int>( brushToolSettings.blendWithCurrentPattern ) );
+
+    return brushTool;
+}
+
+// save airbrush tool settings
+QDomElement KisDoc::saveAirbrushToolSettings( QDomDocument &doc )
+{
+    // airbrush tool element
+    QDomElement airbrushTool = doc.createElement( "airbrushTool" ); 
+
+    airbrushTool.setAttribute( "opacity", airbrushToolSettings.opacity );
+    airbrushTool.setAttribute( "useCurrentGradient", static_cast<int>( airbrushToolSettings.useCurrentGradient ) );
+    airbrushTool.setAttribute( "useCurrentPattern", static_cast<int>( airbrushToolSettings.useCurrentPattern ) );
+
+    return airbrushTool;
+}
+
+// save eraser tool settings
+QDomElement KisDoc::saveEraserToolSettings( QDomDocument &doc )
+{
+    // eraser tool element
+    QDomElement eraserTool = doc.createElement( "eraserTool" ); 
+
+    eraserTool.setAttribute( "opacity", eraserToolSettings.opacity );
+    eraserTool.setAttribute( "blendWithCurrentGradient", static_cast<int>( eraserToolSettings.blendWithCurrentGradient ) );
+    eraserTool.setAttribute( "blendWithCurrentPattern", static_cast<int>( eraserToolSettings.blendWithCurrentPattern ) );
+
+    return eraserTool;
+}
+
+// save line tool settings
+QDomElement KisDoc::saveLineToolSettings( QDomDocument &doc )
+{
+    // line tool element
+    QDomElement lineTool = doc.createElement( "lineTool" ); 
+
+    lineTool.setAttribute( "thickness", lineToolSettings.thickness );
+    lineTool.setAttribute( "opacity", lineToolSettings.opacity );
+    lineTool.setAttribute( "fillInteriorRegions", static_cast<int>( lineToolSettings.fillInteriorRegions ) );
+    lineTool.setAttribute( "useCurrentPattern", static_cast<int>( lineToolSettings.useCurrentPattern ) );
+    lineTool.setAttribute( "fillWithGradient", static_cast<int>( lineToolSettings.fillWithGradient ) );
+
+    return lineTool;
+}
+
+// save polyline tool settings
+QDomElement KisDoc::savePolylineToolSettings( QDomDocument &doc )
+{
+    // polyline tool element
+    QDomElement polylineTool = doc.createElement( "polylineTool" ); 
+
+    polylineTool.setAttribute( "thickness", polylineToolSettings.thickness );
+    polylineTool.setAttribute( "opacity", polylineToolSettings.opacity );
+    polylineTool.setAttribute( "fillInteriorRegions", static_cast<int>( polylineToolSettings.fillInteriorRegions ) );
+    polylineTool.setAttribute( "useCurrentPattern", static_cast<int>( polylineToolSettings.useCurrentPattern ) );
+    polylineTool.setAttribute( "fillWithGradient", static_cast<int>( polylineToolSettings.fillWithGradient ) );
+
+    return polylineTool;
+}
+
+// save rectangle tool settings
+QDomElement KisDoc::saveRectangleToolSettings( QDomDocument &doc )
+{
+    // rectangle tool element
+    QDomElement rectangleTool = doc.createElement( "rectangleTool" ); 
+
+    rectangleTool.setAttribute( "thickness", rectangleToolSettings.thickness );
+    rectangleTool.setAttribute( "opacity", rectangleToolSettings.opacity );
+    rectangleTool.setAttribute( "fillInteriorRegions", static_cast<int>( rectangleToolSettings.fillInteriorRegions ) );
+    rectangleTool.setAttribute( "useCurrentPattern", static_cast<int>( rectangleToolSettings.useCurrentPattern ) );
+    rectangleTool.setAttribute( "fillWithGradient", static_cast<int>( rectangleToolSettings.fillWithGradient ) );
+
+    return rectangleTool;
+}
+
+// save ellipse tool settings
+QDomElement KisDoc::saveEllipseToolSettings( QDomDocument &doc )
+{
+    // ellipse tool element
+    QDomElement ellipseTool = doc.createElement( "ellipseTool" ); 
+
+    ellipseTool.setAttribute( "thickness", ellipseToolSettings.thickness );
+    ellipseTool.setAttribute( "opacity", ellipseToolSettings.opacity );
+    ellipseTool.setAttribute( "fillInteriorRegions", static_cast<int>( ellipseToolSettings.fillInteriorRegions ) );
+    ellipseTool.setAttribute( "useCurrentPattern", static_cast<int>( ellipseToolSettings.useCurrentPattern ) );
+    ellipseTool.setAttribute( "fillWithGradient", static_cast<int>( ellipseToolSettings.fillWithGradient ) );
+
+    return ellipseTool;
+}
+
+// save filler tool settings
+QDomElement KisDoc::saveFillerToolSettings( QDomDocument &doc )
+{
+    // filler tool element
+    QDomElement fillerTool = doc.createElement( "fillerTool" ); 
+
+    fillerTool.setAttribute( "opacity", fillerToolSettings.opacity );
+    fillerTool.setAttribute( "fillWithPattern", static_cast<int>( fillerToolSettings.fillWithPattern ) );
+    fillerTool.setAttribute( "fillWithGradient", static_cast<int>( fillerToolSettings.fillWithGradient ) );
+
+    return fillerTool;
+}
+
+// save Color changer settings
+QDomElement KisDoc::saveColorChangerSettings( QDomDocument &doc )
+{
+    // Color changer element
+    QDomElement colorChanger = doc.createElement( "colorChanger" ); 
+
+    colorChanger.setAttribute( "opacity", colorChangerSettings.opacity );
+    colorChanger.setAttribute( "fillWithPattern", static_cast<int>( colorChangerSettings.fillWithPattern ) );
+    colorChanger.setAttribute( "fillWithGradient", static_cast<int>( colorChangerSettings.fillWithGradient ) );
+
+    return colorChanger;
+}
+
+// save Stamp (Pattern) tool settings
+QDomElement KisDoc::saveStampToolSettings( QDomDocument &doc )
+{
+    // Stamp (Pattern) tool element
+    QDomElement stampTool = doc.createElement( "stampTool" ); 
+
+    stampTool.setAttribute( "opacity", stampToolSettings.opacity );
+    stampTool.setAttribute( "blendWithCurrentGradient", static_cast<int>( stampToolSettings.blendWithCurrentGradient ) );
+
+    return stampTool;
+}
+
+// save Gradients settings
+QDomElement KisDoc::saveGradientsSettings( QDomDocument &doc )
+{
+    // gradients element
+    QDomElement gradients = doc.createElement( "gradients" ); 
+
+    gradients.setAttribute( "opacity", gradientsSettings.opacity );
+    gradients.setAttribute( "offset", gradientsSettings.offset );
+    gradients.setAttribute( "mode", gradientsSettings.mode );
+    gradients.setAttribute( "blend", gradientsSettings.blend );
+    gradients.setAttribute( "gradient", gradientsSettings.gradient );
+    gradients.setAttribute( "repeat", gradientsSettings.repeat );
+
+    return gradients;
 }
 
 /*
@@ -477,6 +695,10 @@ bool KisDoc::loadImages( QDomElement &element )
 
             setCurrentImage( img );
         }
+        else if ( elem.tagName() == "tool" ) {
+            // load tool settings
+            loadToolSettings( elem );
+        }
 
         elem = elem.nextSibling().toElement();
     }
@@ -556,6 +778,149 @@ void KisDoc::loadChannels( QDomElement &element, KisLayer *lay )
             c = c.nextSibling();
         }
     }
+}
+
+// load tool settings
+void KisDoc::loadToolSettings( QDomElement &elem )
+{
+    QDomElement tool = elem.firstChild().toElement();
+
+    while ( !tool.isNull() ) {
+        if ( tool.tagName() == "penTool" )
+            loadPenToolSettings( tool );
+        else if ( tool.tagName() == "brushTool" )
+            loadBrushToolSettings( tool );
+        else if ( tool.tagName() == "airbrushTool" )
+            loadAirbrushToolSettings( tool );
+        else if ( tool.tagName() == "eraserTool" )
+            loadEraserToolSettings( tool );
+        else if ( tool.tagName() == "lineTool" )
+            loadLineToolSettings( tool );
+        else if ( tool.tagName() == "polylineTool" )
+            loadPolylineToolSettings( tool );
+        else if ( tool.tagName() == "rectangleTool" )
+            loadRectangleToolSettings( tool );
+        else if ( tool.tagName() == "ellipseTool" )
+            loadEllipseToolSettings( tool );
+        else if ( tool.tagName() == "fillerTool" )
+            loadFillerToolSettings( tool );
+        else if ( tool.tagName() == "colorChanger" )
+            loadColorChangerSettings( tool );
+        else if ( tool.tagName() == "stampTool" )
+            loadStampToolSettings( tool );
+        else if ( tool.tagName() == "gradients" )
+            loadGradientsSettings( tool );
+
+        tool = tool.nextSibling().toElement();
+    }
+}
+
+// load pen tool settings
+void KisDoc::loadPenToolSettings( QDomElement &elem )
+{
+    penToolSettings.opacity = elem.attribute( "opacity" ).toInt();
+    penToolSettings.paintThreshold = elem.attribute( "paintThreshold" ).toInt();
+    penToolSettings.paintWithPattern = static_cast<bool>( elem.attribute( "paintWithPattern" ).toInt() );
+    penToolSettings.paintWithGradient = static_cast<bool>( elem.attribute( "paintWithGradient" ).toInt() );
+}
+
+// load brush tool settings
+void KisDoc::loadBrushToolSettings( QDomElement &elem )
+{
+    brushToolSettings.opacity = elem.attribute( "opacity" ).toInt();
+    brushToolSettings.blendWithCurrentGradient = static_cast<bool>( elem.attribute( "blendWithCurrentGradient" ).toInt() );
+    brushToolSettings.blendWithCurrentPattern = static_cast<bool>( elem.attribute( "blendWithCurrentPattern" ).toInt() );
+}
+
+// load airbrush tool settings
+void KisDoc::loadAirbrushToolSettings( QDomElement &elem )
+{
+    airbrushToolSettings.opacity = elem.attribute( "opacity" ).toInt();
+    airbrushToolSettings.useCurrentGradient = static_cast<bool>( elem.attribute( "useCurrentGradient" ).toInt() );
+    airbrushToolSettings.useCurrentPattern = static_cast<bool>( elem.attribute( "useCurrentPattern" ).toInt() );
+}
+
+// load eraser tool settings
+void KisDoc::loadEraserToolSettings( QDomElement &elem )
+{
+    eraserToolSettings.opacity = elem.attribute( "opacity" ).toInt();
+    eraserToolSettings.blendWithCurrentGradient = static_cast<bool>( elem.attribute( "blendWithCurrentGradient" ).toInt() );
+    eraserToolSettings.blendWithCurrentPattern = static_cast<bool>( elem.attribute( "blendWithCurrentPattern" ).toInt() );
+}
+
+// load line tool settings
+void KisDoc::loadLineToolSettings( QDomElement &elem )
+{
+    lineToolSettings.thickness = elem.attribute( "thickness" ).toInt();
+    lineToolSettings.opacity = elem.attribute( "opacity" ).toInt();
+    lineToolSettings.fillInteriorRegions = static_cast<bool>( elem.attribute( "fillInteriorRegions" ).toInt() );
+    lineToolSettings.useCurrentPattern = static_cast<bool>( elem.attribute( "useCurrentPattern" ).toInt() );
+    lineToolSettings.fillWithGradient = static_cast<bool>( elem.attribute( "fillWithGradient" ).toInt() );
+}
+
+// load polyline tool settings
+void KisDoc::loadPolylineToolSettings( QDomElement &elem )
+{
+    polylineToolSettings.thickness = elem.attribute( "thickness" ).toInt();
+    polylineToolSettings.opacity = elem.attribute( "opacity" ).toInt();
+    polylineToolSettings.fillInteriorRegions = static_cast<bool>( elem.attribute( "fillInteriorRegions" ).toInt() );
+    polylineToolSettings.useCurrentPattern = static_cast<bool>( elem.attribute( "useCurrentPattern" ).toInt() );
+    polylineToolSettings.fillWithGradient = static_cast<bool>( elem.attribute( "fillWithGradient" ).toInt() );
+
+}
+
+// load rectangle tool settings
+void KisDoc::loadRectangleToolSettings( QDomElement &elem )
+{
+    rectangleToolSettings.thickness = elem.attribute( "thickness" ).toInt();
+    rectangleToolSettings.opacity = elem.attribute( "opacity" ).toInt();
+    rectangleToolSettings.fillInteriorRegions = static_cast<bool>( elem.attribute( "fillInteriorRegions" ).toInt() );
+    rectangleToolSettings.useCurrentPattern = static_cast<bool>( elem.attribute( "useCurrentPattern" ).toInt() );
+    rectangleToolSettings.fillWithGradient = static_cast<bool>( elem.attribute( "fillWithGradient" ).toInt() );
+}
+
+// load ellipse tool settings
+void KisDoc::loadEllipseToolSettings( QDomElement &elem )
+{
+    ellipseToolSettings.thickness = elem.attribute( "thickness" ).toInt();
+    ellipseToolSettings.opacity = elem.attribute( "opacity" ).toInt();
+    ellipseToolSettings.fillInteriorRegions = static_cast<bool>( elem.attribute( "fillInteriorRegions" ).toInt() );
+    ellipseToolSettings.useCurrentPattern = static_cast<bool>( elem.attribute( "useCurrentPattern" ).toInt() );
+    ellipseToolSettings.fillWithGradient = static_cast<bool>( elem.attribute( "fillWithGradient" ).toInt() );
+}
+
+// load filler tool settings
+void KisDoc::loadFillerToolSettings( QDomElement &elem )
+{
+    fillerToolSettings.opacity = elem.attribute( "opacity" ).toInt();
+    fillerToolSettings.fillWithPattern = static_cast<bool>( elem.attribute( "fillWithPattern" ).toInt() );
+    fillerToolSettings.fillWithGradient = static_cast<bool>( elem.attribute( "fillWithGradient" ).toInt() );
+}
+
+// load Color changer settings
+void KisDoc::loadColorChangerSettings( QDomElement &elem )
+{
+    colorChangerSettings.opacity = elem.attribute( "opacity" ).toInt();
+    colorChangerSettings.fillWithPattern = static_cast<bool>( elem.attribute( "fillWithPattern" ).toInt() );
+    colorChangerSettings.fillWithGradient = static_cast<bool>( elem.attribute( "fillWithGradient" ).toInt() );
+}
+
+// load Stamp (Pattern) tool settings
+void KisDoc::loadStampToolSettings( QDomElement &elem )
+{
+    stampToolSettings.opacity = elem.attribute( "opacity" ).toInt();
+    stampToolSettings.blendWithCurrentGradient = static_cast<bool>( elem.attribute( "blendWithCurrentGradient" ).toInt() );
+}
+
+// load Gradients settings
+void KisDoc::loadGradientsSettings( QDomElement &elem )
+{
+    gradientsSettings.opacity = elem.attribute( "opacity" ).toInt();
+    gradientsSettings.offset = elem.attribute( "offset" ).toInt();
+    gradientsSettings.mode = elem.attribute( "mode" );
+    gradientsSettings.blend = elem.attribute( "blend" );
+    gradientsSettings.gradient = elem.attribute( "gradient" );
+    gradientsSettings.repeat = elem.attribute( "repeat" );
 }
 
 bool KisDoc::completeLoading( KoStore* store )
@@ -1589,6 +1954,78 @@ void KisDoc::setImage( QString imageName )
             return;
         }
     }
+}
+
+// Set Pen tool settings
+void KisDoc::setPenToolSettings( PenToolSettings s )
+{
+    penToolSettings = s;
+}
+
+// Set Brush tool settings
+void KisDoc::setBrushToolSettings( BrushToolSettings s )
+{
+    brushToolSettings = s;
+}
+
+// Set Airbrush tool settings
+void KisDoc::setAirbrushToolSettings( AirbrushToolSettings s )
+{
+    airbrushToolSettings = s;
+}
+
+// Eraser tool settings
+void KisDoc::setEraserToolSettings( EraserToolSettings s )
+{
+    eraserToolSettings = s;
+}
+
+// Set Line tool settings
+void KisDoc::setLineToolSettings( LineToolSettings s )
+{
+    lineToolSettings = s;
+}
+
+// Set Polyline tool settings
+void KisDoc::setPolylineToolSettings( PolylineToolSettings s )
+{
+    polylineToolSettings = s;
+}
+
+// Set Rectangle tool settings
+void KisDoc::setRectangleToolSettings( RectangleToolSettings s )
+{
+    rectangleToolSettings = s;
+}
+
+// Set Ellipse tool settings
+void KisDoc::setEllipseToolSettings( EllipseToolSettings s )
+{
+    ellipseToolSettings = s;
+}
+
+// Set Filler tool settings
+void KisDoc::setFillerToolSettings( FillerToolSettings s )
+{
+    fillerToolSettings = s;
+}
+
+// Set Color changer settings
+void KisDoc::setColorChangerSettings( ColorChangerSettings s )
+{
+    colorChangerSettings = s;
+}
+
+// Set Stamp (Pattern) tool settings
+void KisDoc::setStampToolSettings( StampToolSettings s )
+{
+    stampToolSettings = s;
+}
+
+// Set Gradients settings
+void KisDoc::setGradientsSettings( GradientsSettings s )
+{
+    gradientsSettings = s;
 }
 
 #include "kis_doc.moc"

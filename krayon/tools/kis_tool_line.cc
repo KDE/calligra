@@ -35,10 +35,22 @@ LineTool::LineTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
   , m_dragging( false )
   , pCanvas( _canvas )
 {
-    lineThickness = 4;
-    lineOpacity = 255;
-    usePattern = false;
-    useGradient = false;
+    m_pDoc = _doc;
+
+    // initialize line tool settings
+    KisDoc::LineToolSettings s = m_pDoc->getLineToolSettings();
+    lineThickness = s.thickness;
+    lineOpacity = s.opacity;
+    usePattern = s.useCurrentPattern;
+    useGradient = s.fillWithGradient;
+    useRegions = s.fillInteriorRegions;
+
+    KisPainter *p = m_pView->kisPainter();
+    
+    p->setLineThickness( lineThickness );
+    p->setLineOpacity( lineOpacity );
+    p->setPatternFill( usePattern );
+    p->setGradientFill( useGradient );
 }
 
 
@@ -83,8 +95,7 @@ void LineTool::mouseRelease( QMouseEvent* event )
     if ( m_pDoc->isEmpty() )
         return;
 
-    if(( m_dragging) 
-    && ( event->state() == LeftButton))
+    if( ( m_dragging) && ( event->state() == LeftButton) )
     {
         // erase old line
         drawLine( m_dragStart, m_dragEnd );
@@ -124,11 +135,17 @@ void LineTool::optionsDialog()
 {
     ToolOptsStruct ts;    
     
-    ts.usePattern       = usePattern;
-    ts.useGradient      = useGradient;
-    ts.lineThickness    = lineThickness;
-    ts.lineOpacity      = lineOpacity;
-    ts.fillShapes       = false;
+    ts.usePattern     = usePattern;
+    ts.useGradient    = useGradient;
+    ts.lineThickness  = lineThickness;
+    ts.lineOpacity    = lineOpacity;
+    ts.fillShapes     = useRegions;
+
+    bool old_usePattern       = usePattern;
+    bool old_useGradient      = useGradient;
+    int  old_lineThickness    = lineThickness;
+    int  old_lineOpacity      = lineOpacity;
+    bool old_useRegions       = useRegions;
     
     ToolOptionsDialog *pOptsDialog 
         = new ToolOptionsDialog(tt_linetool, ts);
@@ -137,17 +154,36 @@ void LineTool::optionsDialog()
     
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
+    else {
+        lineThickness = pOptsDialog->lineToolTab()->thickness();
+        lineOpacity   = pOptsDialog->lineToolTab()->opacity();
+        usePattern    = pOptsDialog->lineToolTab()->usePattern();
+        useGradient   = pOptsDialog->lineToolTab()->useGradient();
+        useRegions    = pOptsDialog->lineToolTab()->solid();
 
-    lineThickness = pOptsDialog->lineToolTab()->thickness();
-    lineOpacity   = pOptsDialog->lineToolTab()->opacity();
-    usePattern    = pOptsDialog->lineToolTab()->usePattern();
-    useGradient   = pOptsDialog->lineToolTab()->useGradient();
+        // User change value ?
+        if ( old_usePattern != usePattern || old_useGradient != useGradient 
+             || old_lineOpacity != lineOpacity || old_lineThickness != lineThickness
+             || old_useRegions != useRegions ) {    
+            KisPainter *p = m_pView->kisPainter();
     
-    KisPainter *p = m_pView->kisPainter();
-    
-    p->setLineThickness(lineThickness);
-    p->setLineOpacity(lineOpacity);
-    p->setPatternFill(usePattern);
-    p->setGradientFill(useGradient);
+            p->setLineThickness( lineThickness );
+            p->setLineOpacity( lineOpacity );
+            p->setPatternFill( usePattern );
+            p->setGradientFill( useGradient );
+
+            // set line tool settings
+            KisDoc::LineToolSettings s = m_pDoc->getLineToolSettings();
+            s.thickness            = lineThickness;
+            s.opacity              = lineOpacity;
+            s.useCurrentPattern    = usePattern;
+            s.fillWithGradient     = useGradient;
+            s.fillInteriorRegions  = useRegions;
+
+            m_pDoc->setLineToolSettings( s );
+
+            m_pDoc->setModified( true );
+        }
+    }
 }
 

@@ -34,11 +34,22 @@ PolyLineTool::PolyLineTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
   , m_dragging( false )
   , pCanvas( _canvas )
 {
-    lineThickness = 4;
-    lineOpacity = 255;
+    m_pDoc = _doc;
+
+    // initialize polyline tool settings
+    KisDoc::PolylineToolSettings s = m_pDoc->getPolyLineToolSettings();
+    lineThickness = s.thickness;
+    lineOpacity = s.opacity;
+    usePattern = s.useCurrentPattern;
+    useGradient = s.fillWithGradient;
+    useRegions = s.fillInteriorRegions;
+
+    KisPainter *p = m_pView->kisPainter();
     
-    usePattern = false;
-    useGradient = false;
+    p->setLineThickness( lineThickness );
+    p->setLineOpacity( lineOpacity );
+    p->setPatternFill( usePattern );
+    p->setGradientFill( useGradient );
         
     mStart  = QPoint(-1, -1);
     mFinish = QPoint(-1, -1);     
@@ -151,7 +162,13 @@ void PolyLineTool::optionsDialog()
     ts.useGradient      = useGradient;
     ts.lineThickness    = lineThickness;
     ts.lineOpacity      = lineOpacity;
-    ts.fillShapes       = false;
+    ts.fillShapes       = useRegions;
+
+    bool old_usePattern       = usePattern;
+    bool old_useGradient      = useGradient;
+    int  old_lineThickness    = lineThickness;
+    int  old_lineOpacity      = lineOpacity;
+    bool old_useRegions       = useRegions;
     
     ToolOptionsDialog *pOptsDialog 
         = new ToolOptionsDialog(tt_linetool, ts);
@@ -160,17 +177,36 @@ void PolyLineTool::optionsDialog()
     
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
+    else {
+        lineThickness = pOptsDialog->lineToolTab()->thickness();
+        lineOpacity   = pOptsDialog->lineToolTab()->opacity();
+        usePattern    = pOptsDialog->lineToolTab()->usePattern();
+        useGradient   = pOptsDialog->lineToolTab()->useGradient();
+        useRegions    = pOptsDialog->lineToolTab()->solid();
 
-    lineThickness = pOptsDialog->lineToolTab()->thickness();
-    lineOpacity   = pOptsDialog->lineToolTab()->opacity();
-    usePattern    = pOptsDialog->lineToolTab()->usePattern();
-    useGradient   = pOptsDialog->lineToolTab()->useGradient();
+        // User change value ?
+        if ( old_usePattern != usePattern || old_useGradient != useGradient 
+             || old_lineOpacity != lineOpacity || old_lineThickness != lineThickness
+             || old_useRegions != useRegions ) {    
+            KisPainter *p = m_pView->kisPainter();
+    
+            p->setLineThickness( lineThickness );
+            p->setLineOpacity( lineOpacity );
+            p->setPatternFill( usePattern );
+            p->setGradientFill( useGradient );
 
-    KisPainter *p = m_pView->kisPainter();
+            // set polyline tool settings
+            KisDoc::PolylineToolSettings s = m_pDoc->getPolyLineToolSettings();
+            s.thickness            = lineThickness;
+            s.opacity              = lineOpacity;
+            s.useCurrentPattern    = usePattern;
+            s.fillWithGradient     = useGradient;
+            s.fillInteriorRegions  = useRegions;
 
-    p->setLineThickness(lineThickness);
-    p->setLineOpacity(lineOpacity);
-    p->setPatternFill(usePattern);    
-    p->setGradientFill(useGradient);
+            m_pDoc->setPolylineToolSettings( s );
+
+            m_pDoc->setModified( true );
+        }
+    }
 }
 

@@ -26,6 +26,7 @@
 #include "kis_tool.h"
 
 class KisBrush;
+class KisDoc;
 
 class EraserTool : public KisTool
 {
@@ -48,7 +49,8 @@ class EraserTool : public KisTool
 
  protected:
 
-    KisBrush *m_pBrush;   
+    KisBrush *m_pBrush;
+    KisDoc   *m_pDoc;
 
     QPoint  m_dragStart;
     bool    m_dragging;
@@ -58,7 +60,6 @@ class EraserTool : public KisTool
     
     bool usePattern;
     bool useGradient;
-    int lineThickness;
     int lineOpacity;
 };
 

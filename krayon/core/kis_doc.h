@@ -2,6 +2,7 @@
  *  kis_doc.h - part of Krayon
  *
  *  Copyright (c) 1999-2000 Matthias Elter  <me@kde.org>
+ *  Copyright (c) 2001 Toshitaka Fujioka  <fujioka@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -202,6 +203,221 @@ public:
 
     void setImage( QString imageName ); // for print, save file and load file.
 
+    /* 
+     * Pen tool settings 
+     */
+    struct PenToolSettings {
+        PenToolSettings() {
+            opacity = 255;
+            paintThreshold = 128;
+            paintWithPattern = false;
+            paintWithGradient = false;
+        }
+
+        uint opacity, paintThreshold;
+        bool paintWithPattern, paintWithGradient;
+    };
+
+    PenToolSettings getPenToolSettings() const { return penToolSettings; }
+    void setPenToolSettings( PenToolSettings s );
+    
+    /* 
+     * Brush tool settings
+     */
+    struct BrushToolSettings {
+        BrushToolSettings() {
+            opacity = 255;
+            blendWithCurrentGradient = false;
+            blendWithCurrentPattern = false;
+        }
+
+        uint opacity;
+        bool blendWithCurrentGradient, blendWithCurrentPattern;
+    };
+
+    BrushToolSettings getBrushToolSettings() const { return brushToolSettings; }
+    void setBrushToolSettings( BrushToolSettings s );
+
+    /* 
+     * Airbrush tool settings
+     */
+    struct AirbrushToolSettings {
+        AirbrushToolSettings() {
+            opacity = 255;
+            useCurrentGradient = false;
+            useCurrentPattern = false;
+        }
+
+        uint opacity;
+        bool useCurrentGradient, useCurrentPattern;
+    };
+
+    AirbrushToolSettings getAirbrushToolSettings() const { return airbrushToolSettings; }
+    void setAirbrushToolSettings( AirbrushToolSettings s );
+
+    /* 
+     * Eraser tool settings 
+     */
+    struct EraserToolSettings {
+        EraserToolSettings() {
+            opacity = 255;
+            blendWithCurrentGradient = true;
+            blendWithCurrentPattern = false;
+        }
+
+        uint opacity;
+        bool blendWithCurrentGradient, blendWithCurrentPattern;
+    };
+
+    EraserToolSettings getEraserToolSettings() const { return eraserToolSettings; }
+    void setEraserToolSettings( EraserToolSettings s );
+
+    /* 
+     * Line tool settings 
+     */
+    struct LineToolSettings {
+        LineToolSettings() {
+            thickness = 4;
+            opacity = 255;
+            fillInteriorRegions = false;
+            useCurrentPattern = false;
+            fillWithGradient = false;
+        }
+
+        uint thickness, opacity;
+        bool fillInteriorRegions, useCurrentPattern, fillWithGradient;
+    };
+
+    LineToolSettings getLineToolSettings() const { return lineToolSettings; }
+    void setLineToolSettings( LineToolSettings s );
+
+    /* 
+     * Polyline tool settings 
+     */
+    struct PolylineToolSettings {
+        PolylineToolSettings() {
+            thickness = 4;
+            opacity = 255;
+            fillInteriorRegions = false;
+            useCurrentPattern = false;
+            fillWithGradient = false;
+        }
+
+        uint thickness, opacity;
+        bool fillInteriorRegions, useCurrentPattern, fillWithGradient;
+    };
+
+    PolylineToolSettings getPolyLineToolSettings() const { return polylineToolSettings; }
+    void setPolylineToolSettings( PolylineToolSettings s );
+
+    /* 
+     * Rectangle tool settings 
+     */
+    struct RectangleToolSettings {
+        RectangleToolSettings() {
+            thickness = 4;
+            opacity = 255;
+            fillInteriorRegions = false;
+            useCurrentPattern = false;
+            fillWithGradient = false;
+        }
+
+        uint thickness, opacity;
+        bool fillInteriorRegions, useCurrentPattern, fillWithGradient;
+    };
+
+    RectangleToolSettings getRectangleToolSettings() const { return rectangleToolSettings; }
+    void setRectangleToolSettings( RectangleToolSettings s );
+
+    /* 
+     * Ellipse tool settings 
+     */
+    struct EllipseToolSettings {
+        EllipseToolSettings() {
+            thickness = 4;
+            opacity = 255;
+            fillInteriorRegions = false;
+            useCurrentPattern = false;
+            fillWithGradient = false;
+        }
+
+        uint thickness, opacity;
+        bool fillInteriorRegions, useCurrentPattern, fillWithGradient;
+    };
+
+    EllipseToolSettings getEllipseToolSettings() const { return ellipseToolSettings; }
+    void setEllipseToolSettings( EllipseToolSettings s );
+
+    /* 
+     * Filler tool settings 
+     */
+    struct FillerToolSettings {
+        FillerToolSettings() {
+            opacity = 255;
+            fillWithPattern = false;
+            fillWithGradient = false;
+        }
+
+        uint opacity;
+        bool fillWithPattern, fillWithGradient;
+    };
+
+    FillerToolSettings getFillerToolSettings() const { return fillerToolSettings; }
+    void setFillerToolSettings( FillerToolSettings s );
+
+    /* 
+     * Color changer settings 
+     */
+    struct ColorChangerSettings {
+        ColorChangerSettings() {
+            opacity = 255;
+            fillWithPattern = false;
+            fillWithGradient = false;
+        }
+
+        uint opacity;
+        bool fillWithPattern, fillWithGradient;
+    };
+
+    ColorChangerSettings getColorChangerSettings() const { return colorChangerSettings; }
+    void setColorChangerSettings( ColorChangerSettings s );
+
+    /* 
+     * Stamp (Pattern) tool settings
+     */
+    struct StampToolSettings {
+        StampToolSettings() {
+            opacity = 255;
+            blendWithCurrentGradient = false;
+        }
+
+        uint opacity;
+        bool blendWithCurrentGradient;
+    };
+
+    StampToolSettings getStampToolSettings() const { return stampToolSettings; }
+    void setStampToolSettings( StampToolSettings s );
+
+    /* 
+     * Gradients settings 
+     */
+    struct GradientsSettings {
+        GradientsSettings() {
+            opacity = 100;
+            offset = 0;
+            mode = i18n( "Normal" );
+            blend = i18n( "FG to BG (RGB)" );
+            gradient = i18n( "Vertical" );
+            repeat = i18n( "None" );
+        }
+
+        uint opacity, offset;
+        QString mode, blend, gradient, repeat;
+    };
+
+    GradientsSettings getGradientsToolSettings() const { return gradientsSettings; }
+    void setGradientsSettings( GradientsSettings s );
+
 public slots:
     void slotImageUpdated();
     void slotImageUpdated( const QRect& rect);
@@ -223,6 +439,7 @@ protected:
     views of the same data */
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
+
     /* save images */
     QDomElement saveImages( QDomDocument &doc );
 
@@ -231,6 +448,46 @@ protected:
 
     /* save channels */
     QDomElement saveChannels( QDomDocument &doc, KisLayer *lay );
+
+    /* save tool settings */
+    QDomElement saveToolSettings( QDomDocument &doc );
+
+    /* save pen tool settings */
+    QDomElement savePenToolSettings( QDomDocument &doc );
+
+    /* save brush tool settings */
+    QDomElement saveBrushToolSettings( QDomDocument &doc );
+
+    /* save airbrush tool settings */
+    QDomElement saveAirbrushToolSettings( QDomDocument &doc );
+
+    /* save eraser tool settings */
+    QDomElement saveEraserToolSettings( QDomDocument &doc );
+
+    /* save line tool settings */
+    QDomElement saveLineToolSettings( QDomDocument &doc );
+
+    /* save polyline tool settings */
+    QDomElement savePolylineToolSettings( QDomDocument &doc );
+
+    /* save rectangle tool settings */
+    QDomElement saveRectangleToolSettings( QDomDocument &doc );
+
+    /* save ellipse tool settings */
+    QDomElement saveEllipseToolSettings( QDomDocument &doc );
+
+    /* save filler tool settings */
+    QDomElement saveFillerToolSettings( QDomDocument &doc );
+
+    /* save Color changer settings */
+    QDomElement saveColorChangerSettings( QDomDocument &doc );
+
+    /* save Stamp (Pattern) tool settings */
+    QDomElement saveStampToolSettings( QDomDocument &doc );
+
+    /* save Gradients settings */
+    QDomElement saveGradientsSettings( QDomDocument &doc );
+
 
     /* load images */
     bool loadImages( QDomElement &elem );
@@ -241,10 +498,50 @@ protected:
     /* load channels */
     void loadChannels( QDomElement &elem, KisLayer *lay );
 
+    /* load tool settings */
+    void loadToolSettings( QDomElement &elem );
+
+    /* load pen tool settings */
+    void loadPenToolSettings( QDomElement &elem );
+
+    /* load brush tool settings */
+    void loadBrushToolSettings( QDomElement &elem );
+
+    /* load airbrush tool settings */
+    void loadAirbrushToolSettings( QDomElement &elem );
+
+    /* load eraser tool settings */
+    void loadEraserToolSettings( QDomElement &elem );
+
+    /* load line tool settings */
+    void loadLineToolSettings( QDomElement &elem );
+
+    /* load polyline tool settings */
+    void loadPolylineToolSettings( QDomElement &elem );
+
+    /* load rectangle tool settings */
+    void loadRectangleToolSettings( QDomElement &elem );
+
+    /* load ellipse tool settings */
+    void loadEllipseToolSettings( QDomElement &elem );
+
+    /* load filler tool settings */
+    void loadFillerToolSettings( QDomElement &elem );
+
+    /* load Color changer settings */
+    void loadColorChangerSettings( QDomElement &elem );
+
+    /* load Stamp (Pattern) tool settings */
+    void loadStampToolSettings( QDomElement &elem );
+
+    /* load Gradients settings */
+    void loadGradientsSettings( QDomElement &elem );
+
     /* load old file format */
     bool loadXMLOldFileFormat( QDomElement &image );
     void completeLoadingOldFileFormat( KoStore *store );
     bool oldFileFormat;
+
 
     /* undo/redo */
     KoCommandHistory m_commands;
@@ -262,6 +559,20 @@ protected:
 
     KisSelection *m_pSelection;
     KisFrameBuffer *m_pFrameBuffer;
+
+private:
+    PenToolSettings         penToolSettings;
+    BrushToolSettings       brushToolSettings;
+    AirbrushToolSettings    airbrushToolSettings;
+    EraserToolSettings      eraserToolSettings;
+    LineToolSettings        lineToolSettings;
+    PolylineToolSettings    polylineToolSettings;
+    RectangleToolSettings   rectangleToolSettings;
+    EllipseToolSettings     ellipseToolSettings;
+    FillerToolSettings      fillerToolSettings;
+    ColorChangerSettings    colorChangerSettings;
+    StampToolSettings       stampToolSettings;
+    GradientsSettings       gradientsSettings;
 };
 
 #endif // __kis_doc_h__

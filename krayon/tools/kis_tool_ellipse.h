@@ -63,6 +63,7 @@ protected:
     bool    m_dragging;
     
     KisCanvas   *pCanvas;
+    KisDoc      *m_pDoc;
 };
 
 #endif //__linetool_h__

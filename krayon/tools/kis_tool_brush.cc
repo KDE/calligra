@@ -38,12 +38,15 @@
 BrushTool::BrushTool(KisDoc *doc, KisView *view, KisBrush *_brush)
   : KisTool(doc, view)
 {
+    m_pDoc = doc;
     m_dragging = false;
     m_dragdist = 0;
 
-    usePattern = false;
-    useGradient = false;
-    opacity = 255;
+    // initialize brush tool settings
+    KisDoc::BrushToolSettings s = m_pDoc->getBrushToolSettings();
+    usePattern = s.blendWithCurrentPattern;
+    useGradient = s.blendWithCurrentGradient;
+    opacity = s.opacity;
 
     setBrush(_brush);
 }
@@ -272,6 +275,10 @@ void BrushTool::optionsDialog()
     ts.useGradient      = useGradient;
     ts.opacity          = opacity;
 
+    bool old_usePattern   = usePattern;
+    bool old_useGradient  = useGradient;
+    int  old_opacity      = opacity;
+
     ToolOptionsDialog *pOptsDialog
         = new ToolOptionsDialog(tt_brushtool, ts);
 
@@ -279,8 +286,22 @@ void BrushTool::optionsDialog()
 
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
+    else {
+        opacity      = pOptsDialog->brushToolTab()->opacity();
+        usePattern   = pOptsDialog->brushToolTab()->usePattern();
+        useGradient  = pOptsDialog->brushToolTab()->useGradient();
 
-    opacity   = pOptsDialog->brushToolTab()->opacity();
-    usePattern    = pOptsDialog->brushToolTab()->usePattern();
-    useGradient   = pOptsDialog->brushToolTab()->useGradient();
+        // User change value ?
+        if ( old_usePattern != usePattern || old_useGradient != useGradient || old_opacity != opacity ) {
+            // set brush tool settings
+            KisDoc::BrushToolSettings s = m_pDoc->getBrushToolSettings();
+            s.blendWithCurrentPattern   = usePattern;
+            s.blendWithCurrentGradient  = useGradient;
+            s.opacity                   = opacity;
+
+            m_pDoc->setBrushToolSettings( s );
+
+            m_pDoc->setModified( true );
+        }
+    }
 }

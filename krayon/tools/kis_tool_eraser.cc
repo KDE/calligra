@@ -37,12 +37,13 @@ EraserTool::EraserTool(KisDoc *doc, KisView *view, KisBrush *_brush)
 {
     m_dragging = false;
     m_dragdist = 0;
+    m_pDoc = doc;
 
-    usePattern  = false;
-    useGradient = false;
-
-    lineThickness = 1;
-    lineOpacity = 255;
+    // initialize eraser tool settings
+    KisDoc::EraserToolSettings s = m_pDoc->getEraserToolSettings();
+    usePattern = s.blendWithCurrentPattern;
+    useGradient = s.blendWithCurrentGradient;
+    lineOpacity = s.opacity;
 
     setBrush(_brush);
 }
@@ -273,10 +274,13 @@ void EraserTool::optionsDialog()
 {
     ToolOptsStruct ts;
 
-    ts.usePattern       = usePattern;
-    ts.useGradient      = useGradient;
-    ts.lineThickness    = lineThickness;
-    ts.lineOpacity      = lineOpacity;
+    ts.usePattern  = usePattern;
+    ts.useGradient = useGradient;
+    ts.opacity     = lineOpacity;
+
+    bool old_usePattern     = usePattern;
+    bool old_useGradient    = useGradient;
+    int  old_lineOpacity    = lineOpacity;
 
     ToolOptionsDialog *pOptsDialog
         = new ToolOptionsDialog(tt_erasertool, ts);
@@ -285,11 +289,24 @@ void EraserTool::optionsDialog()
 
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
+    else {
+        lineOpacity   = pOptsDialog->eraserToolTab()->opacity();
+        usePattern    = pOptsDialog->eraserToolTab()->usePattern();
+        useGradient   = pOptsDialog->eraserToolTab()->useGradient();
 
-    lineThickness = pOptsDialog->eraserToolTab()->thickness();
-    lineOpacity   = pOptsDialog->eraserToolTab()->opacity();
-    usePattern    = pOptsDialog->eraserToolTab()->usePattern();
-    useGradient   = pOptsDialog->eraserToolTab()->useGradient();
+        // User change value ?
+        if ( old_usePattern != usePattern || old_useGradient != useGradient 
+             || old_lineOpacity != lineOpacity ) {
+            // set eraser tool settings
+            KisDoc::EraserToolSettings s = m_pDoc->getEraserToolSettings();
+            s.blendWithCurrentPattern   = usePattern;
+            s.blendWithCurrentGradient  = useGradient;
+            s.opacity                   = lineOpacity;
 
+            m_pDoc->setEraserToolSettings( s );
+
+            m_pDoc->setModified( true );
+        }
+    }
 }
 

@@ -41,9 +41,12 @@ StampTool::StampTool(KisDoc *doc, KisView *view,
     m_dragdist = 0;
     m_pView = view;
     m_pCanvas = canvas;
+    m_pDoc = doc;
 
-    opacity = 255;
-    useGradient = false;
+    // initialize stamp tool settings
+    KisDoc::StampToolSettings s = m_pDoc->getStampToolSettings();  
+    opacity = s.opacity;
+    useGradient = s.blendWithCurrentGradient;
     useBlend = false;
 
     setPattern(pattern);
@@ -460,6 +463,9 @@ void StampTool::optionsDialog()
     ts.useGradient      = useGradient;
     ts.opacity          = opacity;
 
+    bool old_useGradient = useGradient;
+    int  old_opacity     = opacity;
+
     ToolOptionsDialog *pOptsDialog
         = new ToolOptionsDialog(tt_stamptool, ts);
 
@@ -467,9 +473,22 @@ void StampTool::optionsDialog()
 
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
+    else {
+        opacity       = pOptsDialog->stampToolTab()->opacity();
+        useGradient   = pOptsDialog->stampToolTab()->useGradient();
 
-    opacity       = pOptsDialog->stampToolTab()->opacity();
-    useGradient   = pOptsDialog->stampToolTab()->useGradient();
+        // User change value ?
+        if ( old_useGradient != useGradient || old_opacity != opacity ) {
+            // set stamp tool settings
+            KisDoc::StampToolSettings s = m_pDoc->getStampToolSettings();
+            s.opacity                   = opacity;
+            s.blendWithCurrentGradient  = useGradient;
+
+            m_pDoc->setStampToolSettings( s );
+
+            m_pDoc->setModified( true );
+        }
+    }
 }
 
 

@@ -29,6 +29,7 @@
 #include "kis_layer.h"
 #include "kis_framebuffer.h"
 
+class KisDoc;
 
 class ColorChangerTool : public KisTool
 {
@@ -68,6 +69,7 @@ class ColorChangerTool : public KisTool
     int toleranceBlue;
 
     KisLayer *fLayer;
+    KisDoc   *m_pDoc;
 };
 
 #endif //__colorchangertool_h__

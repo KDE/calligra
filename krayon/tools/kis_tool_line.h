@@ -54,6 +54,7 @@ protected:
 
     bool        usePattern;
     bool        useGradient;
+    bool        useRegions;
                 
     QPoint      m_dragStart;
     QPoint      m_dragEnd;
@@ -61,6 +62,7 @@ protected:
     bool        m_dragging;
 
     KisCanvas   *pCanvas;
+    KisDoc      *m_pDoc;
 };
 
 #endif //__linetool_h__

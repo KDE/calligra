@@ -29,6 +29,7 @@
 #include "kis_tool.h"
 
 class KisPattern;
+class KisDoc;
 
 class StampTool : public KisTool
 {
@@ -57,6 +58,7 @@ class StampTool : public KisTool
     KisView     *m_pView;
     KisCanvas   *m_pCanvas;
     KisPattern  *m_pPattern;
+    KisDoc      *m_pDoc;
     
     QPoint      oldp;
     QPoint      mHotSpot;
@@ -66,7 +68,7 @@ class StampTool : public KisTool
     int         patternWidth;
     int         patternHeight;
         
-    QPoint 	    m_dragStart;
+    QPoint      m_dragStart;
     bool        m_dragging;
     float       m_dragdist;
     int         spacing;

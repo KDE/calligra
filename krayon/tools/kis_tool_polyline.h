@@ -58,6 +58,7 @@ private:
 
     bool        usePattern;
     bool        useGradient;
+    bool        useRegions;
         
     QPoint      m_dragStart;
     QPoint      m_dragEnd;
@@ -68,6 +69,7 @@ private:
     bool        m_done;
     
     KisCanvas   *pCanvas;
+    KisDoc      *m_pDoc;
 };
 
 #endif //__polylinetool_h__

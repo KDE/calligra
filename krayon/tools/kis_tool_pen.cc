@@ -38,11 +38,14 @@ PenTool::PenTool(KisDoc *doc, KisView *view,
     m_dragging = false;
     m_pView  = view;
     m_pCanvas = canvas;
+    m_pDoc = doc;
 
-    penColorThreshold = 128;
-    penOpacity        = 255;
-    usePattern        = false;
-    useGradient       = false;
+    // initialize pen tool settings
+    KisDoc::PenToolSettings s = m_pDoc->getPenToolSettings();
+    penColorThreshold = s.paintThreshold;
+    penOpacity        = s.opacity;
+    usePattern        = s.paintWithPattern;
+    useGradient       = s.paintWithGradient;
 
     lineThickness = 1;
     lineOpacity = 1;
@@ -263,9 +266,14 @@ void PenTool::optionsDialog()
     ToolOptsStruct ts;
 
     ts.usePattern       = usePattern;
-    ts.useGradient      = usePattern;
+    ts.useGradient      = useGradient;
     ts.penThreshold     = penColorThreshold;
     ts.opacity          = penOpacity;
+
+    bool old_usePattern         = usePattern;
+    bool old_useGradient        = useGradient;
+    int old_penColorThreshold   = penColorThreshold;
+    int old_penOpacity          = penOpacity;
 
     ToolOptionsDialog *pOptsDialog
         = new ToolOptionsDialog(tt_pentool, ts);
@@ -274,9 +282,25 @@ void PenTool::optionsDialog()
 
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
+    else {
+        usePattern          = pOptsDialog->penToolTab()->usePattern();
+        useGradient         = pOptsDialog->penToolTab()->useGradient();
+        penColorThreshold   = pOptsDialog->penToolTab()->penThreshold();
+        penOpacity          = pOptsDialog->penToolTab()->opacity();
 
-    usePattern          = pOptsDialog->penToolTab()->usePattern();
-    useGradient         = pOptsDialog->penToolTab()->useGradient();
-    penColorThreshold   = pOptsDialog->penToolTab()->penThreshold();
-    penOpacity          = pOptsDialog->penToolTab()->opacity();
+        // User change value ?
+        if ( old_usePattern != usePattern || old_useGradient != useGradient
+             || old_penColorThreshold != penColorThreshold || old_penOpacity != penOpacity ) {
+            // set pen tool settings
+            KisDoc::PenToolSettings s;
+            s.paintThreshold     = penColorThreshold;
+            s.opacity            = penOpacity;
+            s.paintWithPattern   = usePattern;
+            s.paintWithGradient  = useGradient;
+
+            m_pDoc->setPenToolSettings( s );
+
+            m_pDoc->setModified( true );
+        }
+    }
 }

@@ -27,6 +27,7 @@
 #include "kis_tool.h"
 
 class KisBrush;
+class KisDoc;
 
 class AirBrushTool : public KisTool
 {
@@ -53,7 +54,8 @@ public slots:
 protected:
 
     KisBrush *m_pBrush;
-    QTimer *timer;    
+    QTimer *timer;
+    KisDoc *m_pDoc;
     
     QArray <int> brushArray; // array of points in brush
     int nPoints;  // number of points marked in array

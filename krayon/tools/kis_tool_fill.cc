@@ -32,10 +32,13 @@ FillTool::FillTool(KisDoc *doc, KisView *view)
   : KisTool(doc, view)
 {
     m_Cursor = KisCursor::pickerCursor();
-    
-    fillOpacity = 255;
-    usePattern  = false;
-    useGradient = false;
+    m_pDoc = doc;
+
+    // initialize filler tool settings
+    KisDoc::FillerToolSettings s = m_pDoc->getFillerToolSettings();  
+    fillOpacity = s.opacity;
+    usePattern  = s.fillWithPattern;
+    useGradient = s.fillWithGradient;
         
     toleranceRed = 0;
     toleranceGreen = 0;
@@ -287,8 +290,13 @@ void FillTool::optionsDialog()
 {
     ToolOptsStruct ts;    
     
+    ts.opacity          = fillOpacity;
     ts.usePattern       = usePattern;
     ts.useGradient      = useGradient;
+
+    int old_fillOpacity   = fillOpacity;
+    bool old_usePattern   = usePattern;
+    bool old_useGradient  = useGradient;
 
     ToolOptionsDialog *pOptsDialog 
         = new ToolOptionsDialog(tt_filltool, ts);
@@ -297,12 +305,26 @@ void FillTool::optionsDialog()
     
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
+    else {
+        fillOpacity     = pOptsDialog->fillToolTab()->opacity();
+        usePattern      = pOptsDialog->fillToolTab()->usePattern();
+        useGradient     = pOptsDialog->fillToolTab()->useGradient();
 
-    fillOpacity     = pOptsDialog->fillToolTab()->opacity();
-    usePattern      = pOptsDialog->fillToolTab()->usePattern();
-    useGradient     = pOptsDialog->fillToolTab()->useGradient();
+        //toleranceRed    = pOptsDialog->ToleranceRed();
+        //toleranceGreen  = pOptsDialog->ToleranceGreen();    
+        //toleranceBlue   = pOptsDialog->ToleranceBlue();
 
-    //toleranceRed    = pOptsDialog->ToleranceRed();
-    //toleranceGreen  = pOptsDialog->ToleranceGreen();    
-    //toleranceBlue   = pOptsDialog->ToleranceBlue();    
+        // User change value ?
+        if ( old_usePattern != usePattern || old_useGradient != useGradient || old_fillOpacity != fillOpacity ) {
+            // set filler tool settings
+            KisDoc::FillerToolSettings s = m_pDoc->getFillerToolSettings();
+            s.opacity              = fillOpacity;
+            s.fillWithPattern      = usePattern;
+            s.fillWithGradient     = useGradient;
+
+            m_pDoc->setFillerToolSettings( s );
+
+            m_pDoc->setModified( true );
+        }
+    }    
 }

@@ -26,6 +26,7 @@
 #include "kis_tool.h"
 
 class KisBrush;
+class KisDoc;
 
 class BrushTool : public KisTool
 {
@@ -46,13 +47,14 @@ public slots:
     virtual void mouseRelease(QMouseEvent*);
     virtual void optionsDialog();
     
- protected:
+protected:
 
     KisBrush *m_pBrush;
+    KisDoc   *m_pDoc;
 
     QPoint 	m_dragStart;
     bool   	m_dragging;
-    float   m_dragdist;
+    float       m_dragdist;
     
     int red, blue, green;
     int brushWidth, brushHeight;

@@ -28,6 +28,8 @@
 #include "kis_tool.h"
 #include "kis_layer.h"
 
+class KisDoc;
+
 struct fillinfo
 {
    int left;
@@ -84,6 +86,7 @@ class FillTool : public KisTool
     int toleranceBlue;
 
     KisLayer *fLayer;
+    KisDoc   *m_pDoc;
 };
 
 #endif //__filltool_h__

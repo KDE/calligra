@@ -54,8 +54,8 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
   , m_cMode (cm)
   , m_bitDepth (bd)
 {
-    m_author = "unknown";
-    m_email = "unknown";
+    m_author = "The Krayon team";
+    m_email = "kimageshop@mail.kde.org";
 
     // jwc - need to update tile extents when a new layer is
     // added larger than the first (or largest) layer - done!

@@ -28,18 +28,19 @@ KAboutData * newKrayonAboutData()
 {
     KAboutData * aboutData = new KAboutData( "krayon",
                                              I18N_NOOP("Krayon"),
-                                             "0.1.0",
+                                             "0.2.0",
                                              I18N_NOOP("KOffice image manipulation application."),
                                              KAboutData::License_GPL,
-                                             "(c) 1999-2000 The Krayon team.",
+                                             "(c) 1999-2001 The Krayon team.",
                                              "",
-                                             "http://koffice.kde.org",
+                                             "http://koffice.kde.org/krayon",
                                              "submit@bugs.kde.org");
     aboutData->addAuthor("Matthias Elter", 0, "me@kde.org");
     aboutData->addAuthor("Carsten Pfeiffer", 0, "carpdjih@cetus.zrz.tu-berlin.de");
     aboutData->addAuthor("Michael Koch", 0, "koch@kde.org");
     aboutData->addAuthor("John Califf",0, "jcaliff@compuzone.net");
     aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
+    aboutData->addAuthor("Toshitaka Fujioka", 0, "fujioka@kde.org");
     return aboutData;
 }
 

@@ -28,6 +28,7 @@
 
 class KisBrush;
 class KisFrameBuffer;
+class KisDoc;
 
 class PenTool : public KisTool
 {
@@ -59,6 +60,7 @@ class PenTool : public KisTool
     KisView         *m_pView;
     KisCanvas       *m_pCanvas;
     KisFrameBuffer  *fb;
+    KisDoc          *m_pDoc;
     
     QPen pen;
     int  penW;
