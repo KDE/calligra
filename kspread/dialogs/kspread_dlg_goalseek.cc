@@ -228,7 +228,7 @@ void KSpreadGoalSeekDlg::slotSelectionChanged( KSpreadSheet * _table, const QRec
     QString tmp;
 
     tmp.setNum( dy );
-    tmp = _table->tableName() + "!" + util_encodeColumnLabelText( dx ) + tmp;
+    tmp = _table->tableName() + "!" + KSpreadCell::columnName( dx ) + tmp;
     m_focus->setText( tmp );
   }
   else

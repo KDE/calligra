@@ -285,7 +285,7 @@ void KSpreadSortDlg::init()
 
   QRect r = m_pView->selection();
   QString cellArea;
-  cellArea += util_encodeColumnLabelText(r.left());
+  cellArea += KSpreadCell::columnName(r.left());
   cellArea += QString::number( r.top() );
   m_outputCell->setText( cellArea );
 
@@ -297,7 +297,7 @@ void KSpreadSortDlg::init()
 
     int right = r.right();
     for (int i = r.left(); i <= right; ++i)
-      m_listColumn += i18n("Column %1").arg(util_encodeColumnLabelText(i));
+      m_listColumn += i18n("Column %1").arg(KSpreadCell::columnName(i));
   }
   // Entire rows selected ?
   else if ( util_isRowSelected(r) )
@@ -331,7 +331,7 @@ void KSpreadSortDlg::init()
     int right  = r.right();
     int bottom = r.bottom();
     for (int i = r.left(); i <= right; ++i)
-      m_listColumn += i18n("Column %1").arg(util_encodeColumnLabelText(i));
+      m_listColumn += i18n("Column %1").arg(KSpreadCell::columnName(i));
 
     for (int i = r.top(); i <= bottom; ++i)
       m_listRow += i18n("Row %1").arg(i);

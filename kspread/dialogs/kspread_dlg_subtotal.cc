@@ -241,7 +241,7 @@ void KSpreadSubtotalDlg::fillColumnBoxes()
 
     if ( text.length() > 0 )
     {
-      text = col.arg( util_encodeColumnLabelText( i ) );
+      text = col.arg( KSpreadCell::columnName( i ) );
     }
 
     m_dialog->m_columnBox->insertItem( text );
@@ -291,7 +291,7 @@ bool KSpreadSubtotalDlg::addSubtotal( int mainCol, int column, int row, int topR
     cell->setTextFontUnderline( true );
   }
 
-  QString colName = util_encodeColumnLabelText( column );
+  QString colName = KSpreadCell::columnName( column );
 
   QString formula("=SUBTOTAL(");
   formula += QString::number( m_dialog->m_functionBox->currentItem() + 1 );

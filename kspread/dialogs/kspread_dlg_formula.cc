@@ -726,7 +726,7 @@ void KSpreadDlgFormula::slotSelectionChanged( KSpreadSheet* _table, const QRect&
         int dy = _selection.bottom();
         QString tmp;
         tmp.setNum( dy );
-        tmp = _table->tableName() + "!" + util_encodeColumnLabelText( dx ) + tmp;
+        tmp = _table->tableName() + "!" + KSpreadCell::columnName( dx ) + tmp;
         m_focus->setText( tmp );
     }
     else
