@@ -326,6 +326,10 @@ void HtmlBasicWorker::openParagraph(const QString& strTag,
     {
         *m_streamOut << " align=\"" << layout.alignment << "\"";
     }
+    else if ( layout.alignment=="auto")
+    {
+        // Do nothing, the user-agent should be more intelligent than us.
+    }
     else
     {
         kdWarning(30503) << "Unknown alignment: " << layout.alignment << endl;

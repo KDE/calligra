@@ -277,6 +277,10 @@ QString HtmlCssWorker::layoutToCss(const LayoutData& layoutOrigin,
         {
             strLayout += QString("text-align:%1; ").arg(layout.alignment);
         }
+        else if ( layout.alignment=="auto")
+        {
+            // Do nothing, the user-agent should be more intelligent than us.
+        }
         else
         {
             kdWarning(30503) << "Unknown alignment: " << layout.alignment << endl;
