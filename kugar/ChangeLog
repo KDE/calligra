@@ -29,7 +29,7 @@ Changes:
 
  6. KReportViewer class is added to Kugar lib - it uses KMessageBox and
     KPrinter classes.
-    kugar.h is now references to kreportviewer.h
+    kugar.h now references to kreportviewer.h
     Qt users should include kugarqt.h that references to mreportviewr.h
 
 
