@@ -46,18 +46,9 @@ class KSpreadLocationEditWidget;
 class KoDocumentEntry;
 class KoCharSelectDia;
 class KStatusBarLabel;
-class TKSelectColorAction;
-class KAction;
-class KSelectAction;
-class KFontAction;
-class KFontSizeAction;
-class KToggleAction;
-class KoPartSelectAction;
 class KSpreadSpell;
 class KSpreadMacroUndoAction;
 class KSpreadInsertHandler;
-
-class KActionMenu;
 
 class DCOPObject;
 class KReplace;
