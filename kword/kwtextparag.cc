@@ -465,7 +465,7 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     if ( !elem.isNull() ) {
         QString value = elem.attribute("value");
         if ( value == "0" || value == "1" )
-            font.setUnderline( value.toInt() == 1 );
+            format.setNbLineType( (value.toInt() == 1)?KoTextFormat::SIMPLE: KoTextFormat::NONE );
         else if ( value == "single" ) // value never used when saving, but why not support it? ;)
             format.setNbLineType ( KoTextFormat::SIMPLE);
         else if ( value == "double" )
