@@ -146,7 +146,7 @@ void KWSelectBookmarkDia::slotSelectionChanged()
     bool state =!m_bookmarkList->currentText().isEmpty();
     enableButtonOK( state );
     m_pbRename->setEnabled( state);
-    m_pbDelete->setEnabled( state );
+    m_pbDelete->setEnabled( state && m_doc->isReadWrite());
 }
 
 #include "kwcreatebookmarkdia.moc"
