@@ -335,14 +335,15 @@ public:
     /**
      * Recalculates the current table. If you want to recalculate EVERYTHING, then
      * call @ref Table::setCalcDirtyFlag for all tables in the @ref #m_pMap to make
-     * shure that no invalid values in other tables make you trouble.
+     * sure that no invalid values in other tables make you trouble.
      */
     void recalc(bool mdepend=false);
 
     /**
      * Sets the contents of the cell at row,column to text
+     * @param updateDepends set to false to disable updating the dependencies
      */
-    void setText( int row, int column, const QString& text );
+    void setText( int row, int column, const QString& text, bool updateDepends = true );
 
     /**
      * @return the rectangle of the choose selection.

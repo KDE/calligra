@@ -483,7 +483,7 @@ KSpreadCell* KSpreadTable::nonDefaultCell( int _column, int _row,
   return cell;
 }
 
-void KSpreadTable::setText( int _row, int _column, const QString& _text )
+void KSpreadTable::setText( int _row, int _column, const QString& _text, bool updateDepends )
 {
     m_pDoc->setModified( true );
 
@@ -497,7 +497,7 @@ void KSpreadTable::setText( int _row, int _column, const QString& _text )
     }
 
     // The cell will force a display refresh itself, so we dont have to care here.
-    cell->setCellText( _text, true );
+    cell->setCellText( _text, updateDepends );
 }
 
 void KSpreadTable::setLayoutDirtyFlag()
