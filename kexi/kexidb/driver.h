@@ -111,12 +111,18 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! \return true if \a n is a system object's name, 
 		 eg. name of build-in system table that cannot be used or created by a user,
 		 and in most cases user even shouldn't see this. The list is specific for 
-		 a given driver implementation. By default returns true if \a n starts with "kexi__".
+		 a given driver implementation. 
+		 By default calls Driver::isKexiDBSystemObjectName() static method.
 		 Note for driver developers: Also call Driver::isSystemObjectName()
 		 from your reimplementation.
 		 \sa isSystemFieldName().
 		*/
 		virtual bool isSystemObjectName( const QString& n ) const;
+
+		/*! \return true if \a n is a kexibd-related 'system' object's name, 
+		 i.e. when \a n starts with "kexi__" prefix.
+		*/
+		static bool isKexiDBSystemObjectName( const QString& n );
 
 		/*! \return true if \a n is a system database's name, 
 		 eg. name of build-in, system database that cannot be used or created by a user,

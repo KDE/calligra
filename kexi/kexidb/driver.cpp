@@ -160,7 +160,12 @@ QString Driver::defaultSQLTypeName(int id_t)
 
 bool Driver::isSystemObjectName( const QString& n ) const
 {
-	return n.startsWith("kexi__");
+	return Driver::isKexiDBSystemObjectName(n);
+}
+
+bool Driver::isKexiDBSystemObjectName( const QString& n )
+{
+	return n.lower().startsWith("kexi__");
 }
 
 QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
