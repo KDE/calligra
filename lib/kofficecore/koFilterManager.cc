@@ -35,6 +35,7 @@
 
 #include <unistd.h>
 #include <assert.h>
+#include <config.h>
 
 class KoFilterManagerPrivate {
 
@@ -161,12 +162,12 @@ QString KoFilterManager::fileSelectorList( const Direction &direction,
     return ret;
 }
 
-const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
+bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                                  const Direction &direction,
                                  const char *_format,
                                  const QString & _native_pattern,
                                  const QString & _native_name,
-                                 const bool allfiles ) {
+                                 bool allfiles ) {
 
     QString service;
     service = "'";
@@ -179,8 +180,26 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 
     d->config=QString::null;   // reset the config string
 
+#ifdef HAVE_KDEPRINT // kdelibs > 2.1 -> use the nice setMimeFilter
+    QValueList<KoFilterEntry> vec = KoFilterEntry::query( service );
+
+    QStringList mimes;
+
+    if ( !_native_name.isEmpty() )
+        mimes += QString::fromLatin1(_format);
+    for( unsigned int i = 0; i < vec.count(); ++i )
+    {
+        if ( direction == Import )
+            mimes += vec[i].import;
+        else
+            mimes += vec[i].export_;
+    }
+    dialog->setMimeFilter( mimes );
+
+#else // kdelibs == 2.1
     dialog->setFilter(fileSelectorList(direction, _format, _native_pattern,
                                        _native_name, allfiles));
+#endif
 
     QValueList<KoFilterDialogEntry> vec1 = KoFilterDialogEntry::query( service );
 

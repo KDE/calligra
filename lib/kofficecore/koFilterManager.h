@@ -105,12 +105,12 @@ public:
      * @param allfiles Whether a wildcard that matches all files should be added to the list.
      * @return Have we been sucessful?
      */
-    const bool prepareDialog( KFileDialog *dialog,
-			      const Direction &direction,
-			      const char *_format,
-			      const QString & _native_pattern=QString::null,
-			      const QString & _native_name=QString::null,
-			      const bool allfiles=false );
+    bool prepareDialog( KFileDialog *dialog,
+                        const Direction &direction,
+                        const char *_format,
+                        const QString & _native_pattern=QString::null,
+                        const QString & _native_name=QString::null,
+                        bool allfiles=false );
 
     /**
      * Cleans up the prepared KFileDialog (deletes all the stuff)
