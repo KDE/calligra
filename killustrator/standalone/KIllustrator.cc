@@ -303,9 +303,6 @@ void KIllustrator::initToolBars () {
 			true, 0L, 85);
   KCombo* combo = toolbar->getCombo (10);
 
-  // This is a preliminary hack !!!
-  combo->resize (85, 28);
-
   for (int i = 0; i < (int) zFactors.size (); i++) {
     if (zFactors[i] == 1) {
       combo->setCurrentItem (i);
