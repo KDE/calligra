@@ -4,7 +4,7 @@ noinst_LIBRARIES = libkillu.a
 
 noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 GText.h GGroup.h GClipart.h GBezier.h Tool.h PolylineTool.h \
-		 RectangleTool.h OvalTool.h TextTool.h \
+		 RectangleTool.h OvalTool.h TextTool.h FreeHandTool.h \
 		 SelectionTool.h PolygonTool.h ToolController.h \
 		 EditPointTool.h BezierTool.h ZoomTool.h \
 		 ToolGroup.h ToolPalette.h ColorField.h Canvas.h \
@@ -27,11 +27,12 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 qwmf.h wmfstruct.h metafuncs.h version.h \
 		 ToolButton.h Arrow.h Painter.h LineStyle.h \
 		 TransformationDialog.h koPageLayoutDia.h \
-		 MainView.h PStateManager.h OptionDialog.h
+		 MainView.h PStateManager.h OptionDialog.h \
+		 Preview.h
 
 libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  GOval.cc GClipart.cc GBezier.cc \
-			  GText.cc GGroup.cc Tool.cc PolylineTool.cc \
+			  GText.cc GGroup.cc Tool.cc PolylineTool.cc FreeHandTool.cc \
 			  RectangleTool.cc OvalTool.cc TextTool.cc \
 			  SelectionTool.cc PolygonTool.cc ToolController.cc \
 			  EditPointTool.cc BezierTool.cc ZoomTool.cc \
@@ -56,12 +57,13 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  Ruler.cc AboutDialog.cc qwmf.cc \
 			  ToolButton.cc Arrow.cc Painter.cc LineStyle.cc \
 			  TransformationDialog.cc koPageLayoutDia.cc \
-			  PStateManager.cc OptionDialog.cc
+			  PStateManager.cc OptionDialog.cc \
+			  Preview.cc
 
 # just to make sure, automake makes them 
 BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
 		GText.moc GGroup.moc GClipart.moc GBezier.moc \
-		Tool.moc PolylineTool.moc \
+		Tool.moc PolylineTool.moc FreeHandTool.moc \
 		RectangleTool.moc OvalTool.moc TextTool.moc \
 		SelectionTool.moc PolygonTool.moc ToolController.moc \
 		EditPointTool.moc BezierTool.moc ZoomTool.moc \
@@ -118,6 +120,10 @@ RectangleTool.moc: RectangleTool.h
 PolylineTool.cc: PolylineTool.moc
 PolylineTool.moc: PolylineTool.h
 	$(MOC) PolylineTool.h -o PolylineTool.moc
+
+FreeHandTool.cc: FreeHandTool.moc
+FreeHandTool.moc: FreeHandTool.h
+	$(MOC) FreeHandTool.h -o FreeHandTool.moc
 
 OvalTool.cc: OvalTool.moc
 OvalTool.moc: OvalTool.h
