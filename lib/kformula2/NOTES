@@ -12,4 +12,7 @@ Parenthesis are too big, try (1/2/4).
 
 Ulrich:
 
+Why is stdio.h included in main.cc? Why does kformulacontainer.cc
+use fprintf(stderr, "something") two lines below cerr << "xxx" ?
+
 

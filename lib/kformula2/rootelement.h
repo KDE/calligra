@@ -138,14 +138,7 @@ public:
 
     ElementIndexPtr getIndex() { return ElementIndexPtr(new RootElementIndex(this)); }
 
-    // Tells whether we own those indexes
-    virtual bool hasUpperIndex() const { return hasIndex(); }
-    virtual bool hasLowerIndex() const { return false; }
-
-    // Tells whether we are allowed to own them.
-    // A root will never have a lower index!
-    virtual bool mightHaveLowerIndex() const { return false; }
-   
+    
     virtual QDomElement getElementDom(QDomDocument *doc);
      
 private:

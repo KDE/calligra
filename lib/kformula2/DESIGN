@@ -204,6 +204,58 @@ work together correctly.
 
 
 
+Editing (undo/redo)
+###################
+
+You always use a cursor to work on the element tree. The cursor
+provides all the basic facilities that are needed to change the tree
+in any way. Its up to you to build bigger functions out of the
+cursor's primitives.
+
+The cursor's interface was designed to allow implement undo support.
+
+There are a few things that you need to know:
+
+- You are not supposed to know the elements that are stored in the
+tree. If you remove them from the tree they are yours and you are
+responsible to delete them properly. But as soon as you put them back
+its the trees business to manage them.
+
+- All the cursors operations that change the tree come in pairs. If
+you call both operations in a row (with the right parameters) you get
+back to the place you started. `insert' for example inserts one or
+more elements and selects them. `remove' removes the selected
+elements and returns them.
+
+- You can always save the current cursor position by calling
+getCursorData(). To set a cursor to a place it was before use
+setCursorData(). But note that its up to you to ensure that the
+position still exists. This means you will only want to call it if you
+are certain that the element tree is exactly the same as it was when
+you called getCursorData().
+
+- The creation of new object is not the cursors business. You do this
+yourself.
+
+- If you want to insert special elements like indexes you will have to
+ask the IndexElement in question for the cursor position where to put
+it. But please note that you might only put empty SequenceElements
+there.
+
+- Its a mistake to insert a SequenceElement at a non-special place.
+
+- After a removal the cursor might point to a strange place like a
+removed index. To get it back to point to something meaningful you
+will have to normalize() it. If the cursor is normalized it is inside a
+SequenceElement. If not its not. Most operations expect the cursor to
+be normalized.
+
+- If you remove something from a element it might become
+senseless. This means you must replace it with its main childs
+content.
+
+
+
 Save and Load (Import/Export)
 #############################
 
@@ -228,14 +280,25 @@ them
 
 
 
-"Look" templates
-################
+Style templates
+###############
 
 There need to be templates that tell which font to use, how the sizes
 differ among different elements and what spaces are to be
 included. (And much more.)
 
 Your only need to choose one of them to get a reasonable good look.
+
+Therefore we pass a StyleContext to the
+FormulaElement. The StyleContext contains the font family to use, the
+normal font size, the spaces to include between certain elements and
+all sorts of context information that is needed to draw the
+formula.
+
+The elements use this information to calculate their sizes and to draw
+themselves. Each element is allowed to choose different settings for
+whatever reason. But if the formula looks ugly then its the elements
+blame.
 
 
 
@@ -268,30 +331,14 @@ turns this on.)
 
 
 
-Fonts and font size (2 ideas)
+Fonts and font size
 ###################
 
-1)
-Each element know its font family (also if it is not a text element) so that it 
-can give this font to its children.
+Each elements font size is calculated starting from its parents font
+size. It knows how it differs to those.
 
-The font size is calculated starting from a global scale factor and appling to it
-a local size modifier (like HTML -2, -1,+3,etc..), this also calculate the 
-QPen width for vector drawn stuff (like root symbol etc) and it gives a scale
-factor for pixmap.
-
-2)
-When it comes to drawing we pass a StyleContext to the
-FormulaElement. The StyleContext contains the font family to use, the
-normal font size, the spaces to include between certain elements and
-all sorts of context information that is needed to draw the
-formula. As it is passed down the tree it also counts the current level
-so it can tell each element the font size it is supposed to use.
-
-The elements use this information to calculate their sizes and to draw
-themselves. Each element is allowed to choose different settings for
-whatever reason. But if the formula looks ugly then its the elements
-blame.
+The font size might also be used to choose the pen width and other
+size dependent settings.
 
 
 Andrea Rizzi <rizzi@kde.org>

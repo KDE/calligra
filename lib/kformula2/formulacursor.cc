@@ -138,7 +138,7 @@ void FormulaCursor::moveEnd(int flag)
 }
 
 
-void FormulaCursor::mousePress(const QPoint& pos, int flags)
+void FormulaCursor::mousePress(const QPoint& pos, int)
 {
     setSelection(false);
     FormulaElement* formula = getElement()->formula();
@@ -146,7 +146,7 @@ void FormulaCursor::mousePress(const QPoint& pos, int flags)
     setMark(getPos());
 }
 
-void FormulaCursor::mouseMove(const QPoint& point, int flags)
+void FormulaCursor::mouseMove(const QPoint& point, int)
 {
     setSelection(true);
     BasicElement* element = getElement();
@@ -199,7 +199,7 @@ void FormulaCursor::mouseMove(const QPoint& point, int flags)
     }
 }
 
-void FormulaCursor::mouseRelease(const QPoint&, int flags)
+void FormulaCursor::mouseRelease(const QPoint&, int)
 {
     //mouseSelectionFlag = false;
 }
@@ -376,7 +376,8 @@ bool FormulaCursor::pointsAfterMainChild(BasicElement* element)
 {
     if (element != 0) {
         SequenceElement* mainChild = element->getMainChild();
-        return (getElement() == mainChild) && (mainChild->countChildren() == getPos());
+        return (getElement() == mainChild) &&
+            ((mainChild->countChildren() == getPos()) || (0 == getPos()));
     }
     return false;
 }

@@ -72,17 +72,17 @@ BasicElement* SymbolElement::goToPos(FormulaCursor* cursor, bool& handled,
         }
 
         // the positions after the indexes.
-        //int dx = point.x() - myPos.x();
+        int dx = point.x() - myPos.x();
         int dy = point.y() - myPos.y();
         if (dy < symbol.getY()) {
-            if (hasUpper()) {
+            if (hasUpper() && (dx > upper->getX())) {
                 upper->moveLeft(cursor, this);
                 handled = true;
                 return upper;
             }
         }
         else if (dy > symbol.getY()+symbol.getHeight()) {
-            if (hasLower()) {
+            if (hasLower() && (dx > lower->getX())) {
                 lower->moveLeft(cursor, this);
                 handled = true;
                 return lower;
