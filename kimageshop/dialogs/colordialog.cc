@@ -20,7 +20,6 @@
 
 #include <qframe.h>
 #include <qpushbutton.h>
-#include <qspinbox.h>
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qlabel.h>
