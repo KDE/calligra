@@ -61,6 +61,8 @@ KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
 	setFocusPolicy(StrongFocus);
 	setResizePolicy(Manual);
 
+	m_popup = new KPopupMenu(this, "m_popup");
+	plugSharedAction("edit_delete", m_popup);
 	plugSharedAction("edit_delete",this, SLOT(removeSelectedObject()));
 
 
