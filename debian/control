@@ -89,11 +89,6 @@ Description: a flowcharting program for the KDE Office Suite
  but with a twist.  Objects are scriptable, and a backend plugin system
  offers the ability to make objects do just about anything.
  .
- Feed it a directory of C++ header files, or even Java files, and let it
- generate a graphical class map for you.  Give it a network and let it
- explore and map out the network for you.  All this is possible through
- the scripting/plugin architecture Kivio possesses.
- .
  This package is part of the KDE Office Suite.
 
 Package: kontour
