@@ -170,7 +170,7 @@ KarbonView::print( KPrinter &printer )
 	// TODO : use real page layout stuff
 	QPtrListIterator<VLayer> i = m_part->document().layers();
 	for ( ; i.current(); ++i )
-		if ( i.current()->visible() )
+		//if ( i.current()->visible() )
 			i.current()->draw( &p, KoRect::fromQRect( QRect( 0, 0, width(), height() ) ) );
 
 	p.end();
@@ -189,21 +189,21 @@ KarbonView::editCopy()
 void
 KarbonView::editPaste()
 {
-	VObjectListIterator itr( m_part->document().selection() );
+	VObjectListIterator itr( m_part->document().selection().objects() );
 	VObjectList selection;
 	for ( ; itr.current() ; ++itr )
 	{
-		VShape *temp = itr.current()->clone();
+		VObject *temp = itr.current()->clone();
 		temp->transform( QWMatrix().translate( VGlobal::copyOffset, VGlobal::copyOffset ) );
 		selection.append( temp );
 	}
-	m_part->document().deselectAllObjects();
+	m_part->document().deselect();
 	// calc new selection
 	VObjectListIterator itr2( selection );
 	for ( ; itr2.current() ; ++itr2 )
 	{
 		m_part->insertObject( itr2.current() );
-		m_part->document().selectObject( *( itr2.current() ) );
+		m_part->document().select( *( itr2.current() ) );
 	}
 	m_part->repaintAllViews();
 }
@@ -211,18 +211,18 @@ KarbonView::editPaste()
 void
 KarbonView::editSelectAll()
 {
-	m_part->document().selectAllObjects();
+	m_part->document().select();
 	//handleTool();
-	if( m_part->document().selection().count() > 0 )
+	if( m_part->document().selection().objects().count() > 0 )
 		m_part->repaintAllViews();
 }
 
 void
 KarbonView::editDeselectAll()
 {
-	if( m_part->document().selection().count() > 0 )
+	if( m_part->document().selection().objects().count() > 0 )
 	{
-		m_part->document().deselectAllObjects();
+		m_part->document().deselect();
 		m_part->repaintAllViews();
 	}
 }
@@ -288,14 +288,14 @@ KarbonView::groupSelection()
 void
 KarbonView::ungroupSelection()
 {
-	if( m_part->document().selection().count() == 1 )
+	if( m_part->document().selection().objects().count() == 1 )
 	{
-		VGroup *grp = dynamic_cast<VGroup *>( m_part->document().selection().getFirst() );
+		VGroup *grp = dynamic_cast<VGroup *>( m_part->document().selection().objects().getFirst() );
 		if( grp )
 		{
 			grp->ungroup();
 			delete grp;
-			m_part->document().deselectAllObjects();
+			m_part->document().deselect();
 		}
 	}
 }
@@ -314,7 +314,7 @@ kdDebug() << "KarbonView::dummyForTesting()" << endl;
 		0.5,
 		200.0 );
 
-	VObjectListIterator itr( m_part->document().selection() );
+	VObjectListIterator itr( m_part->document().selection().objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		op.visit( *itr.current() );

@@ -79,11 +79,11 @@ KarbonPart::saveXML()
 }
 
 void
-KarbonPart::insertObject( VShape* object )
+KarbonPart::insertObject( VObject* object )
 {
 	// don't repaint here explicitely. some commands might want to insert many
 	// objects.
-	m_doc.appendObject( object );
+	m_doc.append( object );
 	setModified( true );
 }
 
@@ -149,7 +149,7 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 
 	QPtrListIterator<VLayer> itr( m_doc.layers() );
 	for( ; itr.current(); ++itr )
-		if( itr.current()->visible() )
+		//if( itr.current()->visible() )
 			itr.current()->draw( p, KoRect::fromQRect( rect ) );
 
 	p->end();

@@ -22,9 +22,9 @@ VObject::VObject( VObject* parent, VState state )
 
 VObject::VObject( const VObject& obj )
 {
-	m_stroke = new VStroke( *obj.m_stroke );
-	m_fill = new VFill( *obj.m_fill );
-	
+	m_stroke = obj.m_stroke ? new VStroke( *obj.m_stroke ) : new VStroke;
+	m_fill = obj.m_fill ? new VFill( *obj.m_fill ) : new VFill;
+
 	m_parent = obj.m_parent;
 	m_state = obj.m_state;
 

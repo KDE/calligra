@@ -351,8 +351,8 @@ VDocument::moveSelectionToBottom()
 void
 VDocument::applyDefaultColors( VObject& obj ) const
 {
-	VStroke stroke( *obj.stroke() );
-	VFill fill( *obj.fill() );
+	VStroke stroke;
+	VFill fill;
 
 	stroke.setColor( m_defaultStrokeColor );
 	fill.setColor( m_defaultFillColor );
