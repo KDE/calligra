@@ -150,7 +150,7 @@ void KSpreadConsolidate::slotOk()
   if ( w <= ( ( desc == D_BOTH || desc == D_COL ) ? 1 : 0 ) ||
        h <= ( ( desc == D_BOTH || desc == D_ROW ) ? 1 : 0 ) )
   {
-    QMessageBox::critical( 0L, i18n("Error"), i18n( "The range\n%1\nis too small" ).arg( r.getFirst() ) );
+    QMessageBox::critical( 0L, i18n("Error"), i18n( "The range\n%1\nis too small" ).arg( *( r.begin() ) ) );
     return;
   }
 
@@ -164,7 +164,7 @@ void KSpreadConsolidate::slotOk()
 	 ( desc == D_ROW && h != h2 ) ||
 	 ( desc == D_COL && w != w2 ) )
     {
-      QString tmp = i18n( "The ranges\n%1\nand\n%2\nhave different size").arg( r.getFirst() ).arg( r[i] );
+      QString tmp = i18n( "The ranges\n%1\nand\n%2\nhave different size").arg( *( r.begin() ) ).arg( r[i] );
       QMessageBox::critical( 0L, i18n("Error"), tmp );
       return;
     }
@@ -616,7 +616,7 @@ void KSpreadConsolidate::slotOk()
 	    if ( f == F_SUM || f == F_AVERAGE )
 	    {
 	      if ( formel != "=" )
-		formel += "+";
+              formel += "+";
 	      formel += (*lit).table;
 	      formel += "!";
 	      formel += util_cellName( (*lit).x, (*lit).y );
