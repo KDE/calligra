@@ -336,7 +336,11 @@ public:
     QString uniqueFramesetName( const QString& oldName );
     //use insert file attribute for footnote frameset
     //don't change it attibute otherwise we have a footnote with is not fixed
-    void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool copyFootNote = false );
+    /*
+     * dontCreateFootNote = true when we copy footnote into an other
+     * frameset that mainFrameSet => footnote is removed !
+     */
+    void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool copyFootNote = false, bool dontCreateFootNote = false);
 
     void insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd );
     void completePasting();
@@ -441,7 +445,7 @@ public:
     void addFootNoteRequest( const QString &framesetName, KWFootNoteVariable* var );
 
     // This is used by loadFrameSets() and by KWCanvas to paste framesets
-    KWFrameSet *loadFrameSet( QDomElement framesetElem, bool loadFrames = true );
+    KWFrameSet *loadFrameSet( QDomElement framesetElem, bool loadFrames = true , bool loadFootnote = true);
     void loadEmbedded( const QDomElement &embedded );
 
     void recalcVariables( int type );

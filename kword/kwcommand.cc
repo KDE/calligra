@@ -120,7 +120,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
                 }
             }
 
-            parag->loadFormatting( paragElem, m_idx );
+            parag->loadFormatting( paragElem, m_idx, (textFs->isMainFrameset()));
         }
         else
         {
@@ -131,7 +131,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
             int len = (item == count-1) ? c->index() : parag->string()->length();
             // Apply default format
             parag->setFormat( 0, len, parag->paragFormat(), TRUE );
-            parag->loadFormatting( paragElem );
+            parag->loadFormatting( paragElem, 0, (textFs->isMainFrameset()) );
         }
         parag->format();
         parag->setChanged( TRUE );
@@ -146,7 +146,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
 
     kdDebug() << "KWPasteTextCommand::execute calling doc->pasteFrames" << endl;
     // In case of any inline frameset
-    doc->pasteFrames( elem, 0,true /*don't change footnote attribute*/ );
+    doc->pasteFrames( elem, 0,true /*don't change footnote attribute*/ , (textFs->isMainFrameset()));
     doc->completePasting();
 
     m_lastParag = c->parag()->paragId();

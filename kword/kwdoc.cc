@@ -1755,7 +1755,7 @@ void KWDocument::loadFrameSets( const QDomElement &framesetsElem )
     }
 }
 
-KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames )
+KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames, bool loadFootnote )
 {
     FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( framesetElem, "frameType", FT_BASE ) );
     QString fsname = KWDocument::getAttribute( framesetElem, "name", "" );
@@ -1789,6 +1789,8 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
             KWFrameSet::Info info = static_cast<KWFrameSet::Info>( framesetElem.attribute("frameInfo").toInt() );
             if ( info == KWFrameSet::FI_FOOTNOTE )
             {
+                if ( !loadFootnote )
+                    return 0L;
                 // Footnote -> create a KWFootNoteFrameSet
                 KWFootNoteFrameSet *fs = new KWFootNoteFrameSet( this, fsname );
                 fs->load( framesetElem, loadFrames );
@@ -1978,7 +1980,7 @@ QString KWDocument::uniqueFramesetName( const QString& oldName )
     return newName;
 }
 
-void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool copyFootNote )
+void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool copyFootNote, bool loadFootNote )
 {
     m_pasteFramesetsMap = new QMap<QString, QString>();
     //QPtrList<KWFrameSet> frameSetsToFinalize;
@@ -2025,13 +2027,16 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool
                 kdWarning(32001) << "Copying part objects isn't implemented yet" << endl;
                 break;
             default:
-                fs = loadFrameSet( elem, false );
-                kdDebug() << "KWDocument::pasteFrames created frame " << newName << endl;
-                fs->setName( newName );
-                frameElem = elem.namedItem( "FRAME" ).toElement();
+                fs = loadFrameSet( elem, false, loadFootNote );
+                if ( fs )
+                {
+                    kdDebug() << "KWDocument::pasteFrames created frame " << newName << endl;
+                    fs->setName( newName );
+                    frameElem = elem.namedItem( "FRAME" ).toElement();
+                }
             }
             //when we paste a header/footer we transforme it in a body frame
-            if(fs->isHeaderOrFooter() || ( !copyFootNote && fs->isFootEndNote()))
+            if(fs && (fs->isHeaderOrFooter() || ( !copyFootNote && fs->isFootEndNote())))
                 fs->setFrameSetInfo(KWFrameSet::FI_BODY);
         }
         // Test commented out since the toplevel element can contain "PARAGRAPH" now
@@ -2113,7 +2118,6 @@ void KWDocument::completePasting()
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
         fit.current()->finalize();
-
     repaintAllViews();
     delete m_pasteFramesetsMap;
     m_pasteFramesetsMap = 0L;

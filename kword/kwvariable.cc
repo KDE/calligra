@@ -78,7 +78,7 @@ KWVariableCollection::KWVariableCollection(KWVariableSettings *_setting)
 }
 
 
-KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, bool _forceDefaultFormat )
+KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, bool _forceDefaultFormat, bool loadFootNote )
 {
     KWDocument *m_doc = static_cast<KWDocument *>(doc);
     switch(type) {
@@ -89,6 +89,8 @@ KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVaria
     case VT_MAILMERGE:
 	return new KWMailMergeVariable( textdoc, QString::null, coll->format("STRING"), this, m_doc );
     case VT_FOOTNOTE:
+        if ( !loadFootNote )
+            return 0L;
         if ( !varFormat )
             varFormat =  coll->format("STRING");
         return new KWFootNoteVariable( textdoc, varFormat, this, m_doc );

@@ -607,7 +607,7 @@ void KWTextParag::load( QDomElement &attributes )
     invalidate( 0 );
 }
 
-void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
+void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool loadFootNote )
 {
 
     QValueList<int> removeLenList;
@@ -678,12 +678,16 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                         kdDebug() << "KWTextParag::loadFormatting variable type=" << type << " key=" << key << endl;
                         KoVariableFormat * varFormat = key.isEmpty() ? 0 : doc->variableFormatCollection()->format( key.latin1() );
                         // If varFormat is 0 (no key specified), the default format will be used.
-                        KoVariable * var =doc->getVariableCollection()->createVariable( type, -1, doc->variableFormatCollection(), varFormat,kwTextDocument(),doc, true );
-                        var->load( varElem );
-                        KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont() );
-                        setCustomItem( index, var, document()->formatCollection()->format( &f ) );
+                        KoVariable * var =doc->getVariableCollection()->createVariable( type, -1, doc->variableFormatCollection(), varFormat,kwTextDocument(),doc, true , loadFootNote);
+                        if ( var )
+                        {
+                            kdDebug()<<" variable inserr !!!!!!!!!!!!!!!!!!\n";
+                            var->load( varElem );
+                            KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont() );
+                            setCustomItem( index, var, document()->formatCollection()->format( &f ) );
 
-                        var->recalc();
+                            var->recalc();
+                        }
                         if(len>1) {
                             removePosList.append(index+1);
                             removeLenList.append(len-1);

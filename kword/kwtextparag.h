@@ -71,7 +71,7 @@ public:
     void load( QDomElement &attributes );
 
     /** Load and apply <FORMAT> tags (used by KWTextParag::load and by KWPasteCommand) */
-    void loadFormatting( QDomElement &attributes, int offset = 0 );
+    void loadFormatting( QDomElement &attributes, int offset = 0, bool loadFootNote=true );
 
     /** Load and apply paragraph layout */
     void loadLayout( QDomElement & attributes );
