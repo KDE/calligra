@@ -49,7 +49,7 @@ VGradientTool::draw()
 
 	painter->setPen( Qt::DotLine );
 	painter->newPath();
-	painter->moveTo( first( true ) );
+	painter->moveTo( first() );
 	painter->lineTo( m_current );
 	painter->strokePath();
 }
@@ -60,7 +60,7 @@ VGradientTool::mouseDrag( const KoPoint& current )
 	// undo old line
 	draw();
 
-	m_current = last( true );
+	m_current = last();
 
 	draw();
 }
@@ -68,7 +68,7 @@ VGradientTool::mouseDrag( const KoPoint& current )
 void
 VGradientTool::mouseButtonPress( const KoPoint& current )
 {
-	m_current = first( true );
+	m_current = first();
 }
 
 void
@@ -108,9 +108,9 @@ VGradientTool::mouseDragRelease( const KoPoint& current )
 {
 	// Y mirroring
 	KoPoint fp = first();
-	fp.setY( -fp.y() + view()->canvasWidget()->viewport()->height() );
+	//fp.setY( -fp.y() + view()->canvasWidget()->viewport()->height() );
 	KoPoint lp = last();
-	lp.setY( -lp.y() + view()->canvasWidget()->viewport()->height() );
+	//lp.setY( -lp.y() + view()->canvasWidget()->viewport()->height() );
 	VGradient gradient;
 	gradient.clearStops();
 	gradient.addStop( VColor( m_dialog->startColor().rgb() ), 0.0, 0.5 );
