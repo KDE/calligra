@@ -33,15 +33,15 @@
 
 #ifdef HAVE_FREETYPE
 
-#include <X11/Xlib.h>
-#include <X11/Xft/XftFreetype.h>
 #include <freetype2/freetype/freetype.h>
+#include <fontconfig/fontconfig.h>
 
 #include FT_FREETYPE_H
 #include FT_OUTLINE_H
 #include FT_GLYPH_H
 
 #define FT_TOFLOAT(x) ((x) * (1.0 / 64.0))
+#define FT_FROMFLOAT(x) ((int) floor ((x) * 64.0 + 0.5))
 
 
 
@@ -55,7 +55,7 @@ int traceMoveto( FT_Vector *to, VComposite *composite )
 	//QString add = "M" + QString::number(tox) + "," + QString::number(toy) + " ";
 	//kdDebug() << add.latin1() << endl;
 	composite->moveTo( KoPoint( tox, toy ) );
-
+	
 	return 0;
 }
 
@@ -68,7 +68,7 @@ int traceLineto( FT_Vector *to, VComposite *composite )
 	//kdDebug() << add.latin1() << endl;
 
 	composite->lineTo( KoPoint( tox, toy ) );
-
+	
 	return 0;
 };
 
@@ -83,7 +83,7 @@ int traceQuadraticBezier( FT_Vector *control, FT_Vector *to, VComposite *composi
 	//kdDebug() << add.latin1() << endl;
 //path->curveTo( x1, y1, x1, y1, x2, y2 );
 	composite->curve2To( KoPoint( x1, y1 ), KoPoint( x2, y2 ) );
-
+	
 	return 0;
 };
 
@@ -100,7 +100,7 @@ int traceCubicBezier( FT_Vector *p, FT_Vector *q, FT_Vector *to, VComposite *com
 	//kdDebug() << add.latin1() << endl;
 
 	composite->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x3, y3 ) );
-
+	
 	return 0;
 };
 
@@ -146,7 +146,7 @@ VText::VText( const VText& text )
 	VCompositeListIterator itr( text.m_glyphs );
 	for( ; itr.current() ; ++itr )
 		m_glyphs.append( itr.current()->clone() );
-
+	
 	m_boundingBoxIsInvalid = true;
 }
 
@@ -217,7 +217,7 @@ VText::boundingBox() const
 	if( m_boundingBoxIsInvalid )
 	{
 		// clear:
-		m_boundingBox = KoRect();
+		m_boundingBox = KoRect(); 
 
 		VCompositeListIterator itr( m_glyphs );
 		for( itr.toFirst(); itr.current(); ++itr )
@@ -236,7 +236,7 @@ VText::boundingBox() const
 	}
 
 	return m_boundingBox;
-}
+} 
 
 VText*
 VText::clone() const
@@ -262,7 +262,7 @@ VText::save( QDomElement& element ) const
 		me.setAttribute( "position", m_position );
 
 		element.appendChild( me );
-
+		
 		m_basePath.save( me );
 
 		// save all glyphs / paths
@@ -308,11 +308,11 @@ VText::load( const QDomElement& element )
 	m_boundingBoxIsInvalid = true;
 }
 
-void
+void 
 VText::setState( const VState state )
 {
 	VObject::setState( state );
-
+	
 	VCompositeListIterator itr( m_glyphs );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
@@ -328,7 +328,8 @@ VText::accept( VVisitor& visitor )
 
 #ifdef HAVE_FREETYPE
 
-void VText::traceText( const KarbonView* view )
+void
+VText::traceText( const KarbonView* view )
 {
 	if( !view )
 	{
@@ -341,108 +342,183 @@ void VText::traceText( const KarbonView* view )
 		return;
 	}
 
-	// load the font with all the properties set in m_font
-	XftFont *font = 0L;
 	// TODO : set more options
-	int slant = XFT_SLANT_ROMAN;
+	int slant = FC_SLANT_ROMAN;
 	if( m_font.italic() )
-		slant = XFT_SLANT_ITALIC;
+		slant = FC_SLANT_ITALIC;
 
 	int weight = 0;
 	if( m_font.bold() )
-		weight = XFT_WEIGHT_BOLD;
-	font = XftFontOpen( view->x11Display(), view->x11Screen(), XFT_FAMILY, XftTypeString, m_font.family().latin1(),
-						XFT_SIZE, XftTypeDouble, double( m_font.pointSize() ), XFT_WEIGHT, XftTypeInteger, weight,
-						XFT_SLANT, XftTypeInteger, slant, 0 );
+		weight = FC_WEIGHT_BOLD;
 
-	char *filename;
-	if( font )
+	// Build FontConfig request pattern
+	int id = -1;
+	QString filename = buildRequest( m_font.family(), weight, slant, m_font.pointSize(), id );
+	m_glyphs.clear();
+
+	kdDebug() << "Loading " << filename.latin1() << " for requested font \"" << m_font.family().latin1() << "\", " << m_font.pointSize() << " pt." << endl;
+
+	FT_UInt glyphIndex;
+	FT_Face fontFace;
+	FT_Library library;
+	FT_Init_FreeType( &library );
+	FT_Error error = FT_New_Face( library, filename.latin1(), id, &fontFace );
+
+	if( error )
 	{
-		m_glyphs.clear();
+		kdDebug() << "traceText(), could not load font. Aborting!" << endl;
+		return;
+	}
 
-		XftPatternGetString( font->pattern, XFT_FILE, 0, &filename );
-		kdDebug() << "Loading " << filename << " for requested font \"" << m_font.family().latin1() << "\", " << m_font.pointSize() << " pt." << endl;
-
-		FT_UInt glyphIndex;
-		FT_Face fontFace = font->u.ft.font->face;
-
-		float x = 0;
-		float y = 0;
-		float dx = 0;
-		float sp = 0;
-		KoPoint point;
-		KoPoint normal;
-		KoPoint tangent;
-		VPathIterator pathIt( m_basePath );
-		VSegment* oldSeg = pathIt.current();
-		VSegment* seg = ++pathIt;
-		KoPoint extPoint;
-		bool ext = false;
-		float fsx = 0;
-		int yoffset = ( m_position == Above ? 0 : ( m_position == On ? m_font.pointSize() / 3 : m_font.pointSize() / 1.5 ) );
-		kdDebug() << "Position: " << m_position << " -> " << yoffset << endl;
-		for( int i = 0; i < m_text.length(); i++ )
+	// Choose unicode charmap
+	for( int charmap = 0; charmap < fontFace->num_charmaps; charmap++ )
+	{
+		if( fontFace->charmaps[charmap]->encoding == ft_encoding_unicode )
 		{
-			// get the glyph index for the current character
-			QChar character = m_text.at( i );
-			glyphIndex = FT_Get_Char_Index( fontFace, character.unicode() );
-			bool error = FT_Load_Glyph( fontFace, glyphIndex, FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP );
+			FT_Error error = FT_Set_Charmap( fontFace, fontFace->charmaps[charmap] );
 			if( error )
 			{
-				kdDebug() << "Houston, we have a problem" << endl;
+				kdDebug() << "traceText(), unable to select unicode charmap. Aborting!" << endl;
+				FT_Done_Face( fontFace );
 				return;
 			}
-
-			// decompose to vpaths
-			FT_OutlineGlyph g;
-			FT_Get_Glyph( fontFace->glyph, reinterpret_cast<FT_Glyph *>( &g ) );
-			VComposite *composite = new VComposite( this );
-			VFill *fill = composite->fill();
-			fill->setFillRule( VFill::evenOdd );
-			composite->setFill( *fill );
-			FT_Outline_Decompose(&g->outline, &OutlineMethods, composite );
-			//composite->close();
-
-			// Step 1: place (0, 0) to the rotation center of the glyph.
-			dx = FT_TOFLOAT( fontFace->glyph->advance.x ) / 2;
-			x += dx;
-			composite->transform( QWMatrix( 1, 0, 0, 1, -dx, y + yoffset ) );
-
-			// Step 2: find the position where to draw.
-			while ( seg && x > fsx + seg->length() )
-			{
-				fsx += seg->length();
-				oldSeg = seg;
-				seg = ++pathIt;
-			}
-			if( seg )
-			{
-				sp = ( x - fsx ) / seg->length();
-				seg->pointTangentNormal( sp, &point, &tangent, &normal );
-			}
-			else
-			{
-				ext = true;
-				if( ext )
-					oldSeg->pointTangentNormal( 1, &extPoint, &tangent, &normal );
-				point = extPoint + ( x - fsx ) * tangent;
-			}
-
-			// Step 3: transform glyph and append it. That's it, we've got
-			// text following a path. Really easy, isn't it ;) ?
-			composite->transform( QWMatrix( tangent.x(), tangent.y(), tangent.y(), -tangent.x(), point.x(), point.y() ) );
-			composite->setState( state() );
-			m_glyphs.append( composite );
-
-
-			//kdDebug() << "Glyph: " << (QString)character << " [String pos: " << x << ", " << y << " / Canvas pos: " << point.x() << ", " << point.y() << "]" << endl;;
-
-			x += dx;
-			y += FT_TOFLOAT( fontFace->glyph->advance.y );
 		}
-		XftFontClose( view->x11Display(), font );
 	}
+
+	FT_Set_Char_Size( fontFace, FT_FROMFLOAT( m_font.pointSize() ), FT_FROMFLOAT( m_font.pointSize() ), 0, 0 );
+
+	float x = 0;
+	float y = 0;
+	float dx = 0;
+	float sp = 0;
+	KoPoint point;
+	KoPoint normal;
+	KoPoint tangent;
+	VPathIterator pathIt( m_basePath );
+	VSegment* oldSeg = pathIt.current();
+	VSegment* seg = ++pathIt;
+	KoPoint extPoint;
+	bool ext = false;
+	float fsx = 0;
+	int yoffset = ( m_position == Above ? 0 : ( m_position == On ? m_font.pointSize() / 3 : m_font.pointSize() / 1.5 ) );
+	kdDebug() << "Position: " << m_position << " -> " << yoffset << endl;
+	for( int i = 0; i < m_text.length(); i++ )
+	{
+		// get the glyph index for the current character
+		QChar character = m_text.at( i );
+		glyphIndex = FT_Get_Char_Index( fontFace, character.unicode() );
+		//kdDebug() << "glyphIndex : " << glyphIndex << endl;
+		FT_Error error = FT_Load_Glyph( fontFace, glyphIndex, FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP );
+		if( error )
+		{
+			kdDebug() << "Houston, we have a problem : " << error << endl;
+			continue;
+		}
+
+		// decompose to vpaths
+		FT_OutlineGlyph g;
+		FT_Get_Glyph( fontFace->glyph, reinterpret_cast<FT_Glyph *>( &g ) );
+		VComposite *composite = new VComposite( this );
+		VFill *fill = composite->fill();
+		fill->setFillRule( VFill::evenOdd );
+		composite->setFill( *fill );
+		FT_Outline_Decompose(&g->outline, &OutlineMethods, composite );
+		//composite->close();
+
+		// Step 1: place (0, 0) to the rotation center of the glyph.
+		dx = FT_TOFLOAT( fontFace->glyph->advance.x ) / 2;
+		x += dx;
+		composite->transform( QWMatrix( 1, 0, 0, 1, -dx, y + yoffset ) );
+
+		// Step 2: find the position where to draw.
+		while ( seg && x > fsx + seg->length() )
+		{
+			fsx += seg->length();
+			oldSeg = seg;
+			seg = ++pathIt;
+		}
+		if( seg )
+		{
+			sp = ( x - fsx ) / seg->length();
+			seg->pointTangentNormal( sp, &point, &tangent, &normal );
+		}
+		else
+		{
+			ext = true;
+			if( ext )
+				oldSeg->pointTangentNormal( 1, &extPoint, &tangent, &normal );
+			point = extPoint + ( x - fsx ) * tangent;
+		}
+
+		// Step 3: transform glyph and append it. That's it, we've got
+		// text following a path. Really easy, isn't it ;) ?
+		composite->transform( QWMatrix( tangent.x(), tangent.y(), tangent.y(), -tangent.x(), point.x(), point.y() ) );
+		composite->setState( state() );
+		m_glyphs.append( composite );
+
+		//kdDebug() << "Glyph: " << (QString)character << " [String pos: " << x << ", " << y << " / Canvas pos: " << point.x() << ", " << point.y() << "]" << endl;
+
+		x += dx;
+		y += FT_TOFLOAT( fontFace->glyph->advance.y );
+	}
+	FT_Done_Face( fontFace );
 	m_boundingBoxIsInvalid = true;
+}
+
+// This routine is copied from KSVGFont (Rob)
+QString
+VText::buildRequest( QString family, int weight, int slant, double size, int &id )
+{
+	// Use FontConfig to locate & select fonts and use  FreeType2 to open them
+	FcPattern *pattern;
+	QString fileName;
+
+	pattern = FcPatternBuild( 0, FC_WEIGHT, FcTypeInteger, weight,
+							  FC_SLANT, FcTypeInteger, slant,
+							  FC_SIZE, FcTypeDouble, size, 0 );
+
+	// Add font name
+	FcPatternAddString( pattern, FC_FAMILY, reinterpret_cast<const FcChar8 *>( family.latin1() ) );
+
+	// Disable hinting
+	FcPatternAddBool( pattern, FC_HINTING, false );
+
+	// Perform the default font pattern modification operations.
+	FcDefaultSubstitute( pattern );
+	FcConfigSubstitute( FcConfigGetCurrent(), pattern, FcMatchPattern );
+
+	// Match the pattern!
+	FcResult result;
+	FcPattern *match = FcFontMatch( 0, pattern, &result );
+
+	// Destroy pattern
+	FcPatternDestroy( pattern );
+
+	// Get index & filename
+	FcChar8 *temp;
+
+	if(match)
+	{
+		FcPattern *pattern = FcPatternDuplicate( match );
+
+		// Get index & filename
+		if(	FcPatternGetString(pattern, FC_FILE, 0, &temp) != FcResultMatch ||
+		   	FcPatternGetInteger(pattern, FC_INDEX, 0, &id) != FcResultMatch )
+		{
+			kdDebug() << "VText::buildRequest(), could not load font file for requested font \"" << family.latin1() << "\"" << endl;
+			return QString::null;
+		}
+
+		fileName = QString::fromLatin1( reinterpret_cast<const char *>( temp ) );
+
+		// Kill pattern
+		FcPatternDestroy( pattern );
+	}
+
+	// Kill pattern
+	FcPatternDestroy( match ); 
+
+	return fileName;
 }
 
 #endif // HAVE_FREETYPE

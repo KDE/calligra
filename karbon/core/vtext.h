@@ -79,6 +79,9 @@ public:
 	void traceText( const KarbonView* view );
 #endif // HAVE_FREETYPE
 
+protected:
+	QString buildRequest( QString family, int weight, int slant, double size, int &id );
+
 private:
 		// The font to use to draw the text.
 	QFont       m_font;
