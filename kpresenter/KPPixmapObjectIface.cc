@@ -83,7 +83,7 @@ void KPPixmapObjectIface::setGrayscale( bool grayscal )
 
 void KPPixmapObjectIface::loadImage( const QString & fileName )
 {
-    obj->loadImage(fileName);
+    obj->loadPicture(fileName);
 }
 
 void KPPixmapObjectIface::setPictureMirrorType(const QString & _mirror)
