@@ -236,7 +236,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
     // Saved size
     config->setGroup( "MainWindow" );
-    kdDebug(30003) << "KoMainWindow::restoreWindowSize" << endl;
+    //kdDebug(30003) << "KoMainWindow::restoreWindowSize" << endl;
     restoreWindowSize( config );
 }
 
@@ -262,13 +262,13 @@ KoMainWindow::~KoMainWindow()
     if ( d->m_rootDoc && d->m_rootDoc->viewCount() == 0 &&
          !d->m_rootDoc->isEmbedded())
     {
-        kdDebug(30003) << "Destructor. No more views, deleting old doc " << d->m_rootDoc << endl;
+        //kdDebug(30003) << "Destructor. No more views, deleting old doc " << d->m_rootDoc << endl;
         delete d->m_rootDoc;
     }
 
     // Save list of recent files
     KConfig * config = instance() ? instance()->config() : KGlobal::config();
-    kdDebug() << "Saving recent files list into config. instance()=" << instance() << endl;
+    //kdDebug() << "Saving recent files list into config. instance()=" << instance() << endl;
     m_recent->saveEntries( config );
     config->sync();
 
@@ -281,7 +281,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   if ( d->m_rootDoc == doc )
     return;
 
-  kdDebug(30003) <<  "KoMainWindow::setRootDocument this = " << this << " doc = " << doc << endl;
+  //kdDebug(30003) <<  "KoMainWindow::setRootDocument this = " << this << " doc = " << doc << endl;
   QList<KoView> oldRootViews = d->m_rootViews;
   d->m_rootViews.clear();
   KoDocument *oldRootDoc = d->m_rootDoc;
@@ -323,7 +323,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
 
   if ( oldRootDoc && oldRootDoc->viewCount() == 0 )
   {
-    kdDebug(30003) << "No more views, deleting old doc " << oldRootDoc << endl;
+    //kdDebug(30003) << "No more views, deleting old doc " << oldRootDoc << endl;
     delete oldRootDoc;
   }
 }
@@ -349,7 +349,7 @@ KoDocument* KoMainWindow::createDoc() const
 
 void KoMainWindow::updateCaption()
 {
-  kdDebug(30003) << "KoMainWindow::updateCaption()" << endl;
+  //kdDebug(30003) << "KoMainWindow::updateCaption()" << endl;
   if ( !d->m_rootDoc )
     setCaption(QString::null);
   else
@@ -512,10 +512,10 @@ void KoMainWindow::closeEvent(QCloseEvent *e) {
         {
             // Save window size into the config file of our instance
             instance()->config()->setGroup( "MainWindow" );
-            kdDebug(30003) << "KoMainWindow::closeEvent -> saveWindowSize" << endl;
+            //kdDebug(30003) << "KoMainWindow::closeEvent -> saveWindowSize" << endl;
             saveWindowSize( instance()->config() );
             // Save toolbar position into the config file of the app, under the doc's instance name
-            kdDebug() << "KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's instance=" << rootDocument()->instance()->instanceName() << endl;
+            //kdDebug() << "KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's instance=" << rootDocument()->instance()->instanceName() << endl;
             saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
             KGlobal::config()->sync();
             resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
@@ -535,7 +535,7 @@ bool KoMainWindow::queryClose()
 {
   if ( rootDocument() == 0 )
     return true;
-  kdDebug(30003) << "KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount()
+  //kdDebug(30003) << "KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount()
                  << " shellcount=" << rootDocument()->shellCount() << endl;
   if ( !d->m_forQuit && rootDocument()->shellCount() > 1 )
     // there are more open, and we are closing just one, so no problem for closing
@@ -743,7 +743,7 @@ void KoMainWindow::slotNewToolbarConfig()
 
 void KoMainWindow::slotToolbarToggled( bool toggle )
 {
-  kdDebug(30003) << "KoMainWindow::slotToolbarToggled " << sender()->name() << " toggle=" << true << endl;
+  //kdDebug(30003) << "KoMainWindow::slotToolbarToggled " << sender()->name() << " toggle=" << true << endl;
   // The action (sender) and the toolbar have the same name
   KToolBar * bar = toolBar( sender()->name() );
   if (bar)
@@ -897,13 +897,12 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
   // to reimplement it because it works with an active part, whereas we work
   // with an active view _and_ an active part, depending for what.
   // Both are KXMLGUIClients, but e.g. the plugin query needs a QObject.
-  kdDebug(30003) <<  "KoMainWindow::slotActivePartChanged( Part * newPart) newPart = " <<
-    newPart << endl;
-  kdDebug(30003) <<  "current active part is " << d->m_activePart << endl;
+  //kdDebug(30003) <<  "KoMainWindow::slotActivePartChanged( Part * newPart) newPart = " << newPart << endl;
+  //kdDebug(30003) <<  "current active part is " << d->m_activePart << endl;
 
   if ( d->m_activePart && d->m_activePart == newPart && !d->m_splitted )
   {
-    kdDebug(30003) << "no need to change the GUI" << endl;
+    //kdDebug(30003) << "no need to change the GUI" << endl;
     return;
   }
 
@@ -940,7 +939,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
   {
     d->m_activeView = (KoView *)d->m_manager->activeWidget();
     d->m_activePart = newPart;
-    kdDebug(30003) <<  "new active part is " << d->m_activePart << endl;
+    //kdDebug(30003) <<  "new active part is " << d->m_activePart << endl;
 
     factory->addClient( d->m_activeView );
 
