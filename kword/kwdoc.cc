@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2002-2004 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1203,6 +1204,9 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles 
     // TODO MAILMERGE
 
     KoOasisContext context( oasisStyles );
+    Q_ASSERT( !oasisStyles.officeStyle().isNull() );
+    QDomElement outlineStyle = oasisStyles.officeStyle().namedItem( "text:outline-style" ).toElement();
+    Q_ASSERT( !outlineStyle.isNull() );
 
     // Load all styles before the corresponding paragraphs try to use them!
     loadOasisStyleTemplates( context );
@@ -1214,7 +1218,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles 
     if ( m_processingType == WP ) {
         // Create main frameset
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Main Text Frameset" ) );
-        fs->loadOasis( body, context );
+        fs->loadOasis( body, context, outlineStyle );
         KWFrame* frame = new KWFrame( fs, 29, 798, 42, 566 );
         frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
         frame->setNewFrameBehavior( KWFrame::Reconnect );
@@ -1705,15 +1709,15 @@ void KWDocument::loadEmbedded( const QDomElement &embedded )
 void KWDocument::loadOasisStyleTemplates( KoOasisContext& context )
 {
     QValueList<QString> followingStyles;
-    uint nStyles = context.m_styles.userStyles().count();
+    uint nStyles = context.oasisStyles().userStyles().count();
     if( nStyles ) { // we are going to import at least one style.
         KoStyle *s = m_styleColl->findStyle("Standard");
-        //kdDebug(32001) << "KWDocument::loadStyleTemplates looking for Standard, to delete it. Found " << s << endl;
+        //kdDebug(32001) << "KWDocument::loadOasisStyleTemplates looking for Standard, to delete it. Found " << s << endl;
         if(s) // delete the standard style.
             m_styleColl->removeStyleTemplate(s);
     }
     for (unsigned int item = 0; item < nStyles; item++) {
-        QDomElement styleElem = context.m_styles.userStyles()[item];
+        QDomElement styleElem = context.oasisStyles().userStyles()[item];
         KoStyle *sty = new KoStyle( QString::null );
         // Load the style
         sty->loadStyle( styleElem, context );
@@ -1722,22 +1726,28 @@ void KWDocument::loadOasisStyleTemplates( KoOasisContext& context )
         // Style created, now let's try to add it
         sty = m_styleColl->addStyleTemplate( sty );
 
+        kdDebug(32001) << "KWDocument: Loaded style " << sty->name() << endl;
+
         if(m_styleColl->styleList().count() > followingStyles.count() )
         {
-            QString following = styleElem.namedItem("FOLLOWING").toElement().attribute("name");
+            QString following = styleElem.attribute( "style:next-style-name" );
             followingStyles.append( following );
         }
         else
-            kdWarning () << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
+            kdWarning(32001) << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
     }
 
-    Q_ASSERT( followingStyles.count() == m_styleColl->styleList().count() );
+    if( followingStyles.count() != m_styleColl->styleList().count() ) {
+        kdDebug(32001) << "Ouch, " << followingStyles.count() << " following-styles, but "
+                       << m_styleColl->styleList().count() << " styles in styleList" << endl;
+    }
 
     unsigned int i=0;
     for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
         KoStyle * style = m_styleColl->findStyle(*it);
         m_styleColl->styleAt(i++)->setFollowingStyle( style );
     }
+    Q_ASSERT( m_styleColl->findStyle( "Standard" ) );
 }
 
 void KWDocument::loadStyleTemplates( const QDomElement &stylesElem )

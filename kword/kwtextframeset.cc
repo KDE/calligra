@@ -1767,34 +1767,61 @@ QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFram
     return framesetElem;
 }
 
-void KWTextFrameSet::loadOasis( QDomElement &bodyElem, KoOasisContext& context )
+// How to share this code with KPresenter?
+KWTextParag* KWTextFrameSet::loadList( const QDomElement& list, KoOasisContext& context, KWTextParag* lastParagraph, const QDomElement& outlineStyle )
 {
-    textDocument()->clear(false); // Get rid of dummy paragraph (and more if any)
-    m_textobj->setLastFormattedParag( 0L ); // no more parags, avoid UMR in next setLastFormattedParag call
-    KWTextParag *lastParagraph = 0L;
+    //kdDebug(30518) << k_funcinfo << "parsing list"<< endl;
 
+    bool orderedList = list.tagName() == "text:ordered-list";
+    const QString listStyleName = list.attribute( "text:style-name" );
+    bool listOK = !listStyleName.isEmpty();
+    const int level = context.listStyleStack().level() + 1;
+    if ( listOK )
+        listOK = context.pushListLevelStyle( listStyleName, level );
+
+    // Iterate over list items
+    for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement listItem = n.toElement();
+        int restartNumbering = -1;
+        if ( listItem.hasAttribute( "text:start-value" ) )
+            restartNumbering = listItem.attribute( "text:start-value" ).toInt();
+        KWTextParag* oldLast = lastParagraph;
+        lastParagraph = loadOasisText( listItem, context, lastParagraph, outlineStyle );
+        // It's either list-header (normal text on top of list) or list-item
+        if ( listItem.tagName() != "text:list-header" && oldLast && oldLast->next() ) {
+            // Apply list style to first paragraph inside list-item
+            oldLast->next()->applyListStyle( context, restartNumbering, orderedList, false, context.listStyleStack().level() );
+        }
+    }
+    if ( listOK )
+        context.listStyleStack().pop();
+    return lastParagraph;
+}
+
+KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KWTextParag* lastParagraph, const QDomElement& outlineStyle )
+{
     // was OoWriterImport::parseBodyOrSimilar
     for ( QDomNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
     {
-        context.m_styleStack.save();
-        QDomElement t = text.toElement();
-        QString name = t.tagName();
+        context.styleStack().save();
+        QDomElement e = text.toElement();
+        QString name = e.tagName();
 
         if ( name == "text:p" ) {  // text paragraph
-            context.fillStyleStack( t, "text:style-name" );
+            context.fillStyleStack( e, "text:style-name" );
 
             KWTextParag *parag = new KWTextParag( textDocument(), lastParagraph );
-            parag->loadOasis( t, context, m_doc->styleCollection() );
+            parag->loadOasis( e, context, m_doc->styleCollection() );
             if ( !lastParagraph )        // First parag
                 textDocument()->setFirstParag( parag );
             lastParagraph = parag;
-            m_doc->progressItemLoaded();
+            m_doc->progressItemLoaded(); // ## check
         }
-#if 0
         else if ( name == "text:h" ) // heading
         {
-            fillStyleStack( t, "text:style-name" );
-            int level = t.attribute( "text:level" ).toInt();
+            context.fillStyleStack( e, "text:style-name" );
+            int level = e.attribute( "text:level" ).toInt();
             bool listOK = false;
             // When a heading is inside a list, it seems that the list prevails.
             // Example:
@@ -1804,40 +1831,48 @@ void KWTextFrameSet::loadOasis( QDomElement &bodyElem, KoOasisContext& context )
             // where P2 has list-style-name="something else"
             // Result: the numbering of the header follows "Numbering 1".
             // So we use the style for the outline level only if we're not inside a list:
-            if ( !m_nextItemIsListItem )
-                listOK = pushListLevelStyle( "<outline-style>", m_outlineStyle, level );
-            m_nextItemIsListItem = true;
-            if ( t.hasAttribute( "text:start-value" ) )
+            //if ( !context.atStartOfListItem() )
+            // === The new method for this is that we simply override it in parseList, afterwards.
+            listOK = context.pushListLevelStyle( "<outline-style>", outlineStyle, level );
+            int restartNumbering = -1;
+            if ( e.hasAttribute( "text:start-value" ) )
                  // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
-                 m_restartNumbering = t.attribute( "text:start-value" ).toInt();
-            e = parseParagraph( doc, t );
-            if ( listOK )
-                m_listStyleStack.pop();
+                 restartNumbering = e.attribute( "text:start-value" ).toInt();
+            KWTextParag *parag = new KWTextParag( textDocument(), lastParagraph );
+            parag->loadOasis( e, context, m_doc->styleCollection() );
+            if ( !lastParagraph )        // First parag
+                textDocument()->setFirstParag( parag );
+            lastParagraph = parag;
+            if ( listOK ) {
+                parag->applyListStyle( context, restartNumbering, true /*ordered*/, true /*heading*/, level );
+                context.listStyleStack().pop();
+            }
         }
         else if ( name == "text:unordered-list" || name == "text:ordered-list" ) // list
         {
-            parseList( doc, t, currentFramesetElement );
-            context.m_styleStack.restore();
+            lastParagraph = loadList( e, context, lastParagraph, outlineStyle );
+            context.styleStack().restore();
             continue;
         }
         else if ( name == "text:section" ) // Provisory support (###TODO)
         {
-            kdDebug(30518) << "Section found!" << endl;
-            fillStyleStack( t, "text:style-name" );
-            parseBodyOrSimilar( doc, t, currentFramesetElement);
+            kdDebug(32002) << "Section found!" << endl;
+            context.fillStyleStack( e, "text:style-name" );
+            lastParagraph = loadOasisText( e, context, lastParagraph, outlineStyle );
         }
+#if 0
         else if ( name == "table:table" )
         {
-            kdDebug(30518) << "Table found!" << endl;
-            parseTable( doc, t, currentFramesetElement );
+            kdDebug(32002) << "Table found!" << endl;
+            parseTable( e, currentFramesetElement );
         }
         else if ( name == "draw:image" )
         {
-            appendPicture( doc, t );
+            appendPicture( e );
         }
         else if ( name == "draw:text-box" )
         {
-            appendTextBox( doc, t );
+            appendTextBox( e );
         }
         else if ( name == "text:variable-decls" )
         {
@@ -1846,17 +1881,26 @@ void KWTextFrameSet::loadOasis( QDomElement &bodyElem, KoOasisContext& context )
         }
         else if ( name == "text:table-of-content" )
         {
-            appendTOC( doc, t );
+            appendTOC( e );
         }
 #endif
         // TODO text:sequence-decls
         else
         {
-            kdWarning(30518) << "Unsupported body element '" << name << "'" << endl;
+            kdWarning(32002) << "Unsupported body element '" << name << "'" << endl;
         }
 
-        context.m_styleStack.restore(); // remove the styles added by the paragraph or list
+        context.styleStack().restore(); // remove the styles added by the paragraph or list
     }
+    return lastParagraph;
+}
+
+void KWTextFrameSet::loadOasis( const QDomElement &bodyElem, KoOasisContext& context, const QDomElement& outlineStyle )
+{
+    textDocument()->clear(false); // Get rid of dummy paragraph (and more if any)
+    m_textobj->setLastFormattedParag( 0L ); // no more parags, avoid UMR in next setLastFormattedParag call
+
+    KWTextParag *lastParagraph = loadOasisText( bodyElem, context, 0, outlineStyle );
 
     if ( !lastParagraph )                // We created no paragraph
     {

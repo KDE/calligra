@@ -143,7 +143,7 @@ public:
     { return saveInternal( parentElem, saveFrames, true ); }
 
     virtual void load( QDomElement &attributes, bool loadFrames = true );
-    void loadOasis( QDomElement &bodyElem, KoOasisContext& context );
+    void loadOasis( const QDomElement &bodyElem, KoOasisContext& context, const QDomElement& outlineStyle );
 
     virtual void finalize();
     virtual void zoom( bool forPrint );
@@ -314,6 +314,8 @@ protected:
     double footNoteSize( KWFrame *theFrame );
     QDomElement saveInternal( QDomElement &parentElem, bool saveFrames, bool saveAnchorsFramesets );
     void createNewPageAndNewFrame( KoTextParag* lastFormatted, int difference, bool* abort );
+    KWTextParag* loadList( const QDomElement& list, KoOasisContext& context, KWTextParag* lastParagraph, const QDomElement& outlineStyle );
+    KWTextParag * loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KWTextParag* lastParagraph, const QDomElement& outlineStyle );
 
 private:
     /** The contained text object */
