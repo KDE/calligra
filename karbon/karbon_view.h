@@ -89,6 +89,7 @@ protected slots:
 	void viewModeChanged();
 	void zoomChanged();
 	void viewColorManager();
+	void refreshView();
 	
 	//toolbox dialogs - slots
 	void solidFillClicked();

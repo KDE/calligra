@@ -61,6 +61,7 @@
 		<Action name="view_zoom_out"/>
 		<Action name="view_zoom"/>
         <Action name="view_mode"/>
+	<Action name="view_refresh"/>
 	<Separator/>
 	<Action name="view_color_manager"/>
 	</Menu>
