@@ -81,10 +81,13 @@
 #include <kglobal.h>
 #include <kimageio.h>
 #include <kcoloractions.h>
+#include <tkcoloractions.h>
 #include <kfontdialog.h>
 #include <kstddirs.h>
 #include <kparts/event.h>
 #include <kformuladocument.h>
+
+
 
 #include <stdlib.h>
 
@@ -203,7 +206,7 @@ void KWView::initGui()
 
     actionFormatColor->setColor( Qt::black );
     actionBorderColor->setColor( Qt::black );
-    actionBackgroundColor->setColor( Qt::white );
+    //actionBackgroundColor->setColor( Qt::white );
 
     //refresh zoom combobox
     QStringList list=actionViewZoom->items();
@@ -503,8 +506,8 @@ void KWView::setupActions()
     actionBorderWidth->setItems( lst );
     actionBorderColor = new KSelectColorAction( i18n( "Border Color" ), KColorAction::FrameColor,
         0, this, SLOT( borderColor() ), actionCollection(), "border_color" );
-    actionBackgroundColor = new KSelectColorAction( i18n( "Background Color" ), KColorAction::BackgroundColor,
-        0, this, SLOT( backgroundColor() ), actionCollection(), "border_backgroundcolor" );
+    actionBackgroundColor = new TKSelectColorAction( i18n( "Background Color" ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor");
+    connect(actionBackgroundColor,SIGNAL(activated()),SLOT(backgroundColor() ));
 
     // ---------------------- formula toolbar actions
 

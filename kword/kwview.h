@@ -62,6 +62,7 @@ class KFontSizeAction;
 class KFontAction;
 class KColorAction;
 class KWTextFrameSetEdit;
+class TKSelectColorAction;
 namespace Qt3 {
 class QTextFormat;
 class QTextParag;
@@ -349,7 +350,7 @@ protected:
     KSelectColorAction *actionBorderColor;
     KSelectAction *actionBorderWidth;
     KSelectAction *actionBorderStyle;
-    KSelectColorAction *actionBackgroundColor;
+    TKSelectColorAction *actionBackgroundColor;
     void borderShowValues();
     void borderSet();
     struct
