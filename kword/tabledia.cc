@@ -62,14 +62,14 @@ void KWTablePreview::paintEvent( QPaintEvent * )
 /******************************************************************/
 
 KWTableDia::KWTableDia( QWidget* parent, const char* name, KWCanvas *_canvas, KWDocument *_doc,
-			int rows, int cols, CellSize wid, CellSize hei, bool floating )
+			int rows, int cols, CellSize wid, CellSize hei, bool floating , const QString & _templateName)
     : KDialogBase( Tabbed, i18n("Table Settings"), Ok | Cancel, Ok, parent, name, true)
 {
     canvas = _canvas;
     doc = _doc;
 
     setupTab1( rows, cols, wid, hei, floating );
-    setupTab2();
+    setupTab2( _templateName );
 
     setInitialSize( QSize(500, 450) );
 }
@@ -162,13 +162,13 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
     connect( nCols, SIGNAL( valueChanged( int ) ), this, SLOT( colsChanged( int ) ) );
 }
 
-void KWTableDia::setupTab2()
+void KWTableDia::setupTab2(const QString & _templateName )
 {
     QWidget *tab2 = addPage( i18n("Templates"));
 
     QGridLayout *grid = new QGridLayout( tab2, 1, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
-    tableTemplateSelector = new KWTableTemplateSelector( doc, tab2 );
+    tableTemplateSelector = new KWTableTemplateSelector( doc, tab2, _templateName );
     grid->addWidget(tableTemplateSelector, 0, 0);
 
     grid->activate();

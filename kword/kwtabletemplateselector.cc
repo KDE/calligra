@@ -58,16 +58,16 @@ KWTableTemplatePreview::KWTableTemplatePreview( const QString& title, KWTableSty
     m_textdoc = new KWTextDocument( m_zoomHandler );
     tableTemplate = 0L;
     origTableTemplate = 0L;
-    
+
     fillContents();
 }
-    
+
 KWTableTemplatePreview::~KWTableTemplatePreview()
 {
-    
+
     delete m_textdoc;
     delete m_zoomHandler;
-    
+
 //    if (tableTemplate)
 //        delete tableTemplate;
 
@@ -76,7 +76,7 @@ KWTableTemplatePreview::~KWTableTemplatePreview()
 int KWTableTemplatePreview::bottomBorder(const int rows, const int cols, const int rowpos, const int colpos)
 {
     if ( (rowpos<0) || (colpos<0) ) return 0;
-    
+
     if ( (rowpos==0) && (colpos==0) ) // TOP LEFT CORNER
         return int( tableTemplate->pTopLeftCorner()->pFrameStyle()->bottomBorder().width() );
     else
@@ -103,14 +103,14 @@ int KWTableTemplatePreview::bottomBorder(const int rows, const int cols, const i
     else
     if ( (rowpos>0) && (colpos>0) && (rowpos<(rows-1)) && (colpos<(cols-1)) ) // BODY
         return int( tableTemplate->pBodyCell()->pFrameStyle()->bottomBorder().width() );
-    
+
     return 0;
 }
 
 int KWTableTemplatePreview::rightBorder(const int rows, const int cols, const int rowpos, const int colpos)
 {
     if ( (rowpos<0) || (colpos<0) ) return 0;
-    
+
     if ( (rowpos==0) && (colpos==0) ) // TOP LEFT CORNER
         return int( tableTemplate->pTopLeftCorner()->pFrameStyle()->rightBorder().width() );
     else
@@ -137,50 +137,50 @@ int KWTableTemplatePreview::rightBorder(const int rows, const int cols, const in
     else
     if ( (rowpos>0) && (colpos>0) && (rowpos<(rows-1)) && (colpos<(cols-1)) ) // BODY
         return int( tableTemplate->pBodyCell()->pFrameStyle()->rightBorder().width() );
-    
+
     return 0;
 }
 
-void KWTableTemplatePreview::drawCell( QPainter *p, const KWTableStyle *ts, const QRect globalRect, 
+void KWTableTemplatePreview::drawCell( QPainter *p, const KWTableStyle *ts, const QRect globalRect,
                                        const int rows, int cols, int rowpos, int colpos, const QString & txt)
 {
     if (!ts) return;
-    
+
     QRect insRect;
-    
+
     p->resetXForm();
     p->setClipping( false );
-    
+
     // 1. Calculate insRect
     int wid = int( globalRect.width()/cols ); // inner width
     int hei = int( globalRect.height()/rows ); // inner height
-    
+
     insRect.setX( colpos*wid + globalRect.x() );
     insRect.setY( rowpos*hei + globalRect.y() );
     insRect.setWidth( wid + ts->pFrameStyle()->rightBorder().width() );
     insRect.setHeight( hei + ts->pFrameStyle()->bottomBorder().width() );
-    
+
     // 2. Set background
     // caching
     int rb = rightBorder(rows,cols,rowpos,colpos-1);
     int bb = bottomBorder(rows,cols,rowpos-1,colpos);
     int hbb = bottomBorder(rows,cols,rowpos,colpos-1);
     int wrb = rightBorder(rows,cols,rowpos-1,colpos);
-    
+
     if (rb==0)
         rb = rightBorder(rows,cols,rowpos-1,colpos-1);
     if (bb==0)
         bb = bottomBorder(rows,cols,rowpos-1,colpos-1);
-    
+
     p->fillRect( QRect( colpos*wid + globalRect.x() + ( (rb <= ts->pFrameStyle()->rightBorder().width()) ? int(ts->pFrameStyle()->rightBorder().width()) : rb ),
                         rowpos*hei + globalRect.y() + ( (bb <= ts->pFrameStyle()->topBorder().width()) ? int(ts->pFrameStyle()->topBorder().width()) : bb ),
                         wid + ( ( (wrb > ts->pFrameStyle()->rightBorder().width()) && ((rb > ts->pFrameStyle()->rightBorder().width()) || ((rb==0) && (ts->pFrameStyle()->rightBorder().width()==0) ) ) && ((wrb-rb)>0) )  ? wrb : 0 ),
                         hei + ( ( (hbb > ts->pFrameStyle()->bottomBorder().width()) && ((bb > ts->pFrameStyle()->topBorder().width()) || ((bb==0) && (ts->pFrameStyle()->topBorder().width()==0) ) ) && ((hbb-bb)>0) ) ? hbb : 0 )),
                         ts->pFrameStyle()->backgroundColor() );
-                            
+
     // 2. set Style
     KoTextParag * parag = m_textdoc->firstParag();
-    
+
     parag->remove( 0, parag->string()->length()-1 );
     parag->insert( 0, txt );
     parag->applyStyle( ts->pStyle() );
@@ -195,10 +195,10 @@ void KWTableTemplatePreview::drawCell( QPainter *p, const KWTableStyle *ts, cons
     QRect textRect = parag->pixelRect( m_zoomHandler );
     textRect.moveTopLeft( QPoint( insRect.x() + ( (rb<ts->pFrameStyle()->rightBorder().width()) ? ts->pFrameStyle()->rightBorder().width() : rb ) +1,
                                   insRect.y() + ( (bb<ts->pFrameStyle()->topBorder().width()) ? ts->pFrameStyle()->topBorder().width() : bb ) + 1 ) );
-    
-    
+
+
     textRect.setWidth(wid-2);
-        
+
     p->setClipRect( textRect.intersect( globalRect ) );
     p->translate( textRect.x(), textRect.y() );
 
@@ -206,18 +206,18 @@ void KWTableTemplatePreview::drawCell( QPainter *p, const KWTableStyle *ts, cons
     cg.setBrush( QColorGroup::Base, ts->pFrameStyle()->backgroundColor() );
 
     m_textdoc->drawWYSIWYG( p, 1, 0, textRect.width() - 1, textRect.height(), cg, m_zoomHandler );
-    
+
     // 4. Set borders
     p->resetXForm();
     p->setClipping( false );
-    
+
     QRect cell(globalRect.x(), globalRect.y(),
                   globalRect.width() + ts->pFrameStyle()->rightBorder().width(),
                   globalRect.height() + ts->pFrameStyle()->bottomBorder().width() );
     p->setClipRect( insRect.intersect( cell ) );
-    
+
     p->translate( insRect.x(), insRect.y() );
-    
+
     if (ts->pFrameStyle()->topBorder().width()>0) {
         p->setPen( KoBorder::borderPen(ts->pFrameStyle()->topBorder(), ts->pFrameStyle()->topBorder().width(),black) ); // Top border
         p->drawLine( 0, int( floor( ts->pFrameStyle()->topBorder().width()/2 ) ), wid + ts->pFrameStyle()->rightBorder().width(), int( floor( ts->pFrameStyle()->topBorder().width()/2 ) ) );
@@ -235,13 +235,13 @@ void KWTableTemplatePreview::drawCell( QPainter *p, const KWTableStyle *ts, cons
         p->drawLine( wid + int( floor( ts->pFrameStyle()->rightBorder().width()/2 ) ), 0, wid + int( floor( ts->pFrameStyle()->rightBorder().width()/2 ) ), hei + ts->pFrameStyle()->bottomBorder().width() );
     }
 }
-    
+
 
 void KWTableTemplatePreview::drawPreviewTable( QPainter *p, int rows, int cols, QRect globalRect )
 {
     KWTableStyle *cell = 0L;
     QString txt;
-    
+
     for ( int i = 0; i < rows; i++ )
     {
         for ( int j = 0; j < cols; j++ )
@@ -272,7 +272,7 @@ void KWTableTemplatePreview::drawPreviewTable( QPainter *p, int rows, int cols, 
             else
             if ( (i>0) && (j>0) && (i<(rows-1)) && (j<(cols-1)) ) // BODY
                 cell = tableTemplate->pBodyCell();
-            
+
             if ( (i==0) && (j==0) ) // TOP LEFT CORNER
                 txt = m_contents[0][0];
             else
@@ -283,7 +283,7 @@ void KWTableTemplatePreview::drawPreviewTable( QPainter *p, int rows, int cols, 
                 txt = m_contents[1][i];
             else
                 txt = QString::number(i) + QString::number(j);
-            
+
             drawCell( p, cell, globalRect, rows, cols, i, j, txt );
         }
     }
@@ -296,13 +296,13 @@ void KWTableTemplatePreview::drawContents( QPainter *p )
 
     // 1. Draw fake document white background
     p->fillRect( QRect( 10, 20, r.width() - 20, r.height() - 20 ), QColor("white") );
-    
+
     // 2. Draw preview table
     if (tableTemplate) {
-        
+
         QRect tableRect;
         int x,y;
-        
+
         // x
         if ( tableTemplate->pTopRightCorner()->pFrameStyle()->rightBorder().width() >
              tableTemplate->pLastCol()->pFrameStyle()->rightBorder().width() )
@@ -311,7 +311,7 @@ void KWTableTemplatePreview::drawContents( QPainter *p )
              x = int( tableTemplate->pLastCol()->pFrameStyle()->rightBorder().width() );
         if ( tableTemplate->pBottomRightCorner()->pFrameStyle()->rightBorder().width() > x )
              x = int( tableTemplate->pBottomRightCorner()->pFrameStyle()->rightBorder().width() );
-        
+
         // y
         if ( tableTemplate->pBottomRightCorner()->pFrameStyle()->bottomBorder().width() >
              tableTemplate->pLastRow()->pFrameStyle()->bottomBorder().width() )
@@ -320,15 +320,15 @@ void KWTableTemplatePreview::drawContents( QPainter *p )
              y = int( tableTemplate->pLastRow()->pFrameStyle()->bottomBorder().width() );
         if ( tableTemplate->pBottomLeftCorner()->pFrameStyle()->bottomBorder().width() > y )
              y = int( tableTemplate->pBottomLeftCorner()->pFrameStyle()->leftBorder().width() );
-             
+
         tableRect.setX( 20 - int(x/2) );
         tableRect.setY( 30 - int(y/2) );
         tableRect.setWidth( r.width() - 40 );
         tableRect.setHeight( r.height() - 40 );
-    
+
         drawPreviewTable( p, 5, 4, tableRect );
     }
-    
+
     p->restore();
 }
 
@@ -338,37 +338,37 @@ void KWTableTemplatePreview::setSpecialCells( KWTableTemplate *_tableTemplate )
         tableTemplate->setFirstRow( tableTemplate->pBodyCell() );
     else
         tableTemplate->setFirstRow( _tableTemplate->pFirstRow() );
-    
+
     if (_tableTemplate->pFirstCol()==_tableTemplate->pBodyCell())
         tableTemplate->setFirstCol( tableTemplate->pBodyCell() );
     else
         tableTemplate->setFirstCol( _tableTemplate->pFirstCol() );
-    
+
     if (_tableTemplate->pLastRow()==_tableTemplate->pBodyCell())
         tableTemplate->setLastRow( tableTemplate->pBodyCell() );
     else
         tableTemplate->setLastRow( _tableTemplate->pLastRow() );
-    
+
     if (_tableTemplate->pLastCol()==_tableTemplate->pBodyCell())
         tableTemplate->setLastCol( tableTemplate->pBodyCell() );
     else
         tableTemplate->setLastCol( _tableTemplate->pLastCol() );
-    
+
     if (_tableTemplate->pTopLeftCorner()==_tableTemplate->pBodyCell())
         tableTemplate->setTopLeftCorner( tableTemplate->pBodyCell() );
     else
         tableTemplate->setTopLeftCorner( _tableTemplate->pTopLeftCorner() );
-    
+
     if (_tableTemplate->pTopRightCorner()==_tableTemplate->pBodyCell())
         tableTemplate->setTopRightCorner( tableTemplate->pBodyCell() );
     else
         tableTemplate->setTopRightCorner( _tableTemplate->pTopRightCorner() );
-    
+
     if (_tableTemplate->pBottomLeftCorner()==_tableTemplate->pBodyCell())
         tableTemplate->setBottomLeftCorner( tableTemplate->pBodyCell() );
     else
         tableTemplate->setBottomLeftCorner( _tableTemplate->pBottomLeftCorner() );
-    
+
     if (_tableTemplate->pBottomRightCorner()==_tableTemplate->pBodyCell())
         tableTemplate->setBottomRightCorner( tableTemplate->pBodyCell() );
     else
@@ -378,15 +378,15 @@ void KWTableTemplatePreview::setSpecialCells( KWTableTemplate *_tableTemplate )
 void KWTableTemplatePreview::setTableTemplate( KWTableTemplate *_tableTemplate )
 {
     origTableTemplate = _tableTemplate;
-    
+
     if (tableTemplate)
         delete tableTemplate;
-    
+
     tableTemplate = new KWTableTemplate(_tableTemplate->translatedName());
     tableTemplate->setBodyCell( _tableTemplate->pBodyCell() );
-    
+
     setSpecialCells(_tableTemplate);
-        
+
     repaint( true );
 }
 
@@ -404,7 +404,7 @@ void KWTableTemplatePreview::fillContents()
     m_contents[1][2] = "II";
     m_contents[1][3] = "III";
     m_contents[1][4] = "IV";
-    
+
 }
 
 KWTableTemplate* KWTableTemplatePreview::getTableTemplate()
@@ -418,7 +418,7 @@ void KWTableTemplatePreview::cbFirstRowChanged( bool enable )
         tableTemplate->setFirstRow( origTableTemplate->pFirstRow() );
     else
         tableTemplate->setFirstRow( tableTemplate->pBodyCell() );
-    
+
     if ( enable && ( origTableTemplate->pTopLeftCorner()==origTableTemplate->pFirstRow() ) )
         tableTemplate->setTopLeftCorner( origTableTemplate->pTopLeftCorner() );
     else
@@ -430,7 +430,7 @@ void KWTableTemplatePreview::cbFirstRowChanged( bool enable )
     else
     if ( (!enable) && ( origTableTemplate->pTopRightCorner()==origTableTemplate->pFirstRow() ) )
         tableTemplate->setTopRightCorner( tableTemplate->pBodyCell() );
-              
+
     repaint( true );
 }
 
@@ -452,7 +452,7 @@ void KWTableTemplatePreview::cbFirstColChanged( bool enable )
     else
     if ( (!enable) && ( origTableTemplate->pBottomLeftCorner()==origTableTemplate->pFirstCol() ) )
         tableTemplate->setBottomLeftCorner( tableTemplate->pBodyCell() );
-              
+
     repaint( true );
 }
 
@@ -474,7 +474,7 @@ void KWTableTemplatePreview::cbLastRowChanged( bool enable )
     else
     if ( (!enable) && ( origTableTemplate->pBottomLeftCorner()==origTableTemplate->pLastRow() ) )
         tableTemplate->setBottomLeftCorner( tableTemplate->pBodyCell() );
-              
+
     repaint( true );
 }
 
@@ -490,7 +490,7 @@ void KWTableTemplatePreview::cbLastColChanged( bool enable )
     else
     if ( (!enable) && ( origTableTemplate->pTopRightCorner()==origTableTemplate->pLastCol() ) )
         tableTemplate->setTopRightCorner( tableTemplate->pBodyCell() );
-              
+
     if ( enable && ( origTableTemplate->pBottomRightCorner()==origTableTemplate->pLastCol() ) )
         tableTemplate->setBottomRightCorner( origTableTemplate->pBottomRightCorner() );
     else
@@ -503,16 +503,16 @@ void KWTableTemplatePreview::cbLastColChanged( bool enable )
 void KWTableTemplatePreview::cbBodyChanged( bool enable )
 {
     KWTableTemplate *oldTemplate = new KWTableTemplate( *tableTemplate );
-    
+
     if ( enable )
         tableTemplate->setBodyCell( origTableTemplate->pBodyCell() );
     else
         tableTemplate->setBodyCell( m_emptyStyle );
 
     setSpecialCells(oldTemplate);
-    
+
     if (oldTemplate) delete oldTemplate;
-              
+
     repaint( true );
 }
 
@@ -521,7 +521,7 @@ void KWTableTemplatePreview::cbBodyChanged( bool enable )
 /* Class: KWTableTemplateSelector                                    */
 /******************************************************************/
 
-KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_parent, const char *_name)
+KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_parent, const QString & _tableTemplate, const char *_name)
     : QWidget( _parent, _name )
 {
     m_doc = _doc;
@@ -530,44 +530,44 @@ KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_pa
 
     QWidget *innerHolder = new QWidget( this );
     QGridLayout *innerGrid = new QGridLayout( innerHolder, 2, 1, 0, KDialog::spacingHint() );
-    
+
     lTemplates = new QLabel( i18n( "Templates" ), this );
     grid->addWidget( lTemplates, 0, 0 );
 
     lbTemplates = new QListBox( innerHolder );
-    
+
     QPtrListIterator<KWTableTemplate> it( m_doc->tableTemplateCollection()->tableTemplateList() );
     for ( ; it.current() ; ++it )
     {
         lbTemplates->insertItem( it.current()->translatedName() );
     }
-    
+
     innerGrid->addWidget( lbTemplates, 0, 0 );
 
     pbCustomize = new QPushButton( i18n( "&Customize" ), innerHolder );
     pbCustomize->setEnabled(false);
 
     innerGrid->addWidget( pbCustomize, 1, 0 );
-        
+
     grid->addMultiCellWidget( innerHolder, 1, 2, 0, 0 );
-    
+
     preview = new KWTableTemplatePreview( i18n( "Preview" ), m_doc->tableStyleCollection()->findTableStyle("Plain"), this );
     grid->addWidget( preview, 1, 1 );
 
     bgCustomize = new QButtonGroup( 3, Horizontal, i18n( "Apply to" ), this );
-    
+
     cbFirstRow = new QCheckBox( i18n( "First row" ), bgCustomize );
     cbLastRow = new QCheckBox( i18n( "Last row" ), bgCustomize );
     cbBody = new QCheckBox( i18n( "Body" ), bgCustomize );
     cbFirstCol = new QCheckBox( i18n( "First column" ), bgCustomize );
     cbLastCol = new QCheckBox( i18n( "Last column" ), bgCustomize );
-    
+
     cbFirstRow->setChecked(true);
     cbFirstCol->setChecked(true);
     cbLastRow->setChecked(true);
     cbLastCol->setChecked(true);
     cbBody->setChecked(true);
-    
+
     grid->addWidget( bgCustomize, 2, 1 );
 
     grid->setRowStretch( 0, 0 );
@@ -585,11 +585,14 @@ KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_pa
     connect( cbBody,  SIGNAL( toggled( bool ) ), preview, SLOT( cbBodyChanged( bool ) ) );
 
     connect( lbTemplates, SIGNAL(  selectionChanged () ), this, SLOT( changeTableTemplate() ) );
-
+    QListBoxItem * item = lbTemplates->findItem( _tableTemplate );
+    int index = 0;
+    if ( item  )
+        index = lbTemplates->index ( item );
     if (m_doc->tableTemplateCollection()->tableTemplateList().count() > 0) {
-      preview->setTableTemplate( m_doc->tableTemplateCollection()->tableTemplateAt(0) );
+      preview->setTableTemplate( m_doc->tableTemplateCollection()->tableTemplateAt(index) );
       selectedTableTemplate = 0L;
-      lbTemplates->setSelected( 0, true );
+      lbTemplates->setSelected( index, true );
     }
 }
 

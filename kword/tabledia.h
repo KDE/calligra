@@ -71,11 +71,11 @@ class KWTableDia : public KDialogBase
 public:
     typedef int CellSize; // in fact KWTableFrameSet::CellSize, which is an enum
     KWTableDia( QWidget *parent, const char *name, KWCanvas *_canvas, KWDocument *_doc,
-		int rows, int cols, CellSize wid, CellSize hei, bool floating );
+		int rows, int cols, CellSize wid, CellSize hei, bool floating , const QString & _templateName);
 
 protected:
     void setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool floating );
-    void setupTab2();
+    void setupTab2( const QString &_templateName);
 
     QWidget *tab1;
     QLabel *lRows, *lCols, *lWid, *lHei;
@@ -86,7 +86,7 @@ protected:
 
     QGridLayout *grid;
     KWTableTemplateSelector *tableTemplateSelector;
-    
+
     KWCanvas *canvas;
     KWDocument *doc;
 

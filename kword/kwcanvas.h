@@ -144,6 +144,9 @@ public:
     void setSplitCellRows(unsigned int _nb){ m_tableSplit.nbRows=_nb;}
     void setSplitCellCols(unsigned int _nb){ m_tableSplit.nbCols=_nb;}
 
+    QString tableTemplateName()const { return m_table.tableTemplateName;}
+    void setTableTemplateName(const QString &_name) { m_table.tableTemplateName=_name;}
+
     void createTable( unsigned int rows, unsigned int cols,
                       int /*KWTableFrameSet::CellSize*/ wid, int /*KWTableFrameSet::CellSize*/ hei,
                       bool isFloating,
@@ -297,6 +300,7 @@ private:
         int /*KWTableFrameSet::CellSize*/ width;
         int /*KWTableFrameSet::CellSize*/ height;
         bool floating;
+        QString tableTemplateName;
         KWTableTemplate *tt;
     } m_table;
     KWTableFrameSet *curTable;

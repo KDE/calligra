@@ -70,7 +70,7 @@ public slots:
 protected:
     int bottomBorder(const int rows, const int cols, const int rowpos, const int colpos);
     int rightBorder(const int rows, const int cols, const int rowpos, const int colpos);
-    void drawCell( QPainter *p, const KWTableStyle *ts, const QRect globalRect, 
+    void drawCell( QPainter *p, const KWTableStyle *ts, const QRect globalRect,
                    const int rows, int cols, int rowpos, int colpos, const QString & txt);
     void drawPreviewTable(QPainter *p, int rows, int cols, QRect globalRect);
     void drawContents( QPainter *p );
@@ -83,7 +83,7 @@ protected:
     KWTableTemplate *origTableTemplate;
 private:
     QString m_contents[2][5];
-    
+
     void fillContents();
 };
 
@@ -96,10 +96,10 @@ class KWTableTemplateSelector : public QWidget
     Q_OBJECT
 
 public:
-    KWTableTemplateSelector( KWDocument *_doc, QWidget * _parent, const char * _name = 0 );
+    KWTableTemplateSelector( KWDocument *_doc, QWidget * _parent, const QString & _tableTemplate, const char * _name = 0 );
 
     KWTableTemplate *getTableTemplate();
-    
+
 protected:
     KWDocument *m_doc;
 
@@ -107,7 +107,7 @@ protected:
     QLabel *lTemplates;
     QListBox *lbTemplates;
     QPushButton *pbCustomize;
-    
+
     QButtonGroup *bgCustomize;
     QCheckBox *cbFirstRow, *cbFirstCol, *cbLastRow, *cbLastCol, *cbBody;
 
