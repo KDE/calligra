@@ -18,11 +18,15 @@
 */
 
 #include <qpainter.h>
+#include <qpixmap.h>
 
 #include <kdebug.h>
 
 #include "kexirelationviewtable.h"
 #include "kexirelationviewconnection.h"
+
+#include "r1.xpm"
+#include "rn.xpm"
 
 KexiRelationViewConnection::KexiRelationViewConnection(KexiRelationViewTableContainer *srcTbl, KexiRelationViewTableContainer *rcvTbl,
   const QString &srcFld, const QString &rcvFld)
@@ -49,18 +53,12 @@ KexiRelationViewConnection::drawConnection(QPainter *p, QWidget *parent)
 	int sy = m_srcTable->globalY(m_srcField);
 	int rx = m_rcvTable->x();
 	int ry = m_rcvTable->globalY(m_rcvField);
-	
+
+	QPoint side1(0, 0);
+	QPoint sideN(0, 0);
 
 	if(m_srcTable->x() < m_rcvTable->x())
 	{
-
-//		p->drawRect(sx, sy - 1, sx + 5, sy + 1);
-
-/*
-		p->drawLine(rx - 5, ry - 1, rx, ry - 1);
-		p->drawLine(rx - 6, ry, rx, ry);
-		p->drawLine(rx - 5, ry + 1, rx, ry + 1);
-*/
 
 		p->drawLine(sx + 6, sy, rx - 8, ry);
 
@@ -72,6 +70,12 @@ KexiRelationViewConnection::drawConnection(QPainter *p, QWidget *parent)
 		p->drawLine(sx, sy - 1, sx + 5, sy - 1);
 		p->drawLine(sx, sy, sx + 6, sy);
 		p->drawLine(sx, sy + 1, sx + 5, sy + 1);
+
+		side1.setX(sx + 2);
+		side1.setY(sy - 7);
+
+		sideN.setX(rx - 10);
+		sideN.setY(ry - 6);
 	}
 	else
 	{
@@ -88,9 +92,16 @@ KexiRelationViewConnection::drawConnection(QPainter *p, QWidget *parent)
 		p->drawLine(rx - 7, sy - 1, rx, sy - 1);
 		p->drawLine(rx - 7, sy + 1, rx, sy + 1);
 		p->drawLine(rx - 8, sy, rx, sy);
-		
-		
+
+		side1.setX(rx - 4);
+		side1.setY(sy - 7);
+
+		sideN.setX(lx + 3);
+		sideN.setY(ry - 6);
 	}
+
+	p->drawPixmap(side1, QPixmap(r1_xpm));
+	p->drawPixmap(sideN, QPixmap(rn_xpm));
 }
 
 const QRect
@@ -126,7 +137,7 @@ KexiRelationViewConnection::connectionRect()
 
 
 //	return QRect(sx - 1, sy - 1, (rx + m_rcvTable->width()) - sx + 1, ry - sy + 1);
-	QRect rect(left - 3, top - 3, dx + 3, dy + 5);
+	QRect rect(left - 3, top - 7, dx + 3, dy + 7);
 	m_oldRect = rect;
 	
 	return rect;
