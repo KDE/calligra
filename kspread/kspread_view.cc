@@ -70,7 +70,6 @@
 #include "kspread_dlg_insert.h"
 #include "kspread_handler.h"
 #include "kspread_events.h"
-#include "kspread_global.h"
 #include "kspread_editors.h"
 #include "kspread_dlg_format.h"
 #include "kspread_dlg_oszi.h"
@@ -195,28 +194,28 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     // Handler for moving and resizing embedded parts
     (void)new ContainerHandler( this, m_pCanvas );
 
-    m_bold = new KToggleAction( i18n("Bold"), "bold"), CTRL + Key_B, actionCollection(), "bold";
+    m_bold = new KToggleAction( i18n("Bold"), "bold", CTRL + Key_B, actionCollection(), "bold");
     connect( m_bold, SIGNAL( toggled( bool ) ), this, SLOT( bold( bool ) ) );
-    m_italic = new KToggleAction( i18n("Italic"), "italic"), CTRL + Key_I, actionCollection(), "italic";
+    m_italic = new KToggleAction( i18n("Italic"), "italic", CTRL + Key_I, actionCollection(), "italic");
     connect( m_italic, SIGNAL( toggled( bool ) ), this, SLOT( italic( bool ) ) );
-    m_underline = new KToggleAction( i18n("Underline"), "underline"), CTRL + Key_U, actionCollection(), "underline";
+    m_underline = new KToggleAction( i18n("Underline"), "underline", CTRL + Key_U, actionCollection(), "underline");
     connect( m_underline, SIGNAL( toggled( bool ) ), this, SLOT( underline( bool ) ) );
 
-    m_percent = new KToggleAction( i18n("Percent format"), "percent"), 0, actionCollection(), "percent";
+    m_percent = new KToggleAction( i18n("Percent format"), "percent", 0, actionCollection(), "percent");
     connect( m_percent, SIGNAL( toggled( bool ) ), this, SLOT( percent( bool ) ) );
     m_precplus = new KAction( i18n("Increase precision"), "precplus", 0, this,
 			      SLOT( precisionPlus() ), actionCollection(), "precplus");
     m_precminus = new KAction( i18n("Decrease precision"), "precminus", 0, this,
 			      SLOT( precisionMinus() ), actionCollection(), "precminus");
-    m_money = new KToggleAction( i18n("Money format"), "money"), 0, actionCollection(), "money";
+    m_money = new KToggleAction( i18n("Money format"), "money", 0, actionCollection(), "money");
     connect( m_money, SIGNAL( toggled( bool ) ), this, SLOT( moneyFormat( bool ) ) );
-    m_alignLeft = new KToggleAction( i18n("Align left"), "left"), 0, actionCollection(), "left";
+    m_alignLeft = new KToggleAction( i18n("Align left"), "left", 0, actionCollection(), "left");
     connect( m_alignLeft, SIGNAL( toggled( bool ) ), this, SLOT( alignLeft( bool ) ) );
     m_alignLeft->setExclusiveGroup( "Align" );
-    m_alignCenter = new KToggleAction( i18n("Align center"), "center"), 0, actionCollection(), "center";
+    m_alignCenter = new KToggleAction( i18n("Align center"), "center", 0, actionCollection(), "center");
     connect( m_alignCenter, SIGNAL( toggled( bool ) ), this, SLOT( alignCenter( bool ) ) );
     m_alignCenter->setExclusiveGroup( "Align" );
-    m_alignRight = new KToggleAction( i18n("Align right"), "right"), 0, actionCollection(), "right";
+    m_alignRight = new KToggleAction( i18n("Align right"), "right", 0, actionCollection(), "right");
     connect( m_alignRight, SIGNAL( toggled( bool ) ), this, SLOT( alignRight( bool ) ) );
     m_alignRight->setExclusiveGroup( "Align" );
     m_transform = new KAction( i18n("Transform object..."), "rotate", 0, this, SLOT( transformPart() ),
@@ -946,7 +945,7 @@ QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget 
 
   QPixmap *pixmap = 0L;
 
-  pixmap = new QPixmap( KSBarIcon(_file) );
+  pixmap = new QPixmap( BarIcon(_file) );
 
   QButton *pb;
   if ( !_kbutton )
@@ -1631,7 +1630,7 @@ void KSpreadView::slotRemoveChild( KSpreadChild *_child )
   // TODO
 }
 
-void KSpreadView::slotUpdateChildGeometry( KSpreadChild *_child )
+void KSpreadView::slotUpdateChildGeometry( KSpreadChild */*_child*/ )
 {
     // ##############
     // TODO

@@ -5,7 +5,7 @@
 
 #include "kspread_factory.h"
 
-#define KSBarIcon( x ) BarIcon( x, KSpreadFactory::global() )
+//#define KSBarIcon( x ) BarIcon( x, KSpreadFactory::global() )
 
 enum PasteMode { Normal, Text, Format, NoBorder, NormalAndTranspose, TextAndTranspoase,
 		 FormatAndTranspose, NoBorderAndTranspose };
