@@ -396,7 +396,6 @@ KSpreadTable* KSpreadDoc::createTable()
 {
   QString s( i18n("Table%1") );
   s = s.arg( m_iTableId++ );
-
   //KSpreadTable *t = new KSpreadTable( m_pMap, s.latin1() );
   KSpreadTable *t = new KSpreadTable( m_pMap, s.local8Bit() );
   t->setTableName( s, TRUE );

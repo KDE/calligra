@@ -171,6 +171,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
 {
   if ( s_mapTables == 0L )
     s_mapTables = new QIntDict<KSpreadTable>;
+  
   m_id = s_id++;
   s_mapTables->insert( m_id, this );
 
@@ -7264,6 +7265,12 @@ bool KSpreadTable::saveChildren( KoStore* _store, const QString &_path )
 KSpreadTable::~KSpreadTable()
 {
     s_mapTables->remove( m_id );
+
+    //when you remove all table (close file)
+    //you must reinit s_id otherwise there is not 
+    //the good name between map and table
+    if( s_mapTables->count()==0)
+      s_id=0L;
 
     KSpreadCell* c = m_cells.firstCell();
     for( ; c; c = c->nextCell() )
