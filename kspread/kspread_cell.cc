@@ -3055,7 +3055,28 @@ void KSpreadCell::checkValue()
 	m_dValue = atof( ptext );
         return;
         }
-
+    bool ok;
+    double val=m_strText.toDouble(&ok);
+    QString tmp;
+    //test for scientific format
+    //don't work for the moment.
+    /*if(ok)
+        {
+        if(m_strText.contains('E')||m_strText.contains('e'))
+                {
+                m_dValue=val;
+                m_bValue = true;
+                m_eFormatNumber=Scientific;
+                if(fabs(val)<1)
+                        m_strText= QString::number(val, 'f');
+                else
+                        m_strText= QString::number(val, 'f',0);
+                setFaktor(1.0);
+                //setPrecision(-1);
+                return;
+                }
+        }
+    */
     //test if text is a percent value
     if(m_strText.at(m_strText.length()-1)=='%')
         {
@@ -3078,9 +3099,7 @@ void KSpreadCell::checkValue()
         }
 
     int pos=0;
-    bool ok;
-    double val;
-    QString tmp;
+
     if((pos=m_strText.find(KGlobal::locale()->currencySymbol()))!=-1)
         {
         if(pos==0) // example $ 154.545

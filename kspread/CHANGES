@@ -716,3 +716,8 @@ Date is saving in "international format", date can read in each language.
 -Add new format : Fraction format (1/2,1/4,1/8,1/16,1/10,1/100)
 -Now you can move into an area when you press enter key, you move
 top to bottom and left to right.
+
+2000-07-04-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Now kspread can understand Table1!C1 and Table1!c1
+it works.

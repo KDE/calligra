@@ -105,16 +105,33 @@ void KSpreadPoint::init( const QString& _str )
     columnFixed = false;
 
   // Malformed ?
-  if ( p == len || _str[p] < 'A' || _str[p] > 'Z' )
+  /*if ( p == len || _str[p] < 'A' || _str[p] > 'Z' )
     return;
+  */
+  if ( p == len || _str[p] < 'A' || _str[p] > 'Z' )
+        {
+        if(_str[p] < 'a' || _str[p] > 'z' )
+                return;
+        }
+  int offset='a'-'A';
+  int x;
+  if(_str[p] >= 'A' && _str[p] <= 'Z')
+         x= _str[p++] - 'A' + 1;
+  else if(_str[p] >= 'a' && _str[p] <= 'z')
+        x= _str[p++]-offset - 'A' + 1;
 
-  int x = _str[p++] - 'A' + 1;
   // Malformed ?
   if ( p == len  )
     return;
 
-  while( p < len && _str[p] >= 'A' && _str[p] <= 'Z' )
-    x = x*26 + (char)_str[p++] - 'A' + 1;
+  while( p < len && ((_str[p] >= 'A' && _str[p] <= 'Z')||(_str[p] >= 'a' && _str[p] <= 'z' )))
+    {
+    if(_str[p] >= 'A' && _str[p] <= 'Z')
+        x = x*26 + (char)_str[p++] - 'A' + 1;
+    else if(_str[p] >= 'a' && _str[p] <= 'z')
+        x = x*26 + (char)_str[p++] - 'A' + 1-offset;
+    }
+
   //limit is 26*26
   if(x>(26*26))
     return;
