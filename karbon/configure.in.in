@@ -1,1 +1,2 @@
-#DO_NOT_COMPILE="$DO_NOT_COMPILE karbon"
+dnl You dont want to compile karbon, do you ?
+DO_NOT_COMPILE="$DO_NOT_COMPILE karbon"

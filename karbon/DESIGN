@@ -1,20 +1,30 @@
+Classes:
+========
 - vpoint
+- vrect (bounding box)
 - vlayer
-	                 / vline
-	   / vprimitive-|- vbezier
-          |              \ vrect (bounding box)
-          | 		 / vpath
-- vobject-|             |- vbitmap
-   	  |		|- vtext
-	   \ vdrawable--|- vgroup
- 	                |- vmask
-		         \ vcompoundpath
-- vdocument:
+	      / vline
+- vprimitive-|
+              \ vbezier
+
+            / vpath
+           |- vbitmap
+           |- vtext
+- vobject--|- - - - - - - - 
+           |- vgroup
+ 	   |- vmask
+            \ vcompoundpath
+
+
+
+- vobject
+    + vpoint
+
+- karbon_part:
     + vlayer
     + vdrawables
 
-- vview:
-    + vpointcache
+- karbon_view:
 
 	  / vrectangle
 	 |- vellipse

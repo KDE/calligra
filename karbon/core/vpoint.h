@@ -1,8 +1,6 @@
 #ifndef __VPOINT_H__
 #define __VPOINT_H__
 
-#include "vobject.h"
-
 class VPoint {
 public:
     VPoint()

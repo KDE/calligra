@@ -3,18 +3,18 @@
 
 #include <qlist.h>
 
-#include "vdrawable.h"
+#include "vobject.h"
 #include "vprimitive.h"
 
-class QPainter;
+class VPainter;
 class VPoint;
 
-class VPath : public VDrawable {
+class VPath : public VObject {
 public:
     VPath();
     virtual ~VPath();
     
-    virtual void draw( QPainter& p );
+    virtual void draw( VPainter& p );
     
     // postscript-like commands:
     void moveTo();

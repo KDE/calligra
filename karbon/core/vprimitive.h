@@ -1,10 +1,9 @@
 #ifndef __VPRIMITIVE_H__
 #define __VPRIMITIVE_H__
 
-#include "vobject.h"
 #include "vpoint.h"
 
-class VPrimitive : public VObject {
+class VPrimitive {
 public:
     VPrimitive();
 

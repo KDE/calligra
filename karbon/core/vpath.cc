@@ -1,7 +1,7 @@
 #include "vpath.h"
 
 VPath::VPath()
-    : VDrawable()
+    : VObject()
 {
 }
 
@@ -16,6 +16,6 @@ VPath::~VPath()
 }
 
 void
-VPath::draw( QPainter& /*p*/ )
+VPath::draw( VPainter& /*p*/ )
 {
 }
