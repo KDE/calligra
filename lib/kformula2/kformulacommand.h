@@ -54,11 +54,36 @@ public:
      */
      virtual bool redo(FormulaCursor *) {return true; }  //undo of nothing is nothing
 
+    /**
+     * @return a short i18n text that describes the undo/redo
+     * action. This has to be used in menus entries.
+     */
+     QString getShortDescription() { return shortText; } 
+
+    /**
+     * @return a long i18n text that describes the undo/redo
+     * action. This can be used as tooltip.
+     */
+     QString getLongDescription() { return longText; } 
+
+    /**
+     * @return true if the command you asked for do nothing relevant,
+     * may be it only move the cursor, in this case the constructor will
+     * move the cursor but the undo/redo will do nothing.
+     */
+     
+     virtual bool isDoNothing() { return false; }  //this class is doing nothing but this function
+                                                   //Is used by many childclasses     
+
 protected:
      
      KFormulaContainer *doc;
      FormulaCursor::CursorData *cursordata;  //Cursor before the command execution
      FormulaCursor::CursorData *undocursor;  //Cursor after the command execution
+     QString shortText;
+     QString longText;
+     
+    
 };
 
 class KFCAdd : public KFormulaCommand
@@ -200,6 +225,41 @@ protected:
      BasicElement *insideElement;   
   
 };
+
+class KFCAddIndex : public KFormulaCommand
+{
+public:
+   /**
+    * Add an index at position.
+    */
+    KFCAddIndex(KFormulaContainer *document,FormulaCursor* cursor,int position);
+
+    virtual bool undo(FormulaCursor *cursor);
+    virtual bool redo(FormulaCursor *cursor);
+
+    /**
+     * @return true if the command you asked for do nothing relevant,
+     * may be it only move the cursor, in this case the constructor will
+     * move the cursor but the undo/redo will do nothing.
+     */
+     
+     virtual bool isDoNothing() { return nothing; }  
+
+
+
+protected:
+
+
+     QList<BasicElement> removedList;
+     BasicElement *indexelem;   
+     FormulaCursor::CursorData *indexcursor;  //Cursor for index insertion (lower orupper,left or right)
+     FormulaCursor::CursorData *enclosingcursor;  //Cursor for index insertion (lower orupper,left or right)
+              
+     bool nothing;
+     bool indexExists;
+     
+};
+
 
 
 #if 0

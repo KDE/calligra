@@ -23,6 +23,7 @@
 
 #include <qdom.h>
 #include <qwidget.h>
+#include <qclipboard.h>
 
 class FormulaCursor;
 class KFormulaContainer;
@@ -57,10 +58,7 @@ private:
     KFormulaContainer* document;
     FormulaCursor* cursor;
 
-    /**
-     * This isn't meant to last.
-     */
-    QDomDocument clipboard;
+    QClipboard *clipboard;
 };
 
 #endif // __KFORMULAWIDGET_H

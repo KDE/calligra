@@ -172,6 +172,11 @@ public slots:
      */
     void testDirty();
 
+    /**
+     * Emits a formulaChanged signal if we are dirty.
+     */
+    QRect boundingRect();
+
     
 private:
 

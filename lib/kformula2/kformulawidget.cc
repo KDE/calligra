@@ -25,7 +25,8 @@
 #include "formulacursor.h"
 #include "kformulacontainer.h"
 #include "kformulawidget.h"
-
+#include "kformulamimesource.h"
+#include <qapp.h>
 
 KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const char* name, WFlags f)
     : QWidget(parent, name, f), document(doc)
@@ -33,6 +34,7 @@ KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const ch
     cursor = document->createCursor();
 
     connect(document, SIGNAL(formulaChanged()), this, SLOT(formulaChanged()));
+    clipboard = QApplication::clipboard(); 
 }
 
 KFormulaWidget::~KFormulaWidget()
@@ -55,7 +57,7 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
     QPainter painter;
     painter.begin(this);
     cursor->draw(painter);
-
+    
     QChar ch = event->text().at(0);
     if (ch.isPrint()) {
         int latin1 = ch.latin1();
@@ -186,11 +188,24 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
                     document->replaceElementWithMainChild(cursor, BasicElement::beforeCursor);
                     break;
                 case Qt::Key_C:
-                    clipboard = cursor->copy();
-                    break;
+		    {
+			QDomDocument formula = cursor->copy();
+			clipboard->setData(new KFormulaMimeSource(formula));
+                    }
+		    break;
                 case Qt::Key_V:
-                    cursor->paste(clipboard);
-                    break;
+		    {
+		    QMimeSource *m=clipboard->data();
+			if(m->provides("application/x-kformula")) {
+                	    QDomDocument formula;
+			    QByteArray data=m->encodedData("application/x-kformula");
+			    cerr << data <<"aaa"<< endl;
+    	    		    formula.setContent(data);
+		    	    cursor->paste(formula);
+            		}
+		    }
+		    
+		    break;
                 default:
                     //cerr << "Key: " << event->key() << endl;
                     break;

@@ -198,42 +198,40 @@ void KFormulaContainer::addMatrix(FormulaCursor* cursor, int rows, int columns)
 
 void KFormulaContainer::addLowerLeftIndex(FormulaCursor* cursor)
 {
-    IndexElement* element = cursor->getActiveIndexElement();
-    if (element == 0) {
-        element = new IndexElement;
-        cursor->replaceSelectionWith(element, BasicElement::beforeCursor);
-    }
-    addIndex(cursor, element->getLowerLeft());
+
+    KFCAddIndex *command=new KFCAddIndex(this,cursor,IndexElement::lowerLeftPos);
+    
+    if(!command->isDoNothing())
+	execute(command);
+    
+
 }
 
 void KFormulaContainer::addUpperLeftIndex(FormulaCursor* cursor)
 {
-    IndexElement* element = cursor->getActiveIndexElement();
-    if (element == 0) {
-        element = new IndexElement;
-        cursor->replaceSelectionWith(element, BasicElement::beforeCursor);
-    }
-    addIndex(cursor, element->getUpperLeft());
+
+    KFCAddIndex *command=new KFCAddIndex(this,cursor,IndexElement::upperLeftPos);
+    
+    if(!command->isDoNothing())
+	execute(command);
+    
 }
 
 void KFormulaContainer::addLowerRightIndex(FormulaCursor* cursor)
 {
-    IndexElement* element = cursor->getActiveIndexElement();
-    if (element == 0) {
-        element = new IndexElement;
-        cursor->replaceSelectionWith(element, BasicElement::beforeCursor);
-    }
-    addIndex(cursor, element->getLowerRight());
+    KFCAddIndex *command=new KFCAddIndex(this,cursor,IndexElement::lowerRightPos);
+    
+    if(!command->isDoNothing())
+	execute(command);
+    
 }
 
 void KFormulaContainer::addUpperRightIndex(FormulaCursor* cursor)
 {
-    IndexElement* element = cursor->getActiveIndexElement();
-    if (element == 0) {
-        element = new IndexElement;
-        cursor->replaceSelectionWith(element, BasicElement::beforeCursor);
-    }
-    addIndex(cursor, element->getUpperRight());
+    KFCAddIndex *command=new KFCAddIndex(this,cursor,IndexElement::upperRightPos);
+    
+    if(!command->isDoNothing())
+	execute(command);
 }
 
 void KFormulaContainer::addRootIndex(FormulaCursor* cursor)
@@ -393,6 +391,11 @@ void KFormulaContainer::pushRedoStack(KFormulaCommand *command)
 
 //emit signals
 
+}
+
+QRect KFormulaContainer::boundingRect()
+{
+    return QRect(0,0,rootElement->getWidth(),rootElement->getHeight());
 }
 
 
