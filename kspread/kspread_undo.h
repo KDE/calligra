@@ -654,6 +654,13 @@ protected:
     KSpreadTable* m_table;
 };
 
+class KSpreadUndoInsertData : public KSpreadUndoChangeAreaTextCell
+{
+ public:
+    KSpreadUndoInsertData( KSpreadDoc * _doc, KSpreadTable * _table, QRect & _selection );
+};
+
+
 class KSpreadUndo
 {
 public:

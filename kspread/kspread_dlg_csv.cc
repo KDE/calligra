@@ -27,7 +27,6 @@
 
 #include <qclipboard.h>
 #include <qmime.h>
-#include <qvariant.h>
 #include <qbuttongroup.h>
 #include <qcombobox.h>
 #include <qlabel.h>
@@ -59,10 +58,10 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
     setName( "KSpreadCSVDialog" );
 
   setSizeGripEnabled( TRUE );
-  MyDialogLayout = new QGridLayout( this, 1, 1, 11, 6, "MyDialogLayout"); 
-  
-  Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1"); 
-  
+  MyDialogLayout = new QGridLayout( this, 1, 1, 11, 6, "MyDialogLayout");
+
+  Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
+
   buttonHelp = new QPushButton( this, "buttonHelp" );
   buttonHelp->setText( i18n( "Help" ) );
   buttonHelp->setAccel( 4144 );
@@ -71,14 +70,14 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
   Layout1->addWidget( buttonHelp );
   QSpacerItem* spacer = new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
   Layout1->addItem( spacer );
-  
+
   buttonOk = new QPushButton( this, "buttonOk" );
   buttonOk->setText( i18n( "&OK" ) );
   buttonOk->setAccel( 0 );
   buttonOk->setAutoDefault( TRUE );
   buttonOk->setDefault( TRUE );
   Layout1->addWidget( buttonOk );
-    
+
   buttonCancel = new QPushButton( this, "buttonCancel" );
   buttonCancel->setText( i18n( "&Cancel" ) );
   buttonCancel->setAccel( 0 );
@@ -212,7 +211,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
       KMessageBox::information( this, i18n("There is no data in the clipboard.") );
       return;
     }
-    
+
     if ( !mime->provides( "text/plain" ) )
     {
       KMessageBox::information( this, i18n("There is no usable data in the clipboard.") );
@@ -227,7 +226,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
                                                 "text/plain",
                                                 this);
     QFile in(file);
-    if (!in.open(IO_ReadOnly)) 
+    if (!in.open(IO_ReadOnly))
     {
       KMessageBox::sorry( this, i18n("Cannot open input file!") );
       in.close();
@@ -236,9 +235,9 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
     }
     m_fileArray = QByteArray(in.size());
     in.readBlock(m_fileArray.data(), in.size());
-    in.close();    
+    in.close();
   }
-  else 
+  else
   {
     setCaption( i18n( "Text To Columns" ) );
     m_data = "";
@@ -308,7 +307,7 @@ void KSpreadCSVDialog::fillTable()
   QTextStream inputStream(m_data, IO_ReadOnly);
   inputStream.setEncoding(QTextStream::Locale);
 
-  while (!inputStream.atEnd()) 
+  while (!inputStream.atEnd())
   {
     inputStream >> x; // read one char
 
@@ -445,7 +444,7 @@ void KSpreadCSVDialog::fillTable()
     ++row;
     field = "";
   }
-    
+
   adjustRows( row - m_startline );
 
   for (column = 0; column < m_table->numCols(); ++column)
@@ -487,7 +486,7 @@ void KSpreadCSVDialog::setText(int row, int col, const QString& text)
  */
 void KSpreadCSVDialog::adjustRows(int iRows)
 {
-  if (m_adjustRows) 
+  if (m_adjustRows)
   {
     m_table->setNumRows( iRows );
     m_adjustRows=0;
@@ -594,7 +593,7 @@ void KSpreadCSVDialog::accept()
   KSpreadTable * table  = m_pView->activeTable();
   QString csv_delimiter = QString::null;
   KSpreadCell  * cell;
-  
+
   int numRows = m_table->numRows();
   int numCols = m_table->numCols();
 
@@ -607,7 +606,7 @@ void KSpreadCSVDialog::accept()
   }
   else
     m_targetRect.setRight( m_targetRect.left() + numCols );
-  
+
   if ( (numRows > m_targetRect.height()) && (m_targetRect.height() > 1) )
     numRows = m_targetRect.height();
   else
@@ -619,7 +618,7 @@ void KSpreadCSVDialog::accept()
     cell = table->nonDefaultCell( m_targetRect.left(), m_targetRect.top() );
     if ( !doc->undoBuffer()->isLocked() )
     {
-      KSpreadUndoSetText * undo = new KSpreadUndoSetText( doc, table , cell->text(), m_targetRect.left(), 
+      KSpreadUndoSetText * undo = new KSpreadUndoSetText( doc, table , cell->text(), m_targetRect.left(),
                                                           m_targetRect.top(), cell->formatType() );
       doc->undoBuffer()->appendUndo( undo );
     }
@@ -629,14 +628,14 @@ void KSpreadCSVDialog::accept()
       KSpreadUndoChangeAreaTextCell * undo = new KSpreadUndoChangeAreaTextCell( m_pView->doc(), table , m_targetRect );
       m_pView->doc()->undoBuffer()->appendUndo( undo );
   }
-  
+
   for (int row = 0; row < numRows; ++row)
   {
     for (int col = 0; col < numCols; ++col)
     {
       cell = table->nonDefaultCell( m_targetRect.left() + col, m_targetRect.top() + row );
       cell->setCellText( getText( row, col ) );
-      
+
       switch (getHeader(col))
       {
        case TEXT:

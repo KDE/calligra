@@ -2826,3 +2826,9 @@ void KSpreadUndoRemoveTable::redo()
     doc()->takeTable( m_table );
     doc()->undoBuffer()->unlock();
 }
+
+KSpreadUndoInsertData::KSpreadUndoInsertData( KSpreadDoc * _doc, KSpreadTable * _table, QRect & _selection )
+    : KSpreadUndoChangeAreaTextCell( _doc, _table, _selection )
+{
+    name = i18n("Insert Data From Database");
+}

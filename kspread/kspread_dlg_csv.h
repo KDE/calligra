@@ -21,11 +21,10 @@
 #define CSVDIALOG_H
 
 
-#include <qvariant.h>
 #include <qdialog.h>
-class QVBoxLayout; 
-class QHBoxLayout; 
-class QGridLayout; 
+class QVBoxLayout;
+class QHBoxLayout;
+class QGridLayout;
 class QButtonGroup;
 class QComboBox;
 class QLabel;
@@ -37,11 +36,11 @@ class QTable;
 class KSpreadView;
 
 class KSpreadCSVDialog : public QDialog
-{ 
+{
   Q_OBJECT
 
  public:
-  
+
   enum Mode { Clipboard, File, Column };
   enum Header { TEXT, NUMBER, DATE, CURRENCY };
 

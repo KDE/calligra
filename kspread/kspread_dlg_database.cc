@@ -53,16 +53,6 @@
 #include <qwidget.h>
 
 
-class KSpreadUndoInsertData : public KSpreadUndoChangeAreaTextCell
-{
- public:
-  KSpreadUndoInsertData( KSpreadDoc * _doc, KSpreadTable * _table, QRect & _selection )
-    : KSpreadUndoChangeAreaTextCell( _doc, _table, _selection )
-  {
-    name = i18n("Insert Data From Database");
-  }
-};
-
 /********************************************************
  *                 Database wizard                      *
  ********************************************************/
@@ -82,18 +72,18 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   // database page
 
   m_database = new QWidget( this, "m_database" );
-  m_databaseLayout = new QGridLayout( m_database, 1, 1, -1, -1, "m_databaseLayout"); 
+  m_databaseLayout = new QGridLayout( m_database, 1, 1, -1, -1, "m_databaseLayout");
 
   QFrame * Frame5 = new QFrame( m_database, "Frame5" );
   Frame5->setFrameShape( QFrame::MShape );
   Frame5->setFrameShadow( QFrame::MShadow );
-  QVBoxLayout * Frame5Layout = new QVBoxLayout( Frame5, 11, 6, "Frame5Layout"); 
+  QVBoxLayout * Frame5Layout = new QVBoxLayout( Frame5, 11, 6, "Frame5Layout");
 
 
   QFrame * Frame16 = new QFrame( Frame5, "Frame16" );
   Frame16->setFrameShape( QFrame::NoFrame );
   Frame16->setFrameShadow( QFrame::Plain );
-  QGridLayout * Frame16Layout = new QGridLayout( Frame16, 1, 1, 11, 7, "Frame16Layout"); 
+  QGridLayout * Frame16Layout = new QGridLayout( Frame16, 1, 1, 11, 7, "Frame16Layout");
 
   m_Type = new QLabel( Frame16, "m_Type" );
   m_Type->setText( i18n( "Type:" ) );
@@ -164,14 +154,14 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   // new page
 
   m_table = new QWidget( this, "m_table" );
-  m_tableLayout = new QGridLayout( m_table, 1, 1, 11, 6, "m_tableLayout"); 
+  m_tableLayout = new QGridLayout( m_table, 1, 1, 11, 6, "m_tableLayout");
 
   QFrame * Frame5_2 = new QFrame( m_table, "Frame5_2" );
   Frame5_2->setFrameShape( QFrame::MShape );
   Frame5_2->setFrameShadow( QFrame::MShadow );
-  QGridLayout * Frame5_2Layout = new QGridLayout( Frame5_2, 1, 1, 11, 6, "Frame5_2Layout"); 
+  QGridLayout * Frame5_2Layout = new QGridLayout( Frame5_2, 1, 1, 11, 6, "Frame5_2Layout");
 
-  QHBoxLayout * Layout21 = new QHBoxLayout( 0, 0, 6, "Layout21"); 
+  QHBoxLayout * Layout21 = new QHBoxLayout( 0, 0, 6, "Layout21");
 
   //  QLabel * TextLabel12_2 = new QLabel( Frame5_2, "TextLabel12_2" );
   //  TextLabel12_2->setText( i18n( "Database:" ) );
@@ -212,12 +202,12 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   addPage( m_table, i18n( "Tables" ) );
 
   m_columns = new QWidget( this, "m_columns" );
-  m_columnsLayout = new QGridLayout( m_columns, 1, 1, 11, 6, "m_columnsLayout"); 
+  m_columnsLayout = new QGridLayout( m_columns, 1, 1, 11, 6, "m_columnsLayout");
 
   QFrame * Frame5_2_2 = new QFrame( m_columns, "Frame5_2_2" );
   Frame5_2_2->setFrameShape( QFrame::MShape );
   Frame5_2_2->setFrameShadow( QFrame::MShadow );
-  QGridLayout * Frame5_2_2Layout = new QGridLayout( Frame5_2_2, 1, 1, 11, 6, "Frame5_2_2Layout"); 
+  QGridLayout * Frame5_2_2Layout = new QGridLayout( Frame5_2_2, 1, 1, 11, 6, "Frame5_2_2Layout");
 
   QLabel * TextLabel11_2 = new QLabel( Frame5_2_2, "TextLabel11_2" );
   TextLabel11_2->setText( i18n( "Select columns:" ) );
@@ -250,23 +240,23 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   // options page
 
   m_options = new QWidget( this, "m_options" );
-  m_optionsLayout = new QGridLayout( m_options, 1, 1, 11, 6, "m_optionsLayout"); 
-  
+  m_optionsLayout = new QGridLayout( m_options, 1, 1, 11, 6, "m_optionsLayout");
+
   QFrame * optionsFrame = new QFrame( m_options, "optionsFrame" );
   optionsFrame->setFrameShape( QFrame::MShape );
   optionsFrame->setFrameShadow( QFrame::MShadow );
-  QGridLayout * optionsFrameLayout = new QGridLayout( optionsFrame, 1, 1, 11, 6, "optionsFrameLayout"); 
-  
+  QGridLayout * optionsFrameLayout = new QGridLayout( optionsFrame, 1, 1, 11, 6, "optionsFrameLayout");
+
   m_columns_1 = new QComboBox( false, optionsFrame, "m_columns_1" );
   optionsFrameLayout->addWidget( m_columns_1, 2, 0 );
-  
+
   m_operatorValue_2 = new QLineEdit( optionsFrame, "m_operatorValue_2" );
   optionsFrameLayout->addWidget( m_operatorValue_2, 3, 2 );
 
   m_andBox = new QRadioButton( optionsFrame, "m_andBox" );
   m_andBox->setText( i18n( "Match all of the following (AND)" ) );
   m_andBox->setChecked( true );
-  
+
   optionsFrameLayout->addMultiCellWidget( m_andBox, 0, 0, 0, 2 );
 
   m_orBox = new QRadioButton( optionsFrame, "m_orBox" );
@@ -292,7 +282,7 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   m_operator_1->insertItem( i18n( "lesser" ) );
   m_operator_1->insertItem( i18n( "greater or equal" ) );
   m_operator_1->insertItem( i18n( "less or equal" ) );
-  
+
   optionsFrameLayout->addWidget( m_operator_1, 2, 1 );
 
   m_operator_2 = new QComboBox( FALSE, optionsFrame, "m_operator_2" );
@@ -303,9 +293,9 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   m_operator_2->insertItem( i18n( "like" ) );
   m_operator_2->insertItem( i18n( "greater" ) );
   m_operator_2->insertItem( i18n( "lesser" ) );
-  
+
   optionsFrameLayout->addWidget( m_operator_2, 3, 1 );
-  
+
   m_operator_3 = new QComboBox( FALSE, optionsFrame, "m_operator_3" );
   m_operator_3->insertItem( i18n( "equals" ) );
   m_operator_3->insertItem( i18n( "not equal" ) );
@@ -314,9 +304,9 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   m_operator_3->insertItem( i18n( "like" ) );
   m_operator_3->insertItem( i18n( "greater" ) );
   m_operator_3->insertItem( i18n( "lesser" ) );
-  
+
   optionsFrameLayout->addWidget( m_operator_3, 4, 1 );
-  
+
   m_columns_3 = new QComboBox( false, optionsFrame, "m_columns_3" );
 
   optionsFrameLayout->addWidget( m_columns_3, 4, 0 );
@@ -369,12 +359,12 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   // result page
 
   m_result = new QWidget( this, "m_result" );
-  m_resultLayout = new QGridLayout( m_result, 1, 1, 11, 6, "m_resultLayout"); 
+  m_resultLayout = new QGridLayout( m_result, 1, 1, 11, 6, "m_resultLayout");
 
   QFrame * Frame5_2_2_3 = new QFrame( m_result, "Frame5_2_2_3" );
   Frame5_2_2_3->setFrameShape( QFrame::MShape );
   Frame5_2_2_3->setFrameShadow( QFrame::MShadow );
-  QGridLayout * Frame5_2_2_3Layout = new QGridLayout( Frame5_2_2_3, 1, 1, 11, 6, "Frame5_2_2_3Layout"); 
+  QGridLayout * Frame5_2_2_3Layout = new QGridLayout( Frame5_2_2_3, 1, 1, 11, 6, "Frame5_2_2_3Layout");
 
   QLabel * TextLabel17 = new QLabel( Frame5_2_2_3, "TextLabel17" );
   TextLabel17->setText( i18n( "SQL query:" ) );
@@ -386,7 +376,7 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   QFrame * Frame12 = new QFrame( Frame5_2_2_3, "Frame12" );
   Frame12->setFrameShape( QFrame::StyledPanel );
   Frame12->setFrameShadow( QFrame::Raised );
-  QGridLayout * Frame12Layout = new QGridLayout( Frame12, 1, 1, 11, 6, "Frame12Layout"); 
+  QGridLayout * Frame12Layout = new QGridLayout( Frame12, 1, 1, 11, 6, "Frame12Layout");
 
   m_startingRegion = new QRadioButton( Frame12, "m_startingRegion" );
   m_startingRegion->setText( i18n( "Insert in region" ) );
@@ -465,19 +455,19 @@ void KSpreadDatabaseDlg::switchPage( int id )
    case eDatabase:
     showPage(m_database);
     break;
-   
+
    case eTables:
     showPage(m_table);
     break;
-   
+
    case eColumns:
     showPage(m_columns);
     break;
-   
+
    case eOptions:
     showPage(m_options);
     break;
-   
+
    case eResult:
     showPage(m_result);
     break;
@@ -495,22 +485,22 @@ void KSpreadDatabaseDlg::next()
     if (!databaseDoNext())
       return;
     break;
-   
+
    case eTables:
     if (!tablesDoNext())
       return;
     break;
-   
+
    case eColumns:
     if (!columnsDoNext())
       return;
     break;
-   
+
    case eOptions:
     if (!optionsDoNext())
       return;
     break;
-   
+
    case eResult:
     // there is nothing to do here
     break;
@@ -676,7 +666,7 @@ void KSpreadDatabaseDlg::accept()
         cell->setCellText( query.value( i ).toString() );
       }
       ++y;
-      
+
       if ( y == height )
         break;
     }
@@ -690,7 +680,7 @@ bool KSpreadDatabaseDlg::databaseDoNext()
 {
   m_dbConnection = QSqlDatabase::addDatabase( m_driver->currentText() );
 
-  if ( m_dbConnection ) 
+  if ( m_dbConnection )
   {
     m_dbConnection->setDatabaseName( m_databaseName->text() );
     m_dbConnection->setHostName( m_host->text() );
@@ -714,11 +704,11 @@ bool KSpreadDatabaseDlg::databaseDoNext()
     }
 
     m_databaseStatus->setText( i18n("Connecting to database...") );
-    if ( m_dbConnection->open() ) 
+    if ( m_dbConnection->open() )
     {
       m_databaseStatus->setText( i18n("Connected. Retrieving table information...") );
       QStringList tableList( m_dbConnection->tables() );
-      
+
       if ( tableList.isEmpty() )
       {
         KMessageBox::error( this, i18n("This database contains no tables") );
@@ -728,7 +718,7 @@ bool KSpreadDatabaseDlg::databaseDoNext()
       unsigned int i;
       m_tableView->clear();
 
-      for ( i = 0; i < tableList.size(); ++i )        
+      for ( i = 0; i < tableList.size(); ++i )
       {
         QCheckListItem * item = new QCheckListItem( m_tableView, tableList[i],
                                                     QCheckListItem::CheckBox );
@@ -824,7 +814,7 @@ bool KSpreadDatabaseDlg::columnsDoNext()
   for (QListViewItem * item = m_columnView->firstChild(); item; item = item->nextSibling())
   {
     if (((QCheckListItem * ) item)->isOn())
-    {      
+    {
       columns.append( item->text(1) + "." + ((QCheckListItem * ) item)->text());
     }
   }
@@ -855,11 +845,11 @@ bool KSpreadDatabaseDlg::columnsDoNext()
 
 
 QString KSpreadDatabaseDlg::getWhereCondition(QString const & column,
-                                              QString const & value, 
+                                              QString const & value,
                                               int op)
 {
   QString wherePart;
-  
+
   switch( op )
   {
    case 0:
@@ -880,7 +870,7 @@ QString KSpreadDatabaseDlg::getWhereCondition(QString const & column,
     wherePart += column;
     wherePart += " IN ";
     break;
-   case 4:    
+   case 4:
     wherePart += column;
     wherePart += " LIKE ";
     break;
@@ -901,7 +891,7 @@ QString KSpreadDatabaseDlg::getWhereCondition(QString const & column,
     wherePart += " <= ";
     break;
   }
-  
+
   if ( op != 2 && op != 3 )
   {
     QString val;
@@ -946,7 +936,7 @@ QString KSpreadDatabaseDlg::exchangeWildcards(QString const & value)
     str = str.replace( p, 1, "%" );
     p = str.find('*');
   }
-  
+
   p = str.find('?');
   while ( p > -1 )
   {
@@ -1038,7 +1028,7 @@ bool KSpreadDatabaseDlg::optionsDoNext()
     query += getWhereCondition(m_columns_1->currentText(),
                                m_operatorValue_1->text(),
                                m_operator_1->currentItem());
-    added = true;                               
+    added = true;
   }
 
   if ( !m_operatorValue_2->text().isEmpty() )
@@ -1126,7 +1116,7 @@ void KSpreadDatabaseDlg::connectButton_clicked()
 
 void KSpreadDatabaseDlg::databaseNameChanged(const QString & s)
 {
-  if ( !m_driver->currentText().isEmpty() && !s.isEmpty() 
+  if ( !m_driver->currentText().isEmpty() && !s.isEmpty()
        && !m_host->text().isEmpty() )
     setNextEnabled(m_database, true);
   else
@@ -1135,7 +1125,7 @@ void KSpreadDatabaseDlg::databaseNameChanged(const QString & s)
 
 void KSpreadDatabaseDlg::databaseHostChanged(const QString & s)
 {
-  if ( !m_driver->currentText().isEmpty() && !s.isEmpty() 
+  if ( !m_driver->currentText().isEmpty() && !s.isEmpty()
        && !m_databaseName->text().isEmpty() )
     setNextEnabled(m_database, true);
   else

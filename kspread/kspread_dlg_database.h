@@ -22,7 +22,6 @@
 
 #include <qdialog.h>
 #include <qrect.h>
-#include <qvariant.h>
 
 #include <kwizard.h>
 
@@ -31,22 +30,22 @@ class KSpreadView;
 class QCheckBox;
 class QComboBox;
 class QFrame;
-class QGridLayout; 
+class QGridLayout;
 class QLabel;
 class QLineEdit;
 class QListViewItem;
-class QHBoxLayout; 
+class QHBoxLayout;
 class QRadioButton;
 class QSqlDatabase;
 class QTextEdit;
-class QVBoxLayout; 
+class QVBoxLayout;
 class QWidget;
 
 class KListView;
 class KPushButton;
 
 class KSpreadDatabaseDlg : public KWizard
-{ 
+{
   Q_OBJECT
 
  public:
@@ -136,4 +135,4 @@ class KSpreadDatabaseDlg : public KWizard
   QString getWhereCondition( QString const &, QString const &, int );
 };
 
-#endif 
+#endif
