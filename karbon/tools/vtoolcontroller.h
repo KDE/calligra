@@ -28,12 +28,28 @@ class QEvent;
 class VTool;
 class KarbonPart;
 class KarbonView;
+class VSelectTool;
+class VSelectNodesTool;
+class VRotateTool;
+class VShearTool;
+class VClipartTool;
+class VEllipseTool;
+class VGradientTool;
+class VPatternTool;
+class VPolygonTool;
+class VPolylineTool;
+class VRectangleTool;
+class VRoundRectTool;
+class VSinusTool;
+class VSpiralTool;
+class VStarTool;
+class VTextTool;
 
 class VToolController
 {
 public:
 	VToolController( KarbonPart *part );
-	virtual ~VToolController() {}
+	virtual ~VToolController();
 
 	void init();
 
@@ -43,7 +59,7 @@ public:
 	VTool *activeTool() const { return m_activeTool; }
 
 	KarbonView *activeView() const { return m_activeView; }
-	void setActiveView( KarbonView *view ) {  m_activeView = view; }
+	void setActiveView( KarbonView *view ) { m_activeView = view; }
 
 	bool mouseEvent( QMouseEvent* event, const KoPoint& );
 	bool keyEvent( QEvent* event );
@@ -51,10 +67,26 @@ public:
 	const QDict<VTool> &tools() { return m_tools; }
 
 private:
-	KarbonPart	*m_part;
-	KarbonView	*m_activeView;
-	VTool		*m_activeTool;
-	QDict<VTool>	m_tools;
+	KarbonPart			*m_part;
+	KarbonView			*m_activeView;
+	VTool				*m_activeTool;
+	QDict<VTool>		m_tools;
+	VSelectTool			*m_selectTool;
+	VSelectNodesTool	*m_selectNodesTool;
+	VRotateTool			*m_rotateTool;
+	VShearTool			*m_shearTool;
+	VEllipseTool		*m_ellipseTool;
+	VGradientTool		*m_gradientTool;
+	VPatternTool		*m_patternTool;
+	VPolygonTool		*m_polygonTool;
+	VPolylineTool		*m_polylineTool;
+	VRectangleTool		*m_rectangleTool;
+	VRoundRectTool		*m_roundRectTool;
+	VSinusTool			*m_sinusTool;
+	VSpiralTool			*m_spiralTool;
+	VStarTool			*m_starTool;
+	VTextTool			*m_textTool;
+	VClipartTool		*m_clipartTool;
 };
 
 #endif

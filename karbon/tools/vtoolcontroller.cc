@@ -45,22 +45,42 @@ VToolController::VToolController( KarbonPart *part ) : m_part( part )
 void
 VToolController::init()
 {
-	new VSelectTool( m_part, "" );
-	new VSelectNodesTool( m_part, "" );
-	new VRotateTool( m_part, "" );
-	new VShearTool( m_part, "" );
-	new VEllipseTool( m_part );
-	new VGradientTool( m_part, "" );
-	new VPatternTool( m_part, "" );
-	new VPolygonTool( m_part );
-	new VPolylineTool( m_part, "" );
-	new VRectangleTool( m_part );
-	new VRoundRectTool( m_part );
-	new VSinusTool( m_part );
-	new VSpiralTool( m_part );
-	new VStarTool( m_part );
-	new VTextTool( m_part, "" );
-	new VClipartTool( m_part, "" );
+	m_selectTool		= new VSelectTool( m_part, "" );
+	m_selectNodesTool	= new VSelectNodesTool( m_part, "" );
+	m_rotateTool		= new VRotateTool( m_part, "" );
+	m_shearTool			= new VShearTool( m_part, "" );
+	m_ellipseTool		= new VEllipseTool( m_part );
+	m_gradientTool		= new VGradientTool( m_part, "" );
+	m_patternTool		= new VPatternTool( m_part, "" );
+	m_polygonTool		= new VPolygonTool( m_part );
+	m_polylineTool		= new VPolylineTool( m_part, "" );
+	m_rectangleTool		= new VRectangleTool( m_part );
+	m_roundRectTool		= new VRoundRectTool( m_part );
+	m_sinusTool			= new VSinusTool( m_part );
+	m_spiralTool		= new VSpiralTool( m_part );
+	m_starTool			= new VStarTool( m_part );
+	m_textTool			= new VTextTool( m_part, "" );
+	m_clipartTool		= new VClipartTool( m_part, "" );
+}
+
+VToolController::~VToolController()
+{
+	delete m_selectTool;
+	delete m_selectNodesTool;
+	delete m_rotateTool;
+	delete m_shearTool;
+	delete m_ellipseTool;
+	delete m_gradientTool;
+	delete m_patternTool;
+	delete m_polygonTool;
+	delete m_polylineTool;
+	delete m_rectangleTool;
+	delete m_roundRectTool;
+	delete m_sinusTool;
+	delete m_spiralTool;
+	delete m_starTool;
+	delete m_textTool;
+	delete m_clipartTool;
 }
 
 void
