@@ -1056,7 +1056,7 @@ void KoTextParag::printRTDebug( int info )
 
 void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int h )
 {
-    if ( format->doubleUnderline() )
+    if ( format->doubleUnderline())
     {
         // For double-underlining, both lines are of width 0.5 (*zoom), in the hopes
 	// to have room for both.
@@ -1068,7 +1068,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
 
 	int y = lastY + baseLine + KoBorder::zoomWidthY( 0.2, zh, 0 ); // slightly under the baseline if possible
         p->save();
-        switch( format->underlineLineStyle() )
+        switch( format->underlineLineStyle())
         {
         case KoTextFormat::U_SOLID:
             p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
@@ -1101,32 +1101,33 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
             p->setFont( font );
         }
     }
-    else if ( format->underline() )
+    else if ( format->underline() ||
+      format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD)
     {
         int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
         QColor col = format->textUnderlineColor().isValid() ? format->textUnderlineColor(): color ;
         p->save();
-
+        unsigned int dim = (format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD)? KoBorder::zoomWidthY( 2, zh, 1 ) : KoBorder::zoomWidthY( 1, zh, 1 );
         switch( format->underlineLineStyle() )
         {
         case KoTextFormat::U_SOLID:
-            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+            p->setPen( QPen( col, dim, Qt::SolidLine ) );
             break;
         case KoTextFormat::U_DASH:
-            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashLine ) );
+            p->setPen( QPen( col, dim, Qt::DashLine ) );
             break;
         case KoTextFormat::U_DOT:
-            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
+            p->setPen( QPen( col, dim, Qt::DashDotLine ) );
             break;
         case KoTextFormat::U_DASH_DOT:
-            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
+            p->setPen( QPen( col, dim, Qt::DashDotLine ) );
             break;
         case KoTextFormat::U_DASH_DOT_DOT:
-            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotDotLine ) );
+            p->setPen( QPen( col, dim, Qt::DashDotDotLine ) );
 
             break;
         default:
-            p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+            p->setPen( QPen( col, dim, Qt::SolidLine ) );
         }
 
         p->drawLine( startX, y, startX + bw, y );
@@ -1137,7 +1138,6 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
 
     if ( format->strikeOutLineType() == KoTextFormat::S_SIMPLE )
     {
-
         p->save();
         switch( format->strikeOutLineStyle() )
         {
@@ -1191,11 +1191,9 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         default:
             p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
         }
-
         int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
         p->drawLine( startX, y - h/2 + 2 -KoBorder::zoomWidthY( 1, zh, 0 ) , startX + bw, y- h/2 +2 -KoBorder::zoomWidthY( 1, zh, 0 ));
         p->drawLine( startX, y - h/2 + 2 + KoBorder::zoomWidthY( 1, zh, 0 ) , startX + bw, y- h/2 +2 +KoBorder::zoomWidthY( 1, zh, 0 ));
-
         p->restore();
         font.setStrikeOut( FALSE );
         p->setFont( font );

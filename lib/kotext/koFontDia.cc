@@ -117,6 +117,7 @@ void KoFontChooser::setupTab2()
     QStringList lst;
     lst <<i18n("Without");
     lst <<i18n("Single");
+    lst <<i18n("Simple bold");
     lst <<i18n("Double");
     m_underlining->insertStringList( lst );
 
@@ -137,6 +138,10 @@ void KoFontChooser::setupTab2()
 
     lab = new QLabel( i18n("Strikethrough:"), grp);
     grid->addWidget( lab, 2, 0);
+    lst.clear();
+    lst <<i18n("Without");
+    lst <<i18n("Single");
+    lst <<i18n("Double");
 
     d->m_strikeOut = new QComboBox( grp );
     grid->addWidget( d->m_strikeOut, 3, 0);
@@ -280,6 +285,9 @@ KoTextFormat::UnderlineLineType KoFontChooser::getUnderlineLineType()
         return KoTextFormat::U_SIMPLE;
         break;
     case 2:
+        return KoTextFormat::U_SIMPLE_BOLD;
+        break;
+    case 3:
         return KoTextFormat::U_DOUBLE;
         break;
     default:
@@ -311,25 +319,17 @@ void KoFontChooser::setStrikeOutlineType(KoTextFormat::StrikeOutLineType nb)
 {
     switch ( nb )
     {
-    case KoTextFormat::S_SOLID:
-        d->m_strikeOut->setCurrentItem( 0 );
+    case KoTextFormat::S_NONE:
+        d->m_strikeOut->setCurrentItem(0);
         break;
-    case KoTextFormat::S_DASH:
-        d->m_strikeOut->setCurrentItem( 1 );
+    case KoTextFormat::S_SIMPLE:
+         d->m_strikeOut->setCurrentItem(1);
         break;
-    case KoTextFormat::S_DOT:
-        d->m_strikeOut->setCurrentItem( 2 );
-        break;
-    case KoTextFormat::S_DASH_DOT:
-        d->m_strikeOut->setCurrentItem( 3 );
-        break;
-    case KoTextFormat::S_DASH_DOT_DOT:
-        d->m_strikeOut->setCurrentItem( 4 );
-        break;
-    default:
-        d->m_strikeOut->setCurrentItem( 0 );
+    case KoTextFormat::S_DOUBLE:
+         d->m_strikeOut->setCurrentItem(2);
         break;
     }
+
     m_changedFlags = 0;
 }
 
@@ -338,26 +338,19 @@ void KoFontChooser::setUnderlineLineType(KoTextFormat::UnderlineLineType nb)
 {
     switch ( nb )
     {
-    case KoTextFormat::U_SOLID:
-        m_underlining->setCurrentItem( 0 );
+    case KoTextFormat::U_NONE:
+        m_underlining->setCurrentItem(0);
         break;
-    case KoTextFormat::U_DASH:
-        m_underlining->setCurrentItem( 1 );
+    case KoTextFormat::U_SIMPLE:
+        m_underlining->setCurrentItem(1);
         break;
-    case KoTextFormat::U_DOT:
-        m_underlining->setCurrentItem( 2 );
+    case KoTextFormat::U_SIMPLE_BOLD:
+        m_underlining->setCurrentItem(2);
         break;
-    case KoTextFormat::U_DASH_DOT:
-        m_underlining->setCurrentItem( 3 );
-        break;
-    case KoTextFormat::U_DASH_DOT_DOT:
-        m_underlining->setCurrentItem( 4 );
-        break;
-    default:
-        m_underlining->setCurrentItem( 0 );
+    case KoTextFormat::U_DOUBLE:
+        m_underlining->setCurrentItem(3);
         break;
     }
-
     m_changedFlags = 0;
 }
 
@@ -365,14 +358,23 @@ void KoFontChooser::setUnderlineLineStyle(KoTextFormat::UnderlineLineStyle _t)
 {
     switch ( _t )
     {
-    case KoTextFormat::U_NONE:
-        m_underlining->setCurrentItem(0);
+    case KoTextFormat::U_SOLID:
+        m_underlineType->setCurrentItem( 0 );
         break;
-    case KoTextFormat::U_SIMPLE:
-        m_underlining->setCurrentItem(1);
+    case KoTextFormat::U_DASH:
+        m_underlineType->setCurrentItem( 1 );
         break;
-    case KoTextFormat::U_DOUBLE:
-        m_underlining->setCurrentItem(2);
+    case KoTextFormat::U_DOT:
+        m_underlineType->setCurrentItem( 2 );
+        break;
+    case KoTextFormat::U_DASH_DOT:
+        m_underlineType->setCurrentItem( 3 );
+        break;
+    case KoTextFormat::U_DASH_DOT_DOT:
+        m_underlineType->setCurrentItem( 4 );
+        break;
+    default:
+        m_underlineType->setCurrentItem( 0 );
         break;
     }
     m_underlineType->setEnabled( m_underlining->currentItem()!= 0);
@@ -385,13 +387,22 @@ void KoFontChooser::setStrikeOutLineStyle(KoTextFormat::StrikeOutLineStyle _t)
     switch ( _t )
     {
     case KoTextFormat::S_NONE:
-        d->m_strikeOut->setCurrentItem(0);
+        m_strikeOutType->setCurrentItem( 0 );
         break;
-    case KoTextFormat::S_SIMPLE:
-        d->m_strikeOut->setCurrentItem(1);
+    case KoTextFormat::S_DASH:
+        m_strikeOutType->setCurrentItem( 1 );
         break;
-    case KoTextFormat::S_DOUBLE:
-        d->m_strikeOut->setCurrentItem(2);
+    case KoTextFormat::S_DOT:
+        m_strikeOutType->setCurrentItem( 2 );
+        break;
+    case KoTextFormat::S_DASH_DOT:
+        m_strikeOutType->setCurrentItem( 3 );
+        break;
+    case KoTextFormat::S_DASH_DOT_DOT:
+        m_strikeOutType->setCurrentItem( 4 );
+        break;
+    default:
+        m_strikeOutType->setCurrentItem( 0 );
         break;
     }
 
@@ -426,6 +437,7 @@ KoTextFormat::UnderlineLineStyle KoFontChooser::getUnderlineLineStyle()
 
 KoTextFormat::StrikeOutLineStyle KoFontChooser::getStrikeOutLineStyle()
 {
+
     switch ( m_strikeOutType->currentItem() )
     {
     case 0:
