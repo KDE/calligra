@@ -54,6 +54,7 @@ void KWCreateBookmarkDia::init()
     connect( m_bookmarkName, SIGNAL(textChanged ( const QString & )), this, SLOT(nameChanged( const QString &)));
     setMainWidget(dia);
     resize( 300, 200);
+    m_bookmarkName->setFocus();
 }
 
 void KWCreateBookmarkDia::slotOk()
