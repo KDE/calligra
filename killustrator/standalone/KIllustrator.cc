@@ -83,6 +83,7 @@
 #include <qlayout.h>
 #include <unistd.h>
 #include <kimgio.h>
+#include <ktoolbar.h>
 
 #include "koPageLayoutDia.h"
 
@@ -504,6 +505,16 @@ void KIllustrator::initToolBars () {
   editPointToolbar->setBarPos (KToolBar::Floating);
   editPointToolbar->setFullWidth ();
   addToolBar (editPointToolbar);
+  
+  // Saving of toolbar positions
+  restoreToolbarStatus ();
+
+  connect (toolbar, SIGNAL (moved(BarPosition)), 
+	   this, SLOT (saveToolbarStatus ()));
+  connect (toolPalette, SIGNAL (moved(BarPosition)), 
+	   this, SLOT (saveToolbarStatus ()));
+  connect (colorPalette, SIGNAL (moved(BarPosition)), 
+	   this, SLOT (saveToolbarStatus ()));
 }
 
 void KIllustrator::initMenu () {
@@ -676,6 +687,10 @@ void KIllustrator::initMenu () {
   popupMenu->insertItem (i18n ("To Back"), ID_ARRANGE_BACK);
   popupMenu->insertItem (i18n ("Forward One"), ID_ARRANGE_1_FORWARD);
   popupMenu->insertItem (i18n ("Back One"), ID_ARRANGE_1_BACK); 
+  
+  // Save position of menubar
+  restoreMenubarStatus ();
+  connect (menubar, SIGNAL (moved (menuPosition)), SLOT (saveMenubarStatus ()));
   connect (popupMenu, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 }
 
@@ -734,9 +749,12 @@ void KIllustrator::menuCallback (int item) {
     {
       if (askForSave ()) {
 	QString fname = 
-	  KFilePreviewDialog::getOpenFileURL 
-	  (0, "*.kil | KIllustrator File", this);
+	  KFilePreviewDialog::getOpenFileURL((const char *) lastOpenDir, 
+					     "*.kil | KIllustrator File", 
+					     this);
 	if (! fname.isEmpty ()) {
+          KURL u (fname);
+          lastOpenDir = u.directoryURL();
 	  document->initialize ();
 	  openURL ((const char *)fname);
 	  cmdHistory.reset ();
@@ -809,24 +827,29 @@ void KIllustrator::menuCallback (int item) {
   case ID_INSERT_BITMAP:
     {
       QString fname = KFilePreviewDialog::getOpenFileName 
-	(0, "*.gif *.GIF | GIF Images\n"
-	 "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
-	 "*.png | PNG Images\n"
-	 "*.xbm | X11 Bitmaps\n"
-	 "*.xpm | X11 Pixmaps",
-	 this);
-      if (! fname.isEmpty ()) {
-	InsertPixmapCmd *cmd = new InsertPixmapCmd (document, 
-						    (const char *) fname);
-	cmdHistory.addCommand (cmd, true);
-      }
-      break;
+	     ((const char *) lastBitmapDir, "*.gif *.GIF | GIF Images\n"
+	         "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
+	         "*.png | PNG Images\n"
+	         "*.xbm | X11 Bitmaps\n"
+	         "*.xpm | X11 Pixmaps",
+	     this);
+       if (! fname.isEmpty ()) {
+         QFileInfo finfo (fname);
+         lastBitmapDir = finfo.dirPath ();
+	 InsertPixmapCmd *cmd = new InsertPixmapCmd (document, 
+						     (const char *) fname);
+	 cmdHistory.addCommand (cmd, true);
+       }
+       break;
     }
   case ID_INSERT_CLIPART:
     {
       QString fname = KFilePreviewDialog::getOpenFileName 
-	(0, "*.wmf *.WMF | Windows Metafiles", this);
+	      ((const char *) lastClipartDir, 
+	       "*.wmf *.WMF | Windows Metafiles", this);
       if (! fname.isEmpty ()) {
+        QFileInfo finfo (fname);
+        lastClipartDir = finfo.dirPath ();
 	InsertClipartCmd *cmd = new InsertClipartCmd (document, 
 						      (const char *) fname);
 	cmdHistory.addCommand (cmd, true);
@@ -1121,7 +1144,10 @@ void KIllustrator::saveFile () {
 }
 
 void KIllustrator::saveAsFile () {
-  QString fname = KFileDialog::getSaveFileName (0, "*.kil", this);
+  QString fname = KFileDialog::getSaveFileName ((const char *)
+						lastSaveDir, "*.kil", this);
+  QFileInfo finfo (fname);
+    lastSaveDir = finfo.dirPath ();
   if (! fname.isEmpty ()) {
     if (access ((const char *) fname, W_OK) == 0) {
       // there is already a file with the same name
@@ -1288,7 +1314,9 @@ QString KIllustrator::getExportFileName (FilterManager *filterMgr) {
 	}
     }
     QString filter = filterMgr->exportFilters (defaultExt);
-    KFileDialog *dlg = new KFileDialog (0L, (const char *) filter, this,
+    
+    KFileDialog *dlg = new KFileDialog ((const char *) lastExportDir, 
+					(const char *) filter, this,
 					0L, true, false);
     dlg->setCaption (i18n ("Save As"));
     if (! lastExport.isEmpty ()) {
@@ -1296,8 +1324,11 @@ QString KIllustrator::getExportFileName (FilterManager *filterMgr) {
     }
     QString filename;
 
-    if (dlg->exec() == QDialog::Accepted)
-	filename = dlg->selectedFile ();
+    if (dlg->exec() == QDialog::Accepted) {
+	   filename = dlg->selectedFile ();
+      QFileInfo finfo (filename);
+      lastExportDir = finfo.dirPath ();
+    }
 
     delete dlg;
 
@@ -1337,17 +1368,18 @@ void KIllustrator::importFromFile () {
   QString filter = filterMgr->importFilters ();
   
   QString fname = 
-    KFilePreviewDialog::getOpenFileName (0, (const char *) filter, this);
+    KFilePreviewDialog::getOpenFileName ((const char *) lastImportDir, 
+					 (const char *) filter, this);
   if (! fname.isEmpty ()) {
     QFileInfo finfo ((const char *) fname);
     if (!finfo.isFile () || !finfo.isReadable ())
       return;
 
+    lastImportDir = finfo.dirPath (); 
     FilterInfo* filterInfo = filterMgr->findFilter (fname, 
 						    FilterInfo::FKind_Import);
     if (filterInfo) {
       ImportFilter* filter = filterInfo->importFilter ();
-      cout << "filter = " << filterInfo->type () << endl;
       if (filter->setup (document, filterInfo->extension ())) {
 	filter->setInputFileName (fname);
 	filter->importFromFile (document);
@@ -1461,6 +1493,121 @@ void KIllustrator::saveRulerStatus (bool show_it) {
   config->sync ();
 }
 
+void KIllustrator::restoreToolbarStatus () {
+  KConfig* config = kapp->getConfig ();   
+  QString oldgroup = config->group ();
+
+  config->setGroup ("Toolbar Positions");
+  
+  QString str = config->readEntry ("toolbar");
+  if (! str.isNull ()) {
+    if (str == "Left")
+      toolbar->setBarPos (KToolBar::Left);
+    else if (str == "Right")
+      toolbar->setBarPos (KToolBar::Right);
+    else if (str == "Bottom")
+      toolbar->setBarPos (KToolBar::Bottom);
+    else
+      toolbar->setBarPos (KToolBar::Top);
+  }  
+  
+  str = config->readEntry ("toolpalette");
+  if (! str.isNull ()) {
+    if (str == "Top")
+      toolPalette->setBarPos (KToolBar::Top);
+    else if (str == "Right")
+      toolPalette->setBarPos (KToolBar::Right);
+    else if (str == "Bottom")
+      toolPalette->setBarPos (KToolBar::Bottom);
+    else
+      toolPalette->setBarPos (KToolBar::Left);
+  }  
+  
+  str = config->readEntry ("colorpalette");
+  if (! str.isNull ()) {
+    if (str == "Left")
+      colorPalette->setBarPos (KToolBar::Left);
+    else if (str == "Top")
+      colorPalette->setBarPos (KToolBar::Top);
+    else if (str == "Bottom")
+      colorPalette->setBarPos (KToolBar::Bottom);
+    else
+      colorPalette->setBarPos (KToolBar::Right);
+  }  
+  
+  config->setGroup (oldgroup);
+}
+
+void KIllustrator::saveToolbarStatus () {
+  KConfig* config = kapp->getConfig ();
+  QString oldgroup = config->group ();
+  
+  config->setGroup ("Toolbar Positions");
+  QString str;
+  if ( toolbar->barPos() == KToolBar::Left )
+    str = "Left";
+  else if ( toolbar->barPos() == KToolBar::Right )
+    str = "Right";
+  else if ( toolbar->barPos() == KToolBar::Bottom )
+    str = "Bottom";
+  else
+    str = "Top";
+  config->writeEntry( "toolbar", str.data() );
+  
+  if ( toolPalette->barPos() == KToolBar::Left )
+    str = "Left";
+  else if ( toolPalette->barPos() == KToolBar::Right )
+    str = "Right";
+  else if ( toolPalette->barPos() == KToolBar::Bottom )
+    str = "Bottom";
+  else
+    str = "Top";
+  config->writeEntry( "toolpalette", str.data() );
+  
+  if ( colorPalette->barPos() == KToolBar::Left )
+    str = "Left";
+  else if ( colorPalette->barPos() == KToolBar::Right )
+    str = "Right";
+  else if ( colorPalette->barPos() == KToolBar::Bottom )
+    str = "Bottom";
+  else
+    str = "Top";
+  config->writeEntry( "colorpalette", str.data() );
+  
+  config->setGroup (oldgroup);
+  config->sync ();
+}
+ 
+void KIllustrator::restoreMenubarStatus () {
+  KConfig* config = kapp->getConfig ();   
+  QString oldgroup = config->group ();
+  
+  QString str = config->readEntry ("Menubar Position");
+  if (! str.isNull ()) {
+    if (str == "Bottom")
+      menubar->setMenuBarPos (KMenuBar::Bottom);
+    else
+      menubar->setMenuBarPos (KMenuBar::Top);
+  }  
+  
+   config->setGroup (oldgroup);
+}
+
+void KIllustrator::saveMenubarStatus () {
+  KConfig* config = kapp->getConfig ();
+  QString oldgroup = config->group ();
+  
+  QString str;
+  if ( menubar->menuBarPos() == KMenuBar::Bottom )
+    str = "Bottom";
+  else
+    str = "Top";
+  config->writeEntry( "Menubar Position", str.data() );
+  
+  config->setGroup (oldgroup);
+  config->sync ();
+}
+ 
 bool KIllustrator::parseColorPalette (const char* fname, 
 				      vector<QColor>& colors) {
   ifstream in (fname);
@@ -1491,7 +1638,9 @@ bool KIllustrator::parseColorPalette (const char* fname,
 }
 
 void KIllustrator::loadPalette () {
-  QString pfile = KFileDialog::getOpenFileName ();
+  QString pfile = KFileDialog::getOpenFileName ((const char *) lastPaletteDir);
+  QFileInfo finfo (pfile);
+  lastPaletteDir = finfo.dirPath (); 
   if (! pfile.isEmpty ()) {
     vector<QColor> new_palette;
     if (parseColorPalette ((const char *) pfile, new_palette)) {

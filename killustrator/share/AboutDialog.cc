@@ -35,10 +35,8 @@
 #define ABOUT_INFO "Version "APP_VERSION"\n\nCopyright (C) 1998\n\
 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)\n\n\
 Contributions by\n\
-Steffen Thorhauer (sth@iti.cs.uni-magdeburg.de)\n\
-Stefan Taferner (taferner@salzburg.co.at)\n\
-Stephan Kulow (coolo@kde.org)\n\
-Jost Schenck (jost@schenck.de)"
+Steffen Thorhauer, Stefan Taferner\n\
+Stephan Kulow, Jost Schenck, Ben Skelton"
 
 AboutDialog::AboutDialog (QWidget* parent) : 
     QDialog (parent, "About", true) {

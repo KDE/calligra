@@ -184,9 +184,14 @@ protected slots:
 
   void documentIsModifiedSlot (bool flag);
 
+  void saveToolbarStatus ();
+  void saveMenubarStatus ();   
+  
 private:
   void saveRulerStatus (bool show_it);
   void restoreRulerStatus ();
+  void restoreToolbarStatus ();
+  void restoreMenubarStatus ();
 
   static bool closeWindow (KIllustrator* win);
   static void quit ();
@@ -250,6 +255,8 @@ private:
   PStateManager* psm;
   int selectedColorIdx;
   vector<QColor> palette;
+  QString lastOpenDir, lastSaveDir, lastBitmapDir, lastClipartDir,
+    lastExportDir, lastImportDir, lastPaletteDir;
 
   // this should go away sometimes ...
   static QList<KIllustrator> windows;
