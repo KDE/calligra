@@ -253,6 +253,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
     *m_streamOut << "alt=\"" << escapeHtmlText(anchor.picture.key) << "\"";
     *m_streamOut << (isXML()?"/>":">") << "\n";
 
+    return true;
 }
 
 QString HtmlWorker::getFormatTextParagraph(const QString& strText, const FormatData& format)
@@ -769,7 +770,7 @@ bool HtmlWorker::doOpenHead(void)
     {
         // Somehow we have still an empty title (this should not happen!)
         kdWarning(30503) << "Title still empty! (HtmlWorker::doOpenHead)" << endl;
-        m_strTitle=i18n("Untitled");
+        m_strTitle=i18n("Untitled Document");
     }
     *m_streamOut << "<title>"<< escapeHtmlText(m_strTitle) <<"</title>\n";  // <TITLE> is mandatory!
 
