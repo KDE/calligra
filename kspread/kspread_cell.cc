@@ -3106,7 +3106,10 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
    */
   if ( !m_strText.isEmpty() && m_strText[0] == '=' )
   {
+    m_strText = decodeFormula( _text, m_iColumn, m_iRow );
     setFlag(Flag_LayoutDirty);
+    clearFlag(Flag_Error);
+
     m_content = Formula;
 
     if ( !m_pTable->isLoading() )
@@ -4113,10 +4116,12 @@ bool KSpreadCell::loadCellData(QDomElement text, Operation op )
   {
     clearFormula();
     t = decodeFormula( t, m_iColumn, m_iRow );
+    m_strText = pasteOperation( t, m_strText, op );
+
     setFlag(Flag_LayoutDirty);
     clearFlag(Flag_Error);
     m_content = Formula;
-    m_strText = pasteOperation( t, m_strText, op );
+
     if ( !m_pTable->isLoading() ) // i.e. when pasting
       if ( !makeFormula() )
         kdError(36002) << "ERROR: Syntax ERROR" << endl;
@@ -4182,16 +4187,16 @@ bool KSpreadCell::loadCellData(QDomElement text, Operation op )
       {
         bool ok = false;
         m_dValue = t.toDouble(&ok); // We save in non-localized format
-                    m_strText = pasteOperation( t, m_strText, op );
-                    if ( !ok )
-                      kdWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
-                    if ( formatType() == Percentage )
-                    {
-                      setFactor(100.0); // should have been already done by loadLayout
-                      m_strText += '%';
-                    }
-
-                    break;
+        m_strText = pasteOperation( t, m_strText, op );
+        if ( !ok )
+          kdWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
+        if ( formatType() == Percentage )
+        {
+          setFactor(100.0); // should have been already done by loadLayout
+          m_strText += '%';
+        }
+        
+        break;
       }
       case DateData:
       {
@@ -4208,7 +4213,7 @@ bool KSpreadCell::loadCellData(QDomElement text, Operation op )
           checkTextInput();
         }
         break;
-                }
+      }
       case TimeData:
       {
         int hours = -1;
@@ -4237,6 +4242,10 @@ bool KSpreadCell::loadCellData(QDomElement text, Operation op )
       setFlag(Flag_LayoutDirty);
     }
   }
+
+  if ( !m_pTable->isLoading() ) 
+    setCellText(m_strText);
+
   return true;
 }
 
@@ -4324,6 +4333,11 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
     bool b1, b2;
     tmp.toDouble( &b1 );
     old.toDouble( &b2 );
+    if (b1 && !b2 && old.length() == 0)
+    {
+      old = "0";
+      b2 = true;
+    }
 
     if( b1 && b2 )
     {

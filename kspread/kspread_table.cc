@@ -4125,29 +4125,48 @@ void KSpreadTable::paste( const QByteArray& b, const QPoint &_marker,bool makeUn
 
     // ##### TODO: Test for parsing errors
 
-    loadSelection( doc, _marker.x() - 1, _marker.y() - 1,makeUndo, sp, op, insert, insertTo);
+    int mx = _marker.x();
+    int my = _marker.y();
 
+    if ( (selectionRect().x() > 0) && (selectionRect().y() > 0) )
+    {
+      if (selectionRect().x() < mx)
+        mx = selectionRect().x();
+      if (selectionRect().y() < my)
+        my = selectionRect().y();
+    }
+
+    loadSelection( doc, mx - 1, my - 1, makeUndo, sp, op, insert, insertTo );
 }
 
 bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _yshift,bool makeUndo, PasteMode sp, Operation op,bool insert,int insertTo )
 {
     QDomElement e = doc.documentElement();
-    if(!isLoading()&&makeUndo)
-        loadSelectionUndo( doc, _xshift,_yshift,insert,insertTo);
 
-    int rowsInClpbrd =  e.attribute( "rows" ).toInt();
+    if (!isLoading() && makeUndo)
+        loadSelectionUndo( doc, _xshift, _yshift, insert, insertTo );
+
+    int rowsInClpbrd    =  e.attribute( "rows" ).toInt();
     int columnsInClpbrd =  e.attribute( "columns" ).toInt();
+
     // find size of rectangle that we want to paste to (either clipboard size or current selection)
-    const int pasteWidth = ( selectionRect().left() != 0 && selectionRect().width() >= columnsInClpbrd &&
-                             isRowSelected() == FALSE && e.namedItem( "rows" ).toElement().isNull() )
-        ? selectionRect().width() : columnsInClpbrd;
-    const int pasteHeight = ( selectionRect().left() != 0 && selectionRect().height() >= rowsInClpbrd &&
-                              isColumnSelected() == FALSE && e.namedItem( "columns" ).toElement().isNull() )
-        ? selectionRect().height() : rowsInClpbrd;
-    //kdDebug(36001) << "loadSelection: paste area has size " << pasteHeight << " rows * "
-    //               << pasteWidth << " columns " << endl;
-    //kdDebug(36001) << "loadSelection: " << rowsInClpbrd << " rows and "
-    //               << columnsInClpbrd << " columns in clipboard." << endl;
+    const int pasteWidth = ( selectionRect().left() != 0 
+                             && selectionRect().width() >= columnsInClpbrd 
+                             && isRowSelected() == FALSE 
+                             && e.namedItem( "rows" ).toElement().isNull() )
+      ? selectionRect().width() : columnsInClpbrd;
+    const int pasteHeight = ( selectionRect().left() != 0 
+                              && selectionRect().height() >= rowsInClpbrd 
+                              && isColumnSelected() == FALSE 
+                              && e.namedItem( "columns" ).toElement().isNull() )
+      ? selectionRect().height() : rowsInClpbrd;
+
+    /*    kdDebug() << "loadSelection: paste area has size " << pasteHeight << " rows * "
+          << pasteWidth << " columns " << endl;
+          kdDebug() << "loadSelection: " << rowsInClpbrd << " rows and "
+          << columnsInClpbrd << " columns in clipboard." << endl;
+          kdDebug() << "xshift: " << _xshift << " _yshift: " << _yshift << endl;
+    */
 
     if ( !e.namedItem( "columns" ).toElement().isNull() )
     {
@@ -4214,12 +4233,13 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
             int row = c.attribute( "row" ).toInt() + _yshift;
             int col = c.attribute( "column" ).toInt() + _xshift;
             // tile the selection with the clipboard contents
-            for(int roff=0; row-_yshift+roff<=pasteHeight; roff += rowsInClpbrd)
+
+            for (int roff = 0; row + roff - _yshift <= pasteHeight; roff += rowsInClpbrd)
             {
-                for(int coff=0; col-_xshift+coff<=pasteWidth; coff += columnsInClpbrd)
+                for (int coff = 0; col + coff - _xshift <= pasteWidth; coff += columnsInClpbrd)
                 {
-                    //kdDebug(36001) << "loadSelection: cell at " << (row+roff) << "," << (col+coff) << " with roff,coff= "
-                    //               << roff << "," << coff << endl;
+                  //kdDebug() << "loadSelection: cell at " << (col+coff) << "," << (row+roff) << " with roff,coff= "
+                  //          << roff << "," << coff << ", _xshift: " << _xshift << ", _yshift: " << _yshift << endl;
 
                     bool needInsert = FALSE;
                     KSpreadCell* cell = cellAt( col + coff, row + roff );
