@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
    Copyright (c) 2001 IABG mbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@IABG.de>
 
@@ -40,6 +40,9 @@
 
 #include <TagProcessing.h>
 
+#define DEBUG_KWORD_TAGS
+
+
 // The class TagProcessing and the two functions ProcessSubtags () and
 // AllowNoSubtags () allow for easing parsing of subtags in the
 // current tag. If don't expect any subtags you call AllowNoSubtags ().
@@ -52,19 +55,20 @@ void ProcessSubtags ( QDomNode                   parentNode,
                       QValueList<TagProcessing>  &tagProcessingList,
                       KWEFKWordLeader            *leader)
 {
+    //kdDebug(30508) << "Starting ProcessSubtags for node: " << parentNode.nodeName() << endl;
+
     QDomNode childNode;
 
     for ( childNode = parentNode.firstChild (); !childNode.isNull (); childNode = childNode.nextSibling () )
     {
-//      if ( childNode.isElement () )   // doesn't work!!!
-        if ( childNode.nodeType () == QDomNode::ElementNode )
+        if ( childNode.isElement () )
         {
             bool found = false;
 
             QValueList<TagProcessing>::Iterator  tagProcessingIt;
 
             for ( tagProcessingIt = tagProcessingList.begin ();
-                  !found && tagProcessingIt != tagProcessingList.end ();
+                  tagProcessingIt != tagProcessingList.end ();
                   tagProcessingIt++ )
             {
                 if ( childNode.nodeName () == (*tagProcessingIt).name )
@@ -75,11 +79,14 @@ void ProcessSubtags ( QDomNode                   parentNode,
                     {
                         ((*tagProcessingIt).processor) ( childNode, (*tagProcessingIt).data, leader );
                     }
+#ifdef DEBUG_KWORD_TAGS
                     else
                     {
-//                      kdError (30503) << "<para>ignoring " << childNode.nodeName ()
-//                                      << " tag in " << parentNode.nodeName () << "!</para>" << endl;
+                        kdWarning (30508) << "Ignoring " << childNode.nodeName ()
+                            << " tag in " << parentNode.nodeName () << endl;
                     }
+#endif
+                    break;
                 }
             }
 
@@ -90,19 +97,20 @@ void ProcessSubtags ( QDomNode                   parentNode,
             }
         }
     }
+    //kdDebug(30508) << "Ending ProcessSubtags for node: " << parentNode.nodeName() << endl;
 }
 
 #ifdef DEBUG_KWORD_TAGS
 // Version for debugging (process all sub tags)
-void AllowNoSubtags ( QDomNode  myNode )
+void AllowNoSubtags ( QDomNode myNode, KWEFKWordLeader *leader )
 {
     QString outputText;
     QValueList<TagProcessing> tagProcessingList;
-    ProcessSubtags (myNode, tagProcessingList, outputText, NULL);
+    ProcessSubtags (myNode, tagProcessingList, leader);
 }
 #else
 // Normal version: no subtags expected, so do not search any!
-void AllowNoSubtags ( QDomNode )
+void AllowNoSubtags ( QDomNode, KWEFKWordLeader* )
 {
 }
 #endif
@@ -118,12 +126,11 @@ void AllowNoSubtags ( QDomNode )
 void ProcessAttributes ( QDomNode                     myNode,
                          QValueList<AttrProcessing>  &attrProcessingList )
 {
-    QDomNamedNodeMap myAttribs ( myNode.toElement ().attributes () );
+    //kdDebug(30508) << "Starting ProcessAttributes for node: " << myNode.nodeName() << endl;
 
-    int i, n;
-    n = myAttribs.length ();
+    QDomNamedNodeMap myAttribs ( myNode.attributes () );
 
-    for ( i = 0; i < n; i++ )
+    for ( uint i = 0; i <  myAttribs.length (); i++ )
     {
         QDomAttr myAttrib ( myAttribs.item (i).toAttr () );
 
@@ -134,7 +141,7 @@ void ProcessAttributes ( QDomNode                     myNode,
             QValueList<AttrProcessing>::Iterator attrProcessingIt;
 
             for ( attrProcessingIt = attrProcessingList.begin ();
-                  !found && attrProcessingIt != attrProcessingList.end ();
+                  attrProcessingIt != attrProcessingList.end ();
                   attrProcessingIt++ )
             {
                 if ( myAttrib.name () == (*attrProcessingIt).name )
@@ -163,12 +170,15 @@ void ProcessAttributes ( QDomNode                     myNode,
                                 << "!" << endl;
                         }
                     }
+#ifdef DEBUG_KWORD_TAGS
                     else
                     {
-//                      kdWarning(30508) << "<para>ignoring " << myNode.tagName
-//                          << " attribute " << (*attrProcessingIt).name
-//                          << "!</para>" << endl;
+                        kdWarning(30508) << "Ignoring " << myNode.nodeName()
+                            << " attribute " << (*attrProcessingIt).name
+                            << endl;
                     }
+#endif
+                    break;
                 }
             }
 
@@ -179,6 +189,7 @@ void ProcessAttributes ( QDomNode                     myNode,
             }
         }
     }
+    //kdDebug(30508) << "Ending ProcessAttributes for node: " << myNode.nodeName() << endl;
 }
 
 #ifdef DEBUG_KWORD_TAGS

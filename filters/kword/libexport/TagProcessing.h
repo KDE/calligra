@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -71,8 +71,7 @@ void ProcessSubtags     ( QDomNode                   parentNode,
                           QValueList<TagProcessing>  &tagProcessingList,
                           KWEFKWordLeader            *leader);
 
-void AllowNoSubtags ( QDomNode  myNode );
-
+void AllowNoSubtags ( QDomNode myNode, KWEFKWordLeader *leader );
 
 // The class AttrProcessing and the two functions ProcessAttributes ()
 // and AllowNoSubtags () allow for easing parsing of the current tag's

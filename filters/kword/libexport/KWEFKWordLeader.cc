@@ -80,7 +80,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
                                   KWEFKWordLeader *leader )
 {
 #if 0
-    kdError (30508) << "ProcessParagraphTag () - Begin" << endl;
+    kdDebug (30508) << "ProcessParagraphTag () - Begin" << endl;
 #endif
 
     QValueList<ParaData> *paraList = (QValueList<ParaData> *) tagData;
@@ -106,7 +106,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
         }
         else
         {
-            kdError (30508) << "No useful FORMAT tag found for text in PARAGRAPH" << endl;
+            kdWarning (30508) << "No useful FORMAT tag found for text in PARAGRAPH" << endl;
         }
     }
 
@@ -114,7 +114,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
     *paraList << paraData;
 
 #if 0
-    kdError (30508) << "ProcessParagraphTag () - End " << paraText << endl;
+    kdDebug (30508) << "ProcessParagraphTag () - End " << paraText << endl;
 #endif
 }
 
@@ -136,7 +136,7 @@ static void ProcessImageKeyTag ( QDomNode         myNode,
                        << AttrProcessing ( "filename", "QString", (void *) key );
     ProcessAttributes (myNode, attrProcessingList);
 
-    AllowNoSubtags (myNode);
+    AllowNoSubtags (myNode, leader);
 }
 
 
@@ -159,7 +159,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                                 KWEFKWordLeader *leader )
 {
 #if 0
-    kdError (30508) << "ProcessFramesetTag () - Begin" << endl;
+    kdDebug (30508) << "ProcessFramesetTag () - Begin" << endl;
 #endif
 
     QValueList<ParaData> *paraList = (QValueList<ParaData> *) tagData;
@@ -210,7 +210,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     if ( cols == 1 && rows == 1 )
                     {
 #if 0
-                        kdError (30508) << "DEBUG - FRAMESET: table " << name << " col, row = "
+                        kdDebug (30508) << "DEBUG - FRAMESET: table " << name << " col, row = "
                                         << col << ", " << row << endl;
 #endif
 
@@ -231,21 +231,21 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                         }
                         else
                         {
-                            kdError (30508) << "ProcessFramesetTag (): Couldn't find anchor " << name << endl;
+                            kdWarning (30508) << "ProcessFramesetTag (): Couldn't find anchor " << name << endl;
                         }
                     }
                     else
                     {
-                        kdError (30508) << "Unexpected value for one of, or all FRAMESET attribute cols, rows: "
+                        kdWarning (30508) << "Unexpected value for one of, or all FRAMESET attribute cols, rows: "
                                         << cols << ", " << rows << "!" << endl;
-                        AllowNoSubtags (myNode);
+                        AllowNoSubtags (myNode, leader);
                     }
                 }
                 else
                 {
-                    kdError (30508) << "Unset value for one of, or all FRAMESET attributes col, row: "
+                    kdWarning (30508) << "Unset value for one of, or all FRAMESET attributes col, row: "
                                     << col << ", " << row << "!" << endl;
-                    AllowNoSubtags (myNode);
+                    AllowNoSubtags (myNode, leader);
                 }
             }
             break;
@@ -253,7 +253,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
         case 2:
             {
 #if 0
-            kdError (30508) << "DEBUG: FRAMESET name of picture is " << name << endl;
+            kdDebug (30508) << "DEBUG: FRAMESET name of picture is " << name << endl;
 #endif
 
             FrameAnchor *frameAnchor = findAnchor (name, *paraList);
@@ -268,25 +268,25 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                 ProcessSubtags (myNode, tagProcessingList, leader);
 
 #if 0
-                kdError (30508) << "DEBUG: FRAMESET IMAGE KEY filename of picture is " << frameAnchor->picture.key << endl;
+                kdDebug (30508) << "DEBUG: FRAMESET IMAGE KEY filename of picture is " << frameAnchor->picture.key << endl;
 #endif
 
                 frameAnchor->name = frameAnchor->picture.key;
             }
             else
             {
-                kdError (30508) << "ProcessFramesetTag (): Couldn't find anchor " << name << endl;
+                kdWarning (30508) << "ProcessFramesetTag (): Couldn't find anchor " << name << endl;
             }
 
             }
             break;
 
         default:
-            kdError (30508) << "Unexpected frametype " << frameType << "!" << endl;
+            kdWarning (30508) << "Unexpected frametype " << frameType << "!" << endl;
     }
 
 #if 0
-    kdError (30508) << "ProcessFramesetTag () - End" << endl;
+    kdDebug (30508) << "ProcessFramesetTag () - End" << endl;
 #endif
 }
 
@@ -350,7 +350,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
                        << AttrProcessing ( "spFootBody",      "",       NULL                  );
     ProcessAttributes (myNode, attrProcessingList);
 
-    AllowNoSubtags (myNode);
+    AllowNoSubtags (myNode, leader);
 
     leader->doFullPaperFormat (format, width, height, orientation);
 }
@@ -382,7 +382,7 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
     if ( frameAnchor )
     {
 #if 0
-        kdError (30508) << "DEBUG: ProcessPixmapsKeyTag (): koStore for picture "
+        kdDebug (30508) << "DEBUG: ProcessPixmapsKeyTag (): koStore for picture "
                         << fileName << " is " << name << endl;
 #endif
 
@@ -390,11 +390,11 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
     }
     else
     {
-        kdError (30508) << "Could find anchor for picture " << fileName << "!" << endl;
+        kdWarning (30508) << "Could find anchor for picture " << fileName << "!" << endl;
     }
 
 
-    AllowNoSubtags (myNode);
+    AllowNoSubtags (myNode, leader);
 }
 
 
@@ -484,10 +484,10 @@ static void ProcessDocTag ( QDomNode         myNode,
                       << TagProcessing ( "PIXMAPS",     ProcessPixmapsTag,      (void *) &paraList )
                       << TagProcessing ( "EMBEDDED",    NULL,                   NULL               )
                       ;
-// TODO: delete (they do not exist anymore in KOffice 1.2)
-// tagProcessingList << TagProcessing ( "SERIALL",     NULL,                   NULL               );
-// tagProcessingList << TagProcessing ( "FOOTNOTEMGR", NULL,                   NULL               );
-// tagProcessingList << TagProcessing ( "CLIPARTS",    NULL,                   NULL               );
+    // TODO: why are the followings used by KWord 1.2 but are not in its DTD?
+    tagProcessingList << TagProcessing ( "SERIALL",     NULL,                   NULL               );
+    tagProcessingList << TagProcessing ( "FOOTNOTEMGR", NULL,                   NULL               );
+    tagProcessingList << TagProcessing ( "CLIPARTS",    NULL,                   NULL               );
 
     ProcessSubtags (myNode, tagProcessingList, leader);
 

@@ -1,5 +1,5 @@
-- tidy files TagProcessing.* (use QT3) {2002-01-05}
 - remove all unnessary (void*) (not urgent) {2002-01-05}
+- KWord's <LINK> seems to have been changed. {2002-01-30}
 
 - any TODO in status.html
 - any TODO in source code
