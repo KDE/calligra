@@ -84,6 +84,12 @@ public:
   bool singleViewMode() const;
 
   // ######## Where and why is this needed ?
+  // Well, normally all the KOffice apps define the actions in the
+  // view (therefore there is an actionCollection in the KoView class).
+  // As Simon pointed out this is not correct. They should only define
+  // view-actions (like zooming and stuff) in the view. Every action
+  // which changes the document should be defined here. That's at least
+  // what I understood :) (Werner)
   /**
    * Returns the action described action object. In fact only the "name" attribute
    * of @ref #element is of interest here. The method searches first in the
@@ -98,7 +104,7 @@ public:
    */
   virtual KAction *action( const QDomElement &element ) const;
 
-    // ######## Where and why is this needed ?
+  // ######## Where and why is this needed ?
   /**
    * Returns the DOM document which describes the GUI of the
    * first view.
@@ -251,7 +257,7 @@ public:
   virtual void paintContent( QPainter &painter, const QRect &rect, bool transparent = false ) = 0;
 
   /**
-   *  Initializes an empty document (or displays the template dialog).
+   *  Initializes an empty document (display the template dialog!).
    *  You have to overload this method to initalize all your document variables.
    */
   virtual bool initDoc() = 0;

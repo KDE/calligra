@@ -28,9 +28,9 @@
 
 KGObject::~KGObject() {
 
-    if(m_group!=0L)
+    if(m_group)
 	m_group->removeMember(this);
-    if(tmpGroup!=0L)
+    if(tmpGroup)
 	tmpGroup->removeMember(this);
 }
 
@@ -39,11 +39,11 @@ QDomElement KGObject::save(QDomDocument &doc) const {
     QDomElement e=doc.createElement("kgobject");
     e.setAttribute("name", m_name);
     e.setAttribute("state", m_state);
-    if(m_group!=0L || tmpGroup!=0L) {
+    if(m_group || tmpGroup) {
 	QDomElement groups=doc.createElement("groups");
-	if(m_group!=0L)
+	if(m_group)
 	    groups.setAttribute("group", m_group->id());
-	if(tmpGroup!=0L)
+	if(tmpGroup)
 	    groups.setAttribute("tmpGroup", tmpGroup->id());
 	e.appendChild(groups);
     }
@@ -156,11 +156,11 @@ KGObject::KGObject(const KGObjectPool * const pool, const QDomElement &element) 
 		m_gradient.ca=QColor(gradient.attribute("colorA"));
 	    if(gradient.hasAttribute("colorB"))
 		m_gradient.cb=QColor(gradient.attribute("colorB"));
-	    
+	
 	    m_gradient.type=static_cast<KImageEffect::GradientType>(gradient.attribute("type").toInt(&ok));
 	    if(!ok)
 		m_gradient.type=static_cast<KImageEffect::GradientType>(0);
-	    
+	
 	    m_gradient.xfactor=gradient.attribute("xfactor").toInt(&ok);
 	    if(!ok)
 		m_gradient.xfactor=1;

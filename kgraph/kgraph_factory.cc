@@ -50,7 +50,7 @@ QObject *KGraphFactory::create(QObject *parent, const char *name, const char *cl
 /*
     if (parent && !parent->inherits("KoDocument")) {
         kdDebug(37001) << "KGraphFactory: parent does not inherit KoDocument" << endl;
-        return 0;
+        return 0L;
     }
 */
 

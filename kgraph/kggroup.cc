@@ -44,8 +44,7 @@ KGGroup::KGGroup(const QDomElement &element) : m_exclusive(true),
 
 KGGroup::~KGGroup() {
 
-    QListIterator<KGObject> it(members);
-    for( ; it.current(); ++it) {
+    for(QListIterator<KGObject> it(members); it.current(); ++it) {
 	if(it.current()->group()==this)
 	    it.current()->setGroup(0L);
 	else if(it.current()->temporaryGroup()==this)
@@ -66,7 +65,7 @@ const bool KGGroup::isExclusive() {
     QListIterator<KGObject> it(members);
     const char *firstName=it.current()->className();
     ++it;
-    for( ; it.current() && m_exclusive==true; ++it) {
+    for( ; it.current() && m_exclusive; ++it) {
 	if(strcmp(firstName, it.current()->className())!=0) {
 	    m_exclusive=false;
 	}
@@ -100,9 +99,8 @@ const bool KGGroup::changeProperty(const char *property, const QVariant &value,
 	return false;
 
     bool ok=false;
-
     QListIterator<KGObject> it(members);
-    
+
     // propagate it to all objects (if possible)
     if(object==0L) {
 	for( ; it.current(); ++it) {

@@ -2,7 +2,6 @@
 #define __koFrame_h__
 
 #include <qwidget.h>
-#include <qpoint.h>
 
 class KoView;
 class KoFramePrivate;

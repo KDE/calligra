@@ -43,5 +43,4 @@ int main(int argc, char **argv) {
 
     app.start(); // parses command line args, create initial docs and shells
     app.exec();
-    return 0;
 }

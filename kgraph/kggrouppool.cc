@@ -33,8 +33,7 @@ QDomElement KGGroupPool::save(QDomDocument &doc) {
 
 KGGroup *KGGroupPool::find(const int &id) const {
 
-    QListIterator<KGGroup> it(pool);
-    for( ; it.current(); ++it) {
+    for(QListIterator<KGGroup> it(pool); it.current(); ++it) {
 	if(it.current()->id()==id)
 	    return it.current();
     }

@@ -25,6 +25,7 @@
 #include <qmessagebox.h>
 #include <qdict.h>
 #include <qpixmap.h>
+#include <qfileinfo.h>
 
 #include <komlMime.h>
 #include <koStream.h>
@@ -171,29 +172,24 @@ bool KWordDocument::initDoc()
 								FALSE );
 
     bool ok = FALSE;
-    KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate(
-	"kword_template", KWordFactory::global(), _template, TRUE, FALSE, filter, "application/x-kword" );
+    KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::choose(
+	"kword_template", KWordFactory::global(), _template, KoTemplateChooseDia::Everything,
+	true, filter, "application/x-kword" );
     if ( ret == KoTemplateChooseDia::Template ) {
 	QFileInfo fileInfo( _template );
 	QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kwt" );
 	resetURL();
 	ok = loadNativeFormat( fileName );
-    } else if ( ret == KoTemplateChooseDia::File ||
-                ret == KoTemplateChooseDia::TempFile ) {
+    } else if ( ret == KoTemplateChooseDia::File ) {
 	QString fileName( _template );
         KURL::encode( fileName );
 	ok = openURL( KURL( fileName ) );
-	if ( ret == KoTemplateChooseDia::TempFile )
-	{
-	    resetURL();
-	    unlink( fileName.ascii() );
-	}
+	resetURL();
     } else if ( ret == KoTemplateChooseDia::Empty ) {
 	QString fileName( locate( "kword_template", "Wordprocessing/PlainText.kwt" , KWordFactory::global() ) );
 	resetURL();
 	ok = loadNativeFormat( fileName );
     }
-
     setModified( FALSE );
     setEmpty();
     return ok;

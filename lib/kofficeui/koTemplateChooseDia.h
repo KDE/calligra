@@ -1,6 +1,7 @@
 /*
    This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+                 2000 Werner Trobin <wtrobin@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,23 +22,8 @@
 #ifndef koTemplateChooseDia_h
 #define koTemplateChooseDia_h
 
-#include <qdialog.h>
-#include <qwidget.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qlist.h>
-#include <qfileinfo.h>
-#include <qpixmap.h>
-#include <qstring.h>
-#include <qevent.h>
-#include <qfile.h>
-#include <qradiobutton.h>
-#include <qtabwidget.h>
-#include <qsizepolicy.h>
-
+#include <kdialog.h>
 #include <kicondialog.h>
-#include <kpixmap.h>
-#include <kapp.h>
 
 
 class MyIconCanvas : public KIconCanvas
@@ -65,69 +51,43 @@ protected:
 
 signals:
     void currentChanged( const QString & );
-
 };
 
-class QGridLayout;
 
 class KInstance;
+class KoTemplateChooseDiaPrivate;
 
 /**
  *  class KoTemplateChooseDia
  */
-
-class KoTemplateChooseDia : public QDialog
+class KoTemplateChooseDia : public KDialog
 {
     Q_OBJECT
 
 public:
-    enum ReturnType {Cancel, Template, File, TempFile, Empty};
+    enum ReturnType {Cancel, Template, File, Empty};
+    enum DialogType {Everything, OnlyTemplates, NoTemplates};
 
-    KoTemplateChooseDia( QWidget *parent, const char *name, const QString& template_type,
-			 KInstance* global, bool _hasCancel, bool _onlyTemplates,
-			 const QString &importFilter, const QString &mimeType );
-    ~KoTemplateChooseDia() {;}
+    KoTemplateChooseDia(QWidget *parent, const char *name, const QString& templateType,
+			KInstance* global, const QString &importFilter, const QString &mimeType,
+			bool hasCancel=true, const DialogType &dialogType=Everything);
+    ~KoTemplateChooseDia();
 
-    static ReturnType chooseTemplate( const QString& template_type, KInstance* global, QString &_template,
-				      bool _hasCancel, bool _onlyTemplates = true,
-				      const QString &importFilter = QString::null,
-				      const QString &mimeType = QString::null );
+    static ReturnType choose(const QString& templateType, KInstance* global, QString &file,
+			     const DialogType &dialogType=Everything, bool hasCancel=true,
+			     const QString &importFilter=QString::null,
+			     const QString &mimeType=QString::null);
 
-    QString getTemplate() { return templateName; }
-    QString getFullTemplate() { return fullTemplateName; }
-    ReturnType getReturnType() { return returnType; }
+    QString getTemplate();
+    QString getFullTemplate();
+    ReturnType getReturnType();
+    DialogType getDialogType();
 
 private:
-    struct Group {
-	QFileInfo dir;
-	QString name;
-	QWidget *tab;
-	MyIconCanvas *loadWid;
-	QLabel *label;
-    };
+    KoTemplateChooseDiaPrivate *d;
 
     void getGroups();
     void setupTabs();
-
-    QList<Group> groupList;
-    Group *grpPtr;
-    QString template_type;
-    QString templateName;
-    QString fullTemplateName;
-    bool onlyTemplates;
-    QRadioButton *rbTemplates;
-    QRadioButton *rbFile;
-    QRadioButton *rbEmpty;
-    QLabel *lFile;
-    QPushButton *bFile;
-    QPushButton *ok;
-    QTabWidget *tabs;
-    ReturnType returnType;
-    QGridLayout *grid;
-    QString m_strImportFilter;
-    QString m_strMimeType;
-    KInstance* global;
-    bool firstTime;
 
 private slots:
     void chosen();
@@ -137,12 +97,9 @@ private slots:
     void openFile();
     void openEmpty();
     void chooseFile();
-    void tabsChanged( const QString & )
-    { if ( !firstTime ) openTemplate(); firstTime = FALSE; }
+    void tabsChanged( const QString & );
 
 signals:
     void templateChosen( const QString & );
-
 };
-
 #endif
