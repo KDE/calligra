@@ -24,7 +24,9 @@
 #include <qbutton.h>
 
 #include "kchartcolorarray.h"
-#include "kchartDataEditor.h"
+
+#include "koChart.h"
+
 class QLineEdit;
 class QListBox;
 class QPushButton;

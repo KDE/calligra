@@ -44,6 +44,7 @@ namespace std {}
 using namespace std;
 
 #include "kchart_params.h"
+#include "kchart_part.h"
 
 namespace KChart
 {

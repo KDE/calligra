@@ -49,8 +49,10 @@ Item								   Prio Status
   + Labels are no longer generated correctly.			      1	DONE
 
 * Other fixes
+  + Make setting of line width nicer / more well-placed		     S1 ----
   + Tooltips & What's this help all over the program?		     S1 ----
   + Remove the predefined bar chart?				      2 ----
+      Issue: What is an empty chart document?
   + Include me in Authors					      2	DONE
   + Can HiLo charts be made thicker than one pixel? No.		      3 DONE
   + Make the settings in Edit->"Page Layout" clearer?		      2 DONE
@@ -63,13 +65,12 @@ Item								   Prio Status
     - kchartDataEditor.cc:304  // FIXME: Remove			      2 done
     - kchartDataEditor.cc:316  // FIXME: Remove			      2 done
     - kchartDataEditor.cc:345  // FIXME: Remove			      2 done
-  + Remove include of kchartDataEditor. in a lot of .h files          2 ----
+  + Remove include of kchartDataEditor in a lot of .h files	      2 DONE
   + What is kchartBarConfigDialog.{h,cc}? Remove it if possible.      1 ----
 
 * Toolbars
   + Separate toolbar for chart types (separate from config, etc).     2 ----
-  + Reorder: Group pie chart with ring chart and polar.			DONE
-             Group Box&Whiskers with HiLo				DONE
+  + Reorder chart types into a more logical order.		      1	DONE
 
 * Icons
   + Smaller icons for chart subtypes in config dialog.                1 ----
@@ -133,6 +134,7 @@ Item								   Prio Status
 * Manual
   + Describe stand-alone charting.				     S1 ----
   + New screen shots.						     S1 ----
+  + Describe all chart types					     S1 ----
   + Other enhancements?						     S2 ----
 
 * KDChart

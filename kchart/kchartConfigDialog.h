@@ -21,12 +21,22 @@
 #ifndef __KCHARTCONFIGDIALOG_H__
 #define __KCHARTCONFIGDIALOG_H__
 
+
 #include <qtabdialog.h>
-#include "kchartDataEditor.h"
+
+#include "koChart.h"
+
+
+class QWidget;
+
 class KDChartParams;
+
 
 namespace KChart
 {
+
+class KChartParams;
+class KChartAuxiliary;
 
 class KChartSubTypeChartPage;
 class KChartHeaderFooterConfigPage;

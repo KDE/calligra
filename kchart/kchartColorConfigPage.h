@@ -20,11 +20,15 @@
 #ifndef __KCHARTCOLORCONFIGPAGE_H__
 #define __KCHARTCOLORCONFIGPAGE_H__
 
+
 #include <qwidget.h>
 #include <kcolorbutton.h>
+
+#include "koChart.h"
 #include "kchartcolorarray.h"
-#include "kchartDataEditor.h"
+
 class KListBox;
+
 
 namespace KChart
 {

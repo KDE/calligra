@@ -1,3 +1,9 @@
+2005-03-14  Inge Wallin  <inge@lysator.liu.se>
+
+	Don't include kchartDataEditor.h where is shouldn't be included.
+	* kchartBarConfigDialog.cc, kchartColorConfigPage.cc,
+	kchartDataConfigPage.cc: remove it, and include koChart.h instead
+
 2005-03-13  Inge Wallin  <inge@lysator.liu.se>
 
 	Make the page layout dialog better looking.

@@ -20,8 +20,9 @@
 #ifndef __KOCHARTBARCONFIGDIALOG_H__
 #define __KOCHARTBARCONFIGDIALOG_H__
 
+
 #include "kchartConfigDialog.h"
-#include "kchartDataEditor.h"
+
 
 namespace KChart
 {

@@ -25,15 +25,15 @@
 #include <qlistbox.h>
 #include <qpainter.h>
 
-// FIXME: Should include something else to get KoChart declared!
-#include "kchartDataEditor.h"
+#include "koChart.h"
 
 class QRadioButton;
 
 namespace KChart
 {
 
-class KChartParams;
+class  KChartParams;
+struct KChartAuxiliary;
 
 class KChartDataConfigPage : public QWidget
 {
