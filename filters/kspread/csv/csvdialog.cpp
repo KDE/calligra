@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1999 David Faure <faure@kde.org>
-
+   Copyright (C) 2004 Nicolas GOUTTE <goutte@kde.org>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -30,11 +31,14 @@
 #include <qbuttongroup.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
+#include <qtextcodec.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kcombobox.h>
 #include <kmessagebox.h>
+#include <kcharsets.h>
 
 CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*seperator*/)
     : KDialogBase(parent, 0, true, QString::null, Ok|Cancel, No, true),
@@ -53,6 +57,18 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
     setCaption( i18n( "Import" ) );
     kapp->restoreOverrideCursor();
 
+    QStringList encodings;
+    encodings << i18n( "Descriptive encoding name", "Recommended ( %1 )" ).arg( "UTF-8" );
+    encodings << i18n( "Descriptive encoding name", "Locale ( %1 )" ).arg( QTextCodec::codecForLocale()->name() );
+    encodings += KGlobal::charsets()->descriptiveEncodingNames();
+    // Add a few non-standard encodings, which might be useful for text files
+    const QString description(i18n("Descriptive encoding name","Other ( %1 )"));
+    encodings << description.arg("Apple Roman"); // Apple
+    encodings << description.arg("IBM 850") << description.arg("IBM 866"); // MS DOS
+    encodings << description.arg("CP 1258"); // Windows
+    
+    m_dialog->comboBoxEncoding->insertStringList(encodings);
+    
     fillTable();
 
     resize(sizeHint());
@@ -547,4 +563,34 @@ void CSVDialog::ignoreDuplicatesChanged(int)
   fillTable();
 }
 
+QTextCodec* CSVDialog::getCodec(void) const
+{
+    const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
+    kdDebug(30502) << "Encoding: " << strCodec << endl;
+
+    bool ok = false;
+    QTextCodec* codec = QTextCodec::codecForName( strCodec.utf8() );
+
+    // If QTextCodec has not found a valid encoding, so try with KCharsets.
+    if ( codec )
+    {
+        ok = true;
+    }
+    else
+    {
+        codec = KGlobal::charsets()->codecForName( strCodec, ok );
+    }
+
+    // Still nothing?
+    if ( !codec || !ok )
+    {
+        // Default: UTF-8
+        kdWarning(30502) << "Cannot find encoding:" << strCodec << endl;
+        // ### TODO: what parent to use?
+        KMessageBox::error( 0, i18n("Cannot find encoding: %1").arg( strCodec ) );
+        return 0;
+    }
+
+    return codec;
+}
 #include <csvdialog.moc>

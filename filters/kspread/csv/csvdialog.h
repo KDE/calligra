@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1999 David Faure <faure@kde.org>
+   Copyright (C) 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,6 +46,7 @@ private:
     void adjustRows(int iRows);
     void adjustCols(int iCols);
     bool checkUpdateRange();
+    QTextCodec* getCodec(void) const;
 
     bool    m_adjustRows;
     bool    m_adjustCols;

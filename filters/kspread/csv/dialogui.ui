@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>DialogUI</class>
 <widget class="QWidget">
     <property name="name">
@@ -19,6 +19,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
         </sizepolicy>
+    </property>
+    <property name="caption">
+        <string>DialogUI</string>
     </property>
     <grid>
         <property name="name">
@@ -53,6 +56,85 @@
             <property name="name">
                 <cstring>tabWidget2</cstring>
             </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Encoding</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout3</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1_3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>E&amp;ncoding:</string>
+                                </property>
+                                <property name="textFormat">
+                                    <enum>PlainText</enum>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>comboBoxEncoding</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KComboBox">
+                                <property name="name">
+                                    <cstring>comboBoxEncoding</cstring>
+                                </property>
+                                <property name="editable">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>106</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </hbox>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>Spacer3</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>60</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
+            </widget>
             <widget class="QWidget">
                 <property name="name">
                     <cstring>tab</cstring>
@@ -476,4 +558,8 @@
     </grid>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+</includehints>
 </UI>
