@@ -265,6 +265,14 @@ ostream& operator<< ( ostream& outs, const QImage &_img )
   return outs;
 }
 
+void writeImageToStream( ostream &outs, const QImage &_img, const QString &_format )
+{
+  QIO2CPP out( outs );
+  QImageIO io( &out, _format.upper() );
+  io.setImage( _img );
+  io.write();
+}    
+
 ostream& operator<< ( ostream& outs, const QPicture &_pic )
 {
   QIO2CPP out( outs );
@@ -359,6 +367,6 @@ istream &operator>>( istream &ins, QPicture &_pic )
     buff.close();
 
     _pic.setData( buff.buffer(), buff.size() );
-    
+
     return ins;
 }

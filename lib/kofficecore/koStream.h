@@ -54,6 +54,7 @@ ostream& operator<< ( ostream& outs, const QFont &_font );
 QFont tagToFont( vector<KOMLAttrib>& _attribs );
 
 ostream& operator<< ( ostream& outs, const QImage &_img );
+void writeImageToStream( ostream &outs, const QImage &_img, const QString &_format );
 istream& operator>> ( istream& ins, QImage &_img );
 
 ostream& operator<< ( ostream& outs, const QPicture &_pic );
