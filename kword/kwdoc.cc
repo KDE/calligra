@@ -1330,7 +1330,7 @@ void KWDocument::startBackgroundSpellCheck()
 
 }
 
-void KWDocument::loadEmbedded( QDomElement embedded )
+void KWDocument::loadEmbedded( const QDomElement &embedded )
 {
     QDomElement object = embedded.namedItem( "OBJECT" ).toElement();
     if ( !object.isNull() )
@@ -1356,7 +1356,7 @@ void KWDocument::loadEmbedded( QDomElement embedded )
         kdError(32001) << "No <OBJECT> tag in EMBEDDED" << endl;
 }
 
-void KWDocument::loadStyleTemplates( QDomElement stylesElem )
+void KWDocument::loadStyleTemplates( const QDomElement &stylesElem )
 {
     QValueList<QString> followingStyles;
     QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
@@ -1415,7 +1415,7 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
 
 }
 
-void KWDocument::loadFrameStyleTemplates( QDomElement stylesElem )
+void KWDocument::loadFrameStyleTemplates( const QDomElement &stylesElem )
 {
     QDomNodeList listStyles = stylesElem.elementsByTagName( "FRAMESTYLE" );
     if( listStyles.count() > 0) { // we are going to import at least one style.
@@ -1490,7 +1490,7 @@ void KWDocument::loadDefaultFrameStyleTemplates()
     }
 }
 
-void KWDocument::loadTableStyleTemplates( QDomElement stylesElem )
+void KWDocument::loadTableStyleTemplates( const QDomElement& stylesElem )
 {
     QDomNodeList listStyles = stylesElem.elementsByTagName( "TABLESTYLE" );
     if( listStyles.count() > 0) { // we are going to import at least one style.
@@ -1571,7 +1571,7 @@ void KWDocument::progressItemLoaded()
     }
 }
 
-void KWDocument::loadFrameSets( QDomElement framesetsElem )
+void KWDocument::loadFrameSets( const QDomElement &framesetsElem )
 {
     // <FRAMESET>
     // First prepare progress info

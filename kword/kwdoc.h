@@ -414,7 +414,7 @@ public:
 
     // This is used by loadFrameSets() and by KWCanvas to paste framesets
     KWFrameSet *loadFrameSet( QDomElement framesetElem, bool loadFrames = true );
-    void loadEmbedded( QDomElement embedded );
+    void loadEmbedded( const QDomElement &embedded );
 
     void recalcVariables( int type );
 
@@ -711,15 +711,15 @@ protected:
     virtual bool completeLoading( KoStore* _store );
     virtual bool completeSaving( KoStore *_store );
 
-    void loadFrameSets( QDomElement framesets );
-    void loadStyleTemplates( QDomElement styles );
+    void loadFrameSets( const QDomElement &framesets );
+    void loadStyleTemplates( const QDomElement &styles );
     void saveStyle( KWStyle *sty, QDomElement parentElem );
     void saveFrameStyle( KWFrameStyle *sty, QDomElement parentElem );
     void saveTableStyle( KWTableStyle *sty, QDomElement parentElem );
 
-    void loadFrameStyleTemplates( QDomElement styles );
+    void loadFrameStyleTemplates( const QDomElement &styles );
     void loadDefaultFrameStyleTemplates();
-    void loadTableStyleTemplates( QDomElement styles );
+    void loadTableStyleTemplates( const QDomElement &styles );
     void loadDefaultTableStyleTemplates();
 
 private:
