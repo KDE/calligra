@@ -25,7 +25,6 @@
 
 class QTabWidget;
 class QWidget;
-class KoMainWindow;
 class KarbonView;
 class KarbonPart;
 class VColor;
@@ -46,7 +45,6 @@ public slots:
 	virtual void setFillDocker();
 	virtual void setStrokeDocker();
 	virtual void setColor( VColor *);
-	void slotItemSelected( KoIconItem * );
 
 private:
 	virtual void mouseReleaseEvent( QMouseEvent *e );

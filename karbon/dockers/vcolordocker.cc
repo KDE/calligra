@@ -25,7 +25,6 @@
 
 #include <klocale.h>
 #include <koMainWindow.h>
-#include <kseparator.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"
@@ -38,8 +37,6 @@
 #include "vstrokecmd.h"
 
 #include "vcolordocker.h"
-
-#include <koIconChooser.h>
 
 VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
 	: VDocker( parent->shell() ), m_part ( part ), m_view( parent )
@@ -93,18 +90,11 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	mainCMYKLayout->activate();
 	mTabWidget->addTab( mCMYKWidget, i18n( "CMYK" ) );
 
-	//Pattern
-	KoPatternChooser *pPatternChooser = new KoPatternChooser( KarbonFactory::rServer()->patterns(), mTabWidget );
-    pPatternChooser->setCaption( i18n( "Patterns" ) );
-
-	connect( pPatternChooser, SIGNAL(selected( KoIconItem * ) ), this, SLOT( slotItemSelected( KoIconItem * )));
-	mTabWidget->addTab( pPatternChooser, i18n( "Patterns" ) );
-
 	//Opacity
 	mOpacity = new VColorSlider( i18n( "Opacity:" ), QColor( "black" ), QColor( "white" ), 0, 100, 100, mainWidget );
 	//TODO: Make "white" a transparent color
 	connect( mOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateOpacity() ) );
-	
+
 	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( mainWidget, 3 );
 	mainWidgetLayout->addWidget( mTabWidget );
 	mainWidgetLayout->addWidget( mOpacity );
@@ -120,25 +110,6 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 VColorDocker::~VColorDocker()
 {
 	delete m_Color;
-}
-
-void VColorDocker::slotItemSelected( KoIconItem *item )
-{
-	VPattern *pattern = (VPattern *)item;
-	if( !pattern ) return;
-	kdDebug() << "loading pattern : " << pattern->tilename().latin1() << endl;
-	if( m_isStrokeDocker && m_part && m_part->document().selection() )
-	{
-		m_part->addCommand( new VStrokeCmd( &m_part->document(), pattern ), true );
-	}
-	else if( m_part && m_part->document().selection() )
-	{
-		VFill fill;
-		fill.pattern() = *pattern;//.load( pattern->tilename() );
-		fill.setColor( *m_Color );
-		fill.setType( VFill::patt );
-		m_part->addCommand( new VFillCmd( &m_part->document(), fill ), true );
-	}
 }
 
 void VColorDocker::updateCanvas()
