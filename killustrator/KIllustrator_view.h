@@ -69,6 +69,8 @@ class ToolDockManager;
 class ToolDockBase;
 class LayerPanel;
 class QButton;
+class KoPartSelectAction;
+
 
 class KIllustratorView : public KoView, public MainView
 {
@@ -185,7 +187,7 @@ private slots:
     void slotEllipseTool( bool );
     void slotTextTool( bool );
     void slotZoomTool( bool );
-    void slotInsertPartTool( bool );
+    void slotInsertPartTool( );
     void slotMoveNode( bool );
     void slotNewNode( bool );
     void slotDeleteNode( bool );
@@ -238,6 +240,8 @@ protected:
     KAction* m_setupGrid;
     KAction* m_setupHelplines;
     KAction* m_backOne;
+
+    KoPartSelectAction *m_insertPartTool;
 
     QButton *m_pTabBarFirst;
     QButton *m_pTabBarLeft;

@@ -93,6 +93,7 @@
 #include <qlayout.h>
 #include <qdatetime.h>
 #include <qtl.h>
+#include <koPartSelectAction.h>
 
 
 KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
@@ -232,9 +233,8 @@ void KIllustratorView::createMyGUI()
     m_zoomTool->setExclusiveGroup( "Tools" );
     connect( m_zoomTool, SIGNAL( toggled( bool ) ), this, SLOT( slotZoomTool( bool ) ) );
 
-    KToggleAction *m_insertPartTool = new KToggleAction( i18n("Insert Part"), "frame_query", 0, actionCollection(), "insertpart" );
-    m_insertPartTool->setExclusiveGroup( "Tools" );
-    connect( m_insertPartTool, SIGNAL( toggled( bool ) ), this, SLOT( slotInsertPartTool( bool ) ) );
+    m_insertPartTool = new KoPartSelectAction( i18n("Insert Part"), "frame_query", this, SLOT( slotInsertPartTool( ) ), actionCollection(), "insertpart" );
+    //m_insertPartTool->setExclusiveGroup( "Tools" );
 
     // Layout menu
     new KAction( i18n("&Page..."), 0, this, SLOT( slotPage() ), actionCollection(), "page" );
@@ -524,7 +524,7 @@ void KIllustratorView::print( KPrinter &printer )
 void KIllustratorView::editInsertObject ()
 {
     m_pDoc->gdoc()->activePage()->unselectAllObjects();
-    KoDocumentEntry docEntry = KoPartSelectDia::selectPart ();
+    KoDocumentEntry docEntry = m_insertPartTool->documentEntry();
     if (docEntry.isEmpty ())
         return;
 
@@ -1183,11 +1183,10 @@ void KIllustratorView::slotZoomTool( bool b  )
        tcontroller->toolSelected( Tool::ToolZoom );
 }
 
-void KIllustratorView::slotInsertPartTool( bool b  )
+void KIllustratorView::slotInsertPartTool( )
 {
  editInsertObject ();
- if ( b )
-    tcontroller->toolSelected( Tool::ToolInsertPart );
+ tcontroller->toolSelected( Tool::ToolInsertPart );
 }
 
 void KIllustratorView::slotMoveNode( bool b )

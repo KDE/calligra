@@ -149,6 +149,7 @@ void InsertPartTool::processButtonReleaseEvent (QMouseEvent* /*e*/)
     }
     canvas->repaint ();
     m_toolController->emitOperationDone (m_id);
+    m_toolController->toolSelected( Tool::ToolSelect);
     state = S_Init;
     return;
    }
