@@ -3,7 +3,7 @@ int tablesTest()
 	if (dbCreationTest()!=0)
 		return 1;
 
-	if (!conn->useDatabase( /*default*/ )) {
+	if (!conn->useDatabase( db_name )) {
 		conn->debugError();
 		return 1;
 	}

@@ -12,7 +12,7 @@ int dbCreationTest()
 		return 1;
 	}
 	kdDebug() << "DB '" << db_name << "' created"<< endl;
-	if (!conn->useDatabase( /*default*/ )) {
+	if (!conn->useDatabase( db_name )) {
 		conn->debugError();
 		return 1;
 	}

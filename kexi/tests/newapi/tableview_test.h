@@ -23,7 +23,7 @@
 
 int tableViewTest()
 {
-	if (!conn->useDatabase( /*default*/ )) {
+	if (!conn->useDatabase( db_name )) {
 		conn->debugError();
 		return 1;
 	}
