@@ -37,7 +37,6 @@ public:
     ~KPrImportStyleDia();
 
 protected:
-    KoStyle *findStyle( const QString & _name);
     virtual void loadFile();
 
 private:
