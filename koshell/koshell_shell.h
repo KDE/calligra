@@ -23,7 +23,7 @@
 
 #include <koMainWindow.h>
 #include <koQueryTrader.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qmap.h>
 #include <qvaluelist.h>
 

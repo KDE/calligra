@@ -107,7 +107,7 @@ KoShellWindow::~KoShellWindow()
   }
   m_lstPages.clear();
 
-  setRootDocumentDirect( 0L, QList<KoView>() ); // prevent our parent destructor from doing stupid things
+  setRootDocumentDirect( 0L, QPtrList<KoView>() ); // prevent our parent destructor from doing stupid things
 }
 
 QString KoShellWindow::nativeFormatName() const
@@ -186,7 +186,7 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
   {
     doc->addShell( this );
     KoView *v = doc->createView( m_pFrame );
-    QList<KoView> views;
+    QPtrList<KoView> views;
     views.append(v);
     setRootDocumentDirect( doc, views );
 
@@ -209,7 +209,7 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
     switchToPage( m_lstPages.fromLast() );
   } else
   {
-    setRootDocumentDirect( 0L, QList<KoView>() );
+    setRootDocumentDirect( 0L, QPtrList<KoView>() );
     m_activePage = m_lstPages.end();
     KoMainWindow::updateCaption();
   }
@@ -311,7 +311,7 @@ void KoShellWindow::switchToPage( QValueList<Page>::Iterator it )
   // Make it active (GUI etc.)
   partManager()->setActivePart( (*m_activePage).m_pDoc, v );
   // Change current document
-  QList<KoView> views;
+  QPtrList<KoView> views;
   views.append(v);
   setRootDocumentDirect( (*m_activePage).m_pDoc, views );
   // Fix caption
@@ -426,7 +426,7 @@ void KoShellWindow::closeDocument()
 bool KoShellWindow::queryClose()
 {
   // Save current doc and views
-  QList<KoView> currentViews;
+  QPtrList<KoView> currentViews;
   KoDocument * currentDoc = 0L;
   if (m_activePage != m_lstPages.end())
   {
@@ -442,7 +442,7 @@ bool KoShellWindow::queryClose()
   {
     // This is quite a HACK
     // We should ask ourselves, to get a better dialog box
-    setRootDocumentDirect( (*it).m_pDoc, QList<KoView>() );
+    setRootDocumentDirect( (*it).m_pDoc, QPtrList<KoView>() );
     // Test if we can close this doc
     if ( !KoMainWindow::queryClose() )
     {
