@@ -346,18 +346,18 @@ int KoTextParag::lineSpacing( int line ) const
 
 QRect KoTextParag::pixelRect( KoZoomHandler *zh ) const
 {
-    QRect rect( zh->layoutUnitToPixel( rect() ) );
+    QRect rct( zh->layoutUnitToPixel( rect() ) );
     // After division we almost always end up with the top overwriting the bottom of the parag above
     if ( prev() )
     {
         QRect prevRect( zh->layoutUnitToPixel( prev()->rect() ) );
-        if ( rect.top() < prevRect.bottom() + 1 )
+        if ( rct.top() < prevRect.bottom() + 1 )
         {
-            //kdDebug() << "rect.top() adjusted to " << prevRect.bottom() + 1 << " (was " << rect.top() << ")" << endl;
-            rect.setTop( prevRect.bottom() + 1 );
+            //kdDebug() << "rct.top() adjusted to " << prevRect.bottom() + 1 << " (was " << rct.top() << ")" << endl;
+            rct.setTop( prevRect.bottom() + 1 );
         }
     }
-    return rect;
+    return rct;
 }
 
 // Reimplemented from QTextParag, called by KoTextDocument::drawParagWYSIWYG
