@@ -577,12 +577,14 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
 #define kdDebugBody(area) if ( frameSetInfo() == FI_BODY ) kdDebug(area)
 
 // Helper for adjust*. Returns marginLeft/marginRight/breakEnd, each for an adjust* method.
-void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakEnd )
+// paragLeftMargin is only used in the breakEnd case
+void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakEnd, int paragLeftMargin )
 {
 #ifdef DEBUG_FLOW
     kdDebugBody(32002) << "  KWTextFrameSet " << this << "(" << getName() << ") getMargins yp=" << yp
                        << " h=" << h << " called by "
                        << (marginLeft?"adjustLMargin":marginRight?"adjustRMargin":"adjustFlow")
+                       << " paragLeftMargin=" << paragLeftMargin
                        << endl;
 #endif
     QPoint p;
@@ -655,7 +657,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     to -= left;
 
     // If the available space is too small, give up on it
-    if ( to - from < kWordDocument()->zoomItX( 15 ) )
+    if ( to - from < kWordDocument()->zoomItX( 15 ) + paragLeftMargin )
         from = to;
     else
         bottomSkip = 0; // nothing to skip
@@ -698,6 +700,9 @@ int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
 // helper for adjustFlow
 bool KWTextFrameSet::checkVerticalBreak( int & yp, int h, QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd )
 {
+    // We need the "+1" here because when skipping a frame on top, we want to be _under_
+    // its bottom. Without the +1, we hit the frame again on the next adjustLMargin call.
+
     // Check for intersection between the parag (yp -- yp+h) and the break area (breakBegin -- breakEnd)
     if ( QMAX( yp, breakBegin ) <= QMIN( yp+h, breakEnd ) )
     {
@@ -707,7 +712,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int h, QTextParag * parag, bo
             kdDebug(32002) << "checkVerticalBreak ADJUSTING yp=" << yp << " h=" << h
                            << " breakEnd+2 [new value for yp]=" << breakEnd+2 << endl;
 #endif
-            yp = breakEnd /*+ 1*/;
+            yp = breakEnd + 1;
             return true;
         }
         else // Line-level breaking
@@ -743,10 +748,10 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int h, QTextParag * parag, bo
                             kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
                                            << " BREAKING first line -> parag break" << endl;
 #endif
-                            yp = breakEnd /*+ 1*/;
+                            yp = breakEnd + 1;
                             return true;
                         }
-                        dy = breakEnd /*+ 1*/ - y;
+                        dy = breakEnd + 1 - y;
 #ifdef DEBUG_FLOW
                         kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
                                        << " BREAKING at line " << line << " dy=" << dy << endl;
@@ -873,7 +878,7 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
     // And the last case for a vertical break is RA_BOUNDINGRECT frames that
     // leave no space by their side for any text (e.g. most tables)
     int breakEnd = 0;
-    getMargins( yp, h, 0L, 0L, &breakEnd );
+    getMargins( yp, h, 0L, 0L, &breakEnd, parag ? QMAX( parag->firstLineMargin(), parag->leftMargin() ) : 0 );
     if ( breakEnd )
     {
         kdDebug(32002) << "KWTextFrameSet::adjustFlow no-space case. breakEnd=" << breakEnd
