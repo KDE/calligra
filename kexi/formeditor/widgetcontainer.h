@@ -101,6 +101,10 @@ namespace KFormEditor
 		public:
 			QPtrList<WidgetContainer> m_subWidgets;
 
+		protected:
+			void emitActivated(QObject*);
+		private:
+			QObject *m_lastActivated;
 		signals:
 			void activated(QObject*);
 	};

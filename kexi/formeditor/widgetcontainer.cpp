@@ -47,6 +47,7 @@ namespace KFormEditor {
 	WidgetContainer::WidgetContainer(QWidget *parent, const char *name, QString identifier)
 	: QWidget(parent,name)
 	{
+		m_lastActivated=0;
 		m_topLevelContainer=this;
 		setMinimumWidth(50);
 		setMinimumHeight(50);
@@ -133,13 +134,6 @@ namespace KFormEditor {
 				kdDebug()<<"Let the parent handle the mouse press event"<<endl;
 				QApplication::sendEvent(parent(),ev);
 			}
-		}
-		else
-		{
-			kdDebug() << "WidgetContainer::mousePressEvent(): we are parent!" << endl;
-			m_activeWidget = this;
-			setResizeHandles(this);
-			emit activated(this);
 		}
 	}
 
@@ -280,14 +274,6 @@ namespace KFormEditor {
 			m_topLevelContainer->setResizeHandles(m_activeWidget);
 			return;
 		}
-		
-		
-		if(m_activeWidget == m_topLevelContainer)
-		{
-			delete m_resizeHandleSet;
-			m_resizeHandleSet = 0;
-			return;
-		}
 
 		if (!m_resizeHandleSet)
 		{
@@ -299,20 +285,26 @@ namespace KFormEditor {
 			delete m_resizeHandleSet;
 			m_resizeHandleSet=new ResizeHandleSet(m_activeWidget);
 		}
+
 	}
 
 	void WidgetContainer::activateWidget(QWidget *widget)
 	{
-			if (widget!=m_activeWidget)
-			{
-				emit activated(widget);
-			}
 			m_activeWidget=widget;
 			while (!(m_activeWidget->parentWidget(true)==this))
 				m_activeWidget=m_activeWidget->parentWidget();
 			setResizeHandles(m_activeWidget);
+			m_topLevelContainer->emitActivated(m_activeWidget);
 	}
 
+	void WidgetContainer::emitActivated(QObject *obj)
+	{
+		if (obj!=m_lastActivated) 
+		{
+			m_lastActivated=obj;
+			emit activated(obj);
+		}
+	}
 	bool WidgetContainer::eventFilter(QObject *obj, QEvent *ev)
 	{
 		if (m_pendingWidget) return false;
