@@ -1489,8 +1489,6 @@ void KPresenterDoc::deletePage( int _page )
     KPrDeletePageCmd *cmd=new KPrDeletePageCmd(i18n("Delete page"),_page,m_pageList.at(_page),this);
     cmd->execute();
     addCommand(cmd);
-
-    AddRemovePage();
 }
 
 void KPresenterDoc::insertPage( KPrPage *_page, int position)
@@ -1507,6 +1505,9 @@ void KPresenterDoc::insertPage( KPrPage *_page, int position)
     }
     else
         m_selectedSlides.append( true );
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+        static_cast<KPresenterView*>(it.current())->skipToPage(position);
 
 }
 
@@ -1520,6 +1521,9 @@ void KPresenterDoc::takePage(KPrPage *_page)
     repaint( false );
     Q_ASSERT( pos < (int)m_selectedSlides.count() );
     m_selectedSlides.remove( m_selectedSlides.at( pos ) );
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+        static_cast<KPresenterView*>(it.current())->skipToPage(pos-1);
     emit sig_updateMenuBar();
 }
 

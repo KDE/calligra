@@ -504,8 +504,7 @@ void KPresenterView::updateSideBarMenu()
 void KPresenterView::editDelPage()
 {
     if ( KMessageBox::questionYesNo( this,
-                                     i18n( "Do you want to remove the current page?\n"
-                                           "This operation cannot be undone.") )
+                                     i18n( "Do you want to remove the current page?") )
          != KMessageBox::Yes )
         return;
     m_canvas->exitEditMode();
