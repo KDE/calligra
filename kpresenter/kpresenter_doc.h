@@ -146,6 +146,10 @@ class KPresenterDoc : public KoDocument
 
     // load
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& styles, const QDomDocument&, KoStore* store );
+    /*
+     * Load oasis object
+     * @param pos: we use -1 for sticky page.
+     */
     void loadOasisObject( int pos, KPrPage * page, QDomNode & drawPage, KoOasisContext & context, KPGroupObject *groupObject = 0L);
 
     virtual bool loadXML( const QDomDocument& doc );

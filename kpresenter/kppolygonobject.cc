@@ -29,7 +29,7 @@
 #include <qpainter.h>
 #include "KPPolygonObjectIface.h"
 #include <koUnit.h>
-
+#include <kooasiscontext.h>
 #include <math.h>
 
 using namespace std;
@@ -79,11 +79,7 @@ DCOPObject* KPPolygonObject::dcopObject()
 bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  )
 {
     xmlWriter.startElement( "draw:polygon" );
-    kdDebug()<<"bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter ) not finished to implemented\n";
-    //xmlWriter.addAttribute( "draw:style-name", style ); FIXME todo add style
-    //save object name and other generic attribute
-    //KPObject::saveOasis( xmlWriter );
-    saveOasisPosObject(xmlWriter,indexObj );
+    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(), indexObj ) );
 
     QString listOfPoint;
     int maxX=0;
