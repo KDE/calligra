@@ -36,11 +36,12 @@ class SHA1 {
      /*
       *  Process a block of data for the hash function.
       */
-     virtual int process(void *block, int len) = 0;
+     virtual int process(unsigned char *block, int len) = 0;
      
      /*
       *  Return the digest.
       */
+     virtual 
      
      /*
       *  Reset the digest so a new one can be calculated.
@@ -54,6 +55,8 @@ class SHA1 {
      long _h0, _h1, _h2, _h3, _h4;
      long _nblocks;
      int _count;
+     unsigned char *_buf;
+     void transform(unsigned char *data);
 };
 
 
