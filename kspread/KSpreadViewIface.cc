@@ -258,6 +258,11 @@ void KSpreadViewIface::setSelection(QRect selection)
                                         m_view->activeTable());
 }
 
+QRect KSpreadViewIface::selection()
+{
+  return m_view->selectionInfo()->selection();
+}
+
 void KSpreadViewIface::setSelectionMoneyFormat( bool b )
 {
   m_view->moneyFormat(b);

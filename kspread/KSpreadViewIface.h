@@ -29,6 +29,7 @@ k_dcop:
     virtual void show();
 
     virtual void setSelection(QRect selection);
+    virtual QRect selection();
     virtual void find();
     virtual void replace();
     virtual void conditional();
