@@ -22,8 +22,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <stdlib.h> // abs
-
 #include "KDChartRingPainter.h"
 #include "KDChartParams.h"
 
@@ -36,6 +34,7 @@
 #include <math.h>
 #else
 #include <cmath>
+#include <stdlib.h>
 #endif
 
 #if defined __WINDOWS__ || defined SUN7 || ( defined HP11_aCC && defined HP1100 )

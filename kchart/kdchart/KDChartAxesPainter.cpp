@@ -22,14 +22,23 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <stdlib.h> // abs
-
 #include <qpainter.h>
 
 #include "KDChartAxesPainter.h"
 #include "KDChartAxisParams.h"
 #include "KDChartParams.h"
 #include "KDChartData.h"
+
+#ifdef __WINDOWS__
+#include <math.h>
+#else
+#include <cmath>
+#include <stdlib.h>
+#endif
+
+#if defined __WINDOWS__ || defined SUN7 || ( defined HP11_aCC && defined HP1100 )
+#define std
+#endif
 
 /**
    \class KDChartAxesPainter KDChartAxesPainter.h
@@ -357,7 +366,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                     QPen pen( para.axisLineColor(), 0.5 * lineWidth );
                     uint penWidth = pen.width();
                     bool bOk = true;
-                    while ( abs( ( pXDelta + pYDelta ) * nSubDelimFactor / 6.0 )
+                    while ( std::fabs( ( pXDelta + pYDelta ) * nSubDelimFactor / 6.0 )
                             <= 1.0 + penWidth
                             && bOk ) {
                         if ( 0 < penWidth ) {
@@ -505,7 +514,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                     QPoint pZ(  para.axisZeroLineStartX()
                               + xFactor * _dataRect.width(),
                                 para.axisZeroLineStartY()
-                              - abs( pXDeltaFactor ) * _dataRect.height() );
+                              - std::fabs( pXDeltaFactor ) * _dataRect.height() );
                     saveDrawLine( *painter,
                                   pZ0,
                                   pZ,
@@ -752,7 +761,7 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& painter,
               : para.axisValueDelta();
             modf( ddelta, &ddelta );
             bool positive = ( 0.0 <= ddelta );
-            int delta = static_cast < int > ( abs( ddelta ) );
+            int delta = static_cast < int > ( std::fabs( ddelta ) );
             // find 1st significant entry
             QStringList::Iterator it = positive
                                        ? tmpList->begin()
@@ -997,7 +1006,7 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& painter,
                                 nLow -= nDist / 100.0; // shift lowest value
 
                         }
-                        else if( nDist / 100.0 < fabs( nLow ) )
+                        else if( nDist / 100.0 < std::fabs( nLow ) )
                             nLow -= nDist / 100.0; // shift lowest value
                         nDist = nHigh - nLow;
                     // qDebug("* nLow:  %f\n  nHigh: %f", nLow, nHigh );
@@ -1011,7 +1020,7 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& painter,
                             else if( nDist / 100.0 > nHigh )
                                 nHigh += nDist / 100.0; // shift highest value
                         }
-                        else if( nDist / 100.0 < fabs( nHigh ) )
+                        else if( nDist / 100.0 < std::fabs( nHigh ) )
                             nHigh += nDist / 100.0; // shift highest value
                         nDist = nHigh - nLow;
                     // qDebug("* nLow:  %f\n  nHigh: %f", nLow, nHigh );
@@ -1214,7 +1223,7 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& painter,
                     font.setPointSizeFloat( nTxtHeight );
                 QFontMetrics fm( font );
                 if ( fm.width( prefix +
-                               QString::number( -abs( ( s + f ) / 2.0 + delta ),
+                               QString::number( -std::fabs( ( s + f ) / 2.0 + delta ),
                                                 'f', precis ) )
                         > pTextsW ) {
                     prefix = "[ ";
