@@ -2934,7 +2934,11 @@ if (( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined) && !i
         }
 
 ColumnLayout *cl = m_pTable->columnLayout( column() );
-int w = cl->width();
+int w;
+if(  m_iExtraWidth==0)
+        w = cl->width();
+else
+        w = m_iExtraWidth;
 if( isValue())
         {
         if( m_eFormatNumber!=Scientific)
