@@ -3,6 +3,7 @@
 #include "KChartWizardSetupAxesPage.h"
 #include "KChart.h"
 #include "KChartData.h"
+#include "KChartWidget.h"
 
 #include <qlabel.h>
 #include <qframe.h>
@@ -20,15 +21,14 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
   QFrame* tmpQFrame;
   tmpQFrame = new QFrame( this, "Frame_2" );
   tmpQFrame->setGeometry( 10, 10, 240, 220 );
-  {
-	QColorGroup normal( QColor( QRgb(0) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( QColor( QRgb(8421504) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( QColor( QRgb(0) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	tmpQFrame->setPalette( palette );
-  }
   tmpQFrame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
   tmpQFrame->setLineWidth( 2 );
+
+  preview = new KChartWidget( _chart, tmpQFrame );
+  preview->show();
+  _chart->addAutoUpdate( preview );
+  preview->resize( tmpQFrame->contentsRect().width(),
+				   tmpQFrame->contentsRect().height() );
 
   QCheckBox* usetwoaxesCB = new QCheckBox( i18n( "Use two Y axes" ), this );
   usetwoaxesCB->setGeometry( 70, 250, 110, 30 );
@@ -117,3 +117,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 }
 
 
+KChartWizardSetupAxesPage::~KChartWizardSetupAxesPage()
+{
+  _chart->removeAutoUpdate( preview );
+}

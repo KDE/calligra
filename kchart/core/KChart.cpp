@@ -65,8 +65,7 @@ void KChart::setChartType( KChartType charttype )
 	_cp = new KChartBarsPainter( this );
   };
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 KChartType KChart::chartType() const
@@ -97,8 +96,7 @@ void KChart::setTitle( const char* str )
 {
   _title = str;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 
@@ -112,8 +110,7 @@ void KChart::setXLabel( const char* str )
 {
   _xlabel = str;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 
@@ -127,8 +124,7 @@ void KChart::setYLabel( const char* str )
 {
   _ylabel = str;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 
@@ -141,8 +137,7 @@ void KChart::setY1Label( const char* str )
 {
   _y1label = str;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 QString KChart::y1Label() const
@@ -154,8 +149,7 @@ void KChart::setY2Label( const char* str )
 {
   _y2label = str;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 
@@ -169,8 +163,7 @@ void KChart::setTextColor( QColor color  )
 {
   _textcolor = color;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 QColor KChart::textColor() const
@@ -183,8 +176,7 @@ void KChart::setTitleFont( QFont font )
 {
   _titlefont = font;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 QFont KChart::titleFont() const
@@ -198,8 +190,7 @@ void KChart::setLabelFont( QFont font )
   _xlabelfont = font;
   _ylabelfont = font;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 QFont KChart::labelFont() const
@@ -212,8 +203,7 @@ void KChart::setXLabelFont( QFont font  )
 {
   _xlabelfont = font;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 QFont KChart::xLabelFont() const
@@ -226,8 +216,7 @@ void KChart::setYLabelFont( QFont font )
 {
   _ylabelfont = font;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 QFont KChart::yLabelFont() const
@@ -240,8 +229,7 @@ void KChart::setValueFont( QFont font  )
 {
   fatal( "Sorry, not implemented: KChart::setValueFont\n" );
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 QFont KChart::valueFont() const
@@ -255,8 +243,7 @@ void KChart::setXAxisFont( QFont font  )
 {
   _xaxisfont = font;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 QFont KChart::xAxisFont() const
@@ -269,8 +256,7 @@ void KChart::setYAxisFont( QFont font )
 {
   _yaxisfont = font;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 QFont KChart::yAxisFont() const
@@ -286,8 +272,7 @@ void KChart::setMargin( int margin )
   _leftmargin = margin;
   _rightmargin = margin;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 int KChart::margin() const
@@ -301,8 +286,7 @@ void KChart::setDataColors( KChartColorArray* colors )
 {
   _datacolors = *colors;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 const KChartColorArray* KChart::dataColors() const
@@ -315,8 +299,7 @@ void KChart::setTickLength( int length )
 {
   _ticklength = length;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 int KChart::tickLength() const
@@ -329,8 +312,7 @@ void KChart::setYTicksNum( int ticks )
 {
   _yticksnum = ticks;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 
@@ -344,8 +326,7 @@ void KChart::setXLabelSkip( int skip )
 {
   _xlabelskip = skip;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 int KChart::xLabelSkip() const
@@ -358,8 +339,7 @@ void KChart::setYLabelSkip( int skip  )
 {
   _ylabelskip = skip;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 int KChart::yLabelSkip() const
@@ -372,8 +352,7 @@ void KChart::setXPlotValues( bool plot )
 {
   _xplotvalues = plot;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 bool KChart::xPlotValues() const
@@ -386,8 +365,7 @@ void KChart::setYPlotValues( bool plot )
 {
   _yplotvalues = plot;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 bool KChart::yPlotValues() const
@@ -401,8 +379,7 @@ void KChart::setYMaxValue( double value )
   _ymaxs[0] = value;
   _ymaxs[1] = value;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 double KChart::yMaxValue() const
@@ -416,8 +393,7 @@ void KChart::setYMinValue( double value )
   _ymins[0] = value;
   _ymins[1] = value;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 double KChart::yMinValue() const
@@ -429,8 +405,7 @@ void KChart::setY1MaxValue( double value )
 {
   _ymaxs[0] = value;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 double KChart::y1MaxValue() const
@@ -442,8 +417,7 @@ void KChart::setY1MinValue( double value )
 {
   _ymins[0] = value;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 double KChart::y1MinValue() const
@@ -455,8 +429,7 @@ void KChart::setY2MaxValue( double value )
 {
   _ymaxs[1] = value;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 double KChart::y2MaxValue() const
@@ -468,8 +441,7 @@ void KChart::setY2MinValue( double value )
 {
   _ymins[1] = value;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 double KChart::y2MinValue() const
@@ -482,8 +454,7 @@ void KChart::setAxisSpace( int space )
 {
   _axisspace = space;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 int KChart::axisSpace() const
@@ -496,8 +467,7 @@ void KChart::setLineWidth( int width )
 {
   _linewidth = width;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 int KChart::lineWidth() const
@@ -510,8 +480,7 @@ void KChart::setOverwrite( OverwriteMode over )
 {
   _overwrite = over;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 
@@ -525,8 +494,7 @@ void KChart::setTwoAxes( bool twoaxes )
 {
   _twoaxes = twoaxes;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 bool KChart::twoAxes() const
@@ -539,8 +507,7 @@ void KChart::setLongTicks( bool longticks )
 {
   _longticks = longticks;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 bool KChart::longTicks() const
@@ -553,8 +520,7 @@ void KChart::setLegends( QStrList legends )
 {
   _legends = legends;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 
@@ -568,8 +534,7 @@ void KChart::setLegendPlacement( int placement )
 {
   _legendplacement = (LegendPlacement)placement;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 LegendPlacement KChart::legendPlacement() const
@@ -582,8 +547,7 @@ void KChart::setZeroAxisOnly( bool only )
 {
   _zeroaxisonly = only;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 bool KChart::zeroAxisOnly() const
@@ -596,8 +560,7 @@ void KChart::setAxisLabelColor( QColor color )
 {
   _axislabelcolor = color;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 QColor KChart::axisLabelColor() const
@@ -610,8 +573,7 @@ void KChart::setBoxAxis( bool boxaxis )
 {
   _boxaxis = boxaxis;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 bool KChart::boxAxis() const
@@ -624,8 +586,7 @@ void KChart::setXTicks( bool xticks )
 {
   _xticks = xticks;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 bool KChart::xTicks() const
@@ -642,8 +603,7 @@ void KChart::setLineTypes( PenStyle types[], int number )
 	_linetypes.append( ps );
   }
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 void KChart::lineTypes( PenStyle types[], int& number )
@@ -659,8 +619,7 @@ void KChart::setLegendMarkerWidth( int width )
 {
   _legendmarkerwidth = width;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 int KChart::legendMarkerWidth() const
@@ -673,8 +632,7 @@ void KChart::setLegendMarkerHeight( int height )
 {
   _legendmarkerheight = height;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 int KChart::legendMarkerHeight() const
@@ -687,8 +645,7 @@ void KChart::setLegendFont( QFont font )
 {
   _legendfont = font;
 
-  if( _autoupdatedevice )
-	repaintChart( _autoupdatedevice );
+  doAutoUpdate();
 }
 
 QFont KChart::legendFont() const
@@ -697,7 +654,23 @@ QFont KChart::legendFont() const
 }
 
 
-void KChart::setAutoUpdate( QPaintDevice* device )
+void KChart::addAutoUpdate( QPaintDevice* device )
 {
-  _autoupdatedevice = device;
+  _autoupdatedevices.append( device );
+}
+
+
+void KChart::removeAutoUpdate( QPaintDevice* device )
+{
+  _autoupdatedevices.remove( device );
+}
+
+
+void KChart::doAutoUpdate()
+{
+  QPaintDevice* device = _autoupdatedevices.first();
+  while( device ) {
+	repaintChart( device );
+	device = _autoupdatedevices.next();
+  }
 }

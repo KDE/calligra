@@ -140,4 +140,6 @@ void KChartWizardSelectChartTypePage::chartTypeSelected( int type )
   _chart->setChartType( (KChartType)type );
 }
 
+#ifdef INCLUDE_MOC_BULLSHIT
 #include "KChartWizardSelectChartTypePage.moc"
+#endif

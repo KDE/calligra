@@ -6,6 +6,7 @@
 class QLineEdit;
 class QRadioButton;
 class KChart;
+class KChartWidget;
 
 class KChartWizardLabelsLegendPage : public QWidget
 {
@@ -13,11 +14,13 @@ class KChartWizardLabelsLegendPage : public QWidget
 
 public:
   KChartWizardLabelsLegendPage( QWidget* parent, KChart* chart );
+  ~KChartWizardLabelsLegendPage();
 
   void placementChanged( int );
 
 private:
   KChart* _chart;
+  KChartWidget* preview;
   QLineEdit* _xlabelED;
   QLineEdit* _ylabelED;
   QLineEdit* _titleED;

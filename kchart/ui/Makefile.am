@@ -3,7 +3,7 @@
 ####### General stuff
 
 INCLUDES= $(all_includes) $(MICO_INCLUDES)
-CXXFLAGS += -O
+CXXFLAGS += -O -DINCLUDE_MOC_BULLSHIT
 
 ####### Files
 
@@ -44,7 +44,7 @@ KChartWizardSetupDataPage.cpp: KChartWizardSetupDataPage.moc
 
 test_SOURCES = main.cpp
 
-LDFLAGS = $(all_libraries) $(KDE_RPATH)
+LDFLAGS = $(all_libraries)
 LDADD = libkchartui.la -lkchartcore -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
 
 picsdir = $(kde_toolbardir)

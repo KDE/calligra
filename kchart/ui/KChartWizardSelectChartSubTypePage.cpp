@@ -143,4 +143,6 @@ void KChartWizardSelectChartSubTypePage::createChildren( int no )
 }
 
 
+#ifdef INCLUDE_MOC_BULLSHIT
 #include "KChartWizardSelectChartSubTypePage.moc"
+#endif

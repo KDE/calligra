@@ -33,7 +33,8 @@ public:
   ~KChart();
 
   void setChartData( KChartData* );
-  void setAutoUpdate( QPaintDevice* device );
+  void addAutoUpdate( QPaintDevice* device );
+  void removeAutoUpdate( QPaintDevice* device );
 
   KChartType chartType() const;
   KChartData* chartData() const;
@@ -132,11 +133,13 @@ public slots:
   void setLegendMarkerHeight( int height );
 
 private:
+  void doAutoUpdate();
+
   KChartType _charttype;
   KChartPainter* _cp;
   KChartData* _chartdata;
 
-  QPaintDevice* _autoupdatedevice;
+  QList<QPaintDevice> _autoupdatedevices;
 
   // This is stuff that used to be in the painters
   KChartColorArray _datacolors;

@@ -2,6 +2,7 @@
 
 #include "KChartWizardLabelsLegendPage.h"
 #include "KChartTypes.h"
+#include "KChartWidget.h"
 #include "KChart.h"
 
 #include <qbttngrp.h>
@@ -70,26 +71,33 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
   // initialize the correct button
   ((QRadioButton*)placementBG->find( _chart->legendPlacement() ))->setChecked( true );
 
-  QFrame* tmpQFrame;
-  tmpQFrame = new QFrame( this, "Frame_1" );
-  tmpQFrame->setGeometry( 10, 10, 240, 220 );
-  {
-	QColorGroup normal( QColor( QRgb(0) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( QColor( QRgb(8421504) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( QColor( QRgb(0) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	tmpQFrame->setPalette( palette );
-  }
-  tmpQFrame->setFrameStyle( 50 );
-  tmpQFrame->setLineWidth( 2 );
-   
   connect( placementBG, SIGNAL( clicked( int ) ),
 		   _chart, SLOT( setLegendPlacement( int ) ) );
 
+  QFrame* tmpQFrame;
+  tmpQFrame = new QFrame( this, "Frame_1" );
+  tmpQFrame->setGeometry( 10, 10, 240, 220 );
+  tmpQFrame->setFrameStyle( QFrame::Sunken | QFrame::Panel );
+  tmpQFrame->setLineWidth( 2 );
+
+  preview = new KChartWidget( _chart, tmpQFrame );
+  preview->show();
+  _chart->addAutoUpdate( preview );
+  preview->resize( tmpQFrame->contentsRect().width(),
+				   tmpQFrame->contentsRect().height() );
+   
   resize( 600, 300 );
 }
 
 
+KChartWizardLabelsLegendPage::~KChartWizardLabelsLegendPage()
+{
+  _chart->removeAutoUpdate( preview );
+}
+
+ 
+#ifdef INCLUDE_MOC_BULLSHIT
 #include "KChartWizardLabelsLegendPage.moc"
+#endif
 
 

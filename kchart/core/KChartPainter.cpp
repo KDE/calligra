@@ -73,6 +73,10 @@ QPainter* KChartPainter::setupPaintDev( QPaintDevice* paintdev )
   // Set some initial values
   painter->setPen( _chart->_fgcolor );
   painter->setBackgroundColor( _chart->_bgcolor );
+
+  // clear the background
+  painter->eraseRect( painter->window() );
+
   // (Other colors to be set when used.)
   painter->setBackgroundMode( _chart->_transparency ? TransparentMode :
 							  OpaqueMode );

@@ -1,14 +1,18 @@
 /* $Id$ */
 
 #include "KChartWizardSetupDataPage.h"
+#include "KChart.h"
+#include "KChartWidget.h"
 
 #include <qradiobt.h>
 #include <qchkbox.h>
 #include <qbttngrp.h>
 #include <qlabel.h>
 
-KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent ) :
-  QWidget( parent )
+KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
+													  KChart* chart) :
+  QWidget( parent ),
+  _chart( chart )
 {
   QButtonGroup* tmpQGroupBox;
   tmpQGroupBox = new QButtonGroup( this, "GroupBox_1" );
@@ -66,17 +70,22 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent ) :
   QFrame* tmpQFrame;
   tmpQFrame = new QFrame( this, "Frame_1" );
   tmpQFrame->setGeometry( 10, 10, 240, 220 );
-  {
-	QColorGroup normal( QColor( QRgb(0) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( QColor( QRgb(8421504) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( QColor( QRgb(0) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	tmpQFrame->setPalette( palette );
-  }
-  tmpQFrame->setFrameStyle( 50 );
+  tmpQFrame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
   tmpQFrame->setLineWidth( 2 );
+
+  preview = new KChartWidget( _chart, tmpQFrame );
+  preview->show();
+  _chart->addAutoUpdate( preview );
+  preview->resize( tmpQFrame->contentsRect().width(),
+				   tmpQFrame->contentsRect().height() );
   
   parent->resize( 400, 350 );
+}
+
+
+KChartWizardSetupDataPage::~KChartWizardSetupDataPage()
+{
+  _chart->removeAutoUpdate( preview );
 }
 
 
@@ -101,4 +110,6 @@ void KChartWizardSetupDataPage::firstRowIsDescriptionToggled( bool )
 }
 
 
+#ifdef INCLUDE_MOC_BULLSHIT
 #include "KChartWizardSetupDataPage.moc"
+#endif

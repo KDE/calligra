@@ -53,7 +53,7 @@ KChartWizard::KChartWizard ( KChart* chart, QWidget *parent, const char* name,
 
   // Fourth page: data setup
   _setupdatapage = new KWizardPage;
-  QWidget* setupdatawidget = new KChartWizardSetupDataPage( this );
+  QWidget* setupdatawidget = new KChartWizardSetupDataPage( this, _chart );
   _setupdatapage->w = setupdatawidget;
   _setupdatapage->title = i18n( "Data setup" );
   _setupdatapage->enabled = true;
@@ -102,4 +102,6 @@ QString KChartWizard::dataArea() const
 }
 
 
+#ifdef INCLUDE_MOC_BULLSHIT
 #include "KChartWizard.moc"
+#endif
