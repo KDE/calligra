@@ -384,7 +384,12 @@ void KWView::setupActions()
     addVariableActions( VT_TIME, KWTimeVariable::actionTexts(), actionInsertVariable, i18n("&Time") );
     addVariableActions( VT_PGNUM, KWPgNumVariable::actionTexts(), actionInsertVariable, QString::null );
     addVariableActions( VT_CUSTOM, KWCustomVariable::actionTexts(), actionInsertVariable, QString::null );
+    /*
+
+    TODO for the moment serail letter doesn't work.
     addVariableActions( VT_SERIALLETTER, KWSerialLetterVariable::actionTexts(), actionInsertVariable, QString::null );
+    */
+
 
     actionInsertExpression = new KActionMenu( i18n( "&Expression" ),
                                             actionCollection(), "insert_expression" );
