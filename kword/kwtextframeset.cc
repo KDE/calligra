@@ -1208,11 +1208,19 @@ void KWTextFrameSet::formatMore()
              && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) )
         {
             kdDebug(32002) << "KWTextFrameSet::formatMore too much space (" << m_availableHeight << ") , trying to remove last frame" << endl;
+            int lastPage = m_doc->getPages() - 1;
             // Last frame is empty -> try removing last page, and more if necessary
             while ( frames.count() > 1 && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) &&
-                    m_doc->canRemovePage( m_doc->getPages() - 1, frames.last() ) )
+                    m_doc->canRemovePage( lastPage, frames.last() ) )
             {
-                m_doc->removePage( m_doc->getPages() - 1 );
+                m_doc->removePage( lastPage );
+                if ( m_doc->getPages() - 1 >= lastPage ) // removing didn't work
+                {
+                    kdWarning() << "Removing page " << lastPage << " didn't work !" << endl;
+                    kdWarning() << "Last page still " << m_doc->getPages()-1 << ". Aborting loop." << endl;
+                    break;
+                }
+                lastPage = m_doc->getPages() - 1;
             }
         }
 

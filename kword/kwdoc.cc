@@ -425,10 +425,11 @@ void KWDocument::recalcFrames()
         int pages2=0;
         for (int m = getNumFrameSets()-1; m>=0; m--) {
             KWFrameSet *fs=getFrameSet(m);
-            if ( fs->isVisible() )
+            if ( fs->isVisible() && !fs->isAHeader() && !fs->isAFooter() )
             {
                 for (int n = fs->getNumFrames()-1;  n >=0; n--) {
-                    //kdDebug(32002) << "KWDocument::recalcFrames frameset " << m << " frame " << n << " bottom=" << fs->getFrame(n)->bottom() << endl;
+                    //if ( n == fs->getNumFrames()-1 )
+                    //    kdDebug(32002) << "KWDocument::recalcFrames frameset " << m << " frame " << n << " bottom=" << fs->getFrame(n)->bottom() << endl;
                     pages2=QMAX(pages2, fs->getFrame(n)->bottom());
                 }
             }
@@ -1603,7 +1604,7 @@ bool KWDocument::completeSaving( KoStore *_store )
         if ( format == "JPG" )
             format = "JPEG";
         if ( QImage::outputFormats().find( QFile::encodeName(format) ) == -1 )
-            format = "BMP";
+            format = "PNG";
 
         QString u2 = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
         if ( !isStoredExtern() )
@@ -1890,12 +1891,13 @@ bool KWDocument::canRemovePage( int num, KWFrame *f )
                 return FALSE;
         }
     }
-    kdDebug(32002) << "KWDocument::removePage " << num << " frame=" << f << "-> TRUE" << endl;
+    kdDebug(32002) << "KWDocument::canRemovePage " << num << " frame=" << f << "-> TRUE" << endl;
     return TRUE;
 }
 
 void KWDocument::removePage( int num )
 {
+    //kdDebug() << "KWDocument::removePage " << num << endl;
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -1911,6 +1913,7 @@ void KWDocument::removePage( int num )
         }
     }
     m_pages--;
+    //kdDebug() << "KWDocument::removePage -- -> " << m_pages << endl;
     emit pageNumChanged();
     recalcFrames();
 }
