@@ -1770,7 +1770,7 @@ KWTextFrameSetEdit::~KWTextFrameSetEdit()
 {
     kdDebug(32001) << "KWTextFrameSetEdit::~KWTextFrameSetEdit" << endl;
     textDocument()->removeSelection( QTextDocument::Standard );
-    m_canvas->repaintChanged( this );
+    m_canvas->repaintChanged( textFrameSet() );
     hideCursor();
     delete cursor;
 }

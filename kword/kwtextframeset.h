@@ -322,7 +322,6 @@ private slots:
     void setCursor( QTextCursor * _cursor ) { *cursor = *_cursor; }
     void ensureCursorVisible();
     void showCurrentFormat();
-    void repaintChanged();
 
 private:
 
