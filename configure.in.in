@@ -139,6 +139,6 @@ CXXFLAGS="$kdeversion_save_CXXFLAGS"
 LIBS="$kdeversion_safe_LIBS"
 AC_LANG_RESTORE
 
-AM_CONDITIONAL(need_kde31_compatibilty, test "$old_kde_version" = "yes")
+AM_CONDITIONAL(need_kde31_compatibility, test "$old_kde_version" = "yes")
 
 # --- End KDE 3.1 check ---
