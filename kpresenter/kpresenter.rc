@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="107">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="108">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -92,6 +92,7 @@
   <Action name="tools_mouse"/>
   <Action name="tools_rotate"/>
   <Action name="tools_zoom"/>
+  <Action name="extra_properties"/>
   <Separator/>
   <Menu name="Arrange Objects"><text>Arra&amp;nge Objects</text>
     <Action name="extra_lower"/>
@@ -107,16 +108,14 @@
    <Action name="extra_aligncenterv"/>
    <Action name="extra_alignbottom"/>
   </Menu>
-  <Separator/>
-  <Action name="extra_shadow"/>
-  <Separator/>
   <Action name="extra_group"/>
   <Action name="extra_ungroup"/>
+  <Action name="extra_shadow"/>
   <Separator/>
   <Action name="extra_layout"/>
+  <Separator/>
   <Action name="extra_background"/>
   <Separator/>
-  <Action name="extra_properties"/>
  </Menu>
  <Menu name="Text"><text>Te&amp;xt</text>
   <Action name="text_default"/>
