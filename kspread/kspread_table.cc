@@ -3784,6 +3784,10 @@ void KSpreadTable::deleteSelection( const QPoint& _marker )
     emit sig_updateView( this );
 }
 
+void KSpreadTable::refreshView(const QRect& rect)
+{
+    emit sig_updateView( this, rect );
+}
 void KSpreadTable::mergeCell( const QPoint &_marker)
 {
     if(m_rctSelection.left() == 0)

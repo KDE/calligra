@@ -568,6 +568,6 @@ void KSpreadUndoDelete::redo()
 	return;
 
     table->deleteCells( m_selection );
-    
+    table->refreshView( m_selection );
     doc()->undoBuffer()->unlock();
 }
