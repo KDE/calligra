@@ -275,11 +275,11 @@ bool GLine::intersects(const QRect &r) const {
 const QRect &GLine::boundingRect() const {
 
     if(!boundingRectDirty())
-        return boundingRect();
+        return GObject::boundingRect();
     setBoundingRect(QRect( QMIN(m_a.x(), m_b.x()), QMIN(m_a.y(), m_b.y()),
                           QABS(m_a.x()-m_b.x()), QABS(m_a.y()-m_b.y())));
     setBoundingRectDirty(false);
-    return boundingRect();
+    return GObject::boundingRect();
 }
 
 GObjectM9r *GLine::createM9r(GraphitePart *part, GraphiteView *view,
@@ -320,17 +320,6 @@ void GLine::rotate(const QPoint &center, const double &angle) {
     Graphite::rotatePoint(m_a, angle, center);
     Graphite::rotatePoint(m_b, angle, center);
     setBoundingRectDirty();
-}
-
-const double &GLine::angle() const {
-
-    // [FIXME]: Do we really want that to be the angle??? (Werner)
-    // Normally the angle should be the angle which the object was
-    // rotated by... and not the angle of the line. This is a special case
-    // though, hmmm.... We really don't want that one here!
-    setAngle(std::atan( static_cast<double>(m_b.y()-m_a.y()) /
-                        static_cast<double>(m_b.x()-m_a.x()) ));
-    return angle();
 }
 
 void GLine::scale(const QPoint &origin, const double &xfactor, const double &yfactor) {

@@ -665,6 +665,10 @@ void GObject::drawHandles(QPainter &p, QList<QRect> *handles) {
     p.restore();
 }
 
+const QRect &GObject::boundingRect() const {
+    return m_boundingRect;
+}
+
 void GObject::setParent(GObject *parent) const {
 
     if(parent!=this)   // it's illegal to be oneselves parent! (parent==0L -> no parent :)

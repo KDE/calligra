@@ -225,12 +225,12 @@ bool GGroup::intersects(const QRect &r) const {
 const QRect &GGroup::boundingRect() const {
 
     if(!boundingRectDirty())
-        return boundingRect();
+        return GObject::boundingRect();
 
     if(m_members.isEmpty()) {
         setBoundingRect(QRect(0, 0, 0, 0));
         setBoundingRectDirty(false);
-        return boundingRect();
+        return GObject::boundingRect();
     }
 
     QListIterator<GObject> it(m_members);
@@ -249,7 +249,7 @@ const QRect &GGroup::boundingRect() const {
     }
     setBoundingRect(br);
     setBoundingRectDirty(false);
-    return boundingRect();
+    return GObject::boundingRect();
 }
 
 GObjectM9r *GGroup::createM9r(GraphitePart *part, GraphiteView *view,

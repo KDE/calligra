@@ -273,7 +273,7 @@ public:
     // does the object contain this point? (Note: finds the most nested child which is hit!)
     virtual const GObject *hit(const QPoint &p) const = 0;
     virtual bool intersects(const QRect &r) const = 0;  // does the object intersect the rectangle?
-    virtual const QRect &boundingRect() const = 0;            // the bounding rectangle of this object
+    virtual const QRect &boundingRect() const = 0;  // the bounding rectangle of this object
 
     virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
                                   const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) = 0;
