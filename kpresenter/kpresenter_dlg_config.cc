@@ -620,16 +620,10 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
 {
     m_pView=_view;
     config = KPresenterFactory::global()->config();
+    KPresenterDoc *doc = m_pView->kPresenterDoc();
     QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document Defaults"), box, "GroupBox" );
     gbDocumentDefaults->setMargin( 10 );
     gbDocumentDefaults->setInsideSpacing( 5 );
-
-    QString defaultFont="Sans serif,12,-1,5,50,0,0,0,0,0";
-    if( config->hasGroup("Document defaults") )
-    {
-        config->setGroup( "Document defaults" );
-        defaultFont=config->readEntry("DefaultFont",defaultFont);
-    }
 
     QWidget *fontContainer = new QWidget(gbDocumentDefaults);
     QGridLayout * fontLayout = new QGridLayout(fontContainer, 1, 3);
@@ -640,8 +634,8 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
 
     QLabel *fontTitle = new QLabel(i18n("Default font:"), fontContainer);
 
-    font= new QFont();
-    font->fromString(defaultFont);
+    font= new QFont( doc->defaultFont() );
+    font->setPointSize( KoTextZoomHandler::layoutUnitPtToPt( font->pointSize() ) );
 
     QString labelName = font->family() + ' ' + QString::number(font->pointSize());
     fontName = new QLabel(labelName, fontContainer);
@@ -661,7 +655,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     gbDocumentSettings->setMargin( 10 );
     gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
-    oldAutoSaveValue =  m_pView->kPresenterDoc()->defaultAutoSave()/60;
+    oldAutoSaveValue =  doc->defaultAutoSave()/60;
 
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
@@ -675,7 +669,6 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     autoSave->setSuffix( i18n("min") );
 
     new QLabel(i18n("Starting page number:"), gbDocumentSettings);
-    KPresenterDoc* doc = m_pView->kPresenterDoc();
     m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPage();
     m_variableNumberOffset=new KIntNumInput(gbDocumentSettings);
     m_variableNumberOffset->setRange(1, 9999, 1, false);
