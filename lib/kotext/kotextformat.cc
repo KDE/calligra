@@ -801,16 +801,20 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
         pixelww = fontMetrics.charWidth( str, off );
     }
 
-    // Add room for the shadow
+#if 0
+    // Add room for the shadow - hmm, this is wrong. A word with a shadow
+    // doesn't need to space its chars so that the shadow never runs into
+    // the next char. The usual effect is that it DOES run into other chars.
     if ( d->m_shadowDistanceX != 0 )
     {
         // pt to pixel conversion
         int shadowpix = (int)(POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiX() ) ) * QABS( d->m_shadowDistanceX ) );
-        //kdDebug(32500) << "d->m_shadowDistanceX=" << d->m_shadowDistanceX << " -> shadowpix=" << shadowpix 
+        //kdDebug(32500) << "d->m_shadowDistanceX=" << d->m_shadowDistanceX << " -> shadowpix=" << shadowpix
         //      << ( applyZoom ? " and applying zoom " : " (100% zoom) " )
         //      << " -> adding " << ( applyZoom ? (  shadowpix * zh->zoom() / 100 ) : shadowpix ) << endl;
         pixelww += applyZoom ? ( shadowpix * zh->zoom() / 100 ) : shadowpix;
     }
+#endif
 
 #if 0
         kdDebug(32500) << "KoTextFormat::charWidth: char=" << QString(c->c) << " format=" << key()
@@ -846,24 +850,30 @@ int KoTextFormat::height() const
 int KoTextFormat::offsetX() const // in LU pixels
 {
     int off = 0;
+#if 0
     // Shadow on left -> character is moved to the right
+    // Wrong if next char has no shadow (they'll run into each other)
+    // Somehow we should only do this if x == 0 (in the formatter)
     if ( d->m_shadowDistanceX < 0 )
     {
         double lupt = KoTextZoomHandler::ptToLayoutUnitPt( QABS( d->m_shadowDistanceX ) );
         off += (int)(POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiX() ) ) * lupt );
     }
+#endif
     return off;
 }
 
 int KoTextFormat::offsetY() const // in LU pixels
 {
     int off = 0;
+#if 0
     // Shadow on top -> character is moved down
     if ( d->m_shadowDistanceY < 0 )
     {
         double lupt = KoTextZoomHandler::ptToLayoutUnitPt( QABS( d->m_shadowDistanceY ) );
         off += (int)(POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiY() ) ) * lupt );
     }
+#endif
     return off;
 }
 

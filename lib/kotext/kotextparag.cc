@@ -705,11 +705,9 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
     kdDebug(32500) << " startX in LU: " << startX << endl;
 #endif
 
-    // Apply offset (e.g. due to shadow on left or top)
-    startX += format->offsetX(); // in LU pixels
-    //kdDebug(32500) << "painting parag at lastY=" << lastY << " (pix: " << zh->layoutUnitToPixelY( lastY ) << ")"
-    //               << " with shadow offset: lastY=" << lastY+format->offsetY() << " (pix: " << zh->layoutUnitToPixelY( lastY+format->offsetY() ) << ")" << endl;
-    lastY += format->offsetY(); // in LU pixels
+    // Calculate offset (e.g. due to shadow on left or top)
+    int shadowOffsetX_pix = zh->layoutUnitToPixelX( startX, format->offsetX() );
+    int shadowOffsetY_pix = zh->layoutUnitToPixelY( lastY, format->offsetY() );
 
     // Calculate startX in pixels
     int startX_pix = zh->layoutUnitToPixelX( startX ) /* + at( rightToLeft ? start+len-1 : start )->pixelxadj */;
@@ -729,15 +727,6 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
     if ( format->textBackgroundColor().isValid() )
         painter.fillRect( startX_pix, lastY_pix, bw_pix, h_pix, format->textBackgroundColor() );
 
-    // Apply offset from shadow
-    // ## we add pixels to pixels, we could also recalculate from LUs
-    if ( format->shadowDistanceX() < 0 ) {
-        startX_pix -= format->shadowX( zh );
-    }
-    if ( format->shadowDistanceY() < 0 ) {
-        lastY_pix -= format->shadowY( zh );
-    }
-
     // don't want to draw line breaks but want them when drawing formatting chars
     int draw_len = len;
     int draw_startX = startX;
@@ -750,9 +739,30 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
             draw_startX = at( start + draw_len - 1 )->x;
     }
 
+    // Draw selection (moved here to do it before applying the offset from the shadow)
+    // (and because it's not part of the shadow drawing)
+    if ( drawSelections ) {
+        bool inSelection = false;
+	const int nSels = doc ? doc->numSelections() : 1;
+	for ( int j = 0; j < nSels; ++j ) {
+	    if ( start >= selectionStarts[ j ] && start < selectionEnds[ j ] ) {
+                inSelection = true;
+		if ( j == KoTextDocument::Standard )
+		    painter.fillRect( startX_pix, lastY_pix, bw_pix, h_pix, cg.color( QColorGroup::Highlight ) );
+		else
+		    painter.fillRect( startX_pix, lastY_pix, bw_pix, h_pix, doc ? doc->selectionColor( j ) : cg.color( QColorGroup::Highlight ) );
+                break;
+	    }
+	}
+        if ( !inSelection )
+            drawSelections = false; // save time in drawParagStringInternal
+    }
+
     if ( draw_len > 0 )
     {
         int draw_startX_pix = zh->layoutUnitToPixelX( draw_startX ) /* + at( rightToLeft ? start+draw_len-1 : start )->pixelxadj*/;
+        draw_startX_pix += shadowOffsetX_pix;
+        lastY_pix += shadowOffsetY_pix;
 
         if ( format->shadowDistanceX() != 0 || format->shadowDistanceY() != 0 ) {
             int sx = format->shadowX( zh );
@@ -839,14 +849,10 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 		if ( !doc || doc->invertSelectionText( j ) )
 		    textColor = cg.color( QColorGroup::HighlightedText );
 		    painter.setPen( QPen( textColor ) );
-		if ( j == KoTextDocument::Standard )
-		    painter.fillRect( startX, lastY, bw, h, cg.color( QColorGroup::Highlight ) );
-		else
-		    painter.fillRect( startX, lastY, bw, h, doc ? doc->selectionColor( j ) : cg.color( QColorGroup::Highlight ) );
-	    }
-	}
+                    break;
+            }
+        }
     }
-
 
     QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
 
