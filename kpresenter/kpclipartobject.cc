@@ -93,7 +93,7 @@ double KPClipartObject::load(const QDomElement &element)
     QDomElement e=element.namedItem("KEY").toElement();
     if(!e.isNull()) {
         KoPictureKey key;
-        key.loadAttributes(e, QDate( 1970, 1, 1 ), QTime( 0, 0 ) );
+        key.loadAttributes( e );
         m_clipart.clear();
         m_clipart.setKey( key );
     }

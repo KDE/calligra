@@ -81,12 +81,27 @@ void KPBackGround::setBackPixmap( const QString &_filename, QDateTime _lastModif
 #endif
 }
 
+void KPBackGround::setBackPixmap( const KoPicture& pixmap )
+{
+    if ( backType != BT_PICTURE )
+        return;
+    backImage = imageCollection()->insertPicture(pixmap);
+}
+
 void KPBackGround::setBackClipart( const QString &_filename, QDateTime _lastModified )
 {
     if ( backType != BT_CLIPART )
         return;
 
     backClipart = clipartCollection()->findOrLoad( _filename, _lastModified );
+}
+
+void KPBackGround::setBackClipart( const KoPicture& clipart )
+{
+    if ( backType != BT_CLIPART )
+        return;
+
+    backClipart = clipartCollection()->insertPicture(clipart);
 }
 
 void KPBackGround::draw( QPainter *_painter, const KoZoomHandler* zoomHandler,
@@ -307,7 +322,7 @@ void KPBackGround::load( const QDomElement &element )
     e=element.namedItem("BACKPIXKEY").toElement();
     if(!e.isNull()) {
         KoPictureKey key;
-        key.loadAttributes(e, QDate( 1970, 1, 1 ), QTime( 0,0 ) );
+        key.loadAttributes( e );
         backImage.clear();
         backImage.setKey( key );
         // Image will be set by reload(), called by completeLoading()
@@ -342,8 +357,7 @@ void KPBackGround::load( const QDomElement &element )
                 backImage = imageCollection()->loadPicture( _fileName );
             else
             {
-                QDateTime dateTime(  QDate( 1970, 1, 1 ) ); // We need a valid date
-                KoPictureKey key( _fileName, dateTime );
+                KoPictureKey key( _fileName );
                 backImage.clear();
                 backImage.setKey(key);
                 QByteArray rawData=_data.utf8(); // XPM is normally ASCII, therefore UTF-8
@@ -363,7 +377,7 @@ void KPBackGround::load( const QDomElement &element )
     e=element.namedItem("BACKCLIPKEY").toElement();
     if(!e.isNull()) {
         KoPictureKey clipKey;
-        clipKey.loadAttributes(e, QDate( 1970, 1, 1 ), QTime ( 0, 0 ) );
+        clipKey.loadAttributes( e );
         backClipart.clear();
         backClipart.setKey(clipKey);
         // Picture will be set by reload(), called by completeLoading()

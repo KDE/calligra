@@ -1212,11 +1212,9 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 }
             }
         } else if(elem.tagName()=="PIXMAPS") {
-            QDateTime defaultDateTime( QDate ( 1970, 1, 1 ) );
-            m_pixmapMap = new QMap<KoPictureKey, QString>( _imageCollection.readXML( elem, defaultDateTime ) );
+            m_pixmapMap = new QMap<KoPictureKey, QString>( _imageCollection.readXML( elem ) );
         } else if(elem.tagName()=="CLIPARTS") {
-            QDateTime defaultDateTime( QDate ( 1970, 1, 1 ) );
-            m_clipartMap = new QMap<KoPictureKey, QString>( _clipartCollection.readXML( elem, defaultDateTime ) );
+            m_clipartMap = new QMap<KoPictureKey, QString>( _clipartCollection.readXML( elem ) );
         } else if ( elem.tagName() == "SOUNDS" ) {
             loadUsedSoundFileFromXML( elem );
         }

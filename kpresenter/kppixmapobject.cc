@@ -120,7 +120,7 @@ double KPPixmapObject::load(const QDomElement &element)
     QDomElement e=element.namedItem("KEY").toElement();
     if(!e.isNull()) {
         KoPictureKey key;
-        key.loadAttributes(e, QDate( 1970, 1, 1 ), QTime( 0, 0 ) ); // We need a valid date
+        key.loadAttributes( e );
         image.clear();
         image.setKey(key);
     }
@@ -154,8 +154,7 @@ double KPPixmapObject::load(const QDomElement &element)
                 image = imageCollection->loadPicture( _fileName );
             else
             {
-                QDateTime dateTime(  QDate( 1970, 1, 1 ) ); // We need a valid date
-                KoPictureKey key( _fileName, dateTime );
+                KoPictureKey key( _fileName );
                 image.clear();
                 image.setKey(key);
                 QByteArray rawData=_data.utf8(); // XPM is normally ASCII, therefore UTF-8
