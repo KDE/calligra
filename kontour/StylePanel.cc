@@ -356,6 +356,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mPaintingBox->insertItem(i18n("Gradient"));
   mPaintingBox->insertItem(i18n("Bitmap"));
   mPaintingBox->setCurrentItem(0);
+  connect(mPaintingBox, SIGNAL(activated(int)), this, SLOT(slotChangeFilled(int)));
 
   QLabel *mOpacityText = new QLabel(i18n("Opacity"), mPainting);
   mOpacityBox = new QSpinBox(0, 100, 5, mPainting);
@@ -376,7 +377,6 @@ QDockWindow(QDockWindow::InDock, parent, name)
 
   mBitmapPanel = new KoIconChooser(QSize(30, 30), mTab);
   mTab->insertTab(mBitmapPanel, i18n("Bitmap"));
-  connect(mPaintingBox, SIGNAL(activated(int)), this, SLOT(slotChangeFilled(int)));
 
   setWidget(mTab);
   setCaption(i18n("Painting"));

@@ -175,16 +175,10 @@ void RectTool::processEvent(QEvent *e)
 	if(!mFill)
 	  rect->style()->filled(GStyle::NoFill);
         doc->history()->addCommand(cmd);
-        page->updateSelection();
+//        page->updateSelection();
       }
       state = S_Init;
     }
-  }
-  else if(e->type() == QEvent::KeyPress)
-  {
-/*      QKeyEvent *ke = (QKeyEvent *) e;
-      if (ke->key () == Qt::Key_Escape)
-         m_toolController->emitOperationDone (m_id);*/
   }
 }
 

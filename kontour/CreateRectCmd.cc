@@ -47,6 +47,7 @@ CreateRectCmd::~CreateRectCmd()
 void CreateRectCmd::execute()
 {
   document()->activePage()->insertObject(object);
+  document()->emitChanged(object->boundingBox(), true);
 }
 
 void CreateRectCmd::unexecute()

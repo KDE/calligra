@@ -47,6 +47,7 @@ CreateOvalCmd::~CreateOvalCmd()
 void CreateOvalCmd::execute()
 {
   document()->activePage()->insertObject(object);
+  document()->emitChanged(object->boundingBox(), true);
 }
 
 void CreateOvalCmd::unexecute()
