@@ -912,7 +912,7 @@ void KoRuler::setupMenu()
 {
     d->rb_menu = new QPopupMenu();
     Q_CHECK_PTR( d->rb_menu );
-    for ( uint i = 0 ; i < KoUnit::U_LASTUNIT ; ++i )
+    for ( uint i = 0 ; i <= KoUnit::U_LASTUNIT ; ++i )
     {
         KoUnit::Unit unit = static_cast<KoUnit::Unit>( i );
         d->rb_menu->insertItem( KoUnit::unitDescription( unit ), i /*as id*/ );
