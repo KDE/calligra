@@ -4,10 +4,10 @@
  </PAPER>
  <ATTRIBUTES standardpage="1" hasFooter="0" unit="mm" hasHeader="0" processing="1" />
  <FRAMESETS>
-  <FRAMESET removable="0" frameType="1" frameInfo="0" name="Frameset 1" visible="1" >
+  <FRAMESET removable="0" frameType="1" frameInfo="0" visible="1" >
    <FRAME right="293" left="28" bottom="416" runaroundGap="2" top="42" />
   </FRAMESET>
-  <FRAMESET removable="0" frameType="1" frameInfo="0" name="Frameset 2" visible="1" >
+  <FRAMESET removable="0" frameType="1" frameInfo="0" visible="1" >
    <FRAME right="293" left="28" bottom="797" runaroundGap="2" top="423" />
    <FRAME right="565" left="300" bottom="797" runaroundGap="2" top="42" />
   </FRAMESET>

@@ -4,7 +4,7 @@
  </PAPER>
  <ATTRIBUTES standardpage="1" hasFooter="0" unit="mm" hasHeader="0" processing="0" />
  <FRAMESETS>
-  <FRAMESET removable="0" frameType="1" frameInfo="0" name="Frameset 1" visible="1" >
+  <FRAMESET removable="0" frameType="1" frameInfo="0" visible="1" >
    <FRAME runaround="1" right="566" left="28" bottom="798" runaroundGap="2" top="42" />
   </FRAMESET>
  </FRAMESETS>
