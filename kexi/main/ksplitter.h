@@ -35,6 +35,7 @@
 
 class QFrame;
 class KDockContainer;
+class KDockWidget;
 
 
 /**
