@@ -34,6 +34,7 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <klistview.h>
+#include <kmessagebox.h>
 
 //KexiAlterTable::KexiAlterTable(KexiView *view, QWidget *parent,
 //	const QString &table, bool create, const char *name)
@@ -306,6 +307,20 @@ KexiAlterTable::propertyChanged()
 	m_fieldTable->triggerUpdate();
 
 	changeTable();
+}
+
+
+void
+KexiAlterTable::closeEvent(QCloseEvent *ev)
+{
+	//do not allow creating table without fields
+	if (m_tableFields.isEmpty()) {
+		kdDebug() <<"NO FIELDS!";
+		ev->ignore();
+		KMessageBox::sorry( 0, i18n( "Table \"%1\" should contain at least one field. Add fields to this table." ).arg(m_table) );
+		return;
+	}
+	KexiDialogBase::closeEvent(ev);
 }
 
 #include "kexialtertable.moc"

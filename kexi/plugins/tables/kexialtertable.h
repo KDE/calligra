@@ -44,6 +44,7 @@ class KEXI_HAND_TBL_EXPORT KexiAlterTable : public KexiDialogBase
 		void init(QString title, QString identifier);
 		void initView();
 		void getFields();
+		virtual void closeEvent(QCloseEvent *ev);
 
 	protected slots:
 		void changeShownField(KexiTableItem* i);

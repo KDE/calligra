@@ -101,7 +101,7 @@ KexiCreateProjectPageDB::KexiCreateProjectPageDB(KexiCreateProject *parent, QPix
 	selectBGrp->insert(m_newRBtn);
 }
 
-void
+bool
 KexiCreateProjectPageDB::connectHost(const QString &driver, const QString &host, const QString &user, const QString &password,
 	const QString &socket, const QString &port, bool savePass)
 {
@@ -120,7 +120,7 @@ KexiCreateProjectPageDB::connectHost(const QString &driver, const QString &host,
 	{
 		KMessageBox::detailedError(0, i18n("Error in databaseconnection"),
 			db ? db->latestError()->message() : "", i18n("Database Connection"));
-		return /*false*/;
+		return false;
 	}
 
 	QStringList databases = db->databases();
@@ -132,7 +132,7 @@ KexiCreateProjectPageDB::connectHost(const QString &driver, const QString &host,
 			item->setPixmap(0, db_pix);
 		}
 	}
-
+	return true;
 }
 
 bool

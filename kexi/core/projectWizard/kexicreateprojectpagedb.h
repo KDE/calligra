@@ -39,9 +39,9 @@ class KEXIPRJWIZARD_EXPORT KexiCreateProjectPageDB : public KexiCreateProjectPag
 		KexiCreateProjectPageDB(KexiCreateProject *parent, QPixmap *wpic, const char *name=0);
 		~KexiCreateProjectPageDB();
 
-    void		connectHost(const QString &driver, const QString &host, const QString &user, const QString &password,
-			const QString &socket, const QString &port, bool savePass);
-		bool		connectDB();
+		bool connectHost(const QString &driver, const QString &host, const QString &user, 
+				const QString &password, const QString &socket, const QString &port, bool savePass);
+		bool connectDB();
 
 	protected:
 		KListView	*m_databases;

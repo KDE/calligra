@@ -126,7 +126,9 @@ KexiTablePartProxy::slotOpen(const QString& identifier)
 				return;
 			}
 			//yes: close alter window and open in data mode
-			w->close(true);
+			if (!w->close(true))
+				return; //window do not want to be closed: give up!
+
 		}
 	else
 		return; //unknown window type
@@ -172,7 +174,8 @@ KexiTablePartProxy::slotAlter(const QString& identifier)
 				return;
 			}
 			//yes: close window and open in alter mode
-			w->close(true);
+			if (!w->close(true))
+				return; //window do not want to be closed: give up!
 		}
 	else
 		return; //unknown window type
@@ -195,9 +198,10 @@ KexiTablePartProxy::slotDrop(const QString& identifier)
         }
 	//close table window if exists
 	KexiDialogBase *w = m_view->findWindow(identifier);
-	if (w)
-		w->close(true);
-
+	if (w) {
+		if (!w->close(true))
+			return; //window do not want to be closed: give up!
+	}
 //	QString rI = item->title();
 	int ans = KMessageBox::questionYesNo(kexiView(),
 		i18n("Do you want to delete \"%1\" table?").arg(item->title()), KEXI_APP_NAME);

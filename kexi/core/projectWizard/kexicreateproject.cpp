@@ -146,8 +146,10 @@ KexiCreateProject::next()
 		kdDebug() << "User = " << user << endl;
 		kdDebug() << "Socket = " << socket << " Port = " << port << endl;
 
-		static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectHost(engine, host, user, pass, socket,
-			port, savePass);
+		if (!static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)
+				->connectHost(engine, host, user, pass, socket, port, savePass)) {
+			return;
+		}
 	}
 
 	KWizard::next();

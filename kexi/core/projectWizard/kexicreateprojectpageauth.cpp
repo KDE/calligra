@@ -51,6 +51,9 @@ KexiCreateProjectPageAuth::KexiCreateProjectPageAuth(KexiCreateProject *parent, 
 
 	m_savePassChk = new QCheckBox(i18n("Save password"), this);
 	m_savePassChk->setChecked(true);
+#ifdef KEXI_NO_UNFINISHED
+	m_savePassChk->hide();
+#endif
 	setProperty("savePassword", QVariant(m_savePassChk->isChecked()));
 
 	//layout

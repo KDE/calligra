@@ -74,7 +74,7 @@ class KEXICORE_EXPORT KexiDialogBase : public QWidget
 		enum WindowType {ToolWindow, DocumentWindow};
 		void registerAs(KexiDialogBase::WindowType wt, const QString &identifier=QString::null);
 		void registerChild(QWidget *w);
-		void closeEvent(QCloseEvent *ev);
+		virtual void closeEvent(QCloseEvent *ev);
 		virtual void finishUpForClosing(){;}
 		static KexiDialogBase *s_activeDocumentWindow;
 		static KexiDialogBase *s_activeToolWindow;

@@ -169,9 +169,11 @@ void KexiView::initActions()
 	 actionCollection(), "project_props");
 	connect(actionProjectProps, SIGNAL(activated()), this, SLOT(slotShowProjectProps()));
 
+#ifndef KEXI_NO_UNFINISHED
 	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
 	 actionCollection(), "kexi_settings");
 	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
+#endif
 
 	KAction *actionImport = new KAction(i18n("Import Data..."), "", 0,
 	 actionCollection(), "kexi_importdata");
