@@ -1112,7 +1112,6 @@ QStringList KoTimeVariable::actionTexts()
     QStringList lst;
     lst << i18n( "Current Time (fixed)" );
     lst << i18n( "Current Time (variable)" );
-    // TODO add time created, time printed, time last modified( BR #24242 )
     return lst;
 }
 
