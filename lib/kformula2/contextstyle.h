@@ -39,6 +39,7 @@ class ContextStyle
 {
 public:  
     enum DrawMode {CharSize,FixedHeight,FixedWidth};
+    enum Alignment {left, center, right};
 
     /**
      * Build a default context style
@@ -59,6 +60,8 @@ public:
     QFont getDefaultFont() { return defaultFont; }
 
     int getDistance() { return 5; }
+
+    Alignment getMatrixAlignment() { return center; }
     
 private:
     

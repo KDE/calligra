@@ -12,7 +12,8 @@ KFORMULA2PATCH=	0
 libkformula2_la_SOURCES	= basicelement.cc contextstyle.cc formulacursor.cc \
 	formulaelement.cc indexelement.cc kformulacontainer.cc kformulawidget.cc \
 	sequenceelement.cc textelement.cc bracketelement.cc operatorelement.cc \
-	matrixelement.cc fractionelement.cc rootelement.cc
+	matrixelement.cc fractionelement.cc rootelement.cc symbolelement.cc \
+	artwork.cc
 
 include_HEADERS = 
 

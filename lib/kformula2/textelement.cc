@@ -48,8 +48,11 @@ ostream& TextElement::output(ostream& stream)
  */
 void TextElement::calcSizes(ContextStyle& context, int parentSize)
 {
+    int mySize = parentSize + getRelativeSize();
     //QFontMetrics fm = context.fontMetrics();
-    QFontMetrics fm(context.getDefaultFont());
+    QFont font = context.getDefaultFont();
+    font.setPointSize(mySize);
+    QFontMetrics fm(font);
     setWidth(fm.width(character));
     setHeight(fm.height());
     setMidline(getHeight() / 2);
@@ -64,8 +67,12 @@ void TextElement::calcSizes(ContextStyle& context, int parentSize)
 void TextElement::draw(QPainter& painter, ContextStyle& context,
                        int parentSize, const QPoint& parentOrigin)
 {
+    int mySize = parentSize + getRelativeSize();
     //context.setupPainter(painter);
     //cerr << "TextElement::draw: " << parentOrigin.x()+getX() << " " << parentOrigin.y()+getY()+baseline << " " << character << "\n";
+    QFont font = context.getDefaultFont();
+    font.setPointSize(mySize);
+    painter.setFont(font);
     painter.setPen(context.getDefaultColor());
     painter.drawText(parentOrigin.x()+getX(),
                      parentOrigin.y()+getY()+baseline, character);

@@ -236,7 +236,8 @@ public:
     int getHeight() const { return size.height(); }
 
     int getRelativeSize() const { return relativeSize; }
-
+    void setRelativeSize(int size) { relativeSize = size; }
+    
     /**
      * Our position inside our parent.
      */

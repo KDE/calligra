@@ -33,6 +33,7 @@
 #include "operatorelement.h"
 #include "rootelement.h"
 #include "sequenceelement.h"
+#include "symbolelement.h"
 #include "textelement.h"
 
 
@@ -166,6 +167,15 @@ void KFormulaContainer::keyPressEvent(FormulaCursor* cursor, QKeyEvent* event)
         case Qt::Key_End:
             cursor->moveEnd(event);
             break;
+        case Qt::Key_F1:
+            addSymbol(cursor, Artwork::product);
+            break;
+        case Qt::Key_F2:
+            addSymbol(cursor, Artwork::sum);
+            break;
+        case Qt::Key_F3:
+            addSymbol(cursor, Artwork::integral);
+            break;
         }
     }
     
@@ -231,6 +241,20 @@ void KFormulaContainer::addRoot(FormulaCursor* cursor)
         //cursor->setSelection(false);
     }
     cursor->goInsideElement(root);
+}
+
+void KFormulaContainer::addSymbol(FormulaCursor* cursor,
+                                  Artwork::SymbolType type)
+{
+    SymbolElement* symbol = new SymbolElement(type);
+    if (cursor->isSelection()) {
+        cursor->replaceSelectionWith(symbol);
+    }
+    else {
+        cursor->insert(symbol);
+        //cursor->setSelection(false);
+    }
+    cursor->goInsideElement(symbol);
 }
 
 void KFormulaContainer::addMatrix(FormulaCursor* cursor, int rows, int columns)

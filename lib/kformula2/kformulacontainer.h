@@ -23,6 +23,7 @@
 
 #include <qobject.h>
 
+#include "artwork.h"
 #include "basicelement.h"
 #include "contextstyle.h"
 #include "formulaelement.h"
@@ -97,6 +98,7 @@ public slots:
     void addBracket(FormulaCursor* cursor, char left, char right);
     void addFraction(FormulaCursor* cursor);
     void addRoot(FormulaCursor* cursor);
+    void addSymbol(FormulaCursor* cursor, Artwork::SymbolType type);
     void addMatrix(FormulaCursor* cursor, int rows, int columns);
     void addLowerRightIndex(FormulaCursor* cursor);
     void addUpperRightIndex(FormulaCursor* cursor);

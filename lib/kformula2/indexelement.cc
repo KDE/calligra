@@ -446,50 +446,6 @@ void IndexElement::moveDown(FormulaCursor* cursor, BasicElement* from)
 
 // children
 
-/**
- * Removes the child. If this was the main child this element might
- * request its own removal.
- * The cursor is the one that caused the removal. It has to be moved
- * to the place any user expects the cursor after that particular
- * element has been removed.
- */
-// void IndexElement::removeChild(FormulaCursor* cursor, BasicElement* child)
-// {
-//     if (child == upperLeft) {
-//         formula()->elementRemoval(upperLeft);
-//         content->moveRight(cursor, this);
-//         upperLeft = 0;
-//     }
-//     else if (child == lowerLeft) {
-//         formula()->elementRemoval(lowerLeft);
-//         content->moveRight(cursor, this);
-//         lowerLeft = 0;
-//     }
-//     else if (child == upperRight) {
-//         formula()->elementRemoval(upperRight);
-//         content->moveLeft(cursor, this);
-//         upperRight = 0;
-//     }
-//     else if (child == lowerRight) {
-//         formula()->elementRemoval(lowerRight);
-//         content->moveLeft(cursor, this);
-//         lowerRight = 0;
-//     }
-//     else if (child == content) {
-//         getParent()->removeChild(cursor, this);
-//         return;
-//     }
-
-//     if ((upperLeft == 0) && (lowerLeft == 0) &&
-//         (upperRight == 0) && (lowerRight == 0)) {
-//         static_cast<SequenceElement*>(getParent())->
-//             replaceElementByMainChild(cursor, this);
-//     }
-//     else {
-//         formula()->changed();
-//     }
-// }
-
     
 // main child
 //

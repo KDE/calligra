@@ -28,6 +28,7 @@
 FormulaElement::FormulaElement(KFormulaContainer* container)
     : document(container)
 {
+    size = 20;
 }
 
 void FormulaElement::elementRemoval(BasicElement* child)

@@ -92,7 +92,17 @@ void MatrixElement::calcSizes(ContextStyle& style, int parentSize)
         yPos += toMidlines[r];
         for (uint c = 0; c < columns; c++) {
             SequenceElement* element = list->at(c);
-            element->setX(xPos);
+            switch (style.getMatrixAlignment()) {
+            case ContextStyle::left:
+                element->setX(xPos);
+                break;
+            case ContextStyle::center:
+                element->setX(xPos + (widths[c] - element->getWidth())/2);
+                break;
+            case ContextStyle::right:
+                element->setX(xPos + widths[c] - element->getWidth());
+                break;
+            }
             element->setY(yPos - element->getMidline());
             xPos += widths[c] + dist;
         }
