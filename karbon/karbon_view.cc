@@ -131,9 +131,9 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_whirlPinchDlg->setRadius( 100.0 );
 
 	m_contextHelpDocker = new VContextHelpDocker( this );
-	m_contextHelpDocker->show();
+	mainWindow()->addDockWindow( m_contextHelpDocker, DockRight );
 	m_toolOptionsDocker = new VToolOptionsDocker( this );
-	m_toolOptionsDocker->show();
+	mainWindow()->addDockWindow( m_toolOptionsDocker, DockRight );
 	
 	// tools:
 	m_ellipseTool = new VEllipseTool( this );
