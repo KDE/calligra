@@ -46,7 +46,9 @@ namespace KFormDesigner {
 ///////////// The dialog to edit or add/remove connections //////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 ConnectionDialog::ConnectionDialog(QWidget *parent)
-: KDialogBase(parent, "connections_dialog", true, i18n("Edit Form Connections"), Ok|Cancel|Details, Ok, false), m_buffer(0)
+: KDialogBase(parent, "connections_dialog", true, i18n("Edit Form Connections"), 
+							Ok|Cancel|Details, Ok, false)
+, m_buffer(0)
 {
 	QFrame *frame = makeMainWidget();
 	QHBoxLayout *layout = new QHBoxLayout(frame, 0, 6);
@@ -89,7 +91,7 @@ ConnectionDialog::ConnectionDialog(QWidget *parent)
 	vlayout->addStretch();
 
 	setInitialSize(QSize(600, 300));
-	setWFlags(WDestructiveClose);
+	//setWFlags(WDestructiveClose);
 
 	connect(m_table,SIGNAL(cellSelected(int, int)), this, SLOT(slotCellSelected(int, int)));
 	connect(m_table->data(), SIGNAL(rowInserted(KexiTableItem*,bool)), this, SLOT(slotRowInserted(KexiTableItem*,bool)));
@@ -141,17 +143,19 @@ ConnectionDialog::exec(Form *form)
 	m_form = form;
 	updateTableData();
 
-	show();
-	return;
+	KDialogBase::exec();
 }
 
 void ConnectionDialog::slotCellSelected(int col, int row)
 {
 	m_buttons[BRemove]->setEnabled( row < m_table->rows() );
+	KexiTableItem *item = m_table->itemAt(row);
+	if (!item)
+		return;
 	if(col == 2) // signal col
-		updateSignalList(m_table->itemAt(row));
+		updateSignalList(item);
 	else if(col == 4) // slot col
-		updateSlotList(m_table->itemAt(row));
+		updateSlotList(item);
 }
 
 void ConnectionDialog::slotRowInserted(KexiTableItem* item,bool)
