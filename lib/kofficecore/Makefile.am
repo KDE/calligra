@@ -13,7 +13,7 @@ kde_module_LTLIBRARIES = libkodocinfopropspage.la
 
 libkofficecore_la_SOURCES = koDocument.cc \
 	koFilterManager.cc \
-	koMainWindow.cc koPrintPreview.cc \
+	koMainWindow.cc \
 	koApplication.cc koQueryTrader.cc \
 	koFilter.cc koFilterChain.cpp \
 	koImage.cc koImageCollection.cc \
@@ -29,7 +29,7 @@ libkofficecore_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
 
 include_HEADERS = koFilter.h \
 	koDocument.h \
-	koMainWindow.h koPrintPreview.h \
+	koMainWindow.h \
 	koApplication.h koQueryTrader.h \
 	koFilterManager.h \
 	koDocumentInfo.h \

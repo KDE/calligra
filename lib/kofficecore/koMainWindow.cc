@@ -794,7 +794,7 @@ void KoMainWindow::slotFilePrintPreview()
         kdWarning() << "KoMainWindow::slotFilePrint : No root view!" << endl;
         return;
     }
-    KPrinter printer;
+    KPrinter printer( false );
     KTempFile tmpFile;
     // The temp file is deleted by KoPrintPreview
 
@@ -805,6 +805,7 @@ void KoMainWindow::slotFilePrintPreview()
 
     QString oldFileName = printer.outputFileName();
     printer.setOutputFileName( tmpFile.name() );
+    printer.setPreviewOnly( true );
     int oldNumCopies = printer.numCopies();
     printer.setNumCopies( 1 );
     // Disable kdeprint's own preview, we'd get two. This shows that KPrinter needs
@@ -813,7 +814,7 @@ void KoMainWindow::slotFilePrintPreview()
     printer.setOption( "kde-preview", "0" );
 
     rootView()->print(printer);
-    KoPrintPreview::preview(this, "KoPrintPreviewDialog", tmpFile.name());
+    //KoPrintPreview::preview(this, "KoPrintPreviewDialog", tmpFile.name());
 
     // Restore previous values
     printer.setOutputFileName( oldFileName );
