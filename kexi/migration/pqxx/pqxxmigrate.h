@@ -80,7 +80,9 @@ namespace KexiMigration
 			//Driver specific connection implementation
 			virtual bool drv_connect();
 			virtual bool drv_disconnect();
-			
+
+			virtual bool drv_copyTable(const QString& srcTable,
+																 KexiDB::TableSchema* dstTable);
 //TODO: move this somewhere to low level class (MIGRATION?)
 			//virtual bool drv_getTablesList( QStringList &list );
 //TODO: move this somewhere to low level class (MIGRATION?)

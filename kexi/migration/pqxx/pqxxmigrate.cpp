@@ -387,6 +387,12 @@ bool pqxxMigrate::primaryKey(pqxx::oid table_uid, int col) const
 	return pkey;
 }
 
+/*! Copy PostgreSQL table to KexiDB database */
+bool pqxxMigrate::drv_copyTable(const QString& srcTable,
+                                KexiDB::TableSchema* dstTable) {
+	return true;
+}
+
 //=========================================================================
 //Return whether or not the curent field is a primary key
 //TODO: Add result caching for speed
