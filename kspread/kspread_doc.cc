@@ -668,7 +668,7 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         return false;
     }
 
-    manifestWriter->addManifestEntry( "style.xml",  "text/xml" );
+    manifestWriter->addManifestEntry( "styles.xml",  "text/xml" );
     saveOasisDocumentStyles( store, mainStyles );
     delete d->m_savingInfo;
     d->m_savingInfo = 0L;
