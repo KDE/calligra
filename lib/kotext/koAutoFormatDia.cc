@@ -707,8 +707,8 @@ void KoAutoFormatDia::chooseDoubleQuote2()
 
 void KoAutoFormatDia::defaultDoubleQuote()
 {
-    pbDoubleQuote1->setText("«");
-    pbDoubleQuote2->setText("»");
+    pbDoubleQuote1->setText(m_docAutoFormat->getDefaultTypographicDoubleQuotes().begin);
+    pbDoubleQuote2->setText(m_docAutoFormat->getDefaultTypographicDoubleQuotes().end);
 }
 
 void KoAutoFormatDia::chooseSimpleQuote1()

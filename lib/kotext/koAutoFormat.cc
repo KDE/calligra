@@ -68,6 +68,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_bulletStyle(),
       m_typographicSimpleQuotes(),
       m_typographicDoubleQuotes(),
+      m_typographicDefaultDoubleQuotes(),
       m_listCompletion( new KCompletion ),
       m_entries(),
       m_superScriptEntries(),
@@ -107,6 +108,7 @@ KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
       m_bulletStyle( format.m_bulletStyle ),
       m_typographicSimpleQuotes( format.m_typographicSimpleQuotes ),
       m_typographicDoubleQuotes( format.m_typographicDoubleQuotes ),
+      m_typographicDefaultDoubleQuotes( format.m_typographicDefaultDoubleQuotes),
       m_listCompletion( 0L ), // don't copy it!
       m_entries( format.m_entries ),
       m_superScriptEntries ( format.m_superScriptEntries ),
@@ -163,17 +165,14 @@ void KoAutoFormat::readConfig()
     m_useAutoNumberStyle = config.readBoolEntry( "AutoNumberStyle", false );
 
 
-    QString begin = config.readEntry( "TypographicQuotesBegin", "«" );
-    m_typographicDoubleQuotes.begin = begin[0];
-    QString end = config.readEntry( "TypographicQuotesEnd", "»" );
-    m_typographicDoubleQuotes.end = end[0];
-    m_typographicDoubleQuotes.replace = config.readBoolEntry( "TypographicQuotesEnabled", false )
-                                  && !begin.isEmpty()
-                                  && !end.isEmpty();
+    QString beginDoubleQuote = config.readEntry( "TypographicQuotesBegin" );
+    QString endDoubleQuote = config.readEntry( "TypographicQuotesEnd" );
 
-    begin = config.readEntry( "TypographicSimpleQuotesBegin", "'" );
+    m_typographicDoubleQuotes.replace = config.readBoolEntry( "TypographicQuotesEnabled", false );
+
+    QString begin = config.readEntry( "TypographicSimpleQuotesBegin", "'" );
     m_typographicSimpleQuotes.begin = begin[0];
-    end = config.readEntry( "TypographicSimpleQuotesEnd", "'" );
+    QString end = config.readEntry( "TypographicSimpleQuotesEnd", "'" );
     m_typographicSimpleQuotes.end = end[0];
     m_typographicSimpleQuotes.replace = config.readBoolEntry( "TypographicSimpleQuotesEnabled", false )
                                   && !begin.isEmpty()
@@ -255,7 +254,29 @@ void KoAutoFormat::readConfig()
           }
       }
 
+      QDomElement doubleQuote = de.namedItem( "DoubleQuote" ).toElement();
+      if(!doubleQuote.isNull())
+      {
+          QDomNodeList nl = doubleQuote.childNodes();
+          m_typographicDefaultDoubleQuotes.begin =  nl.item(0).toElement().attribute("begin")[0];
+          m_typographicDefaultDoubleQuotes.end = nl.item(0).toElement().attribute("end")[0];
+      }
     }
+
+    if( beginDoubleQuote.isEmpty())
+        m_typographicDoubleQuotes.begin = m_typographicDefaultDoubleQuotes.begin;
+    else
+        m_typographicDoubleQuotes.begin = beginDoubleQuote[0];
+    if( endDoubleQuote.isEmpty() )
+        m_typographicDoubleQuotes.end = m_typographicDefaultDoubleQuotes.end;
+    else
+        m_typographicDoubleQuotes.end = endDoubleQuote[0];
+
+    m_typographicDoubleQuotes.replace = m_typographicDoubleQuotes.replace
+                                  && !beginDoubleQuote.isEmpty()
+                                  && !endDoubleQuote.isEmpty();
+
+
     xmlFile.close();
     buildMaxLen();
     autoFormatIsActive();
@@ -361,6 +382,13 @@ void KoAutoFormat::saveConfig()
     }
     begin.appendChild(super);
 
+    QDomElement doubleQuote;
+    doubleQuote = doc.createElement("DoubleQuote");
+    data = doc.createElement("doublequote");
+    data.setAttribute("begin", QString(m_typographicDefaultDoubleQuotes.begin));
+    data.setAttribute("end", QString(m_typographicDefaultDoubleQuotes.end));
+    doubleQuote.appendChild(data);
+    begin.appendChild(doubleQuote);
 
     QFile f(locateLocal("data", "koffice/autocorrect/"+klocale.languageList().front() + ".xml",m_doc->instance()));
     if(!f.open(IO_WriteOnly)) {
