@@ -39,7 +39,9 @@ libdialogs_la_SOURCES = \
 	kspread_dlg_styles.cc \
 	kspread_dlg_subtotal.cc \
 	kspread_dlg_validity.cc \
-	kspreadsubtotal.ui
+	kspreadsubtotal.ui \
+	sheet_properties_base.ui \
+	sheet_properties.cc
 
 libdialogs_la_METASOURCES = \
 	AUTO

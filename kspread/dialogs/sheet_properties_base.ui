@@ -1,0 +1,159 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>SheetPropertiesBase</class>
+<comment>This file is part of the KDE project
+Copyright (C) 2004 Ariya Hidayat &lt;ariya@kde.org&gt;
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Library General Public License for more details.
+
+You should have received a copy of the GNU Library General Public
+License along with this library; see the file COPYING.LIB.  If not, 
+write to the Free Software Foundation, Inc., 59 Temple Place - 
+Suite 330, Boston, MA 02111-1307, USA.</comment>
+<author>Ariya Hidayat &lt;ariya@kde.org&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>SheetPropertiesBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>377</width>
+            <height>381</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>SheetPropertiesBase</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>autoCalcCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Automatic Recalculation</string>
+            </property>
+            <property name="accel">
+                <string>Alt+A</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>showGridCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>Show &amp;Grid</string>
+            </property>
+            <property name="accel">
+                <string>Alt+G</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>showPageBordersCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>Show Page &amp;Borders</string>
+            </property>
+            <property name="accel">
+                <string>Alt+B</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>showFormulaCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>Show &amp;Formula</string>
+            </property>
+            <property name="accel">
+                <string>Alt+F</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>hideZeroCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Hide Zero</string>
+            </property>
+            <property name="accel">
+                <string>Alt+H</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>showFormulaIndicatorCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>Show Formula &amp;Indicator</string>
+            </property>
+            <property name="accel">
+                <string>Alt+I</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>showColumnAsNumbersCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>Show Column As &amp;Numbers</string>
+            </property>
+            <property name="accel">
+                <string>Alt+N</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>useLCModeCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>Use &amp;LC Mode</string>
+            </property>
+            <property name="accel">
+                <string>Alt+L</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>capitalizeFirstLetterCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Convert First Letter to Uppercase</string>
+            </property>
+            <property name="accel">
+                <string>Alt+C</string>
+            </property>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>60</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
