@@ -1857,6 +1857,8 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 		d->pEditor->view()->installEventFilter(this);
 	d->pEditor->show();
 	d->pEditor->setFocus();
+
+	emit rowEditStarted(d->curRow);
 }
 
 void KexiTableView::focusInEvent(QFocusEvent*)
@@ -2313,20 +2315,21 @@ void KexiTableView::acceptRowEdit()
 	//redraw
 	updateRow(d->curRow);
 
-	if (!success)
-		return;
+	if (success) {
+		kdDebug() << "EDIT ROW ACCEPTED:" << endl;
+		/*debug*/itemAt(d->curRow);
 
-	kdDebug() << "EDIT ROW ACCEPTED:" << endl;
-	/*debug*/itemAt(d->curRow);
+		if (inserting) {
+			emit rowInserted(d->pCurrentItem);
+			//update navigator's data
+			setNavRowCount(rows());
+		}
+		else {
+			emit rowUpdated(d->pCurrentItem);
+		}
+	}
 
-	if (inserting) {
-		emit rowInserted(d->pCurrentItem);
-		//update navigator's data
-		setNavRowCount(rows());
-	}
-	else {
-		emit rowUpdated(d->pCurrentItem);
-	}
+	emit rowEditTerminated(d->curRow);
 }
 
 void KexiTableView::cancelRowEdit()
@@ -2361,6 +2364,8 @@ void KexiTableView::cancelRowEdit()
 	
 //! \todo (js): cancel changes for this row!
 	kdDebug(44021) << "EDIT ROW CANCELLED." << endl;
+
+	emit rowEditTerminated(d->curRow);
 }
 
 void KexiTableView::setInsertionPolicy(InsertionPolicy policy)

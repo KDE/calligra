@@ -61,6 +61,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 	protected slots:
 		void filter();
 		void slotCellSelected(int col, int row);
+		void slotUpdateRowActions(int row);
 
 	private:
 		KexiDataTableView *m_view;

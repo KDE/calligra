@@ -333,6 +333,13 @@ signals:
 	void rowUpdated(KexiTableItem*);
 	void rowInserted(KexiTableItem*);
 
+	//! emmited when row editing is started (for updating or inserting)
+	void rowEditStarted(int row);
+
+	//! emmited when row editing is terminated (for updating or inserting)
+	//! no matter if accepted or not
+	void rowEditTerminated(int row);
+
 protected slots:
 	void columnWidthChanged( int col, int os, int ns );
 	void cancelEditor();

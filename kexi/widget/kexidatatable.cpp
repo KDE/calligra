@@ -53,6 +53,11 @@ void KexiDataTable::init()
 	//! before closing - we'are accepting editing
 	connect(this,SIGNAL(closing()),m_view,SLOT(acceptRowEdit()));
 
+	//! updating actions on start/stop editing
+	connect(m_view, SIGNAL(rowEditStarted(int)), this, SLOT(slotUpdateRowActions(int)));
+	connect(m_view, SIGNAL(rowEditTerminated(int)), this, SLOT(slotUpdateRowActions(int)));
+
+
 	QVBoxLayout *box = new QVBoxLayout(this);
 	box->addWidget(m_view);
 	setMinimumSize(m_view->minimumSizeHint().width(),m_view->minimumSizeHint().height());
@@ -60,7 +65,7 @@ void KexiDataTable::init()
 //js	m_view->show();
 //	setFocusProxy(m_view);
 	m_view->setFocus();
-	setIcon(SmallIcon("table"));
+//not needed	setIcon(SmallIcon("table"));
 	
 	initActions();
 //js already done in keximainwindow:	registerDialog();
@@ -89,6 +94,8 @@ KexiDataTable::initActions()
 
 	plugSharedAction("data_save_row",m_view, SLOT(acceptRowEdit()));
 	m_view->plugSharedAction(sharedAction("data_save_row")); //for proper shortcut
+
+	slotCellSelected( m_view->currentColumn(), m_view->currentRow() );
 }
 
 void
@@ -118,10 +125,19 @@ QSize KexiDataTable::sizeHint() const
 	return m_view->sizeHint();
 }
 
+// update actions --------------
+
 void KexiDataTable::slotCellSelected(int col, int row)
 {
-	setAvailable("edit_delete_row", !(m_view->isInsertingEnabled() && row==m_view->rows()) );
+	slotUpdateRowActions(row);
 }
+
+void KexiDataTable::slotUpdateRowActions(int row)
+{
+	setAvailable("edit_delete_row", !m_view->isReadOnly() && !(m_view->isInsertingEnabled() && row==m_view->rows()) );
+	setAvailable("data_save_row", m_view->rowEditing());
+}
+
 
 #include "kexidatatable.moc"
 
