@@ -378,7 +378,7 @@ public:
     void borderBottom( const QPoint &_marker,QColor _color );
     void borderRight( const QPoint &_marker,QColor _color );
 
-
+    QString Currency(){return currency;}
     /**
     * Change Name table in a formula
     * When you change name table Table1 -> Price

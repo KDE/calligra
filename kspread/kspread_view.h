@@ -167,7 +167,7 @@ public slots:
     void showTable();
     void helpUsing();
     void insertChart();
-    void moneyFormat();
+    void moneyFormat(bool b);
     void alignLeft( bool b );
     void alignRight( bool b );
     void alignCenter( bool b );
@@ -327,7 +327,7 @@ private:
     KToggleAction* m_percent;
     KAction* m_precplus;
     KAction* m_precminus;
-    KAction* m_money;
+    KToggleAction* m_money;
     KToggleAction* m_alignLeft;
     KToggleAction* m_alignCenter;
     KToggleAction* m_alignRight;

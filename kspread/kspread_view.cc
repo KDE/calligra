@@ -175,8 +175,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 			      SLOT( precisionPlus() ), actionCollection(), "precplus");
     m_precminus = new KAction( i18n("Decrease precision"), KSBarIcon("precminus"), 0, this,
 			      SLOT( precisionMinus() ), actionCollection(), "precminus");
-    m_money = new KAction( i18n("Money format"), KSBarIcon("money"), 0, this, SLOT( moneyFormat() ),
-			    actionCollection(), "money");
+    /*m_money = new KAction( i18n("Money format"), KSBarIcon("money"), 0, this, SLOT( moneyFormat() ),
+			    actionCollection(), "money");*/
+    m_money = new KToggleAction( i18n("Money format"), KSBarIcon("money"), 0, actionCollection(), "money");
+    connect( m_money, SIGNAL( toggled( bool ) ), this, SLOT( moneyFormat( bool ) ) );
     m_alignLeft = new KToggleAction( i18n("Align left"), KSBarIcon("left"), 0, actionCollection(), "left");
     connect( m_alignLeft, SIGNAL( toggled( bool ) ), this, SLOT( alignLeft( bool ) ) );
     m_alignLeft->setExclusiveGroup( "Align" );
@@ -534,6 +536,12 @@ void KSpreadView::updateEditWidget()
     	m_percent->setChecked( TRUE );
     else
     	m_percent->setChecked( FALSE );
+
+    if( cell->postfix()==(" "+activeTable()->Currency()))
+    	m_money->setChecked( TRUE );
+    else
+    	m_money->setChecked( FALSE );
+
     m_toolbarLock = FALSE;
 }
 
@@ -1877,10 +1885,13 @@ void KSpreadView::alignCenter( bool b )
 	m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Center );
 }
 
-void KSpreadView::moneyFormat()
+void KSpreadView::moneyFormat(bool b)
 {
+    if ( m_toolbarLock )
+	return;
     if ( m_pTable != 0L )
 	m_pTable->setSelectionMoneyFormat( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    updateEditWidget();
 }
 
 void KSpreadView::precisionPlus()
@@ -1901,6 +1912,7 @@ void KSpreadView::percent( bool b )
 	return;
   if ( m_pTable != 0L )
     m_pTable->setSelectionPercent( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+  updateEditWidget();
 }
 
 void KSpreadView::insertObject()

@@ -139,7 +139,16 @@ thanks .
 (for example NO =>not etc ...)
 Now it works
 
+Summary 1999-11-02 ->1999-11-11
+
+Torben weis has installed a new dialogbox for choose a table format
+	=>2 styles of table.
+And bug fix	
+thanks.
+
+
 1999-11-11 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
 -bugfix Now changeref works
 -Now you can put and remove percent in a cell.
+-Now you can put and remove format money in a cell

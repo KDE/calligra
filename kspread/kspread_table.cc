@@ -211,6 +211,8 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
 
   setHide(false);
 
+  //init currency
+  currency = KGlobal::locale()->currencySymbol();
   // Get a unique name so that we can offer scripting
   if ( !_name )
   {
@@ -2275,10 +2277,10 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
     if(!currency)
     	{
     	currency = KGlobal::locale()->currencySymbol();
-	cout <<"Monney:" <<currency.ascii()<<endl;
+	cout <<"Money:" <<currency.ascii()<<endl;
     	}
     bool selected = ( m_rctSelection.left() != 0 );
-
+    QString tmp=" "+currency;
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
@@ -2290,10 +2292,21 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
 	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
 	{
 	  it.current()->setDisplayDirtyFlag();
-	  it.current()->setPostfix( " "+currency);
-	  //it.current()->setPostfix( " DM" );
-	  it.current()->setPrefix( "" );
-	  it.current()->setPrecision( 2 );
+	
+	  if(it.current()->postfix()==tmp)
+	  	{
+	  	it.current()->setPostfix( "");
+	  	it.current()->setPrefix( "" );
+	  	it.current()->setPrecision( 0 );
+	  	}
+	  else
+	  	{
+	  	it.current()->setPostfix( " "+currency);
+	  	//it.current()->setPostfix( " DM" );
+	  	it.current()->setFaktor( 1.0 );
+	  	it.current()->setPrefix( "" );
+	  	it.current()->setPrecision( 2 );
+	  	}
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -2312,10 +2325,20 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
 	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
 	{
 	  it.current()->setDisplayDirtyFlag();
-	  it.current()->setPostfix(" "+currency);
-	  //it.current()->setPostfix( " DM" );
-	  it.current()->setPrefix( "" );
-	  it.current()->setPrecision( 2 );
+	  if(it.current()->postfix()==tmp)
+	  	{
+	  	it.current()->setPostfix( "");
+	  	it.current()->setPrefix( "" );
+	  	it.current()->setPrecision( 0 );
+	  	}
+	  else
+	  	{
+	  	it.current()->setPostfix(" "+currency);
+	  	it.current()->setFaktor( 1.0 );
+	  	//it.current()->setPostfix( " DM" );
+	  	it.current()->setPrefix( "" );
+	  	it.current()->setPrecision( 2 );
+	  	}
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -2350,9 +2373,19 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
 
 		cell->setDisplayDirtyFlag();
 		//cell->setPostfix( " DM" );
-		cell->setPostfix( " "+currency);
-		cell->setPrefix( "" );
-		cell->setPrecision( 2 );
+		if(cell->postfix()==tmp)
+	  		{
+	  		cell->setPostfix( "");
+	  		cell->setPrefix( "" );
+	  		cell->setPrecision( 0 );
+	  		}
+	 	else
+	 		{
+			cell->setPostfix( " "+currency);
+			cell->setFaktor( 1.0 );
+			cell->setPrefix( "" );
+			cell->setPrecision( 2 );
+			}
 		cell->clearDisplayDirtyFlag();
 	    	}
 
