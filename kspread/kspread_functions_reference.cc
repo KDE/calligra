@@ -173,7 +173,7 @@ bool kspreadfunc_address( KSContext & context )
     if ( abs )
       result += '$';
 
-    result += util_encodeColumnLabelText( col );
+    result += KSpreadCell::columnName( col );
 
     abs = false;
     if ( absNum == 1 || absNum == 2 )
