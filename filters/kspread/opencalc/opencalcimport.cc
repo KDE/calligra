@@ -2468,12 +2468,12 @@ void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& v
     if ( !help.isNull() )
     {
         if ( help.hasAttribute( "table:title" ) )
-            kdDebug()<<"help.attribute( table:title ) :"<<help.attribute( "table:title" )<<endl;
+             val->titleInfo = help.attribute( "table:title" );
         if ( help.hasAttribute( "table:display" ) )
-            kdDebug()<<"help.attribute( table:display ) :"<<help.attribute( "table:display" )<<endl;
+            val->displayValidationInformation = ( ( help.attribute( "table:display" )=="true" ) ? true : false );
         QDomElement attrText = help.namedItem( "text:p" ).toElement();
         if ( !attrText.isNull() )
-            kdDebug()<<"help text :"<<attrText.text()<<endl;
+            val->messageInfo = attrText.text();
     }
 
     QDomElement error = element.namedItem( "table:error-message" ).toElement();
