@@ -9,7 +9,7 @@
    <PARAGRAPH>
     <TEXT>Euro symbol: €</TEXT>
     <LAYOUT>
-     <NAME value="Standard " />
+     <NAME value="Standard" />
      <FLOW align="left" />
      <FORMAT id="1" pos="0" len="14" >
       <WEIGHT value="50" />
@@ -26,7 +26,7 @@
    <PARAGRAPH>
     <TEXT></TEXT>
     <LAYOUT>
-     <NAME value="Standard " />
+     <NAME value="Standard" />
      <FLOW align="left" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
