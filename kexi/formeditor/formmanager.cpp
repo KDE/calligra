@@ -45,6 +45,7 @@
 #include <kglobal.h>
 #include <kdialogbase.h>
 #include <ktextedit.h>
+#include <ktabwidget.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,1,9) && !defined(Q_WS_WIN)
@@ -1134,7 +1135,7 @@ void
 FormManager::showFormUICode()
 {
 #ifdef KEXI_SHOW_DEBUG_ACTIONS
-	if(!activeForm() || !activeForm()->objectTree())
+	if(!activeForm())
 		return;
 
 	QString uiCode;
@@ -1143,16 +1144,29 @@ FormManager::showFormUICode()
 	if (!m_uiCodeDialog) {
 		m_uiCodeDialog = new KDialogBase(0, "uiwindow", true, i18n("Form's UI Code"),
 				KDialogBase::Close,	KDialogBase::Close);
-		m_uiCodeDialog->resize(700, 400);
+		m_uiCodeDialog->resize(700, 600);
 		QVBox *box = m_uiCodeDialog->makeVBoxMainWidget();
-		m_uiCodeDialogEditor = new KTextEdit(QString::null, QString::null, box);
-		m_uiCodeDialogEditor->setReadOnly(true);
-		QFont f( m_uiCodeDialogEditor->font() );
+		KTabWidget* tab = new KTabWidget(box);
+
+		m_currentUICodeDialogEditor = new KTextEdit(QString::null, QString::null, tab);
+		tab->addTab( m_currentUICodeDialogEditor, i18n("Current"));
+		m_currentUICodeDialogEditor->setReadOnly(true);
+		QFont f( m_currentUICodeDialogEditor->font() );
 		f.setFamily("courier");
-		m_uiCodeDialogEditor->setFont(f);
-		m_uiCodeDialogEditor->setTextFormat(Qt::PlainText);
+		m_currentUICodeDialogEditor->setFont(f);
+		m_currentUICodeDialogEditor->setTextFormat(Qt::PlainText);
+		
+		m_originalUICodeDialogEditor = new KTextEdit(QString::null, QString::null, tab);
+		tab->addTab( m_originalUICodeDialogEditor, i18n("Original"));
+		m_originalUICodeDialogEditor->setReadOnly(true);
+		m_originalUICodeDialogEditor->setFont(f);
+		m_originalUICodeDialogEditor->setTextFormat(Qt::PlainText);
 	}
-	m_uiCodeDialogEditor->setText( uiCode );
+	m_currentUICodeDialogEditor->setText( uiCode );
+	//indent and set our original doc as well:
+	QDomDocument doc;
+	doc.setContent( activeForm()->m_recentlyLoadedUICode );
+	m_originalUICodeDialogEditor->setText( doc.toString( 3 ) );
 	m_uiCodeDialog->show();
 #endif
 }

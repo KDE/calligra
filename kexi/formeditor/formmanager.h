@@ -372,7 +372,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 #ifdef KEXI_SHOW_DEBUG_ACTIONS
 		KDialogBase *m_uiCodeDialog;
-		KTextEdit *m_uiCodeDialogEditor;
+		KTextEdit *m_currentUICodeDialogEditor;
+		KTextEdit *m_originalUICodeDialogEditor;
 #endif
 
 		friend class PropertyCommand;

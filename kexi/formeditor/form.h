@@ -236,6 +236,11 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		(called for example before saving or displaying the tab order dialog) */
 		void			autoAssignTabStops();
 
+#ifdef KEXI_SHOW_DEBUG_ACTIONS
+		//! For debugging purposes
+		QString m_recentlyLoadedUICode;
+#endif
+
 	public slots:
 		/*! This slot is called when the name of a widget was changed in Property Editor.
 		It renames the ObjectTreeItem associated to this widget.

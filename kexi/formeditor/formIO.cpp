@@ -223,6 +223,10 @@ FormIO::loadFormFromString(Form *form, QWidget *container, QString &src, bool pr
 	int errLine;
 	int errCol;
 
+#ifdef KEXI_SHOW_DEBUG_ACTIONS
+	form->m_recentlyLoadedUICode = src;
+#endif
+
 	QDomDocument inBuf;
 	bool parsed = inBuf.setContent(src, false, &errMsg, &errLine, &errCol);
 
