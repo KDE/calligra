@@ -164,11 +164,6 @@ public:
 
     void initConfig();
 
-    /**
-    * refresh view when you hide/show vertical scrollbar
-    */
-    void refreshView();
-
     bool isLoading()const {return m_bLoading;}
 
     /**
@@ -197,6 +192,10 @@ public:
   void paintUpdates();
 
 public slots:
+    /**
+    * refresh view when you hide/show vertical scrollbar
+    */
+    void refreshView();
     void initialPosition();
     /**
      * Actions
@@ -210,8 +209,8 @@ public slots:
     void clearCommentSelection();
     void clearValiditySelection();
     void clearConditionalSelection();
-    void RecalcWorkBook();
-    void RecalcWorkSheet();
+    void recalcWorkBook();
+    void recalcWorkSheet();
     void paste();
     void specialPaste();
     void editCell();
@@ -416,8 +415,7 @@ public slots:
     void slotTableHidden( KSpreadSheet*_table );
     void slotTableShown( KSpreadSheet*_table );
     void slotTableRemoved( KSpreadSheet*_table );
-    void slotRefreshView( );
-    void slotRefreshLocale();
+    void refreshLocale();
     void extraSpelling();
 
     void spellCheckerReady();

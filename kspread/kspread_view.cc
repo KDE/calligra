@@ -430,9 +430,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     QObject::connect( m_pDoc, SIGNAL( sig_addTable( KSpreadSheet* ) ), SLOT( slotAddTable( KSpreadSheet* ) ) );
 
 
-    QObject::connect( m_pDoc, SIGNAL( sig_refreshView(  ) ), this, SLOT( slotRefreshView() ) );
+    QObject::connect( m_pDoc, SIGNAL( sig_refreshView(  ) ), this, SLOT( refreshView() ) );
 
-    QObject::connect( m_pDoc, SIGNAL( sig_refreshLocale() ), this, SLOT( slotRefreshLocale()));
+    QObject::connect( m_pDoc, SIGNAL( sig_refreshLocale() ), this, SLOT( refreshLocale()));
     viewZoom(QString::number(m_pDoc->zoom()) );
 
     QStringList list = m_viewZoom->items();
@@ -1351,11 +1351,9 @@ void KSpreadView::initCalcMenu()
 
 }
 
-void KSpreadView::RecalcWorkBook(){
-
-    KSpreadSheet *tbl;
-
-    for ( tbl = m_pDoc->map()->firstTable();
+void KSpreadView::recalcWorkBook()
+{
+    for ( KSpreadSheet *tbl = m_pDoc->map()->firstTable();
 	  tbl != 0L;
           tbl = m_pDoc->map()->nextTable() )
     {
@@ -1369,17 +1367,16 @@ void KSpreadView::RecalcWorkBook(){
 
 }
 
-void KSpreadView::slotRefreshLocale()
+void KSpreadView::refreshLocale()
 {
-    KSpreadSheet *tbl;
-    for ( tbl = m_pDoc->map()->firstTable();
+    for ( KSpreadSheet *tbl = m_pDoc->map()->firstTable();
 	  tbl != 0L;
           tbl = m_pDoc->map()->nextTable() ){
       tbl->updateLocale();
     }
 }
 
-void KSpreadView::RecalcWorkSheet()
+void KSpreadView::recalcWorkSheet()
 {
   if (m_pTable != 0)
   {
@@ -1530,12 +1527,9 @@ void KSpreadView::spellCheckerReady()
     ++m_spell.spellCurrCellY;
   }
 
-  unsigned int y;
-  unsigned int x;
-
-  for ( y = m_spell.spellCurrCellY; y <= m_spell.spellEndCellY; ++y )
+  for ( uint y = m_spell.spellCurrCellY; y <= m_spell.spellEndCellY; ++y )
   {
-    for ( x = m_spell.spellCurrCellX; x <= m_spell.spellEndCellX; ++x )
+    for ( uint x = m_spell.spellCurrCellX; x <= m_spell.spellEndCellX; ++x )
     {
       KSpreadCell * cell = m_spell.currentSpellTable->cellAt( x, y );
 
@@ -2723,11 +2717,6 @@ void KSpreadView::setActiveTable( KSpreadSheet *_t,bool updateTable )
   resultOfCalc();
 }
 
-void KSpreadView::slotRefreshView(  )
-{
-  refreshView();
-}
-
 void KSpreadView::slotTableRenamed( KSpreadSheet* table, const QString& old_name )
 {
     m_pTabBar->renameTab( old_name, table->tableName() );
@@ -3649,6 +3638,7 @@ void KSpreadView::refreshView()
 
     m_pCanvas->setGeometry( widthRowHeader, heightColHeader,
                             m_pFrame->width() -widthRowHeader, m_pFrame->height() - heightColHeader );
+    m_pCanvas->updatePosWidget();
 
     m_pHBorderWidget->setGeometry( widthRowHeader + 1, 0,
                                    m_pFrame->width() - widthRowHeader, heightColHeader );

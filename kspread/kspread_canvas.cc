@@ -46,17 +46,15 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
     case Key_Return:
     case Key_Enter:
         {
-	    QString tmp;
             QString ltext = text();
-            tmp = ltext.lower();
+            QString tmp = ltext.lower();
             QValueList<Reference>::Iterator it;
 	    QValueList<Reference> area = m_pView->doc()->listArea();
 	    for ( it = area.begin(); it != area.end(); ++it )
             {
                 if ((*it).ref_name == tmp)
                 {
-                    QString tmp;
-                    tmp = (*it).table_name;
+                    QString tmp = (*it).table_name;
                     tmp += "!";
                     tmp += util_rangeName((*it).rect);
                     m_pView->canvasWidget()->gotoLocation( KSpreadRange(tmp, m_pView->doc()->map()));
@@ -64,11 +62,9 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
                 }
             }
 
-            int pos;
-
             // Set the cell component to uppercase:
             // Table1!a1 -> Table1!A2
-            pos = ltext.find('!');
+            int pos = ltext.find('!');
             if( pos !=- 1 )
                 tmp = ltext.left(pos)+ltext.mid(pos).upper();
             else
@@ -3539,7 +3535,6 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     scaledYpos = qRound( int( dblYpos ) * m_pCanvas->zoom() );
     y++;
   }
-  m_pCanvas->updatePosWidget();
 }
 
 /****************************************************************
@@ -4122,7 +4117,6 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
     scaledXpos = qRound( int( dblXpos ) * m_pCanvas->zoom() );
     x++;
   }
-  m_pCanvas->updatePosWidget();
 }
 
 /****************************************************************
