@@ -242,6 +242,9 @@ public:
     /** Let KoTextFormatInterface access the current parag layout */
     virtual const KoParagLayout * currentParagLayoutFormat() const;
 
+    virtual bool rtl() const ;
+
+
     /** Let KoTextFormatInterface set a modified current parag layout */
     virtual KCommand *setParagLayoutFormatCommand( KoParagLayout *newLayout, int flags, int marginIndex=-1);
 

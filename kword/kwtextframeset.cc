@@ -2544,6 +2544,12 @@ const KoParagLayout * KWTextFrameSet::currentParagLayoutFormat() const
     return m_textobj->currentParagLayoutFormat();
 }
 
+bool KWTextFrameSet::rtl() const
+{
+    return m_textobj->rtl();
+}
+
+
 KCommand *KWTextFrameSet::setParagLayoutFormatCommand( KoParagLayout *newLayout,int flags, int marginIndex)
 {
     return m_textobj->setParagLayoutFormatCommand(newLayout, flags, marginIndex);
