@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999,2000 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999,2000 Montel Laurent <lmontel@mandrakesoft.com>
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -34,9 +33,10 @@
 #include <kfontdialog.h>
 #include <knumvalidator.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , const QRect &_marker )
-        :KDialogBase(KDialogBase::Tabbed, i18n("Validity"), Ok|Cancel, Ok, parent, name)
+        :KDialogBase(KDialogBase::Tabbed, i18n("Validity"), User1|Cancel, User1, parent, name,true,false,i18n("Ok"))
 
 {
     m_pView=parent;
@@ -148,7 +148,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
 
      connect(choose,SIGNAL(highlighted(int )),this,SLOT(changeIndexCond(int)));
      connect(chooseType,SIGNAL(highlighted(int )),this,SLOT(changeIndexType(int)));
-     connect( this, SIGNAL(okClicked()), SLOT(OkPressed()) );
+     connect( this, SIGNAL(user1Clicked()), SLOT(OkPressed()) );
      init();
 }
 
@@ -291,7 +291,8 @@ void KSpreadDlgValidity::init()
                         break;
                 case Allow_Number:
                         chooseType->setCurrentItem(1);
-                        val_max->setText(tmp.setNum(tmpValidity->valMax));
+                        if(tmpValidity->m_cond >=5 )
+                                val_max->setText(tmp.setNum(tmpValidity->valMax));
                         val_min->setText(tmp.setNum(tmpValidity->valMin));
                         break;
                 case Allow_Text:
@@ -299,13 +300,15 @@ void KSpreadDlgValidity::init()
                         break;
                 case Allow_Date:
                         chooseType->setCurrentItem(3);
-                        val_max->setText(KGlobal::locale()->formatDate(tmpValidity->dateMax,true));
                         val_min->setText(KGlobal::locale()->formatDate(tmpValidity->dateMin,true));
+                        if(tmpValidity->m_cond >=5 )
+                                val_max->setText(KGlobal::locale()->formatDate(tmpValidity->dateMax,true));
                         break;
                 case Allow_Time:
                         chooseType->setCurrentItem(4);
-                        val_max->setText(KGlobal::locale()->formatTime(tmpValidity->timeMax,true));
                         val_min->setText(KGlobal::locale()->formatTime(tmpValidity->timeMin,true));
+                        if(tmpValidity->m_cond >=5 )
+                                val_max->setText(KGlobal::locale()->formatTime(tmpValidity->timeMax,true));
                         break;
                 default :
                         chooseType->setCurrentItem(0);
@@ -360,6 +363,56 @@ changeIndexCond(choose->currentItem()) ;
 
 void KSpreadDlgValidity::OkPressed()
 {
+if( chooseType->currentItem()==1)
+        {
+        QString tmp;
+        bool ok;
+        tmp=val_min->text().toDouble(&ok);
+        if(! ok)
+                {
+                KMessageBox::error( this , i18n("This is not a valid value !"),i18n("Error"));
+                val_min->setText("");
+                return;
+                }
+        tmp=val_max->text().toDouble(&ok);
+        if(! ok && choose->currentItem() >=5 )
+                {
+                KMessageBox::error( this , i18n("This is not a valid value !"),i18n("Error"));
+                val_max->setText("");
+                return;
+                }
+        }
+else  if(  chooseType->currentItem()==4)
+        {
+        if(! KGlobal::locale()->readTime(val_min->text()).isValid())
+                {
+                KMessageBox::error( this , i18n("This is not a valid date !"),i18n("Error"));
+                val_min->setText("");
+                return;
+                }
+        if(! KGlobal::locale()->readTime(val_max->text()).isValid() && choose->currentItem()  >=5)
+                {
+                KMessageBox::error( this , i18n("This is not a valid date !"),i18n("Error"));
+                val_max->setText("");
+                return;
+                }
+        }
+else  if(  chooseType->currentItem()==3)
+        {
+        if(! KGlobal::locale()->readDate(val_min->text()).isValid())
+                {
+                KMessageBox::error( this , i18n("This is not a valid time !"),i18n("Error"));
+                val_min->setText("");
+                return;
+                }
+        if(! KGlobal::locale()->readDate(val_max->text()).isValid() && choose->currentItem()  >=5 )
+                {
+                KMessageBox::error( this , i18n("This is not a valid time !"),i18n("Error"));
+                val_max->setText("");
+                return;
+                }
+        }
+
 if( chooseType->currentItem()==0)
         {//no validity
         result.m_allow=Allow_All;
@@ -447,8 +500,15 @@ else
 
         if( chooseType->currentItem()==1)
                 {
-                result.valMin=QMIN(val_min->text().toDouble(),val_max->text().toDouble());
-                result.valMax=QMAX(val_max->text().toDouble(),val_min->text().toDouble());
+                if(choose->currentItem()  <5)
+                        {
+                        result.valMin=val_min->text().toDouble();
+                        }
+                else
+                        {
+                        result.valMin=QMIN(val_min->text().toDouble(),val_max->text().toDouble());
+                        result.valMax=QMAX(val_max->text().toDouble(),val_min->text().toDouble());
+                        }
                 }
         else  if(  chooseType->currentItem()==4)
                 {
@@ -464,6 +524,7 @@ else
 
 m_pView->activeTable()->setValidity( QPoint(  m_pView->canvasWidget()->markerColumn(),
                                                   m_pView->canvasWidget()->markerRow() ),  result);
+accept();
 }
 
 #include "kspread_dlg_validity.moc"

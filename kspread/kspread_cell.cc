@@ -4245,6 +4245,37 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         message.appendChild( doc.createCDATASection( m_Validity->message ) );
         validity.appendChild( message );
 
+        QString tmp;
+        if(  m_Validity->timeMin.isValid())
+                {
+                QDomElement timeMin = doc.createElement( "timemin" );
+                tmp=m_Validity->timeMin.toString();
+                timeMin.appendChild( doc.createTextNode( tmp ) );
+                validity.appendChild( timeMin );
+                }
+        if(  m_Validity->timeMax.isValid())
+                {
+                QDomElement timeMax = doc.createElement( "timemax" );
+                tmp=m_Validity->timeMax.toString();
+                timeMax.appendChild( doc.createTextNode( tmp ) );
+                validity.appendChild( timeMax );
+                }
+
+        if(m_Validity->dateMin.isValid())
+                {
+                QDomElement dateMin = doc.createElement( "datemin" );
+                tmp=tmp.setNum(m_Validity->dateMin.year())+"/"+tmp.setNum(m_Validity->dateMin.month())+"/"+tmp.setNum(m_Validity->dateMin.day());
+                dateMin.appendChild( doc.createTextNode( tmp ) );
+                validity.appendChild( dateMin );
+                }
+        if( m_Validity->dateMax.isValid())
+                {
+                QDomElement dateMax = doc.createElement( "datemax" );
+                tmp=tmp.setNum(m_Validity->dateMax.year())+"/"+tmp.setNum(m_Validity->dateMax.month())+"/"+tmp.setNum(m_Validity->dateMax.day());
+                dateMax.appendChild( doc.createTextNode( tmp ) );
+                validity.appendChild( dateMax );
+                }
+
         cell.appendChild( validity );
     }
 
@@ -4523,6 +4554,27 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         {
                  m_Validity->message= message.text();
         }
+        QDomElement timeMin = validity.namedItem( "timemin" ).toElement();
+        if ( !timeMin.isNull()  )
+        {
+            m_Validity->timeMin=toTime(timeMin);
+         }
+        QDomElement timeMax = validity.namedItem( "timemax" ).toElement();
+        if ( !timeMax.isNull()  )
+        {
+            m_Validity->timeMax=toTime(timeMax);
+         }
+        QDomElement dateMin = validity.namedItem( "datemin" ).toElement();
+        if ( !dateMin.isNull()  )
+        {
+            m_Validity->dateMin=toDate(dateMin);
+         }
+        QDomElement dateMax = validity.namedItem( "datemax" ).toElement();
+        if ( !dateMax.isNull()  )
+        {
+            m_Validity->dateMax=toDate(dateMax);
+         }
+
     }
 
     //
@@ -4605,6 +4657,40 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         setStyle( (Style)f.attribute("style").toInt() );
 
     return true;
+}
+
+QTime KSpreadCell::toTime(QDomElement &element)
+{
+QString t = element.text();
+t = t.stripWhiteSpace();
+int hours = -1;
+int minutes = -1;
+int second = -1;
+int pos, pos1;
+pos = t.find(':');
+hours = t.mid(0,pos).toInt();
+pos1 = t.find(':',pos+1);
+minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
+second = t.right(t.length()-pos1-1).toInt();
+m_Time = QTime(hours,minutes,second);
+return m_Time;
+}
+
+QDate KSpreadCell::toDate(QDomElement &element)
+{
+QString t = element.text();
+int pos;
+int pos1;
+int year = -1;
+int month = -1;
+int day = -1;
+pos = t.find('/');
+year = t.mid(0,pos).toInt();
+pos1 = t.find('/',pos+1);
+month = t.mid(pos+1,((pos1-1)-pos)).toInt();
+day = t.right(t.length()-pos1-1).toInt();
+m_Date = QDate(year,month,day);
+return m_Date;
 }
 
 QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operation op )

@@ -173,6 +173,8 @@ public:
     virtual QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool fallBack=false );
     bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal,
 	       Operation op = OverWrite );
+    QTime toTime(QDomElement &element) ;
+    QDate toDate(QDomElement &element);
     /**
     * save layout parameters when you copy cell
     * used fallback
