@@ -9,150 +9,37 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
-            <height>508</height>
+            <width>726</width>
+            <height>458</height>
         </rect>
-    </property>
-    <property name="minimumSize">
-        <size>
-            <width>600</width>
-            <height>450</height>
-        </size>
     </property>
     <property name="caption">
         <string>RequestResourcesPanelBase</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox" row="1" column="0">
-            <property name="name">
-                <cstring>groupBox22</cstring>
-            </property>
-            <property name="title">
-                <string>Resources</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel" row="1" column="1">
-                    <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Or assign specific resources:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>resourceTable</cstring>
-                    </property>
-                </widget>
-                <widget class="QListView" row="0" column="0" rowspan="3" colspan="1">
-                    <column>
-                        <property name="text">
-                            <string>Group</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>Max. units</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                    <property name="name">
-                        <cstring>groupList</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>7</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>200</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                </widget>
-                <widget class="QTable" row="2" column="1">
-                    <column>
-                        <property name="text">
-                            <string>Resource</string>
-                        </property>
-                    </column>
-                    <property name="name">
-                        <cstring>resourceTable</cstring>
-                    </property>
-                    <property name="numRows">
-                        <number>0</number>
-                    </property>
-                    <property name="numCols">
-                        <number>1</number>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget" row="0" column="1">
-                    <property name="name">
-                        <cstring>layout32</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Enter number of units:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>numUnits</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QSpinBox">
-                            <property name="name">
-                                <cstring>numUnits</cstring>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QGroupBox" row="0" column="0">
+        <widget class="QGroupBox">
             <property name="name">
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
                 <string>Effort</string>
             </property>
-            <grid>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget" row="1" column="0">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>layout21</cstring>
+                        <cstring>layout11</cstring>
                     </property>
-                    <hbox>
+                    <grid>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QComboBox">
+                        <widget class="QComboBox" row="1" column="0">
                             <item>
                                 <property name="text">
                                     <string>Work based</string>
@@ -167,7 +54,77 @@
                                 <cstring>effortType</cstring>
                             </property>
                         </widget>
-                        <widget class="QComboBox">
+                        <widget class="QSpinBox" row="2" column="2">
+                            <property name="name">
+                                <cstring>pessimisticValue</cstring>
+                            </property>
+                            <property name="prefix">
+                                <string></string>
+                            </property>
+                            <property name="suffix">
+                                <string>%</string>
+                            </property>
+                            <property name="value">
+                                <number>99</number>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="0" column="1">
+                            <property name="name">
+                                <cstring>numDays</cstring>
+                            </property>
+                            <property name="suffix">
+                                <string>day(s)</string>
+                            </property>
+                            <property name="maxValue">
+                                <number>6</number>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="0" column="0">
+                            <property name="name">
+                                <cstring>numWeeks</cstring>
+                            </property>
+                            <property name="suffix">
+                                <string>week(s)</string>
+                            </property>
+                            <property name="maxValue">
+                                <number>9999</number>
+                            </property>
+                            <property name="lineStep">
+                                <number>1</number>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="2" column="1">
+                            <property name="name">
+                                <cstring>textLabel5</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&lt;p align="right"&gt;Pessimistic:&lt;/p&gt;</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>pessimisticValue</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="1" column="2">
+                            <property name="name">
+                                <cstring>optimisticValue</cstring>
+                            </property>
+                            <property name="prefix">
+                                <string></string>
+                            </property>
+                            <property name="suffix">
+                                <string>%</string>
+                            </property>
+                            <property name="maxValue">
+                                <number>0</number>
+                            </property>
+                            <property name="minValue">
+                                <number>-99</number>
+                            </property>
+                            <property name="value">
+                                <number>-99</number>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="2" column="0">
                             <item>
                                 <property name="text">
                                     <string>No risk</string>
@@ -187,17 +144,26 @@
                                 <cstring>risk</cstring>
                             </property>
                         </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget" row="1" column="1">
-                    <property name="name">
-                        <cstring>layout19</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
+                        <widget class="QSpinBox" row="0" column="2">
+                            <property name="name">
+                                <cstring>numHours</cstring>
+                            </property>
+                            <property name="suffix">
+                                <string>:</string>
+                            </property>
+                            <property name="maxValue">
+                                <number>23</number>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="0" column="3">
+                            <property name="name">
+                                <cstring>numMinutes</cstring>
+                            </property>
+                            <property name="maxValue">
+                                <number>59</number>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="1">
                             <property name="name">
                                 <cstring>textLabel4</cstring>
                             </property>
@@ -208,107 +174,133 @@
                                 <cstring>optimisticValue</cstring>
                             </property>
                         </widget>
-                        <widget class="QSpinBox">
-                            <property name="name">
-                                <cstring>optimisticValue</cstring>
-                            </property>
-                            <property name="prefix">
-                                <string></string>
-                            </property>
-                            <property name="suffix">
-                                <string>%</string>
-                            </property>
-                            <property name="maxValue">
-                                <number>0</number>
-                            </property>
-                            <property name="minValue">
-                                <number>-99</number>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel5</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&lt;p align="right"&gt;Pessimistic:&lt;/p&gt;</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>pessimisticValue</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QSpinBox">
-                            <property name="name">
-                                <cstring>pessimisticValue</cstring>
-                            </property>
-                            <property name="prefix">
-                                <string></string>
-                            </property>
-                            <property name="suffix">
-                                <string>%</string>
-                            </property>
-                        </widget>
-                    </hbox>
+                    </grid>
                 </widget>
-                <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
+            </vbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox22</cstring>
+            </property>
+            <property name="title">
+                <string>Resources</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>layout20</cstring>
+                        <cstring>layout15</cstring>
                     </property>
                     <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QSpinBox">
+                        <widget class="QListView">
+                            <column>
+                                <property name="text">
+                                    <string>Group</string>
+                                </property>
+                                <property name="clickable">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="resizable">
+                                    <bool>true</bool>
+                                </property>
+                            </column>
+                            <column>
+                                <property name="text">
+                                    <string>Max. units</string>
+                                </property>
+                                <property name="clickable">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="resizable">
+                                    <bool>true</bool>
+                                </property>
+                            </column>
                             <property name="name">
-                                <cstring>numWeeks</cstring>
+                                <cstring>groupList</cstring>
                             </property>
-                            <property name="suffix">
-                                <string> week(s)</string>
-                            </property>
-                            <property name="maxValue">
-                                <number>99000</number>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>200</width>
+                                    <height>0</height>
+                                </size>
                             </property>
                         </widget>
-                        <widget class="QSpinBox">
+                        <widget class="QLayoutWidget">
                             <property name="name">
-                                <cstring>numDays</cstring>
+                                <cstring>layout14</cstring>
                             </property>
-                            <property name="suffix">
-                                <string> day(s)</string>
-                            </property>
-                            <property name="maxValue">
-                                <number>99000</number>
-                            </property>
-                        </widget>
-                        <widget class="QSpinBox">
-                            <property name="name">
-                                <cstring>numHours</cstring>
-                            </property>
-                            <property name="suffix">
-                                <string> hour(s)</string>
-                            </property>
-                            <property name="maxValue">
-                                <number>99000</number>
-                            </property>
-                        </widget>
-                        <widget class="QSpinBox">
-                            <property name="name">
-                                <cstring>numMinutes</cstring>
-                            </property>
-                            <property name="suffix">
-                                <string> min(s)</string>
-                            </property>
-                            <property name="maxValue">
-                                <number>99000</number>
-                            </property>
-                            <property name="lineStep">
-                                <number>15</number>
-                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLayoutWidget">
+                                    <property name="name">
+                                        <cstring>layout32</cstring>
+                                    </property>
+                                    <hbox>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <widget class="QLabel">
+                                            <property name="name">
+                                                <cstring>textLabel1</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Enter number of units:</string>
+                                            </property>
+                                            <property name="buddy" stdset="0">
+                                                <cstring>numUnits</cstring>
+                                            </property>
+                                        </widget>
+                                        <widget class="QSpinBox">
+                                            <property name="name">
+                                                <cstring>numUnits</cstring>
+                                            </property>
+                                        </widget>
+                                    </hbox>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Or assign specific resources:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>resourceTable</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QTable">
+                                    <column>
+                                        <property name="text">
+                                            <string>Resource</string>
+                                        </property>
+                                    </column>
+                                    <property name="name">
+                                        <cstring>resourceTable</cstring>
+                                    </property>
+                                    <property name="resizePolicy">
+                                        <enum>Default</enum>
+                                    </property>
+                                    <property name="numRows">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="numCols">
+                                        <number>1</number>
+                                    </property>
+                                </widget>
+                            </vbox>
                         </widget>
                     </hbox>
                 </widget>
-            </grid>
+            </vbox>
         </widget>
-    </grid>
+    </vbox>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
