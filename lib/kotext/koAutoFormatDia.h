@@ -128,7 +128,7 @@ protected:
     KoAutoFormatExceptionWidget *abbreviation;
     KoAutoFormatExceptionWidget *twoUpperLetter;
     QListBox *m_listCompletion;
-    QSpinBox *m_minWordLength;
+    KIntNumInput *m_minWordLength;
     KIntNumInput *m_maxNbWordCompletion;
 
 protected slots:

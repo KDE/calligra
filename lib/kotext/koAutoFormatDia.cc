@@ -439,9 +439,9 @@ void KoAutoFormatDia::setupTab5()
     QLabel *lab=new QLabel( i18n("Min. word length:"), tab5);
     lab->resize( lab->sizeHint() );
 
-    m_minWordLength = new QSpinBox( tab5);
+    m_minWordLength = new KIntNumInput( tab5);
     m_minWordLength->setValue ( m_docAutoFormat->getConfigMinWordLength() );
-    m_minWordLength->setMinValue ( 5 );
+    m_minWordLength->setRange ( 5, 800,1,false );
     m_minWordLength->resize( m_minWordLength->sizeHint() );
 
 

@@ -377,6 +377,29 @@ bool KoTextViewIface::isALinkVariable() const
     return (m_textView->linkVariable()!=0);
 }
 
+QString KoTextViewIface::linkVariableUrl( ) const
+{
+    KoLinkVariable *var=m_textView->linkVariable();
+    if ( !var)
+        return QString::null;
+    else
+    {
+        return var->url();
+    }
+}
+
+QString KoTextViewIface::linkVariableName( ) const
+{
+    KoLinkVariable *var=m_textView->linkVariable();
+    if ( !var)
+        return QString::null;
+    else
+    {
+        return var->value();
+    }
+}
+
+
 bool KoTextViewIface::changeLinkVariableUrl( const QString & _url)
 {
     KoLinkVariable *var=m_textView->linkVariable();

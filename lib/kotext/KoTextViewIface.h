@@ -116,6 +116,11 @@ k_dcop:
     //return false if there is not a link
     bool changeLinkVariableName( const QString & _name);
 
+    //be carefull these functions return QString::null when there is not
+    //a variable
+    QString linkVariableUrl( ) const;
+    QString linkVariableName( ) const;
+
     bool isANoteVariable() const ;
     QString noteVariableText() const;
     //return false if there is not a note variable
