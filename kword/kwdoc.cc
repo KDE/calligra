@@ -1387,20 +1387,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     recalcFrames(); // This computes the number of pages (from the frames)
                     // for the first time (and adds footers/headers etc.)
 
-#if 0 // If KWCanvas calls updateViewArea right, this is not needed anymore
-    kdDebug(32002) << "KWDocument::loadXML starting formatting" << endl;
-    // So now we can start formatting
-    fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWTextFrameSet * frameset = dynamic_cast<KWTextFrameSet *>(fit.current());
-        if ( frameset )
-        {
-            frameset->formatMore(); // creates more pages/frames if necessary
-        }
-    }
-#endif
-
     emit newContentsSize();
     repaintAllViews( true );     // in case any view exists already
 

@@ -1895,8 +1895,6 @@ KCommand * KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & da
 
     *cursor = *( cmd->execute( cursor ) );
 
-    (void) availableHeight(); // calculate it again (set to -1 due to unzoom/zoom)
-
     m_textobj->formatMore();
     emit repaintChanged( this );
     m_textobj->emitEnsureCursorVisible();
