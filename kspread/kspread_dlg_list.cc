@@ -35,7 +35,7 @@
 #include <qmultilineedit.h>
 #include <kconfig.h>
 #include <qlabel.h>
-
+#include <kdebug.h>
 
 KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
 	: QDialog( parent, name,TRUE )
@@ -262,9 +262,8 @@ void KSpreadList::slotOk()
 
 void KSpreadList::slotModify()
 {
-
     //you can modify list but not the two first list
-  if(list->currentItem ()>2 && !entryList->text().isEmpty())
+  if(list->currentItem ()>1 && !entryList->text().isEmpty())
     {
       QString tmp;
       for(int i=0;i<entryList->numLines();i++)
