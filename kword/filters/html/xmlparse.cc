@@ -504,7 +504,7 @@ void TranslateEntityRefs(char *z){
       while( p && strcmp(p->zName,&z[from+1])!=0 ){ p = p->pNext; }
       z[i] = c;
       if( p ){
-        zVal = p->zValue;
+        zVal = (char *) p->zValue;
         while( *zVal ){
           z[to++] = *(zVal++);
         }
