@@ -19,24 +19,23 @@
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
 */
-
-#include <qdir.h>
-#include <qfileinfo.h>
 
 #include <iostream.h>
 
-#include "ScriptDialog.h"
-#include "ScriptDialog.moc"
+#include <qdir.h>
+#include <qfileinfo.h>
+#include <qpushbt.h>
+#include <qlayout.h>
 
 #include <klocale.h>
 #include <kapp.h>
 #include <kbuttonbox.h>
 #include <kseparator.h>
+#include <kstddirs.h>
 
-#include <qpushbt.h>
-#include <qlayout.h>
+#include "ScriptDialog.h"
+#include "ScriptDialog.moc"
 
 ScriptDialog::ScriptDialog (QWidget* parent, const char* name) : 
     QDialog (parent, name, false) {
@@ -76,13 +75,20 @@ ScriptDialog::ScriptDialog (QWidget* parent, const char* name) :
 void ScriptDialog::setActiveDocument (GDocument* ) {
 }
 
-#include <kstddirs.h>
-
 void ScriptDialog::loadScripts () {
   listBox->clear ();
   lastSystemScript = -1;
 
   // load scripts from system directory
+#if NEWKDE
+  QStringList scriptLst = KGlobal::dirs()->findAllResources( "appdata", "scripts/*.py" );
+  for( QStringList::Iterator it = scriptLst.begin(); it != scriptLst.end(); it++)
+  {
+    QString file = *it;
+    listBox->insertItem( file.mid( file.findRev( '/' ) + 1 ) );
+  }
+  lastSystemScript = scriptLst.count() - 1;
+#else
   QString systemScripts = KGlobal::dirs()->kde_default( "data" ) + "killustrator/scripts";
   QDir systemDir (systemScripts.data (), "*.py", QDir::Name,
 		  QDir::Files);
@@ -96,6 +102,7 @@ void ScriptDialog::loadScripts () {
     }
     lastSystemScript = systemDir.count () - 1;
   }
+#endif
 
   // load scripts from user's directory
   QString userScripts = QDir::homeDirPath () + "/.killustrator/scripts";
