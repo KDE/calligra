@@ -20,8 +20,30 @@
 #ifndef TABLEHANDLER_H
 #define TABLEHANDLER_H
 
+#include <functor.h>
 #include <handlers.h>
+#include <qstring.h>
+#include <qvaluelist.h>
 #include <deque>
+
+namespace KWord
+{
+    typedef const wvWare::TableRowFunctor* TableRowFunctorPtr;
+
+    struct Row
+    {
+        Row() : functorPtr( 0L )  {} // QValueList wants that one
+        Row( TableRowFunctorPtr ptr ) : functorPtr(ptr) {}
+        ~Row() {}
+        TableRowFunctorPtr functorPtr;
+    };
+
+    struct Table
+    {
+        QString name; // kword's grpMgr attribute
+        QValueList<Row> rows; // need to use QValueList to benefit from implicit sharing
+    };
+};
 
 class KWordTableHandler : public wvWare::TableHandler
 {
@@ -29,7 +51,7 @@ public:
     KWordTableHandler();
 
     //////// TableHandler interface
-    virtual void tableRowFound( const wvWare::TableRowFunctor& tableRow );
+    virtual void tableRowFound( const wvWare::TableRowFunctor& tableRowFunctor );
 
     virtual void tableRowStart( wvWare::SharedPtr<const wvWare::Word97::TAP> tap );
     virtual void tableRowEnd();
@@ -37,10 +59,12 @@ public:
     virtual void tableCellEnd();
 
     ///////// Our own interface
-    void writeOutTables(); // feed me with parameters :-)
+    void setCurrentTableName( const QString& name ) {
+        m_currentTableName = name;
+    }
 
 private:
-    std::deque<wvWare::TableRowFunctor> tableRows;
+    QString m_currentTableName;
 };
 
 #endif // TABLEHANDLER_H

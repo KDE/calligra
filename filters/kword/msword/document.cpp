@@ -20,7 +20,6 @@
 #include "document.h"
 #include "conversion.h"
 #include "texthandler.h"
-#include "tablehandler.h"
 #include "associatedstrings.h"
 
 #include <koGlobal.h>
@@ -48,6 +47,8 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
         m_textHandler = new KWordTextHandler( m_parser );
         connect( m_textHandler, SIGNAL( subDocFound( const wvWare::FunctorBase*, int ) ),
                  this, SLOT( slotSubDocFound( const wvWare::FunctorBase*, int ) ) );
+        connect( m_textHandler, SIGNAL( tableFound( const KWord::Table& ) ),
+                 this, SLOT( slotTableFound( const KWord::Table& ) ) );
         m_parser->setSubDocumentHandler( this );
         m_parser->setTextHandler( m_textHandler );
         m_parser->setTableHandler( m_tableHandler );
@@ -262,22 +263,6 @@ void Document::headerStart( wvWare::HeaderData::Type type )
     kdDebug() << "startHeader type=" << type << " (" << Conversion::headerTypeToFramesetName( type ) << ")" << endl;
     // Werner says the headers are always emitted in the order of the Type enum.
 
-#if 0 // This is not necessary anymore. KWord's odd/even mess has been fixed,
-    // and it happens that now, KWord also uses Odd headers on all pages (if there are no Even headers)
-
-    // So when HeaderOdd arrives, there are two cases.
-    // * If HeaderEven was sent before, we know we're in the even/odd case.
-    // * If not, the HeaderOdd header will be used for odd and even pages
-    // ..... in which case it needs to be saved as the "Even" header for KWord !!!
-    if ( type == wvWare::HeaderData::HeaderOdd &&
-         ( ( m_headerFooters & wvWare::HeaderData::HeaderEven ) == 0 ) )
-        type = wvWare::HeaderData::HeaderEven;
-    else if ( type == wvWare::HeaderData::FooterOdd &&
-              ( ( m_headerFooters & wvWare::HeaderData::FooterEven ) == 0 ) )
-        type = wvWare::HeaderData::FooterEven;
-    kdDebug() << "  type is now " << type << " (" << Conversion::headerTypeToFramesetName( type ) << ")" << endl;
-#endif
-
     QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
     framesetElement.setAttribute("frameType",1);
     framesetElement.setAttribute("frameInfo",Conversion::headerTypeToFrameInfo(type));
@@ -350,14 +335,14 @@ void Document::slotSubDocFound( const wvWare::FunctorBase* functor, int data )
     m_subdocQueue.push( subdoc );
 }
 
-bool Document::hasSubDocument() const
+void Document::slotTableFound( const KWord::Table& table )
 {
-    return !m_subdocQueue.empty();
+    m_tableQueue.push( table );
 }
 
 void Document::processSubDocQueue()
 {
-    while ( hasSubDocument() )
+    while ( !m_subdocQueue.empty() )
     {
         SubDocument subdoc( m_subdocQueue.front() );
         Q_ASSERT( subdoc.functorPtr );
@@ -365,7 +350,19 @@ void Document::processSubDocQueue()
         delete subdoc.functorPtr; // delete it
         m_subdocQueue.pop();
     }
-    m_tableHandler->writeOutTables();
+    while ( !m_tableQueue.empty() )
+    {
+        KWord::Table& table = m_tableQueue.front();
+        m_tableHandler->setCurrentTableName( table.name );
+        QValueList<KWord::Row> &rows = table.rows;
+        for( QValueList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
+            KWord::TableRowFunctorPtr f = (*it).functorPtr;
+            Q_ASSERT( f );
+            (*f)(); // call it
+            delete f; // delete it
+        }
+        m_tableQueue.pop();
+    }
 }
 
 #include "document.moc"

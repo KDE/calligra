@@ -81,11 +81,11 @@ KoFilter::ConversionStatus MSWordImport::convert( const QCString& from, const QC
     if ( !out ) {
 	return KoFilter::StorageCreationError;
     }
-    
+
     cstr = documentInfo.toCString();
     out->writeBlock( cstr, cstr.length() );
     out->close();
-    
+
     kdDebug() << "######################## MSWordImport::convert done ####################" << endl;
     return KoFilter::OK;
 }

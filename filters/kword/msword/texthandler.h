@@ -20,6 +20,8 @@
 #ifndef TEXTHANDLER_H
 #define TEXTHANDLER_H
 
+#include "tablehandler.h"
+
 #include <handlers.h>
 #include <qstring.h>
 #include <qobject.h>
@@ -69,6 +71,8 @@ public:
     virtual void fieldEnd( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
     virtual void runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
 
+    virtual void tableRowFound( const wvWare::TableRowFunctor& functor );
+
     ///////// Our own interface, also used by processStyles
 
     // Called at the beginning of a parag/style
@@ -85,6 +89,7 @@ public:
 signals:
     void firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> );
     void subDocFound( const wvWare::FunctorBase* parsingFunctor, int data );
+    void tableFound( const KWord::Table& table );
 
 protected:
     void writeOutParagraph( const QString& styleName, const QString& text );
@@ -108,6 +113,8 @@ private:
     int m_index;
     QDomElement m_formats;
     QDomElement m_oldLayout;
+
+    KWord::Table* m_currentTable;
 
     QString m_fieldValue;
     bool m_insideField;

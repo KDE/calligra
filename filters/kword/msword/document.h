@@ -20,6 +20,8 @@
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 
+#include "tablehandler.h"
+
 #include <handlers.h>
 #include <functor.h>
 
@@ -70,7 +72,6 @@ public:
         FunctorPtr functorPtr;
         int data;
     };
-    bool hasSubDocument() const;
 
 protected slots:
     // Connected to the KWordTextHandler only when parsing the body
@@ -79,6 +80,9 @@ protected slots:
     // Add to our parsing queue, for headers, footers, footnotes, text boxes etc.
     // Note that a header functor will parse ALL the header/footers (of the section)
     void slotSubDocFound( const wvWare::FunctorBase* functor, int data );
+
+    // Add to our parsing queue, for tables
+    void slotTableFound( const KWord::Table& table );
 
 private:
     void processStyles();
@@ -93,6 +97,7 @@ private:
     KWordTextHandler* m_textHandler;
     wvWare::SharedPtr<wvWare::Parser> m_parser;
     std::queue<SubDocument> m_subdocQueue;
+    std::queue<KWord::Table> m_tableQueue;
     unsigned char m_headerFooters; // a mask of HeaderData::Type bits
     bool m_bodyFound;
     int m_footNoteNumber; // number of footnote _framesets_ written out

@@ -54,6 +54,7 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser )
     : m_parser( parser ), m_sectionNumber( 0 ), m_footNoteNumber( 0 ), m_endNoteNumber( 0 ),
       m_currentStyle( 0L ), m_shadowTextFound( NoShadow ), m_index( 0 ),
+      m_currentTable( 0L ),
       m_insideField( false), m_fieldAfterSeparator( false ), m_fieldType( 0 )
 {
 }
@@ -130,6 +131,18 @@ void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
     emit subDocFound( new wvWare::FootnoteFunctor( parseFootnote ), type );
 }
 
+void KWordTextHandler::tableRowFound( const wvWare::TableRowFunctor& functor )
+{
+    if ( !m_currentTable )
+    {
+        static int s_tableNumber = 0;
+        m_currentTable = new KWord::Table();
+        m_currentTable->name = i18n("Table %1").arg( ++s_tableNumber );
+    }
+    KWord::Row row( new wvWare::TableRowFunctor( functor ) );
+    m_currentTable->rows.append( row );
+}
+
 QDomElement KWordTextHandler::insertVariable( int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format )
 {
     m_paragraph += '#';
@@ -155,6 +168,11 @@ void KWordTextHandler::paragLayoutBegin()
 
 void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties )
 {
+    if ( m_currentTable ) // paragraphStart after tablerow functors denotes end of table
+    {
+        emit tableFound( *m_currentTable );
+        m_currentTable = 0L;
+    }
     //kdDebug() << "paragraphStart. style index:" << paragraphProperties->pap().istd << endl;
     m_formats = mainDocument().createElement( "FORMATS" );
     m_paragraphProperties = paragraphProperties;

@@ -31,10 +31,9 @@ KWordTableHandler::KWordTableHandler()
 {
 }
 
-void KWordTableHandler::tableRowFound( const wvWare::TableRowFunctor& tableRow )
+void KWordTableHandler::tableRowFound( const wvWare::TableRowFunctor& tableRowFunctor )
 {
-    kdDebug() << k_funcinfo << endl;
-    tableRows.push_back( tableRow );
+    // This one has moved to the text handler
 }
 
 void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::TAP> /*tap*/ )
@@ -55,13 +54,4 @@ void KWordTableHandler::tableCellStart()
 void KWordTableHandler::tableCellEnd()
 {
     kdDebug() << k_funcinfo << endl;
-}
-
-void KWordTableHandler::writeOutTables()
-{
-    // In reverse order, just for fun
-    std::deque<wvWare::TableRowFunctor>::const_reverse_iterator it( tableRows.rbegin() );
-    std::deque<wvWare::TableRowFunctor>::const_reverse_iterator end( tableRows.rend() );
-    for ( ; it != end; ++it )
-        ( *it )();
 }
