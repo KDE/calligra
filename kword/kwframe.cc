@@ -34,6 +34,7 @@
 #include <kformuladocument.h>
 #include <kformulaview.h>
 
+#include <kcursor.h>
 #include <kdebug.h>
 
 /******************************************************************/
@@ -948,7 +949,7 @@ bool KWFrameSet::getMouseCursor( const QPoint &nPoint, bool controlPressed, QCur
 {
     bool canMove = isMoveable();
     KoPoint docPoint = m_doc->unzoomPoint( nPoint );
-    QCursor defaultCursor = ( canMove && !isFloating() ) ? Qt::sizeAllCursor : Qt::pointingHandCursor;
+    QCursor defaultCursor = ( canMove && !isFloating() ) ? Qt::sizeAllCursor : KCursor::handCursor();
     // See if we're over a frame border
     KWFrame * frame = frameByBorder( nPoint );
     if ( frame )
