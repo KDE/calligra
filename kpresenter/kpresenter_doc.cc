@@ -1273,7 +1273,7 @@ void KPresenterDoc::loadTextStyle( const QDomElement& domElement )
         loadStyleTemplates( style );
 }
 
-void KPresenterDoc::loadPictureMap ( QDomElement& domElement )
+void KPresenterDoc::loadPictureMap ( const QDomElement& domElement )
 {
     m_pictureMap.clear();
 
@@ -1871,7 +1871,7 @@ void KPresenterDoc::loadUsedSoundFileFromStore( KoStore *_store, QStringList _li
 }
 
 /*===================== set page layout ==========================*/
-void KPresenterDoc::setPageLayout( KoPageLayout pgLayout )
+void KPresenterDoc::setPageLayout( const KoPageLayout &pgLayout )
 {
     //     if ( _pageLayout == pgLayout )
     //	return;
@@ -2811,7 +2811,7 @@ void KPresenterDoc::refreshAllNoteBar(int page, const QString &text, KPresenterV
 }
 
 
-void KPresenterDoc::loadStyleTemplates( QDomElement stylesElem )
+void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
 {
     QValueList<QString> followingStyles;
     QPtrList<KoStyle>m_styleList(m_styleColl->styleList());
@@ -3126,12 +3126,12 @@ void KPresenterDoc::removeHelpPoint( int index )
         m_helpPoints.remove(m_helpPoints[index]);
 }
 
-void KPresenterDoc::addHelpPoint( KoPoint pos )
+void KPresenterDoc::addHelpPoint( const KoPoint &pos )
 {
     m_helpPoints.append( pos );
 }
 
-void KPresenterDoc::updateHelpPoint( int idx, KoPoint pos )
+void KPresenterDoc::updateHelpPoint( int idx, const KoPoint &pos )
 {
     if ( idx >= (int)m_helpPoints.count())
         kdDebug(33001)<<" updateHelpPoint : index is bad !\n";
@@ -3142,7 +3142,7 @@ void KPresenterDoc::updateHelpPoint( int idx, KoPoint pos )
 
 }
 
-int KPresenterDoc::indexOfHelpPoint( KoPoint pos )
+int KPresenterDoc::indexOfHelpPoint( const KoPoint &pos )
 {
     int ret = 0;
     for(QValueList<KoPoint>::Iterator i = m_helpPoints.begin(); i != m_helpPoints.end(); ++i, ++ret)

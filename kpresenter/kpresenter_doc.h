@@ -116,7 +116,7 @@ public:
     void initEmpty();
 
     // page layout
-    void setPageLayout( KoPageLayout );
+    void setPageLayout( const KoPageLayout &);
 
     virtual QPixmap generatePreview( const QSize &size );
 
@@ -349,18 +349,18 @@ public:
     int indexOfHorizHelpline(double pos);
     int indexOfVertHelpline(double pos);
 
-    int indexOfHelpPoint( KoPoint pos );
+    int indexOfHelpPoint( const KoPoint &pos );
 
     void updateHorizHelpline(int idx, double pos);
     void updateVertHelpline(int idx, double pos);
 
-    void updateHelpPoint( int idx, KoPoint pos );
+    void updateHelpPoint( int idx, const KoPoint &pos );
 
 
     void addHorizHelpline(double pos);
     void addVertHelpline(double pos);
 
-    void addHelpPoint( KoPoint pos );
+    void addHelpPoint( const KoPoint &pos );
 
     void removeHorizHelpline(int index);
     void removeVertHelpline( int index );
@@ -411,7 +411,7 @@ public:
     void spellCheckParagraphDeleted( KoTextParag *_parag,  KPTextObject *frm);
     void configureSpellChecker();
 
-    void loadPictureMap ( QDomElement& domElement );
+    void loadPictureMap ( const QDomElement& domElement );
     void updateRulerInProtectContentMode();
     void updatePresentationButton();
     void refreshGroupButton();
@@ -451,7 +451,7 @@ protected:
      */
     virtual bool saveChildren( KoStore* _store );
 
-    void loadStyleTemplates( QDomElement styles );
+    void loadStyleTemplates( const QDomElement &styles );
     void saveStyle( KoStyle *sty, QDomElement parentElem );
 
     QDomDocumentFragment saveBackground( QDomDocument& );
