@@ -295,7 +295,7 @@ void RTFWorker::ProcessParagraphData (const QString& strTag, const QString &para
                 kdDebug(30503) << "Found an anchor of type: " << (*paraFormatDataIt).frameAnchor.type << endl;
                 // We have an image, a clipart or a table
 
-                // But first, we must sure that the paragraph is not opened.
+                // But first, we must be sure that the paragraph is not opened.
                 if (!paragraphNotOpened)
                 {
                     // The paragraph was opened, so close it.
@@ -807,7 +807,7 @@ bool RTFWorker::doFullDefineStyle(LayoutData& layout)
     //Register the new style in the style list
     m_styleList << layout;
 
-    // Now we must register a few things (with help of the lookup methofs.)
+    // Now we must register a few things (with help of the lookup methods.)
     lookupFont(layout.formatData.text.fontName);
     lookupColor(QString::null, layout.formatData.text.fgColor);
     lookupColor(QString::null, layout.formatData.text.bgColor);
