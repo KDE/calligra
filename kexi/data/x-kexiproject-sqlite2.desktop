@@ -1,10 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=MimeType
-MimeType=application/x-kexiproject-sqlite
-Hidden=true
-Icon=kexiproject_sqlite
-Patterns=
+MimeType=application/x-kexiproject-sqlite2
+Icon=kexiproject_sqlite2
+Patterns=*.kexi
 Comment=Kexi Database File-based Project
 Comment[bg]=Файл за проект на Kexi за БД
 Comment[ca]=Projecte Kexi en una base de dades basada en fitxers
