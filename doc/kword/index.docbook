@@ -63,7 +63,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-06-25</date>
+<date>2002-06-28</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -800,15 +800,15 @@ find more help on the other command line options.</para>
 <appendix id="filters">
 <title>Import/Export Filters</title>
 <sect1 id="filter-intro"><title>Introduction to Filters</title>
-<para>&kword; has the ability (with varying success) to load data 
+<para>&kword; has the ability (with varying success) to load data
 from foriegn (non-&koffice;) data files.  &kword; also has the ability to
-save data too non-&koffice; data files.  This is provided to help users 
+save data too non-&koffice; data files.  This is provided to help users
 of &kword; to interact more seamlessly with people who use other
 operating systems and wordprocessors.</para>
 
-<para>&kword; does this by loading a non-&koffice; datafile into 
+<para>&kword; does this by loading a non-&koffice; datafile into
 memory and passing the data through a <emphasis>filter</emphasis>
-to extract as much information as possible from the data file.  Some 
+to extract as much information as possible from the data file.  Some
 formatting information will be lost or changed by the filter in the
 attempt.</para>
 
@@ -820,892 +820,77 @@ attempt.</para>
 <para>When &kword; saves a &kword; document as a non-&koffice;
 file format, it is <emphasis>exporting</emphasis> the data.</para>
 
-<para>The purpose of this appendix is to detail for the user which filters exist, what they can do, and what their current limitations are.</para>
-<para>&kword; comes with the following filters.</para>
-
-<informaltable>
-<tgroup cols="3">
-<thead><row><entry>Application</entry><entry>Import Filter</entry><entry>Export Filter</entry></row></thead>
-<tbody>
-<row><entry><link linkend="filter-abiword">Abiword</link></entry><entry><link linkend="abiimport">Yes</link></entry><entry><link linkend="abi-export">Yes</link></entry></row>
-<row><entry><link linkend="filter-ami">AmiPro</link></entry><entry><link linkend="ami-import">Yes</link></entry><entry><link linkend="ami-export">Yes</link></entry></row>
-
-
-
-
-</tbody>
-</tgroup>
-</informaltable>
+<para>For the current status of all &kword; import and export filters, see the
+<ulink url="http://www.koffice.org/filters/status.phtml">Koffice filters status page</ulink>.</para>
 </sect1>
-<sect1 id="filter-abiword">
-<title><application>Abiword</application> Filter</title>
+<sect1 id="filters-included"><title>Filters included in &kword;</title>
 
-<variablelist>
-<varlistentry>
-<term>Status</term>
-<listitem>
-<para>The <application>Abiword</application> filter is in the early
-stages, and should be used with caution.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Developer</term>
-<listitem>
-<para>Nicolas Goutte <email>nicog@snafu.de</email>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><application>Abiword</application> Homepage</term>
-<listitem>
-<para><ulink
-url="http://www.abisource.com">http://www.abisource.com</ulink></para>
-</listitem>
-</varlistentry>
-</variablelist>
-
-<sect2 id="abiimport">
-<title>Import <application>Abiword</application> files into &kword;</title>
-
-<para>Use:  Some <application>Abiword</application> files will bring up a dialog box.</para>
-
-<screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="abiimport.png" format="PNG"/></imageobject>
-</mediaobject>
-</screenshot>
-
-<para>Do not let this alarm you.  <application>Abiword</application> uses an &XML; format.  Simply accept the default values.</para>
-
-<informaltable>
-<tgroup cols="2">
-<tbody>
-<row>
-<entry>Features</entry>
-<entry>
+<para>&kword; comes with the following filters:</para>
 <itemizedlist>
-<listitem><para>Import text.</para></listitem>
-<listitem><para>Can import simple formating (font name, font size, bold,
-italic, underline, colour, subscript superscript).</para></listitem>
-<listitem><para>Can read gzip-compressed files (just use <literal
-role="extension">.abw.gz</literal> or <literal
-role="extension">.zabw</literal> as an extension of the
-filename!)</para></listitem>
+
+<listitem><para>
+<ulink url="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/filters/kword/abiword/status.html?content-type=text/html">
+Abiword</ulink></para></listitem>
+
+<listitem><para>
+<ulink url="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/filters/kword/amipro/status.html?content-type=text/html">
+AmiPro</ulink></para></listitem>
+
+<listitem><para>
+<ulink url="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/filters/kword/applixword/status.html?content-type=text/html">
+Applix Word</ulink> (import only)</para></listitem>
+
+<listitem><para>
+<ulink url="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/filters/kword/ascii/status.html?content-type=text/html">
+ASCII Text (Plain Text)</ulink></para></listitem>
+
+<listitem><para>
+<ulink url="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/filters/kword/docbook/status.html?content-type=text/html">
+Docbook</ulink> (export only)</para></listitem>
+
+<listitem><para>
+<ulink url="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/filters/olefilters/hancomword/status.html?content-type=text/html">
+Hancom Word 2.0</ulink> or later (import only)</para></listitem>
+
+<listitem><para>
+<ulink url="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/filters/kword/html/status.html?content-type=text/html">
+HTML</ulink></para></listitem>
+
+<listitem><para>
+<ulink url="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/filters/kword/latex/status.html?content-type=text/html">
+LaTeX</ulink> (export only)</para></listitem>
+
+<listitem><para>
+<ulink url="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/kword/filters/mif/status.html?content-type=text/html">
+MIF</ulink> (import only)</para></listitem>
+
+<listitem><para>
+<ulink url="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/filters/kword/mswrite/status.html?content-type=text/html">
+MSWrite</ulink> (import only)</para></listitem>
+
+<listitem><para>
+<ulink url="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/filters/kword/palmdoc/status.html?content-type=text/html">
+Palm Doc</ulink></para></listitem>
+
+<listitem><para>
+<ulink url="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/filters/kword/rtf/status.html?content-type=text/html">
+Rich Text Format (RTF)</ulink></para></listitem>
+
+<listitem><para>
+<ulink url="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/filters/olefilters/winword97/status.html?content-type=text/html">
+Microsoft Word 97/2000</ulink> (import only)</para></listitem>
+
+<listitem><para>
+<ulink url="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/filters/kword/wml/status.html?content-type=text/html">
+Wireless Markup Language (WML)</ulink></para></listitem>
+
+<listitem><para>
+<ulink url="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/filters/kword/wordperfect/status.html?content-type=text/html">
+Wordperfect 5.x, 6/7/8</ulink> (import only)</para></listitem>
+
 </itemizedlist>
-</entry>
-</row>
-<row>
-<entry>Still to be done.</entry>
-<entry>
-<itemizedlist>
-<listitem><para>Multiple columns</para></listitem>
-<listitem><para>Styles</para></listitem>
-<listitem><para>Images (PNG)</para></listitem>
-<listitem><para>Stop &kword; from crashing when importing wrong
-documents.</para></listitem>
-<listitem><para>Many other things...</para></listitem>
-</itemizedlist>
-</entry>
-</row>
-</tbody>
-</tgroup>
-</informaltable>
-</sect2>
 
-<sect2 id="abi-export">
-<title>Export &kword; files into <application>Abiword</application> files</title>
-
-<para>Use: No configuration options</para>
-<informaltable>
-<tgroup cols="2">
-<tbody>
-<row>
-<entry>Features</entry>
-<entry>
-<itemizedlist>
-<listitem><para>Export text.</para></listitem>
-<listitem><para>Can export simple formating (font name, font size, bold,
-italic, underline, colour, subscript superscript).</para></listitem>
-<listitem><para>Can write gzip-compressed files (just use <literal
-role="extension">.abw.gz</literal> or <literal
-role="extension">.zabw</literal> as an extension of the
-filename!)</para></listitem>
-</itemizedlist></entry>
-</row>
-<row>
-<entry>Still to be done.</entry>
-<entry><itemizedlist>
-<listitem><para>Multiple columns.</para></listitem>
-<listitem><para>Styles.</para></listitem>
-<listitem><para>Images (Only PNG possible).</para></listitem>
-<listitem><para>Transform tables into something
-<application>AbiWord</application> can understand.</para></listitem>
-<listitem><para>&kword;'s <acronym>DTP</acronym> modus (How can you
-export that?)</para></listitem>
-<listitem><para>Many other things...</para></listitem>
-</itemizedlist></entry>
-</row>
-</tbody>
-</tgroup>
-</informaltable>
-</sect2>
-</sect1>
-
-<sect1 id="filter-ami">
-<title><application>AmiPro</application> Filter</title>
-
-<variablelist>
-<varlistentry>
-<term>Status</term>
-<listitem>
-<para>The <application>AmiPro</application> filter is in the early
-stages, and should be used with caution.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Developer</term>
-<listitem>
-<para>Ariya Hidayat <email>ariyahidayat@yahoo.de</email></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><application>AmiPro</application> Information.</term>
-<listitem>
-<para><application>AmiPro</application> was a wordprocessor from Lotus, part of its SmartSuite
-package.</para>
-<note><para><application>AmiPro</application> is different from WordPro, which is the
-successor of <application>AmiPro</application> but with totally different file format (hence not
-supported by this filter).</para></note>
-</listitem>
-</varlistentry>
-</variablelist>
-
-<sect2 id="ami-import">
-<title>Import <application>AmiPro</application> files into &kword;</title>
-
-<informaltable>
-<tgroup cols="2">
-<tbody>
-<row>
-<entry>Features</entry>
-<entry><itemizedlist>
-<listitem><para>Can import all text</para></listitem>
-<listitem><para>Supported formatting: bold, italic, underline, subscript, superscript, strikethrough
-(word underline and double-underline still treated as underline)</para></listitem>
-<listitem><para>Supports paragraph align</para></listitem>
-<listitem><para>Linespaces: single, double, one-and-half, custom</para></listitem>
-<listitem><para>Styles (still not complete, but it works)</para></listitem>
-</itemizedlist></entry>
-</row>
-<row>
-<entry>Still to be done.</entry>
-<entry><itemizedlist>
-<listitem><para>Finish Style import</para></listitem>
-<listitem><para>All other document formatting</para></listitem>
-</itemizedlist>
-</entry>
-</row>
-</tbody>
-</tgroup>
-</informaltable>
-</sect2>
-
-<sect2 id="ami-export">
-<title>Export &kword; files into <application>AmiPro</application>
-files</title>
-<informaltable>
-<tgroup cols="2">
-<tbody>
-<row>
-<entry>Features</entry>
-<entry><itemizedlist>
-<listitem><para>Export formatted text (bold, italic, underline, subscript, superscript, strikethrough)</para></listitem>
-</itemizedlist></entry>
-</row>
-<row>
-<entry>Still to be done.</entry>
-<entry><itemizedlist>
-<listitem><para>All other document formatting</para></listitem>
-</itemizedlist>
-</entry>
-</row>
-</tbody>
-</tgroup>
-</informaltable>
-
-</sect2>
-</sect1>
-
-
-<sect1 id="filter-applixware">
-<title><application>Applixware</application> Filter</title>
-
-<variablelist>
-<varlistentry>
-<term>Status</term>
-<listitem>
-<para>The <application>Applixware</application> filter is in the early
-stages, and should be used with caution. This is currently an import
-only filter.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Developer</term>
-<listitem>
-<para>Enno Bartels <email>ebartels@nwn.de</email>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><application>Applixware</application> Homepage</term>
-<listitem>
-<para><ulink
-url="http://www.vistasource.com/">http://www.vistasource.com/</ulink></para>
-</listitem>
-</varlistentry>
-</variablelist>
-
-<sect2 id="applix-import">
-<title>Import <application>Applixword</application> files into &kword;</title>
-
-<informaltable>
-<tgroup cols="2">
-<tbody>
-<row>
-<entry>Features</entry>
-<entry><itemizedlist>
-<listitem><para>Can import simple text from <application>Applix
-Word</application> documents</para></listitem>
-<listitem><para>Can convert all special characters</para></listitem>
-<listitem><para>Tests the headline of the document</para></listitem>
-<listitem><para>Now read a line and not a single
-character</para></listitem>
-<listitem><para>Ignores text in style block.</para></listitem>
-<listitem><para>Ignores text in header/footer block</para></listitem>
-<listitem><para>Can detect embedded applix objects</para></listitem>
-<listitem><para>Reads a full applix tagline for all lineread
-operations. It can be one or more lines to get one
-tag.</para></listitem>
-<listitem><para>Can differ betwen textstr end and(") and applix quotes
-(/").</para></listitem>
-<listitem><para>Can read the color block and converts cmyk to
-rgb.</para></listitem>
-<listitem><para>Font size, bold, italic, underline, fontcolor,
-fontfamily.</para></listitem>
-</itemizedlist></entry>
-</row>
-<row>
-<entry>Still to be done.</entry>
-<entry><itemizedlist>
-<listitem><para>Get format and style information and add this into
-&kword;</para></listitem>
-<listitem><para>Textblock style, endof line - what is a
-paragraph</para></listitem>
-<listitem><para>Tabulators</para></listitem>
-<listitem><para>Header and footer</para></listitem>
-<listitem><para>Embedded applixwear objects</para></listitem>
-<listitem><para>Linked objects - &eg; pictures</para></listitem>
-<listitem><para>add endoffile checking with dialog in do-while
-loops</para></listitem>
-</itemizedlist>
-</entry>
-</row>
-</tbody>
-</tgroup>
-</informaltable>
-</sect2>
-
-<sect2 id="applix-export">
-<title>Export &kword; files into <application>Applixware</application>
-files</title>
-
-<para>Not currently available.</para>
-
-</sect2>
-</sect1>
-
-<sect1 id="filter-ascii">
-<title><acronym>ASCII</acronym> Filter</title>
-
-<variablelist>
-<varlistentry>
-<term>Status</term>
-<listitem>
-<para>The <acronym>ASCII</acronym> filter is complete and fully
-functional.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Developer</term>
-<listitem>
-<para>Wolf-Michael Bolle <email>Bolle@ID-PRO.de</email>, Werner Trobin
-<email>wtrobin@mandrakesoft.com</email>, Reginald Stadlbauer
-<email>reggie@kde.org</email>, Nicolas Goutte
-<email>nicog@snafu.de</email>  
-</para>
-</listitem>
-</varlistentry>
-</variablelist>
-
-<sect2 id="ascii-import">
-<title>Import <acronym>ASCII</acronym> files into &kword;</title>
-
-<para>All text is imported into &kword;.</para>
-</sect2>
-
-<sect2 id="ascii-export">
-<title>Export &kword; files to <acronym>ASCII</acronym> files.</title>
-
-<para>All text is exported into an <acronym>ASCII</acronym> file.</para>
-
-</sect2>
-</sect1>
-
-<sect1 id="filter-html">
-<title><acronym>HTML</acronym> Filter (<acronym>HTML</acronym>
-4.01)</title>
-
-<variablelist>
-<varlistentry>
-<term>Status</term>
-<listitem>
-<para>The <acronym>HTML</acronym> filter is in the early stages, and is
-being rewritten.  It should be used with caution.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Developer</term>
-<listitem>
-<para>Nicolas Goutte <email>nicog@snafu.de</email>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><acronym>HTML</acronym> homepage</term>
-<listitem>
-<para><ulink
-url="http://www.w3.org/TR/html401">http://www.w3.org/TR/html401</ulink></para>
-</listitem>
-</varlistentry>
-</variablelist>
-
-<sect2 id="html-import">
-<title>Import <acronym>HTML</acronym> files into &kword;</title>
-
-<informaltable>
-<tgroup cols="2">
-<tbody>
-<row>
-<entry>Features</entry>
-<entry><itemizedlist>
-<listitem><para>Crude!</para></listitem>
-<listitem><para>&XHTML; 1.0 or well-formed <acronym>HTML</acronym> 4.01
-only!</para>
-</listitem>
-</itemizedlist>
-</entry>
-</row>
-<row>
-<entry>Still to be done.</entry>
-<entry>
-<itemizedlist>
-<listitem><para>character references/entities</para></listitem>
-<listitem><para>&lt;font&gt; tags</para></listitem>
-<listitem><para>tables</para></listitem>
-<listitem><para>images</para></listitem>
-<listitem><para>use all of <acronym>CSS2</acronym> (not just a very
-little part of it)</para></listitem>
-<listitem><para>many other tags</para></listitem>
-<listitem><para>importing non-well-formed <acronym>HTML</acronym> 4.01
-or older</para></listitem>
-</itemizedlist>
-</entry>
-</row>
-</tbody>
-</tgroup>
-</informaltable>
-
-</sect2>
-
-<sect2 id="html-export">
-<title>Export &kword; files into <acronym>HTML</acronym></title>
-
-<informaltable>
-<tgroup cols="2">
-<tbody>
-<row>
-<entry>Features</entry>
-<entry><itemizedlist>
-<listitem><para>Export to <acronym>HTML</acronym> 4.01 or &XHTML; 1.0
-documents</para></listitem>
-<listitem><para>Character formatting (not in <quote>Spartan</quote>
-mode)</para></listitem>
-<listitem><para>Partial <acronym>CSS2</acronym> support (still no style
-sheets)</para></listitem>
-</itemizedlist>
-</entry>
-</row>
-<row>
-<entry>Still to be done.</entry>
-<entry><itemizedlist>
-<listitem><para>Finish the complete re-write</para></listitem>
-<listitem><para>Fix white space problems (space at start, space at end,
-multiple consecutive spaces)</para></listitem>
-<listitem><para>Other Unicode encodings (&eg; UTF-16)</para></listitem>
-<listitem><para>Other non-Unicode encodings (&eg;
-<acronym>ASCII</acronym>, Local encoding)</para></listitem>
-<listitem><para>Tables</para></listitem>
-<listitem><para>Images</para></listitem>
-<listitem><para>Lists</para></listitem>
-<listitem><para>Special treatment for paragraphs in fixed fonts (needed
-or not?)</para></listitem>
-<listitem><para><acronym>CSS2</acronym> (treatment)</para></listitem>
-<listitem><para>Have a correct font size algorithm</para></listitem>
-</itemizedlist>
-</entry>
-</row>
-</tbody>
-</tgroup>
-</informaltable>
-</sect2>
-</sect1>
-
-<sect1 id="filter-latex">
-<title>LaTeX Filter</title>
-<para></para>
-</sect1>
-
-<sect1 id="filter-word97">
-<title>&Microsoft; <application>Word 97</application> and
-<application>Word 2000</application> Filter</title>
-
-<variablelist>
-<varlistentry>
-<term>Status</term>
-<listitem>
-<para>The &Microsoft; <application>Word 97/2000</application> export
-filter is not currently functioning.  The import filter is working, but
-has some known limitations. It should be used with caution.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Developers</term>
-<listitem>
-<para>Wolf-Michael Bolle <email>Bolle@ID-PRO.de</email> and Michael
-Johnson<email>mailto:mikejl@xnet.com</email>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>&Microsoft; Word File Format:</term>
-<listitem>
-<para>
-Can be located within &Microsoft;s MSDN, but rumor has it that it may have
-been lost or removed.</para>
-</listitem>
-</varlistentry>
-</variablelist>
-
-<sect2 id="word-import">
-<title>Import &Microsoft; <application>Word</application> files into
-&kword;.</title>
-
-<informaltable>
-<tgroup cols="2">
-<tbody>
-<row>
-<entry>Features</entry>
-<entry><itemizedlist>
-<listitem><para>numbered headings</para></listitem>
-<listitem><para>lists (bulleted, numbered, lettered)</para></listitem>
-<listitem><para>body text with some formatting (bold, italic, underline,
-superscript, subscript)</para></listitem>
-<listitem><para>word-builtin colors</para></listitem>
-<listitem><para>tables</para></listitem>
-<listitem><para>i18n support</para></listitem>
-</itemizedlist>
-</entry>
-</row>
-<row>
-<entry>Still to be done.</entry>
-<entry><itemizedlist>
-<listitem><para>Embedded objects (with some
-restrictions)</para></listitem>
-<listitem><para>Header and footer support.</para></listitem>
-<listitem><para>many more..</para></listitem>
-</itemizedlist></entry>
-</row>
-</tbody>
-</tgroup>
-</informaltable>
-</sect2>
-
-<sect2 id="word-export">
-<title>Export &kword; files for use in &Microsoft;
-<application>Word</application>.</title>
-
-<para>This is currently not functioning</para>
-
-</sect2>
-</sect1>
-
-<sect1 id="filter-palmdoc">
-<title>Palmdoc Filter</title>
-
-<variablelist>
-<varlistentry>
-<term>Status</term>
-<listitem>
-<para>The PalmDoc filter is completed and usable.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Developer</term>
-<listitem>
-<para>Ariya Hidayat <email>ariyahidayat@yahoo.de</email></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Palm Doc Information</term>
-<listitem>
-<para>Palm Doc file format is not tied to any particular application.  Instead, it is the defacto standard file
-format for long documents in the &PalmOS;.</para>
-</listitem>
-</varlistentry>
-</variablelist>
-
-<sect2 id="palmdoc-import">
-<title>Import PalmDoc files into &kword;</title>
-
-<informaltable>
-<tgroup cols="2">
-<tbody>
-<row>
-<entry>Features</entry>
-<entry><para>Can import all text (compressed or plain)</para>
-</entry></row>
-<row><entry>Still to be done</entry>
-<entry><para>Support for another (open) document format, perhaps RichReader or zTXT</para></entry>
-</row>
-</tbody></tgroup></informaltable>
-</sect2>
-
-<sect2 id="palmdoc-export">
-<title>Export &kword; files to PalmDoc files.</title>
-
-<informaltable>
-<tgroup cols="2">
-<tbody>
-<row>
-<entry>Features</entry>
-<entry><para>All text is saved as a compressed PalmDoc file.</para>
-</entry></row>
-<row><entry>Still to be done</entry>
-<entry><para>Support for other document formats</para></entry>
-</row>
-</tbody></tgroup></informaltable>
-</sect2>
-</sect1>
-
-<sect1 id="filter-mif">
-<title>Maker Interchange Format (<acronym>MIF</acronym>)/Adobe
-<application>Framemaker</application> Filter</title>
-
-<variablelist>
-<varlistentry>
-<term>Status</term>
-<listitem>
-<para>The <acronym>MIF</acronym> filter is in the early stages and
-should be used with caution.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Developer</term>
-<listitem>
-<para>Matthias Kalle Dalheimer <email>kalle@dalheimer.de></email></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Adobe <application>Framemaker</application> Homepage</term>
-<listitem>
-<para><ulink
-url="http://www.adobe.com/products/framemaker/main.html">
-http://www.adobe.com/products/framemaker/main.html</ulink></para>
-</listitem>
-</varlistentry>
-</variablelist>
-
-<sect2 id="mif-import">
-<title>Import <acronym>MIF</acronym> files into &kword;</title>
-
-<para>All text is imported into &kword;.</para>
-</sect2>
-
-<sect2 id="mif-export">
-<title>Export &kword; files to <acronym>MIF</acronym> files.</title>
-
-<para>Not currently available.</para>
-
-</sect2>
-
-</sect1>
-
-<sect1 id="filter-rtf">
-<title>Rich Text File (<acronym>RTF</acronym>) Filter</title>
-
-<variablelist>
-<varlistentry>
-<term>Status</term>
-<listitem>
-<para>The <acronym>RTF</acronym> import filter is not currently
-functioning.  The Export filter is working, but has some known
-limitations. It should be used with caution.</para> 
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Developers</term>
-<listitem>
-<para>
-Wolf-Michael Bolle <email>Bolle@ID-PRO.de</email> and Michael
-Johnson<email>mailto:mikejl@xnet.com</email>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><acronym>RTF</acronym> File Format Page:</term>
-<listitem>
-<para><ulink
-url="http://www.primate.wisc.edu/software/RTF/">
-http://www.primate.wisc.edu/software/RTF/</ulink></para>
-</listitem>
-</varlistentry>
-
-</variablelist>
-
-<sect2 id="rtf-import">
-<title>Import <acronym>RTF</acronym> files into &kword;</title>
-
-<para>This is currently not functioning</para>
-
-</sect2>
-
-<sect2 id="rtf-export">
-<title>Export &kword; files into <acronym>RTF</acronym></title>
-
-<informaltable>
-<tgroup cols="2">
-<tbody>
-<row>
-<entry>Features</entry>
-<entry><itemizedlist>
-<listitem><para>Unicode to ANSI conversion.</para></listitem>
-<listitem><para>Text formatting. (font, size, weight, italic, undeANSIe,
-&eg;.)</para></listitem>
-<listitem><para>Paragraph numbering. (Head 1,2,3 Numeric, Alpha, Roman,
-bullet)</para></listitem>
-<listitem><para>Multi level paragraph numbering. (1.2.5, &etc;) Doesn't
-work properly</para></listitem>
-<listitem><para>Table presentations (with cell
-borders).</para></listitem>
-<listitem><para>Page sizes.</para></listitem>
-<listitem><para>Margins.</para></listitem>
-<listitem><para>Document information. (author, title,
-&etc;).</para></listitem>
-<listitem><para>Tabulator tags.</para></listitem>
-<listitem><para>Page headers.</para></listitem>
-<listitem><para>Page footers.</para></listitem>
-<listitem><para>Paragraph borders.</para></listitem>
-<listitem><para>Colored text and borders.</para></listitem>
-<listitem><para>Date markers.</para></listitem>
-<listitem><para>Time markers.</para></listitem>
-<listitem><para>Page numbers.</para></listitem>
-</itemizedlist></entry>
-</row>
-<row>
-<entry>Still to be done.</entry>
-<entry><itemizedlist>
-<listitem><para>Footnotes and endnotes.</para></listitem>
-<listitem><para>Multi column.</para></listitem>
-<listitem><para>Text boxes.</para></listitem>
-<listitem><para>Pixmaps.</para></listitem>
-<listitem><para>Kpart inserts (&kspread;, &kpresenter;,
-&etc;).</para></listitem>
-<listitem><para>Page hard breaks.</para></listitem>
-<listitem><para>Identification of the ANSI code page.</para></listitem>
-<listitem><para>Multi-strike markup. (no current
-plans).</para></listitem>
-<listitem><para>Bidirectional markup. (no current
-plans).</para></listitem>
-</itemizedlist></entry>
-</row>
-</tbody>
-</tgroup>
-</informaltable>
-</sect2>
-</sect1>
-
-<sect1 id="filter-starwriter">
-<title>Star Writer Filter</title>
-
-<para>Development has begun, but Star Writer Files are currently not
-supported.</para>
-
-</sect1>
-
-<sect1 id="filter-wml">
-<title>Wireless Markup Language (WML) Filter</title>
-
-<variablelist>
-<varlistentry>
-<term>Status</term>
-<listitem>
-<para>The Wireless Markup Language <acronym>WML</acronym> filter is usable, but may contain bugs.
-Use with caution on critical information.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Developer</term>
-<listitem>
-<para>Ariya Hidayat <email>ariyahidayat@yahoo.de</email></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Wireless Markup Language Information</term>
-<listitem>
-<para>WML is another markup-language, intended
-to display information on hand held computers (PDA's). It's very much like HTML in general.</para>
-<para>For the official specification, visit the
-<ulink url="http://www.wapforum.org/what/technical.htm">WAP forum technical pages</ulink>.</para>
-</listitem>
-</varlistentry>
-</variablelist>
-
-<sect2 id="wml-import">
-<title>Import <acronym>WML</acronym> files into &kword;</title>
-
-<informaltable>
-<tgroup cols="2">
-<tbody>
-<row>
-<entry>Features</entry>
-<entry><itemizedlist>
-<listitem><para>Can import all text along with formatting (bold, italics, underline)</para></listitem>
-<listitem><para>Support paragraph align (left, center, right)</para></listitem>
-<listitem><para>Support &lt;BIG&gt; and &lt;SMALL&gt;</para></listitem>
-<listitem><para>Support hyperlink</para></listitem>
-</itemizedlist>
-</entry></row>
-<row><entry>Still to be done</entry>
-<entry><itemizedlist>
-<listitem><para>Image (WBMP format, monochrome BMP for handheld)</para></listitem>
-<listitem><para>Text encoding</para></listitem>
-<listitem><para>Tables</para></listitem>
-</itemizedlist>
-</entry>
-</row>
-</tbody></tgroup></informaltable>
-</sect2>
-<sect2 id="wml-export">
-<title>Export &kword; files to <acronym>WML</acronym> files.</title>
-
-<informaltable>
-<tgroup cols="2">
-<tbody>
-<row>
-<entry>Features</entry>
-<entry><itemizedlist>
-<listitem><para>Formatted text</para></listitem>
-</itemizedlist></entry></row>
-<row><entry>Still to be done</entry>
-<entry><itemizedlist>
-<listitem><para>Card title</para></listitem>
-<listitem><para>Text encoding</para></listitem>
-<listitem><para>Images</para></listitem>
-<listitem><para>Hyperlinks</para></listitem>
-</itemizedlist></entry>
-</row>
-</tbody></tgroup></informaltable>
-</sect2>
-</sect1>
-
-<sect1 id="filter-wordperfect">
-<title>Wordperfect Filter</title>
-
-<variablelist>
-<varlistentry>
-<term>Status</term>
-<listitem>
-<para>The Wordperfect filter is usable, but may contain bugs.
-Use with caution on critical information. Currently you can only import files into &kword;.  No export ability available.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Developer</term>
-<listitem>
-<para>Ariya Hidayat <email>ariyahidayat@yahoo.de</email></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Wordperfect</term>
-<listitem>
-<para>Wordperfect is a wordprocessor from Corel.  You can visit the Corel Website at 
-<ulink url="http://www.corel.com/">www.corel.com</ulink>. </para>
-<para></para>
-</listitem>
-</varlistentry>
-</variablelist>
-
-<sect2 id="wordperfect-import">
-<title>Import Wordperfect files into &kword;</title>
-
-<informaltable>
-<tgroup cols="2">
-<tbody>
-<row>
-<entry>Features</entry>
-<entry><itemizedlist>
-<listitem><para>Can import all text</para></listitem>
-<listitem><para>Support Wordperfect 5.x and Wordperfect 6/7/8 documents</para></listitem>
-<listitem><para>Font information: size, typeface, color, etc</para></listitem>
-<listitem><para>Wordperfect extended character converted to Unicode</para></listitem>
-<listitem><para>Character formatting: bold, italics, underline, strikeout, superscript, subscript</para></listitem>
-<listitem><para>Paragraph layout: linespacing, justification</para></listitem>
-<listitem><para>Page settings: margins</para></listitem>
-<listitem><para>Document summary: title, author, abstract</para></listitem>
-</itemizedlist>
-</entry></row>
-<row><entry>Still to be done</entry>
-<entry><itemizedlist>
-<listitem><para>Headers and footers</para></listitem>
-<listitem><para>Multicolumn pages</para></listitem>
-<listitem><para>Styles</para></listitem>
-<listitem><para>Tables</para></listitem>
-</itemizedlist>
-</entry>
-</row>
-</tbody></tgroup></informaltable>
-</sect2>
-<sect2 id="wordperfect-export">
-<title>Export &kword; files to WordPerfect files.</title>
-<para>Not currently available.</para>
-</sect2>
+<para>Click on the filter name to get more information about the filter.</para>
 </sect1>
 
 
