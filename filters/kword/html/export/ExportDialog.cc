@@ -46,7 +46,6 @@ HtmlExportDialog :: HtmlExportDialog(QWidget* parent)
     m_dialog->comboBoxEncoding->insertStringList(KGlobal::charsets()->availableEncodingNames());
     //m_dialog->comboBoxEncoding->insertStringList(KGlobal::charsets()->descriptiveEncodingNames());
 
-    resize(size()); // Is this right?
 
     setMainWidget(m_dialog);
 
@@ -70,7 +69,7 @@ bool HtmlExportDialog::isXHtml(void) const
 
 QTextCodec* HtmlExportDialog::getCodec(void) const
 {
-    QTextCodec* codec=NULL;
+    QTextCodec* codec=0;
 
     if (m_dialog->radioEncodingUTF8==m_dialog->buttonGroupEncoding->selected())
     {
@@ -128,7 +127,7 @@ HtmlExportDialog::Mode HtmlExportDialog::getMode(void) const
         return Light;
     }
 
-    return CSS;
+    return CSS;//Our default
 }
 
 

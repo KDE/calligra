@@ -324,6 +324,8 @@ void HtmlBasicWorker::openParagraph(const QString& strTag,
         || (layout.alignment=="center") || (layout.alignment=="justify"))
     {
         *m_streamOut << " align=\"" << layout.alignment << "\"";
+        if (layout.alignment == "right")
+          *m_streamOut << " dir=\"rtl\"";
     }
     else if ( layout.alignment=="auto")
     {

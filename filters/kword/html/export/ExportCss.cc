@@ -483,7 +483,10 @@ void HtmlCssWorker::openParagraph(const QString& strTag,
     {
         *m_streamOut << " style=\"" << strStyle << "\"";
     }
-    
+
+    if (layout.alignment == "right")
+        *m_streamOut << " dir=\"rtl\"";
+
     *m_streamOut << ">";
 
     if ( 1==layout.formatData.text.verticalAlignment )
@@ -610,7 +613,7 @@ bool HtmlCssWorker::doFullDefineStyle(LayoutData& layout)
 {
     //Register style in the style map
     m_styleMap[layout.styleName]=layout;
-    
+
     // We do not limit (anymore) any style to <h1> ... <h6>, because
     //   the style could be forced on <p> by the layout.
 
