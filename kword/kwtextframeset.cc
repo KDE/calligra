@@ -868,6 +868,9 @@ void KWTextFrameSet::zoom()
     m_origFontSizes.insert( format, new int( format->font().pointSize() ) );
     format->setPointSizeFloat( format->font().pointSizeFloat() * factor );
 
+    // Update Tab Width
+    textDocument()->setTabStops( textDocument()->formatCollection()->defaultFormat()->width( 'x' ) * 8 );
+
     // Zoom all custom items
     QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
     for ( ; cit.current() ; ++cit )
@@ -876,6 +879,7 @@ void KWTextFrameSet::zoom()
     // Mark all paragraphs as changed !
     for ( KWTextParag * s = static_cast<KWTextParag *>( textdoc->firstParag() ) ; s ; s = static_cast<KWTextParag *>( s->next() ) )
     {
+        s->setTabList( s->tabList() ); // to recalculate with the new zoom
         s->setChanged( TRUE );
         s->invalidate( 0 );
         if ( s->counter() )

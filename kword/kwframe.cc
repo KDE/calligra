@@ -347,6 +347,7 @@ void KWFrameSet::delFrame( unsigned int _num )
     //if ( isFloating() )
     //    deleteAnchors();
     KWFrame *frm = frames.at( _num );
+    ASSERT( frm );
     delFrame(frm,true);
     //if ( isFloating() )
     //    updateAnchors();
@@ -356,6 +357,7 @@ void KWFrameSet::delFrame( unsigned int _num )
 void KWFrameSet::delFrame( KWFrame *frm, bool remove )
 {
     int _num = frames.findRef( frm );
+    ASSERT( _num != -1 );
     if ( _num == -1 )
         return;
 
