@@ -42,18 +42,28 @@ public:
 private:
 	QTabWidget* mTabWidget;
 	QWidget* mRGBWidget;
-	KColorPatch* mColorPreview;
-	QHButtonGroup *mButtonGroup;
+	QWidget* mCMYKWidget;
+	KColorPatch* mRGBColorPreview;
+	KColorPatch* mCMYKColorPreview;
+	QHButtonGroup *mRGBButtonGroup;
+	QHButtonGroup *mCMYKButtonGroup;
 	VColorSlider *mRedSlider;
 	VColorSlider *mGreenSlider;
 	VColorSlider *mBlueSlider;
-	KIntNumInput* mOpacity;
+	VColorSlider *mCyanSlider;
+	VColorSlider *mMagentaSlider;
+	VColorSlider *mYellowSlider;
+	VColorSlider *mBlackSlider;
+	KIntNumInput* mRGBOpacity;
+	KIntNumInput* mCMYKOpacity;
 	enum ButtonChoice { Outline, Fill };
 	KarbonPart *m_part;
 	
 private slots:
 	void updateRGBColorPreview();
-	void buttonClicked( int button_ID );
+	void updateCMYKColorPreview();
+	void buttonRGBClicked( int button_ID );
+	void buttonCMYKClicked( int button_ID );
 };
 
 #endif
