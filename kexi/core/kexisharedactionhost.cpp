@@ -49,7 +49,7 @@ void KexiSharedActionHostPrivate::slotAction(const QString& act_id)
 
 	if (!proxy || !proxy->activateSharedAction(act_id.latin1())) {
 		//also try to find previous enabler
-		w = enablers[act_id];
+		w = enablers[act_id.latin1()];
 		if (!w)
 			return;
 		proxy = actionProxies[ w ];
