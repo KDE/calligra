@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,24 +23,24 @@
 
 */
 
-#ifndef PasteCmd_h_
-#define PasteCmd_h_
+#ifndef __PasteCmd_h__
+#define __PasteCmd_h__
 
-#include <Command.h>
+#include "Command.h"
 
 class GDocument;
 class GObject;
 
-class PasteCmd : public Command {
+class PasteCmd : public Command
+{
 public:
-  PasteCmd (GDocument* doc);
-  ~PasteCmd ();
+  PasteCmd(GDocument *aGDoc);
+  ~PasteCmd();
 
-  void execute ();
-  void unexecute ();
+  void execute();
+  void unexecute();
 
 private:
-  GDocument* document;
   QPtrList<GObject> objects;
 };
 

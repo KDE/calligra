@@ -28,9 +28,7 @@
   <Action name="showGrid"/>
   <Action name="showHelplines"/>
  </Menu>
- <Menu name="insert"><text>&amp;Tools</text>
-   <Action name="testTool"/>
-   <Action name="RectTool"/>
+ <Menu name="insert"><text>&amp;Insert</text>
  </Menu>
  <Menu name="layout"><text>&amp;Layout</text>
    <Action name="alignToGrid"/>
@@ -50,15 +48,8 @@
    <Action name="deleteStyle"/>
  </Menu>
  <Menu name="modify"><text>&amp;Modify</text>
-   <Action name="transformPosition"/>
-   <Action name="transformDimension"/>
-   <Action name="transformRotation"/>
-   <Action name="transformMirror"/>
    <Action name="distribute"/>
    <Action name="convertToPath"/>
-   <Separator/>
-   <Action name="textAlongPath"/>
-   
  </Menu>
  <Menu name="effects"><text>Effe&amp;cts</text>
    <Action name="blend"/>

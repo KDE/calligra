@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,29 +23,30 @@
 
 */
 
-#ifndef CutCmd_h_
-#define CutCmd_h_
+#ifndef __CutCmd_h__
+#define __CutCmd_h__
 
-#include <Command.h>
+#include "Command.h"
 
 class GDocument;
 class GObject;
 
-class CutCmd : public Command {
+class CutCmd : public Command
+{
 public:
-    CutCmd (GDocument* doc);
-    ~CutCmd ();
+  CutCmd(GDocument *aGDoc);
+  ~CutCmd();
 
-    void execute ();
-    void unexecute ();
+  void execute();
+  void unexecute();
 
 private:
-    struct MyPair {
-        GObject *o;
-        int pos;
-    };
-    GDocument* document;
-    QPtrList<MyPair> objects;
+  struct MyPair
+  {
+    GObject *o;
+    int pos;
+  };
+  QPtrList<MyPair> objects;
 };
 
 #endif

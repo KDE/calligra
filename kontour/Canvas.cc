@@ -305,12 +305,14 @@ void Canvas::addHelpline(int x, int y, bool horizH)
   {
     pos = static_cast<double>(y - mYOffset) / zoomFactor();
     mGDoc->addHorizHelpline(pos);
+    updateBuf(QRect(0, y, width(), 1));
     repaint(0, y, width(), 1);
   }
   else
   {
     pos = static_cast<double>(x - mXOffset) / zoomFactor();
     mGDoc->addVertHelpline(pos);
+    updateBuf(QRect(x, 0, 1, height()));
     repaint(x, 0, 1, height());
   }
 }

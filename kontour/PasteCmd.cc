@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,7 +23,7 @@
 
 */
 
-#include <PasteCmd.h>
+#include "PasteCmd.h"
 
 #include <qstring.h>
 #include <qclipboard.h>
@@ -32,60 +33,61 @@
 #include <klocale.h>
 #include <kapp.h>
 
-#include <GDocument.h>
-#include <GObject.h>
-#include <GText.h>
+#include "GDocument.h"
 #include "GPage.h"
+#include "GObject.h"
 
-PasteCmd::PasteCmd (GDocument* doc)
-  : Command(i18n("Paste"))
+PasteCmd::PasteCmd(GDocument *aGDoc):
+Command(aGDoc, i18n("Paste"))
 {
-  document = doc;
 }
 
-PasteCmd::~PasteCmd () {
-    for (GObject *o=objects.first(); o!=0L; o=objects.next())
-        o->unref();
+PasteCmd::~PasteCmd()
+{
+  for(GObject *o = objects.first(); o != 0L; o = objects.next())
+    o->unref();
 }
 
-void PasteCmd::execute () {
+void PasteCmd::execute()
+{
+  for(GObject *o = objects.first(); o != 0L; o = objects.next())
+    o->unref();
+  objects.clear();
 
-    for (GObject *o=objects.first(); o!=0L; o=objects.next())
-        o->unref ();
-    objects.clear ();
+  QMimeSource *src = QApplication::clipboard()->data();
 
-    QMimeSource *src = QApplication::clipboard()->data();
+  if(src && src->provides("application/x-kontour-snippet"))
+  {
+    /* KIllustrator objects */
+    QWMatrix m;
+    m.translate(10, 10);
 
-    if ( src && src->provides( "application/x-killustrator-snippet" ) )
+    QBuffer buffer(src->encodedData("application/x-kontour-snippet"));
+    buffer.open( IO_ReadOnly );
+    QDomDocument d;
+    d.setContent(&buffer);
+    buffer.close();
+//    document()->activePage()->insertFromXml(d, objects);
+    document()->activePage()->unselectAllObjects ();
+    for(GObject *o = objects.first(); o != 0L; o = objects.next())
     {
-        // KIllustrator objects
-        QWMatrix m;
-        m.translate(10, 10);
-
-        QBuffer buffer( src->encodedData( "application/x-killustrator-snippet" ) );
-        buffer.open( IO_ReadOnly );
-        QDomDocument d;
-        d.setContent(&buffer);
-        buffer.close();
-        document->activePage()->insertFromXml (d, objects);
-        document->activePage()->unselectAllObjects ();
-        for (GObject *o=objects.first(); o!=0L; o=objects.next()) {
-            o->ref ();
-            o->transform (m, true);
-            document->activePage()->selectObject(o);
-        }
+      o->ref();
+      o->transform(m, true);
+      document()->activePage()->selectObject(o);
     }
-    else {
+  }
+/*  else
+  {
         // plain text
         GText *tobj = new GText (document);
         tobj->setText ( QApplication::clipboard()->text() );
         objects.append(tobj);
         document->activePage()->insertObject (tobj);
-    }
+  }*/
 }
 
-void PasteCmd::unexecute () {
-    for (GObject *o=objects.first(); o!=0L; o=objects.next())
-        document->activePage()->deleteObject(o);
+void PasteCmd::unexecute()
+{
+  for(GObject *o = objects.first(); o != 0L; o = objects.next())
+    document()->activePage()->deleteObject(o);
 }
-

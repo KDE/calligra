@@ -31,8 +31,8 @@
 #include <qhbox.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
-#include <kcolorbutton.h>
 
+#include <kcolorbutton.h>
 #include <klocale.h>
 
 #include "kontour_view.h"
@@ -69,6 +69,7 @@ KDialogBase(KDialogBase::TreeList, i18n("Option"), Ok|Apply|Cancel, Ok, parent, 
 
   horizLines = mGDoc->horizHelplines();
   vertLines = mGDoc->vertHelplines();
+
   initHelplinesLists();
 }
 

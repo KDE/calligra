@@ -27,21 +27,20 @@
 
 #include <klocale.h>
 
-#include <GDocument.h>
+#include "GDocument.h"
 #include "GPage.h"
-#include <GObject.h>
+#include "GObject.h"
 
 bool DuplicateCmd::repeatCmd = false;
-float DuplicateCmd::repOffX = 0.0;
-float DuplicateCmd::repOffY = 0.0;
+double DuplicateCmd::repOffX = 0.0;
+double DuplicateCmd::repOffY = 0.0;
 
-DuplicateCmd::DuplicateCmd(GDocument* doc):
-Command(i18n("Duplicate"))
+DuplicateCmd::DuplicateCmd(GDocument *aGDoc):
+Command(aGDoc, i18n("Duplicate"))
 {
-  document = doc;
-  for (QPtrListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it)
+  for(QPtrListIterator<GObject> it(document()->activePage()->getSelection()); it.current(); ++it)
   {
-    GObject* o = *it;
+    GObject *o = *it;
     if(o->isA("GPart"))
       continue;
     o->ref();
@@ -49,57 +48,63 @@ Command(i18n("Duplicate"))
   }
 }
 
-DuplicateCmd::~DuplicateCmd () {
-    GObject *o;
-    for (o=objects.first(); o!=0L; o=objects.next())
-        o->unref ();
-    for (o=new_objects.first(); o!=0L; o=new_objects.next())
-        o->unref ();
+DuplicateCmd::~DuplicateCmd()
+{
+  GObject *o;
+  for(o = objects.first(); o != 0L; o = objects.next())
+    o->unref();
+  for(o = new_objects.first(); o != 0L; o = new_objects.next())
+    o->unref();
 }
 
-void DuplicateCmd::execute () {
-  float xoff;
-  float yoff;
+void DuplicateCmd::execute()
+{
+  double xoff;
+  double yoff;
 
-  if (repeatCmd) {
+  if(repeatCmd)
+  {
     xoff = repOffX;
     yoff = repOffY;
   }
-  else {
-    xoff = PStateManager::instance ()->duplicateXOffset ();
-    yoff = PStateManager::instance ()->duplicateYOffset ();
+  else
+  {
+//    xoff = PStateManager::instance ()->duplicateXOffset ();
+//    yoff = PStateManager::instance ()->duplicateYOffset ();
   }
   QWMatrix m;
-  m.translate (xoff, yoff);
+  m.translate(xoff, yoff);
 
-  document->activePage()->unselectAllObjects ();
-  for (GObject *i=objects.first(); i!=0L;
-       i=objects.next()) {
-    GObject *o = i->copy ();
-    o->ref ();
-    o->transform (m, true);
-    document->activePage()->insertObject (o);
-    document->activePage()->selectObject (o);
-    new_objects.append(o);
+  document()->activePage()->unselectAllObjects();
+  for(GObject *i = objects.first(); i != 0L; i = objects.next())
+  {
+/*    GObject *o = i->copy();
+    o->ref();
+    o->transform(m, true);
+    document()->activePage()->insertObject(o);
+    document()->activePage()->selectObject(o);
+    new_objects.append(o);*/
   }
 }
 
-void DuplicateCmd::unexecute () {
-    document->activePage()->unselectAllObjects ();
-    GObject *o;
-    for (o=new_objects.first(); o!=0L; o=new_objects.next())
-        document->activePage()->deleteObject(o);
-    for (o = objects.first(); o!=0L; o=objects.next())
-        document->activePage()->selectObject(o);
+void DuplicateCmd::unexecute()
+{
+  document()->activePage()->unselectAllObjects();
+  GObject *o;
+  for(o = new_objects.first(); o != 0L; o = new_objects.next())
+    document()->activePage()->deleteObject(o);
+  for(o = objects.first(); o != 0L; o = objects.next())
+    document()->activePage()->selectObject(o);
 }
 
-void DuplicateCmd::resetRepetition () {
-    repeatCmd = false;
+void DuplicateCmd::resetRepetition()
+{
+  repeatCmd = false;
 }
 
-void DuplicateCmd::setRepetitionOffset (float dx, float dy) {
-  repOffX = dx + PStateManager::instance ()->duplicateXOffset ();
-  repOffY = dy + PStateManager::instance ()->duplicateYOffset ();
+void DuplicateCmd::setRepetitionOffset(double dx, double dy)
+{
+  repOffX = dx;// + PStateManager::instance ()->duplicateXOffset ();
+  repOffY = dy;// + PStateManager::instance ()->duplicateYOffset ();
   repeatCmd = true;
 }
-

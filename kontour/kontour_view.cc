@@ -62,6 +62,10 @@
 #include "OvalTool.h"
 #include "ZoomTool.h"
 #include "LayerPanel.h"
+#include "CopyCmd.h"
+#include "CutCmd.h"
+#include "PasteCmd.h"
+#include "DuplicateCmd.h"
 #include "DeleteCmd.h"
 #include "ToPathCmd.h"
 
@@ -181,11 +185,6 @@ void KontourView::setupActions()
   m_deleteStyle = new KAction(i18n("&Delete style"), 0, this, SLOT(slotDeleteStyle()), actionCollection(), "deleteStyle");
 
   /* Modify menu */
-
-  new KAction(i18n("&Position..."), 0, this, SLOT(slotTransformPosition()), actionCollection(), "transformPosition");
-  new KAction(i18n("&Dimension..."), 0, this, SLOT(slotTransformDimension()), actionCollection(), "transformDimension");
-  new KAction(i18n("&Rotation..."), 0, this, SLOT(slotTransformRotation()), actionCollection(), "transformRotation");
-  new KAction(i18n("&Mirror..."), 0, this, SLOT(slotTransformMirror()), actionCollection(), "transformMirror");
 
   m_distribute = new KAction( i18n("&Align/Distribute..."), 0, this, SLOT(slotDistribute()), actionCollection(), "distribute");
   m_convertToPath = new KAction(i18n("&Convert to Path"), 0, this, SLOT(slotConvertToPath()), actionCollection(), "convertToPath");
@@ -585,6 +584,8 @@ void KontourView::changeSelection()
   {
     m_copy->setEnabled(false);
     m_cut->setEnabled(false);
+    m_delete->setEnabled(false);
+    m_duplicate->setEnabled(false);
     m_convertToPath->setEnabled(false);
   }
   else
@@ -592,9 +593,15 @@ void KontourView::changeSelection()
     m_copy->setEnabled(true);
     m_cut->setEnabled(true);
     m_convertToPath->setEnabled(true);
-	// set selection style here
-	//mPaintPanel->slotChangeColor(page->getSelection().first()->style().fillColor());
+    m_delete->setEnabled(true);
+    m_duplicate->setEnabled(true);
+    // set selection style here
+    //mPaintPanel->slotChangeColor(page->getSelection().first()->style().fillColor());
   }
+  if(page->objectCount() == page->selectionCount())
+    m_selectAll->setEnabled(false);
+  else
+    m_selectAll->setEnabled(true);
 }
 
 void KontourView::slotZoomFactorChanged()
@@ -621,30 +628,36 @@ void KontourView::slotZoomFactorChanged()
 
 /*******************[Actions]*******************/
 
-void KontourView::setupPrinter(KPrinter &printer)
+void KontourView::setupPrinter(KPrinter &/*printer*/)
 {
-//  mCanvas->setupPrinter(printer);
 }
 
-void KontourView::print(KPrinter &printer)
+void KontourView::print(KPrinter &/*printer*/)
 {
-//  mCanvas->print(printer);
 }
 
 void KontourView::slotCopy()
 {
+  CopyCmd *cmd = new CopyCmd(activeDocument());
+  mDoc->history()->addCommand(cmd);
 }
 
 void KontourView::slotPaste()
 {
+  PasteCmd *cmd = new PasteCmd(activeDocument());
+  mDoc->history()->addCommand(cmd);
 }
 
 void KontourView::slotCut()
 {
+  CutCmd *cmd = new CutCmd(activeDocument());
+  mDoc->history()->addCommand(cmd);
 }
 
 void KontourView::slotDuplicate()
 {
+  DuplicateCmd *cmd = new DuplicateCmd(activeDocument());
+  mDoc->history()->addCommand(cmd);
 }
 
 void KontourView::slotDelete()
@@ -792,26 +805,6 @@ void KontourView::slotDeleteStyle()
 
 }
 
-void KontourView::slotTransformPosition()
-{
-  showTransformationDialog(0);
-}
-
-void KontourView::slotTransformDimension()
-{
-  showTransformationDialog(1);
-}
-
-void KontourView::slotTransformRotation()
-{
-  showTransformationDialog(2);
-}
-
-void KontourView::slotTransformMirror()
-{
-  showTransformationDialog(3);
-}
-
 void KontourView::slotDistribute()
 {
 //    AlignmentDialog::alignSelection (m_pDoc->gdoc(), &cmdHistory);
@@ -850,45 +843,7 @@ void KontourView::slotOptions()
    }*/
 }
 
-//TODO need this dialog?
-void KontourView::showTransformationDialog(int id)
-{
-    /*TransformationDialog *transformationDialog = new TransformationDialog (&cmdHistory);
-    QObject::connect (m_pDoc->gdoc(), SIGNAL (selectionChanged ()),
-                      transformationDialog, SLOT (update ()));
-    transformationDialog->setDocument ( m_pDoc->gdoc() );
-    transformationDialog->showTab (id);*/
-}
-
-
-
-
-
-
-
-
 /*
-void KontourView::showCurrentMode (Tool::ToolID, const QString& msg)
-{
-   KoMainWindow * tmpKo = shell();
-   if (tmpKo)
-      tmpKo->statusBarLabel()->setText(msg);
-   //statusbar->changeItem (msg, 2);
-}
-
-//void KontourView::resizeEvent(QResizeEvent* ) {
-    if(mShowRulers) {
-        hRuler->setGeometry(20, 0, width()-20, 20);
-        vRuler->setGeometry(0, 20, 20, height()-20);
-        mCanvas->setGeometry(20, 20, width()-20, height()-20);
-    }
-    else
-        mCanvas->setGeometry(0, 0, width(), height());
-//}
-
-//when we get here, the mCanvas is already zoomed
-
-
 // Reimplemented from KoView. Automatically called for embedded views
 void KontourView::setZoom( double zoom ) {
     kdDebug() << "KontourView::setZoom " << zoom << endl;

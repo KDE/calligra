@@ -34,21 +34,21 @@ class GObject;
 class DuplicateCmd : public Command
 {
 public:
-  DuplicateCmd(GDocument* doc);
+  DuplicateCmd(GDocument *aGDoc);
   ~DuplicateCmd();
 
   void execute();
   void unexecute();
 
   static void resetRepetition();
-  static void setRepetitionOffset(float dx, float dy);
+  static void setRepetitionOffset(double dx, double dy);
 
 private:
   QPtrList<GObject> objects;
   QPtrList<GObject> new_objects;
 
-  static bool repeatCmd; // repeat command with given offsets
-  static float repOffX, repOffY; // offset for repetition
+  static bool repeatCmd;            // repeat command with given offsets
+  static double repOffX, repOffY;   // offset for repetition
 };
 
 #endif

@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -29,75 +30,74 @@
 #include <qtextstream.h>
 #include <qdragobject.h>
 #include <qdom.h>
+
 #include <kapp.h>
 #include <klocale.h>
 
 #include "GDocument.h"
-#include "GObject.h"
 #include "GPage.h"
+#include "GObject.h"
 
-CutCmd::CutCmd (GDocument* doc)
-  : Command(i18n("Cut"))
+CutCmd::CutCmd(GDocument *aGDoc):
+Command(aGDoc, i18n("Cut"))
 {
-  document = doc;
   objects.setAutoDelete(true);
-  for(QPtrListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it)
+  for(QPtrListIterator<GObject> it(document()->activePage()->getSelection()); it.current(); ++it)
   {
-    MyPair *p=new MyPair;
+    MyPair *p = new MyPair;
     p->o = *it;
-    p->o->ref ();
-    // store the old position of the object
-    p->pos = doc->activePage()->findIndexOfObject(p->o);
+    p->o->ref();
+    /* store the old position of the object */
+    p->pos = document()->activePage()->findIndexOfObject(p->o);
     objects.append(p);
   }
 }
 
-CutCmd::~CutCmd ()
+CutCmd::~CutCmd()
 {
-  for (MyPair *p=objects.first(); p!=0L; p=objects.next())
-    p->o->unref ();
+  for(MyPair *p = objects.first(); p != 0L; p = objects.next())
+    p->o->unref();
 }
 
 void CutCmd::execute()
 {
-  QDomDocument docu("killustrator");
-  docu.appendChild( docu.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-  QDomElement doc=docu.createElement("killustrator");
-  doc.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
+  QDomDocument docu("kontour");
+  docu.appendChild(docu.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+  QDomElement doc = docu.createElement("kontour");
+//  doc.setAttribute("mime", KILLUSTRATOR_MIMETYPE);
   docu.appendChild(doc);
-  QDomElement layer=docu.createElement("layer");
+  QDomElement layer = docu.createElement("layer");
   doc.appendChild(layer);
 
-  for (MyPair *p=objects.first(); p!=0L; p=objects.next())
+  for(MyPair *p = objects.first(); p != 0L; p = objects.next())
   {
     layer.appendChild(p->o->writeToXml(docu));
-    document->activePage()->deleteObject (p->o);
+    document()->activePage()->deleteObject(p->o);
   }
 
   QBuffer buffer;
-  buffer.open( IO_WriteOnly );
-  QTextStream stream( &buffer );
-  stream.setEncoding( QTextStream::UnicodeUTF8 );
+  buffer.open(IO_WriteOnly);
+  QTextStream stream(&buffer);
+  stream.setEncoding(QTextStream::UnicodeUTF8);
   stream << docu;
   buffer.close();
 
-  QStoredDrag *drag = new QStoredDrag( "application/x-killustrator-snippet" );
-  drag->setEncodedData( buffer.buffer() );
+  QStoredDrag *drag = new QStoredDrag("application/x-kontour-snippet");
+  drag->setEncodedData(buffer.buffer());
 
   QApplication::clipboard()->setData(drag);
 }
 
-void CutCmd::unexecute ()
+void CutCmd::unexecute()
 {
-  QApplication::clipboard ()->clear ();
-  document->activePage()->unselectAllObjects ();
+  QApplication::clipboard()->clear();
+  document()->activePage()->unselectAllObjects();
 
-  for (MyPair *p=objects.first(); p!=0; p=objects.next())
+  for(MyPair *p = objects.first(); p != 0; p = objects.next())
   {
-    // insert the object at the old position
-    p->o->ref ();
-    document->activePage()->insertObjectAtIndex (p->o, p->pos);
-    document->activePage()->selectObject (p->o);
+    /* insert the object at the old position */
+    p->o->ref();
+    document()->activePage()->insertObjectAtIndex(p->o, p->pos);
+    document()->activePage()->selectObject(p->o);
   }
 }
-

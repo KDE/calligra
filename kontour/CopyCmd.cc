@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,65 +23,65 @@
 
 */
 
-#include <CopyCmd.h>
+#include "CopyCmd.h"
 
 #include <qclipboard.h>
 #include <qbuffer.h>
 #include <qtextstream.h>
 #include <qdragobject.h>
 #include <qdom.h>
+
 #include <kapp.h>
 #include <klocale.h>
 
-#include <GDocument.h>
-#include <GObject.h>
+#include "GDocument.h"
 #include "GPage.h"
+#include "GObject.h"
 
-CopyCmd::CopyCmd (GDocument* doc)
-  : Command(i18n("Copy"))
+CopyCmd::CopyCmd(GDocument *aGDoc):
+Command(aGDoc, i18n("Copy"))
 {
-  document = doc;
-  for(QPtrListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
-    GObject* o = *it;
-    o->ref ();
+  for(QPtrListIterator<GObject> it(document()->activePage()->getSelection()); it.current(); ++it)
+  {
+    GObject *o = *it;
+    o->ref();
     objects.append(o);
   }
 }
 
-CopyCmd::~CopyCmd () {
-  for(GObject *o=objects.first();
-       o!=0L; o=objects.next())
-      o->unref ();
+CopyCmd::~CopyCmd()
+{
+  for(GObject *o = objects.first(); o != 0L; o = objects.next())
+    o->unref();
 }
 
-void CopyCmd::execute () {
+void CopyCmd::execute()
+{
+  QDomDocument docu("kontour");
+  docu.appendChild(docu.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+  QDomElement doc = docu.createElement("kontour");
+//  doc.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
+  docu.appendChild(doc);
+  QDomElement layer = docu.createElement("layer");
+  doc.appendChild(layer);
 
-    QDomDocument docu("killustrator");
-    docu.appendChild( docu.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-    QDomElement doc=docu.createElement("killustrator");
-    doc.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
-    docu.appendChild(doc);
-    QDomElement layer=docu.createElement("layer");
-    doc.appendChild(layer);
+  for(GObject *o = objects.first(); o != 0L; o = objects.next())
+    layer.appendChild(o->writeToXml(docu));
 
-    for (GObject *o=objects.first(); o!=0L;
-         o=objects.next())
-        layer.appendChild(o->writeToXml (docu));
+  QBuffer buffer;
+  buffer.open(IO_WriteOnly);
+  QTextStream stream(&buffer);
+  stream.setEncoding(QTextStream::UnicodeUTF8);
+  stream << docu;
+  buffer.close();
 
-    QBuffer buffer;
-    buffer.open( IO_WriteOnly );
-    QTextStream stream( &buffer );
-    stream.setEncoding( QTextStream::UnicodeUTF8 );
-    stream << docu;
-    buffer.close();
+  QStoredDrag *drag = new QStoredDrag("application/x-kontour-snippet");
+  drag->setEncodedData(buffer.buffer());
 
-    QStoredDrag *drag = new QStoredDrag( "application/x-killustrator-snippet" );
-    drag->setEncodedData( buffer.buffer() );
-
-    QApplication::clipboard ()->setData( drag );
+  QApplication::clipboard()->setData(drag);
 }
 
-void CopyCmd::unexecute () {
-  QApplication::clipboard ()->clear ();
+void CopyCmd::unexecute()
+{
+  QApplication::clipboard()->clear();
 }
-

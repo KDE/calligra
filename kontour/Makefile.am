@@ -57,7 +57,11 @@ libkontourpart_la_SOURCES = \
 	ZoomTool.cc \
 	Handle.cc \
 	Command.cc \
+	CopyCmd.cc \
+	CutCmd.cc \
+	PasteCmd.cc \
 	DeleteCmd.cc \
+	DuplicateCmd.cc \
 	ToPathCmd.cc \
 	TranslateCmd.cc \
 	RotateCmd.cc \

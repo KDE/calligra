@@ -99,8 +99,6 @@ private:
   void readConfigAfter();
   void writeConfig();
   void updateStyles();
-  
-  void showTransformationDialog(int id);
 
 private slots:
   void popupForSelection();
@@ -137,10 +135,6 @@ private slots:
   void slotStyles(const QString &s);
   void slotAddStyle();
   void slotDeleteStyle();
-  void slotTransformPosition();
-  void slotTransformDimension();
-  void slotTransformRotation();
-  void slotTransformMirror();
   void slotDistribute();
   void slotConvertToPath();
   void slotBlend();
