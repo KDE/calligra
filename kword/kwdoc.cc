@@ -559,7 +559,6 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
             case KWFrameSet::FI_EVEN_HEADER:
-                kdDebug() << " FI_EVEN_HEADER vis:" << isHeaderVisible() << " fs:" << fs->className() << endl;
                 if ( isHeaderVisible() ) {
                     evenHeader = dynamic_cast<KWTextFrameSet*>( fs );
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }

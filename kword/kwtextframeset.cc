@@ -2179,19 +2179,21 @@ QString KWTextFrameSet::selectedText() const
     return m_textobj->selectedText();
 }
 
-void KWTextFrameSet::highlightPortion( KoTextParag * parag, int index, int length, KWCanvas * canvas )
+void KWTextFrameSet::highlightPortion( KoTextParag * parag, int index, int length, KWCanvas * canvas, bool repaint )
 {
-    m_textobj->highlightPortion( parag, index, length );
-    QRect expose = canvas->viewMode()->normalToView( paragRect( parag ) );
-    canvas->ensureVisible( (expose.left()+expose.right()) / 2,  // point = center of the rect
-                           (expose.top()+expose.bottom()) / 2,
-                           (expose.right()-expose.left()) / 2,  // margin = half-width of the rect
-                           (expose.bottom()-expose.top()) / 2);
+    m_textobj->highlightPortion( parag, index, length, repaint );
+    if ( repaint ) {
+        QRect expose = canvas->viewMode()->normalToView( paragRect( parag ) );
+        canvas->ensureVisible( (expose.left()+expose.right()) / 2,  // point = center of the rect
+                               (expose.top()+expose.bottom()) / 2,
+                               (expose.right()-expose.left()) / 2,  // margin = half-width of the rect
+                               (expose.bottom()-expose.top()) / 2);
+    }
 }
 
-void KWTextFrameSet::removeHighlight()
+void KWTextFrameSet::removeHighlight( bool repaint )
 {
-    m_textobj->removeHighlight();
+    m_textobj->removeHighlight( repaint );
 }
 
 void KWTextFrameSet::clearUndoRedoInfo()
