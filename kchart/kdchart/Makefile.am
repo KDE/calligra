@@ -23,16 +23,16 @@ noinst_HEADERS =	KDChartAreaPainter.h	\
 			KDChartRingPainter.h	\
 			KDChartTextPiece.h	\
 			KDChartAxisParams.h	\
-			KDChartData.h		\
 			KDChartDataRegion.h	\
 			KDChart.h		\
 			KDChartNotEnoughSpaceException.h	\
 			KDChartPainter.h	\
 			KDChartParams.h		\
-			KDChartTable.h		\
 			KDChartUnknownTypeException.h	\
 			KDChartWidget.h
 
 METASOURCES = AUTO
 
 INCLUDES  = -I../include $(all_includes)
+
+include_HEADERS = KDChartData.h KDChartTable.h
