@@ -802,7 +802,8 @@ void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags )
         setCounter( layout.counter );
     if ( flags & KoParagLayout::Tabulator )
         setTabList( layout.tabList() );
-
+    if ( flags & KoParagLayout::Shadow )
+        setShadow( layout.shadowDistance, layout.shadowDirection,layout.shadowColor );
     if ( flags == KoParagLayout::All )
         // Don't call setStyle from here, it would overwrite any paragraph-specific settings
         setStyle( layout.style );

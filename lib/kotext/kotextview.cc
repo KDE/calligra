@@ -751,6 +751,11 @@ KCommand * KoTextView::setTabListCommand( const KoTabulatorList & tabList )
     return textObject()->setTabListCommand( m_cursor, tabList );
 }
 
+KCommand * KoTextView::setShadowCommand( double dist, short int direction, const QColor &col )
+{
+    return textObject()->setShadowCommand( m_cursor,dist, direction, col);
+}
+
 KoTextDocument * KoTextView::textDocument() const
 {
     return textObject()->textDocument();

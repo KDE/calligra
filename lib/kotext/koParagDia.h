@@ -331,6 +331,73 @@ protected:
     bool noSignals;
 };
 
+class KoShadowPreview : public QFrame
+{
+    Q_OBJECT
+
+public:
+    // constructor - destructor
+    KoShadowPreview( QWidget* parent, const char* );
+    ~KoShadowPreview() {}
+
+    void setShadowDirection( short int sd ) { shadowDirection = sd; repaint( true ); }
+    void setShadowDistance( int sd ) { shadowDistance = sd; repaint( true ); }
+    void setShadowColor( QColor sc ) { shadowColor = sc; repaint( true ); }
+
+protected:
+    void drawContents( QPainter* );
+
+    short int shadowDirection;
+    int shadowDistance;
+    QColor shadowColor;
+};
+
+
+class KoParagShadowWidget: public KoParagLayoutWidget
+{
+    Q_OBJECT
+public:
+    KoParagShadowWidget( QWidget * parent, const char * name );
+    virtual ~KoParagShadowWidget() {}
+
+    virtual void display( const KoParagLayout & lay );
+    virtual void save( KoParagLayout & lay );
+    virtual QString tabName();
+
+    void setShadowDirection( short int sd );
+    void setShadowDistance( int sd );
+    void setShadowColor( QColor sc );
+
+    short int getShadowDirection() { return shadowDirection; }
+    int getShadowDistance() { return shadowDistance; }
+    QColor getShadowColor() { return shadowColor; }
+
+protected:
+    KoShadowPreview *m_shadowPreview;
+
+    QSpinBox *distance;
+    QPushButton *lu, *u, *ru, *r, *rb, *b, *lb, *l;
+    KColorButton *color;
+    QLabel *lcolor, *ldirection, *ldistance;
+
+    short int shadowDirection;
+    int shadowDistance;
+    QColor shadowColor;
+
+protected slots:
+    void luChanged();
+    void uChanged();
+    void ruChanged();
+    void rChanged();
+    void rbChanged();
+    void bChanged();
+    void lbChanged();
+    void lChanged();
+    void colorChanged( const QColor& );
+    void distanceChanged( int );
+
+};
+
 /**
  * The complete(*) dialog for changing attributes of a paragraph
  *
@@ -342,7 +409,7 @@ class KoParagDia : public KDialogBase
     Q_OBJECT
 
 public:
-    enum { PD_SPACING = 1, PD_ALIGN = 2, PD_BORDERS = 4, PD_NUMBERING = 8, PD_TABS = 16 };
+    enum { PD_SPACING = 1, PD_ALIGN = 2, PD_BORDERS = 4, PD_NUMBERING = 8, PD_TABS = 16, PD_SHADOW=32 };
 
     /**
      * breakLine : kpresenter didn't used this attibute, kword use it.
@@ -383,6 +450,11 @@ public:
     KoTabulatorList tabListTabulator() const { return m_tabulatorsWidget->tabList(); }
     KoParagTabulatorsWidget * tabulatorsWidget() const { return m_tabulatorsWidget; }
 
+    // tab 6
+    short int shadowDirection()const {return  m_shadowWidget->getShadowDirection();}
+    int shadowDistance() const { return m_shadowWidget->getShadowDistance(); }
+    QColor shadowColor() const { return m_shadowWidget->getShadowColor(); }
+
     // Support for "what has changed?"
     bool isAlignChanged() const {return oldLayout.alignment!=align();}
     bool isLineSpacingChanged() const {return oldLayout.lineSpacing!=lineSpacing();}
@@ -400,12 +472,17 @@ public:
                                            oldLayout.bottomBorder!=bottomBorder() ); }
     bool listTabulatorChanged() const {return oldLayout.tabList()!=tabListTabulator();}
 
+    bool isShadowChanged() const { return (oldLayout.shadowDistance!=shadowDistance() || 
+					  oldLayout.shadowColor !=shadowColor() 
+					  ||  oldLayout.shadowDirection!=shadowDirection());}
+
 private:
     KoIndentSpacingWidget * m_indentSpacingWidget;
     KoParagAlignWidget * m_alignWidget;
     KoParagBorderWidget * m_borderWidget;
     KoParagCounterWidget * m_counterWidget;
     KoParagTabulatorsWidget * m_tabulatorsWidget;
+    KoParagShadowWidget *m_shadowWidget;
 
     int m_flags;
     KoParagLayout oldLayout;

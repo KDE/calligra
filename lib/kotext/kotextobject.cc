@@ -1073,7 +1073,8 @@ KCommand * KoTextObject::setBordersCommand( QTextCursor * cursor, const KoBorder
 KCommand * KoTextObject::setTabListCommand( QTextCursor * cursor, const KoTabulatorList &tabList, int selectionId  )
 {
     QTextDocument * textdoc = textDocument();
-    if ( !textdoc->hasSelection( selectionId ) && cursor && static_cast<KoTextParag *>(cursor->parag())->tabList() == tabList )
+    if ( !textdoc->hasSelection( selectionId ) && cursor &&
+         static_cast<KoTextParag *>(cursor->parag())->tabList() == tabList )
         return 0L; // No change needed.
 
     emit hideCursor();
@@ -1106,6 +1107,49 @@ KCommand * KoTextObject::setTabListCommand( QTextCursor * cursor, const KoTabula
     emit updateUI( true );
     return new KoTextCommand( this, /*cmd, */i18n("Change Tabulator") );
 }
+
+KCommand * KoTextObject::setShadowCommand( QTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId )
+{
+    QTextDocument * textdoc = textDocument();
+    if ( !textdoc->hasSelection( selectionId ) && cursor &&
+         static_cast<KoTextParag *>(cursor->parag())->shadowColor() == col &&
+         static_cast<KoTextParag *>(cursor->parag())->shadowDirection() == direction &&
+         static_cast<KoTextParag *>(cursor->parag())->shadowDistance() == dist )
+        return 0L; // No change needed.
+
+    emit hideCursor();
+    if(cursor)
+        storeParagUndoRedoInfo( cursor );
+
+    if ( !textdoc->hasSelection( selectionId ) && cursor ) {
+        static_cast<KoTextParag *>(cursor->parag())->setShadow( dist, direction, col );
+        setLastFormattedParag( cursor->parag() );
+    }
+    else
+    {
+        Qt3::QTextParag *start = textDocument()->selectionStart( selectionId );
+        Qt3::QTextParag *end = textDocument()->selectionEnd( selectionId );
+        setLastFormattedParag( start );
+        for ( ; start && start != end->next() ; start = start->next() )
+            static_cast<KoTextParag *>(start)->setShadow( dist, direction, col );
+    }
+
+    formatMore();
+    emit repaintChanged( this );
+    undoRedoInfo.newParagLayout.shadowDistance=dist;
+    undoRedoInfo.newParagLayout.shadowColor=col;
+    undoRedoInfo.newParagLayout.shadowDirection=direction;
+    KoTextParagCommand *cmd = new KoTextParagCommand(
+        textdoc, undoRedoInfo.id, undoRedoInfo.eid,
+        undoRedoInfo.oldParagLayouts, undoRedoInfo.newParagLayout,
+        KoParagLayout::Shadow);
+    textdoc->addCommand( cmd );
+    undoRedoInfo.clear();
+    emit showCursor();
+    emit updateUI( true );
+    return new KoTextCommand( this, /*cmd, */i18n("Change Shadow") );
+}
+
 
 void KoTextObject::removeSelectedText( QTextCursor * cursor, int selectionId, const QString & cmdName )
 {

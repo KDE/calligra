@@ -92,6 +92,7 @@ public:
     KCommand * setBordersCommand( const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& bottomBorder, const KoBorder& topBorder );
     KCommand * setMarginCommand( QStyleSheetItem::Margin m, double margin );
     KCommand * setTabListCommand( const KoTabulatorList & tabList );
+    KCommand * setShadowCommand( double dist, short int direction, const QColor &col );
 
     void applyStyle( const KoStyle * style );
 

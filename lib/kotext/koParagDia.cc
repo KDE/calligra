@@ -1675,6 +1675,383 @@ QString KoParagTabulatorsWidget::tabName() {
     return i18n( "Tabulators" );
 }
 
+
+
+/*==================== constructor ===============================*/
+KoShadowPreview::KoShadowPreview( QWidget* parent, const char* name )
+    : QFrame( parent, name )
+{
+    setFrameStyle( WinPanel | Sunken );
+    setBackgroundColor( white );
+}
+
+/*====================== draw contents ===========================*/
+void KoShadowPreview::drawContents( QPainter* painter )
+{
+    QFont font(KoGlobal::defaultFont().family(), 30, QFont::Bold);
+    QFontMetrics fm( font );
+
+    QRect br = fm.boundingRect( "KOffice" );
+    int x = ( width() - br.width() ) / 2;
+    int y = ( height() - br.height() ) / 2 + br.height();
+    int sx = 0, sy = 0;
+
+    switch ( shadowDirection )
+    {
+    case KoParagLayout::SD_LEFT_UP:
+    {
+        sx = x - shadowDistance;
+        sy = y - shadowDistance;
+    }
+    break;
+    case KoParagLayout::SD_UP:
+    {
+        sx = x;
+        sy = y - shadowDistance;
+    }
+    break;
+    case KoParagLayout::SD_RIGHT_UP:
+    {
+        sx = x + shadowDistance;
+        sy = y - shadowDistance;
+    } break;
+    case KoParagLayout::SD_RIGHT:
+    {
+        sx = x + shadowDistance;
+        sy = y;
+    }
+    break;
+    case KoParagLayout::SD_RIGHT_BOTTOM:
+    {
+        sx = x + shadowDistance;
+        sy = y + shadowDistance;
+    }
+    break;
+    case KoParagLayout::SD_BOTTOM:
+    {
+        sx = x;
+        sy = y + shadowDistance;
+    }
+    break;
+    case KoParagLayout::SD_LEFT_BOTTOM:
+    {
+        sx = x - shadowDistance;
+        sy = y + shadowDistance;
+    } break;
+    case KoParagLayout::SD_LEFT:
+    {
+        sx = x - shadowDistance;
+        sy = y;
+    }
+    break;
+    }
+    painter->save();
+
+    painter->setFont( font );
+    painter->setPen( shadowColor );
+    painter->drawText( sx, sy, "KOffice" );
+
+    painter->setPen( blue );
+    painter->drawText( x, y, "KOffice" );
+
+    painter->restore();
+}
+
+
+
+KoParagShadowWidget::KoParagShadowWidget( QWidget * parent, const char * name )
+    : KoParagLayoutWidget( KoParagDia::PD_SHADOW, parent, name )
+{
+
+    QGridLayout *grid = new QGridLayout( this, 8, 2, KDialog::marginHint(), KDialog::spacingHint() );
+
+    QGroupBox *shadow = new QGroupBox( i18n( "Shadow" ), this );
+    grid->addMultiCellWidget( shadow, 0, 3,0,0 );
+
+    QGridLayout *grid2 = new QGridLayout( shadow, 4, 2, 2*KDialog::marginHint(), 2*KDialog::spacingHint() );
+
+    QLabel *lcolor = new QLabel( i18n( "Color:" ), shadow );
+    grid2->addWidget(lcolor,0,0);
+
+    color = new KColorButton( shadow );
+    grid2->addWidget(color,1,0);
+    connect( color, SIGNAL( changed( const QColor& ) ), this, SLOT( colorChanged( const QColor& ) ) );
+
+    QLabel *ldistance = new QLabel( i18n( "Distance:" ), shadow );
+    grid2->addWidget(ldistance,2,0);
+
+    distance = new QSpinBox( 0, 20, 1, shadow );
+    connect( distance, SIGNAL( valueChanged( int ) ), this, SLOT( distanceChanged( int ) ) );
+    grid2->addWidget(distance,3,0);
+
+    QLabel *ldirection = new QLabel( i18n( "Direction:" ), shadow );
+    grid2->addWidget(ldirection,0,1);
+
+    QGridLayout *grid3 = new QGridLayout( shadow, 3, 3, KDialog::marginHint(), KDialog::spacingHint() );
+
+    lu = new QPushButton( shadow );
+    grid3->addWidget(lu,0,0);
+    lu->setToggleButton( true );
+    u = new QPushButton( shadow );
+    grid3->addWidget(u,0,1);
+    u->setToggleButton( true );
+    ru = new QPushButton( shadow );
+    grid3->addWidget(ru,0,2);
+    ru->setToggleButton( true );
+    r = new QPushButton( shadow );
+    grid3->addWidget(r,1,2);
+    r->setToggleButton( true );
+    rb = new QPushButton( shadow );
+    grid3->addWidget(rb,2,2);
+    rb->setToggleButton( true );
+    b = new QPushButton( shadow );
+    grid3->addWidget(b,2,1);
+    b->setToggleButton( true );
+    lb = new QPushButton( shadow );
+    grid3->addWidget(lb,2,0);
+    lb->setToggleButton( true );
+    l = new QPushButton( shadow );
+    grid3->addWidget(l,1,0);
+    l->setToggleButton( true );
+
+    lu->setPixmap( BarIcon( "shadowLU" ) );
+    u->setPixmap( BarIcon( "shadowU" ) );
+    ru->setPixmap( BarIcon( "shadowRU" ) );
+    r->setPixmap( BarIcon( "shadowR" ) );
+    rb->setPixmap( BarIcon( "shadowRB" ) );
+    b->setPixmap( BarIcon( "shadowB" ) );
+    lb->setPixmap( BarIcon( "shadowLB" ) );
+    l->setPixmap( BarIcon( "shadowL" ) );
+
+    connect( lu, SIGNAL( clicked() ), this, SLOT( luChanged() ) );
+    connect( u, SIGNAL( clicked() ), this, SLOT( uChanged() ) );
+    connect( ru, SIGNAL( clicked() ), this, SLOT( ruChanged() ) );
+    connect( r, SIGNAL( clicked() ), this, SLOT( rChanged() ) );
+    connect( rb, SIGNAL( clicked() ), this, SLOT( rbChanged() ) );
+    connect( b, SIGNAL( clicked() ), this, SLOT( bChanged() ) );
+    connect( lb, SIGNAL( clicked() ), this, SLOT( lbChanged() ) );
+    connect( l, SIGNAL( clicked() ), this, SLOT( lChanged() ) );
+
+
+    grid2->addMultiCellLayout (grid3, 1,3, 1, 1 );
+
+    m_shadowPreview =new KoShadowPreview( this, "preview" );
+    grid->addMultiCellWidget( m_shadowPreview, 0, 3,1,1 );
+}
+
+void KoParagShadowWidget::setShadowDirection( short int sd )
+{
+    lu->setOn( false );
+    u->setOn( false );
+    ru->setOn( false );
+    r->setOn( false );
+    rb->setOn( false );
+    b->setOn( false );
+    lb->setOn( false );
+    l->setOn( false );
+
+    shadowDirection = sd;
+    m_shadowPreview->setShadowDirection( shadowDirection );
+
+    switch ( shadowDirection )
+    {
+    case KoParagLayout::SD_LEFT_UP:
+        lu->setOn( true );
+        break;
+    case KoParagLayout::SD_UP:
+        u->setOn( true );
+        break;
+    case KoParagLayout::SD_RIGHT_UP:
+        ru->setOn( true );
+        break;
+    case KoParagLayout::SD_RIGHT:
+        r->setOn( true );
+        break;
+    case KoParagLayout::SD_RIGHT_BOTTOM:
+        rb->setOn( true );
+        break;
+    case KoParagLayout::SD_BOTTOM:
+        b->setOn( true );
+        break;
+    case KoParagLayout::SD_LEFT_BOTTOM:
+        lb->setOn( true );
+        break;
+    case KoParagLayout::SD_LEFT:
+        l->setOn( true );
+        break;
+    }
+}
+
+void KoParagShadowWidget::setShadowDistance( int sd )
+{
+    shadowDistance = sd;
+    m_shadowPreview->setShadowDistance( shadowDistance );
+
+    distance->setValue( shadowDistance );
+}
+
+void KoParagShadowWidget::setShadowColor( QColor sc )
+{
+    shadowColor = sc;
+    m_shadowPreview->setShadowColor( shadowColor );
+    color->setColor( shadowColor );
+}
+
+void KoParagShadowWidget::luChanged()
+{
+    lu->setOn( true );
+    u->setOn( false );
+    ru->setOn( false );
+    r->setOn( false );
+    rb->setOn( false );
+    b->setOn( false );
+    lb->setOn( false );
+    l->setOn( false );
+
+    shadowDirection = KoParagLayout::SD_LEFT_UP;
+    m_shadowPreview->setShadowDirection( shadowDirection );
+}
+
+void KoParagShadowWidget::uChanged()
+{
+    lu->setOn( false );
+    u->setOn( true );
+    ru->setOn( false );
+    r->setOn( false );
+    rb->setOn( false );
+    b->setOn( false );
+    lb->setOn( false );
+    l->setOn( false );
+
+    shadowDirection = KoParagLayout::SD_UP;
+    m_shadowPreview->setShadowDirection( shadowDirection );
+}
+
+void KoParagShadowWidget::ruChanged()
+{
+    lu->setOn( false );
+    u->setOn( false );
+    ru->setOn( true );
+    r->setOn( false );
+    rb->setOn( false );
+    b->setOn( false );
+    lb->setOn( false );
+    l->setOn( false );
+
+    shadowDirection = KoParagLayout::SD_RIGHT_UP;
+    m_shadowPreview->setShadowDirection( shadowDirection );
+}
+
+
+void KoParagShadowWidget::rChanged()
+{
+    lu->setOn( false );
+    u->setOn( false );
+    ru->setOn( false );
+    r->setOn( true );
+    rb->setOn( false );
+    b->setOn( false );
+    lb->setOn( false );
+    l->setOn( false );
+
+    shadowDirection = KoParagLayout::SD_RIGHT;
+    m_shadowPreview->setShadowDirection( shadowDirection );
+}
+
+
+void KoParagShadowWidget::rbChanged()
+{
+    lu->setOn( false );
+    u->setOn( false );
+    ru->setOn( false );
+    r->setOn( false );
+    rb->setOn( true );
+    b->setOn( false );
+    lb->setOn( false );
+    l->setOn( false );
+
+    shadowDirection = KoParagLayout::SD_RIGHT_BOTTOM;
+    m_shadowPreview->setShadowDirection( shadowDirection );
+}
+
+
+void KoParagShadowWidget::bChanged()
+{
+    lu->setOn( false );
+    u->setOn( false );
+    ru->setOn( false );
+    r->setOn( false );
+    rb->setOn( false );
+    b->setOn( true );
+    lb->setOn( false );
+    l->setOn( false );
+
+    shadowDirection = KoParagLayout::SD_BOTTOM;
+    m_shadowPreview->setShadowDirection( shadowDirection );
+}
+
+
+void KoParagShadowWidget::lbChanged()
+{
+    lu->setOn( false );
+    u->setOn( false );
+    ru->setOn( false );
+    r->setOn( false );
+    rb->setOn( false );
+    b->setOn( false );
+    lb->setOn( true );
+    l->setOn( false );
+
+    shadowDirection = KoParagLayout::SD_LEFT_BOTTOM;
+    m_shadowPreview->setShadowDirection( shadowDirection );
+}
+
+
+void KoParagShadowWidget::lChanged()
+{
+    lu->setOn( false );
+    u->setOn( false );
+    ru->setOn( false );
+    r->setOn( false );
+    rb->setOn( false );
+    b->setOn( false );
+    lb->setOn( false );
+    l->setOn( true );
+
+    shadowDirection = KoParagLayout::SD_LEFT;
+    m_shadowPreview->setShadowDirection( shadowDirection );
+}
+
+void KoParagShadowWidget::colorChanged( const QColor& col )
+{
+    shadowColor = col;
+    m_shadowPreview->setShadowColor( col );
+}
+
+void KoParagShadowWidget::distanceChanged( int _val )
+{
+    shadowDistance = _val;
+    m_shadowPreview->setShadowDistance( shadowDistance );
+}
+
+void KoParagShadowWidget::display( const KoParagLayout &lay ) {
+    distanceChanged((int)lay.shadowDistance);
+    distance->setValue((int)lay.shadowDistance);
+    colorChanged(lay.shadowColor);
+    setShadowDirection( lay.shadowDirection );
+    color->setColor(lay.shadowColor);
+}
+
+QString KoParagShadowWidget::tabName() {
+    return i18n( "Shadow" );
+}
+
+void KoParagShadowWidget::save( KoParagLayout & lay ) {
+    lay.shadowDistance=shadowDistance;
+    lay.shadowColor=shadowColor;
+    lay.shadowDirection=shadowDirection;
+}
+
 /******************************************************************/
 /* Class: KoParagDia                                              */
 /******************************************************************/
@@ -1708,6 +2085,12 @@ KoParagDia::KoParagDia( QWidget* parent, const char* name,
         QVBox * page = addVBoxPage( i18n( "Tabulators" ) );
         m_tabulatorsWidget = new KoParagTabulatorsWidget( unit,_frameWidth, page, "tabs");
     }
+
+    if (m_flags &PD_SHADOW)
+    {
+        QVBox * page = addVBoxPage( i18n( "Shadow" ) );
+        m_shadowWidget=new KoParagShadowWidget( page, "shadow" );
+    }
     setInitialSize( QSize(600, 500) );
 }
 
@@ -1734,6 +2117,9 @@ void KoParagDia::setCurrentPage( int page )
     case PD_TABS:
         showPage( pageIndex( m_tabulatorsWidget->parentWidget() ) );
         break;
+    case PD_SHADOW:
+        showPage( pageIndex( m_shadowWidget->parentWidget() ) );
+        break;
     default:
         break;
     }
@@ -1746,6 +2132,7 @@ void KoParagDia::setParagLayout( const KoParagLayout & lay )
     m_borderWidget->display( lay );
     m_counterWidget->display( lay );
     m_tabulatorsWidget->display( lay );
+    m_shadowWidget->display(lay);
     oldLayout = lay;
 }
 

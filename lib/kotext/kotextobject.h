@@ -195,6 +195,8 @@ public:
     KCommand * setMarginCommand( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin, int selectionId = QTextDocument::Standard);
     KCommand* setTabListCommand( QTextCursor * cursor,const KoTabulatorList & tabList , int selectionId = QTextDocument::Standard );
 
+    KCommand * setShadowCommand( QTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId= QTextDocument::Standard  );
+
     void applyStyle( QTextCursor * cursor, const KoStyle * style,
                      int selectionId = QTextDocument::Standard,
                      int paragLayoutFlags = KoParagLayout::All, int formatFlags = QTextFormat::Format,
