@@ -47,7 +47,8 @@ private:
     void createStyleMap( QDomDocument &docstyles );
     void insertDraws( const QDomElement& styles );
     void insertStyles( const QDomElement& styles );
-    void fillStyleStack( const QDomElement& object );
+	void insertStylesPresentation( const QDomElement& styles );
+	void fillStyleStack( const QDomElement& object,bool sticky = false );	
     void addStyles( const QDomElement* style );
     void appendName(QDomDocument& doc, QDomElement& e, const QDomElement& object);
 
@@ -89,7 +90,7 @@ private:
     QDomDocument    m_content;
     QDomDocument    m_meta;
     QDomDocument    m_settings;
-    QDict<QDomElement> m_styles, m_draws;
+    QDict<QDomElement> m_styles, m_draws,m_stylesPresentation;
     QDict<QDomElement> m_animations;
     KZip * m_zip;
     StyleStack m_styleStack;
