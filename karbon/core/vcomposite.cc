@@ -90,56 +90,15 @@ VComposite::draw( VPainter* painter, const KoRect * /*rect*/ ) const
 		return;
 	}
 
-	//double zoomFactor = painter->zoomFactor();
-
 	//if( rect && !rect->intersects( boundingBox() ) )
 	//	return;
 
 	painter->save();
-	//painter->setZoomFactor( zoomFactor );
 
 	VPathListIterator itr( m_paths );
 
-	if( state() != edit )
-	{
-		// paint fill:
-		painter->newPath();
-
-		for( itr.toFirst(); itr.current(); ++itr )
-		{
-			VPathIterator jtr( *( itr.current() ) );
-			for( ; jtr.current(); ++jtr )
-			{
-				jtr.current()->draw( painter );
-			}
-		}
-
-		//kdDebug() << "bbox.x : " << boundingBox().x() << endl;
-		//kdDebug() << "bbox.y : " << boundingBox().y() << endl;
-		//kdDebug() << "bbox.width : " << boundingBox().width() << endl;
-		//kdDebug() << "bbox.height : " << boundingBox().height() << endl;
-
-		painter->setRasterOp( Qt::CopyROP );
-		painter->setPen( Qt::NoPen );
-		painter->setBrush( *fill() );
-		painter->fillPath();
-
-		// draw stroke:
-		painter->setRasterOp( Qt::CopyROP );
-		painter->setPen( *stroke() );
-		painter->setBrush( Qt::NoBrush );
-		painter->strokePath();
-
-		//m_boundingBox = painter->boundingBox();
-
-		//kdDebug() << "bbox.x : " << m_boundingBox.x() << endl;
-		//kdDebug() << "bbox.y : " << m_boundingBox.y() << endl;
-		//kdDebug() << "bbox.width : " << m_boundingBox.width() << endl;
-		//kdDebug() << "bbox.height : " << m_boundingBox.height() << endl;
-	}
-
 	// draw simplistic contour:
-	if( state() == edit )//|| state() == selected )
+	if( state() == edit )
 	{
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
@@ -156,6 +115,30 @@ VComposite::draw( VPainter* painter, const KoRect * /*rect*/ ) const
 
 			painter->strokePath();
 		}
+	}
+	else if( state() != edit )
+	{
+		// paint fill:
+		painter->newPath();
+
+		for( itr.toFirst(); itr.current(); ++itr )
+		{
+			VPathIterator jtr( *( itr.current() ) );
+			for( ; jtr.current(); ++jtr )
+			{
+				jtr.current()->draw( painter );
+			}
+		}
+
+		painter->setRasterOp( Qt::CopyROP );
+		painter->setPen( Qt::NoPen );
+		painter->setBrush( *fill() );
+		painter->fillPath();
+
+		// draw stroke:
+		painter->setPen( *stroke() );
+		painter->setBrush( Qt::NoBrush );
+		painter->strokePath();
 	}
 
 	painter->restore();
