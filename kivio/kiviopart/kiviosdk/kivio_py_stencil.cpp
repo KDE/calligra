@@ -465,7 +465,7 @@ void KivioPyStencil::paint( KivioIntraStencilData *d, bool outlined )
       int tf = vTextAlign() | hTextAlign();
 
       QFont f = textFont();
-      f.setPointSizeFloat( zoomHandler->layoutUnitToFontSize(f.pointSize(), d->printing) );
+      f.setPointSize( zoomHandler->zoomItY(f.pointSize()) );
 
       d->painter->setFont( f );
       QString text = getStringFromDict(shape,"text");
@@ -795,21 +795,21 @@ void KivioPyStencil::setStyle( KivioIntraStencilData *d, PyObject *s, int &fillS
   }
 
   QString  sfont = getStringFromDict(s,"font");
-  double fontSize = zoomHandler->layoutUnitToFontSize((int)getDoubleFromDict(s,"fontsize"), d->printing);
+  double fontSize = zoomHandler->zoomItY((int)getDoubleFromDict(s,"fontsize"));
 
   if ( !sfont.isEmpty() ) {
     if (!fontSize) {
-      fontSize = zoomHandler->layoutUnitToFontSize(12, d->printing);
+      fontSize = zoomHandler->zoomItY(12);
     }
 
     QFont f;
-    f.setPointSizeFloat(fontSize);
+    f.setPointSize(fontSize);
     f.setFamily(sfont);
     p->setFont(f);
   } else {
     if (fontSize) {
       QFont f;
-      f.setPointSizeFloat(fontSize);
+      f.setPointSize(fontSize);
       f.setFamily("times");
       p->setFont(f);
     }

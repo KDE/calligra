@@ -869,7 +869,7 @@ void Kivio1DStencil::drawText( KivioIntraStencilData *pData )
 
   QFont f = m_pTextStyle->font();
 
-  f.setPointSize(zoomHandler->layoutUnitToFontSize(f.pointSize(), pData->printing));
+  f.setPointSize(zoomHandler->zoomItY(f.pointSize()));
   painter->setFont(f);
   painter->setTextColor(m_pTextStyle->color());
 
