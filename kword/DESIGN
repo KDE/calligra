@@ -17,6 +17,20 @@ hold no data.
 * About text framesets: they hold a text document (KWTextDocument, which is
 a QTextDocument from the QRichText classes - more on QRT later).
 
+Painting
+========
+Here's how the painting (drawing the stuff on screen, and on printer) works:
+Each frameset is responsible for drawing itself. The base class, KWFrameSet,
+handles the generic code for iterating through the frames, applying the
+"frame is a copy" stuff, drawing the borders, etc. So each specific frameset
+class only has to implement drawFrame (exception for KWTableFrameset though).
+
+When KWTextFrameset paints the text inside a frame, it uses QTextDocument's
+draw() method, which takes care of iterating through the paragraphs etc.
+Series of characters with the same formatting are drawn at once, by
+QTextParag::drawParagString (reimplemented in KWTextParag, to draw the
+formatting codes etc.).
+
 Coordinate systems
 ==================
  
