@@ -49,9 +49,9 @@ VColor::VColor( const QColor& color )
 	m_colorSpace = rgb;
 	m_opacity = 1.0;
 
-	m_value[0] = color.red();
-	m_value[1] = color.green();
-	m_value[2] = color.blue();
+	m_value[0] = color.red() / 255.0;
+	m_value[1] = color.green() / 255.0;
+	m_value[2] = color.blue() / 255.0;
 }
 
 QColor
