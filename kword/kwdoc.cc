@@ -4725,5 +4725,12 @@ void KWDocument::setHorizontalLinePath( const QStringList & lst)
     m_horizontalLinePath = lst;
 }
 
+void KWDocument::addWordToDictionary( const QString & word)
+{
+    if ( m_bgSpellCheck )
+    {
+        m_bgSpellCheck->addPersonalDictonary( word );
+    }
+}
 
 #include "kwdoc.moc"

@@ -395,6 +395,8 @@ public slots:
     void insertHorizontalLine();
     void changeHorizontalLine();
 
+    void addWordToDictionary();
+
 protected slots:
     void slotSetInitialPosition();
 
@@ -654,6 +656,8 @@ private:
 
     KAction *actionInsertHorizontalLine;
     KAction *actionChangeHorizontalLine;
+
+    KAction *actionAddWordToPersonalDictionary;
 
     KToggleAction *actionInsertDirectCursor;
 

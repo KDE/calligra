@@ -397,3 +397,7 @@ void KWordViewIface::changeHorizontalLine()
     view->changeHorizontalLine();
 }
 
+void KWordViewIface::addWordToDictionary()
+{
+    view->addWordToDictionary();
+}

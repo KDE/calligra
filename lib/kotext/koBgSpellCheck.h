@@ -55,6 +55,7 @@ public:
     void clearIgnoreWordAll( );
     void addIgnoreWordAllList( const QStringList & list);
     void spellCheckParagraphDeleted( KoTextParag *_parag,  KoTextObject *obj);
+    void addPersonalDictonary( const QString & word );
 public slots:
     void startBackgroundSpellCheck();
 

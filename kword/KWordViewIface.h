@@ -121,6 +121,8 @@ k_dcop:
     void addPersonalExpression();
     void insertHorizontalLine();
     void changeHorizontalLine();
+    void addWordToDictionary();
+
 private:
     KWView *view;
 

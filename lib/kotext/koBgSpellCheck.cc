@@ -48,6 +48,14 @@ KoBgSpellCheck::~KoBgSpellCheck()
     delete m_pKSpellConfig;
 }
 
+void KoBgSpellCheck::addPersonalDictonary( const QString & word )
+{
+    if ( m_bgSpell.kspell )
+    {
+        m_bgSpell.kspell->addPersonal ( word);
+    }
+}
+
 void KoBgSpellCheck::spellCheckParagraphDeleted( KoTextParag *_parag,  KoTextObject *obj)
 {
     if ( m_bgSpell.currentTextObj == obj && m_bgSpell.currentParag == _parag)
@@ -187,7 +195,7 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
          slotRepaintChanged( m_bgSpell.currentTextObj );
          m_bgSpell.needsRepaint=false;
     }
-    
+
     KoTextParag* parag = m_bgSpell.currentParag;
     if ( parag && parag->string() && parag->string()->needsSpellCheck() )
     {

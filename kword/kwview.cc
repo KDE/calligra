@@ -1189,6 +1189,10 @@ void KWView::setupActions()
                                             this, SLOT( changeHorizontalLine() ),
                                             actionCollection(), "change_horizontal_line" );
 
+    actionAddWordToPersonalDictionary=new KAction( i18n( "Add word to dictionary" ),0,
+                                                   this, SLOT( addWordToDictionary() ),
+                                                   actionCollection(), "add_word_to_dictionary" );
+
 }
 
 void KWView::refreshMenuExpression()
@@ -6999,6 +7003,17 @@ void KWView::changeHorizontalLine()
         m_doc->addCommand(cmd);
     }
     delete dia;
+}
+
+void KWView::addWordToDictionary()
+{
+    KWTextFrameSetEdit* edit = currentTextEdit();
+    if ( edit && m_doc->backgroundSpellCheckEnabled() )
+    {
+        QString word = edit->wordUnderCursor( *edit->cursor() );
+        if ( !word.isEmpty())
+            m_doc->addWordToDictionary( word);
+    }
 }
 
 /******************************************************************/
