@@ -837,9 +837,14 @@ void KoMainWindow::slotConfigureKeys()
     if ( doc )
         coll += *doc->actionCollection();
     KoView *view = rootView();
-    if ( view )
-        coll += *view->actionCollection();
-    KKeyDialog::configureKeys(&coll, xmlFile());
+    // We _need_ a view. We use the view's xmlFile() (e.g. kword.rc)
+    ASSERT( view );
+    if ( !view )
+        return;
+    coll += *view->actionCollection();
+    QString relXmlFile = view->xmlFile();
+    // the global instance name will automatically be prepended, e.g. kword/kword.rc
+    KKeyDialog::configureKeys(&coll, relXmlFile);
 }
 
 void KoMainWindow::slotConfigureToolbars()
