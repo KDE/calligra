@@ -343,12 +343,14 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     QTextCursor * cursor = edit ? static_cast<KWTextFrameSetEdit *>(edit)->getCursor() : 0;
 
     // This paints the 1st two lines, which QRT forgets.
-    if (!onlyChanged)
+    // Update: now it doesn't anymore :)
+/*    if (!onlyChanged)
     {
         QRect rtop( r.intersect( QRect( 0, 0, r.right(), 2 ) ) );
         if ( !rtop.isEmpty() )
             painter->fillRect( rtop, cg.brush( QColorGroup::Base ) );
     }
+    */
 
     QTextParag * lastFormatted = textdoc->draw( painter, r.x(), r.y(), r.width(), r.height(),
                                                 cg, onlyChanged, drawCursor, cursor, resetChanged );
@@ -3932,14 +3934,14 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
 
 void KWTextFrameSetEdit::ensureCursorVisible()
 {
-    kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible paragId=" << cursor->parag()->paragId() << endl;
+    //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible paragId=" << cursor->parag()->paragId() << endl;
     QTextParag * parag = cursor->parag();
     textFrameSet()->ensureFormatted( parag );
     QTextStringChar *chr = parag->at( cursor->index() );
     int h = parag->lineHeightOfChar( cursor->index() );
     int x = parag->rect().x() + chr->x + cursor->offsetX();
-    kdDebug() << "parag->rect().x()=" << parag->rect().x() << " chr->x=" << chr->x
-              << " cursor->offsetX()=" << cursor->offsetX() << endl;
+    //kdDebug() << "parag->rect().x()=" << parag->rect().x() << " chr->x=" << chr->x
+    //          << " cursor->offsetX()=" << cursor->offsetX() << endl;
     int y = 0; int dummy;
     parag->lineHeightOfChar( cursor->index(), &dummy, &y );
     y += parag->rect().y() + cursor->offsetY();
@@ -3949,7 +3951,7 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     if ( m_currentFrame )
         hintNPoint = frameSet()->kWordDocument()->zoomPoint( m_currentFrame->topLeft() );
     KWFrame * frame = textFrameSet()->internalToNormalWithHint( QPoint(x, y), p, hintNPoint );
-    kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible frame=" << frame << " m_currentFrame=" << m_currentFrame << endl;
+    //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible frame=" << frame << " m_currentFrame=" << m_currentFrame << endl;
     if ( frame && m_currentFrame != frame )
     {
         m_currentFrame = frame;
