@@ -136,10 +136,15 @@ void KChartConfigDialog::apply()
             _colorpage->hdFtColor( KDChartParams::HdFtPosFooter  ) );
 
     KDChartAxisParams leftparams = _params->axisParams( KDChartAxisParams::AxisPosLeft );
-    leftparams.setAxisGridColor( _colorpage->gridColor() );
-    _params->setOutlineDataColor( _colorpage->lineColor() );
     KDChartAxisParams rightparams = _params->axisParams( KDChartAxisParams::AxisPosRight );
     KDChartAxisParams bottomparams = _params->axisParams( KDChartAxisParams::AxisPosBottom );
+    leftparams.setAxisGridColor(   _colorpage->gridColor() );
+
+    // temporary solution: make vertical grid lines have the same
+    // color as horizontal grid lines           (khz, 10.12.2001)
+    bottomparams.setAxisGridColor( _colorpage->gridColor() );
+
+    _params->setOutlineDataColor( _colorpage->lineColor() );
     if( _colorpage->xTitleColor().isValid() )
         bottomparams.setAxisLineColor( _colorpage->xTitleColor() );
     if( _colorpage->yTitleColor().isValid() )
