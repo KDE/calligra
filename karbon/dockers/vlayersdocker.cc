@@ -49,6 +49,12 @@ void VLayerListViewItem::update()
 	QPixmap preview;
 	preview.resize( 16, 16 );
 	VKoPainter p( &preview, 16, 16 );
+	// Y mirroring
+	QWMatrix mat;
+	mat.scale( 1, -1 );
+	mat.translate( 0,  -800.0 * ( 16. / 830.) );
+	p.setWorldMatrix( mat );
+
 	// TODO: When the document will support page size, change the following line.
 	p.setZoomFactor( 16. / 830. );
 	m_layer->draw( &p );
