@@ -4296,7 +4296,7 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
             KoTextStringChar *c = chr;
             if ( i > 0 )
                 --c;
-            curh = c->format()->height();
+            curh = c->height();
             cury = cy + baseLine - c->ascent();
 	}
 
