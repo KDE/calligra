@@ -468,6 +468,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         _time.start();
 
         _h = 0;
+	int h0 = 0;
         for ( ; ; )
         {
             kapp->processEvents();
@@ -477,7 +478,9 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
                 _h = _step * blockSize / _steps;
 
                 for ( int i=0; i < height; i += blockSize )
-                  bitBlt( canv, 0, i, &_pix2, 0, i, width, _h );
+                  bitBlt( canv, 0, h0 + i, &_pix2, 0, h0 + i, width, _h - h0 );
+
+		h0 = _h;
 
                 _time.restart();
             }
@@ -494,6 +497,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         _time.start();
 
         _w = 0;
+	int w0 = 0;
         for ( ; ; )
         {
             kapp->processEvents();
@@ -503,7 +507,9 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
                 _w = _step * blockSize / _steps;
 
                 for( int i=0; i < width; i += blockSize )
-                  bitBlt( canv, i, 0, &_pix2, i, 0, _w, height );
+                  bitBlt( canv, w0 + i, 0, &_pix2, w0 + i, 0, _w - w0, height );
+
+		w0 = _w;
 
                 _time.restart();
             }

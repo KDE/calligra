@@ -76,9 +76,9 @@ k_dcop:
     virtual bool presentationDuration() const;
     virtual void setPresentationDuration( bool pd );
 
-    virtual bool spInfinitLoop() const;
+    virtual bool spInfiniteLoop() const;
     virtual bool spManualSwitch() const;
-    virtual void setInfinitLoop( bool il );
+    virtual void setInfiniteLoop( bool il );
     virtual void setManualSwitch( bool ms );
 
     virtual void setHeader( bool b );

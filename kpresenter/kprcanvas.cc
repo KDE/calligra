@@ -5000,9 +5000,9 @@ QColor KPrCanvas::txtBackCol() const
 }
 
 /*================================================================*/
-bool KPrCanvas::spInfinitLoop() const
+bool KPrCanvas::spInfiniteLoop() const
 {
-    return m_view->kPresenterDoc()->spInfinitLoop();
+    return m_view->kPresenterDoc()->spInfiniteLoop();
 }
 
 /*================================================================*/

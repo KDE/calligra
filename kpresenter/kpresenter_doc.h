@@ -149,10 +149,10 @@ public:
     unsigned int getRndY() const { return _yRnd; }
 
     // get values for screenpresentations
-    bool spInfinitLoop() const { return _spInfinitLoop; }
+    bool spInfiniteLoop() const { return _spInfiniteLoop; }
     bool spManualSwitch() const { return _spManualSwitch; }
     bool presentationDuration() const { return _showPresentationDuration; }
-    void setInfinitLoop( bool il ) { _spInfinitLoop = il; }
+    void setInfiniteLoop( bool il ) { _spInfiniteLoop = il; }
     void setManualSwitch( bool ms ) { _spManualSwitch = ms; }
     void setPresentationDuration( bool pd ) { _showPresentationDuration = pd; }
 
@@ -483,7 +483,7 @@ protected:
     };
 
     // screenpresentations
-    bool _spInfinitLoop, _spManualSwitch, _showPresentationDuration;
+    bool _spInfiniteLoop, _spManualSwitch, _showPresentationDuration;
 
     // options
     int _xRnd, _yRnd;

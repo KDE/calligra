@@ -183,7 +183,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bShowStatusBar = true;
     m_autoFormat = new KoAutoFormat(this,m_varColl,m_varFormatCollection);
     _clean = true;
-    _spInfinitLoop = false;
+    _spInfiniteLoop = false;
     _spManualSwitch = true;
     _showPresentationDuration = false;
     tmpSoundFileList = QPtrList<KTempFile>();
@@ -575,7 +575,7 @@ QDomDocument KPresenterDoc::saveXML()
 
     // ### If we will create a new version of the file format, fix that spelling error
     element=doc.createElement("INFINITLOOP");
-    element.setAttribute("value", _spInfinitLoop);
+    element.setAttribute("value", _spInfiniteLoop);
     presenter.appendChild(element);
     element=doc.createElement("MANUALSWITCH");
     element.setAttribute("value", _spManualSwitch);
@@ -973,7 +973,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         //KoPageLayout __pgLayout;
         __pgLayout = KoPageLayoutDia::standardLayout();
         //__pgLayout.unit = KoUnit::U_MM;
-        _spInfinitLoop = false;
+        _spInfiniteLoop = false;
         _spManualSwitch = true;
         _showPresentationDuration = false;
         _xRnd = 20;
@@ -1193,7 +1193,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         } else if(elem.tagName()=="INFINITLOOP") {
             if(_clean) {
                 if(elem.hasAttribute("value"))
-                    _spInfinitLoop = static_cast<bool>(elem.attribute("value").toInt());
+                    _spInfiniteLoop = static_cast<bool>(elem.attribute("value").toInt());
             }
         } else if(elem.tagName()=="PRESSPEED") {
             if(_clean) {

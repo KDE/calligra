@@ -64,8 +64,8 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     general = new QButtonGroup( 1, Qt::Horizontal, i18n( "General" ), page, "general" );
     general->setFrameStyle( QFrame::Box | QFrame::Sunken );
 
-    infinitLoop = new QCheckBox( i18n( "&Infinite loop" ), general );
-    infinitLoop->setChecked( infLoop );
+    infiniteLoop = new QCheckBox( i18n( "&Infinite loop" ), general );
+    infiniteLoop->setChecked( infLoop );
 
     manualSwitch = new QCheckBox( i18n( "&Manual switch to next step" ), general );
     manualSwitch->setChecked( swMan );
@@ -196,8 +196,8 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     connect( buttonTestStopSoundEffect, SIGNAL( clicked() ), this, SLOT( stopSound() ) );
 
 
-
-    slides = new QButtonGroup( 1, Qt::Horizontal, this );
+#if 0
+    slides = new QButtonGroup( 1, Qt::Horizontal, page );
     slides->setCaption( i18n( "Show Slides in Presentation" ) );
 
     slidesAll = new QRadioButton( i18n( "&All slides" ), slides );
@@ -216,7 +216,7 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
 
     connect( slides, SIGNAL( clicked( int ) ),
              this, SLOT( presSlidesChanged( int ) ) );
-
+#endif
 
     connect( this, SIGNAL( okClicked() ), this, SLOT( confDiaOk() ) );
     connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
@@ -244,9 +244,9 @@ void PgConfDia::presSlidesChanged( int )
 }
 
 /*================================================================*/
-bool PgConfDia::getInfinitLoop() const
+bool PgConfDia::getInfiniteLoop() const
 {
-    return infinitLoop->isChecked();
+    return infiniteLoop->isChecked();
 }
 
 /*================================================================*/

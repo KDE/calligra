@@ -1463,7 +1463,7 @@ void KPresenterView::screenConfigPages()
     }
     KPrPage *page=m_canvas->activePage();
     pgConfDia = new PgConfDia( this, "PageConfig",
-                               kPresenterDoc()->spInfinitLoop(),
+                               kPresenterDoc()->spInfiniteLoop(),
 			       kPresenterDoc()->spManualSwitch(),
                                getCurrPgNum(),
 			       page->getPageEffect(),
@@ -3834,14 +3834,14 @@ void KPresenterView::pgConfOk()
 {
     KPrPage *page=m_canvas->activePage();
     PgConfCmd *pgConfCmd = new PgConfCmd( i18n( "Configure Page for Screen Presentations" ),
-					  pgConfDia->getManualSwitch(), pgConfDia->getInfinitLoop(),
+					  pgConfDia->getManualSwitch(), pgConfDia->getInfiniteLoop(),
 					  pgConfDia->getPageEffect(), pgConfDia->getPresSpeed(),
 					  pgConfDia->getPageTimer(),
 					  pgConfDia->getPageSoundEffect(),
 					  pgConfDia->getPageSoundFileName(),
                                           pgConfDia->getPresentationDuration(),
 					  kPresenterDoc()->spManualSwitch(),
-					  kPresenterDoc()->spInfinitLoop(),
+					  kPresenterDoc()->spInfiniteLoop(),
 					  page->getPageEffect(),
 					  kPresenterDoc()->getPresSpeed(),
 					  page->getPageTimer(),
@@ -4198,7 +4198,7 @@ void KPresenterView::doAutomaticScreenPres()
 {
     if ( exitPres ) // A user pushed Escape key or clicked "Exit presentation" menu.
         return;
-    else if ( !continuePres && kPresenterDoc()->spInfinitLoop() ) {
+    else if ( !continuePres && kPresenterDoc()->spInfiniteLoop() ) {
         continuePres = true;
         m_canvas->gotoPage( 1 ); // return to first page.
         setCurrentTimer( 1 );

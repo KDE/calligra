@@ -227,9 +227,9 @@ void KPresenterDocIface::setPresentationDuration( bool pd )
     doc->setPresentationDuration(pd);
 }
 
-bool KPresenterDocIface::spInfinitLoop() const
+bool KPresenterDocIface::spInfiniteLoop() const
 {
-    return doc->spInfinitLoop();
+    return doc->spInfiniteLoop();
 }
 
 bool KPresenterDocIface::spManualSwitch() const
@@ -237,9 +237,9 @@ bool KPresenterDocIface::spManualSwitch() const
     return doc->spManualSwitch();
 }
 
-void KPresenterDocIface::setInfinitLoop( bool il )
+void KPresenterDocIface::setInfiniteLoop( bool il )
 {
-    doc->setInfinitLoop(il);
+    doc->setInfiniteLoop(il);
 }
 
 void KPresenterDocIface::setManualSwitch( bool ms )

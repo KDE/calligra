@@ -54,7 +54,7 @@ public:
                PageEffect pageEffect, PresSpeed presSpeed, int pageTimer,
                bool soundEffect, QString fileName, bool showPresentationDuration );
     ~PgConfDia();
-    bool getInfinitLoop() const;
+    bool getInfiniteLoop() const;
     bool getManualSwitch() const;
     PageEffect getPageEffect() const;
     PresSpeed getPresSpeed() const;
@@ -68,7 +68,7 @@ protected:
 
 protected:
     QButtonGroup *general, *page, *slides;
-    QCheckBox *infinitLoop, *manualSwitch, *presentationDuration;
+    QCheckBox *infiniteLoop, *manualSwitch, *presentationDuration;
     QRadioButton *slidesAll, *slidesCurrent, *slidesSelected;
     QLabel *label2, *label3, *lTimer;
     QComboBox *effectCombo;

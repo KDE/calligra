@@ -1373,17 +1373,17 @@ void BrushCmd::unexecute()
 /******************************************************************/
 
 /*================================================================*/
-PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infinitLoop,
+PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
                       PageEffect _pageEffect, PresSpeed _presSpeed, int _pageTimer,
                       bool _soundEffect, const QString &_fileName, bool _showPresentationDuration,
-                      bool _oldManualSwitch, bool _oldInfinitLoop,
+                      bool _oldManualSwitch, bool _oldInfiniteLoop,
                       PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, int _oldPageTimer,
                       bool _oldSoundEffect, const QString &_oldFileName, bool _oldShowPresentationDuration,
                       KPresenterDoc *_doc, KPrPage *_page )
     : KNamedCommand( _name )
 {
     manualSwitch = _manualSwitch;
-    infinitLoop = _infinitLoop;
+    infiniteLoop = _infiniteLoop;
     pageEffect = _pageEffect;
     presSpeed = _presSpeed;
     pageTimer = _pageTimer;
@@ -1391,7 +1391,7 @@ PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infinitLoo
     fileName = _fileName;
     showPresentationDuration = _showPresentationDuration;
     oldManualSwitch = _oldManualSwitch;
-    oldInfinitLoop = _oldInfinitLoop;
+    oldInfiniteLoop = _oldInfiniteLoop;
     oldPageEffect = _oldPageEffect;
     oldPresSpeed = _oldPresSpeed;
     oldPageTimer = _oldPageTimer;
@@ -1406,7 +1406,7 @@ PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infinitLoo
 void PgConfCmd::execute()
 {
     doc->setManualSwitch( manualSwitch );
-    doc->setInfinitLoop( infinitLoop );
+    doc->setInfiniteLoop( infiniteLoop );
     m_page->setPageEffect( pageEffect );
     doc->setPresSpeed( presSpeed );
     m_page->setPageTimer(  pageTimer );
@@ -1419,7 +1419,7 @@ void PgConfCmd::execute()
 void PgConfCmd::unexecute()
 {
     doc->setManualSwitch( oldManualSwitch );
-    doc->setInfinitLoop( oldInfinitLoop );
+    doc->setInfiniteLoop( oldInfiniteLoop );
     m_page->setPageEffect( oldPageEffect );
     doc->setPresSpeed( oldPresSpeed );
     m_page->setPageTimer(  oldPageTimer );
