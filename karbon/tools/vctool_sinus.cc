@@ -37,6 +37,7 @@ VCToolSinus::instance( KarbonPart* part )
 		s_instance = new VCToolSinus( part );
 	}
 
+	s_instance->m_part = part;
 	return s_instance;
 }
 

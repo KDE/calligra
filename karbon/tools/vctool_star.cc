@@ -37,6 +37,7 @@ VCToolStar::instance( KarbonPart* part )
 		s_instance = new VCToolStar( part );
 	}
 
+	s_instance->m_part = part;
 	return s_instance;
 }
 

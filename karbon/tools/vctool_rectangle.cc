@@ -36,6 +36,7 @@ VCToolRectangle::instance( KarbonPart* part )
 		s_instance = new VCToolRectangle( part );
 	}
 
+	s_instance->m_part = part;
 	return s_instance;
 }
 

@@ -33,6 +33,7 @@ VMToolScale::instance( KarbonPart* part )
 		s_instance = new VMToolScale( part );
 	}
 
+	s_instance->m_part = part;
 	return s_instance;
 }
 

@@ -38,6 +38,7 @@ VCToolSpiral::instance( KarbonPart* part )
 		s_instance = new VCToolSpiral( part );
 	}
 
+	s_instance->m_part = part;
 	return s_instance;
 }
 

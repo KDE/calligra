@@ -28,12 +28,12 @@ VMToolSelect::~VMToolSelect()
 VMToolSelect*
 VMToolSelect::instance( KarbonPart* part )
 {
-	delete s_instance;
-
-	//if ( s_instance == 0L )
-	//{
+	if ( s_instance == 0L )
+	{
 		s_instance = new VMToolSelect( part );
-	//}
+	}
+
+	s_instance->m_part = part;
 	return s_instance;
 }
 

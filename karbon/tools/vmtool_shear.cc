@@ -33,6 +33,7 @@ VMToolShear::instance( KarbonPart* part )
 		s_instance = new VMToolShear( part );
 	}
 
+	s_instance->m_part = part;
 	return s_instance;
 }
 

@@ -36,6 +36,7 @@ VCToolPolygon::instance( KarbonPart* part )
 		s_instance = new VCToolPolygon( part );
 	}
 
+	s_instance->m_part = part;
 	return s_instance;
 }
 
