@@ -64,7 +64,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 			if(size!=m_pView->activeTable()->rowLayout(i)->height(m_pView->canvasWidget()))
 			equals=false;
 		label=i18n("Height (%1)").arg(m_pView->doc()->getUnitName());
-		tmpCheck+=" (20 mm)";
+                tmpCheck+=QString(" %1 %2").arg(KoUnit::ptToUnit( MM_TO_POINT( 20 ), m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
 		break;
 	case resize_column:
 		setCaption( i18n("Resize Column") );
@@ -78,7 +78,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 			equals=false;
 
 		label=i18n("Width (%1)").arg(m_pView->doc()->getUnitName());
-		tmpCheck+=" (60 mm)";
+                tmpCheck+=QString(" %1 %2").arg(KoUnit::ptToUnit( MM_TO_POINT( 60 ), m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
 		break;
 	default :
 	        kdDebug(36001) <<"Err in type_resize" << endl;
@@ -90,14 +90,14 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
   	switch(type)
 	{
 	case resize_row:
-			size=20;
+			size=(int)KoUnit::ptToUnit( MM_TO_POINT( 20 ), m_pView->doc()->getUnit() );
 			break;
 	case resize_column:
-			size=60;
+			size=(int)KoUnit::ptToUnit( MM_TO_POINT( 60 ), m_pView->doc()->getUnit() );
 			break;
 	}
 
-  m_pSize2=new KIntNumInput(size, page, 10);
+  m_pSize2=new KIntNumInput((int)KoUnit::ptToUnit( size, m_pView->doc()->getUnit() ), page, 10);
   m_pSize2->setRange(2, 400, 1);
   m_pSize2->setLabel(label);
   lay1->addWidget(m_pSize2);
@@ -138,7 +138,7 @@ void KSpreadresize2::slotOk()
 	    break;
 	  }
       }
-    int new_size=m_pSize2->value();
+    int new_size=KoUnit::ptFromUnit( m_pSize2->value(), m_pView->doc()->getUnit() );
     if ( !m_pView->doc()->undoBuffer()->isLocked() )
       {
         KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(),m_pView->activeTable() , rect );
