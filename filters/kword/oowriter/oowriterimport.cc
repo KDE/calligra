@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
+   Copyright (C) 2003 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +25,7 @@
 #include <qregexp.h>
 
 #include "oowriterimport.h"
+#include <ooutils.h>
 
 #include <kdebug.h>
 #include <koDocumentInfo.h>
@@ -66,8 +68,17 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
     QDomDocument mainDocument;
     QDomElement framesetsElem;
     prepareDocument( mainDocument, framesetsElem );
-    createPageDocument( mainDocument, framesetsElem );
 
+    // Create main frameset
+    QDomElement mainFramesetElement = mainDocument.createElement("FRAMESET");
+    mainFramesetElement.setAttribute("frameType",1);
+    mainFramesetElement.setAttribute("frameInfo",0);
+    mainFramesetElement.setAttribute("visible",1);
+    framesetsElem.appendChild(mainFramesetElement);
+
+    createInitialFrame( mainFramesetElement, 42, 566, false );
+
+    createDocumentContent( mainDocument, mainFramesetElement );
 
     KoStoreDevice* out = m_chain->storageFile( "maindoc.xml", KoStore::Write );
     if ( !out ) {
@@ -77,6 +88,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
     else
     {
         QCString cstr = mainDocument.toCString();
+        kdDebug()<<" maindoc: " << cstr << endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
         out->writeBlock( cstr, cstr.length() );
     }
@@ -99,14 +111,8 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
     return KoFilter::OK;
 }
 
-void OoWriterImport::createDocumentContent( QDomDocument &doccontent )
+void OoWriterImport::createDocumentContent( QDomDocument &doc, QDomElement& mainFramesetElement )
 {
-    QDomDocument doc = KoDocument::createDomDocument( "kword", "DOC", "1.2" );
-    QDomElement docElement = doc.documentElement();
-    docElement.setAttribute( "editor", "KWord" );
-    docElement.setAttribute( "mime", "application/x-kword" );
-    docElement.setAttribute( "syntaxVersion", "2" );
-
     QDomElement content = m_content.documentElement();
 
     // content.xml contains some automatic-styles that we need to store
@@ -118,20 +124,38 @@ void OoWriterImport::createDocumentContent( QDomDocument &doccontent )
     if ( body.isNull() )
         return;
 
-    doccontent.appendChild( doc );
+    // TODO handle sequence-decls
+
+    for ( QDomNode text = body.firstChild(); !text.isNull(); text = text.nextSibling() )
+    {
+        m_styleStack.setObjectMark();
+        QDomElement t = text.toElement();
+        QString name = t.tagName();
+
+        QDomElement e;
+        if ( name == "text:p" ) // text paragraph
+            e = parseParagraph( doc, t );
+        else if ( name == "text:unordered-list" || name == "text:ordered-list" ) // listitem
+            e = parseList( doc, t );
+        else
+        {
+            kdDebug() << "Unsupported texttype '" << name << "'" << endl;
+            continue;
+        }
+
+        mainFramesetElement.appendChild( e );
+        m_styleStack.clearObjectMark(); // remove the styles added by the child-objects
+    }
 }
 
 void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem )
 {
-    createDocumentContent(mainDocument);
+    mainDocument = KoDocument::createDomDocument( "kword", "DOC", "1.2" );
+    QDomElement docElement = mainDocument.documentElement();
+    docElement.setAttribute( "editor", "KWord's OOWriter Import Filter" );
+    docElement.setAttribute( "mime", "application/x-kword" );
+    docElement.setAttribute( "syntaxVersion", "2" );
 
-    framesetsElem=mainDocument.createElement("FRAMESETS");
-    mainDocument.documentElement().appendChild(framesetsElem);
-}
-
-void OoWriterImport::createPageDocument( QDomDocument& mainDocument, QDomElement& framesetsElem )
-{
-    QDomElement elementDoc = mainDocument.documentElement();
     QDomElement elementPaper = mainDocument.createElement("PAPER");
 
     elementPaper.setAttribute("format",PG_US_LETTER);
@@ -145,16 +169,10 @@ void OoWriterImport::createPageDocument( QDomDocument& mainDocument, QDomElement
     elementPaper.setAttribute("spHeadBody",9);
     elementPaper.setAttribute("spFootBody",9);
     elementPaper.setAttribute("zoom",100);
-    elementDoc.appendChild(elementPaper);
+    docElement.appendChild(elementPaper);
 
-    QDomElement mainFramesetElement = mainDocument.createElement("FRAMESET");
-    mainFramesetElement.setAttribute("frameType",1);
-    mainFramesetElement.setAttribute("frameInfo",0);
-    mainFramesetElement.setAttribute("visible",1);
-    framesetsElem.appendChild(mainFramesetElement);
-
-    createInitialFrame( mainFramesetElement, 42, 566, false );
-
+    framesetsElem=mainDocument.createElement("FRAMESETS");
+    docElement.appendChild(framesetsElem);
 }
 
 void OoWriterImport::createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool headerFooter )
@@ -508,11 +526,10 @@ QDomElement OoWriterImport::parseList( QDomDocument& doc, const QDomElement& lis
 
 QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement& paragraph )
 {
-#if 0
     QDomElement p = doc.createElement( "PARAGRAPH" );
 
     // parse the paragraph-properties
-    //fillStyleStack( paragraph );
+    fillStyleStack( paragraph );
 
     if ( m_styleStack.hasAttribute( "fo:text-align" ) )
     {
@@ -539,7 +556,7 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
             if ( ts.tagName() != "text:span" ) // TODO: are there any other possible
                 continue;                      // elements or even nested test:spans?
 
-            //fillStyleStack( ts.toElement() );
+            fillStyleStack( ts.toElement() );
 
             // We do a look ahead to eventually find a text:span that contains
             // only a line-break. If found, we'll add it to the current string
@@ -564,8 +581,8 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
         if( m_styleStack.hasAttribute("fo:margin-top") ||
             m_styleStack.hasAttribute("fo:margin-bottom"))
         {
-            double mtop = toPoint( m_styleStack.attribute( "fo:margin-top"));
-            double mbottom = toPoint( m_styleStack.attribute("fo:margin-bottom"));
+            double mtop = OoUtils::toPoint( m_styleStack.attribute( "fo:margin-top"));
+            double mbottom = OoUtils::toPoint( m_styleStack.attribute("fo:margin-bottom"));
             if( mtop != 0 || mbottom!=0 )
             {
                 QDomElement offset = doc.createElement( "OFFSETS" );
@@ -581,9 +598,9 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
             m_styleStack.hasAttribute( "fo:margin-right" ) ||
             m_styleStack.hasAttribute( "fo:text-indent"))
         {
-            double marginLeft =toPoint( m_styleStack.attribute( "fo:margin-left" ) );
-            double marginRight = toPoint( m_styleStack.attribute( "fo:margin-right" ) );
-            double first = toPoint( m_styleStack.attribute("fo:text-indent"));
+            double marginLeft = OoUtils::toPoint( m_styleStack.attribute( "fo:margin-left" ) );
+            double marginRight = OoUtils::toPoint( m_styleStack.attribute( "fo:margin-right" ) );
+            double first = OoUtils::toPoint( m_styleStack.attribute("fo:text-indent"));
             if ( (marginLeft!= 0) || marginRight!=0 || first!=0)
             {
                 QDomElement indent = doc.createElement( "INDENTS" );
@@ -628,7 +645,7 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
                 text.setAttribute( "family", m_styleStack.attribute( "fo:font-family" ).remove( "'" ) );
         }
         if ( m_styleStack.hasAttribute( "fo:font-size" ) )
-            text.setAttribute( "pointSize", toPoint( m_styleStack.attribute( "fo:font-size" ) ) );
+            text.setAttribute( "pointSize", OoUtils::toPoint( m_styleStack.attribute( "fo:font-size" ) ) );
         if ( m_styleStack.hasAttribute( "fo:font-weight" ) )
             if ( m_styleStack.attribute( "fo:font-weight" ) == "bold" )
                 text.setAttribute( "bold", 1 );
@@ -716,35 +733,11 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
         }
 
         //appendShadow( doc, p ); // this is necessary to take care of shadowed paragraphs
-        //m_styleStack.clearObjectMark(); // remove possible test:span styles from the stack
+        m_styleStack.clearObjectMark(); // remove possible test:span styles from the stack
         p.appendChild( text );
     }
 
     return p;
-#endif
-}
-
-double OoWriterImport::toPoint( QString &value )
-{
-    value.simplifyWhiteSpace();
-    value.remove( ' ' );
-
-    int index = value.find( QRegExp( "[a-z]{1,2}$" ), -1 );
-    if ( index == -1 )
-        return 0;
-
-    QString unit = value.mid( index - 1 );
-    value.truncate ( index - 1 );
-
-    if ( unit == "cm" )
-        return CM_TO_POINT( value.toDouble() );
-    else if ( unit == "mm" )
-        return MM_TO_POINT( value.toDouble() );
-    else if ( unit == "pt" )
-        return value.toDouble();
-    else
-        return 0;
 }
 
 #include "oowriterimport.moc"
-

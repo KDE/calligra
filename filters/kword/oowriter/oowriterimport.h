@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
+   Copyright (C) 2003 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,7 +25,7 @@
 
 #include <qdict.h>
 #include <qdom.h>
-#include "stylestack.h"
+#include <stylestack.h>
 
 class OoWriterImport : public KoFilter
 {
@@ -42,13 +43,14 @@ private:
     QDomElement parseParagraph( QDomDocument& doc, const QDomElement& paragraph );
     void createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool headerFooter );
     void createDocumentInfo( QDomDocument &docinfo );
-    void createDocumentContent( QDomDocument &doccontent );
+    void createDocumentContent( QDomDocument &doccontent, QDomElement& mainFramesetElement );
     KoFilter::ConversionStatus openFile();
     bool createStyleMap( const QDomDocument & styles );
     void insertStyles( const QDomElement& element );
     void fillStyleStack( const QDomElement& object );
     void addStyles( const QDomElement* style );
-    double toPoint( QString &value );
+
+
     QDomDocument    m_content;
     QDomDocument    m_meta;
     QDomDocument    m_settings;
