@@ -54,6 +54,7 @@ public slots:
 protected slots:
     void spellCheckerMisspelling(const QString &, int );
     void spellCheckerDone();
+    void checkerContinue();
 
     void slotParagraphCreated( KoTextParag* parag );
     void slotParagraphModified( KoTextParag* parag, int /*ParagModifyType*/, int pos, int length );

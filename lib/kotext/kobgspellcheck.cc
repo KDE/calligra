@@ -49,9 +49,13 @@ class KoBgSpellCheck::Private
 {
 public:
     bool enabled;
+    int marked;
     KoSpell *backSpeller;
     QPtrDict<KoTextParag> paragCache;
+    bool startupChecking;
 };
+
+static const int delayAfterMarked = 10;
 
 KoBgSpellCheck::KoBgSpellCheck( const Broker::Ptr& broker, QObject *parent,
                                 const char *name )
@@ -62,6 +66,8 @@ KoBgSpellCheck::KoBgSpellCheck( const Broker::Ptr& broker, QObject *parent,
 #endif
     d = new Private;
     d->enabled = false;
+    d->startupChecking = false;
+    d->marked = 0;
     d->backSpeller = new KoSpell( broker, this, "KoSpell" );
 
     connect( d->backSpeller, SIGNAL(misspelling(const QString&, int)),
@@ -108,6 +114,8 @@ void KoBgSpellCheck::start()
     if ( !d->enabled )
         return;
 
+    d->startupChecking = true;
+    d->marked = 0;
     KoTextIterator *itr = createWholeDocIterator();
     d->backSpeller->check( itr );
     d->backSpeller->start();
@@ -124,9 +132,9 @@ void KoBgSpellCheck::spellCheckerMisspelling( const QString &old, int pos )
 #endif
     markWord( old, pos, true );
     // set the repaint flags
-    parag->setChanged( true );
-    parag->document()->emitRepaintChanged();
-    d->backSpeller->continueChecking();
+    //parag->setChanged( true );
+    //parag->document()->emitRepaintChanged();
+    //d->backSpeller->continueChecking();
 }
 
 void KoBgSpellCheck::markWord( const QString &old, int pos, bool misspelled )
@@ -141,11 +149,26 @@ void KoBgSpellCheck::markWord( const QString &old, int pos, bool misspelled )
 
     parag->setChanged( true );
     parag->document()->emitRepaintChanged();
+
+    if ( d->startupChecking && d->marked > delayAfterMarked ) {
+        d->marked = 0;
+        QTimer::singleShot( 1000, this, SLOT(checkerContinue()) );
+    } else {
+        if ( d->startupChecking )
+            ++d->marked;
+        checkerContinue();
+    }
+}
+
+void KoBgSpellCheck::checkerContinue()
+{
     d->backSpeller->continueChecking();
 }
 
 void KoBgSpellCheck::spellCheckerDone()
 {
+    d->startupChecking = false;
+
     if ( d->paragCache.isEmpty() )
         return;
 
