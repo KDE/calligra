@@ -296,16 +296,10 @@ bool KoDocument::saveFile()
         else
             backup = d->m_backupPath +"/"+url().fileName();
         backup.setPath( backup.path() + QString::fromLatin1("~") );
-        (void) KIO::NetAccess::del( backup );
-        if ( backupFile() )
-            (void) KIO::NetAccess::copy( url(), backup );
-
-        // This is noticeably faster, but not network transparent, and more importantly
-        // it fails with '(' and other special chars in the filename.
-        //QString cmd = QString( "rm -rf %1~" ).arg( url.path() );
-        //system( cmd.local8Bit() );
-        //cmd = QString("cp %1 %2~").arg( url.path() ).arg( url.path() );
-        //system( cmd.local8Bit() );
+        if ( backupFile() ) {
+            KIO::NetAccess::del( backup ); // Copy does not remove existing destination file
+            KIO::NetAccess::copy( url(), backup );
+        }
     }
 
     bool ret = false;
