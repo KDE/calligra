@@ -1802,6 +1802,7 @@ void KWCanvas::insertPicture( const QString & filename, bool isClipart, QSize pi
     m_pictureFilename = filename;
     m_isClipart = isClipart;
     m_pixmapSize = pixmapSize;
+    if( pixmapSize.isEmpty()) m_pixmapSize = QPixmap( filename ).size();
     m_keepRatio = _keepRatio;
 }
 
