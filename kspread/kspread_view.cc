@@ -96,6 +96,8 @@
 #include "kspread_events.h"
 #include "kspread_editors.h"
 #include "kspread_sheetprint.h"
+#include "valuecalc.h"
+#include "valueconverter.h"
 #include "kspread_dlg_format.h"
 #include "kspread_dlg_conditional.h"
 #include "kspread_dlg_series.h"
@@ -6232,161 +6234,57 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
 void KSpreadView::resultOfCalc()
 {
   KSpreadSheet * table = activeTable();
-  double result = 0.0;
-  int nbCell = 0;
+  KSpreadValue val;
   QRect tmpRect(d->selectionInfo->selection());
   MethodOfCalc tmpMethod = d->doc->getTypeOfCalc() ;
   if ( tmpMethod != NoneCalc )
   {
-    if ( util_isColumnSelected(selection()) )
+    
+    KSpreadValue range = table->valueRange (tmpRect.left(), tmpRect.top(),
+        tmpRect.right(), tmpRect.bottom());
+    switch (tmpMethod)
     {
-      for ( int col = tmpRect.left(); col <= tmpRect.right(); ++col )
-      {
-        KSpreadCell * c = table->getFirstCellColumn( col );
-        while ( c )
-        {
-          if ( !c->isObscuringForced() )
-          {
-            if ( c->value().isNumber() )
-            {
-              double val = c->value().asFloat();
-              switch( tmpMethod )
-              {
-               case SumOfNumber:
-                result += val;
-                break;
-               case Average:
-                result += val;
-                break;
-               case Min:
-                if (result != 0)
-                  result = QMIN(val, result);
-                else
-                  result = val;
-                break;
-               case Max:
-                if (result != 0)
-                  result = QMAX(val, result);
-                else
-                  result = val;
-                break;
-               case Count:
-               case NoneCalc:
-                break;
-               default:
-                break;
-              }
-              ++nbCell;
-            }
-          }
-          c = table->getNextCellDown( col, c->row() );
-        }
-      }
+      case SumOfNumber:
+        val = ValueCalc::self()->sum (range);
+      break;
+      case Average:
+        val = ValueCalc::self()->avg (range);
+      break;
+      case Min:
+        val = ValueCalc::self()->min (range);
+      break;
+      case Max:
+        val = ValueCalc::self()->max (range);
+      break;
+      case Count:
+        val = KSpreadValue (ValueCalc::self()->count (range));
+      case NoneCalc:
+      break;
+      default:
+      break;
     }
-    else if ( util_isRowSelected(selection()) )
-    {
-      for ( int row = tmpRect.top(); row <= tmpRect.bottom(); ++row )
-      {
-        KSpreadCell * c = table->getFirstCellRow( row );
-        while ( c )
-        {
-          if ( !c->isObscuringForced() && c->value().isNumber() )
-          {
-            double val = c->value().asFloat();
-            switch(tmpMethod )
-            {
-             case SumOfNumber:
-              result += val;
-              break;
-             case Average:
-              result += val;
-              break;
-             case Min:
-              if (result != 0)
-                result = QMIN(val, result);
-              else
-                result = val;
-              break;
-             case Max:
-              if (result != 0)
-                result = QMAX(val, result);
-              else
-                result = val;
-              break;
-             case Count:
-             case NoneCalc:
-              break;
-             default:
-              break;
-            }
-            ++nbCell;
-          }
-          c = table->getNextCellRight( c->column(), row );
-        }
-      }
-    }
-    else
-    {
-      int right  = tmpRect.right();
-      int bottom = tmpRect.bottom();
-      KSpreadCell * cell;
-
-      for ( int i = tmpRect.left(); i <= right; ++i )
-        for(int j = tmpRect.top(); j <= bottom; ++j )
-        {
-          cell = activeTable()->cellAt( i, j );
-          if ( !cell->isDefault() && cell->value().isNumber() )
-          {
-            double val = cell->value().asFloat();
-            switch(tmpMethod )
-            {
-             case SumOfNumber:
-              result += val;
-              break;
-             case Average:
-              result += val;
-              break;
-             case Min:
-              if (result != 0)
-                result = QMIN(val, result);
-              else
-                result = val;
-              break;
-             case Max:
-              if (result != 0)
-                result = QMAX(val,result);
-              else
-                result = val;
-              break;
-             case Count:
-             case NoneCalc:
-              break;
-             default:
-              break;
-            }
-            ++nbCell;
-          }
-        }
-    }
+    
   }
+  
+  QString res = KSpread::ValueConverter::self()->asString (val,
+      d->doc->locale()).asString ();
   QString tmp;
   switch(tmpMethod )
   {
    case SumOfNumber:
-    tmp = i18n(" Sum: %1").arg(result);
+    tmp = i18n("Sum: ") + res;
     break;
    case Average:
-    result = result/nbCell;
-    tmp = i18n("Average: %1").arg(result);
+    tmp = i18n("Average: ") + res;
     break;
    case Min:
-    tmp = i18n("Min: %1").arg(result);
+    tmp = i18n("Min: ") + res;
     break;
    case Max:
-    tmp = i18n("Max: %1").arg(result);
+    tmp = i18n("Max: ") + res;
     break;
    case Count:
-    tmp = i18n("Count: %1").arg(nbCell);
+    tmp = i18n("Count: ") + res;
     break;
    case NoneCalc:
     tmp = "";

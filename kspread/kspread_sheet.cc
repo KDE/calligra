@@ -585,6 +585,12 @@ RowFormat* KSpreadSheet::rowFormat( int _row )
     return d->defaultRowFormat;
 }
 
+KSpreadValue KSpreadSheet::valueRange (int col1, int row1,
+    int col2, int row2) const
+{
+  return d->cells.valueRange (col1, row1, col2, row2);
+}
+
 void KSpreadSheet::password( QCString & passwd ) const
 {
     passwd = d->password;

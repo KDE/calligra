@@ -60,6 +60,8 @@ class KSpreadCell;
 class ColumnFormat;
 class RowFormat;
 
+#include "kspread_value.h"
+
 class QPoint;
 
 #define KSPREAD_CLUSTER_LEVEL1 128
@@ -138,6 +140,12 @@ public:
      */
     void clearColumn( int col );
     void clearRow( int row );
+
+  /** Retrieve a range of values stored in a KSpreadValue.
+  The range is two-leveled with similar structure and reasoning as the
+  storage of cells themselves.
+  */
+  KSpreadValue valueRange (int col1, int row1, int col2, int row2) const;
 
   /**
    * Retrieve the first used cell in a given column.  Can be used in conjunction
@@ -240,9 +248,13 @@ private:
     void unshiftColumn( const QPoint& marker, bool& work );
     void unshiftRow( const QPoint& marker, bool& work );
 
+    /** helper method used by valueRange */
+    KSpreadValue makeArray (int col1, int row1, int col2, int row2) const;
+    
     KSpreadCell*** m_cluster;
     KSpreadCell* m_first;
     bool m_autoDelete;
+    unsigned int m_biggestX, m_biggestY;
 };
 
 class KSpreadColumnCluster

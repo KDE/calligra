@@ -411,6 +411,9 @@ public:
     KSpreadFormat* defaultFormat();
     const KSpreadFormat* defaultFormat() const;
 
+    /** retrieve a range of values */
+    KSpreadValue valueRange (int col1, int row1, int col2, int row2) const;
+
     QRect visibleRect( KSpreadCanvas const * const _canvas ) const;
     int topRow( double _ypos, double &_top, const KSpreadCanvas *_canvas = 0L ) const;
     int bottomRow( double _ypos, const KSpreadCanvas *_canvas = 0L ) const;

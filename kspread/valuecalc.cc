@@ -23,6 +23,8 @@
 
 #include <math.h>
 
+#include <kdebug.h>
+
 using namespace KSpread;
 
 KLocale *ValueCalc::locale = 0;
@@ -32,7 +34,9 @@ ValueCalc* ValueCalc::_self = 0;
 ValueCalc * ValueCalc::self ()
 {
   if (!_self)
+  {
     _self = new ValueCalc;
+  }
   return _self;
 }
 
@@ -236,14 +240,18 @@ KSpreadValue ValueCalc::sum (const KSpreadValue &range)
   KSpreadValue res;
   KSpreadValue::Format fmt = KSpreadValue::fmt_None;
 
-  int cols = range.columns ();
   int rows = range.rows ();
+  int cols = range.columns ();
   for (int r = 0; r < rows; r++)
     for (int c = 0; c < cols; c++)
     {
-      res = add (res, range.element (r, c));
+      KSpreadValue v = range.element (c, r);
+      if (v.isArray())
+        res = add (res, sum (v));
+      else
+        res = add (res, v);
       if (fmt == KSpreadValue::fmt_None)
-        fmt = range.element (r, c).format ();
+        fmt = range.element (c, r).format ();
     }
 
   res.setFormat (fmt);
@@ -261,8 +269,14 @@ int ValueCalc::count (const KSpreadValue &range)
   int rows = range.rows ();
   for (int r = 0; r < rows; r++)
     for (int c = 0; c < cols; c++)
-      if (!range.element (r, c).isEmpty())
-        res++;
+    {
+      KSpreadValue v = range.element (c, r);
+      if (v.isArray())
+        res += count (v);
+      else
+        if (!range.element (c, r).isEmpty())
+          res++;
+    }
 
   return res;
 }
@@ -277,17 +291,79 @@ KSpreadValue ValueCalc::avg (const KSpreadValue &range)
 
 KSpreadValue ValueCalc::max (const KSpreadValue &range)
 {
-  // TODO
+  ValueConverter *vc = ValueConverter::self();
+
+  if (!range.isArray())
+    return vc->asFloat (range, locale);
+
+  //if we are here, we have an array
+  KSpreadValue res;
+
+  int rows = range.rows ();
+  int cols = range.columns ();
+  bool got = false;
+  for (int r = 0; r < rows; r++)
+    for (int c = 0; c < cols; c++)
+    {
+      KSpreadValue v = range.element (c, r);
+      if (v.isArray())
+        v = max (v);
+      if (!v.isEmpty ())
+        if (got)
+        {
+          if (v.greater (res))
+            res = v;
+        }
+        else
+        {
+          res = v;
+          got = true;
+        }
+    }
+
+  return res;
 }
 
 KSpreadValue ValueCalc::min (const KSpreadValue &range)
 {
-  // TODO
+  ValueConverter *vc = ValueConverter::self();
+
+  if (!range.isArray())
+    return vc->asFloat (range, locale);
+
+  //if we are here, we have an array
+  KSpreadValue res;
+
+  int rows = range.rows ();
+  int cols = range.columns ();
+  bool got = false;
+  for (int r = 0; r < rows; r++)
+    for (int c = 0; c < cols; c++)
+    {
+      KSpreadValue v = range.element (c, r);
+      if (v.isArray())
+        v = max (v);
+      if (!v.isEmpty ())
+        if (got)
+        {
+          if (v.less (res))
+            res = v;
+        }
+        else
+        {
+          res = v;
+          got = true;
+        }
+    }
+
+  return res;
 }
 
 KSpreadValue::Format ValueCalc::format (KSpreadValue::Format a,
     KSpreadValue::Format b)
 {
-  //TODO ...
+  if ((a == KSpreadValue::fmt_None) || (a == KSpreadValue::fmt_Boolean))
+    return b;
+  return a;
 }
 
