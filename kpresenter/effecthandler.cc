@@ -113,10 +113,17 @@ bool EffectHandler::doEffect()
 
         while ( ( object = it.current() ) != 0 )
         {
+            int speed[] = { 50, 35, 20 };
+            
             ++it;
             if ( object == appearObject )
             {
                 bool next = true;
+
+                double speedFactor = speed[object->getAppearSpeed()];
+                
+                m_stepWidth = static_cast<int>( m_src->width() / speedFactor );
+                m_stepHeight = static_cast<int>( m_src->height() / speedFactor );
 
                 if ( doAppearEffectStep( object ) )
                 {
@@ -138,6 +145,12 @@ bool EffectHandler::doEffect()
             else if ( object == disappearObject )
             {
                 bool next = true;
+
+                double speedFactor = speed[object->getAppearSpeed()];
+                
+                m_stepWidth = static_cast<int>( m_src->width() / speedFactor );
+                m_stepHeight = static_cast<int>( m_src->height() / speedFactor );
+
                 if ( doDisappearEffectStep( object ) )
                 {
                     if ( disappearObject != m_disappearEffectObjects.getLast() )
