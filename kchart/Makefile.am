@@ -79,7 +79,7 @@ noinst_HEADERS =  kchart_part.h \
 		parser.h \
 		sheet.h \
 		sheetdlg.h \
-		table.h \
+		table.h qttableview.h \
 		kchart_aboutdata.h	\
 		kchartcolorarray.h KChartViewIface.h \
 		kchartLegendConfigPage.h  kchart_params.h \
