@@ -603,6 +603,10 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         emit repaintChanged( this );
         emit ensureCursorVisible();
         emit showCursor();
+        // we typed the first char of a paragraph in AlignAuto mode -> show correct alignment in UI
+        if ( oldCursor.index() == 0 && oldCursor.parag()->alignment() == Qt::AlignAuto )
+            emit updateUI( true );
+
     }
     undoRedoInfo.text += txt;
     for ( int i = 0; i < (int)txt.length(); ++i ) {
