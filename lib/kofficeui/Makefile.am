@@ -10,7 +10,7 @@ SUBDIRS = . tests pics
 lib_LTLIBRARIES = libkofficeui.la
 
 libkofficeui_la_SOURCES = \
-        koPageLayoutDia.cc kozoomaction.cpp \
+        koPageLayoutDia.cc kozoomaction.cpp kotabbar.cpp \
 	koPartSelectDia.cc koPartSelectAction.cc \
 	koRuler.cc koTemplateChooseDia.cc koTabChooser.cc \
 	koKoolBar.cc koTemplateCreateDia.cc kocontexthelp.cc\
@@ -22,7 +22,7 @@ libkofficeui_la_LDFLAGS	= -version-info 2:0:0 -no-undefined $(all_libraries)
 libkofficeui_la_LIBADD  = $(LIB_KOFFICECORE) ../kospell/libkospell.la
 
 include_HEADERS = \
-	koPageLayoutDia.h kozoomaction.h \
+	koPageLayoutDia.h kozoomaction.h kotabbar.h \
 	koPartSelectDia.h koPartSelectAction.h \
 	koRuler.h koTemplateChooseDia.h koTabChooser.h \
 	koKoolBar.h koTemplateCreateDia.h kocontexthelp.h \
