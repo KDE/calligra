@@ -1454,7 +1454,7 @@ bool KWDocument::completeLoading( KoStore *_store )
 
             QImage image( filename );
             if ( !img.isNull() )
-                m_imageCollection.insertImage( KoImage::Key( *it ), image );
+                m_imageCollection.insertImage( *it, image );
         }
     }
 /*
@@ -1464,7 +1464,7 @@ bool KWDocument::completeLoading( KoStore *_store )
 
     QDictIterator<KWPictureFrameSet> it3( imageRequests2 );
     for ( ; it3.current(); ++it3 )
-        it3.current()->setImage( m_imageCollection.image( KoImage::Key( it3.currentKey() ) ) );
+        it3.current()->setImage( m_imageCollection.findImage( it3.currentKey() ) );
 
     return TRUE;
 }
@@ -1531,14 +1531,12 @@ QDomDocument KWDocument::saveXML()
     QDomElement pixmaps = doc.createElement( "PIXMAPS" );
     kwdoc.appendChild( pixmaps );
 
-    KoImageCollection::Map imageData = m_imageCollection.data();
-    KoImageCollection::Map::ConstIterator it = imageData.begin();
-    KoImageCollection::Map::ConstIterator end = imageData.end();
-    QStringList images;
-    QValueList<KoImage::Key> keys;
+    KWImageCollection::ConstIterator it = m_imageCollection.begin();
+    KWImageCollection::ConstIterator end = m_imageCollection.end();
+    QStringList images, keys;
     int i = 0;
     for ( ; it != end; ++it ) {
-        QString fileName = it.key().fileName;
+        QString fileName = it.key();
         if ( keys.contains( it.key() ) || images.contains( fileName ) )
             continue;
         QString format = QFileInfo( fileName ).extension().upper();
@@ -1615,16 +1613,14 @@ bool KWDocument::completeSaving( KoStore *_store )
 
     QString u = KURL( url() ).path();
 
-    KoImageCollection::Map imageData = m_imageCollection.data();
-    KoImageCollection::Map::ConstIterator it = imageData.begin();
-    KoImageCollection::Map::ConstIterator end = imageData.end();
+    KWImageCollection::ConstIterator it = m_imageCollection.begin();
+    KWImageCollection::ConstIterator end = m_imageCollection.end();
 
-    QStringList images;
-    QValueList<KoImage::Key> keys;
+    QStringList images, keys;
     int i = 0;
 
     for( ; it != end; ++it ) {
-        QString fileName = it.key().fileName;
+        QString fileName = it.key();
         if ( keys.contains( it.key() ) || images.contains( fileName ) )
             continue;
 

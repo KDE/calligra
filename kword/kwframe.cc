@@ -799,9 +799,9 @@ KWPictureFrameSet::~KWPictureFrameSet() {
 /*================================================================*/
 void KWPictureFrameSet::setFileName( const QString &_filename, const QSize &_imgSize )
 {
-    KoImageCollection *collection = doc->imageCollection();
+    KWImageCollection *collection = doc->imageCollection();
 
-    m_image = collection->image( _filename );
+    m_image = collection->findImage( _filename );
     if ( !m_image.isNull() )
     {
         QImage img( _filename );
@@ -833,7 +833,7 @@ void KWPictureFrameSet::save( QDomElement & parentElem )
     framesetElem.appendChild( imageElem );
     QDomElement elem = parentElem.ownerDocument().createElement( "FILENAME" );
     imageElem.appendChild( elem );
-    elem.setAttribute( "value", correctQString( m_image.fileName() ) );
+    elem.setAttribute( "value", correctQString( m_image.key() ) );
 }
 
 /*================================================================*/

@@ -22,6 +22,7 @@
 
 #include "defs.h"
 #include "kwunit.h"
+#include "kwimage.h"
 
 #include <qrect.h>
 #include <qpicture.h>
@@ -29,7 +30,6 @@
 
 #include "border.h"
 #include <koMainWindow.h>
-#include <koImage.h>
 
 class KWFrame;
 class KWDocument;
@@ -37,7 +37,6 @@ class KWChild;
 class KWordFrame;
 class KWGroupManager;
 class KFormulaEdit;
-class KWImage;
 class KWResizeHandle;
 class KWCanvas;
 class QPoint;
@@ -415,10 +414,10 @@ public:
 
     virtual FrameType getFrameType() { return FT_PICTURE; }
 
-    void setImage( const KoImage &image ) { m_image = image; }
-    KoImage image() const { return m_image; }
+    void setImage( const KWImage &image ) { m_image = image; }
+    KWImage image() const { return m_image; }
 
-    KoImage::Key key() const { return m_image.key(); }
+    QString key() const { return m_image.key(); }
 
     void setFileName( const QString &_filename, const QSize &_imgSize );
     void setSize( QSize _imgSize );
@@ -430,7 +429,7 @@ public:
                                QColorGroup &, bool /*onlyChanged*/ );
 
 protected:
-    KoImage m_image;
+    KWImage m_image;
 };
 
 /******************************************************************/

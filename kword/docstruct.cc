@@ -410,7 +410,7 @@ void KWDocStructRootItem::setupPictures()
         frameset = doc->getFrameSet( i );
         if ( frameset->getFrameType() == FT_PICTURE )
         {
-            _name=i18n("Picture (%1) %2").arg(dynamic_cast<KWPictureFrameSet*>( frameset )->image().fileName()).arg(++j);
+            _name=i18n("Picture (%1) %2").arg(dynamic_cast<KWPictureFrameSet*>( frameset )->image().key()).arg(++j);
             child = new KWDocStructPictureItem( this, _name, dynamic_cast<KWPictureFrameSet*>( frameset ), gui );
             QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
         }
