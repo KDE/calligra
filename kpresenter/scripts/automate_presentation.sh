@@ -9,7 +9,7 @@
 #
 # Open the presentation in kpresenter, then launch this script
 #
-appname=`dcop | grep ^kpresenter`
+appname=`dcop | grep -m 1 ^kpresenter`
 #echo $appname
 
 viewname=`dcop $appname | grep ^View`
