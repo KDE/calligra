@@ -675,6 +675,9 @@ QDomElement KoAutoFormat::saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QD
             case KoTextFormat::U_SIMPLE_BOLD:
                 data.setAttribute("UNDERLINE", "single-bold");
                 break;
+            case KoTextFormat::U_WAVE:
+                data.setAttribute("UNDERLINE", "wave");
+                break;
             case KoTextFormat::U_NONE:
                 data.setAttribute("UNDERLINE", "none");
                 break;
@@ -700,18 +703,7 @@ QDomElement KoAutoFormat::saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QD
         }
         if ( tmp->m_optionsMask & KoSearchContext::Attribute )
         {
-            switch( tmp->m_attribute )
-            {
-            case KoTextFormat::ATT_NONE:
-                data.setAttribute("FONTATTRIBUTE", "none");
-                break;
-            case KoTextFormat::ATT_UPPER:
-                data.setAttribute("FONTATTRIBUTE", "upper");
-                break;
-            case KoTextFormat::ATT_LOWER:
-                data.setAttribute("FONTATTRIBUTE", "lower");
-                break;
-            }
+            data.setAttribute("FONTATTRIBUTE", KoTextFormat::attributeFontToString( tmp->m_attribute ) );
         }
 
         if ( tmp->m_optionsMask & KoSearchContext::VertAlign)
