@@ -43,7 +43,7 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
-  
+
   RowLayout *rl;
   ColumnLayout *cl;
   switch(type)
@@ -68,9 +68,11 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
 	}
 
   setCaption( tmp );
-  
-  m_pSize2=new KIntNumInput( 20,400,1,size ,this,label, QString::null,false);
-  m_pSize2->layout();
+
+  //m_pSize2=new KIntNumInput( 20,400,1,size ,this,label, QString::null,false);
+  m_pSize2=new KIntNumInput(size, this, 10);
+  m_pSize2->setRange(20, 400, 1);
+  //m_pSize2->layout();
   lay1->addWidget(m_pSize2);
 
   KButtonBox *bb = new KButtonBox( this );
