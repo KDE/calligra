@@ -365,6 +365,12 @@ Core, Plugins
   and Part::initInstanceActions() (lazy one)
 Kexi
 - name argument is now passed to KGenericFactory to avoid runtime warnings
+KexiDB Parser, KexiDB
+- Expression: 
+-- former type renamed to token
+-- 'type' member added; typechecks added to validate()
+- more SQL statements are supported
+
 
 2004-10-14
 Kexi

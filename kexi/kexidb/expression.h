@@ -54,9 +54,10 @@ public:
 	typedef QPtrList<BaseExpr> List;
 	typedef QPtrListIterator<BaseExpr> ListIterator;
 
-	BaseExpr(int type);
+	BaseExpr(int token);
 	virtual ~BaseExpr();
-	int type() const { return m_type; }
+	int token() const { return m_token; }
+	virtual int type();
 	BaseExpr *BaseExpr::parent() const { return m_par; }
 	virtual void setParent(BaseExpr *p) { m_par = p; }
 	virtual bool validate(ParseInfo& parseInfo);
@@ -64,23 +65,23 @@ public:
 	
 	inline void debug() { KexiDBDbg << debugString() << endl; }
 	virtual QString debugString();
-	/*! \return single character if the type is < 256 
+	/*! \return single character if the token is < 256 
 	 or number (for debugging). */
-	QString typeToString();
+	QString tokenToString();
 
 	int exprClass() const { return m_cl; }
 
 protected:
 	int m_cl; //!< class
-	BaseExpr *m_par; //!< parent
-	int m_type;
+	BaseExpr *m_par; //!< parent expression
+	int m_token;
 };
 
 //! A base class N-argument operation
 class KEXI_DB_EXPORT NArgExpr : public BaseExpr
 {
 public:
-	NArgExpr(int aClass, int typ);
+	NArgExpr(int aClass, int token);
 	void add(BaseExpr *expr);
 	BaseExpr *arg(int n);
 	int args();
@@ -94,7 +95,7 @@ public:
 class KEXI_DB_EXPORT UnaryExpr : public NArgExpr
 {
 public:
-	UnaryExpr(int type, BaseExpr *n);
+	UnaryExpr(int token, BaseExpr *n);
 	virtual ~UnaryExpr();
 	virtual QString debugString();
 	virtual QString toString();
@@ -107,13 +108,13 @@ public:
  - relational operations: = (or ==) < > <= >= <> (or !=) LIKE IN 'SIMILAR TO' 'NOT SIMILAR TO'
  - logical operations: OR (or ||) AND (or &&) XOR
  - SpecialBinary "pseudo operators": 
-    * e.g. "f1 f2" : type == 0
-    * e.g. "f1 AS f2" : type == AS
+    * e.g. "f1 f2" : token == 0
+    * e.g. "f1 AS f2" : token == AS
 */
 class KEXI_DB_EXPORT BinaryExpr : public NArgExpr
 {
 public:
-	BinaryExpr(int aClass, BaseExpr *left_expr, int type, BaseExpr *right_expr);
+	BinaryExpr(int aClass, BaseExpr *left_expr, int token, BaseExpr *right_expr);
 	virtual QString debugString();
 	virtual QString toString();
 	BaseExpr *left();
@@ -122,13 +123,13 @@ public:
 };
 
 /*! String, integer, float constants also includes NULL value.
- type can be: IDENTIFIER, SQL_NULL, CHARACTER_STRING_LITERAL,
+ token can be: IDENTIFIER, SQL_NULL, CHARACTER_STRING_LITERAL,
  INTEGER_CONST, REAL_CONST
 */
 class KEXI_DB_EXPORT ConstExpr : public BaseExpr
 {
 public:
-	ConstExpr(int type, const QVariant& val);
+	ConstExpr(int token, const QVariant& val);
 	virtual QString debugString();
 	virtual QString toString();
 	virtual bool validate(ParseInfo& parseInfo);

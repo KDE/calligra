@@ -747,127 +747,127 @@ aExpr3 AND aExpr2
 aExpr3
 ;
 
-/* arithm. lowest precedence */
+/* relational op precedence */
 aExpr3:
-aExpr4 BITWISE_SHIFT_LEFT aExpr3
+aExpr4 '>' %prec GREATER_OR_EQUAL aExpr3
 {
-	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, BITWISE_SHIFT_LEFT, $3);
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, '>', $3);
 }
-| aExpr4 BITWISE_SHIFT_RIGHT aExpr3
+| aExpr4 GREATER_OR_EQUAL aExpr3
 {
-	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, BITWISE_SHIFT_RIGHT, $3);
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, GREATER_OR_EQUAL, $3);
+}
+| aExpr4 '<' %prec LESS_OR_EQUAL aExpr3
+{
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, '<', $3);
+}
+| aExpr4 LESS_OR_EQUAL aExpr3
+{
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, LESS_OR_EQUAL, $3);
+}
+| aExpr4 '=' aExpr3
+{
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, '=', $3);
 }
 |
 aExpr4
 ;
 
-/* arithm. lower precedence */
+/* relational (equality) op precedence */
 aExpr4:
-aExpr5 '+' aExpr4
+aExpr5 NOT_EQUAL aExpr4
 {
-	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '+', $3);
-	$$->debug();
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, NOT_EQUAL, $3);
 }
-| aExpr5 '-' %prec UMINUS aExpr4
+|
+aExpr5 NOT_EQUAL2 aExpr4
 {
-	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '-', $3);
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, NOT_EQUAL2, $3);
 }
-| aExpr5 '&' aExpr4
+| aExpr5 LIKE aExpr4
 {
-	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '&', $3);
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, LIKE, $3);
 }
-| aExpr5 '|' aExpr4
+| aExpr5 SQL_IN aExpr4
 {
-	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '|', $3);
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, SQL_IN, $3);
+}
+| aExpr5 SIMILAR_TO aExpr4
+{
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, SIMILAR_TO, $3);
+}
+| aExpr5 NOT_SIMILAR_TO aExpr4
+{
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, NOT_SIMILAR_TO, $3);
 }
 |
 aExpr5
 ;
 
-/* arithm. higher precedence */
+/* --- unary logical right --- */
 aExpr5:
-aExpr6 '/' aExpr5
+aExpr5 SQL_IS_NULL
 {
-	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '/', $3);
+	$$ = new UnaryExpr( SQL_IS_NULL, $1 );
 }
-| aExpr6 '*' aExpr5
+| aExpr5 SQL_IS_NOT_NULL
 {
-	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '*', $3);
-}
-| aExpr6 '%' aExpr5
-{
-	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '%', $3);
+	$$ = new UnaryExpr( SQL_IS_NOT_NULL, $1 );
 }
 |
 aExpr6
 ;
 
-/* relational op precedence */
+/* arithm. lowest precedence */
 aExpr6:
-aExpr7 '>' %prec GREATER_OR_EQUAL aExpr6
+aExpr7 BITWISE_SHIFT_LEFT aExpr6
 {
-	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, '>', $3);
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, BITWISE_SHIFT_LEFT, $3);
 }
-| aExpr7 GREATER_OR_EQUAL aExpr6
+| aExpr7 BITWISE_SHIFT_RIGHT aExpr6
 {
-	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, GREATER_OR_EQUAL, $3);
-}
-| aExpr7 '<' %prec LESS_OR_EQUAL aExpr6
-{
-	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, '<', $3);
-}
-| aExpr7 LESS_OR_EQUAL aExpr6
-{
-	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, LESS_OR_EQUAL, $3);
-}
-| aExpr7 '=' aExpr6
-{
-	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, '=', $3);
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, BITWISE_SHIFT_RIGHT, $3);
 }
 |
 aExpr7
 ;
 
-/* relational (equality) op precedence */
+/* arithm. lower precedence */
 aExpr7:
-aExpr8 NOT_EQUAL aExpr7
+aExpr8 '+' aExpr7
 {
-	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, NOT_EQUAL, $3);
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '+', $3);
+	$$->debug();
 }
-|
-aExpr8 NOT_EQUAL2 aExpr7
+| aExpr8 '-' %prec UMINUS aExpr7
 {
-	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, NOT_EQUAL2, $3);
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '-', $3);
 }
-| aExpr8 LIKE aExpr7
+| aExpr8 '&' aExpr7
 {
-	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, LIKE, $3);
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '&', $3);
 }
-| aExpr8 SQL_IN aExpr7
+| aExpr8 '|' aExpr7
 {
-	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, SQL_IN, $3);
-}
-| aExpr8 SIMILAR_TO aExpr7
-{
-	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, SIMILAR_TO, $3);
-}
-| aExpr8 NOT_SIMILAR_TO aExpr7
-{
-	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, NOT_SIMILAR_TO, $3);
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '|', $3);
 }
 |
 aExpr8
 ;
 
-/* --- unary logical right --- */
+/* arithm. higher precedence */
 aExpr8:
-aExpr8 SQL_IS_NULL
+aExpr9 '/' aExpr8
 {
-	$$ = new UnaryExpr( SQL_IS_NULL, $1 );
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '/', $3);
 }
-| aExpr8 SQL_IS_NOT_NULL
+| aExpr9 '*' aExpr8
 {
-	$$ = new UnaryExpr( SQL_IS_NOT_NULL, $1 );
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '*', $3);
+}
+| aExpr9 '%' aExpr8
+{
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '%', $3);
 }
 |
 aExpr9

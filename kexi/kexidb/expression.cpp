@@ -59,10 +59,10 @@ using namespace KexiDB;
 
 //=========================================
 
-BaseExpr::BaseExpr(int type) 
+BaseExpr::BaseExpr(int token) 
  : m_cl(KexiDBExpr_Unknown)
  , m_par(0)
- , m_type(type)
+ , m_token(token)
 {
 
 }
@@ -71,9 +71,14 @@ BaseExpr::~BaseExpr()
 {
 }
 
+int BaseExpr::type()
+{
+	return 0; //unknown
+}
+
 QString BaseExpr::debugString()
 {
-	return QString("BaseExpr(%1)").arg(m_type);
+	return QString("BaseExpr(%1)").arg(m_token);
 }
 
 bool BaseExpr::validate(ParseInfo& /*parseInfo*/)
@@ -82,23 +87,23 @@ bool BaseExpr::validate(ParseInfo& /*parseInfo*/)
 }
 
 extern const char * const tname(int offset);
-#define safe_tname(type) ((type>=254 && type<=__LAST_TOKEN) ? tname(type-254) : "")
+#define safe_tname(token) ((token>=254 && token<=__LAST_TOKEN) ? tname(token-254) : "")
 
-QString BaseExpr::typeToString()
+QString BaseExpr::tokenToString()
 {
-	if (m_type < 254) {
-		if (isprint(m_type))
-			return QString(QChar(uchar(m_type)));
+	if (m_token < 254) {
+		if (isprint(m_token))
+			return QString(QChar(uchar(m_token)));
 		else
-			return QString::number(m_type);
+			return QString::number(m_token);
 	}
-	return QString(safe_tname(m_type));
+	return QString(safe_tname(m_token));
 }
 
 //=========================================
 
-NArgExpr::NArgExpr(int aClass, int type)
- : BaseExpr(type)
+NArgExpr::NArgExpr(int aClass, int token)
+ : BaseExpr(token)
 {
 	m_cl = aClass;
 	list.setAutoDelete(TRUE);
@@ -171,24 +176,24 @@ UnaryExpr::~UnaryExpr()
 QString UnaryExpr::debugString()
 {
 	return "UnaryExpr('" 
-		+ typeToString() + "', "
+		+ tokenToString() + "', "
 		+ (arg() ? arg()->debugString() : QString("<NONE>")) 
 		+ ")";
 }
 
 QString UnaryExpr::toString()
 {
-	if (m_type=='(') //parentheses (special case)
+	if (m_token=='(') //parentheses (special case)
 		return "(" + arg()->toString() + ")";
-	if (m_type < 255 && isprint(m_type))
-		return typeToString() + arg()->toString();
-	if (m_type==NOT)
+	if (m_token < 255 && isprint(m_token))
+		return tokenToString() + arg()->toString();
+	if (m_token==NOT)
 		return "NOT " + arg()->toString();
-	if (m_type==SQL_IS_NULL)
+	if (m_token==SQL_IS_NULL)
 		return arg()->toString() + " IS NULL";
-	if (m_type==SQL_IS_NOT_NULL)
+	if (m_token==SQL_IS_NOT_NULL)
 		return arg()->toString() + " IS NOT NULL";
-	return QString("{INVALID_OPERATOR#%1} ").arg(m_type) + arg()->toString();
+	return QString("{INVALID_OPERATOR#%1} ").arg(m_token) + arg()->toString();
 }
 
 bool UnaryExpr::validate(ParseInfo& parseInfo)
@@ -256,7 +261,7 @@ QString BinaryExpr::debugString()
 	return QString("BinaryExpr(")
 		+ "class=" + exprClassName(m_cl)
 		+ "," + (left() ? left()->debugString() : QString("<NONE>")) 
-		+ ",'" + typeToString() + "',"
+		+ ",'" + tokenToString() + "',"
 		+ (right() ? right()->debugString() : QString("<NONE>")) 
 		+ ")";
 }
@@ -266,48 +271,48 @@ QString BinaryExpr::toString()
 #define INFIX(a) \
 		left()->toString() + " " + a + " " + right()->toString()
 
-	if (m_type < 255 && isprint(m_type))
-		return INFIX(typeToString());
+	if (m_token < 255 && isprint(m_token))
+		return INFIX(tokenToString());
 	// other arithmetic operations: << >>
-	if (m_type==BITWISE_SHIFT_RIGHT)
+	if (m_token==BITWISE_SHIFT_RIGHT)
 		return INFIX(">>");
-	if (m_type==BITWISE_SHIFT_LEFT)
+	if (m_token==BITWISE_SHIFT_LEFT)
 		return INFIX("<<");
 	// other relational operations: <= >= <> (or !=) LIKE IN
-	if (m_type==NOT_EQUAL)
+	if (m_token==NOT_EQUAL)
 		return INFIX("<>");
-	if (m_type==NOT_EQUAL2)
+	if (m_token==NOT_EQUAL2)
 		return INFIX("!=");
-	if (m_type==LESS_OR_EQUAL)
+	if (m_token==LESS_OR_EQUAL)
 		return INFIX("<=");
-	if (m_type==GREATER_OR_EQUAL)
+	if (m_token==GREATER_OR_EQUAL)
 		return INFIX(">=");
-	if (m_type==LIKE)
+	if (m_token==LIKE)
 		return INFIX("LIKE");
-	if (m_type==SQL_IN)
+	if (m_token==SQL_IN)
 		return INFIX("IN");
 	// other logical operations: OR (or ||) AND (or &&) XOR
-	if (m_type==SIMILAR_TO)
+	if (m_token==SIMILAR_TO)
 		return INFIX("SIMILAR TO");
-	if (m_type==NOT_SIMILAR_TO)
+	if (m_token==NOT_SIMILAR_TO)
 		return INFIX("NOT SIMILAR TO");
-	if (m_type==OR)
+	if (m_token==OR)
 		return INFIX("OR");
-	if (m_type==AND)
+	if (m_token==AND)
 		return INFIX("AND");
-	if (m_type==XOR)
+	if (m_token==XOR)
 		return INFIX("XOR");
 	// other string operations: || (as CONCATENATION)
-	if (m_type==CONCATENATION)
+	if (m_token==CONCATENATION)
 		return INFIX("||");
 	// SpecialBinary "pseudo operators":
 	/* not handled here */
-	return INFIX( QString("{INVALID_BINARY_OPERATOR#%1} ").arg(m_type));
+	return INFIX( QString("{INVALID_BINARY_OPERATOR#%1} ").arg(m_token));
 }
 
 //=========================================
-ConstExpr::ConstExpr( int type, const QVariant& val)
-: BaseExpr( type )
+ConstExpr::ConstExpr( int token, const QVariant& val)
+: BaseExpr( token )
 , value(val)
 {
 	m_cl = KexiDBExpr_Const;
@@ -315,14 +320,14 @@ ConstExpr::ConstExpr( int type, const QVariant& val)
 
 QString ConstExpr::debugString()
 {
-	return QString("ConstExpr('") + typeToString() +"'," + toString() + ")";
+	return QString("ConstExpr('") + tokenToString() +"'," + toString() + ")";
 }
 
 QString ConstExpr::toString()
 {
-	if (m_type==SQL_NULL)
+	if (m_token==SQL_NULL)
 		return "NULL";
-	if (m_type==REAL_CONST)
+	if (m_token==REAL_CONST)
 		return QString::number(value.toPoint().x())+"."+QString::number(value.toPoint().y());
 	return value.toString();
 }
