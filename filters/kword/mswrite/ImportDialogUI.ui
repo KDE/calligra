@@ -143,7 +143,7 @@
                 <string>&amp;Advanced</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>These advanced options allow you to finetune the importation of formatting information.  They compensate for differences between KWord and MS Write by adding extra formatting information (not found in the original document) to try to make the imported document look as close to the original as possible.&lt;br&gt;&lt;br&gt;It is safe to use the defaults, if unsure.</string>
+                <string>These advanced options allow you to fine-tune the importing of formatting information. They compensate for differences between KWord and MS Write by adding extra formatting information (not found in the original document), to try to make the imported document look as close to the original as possible.&lt;br&gt;&lt;br&gt;It is safe to use the defaults, if unsure.</string>
             </property>
             <grid>
                 <property name="name">
