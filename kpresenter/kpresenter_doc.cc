@@ -706,6 +706,9 @@ QDomDocument KPresenterDoc::saveXML()
     return doc;
 }
 
+void KPresenterDoc::saveEmbeddedObject(KPrPage *page, const QPtrList<KoDocumentChild>& childList ,QDomDocument &doc,QDomElement &presenter )
+{
+}
 
 void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl,QDomDocument &doc,QDomElement &presenter, double offset )
 {

@@ -475,6 +475,7 @@ public:
     void addWordToDictionary( const QString & word);
 
     void loadImagesFromStore( KoStore *_store );
+    void saveEmbeddedObject(KPrPage *page, const QPtrList<KoDocumentChild>& childList ,QDomDocument &doc,QDomElement &presenter );
 
 public slots:
     void movePage( int from, int to );

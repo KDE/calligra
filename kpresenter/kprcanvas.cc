@@ -4947,26 +4947,32 @@ void KPrCanvas::copyObjs()
 
     doc.appendChild(presenter);
 
-    QPtrList<KoDocumentChild> embeddedObjects;
+    QPtrList<KoDocumentChild> embeddedObjectsActivePage;
+    QPtrList<KoDocumentChild> embeddedObjectsStickyPage;
 
     KoStoreDrag *kd = new KoStoreDrag( "application/x-kpresenter", 0L );
     QByteArray arr;
     QBuffer buffer(arr);
     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, "application/x-kpresenter" );
 
-    m_activePage->getAllEmbeddedObjectSelected(embeddedObjects );
-    stickyPage()->getAllEmbeddedObjectSelected(embeddedObjects );
+    m_activePage->getAllEmbeddedObjectSelected(embeddedObjectsActivePage );
+    stickyPage()->getAllEmbeddedObjectSelected(embeddedObjectsStickyPage );
 
     // Save internal embedded objects first, since it might change their URL
     int i = 0;
     QValueList<KoPictureKey> savePictures;
-    QPtrListIterator<KoDocumentChild> chl( embeddedObjects );
+    QPtrListIterator<KoDocumentChild> chl( embeddedObjectsActivePage );
     for( ; chl.current(); ++chl ) {
         KoDocument* childDoc = chl.current()->document();
         if ( childDoc && !childDoc->isStoredExtern() )
             (void) childDoc->saveToStore( store, QString::number( i++ ) );
     }
-
+    QPtrListIterator<KoDocumentChild> chl2( embeddedObjectsStickyPage );
+    for( ; chl2.current(); ++chl2 ) {
+        KoDocument* childDoc = chl2.current()->document();
+        if ( childDoc && !childDoc->isStoredExtern() )
+            (void) childDoc->saveToStore( store, QString::number( i++ ) );
+    }
 
     m_activePage->copyObjs(doc, presenter, savePictures);
     stickyPage()->copyObjs(doc, presenter, savePictures);
@@ -4978,10 +4984,16 @@ void KPrCanvas::copyObjs()
     }
 #endif
 
-#if 0 //FIXME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    if ( !embeddedObjects.isEmpty() )
-        m_view->kPresenterDoc()->saveEmbeddedObjects( topElem, embeddedObjects );
-#endif
+    if ( !embeddedObjectsStickyPage.isEmpty() )
+    {
+        m_view->kPresenterDoc()->saveEmbeddedObject(stickyPage(), embeddedObjectsStickyPage, doc, presenter );
+
+    }
+    if ( !embeddedObjectsActivePage.isEmpty())
+    {
+        m_view->kPresenterDoc()->saveEmbeddedObject(m_activePage, embeddedObjectsActivePage,doc,presenter);
+    }
+
     if ( !savePictures.isEmpty() ) {
         // Save picture list at the end of the main XML
         presenter.appendChild( m_view->kPresenterDoc()->pictureCollection()->saveXML( KoPictureCollection::CollectionPicture, doc, savePictures ) );
