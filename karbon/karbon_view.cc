@@ -737,8 +737,8 @@ KarbonView::zoomChanged( const KoPoint &p )
 
 	m_canvas->viewport()->setUpdatesEnabled( false );
 
-	m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 40 ) * zoomFactor ),
-							  int( ( part()->pageLayout().ptHeight + 80 ) * zoomFactor ) );
+	m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 300 ) * zoomFactor ),
+							  int( ( part()->pageLayout().ptHeight + 460 ) * zoomFactor ) );
 
 
 	VPainter *painter = painterFactory()->editpainter();
