@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 2000 Werner Trobin <wtrobin@carinthia.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,7 +39,7 @@ int main(int argc, char **argv) {
 
     KCmdLineArgs::init(argc, argv, KGraphFactory::aboutData());
     KCmdLineArgs::addCmdLineOptions(options);
-  
+
     KoApplication app;
 
     // Register DCOP interface, TODO
