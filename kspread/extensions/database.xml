@@ -1,0 +1,31 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+
+  <Group>
+    <GroupName>Database</GroupName>
+
+    <Function>
+      <Name>DSUM</Name>
+      <Type>FLOAT</Type>
+      <Parameter>
+	<Comment>Range marking the database</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String marking the column in the database</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Range marking the conditions</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>Sums up the numbers in a column of a database specified by a set of conditions.</Text>
+	<Syntax>DSUM(Database; "Header"; Conditions)</Syntax>
+	<Example>DSUM(A1:C5; "Salary"; A9:A11)</Example>
+      </Help>
+    </Function>
+
+  </Group>
+
+</KSpreadFunctions>

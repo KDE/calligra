@@ -11,6 +11,7 @@
 
 // these are defined in kspread_function_*.cc
 void KSpreadRegisterConversionFunctions();  
+void KSpreadRegisterDatabaseFunctions();
 void KSpreadRegisterDateTimeFunctions();    
 void KSpreadRegisterEngineeringFunctions(); 
 void KSpreadRegisterFinancialFunctions();   
@@ -257,6 +258,7 @@ KSpreadFunctionRepository* KSpreadFunctionRepository::self()
 
         // register all built-in functions
         KSpreadRegisterConversionFunctions();  
+        KSpreadRegisterDatabaseFunctions();
         KSpreadRegisterDateTimeFunctions();    
         KSpreadRegisterEngineeringFunctions(); 
         KSpreadRegisterFinancialFunctions();   

@@ -19,7 +19,7 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_functions_statistical.cc kspread_functions_text.cc \
 	kspread_layout.cc kspread_map.cc kspread_dlg_layout.cc \
 	kspread_dlg_scripts.cc kspread_cell.cc kspread_table.cc \
-	kspread_dlg_cons.cc kspread_util.cc \
+	kspread_dlg_cons.cc kspread_util.cc kspread_functions_database.cc \
         kspread_dlg_database.cc kspread_dlg_goalseek.cc \
 	kspread_editors.cc kspreadsubtotal.ui \
 	kspread_dlg_reference.cc kspread_dlg_subtotal.cc \
