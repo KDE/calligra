@@ -5132,7 +5132,7 @@ bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
 
 void KSpreadCell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
 {
-    if ( hasProperty( KSpreadFormat::PComment ) /*fixme*/)
+    if ( m_strComment )
     {
         xmlwriter.startElement( "office:annotation" );
         QStringList text = QStringList::split( "\n", *m_strComment );
