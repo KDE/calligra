@@ -241,7 +241,7 @@ bool OOWriterWorker::doOpenFile(const QString& filenameOut, const QString& )
 #endif
 
     const QCString appId( "application/vnd.sun.xml.writer" );
-    // ### TODO: QCString::length is slow in Qt3!
+
     m_zip->writeFile( "mimetype", QString::null, QString::null, appId.length(), appId.data() );
 
     m_zip->setCompression( KZip::DeflateCompression );
@@ -307,6 +307,7 @@ void OOWriterWorker::writeStartOfFile(const QString& type)
     zipWriteData("<!DOCTYPE office:document");
     if (!noType)
     {
+        // No type might happen for raw XML documents (which this filter does not support yet.)
         zipWriteData("-");
         zipWriteData(type);
     }
@@ -323,25 +324,34 @@ void OOWriterWorker::writeStartOfFile(const QString& type)
 
     // The name spaces used by OOWriter (those not used by this filter are commented out)
 
-    // For context.xml
+    // General namespaces
     zipWriteData(" xmlns:office=\"http://openoffice.org/2000/office\"");
-    zipWriteData(" xmlns:style=\"http://openoffice.org/2000/style\"");
-    zipWriteData(" xmlns:text=\"http://openoffice.org/2000/text\"");
-    zipWriteData(" xmlns:table=\"http://openoffice.org/2000/table\"");
-    zipWriteData(" xmlns:draw=\"http://openoffice.org/2000/drawing\"");
-    zipWriteData(" xmlns:fo=\"http://www.w3.org/1999/XSL/Format\"");
     zipWriteData(" xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
-    //zipWriteData(" xmlns:number=\"http://openoffice.org/2000/datastyle\"");
-    zipWriteData(" xmlns:svg=\"http://www.w3.org/2000/svg\"");
-    //zipWriteData(" xmlns:chart=\"http://openoffice.org/2000/chart\"");
-    //zipWriteData(" xmlns:dr3d=\"http://openoffice.org/2000/dr3d\"");
-    //zipWriteData(" xmlns:math=\"http://www.w3.org/1998/Math/MathML"");
-    //zipWriteData(" xmlns:form=\"http://openoffice.org/2000/form\"");
-    //zipWriteData(" xmlns:script=\"http://openoffice.org/2000/script\"");
 
-    // For meta.xml
-    zipWriteData(" xmlns:dc=\"http://purl.org/dc/elements/1.1/\"");
-    zipWriteData(" xmlns:meta=\"http://openoffice.org/2000/meta\"");
+    // Namespaces for context.xml and style.xml
+    if ( type == "content" || type == "styles" || type.isEmpty() )
+    {
+        zipWriteData(" xmlns:style=\"http://openoffice.org/2000/style\"");
+        zipWriteData(" xmlns:text=\"http://openoffice.org/2000/text\"");
+        zipWriteData(" xmlns:table=\"http://openoffice.org/2000/table\"");
+        zipWriteData(" xmlns:draw=\"http://openoffice.org/2000/drawing\"");
+        zipWriteData(" xmlns:fo=\"http://www.w3.org/1999/XSL/Format\"");
+
+        //zipWriteData(" xmlns:number=\"http://openoffice.org/2000/datastyle\"");
+        zipWriteData(" xmlns:svg=\"http://www.w3.org/2000/svg\"");
+        //zipWriteData(" xmlns:chart=\"http://openoffice.org/2000/chart\"");
+        //zipWriteData(" xmlns:dr3d=\"http://openoffice.org/2000/dr3d\"");
+        //zipWriteData(" xmlns:math=\"http://www.w3.org/1998/Math/MathML"");
+        //zipWriteData(" xmlns:form=\"http://openoffice.org/2000/form\"");
+        //zipWriteData(" xmlns:script=\"http://openoffice.org/2000/script\"");
+    }
+
+    // Namespaces For meta.xml
+    if ( type == "meta" || type.isEmpty() )
+    {
+        zipWriteData(" xmlns:dc=\"http://purl.org/dc/elements/1.1/\"");
+        zipWriteData(" xmlns:meta=\"http://openoffice.org/2000/meta\"");
+    }
 
 
     zipWriteData(" office:class=\"text\"");
