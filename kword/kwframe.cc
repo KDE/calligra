@@ -877,6 +877,13 @@ QRect KWFrameSet::floatingFrameRect( int frameNum )
     return frame->outerRect();
 }
 
+KoRect KWFrameSet::floatingFrameKoRect( int frameNum )
+{
+    KWFrame * frame = frames.at( frameNum );
+    Q_ASSERT( frame );
+    return frame->outerKoRect();
+}
+
 KCommand * KWFrameSet::anchoredObjectCreateCommand( int frameNum )
 {
     KWFrame * frame = frames.at( frameNum );

@@ -269,6 +269,7 @@ public:
     /* Overloaded methods, look for docu in kwframe.h */
     virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
     virtual QRect floatingFrameRect( int frameNum );
+    virtual KoRect floatingFrameKoRect( int frameNum );
     virtual KCommand * anchoredObjectCreateCommand( int frameNum );
     virtual KCommand * anchoredObjectDeleteCommand( int frameNum );
     virtual KWAnchor * createAnchor( KoTextDocument *txt, int frameNum );

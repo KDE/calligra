@@ -47,12 +47,13 @@ void KWAnchor::finalize()
     if ( m_deleted )
         return;
 
+    int paragx = paragraph()->rect().x();
     int paragy = paragraph()->rect().y();
-    kdDebug(32001) << this << " KWAnchor::finalize " << x() << "," << y() << " paragy=" << paragy << endl;
+    kdDebug(32001) << this << " KWAnchor::finalize " << x() << "," << y() << " paragx=" << paragx << " paragy=" << paragy << endl;
 
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
     KoPoint dPoint;
-    if ( fs->internalToDocument( QPoint( x(), y()+paragy ), dPoint ) )
+    if ( fs->internalToDocument( QPoint( x()+paragx, y()+paragy ), dPoint ) )
     {
         //kdDebug(32001) << "KWAnchor::finalize moving frame to [zoomed pos] " << nPoint.x() << "," << nPoint.y() << endl;
         // Move the frame to position nPoint.
@@ -60,7 +61,7 @@ void KWAnchor::finalize()
     } else
     {
         // This can happen if the page hasn't been created yet
-        kdDebug(32001) << "KWAnchor::move internalToDocument returned 0L for " << x() << ", " << y()+paragy << endl;
+        kdDebug(32001) << "KWAnchor::move internalToDocument returned 0L for " << x()+paragx << ", " << y()+paragy << endl;
     }
 }
 
@@ -81,36 +82,45 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     // The containing text-frameset.
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
     KoZoomHandler* zh = fs->textDocument()->paintingZoomHandler();
+    int paragx = paragraph()->rect().x();
     int paragy = paragraph()->rect().y();
 #ifdef DEBUG_DRAWING
-    kdDebug(32001) << "KWAnchor::draw x:" << x << ", y:" << y << " paragy=" << paragy
+    kdDebug(32001) << "KWAnchor::draw x:" << x << ", y:" << y << " paragx=" << paragx << " paragy=" << paragy
                    << "  cliprect(LU)" << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
 #endif
 
-    QRect crectLU;
-    // Special case: QRichText calls us with (-1,-1,-1,-1) to mean "draw it all"
-    if ( cx == -1 && cy+paragy == -1 && cw == -1 && ch == -1 )
-        crectLU = QRect( x, y+paragy, width, height );
-    else // otherwise just use the passed data as crect
-        crectLU = QRect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
+    QRect crectLU = QRect( (cx > 0 ? cx : 0)+paragx, cy+paragy, cw, ch );
 #ifdef DEBUG_DRAWING
     kdDebug() << "KWAnchor::draw crect in LU coordinates:                   " << DEBUGRECT( crectLU ) << endl;
 #endif
 
     QPoint topLeftLU = crectLU.topLeft();
-    QPoint bottomRightLU = crectLU.bottomRight();
 
     // Convert crect to document coordinates, first topleft then bottomright
     KoPoint topLeftPt;
-    if ( ! fs->internalToDocument( topLeftLU, topLeftPt ))
+    KWFrame* frameContainingTopLeft = fs->internalToDocument( topLeftLU, topLeftPt );
+    if ( !frameContainingTopLeft )
     {
         kdDebug() << "KWAnchor::paint Hmm? it seems my frame is positioned outside all text areas!!, aboring draw\n";
         return;
     }
+    int rightFrameLU = zh->ptToLayoutUnitPixX( frameContainingTopLeft->innerWidth() );
+    int bottomFrameLU = zh->ptToLayoutUnitPixY( frameContainingTopLeft->internalY() + frameContainingTopLeft->innerHeight() );
+    //kdDebug() << "KWAnchor::draw rightFrameLU " << rightFrameLU << " bottomFrameLU=" << bottomFrameLU << endl;
+
+    crectLU = crectLU.intersect( QRect( topLeftLU, QPoint( rightFrameLU, bottomFrameLU ) ) );
+    //kdDebug() << "KWAnchor::draw crectLU now " << crectLU << endl;
+
+    QPoint bottomRightLU = crectLU.bottomRight();
     KoPoint bottomRightPt;
     if ( ! fs->internalToDocument( bottomRightLU, bottomRightPt ) )
     {
         kdWarning() << "internalToDocument returned 0L for bottomRightLU=" << bottomRightLU.x() << "," << bottomRightLU.y() << endl;
+#ifndef NDEBUG
+	// Some debug
+	fs->printDebug();
+	paragraph()->printRTDebug(0);
+#endif
         return;
     }
     KoRect crectPt( topLeftPt, bottomRightPt );
@@ -158,6 +168,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     if ( containingFrame ) // 0 in the textviewmode
         topLeftParagPt = containingFrame->innerRect().topLeft();
 
+    topLeftParagPt.rx() += zh->layoutUnitPtToPt( zh->pixelYToPt( paragx ) );
     topLeftParagPt.ry() += zh->layoutUnitPtToPt( zh->pixelYToPt( paragy ) );
     if ( containingFrame ) // 0 in the textviewmode
         topLeftParagPt.ry() -= containingFrame->internalY();
@@ -197,12 +208,13 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 
 QSize KWAnchor::size() const
 {
-    QSize sz = m_frameset->floatingFrameRect( m_frameNum ).size();
-    if ( sz.isNull() ) // for some reason, we don't know the size yet
-        sz = QSize( width, height );
-    // Convert to LU
+    KoSize kosz = m_frameset->floatingFrameKoRect( m_frameNum ).size();
+    //kdDebug() << "KWAnchor::size " << kosz.width() << "x" << kosz.height() << endl;
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
-    return QSize( zh->pixelToLayoutUnitX( sz.width() ), zh->pixelToLayoutUnitY( sz.height() ) );
+    QSize sz( zh->ptToLayoutUnitPixX( kosz.width() ), zh->ptToLayoutUnitPixX( kosz.height() ) );
+    if ( sz.isNull() ) // for some reason, we don't know the size yet
+        sz = QSize( width, height ); // LU
+    return sz;
 }
 
 int KWAnchor::ascent() const

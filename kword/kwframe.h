@@ -629,6 +629,7 @@ public:
     /** Get the [zoomed, in view pixels] rect of the "floating frame" identified by frameNum.
         By default a real frame but not for tables. */
     virtual QRect floatingFrameRect( int frameNum );
+    virtual KoRect floatingFrameKoRect( int frameNum );
     /** Get the 'baseline' to use for the "floating frame" identified by frameNum.
         -1 means same as the height (usual case) */
     virtual int floatingFrameBaseline( int /*frameNum*/ ) { return -1; }

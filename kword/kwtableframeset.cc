@@ -100,6 +100,11 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
         m_doc->updateAllFrames();
 }
 
+KoRect KWTableFrameSet::floatingFrameKoRect( int frameNum )
+{
+    return boundingRect();
+}
+
 QRect KWTableFrameSet::floatingFrameRect( int /*frameNum TODO */ )
 {
     KoRect r = boundingRect();
