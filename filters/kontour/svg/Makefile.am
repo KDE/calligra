@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) -I$(top_srcdir)/kontour $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES= -I$(srcdir) -I$(top_srcdir)/kontour -I$(top_srcdir)/lib/kopainter/ $(KOFFICE_INCLUDES) $(all_includes)
 
 ####### Files
 
