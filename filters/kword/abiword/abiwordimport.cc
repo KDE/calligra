@@ -1303,7 +1303,8 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
 
     //Write the document!
     QCString strOut=qDomDocumentOut.toCString();
-    out.write(strOut);
+    // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
+    out.write(strOut,strOut.length());
     out.close();
 
 #if 0
