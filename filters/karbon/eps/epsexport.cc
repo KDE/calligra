@@ -14,7 +14,14 @@
 
 #include "epsexport.h"
 #include "vdocument.h"
+#include "vfill.h"
+#include "vgroup.h"
+#include "vlayer.h"
+#include "vpath.h"
+#include "vsegment.h"
+#include "vsegmentlist.h"
 #include "vselection.h"
+#include "vstroke.h"
 
 #include <kdebug.h>
 
@@ -68,145 +75,160 @@ EpsExport::convert( const QCString& from, const QCString& to )
 	domIn.setContent( byteArrayIn );
 	QDomElement docNode = domIn.documentElement();
 
-	QTextStream s( &fileOut );
+	m_stream = new QTextStream( &fileOut );
 
+
+	// load the document and export it:
 	VDocument doc;
 	doc.load( docNode );
+	exportDocument( doc );
 
-	// find the bounding box of all objects:
-	doc.select();
-	const KoRect& rect = doc.selection()->boundingBox();
-
-	// header:
-	s <<
-		"%!PS-Adobe-2.0\n"
-		"%%Creator: Karbon14 Exportfilter\n"
-		"%%BoundingBox: "
-		<< rect.left() << " "
-		<< rect.top()  << " "
-		<< rect.right() << " "
-		<< rect.bottom()
-	<< endl;
-
-	// defs:
-	s <<
-		"/d /def load def\n"
-		"/D {bind d} bind d\n"
-		"/m {moveto} D\n"
-		"/c {curveto} D\n"
-		"/l {lineto} D\n"
-		"/s {stroke} D\n"
-	<< endl;
-
-
-	// parse dom-tree:
-	QDomNodeList list = domIn.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
-	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
-
-			if( e.tagName() == "DOC" )
-				exportDocument( s, e );
-		}
-	}
 
 	fileOut.close();
+
+	delete m_stream;
 	delete storeIn;
+
 	return KoFilter::OK;
 }
 
 void
-EpsExport::exportDocument( QTextStream& s, const QDomElement& node )
+EpsExport::exportDocument( const VDocument& document )
 {
-	QDomNodeList list = node.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
-	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
+	// select all objects:
+	document.select();
 
-			if( e.tagName() == "LAYER" )
-				exportLayer( s, e );
-		}
+	// get the bounding box of all selected objects:
+	const KoRect& rect = document.selection()->boundingBox();
+
+	// print a header:
+	*m_stream <<
+		"%!PS-Adobe-2.0\n"
+		"%%Creator: Karbon14 EPS 0.5\n"
+		"%%BoundingBox: "
+		<< rect.left() << " "
+		<< rect.top()  << " "
+		<< rect.right() << " "
+		<< rect.bottom() << "\n"
+	<< endl;
+
+	// we dont need the selection anymore:
+	document.deselect();
+
+	// print some defines:
+	*m_stream <<
+		"/N {newpath} def\n"
+		"/C {closepath} def\n"
+		"/m {moveto} def\n"
+		"/c {curveto} def\n"
+		"/l {lineto} def\n"
+		"/s {stroke} def\n"
+		"/f {fill} def\n"
+	<< endl;
+
+	// export layers:
+	VLayerListIterator itr( document.layers() );
+	for( ; itr.current(); ++itr )
+		exportLayer( *itr.current() );
+}
+
+void
+EpsExport::exportGroup( const VGroup& group )
+{
+	// export objects:
+	VObjectListIterator itr( group.objects() );
+	for( ; itr.current(); ++itr )
+	{
+		if( VPath* path = dynamic_cast<VPath*>( itr.current() ) )
+			exportPath( *path );
+		else if( VGroup* group = dynamic_cast<VGroup*>( itr.current() ) )
+			exportGroup( *group );
 	}
 }
 
 void
-EpsExport::exportLayer( QTextStream& s, const QDomElement& node )
+EpsExport::exportLayer( const VLayer& layer )
 {
-	QDomNodeList list = node.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
-	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
-
-			if( e.tagName() == "PATH" )
-				exportPath( s, e );
-		}
-	}
+	exportGroup( layer );
 }
 
 void
-EpsExport::exportPath( QTextStream& s, const QDomElement& node )
+EpsExport::exportPath( const VPath& path )
 {
+	// export segmentlists:
+	VSegmentListListIterator itr( path.segmentLists() );
+	for( ; itr.current(); ++itr )
+		exportSegmentList( *itr.current() );
 
-	s << "newpath" << endl;
+	if( path.stroke()->type() != stroke_none )
+		*m_stream << "s ";
 
-	QDomNodeList list = node.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
-	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
+	if( path.fill()->type() != fill_none )
+		*m_stream << "f ";
 
-			if( e.tagName() == "SEGMENTS" )
-				exportSegments( s, e );
-		}
-	}
-
-	if( node.attribute( "closed" ) != 0 )
-		s << "closepath" << endl;
-
-	s << "stroke" << endl;
+	*m_stream << endl;
 }
 
 void
-EpsExport::exportSegments( QTextStream& s, const QDomElement& node )
+EpsExport::exportSegmentList( const VSegmentList& segmentList )
 {
-	QDomNodeList list = node.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
-	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
+	*m_stream << "N\n";
 
-			if( e.tagName() == "CURVE" )
-			{
-				s <<
-					e.attribute( "x1" ) << " " <<
-					e.attribute( "y1" ) << " " <<
-					e.attribute( "x2" ) << " " <<
-					e.attribute( "y2" ) << " " <<
-					e.attribute( "x3" ) << " " <<
-					e.attribute( "y3" ) << " c" << endl;
-			}
-			else if( e.tagName() == "LINE" )
-			{
-				s <<
-					e.attribute( "x" ) << " " <<
-					e.attribute( "y" ) << " l" << endl;
-			}
-			else if( e.tagName() == "MOVE" )
-			{
-				s <<
-					e.attribute( "x" ) << " " <<
-					e.attribute( "y" ) << " m" << endl;
-			}
+	// export segments:
+	VSegmentListIterator itr( segmentList );
+	for( ; itr.current(); ++itr )
+	{
+		switch( itr.current()->type() )
+		{
+			case segment_curve:
+				*m_stream <<
+					itr.current()->ctrlPoint1().x() << " " <<
+					itr.current()->ctrlPoint1().y() << " " <<
+					itr.current()->ctrlPoint2().x() << " " <<
+					itr.current()->ctrlPoint2().y() << " " <<
+					itr.current()->knot2().x() << " " <<
+					itr.current()->knot2().y() << " " <<
+					"c\n";
+			break;
+			case segment_curve1:
+				*m_stream <<
+					itr.current()->knot1().x() << " " <<
+					itr.current()->knot1().y() << " " <<
+					itr.current()->ctrlPoint2().x() << " " <<
+					itr.current()->ctrlPoint2().y() << " " <<
+					itr.current()->knot2().x() << " " <<
+					itr.current()->knot2().y() << " " <<
+					"c\n";
+			break;
+			case segment_curve2:
+				*m_stream <<
+					itr.current()->ctrlPoint1().x() << " " <<
+					itr.current()->ctrlPoint1().y() << " " <<
+					itr.current()->knot2().x() << " " <<
+					itr.current()->knot2().y() << " " <<
+					itr.current()->knot2().x() << " " <<
+					itr.current()->knot2().y() << " " <<
+					"c\n";
+			break;
+			case segment_line:
+				*m_stream <<
+					itr.current()->knot2().x() << " " <<
+					itr.current()->knot2().y() << " " <<
+					"l\n";
+			break;
+			case segment_begin:
+				*m_stream <<
+					itr.current()->knot2().x() << " " <<
+					itr.current()->knot2().y() << " " <<
+					"m\n";
+			break;
+			case segment_end:
+			break;
 		}
 	}
+
+	if( segmentList.isClosed() )
+		*m_stream << "C ";
 }
 
 #include "epsexport.moc"

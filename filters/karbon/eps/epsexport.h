@@ -9,8 +9,12 @@
 
 #include <koFilter.h>
 
-class QDomElement;
 class QTextStream;
+class VDocument;
+class VGroup;
+class VLayer;
+class VPath;
+class VSegmentList;
 
 class EpsExport : public KoFilter
 {
@@ -23,10 +27,13 @@ public:
 	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
 private:
-	void exportDocument( QTextStream& s, const QDomElement& node );
-	void exportLayer( QTextStream& s, const QDomElement& node );
-	void exportPath( QTextStream& s, const QDomElement& node );
-	void exportSegments( QTextStream& s, const QDomElement& node );
+	void exportDocument( const VDocument& document );
+	void exportGroup( const VGroup& group );
+	void exportLayer( const VLayer& layer );
+	void exportPath( const VPath& path );
+	void exportSegmentList( const VSegmentList& segmentList );
+
+	QTextStream* m_stream;
 };
 
 #endif
