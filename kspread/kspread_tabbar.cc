@@ -44,7 +44,7 @@ KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent )
 
     m_pAutoScrollTimer = new QTimer(this);
     connect( m_pAutoScrollTimer, SIGNAL(timeout()), SLOT(slotAutoScroll()));
-	
+
     leftTab = 1;
     m_rightTab = 0;
     activeTab = 0;
@@ -392,6 +392,7 @@ void KSpreadTabBar::slotRename()
 		slotRename();
 		return;
 	    }
+        m_pView->updateEditWidget();
         }
     }
 }
