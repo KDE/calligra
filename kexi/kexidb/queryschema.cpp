@@ -135,8 +135,10 @@ Connection* QuerySchema::connection()
 void QuerySchema::debug()
 {
 	KexiDBDbg << "QUERY " << schemaDataDebugString() << endl;
-	KexiDBDbg << "  PARENT_TABLE=" << (m_parent_table ? m_parent_table->name() :"(NULL)") << endl;
+	KexiDBDbg << "  -PARENT_TABLE=" << (m_parent_table ? m_parent_table->name() :"(NULL)") << endl;
+	KexiDBDbg << "  -FIELDS/ASTERISKS: " << endl;
 	FieldList::debug();
+
 	TableSchema *table;
 	QString table_names;
 	for ( table = m_tables.first(); table; table = m_tables.next() ) {
@@ -144,13 +146,17 @@ void QuerySchema::debug()
 			table_names += ", ";
 		table_names += table->name();
 	}
-	KexiDBDbg << "  TABLES: " << table_names << endl;
+	if (m_tables.isEmpty())
+		table_names = "<NONE>";
+	KexiDBDbg << "  -TABLES: " << table_names << endl;
 	QMap<Field*, QString>::Iterator it;
 	QString aliases;
 	for ( it = m_aliases.begin(); it != m_aliases.end(); ++it ) {
 		aliases += (it.key()->name() + " -> " + it.data() + "\n");
 	}
-	KexiDBDbg << "  ALIASES: " << aliases << endl;
+	if (m_aliases.isEmpty())
+		aliases = "<NONE>";
+	KexiDBDbg << "  -ALIASES: " << aliases << endl;
 }
 
 TableSchema* QuerySchema::parentTable() const
@@ -289,6 +295,11 @@ QueryAsterisk::~QueryAsterisk()
 {
 }
 
+void QueryAsterisk::setTable(TableSchema *table)
+{
+	m_table=table;
+}
+
 QString QueryAsterisk::debugString() const
 {
 	QString dbg;
@@ -305,7 +316,7 @@ QString QueryAsterisk::debugString() const
 		dbg += (table_names + ")");
 	}
 	else {
-		dbg += ("SINGLE-TABLE ASTERISK (*." + table()->name() + ")");
+		dbg += ("SINGLE-TABLE ASTERISK (" + table()->name() + ".*)");
 	}
 	return dbg;
 }

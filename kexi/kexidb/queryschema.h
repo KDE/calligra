@@ -275,6 +275,10 @@ class KEXI_DB_EXPORT QueryAsterisk : protected Field
 		 or NULL if it has "all-tables" type (2nd type) defined. */
 		virtual TableSchema* table() const { return m_table; }
 
+		/*! Sets table schema for this asterisk. 
+		 \a table may be NULL - then the asterisk becames "all-tables" type asterisk. */
+		void setTable(TableSchema *table);
+
 		/*! This is convenience method that returns true 
 		 if the asterisk has "all-tables" type (2nd type).*/
 		bool isSingleTableAsterisk() const { return m_table!=NULL; }
