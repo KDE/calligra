@@ -71,18 +71,17 @@ RTFWorker::RTFWorker():
 {
 }
 
+#define FULL_TABLE_SUPPORT
 
 bool RTFWorker::makeTable(const FrameAnchor& anchor)
 {
-#undef FULL_TABLE_SUPPORT
     m_textBody += m_prefix;
+    QString rowText;
 
 #ifdef FULL_TABLE_SUPPORT
     int rowCurrent = 0;
     int cellCurrent = 0;
     QString textCellx; // All \cellx
-    QString realTextBody ( m_textBody ); // Save the current m_textBody
-    m_textBody = QString::null;
 
     const bool oldInTable = m_inTable;
     m_inTable = true;
@@ -98,13 +97,13 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
         {
             rowCurrent = (*itCell).row;
             cellCurrent = 0;
-            realTextBody += "\\trowd\\trgaph60\\trleft-60";  // start new row
-            realTextBody += textCellx;
-            realTextBody += " "; // End of keyword
-            realTextBody += m_textBody;
-            realTextBody += "\\row";
-            realTextBody += m_eol;
-            m_textBody = QString::null;
+            m_textBody += "\\trowd\\trgaph60\\trleft-60";  // start new row
+            m_textBody += textCellx;
+            m_textBody += " "; // End of keyword
+            m_textBody += rowText;
+            m_textBody += "\\row";
+            m_textBody += m_eol;
+            rowText = QString::null;
             textCellx = QString::null;
         }
         cellCurrent ++; // Should be at least 1
@@ -116,25 +115,26 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
         QValueList<ParaData>::ConstIterator it;
         for (it=paraList.begin();it!=paraList.end();it++)
         {
-            m_textBody += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
-            m_textBody += m_eol;
-            m_textBody += "\\par";
+            rowText += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
+            rowText += m_eol;
+            rowText += "\\par";
         }
 #ifdef FULL_TABLE_SUPPORT
-        m_textBody += "\\cell";
+        rowText += "\\cell";
         cellCurrent ++;
+#else
+        m_textBody += rowText;
+        rowText = QString::null;
 #endif
     }
 
 #ifdef FULL_TABLE_SUPPORT
-    realTextBody += "\\trowd\\trgaph60\\trleft-60";  // start new row
-    realTextBody += textCellx;
-    realTextBody += " "; // End of keyword
-    realTextBody += m_textBody;
-    realTextBody += "\\row";
-    realTextBody += m_eol;
-    m_textBody = realTextBody;
-    realTextBody = QString::null; // Release memory
+    m_textBody += "\\trowd\\trgaph60\\trleft-60";  // start new row
+    m_textBody += textCellx;
+    m_textBody += " "; // End of keyword
+    m_textBody += rowText;
+    m_textBody += "\\row";
+    m_textBody += m_eol;
     m_inTable = oldInTable;
     m_textBody += "\\par";  // delimit last row
     m_textBody += m_eol;
