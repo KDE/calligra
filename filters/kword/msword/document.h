@@ -98,7 +98,7 @@ private:
     void processAssociatedStrings();
     enum NewFrameBehavior { Reconnect=0, NoFollowup=1, Copy=2 };
     QDomElement createInitialFrame( QDomElement& parentFramesetElem, double left, double right, double top, double bottom, bool autoExtend, NewFrameBehavior nfb );
-    void generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, int ico = -1 );
+    void generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd );
 
     QDomDocument& m_mainDocument;
     QDomDocument& m_documentInfo;

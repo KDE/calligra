@@ -76,6 +76,85 @@ QColor Conversion::color(int number, int defaultcolor, bool defaultWhite)
     }
 }
 
+int Conversion::fillPatternStyle( int ipat )
+{
+    // See $QTDIR/doc/html/qbrush.html#setStyle
+    switch( ipat )  {
+    case 0: // Automatic (?!?)
+        return Qt::NoBrush;
+    case 1: // Solid
+        return Qt::SolidPattern;
+    case 2: // 5%
+    case 35: // 2.5 Percent
+    case 36: // 7.5 Percent
+        return Qt::Dense7Pattern;
+    case 3: // 10%
+    case 37: // 12.5 Percent
+    case 38: // 15 Percent
+    case 39: // 17.5 Percent
+    case 4: // 20%
+        return Qt::Dense6Pattern;
+    case 40: // 22.5 Percent
+    case 5: // 25%
+    case 41: // 27.5 Percent
+    case 6: // 30%
+    case 42: // 32.5 Percent
+    case 43: // 35 Percent
+    case 44: // 37.5 Percent
+    case 7: // 40%
+        return Qt::Dense5Pattern;
+    case 45: // 42.5 Percent
+    case 46: // 45 Percent
+    case 47: // 47.5 Percent
+    case 8: // 50%
+    case 48: // 52.5 Percent
+    case 49: // 55 Percent
+        return Qt::Dense4Pattern;
+    case 50: // 57.5 Percent
+    case 9: // 60%
+    case 51: // 62.5 Percent
+    case 52: // 65 Percent
+    case 53: // 67.5 Percent
+    case 10: // 70%
+    case 54: // 72.5 Percent
+        return Qt::Dense3Pattern;
+    case 11: // 75%
+    case 55: // 77.5 Percent
+    case 12: // 80%
+    case 56: // 82.5 Percent
+    case 57: // 85 Percent
+    case 58: // 87.5 Percent
+    case 13: // 90%
+        return Qt::Dense2Pattern;
+    case 59: // 92.5 Percent
+    case 60: // 95 Percent
+    case 61: // 97.5 Percent
+    case 62: // 97 Percent
+        return Qt::Dense1Pattern;
+    case 14: // Dark Horizontal
+    case 20: // Horizontal
+        return Qt::HorPattern;
+    case 15: // Dark Vertical
+    case 21: // Vertical
+        return Qt::VerPattern;
+    case 16: // Dark Forward Diagonal
+    case 22: // Forward Diagonal
+        return Qt::FDiagPattern;
+    case 17: // Dark Backward Diagonal
+    case 23: // Backward Diagonal
+        return Qt::BDiagPattern;
+    case 18: // Dark Cross
+    case 24: // Cross
+        return Qt::CrossPattern;
+    case 19: // Dark Diagonal Cross
+    case 25: // Diagonal Cross
+        return Qt::DiagCrossPattern;
+    default:
+        kdWarning() << "Unhandled undocumented SHD ipat value: " << ipat << endl;
+        return Qt::NoBrush;
+    }
+}
+
 QString Conversion::alignment( int jc ) {
     QString value( "left" );
     if ( jc == 1 )

@@ -160,7 +160,7 @@ void Document::processStyles()
     {
         const wvWare::Style* style = styles.styleByIndex( i );
         Q_ASSERT( style );
-        kdDebug() << k_funcinfo << "style " << i << " " << style << endl;
+        //kdDebug() << k_funcinfo << "style " << i << " " << style << endl;
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
             QDomElement styleElem = m_mainDocument.createElement("STYLE");
@@ -171,7 +171,7 @@ void Document::processStyles()
             element.setAttribute( "value", name.string() );
             styleElem.appendChild( element );
 
-            kdDebug() << k_funcinfo << "Style " << i << ": " << name.string() << endl;
+            //kdDebug() << k_funcinfo << "Style " << i << ": " << name.string() << endl;
 
             const wvWare::Style* followingStyle = styles.styleByID( style->followingStyle() );
             if ( followingStyle && followingStyle != style )
@@ -338,7 +338,7 @@ void Document::slotTableCellStart( int row, int column, int rowSpan, int columnS
     m_framesetsElement.appendChild(framesetElement);
 
     QDomElement frameElem = createInitialFrame( framesetElement, cellRect.left(), cellRect.right(), cellRect.top(), cellRect.bottom(), true, NoFollowup );
-    generateFrameBorder( frameElem, tc.brcTop, tc.brcBottom, tc.brcLeft, tc.brcRight, shd.icoBack );
+    generateFrameBorder( frameElem, tc.brcTop, tc.brcBottom, tc.brcLeft, tc.brcRight, shd );
 
     m_textHandler->setFrameSetElement( framesetElement );
 }
@@ -364,14 +364,20 @@ QDomElement Document::createInitialFrame( QDomElement& parentFramesetElem, doubl
     return frameElementOut;
 }
 
-void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, int ico )
+void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
 {
     Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );
     Conversion::setBorderAttributes( frameElementOut, brcBottom, "b" );
     Conversion::setBorderAttributes( frameElementOut, brcLeft, "l" );
     Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );
-    if ( ico != -1 )
-        Conversion::setColorAttributes( frameElementOut, ico, "bk", true );
+    //kdDebug() << "generateFrameBorder: " << " icoFore=" << shd.icoFore << " icoBack=" << shd.icoBack << " ipat=" << shd.ipat << endl;
+    if ( shd.icoFore != 0 )
+    {
+        // icoFore is used for the background color. Go figure :)
+        Conversion::setColorAttributes( frameElementOut, shd.icoFore, "bk", true );
+        // Fill style
+        frameElementOut.setAttribute( "bkStyle", Conversion::fillPatternStyle( shd.ipat ) );
+    }
 }
 
 void Document::slotSubDocFound( const wvWare::FunctorBase* functor, int data )

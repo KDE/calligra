@@ -51,6 +51,9 @@ namespace Conversion
     // Convert color code (ico) to QColor
     QColor color(int number, int defaultcolor, bool defaultWhite = false);
 
+    // Convert pattern style (ipat) to QBrush::BrushStyle
+    int fillPatternStyle( int ipat );
+
     // Convert alignment code to string
     QString alignment( int jc );
 
