@@ -314,27 +314,17 @@ void KoDocument::removeView( KoView *view )
     d->m_views.removeRef( view );
 }
 
-KoView *KoDocument::firstView()
+QList<KoView> KoDocument::views() const
 {
-  return d->m_views.first();
+    return d->m_views;
 }
 
-KoView *KoDocument::nextView()
-{
-  return d->m_views.next();
-}
-
-unsigned int KoDocument::viewCount()
+int KoDocument::viewCount() const
 {
   return d->m_views.count();
 }
 
-KoView *KoDocument::view( int idx )
-{
-  return d->m_views.at( idx );
-}
-
-void KoDocument::insertChild( const KoDocumentChild *child )
+void KoDocument::insertChild( KoDocumentChild *child )
 {
   setModified( true );
 
@@ -371,7 +361,7 @@ void KoDocument::slotChildDestroyed()
     d->m_children.removeRef( child );
 }
 
-QList<KoDocumentChild> &KoDocument::children() const
+QList<KoDocumentChild> KoDocument::children() const
 {
   return d->m_children;
 }
@@ -684,8 +674,9 @@ bool KoDocument::openFile()
     if ( isReadWrite() )
       m_url = KURL();
     // and remove temp file
-    if(!importedFile.isEmpty())
-      unlink( QFile::encodeName(importedFile) );
+    //if(!importedFile.isEmpty())
+      //unlink( QFile::encodeName(importedFile) );
+kdDebug() << "-- grab it at " << importedFile << endl;
   }
 
   if ( ok && d->m_bSingleViewMode )
@@ -936,17 +927,13 @@ void KoDocument::removeShell( KoMainWindow *shell )
   d->m_shells.removeRef( shell );
 }
 
-KoMainWindow *KoDocument::firstShell()
+QList<KoMainWindow> KoDocument::shells() const
 {
-    return d->m_shells.first();
+    return d->m_shells;
 }
 
-KoMainWindow *KoDocument::nextShell()
+int KoDocument::shellCount() const
 {
-    return d->m_shells.next();
-}
-
-unsigned int KoDocument::shellCount() const {
     return d->m_shells.count();
 }
 

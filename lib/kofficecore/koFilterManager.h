@@ -155,7 +155,7 @@ public:
      * @param outputFormat the format in which to save
      */
     QString prepareExport( const QString &_url, const QCString & _native_format,
-                           const QCString & outputFormat, const KoDocument *document );
+                           const QCString & outputFormat, KoDocument *document );
     /**
      * Performs the "real" exporting - don't call this function directly! It will
      * be called from KoMainWindow::saveDocument()

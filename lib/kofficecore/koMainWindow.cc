@@ -803,9 +803,11 @@ void KoMainWindow::slotCloseAllViews() {
         d->m_rootDoc->removeShell(this);
         // In case the document is embedded we close all open "extra-shells"
         if(d->m_rootDoc && d->m_rootDoc->isEmbedded()) {
-            for(KoMainWindow *w=d->m_rootDoc->firstShell(); w!=0L; w=d->m_rootDoc->nextShell()) {
-                w->hide();
-                delete w;
+            QListIterator<KoMainWindow> it(d->m_rootDoc->shells());
+            while (it.current()) {
+                it.current()->hide();
+                delete it.current(); // this updates the lists' current pointer and thus
+                                     // the iterator (the shell dtor calls removeShell)
             }
         }
         // not embedded -> destroy the document and all shells/views ;)

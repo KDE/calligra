@@ -59,6 +59,8 @@ protected:
   QPixmap m_pixmap;
   int m_id;
   bool m_bEnabled;
+  class KoKoolBarItemPrivate;
+  KoKoolBarItemPrivate *d;
 };
 
 class KoKoolBarGroup : public QObject
@@ -90,6 +92,8 @@ protected:
   int m_id;
   QPushButton* m_pButton;
   bool m_bEnabled;
+  class KoKoolBarGroupPrivate;
+  KoKoolBarGroupPrivate *d;
 };
 
 class KoKoolBarBox : public QFrame
@@ -126,6 +130,8 @@ protected:
   KoKoolBarGroup *m_pGroup;
   QPushButton* m_pButtonUp;
   QPushButton* m_pButtonDown;
+  class KoKoolBarBoxPrivate;
+  KoKoolBarBoxPrivate *d;
 };
 
 class KoKoolBar : public QWidget
@@ -153,6 +159,8 @@ protected:
 
   int m_iActiveGroup;
   KoKoolBarBox* m_pBox;
+  class KoKoolBarPrivate;
+  KoKoolBarPrivate *d;
 };
 
 #endif

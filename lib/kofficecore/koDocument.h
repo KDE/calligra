@@ -53,7 +53,6 @@ class DCOPObject;
 class KoDocument : public KParts::ReadWritePart
 {
   Q_OBJECT
-
 public:
 
   /**
@@ -180,27 +179,9 @@ public:
 
   virtual void removeView( KoView *view );
 
-  /**
-   *  Retrieves the first view of the document.
-   *
-   *  @see nextView
-   */
-  virtual KoView *firstView();
+  QList<KoView> views() const;
 
-  /**
-   *  Retrieves the next view of the document after you called @ref firstView
-   *  or nextView itself.
-   *
-   *  @see firstView
-   */
-  virtual KoView *nextView();
-
-  /**
-   *  Retrieves the number of views for this document
-   */
-  virtual unsigned int viewCount();
-
-  virtual KoView *view( int idx );
+  int viewCount() const;
 
   /**
    * Reimplemented from @ref KParts::Part
@@ -346,24 +327,12 @@ public:
    */
   virtual bool saveNativeFormat( const QString & file );
 
-  /**
-   * Inserts the new child in the list of children and emits the
-   * @ref #childChanged signal.
-   *
-   * At the same time this method marks this document as modified.
-   *
-   * To remove a child, just delete it. KoDocument will detect this
-   * and remove the child from its lists.
-   *
-   * @see #isModified
-   */
-  virtual void insertChild( const KoDocumentChild *child );
 
   /**
    * @return the list of all children. Do not modify the
    *         returned list.
    */
-  QList<KoDocumentChild> &children() const;
+  QList<KoDocumentChild> children() const;
 
   /**
    * @return the KoDocumentChild associated with the given Document, but only if
@@ -393,10 +362,9 @@ public:
    */
   virtual void removeShell( KoMainWindow *shell );
 
-  // Doesn't really have any reason to be virtual anymore
-  virtual KoMainWindow *firstShell();
-  virtual KoMainWindow *nextShell();
-  virtual unsigned int shellCount() const;
+  QList<KoMainWindow> shells() const;
+
+  int shellCount() const;
 
   /**
    * Returns the list of all the currently opened documents
@@ -410,8 +378,7 @@ public:
    */
   virtual DCOPObject * dcopObject();
 
-public slots:
-  void slotProgress(int value) { emit sigProgress(value); }
+  void emitProgress( int value ) { emit sigProgress( value ); }
 
 signals:
   /**
@@ -423,6 +390,7 @@ signals:
    * passed by the signal.
    */
   void childChanged( KoDocumentChild *child );
+
   void sigProgress(int value);
 
 protected:
@@ -516,6 +484,19 @@ protected:
    */
   void resetURL() { m_url = KURL(); }
 
+  /**
+   * Inserts the new child in the list of children and emits the
+   * @ref #childChanged signal.
+   *
+   * At the same time this method marks this document as modified.
+   *
+   * To remove a child, just delete it. KoDocument will detect this
+   * and remove the child from its lists.
+   *
+   * @see #isModified
+   */
+  virtual void insertChild( KoDocumentChild *child );
+ 
   /// @internal
   virtual void setModified() { KParts::ReadWritePart::setModified(); }
 

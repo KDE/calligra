@@ -108,7 +108,7 @@ public:
      * @param config    A String which can be used to pass configure information
      * @return          If the method returns true the filtering was successful
      */
-    virtual bool I_filter(const QString &file, const QString &from,
+    virtual bool filterImport(const QString &file, const QString &from,
                           QDomDocument &doc, const QString &to,
                           const QString &config=QString::null);
 
@@ -125,7 +125,7 @@ public:
      * @param config    A String which can be used to pass configure information
      * @return          If the method returns true the filtering was successful
      */
-    virtual bool I_filter(const QString &file, KoDocument *document,
+    virtual bool filterImport(const QString &file, KoDocument *document,
                           const QString &from, const QString &to,
                           const QString &config=QString::null);
 
@@ -143,7 +143,7 @@ public:
      * @param config    A String which can be used to pass configure information
      * @return          If the method returns true the filtering was successful
      */
-    virtual bool E_filter(const QString &file, const KoDocument * const document,
+    virtual bool filterExport(const QString &file, KoDocument * document,
                           const QString &from, const QString &to,
                           const QString &config=QString::null);
 

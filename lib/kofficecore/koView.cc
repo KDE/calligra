@@ -444,7 +444,7 @@ KoMainWindow * KoView::shell() const
     return dynamic_cast<KoMainWindow *>( topLevelWidget() );
 }
 
-KStatusBar * KoView::statusBar()
+KStatusBar * KoView::statusBar() const
 {
     KoMainWindow *mw = shell();
     return mw ? mw->statusBar() : 0L;

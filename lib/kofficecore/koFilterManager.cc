@@ -46,7 +46,7 @@ public:
     QString exportFile;
     QString native_format, mime_type;
     bool prepare;
-    const KoDocument *document;
+    KoDocument *document;
     QValueList<KoFilterEntry> m_vec;
     PreviewStack *ps;
     mutable QMap<QString, int> dialogMap;
@@ -397,8 +397,8 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
         // it is not available (e.g. within an OLEfilter filter).
         if (document)
         {
-            QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
-            document->slotProgress(0);
+            QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(sigProgress(int)));
+            document->emitProgress(0);
         }
         if(vec[i].implemented.lower()=="file") {
             //kdDebug(s_area) << "XXXXXXXXXXX file XXXXXXXXXXXXXX" << endl;
@@ -415,7 +415,7 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
         else if(vec[i].implemented.lower()=="qdom") {
             //kdDebug(s_area) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
             QDomDocument qdoc;
-            ok=filter->I_filter( file, mimeType, qdoc, _native_format, d->config);
+            ok=filter->filterImport( file, mimeType, qdoc, _native_format, d->config);
             if(ok) {
                 ok=document->loadXML(0L,qdoc);
                 if (!ok)
@@ -425,13 +425,13 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
         }
         else if(vec[i].implemented.lower()=="kodocument") {
             //kdDebug(s_area) << "XXXXXXXXXXX kodocument XXXXXXXXXXXXXX" << endl;
-            ok=filter->I_filter( file, document, mimeType, _native_format, d->config);
+            ok=filter->filterImport( file, document, mimeType, _native_format, d->config);
             if(ok)
                 document->changedByFilter();
         }
         if (document)
         {
-            document->slotProgress(-1);  // remove the bar
+            document->emitProgress(-1);  // remove the bar
         }
         delete filter;
         ++i;
@@ -447,7 +447,7 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
 QString KoFilterManager::prepareExport( const QString & file,
                                         const QCString & _native_format,
                                         const QCString & outputFormat,
-                                        const KoDocument *document )
+                                        KoDocument *document )
 {
     d->exportFile=file;
     d->native_format=QString::fromLatin1(_native_format);
@@ -491,16 +491,16 @@ QString KoFilterManager::prepareExport( const QString & file,
         }
         else
         {
-            QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
+            QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(sigProgress(int)));
             if(vec[i].implemented.lower()=="file")
                 tmpFileNeeded=true;
             else if(vec[i].implemented.lower()=="kodocument") {
-                ok=filter->E_filter(file, document, _native_format, outputFormat, d->config);
+                ok=filter->filterExport(file, document, _native_format, outputFormat, d->config);
                 // if(ok)
                 //  document->changedByFilter();
-                const_cast<KoDocument*>(document)->slotProgress(-1);
+                document->emitProgress(-1);
             }
-            QObject::disconnect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
+            QObject::disconnect(filter, SIGNAL(sigProgress(int)), document, SLOT(sigProgress(int)));
             delete filter;
         }
         ++i;
@@ -528,10 +528,10 @@ bool KoFilterManager::export_() {
             KoFilter* filter = d->m_vec[i].createFilter();
             if( !filter )
                 return false; // error already emitted in prepareExport
-            QObject::connect(filter, SIGNAL(sigProgress(int)), d->document, SLOT(slotProgress(int)));
+            QObject::connect(filter, SIGNAL(sigProgress(int)), d->document, SLOT(sigProgress(int)));
             ok=filter->filter(d->tmpFile, d->exportFile, d->native_format, d->mime_type, d->config );
-            const_cast<KoDocument*>(d->document)->slotProgress(-1);
-            QObject::disconnect(filter, SIGNAL(sigProgress(int)), d->document, SLOT(slotProgress(int)));
+            d->document->emitProgress(-1);
+            QObject::disconnect(filter, SIGNAL(sigProgress(int)), d->document, SLOT(sigProgress(int)));
             delete filter;
         }
         ++i;

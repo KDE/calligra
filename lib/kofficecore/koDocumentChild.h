@@ -29,8 +29,6 @@ class KURL;
 class KoStore;
 class KoDocument;
 class KoDocumentChildPrivate;
-class KOMLParser;
-class KOMLAttrib;
 
 /**
  * Holds an embedded object.

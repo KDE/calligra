@@ -39,19 +39,19 @@ bool KoFilter::supportsEmbedding() {
     return false;
 }
 
-bool KoFilter::I_filter(const QString &, const QString &,
+bool KoFilter::filterImport(const QString &, const QString &,
                         QDomDocument &, const QString &,
                         const QString &) {
     return false;
 }
 
-bool KoFilter::I_filter(const QString &, KoDocument *,
+bool KoFilter::filterImport(const QString &, KoDocument *,
                         const QString &, const QString &,
                         const QString &) {
     return false;
 }
 
-bool KoFilter::E_filter(const QString &, const KoDocument * const,
+bool KoFilter::filterExport(const QString &, KoDocument * ,
                         const QString &, const QString &,
                         const QString &) {
     return false;

@@ -44,7 +44,6 @@ namespace KParts
 class KoMainWindow : public KParts::MainWindow
 {
     Q_OBJECT
-    friend class KoDocument;
 public:
 
     /**
@@ -199,8 +198,6 @@ public slots:
      */
     virtual void slotCloseAllViews();
 
-    void slotProgress(int value);
-
 protected:
 
     /**
@@ -241,6 +238,9 @@ protected:
 
 protected slots:
     virtual void slotActivePartChanged( KParts::Part *newPart );
+
+private slots:
+    void slotProgress(int value);
 
 private:
     KoMainWindowPrivate *d;

@@ -57,7 +57,6 @@ namespace KParts
  */
 class KoView : public QWidget, public KParts::PartBase
 {
-  friend class KoDocument;
   Q_OBJECT
 public:
   /**
@@ -261,7 +260,13 @@ public:
    * NOTE: this could be 0L, if the main window isn't a koffice main window.
    * (e.g. it can be any KParts application).
    */
-  KStatusBar * statusBar();
+  KStatusBar * statusBar() const;
+
+  /**
+   * You have to implement this method and disable/enable certain functionality (actions for example) in
+   * your view to allow/disallow editing of the document.
+   */
+  virtual void updateReadWrite( bool readwrite ) = 0;
 
 public slots:
 
@@ -280,17 +285,6 @@ protected:
   virtual void partActivateEvent( KParts::PartActivateEvent *event );
   virtual void partSelectEvent( KParts::PartSelectEvent *event );
   virtual void guiActivateEvent( KParts::GUIActivateEvent * );
-
-
-  /**
-   * You have to implement this method and disable/enable certain functionality (actions for example) in
-   * your view to allow/disallow editing of the document.
-   */
-  virtual void updateReadWrite( bool readwrite ) = 0;
-
-  virtual void setupGlobalActions( void );
-
-  KAction *actionNewView;
 
 signals:
   void activated( bool active );
@@ -326,6 +320,8 @@ protected slots:
   virtual void slotChildChanged( KoDocumentChild *child );
 
 private:
+  KAction *actionNewView;
+  virtual void setupGlobalActions( void );
   KoViewPrivate *d;
 };
 
