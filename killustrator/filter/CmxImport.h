@@ -22,27 +22,29 @@
 
 */
 
-#ifndef BlendDialog_h
-#define BlendDialog_h
+#ifndef CmxImport_h_
+#define CmxImport_h_
 
-#include <qdialog.h>
-#include <qspinbox.h>
+#include <qcolor.h>
+#include "GDocument.h"
+#include "ImportFilter.h"
 
-class BlendDialog : public QDialog {
-  Q_OBJECT
+class CmxImport : public ImportFilter {
 public:
-  BlendDialog (QWidget* parent = 0L, const char* name = 0L);
-  
-  static int getNumOfSteps ();
+  CmxImport ();
+  ~CmxImport ();
 
-protected:
-  QWidget *createWidget (QWidget *parent);
+  bool setup (GDocument* doc, const char* format);
+  bool importFromFile (GDocument *doc);
 
-private slots:
-  void helpPressed ();
-  
 private:
-  QSpinBox *spinbox;
-};
+  bool readPageIndex (QDataStream& strm, GDocument *doc);
+  bool readPageSection (QDataStream& strm, GDocument *doc);
+  void skipBytes (QDataStream& strm, int len);
 
+  int readPolyCurve (QDataStream& strm, GDocument *doc);
+
+  float unit2pt (float);
+};
+  
 #endif

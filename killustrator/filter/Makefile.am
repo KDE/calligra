@@ -8,11 +8,13 @@ noinst_HEADERS = FilterManager.h \
 	gif.h \
 	EPSExport.h \
 	KilluImport.h \
-	XfigImport.h
+	XfigImport.h \
+	CmxImport.h
 
 libfilter_a_SOURCES = FilterManager.cc \
 	ImageExport.cc \
 	gif.cc \
 	EPSExport.cc \
 	KilluImport.cc \
-	XfigImport.cc
+	XfigImport.cc \
+	CmxImport.cc

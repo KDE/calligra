@@ -28,12 +28,11 @@
 #include <qdialog.h>
 #include <qradiobt.h>
 
+#include <qspinbox.h>
 #include <kslider.h>
 
 #include "PolygonTool.h"
 #include "PolygonPreview.h"
-
-class QSpinBox;
 
 class PolygonConfigDialog : public QDialog {
   Q_OBJECT

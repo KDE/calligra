@@ -22,25 +22,31 @@
 
 */
 
+#include "version.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <qlineedit.h>
-
 #include "FloatSpinBox.h"
 #include "FloatSpinBox.moc"
 
-FloatSpinBox::FloatSpinBox (QWidget* parent, const char* name,
-                            int /*align*/) : QSpinBox (parent, name) {
+#if QT_VERSION >= 199
+#define TEXT(s) s.ascii ()
+#else
+#define TEXT(s) s
+#endif
+
+FloatSpinBox::FloatSpinBox (QWidget* parent, const char* name, 
+			    int align) : QSpinBox (parent, name/*, align*/) {
   minval = 1;
   maxval = 10;
   step = 1;
 
   format = "%3.2f";
   setValue ((float) 1);
-
-  connect (this, SIGNAL (valueIncreased ()), SLOT(slotIncrease ()));
-  connect (this, SIGNAL (valueDecreased ()), SLOT(slotDecrease ()));
-  connect (editor(), SIGNAL (returnPressed ()), this,
+   val = new QDoubleValidator (minval, maxval, 2, this);
+  setValidator (val);
+  //  connect (this, SIGNAL (valueIncreased ()), SLOT(slotIncrease ()));
+  //  connect (this, SIGNAL (valueDecreased ()), SLOT(slotDecrease ()));
+  connect ((QObject *) editor (), SIGNAL (returnPressed ()), this,
 	   SLOT (slotValueChange ()));
 }
 
@@ -48,7 +54,7 @@ FloatSpinBox::~FloatSpinBox () {
 }
 
 float FloatSpinBox::getValue () {
-  return atof (QString(editor()->text()).ascii());
+  return atof (TEXT (text ()));
 }
 
 void FloatSpinBox::setFormatString (const char* fmt) {
@@ -59,7 +65,8 @@ void FloatSpinBox::setValue (float value) {
   char buf[20];
   if (minval <= value && value <= maxval) {
     sprintf (buf, (const char *) format, value);
-    editor()->setText(buf);
+    //    KSpinBox::setValue (buf);
+    QSpinBox::setValue (int (value * 100.0));
   }
 }
 
@@ -75,6 +82,8 @@ void FloatSpinBox::setRange (float minVal, float maxVal) {
   if (minVal < maxVal) {
     minval = minVal;
     maxval = maxVal;
+    QRangeControl::setRange (int (minVal * 100.0), int (maxVal * 100.0));
+    val->setRange (minVal, maxVal, 2);
   }
 }
 
@@ -92,4 +101,18 @@ void FloatSpinBox::slotDecrease () {
 
 void FloatSpinBox::slotValueChange () {
   emit valueChanged (getValue ());
+}
+
+int FloatSpinBox::mapTextToValue (bool *ok) {
+  const char *txt = TEXT (text ());
+  float v = atof (txt);
+  return int (v * 100.0);
+  *ok = true;
+}
+
+QString FloatSpinBox::mapValueToText (int v) {
+  float f = float (v) / 100.0;
+  QString buf;
+  buf.sprintf ((const char *) format, f);
+  return buf;
 }

@@ -171,7 +171,7 @@ void HelplineDialog::initLists () {
 
   for (i = vertLines.begin (); i != vertLines.end (); i++) {
     float value = *i;
-    buf.sprintf("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
+    sprintf (buf, "%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
     vertList->insertItem (STR(buf));
   }
 }

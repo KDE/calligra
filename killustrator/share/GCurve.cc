@@ -30,6 +30,30 @@
 #include <klocale.h>
 #include "version.h"
 
+static float seg_length (const Coord& p1, const Coord& p2) {
+  float dx = p2.x () - p1.x ();
+  float dy = p2.y () - p1.y ();
+  return sqrt (dx * dx + dy * dy);
+}
+
+static Coord computePoint (int idx, const GSegment& s1, const GSegment& s2) {
+  // s1 == Line, s2 == Bezier 
+  float xp, yp;
+
+  float llen = s1.length ();
+  float blen = s2.length ();
+  float slen = 0;
+  for (int i = 0; i < idx; i++) {
+     slen += seg_length (s2.pointAt (i), s2.pointAt (i + 1));
+  }
+  float dx = s1.pointAt (1).x () - s1.pointAt (0).x ();
+  float dy = s1.pointAt (1).y () - s1.pointAt (0).y ();
+  xp = slen / blen * dx + s1.pointAt (0).x ();
+  yp = slen / blen * dy + s1.pointAt (0).y ();
+
+  return Coord (xp, yp);
+}
+
 static Coord blendPoints (const Coord& p1, const Coord& p2, 
 			  int step, int num) {
   float dx = ((p2.x () - p1.x ()) / (num + 1.0)) * (step + 1.0);
@@ -48,16 +72,31 @@ static GSegment blendSegments (const GSegment& s1, const GSegment& s2,
     seg.setPoint (1, blendPoints (s1.pointAt (1), s2.pointAt (1), step, num));
   }
   else {
-    if (s1.kind () == GSegment::sk_Line)
-      // TODO
-      ;
-    if (s2.kind () == GSegment::sk_Line)
-      // TODO
-      ;
-
-    for (int i = 0; i < 4; i++) 
-      seg.setPoint (i, blendPoints (s1.pointAt (i), s2.pointAt (i), 
-				    step, num));
+    if (s1.kind () == GSegment::sk_Line) {
+      GSegment snew (GSegment::sk_Bezier);
+      snew.setPoint (0, s1.pointAt (0));
+      snew.setPoint (1, computePoint (1, s1, s2));
+      snew.setPoint (2, computePoint (2, s1, s2));
+      snew.setPoint (3, s1.pointAt (1));
+      for (int i = 0; i < 4; i++) 
+	seg.setPoint (i, blendPoints (snew.pointAt (i), s2.pointAt (i), 
+				      step, num));
+    }
+    else if (s2.kind () == GSegment::sk_Line) {
+      GSegment snew (GSegment::sk_Bezier);
+      snew.setPoint (0, s2.pointAt (0));
+      snew.setPoint (1, computePoint (1, s2, s1));
+      snew.setPoint (2, computePoint (2, s2, s1));
+      snew.setPoint (3, s2.pointAt (1));
+      for (int i = 0; i < 4; i++) 
+	seg.setPoint (i, blendPoints (s1.pointAt (i), snew.pointAt (i), 
+				      step, num));
+    }
+    else {
+      for (int i = 0; i < 4; i++) 
+	seg.setPoint (i, blendPoints (s1.pointAt (i), s2.pointAt (i), 
+				      step, num));
+    }
   }
   return seg;
 }
@@ -167,6 +206,16 @@ void GSegment::draw (Painter& p, bool withBasePoints, bool /*outline*/,
   }
 }
 
+void GSegment::movePoint (int idx, float dx, float dy) {
+  assert (idx >= 0 && ((skind == sk_Bezier && idx < 4) || 
+		       (skind == sk_Line && idx < 2)));
+  points[idx].x (points[idx].x () + dx);
+  points[idx].y (points[idx].y () + dy);
+  if (skind == sk_Bezier) {
+    bpoints.setPoint (idx, points[idx].x (), points[idx].y ());
+  }
+}
+
 Rect GSegment::boundingBox () {
   Rect r;
   if (skind == sk_Line)
@@ -194,6 +243,18 @@ QPointArray GSegment::getPoints () const {
   }
   else 
     return bpoints.quadBezier ();
+}
+
+float GSegment::length () const {
+  float len = 0.0;
+
+  if (skind == sk_Line) {
+    len = seg_length (points[0], points[1]);
+  }
+  else
+   for (int i = 0; i < 3; i++)
+     len += seg_length (points[i], points[i + 1]);
+  return len;
 }
 
 GCurve::GCurve () : GObject () {
@@ -261,10 +322,56 @@ void GCurve::draw (Painter& p, bool withBasePoints, bool outline) {
 
 bool GCurve::contains (const Coord& p) {
   Coord pp = p.transform (iMatrix);
-  if (box.contains (pp))
+  if (box.contains (pp)) {
     return (containingSegment (pp) != segments.end ());
+  }
   else
     return false;
+}
+
+void GCurve::movePoint (int idx, float dx, float dy) {
+  int pidx = 0;
+  list<GSegment>::iterator i;
+  float ndx = dx * iMatrix.m11 () + dy * iMatrix.m21 ();
+  float ndy = dy * iMatrix.m22 () + dx * iMatrix.m12 ();
+
+  for (i = segments.begin (); i != segments.end (); i++) { 
+    int num = (i->kind () == GSegment::sk_Line ? 2 : 4);
+    pidx += num;
+    if (pidx > idx) {
+      // move point of segment[i]
+      int sidx = idx - (pidx - num);
+      i->movePoint (sidx, ndx, ndy);
+      if (pidx == idx + 1) {
+	// it's a endpoint, so move the first point of segment[i+1]
+	i++;
+	if (i != segments.end ()) {
+	  i->movePoint (0, ndx, ndy);
+	}
+      }
+      updatePath ();
+      updateRegion (true);
+      return;
+    }
+  }
+}
+
+int GCurve::getNeighbourPoint (const Coord& p) {
+  Coord c;
+  int idx = 0;
+
+  list<GSegment>::iterator i;
+  for (i = segments.begin (); i != segments.end (); i++) { 
+    int num  = (i->kind () == GSegment::sk_Line ? 2 : 4);
+    for (int n = 0; n < num; n++) {
+      c = i->pointAt (n).transform (tMatrix);
+      if (c.isNear (p, NEAR_DISTANCE)) {
+	return idx;
+      }
+      idx++;
+    }
+  }
+  return -1;
 }
 
 QString GCurve::typeName () const {
@@ -331,7 +438,7 @@ void GCurve::addLineSegment (const Coord& p1, const Coord& p2) {
   seg.setPoint (1, p2);
   segments.push_back (seg);
   updatePath ();
-  updateRegion ();
+  updateRegion (true);
 }
 
 void GCurve::addBezierSegment (const Coord& p1, const Coord& p2,
@@ -343,13 +450,40 @@ void GCurve::addBezierSegment (const Coord& p1, const Coord& p2,
   seg.setPoint (3, p4);
   segments.push_back (seg);
   updatePath ();
-  updateRegion ();
+  updateRegion (true);
 }
 
 void GCurve::addSegment (const GSegment& s) {
   segments.push_back (s);
   updatePath ();
-  updateRegion ();
+  updateRegion (true);
+}
+
+void GCurve::removePoint (int idx, bool update) {
+  int pidx = 0;
+  list<GSegment>::iterator i;
+
+  if (segments.size () > 1) {
+#if 0
+    if (idx == 0) {
+      // remove the first segment
+      segments.erase (segments.begin ());
+    }
+    else {
+      for (i = segments.begin (); i != segments.end (); i++) { 
+	int num = (i->kind () == GSegment::sk_Line ? 2 : 4);
+	pidx += num;
+	if (pidx > idx) {
+	  // remove this segment and set the first point
+	  // of the following 
+	}
+      }
+    }
+#endif
+  }
+
+  if (update) 
+    updateRegion ();
 }
 
 GCurve* GCurve::blendCurves (GCurve *start, GCurve *end, int step, int num) {
@@ -414,6 +548,7 @@ GCurve* GCurve::blendCurves (GCurve *start, GCurve *end, int step, int num) {
     }
     res->setClosed (true);
   }
+  res->calcBoundingBox ();
   return res;
 }
 

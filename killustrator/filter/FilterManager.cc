@@ -34,6 +34,7 @@
 #include "filter/EPSExport.h"
 #include "filter/KilluImport.h"
 #include "filter/XfigImport.h"
+#include "filter/CmxImport.h"
 
 #include <qstrlist.h>
 
@@ -83,6 +84,11 @@ void FilterManager::installDefaultFilters () {
 					  "Encapsulated PostScript", "eps",
 					  "Kai-Uwe Sattler",
 					  "0.1", 0L, epsFilter));
+  CmxImport* cmxFilter = new CmxImport ();
+  filters.insert ("CMX", new FilterInfo (FilterInfo::FKind_Import,
+						  "Corel Exchange", "cmx",
+						  "Kai-Uwe Sattler",
+						  "0.1", cmxFilter, 0L));
 }
 
 QString FilterManager::importFilters () {

@@ -101,9 +101,11 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
     Rect selRect (selPoint[0], selPoint[1]);
     if (doc->findObjectsContainedIn (selRect.normalize (), olist)) {
       QListIterator<GObject> it (olist);
+      doc->setAutoUpdate (false);
       for (; it.current (); ++it) 
 	doc->selectObject (it.current ());
       state = S_Pick;
+      doc->setAutoUpdate (true);
     }
     else {
       // no object found - repaint canvas to remove the rubberband

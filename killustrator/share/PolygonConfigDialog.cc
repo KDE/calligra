@@ -38,7 +38,6 @@
 #include <qlayout.h>
 #include <qgrpbox.h>
 #include <qframe.h>
-#include <qspinbox.h>
 
 PolygonConfigDialog::PolygonConfigDialog (QWidget* parent, const char* name) : 
     QDialog (parent, name, true) {
@@ -100,7 +99,9 @@ QWidget* PolygonConfigDialog::createWidget (QWidget* parent) {
   label->setText (i18n ("Corners:"));
   label->move (10, 90);
 
-  spinbox = new QSpinBox (3, 100, 1, w);
+  spinbox = new QSpinBox (w);
+  spinbox->setRange (3, 100);
+//  spinbox->setStep (1);
   spinbox->move (90, 90);
 
   label = new QLabel (w);
@@ -128,10 +129,8 @@ QWidget* PolygonConfigDialog::createWidget (QWidget* parent) {
 	   SLOT(slotConcavePolygon ()));
   connect (convexButton, SIGNAL(clicked ()), preview, 
 	   SLOT(slotConvexPolygon ()));
-  connect (spinbox, SIGNAL(valueIncreased ()), preview, 
-	   SLOT(increaseNumOfCorners ()));
-  connect (spinbox, SIGNAL(valueDecreased ()), preview, 
-	   SLOT(decreaseNumOfCorners ()));
+  connect (spinbox, SIGNAL(valueChanged (int)), preview, 
+	   SLOT(setNumOfCorners (int)));
 
   w->setMinimumSize (400, 170);
   w->setMaximumSize (400, 170);

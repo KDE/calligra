@@ -26,6 +26,7 @@
 #define FloatSpinBox_h_
 
 #include <qspinbox.h>
+#include <qvalidator.h>
 
 class FloatSpinBox : public QSpinBox {
   Q_OBJECT
@@ -55,9 +56,14 @@ public slots:
 protected slots:
   void slotValueChange ();
 
+protected:
+  int mapTextToValue (bool *ok);
+  QString mapValueToText (int v);
+
 private:
   float step, minval, maxval;
   QString format;
+  QDoubleValidator *val;
 };
 
 #endif

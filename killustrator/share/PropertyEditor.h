@@ -32,6 +32,7 @@
 
 #include <ktabctl.h>
 #include <kcolordlg.h>
+#include <kspinbox.h>
 #include <kslider.h>
 #include <kcombo.h>
 #include <kcolorbtn.h>

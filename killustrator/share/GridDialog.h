@@ -26,10 +26,12 @@
 #define GridDialog_h
 
 #include <qdialog.h>
+#include <qradiobt.h>
+#include <qchkbox.h>
+#include <kspinbox.h>
 #include "Canvas.h"
+#include "FloatSpinBox.h"
 #include "UnitBox.h"
-
-class QCheckBox;
 
 class GridDialog : public QDialog {
   Q_OBJECT
@@ -44,6 +46,8 @@ public:
   void setDistances (float h, float v);
   void setSnapToGridOn (bool flag);
   void setShowGridOn (bool flag);
+
+
 
   static void setupGrid (Canvas* canvas);
 

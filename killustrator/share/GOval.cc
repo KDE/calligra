@@ -27,6 +27,7 @@
 #include "GOval.h"
 #include "GOval.moc"
 #include "GPolyline.h"
+#include "GCurve.h"
 
 #include <klocale.h>
 #include <kapp.h>
@@ -489,6 +490,41 @@ void GOval::getPath (vector<Coord>& path) {
     Coord pi (p.x (), p.y ());
     path[i] = pi.transform (tMatrix);
   }
+}
+
+GCurve* GOval::convertToCurve () const {
+  // this is not the right way.
+  // we should reimplement this !!
+  QPointArray parray;
+  if (outlineInfo.shape == GObject::OutlineInfo::DefaultShape)
+    parray.makeArc (sPoint.x (), sPoint.y (), 
+		    ePoint.x () - sPoint.x (), 
+		    ePoint.y () - sPoint.y (),
+		    -180 * 16, -360 * 16);
+  else {
+    float alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
+    parray.makeArc (sPoint.x (), sPoint.y (), 
+		    ePoint.x () - sPoint.x (), 
+		    ePoint.y () - sPoint.y (), -eAngle * 16, 
+		    -alen * 16);
+  }
+  unsigned int num = parray.size ();
+  GCurve* curve = new GCurve ();
+
+  Coord p0 (parray[0].x (), parray[0].y ());
+  p0 = p0.transform (tmpMatrix);
+  Coord p = p0;
+  for (unsigned int i = 1; i < num; i++) {
+    Coord p1 (parray[i].x (), parray[i].y ());
+    p1 = p1.transform (tmpMatrix);
+    curve->addLineSegment (p0, p1);
+    p0 = p1;
+  }
+  curve->addLineSegment (p0, p);
+  curve->setClosed (true);
+  curve->setOutlineInfo (outlineInfo);
+  curve->setFillInfo (fillInfo);
+  return curve;
 }
 
 bool GOval::isValid () {

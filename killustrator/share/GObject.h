@@ -310,6 +310,7 @@ public:
 
   virtual int getNeighbourPoint (const Coord& ) { return -1; }
   virtual void movePoint (int /*idx*/, float /*dx*/, float /*dy*/) {}
+  virtual void removePoint (int , bool) {}
 
   /**
    * Draw the object with the given painter.

@@ -76,7 +76,7 @@ void UnitBox::getRange (float& minVal, float& maxVal) {
 }
 
 void UnitBox::setEditable (bool flag) {
-//  valueBox->setEditable (flag);
+  //  valueBox->setEditable (flag);
 }
 
 void UnitBox::unitChanged (int id) {

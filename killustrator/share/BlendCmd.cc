@@ -70,6 +70,8 @@ void BlendCmd::execute () {
     else
       end = eobj->convertToCurve ();
   }
+  if (start == NULL || end == NULL)
+    return;
   document->setAutoUpdate (false);
   for (int i = 0; i < num_steps; i++) {
     unsigned int idx = document->findIndexOfObject (sobj);
@@ -81,6 +83,8 @@ void BlendCmd::execute () {
 }
 
 void BlendCmd::unexecute () {
+  if (start == NULL || end == NULL)
+    return;
   list<GCurve*>::iterator i;
   document->setAutoUpdate (false);
   for (i = curves.begin (); i != curves.end (); i++) {

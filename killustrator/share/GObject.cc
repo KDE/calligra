@@ -178,7 +178,6 @@ void GObject::unref () {
 
 void GObject::updateRegion (bool recalcBBox) {
   Rect newbox = redrawBox ();
-  
   if (recalcBBox) {
     Rect oldbox = newbox;
     calcBoundingBox ();

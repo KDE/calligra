@@ -48,12 +48,15 @@ DeleteCmd::~DeleteCmd () {
 void DeleteCmd::execute () {
   list<pair<int, GObject*> >::iterator i;
 
+  document->setAutoUpdate (false);
   for (i = objects.begin (); i != objects.end (); i++)
     document->deleteObject (i->second);
+  document->setAutoUpdate (true);
 }
 
 void DeleteCmd::unexecute () {
   list<pair<int, GObject*> >::iterator i;
+  document->setAutoUpdate (false);
   document->unselectAllObjects ();
   for (i = objects.begin (); i != objects.end (); i++) {
     // insert the object at the old position
@@ -63,5 +66,6 @@ void DeleteCmd::unexecute () {
     document->insertObjectAtIndex (obj, pos);
     document->selectObject (obj);
   }
+  document->setAutoUpdate (true);
 }
 

@@ -26,16 +26,16 @@
 #define TransformationDialog_h
 
 #include <qdialog.h>
+#include <qradiobt.h>
+#include <qchkbox.h>
+#include <kspinbox.h>
+#include <ktabctl.h>
 #include "GDocument.h"
 #include "GObject.h"
 #include "CommandHistory.h"
 #include "FloatSpinBox.h"
 #include "UnitBox.h"
 #include "MyTabCtl.h"
-
-class QRadioButton;
-class QPushButton;
-class QCheckBox;
 
 class TransformationDialog : public QDialog {
   Q_OBJECT

@@ -71,6 +71,7 @@ public:
   virtual QString typeName () const;
 
   virtual void getPath (vector<Coord>& path);
+  virtual GCurve* convertToCurve () const;
 
 protected:
   void updateGradientShape (QPainter& p);

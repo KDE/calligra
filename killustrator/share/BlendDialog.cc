@@ -22,19 +22,21 @@
 
 */
 
-#include <qlayout.h>
-#include <qgroupbox.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qspinbox.h>
-
 #include "BlendDialog.h"
 #include "BlendDialog.moc"
+
+#include <stdio.h>
 
 #include <klocale.h>
 #include <kapp.h>
 #include <kbuttonbox.h>
 #include <kseparator.h>
+
+#include <qpushbt.h>
+#include <qbttngrp.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qgrpbox.h>
 
 BlendDialog::BlendDialog (QWidget* parent, const char* name) : 
     QDialog (parent, name, true) {
@@ -86,8 +88,10 @@ QWidget* BlendDialog::createWidget (QWidget* parent) {
   label->setText (i18n ("Steps"));
   label->move (20, 20);
 
-  spinbox = new QSpinBox (0, 1000, 1, box);
+  spinbox = new QSpinBox (box);
   spinbox->setValue (10);
+//  spinbox->setStep (1);
+  spinbox->setRange (0, 1000);
   spinbox->move (100, 20);
  
   w->setMinimumSize (230, 140);

@@ -46,12 +46,15 @@ public:
 
   void writeToXml (XmlWriter& xml);
   void draw (Painter& p, bool withBasePoints, bool outline, bool drawFirst);
+  void movePoint (int idx, float dx, float dy);
 
   Rect boundingBox ();
   bool contains (const Coord& p);
 
   Kind kind () const { return skind; }
   QPointArray getPoints () const;
+
+  float length () const;
 
 private:
   Kind skind;
@@ -76,6 +79,10 @@ public:
   virtual GObject* clone (const list<XmlAttribute>& attribs);
 
   virtual void writeToXml (XmlWriter&);
+
+  virtual void movePoint (int /*idx*/, float /*dx*/, float /*dy*/);
+  virtual void removePoint (int idx, bool update = true);
+  virtual int getNeighbourPoint (const Coord& p);
 
   virtual void getPath (vector<Coord>& path);
 
