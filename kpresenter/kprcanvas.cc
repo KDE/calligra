@@ -351,7 +351,6 @@ void KPrCanvas::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceR
 void KPrCanvas::drawObjects( QPainter *painter, const QRect& rect, bool drawCursor )
 {
     int pgNum = editMode ? (int)m_view->getCurrPgNum() : currPresPage;
-    //kdDebug(33001) << "Page::drawObjects ----- pgNum=" << pgNum << " currPresStep=" << currPresStep << " drawCursor=" << drawCursor << endl;
     KoRect rect2=KoRect::fromQRect(rect);
     QPtrListIterator<KPObject> it( m_view->kPresenterDoc()->pageList().at(pgNum-1)->objectList() );
     for ( ; it.current() ; ++it )
@@ -2410,10 +2409,10 @@ void KPrCanvas::drawPageInPix2( QPixmap &_pix, int pgnum, float /*_zoom*/ )
     bool _editMode = editMode;
     editMode = false;
     drawBackground( &p, _pix.rect() );
-    editMode = _editMode;
 
     drawObjects( &p, _pix.rect(), false );
 
+    editMode = _editMode;
     p.end();
 
     //m_view->setDiffY( _yOffset );
