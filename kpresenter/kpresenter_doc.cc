@@ -3818,6 +3818,7 @@ void KPresenterDoc::slotUndoRedoChanged( QString _undo, QString _redo )
 	((KPresenterView*)view)->changeUndo( _undo, !_undo.isEmpty() );
 	((KPresenterView*)view)->changeRedo( _redo, !_redo.isEmpty() );
     }
+    setModified(true);
 }
 
 /*==============================================================*/
