@@ -81,6 +81,7 @@ public:
     {
         Q_ASSERT( !mimeFilter.isEmpty() );
         Q_ASSERT( mimeFilter[0] == nativeFormat );
+
         // Insert two entries with native mimetypes, for the special entries.
         QStringList::Iterator mimeFilterIt = mimeFilter.at( 1 );
         mimeFilter.insert( mimeFilterIt /* before 1 -> after 0 */, 2, nativeFormat );
@@ -88,8 +89,19 @@ public:
         setMimeFilter( mimeFilter, nativeFormat );
         // To get a different description in the combo, we need to change its entries afterwards
         KMimeType::Ptr type = KMimeType::mimeType( nativeFormat );
-        filterWidget->changeItem( i18n("%1 (KOffice-1.1 format)").arg( type->comment() ), KoDocument::SaveAsKOffice1dot1 );
-        filterWidget->changeItem( i18n("%1 (Uncompressed XML files)").arg( type->comment() ), KoDocument::SaveAsDirectoryStore );
+        filterWidget->changeItem( i18n("%1 (KOffice-1.1 Format)").arg( type->comment() ), KoDocument::SaveAsKOffice1dot1 );
+        filterWidget->changeItem( i18n("%1 (Uncompressed XML Files)").arg( type->comment() ), KoDocument::SaveAsDirectoryStore );
+
+        // [Mainly KWord] Tell MS Office users that they can save in RTF!
+        int i = 0;
+        for (mimeFilterIt = mimeFilter.begin (); mimeFilterIt != mimeFilter.end (); mimeFilterIt++, i++)
+        {
+            KMimeType::Ptr mime = KMimeType::mimeType (*mimeFilterIt);
+            QString compatString = mime->property ("X-KDE-CompatibleApplication").toString ();
+            if (!compatString.isEmpty ())
+                filterWidget->changeItem (i18n ("%1 (%2 Compatible)").arg (mime->comment ()).arg (compatString), i);
+        }
+
         // KFileFilterCombo selected the _last_ "native mimetype" entry, select 0 again.
         filterWidget->setCurrentItem( 0 );
     }
