@@ -74,6 +74,9 @@ public:
     // over any of its copies (e.g. in the header/footer case).
     KWFrame * internalToNormalWithHint( QPoint iPoint, QPoint & nPoint, QPoint hintNPoint ) const;
 
+    // Implementation of Ctrl+PageUp/PageDown
+    QPoint moveToPage( int currentPgNum, short int direction ) const;
+
     // Return the available height in pixels (sum of all frames' height, with zoom applied)
     // Used to know if we need to create more pages.
     int availableHeight() const;
@@ -444,7 +447,9 @@ private:
         MovePgUp,
         MovePgDown,
         MoveParagUp, // KWord-specific
-        MoveParagDown // KWord-specific
+        MoveParagDown, // KWord-specific
+        MoveViewportUp, // KWord-specific
+        MoveViewportDown // KWord-specific
     };
 
     void moveCursor( CursorAction action, bool select );

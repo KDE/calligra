@@ -263,6 +263,34 @@ KWFrame * KWTextFrameSet::internalToNormalWithHint( QPoint iPoint, QPoint & nPoi
     return 0L;
 }
 
+QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const
+{
+    if ( !isVisible() || frames.isEmpty() )
+        return QPoint();
+    //kdDebug() << "KWTextFrameSet::moveToPage currentPgNum=" << currentPgNum << " direction=" << direction << endl;
+    int num = currentPgNum + direction;
+    int pages = m_doc->getPages();
+    for ( ; num >= 0 && num < pages ; num += direction )
+    {
+        //kdDebug() << "KWTextFrameSet::moveToPage num=" << num << " pages=" << pages << endl;
+        // Find the first frame on page num
+        if ( num < m_firstPage || num >= m_framesInPage.size() + m_firstPage )
+            continue; // No frame on that page
+
+        //kdDebug() << "KWTextFrameSet::moveToPage ok for first frame in page " << num << endl;
+        QListIterator<KWFrame> frameIt( framesInPage( num ) );
+        return QPoint( 0, frameIt.current()->internalY() + 2 ); // found, ok.
+    }
+    // Not found. Go to top of first frame or bottom of last frame, depending on direction
+    if ( direction < 0 )
+        return QPoint( 0, frames.getFirst()->internalY() + 2 );
+    else
+    {
+        KWFrame * frame = frames.getLast();
+        return QPoint( 0, frame->internalY() + m_doc->zoomItY( frame->height() ) );
+    }
+}
+
 void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &r,
                                 QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                 KWFrameSetEdit *edit )
@@ -3007,10 +3035,10 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
         moveCursor( e->state() & ControlButton ? MoveEnd : MoveLineEnd, e->state() & ShiftButton );
         break;
     case Key_Prior:
-        moveCursor( MovePgUp, e->state() & ShiftButton );
+        moveCursor( e->state() & ControlButton ? MovePgUp : MoveViewportUp, e->state() & ShiftButton );
         break;
     case Key_Next:
-        moveCursor( MovePgDown, e->state() & ShiftButton );
+        moveCursor( e->state() & ControlButton ? MovePgDown : MoveViewportDown, e->state() & ShiftButton );
         break;
     case Key_Return: case Key_Enter:
         if ( textDocument()->hasSelection( QTextDocument::Standard ) )
@@ -3193,11 +3221,29 @@ void KWTextFrameSetEdit::moveCursor( CursorAction action )
         case MoveDown:
             cursor->gotoDown();
             break;
-        case MovePgUp:
+        case MoveViewportUp:
+            /// ###
             cursor->gotoPageUp( m_canvas->visibleHeight() );
             break;
-        case MovePgDown:
+        case MoveViewportDown:
+            /// ###
             cursor->gotoPageDown( m_canvas->visibleHeight() );
+            break;
+        case MovePgUp:
+            if ( m_currentFrame )
+            {
+                QPoint iPoint = textFrameSet()->moveToPage( m_currentFrame->pageNum(), -1 );
+                if ( !iPoint.isNull() )
+                    placeCursor( iPoint );
+            }
+            break;
+        case MovePgDown:
+            if ( m_currentFrame )
+            {
+                QPoint iPoint = textFrameSet()->moveToPage( m_currentFrame->pageNum(), +1 );
+                if ( !iPoint.isNull() )
+                    placeCursor( iPoint );
+            }
             break;
         case MoveLineStart:
             cursor->gotoLineStart();
