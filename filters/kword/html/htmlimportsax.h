@@ -23,15 +23,26 @@
 #define HTMLIMPORTSAX_H
 
 #include<qdom.h>
-
 class CSS2Styles
 {
 public:
     CSS2Styles() {};
-    CSS2Styles(QString newName, void* newValue) : name(newName), value(newValue) {};
+    CSS2Styles(QString newValue) : m_value(newValue) {};
     virtual ~CSS2Styles() {};
     QString name;
-    void* value;
+public:
+    inline QString getValue(void) const { return m_value; }
+private:
+    QString m_value;
+};
+
+class CSS2StylesMap : public QMap<QString,CSS2Styles>
+{
+public:
+    CSS2StylesMap() {};
+    virtual ~CSS2StylesMap() {};
+public:
+    bool setProperty(QString newName, QString newValue);
 };
 
 void TreatCSS2Styles(QString strProps,QValueList<CSS2Styles> &css2StylesList);

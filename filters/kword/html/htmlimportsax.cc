@@ -30,8 +30,13 @@
 // Tags in lower case (e.g. <p>) are HTML's ones.
 // Tags in upper case (e.g. <TEXT>) are KWord's ones.
 
+bool CSS2StylesMap::setProperty(QString newName, QString newValue)
+{
+    replace(newName,CSS2Styles(newValue));
+}
+
 // Treat the "style" attribute of tags and split it in separates names and values
-void TreatCSS2Styles(QString strProps,QValueList<CSS2Styles> &css2StylesList)
+void TreatCSS2Styles(QString strProps, CSS2StylesMap &css2StylesMap)
 {
     if (strProps.isEmpty())
         return;
@@ -67,68 +72,50 @@ void TreatCSS2Styles(QString strProps,QValueList<CSS2Styles> &css2StylesList)
             }
         }
         kdDebug(30503) << "========== (Property :" << name << "=" << value <<":)"<<endl;
-        //Now treat the name and the value that we have just found
-        QValueList<CSS2Styles>::Iterator iterator;
-        for (iterator=css2StylesList.begin();iterator!=css2StylesList.end();iterator++)
-        {
-            if (name==(*iterator).name)
-            {
-                if((*(iterator)).value)
-                {
-                    void *pointer=(*(iterator)).value;
-                    *((QString*) pointer)=value;
-                }
-                break;
-            }
-        }
+
+        // Now set the property
+        css2StylesMap.setProperty(name,value);
     }
 }
 
-bool TransformCSS2ToStackItem(StackItem* stackItem, StackItem* /* stackCurrent */, QString strStyle)
+void PopulateProperties(StackItem* stackItem, QString strStyle,
+                        CSS2StylesMap& css2StylesMap, const bool allowInit)
+// TODO: find a better name for this function
 {
-    // TODO: do real CSS2 (this is just a very narrow part of its possibilities)
-    // Initialize the QStrings with the previous values of the properties they represent!
-    QString strFontStyle(stackItem->italic?"italic":"");
-    QString strWeight(stackItem->bold?"bold":"");
-
-    QString strDecoration;
-    if (stackItem->underline)
+    if (allowInit)
     {
-        strDecoration="underline";
-    }
-    else if (stackItem->strikeout)
-    {
-        strDecoration="line-through";
-    }
-    else
-    {
-        strDecoration="";
+        // Initialize the QStrings with the previous values of the properties
+        if (stackItem->italic)
+        {
+            css2StylesMap.setProperty("font-style","italic");
+        }
+        if (stackItem->bold)
+        {
+            css2StylesMap.setProperty("font-weight","bold");
+        }
+
+        if (stackItem->underline)
+        {
+            css2StylesMap.setProperty("text-decoration","underline");
+        }
+        else if (stackItem->strikeout)
+        {
+            css2StylesMap.setProperty("text-decoration","line-through");
+        }
     }
 
-    QString strTextPosition("old");
-    QString strColour("old");
-    QString strFontSize("old");
-    QString strFontFamily("old");
-
-    QValueList<CSS2Styles> css2StylesList;
-
-    css2StylesList.append( CSS2Styles("font-style",&strFontStyle));
-    css2StylesList.append( CSS2Styles("font-weight",&strWeight));
-    css2StylesList.append( CSS2Styles("text-decoration",&strDecoration));
-    css2StylesList.append( CSS2Styles("text-position",&strTextPosition));
-    css2StylesList.append( CSS2Styles("color",&strColour));
-    css2StylesList.append( CSS2Styles("font-size",&strFontSize));
-    css2StylesList.append( CSS2Styles("font-family",&strFontFamily));
     kdDebug(30503)<< "========== style=\"" << strStyle << "\"" << endl;
-    TreatCSS2Styles(strStyle,css2StylesList);
+    TreatCSS2Styles(strStyle,css2StylesMap);
 
-    stackItem->italic=(strFontStyle=="italic");
-    stackItem->bold=(strWeight=="bold");
+    stackItem->italic=(css2StylesMap["font-style"].getValue()=="italic");
+    stackItem->bold=(css2StylesMap["font-weight"].getValue()=="bold");
 
+    QString strDecoration=css2StylesMap["text-decoration"].getValue();
     stackItem->underline=(strDecoration=="underline");
     stackItem->strikeout=(strDecoration=="line-through");
 
-	if (strTextPosition=="subscript")
+    QString strTextPosition=css2StylesMap["text-position"].getValue();
+    if (strTextPosition=="subscript")
     {
         stackItem->textPosition=1;
     }
@@ -136,20 +123,26 @@ bool TransformCSS2ToStackItem(StackItem* stackItem, StackItem* /* stackCurrent *
     {
         stackItem->textPosition=2;
     }
-    else if (strTextPosition!="old")
+    else if (!strTextPosition.isEmpty())
     {
         // we have any other new value, assume it means normal!
         stackItem->textPosition=0;
     }
-    if (!strColour.isEmpty() && (strColour!="old"))
+
+    QString strColour=css2StylesMap["color"].getValue();
+    if (!strColour.isEmpty())
     {
         // we have a new colour, so decode it!
         long int colour=strColour.mid(1).toLong(NULL,16);
+        // Note: mid(1) is for skiping the #
+        // TODO: other colour descriptions of CSS2
         stackItem->red  =(colour&0xFF0000)>>16;
         stackItem->green=(colour&0x00FF00)>>8;
         stackItem->blue =(colour&0x0000FF);
     }
-    if (!strFontSize.isEmpty() && (strFontSize!="old"))
+
+    QString strFontSize=css2StylesMap["font-size"].getValue();
+    if (!strFontSize.isEmpty())
     {
         int size=0;
         int ch; // digit value of the character
@@ -173,12 +166,13 @@ bool TransformCSS2ToStackItem(StackItem* stackItem, StackItem* /* stackCurrent *
             stackItem->fontSize=size;
         }
     }
-    if (!strFontFamily.isEmpty() && (strFontFamily!="old"))
+
+    QString strFontFamily=css2StylesMap["font-family"].getValue();
+    if (!strFontFamily.isEmpty())
     {
         // TODO: transform the font-family in a font we have on the system on which KWord runs.
         stackItem->fontName=strFontFamily;
     }
-    return true; // For now the return value is always true!
 }
 
 // Element <span>
@@ -191,10 +185,9 @@ bool StartElementSpan(StackItem* stackItem, StackItem* stackCurrent, const QStri
     // <span> elements can be nested in <p> elements or in other <span> elements
     if ((stackCurrent->elementType==ElementTypeParagraph)||(stackCurrent->elementType==ElementTypeSpan))
     {
-        if (!TransformCSS2ToStackItem(stackItem,stackCurrent,strStyle))
-        {
-            return false;
-        }
+        CSS2StylesMap css2StylesMap;
+        PopulateProperties(stackItem,strStyle,css2StylesMap,true);
+
         QDomNode nodeOut=stackCurrent->stackNode;
         QDomNode nodeOut2=stackCurrent->stackNode2;
         stackItem->stackNode=nodeOut;   // <TEXT>
@@ -318,91 +311,15 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     QDomElement formatsPluralElementOut=mainFramesetElement.ownerDocument().createElement("FORMATS");
     paragraphElementOut.appendChild(formatsPluralElementOut);
 
-    QValueList<CSS2Styles> css2StylesList;
-
-    QString strFontStyle;
-    QString strWeight;
-    QString strDecoration;
-    QString strTextPosition;
-    QString strColour;
-    QString strFontSize;
-    QString strFontFamily;
-    QString strFlow;
-
-    css2StylesList.append( CSS2Styles("font-style",&strFontStyle));
-    css2StylesList.append( CSS2Styles("font-weight",&strWeight));
-    css2StylesList.append( CSS2Styles("text-decoration",&strDecoration));
-    css2StylesList.append( CSS2Styles("text-position",&strTextPosition));
-    css2StylesList.append( CSS2Styles("color",&strColour));
-    css2StylesList.append( CSS2Styles("font-size",&strFontSize));
-    css2StylesList.append( CSS2Styles("font-family",&strFontFamily));
-    css2StylesList.append( CSS2Styles("text-align",&strFlow));
-
-    kdDebug(30503)<< "========== style=\"" << strStyle << "\"" << endl;
-    TreatCSS2Styles(strStyle,css2StylesList);
+    CSS2StylesMap css2StylesMap;
+    PopulateProperties(stackItem,strStyle,css2StylesMap,false);
 
     stackItem->elementType=ElementTypeParagraph;
     stackItem->stackNode=textElementOut; // <TEXT>
     stackItem->stackNode2=formatsPluralElementOut; // <FORMATS>
     stackItem->pos=0; // No text characters yet
-    stackItem->italic=(strFontStyle=="italic");
-    stackItem->bold=(strWeight=="bold");
 
-    stackItem->underline=(strDecoration=="underline");
-    stackItem->strikeout=(strDecoration=="line-through");
-
-    if (strTextPosition=="subscript")
-    {
-        stackItem->textPosition=1;
-    }
-    else if (strTextPosition=="superscript")
-    {
-        stackItem->textPosition=2;
-    }
-    else
-    {
-        // we have any other new value, assume it means normal!
-        stackItem->textPosition=0;
-    }
-    if (!strColour.isEmpty())
-    {
-        // we have a new colour, so decode it!
-        long int colour=strColour.mid(1).toLong(NULL,16);
-        stackItem->red  =(colour&0xFF0000)>>16;
-        stackItem->green=(colour&0x00FF00)>>8;
-        stackItem->blue =(colour&0x0000FF);
-    }
-    if (!strFontSize.isEmpty())
-    {
-        int size=0;
-        int ch; // digit value of the character
-        for (int pos=0;;pos++)
-        {
-            ch=strFontSize.at(pos).digitValue();
-            if (ch==-1)
-            {
-                // Not a digit
-                break;
-            }
-            else
-            {
-                size*=10;
-                size+=ch;
-            }
-        }
-        // TODO: verify that the unit of the font size is really "pt"
-        if (size>0)
-        {
-            stackItem->fontSize=size;
-        }
-    }
-    if (!strFontFamily.isEmpty())
-    {
-        // TODO: transform the font-family in a font we have on the system on which KWord runs.
-        stackItem->fontName=strFontFamily;
-    }
-
-	// Now we populate the layout
+    // Now we populate the layout
     QDomElement layoutElement=nodeOut.ownerDocument().createElement("LAYOUT");
     paragraphElementOut.appendChild(layoutElement);
 
@@ -415,6 +332,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     element.setAttribute("value","Standard");
     layoutElement.appendChild(element);
 
+    QString strFlow=css2StylesMap["text-align"].getValue();
     element=layoutElement.ownerDocument().createElement("FLOW");
     if ((strFlow=="left") || (strFlow=="center") || (strFlow=="right") || (strFlow=="justify"))
     {
