@@ -109,11 +109,12 @@ VSegment::pointDerivatives( double t, KoPoint* p,
 	// Lines:
 	if( m_type == segment_line )
 	{
+		const KoPoint diff = m_point[2] - m_prev->m_point[2];
+
 		if( p )
-			*p = m_prev->m_point[2] +
-				( m_point[2] - m_prev->m_point[2] ) * t;
+			*p = m_prev->m_point[2] + diff * t;
 		if( d1 )
-			*d1 = m_point[2] - m_prev->m_point[2];
+			*d1 = diff;
 		if( d2 )
 			*d2 = KoPoint( 0.0, 0.0 );
 
@@ -180,7 +181,7 @@ VSegment::pointTangentNormal( double t, KoPoint* p,
 	if( n )
 	{
 		// Calculate vector product of "binormal" x tangent
-		// (0,0,1) x (d1,d2,0), which is simply (d2,-d1,0):
+		// (0,0,1) x (dx,dy,0), which is simply (dy,-dx,0):
 		n->setX(  d.y() );
 		n->setY( -d.x() );
 	}
@@ -204,12 +205,7 @@ VSegment::length( double t ) const
 	if( m_type == segment_line )
 	{
 		return
-			sqrt(
-				t * (
-					( m_point[2].x() - m_prev->m_point[2].x() ) *
-					( m_point[2].x() - m_prev->m_point[2].x() ) +
-					( m_point[2].y() - m_prev->m_point[2].y() ) *
-					( m_point[2].y() - m_prev->m_point[2].y() ) ) );
+			t * chordLength();
 	}
 	// Length of a bezier:
 	else if( m_type == segment_curve )
@@ -245,49 +241,8 @@ VSegment::length( double t ) const
 
 		while( list.current() )
 		{
-			chord =
-				sqrt(
-						( list.current()->m_point[2].x() -
-							list.current()->m_prev->m_point[2].x() ) *
-						( list.current()->m_point[2].x() -
-							list.current()->m_prev->m_point[2].x() )
-					+
-						( list.current()->m_point[2].y() -
-							list.current()->m_prev->m_point[2].y() ) *
-						( list.current()->m_point[2].y() -
-							list.current()->m_prev->m_point[2].y() ) );
-
-			poly =
-				sqrt(
-						( list.current()->m_point[0].x() -
-							list.current()->m_prev->m_point[2].x() ) *
-						( list.current()->m_point[0].x() -
-							list.current()->m_prev->m_point[2].x() )
-					+
-						( list.current()->m_point[0].y() -
-							list.current()->m_prev->m_point[2].y() ) *
-						( list.current()->m_point[0].y() -
-							list.current()->m_prev->m_point[2].y() ) )
-				+ sqrt(
-						( list.current()->m_point[1].x() -
-							list.current()->m_point[0].x() ) *
-						( list.current()->m_point[1].x() -
-							list.current()->m_point[0].x() )
-					+
-						( list.current()->m_point[1].y() -
-							list.current()->m_point[0].y() ) *
-						( list.current()->m_point[1].y() -
-							list.current()->m_point[0].y() ) )
-				+ sqrt(
-						( list.current()->m_point[2].x() -
-							list.current()->m_point[1].x() ) *
-						( list.current()->m_point[2].x() -
-							list.current()->m_point[1].x() )
-					+
-						( list.current()->m_point[2].y() -
-							list.current()->m_point[1].y() ) *
-						( list.current()->m_point[2].y() -
-							list.current()->m_point[1].y() ) );
+			chord = list.current()->chordLength();
+			poly  = list.current()->polyLength();
 
 			if(
 				poly &&
@@ -308,6 +263,86 @@ VSegment::length( double t ) const
 	}
 	else
 		return 0.0;
+}
+
+double
+VSegment::chordLength() const
+{
+	if( !m_prev )
+		return 0.0;
+
+	return
+		sqrt(
+				( m_point[2].x() - m_prev->m_point[2].x() ) *
+				( m_point[2].x() - m_prev->m_point[2].x() ) +
+				( m_point[2].y() - m_prev->m_point[2].y() ) *
+				( m_point[2].y() - m_prev->m_point[2].y() ) );
+}
+
+double
+VSegment::polyLength() const
+{
+	if( !m_prev )
+		return 0.0;
+
+	return
+		sqrt(
+				( m_point[0].x() - m_prev->m_point[2].x() ) *
+				( m_point[0].x() - m_prev->m_point[2].x() )
+			+
+				( m_point[0].y() - m_prev->m_point[2].y() ) *
+				( m_point[0].y() - m_prev->m_point[2].y() ) )
+		+ sqrt(
+				( m_point[1].x() - m_point[0].x() ) *
+				( m_point[1].x() - m_point[0].x() )
+			+
+				( m_point[1].y() - m_point[0].y() ) *
+				( m_point[1].y() - m_point[0].y() ) )
+		+ sqrt(
+				( m_point[2].x() - m_point[1].x() ) *
+				( m_point[2].x() - m_point[1].x() )
+			+
+				( m_point[2].y() - m_point[1].y() ) *
+				( m_point[2].y() - m_point[1].y() ) );
+}
+
+double
+VSegment::param( double len ) const
+{
+	if( !m_prev || len == 0.0 )		// We divide by len below.
+		return 0.0;
+
+	// Line:
+	if( m_type == segment_line )
+	{
+		return
+			len / chordLength();
+	}
+	// Bezier:
+	else if( m_type == segment_curve )
+	{
+		// Perform a successive interval bisection:
+		double param1   = 0.0;
+		double paramMid = 0.5;
+		double param2   = 1.0;
+		double lengthMid = length( paramMid );
+
+		while( QABS( lengthMid - len ) / len > VGlobal::paramLengthTolerance )
+		{
+			if( lengthMid < len )
+				param1 = paramMid;
+			else
+				param2 = paramMid;
+
+			paramMid = 0.5 * ( param2 + param1 );
+
+			lengthMid = length( paramMid );
+		}
+
+		return paramMid;
+	}
+
+	return 0.0;
 }
 
 KoRect

@@ -35,7 +35,8 @@ enum VCtrlPointFixing
 /**
  * A class representing lines and beziers. We waste some KoPoints, if we
  * would use only lines, but this makes it easy to convert the segment types
- * into each other.
+ * into each other. Make sure yourself, that you pass values to functions within
+ * proper ranges.
  */
 
 class VSegment
@@ -63,7 +64,15 @@ public:
 	void setCtrlPoint2( const KoPoint& p ) { m_point[1] = p; }
 	void setKnot( const KoPoint& p ) { m_point[2] = p; }
 
+	/**
+	 * Returns a pointer to the previous segment, if stored in a
+	 * VSegmentList.
+	 */
 	const VSegment* prev() const { return m_prev; }
+	/**
+	 * Returns a pointer to the next segment, if stored in a
+	 * VSegmentList.
+	 */
 	const VSegment* next() const { return m_next; }
 
 	/**
@@ -73,20 +82,19 @@ public:
 
 	/**
 	 * Returns the point on this segment for 0 <= t <= 1.
-	 * Convenience wrapper for pointDerivatives().
+	 * This is a convenience wrapper for pointDerivatives().
 	 */
 	KoPoint point( double t ) const;
 
 	/**
 	 * Returns the tangent vector on this segment for 0 <= t <= 1.
-	 * Convenience wrapper for pointTangentNormal().
+	 * This is a convenience wrapper for pointTangentNormal().
 	 */
 	KoPoint tangent( double t ) const;
 
 	/**
-	 * Calculates point and/or derivative(s) at the same time
-	 * for 0 <= t <= 1. Returns: the point and derivatives
-	 * of first and second order.
+	 * Returns the point and the derivatives of first and second order
+	 * for 0 <= t <= 1.
 	 */
 	void pointDerivatives( double t, KoPoint* p = 0L,
 		KoPoint* d1 = 0L, KoPoint* d2 = 0L ) const;
@@ -104,14 +112,29 @@ public:
 	double length( double t = 1.0 ) const;
 
 	/**
+	 * Returns the chord length |p0p3|.
+	 */
+	double chordLength() const;
+
+	/**
+	 * Returns the length of the control polygon |p0p1|+|p1p2|+|p2p3|.
+	 */
+	double polyLength() const;
+
+	/**
+	 * Returns the parameter of a point located a length len. This is the
+	 * exact inverse operation of length( t ).
+	 */
+	double param( double len ) const;
+
+	/**
 	 * Returns the bounding box.
 	 */
 	KoRect boundingBox() const;
 
 	/**
 	 *  Splits the segment at 0 <= t <= 1. Returns the first segment and transforms
-	 *  the current one to the second segment. Make sure yourself, this segment
-	 *  has a m_prev != 0L and t is in proper range.
+	 *  the current one to the second segment.
 	 */
 	VSegment* splitAt( double t );
 

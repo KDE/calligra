@@ -33,9 +33,19 @@ namespace VGlobal
 	const double flatnessTolerance = 0.5;
 
 	/**
-	 * A tolerance used to approximate bezier lengths.
+	 * A tolerance used to approximate bezier lengths. If the relative difference
+	 * between chordlength and polylength (length of the controlpolygon) is smaller
+	 * than this value, the length of the bezier is 1/2 chordlength + 1/2 polylength.
 	 */
 	const double lengthTolerance = 0.01;
+
+	/**
+	 * A tolerance used to calculate param t on a segment at a given arc
+	 * length (calculated from t=0).
+	 * If the relative difference between a length approximation and the given
+	 * length is smaller than this value, they are assumed to be identical.
+	 */
+	const double paramLengthTolerance = 0.01;
 
 	/**
 	 * A range for KoPoint::isNear() check, to decide if a KoPoint "is the same"

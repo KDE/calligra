@@ -139,6 +139,25 @@ VSegmentList::VSegmentList( const VSegmentList& list )
 	}
 }
 
+VSegmentList::VSegmentList( const VSegment& segment )
+	: VObject( 0L )
+{
+	m_isClosed = false;
+
+	m_first = m_last = m_current = 0L;
+	m_number = 0;
+	m_currentIndex = -1;
+	m_iteratorList = 0L;
+
+	// add an initial ("begin") segment:
+	append( new VSegment() );
+
+	if( segment.prev() )
+		moveTo( segment.prev()->knot() );
+
+	append( segment.clone() );
+}
+
 VSegmentList::~VSegmentList()
 {
 	clear();

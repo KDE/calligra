@@ -387,9 +387,14 @@ kdDebug() << "KarbonView::dummyForTesting()" << endl;
 	KoPoint T;
 	KoPoint N;
 
+	double length = s.getLast()->length() / 10.0;
+	double t;
+
 	for( uint i = 0; i < 10; ++i )
 	{
-		s.getLast()->pointTangentNormal( i / 10.0, &P, &T, &N );
+		s.getLast()->pointTangentNormal(
+			s.getLast()->param( i * length ),
+			&P, &T, &N );
 
 		p = new VPath( 0L );
 		p->moveTo( P );

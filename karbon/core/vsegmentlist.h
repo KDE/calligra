@@ -27,6 +27,7 @@ friend class VSegmentListIterator;
 public:
 	VSegmentList( VObject* parent );
 	VSegmentList( const VSegmentList& list );
+	VSegmentList( const VSegment& segment );
 	virtual ~VSegmentList();
 
 	const KoPoint& currentPoint() const;

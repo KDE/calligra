@@ -83,9 +83,7 @@ VBoolean::recursiveSubdivision(
 		else
 		{
 			// "copy segment" and split it at midpoint:
-			VSegmentList list2( 0L );
-			list2.moveTo( segment2.prev()->knot() );
-			list2.append( segment2.clone() );
+			VSegmentList list2( segment2 );
 			list2.insert( list2.current()->splitAt( 0.5 ) );
 
 			double mid2 = 0.5 * ( t0_2 + t1_2 );
@@ -101,9 +99,7 @@ VBoolean::recursiveSubdivision(
 	else
 	{
 		// "copy segment" and split it at midpoint:
-		VSegmentList list1( 0L );
-		list1.moveTo( segment1.prev()->knot() );
-		list1.append( segment1.clone() );
+		VSegmentList list1( segment1 );
 		list1.insert( list1.current()->splitAt( 0.5 ) );
 
 		double mid1 = 0.5 * ( t0_1 + t1_1 );
@@ -120,9 +116,7 @@ VBoolean::recursiveSubdivision(
 		else
 		{
 			// "copy segment" and split it at midpoint:
-			VSegmentList list2( 0L );
-			list2.moveTo( segment2.prev()->knot() );
-			list2.append( segment2.clone() );
+			VSegmentList list2( segment2 );
 			list2.insert( list2.current()->splitAt( 0.5 ) );
 
 			double mid2 = 0.5 * ( t0_2 + t1_2 );
