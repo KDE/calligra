@@ -3,17 +3,17 @@
 /*
    This file is part of the KDE project
    Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -31,8 +31,8 @@
 #include <qxml.h>
 #include <qdom.h>
 #include <qstack.h>
-#include <klocale.h>
-#include <kmessagebox.h>
+#include <zlib.h>
+#include <ktempfile.h>
 #include "processors.h"
 
 // *Note for the reader of this code*
@@ -207,7 +207,9 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
 
     QDomNode nodeOut=structureStack.current()->stackNode;
     QDomNode nodeOut2=structureStack.current()->stackNode2;
-    StackItem *stackItem=new(StackItem); //TODO: memory failure recovery
+    // Create a new stack element copying the top of the stack.
+    StackItem *stackItem=new StackItem(*structureStack.current());
+    //TODO: memory failure recovery
     if ((name=="c")||(name=="C"))
     {
         // <c> tags can be nested in <p> tags or in other <c> tags
@@ -334,7 +336,8 @@ bool StructureParser :: characters ( const QString & ch )
         formatElementOut.setAttribute("len",ch.length()); // Start position
         nodeOut2.appendChild(formatElementOut); //Append to <FORMATS>
         stackItem->pos+=ch.length(); // Adapt new starting position
-        
+
+        //Note: the <FONT> tag is mandatory for KWord
         QDomElement fontElementOut=nodeOut.ownerDocument().createElement("FONT");
         fontElementOut.setAttribute("name",stackItem->propertyFontName); // Font name
         formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
@@ -384,8 +387,79 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     //The warning is serious!! (KWord crashes if it does not find a few things in its XML code)
     kdDebug()<<"WARNING: AbiWord to KWord Import filter can crash KWord!!"<<endl;
 
-    // Make the file header
-    
+    QString fileToParseName(fileIn); //Name of the file to parse
+    bool otherFile=false; //Do we have an intermediary file;
+
+    //Test if the file is gzipped
+
+    //At first, find the last extension
+    QString strExt;
+    const int result=fileIn.findRev('.');
+    if (result>=0)
+    {
+        strExt=fileIn.mid(result);
+    }
+
+    kdDebug() << "AbiWord Filter: -" << strExt << "-" << endl;
+
+    if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (logical extension)
+        ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
+    {   //The input file is compressed, so we cannot treat it directly
+
+        const int bufferSize=1024;
+        char buffer[bufferSize];
+
+        //Open another temporary file (in the method of KoFilterManager::import)
+        KTempFile tempFileIn;
+        if (tempFileIn.status())
+        { //An error has occured, so abort!
+            return false;
+        }
+        QString tempFileInName=tempFileIn.name();
+        gzFile gzfile=gzopen(fileIn.local8Bit(),"rb");
+        if (!gzfile)
+        {
+            kdError() << "Could not open gzipped file! Aborting!" << endl;
+            return false;
+        }
+        for (;;)
+        {
+            const int result=gzread(gzfile,buffer,bufferSize);
+            if (result>0)
+            {
+                const int result2=tempFileIn.file()->writeBlock(buffer,result);
+                if (result==result2)
+                {
+                    continue;
+                }
+                else
+                {
+                    // error!
+                    kdError() << "Cannot write temp file! Aborting!" << endl;
+                    gzclose(gzfile);
+                    return false;
+                }
+            }
+            else if (!result)
+            {
+                // end of file
+                break;
+            }
+            else
+            {
+                // error!
+                kdError() << "Error reading gzipped file! Aborting!" << endl;
+                gzclose(gzfile);
+                return false;
+            }
+        }
+        gzclose(gzfile);
+        kdDebug()<< "Gzipped file uncompressed!" << endl;
+
+        fileToParseName=tempFileIn.name();
+        otherFile=true;
+    }
+
     //Initiate QDomDocument (TODO: is there are better way?)
     QString strHeader("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     strHeader+="<DOC editor=\"KWord\" mime=\"application/x-kword\" syntaxVersion=\"1\" >\n";
@@ -400,30 +474,37 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     strHeader+="inchLeft=\"0.393701\" inchTop=\"0.590551\" inchRight=\"0.393701\" inchBottom=\"0.590551\" />\n";
     strHeader+="</PAPER>\n";
     strHeader+="</DOC>\n";
-       
+
     QDomDocument qDomDocumentOut(fileOut);
     qDomDocumentOut.setContent(strHeader);
-    
-    QFile in(fileIn);
+
 
     StructureParser handler(createMainFramesetElement(qDomDocumentOut));
-    
+
     //TODO: verify if the encoding of the file is really UTF-8
     //For now, we arbitrarily decide that Qt can handle it!!
-    
-    QXmlInputSource source(in);
+
     QXmlSimpleReader reader;
     reader.setContentHandler( &handler );
 
+    // The input file is now uncompressed, so we may handle it directly
+    QFile in(fileToParseName);
+    QXmlInputSource source(in);
     if (!reader.parse( source ))
     {
-        kdError() << "AbiWord Import: Parsing unsuccessful. Aborting!";
+        kdError() << "AbiWord Import: Parsing unsuccessful. Aborting!" << endl;
         return false;
     }
-   
+
+    if (otherFile)
+    {
+        // Unlink the intermediary file (Note: file is not deleted if there was a parsing error!)
+        in.remove();
+    }
+
     kdDebug()<< qDomDocumentOut.toCString() << endl << "Now importing to KWord!" << endl;
 
-    KoStore out=KoStore(QString(fileOut), KoStore::Write);
+    KoStore out=KoStore(fileOut, KoStore::Write);
     if(!out.open("root"))
     {
         kdError() << "AbiWord Import unable to open output file!" << endl;
@@ -435,6 +516,6 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     QCString strOut=qDomDocumentOut.toCString();
     out.write((const char*)strOut, strOut.length());
     out.close();
-    
+
     return true;
 }
