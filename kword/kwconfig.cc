@@ -292,7 +292,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 
     QString suffix = KoUnit::unitName( unit ).prepend(' ');
     gridX=new KDoubleNumInput( recentFiles, KoUnit::ptToUnit( ptGridX, unit ), gbInterfaceGroup );
-    gridX->setRange(0.1, 50, 0.1);
+    gridX->setRange(KoUnit::ptToUnit( 0.1, unit ),KoUnit::ptToUnit( 50, unit ), KoUnit::ptToUnit( 0.1, unit ));
     gridX->setPrecision (1);
     gridX->setSuffix( suffix );
     gridX->setLabel(i18n("&Horizontal grid size:"));
@@ -300,7 +300,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
                     "moving and scaling") );
 
     gridY=new KDoubleNumInput( gridX, KoUnit::ptToUnit( ptGridY, unit ), gbInterfaceGroup );
-    gridY->setRange(0.1, 50, 0.1);
+    gridY->setRange(KoUnit::ptToUnit( 0.1, unit ), KoUnit::ptToUnit( 50, unit ), KoUnit::ptToUnit( 0.1, unit ));
     gridY->setPrecision(1);
     gridY->setLabel(i18n("&Vertical grid size:"));
     QWhatsThis::add( gridY, i18n("The grid size on which frames and other content snaps while "
@@ -309,7 +309,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 
     double val = KoUnit::ptToUnit( ptIndent, unit );
     indent = new KDoubleNumInput( gridY, val, gbInterfaceGroup );
-    indent->setRange(0.1, 50, 0.1);
+    indent->setRange(KoUnit::ptToUnit( 0.1, unit ), KoUnit::ptToUnit( 50, unit ), KoUnit::ptToUnit( 0.1, unit ));
     indent->setPrecision(1);
     indent->setSuffix( suffix );
     indent->setLabel(i18n("&Paragraph indent by toolbar buttons:"));
@@ -662,7 +662,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
 
     QString suffix = unitType.prepend(' ');
     columnSpacing=new KDoubleNumInput( KoUnit::ptToUnit( ptColumnSpacing, unit ), gbDocumentDefaults );
-    columnSpacing->setRange(0.1, 50, 0.1);
+    columnSpacing->setRange(KoUnit::ptToUnit( 0.1, unit ), KoUnit::ptToUnit( 50, unit ), KoUnit::ptToUnit( 0.1, unit ));
     columnSpacing->setPrecision(1);
     columnSpacing->setSuffix( suffix );
     columnSpacing->setLabel(i18n("Default column spacing:"));
