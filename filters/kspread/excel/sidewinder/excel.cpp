@@ -1754,6 +1754,25 @@ void FormulaRecord::setResult( const Value& r )
   d->result = r;
 }
 
+static Value errorAsValue( int errorCode )
+{
+  Value result( Value::Error );
+  
+  switch( errorCode )
+  {
+    case 0x00: result = Value::errorNULL();  break;
+    case 0x07: result = Value::errorDIV0();  break;
+    case 0x0f: result = Value::errorVALUE(); break;
+    case 0x17: result = Value::errorREF();   break;
+    case 0x1d: result = Value::errorNAME();  break;
+    case 0x24: result = Value::errorNUM();   break;
+    case 0x2A: result = Value::errorNA();    break;
+    default: break;
+  };
+  
+  return result;
+};
+
 void FormulaRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 20 ) return;
@@ -1761,11 +1780,42 @@ void FormulaRecord::setData( unsigned size, const unsigned char* data )
   setRow( readU16( data ) );
   setColumn( readU16( data+2 ) );
   setXfIndex( readU16( data+4 ) );
+  
+  if( readU16( data+12 ) != 0xffff )
+  {
+    // Floating-point 
+    setResult( Value( readFloat64( data+6 ) ) );
+  }
+  else
+  {
+    switch( data[6] )
+    {
+      case 0: // string, real value in subsequent string record
+        setResult( Value( Value::String ) );
+        break;
+      case 1: // boolean
+        setResult( Value( data[8] ? true : false ) );
+        break;
+      case 2: // error code  
+        setResult( errorAsValue( data[8] ) );
+        break;
+      case 3: // empty
+        setResult( Value::empty() );
+        break;
+      default: // fallback  
+        setResult( Value::empty() );
+        break;
+    };
+  }
 }
 
 void FormulaRecord::dump( std::ostream& out ) const
 {
   out << "FORMULA" << std::endl;
+  out << "                Row : " << row() << std::endl;
+  out << "             Column : " << column() << std::endl;
+  out << "           XF Index : " << xfIndex() << std::endl;
+  out << "             Result : " << result() << std::endl;
 }
 
 // ========== LABEL ========== 
