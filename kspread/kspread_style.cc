@@ -125,12 +125,28 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     styleStack.push( element );
     styleStack.setTypeProperties( "table-cell" );
     QString str;
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
+    if ( element.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
     {
-        kdDebug()<<"styleStack.attribute( style:data-style-name ) :"<<styleStack.attributeNS( KoXmlNS::style, "data-style-name" )<<endl;
-        kdDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[styleStack.attributeNS( KoXmlNS::style, "data-style-name" )].formatStr<<endl;
-        kdDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[styleStack.attributeNS( KoXmlNS::style, "data-style-name" )].prefix<<endl;
-        kdDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[styleStack.attributeNS( KoXmlNS::style, "data-style-name" )].suffix<<endl;
+        kdDebug()<<"styleStack.attribute( style:data-style-name ) :"<<element.attributeNS( KoXmlNS::style, "data-style-name", QString::null )<<endl;
+        kdDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].formatStr<<endl;
+        kdDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].prefix<<endl;
+        kdDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].suffix<<endl;
+
+        QString tmp = oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].prefix;
+        if ( !tmp.isEmpty() )
+        {
+            m_prefix = tmp;
+            m_featuresSet |= SPrefix;
+        }
+        tmp = oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].suffix;
+        if ( !tmp.isEmpty() )
+        {
+            m_postfix = tmp;
+            m_featuresSet |= SPostfix;
+        }
+        //TODO
+        //oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].formatStr
+
 
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "font-name" ) )
