@@ -165,31 +165,37 @@ void KWPage::keyPressEvent(QKeyEvent *e)
       {
 	fc->cursorGotoLineStart(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
+	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
       } break;
     case Key_End:
       {
 	fc->cursorGotoLineEnd(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
+	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
       } break;
     case Key_Right:
       {
 	fc->cursorGotoRight(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
+	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
       } break;
     case Key_Left:
       {
 	fc->cursorGotoLeft(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
+	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
       } break;
     case Key_Up:
       {
 	fc->cursorGotoUp(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
+	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
       } break;
     case Key_Down:
       {
 	fc->cursorGotoDown(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
+	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
       } break;
     case Key_Return: case Key_Enter:
       {

@@ -45,6 +45,7 @@ class KWPaintWindow;
 #include "kword.h"
 #include "kword_page.h"
 #include "format.h"
+#include "paraglayout.h"
 
 #include <koPageLayoutDia.h>
 
@@ -141,6 +142,7 @@ public:
   virtual void createGUI();
   virtual void construct();
   virtual void setFormat(KWFormat &_format,bool _check = true);
+  virtual void setFlow(KWParagLayout::Flow _flow);
 
   KWordGUI *getGUI() { return gui; }
 
@@ -263,6 +265,7 @@ protected:
   bool m_bShowGUI;
 
   KWFormat format;
+  KWParagLayout::Flow flow;
 
 };
 
@@ -319,7 +322,7 @@ protected:
   KWPage *paperWidget;
   KWordDocument_impl *doc;
   KWordView_impl *view;
-
+  
 };
 
 #endif

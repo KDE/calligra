@@ -67,6 +67,7 @@ KWordView_impl::KWordView_impl(QWidget *_parent = 0L,const char *_name = 0L)
 
   m_lstFrames.setAutoDelete(true);  
   gui = 0;
+  flow = KWParagLayout::LEFT;
 }
 
 /*================================================================*/
@@ -178,6 +179,35 @@ void KWordView_impl::setFormat(KWFormat &_format,bool _check = true)
   format = _format;
   
   gui->getPaperWidget()->formatChanged(format);
+}
+
+/*================================================================*/
+void KWordView_impl::setFlow(KWParagLayout::Flow _flow)
+{
+  if (_flow != flow)
+    {
+      flow = _flow;
+      m_rToolBarText->setButton(m_idButtonText_ALeft,false);  
+      m_rToolBarText->setButton(m_idButtonText_ACenter,false);  
+      m_rToolBarText->setButton(m_idButtonText_ARight,false);  
+      m_rToolBarText->setButton(m_idButtonText_ABlock,false);  
+      
+      switch (flow)
+	{
+	case KWParagLayout::LEFT:
+	  m_rToolBarText->setButton(m_idButtonText_ALeft,true);  
+	  break;
+	case KWParagLayout::CENTER:
+	  m_rToolBarText->setButton(m_idButtonText_ACenter,true);  
+	  break;
+	case KWParagLayout::RIGHT:
+	  m_rToolBarText->setButton(m_idButtonText_ARight,true);  
+	  break;
+	case KWParagLayout::BLOCK:
+	  m_rToolBarText->setButton(m_idButtonText_ABlock,true);  
+	  break;
+	}
+    }
 }
 
 /*================================================================*/
@@ -421,21 +451,45 @@ void KWordView_impl::textColor()
 /*======================= text align left =======================*/
 void KWordView_impl::textAlignLeft()
 {
+  flow = KWParagLayout::LEFT;
+  m_rToolBarText->setButton(m_idButtonText_ALeft,false);  
+  m_rToolBarText->setButton(m_idButtonText_ACenter,false);  
+  m_rToolBarText->setButton(m_idButtonText_ARight,false);  
+  m_rToolBarText->setButton(m_idButtonText_ABlock,false);  
+  gui->getPaperWidget()->setFlow(KWParagLayout::LEFT);
 }
 
 /*======================= text align center =====================*/
 void KWordView_impl::textAlignCenter()
 {
+  flow = KWParagLayout::CENTER;
+  m_rToolBarText->setButton(m_idButtonText_ACenter,false);  
+  m_rToolBarText->setButton(m_idButtonText_ALeft,false);  
+  m_rToolBarText->setButton(m_idButtonText_ARight,false);  
+  m_rToolBarText->setButton(m_idButtonText_ABlock,false);  
+  gui->getPaperWidget()->setFlow(KWParagLayout::CENTER);
 }
 
 /*======================= text align right ======================*/
 void KWordView_impl::textAlignRight()
 {
+  flow = KWParagLayout::RIGHT;
+  m_rToolBarText->setButton(m_idButtonText_ARight,false);  
+  m_rToolBarText->setButton(m_idButtonText_ACenter,false);  
+  m_rToolBarText->setButton(m_idButtonText_ALeft,false);  
+  m_rToolBarText->setButton(m_idButtonText_ABlock,false);  
+  gui->getPaperWidget()->setFlow(KWParagLayout::RIGHT);
 }
 
 /*======================= text align block ======================*/
 void KWordView_impl::textAlignBlock()
 {
+  flow = KWParagLayout::BLOCK;
+  m_rToolBarText->setButton(m_idButtonText_ABlock,false);  
+  m_rToolBarText->setButton(m_idButtonText_ACenter,false);  
+  m_rToolBarText->setButton(m_idButtonText_ARight,false);  
+  m_rToolBarText->setButton(m_idButtonText_ALeft,false);  
+  gui->getPaperWidget()->setFlow(KWParagLayout::BLOCK);
 }
 
 /*====================== enumerated list ========================*/

@@ -562,12 +562,12 @@ void KWordDocument_impl::insertParag(KWParag *_parag,InsertPos _pos)
     {
     case I_AFTER:
       {
-	_new = new KWParag(this,_parag,_next,defaultParagLayout);
+	_new = new KWParag(this,_parag,_next,_parag->getParagLayout());
 	if (_next) _next->setPrev(_new);
       } break;
     case I_BEFORE:
       {
-	_new = new KWParag(this,_prev,_parag,defaultParagLayout);
+	_new = new KWParag(this,_prev,_parag,_parag->getParagLayout());
 	if (_parag) _parag->setPrev(_new);
 	else setFirstParag(_new);
       } break;
@@ -583,7 +583,7 @@ void KWordDocument_impl::splitParag(KWParag *_parag,unsigned int _pos)
     
   unsigned int len = _parag->getTextLen() - _pos;
   KWChar* _string = _parag->getKWString()->split(_pos);
-  _new = new KWParag(this,_parag,_next,defaultParagLayout);
+  _new = new KWParag(this,_parag,_next,_parag->getParagLayout());
   if (_next) _next->setPrev(_new);
   
   _new->appendText(_string,len);

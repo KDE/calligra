@@ -6,6 +6,8 @@ class KWParagLayout;
 #include "defs.h"
 #include "format.h"
 
+#include <qstring.h>
+
 /**
  * A KWParagLayout-Instance provides all information neccessary to format a given
  * parag. This means: Font, TextFlow, Counter ....
@@ -20,6 +22,8 @@ public:
     KWParagLayout( KWordDocument_impl *_doc );
     ~KWParagLayout();
     
+    KWParagLayout& operator=(KWParagLayout &_layout);
+
     void setFormat( KWFormat &_format );
     void setPTFirstLineLeftIndent( unsigned int _i ) { ptFirstLineLeftIndent = _i; }
     void setptLeftIndent( unsigned int _i ) { ptLeftIndent = _i; }

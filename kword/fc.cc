@@ -22,6 +22,8 @@ KWFormatContext::KWFormatContext( KWordDocument_impl *_doc ) : KWFormat()
   during_vertical_cursor_movement = FALSE;
 
   spacingError = 0;
+  ptTextLen = 0;
+  textPos = 0;
 }
 
 KWFormatContext::~KWFormatContext()
@@ -516,6 +518,10 @@ bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
 
 bool KWFormatContext::makeLineLayout( QPainter &_painter )
 {
+  //if (parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK || 
+  //parag->getParagLayout()->getFlow() == KWParagLayout::CENTER)
+  //    calcTextLen();
+
     ptPos = 0;
     spaces = 0;
     textPos = lineStartPos;
@@ -587,6 +593,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     else if ( parag->getParagLayout()->getFlow() == KWParagLayout::CENTER )
 	ptPos = xShift + ( document->getPTColumnWidth() - indent - left - right - ptTextLen ) / 2;
 
+    //debug("%d %d %d",ptPos,ptTextLen,xShift + document->getPTColumnWidth());
 
     ptStartPos = ptPos;
 
@@ -759,3 +766,59 @@ void KWFormatContext::apply( KWFormat &_format )
     }
 }
 
+void KWFormatContext::calcTextLen()
+{
+  // Reggie: this is DOG SLOW and has to be done better
+
+  ptTextLen = 0;
+  
+  unsigned int pos = 0,tmpPTPos = 0,_ptPos = 0,tmpPos = 0;
+  KWChar *text = parag->getText();
+  unsigned int xShift = document->getPTLeftBorder() + ( column - 1 ) * ( document->getPTColumnWidth() + document->getPTColumnSpacing() );
+
+  tmpFormat.apply( *this );
+  KWDisplayFont *font = tmpFormat.loadFont( document );
+  displayFont = font;
+
+
+  while ( pos < textPos )
+    {
+      char c = text[ pos ].c;
+      
+      if ( c != 0 && text[ pos ].attrib )
+	{
+	  // Handle font formats here.
+	  assert( text[ pos ].attrib->getClassId() == ID_KWCharFormat );
+	  KWCharFormat *f = (KWCharFormat*)text[ pos ].attrib;
+	  apply( *f->getFormat() );
+	}
+      
+      if (c == ' ')
+	{
+	  tmpPTPos = 0;
+	  tmpPos = 0;
+	}
+	
+      // Do we have some format definition here ?
+      if ( c == 0 )
+	;
+      else // A usual character ...
+	{ 
+	  _ptPos += font->getPTWidth( c );
+	  ptTextLen += font->getPTWidth( c );
+	  tmpPTPos += font->getPTWidth( c );
+	  pos++;
+	  tmpPos++;
+
+	  if (_ptPos > xShift + document->getPTColumnWidth())
+	    {
+	      lineStartPos = tmpPos;
+	      ptTextLen = tmpPTPos;
+	      _ptPos = 0;
+	    }
+	}
+    }
+
+  lineEndPos = getParag()->getTextLen();
+  debug("%d %d",lineStartPos,ptTextLen);
+}

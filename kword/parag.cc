@@ -9,7 +9,8 @@ KWParag::KWParag( KWordDocument_impl *_doc, KWParag* _prev, KWParag* _next, KWPa
 {
     prev = _prev;
     next = _next;
-    paragLayout = _paragLayout;
+    paragLayout = new KWParagLayout(_doc);
+    *paragLayout = *_paragLayout;
     document = _doc;
     
     if ( prev )

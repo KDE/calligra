@@ -158,6 +158,8 @@ public:
     void apply( KWFormat &_format );
     
 protected:
+    void calcTextLen();
+
     unsigned int ptTextLen;
     unsigned int ptAscender;
     unsigned int ptDescender;

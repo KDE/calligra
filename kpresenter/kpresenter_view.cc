@@ -905,6 +905,7 @@ void KPresenterView_impl::textAlignLeft()
   tbAlign = TxtParagraph::LEFT;
   page->setTextAlign(tbAlign);
 
+  m_rToolBarText->setButton(m_idButtonText_ALeft,false);
   m_rToolBarText->setButton(m_idButtonText_ACenter,false);
   m_rToolBarText->setButton(m_idButtonText_ARight,false);
   m_rMenuBar->setItemChecked(m_idMenuExtra_TAlign_Left,true);
@@ -918,6 +919,7 @@ void KPresenterView_impl::textAlignCenter()
   tbAlign = TxtParagraph::CENTER;
   page->setTextAlign(TxtParagraph::CENTER);
 
+  m_rToolBarText->setButton(m_idButtonText_ACenter,false);
   m_rToolBarText->setButton(m_idButtonText_ALeft,false);
   m_rToolBarText->setButton(m_idButtonText_ARight,false);
   m_rMenuBar->setItemChecked(m_idMenuExtra_TAlign_Left,false);
@@ -931,6 +933,7 @@ void KPresenterView_impl::textAlignRight()
   tbAlign = TxtParagraph::RIGHT;
   page->setTextAlign(TxtParagraph::RIGHT);
 
+  m_rToolBarText->setButton(m_idButtonText_ARight,false);
   m_rToolBarText->setButton(m_idButtonText_ALeft,false);
   m_rToolBarText->setButton(m_idButtonText_ACenter,false);
   m_rMenuBar->setItemChecked(m_idMenuExtra_TAlign_Left,false);

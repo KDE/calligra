@@ -20,6 +20,7 @@
 #include "defs.h"
 #include "fc.h"
 #include "format.h"
+#include "paraglayout.h"
 
 #include <qevent.h>
 #include <math.h>
@@ -77,6 +78,8 @@ public:
   void scroll(int dx,int dy);
 
   void formatChanged(KWFormat &_format);
+  void setFlow(KWParagLayout::Flow _flow)
+    { fc->getParag()->getParagLayout()->setFlow(_flow); repaint(false); }
 
 protected:
   unsigned int ptLeftBorder();

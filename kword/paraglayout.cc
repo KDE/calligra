@@ -4,7 +4,7 @@
 KWParagLayout::KWParagLayout( KWordDocument_impl *_doc )
   : format(_doc), counterFormat(_doc)
 {
-    flow = BLOCK; //LEFT;
+    flow = LEFT;
     ptParagFootOffset = 0;
     ptParagHeadOffset = 0;
     ptFirstLineLeftIndent = 0;
@@ -22,12 +22,32 @@ KWParagLayout::KWParagLayout( KWordDocument_impl *_doc )
     
     document = _doc;
     document->paragLayoutList.append( this );
-    document->paragLayoutList.setAutoDelete( FALSE );
+    document->paragLayoutList.setAutoDelete(true);
 }
 
 KWParagLayout::~KWParagLayout()
 {
     document->paragLayoutList.removeRef( this );
+}
+
+KWParagLayout& KWParagLayout::operator=(KWParagLayout &_layout)
+{
+  flow = _layout.getFlow();
+  ptParagFootOffset = _layout.getPTParagFootOffset();
+  ptParagHeadOffset = _layout.getPTParagHeadOffset();
+  ptFirstLineLeftIndent = _layout.getPTFirstLineLeftIndent();
+  ptLeftIndent = _layout.getPTLeftIndent();
+  counterFlow = static_cast<CounterFlow>(_layout.getCounterFlow());
+  counterDepth = _layout.getCounterDepth();
+  counterNr = _layout.getCounterNr();
+  counterLeftText = qstrdup(_layout.getCounterLeftText());
+  counterRightText = qstrdup(_layout.getCounterRightText());
+  followingParagLayout = this;
+  numberLikeParagLayout = 0L;
+
+  format.setDefaults( document );
+
+  return *this;
 }
 
 void KWParagLayout::setFollowingParagLayout( const char *_name )

@@ -67,3 +67,11 @@ Reggie, 15.9.1998:
 ------------------
 - Fixed a bug with setting formats
 - Added some new GUI stuff
+
+Reggie, 16.9.1998:
+------------------
+- Started working on alignments/flows. Now you can choose the flow
+  for the current paragraph via the toolbar, and the toolbar is
+  updated automatically when moving the cursor. Now I have to
+  work on the implementation of CENTER and RIGHT, this is really
+  broken at the moment...
