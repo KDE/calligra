@@ -171,7 +171,7 @@ bool KWordChild::save( QTextStream& out )
 
 /*================================================================*/
 KWordDocument::KWordDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ), defaultUserFont(0L),
       formatCollection( this ), imageCollection( this ), selStart( this, 1 ), selEnd( this, 1 ),
       ret_pix( KWBarIcon( "return" ) ), unit( "mm" ), numParags( 0 ), footNoteManager( this ),
       autoFormat( this ), urlIntern(), pglChanged( TRUE )
@@ -754,7 +754,7 @@ bool KWordDocument::loadXML( QIODevice *, const QDomDocument & doc )
     pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_MM( 10 );
     pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM( 10 );
 
-    defaultUserFont = findUserFont( "times" );
+    // defaultUserFont = findUserFont( "times" ); // we don't like mem leaks that much (Werner)
     defaultParagLayout = new KWParagLayout( this );
     defaultParagLayout->setName( "Standard" );
     defaultParagLayout->setCounterType( KWParagLayout::CT_NONE );
@@ -4260,6 +4260,13 @@ void KWordDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHe
         _hf.inchHeaderBodySpacing = zoomIt( _hf.inchHeaderBodySpacing );
         _hf.inchFooterBodySpacing = zoomIt( _hf.inchFooterBodySpacing );
     }
+}
+
+KWUserFont* KWordDocument::getDefaultUserFont() {
+
+    if(defaultUserFont==0L)
+        defaultUserFont=findUserFont( "times" );
+    return defaultUserFont;
 }
 
 void KWordDocument::updateFrameSizes( int oldZoom )

@@ -148,8 +148,7 @@ public:
             return 0L;
     }
 
-    KWUserFont* getDefaultUserFont()
-    { return defaultUserFont;  }
+    KWUserFont* getDefaultUserFont();
     KWParagLayout *getDefaultParagLayout()
     { return defaultParagLayout; }
 
@@ -433,12 +432,12 @@ protected:
 
     unsigned int ptColumnWidth;
 
+    KWUserFont *defaultUserFont;
     KWFormatCollection formatCollection;
     KWImageCollection imageCollection;
     QList<KWFrameSet> frames;
     QList<KWGroupManager> grpMgrs;
 
-    KWUserFont *defaultUserFont;
     KWParagLayout *defaultParagLayout;
 
     int pages;
