@@ -173,6 +173,14 @@ k_dcop:
     bool removeVertHelpLine( int index );
     bool removeHorizHelpLine( int index );
 
+
+    unsigned int nbHorizontalHelpLine() const;
+    unsigned int nbVerticalHelpLine() const;
+
+    //return false if we can find help line
+    bool moveHorizontalHelpLine( int index, double newPos);
+    bool moveVerticalHelpLine( int index, double newPos);
+
 private:
     KPresenterDoc *doc;
 

@@ -6342,7 +6342,7 @@ void KPrCanvas::tmpMoveHelpLine( const QPoint & newPos)
         tmpHelpLinePosX = vi;
     }
     p.end();
-
+    m_view->kPresenterDoc()->setModified(true);
 }
 
 void KPrCanvas::removeHelpLine()

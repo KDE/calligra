@@ -592,3 +592,30 @@ bool KPresenterDocIface::removeHorizHelpLine( int index )
     return true;
 }
 
+unsigned int KPresenterDocIface::nbHorizontalHelpLine() const
+{
+    return doc->horizHelplines().count();
+}
+
+unsigned int KPresenterDocIface::nbVerticalHelpLine() const
+{
+    return doc->vertHelplines().count();
+}
+
+bool KPresenterDocIface::moveHorizontalHelpLine( int index, double newPos)
+{
+    if ( index >= doc->horizHelplines().count() )
+        return false;
+    doc->updateHorizHelpline( index, newPos);
+    doc->repaint( false );
+    return true;
+}
+
+bool KPresenterDocIface::moveVerticalHelpLine( int index, double newPos)
+{
+    if ( index >= doc->vertHelplines().count() )
+        return false;
+    doc->updateVertHelpline( index, newPos);
+    doc->repaint( false );
+    return true;
+}
