@@ -740,7 +740,7 @@ bool KoDocument::openFile()
     // But only if in readwrite mode (no saving problem otherwise)
     if ( isReadWrite() )
       m_url = KURL();
-    // and remove temp file
+    // and remove temp file - uncomment this to debug import filters
     if(!importedFile.isEmpty())
       unlink( QFile::encodeName(importedFile) );
   }
@@ -820,6 +820,12 @@ bool KoDocument::loadNativeFormat( const QString & file )
         return false;
       }
       store->close();
+    } else
+    {
+      kdError(30003) << "ERROR: No maindoc.xml" << endl;
+      delete store;
+      QApplication::restoreOverrideCursor();
+      return false;
     }
 
     if ( !loadChildren( store ) )
