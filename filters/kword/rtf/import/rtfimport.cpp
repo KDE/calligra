@@ -56,12 +56,12 @@ static RTFProperty destinationPropertyTable[] =
 	PROP(	"@field",	"@fldinst",	parseFldinst,		0L, false ),
 	PROP(	"@field",	"@fldrslt",	parseFldrslt,		0L, false ),
 	PROP(	"@rtf",		"@fonttbl",	parseFontTable,		0L, true ),
-	MEMBER(	"@rtf",		"@footer",	parseRichText,		evenPagesFooter, true ),
+	MEMBER(	"@rtf",		"@footer",	parseRichText,		oddPagesFooter, true ),
 	PROP(	"@rtf",		"@footnote",	parseFootNote,		0L, true ),
 	MEMBER(	"@rtf",		"@footerf",	parseRichText,		firstPageFooter, true ),
 	MEMBER(	"@rtf",		"@footerl",	parseRichText,		oddPagesFooter, true ),
 	MEMBER(	"@rtf",		"@footerr",	parseRichText,		evenPagesFooter, true ),
-	MEMBER(	"@rtf",		"@header",	parseRichText,		evenPagesHeader, true ),
+	MEMBER(	"@rtf",		"@header",	parseRichText,		oddPagesHeader, true ),
 	MEMBER(	"@rtf",		"@headerf",	parseRichText,		firstPageHeader, true ),
 	MEMBER(	"@rtf",		"@headerl",	parseRichText,		oddPagesHeader, true ),
 	MEMBER(	"@rtf",		"@headerr",	parseRichText,		evenPagesHeader, true ),
@@ -496,14 +496,17 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     }
 
     // Determine header and footer type
-    // ### FIXME: hType==1 mode is missing (first, odd and even all different.)
-    int hType = facingPages ? 3 : (state.section.titlePage ? 2 : 0);
-    bool hasHeader = !evenPagesHeader.node.isEmpty() ||
-		     (hType == 3 && !oddPagesHeader.node.isEmpty()) ||
-		     (hType == 2 && !firstPageHeader.node.isEmpty());
-    bool hasFooter = !evenPagesFooter.node.isEmpty() ||
-		     (hType == 3 && !oddPagesFooter.node.isEmpty()) ||
-		     (hType == 2 && !firstPageFooter.node.isEmpty());
+    const int hType = facingPages
+        ? (state.section.titlePage ? 3 : 1) : (state.section.titlePage ? 2 : 0);
+
+    const bool hasHeader = !oddPagesHeader.node.isEmpty() ||
+        (facingPages &&!evenPagesHeader.node.isEmpty()) ||
+        (state.section.titlePage && !firstPageHeader.node.isEmpty());
+    const bool hasFooter = !oddPagesFooter.node.isEmpty() ||
+        (facingPages && !evenPagesFooter.node.isEmpty()) ||
+        (state.section.titlePage && !firstPageFooter.node.isEmpty());
+
+    kdDebug(30515) << "hType " << hType << " hasHeader " << hasHeader << " hasFooter " << hasFooter << endl;
 
     // Create main document
     DomNode mainDoc( "DOC" );
