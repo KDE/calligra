@@ -36,7 +36,8 @@ public:
 /*================================================================*/
 
 ConnectionData::ConnectionData()
-: port(0)
+: id(-1)
+, port(0)
 , d(new ConnectionData::Private())
 {
 }

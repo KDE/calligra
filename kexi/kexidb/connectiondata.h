@@ -30,7 +30,8 @@ namespace KexiDB {
 class KEXI_DB_EXPORT ConnectionData
 {
 	public:
-		typedef QPtrList<const ConnectionData> ConstList;
+		typedef QPtrList<ConnectionData> List;
+//		typedef QPtrList<const ConnectionData> ConstList;
 
 		ConnectionData();
 
@@ -41,6 +42,10 @@ class KEXI_DB_EXPORT ConnectionData
 		/*! Name is optional for identyfying given connection
 			by name eg. for users. */
 		QString name;
+
+		/*! Optional id used for identyfiyng any single data in a set (ConnectionData::ConstList).
+		 This is set automatically when needed. By default: -1. */
+		int id;
 
 		/*! Name (unique, not i18n'd) of driver that is used (o should be used) to 
 		 create a connection.
@@ -85,13 +90,13 @@ class KEXI_DB_EXPORT ConnectionData
 
 		/*! For file-based database engines like SQLite, \a fileName is used
 			instead hostName and port */
-		QString fileName() { return m_fileName; }
+		QString fileName() const { return m_fileName; }
 
-		/*! \return file path (for file-based engines) but without a full path */
-		QString dbPath() { return m_dbPath; }
+		/*! \return file path (for file-based engines) but without a file name */
+		QString dbPath() const { return m_dbPath; }
 		
 		/*! \return file name (for file-based engines) but without a full path */
-		QString dbFileName() { return m_dbFileName; }
+		QString dbFileName() const { return m_dbFileName; }
 	protected:
 		/*! For file-based database engines like SQLite, \a fileName is used
 			instead hostName and port */
