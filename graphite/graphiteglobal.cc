@@ -307,8 +307,53 @@ bool operator!=(const PageLayout &lhs, const PageLayout &rhs) {
     return !(lhs==rhs);
 }
 
+QRegion diff(const PageBorders &oldBorders, const PageBorders &newBorders,
+             const double &width, const double &height) {
+
+    double zr=GraphiteGlobal::self()->zoomedResolution();
+    int w=double2Int(width*zr);
+    int h=double2Int(height*zr);
+    // lo = left-outside, ti = top-inside and so on
+    int lo=double2Int(min(oldBorders.left, newBorders.left)*zr);
+    int ro=double2Int(min(oldBorders.right, newBorders.right)*zr);
+    int to=double2Int(min(oldBorders.top, newBorders.top)*zr);
+    int bo=double2Int(min(oldBorders.bottom, newBorders.bottom)*zr);
+    int li=double2Int(max(oldBorders.left, newBorders.left)*zr);
+    int ri=double2Int(max(oldBorders.right, newBorders.right)*zr);
+    int ti=double2Int(max(oldBorders.top, newBorders.top)*zr);
+    int bi=double2Int(max(oldBorders.bottom, newBorders.bottom)*zr);
+
+    QRegion reg;
+    if(lo!=li)
+        reg=reg.unite(QRegion(lo, to, abs(lo-li), abs(h-bo-to)+1));
+    if(to!=ti)
+        reg=reg.unite(QRegion(lo, to, abs(w-ro-lo)+1, abs(to-ti)));
+    if(bo!=bi)
+        reg=reg.unite(QRegion(lo, h-bi, abs(w-ro-lo)+1, abs(bo-bi)+1));
+    if(ro!=ri)
+        reg=reg.unite(QRegion(w-ri, to, abs(ro-ri)+1, abs(h-bo-to)+1));
+    if(reg.isNull()) {
+        // should never happen, but well... we add a very small repaint area here
+        // to avoid flicker :)
+        reg=QRegion(0, 0, 1, 1);
+        kdWarning() << "++++++++++ reg.isNull(): ++++++++++" << endl;
+    }
+    return reg;
+}
+
 QRegion diff(const PageLayout &oldLayout, const PageLayout &newLayout) {
-    return QRegion();
+
+    if(oldLayout.orientation!=newLayout.orientation)
+        return QRegion();
+    else if(oldLayout.layout!=newLayout.layout)
+        return QRegion();
+    else if(oldLayout.size!=newLayout.size)
+        return QRegion();
+    else if(oldLayout.customHeight!=newLayout.customHeight)
+        return QRegion();
+    else if(oldLayout.customWidth!=newLayout.customWidth)
+        return QRegion();
+    return diff(oldLayout.borders, newLayout.borders, newLayout.width(), newLayout.height());
 }
 
 }; //namespace Graphite

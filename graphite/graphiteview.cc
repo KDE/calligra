@@ -19,7 +19,6 @@
 
 #include <kaction.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 #include <ruler.h>
 #include <graphitepart.h>
@@ -55,21 +54,15 @@ GraphiteView::~GraphiteView() {
 
 void GraphiteView::layoutChanged(const QRegion &diff) {
 
-    kdDebug() << ":::GraphiteView::layoutChanged::: --->" << endl;
     m_vert->setPageLayout(m_doc->pageLayout());
     m_horiz->setPageLayout(m_doc->pageLayout());
     m_canvas->resizeContentsMM(m_doc->pageLayout().width(),m_doc->pageLayout().height());
-    if(diff.isEmpty()) {
-        kdDebug() << "+++ diff empty +++" << endl;
+    if(diff.isNull())
         m_canvas->viewport()->erase();
-    }
-    else {
-        kdDebug() << "+++ DIFF! +++" << endl;
+    else
         m_canvas->viewport()->erase(diff);
-    }
     m_canvas->viewport()->update(0, 0, m_canvas->visibleWidth(),
                                  m_canvas->visibleHeight());
-    kdDebug() << "<--- :::GraphiteView::layoutChanged:::" << endl;
 }
 
 void GraphiteView::slotViewZoom(const QString &t) {

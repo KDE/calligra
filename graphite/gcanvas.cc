@@ -67,7 +67,6 @@ void GCanvas::contentsMouseMoveEvent(QMouseEvent *e) {
 
 void GCanvas::viewportPaintEvent(QPaintEvent *e) {
 
-    kdDebug() << "GCanvas::viewportPaintEvent" << endl;
     m_doc->setGlobalZoom(m_view->zoom());
     viewport()->erase(0, 0, m_eraseWidth, m_eraseHeight);
     QPainter p(viewport());

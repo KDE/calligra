@@ -151,6 +151,8 @@ struct PageLayout {
 
 bool operator==(const PageLayout &lhs, const PageLayout &rhs);
 bool operator!=(const PageLayout &lhs, const PageLayout &rhs);
+QRegion diff(const PageBorders &oldBorders, const PageBorders &newBorders,
+             const double &width, const double &height);
 QRegion diff(const PageLayout &oldLayout, const PageLayout &newLayout);
 
 }; //namespace Graphite
