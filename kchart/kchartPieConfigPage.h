@@ -39,8 +39,6 @@ private:
     QSpinBox *dist;
     QSpinBox *column;
     QListView *list;
-    QSpinBox *angle;
-    QSpinBox *depth;
     QSpinBox *explose;
     QMemArray<int> value;
     int pos;

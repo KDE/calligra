@@ -48,16 +48,44 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params
     pie3d=new QCheckBox(i18n("pie 3D"),gb3);
     grid3->addWidget(pie3d,2,0);
 
+    label = new QLabel( i18n( "Start" ), gb3 );
+    label->resize( label->sizeHint() );
+    label->setAlignment(Qt::AlignCenter);
+    grid3->addWidget( label,3,0);
 
+    angle = new QSpinBox(0, 90, 1, gb3);
+    angle->resize(100, angle->sizeHint().height() );
+    grid3->addWidget( angle,4,0);
+
+    label = new QLabel( i18n( "3D-Depth" ), gb3 );
+    label->resize( label->sizeHint() );
+    label->setAlignment(Qt::AlignCenter);
+    grid3->addWidget( label,5,0);
+
+    depth = new QSpinBox(0, 40, 1, gb3);
+    depth->resize(100, depth->sizeHint().height() );
+    grid3->addWidget( depth,6,0);
 
     grid1->addWidget(gb3,1,0);
+    connect(pie3d,SIGNAL(toggled ( bool )),this, SLOT(active3DPie(bool)));
+}
 
+void KChartParameterPieConfigPage::active3DPie(bool b)
+{
+    depth->setEnabled(b);
 }
 
 void KChartParameterPieConfigPage::init()
 {
     title->setText(_params->header1Text());
     pie3d->setChecked(_params->threeDPies());
+    bool state=_params->threeDPies();
+    depth->setEnabled(state);
+    if( state )	{
+        depth->setValue( _params->threeDPieHeight() );
+    }
+
+    angle->setValue( _params->pieStart() );
 }
 
 
@@ -65,4 +93,9 @@ void KChartParameterPieConfigPage::apply()
 {
      _params->setHeader1Text(title->text());
      _params->setThreeDPies( pie3d->isChecked() );
+     if( _params->threeDPies() )	{
+        _params->setThreeDPieHeight( depth->value() );
+    }
+
+    _params->setPieStart( angle->value() );
 }

@@ -54,39 +54,20 @@ KChartPieConfigPage::KChartPieConfigPage( KChartParams* params,
     dist->resize(100, dist->sizeHint().height() );
     grid->addWidget( dist,3,1);
 
-    label = new QLabel( i18n( "Start" ), this );
+    label = new QLabel( i18n( "Explode factor (%)" ), this );
     label->resize( label->sizeHint() );
     label->setAlignment(Qt::AlignCenter);
     grid->addWidget( label,4,1);
 
-    angle = new QSpinBox(0, 90, 1, this);
-    angle->resize(100, angle->sizeHint().height() );
-    grid->addWidget( angle,5,1);
-
-    label = new QLabel( i18n( "3D-Depth" ), this );
-    label->resize( label->sizeHint() );
-    label->setAlignment(Qt::AlignCenter);
-    grid->addWidget( label,6,1);
-
-    depth = new QSpinBox(0, 40, 1, this);
-    depth->resize(100, depth->sizeHint().height() );
-    grid->addWidget( depth,7,1);
-
-    label = new QLabel( i18n( "Explode factor (%)" ), this );
-    label->resize( label->sizeHint() );
-    label->setAlignment(Qt::AlignCenter);
-    grid->addWidget( label,8,1);
-
     explose = new QSpinBox(0, 100, 1, this);
     explose->resize(100, explose->sizeHint().height() );
-    grid->addWidget( explose,9,1);
+    grid->addWidget( explose,5,1);
 
 
     grid->addColSpacing(0,list->width());
     grid->addColSpacing(2,list->width());
     grid->addColSpacing(3,list->width());
 
-    depth->setEnabled(_params->threeDPies());
 
     initList();
     dist->setEnabled(false);
@@ -167,12 +148,6 @@ void KChartPieConfigPage::init()
         //         ((QCheckListItem*)it.current())->setOn(_params->missing[_params->legend.count()*col+indice]) ;
     }
 
-    if( _params->threeDPies() )	{
-        depth->setValue( _params->threeDPieHeight() );
-    }
-
-    angle->setValue( _params->pieStart() );
-
     // PENDING(kalle) Put back in
 //     value.duplicate(_params->explode);
 //     if(pos!=-1) {
@@ -194,12 +169,6 @@ void KChartPieConfigPage::apply()
 //         _params->missing[_params->legend.count()*col+indice]=((QCheckListItem*)it.current())->isOn() ;
     }
     //     _params->colPie=col;
-
-    if( _params->threeDPies() )	{
-        _params->setThreeDPieHeight( depth->value() );
-    }
-
-    _params->setPieStart( angle->value() );
 
     // PENDING(kalle) Put back in
     //     value[pos]=dist->value();
