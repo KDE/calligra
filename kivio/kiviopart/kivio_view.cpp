@@ -464,6 +464,7 @@ void KivioView::setupActions()
   
   m_lineWidthAction = new KoLineWidthAction(i18n("Line Width"), "linewidth", this, SLOT(setLineWidth(double)),
     actionCollection(), "setLineWidth");
+  m_lineWidthAction->setUnit(m_pDoc->units());
   connect(m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), m_lineWidthAction, SLOT(setUnit(KoUnit::Unit)));
   
   m_paperLayout = new KAction( i18n("Page Layout..."), 0, this, SLOT(paperLayoutDlg()), actionCollection(), "paperLayout" );

@@ -192,6 +192,8 @@ void KoLineWidthAction::execute(int index)
     ok = true;
   } if(index == 11) { // Custom width dialog...
     KoLineWidthChooser dlg;
+    dlg.setUnit(m_unit);
+    dlg.setWidth(m_currentWidth);
     
     if(dlg.exec()) {
       m_currentWidth = dlg.width();
