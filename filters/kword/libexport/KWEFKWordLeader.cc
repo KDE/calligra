@@ -507,6 +507,9 @@ static void ProcessDocTag ( QDomNode         myNode,
 void KWEFKWordLeader::setWorker ( KWEFBaseWorker *newWorker )
 {
     m_worker = newWorker;
+    
+    if (newWorker)
+        newWorker->registerKWordLeader(this);
 }
 
 
@@ -621,6 +624,30 @@ static bool ProcessStoreFile ( QByteArray       &byteArrayIn,
     return true;
 }
 
+bool KWEFKWordLeader::loadKoStoreFile(const QString& fileName, QByteArray& array)
+{
+    if (m_filenameIn.isEmpty())
+    {
+        // We have no KoStore, so we cannot offer anything!
+        kdWarning (30508) << "No KoStore to get file from!" << endl;
+        return false;
+    }
+
+    KoStore koStore (m_filenameIn, KoStore::Read);
+
+    if ( koStore.open ( fileName ) )
+    {
+        array = koStore.read ( koStore.size () );
+        koStore.close ();
+    }
+    else
+    {
+        // Note: we do not worry too much if we cannot open the document info!
+        kdWarning (30508) << "Unable to open" << fileName << "sub-file!" << endl;
+        return false;
+    }
+    return true;
+}
 
 bool KWEFKWordLeader::filter ( const QString &filenameIn,
                                const QString &filenameOut,
@@ -675,6 +702,7 @@ bool KWEFKWordLeader::filter ( const QString &filenameIn,
     {
         byteArrayIn = koStoreIn.read ( koStoreIn.size () );
         koStoreIn.close ();
+        m_filenameIn=filenameIn;
 
         kdDebug (30508) << "Processing KWord File (KoStore)..." << endl;
         ProcessStoreFile (byteArrayIn, ProcessDocTag, filterData, this);
@@ -689,6 +717,8 @@ bool KWEFKWordLeader::filter ( const QString &filenameIn,
         {
             byteArrayIn = file.readAll ();
             file.close ();
+            
+            // DO *not* set m_filenameIn as we have not any KoStore
 
             kdDebug (30508) << "Processing KWord File (QFile)..." << endl;
             ProcessStoreFile (byteArrayIn, ProcessDocTag, filterData, this);

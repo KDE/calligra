@@ -27,11 +27,15 @@
 
 #include <KWEFStructures.h>
 
+class KWEFKWordLeader;
+
 class KWEFBaseWorker
 {
     public:
-        KWEFBaseWorker(void) {}
+        KWEFBaseWorker(void) : m_kwordLeader(NULL) {}
         virtual ~KWEFBaseWorker(void) {}
+    public:
+        void registerKWordLeader(KWEFKWordLeader* leader);
     public: // leader/worker functions
         virtual bool doOpenFile (const QString& filenameOut, const QString& to);
         virtual bool doCloseFile (void); // Close file in normal conditions
@@ -54,6 +58,8 @@ class KWEFBaseWorker
         virtual bool doOpenStyles (void); // Like HTML's <style>
         virtual bool doCloseStyles (void); // Like HTML's </style>
         virtual bool doFullDefineStyle (LayoutData& layout); // Defines a single style
+    protected:
+        KWEFKWordLeader* m_kwordLeader;
 };
 
 #endif /* KWEF_BASEWORKER_H */

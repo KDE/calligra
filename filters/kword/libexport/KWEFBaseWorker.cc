@@ -25,6 +25,11 @@
 #include "KWEFStructures.h"
 #include "KWEFBaseWorker.h"
 
+void KWEFBaseWorker::registerKWordLeader(KWEFKWordLeader* leader)
+{
+    m_kwordLeader=leader;
+}
+
 //
 // At first, define all methods that do something real!
 //

@@ -29,7 +29,8 @@ class KWEFKWordLeader
 {
     public:
         KWEFKWordLeader(void) : m_worker (0 /*NULL*/) {}
-        KWEFKWordLeader(KWEFBaseWorker* newWorker) : m_worker (newWorker) {}
+        KWEFKWordLeader(KWEFBaseWorker* newWorker) : m_worker (newWorker)
+        { if (newWorker) newWorker->registerKWordLeader(this); }
         virtual ~KWEFKWordLeader(void) {}
 
     public:
@@ -37,7 +38,8 @@ class KWEFKWordLeader
         KWEFBaseWorker *getWorker(void) const;
         bool filter ( const QString& filenameIn, const QString& filenameOut,
                       const QString& from, const QString& to, const QString& param );
-
+    public: // callbacks
+        bool loadKoStoreFile(const QString& fileName, QByteArray& array);
     public: // public leader/worker functions (DO NOT use in your own code!)
         bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
         bool doFullDocument (const QValueList<ParaData> &, QString &, QString &);
@@ -57,6 +59,7 @@ class KWEFKWordLeader
         bool doCloseDocument (void);
     private:
         KWEFBaseWorker *m_worker;
+        QString m_filenameIn;
 };
 
 #endif /* KWEF_KWORDLEADER_H */
