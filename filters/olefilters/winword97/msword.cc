@@ -878,7 +878,7 @@ void MsWord::parse()
         {
             clxtGrpprl = 1,
             clxtPlcfpcd = 2
-        };
+        } clxtENUM;
 
         QArray<unsigned> grpprlCounts;
         QArray<const U8 *> grpprlPtrs;

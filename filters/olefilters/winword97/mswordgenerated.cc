@@ -27,56 +27,56 @@ DESCRIPTION
 #include <mswordgenerated.h>
 #include <string.h>
 
-unsigned MsWordGenerated::read(const U8 *in, U8 *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL U8 *out, unsigned count)
 {
-    memcpy(out, in, count);
+    memcpy((void*) out, in, count);
     return count;
 }
 
-unsigned MsWordGenerated::read(const U8 *in, S8 *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL S8 *out, unsigned count)
 {
     return read(in, (U8 *)out, count);
 }
 
-unsigned MsWordGenerated::read(const U8 *in, U16 *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL U16 *out, unsigned count)
 {
     U16 tmp;
 
     for (unsigned i = 0; i < count; i++)
     {
         tmp = (U16)((*(in + 1) << 8) + (*in));
-        memcpy(out, &tmp, sizeof(tmp));
+        memcpy((void*) out, &tmp, sizeof(tmp));
         out++;
         in += sizeof(tmp);
     }
     return count + count;
 }
 
-unsigned MsWordGenerated::read(const U8 *in, S16 *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL S16 *out, unsigned count)
 {
     return read(in, (U16 *)out, count);
 }
 
-unsigned MsWordGenerated::read(const U8 *in, U32 *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL U32 *out, unsigned count)
 {
     U32 tmp;
 
     for (unsigned i = 0; i < count; i++)
     {
         tmp = (U32)((*(in + 3) << 24) + (*(in + 2) << 16) + (*(in + 1) << 8) + (*in));
-        memcpy(out, &tmp, sizeof(tmp));
+        memcpy((void*) out, &tmp, sizeof(tmp));
         out++;
         in += sizeof(tmp);
     }
     return count + count + count + count;
 }
 
-unsigned MsWordGenerated::read(const U8 *in, S32 *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL S32 *out, unsigned count)
 {
     return read(in, (U32 *)out, count);
 }
 
-unsigned MsWordGenerated::read(const U8 *in, DTTM *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL DTTM *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -107,7 +107,7 @@ unsigned MsWordGenerated::read(const U8 *in, DTTM *out, unsigned count)
     return bytes;
 } // DTTM
 
-unsigned MsWordGenerated::read(const U8 *in, SHD *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL SHD *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -131,7 +131,7 @@ unsigned MsWordGenerated::read(const U8 *in, SHD *out, unsigned count)
     return bytes;
 } // SHD
 
-unsigned MsWordGenerated::read(const U8 *in, DOPTYPOGRAPHY *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL DOPTYPOGRAPHY *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -160,7 +160,7 @@ unsigned MsWordGenerated::read(const U8 *in, DOPTYPOGRAPHY *out, unsigned count)
     return bytes;
 } // DOPTYPOGRAPHY
 
-unsigned MsWordGenerated::read(const U8 *in, PRM *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL PRM *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -184,7 +184,7 @@ unsigned MsWordGenerated::read(const U8 *in, PRM *out, unsigned count)
     return bytes;
 } // PRM
 
-unsigned MsWordGenerated::read(const U8 *in, ATRD *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL ATRD *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -209,7 +209,7 @@ unsigned MsWordGenerated::read(const U8 *in, ATRD *out, unsigned count)
     return bytes;
 } // ATRD
 
-unsigned MsWordGenerated::read(const U8 *in, ANLD *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL ANLD *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -267,7 +267,7 @@ unsigned MsWordGenerated::read(const U8 *in, ANLD *out, unsigned count)
     return bytes;
 } // ANLD
 
-unsigned MsWordGenerated::read(const U8 *in, ANLV *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL ANLV *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -323,7 +323,7 @@ unsigned MsWordGenerated::read(const U8 *in, ANLV *out, unsigned count)
     return bytes;
 } // ANLV
 
-unsigned MsWordGenerated::read(const U8 *in, ASUMY *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL ASUMY *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -341,7 +341,7 @@ unsigned MsWordGenerated::read(const U8 *in, ASUMY *out, unsigned count)
     return bytes;
 } // ASUMY
 
-unsigned MsWordGenerated::read(const U8 *in, ASUMYI *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL ASUMYI *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -371,7 +371,7 @@ unsigned MsWordGenerated::read(const U8 *in, ASUMYI *out, unsigned count)
     return bytes;
 } // ASUMYI
 
-unsigned MsWordGenerated::read(const U8 *in, BTE *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL BTE *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -389,7 +389,7 @@ unsigned MsWordGenerated::read(const U8 *in, BTE *out, unsigned count)
     return bytes;
 } // BTE
 
-unsigned MsWordGenerated::read(const U8 *in, BKD *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL BKD *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -420,7 +420,7 @@ unsigned MsWordGenerated::read(const U8 *in, BKD *out, unsigned count)
     return bytes;
 } // BKD
 
-unsigned MsWordGenerated::read(const U8 *in, BKF *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL BKF *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -447,7 +447,7 @@ unsigned MsWordGenerated::read(const U8 *in, BKF *out, unsigned count)
     return bytes;
 } // BKF
 
-unsigned MsWordGenerated::read(const U8 *in, BKL *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL BKL *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -465,7 +465,7 @@ unsigned MsWordGenerated::read(const U8 *in, BKL *out, unsigned count)
     return bytes;
 } // BKL
 
-unsigned MsWordGenerated::read(const U8 *in, BRC *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL BRC *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -498,7 +498,7 @@ unsigned MsWordGenerated::read(const U8 *in, BRC *out, unsigned count)
     return bytes;
 } // BRC
 
-unsigned MsWordGenerated::read(const U8 *in, BRC10 *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL BRC10 *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -528,7 +528,7 @@ unsigned MsWordGenerated::read(const U8 *in, BRC10 *out, unsigned count)
     return bytes;
 } // BRC10
 
-unsigned MsWordGenerated::read(const U8 *in, CHP *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL CHP *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -644,7 +644,7 @@ unsigned MsWordGenerated::read(const U8 *in, CHP *out, unsigned count)
     return bytes;
 } // CHP
 
-//unsigned MsWordGenerated::read(const U8 *in, CHPX *out, unsigned count)
+//unsigned MsWordGenerated::read(const U8 *in, __UNAL CHPX *out, unsigned count)
 //{
 //    U32 shifterU32;
 //    U16 shifterU16;
@@ -663,7 +663,7 @@ unsigned MsWordGenerated::read(const U8 *in, CHP *out, unsigned count)
 //    return bytes;
 //} // CHPX
 
-unsigned MsWordGenerated::read(const U8 *in, DCS *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL DCS *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -686,7 +686,7 @@ unsigned MsWordGenerated::read(const U8 *in, DCS *out, unsigned count)
     return bytes;
 } // DCS
 
-unsigned MsWordGenerated::read(const U8 *in, DOGRID *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL DOGRID *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -713,7 +713,7 @@ unsigned MsWordGenerated::read(const U8 *in, DOGRID *out, unsigned count)
     return bytes;
 } // DOGRID
 
-unsigned MsWordGenerated::read(const U8 *in, DOP *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL DOP *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -871,7 +871,7 @@ unsigned MsWordGenerated::read(const U8 *in, DOP *out, unsigned count)
     return bytes;
 } // DOP
 
-unsigned MsWordGenerated::read(const U8 *in, DOP102 *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL DOP102 *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -929,7 +929,7 @@ unsigned MsWordGenerated::read(const U8 *in, DOP102 *out, unsigned count)
     return bytes;
 } // DOP102
 
-unsigned MsWordGenerated::read(const U8 *in, DOP105 *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL DOP105 *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -995,7 +995,7 @@ unsigned MsWordGenerated::read(const U8 *in, DOP105 *out, unsigned count)
     return bytes;
 } // DOP105
 
-unsigned MsWordGenerated::read(const U8 *in, FLD *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL FLD *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1018,7 +1018,7 @@ unsigned MsWordGenerated::read(const U8 *in, FLD *out, unsigned count)
     return bytes;
 } // FLD
 
-unsigned MsWordGenerated::read(const U8 *in, FSPA *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL FSPA *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1054,7 +1054,7 @@ unsigned MsWordGenerated::read(const U8 *in, FSPA *out, unsigned count)
     return bytes;
 } // FSPA
 
-//unsigned MsWordGenerated::read(const U8 *in, FFN *out, unsigned count)
+//unsigned MsWordGenerated::read(const U8 *in, __UNAL FFN *out, unsigned count)
 //{
 //    U32 shifterU32;
 //    U16 shifterU16;
@@ -1085,7 +1085,7 @@ unsigned MsWordGenerated::read(const U8 *in, FSPA *out, unsigned count)
 //    return bytes;
 //} // FFN
 
-unsigned MsWordGenerated::read(const U8 *in, FIB *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL FIB *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1152,7 +1152,7 @@ unsigned MsWordGenerated::read(const U8 *in, FIB *out, unsigned count)
     return bytes;
 } // FIB
 
-unsigned MsWordGenerated::read(const U8 *in, FIBFCLCB *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL FIBFCLCB *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1170,7 +1170,7 @@ unsigned MsWordGenerated::read(const U8 *in, FIBFCLCB *out, unsigned count)
     return bytes;
 } // FIBFCLCB
 
-unsigned MsWordGenerated::read(const U8 *in, FRD *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL FRD *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1188,7 +1188,7 @@ unsigned MsWordGenerated::read(const U8 *in, FRD *out, unsigned count)
     return bytes;
 } // FRD
 
-//unsigned MsWordGenerated::read(const U8 *in, CHPXFKP *out, unsigned count)
+//unsigned MsWordGenerated::read(const U8 *in, __UNAL CHPXFKP *out, unsigned count)
 //{
 //    U32 shifterU32;
 //    U16 shifterU16;
@@ -1206,7 +1206,7 @@ unsigned MsWordGenerated::read(const U8 *in, FRD *out, unsigned count)
 //    return bytes;
 //} // CHPXFKP
 
-//unsigned MsWordGenerated::read(const U8 *in, PAPXFKP *out, unsigned count)
+//unsigned MsWordGenerated::read(const U8 *in, __UNAL PAPXFKP *out, unsigned count)
 //{
 //    U32 shifterU32;
 //    U16 shifterU16;
@@ -1226,7 +1226,7 @@ unsigned MsWordGenerated::read(const U8 *in, FRD *out, unsigned count)
 //    return bytes;
 //} // PAPXFKP
 
-unsigned MsWordGenerated::read(const U8 *in, LVLF *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL LVLF *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1264,7 +1264,7 @@ unsigned MsWordGenerated::read(const U8 *in, LVLF *out, unsigned count)
     return bytes;
 } // LVLF
 
-unsigned MsWordGenerated::read(const U8 *in, LSPD *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL LSPD *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1282,7 +1282,7 @@ unsigned MsWordGenerated::read(const U8 *in, LSPD *out, unsigned count)
     return bytes;
 } // LSPD
 
-unsigned MsWordGenerated::read(const U8 *in, LSTF *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL LSTF *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1309,7 +1309,7 @@ unsigned MsWordGenerated::read(const U8 *in, LSTF *out, unsigned count)
     return bytes;
 } // LSTF
 
-unsigned MsWordGenerated::read(const U8 *in, LFO *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL LFO *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1328,7 +1328,7 @@ unsigned MsWordGenerated::read(const U8 *in, LFO *out, unsigned count)
     return bytes;
 } // LFO
 
-unsigned MsWordGenerated::read(const U8 *in, LFOLVL *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL LFOLVL *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1356,7 +1356,7 @@ unsigned MsWordGenerated::read(const U8 *in, LFOLVL *out, unsigned count)
     return bytes;
 } // LFOLVL
 
-unsigned MsWordGenerated::read(const U8 *in, OLST *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL OLST *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1376,7 +1376,7 @@ unsigned MsWordGenerated::read(const U8 *in, OLST *out, unsigned count)
     return bytes;
 } // OLST
 
-unsigned MsWordGenerated::read(const U8 *in, NUMRM *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL NUMRM *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1400,7 +1400,7 @@ unsigned MsWordGenerated::read(const U8 *in, NUMRM *out, unsigned count)
     return bytes;
 } // NUMRM
 
-unsigned MsWordGenerated::read(const U8 *in, PGD *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL PGD *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1446,7 +1446,7 @@ unsigned MsWordGenerated::read(const U8 *in, PGD *out, unsigned count)
     return bytes;
 } // PGD
 
-unsigned MsWordGenerated::read(const U8 *in, PHE *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL PHE *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1476,7 +1476,7 @@ unsigned MsWordGenerated::read(const U8 *in, PHE *out, unsigned count)
     return bytes;
 } // PHE
 
-unsigned MsWordGenerated::read(const U8 *in, PAP *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL PAP *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1542,7 +1542,7 @@ unsigned MsWordGenerated::read(const U8 *in, PAP *out, unsigned count)
     return bytes;
 } // PAP
 
-//unsigned MsWordGenerated::read(const U8 *in, PAPX *out, unsigned count)
+//unsigned MsWordGenerated::read(const U8 *in, __UNAL PAPX *out, unsigned count)
 //{
 //    U32 shifterU32;
 //    U16 shifterU16;
@@ -1562,7 +1562,7 @@ unsigned MsWordGenerated::read(const U8 *in, PAP *out, unsigned count)
 //    return bytes;
 //} // PAPX
 
-unsigned MsWordGenerated::read(const U8 *in, PICF *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL PICF *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1581,7 +1581,7 @@ unsigned MsWordGenerated::read(const U8 *in, PICF *out, unsigned count)
     return bytes;
 } // PICF
 
-unsigned MsWordGenerated::read(const U8 *in, PCD *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL PCD *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1611,7 +1611,7 @@ unsigned MsWordGenerated::read(const U8 *in, PCD *out, unsigned count)
     return bytes;
 } // PCD
 
-//unsigned MsWordGenerated::read(const U8 *in, PLCF *out, unsigned count)
+//unsigned MsWordGenerated::read(const U8 *in, __UNAL PLCF *out, unsigned count)
 //{
 //    U32 shifterU32;
 //    U16 shifterU16;
@@ -1628,7 +1628,7 @@ unsigned MsWordGenerated::read(const U8 *in, PCD *out, unsigned count)
 //    return bytes;
 //} // PLCF
 
-unsigned MsWordGenerated::read(const U8 *in, PRM2 *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL PRM2 *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1650,7 +1650,7 @@ unsigned MsWordGenerated::read(const U8 *in, PRM2 *out, unsigned count)
     return bytes;
 } // PRM2
 
-unsigned MsWordGenerated::read(const U8 *in, RS *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL RS *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1668,7 +1668,7 @@ unsigned MsWordGenerated::read(const U8 *in, RS *out, unsigned count)
     return bytes;
 } // RS
 
-unsigned MsWordGenerated::read(const U8 *in, RR *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL RR *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1686,7 +1686,7 @@ unsigned MsWordGenerated::read(const U8 *in, RR *out, unsigned count)
     return bytes;
 } // RR
 
-unsigned MsWordGenerated::read(const U8 *in, SED *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL SED *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1707,7 +1707,7 @@ unsigned MsWordGenerated::read(const U8 *in, SED *out, unsigned count)
     return bytes;
 } // SED
 
-unsigned MsWordGenerated::read(const U8 *in, SEP *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL SEP *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1751,7 +1751,7 @@ unsigned MsWordGenerated::read(const U8 *in, SEP *out, unsigned count)
     return bytes;
 } // SEP
 
-//unsigned MsWordGenerated::read(const U8 *in, SEPX *out, unsigned count)
+//unsigned MsWordGenerated::read(const U8 *in, __UNAL SEPX *out, unsigned count)
 //{
 //    U32 shifterU32;
 //    U16 shifterU16;
@@ -1769,7 +1769,7 @@ unsigned MsWordGenerated::read(const U8 *in, SEP *out, unsigned count)
 //    return bytes;
 //} // SEPX
 
-unsigned MsWordGenerated::read(const U8 *in, STSHI *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL STSHI *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1793,7 +1793,7 @@ unsigned MsWordGenerated::read(const U8 *in, STSHI *out, unsigned count)
     return bytes;
 } // STSHI
 
-//unsigned MsWordGenerated::read(const U8 *in, STD *out, unsigned count)
+//unsigned MsWordGenerated::read(const U8 *in, __UNAL STD *out, unsigned count)
 //{
 //    U32 shifterU32;
 //    U16 shifterU16;
@@ -1840,7 +1840,7 @@ unsigned MsWordGenerated::read(const U8 *in, STSHI *out, unsigned count)
 //    return bytes;
 //} // STD
 
-unsigned MsWordGenerated::read(const U8 *in, TBD *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL TBD *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1864,7 +1864,7 @@ unsigned MsWordGenerated::read(const U8 *in, TBD *out, unsigned count)
     return bytes;
 } // TBD
 
-unsigned MsWordGenerated::read(const U8 *in, TC *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL TC *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1902,7 +1902,7 @@ unsigned MsWordGenerated::read(const U8 *in, TC *out, unsigned count)
     return bytes;
 } // TC
 
-unsigned MsWordGenerated::read(const U8 *in, TLP *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL TLP *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1939,7 +1939,7 @@ unsigned MsWordGenerated::read(const U8 *in, TLP *out, unsigned count)
     return bytes;
 } // TLP
 
-unsigned MsWordGenerated::read(const U8 *in, TAP *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL TAP *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1978,7 +1978,7 @@ unsigned MsWordGenerated::read(const U8 *in, TAP *out, unsigned count)
     return bytes;
 } // TAP
 
-unsigned MsWordGenerated::read(const U8 *in, FTXBXS *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL FTXBXS *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1998,7 +1998,7 @@ unsigned MsWordGenerated::read(const U8 *in, FTXBXS *out, unsigned count)
     return bytes;
 } // FTXBXS
 
-unsigned MsWordGenerated::read(const U8 *in, WKB *out, unsigned count)
+unsigned MsWordGenerated::read(const U8 *in, __UNAL WKB *out, unsigned count)
 {
     U32 shifterU32;
     U16 shifterU16;

@@ -27,23 +27,31 @@ DESCRIPTION
 #ifndef MSWORDGENERATED_H
 #define MSWORDGENERATED_H
 
+#ifdef __DECCXX
+#define __attribute__(a)
+#define __UNAL __unaligned
+#pragma pack(1)
+#else
+#define __UNAL
+#endif
+
 class MsWordGenerated
 {
 public:
     typedef char S8;
     typedef unsigned char U8;
-    static unsigned read(const U8 *in, U8 *out, unsigned count=1);
-    static unsigned read(const U8 *in, S8 *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL U8 *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL S8 *out, unsigned count=1);
 
     typedef short S16;
     typedef unsigned short U16;
-    static unsigned read(const U8 *in, U16 *out, unsigned count=1);
-    static unsigned read(const U8 *in, S16 *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL U16 *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL S16 *out, unsigned count=1);
 
     typedef int S32;
     typedef unsigned int U32;
-    static unsigned read(const U8 *in, U32 *out, unsigned count=1);
-    static unsigned read(const U8 *in, S32 *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL U32 *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL S32 *out, unsigned count=1);
 
     typedef U16 XCHAR;
     // Date and Time (internal date format) (DTTM)
@@ -76,7 +84,7 @@ public:
         U16 wdy:3;
 
     } __attribute__ ((packed)) DTTM;
-    static unsigned read(const U8 *in, DTTM *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL DTTM *out, unsigned count=1);
 
     // Shading Descriptor (SHD)
     typedef struct SHD
@@ -146,7 +154,7 @@ public:
         U16 ipat:6;
 
     } __attribute__ ((packed)) SHD;
-    static unsigned read(const U8 *in, SHD *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL SHD *out, unsigned count=1);
 
     // Document Typography Info (DOPTYPOGRAPHY)
     typedef struct DOPTYPOGRAPHY
@@ -185,7 +193,7 @@ public:
         // array of characters that should never appear at the end of a line
         XCHAR rgxchLPunct[51];
     } __attribute__ ((packed)) DOPTYPOGRAPHY;
-    static unsigned read(const U8 *in, DOPTYPOGRAPHY *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL DOPTYPOGRAPHY *out, unsigned count=1);
 
     // Property Modifier(variant 1) (PRM)
     typedef struct PRM
@@ -201,7 +209,7 @@ public:
         U16 val:8;
 
     } __attribute__ ((packed)) PRM;
-    static unsigned read(const U8 *in, PRM *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL PRM *out, unsigned count=1);
 
     // HOIST STRUCTUREs just above here if needed to avoid forward references.
 
@@ -229,7 +237,7 @@ public:
         // annotation references.
         U32 lTagBkmk;
     } __attribute__ ((packed)) ATRD;
-    static unsigned read(const U8 *in, ATRD *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL ATRD *out, unsigned count=1);
 
     // Autonumbered List Data Descriptor (ANLD)
     typedef struct ANLD
@@ -349,7 +357,7 @@ public:
         // characters displayed before/after autonumber
         XCHAR rgxch[32];
     } __attribute__ ((packed)) ANLD;
-    static unsigned read(const U8 *in, ANLD *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL ANLD *out, unsigned count=1);
 
     // Autonumber Level Descriptor (ANLV)
     typedef struct ANLV
@@ -454,7 +462,7 @@ public:
         // minimum space between number and paragraph
         U16 dxaSpace;
     } __attribute__ ((packed)) ANLV;
-    static unsigned read(const U8 *in, ANLV *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL ANLV *out, unsigned count=1);
 
     // AutoSummary Analysis (ASUMY)
     typedef struct ASUMY
@@ -463,7 +471,7 @@ public:
         // AutoSummary level
         U32 lLevel;
     } __attribute__ ((packed)) ASUMY;
-    static unsigned read(const U8 *in, ASUMY *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL ASUMY *out, unsigned count=1);
 
     // AutoSummary Info (ASUMYI)
     typedef struct ASUMYI
@@ -498,7 +506,7 @@ public:
         // show document sentences at or below this level
         U32 lCurrentLevel;
     } __attribute__ ((packed)) ASUMYI;
-    static unsigned read(const U8 *in, ASUMYI *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL ASUMYI *out, unsigned count=1);
 
     // Bin Table Entry (BTE)
     typedef struct BTE
@@ -507,7 +515,7 @@ public:
         // Page Number for FKP
         U32 pn;
     } __attribute__ ((packed)) BTE;
-    static unsigned read(const U8 *in, BTE *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL BTE *out, unsigned count=1);
 
     // BreaK Descriptor (BKD)
     typedef struct BKD
@@ -545,7 +553,7 @@ public:
         U16 fTextOverflow:1;
 
     } __attribute__ ((packed)) BKD;
-    static unsigned read(const U8 *in, BKD *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL BKD *out, unsigned count=1);
 
     // BooKmark First descriptor (BKF)
     typedef struct BKF
@@ -572,7 +580,7 @@ public:
         U16 fCol:1;
 
     } __attribute__ ((packed)) BKF;
-    static unsigned read(const U8 *in, BKF *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL BKF *out, unsigned count=1);
 
     // BooKmark Lim descriptor (BKL)
     typedef struct BKL
@@ -585,7 +593,7 @@ public:
         // that corresponds to this entry.
         U16 ibkf;
     } __attribute__ ((packed)) BKL;
-    static unsigned read(const U8 *in, BKL *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL BKL *out, unsigned count=1);
 
     // Border Code (BRC)
     typedef struct BRC
@@ -641,7 +649,7 @@ public:
         U16 unused2_15:1;
 
     } __attribute__ ((packed)) BRC;
-    static unsigned read(const U8 *in, BRC *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL BRC *out, unsigned count=1);
 
     // Border Code for Windows Word 1.0 (BRC10)
     typedef struct BRC10
@@ -668,7 +676,7 @@ public:
         U16 fSpare:1;
 
     } __attribute__ ((packed)) BRC10;
-    static unsigned read(const U8 *in, BRC10 *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL BRC10 *out, unsigned count=1);
 
     // Character Properties (CHP)
     typedef struct CHP
@@ -1070,7 +1078,7 @@ public:
         // border
         BRC brc;
     } __attribute__ ((packed)) CHP;
-    static unsigned read(const U8 *in, CHP *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL CHP *out, unsigned count=1);
 
     // Character Property Exceptions (CHPX)
 //    typedef struct CHPX
@@ -1084,7 +1092,7 @@ public:
 //        // styles that tag the run.
 //        U8[cb] grpprl;
 //    } __attribute__ ((packed)) CHPX;
-//    static unsigned read(const U8 *in, CHPX *out, unsigned count=1);
+//    static unsigned read(const U8 *in, __UNAL CHPX *out, unsigned count=1);
 
     // Drop Cap Specifier(DCS)
     typedef struct DCS
@@ -1099,7 +1107,7 @@ public:
         // 
         U16 unused1;
     } __attribute__ ((packed)) DCS;
-    static unsigned read(const U8 *in, DCS *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL DCS *out, unsigned count=1);
 
     // Drawing Object Grid (DOGRID)
     typedef struct DOGRID
@@ -1135,7 +1143,7 @@ public:
         U16 fFollowMargins:1;
 
     } __attribute__ ((packed)) DOGRID;
-    static unsigned read(const U8 *in, DOGRID *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL DOGRID *out, unsigned count=1);
 
     // Document Properties (DOP)
     typedef struct DOP
@@ -1452,7 +1460,7 @@ public:
         U16 iGutterPos:1;
 
     } __attribute__ ((packed)) DOP;
-    static unsigned read(const U8 *in, DOP *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL DOP *out, unsigned count=1);
 
     // Document Properties with nFIB > 102 (DOP102)
     typedef struct DOP102
@@ -1518,7 +1526,7 @@ public:
         U32 unused84_22:10;
 
     } __attribute__ ((packed)) DOP102;
-    static unsigned read(const U8 *in, DOP102 *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL DOP102 *out, unsigned count=1);
 
     // Document Properties with nFIB > 105 (DOP105)
     typedef struct DOP105
@@ -1643,7 +1651,7 @@ public:
         // height of the window in online view during last repag
         U16 dywDispPag;
     } __attribute__ ((packed)) DOP105;
-    static unsigned read(const U8 *in, DOP105 *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL DOP105 *out, unsigned count=1);
 
     // Field Descriptor (FLD)
     typedef struct FLD
@@ -1670,7 +1678,7 @@ public:
         //     fHasSep:1 - 1 when field has a field separator.
         U8 flt;
     } __attribute__ ((packed)) FLD;
-    static unsigned read(const U8 *in, FLD *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL FLD *out, unsigned count=1);
 
     // File Shape Address (FSPA)
     typedef struct FSPA
@@ -1746,7 +1754,7 @@ public:
         // count of textboxes in shape (undo doc only)
         U32 cTxbx;
     } __attribute__ ((packed)) FSPA;
-    static unsigned read(const U8 *in, FSPA *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL FSPA *out, unsigned count=1);
 
     // Font Family Name (FFN)
 //    typedef struct FFN
@@ -1791,7 +1799,7 @@ public:
 //        // Maximal size of xszFfn is 65 characters.
 //        U8 xszFfn[0];
 //    } __attribute__ ((packed)) FFN;
-//    static unsigned read(const U8 *in, FFN *out, unsigned count=1);
+//    static unsigned read(const U8 *in, __UNAL FFN *out, unsigned count=1);
 
     // File Information Block (FIB)
     typedef struct FIB
@@ -2723,7 +2731,7 @@ public:
         // 
         U32 lcbSttbfUssr;
     } __attribute__ ((packed)) FIB;
-    static unsigned read(const U8 *in, FIB *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL FIB *out, unsigned count=1);
 
     // File Information FC/LCB pair (FIBFCLCB)
     typedef struct FIBFCLCB
@@ -2735,7 +2743,7 @@ public:
         // Size of data. Ignore fc if lcb is zero.
         U32 lcb;
     } __attribute__ ((packed)) FIBFCLCB;
-    static unsigned read(const U8 *in, FIBFCLCB *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL FIBFCLCB *out, unsigned count=1);
 
     // Footnote Reference Descriptor (FRD)
     typedef struct FRD
@@ -2745,7 +2753,7 @@ public:
         // has a custom mark
         U16 nAuto;
     } __attribute__ ((packed)) FRD;
-    static unsigned read(const U8 *in, FRD *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL FRD *out, unsigned count=1);
 
     // Formatted Disk Page for CHPXs (CHPXFKP)
 //    typedef struct CHPXFKP
@@ -2772,7 +2780,7 @@ public:
 //        // count of runs for <b>CHPX FKP,</b>
 //        U8 crun;
 //    } __attribute__ ((packed)) CHPXFKP;
-//    static unsigned read(const U8 *in, CHPXFKP *out, unsigned count=1);
+//    static unsigned read(const U8 *in, __UNAL CHPXFKP *out, unsigned count=1);
 
     // Formatted Disk Page for PAPXs (PAPXFKP)
 //    typedef struct PAPXFKP
@@ -2807,7 +2815,7 @@ public:
 //        // count of paragraphs for <b>PAPX FKP.</b>
 //        U8 crun;
 //    } __attribute__ ((packed)) PAPXFKP;
-//    static unsigned read(const U8 *in, PAPXFKP *out, unsigned count=1);
+//    static unsigned read(const U8 *in, __UNAL PAPXFKP *out, unsigned count=1);
 
     // List LeVeL (on File) (LVLF)
     typedef struct LVLF
@@ -2874,7 +2882,7 @@ public:
         // reserved
         U16 reserved;
     } __attribute__ ((packed)) LVLF;
-    static unsigned read(const U8 *in, LVLF *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL LVLF *out, unsigned count=1);
 
     // Line Spacing Descriptor (LSPD)
     typedef struct LSPD
@@ -2889,7 +2897,7 @@ public:
         // fields.
         U16 fMultLinespace;
     } __attribute__ ((packed)) LSPD;
-    static unsigned read(const U8 *in, LSPD *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL LSPD *out, unsigned count=1);
 
     // LiST Data (on File) (LSTF)
     typedef struct LSTF
@@ -2919,7 +2927,7 @@ public:
         // reserved
         U8 reserved;
     } __attribute__ ((packed)) LSTF;
-    static unsigned read(const U8 *in, LSTF *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL LSTF *out, unsigned count=1);
 
     // List Format Override (LFO)
     typedef struct LFO
@@ -2940,7 +2948,7 @@ public:
         // reserved
         U8 reserved[3];
     } __attribute__ ((packed)) LFO;
-    static unsigned read(const U8 *in, LFO *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL LFO *out, unsigned count=1);
 
     // List Format Override for a single LeVeL (LFOLVL)
     typedef struct LFOLVL
@@ -2966,7 +2974,7 @@ public:
         // reserved
         U8 reserved[3];
     } __attribute__ ((packed)) LFOLVL;
-    static unsigned read(const U8 *in, LFOLVL *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL LFOLVL *out, unsigned count=1);
 
     // Outline LiST Data (OLST)
     typedef struct OLST
@@ -2991,7 +2999,7 @@ public:
         // text before/after number
         XCHAR rgxch[32];
     } __attribute__ ((packed)) OLST;
-    static unsigned read(const U8 *in, OLST *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL OLST *out, unsigned count=1);
 
     // Number Revision Mark Data (NUMRM)
     typedef struct NUMRM
@@ -3029,7 +3037,7 @@ public:
         // holders
         XCHAR xst[32];
     } __attribute__ ((packed)) NUMRM;
-    static unsigned read(const U8 *in, NUMRM *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL NUMRM *out, unsigned count=1);
 
     // Page Descriptor (PGD)
     typedef struct PGD
@@ -3085,7 +3093,7 @@ public:
         // 
         U32 dym;
     } __attribute__ ((packed)) PGD;
-    static unsigned read(const U8 *in, PGD *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL PGD *out, unsigned count=1);
 
     // Paragraph Height (PHE)
     typedef struct PHE
@@ -3118,7 +3126,7 @@ public:
         //     when fDiffLines is 1, is the total height in pixels of the paragraph (dymHeight)
         U32 dym;
     } __attribute__ ((packed)) PHE;
-    static unsigned read(const U8 *in, PHE *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL PHE *out, unsigned count=1);
 
     // Paragraph Properties (PAP)
     typedef struct PAP
@@ -3407,7 +3415,7 @@ public:
         // array of itbdMac tab descriptors
         U16 rgtbd[64];
     } __attribute__ ((packed)) PAP;
-    static unsigned read(const U8 *in, PAP *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL PAP *out, unsigned count=1);
 
     // Paragraph Property Exceptions (PAPX)
 //    typedef struct PAPX
@@ -3443,7 +3451,7 @@ public:
 //        // definitions for list of sprms that are used in PAPXs.
 //        character array grpprl;
 //    } __attribute__ ((packed)) PAPX;
-//    static unsigned read(const U8 *in, PAPX *out, unsigned count=1);
+//    static unsigned read(const U8 *in, __UNAL PAPX *out, unsigned count=1);
 
     // Picture Descriptor (on File) (PICF)
     typedef struct PICF
@@ -3471,7 +3479,7 @@ public:
         // 
         U16 mfp_hMF;
     } __attribute__ ((packed)) PICF;
-    static unsigned read(const U8 *in, PICF *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL PICF *out, unsigned count=1);
 
     // Piece Descriptor (PCD)
     typedef struct PCD
@@ -3502,7 +3510,7 @@ public:
         // piece.
         PRM prm;
     } __attribute__ ((packed)) PCD;
-    static unsigned read(const U8 *in, PCD *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL PCD *out, unsigned count=1);
 
     // Plex of CPs stored in File (PLCF)
 //    typedef struct PLCF
@@ -3518,7 +3526,7 @@ public:
 //        // piece.
 //        U8 rgstruct[];
 //    } __attribute__ ((packed)) PLCF;
-//    static unsigned read(const U8 *in, PLCF *out, unsigned count=1);
+//    static unsigned read(const U8 *in, __UNAL PLCF *out, unsigned count=1);
 
     // Property Modifier(variant 2) (PRM2)
     typedef struct PRM2
@@ -3531,7 +3539,7 @@ public:
         U16 igrpprl:15;
 
     } __attribute__ ((packed)) PRM2;
-    static unsigned read(const U8 *in, PRM2 *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL PRM2 *out, unsigned count=1);
 
     // Routing Slip (RS)
     typedef struct RS
@@ -3568,7 +3576,7 @@ public:
         // count of recipients.
         U16 cRecip;
     } __attribute__ ((packed)) RS;
-    static unsigned read(const U8 *in, RS *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL RS *out, unsigned count=1);
 
     // Routing Recipient (RR)
     typedef struct RR
@@ -3580,7 +3588,7 @@ public:
         // count of bytes in recipient string (including null terminator).
         U16 cbSzRecip;
     } __attribute__ ((packed)) RR;
-    static unsigned read(const U8 *in, RR *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL RR *out, unsigned count=1);
 
     // Section Descriptor (SED)
     typedef struct SED
@@ -3601,7 +3609,7 @@ public:
         // Print Record for a document created on a Mac will be stored
         U32 fcMpr;
     } __attribute__ ((packed)) SED;
-    static unsigned read(const U8 *in, SED *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL SED *out, unsigned count=1);
 
     // Section Properties (SEP)
     typedef struct SEP
@@ -3828,7 +3836,7 @@ public:
         // multilevel autonumbering list data (see OLST definition)
         OLST olstAnm;
     } __attribute__ ((packed)) SEP;
-    static unsigned read(const U8 *in, SEP *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL SEP *out, unsigned count=1);
 
     // Section Property Exceptions (SEPX)
 //    typedef struct SEPX
@@ -3841,7 +3849,7 @@ public:
 //        // of a section and Word's default section properties.
 //        U8 grpprl[0];
 //    } __attribute__ ((packed)) SEPX;
-//    static unsigned read(const U8 *in, SEPX *out, unsigned count=1);
+//    static unsigned read(const U8 *in, __UNAL SEPX *out, unsigned count=1);
 
     // STyleSHeet Information (STSHI)
     typedef struct STSHI
@@ -3871,7 +3879,7 @@ public:
         // ftc used by StandardChpStsh for this document
         U16 rgftcStandardChpStsh[3];
     } __attribute__ ((packed)) STSHI;
-    static unsigned read(const U8 *in, STSHI *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL STSHI *out, unsigned count=1);
 
     // STyle Definition (STD)
 //    typedef struct STD
@@ -3927,7 +3935,7 @@ public:
 //        // based-on chain
 //        U8 grupe[];
 //    } __attribute__ ((packed)) STD;
-//    static unsigned read(const U8 *in, STD *out, unsigned count=1);
+//    static unsigned read(const U8 *in, __UNAL STD *out, unsigned count=1);
 
     // Tab Descriptor (TBD)
     typedef struct TBD
@@ -3953,7 +3961,7 @@ public:
         U8 unused0_6:2;
 
     } __attribute__ ((packed)) TBD;
-    static unsigned read(const U8 *in, TBD *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL TBD *out, unsigned count=1);
 
     // Table Cell Descriptors (TC)
     typedef struct TC
@@ -4026,7 +4034,7 @@ public:
         // specification of right border of table row.
         BRC brcRight;
     } __attribute__ ((packed)) TC;
-    static unsigned read(const U8 *in, TC *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL TC *out, unsigned count=1);
 
     // Table Autoformat Look sPecifier (TLP)
     typedef struct TLP
@@ -4107,7 +4115,7 @@ public:
         U16 fLastCol:1;
 
     } __attribute__ ((packed)) TLP;
-    static unsigned read(const U8 *in, TLP *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL TLP *out, unsigned count=1);
 
     // Table Properties (TAP)
     typedef struct TAP
@@ -4197,7 +4205,7 @@ public:
         // array of border defaults for cells
         BRC rgbrcTable[6];
     } __attribute__ ((packed)) TAP;
-    static unsigned read(const U8 *in, TAP *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL TAP *out, unsigned count=1);
 
     // TeXtBoX Story (FTXBXS)
     typedef struct FTXBXS
@@ -4225,7 +4233,7 @@ public:
         // 
         U32 txidUndo;
     } __attribute__ ((packed)) FTXBXS;
-    static unsigned read(const U8 *in, FTXBXS *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL FTXBXS *out, unsigned count=1);
 
     // WorK Book (WKB)
     typedef struct WKB
@@ -4249,6 +4257,10 @@ public:
         // unused
         U32 doc;
     } __attribute__ ((packed)) WKB;
-    static unsigned read(const U8 *in, WKB *out, unsigned count=1);
+    static unsigned read(const U8 *in, __UNAL WKB *out, unsigned count=1);
 };
+
+#ifdef __DECCXX
+#pragma pack(8)
+#endif
 #endif
