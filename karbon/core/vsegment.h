@@ -155,32 +155,38 @@ public:
 	KoPoint point( double t ) const;
 
 	/**
-	 * Returns the tangent vector on this segment for 0 <= t <= 1.
-	 * This is a convenience wrapper for pointTangentNormal().
+	 * Returns the normalized tangent vector (length=1) at the point
+	 * parameterized by 0 <= t <= 1. This is a convenience wrapper
+	 * for pointTangentNormal(). Use the latter function directly if you
+	 * need to calculate the point and normal vector or tangetn vector
+	 * at once.
 	 */
 	KoPoint tangent( double t ) const;
 
 	/**
-	 * Returns the point and the derivatives of first and second order
+	 * Calculates the point and the derivatives of first and second order
 	 * for 0 <= t <= 1.
 	 */
 	void pointDerivatives( double t, KoPoint* p = 0L,
 		KoPoint* d1 = 0L, KoPoint* d2 = 0L ) const;
 
 	/**
-	 * Returns the point, the tangent and the normal vector for
-	 * 0 <= t <= 1.
+	 * Calculates the point, the tangent vector and the normal vector for
+	 * 0 <= t <= 1. The tangent vector and the normal vector are
+	 * normalized (length=1).
 	 */
 	void pointTangentNormal( double t, KoPoint* p = 0L,
 		KoPoint* tn = 0L, KoPoint* n = 0L ) const;
 
 	/**
-	 * Returns the arc length from 0 to 0 <= t <= 1.
+	 * Returns the arclength from p0 to the point parametrized
+	 * by 0 <= t <= 1.
 	 */
 	double length( double t = 1.0 ) const;
 
 	/**
-	 * Returns the chord length |p0p3|.
+	 * Returns the chord length |p0p3| (the distance from the previous
+	 * knot to the current knot).
 	 */
 	double chordLength() const;
 
@@ -190,8 +196,8 @@ public:
 	double polyLength() const;
 
 	/**
-	 * Returns the parameter of a point located a length len. This is the
-	 * exact inverse operation of length( t ).
+	 * Returns the parameter of a point located at arclength len.
+	 * This is the exact inverse operation of length( t ).
 	 */
 	double param( double len ) const;
 
@@ -201,8 +207,9 @@ public:
 	KoRect boundingBox() const;
 
 	/**
-	 *  Splits the segment at 0 <= t <= 1. Returns the first segment and transforms
-	 *  the current one to the second segment.
+	 *  Splits the segment at parameter 0 <= t <= 1. Returns a pointer
+	 *  to the first segment and transforms the current one to
+	 *  the second segment.
 	 */
 	VSegment* splitAt( double t );
 
