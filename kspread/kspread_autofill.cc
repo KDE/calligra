@@ -105,20 +105,20 @@ double AutoFillDeltaSequence::getItemDelta( int _pos )
 
 AutoFillSequenceItem::AutoFillSequenceItem( int _i )
 {
-    ivalue = _i;
-    type = INTEGER;
+    m_IValue = _i;
+    m_Type = INTEGER;
 }
 
 AutoFillSequenceItem::AutoFillSequenceItem( double _d )
 {
-    dvalue = _d;
-    type = FLOAT;
+    m_DValue = _d;
+    m_Type = FLOAT;
 }
 
 AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
 {
-    string = _str;
-    type = STRING;
+    m_String = _str;
+    m_Type = STRING;
 
     if ( month == 0L )
     {
@@ -157,28 +157,28 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
       }
     if ( month->find( _str ) != month->end() )
     {
-        type = MONTH;
+        m_Type = MONTH;
         return;
     }
 
     if ( day->find( _str ) != day->end() )
     {
-      type = DAY;
+      m_Type = DAY;
       return;
     }
 
     if( other->find(_str)!=other->end())
       {
-	type = OTHER;
-	otherBegin=0;
-	otherEnd=other->count();
+	m_Type = OTHER;
+	m_OtherBegin=0;
+	m_OtherEnd=other->count();
 	int index= other->findIndex(_str);
 	//find end and begin of qstringlist of other.
 	for ( QStringList::Iterator it = other->find(_str); it != other->end();++it )
 	  {
 	    if((*it)=="\\")
 	      {
-	      otherEnd=index;
+	      m_OtherEnd=index;
 	      break;
 	      }
 	    index++;
@@ -188,7 +188,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
 	  {
 	    if((*it)=="\\")
 	      {
-	      otherBegin=index;
+	      m_OtherBegin=index;
 	      break;
 	      }
 	    index--;
@@ -196,26 +196,26 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
 	return;
       }
 
-    if ( string[0] == '=' )
-        type = FORMULA;
+    if ( m_String[0] == '=' )
+        m_Type = FORMULA;
 }
 
 bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
 {
-    if ( seq->getType() != type )
+    if ( seq->getType() != m_Type )
         return FALSE;
 
-    switch( type )
+    switch( m_Type )
     {
     case INTEGER:
-        _delta = (double)( seq->getIValue() - ivalue );
+        _delta = (double)( seq->getIValue() - m_IValue );
         return TRUE;
     case FLOAT:
-        _delta = seq->getDValue() - dvalue;
+        _delta = seq->getDValue() - m_DValue;
         return TRUE;
     case FORMULA:
     case STRING:
-        if ( string == seq->getString() )
+        if ( m_String == seq->getString() )
         {
             _delta = 0.0;
             return TRUE;
@@ -223,7 +223,7 @@ bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
         return FALSE;
     case MONTH:
         {
-            int i = month->findIndex( string );
+            int i = month->findIndex( m_String );
             int j = month->findIndex( seq->getString() );
             int k = j;
             if ( j < i )
@@ -237,7 +237,7 @@ bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
 
     case DAY:
         {
-            int i = day->findIndex( string );
+            int i = day->findIndex( m_String );
             int j = day->findIndex( seq->getString() );
             int k = j;
             if ( j < i )
@@ -250,13 +250,13 @@ bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
         }
     case OTHER:
       {
-	if( otherEnd!= seq->getIOtherEnd() || otherBegin!= seq->getIOtherBegin())
+	if( m_OtherEnd!= seq->getIOtherEnd() || m_OtherBegin!= seq->getIOtherBegin())
 	  return false;
-	int i = other->findIndex( string );
+	int i = other->findIndex( m_String );
 	int j = other->findIndex( seq->getString() );
 	int k = j;
 	if ( j < i )
-	  k += (otherEnd - otherBegin-1);
+	  k += (m_OtherEnd - m_OtherBegin-1);
 	/*if ( j + 1 == i )
 	  _delta = -1.0;
 	  else*/
@@ -271,21 +271,21 @@ bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
 QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
 {
     QString erg;
-    switch( type )
+    switch( m_Type )
     {
     case INTEGER:
-        erg.sprintf("%i", ivalue + _no * (int)_delta );
+        erg.sprintf("%i", m_IValue + _no * (int)_delta );
         break;
     case FLOAT:
-        erg.sprintf("%f", dvalue + (double)_no * _delta );
+        erg.sprintf("%f", m_DValue + (double)_no * _delta );
         break;
     case FORMULA:
     case STRING:
-        erg = string;
+        erg = m_String;
         break;
     case MONTH:
         {
-            int i = month->findIndex( string );
+            int i = month->findIndex( m_String );
             int j = i + _no * (int) _delta;
             int k = j % month->count();
             erg = (*month->at( k ));
@@ -293,7 +293,7 @@ QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
         break;
     case DAY:
         {
-            int i = day->findIndex( string );
+            int i = day->findIndex( m_String );
             int j = i + _no * (int) _delta;
             int k = j % day->count();
             erg = (*day->at( k ));
@@ -301,10 +301,10 @@ QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
 	break;
     case OTHER:
       {
-	 int i = other->findIndex( string )-(otherBegin+1);
+	 int i = other->findIndex( m_String )-(m_OtherBegin+1);
 	 int j = i + _no * (int) _delta;
-	 int k = j % (otherEnd - otherBegin-1);
-	 erg = (*other->at( (k+otherBegin+1) ));
+	 int k = j % (m_OtherEnd - m_OtherBegin-1);
+	 erg = (*other->at( (k+m_OtherBegin+1) ));
       }
     }
 
@@ -582,7 +582,10 @@ void KSpreadTable::FillSequenceWithCopy
 	incre+=60;
 	cell->setCellText(doc()->locale()->formatTime(tmpTime,true),true);
       }
-      else if(AutoFillSequenceItem::month->find( _srcList.at( s )->text())!=0L && AutoFillSequenceItem::month->find( _srcList.at( s )->text()) != AutoFillSequenceItem::month->end() && _srcList.count()==1)
+      else if((AutoFillSequenceItem::month != 0L)
+	      && AutoFillSequenceItem::month->find( _srcList.at( s )->text()) != 0L 
+	      && AutoFillSequenceItem::month->find( _srcList.at( s )->text()) != AutoFillSequenceItem::month->end() 
+	      && _srcList.count() == 1)
       {
 	QString strMonth=_srcList.at( s )->text();
 	int i = AutoFillSequenceItem::month->findIndex( strMonth );
@@ -590,7 +593,11 @@ void KSpreadTable::FillSequenceWithCopy
 	cell->setCellText((*AutoFillSequenceItem::month->at( k )));
 	incre++;
       }
-      else if(AutoFillSequenceItem::day->find( _srcList.at( s )->text())!=0L && AutoFillSequenceItem::day->find( _srcList.at( s )->text()) != AutoFillSequenceItem::day->end() && _srcList.count()==1)
+      else if(AutoFillSequenceItem::day != 0L
+	      && AutoFillSequenceItem::day->find( _srcList.at( s )->text()) != 0L 
+	      && AutoFillSequenceItem::day->find( _srcList.at( s )->text()) 
+	         != AutoFillSequenceItem::day->end() 
+	      && _srcList.count()==1)
       {
 	QString strDay=_srcList.at( s )->text();
 	int i = AutoFillSequenceItem::day->findIndex( strDay );

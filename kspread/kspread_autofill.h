@@ -44,24 +44,24 @@ public:
 
     QString getSuccessor( int _no, double _delta );
 
-    Type getType() { return type; }
-    int getIValue() { return ivalue; }
-    double getDValue() { return dvalue; }
-    QString getString() { return string; }
-    int getIOtherEnd() {return otherEnd; }
-    int getIOtherBegin() {return otherBegin; }
+    Type getType() { return m_Type; }
+    int getIValue() { return m_IValue; }
+    double getDValue() { return m_DValue; }
+    QString getString() { return m_String; }
+    int getIOtherEnd() {return m_OtherEnd; }
+    int getIOtherBegin() {return m_OtherBegin; }
     static QStringList *other;
     static QStringList *month;
     static QStringList *day;
 protected:
-    int ivalue;
-    double dvalue;
-    int otherBegin;
-    int otherEnd;
+    int    m_IValue;
+    double m_DValue;
+    int    m_OtherBegin;
+    int    m_OtherEnd;
 
-    QString string;
+    QString m_String;
 
-    Type type;
+    Type m_Type;
 };
 
 class AutoFillSequence
