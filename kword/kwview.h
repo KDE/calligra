@@ -451,7 +451,7 @@ public slots:
     void editFrameSetProperties();
 
 protected slots:
-    virtual void slotChildActivated( bool a ); // from KoView
+    virtual void slotChildActivated( bool a ); ///< from KoView
     void slotSetInitialPosition();
 
     void spellCheckerMisspelling( const QString &, int );
@@ -639,11 +639,11 @@ private:
     TKSelectColorAction *actionBackgroundColor;
     struct
     {
-        KoBorder left;    // Values specific to left border.
-        KoBorder right;   // right.
-        KoBorder top;     // top.
-        KoBorder bottom;  // bottom.
-        KoBorder common;  // Value common to left, right top and bottom borders.
+        KoBorder left;    ///< Values specific to left border.
+        KoBorder right;   ///< right.
+        KoBorder top;     ///< top.
+        KoBorder bottom;  ///< bottom.
+        KoBorder common;  ///< Value common to left, right top and bottom borders.
     } m_border;
 
     KAction *actionTableDelRow;
@@ -746,11 +746,11 @@ private:
     QPtrList<KAction> m_variableActionList;
     QPtrList<KAction> m_tableActionList;
 
-    int m_currentPage; // 0-based current page number
+    int m_currentPage; ///< 0-based current page number
 
     // Statusbar items
-    QLabel * m_sbPageLabel; // 'Current page number and page count' label
-    QLabel * m_sbFramesLabel; // Info about selected frames
+    QLabel * m_sbPageLabel; ///< 'Current page number and page count' label
+    QLabel * m_sbFramesLabel; ///< Info about selected frames
 
     // Zoom values for each viewmode ( todo a viewmode enum and a qmap or so )
     int m_zoomViewModeNormal;
@@ -758,7 +758,7 @@ private:
 
     bool m_viewFrameBorders /*, m_viewTableGrid*/;
 
-    // Spell-checking
+    /// Spell-checking
     struct {
         KoSpell *kospell;
 	KMacroCommand * macroCmdSpellCheck;

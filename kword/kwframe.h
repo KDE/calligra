@@ -326,8 +326,8 @@ private:
     KoBorder m_borderLeft, m_borderRight, m_borderTop, m_borderBottom;
 
     QPtrList<KWResizeHandle> handles;
-    KWFrameList m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
-    KWFrameList m_framesBelow; // List of frames below us. needed for selection code & transparency
+    KWFrameList m_framesOnTop; ///< List of frames on top of us, those we shouldn't overwrite
+    KWFrameList m_framesBelow; ///< List of frames below us. needed for selection code & transparency
     KWFrameSet *m_frameSet;
 
     /** Prevent operator=
@@ -420,9 +420,9 @@ class KWFrameSet : public QObject
 {
     Q_OBJECT
 public:
-    // constructor
+    /// constructor
     KWFrameSet( KWDocument *doc );
-    // destructor
+    /// destructor
     virtual ~KWFrameSet();
 
     virtual KWordFrameSetIface* dcopObject();
@@ -490,7 +490,7 @@ public:
     virtual void frameDeleted( KWFrame* /*frm*/, bool /*recalc*/ ) {}
 
     void deleteAllFrames();
-    void deleteAllCopies(); // for headers/footers only
+    void deleteAllCopies(); /// \note for headers/footers only
 
     /** retrieve frame from x and y coords (unzoomed coords) */
     KWFrame *frameAtPos( double _x, double _y );
@@ -623,7 +623,7 @@ public:
 
     enum UpdateFramesFlags {
         UpdateFramesInPage = 1,
-        SortFrames = 2 // kwtextframeset only
+        SortFrames = 2 ///< kwtextframeset only
         // next one is 4, not 3 ;)
     };
     /**
@@ -696,7 +696,7 @@ public:
 
     KWDocument* kWordDocument() const { return m_doc; }
 
-    // Return true if page @p num can be removed, as far as this frameset is concerned
+    /// Return true if page @p num can be removed, as far as this frameset is concerned
     virtual bool canRemovePage( int num );
 
     //Note: none of those floating-frameset methods creates undo/redo
@@ -709,7 +709,9 @@ public:
      * Also used during OASIS loading (placeHolderExists=true)
      */
     void setAnchored( KWTextFrameSet* textfs, KoTextParag* parag, int index, bool placeHolderExists = false, bool repaint = true );
-    /** Make this frameset floating, with the anchor at @p paragId,@p index in the text frameset @p textfs. DEPRECATED */
+    /** Make this frameset floating, with the anchor at @p paragId,@p index in the text frameset @p textfs.
+     * \deprecated
+     */
     void setAnchored( KWTextFrameSet* textfs, int paragId, int index, bool placeHolderExists = false, bool repaint = true );
     /** Note that this frameset has been made floating already, and store anchor position */
     void setAnchored( KWTextFrameSet* textfs );
@@ -853,7 +855,7 @@ class KWPictureFrameSet : public KWFrameSet
 {
 public:
     KWPictureFrameSet( KWDocument *_doc, const QString & name );
-    // Used for OASIS loading
+    /// Used for OASIS loading
     KWPictureFrameSet( KWDocument* doc, const QDomElement& frame, const QDomElement& imageTag, KoOasisContext& context );
     virtual ~KWPictureFrameSet();
 
@@ -901,7 +903,7 @@ public:
                                     const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                     KWFrameSetEdit * edit, KWViewMode *viewMode );
 
-    // Pixmaps can be transparent
+    /// Pixmaps can be transparent
     virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
 
 #ifndef NDEBUG

@@ -166,7 +166,7 @@ public:
 
     int syntaxVersion( ) const { return m_syntaxVersion; }
 
-    // Called by KWFrame*'s loading code to emit correct progress info
+    /// Called by KWFrame*'s loading code to emit correct progress info
     void progressItemLoaded();
 
     /**
@@ -243,11 +243,12 @@ public:
     unsigned int bottomBorder() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptBottom )); }
     unsigned int leftBorder() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptLeft )); }
     unsigned int rightBorder() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptRight )); }
-    // WARNING: don't multiply this value by the number of the page, this leads to rounding problems.
+    /// \warning don't multiply this value by the number of the page, this leads to rounding problems.
     unsigned int paperHeight() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptHeight )); }
+    /// \warning don't multiply this value by the number of the page, this leads to rounding problems.
     unsigned int paperWidth() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptWidth )); }
     unsigned int columnSpacing() const { return static_cast<unsigned int>(zoomItX( m_pageColumns.ptColumnSpacing )); }
-    // Top of the page number pgNum, in pixels (in the normal coord system)
+    /// Top of the page number pgNum, in pixels (in the normal coord system)
     unsigned int pageTop( int pgNum /*0-based*/ ) const { return zoomItY( ptPageTop( pgNum ) ); }
 
     // Those distances are in _pt_, i.e. the real distances, stored in m_pageLayout
@@ -310,9 +311,9 @@ public:
     void framesChanged( const QPtrList<KWFrame> & frames, KWView * view = 0L );
 
     QString uniqueFramesetName( const QString& oldName );
-    /*
+    /**
      * @param copyFootNote ...
-     * @param dontCreateFootNote = true when we copy footnote into an other frameset than mainFrameSet => footnote is removed !
+     * @param dontCreateFootNote true when we copy footnote into an other frameset than mainFrameSet => footnote is removed !
      * @param selectFrames if true, pasted frames are auto-selected. Set to false when loading from a file etc.
      */
     void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool copyFootNote = false, bool dontCreateFootNote = false, bool selectFrames = true );
@@ -380,7 +381,7 @@ public:
     ProcessingType processingType()const { return m_processingType;  }
 
     MouseMeaning getMouseMeaning( const QPoint &nPoint, int keyState, KWFrame** pFrame = 0L );
-    // The cursor for the current 'mouse click meaning'
+    /// The cursor for the current 'mouse click meaning'
     QCursor getMouseCursor( const QPoint& nPoint, int keyState );
     QPtrList<KWFrame> getSelectedFrames() const;
     KWFrame *getFirstSelectedFrame() const;
@@ -389,9 +390,11 @@ public:
     void lowerMainFrames( int pageNum );
     void lowerMainFrames( int pageNum, int lowestZOrder );
 
-    // Those three methods consider _all_ text framesets, even table cells
+    /// \note This method consider _all_ text framesets, even table cells
     QPtrList<KWTextFrameSet> allTextFramesets( bool onlyReadWrite ) const;
+    /// \note This method consider _all_ text framesets, even table cells
     int numberOfTextFrameSet( KWFrameSet* fs, bool onlyReadWrite );
+    /// \note This method consider _all_ text framesets, even table cells
     KWFrameSet * textFrameSetFromIndex( unsigned int _num, bool onlyReadWrite );
 
 
@@ -405,9 +408,9 @@ public:
 
     /**
      * Max z-order among all frames on the given page
+     * \note There is no minZOrder() method, because of the main frameset, see kwview::lowerFrame
      */
     int maxZOrder( int pageNum ) const;
-    // No minZOrder() method, because of the main frameset, see kwview::lowerFrame
 
     void updateAllFrames();
     void updateFramesOnTopOrBelow( int pageNum = -1 /* all */ );
@@ -439,7 +442,7 @@ public:
     void setFooterVisible( bool f );
     bool hasEndNotes() const;
 
-    // flags: see KWFrameLayout
+    /// @param flags see KWFrameLayout
     void recalcFrames( int fromPage = 0, int toPage = -1, uint flags = 0 );
 
     KoHFType getHeaderType() const { return m_pageHeaderFooter.header; }
@@ -460,17 +463,28 @@ public:
     KoCommandHistory * commandHistory() const { return m_commandHistory; }
     KoAutoFormat * getAutoFormat() const { return m_autoFormat; }
 
-    // This is used upon loading, to delay certain things until completeLoading.
-    // For KWTextImage
+    /**
+     * This is used upon loading, to delay certain things until completeLoading,
+     * for KWTextImage
+     */
     void addTextImageRequest( KWTextImage *img );
-    // For KWPictureFrameSet
+    /**
+     * This is used upon loading, to delay certain things until completeLoading,
+     * for KWPictureFrameSet
+     */
     void addPictureRequest( KWPictureFrameSet *fs );
-    // For KWTextParag
+    /**
+     * This is used upon loading, to delay certain things until completeLoading,
+     * for KWTextParag
+     */
     void addAnchorRequest( const QString &framesetName, const KWAnchorPosition &anchorPos );
-    // For KWFootNoteVariable
+    /**
+     * This is used upon loading, to delay certain things until completeLoading,
+     * for KWFootNoteVariable
+     */
     void addFootNoteRequest( const QString &framesetName, KWFootNoteVariable* var );
 
-    // This is used by loadFrameSets() and by KWCanvas to paste framesets
+    /// This is used by loadFrameSets() and by KWCanvas to paste framesets
     KWFrameSet *loadFrameSet( QDomElement framesetElem, bool loadFrames = true , bool loadFootnote = true);
     void loadEmbeddedObjects( QDomElement& word );
     void saveEmbeddedObjects( QDomElement& parentElem, const QPtrList<KoDocumentChild>& childList );
@@ -513,7 +527,7 @@ public:
     void switchViewMode( KWViewMode * newViewMode );
 
 
-    // useless method
+    /// \todo useless method
     static QString getAttribute(QDomElement &element, const char *attributeName, const QString &defaultValue)
       {
           return element.attribute( attributeName, defaultValue );
@@ -612,19 +626,22 @@ public:
     KFormula::Document* getFormulaDocument();
 
     void reorganizeGUI();
-    //necessary to update resize handle when you change layout
-    // make zoom, add header, add footer etc...
+    /** necessary to update resize handle when you change layout
+     * make zoom, add header, add footer etc
+     */
     void updateResizeHandles();
-    //necessary to force repaint resizehandle otherwise
-    //when we change protect size attribute handle was not repainting
+
+    /** necessary to force repaint resizehandle otherwise
+     * when we change protect size attribute handle was not repainting
+     */
     void repaintResizeHandles();
 
-    //necessary when we undo/Redo change protect content.
+    ///necessary when we undo/Redo change protect content.
     void updateCursorType( );
 
-    // Tell all views to stop editing this frameset, if they were doing so
+    /// Tell all views to stop editing this frameset, if they were doing so
     void terminateEditing( KWFrameSet * frameSet )
-    { emit sig_terminateEditing( frameSet ); }
+        { emit sig_terminateEditing( frameSet ); }
 
     void clearUndoRedoInfos();
 
@@ -643,8 +660,9 @@ public:
 
     void updateZoomRuler();
 
-    // ## rename!
+    /// \todo ### rename!
     void hasTOC(bool _b){ m_hasTOC=_b;}
+    /// \todo ### rename!
     bool isTOC(){return m_hasTOC;}
 
     QString sectionTitle( int pageNum ) const;
@@ -698,10 +716,10 @@ public:
     void changeBgSpellCheckingState( bool b );
 
     // To position the cursor when opening a document
-    QString initialFrameSet() const; // can be empty for "unset"
+    QString initialFrameSet() const; ///< \note can be empty for "unset"
     int initialCursorParag() const;
     int initialCursorIndex() const;
-    // Once we're done with this info, get rid of it
+    /// Once we're done with this info, get rid of it
     void deleteInitialEditingInfo();
 
     bool cursorInProtectedArea()const;
@@ -772,17 +790,18 @@ public:
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 
-    // This is emitted by setPageLayout if updateViews=true
+    /// This is emitted by setPageLayout if updateViews=true
     void pageLayoutChanged( const KoPageLayout& );
 
-    // Emitted when the scrollview contents must be resized (e.g. new page, new layout...)
+    /// Emitted when the scrollview contents must be resized (e.g. new page, new layout...)
     void newContentsSize();
 
-    // This is emitted when the height of the text in the main frameset changes
-    // Mostly useful for the text viewmode.
+    /** This is emitted when the height of the text in the main frameset changes
+     * \note Mostly useful for the text viewmode.
+     */
     void mainTextHeightChanged();
 
-    // This is emitted when the number of pages changes.
+    /// This is emitted when the number of pages changes.
     void pageNumChanged();
 
     void docStructureChanged(int);
@@ -806,11 +825,11 @@ protected slots:
     void slotCommandExecuted();
     void slotDocumentInfoModifed();
     void slotChapterParagraphFormatted( KoTextParag* parag );
-    void saveDialogShown(bool reset); ///called just before the save-dialog is shown
+    void saveDialogShown(bool reset); ///< called just before the save-dialog is shown
 
 protected:
     void nextParagraphNeedingCheck();
-    // fix up Z-order for import from older kword versions.
+    /// fix up Z-order for import from older kword versions.
     void fixZOrders();
     QString checkSectionTitleInParag( KoTextParag* parag, KWTextFrameSet*, int pageNum ) const;
     KoView* createViewInstance( QWidget* parent, const char* name );
@@ -879,11 +898,11 @@ private:
     KoCommandHistory * m_commandHistory;
     KoAutoFormat * m_autoFormat;
 
-    // The viewmode used by all views.
+    /// The viewmode used by all views.
     KWViewMode *m_viewMode;
 
-    ////////////// Legacy loading stuff, remove when switching to OASIS ////////
-    // Shared between loadXML and loadComplete
+    // ===== Legacy loading stuff, remove when switching to OASIS =====
+    /// \note Shared between loadXML and loadComplete
     QString m_urlIntern;
 
     QMap<KoPictureKey, QString> m_pictureMap;
@@ -892,8 +911,8 @@ private:
     QPtrList<KWTextImage> m_textImageRequests;
     QPtrList<KWPictureFrameSet> m_pictureRequests;
     QMap<QString, KWAnchorPosition> m_anchorRequests;
-    QMap<QString, KWFootNoteVariable *> m_footnoteVarRequests; // still needed? (move to KWLoadingInfo if so)
-    ////////// End of legacy loading stuff ////////////
+    QMap<QString, KWFootNoteVariable *> m_footnoteVarRequests; ///< \todo still needed? (move to KWLoadingInfo if so)
+    // ===== End of legacy loading stuff =====
 
     QMap<QString,QString> * m_pasteFramesetsMap;
 
@@ -901,9 +920,10 @@ private:
     KWMailMergeDataBase *m_slDataBase;
     int slRecordNum;
 
-    /*
+    /**
      * When a document is written out, the syntax version in use will be recorded. When read back
      * in, this variable reflects that value.
+     * \note KWord legacy format only
      */
     int m_syntaxVersion;
 
@@ -928,11 +948,12 @@ private:
     bool m_viewFormattingTabs;
     bool m_viewFormattingBreak;
 
-    /// The wrapper that contains the formula's document and its
-    /// actions. It owns the real document.
+    /** The wrapper that contains the formula's document and its
+     * actions. It owns the real document.
+     */
     KFormula::DocumentWrapper* m_formulaDocumentWrapper;
 
-    double m_indent; // in pt
+    double m_indent; ///< \note in pt
     double m_defaultColumnSpacing;
 
     int m_iNbPagePerRow;
@@ -951,7 +972,7 @@ private:
 
 
     SeparatorLinePos m_footNoteSeparatorLinePos;
-    //it's a percentage of page.
+    /// It's a percentage of page.
     int m_iFootNoteSeparatorLineLength;
 
     double m_footNoteSeparatorLineWidth;
@@ -968,8 +989,8 @@ private:
 
     KWLoadingInfo* m_loadingInfo;
 
-    // Remains alive a little bit longer than the loading info (until KWCanvas ctor)
     class InitialEditing;
+    /// \note Remains alive a little bit longer than the loading info (until KWCanvas ctor)
     InitialEditing *m_initialEditing;
 
     QPtrList<KWBookMark> m_bookmarkList;
