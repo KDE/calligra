@@ -1157,16 +1157,15 @@ void KWView::loadexpressionActions( KActionMenu * parentMenu)
     parentMenu->popupMenu()->clear();
     QStringList files = KWFactory::global()->dirs()->findAllResources( "expression", "*.xml", TRUE );
     int i = 0;
-    for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
-    {
-        createExpressionActions( parentMenu,*it, i );
-    }
+    int nbFile = 0;
+    for( QStringList::Iterator it = files.begin(); it != files.end(); ++it,nbFile++ )
+        createExpressionActions( parentMenu,*it, i,(nbFile<(int)files.count()-1) );
     delete m_personalShortCut;
     m_personalShortCut=0L;
 
 }
 
-void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& filename,int &i )
+void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& filename,int &i, bool insertSepar )
 {
     QFile file( filename );
     if ( !file.open( IO_ReadOnly ) )
@@ -1177,9 +1176,8 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
     file.close();
 
     QString group = "";
-
+    bool expressionExist =false;
     QDomNode n = doc.documentElement().firstChild();
-    bool expressionExist=false;
     for( ; !n.isNull(); n = n.nextSibling() )
     {
         if ( n.isElement() )
@@ -1187,11 +1185,7 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
             QDomElement e = n.toElement();
             if ( e.tagName() == "Type" )
             {
-                if(!expressionExist)
-                {
-                    parentMenu->popupMenu()->insertSeparator();
-                    expressionExist=true;
-                }
+                expressionExist =true;
                 group = i18n( e.namedItem( "TypeName" ).toElement().text().utf8() );
                 KActionMenu * subMenu = new KActionMenu( group, actionCollection() );
                 parentMenu->insert( subMenu );
@@ -1227,6 +1221,8 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
             }
         }
     }
+    if(expressionExist && insertSepar)
+        parentMenu->popupMenu()->insertSeparator();
 }
 
 void KWView::insertExpression()

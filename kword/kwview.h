@@ -398,7 +398,7 @@ protected:
 
     void loadexpressionActions( KActionMenu * parentMenu);
 
-    void createExpressionActions( KActionMenu * parentMenu,const QString& filename,int &i  );
+    void createExpressionActions( KActionMenu * parentMenu,const QString& filename,int &i , bool insertSepar );
 
     void insertPicture( const QString &filename, bool isClipart, bool makeInline, QSize pixmapSize, bool _keepRatio );
 
