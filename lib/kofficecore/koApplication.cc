@@ -20,6 +20,7 @@
 #include "koApplication.h"
 
 #include <klocale.h>
+#include <kimgio.h>
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <qstringlist.h>
@@ -31,7 +32,9 @@ KoApplication::KoApplication(int &argc, char **argv, const QCString& rAppName)
     KGlobal::locale()->insertCatalogue("koffice");
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/toolbar/");
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/pics/");
-	
+
+    kimgioRegister();
+
     // checking whether the app is started as a server
     // ###### Torben: Is that needed ?
     /*
