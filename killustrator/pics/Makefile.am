@@ -31,7 +31,6 @@ vmirror.png \
 tleftalign.png \
 tcenteralign.png \
 trightalign.png \
-lo-killustrator.png \
 logo.png \
 deletelayer.png \
 lowerlayer.png \
@@ -43,7 +42,6 @@ joinNodes.png \
 moveNode.png \
 newNode.png \
 split.png \
-mini-killustrator.png  \
 killustrator-intro.gif
 
 EXTRA_DIST = $(data_DATA) 
