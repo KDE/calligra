@@ -157,6 +157,8 @@ void KSpreadSelection::setSelection( const QPoint &newMarker,
     setCursorPosition(newMarker);
   }
 
+  m_pView->enableInsertColumn( !util_isRowSelected( newSelection ) );
+  m_pView->enableInsertRow( !util_isColumnSelected( newSelection ) );
   m_pView->slotChangeSelection( table, oldSelection, oldMarker );
 }
 

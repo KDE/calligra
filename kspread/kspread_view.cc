@@ -2149,6 +2149,16 @@ void KSpreadView::enableRedo( bool _b )
     m_redo->setText(i18n("Redo: %1").arg(m_pDoc->undoBuffer()->getRedoName()));
 }
 
+void KSpreadView::enableInsertColumn( bool _b )
+{
+    m_insertColumn->setEnabled( _b );
+}
+
+void KSpreadView::enableInsertRow( bool _b )
+{
+    m_insertRow->setEnabled( _b );
+}
+
 void KSpreadView::undo()
 {
   m_pDoc->emitBeginOperation(false);
