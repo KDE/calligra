@@ -186,7 +186,7 @@ void ZoomTool::activate()
 
 void ZoomTool::deactivate()
 {
-  qDebug("ZoomTool DeActivate");
+  kdDebug() << "ZoomTool DeActivate" << endl;
   if (m_pToolBar)
    m_pToolBar->hide();
 

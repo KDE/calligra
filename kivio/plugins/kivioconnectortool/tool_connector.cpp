@@ -85,7 +85,7 @@ void ConnectorTool::processEvent( QEvent* e )
 
 void ConnectorTool::activate()
 {
-    qDebug("ConnectorTool activate");
+    kdDebug() << "ConnectorTool activate" << endl;
     m_pCanvas->setCursor(*m_pConnectorCursor1);
     m_mode = stmNone;
     m_pStencil = 0;
