@@ -335,6 +335,13 @@ void KWFrameLayout::checkFootNotes()
             Q_ASSERT ( hff->m_frameset->isFootEndNote() );
             KWFootNoteFrameSet* fnfs = static_cast<KWFootNoteFrameSet *>( hff->m_frameset );
             KWFootNoteVariable* fnvar = fnfs->footNoteVariable();
+            //necessary to test paragraph because when we delete mutli
+            //footnote, first footnote who delete call setDelete(true)
+            //and force recalc, but with multi footnote deleted
+            //paragraph is null before we apply attribute to
+            //kotextcustom.
+            if ( !fnvar->paragraph() )
+                continue;
             double varY = fnvar->varY();
             hff->m_minY = varY + /*2 * */ hff->m_spacing + 2 /* some spacing */;
             int pageNum = static_cast<int>(varY / m_doc->ptPaperHeight());
