@@ -320,7 +320,7 @@ bool SelectTool::startCustomDragging(QPoint pos)
             pPage->unselectAllStencils();
 
         m_pCustomDraggingStencil = pStencil;
-        
+
         pPage->selectStencil( pStencil );
     }
 
@@ -815,8 +815,8 @@ void SelectTool::mouseRelease(QPoint pos)
             endResizing(pos);
             break;
     }
-	
-  	m_mode = stmNone;
+
+        m_mode = stmNone;
 
     m_pView->doc()->updateView(m_pView->activePage());
 }
@@ -906,10 +906,11 @@ void SelectTool::showPopupMenu( QPoint pos )
  * it launches the text tool on the selected stencils and switches back
  * to this tool when it's done.
  */
-void SelectTool::leftDoubleClick( QPoint p )
+void SelectTool::leftDoubleClick( QPoint /*p*/ )
 {
-    if( m_pView->activePage()->selectedStencils()->count() < 0 )
-        return;
+    // werner: always false!
+    //if( m_pView->activePage()->selectedStencils()->count() < 0 )
+    //    return;
 
     // Locate the text tool.  If not found, bail with an error
     Tool *t = controller()->findTool("Text");

@@ -87,13 +87,13 @@ void TextTool::activate()
     qDebug("TextTool activate");
     m_pCanvas->setCursor(*m_pTextCursor);
     m_mode = stmNone;
-    
+
     KivioPage *pPage =m_pView->activePage();
     KivioStencil *pStencil = pPage->selectedStencils()->first();
 
     if( !pStencil )
         return;
-    
+
     setStencilText();
 
     controller()->activateDefault();
@@ -157,11 +157,11 @@ void TextTool::text(QRect r)
 
     KivioDoc* doc = m_pView->doc();
     KivioPage* page = m_pCanvas->activePage();
-    
+
     KivioStencilSpawner* ss = doc->findInternalStencilSpawner("Text");
     if (!ss)
         return;
-        
+
     KivioStencil* stencil = ss->newStencil();
     stencil->setPosition(x,y);
     stencil->setDimensions(w,h);
@@ -169,11 +169,11 @@ void TextTool::text(QRect r)
     page->unselectAllStencils();
     page->addStencil(stencil);
     page->selectStencil(stencil);
-    
+
     doc->updateView(page,false);
 
     setStencilText();
-    
+
     if (stencil->text().isEmpty()) {
         page->deleteSelectedStencils();
         doc->updateView(page,false);
@@ -207,7 +207,7 @@ void TextTool::mouseMove( QMouseEvent * e )
         case stmDrawRubber:
             continueRubberBanding(e);
             break;
-        
+
         default:
             break;
     }
@@ -228,13 +228,13 @@ void TextTool::mouseRelease( QMouseEvent *e )
             endRubberBanding(e);
             break;
     }
-	
-  	m_mode = stmNone;
+
+        m_mode = stmNone;
 
     m_pCanvas->repaint();
 }
 
-void TextTool::endRubberBanding(QMouseEvent *e)
+void TextTool::endRubberBanding(QMouseEvent *)
 {
     // End the rubber-band drawing
     m_pCanvas->endRectDraw();

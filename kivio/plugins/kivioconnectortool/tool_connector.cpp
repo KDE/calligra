@@ -105,7 +105,7 @@ void ConnectorTool::configure()
 {
 }
 
-void ConnectorTool::connector(QRect r)
+void ConnectorTool::connector(QRect /*r*/)
 {
     if (!m_pStencil)
       return;
@@ -115,7 +115,7 @@ void ConnectorTool::connector(QRect r)
 
     KivioDoc* doc = m_pView->doc();
     KivioPage* page = m_pCanvas->activePage();
-    
+
     if (m_pStencil->w() < 3.0 && m_pStencil->h() < 3.0) {
         page->unselectAllStencils();
         page->selectStencil(m_pStencil);
@@ -180,7 +180,7 @@ void ConnectorTool::mouseMove( QMouseEvent * e )
         case stmDrawRubber:
             continueRubberBanding(e);
             break;
-        
+
         default:
             break;
     }
@@ -211,12 +211,12 @@ void ConnectorTool::mouseRelease( QMouseEvent *e )
             endRubberBanding(e);
             break;
     }
-	
+
     m_pCanvas->setCursor(*m_pConnectorCursor1);
-  	m_mode = stmNone;
+        m_mode = stmNone;
 }
 
-void ConnectorTool::endRubberBanding(QMouseEvent *e)
+void ConnectorTool::endRubberBanding(QMouseEvent *)
 {
     connector(m_pCanvas->rect());
     m_pStencil = 0;

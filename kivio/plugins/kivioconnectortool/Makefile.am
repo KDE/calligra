@@ -8,12 +8,12 @@ lib_LTLIBRARIES =libkivioconnectortool.la
 
 libkivioconnectortool_la_LDFLAGS = -version-info
 
-INCLUDES = $(all_includes)\
-		-I$(top_srcdir)/kivio/kiviopart\
-		-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
-		-I$(top_srcdir)/kivio/kiviopart/tklib\
-		-I$(top_srcdir)/kivio/kiviopart/tools\
-		-I$(top_srcdir)/kivio/plugins/kivioconnectortool/straight_connector
+INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
+	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
+	-I$(top_srcdir)/kivio/kiviopart/tklib\
+	-I$(top_srcdir)/kivio/kiviopart/tools\
+	-I$(top_srcdir)/kivio/plugins/kivioconnectortool/straight_connector \
+	$(all_includes)
 libkivioconnectortool_la_METASOURCES = AUTO
 libkivioconnectortool_la_SOURCES = \
 		plugin.cpp\
