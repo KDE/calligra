@@ -185,6 +185,7 @@ public slots:
     void viewZoom( const QString &s );
 
     void insertPicture();
+    void insertPicture(const QString &filename);
     void insertSpecialChar();
     void insertFrameBreak();
     void insertVariableDateFix();

@@ -127,6 +127,8 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 
     QObject::connect( doc, SIGNAL( sig_insertObject( KWChild*, KWPartFrameSet* ) ),
                       this, SLOT( slotInsertObject( KWChild*, KWPartFrameSet* ) ) );
+    QObject::connect( doc, SIGNAL( embeddImage( const QString & ) ),
+                      this, SLOT( insertPicture( const QString & ) ) );
     QObject::connect( doc, SIGNAL( sig_updateChildGeometry( KWChild* ) ),
                       this, SLOT( slotUpdateChildGeometry( KWChild* ) ) );
 
@@ -1262,6 +1264,14 @@ void KWView::insertPicture()
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->insertPicture( file );
+}
+
+/*===============================================================*/
+void KWView::insertPicture(const QString &filename)
+{
+    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
+    if ( edit )
+        edit->insertPicture( filename );
 }
 
 /*===============================================================*/
