@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Laurent Montel \<montel@kde.org\>
+   Copyright (C) 2004 Laurent Montel <montel@kde.org>
+                      David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,6 +32,9 @@
  * For reference, the structure of settings.xml looks like:
  * <pre>
  *   \<office:settings\>
+ *      \<config:config-item-set config:name="configure-settings"\>
+ *      ....
+ *      \</config:config-item-set\>
  *      \<config:config-item-set config:name="view-settings"\>
  *         \<config:config-item-map-indexed config:name="Views"\>
  *           \<config:config-item-map-entry\>
@@ -51,68 +55,103 @@
  *         \<config:config-item-map-indexed config:name="Interface"\>
  *         .......
  *         \</config:config-item-map-indexed\>
- *       \</config:config-item-set\>
- *       \<config:config-item-set config:name="configure-settings"\>
- *       ....
- *       \</config:config-item-set\>
+ *      \</config:config-item-set\>
  *   \</office:settings\>
  * </pre>
- * Basically, config-items are either part of an item-set, or part of an item-map which is inside an item-set.
+ * Basically, an item-set is a set of named \<config-item\>s and/or maps.
+ * There are two kinds of maps (by-index or by-name), and entries in the
+ * maps contain \<config-item\>s too, or nested maps.
  *
- * The API of KoOasisSettings allows the caller to look for a given item-set or item-map once,
- * and then lookup multiple items inside it.
+ * The API of KoOasisSettings allows the caller to look for a given item-set
+ * or item-map once, and then lookup multiple items inside it.
+ * It also allows "drilling down" inside the tree in case of nesting.
  */
 class KoOasisSettings
 {
 public:
-    KoOasisSettings( const QDomDocument &doc );
+    KoOasisSettings( const QDomDocument& doc );
+
+    class Items;
 
     /**
-     * Select the config-item-set named @p configItemName
-     * @return false if no such item set was found
+     * Returns the toplevel item-set named @p itemSetName.
+     * If not found, the returned items instance is null.
      */
-    bool selectItemSet( const QString &itemSetName );
+    Items itemSet( const QString& itemSetName ) const;
 
-    /**
-     * Select the config-item-map-indexed named @p mapItemName, (for instance
-     * inside the item-set previously selected by selectItemSet).
-     *
-     * An indexed map is an array (or sequence), i.e. items are supposed to
-     * be retrieved by index. TODO: some API for that.
-     * @return false if no such map was found
-     */
-    bool selectItemMap( const QString &itemMapName );
+    class IndexedMap;
+    class NamedMap;
+    /// Represents a collection of items (config-item or maps).
+    class Items
+    {
+        friend class KoOasisSettings;
+        friend class IndexedMap;
+        friend class NamedMap;
+        Items( const QDomElement& elem ) : m_element( elem ) {}
+    public:
+        bool isNull() const { return m_element.isNull(); }
 
-    /**
-     * Select the config-item-map-named named @p mapItemName, inside the item-set
-     * previously selected by selectItemSet.
-     *
-     * A named map is a map where items are retrieved by entry name, @see selectItemMapEntry
-     * @return false if no such map was found
-     */
-    bool selectItemMapNamed( const QString &itemMapName );
+        /**
+         * Look for the config-item-map-indexed named @p itemMapName and return it.
+         *
+         * An indexed map is an array (or sequence), i.e. items are supposed to
+         * be retrieved by index. This is useful for e.g. "view 0", "view 1" etc.
+         */
+        IndexedMap indexedMap( const QString& itemMapName ) const;
 
-    /**
-     * Select an entry in a named map
-     */
-    bool selectItemMapEntry( const QString& entryName );
+        /**
+         * Look for the config-item-map-named named @p mapItemName and return it.
+         *
+         * A named map is a map where items are retrieved by entry name, @see selectItemMapEntry
+         * @return false if no such map was found
+         */
+        NamedMap namedMap( const QString& itemMapName ) const;
 
-    // TODO: remove last argument, use selectItemMapEntry instead
-    int parseConfigItemInt( const QString & configName, const QString &itemNameEntry = QString::null ) const;
-    double parseConfigItemDouble( const QString & configName, const QString &itemNameEntry = QString::null ) const;
-    QString parseConfigItemString( const QString & configName, const QString &itemNameEntry = QString::null ) const;
-    bool parseConfigItemBool( const QString & configName, const QString &itemNameEntry = QString::null ) const;
-    short parseConfigItemShort( const QString & configName, const QString &itemNameEntry = QString::null ) const;
-    long parseConfigItemLong( const QString & configName, const QString &itemNameEntry = QString::null ) const;
+        int parseConfigItemInt( const QString& configName, int defValue = 0 ) const;
+        double parseConfigItemDouble( const QString& configName, double defValue = 0 ) const;
+        QString parseConfigItemString( const QString& configName, const QString& defValue = QString::null ) const;
+        bool parseConfigItemBool( const QString& configName, bool defValue = false ) const;
+        short parseConfigItemShort( const QString& configName, short defValue = 0 ) const;
+        long parseConfigItemLong( const QString& configName, long defValue = 0 ) const;
+    private:
+        /// @internal
+        QString findConfigItem( const QString& item, bool* ok ) const;
+        /// @internal
+        static QString findConfigItem( const QDomElement& element, const QString& item, bool* ok );
+
+        QDomElement m_element;
+    };
+
+    /// Internal base class for IndexedMap and NamedMap
+    class Map
+    {
+    public:
+        bool isNull() const { return m_element.isNull(); }
+    protected:
+        Map( const QDomElement& elem ) : m_element( elem ) {}
+        const QDomElement m_element;
+    };
+
+    class IndexedMap : public Map
+    {
+        friend class Items;
+        IndexedMap( const QDomElement& elem ) : Map( elem ) {}
+    public:
+        /// Returns an entry in an indexed map
+        Items entry( int entryIndex ) const;
+    };
+
+    class NamedMap : public Map
+    {
+        friend class Items;
+        NamedMap( const QDomElement& elem ) : Map( elem ) {}
+    public:
+        /// Returns an entry in a named map
+        Items entry( const QString& entryName ) const;
+    };
 
 private:
-    /// @internal
-    QString parseConfigItem( const QString &item, const QString &itemNameEntry = QString::null ) const;
-    /// @internal
-    QString parseConfigItemName( const QDomElement & element, const QString &item ) const;
-
-    const QDomDocument m_doc;
-    QDomElement m_element;
+    const QDomElement m_settingsElement;
 };
 
 #endif

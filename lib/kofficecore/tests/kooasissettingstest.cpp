@@ -23,25 +23,50 @@
 
 void testSelectItemSet( KoOasisSettings& settings )
 {
-    bool ok = settings.selectItemSet( "notexist" );
-    assert( !ok );
-    ok = settings.selectItemSet( "view-settings" );
-    assert( ok );
+    KoOasisSettings::Items items = settings.itemSet( "notexist" );
+    assert( items.isNull() );
+    items = settings.itemSet( "view-settings" );
+    assert( !items.isNull() );
+    kdDebug() << "testSelectItemSet OK" << endl;
 }
 
 void testParseConfigItemString( KoOasisSettings& settings )
 {
-    const QString unit = settings.parseConfigItemString( "unit" );
+    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
+    const QString unit = viewSettings.parseConfigItemString( "unit" );
     qDebug( "%s", unit.latin1() );
     assert( unit == "mm" );
+    kdDebug() << "testParseConfigItemString OK" << endl;
 }
 
-void testSelectItemMap( KoOasisSettings& settings )
+void testIndexedMap( KoOasisSettings& settings )
 {
-    bool ok = settings.selectItemSet( "view-settings" );
-    assert( ok );
-    ok = settings.selectItemMap( "Views" );
-    assert( ok );
+    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
+    assert( !viewSettings.isNull() );
+    KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap( "Views" );
+    assert( !viewMap.isNull() );
+    KoOasisSettings::Items firstView = viewMap.entry( 0 );
+    assert( !firstView.isNull() );
+    const short zoomFactor = firstView.parseConfigItemShort( "ZoomFactor" );
+    assert( zoomFactor == 100 );
+    KoOasisSettings::Items secondView = viewMap.entry( 1 );
+    assert( secondView.isNull() );
+    kdDebug() << "testIndexedMap OK" << endl;
+}
+
+void testNamedMap( KoOasisSettings& settings )
+{
+    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
+    assert( !viewSettings.isNull() );
+    KoOasisSettings::NamedMap viewMap = viewSettings.namedMap( "NamedMap" );
+    assert( !viewMap.isNull() );
+    KoOasisSettings::Items foo = viewMap.entry( "foo" );
+    assert( !foo.isNull() );
+    const int zoomFactor = foo.parseConfigItemShort( "ZoomFactor" );
+    assert( zoomFactor == 100 );
+    KoOasisSettings::Items secondView = viewMap.entry( "foobar" );
+    assert( secondView.isNull() );
+    kdDebug() << "testNamedMap OK" << endl;
 }
 
 int main( int, char** ) {
@@ -54,9 +79,14 @@ int main( int, char** ) {
     <config:config-item config:name=\"unit\" config:type=\"string\">mm</config:config-item> \
     <config:config-item-map-indexed config:name=\"Views\"> \
       <config:config-item-map-entry> \
-        <config:config-item config:name=\"SnapLinesDrawing\" config:type=\"string\">value</config:config-item> \
+        <config:config-item config:name=\"ZoomFactor\" config:type=\"short\">100</config:config-item> \
       </config:config-item-map-entry> \
     </config:config-item-map-indexed> \
+    <config:config-item-map-named config:name=\"NamedMap\"> \
+      <config:config-item-map-entry config:name=\"foo\"> \
+        <config:config-item config:name=\"ZoomFactor\" config:type=\"int\">100</config:config-item> \
+      </config:config-item-map-entry> \
+    </config:config-item-map-named> \
   </config:config-item-set> \
  </office:settings> \
 </office:document-settings> \
@@ -70,6 +100,7 @@ int main( int, char** ) {
 
     testSelectItemSet( settings );
     testParseConfigItemString( settings );
-    testSelectItemMap( settings );
+    testIndexedMap( settings );
+    testNamedMap( settings );
     return 0;
 }
