@@ -20,8 +20,6 @@
 #ifndef __main_h__
 #define __main_h__
 
-class KSpell;
-
 #include <qobject.h>
 #include <kdatatool.h>
 #include <klibloader.h>
