@@ -1077,7 +1077,7 @@ void KPresenterView::extraWebPres()
     QString config = QString::null;
     if ( KMessageBox::questionYesNo( this,
 	   i18n( "Do you want to load a previously saved configuration"
-		 "which will be used for this HTML Presentation?" ),
+		 " which will be used for this HTML Presentation?" ),
 	   i18n( "Create HTML Presentation" ) ) == KMessageBox::Yes )
     {
 	url = KFileDialog::getOpenURL( QString::null, i18n("*.kpweb|KPresenter HTML Presentation (*.kpweb)") );
