@@ -634,6 +634,13 @@ QString KIllustratorView::getExportFileName (FilterManager *filterMgr)
         if (!url.isLocalFile())
             KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
         filename = url.path();
+        if ( QFileInfo( url.path() ).extension().isEmpty() ) {
+            // assume that the pattern ends with .extension
+            QString s( dlg->currentFilter() );
+            QString extension = s.mid( s.find( "." ) );
+            extension = extension.left( extension.find( " " ) );
+            filename+=extension;
+        }
         lastExportDir = url.directory();
     }
 
