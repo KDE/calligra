@@ -675,6 +675,17 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
                 format.appendChild( italic );
             }
 
+        if (m_styleStack.hasAttribute("fo:language")) // 3.10.17
+        {
+            QDomElement lang = doc.createElement("LANGUAGE");
+            QString tmp = m_styleStack.attribute("fo:language");
+            if (tmp=="en")
+                lang.setAttribute("value", "en_US");
+            else
+                lang.setAttribute("value", tmp);
+            format.appendChild(lang);
+        }
+
         if( m_styleStack.hasAttribute("style:text-crossing-out" )) // 3.10.6
         {
             QString strikeOutType = m_styleStack.attribute( "style:text-crossing-out" );
