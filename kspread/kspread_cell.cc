@@ -1618,7 +1618,7 @@ bool KSpreadCell::calc( bool _makedepend )
 	    KSpreadCell *cell = dep->m_pTable->cellAt( x, y );
 	    if ( cell == 0L )
 	      return false;
-	    if ( cell->calc( _makedepend ) )
+	    if ( !cell->calc( _makedepend ) )
 	    {
 	      m_strFormularOut = "####";
 	      m_bValue = false;
