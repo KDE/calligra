@@ -10,6 +10,7 @@
 #include "kchartDataEditor.h"
 #include "kchartBarConfigDialog.h"
 #include "KChartViewIface.h"
+#include "kchartPageLayout.h"
 
 #include "kchart_params.h"
 
@@ -113,6 +114,10 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     m_headerFooterConfig= new KAction( i18n( "&Configure header footer" ), 0,
                             this, SLOT( slotConfigHeaderFooterChart() ),
                             actionCollection(), "headerfooter_subtype" );
+
+    m_pageLayoutConfig=new KAction( i18n( "Page Layout..." ), 0,
+                            this, SLOT( slotConfigPageLayout() ),
+                            actionCollection(), "page_layout" );
     // initialize the configuration
     //    loadConfig();
 
@@ -462,6 +467,13 @@ void KChartView::updateButton()
                 params->chartType()==KDChartParams::HiLo ||
                 params->chartType()==KDChartParams::Polar);
     m_subTypeChartConfig->setEnabled(state);
+}
+
+void KChartView::slotConfigPageLayout()
+{
+    KChartParams* params = ((KChartPart*)koDocument())->params();
+    KChartPageLayout dialog(params,this,"Page Layout");
+    dialog.exec();
 }
 
 #include "kchart_view.moc"

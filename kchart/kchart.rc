@@ -1,9 +1,11 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KChart" version="9">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KChart" version="10">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="wizard"/>
   <Action name="edit"/>
   <Action name="config"/>
+  <Separator />
+  <Action name="page_layout"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
   <Action name="loadconfig"/>
