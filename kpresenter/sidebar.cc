@@ -780,21 +780,33 @@ QRect Outline::tip(const QPoint &pos, QString &title)
 void Outline::itemClicked( QListViewItem *item )
 {
     if( !item ) return;
-    
+
+    // check if we need to show chosen slide    
     OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(item);
     if( slideItem )
     {
         KPrPage* page = slideItem->page();
         if( !page ) return;
-        int index = page->kPresenterDoc()->pageList().find( page );
-        emit showPage( index );
+        emit showPage( page->kPresenterDoc()->pageList().find( page ) );
     }    
     
+    // check if we need to show chosen object    
     OutlineObjectItem* objectItem = dynamic_cast<OutlineObjectItem*>(item);
     if( objectItem )
     {
         KPObject *object = objectItem->object();
         if( !object ) return;
+        
+        // ensure the owner slide is shown first
+        OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(objectItem->parent());
+        if( slideItem ) if( slideItem != currentItem() )
+        {
+            KPrPage* page = slideItem->page();
+            if( !page ) return;
+            emit showPage( page->kPresenterDoc()->pageList().find( page ) );
+        }
+        
+        // select the object, make sure it's visible
         QRect rect( doc->zoomHandler()->zoomRect( object->getBoundingRect() ) );
         object->setSelected( true );
         doc->repaint( object );
@@ -809,7 +821,7 @@ void Outline::itemClicked( QListViewItem *item )
 void Outline::setCurrentPage( int pg )
 {
     OutlineSlideItem *item = slideItem( pg );
-    if( item )
+    if( item && ( item!=currentItem()->parent() ) )
     {
         setCurrentItem( item );
         setSelected( item, true );
