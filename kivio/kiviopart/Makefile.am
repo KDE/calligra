@@ -5,7 +5,6 @@
 SUBDIRS = ui kiviosdk tklib tools pics tiles stencils .
 
 kde_module_LTLIBRARIES = libkiviopart.la
-libkiviopart_la_LDFLAGS = -version-info 
 libkiviopart_la_LIBADD = \
 		$(top_builddir)/kivio/kiviopart/tools/libtools.la\
 		$(top_builddir)/kivio/kiviopart/tklib/libtklib.la\

@@ -6,8 +6,6 @@ SUBDIRS = straight_connector
 lib_LTLIBRARIES =libkivioconnectortool.la
 
 
-libkivioconnectortool_la_LDFLAGS = -version-info
-
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
 	-I$(top_srcdir)/kivio/kiviopart/tklib\

@@ -5,9 +5,6 @@
 SUBDIRS = zoom_pics 
 lib_LTLIBRARIES =libkiviozoomtool.la
 
-
-libkiviozoomtool_la_LDFLAGS = -version-info
-
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
 	-I$(top_srcdir)/kivio/kiviopart/tklib\
