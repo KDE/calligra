@@ -114,18 +114,21 @@ VPath::draw( VPainter* painter, const KoRect *rect ) const
 	{
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			painter->newPath();
-			painter->setRasterOp( Qt::XorROP );
-			painter->setPen( Qt::yellow );
-			painter->setBrush( Qt::NoBrush );
-
-			VSubpathIterator jtr( *( itr.current() ) );
-			for( ; jtr.current(); ++jtr )
+			if( !itr.current()->isEmpty() )
 			{
-				jtr.current()->draw( painter );
-			}
+				painter->newPath();
+				painter->setRasterOp( Qt::XorROP );
+				painter->setPen( Qt::yellow );
+				painter->setBrush( Qt::NoBrush );
 
-			painter->strokePath();
+				VSubpathIterator jtr( *( itr.current() ) );
+				for( ; jtr.current(); ++jtr )
+				{
+					jtr.current()->draw( painter );
+				}
+
+				painter->strokePath();
+			}
 		}
 	}
 	else if( state() != edit )
@@ -136,10 +139,13 @@ VPath::draw( VPainter* painter, const KoRect *rect ) const
 
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			VSubpathIterator jtr( *( itr.current() ) );
-			for( ; jtr.current(); ++jtr )
+			if( !itr.current()->isEmpty() )
 			{
-				jtr.current()->draw( painter );
+				VSubpathIterator jtr( *( itr.current() ) );
+				for( ; jtr.current(); ++jtr )
+				{
+					jtr.current()->draw( painter );
+				}
 			}
 		}
 
