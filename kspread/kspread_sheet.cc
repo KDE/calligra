@@ -1023,7 +1023,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
   {
     for ( RowFormat * rw = m_rows.first(); rw; rw = rw->next() )
     {
-      if ( !rw->isDefault() && worker.testCondition( rw ) )
+      if ( worker.testCondition( rw ) )
       {
         for ( int col = left; col <= right; ++col )
         {
@@ -1074,6 +1074,20 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
         RowFormat * rw = nonDefaultRowFormat(i);
         worker.doWork( rw );
       }
+
+      for ( int row = top; row <= bottom; ++row )
+      {
+        cell = getFirstCellRow( row );
+        while ( cell )
+        {
+          if ( worker.testCondition( cell ) )
+          {
+            worker.doWork( cell, false, cell->column(), row );
+          }
+        cell = getNextCellRight( cell->column(), row );
+        }
+      }
+
     }
     result = CompleteRows;
   }
@@ -1112,7 +1126,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
 
       for ( RowFormat * rw = m_rows.first(); rw; rw = rw->next() )
       {
-        if ( !rw->isDefault() && worker.testCondition( rw ) )
+        if ( worker.testCondition( rw ) )
         {
           for ( int i = left; i <= right; ++i )
           {
