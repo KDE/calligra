@@ -2077,7 +2077,7 @@ void KWFormulaFrameSet::paste( QDomNode& formulaElem )
             connect(formula, SIGNAL(formulaChanged(double, double)),
                     this, SLOT(slotFormulaChanged(double, double)));
         }
-        if (!formula->load(formulaElem)) {
+        if ( !formula->load( formulaElem.firstChild().toElement() ) ) {
             kdError(32001) << "Error loading formula" << endl;
         }
     }
