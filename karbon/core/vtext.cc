@@ -372,6 +372,7 @@ VText::load( const QDomElement& element )
 		traceText();
 #endif
 	m_boundingBoxIsInvalid = true;
+	m_fill->setFillRule( VFill::evenOdd );
 }
 
 void 
