@@ -257,7 +257,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		  int frameset = 0;
 		  KWFrame *frame = doc->getFirstSelectedFrame(frameset);
 		  if (doc->getFrameSet(frameset)->getFrameInfo() != FI_BODY) break;
-		  if (frameset < 1) break;
+		  if (frameset < 1 && doc->getProcessingType() != KWordDocument::DTP) break;
 
 		  QPainter p;
 		  p.begin(this);
@@ -694,6 +694,8 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MM_EDIT_FRAME:
       {
+	setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
+	gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
 	doc->recalcFrames();
 	doc->updateAllFrames();
 	recalcAll = true;
@@ -2345,6 +2347,10 @@ void KWPage::drawFrameSelection(QPainter &_painter,KWFrame *_frame)
 /*================================================================*/
 void KWPage::frameSizeChanged(KoPageLayout _layout)
 {
+  gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
+
+  if (doc->getProcessingType() != KWordDocument::DTP) return;
+
   KWFrame *frame = doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1);
 
   unsigned int page = 0;
@@ -2869,6 +2875,7 @@ void KWPage::setParagBottomBorder(KWParagLayout::Border _brd)
 /*================================================================*/
 void KWPage::tabListChanged(QList<KoTabulator> *_tablist)
 { 
+  gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
   if (!doc->has_selection())
     fc->getParag()->tabListChanged(_tablist); 
   else

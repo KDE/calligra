@@ -747,6 +747,7 @@ void KWordView::formatPage()
       m_pKWordDoc->setPageLayout(pgLayout,cl,kwhf);
       gui->getVertRuler()->setPageLayout(pgLayout);
       gui->getHorzRuler()->setPageLayout(pgLayout);
+      gui->getPaperWidget()->frameSizeChanged(pgLayout);
     }
 }
 
@@ -1921,8 +1922,8 @@ void KWordView::newPageLayout(KoPageLayout _layout)
   gui->getHorzRuler()->setPageLayout(_layout);
   gui->getVertRuler()->setPageLayout(_layout);
 
-  if (m_pKWordDoc->getProcessingType() == KWordDocument::DTP)
-    gui->getPaperWidget()->frameSizeChanged(_layout);
+  //if (m_pKWordDoc->getProcessingType() == KWordDocument::DTP)
+  gui->getPaperWidget()->frameSizeChanged(_layout);
 }
 
 /*================================================================*/

@@ -927,7 +927,7 @@ void KWParagDia::setupTab5()
   tab5 = new QWidget(this);
   grid5 = new QGridLayout(tab5,4,2,15,7);
 
-  lTab = new QLabel(i18n("Tabulator positions are given in millimeters"),tab5);
+  lTab = new QLabel(i18n("Tabulator positions are given in points (pt)"),tab5);
   lTab->resize(lTab->sizeHint());
   grid5->addWidget(lTab,0,0);
 
@@ -1368,7 +1368,7 @@ void KWParagDia::setTabList(QList<KoTabulator> *tabList)
 
   for (unsigned int i = 0;i < tabList->count();i++)
     {
-      str.sprintf("%d",tabList->at(i)->mmPos);
+      str.sprintf("%d",tabList->at(i)->ptPos);
       lTabs->insertItem(str);
     }
 }
