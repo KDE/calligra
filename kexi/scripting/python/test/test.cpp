@@ -50,12 +50,13 @@ bool test_simple(int argc, char **argv)
     //std::cout << "module->as_string() = " << module.as_string() << std::endl;
 
     QFile f( QFile::encodeName("test/test.py") );
-    if(! f.open(IO_ReadOnly)) return false;
-    QString data = f.readAll();
-    f.close();
+    if(f.exists() && f.open(IO_ReadOnly)) {
+        QString data = f.readAll();
+        f.close();
 
-    if(! data.isEmpty())
-        PyRun_SimpleString(data.latin1());
+        if(! data.isEmpty())
+            PyRun_SimpleString(data.latin1());
+    }
 
     delete database;
 
