@@ -3028,6 +3028,7 @@ void KWDocument::updateZoomRuler()
     {
         it.current()->getGUI()->getHorzRuler()->setZoom( zoomedResolutionX() );
         it.current()->getGUI()->getVertRuler()->setZoom( zoomedResolutionY() );
+        it.current()->setFrameStartEnd();
     }
 }
 

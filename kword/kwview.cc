@@ -1574,6 +1574,7 @@ void KWView::viewPageMode()
             m_zoomViewModePreview = m_doc->zoom();
         showZoom( m_zoomViewModeNormal );
         setZoom( m_zoomViewModeNormal, false );
+        setFrameStartEnd();
         m_gui->canvasWidget()->switchViewMode( new KWViewModeNormal( m_gui->canvasWidget()) );
     }
     else
@@ -1587,6 +1588,7 @@ void KWView::viewPreviewMode()
         m_zoomViewModeNormal = m_doc->zoom();
         showZoom( m_zoomViewModePreview );
         setZoom( m_zoomViewModePreview, false );
+        setFrameStartEnd();
         m_gui->canvasWidget()->switchViewMode( new KWViewModePreview( m_gui->canvasWidget(),m_doc->getNbPagePerRow() ) );
     }
     else
@@ -3232,7 +3234,7 @@ void KWView::setFrameStartEnd()
     {
         QRect r = m_doc->zoomRect( *edit->currentFrame() );
         r = m_gui->canvasWidget()->viewMode()->normalToView( r );
-        m_gui->getHorzRuler()->setFrameStartEnd( r.left(), r.right() );
+        m_gui->getHorzRuler()->setFrameStartEnd(  r.left(), r.right() );
     }
 
 }

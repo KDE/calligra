@@ -276,6 +276,7 @@ public slots:
     void slotSpecialCharDlgClosed();
 
     void refreshCustomMenu();
+    void setFrameStartEnd();
 protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );
@@ -290,7 +291,6 @@ protected:
 
     void setupActions();
     void createKWGUI();
-    void setFrameStartEnd();
 
     virtual void resizeEvent( QResizeEvent *e );
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
