@@ -54,7 +54,7 @@
 #define STORE_PROTOCOL "tar"
 // The internal path is a hack to make KURL happy and still pass
 // some kind of relative path to KoDocumentChild
-#define INTERNAL_PROTOCOL "intern:"
+#define INTERNAL_PROTOCOL "intern"
 #define INTERNAL_PREFIX "intern:/"
 // Warning, keep it sync in koStore.cc and koDocumentChild.cc
 
@@ -1136,7 +1136,7 @@ void KoDocument::emitEndOperation()
 
 bool KoDocument::isStoredExtern()
 {
-    return ( url().protocol() != STORE_PROTOCOL && url().protocol() != INTERNAL_PROTOCOL );
+    return ( !url().protocol().isEmpty() && url().protocol() != STORE_PROTOCOL && url().protocol() != INTERNAL_PROTOCOL );
 }
 
 void KoDocument::setModified( bool mod )

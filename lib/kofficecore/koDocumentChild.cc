@@ -35,7 +35,7 @@
 // This used to "store" but KURL didn't like it,
 // so let's simply make it "tar" !
 #define STORE_PROTOCOL "tar"
-#define INTERNAL_PROTOCOL "intern:"
+#define INTERNAL_PROTOCOL "intern"
 // Warning, keep it sync in koStore.cc and koDocument.cc
 
 /**********************************************************
