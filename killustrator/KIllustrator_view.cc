@@ -124,11 +124,14 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
 
     setupCanvas();
     kdDebug()<<"KIlluView after setupCanvas: "<<time.elapsed()<<endl;
+    setXMLFile( "KIllustrator.rc" );
+    kdDebug()<<"KIlluView after setXMLFile(): "<<time.elapsed()<<endl
+        ;
+    canvas->docSizeChanged();
+
     createMyGUI();
     kdDebug()<<"KIlluView after createMyGUI: "<<time.elapsed()<<endl;
-    setXMLFile( "KIllustrator.rc" );
-    kdDebug()<<"KIlluView after setXMLFile(): "<<time.elapsed()<<endl;
-    canvas->docSizeChanged();
+
     connect (activeDocument(),SIGNAL(pageChanged()),canvas,SLOT(repaint()));
     connect (activeDocument(),SIGNAL(pageChanged()),this,SLOT(refreshLayerPanel()));
     readConfig();
@@ -286,7 +289,6 @@ void KIllustratorView::createMyGUI()
     connect(m_viewZoom, SIGNAL(activated(const QString &)),this, SLOT(slotViewZoom(const QString &)));
     m_viewZoom->setCurrentItem(1);
 
-
     // Colorbar action
     QValueList<QColor> colorList;
     colorList << Qt::white << Qt::red << Qt::green << Qt::blue << Qt::cyan << Qt::magenta << Qt::yellow
@@ -300,7 +302,6 @@ void KIllustratorView::createMyGUI()
                          SLOT( slotPenChosen( const QColor & ) ),
                          colorList,
                          actionCollection(), "colorbar" );
-
     // Node Toolbar
     m_moveNode = new KToggleAction( i18n("Move Node "), "moveNode", 0, actionCollection(), "moveNode" );
     m_moveNode->setExclusiveGroup( "Node" );
@@ -314,7 +315,6 @@ void KIllustratorView::createMyGUI()
     m_splitLine = new KToggleAction( i18n("Split line"), "split", 0, actionCollection(), "splitLine" );
     m_splitLine->setExclusiveGroup( "Node" );
     connect( m_splitLine, SIGNAL( toggled( bool ) ), this, SLOT( slotSplitLine( bool ) ) );
-
     m_normal->setChecked( true );
     m_showRuler->setChecked( true );
     m_showHelplines->setChecked(activeDocument()->showHelplines());
@@ -323,7 +323,9 @@ void KIllustratorView::createMyGUI()
     m_alignToGrid->setChecked(activeDocument()->snapToGrid());
     m_selectTool->setChecked( true );
     if(m_pDoc->isReadWrite())
+    {
       tcontroller->toolSelected( Tool::ToolSelect);
+    }
     setUndoStatus (false, false);
     connect (&cmdHistory, SIGNAL(changed(bool, bool)),SLOT(setUndoStatus(bool, bool)));
     // Disable node actions
@@ -442,7 +444,7 @@ void KIllustratorView::setupCanvas()
 
 void KIllustratorView::readConfig()
 {
-   KConfig* config = kapp->config ();
+   KConfig* config = KIllustratorFactory::global()->config ();
    config->setGroup("Panels");
    bool b=config->readBoolEntry("Enabled",true);
 /*   if (!b)
@@ -454,7 +456,7 @@ void KIllustratorView::readConfig()
 
 void KIllustratorView::writeConfig()
  {
-   KConfig* config = kapp->config ();
+   KConfig* config = KIllustratorFactory::global()->config ();
    config->setGroup("Panels");
    config->writeEntry("Enabled",m_showLayers->isChecked());
    config->sync();
@@ -1344,7 +1346,6 @@ void KIllustratorView::createLayerPanel(bool calledFromAction)
       return;
    disconnect(m_showLayers,SIGNAL(toggled(bool)),this,SLOT(createLayerPanel(bool)));
    mToolDockManager = new ToolDockManager(canvas);
-
    //Layer Panel
    mLayerPanel = new LayerPanel(this);
    mLayerDockBase = mToolDockManager->createToolDock(mLayerPanel, i18n("Layers"));
@@ -1352,7 +1353,6 @@ void KIllustratorView::createLayerPanel(bool calledFromAction)
    connect( m_showLayers, SIGNAL(toggled(bool)), mLayerDockBase, SLOT(makeVisible(bool)));
    slotLayersPanel(false);
    mLayerPanel->stateOfButton();
-
    if (calledFromAction)
       mLayerDockBase->makeVisible(calledFromAction);
 }
