@@ -33,7 +33,7 @@
 #include <stdio.h> // debug
 
 typedef KGenericFactory<WPImport, KoFilter> WPImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libwpimport, WPImportFactory( "wpimport" ) )
+K_EXPORT_COMPONENT_FACTORY( libwpimport, WPImportFactory( "kofficefilters" ) )
 
 WPImport::WPImport( KoFilter *, const char *, const QStringList& ):
                      KoFilter()

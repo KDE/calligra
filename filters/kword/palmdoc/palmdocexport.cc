@@ -40,7 +40,7 @@
 #include "palmdocexport.h"
 
 typedef KGenericFactory<PalmDocExport, KoFilter> PalmDocExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libpalmdocexport, PalmDocExportFactory( "palmdocexport" ) )
+K_EXPORT_COMPONENT_FACTORY( libpalmdocexport, PalmDocExportFactory( "kofficefilters" ) )
 
 class PalmDocWorker : public KWEFBaseWorker
 {

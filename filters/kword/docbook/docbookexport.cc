@@ -38,7 +38,7 @@
 #include <KWEFBaseWorker.h>
 
 typedef KGenericFactory<DocBookExport, KoFilter> DocBookExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libdocbookexport, DocBookExportFactory( "docbookexport" ) )
+K_EXPORT_COMPONENT_FACTORY( libdocbookexport, DocBookExportFactory( "kofficefilters" ) )
 
 DocBookExport::DocBookExport ( KoFilter          *,
                                const char        *,

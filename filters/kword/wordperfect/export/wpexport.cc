@@ -40,7 +40,7 @@
 #include <wp6.h>
 
 typedef KGenericFactory<WPExport, KoFilter> WPExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libwpexport, WPExportFactory( "wpexport" ) )
+K_EXPORT_COMPONENT_FACTORY( libwpexport, WPExportFactory( "kofficefilters" ) )
 
 WPExport::WPExport( KoFilter *, const char *, const QStringList& ):
                      KoFilter()

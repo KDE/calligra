@@ -37,7 +37,7 @@
 #include <amiproparser.h>
 
 typedef KGenericFactory<AmiProImport, KoFilter> AmiProImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libamiproimport, AmiProImportFactory( "amiproimport" ) )
+K_EXPORT_COMPONENT_FACTORY( libamiproimport, AmiProImportFactory( "kofficefilters" ) )
 
 AmiProImport::AmiProImport( KoFilter *, const char *, const QStringList& ):
                      KoFilter()

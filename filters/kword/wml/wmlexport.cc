@@ -40,7 +40,7 @@
 #include "wmlexport.h"
 
 typedef KGenericFactory<WMLExport, KoFilter> WMLExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libwmlexport, WMLExportFactory( "wmlexport" ) )
+K_EXPORT_COMPONENT_FACTORY( libwmlexport, WMLExportFactory( "kofficefilters" ) )
 
 class WMLWorker : public KWEFBaseWorker
 {

@@ -40,7 +40,7 @@
 #include <amiproexport.h>
 
 typedef KGenericFactory<AmiProExport, KoFilter> AmiProExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libamiproexport, AmiProExportFactory( "amiproexport" ) )
+K_EXPORT_COMPONENT_FACTORY( libamiproexport, AmiProExportFactory( "kofficefilters" ) )
 class AmiProWorker : public KWEFBaseWorker
 {
   public:

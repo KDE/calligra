@@ -47,7 +47,7 @@
 #include <rtfexport.moc>
 
 typedef KGenericFactory<RTFExport, KoFilter> RTFExportFactory;
-K_EXPORT_COMPONENT_FACTORY( librtfexport, RTFExportFactory( "kwordrtfexportfilter" ) )
+K_EXPORT_COMPONENT_FACTORY( librtfexport, RTFExportFactory( "kofficefilters" ) )
 
 //
 // RTFExport
