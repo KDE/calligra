@@ -409,6 +409,7 @@ private:
     KAction *actionBringToFront;
 
     KAction *actionEditCustomVars;
+    KAction *actionEditCustomVarsEdit;
     KAction *actionEditFind;
     KAction *actionEditReplace;
     KAction *actionApplyAutoFormat;

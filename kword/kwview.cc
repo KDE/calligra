@@ -860,7 +860,7 @@ void KWView::setupActions()
     actionAutoFormat->setToolTip( i18n( "Change autocorrection options." ) );
     actionAutoFormat->setWhatsThis( i18n( "Change autocorrection options including:<p> <UL><LI><P>exceptions to autocorrection</P> <LI><P>add/remove autocorrection replacement text</P> <LI><P>and basic autocorrection options</P>." ) );
 
-    actionEditCustomVars = new KAction( i18n( "Custom &Variables..." ), 0,
+    actionEditCustomVarsEdit = new KAction( i18n( "Custom &Variables..." ), 0,
                                         this, SLOT( editCustomVars() ), // TODO: new dialog w add etc.
                                         actionCollection(), "custom_vars" );
 
@@ -964,7 +964,7 @@ void KWView::setupActions()
 #endif
 
     actionEditCustomVars = new KAction( i18n( "Edit Variable..." ), 0,
-                                        this, SLOT( editCustomVariable() ), 
+                                        this, SLOT( editCustomVariable() ),
                                         actionCollection(), "edit_customvars" );
     actionApplyAutoFormat= new KAction( i18n( "Apply AutoFormat" ), 0,
                                         this, SLOT( applyAutoFormat() ),
@@ -1158,6 +1158,10 @@ void KWView::refreshCustomMenu()
         actionInsertCustom->popupMenu()->insertSeparator();
 
     act = new KAction( i18n("New..."), 0, this, SLOT( insertNewCustomVariable() ), actionCollection(), "custom-action" );
+
+
+    actionEditCustomVarsEdit->setEnabled( state );
+
     actionInsertCustom->insert( act );
 
 }
