@@ -226,8 +226,6 @@ public:
     void changeUndo( QString, bool );
     void changeRedo( QString, bool );
 
-    void sendFocusEvent();
-
     KOffice::MainWindow_var getMainWindow() { return m_vKoMainWindow; }
     OpenParts::Id getID() { return OPPartIf::m_id; }
 

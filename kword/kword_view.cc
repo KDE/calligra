@@ -728,8 +728,6 @@ void KWordView::editUndo()
 {
     m_pKWordDoc->undo();
     gui->getPaperWidget()->recalcWholeText( true );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -737,24 +735,18 @@ void KWordView::editRedo()
 {
     m_pKWordDoc->redo();
     gui->getPaperWidget()->recalcWholeText( true );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::editCut()
 {
     gui->getPaperWidget()->editCut();
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::editCopy()
 {
     gui->getPaperWidget()->editCopy();
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -774,16 +766,12 @@ void KWordView::editPaste()
     }
     else if ( !cb->text().isEmpty() )
         gui->getPaperWidget()->editPaste( cb->text() );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::editSelectAll()
 {
     gui->getPaperWidget()->selectAll();
-    
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -795,8 +783,6 @@ void KWordView::editFind()
     searchDia->setCaption( i18n( "KWord - Search & Replace" ) );
     QObject::connect( searchDia, SIGNAL( cancelButtonPressed() ), this, SLOT( searchDiaClosed() ) );
     searchDia->show();
-
-    sendFocusEvent();
 }
 
 /*================================================================*/
@@ -807,8 +793,6 @@ void KWordView::newView()
     KWordShell* shell = new KWordShell;
     shell->show();
     shell->setDocument( m_pKWordDoc );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -817,8 +801,6 @@ void KWordView::viewFormattingChars()
     m_vMenuView->setItemChecked( m_idMenuView_FormattingChars, !m_vMenuView->isItemChecked( m_idMenuView_FormattingChars ) );
     _viewFormattingChars = m_vMenuView->isItemChecked( m_idMenuView_FormattingChars );
     gui->getPaperWidget()->repaintScreen( !_viewFormattingChars );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -827,8 +809,6 @@ void KWordView::viewFrameBorders()
     m_vMenuView->setItemChecked( m_idMenuView_FrameBorders, !m_vMenuView->isItemChecked( m_idMenuView_FrameBorders ) );
     _viewFrameBorders = m_vMenuView->isItemChecked( m_idMenuView_FrameBorders );
     gui->getPaperWidget()->repaintScreen( false );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -837,8 +817,6 @@ void KWordView::viewTableGrid()
     m_vMenuView->setItemChecked( m_idMenuView_TableGrid, !m_vMenuView->isItemChecked( m_idMenuView_TableGrid ) );
     _viewTableGrid = m_vMenuView->isItemChecked( m_idMenuView_TableGrid );
     gui->getPaperWidget()->repaintScreen( !_viewTableGrid );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -846,8 +824,6 @@ void KWordView::viewHeader()
 {
     m_vMenuView->setItemChecked( m_idMenuView_Header, !m_vMenuView->isItemChecked( m_idMenuView_Header ) );
     m_pKWordDoc->setHeader( m_vMenuView->isItemChecked( m_idMenuView_Header ) );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -855,8 +831,6 @@ void KWordView::viewFooter()
 {
     m_vMenuView->setItemChecked( m_idMenuView_Footer, !m_vMenuView->isItemChecked( m_idMenuView_Footer ) );
     m_pKWordDoc->setFooter( m_vMenuView->isItemChecked( m_idMenuView_Footer ) );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -864,8 +838,6 @@ void KWordView::viewDocStruct()
 {
     m_vMenuView->setItemChecked( m_idMenuView_DocStruct, !m_vMenuView->isItemChecked( m_idMenuView_DocStruct ) );
     gui->showDocStruct( m_vMenuView->isItemChecked( m_idMenuView_DocStruct ) );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -875,8 +847,6 @@ void KWordView::viewFootNotes()
     m_vMenuEdit->setItemChecked( m_idMenuView_EndNotes, false );
 
     m_pKWordDoc->setNoteType( KWFootNoteManager::FootNotes );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -886,8 +856,6 @@ void KWordView::viewEndNotes()
     m_vMenuEdit->setItemChecked( m_idMenuView_EndNotes, true );
 
     m_pKWordDoc->setNoteType( KWFootNoteManager::EndNotes );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -897,22 +865,16 @@ void KWordView::insertPicture()
 							KImageIO::pattern(KImageIO::Reading), 0);
 
     if ( !file.isEmpty() ) m_pKWordDoc->insertPicture( file, gui->getPaperWidget() );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::insertClipart()
 {
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::insertSpecialChar()
 {
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -922,55 +884,41 @@ void KWordView::insertFrameBreak()
 
     QKeyEvent e(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Key_Return,0,ControlButton);
     gui->getPaperWidget()->keyPressEvent( &e );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::insertVariableDateFix()
 {
     gui->getPaperWidget()->insertVariable( VT_DATE_FIX );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::insertVariableDateVar()
 {
     gui->getPaperWidget()->insertVariable( VT_DATE_VAR );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::insertVariableTimeFix()
 {
     gui->getPaperWidget()->insertVariable( VT_TIME_FIX );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::insertVariableTimeVar()
 {
     gui->getPaperWidget()->insertVariable( VT_TIME_VAR );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::insertVariablePageNum()
 {
     gui->getPaperWidget()->insertVariable( VT_PGNUM );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::insertVariableOther()
 {
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -989,22 +937,16 @@ void KWordView::insertFootNoteEndNote()
         dia.setCaption( i18n( "Insert Footnote/Endnote" ) );
         dia.show();
     }
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::formatFont()
 {
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::formatColor()
 {
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1034,8 +976,6 @@ void KWordView::formatParagraph()
     paragDia->setCounter( gui->getPaperWidget()->getCounter() );
     paragDia->setTabList( gui->getPaperWidget()->getParagLayout()->getTabList() );
     paragDia->show();
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1060,22 +1000,16 @@ void KWordView::formatPage()
         gui->getHorzRuler()->setPageLayout( pgLayout );
         gui->getPaperWidget()->frameSizeChanged( pgLayout );
     }
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::formatNumbering()
 {
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::formatStyle()
 {
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1085,8 +1019,6 @@ void KWordView::formatFrameSet()
         gui->getPaperWidget()->femProps();
     else
         QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to select at least one frame!" ), i18n( "OK" ) );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1095,8 +1027,6 @@ void KWordView::extraSpelling()
     currParag = 0L;
     currFrameSetNum = -1;
     kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ) );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1105,8 +1035,6 @@ void KWordView::extraAutoFormat()
     KWAutoFormatDia dia( this, "", m_pKWordDoc, gui->getPaperWidget() );
     dia.setCaption( i18n( "Autocorrection" ) );
     dia.show();
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1123,39 +1051,29 @@ void KWordView::extraStylist()
     QObject::connect( styleManager, SIGNAL( applyButtonPressed() ), this, SLOT( styleManagerOk() ) );
     styleManager->setCaption( i18n( "KWord - Stylist" ) );
     styleManager->show();
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::extraOptions()
 {
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::toolsEdit()
 {
     gui->getPaperWidget()->mmEdit();
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::toolsEditFrame()
 {
     gui->getPaperWidget()->mmEditFrame();
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::toolsCreateText()
 {
     gui->getPaperWidget()->mmCreateText();
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1172,16 +1090,12 @@ void KWordView::toolsCreatePix()
     }
     else
         gui->getPaperWidget()->mmEdit();
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::toolsClipart()
 {
     gui->getPaperWidget()->mmClipart();
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1197,8 +1111,6 @@ void KWordView::toolsTable()
     tableDia = new KWTableDia( this, "", gui->getPaperWidget(), m_pKWordDoc, 7, 5 );
     tableDia->setCaption( i18n( "KWord - Insert Table" ) );
     tableDia->show();
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1216,8 +1128,6 @@ void KWordView::toolsKSpreadTable()
 
     cerr << "USING component " << vec[ 0 ].name.ascii() << endl;
     gui->getPaperWidget()->setPartEntry( vec[ 0 ] );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1233,8 +1143,6 @@ void KWordView::toolsFormula()
         return;
     }
     gui->getPaperWidget()->setPartEntry( vec[ 0 ] );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1248,8 +1156,6 @@ void KWordView::toolsPart()
 
     gui->getPaperWidget()->mmPart();
     gui->getPaperWidget()->setPartEntry( pe );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1266,8 +1172,6 @@ void KWordView::tableInsertRow()
         dia.setCaption( i18n( "Insert Row" ) );
         dia.show();
     }
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1290,8 +1194,6 @@ void KWordView::tableInsertCol()
             dia.show();
         }
     }
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1313,8 +1215,6 @@ void KWordView::tableDeleteRow()
             dia.show();
         }
     }
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1336,8 +1236,6 @@ void KWordView::tableDeleteCol()
             dia.show();
         }
     }
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1362,8 +1260,6 @@ void KWordView::tableJoinCells()
                    r.width(), r.height() );
         gui->getPaperWidget()->repaintScreen( r, true );
     }
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1388,8 +1284,6 @@ void KWordView::tableSplitCells()
                    r.width(), r.height() );
         gui->getPaperWidget()->repaintScreen( r, true );
     }
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1413,15 +1307,11 @@ void KWordView::tableUngroupTable()
             gui->getPaperWidget()->repaintScreen( r, true );
         }
     }
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::helpContents()
 {
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1432,22 +1322,16 @@ void KWordView::helpAbout()
                                     "( c ) by Torben Weis <weis@kde.org> and \n"
                                     "Reginald Stadlbauer <reggie@kde.org> 1998\n\n"
                                     "KWord is under GNU GPL" ) );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::helpAboutKOffice()
 {
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
 void KWordView::helpAboutKDE()
 {
-
-    sendFocusEvent();
 }
 
 /*====================== text style selected  ===================*/
@@ -1458,8 +1342,6 @@ void KWordView::textStyleSelected( const CORBA::WChar *_style )
     format = m_pKWordDoc->findParagLayout( style )->getFormat();
     gui->getPaperWidget()->formatChanged( format );
     updateStyle( style, false );
-
-    sendFocusEvent();
 }
 
 /*======================= text size selected  ===================*/
@@ -1469,8 +1351,6 @@ void KWordView::textSizeSelected( const CORBA::WChar *_size )
     tbFont.setPointSize( size.toInt() );
     format.setPTFontSize( size.toInt() );
     gui->getPaperWidget()->formatChanged( format );
-
-    sendFocusEvent();
 }
 
 /*======================= text font selected  ===================*/
@@ -1480,8 +1360,6 @@ void KWordView::textFontSelected( const CORBA::WChar *_font )
     tbFont.setFamily( font );
     format.setUserFont( m_pKWordDoc->findUserFont( font ) );
     gui->getPaperWidget()->formatChanged( format );
-
-    sendFocusEvent();
 }
 
 /*========================= text bold ===========================*/
@@ -1490,8 +1368,6 @@ void KWordView::textBold()
     tbFont.setBold( !tbFont.bold() );
     format.setWeight( tbFont.bold() ? QFont::Bold : QFont::Normal );
     gui->getPaperWidget()->formatChanged( format );
-
-    sendFocusEvent();
 }
 
 /*========================== text italic ========================*/
@@ -1500,8 +1376,6 @@ void KWordView::textItalic()
     tbFont.setItalic( !tbFont.italic() );
     format.setItalic( tbFont.italic() ? 1 : 0 );
     gui->getPaperWidget()->formatChanged( format );
-
-    sendFocusEvent();
 }
 
 /*======================== text underline =======================*/
@@ -1510,8 +1384,6 @@ void KWordView::textUnderline()
     tbFont.setUnderline( !tbFont.underline() );
     format.setUnderline( tbFont.underline() ? 1 : 0 );
     gui->getPaperWidget()->formatChanged( format );
-
-    sendFocusEvent();
 }
 
 /*=========================== text color ========================*/
@@ -1526,8 +1398,6 @@ void KWordView::textColor()
         format.setColor( tbColor );
         gui->getPaperWidget()->formatChanged( format );
     }
-
-    sendFocusEvent();
 }
 
 /*======================= text align left =======================*/
@@ -1539,8 +1409,6 @@ void KWordView::textAlignLeft()
     m_vToolBarText->setButton( ID_ARIGHT, false );
     m_vToolBarText->setButton( ID_ABLOCK, false );
     gui->getPaperWidget()->setFlow( KWParagLayout::LEFT );
-
-    sendFocusEvent();
 }
 
 /*======================= text align center =====================*/
@@ -1552,8 +1420,6 @@ void KWordView::textAlignCenter()
     m_vToolBarText->setButton( ID_ARIGHT, false );
     m_vToolBarText->setButton( ID_ABLOCK, false );
     gui->getPaperWidget()->setFlow( KWParagLayout::CENTER );
-
-    sendFocusEvent();
 }
 
 /*======================= text align right ======================*/
@@ -1565,8 +1431,6 @@ void KWordView::textAlignRight()
     m_vToolBarText->setButton( ID_ARIGHT, true );
     m_vToolBarText->setButton( ID_ABLOCK, false );
     gui->getPaperWidget()->setFlow( KWParagLayout::RIGHT );
-
-    sendFocusEvent();
 }
 
 /*======================= text align block ======================*/
@@ -1578,8 +1442,6 @@ void KWordView::textAlignBlock()
     m_vToolBarText->setButton( ID_ALEFT, false );
     m_vToolBarText->setButton( ID_ABLOCK, true );
     gui->getPaperWidget()->setFlow( KWParagLayout::BLOCK );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1588,8 +1450,6 @@ void KWordView::textLineSpacing( const CORBA::WChar *spc )
     KWUnit u;
     u.setPT( C2Q( spc ).toInt() );
     gui->getPaperWidget()->setLineSpacing( u );
-
-    sendFocusEvent();
 }
 
 /*====================== enumerated list ========================*/
@@ -1600,8 +1460,6 @@ void KWordView::textEnumList()
         gui->getPaperWidget()->setEnumList();
     else
         gui->getPaperWidget()->setNormalText();
-
-    sendFocusEvent();
 }
 
 /*====================== unsorted list ==========================*/
@@ -1612,8 +1470,6 @@ void KWordView::textUnsortList()
         gui->getPaperWidget()->setBulletList();
     else
         gui->getPaperWidget()->setNormalText();
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1626,8 +1482,6 @@ void KWordView::textSuperScript()
         vertAlign = KWFormat::VA_NORMAL;
     format.setVertAlign( vertAlign );
     gui->getPaperWidget()->formatChanged( format );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1640,8 +1494,6 @@ void KWordView::textSubScript()
         vertAlign = KWFormat::VA_NORMAL;
     format.setVertAlign( vertAlign );
     gui->getPaperWidget()->formatChanged( format );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1653,8 +1505,6 @@ void KWordView::textBorderLeft()
         left.ptWidth = 0;
 
     gui->getPaperWidget()->setParagLeftBorder( left );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1666,8 +1516,6 @@ void KWordView::textBorderRight()
         right.ptWidth = 0;
 
     gui->getPaperWidget()->setParagRightBorder( right );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1679,8 +1527,6 @@ void KWordView::textBorderTop()
         top.ptWidth = 0;
 
     gui->getPaperWidget()->setParagTopBorder( top );
-
-    sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1692,8 +1538,6 @@ void KWordView::textBorderBottom()
         bottom.ptWidth = 0;
 
     gui->getPaperWidget()->setParagBottomBorder( bottom );
-
-    sendFocusEvent();
 }
 
 /*================================================================*/
@@ -1705,16 +1549,12 @@ void KWordView::textBorderColor()
         pix.data = CORBA::string_dup( colorToPixString( tmpBrd.color, FRAME_COLOR ) );
         m_vToolBarText->setButtonPixmap( ID_BORDER_COLOR, pix );
     }
-
-    sendFocusEvent();
 }
 
 /*================================================================*/
 void KWordView::textBorderWidth( const CORBA::WChar *width )
 {
     tmpBrd.ptWidth = C2Q( width ).toInt();
-
-    sendFocusEvent();
 }
 
 /*================================================================*/
@@ -1732,41 +1572,30 @@ void KWordView::textBorderStyle( const CORBA::WChar *style )
         tmpBrd.style = KWParagLayout::DASH_DOT;
     else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
         tmpBrd.style = KWParagLayout::DASH_DOT_DOT;
-
-
-    sendFocusEvent();
 }
 
 /*================================================================*/
 void KWordView::frameBorderLeft()
 {
     gui->getPaperWidget()->setLeftFrameBorder( frmBrd, m_vToolBarFrame->isButtonOn( ID_FBRD_LEFT ) );
-
-    sendFocusEvent();
 }
 
 /*================================================================*/
 void KWordView::frameBorderRight()
 {
     gui->getPaperWidget()->setRightFrameBorder( frmBrd, m_vToolBarFrame->isButtonOn( ID_FBRD_RIGHT ) );
-
-    sendFocusEvent();
 }
 
 /*================================================================*/
 void KWordView::frameBorderTop()
 {
     gui->getPaperWidget()->setTopFrameBorder( frmBrd, m_vToolBarFrame->isButtonOn( ID_FBRD_TOP ) );
-
-    sendFocusEvent();
 }
 
 /*================================================================*/
 void KWordView::frameBorderBottom()
 {
     gui->getPaperWidget()->setBottomFrameBorder( frmBrd, m_vToolBarFrame->isButtonOn( ID_FBRD_BOTTOM ) );
-
-    sendFocusEvent();
 }
 
 /*================================================================*/
@@ -1778,16 +1607,12 @@ void KWordView::frameBorderColor()
         pix.data = CORBA::string_dup( colorToPixString( frmBrd.color, FRAME_COLOR ) );
         m_vToolBarFrame->setButtonPixmap( ID_FBORDER_COLOR, pix );
     }
-
-    sendFocusEvent();
 }
 
 /*================================================================*/
 void KWordView::frameBorderWidth( const CORBA::WChar *width )
 {
     frmBrd.ptWidth = C2Q( width ).toInt();
-
-    sendFocusEvent();
 }
 
 /*================================================================*/
@@ -1805,8 +1630,6 @@ void KWordView::frameBorderStyle( const CORBA::WChar *style )
         frmBrd.style = KWParagLayout::DASH_DOT;
     else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
         frmBrd.style = KWParagLayout::DASH_DOT_DOT;
-
-    sendFocusEvent();
 }
 
 /*================================================================*/
@@ -1821,8 +1644,6 @@ void KWordView::frameBackColor()
         m_vToolBarFrame->setButtonPixmap( ID_FBACK_COLOR, pix );
         gui->getPaperWidget()->setFrameBackgroundColor( backColor );
     }
-
-    sendFocusEvent();
 }
 
 
@@ -1831,8 +1652,6 @@ void KWordView::resizeEvent( QResizeEvent *e )
 {
     QWidget::resizeEvent( e );
     if ( gui ) gui->resize( width(), height() );
-
-    sendFocusEvent();
 }
 
 /*================================================================*/
@@ -3168,13 +2987,6 @@ void KWordView::changeRedo( QString _text, bool _enable )
         m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
         m_vToolBarEdit->setItemEnabled( ID_REDO, false );
     }
-}
-
-/*================================================================*/
-void KWordView::sendFocusEvent()
-{
-    QFocusEvent e( ( QEvent::Type ) 9 );
-    QApplication::sendEvent( shell->frame(), &e );
 }
 
 /******************************************************************/

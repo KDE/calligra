@@ -606,9 +606,6 @@ void KWPage::viewportMouseMoveEvent( QMouseEvent *e )
         return;
     }
 
-    if ( !hasFocus() )
-        gui->getView()->sendFocusEvent();
-
     mouseMoved = true;
     unsigned int mx = e->x() + contentsX();
     unsigned int my = e->y() + contentsY();
@@ -904,8 +901,6 @@ void KWPage::viewportMousePressEvent( QMouseEvent *e )
 {
     stopBlinkCursor();
     maybeDrag = false;
-
-    if ( gui->getView() ) gui->getView()->sendFocusEvent();
 
     if ( editNum != -1 )
     {
@@ -2122,7 +2117,7 @@ bool KWPage::kDown( QKeyEvent *e, int, int, KWParag *, KWTextFrameSet * )
 /*================================================================*/
 bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet )
 {
-    redrawOnlyCurrFrameset = true;
+    redrawOnlyCurrFrameset = false;
 
     QString pln = fc->getParag()->getParagLayout()->getName();
     KWFormat _format( doc );
@@ -2740,9 +2735,14 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack )
             else if ( !gui->getView()->getViewFrameBorders() ) should_draw = false;
             frame = QRect( tmp->x() - contentsX() - 1, tmp->y() - contentsY() - 1, tmp->width() + 2, tmp->height() + 2 );
 
-            if ( v_area.intersects( frame ) && should_draw && !frameset->getGroupManager() && drawBack )
+            if ( v_area.intersects( frame ) && should_draw && !frameset->getGroupManager() )
+            {
+                if ( !drawBack )
+                    _painter.setBrush( Qt::NoBrush );
                 _painter.drawRect( frame );
-            _painter.setBrush( NoBrush );
+            }
+            
+            _painter.setBrush( Qt::NoBrush );
             if ( v_area.intersects( frame ) && frameset->getGroupManager() )
             {
                 _painter.fillRect( frame, tmp->getBackgroundColor() );

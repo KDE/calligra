@@ -256,7 +256,7 @@ public:
     void updateAllViewportSizes();
     void setUnitToAll();
     void updateAllCursors();
-    void drawAllBorders();
+    void drawAllBorders( bool back = true);
     void recalcWholeText( bool _cursor = false, bool _fast = false );
     void recalcWholeText( KWParag *start, unsigned int fs );
 
@@ -401,7 +401,7 @@ public:
 
     void addImageRequest( const QString &filename, KWCharImage *img );
     void addImageRequest( const QString &filename, KWPictureFrameSet *fs );
-    
+
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
@@ -513,7 +513,7 @@ protected:
     QStringList pixmapKeys;
     QDict<KWCharImage> imageRequests;
     QDict<KWPictureFrameSet> imageRequests2;
-    
+
 };
 
 #endif

@@ -1351,6 +1351,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
                     document->recalcFrames( false, true );
                     document->updateAllFrames();
                     document->setNeedRedraw( true );
+                    document->drawAllBorders( );
                 }
                 else
                 {
@@ -1366,7 +1367,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
                 parag->setEndPage( page );
                 parag->setEndFrame( frame );
                 ptY = document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->top() +
-                    document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBTop().pt();
+                      document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBTop().pt();
                 return makeLineLayout();
             }
         }

@@ -1346,3 +1346,8 @@ Reggie, 22.6.1999:
 - Activating/Deactivating embedded parts works now
   (no crashes anymore :-)
 - Fixed a crash in the document structure viewer
+
+Reggie, 29.6.1999:
+------------------
+- Fixed some redraw bugs I found in KL.
+- Removed some focus hacks

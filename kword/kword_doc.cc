@@ -1695,9 +1695,7 @@ QListIterator<KWordChild> KWordDocument::childIterator()
 }
 
 /*================================================================*/
-void KWordDocument::draw( QPaintDevice* , CORBA::Long,
-			  CORBA::Long ,
-                          CORBA::Float )
+void KWordDocument::draw( QPaintDevice *, CORBA::Long, CORBA::Long, CORBA::Float )
 {
 }
 
@@ -2370,15 +2368,13 @@ void KWordDocument::updateAllStyleLists()
         for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
         {
             if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() )
-            {
                 viewPtr->updateStyleList();
-            }
         }
     }
 }
 
 /*================================================================*/
-void KWordDocument::drawAllBorders()
+void KWordDocument::drawAllBorders( bool back )
 {
     QPainter *_painter = 0L;
     KWordView *viewPtr;
@@ -2395,11 +2391,11 @@ void KWordDocument::drawAllBorders()
                     if ( !_painter )
                     {
                         p.begin( viewPtr->getGUI()->getPaperWidget()->viewport() );
-                        viewPtr->getGUI()->getPaperWidget()->drawBorders( p, viewPtr->getGUI()->getPaperWidget()->rect() );
+                        viewPtr->getGUI()->getPaperWidget()->drawBorders( p, viewPtr->getGUI()->getPaperWidget()->rect(), back );
                         p.end();
                     }
                     else
-                        viewPtr->getGUI()->getPaperWidget()->drawBorders( *_painter, viewPtr->getGUI()->getPaperWidget()->rect() );
+                        viewPtr->getGUI()->getPaperWidget()->drawBorders( *_painter, viewPtr->getGUI()->getPaperWidget()->rect(), back );
                 }
             }
         }
