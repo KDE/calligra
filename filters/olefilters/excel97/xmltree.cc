@@ -119,7 +119,6 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
   if (s.find("General", 0, false) != -1) {
     format.setAttribute("faktor", 1);
   }
-
   // need to add float and floatcolor
 
   return format;

@@ -62,16 +62,16 @@ const bool ExcelFilter::filter()
 
     if (biff[i].opcode == opcode) {
       success = (tree->*(biff[i].func))(size, *body);
-    } 
+    }
     else {
-      //debug("ExcelFilter: Oops, unknown opcode %x.", opcode);
+      debug("ExcelFilter: Oops, unknown opcode %x.", opcode);
     }
     delete body;
     rec.resetRawData(buffer, size);
   }
   ready = true;
 
-  delete []buffer;
+  delete [] buffer;
   return success;
 }
 
@@ -83,8 +83,7 @@ const QString ExcelFilter::part()
     return tree->part();
   }
   else {
-    QString str;
-    str+="<?xml version=\"1.0\"?>\n"
+    return "<?xml version=\"1.0\"?>\n"
       "<DOC author=\"Torben Weis\" email=\"weis@kde.org\" editor=\"KSpread\" mime=\"application/x-kspread\" >\n"
       "<PAPER format=\"A4\" orientation=\"Portrait\">\n"
       "<PAPERBORDERS left=\"20\" top=\"20\" right=\"20\" bottom=\"20\"/>\n"
@@ -100,6 +99,5 @@ const QString ExcelFilter::part()
       "</TABLE>\n"
       "</MAP>\n"
       "</DOC>";
-    return str;
   }
 }

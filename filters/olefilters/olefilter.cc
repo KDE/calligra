@@ -81,41 +81,38 @@ const bool OLEFilter::filter(const QCString &fileIn, const QCString &fileOut,
     }
 
     storePath.resize(0);
+    partMap.insert("root", "root");
     convert("root");
     return success;
 }
 
-void OLEFilter::slotSavePic(Picture *pic) {
-
-    QString name;
-
-    name+="tar:/";
-    // and so on...
+void OLEFilter::slotSavePic(Picture *) {
+    // we'll use Reggies Collection class here, soon (at least I hope so :)
 }
 
 void OLEFilter::slotPart(const char *nameIN, char **nameOUT) {
 
-    /*
-    if(nameIN!=0) {
-        QMap<QString, QString>::Iterator it=partMap.find(nameIN);
-        QString value;
+    if(nameIN==0)
+        return;
 
-        if(it!=partMap.end())
-            value=partMap[nameIN];
-        else {
-            QString key=QString(nameIN);
-            value="part";
-            value+=QString::number(numPart);
-            numPart++;
-            value+='.';
-            value+=type;
-            partMap.insert(key, value);
+    QMap<QString, QString>::Iterator it=partMap.find(nameIN);
+    QString value;
+
+    if(it!=partMap.end())
+        value=partMap[nameIN];
+    else {
+        QString key=QString(nameIN);
+        value="tar:";
+        for(unsigned int i=0; i<storePath.size(); ++i) {
+            value+='/';
+            value+=QString::number(static_cast<unsigned int>(storePath[i]));
         }
-        *nameOUT=new char[value.length()+1];
-        strncpy(*nameOUT, (const char*)value, value.length());
-        *nameOUT[value.length()]='\0';
+        partMap.insert(key, value);
     }
-    */
+    unsigned int len=value.length();
+    *nameOUT=new char[len+1];
+    strncpy(*nameOUT, (const char*)value, len);
+    *(*nameOUT+len)='\0';
 }
 
 void OLEFilter::slotGetStream(const long &handle, myFile &stream) {
@@ -143,9 +140,19 @@ void OLEFilter::convert(const QString &dirname) {
     QList<OLENode> list=docfile->parseCurrentDir();
     OLENode *node;
     bool onlyDirs=true;
+    bool resized=false;
+    short index=storePath.size()-1;
 
     for(node=list.first(); node!=0; node=list.next()) {
         if(node->type==1) {         // it is a dir!
+            if(!resized) {
+                ++index;
+                storePath.resize(index+1);
+                storePath[index]=0;
+                resized=true;
+            }
+            else
+                ++storePath[index];
             docfile->enterDir(node->handle);
             convert(node->name);
             docfile->leaveDir();
@@ -154,6 +161,9 @@ void OLEFilter::convert(const QString &dirname) {
             onlyDirs=false;
         }
     }
+
+    if(resized)
+        storePath.resize(index);
 
     if(!onlyDirs) {
         FilterBase *myFilter=0L;
@@ -225,13 +235,14 @@ void OLEFilter::convert(const QString &dirname) {
         success=myFilter->filter();
         QString file=myFilter->part();
         char *tmp=0L;
-        //slotPart(dirname, myFilter->extension(), &tmp);  // TODO!
-        //fileOut->writeFile(tmp, "", "", file.length(), (const char*)file.utf8());
-        // use KoTarStore for that stuff:
-        // generate name (e.g. tar:/0/1/0)
-        // store->open(...);
-        // store->write(...);
-        // store->close();
+        slotPart(dirname, &tmp);
+        if(!store->open(tmp, "")) {
+            success=false;
+            kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): Could not open KoTarStore!");
+            return;
+        }
+        store->write((const char*)(file.utf8()), file.length());
+        store->close();
         delete [] tmp;
         delete myFilter;
     }
