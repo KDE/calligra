@@ -13,12 +13,13 @@ liblatexparser_la_SOURCES = command.cc comment.cc element.cc env.cc group.cc \
 														texscaner.cc
 
 noinst_HEADERS = command.h comment.h element.h env.h group.h \
-								 latexparser.h param.h text.h texscaner.hh
+								 latexparser.h param.h text.h
 
-.PHONY: parser
-parser:
-		cd $(srcdir) && flex -B -8 -otexparser.cc texparser.l
-		cd $(srcdir) && bison --debug --verbose -d -o texscaner.cc texscaner.y
+texparser.cc: $(srcdir)/texparser.l texscaner.cc
+		flex -B -8 -otexparser.cc $(srcdir)/texparser.l
+
+texscaner.cc: $(srcdir)/texscaner.y
+		bison --debug --verbose -d -o texscaner.cc $(srcdir)/texscaner.y && mv -f texscaner.cc.h texscaner.hh
 # -p texparser
 ######## Debug
 check_PROGRAMS = texlauncher
