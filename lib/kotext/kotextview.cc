@@ -485,6 +485,9 @@ KoTextCursor KoTextView::selectWordUnderCursor( const KoTextCursor& cursor, int 
     if ( !cursor.parag()->at( cursor.index() )->c.isSpace() && !cursor.atParagEnd() )
         c2.gotoWordRight();
 
+    // The above is almost correct, but gotoWordRight also skips the spaces/punctuations
+    // until the next word. So the 'word under cursor' contained e.g. that trailing space.
+    // To be on the safe side, we skip spaces/punctuations on both sides:
     KoTextString *s = cursor.parag()->string();
     bool beginFound=false;
     for ( int i = c1.index(); i< c2.index(); i++)
