@@ -10,7 +10,7 @@ bin_PROGRAMS = kpresenter.bin
 kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	kpresenter_view.cc kpresenter_shell.cc kpresenter.cc \
 	backdia.cc page.cc ktextobject.cc styledia.cc \
-	formats.cc qwmf.cc kenumlistdia.cc kcharselect.cc \
+	formats.cc qwmf.cc kenumlistdia.cc \
 	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc \
 	kpresenter_utils.cc rotatedia.cc ksearchdialogs.cc \
 	shadowdia.cc presstructview.cc delpagedia.cc inspagedia.cc \
@@ -30,7 +30,7 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kpresenter_shell.h kpresenter.h \
 		backdia.h page.h ktextobject.h styledia.h \
 		formats.h qwmf.h global.h \
-		kenumlistdia.h kcharselect.h kcharselectdia.h optiondia.h \
+		kenumlistdia.h kcharselectdia.h optiondia.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \
 		rotatedia.h ksearchdialogs.h shadowdia.h presstructview.h \
 		delpagedia.h inspagedia.h confpiedia.h spacingdia.h confrectdia.h \
@@ -48,7 +48,7 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 METASOURCES =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kpresenter_shell.moc \
 		page.moc ktextobject.moc backdia.moc styledia.moc \
-		kenumlistdia.moc kcharselect.moc kcharselectdia.moc \
+		kenumlistdia.moc kcharselectdia.moc \
 		optiondia.moc pgconfdia.moc effectdia.moc \
 		rotatedia.moc ksearchdialogs.moc shadowdia.moc \
 		presstructview.moc delpagedia.moc inspagedia.moc confpiedia.moc \

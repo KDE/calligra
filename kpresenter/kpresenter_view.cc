@@ -1460,9 +1460,9 @@ void KPresenterView::textUnsortList()
     {
       QList<QFont> *_font = page->kTxtObj()->unsortListType().font;
       QList<QColor> *_color = page->kTxtObj()->unsortListType().color;
-      QList<int> *_c = page->kTxtObj()->unsortListType().chr;
+      QList<QChar> *_c = page->kTxtObj()->unsortListType().chr;
 
-      if (KCharSelectDia::selectChar(_font,_color,_c,fontList))
+      if (KCharSelectDia::selectChar(_font,_color,_c))
 	{
 	  KTextObject::UnsortListType ult;
 	  ult.font = _font;
@@ -2921,7 +2921,7 @@ bool KPresenterView::mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar)
   }
 
   CORBA::WString_var text;
-  
+
   // MENU Edit
   text = Q2C( i18n("&Edit") );
   _menubar->insertMenu(text,m_vMenuEdit,-1,-1);
@@ -3403,7 +3403,7 @@ bool KPresenterView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _facto
   cerr << "bool KPresenterView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)" << endl;
 
   CORBA::WString_var toolTip;
-  
+
   ///////
   // Edit
   ///////

@@ -28,14 +28,13 @@
 #include <qchkbox.h>
 #include <qpalette.h>
 #include <qlist.h>
+#include <qfont.h>
 
 #include <kbuttonbox.h>
 #include <kapp.h>
 #include <kcolorbtn.h>
 
-#include <X11/Xlib.h>
-
-#include "kcharselect.h"
+#include <kcharselect.h>
 
 /******************************************************************/
 /* class KCharSelectDia                                           */
@@ -46,39 +45,34 @@ class KCharSelectDia : public QDialog
   Q_OBJECT
 
 public:
-
   // constructor - destructor
-  KCharSelectDia(QWidget*,const char*,QList<QFont>* __font,QList<QColor>* __color,QList<int>* __c,QStrList);
-  ~KCharSelectDia();
+  KCharSelectDia(QWidget *parent,const char *name,QList<QFont> *_font,QList<QColor>* _color,QList<QChar>* _chr);
 
   // select char dialog
-  static bool selectChar(QList<QFont> *__font,QList<QColor> *__color,QList<int> *__chr,QStrList);
+  static bool selectChar(QList<QFont> *_font,QList<QColor> *_color,QList<QChar> *_chr);
 
   // internal
-  QList<QFont> *font() {return _font;}
-  QList<QColor> *color() {return _color;}
-  QList<int> *c() {return _c;}
+  QList<QFont> *font() { return vFont; }
+  QList<QColor> *color() { return vColor; }
+  QList<QChar> *chr() { return vChr; }
 
 protected:
-
   // dialog objects
   QGridLayout *grid,*grid2;
-  QComboBox *fontCombo,*sizeCombo,*depthCombo;
+  QComboBox *sizeCombo,*depthCombo;
   KButtonBox *bbox;
   QPushButton *bOk,*bCancel;
   KCharSelect *charSelect;
   QWidget *wid;
-  QLabel *lFont,*lSize,*lColor,*lPreview,*lAttrib,*lDepth;
+  QLabel *lSize,*lColor,*lPreview,*lAttrib,*lDepth;
   KColorButton *colorButton;
   QCheckBox *bold,*italic,*underl;
 
   // values
-  QList<QFont> *_font;
-  QList<QColor> *_color;
-  QList<int> *_c;
+  QList<QFont> *vFont;
+  QList<QColor> *vColor;
+  QList<QChar> *vChr;
   int _depth;
-
-  QStrList fontList;
 
 protected slots:
   void fontSelected(const QString &);
@@ -88,7 +82,7 @@ protected slots:
   void boldChanged();
   void italicChanged();
   void underlChanged();
-  void charChanged(int);
+  void charChanged(const QChar &);
 
 };
 #endif //KCHARSELECTDIA_H

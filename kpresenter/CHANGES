@@ -108,3 +108,9 @@ Reggie, 21.4.1999:
 ------------------
 - Unicoded KPresenter and KTextObject (also load and save)
 - Fixes in keycompression of KTextObject
+
+Reggie, 26.4.1999:
+------------------
+- Using now the KCharSelect widget of libkdeui for the character selector dialog
+- More work on unicode
+- Corrected some stuff in the templates

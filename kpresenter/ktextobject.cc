@@ -1488,13 +1488,13 @@ KTextObject::KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,
   objUnsortListType.font = new QList<QFont>;
   objUnsortListType.color = new QList<QColor>;
   objUnsortListType.ofont = new QList<QFont>;
-  objUnsortListType.chr = new QList<int>;
+  objUnsortListType.chr = new QList<QChar>;
 
   for (unsigned int i = 0;i < 16;i++)
     {
       objUnsortListType.font->append(new QFont("times",20));
       objUnsortListType.color->append(new QColor(Qt::red));
-      objUnsortListType.chr->append(new int('-'));
+      objUnsortListType.chr->append(new QChar('-'));
       objUnsortListType.font->append(new QFont());
     }
   objUnsortListType.font->setAutoDelete(true);
@@ -4287,10 +4287,10 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 	      p->setPen(*objUnsortListType.color->at(paragraphPtr->getDepth()));
 	    else
 	      p->setPen(allColor);
-	    sprintf(chr,"%c",*objUnsortListType.chr->at(paragraphPtr->getDepth()));
+	    QChar _chr = *objUnsortListType.chr->at(paragraphPtr->getDepth());
 	    if (!paragraphPtr->isEmpty())
 	      p->drawText(0 + getLeftIndent(row),(!drawPic ? 0 : y) + paragraphPtr->lineAt(0)->ascent(paragraphPtr) - fm.ascent(),
-			  xstart,fm.height() + paragraphPtr->getLineSpacing(),AlignLeft,chr);
+			  xstart,fm.height() + paragraphPtr->getLineSpacing(),AlignLeft,_chr);
 	
 	    if (!drawPic)
 	      {

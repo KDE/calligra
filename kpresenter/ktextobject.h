@@ -930,7 +930,7 @@ public:
   {
     QList<QFont> *font;
     QList<QColor> *color;
-    QList<int> *chr;
+    QList<QChar> *chr;
     QList<QFont> *ofont;
   };
 

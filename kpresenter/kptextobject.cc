@@ -568,7 +568,8 @@ void KPTextObject::saveKTextObject(ostream& out)
 	  << ktextobject.unsortListType().font->at(i)->italic()
 	  << "\" underline=\"" << ktextobject.unsortListType().font->at(i)->underline() << "\" red=\""
 	  << ktextobject.unsortListType().color->at(i)->red() << "\" green=\"" << ktextobject.unsortListType().color->at(i)->green()
-	  << "\" blue=\"" << ktextobject.unsortListType().color->at(i)->blue() << "\" chr=\"" << *ktextobject.unsortListType().chr->at(i)
+	  << "\" blue=\"" << ktextobject.unsortListType().color->at(i)->blue() << "\" chr=\"" 
+	  << static_cast<unsigned short>(ktextobject.unsortListType().chr->at(i)->unicode())
 	  << "\"/>" << endl;
     }
 
@@ -625,7 +626,7 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
   string tag;
   string name;
   bool utf8 = false;
-  
+
   KTextObject::EnumListType elt;
   KTextObject::UnsortListType ult = ktextobject.unsortListType();
 
@@ -636,7 +637,8 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 
   QFont font;
   QColor color;
-  int r = 0,g = 0,b = 0,c = 0;
+  int r = 0,g = 0,b = 0;
+  QChar c;
   TxtParagraph *txtParagraph;
   TxtObj *objPtr;
 
@@ -690,7 +692,7 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "chr")
-		c = atoi((*it).m_strValue.c_str());
+		c = QChar(static_cast<unsigned short>(atoi((*it).m_strValue.c_str())));
 	      if ((*it).m_strName == "family")
 		font.setFamily((*it).m_strValue.c_str());
 	      if ((*it).m_strName == "pointSize")
@@ -709,7 +711,7 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		b = atoi((*it).m_strValue.c_str());
 	    }
 	  color.setRgb(r,g,b);
-	  ult.chr->append(new int(c));
+	  ult.chr->append(new QChar(c));
 	  ult.font->append(new QFont(font));
 	  ult.color->append(new QColor(color));
 	  ult.ofont->append(new QFont());
@@ -823,7 +825,7 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 				{
 				  QString tmp2;
 				  string tmp;
-				  
+				
 				  KOMLParser::parseTag(tag.c_str(),name,lst);
 				  vector<KOMLAttrib>::const_iterator it = lst.begin();
 				  for(;it != lst.end();it++)
@@ -899,7 +901,7 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	{
 	  ult.font->append(new QFont("times",20));
 	  ult.color->append(new QColor(red));
-	  ult.chr->append(new int('-'));
+	  ult.chr->append(new QChar('-'));
 	  ult.ofont->append(new QFont());
 	}
     }

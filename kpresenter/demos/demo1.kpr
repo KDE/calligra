@@ -77,7 +77,7 @@
    <BRUSH red="0" green="0" blue="0" style="0"/>
    <TEXTOBJ objType="0">
     <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
-    <UNSORTEDLISTTYPE family="symbol" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
@@ -168,7 +168,7 @@
    <BRUSH red="0" green="0" blue="0" style="0"/>
    <TEXTOBJ objType="0">
     <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
-    <UNSORTEDLISTTYPE family="symbol" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
@@ -217,7 +217,7 @@
    <BRUSH red="0" green="0" blue="0" style="0"/>
    <TEXTOBJ objType="0">
     <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
-    <UNSORTEDLISTTYPE family="symbol" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
@@ -317,7 +317,7 @@
    <BRUSH red="0" green="0" blue="0" style="0"/>
    <TEXTOBJ objType="0">
     <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
-    <UNSORTEDLISTTYPE family="symbol" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
@@ -407,7 +407,7 @@
    <BRUSH red="0" green="0" blue="0" style="0"/>
    <TEXTOBJ objType="0">
     <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
-    <UNSORTEDLISTTYPE family="symbol" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
@@ -497,7 +497,7 @@
    <BRUSH red="0" green="0" blue="0" style="0"/>
    <TEXTOBJ objType="0">
     <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
-    <UNSORTEDLISTTYPE family="symbol" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
@@ -574,7 +574,7 @@
    <BRUSH red="0" green="0" blue="0" style="0"/>
    <TEXTOBJ objType="0">
     <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
-    <UNSORTEDLISTTYPE family="symbol" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
@@ -834,7 +834,7 @@
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
-       <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
        <TEXT> </TEXT>
@@ -884,7 +884,7 @@
    <BRUSH red="0" green="0" blue="0" style="0"/>
    <TEXTOBJ objType="2">
     <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
-    <UNSORTEDLISTTYPE family="symbol" pointSize="30" bold="0" italic="0" underline="0" red="0" green="0" blue="255" chr="222"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="30" bold="1" italic="0" underline="0" red="0" green="0" blue="255" chr="183"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>

@@ -409,7 +409,7 @@ static char*kpresenter_tmp[]={
    <BRUSH red="0" green="0" blue="0" style="0"/>
    <TEXTOBJ objType="0">
     <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
-    <UNSORTEDLISTTYPE family="symbol" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
     <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
