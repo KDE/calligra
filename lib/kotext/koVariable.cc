@@ -479,29 +479,28 @@ QString KoVariable::text(bool realValue)
         return m_varFormat->convert( m_varValue );
 }
 
-void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
+void KoVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
 {
     KoTextFormat * fmt = format();
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     QFont font( fmt->screenFont( zh ) );
-    drawCustomItemHelper( p, x, y, cg, selected, offset, fmt, font, fmt->color() );
+    drawCustomItemHelper( p, x, y, wpix, hpix, cg, selected, offset, fmt, font, fmt->color() );
 }
 
-void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, const QColorGroup& cg, bool selected, const int offset, KoTextFormat* fmt, const QFont& font, QColor textColor )
+void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int hpix, const QColorGroup& cg, bool selected, const int offset, KoTextFormat* fmt, const QFont& font, QColor textColor )
 {
     int bl, _y;
     KoTextParag * parag = paragraph();
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
-    //kdDebug(32500) << "KoVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
-    int h = parag->lineHeightOfChar( index(), &bl, &_y /*unused*/);
+    //kdDebug(32500) << "KoVariable::drawCustomItemHelper index=" << index() << " x=" << x << " y=" << y << endl;
+    (void)parag->lineHeightOfChar( index(), &bl, &_y /*unused*/);
 
-    h = zh->layoutUnitToPixelY( y, h );
-    bl = zh->layoutUnitToPixelY( y, bl );
+    bl = zh->layoutUnitToPixelY( /*yLU,*/ bl ); // small rounding error...
 
     p->save();
 
     if ( fmt->textBackgroundColor().isValid() )
-        p->fillRect( x, y, zh->layoutUnitToPixelX( width ), h, fmt->textBackgroundColor() );
+        p->fillRect( x, y, wpix, hpix, fmt->textBackgroundColor() );
 
     if ( textDocument()->drawingShadow() ) // Use shadow color if drawing a shadow
     {
@@ -512,14 +511,14 @@ void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, const QColorGr
     {
         textColor = cg.color( QColorGroup::HighlightedText );
         p->setPen( QPen( textColor ) );
-        p->fillRect( x, y,  zh->layoutUnitToPixelX( width ), h, cg.color( QColorGroup::Highlight ) );
+        p->fillRect( x, y, wpix, hpix, cg.color( QColorGroup::Highlight ) );
     }
     else if ( textDocument() && textDocument()->drawFormattingChars()
               && p->device()->devType() != QInternal::Printer )
     {
         textColor = cg.color( QColorGroup::Highlight );
         p->setPen( QPen ( textColor, 0, Qt::DotLine ) );
-        p->drawRect( x, y, zh->layoutUnitToPixelX( width ), h );
+        p->drawRect( x, y, wpix, hpix );
     }
     else {
         if ( !textColor.isValid() ) // Resolve the color at this point
@@ -530,7 +529,7 @@ void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, const QColorGr
     p->setFont( font ); // already done by KoTextCustomItem::draw but someone might
                         // change the font passed to drawCustomItemHelper (e.g. KoLinkVariable)
 
-    KoTextParag::drawFontEffects( p, fmt, zh, font, textColor, x, bl, zh->layoutUnitToPixelX( width ), y, h );
+    KoTextParag::drawFontEffects( p, fmt, zh, font, textColor, x, bl, wpix, y, hpix );
 
     //kdDebug(32500) << "KoVariable::draw bl=" << bl << << endl;
     p->drawText( x, y + bl + offset, text() );
@@ -1462,7 +1461,7 @@ QStringList KoLinkVariable::actionTexts()
 }
 
 
-void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
+void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
 {
     KoTextFormat * fmt = format();
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
@@ -1473,7 +1472,7 @@ void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int 
         font.setUnderline( true );
     QColor textColor = displayLink ? cg.color( QColorGroup::Link ) : fmt->color();
 
-    drawCustomItemHelper( p, x, y, cg, selected, offset, fmt, font, textColor );
+    drawCustomItemHelper( p, x, y, wpix, hpix, cg, selected, offset, fmt, font, textColor );
 }
 
 
@@ -1529,38 +1528,33 @@ QString KoNoteVariable::text(bool realValue)
 
 }
 
-void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, const int offset )
+void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, const int offset )
 {
     if ( !m_varColl->variableSetting()->displayComment())
         return;
 
     KoTextFormat * fmt = format();
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
-    int _bl, _y;
-    KoTextParag * parag = paragraph();
-    //kdDebug(32500) << "KoVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
-    int h = parag->lineHeightOfChar( index(), &_bl /*unused*/, &_y /*unused*/);
-
-    h = zh->layoutUnitToPixelY( y, h );
+    //kdDebug(32500) << "KoNoteVariable::drawCustomItem index=" << index() << " x=" << x << " y=" << y << endl;
 
     p->save();
     p->setPen( QPen( fmt->color() ) );
     if ( fmt->textBackgroundColor().isValid() )
-        p->fillRect( x, y, zh->layoutUnitToPixelX( width ), h, fmt->textBackgroundColor() );
+        p->fillRect( x, y, wpix, hpix, fmt->textBackgroundColor() );
     if ( selected )
     {
         p->setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
-        p->fillRect( x, y,  zh->layoutUnitToPixelX( width ), h, cg.color( QColorGroup::Highlight ) );
+        p->fillRect( x, y, wpix, hpix, cg.color( QColorGroup::Highlight ) );
     }
     else if ( textDocument() && p->device()->devType() != QInternal::Printer
         && !textDocument()->dontDrawingNoteVariable())
     {
-        p->fillRect( x, y, zh->layoutUnitToPixelX( width ), h,  Qt::yellow);
+        p->fillRect( x, y, wpix, hpix, Qt::yellow);
         p->setPen( QPen( cg.color( QColorGroup::Highlight ), 0, Qt::DotLine ) );
-        p->drawRect( x, y, zh->layoutUnitToPixelX( width ), h );
+        p->drawRect( x, y, wpix, hpix );
     }
     //call it for use drawCustomItemHelper just for draw font effect
-    KoVariable::drawCustomItem( p, x, y, cx, cy, cw, ch, cg, selected, offset );
+    KoVariable::drawCustomItem( p, x, y, wpix, hpix, cx, cy, cw, ch, cg, selected, offset );
 
     p->restore();
 }

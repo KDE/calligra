@@ -1565,6 +1565,7 @@ struct Q_EXPORT KoTextDocumentTag {
 		    vec.insert( i, curtag.style ); \
 		    curpar->setStyleSheetItems( vec ); }while(FALSE)
 
+
 #if 0
 void KoTextDocument::setRichText( const QString &text, const QString &context )
 {
@@ -4240,14 +4241,18 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
     int baseLine = 0, lastBaseLine = 0;
     KoTextFormat *lastFormat = 0;
     int lastY = -1;
+    // This is necessary with the current code, but in theory it shouldn't
+    // be necessary, if setMatrix really gives us fully proportionnal chars....
+#define CHECK_PIXELXADJ
+
+#ifdef CHECK_PIXELXADJ
+    int lastXAdj = 0;
+#endif
     int startX = 0;
     int bw = 0;
     int cy = 0;
     int curx = -1, cury = 0, curh = 0, curline = 0;
     bool lastDirection = chr->rightToLeft;
-#if 0 // seems we don't need that anymore
-    int tw = 0;
-#endif
 
     QString qstr = str->toString();
 
@@ -4275,20 +4280,16 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 
     int line = -1;
     int cw;
-    bool didListLabel = FALSE;
     int paintStart = 0;
     int paintEnd = -1;
     int lasth = 0;
     for ( i = 0; i < length(); i++ ) {
 	chr = at( i );
 
-        cw = chr->pixelwidth;
+        cw = chr->width;
 
 	// init a new line
 	if ( chr->lineStart ) {
-#if 0 // seems we don't need that anymore
-	    tw = 0;
-#endif
 	    ++line;
 	    lineInfo( line, cy, h, baseLine );
 	    lasth = h;
@@ -4296,15 +4297,6 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 		break;
 	    if ( lastBaseLine == 0 )
 		lastBaseLine = baseLine;
-	}
-
-	// draw bullet list items
-	if ( !didListLabel && line == 0 && qstyle() && qstyle()->displayMode() == QStyleSheetItem::DisplayListItem ) {
-	    didListLabel = TRUE;
-            int xLabel = chr->x;
-            if ( str->isRightToLeft() )
-                xLabel += chr->width;
-	    drawLabel( &painter, xLabel, cy, 0, 0, baseLine, cg );
 	}
 
 	// check for cursor mark
@@ -4340,15 +4332,18 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 	}
 
 	//if something (format, etc.) changed, draw what we have so far
-	if ( ( ( ( alignment() & Qt::AlignJustify ) == Qt::AlignJustify && paintEnd != -1 && at(paintEnd)->c.isSpace() ) ||
-               // ( paintEnd != -1 && paintEnd - paintStart >= 5 ) || // WYSIWYG problem: don't cumulate rounding problems too long - check if exactly same limits as KoTextFormatter
+	if ( ( ( alignment() & Qt::AlignJustify ) == Qt::AlignJustify && paintEnd != -1 && at(paintEnd)->c.isSpace() ) ||
+#ifdef CHECK_PIXELXADJ
+               lastXAdj != chr->pixelxadj ||
+#endif
 	       lastDirection != (bool)chr->rightToLeft ||
 	       chr->startOfRun ||
 	       lastY != cy || chr->format() != lastFormat ||
 	       ( paintEnd != -1 && at( paintEnd )->c =='\t' ) || chr->c == '\t' ||
 	       ( paintEnd != -1 && at( paintEnd )->c.unicode() == 0xad ) || chr->c.unicode() == 0xad ||
-	       selectionChange || chr->isCustom() ) ) {
-	    if ( paintStart <= paintEnd ) {
+	       selectionChange || chr->isCustom() ) {
+
+            if ( paintStart <= paintEnd ) {
 		if ( chr->isCustom() && chr->customItem()->placement() == KoTextCustomItem::PlaceInline ) {
 		    qstr.replace(i,1," ");
 		}
@@ -4394,6 +4389,9 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 	lastBaseLine = baseLine;
 	lasth = h;
 	lastDirection = chr->rightToLeft;
+#ifdef CHECK_PIXELXADJ
+        lastXAdj = chr->pixelxadj;
+#endif
     }
 
     // if we are through the parag, but still have some stuff left to draw, draw it now
@@ -5868,7 +5866,8 @@ void KoTextFormatCollection::setPainter( QPainter *p )
 void KoTextFormatCollection::debug()
 {
     qDebug( "------------ KoTextFormatCollection: debug --------------- BEGIN" );
-    defFormat->printDebug();
+    qDebug( "Default Format: '%s' (%p): realfont: %s",
+            defFormat->key().latin1(), (void*)defFormat, QFontInfo( defFormat->font() ).family().latin1() );
     QDictIterator<KoTextFormat> it( cKey );
     for ( ; it.current(); ++it ) {
          Q_ASSERT(it.currentKey() == it.current()->key());

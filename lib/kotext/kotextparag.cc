@@ -170,7 +170,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
     int y = zh->layoutUnitToPixelY( yLU );
     //int h = zh->layoutUnitToPixelY( yLU, hLU );
     int base = zh->layoutUnitToPixelY( yLU, baseLU );
-    int counterWidth = zh->layoutUnitToPixelX( counterWidthLU );
+    int counterWidth = zh->layoutUnitToPixelX( xLU, counterWidthLU );
     int height = zh->layoutUnitToPixelY( yLU, format->height() );
 
     QFont font( format->screenFont( zh ) );
@@ -190,7 +190,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
 
         //kdDebug(32500) << "KoTextParag::drawLabel xLU=" << xLU << " counterWidthLU=" << counterWidthLU << endl;
 	// The width and height of the bullet is the width of one space
-        int width = zh->layoutUnitToPixelX( format->width( ' ' ) );
+        int width = zh->layoutUnitToPixelX( xLeft, format->width( ' ' ) );
 
         //kdDebug(32500) << "Pix: xLeft=" << xLeft << " counterWidth=" << counterWidth
         //          << " xBullet=" << xBullet << " width=" << width << endl;
@@ -386,16 +386,8 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         drawLabel( &painter, xLabel, cy, 0, 0, baseLine, cg );
     }
 
-    // We force the alignment to justify during drawing, so that drawParagString is called
-    // for at most one word at a time, never more. This allows to make the spaces slightly
-    // bigger to compensate for the rounding problems.
-    int realAlignment = alignment();
-    setAlignmentDirect( Qt::AlignJustify );
-
     //qDebug("KoTextParag::paint %p", this);
     KoTextParag::paintDefault( painter, cg, cursor, drawSelections, clipx, clipy, clipw, cliph );
-
-    setAlignmentDirect( realAlignment );
 
     // Now draw paragraph border
     if ( m_layout.hasBorder() &&!textDocument()->drawingShadow())
@@ -434,15 +426,17 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
                                    KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
                                    const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft )
 {
+    //kdDebug() << "KoTextParag::drawParagString drawing from " << start << " to " << start+len << endl;
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     assert(zh);
 
     //kdDebug(32500) << "startX in LU: " << startX << " layoutUnitToPt( startX )*zoomedResolutionX : " << zh->layoutUnitToPt( startX ) << "*" << zh->zoomedResolutionX() << endl;
 
-    // Calculate startX in pixels (using the xadj value of the corresponding char)
-    int startX_pix = zh->layoutUnitToPixelX( startX ) + at( rightToLeft ? start+len-1 : start )->pixelxadj;
-    //kdDebug(32500) << "KoTextParag::drawParagString startX in pixels : " << startX_pix << " bw=" << bw << endl;
+    // Calculate startX in pixels
+    int startX_pix = zh->layoutUnitToPixelX( startX ) /* + at( rightToLeft ? start+len-1 : start )->pixelxadj */;
+    //kdDebug(32500) << "KoTextParag::drawParagString startX in pixels : " << startX_pix << " adjustment:" << at( rightToLeft ? start+len-1 : start )->pixelxadj << " bw=" << bw << endl;
 
+    int bw_pix = zh->layoutUnitToPixelX( startX, bw );
     int lastY_pix = zh->layoutUnitToPixelY( lastY );
     int baseLine_pix = zh->layoutUnitToPixelY( lastY, baseLine );
     int h_pix = zh->layoutUnitToPixelY( lastY, h );
@@ -450,12 +444,12 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     //        << " h(PIX)=" << h_pix << " lastY(PIX)=" << lastY_pix << endl;
 
     if ( lastFormat->textBackgroundColor().isValid() )
-        painter.fillRect( startX_pix, lastY_pix, bw, h_pix, lastFormat->textBackgroundColor() );
+        painter.fillRect( startX_pix, lastY_pix, bw_pix, h_pix, lastFormat->textBackgroundColor() );
 
     // don't want to draw line breaks but want them when drawing formatting chars
     int draw_len = len;
     int draw_startX = startX;
-    int draw_bw = bw;
+    int draw_bw = bw_pix;
     if ( at( start + len - 1 )->c == '\n' )
     {
       draw_len--;
@@ -463,11 +457,11 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
       if ( rightToLeft )
         draw_startX = at( start + draw_len - 1 )->x;
     }
-    int draw_startX_pix = zh->layoutUnitToPixelX( draw_startX ) + at( rightToLeft ? start+draw_len-1 : start )->pixelxadj;
+    int draw_startX_pix = zh->layoutUnitToPixelX( draw_startX ) /* + at( rightToLeft ? start+draw_len-1 : start )->pixelxadj*/;
 
     drawParagStringInternal( painter, s, start, draw_len, draw_startX_pix,
                              lastY_pix, baseLine_pix,
-                             draw_bw, // Note that bw is already in pixels (see KoTextParag::paint)
+                             draw_bw,
                              h_pix, drawSelections, lastFormat, i, selectionStarts,
                              selectionEnds, cg, rightToLeft, zh );
 
@@ -475,7 +469,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     {
         drawFormattingChars( painter, s, start, len,
                              startX, lastY, baseLine, h,
-                             startX_pix, lastY_pix, baseLine_pix, bw, h_pix,
+                             startX_pix, lastY_pix, baseLine_pix, bw_pix, h_pix,
                              drawSelections,
                              lastFormat, i, selectionStarts,
                              selectionEnds, cg, rightToLeft );
@@ -503,7 +497,6 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
         textColor = KoTextFormat::defaultTextColor( &painter );
 
     // 2) Sort out the font
-    //bool forPrint = ( painter.device()->devType() == QInternal::Printer );
     QFont font( lastFormat->screenFont( zh ) );
 #if 0
     QFontInfo fi( font );
@@ -523,8 +516,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 
     if ( drawSelections ) {
 	const int nSels = doc ? doc->numSelections() : 1;
-	const int startSel = painter.device()->devType() != QInternal::Printer ? 0 : 1;
-	for ( int j = startSel; j < nSels; ++j ) {
+	for ( int j = 0; j < nSels; ++j ) {
 	    if ( i > selectionStarts[ j ] && i <= selectionEnds[ j ] ) {
 		if ( !doc || doc->invertSelectionText( j ) )
 		    textColor = cg.color( QColorGroup::HighlightedText );
@@ -651,7 +643,7 @@ void KoTextParag::drawCursor( QPainter &painter, KoTextCursor *cursor, int curx,
     if ( textDocument()->drawingShadow() )
         return; // No shadow of the cursor ;)
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
-    int x = zh->layoutUnitToPixelX( curx ) + cursor->parag()->at( cursor->index() )->pixelxadj;
+    int x = zh->layoutUnitToPixelX( curx ) /*+ cursor->parag()->at( cursor->index() )->pixelxadj*/;
     //qDebug("  drawCursor: LU: [cur]x=%d, cury=%d -> PIX: x=%d, y=%d", curx, cury, x, zh->layoutUnitToPixelY( cury ) );
     KoTextParag::drawCursorDefault( painter, cursor, x,
                             zh->layoutUnitToPixelY( cury ),

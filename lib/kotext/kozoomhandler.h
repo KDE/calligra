@@ -167,6 +167,9 @@ public:
       // Same as layoutUnitToPixelX nowadays
     { return layoutUnitToPixelX( lupix ); }
 
+    /** This variant converts a width, using a reference X position.
+     * This prevents rounding problems. */
+    int layoutUnitToPixelX( int x, int w ) const;
     /** This variant converts a height, using a reference Y position.
      * This prevents rounding problems. */
     int layoutUnitToPixelY( int y, int h ) const;

@@ -69,6 +69,14 @@ double KoZoomHandler::layoutUnitToFontSize( int luSize, bool /*forPrint*/ ) cons
     // ### Same calculation as layoutUnitToPixel !
 }
 
+int KoZoomHandler::layoutUnitToPixelX( int x, int w ) const
+{
+    // We call layoutUnitToPixelX on the right value, i.e. x+w-1,
+    // and then determine the height from the result (i.e. right-left+1).
+    // Calling layoutUnitToPixelX(w) leads to rounding problems.
+    return layoutUnitToPixelY( x + w - 1 ) - layoutUnitToPixelY( x ) + 1;
+}
+
 int KoZoomHandler::layoutUnitToPixelY( int y, int h ) const
 {
     // We call layoutUnitToPixelY on the bottom value, i.e. y+h-1,

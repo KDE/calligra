@@ -37,10 +37,10 @@ KoTextFormat * KoTextCustomItem::format() const
 }
 
 
-void KoTextCustomItem::draw(QPainter* p, int x, int _y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
+void KoTextCustomItem::draw(QPainter* p, int _x, int _y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
     KoZoomHandler *zh=textDocument()->paintingZoomHandler();
-    //kdDebug(32500)<<" x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
+    //kdDebug(32500)<<" x :"<<_x<<" y :"<<_y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
 
     // Calculate index only once
     // Hmm, should pass it to drawCustomItem...
@@ -48,12 +48,14 @@ void KoTextCustomItem::draw(QPainter* p, int x, int _y, int cx, int cy, int cw, 
     KoTextStringChar* stringChar = paragraph()->at( charIndex );
 
     // Convert x, y, cx, cy, cw and ch from Layout Units to pixels.
-    x = zh->layoutUnitToPixelX(x) + stringChar->pixelxadj;
+    int x = zh->layoutUnitToPixelX(_x) /*+ stringChar->pixelxadj*/;
     int y = zh->layoutUnitToPixelY(_y);
     cx = zh->layoutUnitToPixelX(cx);
-    cy = zh->layoutUnitToPixelY(_y,cy);
+    cy = zh->layoutUnitToPixelY(cy);
+    cw = zh->layoutUnitToPixelX(_x,cw);
     ch = zh->layoutUnitToPixelY(_y,ch);
-    cw = zh->layoutUnitToPixelX(cw);
+    int wpix = zh->layoutUnitToPixelX(_x,width);
+    int hpix = zh->layoutUnitToPixelX(_y,height);
     //kdDebug(32500)<<"After  x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
 
     KoTextFormat * fmt = stringChar->format();
@@ -68,7 +70,7 @@ void KoTextCustomItem::draw(QPainter* p, int x, int _y, int cx, int cy, int cw, 
         offset = -( h - p->fontMetrics().height() );
     }
 
-    drawCustomItem(p, x, y, cx, cy, cw, ch, cg, selected, offset);
+    drawCustomItem(p, x, y, wpix, hpix, cx, cy, cw, ch, cg, selected, offset);
 }
 
 ////////////////

@@ -23,6 +23,9 @@
 #include <kdebug.h>
 //#define DEBUG_FORMATTER
 
+/////// keep in sync with kotextformat.cc !
+//#define REF_IS_LU
+
 // Originally based on KoTextFormatterBaseBreakWords::format()
 int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                              int start, const QMap<int, KoTextParagLineStart*> & )
@@ -80,15 +83,18 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     int ww = 0; // width in layout units
 
     KoZoomHandler *zh = doc->formattingZoomHandler();
+#ifndef REF_IS_LU
     int pixelww = 0; // width in pixels
+#endif
     int pixelx = zh->layoutUnitToPixelX( x );
+    int lastPixelx = 0;
 
     parag->tabCache().clear();
 
-    QChar lastChr;
+    KoTextStringChar* lastChr = 0;
     for ( ; i < len; ++i, ++col ) {
 	if ( c )
-	    lastChr = c->c;
+	    lastChr = c;
 	c = &string->at( i );
 	if ( i > 0 && (x > curLeft || ww == 0) || lastWasNonInlineCustom ) {
 	    c->lineStart = 0;
@@ -103,44 +109,28 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	    lastWasNonInlineCustom = FALSE;
 
 	if ( c->c != '\t' || c->isCustom() ) {
-            // Instead of using the high-resolution font, let's use the 100%-zoom-font
-            // and calculate the LU size it is equivalent to. This gives better results
-            // at most usual zoom resolutions.
-	    // ww = string->width( i );
             KoTextFormat *charFormat = c->format();
             if ( c->isCustom() ) {
                 ww = c->customItem()->width;
+#ifndef REF_IS_LU
                 pixelww = zh->layoutUnitToPixelX( ww );
+#endif
             } else {
                 ww = charFormat->charWidthLU( c, parag, i );
+#ifndef REF_IS_LU
                 // Pixel size - we want the metrics of the font that's going to be used.
                 pixelww = charFormat->charWidth( zh, true, c, parag, i );
-            }
-
-            // This was wrong - we paint the text word by word anyway
-#if 0
-            bool breakable = ( lineStart && ( isBreakable( string, i ) || parag->isNewLinesAllowed() && c->c == '\n' ) ); // same test as below
-
-            int ww_topix = zh->layoutUnitToPixelX(ww);
-            // We have to limit the difference between pixel-width and proportional width
-            // to negative differences. Such differences can be compensated on spaces, making
-            // them larger. Positive differences can lead to a 0-sized or even a negative
-            // sized spaces, which we don't want. This doesn't apply to spaces themselves, of course.
-            if ( !breakable && pixelww > ww_topix  ) {
-#ifdef DEBUG_FORMATTER
-                qDebug("pixelww (%d) bigger than lu2pixel(%d)=%d -> setting to %d",
-                       pixelww, ww, ww_topix, ww_topix);
 #endif
-                pixelww = ww_topix;
             }
-#endif
 	} else { // tab
 	    int nx = parag->nextTab( i, x );
 	    if ( nx < x )
 		ww = availableWidth - x;
 	    else
 		ww = nx - x + 1;
+#ifndef REF_IS_LU
             pixelww = zh->layoutUnitToPixelX( ww );
+#endif
 	}
         c->width = ww;
 
@@ -201,7 +191,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	     ( wrapAtColumn() == -1 && x + ww > availableWidth && lastBreak != -1 ||
 	       wrapAtColumn() == -1 && x + ww > availableWidth - 4 && lastBreak == -1 && allowBreakInWords() ||
 	       wrapAtColumn() != -1 && col >= wrapAtColumn() ) ||
-	       parag->isNewLinesAllowed() && lastChr == '\n' && lastBreak > -1 ) {
+	       parag->isNewLinesAllowed() && lastChr->c == '\n' && lastBreak > -1 ) {
 #ifdef DEBUG_FORMATTER
 	    qDebug( "BREAKING" );
 #endif
@@ -257,7 +247,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		// Breakable char was found
 		i = lastBreak;
 		c = &string->at( i ); // The last char in the last line
-                int lineWidth = availableWidth - c->x - ( string->isRightToLeft() && lastChr == '\n'? c->width : 0 );
+                int lineWidth = availableWidth - c->x - ( string->isRightToLeft() && lastChr->c == '\n'? c->width : 0 );
                 if ( c->c.unicode() == 0xad ) // soft hyphen
                 {
                     // Recalculate its width, the hyphen will appear finally (important for the parag rect)
@@ -355,7 +345,9 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                     // ww and pixelww already calculated and stored, no need to duplicate
                     // code like QRT does.
                     ww = c->width;
+#ifndef REF_IS_LU
                     pixelww = c->pixelwidth;
+#endif
 		}
 	    }
 
@@ -374,33 +366,30 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	    //qDebug(  " -> tmpBaseLine/tmph : %d/%d", tmpBaseLine, tmph );
 	}
 
-        bool breakable = ( lineStart && ( isBreakable( string, i ) || parag->isNewLinesAllowed() && c->c == '\n' ) ); // same test as above
-        if ( breakable /* || ( lastBreak != -1 && i - lastBreak > 5 ) || ( lastBreak == -1 && i % 5 == 0 ) */ )
-        {
-            // Re-sync x and pixelx (this is how we steal white pixels in spaces to compensate for rounding errors)
-            //pixelx = zh->layoutUnitToPixelX( x );
-            // More complex than that. It's the _space_ that has to grow/shrink
-#ifdef DEBUG_FORMATTER
-            int oldpixelww = pixelww;
-#endif
-            pixelww -= pixelx - zh->layoutUnitToPixelX( x );
-#ifdef DEBUG_FORMATTER
-            qDebug("pixelww was %d, now %d. Adjusted by pixelx - x. x=%d pixelx=%d", oldpixelww, pixelww, zh->layoutUnitToPixelX( x ), pixelx);
-#endif
-        }
 	c->x = x;
         // pixelxadj is the adjustement to add to lu2pixel(x), to find pixelx
         // (pixelx would be too expensive to store directly since it would require an int)
         c->pixelxadj = pixelx - zh->layoutUnitToPixelX( x );
-        c->pixelwidth = pixelww;
+        //c->pixelwidth = pixelww;
 #ifdef DEBUG_FORMATTER
         qDebug("LU: x=%d [equiv. to pix=%d] ; PIX: x=%d  --> adj=%d",
                x, zh->layoutUnitToPixelX( x ), pixelx, c->pixelxadj );
 #endif
-	x += ww;
-        pixelx += pixelww;
+
+        if ( i > 0 )
+            lastChr->pixelwidth = pixelx - lastPixelx;
         if ( i < len - 1 )
             wused = QMAX( wused, x );
+        else // trailing space
+            c->pixelwidth = zh->layoutUnitToPixelX( ww ); // was: pixelww;
+
+	x += ww;
+        lastPixelx = pixelx;
+#ifdef REF_IS_LU
+        pixelx = zh->layoutUnitToPixelX( x ); // no accumulating rounding errors anymore
+#else
+        pixelx += pixelww;
+#endif
 #ifdef DEBUG_FORMATTER
 	qDebug("LU: added %d -> now x=%d ; PIX: added %d -> now pixelx=%d",ww,x,pixelww,pixelx);
 #endif
@@ -460,9 +449,13 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 void KoTextFormatter::moveChar( KoTextStringChar& chr, KoZoomHandler *zh,
                                 int deltaX, int deltaPixelX )
 {
+#ifndef REF_IS_LU
     int pixelx = chr.pixelxadj + zh->layoutUnitToPixelX( chr.x );
+#endif
     chr.x += deltaX;
+#ifndef REF_IS_LU
     chr.pixelxadj = pixelx + deltaPixelX - zh->layoutUnitToPixelX( chr.x );
+#endif
 }
 
 KoTextParagLineStart *KoTextFormatter::koFormatLine(
@@ -514,7 +507,9 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
 		space -= s;
 		numSpaces--;
                 chr.width += s;
+#ifndef REF_IS_LU
                 chr.pixelwidth += zh->layoutUnitToPixelX( s ); // ### rounding problem, recalculate
+#endif
 	    }
 	}
     }
@@ -587,6 +582,7 @@ KoTextParagLineStart *KoTextFormatter::koBidiReorderLine(
 	    }
 	}
     }
+// TODO #ifndef REF_IS_LU or remove
     int pixelx = zh->layoutUnitToPixelX( x );
     int toAdd = 0;
     int toAddPix = 0;
