@@ -49,8 +49,6 @@ KarbonFactory::KarbonFactory( QObject* parent, const char* name )
 	: KoFactory( parent, name )
 {
 	instance();
-
-	s_rserver = new KarbonResourceServer;
 }
 
 KarbonFactory::~KarbonFactory()
@@ -150,6 +148,8 @@ KarbonFactory::instance()
 
 KarbonResourceServer *KarbonFactory::rServer()
 {
+	if( !s_rserver )
+		s_rserver = new KarbonResourceServer;
 	return s_rserver;
 }
 

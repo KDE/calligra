@@ -148,20 +148,23 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_layersDocker = 0L;
 
 	// tools:
-	m_ellipseTool = new VEllipseTool( this );
-	m_gradTool = new VGradientTool( this );
-	m_polygonTool = new VPolygonTool( this );
-	m_rectangleTool = new VRectangleTool( this );
-	m_rotateTool = new VRotateTool( this );
-	m_roundRectTool = new VRoundRectTool( this );
 	m_selectTool = new VSelectTool( this );
-	m_selectNodesTool = new VSelectNodesTool( this );
-	m_shearTool = new VShearTool( this );
-	m_sinusTool = new VSinusTool( this );
-	m_spiralTool = new VSpiralTool( this );
-	m_starTool = new VStarTool( this );
-	m_polylineTool = new VPolylineTool( this );
-	m_clipartTool = new VClipartTool( this );
+	if( shell() )
+	{
+		m_ellipseTool		= new VEllipseTool( this );
+		m_gradTool			= new VGradientTool( this );
+		m_polygonTool		= new VPolygonTool( this );
+		m_rectangleTool		= new VRectangleTool( this );
+		m_rotateTool		= new VRotateTool( this );
+		m_roundRectTool		= new VRoundRectTool( this );
+		m_selectNodesTool	= new VSelectNodesTool( this );
+		m_shearTool			= new VShearTool( this );
+		m_sinusTool			= new VSinusTool( this );
+		m_spiralTool		= new VSpiralTool( this );
+		m_starTool			= new VStarTool( this );
+		m_polylineTool		= new VPolylineTool( this );
+		m_clipartTool		= new VClipartTool( this );
+	}
 #ifdef HAVE_KARBONTEXT
 	m_textTool = new VTextTool( this );
 #endif
