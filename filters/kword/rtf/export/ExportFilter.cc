@@ -71,7 +71,7 @@ RTFWorker::RTFWorker():
 {
 }
 
-#undef FULL_TABLE_SUPPORT
+#define FULL_TABLE_SUPPORT
 
 bool RTFWorker::makeTable(const FrameAnchor& anchor)
 {
@@ -80,7 +80,8 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
 
 #ifdef FULL_TABLE_SUPPORT
     int rowCurrent = 0;
-    int cellCurrent = 0;
+    int debugCellCurrent = 0; //DEBUG
+    int debugRowCurrent = 0; //DEBUG
     QString textCellx; // All \cellx
 
     const bool oldInTable = m_inTable;
@@ -96,7 +97,6 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
         if (rowCurrent!=(*itCell).row)
         {
             rowCurrent = (*itCell).row;
-            cellCurrent = 0;
             m_textBody += "\\trowd\\trgaph60\\trleft-60";  // start new row
             m_textBody += textCellx;
             m_textBody += " "; // End of keyword
@@ -105,11 +105,15 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
             m_textBody += m_eol;
             rowText = QString::null;
             textCellx = QString::null;
+            debugRowCurrent++; // DEBUG
+            debugCellCurrent = 0; //DEBUG
         }
-        cellCurrent ++; // Should be at least 1
+
         const FrameData& frame = (*itCell).frame;
+        kdDebug(30515) << "Cell: " << debugRowCurrent << "," << debugCellCurrent
+            << " left: " << frame.left << " right: " << frame.right << " top: " << frame.top << " bottom " << frame.bottom << endl;
         textCellx += "\\cellx";
-        textCellx += QString::number(qRound(PT_TO_TWIP(frame.right)) /*- PT_TO_TWIP(m_paperMarginRight)*/); //right border of cell
+        textCellx += QString::number(qRound(PT_TO_TWIP(frame.right)) - m_paperMarginRight); //right border of cell
 #endif
 
         QValueList<ParaData> *paraList = (*itCell).paraList;
@@ -122,7 +126,7 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
         }
 #ifdef FULL_TABLE_SUPPORT
         rowText += "\\cell";
-        cellCurrent ++;
+        debugCellCurrent ++; // DEBUG
 #else
         m_textBody += rowText;
         rowText = QString::null;
@@ -134,8 +138,8 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
     m_textBody += textCellx;
     m_textBody += " "; // End of keyword
     m_textBody += rowText;
-    m_textBody += "\\row";
-    m_textBody += m_eol;
+    //m_textBody += "\\row";
+    //m_textBody += m_eol;
     m_inTable = oldInTable;
     m_textBody += "\\par";  // delimit last row
     m_textBody += m_eol;
