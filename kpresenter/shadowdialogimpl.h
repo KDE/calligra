@@ -1,32 +1,10 @@
 #ifndef __shadowdialogimpl_h__
 #define __shadowdialogimpl_h__
 
-#include <qframe.h>
-#include <qcolor.h>
-
 #include "shadowdialog.h"
 #include "global.h"
 
-class ShadowPreview : public QFrame
-{
-    Q_OBJECT
-
-public:
-    ShadowPreview( QWidget* parent, const char* name = 0 );
-    ~ShadowPreview() {}
-
-    void setShadowDirection( ShadowDirection sd ) { shadowDirection = sd; repaint( true ); }
-    void setShadowDistance( int sd ) { shadowDistance = sd; repaint( true ); }
-    void setShadowColor( const QColor &sc ) { shadowColor = sc; repaint( true ); }
-
-protected:
-    void drawContents( QPainter* );
-
-    ShadowDirection shadowDirection;
-    int shadowDistance;
-    QColor shadowColor;
-
-};
+class TextPreview;
 
 class ShadowDialogImpl : public ShadowDialogBase
 {
@@ -34,7 +12,7 @@ class ShadowDialogImpl : public ShadowDialogBase
 
 public:
     ShadowDialogImpl( QWidget *parent, const char* name = 0 );
-    ~ShadowDialogImpl();
+    ~ShadowDialogImpl() {}
 
     void setShadowDirection( ShadowDirection sd );
     void setShadowDistance( int sd );
@@ -55,7 +33,7 @@ protected slots:
     void okClicked();
 
 protected:
-    ShadowPreview *_preview;
+    TextPreview *_preview;
 };
 
 

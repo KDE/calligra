@@ -40,7 +40,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	KPLineObjectIface.skel KPLineObjectIface.cc \
 	KPQuadricbezierCurveObjectIface.skel KPQuadricbezierCurveObjectIface.cc \
 	KPCubicbeziercurveObjectIface.skel KPCubicbeziercurveObjectIface.cc \
-	shadowdialog.ui shadowdialogimpl.cc
+	shadowdialog.ui shadowdialogimpl.cc textpreview.cc
 
 libkpresenterpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell  -lqtmcop -lkmedia2_idl -lsoundserver_idl -lartskde
@@ -82,7 +82,7 @@ noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresente
 		presdurationdia.h KPPieObjectIface.h KPPolygonObjectIface.h KPRectObjectIface.h KPPixmapObjectIface.h \
 		KPAutoFormObjectIface.h KPresenterObject2DIface.h \
 		KPLineObjectIface.h KPQuadricbezierCurveObjectIface.h \
-		KPCubicbeziercurveObjectIface.h
+		KPCubicbeziercurveObjectIface.h textpreview.h
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office
