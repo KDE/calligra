@@ -19,31 +19,6 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-/*
-   This file is based on the old file:
-    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
-
-   The old file was copyrighted by 
-    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-    Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
-                       Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
- 
-   The old file was licensed under the terms of the GNU Library General Public
-   License version 2.
-*/
-
-/*
-   This file is based on the old file:
-    koffice/filters/kword/ascii/asciiimport.cc
-
-   The old file was copyrighted by 
-    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-    Copyright (C) 2000 Michael Johnson <mikej@xnet.com>
-
-   The old file was licensed under the terms of the GNU Library General Public
-   License version 2.
-*/
-
 #include <config.h>
 
 #ifdef HAVE_UNISTD_H
