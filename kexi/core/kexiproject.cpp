@@ -384,7 +384,7 @@ KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, KexiPart::Item& ite
 	KexiDialogBase *dlg  = part->openInstance(wnd, item, viewMode);
 	if (!dlg) {
 		if (part->lastOperationStatus().error())
-			setError(i18n("Opening object \"%1\" failed.").arg(item.name())+"<br><br>"+part->lastOperationStatus().message, 
+			setError(i18n("Opening object \"%1\" failed.").arg(item.name())+"<br>"+part->lastOperationStatus().message, 
 				part->lastOperationStatus().description);
 		return 0;
 	}
