@@ -778,11 +778,11 @@ KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name, KoAutoForma
       m_autoFormat( *autoFormat ),
       m_docAutoFormat( autoFormat )
 {
-    setButtonText( KDialogBase::User1, i18n("Reset") );
+    setButtonText( KDialogBase::User1, i18n("&Reset") );
     setCaption( i18n("Completion") );
     setup();
     slotResetConf();
-    setInitialSize( QSize(500, 400) );
+    setInitialSize( QSize( 400, 400 ) );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotResetConf()));
 }
 
@@ -790,45 +790,34 @@ void KoCompletionDia::setup()
 {
     QVBox *page = makeVBoxMainWidget();
     cbAllowCompletion = new QCheckBox( page );
-    cbAllowCompletion->setText( i18n( "Enable completion" ) );
+    cbAllowCompletion->setText( i18n( "E&nable completion" ) );
     // TODO whatsthis or text, to tell about the key to use for autocompletion....
-    cbAllowCompletion->resize( cbAllowCompletion->sizeHint() );
-
     cbAddCompletionWord = new QCheckBox( page );
-    cbAddCompletionWord->setText( i18n( "Automatically add new words to completion list" ) );
+    cbAddCompletionWord->setText( i18n( "&Automatically add new words to completion list" ) );
     QWhatsThis::add( cbAddCompletionWord, i18n("If this is option is enabled, any word typed in this document will automatically be added to the list of words used by the completion." ) );
-    cbAddCompletionWord->resize( cbAddCompletionWord->sizeHint() );
 
     m_lbListCompletion = new QListBox( page );
     connect( m_lbListCompletion, SIGNAL( selected ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
     connect( m_lbListCompletion, SIGNAL( highlighted ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
 
 
-    pbRemoveCompletionEntry = new QPushButton(i18n( "Remove Completion Entry"), page  );
+    pbRemoveCompletionEntry = new QPushButton(i18n( "R&emove Completion Entry"), page  );
     connect( pbRemoveCompletionEntry, SIGNAL( clicked() ), this, SLOT( slotRemoveCompletionEntry()));
 
-    pbSaveCompletionEntry= new QPushButton(i18n( "Save Completion List"), page );
+    pbSaveCompletionEntry= new QPushButton(i18n( "&Save Completion List"), page );
     connect( pbSaveCompletionEntry, SIGNAL( clicked() ), this, SLOT( slotSaveCompletionEntry()));
 
 
-    QLabel *lab=new QLabel( i18n("Min. word length:"), page);
-    lab->resize( lab->sizeHint() );
-
     m_minWordLength = new KIntNumInput( page );
-    m_minWordLength->setRange ( 5, 800,1,false );
-    m_minWordLength->resize( m_minWordLength->sizeHint() );
-
-
-    lab=new QLabel( i18n("Max. number of completion words:"), page );
-    lab->resize( lab->sizeHint() );
+    m_minWordLength->setRange ( 5, 100,1,true );
+    m_minWordLength->setLabel( i18n( "&Minimum word length:" ) );
 
     m_maxNbWordCompletion = new KIntNumInput( page );
-    m_maxNbWordCompletion->setRange( 1, 500, 1, false);
-    m_maxNbWordCompletion->resize( m_maxNbWordCompletion->sizeHint() );
+    m_maxNbWordCompletion->setRange( 1, 500, 1, true);
+    m_maxNbWordCompletion->setLabel( i18n( "Ma&ximum number of completion words:" ) );
 
     cbAppendSpace = new QCheckBox( page );
-    cbAppendSpace->setText( i18n( "Append space" ) );
-    cbAppendSpace->resize( cbAppendSpace->sizeHint() );
+    cbAppendSpace->setText( i18n( "A&ppend space" ) );
 
     m_listCompletion = m_docAutoFormat->listCompletion();
 }
