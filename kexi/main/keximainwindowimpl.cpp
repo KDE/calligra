@@ -175,6 +175,9 @@ class KexiMainWindowImpl::Private
 		KAction *action_tools_data_migration;
 #endif
 
+		//! window menu
+		KAction *action_window_next, *action_window_previous;
+
 		//! settings menu
 		KAction *action_configure;
 
@@ -443,6 +446,24 @@ void KexiMainWindowImpl::setWindowMenu(QPopupMenu *menu)
 	QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
 }
 
+void KexiMainWindowImpl::fillWindowMenu()
+{
+	KexiMainWindow::fillWindowMenu();
+
+	const QString t = i18n("&Dock/Undock...");
+	int i = 0;
+	for (int index;; i++) {
+		index = m_pWindowMenu->idAt(i);
+		if (index==-1 || m_pWindowMenu->text(index)==t)
+				break;
+	}
+	i+=2;
+	d->action_window_next->plug( m_pWindowMenu, i++ );
+	d->action_window_previous->plug( m_pWindowMenu, i++ );
+	if (!m_pDocumentViews->isEmpty())
+		m_pWindowMenu->insertSeparator( i++ );
+}
+
 QPopupMenu* KexiMainWindowImpl::findPopupMenu(const char *popupName)
 {
 	return d->popups[popupName];
@@ -617,6 +638,27 @@ KexiMainWindowImpl::initActions()
 	d->action_tools_data_migration = new KAction(i18n("Import Data..."), "toolsdatamigrate", 0, this, SLOT(slotMigrationWizard()), actionCollection(), "tools_data_migration");
 #endif	
 
+	//additional 'Window' menu items
+	d->action_window_next = new KAction( i18n("&Next Window"), "", 
+#ifdef Q_WS_WIN
+		CTRL+Key_Tab,
+#else
+		ALT+Key_Right,
+#endif
+		this, SLOT(activateNextWin()), actionCollection(), "window_next");
+	d->action_window_next->setToolTip( i18n("Next window") );
+	d->action_window_next->setWhatsThis(i18n("Switches to the next window."));
+
+	d->action_window_previous = new KAction( i18n("&Previous Window"), "", 
+#ifdef Q_WS_WIN
+		CTRL+Key_BackTab,
+#else
+		ALT+Key_Left,
+#endif
+		this, SLOT(activatePrevWin()), actionCollection(), "window_previous");
+	d->action_window_previous->setToolTip( i18n("Previous window") );
+	d->action_window_previous->setWhatsThis(i18n("Switches to the previous window."));
+
 	//SETTINGS MENU
 	setStandardToolBarMenuEnabled( true );
 	action = KStdAction::keyBindings(this, SLOT( slotConfigureKeys() ), actionCollection() );
@@ -749,6 +791,12 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 #ifndef KEXI_NO_MIGRATION
 	d->action_tools_data_migration->setEnabled(d->prj);
 #endif
+
+	//WINDOW MENU
+	if (d->action_window_next) {
+		d->action_window_next->setEnabled(!m_pDocumentViews->isEmpty());
+		d->action_window_previous->setEnabled(!m_pDocumentViews->isEmpty());
+	}
 
 	//DOCKS
 	if (d->nav)

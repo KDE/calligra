@@ -219,7 +219,6 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
   "getting index schema"
 
 === Combo box editor TODO ====
--add F4 key support
 -we're completely dropping using regular combobox
 -new layout: a lineedit + dropdown button + popup tableview, when needed
 -use (and add few) methods for tableview to enable adjusting it for use it as dropdown tv
@@ -397,6 +396,14 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 
 
 CCMAIL: dkite@shaw.ca
+
+2004-11-08
+Main
+- a fix for saving main windows settings (now mdimode is saved to proper
+  section)
+- window_next, window_previous actions added
+KexiDB
+- DriverBehaviour::AUTO_INCREMENT_TYPE added
 
 2004-11-05
 Main

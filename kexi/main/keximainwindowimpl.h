@@ -269,6 +269,8 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		 and also optionally application's caption. */
 		virtual void slotObjectRenamed(const KexiPart::Item &item);
 
+		virtual void fillWindowMenu();
+
 		void invalidateSharedActions();
 		void invalidateSharedActionsLater();
 
