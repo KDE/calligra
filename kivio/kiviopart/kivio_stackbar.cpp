@@ -193,3 +193,4 @@ void KivioStackBar::closeEvent(QCloseEvent* ev)
   QFrame::closeEvent(ev);
 }
 
+#include "kivio_stackbar.moc"

@@ -30,7 +30,7 @@ class KivioConfig : public KSimpleConfig
 public:
     typedef enum {
         sbgtColor=0,
-        sbgtPixmap,
+        sbgtPixmap
     } StencilBGType;
 
 protected:

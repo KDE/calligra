@@ -64,7 +64,7 @@ typedef enum
     krhpS=0x0020,
     krhpSW=0x0040,
     krhpW=0x0080,
-    krhpC=0x0100,
+    krhpC=0x0100
 } KivioResizeHandlePosition;
 
 #define KIVIO_RESIZE_HANDLE_POSITION_ALL \

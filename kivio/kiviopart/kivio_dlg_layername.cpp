@@ -79,3 +79,4 @@ void KivioLayerName::slotClose()
   reject();
 }
 
+#include "kivio_dlg_layername.moc"

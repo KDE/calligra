@@ -991,3 +991,4 @@ void ToolDockBase::showProcessStop()
   hsize.setWidth(hsize.width()-1);
   resize(hsize);
 }
+#include "tooldockbase.moc"

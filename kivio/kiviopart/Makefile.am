@@ -15,6 +15,7 @@ libkiviopart_la_LIBADD = \
 
 INCLUDES = $(all_includes)\
 		-I$(srcdir)/ui\
+		-Iui\
 		-I$(srcdir)/kiviosdk\
 		-I$(srcdir)/tklib\
 		-I$(srcdir)/tools

@@ -296,3 +296,4 @@ void StencilBarDockManager::setDoc( KivioDoc *p )
 
     connect(m_pDoc, SIGNAL(sig_deleteStencilSet(DragBarButton*,QWidget*,KivioStackBar*)), this, SLOT(slotDeleteStencilSet( DragBarButton*,QWidget*,KivioStackBar* )));
 }
+#include "stencilbardockmanager.moc"

@@ -1485,3 +1485,5 @@ KivioRect KivioPage::getRectForAllStencils()
 
     return rTotal;
 }
+#include "kivio_page.moc"
+

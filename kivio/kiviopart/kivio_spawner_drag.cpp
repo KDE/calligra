@@ -79,3 +79,4 @@ void KivioSpawnerDrag::append( const QIconDragItem &item, const QRect &pr,
 
     m_spawners << full;
 }
+

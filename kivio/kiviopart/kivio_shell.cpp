@@ -53,3 +53,4 @@ void KivioShell::slotHelpAbout()
     dia->exec();
     delete dia;
 }
+#include "kivio_shell.moc"

@@ -242,3 +242,4 @@ void DragBarButton::leaveEvent( QEvent* ev )
   m_bMouseOn = false;
   repaint();
 }
+#include "stencilbarbutton.moc"

@@ -76,3 +76,4 @@ void LineEndsAction::initComboBox(TKComboBox* combo)
   p.end();
 
 }
+#include "kivio_lineendsaction.moc"
