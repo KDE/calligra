@@ -99,7 +99,7 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
 
   m_firstCondition = 0;
   m_secondCondition = 0;
-  m_thirdCondition = 0;      
+  m_thirdCondition = 0;
   conditionIsTrue=false;
   numberOfCond=-1;
 }
@@ -210,15 +210,15 @@ void KSpreadCell::defaultStyle()
   if(m_firstCondition!=0)
   	delete m_firstCondition;
   m_firstCondition=0;
-  
+
   if(m_thirdCondition!=0)
   	delete m_thirdCondition;
   m_thirdCondition=0;
-  
+
   if(m_secondCondition!=0)
   	delete m_secondCondition;
   m_secondCondition=0;
-  
+
   conditionIsTrue=false;
   numberOfCond=-1;
 }
@@ -1890,7 +1890,7 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
     }
     else
       _painter.setPen( m_textPen );
-    
+
 
     verifyCondition();
     if(conditionIsTrue)
@@ -1910,13 +1910,11 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
 	}
         _painter.setFont( tmpCondition->fontcond );
         m_textPen.setColor( tmpCondition->colorcond );
-        _painter.setPen( m_textPen );
         }
     else
   	{
         _painter.setFont( m_textFont );
         m_textPen.setColor(m_textColor );
-	_painter.setPen( m_textPen );
 	}
     //_painter.setFont( m_textFont );
     conditionAlign(_painter,_col,_row);
@@ -2086,7 +2084,7 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
       	}
       else
         _painter.setFont( m_textFont );
-      conditionAlign(_painter,_col,_row);     
+      conditionAlign(_painter,_col,_row);
       _painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText );
     }
 }
@@ -3240,7 +3238,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    		setTextFontUnderline((bool)underline.attribute("val").toInt( &ok ));
 	    		if ( !ok ) return false;
 	    		}
- 
+
 		}
 	QDomElement left = f.namedItem( "left-border" ).toElement();
 	if ( !left.isNull() && pm != NoBorder )
@@ -3281,7 +3279,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     }
 
 
-  QDomElement condition = cell.namedItem( "condition" ).toElement(); 
+  QDomElement condition = cell.namedItem( "condition" ).toElement();
   if ( !condition.isNull())
   	{
   	 QDomElement first = condition.namedItem( "first" ).toElement();
@@ -3371,7 +3369,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
   	 	}
 
   	}
-  
+
     QDomElement text = cell.namedItem( "text" ).toElement();
     if ( !text.isNull() && ( pm == ::Normal || pm == ::Text || pm == ::NoBorder ) )
     {

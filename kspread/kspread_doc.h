@@ -87,7 +87,7 @@ public:
    */
   void addTable( KSpreadTable *_table );
 
-  KSpreadMap *map() { return m_pMap; }
+  KSpreadMap *map() const { return m_pMap; }
 
   /**
    * @return the printable width of the paper in millimeters.
