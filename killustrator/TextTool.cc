@@ -165,7 +165,7 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
             x = text->line (y).length ();
             changed = true;
         }
-        else if (ke->key()==Qt::Key_Return)
+        else if (ke->key()==Qt::Key_Return ||ke->key()==Qt::Key_Enter )
             text->insertChar("\n");
         else if (ke->key()==Qt::Key_Backspace)
             text->deleteBackward ();
