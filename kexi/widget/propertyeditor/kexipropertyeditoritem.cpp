@@ -503,6 +503,8 @@ KexiPropertyEditorItem::~KexiPropertyEditorItem()
 void KexiPropertyEditorItem::updateValue()
 {
 	setText( 1, m_property->valueText() );
+	if (parent())
+		static_cast<KexiPropertyEditorItem*>(parent())->updateValue();
 }
 
 /*QString KexiPropertyEditorItem::key( int column, bool ascending ) const
