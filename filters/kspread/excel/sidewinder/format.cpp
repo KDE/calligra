@@ -436,6 +436,11 @@ bool FormatAlignment::isNull() const
   return d->null;
 }
 
+bool Format::isNull() const
+{
+  return d->font.isNull() && d->alignment.isNull() && d->borders.isNull();
+}
+
 FormatFont& Format::font()
 {
   return d->font;

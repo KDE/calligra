@@ -423,6 +423,8 @@ public:
    */
   Format& assign( const Format& f );
   
+  bool isNull() const;
+  
   /** 
    * Returns a reference to the formatting information of this format.
    */
