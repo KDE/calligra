@@ -267,6 +267,8 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
             formatElem.appendChild( elem );
             if ( curFormat->doubleUnderline() )
                 elem.setAttribute( "value", "double" );
+            else if ( curFormat->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD)
+                elem.setAttribute( "value", "single-bold" );
             else
                 elem.setAttribute( "value", static_cast<int>(curFormat->underline()) );
             QString strLineType=underlineStyleToString( curFormat->underlineLineStyle() );
@@ -478,6 +480,8 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
             format.setUnderlineLineType ( KoTextFormat::U_SIMPLE);
         else if ( value == "double" )
             format.setUnderlineLineType ( KoTextFormat::U_DOUBLE);
+        else if ( value == "single-bold" )
+            format.setUnderlineLineType ( KoTextFormat::U_SIMPLE_BOLD);
         if ( elem.hasAttribute("styleline" ))
         {
             QString strLineType = elem.attribute("styleline");
