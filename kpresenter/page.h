@@ -112,10 +112,6 @@ public:
 
     void print( QPainter*, KPrinter*, float, float );
 
-    //laurent this function is unused
-#if 0
-    void editSelectedTextArea();
-#endif
 
     void setPartEntry( KoDocumentEntry& _e )
     { partEntry = _e; }
@@ -149,6 +145,7 @@ public:
     KPTextView *currentTextObjectView() const { return m_currentTextObjectView; }
 
     KPresenterView * getView(){return view;}
+    QPtrList<KPObject> *objectList();	
 
 public slots:
     void exitEditMode();
@@ -216,7 +213,6 @@ protected:
 
     // get - set data
     QPtrList<KPBackGround> *backgroundList();
-    QPtrList<KPObject> *objectList();
     const QPtrList<KPBackGround> *backgroundList() const;
     const QPtrList<KPObject> *objectList() const;
     unsigned int objNums();

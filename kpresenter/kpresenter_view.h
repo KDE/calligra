@@ -58,6 +58,7 @@ class KFontSizeAction;
 class KColorAction;
 class KSelectAction;
 class KFontAction;
+class KSpell;
 
 class PageBase : public QWidget
 {
@@ -251,7 +252,15 @@ public slots:
     void slotSoftHyphen();
 
     void extraAutoFormat();
+    void extraSpelling();
 
+
+    void spellCheckerReady();
+    void spellCheckerMisspelling( QString, QStringList*, unsigned );
+    void spellCheckerCorrected( QString, QString, unsigned );
+    void spellCheckerDone( const QString & );
+    void spellCheckerFinished( );
+    void startKSpell();
 public:
     // create GUI
     virtual void createGUI();
@@ -620,6 +629,7 @@ private:
     KAction *actionPic1280x1024;
     KAction *actionPic1600x1200;
     KAction *actionChangePic;
+    KAction *actionExtraSpellCheck;
 
     DCOPObject *dcop;
 
@@ -640,6 +650,16 @@ private:
     int automaticScreenPresWaitTime;
     bool automaticScreenPresFirstTimer;
     KoCharSelectDia *m_specialCharDlg;
+    
+    QStringList m_ignoreWord;
+    // Spell-checking
+    struct {
+	KSpell *kspell;
+	int spellCurrTextObjNum;
+	QPtrList<KPTextObject> textObject;
+	QStringList ignoreWord;
+	KMacroCommand * macroCmdSpellCheck;
+     } m_spell;
 
 };
 

@@ -641,6 +641,24 @@ KPTextView * KPTextObject::createKPTextView( Page * _page )
 }
 
 
+void KPTextObject::removeHighlight ()
+{
+    m_textobj->removeHighlight();
+}
+
+void KPTextObject::highlightPortion( Qt3::QTextParag * parag, int index, int length, Page */*_page*/ )
+{
+    m_textobj->highlightPortion( parag, index, length );
+#if 0
+    QRect expose = canvas->viewMode()->normalToView( paragRect( parag ) );
+    canvas->ensureVisible( (expose.left()+expose.right()) / 2,  // point = center of the rect
+                           (expose.top()+expose.bottom()) / 2,
+                           (expose.right()-expose.left()) / 2,  // margin = half-width of the rect
+                           (expose.bottom()-expose.top()) / 2);
+#endif
+}
+
+
 KPTextView::KPTextView( KPTextObject * txtObj,Page *_page )
     : KoTextView( txtObj->textObject() )
 {

@@ -101,6 +101,9 @@
 #include <koCharSelectDia.h>
 #include <koInsertLink.h>
 #include <koAutoFormatDia.h>
+
+#include <kspell.h>
+
 #define DEBUG
 
 static const char *pageup_xpm[] = {
@@ -216,6 +219,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     pageBase = 0;
     sticky = FALSE;
     page = 0L;
+    m_spell.kspell = 0;
     automaticScreenPresFirstTimer = true;
 
     m_pKPresenterDoc = _doc;
@@ -250,6 +254,16 @@ KPresenterView::~KPresenterView()
         config->setGroup("Global");
         config->writeEntry("Sidebar", sidebar->isVisible());
     }
+
+    if(m_spell.kspell)
+    {
+        KPTextObject * objtxt = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
+        Q_ASSERT( objtxt );
+        if ( objtxt )
+            objtxt->removeHighlight();
+        delete m_spell.kspell;
+    }
+
     delete searchDialog;
     delete presStructView;
     delete rb_oalign;
@@ -2361,7 +2375,7 @@ void KPresenterView::setupActions()
     (void) new KAction( i18n( "&Autocorrection..." ), 0,
                         this, SLOT( extraAutoFormat() ),
                         actionCollection(), "extra_autocorrection" );
-
+    actionExtraSpellCheck = KStdAction::spelling( this, SLOT( extraSpelling() ), actionCollection(), "extra_spellcheck" );
 }
 
 void KPresenterView::textSubScript()
@@ -3596,5 +3610,179 @@ void KPresenterView::extraAutoFormat()
     KoAutoFormatDia dia( this, 0, m_pKPresenterDoc->getAutoFormat() );
     dia.exec();
 }
+
+void KPresenterView::extraSpelling()
+{
+    if (m_spell.kspell) return; // Already in progress
+    m_spell.spellCurrTextObjNum = -1;
+    m_spell.macroCmdSpellCheck=0L;
+    m_spell.textObject.clear();
+    QPtrList<KPObject> *listObj(page->objectList());
+    for ( unsigned int i = 0; i < listObj->count(); i++ ) {
+        if(listObj->at( i )->getType() == OT_TEXT)
+            m_spell.textObject.append(dynamic_cast<KPTextObject*>( listObj->at( i ) ));
+    }
+    startKSpell();
+}
+
+void KPresenterView::startKSpell()
+{
+    // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
+    if(m_pKPresenterDoc->getKSpellConfig() && !m_ignoreWord.isEmpty())
+        m_pKPresenterDoc->getKSpellConfig()->setIgnoreList(m_ignoreWord);
+    m_spell.kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_pKPresenterDoc->getKSpellConfig() );
+
+
+     m_spell.kspell->setIgnoreUpperWords(m_pKPresenterDoc->dontCheckUpperWord());
+     m_spell.kspell->setIgnoreTitleCase(m_pKPresenterDoc->dontCheckTitleCase());
+
+    QObject::connect( m_spell.kspell, SIGNAL( death() ),
+                      this, SLOT( spellCheckerFinished() ) );
+    QObject::connect( m_spell.kspell, SIGNAL( misspelling( QString, QStringList*, unsigned ) ),
+                      this, SLOT( spellCheckerMisspelling( QString, QStringList*, unsigned ) ) );
+    QObject::connect( m_spell.kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
+                      this, SLOT( spellCheckerCorrected( QString, QString, unsigned ) ) );
+    QObject::connect( m_spell.kspell, SIGNAL( done( const QString & ) ),
+                      this, SLOT( spellCheckerDone( const QString & ) ) );
+}
+
+void KPresenterView::spellCheckerReady()
+{
+
+    for ( unsigned int i = m_spell.spellCurrTextObjNum + 1; i < m_spell.textObject.count(); i++ ) {
+        KPTextObject *textobj = m_spell.textObject.at( i );
+        m_spell.spellCurrTextObjNum = i; // store as number, not as pointer, to implement "go to next frameset" when done
+        //kdDebug() << "KPresenterView::spellCheckerReady spell-checking frameset " << spellCurrTextObjNum << endl;
+
+        Qt3::QTextParag * p = textobj->textDocument()->firstParag();
+        QString text;
+        bool textIsEmpty=true;
+        while ( p ) {
+            QString str = p->string()->toString();
+            str.truncate( str.length() - 1 ); // damn trailing space
+            if(textIsEmpty)
+                textIsEmpty=str.isEmpty();
+            text += str + '\n';
+            p = p->next();
+        }
+        if(textIsEmpty)
+            continue;
+        text += '\n';
+        m_spell.kspell->check( text );
+        return;
+    }
+    //kdDebug() << "KPresenterView::spellCheckerReady done" << endl;
+
+    // Done
+    m_spell.kspell->cleanUp();
+    delete m_spell.kspell;
+    m_spell.kspell = 0;
+    m_spell.textObject.clear();
+    m_spell.ignoreWord.clear();
+    if(m_spell.macroCmdSpellCheck)
+        m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
+}
+
+void KPresenterView::spellCheckerMisspelling( QString old, QStringList* , unsigned pos )
+{
+    //kdDebug() << "KPresenterView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
+    KPTextObject * textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
+    Q_ASSERT( textobj );
+    if ( !textobj ) return;
+    Qt3::QTextParag * p = textobj->textDocument()->firstParag();
+    while ( p && (int)pos >= p->length() )
+    {
+        pos -= p->length();
+        p = p->next();
+    }
+    Q_ASSERT( p );
+    if ( !p ) return;
+    //kdDebug() << "KPresenterView::spellCheckerMisspelling p=" << p->paragId() << " pos=" << pos << " length=" << old.length() << endl;
+    textobj->highlightPortion( p, pos, old.length(), page );
+}
+
+void KPresenterView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
+{
+    //kdDebug() << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
+
+    KPTextObject * textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
+    Q_ASSERT( textobj );
+    if ( !textobj ) return;
+    Qt3::QTextParag * p = textobj->textDocument()->firstParag();
+    while ( p && (int)pos >= p->length() )
+    {
+        pos -= p->length();
+        p = p->next();
+    }
+    Q_ASSERT( p );
+    if ( !p ) return;
+    textobj->highlightPortion( p, pos, old.length(), page );
+    QTextCursor cursor( textobj->textDocument() );
+    cursor.setParag( p );
+    cursor.setIndex( pos );
+    if(!m_spell.macroCmdSpellCheck)
+        m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct misspelled word"));
+    m_spell.macroCmdSpellCheck->addCommand(textobj->textObject()->replaceSelectionCommand(
+        &cursor, corr, KoTextObject::HighlightSelection, QString::null ));
+}
+
+void KPresenterView::spellCheckerDone( const QString & )
+{
+    KPTextObject * textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
+    Q_ASSERT( textobj );
+    if ( textobj )
+        textobj->removeHighlight();
+
+    int result = m_spell.kspell->dlgResult();
+
+    //store ignore word
+    m_spell.ignoreWord=m_spell.kspell->ksConfig().ignoreList ();
+
+    m_spell.kspell->cleanUp();
+    delete m_spell.kspell;
+    m_spell.kspell = 0;
+
+    if ( result != KS_CANCEL && result != KS_STOP )
+    {
+        // Try to check another frameset
+        startKSpell();
+    }
+    else
+    {
+        m_spell.textObject.clear();
+        m_ignoreWord.clear();
+        if(m_spell.macroCmdSpellCheck)
+            m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
+    }
+}
+
+void KPresenterView::spellCheckerFinished()
+{
+    KSpell::spellStatus status = m_spell.kspell->status();
+    delete m_spell.kspell;
+    m_spell.kspell = 0;
+    if (status == KSpell::Error)
+    {
+        KMessageBox::sorry(this, i18n("ISpell could not be started.\n"
+                                      "Please make sure you have ISpell properly configured and in your PATH.\nUsed settings->configure."));
+    }
+    else if (status == KSpell::Crashed)
+    {
+        KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
+    }
+    KPTextObject * textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
+    Q_ASSERT( textobj );
+    if ( textobj )
+        textobj->removeHighlight();
+    m_spell.textObject.clear();
+    m_ignoreWord.clear();
+    if(m_spell.macroCmdSpellCheck)
+        m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
+
+    KPTextView *edit=page->currentTextObjectView();
+    if (edit)
+        edit->drawCursor( TRUE );
+}
+
 
 #include <kpresenter_view.moc>

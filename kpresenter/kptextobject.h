@@ -87,6 +87,9 @@ public:
 
     KPTextView * createKPTextView( Page * );
 
+    void removeHighlight ();
+    void highlightPortion( Qt3::QTextParag * parag, int index, int length, Page */*_page*/ );
+
 signals:
     void repaintChanged( KPTextObject* );
 
@@ -147,6 +150,7 @@ public:
     void insertLink(const QString &_linkName, const QString & hrefName);
     void insertSoftHyphen();
     void selectAll();
+    virtual void drawCursor( bool b );
 
 public slots:
     void cut();
@@ -164,7 +168,6 @@ protected:
     // Reimplemented from KoTextView
     virtual void doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
     virtual void showFormat( KoTextFormat *format ) ;
-    virtual void drawCursor( bool b );
 
     virtual void pgUpKeyPressed();
     virtual void pgDownKeyPressed();
