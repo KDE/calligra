@@ -70,6 +70,7 @@ public:
     virtual bool doFullDefineStyle(LayoutData& layout);
     virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
     virtual bool doVariableSettings(const VariableSettingsData& vs);
+    virtual bool doOpenBody (void);
 private:
     void processParagraphData (const QString& paraText,
         const TextFormatting& formatLayout,

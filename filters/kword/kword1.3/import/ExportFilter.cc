@@ -202,9 +202,7 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
                 break;
             }
         // Following characters are not allowed in XML (but some files from KWord 0.8 have some of them.)
-        case  0: case  2: case  3: case  4: case  5: case  6: case  7: case  8: case 11: case 12:
-        case 14: case 15: case 16: case 17: case 18: case 19: case 20: case 21: case 22: case 23:
-        case 24: case 25: case 26: case 27: case 28: case 29: case 30: case 31:
+        case  0: case  2 ... 8: case 11: case 12: case 14 ... 31:
             {
                 kdWarning(30518) << "Not allowed XML character: " << ch.unicode() << endl;
                 strReturn += '?';
@@ -618,13 +616,29 @@ bool OOWriterWorker::doOpenDocument(void)
     kdDebug(30518)<< "OOWriterWorker::doOpenDocument" << endl;
 
     *m_streamOut << " <office:body>\n";
-
+    
     return true;
 }
 
 bool OOWriterWorker::doCloseDocument(void)
 {
     *m_streamOut << " </office:body>\n";
+    return true;
+}
+
+bool OOWriterWorker::doOpenBody(void)
+{
+    // We have to process all non-inline pictures
+    kdDebug(30520) << "=== Processing non-inlined pictures ===" << endl;
+    QValueList<FrameAnchor>::Iterator it;
+    for ( it = m_nonInlinedPictureAnchors.begin(); it != m_nonInlinedPictureAnchors.end(); ++it )
+    {
+        *m_streamOut << "  ";
+        makePicture( *it, true ); // ### PROVISORY as as-char anchor
+        *m_streamOut << "\n";
+    }
+    kdDebug(30520) << "=== Non-inlined pictures processed ===" << endl;
+
     return true;
 }
 
