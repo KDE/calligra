@@ -41,3 +41,9 @@ we want to have in the 1.0 release:
 - Restore default tool functionality
 - Rotates layout
 - Saves channel information to file
+
+BUGS
+
+Paste tool and paste is broken
+Select Ellipse Tool is broken
+Selection tools don't get redrawed when they need to
