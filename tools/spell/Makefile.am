@@ -31,7 +31,7 @@ messages:
 datatools.h: $(idldir)/datatools.idl
 	rm -f datatools.h
 	rm -f datatools.cc
-	$(IDL) --query-server-for-narrow --relative-paths -I$(idldir) $(idldir)/datatools.idl
+	$(IDL) --query-server-for-narrow --relative-paths --any -I$(idldir) $(idldir)/datatools.idl
 
 main.cc: main.h
 datatools.cc: datatools.h

@@ -1159,7 +1159,7 @@ void KPresenterDoc::insertObject( const KRect& _rect, KoDocumentEntry& _e, int _
     if ( CORBA::is_nil( doc ) )
         return;
 
-    if ( !doc->init() )
+    if ( !doc->initDoc() )
     {
         QMessageBox::critical( ( QWidget* )0L, i18n( "KPresenter Error" ), i18n( "Could not init" ), i18n( "OK" ) );
         return;

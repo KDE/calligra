@@ -156,7 +156,7 @@ bool KPresenterShell::newDocument()
     }
 
     m_pDoc = new KPresenterDoc;
-    if ( !m_pDoc->init() )
+    if ( !m_pDoc->initDoc() )
     { // user selected cancel
         releaseDocument();
         return false;
