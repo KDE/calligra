@@ -63,7 +63,7 @@
 GDocument::GDocument (KIllustratorDocument *_doc)
 :doc(_doc)
 {
-  initialize ();
+    initialize ();
 }
 
 GDocument::~GDocument ()
@@ -287,7 +287,7 @@ bool GDocument::readFromXml (const  QDomDocument &document)
     gridSnapIsOn = (grid.attribute("align").toInt() == 1);
     gridIsOn = (grid.attribute("show").toInt() == 1);
     mGridColor.setNamedColor(grid.attribute("color"));
-    
+
     QDomElement helplines=grid.namedItem("helplines").toElement();
     helplinesSnapIsOn = (helplines.attribute("align").toInt() == 1);
     helplinesAreOn = (helplines.attribute("show").toInt() == 1);

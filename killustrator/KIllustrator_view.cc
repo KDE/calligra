@@ -1345,6 +1345,8 @@ void KIllustratorView::createLayerPanel(bool calledFromAction)
    connect(mLayerDockBase, SIGNAL(visibleChange(bool)), SLOT(slotLayersPanel(bool)));
    connect( m_showLayers, SIGNAL(toggled(bool)), mLayerDockBase, SLOT(makeVisible(bool)));
    slotLayersPanel(false);
+   mLayerPanel->stateOfButton();
+
    if (calledFromAction)
       mLayerDockBase->makeVisible(calledFromAction);
 }

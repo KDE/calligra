@@ -59,6 +59,7 @@ LayerPanel::LayerPanel (QWidget* parent, const char* name) :
     btn_dl->setPixmap (SmallIcon ("deletelayer",KIllustratorFactory::global()));
     connect (btn_dl, SIGNAL (clicked ()), SLOT (deletePressed ()));
     mGrid->addWidget( btn_dl, 0, 3 );
+    stateOfButton();
 }
 
 void LayerPanel::manageDocument (GDocument* doc) {
@@ -69,11 +70,13 @@ void LayerPanel::manageDocument (GDocument* doc) {
 void LayerPanel::upPressed () {
   document->activePage()->raiseLayer (document->activePage()->activeLayer ());
   layerView->setActiveDocument (document);
+  upDownButton();
 }
 
 void LayerPanel::downPressed () {
   document->activePage()->lowerLayer (document->activePage()->activeLayer ());
   layerView->setActiveDocument (document);
+  upDownButton();
 }
 
 void LayerPanel::newPressed () {
@@ -81,11 +84,29 @@ void LayerPanel::newPressed () {
   document->activePage()->setActiveLayer (layer);
   // force update
   layerView->setActiveDocument (document);
+  stateOfButton();
 }
 
 void LayerPanel::deletePressed () {
   document->activePage()->deleteLayer (document->activePage()->activeLayer ());
   layerView->setActiveDocument (document);
+  stateOfButton();
+}
+void LayerPanel::stateOfButton(){
+    if(document && document->activePage())
+    {
+        bool state=document->activePage()->getLayers().count()>1;
+        btn_dl->setEnabled(state);
+        btn_rl->setEnabled(state);
+        btn_ll->setEnabled(state);
+        upDownButton();
+    }
+}
+
+void LayerPanel::upDownButton(){
+    QList<GLayer> list =document->activePage()->getLayers();
+    btn_ll->setEnabled(list.first()!=document->activePage()->activeLayer ());
+    btn_rl->setEnabled(list.last()!=document->activePage()->activeLayer ());
 }
 
 #include <LayerPanel.moc>

@@ -37,7 +37,8 @@ public:
   LayerPanel (QWidget* parent = 0L, const char* name = 0L);
 
   void manageDocument (GDocument* doc);
-
+    void stateOfButton();
+    void upDownButton();
 private slots:
   void upPressed ();
   void downPressed ();
