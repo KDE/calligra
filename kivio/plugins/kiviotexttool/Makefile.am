@@ -3,7 +3,7 @@
 #### WARNING! All changes made in this part will be lost! ####
 ##############################################################
 
-kde_module_LTLIBRARIES =libkiviotexttool.la
+lib_LTLIBRARIES =libkiviotexttool.la
 
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\

@@ -3,7 +3,7 @@
 #### WARNING! All changes made in this part will be lost! ####
 ##############################################################
 SUBDIRS = zoom_pics 
-kde_module_LTLIBRARIES =libkiviozoomtool.la
+lib_LTLIBRARIES =libkiviozoomtool.la
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\

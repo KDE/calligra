@@ -3,7 +3,7 @@
 #### WARNING! All changes made in this part will be lost! ####
 ##############################################################
 SUBDIRS = straight_connector 
-kde_module_LTLIBRARIES =libkivioconnectortool.la
+lib_LTLIBRARIES =libkivioconnectortool.la
 
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
