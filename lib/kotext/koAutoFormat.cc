@@ -180,6 +180,8 @@ void KoAutoFormat::readConfig()
         return;
     KConfig config("kofficerc");
     KConfigGroupSaver cgs( &config, "AutoFormat" );
+    m_autoFormatLanguage = config.readEntry("formatLanguage", QString::null);
+
     m_convertUpperCase = config.readBoolEntry( "ConvertUpperCase", false );
     m_convertUpperUpper = config.readBoolEntry( "ConvertUpperUpper", false );
     m_includeTwoUpperLetterException = config.readBoolEntry( "includeTwoLetterException", false );
@@ -436,6 +438,8 @@ void KoAutoFormat::saveConfig()
     KLocale klocale(m_doc->instance()->instanceName());
     KConfigGroupSaver cgs( &config, "AutoFormat" );
     config.writeEntry( "ConvertUpperCase", m_convertUpperCase );
+    config.writeEntry( "formatLanguage", m_autoFormatLanguage);
+
     config.writeEntry( "ConvertUpperUpper", m_convertUpperUpper );
     config.writeEntry( "includeTwoLetterException", m_includeTwoUpperLetterException );
     config.writeEntry( "includeAbbreviation", m_includeAbbreviation );

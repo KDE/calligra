@@ -592,6 +592,7 @@ void KoAutoFormatDia::initTab3()
     {
         ( void )new QListViewItem( m_pListView, it.currentKey(), it.current()->replace() );
     }
+    autoFormatLanguage->setCurrentText(m_autoFormat.getConfigAutoFormatLanguage( ));
 }
 
 void KoAutoFormatDia::setupTab4()
@@ -811,6 +812,12 @@ bool KoAutoFormatDia::applyConfig()
 
     m_docAutoFormat->configIncludeTwoUpperUpperLetterException( twoUpperLetter->autoInclude());
     m_docAutoFormat->configIncludeAbbreviation( abbreviation->autoInclude());
+
+    QString lang = autoFormatLanguage->currentText();
+    if ( lang == i18n("Default") )
+        m_docAutoFormat->configAutoFormatLanguage(QString::null);
+    else
+        m_docAutoFormat->configAutoFormatLanguage(lang);
 
     // Save to config file
     m_docAutoFormat->saveConfig();
