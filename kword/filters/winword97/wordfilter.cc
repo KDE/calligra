@@ -5,8 +5,7 @@
 #include "wordfilter.h"
 
 WordFilter::WordFilter(myFile in) {
-    doc=in;
-    myDoc=new WinWordDoc(doc);
+    myDoc=new WinWordDoc(in);
     myKwd=new KWordDoc();
 }
 
@@ -18,8 +17,8 @@ WordFilter::~WordFilter() {
 }
 
 bool WordFilter::filterIt() {
-    // not very interesting at the moment ;)
-    return true;
+    // not very interesting at the moment
+    return false;  // was not able to convert ;)
 }
 
 QString WordFilter::kwdFile() {

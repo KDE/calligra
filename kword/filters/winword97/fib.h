@@ -7,7 +7,7 @@
 #ifndef FIB_H
 #define FIB_H
 
-struct {
+struct FIB {
     unsigned short wIdent;    // 0, fibh
     unsigned short nFib;
     unsigned short nProduct;
@@ -264,5 +264,5 @@ struct {
     unsigned long lcbSttbListNames;
     long fcSttbfUssr;   // 890
     unsigned long lcbSttbfUssr;
-} FIB;
+};
 #endif // FIB_H
