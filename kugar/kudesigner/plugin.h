@@ -25,6 +25,7 @@ class QString;
 class CanvasBox;
 class QWidget;
 class Property;
+class CanvasReportItem;
 
 class KuDesignerPlugin: public QObject {
 	Q_OBJECT
@@ -34,6 +35,7 @@ public:
         virtual bool acceptsDrops(){return false;}
 	virtual bool dragMove(QDragMoveEvent *,CanvasBox *cb) {return false;}
 	virtual void newCanvasBox(int type, CanvasBox *cb){;}
+        virtual void modifyItemPropertyOnLoad(CanvasReportItem *item,QString &propertyName,QString &propertyValue){;}
 public slots:
     virtual void createPluggedInEditor(QWidget *& retVal, PropertyEditor *editor,
         Property *property,CanvasBox *);
