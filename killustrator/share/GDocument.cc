@@ -571,7 +571,7 @@ bool GDocument::parseBody (const QDomElement &element, QList<GObject>& /*newObjs
             QDomNode cn=layerelem.firstChild();
             while(!cn.isNull()) {
                 QDomElement child=cn.toElement();
-                obj=KIllustrator::objectFactory(child);
+                obj=KIllustrator::objectFactory(child, document());
                 if(!obj) {
                     GObject *proto = GObject::lookupPrototype (child.tagName());
                     if (proto != 0L) {

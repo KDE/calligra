@@ -48,6 +48,7 @@ class GLayer;
 class GCurve;
 class QDomDocument;
 class QDomElement;
+class KIllustratorDocument;
 
 /**
  * The base class for all graphical objects.
@@ -433,7 +434,7 @@ inline float seg_length (const Coord& c1, const Coord& c2) {
 namespace KIllustrator {
     QDomElement createMatrixElement(const QString &tag, const QWMatrix &matrix, QDomDocument &document);
     QWMatrix toMatrix(const QDomElement &matrix);
-    GObject *objectFactory(const QDomElement &element);
+    GObject *objectFactory(const QDomElement &element, KIllustratorDocument *doc = 0);
 };
 
 #endif

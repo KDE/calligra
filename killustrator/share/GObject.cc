@@ -40,6 +40,7 @@
 #include <Gradient.h>
 #include <GPixmap.h>
 #include <GCurve.h>
+#include "../koffice/GPart.h"
 
 GObject::OutlineInfo GObject::defaultOutlineInfo;
 GObject::FillInfo GObject::defaultFillInfo;
@@ -503,8 +504,9 @@ QWMatrix KIllustrator::toMatrix(const QDomElement &matrix) {
     return QWMatrix(m11, m12, m21, m22, dx, dy);
 }
 
-GObject *KIllustrator::objectFactory(const QDomElement &element) {
-
+GObject *KIllustrator::objectFactory(const QDomElement &element, KIllustratorDocument *doc) {
+    if (element.tagName () == "object")
+        return new GPart (doc, element);
     if (element.tagName () == "polyline")
         return new GPolyline (element);
     else if (element.tagName () == "ellipse")
