@@ -1215,9 +1215,11 @@ QDomDocument KoDocument::createDomDocument( const QString& appName, const QStrin
     QDomImplementation impl;
     QString url = QString("http://www.koffice.org/DTD/%1-%1.dtd").arg(appName).arg(version);
     QDomDocumentType dtype = impl.createDocumentType( tagName,
-                                                      QString("-//KDE//DTD %1 %1//EN").arg(tagName).arg(version),
+                                                      QString("-//KDE//DTD %1 %1//EN").arg(appName).arg(version),
                                                       url );
-    QDomDocument doc = impl.createDocument( url, tagName, dtype );
+    // The namespace URN doesn't need to include the version number.
+    QString namespaceURN = QString("http://www.koffice.org/DTD/%1").arg(appName);
+    QDomDocument doc = impl.createDocument( namespaceURN, tagName, dtype );
     doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
     return doc;
 }
