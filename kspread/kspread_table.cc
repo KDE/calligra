@@ -180,6 +180,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   m_pMap = _map;
   m_pDoc = _map->doc();
   m_dcop = 0;
+  dcopObject();
   m_bShowPageBorders = FALSE;
 
   m_lstCellBindings.setAutoDelete( FALSE );
@@ -5320,6 +5321,7 @@ KSpreadTable::~KSpreadTable()
     delete m_pWidget;
 
     delete m_defaultLayout;
+    delete m_dcop;
 }
 
 void KSpreadTable::enableScrollBarUpdates( bool _enable )
