@@ -366,7 +366,16 @@ void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect, KPrPage * 
             eraseEmptySpace( painter, grayRegion, QApplication::palette().active().brush( QColorGroup::Mid ) );
     }
     else
-        page->background()->draw( painter, m_view->zoomHandler(), rect, false );
+    {
+        // Old code, left a black area if zoomX != zoomY
+        //page->background()->draw( painter, m_view->zoomHandler(), rect, false );
+
+        QRect desk = KGlobalSettings::desktopGeometry(getView());
+        QRect crect = desk.intersect( rect );
+        if ( crect.isEmpty() )
+            return;
+        page->background()->draw( painter, desk.size(), crect, false );
+    }
 }
 
 
@@ -3090,10 +3099,13 @@ void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNu
     m_activePageBeforePresentation = doc->activePage();
     doc->displayActivePage( doc->pageList().at( curPgNum-1 ) );
 
-    m_zoomBeforePresentation = doc->zoomHandler()->zoom();
-    doc->zoomHandler()->setZoomedResolution( zoomX, zoomY );
-    doc->newZoomAndResolution( false, false );
+    // Text can't zoom with a different x and y factor, yet.
+    // So we have to choose the smallest zoom (but still paint background everywhere)
+    double zoom = kMin( zoomX, zoomY );
 
+    m_zoomBeforePresentation = doc->zoomHandler()->zoom();
+    doc->zoomHandler()->setZoomedResolution( zoom, zoom );
+    doc->newZoomAndResolution( false, false );
 
     // add all selected slides
     m_presentationSlides.clear();
@@ -3223,7 +3235,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
         if ( !spManualSwitch() && m_setPageTimer )
         {
             //TODO add global presentation speed
-            m_view->setAutoPresTimer( doc->pageList().at( (*m_presentationSlidesIterator) - 1 )->getPageTimer() / 1 ); 
+            m_view->setAutoPresTimer( doc->pageList().at( (*m_presentationSlidesIterator) - 1 )->getPageTimer() / 1 );
             m_setPageTimer = false;
             return false;
         }
