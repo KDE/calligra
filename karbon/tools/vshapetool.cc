@@ -9,6 +9,7 @@
 #include "karbon_view.h"
 #include "vshapetool.h"
 
+
 VShapeTool::VShapeTool( KarbonPart* part, bool polar )
 	: VTool( part ), m_calcPolar( polar ),
 		m_isDragging( false ), m_isSquare( false ),
@@ -180,3 +181,4 @@ VShapeTool::eventFilter( KarbonView* view, QEvent* event )
 
 	return false;
 }
+

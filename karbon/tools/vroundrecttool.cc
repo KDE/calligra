@@ -4,17 +4,17 @@
 */
 
 #include "karbon_view.h"
-#include "vctool_roundrect.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vpath.h"
-#include "vroundrectcmd.h"	// command
-#include "vroundrectdlg.h"	// dialog
+#include "vroundrectcmd.h"
+#include "vroundrectdlg.h"
+#include "vroundrecttool.h"
 
 
-VCToolRoundRect* VCToolRoundRect::s_instance = 0L;
+VRoundRectTool* VRoundRectTool::s_instance = 0L;
 
-VCToolRoundRect::VCToolRoundRect( KarbonPart* part )
+VRoundRectTool::VRoundRectTool( KarbonPart* part )
 	: VShapeTool( part )
 {
 	// create config dialog:
@@ -24,17 +24,17 @@ VCToolRoundRect::VCToolRoundRect( KarbonPart* part )
 	m_dialog->setRound( 20.0 );
 }
 
-VCToolRoundRect::~VCToolRoundRect()
+VRoundRectTool::~VRoundRectTool()
 {
 	delete( m_dialog );
 }
 
-VCToolRoundRect*
-VCToolRoundRect::instance( KarbonPart* part )
+VRoundRectTool*
+VRoundRectTool::instance( KarbonPart* part )
 {
 	if ( s_instance == 0L )
 	{
-		s_instance = new VCToolRoundRect( part );
+		s_instance = new VRoundRectTool( part );
 	}
 
 	s_instance->m_part = part;
@@ -42,7 +42,7 @@ VCToolRoundRect::instance( KarbonPart* part )
 }
 
 void
-VCToolRoundRect::drawTemporaryObject(
+VRoundRectTool::drawTemporaryObject(
 	KarbonView* view, const KoPoint& p, double d1, double d2 )
 {
 	VPainter *painter = view->painterFactory()->editpainter();
@@ -60,7 +60,7 @@ VCToolRoundRect::drawTemporaryObject(
 }
 
 VCommand*
-VCToolRoundRect::createCmd( double x, double y, double d1, double d2 )
+VRoundRectTool::createCmd( double x, double y, double d1, double d2 )
 {
 	if( d1 <= 1.0 && d2 <= 1.0 )
 	{
@@ -84,7 +84,7 @@ VCToolRoundRect::createCmd( double x, double y, double d1, double d2 )
 }
 
 void
-VCToolRoundRect::showDialog() const
+VRoundRectTool::showDialog() const
 {
 	m_dialog->exec();
 }

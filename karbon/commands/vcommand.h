@@ -7,16 +7,18 @@
 #define __VCOMMAND_H__
 
 #include <assert.h>
+
 #include <kcommand.h>
 
 #include "karbon_part.h"
+
 
 class VDocument;
 
 class VCommand : public KNamedCommand
 {
 public:
-	VCommand( VDocument *doc, const QString& name )
+	VCommand( VDocument* doc, const QString& name )
 		: KNamedCommand( name ), m_doc( doc )
 	{
 		assert( doc );
@@ -27,7 +29,7 @@ public:
 	virtual void unexecute() {}
 
 protected:
-	VDocument *m_doc;
+	VDocument* m_doc;
 };
 
 

@@ -10,36 +10,36 @@ INCLUDES = $(KOFFICE_INCLUDES) \
 noinst_LTLIBRARIES = libkarbontools.la
 
 noinst_HEADERS = \
-	vctool_ellipse.h \
-	vctool_polygon.h \
-	vctool_rectangle.h \
-	vctool_roundrect.h \
-	vctool_sinus.h \
-	vctool_spiral.h \
-	vctool_star.h \
-	vmtool_handle.h \
-	vmtool_select.h \
-	vmtool_rotate.h \
-	vmtool_scale.h \
-	vmtool_shear.h \
-	vtool.h \
-	vshapetool.h 
+	vellipsetool.h \
+	vhandletool.h \
+	vpolygontool.h \
+	vrectangletool.h \
+	vrotatetool.h \
+	vroundrecttool.h \
+	vscaletool.h \
+	vselecttool.h \
+	vshapetool.h \
+	vsheartool.h \
+	vsinustool.h \
+	vspiraltool.h \
+	vstartool.h \
+	vtool.h
 
 libkarbontools_la_SOURCES = \
-	vctool_ellipse.cc \
-	vctool_polygon.cc \
-	vctool_rectangle.cc \
-	vctool_roundrect.cc \
-	vctool_sinus.cc \
-	vctool_spiral.cc \
-	vctool_star.cc \
-	vmtool_handle.cc \
-	vmtool_select.cc \
-	vmtool_rotate.cc \
-	vmtool_scale.cc \
-	vmtool_shear.cc \
-	vtool.cc \
-	vshapetool.cc 
+	vellipsetool.cc \
+	vhandletool.cc \
+	vpolygontool.cc \
+	vrectangletool.cc \
+	vrotatetool.cc \
+	vroundrecttool.cc \
+	vscaletool.cc \
+	vselecttool.cc \
+	vshapetool.cc \
+	vsheartool.cc \
+	vsinustool.cc \
+	vspiraltool.cc \
+	vstartool.cc \
+	vtool.cc
 
 libkarbontools_la_METASOURCES = \
 	AUTO

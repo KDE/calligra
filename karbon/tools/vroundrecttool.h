@@ -3,34 +3,36 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VCTOOLELLIPSE_H__
-#define __VCTOOLELLIPSE_H__
+#ifndef __VROUNDRECTTOOL_H__
+#define __VROUNDRECTTOOL_H__
 
 #include "vshapetool.h"
 
 class KarbonPart;
-class VEllipseDlg;
+class VRoundRectDlg;
 
-// A singleton state to create an ellipse
+// A singleton state to create a rectangle.
 
-class VCToolEllipse : public VShapeTool
+class VRoundRectTool : public VShapeTool
 {
 public:
-	virtual ~VCToolEllipse();
-	static VCToolEllipse* instance( KarbonPart* part );
+	virtual ~VRoundRectTool();
+	static VRoundRectTool* instance( KarbonPart* part );
 
 	virtual VCommand* createCmd( double x, double y, double d1, double d2 );
 
 	virtual void drawTemporaryObject(
 		KarbonView* view, const KoPoint& p, double d1, double d2 );
 
+	virtual void showDialog() const;
+
 protected:
-	VCToolEllipse( KarbonPart* part );
+	VRoundRectTool( KarbonPart* part );
 
 private:
-	static VCToolEllipse* s_instance;
+	static VRoundRectTool* s_instance;
 
-	VEllipseDlg* m_dialog;
+	VRoundRectDlg* m_dialog;
 };
 
 #endif

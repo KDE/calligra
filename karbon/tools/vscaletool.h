@@ -3,21 +3,21 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VMTOOLROTATE_H__
-#define __VMTOOLROTATE_H__
+#ifndef __VSCALETOOL_H__
+#define __VSCALETOOL_H__
 
 #include "vtool.h"
 
 class KarbonPart;
 class KarbonView;
 
-// A singleton state to rotate object(s)
+// A singleton state to scale object(s)
 
-class VMToolRotate : public VTool
+class VScaleTool : public VTool
 {
 public:
-	virtual ~VMToolRotate();
-	static VMToolRotate* instance( KarbonPart* part );
+	virtual ~VScaleTool();
+	static VScaleTool* instance( KarbonPart* part );
 
 	virtual bool eventFilter( KarbonView* view, QEvent* event );
 
@@ -25,21 +25,22 @@ public:
 	void drawTemporaryObject( KarbonView* view );
 
 protected:
-	VMToolRotate( KarbonPart* part );
+	VScaleTool( KarbonPart* part );
 
 	void setCursor( KarbonView* view ) const;
 
 private:
-	static VMToolRotate* s_instance;
+	static VScaleTool* s_instance;
 
 	// input (mouse coordinates):
 	KoPoint m_fp;
 	KoPoint m_lp;
-	KoPoint m_sp;
 
-	double m_angle;
+	double m_s1, m_s2;
+	KoPoint m_sp;
 
 	bool m_isDragging;
 };
 
 #endif
+

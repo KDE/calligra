@@ -3,8 +3,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VCTOOLRECTANGLE_H__
-#define __VCTOOLRECTANGLE_H__
+#ifndef __VRECTANGLETOOL_H__
+#define __VRECTANGLETOOL_H__
 
 #include "vshapetool.h"
 
@@ -13,11 +13,11 @@ class VRectangleDlg;
 
 // A singleton state to create a rectangle.
 
-class VCToolRectangle : public VShapeTool
+class VRectangleTool : public VShapeTool
 {
 public:
-	virtual ~VCToolRectangle();
-	static VCToolRectangle* instance( KarbonPart* part );
+	virtual ~VRectangleTool();
+	static VRectangleTool* instance( KarbonPart* part );
 
 	virtual VCommand* createCmd( double x, double y, double d1, double d2 );
 
@@ -25,10 +25,10 @@ public:
 		KarbonView* view, const KoPoint& p, double d1, double d2 );
 
 protected:
-	VCToolRectangle( KarbonPart* part );
+	VRectangleTool( KarbonPart* part );
 
 private:
-	static VCToolRectangle* s_instance;
+	static VRectangleTool* s_instance;
 
 	VRectangleDlg* m_dialog;
 };

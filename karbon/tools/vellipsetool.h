@@ -3,36 +3,34 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VCTOOLSTAR_H__
-#define __VCTOOLSTAR_H__
+#ifndef __VELLIPSETOOL_H__
+#define __VELLIPSETOOL_H__
 
 #include "vshapetool.h"
 
 class KarbonPart;
-class VStarDlg;
+class VEllipseDlg;
 
-// A singleton state to create a star
+// A singleton state to create an ellipse
 
-class VCToolStar : public VShapeTool
+class VEllipseTool : public VShapeTool
 {
 public:
-	virtual ~VCToolStar();
-	static VCToolStar* instance( KarbonPart* part );
+	virtual ~VEllipseTool();
+	static VEllipseTool* instance( KarbonPart* part );
 
 	virtual VCommand* createCmd( double x, double y, double d1, double d2 );
 
 	virtual void drawTemporaryObject(
 		KarbonView* view, const KoPoint& p, double d1, double d2 );
 
-    virtual void showDialog() const;
-
 protected:
-	VCToolStar( KarbonPart* part );
+	VEllipseTool( KarbonPart* part );
 
 private:
-	static VCToolStar* s_instance;
+	static VEllipseTool* s_instance;
 
-	VStarDlg* m_dialog;
+	VEllipseDlg* m_dialog;
 };
 
 #endif

@@ -9,31 +9,31 @@
 
 #include "karbon_part.h"
 #include "karbon_view.h"
-#include "vmtool_handle.h"
+#include "vhandletool.h"
 
 #include <kdebug.h>
 
 #define HANDLE_SIZE 3
 
 
-VMToolHandle* VMToolHandle::s_instance = 0L;
+VHandleTool* VHandleTool::s_instance = 0L;
 
-VMToolHandle::VMToolHandle( KarbonPart* part )
+VHandleTool::VHandleTool( KarbonPart* part )
 	: VTool( part )
 {
 	m_activeNode = NODE_MM;
 }
 
-VMToolHandle::~VMToolHandle()
+VHandleTool::~VHandleTool()
 {
 }
 
-VMToolHandle*
-VMToolHandle::instance( KarbonPart* part )
+VHandleTool*
+VHandleTool::instance( KarbonPart* part )
 {
 	if ( s_instance == 0L )
 	{
-		s_instance = new VMToolHandle( part );
+		s_instance = new VHandleTool( part );
 	}
 
 	s_instance->m_part = part;
@@ -41,7 +41,7 @@ VMToolHandle::instance( KarbonPart* part )
 }
 
 void
-VMToolHandle::drawBox( QPainter& painter, short index )
+VHandleTool::drawBox( QPainter& painter, short index )
 {
 	painter.setPen( Qt::blue.light() );
 	painter.setBrush( Qt::white );
@@ -56,7 +56,7 @@ computeRect( double cx, double cy, const double zoomFactor )
 }
 
 void
-VMToolHandle::draw( QPainter& painter, const double zoomFactor )
+VHandleTool::draw( QPainter& painter, const double zoomFactor )
 {
 	painter.setBrush( Qt::NoBrush );
 	painter.setPen( Qt::blue.light() );
@@ -90,9 +90,9 @@ VMToolHandle::draw( QPainter& painter, const double zoomFactor )
 }
 
 bool
-VMToolHandle::eventFilter( KarbonView* view, QEvent* event )
+VHandleTool::eventFilter( KarbonView* view, QEvent* event )
 {
-	kdDebug() << "VMToolHandle::eventFilter" << endl;
+	kdDebug() << "VHandleTool::eventFilter" << endl;
 	m_activeNode = NODE_MM;
 
 	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
@@ -144,7 +144,7 @@ VMToolHandle::eventFilter( KarbonView* view, QEvent* event )
 }
 
 short
-VMToolHandle::activeNode() const
+VHandleTool::activeNode() const
 {
 	return m_activeNode;
 }

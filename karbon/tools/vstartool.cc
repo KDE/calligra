@@ -4,17 +4,17 @@
 */
 
 #include "karbon_view.h"
-#include "vctool_star.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vpath.h"
-#include "vstarcmd.h"	// command
-#include "vstardlg.h"	// dialog
+#include "vstarcmd.h"
+#include "vstardlg.h"
+#include "vstartool.h"
 
 
-VCToolStar* VCToolStar::s_instance = 0L;
+VStarTool* VStarTool::s_instance = 0L;
 
-VCToolStar::VCToolStar( KarbonPart* part )
+VStarTool::VStarTool( KarbonPart* part )
 	: VShapeTool( part, true )
 {
 	// create config dialog:
@@ -24,17 +24,17 @@ VCToolStar::VCToolStar( KarbonPart* part )
 	m_dialog->setEdges( 5 );
 }
 
-VCToolStar::~VCToolStar()
+VStarTool::~VStarTool()
 {
 	delete( m_dialog );
 }
 
-VCToolStar*
-VCToolStar::instance( KarbonPart* part )
+VStarTool*
+VStarTool::instance( KarbonPart* part )
 {
 	if ( s_instance == 0L )
 	{
-		s_instance = new VCToolStar( part );
+		s_instance = new VStarTool( part );
 	}
 
 	s_instance->m_part = part;
@@ -42,7 +42,7 @@ VCToolStar::instance( KarbonPart* part )
 }
 
 void
-VCToolStar::drawTemporaryObject(
+VStarTool::drawTemporaryObject(
 	KarbonView* view, const KoPoint& p, double d1, double d2 )
 {
 	VPainter *painter = view->painterFactory()->editpainter();
@@ -64,7 +64,7 @@ VCToolStar::drawTemporaryObject(
 }
 
 VCommand*
-VCToolStar::createCmd( double x, double y, double d1, double d2 )
+VStarTool::createCmd( double x, double y, double d1, double d2 )
 {
 	if( d1 <= 1.0 )
 	{
@@ -89,7 +89,7 @@ VCToolStar::createCmd( double x, double y, double d1, double d2 )
 }
 
 void
-VCToolStar::showDialog() const
+VStarTool::showDialog() const
 {
 	m_dialog->exec();
 }

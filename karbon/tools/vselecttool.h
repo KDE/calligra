@@ -3,21 +3,21 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VMTOOLSCALE_H__
-#define __VMTOOLSCALE_H__
+#ifndef __VSELECTTOOL_H__
+#define __VSELECTTOOL_H__
 
 #include "vtool.h"
 
 class KarbonPart;
 class KarbonView;
 
-// A singleton state to scale object(s)
+// A singleton state to select object(s)
 
-class VMToolScale : public VTool
+class VSelectTool : public VTool
 {
 public:
-	virtual ~VMToolScale();
-	static VMToolScale* instance( KarbonPart* part );
+	virtual ~VSelectTool();
+	static VSelectTool* instance( KarbonPart* part );
 
 	virtual bool eventFilter( KarbonView* view, QEvent* event );
 
@@ -25,21 +25,18 @@ public:
 	void drawTemporaryObject( KarbonView* view );
 
 protected:
-	VMToolScale( KarbonPart* part );
-
-	void setCursor( KarbonView* view ) const;
+	VSelectTool( KarbonPart* part );
 
 private:
-	static VMToolScale* s_instance;
+	static VSelectTool* s_instance;
+	enum { normal, moving, scaling, rotating } m_state;
 
 	// input (mouse coordinates):
 	KoPoint m_fp;
 	KoPoint m_lp;
 
-	double m_s1, m_s2;
-	KoPoint m_sp;
-
 	bool m_isDragging;
 };
 
 #endif
+

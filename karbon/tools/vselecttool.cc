@@ -3,37 +3,38 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#include <math.h>
+
 #include <koRect.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"
-#include "vmtool_handle.h"
-#include "vmtool_select.h"
+#include "vhandletool.h"
+#include "vselecttool.h"
 #include "vpainterfactory.h"
 #include "vpainter.h"
 #include "vtransformcmd.h"
 
 #include <kdebug.h>
 
-#include <math.h>
 
-VMToolSelect* VMToolSelect::s_instance = 0L;
+VSelectTool* VSelectTool::s_instance = 0L;
 
-VMToolSelect::VMToolSelect( KarbonPart* part )
+VSelectTool::VSelectTool( KarbonPart* part )
 	: VTool( part ), m_state( normal ), m_isDragging( false )
 {
 }
 
-VMToolSelect::~VMToolSelect()
+VSelectTool::~VSelectTool()
 {
 }
 
-VMToolSelect*
-VMToolSelect::instance( KarbonPart* part )
+VSelectTool*
+VSelectTool::instance( KarbonPart* part )
 {
 	if ( s_instance == 0L )
 	{
-		s_instance = new VMToolSelect( part );
+		s_instance = new VSelectTool( part );
 	}
 
 	s_instance->m_part = part;
@@ -41,7 +42,7 @@ VMToolSelect::instance( KarbonPart* part )
 }
 
 void
-VMToolSelect::drawTemporaryObject( KarbonView* view )
+VSelectTool::drawTemporaryObject( KarbonView* view )
 {
 	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
@@ -101,7 +102,7 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 }
 
 bool
-VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
+VSelectTool::eventFilter( KarbonView* view, QEvent* event )
 {
 	if ( event->type() == QEvent::MouseMove && m_isDragging )
 	{
@@ -191,7 +192,7 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 	if ( event->type() == QEvent::MouseButtonPress )
 	{
 		view->painterFactory()->painter()->end();
-		VMToolHandle::instance( m_part )->eventFilter( view, event );
+		VHandleTool::instance( m_part )->eventFilter( view, event );
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*>( event );
 		m_fp.setX( mouse_event->pos().x() );
 		m_fp.setY( mouse_event->pos().y() );
@@ -207,3 +208,4 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 
 	return false;
 }
+

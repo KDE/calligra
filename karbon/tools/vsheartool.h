@@ -3,8 +3,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VMTOOLSHEAR_H__
-#define __VMTOOLSHEAR_H__
+#ifndef __VSHEARTOOL_H__
+#define __VSHEARTOOL_H__
 
 #include "vtool.h"
 
@@ -13,11 +13,11 @@ class KarbonView;
 
 // A singleton state to scale object(s)
 
-class VMToolShear : public VTool
+class VShearTool : public VTool
 {
 public:
-	virtual ~VMToolShear();
-	static VMToolShear* instance( KarbonPart* part );
+	virtual ~VShearTool();
+	static VShearTool* instance( KarbonPart* part );
 
 	virtual bool eventFilter( KarbonView* view, QEvent* event );
 
@@ -25,12 +25,12 @@ public:
 	void drawTemporaryObject( KarbonView* view );
 
 protected:
-	VMToolShear( KarbonPart* part );
+	VShearTool( KarbonPart* part );
 
 	void setCursor( KarbonView* view ) const;
 
 private:
-	static VMToolShear* s_instance;
+	static VShearTool* s_instance;
 
 	// input (mouse coordinates):
 	KoPoint m_fp;
@@ -42,3 +42,4 @@ private:
 };
 
 #endif
+

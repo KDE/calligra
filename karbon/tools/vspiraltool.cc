@@ -4,36 +4,38 @@
 */
 
 #include "karbon_view.h"
-#include "vctool_polygon.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vpath.h"
-#include "vpolygoncmd.h"	// command
-#include "vpolygondlg.h"	// dialog
+#include "vspiralcmd.h"
+#include "vspiraldlg.h"
+#include "vspiraltool.h"
 
 
-VCToolPolygon* VCToolPolygon::s_instance = 0L;
+VSpiralTool* VSpiralTool::s_instance = 0L;
 
-VCToolPolygon::VCToolPolygon( KarbonPart* part )
+VSpiralTool::VSpiralTool( KarbonPart* part )
 	: VShapeTool( part, true )
 {
 	// create config dialog:
-	m_dialog = new VPolygonDlg();
+	m_dialog = new VSpiralDlg();
 	m_dialog->setRadius( 100.0 );
-	m_dialog->setEdges( 5 );
+	m_dialog->setSegments( 8 );
+	m_dialog->setFade( 0.8 );
+	m_dialog->setClockwise( true );
 }
 
-VCToolPolygon::~VCToolPolygon()
+VSpiralTool::~VSpiralTool()
 {
 	delete( m_dialog );
 }
 
-VCToolPolygon*
-VCToolPolygon::instance( KarbonPart* part )
+VSpiralTool*
+VSpiralTool::instance( KarbonPart* part )
 {
 	if ( s_instance == 0L )
 	{
-		s_instance = new VCToolPolygon( part );
+		s_instance = new VSpiralTool( part );
 	}
 
 	s_instance->m_part = part;
@@ -41,16 +43,18 @@ VCToolPolygon::instance( KarbonPart* part )
 }
 
 void
-VCToolPolygon::drawTemporaryObject(
+VSpiralTool::drawTemporaryObject(
 	KarbonView* view, const KoPoint& p, double d1, double d2 )
 {
 	VPainter *painter = view->painterFactory()->editpainter();
 	
-	VPolygonCmd* cmd =
-		new VPolygonCmd( &part()->document(),
+	VSpiralCmd* cmd =
+		new VSpiralCmd( &part()->document(),
 			p.x(), p.y(),
 			d1,
-			m_dialog->edges(),
+			m_dialog->segments(),
+			m_dialog->fade(),
+			m_dialog->clockwise(),
 			d2 );
 
 	VObject* path = cmd->createPath();
@@ -62,30 +66,35 @@ VCToolPolygon::drawTemporaryObject(
 }
 
 VCommand*
-VCToolPolygon::createCmd( double x, double y, double d1, double d2 )
+VSpiralTool::createCmd( double x, double y, double d1, double d2 )
 {
 	if( d1 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VPolygonCmd( &part()->document(),
+				new VSpiralCmd( &part()->document(),
 					x, y,
 					m_dialog->radius(),
-					m_dialog->edges() );
+					m_dialog->segments(),
+					m_dialog->fade(),
+					m_dialog->clockwise(),
+					d2 );
 		else
 			return 0L;
 	}
 	else
 		return
-			new VPolygonCmd( &part()->document(),
+			new VSpiralCmd( &part()->document(),
 				x, y,
 				d1,
-				m_dialog->edges(),
+				m_dialog->segments(),
+				m_dialog->fade(),
+				m_dialog->clockwise(),
 				d2 );
 }
 
 void
-VCToolPolygon::showDialog() const
+VSpiralTool::showDialog() const
 {
 	m_dialog->exec();
 }

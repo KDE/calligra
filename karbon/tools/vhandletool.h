@@ -3,24 +3,24 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VMTOOLHANDLE_H__
-#define __VMTOOLHANDLE_H__
+#ifndef __VHANDLETOOL_H__
+#define __VHANDLETOOL_H__
 
 #include "vtool.h"
 
-class QPainter;
 class KarbonPart;
 class KoRect;
+class QPainter;
 
 // A singleton state to represent a handle.
 
 enum { NODE_LT, NODE_MT, NODE_RT, NODE_LM, NODE_MM, NODE_RM, NODE_LB, NODE_MB, NODE_RB };
 
-class VMToolHandle : public VTool
+class VHandleTool : public VTool
 {
 public:
-	virtual ~VMToolHandle();
-	static VMToolHandle* instance( KarbonPart* part );
+	virtual ~VHandleTool();
+	static VHandleTool* instance( KarbonPart* part );
 
 	void draw( QPainter& painter, const double zoomFactor );
 
@@ -31,10 +31,10 @@ public:
 	void drawBox( QPainter& painter, short index );
 
 protected:
-	VMToolHandle( KarbonPart* part );
+	VHandleTool( KarbonPart* part );
 
 private:
-	static VMToolHandle* s_instance;
+	static VHandleTool* s_instance;
 
 	KoRect m_bbox;
 	KoRect m_nodes[9];
@@ -42,3 +42,4 @@ private:
 };
 
 #endif
+

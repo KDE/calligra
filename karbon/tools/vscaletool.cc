@@ -12,29 +12,30 @@
 
 #include "karbon_part.h"
 #include "karbon_view.h"
-#include "vmtool_handle.h"
-#include "vmtool_scale.h"
+#include "vhandletool.h"
+#include "vscaletool.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vtransformcmd.h"
 
-VMToolScale* VMToolScale::s_instance = 0L;
 
-VMToolScale::VMToolScale( KarbonPart* part )
+VScaleTool* VScaleTool::s_instance = 0L;
+
+VScaleTool::VScaleTool( KarbonPart* part )
 	: VTool( part ), m_isDragging( false )
 {
 }
 
-VMToolScale::~VMToolScale()
+VScaleTool::~VScaleTool()
 {
 }
 
-VMToolScale*
-VMToolScale::instance( KarbonPart* part )
+VScaleTool*
+VScaleTool::instance( KarbonPart* part )
 {
 	if ( s_instance == 0L )
 	{
-		s_instance = new VMToolScale( part );
+		s_instance = new VScaleTool( part );
 	}
 
 	s_instance->m_part = part;
@@ -42,9 +43,9 @@ VMToolScale::instance( KarbonPart* part )
 }
 
 void
-VMToolScale::setCursor( KarbonView* view ) const
+VScaleTool::setCursor( KarbonView* view ) const
 {
-	switch( VMToolHandle::instance( m_part )->activeNode() )
+	switch( VHandleTool::instance( m_part )->activeNode() )
 	{
 	case NODE_LT:
 	case NODE_RB:	view->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeFDiagCursor ) );
@@ -63,7 +64,7 @@ VMToolScale::setCursor( KarbonView* view ) const
 }
 
 void
-VMToolScale::drawTemporaryObject( KarbonView* view )
+VScaleTool::drawTemporaryObject( KarbonView* view )
 {
 	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
@@ -73,54 +74,54 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 	KoRect rect = part()->document().selection().boundingBox();
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	if( !part()->document().selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
+	if( !part()->document().selection().isEmpty() && VHandleTool::instance( m_part )->activeNode() != NODE_MM )
 	{
 		setCursor( view );
 		// scale operation
 		QWMatrix mat;
-		if( VMToolHandle::instance( m_part )->activeNode() == NODE_LT )
+		if( VHandleTool::instance( m_part )->activeNode() == NODE_LT )
 		{
 			m_sp = KoPoint( rect.right(), rect.bottom() );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
 		}
-		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_MT )
+		else if( VHandleTool::instance( m_part )->activeNode() == NODE_MT )
 		{
 			m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.bottom() );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() / 2 );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
 		}
-		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RT )
+		else if( VHandleTool::instance( m_part )->activeNode() == NODE_RT )
 		{
 			m_sp = KoPoint( rect.x(), rect.bottom() );
 			m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
 		}
-		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RM)
+		else if( VHandleTool::instance( m_part )->activeNode() == NODE_RM)
 		{
 			m_sp = KoPoint( rect.x(), ( rect.bottom() + rect.top() )  / 2 );
 			m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() / 2 );
 		}
-		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RB )
+		else if( VHandleTool::instance( m_part )->activeNode() == NODE_RB )
 		{
 			m_sp = KoPoint( rect.x(), rect.y() );
 			m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
 			m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
 		}
-		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_MB )
+		else if( VHandleTool::instance( m_part )->activeNode() == NODE_MB )
 		{
 			m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.y() );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() / 2 );
 			m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
 		}
-		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_LB )
+		else if( VHandleTool::instance( m_part )->activeNode() == NODE_LB )
 		{
 			m_sp = KoPoint( rect.right(), rect.y() );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
 			m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
 		}
-		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_LM )
+		else if( VHandleTool::instance( m_part )->activeNode() == NODE_LM )
 		{
 			m_sp = KoPoint( rect.right(), ( rect.bottom() + rect.top() )  / 2 );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
@@ -155,7 +156,7 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 }
 
 bool
-VMToolScale::eventFilter( KarbonView* view, QEvent* event )
+VScaleTool::eventFilter( KarbonView* view, QEvent* event )
 {
 	if ( event->type() == QEvent::MouseMove )
 	{
@@ -173,7 +174,7 @@ VMToolScale::eventFilter( KarbonView* view, QEvent* event )
 		}
 		else
 		{
-			VMToolHandle::instance( m_part )->eventFilter( view, event );
+			VHandleTool::instance( m_part )->eventFilter( view, event );
 			setCursor( view );
 		}
 
@@ -218,7 +219,7 @@ VMToolScale::eventFilter( KarbonView* view, QEvent* event )
 	if ( event->type() == QEvent::MouseButtonPress )
 	{
 		view->painterFactory()->painter()->end();
-		VMToolHandle::instance( m_part )->eventFilter( view, event );
+		VHandleTool::instance( m_part )->eventFilter( view, event );
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*>( event );
 		m_fp.setX( mouse_event->pos().x() );
 		m_fp.setY( mouse_event->pos().y() );
@@ -234,3 +235,4 @@ VMToolScale::eventFilter( KarbonView* view, QEvent* event )
 
 	return false;
 }
+

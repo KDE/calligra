@@ -11,30 +11,30 @@
 
 #include "karbon_part.h"
 #include "karbon_view.h"
-#include "vmtool_handle.h"
-#include "vmtool_shear.h"
+#include "vhandletool.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
+#include "vsheartool.h"
 #include "vtransformcmd.h"
 
 
-VMToolShear* VMToolShear::s_instance = 0L;
+VShearTool* VShearTool::s_instance = 0L;
 
-VMToolShear::VMToolShear( KarbonPart* part )
+VShearTool::VShearTool( KarbonPart* part )
 	: VTool( part ), m_isDragging( false )
 {
 }
 
-VMToolShear::~VMToolShear()
+VShearTool::~VShearTool()
 {
 }
 
-VMToolShear*
-VMToolShear::instance( KarbonPart* part )
+VShearTool*
+VShearTool::instance( KarbonPart* part )
 {
 	if ( s_instance == 0L )
 	{
-		s_instance = new VMToolShear( part );
+		s_instance = new VShearTool( part );
 	}
 
 	s_instance->m_part = part;
@@ -42,9 +42,9 @@ VMToolShear::instance( KarbonPart* part )
 }
 
 void
-VMToolShear::setCursor( KarbonView* view ) const
+VShearTool::setCursor( KarbonView* view ) const
 {
-	switch( VMToolHandle::instance( m_part )->activeNode() )
+	switch( VHandleTool::instance( m_part )->activeNode() )
 	{
 	case NODE_LT:
 	case NODE_RB:	view->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeFDiagCursor ) );
@@ -63,44 +63,44 @@ VMToolShear::setCursor( KarbonView* view ) const
 }
 
 void
-VMToolShear::drawTemporaryObject( KarbonView* view )
+VShearTool::drawTemporaryObject( KarbonView* view )
 {
 	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	if( !part()->document().selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
+	if( !part()->document().selection().isEmpty() && VHandleTool::instance( m_part )->activeNode() != NODE_MM )
 	{
 		KoRect rect = part()->document().selection().boundingBox();
 
-		if( VMToolHandle::instance( m_part )->activeNode() == NODE_LT )
+		if( VHandleTool::instance( m_part )->activeNode() == NODE_LT )
 		{
 		}
-		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_MT )
+		else if( VHandleTool::instance( m_part )->activeNode() == NODE_MT )
 		{
 			m_s1 = 0;
 			m_s2 = ( m_lp.y() - m_fp.y() ) / double( ( rect.height() / 2 ) * view->zoom() );
 		}
-		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RT )
+		else if( VHandleTool::instance( m_part )->activeNode() == NODE_RT )
 		{
 		}
-		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RM)
+		else if( VHandleTool::instance( m_part )->activeNode() == NODE_RM)
 		{
 			m_s1 = ( m_lp.x() - m_fp.x() ) / double( ( rect.width() / 2 ) * view->zoom() );
 			m_s2 = 0;
 		}
-		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RB )
+		else if( VHandleTool::instance( m_part )->activeNode() == NODE_RB )
 		{
 		}
-		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_MB )
+		else if( VHandleTool::instance( m_part )->activeNode() == NODE_MB )
 		{
 			m_s1 = 0;
 			m_s2 = ( m_lp.y() - m_fp.y() ) / double( ( rect.height() / 2 ) * view->zoom() );
 		}
-		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_LB )
+		else if( VHandleTool::instance( m_part )->activeNode() == NODE_LB )
 		{
 		}
-		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_LM )
+		else if( VHandleTool::instance( m_part )->activeNode() == NODE_LM )
 		{
 			m_s1 = ( m_lp.x() - m_fp.x() ) / double( ( rect.width() / 2 ) * view->zoom() );
 			m_s2 = 0;
@@ -135,7 +135,7 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 }
 
 bool
-VMToolShear::eventFilter( KarbonView* view, QEvent* event )
+VShearTool::eventFilter( KarbonView* view, QEvent* event )
 {
 	if ( event->type() == QEvent::MouseMove )
 	{
@@ -153,7 +153,7 @@ VMToolShear::eventFilter( KarbonView* view, QEvent* event )
 		}
 		else
 		{
-			VMToolHandle::instance( m_part )->eventFilter( view, event );
+			VHandleTool::instance( m_part )->eventFilter( view, event );
 			setCursor( view );
 		}
 
@@ -198,7 +198,7 @@ VMToolShear::eventFilter( KarbonView* view, QEvent* event )
 	if ( event->type() == QEvent::MouseButtonPress )
 	{
 		view->painterFactory()->painter()->end();
-        VMToolHandle::instance( m_part )->eventFilter( view, event );
+        VHandleTool::instance( m_part )->eventFilter( view, event );
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*>( event );
 		m_fp.setX( mouse_event->pos().x() );
 		m_fp.setY( mouse_event->pos().y() );
@@ -214,3 +214,4 @@ VMToolShear::eventFilter( KarbonView* view, QEvent* event )
 
 	return false;
 }
+

@@ -3,21 +3,21 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VCTOOLROUNDRECT_H__
-#define __VCTOOLROUNDRECT_H__
+#ifndef __VSINUSTOOL_H__
+#define __VSINUSTOOL_H__
 
 #include "vshapetool.h"
 
 class KarbonPart;
-class VRoundRectDlg;
+class VSinusDlg;
 
-// A singleton state to create a rectangle.
+// A singleton state to create a sinus
 
-class VCToolRoundRect : public VShapeTool
+class VSinusTool : public VShapeTool
 {
 public:
-	virtual ~VCToolRoundRect();
-	static VCToolRoundRect* instance( KarbonPart* part );
+	virtual ~VSinusTool();
+	static VSinusTool* instance( KarbonPart* part );
 
 	virtual VCommand* createCmd( double x, double y, double d1, double d2 );
 
@@ -27,12 +27,12 @@ public:
 	virtual void showDialog() const;
 
 protected:
-	VCToolRoundRect( KarbonPart* part );
+	VSinusTool( KarbonPart* part );
 
 private:
-	static VCToolRoundRect* s_instance;
+	static VSinusTool* s_instance;
 
-	VRoundRectDlg* m_dialog;
+	VSinusDlg* m_dialog;
 };
 
 #endif

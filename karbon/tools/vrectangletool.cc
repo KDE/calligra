@@ -4,17 +4,17 @@
 */
 
 #include "karbon_view.h"
-#include "vctool_rectangle.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vpath.h"
-#include "vrectanglecmd.h"	// command
-#include "vrectangledlg.h"	// dialog
+#include "vrectanglecmd.h"
+#include "vrectangledlg.h"
+#include "vrectangletool.h"
 
 
-VCToolRectangle* VCToolRectangle::s_instance = 0L;
+VRectangleTool* VRectangleTool::s_instance = 0L;
 
-VCToolRectangle::VCToolRectangle( KarbonPart* part )
+VRectangleTool::VRectangleTool( KarbonPart* part )
 	: VShapeTool( part )
 {
 	// create config dialog:
@@ -23,17 +23,17 @@ VCToolRectangle::VCToolRectangle( KarbonPart* part )
 	m_dialog->setHeight( 100.0 );
 }
 
-VCToolRectangle::~VCToolRectangle()
+VRectangleTool::~VRectangleTool()
 {
 	delete( m_dialog );
 }
 
-VCToolRectangle*
-VCToolRectangle::instance( KarbonPart* part )
+VRectangleTool*
+VRectangleTool::instance( KarbonPart* part )
 {
 	if ( s_instance == 0L )
 	{
-		s_instance = new VCToolRectangle( part );
+		s_instance = new VRectangleTool( part );
 	}
 
 	s_instance->m_part = part;
@@ -41,7 +41,7 @@ VCToolRectangle::instance( KarbonPart* part )
 }
 
 void
-VCToolRectangle::drawTemporaryObject(
+VRectangleTool::drawTemporaryObject(
 	KarbonView* view, const KoPoint& p, double d1, double d2 )
 {
 	VPainter *painter = view->painterFactory()->editpainter();
@@ -58,7 +58,7 @@ VCToolRectangle::drawTemporaryObject(
 }
 
 VCommand*
-VCToolRectangle::createCmd( double x, double y, double d1, double d2 )
+VRectangleTool::createCmd( double x, double y, double d1, double d2 )
 {
 	if( d1 <= 1.0 && d2 <= 1.0 )
 	{

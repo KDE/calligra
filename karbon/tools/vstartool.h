@@ -3,36 +3,36 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VCTOOLSPIRAL_H__
-#define __VCTOOLSPIRAL_H__
+#ifndef __VSTARTOOL_H__
+#define __VSTARTOOL_H__
 
 #include "vshapetool.h"
 
 class KarbonPart;
-class VSpiralDlg;
+class VStarDlg;
 
-// A singleton state to create a spiral.
+// A singleton state to create a star
 
-class VCToolSpiral : public VShapeTool
+class VStarTool : public VShapeTool
 {
 public:
-	virtual ~VCToolSpiral();
-	static VCToolSpiral* instance( KarbonPart* part );
+	virtual ~VStarTool();
+	static VStarTool* instance( KarbonPart* part );
 
 	virtual VCommand* createCmd( double x, double y, double d1, double d2 );
 
 	virtual void drawTemporaryObject(
 		KarbonView* view, const KoPoint& p, double d1, double d2 );
 
-	virtual void showDialog() const;
+    virtual void showDialog() const;
 
 protected:
-	VCToolSpiral( KarbonPart* part );
+	VStarTool( KarbonPart* part );
 
 private:
-	static VCToolSpiral* s_instance;
+	static VStarTool* s_instance;
 
-	VSpiralDlg* m_dialog;
+	VStarDlg* m_dialog;
 };
 
 #endif

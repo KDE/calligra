@@ -1,23 +1,22 @@
 /* This file is part of the KDE project
    Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VCTOOLSINUS_H__
-#define __VCTOOLSINUS_H__
+#ifndef __VPOLYGONTOOL_H__
+#define __VPOLYGONTOOL_H__
 
 #include "vshapetool.h"
 
 class KarbonPart;
-class VSinusDlg;
+class VPolygonDlg;
 
-// A singleton state to create a sinus
+// A singleton state to create a polygon.
 
-class VCToolSinus : public VShapeTool
+class VPolygonTool : public VShapeTool
 {
 public:
-	virtual ~VCToolSinus();
-	static VCToolSinus* instance( KarbonPart* part );
+	virtual ~VPolygonTool();
+	static VPolygonTool* instance( KarbonPart* part );
 
 	virtual VCommand* createCmd( double x, double y, double d1, double d2 );
 
@@ -27,12 +26,12 @@ public:
 	virtual void showDialog() const;
 
 protected:
-	VCToolSinus( KarbonPart* part );
+	VPolygonTool( KarbonPart* part );
 
 private:
-	static VCToolSinus* s_instance;
+	static VPolygonTool* s_instance;
 
-	VSinusDlg* m_dialog;
+	VPolygonDlg* m_dialog;
 };
 
 #endif

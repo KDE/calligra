@@ -16,7 +16,7 @@ enum VState
 {
 	state_normal   = 0,	/// visible, not active
 	state_selected = 1, /// visible, active and can be manipulated by tools
-	state_edit     = 2, /// visible, active and can be manipulated by edit tools
+	state_edit     = 2, /// visible, active and is currently manipulated by a tool
 	state_deleted  = 3  /// not visible
 };
 
