@@ -338,8 +338,9 @@ void KoShellWindow::switchToPage( QValueList<Page>::Iterator it )
   QPtrList<KoView> views;
   views.append(v);
   setRootDocumentDirect( (*m_activePage).m_pDoc, views );
-  // Fix caption
+  // Fix caption and set focus to the new view
   updateCaption();
+  v->setFocus();
 }
 
 void KoShellWindow::slotFileNew()
