@@ -166,7 +166,7 @@ void SideBar::pageDefaultTemplate()
 
 void SideBar::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
 {
-    if ( !selectedItem() )
+    if ( !selectedItem() || !doc->isReadWrite())
         return;
 
     pageMenu->setItemEnabled( delPageId, doc->getPageNums() > 1 );
