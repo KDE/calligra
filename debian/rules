@@ -66,11 +66,6 @@ binary-arch: build install
 		ln -s ../common $$i ;\
 	done
 	cp debian/README.task debian/task-koffice/usr/share/doc/task-koffice/README
-	-rm -f debian/tmp/usr/share/icons/locolor/16x16/actions/wizard.png
-	-rm -f debian/tmp/usr/share/icons/locolor/16x16/actions/bottom.png
-	-rm -f debian/tmp/usr/share/icons/locolor/16x16/actions/rotate.png
-	-rm -f debian/tmp/usr/share/icons/locolor/16x16/actions/top.png 
-
 	for i in `find debian/tmp/usr/bin | sed -e 's#^debian/tmp/usr/bin/##'  | grep -v "debian/tmp"`; do \
 		echo "$$i.1" >> debian/undocumented ;\
 	done
