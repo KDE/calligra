@@ -885,7 +885,7 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "BINOMDIST",        273,  4 },
 	{ "CHIDIST",          274,  2 },
 	{ "CHIINV",           275,  2 },
-	{ "KOMBIN",           276,  2 },
+	{ "COMBIN",           276,  2 },
 	{ "CONFIDENCE",       277,  3 },
 	{ "KRITBINOM",        278,  3 },
 	{ "EVEN",             279,  1 },
