@@ -671,12 +671,12 @@ void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
 
 void KWFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
 {
-    //kdDebug(32001) << k_funcinfo << getName() << " deleting frame" <<  _num << " remove=" << remove << " recalc=" << recalc << endl;
+    //kdDebug(32001) << k_funcinfo << getName() << " deleting frame" <<  _num << " remove=" << remove << " recalc=" << recalc << kdBacktrace();
     KWFrame *frm = frames.at( _num );
     Q_ASSERT( frm );
+    frames.take( _num );
     if ( !remove )
     {
-        frames.take( _num );
         if (frm->isSelected()) // get rid of the resize handles
             frm->setSelected(false);
         frm->setFrameSet(0L);
@@ -684,7 +684,7 @@ void KWFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
     else {
         // ###### should something similar be done when just removing a frame from the list?
         frameDeleted( frm, recalc ); // inform kwtableframeset if necessary
-        frames.remove( _num );
+        delete frm;
         //kdDebug(32001) << k_funcinfo << frm << " deleted. Now I have " << frames.count() << " frames" << endl;
     }
 
