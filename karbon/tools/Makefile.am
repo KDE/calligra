@@ -29,7 +29,7 @@ libkarbontools_la_SOURCES = \
 	vctool_sinus.cc
 
 libkarbontools_la_LIBADD = \
-        $(srcdir)/../ui/libkarbonui.la
+        ../ui/libkarbonui.la
 
 libkarbontools_la_METASOURCES = \
 	AUTO
