@@ -399,12 +399,12 @@ void GraphitePart::updatePage(const QValueList<FxRect> &diff) {
 }
 
 
-GLayoutCmd::GLayoutCmd(GraphitePart *doc, const QString &name) : KCommand(name), m_doc(doc) {
+GLayoutCmd::GLayoutCmd(GraphitePart *doc, const QString &name) : KNamedCommand(name), m_doc(doc) {
 }
 
 GLayoutCmd::GLayoutCmd(GraphitePart *doc, const QString &name,
                        const Graphite::PageLayout &oldLayout, const Graphite::PageLayout &newLayout) :
-    KCommand(name), m_doc(doc), m_oldLayout(oldLayout), m_newLayout(newLayout) {
+    KNamedCommand(name), m_doc(doc), m_oldLayout(oldLayout), m_newLayout(newLayout) {
 }
 
 void GLayoutCmd::execute() {
@@ -418,12 +418,12 @@ void GLayoutCmd::unexecute() {
 }
 
 
-GBordersCmd::GBordersCmd(GraphitePart *doc, const QString &name) : KCommand(name), m_doc(doc) {
+GBordersCmd::GBordersCmd(GraphitePart *doc, const QString &name) : KNamedCommand(name), m_doc(doc) {
 }
 
 GBordersCmd::GBordersCmd(GraphitePart *doc, const QString &name,
             const Graphite::PageBorders &oldBorders, const Graphite::PageBorders &newBorders) :
-    KCommand(name), m_doc(doc), m_oldBorders(oldBorders), m_newBorders(newBorders) {
+    KNamedCommand(name), m_doc(doc), m_oldBorders(oldBorders), m_newBorders(newBorders) {
 }
 
 void GBordersCmd::execute() {

@@ -126,7 +126,7 @@ private:
 };
 
 
-class GLayoutCmd : public KCommand {
+class GLayoutCmd : public KNamedCommand {
 
 public:
     GLayoutCmd(GraphitePart *doc, const QString &name);
@@ -148,7 +148,7 @@ private:
 };
 
 
-class GBordersCmd : public KCommand {
+class GBordersCmd : public KNamedCommand {
 
 public:
     GBordersCmd(GraphitePart *doc, const QString &name);

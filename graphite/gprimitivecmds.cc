@@ -20,12 +20,12 @@
 #include <gprimitivecmds.h>
 
 
-GRotateCmd::GRotateCmd(GObject *object, const QString &name) : KCommand(name),
+GRotateCmd::GRotateCmd(GObject *object, const QString &name) : KNamedCommand(name),
                                                                m_object(object) {
 }
 
 GRotateCmd::GRotateCmd(GObject *object, const QString &name, const FxPoint &center,
-                       const double &angle) : KCommand(name), m_object(object),
+                       const double &angle) : KNamedCommand(name), m_object(object),
                                               m_center(center), m_angle(angle) {
 }
 
@@ -40,13 +40,13 @@ void GRotateCmd::unexecute() {
 }
 
 
-GScaleCmd::GScaleCmd(GObject *object, const QString &name) : KCommand(name),
+GScaleCmd::GScaleCmd(GObject *object, const QString &name) : KNamedCommand(name),
                                                              m_object(object) {
 }
 
 GScaleCmd::GScaleCmd(GObject *object, const QString &name,
                      const FxPoint &origin, const double &xfactor,
-                     const double &yfactor) : KCommand(name), m_object(object),
+                     const double &yfactor) : KNamedCommand(name), m_object(object),
                                               m_origin(origin), m_xfactor(xfactor),
                                               m_yfactor(yfactor) {
 }

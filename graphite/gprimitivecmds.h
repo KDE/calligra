@@ -30,12 +30,12 @@ class FxRect;
 class QBrush;
 class QPen;
 
-template<class Property, void (GObject::* Function) (const Property &)> class GenericCmd : public KCommand {
+template<class Property, void (GObject::* Function) (const Property &)> class GenericCmd : public KNamedCommand {
 
 public:
-    GenericCmd(GObject *object, const QString &name) : KCommand(name), m_object(object) {}
+    GenericCmd(GObject *object, const QString &name) : KNamedCommand(name), m_object(object) {}
     GenericCmd(GObject *object, const QString &name,
-               const Property &oldProperty, const Property &newProperty) : KCommand(name),
+               const Property &oldProperty, const Property &newProperty) : KNamedCommand(name),
         m_object(object), m_oldProperty(oldProperty), m_newProperty(newProperty) {}
     virtual ~GenericCmd() {}
 
@@ -65,7 +65,7 @@ typedef GenericCmd<GObject::FillStyle, &GObject::setFillStyle> GSetFillStyleCmd;
 typedef GenericCmd<Gradient, &GObject::setGradient> GSetGradientCmd;
 
 
-class GRotateCmd : public KCommand {
+class GRotateCmd : public KNamedCommand {
 
 public:
     GRotateCmd(GObject *object, const QString &name);
@@ -88,7 +88,7 @@ private:
 };
 
 
-class GScaleCmd : public KCommand {
+class GScaleCmd : public KNamedCommand {
 
 public:
     GScaleCmd(GObject *object, const QString &name);
