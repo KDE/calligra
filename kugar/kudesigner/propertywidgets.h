@@ -14,11 +14,18 @@
  *   License, or (at your option) any later version.                       *
  *                                                                         *
  ***************************************************************************/
-
+#ifndef PROPERTY_WIDGETS_H
+#define PROPERTY_WIDGETS_H
+ 
 #include <map>
  
 #include <qlineedit.h>
 #include <qcombobox.h>
+#include <qspinbox.h>
+#include <qpushbutton.h>
+
+#include <kfontcombo.h>
+#include <kcolorcombo.h>
 
 class PropertyWidget{
 public:
@@ -32,6 +39,17 @@ public:
         QLineEdit(parent, name) {};
     PLineEdit ( const QString & contents, QWidget * parent, const char * name = 0 ):
         QLineEdit(contents, parent, name) {};
+
+    virtual QString value() const;
+    virtual void setValue(const QString value);
+};
+
+class PSpinBox: public QSpinBox, PropertyWidget{
+public:
+    PSpinBox ( QWidget * parent = 0, const char * name = 0 ):
+        QSpinBox(parent, name) {}
+    PSpinBox ( int minValue, int maxValue, int step = 1, QWidget * parent = 0, const char * name = 0 ):
+        QSpinBox(minValue, maxValue, step, parent, name) {}
 
     virtual QString value() const;
     virtual void setValue(const QString value);
@@ -55,3 +73,40 @@ protected:
     virtual void fillBox();
 };
 
+class PFontCombo: public KFontCombo, PropertyWidget{
+public:
+    PFontCombo (QWidget *parent, const char *name=0);
+    PFontCombo (const QStringList &fonts, QWidget *parent, const char *name=0);
+
+    virtual QString value() const;
+    virtual void setValue(const QString value);
+};
+
+class PColorCombo: public KColorCombo, PropertyWidget{
+public:
+    PColorCombo(QWidget *parent, const char *name = 0);
+    
+    virtual QString value() const;
+    virtual void setValue(const QString value);
+};
+
+class QHBoxLayout;
+
+class PSymbolCombo: public QWidget, PropertyWidget{
+    Q_OBJECT
+public:
+    PSymbolCombo(QWidget *parent = 0, const char *name = 0);
+
+    virtual QString value() const;
+    virtual void setValue(const QString value);
+
+public slots:
+    void selectChar();
+
+private:
+    QLineEdit *edit;
+    QPushButton *pbSelect;
+    QHBoxLayout *l;
+};
+
+#endif

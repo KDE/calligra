@@ -79,25 +79,41 @@ void Property::setDescription(QString description)
 
 QWidget *Property::editorOfType()
 {
+    PSpinBox *s;
+    PLineEdit *l;
+    PFontCombo *f;
+    PColorCombo *c;
+    PSymbolCombo *y;
+    
     switch (type())
     {
         case IntegerValue:
-//            return new PLineEdit(0);
+            s = new PSpinBox(0, 10000, 1, 0);
+            s->setValue(value());
+            return s;
+
+        case Color:
+            c = new PColorCombo(0);
+            c->setValue(value());
+            return c;
+
+        case FontName:
+            f = new PFontCombo(0);
+            f->setValue(value());
+            return f;
+
+        case Symbol:
+            y = new PSymbolCombo(0);
+            y->setValue(value());
+            return y;
 
         case LineStyle:
 //            return new PLineEdit(0);
 
-        case Color:
-//            return new PLineEdit(0);
-
-        case FontName:
-//            return new PLineEdit(0);
-
         case ValueFromList:
         case StringValue:
-        case Symbol:
         default:
-            PLineEdit *l = new PLineEdit(0);
+            l = new PLineEdit(0);
             l->setValue(value());
             return l;
     }

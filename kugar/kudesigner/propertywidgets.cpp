@@ -15,6 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <klocale.h>
+#include <kcharselect.h>
+ 
+#include <qlayout.h>
+#include <qdialog.h>
+ 
 #include "propertywidgets.h"
 
 QString PLineEdit::value() const
@@ -25,6 +31,17 @@ QString PLineEdit::value() const
 void PLineEdit::setValue(const QString value)
 {
     setText(value);
+}
+
+
+QString PSpinBox::value() const
+{
+    return cleanText();
+}
+
+void PSpinBox::setValue(const QString value)
+{
+    QSpinBox::setValue(value.toInt());
 }
 
 
@@ -61,3 +78,105 @@ void PComboBox::setValue(const QString value)
     if (!value.isNull())
         setCurrentText(r_corresp[value]);    
 }
+
+PFontCombo::PFontCombo (QWidget *parent, const char *name):
+    KFontCombo(parent, name)
+{
+    setEditable(false);    
+}
+
+PFontCombo::PFontCombo (const QStringList &fonts, QWidget *parent, const char *name):
+    KFontCombo(fonts, parent, name)
+{
+    setEditable(false);
+}
+
+QString PFontCombo::value() const
+{
+    return currentFont();
+}
+
+void PFontCombo::setValue(const QString value)
+{
+    setCurrentFont(value);    
+}
+
+PColorCombo::PColorCombo(QWidget *parent, const char *name):
+    KColorCombo(parent, name)
+{
+    
+}
+
+QString PColorCombo::value() const
+{
+    return QString("%1,%2,%3").arg(color().red(), color().green(), color().blue());
+}
+
+void PColorCombo::setValue(const QString value)
+{
+    setColor(QColor(value.section(',', 0, 0).toInt(),
+        value.section(',', 1, 1).toInt(),
+        value.section(',', 2, 2).toInt()));
+}
+
+PSymbolCombo::PSymbolCombo(QWidget *parent, const char *name):
+    QWidget(parent, name)
+{
+    l = new QHBoxLayout(this);
+
+    edit = new QLineEdit(this);
+    edit->setMaxLength(1);
+    l->addWidget(edit);
+    pbSelect = new QPushButton("...", this);
+    l->addWidget(pbSelect);
+
+    connect(pbSelect, SIGNAL(clicked()), this, SLOT(selectChar()));
+}
+
+QString PSymbolCombo::value() const
+{
+    if (!(edit->text().isNull()))
+        return QString("%1").arg(edit->text().at(0).unicode());
+    else
+        return "";
+}
+
+void PSymbolCombo::setValue(const QString value)
+{
+    if (!(value.isNull()))
+    {
+        edit->setText(QChar(value.toInt()));
+    }
+}
+
+void PSymbolCombo::selectChar()
+{
+    QDialog* dia = new QDialog(this, "select_dialog", true);
+    QVBoxLayout *dv = new QVBoxLayout(dia, 2);
+
+    KCharSelect *select = new KCharSelect(dia, "select_char");
+    dv->addWidget(select);
+    
+    QHBoxLayout *dh = new QHBoxLayout(dv, 6);
+    QPushButton *pbOk = new QPushButton(i18n("Ok"), dia);
+    QPushButton *pbCancel = new QPushButton(i18n("Cancel"), dia);
+    QSpacerItem *si = new QSpacerItem(30, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    
+    connect(pbOk, SIGNAL(clicked()), dia, SLOT(accept()));
+    connect(pbCancel, SIGNAL(clicked()), dia, SLOT(reject()));
+
+    dh->addItem(si);
+    dh->addWidget(pbOk);
+    dh->addWidget(pbCancel);
+
+    if (!(edit->text().isNull()))
+        select->setChar(edit->text().at(0));
+    
+    if (dia->exec() == QDialog::Accepted)
+    {
+        edit->setText(select->chr());
+    }
+    delete dia;
+}
+
+#include "propertywidgets.moc"
