@@ -39,7 +39,9 @@ libkwordpart_la_SOURCES = kwcanvas.cc kwframe.cc \
 		KWordPartFrameSetEditIface.skel KWordPartFrameSetEditIface.cc \
 		kwbgspellcheck.cc resizetabledia.cc kwframelayout.cc \
 		configfootnotedia.cc kwcreatebookmarkdia.cc kwimportstyledia.cc \
-		KWordFootNoteFrameSetIface.skel KWordFootNoteFrameSetIface.cc
+		KWordFootNoteFrameSetIface.skel KWordFootNoteFrameSetIface.cc \
+        kwcreatebookmarkdiabase.ui  kwselectbookmarkdiabase.ui
+
 
 libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la -lkspell ./libkwmailmerge_interface.la
