@@ -800,3 +800,4 @@ void KImageView::paintEvent( QPaintEvent * )
 }
 
 #include "kimage_view.moc"
+

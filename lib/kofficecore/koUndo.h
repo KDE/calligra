@@ -25,8 +25,6 @@
 #include <qstring.h>
 #include <qstringlist.h>
 
-#define MAX_UNDO_REDO 100
-
 class KoCommand;
 
 typedef QList<KoCommand> KoCommandList;
@@ -49,8 +47,8 @@ public:
    *
    *  @param _name Name of the command. This name is normally shown in the menu after "Undo" and "Redo".
    */
-  KoCommand( QString _name )
-  : m_name( _name ) {}
+  KoCommand( const QString& _name )
+    : m_name( _name ) {}
 
   /**
    *  Destructor.
@@ -80,7 +78,7 @@ public:
    *
    *  @see setName
    */
-  QString name()
+  QString name() const
   { return m_name; }
 
   /**
@@ -88,7 +86,7 @@ public:
    *
    *  @see name
    */
-  void setName( const QString& _name ) { m_name = _name; };
+  void setName( const QString& _name ) { m_name = _name; }
 
 private:
 
@@ -113,14 +111,14 @@ public:
   /**
    *  Constructor.
    *
-   *  @param _number      The number of strings that will be return by 
+   *  @param _number      The number of strings that will be returned by 
    *                      @ref #getUndoList and @ref #getRedoList.
    *  @param _maxundoredo The number of commands that can be stored in the
    *                      history maximal.
    *
    *  @see #getUndoList, #getRedoList
    */
-  KoCommandHistory( int _number = 0, int _maxundoredo = MAX_UNDO_REDO );
+  KoCommandHistory( int _number = 0, int _maxundoredo = 100 );
 
   /**
    *  Adds a class derived from KoCommand to the history.
@@ -186,14 +184,14 @@ public:
    *
    *  @see #maxUndoRedo, #setMaxUndoRedo
    */
-  int count() { return m_history.count(); }
+  int count() const { return m_history.count(); }
 
   /**
    *  Returns the maximal number of items that can be undone/redone.
    *
    *  @see #setMaxUndoRedo
    */
-  int maxUndoRedo() { return m_maxUndoRedo; }
+  int maxUndoRedo() const { return m_maxUndoRedo; }
 
   /**
    *  Sets the maximal number of items that can be undone/redone.
@@ -207,7 +205,7 @@ public:
    *
    *  @see #setNumToolbarItems, #getUndoList, #getRedoList
    */
-  int numToolbarItems() { return m_numToolbarItems; }
+  int numToolbarItems() const { return m_numToolbarItems; }
 
   /**
    *  Sets the maximal number of items that will be return in a undo/redo lists.
@@ -220,7 +218,7 @@ private:
 
   KoCommandList m_history;
   int m_current;
-  int m_maxUndoRedo;
+  uint m_maxUndoRedo;
   int m_numToolbarItems;
 
 signals:

@@ -30,11 +30,11 @@ EditWidget::EditWidget( QWidget *parent, const char *name )
     QPixmap pixmap;
 
     ok = new KButton(this);
-    ok->setPixmap(ICON("tick.xpm"));
+    ok->setPixmap(BarIcon("tick"));
     QToolTip::add(ok,"Take the changes");
 
     cancel = new KButton(this);
-    cancel->setPixmap(ICON("exit.xpm"));
+    cancel->setPixmap(BarIcon("exit"));
     QToolTip::add(cancel,"Don't take the changes");
 
     lineEdit = new QLineEdit(this);

@@ -52,14 +52,6 @@
 #include "brushtool.h"
 #include "zoomtool.h"
 
-// ugly hack around none working macro ICON()
-// has to be removed, when I found the bug (Michael)
-#warning Hack for not correctly working function BarIcon (Michael)
-#include <kpixmapcache.h>
-#undef OPICON
-#define OPICON( name ) OPUIUtils::convertPixmap( *KPixmapCache::toolbarPixmap( name ) )
-//#define OPICON( name ) OPUIUtils::convertPixmap( BarIcon( name ) )
-
 KImageShopView::KImageShopView( QWidget* _parent, const char* _name, KImageShopDoc* _doc )
   : QWidget( _parent, _name )
   , KoViewIf( _doc )
@@ -186,14 +178,14 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   // undo
   text = Q2C( i18n( "Undo last action." ) );
-  pix = OPICON( "undo.png" );
+  pix = OPICON( "undo" );
   m_vToolBarEdit->insertButton2( pix, TBEDIT_UNDO, SIGNAL( clicked() ), this, "slotEditUndo", true, text, -1 );
   m_vToolBarEdit->setDelayedPopup( TBEDIT_UNDO, m_vTBUndoMenu );
   m_vToolBarEdit->setItemEnabled( TBEDIT_UNDO, false );
 
   // redo
   text = Q2C( i18n( "Redo last action." ) );
-  pix = OPICON( "redo.png" );
+  pix = OPICON( "redo" );
   m_vToolBarEdit->insertButton2( pix, TBEDIT_REDO, SIGNAL( clicked() ), this, "slotEditRedo", true, text, -1 );
   m_vToolBarEdit->setDelayedPopup( TBEDIT_REDO, m_vTBRedoMenu );
   m_vToolBarEdit->setItemEnabled( TBEDIT_REDO, false );
@@ -202,19 +194,19 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   // cut
   text = Q2C( i18n( "Cut selected area." ) );
-  pix = OPICON( "editcut.png" );
+  pix = OPICON( "editcut" );
   m_vToolBarEdit->insertButton2( pix, TBEDIT_CUT, SIGNAL( clicked() ), this, "slotEditCut", true, text, -1 );
   m_vToolBarEdit->setItemEnabled( TBEDIT_CUT, false );
 
   // copy
   text = Q2C( i18n( "Copy selected area." ) );
-  pix = OPICON( "editcopy.png" );
+  pix = OPICON( "editcopy" );
   m_vToolBarEdit->insertButton2( pix, TBEDIT_COPY, SIGNAL( clicked() ), this, "slotEditCopy", true, text, -1 );
   m_vToolBarEdit->setItemEnabled( TBEDIT_COPY, false );
 
   // paste
   text = Q2C( i18n( "Paste clipboard into active layer." ) );
-  pix = OPICON( "editpaste.png" );
+  pix = OPICON( "editpaste" );
   m_vToolBarEdit->insertButton2( pix, TBEDIT_PASTE, SIGNAL( clicked() ), this, "slotEditPaste", true, text, -1 );
   m_vToolBarEdit->setItemEnabled( TBEDIT_PASTE, false );
 
@@ -226,20 +218,20 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   // move tool
   text = Q2C( i18n( "Move layers and selections." ) );
-  pix = OPICON( "move.png" );
+  pix = OPICON( "move" );
   m_vToolBarTools->insertButton2( pix, TBTOOLS_MOVETOOL, SIGNAL( clicked() ), this, "slotActivateMoveTool", true, text, -1 );
   m_vToolBarTools->setToggle( TBTOOLS_MOVETOOL, true );
   m_vToolBarTools->toggleButton( TBTOOLS_MOVETOOL );
 
   // zoom tool
   text = Q2C( i18n( "Zoom in/out." ) );
-  pix = OPICON( "viewmag.png" );
+  pix = OPICON( "viewmag" );
   m_vToolBarTools->insertButton2( pix, TBTOOLS_ZOOMTOOL, SIGNAL(clicked()), this, "slotActivateZoomTool", true, text, -1 );
   m_vToolBarTools->setToggle( TBTOOLS_ZOOMTOOL, true );
 
   // paint tool
   text = Q2C( i18n( "Paint using a brush." ) );
-  pix = OPICON( "paintbrush.png" );
+  pix = OPICON( "paintbrush" );
   m_vToolBarTools->insertButton2( pix, TBTOOLS_BRUSHTOOL, SIGNAL(clicked()), this, "slotActivateBrushTool", true, text, -1 );
   m_vToolBarTools->setToggle( TBTOOLS_BRUSHTOOL, true );
 
@@ -274,29 +266,29 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   menubar->insertMenu( text , m_vMenuEdit, -1, -1 );
 
   text = Q2C( i18n( "&Undo" ) );
-  pix = OPICON( "undo.png" );
+  pix = OPICON( "undo" );
   m_idMenuEdit_Undo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditUndo", stdAccel.undo() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
 
   text = Q2C( i18n( "&Redo" ) );
-  pix = OPICON( "redo.png" );
+  pix = OPICON( "redo" );
   m_idMenuEdit_Redo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditRedo", stdAccel.redo() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
 
   m_vMenuEdit->insertSeparator( -1 );
 
   text = Q2C( i18n( "&Cut" ) );
-  pix = OPICON( "editcut.png" );
+  pix = OPICON( "editcut" );
   m_idMenuEdit_Cut = m_vMenuEdit->insertItem3( pix, text, this, "slotEditCut", stdAccel.cut() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Cut, false );
 
   text = Q2C( i18n( "&Copy" ) );
-  pix = OPICON( "editcopy.png" );
+  pix = OPICON( "editcopy" );
   m_idMenuEdit_Copy = m_vMenuEdit->insertItem3( pix, text, this, "slotEditCopy", stdAccel.cut() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Copy, false );
 
   text = Q2C( i18n( "&Paste" ) );
-  pix = OPICON( "editpaste.png" );
+  pix = OPICON( "editpaste" );
   m_idMenuEdit_Paste = m_vMenuEdit->insertItem3( pix, text, this, "slotEditPaste", stdAccel.cut() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Paste, false );
 

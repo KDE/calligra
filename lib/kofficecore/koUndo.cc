@@ -20,16 +20,16 @@
 #include "koUndo.h"
 
 KoCommandHistory::KoCommandHistory( int _number, int _maxundoredo )
-  : m_numToolbarItems( _number )
+  : m_current( -1 )
   , m_maxUndoRedo( _maxundoredo )
-  , m_current( -1 )
+  , m_numToolbarItems( _number )
 {
   m_history.setAutoDelete( true );
 }
 
 void KoCommandHistory::addCommand( KoCommand* _command )
 {
-  if( m_current < ( m_history.count() - 1 ) )
+  if( m_current < ( (int)m_history.count() - 1 ) )
   {
     KoCommandList commands;
     commands.setAutoDelete( false );
@@ -73,7 +73,7 @@ void KoCommandHistory::redo()
 {
   if( m_current > -1 )
   {
-    if( m_current < ( m_history.count() - 1 ) )
+    if( m_current < ( (int)m_history.count() - 1 ) )
     {
       m_current++;
       m_history.at( m_current )->execute();
@@ -105,7 +105,7 @@ QString KoCommandHistory::getRedoName()
 {
   if( m_current > -1 )
   {
-    if( m_current < ( m_history.count() - 1 ) )
+    if( m_current < ( (int)m_history.count() - 1 ) )
       return m_history.at( m_current + 1 )->name();
     else
       return QString();
@@ -142,7 +142,7 @@ void KoCommandHistory::setMaxUndoRedo( int _maxundoredo )
     KoCommandList commands;
     commands.setAutoDelete( false );
  
-    for( int i = 0; i <= m_maxUndoRedo; i++ )
+    for( uint i = 0; i <= m_maxUndoRedo; i++ )
     {
       commands.insert( i, m_history.at( 0 ) );
       m_history.take( 0 );

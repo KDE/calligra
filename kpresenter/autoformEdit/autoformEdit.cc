@@ -52,10 +52,10 @@ void AEditWin::setupMenu()
     /* file menu */
     file = new QPopupMenu( this );
     CHECK_PTR(file);
-    M_FNEW = file->insertItem(ICON("filenew.xpm"),"&New",this,SLOT(fileNew()),CTRL+Key_N);
-    M_FOPEN = file->insertItem(ICON("fileopen.xpm"),"&Open...",this,SLOT(fileOpen()),CTRL+Key_O);
+    M_FNEW = file->insertItem(BarIcon("filenew"),"&New",this,SLOT(fileNew()),CTRL+Key_N);
+    M_FOPEN = file->insertItem(BarIcon("fileopen"),"&Open...",this,SLOT(fileOpen()),CTRL+Key_O);
     file->insertSeparator();
-    M_FSAVE = file->insertItem(ICON("filefloppy.xpm"),"&Save",this,SLOT(fileSave()),CTRL+Key_S);
+    M_FSAVE = file->insertItem(BarIcon("filefloppy"),"&Save",this,SLOT(fileSave()),CTRL+Key_S);
     M_FSAS = file->insertItem("S&ave as...",this,SLOT(fileSaveAs()),ALT+Key_S);
     file->insertSeparator();
     M_FWIN = file->insertItem("New &Window",this,SLOT(fileNewWin()),ALT+Key_N);
@@ -66,17 +66,17 @@ void AEditWin::setupMenu()
     /* edit menu */
     edit = new QPopupMenu( this );
     CHECK_PTR(edit);
-    M_ECUT = edit->insertItem(ICON("editcut.xpm"),"&Cut",this,SLOT(editCut()),CTRL+Key_X);
-    M_ECOPY = edit->insertItem(ICON("editcopy.xpm"),"C&opy",this,SLOT(editCopy()),CTRL+Key_C);
-    M_EPASTE = edit->insertItem(ICON("editpaste.xpm"),"&Paste",this,SLOT(editPaste()),CTRL+Key_V);
-    M_EDELETE = edit->insertItem(ICON("delete.xpm"),"&Delete",this,SLOT(editDelete()),CTRL+Key_Delete);
+    M_ECUT = edit->insertItem(BarIcon("editcut"),"&Cut",this,SLOT(editCut()),CTRL+Key_X);
+    M_ECOPY = edit->insertItem(BarIcon("editcopy"),"C&opy",this,SLOT(editCopy()),CTRL+Key_C);
+    M_EPASTE = edit->insertItem(BarIcon("editpaste"),"&Paste",this,SLOT(editPaste()),CTRL+Key_V);
+    M_EDELETE = edit->insertItem(BarIcon("delete"),"&Delete",this,SLOT(editDelete()),CTRL+Key_Delete);
     edit->setMouseTracking(true);
     /* extra menu */
     extra = new QPopupMenu( this );
     CHECK_PTR(extra);
-    M_EINSPNT = extra->insertItem(ICON("newPoint.xpm"),"&Insert Point...",this,SLOT(extraInsertPoint()),ALT+Key_I);
+    M_EINSPNT = extra->insertItem(BarIcon("newPoint"),"&Insert Point...",this,SLOT(extraInsertPoint()),ALT+Key_I);
     extra->insertSeparator();
-    M_E121 = extra->insertItem(ICON("121.xpm"),"&View autoform in 1:1",this,SLOT(extraOne2One()),CTRL+Key_R);
+    M_E121 = extra->insertItem(BarIcon("121"),"&View autoform in 1:1",this,SLOT(extraOne2One()),CTRL+Key_R);
     extra->setItemChecked(M_E121,true);
     extra->setMouseTracking(true);
     extra->setCheckable(true);
@@ -118,33 +118,33 @@ void AEditWin::setupToolbar1()
     /* create toolbar */
     toolbar1 = new KToolBar(this);
     /* insert buttons */
-    toolbar1->insertButton(ICON("filenew.xpm"),0,
+    toolbar1->insertButton(BarIcon("filenew"),0,
                            SIGNAL(clicked()),this,
                            SLOT(fileNew()),true,"Create a new autoform in that window");
-    toolbar1->insertButton(ICON("fileopen.xpm"),0,
+    toolbar1->insertButton(BarIcon("fileopen"),0,
                            SIGNAL(clicked()),this,
                            SLOT(fileOpen()),true,"Open an autoform in that window");
-    toolbar1->insertButton(ICON("filefloppy.xpm"),0,
+    toolbar1->insertButton(BarIcon("filefloppy"),0,
                            SIGNAL(clicked()),this,
                            SLOT(fileSave()),true,"Save current autoform");
     toolbar1->insertSeparator();
-    toolbar1->insertButton(ICON("editcut.xpm"),0,
+    toolbar1->insertButton(BarIcon("editcut"),0,
                            SIGNAL(clicked()),this,
                            SLOT(editCut()),true,"Cut to the clipboard");
-    toolbar1->insertButton(ICON("editcopy.xpm"),0,
+    toolbar1->insertButton(BarIcon("editcopy"),0,
                            SIGNAL(clicked()),this,
                            SLOT(editCopy()),true,"Copy to the clipboard");
-    toolbar1->insertButton(ICON("editpaste.xpm"),0,
+    toolbar1->insertButton(BarIcon("editpaste"),0,
                            SIGNAL(clicked()),this,
                            SLOT(editPaste()),true,"Paste from the clipboard");
-    toolbar1->insertButton(ICON("delete.xpm"),0,
+    toolbar1->insertButton(BarIcon("delete"),0,
                            SIGNAL(clicked()),this,
                            SLOT(editDelete()),true,"Delete selected point");
     toolbar1->insertSeparator();
-    toolbar1->insertButton(ICON("newPoint.xpm"),0,
+    toolbar1->insertButton(BarIcon("newPoint"),0,
                            SIGNAL(clicked()),this,
                            SLOT(extraInsertPoint()),true,"Insert a new point");
-    toolbar1->insertButton(ICON("121.xpm"),T_RELATION,
+    toolbar1->insertButton(BarIcon("121"),T_RELATION,
                            SIGNAL(clicked()),this,
                            SLOT(extraOne2One()),true,"Switch relation of the autoform viewer");
     toolbar1->setToggle(T_RELATION,true);
