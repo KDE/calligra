@@ -37,6 +37,9 @@ KexiGradientWidget::KexiGradientWidget( QWidget *parent, const char *name, WFlag
 {
 	p_customBackgroundWidgets.setAutoDelete( false );
 	p_knownWidgets.setAutoDelete( false );
+
+	connect ( &p_rebuildDelayTimer, SIGNAL( timeout() ), this, SLOT( setCacheDirty() ) );
+
 	installEventFilter( this );
 }
 

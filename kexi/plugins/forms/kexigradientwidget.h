@@ -20,10 +20,13 @@
 #ifndef KEXIGRADIENTWIDGET_H
 #define KEXIGRADIENTWIDGET_H
 
+#include <qtimer.h>
 #include <qwidget.h>
 
 #include <kimageeffect.h>
 #include <kpixmap.h>
+
+#define REBUILD_DELAY 100
 
 /**
 A simple QWidget that can use different types of gradients as the background.
@@ -72,7 +75,7 @@ class KexiGradientWidget : public QWidget {
 
 		virtual void setPaletteBackgroundPixmap( const QPixmap& pixmap ) {
 			p_backgroundPixmap = pixmap;
-			p_cacheDirty = true;
+			p_rebuildDelayTimer.start( REBUILD_DELAY, true );
 		}
 
 		/*!
@@ -165,7 +168,7 @@ class KexiGradientWidget : public QWidget {
 		virtual void paintEvent( QPaintEvent* e );
 
 		virtual void resizeEvent( QResizeEvent* e ) {
-			p_cacheDirty = true;
+			p_rebuildDelayTimer.start( REBUILD_DELAY, true );
 			QWidget::resizeEvent( e );
 		}
 
@@ -213,6 +216,7 @@ class KexiGradientWidget : public QWidget {
 		KPixmap p_backgroundPixmap;
 		QColor p_color1;
 		QColor p_color2;
+		QTimer p_rebuildDelayTimer;
 		QWidget* p_currentChild;
 		double p_opacity;
 		bool p_cacheDirty;
@@ -226,6 +230,12 @@ class KexiGradientWidget : public QWidget {
 			QWidget::polish();
 			rebuildCache();
 		}
+
+	private slots:
+		void setCacheDirty() {
+			rebuildCache();
+		}
+
 	};
 
 #endif
