@@ -239,7 +239,7 @@ KOSpellConfig::interpret (QString &fname, QString &lname,
     else
       extension = country + " - " + extension;
   }
-  //These are mostly the ispell-langpack defaults
+    //These are mostly the ispell-langpack defaults
   else if (dname=="english" || dname=="american" ||
       dname=="british" || dname=="canadian") {
     lname="en"; hname=i18n("English");
@@ -269,19 +269,19 @@ KOSpellConfig::interpret (QString &fname, QString &lname,
     lname="no"; hname=i18n("Norwegian");
   }
   else if (dname=="polish") {
-    lname="pl"; hname=i18n("Polish"); sChangeEncoding(KS_E_LATIN2);
+      lname="pl"; hname=i18n("Polish"); //sChangeEncoding(KS_E_LATIN2);
   }
   else if (dname=="russian") {
     lname="ru"; hname=i18n("Russian");
   }
   else if (dname=="slovensko") {
-    lname="si"; hname=i18n("Slovenian"); sChangeEncoding(KS_E_LATIN2);
+      lname="si"; hname=i18n("Slovenian"); //sChangeEncoding(KS_E_LATIN2);
   }
   else if (dname=="slovak"){
-    lname="sk"; hname=i18n("Slovak"); sChangeEncoding(KS_E_LATIN2);
+      lname="sk"; hname=i18n("Slovak"); //sChangeEncoding(KS_E_LATIN2);
   }
   else if (dname=="czech") {
-    lname="cs"; hname=i18n("Czech"); sChangeEncoding(KS_E_LATIN2);
+      lname="cs"; hname=i18n("Czech"); //sChangeEncoding(KS_E_LATIN2);
   }
   else if (dname=="svenska") {
     lname="sv"; hname=i18n("Swedish");
@@ -303,7 +303,7 @@ KOSpellConfig::interpret (QString &fname, QString &lname,
   }
   else if( dname == "magyar" ) {
     lname="hu"; hname=i18n("Hungarian");
-    sChangeEncoding(KS_E_LATIN2);
+    //sChangeEncoding(KS_E_LATIN2);
   }
   else {
     lname=""; hname=i18n("Unknown ispell dictionary", "Unknown");
@@ -341,9 +341,9 @@ KOSpellConfig::fillInDialog ()
   int whichelement=-1;
 
   if (dictFromList())
-    for (unsigned int i=0; i<langfnames.count(); i++)
+    for (unsigned int i=0; i<listOfLanguageFileName().count(); i++)
       {
-	if (langfnames[i] == dictionary())
+	if (listOfLanguageFileName()[i] == dictionary())
 	  whichelement=i;
       }
 
@@ -365,67 +365,9 @@ KOSpellConfig::fillInDialog ()
 
 
 
-void KOSpellConfig::getAvailDictsAspell () {
-
-  langfnames.clear();
-  dictcombo->clear();
-
-  langfnames.append(""); // Default
-  dictcombo->insertItem (i18n("ASpell Default"));
-
-  // dictionary path
-  // FIXME: use "aspell dump config" to find out the dict-dir
-  QFileInfo dir ("/usr/lib/aspell");
-  if (!dir.exists() || !dir.isDir())
-    dir.setFile ("/usr/local/lib/aspell");
-  if (!dir.exists() || !dir.isDir())
-    dir.setFile ("/usr/share/aspell");
-  if (!dir.exists() || !dir.isDir())
-    dir.setFile ("/usr/local/share/aspell");
-  if (!dir.exists() || !dir.isDir()) return;
-
-  kdDebug(750) << "KOSpellConfig::getAvailDictsAspell "
-	       << dir.filePath() << " " << dir.dirPath() << endl;
-
-  QDir thedir (dir.filePath(),"*.multi");
-
-  kdDebug(750) << "KOSpellConfig" << thedir.path() << "\n" << endl;
-  kdDebug(750) << "entryList().count()="
-	       << thedir.entryList().count() << endl;
-
-  for (unsigned int i=0; i<thedir.entryList().count(); i++)
-    {
-      QString fname, lname, hname;
-      fname = thedir [i];
-
-      // consider only simple dicts without '-' in the name
-      // FIXME: may be this is wrong an the list should contain
-      // all *.multi files too, to allow using special dictionaries
-      if (fname[0] != '.')
-	{
-
-	  // remove .multi
-	  if (fname.right(6) == ".multi") fname.remove (fname.length()-6,6);
-
-	  if (interpret (fname, lname, hname) && langfnames[0].isEmpty())
-	    { // This one is the KDE default language
-	      // so place it first in the lists (overwrite "Default")
-
-	      langfnames.remove ( langfnames.begin() );
-	      langfnames.prepend ( fname );
-
-	      hname=i18n("default spelling dictionary"
-			 ,"Default - %1").arg(hname);
-
-	      dictcombo->changeItem (hname,0);
-	    }
-	  else
-	    {
-	      langfnames.append (fname);
-	      dictcombo->insertItem (hname);
-	    }
-	}
-    }
+void KOSpellConfig::getAvailDictsAspell ()
+{
+    dictcombo->insertStringList( listOfAspellLanguages() );
 }
 
 /*
@@ -466,9 +408,9 @@ KOSpellConfig::setDictionary (const QString s)
     int whichelement=-1;
     if (dictFromList())
     {
-      for (unsigned int i=0;i<langfnames.count();i++)
+      for (unsigned int i=0;i<listOfLanguageFileName().count();i++)
       {
-         if (langfnames[i] == s)
+         if (listOfLanguageFileName()[i] == s)
            whichelement=i;
       }
 
@@ -541,7 +483,7 @@ KOSpellConfig::sNoAff(bool)
 void
 KOSpellConfig::sSetDictionary (int i)
 {
-  setDictionary (langfnames[i]);
+  setDictionary (listOfLanguageFileName()[i]);
   setDictFromList (TRUE);
   emit configChanged();
 }
@@ -552,7 +494,7 @@ KOSpellConfig::sDictionary(bool on)
   if (on)
     {
       dictcombo->setEnabled (TRUE);
-      setDictionary (langfnames[dictcombo->currentItem()] );
+      setDictionary (listOfLanguageFileName()[dictcombo->currentItem()] );
       setDictFromList (TRUE);
     }
   else
@@ -594,18 +536,6 @@ void KOSpellConfig::sHelp( void )
   kapp->invokeHelp("configuration", "kspell");
 }
 
-/*
-void KOSpellConfig::textChanged1 (const char *s)
-{
-  setDictionary (s);
-}
-
-void KOSpellConfig::textChanged2 (const char *)
-{
-  //  setPersonalDict (s);
-}
-*/
-
 void
 KOSpellConfig::operator= (const KOSpellConfig &ksc)
 {
@@ -644,6 +574,105 @@ KOSpellConfig::replaceAllList () const
 {
   return d->replacelist;
 }
+
+QStringList KOSpellConfig::s_aspellLanguageList = QStringList();
+QStringList KOSpellConfig::s_aspellLanguageFileName = QStringList();
+
+QStringList KOSpellConfig::listOfAspellLanguages()
+{
+    if ( s_aspellLanguageList.count()==0 )
+        createListOfLanguages();
+    return s_aspellLanguageList;
+}
+
+QStringList KOSpellConfig::listOfLanguageFileName()
+{
+    if ( s_aspellLanguageFileName.count()==0 )
+        createListOfLanguages();
+    return s_aspellLanguageFileName;
+}
+
+QString KOSpellConfig::fileNameFromLanguage( const QString & _lang)
+{
+    int pos = s_aspellLanguageList.findIndex( _lang );
+    if ( pos != -1)
+    {
+        return s_aspellLanguageFileName[ pos ];
+    }
+    return QString::null;
+}
+
+QString KOSpellConfig::languageFromFileName( const QString &_lang )
+{
+    int pos = s_aspellLanguageFileName.findIndex( _lang );
+    if ( pos != -1)
+        return s_aspellLanguageList[ pos ];
+    else
+        return QString::null;
+}
+
+void KOSpellConfig::createListOfLanguages()
+{
+    s_aspellLanguageFileName.append(""); // Default
+    s_aspellLanguageList.append(i18n("ASpell Default"));
+
+    // dictionary path
+    // FIXME: use "aspell dump config" to find out the dict-dir
+    QFileInfo dir ("/usr/lib/aspell");
+    if (!dir.exists() || !dir.isDir())
+        dir.setFile ("/usr/local/lib/aspell");
+    if (!dir.exists() || !dir.isDir())
+        dir.setFile ("/usr/share/aspell");
+    if (!dir.exists() || !dir.isDir())
+        dir.setFile ("/usr/local/share/aspell");
+    if (!dir.exists() || !dir.isDir()) return;
+
+    kdDebug(750) << "KOSpellConfig::getAvailDictsAspell "
+                 << dir.filePath() << " " << dir.dirPath() << endl;
+
+    QDir thedir (dir.filePath(),"*.multi");
+
+    kdDebug(750) << "KOSpellConfig" << thedir.path() << "\n" << endl;
+    kdDebug(750) << "entryList().count()="
+                 << thedir.entryList().count() << endl;
+
+    for (unsigned int i=0; i<thedir.entryList().count(); i++)
+    {
+        QString fname, lname, hname;
+        fname = thedir [i];
+
+        // consider only simple dicts without '-' in the name
+        // FIXME: may be this is wrong an the list should contain
+        // all *.multi files too, to allow using special dictionaries
+        if (fname[0] != '.')
+	{
+
+            // remove .multi
+            if (fname.right(6) == ".multi")
+                fname.remove (fname.length()-6,6);
+
+            if (interpret (fname, lname, hname) && s_aspellLanguageFileName[0].isEmpty())
+	    { // This one is the KDE default language
+	      // so place it first in the lists (overwrite "Default")
+
+                s_aspellLanguageFileName.remove ( s_aspellLanguageFileName.begin() );
+                s_aspellLanguageFileName.prepend ( fname );
+
+                hname=i18n("default spelling dictionary"
+                           ,"Default - %1").arg(hname);
+                s_aspellLanguageList[0]=hname;
+	    }
+            else
+	    {
+                s_aspellLanguageFileName.append( fname);
+                s_aspellLanguageList.append( hname );
+	    }
+	}
+    }
+
+}
+
+
 
 #include "koSconfig.moc"
 

@@ -32,6 +32,7 @@
 #include <kbuttonbox.h>
 #include <kdebug.h>
 #include <qcombobox.h>
+#include <koSconfig.h>
 #include "koSpelldlg.h"
 
 KOSpellDlg::KOSpellDlg(
@@ -62,6 +63,8 @@ KOSpellDlg::KOSpellDlg(
     new QLabel(i18n("Language:"), w, "l_language");
 
   language = new QComboBox( w, "language");
+
+  language->insertStringList( KOSpellConfig::listOfAspellLanguages());
 
   QLabel * l_misspelled =
     new QLabel(i18n("Misspelled word:"), w, "l_misspelled");

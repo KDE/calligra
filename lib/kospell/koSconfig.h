@@ -67,7 +67,6 @@ enum Encoding {
  * writing papers in their word processor.
  *
  * @author David Sweet <dsweet@kde.org>
- * @version $Id$
  * @see KSpell
  */
 
@@ -166,6 +165,13 @@ class KOSpellConfig : public QWidget
      */
     bool writeGlobalSettings ();
 
+
+    static QStringList listOfAspellLanguages();
+    static QStringList listOfLanguageFileName();
+    static QString fileNameFromLanguage( const QString & _lang);
+    static QString languageFromFileName( const QString &_lang );
+
+
   protected:
     void fillInDialog();
     bool readGlobalSettings();
@@ -179,7 +185,7 @@ class KOSpellConfig : public QWidget
      *
      * TRUE is returned if lname.data()==$LANG
      */
-    bool interpret( QString &fname, QString &lname, QString &hname );
+    static bool interpret( QString &fname, QString &lname, QString &hname );
 
 
   public slots:
@@ -219,7 +225,6 @@ class KOSpellConfig : public QWidget
     QCheckBox *cb1, *cb2;
     QLabel *dictlist;
     QComboBox *dictcombo, *encodingcombo, *clientcombo;
-    QStringList langfnames;
 
 signals:
     void configChanged();
@@ -228,6 +233,10 @@ private:
     KOSpellConfigPrivate *d;
     void getAvailDictsIspell();
     void getAvailDictsAspell();
+
+    static void createListOfLanguages();
+    static QStringList s_aspellLanguageList;
+    static QStringList s_aspellLanguageFileName;
 };
 
 #endif
