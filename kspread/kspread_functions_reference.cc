@@ -18,7 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-// built-in logical functions
+// built-in reference functions
 
 #include <stdlib.h>
 #include <math.h>
@@ -35,8 +35,10 @@
 #include <kspread_functions.h>
 #include <kspread_util.h>
 #include <kspread_table.h>
+#include <kspread_value.h>
 
 // prototypes (sorted alphabetically)
+#if 0
 bool kspreadfunc_address( KSContext & context );
 bool kspreadfunc_areas( KSContext & context );
 bool kspreadfunc_choose( KSContext & context );
@@ -46,12 +48,13 @@ bool kspreadfunc_indirect( KSContext & context );
 bool kspreadfunc_lookup( KSContext & context );
 bool kspreadfunc_row( KSContext & context );
 bool kspreadfunc_rows( KSContext & context );
+#endif
 
 // registers all reference functions
 void KSpreadRegisterReferenceFunctions()
 {
   KSpreadFunctionRepository * repo = KSpreadFunctionRepository::self();
-
+#if 0
   repo->registerFunction( "ADDRESS",  kspreadfunc_address );
   repo->registerFunction( "AREAS",    kspreadfunc_areas );
   repo->registerFunction( "CHOOSE",   kspreadfunc_choose );
@@ -61,8 +64,10 @@ void KSpreadRegisterReferenceFunctions()
   repo->registerFunction( "LOOKUP",   kspreadfunc_lookup );
   repo->registerFunction( "ROW",      kspreadfunc_row );
   repo->registerFunction( "ROWS",     kspreadfunc_rows );
+#endif
 }
 
+#if 0
 // Function: ADDRESS
 bool kspreadfunc_address( KSContext & context )
 {
@@ -462,11 +467,11 @@ bool kspreadfunc_indirect( KSContext & context )
   if ( cell )
   {
     if ( cell->isString() )
-      context.setValue( new KSValue( cell->valueString() ) );
-    else if ( cell->isNumeric() )
-      context.setValue( new KSValue( cell->valueDouble() ) );
-    else if ( cell->isBool() )
-      context.setValue( new KSValue( cell->valueBool() ) );
+      context.setValue( new KSValue( cell->value().asString() ) );
+    else if ( cell->value().isNumber() )
+      context.setValue( new KSValue( cell->value().asFloat() ) );
+    else if ( cell->value().isBoolean() )
+      context.setValue( new KSValue( cell->value().asBoolean() ) );
     else if ( cell->isDate() )
       context.setValue( new KSValue( cell->valueDate() ) );
     else if ( cell->isTime() )
@@ -480,10 +485,10 @@ bool kspreadfunc_indirect( KSContext & context )
   return false;
 }
 
-static bool isEqualLess( KSContext & context, KSpreadCell::DataType type, KSValue::Ptr const & value, 
+static bool isEqualLess( KSContext & context, KSpreadValue::Type type, KSValue::Ptr const & value, 
                          double dValue, QString const & sValue, bool bValue )
 {
-  if ( ( type == KSpreadCell::NumericData )
+  if ( ( type == KSpreadValue::Type::Float )
        && ( KSUtil::checkType( context, value, KSValue::DoubleType, true ) ) )
   {
     kdDebug() << "Values: " << value->doubleValue() << endl;
@@ -549,7 +554,7 @@ bool kspreadfunc_lookup( KSContext & context )
     return false;
 
   kdDebug() << "H1 " << endl;
-  KSpreadCell::DataType type;
+  KSpreadValue::Type type;
 
   if ( KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
     type = KSpreadCell::BoolData;
@@ -770,4 +775,4 @@ bool kspreadfunc_rows( KSContext & context )
 
   return false;
 }
-
+#endif

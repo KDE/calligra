@@ -43,10 +43,10 @@ bool KSpreadConditions::currentCondition(KSpreadConditional& condition)
   /* for now, the first condition that is true is the one that will be used */
 
   QValueList<KSpreadConditional>::const_iterator it;
-  double value = cell->valueDouble() * cell->factor(cell->column(),
+  double value = cell->value().asFloat() * cell->factor(cell->column(),
 						    cell->row());
 
-  if (cell->isNumeric() && !cell->table()->getShowFormula())
+  if (cell->value().isNumber() && !cell->table()->getShowFormula())
   {
     for (it = condList.begin(); it != condList.end(); it++)
     {

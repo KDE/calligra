@@ -22,7 +22,7 @@ bool KSpreadCellIface::isDefault() const
 QString KSpreadCellIface::text() const
 {
     KSpreadCell* cell = m_table->cellAt( m_point );
-    return cell->valueString();
+    return cell->value().asString();
 }
 
 void KSpreadCellIface::setText( const QString& text )
@@ -59,7 +59,7 @@ void KSpreadCellIface::setValue( double value )
 double KSpreadCellIface::value() const
 {
     KSpreadCell* cell = m_table->cellAt( m_point );
-    return cell->valueDouble();
+    return cell->value().asFloat();
 }
 
 void KSpreadCellIface::setBgColor(const QString& _c)

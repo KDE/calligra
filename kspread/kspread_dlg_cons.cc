@@ -274,7 +274,7 @@ void KSpreadConsolidate::slotOk()
 	KSpreadCell *c = t->cellAt( x, (*it).range.top() );
 	if ( c )
 	{
-	  QString s = c->valueString();
+	  QString s = c->value().asString();
 	  if ( !lst.contains( s ) )
 	    lst.append( s );
 	}
@@ -321,7 +321,7 @@ void KSpreadConsolidate::slotOk()
 	    KSpreadCell *c = t->cellAt( i, (*it).range.top() );
 	    if ( c )
 	    {
-	      if ( c->valueString() == *s )
+	      if ( c->value().asString() == *s )
 	      {
 //		KSpreadCell *c2 = t->cellAt( i, y + (*it).range.top() );
 		count++;
@@ -354,7 +354,7 @@ void KSpreadConsolidate::slotOk()
 	KSpreadCell *c = t->cellAt( (*it).range.left(), y );
 	if ( c )
 	{
-	  QString s = c->valueString();
+	  QString s = c->value().asString();
 	  if ( !s.isEmpty() && lst.find( s ) == lst.end() )
 	    lst.append( s );
 	}
@@ -401,7 +401,7 @@ void KSpreadConsolidate::slotOk()
 	    KSpreadCell *c = t->cellAt( (*it).range.left(), i );
 	    if ( c )
 	    {
-	      QString v = c->valueString();
+	      QString v = c->value().asString();
 	      if ( !v.isEmpty() && *s == v )
 	      {
 //		KSpreadCell *c2 = t->cellAt( x + (*it).range.left(), i );
@@ -435,7 +435,7 @@ void KSpreadConsolidate::slotOk()
 	KSpreadCell *c = t->cellAt( (*it).range.left(), y );
 	if ( c )
 	{
-	  QString s = c->valueString();
+	  QString s = c->value().asString();
 	  if ( !s.isEmpty() && cols.find( s ) == cols.end() )
 	    cols.append( s );
 	}
@@ -455,7 +455,7 @@ void KSpreadConsolidate::slotOk()
 	KSpreadCell *c = t->cellAt( x, (*it).range.top() );
 	if ( c )
 	{
-	  QString s = c->valueString();
+	  QString s = c->value().asString();
 	  if ( !s.isEmpty() && rows.find( s ) == rows.end() )
 	    rows.append( s );
 	}
@@ -493,15 +493,15 @@ void KSpreadConsolidate::slotOk()
 	KSpreadCell *c = t->cellAt( x, (*it).range.top() );
 	if ( c )
 	{
-	  QString ydesc = c->valueString();
+	  QString ydesc = c->value().asString();
 	  for( int y = (*it).range.top() + 1; y <= (*it).range.bottom() ; ++y )
 	  {
 	    KSpreadCell *c2 = t->cellAt( (*it).range.left(), y );
 	    if ( c2 )
 	    {
-	      QString xdesc = c2->valueString();
+	      QString xdesc = c2->value().asString();
 	      KSpreadCell *c3 = t->cellAt( x, y );
-	      if ( c3 && c3->isNumeric() )
+	      if ( c3 && c3->value().isNumber() )
 	      {
 		st_cell k;
 		k.xdesc = xdesc;

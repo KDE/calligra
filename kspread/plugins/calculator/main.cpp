@@ -141,7 +141,7 @@ bool Calculator::eventFilter( QObject*, QEvent* ev )
             if ( cell->isEmpty() )
                 d = 0;
             else
-                d = cell->valueDouble();
+                d = cell->value().asFloat();
             m_calc->setValue( d );
 
             return FALSE;
@@ -189,7 +189,7 @@ void QtCalculator::useData()
             if ( !cell )
                 return;
 
-            v[n++] = cell->valueDouble();
+            v[n++] = cell->value().asFloat();
         }
 
     for( int i = 0; i < n; i++ )

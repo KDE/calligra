@@ -1512,7 +1512,7 @@ void KSpreadView::spellCheckerReady()
     while ( m_spell.currentCell )
     {
       // check text only
-      if ( !m_spell.currentCell->isDefault() && m_spell.currentCell->isString() )
+      if ( !m_spell.currentCell->isDefault() && m_spell.currentCell->value().isString() )
       {
         m_spell.kspell->check( m_spell.currentCell->text(), true );
 
@@ -1549,7 +1549,7 @@ void KSpreadView::spellCheckerReady()
       KSpreadCell * cell = m_spell.currentSpellTable->cellAt( x, y );
 
       // check text only
-      if (cell->isDefault() || !cell->isString())
+      if (cell->isDefault() || !cell->value().isString())
         continue;
 
       m_spell.spellCurrCellX = x;
@@ -2010,7 +2010,7 @@ void KSpreadView::autoSum()
         {
             cell = activeTable()->cellAt( m_pCanvas->markerColumn(), --r );
         }
-        while ( cell && cell->isNumeric() );
+        while ( cell && cell->value().isNumber() );
 
         if ( r + 1 < m_pCanvas->markerRow() )
         {
@@ -2028,7 +2028,7 @@ void KSpreadView::autoSum()
         {
             cell = activeTable()->cellAt( --c, m_pCanvas->markerRow() );
         }
-        while ( cell && cell->isNumeric() );
+        while ( cell && cell->value().isNumber() );
 
         if ( c + 1 < m_pCanvas->markerColumn() )
         {
@@ -4213,7 +4213,7 @@ void KSpreadView::slotListChoosePopupMenu( )
           && !( col == m_pCanvas->markerColumn()
                 && c->row() == m_pCanvas->markerRow()) )
      {
-       if ( c->isString() && c->text() != tmp && !c->text().isEmpty() )
+       if ( c->value().isString() && c->text() != tmp && !c->text().isEmpty() )
        {
          if ( itemList.findIndex( c->text() ) == -1 )
            itemList.append(c->text());
@@ -4924,7 +4924,8 @@ void KSpreadView::setText( const QString& _text )
   m_pDoc->emitBeginOperation(false);
   m_pTable->setText( m_pCanvas->markerRow(), m_pCanvas->markerColumn(), _text );
   KSpreadCell* cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-  if(cell->isString() && !_text.isEmpty() && !_text.at(0).isDigit() && !cell->isFormula())
+
+  if(cell->value().isString() && !_text.isEmpty() && !_text.at(0).isDigit() && !cell->isFormula())
       m_pDoc->addStringCompletion(_text);
 
   m_pDoc->emitEndOperation();
@@ -5061,9 +5062,9 @@ void KSpreadView::resultOfCalc()
             {
               if ( !c->isObscuringForced() )
               {
-                if ( c->isNumeric() )
+                if ( c->value().isNumber() )
                 {
-                  double val = c->valueDouble();
+                  double val = c->value().asFloat();
                   switch(tmpMethod)
                   {
                    case SumOfNumber:
@@ -5104,9 +5105,9 @@ void KSpreadView::resultOfCalc()
             KSpreadCell * c = table->getFirstCellRow( row );
             while ( c )
             {
-              if ( !c->isObscuringForced() && c->isNumeric() )
+              if ( !c->isObscuringForced() && c->value().isNumber() )
               {
-                double val = c->valueDouble();
+                double val = c->value().asFloat();
                 switch(tmpMethod )
                 {
                  case SumOfNumber:
@@ -5149,9 +5150,9 @@ void KSpreadView::resultOfCalc()
             for(int j = tmpRect.top(); j <= bottom; ++j )
             {
               cell = activeTable()->cellAt( i, j );
-              if ( !cell->isDefault() && cell->isNumeric() )
+              if ( !cell->isDefault() && cell->value().isNumber() )
               {
-                double val = cell->valueDouble();
+                double val = cell->value().asFloat();
                 switch(tmpMethod )
                 {
                  case SumOfNumber:

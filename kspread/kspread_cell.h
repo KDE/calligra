@@ -42,6 +42,7 @@ class KSParseNode;
 #include "kspread_depend.h"
 #include "kspread_condition.h"
 
+#include <kspread_value.h>
 #include <kozoomhandler.h>
 
 struct KSpreadValidity
@@ -114,6 +115,7 @@ class KSpreadCell : public KSpreadLayout
 public:
     /** The type of content in the cell */
     enum Content { Text, RichText, Formula, VisualFormula };
+
     /**
      * The type of data in the cell, for Content == Text or Formula.
      * RichText always is StringData, and VisualFormula is OtherData
@@ -297,20 +299,6 @@ public:
     Content content() const { return m_content; }
 
     /**
-     * Tells what is the type of data in the cell:
-     * string, numeric, date, time etc.
-     * Set by @ref checkTextInput(), and by @ref load().
-     */
-    DataType dataType() const { return m_dataType; }
-
-    /**
-     * Tells what is the type of data in the cell:
-     * string, numeric, date, time etc.
-     * Set by @ref checkTextInput(), and by @ref load().
-     */
-    void setDataType(DataType const & d) { m_dataType = d; }
-
-    /**
      * Increases the precison of the
      * value displayed. Precision means here the amount of
      * digits behind the dot. If the current precision is the
@@ -439,24 +427,18 @@ public:
      */
     FormatType formatType() const { return getFormatType( m_iColumn, m_iRow ); }
 
-    bool isString() const { return m_dataType == StringData; }
-    bool isNumeric() const { return m_dataType == NumericData; }
-    bool isBool() const { return m_dataType == BoolData; }
-    bool isDate() const { return m_dataType == DateData; }
-    bool isTime() const { return m_dataType == TimeData; }
+    bool isDate() const;
+    bool isTime() const;
 
-    bool valueBool() const { return ( m_dValue != 0.0 ); }
-    double valueDouble() const { return m_dValue; }
-    QString valueString() const;
-    QDate valueDate() const { return m_Date; }
-    QTime valueTime() const { return m_Time; }
+    QDate valueDate() const;
+    QTime valueTime() const;
 
-    void setValue( bool _b );
-    void setValue( double _d );
-    void setValue( QDate _date );
-    void setValue( QTime _time );
     void setDate( QDate const & date, FormatType type );
     void setTime( QTime const & time, FormatType type );
+
+    const KSpreadValue value() const;
+
+    void setValue( const KSpreadValue& value );
 
     /**
      * return size of the text
@@ -696,9 +678,6 @@ public:
     bool operator < ( const KSpreadCell & ) const;
 
     void freeAllObscuredCells();
-
-    QString dataTypeToString( DataType dt ) const;
-    DataType stringToDataType( const QString& str ) const;
 
     /**
      * @return the name of this cell. Example: "A1"
@@ -986,15 +965,7 @@ private:
      */
     Content m_content;
 
-    /**
-     * Tells which kind of data is present in the cell, assuming m_content == Text
-     */
-    DataType m_dataType;
-
-    /* no union -- classes can't be in a union */
-    double m_dValue;
-    QDate m_Date;
-    QTime m_Time;
+    KSpreadValue m_value;
 
     QSimpleRichText *m_pQML; // Set when the cell contains QML
 
@@ -1006,12 +977,10 @@ private:
 
     KSpreadConditions conditions;
 
-#if 0
     /**
      * if true: "Shrink to fit" for cell values
      */
     bool m_bShrinkToSize;
-#endif
 
     /**
     * Store the number of line when you used multirow

@@ -269,7 +269,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
     m_sourceCell = source.cell();
     m_targetCell = target.cell();
 
-    if ( !m_sourceCell->isNumeric() )
+    if ( !m_sourceCell->value().isNumber() )
     {
       KMessageBox::error( this, i18n("Source cell must contain a numeric value!") );
       m_sourceEdit->selectAll();
@@ -299,7 +299,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
     m_restored = false;
 
     pDoc->emitBeginOperation();
-    startCalc( m_sourceCell->valueDouble(), goal );
+    startCalc( m_sourceCell->value().asFloat(), goal );
     pDoc->emitEndOperation();
 
     return;
@@ -376,7 +376,7 @@ void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
   double resultA, resultB;
 
   // save old value
-  m_oldSource = m_sourceCell->valueDouble();
+  m_oldSource = m_sourceCell->value().asFloat();
   resultA = _goal;
 
   // initialize start value
@@ -394,16 +394,16 @@ void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
     //    m_sourceCell->updateDepending();
     m_sourceCell->setCalcDirtyFlag();
     m_targetCell->calc( false );
-    resultA = m_targetCell->valueDouble() - _goal;
-    //    kdDebug() << "Target A: " << m_targetCell->valueDouble() << ", " << m_targetCell->text() << " Calc: " << resultA << endl;
+    resultA = m_targetCell->value().asFloat() - _goal;
+    //    kdDebug() << "Target A: " << m_targetCell->value().asFloat() << ", " << m_targetCell->text() << " Calc: " << resultA << endl;
 
     m_sourceCell->setValue(startB);
     //    m_sourceCell->updateDepending();
     m_sourceCell->setCalcDirtyFlag();
     m_targetCell->calc( false );
-    resultB = m_targetCell->valueDouble() - _goal;
+    resultB = m_targetCell->value().asFloat() - _goal;
     /*
-      kdDebug() << "Target B: " << m_targetCell->valueDouble() << ", " << m_targetCell->text() << " Calc: " << resultB << endl;
+      kdDebug() << "Target B: " << m_targetCell->value().asFloat() << ", " << m_targetCell->text() << " Calc: " << resultB << endl;
 
       kdDebug() << "Iteration: " << m_maxIter << ", StartA: " << startA
               << ", ResultA: " << resultA << " (eps: " << eps << "), StartB: "

@@ -269,10 +269,10 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadSheet *_table,
 
     cellText=obj->text();
 
-    if( obj->isNumeric() || obj->isBool())
+    if( obj->value().isNumber() || obj->value().isBoolean() )
     {
       m_bValue=true;
-      m_value=obj->valueDouble();
+      m_value=obj->value().asFloat();
     }
     else if(obj->isDate())
     {

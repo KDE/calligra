@@ -238,8 +238,8 @@ void KSpreadOsziDlg::slotCalc()
 	    cell_result1->calc();
 	    cell_result2->calc();
 	
-	    x1[x] = cell_result1->valueDouble();
-	    y1[x] = cell_result2->valueDouble();
+	    x1[x] = cell_result1->value().asFloat();
+	    y1[x] = cell_result2->value().asFloat();
 	
 	    dlg.setProgress( x );
 	}
@@ -284,7 +284,7 @@ void KSpreadOsziDlg::slotCalc()
 	    cell_data1->setValue( x1[x] );
 	    cell_result1->calc();
 	
-	    y1[x] = cell_result1->valueDouble();
+	    y1[x] = cell_result1->value().asFloat();
 	
 	    dlg.setProgress( x );
 	}

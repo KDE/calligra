@@ -2037,7 +2037,7 @@ bool kspreadfunc_multipleOP( KSContext& context )
 {
   if (gCell)
   {
-    context.setValue( new KSValue( ((KSpreadInterpreter *) context.interpreter() )->cell()->valueDouble() ) );
+    context.setValue( new KSValue( ((KSpreadInterpreter *) context.interpreter() )->cell()->value().asFloat() ) );
     return true;
   }
 
@@ -2093,7 +2093,7 @@ bool kspreadfunc_multipleOP( KSContext& context )
   KSpreadCell * cell1 = table->cellAt( point3.pos.x(), point3.pos.y() );
   cell1->calc( false );
 
-  double d = cell1->valueDouble();
+  double d = cell1->value().asFloat();
   kdDebug() << "Cell: " << point3.pos.x() << "; " << point3.pos.y() << " with value "
             << d << endl;
 
@@ -2171,34 +2171,34 @@ bool kspreadfunc_subtotal( KSContext & context )
       continue;
 
     ++count;
-    if ( cell->isNumeric() )
+    if ( cell->value().isNumber() )
     {
       ++countA;
       if ( function == 1 || function == 9 || function == 7 || function == 8
            || function == 10 || function == 11 )
-        sum += cell->valueDouble();
+        sum += cell->value().asFloat();
       else if ( function == 4 )
       {
         if ( countA == 1 )
-          max = cell->valueDouble();
+          max = cell->value().asFloat();
         else
-        if ( cell->valueDouble() > max )
-          max = cell->valueDouble();
+        if ( cell->value().asFloat() > max )
+          max = cell->value().asFloat();
       }
       else if ( function == 5 )
       {
         if ( countA == 1 )
-          max = cell->valueDouble();
+          max = cell->value().asFloat();
         else
-        if ( cell->valueDouble() < max )
-          max = cell->valueDouble();
+        if ( cell->value().asFloat() < max )
+          max = cell->value().asFloat();
       }
       else if ( function == 6 )
-        sum *= cell->valueDouble();
+        sum *= cell->value().asFloat();
     }
 
 
-    c = new KSValue( cell->valueDouble() );
+    c = new KSValue( cell->value().asFloat() );
     l->listValue().append( c );
   }
   list->append ( l );

@@ -314,18 +314,18 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
       context.setValue( new KSValue(  /*KSValue::Empty*/ 0.0 ) );
     else if(cell->isObscured() && cell->isObscuringForced())
       context.setValue( new KSValue( 0.0 ) );
-    else if ( cell->isNumeric() )
-      context.setValue( new KSValue( cell->valueDouble() ) );
-    else if ( cell->isBool() )
-      context.setValue( new KSValue( cell->valueBool() ) );
+    else if ( cell->value().isNumber() )
+      context.setValue( new KSValue( cell->value().asFloat() ) );
+    else if ( cell->value().isBoolean() )
+      context.setValue( new KSValue( cell->value().asBoolean() ) );
     else if ( cell->isTime() )
       context.setValue( new KSValue( cell->valueTime() ) );
     else if ( cell->isDate() )
       context.setValue( new KSValue( cell->valueDate() ) );
-    else if ( cell->valueString().isEmpty() )
+    else if ( cell->value().asString().isEmpty() )
       context.setValue( new KSValue( 0.0  /*KSValue::Empty*/ ) );
     else
-      context.setValue( new KSValue( cell->valueString() ) );
+      context.setValue( new KSValue( cell->value().asString() ) );
     return true;
   }
   // Parse a range like "A1:B3"
@@ -361,18 +361,18 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
         context.setValue( new KSValue(  /*KSValue::Empty*/ 0.0 ) );
       else if(cell->isObscured() && cell->isObscuringForced())
         context.setValue( new KSValue( 0.0 ) );
-      else if ( cell->isNumeric() )
-        context.setValue( new KSValue( cell->valueDouble() ) );
-      else if ( cell->isBool() )
-      context.setValue( new KSValue( cell->valueBool() ) );
+      else if ( cell->value().isNumber() )
+        context.setValue( new KSValue( cell->value().asFloat() ) );
+      else if ( cell->value().isBoolean() )
+      context.setValue( new KSValue( cell->value().asBoolean() ) );
       else if ( cell->isTime() )
         context.setValue( new KSValue( cell->valueTime() ) );
       else if ( cell->isDate() )
         context.setValue( new KSValue( cell->valueDate() ) );
-      else if ( cell->valueString().isEmpty() )
+      else if ( cell->value().asString().isEmpty() )
         context.setValue( new KSValue( 0.0  /*KSValue::Empty*/ ) );
       else
-        context.setValue( new KSValue( cell->valueString() ) );
+        context.setValue( new KSValue( cell->value().asString() ) );
 
       return true;
     }
@@ -399,18 +399,18 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
 
         if ( cell->isDefault() )
           c = new KSValue( 0.0 /*KSValue::Empty*/);
-        else if ( cell->isNumeric() )
-          c = new KSValue( cell->valueDouble() );
-        else if ( cell->isBool() )
-          c = new KSValue( cell->valueBool() );
+        else if ( cell->value().isNumber() )
+          c = new KSValue( cell->value().asFloat() );
+        else if ( cell->value().isBoolean() )
+          c = new KSValue( cell->value().asBoolean() );
         else if ( cell->isDate() )
           c = new KSValue( cell->valueDate() );
         else if ( cell->isTime() )
           c = new KSValue( cell->valueTime() );
-        else if ( cell->valueString().isEmpty() )
+        else if ( cell->value().asString().isEmpty() )
           c = new KSValue( 0.0 /*KSValue::Empty*/ );
         else
-          c = new KSValue( cell->valueString() );
+          c = new KSValue( cell->value().asString() );
         if ( !(cell->isObscured() && cell->isObscuringForced()) )
                 l->listValue().append( c );
       }

@@ -121,10 +121,10 @@ void ChartBinding::cellChanged( KSpreadCell* )
         for ( int x = 0; x < m_rctDataArea.width(); x++ )
         {
             cell = m_pTable->cellAt( m_rctDataArea.left() + x, m_rctDataArea.top() + y );
-            if ( cell && cell->isNumeric() )
-                matrix.cell( y, x ) = KoChart::Value( cell->valueDouble() );
+            if ( cell && cell->value().isNumber() )
+                matrix.cell( y, x ) = KoChart::Value( cell->value().asFloat() );
             else if ( cell )
-                matrix.cell( y, x ) = KoChart::Value( cell->valueString() );
+                matrix.cell( y, x ) = KoChart::Value( cell->value().asString() );
             else
                 matrix.cell( y, x ) = KoChart::Value();
         }
@@ -1193,7 +1193,7 @@ struct SetSelectionUpperLowerWorker : public KSpreadSheet::CellWorker {
 	return new KSpreadUndoChangeAreaTextCell( doc, table, r );
     }
     bool testCondition( KSpreadCell* c ) {
-	return ( !c->isNumeric() && !c->isBool() &&!c->isFormula() && !c->isDefault()
+	return ( !c->value().isNumber() && !c->value().isBoolean() &&!c->isFormula() && !c->isDefault()
 		 && !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!'
 		 && !c->isObscuringForced() );
     }
@@ -1222,7 +1222,7 @@ struct SetSelectionFirstLetterUpperWorker : public KSpreadSheet::CellWorker {
 	return   new KSpreadUndoChangeAreaTextCell( doc, table, r );
     }
     bool testCondition( KSpreadCell* c ) {
-	return ( !c->isNumeric() && !c->isBool() &&!c->isFormula() && !c->isDefault()
+	return ( !c->value().isNumber() && !c->value().isBoolean() &&!c->isFormula() && !c->isDefault()
 		 && !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!'
 		 && !c->isObscuringForced() );
     }
@@ -4549,7 +4549,7 @@ int KSpreadSheet::adjustColumnHelper( KSpreadCell * c, int _col, int _row )
         int a = c->align( c->column(), c->row() );
         if ( a == KSpreadCell::Undefined )
         {
-            if ( c->isNumeric() || c->isDate() || c->isTime())
+            if ( c->value().isNumber() || c->isDate() || c->isTime())
                 a = KSpreadCell::Right;
             else
                 a = KSpreadCell::Left;
@@ -4933,7 +4933,7 @@ struct GetWordSpellingWorker : public KSpreadSheet::CellWorker {
     }
     void doWork( KSpreadCell* c, bool cellRegion, int, int ) {
 	if ( !c->isObscured() || cellRegion /* ### ??? */ ) {
-	    if ( !c->isFormula() && !c->isNumeric() && !c->valueString().isEmpty() && !c->isTime()
+	    if ( !c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty() && !c->isTime()
 		 && !c->isDate() && c->content() != KSpreadCell::VisualFormula
 		 && !c->text().isEmpty())
 	    {
@@ -4965,7 +4965,7 @@ struct SetWordSpellingWorker : public KSpreadSheet::CellWorker {
     }
     void doWork( KSpreadCell* c, bool cellRegion, int, int ) {
 	if ( !c->isObscured() || cellRegion /* ### ??? */ ) {
-	    if ( !c->isFormula() && !c->isNumeric() && !c->valueString().isEmpty() && !c->isTime()
+	    if ( !c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty() && !c->isTime()
 		 && !c->isDate() && c->content() != KSpreadCell::VisualFormula
 		 && !c->text().isEmpty())
 	    {
@@ -5690,7 +5690,7 @@ bool KSpreadSheet::testListChoose(KSpreadSelection* selectionInfo)
             !c->isObscuringForced() &&
             !(col==marker.x() && c->row()==marker.y()))
 	 {
-	   if(!c->isFormula() && !c->isNumeric() && !c->valueString().isEmpty()
+	   if(!c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty()
 	      && !c->isTime() &&!c->isDate()
 	      && c->content() != KSpreadCell::VisualFormula)
 	     {
@@ -7835,11 +7835,11 @@ void KSpreadSheet::printDebug()
                         "Text    ", "RichTxt ", "Formula ", "VisForm ", "ERROR   " };
                 cellDescr += s_contentString[ cell->content() ];
                 cellDescr += " | ";
-                cellDescr += cell->dataTypeToString( cell->dataType() ).rightJustify(5,' ');
+                cellDescr += cell->value().type();
                 cellDescr += " | ";
                 cellDescr += cell->text();
                 if ( cell->content() == KSpreadCell::Formula )
-                    cellDescr += QString("  [result: %1]").arg( cell->valueString() );
+                    cellDescr += QString("  [result: %1]").arg( cell->value().asString() );
                 kdDebug(36001) << cellDescr << endl;
             }
         }

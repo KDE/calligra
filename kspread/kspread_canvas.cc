@@ -1,4 +1,4 @@
-#include "kspread_canvas.h"
+
 #include "kspread_util.h"
 #include "kspread_editors.h"
 #include "kspread_map.h"
@@ -1907,8 +1907,8 @@ double KSpreadCanvas::getDouble( KSpreadCell * cell )
     QTime dummy;
     return dummy.secsTo( time );
   }
-  if ( cell->isNumeric() )
-    return cell->valueDouble();
+  if ( cell->value().isNumber() )
+    return cell->value().asFloat();
 
   return 0.0;
 }
@@ -1924,7 +1924,6 @@ void KSpreadCanvas::convertToPercent( KSpreadCell * cell )
 {
   if ( cell->isTime() || cell->isDate() )
     cell->setValue( getDouble( cell ) );
-
   cell->setFactor( 100.0 );
   cell->setFormatType( KSpreadCell::Percentage );
 }
@@ -1933,7 +1932,6 @@ void KSpreadCanvas::convertToMoney( KSpreadCell * cell )
 {
   if ( cell->isTime() || cell->isDate() )
     cell->setValue( getDouble( cell ) );
-
   cell->setFormatType( KSpreadCell::Money );
   cell->setFactor( 1.0 );
   cell->setPrecision( m_pDoc->locale()->fracDigits() );
@@ -1945,12 +1943,9 @@ void KSpreadCanvas::convertToTime( KSpreadCell * cell )
     return;
   if ( cell->isDate() )
     cell->setValue( getDouble( cell ) );
-
   cell->setFormatType( KSpreadLayout::SecondeTime );
-
-  QTime time(0, 0, 0);
-  time = time.addSecs( (int) cell->valueDouble() );
-  int msec = (int) ( (cell->valueDouble() - (int) cell->valueDouble())* 1000 );
+  QTime time = cell->value().asDateTime().time();
+  int msec = (int) ( (cell->value().asFloat() - (int) cell->value().asFloat())* 1000 );
   time = time.addMSecs( msec );
   cell->setCellText( time.toString() );
 }
@@ -1961,13 +1956,12 @@ void KSpreadCanvas::convertToDate( KSpreadCell * cell )
     return;
   if ( cell->isTime() )
     cell->setValue( getDouble( cell ) );
-
   cell->setFormatType( KSpreadLayout::ShortDate );
   cell->setFactor( 1.0 );
 
   QDate date(1900, 1, 1);
-
-  date = date.addDays( (int) cell->valueDouble() - 1 );
+  date = date.addDays( (int) cell->value().asFloat() - 1 );
+  date = cell->value().asDateTime().date();
   cell->setCellText( util_dateFormat(m_pDoc->locale(), date, KSpreadCell::ShortDate) );
 }
 
@@ -3589,7 +3583,6 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
     setCursor( arrowCursor );
   }
 }
-
 
 void KSpreadVBorder::wheelEvent( QWheelEvent* _ev )
 {

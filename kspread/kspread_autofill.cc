@@ -385,14 +385,14 @@ AutoFillSequence::AutoFillSequence( KSpreadCell *_cell )
         QString d = _cell->encodeFormula();
         sequence.append( new AutoFillSequenceItem( d ) );
     }
-    else if ( _cell->isNumeric() )
+    else if ( _cell->value().isNumber() )
     {
-        if ( floor( _cell->valueDouble() ) == _cell->valueDouble() )
+        if ( floor( _cell->value().asFloat() ) == _cell->value().asFloat() )
         {
-            sequence.append( new AutoFillSequenceItem( (int)_cell->valueDouble()) );
+            sequence.append( new AutoFillSequenceItem( (int)_cell->value().asFloat()) );
         }
         else
-            sequence.append( new AutoFillSequenceItem(_cell->valueDouble() ) );
+            sequence.append( new AutoFillSequenceItem(_cell->value().asFloat() ) );
     }
     else if ( !_cell->text().isEmpty() )
         sequence.append( new AutoFillSequenceItem( _cell->text() ) );
@@ -580,7 +580,7 @@ double getDiff(KSpreadCell * cell1, KSpreadCell * cell2, AutoFillSequenceItem::T
 {
   if (type == AutoFillSequenceItem::FLOAT)
   {
-    return ( cell2->valueDouble() - cell1->valueDouble() );
+    return ( cell2->value().asFloat() - cell1->value().asFloat() );
   }
   else if (type == AutoFillSequenceItem::DATE)
   {
@@ -612,7 +612,7 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
   deltaList.setAutoDelete( TRUE );
   bool ok = false;
 
-  if ( _srcList.first()->isNumeric() || _srcList.first()->isDate() || _srcList.first()->isTime() )
+  if ( _srcList.first()->value().isNumber() || _srcList.first()->isDate() || _srcList.first()->isTime() )
   {
     AutoFillSequenceItem::Type type;
 
@@ -625,7 +625,7 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
     KSpreadCell * cell = _srcList.first();
     KSpreadCell * cell2 = _srcList.next();
 
-    if ( cell->isNumeric() )
+    if ( cell->value().isNumber() )
       type = AutoFillSequenceItem::FLOAT;
     else if ( cell->isDate() )
       type = AutoFillSequenceItem::DATE;
@@ -637,10 +637,10 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
     while ( cell && cell2 )
     {
       // check if both cells contain the same type
-      if ( ( cell2->isNumeric() && type != AutoFillSequenceItem::FLOAT )
+      if ( ( cell2->value().isNumber() && type != AutoFillSequenceItem::FLOAT )
            || ( cell2->isDate() && type != AutoFillSequenceItem::DATE )
            || ( cell2->isTime() && type != AutoFillSequenceItem::TIME )
-           || (!cell2->isNumeric() && !cell2->isDate() && !cell2->isTime()) )
+           || (!cell2->value().isNumber() && !cell2->isDate() && !cell2->isTime()) )
       {
         count = 0;
         ok = false;
@@ -705,7 +705,7 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
         src  = _srcList.last();
 
         if (type == AutoFillSequenceItem::FLOAT)
-          initDouble = src->valueDouble();
+          initDouble = src->value().asFloat();
         else if (type == AutoFillSequenceItem::DATE)
           initDate = src->valueDate();
         else if (type == AutoFillSequenceItem::TIME)
@@ -717,7 +717,7 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
         src  = _srcList.first();
 
         if (type == AutoFillSequenceItem::FLOAT)
-          initDouble = src->valueDouble();
+          initDouble = src->value().asFloat();
         else if (type == AutoFillSequenceItem::DATE)
           initDate = src->valueDate();
         else if (type == AutoFillSequenceItem::TIME)
@@ -945,8 +945,8 @@ void KSpreadSheet::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
   if (!down)
     s = _srcList.count() - 1;
 
-  if ( _srcList.at( s )->isNumeric() );
-    factor = _srcList.at( s )->valueDouble();
+  if ( _srcList.at( s )->value().isNumber() );
+    factor = _srcList.at( s )->value().asFloat();
 
   while ( cell )
   {
@@ -968,15 +968,15 @@ void KSpreadSheet::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
  	QString d = _srcList.at( s )->encodeFormula();
 	cell->setCellText( cell->decodeFormula( d ), true );
       }
-      else if(_srcList.at( s )->isNumeric() && _srcList.count()==1)
+      else if(_srcList.at( s )->value().isNumber() && _srcList.count()==1)
       {
 	double val;
         if ( _srcList.at( s )->formatType() == KSpreadLayout::Percentage )
             factor = 0.01;
         if (!down)
-          val = (_srcList.at( s )->valueDouble() - (incr * factor));
+          val = (_srcList.at( s )->value().asFloat() - (incr * factor));
         else
-          val = (_srcList.at( s )->valueDouble() + (incr * factor));
+          val = (_srcList.at( s )->value().asFloat() + (incr * factor));
 	QString tmp;
 	tmp = tmp.setNum(val);
 	cell->setCellText( tmp, true );

@@ -252,10 +252,10 @@ bool conditionMatches( KSpreadDB::Condition cond, KSpreadCell * cell )
 
   if ( cond.type == KSpreadDB::numeric )
   {
-    if ( !cell->isNumeric() )
+    if ( !cell->value().isNumber() )
       return false;
     
-    double d = cell->valueDouble();
+    double d = cell->value().asFloat();
 
     kdDebug() << "Comparing: " << d << " - " << cond.value << "; Comp: " << cond.comp << endl;
 
@@ -450,8 +450,8 @@ bool kspreadfunc_dsum( KSContext & context )
   KSpreadCell * cell = cells->first();
   while ( cell )
   {
-    if ( cell->isNumeric() )
-      sum += cell->valueDouble();
+    if ( cell->value().isNumber() )
+      sum += cell->value().asFloat();
 
     cell = cells->next();
   }
@@ -501,10 +501,10 @@ bool kspreadfunc_daverage( KSContext & context )
   KSpreadCell * cell = cells->first();
   while ( cell )
   {
-    if ( cell->isNumeric() )
+    if ( cell->value().isNumber() )
     {
       ++count;
-      sum += cell->valueDouble();
+      sum += cell->value().asFloat();
     }
 
     cell = cells->next();
@@ -554,7 +554,7 @@ bool kspreadfunc_dcount( KSContext & context )
   KSpreadCell * cell = cells->first();
   while ( cell )
   {
-    if ( cell->isNumeric() )
+    if ( cell->value().isNumber() )
     {
       ++count;
     }
@@ -656,13 +656,13 @@ bool kspreadfunc_dget( KSContext & context )
 
   while ( cell )
   {
-    if ( cell->isNumeric() )
+    if ( cell->value().isNumber() )
     {
       ++count;
       if ( count > 1 )
         return false;
 
-      value = cell->valueDouble();
+      value = cell->value().asFloat();
     }
 
     cell = cells->next();
@@ -713,15 +713,15 @@ bool kspreadfunc_dmax( KSContext & context )
   double max = 0.0;
 
   KSpreadCell * cell = cells->first();
-  if ( cell && cell->isNumeric() )
-    max = cell->valueDouble();
+  if ( cell && cell->value().isNumber() )
+    max = cell->value().asFloat();
 
   while ( cell )
   {
-    if ( cell->isNumeric() )
+    if ( cell->value().isNumber() )
     {
-      if ( cell->valueDouble() > max )
-        max = cell->valueDouble();
+      if ( cell->value().asFloat() > max )
+        max = cell->value().asFloat();
     }
 
     cell = cells->next();
@@ -769,15 +769,15 @@ bool kspreadfunc_dmin( KSContext & context )
   double min = 0.0;
 
   KSpreadCell * cell = cells->first();
-  if ( cell && cell->isNumeric() )
-    min = cell->valueDouble();
+  if ( cell && cell->value().isNumber() )
+    min = cell->value().asFloat();
 
   while ( cell )
   {
-    if ( cell->isNumeric() )
+    if ( cell->value().isNumber() )
     {
-      if ( cell->valueDouble() < min )
-        min = cell->valueDouble();
+      if ( cell->value().asFloat() < min )
+        min = cell->value().asFloat();
     }
 
     cell = cells->next();
@@ -829,10 +829,10 @@ bool kspreadfunc_dproduct( KSContext & context )
 
   while ( cell )
   {
-    if ( cell->isNumeric() )
+    if ( cell->value().isNumber() )
     {
       ++count;
-      product *= cell->valueDouble();
+      product *= cell->value().asFloat();
     }
 
     cell = cells->next();
@@ -887,9 +887,9 @@ bool kspreadfunc_dstdev( KSContext & context )
 
   while ( cell )
   {
-    if ( cell->isNumeric() )
+    if ( cell->value().isNumber() )
     {
-      sum += cell->valueDouble();
+      sum += cell->value().asFloat();
       ++count;
     }
 
@@ -906,9 +906,9 @@ bool kspreadfunc_dstdev( KSContext & context )
 
   while ( cell )
   {
-    if ( cell->isNumeric() )
+    if ( cell->value().isNumber() )
     {
-      result += ( ( cell->valueDouble() - average ) * ( cell->valueDouble() - average ) );
+      result += ( ( cell->value().asFloat() - average ) * ( cell->value().asFloat() - average ) );
     }
 
     cell = cells->next();
@@ -961,9 +961,9 @@ bool kspreadfunc_dstdevp( KSContext & context )
 
   while ( cell )
   {
-    if ( cell->isNumeric() )
+    if ( cell->value().isNumber() )
     {
-      sum += cell->valueDouble();
+      sum += cell->value().asFloat();
       ++count;
     }
 
@@ -980,9 +980,9 @@ bool kspreadfunc_dstdevp( KSContext & context )
 
   while ( cell )
   {
-    if ( cell->isNumeric() )
+    if ( cell->value().isNumber() )
     {
-      result += ( ( cell->valueDouble() - average ) * ( cell->valueDouble() - average ) );
+      result += ( ( cell->value().asFloat() - average ) * ( cell->value().asFloat() - average ) );
     }
 
     cell = cells->next();
@@ -1034,9 +1034,9 @@ bool kspreadfunc_dvar( KSContext & context )
 
   while ( cell )
   {
-    if ( cell->isNumeric() )
+    if ( cell->value().isNumber() )
     {
-      sum += cell->valueDouble();
+      sum += cell->value().asFloat();
       ++count;
     }
 
@@ -1053,9 +1053,9 @@ bool kspreadfunc_dvar( KSContext & context )
 
   while ( cell )
   {
-    if ( cell->isNumeric() )
+    if ( cell->value().isNumber() )
     {
-      result += ( ( cell->valueDouble() - average ) * ( cell->valueDouble() - average ) );
+      result += ( ( cell->value().asFloat() - average ) * ( cell->value().asFloat() - average ) );
     }
 
     cell = cells->next();
@@ -1107,9 +1107,9 @@ bool kspreadfunc_dvarp( KSContext & context )
 
   while ( cell )
   {
-    if ( cell->isNumeric() )
+    if ( cell->value().isNumber() )
     {
-      sum += cell->valueDouble();
+      sum += cell->value().asFloat();
       ++count;
     }
 
@@ -1126,9 +1126,9 @@ bool kspreadfunc_dvarp( KSContext & context )
 
   while ( cell )
   {
-    if ( cell->isNumeric() )
+    if ( cell->value().isNumber() )
     {
-      result += ( ( cell->valueDouble() - average ) * ( cell->valueDouble() - average ) );
+      result += ( ( cell->value().asFloat() - average ) * ( cell->value().asFloat() - average ) );
     }
 
     cell = cells->next();
