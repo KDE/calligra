@@ -23,7 +23,7 @@
 #include <qkeycode.h>
 #include <qpixmap.h>
 #include <qevent.h>
-#include <qmessagebox.h>
+#include <kmessagebox.h>
 #include <qclipboard.h>
 #include <qdropsite.h>
 #include <qscrollview.h>
@@ -307,12 +307,16 @@ void KWordView::setupActions()
     actionInsertPicture = new KAction( i18n( "&Picture..." ), "picture", Key_F2,
 				       this, SLOT( insertPicture() ),
 				       actionCollection(), "insert_picture" );
+#if 0
     actionInsertClipart = new KAction( i18n( "&Clipart..." ), "clipart", Key_F3,
 				       this, SLOT( insertClipart() ),
 				       actionCollection(), "insert_clipart" );
+#endif
+#if 0				       
     actionInsertSpecialChar = new KAction( i18n( "&Special Character..." ), "char", ALT + SHIFT + Key_C,
 					   this, SLOT( insertSpecialChar() ),
 					   actionCollection(), "insert_specialchar" );
+#endif
     actionInsertFrameBreak = new KAction( i18n( "&Hard Frame Break" ), CTRL + Key_Return,
 					  this, SLOT( insertFrameBreak() ),
 					  actionCollection(), "insert_framebreak" );
@@ -1321,17 +1325,17 @@ void KWordView::insertPicture()
 /*===============================================================*/
 void KWordView::insertClipart()
 {
-    QMessageBox::information( this, i18n( "Not implemented" ),
-			      i18n( "Inserting cliparts is currently not implemented!" ),
-			      i18n( "OK" ) );
+#ifdef __GNUC__
+#warning "Inserting cliparts is currently not implemented!"
+#endif
 }
 
 /*===============================================================*/
 void KWordView::insertSpecialChar()
 {
-    QMessageBox::information( this, i18n( "Not implemented" ),
-			      i18n( "Inserting special characters is currently not implemented!" ),
-			      i18n( "OK" ) );
+#ifdef __GNUC__
+#warning "Inserting special characters is currently not implemented!"
+#endif
 }
 
 /*===============================================================*/
@@ -1391,9 +1395,12 @@ void KWordView::insertFootNoteEndNote()
     int start = m_pKWordDoc->getFootNoteManager().findStart( gui->getPaperWidget()->getCursor() );
 
     if ( start == -1 )
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "Currently you can only insert footnotes or\n"
-							    "endotes into the first frameset!" ), i18n( "OK" ) );
-    else {
+    {
+        KMessageBox::sorry( this, 
+                            i18n( "Sorry, you can only insert footnotes or\n"
+                                  "endnotes into the first frameset."),
+        		    i18n("Insert Footnote/Endnote"));
+    } else {
 	KWFootNoteDia dia( 0L, "", m_pKWordDoc, gui->getPaperWidget(), start );
 	dia.setCaption( i18n( "Insert Footnote/Endnote" ) );
 	dia.show();
@@ -1498,9 +1505,13 @@ void KWordView::formatPage()
 void KWordView::formatFrameSet()
 {
     if ( m_pKWordDoc->getFirstSelectedFrame() )
+    {
 	gui->getPaperWidget()->femProps();
-    else
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to select at least one frame!" ), i18n( "OK" ) );
+    } else {
+        KMessageBox::sorry( this, 
+                            i18n("Sorry, you have to select a frame first."),
+                            i18n("Format Frameset"));
+    }
 }
 
 /*===============================================================*/
@@ -1710,9 +1721,12 @@ void KWordView::tableInsertRow()
 
     KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
     if ( !grpMgr )
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ),
-			       i18n( "OK" ) );
-    else {
+    {
+        KMessageBox::sorry( this, 
+                            i18n( "You have to put the cursor into a table\n"
+                                  "before inserting a new row." ),
+			    i18n( "Insert Row" ) );
+    } else {
 	KWInsertDia dia( this, "", grpMgr, m_pKWordDoc, KWInsertDia::ROW, gui->getPaperWidget() );
 	dia.setCaption( i18n( "Insert Row" ) );
 	dia.show();
@@ -1726,14 +1740,19 @@ void KWordView::tableInsertCol()
 
     KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
     if ( !grpMgr )
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ),
-			       i18n( "OK" ) );
-    else {
+    {
+        KMessageBox::sorry( this, 
+                            i18n( "You have to put the cursor into a table\n"
+                                  "before inserting a new column." ),
+			    i18n( "Insert Column" ) );
+    } else {
 	if ( grpMgr->getBoundingRect().right() + 62 > static_cast<int>( m_pKWordDoc->getPTPaperWidth() ) )
-	    QMessageBox::critical( this, i18n( "Error" ),
-				   i18n( "There is not enough space at the right of the table\n"
-					 "to insert a new column." ),
-				   i18n( "OK" ) );
+        {
+            KMessageBox::sorry( this, 
+                            i18n( "There is not enough space at the right of the table\n"
+                                  "to insert a new column." ),
+			    i18n( "Insert Column" ) );
+	}
 	else
 	{
 	    KWInsertDia dia( this, "", grpMgr, m_pKWordDoc, KWInsertDia::COL, gui->getPaperWidget() );
@@ -1750,13 +1769,26 @@ void KWordView::tableDeleteRow()
 
     KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
     if ( !grpMgr )
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ),
-			       i18n( "OK" ) );
-    else {
+    {
+        KMessageBox::sorry( this, 
+                            i18n( "You have to put the cursor into a table\n"
+                                  "before deleting a row." ),
+			    i18n( "Delete Row" ) );
+    } else {
 	if ( grpMgr->getRows() == 1 )
-	    QMessageBox::critical( this, i18n( "Error" ),
-				   i18n( "The table has only one row. You can't delete the last one!" ), i18n( "OK" ) );
-	else {
+	{
+	    int result;
+	    result = KMessageBox::warningContinueCancel(this,
+	    		i18n("The table has only one row.\n"
+	    		     "Deleting this row will delete the table.\n\n"
+	    		     "Do you want to delete the table?"),
+	    		i18n("Delete Row"),
+	    		i18n("&Delete"));
+	    if (result == KMessageBox::Continue)
+	    {
+	        gui->getPaperWidget()->deleteTable( grpMgr );
+	    }
+	} else {
 	    KWDeleteDia dia( this, "", grpMgr, m_pKWordDoc, KWDeleteDia::ROW, gui->getPaperWidget() );
 	    dia.setCaption( i18n( "Delete Row" ) );
 	    dia.show();
@@ -1771,13 +1803,26 @@ void KWordView::tableDeleteCol()
 
     KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
     if ( !grpMgr )
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ),
-			       i18n( "OK" ) );
-    else {
+    {
+        KMessageBox::sorry( this, 
+                            i18n( "You have to put the cursor into a table\n"
+                                  "before deleting a column." ),
+			    i18n( "Delete Column" ) );
+    } else {
 	if ( grpMgr->getCols() == 1 )
-	    QMessageBox::critical( this, i18n( "Error" ),
-				   i18n( "The table has only one column. You can't delete the last one!" ), i18n( "OK" ) );
-	else {
+	{
+	    int result;
+	    result = KMessageBox::warningContinueCancel(this,
+	    		i18n("The table has only one column.\n"
+	    		     "Deleting this column will delete the table.\n\n"
+	    		     "Do you want to delete the table?"),
+	    		i18n("Delete Column"),
+	    		i18n("&Delete"));
+	    if (result == KMessageBox::Continue)
+	    {
+	        gui->getPaperWidget()->deleteTable( grpMgr );
+	    }
+	} else {
 	    KWDeleteDia dia( this, "", grpMgr, m_pKWordDoc, KWDeleteDia::COL, gui->getPaperWidget() );
 	    dia.setCaption( i18n( "Delete Column" ) );
 	    dia.show();
@@ -1792,15 +1837,21 @@ void KWordView::tableJoinCells()
 
     KWGroupManager *grpMgr = gui->getPaperWidget()->getCurrentTable();
     if ( !grpMgr )
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to select some cells in a table to join them!" ),
-			       i18n( "OK" ) );
-    else {
+    {
+        KMessageBox::sorry( this, 
+                            i18n( "You have to put the cursor into a table\n"
+                                  "before joining cells." ),
+			    i18n( "Join Cells" ) );
+    } else {
 	QPainter painter;
 	painter.begin( gui->getPaperWidget() );
 	if ( !grpMgr->joinCells() )
-	    QMessageBox::critical( this, i18n( "Error" ),
-				   i18n( "You have to select some cells which are next to each other\n"
-					 "and are not already joined." ), i18n( "OK" ) );
+	{
+	    KMessageBox::sorry( this, 
+				i18n( "You have to select some cells which are next to each other\n"
+				      "and are not already joined." ), 
+				i18n( "Join Cells" ) );
+	}
 	painter.end();
 	QRect r = grpMgr->getBoundingRect();
 	r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
@@ -1817,14 +1868,20 @@ void KWordView::tableSplitCells()
 
     KWGroupManager *grpMgr = gui->getPaperWidget()->getCurrentTable();
     if ( !grpMgr )
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to select a cell in a table to split it!" ),
-			       i18n( "OK" ) );
-    else {
+    {
+        KMessageBox::sorry( this, 
+                            i18n( "You have to put the cursor into a table\n"
+                                  "before splitting cells." ),
+			    i18n( "Split Cells" ) );
+    } else {
 	QPainter painter;
 	painter.begin( gui->getPaperWidget() );
 	if ( !grpMgr->splitCell() )
-	    QMessageBox::critical( this, i18n( "Error" ), i18n( "Currently it's only possible to split a joined cell.\n"
-								"So, you have to selecte a joined cell." ), i18n( "OK" ) );
+	{
+	    KMessageBox::sorry( this, 
+	                        i18n("You have to select a joined cell."),
+	                        i18n("Split Cells") );
+	}				
 	painter.end();
 	QRect r = grpMgr->getBoundingRect();
 	r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
@@ -1841,12 +1898,19 @@ void KWordView::tableUngroupTable()
 
     KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
     if ( !grpMgr )
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ),
-			       i18n( "OK" ) );
-    else {
-	if ( QMessageBox::warning( this, i18n( "Warning" ), i18n( "Ungrouping a table is an irrevesible action!\n"
-								  "Do you really want to do that?" ), i18n( "Yes" ),
-				   i18n( "No" ) ) == 0 ) {
+    {
+        KMessageBox::sorry( this, 
+                            i18n( "You have to put the cursor into a table\n"
+                                  "before ungrouping a table." ),
+			    i18n( "Ungroup Table" ) );
+    } else {
+        int result;
+        result = KMessageBox::warningContinueCancel(this,
+        		i18n("Ungrouping a table can not be undone.\n"
+        		     "Are you sure you want to ungroup the table?"),
+        		i18n("Ungroup Table"), i18n("&Ungroup"));
+	if (result == KMessageBox::Continue)
+	{
 	    grpMgr->ungroup();
 	    QRect r = grpMgr->getBoundingRect();
 	    r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
@@ -1862,37 +1926,16 @@ void KWordView::tableDelete()
 {
     KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
     if ( !grpMgr )
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table \n"
-							    "or select it to delete it!" ), i18n( "OK" ) );
+    {
+        KMessageBox::sorry( this, 
+	                    i18n( "You have to put the cursor into a table \n"
+			          "or select it to delete it!" ), 
+			    i18n( "Delete Table" ) );
+    }			  
     else
+    {
 	gui->getPaperWidget()->deleteTable( grpMgr );
-
-}
-
-/*===============================================================*/
-void KWordView::helpContents()
-{
-}
-
-/*===============================================================*/
-void KWordView::helpAbout()
-{
-    QMessageBox::information( this, "KWord",
-			      i18n( "KWord 0.0.1 alpha\n\n"
-				    "( c ) by Torben Weis <weis@kde.org> and \n"
-				    "Reginald Stadlbauer <reggie@kde.org> 1998\n\n"
-				    "KWord is under GNU GPL" ),
-                              i18n( "OK"));
-}
-
-/*===============================================================*/
-void KWordView::helpAboutKOffice()
-{
-}
-
-/*===============================================================*/
-void KWordView::helpAboutKDE()
-{
+    }
 }
 
 /*====================== text style selected  ===================*/

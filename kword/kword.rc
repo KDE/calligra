@@ -111,9 +111,9 @@
 </ToolBar>
 <ToolBar name="insert_toolbar" position="top" >
   <Action name="insert_picture"/>
-  <Action name="insert_clipart"/>
+  <!-- Action name="insert_clipart"/>
   <Separator/>
-  <Action name="insert_specialchar"/>
+  <Action name="insert_specialchar"/ -->
 </ToolBar>
 <ToolBar name="tools_toolbar" position="left">
   <Action name="tools_edit"/>

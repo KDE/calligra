@@ -204,11 +204,6 @@ public slots:
     virtual void tableUngroupTable();
     virtual void tableDelete();
 
-    virtual void helpContents();
-    virtual void helpAbout();
-    virtual void helpAboutKOffice();
-    virtual void helpAboutKDE();
-
     virtual void textStyleSelected( const QString & );
     virtual void textSizeSelected( const QString & );
     virtual void textFontSelected( const QString & );
