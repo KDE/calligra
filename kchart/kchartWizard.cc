@@ -42,6 +42,7 @@ KChartWizard::KChartWizard ( KChartPart* chart, QWidget *parent, const char* nam
     // Third page: select the minor chart type
     _selectchartsubtypepage = new KChartWizardSelectChartSubTypePage( this, _chart );
     addPage( _selectchartsubtypepage, i18n( "Select Chart Subtype" ) );
+    setFinishEnabled(_selectchartsubtypepage, true);
 
     // Fourth page: data setup
     //_setupdatapage = new KChartWizardSetupDataPage( this, _chart );
@@ -50,6 +51,7 @@ KChartWizard::KChartWizard ( KChartPart* chart, QWidget *parent, const char* nam
     // Fifth page: labels/legends setup
     _labelslegendpage = new KChartWizardLabelsLegendPage( this, _chart );
     addPage( _labelslegendpage, i18n( "Labels & Legend" ) );
+    setFinishEnabled(_labelslegendpage, true);
 
     // Sixth page: axes setup
     _axespage = new KChartWizardSetupAxesPage( this, _chart );

@@ -12,8 +12,9 @@ Item								   Prio Status
             (see below also)
   + 101007: Error in reading back axis labels.			      1 ----
       - Store row and column labels separately in the document		done
-      - Load old type files without separately stored labels.
-      - Save / Load row and column labels 
+      - Load old type files without separately stored labels.		--
+      - Save row and column labels	 				--
+      - Load row and column labels	 				--
 
 
 * Wishes
@@ -68,10 +69,10 @@ Item								   Prio Status
   + Pages:
     - "Select Chart Type" page: Reorder like the toolbark		DONE
                                 Black border around selected type?    3 --
-  + Make Help button work.					      1 ----
+  + Make Help button work or disable it.			      1 ----
   + The Back button should be in the same place on all pages.	      3 ----
   + Subtype page should have icons for subtypes like config dialog.   2 ----
-  + Why is Finish button disabled for two pages?		      1 ----
+  + Enable Finish button for all pages.				      1 DONE
 
 * Manual
   + Describe stand-alone charting.				     S1 ----

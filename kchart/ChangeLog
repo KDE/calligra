@@ -1,3 +1,9 @@
+2005-03-11  Inge Wallin  <inge@lysator.liu.se>
+
+	Enable "Finish" button for all pages in the wizard.
+	* kchartWizard.cc (KChartWizard): Enable Finish button for
+	"Subtypes" and "Labels & Legend" pages.
+
 2005-03-10  Inge Wallin  <inge@lysator.liu.se>
 
 	Make the table in the data editor shrink when number of rows/cols
