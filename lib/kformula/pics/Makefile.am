@@ -1,1 +1,1 @@
-SUBDIRS = locolor hicolor
+SUBDIRS = hicolor
