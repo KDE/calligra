@@ -5061,6 +5061,16 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         if( !comment.isEmpty() )
             setComment( comment );
     }
+
+    if ( element.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
+    {
+        QString str = element.attributeNS( KoXmlNS::style, "data-style-name", QString::null );
+        kdDebug()<<" data-style-name !"<<str<<endl;
+        kdDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[str].formatStr<<endl;
+        kdDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[str].prefix<<endl;
+        kdDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[str].suffix<<endl;
+
+    }
     return true;
 }
 
