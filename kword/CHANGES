@@ -1055,3 +1055,7 @@ Reggie, 7.4.1999:
 Reggie, 8.4.1999:
 -----------------
 - When saving text '>' and '<' are converted to &gt; and &lt;
+- More work on footnotes/endnotes
+  - Adding the footnote description for endnotes works quite well now
+    (only in the sorting is a bug...)
+- Some fixes and cleanups

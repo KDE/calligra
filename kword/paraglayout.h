@@ -15,6 +15,10 @@ class KWParagLayout;
 #include <koStream.h>
 #include <koRuler.h>
 
+/******************************************************************/
+/* Class: KWParagLayout                                           */
+/******************************************************************/
+
 /**
  * A KWParagLayout-Instance provides all information neccessary to format a given
  * parag. This means: Font, TextFlow, Counter ....
@@ -25,11 +29,11 @@ const QString CounterPlaceHolder[] = {"","99","w","W","iiix","IIIX","W "};
 class KWParagLayout
 {
 public:
-  enum Flow { LEFT, RIGHT, CENTER, BLOCK };
+  enum Flow {LEFT,RIGHT,CENTER,BLOCK};
   //enum CounterFlow { C_LEFT, C_RIGHT };
   enum CounterType {CT_NONE = 0,CT_NUM = 1,CT_ALPHAB_L = 2,CT_ALPHAB_U = 3,CT_ROM_NUM_L = 4,CT_ROM_NUM_U = 5,CT_BULLET = 6};
   enum NumType {NT_LIST = 0,NT_CHAPTER = 1};
-  
+
   enum BorderStyle {SOLID = 0,DASH = 1,DOT = 2,DASH_DOT = 3,DASH_DOT_DOT = 4};
   struct Border
   {
@@ -43,32 +47,32 @@ public:
       return (style != _brd.style || color != _brd.color || ptWidth != _brd.ptWidth);
     }
   };
-  
+
   struct Counter
   {
     unsigned int counterDepth;
     int counterBullet;
     QString counterLeftText;
-    QString counterRightText;    
+    QString counterRightText;
     CounterType counterType;
     QString startCounter;
     NumType numberingType;
     QString bulletFont;
   };
-  
-  KWParagLayout( KWordDocument *_doc, bool _add = true, QString _name = "Standard" );
+
+  KWParagLayout(KWordDocument *_doc,bool _add = true,QString _name = "Standard");
   ~KWParagLayout();
-  
+
   KWParagLayout& operator=(KWParagLayout &_layout);
-  
-  void setFormat( KWFormat &_format );
+
+  void setFormat(KWFormat &_format);
   void setFirstLineLeftIndent(KWUnit _i) { firstLineLeftIndent = _i; }
   void setLeftIndent(KWUnit _i) { leftIndent = _i; }
   void setParagFootOffset(KWUnit _i) { paragFootOffset = _i; }
   void setParagHeadOffset(KWUnit _i) { paragHeadOffset = _i; }
   void setLineSpacing(KWUnit _i) { lineSpacing = _i; }
   void setName(QString _n) { name = _n; }
-  void setFlow( Flow _f ) { flow = _f; }
+  void setFlow(Flow _f) { flow = _f; }
   /**
    * Set the text left to the counter.
    */
@@ -96,21 +100,21 @@ public:
    * @see KWFormat
    */
   void setFollowingParagLayout(QString _paragname);
-  
+
   void setLeftBorder(Border _brd) { left = _brd; }
   void setRightBorder(Border _brd) { right = _brd; }
   void setTopBorder(Border _brd) { top = _brd; }
   void setBottomBorder(Border _brd) { bottom = _brd; }
-  
+
   void setStartCounter(QString _s) { counter.startCounter = _s; }
   QString getStartCounter() { return counter.startCounter; }
-  
+
   void setNumberingType(NumType _t) { counter.numberingType = _t; }
   NumType getNumberingType() { return counter.numberingType; }
-  
+
   void setBulletFont(QString _f) { counter.bulletFont = _f; }
   QString getBulletFont() { return counter.bulletFont; }
-  
+
   KWFormat& getFormat() { return format; }
   QString getName() { return name; }
   KWUnit getFirstLineLeftIndent() { return firstLineLeftIndent; }
@@ -142,21 +146,21 @@ public:
   /**
    * @return the text right to the counter
    */
-  QString getCounterRightText() { return counter.counterRightText.data(); }  
+  QString getCounterRightText() { return counter.counterRightText.data(); }
   /**
    * @return the name of the following parag layout.
    */
-  QString getFollowingParagLayout() { return followingParagLayout; }  
-  
+  QString getFollowingParagLayout() { return followingParagLayout; }
+
   void save(ostream &out);
   void load(KOMLParser&,vector<KOMLAttrib>&);
-  
+
   Counter getCounter() { return counter; }
   void setCounter(Counter _counter) { counter = _counter; }
-  
+
   QList<KoTabulator> *getTabList() { return &tabList; }
   void setTabList(QList<KoTabulator> *tabList);
-  
+
   bool getNextTab(unsigned int _ptPos,unsigned int _lBorder,unsigned int _rBorder,unsigned int &_tabPos,KoTabulators &_tabType);
   bool hasSpecialTabs() { return specialTabs; }
 
@@ -168,7 +172,7 @@ protected:
    * @see KWFormat
    */
   KWFormat format;
-  
+
   Flow flow;
   KWUnit paragFootOffset;
   KWUnit paragHeadOffset;
@@ -176,7 +180,7 @@ protected:
   KWUnit leftIndent;
   KWUnit lineSpacing;
   Border left,right,top,bottom;
-  
+
   Counter counter;
   /**
    * Parag that is used for numbering. For example a theorem
@@ -186,14 +190,14 @@ protected:
    *
    * @see KWParagLayout
    */
-  //KWParagLayout* numberLikeParagLayout;  
+  //KWParagLayout* numberLikeParagLayout;
   /**
    * Name of the Parag that will be used when you press RETURN in this Parag
    * If this pointer is 0L the following parag layout is still the same.
    *
    * @see KWParagLayout
    */
-  QString followingParagLayout;  
+  QString followingParagLayout;
   /**
    * This parags name.
    */
@@ -204,7 +208,7 @@ protected:
   KWordDocument *document;
   QList<KoTabulator> tabList;
   bool specialTabs;
-  
+
 };
 
 #endif

@@ -50,17 +50,17 @@ public:
 
   NoteType getNoteType() { return noteType; }
   void setNoteType(NoteType nt) { noteType = nt; }
-  
+
 protected:
   void addFootNoteText(KWFootNote *fn);
-  
+
   KWordDocument *doc;
   int start;
   QList<KWFootNote> footNotes;
   bool superscript;
   NoteType noteType;
   QString firstParag;
-  
+
 };
 
 /******************************************************************/
@@ -96,6 +96,8 @@ public:
 
   void setParag(KWParag *_parag);
   QString getParag() { return parag; }
+
+  void updateDescription(int _start);
   
 protected:
   void makeText();
@@ -105,7 +107,7 @@ protected:
   QList<KWFootNoteInternal> parts;
   QString before,after,text;
   QString parag;
-  
+
 };
 
 #endif

@@ -7,8 +7,13 @@
 #include <fstream>
 #include <unistd.h>
 
-KWFormat::KWFormat( KWordDocument *_doc, const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
-		    char _italic = -1, char _underline = -1, VertAlign _vertAlign = VA_NORMAL, char _math = -1, char _direct = -1 )
+/******************************************************************/
+/* Class: KWFormat                                                */
+/******************************************************************/
+
+/*================================================================*/
+KWFormat::KWFormat(KWordDocument *_doc,const QColor& _color,KWUserFont *_font = 0L,int _font_size = -1,int _weight = -1,
+		   char _italic = -1,char _underline = -1,VertAlign _vertAlign = VA_NORMAL,char _math = -1,char _direct = -1)
 {
     doc = _doc;
     color = _color;
@@ -23,6 +28,7 @@ KWFormat::KWFormat( KWordDocument *_doc, const QColor& _color, KWUserFont *_font
     ref = 0;
 }
 
+/*================================================================*/
 KWFormat::KWFormat(KWordDocument *_doc)
 {
     doc = _doc;
@@ -30,7 +36,8 @@ KWFormat::KWFormat(KWordDocument *_doc)
     ref = 0;
 }
 
-KWFormat::KWFormat( KWordDocument *_doc,const KWFormat &_format )
+/*================================================================*/
+KWFormat::KWFormat(KWordDocument *_doc,const KWFormat &_format)
 {
     userFont = _format.getUserFont();
     ptFontSize = _format.getPTFontSize();
@@ -45,7 +52,8 @@ KWFormat::KWFormat( KWordDocument *_doc,const KWFormat &_format )
     doc = _doc;
 }
 
-KWFormat& KWFormat::operator=( const KWFormat& _format )
+/*================================================================*/
+KWFormat& KWFormat::operator=(const KWFormat& _format)
 {
     userFont = _format.getUserFont();
     ptFontSize = _format.getPTFontSize();
@@ -62,6 +70,7 @@ KWFormat& KWFormat::operator=( const KWFormat& _format )
     return *this;
 }
 
+/*================================================================*/
 bool KWFormat::operator==(const KWFormat & _format)
 {
   return (*userFont == *_format.getUserFont() &&
@@ -73,6 +82,7 @@ bool KWFormat::operator==(const KWFormat & _format)
 	  vertAlign == _format.getVertAlign());
 }
 
+/*================================================================*/
 bool KWFormat::operator!=(const KWFormat & _format)
 {
   return (*userFont != *_format.getUserFont() ||
@@ -84,7 +94,8 @@ bool KWFormat::operator!=(const KWFormat & _format)
 	  vertAlign != _format.getVertAlign());
 }
 
-void KWFormat::setDefaults( KWordDocument *_doc )
+/*================================================================*/
+void KWFormat::setDefaults(KWordDocument *_doc)
 {
     userFont = _doc->getDefaultUserFont();
     ptFontSize = 12;
@@ -97,13 +108,15 @@ void KWFormat::setDefaults( KWordDocument *_doc )
     direct = -1;
 }
 
-KWDisplayFont* KWFormat::loadFont( KWordDocument *_doc )
+/*================================================================*/
+KWDisplayFont* KWFormat::loadFont(KWordDocument *_doc)
 {
   KWDisplayFont *font = _doc->findDisplayFont( userFont, ptFontSize, weight, italic, underline );
   return font;
 }
 
-void KWFormat::apply( KWFormat &_format )
+/*================================================================*/
+void KWFormat::apply(KWFormat &_format)
 {
     if ( _format.getUserFont() )
 	userFont = _format.getUserFont();
@@ -126,6 +139,7 @@ void KWFormat::apply( KWFormat &_format )
     vertAlign = _format.getVertAlign();
 }
 
+/*================================================================*/
 void KWFormat::decRef()
 {
   --ref;
@@ -139,6 +153,7 @@ void KWFormat::decRef()
 				" because I have not a pointer to the document!");
 }
 
+/*================================================================*/
 void KWFormat::incRef()
 {
   ++ref;
@@ -146,6 +161,7 @@ void KWFormat::incRef()
   //debug("inc ref (%d): %s",ref,key.data());
 }
 
+/*================================================================*/
 void KWFormat::save(ostream &out)
 {
   out << indent << "<COLOR red=\"" << color.red() << "\" green=\"" << color.green() << "\" blue=\"" << color.blue() << "\"/>" << endl;
@@ -157,6 +173,7 @@ void KWFormat::save(ostream &out)
   out << indent << "<VERTALIGN value=\"" << static_cast<int>(vertAlign) << "\"/>" << endl;
 }
 
+/*================================================================*/
 void KWFormat::load(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument *_doc)
 {
   doc = _doc;

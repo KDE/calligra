@@ -7,51 +7,58 @@
 #include <fstream>
 #include <unistd.h>
 
-KWParagLayout::KWParagLayout(KWordDocument *_doc,bool _add = true, QString _name = "Standard")
+/******************************************************************/
+/* Class: KWParagLayout                                           */
+/******************************************************************/
+
+/*================================================================*/
+KWParagLayout::KWParagLayout(KWordDocument *_doc,bool _add = true,QString _name = "Standard")
   : format(_doc), paragFootOffset(), paragHeadOffset(), firstLineLeftIndent(), leftIndent(), lineSpacing()
 {
-    flow = LEFT;
-    counter.counterType = CT_NONE;
-    counter.counterDepth = 0;
-    counter.counterBullet = '·';
-    counter.counterLeftText = "";
-    counter.counterRightText = "";
-    followingParagLayout = "Standard";
-    name = _name;
-    counter.startCounter = "0";
-    counter.numberingType = NT_LIST;
-    counter.bulletFont = "symbol";
+  flow = LEFT;
+  counter.counterType = CT_NONE;
+  counter.counterDepth = 0;
+  counter.counterBullet = '·';
+  counter.counterLeftText = "";
+  counter.counterRightText = "";
+  followingParagLayout = "Standard";
+  name = _name;
+  counter.startCounter = "0";
+  counter.numberingType = NT_LIST;
+  counter.bulletFont = "symbol";
 
-    left.color = Qt::white;
-    left.style = SOLID;
-    left.ptWidth = 0;
-    right.color = Qt::white;
-    right.style = SOLID;
-    right.ptWidth = 0;
-    top.color = Qt::white;
-    top.style = SOLID;
-    top.ptWidth = 0;
-    bottom.color = Qt::white;
-    bottom.style = SOLID;
-    bottom.ptWidth = 0;
+  left.color = Qt::white;
+  left.style = SOLID;
+  left.ptWidth = 0;
+  right.color = Qt::white;
+  right.style = SOLID;
+  right.ptWidth = 0;
+  top.color = Qt::white;
+  top.style = SOLID;
+  top.ptWidth = 0;
+  bottom.color = Qt::white;
+  bottom.style = SOLID;
+  bottom.ptWidth = 0;
 
-    format.setDefaults(_doc);
+  format.setDefaults(_doc);
 
-    document = _doc;
-    if (_add)
-      document->paragLayoutList.append(this);
+  document = _doc;
+  if (_add)
+    document->paragLayoutList.append(this);
 
-    tabList.setAutoDelete(false);
-    specialTabs = false;
+  tabList.setAutoDelete(false);
+  specialTabs = false;
 }
 
+/*================================================================*/
 KWParagLayout::~KWParagLayout()
 {
-    document->paragLayoutList.setAutoDelete(true);
-    document->paragLayoutList.removeRef( this );
-    document->paragLayoutList.setAutoDelete(false);
+  document->paragLayoutList.setAutoDelete(true);
+  document->paragLayoutList.removeRef( this );
+  document->paragLayoutList.setAutoDelete(false);
 }
 
+/*================================================================*/
 KWParagLayout& KWParagLayout::operator=(KWParagLayout &_layout)
 {
   flow = _layout.getFlow();
@@ -84,16 +91,19 @@ KWParagLayout& KWParagLayout::operator=(KWParagLayout &_layout)
   return *this;
 }
 
+/*================================================================*/
 void KWParagLayout::setFollowingParagLayout(QString _name)
 {
   followingParagLayout = _name;
 }
 
+/*================================================================*/
 void KWParagLayout::setFormat(KWFormat &_f)
 {
   format = _f;
 }
 
+/*================================================================*/
 void KWParagLayout::save(ostream &out)
 {
   out << indent << "<NAME value=\"" << name.ascii() << "\"/>" << endl;
@@ -125,6 +135,7 @@ void KWParagLayout::save(ostream &out)
 	<< "\" inchpos=\"" << tabList.at(i)->inchPos << "\" type=\"" << static_cast<int>(tabList.at(i)->type) << "\"/>" << endl;
 }
 
+/*================================================================*/
 void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
   string tag;
@@ -499,6 +510,7 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
     }
 }
 
+/*================================================================*/
 void KWParagLayout::setTabList(QList<KoTabulator> *_tabList)
 {
   tabList.setAutoDelete(true);
@@ -517,6 +529,7 @@ void KWParagLayout::setTabList(QList<KoTabulator> *_tabList)
     }
 }
 
+/*================================================================*/
 bool KWParagLayout::getNextTab(unsigned int _ptPos,unsigned int _lBorder,unsigned int _rBorder,unsigned int &_tabPos,KoTabulators &_tabType)
 {
   _tabPos = 0;

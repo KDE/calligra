@@ -11,6 +11,11 @@
 #include <fstream>
 #include <unistd.h>
 
+/******************************************************************/
+/* Class: KWParag                                                 */
+/******************************************************************/
+
+/*================================================================*/
 KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc,KWParag* _prev,KWParag* _next,
 		 KWParagLayout* _paragLayout,bool useForFirst)
   : text(_doc)
@@ -45,6 +50,7 @@ KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc,KWParag* _prev,KW
   info = PI_NONE;
 }
 
+/*================================================================*/
 KWParag::KWParag(const KWParag& _parag)
   : text(_parag.document)
 {
@@ -77,10 +83,12 @@ KWParag::KWParag(const KWParag& _parag)
   info = _parag.info;
 }
 
+/*================================================================*/
 KWParag::~KWParag()
 {
 }
 
+/*================================================================*/
 void KWParag::makeCounterText()
 {
   QString buffer = "";
@@ -170,6 +178,7 @@ void KWParag::makeCounterText()
   makeCounterWidth();
 }
 
+/*================================================================*/
 void KWParag::makeCounterWidth()
 {
   QString placeholder = CounterPlaceHolder[static_cast<int>(paragLayout->getCounterType())];
@@ -182,28 +191,33 @@ void KWParag::makeCounterWidth()
   counterWidth = str.copy();
 }
 
+/*================================================================*/
 void KWParag::insertText( unsigned int _pos,QString _text)
 {
   text.insert(_pos,_text);
 }
 
+/*================================================================*/
 void KWParag::insertText( unsigned int _pos,KWString *_text)
 {
   text.insert(_pos,_text);
 }
 
+/*================================================================*/
 void KWParag::insertVariable(unsigned int _pos,KWVariable *_var)
 {
   KWCharVariable *v = new KWCharVariable(_var);
   text.insert(_pos,v);
 }
 
+/*================================================================*/
 void KWParag::insertFootNote(unsigned int _pos,KWFootNote *_fn)
 {
   KWCharFootNote *fn = new KWCharFootNote(_fn);
   text.insert(_pos,fn);
 }
 
+/*================================================================*/
 void KWParag::insertPictureAsChar(unsigned int _pos,QString _filename)
 {
   KWImage _image = KWImage(document,_filename);
@@ -215,22 +229,26 @@ void KWParag::insertPictureAsChar(unsigned int _pos,QString _filename)
   text.insert(_pos,i);
 }
 
+/*================================================================*/
 void KWParag::insertTab(unsigned int _pos)
 {
   KWCharTab *_tab = new KWCharTab();
   text.insert(_pos,_tab);
 }
 
+/*================================================================*/
 void KWParag::appendText(KWChar *_text,unsigned int _len)
 {
   text.append(_text,_len);
 }
 
+/*================================================================*/
 bool KWParag::deleteText( unsigned int _pos, unsigned int _len = 1)
 {
   return text.remove(_pos,_len);
 }
 
+/*================================================================*/
 void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_format )
 {
   if (text.size() == 0) return;
@@ -270,6 +288,7 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
     }
 }
 
+/*================================================================*/
 void KWParag::save(ostream &out)
 {
   out << indent << "<TEXT>" << text.decoded().ascii() << "</TEXT>" << endl;
@@ -367,6 +386,7 @@ void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
     }
 }
 
+/*================================================================*/
 void KWParag::applyStyle(QString _style)
 {
   KWParagLayout *tmp = document->findParagLayout(_style);
@@ -502,31 +522,37 @@ void KWParag::applyStyle(QString _style)
     }
 }
 
+/*================================================================*/
 void KWParag::tabListChanged(QList<KoTabulator>* _tabList)
 {
   paragLayout->setTabList(_tabList);
 }
 
+/*================================================================*/
 int KWParag::find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs,bool _whole)
 {
   return text.find(_expr,_format,_index,_cs,_whole);
 }
 
+/*================================================================*/
 int KWParag::find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index,int &_len,bool _cs,bool _wildcard = false)
 {
   return text.find(_regexp,_format,_index,_len,_cs,_wildcard);
 }
 
+/*================================================================*/
 int KWParag::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs,bool _whole)
 {
   return text.findRev(_expr,_format,_index,_cs,_whole);
 }
 
+/*================================================================*/
 int KWParag::findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index,int &_len,bool _cs,bool _wildcard = false)
 {
   return text.findRev(_regexp,_format,_index,_len,_cs,_wildcard);
 }
 
+/*================================================================*/
 void KWParag::replace(int _pos,int _len,QString _text,KWFormat &_format)
 {
   deleteText(_pos,_len);

@@ -19,6 +19,10 @@ class KWordDocument;
 #include <iostream>
 #include <koStream.h>
 
+/******************************************************************/
+/* Class: KWParag                                                 */
+/******************************************************************/
+
 /**
  * This class hold a real paragraph. It tells abou the text in this
  * paragraph, its format etc. The complete text is a list of KWParag instances.
@@ -27,7 +31,7 @@ class KWParag
 {
 public:
   enum Info {PI_NONE,PI_FOOTNOTE};
-  
+
   /**
    * Creates a new instance of KWParag.
    *
@@ -171,7 +175,7 @@ public:
 
   Info getInfo() { return info; }
   void setInfo(Info _info) { info = _info; }
-  
+
 protected:
   /**
    * Pointer to the previous paragraph or 0L if this is the first one.
@@ -241,7 +245,7 @@ protected:
 
   QString paragName;
   Info info;
-    
+
 };
 
 #endif

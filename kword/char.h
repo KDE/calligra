@@ -21,6 +21,10 @@ class KWTextFrameSet;
 enum ClassIDs {ID_KWCharNone = 0,ID_KWCharFormat = 1,ID_KWCharImage = 2,ID_KWCharTab = 3,ID_KWCharVariable = 4,
 	       ID_KWCharFootNote = 5};
 
+/******************************************************************/
+/* Class: KWCharAttribute                                         */
+/******************************************************************/
+
 class KWCharAttribute
 {
 public:
@@ -39,6 +43,10 @@ protected:
   int classId;
 
 };
+
+/******************************************************************/
+/* Class: KWCharFormat                                            */
+/******************************************************************/
 
 class KWCharFormat : public KWCharAttribute
 {
@@ -64,6 +72,10 @@ protected:
 
 };
 
+/******************************************************************/
+/* Class: KWCharImage                                             */
+/******************************************************************/
+
 class KWCharImage : public KWCharAttribute
 {
 public:
@@ -83,12 +95,20 @@ protected:
 
 };
 
+/******************************************************************/
+/* Class: KWCharTab                                               */
+/******************************************************************/
+
 class KWCharTab : public KWCharAttribute
 {
 public:
   KWCharTab() { classId = ID_KWCharTab; }
 
 };
+
+/******************************************************************/
+/* Class: KWCharVariable                                          */
+/******************************************************************/
 
 class KWCharVariable : public KWCharFormat
 {
@@ -111,6 +131,10 @@ protected:
   KWVariable *var;
 
 };
+
+/******************************************************************/
+/* Class: KWCharFootNote                                         */
+/******************************************************************/
 
 class KWCharFootNote : public KWCharFormat
 {
@@ -143,6 +167,10 @@ struct KWChar
   kwchar c;
   KWCharAttribute* attrib;
 };
+
+/******************************************************************/
+/* Class: KWString                                                */
+/******************************************************************/
 
 class KWString
 {

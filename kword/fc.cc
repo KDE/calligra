@@ -10,6 +10,11 @@
 #define max(a,b) ((a)>(b)?(a):(b))
 #endif
 
+/******************************************************************/
+/* Class: KWFormatContext                                         */
+/******************************************************************/
+
+/*================================================================*/
 KWFormatContext::KWFormatContext(KWordDocument *_doc,unsigned int _frameSet)
   : KWFormat()
 {
@@ -37,13 +42,15 @@ KWFormatContext::KWFormatContext(KWordDocument *_doc,unsigned int _frameSet)
   offsetsAdded = false;
 }
 
+/*================================================================*/
 KWFormatContext::~KWFormatContext()
 {
 }
 
 
-void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true, bool _fromStart = true,
-			    int _frame = -1, int _page = -1 )
+/*================================================================*/
+void KWFormatContext::init(KWParag *_parag,QPainter &_painter,bool _updateCounters = true,bool _fromStart = true,
+			   int _frame = -1,int _page = -1)
 {
   outOfFrame = false;
   specialHeight = 0;
@@ -97,7 +104,8 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCou
     }
 }
 
-void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters = true )
+/*================================================================*/
+void KWFormatContext::enterNextParag(QPainter &_painter,bool _updateCounters = true)
 {
     // Set the context to the given paragraph
     if ( parag != 0L )
@@ -135,7 +143,8 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
     makeLineLayout( _painter );
 }
 
-void KWFormatContext::skipCurrentParag( QPainter &_painter )
+/*================================================================*/
+void KWFormatContext::skipCurrentParag(QPainter &_painter)
 {
     bool ret;
 
@@ -152,10 +161,12 @@ void KWFormatContext::skipCurrentParag( QPainter &_painter )
     } while( ret );
 }
 
-void KWFormatContext::gotoStartOfParag( QPainter & )
+/*================================================================*/
+void KWFormatContext::gotoStartOfParag(QPainter &)
 {
 }
 
+/*================================================================*/
 bool KWFormatContext::isCursorAtLastChar()
 {
   if ( textPos >= lineEndPos - 1 )
@@ -164,28 +175,33 @@ bool KWFormatContext::isCursorAtLastChar()
   return false;
 }
 
+/*================================================================*/
 bool KWFormatContext::isCursorInFirstLine()
 {
     // If we are in the first line, return true
     return ( lineStartPos == 0 );
 }
 
+/*================================================================*/
 bool KWFormatContext::isCursorAtParagStart()
 {
     return ( textPos == 0);
 }
 
+/*================================================================*/
 bool KWFormatContext::isCursorAtLineStart()
 {
     return ( textPos == lineStartPos);
 }
 
+/*================================================================*/
 bool KWFormatContext::isCursorInLastLine()
 {
     // If we are in the last line, return true
     return ( lineEndPos == parag->getTextLen() );
 }
 
+/*================================================================*/
 bool KWFormatContext::isCursorAtParagEnd()
 {
     if ( !isCursorInLastLine() )
@@ -198,6 +214,7 @@ bool KWFormatContext::isCursorAtParagEnd()
     return false;
 }
 
+/*================================================================*/
 bool KWFormatContext::isCursorAtLineEnd()
 {
   // Are we behind the last lines character ?
@@ -205,7 +222,8 @@ bool KWFormatContext::isCursorAtLineEnd()
   return ( textPos == lineEndPos /* || textPos == lineEndPos - 1 */ );
 }
 
-void KWFormatContext::cursorGotoRight( QPainter &_painter )
+/*================================================================*/
+void KWFormatContext::cursorGotoRight(QPainter &_painter)
 {
     during_vertical_cursor_movement = false;
 
@@ -245,7 +263,8 @@ void KWFormatContext::cursorGotoRight( QPainter &_painter )
     cursorGotoPos( textPos, _painter );
 }
 
-void KWFormatContext::cursorGotoRight( QPainter &_painter, int _pos )
+/*================================================================*/
+void KWFormatContext::cursorGotoRight(QPainter &_painter,int _pos)
 {
     during_vertical_cursor_movement = false;
 
@@ -285,7 +304,8 @@ void KWFormatContext::cursorGotoRight( QPainter &_painter, int _pos )
       }
 }
 
-void KWFormatContext::cursorGotoLeft( QPainter &_painter )
+/*================================================================*/
+void KWFormatContext::cursorGotoLeft(QPainter &_painter)
 {
     during_vertical_cursor_movement = false;
 
@@ -334,7 +354,8 @@ void KWFormatContext::cursorGotoLeft( QPainter &_painter )
     cursorGotoPos( textPos, _painter );
 }
 
-void KWFormatContext::cursorGotoUp( QPainter &_painter )
+/*================================================================*/
+void KWFormatContext::cursorGotoUp(QPainter &_painter)
 {
   unsigned int frm = frame;
 
@@ -393,7 +414,8 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
     }
 }
 
-void KWFormatContext::cursorGotoDown( QPainter &_painter )
+/*================================================================*/
+void KWFormatContext::cursorGotoDown(QPainter &_painter)
 {
   unsigned int frm = frame;
     // Save the position where we started going down
@@ -428,14 +450,16 @@ void KWFormatContext::cursorGotoDown( QPainter &_painter )
     }
 }
 
-void KWFormatContext::cursorGotoLineStart( QPainter &_painter )
+/*================================================================*/
+void KWFormatContext::cursorGotoLineStart(QPainter &_painter)
 {
   during_vertical_cursor_movement = false;
   spacingError = 0;
   cursorGotoPos( lineStartPos, _painter );
 }
 
-void KWFormatContext::cursorGotoLineEnd( QPainter &_painter )
+/*================================================================*/
+void KWFormatContext::cursorGotoLineEnd(QPainter &_painter)
 {
   during_vertical_cursor_movement = false;
 
@@ -458,6 +482,7 @@ void KWFormatContext::cursorGotoLineEnd( QPainter &_painter )
   cursorGotoPos( lineEndPos, _painter );
 }
 
+/*================================================================*/
 void KWFormatContext::cursorGotoNextLine(QPainter &_painter)
 {
     during_vertical_cursor_movement = false;
@@ -469,6 +494,7 @@ void KWFormatContext::cursorGotoNextLine(QPainter &_painter)
     return;
 }
 
+/*================================================================*/
 void KWFormatContext::cursorGotoPrevLine(QPainter &_painter)
 {
   // Re-Enter the current paragraph
@@ -491,7 +517,8 @@ void KWFormatContext::cursorGotoPrevLine(QPainter &_painter)
    during_vertical_cursor_movement = false;
 }
 
-void KWFormatContext::cursorGotoLine( unsigned int _textpos, QPainter &_painter )
+/*================================================================*/
+void KWFormatContext::cursorGotoLine(unsigned int _textpos,QPainter &_painter)
 {
     if ( _textpos < lineStartPos )
     {
@@ -519,7 +546,8 @@ void KWFormatContext::cursorGotoLine( unsigned int _textpos, QPainter &_painter 
     exit(1);
 }
 
-void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
+/*================================================================*/
+void KWFormatContext::cursorGotoPos(unsigned int _textpos,QPainter &)
 {
     KWChar *text = parag->getText();
     KWParagLayout *lay = parag->getParagLayout();
@@ -638,6 +666,7 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
     textPos = _textpos;
 }
 
+/*================================================================*/
 void KWFormatContext::cursorGotoPixelLine(unsigned int mx,unsigned int my,QPainter &_painter)
 {
   textPos = 0;
@@ -677,6 +706,7 @@ void KWFormatContext::cursorGotoPixelLine(unsigned int mx,unsigned int my,QPaint
   cursorGotoLineStart(_painter);
 }
 
+/*================================================================*/
 void KWFormatContext::cursorGotoPixelInLine(unsigned int mx,unsigned int my,QPainter &_painter)
 {
   if (isCursorAtLineEnd()) return;
@@ -696,6 +726,7 @@ void KWFormatContext::cursorGotoPixelInLine(unsigned int mx,unsigned int my,QPai
     }
 }
 
+/*================================================================*/
 KWCharAttribute* KWFormatContext::getObjectType(unsigned int mx,unsigned int my,QPainter &_painter)
 {
   KWFormatContext fc(document,frameSet);
@@ -722,6 +753,7 @@ KWCharAttribute* KWFormatContext::getObjectType(unsigned int mx,unsigned int my,
   return fc.getParag()->getKWString()->data()[fc.getTextPos()].attrib;
 }
 
+/*================================================================*/
 int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
 {
   // If we are already at lineend, then we wont move further
@@ -844,7 +876,8 @@ int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
 }
 
 
-bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
+/*================================================================*/
+bool KWFormatContext::makeNextLineLayout(QPainter &_painter)
 {
   if (!document->getFrameSet(frameSet - 1)->isVisible())
     return false;
@@ -872,7 +905,8 @@ bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
   return true;
 }
 
-bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects = true, bool _checkTabs = true )
+/*================================================================*/
+bool KWFormatContext::makeLineLayout(QPainter &_painter,bool _checkIntersects = true,bool _checkTabs = true)
 {
     if (!document->getFrameSet(frameSet - 1)->isVisible())
       return false;
@@ -1300,6 +1334,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     return true;
 }
 
+/*================================================================*/
 unsigned int KWFormatContext::getLineHeight()
 {
   unsigned int hei = ptMaxAscender + ptMaxDescender;
@@ -1308,6 +1343,7 @@ unsigned int KWFormatContext::getLineHeight()
   return max(hei,specialHeight) + getParag()->getParagLayout()->getLineSpacing().pt() + plus;
 }
 
+/*================================================================*/
 void KWFormatContext::makeCounterLayout(QPainter &_painter)
 {
   if (parag->getParagLayout()->getCounterType() == KWParagLayout::CT_NONE) return;
@@ -1326,7 +1362,8 @@ void KWFormatContext::makeCounterLayout(QPainter &_painter)
 }
 
 
-void KWFormatContext::apply( KWFormat &_format )
+/*================================================================*/
+void KWFormatContext::apply(KWFormat &_format)
 {
   if (compare_formats && _format == *((KWFormat*)this)) return;
 
@@ -1357,6 +1394,7 @@ void KWFormatContext::apply( KWFormat &_format )
     }
 }
 
+/*================================================================*/
 void KWFormatContext::selectWord(KWFormatContext &_fc1,KWFormatContext &_fc2,QPainter &painter)
 {
   KWChar *text = parag->getText();
@@ -1398,4 +1436,3 @@ void KWFormatContext::selectWord(KWFormatContext &_fc1,KWFormatContext &_fc2,QPa
     }
   if (goLeft) _fc1.cursorGotoLeft(painter);
 }
-
