@@ -285,34 +285,37 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 	    selectionMode = SM_NONE;
 
         KPresenterDoc *doc =m_view->kPresenterDoc();
-        if ( doc->showGrid() && !doc->gridToFront())
+        if ( editMode )
         {
-            drawGrid( &bufPainter, crect);
-        }
+            if ( doc->showGrid() && !doc->gridToFront())
+            {
+                drawGrid( &bufPainter, crect);
+            }
 
-        if ( doc->showHelplines() && !doc->helpLineToFront())
-        {
-            drawHelplines( &bufPainter, crect);
-            drawHelpPoints( &bufPainter, crect);
+            if ( doc->showHelplines() && !doc->helpLineToFront() && editMode)
+            {
+                drawHelplines( &bufPainter, crect);
+                drawHelpPoints( &bufPainter, crect);
+            }
         }
-
 
         if ( !editMode )
             selectionMode = SM_NONE; // case of screen presentation mode
         drawObjects( &bufPainter, crect, true, selectionMode, true );
-
-        if ( doc->showGrid() && doc->gridToFront())
+        if ( editMode )
         {
-            drawGrid( &bufPainter, crect);
+            if ( doc->showGrid() && doc->gridToFront())
+            {
+                drawGrid( &bufPainter, crect);
+            }
+
+            if ( doc->showHelplines() && doc->helpLineToFront())
+            {
+                drawHelplines( &bufPainter, crect);
+                drawHelpPoints( &bufPainter, crect);
+            }
+
         }
-
-        if ( doc->showHelplines() && doc->helpLineToFront())
-        {
-            drawHelplines( &bufPainter, crect);
-            drawHelpPoints( &bufPainter, crect);
-        }
-
-
         bufPainter.end();
 
         bitBlt( this, paintEvent->rect().topLeft(), &buffer, paintEvent->rect() );

@@ -108,3 +108,4 @@ Bugfixes:
 - Fix save variable.
 - Fix recalc page number + sticky object
 - Fix draw gradient + rectangle object
+- Fix presentation mode : Don't draw grid and helpline in this mode
