@@ -254,7 +254,7 @@ void KSpreadCell::defaultStyle()
   m_numberOfCond=-1;
   setComment("");
   setVerticalText(false);
-  setAngle(m_rotateAngle);
+  setAngle(0);
   setFormatNumber(Number);
   if(m_Validity!=0)
         delete m_Validity;
@@ -958,7 +958,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
         // Remove trailing zeros and the decimal point if necessary
         // unless the number has no decimal point
-        if ( m_iPrecision == -1 && localizedNumber.find(decimal_point) >= 0 )
+        if ( precision( _col, _row)== -1 && localizedNumber.find(decimal_point) >= 0 )
         {
         /*    int i = localizedNumber.length();
             bool bFinished = FALSE;
@@ -1121,7 +1121,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // do so?
     int lines = 1;
     if ( m_iOutTextWidth > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
-         rightBorderWidth( _col, _row ) && m_bMultiRow )
+         rightBorderWidth( _col, _row ) && multiRow(_col, _row ) )
     {
         // copy of m_strOutText
         QString o = m_strOutText;
@@ -1198,7 +1198,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     int a = defineAlignX();
     //apply indent if text is align to left not when text is at right or middle
     if(  a==KSpreadCell::Left)
-        indent=m_indent;
+        indent=getIndent(column(),row());
 
     // Do we have to occupy additional cells right hand ?
     if ( m_iOutTextWidth+indent > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
@@ -1237,7 +1237,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
             // Dont occupy additional space for right aligned or centered text or values.
             // ##### Why ?
-            if (( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined) && !isValue())
+            if (( align(_col,_row) == KSpreadCell::Left || align(_col,_row) == KSpreadCell::Undefined) && !isValue())
             {
                 m_iExtraWidth = w;
                 for( int i = m_iColumn + 1; i <= c; ++i )
@@ -1264,7 +1264,7 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
 {
     // if precision is -1, ask for a huge number of decimals, we'll remove
     // the zeros later. Is 8 ok ?
-    int p = (m_iPrecision == -1) ? 8 : m_iPrecision;
+    int p = (precision(_col,_row) == -1) ? 8 : precision(_col,_row) ;
     QString localizedNumber= locale()->formatNumber( value, p );
     int pos = 0;
 
@@ -1697,7 +1697,7 @@ void KSpreadCell::verifyCondition()
 
 void KSpreadCell::offsetAlign( int _col,int _row )
 {
-    int a = m_eAlign;
+    int a = align(_col,_row);
     RowLayout *rl = m_pTable->rowLayout( _row );
     ColumnLayout *cl = m_pTable->columnLayout( _col );
 
@@ -1708,41 +1708,41 @@ void KSpreadCell::offsetAlign( int _col,int _row )
         w = m_iExtraWidth;
     if ( m_iExtraYCells )
         h = m_iExtraHeight;
-
-    switch( m_eAlignY )
+    int tmpAngle=getAngle(_col,_row);
+    switch( alignY(_col,_row) )
     {
     case KSpreadCell::Top:
-        if(!m_rotateAngle)
+        if(tmpAngle!=0)
             m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
         else
         {
-            if(m_rotateAngle<0)
+            if(tmpAngle<0)
                 m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
             else
-                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
         }
         break;
     case KSpreadCell::Bottom:
-        if(!m_bVerticalText && !m_bMultiRow && !m_rotateAngle)
+        if(!verticalText(_col,_row) && !multiRow(_col,_row) && !tmpAngle)
             m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
-        else if(m_rotateAngle!=0)
+        else if(tmpAngle!=0)
         {
             if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
                 {
-                if( m_rotateAngle < 0 )
+                if( tmpAngle < 0 )
                         m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
                 else
-                        m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row )+(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                        m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row )+(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
                 }
             else
                 {
-                if( m_rotateAngle < 0 )
+                if( tmpAngle < 0 )
                     m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
                 else
-                    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
                 }
         }
-        else if( m_bMultiRow )
+        else if( multiRow(_col,_row) )
         {
             int tmpline=m_nbLines;
             if(m_nbLines>1)
@@ -1759,26 +1759,26 @@ void KSpreadCell::offsetAlign( int _col,int _row )
                 m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
         break;
     case KSpreadCell::Middle:
-        if(!m_bVerticalText && !m_bMultiRow && !m_rotateAngle)
+        if(!verticalText(_col,_row) && !multiRow(_col,_row) && !tmpAngle)
             m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
-        else if( m_rotateAngle != 0 )
+        else if( tmpAngle != 0 )
         {
             if( ( h - m_iOutTextHeight ) > 0 )
             {
-                if( m_rotateAngle < 0 )
+                if( tmpAngle < 0 )
                         m_iTextY = ( h - m_iOutTextHeight ) / 2 ;
                 else
-                        m_iTextY = ( h - m_iOutTextHeight ) / 2 +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                        m_iTextY = ( h - m_iOutTextHeight ) / 2 +(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
             }
             else
                 {
-                if( m_rotateAngle < 0 )
+                if( tmpAngle < 0 )
                     m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
                 else
-                    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
                 }
         }
-        else if( m_bMultiRow )
+        else if( multiRow(_col,_row) )
         {
             int tmpline=m_nbLines;
             if(m_nbLines==0)
@@ -1817,16 +1817,17 @@ void KSpreadCell::textSize( QPainter &_paint )
 {
     QFontMetrics fm = _paint.fontMetrics();
     // Horizontal text ?
-    if( !m_bVerticalText && !m_rotateAngle )
+    int tmpAngle=getAngle(column(),row());
+    if( !verticalText(column(),row()) && !tmpAngle )
     {
         m_iOutTextWidth = fm.width( m_strOutText );
         m_iOutTextHeight = fm.ascent() + fm.descent();
     }
     // Rotated text ?
-    else if( m_rotateAngle != 0 )
+    else if(  tmpAngle!= 0 )
     {
-        m_iOutTextHeight = static_cast<int>(cos(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())+abs((int)(fm.width( m_strOutText )*sin(m_rotateAngle*M_PI/180))));
-        m_iOutTextWidth = static_cast<int>(abs((int)(sin(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())))+fm.width( m_strOutText )*cos(m_rotateAngle*M_PI/180));
+        m_iOutTextHeight = static_cast<int>(cos(tmpAngle*M_PI/180)*(fm.ascent() + fm.descent())+abs((int)(fm.width( m_strOutText )*sin(tmpAngle*M_PI/180))));
+        m_iOutTextWidth = static_cast<int>(abs((int)(sin(tmpAngle*M_PI/180)*(fm.ascent() + fm.descent())))+fm.width( m_strOutText )*cos(tmpAngle*M_PI/180));
         //kdDebug(36001)<<"m_iOutTextWidth"<<m_iOutTextWidth<<"m_iOutTextHeight"<<m_iOutTextHeight<<endl;
     }
     // Vertical text ?
@@ -2723,14 +2724,15 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         int a = defineAlignX();
         //apply indent if text is align to left not when text is at right or middle
         if(  a==KSpreadCell::Left)
-                indent=m_indent;
-        if ( !m_bMultiRow && !m_bVerticalText && !m_rotateAngle)
+                indent=getIndent(column(),row());
+        int tmpAngle=getAngle(_col,_row);
+        if ( !multiRow(_col,_row) && !verticalText(_col,_row) && !tmpAngle)
                 {
                 _painter.drawText( indent+_tx + m_iTextX, _ty + m_iTextY, m_strOutText );
                 }
-        else if( m_rotateAngle!=0)
+        else if( tmpAngle!=0)
         {
-            int angle=m_rotateAngle;
+            int angle=tmpAngle;
             QFontMetrics fm = _painter.fontMetrics();
             _painter.rotate(angle);
             int x;
@@ -2747,7 +2749,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                                -x*sin(angle*M_PI/180) + y*cos(angle*M_PI/180) , m_strOutText );
             _painter.rotate(-angle);
         }
-        else if( m_bMultiRow && !m_bVerticalText)
+        else if( multiRow(_col,_row) && !verticalText(_col,_row))
         {
             QString t;
             int i;
@@ -2788,7 +2790,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
             }
             while ( i != -1 );
         }
-        else if( m_bVerticalText)
+        else if(verticalText(_col,_row))
         {
             QString t;
             int i=0;
@@ -2907,7 +2909,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 
 int KSpreadCell::defineAlignX()
 {
-int a = m_eAlign;
+int a = align(column(),row());
 if ( a == KSpreadCell::Undefined )
         {
         if ( m_bValue || m_bDate || m_bTime)
@@ -2921,8 +2923,8 @@ return a;
 QString KSpreadCell::textDisplaying( QPainter &_painter)
 {
 QFontMetrics fm = _painter.fontMetrics();
-
-if (( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined) && !isValue())
+int a=align(column(),row());
+if (( a == KSpreadCell::Left || a == KSpreadCell::Undefined) && !isValue())
         {
         //not enough space but align to left
         int len=0;
@@ -2935,7 +2937,7 @@ if (( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined) && !i
         for (int i=m_strOutText.length();i!=0;i--)
                 {
                 tmp=m_strOutText.left(i);
-                if((fm.width(tmp)+m_indent)<(len-4-1)) //4 equal lenght of red triangle +1 pixel
+                if((fm.width(tmp)+getIndent(column(),row()))<(len-4-1)) //4 equal lenght of red triangle +1 pixel
                         {
                         return tmp;
                         }
@@ -2953,7 +2955,7 @@ if( isValue())
         {
         if( getFormatNumber(column(),row())!=Scientific)
                 {
-                int p = (m_iPrecision == -1) ? 8 : m_iPrecision;
+                int p = (precision(column(),row())  == -1) ? 8 : precision(column(),row());
                 double value =m_dValue * faktor(column(),row());
                 int pos=0;
                 QString localizedNumber= QString::number( (value), 'E', p);
@@ -2964,7 +2966,7 @@ if( isValue())
                         if(locale()->positiveSign().isEmpty())
                                 localizedNumber='+'+localizedNumber;
                         }
-                if ( m_iPrecision == -1 && localizedNumber.find(decimal_point) >= 0 )
+                if ( precision(column(),row()) == -1 && localizedNumber.find(decimal_point) >= 0 )
                         {
                         //duplicate code it's not good I know I will fix it
                         int start=0;
@@ -3401,8 +3403,8 @@ void KSpreadCell::incPrecision()
 {
   if ( !isValue() )
     return;
-
-  if ( m_iPrecision == -1 )
+  int tmpPreci=precision(column(),row());
+  if ( tmpPreci == -1 )
   {
     int pos = m_strOutText.find(decimal_point);
     if ( pos == -1 )
@@ -3419,14 +3421,14 @@ void KSpreadCell::incPrecision()
       else
         start=0;
       setPrecision(m_strOutText.length() - pos-start);
-      if ( m_iPrecision < 0 )
+      if ( tmpPreci < 0 )
         setPrecision(0);
     }
     m_bLayoutDirtyFlag = TRUE;
   }
-  else if ( m_iPrecision < 10 )
+  else if ( tmpPreci < 10 )
   {
-    setPrecision(++m_iPrecision);
+    setPrecision(++tmpPreci);
     m_bLayoutDirtyFlag = TRUE;
   }
 }
@@ -3435,8 +3437,8 @@ void KSpreadCell::decPrecision()
 {
   if ( !isValue() )
     return;
-
-  if ( m_iPrecision == -1 )
+  int preciTmp=precision(column(),row());
+  if ( precision(column(),row()) == -1 )
   {
     int pos = m_strOutText.find(decimal_point);
     int start=0;
@@ -3451,13 +3453,13 @@ void KSpreadCell::decPrecision()
     if ( pos == -1 )
       return;
     setPrecision(m_strOutText.length() - pos - 2-start);
-    if ( m_iPrecision < 0 )
-      setPrecision(m_iPrecision );
+    if ( preciTmp < 0 )
+      setPrecision(preciTmp );
     m_bLayoutDirtyFlag = TRUE;
   }
-  else if ( m_iPrecision > 0 )
+  else if ( preciTmp > 0 )
   {
-    setPrecision(--m_iPrecision);
+    setPrecision(--preciTmp);
     m_bLayoutDirtyFlag = TRUE;
   }
 }

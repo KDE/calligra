@@ -862,7 +862,10 @@ void KSpreadLayout::setFloatColor( FloatColor _c )
 
 void KSpreadLayout::setMultiRow( bool _b )
 {
-    setProperty( PMultiRow );
+   if ( _b == false )
+        clearProperty( PMultiRow );
+    else
+        setProperty( PMultiRow );
 
     m_bMultiRow = _b;
     layoutChanged();
@@ -870,7 +873,10 @@ void KSpreadLayout::setMultiRow( bool _b )
 
 void KSpreadLayout::setVerticalText( bool _b )
 {
-    setProperty( PVerticalText );
+    if ( _b == false )
+        clearProperty( PVerticalText );
+    else
+        setProperty( PVerticalText );
 
     m_bVerticalText = _b;
     layoutChanged();
