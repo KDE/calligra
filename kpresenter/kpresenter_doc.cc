@@ -3030,5 +3030,11 @@ void KPresenterDoc::updateObjectStatusBarItem()
 	((KPresenterView*)it.current())->updateObjectStatusBarItem();
 }
 
+void KPresenterDoc::updateObjectSelected()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+	((KPresenterView*)it.current())->objectSelectedChanged();
+}
 
 #include <kpresenter_doc.moc>

@@ -2242,9 +2242,11 @@ KPrProtectContentCommand::~KPrProtectContentCommand()
 void KPrProtectContentCommand::execute()
 {
     objects->setProtectContent( protectContent );
+    doc->updateObjectSelected();
 }
 
 void KPrProtectContentCommand::unexecute()
 {
     objects->setProtectContent( !protectContent );
+    doc->updateObjectSelected();
 }

@@ -400,6 +400,7 @@ public:
     void clearIgnoreWordAll( );
     KCommandHistory * commandHistory()const { return m_commandHistory; }
     void updateObjectStatusBarItem();
+    void updateObjectSelected();
 
 public slots:
     void movePage( int from, int to );
