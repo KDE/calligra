@@ -1156,11 +1156,13 @@ void Msod::opTextbox(
     skip(bytes, operands);
 }
 
-void Msod::shpLine(Header &, U32, QDataStream &operands)
+void Msod::shpLine(Header &, U32 bytes, QDataStream &operands)
 {
     QPoint lineFrom;
     QPoint lineTo;
 
+    if (bytes < 8)
+        return;
     lineTo = normalisePoint(operands);
     QPointArray points(2);
     points.setPoint(0, lineFrom);
@@ -1177,11 +1179,13 @@ void Msod::shpPictureFrame(Header &, U32 bytes, QDataStream &operands)
     skip(bytes, operands);
 }
 
-void Msod::shpRectangle(Header &, U32, QDataStream &operands)
+void Msod::shpRectangle(Header &, U32 bytes, QDataStream &operands)
 {
     QPoint topLeft;
     QSize size;
 
+    if (bytes < 8)
+        return;
     topLeft = normalisePoint(operands);
     size = normaliseSize(operands);
     QRect rect(topLeft, size);
