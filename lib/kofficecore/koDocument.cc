@@ -309,13 +309,16 @@ bool KoDocument::saveFile()
     }
 
     bool ret = false;
+    bool userCancelled = false;
     if ( outputMimeType != _native_format ) {
         kdDebug(30003) << "Saving to format " << outputMimeType << " in " << m_file << endl;
         // Not native format : save using export filter
         if ( !d->filterManager )
             d->filterManager = new KoFilterManager( this );
 
-        ret = d->filterManager->exp0rt( m_file, outputMimeType ) == KoFilter::OK;
+        KoFilter::ConversionStatus status = d->filterManager->exp0rt( m_file, outputMimeType );
+        ret = status == KoFilter::OK;
+        userCancelled = status == KoFilter::UserCancelled;
     } else
         // Native format => normal save
         ret = saveNativeFormat( m_file );
@@ -324,7 +327,7 @@ bool KoDocument::saveFile()
         removeAutoSaveFiles();
 
     QApplication::restoreOverrideCursor();
-    if ( !ret )
+    if ( !ret && !userCancelled )
     {
         if ( d->lastErrorMessage.isEmpty() )
             KMessageBox::error( 0L, i18n( "Could not save\n%1" ).arg( m_file ) );
