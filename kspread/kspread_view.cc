@@ -3556,12 +3556,10 @@ void KSpreadView::insertTable()
   d->doc->emitBeginOperation( false );
   d->canvas->closeEditor();
   KSpreadSheet * t = d->doc->createTable();
-  d->doc->addTable( t );
-  updateEditWidget();
   KCommand* command = new AddSheetCommand( t );
   d->doc->addCommand( command );
   command->execute();
-
+  updateEditWidget();
   setActiveTable( t );
 
   if ( d->workbook->visibleSheets().count() > 1 )

@@ -143,6 +143,7 @@ AddSheetCommand::AddSheetCommand( KSpreadSheet* s )
 {
     sheet = s;
     doc = sheet->doc();
+    doc->addTable( s );
 }
 
 void AddSheetCommand::execute()
