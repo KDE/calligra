@@ -107,7 +107,7 @@ public:
   int id()const { return m_id; }
   static KivioPage* find( int _id );
 
-  TKPageLayout paperLayout() { return m_pPageLayout; }
+  TKPageLayout paperLayout()const { return m_pPageLayout; }
   void setPaperLayout(TKPageLayout);
 
   void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, float, bool );

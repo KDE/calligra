@@ -22,6 +22,7 @@
 
 #include <kcommand.h>
 #include "kivio_rect.h"
+#include "tkpagelayout.h"
 class KivioPage;
 class KivioLayer;
 class KivioPage;
@@ -204,6 +205,20 @@ protected:
     KivioPage *m_page;
 };
 
+class KivioChangeLayoutCommand : public KNamedCommand
+{
+public:
+    KivioChangeLayoutCommand(const QString &_name, KivioPage *_page, TKPageLayout _oldLayout, TKPageLayout _newLayout);
+    ~KivioChangeLayoutCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioPage *m_page;
+    TKPageLayout oldLayout;
+    TKPageLayout newLayout;
+};
 
 #endif
 

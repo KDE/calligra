@@ -4,6 +4,7 @@
 #include "kivio_doc.h"
 #include "kivio_map.h"
 #include "kivio_config.h"
+#include "kivio_command.h"
 
 #include "tkcombobox.h"
 #include "tkfloatspinbox.h"
@@ -136,39 +137,47 @@ void PageSetupDialog::update()
 
 void PageSetupDialog::apply(QWidget* page)
 {
-  if (page != this)
-    return;
+    if (page != this)
+        return;
 
-  TKPageLayout l;
-  int u = pUnit->unit();
-  l.unit = u;
-  if (orientation->currentItem() == 0) {
-    l.width = pWidth->value(u);
-    l.height = pHeight->value(u);
-  } else {
-    l.width = pHeight->value(u);
-    l.height = pWidth->value(u);
-  }
-  l.marginLeft = mLeft->value(u);
-  l.marginRight = mRight->value(u);
-  l.marginTop = mTop->value(u);
-  l.marginBottom = mBottom->value(u);
+    TKPageLayout l;
+    int u = pUnit->unit();
+    l.unit = u;
+    if (orientation->currentItem() == 0) {
+        l.width = pWidth->value(u);
+        l.height = pHeight->value(u);
+    } else {
+        l.width = pHeight->value(u);
+        l.height = pWidth->value(u);
+    }
+    l.marginLeft = mLeft->value(u);
+    l.marginRight = mRight->value(u);
+    l.marginTop = mTop->value(u);
+    l.marginBottom = mBottom->value(u);
 
-  KivioDoc* doc = m_pPage->doc();
+    KivioDoc* doc = m_pPage->doc();
 
-  if (resizeAll->isChecked()) {
-    KivioMap* map = doc->map();
-    for (KivioPage* p = map->firstPage(); p; p = map->nextPage())
-      p->setPaperLayout(l);
-  } else {
-    m_pPage->setPaperLayout(l);
-  }
+    if (resizeAll->isChecked()) {
+        KMacroCommand * macro = new KMacroCommand(i18n("Change Page Layout"));
+        KivioMap* map = doc->map();
+        for (KivioPage* p = map->firstPage(); p; p = map->nextPage())
+        {
+            KivioChangeLayoutCommand * cmd = new KivioChangeLayoutCommand( i18n("Change Page Layout"), p , p->paperLayout(), l);
+            macro->addCommand( cmd );
+            p->setPaperLayout(l);
+        }
+        doc->addCommand( macro );
+    } else {
+        KivioChangeLayoutCommand * cmd = new KivioChangeLayoutCommand( i18n("Change Page Layout"), m_pPage , m_pPage->paperLayout(), l);
+        doc->addCommand( cmd );
+        m_pPage->setPaperLayout(l);
+    }
 
-  if (docDefault->isChecked())
-    doc->config()->setDefaultPageLayout(l);
+    if (docDefault->isChecked())
+        doc->config()->setDefaultPageLayout(l);
 
-  if (globalDefault->isChecked())
-    doc->config()->setGlobalDefaultPageLayout(l);
+    if (globalDefault->isChecked())
+        doc->config()->setGlobalDefaultPageLayout(l);
 }
 
 #include "pagesetupdialog.moc"

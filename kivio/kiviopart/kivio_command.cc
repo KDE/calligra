@@ -292,3 +292,25 @@ void KivioMoveStencilCommand::unexecute()
     m_stencil->setPosition( initSize.x(), initSize.y() );
     m_page->doc()->updateView(m_page);
 }
+
+KivioChangeLayoutCommand::KivioChangeLayoutCommand( const QString &_name, KivioPage *_page, TKPageLayout _oldLayout, TKPageLayout _newLayout)
+    :KNamedCommand( _name),
+     m_page(_page),
+     oldLayout( _oldLayout),
+     newLayout( _newLayout)
+{
+}
+
+KivioChangeLayoutCommand::~KivioChangeLayoutCommand()
+{
+}
+
+void KivioChangeLayoutCommand::execute()
+{
+    m_page->setPaperLayout(newLayout);
+}
+
+void KivioChangeLayoutCommand::unexecute()
+{
+    m_page->setPaperLayout(oldLayout);
+}
