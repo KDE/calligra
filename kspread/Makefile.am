@@ -13,8 +13,8 @@ libkspreadcommon_la_SOURCES =  \
         damages.cc \
         dependencies.cc \
         formula.cc \
-				functions.cc \
-				stylecluster.cc \
+	functions.cc \
+	stylecluster.cc \
         kspread_autofill.cc \
         kspread_canvas.cc \
         kspread_cell.cc \
@@ -53,10 +53,10 @@ libkspreadcommon_la_SOURCES =  \
         kspread_sheet.cc \
         kspread_sheetprint.cc \
         kspread_util.cc  \
-				valuecalc.cc \
-				valueconverter.cc \
-				valueformatter.cc \
-				valueparser.cc \
+	valuecalc.cc \
+	valueconverter.cc \
+	valueformatter.cc \
+	valueparser.cc \
         KSpreadAppIface.cc  \
         KSpreadAppIface.skel  \
         KSpreadCellIface.cc \
@@ -123,3 +123,6 @@ messages: rc.cpp
 	$(EXTRACTRC) dialogs/*.ui >> rc.cpp
 	$(XGETTEXT) rc.cpp *.cc kspread_aboutdata.h dialogs/*.cc tests/*.cc -o $(podir)/kspread.pot
 	-rm xml_doc.cc
+
+include ../admin/Doxyfile.am
+
