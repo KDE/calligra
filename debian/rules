@@ -20,9 +20,10 @@ ifeq ($(ARCH),alpha)
 else
   COMPILER_FLAGS=CXX=g++ CC=gcc
 endif
-ifeq ($(ARCH),i386)
-  OBJPRELINK=--enable-objprelink
-endif
+# Note: objprelink is no longer recommended for use.
+# ifeq ($(ARCH),i386)
+#   OBJPRELINK=--enable-objprelink
+# endif
 
 build: build-stamp
 
