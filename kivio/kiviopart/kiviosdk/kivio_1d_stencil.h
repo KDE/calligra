@@ -6,7 +6,7 @@
 #endif
 
 #include <qdom.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include "kivio_stencil.h"
 #include "kivio_text_style.h"
@@ -23,7 +23,7 @@ class KivioStencil;
 class Kivio1DStencil : public KivioStencil
 {
 protected:
-    QList <KivioConnectorPoint> *m_pConnectorPoints;
+    QPtrList <KivioConnectorPoint> *m_pConnectorPoints;
     
     KivioConnectorPoint *m_pStart, *m_pEnd;
     KivioConnectorPoint *m_pLeft, *m_pRight;

@@ -161,7 +161,7 @@ void KivioArrowHead::paintArrowLine( KivioArrowHeadData *d )
     pvecX = nvecY;
     pvecY = -nvecX;
 
-    QList<KivioPoint>l;
+    QPtrList<KivioPoint>l;
     l.setAutoDelete(true);
 
     float _x;
@@ -216,7 +216,7 @@ void KivioArrowHead::paintArrowTriangleSolid( KivioArrowHeadData *d )
     pvecX = nvecY;
     pvecY = -nvecX;
 
-    QList<KivioPoint>l;
+    QPtrList<KivioPoint>l;
     l.setAutoDelete(true);
 
     float _x = d->x * d->scale;

@@ -73,7 +73,7 @@ Kivio1DStencil::Kivio1DStencil()
     m_pLineStyle = new KivioLineStyle();
     m_pTextStyle = new KivioTextStyle();
 
-    m_pConnectorPoints = new QList<KivioConnectorPoint>;
+    m_pConnectorPoints = new QPtrList<KivioConnectorPoint>;
     m_pConnectorPoints->setAutoDelete(true);
 
     m_pStart = new KivioConnectorPoint(this, true);
@@ -245,14 +245,14 @@ void Kivio1DStencil::updateConnectorPoints( KivioConnectorPoint *p, float /*oldX
       float len = sqrt( vx*vx + vy*vy );
       float midX = (m_pStart->x() + m_pEnd->x())/2.0f;
       float midY = (m_pStart->y() + m_pEnd->y())/2.0f;
-      
+
       vx /= len;
       vy /= len;
-      
+
       float d = m_connectorWidth/2.0f;
-      
+
       m_pLeft->setPosition( midX + d*vy, midY + d*(-vx), false );
-      m_pRight->setPosition( midX + d*(-vy), midY + d*vx, false );  
+      m_pRight->setPosition( midX + d*(-vy), midY + d*vx, false );
    }
 
    updateGeometry();
@@ -289,9 +289,9 @@ void Kivio1DStencil::paintSelectionHandles( KivioIntraStencilData *pData )
        // ignore it.
        x1 = p->x() * scale;
        y1 = p->y() * scale;
-       
+
        flag = (p->target()) ? KivioPainter::cpfConnected : 0;
-       
+
        if( p==m_pTextConn )
        {
 	  if( m_needsText==true )
@@ -334,7 +334,7 @@ void Kivio1DStencil::paintSelectionHandles( KivioIntraStencilData *pData )
 KivioCollisionType Kivio1DStencil::checkForCollision( KivioPoint *, float )
 {
     /* Derived class must implement this */
-   
+
     return kctNone;
 }
 
@@ -359,11 +359,11 @@ void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
     int id = pData->id;
     float oldX, oldY;
     bool doneSearching = false;
-    bool foundConnection = false; 
+    bool foundConnection = false;
 
     float oldStencilX, oldStencilY;
 
-    
+
 
     KivioConnectorPoint *p;
 
@@ -387,7 +387,7 @@ void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
        // Attempt a snap....
        KivioLayer *pCurLayer = pData->page->curLayer();
        KivioLayer *pLayer = pData->page->firstLayer(); //pData->page->curLayer();
-       
+
        while( pLayer && doneSearching==false)
        {
 	  // To be connected to, a layer must be visible and connectable
@@ -399,24 +399,24 @@ void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
                 continue;
 	     }
 	  }
-	  
+
 	  // Tell the layer to search for a target
 	  if( pLayer->connectPointToTarget( p, 8.0f ) )
 	  {
 	     foundConnection = true;
 	     doneSearching = true;
 	  }
-	  
+
 	  pLayer = pData->page->nextLayer();
        }
-       
+
        if( foundConnection == false )
        {
 	  p->disconnect();
        }
     }
 
-    
+
     // If it is a start/end point, then make a request to update the connectors (must be implemented by stencil developer)
     if( id == kctCustom+1 ||
 	id == kctCustom+2 )
@@ -731,7 +731,7 @@ bool Kivio1DStencil::loadConnectors( const QDomElement &e )
     if( m_pTextConn == NULL ) {
        m_pTextConn = new KivioConnectorPoint(this, false);
     }
-    
+
 
     return true;
 }
@@ -873,7 +873,7 @@ void Kivio1DStencil::drawText( KivioIntraStencilData *pData )
    f.setPointSize( f.pointSize() * scale);
    painter->setFont(f);
    painter->setTextColor(m_pTextStyle->color());
-   
+
 
    tf = m_pTextStyle->hTextAlign() | m_pTextStyle->vTextAlign();
 

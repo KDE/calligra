@@ -28,7 +28,7 @@
 
 #ifdef HAVE_PYTHON
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qcolor.h>
 #include <qfont.h>
 
@@ -107,7 +107,7 @@ protected:
     QColor readColor( PyObject *color ); // used by setStyle
 
 
-    QList<KivioConnectorTarget> *m_pConnectorTargets;
+    QPtrList<KivioConnectorTarget> *m_pConnectorTargets;
 
     /**
     *   init stencil using initCode, return 1, if ok, or 0 if was some error ( maybe python syntax error )

@@ -85,14 +85,14 @@ QDomElement KivioMap::save( QDomDocument& doc )
 
   // Before we save, tell all the pages/layers/stencil/targets/connectors to generate
   // their ids so we can restore connections when reloaded.
-  QListIterator<KivioPage> it2(m_lstPages);
+  QPtrListIterator<KivioPage> it2(m_lstPages);
   for( ; it2.current(); ++it2 )
   {
     next = it2.current()->generateStencilIds( next );
   }
 
   // Now save the pages
-  QListIterator<KivioPage> it(m_lstPages);
+  QPtrListIterator<KivioPage> it(m_lstPages);
   for( ; it.current(); ++it )
   {
     QDomElement e = it.current()->save(doc);
@@ -124,7 +124,7 @@ bool KivioMap::loadXML( const QDomElement& mymap )
 
 void KivioMap::update()
 {
-  QListIterator<KivioPage> it( m_lstPages );
+  QPtrListIterator<KivioPage> it( m_lstPages );
   for( ; it.current(); ++it )
     it.current()->update();
 }

@@ -20,7 +20,7 @@
 #define KIVIO_CONNECTOR_TARGET_H
 
 #include <qdom.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include "kivio_point.h"
 
@@ -35,7 +35,7 @@ class KivioConnectorTarget
 protected:
     KivioPoint m_position;
     int m_id;
-    QList<KivioConnectorPoint> *m_pConnectors;
+    QPtrList<KivioConnectorPoint> *m_pConnectors;
 
 public:
     KivioConnectorTarget();

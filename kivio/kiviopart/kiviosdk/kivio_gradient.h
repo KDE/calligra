@@ -19,7 +19,7 @@
 #ifndef KIVIO_GRADIENT_H
 #define KIVIO_GRADIENT_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qcolor.h>
 #include <qdom.h>
 class KivioPoint;
@@ -40,8 +40,8 @@ public:
     } KivioGradientType;
     
 protected:
-    QList <QColor> *m_pColors;              // A list of the colors in the gradient
-    QList <KivioPoint> *m_pPoints;         // A list of the points for each color
+    QPtrList <QColor> *m_pColors;              // A list of the colors in the gradient
+    QPtrList <KivioPoint> *m_pPoints;         // A list of the points for each color
     KivioGradientType m_gradientType;       // The type of gradient
     
     
@@ -56,9 +56,9 @@ public:
     QDomElement saveXML( QDomDocument & );
     
     
-    QList<QColor> *colors() const { return m_pColors; }
+    QPtrList<QColor> *colors() const { return m_pColors; }
     
-    QList<KivioPoint> *points() const { return m_pPoints; }
+    QPtrList<KivioPoint> *points() const { return m_pPoints; }
     
     KivioGradientType gradientType() const { return m_gradientType; }
     void setGradientType( KivioGradientType t ) { m_gradientType=t; }

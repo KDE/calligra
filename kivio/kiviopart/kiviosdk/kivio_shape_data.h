@@ -22,7 +22,7 @@
 #include <qfont.h>
 #include <qcolor.h>
 #include <qdom.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 #include "kivio_point.h"
@@ -73,7 +73,7 @@ public:
 protected:
     friend class KivioShape;
     
-    QList <KivioPoint> *m_pOriginalPointList;       // Original point list loaded from an SML file
+    QPtrList <KivioPoint> *m_pOriginalPointList;       // Original point list loaded from an SML file
     
     KivioShapeType m_shapeType;                     // The shape type
     KivioPoint m_position, m_dimensions;            // The position and dimensions
@@ -103,7 +103,7 @@ public:
     
     static KivioShapeType shapeTypeFromString( const QString & );
 
-    QList<KivioPoint> *pointList() { return m_pOriginalPointList; }
+    QPtrList<KivioPoint> *pointList() { return m_pOriginalPointList; }
     
     KivioFillStyle *fillStyle() const { return m_pFillStyle; }
     KivioLineStyle *lineStyle() const { return m_pLineStyle; }

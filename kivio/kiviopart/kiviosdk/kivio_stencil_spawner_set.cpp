@@ -36,7 +36,7 @@ KivioStencilSpawnerSet::KivioStencilSpawnerSet(const QString& name)
     m_dir = "";
     m_name = name.isEmpty() ? QString("Untitled") : name;
 
-    m_pSpawners = new QList<KivioStencilSpawner>;
+    m_pSpawners = new QPtrList<KivioStencilSpawner>;
     m_pSpawners->setAutoDelete(true);
 }
 

@@ -21,7 +21,7 @@
 
 #include <qdom.h>
 #include <qiconview.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qpainter.h>
 #include <qpalette.h>
 #include <qpixmap.h>
@@ -80,7 +80,7 @@ public:
   static void setVisualData(KivioIconViewVisual);
 
 private:
-  static QList<KivioIconView> objList;
+  static QPtrList<KivioIconView> objList;
   static KivioIconViewVisual visual;
   bool isReadWrite;
 };

@@ -22,7 +22,7 @@
 #include <qfont.h>
 #include <qcolor.h>
 #include <qdom.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class KivioCustomDragData;
 class KivioConnectorPoint;
@@ -46,7 +46,7 @@ protected:
     KivioFillStyle *m_pFillStyle;
     KivioTextStyle *m_pTextStyle;
 
-    QList<KivioConnectorTarget> *m_pTargets;
+    QPtrList<KivioConnectorTarget> *m_pTargets;
 
     virtual QDomElement createRootElement( QDomDocument & );
 

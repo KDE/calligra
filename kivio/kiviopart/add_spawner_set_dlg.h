@@ -24,7 +24,7 @@
 
 #include <qstring.h>
 #include <qdialog.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class QPopupMenu;
 
@@ -55,8 +55,8 @@ protected slots:
 private:
   uint m_id;
   QPopupMenu* m_pPopupMenu;
-  QList<QPopupMenu> childMenuList;
-  QList<QString> pathList;
+  QPtrList<QPopupMenu> childMenuList;
+  QPtrList<QString> pathList;
 };
 /************************************************************************************************/
 class QListView;

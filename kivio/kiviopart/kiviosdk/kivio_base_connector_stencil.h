@@ -24,7 +24,7 @@
 #endif
 
 #include <qdom.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include "kivio_stencil.h"
 
@@ -39,7 +39,7 @@ class KivioStencil;
 class KivioBaseConnectorStencil : public KivioStencil
 {
 protected:
-    QList <KivioConnectorPoint> *m_pConnectorPoints;
+    QPtrList <KivioConnectorPoint> *m_pConnectorPoints;
 
     KivioFillStyle *m_pFillStyle;
     KivioLineStyle *m_pLineStyle;

@@ -20,7 +20,7 @@
 #define KIVIO_PAINTER_H
 
 #include <qfont.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qpaintdevice.h>
 #include <qpixmap.h>
 #include <qpointarray.h>
@@ -85,7 +85,7 @@ public:
     virtual void drawLine( float, float, float, float ) {;}
     virtual void drawArc( float, float, float, float, float, float ) {;}
     
-    virtual void drawBezier( QList<KivioPoint> * ) {;}
+    virtual void drawBezier( QPtrList<KivioPoint> * ) {;}
     virtual void drawBezier( QPointArray & ) {;}
     
     virtual void drawRect( float, float, float, float ) {;}
@@ -103,12 +103,12 @@ public:
     virtual void drawChord( float, float, float, float, float, float ) {;}
     virtual void fillChord( float, float, float, float, float, float ) {;}
    
-    virtual void drawOpenPath( QList<KivioPoint> * ) {;}
-    virtual void drawClosedPath( QList<KivioPoint> * ) {;}
+    virtual void drawOpenPath( QPtrList<KivioPoint> * ) {;}
+    virtual void drawClosedPath( QPtrList<KivioPoint> * ) {;}
    
-    virtual void drawLineArray( QList<KivioPoint> * ) {;}
-    virtual void drawPolyline( QList<KivioPoint> * ) {;}
-    virtual void drawPolygon( QList<KivioPoint> * ) {;}
+    virtual void drawLineArray( QPtrList<KivioPoint> * ) {;}
+    virtual void drawPolyline( QPtrList<KivioPoint> * ) {;}
+    virtual void drawPolygon( QPtrList<KivioPoint> * ) {;}
    
     virtual void drawLineArray( QPointArray & ) {;}
     virtual void drawPolyline( QPointArray & ) {;}

@@ -20,7 +20,7 @@
 #define KIVIO_LAYER_H
 
 #include <qdom.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class KivioConnectorPoint;
 class KivioConnectorTarget;
@@ -41,7 +41,7 @@ protected:
     friend class KivioGroupStencil;
 
     int m_flags;
-    QList <KivioStencil> *m_pStencilList;
+    QPtrList <KivioStencil> *m_pStencilList;
     QString m_name;
     KivioPage *m_pPage;
 
@@ -54,7 +54,7 @@ public:
     KivioLayer( KivioPage * );
     virtual ~KivioLayer();
 
-    QList<KivioStencil> *stencilList() { return m_pStencilList; }
+    QPtrList<KivioStencil> *stencilList() { return m_pStencilList; }
 
     bool visible() { return (m_flags & FLOW_LAYER_VISIBLE)?true:false; }
     void setVisible( bool f );

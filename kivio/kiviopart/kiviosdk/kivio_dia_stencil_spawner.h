@@ -21,7 +21,7 @@
 
 #include <qdom.h>
 #include <qvaluelist.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 #include "kivio_connector_target.h"
@@ -45,7 +45,7 @@ class KivioDiaStencilSpawner : public KivioStencilSpawner
 
 	virtual KivioStencil *newStencil();
 
-	QList<KivioConnectorTarget> *targets() { return m_smlStencilSpawner->targets(); }
+	QPtrList<KivioConnectorTarget> *targets() { return m_smlStencilSpawner->targets(); }
 
     protected:
 	void calculateDimensions(float x, float y);

@@ -47,7 +47,7 @@ KivioPyStencilSpawner::KivioPyStencilSpawner( KivioStencilSpawnerSet *p )
     m_pStencil = new KivioPyStencil();
 	m_pStencil->setSpawner(this);
 
-    m_pTargets = new QList<KivioConnectorTarget>;
+    m_pTargets = new QPtrList<KivioConnectorTarget>;
     m_pTargets->setAutoDelete(true);
 }
 

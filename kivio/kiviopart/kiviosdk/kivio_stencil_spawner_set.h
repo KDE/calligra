@@ -19,7 +19,7 @@
 #ifndef KIVIO_STENCIL_SPAWNER_SET_H
 #define KIVIO_STENCIL_SPAWNER_SET_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qdom.h>
 
 class KivioStencilSpawner;
@@ -30,7 +30,7 @@ protected:
     QString m_name;
     QString m_id;
     
-    QList<KivioStencilSpawner> *m_pSpawners;
+    QPtrList<KivioStencilSpawner> *m_pSpawners;
     KivioStencilSpawner *m_pSelected;
     
 public:
@@ -43,7 +43,7 @@ public:
     bool loadXML( const QDomElement & );
     QDomElement saveXML( QDomDocument & );
     
-    QList<KivioStencilSpawner> *spawners() { return m_pSpawners; }
+    QPtrList<KivioStencilSpawner> *spawners() { return m_pSpawners; }
     KivioStencilSpawner *selected() { return m_pSelected; }
 
     QString dir() { return m_dir; }

@@ -71,18 +71,18 @@ public:
     void drawEllipse( float, float, float, float );
     void fillEllipse( float, float, float, float );
 
-    void drawLineArray( QList<KivioPoint> * );
+    void drawLineArray( QPtrList<KivioPoint> * );
 
 
-    void drawPolyline( QList<KivioPoint> * );
-    void drawPolygon( QList<KivioPoint> * );
+    void drawPolyline( QPtrList<KivioPoint> * );
+    void drawPolygon( QPtrList<KivioPoint> * );
 
     void drawPolyline( QPointArray & );
     void drawPolygon( QPointArray & );
     void drawLineArray( QPointArray & );
 
-    void drawClosedPath( QList<KivioPoint> * );
-    void drawOpenPath( QList<KivioPoint> * );
+    void drawClosedPath( QPtrList<KivioPoint> * );
+    void drawOpenPath( QPtrList<KivioPoint> * );
 };
 
 #endif

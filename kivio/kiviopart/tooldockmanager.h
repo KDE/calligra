@@ -21,7 +21,7 @@
 
 #include <qobject.h>
 #include <qwidget.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qtimer.h>
 
 class ToolDockBase;
@@ -46,7 +46,7 @@ protected slots:
 private:
   QTimer timer;
   QWidget* m_pView;
-  QList<ToolDockBase> tools;
+  QPtrList<ToolDockBase> tools;
 };
 #endif
 

@@ -252,7 +252,7 @@ void KivioPSPrinter::drawEllipse( float x, float y, float w, float h )
     fprintf( m_fp, "%s\n", PS_RESTORE );
 }
 
-void KivioPSPrinter::drawLineArray( QList< KivioPoint > *pList )
+void KivioPSPrinter::drawLineArray( QPtrList< KivioPoint > *pList )
 {
     PS_CHECK_FP("drawLines");
 
@@ -279,7 +279,7 @@ void KivioPSPrinter::drawLineArray( QList< KivioPoint > *pList )
 	}
 }
 
-void KivioPSPrinter::drawPolyline( QList<KivioPoint> *pList )
+void KivioPSPrinter::drawPolyline( QPtrList<KivioPoint> *pList )
 {
     PS_CHECK_FP("drawPolyline");
 
@@ -301,7 +301,7 @@ void KivioPSPrinter::drawPolyline( QList<KivioPoint> *pList )
 	fprintf( m_fp, "%s\n", PS_STROKE );
 }
 
-void KivioPSPrinter::drawPolygon( QList< KivioPoint> *pList )
+void KivioPSPrinter::drawPolygon( QPtrList< KivioPoint> *pList )
 {
     PS_CHECK_FP("drawPolygon");
 
@@ -464,7 +464,7 @@ void KivioPSPrinter::drawPolygon( QPointArray &pArray )
 	}
 }
 
-void KivioPSPrinter::drawOpenPath( QList< KivioPoint > * pList )
+void KivioPSPrinter::drawOpenPath( QPtrList< KivioPoint > * pList )
 {
     PS_CHECK_FP("drawOpenPath");
 
@@ -522,7 +522,7 @@ void KivioPSPrinter::drawOpenPath( QList< KivioPoint > * pList )
 	fprintf(m_fp, "%s\n", PS_STROKE );
 }
 
-void KivioPSPrinter::drawClosedPath( QList< KivioPoint > * pList )
+void KivioPSPrinter::drawClosedPath( QPtrList< KivioPoint > * pList )
 {
     PS_CHECK_FP("drawClosedPath");
 

@@ -64,7 +64,7 @@ KivioBaseConnectorStencil::KivioBaseConnectorStencil()
     m_pFillStyle = new KivioFillStyle();
     m_pLineStyle = new KivioLineStyle();
 
-    m_pConnectorPoints = new QList<KivioConnectorPoint>;
+    m_pConnectorPoints = new QPtrList<KivioConnectorPoint>;
     m_pConnectorPoints->setAutoDelete(true);
 
 }

@@ -20,7 +20,7 @@ KivioBaseTargetStencil::KivioBaseTargetStencil()
     m_pLineStyle = new KivioLineStyle();
     m_pTextStyle = new KivioTextStyle();
 
-    m_pTargets = new QList<KivioConnectorTarget>;
+    m_pTargets = new QPtrList<KivioConnectorTarget>;
     m_pTargets->setAutoDelete(true);
 }
 

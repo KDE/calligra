@@ -22,7 +22,7 @@
 #include <qfont.h>
 #include <qcolor.h>
 #include <qdom.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qbitarray.h>
 
 class KivioCustomDragData;
@@ -192,7 +192,7 @@ public:
     virtual QBitArray *canProtect() { return m_pCanProtect; }
 
     virtual void addToGroup( KivioStencil * );
-    virtual QList<KivioStencil>* groupList() { return NULL; }
+    virtual QPtrList<KivioStencil>* groupList() { return NULL; }
 
     virtual void updateGeometry();
     virtual void updateConnectorPoints(KivioConnectorPoint *, float oldX, float oldY);

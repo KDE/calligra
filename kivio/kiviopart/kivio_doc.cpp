@@ -84,20 +84,20 @@
  *
  *****************************************************************************/
 
-QList<KivioDoc>* KivioDoc::s_docs = 0;
+QPtrList<KivioDoc>* KivioDoc::s_docs = 0;
 int KivioDoc::s_docId = 0;
 
 KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* parent, const char* name, bool singleViewMode )
 : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
   if (!s_docs)
-    s_docs = new QList<KivioDoc>;
+    s_docs = new QPtrList<KivioDoc>;
 
   s_docs->append(this);
 
   m_options = new KivioOptions();
 
-  m_pLstSpawnerSets = new QList<KivioStencilSpawnerSet>;
+  m_pLstSpawnerSets = new QPtrList<KivioStencilSpawnerSet>;
   m_pLstSpawnerSets->setAutoDelete(true);
 
   setInstance( KivioFactory::global(), false );
@@ -132,10 +132,10 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
   viewItemList = new ViewItemList(this);
 }
 
-QList<KivioDoc>& KivioDoc::documents()
+QPtrList<KivioDoc>& KivioDoc::documents()
 {
   if ( s_docs == 0 )
-    s_docs = new QList<KivioDoc>;
+    s_docs = new QPtrList<KivioDoc>;
   return *s_docs;
 }
 

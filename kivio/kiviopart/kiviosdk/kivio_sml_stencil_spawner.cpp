@@ -44,7 +44,7 @@ KivioSMLStencilSpawner::KivioSMLStencilSpawner( KivioStencilSpawnerSet *p )
 {
     m_pStencil = new KivioSMLStencil();
 
-    m_pTargets = new QList<KivioConnectorTarget>;
+    m_pTargets = new QPtrList<KivioConnectorTarget>;
     m_pTargets->setAutoDelete(true);
 }
 
@@ -108,11 +108,11 @@ bool KivioSMLStencilSpawner::loadXML( const QString &file, QDomDocument &d )
     QDomElement e;
     QDomNode node = root.firstChild();
     QString nodeName;
-    
+
     while( !node.isNull() )
     {
         nodeName = node.nodeName();
-        
+
         if( nodeName.compare("KivioSMLStencilSpawnerInfo")==0 )
         {
             m_pInfo->loadXML( (const QDomElement)node.toElement() );
@@ -124,7 +124,7 @@ bool KivioSMLStencilSpawner::loadXML( const QString &file, QDomDocument &d )
         else if( nodeName.compare("Dimensions")==0 )
         {
             e = node.toElement();
-            
+
             m_defWidth = XmlReadFloat( e, "w", 72.0f );
             m_defHeight = XmlReadFloat( e, "h", 72.0f );
         }
@@ -141,8 +141,8 @@ bool KivioSMLStencilSpawner::loadXML( const QString &file, QDomDocument &d )
         {
 	   kdDebug() << "KivioSMLStencilSpawner::load() - Unknown node " << nodeName << " while loading " << file << endl;
         }
-        
-        node = node.nextSibling();    
+
+        node = node.nextSibling();
     }
 
     // Now load the xpm
@@ -163,64 +163,64 @@ void KivioSMLStencilSpawner::loadShape( QDomNode &shapeNode )
     KivioShapeData::KivioShapeType t;
     KivioShape *pShape = NULL;
     QDomElement shapeElement = shapeNode.toElement();
-    
+
     t = KivioShapeData::shapeTypeFromString( XmlReadString( shapeElement, "type", "None" ) );
-    
+
     switch( t )
     {
         case KivioShapeData::kstNone:
             break;
-            
+
         case KivioShapeData::kstArc:
             pShape = KivioShape::loadShapeArc( shapeElement );
             break;
-        
+
         case KivioShapeData::kstPie:
             pShape = KivioShape::loadShapePie( shapeElement );
             break;
-        
+
         case KivioShapeData::kstLineArray:
             pShape = KivioShape::loadShapeLineArray( shapeElement );
             break;
-        
+
         case KivioShapeData::kstPolyline:
             pShape = KivioShape::loadShapePolyline( shapeElement );
             break;
-        
+
         case KivioShapeData::kstPolygon:
             pShape = KivioShape::loadShapePolygon( shapeElement );
             break;
-        
+
         case KivioShapeData::kstBezier:
             pShape = KivioShape::loadShapeBezier( shapeElement );
             break;
-        
+
         case KivioShapeData::kstRectangle:
             pShape = KivioShape::loadShapeRectangle( shapeElement );
             break;
-        
+
         case KivioShapeData::kstRoundRectangle:
             pShape = KivioShape::loadShapeRoundRectangle( shapeElement );
             break;
-        
+
         case KivioShapeData::kstEllipse:
             pShape = KivioShape::loadShapeEllipse( shapeElement );
             break;
-        
+
         case KivioShapeData::kstOpenPath:
             pShape = KivioShape::loadShapeOpenPath( shapeElement );
             break;
-        
+
         case KivioShapeData::kstClosedPath:
             pShape = KivioShape::loadShapeClosedPath( shapeElement );
             break;
-        
+
         case KivioShapeData::kstTextBox:
             pShape = KivioShape::loadShapeTextBox( shapeElement );
             break;
 
         default:
-            break;        
+            break;
     }
 
     if( pShape )
@@ -238,9 +238,9 @@ void KivioSMLStencilSpawner::loadShape( QDomNode &shapeNode )
 KivioStencil *KivioSMLStencilSpawner::newStencil()
 {
     KivioStencil *pNewStencil = m_pStencil->duplicate();
-    
+
     pNewStencil->setSpawner(this);
-    
+
     pNewStencil->setDimensions( m_defWidth, m_defHeight );
 
     return pNewStencil;
