@@ -6,43 +6,14 @@
 
 2. AbiWord's Multiple File Formats
 
- AbiWord's file format has evolved in the time. The older file formats are
+ AbiWord's file format has evolved with the time. The older file formats are
  XML-like, the newer ones are in XML.
 
- Here are a few versions (from oldest to newest):
+ See the file FileFormats.html for an overview!
 
-   - The "awml" format starts with a tag <awml> and has no other header before.
-
-   - The "anonymous" format is the same but the tag <awml> is now named
-   <abiword>.
-
-   - The "numbered" version has a special header embeded in XML comments and the
-   tag <abiword> has now a "version" attribute with a version number as parameter
-
-   - The "unnumbered" version has the version number of the "version" attribute
-   with the value "unnumbered".
-
-   - The "xml" version has a XML declaration ( <?xml ) and but has still the
-   special header after the XML declaration. Note: the encoding (e.g. UTF-8) is
-   not always given.
-
-   - The "fileformat 1.0" version: the <abiword> tag has an attribute fileformat
-   (set to 1.0)
-
-   - The "wrong doctype": a DOCTYPE was added with a wrong public type of:
-   "-//W3C//DTD ABW 1.0 Strict//EN". (Wrong is the W3C part! W3C has nothing to
-   do with AbiWord. AbiWord Bug #1882)
-
-   - The "correct doctype": (AbiWord CVS 2001-08-21) with a DOCTYPE of:
-   <!DOCTYPE abw PUBLIC "-//ABISOURCE//DTD ABW 1.0 Strict//EN" "http://www.abisource.com/awml.dtd">
-
- (They are NOT official names; it is just how I have named them.)
-
- They may be also other variations of the file format!
- 
  The AbiWord filter for KWord *must* be able to read all those formats. A user
  will not be happy if you tell him that his sub-version is not supported!
- 
+
  However to make it easier all these formats differ mainly only in the header.
  (Only the "awml" format has different names for some tags.)
 
@@ -58,12 +29,7 @@
  AbiWord is still in development. Be careful that future file formats does not
  contain potential problems. At least they should not crash the import filter.
 
- Abiword can only handle PNG images now. But the file format accepts any mime
- type. In future, it seems that even non-image object are also planned.
-     
  You must really look into AbiWord's source code, as you will have the surprise
  to find that the documented file format (also in the source distribution) does
  not tell everything, e.g. the "mime-type" and "base64" attributes in the <d>
  tag.
-
-Nicolas GOUTTE ( nicog at snafu dot de )
