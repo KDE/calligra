@@ -22,10 +22,10 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <config.h>
+#include <kofficeversion.h>
 
 static const char* description=I18N_NOOP("KOffice Presentation Tool");
-static const char* version=VERSION;
+static const char* version=KOFFICE_VERSION_STRING;
 
 KAboutData * newKPresenterAboutData()
 {

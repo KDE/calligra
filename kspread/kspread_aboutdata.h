@@ -22,12 +22,12 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <config.h> // for VERSION
+#include <kofficeversion.h>
 
 static const char* description=I18N_NOOP("KOffice Spreadsheet Application");
 
 // Always the same as the KOffice version
-static const char* version=VERSION;
+static const char* version=KOFFICE_VERSION_STRING;
 
 KAboutData * newKSpreadAboutData()
 {

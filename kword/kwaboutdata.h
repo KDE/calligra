@@ -22,7 +22,7 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <config.h> // for VERSION
+#include <kofficeversion.h>
 
 static const char* KWORD_DESCRIPTION=I18N_NOOP("KOffice Word Processor");
 // First official public release Oct 2000 version 0.8
@@ -30,7 +30,7 @@ static const char* KWORD_DESCRIPTION=I18N_NOOP("KOffice Word Processor");
 // KOffice-1.1-beta2: version 1.1 (to remove confusion)
 // KOffice-1.2: version 1.2
 // From then on: always the same as the KOffice version
-static const char* KWORD_VERSION=VERSION;
+static const char* KWORD_VERSION=KOFFICE_VERSION_STRING;
 
 KAboutData * newKWordAboutData()
 {
