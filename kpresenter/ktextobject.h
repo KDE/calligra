@@ -248,6 +248,11 @@ public:
    */
   void setKTextObject(KTextObject* _txtObj) {txtObj = _txtObj;}
 
+  /**
+   * copy a TxtCursor and return a reference to it. 
+   */
+  TxtCursor& copy(TxtCursor&);
+
 protected:
 
   //*********** variables ***********
@@ -649,6 +654,16 @@ class TxtParagraph
 public:
 
   /**
+   * structure for RegExpMode
+   */
+  struct RegExpMode
+  {
+    QRegExp regexp;
+    QFont font;
+    QColor color;
+  };
+
+  /**
    * Horizontal alignment of the paragraph.
    */
   enum HorzAlign {LEFT,CENTER,RIGHT,BLOCK};
@@ -737,12 +752,12 @@ public:
   /**
    * Breaks lines in a certain width (pixels). Returns the needed rect.<br>
    */
-  QRect breakLines(unsigned int);
+  QRect breakLines(unsigned int,bool regexpMode=false,bool composerMode=false);
 
   /**
    * Breaks lines in a certain width (chars).<br>
    */
-  void break_Lines(unsigned int);
+  void break_Lines(unsigned int,bool regexpMode=false,bool composerMode=false);
 
   /**
    * Concate all lines of the paragraph and return the reference to the resulting line.
@@ -753,6 +768,11 @@ public:
    * Used for composer mode of the KTextObject.
    */
   void doComposerMode(QColor,QFont,QColor,QFont);
+
+  /**
+   * Used for regexp mode of the KTextObject.
+   */
+  void doRegExpMode(QList<RegExpMode>*,bool revert=true);
 
   /**
    * Returns number of TxtObjs in the paragraph.
@@ -779,6 +799,11 @@ public:
    */
   void deleteLine(unsigned int pos) {lineList.remove(pos);}
 
+  /**
+   * Set regexp-List.
+   */
+  void setRegExpList(QList<RegExpMode> *l) {regExpList = l;}
+
 protected:
 
   unsigned int widthToNextSep(unsigned int);
@@ -794,6 +819,7 @@ protected:
   TxtLine *lin;
   TxtLine *line;
   TxtObj *obj;
+  QList<RegExpMode> *regExpList;
 };
 
 /******************************************************************/
@@ -879,7 +905,7 @@ public:
    * <i>_width</i>: Linebreak width. (< 1 means dynamically linebreak, >= 1 means max. _width chars in a line)<br>
    */
   KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,unsigned int c=0,unsigned int r=0,int __width=0);
-  ~KTextObject() {paragraphList.clear(); cellWidths.clear(); cellHeights.clear(); delete txtCursor;}
+  ~KTextObject() {paragraphList.clear(); cellWidths.clear(); cellHeights.clear(); delete txtCursor; regExpList.clear();}
 
   /**
    * Set the object type of the KTextObject.
@@ -1159,6 +1185,20 @@ public:
    * With this function you can switch off the composer mode.
    */
   void disableComposerMode() {composerMode = false;}
+
+  /**
+   * Enable RegExpMode. In this mode you can give a list of @ref #RegExpMode, which is used for
+   * syntax highliting. That means, if a part of the text string matches to a regexp of the list, this part
+   * is drawn in the attributes of this list item.<br>
+   * <b>IMPORTANT</b>: The first item of the list has to store the attributes of the default text. So the
+   * regular expression of the first list-item is ignored!
+   */
+  void enableRegExpMode(QList<TxtParagraph::RegExpMode>);
+
+  /**
+   * Disable RegExpMode.
+   */
+  void disableRegExpMode() {regexpMode = false;}
 
   /**
    * Returns a part of the text.
@@ -1740,6 +1780,9 @@ protected:
 
   QPopupMenu *rbMenu;
   QWidget *_parent;
+
+  QList<TxtParagraph::RegExpMode> regExpList;
+  bool regexpMode;
 
   int CB_CUT,CB_COPY,CB_PASTE;
 

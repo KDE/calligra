@@ -293,6 +293,8 @@ void TxtCursor::setPositionLine(unsigned int line,unsigned int pos)
 /*============== calculate the position of the cursor ============*/
 void TxtCursor::calcPos()
 {
+  //debug("calc pos begin");
+
   // if the textobject is valid
   if (txtObj)
     {
@@ -329,6 +331,7 @@ void TxtCursor::calcPos()
  	  l1 += paragraphPtr->paragraphLength();
  	}
     }
+  //debug("calc pos end");
 }
 
 /*============ get minimum of two cursors ========================*/
@@ -343,6 +346,26 @@ TxtCursor* TxtCursor::maxCursor(TxtCursor *c)
 {
   if (c->absPos > absPos) return c;
   else return this;
+}
+
+/*============================ copy ==============================*/
+TxtCursor& TxtCursor::copy(TxtCursor& c)
+{
+  absPos = c.positionAbs();
+  
+  paragraph = c.positionParagraph();
+  inParagraph = c.positionInParagraph();
+
+  line = c.positionLine();
+  inLine = c.positionInLine();
+
+  objMaxPos = c.maxPosition();
+
+  _xpos = c.xpos();
+  _ypos = c.ypos();
+  __height = c.height();
+
+  return *this;
 }
 
 /******************************************************************/
@@ -902,7 +925,7 @@ unsigned int TxtParagraph::height()
 }
 
 /*======================= break lines ============================*/
-QRect TxtParagraph::breakLines(unsigned int wid)
+QRect TxtParagraph::breakLines(unsigned int wid,bool regExpMode=false,bool composerMode=false)
 {
   //debug("break lines begin");
   //debug(" concat lines begin");
@@ -910,12 +933,24 @@ QRect TxtParagraph::breakLines(unsigned int wid)
   linePtr = toOneLine();
   //debug(" concat lines end");
 
+  if (regExpMode && regExpList) doRegExpMode(regExpList,!composerMode);
+
   line = new TxtLine();
   unsigned int i,j,w = 0;
   
   // if a line exists
   if (linePtr)
     {
+      if (linePtr->itemAt(linePtr->items() - 1)->type() == TxtObj::SEPARATOR && linePtr->items() > 1)
+	{
+	  QFont font = linePtr->itemAt(linePtr->items() - 2)->font();
+	  QColor color = linePtr->itemAt(linePtr->items() - 2)->color();
+	  if (linePtr->itemAt(linePtr->items() - 1)->font() != font)
+	    linePtr->itemAt(linePtr->items() - 1)->setFont(font);
+	  if (linePtr->itemAt(linePtr->items() - 1)->color() != color)
+	    linePtr->itemAt(linePtr->items() - 1)->setColor(color);
+	}
+
       for (i = 0;i < linePtr->items(); i++)
  	{
 	  obj = linePtr->itemAt(i);
@@ -947,7 +982,8 @@ QRect TxtParagraph::breakLines(unsigned int wid)
  	}
 
       // don't forget the last line!
-      if (line->items() > 0) lineList.append(line);
+      if (line->items() > 0)
+	lineList.append(line);
 
       for (linePtr = lineList.first();linePtr != 0;linePtr = lineList.next())
 	if (linePtr->items() > 0 && linePtr->itemAt(linePtr->items()-1)->type() != TxtObj::SEPARATOR)
@@ -960,9 +996,11 @@ QRect TxtParagraph::breakLines(unsigned int wid)
 }
 
 /*===================== break lines ==============================*/
-void TxtParagraph::break_Lines(unsigned int wid)
+void TxtParagraph::break_Lines(unsigned int wid,bool regExpMode=false,bool composerMode=false)
 {
   linePtr = toOneLine();
+
+  if (regExpMode && regExpList) doRegExpMode(regExpList,!composerMode);
 
   line = new TxtLine();
   unsigned int i,j,w = 0;
@@ -1077,6 +1115,115 @@ void TxtParagraph::doComposerMode(QColor quoted_color,QFont quoted_font,QColor n
 		  linePtr->itemAt(i)->setColor(normal_color);
 		}
 	    }
+
+	  if (regExpList)
+	    doRegExpMode(regExpList,false);
+	}
+    }
+}
+
+/*======================== do regexp mode ========================*/
+void TxtParagraph::doRegExpMode(QList<RegExpMode> *regExpList,bool revert=true)
+{
+  if (linePtr && !regExpList->isEmpty())
+    {
+      QString text = linePtr->getText();
+      RegExpMode *regexp;
+      int index,len;
+      enum CurPos {C_IN,C_BEFORE,C_AFTER};
+      int start_pos = 0,start_cpos = C_IN,i,j;
+      int stop_pos = 0,stop_cpos = C_IN,objnum,start,stop;
+ 
+      for (i = 0,regexp = regExpList->first();regexp != 0;regexp = regExpList->next(),i++)
+	{
+	  if (i == 0 && revert)
+	    {
+	      for (j = 0;j < (int)linePtr->items();j++)
+		{
+		  obj = linePtr->itemAt(j);
+		  obj->setFont(regexp->font);
+		  obj->setColor(regexp->color);
+		}
+	      continue;
+	    }
+	  
+	  index = 0;
+	  len = 0;
+	  while (true)
+	    {
+	      index = regexp->regexp.match((const char*)text,index + len,&len);
+	      if (index == -1) break;
+
+	      objnum = linePtr->getInObj(index);
+	      if (objnum == -1)
+		{
+		  objnum = linePtr->getBeforeObj(index);
+		  if (objnum == -1)
+		    {
+		      objnum = linePtr->getAfterObj(index);
+		      if (objnum == -1)
+			// something wrong here - let's exit!
+			return;
+		      else start_cpos = C_AFTER;
+		    }
+		  else start_cpos = C_BEFORE;
+		  
+		}
+	      else start_cpos = C_IN;
+	      
+	      start_pos = objnum;
+	      
+	      objnum = linePtr->getInObj(index + len);
+	      if (objnum == -1)
+		{
+		  objnum = linePtr->getBeforeObj(index + len);
+		  if (objnum == -1)
+		    {
+		      objnum = linePtr->getAfterObj(index + len);
+		      if (objnum == -1)
+			// something wrong here - let's exit!
+			return;
+		      else stop_cpos = C_AFTER;
+		    }
+		  else stop_cpos = C_BEFORE;
+		  
+		}
+	      else stop_cpos = C_IN;
+	      
+	      stop_pos = objnum;
+
+	      if (stop_cpos == C_AFTER) stop_pos++;
+
+	      if (start_cpos == C_IN)
+		{
+		  linePtr->splitObj(index);
+		  start_pos++;
+		  start_cpos = C_BEFORE;
+		  stop_pos++;
+		}
+
+	      if (stop_cpos == C_IN)
+		{
+		  linePtr->splitObj(index + len);
+		  //stop_cpos = C_BEFORE;
+		}
+
+	      if (start_cpos == C_AFTER) start = start_pos + 1;
+	      else start = start_pos;
+
+	      if (stop_cpos == C_AFTER) stop = stop_pos + 1;
+	      else if (stop_cpos == C_BEFORE) stop = stop_pos - 1;
+	      else stop = stop_pos;
+	      
+	      for (i = start;i <= stop;i++)
+		{    
+		  if (i < (int)linePtr->items())
+		    {
+		      linePtr->itemAt(i)->setFont(regexp->font);
+		      linePtr->itemAt(i)->setColor(regexp->color);
+		    }
+		}
+	    } 
 	}
     }
 }
@@ -1259,6 +1406,9 @@ KTextObject::KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,
   createRBMenu();
 
   _modified = false;
+
+  regexpMode = false;
+  regExpList.setAutoDelete(true);
 }
 
 /*===================== set objecttype ===========================*/
@@ -2155,6 +2305,19 @@ void KTextObject::enableComposerMode(QColor quoted_color,QFont quoted_font,QColo
   repaint(false);
 }
 
+/*======================= enable regexp mode =====================*/
+void KTextObject::enableRegExpMode(QList<TxtParagraph::RegExpMode> regList)
+{
+//   if (!regExpList.isEmpty())
+//     regExpList.clear();
+
+  regexpMode = true;
+  regExpList = regList;
+  //regExpList.setAutoDelete(true);
+  recalc(true);
+  repaint(false);
+}
+
 /*===================== get part of text =========================*/
 QString KTextObject::getPartOfText(TxtCursor *_from,TxtCursor *_to)
 {
@@ -2757,7 +2920,6 @@ void KTextObject::insertText(QString text,int pos,QFont font,QColor color)
   cur.setKTextObject((KTextObject*)this);
 
   cur.setPositionAbs(x1);
-  cur.calcPos();
 
   insertText(text,&cur,font,color);
 }
@@ -2773,7 +2935,6 @@ void KTextObject::insertTextInLine(QString text,int pos,int line,QFont font,QCol
   cur.setKTextObject((KTextObject*)this);
 
   cur.setPositionAbs(x1);
-  cur.calcPos();
 
   insertText(text,&cur,font,color);
 }
@@ -2789,7 +2950,6 @@ void KTextObject::insertTextInPara(QString text,int pos,int para,QFont font,QCol
   cur.setKTextObject((KTextObject*)this);
 
   cur.setPositionAbs(x1);
-  cur.calcPos();
 
   insertText(text,&cur,font,color);
 }
@@ -2805,7 +2965,6 @@ void KTextObject::insertText(QString text,int pos,int line,int para,QFont font,Q
   cur.setKTextObject((KTextObject*)this);
 
   cur.setPositionAbs(x1);
-  cur.calcPos();
 
   insertText(text,&cur,font,color);
 }
@@ -3835,8 +3994,9 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
       //txtCursor->setMaxPosition(textLength());
       
       TxtCursor *oldCursor = new TxtCursor((KTextObject*)this);
-      oldCursor->setPositionAbs(txtCursor->positionAbs());
-      
+      //oldCursor->setPositionAbs(txtCursor->positionAbs());
+      oldCursor->copy(*txtCursor);
+
       changedParagraphs.clear();
 
       // react on the pressed key
@@ -3963,7 +4123,7 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
       // if a line and everything below should be drawn
       if (drawBelow)
 	{
-	  oldCursor->calcPos();
+	  //oldCursor->calcPos();
 	  TxtCursor *minCursor = txtCursor->minCursor(oldCursor);
 	  drawParagraph = minCursor->positionParagraph();
 	  drawLine = minCursor->positionLine();
@@ -4137,20 +4297,25 @@ void KTextObject::recalc(bool breakAllLines=true)
     breakLines = changedParagraphs.count() > 0 ? true : false;
   else breakLines = breakAllLines;
 
+  //debug("break lines begin");
   for (paragraphPtr = paragraphList.first();paragraphPtr != 0;paragraphPtr = paragraphList.next())
     {
       // break the lines, and resize the cell
       if (breakAllLines || breakLines && changedParagraphs.containsRef((int*)paragraphList.at()))
 	{
+	  //debug("break line: %d",paragraphList.at());
+	  if (regexpMode)
+	    paragraphPtr->setRegExpList(&regExpList);
+
 	  if (linebreak_width < 1)
 	    {
-	      paragraphPtr->breakLines(cellWidth(0));
+	      paragraphPtr->breakLines(cellWidth(0),regexpMode,composerMode);
 	      cellWidths.at(0)->wh = width()-xstart;
 	      if (tableFlags() & Tbl_vScrollBar) cellWidths.at(0)->wh -= verticalScrollBar()->width(); 
 	    }	 
 	  else
 	    {
-	      paragraphPtr->break_Lines(linebreak_width);
+	      paragraphPtr->break_Lines(linebreak_width,regexpMode,composerMode);
 	      _width = max(_width,(int)paragraphPtr->width());
 	      cellWidths.at(0)->wh = _width;
 	    }
@@ -4161,6 +4326,7 @@ void KTextObject::recalc(bool breakAllLines=true)
 
       cellHeights.at(paragraphList.at())->wh = paragraphPtr->height();
     }
+  //debug("break lines end");
 
   // calculate the new cursorposition
   txtCursor->calcPos();
@@ -4621,9 +4787,22 @@ bool KTextObject::makeCursorVisible()
       if (yOffset() == 0) _update = false;
     }
 
-  if (xOffset() + width() - 16 < txtCursor->xpos() || xOffset() > txtCursor->xpos())
+  if (_update)
     {
-      setXOffset(txtCursor->xpos());
+      updateTableSize();
+      updateScrollBars();
+      _update = false;
+    }
+
+  if (xOffset() + width() - 16 < txtCursor->xpos())
+    {
+      setXOffset(txtCursor->xpos() - xOffset());
+      _update = true;
+    }
+
+  if (!_update && xOffset() > txtCursor->xpos())
+    {
+      setXOffset(yOffset() - txtCursor->xpos());
       _update = true;
     }
 
@@ -4631,6 +4810,7 @@ bool KTextObject::makeCursorVisible()
     {
       updateTableSize();
       updateScrollBars();
+      _update = false;
     }
 
   return _update;
