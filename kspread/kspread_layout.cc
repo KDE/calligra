@@ -111,6 +111,7 @@ void KSpreadLayout::copy( KSpreadLayout &_l )
   setTextFontBold( _l.textFontBold() );
   setTextFontItalic( _l.textFontItalic() );
   setTextFontUnderline( _l.textFontUnderline() );
+  setTextFontStrike( _l.textFontStrike() );
   setPrefix( _l.prefix() );
   setPostfix( _l.postfix() );
 }

@@ -3093,6 +3093,12 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   	underline.setAttribute( "val",(int)textFontUnderline());
   	format.appendChild( underline );
   	}
+  if ( textFontStrike())
+  	{
+  	QDomElement strike = doc.createElement( "strike" );
+  	strike.setAttribute( "val",(int)textFontStrike());
+  	format.appendChild( strike );
+  	}
   if ( m_textPen != m_pTable->defaultCell()->textPen() )
     {
     if(m_conditionIsTrue)
@@ -3334,6 +3340,16 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 		if ( underline.hasAttribute( "val" ) )
         		{
 	    		setTextFontUnderline((bool)underline.attribute("val").toInt( &ok ));
+	    		if ( !ok ) return false;
+	    		}
+
+		}
+        QDomElement strike = f.namedItem( "strike" ).toElement();
+	if ( !strike.isNull() )
+		{
+		if ( strike.hasAttribute( "val" ) )
+        		{
+	    		setTextFontStrike((bool)strike.attribute("val").toInt( &ok ));
 	    		if ( !ok ) return false;
 	    		}
 

@@ -573,7 +573,8 @@ void KSpreadTable::setSelection( const QRect &_sel, KSpreadCanvas *_canvas )
 }
 
 void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, int _size,
-				     signed char _bold, signed char _italic,signed char _underline )
+				     signed char _bold, signed char _italic,signed char _underline,
+                                     signed char _strike )
 {
     m_pDoc->setModified( true );
 
@@ -600,6 +601,8 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	    	it.current()->setTextFontBold( (bool)_bold );
 	  if ( _underline >= 0 )
 	    	it.current()->setTextFontUnderline( (bool)_underline );
+         if ( _strike >= 0 )
+	    	it.current()->setTextFontStrike( (bool)_strike );
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -628,6 +631,8 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	    	it.current()->setTextFontBold( (bool)_bold );
 	  if ( _underline >= 0 )
 	    	it.current()->setTextFontUnderline( (bool)_underline );
+          if ( _strike >= 0 )
+	    	it.current()->setTextFontStrike( (bool)_strike );
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -640,7 +645,7 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	QRect r( m_rctSelection );
 	if ( !selected )
 	    r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
-	
+
 	KSpreadUndoCellLayout *undo;
 	if ( !m_pDoc->undoBuffer()->isLocked() )
 	{
@@ -650,7 +655,7 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 
 	for ( int x = r.left(); x <= r.right(); x++ )
 	    for ( int y = r.top(); y <= r.bottom(); y++ )
-	    {		
+	    {
 	      KSpreadCell *cell = cellAt( x, y );
 
 	      if ( cell == m_pDefaultCell )
@@ -661,7 +666,7 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	      }
 
 	      cell->setDisplayDirtyFlag();
-		
+
 	      if ( _font )
 		cell->setTextFontFamily( _font );
 	      if ( _size > 0 )
@@ -672,7 +677,8 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 		  cell->setTextFontBold( (bool)_bold );
 	      if ( _underline >= 0 )
 	    	  cell->setTextFontUnderline( (bool)_underline );
-
+              if ( _strike >= 0 )
+	    	  cell->setTextFontStrike( (bool)_strike );
 	      cell->clearDisplayDirtyFlag();
 	    }
 

@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __kspread_dlg_layout_h__
 #define __kspread_dlg_layout_h__
@@ -144,7 +144,8 @@ private:
 
     QLabel       *example_label;
     QFont         selFont;
-
+    QCheckBox* strike;
+    QCheckBox* underline;
     CellLayoutDlg *dlg;
 };
 
@@ -157,21 +158,15 @@ public:
     void apply( KSpreadCell *_cell );
 
 public slots:
-    //void slotTextColor();
-    //void slotBackgroundColor();
     void slotStyle( int );
     void slotSetTextColor( const QColor &_color );
     void slotSetBackgroundColor( const QColor &_color );
 protected:
-    //void setColor( QPushButton *_button, const QColor &_color );
-
     QColor textColor;
     bool bTextColorUndefined;
     QColor bgColor;
     bool bBgColorUndefined;
 
-    //QPushButton *textColorButton;
-    //QPushButton *bgColorButton;
     KColorButton *textColorButton;
     KColorButton *bgColorButton;
 
@@ -182,7 +177,6 @@ protected:
     int idStyleSelect;
 
     QLineEdit* actionText;
-
     CellLayoutDlg *dlg;
 };
 

@@ -789,11 +789,11 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
   box1 = new QGroupBox(this, "Box1");
   box1->setGeometry(XOFFSET,YOFFSET,SIZE_X -  XOFFSET
-		   ,130);
+		   ,160);
   box1->setTitle(i18n("Requested Font"));
 
   box1 = new QGroupBox(this, "Box2");
-  box1->setGeometry(XOFFSET,140,SIZE_X -  XOFFSET
+  box1->setGeometry(XOFFSET,170,SIZE_X -  XOFFSET
 		   ,110);
   box1->setTitle(i18n("Actual Font"));
 
@@ -804,10 +804,10 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
   actual_family_label = new QLabel(this,"afamily");
   actual_family_label->setText(i18n("Family:"));
-  actual_family_label->setGeometry(3*XOFFSET,160,40,LABLE_HEIGHT);
+  actual_family_label->setGeometry(3*XOFFSET,190,40,LABLE_HEIGHT);
 
   actual_family_label_data = new QLabel(this,"afamilyd");
-  actual_family_label_data->setGeometry(3*XOFFSET +50 ,160,110,LABLE_HEIGHT);
+  actual_family_label_data->setGeometry(3*XOFFSET +50 ,190,110,LABLE_HEIGHT);
 
   size_label = new QLabel(this,"size");
   size_label->setText(i18n("Size:"));
@@ -816,11 +816,11 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
   actual_size_label = new QLabel(this,"asize");
   actual_size_label->setText(i18n("Size:"));
-  actual_size_label->setGeometry(3*XOFFSET,160 +LABLE_HEIGHT ,
+  actual_size_label->setGeometry(3*XOFFSET,190 +LABLE_HEIGHT ,
 				 LABLE_LENGTH,LABLE_HEIGHT);
 
   actual_size_label_data = new QLabel(this,"asized");
-  actual_size_label_data->setGeometry(3*XOFFSET +50 ,160 + LABLE_HEIGHT
+  actual_size_label_data->setGeometry(3*XOFFSET +50 ,190 + LABLE_HEIGHT
 				      ,110,LABLE_HEIGHT);
 
   weight_label = new QLabel(this,"weight");
@@ -830,11 +830,11 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
   actual_weight_label = new QLabel(this,"aweight");
   actual_weight_label->setText(i18n("Weight:"));
-  actual_weight_label->setGeometry(3*XOFFSET,160 + 2*LABLE_HEIGHT ,
+  actual_weight_label->setGeometry(3*XOFFSET,190 + 2*LABLE_HEIGHT ,
 				 LABLE_LENGTH,LABLE_HEIGHT);
 
   actual_weight_label_data = new QLabel(this,"aweightd");
-  actual_weight_label_data->setGeometry(3*XOFFSET +50 ,160 + 2*LABLE_HEIGHT
+  actual_weight_label_data->setGeometry(3*XOFFSET +50 ,190 + 2*LABLE_HEIGHT
 				      ,110,LABLE_HEIGHT);
 
   style_label = new QLabel(this,"style");
@@ -847,11 +847,11 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
   actual_style_label = new QLabel(this,"astyle");
   actual_style_label->setText(i18n("Style:"));
-  actual_style_label->setGeometry(3*XOFFSET,160 + 3*LABLE_HEIGHT ,
+  actual_style_label->setGeometry(3*XOFFSET,190 + 3*LABLE_HEIGHT ,
 				 LABLE_LENGTH,LABLE_HEIGHT);
 
   actual_style_label_data = new QLabel(this,"astyled");
-  actual_style_label_data->setGeometry(3*XOFFSET +50 ,160 + 3*LABLE_HEIGHT
+  actual_style_label_data->setGeometry(3*XOFFSET +50 ,190 + 3*LABLE_HEIGHT
 				      ,110,LABLE_HEIGHT);
 
   family_combo = new QComboBox( this, "Family" );
@@ -885,7 +885,14 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   connect( size_combo, SIGNAL(activated(const QString &)),
 	   SLOT(size_chosen_slot(const QString &)) );
   //  QToolTip::add( size_combo, "Select Font Size in Points" );
-
+  strike = new QCheckBox(i18n("Strike out"),this);
+  strike->setGeometry(6*XOFFSET + LABLE_LENGTH
+			    ,26*YOFFSET - COMBO_ADJUST
+			    ,2*LABLE_LENGTH+20,COMBO_BOX_HEIGHT);
+  underline = new QCheckBox(i18n("Underline"),this);
+  underline->setGeometry(10*XOFFSET + 6*LABLE_LENGTH
+			    ,26*YOFFSET - COMBO_ADJUST
+			    ,2*LABLE_LENGTH+20,COMBO_BOX_HEIGHT);
 
   weight_combo = new QComboBox( this, "Weight" );
   weight_combo->insertItem( "", 0 );
@@ -898,6 +905,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   connect( weight_combo, SIGNAL(activated(const QString &)),
 	   SLOT(weight_chosen_slot(const QString &)) );
   //  QToolTip::add( weight_combo, "Select Font Weight" );
+
 
   style_combo = new QComboBox( this, "Style" );
   style_combo->insertItem( "", 0 );
@@ -913,7 +921,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
   example_label = new QLabel(this,"examples");
   example_label->setFont(selFont);
-  example_label->setGeometry(200,160,190, 80);
+  example_label->setGeometry(200,190,190, 80);
   example_label->setAlignment(AlignCenter);
   example_label->setBackgroundColor(white);
   example_label->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );

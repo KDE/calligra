@@ -77,6 +77,7 @@ public:
     virtual void setTextFontBold( bool _b ) { m_textFont.setBold( _b ); }
     virtual void setTextFontItalic( bool _i ) { m_textFont.setItalic( _i ); }
     virtual void setTextFontUnderline( bool _i ) { m_textFont.setUnderline( _i ); }
+    virtual void setTextFontStrike( bool _i ) { m_textFont.setStrikeOut( _i ); }
     virtual void setTextFont( const QFont& _f ) { m_textFont = _f; }
     virtual void setTextColor( const QColor & _c ) { m_textPen.setColor( _c ); m_textColor = _c; }
     virtual void setBgColor( const QColor & _c ) { m_bgColor = _c; }
@@ -153,7 +154,7 @@ public:
     virtual bool textFontBold() { return m_textFont.bold(); }
     virtual bool textFontItalic() { return m_textFont.italic(); }
     virtual bool textFontUnderline() { return m_textFont.underline(); }
-
+    virtual bool textFontStrike() { return m_textFont.strikeOut(); }
     virtual Align align() { return m_eAlign; }
 
     virtual AlignY alignY() { return m_eAlignY; }
