@@ -128,13 +128,31 @@ private:
     KService::Ptr m_service;
 };
 
+/**
+ * A generic tool for a KOffice application.
+ * 
+ * A koffice-data-tool is a "plugin" for a KOffice application, that acts
+ * on a portion of the data present in the document (e.g. a KSpread cell,
+ * a KWord word or paragraph, etc.)
+ * The application has some generic code for presenting the tools in a popupmenu,
+ * and activating the selected one, passing it the data (and eventually getting
+ * modified data from it).
+ */
 class KoDataTool : public QObject
 {
     Q_OBJECT
 public:
     KoDataTool( QObject* parent = 0, const char* name = 0 );
-    //add KSpellConfig *_ksconf for spell tool
-    //now spell tool used KSpellConfig local to kspread
+    /**
+     * 'Run' this tool.
+     * @param command is the command that was selected (see KoDataToolInfo::commands())
+     * @param data the data provided by the application, on which to run the tool.
+     *             The application is responsible for setting that data before running the tool,
+     *             and for getting it back and updating itself with it, after the tool ran.
+     * @param datatype defines the type of @p data.
+     * @param mimetype defines the mimetype of the data (for instance datatype may be
+     *                 QString, but the mimetype can be text/plain, text/html etc.)
+     */
     virtual bool run( const QString& command, void* data, const QString& datatype, const QString& mimetype) = 0;
 };
 
