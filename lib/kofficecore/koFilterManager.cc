@@ -258,9 +258,8 @@ const int KoFilterManager::findWidget(const QString &ext) const {
 const QString KoFilterManager::import( const QString & _file, const char *_native_format,
 				       KoDocument *document )
 {
-    QString path( _file );
-    KURL::encode( path ); // Encode local paths before creating a KURL from them
-    KURL url( path );
+    KURL url;
+    url.setPath( _file );
     QCString file = QFile::encodeName( _file ); // The 8bit version of the filename
 
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
