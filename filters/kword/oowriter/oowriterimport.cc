@@ -2223,7 +2223,7 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& p
         QDomElement t = text.toElement();
         QString name = t.tagName();
 
-        if ( name == "table:table-cell" )
+        if ( name == "table:table-cell" ) // OOo SPEC 4.8.1 p267
         {
             const QString frameName(i18n("Frameset name","Table %3, row %1, column %2")
                 .arg(row).arg(column).arg(tableName)); // The table name could have a % sequence, so use the table name as last!
@@ -2237,8 +2237,10 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& p
             framesetElement.setAttribute("name",frameName);
             framesetElement.setAttribute("row",row);
             framesetElement.setAttribute("col",column);
-            framesetElement.setAttribute("rows",1); // ### TODO: rowspan
-            framesetElement.setAttribute("cols",1); // ### TODO: colspan
+            int rowSpan = t.attribute( "table:number-rows-spanned" ).toInt();
+            framesetElement.setAttribute("rows",rowSpan == 0 ? 1 : rowSpan);
+            int colSpan = t.attribute( "table:number-columns-spanned" ).toInt();
+            framesetElement.setAttribute("cols",colSpan == 0 ? 1 : colSpan);
             framesetElement.setAttribute("grpMgr",tableName);
             framesetsPluralElement.appendChild(framesetElement);
 
@@ -2250,10 +2252,19 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& p
             frameElementOut.setAttribute("runaround",1);
             frameElementOut.setAttribute("autoCreateNewFrame",0); // Very important for cell growing!
             // ### TODO: a few attributes are missing
-            // TODO: check if importCommonFrameProperties would work for borders and background
+
+            m_styleStack.save();
+            fillStyleStack( t, "table:style-name" ); // get the style for the graphics element
+            importCommonFrameProperties(frameElementOut);
+            m_styleStack.restore();
+
             framesetElement.appendChild(frameElementOut);
 
             parseBodyOrSimilar( doc, t, framesetElement); // We change the frameset!
+            column++;
+        }
+        else if ( name == "table:covered-table-cell" )
+        {
             column++;
         }
         else if ( name == "table:table-row" )
@@ -2270,6 +2281,7 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& p
         {
             // Allready treated in OoWriterImport::parseTable, we do not need to do anything here!
         }
+        // TODO sub-table
         else
         {
             kdWarning(30518) << "Skiping element " << name << " (in OoWriterImport::parseInsideOfTable)" << endl;
