@@ -94,8 +94,20 @@ class KEXICORE_EXPORT Part : public QObject
 		//! This method is called from KexiMainWindow
 		void createGUIClients(KexiMainWindow *win);
 
+		/*! For reimplementation. Create here all part actions (KAction or similar). 
+		 "Part action" is an action that is bound to given part, not for dialogs 
+		 created with this part, eg. "Open external project" action for Form part.
+		 Default implementation does nothing.
+		*/
 		virtual void initPartActions( KActionCollection * ) {};
-//		virtual void initInstanceActions( KActionCollection * ) {};
+
+		/*! For reimplementation. Create here all instance actions for \a mode (KAction or similar). 
+		 "Instance action" is an action that is bound to given dialog instance (created with a part), 
+		 for specific view; eg. "Filter data" action for DataViewMode of Table part. 
+		 By creating actions here, you can ensure that after switching to other view mode (eg. from
+		 Design view to Data view), appropriate actions will be switched/hidden
+		 Default implementation does nothing.
+		*/
 		virtual void initInstanceActions( int mode, KActionCollection * ) {};
 
 		inline void setInfo(Info *info) { m_info = info; }
