@@ -4078,15 +4078,15 @@ void KSpreadCell::setDisplayText( const QString& _text )
 void KSpreadCell::setLink( const QString& link )
 {
   if( link.isEmpty() ) return;
-  
+
   d->extra()->link = link;
-  
+
   QString t = d->strText;
-  if( t.isEmpty() ) 
+  if( t.isEmpty() )
     t = link;
-    
+
   // TODO what if strText is already rich-text?
-        
+
   t = "!<a href=\"" + link + "\">" + t + +"</a>";;
   setCellText( t );
 }
@@ -4809,10 +4809,11 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
     else if ( content() == RichText )//|| content() == VisualFormula )
     {
         kdDebug()<<"Link found \n";
+        //TODO format !
         xmlwriter.startElement( "text:p" );
         xmlwriter.startElement( "text:a" );
-        xmlwriter.addAttribute( " xlink:href", "url" );//TODO
-        xmlwriter.addTextNode( "Text" );//TODO
+        xmlwriter.addAttribute( " xlink:href", link() );
+        xmlwriter.addTextNode( text() );
         xmlwriter.endElement();
         xmlwriter.endElement();
         //<text:p>
