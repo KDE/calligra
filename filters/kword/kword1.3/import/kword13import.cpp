@@ -111,7 +111,98 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
     KImageIO::registerFormats();
 
     KWord13Document kwordDocument;
+#if 1
+    const QString fileName( m_chain->inputFile() );
+    if ( fileName.isEmpty() )
+    {
+        kdError(30520) << "No input file name!" << endl;
+        return KoFilter::StupidError;
+    }
     
+    KoStore* store = KoStore::createStore( fileName, KoStore::Read );
+    if ( store && store->hasFile( "maindoc.xml" ) )
+    {
+        kdDebug(30520) << "Maindoc.xml found in KoStore!" << endl;
+        
+        // We do not really care about errors while reading/parsing documentinfo
+        store->open( "documentinfo.xml" );
+        KoStoreDevice ioInfo( store );
+        ioInfo.open( IO_ReadOnly );
+        kdDebug (30520) << "Processing document info... " <<  endl;
+        if ( ! parseInfo ( &ioInfo, kwordDocument ) )
+        {
+            kdWarning(30520) << "Parsing documentinfo.xml has failed. Ignoring!" << endl;
+        }
+        ioInfo.close();
+        store->close();
+        
+        // ### TODO: error return values
+        if ( ! store->open( "maindoc.xml" ) )
+        {
+            kdError(30520) << "Opening root has failed" << endl;
+            delete store;
+            return KoFilter::StupidError;
+        }
+        KoStoreDevice ioMain( store );
+        ioMain.open( IO_ReadOnly );
+        kdDebug (30520) << "Processing root... " <<  endl;
+        if ( ! parseRoot ( &ioMain, kwordDocument ) )
+        {
+            kdWarning(30520) << "Parsing maindoc.xml has failed! Aborting!" << endl;
+            delete store;
+            return KoFilter::StupidError;
+        }
+        ioMain.close();
+        store->close();
+        
+        if ( store->open( "preview.xml" ) )
+        {
+            
+            kdDebug(30520) << "Preview found!" << endl;
+            KoStoreDevice ioPreview( store );
+            ioPreview.open( IO_ReadOnly );
+            const QByteArray image ( ioPreview.readAll() );
+            if ( image.isNull() )
+            {
+                kdWarning(30520) << "Loading of preview failed! Ignoring!" << endl;
+            }
+            else
+            {
+                kwordDocument.m_previewFile = new KTempFile( QString::null, ".png" );
+                // ### TODO check KTempFile
+                kwordDocument.m_previewFile->setAutoDelete( true );
+                QFile file( kwordDocument.m_previewFile->name() );
+                // ### TODO: check if file is correctly written
+                file.open( IO_WriteOnly );
+                file.writeBlock( image );
+                file.close();
+            }
+            ioPreview.close();
+            store->close();
+        }
+        else
+        {
+            kdDebug(30520) << "No preview found!" << endl;
+        }
+    }
+    else
+    {
+        kdWarning(30520) << "Opening store has failed. Trying raw XML file!" << endl;
+        // Be sure to undefine store
+        delete store;
+        store = 0;
+
+        QFile file( fileName );
+        file.open( IO_ReadOnly );
+        if ( ! parseRoot( &file, kwordDocument ) )
+        {
+            kdError(30520) << "Could not process document! Aborting!" << endl;
+            file.close();
+            return KoFilter::StupidError;
+        }
+        file.close();      
+    }
+#else
     KoStoreDevice* subFile;
 
     subFile = m_chain->storageFile( "documentinfo.xml", KoStore::Read );
@@ -174,9 +265,14 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
             file.close();
         }
     }
-
+#endif
     // ### TODO: do post-parsing data processing (table groups, load pictures...)
     
+#if 1
+    // We have finished with the input store/file, so close the store (already done for a raw XML file)
+    delete store;
+    store = 0;
+#endif
     
     KWord13OasisGenerator generator;
         
