@@ -1,8 +1,8 @@
-// $Header$
+//
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,13 +43,15 @@
 
 class KWEFKWordLeader;
 
-// The class TagProcessing and the two functions ProcessSubtags () and
-// AllowNoSubtags () allow for easing parsing of subtags in the
-// current tag. If don't expect any subtags you call AllowNoSubtags ().
-// Otherwise you create a list of TagProcessing elements and pass that
-// to ProcessSubtags () which will go through all subtags it can find,
-// call the corresponding processing function, and do all the
-// necessary error handling.
+/**
+ * The class TagProcessing and the two functions ProcessSubtags () and
+ * AllowNoSubtags () allow for easing parsing of subtags in the
+ * current tag. If don't expect any subtags you call AllowNoSubtags ().
+ * Otherwise you create a list of TagProcessing elements and pass that
+ * to ProcessSubtags () which will go through all subtags it can find,
+ * call the corresponding processing function, and do all the
+ * necessary error handling.
+ */
 
 class TagProcessing
 {
@@ -73,29 +75,36 @@ void ProcessSubtags     ( QDomNode                   parentNode,
 
 void AllowNoSubtags ( QDomNode myNode, KWEFKWordLeader *leader );
 
-// The class AttrProcessing and the two functions ProcessAttributes ()
-// and AllowNoSubtags () allow for easing parsing of the current tag's
-// attributes. If don't expect any attributes you call AllowNoAttributes ().
-// Otherwise you create a list of AttrProcessing elements and pass
-// that to ProcessAttributes () which will go through all attributes
-// it can find, retrieve the value in the datatype defined, and do all
-// the necessary error handling.
+
+/**
+ * The class AttrProcessing and the two functions ProcessAttributes ()
+ * and AllowNoSubtags () allow for easing parsing of the current tag's
+ * attributes. If don't expect any attributes you call AllowNoAttributes ().
+ * Otherwise you create a list of AttrProcessing elements and pass
+ * that to ProcessAttributes () which will go through all attributes
+ * it can find, retrieve the value in the datatype defined, and do all
+ */ the necessary error handling.
 
 
 class AttrProcessing
 {
-    public:
-        AttrProcessing ()
-        {}
+public:
+    /**
+     * Default constructor
+     */
+    AttrProcessing () : data(0) {}
 
-        AttrProcessing ( QString   n,
-                         QString   t,
-                         void     *d  ) : name (n), type (t), data (d)
-        {}
+    /**
+     * Old constructor (without type checking)
+     * Deprecated, do not use for new code
+     */
+    AttrProcessing ( QString n, QString t, void *d )
+        : name (n), type (t), data (d) {}
 
-        QString   name;
-        QString   type;
-        void     *data;
+public:
+    QString   name;
+    QString   type;
+    void     *data;
 };
 
 void ProcessAttributes ( QDomNode                     myNode,
