@@ -211,7 +211,7 @@ protected slots:
   void setTextColor();
 
   void setFontFamily( const QString & );
-  void setFontSize( const QString & );
+  void setFontSize( int );
 
   void setLineWidth();
 

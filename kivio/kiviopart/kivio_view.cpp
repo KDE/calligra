@@ -376,7 +376,9 @@ void KivioView::setupActions()
   connect( m_setFontFamily, SIGNAL(activated(const QString&)), SLOT(setFontFamily(const QString&)) );
 
   m_setFontSize = new KFontSizeAction( i18n( "Set Font Size" ), 0, actionCollection(), "setFontSize" );
-  connect( m_setFontSize, SIGNAL(activated(const QString&)), SLOT(setFontSize(const QString&)) );
+  connect( m_setFontSize, SIGNAL( fontSizeChanged( int ) ),
+           this, SLOT( setFontSize(int ) ) );
+
 
   m_setTextColor = new TKSelectColorAction( i18n("Set Text Color"), TKSelectColorAction::TextColor, actionCollection(), "setTextColor" );
   connect( m_setTextColor, SIGNAL(activated()), SLOT(setTextColor()) );
@@ -1061,14 +1063,13 @@ void KivioView::setFontFamily( const QString &str )
     m_pDoc->updateView(m_pActivePage);
 }
 
-void KivioView::setFontSize(const QString &str )
+void KivioView::setFontSize(int size )
 {
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
 
     QFont f;
-    int size = str.toInt();
     KMacroCommand * macro = 0L;
     while( pStencil )
     {
