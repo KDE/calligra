@@ -22,6 +22,8 @@ public:
 
 	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
+	void importDocument( QTextStream& s, const QByteArray& ba );
+
 private:
 };
 

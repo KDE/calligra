@@ -17,7 +17,7 @@
 #include "aiimport.h"
 
 
-void parseAI( const char* in );	// from yacc/bison
+void parseAI( QTextStream& s, const char* in );	// from yacc/bison
 
 
 class AiImportFactory : KGenericFactory<AiImport, KoFilter>
@@ -49,28 +49,42 @@ AiImport::convert( const QCString& from, const QCString& to )
 		return KoFilter::NotImplemented;
 	}
 
-	KoStore koStoreIn( m_chain->inputFile(), KoStore::Read );
-	if( !koStoreIn.open( "root" ) )
+	QFile fileIn( m_chain->inputFile() );
+	if( !fileIn.open( IO_ReadOnly ) )
 	{
-		koStoreIn.close();
-		kdError() << "Unable to open input file!" << endl;
-		return KoFilter::StupidError;
+		fileIn.close();
+		return KoFilter::FileNotFound;
 	}
 
-	QFile fileOut( m_chain->outputFile() );
-	if( !fileOut.open( IO_WriteOnly ) ) {
-		kdError() << "Unable to open output file: " << m_chain->outputFile() << endl;
-		return KoFilter::StupidError;
+	KoStoreDevice* storeOut = m_chain->storageFile( "root", KoStore::Write );
+	if( !storeOut )
+	{
+		fileIn.close();
+		return KoFilter::StorageCreationError;
 	}
 
-	QByteArray byteArrayIn = koStoreIn.read( koStoreIn.size() );
-	koStoreIn.close();
+	QByteArray byteArrayIn( fileIn.size() );
+	fileIn.readBlock( byteArrayIn.data(), fileIn.size() );
+	fileIn.close();
 
-kdDebug() << "parsing now" << endl;
-	parseAI( byteArrayIn.data() );
+	QString outStr;
+	QTextStream s( &outStr, IO_WriteOnly );
 
-	fileOut.close();
+	importDocument( s, byteArrayIn );
+
+	QCString cStr = outStr.latin1();
+	storeOut->writeBlock( cStr, cStr.length() );
+
 	return KoFilter::OK;
+}
+
+void
+AiImport::importDocument( QTextStream& s, const QByteArray& ba )
+{
+	s << "" << endl;
+		
+
+	parseAI( s, ba.data() );
 }
 
 

@@ -46,22 +46,21 @@ EpsExport::convert( const QCString& from, const QCString& to )
 		return KoFilter::NotImplemented;
 	}
 
-	KoStore koStoreIn( m_chain->inputFile(), KoStore::Read );
-	if( !koStoreIn.open( "root" ) )
+	KoStore storeIn( m_chain->inputFile(), KoStore::Read );
+	if( !storeIn.open( "root" ) )
 	{
-		koStoreIn.close();
-		kdError() << "Unable to open input file!" << endl;
+		storeIn.close();
 		return KoFilter::StupidError;
 	}
 
 	QFile fileOut( m_chain->outputFile() );
 	if( !fileOut.open( IO_WriteOnly ) ) {
-		kdError() << "Unable to open output file: " << m_chain->outputFile() << endl;
+		storeIn.close();
 		return KoFilter::StupidError;
 	}
 
-	QByteArray byteArrayIn = koStoreIn.read( koStoreIn.size() );
-	koStoreIn.close();
+	QByteArray byteArrayIn = storeIn.read( storeIn.size() );
+	storeIn.close();
 
 	QDomDocument domIn;
 	domIn.setContent( byteArrayIn );

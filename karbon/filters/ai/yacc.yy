@@ -7,8 +7,11 @@
 #include <assert.h>
 
 #include <qstring.h>
+#include <qtextstream.h>
 
 extern int yylex();
+
+void karbonInitFlex( const char* in );
 
 void yyerror( const char* s )
 {
@@ -18,18 +21,17 @@ void yyerror( const char* s )
 
 %}
 
-
-%token NUM
+%token T_HEAD_COMMENT
 
 %%
 
-exp:      NUM             { $$ = $1;         }
+exp:	T_HEAD_COMMENT	{  }
 ;
 
 %%
 
-void parseAI( const char* in )
+void parseAI( QTextStream& s, const char* in )
 {
-qDebug("inside");
+	karbonInitFlex( in );
 	yyparse();
 }

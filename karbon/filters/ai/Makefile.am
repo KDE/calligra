@@ -1,17 +1,12 @@
 kde_module_LTLIBRARIES = libkarbonaiimport.la
 
-libkarbonaiimport_la_LDFLAGS = \
-	$(KDE_PLUGIN) \
-	-module \
-	-avoid-version \
-	-no-undefined
-
 libkarbonaiimport_la_LIBADD = \
 	../../../../koffice/lib/kofficeui/libkofficeui.la
 
 libkarbonaiimport_la_LDFLAGS = \
 	$(all_libraries) \
-	$(KDE_RPATH)
+	$(KDE_RPATH) \
+	-version-info 1:0:0 -no-undefined
 
 INCLUDES = \
 	-I$(srcdir)/.. \
