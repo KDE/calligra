@@ -780,6 +780,10 @@ void KivioView::print(KPrinter& ptr)
 
 void KivioView::viewZoom(int zoom)
 {
+  if(zoom < 10 || zoom > 2000) {
+    return;
+  }
+  
   zoomHandler()->setZoomAndResolution(zoom, QPaintDevice::x11AppDpiX(),
     QPaintDevice::x11AppDpiY());
   m_pCanvas->update();
@@ -1771,7 +1775,7 @@ void KivioView::viewZoom(const QString& s)
   bool ok = false;
   int zoom = z.toInt(&ok);
 
-  if(!ok || zoom < 10) {
+  if(!ok || zoom < 10 || zoom > 2000) {
     zoom = zoomHandler()->zoom();
   }
 
