@@ -44,7 +44,7 @@ VToolContainer::VToolContainer( KarbonPart *part, KoView* parent, const char* /*
 	btngroup->setInsideMargin( 5 );
 
 	button = new QToolButton( btngroup );
-	QPixmap pixmap = BarIcon( "select", KarbonFactory::instance() );
+	QPixmap pixmap = BarIcon( "14_select", KarbonFactory::instance() );
 	button->setPixmap( pixmap );
 	button->setToggleButton( true );
 	button->toggle();
@@ -52,7 +52,7 @@ VToolContainer::VToolContainer( KarbonPart *part, KoView* parent, const char* /*
 	btngroup->insert( button, Select );
 
 	button = new QToolButton( btngroup );
-	pixmap = BarIcon( "select", KarbonFactory::instance() );
+	pixmap = BarIcon( "14_selectnodes", KarbonFactory::instance() );
 	button->setPixmap( pixmap );
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( editNodeToolActivated() ) );
@@ -129,7 +129,7 @@ VToolContainer::VToolContainer( KarbonPart *part, KoView* parent, const char* /*
 	btngroup->insert( button, Text );*/
 
 	button = new QToolButton( btngroup );
-	pixmap = BarIcon( "14_gradtool", KarbonFactory::instance() );
+	pixmap = BarIcon( "14_gradient", KarbonFactory::instance() );
 	button->setPixmap( pixmap );
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( gradToolActivated() ) );
