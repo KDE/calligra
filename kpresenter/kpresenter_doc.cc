@@ -1252,7 +1252,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
 
     loadPictureMap( document );
 
-
     if(activePage!=-1)
         m_initialActivePage=m_pageList.at(activePage);
     setModified(false);
@@ -1514,7 +1513,6 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     macro->addCommand( insertCmd );
                     kppixmapobject->reload();
                     createMacro=true;
-
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {

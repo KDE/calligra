@@ -281,6 +281,10 @@ public:
 protected:
 
 private:
+    void makeUsedPixmapListForGroupObject( KPObject *_obj );
+    void completeLoadingForGroupObject( KPObject *_obj );
+
+
     // list of objects
     QPtrList<KPObject> m_objectList;
     KPresenterDoc *m_doc;

@@ -197,6 +197,7 @@ double KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
                         KPClipartObject *kpclipartobject = new KPClipartObject( doc->getPictureCollection() );
                         objOffset = kpclipartobject->load(current);
                         kpclipartobject->setOrig(kpclipartobject->getOrig().x(),objOffset);
+                        kpclipartobject->reload();
                         objects.append( kpclipartobject );
                     } break;
                     case OT_TEXT: {
@@ -209,6 +210,7 @@ double KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
                         KPPixmapObject *kppixmapobject = new KPPixmapObject( doc->getPictureCollection() );
                         objOffset = kppixmapobject->load(current);
                         kppixmapobject->setOrig(kppixmapobject->getOrig().x(),objOffset);
+                        kppixmapobject->reload();
                         objects.append( kppixmapobject );
                     } break;
                     case OT_FREEHAND: {

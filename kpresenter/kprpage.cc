@@ -2846,19 +2846,45 @@ void KPrPage::completeLoading( bool _clean, int lastObj )
             if(obj)
                 obj->reload();
         }
-        else
+        else if ( it.current()->getType() == OT_TEXT )
         {
-            if ( it.current()->getType() == OT_TEXT )
-            {
                 KPTextObject*obj=dynamic_cast<KPTextObject*>( it.current() );
                 if(obj)
                     obj->recalcPageNum( m_doc,this );
-            }
         }
+        else if ( it.current()->getType() == OT_GROUP )
+            completeLoadingForGroupObject( it.current() );
     }
     kpbackground->reload();
 }
 
+void KPrPage::completeLoadingForGroupObject( KPObject *_obj )
+{
+    KPGroupObject *_groupObj = static_cast<KPGroupObject*>( _obj );
+
+    if ( _groupObj ) {
+        QPtrListIterator<KPObject> it( _groupObj->objectList() );
+        for ( ; it.current(); ++it ) {
+            if ( it.current()->getType() == OT_PICTURE ) {
+                KPPixmapObject *_pixObj = static_cast<KPPixmapObject*>( it.current() );
+                if ( _pixObj )
+                    _pixObj->reload();
+            }
+            else if ( it.current()->getType() == OT_CLIPART ) {
+                KPClipartObject *_clipartObj = static_cast<KPClipartObject*>( it.current() );
+                if ( _clipartObj )
+                    _clipartObj->reload();
+            }
+            else if ( it.current()->getType() == OT_TEXT ) {
+                KPTextObject *_textObj=  static_cast<KPTextObject*>( it.current() );
+                if ( _textObj )
+                    _textObj->recalcPageNum( m_doc, this );
+            }
+            else if ( it.current()->getType() == OT_GROUP )
+                completeLoadingForGroupObject( it.current() ); // recursion
+        }
+    }
+}
 
 /*====================== replace objects =========================*/
 KCommand * KPrPage::replaceObjs( bool createUndoRedo, double _orastX,double _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol )
@@ -2966,12 +2992,30 @@ void KPrPage::makeUsedPixmapList()
            else
                m_doc->insertClipartKey(dynamic_cast<KPClipartObject*>( it.current())->getKey());
        }
+       else if ( it.current()->getType() == OT_GROUP )
+           makeUsedPixmapListForGroupObject( it.current() );
    }
 
    if( kpbackground->getBackType()==BT_PICTURE || kpbackground->getBackType()==BT_CLIPART)
        m_doc->insertPixmapKey(kpbackground->getBackPixKey());
 }
 
+void KPrPage::makeUsedPixmapListForGroupObject( KPObject *_obj )
+{
+    KPGroupObject *_groupObj = static_cast<KPGroupObject*>( _obj );
+
+    if ( _groupObj ) {
+        QPtrListIterator<KPObject> it( _groupObj->objectList() );
+        for ( ; it.current(); ++it ) {
+            if ( it.current()->getType() == OT_PICTURE )
+                m_doc->insertPixmapKey( dynamic_cast<KPPixmapObject*>( it.current() )->getKey() );
+            else if ( it.current()->getType() == OT_CLIPART )
+                m_doc->insertClipartKey( dynamic_cast<KPClipartObject*>( it.current() )->getKey() );
+            else if ( it.current()->getType() == OT_GROUP )
+                makeUsedPixmapListForGroupObject( it.current() );  // recursion
+        }
+    }
+}
 
 QValueList<int> KPrPage::reorderPage() const
 {
