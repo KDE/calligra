@@ -167,7 +167,6 @@ void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const w
         format.appendChild( underline );
     }
     if ( chp->fStrike || chp->fDStrike ) {
-        kdDebug() << "fStrike=" << chp->fStrike << " chp->fDStrike=" << chp->fDStrike << endl;
         QDomElement strikeout( m_mainDocument.createElement( "STRIKEOUT" ) );
         if ( chp->fDStrike ) // double strikethrough
         {
@@ -339,7 +338,30 @@ void Document::writeOutParagraph( const QString& styleName, const QString& text 
             layoutElement.appendChild( pageBreak );
         }
 
-        // TODO: LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER  - see pap.brcl brcTop brcLeft brcBottom brcRight
+        if ( m_pap->brcTop.brcType )
+        {
+            QDomElement borderElement = m_mainDocument.createElement( "TOPBORDER" );
+            Conversion::setBorderAttributes( borderElement, m_pap->brcTop );
+            layoutElement.appendChild( borderElement );
+        }
+        if ( m_pap->brcBottom.brcType )
+        {
+            QDomElement borderElement = m_mainDocument.createElement( "BOTTOMBORDER" );
+            Conversion::setBorderAttributes( borderElement, m_pap->brcBottom );
+            layoutElement.appendChild( borderElement );
+        }
+        if ( m_pap->brcLeft.brcType )
+        {
+            QDomElement borderElement = m_mainDocument.createElement( "LEFTBORDER" );
+            Conversion::setBorderAttributes( borderElement, m_pap->brcLeft );
+            layoutElement.appendChild( borderElement );
+        }
+        if ( m_pap->brcRight.brcType )
+        {
+            QDomElement borderElement = m_mainDocument.createElement( "RIGHTBORDER" );
+            Conversion::setBorderAttributes( borderElement, m_pap->brcRight );
+            layoutElement.appendChild( borderElement );
+        }
 
         // TODO: COUNTER
         // TODO: FORMAT - unless it all comes from the style

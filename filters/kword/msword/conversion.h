@@ -23,9 +23,11 @@
 #include <qstring.h>
 #include <qcolor.h>
 
+class QDomElement;
 namespace wvWare {
     namespace Word97 {
         class LSPD;
+        class BRC;
     }
 }
 
@@ -45,6 +47,10 @@ namespace Conversion
 
     // Conversion linespacing struct to string
     QString lineSpacing( const wvWare::Word97::LSPD& lspd );
+
+    // Set all border attributes in the XML element, from a BRC structure
+    void setBorderAttributes( QDomElement& borderElement, const wvWare::Word97::BRC& brc );
+
 };
 
 #endif

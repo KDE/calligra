@@ -22,6 +22,7 @@
 #include <word97_generated.h>
 #include <kdebug.h>
 #include <qregexp.h>
+#include <qdom.h>
 
 void Conversion::encodeText( QString &text )
 {
@@ -129,4 +130,41 @@ QString Conversion::lineSpacing( const wvWare::Word97::LSPD& lspd )
     else
         kdWarning() << "Unhandled LSPD::fMultLinespace value: " << lspd.fMultLinespace << endl;
     return value;
+}
+
+void Conversion::setBorderAttributes( QDomElement& borderElement, const wvWare::Word97::BRC& brc )
+{
+    QColor color = Conversion::color( brc.ico, -1 );
+    borderElement.setAttribute( "red", color.red() );
+    borderElement.setAttribute( "blue", color.blue() );
+    borderElement.setAttribute( "green", color.green() );
+    borderElement.setAttribute( "width", (double)brc.dptLineWidth / 8.0 );
+
+    QString style = "0"; // KWord: solid
+    switch ( brc.brcType ) {
+    case 0: // none
+        Q_ASSERT( brc.dptLineWidth == 0 ); // otherwise kword will show a border!
+        break;
+    case 7: // dash large gap
+    case 22: // dash small gap
+        style = "1"; // KWord: dashes
+        break;
+    case 6: // dot
+        style = "2";
+        break;
+    case 8: // dot dash
+        style = "3";
+        break;
+    case 9: // dot dot dash
+        style = "4";
+        break;
+    case 3: // double
+    case 1: // single
+    default:
+        // if a fancy unsupported border is specified -> better a normal border than none
+        // (so we keep the default value, "0", for "solid single line".
+        break;
+    }
+    borderElement.setAttribute( "style", style );
+    // We ignore brc.dptSpace (spacing), brc.fShadow (shadow), and brc.fFrame (?)
 }
