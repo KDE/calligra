@@ -60,4 +60,26 @@ QString KWord13FormatOneData::getProperty( const QString& name ) const
     }
 }
 
+//
+//
+//
+
+KWord13FormatOne::KWord13FormatOne(void) : m_length(1)
+{
+    m_id = 1;
+}
+
+KWord13FormatOne::~KWord13FormatOne(void)
+{
+}
+
+int KWord13FormatOne::length(void)
+{
+    return m_length;
+}
+
+KWord13FormatOneData* KWord13FormatOne::getFormatOneData(void)
+{
+    return &m_formatOne;
+}
 
