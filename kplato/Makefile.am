@@ -1,4 +1,4 @@
-SUBDIRS = templates pics reports
+SUBDIRS = templates pics reports toolbar
 
 INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kdgantt -I$(top_srcdir)/kugar/lib \
                    $(all_includes)
