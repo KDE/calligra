@@ -42,14 +42,11 @@
 #else
 #include <values.h>
 #include <limits.h>
-#if !defined SUN7
-#include <cmath>
-#endif
+#include <math.h>
 #endif
 
 #if defined SUN7 || ( defined HP11_aCC && defined HP1100 )
 #define std
-#include <math.h>
 #endif
 
 #include <KDChartData.h>
@@ -634,7 +631,7 @@ inline double KDChartTableData::colAbsSum( uint col ) const
     for ( uint row = 0; row < usedRows(); row++ ) {
         KDChartData d = cell( row, col );
         if ( d.isDouble() )
-            sum += std::fabs( d.doubleValue() );
+            sum += fabs( d.doubleValue() );
     }
 
     return sum;
@@ -659,7 +656,7 @@ inline double KDChartTableData::rowAbsSum( uint row ) const
     for ( uint col = 0; col < usedCols(); col++ ) {
         KDChartData d = cell( row, col );
         if ( d.isDouble() )
-            sum += std::fabs( d.doubleValue() );
+            sum += fabs( d.doubleValue() );
     }
     return sum;
 }

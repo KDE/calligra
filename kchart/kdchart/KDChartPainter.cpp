@@ -468,11 +468,13 @@ throw( KDChartNotEnoughSpaceException )
     QPaintDeviceMetrics metrics( painter->device() );
 
     QRect drawRect;
-    if( rect )
+    if( rect ) {
         drawRect = *rect;
-    else
-        drawRect = QRect( 0, 0, metrics.width(), metrics.height() );
-    
+    }
+    else {
+        drawRect = QRect( 0, 0,  metrics.width(), metrics.height() );
+    }
+
     uint yposTop =  drawRect.top();
     uint xposLeft = drawRect.left();
     uint yposBottom = drawRect.height();

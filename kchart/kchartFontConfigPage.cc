@@ -21,6 +21,9 @@
 
 #include <kfontdialog.h>
 
+// For IRIX
+namespace std {}
+
 using namespace std;
 
 #include "kdchart/KDChartParams.h"

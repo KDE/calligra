@@ -2018,7 +2018,7 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                             if( readStringNode( element, string ) )
                                 if( axisSettings->_axisShortLabelsStringList )
                                     *(axisSettings->_axisShortLabelsStringList) << string;
-                        } else if( tagName == "LabelTexts" ) {
+                        } else if( tagName == "LabelText" ) {
                             QString string;
                             if( readStringNode( element, string ) )
                                 axisSettings->_axisLabelTexts = string;

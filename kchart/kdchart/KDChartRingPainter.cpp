@@ -30,10 +30,9 @@
 
 #define DEGTORAD(d) (d)*M_PI/180
 
-#ifdef __WINDOWS__
 #include <math.h>
-#else
-#include <cmath>
+
+#ifndef __WINDOWS__
 #include <stdlib.h>
 #endif
 
@@ -115,7 +114,7 @@ void KDChartRingPainter::paintData( QPainter* painter,
                          ? maxRow
                          : maxRowMinus1 );
     }
-    uint datasetNum = static_cast < uint > ( abs( ( datasetEnd - datasetStart ) + 1.0 ) );
+    uint datasetNum = static_cast < uint > ( abs( ( datasetEnd - datasetStart ) + 1 ) );
 
 
     // Number of values: If -1, use all values, otherwise use the
@@ -164,7 +163,7 @@ void KDChartRingPainter::paintData( QPainter* painter,
         if( params()->relativeRingThickness() ) {
             // 50% should be the same thickness as the one used when ring
             // thickness is constant.
-            ringthicknesses[d2] = (uint)std::floor( (rowsums[d2] / totalSum) *
+            ringthicknesses[d2] = (uint)floor( (rowsums[d2] / totalSum) *
                                                     ( 2.0 * (double)ringthickness ) + 0.5 );
         } else {
             ringthicknesses[d2] = ringthickness;
@@ -182,7 +181,7 @@ void KDChartRingPainter::paintData( QPainter* painter,
             // is there anything at all at this value?
             double cellValue = 0.0;
             if( data->cell( dataset, value ).isDouble() ) {
-                cellValue = std::fabs( data->cell( dataset, value ).doubleValue() );
+                cellValue = fabs( data->cell( dataset, value ).doubleValue() );
                 // Explosion: Only explode if explosion is turned on generally
                 // and we are on the first ring. Besides, if there is a list
                 // of explodeable values, the current value must be on this

@@ -104,6 +104,11 @@ void KDChartBarPainter::paintData( QPainter* painter,
         ourClipRect.setHeight( ourClipRect.height() + clipShiftUp - 1 );
     } else
         ourClipRect.setHeight( ourClipRect.height() + clipShiftUp / 2 - 1 );
+
+    const QWMatrix & world = painter->worldMatrix();
+    ourClipRect.moveBy( static_cast < int > ( world.dx() ),
+                        static_cast < int > ( world.dy() ) );
+
     painter->setClipRect( ourClipRect );
     painter->translate( _dataRect.x(), _dataRect.y() );
 
@@ -191,7 +196,7 @@ void KDChartBarPainter::paintData( QPainter* painter,
         }
 
 
-        uint datasetNum = static_cast < uint > ( abs( ( chartDatasetEnd - chartDatasetStart ) + 1.0 ) );
+        uint datasetNum = static_cast < uint > ( abs( ( chartDatasetEnd - chartDatasetStart ) + 1 ) );
 
         // Number of values: If -1, use all values, otherwise use the
         // specified number of values.
@@ -308,7 +313,7 @@ void KDChartBarPainter::paintData( QPainter* painter,
                     if ( params()->barChartSubType() == KDChartParams::BarPercent )
                         //     barHeight = ( cellValue / valueTotal ) * logHeight;
                         barHeight = ( cellValue / valueTotal )
-                                    * abs( zeroXAxisI - logHeight + sideBarHeight );
+                                    * fabs( zeroXAxisI - logHeight + sideBarHeight );
 
                     else
                         barHeight = pixelsPerUnit * cellValue;

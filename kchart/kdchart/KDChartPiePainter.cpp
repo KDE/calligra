@@ -30,11 +30,7 @@
 
 #define DEGTORAD(d) (d)*M_PI/180
 
-#ifdef __WINDOWS__
 #include <math.h>
-#else
-#include <cmath>
-#endif
 
 #if defined __WINDOWS__ || defined SUN7 || ( defined HP11_aCC && defined HP1100 )
 #define std
@@ -85,7 +81,12 @@ void KDChartPiePainter::paintData( QPainter* painter,
                                    bool paint2nd,
                                    KDChartDataRegionList* regions )
 {
-    painter->setClipRect( _dataRect );
+    const QWMatrix & world = painter->worldMatrix();
+    QRect rect( _dataRect );
+    rect.moveBy( static_cast < int > ( world.dx() ),
+                 static_cast < int > ( world.dy() ) );
+
+    painter->setClipRect( rect );
 
     // find which dataset to paint
     uint dataset;
@@ -161,8 +162,8 @@ void KDChartPiePainter::paintData( QPainter* painter,
 
         if ( data->cell( dataset, value ).isDouble() ) {
             _startAngles[ value ] = currentValue;
-            double cellValue = std::fabs( data->cell( dataset, value ).doubleValue() );
-            _angleLens[ value ] = ( int ) std::floor( cellValue * sectorsPerValue + 0.5 );
+            double cellValue = fabs( data->cell( dataset, value ).doubleValue() );
+            _angleLens[ value ] = ( int ) floor( cellValue * sectorsPerValue + 0.5 );
         } else { // mark as non-existent
             _angleLens[ value ] = 0;
             if ( value > 0 )
@@ -608,7 +609,7 @@ uint KDChartPiePainter::findLeftPie( uint pie )
             return 0;
     else {
         uint leftpie = pie - 1;
-        if ( leftpie < 0 )
+        if ( leftpie < 0 )  // comparison < 0 for unsigned int?
             leftpie = _numValues - 1;
         return leftpie;
     }
@@ -637,8 +638,8 @@ QPoint KDChartPiePainter::pointOnCircle( const QRect& rect, int angle )
     double normAngleRad = DEGTORAD( normAngle );
     double cosAngle = cos( normAngleRad );
     double sinAngle = -sin( normAngleRad );
-    double posX = std::floor( cosAngle * ( double ) rect.width() / 2.0 + 0.5 );
-    double posY = std::floor( sinAngle * ( double ) rect.height() / 2.0 + 0.5 );
+    double posX = floor( cosAngle * ( double ) rect.width() / 2.0 + 0.5 );
+    double posY = floor( sinAngle * ( double ) rect.height() / 2.0 + 0.5 );
     return QPoint( ( int ) posX + rect.center().x(),
                    ( int ) posY + rect.center().y() );
 }

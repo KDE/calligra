@@ -33,11 +33,7 @@
 #include <qtextstream.h>
 #include <qdom.h>
 
-#if defined( SUN7 )
 #include <math.h>
-#else
-#include <cmath>
-#endif
 #ifdef __WINDOWS__
 #define M_PI 3.14159265358979323846
 #endif

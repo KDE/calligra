@@ -52,7 +52,9 @@ KChartComboPage::KChartComboPage( KDChartParams* params,
 void KChartComboPage::init()
 {
     qDebug( "Sorry, not implemented: KChartComboPage::init()" );
+#ifdef __GNUC__
 #warning Put back in
+#endif
 #ifdef K
     switch((int)_params->hlc_style)
         {
@@ -88,7 +90,9 @@ void KChartComboPage::init()
 void KChartComboPage::apply()
 {
     qDebug( "Sorry, not implemented: KChartComboPage::apply()" );
+#ifdef __GNUC__
 #warning Put back in
+#endif
 #ifdef K
     if(diamond->isChecked())
         {

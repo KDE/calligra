@@ -27,10 +27,9 @@
 
 #include <qpainter.h>
 
-#ifdef __WINDOWS__
 #include <math.h>
-#else
-#include <cmath>
+
+#ifndef __WINDOWS__
 #include <stdlib.h>
 #endif
 
@@ -188,7 +187,7 @@ void KDChartLinesPainter::paintDataInternal( QPainter* painter,
                          ? maxRow
                          : maxRowMinus1 );
     }
-    uint datasetNum = static_cast < uint > ( abs( ( datasetEnd - datasetStart ) + 1.0 ) );
+    uint datasetNum = static_cast < uint > ( abs( ( datasetEnd - datasetStart ) + 1 ) );
 
     // Number of values: If -1, use all values, otherwise use the
     // specified number of values.
