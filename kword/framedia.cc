@@ -101,7 +101,8 @@ void KWFrameDia::init() {
             doc=frame->getFrameSet()->kWordDocument();
             frameUnits=KWUnit::unitType( doc->getUnit() );
             }
-        if(!doc) {
+        if(!doc)
+        {
             kdDebug() << "ERROR: KWFrameDia::init frame has no reference to doc.."<<endl;
             return;
         }
@@ -157,7 +158,7 @@ void KWFrameDia::init() {
 /*================================================================*/
 
 void KWFrameDia::setupTab1(){ // TAB Frame Options
-    kdDebug() << "setup tab 1 Frame options"<<endl;
+    //kdDebug() << "setup tab 1 Frame options"<<endl;
     tab1 = addPage( i18n("Options") );
 
     int rows=2;
@@ -342,13 +343,13 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         // add rest of sidehead init..
     }
 
-    kdDebug() << "setup tab 1 exit"<<endl;
+    //kdDebug() << "setup tab 1 exit"<<endl;
     grid1->activate();
 }
 
 
 void KWFrameDia::setupTab2(){ // TAB Text Runaround
-    kdDebug() << "setup tab 2 text runaround"<<endl;
+    //kdDebug() << "setup tab 2 text runaround"<<endl;
 
     tab2 =  addPage( i18n( "Text run around" ) );
 
@@ -468,7 +469,7 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
     str.sprintf( "%.2f", ragap.value(frameUnits  ) );
     eRGap->setText( str );
 
-    kdDebug() << "setup tab 2 exit"<<endl;
+    //kdDebug() << "setup tab 2 exit"<<endl;
 }
 
 void KWFrameDia::setupTab3(){ // TAB Frameset
@@ -480,7 +481,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
      * framebehaviour will be copied from the frameset
      * then the new connection should be made.
  */
-    kdDebug() << "setup tab 3 frameSet"<<endl;
+    //kdDebug() << "setup tab 3 frameSet"<<endl;
     tab3 = addPage( i18n( "Connect text frames" ) );
 
     grid3 = new QGridLayout( tab3, 3, 1, 15, 7 );
@@ -775,6 +776,12 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     KWUnit l, r, t, b;
     doc->getFrameMargins( l, r, t, b );
+    sml->setText( QString().setNum( l.value(frameUnits)));
+    smr->setText( QString().setNum( r.value(frameUnits)));
+    smt->setText( QString().setNum( t.value(frameUnits)));
+    smb->setText( QString().setNum( b.value(frameUnits)));
+#if 0
+
     switch ( frameUnits ) {
     case U_MM:
         sml->setText( QString().setNum( l.mm() ) );
@@ -795,7 +802,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         smb->setText( QString().setNum( b.pt() ) );
         break;
     }
-
+#endif
 
     if (doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
                                            ( doc->processingType() == KWDocument::WP &&
@@ -1026,7 +1033,9 @@ bool KWFrameDia::applyChanges()
             else if ( rRunContur->isChecked() )
                 frame->setRunAround( RA_SKIP );
 
-            KWUnit u;
+            KWUnit u=KWUnit::createUnit( eRGap->text().toDouble(),frameUnits  );
+
+#if 0
             switch ( frameUnits )
             {
                 case U_MM: u.setMM( eRGap->text().toDouble() );
@@ -1036,6 +1045,7 @@ bool KWFrameDia::applyChanges()
                 case U_PT: u.setPT( eRGap->text().toDouble() );
                     break;
             }
+#endif
             frame->setRunAroundGap( u );
         }
 
@@ -1073,6 +1083,11 @@ bool KWFrameDia::applyChanges()
         }
 
         KWUnit u1, u2, u3, u4;
+        u1=KWUnit::createUnit(QMAX(sml->text().toDouble(),0),frameUnits );
+        u2=KWUnit::createUnit(QMAX(smr->text().toDouble(),0),frameUnits );
+        u3=KWUnit::createUnit(QMAX(smt->text().toDouble(),0),frameUnits );
+        u4=KWUnit::createUnit(QMAX(smb->text().toDouble(),0),frameUnits );
+#if 0
         switch ( frameUnits )
         {
             case U_MM:
@@ -1094,6 +1109,7 @@ bool KWFrameDia::applyChanges()
                 u4.setPT( QMAX(smb->text().toInt(),0) );
                 break;
         }
+#endif
         doc->setFrameMargins( u1, u2, u3, u4 );
     }
 
