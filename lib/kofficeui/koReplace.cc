@@ -122,6 +122,11 @@ void KoReplace::slotClose()
     kapp->exit_loop();
 }
 
+void KoReplace::abort()
+{
+    slotClose();
+}
+
 bool KoReplace::replace(QString &text, const QRect &expose)
 {
     if (m_options & KoFindDialog::FindBackwards)

@@ -396,6 +396,11 @@ void KoFind::slotClose()
     kapp->exit_loop();
 }
 
+void KoFind::abort()
+{
+    slotClose();
+}
+
 bool KoFind::find(const QString &text, const QRect &expose)
 {
     if (m_options & KoFindDialog::FindBackwards)

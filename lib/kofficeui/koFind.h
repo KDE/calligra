@@ -292,9 +292,15 @@ public:
     static int find( const QString &text, const QString &pattern, int index, long options, int *matchedlength );
     static int find( const QString &text, const QRegExp &pattern, int index, long options, int *matchedlength );
 
+    /**
+     * Abort the current find process. Call this when the parent widget
+     * is getting destroyed.
+     */
+    void abort();
+
 signals:
 
-    // Connect to this slot to implement highlighting of found text during the find
+    // Connect to this signal to implement highlighting of found text during the find
     // operation.
     void highlight(const QString &text, int matchingIndex, int matchedLength, const QRect &expose);
 

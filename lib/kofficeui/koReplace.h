@@ -221,6 +221,12 @@ public:
     static int replace( QString &text, const QString &pattern, const QString &replacement, int index, long options, int *replacedLength );
     static int replace( QString &text, const QRegExp &pattern, const QString &replacement, int index, long options, int *replacedLength );
 
+    /**
+     * Abort the current find/replace process. Call this when the parent widget
+     * is getting destroyed.
+     */
+    void abort();
+
 signals:
 
     /**
