@@ -47,21 +47,21 @@ class Cell {
 };
 
 
-CSVExport::CSVExport(KoFilter *parent, QString name) :
+CSVExport::CSVExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
 }
 
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
-const bool CSVExport::E_filter(const QCString &file, const KoDocument * const document,
-			       const QCString &from, const QCString &to,
-			       const QString &config) {
+const bool CSVExport::E_filter(const QString &file, const KoDocument * const document,
+                               const QString &from, const QString &to,
+                               const QString &config) {
 
     if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
     {
         kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
-    	return false;
+        return false;
     }
     if(to!="text/x-csv" || from!="application/x-kspread")
     {
@@ -79,9 +79,9 @@ const bool CSVExport::E_filter(const QCString &file, const KoDocument * const do
 
     QChar csv_delimiter;
     if(config.isEmpty())
-	csv_delimiter = ',';
+        csv_delimiter = ',';
     else
-	csv_delimiter = config[0];
+        csv_delimiter = config[0];
 
     // Now get hold of the table to export
     // (Hey, this could be part of the dialog too, choosing which table to export....
@@ -107,11 +107,11 @@ const bool CSVExport::E_filter(const QCString &file, const KoDocument * const do
     QString emptyLines;
     for ( int currentrow = 1 ; currentrow < iMaxRow ; ++currentrow, ++i )
     {
-	if(i>step) {
-	    value+=2;
-	    emit sigProgress(value);
-	    i=0;
-	}
+        if(i>step) {
+            value+=2;
+            emit sigProgress(value);
+            i=0;
+        }
 
         QString separators;
         QString line;
@@ -174,8 +174,8 @@ const bool CSVExport::E_filter(const QCString &file, const KoDocument * const do
 }
 
 /*
-const bool CSVExport::filter(const QCString &fileIn, const QCString &fileOut,
-                               const QCString& from, const QCString& to,
+const bool CSVExport::filter(const QString &fileIn, const QString &fileOut,
+                               const QString& from, const QString& to,
                                const QString &config) {
 
     if(to!="text/x-csv" || from!="application/x-kspread")
@@ -199,9 +199,9 @@ const bool CSVExport::filter(const QCString &fileIn, const QCString &fileOut,
     //QChar decimal_point = '.';
     QChar csv_delimiter;
     if(config.isEmpty())
-	csv_delimiter = ',';
+        csv_delimiter = ',';
     else
-	csv_delimiter = config[0];
+        csv_delimiter = config[0];
 
     // read the whole file
     QByteArray array=in.read(in.size());

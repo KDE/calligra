@@ -36,7 +36,7 @@ class CSVFilterDia : public KoFilterDialog {
     Q_OBJECT
 
 public:
-    CSVFilterDia(QWidget *parent=0L, QString name=QString::null);
+    CSVFilterDia(QWidget *parent=0L, const char *name=0L);
     virtual ~CSVFilterDia() {}
 
     virtual QString state();

@@ -21,7 +21,7 @@
 #ifndef USE_QFD
 #include <csvfilterdia.moc>
 
-CSVFilterDia::CSVFilterDia(QWidget *parent, QString name) :
+CSVFilterDia::CSVFilterDia(QWidget *parent, const char *name) :
                            KoFilterDialog(parent, name) {
 
     QBoxLayout *ml=new QVBoxLayout(this, 10);

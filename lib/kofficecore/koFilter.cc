@@ -19,30 +19,30 @@
 #include <koFilter.h>
 
 
-KoFilter::KoFilter(KoFilter *parent, QString name) : QObject(parent, name) {
+KoFilter::KoFilter(KoFilter *parent, const char *name) : QObject(parent, name) {
 }
 
-const bool KoFilter::filter(const QCString &, const QCString &,
-			    const QCString &, const QCString &,
-			    const QString &) {
+const bool KoFilter::filter(const QString &, const QString &,
+                            const QString &, const QString &,
+                            const QString &) {
     return false;
 }
 
-const bool KoFilter::I_filter(const QCString &, const QCString &,
-			      QDomDocument &, const QCString &,
-			      const QString &) {
+const bool KoFilter::I_filter(const QString &, const QString &,
+                              QDomDocument &, const QString &,
+                              const QString &) {
     return false;
 }
 
-const bool KoFilter::I_filter(const QCString &, KoDocument *,
-			      const QCString &, const QCString &,
-			      const QString &) {
+const bool KoFilter::I_filter(const QString &, KoDocument *,
+                              const QString &, const QString &,
+                              const QString &) {
     return false;
 }
 
-const bool KoFilter::E_filter(const QCString &, const KoDocument * const,
-			      const QCString &, const QCString &,
-			      const QString &) {
+const bool KoFilter::E_filter(const QString &, const KoDocument * const,
+                              const QString &, const QString &,
+                              const QString &) {
     return false;
 }
 #include <koFilter.moc>

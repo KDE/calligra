@@ -24,25 +24,25 @@ static bool ksfunc_mid( KSContext& context )
     uint len = 0xffffffff;
     if ( KSUtil::checkArgumentsCount( context, 3, "mid", false ) )
     {
-	if( KSUtil::checkType( context, args[2], KSValue::DoubleType, false ) )
-	    len = (uint) args[2]->doubleValue();
-	else if( KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
-	    len = (uint) args[2]->intValue();
-	else
-	    return false;
+        if( KSUtil::checkType( context, args[2], KSValue::DoubleType, false ) )
+            len = (uint) args[2]->doubleValue();
+        else if( KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
+            len = (uint) args[2]->intValue();
+        else
+            return false;
     }
     else if ( !KSUtil::checkArgumentsCount( context, 2, "mid", true ) )
-	return false;
+        return false;
 
     if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-	return false;
+        return false;
 
     if( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-	return false;
+        return false;
     int pos = args[1]->intValue();
 
     QString tmp = args[0]->stringValue().mid( pos, len );
-    context.setValue( new KSValue(tmp)); 	
+    context.setValue( new KSValue(tmp));
     return true;
 }
 
@@ -55,9 +55,9 @@ static bool ksfunc_time( KSContext& context )
     QTime t = KGlobal::locale()->readTime( args[0]->stringValue() );
     if ( !t.isValid() )
     {
-	QString tmp( i18n("Non valid time format: %1") );
-	context.setException( new KSException( "ParsingError", tmp.arg( args[0]->stringValue() ), -1 ) );
-	return false;
+        QString tmp( i18n("Non valid time format: %1") );
+        context.setException( new KSException( "ParsingError", tmp.arg( args[0]->stringValue() ), -1 ) );
+        return false;
     }
 
     context.setValue( new KSValue( t ) );
@@ -74,9 +74,9 @@ static bool ksfunc_date( KSContext& context )
     QDate t = KGlobal::locale()->readDate( args[0]->stringValue() );
     if ( !t.isValid() )
     {
-	QString tmp( i18n("Non valid date format: %1") );
-	context.setException( new KSException( "ParsingError", tmp.arg( args[0]->stringValue() ), -1 ) );
-	return false;
+        QString tmp( i18n("Non valid date format: %1") );
+        context.setException( new KSException( "ParsingError", tmp.arg( args[0]->stringValue() ), -1 ) );
+        return false;
     }
 
     context.setValue( new KSValue( t ) );
@@ -122,7 +122,7 @@ static bool ksfunc_lower( KSContext& context )
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
     if ( !KSUtil::checkArgs( context, args, "s", "lower", TRUE ) )
-	return FALSE;
+        return FALSE;
 
     context.setValue( new KSValue( args[0]->stringValue().lower() ) );
 
@@ -134,7 +134,7 @@ static bool ksfunc_upper( KSContext& context )
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
     if ( !KSUtil::checkArgs( context, args, "s", "lower", TRUE ) )
-	return FALSE;
+        return FALSE;
 
     context.setValue( new KSValue( args[0]->stringValue().upper() ) );
 
@@ -146,25 +146,25 @@ static bool ksfunc_isEmpty( KSContext& context )
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
     if ( !KSUtil::checkArgumentsCount( context, 1, "isEmpty", true ) )
-	return false;
+        return false;
 
     if ( KSUtil::checkType( context, args[0], KSValue::ListType, false ) )
     {
-	context.setValue( new KSValue( args[0]->listValue().isEmpty() ) );
+        context.setValue( new KSValue( args[0]->listValue().isEmpty() ) );
     }
     else if ( KSUtil::checkType( context, args[0], KSValue::MapType, false ) )
     {
-	context.setValue( new KSValue( args[0]->mapValue().isEmpty() ) );
+        context.setValue( new KSValue( args[0]->mapValue().isEmpty() ) );
     }
     else if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
     {
-	context.setValue( new KSValue( args[0]->stringValue().isEmpty() ) );
+        context.setValue( new KSValue( args[0]->stringValue().isEmpty() ) );
     }
     else
     {
-	QString tmp( i18n("Can not determine emptiness of a %1 value") );
-	context.setException( new KSException( "CastingError", tmp.arg( args[0]->typeName() ), -1 ) );
-	return false;
+        QString tmp( i18n("Can not determine emptiness of a %1 value") );
+        context.setException( new KSException( "CastingError", tmp.arg( args[0]->typeName() ), -1 ) );
+        return false;
     }
 
     return true;
@@ -243,21 +243,21 @@ static bool ksfunc_arg( KSContext& context )
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
     if ( !KSUtil::checkArgumentsCount( context, 2, "arg", true ) )
-	return false;
+        return false;
 
     if ( !KSUtil::checkType( context, args[0], KSValue::StringType, TRUE ) )
-	return FALSE;
+        return FALSE;
 
     QString str = args[0]->stringValue();
 
     if ( KSUtil::checkType( context, args[1], KSValue::StringType, FALSE ) )
-	context.setValue( new KSValue( str.arg( args[1]->stringValue() ) ) );
+        context.setValue( new KSValue( str.arg( args[1]->stringValue() ) ) );
     else if ( KSUtil::checkType( context, args[1], KSValue::IntType, FALSE ) )
-	context.setValue( new KSValue( str.arg( args[1]->intValue() ) ) );
+        context.setValue( new KSValue( str.arg( args[1]->intValue() ) ) );
     else if ( KSUtil::checkType( context, args[1], KSValue::DoubleType, FALSE ) )
-	context.setValue( new KSValue( str.arg( args[1]->doubleValue() ) ) );
+        context.setValue( new KSValue( str.arg( args[1]->doubleValue() ) ) );
     else if ( KSUtil::checkType( context, args[1], KSValue::CharType, FALSE ) )
-	context.setValue( new KSValue( str.arg( args[1]->charValue() ) ) );
+        context.setValue( new KSValue( str.arg( args[1]->charValue() ) ) );
     else context.setValue( new KSValue( str.arg( args[1]->toString( context ) ) ) );
 
     return TRUE;
@@ -298,7 +298,7 @@ static bool ksfunc_print( KSContext& context )
     cout << endl;
 
   for( ; it != end; ++it )
-    cout << (*it)->toString( context );
+    cout << (*it)->toString( context ).local8Bit();
 
   // context.value()->clear();
   context.setValue( 0 );
@@ -316,7 +316,7 @@ static bool ksfunc_println( KSContext& context )
     cout << endl;
 
   for( ; it != end; ++it )
-    cout << (*it)->toString( context ) << endl;
+    cout << (*it)->toString( context ).local8Bit() << endl;
 
   // context.value()->clear();
   context.setValue( 0 );
@@ -335,8 +335,8 @@ KSModule::Ptr ksCreateModule_KScript( KSInterpreter* interp )
   module->addObject( "length", new KSValue( new KSBuiltinFunction( module, "length", ksfunc_length ) ) );
   module->addObject( "arg", new KSValue( new KSBuiltinFunction( module, "arg", ksfunc_arg ) ) );
   module->addObject( "mid", new KSValue( new KSBuiltinFunction( module, "mid", ksfunc_mid ) ) );
-  module->addObject( "upper", new KSValue( new KSBuiltinFunction( module, "upper", ksfunc_upper ) ) );	
-  module->addObject( "lower", new KSValue( new KSBuiltinFunction( module, "lower", ksfunc_lower ) ) );	
+  module->addObject( "upper", new KSValue( new KSBuiltinFunction( module, "upper", ksfunc_upper ) ) );
+  module->addObject( "lower", new KSValue( new KSBuiltinFunction( module, "lower", ksfunc_lower ) ) );
   module->addObject( "isEmpty", new KSValue( new KSBuiltinFunction( module, "isEmpty", ksfunc_isEmpty ) ) );
   module->addObject( "toInt", new KSValue( new KSBuiltinFunction( module, "toInt", ksfunc_toInt ) ) );
   module->addObject( "toFloat", new KSValue( new KSBuiltinFunction( module, "toFloat", ksfunc_toFloat ) ) );

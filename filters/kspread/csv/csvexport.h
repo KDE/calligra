@@ -31,12 +31,12 @@ class CSVExport : public KoFilter {
     Q_OBJECT
 
 public:
-    CSVExport(KoFilter *parent, QString name);
+    CSVExport(KoFilter *parent, const char*name);
     virtual ~CSVExport() {}
     /** do the filtering :) */
-    virtual const bool E_filter(const QCString &file, const KoDocument * const document,
-				const QCString &from, const QCString &to,
-				const QString &config=QString::null);
+    virtual const bool E_filter(const QString &file, const KoDocument * const document,
+                                const QString &from, const QString &to,
+                                const QString &config=QString::null);
 };
 #endif
 

@@ -107,16 +107,16 @@ bool KSEval_exports( KSParseNode* node, KSContext& context )
     if ( node->branch1() )
     {
       if ( node->branch1()->getType() == func_dcl )
-	context.value()->structClassValue()->nameSpace()->insert( node->branch1()->getIdent(), new KSValue( new KSScriptFunction( context.scope()->module(), node->branch1() ) ) );
+        context.value()->structClassValue()->nameSpace()->insert( node->branch1()->getIdent(), new KSValue( new KSScriptFunction( context.scope()->module(), node->branch1() ) ) );
       else if ( !node->branch1()->eval( context ) )
-	return false;
+        return false;
     }
     if ( node->branch2() )
     {
       if ( node->branch2()->getType() == func_dcl )
-	context.value()->structClassValue()->nameSpace()->insert( node->branch2()->getIdent(), new KSValue( new KSScriptFunction( context.scope()->module(), node->branch2() ) ) );
+        context.value()->structClassValue()->nameSpace()->insert( node->branch2()->getIdent(), new KSValue( new KSScriptFunction( context.scope()->module(), node->branch2() ) ) );
       else if ( !node->branch2()->eval( context ) )
-	return false;
+        return false;
     }
   }
   else
@@ -130,10 +130,10 @@ bool KSEval_t_vertical_line( KSParseNode* node, KSContext& context )
     EVAL_OPS( context, l, r, false );
 
     if ( !KSUtil::checkType( context, l.value(), KSValue::IntType, true ) ||
-	 !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+         !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
     {
-	context.exception()->addLine( node->getLineNo() );
-	return false;
+        context.exception()->addLine( node->getLineNo() );
+        return false;
     }
 
     context.setValue( new KSValue( (KScript::Boolean)( l.value()->intValue() | r.value()->intValue() ) ) );
@@ -146,10 +146,10 @@ bool KSEval_t_circumflex( KSParseNode* node, KSContext& context )
     EVAL_OPS( context, l, r, false );
 
     if ( !KSUtil::checkType( context, l.value(), KSValue::IntType, true ) ||
-	 !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+         !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
     {
-	context.exception()->addLine( node->getLineNo() );
-	return false;
+        context.exception()->addLine( node->getLineNo() );
+        return false;
     }
 
     context.setValue( new KSValue( (KScript::Boolean)( l.value()->intValue() ^ r.value()->intValue() ) ) );
@@ -162,10 +162,10 @@ bool KSEval_t_ampersand( KSParseNode* node, KSContext& context )
     EVAL_OPS( context, l, r, false );
 
     if ( !KSUtil::checkType( context, l.value(), KSValue::IntType, true ) ||
-	 !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+         !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
     {
-	context.exception()->addLine( node->getLineNo() );
-	return false;
+        context.exception()->addLine( node->getLineNo() );
+        return false;
     }
 
     context.setValue( new KSValue( (KScript::Boolean)( l.value()->intValue() & r.value()->intValue() ) ) );
@@ -178,10 +178,10 @@ bool KSEval_t_shiftright( KSParseNode* node, KSContext& context )
     EVAL_OPS( context, l, r, false );
 
     if ( !KSUtil::checkType( context, l.value(), KSValue::IntType, true ) ||
-	 !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+         !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
     {
-	context.exception()->addLine( node->getLineNo() );
-	return false;
+        context.exception()->addLine( node->getLineNo() );
+        return false;
     }
 
     context.setValue( new KSValue( (KScript::Long)( l.value()->intValue() >> r.value()->intValue() ) ) );
@@ -194,10 +194,10 @@ bool KSEval_t_shiftleft( KSParseNode* node, KSContext& context )
     EVAL_OPS( context, l, r, false );
 
     if ( !KSUtil::checkType( context, l.value(), KSValue::IntType, true ) ||
-	 !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+         !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
     {
-	context.exception()->addLine( node->getLineNo() );
-	return false;
+        context.exception()->addLine( node->getLineNo() );
+        return false;
     }
 
     context.setValue( new KSValue( (KScript::Long)( l.value()->intValue() << r.value()->intValue() ) ) );
@@ -228,7 +228,7 @@ bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context )
   if ( l.value()->type() == KSValue::TimeType )
   {
       if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
-	  return false;
+          return false;
       QTime t = l.value()->timeValue();
       t = t.addSecs( r.value()->intValue() );
       FILL_VALUE( context, l, r );
@@ -238,7 +238,7 @@ bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context )
   else if ( l.value()->type() == KSValue::DateType )
   {
       if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
-	  return false;
+          return false;
       QDate d = l.value()->dateValue();
       d = d.addDays( r.value()->intValue() );
       FILL_VALUE( context, l, r );
@@ -249,63 +249,63 @@ bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context )
   else if ( l.value()->type() == KSValue::DoubleType )
   {
       if ( !KSUtil::checkType( context, r.value(), l.value()->type(), true ) )
-	  return false;
+          return false;
   }
   else
   {
       if ( !KSUtil::checkType( context, l.value(), r.value()->type(), true ) )
-	  return false;
+          return false;
   }
 
   switch( l.value()->type() )
     {
     case KSValue::IntType:
       {
-	KScript::Long result = r.value()->intValue() + l.value()->intValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Long result = r.value()->intValue() + l.value()->intValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
       break;
     case KSValue::DoubleType:
       {
-	KScript::Double result = l.value()->doubleValue() + r.value()->doubleValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Double result = l.value()->doubleValue() + r.value()->doubleValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     case KSValue::StringType:
       {
-	QString result = l.value()->stringValue() + r.value()->stringValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        QString result = l.value()->stringValue() + r.value()->stringValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
       break;
     case KSValue::ListType:
       {
-	QValueList<KSValue::Ptr> result = l.value()->listValue() + r.value()->listValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        QValueList<KSValue::Ptr> result = l.value()->listValue() + r.value()->listValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
       break;
     case KSValue::MapType:
       {
-	  QMap<QString,KSValue::Ptr> result = l.value()->mapValue();
-	  QMap<QString,KSValue::Ptr>::ConstIterator it = r.value()->mapValue().begin();
-	  QMap<QString,KSValue::Ptr>::ConstIterator end = r.value()->mapValue().end();
-	  for( ; it != end; ++it )
-	      result.insert( it.key(), it.data() );
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+          QMap<QString,KSValue::Ptr> result = l.value()->mapValue();
+          QMap<QString,KSValue::Ptr>::ConstIterator it = r.value()->mapValue().begin();
+          QMap<QString,KSValue::Ptr>::ConstIterator end = r.value()->mapValue().end();
+          for( ; it != end; ++it )
+              result.insert( it.key(), it.data() );
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
       break;
     case KSValue::DateType:
     case KSValue::TimeType:
-	// Handled above
-	return true;
+        // Handled above
+        return true;
     default:
       QString tmp( i18n("Operator + not defined for type %1") );
       context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
@@ -345,15 +345,15 @@ bool KSEval_t_minus_sign( KSParseNode* node, KSContext& context )
   {
       if ( KSUtil::checkType( context, r.value(), KSValue::TimeType, false ) )
       {
-	  QTime d = r.value()->timeValue();
-	  int diff = d.secsTo( l.value()->timeValue() );
-	  FILL_VALUE( context, l, r );
-	  context.value()->setValue( (KScript::Long) diff );
-	  return TRUE;
+          QTime d = r.value()->timeValue();
+          int diff = d.secsTo( l.value()->timeValue() );
+          FILL_VALUE( context, l, r );
+          context.value()->setValue( (KScript::Long) diff );
+          return TRUE;
       }
 
       if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
-	  return false;
+          return false;
       QTime t = l.value()->timeValue();
       t = t.addSecs( -r.value()->intValue() );
       FILL_VALUE( context, l, r );
@@ -364,15 +364,15 @@ bool KSEval_t_minus_sign( KSParseNode* node, KSContext& context )
   {
       if ( KSUtil::checkType( context, r.value(), KSValue::DateType, false ) )
       {
-	  QDate d = r.value()->dateValue();
-	  int diff = d.daysTo( l.value()->dateValue() );
-	  FILL_VALUE( context, l, r );
-	  context.value()->setValue( (KScript::Long)diff );
-	  return TRUE;
+          QDate d = r.value()->dateValue();
+          int diff = d.daysTo( l.value()->dateValue() );
+          FILL_VALUE( context, l, r );
+          context.value()->setValue( (KScript::Long)diff );
+          return TRUE;
       }
 
       if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
-	  return false;
+          return false;
       QDate d = l.value()->dateValue();
       d = d.addDays( -r.value()->intValue() );
       FILL_VALUE( context, l, r );
@@ -395,17 +395,17 @@ bool KSEval_t_minus_sign( KSParseNode* node, KSContext& context )
     {
     case KSValue::IntType:
       {
-	KScript::Long result = l.value()->intValue() - r.value()->intValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Long result = l.value()->intValue() - r.value()->intValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     case KSValue::DoubleType:
       {
-	KScript::Double result = l.value()->doubleValue() - r.value()->doubleValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Double result = l.value()->doubleValue() - r.value()->doubleValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     default:
       QString tmp( i18n("Operator - not defined for type %1") );
@@ -437,17 +437,17 @@ bool KSEval_t_asterik( KSParseNode* node, KSContext& context )
     {
     case KSValue::IntType:
       {
-	KScript::Long result = r.value()->intValue() * l.value()->intValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Long result = r.value()->intValue() * l.value()->intValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     case KSValue::DoubleType:
       {
-	KScript::Double result = r.value()->doubleValue() * l.value()->doubleValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Double result = r.value()->doubleValue() * l.value()->doubleValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     default:
       QString tmp( i18n("Operator * not defined for type %1") );
@@ -479,27 +479,27 @@ bool KSEval_t_solidus( KSParseNode* node, KSContext& context )
     {
     case KSValue::IntType:
       {
-	// If the devision has a "rest" then we have to convert to doubles
-	if ( r.value()->intValue()!=0 && ( l.value()->intValue() % r.value()->intValue() ) == 0 )
-	{
-	  KScript::Long result = l.value()->intValue() / r.value()->intValue();
-	  FILL_VALUE( context, l, r );
-	  context.value()->setValue( result );
-	}
-	else
-	{
-	  KScript::Double result = (double)l.value()->intValue() / (double)r.value()->intValue();
-	  FILL_VALUE( context, l, r );
-	  context.value()->setValue( result );
-	}
-	return true;
+        // If the devision has a "rest" then we have to convert to doubles
+        if ( r.value()->intValue()!=0 && ( l.value()->intValue() % r.value()->intValue() ) == 0 )
+        {
+          KScript::Long result = l.value()->intValue() / r.value()->intValue();
+          FILL_VALUE( context, l, r );
+          context.value()->setValue( result );
+        }
+        else
+        {
+          KScript::Double result = (double)l.value()->intValue() / (double)r.value()->intValue();
+          FILL_VALUE( context, l, r );
+          context.value()->setValue( result );
+        }
+        return true;
       }
     case KSValue::DoubleType:
       {
-	KScript::Double result = l.value()->doubleValue() / r.value()->doubleValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Double result = l.value()->doubleValue() / r.value()->doubleValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     default:
       QString tmp( i18n("Operator / not defined for type %1") );
@@ -765,31 +765,31 @@ bool KSEval_t_less_or_equal( KSParseNode* node, KSContext& context )
     {
     case KSValue::IntType:
       {
-	KScript::Boolean result = l.value()->intValue() <= r.value()->intValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Boolean result = l.value()->intValue() <= r.value()->intValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     case KSValue::DoubleType:
       {
-	KScript::Boolean result = l.value()->doubleValue() <= r.value()->doubleValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Boolean result = l.value()->doubleValue() <= r.value()->doubleValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     case KSValue::CharType:
       {
-	KScript::Boolean result = l.value()->charValue() <= r.value()->charValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Boolean result = l.value()->charValue() <= r.value()->charValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     case KSValue::StringType:
       {
-	KScript::Boolean result = l.value()->stringValue() <= r.value()->stringValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Boolean result = l.value()->stringValue() <= r.value()->stringValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     default:
       QString tmp( i18n("Operator <= not defined for type %1") );
@@ -812,31 +812,31 @@ bool KSEval_t_greater_or_equal( KSParseNode* node, KSContext& context )
     {
     case KSValue::IntType:
       {
-	KScript::Boolean result = l.value()->intValue() >= r.value()->intValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Boolean result = l.value()->intValue() >= r.value()->intValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     case KSValue::DoubleType:
       {
-	KScript::Boolean result = l.value()->doubleValue() >= r.value()->doubleValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Boolean result = l.value()->doubleValue() >= r.value()->doubleValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     case KSValue::StringType:
       {
-	KScript::Boolean result = l.value()->stringValue() >= r.value()->stringValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Boolean result = l.value()->stringValue() >= r.value()->stringValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     case KSValue::CharType:
       {
-	KScript::Boolean result = l.value()->charValue() >= r.value()->charValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Boolean result = l.value()->charValue() >= r.value()->charValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     default:
       QString tmp( i18n("Operator >= not defined for type %1") );
@@ -914,7 +914,7 @@ bool KSEval_t_array( KSParseNode* node, KSContext& context )
     {
       // Fill the list with empty values
       for( int i = 0; i <= index - len; ++i )
-	l.value()->listValue().append( new KSValue() );
+        l.value()->listValue().append( new KSValue() );
     }
   }
 
@@ -1003,11 +1003,11 @@ bool KSEval_func_param_in( KSParseNode* node, KSContext& context )
     {
       KSContext d( context );
       if ( !node->branch1()->eval( d ) )
-	return false;
+        return false;
       if ( d.value()->mode() == KSValue::Temp )
-	v = d.shareValue();
+        v = d.shareValue();
       else
-	v = new KSValue( *d.value() );
+        v = new KSValue( *d.value() );
     }
     else
     {
@@ -1197,48 +1197,48 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
    */
   if ( l.value()->type() == KSValue::FunctionType || l.value()->type() == KSValue::MethodType )
   {
-	// Copy l.value to func
-	KSContext func( context );
-	func.setValue( new KSValue( *l.value() ) );
+        // Copy l.value to func
+        KSContext func( context );
+        func.setValue( new KSValue( *l.value() ) );
 
-	// Create a list of parameters
-	l.setValue( new KSValue( KSValue::ListType ) );
+        // Create a list of parameters
+        l.setValue( new KSValue( KSValue::ListType ) );
 
-	// Remove our namespaces
-	KSSubScope* scope = l.scope()->popLocalScope();
-	KSModule* module = l.scope()->popModule();
+        // Remove our namespaces
+        KSSubScope* scope = l.scope()->popLocalScope();
+        KSModule* module = l.scope()->popModule();
 
-	bool b = FALSE;
-	if ( func.value()->type() == KSValue::FunctionType )
+        bool b = FALSE;
+        if ( func.value()->type() == KSValue::FunctionType )
         {
-	    l.scope()->pushModule( l.value()->functionValue()->module() );
-	    // Call the function
-	    b = func.value()->functionValue()->call( l );
-	    l.scope()->popModule();
-	}
-	else if ( func.value()->type() == KSValue::MethodType )
+            l.scope()->pushModule( l.value()->functionValue()->module() );
+            // Call the function
+            b = func.value()->functionValue()->call( l );
+            l.scope()->popModule();
+        }
+        else if ( func.value()->type() == KSValue::MethodType )
         {
-	    l.scope()->pushModule( l.value()->methodValue()->module() );
-	    // Call method
-	    b = func.value()->methodValue()->call( l );
-	    l.scope()->popModule();
-	}
-	else
-	    ASSERT( 0 );
+            l.scope()->pushModule( l.value()->methodValue()->module() );
+            // Call method
+            b = func.value()->methodValue()->call( l );
+            l.scope()->popModule();
+        }
+        else
+            ASSERT( 0 );
 
-	// Resume namespaces
-	l.scope()->pushLocalScope( scope );
-	l.scope()->pushModule( module );
+        // Resume namespaces
+        l.scope()->pushLocalScope( scope );
+        l.scope()->pushModule( module );
 
-	if ( !b )
+        if ( !b )
         {
-	    context.setException( l.exception() );
-	    return false;
-	}
-	
-	// Lets have at least a <none> as return value
-	if ( !l.value() )
-	    l.setValue( KSValue::null() );
+            context.setException( l.exception() );
+            return false;
+        }
+
+        // Lets have at least a <none> as return value
+        if ( !l.value() )
+            l.setValue( KSValue::null() );
   }
   /** End of Syntax trick ;-) **/
 
@@ -1599,31 +1599,31 @@ bool KSEval_t_less( KSParseNode* node, KSContext& context )
     {
     case KSValue::IntType:
       {
-	KScript::Boolean result = l.value()->intValue() < r.value()->intValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Boolean result = l.value()->intValue() < r.value()->intValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     case KSValue::DoubleType:
       {
-	KScript::Boolean result = l.value()->doubleValue() < r.value()->doubleValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Boolean result = l.value()->doubleValue() < r.value()->doubleValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     case KSValue::StringType:
       {
-	KScript::Boolean result = l.value()->stringValue() < r.value()->stringValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Boolean result = l.value()->stringValue() < r.value()->stringValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     case KSValue::CharType:
       {
-	KScript::Boolean result = l.value()->charValue() < r.value()->charValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Boolean result = l.value()->charValue() < r.value()->charValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     default:
       QString tmp( i18n("Operator < not defined for type %1") );
@@ -1646,31 +1646,31 @@ bool KSEval_t_greater( KSParseNode* node, KSContext& context )
     {
     case KSValue::IntType:
       {
-	KScript::Boolean result = l.value()->intValue() > r.value()->intValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Boolean result = l.value()->intValue() > r.value()->intValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     case KSValue::DoubleType:
       {
-	KScript::Boolean result = l.value()->doubleValue() > r.value()->doubleValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Boolean result = l.value()->doubleValue() > r.value()->doubleValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     case KSValue::StringType:
       {
-	KScript::Boolean result = l.value()->stringValue() > r.value()->stringValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Boolean result = l.value()->stringValue() > r.value()->stringValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     case KSValue::CharType:
       {
-	KScript::Boolean result = l.value()->charValue() > r.value()->charValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
-	return true;
+        KScript::Boolean result = l.value()->charValue() > r.value()->charValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
       }
     default:
       QString tmp( i18n("Operator > not defined for type %1") );
@@ -1724,9 +1724,9 @@ bool KSEval_t_foreach( KSParseNode* node, KSContext& context )
       KSContext ctx( context );
       if ( !node->branch2()->eval( ctx ) )
       {
-	context.setException( ctx );
-	context.scope()->localScope()->popNamespace();
-	return false;
+        context.setException( ctx );
+        context.scope()->localScope()->popNamespace();
+        return false;
       }
     }
 
@@ -1758,9 +1758,9 @@ bool KSEval_t_foreach( KSParseNode* node, KSContext& context )
       KSContext ctx( context );
       if ( !node->branch2()->eval( ctx ) )
       {
-	context.setException( ctx );
-	context.scope()->localScope()->popNamespace();
-	return false;
+        context.setException( ctx );
+        context.scope()->localScope()->popNamespace();
+        return false;
       }
     }
 
@@ -1773,16 +1773,16 @@ bool KSEval_t_foreach( KSParseNode* node, KSContext& context )
 bool KSEval_t_match( KSParseNode* node , KSContext& context )
 {
     if ( !node->branch1()->eval( context ) )
-	return false;
+        return false;
 
     if ( !KSUtil::checkType( context, context.value(), KSValue::StringType, TRUE ) )
-	return FALSE;
-			
+        return FALSE;
+
     KRegExp* exp = context.interpreter()->regexp();
-    exp->compile( node->getIdent() );
+    exp->compile( node->getIdent().latin1() ); //i18n problem? (Werner)
 
     qDebug("Matching %s against %s",context.value()->stringValue().latin1(), node->getIdent().latin1() );
-	
+
     context.setValue( new KSValue( exp->match( context.value()->stringValue().latin1() ) ) );
 
     return TRUE;
@@ -1792,54 +1792,54 @@ bool KSEval_t_subst( KSParseNode* node, KSContext& context )
 {
     KSContext l( context, TRUE );
     if ( !node->branch1()->eval( l ) )
-	return false;
+        return false;
 
     if ( l.value()->mode() != KSValue::LeftExpr )
     {
-	context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in substitute"), node->getLineNo() ) );
-	return false;
+        context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in substitute"), node->getLineNo() ) );
+        return false;
     }
 
     if ( !KSUtil::checkType( l, l.value(), KSValue::StringType, TRUE ) )
-	return FALSE;
-			
+        return FALSE;
+
     int pos = node->getIdent().find( '/' );
     ASSERT( pos != -1 );
     QString match = node->getIdent().left( pos );
     QString subst = node->getIdent().mid( pos + 1 );
     KRegExp* exp = context.interpreter()->regexp();
-    exp->compile( match );
+    exp->compile( match.latin1() ); // i18n problem? (Werner)
 
     qDebug("Matching %s against %s",l.value()->stringValue().latin1(), node->getIdent().latin1() );
-	
+
     if ( !exp->match( l.value()->stringValue().latin1() ) )
     {
-	context.setValue( new KSValue( FALSE ) );
-	return TRUE;
+        context.setValue( new KSValue( FALSE ) );
+        return TRUE;
     }
     else
     {
-	int len = subst.length();
-	int i = 0;
-	while( i < len )
+        int len = subst.length();
+        int i = 0;
+        while( i < len )
         {
-	    if ( subst[i] == '\\' && i + 1 < len && subst[i+1].isDigit() )
-	    {
-		const char* grp = exp->group( subst[i+1].latin1() - '0' );
-		QString repl;
-		if ( grp )
-		    repl = grp;
-		else
-		    repl = "";
-		subst.replace( i, 2, repl );
-		len += repl.length() + 1;
-		i += repl.length();
-	    }
-	    else
-		++i;
-	}
-	QString& str = l.value()->stringValue();
-	str.replace( exp->groupStart( 0 ), exp->groupEnd( 0 ) - exp->groupStart( 0 ), subst );
+            if ( subst[i] == '\\' && i + 1 < len && subst[i+1].isDigit() )
+            {
+                const char* grp = exp->group( subst[i+1].latin1() - '0' );
+                QString repl;
+                if ( grp )
+                    repl = grp;
+                else
+                    repl = "";
+                subst.replace( i, 2, repl );
+                len += repl.length() + 1;
+                i += repl.length();
+            }
+            else
+                ++i;
+        }
+        QString& str = l.value()->stringValue();
+        str.replace( exp->groupStart( 0 ), exp->groupEnd( 0 ) - exp->groupStart( 0 ), subst );
     }
 
     context.setValue( new KSValue( TRUE ) );
@@ -1984,7 +1984,7 @@ bool KSEval_t_struct( KSParseNode* node, KSContext& context )
   KSParseNode *left = node->branch1();
   if ( left )
       if ( !left->eval( context ) )
-	  return false;
+          return false;
 
   context.setValue( 0 );
 
@@ -2037,7 +2037,7 @@ extern bool KSEval_t_scope( KSParseNode* node, KSContext& context )
     KSParseNode *left = node->branch1();
     // a construction like "{ }" ?
     if ( !left )
-	return TRUE;
+        return TRUE;
 
     KSNamespace nspace;
     context.scope()->localScope()->pushNamespace( &nspace );
@@ -2186,8 +2186,8 @@ extern bool KSEval_from( KSParseNode* node, KSContext& context )
     // This function puts a KSModule in d.value()
     if ( !context.interpreter()->runModule( d, node->getIdent(), node->getIdent() + ".ks", QStringList() ) )
     {
-	context.setException( d );
-	return false;
+        context.setException( d );
+        return false;
     }
 
     // Register the imported module in the scope
@@ -2197,37 +2197,37 @@ extern bool KSEval_from( KSParseNode* node, KSContext& context )
     // Syntax: "from mymodule import *;"
     if ( lst.isEmpty() )
     {
-	// Iterate over all symbols of the module
-	KSNamespace::Iterator it = d.value()->moduleValue()->nameSpace()->begin();
-	KSNamespace::Iterator end = d.value()->moduleValue()->nameSpace()->end();
-	for(; it != end; ++it )
-	    context.scope()->module()->addObject( it.key(), it.data() );
+        // Iterate over all symbols of the module
+        KSNamespace::Iterator it = d.value()->moduleValue()->nameSpace()->begin();
+        KSNamespace::Iterator end = d.value()->moduleValue()->nameSpace()->end();
+        for(; it != end; ++it )
+            context.scope()->module()->addObject( it.key(), it.data() );
     }
     // Syntax: "from mymodule import sym1, sym2;"
     else
     {
-	// Import from this module
-	KSModule* m = d.value()->moduleValue();
-	
-	// Iterate over all symbols that we should import
-	QStringList::ConstIterator sit = lst.begin();
-	for( ; sit != lst.end(); ++sit )
+        // Import from this module
+        KSModule* m = d.value()->moduleValue();
+
+        // Iterate over all symbols that we should import
+        QStringList::ConstIterator sit = lst.begin();
+        for( ; sit != lst.end(); ++sit )
         {
-	    // Symbol known ?
-	    KSValue* v = m->object( *sit );
-	    if ( !v )
-	    {
-		QString tmp( i18n("The module %1 does not contain a symbol named %2") );
-		context.setException( new KSException( "SymbolUnknown",
-						       tmp.arg( node->getIdent() ).arg( *sit ),
-						       node->getLineNo() ) );
-		return false;
-	    }
-	
-	    // Add the symbol to the current namespace
-	    v->ref();
-	    context.scope()->module()->addObject( *sit, v );
-	}
+            // Symbol known ?
+            KSValue* v = m->object( *sit );
+            if ( !v )
+            {
+                QString tmp( i18n("The module %1 does not contain a symbol named %2") );
+                context.setException( new KSException( "SymbolUnknown",
+                                                       tmp.arg( node->getIdent() ).arg( *sit ),
+                                                       node->getLineNo() ) );
+                return false;
+            }
+
+            // Add the symbol to the current namespace
+            v->ref();
+            context.scope()->module()->addObject( *sit, v );
+        }
     }
 
     return TRUE;
@@ -2239,56 +2239,56 @@ bool KSEval_plus_assign( KSParseNode* node, KSContext& context )
 
     if ( l.value()->mode() != KSValue::LeftExpr )
     {
-	context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in assignment"), node->getLineNo() ) );
-	return false;
+        context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in assignment"), node->getLineNo() ) );
+        return false;
     }
 
     if ( l.value()->type() == KSValue::TimeType )
     {
-	if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
-	    return false;
-	QTime t = l.value()->timeValue();
-	t = t.addSecs( r.value()->intValue() );
-	l.value()->setValue( t );
+        if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+            return false;
+        QTime t = l.value()->timeValue();
+        t = t.addSecs( r.value()->intValue() );
+        l.value()->setValue( t );
     }
     else if ( l.value()->type() == KSValue::DateType )
     {
-	if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
-	    return false;
-	QDate d = l.value()->dateValue();
-	d = d.addDays( r.value()->intValue() );
-	l.value()->setValue( d );
+        if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+            return false;
+        QDate d = l.value()->dateValue();
+        d = d.addDays( r.value()->intValue() );
+        l.value()->setValue( d );
     }
     else if ( !KSUtil::checkType( context, l.value(), r.value()->type(), true ) )
-	return false;
+        return false;
 
     switch( l.value()->type() )
     {
     case KSValue::IntType:
-	l.value()->setValue( r.value()->intValue() + l.value()->intValue() );
-	break;
+        l.value()->setValue( r.value()->intValue() + l.value()->intValue() );
+        break;
     case KSValue::DoubleType:
-	l.value()->setValue( r.value()->doubleValue() + l.value()->doubleValue() );
-	break;
+        l.value()->setValue( r.value()->doubleValue() + l.value()->doubleValue() );
+        break;
     case KSValue::StringType:
-	l.value()->setValue( l.value()->stringValue() + r.value()->stringValue() );
-	break;
+        l.value()->setValue( l.value()->stringValue() + r.value()->stringValue() );
+        break;
     case KSValue::ListType:
-	l.value()->setValue( l.value()->listValue() + r.value()->listValue() );
-	break;
+        l.value()->setValue( l.value()->listValue() + r.value()->listValue() );
+        break;
     case KSValue::MapType:
-	{
-	    QMap<QString,KSValue::Ptr>& map = l.value()->mapValue();
-	    QMap<QString,KSValue::Ptr>::ConstIterator it = r.value()->mapValue().begin();
-	    QMap<QString,KSValue::Ptr>::ConstIterator end = r.value()->mapValue().end();
-	    for( ; it != end; ++it )
-		map.insert( it.key(), it.data() );
-	}
-	break;
+        {
+            QMap<QString,KSValue::Ptr>& map = l.value()->mapValue();
+            QMap<QString,KSValue::Ptr>::ConstIterator it = r.value()->mapValue().begin();
+            QMap<QString,KSValue::Ptr>::ConstIterator end = r.value()->mapValue().end();
+            for( ; it != end; ++it )
+                map.insert( it.key(), it.data() );
+        }
+        break;
     case KSValue::TimeType:
     case KSValue::DateType:
-	// Handled above
-	break;
+        // Handled above
+        break;
     default:
       QString tmp( i18n("Operator += not defined for type %1") );
       context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
@@ -2308,80 +2308,80 @@ bool KSEval_minus_assign( KSParseNode* node, KSContext& context )
 
     if ( l.value()->mode() != KSValue::LeftExpr )
     {
-	context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in assignment"), node->getLineNo() ) );
-	return false;
+        context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in assignment"), node->getLineNo() ) );
+        return false;
     }
 
     if ( l.value()->type() == KSValue::TimeType )
     {
-	if ( KSUtil::checkType( context, r.value(), KSValue::TimeType, false ) )
+        if ( KSUtil::checkType( context, r.value(), KSValue::TimeType, false ) )
         {
-	    QTime d = r.value()->timeValue();
-	    int diff = d.secsTo( l.value()->timeValue() );
-	    l.value()->setValue( (KScript::Long)diff );
-	}
-	else
+            QTime d = r.value()->timeValue();
+            int diff = d.secsTo( l.value()->timeValue() );
+            l.value()->setValue( (KScript::Long)diff );
+        }
+        else
         {
-	    if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
-		return false;
-	    QTime t = l.value()->timeValue();
-	    t = t.addSecs( -r.value()->intValue() );
-	    l.value()->setValue( t );
-	}
+            if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+                return false;
+            QTime t = l.value()->timeValue();
+            t = t.addSecs( -r.value()->intValue() );
+            l.value()->setValue( t );
+        }
     }
     else if ( l.value()->type() == KSValue::DateType )
     {
-	if ( KSUtil::checkType( context, r.value(), KSValue::DateType, false ) )
+        if ( KSUtil::checkType( context, r.value(), KSValue::DateType, false ) )
         {
-	    QDate d = r.value()->dateValue();
-	    int diff = d.daysTo( l.value()->dateValue() );
-	    l.value()->setValue( (KScript::Long)diff );
-	}
-	else
+            QDate d = r.value()->dateValue();
+            int diff = d.daysTo( l.value()->dateValue() );
+            l.value()->setValue( (KScript::Long)diff );
+        }
+        else
         {
-	    if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
-		return false;
-	    QDate d = l.value()->dateValue();
-	    d = d.addDays( -r.value()->intValue() );
-	    l.value()->setValue( d );
-	}
+            if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
+                return false;
+            QDate d = l.value()->dateValue();
+            d = d.addDays( -r.value()->intValue() );
+            l.value()->setValue( d );
+        }
     }
     else if ( !KSUtil::checkType( context, l.value(), r.value()->type(), true ) )
-	return false;
+        return false;
     else
     {
-	switch( l.value()->type() )
+        switch( l.value()->type() )
         {
-	case KSValue::IntType:
-	    l.value()->setValue( r.value()->intValue() + l.value()->intValue() );
-	    break;
-	case KSValue::DoubleType:
-	    l.value()->setValue( r.value()->doubleValue() + l.value()->doubleValue() );
-	    break;
-	case KSValue::StringType:
-	    l.value()->setValue( l.value()->stringValue() + r.value()->stringValue() );
-	    break;
-	case KSValue::ListType:
-	    l.value()->setValue( l.value()->listValue() + r.value()->listValue() );
-	    break;
-	case KSValue::MapType:
-	{
-	    QMap<QString,KSValue::Ptr>& map = l.value()->mapValue();
-	    QMap<QString,KSValue::Ptr>::ConstIterator it = r.value()->mapValue().begin();
-	    QMap<QString,KSValue::Ptr>::ConstIterator end = r.value()->mapValue().end();
-	    for( ; it != end; ++it )
-		map.insert( it.key(), it.data() );
-	}
-	break;
-	case KSValue::TimeType:
-	case KSValue::DateType:
-	    // Handled above
-	    break;
-	default:
-	    QString tmp( i18n("Operator += not defined for type %1") );
-	    context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
-	    return false;
-	}
+        case KSValue::IntType:
+            l.value()->setValue( r.value()->intValue() + l.value()->intValue() );
+            break;
+        case KSValue::DoubleType:
+            l.value()->setValue( r.value()->doubleValue() + l.value()->doubleValue() );
+            break;
+        case KSValue::StringType:
+            l.value()->setValue( l.value()->stringValue() + r.value()->stringValue() );
+            break;
+        case KSValue::ListType:
+            l.value()->setValue( l.value()->listValue() + r.value()->listValue() );
+            break;
+        case KSValue::MapType:
+        {
+            QMap<QString,KSValue::Ptr>& map = l.value()->mapValue();
+            QMap<QString,KSValue::Ptr>::ConstIterator it = r.value()->mapValue().begin();
+            QMap<QString,KSValue::Ptr>::ConstIterator end = r.value()->mapValue().end();
+            for( ; it != end; ++it )
+                map.insert( it.key(), it.data() );
+        }
+        break;
+        case KSValue::TimeType:
+        case KSValue::DateType:
+            // Handled above
+            break;
+        default:
+            QString tmp( i18n("Operator += not defined for type %1") );
+            context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
+            return false;
+        }
     }
 
     l.value()->setMode( KSValue::LeftExpr );
@@ -2396,10 +2396,10 @@ bool KSEval_bool_or( KSParseNode* node, KSContext& context )
     EVAL_OPS( context, l, r, false );
 
     if ( !KSUtil::checkType( context, l.value(), KSValue::BoolType, true ) ||
-	 !KSUtil::checkType( context, r.value(), KSValue::BoolType, true ) )
+         !KSUtil::checkType( context, r.value(), KSValue::BoolType, true ) )
     {
-	context.exception()->addLine( node->getLineNo() );
-	return false;
+        context.exception()->addLine( node->getLineNo() );
+        return false;
     }
 
     context.setValue( new KSValue( (KScript::Boolean)( l.value()->boolValue() || r.value()->boolValue() ) ) );
@@ -2412,10 +2412,10 @@ bool KSEval_bool_and( KSParseNode* node, KSContext& context )
     EVAL_OPS( context, l, r, false );
 
     if ( !KSUtil::checkType( context, l.value(), KSValue::BoolType, true ) ||
-	 !KSUtil::checkType( context, r.value(), KSValue::BoolType, true ) )
+         !KSUtil::checkType( context, r.value(), KSValue::BoolType, true ) )
     {
-	context.exception()->addLine( node->getLineNo() );
-	return false;
+        context.exception()->addLine( node->getLineNo() );
+        return false;
     }
 
     context.setValue( new KSValue( (KScript::Boolean)( l.value()->boolValue() && r.value()->boolValue() ) ) );
@@ -2428,9 +2428,9 @@ bool KSEval_t_regexp_group( KSParseNode* node, KSContext& context )
     KRegExp* exp = context.interpreter()->regexp();
     const char* grp = exp->group( node->getIntegerLiteral() );
     if ( grp )
-	context.setValue( new KSValue( QString( grp ) ) );
+        context.setValue( new KSValue( QString( grp ) ) );
     else
-	context.setValue( new KSValue( QString( "" ) ) );
+        context.setValue( new KSValue( QString( "" ) ) );
 
     return TRUE;
 }
@@ -2453,10 +2453,10 @@ bool KSEval_t_match_line( KSParseNode* node, KSContext& context )
 {
     KSValue::Ptr line = context.interpreter()->lastInputLine();
     if ( !KSUtil::checkType( context, line, KSValue::StringType, TRUE ) )
-	return FALSE;
-			
+        return FALSE;
+
     KRegExp* exp = context.interpreter()->regexp();
-    exp->compile( node->getIdent() );
+    exp->compile( node->getIdent().latin1() ); // i18n problem? (Werner)
 
     context.setValue( new KSValue( exp->match( line->stringValue().latin1() ) ) );
 

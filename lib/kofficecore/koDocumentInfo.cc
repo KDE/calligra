@@ -42,10 +42,10 @@ bool KoDocumentInfo::load( const QDomDocument& doc )
     QStringList::ConstIterator it = lst.begin();
     for( ; it != lst.end(); ++it )
     {
-	KoDocumentInfoPage* p = page( *it );
-	ASSERT( p );
-	if ( !p->load( doc.documentElement() ) )
-	    return false;
+        KoDocumentInfoPage* p = page( *it );
+        ASSERT( p );
+        if ( !p->load( doc.documentElement() ) )
+            return false;
     }
 
     return true;
@@ -62,12 +62,12 @@ QDomDocument KoDocumentInfo::save()
     QStringList::ConstIterator it = lst.begin();
     for( ; it != lst.end(); ++it )
     {
-	KoDocumentInfoPage* p = page( *it );
-	ASSERT( p );
-	QDomElement s = p->save( doc );
-	if ( s.isNull() )
-	    return QDomDocument();
-	e.appendChild( s );
+        KoDocumentInfoPage* p = page( *it );
+        ASSERT( p );
+        QDomElement s = p->save( doc );
+        if ( s.isNull() )
+            return QDomDocument();
+        e.appendChild( s );
     }
 
     return doc;
@@ -75,7 +75,7 @@ QDomDocument KoDocumentInfo::save()
 
 KoDocumentInfoPage* KoDocumentInfo::page( const QString& name )
 {
-    QObject* obj = child( name );
+    QObject* obj = child( name.latin1() );
 
     return (KoDocumentInfoPage*)obj;
 }
@@ -87,13 +87,13 @@ QStringList KoDocumentInfo::pages()
     const QObjectList *list = children();
     if ( list )
     {
-	QObjectListIt it( *list );
-	QObject *obj;
-	while ( ( obj = it.current() ) )
+        QObjectListIt it( *list );
+        QObject *obj;
+        while ( ( obj = it.current() ) )
         {
-	    ret.append( obj->name() );
-	    ++it;
-	}
+            ret.append( obj->name() );
+            ++it;
+        }
     }
 
     return ret;
@@ -128,8 +128,8 @@ bool KoDocumentInfoLog::load( const QDomElement& e )
     QDomElement n = e.namedItem( "log" ).firstChild().toElement();
     for( ; !n.isNull(); n = n.nextSibling().toElement() )
     {
-	if ( n.tagName() == "text" )
-	    m_oldLog = n.text();
+        if ( n.tagName() == "text" )
+            m_oldLog = n.text();
     }
 
     return true;
@@ -140,8 +140,8 @@ QDomElement KoDocumentInfoLog::save( QDomDocument& doc )
     QString text = m_oldLog;
     if ( !m_newLog.isEmpty() )
     {
-	text += "\n";
-	text += m_newLog;
+        text += "\n";
+        text += m_newLog;
     }
 
     QDomElement e = doc.createElement( "log" );
@@ -188,26 +188,26 @@ bool KoDocumentInfoAuthor::load( const QDomElement& e )
     QDomElement n = e.namedItem( "author" ).firstChild().toElement();
     for( ; !n.isNull(); n = n.nextSibling().toElement() )
     {
-	if ( n.tagName() == "full-name" )
-	    m_fullName = n.text();
-	else if ( n.tagName() == "title" )
-	    m_title = n.text();
-	else if ( n.tagName() == "company" )
-	    m_company = n.text();
-	else if ( n.tagName() == "email" )
-	    m_email = n.text();
-	else if ( n.tagName() == "telephone" )
-	    m_telephone = n.text();
-	else if ( n.tagName() == "fax" )
-	    m_fax = n.text();
-	else if ( n.tagName() == "country" )
-	    m_country = n.text();
-	else if ( n.tagName() == "postal-code" )
-	    m_postalCode = n.text();
-	else if ( n.tagName() == "city" )
-	    m_city = n.text();
-	else if ( n.tagName() == "street" )
-	    m_street = n.text();
+        if ( n.tagName() == "full-name" )
+            m_fullName = n.text();
+        else if ( n.tagName() == "title" )
+            m_title = n.text();
+        else if ( n.tagName() == "company" )
+            m_company = n.text();
+        else if ( n.tagName() == "email" )
+            m_email = n.text();
+        else if ( n.tagName() == "telephone" )
+            m_telephone = n.text();
+        else if ( n.tagName() == "fax" )
+            m_fax = n.text();
+        else if ( n.tagName() == "country" )
+            m_country = n.text();
+        else if ( n.tagName() == "postal-code" )
+            m_postalCode = n.text();
+        else if ( n.tagName() == "city" )
+            m_city = n.text();
+        else if ( n.tagName() == "street" )
+            m_street = n.text();
     }
 
     return true;
@@ -376,10 +376,10 @@ bool KoDocumentInfoAbout::load( const QDomElement& e )
     QDomElement n = e.namedItem( "about" ).firstChild().toElement();
     for( ; !n.isNull(); n = n.nextSibling().toElement() )
     {
-	if ( n.tagName() == "abstract" )
-	    m_abstract = n.text();
-	else if ( n.tagName() == "title" )
-	    m_title = n.text();
+        if ( n.tagName() == "abstract" )
+            m_abstract = n.text();
+        else if ( n.tagName() == "title" )
+            m_title = n.text();
     }
 
     return true;

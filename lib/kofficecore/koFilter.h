@@ -54,15 +54,15 @@ public:
      * (filtered) file to the disk. It's not very fast (because of all
      * the tmp files, but it's easy and your filter doesn't rely on internals
      * of the app.
-     * @param fileIn 	The name of the file to filter (input file)
-     * @param fileOut 	Save the converted stuff to that file (output file)
-     * @param from 	Mimetype of the input
-     * @param to 	Mimetype of the output
-     * @param config   	A String which can be used to pass configure information (see HOWTO)
-     * @return 		If the method returns true the filtering was successful
+     * @param fileIn    The name of the file to filter (input file)
+     * @param fileOut   Save the converted stuff to that file (output file)
+     * @param from      Mimetype of the input
+     * @param to        Mimetype of the output
+     * @param config    A String which can be used to pass configure information (see HOWTO)
+     * @return          If the method returns true the filtering was successful
      */
-    virtual const bool filter(const QCString &fileIn, const QCString &fileOut,
-                              const QCString &from, const QCString &to,
+    virtual const bool filter(const QString &fileIn, const QString &fileOut,
+                              const QString &from, const QString &to,
                               const QString &config=QString::null);
 
     /**
@@ -70,16 +70,16 @@ public:
      * QDomDocument. It's slightly faster than the first one, but you need
      * a part which uses QDom (e.g. KSpread, KIS,...- but NOT KWord, KPresenter!).
      * This one can only be used as import filter!!! (hence the I_ :)
-     * @param file 	The filename of the input file
-     * @param from 	Mimetype of the input
-     * @param to 	Mimetype of the output
-     * @param doc	An empty QDomDocument, write the converted information in there
-     * @param config   	A String which can be used to pass configure information
-     * @return 		If the method returns true the filtering was successful
+     * @param file      The filename of the input file
+     * @param from      Mimetype of the input
+     * @param to        Mimetype of the output
+     * @param doc       An empty QDomDocument, write the converted information in there
+     * @param config    A String which can be used to pass configure information
+     * @return          If the method returns true the filtering was successful
      */
-    virtual const bool I_filter(const QCString &file, const QCString &from,
-				QDomDocument &doc, const QCString &to,
-				const QString &config=QString::null);
+    virtual const bool I_filter(const QString &file, const QString &from,
+                                QDomDocument &doc, const QString &to,
+                                const QString &config=QString::null);
 
     /**
      * This is the most hacky method(tm) available. Here you have direct
@@ -87,16 +87,16 @@ public:
      * to IMPORT data directly into a KoDocument. Note: This one is needed
      * only for very special filters which have to transfer huge amounts of
      * data (e.g. image import). Normally you shouldn't use this one!!!
-     * @param file 	The filename of the input file
-     * @param document 	The (empty) KoDocument of the part
-     * @param from 	Mimetype of the input
-     * @param to 	Mimetype of the output
-     * @param config   	A String which can be used to pass configure information
-     * @return 		If the method returns true the filtering was successful
+     * @param file      The filename of the input file
+     * @param document  The (empty) KoDocument of the part
+     * @param from      Mimetype of the input
+     * @param to        Mimetype of the output
+     * @param config    A String which can be used to pass configure information
+     * @return          If the method returns true the filtering was successful
      */
-    virtual const bool I_filter(const QCString &file, KoDocument *document,
-				const QCString &from, const QCString &to,
-				const QString &config=QString::null);
+    virtual const bool I_filter(const QString &file, KoDocument *document,
+                                const QString &from, const QString &to,
+                                const QString &config=QString::null);
 
     /**
      * This is another very nasty method. Here you have direct access to the
@@ -105,22 +105,22 @@ public:
      * won't need direct access to the document! Use this method only in very
      * special clases where everything else is impossible! Beware of corrupting
      * the document!!!
-     * @param file 	The filename of the input file
-     * @param document 	The KoDocument of the part
-     * @param from 	Mimetype of the input
-     * @param to 	Mimetype of the output
-     * @param config   	A String which can be used to pass configure information
-     * @return 		If the method returns true the filtering was successful
+     * @param file      The filename of the input file
+     * @param document  The KoDocument of the part
+     * @param from      Mimetype of the input
+     * @param to        Mimetype of the output
+     * @param config    A String which can be used to pass configure information
+     * @return          If the method returns true the filtering was successful
      */
-    virtual const bool E_filter(const QCString &file, const KoDocument * const document,
-				const QCString &from, const QCString &to,
-				const QString &config=QString::null);
+    virtual const bool E_filter(const QString &file, const KoDocument * const document,
+                                const QString &from, const QString &to,
+                                const QString &config=QString::null);
 
 signals:
     void sigProgress(int value);
 
 protected:
-    KoFilter(KoFilter *parent, QString name);   // only for classes inheriting this one
+    KoFilter(KoFilter *parent, const char *name);   // only for classes inheriting this one
 
 private:
     KoFilter();                                 // Meyers says this is nice :)

@@ -32,13 +32,13 @@
  perl -e '$i=0;while($i<30000) { print rand().",".rand()."\n"; $i++ }' > file.csv
 */
 
-CSVFilter::CSVFilter(KoFilter *parent, QString name) :
+CSVFilter::CSVFilter(KoFilter *parent, const char*name) :
                      KoFilter(parent, name) {
 }
 
-const bool CSVFilter::I_filter(const QCString &file, KoDocument *document,
-			       const QCString &from, const QCString &to,
-			       const QString &config) {
+const bool CSVFilter::I_filter(const QString &file, KoDocument *document,
+                               const QString &from, const QString &to,
+                               const QString &config) {
     bool bSuccess=true;
 
     kdDebug(30501) << "here we go... " << document->className() << endl;
@@ -46,7 +46,7 @@ const bool CSVFilter::I_filter(const QCString &file, KoDocument *document,
     if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
     {
         kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
-    	return false;
+        return false;
     }
     if(from!="text/x-csv" || to!="application/x-kspread")
     {
@@ -113,29 +113,29 @@ const bool CSVFilter::I_filter(const QCString &file, KoDocument *document,
 
     while ( !inputStream.eof() && bSuccess==true )
     {
-	++i;
-	if(i>step) {
-	    kdDebug() << "emitted" << endl;
-	    i=0;
-	    value+=2;
-	    emit sigProgress(value);
-	}
-	inputStream >> x; // read one char
-		
+        ++i;
+        if(i>step) {
+            kdDebug() << "emitted" << endl;
+            i=0;
+            value+=2;
+            emit sigProgress(value);
+        }
+        inputStream >> x; // read one char
+
         if (x == '\r') inputStream >> x; // eat '\r', to handle DOS/LOSEDOWS files correctly
         switch (state)
         {
             case S_START :
-		if (x == '"') state = S_QUOTED_FIELD;
+                if (x == '"') state = S_QUOTED_FIELD;
                 else if (x == csv_delimiter)
-		    ++column;
-		else if (x == '\n')  {
-		    ++row;
-		    column=1;
-		}
+                    ++column;
+                else if (x == '\n')  {
+                    ++row;
+                    column=1;
+                }
                 else
                 {
-		    field += x;
+                    field += x;
                     state = S_NORMAL_FIELD;
                 }
                 break;
@@ -153,15 +153,15 @@ const bool CSVFilter::I_filter(const QCString &file, KoDocument *document,
                     table->setText(row, column, field, false);
                     field = "";
                     if (x == '\n') {
-			++row;
-			column=1;
-		    }
-		    else
-			++column;
+                        ++row;
+                        column=1;
+                    }
+                    else
+                        ++column;
                     state = S_START;
                 } else
                 { // should never happen
-		    kdError(30501) << "Error: unexpected character!" << endl;
+                    kdError(30501) << "Error: unexpected character!" << endl;
                     field += "*** Error : unexpected character : ";
                     field += x;
                     state = S_START;
@@ -174,15 +174,15 @@ const bool CSVFilter::I_filter(const QCString &file, KoDocument *document,
                     table->setText(row, column, field, false);
                     field = "";
                     if (x == '\n') {
-			++row;
-			column=1;
-		    }
-		    else
-			++column;
+                        ++row;
+                        column=1;
+                    }
+                    else
+                        ++column;
                     state = S_START;
-		}
+                }
                 else
-		    field += x;
+                    field += x;
         }
     }
     emit sigProgress(100);

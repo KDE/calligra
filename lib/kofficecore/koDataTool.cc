@@ -18,6 +18,7 @@
 */
 
 #include <qpixmap.h>
+#include <qfile.h>
 #include <koDataTool.h>
 #include <ktrader.h>
 
@@ -44,9 +45,9 @@ KoDataToolInfo::KoDataToolInfo( const KService::Ptr& service )
 
     if ( !!m_service && !m_service->serviceTypes().contains( "KoDataTool" ) )
     {
-	kdDebug(30003) << "The service " << m_service->name().latin1()
-		       << " does not feature the service type KoDataTool" << endl;
-	m_service = 0;
+        kdDebug(30003) << "The service " << m_service->name().latin1()
+                       << " does not feature the service type KoDataTool" << endl;
+        m_service = 0;
     }
 }
 
@@ -65,7 +66,7 @@ KoDataToolInfo& KoDataToolInfo::operator= ( const KoDataToolInfo& info )
 QString KoDataToolInfo::dataType() const
 {
     if ( !m_service )
-	return QString::null;
+        return QString::null;
 
     return m_service->property( "DataType" ).toString();
 }
@@ -73,7 +74,7 @@ QString KoDataToolInfo::dataType() const
 QStringList KoDataToolInfo::mimeTypes() const
 {
     if ( !m_service )
-	return QStringList();
+        return QStringList();
 
     return m_service->property( "DataMimeTypes" ).toStringList();
 }
@@ -81,7 +82,7 @@ QStringList KoDataToolInfo::mimeTypes() const
 bool KoDataToolInfo::isReadOnly() const
 {
     if ( !m_service )
-	return TRUE;
+        return TRUE;
 
     return m_service->property( "ReadOnly" ).toBool();
 }
@@ -89,13 +90,13 @@ bool KoDataToolInfo::isReadOnly() const
 QPixmap KoDataToolInfo::icon() const
 {
     if ( !m_service )
-	return QPixmap();
+        return QPixmap();
 
     QPixmap pix;
     QStringList lst = KGlobal::dirs()->resourceDirs("icon");
     QStringList::ConstIterator it = lst.begin();
     while (!pix.load( *it + "/" + m_service->icon() ) && it != lst.end() )
-	it++;
+        it++;
 
     return pix;
 }
@@ -103,13 +104,13 @@ QPixmap KoDataToolInfo::icon() const
 QPixmap KoDataToolInfo::miniIcon() const
 {
     if ( !m_service )
-	return QPixmap();
+        return QPixmap();
 
     QPixmap pix;
     QStringList lst = KGlobal::dirs()->resourceDirs("mini");
     QStringList::ConstIterator it = lst.begin();
     while (!pix.load( *it + "/" + m_service->icon() ) && it != lst.end() )
-	it++;
+        it++;
 
     return pix;
 }
@@ -117,7 +118,7 @@ QPixmap KoDataToolInfo::miniIcon() const
 QStringList KoDataToolInfo::commands() const
 {
     if ( !m_service )
-	return QString::null;
+        return QString::null;
 
     return m_service->property( "Commands" ).toStringList();
 }
@@ -125,7 +126,7 @@ QStringList KoDataToolInfo::commands() const
 QStringList KoDataToolInfo::userCommands() const
 {
     if ( !m_service )
-	return QString::null;
+        return QString::null;
 
     return m_service->property( "CommandsI18N" ).toStringList();
 }
@@ -133,18 +134,18 @@ QStringList KoDataToolInfo::userCommands() const
 KoDataTool* KoDataToolInfo::createTool( QObject* parent, const char* name )
 {
     if ( !m_service )
-	return 0;
+        return 0;
 
-    KLibFactory* factory = KLibLoader::self()->factory( m_service->library() );
+    KLibFactory* factory = KLibLoader::self()->factory( QFile::encodeName(m_service->library()) );
 
     if( !factory )
-	return 0;
+        return 0;
 
     QObject* obj = factory->create( parent, name );
     if ( !obj || !obj->inherits( "KoDataTool" ) )
     {
-	delete obj;
-	return 0;
+        delete obj;
+        return 0;
     }
 
     return (KoDataTool*)obj;
@@ -163,18 +164,18 @@ QValueList<KoDataToolInfo> KoDataToolInfo::query( const QString& datatype, const
 
     if ( !datatype.isEmpty() )
     {
-	QString tmp( "DataType == '%1'" );
-	tmp = tmp.arg( datatype );
-	constr = tmp;
+        QString tmp( "DataType == '%1'" );
+        tmp = tmp.arg( datatype );
+        constr = tmp;
     }
     if ( !mimetype.isEmpty() )
     {
-	QString tmp( "'%1' in DataMimeTypes" );
-	tmp = tmp.arg( mimetype );
-	if ( constr.isEmpty() )
-	    constr = tmp;
-	else
-	    constr = constr + " and " + tmp;
+        QString tmp( "'%1' in DataMimeTypes" );
+        tmp = tmp.arg( mimetype );
+        if ( constr.isEmpty() )
+            constr = tmp;
+        else
+            constr = constr + " and " + tmp;
     }
 
     // Query the trader
@@ -183,8 +184,8 @@ QValueList<KoDataToolInfo> KoDataToolInfo::query( const QString& datatype, const
 
     KTrader::OfferList::ConstIterator it = offers.begin();
     for( ; it != offers.end(); ++it )
-	lst.append( KoDataToolInfo( *it ) );
-	
+        lst.append( KoDataToolInfo( *it ) );
+
     return lst;
 }
 
@@ -192,7 +193,7 @@ bool KoDataToolInfo::isValid() const
 {
     return( m_service );
 }
-			
+
 /*************************************************
  *
  * KoDataTool

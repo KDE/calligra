@@ -38,11 +38,11 @@ KSInterpreter::KSInterpreter()
 KSInterpreter::~KSInterpreter()
 {
     if ( m_outStream )
-	delete m_outStream;
+        delete m_outStream;
     if ( m_outDevice )
     {
-	m_outDevice->close();
-	delete m_outDevice;
+        m_outDevice->close();
+        delete m_outDevice;
     }
 }
 
@@ -64,7 +64,7 @@ QString KSInterpreter::runScript( const QString& filename, const QStringList& ar
     // The "" indicates that this is not a module but
     // a script in its original meaning.
     if ( !runModule( context, "", filename, args ) )
-	return context.exception()->toString( context );
+        return context.exception()->toString( context );
 
     return QString::null;
 }
@@ -89,7 +89,7 @@ bool KSInterpreter::runModule( KSContext& context, const QString& name )
     DIR *dp = 0L;
     struct dirent *ep;
 
-    dp = opendir( *it );
+    dp = opendir( QFile::encodeName(*it) );
     if ( dp == 0L )
       return false;
 
@@ -97,16 +97,16 @@ bool KSInterpreter::runModule( KSContext& context, const QString& name )
     {
       if ( ksname == ep->d_name )
       {
-	QString f = *it;
-	f += "/";
-	f += ep->d_name;
-	struct stat buff;
-	if ( ( stat( f, &buff ) == 0 ) && S_ISREG( buff.st_mode ) )
-	{
-	  QStringList lst;
-	  qDebug("RUN MODULE %s %s", name.latin1(), f.latin1() );
-	  return runModule( context, name, f, lst );
-	}
+        QString f = *it;
+        f += "/";
+        f += ep->d_name;
+        struct stat buff;
+        if ( ( stat( QFile::encodeName(f), &buff ) == 0 ) && S_ISREG( buff.st_mode ) )
+        {
+          QStringList lst;
+          qDebug("RUN MODULE %s %s", name.latin1(), f.latin1() );
+          return runModule( context, name, f, lst );
+        }
       }
     }
 
@@ -134,7 +134,7 @@ bool KSInterpreter::runModule( KSContext& result, const QString& name, const QSt
 
   // s_current = this;
 
-  FILE* f = fopen( filename, "r" );
+  FILE* f = fopen( QFile::encodeName(filename), "r" );
   if ( !f )
   {
     QString tmp( i18n("Could not open file %1") );
@@ -195,15 +195,15 @@ bool KSInterpreter::runModule( KSContext& result, const QString& name, const QSt
     QStringList::ConstIterator send = args.end();
     for( ; sit != send; ++sit )
     {
-	context.value()->listValue().append( new KSValue( *sit ) );
+        context.value()->listValue().append( new KSValue( *sit ) );
     }
 
     if ( !code->functionValue()->call( context ) )
     {
       if ( context.exception() )
       {
-	result.setException( context );
-	return false;
+        result.setException( context );
+        return false;
       }
 
       // TODO: create exception
@@ -246,43 +246,43 @@ QString KSInterpreter::readInput()
 {
     if ( !m_outStream )
     {
-	if ( m_args.count() > 0 )
+        if ( m_args.count() > 0 )
         {
-	    m_currentArg = 0;
-	    m_outDevice = new QFile( m_args[ m_currentArg ] );
-	    m_outDevice->open( IO_ReadOnly );
-	    m_outStream = new QTextStream( m_outDevice );
-	}
-	else
-	    m_outStream = new QTextStream( stdin, IO_ReadOnly );
+            m_currentArg = 0;
+            m_outDevice = new QFile( m_args[ m_currentArg ] );
+            m_outDevice->open( IO_ReadOnly );
+            m_outStream = new QTextStream( m_outDevice );
+        }
+        else
+            m_outStream = new QTextStream( stdin, IO_ReadOnly );
     }
 
     QString tmp = m_outStream->readLine();
 
     if ( !tmp.isNull() )
     {
-	tmp += "\n";
-	m_lastInputLine->setValue( tmp );
-	return tmp;
+        tmp += "\n";
+        m_lastInputLine->setValue( tmp );
+        return tmp;
     }
 
     m_lastInputLine->setValue( tmp );
-	
+
     // Ended reading a file ...
 
     // Did we scan the last file ?
     if ( m_currentArg == (int)m_args.count() - 1 )
-	return QString();
+        return QString();
     else
     {
-	m_currentArg++;
-	if ( m_outStream )
-	    delete m_outStream;
-	if ( m_outDevice )
-	    delete m_outDevice;
-	m_outDevice = new QFile( m_args[ m_currentArg ] );
-	m_outDevice->open( IO_ReadOnly );
-	m_outStream = new QTextStream( m_outDevice );
+        m_currentArg++;
+        if ( m_outStream )
+            delete m_outStream;
+        if ( m_outDevice )
+            delete m_outDevice;
+        m_outDevice = new QFile( m_args[ m_currentArg ] );
+        m_outDevice->open( IO_ReadOnly );
+        m_outStream = new QTextStream( m_outDevice );
     }
 
     return readInput();

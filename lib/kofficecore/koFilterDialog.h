@@ -48,7 +48,7 @@ class KoFilterDialog : public QWidget {
     Q_OBJECT
 
 public:
-    KoFilterDialog(QWidget *parent=0L, QString name=QString::null);
+    KoFilterDialog(QWidget *parent=0L, const char *name=0L);
     virtual ~KoFilterDialog() {}
     virtual QString state() = 0;
 };

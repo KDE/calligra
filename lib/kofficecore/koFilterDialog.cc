@@ -18,6 +18,6 @@
 
 #include <koFilterDialog.h>
 
-KoFilterDialog::KoFilterDialog(QWidget *parent, QString name) : QWidget(parent, name) {
+KoFilterDialog::KoFilterDialog(QWidget *parent, const char *name) : QWidget(parent, name) {
 }
 #include <koFilterDialog.moc>

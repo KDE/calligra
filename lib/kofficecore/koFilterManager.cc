@@ -65,8 +65,8 @@ KoFilterManager* KoFilterManager::self()
     if( s_pSelf == 0 )
     {
       if ( s_refCnt == 0 ) // someone forgot to call incRef
-	  s_refCnt++;
-	
+          s_refCnt++;
+
         s_pSelf = new KoFilterManager;
     }
     return s_pSelf;
@@ -82,10 +82,10 @@ KoFilterManager::~KoFilterManager()
 }
 
 QString KoFilterManager::fileSelectorList( const Direction &direction,
-					   const char *_format,
-					   const QString & _native_pattern,
-					   const QString & _native_name,
-					   const bool allfiles ) const
+                                           const char *_format,
+                                           const QString & _native_pattern,
+                                           const QString & _native_name,
+                                           const bool allfiles ) const
 {
     QString service;
     if ( direction == Import )
@@ -99,7 +99,7 @@ QString KoFilterManager::fileSelectorList( const Direction &direction,
 
     QString ret;
 
-    if ( _native_pattern && _native_name )
+    if ( !_native_pattern.isEmpty() && !_native_name.isEmpty() )
     {
         ret += _native_pattern;
         ret += "|";
@@ -175,7 +175,7 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
     d->config=QString::null;   // reset the config string
 
     dialog->setFilter(fileSelectorList(direction, _format, _native_pattern,
-				       _native_name, allfiles));
+                                       _native_name, allfiles));
 
     QValueList<KoFilterDialogEntry> vec1 = KoFilterDialogEntry::query( service );
 
@@ -217,11 +217,11 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
     }
     if(!d->dialogMap.isEmpty()) {
         dialog->setPreviewWidget(d->ps);
-	if(direction==Export) {
-	    QObject::connect(dialog, SIGNAL(filterChanged(const QString &)),
-			     d->ps, SLOT(filterChanged(const QString &)));
-	}
-    }	
+        if(direction==Export) {
+            QObject::connect(dialog, SIGNAL(filterChanged(const QString &)),
+                             d->ps, SLOT(filterChanged(const QString &)));
+        }
+    }
     return true;
 }
 
@@ -248,18 +248,18 @@ const int KoFilterManager::findWidget(const QString &ext) const {
     if(it!=d->dialogMap.end())
         return it.data();
     else
-	return 0;  // default Widget
+        return 0;  // default Widget
 }
 
 QString KoFilterManager::import( const QString & _file, const char *_native_format,
-				 KoDocument *document )
+                                 KoDocument *document )
 {
     KURL url;
     url.setPath( _file );
-    QCString file = QFile::encodeName( _file ); // The 8bit version of the filename
+    QString file = QFile::encodeName( _file ); // The 8bit version of the filename
 
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
-    QCString mimeType;
+    QString mimeType;
     if ( t && t->name()!="application/octet-stream" ) {
         kdDebug(30003) << "Found MimeType " << t->name() << endl;
         mimeType = t->name();
@@ -291,50 +291,51 @@ QString KoFilterManager::import( const QString & _file, const char *_native_form
 
     unsigned int i=0;
     bool ok=false;
-    QCString tempfname;
+    QString tempfname;
     // just in case that there are more than one filters
     while(i<vec.count() && !ok) {
-	KoFilter* filter = vec[i].createFilter();
-	ASSERT( filter );
-	QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
-	document->slotProgress(0);
+        KoFilter* filter = vec[i].createFilter();
+        ASSERT( filter );
+        QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
+        document->slotProgress(0);
 
-	if(vec[i].implemented.lower()=="file") {
-	    //kdDebug(30003) << "XXXXXXXXXXX file XXXXXXXXXXXXXX" << endl;
-	    KTempFile tempFile; // create with default file prefix, extension and mode
-	    if (tempFile.status() != 0)
-		return "";
-	    tempfname = QFile::encodeName(tempFile.name());
-	    ok=filter->filter( file, tempfname, mimeType, _native_format, d->config );
-	}
-	else if(vec[i].implemented.lower()=="qdom") {
-	    //kdDebug(30003) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
-	    QDomDocument qdoc;
-	    ok=filter->I_filter( file, mimeType, qdoc, _native_format, d->config);
-	    if(ok) {
-		ok=document->loadXML(0L,qdoc);
+        if(vec[i].implemented.lower()=="file") {
+            //kdDebug(30003) << "XXXXXXXXXXX file XXXXXXXXXXXXXX" << endl;
+            KTempFile tempFile; // create with default file prefix, extension and mode
+            if (tempFile.status() != 0)
+                return "";
+            tempfname = QFile::encodeName(tempFile.name());
+            ok=filter->filter( file, tempfname, mimeType, _native_format, d->config );
+            tempfname=tempFile.name(); // hack for -DQT_NO_BLAH stuff
+        }
+        else if(vec[i].implemented.lower()=="qdom") {
+            //kdDebug(30003) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
+            QDomDocument qdoc;
+            ok=filter->I_filter( file, mimeType, qdoc, _native_format, d->config);
+            if(ok) {
+                ok=document->loadXML(0L,qdoc);
                 if (!ok)
                   kdWarning(30003) << "loadXML FAILED !" << endl;
-		document->changedByFilter();
-	    }
-	}
-	else if(vec[i].implemented.lower()=="kodocument") {
-	    //kdDebug(30003) << "XXXXXXXXXXX kodocument XXXXXXXXXXXXXX" << endl;
-	    ok=filter->I_filter( file, document, mimeType, _native_format, d->config);
-	    if(ok)
-		document->changedByFilter();
-	}
-	document->slotProgress(-1);  // remove the bar
-	delete filter;
-	++i;
+                document->changedByFilter();
+            }
+        }
+        else if(vec[i].implemented.lower()=="kodocument") {
+            //kdDebug(30003) << "XXXXXXXXXXX kodocument XXXXXXXXXXXXXX" << endl;
+            ok=filter->I_filter( file, document, mimeType, _native_format, d->config);
+            if(ok)
+                document->changedByFilter();
+        }
+        document->slotProgress(-1);  // remove the bar
+        delete filter;
+        ++i;
     }
     if(ok && vec[i-1].implemented.lower()=="file")
-	return QFile::decodeName(tempfname);
+        return tempfname;
     return "";
 }
 
 QString KoFilterManager::prepareExport( const QString & file, const char *_native_format,
-					const KoDocument *document )
+                                        const KoDocument *document )
 {
     d->exportFile=file;
     d->native_format=_native_format;
@@ -342,7 +343,7 @@ QString KoFilterManager::prepareExport( const QString & file, const char *_nativ
     KURL url( d->exportFile );
 
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, url.isLocalFile() );
-    QCString mimeType;
+    QString mimeType;
     if (t && t->name() != "application/octet-stream") {
         kdDebug(30003) << "Found MimeType " << t->name() << endl;
         mimeType = t->name();
@@ -384,27 +385,27 @@ QString KoFilterManager::prepareExport( const QString & file, const char *_nativ
     while(i<vec.count() && !ok) {
         KoFilter* filter = vec[i].createFilter();
         ASSERT( filter );
-	QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
-	if(vec[i].implemented.lower()=="file")
-	    tmpFileNeeded=true;
-	else if(vec[i].implemented.lower()=="kodocument") {
-	    ok=filter->E_filter(QCString(file), document, QCString(_native_format), QCString(mimeType), d->config);
-	    // if(ok)
-	    //	document->changedByFilter();
-	    const_cast<KoDocument*>(document)->slotProgress(-1);
-	}
-	QObject::disconnect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
+        QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
+        if(vec[i].implemented.lower()=="file")
+            tmpFileNeeded=true;
+        else if(vec[i].implemented.lower()=="kodocument") {
+            ok=filter->E_filter(file, document, _native_format, mimeType, d->config);
+            // if(ok)
+            //  document->changedByFilter();
+            const_cast<KoDocument*>(document)->slotProgress(-1);
+        }
+        QObject::disconnect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
         delete filter;
         ++i;
     }
 
     if(!ok && tmpFileNeeded) {
-	KTempFile tempFile; // create with default file prefix, extension and mode
-	if (tempFile.status() != 0)
-	    return file;
-	d->tmpFile = tempFile.name();
-	d->prepare=true;	
-	return d->tmpFile;
+        KTempFile tempFile; // create with default file prefix, extension and mode
+        if (tempFile.status() != 0)
+            return file;
+        d->tmpFile = tempFile.name();
+        d->prepare=true;
+        return d->tmpFile;
     }
     return file;
 }
@@ -416,16 +417,15 @@ const bool KoFilterManager::export_() {
     unsigned int i=0;
     bool ok=false;
     while(i<d->m_vec.count() && !ok) {
-	if(d->m_vec[i].implemented.lower()=="file") {
-	    KoFilter* filter = d->m_vec[i].createFilter();
-	    ASSERT( filter );
-	    QObject::connect(filter, SIGNAL(sigProgress(int)), d->document, SLOT(slotProgress(int)));
-	    ok=filter->filter( QCString(d->tmpFile), QCString(d->exportFile), QCString(d->native_format),
-			       QCString(d->mime_type), d->config );
-	    const_cast<KoDocument*>(d->document)->slotProgress(-1);
-	    QObject::disconnect(filter, SIGNAL(sigProgress(int)), d->document, SLOT(slotProgress(int)));
-	    delete filter;
-	}
+        if(d->m_vec[i].implemented.lower()=="file") {
+            KoFilter* filter = d->m_vec[i].createFilter();
+            ASSERT( filter );
+            QObject::connect(filter, SIGNAL(sigProgress(int)), d->document, SLOT(slotProgress(int)));
+            ok=filter->filter(d->tmpFile, d->exportFile, d->native_format, d->mime_type, d->config );
+            const_cast<KoDocument*>(d->document)->slotProgress(-1);
+            QObject::disconnect(filter, SIGNAL(sigProgress(int)), d->document, SLOT(slotProgress(int)));
+            delete filter;
+        }
         ++i;
     }
     // Done, remove temporary file
@@ -484,7 +484,7 @@ void PreviewStack::filterChanged(const QString &filter) {
 void PreviewStack::change(const QString &ext) {
 
     if(ext.isNull() || ext[0]!='.') {
-	if(!hidden) {
+        if(!hidden) {
             hide();
             hidden=true;
         }
@@ -501,7 +501,7 @@ void PreviewStack::change(const QString &ext) {
         return;
     }
     else {
-	raiseWidget(id);
+        raiseWidget(id);
         if(hidden) {
             show();
             hidden=false;

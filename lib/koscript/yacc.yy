@@ -15,7 +15,7 @@ void kscriptInitFlex( const char *_code, int extension );
 
 void yyerror( const char *s )
 {
-  theParser->parse_error( idl_lexFile, s, idl_line_no );
+  theParser->parse_error( idl_lexFile.local8Bit(), s, idl_line_no );
 }
 
 %}

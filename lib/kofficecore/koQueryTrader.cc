@@ -25,6 +25,7 @@
 #include <ktrader.h>
 
 #include <qstringlist.h>
+#include <qfile.h>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -52,10 +53,10 @@ KoDocumentEntry::KoDocumentEntry( KService::Ptr service )
 
 KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name )
 {
-    KLibFactory* factory = KLibLoader::self()->factory( m_service->library() );
+    KLibFactory* factory = KLibLoader::self()->factory( QFile::encodeName(m_service->library()) );
 
     if( !factory )
-	return 0;
+        return 0;
 
     QObject* obj;
     if ( factory->inherits( "KParts::Factory" ) )
@@ -67,9 +68,9 @@ KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name )
 
     if ( !obj || !obj->inherits( "KoDocument" ) )
     {
-	delete obj;
-	delete factory;
-	return 0;
+        delete obj;
+        delete factory;
+        return 0;
     }
 
     return static_cast<KoDocument*>(obj);
@@ -82,7 +83,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
 
     QValueList<KoDocumentEntry> vec = query( constr );
     if ( vec.isEmpty() )
-	return KoDocumentEntry();
+        return KoDocumentEntry();
 
     return vec[0];
 }
@@ -154,17 +155,17 @@ QValueList<KoFilterEntry> KoFilterEntry::query( const QString & _constr )
 
 KoFilter* KoFilterEntry::createFilter( QObject* parent, const char* name )
 {
-    KLibFactory* factory = KLibLoader::self()->factory( m_service->library() );
+    KLibFactory* factory = KLibLoader::self()->factory( QFile::encodeName(m_service->library()) );
 
     if( !factory )
-	return 0;
+        return 0;
 
     QObject* obj = factory->create( parent, name, "KoFilter" );
     if ( !obj || !obj->inherits( "KoFilter" ) )
     {
-	delete obj;
-	delete factory;
-	return 0;
+        delete obj;
+        delete factory;
+        return 0;
     }
 
     return (KoFilter*)obj;
@@ -209,17 +210,17 @@ QValueList<KoFilterDialogEntry> KoFilterDialogEntry::query( const QString & _con
 
 KoFilterDialog* KoFilterDialogEntry::createFilterDialog( QObject* parent, const char* name )
 {
-    KLibFactory* factory = KLibLoader::self()->factory( m_service->library() );
+    KLibFactory* factory = KLibLoader::self()->factory( QFile::encodeName(m_service->library()) );
 
     if( !factory )
-	return 0;
+        return 0;
 
     QObject* obj = factory->create( parent, name, "KoFilterDialog" );
     if ( !obj || !obj->inherits( "KoFilterDialog" ) )
     {
-	delete obj;
-	delete factory;
-	return 0;
+        delete obj;
+        delete factory;
+        return 0;
     }
 
     return (KoFilterDialog*)obj;
@@ -253,7 +254,7 @@ QValueList<KoToolEntry> KoToolEntry::query( const QString &_mime_type )
     KoToolEntry t( koParseToolProperties( *it ) );
 
     if ( t.mimeTypes.find( _mime_type ) != t.mimeTypes.end() )
-	lst.append( t );
+        lst.append( t );
   }
 
   return lst;

@@ -173,8 +173,8 @@ static KSEval KSEvalJump[] = {
 };
 
 KSParseNode::KSParseNode( KSParseNodeType aType, KSParseNode *one,
-		      KSParseNode *two, KSParseNode *three,
-		      KSParseNode *four, KSParseNode *five )
+                      KSParseNode *two, KSParseNode *three,
+                      KSParseNode *four, KSParseNode *five )
 {
   m_extra = 0;
   str = 0;
@@ -375,13 +375,13 @@ void KSParseNode::printBranch( int indent, const char *tag, bool detailed )
   case 0:
     break;
   case 1:
-    cout << " (" << ident << ")";
+    cout << " (" << ident.local8Bit() << ")";
     break;
   case 2:
     cout << " (" << getIntegerLiteral() << ")";
     break;
   case 3:
-    cout << " (" << getStringLiteral() << ")";
+    cout << " (" << getStringLiteral().local8Bit() << ")";
     break;
   case 4:
     cout << " (" << getCharacterLiteral() << ")";
