@@ -183,7 +183,7 @@
             </filter>
             <filter id="kword_starwriter">
                 <title xml:lang="en_us">StarWriter</title>
-                <contact href="mailto:karypid@inf.uth.gr">Alexandros Karypidis</contact>
+                <contact href="mailto:ariya@kde.org">Ariya Hidayat</contact>
                 <contact href="mailto:info@marcozanon.com">Marco Zanon</contact>
                 <stat import="planned" export="none"/>
             </filter>
