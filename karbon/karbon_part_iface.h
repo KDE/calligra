@@ -42,6 +42,7 @@ k_dcop:
     void initConfig();
     int maxRecentFiles() const;
     void purgeHistory();
+    QString unitName() const;
 
 private:
 	KarbonPart *m_part;

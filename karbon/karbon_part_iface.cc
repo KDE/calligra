@@ -71,3 +71,8 @@ void KarbonPartIface::purgeHistory()
     m_part->purgeHistory();
 }
 
+
+QString KarbonPartIface::unitName() const
+{
+    return m_part->getUnitName();
+}
