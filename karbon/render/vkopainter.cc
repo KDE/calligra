@@ -301,9 +301,17 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		else if( m_stroke->lineCap() == VStroke::cap_square )
 			capStyle = ART_PATH_STROKE_CAP_SQUARE;
 
+		// join translation karbon -> art
+		if( m_stroke->lineJoin() == VStroke::join_miter )
+			joinStyle = ART_PATH_STROKE_JOIN_MITER;
+		else if( m_stroke->lineJoin() == VStroke::join_round )
+			joinStyle = ART_PATH_STROKE_JOIN_ROUND;
+		else if( m_stroke->lineJoin() == VStroke::join_bevel )
+			joinStyle = ART_PATH_STROKE_JOIN_BEVEL;
+
 		// zoom stroke width;
 		double ratio = sqrt(pow(affine[0], 2) + pow(affine[3], 2)) / sqrt(2);
-		svp = art_svp_vpath_stroke( vec, ART_PATH_STROKE_JOIN_ROUND, capStyle, ratio * m_stroke->lineWidth(), 5.0, 0.25 );
+		svp = art_svp_vpath_stroke( vec, /*ART_PATH_STROKE_JOIN_ROUND*/joinStyle, capStyle, ratio * m_stroke->lineWidth(), 5.0, 0.25 );
 	}
 
 	// render the svp to the buffer

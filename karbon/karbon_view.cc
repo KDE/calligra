@@ -115,7 +115,7 @@ KarbonView::editDeselectAll()
 void
 KarbonView::editDeleteSelection()
 {
-	m_part->addCommand( new VMCmdDelete( m_part ) );
+	m_part->addCommand( new VMCmdDelete( m_part ), true );
 
 	selectTool();
 }
