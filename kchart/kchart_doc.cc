@@ -180,6 +180,18 @@ void KChartDocument::showWizard()
   m_pWizard->show();
 }
 
+void KChartDocument::setChartData(KChartData *newData)
+{
+  if ( m_pData )
+    delete m_pData;
+
+  m_pData = newData;
+
+  m_chart.setChartData( m_pData );
+
+  emit sig_modified();
+}
+
 void KChartDocument::fill( const Chart::Range& range, const Chart::Matrix& matrix )
 {
   cout << "Got w=" << matrix.columns << " h=" << matrix.rows << endl;

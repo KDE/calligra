@@ -31,7 +31,8 @@ public:
   virtual void setTypeBars();
   virtual void setTypeLines();
   virtual void setTypeArea();
-  
+  virtual void editData();
+
   // C++
   virtual void setDocument( KChartDocument *_doc );
   virtual void createGUI();
@@ -52,6 +53,8 @@ protected:
   MenuBar_ref m_rMenuBar;
   CORBA::Long m_idMenuView;
   CORBA::Long m_idMenuView_NewView;
+  CORBA::Long m_idMenuEdit;
+  CORBA::Long m_idMenuEdit_EditData;
   
   OPParts::ToolBarFactory_var m_vToolBarFactory;
   ToolBar_ref m_rToolBarLayout;

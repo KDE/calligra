@@ -15,9 +15,12 @@ LDADD =  ../lib/kofficeui/libkofficeui.la \
 
 bin_PROGRAMS = kchart.bin
 
-kchart_bin_SOURCES = kchart_main.cc kchart_doc.cc kchart_view.cc kchart.cc kchart_shell.cc chart.cc
-noinst_HEADERS = kchart_main.h kchart_doc.h kchart_view.h kchart.h kchart_shell.h chart.h
-SRCMETA =	kchart_main.moc kchart_view.moc kchart_doc.moc kchart_shell.moc
+kchart_bin_SOURCES = kchart_main.cc kchart_doc.cc kchart_view.cc kchart.cc kchart_shell.cc chart.cc \
+		sheet.cc sheetdlg.cc table.cc parser.cc
+noinst_HEADERS = kchart_main.h kchart_doc.h kchart_view.h kchart.h kchart_shell.h chart.h \
+		sheet.h sheetdlg.h table.h parser.h
+SRCMETA =	kchart_main.moc kchart_view.moc kchart_doc.moc kchart_shell.moc \
+		sheet.moc sheetdlg.moc table.moc
 
 interfacedir = ../lib/interfaces
 IDL_INCLUDES = -I$(idldir) -I$(interfacedir)
@@ -61,3 +64,7 @@ kchart_shell.cc: kchart_shell.moc
 kchart_view.cc: kchart_view.moc
 kchart_main.cc: kchart_view.h kchart.h
 kchart.h: chart.h
+sheet.cc: sheet.h sheet.moc
+sheetdlg.cc: sheetdlg.h sheetdlg.moc
+parser.cc: parser.h
+table.cc: table.h table.moc

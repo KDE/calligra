@@ -76,6 +76,9 @@ public:
   
   void emitModified();
 
+  KChartData *chartData() {return m_pData;}
+  void setChartData(KChartData*);
+
 public slots:
   void slotWizardOk();
   

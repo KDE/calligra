@@ -12,6 +12,7 @@ module KCharter
 		slot void setTypeBars();
 		slot void setTypeLines();
 		slot void setTypeArea();
+		slot void editData();
 	};
 
 	interface Document : OPParts::Document, Chart::SimpleChart

@@ -10,6 +10,11 @@
 #include <qstring.h>
 #include <qmsgbox.h>
 #include <qkeycode.h>
+#include <qdialog.h>
+
+#include "sheetdlg.h"
+
+#include "KChartData.h"
 
 /**********************************************************
  *
@@ -94,6 +99,12 @@ void KChartView::createGUI()
     
     m_idMenuView_NewView = m_rMenuBar->insertItem( i18n( "&New View" ), m_idMenuView,
 						   this, "newView" );
+
+    // Edit
+    m_idMenuEdit = m_rMenuBar->insertMenu( i18n( "&Edit" ) );
+    
+    m_idMenuEdit_EditData = m_rMenuBar->insertItem( i18n( "&Edit data..." ), m_idMenuEdit,
+						    this, "editData" );
   }
 
   m_vToolBarFactory = m_vPartShell->toolBarFactory();
@@ -148,6 +159,62 @@ void KChartView::setTypeArea()
 {
   m_pDoc->chart().setChartType( Area );
   m_pDoc->emitModified();
+}
+
+void KChartView::editData()
+{
+  // create dialog
+  QDialog *_dlg = new QDialog(0,"SheetDlg",true);
+  SheetDlg *_widget = new SheetDlg(_dlg,"SheetWidget");
+  _widget->setGeometry(0,0,520,400);
+  _widget->show();
+  _dlg->resize(520,400);
+  _dlg->setMaximumSize(_dlg->size());
+  _dlg->setMinimumSize(_dlg->size());
+
+  // fill cells
+  int col,row;
+  double maxY = 0;
+  for (row = 0;row < m_pDoc->chartData()->numDatasets();row++)
+    {
+      for (col = 0;col < _widget->TABLE_SIZE;col++)
+	{
+	  if (m_pDoc->chartData()->hasYValue(row,col))
+	    _widget->fillCell(row,col,m_pDoc->chartData()->yValue(row,col));
+	}
+    }
+
+  for (col = 0;(unsigned int)col <= m_pDoc->chartData()->maxPos();col++)
+    _widget->fillX(col,m_pDoc->chartData()->xValue(col));
+
+  // OK pressed
+  if (_dlg->exec() == QDialog::Accepted)
+    {
+      KChartData *m_pData = new KChartData(_widget->rows());
+
+      for (col = 0;col < _widget->cols();col++)
+	m_pData->setXValue( col, (const char*)_widget->getX(col));
+
+      for (row = 0;row < _widget->rows();row++)
+	{
+	  for (col = 0;col < _widget->cols();col++)
+	    {
+	      m_pData->setYValue( row, col, _widget->getCell(row,col) );
+	      maxY = _widget->getCell(row,col) > maxY ? _widget->getCell(row,col) : maxY;
+	    }
+	}
+
+      maxY++;
+       
+      m_pDoc->setChartData(m_pData);
+      m_pDoc->chart().setYMaxValue(maxY);
+      m_pDoc->chart().setYTicksNum(maxY);
+      m_pDoc->chart().repaintChart( this );
+    } 
+  
+  // delete dialog
+//   delete _widget; _widget = 0;
+//   delete _dlg; _dlg = 0;
 }
 
 #include "kchart_view.moc"
