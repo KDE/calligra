@@ -24,6 +24,7 @@
 
 #include "kis_factory.h"
 #include "kis_pluginserver.h"
+#include "kis_brushserver.h"
 #include "kis_doc.h"
 
 extern "C"
@@ -36,27 +37,22 @@ extern "C"
 
 KInstance* KisFactory::s_global = 0;
 KisPluginServer* KisFactory::s_pserver = 0;
+KisBrushServer* KisFactory::s_bserver = 0;
 
 KisFactory::KisFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
   s_global = new KInstance( "kimageshop" );
   
-  s_global->dirs()->addResourceType("kis",
-				    KStandardDirs::kde_default("data") + "kimageshop/");
-  s_global->dirs()->addResourceType("kis_images",
-				    KStandardDirs::kde_default("data") + "kimageshop/images/");
-  s_global->dirs()->addResourceType("kis_brushes",
-				    KStandardDirs::kde_default("data") + "kimageshop/brushes/");
-  s_global->dirs()->addResourceType("toolbar",
-				    KStandardDirs::kde_default("data") + "koffice/toolbar/");
-  s_global->dirs()->addResourceType("kis_pics",
-				    KStandardDirs::kde_default("data") + "kimageshop/pics/");
-  
-  s_global->dirs()->addResourceType("kis_plugins",
-				    KStandardDirs::kde_default("data") + "kimageshop/plugins/");
+  s_global->dirs()->addResourceType("kis", KStandardDirs::kde_default("data") + "kimageshop/");
+  s_global->dirs()->addResourceType("kis_images", KStandardDirs::kde_default("data") + "kimageshop/images/");
+  s_global->dirs()->addResourceType("kis_brushes", KStandardDirs::kde_default("data") + "kimageshop/brushes/");
+  s_global->dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "koffice/toolbar/");
+  s_global->dirs()->addResourceType("kis_pics", KStandardDirs::kde_default("data") + "kimageshop/pics/");
+  s_global->dirs()->addResourceType("kis_plugins", KStandardDirs::kde_default("data") + "kimageshop/plugins/");
 
-  s_pserver = new KisPluginServer();
+  s_pserver = new KisPluginServer;
+  s_bserver = new KisBrushServer;
 }
 
 KisFactory::~KisFactory()
@@ -86,6 +82,11 @@ KInstance* KisFactory::global()
 KisPluginServer* KisFactory::pServer()
 {
     return s_pserver;
+}
+
+KisBrushServer* KisFactory::bServer()
+{
+    return s_bserver;
 }
 
 #include "kis_factory.moc"

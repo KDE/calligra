@@ -25,6 +25,7 @@
 
 class KInstance;
 class KisPluginServer;
+class KisBrushServer;
 
 class KisFactory : public KLibFactory
 {
@@ -37,10 +38,12 @@ public:
 
     static KInstance* global();
     static KisPluginServer* pServer();
+    static KisBrushServer* bServer();
 
 private:
     static KInstance*       s_global;
     static KisPluginServer* s_pserver;
+    static KisBrushServer*  s_bserver;
 };
 
 #endif

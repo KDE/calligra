@@ -38,6 +38,7 @@
 #include "kis_brush.h"
 #include "kis_tool.h"
 #include "kis_util.h"
+#include "kis_pluginserver.h"
 
 #include "kis_dlg_color.h"
 #include "kis_dlg_layer.h"
@@ -75,6 +76,10 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
   setupActions();
   setupDialogs();
   setupTools();
+
+  //QPopupMenu *fm = new QPopupMenu();
+  //KisFactory::pServer()->buildFilterMenu(fm);
+  //fm->exec();
 }
 
 void KisView::setupCanvas()

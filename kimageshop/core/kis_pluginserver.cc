@@ -21,6 +21,7 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qstringlist.h>
+#include <qpopupmenu.h>
 
 #include <ksimpleconfig.h>
 #include <klocale.h>
@@ -33,6 +34,7 @@
 
 KisPluginServer::KisPluginServer()
 {
+  m_count = 0;
   m_plugins.setAutoDelete(true);
 
   /*
@@ -53,10 +55,6 @@ KisPluginServer::KisPluginServer()
     }
   else
     qDebug("Warning: No plugin directories found.");
-
-
-  // build plugin database
-  //findPlugins  ( locate("kis", "kimageshop.rc", KisFactory::global()) )
 }
 
 KisPluginServer::~KisPluginServer()
@@ -66,7 +64,7 @@ KisPluginServer::~KisPluginServer()
 
 void KisPluginServer::findPlugins( const QString &directory )
 {
-  QString pname, pcomment, pdir, plib, ptype;
+  QString pname, pcomment, pdir, plib, ptype, pcategory;
   PluginType type = PLUGIN_FILTER;
 
   QDir dir(directory, "*.kisplugin");
@@ -86,7 +84,9 @@ void KisPluginServer::findPlugins( const QString &directory )
       pcomment = config.readEntry("Comment", i18n("No description available."));
       pdir = directory + config.readEntry("Subdir", fi->baseName());
       plib = config.readEntry("Library", QString("libkisp_") + fi->baseName());
+      pcategory = config.readEntry("Category", "General");
       ptype = config.readEntry("Type", "Filter");
+      qDebug("%s", pcategory.latin1());
 
       if ( ptype == "Filter" )
 	type = PLUGIN_FILTER;
@@ -95,9 +95,76 @@ void KisPluginServer::findPlugins( const QString &directory )
       else
 	qDebug("Warning: %s is not a valid KImageShop plugin type.", ptype.latin1()); 
       
-      PluginInfo *pi = new PluginInfo(pname, pcomment, pdir, plib, type);
+      PluginInfo *pi = new PluginInfo(pname, pcomment, pdir, plib, pcategory, type);
       m_plugins.append(pi);
      
       ++it;
     }
+}
+
+void KisPluginServer::buildFilterMenu( QPopupMenu *menu )
+{
+  if (!menu)
+    return;
+
+  menu->clear();
+
+  QStringList categories;
+
+  // build a list of filter categories.
+  for (PluginInfo *pi = m_plugins.first(); pi != 0; pi = m_plugins.next())
+    {
+      if (!pi->type() == PLUGIN_FILTER)
+	continue;
+
+      if (!categories.contains(pi->category()))
+	categories.append(pi->category());
+    }
+
+  // sort it alphabetically
+  categories.sort();
+
+  // loop through the categories and build submenus
+  for (QStringList::Iterator it = categories.begin(); it != categories.end(); it++)
+    {
+      if ((*it) == "General")
+	continue;
+      
+      qDebug("hallo");
+      QPopupMenu *submenu = new QPopupMenu( menu );
+
+      for (PluginInfo *pi = m_plugins.first(); pi != 0; pi = m_plugins.next())
+	{
+	  if (!pi->type() == PLUGIN_FILTER)
+	    continue;
+
+	  if (pi->category() == (*it))
+	    {
+	      qDebug("hallo2");
+	      int id = ++m_count;
+	      id = submenu->insertItem(pi->name(), id);
+	      pi->setId(id);
+	    }
+	}
+      qDebug("hallo3");
+      menu->insertItem((*it), submenu);
+    }
+
+  // build general (== toplevel) category
+  for (PluginInfo *pi = m_plugins.first(); pi != 0; pi = m_plugins.next())
+    {
+      if (!pi->type() == PLUGIN_FILTER)
+	continue;
+
+      if (pi->category() == "General")
+	{
+	  int id = ++m_count;
+	  menu->insertItem(pi->name(), id);
+	  pi->setId(id);
+	}
+    }
+}
+
+void KisPluginServer::activatePlugin( int )
+{
 }

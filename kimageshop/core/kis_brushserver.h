@@ -1,7 +1,7 @@
 /*
- *  main.cc - part of KImageShop
+ *  kis_brushserver.h - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter <me@kde.org>
+ *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,24 +15,33 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <koApplication.h>
-#include <koDocument.h>
-#include <koMainWindow.h>
-#include <koQueryTypes.h>
+#ifndef __kis_brushserver_h__
+#define __kis_brushserver_h__
 
-#include <dcopclient.h>
+#include <qlist.h>
+#include <qstring.h>
 
-int main( int argc, char **argv )
+#include "kis_brush.h"
+
+class KisBrushServer
 {
-    KoApplication app( argc, argv, "kimageshop", "application/x-kimageshop" );
 
-    app.dcopClient()->attach();
-    app.dcopClient()->registerAs( "kimageshop" );
+public:
 
-    app.start();
-    app.exec();
+  KisBrushServer();
+  ~KisBrushServer();
 
-    return 0;
-}
+  int count() { return m_brushes.count(); }
+  QList<KisBrush> brushes() { return m_brushes; }
+
+ protected:
+  const KisBrush* loadBrush( const QString& filename );
+ 
+ private:
+  QList<KisBrush>  m_brushes;
+};
+
+#endif // __kis_brushserver_h__

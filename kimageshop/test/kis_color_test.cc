@@ -20,7 +20,7 @@
 
 #include <kis_color.h>
 
-void dumpColor(const KColor& k)
+void dumpColor(const KisColor& k)
 {
   qDebug(" rgb : %3d %3d %3d", k.R(), k.G(), k.B());
   qDebug(" hsv : %3d %3d %3d", k.h(), k.s(), k.v());
@@ -49,17 +49,17 @@ void dumpColor(const KColor& k)
 int main( int argc, char **argv )
 {
   qDebug("\n--> KColor a;");
-  KColor a;
+  KisColor a;
   qDebug("Dump a:");
   dumpColor(a);
 
-  qDebug("\n--> KColor b(0, 0, 255);");
-  KColor b(0, 0, 255);
+  qDebug("\n--> KisColor b(0, 0, 255);");
+  KisColor b(0, 0, 255);
   qDebug("Dump b:");
   dumpColor(b);
 
-  qDebug("\n--> KColor c(0, 255, 255, 0);");
-  KColor c(0, 255, 255, 0);
+  qDebug("\n--> KisColor c(0, 255, 255, 0);");
+  KisColor c(0, 255, 255, 0);
   qDebug("Dump c:");
   dumpColor(c);
 
@@ -68,18 +68,18 @@ int main( int argc, char **argv )
   qDebug("Dump a:");
   dumpColor(a);
 
-  qDebug("\n--> a = KColor::red();");
-  a = KColor::red();
+  qDebug("\n--> a = KisColor::red();");
+  a = KisColor::red();
   qDebug("Dump a:");
   dumpColor(a);
 
-  qDebug("\n--> KColor d = KColor::darkBlue();");
-  KColor d = KColor::darkBlue();
+  qDebug("\n--> KisColor d = KisColor::darkBlue();");
+  KisColor d = KisColor::darkBlue();
   qDebug("Dump d:");
   dumpColor(d);
 
-  qDebug("\n--> KColor e = KColor(QColor(0, 255, 0));");
-  KColor e = KColor(QColor(0, 255, 0));
+  qDebug("\n--> KisColor e = KisColor(QColor(0, 255, 0));");
+  KisColor e = KisColor(QColor(0, 255, 0));
   qDebug("Dump e:");
   dumpColor(e);
   qDebug("Dump e again:");

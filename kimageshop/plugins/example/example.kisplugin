@@ -4,3 +4,4 @@ Comment=Example KImageshop plugin
 Subdir=example
 Library=lipkisp_example
 Type=Filter
+Group=Render

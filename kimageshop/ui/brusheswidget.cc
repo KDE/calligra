@@ -30,6 +30,7 @@
 #include <kstddirs.h>
 
 #include "kis_factory.h"
+#include "kis_brushserver.h"
 #include "brusheswidget.h"
 #include "iconchooser.h"
 #include "integerwidget.h"
@@ -53,11 +54,18 @@ BrushesWidget::BrushesWidget( QWidget *parent, const char *name )
   frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
 
   chooser = new IconChooser( frame, QSize(30,30), "icon chooser" );
-  loadBrushes();
+
+  QList<KisBrush> bList = KisFactory::bServer()->brushes();
+  
+  for (KisBrush *brush = bList.first(); brush != 0; brush = bList.next())
+    {
+      if ( brush->isValid() )
+	chooser->addItem( (IconItem *) brush );
+    }
+  
   QObject::connect( chooser, SIGNAL( selected( IconItem * ) ),
 		    this, SLOT( slotItemSelected( IconItem * )));
-				
-
+  
   initGUI();
 
   const KisBrush *brush = currentBrush();
@@ -72,42 +80,6 @@ BrushesWidget::~BrushesWidget()
   delete slSpacing;
   delete chooser;
   delete frame;
-}
-
-
-// load all brushes from all available brushes locations
-void BrushesWidget::loadBrushes()
-{
-  // FIXME this needs to be changed in the near future
-  // (brushes will be saved differently)
-
-  QStringList list;
-  list = KisFactory::global()->dirs()->findAllResources("kis_brushes", "*.png", false, true);
-  QString file;
-  
-  for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
-    {
-      file = *it;
-      (void) loadBrush( file );
-    }
-}
-
-
-// load one brush and add it to the chooser widget
-// return the brush if successful, otherwise return 0L
-const KisBrush * BrushesWidget::loadBrush( const QString& filename ) const
-{
-  KisBrush *brush = new KisBrush( filename );
-
-  if ( brush->isValid() ) {
-    chooser->addItem( (IconItem *) brush );
-  }
-  else {
-    delete brush;
-    brush = 0L;
-  }
-
-  return brush;
 }
 
 

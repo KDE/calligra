@@ -43,8 +43,6 @@ public:
   BrushesWidget( QWidget *parent, const char *name );
   ~BrushesWidget();
 
-  void 		  loadBrushes();
-  const KisBrush  *loadBrush( const QString& filename ) const;
   const KisBrush  *currentBrush()	const;
   void 		  setCurrentBrush( const KisBrush * );
 

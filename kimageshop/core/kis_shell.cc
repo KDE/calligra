@@ -31,6 +31,7 @@
 #include "kis_shell.h"
 #include "kis_doc.h"
 #include "kis_factory.h"
+#include "kis_pluginserver.h"
 
 KisShell::KisShell( QWidget* parent, const char* name )
     : KoMainWindow( parent, name )
