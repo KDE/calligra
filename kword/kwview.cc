@@ -7205,7 +7205,7 @@ QPtrList<KAction> KWView::listOfResultOfCheckWord( const QString &word )
 {
     QPtrList<KAction> listAction;
 //not perfect, improve API!!!!
-    KOSpell *tmpSpell = KOSpell::createKoSpell( this, i18n( "Spell Checking" ), this,SLOT( spellCheckerReady() ) ,m_doc->getKOSpellConfig(), true,true /*FIXME !!!!!!!!!*/ );
+    KOSpell *tmpSpell = KOSpell::createKoSpell( this, i18n( "Spell Checking" ), this, 0 ,m_doc->getKOSpellConfig(), true,true /*FIXME !!!!!!!!!*/ );
     QStringList lst = tmpSpell->resultCheckWord(word );
     delete tmpSpell;
     if ( !lst.contains( word ) )
