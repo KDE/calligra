@@ -637,7 +637,8 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
     m_table.width = wid;
     m_table.height = hei;
     m_table.floating = isFloating;
-    m_table.tableTemplateName = tt->translatedName();
+
+    m_table.tableTemplateName = tt ? tt->translatedName():QString::null;
     m_table.tt = tt;
 
     if ( isFloating  )
