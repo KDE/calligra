@@ -17,24 +17,20 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef CSVEXPORT_TEST_H
-#define CSVEXPORT_TEST_H
+#ifndef CSVEXPORT_H
+#define CSVEXPORT_H
 
 #include <koFilter.h>
-
-class QCString;
-class QString;
-class KoDocument;
 
 class CSVExport : public KoFilter {
 
     Q_OBJECT
 
 public:
-    CSVExport(KoFilter *parent, const char*name);
+    CSVExport(KoFilter* parent, const char* name, const QStringList&);
     virtual ~CSVExport() {}
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 };
-#endif
 
+#endif // CSVEXPORT_H

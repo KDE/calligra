@@ -18,20 +18,20 @@
 */
 
 #include <csvexport.h>
-#include <kdebug.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <koFilterChain.h>
-#include <qdom.h>
-#include <qstring.h>
+
 #include <qfile.h>
-#include <qapplication.h>
-#include <qptrlist.h>
-#include <qsortedlist.h>
+
+#include <kdebug.h>
+#include <kmessagebox.h>
+#include <kgenericfactory.h>
+#include <koFilterChain.h>
 
 #include <kspread_map.h>
 #include <kspread_table.h>
 #include <kspread_doc.h>
+
+typedef KGenericFactory<CSVExport, KoFilter> CSVExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libcsvexport, CSVExportFactory( "csvfilter" ) );
 
 class Cell {
  public:
@@ -48,7 +48,7 @@ class Cell {
 };
 
 
-CSVExport::CSVExport(KoFilter *, const char *) :
+CSVExport::CSVExport(KoFilter *, const char *, const QStringList&) :
                      KoFilter() {
 }
 

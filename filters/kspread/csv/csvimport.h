@@ -20,25 +20,14 @@
 #ifndef CSVFILTER_H
 #define CSVFILTER_H
 
-#include <qstring.h>
-#include <qtextstream.h>
-#include <qfile.h>
-#include <qobject.h>
-
-#include <kdebug.h>
-#include <kglobal.h>
-#include <klocale.h>
 #include <koFilter.h>
-#include <koStore.h>
-
-#include <xmltree.h>
 
 class CSVFilter : public KoFilter {
 
     Q_OBJECT
 
 public:
-    CSVFilter(KoFilter *parent, const char *name);
+    CSVFilter(KoFilter *parent, const char *name, const QStringList&);
     virtual ~CSVFilter() {}
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );

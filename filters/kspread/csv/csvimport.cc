@@ -17,24 +17,32 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "csvdialog.h"
-
 #include <csvimport.h>
-#include <qmessagebox.h>
-#include <kmessagebox.h>
-#include <koFilterChain.h>
 
-// hehe >:->
+#include <qfile.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
+#include <kgenericfactory.h>
+
+#include <koFilterChain.h>
 #include <kspread_doc.h>
 #include <kspread_table.h>
 #include <kspread_cell.h>
+
+#include <csvdialog.h>
+
+// hehe >:->
+
 /*
  To generate a test CSV file:
 
  perl -e '$i=0;while($i<30000) { print rand().",".rand()."\n"; $i++ }' > file.csv
 */
 
-CSVFilter::CSVFilter(KoFilter *, const char*) :
+typedef KGenericFactory<CSVFilter, KoFilter> CSVImportFactory;
+K_EXPORT_COMPONENT_FACTORY( libcsvimport, CSVImportFactory( "csvfilter" ) );
+
+CSVFilter::CSVFilter(KoFilter *, const char*, const QStringList&) :
                      KoFilter() {
 }
 
