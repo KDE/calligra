@@ -24,9 +24,9 @@
 #include <qstring.h>
 
 #include "kivio_connector_target.h"
-#define protected public
+//#define protected public // ewww... what a groy hack
 #include "kivio_stencil_spawner.h"
-#undef protected
+//#undef protected
 #include "kivio_sml_stencil_spawner.h"
 
 class KivioDiaStencilSpawner : public KivioStencilSpawner
@@ -34,7 +34,7 @@ class KivioDiaStencilSpawner : public KivioStencilSpawner
     public:
 	KivioDiaStencilSpawner(KivioStencilSpawnerSet *);
 	virtual ~KivioDiaStencilSpawner();
-    
+
 	virtual bool load(const QString &file);
 	virtual bool loadXML(const QString &file, QDomDocument &d);
 

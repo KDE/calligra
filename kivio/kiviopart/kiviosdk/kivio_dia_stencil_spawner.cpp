@@ -55,7 +55,7 @@ float KivioDiaStencilSpawner::diaPointToKivio(float point, bool xpoint)
 	else
 	    return (fabs(m_highestx) + fabs(m_lowestx)) - (fabs(m_highestx) + fabs(point));
     }
-    else 
+    else
     {
 	if(point > 0)
 	    return fabs(m_lowesty) + fabs(point);
@@ -79,7 +79,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
     }
     dia.setContent(&f);
     QDomNode diaMain = dia.firstChild().nextSibling();
-    
+
     // Set "creator" attribute
     QDomElement firstElement = kivio.createElement("KivioShapeStencil");
     firstElement.setAttribute("creator", "kiviodiafilter");
@@ -91,11 +91,11 @@ bool KivioDiaStencilSpawner::load(const QString &file)
     QDomElement authorInfoElement = kivio.createElement("Author");
     authorInfoElement.setAttribute("data", "n/a");
     QDomElement titleInfoElement = kivio.createElement("Title");
-    titleInfoElement.setAttribute("data", diaMain.namedItem("name").toElement().text()); 
+    titleInfoElement.setAttribute("data", diaMain.namedItem("name").toElement().text());
     QDomElement idInfoElement = kivio.createElement("Id");
     idInfoElement.setAttribute("data", diaMain.namedItem("name").toElement().text());
     QDomElement descriptionInfoElement = kivio.createElement("Description");
-    descriptionInfoElement.setAttribute("data", diaMain.namedItem("description").toElement().text()); 
+    descriptionInfoElement.setAttribute("data", diaMain.namedItem("description").toElement().text());
     QDomElement versionInfoElement = kivio.createElement("Version");
     versionInfoElement.setAttribute("data", "1.0");
     QDomElement webInfoElement = kivio.createElement("Web");
@@ -116,7 +116,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
     spawnerInfoElement.appendChild(emailInfoElement);
     spawnerInfoElement.appendChild(copyrightInfoElement);
     spawnerInfoElement.appendChild(autoUpdateInfoElement);
-    
+
     kivio.documentElement().appendChild(spawnerInfoElement);
 
     float scale = 72.0f;
@@ -124,7 +124,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
     // Add Dimensions
     QDomElement dimensionsElement = kivio.createElement("Dimensions");
     kivio.documentElement().appendChild(dimensionsElement);
-    
+
     // Calculate Dimensions
     QDomElement svgElement = diaMain.namedItem("svg:svg").toElement();
     QDomNode svgNode = svgElement.firstChild();
@@ -174,13 +174,13 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 		    for(QStringList::Iterator it = points.begin(); it != points.end(); ++it)
 		    {
 			QString x, y;
-			
+
 			QStringList parsed = QStringList::split(",", (*it));
 			QStringList::Iterator itp = parsed.begin();
 			x = (*itp);
 			++itp;
 			y = (*itp);
-		
+
 			calculateDimensions(x.toFloat(), y.toFloat());
 		    }
 		}
@@ -193,13 +193,13 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 		    for(QStringList::Iterator it = points.begin(); it != points.end(); ++it)
 		    {
 			QString x, y;
-			
+
 			QStringList parsed = QStringList::split(",", (*it));
 			QStringList::Iterator itp = parsed.begin();
 			x = (*itp);
 			++itp;
 			y = (*itp);
-		
+
 			calculateDimensions(x.toFloat(), y.toFloat());
 		    }
 		}
@@ -217,7 +217,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
     m_lowesty = *ity;
     ++itx;
     ++ity;
-    
+
     for( ; itx != m_xlist.end(); ++itx)
     {
 	m_highestx = QMAX(m_highestx, *itx);
@@ -229,7 +229,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 	m_highesty = QMAX(m_highesty, *ity);
 	m_lowesty = QMIN(m_lowesty, *ity);
     }
-    
+
     // Add KivioConnectorTarget's
     QDomElement connectionsElement = diaMain.namedItem("connections").toElement();
     QDomNode connectionsNode = connectionsElement.firstChild();
@@ -245,7 +245,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 		    QDomElement kivioConnectorTarget = kivio.createElement("KivioConnectorTarget");
 		    kivioConnectorTarget.setAttribute("x", QString::number(diaPointToKivio(connectionChild.attribute("x").toFloat(), true) * scale));
 		    kivioConnectorTarget.setAttribute("y", QString::number(diaPointToKivio(connectionChild.attribute("y").toFloat(), false) * scale));
-		
+
 		    kivio.documentElement().appendChild(kivioConnectorTarget);
 		}
 	    }
@@ -289,7 +289,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 		    kivioShape.setAttribute("y", QString::number((diaPointToKivio(svgChild.attribute("cy").toFloat() - svgChild.attribute("r").toFloat(), false) * scale)));
 		    kivioShape.setAttribute("w", QString::number(svgChild.attribute("r").toFloat() * scale * 2));
 		    kivioShape.setAttribute("h", QString::number(svgChild.attribute("r").toFloat() * scale * 2));
-		    kivio.documentElement().appendChild(kivioShape);	
+		    kivio.documentElement().appendChild(kivioShape);
 		}
 	    }
 	    else if(svgChild.tagName() == "svg:ellipse")
@@ -304,7 +304,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 		    kivioShape.setAttribute("y", QString::number((diaPointToKivio(svgChild.attribute("cy").toFloat() - svgChild.attribute("ry").toFloat(), false) * scale)));
 		    kivioShape.setAttribute("w", QString::number(svgChild.attribute("rx").toFloat() * scale * 2));
 		    kivioShape.setAttribute("h", QString::number(svgChild.attribute("ry").toFloat() * scale * 2));
-	    	    kivio.documentElement().appendChild(kivioShape);	
+	    	    kivio.documentElement().appendChild(kivioShape);
 		}
 	    }
 	    else if(svgChild.tagName() == "svg:line")
@@ -315,7 +315,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 		    QDomElement kivioShape = kivio.createElement("KivioShape");
 		    kivioShape.setAttribute("type", "LineArray");
 		    kivioShape.setAttribute("name", QString::fromLatin1("Element") + QString::number(runs));
-		    
+
 		    QDomElement lineArrayElement = kivio.createElement("Line");
 		    lineArrayElement.setAttribute("x1", QString::number(diaPointToKivio(svgChild.attribute("x1").toFloat(), true) * scale));
 		    lineArrayElement.setAttribute("y1", QString::number(diaPointToKivio(svgChild.attribute("y1").toFloat(), false) * scale));
@@ -323,7 +323,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
     		    lineArrayElement.setAttribute("y2", QString::number(diaPointToKivio(svgChild.attribute("y2").toFloat(), false) * scale));
 
 		    kivioShape.appendChild(lineArrayElement);
-		    kivio.documentElement().appendChild(kivioShape);	
+		    kivio.documentElement().appendChild(kivioShape);
 		}
 	    }
 	    else if(svgChild.tagName() == "svg:polyline")
@@ -334,25 +334,25 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 		    QDomElement kivioShape = kivio.createElement("KivioShape");
 		    kivioShape.setAttribute("type", "Polyline");
 		    kivioShape.setAttribute("name", QString::fromLatin1("Element") + QString::number(runs));
-	    
+
 		    QStringList points = QStringList::split(" ", svgChild.attribute("points"));
 		    for(QStringList::Iterator it = points.begin(); it != points.end(); ++it)
 		    {
 			QString x, y;
-			
+
 			QStringList parsed = QStringList::split(",", (*it));
 			QStringList::Iterator itp = parsed.begin();
 			x = (*itp);
 			++itp;
 			y = (*itp);
-		
+
 			QDomElement kivioPointElement = kivio.createElement("KivioPoint");
 			kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(x.toFloat(), true) * scale));
 			kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(y.toFloat(), false) * scale));
-				
+
 			kivioShape.appendChild(kivioPointElement);
 		    }
-		    kivio.documentElement().appendChild(kivioShape);			
+		    kivio.documentElement().appendChild(kivioShape);
 		}
 	    }
 	    else if(svgChild.tagName() == "svg:polygon")
@@ -363,33 +363,33 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 		    QDomElement kivioShape = kivio.createElement("KivioShape");
 		    kivioShape.setAttribute("type", "Polygon");
 		    kivioShape.setAttribute("name", QString::fromLatin1("Element") + QString::number(runs));
-	    
+
 		    QStringList points = QStringList::split(" ", svgChild.attribute("points"));
 		    for(QStringList::Iterator it = points.begin(); it != points.end(); ++it)
 		    {
 			QString x, y;
-			
+
 			QStringList parsed = QStringList::split(",", (*it));
 			QStringList::Iterator itp = parsed.begin();
 			x = (*itp);
 			++itp;
 			y = (*itp);
-		
+
 			QDomElement kivioPointElement = kivio.createElement("KivioPoint");
 			kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(x.toFloat(), true) * scale));
 			kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(y.toFloat(), false) * scale));
-				
+
 			kivioShape.appendChild(kivioPointElement);
 		    }
-		    kivio.documentElement().appendChild(kivioShape);			
+		    kivio.documentElement().appendChild(kivioShape);
 		}
 	    }
 	}
 	svgNode = svgNode.nextSibling();
     }
-    
+
     // Apply width and height
-    
+
     dimensionsElement.setAttribute("w", QString::number((fabs(m_highestx - m_lowestx)) * scale));
     dimensionsElement.setAttribute("h", QString::number((fabs(m_highesty - m_lowesty)) * scale));
 
@@ -403,12 +403,12 @@ bool KivioDiaStencilSpawner::loadXML(const QString &file, QDomDocument &d)
 {
     bool ret = m_smlStencilSpawner->loadXML(file, d);
 
-    m_icon = m_smlStencilSpawner->m_icon;
-    m_pSet = m_smlStencilSpawner->m_pSet;
-    m_pInfo = m_smlStencilSpawner->m_pInfo;
-    m_defWidth = m_smlStencilSpawner->m_defWidth;
-    m_defHeight = m_smlStencilSpawner->m_defHeight;
-    
+    m_icon = *m_smlStencilSpawner->icon();
+    m_pSet = m_smlStencilSpawner->set();
+    m_pInfo = m_smlStencilSpawner->info();
+    m_defWidth = m_smlStencilSpawner->defWidth();
+    m_defHeight = m_smlStencilSpawner->defHeight();
+
     return ret;
 }
 
@@ -416,6 +416,6 @@ KivioStencil *KivioDiaStencilSpawner::newStencil()
 {
     KivioStencil *newStencil = m_smlStencilSpawner->newStencil();
     newStencil->setSpawner(this);
-    
+
     return newStencil;
 }
