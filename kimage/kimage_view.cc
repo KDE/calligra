@@ -26,9 +26,9 @@
 #include <kfiledialog.h>
 #include <kcolordlg.h>
 #include <klocale.h>
-#include <kglobal.h>
 #include <kiconloader.h>
 #include <klineeditdlg.h>
+
 #include <opUIUtils.h>
 #include <opMainWindow.h>
 #include <opMainWindowIf.h>

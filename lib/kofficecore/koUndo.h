@@ -20,9 +20,10 @@
 #ifndef __koffice_undo_h__
 #define __koffice_undo_h__
 
-#include <qstring.h>
 #include <qlist.h>
 #include <qobject.h>
+#include <qstring.h>
+#include <qstringlist.h>
 
 #define MAX_UNDO_REDO 100
 
@@ -60,6 +61,8 @@ public:
    *  Executes the command.
    *
    *  This method has to be overridden by each derived class.
+   *
+   *  @see unexecute
    */
   virtual void execute() = 0;
 
@@ -67,12 +70,24 @@ public:
    *  Makes the command undone.
    *
    *  This method has to be overridden by each derived class.
+   *
+   *  @see execute
    */
   virtual void unexecute() = 0;
 
+  /**
+   *  Retrieves the name of the command.
+   *
+   *  @see setName
+   */
   QString name()
   { return m_name; }
 
+  /**
+   *  Sets the name of the command.
+   *
+   *  @see name
+   */
   void setName( const QString& _name ) { m_name = _name; };
 
 private:
@@ -97,25 +112,34 @@ public:
 
   /**
    *  Constructor.
+   *
+   *  @param _number      The number of strings that will be return by 
+   *                      @ref #getUndoList and @ref #getRedoList.
+   *  @param _maxundoredo The number of commands that can be stored in the
+   *                      history maximal.
+   *
+   *  @see #getUndoList, #getRedoList
    */
-  KoCommandHistory();
+  KoCommandHistory( int _number = 0, int _maxundoredo = MAX_UNDO_REDO );
 
   /**
    *  Adds a class derived from KoCommand to the history.
    *
    *  @param _command The command that shall be added.
-   *
-   *  @see KoCommand
    */
   void addCommand( KoCommand *_command );
 
   /**
    *  Makes the last command undone.
+   *
+   *  @see #redo
    */
   void undo();
 
   /**
    *  Redoes the last command.
+   *
+   *  @see #undo
    */
   void redo();
 
@@ -124,25 +148,80 @@ public:
    *
    *  This name should be present in the menu.
    *
-   *  @see getRedoName, redo, undo
+   *  @see #getRedoName, #redo, #undo
    */
   QString getUndoName();
+
+  /**
+   *  Retrieves the strings for last actions that can be undone. The maximal
+   *  number of strings is set by the constructor or by @ref setNumToolbarItems .
+   *
+   *  @return List of UNDO-strings.
+   *
+   *  @see #getUndoName, #setNumToolbarItems, #numToolbarItems
+   */ 
+  QStringList getUndoList();
 
   /**
    *  Retrieves the name of the actual command that can be redone.
    *
    *  This name should be present in the menu.
    *
-   *  @see getUndoName, redo, undo
+   *  @see #getUndoName, #redo, #undo
    */
   QString getRedoName();
 
+  /**
+   *  Retrieves the strings for last actions that can be redone. The maximal
+   *  number of strings is set by the constructor or by @ref setNumToolbarItems .
+   *
+   *  @return List of REDO-strings.
+   *
+   *  @see #getRedoName, #setNumToolbarItems, #numToolbarItems
+   */
+  QStringList getRedoList();
+
+  /**
+   *  Returns the number of items in the histoy.
+   *
+   *  @see #maxUndoRedo, #setMaxUndoRedo
+   */
   int count() { return m_history.count(); }
+
+  /**
+   *  Returns the maximal number of items that can be undone/redone.
+   *
+   *  @see #setMaxUndoRedo
+   */
+  int maxUndoRedo() { return m_maxUndoRedo; }
+
+  /**
+   *  Sets the maximal number of items that can be undone/redone.
+   *
+   *  @see #maxUndoRedo
+   */
+  void setMaxUndoRedo( int _maxundoredo );
+
+  /**
+   *  Returns the maximal number of items that will be return in a undo/redo lists.
+   *
+   *  @see #setNumToolbarItems, #getUndoList, #getRedoList
+   */
+  int numToolbarItems() { return m_numToolbarItems; }
+
+  /**
+   *  Sets the maximal number of items that will be return in a undo/redo lists.
+   *
+   *  @see #numToolbarItems, #getUndoList, #getRedoList
+   */
+  void setNumToolbarItems( int _number );
 
 private:
 
   KoCommandList m_history;
   int m_current;
+  int m_maxUndoRedo;
+  int m_numToolbarItems;
 
 signals:
 
@@ -151,8 +230,20 @@ signals:
    *
    *  @param _undo New text of the actual undo command.
    *  @param _redo New text of the actual redo command.
+   *
+   *  @see #getUndoName, #getRedoName
    */
   void undoRedoChanged( QString, QString );
+
+  /**
+   *  This signal is emitted when the names of the undo and redo commands changed.
+   *
+   *  @param _undo New list of text of the actual undo commands.
+   *  @param _redo New list of text of the actual redo commands.
+   *
+   *  @see #getUndoList, #getRedoList
+   */
+  void undoRedoChanged( QStringList, QStringList );
 };
 
 #endif // __koffice_undo_h__

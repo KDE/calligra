@@ -121,6 +121,9 @@ dnl add here all your Makefiles. These are created by configure
 AC_OUTPUT( \
 	Makefile \
 	katabase/Makefile \
+	katabase/lib/Makefile \
+	katabase/lib/katabasecore/Makefile \
+	katabase/lib/katabaseui/Makefile \
 	katabase/kdb/Makefile \
         katabase/kformviewer/Makefile \
         katabase/kformeditor/Makefile \

@@ -28,7 +28,6 @@
 #include <kfiledialog.h>
 #include <kcolordlg.h>
 #include <klocale.h>
-#include <kglobal.h>
 #include <kstddirs.h>
 #include <kstdaccel.h>
 #include <kiconloader.h>

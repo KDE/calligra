@@ -19,7 +19,6 @@
 
 #include <qprinter.h> // has to be first
 
-#include "kspread_view.h"
 #include <iostream.h>
 #include <stdlib.h>
 #include <time.h>
@@ -35,6 +34,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kstdaccel.h>
+#include <kglobal.h>
 
 #include <opUIUtils.h>
 #include <opMainWindow.h>
@@ -54,7 +54,7 @@
 #include "kspread_util.h"
 #include "kspread_canvas.h"
 #include "kspread_tabbar.h"
-#include <kglobal.h>
+#include "kspread_view.h"
 
 /*****************************************************************************
  *
