@@ -66,6 +66,7 @@ ABIWORDExport::ABIWORDExport(KoFilter *parent, const char *name) :
 //          LAYOUT
 //            NAME value=
 //            FLOW align=
+//            FORMAT id=1
 
 
 static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString & )
@@ -104,28 +105,11 @@ class LayoutData
 public:
     LayoutData(void)
     {
-        name=QString::null;
-        flow=QString::null;
     }
     QString name; // Name of the style
     QString flow; // Flow
+    QString abiprops; // AbiWord properties
 };
-
-static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText )
-{
-    LayoutData *layout = (LayoutData *) tagData;
-
-    AllowNoAttributes (myNode);
-
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "NAME",      ProcessLayoutNameTag, (void *) &layout->name ) );
-    tagProcessingList.append ( TagProcessing ( "FOLLOWING", NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "COUNTER",   NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "FORMAT",    NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "TABULATOR", NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "FLOW",      ProcessLayoutFlowTag, (void *) &layout->flow ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText);
-}
 
 // FORMAT's subtags
 
@@ -276,16 +260,19 @@ class FormatData
 };
 
 
-static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &)
+static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &)
 {
-    QValueList<FormatData> *formatDataList = (QValueList<FormatData> *) tagData;
+    // To use in <LAYOUT> or <STYLE> elements
+    // And is base for ProcessFormatTag
+
+    FormatData *formatData = (FormatData*) tagData;
 
     int formatId (-1);
-    FormatData formatData (-1,-1);
+
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList.append ( AttrProcessing ( "id",  "int", (void *) &formatId       ) );
-    attrProcessingList.append ( AttrProcessing ( "pos", "int", (void *) &formatData.pos ) );
-    attrProcessingList.append ( AttrProcessing ( "len", "int", (void *) &formatData.len ) );
+    attrProcessingList.append ( AttrProcessing ( "pos", "int", (void *) &formatData->pos ) );
+    attrProcessingList.append ( AttrProcessing ( "len", "int", (void *) &formatData->len ) );
     ProcessAttributes (myNode, attrProcessingList);
 
     if ( formatId != 1 )
@@ -293,10 +280,10 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &)
         kdError(30506) << "Unexpected FORMAT attribute id value " << formatId << "!" << endl;
     }
 
-    if ( formatData.pos == -1 || formatData.len == -1 )
+    if ( formatData->pos == -1 || formatData->len == -1 )
     {
-        formatData.pos = 0;
-        formatData.len = 0;
+        formatData->pos = 0;
+        formatData->len = 0;
 
         kdError(30506) << "Missing formatting!" << endl;
     }
@@ -304,11 +291,11 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &)
     if ( 6 == formatId )
     {// <FORMAT id=6> have no length but has one character in <TEXT>
         //TODO: verifiy that KWord 0.9 still does it!
-        formatData.realLen=1;
+        formatData->realLen=1;
     }
     else
     {
-        formatData.realLen=formatData.len;
+        formatData->realLen=formatData->len;
     }
 
     QValueList<TagProcessing> tagProcessingList;
@@ -321,20 +308,42 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &)
     tagProcessingList.append ( TagProcessing ( "VERTALIGN", ProcessVertAlignTag,NULL ) );
 
     //Now let's the sub tags fill in the AbiWord's "props" attribute
-    ProcessSubtags (myNode, tagProcessingList, formatData.abiprops);
+    ProcessSubtags (myNode, tagProcessingList, formatData->abiprops);
 
-    //Find the last semi-comma
-    const int result=formatData.abiprops.findRev(";");
+}
 
-    if (result>=0)
-    {
-        // Remove the last semi-comma and the space thereafter
-        formatData.abiprops.remove(result,2);
-    }
+static void ProcessFormatTag (QDomNode myNode, void *tagData, QString & strDummy)
+{
+    // To use in <FORMATS> elements
+
+    QValueList<FormatData> *formatDataList = (QValueList<FormatData> *) tagData;
+
+    FormatData formatData (-1,-1);
+
+    ProcessSingleFormatTag(myNode,(void*) &formatData, strDummy);
 
     formatDataList->append (formatData);
 }
 
+static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText )
+{
+    LayoutData *layout = (LayoutData *) tagData;
+    FormatData formatData(-1,-1);
+
+    AllowNoAttributes (myNode);
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList.append ( TagProcessing ( "NAME",      ProcessLayoutNameTag,   (void *) &layout->name ) );
+    tagProcessingList.append ( TagProcessing ( "FOLLOWING", NULL,                   NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "COUNTER",   NULL,                   NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "FORMAT",    ProcessSingleFormatTag, (void *) &formatData ) );
+    tagProcessingList.append ( TagProcessing ( "TABULATOR", NULL,                   NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "FLOW",      ProcessLayoutFlowTag,   (void *) &layout->flow ) );
+    tagProcessingList.append ( TagProcessing ( "OFFSETS",   NULL,                   NULL            ) );
+    ProcessSubtags (myNode, tagProcessingList, outputText);
+
+    layout->abiprops += formatData.abiprops;
+}
 
 static void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText )
 {
@@ -455,8 +464,20 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
             }
             else
             { // Text with properties, so use a <c> element!
+
+                QString abiprops=(*paraFormatDataIt).abiprops;
+
+                // Erase the last semi-comma (as in CSS2, semi-commas only separate instructions and do not terminate them)
+                const int result=abiprops.findRev(";");
+
+                if (result>=0)
+                {
+                    // Remove the last semi-comma and the space thereafter
+                    abiprops.remove(result,2);
+                }
+
                 outputText += "<c props=\"";
-                outputText += (*paraFormatDataIt).abiprops;
+                outputText += abiprops;
                 outputText += "\">";
                 outputText += partialText;
                 outputText += "</c>";
@@ -520,6 +541,9 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
         props += paraLayout.flow;
         props += "; ";
     }
+
+    // Add all AbiWord properties collected in the <FORMAT> element
+    props += paraLayout.abiprops;
 
     outputText += "<p";  //Warning: No trailing white space or else it's in the text!!!
     if (!style.isEmpty())
@@ -637,44 +661,48 @@ static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText )
 
     outputText += "<pagesize ";
 
+    // TODO: why decimal commas? (not very english! Bug in AbiWord?)
+    // TODO: Decimal points do not work with a custom format! :-(
+
+#if 0
     switch (format)
     {
         // European A formats
         case 0: // A3
         {
-            outputText += "pagetype=\"A3\" width=\"29,7\" height=\"42,0\" units=\"cm\" ";
+            outputText += "pagetype=\"A3\" width=\"29.7\" height=\"42.0\" units=\"cm\" ";
             break;
         }
         case 1: // A4
         {
-            outputText += "pagetype=\"A4\" width=\"21,0\" height=\"29,7\" units=\"cm\" ";
+            outputText += "pagetype=\"A4\" width=\"21.0\" height=\"29.7\" units=\"cm\" ";
             break;
         }
         case 2: // A5
         {
-            outputText += "pagetype=\"A5\" width=\"14,8\" height=\"21,0\" units=\"cm\" ";
+            outputText += "pagetype=\"A5\" width=\"14.8\" height=\"21.0\" units=\"cm\" ";
             break;
         }
         // European B formats
         case 7: // B5
         {
-            outputText += "pagetype=\"B5\" width=\"17,6\" height=\"25,0\" units=\"cm\" ";
+            outputText += "pagetype=\"B5\" width=\"17.6\" height=\"25.0\" units=\"cm\" ";
             break;
         }
         // American formats
         case 3: // Letter
         {
-            outputText += "pagetype=\"Letter\" width=\"8,5\" height=\"11,0\" units=\"inch\" ";
+            outputText += "pagetype=\"Letter\" width=\"8.5\" height=\"11.0\" units=\"inch\" ";
             break;
         }
         case 4: // Legal
         {
-            outputText += "pagetype=\"Legal\" width=\"8,5\" height=\"14,0\" units=\"inch\" ";
+            outputText += "pagetype=\"Legal\" width=\"8.5\" height=\"14.0\" units=\"inch\" ";
             break;
         }
         case 8: // US Executive (does not exists in AbiWord!)
         {
-            outputText += "pagetype=\"Custom\" width=\"7,5\" height=\"10,0\" units=\"inch\" ";
+            outputText += "pagetype=\"Custom\" width=\"7.5\" height=\"10.0\" units=\"inch\" ";
             break;
         }
         // Other!
@@ -682,7 +710,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText )
         case 6: // Custom
         default:
         { // TODO: do a right implemntation!
-            outputText += "pagetype=\"Custom\" width=\"21,0\" height=\"29,7\" units=\"cm\" "; // GRR: Provisory!
+            outputText += "pagetype=\"Custom\" width=\"21.0\" height=\"29.7\" units=\"cm\" "; // FIXME: Provisory!
             break;
         }
     }
@@ -699,7 +727,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText )
     outputText += "\" ";
 
     outputText += "page-scale=\"1,0\"/>\n"; // What is this exactly?
-
+#endif
 }
 
 static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText)
@@ -798,7 +826,12 @@ const bool ABIWORDExport::filter(const QString  &filenameIn,
     // (AbiWord and QString handles UTF-8 well, so we stay with this encoding!)
     stringBufOut = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     // First magic: "<abiword"
+    // TODO: only when <pagesize> is fixed, <abiword> should have again the fileformat attribute
+#if 1
+    stringBufOut += "<abiword version=\"unnumbered\">\n";
+#else
     stringBufOut += "<abiword version=\"unnumbered\" fileformat=\"1.0\">\n";
+#endif
     // Second magic: "<!-- This file is an AbiWord document."
     stringBufOut += "<!-- This file is an AbiWord document. -->\n";
     // We have chosen NOT to have the full comment header that AbiWord files normally have.
