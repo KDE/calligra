@@ -138,6 +138,10 @@ public:
     void addProperty( const QString& propName, const QString& propValue ) {
         m_properties.insert( propName, propValue );
     }
+    /// Overloaded of addProperty version that converts an int to a string
+    void addProperty( const QString& propName, int propValue ) {
+        m_properties.insert( propName, QString::number( propValue ) );
+    }
 
     /**
      *  Add a property which represents a distance, measured in pt
@@ -154,6 +158,10 @@ public:
      */
     void addAttribute( const QString& attrName, const QString& attrValue ) {
         m_attributes.insert( attrName, attrValue );
+    }
+    /// Overloaded of version of addAttribute that converts an int to a string
+    void addAttribute( const QString& attrName, int attrValue ) {
+        m_attributes.insert( attrName, QString::number( attrValue ) );
     }
 
     /**
