@@ -455,12 +455,11 @@ static bool kspreadfunc_sum_helper( KSContext& context, QValueList<KSValue::Ptr>
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
       {
       result += (*it)->doubleValue();
-      //kdDebug(36001) << "Value : " << (*it)->doubleValue() << endl;
       }
     else
       return false;
   }
-  //kdDebug(36001) << "Quit :" << endl;
+
   return true;
 }
 
@@ -681,6 +680,9 @@ static bool kspreadfunc_stddev( KSContext& context )
   int number=0;
   bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result ,number);
 
+  if ( number == 0 )
+      return false;
+  
   if ( b )
   {
     avera=result/number;
@@ -1335,21 +1337,20 @@ static bool kspreadfunc_dayOfYear( KSContext& context )
   return true;
 }
 
-double fact(double val,double end)
+static double fact( double val, double end )
 {
-/* fact =i*(i-1)*(i-2)*...*1 */
-if(val <0||end<0)
+    /* fact =i*(i-1)*(i-2)*...*1 */
+    if(val <0||end<0)
         return (-1);
-if(val==0)
+    if(val==0)
         return(1);
-else if(val==end)
+    else if(val==end)
         return(1);
-        /*val==end => you don't multiplie it */
-else
+    /*val==end => you don't multiplie it */
+    else
         return(val*fact((double)(val-1),end));
 
 }
-
 
 static bool kspreadfunc_fact( KSContext& context )
 {
@@ -1752,7 +1753,9 @@ static bool kspreadfunc_effective( KSContext& context )
   double nominal = args[0]->doubleValue();
   double periods = args[1]->doubleValue();
 
-
+  if ( periods == 0.0 ) // Check null
+      return false;
+  
   context.setValue( new KSValue(  pow(1+nominal/periods, periods)-1));
   return true;
 }
