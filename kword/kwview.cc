@@ -263,7 +263,7 @@ void KWView::setupActions()
                                           actionCollection(), "view_endnotes" );
     actionViewEndNotes->setExclusiveGroup( "notes" );
 
-    actionViewZoom = new KSelectAction( i18n( "Zoom" ), 0,
+    actionViewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
                                         actionCollection(), "view_zoom" );
     connect( actionViewZoom, SIGNAL( activated( const QString & ) ),
              this, SLOT( viewZoom( const QString & ) ) );

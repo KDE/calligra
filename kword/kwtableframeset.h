@@ -206,8 +206,8 @@ public:
 
     virtual void zoom();
 
-    QString anchorType();
-    QString anchorInstance();
+//    QString anchorType();
+//    QString anchorInstance();
 
 protected:
     unsigned int m_rows, m_cols;

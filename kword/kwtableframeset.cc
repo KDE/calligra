@@ -1086,7 +1086,7 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
 }
 
 /*================================================================*/
-QString KWTableFrameSet::anchorType()
+/*QString KWTableFrameSet::anchorType()
 {
     return "grpMgr";
 }
@@ -1094,7 +1094,7 @@ QString KWTableFrameSet::anchorType()
 QString KWTableFrameSet::anchorInstance()
 {
     return name;
-}
+}*/
 
 /*================================================================*/
 void KWTableFrameSet::viewFormatting( QPainter &/*painter*/, int )
