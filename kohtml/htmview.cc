@@ -185,7 +185,7 @@ void KMyHTMLView::feedDocumentData( const char *data, bool eof )
 
        KURL::List lst;
        lst = KURL::split( m_strURL );
-       KURL::List::ConstIterator it = lst.end();
+       KURL::List::ConstIterator it = lst.fromLast();
        begin( it->url(), 0, 0 );
        parse();
      }
