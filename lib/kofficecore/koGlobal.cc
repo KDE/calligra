@@ -46,6 +46,7 @@ struct PageFormatInfo
 
 // NOTES:
 // - the width and height of non-ISO formats are rounded
+// http://en.wikipedia.org/wiki/Paper_size can help
 // - the comments "should be..." indicates the exact values if the inch sizes would be multiplied by 25.4 mm/inch
 
 const PageFormatInfo pageFormatInfo[]=
@@ -53,11 +54,12 @@ const PageFormatInfo pageFormatInfo[]=
     { PG_DIN_A3,        KPrinter::A3,           "A3",           I18N_NOOP("ISO A3"),       297.0,  420.0 },
     { PG_DIN_A4,        KPrinter::A4,           "A4",           I18N_NOOP("ISO A4"),       210.0,  297.0 },
     { PG_DIN_A5,        KPrinter::A5,           "A5",           I18N_NOOP("ISO A5"),       148.0,  210.0 },
-    { PG_US_LETTER,     KPrinter::Letter,       "Letter",       I18N_NOOP("US Letter"),    216.0,  279.0 }, // should be 215.9 mm x 279.4 mm
-    { PG_US_LEGAL,      KPrinter::Legal,        "Legal",        I18N_NOOP("US Legal"),     216.0,  356.0 }, // should be 215.9 mm x 335.6 mm
+    { PG_US_LETTER,     KPrinter::Letter,       "Letter",       I18N_NOOP("US Letter"),    215.9,  279.4 },
+    { PG_US_LEGAL,      KPrinter::Legal,        "Legal",        I18N_NOOP("US Legal"),     215.9,  355.6 },
     { PG_SCREEN,        KPrinter::A4,           "Screen",       I18N_NOOP("Screen"), PG_A4_HEIGHT, PG_A4_WIDTH }, // Custom, so fall back to A4
     { PG_CUSTOM,        KPrinter::A4,           "Custom",       I18N_NOOP("Custom"), PG_A4_WIDTH, PG_A4_HEIGHT }, // Custom, so fall back to A4
     { PG_DIN_B5,        KPrinter::B5,           "B5",           I18N_NOOP("ISO B5"),       182.0,  257.0 },
+    // Hmm, wikipedia says 184.15 * 266.7 for executive !
     { PG_US_EXECUTIVE,  KPrinter::Executive,    "Executive",    I18N_NOOP("US Executive"), 191.0,  254.0 }, // should be 190.5 mm x 254.0 mm
     { PG_DIN_A0,        KPrinter::A0,           "A0",           I18N_NOOP("ISO A0"),       841.0, 1189.0 },
     { PG_DIN_A1,        KPrinter::A1,           "A1",           I18N_NOOP("ISO A1"),       594.0,  841.0 },
