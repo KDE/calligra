@@ -92,25 +92,34 @@ void KSpreadMap::loadOasisSettings( const QDomElement& setting )
 
 void KSpreadMap::saveOasisSettings( KoXmlWriter &settingsWriter )
 {
-  // Save visual info for the first view, such as active table and active cell
-  // It looks like a hack, but reopening a document creates only one view anyway (David)
-  KSpreadView * view = static_cast<KSpreadView*>(this->doc()->views().getFirst());
-  if ( view ) // no view if embedded document
-  {
-      KSpreadCanvas * canvas = view->canvasWidget();
-      //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
-      settingsWriter.addConfigItem( "ActiveTable",  canvas->activeTable()->tableName() );
+    //fixme ViewId is convert in boolean... strnage I don't understand why
+    settingsWriter.addConfigItem( "ViewId", "View1" );
+    // Save visual info for the first view, such as active table and active cell
+    // It looks like a hack, but reopening a document creates only one view anyway (David)
+    KSpreadView * view = static_cast<KSpreadView*>(this->doc()->views().getFirst());
+    if ( view ) // no view if embedded document
+    {
+        KSpreadCanvas * canvas = view->canvasWidget();
+        //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
+        settingsWriter.addConfigItem( "ActiveTable",  canvas->activeTable()->tableName() );
 
-      //todo
-      //mymap.setAttribute( "markerColumn", canvas->markerColumn() );
-      //mymap.setAttribute( "markerRow", canvas->markerRow() );
-  }
+        //todo
+        //mymap.setAttribute( "markerColumn", canvas->markerColumn() );
+        //mymap.setAttribute( "markerRow", canvas->markerRow() );
+    }
 
-  QPtrListIterator<KSpreadSheet> it( m_lstTables );
-  for( ; it.current(); ++it )
-  {
-      it.current()->saveOasisSettings( settingsWriter );
-  }
+    //<config:config-item-map-named config:name="Tables">
+    settingsWriter.startElement("config:config-item-map-named" );
+    settingsWriter.addAttribute("config:name","Tables" );
+    QPtrListIterator<KSpreadSheet> it( m_lstTables );
+    for( ; it.current(); ++it )
+    {
+        settingsWriter.startElement( "config:config-item-map-entry" );
+        settingsWriter.addAttribute( "config:name", ( *it )->tableName() );
+        it.current()->saveOasisSettings( settingsWriter );
+        settingsWriter.endElement();
+    }
+    settingsWriter.endElement();
 }
 
 
