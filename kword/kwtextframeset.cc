@@ -3230,11 +3230,11 @@ void KWTextFrameSet::insertTOC( QTextCursor * cursor )
 
     // Remove old TOC
 
-    KWInsertTOCCommand::removeTOC( this, cursor, macroCmd );
+    QTextCursor *cur= KWInsertTOCCommand::removeTOC( this, cursor, macroCmd );
 
     // Insert new TOC
 
-    QTextCommand * cmd = new KWInsertTOCCommand( this, cursor->parag() );
+    QTextCommand * cmd = new KWInsertTOCCommand( this,cur ? cur->parag(): cursor->parag() );
     textdoc->addCommand( cmd );
     macroCmd->addCommand( new KWTextCommand( this, QString::null ) );
     *cursor = *( cmd->execute( cursor ) );

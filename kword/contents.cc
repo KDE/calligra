@@ -61,8 +61,8 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
     // Insert table and THEN set page numbers
     // Otherwise the page numbers are incorrect
 
-    KWTextParag *p = static_cast<KWTextParag *>(parag->next());
-    ASSERT( p == body );
+    KWTextParag *p = static_cast<KWTextParag *>(textdoc->firstParag()/*parag->next()*/);
+    //ASSERT( p == body );
     KWTextParag *prevTOCParag = parag;
     QMap<KWTextParag *, KWTextParag *> paragMap;     // Associate a paragraph form the TOC with the real one from the body
     while ( p ) {
@@ -129,7 +129,7 @@ QTextCursor *KWInsertTOCCommand::unexecute( QTextCursor *c )
     return c;
 }
 
-void KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMacroCommand * /*macroCmd*/ )
+QTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMacroCommand * /*macroCmd*/ )
 {
     KWTextDocument * textdoc = fs->textDocument();
     // Remove existing table of contents, based on the style
@@ -137,12 +137,17 @@ void KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMa
     QTextCursor end( textdoc );
     // We start from the end, to avoid the parag shifting problem
     QTextParag *p = textdoc->lastParag();
+    QTextCursor *posOfTable=0L;
+    KWTextParag *posOfToc=0L;
+
     while ( p )
     {
         KWTextParag * parag = static_cast<KWTextParag *>(p);
         if ( parag->style() && ( parag->style()->name().startsWith( "Contents Head" ) ||
             parag->style()->name() == "Contents Title" ) )
         {
+            posOfToc=parag;
+
             kdDebug() << "KWContents::createContents Deleting paragraph " << p << " " << p->paragId() << endl;
             // This paragraph is part of the TOC -> remove
 
@@ -197,7 +202,14 @@ void KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMa
         p = p->prev();
     }
     textdoc->invalidate();
+     if(posOfToc)
+     {
+         posOfTable=new QTextCursor( textdoc );
+         posOfTable->setParag(posOfToc  );
+         posOfTable->setIndex( 0 );//start of parag
+     }
     // ### TODO propagate parag ID changes.
+    return posOfTable;
 }
 
 KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int depth )

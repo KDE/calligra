@@ -39,7 +39,7 @@ public:
 
     // Helper method, public for KWTextFrameSet::insertTOC().
     // Remove a toc based on the parag styles
-    static void removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMacroCommand *macroCmd );
+    static QTextCursor * removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMacroCommand *macroCmd );
 
 protected:
     // Find or create a toc style
