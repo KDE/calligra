@@ -53,7 +53,9 @@ public:
     virtual int minimumWidth() const { return size().width(); }
     virtual int ascent() const;
 
-    virtual void drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool /*selected*/ , const QFont & /*customItemFont*/, int /*offset*/);
+    virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
+    /** Never called since we reimplement draw */
+    virtual void drawCustomItem(QPainter*, int, int, int, int, int, int, const QColorGroup&, bool, const QFont &, int) { }
 
     virtual KCommand * createCommand();
     virtual KCommand * deleteCommand();

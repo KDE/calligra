@@ -69,39 +69,39 @@ void KWAnchor::move( int x, int y )
 
 //#define DEBUG_DRAWING
 
-void KWAnchor::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected,const QFont & /*customItemFont*/, int /*offset*/ )
+void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
     if ( m_deleted )
         return;
 
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
-    int paragy = fs->kWordDocument()->layoutUnitToPixelY( paragraph()->rect().y() );
+    int paragy = /*fs->kWordDocument()->layoutUnitToPixelY*/( paragraph()->rect().y() );
 #ifdef DEBUG_DRAWING
     kdDebug(32001) << "KWAnchor::draw " << x << "," << y << " paragy=" << paragy
-                   << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
+                   << "  cliprect(LU)" << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
 #endif
 
-#if 0 // different coord systems now...
     if ( x != xpos || y != ypos ) { // shouldn't happen I guess ?
         kdDebug() << "rectifying position to " << x << "," << y << endl;
         move( x, y );
     }
-#endif
 
     p->save();
     // Determine crect in view coords
-    QRect crect;
-    if ( cx == -1 && cy+paragy == -1 && cw == -1 && ch == -1 )
-        crect = QRect( x, y+paragy, width, height );
-    else
-        crect = QRect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
 
+    // 1 - in internal (LU) coords
+    QRect crect_lu;
+    if ( cx == -1 && cy+paragy == -1 && cw == -1 && ch == -1 )
+        crect_lu = QRect( x, y+paragy, width, height );
+    else
+        crect_lu = QRect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
 #ifdef DEBUG_DRAWING
-    kdDebug() << "KWAnchor::draw crect ( in internal coords ) = " << DEBUGRECT( crect ) << endl;
+    kdDebug() << "KWAnchor::draw crect ( in internal coords, LU ) = " << DEBUGRECT( crect_lu ) << endl;
 #endif
-    QPoint cnPoint = crect.topLeft(); //fallback
+    // 2 - convert to view coords, first topleft then bottomright
+    QPoint cnPoint = crect_lu.topLeft(); //fallback
     KoPoint dPoint;
-    if ( fs->internalToDocument( crect.topLeft(), dPoint ) )
+    if ( fs->internalToDocument( crect_lu.topLeft(), dPoint ) )
         cnPoint = fs->kWordDocument()->zoomPoint( dPoint );
     else
         kdDebug() << "KWAnchor::draw internalToNormal returned 0L for topLeft of crect!" << endl;
@@ -110,10 +110,11 @@ void KWAnchor::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw
 #endif
     cnPoint = fs->currentViewMode()->normalToView( cnPoint );
     //kdDebug() << "KWAnchor::draw cnPoint in view coordinates " << cnPoint.x() << "," << cnPoint.y() << endl;
+    QRect crect;
     crect.setLeft( cnPoint.x() );
     crect.setTop( cnPoint.y() );
     QPoint brnPoint; // bottom right in normal coords
-    if ( fs->internalToDocument( crect.bottomRight(), dPoint ) )
+    if ( fs->internalToDocument( crect_lu.bottomRight(), dPoint ) )
     {
         brnPoint = fs->kWordDocument()->zoomPoint( dPoint );
 #ifdef DEBUG_DRAWING
@@ -126,7 +127,7 @@ void KWAnchor::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw
     else
         kdWarning() << "internalToNormal returned 0L for bottomRight=" << crect.right() << "," << crect.bottom() << endl;
 #ifdef DEBUG_DRAWING
-    kdDebug() << "KWAnchor::draw crect ( in view coords ) = " << DEBUGRECT( crect ) << endl;
+    kdDebug() << "KWAnchor::draw crect (in view coords) = " << DEBUGRECT( crect ) << endl;
 #endif
 
     KWFrame *frame = fs->currentDrawnFrame();
@@ -144,23 +145,24 @@ void KWAnchor::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw
         frame = frameIt.current();
         //kdDebug() << "KWAnchor::draw frame=" << frame << endl;
     }
-    QPoint frameTopLeft = fs->kWordDocument()->zoomPoint( frame->topLeft() );
 
     // and make painter go back to view coord system
     // (this is exactly the opposite of the code in KWFrameSet::drawContents)
-    QPoint iPoint;
-    if ( fs->internalToDocument( frameTopLeft, dPoint ) )
-    {
-        iPoint = fs->kWordDocument()->zoomPoint( dPoint );
-        QPoint vPoint = fs->currentViewMode()->normalToView( frameTopLeft );
+    // (It does translate(view - internal), so we do translate(internal - view))
+
+    //QPoint nFrameTopLeft = fs->kWordDocument()->zoomPoint( frame->topLeft() );
+    //QPoint iPoint;
+    //if ( fs->internalToDocument( frameTopLeft, dPoint ) )
+    //{
+        //iPoint = fs->kWordDocument()->zoomPoint( dPoint );
+        //QPoint vPoint = fs->currentViewMode()->normalToView( frameTopLeft );
 #ifdef DEBUG_DRAWING
-        kdDebug() << "KWAnchor::draw vPoint=" << vPoint.x() << "," << vPoint.y()
-                  << " translating by " << iPoint.x() - vPoint.x() << "," << iPoint.y() - vPoint.y() - paragy << endl;
+        kdDebug() << "KWAnchor::draw translating by " << crect_lu.x() - crect.x() << "," << crect_lu.y() - crect.y() << endl;
 #endif
-        p->translate( iPoint.x() - vPoint.x(), iPoint.y() - vPoint.y() - paragy );
-    } else
-        kdWarning() << "normalToInternal returned 0L in KWAnchor::draw - shouldn't happen. "
-                    << frameTopLeft.x() << "," << frameTopLeft.y() << endl;
+        p->translate( crect_lu.x() - crect.x(), crect_lu.y() - crect.y() /*- paragy ??*/ );
+    //} else
+    //    kdWarning() << "normalToInternal returned 0L in KWAnchor::draw - shouldn't happen. "
+    //                << frameTopLeft.x() << "," << frameTopLeft.y() << endl;
     // Draw the frame
     QColorGroup cg2( cg );
     m_frameset->drawContents( p, crect, cg2, false, true, 0L, fs->currentViewMode(), fs->currentDrawnCanvas() );
@@ -180,9 +182,10 @@ QSize KWAnchor::size() const
 {
     QSize sz = m_frameset->floatingFrameSize( m_frameNum );
     if ( sz.isNull() ) // for some reason, we don't know the size yet
-        return QSize( width, height );
-    else
-        return sz;
+        sz = QSize( width, height );
+    // Convert to LU
+    KoZoomHandler * zh = textDocument()->zoomHandler();
+    return QSize( zh->pixelToLayoutUnitX( sz.width() ), zh->pixelToLayoutUnitY( sz.height() ) );
 }
 
 int KWAnchor::ascent() const
