@@ -312,8 +312,8 @@ SVGPathParser::parseSVG( const QString &s, bool process )
 						xc = 2 * curx - contrlx;
 						yc = 2 * cury - contrly;
 
-						px1 = relative ? (curx + 2 * xc) * (1.0 / 3.0) : (curx + 2 * xc) * (1.0 / 3.0);
-						py1 = relative ? (cury + 2 * yc) * (1.0 / 3.0) : (cury + 2 * yc) * (1.0 / 3.0);
+						px1 = (curx + 2 * xc) * (1.0 / 3.0);
+						py1 = (cury + 2 * yc) * (1.0 / 3.0);
 						px2 = relative ? ((curx + tox) + 2 * xc) * (1.0 / 3.0) : (tox + 2 * xc) * (1.0 / 3.0);
 						py2 = relative ? ((cury + toy) + 2 * yc) * (1.0 / 3.0) : (toy + 2 * yc) * (1.0 / 3.0);
 						px3 = relative ? curx + tox : tox;
