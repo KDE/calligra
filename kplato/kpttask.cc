@@ -330,6 +330,8 @@ int KPTTask::actualWork() {
 
 void KPTTask::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &milestones) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
+    if (isDeleted())
+         return;
     if (type() == KPTNode::Type_Summarytask) {
         if (numDependChildNodes() == 0) {
             endnodes.insert(0, this); // Summarytasks go first in list
@@ -367,6 +369,8 @@ void KPTTask::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<K
 }
 KPTDateTime KPTTask::calculateForward(int use) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
+    if (isDeleted())
+        return earliestStart;
     if (m_visitedForward)
         return earliestStart + m_durationForward;
     // First, calculate all predecessors
@@ -405,6 +409,8 @@ KPTDateTime KPTTask::calculateForward(int use) {
 
 KPTDateTime KPTTask::calculateBackward(int use) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
+    if (isDeleted())
+        return latestFinish;
     if (m_visitedBackward)
         return latestFinish - m_durationBackward;
     // First, calculate all successors
@@ -599,7 +605,40 @@ void KPTTask::scheduleMilestone() {
             m_startTime = time;
     }
     m_endTime = m_startTime;
+    
+    //HACK: temporary fix
+    KPTTask *parent = dynamic_cast<KPTTask*>(m_parent);
+    parent->milestoneMoveStartTime(parent, m_startTime);
+    parent->milestoneMoveEndTime(parent, m_startTime);
 }
+//HACK: temporary fix
+void KPTTask::milestoneMoveStartTime(KPTTask *parent, const KPTDateTime &time) {
+    if (!parent || 
+        (parent->type() != Type_Summarytask && parent->type() != Type_Subproject)) {
+        return;
+    }
+    if (parent->startTime() > time) {
+        parent->setStartTime(time);
+        parent->milestoneSetDuration();
+    }
+    parent->milestoneMoveStartTime(dynamic_cast<KPTTask*>(parent->getParent()), time);
+}
+
+void KPTTask::milestoneMoveEndTime(KPTTask *parent, const KPTDateTime &time) {
+    if (!parent || 
+        (parent->type() != Type_Summarytask && parent->type() != Type_Subproject)) {
+        return;
+    }
+    if (parent->endTime() < time) {
+        parent->setEndTime(time);
+        parent->milestoneSetDuration();
+    }
+    parent->milestoneMoveEndTime(dynamic_cast<KPTTask*>(parent->getParent()), time);
+}
+void KPTTask::milestoneSetDuration() {
+    m_duration = m_endTime - m_startTime;
+}
+
 
 // Assumes all subtasks are calculated
 KPTDuration KPTTask::summarytaskDurationForward(const KPTDateTime &time) {

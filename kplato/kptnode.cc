@@ -524,7 +524,7 @@ void KPTEffort::setType(QString type) {
 // Debugging
 #ifndef NDEBUG
 void KPTNode::printDebug(bool children, QCString indent) {
-    kdDebug()<<indent<<"  Unique node identity="<<m_id<<endl;
+    kdDebug()<<indent<<"  Unique node identity="<<m_id<<" isDeleted="<<isDeleted()<<endl;
     if (m_effort) m_effort->printDebug(indent);
     QString s = "  Constraint: " + constraintToString();
     kdDebug()<<indent<<s<<" ("<<constraintTime().toString()<<")"<<endl;

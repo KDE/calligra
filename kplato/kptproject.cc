@@ -67,6 +67,8 @@ int KPTProject::type() const { return KPTNode::Type_Project; }
 
 void KPTProject::calculate(KPTEffort::Use use) {
     //kdDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_startTime.toString()<<endl;
+    if (isDeleted())
+        return;
     // clear all resource appointments
     QPtrListIterator<KPTResourceGroup> git(m_resourceGroups);
     for ( ; git.current(); ++git ) {
@@ -112,6 +114,8 @@ KPTDuration *KPTProject::getFloat() {
 
 KPTDateTime KPTProject::calculateForward(int use) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
+    if (isDeleted())
+        return KPTDateTime();
     if (type() == KPTNode::Type_Project) {
         // Follow *parent* relations back and
         // calculate forwards following the child relations
@@ -132,6 +136,8 @@ KPTDateTime KPTProject::calculateForward(int use) {
 
 KPTDateTime KPTProject::calculateBackward(int use) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
+    if (isDeleted())
+        return KPTDateTime();
     if (type() == KPTNode::Type_Project) {
         // Follow *child* relations back and
         // calculate backwards following parent relation
@@ -151,6 +157,8 @@ KPTDateTime KPTProject::calculateBackward(int use) {
 }
 
 KPTDateTime &KPTProject::scheduleForward(KPTDateTime &earliest, int use) {
+    if (isDeleted())
+        return m_endTime;
     resetVisited();
     QPtrListIterator<KPTNode> it(m_endNodes);
     for (; it.current(); ++it) {
@@ -164,6 +172,8 @@ KPTDateTime &KPTProject::scheduleForward(KPTDateTime &earliest, int use) {
 }
 
 KPTDateTime &KPTProject::scheduleBackward(KPTDateTime &latest, int use) {
+    if (isDeleted())
+        return m_startTime;
     resetVisited();
     QPtrListIterator<KPTNode> it(m_startNodes);
     for (; it.current(); ++it) {

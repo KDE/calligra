@@ -166,7 +166,11 @@ public:
      */
     virtual KPTDuration workbasedDuration(const KPTDateTime &time, const KPTDuration &effort, bool backward);
 
-    
+    //HACK: Temporary fix
+    void milestoneMoveStartTime(KPTTask *parent, const KPTDateTime &time);
+    void milestoneMoveEndTime(KPTTask *parent, const KPTDateTime &time);
+    void milestoneSetDuration();
+
 private:
     QPtrList<KPTResourceGroup> m_resource;
 
