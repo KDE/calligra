@@ -126,7 +126,7 @@ specific rules (which are outlined below) to create the completed date.</para>
  only <quote>dd</quote>.</para></note>
 <para>To create a custom date string, place a mark in the <guilabel>Custom</guilabel> checkbox.</para>
 <para>Now type placeholders and separators text into the upper drop down box.  Alternatively
-select the format from the <guilabel>Insert</guilabel>
+select the format from the <guilabel>Insert:</guilabel>
 dropdown box, and the
 placeholder will be inserted into the date format string at the cursor location.</para>
 
@@ -138,10 +138,10 @@ placeholder will be inserted into the date format string at the cursor location.
 string is visible below the <guilabel>Custom></guilabel> checkbox.  Click <guibutton>OK</guibutton> when
 the date format string is correct to insert the variable into the document.</para>
 
-<tip><para>Once the date has been inserted into the document, it can be reformated to a different layout
-and toggled between fixed and variable dates.  Simply place the cursor behind the date in question and click once with the &RMB;.
+<tip><para>Once the date has been inserted into the document, it can be reformatted to a different layout
+and toggled between fixed and variable dates.  Simply click once with the &RMB; on the date.
 A small menu will appear.  Select <guilabel>Change variable to...</guilabel> and a submenu will appear.  Select your new
-variable or new layout from the menu and the variable is imediatly updated. </para></tip>
+variable or new layout from the menu and the variable is immediately updated. </para></tip>
 
 </sect3>
 <sect3 id="insert-time"><title>Insert Time</title>
@@ -181,7 +181,7 @@ Compare this choice to <guimenuitem>Current time (fixed)</guimenuitem></para></l
 <imagedata fileref="instime.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-<para>The top dropdown box determins the layout of the variable.  The choices are:</para>
+<para>The top dropdown box determines the layout of the variable.  The choices are:</para>
 
 <variablelist>
 <varlistentry>
@@ -209,7 +209,7 @@ time format string can be created.</para>
 <para>A time format string consists of a list of letters and numbers which follow
 specific rules (which are outlined below) to create the completed time.</para>
 <para>The time format string consists of <emphasis>placeholders</emphasis> and
-<emphasis>seperators</emphasis>.  The placeholders are defined in the following five tables.</para>
+<emphasis>separators</emphasis>.  The placeholders are defined in the following five tables.</para>
 <para><emphasis>Hours</emphasis></para>
 <informaltable>
 <tgroup cols="2">
@@ -257,8 +257,8 @@ specific rules (which are outlined below) to create the completed time.</para>
 <quote>HH</quote> is not a placeholder,
  only <quote>hh</quote></para></note>
 <para>To create a custom time string, place a mark in the <guilabel>Custom</guilabel> checkbox.</para>
-<para>Type the placeholders and seperator text into the upper drop down box.  Alternatively,
-you can select the format from the <guilabel>Insert</guilabel>
+<para>Type the placeholders and separator text into the upper drop down box.  Alternatively,
+you can select the format from the <guilabel>Insert:</guilabel>
 dropdown box, and the
 placeholder will be inserted into the time format string at the cursor location.</para>
 <para>A preview of the current time
@@ -272,10 +272,10 @@ the time format string is correct to insert the variable into your document.</pa
 string is visible below the <guilabel>Custom></guilabel> checkbox.  Click <guibutton>OK</guibutton> when
 the time format string is correct to insert the variable into your document.</para>
 
-<tip><para>Once the time has been inserted into the document, it can be reformated to a different layout
-and toggled between fixed and variable times.  Simply place the cursor behind the time in question and click once with the &RMB;.
+<tip><para>Once the time has been inserted into the document, it can be reformatted to a different layout
+and toggled between fixed and variable times.  Simply click once with the &RMB; on the time in the document.
 A small menu will appear.  Select <guilabel>Change variable to...</guilabel> and a submenu will appear.  Select your new
-variable or new layout from the menu and the variable is imediatly updated. </para></tip>
+variable or new layout from the menu and the variable is immediately updated. </para></tip>
 
 </sect3>
 </sect2>
@@ -314,7 +314,7 @@ on previous pages until it finds a section title.</para>
 <para>&kword; provides other commonly used variables that you might find useful. This set of variables
 are specific to the document.  You can insert these variables by selecting
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Property</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Document Information</guimenuitem>
 </menuchoice> from the menubar.  This will bring up a list of variables.  The variables are detailed below.
 <informaltable>
 <tgroup cols="3">
@@ -323,7 +323,7 @@ are specific to the document.  You can insert these variables by selecting
 </thead>
 <tbody>
 <row><entry>Filename</entry><entry>Resume.kwd</entry><entry>Inserts the file name of the document.</entry></row>
-<row><entry>Author Name</entry><entry>Mike McBride</entry><entry>The name of the author as specified in the
+<row><entry>Author Name</entry><entry>Joseph User</entry><entry>The name of the author as specified in the
 <link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>City</entry><entry>Philadelphia</entry><entry>The postal code specified in the
 <link linkend="documentinfo">Document information</link> box.</entry></row>
@@ -331,16 +331,16 @@ are specific to the document.  You can insert these variables by selecting
 <link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>Country</entry><entry>United States</entry><entry>The country name specified in the
 <link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Directory Name</entry><entry>/home/mmcbride/kword</entry><entry>This is the directory name for
+<row><entry>Directory Name</entry><entry>/home/juser/kword</entry><entry>This is the directory name for
 the document. The filename is not included in the directory name variable.</entry></row>
-<row><entry>Directory and Filename</entry><entry>/home/mmcbride/kword/Resume.kwd</entry><entry>The directory
+<row><entry>Directory and Filename</entry><entry>/home/juser/kword/Resume.kwd</entry><entry>The directory
 and filename of the current file.</entry></row>
 <row><entry>Document Abstract</entry><entry>This is a current resume.</entry>
 <entry>The document abstract specified in the
 <link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>Document Title</entry><entry>My Resume</entry><entry>The document title specified in the
 <link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Email</entry><entry>mpmcbride7@yahoo.com</entry><entry>The email address
+<row><entry>Email</entry><entry>joeuser@kde.org</entry><entry>The email address
 of the author as specified in the
 <link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>Fax</entry><entry>Any valid telephone number</entry><entry>The fax machine number specified in the
@@ -370,19 +370,16 @@ to define your own variables for a document.  </para>
 <para>Select <menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Custom</guimenuitem>
 <guimenuitem>New</guimenuitem></menuchoice> from the menubar.  This will bring up a dialog box.</para>
-<para>Enter the variable name in the drop down box provided.</para>
+<para>Enter the variable name and its current value in the text boxes provided.</para>
 <para>Click <guibutton>OK</guibutton> to create the new variable name and insert it at the current
 cursor location.  Click <guibutton>Cancel</guibutton> to cancel the creation of the new variable.</para>
-<note><para>When you initially create a new variable, it does not have a value.  &kword; will insert
-a placeholder (&lt;none&gt;) in the document to mark the location of the variable.  Once you
-<link linkend="edit-custom-variables">Edit the value of a custom variable</link>, &kword; will replace 
-the placeholder with the new value.</para></note>
+
 <para>It is now possible to <link linkend="insert-custom-variables">insert this new variable</link> at any
 place in your document.</para>
 </sect3>
 <sect3 id="edit-custom-variables"><title>Edit a custom variables value</title>
 <para>In order for variables to be useful, you need to be able to give them a value, and be able to
-change that value easily.  To change the value of a variable (or give it an initial value):</para>
+change that value easily.  To change the value of a variable:</para>
 <para>Select <menuchoice>
 <guimenu>Tools</guimenu>
 <guimenuitem>Custom Variables...</guimenuitem></menuchoice> from the menubar.
@@ -405,12 +402,12 @@ the variable and &kword; will insert the variable, with its current value, at th
 <para>You can tell &kword; to update all variable values (to make sure all variables are set to their
 current values).  This is <emphasis>especially</emphasis> important with dates and times.</para>
 <para>Simply select <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Refresh all variables</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Refresh All Variables</guimenuitem>
 </menuchoice> from the menubar.</para>
 </sect2>
 <sect2 id="update-variables-one"><title>Updating One Date or Time Variable Value </title>
 <para>You can tell &kword; to update a single date or time variable value, and leave the others unchanged.</para>
-<para>Simply place the cursor over the variable you want to update and click with the &RMB;. A small menu will appear which will show
+<para>Simply place the mouse pointer over the variable you want to update and click with the &RMB;. A small menu will appear which will show
 several new date or time formatting options and the option to change either dates or times to fixed or variable time formats.  Simply select
 the new option and this variable will be updated.</para>
 </sect2>

@@ -16,7 +16,6 @@ If you want to manually enter all footnotes in, then select <guilabel>Manual</gu
 the text box to the right.</para>
 <tip><para>If at all possible, try to allow &kword; to automatically number the footnotes for you.  If &kword; controls the numbering, and you 
 insert, delete or move footnotes, &kword; will automatically renumber or reorder the footnotes for you.</para></tip>
-<para>The next section of the dialog, shows that a footnote will be created.</para>
 
 <para>Click <guibutton>Configure</guibutton> to <link linkend="fn-config">change the look</link> of your footnotes.</para>
 <para>Click <guibutton>Cancel</guibutton> to return to your document without inserting a footnote.</para>
@@ -45,7 +44,7 @@ cursor to the appropriate footnote reference.</para></listitem>
 <sect2 id="fn-config">
 <title>Change the look of footnotes</title>
 <para>To configure the appearance of footnotes, select <menuchoice> <guimenu>Format</guimenu>
-<guimenuitem>Footnotes and Endnotes...</guimenuitem></menuchoice> from the menubar.  A dialog will appear.</para>
+<guimenuitem>Footnote...</guimenuitem></menuchoice> from the menubar.  A dialog will appear.</para>
 
 <sect3 id="fn-config-fn">
 <title>Change the appearance of footnote entries</title>
@@ -76,8 +75,8 @@ appear <emphasis>before</emphasis> the footnote number.</para>
 </mediaobject>
 </screenshot>
 
-<para>You can determine the alignment of the separator line by selecting <guilabel>Right</guilabel>, 
-<guilabel>Centered</guilabel> or <guilabel>Left</guilabel></para>
+<para>You can determine the alignment of the separator line by selecting <guilabel>Left</guilabel>,
+<guilabel>Centered</guilabel> or <guilabel>Right</guilabel></para>
 <para>Determine the line lengths using the spin box labeled <guilabel>Separator Line Length</guilabel>.</para>
 <para>Determine the line width using the spin box labeled <guilabel>Separator Line Width</guilabel>.</para>
 <para>Use the drop down box labeled <guilabel>Separator Line Type</guilabel> to determine what kind of line is drawn.</para>
@@ -86,8 +85,8 @@ the previous options.</para>
 </sect3>
 </sect2>
 <sect2 id="fn-placement">
-<title>Change the placment of the footnotes</title>
-<para>You can determine how much space seperates the main text frame and the footnotes.  Select 
+<title>Change the placement of the footnotes</title>
+<para>You can determine how much space separates the main text frame and the footnotes.  Select 
 <menuchoice>
 <guimenu>Format</guimenu><guimenuitem>Page...</guimenuitem></menuchoice>
 from the menubar. This will bring up a dialog:</para>

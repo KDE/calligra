@@ -63,7 +63,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-07-14</date>
+<date>2002-07-16</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -1681,7 +1681,7 @@ align="center"/></imageobject></inlinemediaobject></para>
 <glossdef>
 <para>URL is an abbreviation for Universal Resource Locater.  A universal resource locater is 
 the technical term for what is commonly referred to as a websites address.</para>
-<para>Examples of URLs include <ulink url="http://koffice.kde.org">http://www.koffice.kde.org</ulink> and
+<para>Examples of URLs include <ulink url="http://koffice.kde.org">http://koffice.kde.org</ulink> and
 <ulink url="http://www.kde.org">http://www.kde.org</ulink></para>
 </glossdef>
 </glossentry>
