@@ -1,0 +1,98 @@
+Steps to get a profilable version of KOffice programs:
+
+First of all I have to admit that I'm a profiling newbe, so take all this
+information with a grain of salt.
+To get profiling information into your programs, you have to specify
+the gcc flag -pg (profiling/debugging symbols). This can easily be
+done using --enable-profile --enable-debug as configure options.
+
+To create a static KOffice binary we have to move some code around.
+First of all we need a way to load a KOffice part without depending on
+KLibLoader. The responsible code (for starting apps) is in KoApplication.
+
+1) Copy koApplication.cc and .h to your application's directory
+2) Change the class name to MyApplication or whatever name you prefer
+   (in the header and the implementation)
+3) Remove the DCOP stuff (KoApplicationIface and all the dcop calls)
+   completely (or also move that, if you want to use that)
+4) #include the document class of your application (e.g. #include <kwdoc.h>)
+5) Don't use KLibLoader to dlopen your part but change the code in
+   this way:
+
+original file (around line 88):
+    // No argument -> create an empty document
+    if (!argsCount) {
+        KoDocument* doc = entry.createDoc( 0, "Document" );
+        if ( !doc )
+            return false;
+        KoMainWindow *shell = new KoMainWindow( doc->instance() );
+your changed file:
+    // No argument -> create an empty document
+    if (!argsCount) {
+        KoDocument* doc = new KPresenterDoc; //entry.createDoc( 0, "Document" );
+        if ( !doc )
+            return false;
+        KoMainWindow *shell = new KoMainWindow( doc->instance() );
+
+You have to create your document directly (using new). If you don't do that
+your application will not start up :)
+
+Another thing which happens if you use the new _aboutdata.h header is
+that this method is defined multiple times (linking error) The solution is to
+split that file into a header and a source file and leave only a declaration
+in the header (and of course the implementation has to be copied into the
+source file). Then add the source file to the _SOURCES lines of your part's
+library (e.g. libkpresenterpart_la_SOURCES).
+
+Now we have to remove some kdeinit magic from the Makefile.am
+that this new code actually compiles and links.
+1) Add the new MyApplication class sources to the _SOURCES of your part.
+   (like you already did for the _aboutdata.cc file)
+2) Remove the kdeinit library of your Makefile.am
+
+---- old file:
+## The kdeinit loadable module
+lib_LTLIBRARIES = kpresenter.la
+kpresenter_la_SOURCES = main.cc
+kpresenter_la_LDFLAGS = $(all_libraries) -avoid-version -module
+kpresenter_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+
+## The executable
+bin_PROGRAMS = kpresenter
+kpresenter_SOURCES = dummy.cc
+kpresenter_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+kpresenter_LDADD = kpresenter.la
+
+---- new file:
+## The executable
+bin_PROGRAMS = kpresenter
+kpresenter_SOURCES = main.cc
+kpresenter_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+kpresenter_LDADD = libkpresenterpart.la
+
+If you've done that you can start building the application.
+1) make -f admin/Makefile.common cvs-clean
+2) make -f Makefile.cvs
+3) ./configure --enable-profile --enable-debug --disable-shared --enable-static
+4) vi Makefile -> remove everything you don't need from TOPSUBDIRS :)
+5) make ; make install
+
+This step might fail (I probably just was lucky :), but normally it works fine.
+
+After a successful build start the application as you're used to, and perform
+the actions you want to profile. It's probably a good idea to do one small
+task at a time that one doesn't get lost in the log file. When you quit the
+program properly (i.e. if it doesn't crash) a file called "gmon.out" is written
+into your current directory. This file contains the raw profiling information
+and isn't of much use for a human. Use the gprof tool to create some nice
+tables out of it: 'gprof $KDEDIR/bin/kpresenter gmon.out > processed.out'
+
+Now you should have the flat profile and the call graph in the file
+"processed.out". To get information on how to interpret these results
+please see http://www.gnu.org/manual/gprof-2.9.1/html_mono/gprof.html
+
+I hope this helps at least a little bit. Feel free to correct my mistakes :)
+Note: I don't know if it's possible to compile static kdelibs (kio is a problem
+for sure) and compile KOffice with them... maybe someone can enlighten us.
+
+Werner <trobin@kde.org>
