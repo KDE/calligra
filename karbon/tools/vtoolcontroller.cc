@@ -108,6 +108,19 @@ VToolController::registerTool( VTool *tool )
 	//kdDebug(38000) << "active tool : " << m_activeTool->name() << endl;
 }
 
+void
+VToolController::unregisterTool( VTool *tool )
+{
+	// tool->name() is not valid in VTool destructor
+	QDictIterator<VTool> it( m_tools );
+	for( ; it.current(); ++it )
+		if (it.current() == tool)
+		{
+			m_tools.remove(it.currentKey());
+			return;
+		}
+}
+
 bool
 VToolController::mouseEvent( QMouseEvent* event, const KoPoint &p )
 {

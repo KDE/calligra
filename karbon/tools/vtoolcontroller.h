@@ -54,6 +54,7 @@ public:
 	void init();
 
 	void registerTool( VTool *tool );
+	void unregisterTool( VTool *tool );
 
 	void setActiveTool( VTool * );
 	VTool *activeTool() const { return m_activeTool; }
