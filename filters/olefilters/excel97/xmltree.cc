@@ -645,7 +645,7 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
 		default:
 			if(!formats[xfs[xf]->ifmt])
 			{
-				kdError() << "Formatting IFMT " << xfs[xf]->ifmt << " NOT found!" << endl;
+				kdError() << "Formatting IFMT 0x" << QString::number(xfs[xf]->ifmt, 16) << " NOT implemented!" << endl;
 				break;
 			}
 			s = QString::fromLatin1(formats[xfs[xf]->ifmt]->rgch,
