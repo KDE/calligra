@@ -240,9 +240,9 @@ public:
     // delete/reorder obejcts
     void deleteObjs( bool _add = true );
     void copyObjs( int, int );
-    void pasteObjs( int, int );
+    void pasteObjs( int, int, int );
     void savePage( const QString &file, int pgnum );
-    
+
     // repaint all views
     void repaint( bool );
 
@@ -260,7 +260,7 @@ public:
     KPObject* getSelectedObj();
 
     void restoreBackground( int );
-    void loadStream( istream& );
+    void loadStream( istream&, int );
 
     void deSelectAllObj();
 
@@ -449,7 +449,7 @@ protected:
     DCOPObject *dcop;
 
     int saveOnlyPage;
-    
+
 };
 
 #endif

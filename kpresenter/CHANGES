@@ -545,3 +545,6 @@ Reggie, 21-22.11.1999:
 - Fix in setting cursor in page
 - Replacing or deleting selected text in the txtobj works now correctly
   (cursor position is updated correctly)
+- When pasting a page set the current page number as initial page number
+  in the insert page dia
+

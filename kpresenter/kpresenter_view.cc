@@ -290,7 +290,7 @@ void KPresenterView::editPaste()
     if ( !page->kTxtObj() ) {
 	page->setToolEditMode( TEM_MOUSE );
 	page->deSelectAllObj();
-	m_pKPresenterDoc->pasteObjs( xOffset, yOffset );
+	m_pKPresenterDoc->pasteObjs( xOffset, yOffset, getCurrPgNum() );
     } else {
 	page->kTxtObj()->paste();
     }

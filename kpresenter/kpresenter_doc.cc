@@ -3340,7 +3340,7 @@ void KPresenterDoc::savePage( const QString &file, int pgnum )
 }
 
 /*========================= paste objects ========================*/
-void KPresenterDoc::pasteObjs( int diffx, int diffy )
+void KPresenterDoc::pasteObjs( int diffx, int diffy, int currPage )
 {
     deSelectAllObj();
 
@@ -3352,7 +3352,7 @@ void KPresenterDoc::pasteObjs( int diffx, int diffy )
     if ( clip_str.empty() ) return;
 
     istrstream in( clip_str.c_str() );
-    loadStream( in );
+    loadStream( in, currPage );
 
     pasting = false;
     setModified(true);
@@ -3396,7 +3396,7 @@ void KPresenterDoc::restoreBackground( int pageNum )
 }
 
 /*==================== load stream ==============================*/
-void KPresenterDoc::loadStream( istream &in )
+void KPresenterDoc::loadStream( istream &in, int currPage )
 {
     KOMLStreamFeed feed( in );
     KOMLParser parser( &feed );
@@ -3433,7 +3433,7 @@ void KPresenterDoc::loadStream( istream &in )
     if ( !insertPage )
 	loadObjects( parser, lst, true );
     else {
-	InsPageDia *dia = new InsPageDia( 0, 0, this, 1 );
+	InsPageDia *dia = new InsPageDia( 0, 0, this, currPage );
 	if ( dia->exec() == QDialog::Accepted ) {
 	    KPObject *kpobject = 0;
 	    int _h = getPageSize( 0, 0, 0 ).height();
