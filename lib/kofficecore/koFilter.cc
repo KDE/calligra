@@ -1,5 +1,6 @@
 /* This file is part of the KDE libraries
    Copyright (C) 2001 Werner Trobin <trobin@kde.org>
+                 2002 Werner Trobin <trobin@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +21,8 @@
 
 #include <qfile.h>
 
+#include <kurl.h>
+#include <kmimetype.h>
 #include <ktempfile.h>
 #include <kdebug.h>
 #include <koFilterManager.h>
@@ -41,6 +44,16 @@ KoEmbeddingFilter::~KoEmbeddingFilter()
 int KoEmbeddingFilter::lruPartIndex() const
 {
     return m_partStack.top()->m_lruPartIndex;
+}
+
+QString KoEmbeddingFilter::mimeTypeByExtension( const QString& extension )
+{
+    // We need to resort to an ugly hack to determine the mimetype
+    // from the extension, as kservicetypefactory.h isn't installed
+    KURL url;
+    url.setPath( QString( "dummy.%1" ).arg( extension ) );
+    KMimeType::Ptr m( KMimeType::findByURL( url, 0, true, true ) );
+    return m->name();
 }
 
 KoEmbeddingFilter::KoEmbeddingFilter() : KoFilter()
@@ -88,7 +101,7 @@ void KoEmbeddingFilter::endInternalEmbedding()
     filterChainLeaveDirectory();
 }
 
-int KoEmbeddingFilter::internalPartReference( const QString& key )
+int KoEmbeddingFilter::internalPartReference( const QString& key ) const
 {
     QMapConstIterator<QString, PartReference> it = m_partStack.top()->m_partReferences.find( key );
     if ( it == m_partStack.top()->m_partReferences.end() )
@@ -96,7 +109,7 @@ int KoEmbeddingFilter::internalPartReference( const QString& key )
     return it.data().m_index;
 }
 
-QCString KoEmbeddingFilter::internalPartMimeType( const QString& key )
+QCString KoEmbeddingFilter::internalPartMimeType( const QString& key ) const
 {
     QMapConstIterator<QString, PartReference> it = m_partStack.top()->m_partReferences.find( key );
     if ( it == m_partStack.top()->m_partReferences.end() )
@@ -109,7 +122,7 @@ KoEmbeddingFilter::PartReference::PartReference( int index, const QCString& mime
 {
 }
 
-bool KoEmbeddingFilter::PartReference::isValid()
+bool KoEmbeddingFilter::PartReference::isValid() const
 {
     return m_index != 1 && !m_mimeType.isEmpty();
 }

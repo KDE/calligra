@@ -1,5 +1,6 @@
 /* This file is part of the KOffice libraries
    Copyright (C) 2001 Werner Trobin <trobin@kde.org>
+                 2002 Werner Trobin <trobin@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -108,8 +109,33 @@ private:
 };
 
 
-// Note: Template method pattern
-// For all *import* filters embedding parts or images.
+/**
+ * The base class for all @em import filters embedding other filters. Right
+ * now we don't support embedding for export filters, but if there's a
+ * request for that feature please don't hesitate to contact Werner Trobin
+ * <trobin@kde.org>.
+ *
+ * To make use of embedding features you have to know that there are two kinds
+ * of embedding for filters: embedding the output of a different filter (library)
+ * or embedding the output of several internal filters (no separate library).
+ * The first case is the simpler one. You just have to override @ref savePartContents
+ * and call @ref embedPart to trigger the embedding process. One example for such
+ * a filter is Kontour's MSOD (MS Office Drawing) filter.
+ *
+ * The more complex case is embedding various streams from within the same filter
+ * library. This is neccesary for OLE like files (at least with the current design
+ * of the OLEFilter). In this case you have to use @ref startInternalEmbedding and
+ * @ref endInternalEmbedding accordingly. Try to use the previous method if possible.
+ *
+ * If you're using this class you can also setup a signal/slot communication
+ * between parent and child filter. To make that work you simply have to define
+ * signals and slots along the following rules:
+ * Signals should be named "commSignal<name>" where <name> is the name of the signal,
+ * slots should be named "commSlot<name>". The connection will be done automatically
+ * if names and signatures are matching.
+ *
+ * @author Werner Trobin
+ */
 class KoEmbeddingFilter : public KoFilter
 {
     Q_OBJECT
@@ -117,38 +143,98 @@ class KoEmbeddingFilter : public KoFilter
 public:
     virtual ~KoEmbeddingFilter();
 
-    // last recently used Part index at the current directory level
-    // will get updated when the stack is manipulated
-    // This is used to generate "unique" directory names
+    /**
+     * @internal
+     * This method returns the last recently used part index at the
+     * current directory level. It can be (and is ;) used to generate
+     * the per-directory-unique address for the next part we have to save.
+     * It will get updated automatically, you most likely don't have to
+     * care about that one at all.
+     */
     int lruPartIndex() const;
 
+    /**
+     * A static helper method to determine the mimetype via the
+     * file extension. It allows to go from "wmf" to image/x-wmf
+     * and so on. Note that you should only pass the pure extension
+     * and not a whole pattern like "*.doc" or so.
+     */
+    static QString mimeTypeByExtension( const QString& extension );
+
 protected:
+    /**
+     * Constructs a filter. Note that the m_chain pointer is 0 inside
+     * the constructor. Most likely your constructor will be empty.
+     */
     KoEmbeddingFilter();
 
-    // Embed something using another filter
-    // returns the number of the part (1,2,3,...)
-    // to.isEmpty() -> nearest part, like for exp0rt
+    /**
+     * Embed some document using an external filter (i.e. a different
+     * filter library). This method works according to the template method
+     * pattern and calls @ref savePartContents during execution.
+     * Call this method when you want to convert some data using one or more
+     * KOffice filters selected via the filter manager.
+     * This is the way to go when it comes to embedding unless you have very
+     * special requirements.
+     * @param from The mimetype of the source data
+     * @param to The mimetype of the destination part. If this field is set
+     *           to "" the filter manager will try to find the best native
+     *           KOffice mimetype. When the method returns this parameter will
+     *           hold the string of the used mimetype.
+     * @param status Returns the error status of the filter
+     * @param key Optional key field to allow custom keys inside the part
+     *        map (see @ref internalPartReference). If this field is left
+     *        empty we generate a key from the part number (e.g. 1 -> "1")
+     * @return The number of the part (can be used to refer to the part from
+     *         within the embedding filter).
+     */
     int embedPart( const QCString& from, QCString& to,
                    KoFilter::ConversionStatus& status,
                    const QString& key = QString::null );
 
-    // Embed something within your filter
-    // Changes the storage directory and messes with some
-    // bookkeeping data structures
+    /**
+     * Method to perform "internal" embedding of parts in olefilter-style.
+     * This method can be used to signal the start of a new embedding
+     * level within your filter. Very evil, but what shall I say ;)
+     * Unless you really have to you should always use @ref embedPart as
+     * it's easier to use and not as hacky.
+     * @param key The key we use to store reference/mimetype of your new part
+     * @param mimeType The mimetype of the part you're about to embed
+     */
     void startInternalEmbedding( const QString& key, const QCString& mimeType );
+    /**
+     * This method signals the end of an internal embedding session.
+     * You have to call that exactly as often as you call @ref startInternalEmbedding
+     * or you'll mess up the internal stack and your file will be invalid.
+     * Again: use @ref embedPart if you can :-)
+     */
     void endInternalEmbedding();
 
-    // -1 if not found
-    int internalPartReference( const QString& key );
-    QCString internalPartMimeType( const QString& key );
+    /**
+     * Query the internal part map for the reference of the part
+     * matching the given key. Note that you can use that plain
+     * simple int to refer to the respective part (when used as string).
+     * @param key The key you would like to look up
+     * @return The reference or -1 if we didn't find a part with the
+     *         given key
+     */
+    int internalPartReference( const QString& key ) const;
+    /**
+     * Query the internal part map for the mimetype of the part
+     * matching the given key.
+     * @param key The key you would like to look up
+     * @return The mimetype, might be empty if the part matching
+     *         the given key doesn't exist.
+     */
+    QCString internalPartMimeType( const QString& key ) const;
 
 private:
     // Holds the directory's number and the mimetype of the part
-    // for internal parts
+    // for internal parts. This is all we need to locate a part.
     struct PartReference
     {
         PartReference( int index = -1, const QCString& mimeType = "" );
-        bool isValid();
+        bool isValid() const;
 
         int m_index;
         QCString m_mimeType;
@@ -156,6 +242,8 @@ private:
 
     // This struct keeps track of the last used index for a
     // child part and all references to existing children
+    // We use it to build a whole stack, one PartState per
+    // embedding level.
     struct PartState
     {
         PartState();
@@ -164,16 +252,29 @@ private:
         QMap<QString, PartReference> m_partReferences;
     };
 
+    // Better don't copy or assign the filters
     KoEmbeddingFilter( const KoEmbeddingFilter& rhs );
     KoEmbeddingFilter& operator=( const KoEmbeddingFilter& rhs );
 
-    // method related to embedPart()
-    // Save the contents to this (already opened) file
+    /**
+     * This method will be called by @ref embedPart as soon as it
+     * needs the data of the part (template method pattern). You
+     * have to override that and simply save the part data to the
+     * (already opened) file.
+     * No need to override that when you're not using @ref embedPart
+     * (as you should ;)
+     * @param file An already opened file
+     */
     virtual void savePartContents( QIODevice* file );
 
+    // Internal methods to support the start/endInternalEmbedding
+    // methods (we have to change directories and stuff).
+    // These methods are declared friends of the KoFilterChain
     void filterChainEnterDirectory( const QString& directory ) const;
     void filterChainLeaveDirectory() const;
 
+    // A stack which keeps track of the current part references.
+    // We push one PartState structure for every embedding level.
     QPtrStack<PartState> m_partStack;
 
     class Private;

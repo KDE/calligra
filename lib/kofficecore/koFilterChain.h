@@ -242,8 +242,9 @@ private:
     IOState m_inputQueried, m_outputQueried;
 
     // This stack keeps track of directories we have to enter and
-    // leave due to internal embedding a la OLE filters.
-    // I know that it's crap, and I'll try to clean up that hack
+    // leave due to internal embedding a la OLE filters. This serves
+    // as a kind of "memory" even if we didn't initialize the store yet.
+    // I know that it's ugly, and I'll try to clean up that hack
     // sooner or later (Werner)
     QStringList m_internalEmbeddingDirectories;
 

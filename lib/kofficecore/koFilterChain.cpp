@@ -205,7 +205,7 @@ QString KoFilterChain::inputFile()
 QString KoFilterChain::outputFile()
 {
     // sanity check: No embedded filter should ask for a plain file
-    // ###### CHECK
+    // ###### CHECK: This will break as soon as we support exporting embedding filters
     if ( filterManagerParentChain() )
         kdWarning( 30500 )<< "An embedded filter has to use storageFile()!" << endl;
 
@@ -280,7 +280,7 @@ KoDocument* KoFilterChain::inputDocument()
 KoDocument* KoFilterChain::outputDocument()
 {
     // sanity check: No embedded filter should ask for a document
-    // ###### CHECK
+    // ###### CHECK: This will break as soon as we support exporting embedding filters
     if ( filterManagerParentChain() ) {
         kdWarning( 30500 )<< "An embedded filter has to use storageFile()!" << endl;
         return 0;
