@@ -288,14 +288,14 @@ bool KoDocument::saveFile()
   } else {
     // Native format => normal save
     ret = saveNativeFormat( m_file );
+  }
 
-    if ( ret )
-    {
-        // Eliminate any auto-save file
-        QString asf = autoSaveFile( m_file );
-        if ( QFile::exists( asf ) )
-            unlink( QFile::encodeName( asf ) );
-    }
+  if ( ret )
+  {
+    // Eliminate any auto-save file
+    QString asf = autoSaveFile( m_file );
+    if ( QFile::exists( asf ) )
+      unlink( QFile::encodeName( asf ) );
   }
 
   QApplication::restoreOverrideCursor();
