@@ -1,9 +1,13 @@
 [Desktop Entry]
+Encoding=UTF-8
 Icon=
 Name=Karbon14 WMF Export Filter
+Name[ar]=مِرْشَح تصدير WMF لدى Karbon14
 Name[bg]=Филтър за експорт от Karbon14 в WMF
+Name[br]=Sil ezporzh WMF evit Karbon14
 Name[ca]=Filtre d'exportació WMF per a Karbon14
 Name[cs]=Exportní filtr do formátu WMF pro Karbon14
+Name[cy]=Hidl Allforio WMF Karbon14
 Name[da]=Karbon14 WMF-eksportfilter
 Name[de]=WMF-Exportfilter für Karbon14
 Name[el]=Φίλτρο εξαγωγής WMF του Karbon14
@@ -26,7 +30,10 @@ Name[sk]=WFM filter pre export z Karbon14
 Name[sl]=Izvozni filter WMF za Karbon14
 Name[sr]=Karbon14-ов филтер за извоз у WMF
 Name[sv]=Karbon14 WMF-exportfilter
+Name[ta]=Karbon 14 WNF   ஏற்றுமதி வடிகட்டி 
+Name[tg]=Karbon14 WMF Филтри Содирот
 Name[tr]=Karbon14 WMF Aktarma Filtresi
+Name[uz]=Karbon14 WMF экспорт филтери
 Name[xx]=xxKarbon14 WMF Export Filterxx
 Name[zh_CN]=Karbon14 WMF 导出过滤器
 ServiceTypes=KOfficeFilter

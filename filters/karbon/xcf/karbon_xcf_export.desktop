@@ -1,8 +1,11 @@
 [Desktop Entry]
+Encoding=UTF-8
 Icon=
 Name=Karbon14 Gimp Export Filter
 Name[af]=Karbon14 Gimp Voer uit Filter
+Name[ar]=مِرْشَح تصدير Gimp لدى Karbon14
 Name[bg]=Филтър за експорт от Karbon14 в Gimp
+Name[br]=Sil ezporzh Gimp evit Karbon14
 Name[ca]=Filtre d'exportació Gimp per a Karbon14
 Name[cs]=Exportní filtr do formátu Gimp pro Karbon
 Name[cy]=Hidl Allforio Gimp Karbon14
@@ -33,7 +36,10 @@ Name[sk]=GIMP filter pre export z Karbon14
 Name[sl]=Izvozni filter Gimp za Karbon14
 Name[sr]=Karbon14-ов филтер за извоз у Gimp-а
 Name[sv]=Karbon14 Gimp-exportfilter
+Name[ta]=Karbon 14 gimp   ஏற்றுமதி வடிகட்டி
+Name[tg]=Karbon14 Gimp Филтри Содирот
 Name[tr]=Karbon14 Gimp Aktarma Filtresi
+Name[uz]=Karbon14 Gimp экспорт филтери
 Name[xh]=Isihluzi Sokurhweba ngaphandle se Karbon14 Gimp
 Name[xx]=xxKarbon14 Gimp Export Filterxx
 Name[zh_CN]=Karbon14 Gimp 导出过滤器
