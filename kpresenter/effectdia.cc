@@ -148,10 +148,6 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     appearSoundEffect = new QCheckBox( i18n( "Sound effect" ), grp1 );
     appearSoundEffect->setChecked( obj->getAppearSoundEffect() );
     upperRow->addWidget( appearSoundEffect, 4, 0 );
-    QWhatsThis::add( appearSoundEffect, i18n("If you use sound effect, please do not select 'No Effect'.") );
-
-    if ( static_cast<int>( obj->getEffect() ) == 0 )
-        appearSoundEffect->setEnabled( false );
 
     connect( appearSoundEffect, SIGNAL( clicked() ), this, SLOT( appearSoundEffectChanged() ) );
 
@@ -242,10 +238,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     disappearSoundEffect = new QCheckBox( i18n( "Sound effect" ), grp2 );
     disappearSoundEffect->setChecked( obj->getDisappearSoundEffect() );
     lowerRow->addWidget( disappearSoundEffect, 3, 0 );
-    QWhatsThis::add( disappearSoundEffect, i18n("If you use sound effect, please do not select 'No Effect'.") );
-
-    if ( static_cast<int>( obj->getEffect3() ) == 0 )
-        disappearSoundEffect->setEnabled( false );
+    disappearSoundEffect->setEnabled( disappear->isChecked() );
 
     connect( disappearSoundEffect, SIGNAL( clicked() ), this, SLOT( disappearSoundEffectChanged() ) );
 
@@ -348,6 +341,8 @@ void EffectDia::disappearChanged()
 {
     cDisappear->setEnabled( disappear->isChecked() );
     eDisappearStep->setEnabled( disappear->isChecked() );
+    disappearSoundEffect->setEnabled( disappear->isChecked() );
+    disappearSoundEffectChanged();
 
     if ( !view->kPresenterDoc()->spManualSwitch() )
         timerOfDisappear->setEnabled( disappear->isChecked() );
@@ -355,32 +350,10 @@ void EffectDia::disappearChanged()
 
 void EffectDia::appearEffectChanged( int num )
 {
-    if ( num == 0 ) {
-        appearSoundEffect->setEnabled( false );
-        lSoundEffect1->setEnabled( false );
-        requester1->setEnabled( false );
-        buttonTestPlaySoundEffect1->setEnabled( false );
-        buttonTestStopSoundEffect1->setEnabled( false );
-    }
-    else {
-        appearSoundEffect->setEnabled( true );
-        appearSoundEffectChanged();
-    }
 }
 
 void EffectDia::disappearEffectChanged( int num )
 {
-    if ( num == 0 ) {
-        disappearSoundEffect->setEnabled( false );
-        lSoundEffect2->setEnabled( false );
-        requester2->setEnabled( false );
-        buttonTestPlaySoundEffect2->setEnabled( false );
-        buttonTestStopSoundEffect2->setEnabled( false );
-    }
-    else {
-        disappearSoundEffect->setEnabled( true );
-        disappearSoundEffectChanged();
-    }
 }
 
 void EffectDia::appearSoundEffectChanged()
@@ -400,12 +373,12 @@ void EffectDia::appearSoundEffectChanged()
 
 void EffectDia::disappearSoundEffectChanged()
 {
-    lSoundEffect2->setEnabled( disappearSoundEffect->isChecked() );
-    requester2->setEnabled( disappearSoundEffect->isChecked() );
+    lSoundEffect2->setEnabled( disappear->isChecked() && disappearSoundEffect->isChecked() );
+    requester2->setEnabled( disappear->isChecked() && disappearSoundEffect->isChecked() );
 
     if ( !requester2->url().isEmpty() ) {
-        buttonTestPlaySoundEffect2->setEnabled( disappearSoundEffect->isChecked() );
-        buttonTestStopSoundEffect2->setEnabled( disappearSoundEffect->isChecked() );
+        buttonTestPlaySoundEffect2->setEnabled( disappear->isChecked() && disappearSoundEffect->isChecked() );
+        buttonTestStopSoundEffect2->setEnabled( disappear->isChecked() && disappearSoundEffect->isChecked() );
     }
     else {
         buttonTestPlaySoundEffect2->setEnabled( false );

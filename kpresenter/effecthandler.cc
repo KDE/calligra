@@ -50,7 +50,7 @@ EffectHandler::EffectHandler( int step, int subStep, bool back, QPaintDevice *ds
               && object->getEffect2() == EF2T_PARA ) ) )
         {
             m_appearEffectObjects.append( object );
-            if ( object->getEffect() != EF_NONE && object->getAppearSoundEffect() )
+            if ( object->getAppearSoundEffect() )
             {
                 m_soundEffect = object->getAppearSoundEffectFileName();
             }
@@ -63,7 +63,7 @@ EffectHandler::EffectHandler( int step, int subStep, bool back, QPaintDevice *ds
         else if ( object->getDisappear() && object->getDisappearStep() == m_step )
         {
             m_disappearEffectObjects.append( object );
-            if ( object->getEffect3() != EF3_NONE && object->getDisappearSoundEffect() )
+            if ( object->getDisappearSoundEffect() )
             {
                 m_soundEffect = object->getDisappearSoundEffectFileName();
             }

@@ -3260,7 +3260,7 @@ bool KPrCanvas::pNext( bool )
         bool _soundEffect = backtmp->getPageSoundEffect();
         QString _soundFileName = backtmp->getPageSoundFileName();
 
-        if ( _pageEffect != PEF_NONE && _soundEffect && !_soundFileName.isEmpty() ) {
+        if ( _soundEffect && !_soundFileName.isEmpty() ) {
             stopSound();
             playSound( _soundFileName );
         }
