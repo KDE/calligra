@@ -32,6 +32,12 @@
 #include "kspread_doc.h"
 #include "kspread.h"
 
+// HACK: For KScript
+extern CORBA::ORB* orb()
+{
+  return komapp_orb;
+}
+
 KOFFICE_DOCUMENT_FACTORY( KSpreadDoc, KSpreadFactory, KSpread::DocumentFactory_skel )
 typedef OPAutoLoader<KSpreadFactory> KSpreadAutoLoader;
 

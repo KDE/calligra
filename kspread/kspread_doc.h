@@ -21,6 +21,7 @@
 #define __kspread_doc_h__
 
 class KSpreadDoc;
+class KSInterpreter;
 
 #include <koFrame.h>
 #include <koDocument.h>
@@ -35,16 +36,15 @@ class KSpreadDoc;
 // #include <qprinter.h>
 #include <qpen.h>
 
-#include "kmetaedit.h"
-
 #include "kspread.h"
-#include "kspread_python.h"
 #include "kspread_undo.h"
 #include "kspread_view.h"
 #include "kspread_map.h"
 
 #include <koPageLayoutDia.h>
 
+#include <kscript.h>
+#include <kscript_value.h>
 
 #define MIME_TYPE "application/x-kspread"
 #define EDITOR "IDL:KSpread/Document:1.0"
@@ -202,15 +202,45 @@ public:
   void setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
 			const char *_footl, const char *_footm, const char *_footr );
     
-  KSpreadPythonModule *pythonModule() { return m_pPython; }
-  void reloadScripts();
-  
-  void runPythonCode();
-  bool editPythonCode();
-  void endEditPythonCode();
-  
+  /**
+   * @return the KScript Interpreter used by this document.
+   */
+  KSInterpreter* interpreter() { return m_pInterpreter; }
+  /**
+   * Kills the interpreter and creates a new one and
+   * reloads all scripts. This is useful if they have been
+   * edited and the changes should take effect.
+   */
+  void resetInterpreter();
+  /**
+   * Searches in all KSpread extension modules for the keyword.
+   * The most specific ones are searches first. The modules in the
+   * users apps/kspread directory are considered to be more specific
+   * then the global ones.
+   *
+   * @see #kscriptMap
+   * @see #kscriptModules;
+   */
+  KSValue* lookupKeyword( const QString& keyword );
+  /**
+   * Searches for a class in the kscript module of the KSpread interface.
+   * This is needed to create proxies for KSpread objects in the kscript
+   * environment.
+   */
+  KSValue* lookupClass( const QString& name );
+
+  /**
+   * Undo the last operation.
+   */
   void undo();
+  /**
+   * Redo the last undo.
+   */
   void redo();
+  /**
+   * @return the object that is respnsible for keeping track
+   *         of the undo buffer.
+   */
   KSpreadUndo *undoBuffer() { return m_pUndoBuffer; }
   
   virtual void printMap( QPainter &_painter );
@@ -218,13 +248,12 @@ public:
   void enableUndo( bool _b );
   void enableRedo( bool _b );
 
+  /**
+   * @return TRUE if the document is currently loading.
+   */
   bool isLoading() { return m_bLoading; }
 
-  int docId() { return m_docId; }
-
   const QPen& defaultGridPen() { return m_defaultGridPen; }
-    
-  static KSpreadDoc* find( int _doc_id ); 
 
 public slots:
   /**
@@ -236,7 +265,13 @@ public slots:
   
 signals:
   // Document signals
+  /** 
+   * Emitted if a new table is added to the document.
+   */
   void sig_addTable( KSpreadTable *_table );
+  /**
+   * Emitted if all views have to be updated.
+   */
   void sig_updateView();
   
 protected:
@@ -246,8 +281,14 @@ protected:
   virtual void draw( QPaintDevice*, CORBA::Long _width, CORBA::Long _height,
 		     CORBA::Float _scale );
 
+  /**
+   * Overloaded function of @ref KoDocument.
+   */
   virtual bool completeLoading( KOStore::Store_ptr );
 
+  /**
+   * Overloaded function of @ref KoDocument.
+   */
   virtual void makeChildListIntern( KOffice::Document_ptr _root, const char *_path );
   
   /**
@@ -259,7 +300,19 @@ protected:
    */
   virtual bool hasToWriteMultipart();
   
-  void initPython();
+  /**
+   * Initializes the KScript Interpreter.
+   */
+  void initInterpreter();
+  /**
+   * Destroys the interpreter.
+   */
+  void destroyInterpreter();
+  /**
+   * @return the full qualified filenames of scripts in
+   *         the requested path.
+   */
+  QStringList findScripts( const QString& path );
 
   /**
    * Looks at @ref #m_paperFormat and calculates @ref #m_paperWidth and @ref #m_paperHeight.
@@ -275,8 +328,14 @@ protected:
    */
   QString completeHeading( const char *_data, int _page, const char *_KSpreadTable );
 
-  virtual const char* copyright() { return "kspread (c) Torben Weis, <weis@kde.org> 1998"; }
+  /**
+   * Overloaded function of @ref KoDocument.
+   */
+  virtual const char* copyright() { return "kspread (c) Torben Weis, <weis@kde.org> 1998,1999"; }
 
+  /**
+   * Pointer to the map that holds all the tables.
+   */
   KSpreadMap *m_pMap;
   
   /**
@@ -322,11 +381,35 @@ protected:
    */
   float m_bottomBorder;
   
+  /**
+   * Header string. The string may contains makros. That means
+   * it has to be processed before printing.
+   */
   QString m_headLeft;
+  /**
+   * Header string. The string may contains makros. That means
+   * it has to be processed before printing.
+   */
   QString m_headRight;
+  /**
+   * Header string. The string may contains makros. That means
+   * it has to be processed before printing.
+   */
   QString m_headMid;
+  /**
+   * Footer string. The string may contains makros. That means
+   * it has to be processed before printing.
+   */
   QString m_footLeft;
+  /**
+   * Footer string. The string may contains makros. That means
+   * it has to be processed before printing.
+   */
   QString m_footRight;
+  /**
+   * Footer string. The string may contains makros. That means
+   * it has to be processed before printing.
+   */
   QString m_footMid;
   
   /**
@@ -343,28 +426,51 @@ protected:
    * @see #isModified
    */
   bool m_bModified;
+  /**
+   * TRUE if the document is empty.
+   */
   bool m_bEmpty;
   
-  KSpreadPythonModule *m_pPython;
-  
-  KMetaEditor *m_pEditor;
   /**
-   * Used by @ref #editor
+   * This variable hold the KScript Interpreter.
    */
-  QString m_editorBuffer;
-  
+  KSInterpreter::Ptr m_pInterpreter;
+  /**
+   * Maps keywords to their kscript value. These
+   * keywords are usually functions. This map is used
+   * for quick keyword lookup.
+   *
+   * @see #lookupKeyword
+   */
+  QMap<QString,KSValue::Ptr> m_kscriptMap;
+  /**
+   * This list contains the logical names of all modules
+   * which contains KSpread extensions. These modules are
+   * located in the apps/kspread directory in the global
+   * and the users environment. If a module of the same name
+   * exists in both environments, then the most specific one
+   * is in this list and the other one is dropped.
+   *
+   * @see #lookupKeyword
+   */
+  QStringList m_kscriptModules;
+  /**
+   * Used for undo.
+   */
   KSpreadUndo *m_pUndoBuffer;
   
+  /**
+   * All views associetaed with this document.
+   */
   QList<KSpreadView> m_lstViews;
   
+  /**
+   * TRUE if loading is in process, otherwise FALSE.
+   * This flag is used to avoid updates etc. during loading.
+   */
   bool m_bLoading;
 
-  int m_docId;
-
   QPen m_defaultGridPen;
-  
-  static int s_docId;
-  static QIntDict<KSpreadDoc>* s_mapDocuments;
 };
 
 #endif

@@ -24,6 +24,10 @@
 
 class KSpreadTable;
 
+/**
+ * This struct is used to hold one of the KSpread data types.
+ * It is used during evaluation of some formula.
+ */
 struct KSpreadValue
 {
   enum ValueType { DoubleType, RangeType, BoolType, ErrorType };

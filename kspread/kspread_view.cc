@@ -908,15 +908,12 @@ void KSpreadView::italic()
 
 void KSpreadView::reloadScripts()
 {
-  m_pDoc->reloadScripts(); // reload global scripts
-  m_pDoc->endEditPythonCode(); // get local scripts from file -> probably
-  // should be moved to another menu item. Hum, not sure about the UI.
+  // TODO
 }
 
 void KSpreadView::runLocalScript()
 {
-  debug("KSpreadView::runLocalScript()");
-  m_pDoc->runPythonCode();
+  // TODO
 }
 
 void KSpreadView::editGlobalScripts()
@@ -929,11 +926,12 @@ void KSpreadView::editGlobalScripts()
 
 void KSpreadView::editLocalScripts()
 {
-  if ( !m_pDoc->editPythonCode() )
+  // TODO
+  /* if ( !m_pDoc->editPythonCode() )
   {
     QMessageBox::message( i18n( "KSpread Error" ), i18n( "Could not start editor" ) );
     return;
-  }
+    } */
 }
 
 void KSpreadView::addTable( KSpreadTable *_t )
@@ -1320,8 +1318,7 @@ void KSpreadView::resizeEvent( QResizeEvent * )
     m_pVertScrollBar->setGeometry( width() - 20, top , 20, height() - 20 - top );
     m_pVertScrollBar->show();
 
-    
-	m_pFrame->setGeometry( 0, top, width() - 20, height() - 20 - top );
+    m_pFrame->setGeometry( 0, top, width() - 20, height() - 20 - top );
     m_pFrame->show();
 
     m_pCanvas->setGeometry( YBORDER_WIDTH, XBORDER_HEIGHT,

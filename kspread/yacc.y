@@ -78,19 +78,71 @@ power: power '^' atom { $$ = pow( $<dbl>1, $<dbl>3 ); }
      | atom { $$ = $<dbl>1; }
 ;
 
-atom: '(' exp ')' { $$ = $<dbl>2; }
-   | WENN '(' bool_exp ';' exp ';' exp ')' { if ( $<b>3 ) $$ = $<dbl>5; else $$ = $<dbl>7; }
-   | ID '(' args ')' { double res; int e = funcDbl( $<name>1, $<param>3, &res ); if ( e != 0 ) setError( e, $<name>1 ); $$ = res; }
-   | ID '(' ')' { double res; int e = funcDbl( $<name>1, newArgList(), &res ); if ( e != 0 ) setError( e, $<name>1 ); $$ = res; }
-   | NUM { $$ = $<dbl>1; }
+atom
+   : '(' exp ')'
+     {
+       $$ = $<dbl>2;
+     }
+   | WENN '(' bool_exp ';' exp ';' exp ')'
+     {
+       if ( $<b>3 )
+	 $$ = $<dbl>5;
+       else
+	 $$ = $<dbl>7;
+     }
+   | ID '(' args ')'
+     {
+       double res;
+       int e = funcDbl( $<name>1, $<param>3, &res ); 
+       if ( e != 0 )
+	 setError( e, $<name>1 );
+       $$ = res;
+     }
+   | ID '(' ')'
+     {
+       double res;
+       int e = funcDbl( $<name>1, newArgList(), &res );
+       if ( e != 0 )
+	 setError( e, $<name>1 );
+       $$ = res;
+     }
+   | NUM
+     {
+       $$ = $<dbl>1;
+     }
 ;
 
-args: args ';' exp { addDbl( $<param>1, $<dbl>3 ); $$ = $<param>1; }
-    | args ';' bool_exp { addBool( $<param>1, $<b>3 ); $$ = $<param>1; }
-    | args ';' RANGE { addRange( $<param>1, $<range>3 ); $$ = $<param>1; }
-    | exp { void* l = newArgList(); addDbl( l, $<dbl>1 ); $$ = l; }
-    | bool_exp { void* l = newArgList(); addBool( l, $<b>1 ); $$ = l; }
-    | RANGE { void* l = newArgList(); addRange( l, $<range>1 ); $$ = l; }
+args
+    : args ';' exp
+      {
+	addDbl( $<param>1, $<dbl>3 ); $$ = $<param>1;
+      }
+    | args ';' bool_exp
+      {
+	addBool( $<param>1, $<b>3 ); $$ = $<param>1;
+      }
+    | args ';' RANGE
+      {
+	addRange( $<param>1, $<range>3 );
+	$$ = $<param>1;
+      }
+    | exp
+      {
+	void* l = newArgList();
+	addDbl( l, $<dbl>1 );
+	$$ = l;
+      }
+    | bool_exp
+      {
+	void* l = newArgList();
+	addBool( l, $<b>1 ); $$ = l;
+      }
+    | RANGE
+      {
+	void* l = newArgList();
+	addRange( l, $<range>1 );
+	$$ = l;
+      }
 ;
 
 bool_exp: bool_exp OR bool_and { $$ = $<b>1 || $<b>3; }

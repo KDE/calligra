@@ -26,12 +26,11 @@
 #include <qdrawutl.h>
 #include <qpoint.h>
 #include <qpointarray.h>
-#include <qsimplerichtext.h>
+#include <qsimpletextdocument.h>
 #include <qpopupmenu.h>
 
 #include "kspread_table.h"
 #include "kspread_canvas.h"
-#include "kspread_python.h"
 #include "kspread_map.h"
 #include "kspread_cell.h"
 #include "kspread_calc.h"
@@ -238,6 +237,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
   if ( m_strAction.isEmpty() )
     return;
 
+  // TODO: Execute KScript code here
   // TODO if ( !m_pTable->doc()->pythonModule()->setContext( m_pTable ) )
   // {
   // cerr << "Could not set context" << endl;
@@ -1922,7 +1922,7 @@ void KSpreadCell::setText( const QString& _text )
     if ( isFormular() )
       clearFormular();
 
-    m_pQML = new QSimpleRichText( m_strText.mid(1) );//, m_pTable->widget() );
+    m_pQML = new QSimpleTextDocument( m_strText.mid(1) );//, m_pTable->widget() );
 
     m_bValue = false;
     m_bBool = false;

@@ -128,6 +128,7 @@ bool KSpreadShell::newDocument()
   }
 
   m_pView = m_pDoc->createSpreadView( getFrame() );
+
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   cerr << "*1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;

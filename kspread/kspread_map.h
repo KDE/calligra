@@ -102,25 +102,15 @@ public:
    * @return amount of tables in this map.
    */
   int count() { return m_lstTables.count(); }
-  
-  bool movePythonCodeToFile();
-  bool getPythonCodeFromFile();
-  const char* getPythonCodeFile() { return m_strPythonCodeFile.data(); }
-  bool isPythonCodeInFile() { return m_bPythonCodeInFile; }
-  const char* getPythonCode() { return m_strPythonCode.data(); }
-  
+    
   void update();
   
-  int mapId() { return m_mapId; }
-
   /**
    * Needed for the printing Extension KOffice::Print
    */
   void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
 	       CORBA::Float _scale );
   
-  static KSpreadMap* find( int _map_id );  
-
 protected:
   /**
    * List of all tables in this map. The list has autodelete turned on.
@@ -131,15 +121,6 @@ protected:
    * Pointer to the part which holds this map.
    */
   KSpreadDoc *m_pDoc;
-  
-  QString m_strPythonCode;
-  bool m_bPythonCodeInFile;
-  QString m_strPythonCodeFile;
-  
-  int m_mapId;
-  
-  static int s_mapId;
-  static QIntDict<KSpreadMap>* s_mapMaps;
 };
 
 #endif

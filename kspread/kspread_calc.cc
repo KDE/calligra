@@ -37,6 +37,7 @@
 
 typedef QValueList<KSpreadValue> valuelist;
 
+// These functions are called from the YACC parser
 extern "C" 
 {
   extern double cellValue( void* _table, int _x, int _y );
@@ -62,6 +63,7 @@ extern "C"
   extern void addRange( void* _args, void* _range );
 }
 
+// Used to hold the result of some evaluation
 KSpreadValue g_result;
 
 QList<KSpreadRange>* g_lstRanges = 0L;
@@ -71,24 +73,36 @@ KSpreadTable* g_pTable = 0L;
 QString g_errorText;
 int g_errno;
 
+/**
+ * Called from yacc once the calculation
+ * is finished.
+ */
 void setResult( double _res )
 {
   g_result.value.d = _res;
   g_result.type = KSpreadValue::DoubleType;
 }
 
+/**
+ * Called from yacc once the calculation
+ * is finished and if the formula was of
+ * boolean type.
+ */
 void setResultBool( char _res )
 {
-  debug("Setting Result Bool %i", (int)_res);
-  
   g_result.value.b = (bool)_res;
   g_result.type = KSpreadValue::BoolType;
 }
 
+/**
+ * Creates a new argument list. These lists
+ * are used to hold parameters for a function call.
+ */
 void* newArgList()
 {
   valuelist* a = new valuelist;
 
+  // Use the garbage collection
   if ( g_lstArgs == 0 )
   {
     g_lstArgs = new QList<valuelist>;
@@ -99,6 +113,9 @@ void* newArgList()
   return a;
 }
 
+/**
+ * Add a double value to the argument list.
+ */
 void addDbl( void* _args, double _v )
 {
   valuelist* a = (valuelist*)_args;
@@ -108,6 +125,9 @@ void addDbl( void* _args, double _v )
   a->append( x );
 }
 
+/**
+ * Add a boolean value to the argument list.
+ */
 void addBool( void* _args, char _v )
 {
   valuelist* a = (valuelist*)_args;
@@ -117,6 +137,9 @@ void addBool( void* _args, char _v )
   a->append( x );
 }
 
+/**
+ * Add a range to the argument list.
+ */
 void addRange( void* _args, void* _range )
 {
   valuelist* a = (valuelist*)_args;
@@ -126,14 +149,34 @@ void addRange( void* _args, void* _range )
   a->append( x );
 }
 
+/**
+ * Dispatches all functions which take one argument of type range.
+ *
+ * @return -1 if no such function is known. Only builtin functions
+ *         are handled in this function.
+ */
 int rfunc1( const char *_name, KSpreadRange* _arg, double* _res );
+/**
+ * Dispatches all functions which take one argument of type double.
+ *
+ * @return -1 if no such function is known. Only builtin functions
+ *         are handled in this function.
+ */
 int func1( const char *_name, double _arg, double* _res );
 
+/**
+ * Called from YACC if a function has to be avaulated in a
+ * boolean environment.
+ */
 int funcBool( const char* _name, void* _args, char* _res )
 {
   return -1;
 }
 
+/**
+ * Called from YACC if a function has to be avaulated in a
+ * floating point environment.
+ */
 int funcDbl( const char* _name, void* _args, double* _res )
 {
   valuelist* a = (valuelist*)_args;
@@ -151,7 +194,8 @@ int funcDbl( const char* _name, void* _args, double* _res )
   if ( ret != -1 )
     return ret;
 
-  // Python  
+  // TODO: Use KScript here!
+  /*
   {
     QString cmd = _name;
     cmd += "( ";
@@ -204,17 +248,9 @@ int funcDbl( const char* _name, void* _args, double* _res )
     Py_DECREF( obj );
     
     cerr << "return value is not a double" << endl;
-  
-    /* char *str;
-       if ( !PyArg_Parse( v, "s", &str ) )
-       {
-       printf(" Could not parse\n");
-       return FALSE;
-       }
-       _result = (const char*)str; */
-    
+      
   }
-  
+  */
   return -1;
 }
 

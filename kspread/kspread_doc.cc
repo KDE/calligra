@@ -18,6 +18,8 @@
 */
 
 #include <qprinter.h>
+#include <qmessagebox.h>
+
 #include "kspread_doc.h"
 #include "kspread_shell.h"
 
@@ -40,143 +42,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-int documentCount = 0;
-int moduleCount = 0;
-
-PyObject * xcl_Cell( PyObject* self, PyObject *args);
-PyObject * xcl_SetCell( PyObject*, PyObject *args);
-PyObject * xcl_ParseRange( PyObject*, PyObject *args);
-
-struct PyMethodDef xcl_methods[] = {
-    {"cell",	xcl_Cell, 1},
-    {"setCell",	xcl_SetCell, 1},
-    {"parseRange", xcl_ParseRange, 1},
-    {NULL,		NULL}		/* sentinel */
-};
-
-PyObject * xcl_Cell( PyObject*, PyObject *args)
-{
-  int tableid;
-  int row, column;
-  int docid;
-
-  if ( !PyArg_ParseTuple( args, "iiii", &docid, &tableid, &column, &row ) )
-  {
-    printf("ERROR: Could not parse\n");
-    return NULL;
-  }
-
-  /*
-  KSpreadDoc* doc = KSpreadDoc::find( docid );
-  if ( !doc )
-  {
-    cerr << "ERROR: Unknown document " << docid << endl;
-    return NULL;
-  }
-  */
-  KSpreadTable *t = KSpreadTable::find( tableid );
-  if ( t == 0L )
-  {
-    cerr << "ERROR: Unknown table " << tableid << endl;
-    return NULL;
-  }
-
-  KSpreadCell *obj = t->cellAt( column, row );
-
-  if ( obj->isValue() )
-    return Py_BuildValue( "d", (double)obj->valueDouble() );
-  else if ( obj->valueString() != NULL )
-    return Py_BuildValue( "s", obj->valueString() );
-  else
-    return Py_BuildValue( "s", "" );
-}
-
-PyObject * xcl_SetCell( PyObject*, PyObject *args)
-{
-  int tableid;
-  int row, column;
-  const char* value;
-  int docid;
-
-  if ( PyArg_ParseTuple( args, "iiiis", &docid, &tableid, &column, &row, &value ) )
-  {
-    /* KSpreadDoc* doc = KSpreadDoc::find( docid );
-    if ( !doc )
-    {
-      cerr << "ERROR: Unknown document " << docid << endl;
-      return NULL;
-    }
-    */
-    KSpreadTable *t = KSpreadTable::find( tableid );
-    if ( t == 0L )
-    {
-      cerr << "ERROR: Unknown table " << tableid << endl;
-      return NULL;
-    }
-    KSpreadCell *obj = t->nonDefaultCell( column, row );
-
-    obj->setText( value );
-    return Py_None;
-  }
-
-  double dvalue;
-  if ( !PyArg_ParseTuple( args, "iiiid", &docid, &tableid, &column, &row, &dvalue ) )
-  {
-    printf("ERROR: Could not parse\n");
-    return NULL;
-  }
-
-  /* KSpreadDoc* doc = KSpreadDoc::find( docid );
-  if ( !doc )
-  {
-    cerr << "ERROR: Unknown document " << docid << endl;
-    return NULL;
-  } */
-
-  KSpreadTable *t = KSpreadTable::find( tableid );
-  if ( t == 0L )
-  {
-    cerr << "ERROR: Unknown table " << tableid << endl;
-    return NULL;
-  }
-
-  KSpreadCell *obj = t->nonDefaultCell( column, row );
-  obj->setValue( dvalue );
-  return Py_None;
-}
-
-PyObject * xcl_ParseRange( PyObject*, PyObject *)
-{
-  /* const char* range;
-  int docid;
-  int tabelid; */
-  /*
-  if ( !PyArg_ParseTuple( args, "iis", &docid, &tableid, &range ) )
-  {
-    printf("ERROR: Could not parse\n");
-    return NULL;
-  }
-
-  KSpreadDoc* doc = KSpreadDoc::find( docid );
-  if ( !doc )
-  {
-    cerr << "ERROR: Unknown document " << docid << endl;
-    return NULL;
-  }
-
-  KSpreadTable *t = doc->map()->findTable( table );
-  if ( t == 0L )
-  {
-    cerr << "ERROR: Unknown table " << table << endl;
-    return NULL;
-  }
-
-  KSpreadCell *obj = t->cellAt( column, row );
-  */
-
-  // Returns ( table, col1, row1, col2, row2 )
-  return Py_BuildValue( "(iiiii)",2,5,8,7,6 );
-}
+#include <kscript_context.h>
 
 /*****************************************************************************
  *
@@ -184,29 +50,12 @@ PyObject * xcl_ParseRange( PyObject*, PyObject *)
  *
  *****************************************************************************/
 
-int KSpreadDoc::s_docId = 0L;
-QIntDict<KSpreadDoc>* KSpreadDoc::s_mapDocuments;
-
-KSpreadDoc* KSpreadDoc::find( int _docId )
-{
-  if ( !s_mapDocuments )
-    return 0L;
-
-  return (*s_mapDocuments)[ _docId ];
-}
-
 KSpreadDoc::KSpreadDoc()
 {
   ADD_INTERFACE( "IDL:KSpread/Document:1.0" );
   ADD_INTERFACE( "IDL:KOffice/Print:1.0" );
 
-  if ( s_mapDocuments == 0L )
-    s_mapDocuments = new QIntDict<KSpreadDoc>;
-  m_docId = s_docId++;
-  s_mapDocuments->insert( m_docId, this );
-
-  m_pEditor = 0L;
-  m_pPython = 0L;
+  m_iTableId = 1;
 
   m_leftBorder = 20.0;
   m_rightBorder = 20.0;
@@ -221,13 +70,11 @@ KSpreadDoc::KSpreadDoc()
   m_bLoading = false;
   m_bEmpty = true;
 
-  m_iTableId = 1;
-
   m_defaultGridPen.setColor( lightGray );
   m_defaultGridPen.setWidth( 1 );
   m_defaultGridPen.setStyle( SolidLine );
 
-  //initPython();
+  initInterpreter();
 
   m_pMap = new KSpreadMap( this );
 
@@ -237,6 +84,7 @@ KSpreadDoc::KSpreadDoc()
 
   m_lstViews.setAutoDelete( false );
 
+  // DEBUG: print the IOR
   CORBA::String_var tmp = opapp_orb->object_to_string( this );
   cout << "DOC=" << tmp.in() << endl;
 }
@@ -330,9 +178,7 @@ bool KSpreadDoc::save( ostream& out, const char* /* format */ )
   out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org" << "\" editor=\"" << "KSpread"
       << "\" mime=\"" << "application/x-kspread" << "\" >" << endl;
 
-  if ( m_pEditor && !m_editorBuffer.isNull() && m_editorBuffer.length() > 0 )
-    m_pEditor->saveBuffer( m_editorBuffer );
-  m_pMap->getPythonCodeFromFile();
+  // TODO: Save KScript code in some CDATA here
 
   out << otag << "<PAPER format=\"" << paperFormatString() << "\" orientation=\"" << orientationString() << "\">" << endl;
   out << indent << "<PAPERBORDERS left=\"" << leftBorder() << "\" top=\"" << topBorder() << "\" right=\"" << rightBorder()
@@ -340,11 +186,6 @@ bool KSpreadDoc::save( ostream& out, const char* /* format */ )
   out << indent << "<HEAD left=\"" << headLeft() << "\" center=\"" << headMid() << "\" right=\"" << headRight() << "\"/>" << endl;
   out << indent << "<FOOT left=\"" << footLeft() << "\" center=\"" << footMid() << "\" right=\"" << footRight() << "\"/>" << endl;
   out << etag << "</PAPER>" << endl;
-
-  // TODO
-  // if ( !pythonCode.isNull() && pythonCode.length() > 0 )
-  // {
-  // }
 
   m_pMap->save( out );
 
@@ -539,15 +380,6 @@ KSpreadTable* KSpreadDoc::createTable()
 void KSpreadDoc::addTable( KSpreadTable *_table )
 {
   m_pMap->addTable( _table );
-
-  // TODO
-  // emit signal
-
-    /* if ( pGui )
-    {
-	pGui->addKSpreadTable( _table );
-	pGui->setActiveKSpreadTable( _table );
-    } */
 
   m_bModified = TRUE;
 
@@ -760,138 +592,147 @@ QString KSpreadDoc::completeHeading( const char *_data, int _page, const char *_
     return QString( tmp.data() );
 }
 
-void KSpreadDoc::reloadScripts()
+void KSpreadDoc::resetInterpreter()
 {
-  if ( m_pPython )
-    delete m_pPython;
-
-  //initPython();
+  destroyInterpreter();
+  initInterpreter();
 
   // Update the cell content
-  KSpreadTable *t;
+  // TODO
+  /* KSpreadTable *t;
   for ( t = m_pMap->firstTable(); t != 0L; t = m_pMap->nextTable() )
-  {
-    t->setLayoutDirtyFlag();
-    t->setCalcDirtyFlag();
-  }
+  t->initInterpreter(); */
 
-  for ( t = m_pMap->firstTable(); t != 0L; t = m_pMap->nextTable() )
-    t->recalc();
-
+  // Perhaps something changed. Lets repaint
   emit sig_updateView();
 }
 
-void KSpreadDoc::initPython()
+void KSpreadDoc::initInterpreter()
 {
-    QString t2;
-    t2.sprintf( "xclModule%i", ++moduleCount );
-    m_pPython = new KSpreadPythonModule( t2, docId() );
-    m_pPython->registerMethods( xcl_methods );
-    m_pPython->setContext( this );
+  m_pInterpreter = new KSInterpreter;
 
-    DIR *dp = 0L;
-    struct dirent *ep;
+  QString koffice_global_path = kapp->kde_datadir();
+  koffice_global_path += "/koffice/scripts";
+  m_pInterpreter->addSearchPath( koffice_global_path );
 
-    string path = kapp->kde_datadir().data();
-    path += "/kspread/scripts";
+  QString global_path = kapp->kde_datadir();
+  global_path += "/kspread/scripts";
+  m_pInterpreter->addSearchPath( global_path );
 
-    dp = opendir( path.c_str() );
-    if ( dp == 0L )
-      return;
+  QString koffice_local_path = kapp->localkdedir();
+  koffice_local_path += "/share/apps/kspread/scripts";
+  m_pInterpreter->addSearchPath( koffice_local_path );
 
-    while ( ( ep = readdir( dp ) ) != 0L )
+  QString local_path = kapp->localkdedir();
+  local_path += "/share/apps/kspread/scripts";
+  m_pInterpreter->addSearchPath( local_path );
+
+  // Get all modules which contain kspread extensions
+  m_kscriptModules += findScripts( global_path );
+  m_kscriptModules += findScripts( local_path );
+
+  // Remove dupes
+  QMap<QString,QString> m;
+  for( QStringList::Iterator it = m_kscriptModules.begin(); it != m_kscriptModules.end(); ++it )
+  {
+    int pos = (*it).findRev( '/' );
+    if ( pos != -1 )
     {
-      string f = path;
-      f += "/";
-      f += ep->d_name;
-      struct stat buff;
-      if ( f != "." && f != ".." && ( stat( f.c_str(), &buff ) == 0 ) && S_ISREG( buff.st_mode ) &&
-	   f[ f.size() - 1 ] != '%' && f[ f.size() - 1 ] != '~' )
-      {
-	cerr << "Executing " << f << endl;
-        //if (strcmp(f.c_str(),"/opt/kde/share/apps/kspread/scripts/xcllib.py") != 0)
-	//{
-	// int res = m_pPython->runFile( f.c_str() );
-	// cerr << "Done result=" << res << endl;
-        //}
- 	//else cerr << "DISABLED !!" << endl;
-      }
+      QString name = (*it).mid( pos + 1 );
+      pos = name.find( '.' );
+      if ( pos != -1 )
+	name = name.left( pos );
+      m[ name ] = *it;
     }
-
-    closedir( dp );
-
-    path = kapp->localkdedir().data();
-    path += "/share/apps/kspread/scripts";
-
-    dp = opendir( path.c_str() );
-    if ( dp == 0L )
-      return;
-
-    while ( ( ep = readdir( dp ) ) != 0L )
-    {
-      string f = path;
-      f += "/";
-      f += ep->d_name;
-      struct stat buff;
-      if ( f != "." && f != ".." && ( stat( f.c_str(), &buff ) == 0 ) && S_ISREG( buff.st_mode ) &&
-	   f[ f.size() - 1 ] != '%' && f[ f.size() - 1 ] != '~' )
-      {
-	cerr << "Executing " << f << endl;
-	int res = m_pPython->runFile( f.c_str() );
-	cerr << "Done result=" << res << endl;
-      }
-    }
-
-    closedir( dp );
-}
-
-void KSpreadDoc::runPythonCode()
-{
-  // here we could at least pop up a lineedit dialog asking for the function
-  // to execute, or show the list of functions. For now run the whole script.
-  char * code = (char *) m_pMap->getPythonCode();
-  cerr << "runPythonCode : code=" << code << endl;
-  if (code) {
-    int res = m_pPython->runCodeStr( KPythonModule::PY_STATEMENT, code );
-    cerr << "runPythonCode : result=" << res << endl;
+  }
+  
+  // Load the extension scripts
+  QMap<QString,QString>::Iterator mip = m.begin();
+  for( ; mip != m.end(); ++mip )
+  {
+    KSContext context;
+    if ( !m_pInterpreter->runModule( context, mip.key(), mip.data() ) )
+      QMessageBox::critical( 0L, i18n("KScript error"), context.exception()->toString() );
   }
 }
 
-bool KSpreadDoc::editPythonCode()
+QStringList KSpreadDoc::findScripts( const QString& path )
 {
-  if ( m_pEditor == 0L )
-    m_pEditor = createEditor();
-  if ( !m_pEditor->isOk() )
-    return FALSE;
+  QStringList lst;
 
-  debug("KSpreadDoc::editPythonCode()");
-  m_pMap->movePythonCodeToFile();
+  DIR *dp = 0L;
+  struct dirent *ep;
 
-  m_editorBuffer = m_pEditor->openFile( m_pMap->getPythonCodeFile() ).copy();
-  debug(m_editorBuffer);
-  m_pEditor->show();
+  dp = opendir( path );
+  if ( dp == 0L )
+    return lst;
 
-  return TRUE;
+  while ( ( ep = readdir( dp ) ) != 0L )
+  {
+    QString f = path;
+    f += "/";
+    f += ep->d_name;
+    struct stat buff;
+    if ( f != "." && f != ".." && ( stat( f, &buff ) == 0 ) && S_ISREG( buff.st_mode ) &&
+	 f[ f.length() - 1 ] != '%' && f[ f.length() - 1 ] != '~' )
+      lst.append( f );
+  }
+
+  closedir( dp );
+
+  return lst;
 }
 
-void KSpreadDoc::endEditPythonCode()
+void KSpreadDoc::destroyInterpreter()
 {
-  if ( m_pEditor == 0L )
-    return;
-  if ( !m_pEditor->isOk() )
-    return;
-  if ( m_editorBuffer.isNull() )
-    return;
+  m_kscriptMap.clear();
 
-  debug("KSpreadDoc::endEditPythonCode()");
-  m_pEditor->saveBuffer( m_editorBuffer );
-  m_pEditor->killBuffer( m_editorBuffer );
-  m_pEditor->hide();
+  // TODO
+}
 
-  m_pMap->getPythonCodeFromFile();
-  m_bModified = TRUE;
+KSValue* KSpreadDoc::lookupKeyword( const QString& keyword )
+{
+  QMap<QString,KSValue::Ptr>::Iterator it = m_kscriptMap.find( keyword );
+  if ( it != m_kscriptMap.end() )
+    return it.data();
 
-  m_editorBuffer = QString::null;
+  QStringList::Iterator sit = m_kscriptModules.begin();
+  for( ; sit != m_kscriptModules.end(); ++sit )
+  {
+    KSModule::Ptr mod = m_pInterpreter->module( *sit );
+    if ( mod )
+    {
+      KSValue* v = mod->object( keyword );
+      if ( v )
+      {
+	v->ref();
+	m_kscriptMap.insert( keyword, v );
+	return v;
+      }
+    }
+  }
+
+  return 0;
+}
+
+KSValue* KSpreadDoc::lookupClass( const QString& name )
+{
+  // Is the module loaded ?
+  KSModule::Ptr mod = m_pInterpreter->module( "KSpread" );
+  if ( !mod )
+  {
+    // Try to load the module
+    KSContext context;
+    if ( !m_pInterpreter->runModule( context, "KSpread" ) )
+      // TODO: give error
+      return 0;
+
+    context.value()->moduleValue()->ref();
+    mod = context.value()->moduleValue();
+  }
+
+  // Lookup
+  return mod->object( name );
 }
 
 void KSpreadDoc::undo()
@@ -984,12 +825,7 @@ KSpreadDoc::~KSpreadDoc()
 {
   cerr << "KSpreadDoc::~KSpreadDoc()" << endl;
 
-  s_mapDocuments->remove( m_docId );
-
-  if ( m_pPython )
-    delete m_pPython;
-
-  endEditPythonCode();
+  destroyInterpreter();
 
   if ( m_pUndoBuffer )
     delete m_pUndoBuffer;
