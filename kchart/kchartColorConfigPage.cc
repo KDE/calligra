@@ -211,6 +211,8 @@ void KChartColorConfigPage::activeColorButton()
 
 void KChartColorConfigPage::initDataColorList()
 {
+    if ( index == 0 ) //Fix crash when we didn't create data
+        return;
     QStringList lst;
     for(uint i = 0; i < m_data->rows(); i++)
     {
