@@ -44,7 +44,7 @@ public:
   KoTarStore( const QString & _filename, Mode _mode );
   virtual ~KoTarStore();
 
-  virtual bool open( const QString & name, const QCString &_mime_type = "" );
+  virtual bool open( const QString & name );
   virtual void close();
   virtual QByteArray read( long unsigned int max );
   virtual bool write( const QByteArray& _data );
@@ -65,12 +65,17 @@ protected:
    * Conversion routine
    * @param _internalNaming name used internally : "root", "tar:/0", ...
    * @return the name used in the file, more user-friendly ("maindoc.xml", "part0.xml", ...)
+   * Examples:
+   *
+   * tar:/0 is saved as part0.xml
+   * tar:/0/1 is saved as part0/part1.xml
+   * tar:/0/1/pictures/picture0.png is saved as part0/part1/pictures/picture0.png
    */
   static QString toExternalNaming( const QString & _internalNaming );
 
   Mode m_mode;
 
-  // Store the filenames (with full path inside the archive)  when writing, to avoid duplicates
+  // Store the filenames (with full path inside the archive) when writing, to avoid duplicates
   QStringList m_strFiles;
 
   // Current filename (between an open() and a close())
@@ -86,6 +91,8 @@ protected:
   bool m_bGood;
 
   int m_readBytes;
+  class KoTarStorePrivate;
+  KoTarStorePrivate * d;
 };
 
 #endif

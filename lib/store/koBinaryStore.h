@@ -26,23 +26,26 @@
 
 #include "koStore.h"
 
+/**
+ * Old deprecated binary store.
+ * Kept around only to be able to read old files.
+ * Saving disabled.
+ */
 class KoBinaryStore : public KoStore
 {
 public:
   KoBinaryStore( const QString & _filename, Mode _mode );
   virtual ~KoBinaryStore();
 
-  virtual bool open( const QString & name, const QCString &_mime_type = "" );
+  virtual bool open( const QString & name );
   virtual void close();
   virtual QByteArray read( unsigned long int max );
-  virtual bool write( const QByteArray& _data );
+  virtual bool write( const QByteArray& ) {return false;}
 
-  bool write( const char* _data, unsigned long _len );
+  bool write( const char*, unsigned long ) {return false;}
   long read( char *_buffer, unsigned long _len );
 
-  // void list();
-
-  bool bad() { return m_out.bad(); }
+  bool bad() { return false; }
 
   long size() const;
 
@@ -51,28 +54,28 @@ protected:
 
   struct Entry
   {
-    QCString mimetype;
     QCString name;
     unsigned int size;
     unsigned int pos;
     unsigned int data;
   };
 
-  void writeHeader( const KoBinaryStore::Entry& _entry );
+  //void writeHeader( const KoBinaryStore::Entry& _entry );
   unsigned long readHeader( KoBinaryStore::Entry& _entry );
-  void putULong( unsigned long x );
+  //void putULong( unsigned long x );
   unsigned long getULong();
 
   QMap<QString, Entry> m_map;
 
-  std::ofstream m_out;
+  //std::ofstream m_out;
   std::ifstream m_in;
   bool m_bIsOpen;
 
   Entry m_current;
   int m_readBytes;
 
-  int m_id;
+  class KoBinaryStorePrivate;
+  KoBinaryStorePrivate * d;
 };
 
 #endif

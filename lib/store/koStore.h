@@ -48,9 +48,8 @@ public:
     /**
      * Open a new file inside the store
      * @param name the filename, internal representation ("root", "tar:0"... )
-     * @mimetype deprecated, don't use
      */
-    virtual bool open( const QString & name, const QCString & mimetype = "" ) = 0;
+    virtual bool open( const QString & name ) = 0;
     /**
      * Close the file inside the store
      */

@@ -42,7 +42,6 @@ KoTarStore::KoTarStore( const QString & _filename, KoStore::Mode _mode )
 
 KoTarStore::~KoTarStore()
 {
-  kdDebug(30002) << "###################### DESTRUCTOR ####################" << endl;
   m_pTar->close();
   delete m_pTar;
   if ( m_stream )
@@ -83,19 +82,19 @@ QString KoTarStore::toExternalNaming( const QString & _internalNaming )
   return _internalNaming;
 }
 
-bool KoTarStore::open( const QString & _name, const QCString& /*_mime_type*/ )
+bool KoTarStore::open( const QString & _name )
 {
   m_sName = toExternalNaming( _name );
 
   if ( m_bIsOpen )
   {
-    kdDebug(30002) << "KoTarStore: File is already opened" << endl;
+    kdWarning(30002) << "KoTarStore: File is already opened" << endl;
     return false;
   }
 
   if ( m_sName.length() > 512 )
   {
-      kdDebug(30002) << "KoTarStore: Filename " << m_sName << " is too long" << endl;
+      kdError(30002) << "KoTarStore: Filename " << m_sName << " is too long" << endl;
     return false;
   }
 
@@ -104,7 +103,7 @@ bool KoTarStore::open( const QString & _name, const QCString& /*_mime_type*/ )
     kdDebug(30002) << "KoTarStore: opening for writing '" << m_sName << "'" << endl;
     if ( m_strFiles.findIndex( m_sName ) != -1 ) // just check if it's there
     {
-      kdDebug(30002) << "KoTarStore: Duplicate filename " << m_sName << endl;
+      kdWarning(30002) << "KoTarStore: Duplicate filename " << m_sName << endl;
       return false;
     }
 
@@ -118,12 +117,12 @@ bool KoTarStore::open( const QString & _name, const QCString& /*_mime_type*/ )
     const KTarEntry * entry = m_pTar->directory()->entry( m_sName );
     if ( entry == 0L )
     {
-      kdDebug(30002) << "Unknown filename " << m_sName << endl;
+      kdWarning(30002) << "Unknown filename " << m_sName << endl;
       return false;
     }
     if ( entry->isDirectory() )
     {
-      kdDebug(30002) << m_sName << " is a directory !" << endl;
+      kdWarning(30002) << m_sName << " is a directory !" << endl;
       return false;
     }
     KTarFile * f = (KTarFile *) entry;
@@ -148,7 +147,7 @@ void KoTarStore::close()
 
   if ( !m_bIsOpen )
   {
-    kdDebug(30002) << "KoTarStore: You must open before closing" << endl;
+    kdWarning(30002) << "KoTarStore: You must open before closing" << endl;
     return;
   }
 
@@ -172,20 +171,19 @@ QByteArray KoTarStore::read( unsigned long int max )
 
   if ( !m_bIsOpen )
   {
-    kdDebug(30002) << "KoTarStore: You must open before reading" << endl;
+    kdWarning(30002) << "KoTarStore: You must open before reading" << endl;
     data.resize( 0 );
     return data;
   }
   if ( m_mode != Read )
   {
-    kdDebug(30002) << "KoTarStore: Can not read from store that is opened for writing" << endl;
+    kdError(30002) << "KoTarStore: Can not read from store that is opened for writing" << endl;
     data.resize( 0 );
     return data;
   }
 
   if ( m_stream->atEnd() )
   {
-    kdDebug(30002) << "EOF" << endl;
     data.resize( 0 );
     return data;
   }
@@ -194,7 +192,6 @@ QByteArray KoTarStore::read( unsigned long int max )
     max = m_iSize - m_readBytes;
   if ( max == 0 )
   {
-    kdDebug(30002) << "EOF 2" << endl;
     data.resize( 0 );
     return data;
   }
@@ -218,12 +215,12 @@ long KoTarStore::read( char *_buffer, unsigned long _len )
 {
   if ( !m_bIsOpen )
   {
-    kdDebug(30002) << "KoTarStore: You must open before reading" << endl;
+    kdError(30002) << "KoTarStore: You must open before reading" << endl;
     return -1;
   }
   if ( m_mode != Read )
   {
-    kdDebug(30002) << "KoTarStore: Can not read from store that is opened for writing" << endl;
+    kdError(30002) << "KoTarStore: Can not read from store that is opened for writing" << endl;
     return -1;
   }
 
@@ -246,12 +243,12 @@ long KoTarStore::size() const
 {
   if ( !m_bIsOpen )
   {
-    kdDebug(30002) << "KoTarStore: You must open before asking for a size" << endl;
+    kdWarning(30002) << "KoTarStore: You must open before asking for a size" << endl;
     return -1;
   }
   if ( m_mode != Read )
   {
-    kdDebug(30002) << "KoTarStore: Can not get size from store that is opened for writing" << endl;
+    kdWarning(30002) << "KoTarStore: Can not get size from store that is opened for writing" << endl;
     return -1;
   }
   return (long) m_iSize;
@@ -270,12 +267,12 @@ bool KoTarStore::write( const char* _data, unsigned long _len )
 
   if ( !m_bIsOpen )
   {
-    kdDebug(30002) << "KoTarStore: You must open before writing" << endl;
+    kdError(30002) << "KoTarStore: You must open before writing" << endl;
     return 0L;
   }
   if ( m_mode != Write  )
   {
-    kdDebug(30002) << "KoTarStore: Can not write to store that is opened for reading" << endl;
+    kdError(30002) << "KoTarStore: Can not write to store that is opened for reading" << endl;
     return 0L;
   }
 

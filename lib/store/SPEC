@@ -23,17 +23,16 @@ tools (tar, gzip).
 It enables anybody to hack directly into the document, for instance to update
 an image (faster than launching the application), or to write scripts
 that generate koffice documents ! :)
-Later, someone will be able to easily write an import filter for any other
-office-suite application out there, either reading the whole tar.gz file, or
-(for simple documents) by accepting XML as input (and then the user can extract
-the XML file by himself).
+This way, it is also easy to write an import filter for any other office-suite
+application out there, by reading the tar.gz file and extracting the XML out
+of it (at worse the user can extract the XML file by himself, but then the
+import loses embedded parts and pictures).
 It also generates much smaller files than the old binary store, since
 everything's gzipped.
 
 1) Name of the KOffice Files:
-As some people suggested using a "tgz"-ending is stupid, I'll drop it :)
-Just use the "normal" endings like "MyLetter.kwd", "Sales.ksp", or
-"Meeting.kpr".
+As some people suggested using a "tgz"-ending is stupid, it's been dropped.
+Just use the "normal" endings like "MyLetter.kwd", "Sales.ksp", or "Meeting.kpr".
 
 2) Internal Structure:
 I don't like theoretic explanations so I'd give a simple example: Assume you
@@ -63,12 +62,6 @@ cliparts/clipart0.wmf
 
 If there is only a "plain" document we create a tgz file containing only the
 maindoc.xml file.
-
-Still TODO for the implementation :
-* rename the pictures when saving them, using sequential numbers (to be
-implemented in KoStore)
-(or better, a common class for image collections - currently discussed with
-Reggie)
 
 Thank you for your attention,
 Werner <wtrobin@carinthia.com> and David <faure@kde.org>
