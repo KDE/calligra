@@ -220,7 +220,8 @@ void KexiProperty::init(QVariant value)
 		}
 	}
 
-	setValue( value, false, false );
+	if (!m_name.isEmpty())
+		setValue( value, false, false );
 }
 
 KexiProperty::KexiProperty(const KexiProperty &property)
@@ -304,6 +305,7 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 {
 	if (m_name.isEmpty()) {
 		kexiwarn << "KexiProperty::setValue(): COULD NOT SET value to a null property" << endl;
+		return;
 	}
 //	kdDebug() << m_name << ": setValue('" << v.toString() << "' type=" << v.typeName() << ")" << endl;
 	if (m_value.type() != v.type() && !m_value.isNull() && !v.isNull()
