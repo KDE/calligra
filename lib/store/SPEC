@@ -39,7 +39,11 @@ Name of the KOffice Files
 -------------------------
 
 As some people suggested, using a "tgz"-ending is confusing; it's been dropped.
-Instead, we use the "normal" endings like ".kwd", ".ksp", ".kpr", etc.
+Instead, we use the "normal" endings like ".kwd", ".ksp", ".kpr", etc. To recognize
+KOffice documents without a proper extension David Faure <faure@kde.org>
+added some magic numbers to the gzip header (to see what I'm talking about
+please use the "file" command on a KOffice document or see
+http://lists.kde.org/?l=kde-cvs&m=98603907306662&w=2).
 
 External Structure
 ------------------
@@ -53,6 +57,7 @@ the document as "lab-report.kwd". Here is what the contents of the
 tar.gz file will look like :
 
 lab-report.kwd:
+---------------
 maindoc.xml                 -- The main XML file containing the KWord document.
 documentinfo.xml            -- Author and other "metadata" for KWord document.
 pictures/                   -- Pictures embedded in the main KWord document.
@@ -92,10 +97,9 @@ other format shipped with KDE2.0 is converted (on reading) to look like this
 through the services of the "Internal Name".
 
 If the document does not contain any other Parts or pictures, then the
-maindoc.xml file is tarred and gzipped alone, and saved with the proper
-extension (.kwd for KWord, .ksp for KSpread, etc.).
+maindoc.xml and documentinfo.xml files are tarred and gzipped alone,
+and saved with the proper extension (.kwd for KWord, .ksp for KSpread, etc.).
 
 Thank you for your attention,
 Werner <trobin@kde.org> and David <faure@kde.org>
 (edited by Chris Lee <lee@azsites.com> for grammer, spelling, and formatting)
-
