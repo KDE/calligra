@@ -26,6 +26,7 @@
 #include <koParagDia.h>
 #include <koUnit.h>
 #include <qptrlist.h>
+#include <kostyle.h>
 
 class KoFontChooser;
 class KoStyle;
@@ -52,7 +53,9 @@ public:
     KoStyleManager( QWidget *_parent,KoUnit::Unit unit,const QPtrList<KoStyle> & style );
 
     virtual KoStyle* addStyleTemplate(KoStyle *style)=0;
-    virtual void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )=0;
+    //virtual void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )=0;
+    virtual void applyStyleChange( StyleChangeDefMap changed )=0;
+
     virtual void removeStyleTemplate( KoStyle *style )=0;
     virtual void updateAllStyleLists()=0;
     virtual void updateStyleListOrder( const QStringList & list)=0;

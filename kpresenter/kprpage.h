@@ -26,6 +26,7 @@
 #include <koPoint.h>
 #include "kpbackground.h"
 #include <koRect.h>
+#include <kostyle.h>
 class KPTextView;
 class KPObject;
 class KPresenterDoc;
@@ -260,7 +261,7 @@ public:
     KPObject * getObjectResized(const KoPoint &pos, ModifyType modType, bool &desel, bool &_over, bool &_resize );
     KPObject* getObjectAt( const KoPoint&pos ) const;
     KPPixmapObject * picViewOrigHelper() const;
-    void applyStyleChange( KoStyle *changedStyle, int paragLayoutChanged, int formatChanged );
+    void applyStyleChange( StyleChangeDefMap changed );
 
     void reactivateBgSpellChecking(bool refreshTextObj);
 

@@ -22,6 +22,7 @@
 
 #include <qrichtext_p.h>
 #include <koChangeCaseDia.h>
+#include <kostyle.h>
 class KCommand;
 class KoTextFormat;
 
@@ -285,7 +286,7 @@ public:
      *  @param paragLayoutChanged paragraph flags
      *  @param formatChanged format flags
      */
-    void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );
+    void applyStyleChange( StyleChangeDefMap changed );
     /** Set format changes on selection or current cursor.
         Creates a command if the format was applied to a selection */
     void setFormat( KoTextCursor * cursor, KoTextFormat ** currentFormat, KoTextFormat *format, int flags, bool zoomFont = false );

@@ -38,7 +38,7 @@ public:
     KPrStyleManager( QWidget *_parent, KoUnit::Unit unit,KPresenterDoc *_doc, const QPtrList<KoStyle> & style );
 
     virtual KoStyle* addStyleTemplate(KoStyle *style);
-    virtual void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );
+    virtual void applyStyleChange( StyleChangeDefMap changed  );
     virtual void removeStyleTemplate( KoStyle *style );
     virtual void updateAllStyleLists();
     virtual void updateStyleListOrder( const QStringList & list);

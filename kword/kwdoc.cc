@@ -2729,7 +2729,7 @@ void KWDocument::updateStyleListOrder( const QStringList &list )
     styleCollection()->updateStyleListOrder( list );
 }
 
-void KWDocument::applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged )
+void KWDocument::applyStyleChange( StyleChangeDefMap changed )
 {
     QPtrList<KWTextFrameSet> textFramesets;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
@@ -2739,7 +2739,7 @@ void KWDocument::applyStyleChange( KWStyle * changedStyle, int paragLayoutChange
 
     KWTextFrameSet *frm;
     for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
-        frm->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
+        frm->applyStyleChange( changed );
     }
 }
 

@@ -1372,9 +1372,9 @@ void KPTextObject::slotFormatChanged(const KoTextFormat &_format)
         m_doc->getKPresenterView()->showFormat( _format );
 }
 
-void KPTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )
+void KPTextObject::applyStyleChange( StyleChangeDefMap changed )
 {
-    m_textobj->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
+    m_textobj->applyStyleChange( changed );
 }
 
 

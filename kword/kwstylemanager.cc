@@ -40,9 +40,9 @@ KoStyle* KWStyleManager::addStyleTemplate(KoStyle *style)
     return m_doc->styleCollection()->addStyleTemplate(style);
 }
 
-void KWStyleManager::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )
+void KWStyleManager::applyStyleChange( StyleChangeDefMap changed )
 {
-    m_doc->applyStyleChange( changedStyle, paragLayoutChanged,formatChanged );
+    m_doc->applyStyleChange( changed );
 }
 
 void KWStyleManager::removeStyleTemplate( KoStyle *style )

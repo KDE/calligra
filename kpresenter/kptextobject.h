@@ -23,7 +23,7 @@
 #include <kpobject.h>
 #include "qrichtext_p.h"
 #include <kotextview.h>
-
+#include <kostyle.h>
 
 class KPresenterView;
 class KPresenterDoc;
@@ -101,7 +101,7 @@ public:
     KPresenterDoc* kPresenterDocument() const { return m_doc; }
 
     KPTextView * createKPTextView( KPrCanvas * );
-    void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );
+    void applyStyleChange( StyleChangeDefMap changed );
 
     void removeHighlight ();
     void highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas */*_canvas*/ );

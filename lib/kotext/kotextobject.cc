@@ -817,12 +817,8 @@ KCommand *KoTextObject::applyStyle( KoTextCursor * cursor, const KoStyle * newSt
     return macroCmd;
 }
 
-void KoTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )
+void KoTextObject::applyStyleChange( StyleChangeDefMap changed )
 {
-    // TODO: if we are concerned about performance when updating many styles,
-    // We could make a single call to this method, with a QMap<KoStyle *, struct holding flags>
-    // in order to iterate over all paragraphs only once.
-
     /*kdDebug(32500) << "KoTextObject::applyStyleChange " << changedStyle->name()
                      << " paragLayoutChanged=" << paragLayoutChanged
                      << " formatChanged=" << formatChanged
@@ -831,9 +827,10 @@ void KoTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChan
     KoTextDocument * textdoc = textDocument();
     KoTextParag *p = textdoc->firstParag();
     while ( p ) {
-        if ( p->style() == changedStyle )
+        StyleChangeDefMap::Iterator it = changed.find( p->style() );
+        if ( it != changed.end() )
         {
-            if ( paragLayoutChanged == -1 || formatChanged == -1 ) // Style has been deleted
+            if ( (*it).paragLayoutChanged == -1 || (*it).formatChanged == -1 ) // Style has been deleted
             {
                 p->setStyle( m_defaultStyle ); // keeps current formatting
                 // TODO, make this undoable somehow
@@ -880,9 +877,9 @@ void KoTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChan
                     styleApplied.paragLayout().margins[QStyleSheetItem::MarginTop]=p->margin(QStyleSheetItem::MarginTop);
                 }
 #endif
-                applyStyle( &cursor, changedStyle,
+                applyStyle( &cursor, it.key(),
                             -1, // A selection we can't possibly have
-                            paragLayoutChanged, formatChanged,
+                            (*it).paragLayoutChanged, (*it).formatChanged,
                             false, false ); // don't create undo/redo, not interactive
             }
         }

@@ -2903,15 +2903,15 @@ void KPresenterDoc::updateAllStyleLists()
     }
 }
 
-void KPresenterDoc::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )
+void KPresenterDoc::applyStyleChange( StyleChangeDefMap changed )
 {
     QPtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it )
     {
-        it.current()->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
+        it.current()->applyStyleChange( changed );
     }
     //styckypage
-    m_stickyPage->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
+    m_stickyPage->applyStyleChange( changed );
 }
 
 void KPresenterDoc::saveStyle( KoStyle *sty, QDomElement parentElem )

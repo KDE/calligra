@@ -26,6 +26,20 @@
 
 class KoStyle;
 
+struct StyleChangeDef {
+    StyleChangeDef() {
+        paragLayoutChanged = -1;
+        formatChanged = -1;
+    }
+    StyleChangeDef( int parag, int format) {
+        paragLayoutChanged = parag;
+        formatChanged = format;
+    };
+    int paragLayoutChanged;
+    int formatChanged;
+};
+typedef QMap<KoStyle *, StyleChangeDef> StyleChangeDefMap;
+
 class KoStyleCollection
 {
 public:

@@ -425,6 +425,8 @@ void KoStyleManager::slotApply() {
 
 void KoStyleManager::apply() {
     noSignals=true;
+    StyleChangeDefMap styleChanged;
+    QPtrList<KoStyle> removeStyle;
     for (unsigned int i =0 ; m_origStyles.count() > i ; i++) {
         if(m_origStyles.at(i) == 0L && m_changedStyles.at(i)!=0L) {           // newly added style
             kdDebug(32500) << "adding new " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
@@ -434,8 +436,11 @@ void KoStyleManager::apply() {
             kdDebug(32500) << "deleting orig " << m_origStyles.at(i)->name() << " (" << i << ")" << endl;
 
             KoStyle *orig = m_origStyles.at(i);
-            applyStyleChange( orig, -1, -1 );
-            removeStyleTemplate( orig );
+            //applyStyleChange( orig, -1, -1 );
+            StyleChangeDef tmp( -1,-1);
+            styleChanged.insert( orig, tmp);
+
+            removeStyle.append( orig );
             // Note that the style is never deleted (we'll need it for undo/redo purposes)
 
         } else if(m_changedStyles.at(i) != 0L && m_origStyles.at(i)!=0L) {
@@ -453,11 +458,21 @@ void KoStyleManager::apply() {
             *orig = *changed;
 
             // Apply the change selectively - i.e. only what changed
-            applyStyleChange( orig, paragLayoutChanged, formatChanged );
+            //applyStyleChange( orig, paragLayoutChanged, formatChanged );
+            StyleChangeDef tmp(paragLayoutChanged, formatChanged);
+            styleChanged.insert( orig, tmp);
+
 
         }// else
          //     kdDebug(32500) << "has not changed " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
     }
+
+    applyStyleChange( styleChanged );
+
+    KoStyle *tmp = 0L;
+    for ( tmp = removeStyle.first(); tmp ;tmp = removeStyle.next() )
+        removeStyleTemplate( tmp );
+
     updateStyleListOrder( m_styleOrder);
     updateAllStyleLists();
     noSignals=false;

@@ -55,7 +55,7 @@ class KoTextParag;
 #include <kpgradientcollection.h>
 #include <koUnit.h>
 #include <kozoomhandler.h>
-
+#include <kostyle.h>
 class KoDocumentEntry;
 class KPFooterHeaderEditor;
 class KPTextObject;
@@ -238,7 +238,7 @@ public:
 
 
     void updateAllStyleLists();
-    void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );
+    void applyStyleChange( StyleChangeDefMap changed );
     void updateStyleListOrder( const QStringList &list );
 
     void addCommand( KCommand * cmd );

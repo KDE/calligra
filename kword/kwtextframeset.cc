@@ -2519,9 +2519,9 @@ void KWTextFrameSet::clearUndoRedoInfo()
     m_textobj->clearUndoRedoInfo();
 }
 
-void KWTextFrameSet::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )
+void KWTextFrameSet::applyStyleChange( StyleChangeDefMap changed )
 {
-    m_textobj->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
+    m_textobj->applyStyleChange( changed );
 }
 
 void KWTextFrameSet::showPopup( KWFrame *, KWView *view, const QPoint &point )

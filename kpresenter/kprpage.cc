@@ -3396,7 +3396,7 @@ KPPixmapObject * KPrPage::picViewOrigHelper() const
   return obj;
 }
 
-void KPrPage::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )
+void KPrPage::applyStyleChange( StyleChangeDefMap changed )
 {
     QPtrList<KPObject> lst;
     getAllObjectSelectedList(lst,true /*force*/ );
@@ -3406,7 +3406,7 @@ void KPrPage::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, 
   {
       KPTextObject *obj=dynamic_cast<KPTextObject*>(it.current());
       if( obj)
-          obj->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
+          obj->applyStyleChange( changed );
   }
 }
 

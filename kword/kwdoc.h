@@ -79,7 +79,7 @@ class KoTextParag;
 #include <qptrlist.h>
 #include <qfont.h>
 #include <qvaluevector.h>
-
+#include <kostyle.h>
 class KWPartFrameSet;
 /******************************************************************/
 /* Class: KWChild                                              */
@@ -405,7 +405,7 @@ public:
     // paragLayoutChanged is a set of flags for the parag layout - see the enum in KWParagLayout
     // formatChanged is a set of flags from KoTextFormat
     // If both are -1, it means the style has been deleted.
-    void applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged );
+    void applyStyleChange( StyleChangeDefMap changed );
     void updateAllStyleLists();
     void updateStyleListOrder( const QStringList &list );
 
