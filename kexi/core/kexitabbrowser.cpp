@@ -141,7 +141,9 @@ KexiTabBrowser::slotUpdateBrowsers()
 		if(part->visible())
 		{
 			m_db->addGroup(part);
+#ifndef KEXI_NO_MULTI_TABS
 			addBrowser(new KexiBrowser(m_stack, part->mime(), part), part->groupPixmap(), part->name());
+#endif
 			kdDebug() << "KexiTabBrowser::slotUpdateBrowsers(): added " << part->name() << endl;
 			// Update the databasetab
 			connect(part, SIGNAL(itemListChanged(KexiProjectHandler*)), m_db, SLOT(slotItemListChanged(KexiProjectHandler*)));
