@@ -1634,6 +1634,8 @@ void KWTextFrameSet::formatMore()
                             // from here, since it calls formatMore() !
                             m_doc->updateAllFrames();
                             m_doc->invalidate();
+                            if(theFrame->isSelected())
+                                 theFrame->updateResizeHandles();
                             // Can't call this directly, we might be in a paint event already
                             //m_doc->repaintAllViews();
                             QTimer::singleShot( 0, m_doc, SLOT( slotRepaintAllViews() ) );
@@ -1651,6 +1653,8 @@ void KWTextFrameSet::formatMore()
                         if(theFrame->getFrameSet()->frameSetInfo() != KWFrameSet::FI_BODY)
                         {
                             m_doc->recalcFrames();
+                            if(theFrame->isSelected())
+                                 theFrame->updateResizeHandles();
                         }
 
                         KWTableFrameSet *table = theFrame->getFrameSet()->getGroupManager();
