@@ -3,6 +3,7 @@
 #include "kspread_sheet.h"
 
 KSpreadCellIface::KSpreadCellIface()
+  : m_table( 0 )
 {
 }
 

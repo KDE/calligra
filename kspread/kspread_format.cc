@@ -85,6 +85,7 @@ KSpreadFormat::KSpreadFormat( KSpreadSheet *_table )
     // ######## Not needed anymore in 3.0?
     //KGlobal::charsets()->setQFont(font, KGlobal::locale()->charset());
     m_textFont = font;
+    m_currency.type   = 0;
 }
 
 KSpreadFormat::~KSpreadFormat()

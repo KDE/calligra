@@ -175,6 +175,7 @@ CellFormatDlg::CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table,
                  top + obj->extraYCells() >= bottom));
 
     cCurrency.symbol = locale()->currencySymbol();
+    cCurrency.type   = 0;
 
 
     // Initialize with the upper left object.
