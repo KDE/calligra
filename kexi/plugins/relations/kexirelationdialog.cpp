@@ -48,6 +48,9 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 	m_tableCombo = new QComboBox(hbox);
 	m_tableCombo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
 	m_tableCombo->insertStringList(kexiProject()->db()->tables());
+	QStringList tmp=kexiProject()->db()->tables();
+	for (QStringList::iterator it=tmp.begin();it!=tmp.end();++it)
+		kdDebug()<<"KexiRelationDialog::KexiRelationDialog: Adding table: "<<(*it)<<endl;
 	m_tableCombo->show();
 
 	QPushButton *btnAdd = new QPushButton(i18n("&Add"), hbox);
@@ -96,6 +99,7 @@ KexiRelationDialog::slotAddTable()
 
 		delete r;
 		int oi=m_tableCombo->currentItem();
+		kdDebug()<<"KexiRelationDialog::slotAddTable(): removing a table from the combo box"<<endl;
 		m_tableCombo->removeItem(m_tableCombo->currentItem());
 		if (m_tableCombo->count()>0)
 		{
