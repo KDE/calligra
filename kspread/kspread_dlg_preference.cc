@@ -72,9 +72,10 @@ m_pView->doc()->refreshInterface();
 
 void KSpreadpreference::slotDefault()
 {
-_configure->slotDefault();
-_miscParameter->slotDefault();
-_colorParameter->slotDefault();
+  _preferenceConfig->slotDefault();
+  _configure->slotDefault();
+  _miscParameter->slotDefault();
+  _colorParameter->slotDefault();
 }
 
  preference::preference( KSpreadView* _view,QWidget *parent , char *name )
@@ -126,7 +127,13 @@ _colorParameter->slotDefault();
 
 void preference::slotDefault()
 {
-//todo
+  m_pFormula->setChecked(false);
+  m_pAutoCalc->setChecked(true);
+  m_pGrid->setChecked(true);
+  m_pColumn->setChecked(false);
+  m_pLcMode->setChecked(false);
+  m_pHideZero->setChecked(false);
+  m_pFirstLetterUpper->setChecked(false);
 }
 
 void preference::apply()
