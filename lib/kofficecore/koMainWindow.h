@@ -128,6 +128,8 @@ public:
 
     virtual DCOPObject * dcopObject();
 
+    void reloadRecentFileList();
+
 signals:
     /**
      * This signal is emitted if the document has been saved successfully.
@@ -260,6 +262,8 @@ protected:
 
     bool openDocumentInternal( KoFilterManager * filterManager, const KURL & url,
                                KoDocument * newdoc = 0L );
+
+    void saveRecentFiles();
 
     KRecentFilesAction *m_recent;
 

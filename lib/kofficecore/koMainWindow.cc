@@ -265,12 +265,6 @@ KoMainWindow::~KoMainWindow()
         delete d->m_rootDoc;
     }
 
-    // Save list of recent files
-    KConfig * config = instance() ? instance()->config() : KGlobal::config();
-    //kdDebug(30003) << this << " Saving recent files list into config. instance()=" << instance() << endl;
-    m_recent->saveEntries( config );
-    config->sync();
-
     delete d->m_manager;
     delete d;
 }
@@ -349,7 +343,31 @@ void KoMainWindow::addRecentURL( const KURL& url )
             KRecentDocument::add(url.path(-1));
         else
             KRecentDocument::add(url.url(-1), true);
+        saveRecentFiles();
     }
+}
+
+void KoMainWindow::saveRecentFiles()
+{
+    // Save list of recent files
+    KConfig * config = instance() ? instance()->config() : KGlobal::config();
+    kdDebug(30003) << this << " Saving recent files list into config. instance()=" << instance() << endl;
+    m_recent->saveEntries( config );
+    config->sync();
+    if (KMainWindow::memberList)
+    {
+        // Tell all windows to reload their list, after saving
+        // Doesn't work multi-process, but it's a start
+        KMainWindow *window = KMainWindow::memberList->first();
+        for (; window; window = KMainWindow::memberList->next())
+            static_cast<KoMainWindow *>(window)->reloadRecentFileList();
+    }
+}
+
+void KoMainWindow::reloadRecentFileList()
+{
+    KConfig * config = instance() ? instance()->config() : KGlobal::config();
+    m_recent->loadEntries( config );
 }
 
 KoDocument* KoMainWindow::createDoc() const
@@ -543,11 +561,7 @@ bool KoMainWindow::saveDocument( bool saveas )
         pDoc->setFilterManager( filterManager );
         delete dialog;
         if (bOk) {
-            m_recent->addURL( newURL );
-            if ( newURL.isLocalFile() )
-                KRecentDocument::add(newURL.path(-1));
-            else
-                KRecentDocument::add(newURL.url(-1), true);
+            addRecentURL( newURL );
 
             pDoc->setOutputMimeType( outputFormat );
             if ( outputFormat != _native_format )
