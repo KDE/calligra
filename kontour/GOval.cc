@@ -35,7 +35,7 @@
 #include "kontour_global.h"
 #include "GPath.h"
 
-GOval::GOval(double rx, double ry, Type aType = Arc, double a1 = 270.0, double a2 = 270.0):
+GOval::GOval(double rx, double ry, Type aType, double a1, double a2):
 GObject()
 {
   mRX = rx;
