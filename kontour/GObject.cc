@@ -29,6 +29,9 @@
 #include <qpainter.h>
 #include <kdebug.h>
 
+#include "GDocument.h"
+#include "GPage.h"
+#include "GLayer.h"
 #include "GOval.h"
 #include "GRect.h"
 #include "GPath.h"
@@ -157,8 +160,7 @@ void GObject::transform(const QWMatrix &m, bool update)
 {
   tMatrix = tMatrix * m;
   iMatrix = tMatrix.invert();
-  initTmpMatrix ();
-//  gShape.setInvalid();
+  initTmpMatrix();
   if(update)
     updateRegion();
 }
@@ -263,20 +265,12 @@ void GObject::updateRegion(bool recalcBBox)
   KoRect newbox = boundingBox();//redrawBox();
   if(recalcBBox)
   {
-    KoRect oldbox = newbox;
     calcBoundingBox();
-    newbox = boundingBox().unite(oldbox);//redrawBox().unite(oldbox);
+    newbox = boundingBox().unite(newbox);//redrawBox().unite(oldbox);
   }
 
-//  if(isSelected())
-    // the object is selected, so enlarge the update region in order
-    // to redraw the handle
-//    newbox.enlarge(8);
-//  else
-    // a workaround for some problems
-//    newbox.enlarge(2);
-
-  emit changed(newbox);
+  layer()->page()->updateHandle();
+  layer()->page()->document()->emitChanged(newbox, true);
 }
 
 void GObject::invalidateClipRegion()

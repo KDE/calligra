@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,31 +23,29 @@
 
 */
 
-#ifndef ReorderCmd_h_
-#define ReorderCmd_h_
+#ifndef __ReorderCmd_h__
+#define __ReorderCmd_h__
 
-#include <Command.h>
+#include "Command.h"
+
 #include <qptrvector.h>
 #include <qmemarray.h>
 
 class GDocument;
 
-enum ReorderPosition {
-  RP_ToFront, RP_ToBack, RP_ForwardOne, RP_BackwardOne
-};
-
-class ReorderCmd : public Command {
+class ReorderCmd : public Command
+{
 public:
-  ReorderCmd (GDocument* doc, ReorderPosition pos);
-  ~ReorderCmd ();
+  enum ReorderPosition{ RP_ToFront, RP_ToBack, RP_ForwardOne, RP_BackwardOne };
+  ReorderCmd(GDocument *aGDoc, ReorderPosition pos);
+  ~ReorderCmd();
 
-  void execute ();
-  void unexecute ();
+  void execute();
+  void unexecute();
 
 private:
   QPtrVector<GObject> objects;
   QMemArray<unsigned int> oldpos;
-  GDocument* document;
   ReorderPosition position;
 };
 

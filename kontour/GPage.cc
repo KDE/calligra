@@ -437,21 +437,17 @@ void GPage::deleteSelectedObjects()
 
 KoRect GPage::boundingBoxForSelection()
 {
-  if(!selBoxIsValid)
+  if(!selectionIsEmpty())
   {
-    if(!selectionIsEmpty())
-    {
-      QPtrListIterator<GObject> i(selection);
-      mSelBox = (*i)->boundingBox();
-      ++i;
-      for(; i.current(); ++i)
-        mSelBox = mSelBox.unite((*i)->boundingBox ());
-    }
-    else
-    {
-      mSelBox = KoRect();
-    }
-    selBoxIsValid = true;
+    QPtrListIterator<GObject> i(selection);
+    mSelBox = (*i)->boundingBox();
+    ++i;
+    for(; i.current(); ++i)
+      mSelBox = mSelBox.unite((*i)->boundingBox ());
+  }
+  else
+  {
+    mSelBox = KoRect();
   }
   return mSelBox;
 }
@@ -638,7 +634,7 @@ void GPage::updateHandle()
     kdDebug(38000) << "L=" << r.left() << endl;
     kdDebug(38000) << "R=" << r.right() << endl;
     r = r.unite(rr);
-    document()->emitChanged(r, true);
+//    document()->emitChanged(r, true);
   }
 }
 

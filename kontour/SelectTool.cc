@@ -221,7 +221,7 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
 void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *canvas)
 {
   int xpos = e->x();
-  int ypos = e->x();
+  int ypos = e->y();
   if(state == S_Rubberband)
   {
     QPtrList<GObject> olist;
@@ -317,7 +317,7 @@ void SelectTool::translate(GPage *page, double dx, double dy, bool snap, bool pe
   }*/
   if(dx == 0 && dy == 0)
     return;
-  kdDebug(38000) << "DX=" << dx << " DY=" << dy << endl;
+//  kdDebug(38000) << "DX=" << dx << " DY=" << dy << endl;
   if(permanent)
   {
     QListIterator<GObject> it(page->getSelection());

@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,68 +23,74 @@
 
 */
 
-#include <ReorderCmd.h>
+#include "ReorderCmd.h"
+
 #include <klocale.h>
-#include <GDocument.h>
-#include <GLayer.h>
+
+#include "GDocument.h"
 #include "GPage.h"
+#include "GLayer.h"
+#include "GObject.h"
 
-ReorderCmd::ReorderCmd (GDocument* doc, ReorderPosition pos)
-  : Command(i18n("Reorder"))
+ReorderCmd::ReorderCmd(GDocument *aGDoc, ReorderPosition pos):
+Command(aGDoc, i18n("Reorder"))
 {
-  objects.resize (doc->activePage()->selectionCount ());
-  oldpos.resize (doc->activePage()->selectionCount ());
+  objects.resize(document()->activePage()->selectionCount());
+  oldpos.resize(document()->activePage()->selectionCount());
 
-  QPtrListIterator<GObject> it(doc->activePage()->getSelection());
-  for (unsigned int i = 0; it.current(); ++it, ++i) {
+  QPtrListIterator<GObject> it(document()->activePage()->getSelection());
+  for(unsigned int i = 0; it.current(); ++it, ++i)
+  {
     GObject *o = *it;
-    o->ref ();
-    objects.insert (i, o);
+    o->ref();
+    objects.insert(i, o);
   }
-  document = doc;
   position = pos;
 }
 
-ReorderCmd::~ReorderCmd () {
-  for (unsigned int i = 0; i < objects.count (); i++)
-    objects[i]->unref ();
+ReorderCmd::~ReorderCmd()
+{
+  for(unsigned int i = 0; i < objects.count(); i++)
+    objects[i]->unref();
 }
 
-void ReorderCmd::execute () {
-  for (unsigned int i = 0; i < objects.count (); i++) {
+void ReorderCmd::execute()
+{
+  for(unsigned int i = 0; i < objects.count(); i++)
+  {
     unsigned int newidx =  0;
 
-    // look for the object
-    unsigned int idx = document->activePage()->findIndexOfObject (objects[i]);
+    /* look for the object */
+    unsigned int idx = document()->activePage()->findIndexOfObject(objects[i]);
     oldpos[i] = idx;
-    if (position == RP_ToFront || position == RP_ForwardOne) {
-      if (idx == objects[i]->getLayer ()->objectCount () - 1)
-        // already at the first position
+    if(position == RP_ToFront || position == RP_ForwardOne)
+    {
+      if(idx == objects[i]->layer()->objectCount() - 1)
+      /* already at the first position */
         continue;
-
-      // move the object
-      if (position == RP_ToFront)
-        newidx = objects[i]->getLayer ()->objectCount () - 1;
+      /* move the object */
+      if(position == RP_ToFront)
+        newidx = objects[i]->layer()->objectCount() - 1;
       else
         newidx = idx + 1;
     }
-    else {
-      if (idx == 0)
-        // already at the last position
+    else
+    {
+      if(idx == 0)
+      /* already at the last position */
         continue;
-
-      // move the object
-      if (position == RP_ToBack)
+      /* move the object */
+      if(position == RP_ToBack)
         newidx = 0;
       else
         newidx = idx - 1;
     }
-    document->activePage()->moveObjectToIndex (objects[i], newidx);
+    document()->activePage()->moveObjectToIndex(objects[i], newidx);
   }
 }
 
-void ReorderCmd::unexecute () {
-  for (unsigned int i = 0; i < objects.count (); i++)
-    document->activePage()->moveObjectToIndex (objects[i], oldpos[i]);
+void ReorderCmd::unexecute()
+{
+  for(unsigned int i = 0; i < objects.count(); i++)
+    document()->activePage()->moveObjectToIndex(objects[i], oldpos[i]);
 }
-

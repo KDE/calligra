@@ -42,6 +42,8 @@ public:
   GLayer(GPage *aPage);
   ~GLayer();
 
+  GPage *page() const {return mPage; }
+
   /**
    * Layer properties.
    */

@@ -68,6 +68,7 @@
 #include "PasteCmd.h"
 #include "DuplicateCmd.h"
 #include "DeleteCmd.h"
+#include "ReorderCmd.h"
 #include "ToPathCmd.h"
 
 //#include <kdebug.h>
@@ -520,18 +521,17 @@ void KontourView::popupForSelection()
   if(objMenu)
     delete objMenu;
   objMenu = new KPopupMenu();
-/*  m_copy->plug( objMenu );
-  m_cut->plug( objMenu );
-  m_duplicate->plug(objMenu);
+  //m_distribute->plug( objMenu );
+  m_copy->plug(objMenu);
+  m_cut->plug(objMenu);
   m_delete->plug(objMenu);
-  objMenu->insertSeparator ();
-  m_distribute->plug( objMenu );
-  m_toFront->plug( objMenu );
-  m_toBack->plug( objMenu );
-  m_forwardOne->plug( objMenu );
-  m_backOne->plug( objMenu );
-  objMenu->insertSeparator ();
-  m_properties->plug( objMenu );*/
+  m_duplicate->plug(objMenu);
+  objMenu->insertSeparator();
+  m_toFront->plug(objMenu);
+  m_toBack->plug(objMenu);
+  m_forwardOne->plug(objMenu);
+  m_backOne->plug(objMenu);
+  objMenu->insertSeparator();
   m_convertToPath->plug(objMenu);
   objMenu->popup(QCursor::pos());
 }
@@ -619,6 +619,10 @@ void KontourView::changeSelection()
     m_cut->setEnabled(false);
     m_delete->setEnabled(false);
     m_duplicate->setEnabled(false);
+    m_toFront->setEnabled(false);
+    m_toBack->setEnabled(false);
+    m_forwardOne->setEnabled(false);
+    m_backOne->setEnabled(false);
     m_convertToPath->setEnabled(false);
   }
   else
@@ -627,6 +631,10 @@ void KontourView::changeSelection()
     m_cut->setEnabled(true);
     m_convertToPath->setEnabled(true);
     m_delete->setEnabled(true);
+    m_toFront->setEnabled(true);
+    m_toBack->setEnabled(true);
+    m_forwardOne->setEnabled(true);
+    m_backOne->setEnabled(true);
     m_duplicate->setEnabled(true);
     // set selection style here
     //mPaintPanel->slotChangeColor(page->getSelection().first()->style().fillColor());
@@ -792,22 +800,26 @@ void KontourView::slotAlignToHelplines(bool b)
 
 void KontourView::slotToFront()
 {
-//  cmdHistory.addCommand (new ReorderCmd (m_pDoc->gdoc(), RP_ToFront), true);
+  ReorderCmd *cmd = new ReorderCmd(activeDocument(), ReorderCmd::RP_ToFront);
+  mDoc->history()->addCommand(cmd);
 }
 
 void KontourView::slotToBack()
 {
-//  cmdHistory.addCommand (new ReorderCmd (m_pDoc->gdoc(), RP_ToBack), true);
+  ReorderCmd *cmd = new ReorderCmd(activeDocument(), ReorderCmd::RP_ToBack);
+  mDoc->history()->addCommand(cmd);
 }
 
 void KontourView::slotForwardOne()
 {
-//  cmdHistory.addCommand (new ReorderCmd (m_pDoc->gdoc(), RP_ForwardOne), true);
+  ReorderCmd *cmd = new ReorderCmd(activeDocument(), ReorderCmd::RP_ForwardOne);
+  mDoc->history()->addCommand(cmd);
 }
 
 void KontourView::slotBackOne()
 {
-//  cmdHistory.addCommand (new ReorderCmd (m_pDoc->gdoc(), RP_BackwardOne), true);
+  ReorderCmd *cmd = new ReorderCmd(activeDocument(), ReorderCmd::RP_BackwardOne);
+  mDoc->history()->addCommand(cmd);
 }
 
 void KontourView::slotGroup()

@@ -64,6 +64,7 @@ libkontourpart_la_SOURCES = \
 	DeleteCmd.cc \
 	DuplicateCmd.cc \
 	ToPathCmd.cc \
+	ReorderCmd.cc \
 	TranslateCmd.cc \
 	RotateCmd.cc \
 	ScaleCmd.cc \

@@ -26,6 +26,7 @@
 #include "TranslateCmd.h"
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "GObject.h"
 
@@ -40,6 +41,8 @@ void TranslateCmd::execute()
 {
   QWMatrix m;
   m.translate(dx, dy);
+
+//  kdDebug(38000) << "DX=" << dx << " DY=" << dy << endl;
 
   /* save the states */
   ObjectManipCmd::execute();
