@@ -403,6 +403,11 @@ KWAutoFormatEditDia::KWAutoFormatEditDia( KWAutoFormatDia *parent, const char *n
     connect(pbSpecialChar1,SIGNAL(clicked()),this,SLOT(chooseSpecialChar1()));
     connect(pbSpecialChar2,SIGNAL(clicked()),this,SLOT(chooseSpecialChar2()));
 
+    connect(lineEditReplace,SIGNAL(textChanged ( const QString & )),
+            this,SLOT(textChanged ( const QString & )));
+    connect(lineEditFind,SIGNAL(textChanged ( const QString & )),
+            this,SLOT(textChanged ( const QString & )));
+
     KButtonBox *bb = new KButtonBox( this );
     bb->addStretch();
     m_pOk = bb->addButton( i18n("OK") );
@@ -413,6 +418,12 @@ KWAutoFormatEditDia::KWAutoFormatEditDia( KWAutoFormatDia *parent, const char *n
     connect(m_pClose,SIGNAL(clicked()),this,SLOT(slotCancel()));
     grid->addMultiCellWidget( bb,2,2,1,2 );
     lineEditFind->setFocus();
+    m_pOk->setEnabled(!findStr.isEmpty() && !replaceStr.isEmpty());
+}
+
+void KWAutoFormatEditDia::textChanged ( const QString & )
+{
+    m_pOk->setEnabled((!lineEditReplace->text().isEmpty() && !lineEditFind->text().isEmpty()));
 }
 
 void KWAutoFormatEditDia::chooseSpecialChar1()

@@ -122,6 +122,7 @@ protected slots:
     void slotCancel();
     void chooseSpecialChar1();
     void chooseSpecialChar2();
+    void textChanged ( const QString & );
 private:
     QLineEdit *lineEditFind;
     QLineEdit *lineEditReplace;
