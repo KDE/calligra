@@ -91,7 +91,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     m_tmpHelpPoint = -1;
     tmpHelpPointPos = KoPoint( -1, -1);
     m_keyPressEvent = false;
-    m_drawSymetricLine = false;
+    m_drawSymetricObject = false;
     if ( parent ) {
         mousePressed = false;
 	drawContour = false;
@@ -1354,10 +1354,11 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     }break;
     case INS_LINE: {
         if ( insRect.width() != 0 && insRect.height() != 0 ) {
-            if ( m_drawSymetricLine)
+            if ( m_drawSymetricObject )
             {
-              insRect.moveBy( -insRect.width(), -insRect.height());
-              insRect.setSize( 2*insRect.size() );
+                m_drawSymetricObject = false;
+                insRect.moveBy( -insRect.width(), -insRect.height());
+                insRect.setSize( 2*insRect.size() );
             }
             if ( insRect.top() == insRect.bottom() ) {
                 bool reverse = insRect.left() > insRect.right();
@@ -1382,10 +1383,28 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         }
     } break;
     case INS_RECT:
-        if ( !insRect.isNull() ) insertRect( insRect );
+        if ( !insRect.isNull() )
+        {
+            if ( m_drawSymetricObject )
+            {
+                m_drawSymetricObject = false;
+                insRect.moveBy( -insRect.width(), -insRect.height());
+                insRect.setSize( 2*insRect.size() );
+            }
+            insertRect( insRect );
+        }
         break;
     case INS_ELLIPSE:
-        if ( !insRect.isNull() ) insertEllipse( insRect );
+        if ( !insRect.isNull() )
+        {
+            if ( m_drawSymetricObject )
+            {
+                m_drawSymetricObject = false;
+                insRect.moveBy( -insRect.width(), -insRect.height());
+                insRect.setSize( 2*insRect.size() );
+            }
+        }
+        insertEllipse( insRect );
         break;
     case INS_PIE:
         if ( !insRect.isNull() ) insertPie( insRect );
@@ -1608,11 +1627,34 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		p.setBrush( NoBrush );
 		p.setRasterOp( NotROP );
 		if ( insRect.width() != 0 && insRect.height() != 0 )
-		    p.drawEllipse( insRect );
-		insRect.setRight( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx() );
+                {
+                    if ( !m_drawSymetricObject)
+                        p.drawEllipse( insRect );
+                    else
+                    {
+                        QRect tmpRect( insRect );
+                        tmpRect.moveBy( -insRect.width(), -insRect.height());
+                        tmpRect.setSize( 2*insRect.size() );
+                        p.drawEllipse( tmpRect );
+                    }
+                }
+                insRect.setRight( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx() );
 		insRect.setBottom( ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
                 limitSizeOfObject();
-		p.drawEllipse( insRect );
+
+
+                QRect tmpRect( insRect );
+
+                if ( e->state() & AltButton )
+                {
+                    m_drawSymetricObject = true;
+                    tmpRect.moveBy( -insRect.width(), -insRect.height());
+                    tmpRect.setSize( 2*insRect.size() );
+                }
+                else
+                    m_drawSymetricObject = false;
+
+		p.drawEllipse( tmpRect );
 		p.end();
 
 		mouseSelectedObject = true;
@@ -1626,11 +1668,33 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		p.setBrush( NoBrush );
 		p.setRasterOp( NotROP );
 		if ( insRect.width() != 0 && insRect.height() != 0 )
-		    p.drawRoundRect( insRect, m_view->getRndX(), m_view->getRndY() );
+                {
+                    if ( !m_drawSymetricObject)
+                        p.drawRoundRect( insRect, m_view->getRndX(), m_view->getRndY() );
+                    else
+                    {
+                        QRect tmpRect( insRect );
+                        tmpRect.moveBy( -insRect.width(), -insRect.height());
+                        tmpRect.setSize( 2*insRect.size() );
+                        p.drawRoundRect( tmpRect, m_view->getRndX(), m_view->getRndY() );
+                    }
+                }
 		insRect.setRight( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx() );
 		insRect.setBottom( ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
                 limitSizeOfObject();
-		p.drawRoundRect( insRect, m_view->getRndX(), m_view->getRndY() );
+
+                QRect tmpRect( insRect );
+
+                if ( e->state() & AltButton )
+                {
+                    m_drawSymetricObject = true;
+                    tmpRect.moveBy( -insRect.width(), -insRect.height());
+                    tmpRect.setSize( 2*insRect.size() );
+                }
+                else
+                    m_drawSymetricObject = false;
+
+		p.drawRoundRect( tmpRect, m_view->getRndX(), m_view->getRndY() );
 		p.end();
 
 		mouseSelectedObject = true;
@@ -1645,7 +1709,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		p.setRasterOp( NotROP );
 		if ( insRect.width() != 0 && insRect.height() != 0 )
                 {
-                    if ( !m_drawSymetricLine)
+                    if ( !m_drawSymetricObject)
                         p.drawLine( insRect.topLeft(), insRect.bottomRight() );
                     else
                     {
@@ -1674,12 +1738,12 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 QRect lineRect( insRect );
                 if ( e->state() & AltButton )
                 {
-                    m_drawSymetricLine = true;
+                    m_drawSymetricObject = true;
                     lineRect.moveBy( -insRect.width(), -insRect.height());
                     lineRect.setSize( 2*insRect.size() );
                 }
                 else
-                    m_drawSymetricLine = false;
+                    m_drawSymetricObject = false;
 		p.drawLine( lineRect.topLeft(), lineRect.bottomRight() );
 		p.end();
 

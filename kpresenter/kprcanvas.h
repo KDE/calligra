@@ -519,7 +519,7 @@ private:
     double tmpHelpLinePosY;
 
     bool m_keyPressEvent;
-    bool m_drawSymetricLine;
+    bool m_drawSymetricObject;
 };
 
 #endif //PAGE_H
