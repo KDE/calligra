@@ -589,6 +589,9 @@ bool KSpreadTable::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
                                             QPtrList<AutoFillSequence>& _seqList,
                                             bool down)
 {
+  if (_srcList.first()->isFormula())
+    return false;
+
   QPtrList<AutoFillDeltaSequence> deltaList;
   deltaList.setAutoDelete( TRUE );
   bool ok = false;
