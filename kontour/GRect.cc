@@ -311,14 +311,7 @@ bool GRect::contains(const KoPoint &p)
       y2 = ePoint.y();
     }
 
-//    kdDebug(38000) << "Rect: X1 = " << x1 << endl;
-//    kdDebug(38000) << "Rect: X2 = " << x2 << endl;
-//    kdDebug(38000) << "Rect: Y1 = " << y1 << endl;
-//    kdDebug(38000) << "Rect: Y2 = " << y2 << endl;
-//    kdDebug(38000) << "Rect: px = " << pp.x() << endl;
-//    kdDebug(38000) << "Rect: py = " << pp.y() << endl;
-
-    if(pp.x() <= x2 && pp.x() >= x1 && pp.y() <= y2 && pp.y() >= y1 && (pp.x() == x1 || pp.x() == x2 || pp.y() == y1 || pp.y() == y2))
+    if(pp.x() <= x2 && pp.x() >= x1 && pp.y() <= y2 && pp.y() >= y1)
       return true;
   }
   return false;
@@ -331,11 +324,14 @@ bool GRect::findNearestPoint(const KoPoint &p, double max_dist, double &dist, in
 
 GPath *GRect::convertToPath() const
 {
-  GPath *path = new GPath();
+  GPath *path = new GPath(true);
   path->moveTo(sPoint.x(), sPoint.y());
   path->lineTo(sPoint.x(), ePoint.y());
   path->lineTo(ePoint.x(), ePoint.y());
   path->lineTo(ePoint.x(), sPoint.y());
+  path->lineTo(sPoint.x(), sPoint.y());
+  path->matrix(matrix());
+//  path->style(style());  //why???
   return path;
 }
 

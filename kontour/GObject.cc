@@ -115,6 +115,17 @@ void GObject::setZoomFactor(double f, double pf)
 {
 
 }
+
+void GObject::style(GStyle s)
+{
+  st = s;
+}
+
+void GObject::matrix(QWMatrix m)
+{
+  tMatrix = m;
+  initTmpMatrix();
+}
   
 void GObject::initTmpMatrix()
 {

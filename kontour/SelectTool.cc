@@ -31,6 +31,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include <stdlib.h>  //for abs()
+
 #include "kontour_view.h"
 #include "kontour_doc.h"
 #include "GDocument.h"
@@ -76,6 +78,8 @@ void SelectTool::processEvent(QEvent *e)
 void SelectTool::processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *canvas)
 {
   bool shiftFlag = e->state() & Qt::ShiftButton;
+  p1.setX(e->x());
+  p1.setY(e->y());
   if(state == S_Init)
   {
     //TODO * zoom factor....
@@ -83,7 +87,7 @@ void SelectTool::processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *ca
     if(obj)
     {
       /* an object will be selected */
-//      state = S_Pick;
+      state = S_Pick;
       if(!shiftFlag)
         page->unselectAllObjects();
       /* add the object to the selection */
@@ -94,8 +98,6 @@ void SelectTool::processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *ca
     {
       /* no object */
       state = S_Rubberband;
-      p1.setX(e->x());
-      p1.setY(e->y());
       page->unselectAllObjects();
     }
   }
@@ -103,6 +105,8 @@ void SelectTool::processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *ca
 
 void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canvas)
 {
+  int xpos = e->x();
+  int ypos = e->x();
   if(state == S_Rubberband)
   {
     canvas->repaint(r);
@@ -130,10 +134,28 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
     p.setPen(QPen(blue, 1, Qt::DotLine));
     p.drawRect(r);
   }
+  else if(state == S_Pick)
+  {
+    if(e->state() & Qt::LeftButton)
+        state = S_Translate;
+  }
+  else if(state == S_Translate)
+  {
+    if(e->state() & Qt::ControlButton)
+    {
+      if(abs(xpos - p1.x()) > abs(ypos - p1.y()))
+        ypos = p1.y();
+      else
+        xpos = p1.x();
+    }
+    translate(page, xpos - p1.x(), ypos - p1.y(), true);
+  }
 }
 
 void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *canvas)
 {
+  int xpos = e->x();
+  int ypos = e->x();
   if(state == S_Rubberband)
   {
     QPtrList<GObject> olist;
@@ -152,6 +174,18 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
       canvas->repaint(r);
       state = S_Init;
     }
+  }
+  else if(state == S_Translate)
+  {
+    state = S_Pick;
+    if(e->state() & Qt::ControlButton)
+    {
+      if(abs(xpos - p1.x()) > abs(ypos - p1.y()))
+        ypos = p1.y();
+      else
+        xpos = p1.x();
+    }
+    translate(page, xpos - p1.x(), ypos - p1.y(), true, true);
   }
   else if(state == S_Pick)
   {
@@ -197,6 +231,41 @@ void SelectTool::processKeyPressEvent(QKeyEvent *e, GPage *page, Canvas *canvas)
   }
   if (dx != 0 || dy != 0)
     translate (doc, canvas, dx, dy, false, true); */
+}
+
+void SelectTool::translate(GPage *page, double dx, double dy, bool snap, bool permanent)
+{
+/*  if (snap) {
+    const Rect& obox = origbox;
+    Rect newbox = canvas->snapTranslatedBoxToGrid (obox.translate (dx, dy));
+    if (! (newbox == obox)) {
+      dx = newbox.x () - obox.x ();
+      dy = newbox.y () - obox.y ();
+    }
+  }*/
+  if(dx == 0 && dy == 0)
+    return;
+  kdDebug(38000) << "DX=" << dx << " DY=" << dy << endl;
+  if(permanent)
+  {
+    QListIterator<GObject> it(page->getSelection());
+    for(; it.current(); ++it)
+      (*it)->setWorkInProgress(false);
+    //TranslateCmd *cmd = new TranslateCmd(doc, dx, dy);
+//    history->addCommand (cmd, true);
+  }
+  else
+  {
+    QListIterator<GObject> it(page->getSelection());
+    QWMatrix m;
+    m.translate(dx, dy);
+    for(; it.current(); ++it)
+    {
+      (*it)->setWorkInProgress(true);
+      (*it)->initTmpMatrix();
+      (*it)->ttransform(m, true);
+    }
+  }
 }
 
 #include "SelectTool.moc"

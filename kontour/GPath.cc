@@ -86,7 +86,8 @@ void GLine::movePoint(int idx, double dx, double dy, bool ctrlPressed)
 
 KoRect GLine::boundingBox()
 {
-  return KoRect(points[0], points[1]);
+  KoRect r(points[0], points[1]);
+  return r.normalize();
 }
 
 bool GLine::contains(const KoPoint &p)
@@ -146,7 +147,64 @@ double GLine::length() const
   return Kontour::segLength(points[0], points[1]);
 }
 
+GArc::GArc()
+{
+}
 
+GArc::GArc(const QDomElement &element)
+{
+}
+
+const KoPoint &GArc::point(int i) const
+{
+  return points[i];
+}
+
+void GArc::point(int i, const KoPoint &c)
+{
+  points[i] = c;
+}
+
+QDomElement GArc::writeToXml(QDomDocument &document)
+{
+  QDomElement arc = document.createElement("a");
+  arc.setAttribute("x1", points[0].x());
+  arc.setAttribute("y1", points[0].y());
+  arc.setAttribute("x2", points[1].x());
+  arc.setAttribute("y2", points[1].y());
+  return arc;
+}
+
+void GArc::draw(QPainter &p, bool withBasePoints, bool outline)
+{
+  p.drawLine(static_cast<int>(points[0].x()), static_cast<int>(points[0].y()), static_cast<int>(points[1].x()), static_cast<int>(points[1].y()));
+}
+
+void GArc::movePoint(int idx, double dx, double dy, bool ctrlPressed)
+{
+  points[idx].setX(points[idx].x() + dx);
+  points[idx].setY(points[idx].y() + dy);
+  // TODO Ctrl Pressed
+}
+
+KoRect GArc::boundingBox()
+{
+  return KoRect(points[0], points[1]);
+}
+
+bool GArc::contains(const KoPoint &p)
+{
+}
+
+QPointArray GArc::getPoints() const
+{
+
+}
+
+double GArc::length() const
+{
+  return Kontour::segLength(points[0], points[1]);
+}
 
 
 
@@ -711,17 +769,10 @@ void GPath::draw(QPainter &p, bool withBasePoints, bool outline, bool withEditMa
   setPen(&p);
   setBrush(&p);
   
-  if(mClosed)
+  for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
   {
-
-  }
-  else
-  {
-    for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
-    {
-      GSegment *s = *seg;
-      s->draw(p, withBasePoints, outline);
-    }
+    GSegment *s = *seg;
+    s->draw(p, withBasePoints, outline);
   }
   p.restore();
 }

@@ -41,6 +41,8 @@ public:
   void deactivate();
   void processEvent(QEvent *e);
 
+  void translate(GPage *page, double dx, double dy, bool snap, bool permanent = false);
+
 private:
   void processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *canvas);
   void processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canvas);
@@ -48,7 +50,7 @@ private:
   void processKeyPressEvent(QKeyEvent *e, GPage *page, Canvas *canvas);
 
 private:
-  enum State{ S_Init, S_Rubberband, S_Pick};
+  enum State{ S_Init, S_Rubberband, S_Pick, S_Translate};
   State state;
   QPoint p1;
   QRect r;

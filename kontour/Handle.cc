@@ -54,11 +54,11 @@ void Handle::mode(Mode m, bool propagate)
 void Handle::box(const KoRect &r)
 {
   mBox = r;
-  double x1 = r.left() - 5;
-  double x3 = r.right() + 5;
+  double x1 = r.left() - 4;
+  double x3 = r.right() + 4;
   double x2 = (x1 + x3) / 2;
-  double y1 = r.top() - 5;
-  double y3 = r.bottom() + 5;
+  double y1 = r.top() - 4;
+  double y3 = r.bottom() + 4;
   double y2 = (y1 + y3) / 2;
   pos[0] = KoPoint(x1, y1);
   pos[1] = KoPoint(x2, y1);
@@ -86,10 +86,14 @@ void Handle::draw(QPainter &p)
   p.save();
   if(mMode == HMode_Default)
   {
-    QBrush brush(Qt::black);
+    QBrush brush(Qt::blue);
     p.setBrush(brush);
+    p.setPen(Qt::black);
     for(int i = 0; i < 8; i++)
-    p.fillRect(static_cast<int>(pos[i].x() - 2), static_cast<int>(pos[i].y() - 2), 4, 4, brush);
+    {
+      p.drawRect(static_cast<int>(pos[i].x() - 3), static_cast<int>(pos[i].y() - 3), 6, 6);
+      p.fillRect(static_cast<int>(pos[i].x() - 2), static_cast<int>(pos[i].y() - 2), 4, 4, brush);
+    }
   }
   else
   {
@@ -137,13 +141,11 @@ void Handle::draw(QPainter &p)
 int Handle::contains(const KoPoint &p)
 {
 /*  static int mask[] = {
-    /*
     Handle_Left|Handle_Top, Handle_Top,
     Handle_Top|Handle_Right, Handle_Right,
     Handle_Right|Handle_Bottom, Handle_Bottom,
     Handle_Bottom|Handle_Left, Handle_Left
-    */
-/*     HPos_Left | HPos_Top,
+     HPos_Left | HPos_Top,
      HPos_Top,
      HPos_Top | HPos_Right,
      HPos_Right,

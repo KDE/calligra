@@ -32,6 +32,7 @@
 #include <klocale.h>
 
 #include "kontour_global.h"
+#include "GPath.h"
 
 GOval::GOval(bool cFlag):
 GObject()
@@ -85,7 +86,7 @@ void GOval::type(Type t)
 void GOval::startPoint(const KoPoint &p)
 {
   sPoint = p;
-  updateRegion();
+  calcBoundingBox();
 }
 
 void GOval::endPoint(const KoPoint &p)
@@ -108,8 +109,8 @@ void GOval::endPoint(const KoPoint &p)
       }
   }
   else*/
-    ePoint = p;
-  updateRegion();
+  ePoint = p;
+  calcBoundingBox();
 }
 
 void GOval::setAngles(double sa, double ea)
@@ -359,7 +360,17 @@ bool GOval::findNearestPoint(const KoPoint &p, double max_dist, double &dist, in
 
 GPath *GOval::convertToPath() const
 {
-  return 0L;
+  double xx = (sPoint.x() + ePoint.x()) / 2.0;
+  double yy = (sPoint.y() + ePoint.y()) / 2.0;
+  GPath *path = new GPath(true);
+  path->moveTo(sPoint.x(), yy);
+  path->lineTo(xx, ePoint.y());
+  path->lineTo(ePoint.x(), yy);
+  path->lineTo(xx, sPoint.y());
+  path->lineTo(sPoint.x(), yy);
+  path->matrix(matrix());
+//  path->style(style());  //why???
+  return path;
 }
 
 /*bool GOval::isValid()

@@ -139,7 +139,9 @@ public:
    */
   virtual void setZoomFactor(double f, double pf);
   
-  GStyle &style() {return st; }
+  const GStyle &style() const {return st; }
+  
+  void style(GStyle s);
 
   /**
    * Control points.
@@ -158,6 +160,8 @@ public:
    * @return The current matrix.
    */
   const QWMatrix &matrix() const {return tMatrix; }
+  
+  void matrix(QWMatrix m);
 
   /**
    * Initialize a temporary matrix for transformation from the values of

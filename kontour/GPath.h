@@ -119,13 +119,28 @@ private:
  *
  */
 
-/*class GArc : public GSegment
+class GArc : public GSegment
 {
 public:
+  GArc();
+  GArc(const QDomElement &element);
 
+  const KoPoint &point(int i) const;
+  void point(int i, const KoPoint &c);
+
+  QDomElement writeToXml(QDomDocument &document);
+  void draw(QPainter &p, bool withBasePoints, bool outline);
+  void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
+
+  KoRect boundingBox();
+  bool contains(const KoPoint &p);
+
+  QPointArray getPoints() const;
+
+  double length() const;
 private:
-  koPoint points[3];
-};*/
+  KoPoint points[2];
+};
 
 
 class GPath : public GObject
