@@ -436,6 +436,7 @@
 #include <klocale.h>
 #include <qptrlist.h>
 #include <qcstring.h>
+#include <qregexp.h>
 
 #include <connection.h>
 #include <queryschema.h>
@@ -473,9 +474,12 @@ void yyerror(const char *str)
 	kdDebug() << "at character " << current << " near tooken " << ctoken << endl;
 	parser->setOperation(Parser::OP_Error);
 
+	const bool otherError = (qstrnicmp(str, "other error", 11)==0);
+	
 	if (parser->error().type().isEmpty() 
 		&& (strlen(str)==0 
-		|| qstrnicmp(str, "syntax error", 12)==0 || qstrnicmp(str, "parse error", 11)==0))
+		|| qstrnicmp(str, "syntax error", 12)==0 || qstrnicmp(str, "parse error", 11)==0)
+		|| otherError)
 	{
 		kdDebug() << parser->statement() << endl;
 		QString ptrline = "";
@@ -489,17 +493,47 @@ void yyerror(const char *str)
 		//lexer may add error messages
 		QString lexerErr = parser->error().error();
 
+		QString errtypestr(str);
 		if (lexerErr.isEmpty()) {
-			if (qstrnicmp(str, "parse error, expecting `IDENTIFIER'", 35)==0)
+			if (errtypestr.startsWith("parse error, unexpected ")) {
+				//something like "parse error, unexpected IDENTIFIER, expecting ',' or ')'"
+				QString e = errtypestr.mid(24);
+				kdDebug() << e <<endl;
+				QString token = "IDENTIFIER";
+				if (e.startsWith(token)) {
+					QRegExp re("'.'");
+					int pos=0;
+					pos = re.search(e, pos);
+					QStringList captured=re.capturedTexts();
+					if (captured.count()>=2) {
+						kdDebug() << "**" << captured[1] << endl;
+						kdDebug() << "**" << captured[2] << endl;
+					}
+				}
+					
+					
+					
+//			 IDENTIFIER, expecting '")) {
+				e = errtypestr.mid(47);
+				kdDebug() << e <<endl;
+//				,' or ')'
+//		lexerErr i18n("identifier was expected");
+				
+			} else if (errtypestr.startsWith("parse error, expecting `IDENTIFIER'"))
 				lexerErr = i18n("identifier was expected");
 		}
-		if (!lexerErr.isEmpty())
-			lexerErr.prepend(": ");
+		
+		if (!otherError) {
+			if (!lexerErr.isEmpty())
+				lexerErr.prepend(": ");
 
-		if (parser->isReservedKeyword(ctoken.latin1()))
-			parser->setError( ParserError(i18n("Syntax Error"), i18n("\"%1\" is a reserved keyword").arg(ctoken)+lexerErr, ctoken, current) );
-		else
-			parser->setError( ParserError(i18n("Syntax Error"), i18n("Syntax Error near \"%1\"").arg(ctoken)+lexerErr, ctoken, current) );
+			if (parser->isReservedKeyword(ctoken.latin1()))
+				parser->setError( ParserError(i18n("Syntax Error"), 
+					i18n("\"%1\" is a reserved keyword").arg(ctoken)+lexerErr, ctoken, current) );
+			else
+				parser->setError( ParserError(i18n("Syntax Error"), 
+					i18n("Syntax Error near \"%1\"").arg(ctoken)+lexerErr, ctoken, current) );
+		}
 	}
 }
 
@@ -511,13 +545,8 @@ void setError(const QString& errName, const QString& errDesc)
 
 void setError(const QString& errDesc)
 {
-	setError("", errDesc);
+	setError("other error", errDesc);
 }
-
-/*void tableNotFoundError(const QString& tableName)
-{
-	setError( i18n("Table not found"), i18n("Unknown table \"%1\"").arg(tableName) );
-}*/
 
 /* this is better than assert() */
 #define IMPL_ERROR(errmsg) setError("Implementation error", errmsg)
@@ -599,6 +628,10 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 	if (columnExpr->exprClass() == KexiDBExpr_Variable && v_e) {
 		//it's a variable:
 		if (v_e->name=="*") {//all tables asterisk
+			if (parseInfo.querySchema->tables()->isEmpty()) {
+				setError(i18n("\"*\" could not be used if no tables are specified"));
+				return false;
+			}
 			parseInfo.querySchema->addAsterisk( new QueryAsterisk(parseInfo.querySchema) );
 		}
 		else if (v_e->tableForQueryAsterisk) {//one-table asterisk
@@ -749,6 +782,179 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 	return true;
 }
 
+QuerySchema* parseSelect( 
+	QuerySchema* querySchema, NArgExpr* colViews,	NArgExpr * tablesList )
+{
+	ParseInfo parseInfo(querySchema);
+	
+	//-------tables list
+//	assert( tablesList ); //&& tablesList->exprClass() == KexiDBExpr_TableList );
+
+	uint columnNum = 0;
+/*TODO: use this later if there are columns that use database fields, 
+        e.g. "SELECT 1 from table1 t, table2 t") is ok however. */
+	//used to collect information about first repeated table name or alias:
+//	QDict<char> tableNamesAndTableAliases(997, false);
+//	QString repeatedTableNameOrTableAlias;
+	if (tablesList) {
+		for (int i=0; i<tablesList->args(); i++, columnNum++) {
+			BaseExpr *e = tablesList->arg(i);
+			VariableExpr* t_e = 0;
+			QCString aliasString;
+			if (e->exprClass() == KexiDBExpr_SpecialBinary) {
+				BinaryExpr* t_with_alias = dynamic_cast<BinaryExpr*>(e);
+				assert(t_with_alias);
+				assert(t_with_alias->left()->exprClass() == KexiDBExpr_Variable);
+				assert(t_with_alias->right()->exprClass() == KexiDBExpr_Variable
+					&& (t_with_alias->type()==AS || t_with_alias->type()==0));
+				t_e = dynamic_cast<VariableExpr*>(t_with_alias->left());
+				aliasString = dynamic_cast<VariableExpr*>(t_with_alias->right())->name.latin1();
+			}
+			else {
+				t_e = dynamic_cast<VariableExpr*>(e);
+			}
+			assert(t_e);
+			QCString tname = t_e->name.latin1();
+			TableSchema *s = parser->db()->tableSchema(tname);
+			if(!s) {
+				setError(//i18n("Field List Error"), 
+					i18n("Table \"%1\" does not exist").arg(tname));
+	//			yyerror("fieldlisterror");
+				return 0;
+			}
+			QCString tableOrAliasName;
+			if (!aliasString.isEmpty()) {
+				tableOrAliasName = aliasString;
+				kdDebug() << "- add alias for table: " << aliasString << endl;
+			} else {
+				tableOrAliasName = tname;
+			}
+			// 1. collect information about first repeated table name or alias
+			//    (potential ambiguity)
+			QValueList<int> *list = parseInfo.repeatedTablesAndAliases[tableOrAliasName];
+			if (list) {
+				//another table/alias with the same name
+				list->append( i );
+				kdDebug() << "- another table/alias with name: " << tableOrAliasName << endl;
+			}
+			else {
+				list = new QValueList<int>();
+				list->append( i );
+				parseInfo.repeatedTablesAndAliases.insert( tableOrAliasName, list );
+				kdDebug() << "- first table/alias with name: " << tableOrAliasName << endl;
+			}
+	/*		if (repeatedTableNameOrTableAlias.isEmpty()) {
+				if (tableNamesAndTableAliases[tname])
+					repeatedTableNameOrTableAlias=tname;
+				else
+					tableNamesAndTableAliases.insert(tname, (const char*)1);
+			}
+			if (!aliasString.isEmpty()) {
+				kdDebug() << "- add alias for table: " << aliasString << endl;
+	//			querySchema->setTableAlias(columnNum, aliasString);
+				//2. collect information about first repeated table name or alias
+				//   (potential ambiguity)
+				if (repeatedTableNameOrTableAlias.isEmpty()) {
+					if (tableNamesAndTableAliases[aliasString])
+						repeatedTableNameOrTableAlias=aliasString;
+					else
+						tableNamesAndTableAliases.insert(aliasString, (const char*)1);
+				}
+			}*/
+			kdDebug() << "addTable: " << tname << endl;
+			querySchema->addTable( s, aliasString );
+		}
+	}
+
+	/* set parent table if there's only one */
+//	if (parser->select()->tables()->count()==1)
+	if (querySchema->tables()->count()==1)
+		querySchema->setParentTable(querySchema->tables()->first());
+
+	//-------add fields
+	if (colViews) {
+		BaseExpr *e;
+		columnNum = 0;
+		for (BaseExpr::ListIterator it(colViews->list); (e = it.current()); columnNum++)
+		{
+			bool moveNext = true; //used to avoid ++it when an item is taken from the list
+			BaseExpr *columnExpr = e;
+			VariableExpr* aliasVariable = 0;
+			if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)
+				&& (e->type()==AS || e->type()==0))
+			{
+				//KexiDBExpr_SpecialBinary: with alias
+				columnExpr = dynamic_cast<BinaryExpr*>(e)->left();
+	//			isFieldWithAlias = true;
+				aliasVariable = dynamic_cast<VariableExpr*>(dynamic_cast<BinaryExpr*>(e)->right());
+				if (!aliasVariable) {
+					setError(i18n("Invalid column alias definition")); //ok?
+					return 0;
+				}
+			}
+	
+			const int c = columnExpr->exprClass();
+			const bool isExpressionField = 
+					c == KexiDBExpr_Const
+				|| c == KexiDBExpr_Unary
+				|| c == KexiDBExpr_Arithm
+				|| c == KexiDBExpr_Logical
+				|| c == KexiDBExpr_Relational
+				|| c == KexiDBExpr_Const
+				|| c == KexiDBExpr_Function;
+	
+			if (c == KexiDBExpr_Variable) {
+				//just a variable, do nothing, addColumn() will handle this
+			}
+			else if (isExpressionField) {
+				//expression object will be reused, take, will be owned, do not destroy
+				colViews->list.take();
+				moveNext = false;
+			}
+			else if (aliasVariable) {
+				//take first (left) argument of the special binary expr, will be owned, do not destroy
+				dynamic_cast<BinaryExpr*>(e)->list.take(0);
+			}
+			else {
+				setError(i18n("Invalid column definition")); //ok?
+				return 0;
+			}
+	
+			if (!addColumn( parseInfo, columnExpr ))
+				return 0;
+			
+			if (aliasVariable) {
+				kdDebug() << "ALIAS \"" << aliasVariable->name << "\" set for column " 
+					<< columnNum << endl;
+				querySchema->setColumnAlias(columnNum, aliasVariable->name.latin1());
+			}
+	/*		if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)
+				&& (e->type()==AS || e->type()==0))
+			{
+				//also add alias
+				VariableExpr* aliasVariable =
+					dynamic_cast<VariableExpr*>(dynamic_cast<BinaryExpr*>(e)->right());
+				if (!aliasVariable) {
+					setError(i18n("Invalid column alias definition")); //ok?
+					return 0;
+				}
+				kdDebug() << "ALIAS \"" << aliasVariable->name << "\" set for column " 
+					<< columnNum << endl;
+				querySchema->setColumnAlias(columnNum, aliasVariable->name.latin1());
+			}*/
+	
+			if (moveNext)
+				++it;
+		}
+	}
+	kdDebug() << "Select ColViews=" << (colViews ? colViews->debugString() : QString::null)
+		<< " Tables=" << (tablesList ? tablesList->debugString() : QString::null) << endl;
+	
+	delete colViews; //no longer needed
+	delete tablesList; //no longer needed
+	
+	return querySchema;
+}
 	
 	extern "C"
 	{
@@ -960,206 +1166,34 @@ SelectStatement:
 Select ColViews
 {
 	kdDebug() << "Select ColViews=" << $2->debugString() << endl;
-	
-/*
-	parser->select()->setBaseTable($4);
-	if(parser->select()->unresolvedWildcard() && parser->db())
-	{
-		//resolve a (pure) wildcard
 
-		TableStruct s = parser->db()->structure($4);
-
-		for(Field *it = s.first(); it; it = s.next())
-		{
-			parser->select()->addCol(*it);
-		}
-		parser->select()->setUnresolvedWildcard(false);
-	}
-*/
+	if (!($$ = parseSelect( $1, $2, 0 )))
+		return 0;
 }
 | Select ColViews Tables
 {
-//TODO: move this to all SELECT versions
-	
-	QuerySchema* querySchema = $1;
-	$$ = querySchema;
-	
-	//-------tables list
-	NArgExpr *tablesList = $3;
-	assert( tablesList ); //&& tablesList->exprClass() == KexiDBExpr_TableList );
-
-	uint columnNum = 0;
-/*TODO: use this later if there are columns that use database fields, 
-        e.g. "SELECT 1 from table1 t, table2 t") is ok however. */
-	//used to collect information about first repeated table name or alias:
-//	QDict<char> tableNamesAndTableAliases(997, false);
-//	QString repeatedTableNameOrTableAlias;
-
-	ParseInfo parseInfo(querySchema);
-	
-	for (int i=0; i<tablesList->args(); i++, columnNum++) {
-		BaseExpr *e = tablesList->arg(i);
-		VariableExpr* t_e = 0;
-		QCString aliasString;
-		if (e->exprClass() == KexiDBExpr_SpecialBinary) {
-			BinaryExpr* t_with_alias = dynamic_cast<BinaryExpr*>(e);
-			assert(t_with_alias);
-			assert(t_with_alias->left()->exprClass() == KexiDBExpr_Variable);
-			assert(t_with_alias->right()->exprClass() == KexiDBExpr_Variable
-				&& (t_with_alias->type()==AS || t_with_alias->type()==0));
-			t_e = dynamic_cast<VariableExpr*>(t_with_alias->left());
-			aliasString = dynamic_cast<VariableExpr*>(t_with_alias->right())->name.latin1();
-		}
-		else {
-			t_e = dynamic_cast<VariableExpr*>(e);
-		}
-		assert(t_e);
-		QCString tname = t_e->name.latin1();
-		TableSchema *s = parser->db()->tableSchema(tname);
-		if(!s) {
-			setError(i18n("Field List Error"), 
-				i18n("Table \"%1\" does not exist").arg(tname));
-//			yyerror("fieldlisterror");
-			return 0;
-		}
-		QCString tableOrAliasName;
-		if (!aliasString.isEmpty()) {
-			tableOrAliasName = aliasString;
-			kdDebug() << "- add alias for table: " << aliasString << endl;
-		} else {
-			tableOrAliasName = tname;
-		}
-		// 1. collect information about first repeated table name or alias
-		//    (potential ambiguity)
-		QValueList<int> *list = parseInfo.repeatedTablesAndAliases[tableOrAliasName];
-		if (list) {
-			//another table/alias with the same name
-			list->append( i );
-			kdDebug() << "- another table/alias with name: " << tableOrAliasName << endl;
-		}
-		else {
-			list = new QValueList<int>();
-			list->append( i );
-			parseInfo.repeatedTablesAndAliases.insert( tableOrAliasName, list );
-			kdDebug() << "- first table/alias with name: " << tableOrAliasName << endl;
-		}
-/*		if (repeatedTableNameOrTableAlias.isEmpty()) {
-			if (tableNamesAndTableAliases[tname])
-				repeatedTableNameOrTableAlias=tname;
-			else
-				tableNamesAndTableAliases.insert(tname, (const char*)1);
-		}
-		if (!aliasString.isEmpty()) {
-			kdDebug() << "- add alias for table: " << aliasString << endl;
-//			querySchema->setTableAlias(columnNum, aliasString);
-			//2. collect information about first repeated table name or alias
-			//   (potential ambiguity)
-			if (repeatedTableNameOrTableAlias.isEmpty()) {
-				if (tableNamesAndTableAliases[aliasString])
-					repeatedTableNameOrTableAlias=aliasString;
-				else
-					tableNamesAndTableAliases.insert(aliasString, (const char*)1);
-			}
-		}*/
-		kdDebug() << "addTable: " << tname << endl;
-		querySchema->addTable( s, aliasString );
-	}
-
-	/* set parent table if there's only one */
-//	if (parser->select()->tables()->count()==1)
-	if (querySchema->tables()->count()==1)
-		querySchema->setParentTable(querySchema->tables()->first());
-
-	//-------add fields
-	BaseExpr *e;
-	columnNum = 0;
-	for (BaseExpr::ListIterator it($2->list); (e = it.current()); columnNum++)
-	{
-		bool moveNext = true; //used to avoid ++it when an item is taken from the list
-		BaseExpr *columnExpr = e;
-		VariableExpr* aliasVariable = 0;
-		if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)
-			&& (e->type()==AS || e->type()==0))
-		{
-			//KexiDBExpr_SpecialBinary: with alias
-			columnExpr = dynamic_cast<BinaryExpr*>(e)->left();
-//			isFieldWithAlias = true;
-			aliasVariable = dynamic_cast<VariableExpr*>(dynamic_cast<BinaryExpr*>(e)->right());
-			if (!aliasVariable) {
-				setError(i18n("Invalid column alias definition")); //ok?
-				return 0;
-			}
-		}
-
-		const int c = columnExpr->exprClass();
-		const bool isExpressionField = 
-			   c == KexiDBExpr_Const
-			|| c == KexiDBExpr_Unary
-			|| c == KexiDBExpr_Arithm
-			|| c == KexiDBExpr_Logical
-			|| c == KexiDBExpr_Relational
-			|| c == KexiDBExpr_Const
-			|| c == KexiDBExpr_Function;
-
-		if (c == KexiDBExpr_Variable) {
-			//just a variable, do nothing, addColumn() will handle this
-		}
-		else if (isExpressionField) {
-			//expression object will be reused, take, will be owned, do not destroy
-			$2->list.take();
-			moveNext = false;
-		}
-		else if (aliasVariable) {
-			//take first (left) argument of the special binary expr, will be owned, do not destroy
-			dynamic_cast<BinaryExpr*>(e)->list.take(0);
-		}
-		else {
-			setError(i18n("Invalid column definition")); //ok?
-			return 0;
-		}
-
-		if (!addColumn( parseInfo, columnExpr ))
-			return 0;
-		
-		if (aliasVariable) {
-			kdDebug() << "ALIAS \"" << aliasVariable->name << "\" set for column " 
-				<< columnNum << endl;
-			querySchema->setColumnAlias(columnNum, aliasVariable->name.latin1());
-		}
-/*		if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)
-			&& (e->type()==AS || e->type()==0))
-		{
-			//also add alias
-			VariableExpr* aliasVariable =
-				dynamic_cast<VariableExpr*>(dynamic_cast<BinaryExpr*>(e)->right());
-			if (!aliasVariable) {
-				setError(i18n("Invalid column alias definition")); //ok?
-				return 0;
-			}
-			kdDebug() << "ALIAS \"" << aliasVariable->name << "\" set for column " 
-				<< columnNum << endl;
-			querySchema->setColumnAlias(columnNum, aliasVariable->name.latin1());
-		}*/
-
-		if (moveNext)
-			++it;
-	}
-	kdDebug() << "Select ColViews=" << $2->debugString() 
-		<< " Tables=" << $3->debugString() << endl;
-	
-	delete $2; //no longer needed
+	if (!($$ = parseSelect( $1, $2, $3 )))
+		return 0;
 }
 | Select Tables
 {
 	kdDebug() << "Select ColViews Tables" << endl;
+	if (!($$ = parseSelect( $1, 0, $2 )))
+		return 0;
 }
 | Select ColViews WhereClause
 {
 	kdDebug() << "Select ColViews Conditions" << endl;
+	//TODO
+//	if (!($$ = parseSelect( $1, $2, 0, $4 )))
+//		return 0;
 }
 | Select ColViews Tables WhereClause
 {
 	kdDebug() << "Select ColViews Tables Conditions" << endl;
+	//TODO
+//	if (!($$ = parseSelect( $1, $2, $3, $4 )))
+//		return 0;
 }
 ;
 

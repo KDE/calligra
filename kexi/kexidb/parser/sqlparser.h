@@ -732,7 +732,7 @@ bool parseData(KexiDB::Parser *p, const char *data);
 
 
 #ifndef YYSTYPE
-#line 771 "sqlparser.y"
+#line 977 "sqlparser.y"
 typedef union {
 	char stringValue[255];
 	int integerValue;

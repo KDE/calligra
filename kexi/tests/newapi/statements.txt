@@ -8,6 +8,8 @@ select persons .	* from persons;
 select *, * from persons;
 -- ER003: identifier cannot start with a number
 select 1id from persons;
+-- ER004: asterisk not allowed: no tables specified
+select *;
 
 ---------- TOPIC100: ALIASES IN SELECT STATEMENT --------------
 -- OK100: aliases for columns
@@ -46,6 +48,4 @@ select id*2 from persons p, cars p;
 
 
 -- TODO
--- ER004: asterisk not allowed: no tables specified
-select *;
 -'--' comments
