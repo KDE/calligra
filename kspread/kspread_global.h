@@ -11,11 +11,14 @@ enum PasteMode { Normal, Text, Format, NoBorder, Comment, NormalAndTranspose, Te
 		 FormatAndTranspose, NoBorderAndTranspose };
 enum Operation { OverWrite, Add, Mul, Sub, Div };
 enum Conditional { None, Equal,Superior,Inferior,SuperiorEqual,InferiorEqual,Between,Different};
-enum Series {Column,Row,Linear,Geometric};
+enum Series { Column,Row,Linear,Geometric };
+
+// ##### Torben: Why is this here. Does not look very global.
 struct Reference
-    {
+{
     QString table_name;
     QString ref_name;
     QRect rect;
-    };
+};
+
 #endif

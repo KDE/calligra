@@ -137,7 +137,7 @@ public:
      * forces, relayout, calculation and redrawing of the cell.
      */
     void move( int column, int row );
-    
+
     /**
      * The @ref KSpreadTable calls this method if the table becomes deleted.
      * At the time this method is called other cells may already be deleted or
@@ -169,7 +169,7 @@ public:
      *
      * @see #copyAll
      */
-    void copyLayout( KSpreadCell *_cell ) { copyLayout( _cell->column(), _cell->row() ); }
+    void copyLayout( KSpreadCell *_cell );
 
     /**
      * Copies the layout and the content. It does not copy the @ref #m_row and @ref #m_column attributes.

@@ -23,8 +23,10 @@
 #include "kspread_table.h"
 #include "kspread_view.h"
 #include "kspread_doc.h"
+#include "kspread_map.h"
 
-#include <qbuffer.h>
+#include <qcstring.h>
+#include <qtextstream.h>
 
 /****************************************************************************
  *
@@ -120,48 +122,53 @@ void KSpreadUndo::redo()
 KSpreadUndoRemoveColumn::KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column ) :
     KSpreadUndoAction( _doc )
 {
-    m_pTable = _table;
+    m_tableName = _table->name();
     m_iColumn= _column;
-    m_lstCells.setAutoDelete( TRUE );
-    m_pColumnLayout = 0L;
+    
+    QRect selection;
+    selection.setCoords( _column, 0, _column, 0x7fff );
+    QDomDocument doc = _table->saveCellRect( selection );
+    
+    // Save to buffer
+    QString buffer;
+    QTextStream str( &buffer, IO_WriteOnly );
+    str << doc;
+
+    printf("UNDO %s\n", buffer.latin1() );
+    m_data = buffer.utf8();
 }
 
 KSpreadUndoRemoveColumn::~KSpreadUndoRemoveColumn()
 {
-    if ( m_pColumnLayout )
-	delete m_pColumnLayout;
 }
 
 void KSpreadUndoRemoveColumn::undo()
 {
-    m_pDoc->undoBuffer()->lock();
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+    
+    doc()->undoBuffer()->lock();
 
-    m_pTable->insertColumn( m_iColumn);
+    table->insertColumn( m_iColumn);
 
-    KSpreadCell *o;
-    for ( o = m_lstCells.first(); o != 0L; o = m_lstCells.next() )
-    {
-	KSpreadCell* cell = new KSpreadCell( m_pTable, m_iColumn, o->row() );
-	cell->copyAll( o );
-	m_pTable->insertCell( cell );
-    }
+    table->paste( m_data, QPoint( m_iColumn, 1 ) );
+    table->recalc( true );
 
-    if ( m_pColumnLayout )
-	m_pTable->insertColumnLayout( m_pColumnLayout );
-
-    m_pDoc->undoBuffer()->unlock();
+    doc()->undoBuffer()->unlock();
 }
 
 void KSpreadUndoRemoveColumn::redo()
 {
-    m_pDoc->undoBuffer()->lock();
-    m_pTable->removeColumn( m_iColumn );
-    m_pDoc->undoBuffer()->unlock();
-}
+    doc()->undoBuffer()->lock();
 
-void KSpreadUndoRemoveColumn::appendCell( KSpreadCell *_cell )
-{
-    m_lstCells.append( _cell );
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    table->removeColumn( m_iColumn );
+    
+    doc()->undoBuffer()->unlock();
 }
 
 /****************************************************************************

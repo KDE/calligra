@@ -114,6 +114,11 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_eFormatNumber=KSpreadCell::Number;
 }
 
+void KSpreadCell::copyLayout( KSpreadCell *_cell )
+{
+    copyLayout( _cell->column(), _cell->row() );
+}
+
 void KSpreadCell::copyLayout( int _column, int _row )
 {
     KSpreadCell *o = m_pTable->cellAt( _column, _row );

@@ -47,6 +47,9 @@ public:
     virtual void undo() = 0;
     virtual void redo() = 0;
 
+    KSpreadDoc* doc() { return m_pDoc; }
+    
+// #### To be private
 protected:
     KSpreadDoc *m_pDoc;
 };
@@ -60,14 +63,10 @@ public:
     virtual void undo();
     virtual void redo();
 
-    void appendCell( KSpreadCell *_cell );
-    void setColumnLayout( ColumnLayout *l ) { m_pColumnLayout = l; }
-
 protected:
-    KSpreadTable *m_pTable;
+    QString m_tableName;
+    QCString m_data;
     int m_iColumn;
-    QList<KSpreadCell> m_lstCells;
-    ColumnLayout *m_pColumnLayout;
 };
 
 class KSpreadUndoInsertColumn : public KSpreadUndoAction

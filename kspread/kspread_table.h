@@ -385,8 +385,13 @@ public:
     void copySelection( const QPoint &_marker );
     void cutSelection( const QPoint &_marker );
     void clearSelection(const QPoint &_marker );
+    /**
+     * A convenience function which retrieves the data to be pasted
+     * from the clipboard.
+     */
     void paste( const QPoint &_marker, PasteMode=Normal, Operation=OverWrite );
-    void defaultSelection(const QPoint &_marker );
+    void paste( const QByteArray& data, const QPoint &_marker, PasteMode=Normal, Operation=OverWrite );
+    void defaultSelection( const QPoint &_marker );
 
     bool replace( const QPoint &_marker,QString _find,QString _replace,bool b_sensitive, bool b_whole );
     QString replaceText( QString cellText,QString _find,QString _replace,bool b_sensitive, bool b_whole );
@@ -394,7 +399,7 @@ public:
     void sortByColumn( int ref_column, SortingOrder = Increase );
     void swapCells( int x1, int y1, int x2, int y2 );
     void setSeries( const QPoint &_marker,int start,int end,int step,Series mode,Series type );
-    
+
     /**
      * Moves all cells of the row _marker.y() which are in
      * the column _marker.x() or right hand of that one position
@@ -406,7 +411,7 @@ public:
      */
     bool shiftRow(const QPoint &_marker );
     bool shiftColumn( const QPoint& marker );
-    
+
     void unshiftColumn( const QPoint& marker );
     void unshiftRow( const QPoint& marker );
 
@@ -420,7 +425,7 @@ public:
      * inserts a new and empty row. After this the table is redrawn.
      */
     bool insertRow( int row );
-    
+
     /**
      * Deletes the column @p col and redraws the table.
      */
@@ -466,7 +471,7 @@ public:
     void dissociateCell( const QPoint &_marker );
 
     QRect refreshArea(const QRect &_rect);
-    
+
     /**
      * Change name of reference when the user inserts or removes a column,
      * a row or a cell (= insertion of a row [or column] on a single column [or row]).

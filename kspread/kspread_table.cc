@@ -1674,13 +1674,13 @@ void KSpreadTable::changeCellTabName(QString old_name,QString new_name)
 bool KSpreadTable::shiftRow( const QPoint &_marker )
 {
     m_pDoc->setModified( true );
-  
+
     bool res = m_cells.shiftRow( _marker );
-    
+
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef( _marker, false, KSpreadTable::ColumnInsert, name() );
-  
+
     emit sig_updateView( this );
 
     return res;
@@ -1689,44 +1689,44 @@ bool KSpreadTable::shiftRow( const QPoint &_marker )
 bool KSpreadTable::shiftColumn( const QPoint& marker )
 {
     m_pDoc->setModified( true );
-  
+
     bool res = m_cells.shiftColumn( marker );
-    
+
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef( marker, false, KSpreadTable::RowInsert, name() );
-  
+
     emit sig_updateView( this );
 
     return res;
 }
-    
+
 void KSpreadTable::unshiftColumn( const QPoint& marker )
 {
     m_pDoc->setModified( true );
-  
+
     m_cells.unshiftColumn( marker );
-    
+
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef( marker, false, KSpreadTable::RowRemove, name() );
-  
+
     emit sig_updateView( this );
 }
 
 void KSpreadTable::unshiftRow( const QPoint& marker )
 {
     m_pDoc->setModified( true );
-  
+
     m_cells.unshiftRow( marker );
-    
+
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef( marker, false, KSpreadTable::ColumnRemove, name() );
-  
+
     emit sig_updateView( this );
 }
-    
+
 bool KSpreadTable::insertColumn( int col )
 {
     KSpreadUndoInsertColumn *undo;
@@ -1737,14 +1737,15 @@ bool KSpreadTable::insertColumn( int col )
     }
 
     m_pDoc->setModified( true );
-  
+
     bool res = m_cells.insertColumn( col );
     m_columns.insertColumn( col );
-    
+
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert, name() );
-  
+
+    emit sig_updateHBorder( this );
     emit sig_updateView( this );
 
     return res;
@@ -1760,19 +1761,20 @@ bool KSpreadTable::insertRow( int row )
     }
 
     m_pDoc->setModified( true );
-  
+
     bool res = m_cells.insertRow( row );
     m_rows.insertRow( row );
-    
+
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowInsert, name() );
-  
+
+    emit sig_updateVBorder( this );
     emit sig_updateView( this );
 
     return res;
 }
-    
+
 void KSpreadTable::removeColumn( int col )
 {
     KSpreadUndoRemoveColumn *undo;
@@ -1783,14 +1785,15 @@ void KSpreadTable::removeColumn( int col )
     }
 
     m_pDoc->setModified( true );
-  
+
     m_cells.removeColumn( col );
     m_columns.removeColumn( col );
-    
+
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove, name() );
-  
+
+    emit sig_updateHBorder( this );
     emit sig_updateView( this );
 }
 
@@ -1804,16 +1807,17 @@ void KSpreadTable::removeRow( int row )
     }
 
     m_pDoc->setModified( true );
-  
+
     m_cells.removeRow( row );
     m_rows.removeRow( row );
-    
+
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowRemove, name() );
-  
+
+    emit sig_updateVBorder( this );
     emit sig_updateView( this );
-} 
+}
 
 void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref, QString tabname)
 {
@@ -3398,11 +3402,21 @@ void KSpreadTable::cutSelection( const QPoint &_marker )
 void KSpreadTable::paste( const QPoint &_marker, PasteMode sp, Operation op )
 {
     QMimeSource* mime = QApplication::clipboard()->data();
-    if ( !mime || !mime->provides( "application/x-kspread-snippet" ) )
+    if ( !mime )
 	return;
+    
+    QByteArray b;
+    
+    if ( mime->provides( "application/x-kspread-snippet" ) )
+	b = mime->encodedData( "application/x-kspread-snippet" );
+    else
+	return;
+    
+    paste( b, _marker, sp, op );
+}
 
-    QByteArray b = mime->encodedData( "application/x-kspread-snippet" );
-
+void KSpreadTable::paste( const QByteArray& b, const QPoint &_marker, PasteMode sp, Operation op )
+{
     kdDebug(36001) << "Parsing " << b.size() << " bytes" << endl;
 
     QBuffer buffer( b );
@@ -3411,7 +3425,7 @@ void KSpreadTable::paste( const QPoint &_marker, PasteMode sp, Operation op )
     doc.setContent( &buffer );
     buffer.close();
 
-    // TODO: Test for parsing errors
+    // ##### TODO: Test for parsing errors
 
     loadSelection( doc, _marker.x() - 1, _marker.y() - 1, sp, op );
     m_pDoc->setModified( true );
@@ -3422,6 +3436,25 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 {
     QDomElement e = doc.documentElement();
 
+    if ( !e.namedItem( "columns" ).isElement() )
+    {
+	QDomElement columns = e.namedItem( "columns" ).toElement();
+		
+	// Insert column layouts
+	QDomElement c = e.firstChild().toElement();
+	for( ; !c.isNull(); c = c.nextSibling().toElement() )
+        {
+	    if ( c.tagName() == "column" )
+	    {
+		ColumnLayout *cl = new ColumnLayout( this, 0 );
+		if ( cl->load( c ) )
+		    insertColumnLayout( cl );
+		else
+		    delete cl;
+	    }
+	}
+    }
+    
     QDomElement c = e.firstChild().toElement();
     for( ; !c.isNull(); c = c.nextSibling().toElement() )
     {
@@ -3446,7 +3479,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
               if ( needInsert )
 		insertCell( cell );
 	}
-        else if ( (c.tagName() == "right-most-border")&& ( (sp == Normal) || (sp == Format)) )
+        else if ( c.tagName() == "right-most-border" && ( sp == Normal || sp == Format ) )
         {
 	    int row = c.attribute( "row" ).toInt() + _yshift;
 	    int col = c.attribute( "column" ).toInt() + _xshift;
@@ -3467,7 +3500,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
               if ( needInsert )
 		insertCell( cell );
 	}
-	else if ( (c.tagName() == "bottom-most-border")&& ((sp == Normal) || (sp == Format)))
+	else if ( c.tagName() == "bottom-most-border" && ( sp == Normal || sp == Format ) )
         {
 	    int row = c.attribute( "row" ).toInt() + _yshift;
 	    int col = c.attribute( "column" ).toInt() + _xshift;
@@ -3540,7 +3573,7 @@ void KSpreadTable::deleteSelection( const QPoint &_marker )
     m_pDoc->setModified( true );
 
     QRect r( m_rctSelection );
-    
+
     if ( r.left() == 0 )
 	r = QRect( _marker.x(), _marker.y(), 1, 1 );
 
@@ -3915,6 +3948,58 @@ void KSpreadTable::printPage( QPainter &_painter, QRect *page_range, const QPen&
 
 QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 {
+    // Entire rows selected ?
+    if ( _rect.right() == 0x7fff )
+    {
+	// ##### TODO
+    }
+    // Entire columns selected ?
+    else if ( _rect.bottom() == 0x7fff )
+    {
+	QDomDocument doc( "spreadsheet-columns" );
+	doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+	QDomElement spread = doc.createElement( "spreadsheet-snippet" );
+	doc.appendChild( spread );
+
+	QDomElement columns = doc.createElement("columns");
+	columns.setAttribute( "left", _rect.left() );
+	columns.setAttribute( "right", _rect.right() );
+	spread.appendChild( columns );
+	
+	QRect rightMost( _rect.x(), _rect.y(), _rect.width() + 1, _rect.height() );
+	QRect bottomMost( _rect.x(), _rect.y(), _rect.width(), _rect.height() + 1 );
+
+	// Save all cells.
+	KSpreadCell* c = m_cells.firstCell();
+	for( ;c; c = c->nextCell() )
+        {
+	    if ( !c->isDefault() )
+            {
+		QPoint p( c->column(), c->row() );
+		if ( _rect.contains( p ) )
+		    spread.appendChild( c->save( doc, _rect.left() - 1, 0 ) );
+		else if ( rightMost.contains( p ) )
+		    spread.appendChild( c->saveRightMostBorder( doc, _rect.left() - 1, 0 ) );
+		else if ( bottomMost.contains( p ) )
+		    spread.appendChild( c->saveBottomMostBorder( doc, _rect.left() - 1, 0 ) );
+	    }
+	}
+
+	// Save the column layouts if there are any
+	for( int x = _rect.left(); x <= _rect.right(); ++x )
+        {
+	    ColumnLayout* lay = columnLayout( x );
+	    if ( lay && !lay->isDefault() )
+	    {
+		QDomElement e = lay->save( doc );
+		if ( !e.isNull() )
+		    spread.appendChild( e );
+	    }
+	}
+	
+	return doc;   
+    }
+    
     QDomDocument doc( "spreadsheet-snippet" );
     doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
     QDomElement spread = doc.createElement( "spreadsheet-snippet" );
