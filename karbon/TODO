@@ -6,6 +6,10 @@ GUI:
 	by "color manager" docker
 -	other koffice apps have widgts that may of interest to us, for instance in kpresenter. We should
 	try to reuse them.
+-	make a tool of the patterns with support for pattern vector.
+-	make a UI for the node manipulation tool.
+-	rework the stroke/fill docker with preview on the document and apply button.
+-	Find a better way to select a color than the color manager. Maybe a popup ?
 
 REAL BUGS:
 -	patterns dont zoom
