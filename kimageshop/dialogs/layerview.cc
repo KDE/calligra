@@ -66,7 +66,7 @@ void LayerView::init( KImageShopDoc* doc )
   m_selected = m_doc->layerList().count() - 1;
 
   QPopupMenu *submenu = new QPopupMenu();
- 
+
   submenu->insertItem( i18n( "Upper" ), UPPERLAYER );
   submenu->insertItem( i18n( "Lower" ), LOWERLAYER );
   submenu->insertItem( i18n( "Most front" ), FRONTLAYER );
@@ -100,16 +100,28 @@ void LayerView::paintCell( QPainter* _painter, int _row, int )
     _painter->fillRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1, gray);
   }
 
+  style().drawPanel( _painter, LayerDialog::m_eyeRect.x(), 
+		     LayerDialog::m_eyeRect.y(),
+		     LayerDialog::m_eyeRect.width(), 
+		     LayerDialog::m_eyeRect.height(), colorGroup(),
+		      true );
   if( m_doc->layerList().at( _row )->isVisible() )
   {
     _painter->drawPixmap( LayerDialog::m_eyeRect.topLeft(), *LayerDialog::m_eyeIcon );
   }
 
+  style().drawPanel( _painter, LayerDialog::m_linkRect.x(), 
+		     LayerDialog::m_linkRect.y(),
+		     LayerDialog::m_linkRect.width() , 
+		     LayerDialog::m_linkRect.height(), colorGroup(),
+		     true );
   if( m_doc->layerList().at( _row )->isLinked() )
   {
     _painter->drawPixmap( LayerDialog::m_linkRect.topLeft(), *LayerDialog::m_linkIcon );
   }
 
+  //  style().drawPanel( _painter, LayerDialog::m_previewRect.topLeft(), ....
+  
   _painter->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
   _painter->drawText( 80, 20, m_doc->layerList().at( _row )->name() );
 }
@@ -294,7 +306,7 @@ void LayerView::swapLayers( int a, int b )
     if( l1.intersects( l2 ) )
     {
       QRect rect = l1.intersect( l2 );
- 
+
       m_doc->compositeImage( rect );
       m_doc->slotUpdateViews( rect );
     }
@@ -340,7 +352,7 @@ void LayerView::slotFrontLayer()
   cout << "LayerView::slotFrontLayer" << endl;
 
   if( m_selected != ( m_doc->layerList().count() - 1 ) )
-  { 
+  {
     m_doc->setFrontLayer( m_selected );
     m_selected = m_doc->layerList().count() - 1;
 
@@ -365,7 +377,7 @@ void LayerView::slotBackgroundLayer()
     m_doc->compositeImage( updateRect );
     m_doc->slotUpdateViews( updateRect );
 
-    updateAllCells(); 
+    updateAllCells();
   }
 }
 
@@ -415,7 +427,7 @@ LayerPropertyDialog::LayerPropertyDialog( QString _layername, uchar _opacity, QW
   layout->addWidget( pbCancel, 2, 1 );
   QObject::connect( pbCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
- 
+
 bool LayerPropertyDialog::editProperties( Layer &_layer )
 {
   LayerPropertyDialog *dialog;

@@ -33,6 +33,7 @@
 
 QPixmap *LayerDialog::m_eyeIcon, *LayerDialog::m_linkIcon;
 QRect LayerDialog::m_eyeRect, LayerDialog::m_linkRect;
+QRect LayerDialog::m_previewRect;
 
 LayerTab::LayerTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name , WFlags _flags )
   : QWidget( _parent, _name, _flags )
@@ -43,27 +44,27 @@ LayerTab::LayerTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name , W
   layout->addWidget( layerview );
 
   QHBoxLayout *buttonlayout = new QHBoxLayout( layout );
- 
+
   QPushButton* pbAddLayer = new QPushButton( this, "addlayer" );
   pbAddLayer->setPixmap( BarIcon( "newlayer" ) );
   buttonlayout->addWidget( pbAddLayer );
   connect( pbAddLayer, SIGNAL( clicked() ), layerview, SLOT( slotAddLayer() ) );
- 
+
   QPushButton* pbRemoveLayer = new QPushButton( this, "removelayer" );
   pbRemoveLayer->setPixmap( BarIcon( "deletelayer" ) );
   buttonlayout->addWidget( pbRemoveLayer );
   connect( pbRemoveLayer, SIGNAL( clicked() ), layerview, SLOT( slotRemoveLayer() ) );
 
-/* 
+/*
   QPushButton* pbAddMask = new QPushButton( this, "addmask" );
   pbAddMask->setPixmap( BarIcon( "newlayer" ) );
   buttonlayout->addWidget( pbAddMask );
- 
+
   QPushButton* pbRemoveMask = new QPushButton( this, "removemask" );
   pbRemoveMask->setPixmap( BarIcon( "removelayer" ) );
   buttonlayout->addWidget( pbRemoveMask );
 */
- 
+
   QPushButton* pbUp = new QPushButton( this, "up" );
   pbUp->setPixmap( BarIcon( "raiselayer" ) );
   buttonlayout->addWidget( pbUp );
@@ -82,25 +83,25 @@ ChannelTab::ChannelTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name
   : QWidget( _parent, _name, _flags )
 {
   QVBoxLayout *layout = new QVBoxLayout( this );
- 
+
   ChannelView* channelview = new ChannelView( _doc, this, "channellist" );
   layout->addWidget( channelview );
- 
+
   QHBoxLayout *buttonlayout = new QHBoxLayout( layout );
- 
+
   QPushButton* pbAddLayer = new QPushButton( this, "addchannel" );
   pbAddLayer->setPixmap( BarIcon( "newlayer" ) );
   buttonlayout->addWidget( pbAddLayer );
- 
+
   QPushButton* pbRemoveLayer = new QPushButton( this, "removechannel" );
   pbRemoveLayer->setPixmap( BarIcon( "deletelayer" ) );
   buttonlayout->addWidget( pbRemoveLayer );
- 
+
   QPushButton* pbUp = new QPushButton( this, "raise" );
   pbUp->setPixmap( BarIcon( "raiselayer" ) );
   buttonlayout->addWidget( pbUp );
   connect( pbUp, SIGNAL( clicked() ), channelview, SLOT( slotRaiseChannel() ) );
- 
+
   QPushButton* pbDown = new QPushButton( this, "lower" );
   pbDown->setPixmap( BarIcon( "lowerlayer" ) );
   buttonlayout->addWidget( pbDown );
@@ -128,9 +129,13 @@ LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent )
     m_linkRect = QRect( QPoint( 25,( CELLHEIGHT - m_linkIcon->height() ) / 2 ), m_linkIcon->size() );
   }
 
+  // HACK - the size of the preview image should be configurable somewhere
+  m_previewRect = QRect( QPoint( 40, (CELLHEIGHT - m_linkIcon->height() ) /2 ),
+			 QSize( 15, 15 ) );
+  
   m_pLayerTab = new LayerTab( _doc, this, "layertab" );
   m_pChannelTab =  new ChannelTab(_doc, this, "channeltab" );
-  
+
   addTab(m_pLayerTab, i18n("Layers"));
   addTab(m_pChannelTab, i18n("Channels"));
 }
