@@ -1,4 +1,4 @@
-/* $Header$ */
+// $Header$
 
 /*
    This file is part of the KDE project
@@ -53,49 +53,69 @@
 #include <abiwordimport.h>
 #include <abiwordimport.moc>
 #include <kdebug.h>
+#include <qxml.h>
 #include <qdom.h>
+#include <qstack.h>
 #include "processors.h"
 
-static void ProcessParagraphTag (QDomNode nodeIn, void *,  QDomNode & nodeOut)
-{   // <p>
-    QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ( "props", "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "PROPS", "", NULL ) ); //Note: XML is case sensitive!
-    ProcessAttributes (nodeIn, attrProcessingList);
+enum StackItemElementType{
+    ElementTypeUnknown  = 0, 
+    ElementTypeBottom   = 1, // Bottom of the stack
+    ElementTypeAbiWord  = 2, // <abiword>
+    ElementTypeSection  = 3, // <section>
+    ElementTypeParagraph= 4, // <p>
+    ElementTypeContent  = 5  // <c>
+};
 
-#if 0
-    QValueList<TagProcessingDom> tagProcessingList;
-    tagProcessingList.append ( TagProcessingDom ( "c",             NULL,   NULL ) );
-    tagProcessingList.append ( TagProcessingDom ( "i",             NULL,   NULL ) );
-    // <image> is the same as <i> but obsolete
-    tagProcessingList.append ( TagProcessingDom ( "image",         NULL,   NULL ) ); 
-    ProcessSubtags (nodeIn, tagProcessingList, nodeOut);
-#endif
-    
-    QDomElement paragraphElementIn=nodeIn.toElement();
-    QString strResult=paragraphElementIn.text(); //Retrieve text inside <p> </p> and all sub tags.
-    //Todo: retrieve all the informations correctly (white space problem!!)
-    QDomElement paragraphElementOut=nodeOut.ownerDocument().createElement("PARAGRAPH");
-    nodeOut.appendChild(paragraphElementOut);
-    QDomElement textElementOut=nodeOut.ownerDocument().createElement("TEXT");
-    paragraphElementOut.appendChild(textElementOut);
-    textElementOut.appendChild(nodeOut.ownerDocument().createTextNode(strResult));
-}
+class StackItem
+{
+public:
+    StackItemElementType elementType;
+    QDomNode stackNode;
+};
 
-static void ProcessSectionTag (QDomNode nodeIn, void *,  QDomNode & nodeOut)
-{   //<section>
-    QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ( "props", "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "PROPS", "", NULL ) ); //Note: XML is case sensitive!
-    ProcessAttributes (nodeIn, attrProcessingList);
 
+//Taken from QT docs
+class StructureParser : public QXmlDefaultHandler
+{
+public:
+    StructureParser(QDomElement node)
+    {
+        structureStack.setAutoDelete(true);
+        nodeStructure=node;
+        StackItem *stackItem=new(StackItem); //TODO: memory failure recovery
+        stackItem->elementType=ElementTypeBottom;
+        stackItem->stackNode=node;
+        structureStack.push(stackItem); //Security item (not to empty the stack)
+    }
+    virtual ~StructureParser()
+    {
+        structureStack.clear();
+    }
+    bool startDocument()
+    {
+        indent = "";
+        return TRUE;
+    }
+    virtual bool startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes);
+    virtual bool endElement( const QString&, const QString& , const QString& qName);
+    virtual bool characters ( const QString & ch );
+private:
+    bool startElementSection( const QXmlAttributes& attributes , QDomNode& nodeOut);
+    QString indent;
+    QStack<StackItem> structureStack;
+    QDomNode nodeStructure;
+};
+
+bool StructureParser :: startElementSection(const QXmlAttributes &attributes, QDomNode& nodeOut)
+{
     //Search in output <FRAMESETS>
     QDomNodeList framesetsNodeList(nodeOut.toElement().elementsByTagName("FRAMESETS"));
     //Take first item, as they are only one <FRAMESETS> in KWord's documents
     if (!framesetsNodeList.count())
     {
         kdError()<<"AbiWord filter bailing out! No <FRAMESETS> tag found! "<< endl;
-        return;
+        return false;
     }
     kdDebug()<<"framesetsNodeList.count()= " << framesetsNodeList.count() << endl;
     QDomNode framesetsPluralElement(framesetsNodeList.item(0).toElement());
@@ -103,7 +123,7 @@ static void ProcessSectionTag (QDomNode nodeIn, void *,  QDomNode & nodeOut)
     if (framesetsPluralElement.isNull())
     {
         kdError()<<"AbiWord filter bailing out! Cannot access <FRAMESETS> tag!"<<endl;
-        return;
+        return false;
     }
     //As we have a new AbiWord <section>, we think we have a KWord <FRAMESET>
     QDomElement framesetElementOut=nodeOut.ownerDocument().createElement("FRAMESET");
@@ -121,25 +141,81 @@ static void ProcessSectionTag (QDomNode nodeIn, void *,  QDomNode & nodeOut)
     frameElementOut.setAttribute("right",798);
     frameElementOut.setAttribute("runaround",1);
     framesetElementOut.appendChild(frameElementOut);
-
-    QValueList<TagProcessingDom> tagProcessingList;
-    tagProcessingList.append ( TagProcessingDom ( "p",             ProcessParagraphTag,   NULL ) );
-    ProcessSubtagsDom (nodeIn, tagProcessingList, framesetElementOut);
+    
+    nodeOut=framesetElementOut;
+    return true;
 }
 
-static void ProcessAbiWordTag (QDomNode nodeIn, void *,  QDomNode & nodeOut)
-{   // <abiword>
-    QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ( "version", "", NULL ) );
-    ProcessAttributes (nodeIn, attrProcessingList);
-
-    QValueList<TagProcessingDom> tagProcessingList;
-    tagProcessingList.append ( TagProcessingDom ( "section",       ProcessSectionTag,   NULL ) );
-    tagProcessingList.append ( TagProcessingDom ( "style",         NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessingDom ( "data",          NULL,                NULL ) );
-    ProcessSubtagsDom (nodeIn, tagProcessingList, nodeOut);
+bool StructureParser :: startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes)
+{
+    kdDebug() << indent << " <" << name << ">" << endl;
+    indent += "*";
+    QDomNode nodeOut=structureStack.current()->stackNode; //TODO: empty stack!
+    StackItem *stackItem=new(StackItem); //TODO: memory failure recovery
+    if (name=="c")
+    {
+        stackItem->elementType=ElementTypeContent;
+        stackItem->stackNode=nodeOut;
+    }
+    else if (name=="p")
+    {
+        QDomElement paragraphElementOut=nodeOut.ownerDocument().createElement("PARAGRAPH");
+        nodeOut.appendChild(paragraphElementOut);
+        QDomElement textElementOut=nodeOut.ownerDocument().createElement("TEXT");
+        paragraphElementOut.appendChild(textElementOut);
+        stackItem->elementType=ElementTypeParagraph;
+        stackItem->stackNode=textElementOut;
+    }
+    else if (name=="section")
+    {
+        startElementSection(attributes,nodeOut);
+        stackItem->elementType=ElementTypeSection;
+        stackItem->stackNode=nodeOut;
+    }
+    else
+    {
+        stackItem->elementType=ElementTypeUnknown;
+        stackItem->stackNode=nodeOut;
+    }
+    structureStack.push(stackItem);
+    return true;
 }
 
+bool StructureParser :: endElement( const QString&, const QString& , const QString& name)
+{
+    indent.remove( 0, 1 );
+    kdDebug() << indent << " </" << name << ">" << endl;
+    // TODO: stack empty?
+    StackItem *stackItem=structureStack.pop();
+    if (name=="c")
+    {// TODO: verify consistancy with stack!
+        stackItem->stackNode.toElement().normalize();
+    }
+    else if (name=="p")
+    {// TODO: verify consistancy with stack!
+        stackItem->stackNode.toElement().normalize();
+    }
+    // Do nothing yet
+    delete stackItem;        
+    return true;
+}
+
+bool StructureParser :: characters ( const QString & ch )
+{
+    kdDebug() << indent << " :" << ch << ":" << endl;
+    StackItem *stackItem=structureStack.current();
+    QDomNode nodeOut=stackItem->stackNode; //TODO: empty stack!
+    if (stackItem->elementType==ElementTypeContent)
+    {// TODO: verify consistancy with stack!
+        nodeOut.appendChild(nodeOut.ownerDocument().createTextNode(ch));
+    }
+    else if (stackItem->elementType==ElementTypeParagraph)
+    {// TODO: verify consistancy with stack!
+        nodeOut.appendChild(nodeOut.ownerDocument().createTextNode(ch));
+    }
+    
+    return true;
+}
 
 ABIWORDImport::ABIWORDImport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
@@ -152,44 +228,9 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     if ((to != "application/x-kword") || (from != "application/x-abiword"))
         return false;
 
-    // Note: we implement the import similary to the export.
-    // We have something like an XML-file, haven't we?
-    
-    QFile in(fileIn);
-    if(!in.open(IO_ReadOnly))
-    {
-        kdError() << "Unable to open input file!" << endl;
-        in.close();
-        return false;
-    }
 
     //The warning is serious!! (KWord crashes if it does not find a few things in its XML code)
-    kdDebug()<<"AbiWord to KWord Import filter: WARNING: the following code can crash KWord!!"<<endl;
-    
-    //ToDo: verify if the encoding of the file is really UTF-8
-    //For now, we arbitrarily decide it is or that Qt can handle it!!
-    
-#if 1
-    QDomDocument qDomDocumentIn; //For parsing the XML
-    
-    qDomDocumentIn.setContent(&in); //Feed it with the file content!
-    in.close(); //Hopefully there is no errors!
-#else
-    QByteArray byteArrayIn;
-    in.ReadBlock((char*) byteArrayIn, in.size());
-    in.close(); //Hopefully there is no errors!
-    
-    //ToDo: verify if the encoding of the file is really UTF-8
-    //For now, we arbitrarily decide it is!!
-    
-    QDomDocument qDomDocumentIn; //For parsing the XML
-    
-    qDomDocumentIn.setContent(byteArrayIn); //Feed it with the file content!
-#endif       
-   
-    kdError() << "Filter for AbiWord import is not ready yet" << endl; //Todo: remove it!
-
-    QDomDocument qDomDocumentOut("abiword");
+    kdDebug()<<"WARNING: AbiWord to KWord Import filter can crash KWord!!"<<endl;
 
     // Make the file header
     
@@ -210,15 +251,25 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     strHeader+="</FRAMESETS>\n";
     strHeader+="</DOC>\n";
        
+    
+    QFile in(fileIn);
+    //ToDo: verify if the encoding of the file is really UTF-8
+    //For now, we arbitrarily decide that Qt can handle it!!
+    QDomDocument qDomDocumentOut(fileOut);
     qDomDocumentOut.setContent(strHeader);
     
-    QDomElement elementOut=qDomDocumentOut.documentElement();
-    kdDebug()<<elementOut.tagName();
-
-    ProcessAbiWordTag(qDomDocumentIn.documentElement(),NULL,elementOut);
+    StructureParser handler(qDomDocumentOut.documentElement());
+    QXmlInputSource source(in);
+    QXmlSimpleReader reader;
+    reader.setContentHandler( &handler );
+    reader.parse( source );
+   
+    kdError() << "Filter for AbiWord import is not ready yet" << endl; //Todo: remove it!
 
     kdDebug()<< qDomDocumentOut.toCString() << endl << "Now importing to KWord!" << endl;
-        
+
+    //Todo: verify that the output document is valid for KWord, as KWord hates <FRAMESETS/>
+            
     KoStore out=KoStore(QString(fileOut), KoStore::Write);
     if(!out.open("root"))
     {
