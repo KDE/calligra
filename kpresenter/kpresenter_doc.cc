@@ -3174,7 +3174,6 @@ void KPresenterDoc::insertFile(const QString & file )
     KMacroCommand *macro = 0L;
     bool createMacro = false;
     for ( int i = m_insertFilePage; i<m_pageList.count();i++)
-        //for ( int i =m_pageList.count()-1 ; i>= m_insertFilePage; i--)
     {
         if ( !macro )
             macro = new KMacroCommand( i18n("Insert File"));
