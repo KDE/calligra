@@ -5435,6 +5435,12 @@ void KPresenterView::spellCheckerDone( const QString & )
                                      i18n("SpellCheck selection finished."),
                                      i18n("Spell checking"));
             m_pKPresenterDoc->setReadWrite(true);
+
+#ifdef HAVE_LIBASPELL
+            delete m_spell.kospell;
+            m_spell.kospell = 0;
+#endif
+             clearSpellChecker();
         }
         else
         {
