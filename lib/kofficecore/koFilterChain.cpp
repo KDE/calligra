@@ -664,17 +664,17 @@ namespace KOffice {
                 QStringList::ConstIterator exportIt = ( *it )->export_.begin();
                 QStringList::ConstIterator exportEnd = ( *it )->export_.end();
 
-            for ( ; exportIt != exportEnd; ++exportIt ) {
-                // First make sure the export vertex is in place
-                QCString key = ( *exportIt ).latin1();  // latin1 is okay here
-                Vertex* exp = m_vertices[ key ];
-                if ( !exp ) {
-                    exp = new Vertex( key );
-                    m_vertices.insert( key, exp );
-                }
-                // Then create the appropriate edges
+                for ( ; exportIt != exportEnd; ++exportIt ) {
+                    // First make sure the export vertex is in place
+                    QCString key = ( *exportIt ).latin1();  // latin1 is okay here
+                    Vertex* exp = m_vertices[ key ];
+                    if ( !exp ) {
+                        exp = new Vertex( key );
+                        m_vertices.insert( key, exp );
+                    }
+                    // Then create the appropriate edges
                     importIt = ( *it )->import.begin();
-                for ( ; importIt != importEnd; ++importIt )
+                    for ( ; importIt != importEnd; ++importIt )
                         m_vertices[ ( *importIt ).latin1() ]->addEdge( new Edge( exp, *it ) );
                 }
             }

@@ -44,54 +44,71 @@ class KoFilterManager : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * This enum is used to distinguish the import/export cases
+     */
     enum Direction { Import = 1,  Export = 2 };
 
-    // Filter manager for a document
+    /**
+     * Create a filter manager for a document
+     */
     KoFilterManager( KoDocument* document );
-    // Filter manager for a filter which wants to embed something. The url
-    // it passes is the file to convert, obviously. You can't use the
-    // import method, use exp0rt to convert the file to the destination
-    // mimetype you prefer.
+    /**
+     * Create a filter manager for a filter which wants to embed something.
+     * The url it passes is the file to convert, obviously. You can't use
+     * the @ref import() method -- use @ref exp0rt() to convert the file to
+     * the destination mimetype you prefer.
+     */
     KoFilterManager( const QString& url );
 
     virtual ~KoFilterManager();
 
-    // Imports the passed URL and returns the resultant filename
-    // (most likely some file in /tmp).
-    // The status vaiable signals the success/error of the conversion
-    // If the QString which is returned isEmpty() and the status is OK,
-    // then we imported the file directly into the document.
+    /**
+     * Imports the passed URL and returns the resultant filename
+     * (most likely some file in /tmp).
+     * The status vaiable signals the success/error of the conversion
+     * If the QString which is returned isEmpty() and the status is OK,
+     * then we imported the file directly into the document.
+     */
     QString import( const QString& url, KoFilter::ConversionStatus& status );
-
-    // Exports the given file/document *to* the specified URL/mimetype.
-    // Oh, well, export is a C++ keyword ;)
+    /**
+     * Exports the given file/document *to* the specified URL/mimetype.
+     * Oh, well, export is a C++ keyword ;)
+     */
     KoFilter::ConversionStatus exp0rt( const QString& url, QCString& mimeType );
 
 
     // ### Static API ###
-    // Suitable for passing to KFileDialog::setMimeFilter. The default mime
-    // gets set by the "users" of this method, as we don't have enough
-    // information here.
+    /**
+     * Suitable for passing to @ref KFileDialog::setMimeFilter. The default mime
+     * gets set by the "users" of this method, as we don't have enough
+     * information here.
+     */
     static QStringList mimeFilter( const QCString& mimetype, Direction direction );
 
-    // The same method as above for KoShell.
-    // We don't need the mimetype, as we will simply use all available
-    // KOffice mimetypes, the Direction enum is omitted, as we only
-    // call this for importing. When saving we already know the KOffice
-    // part we're using.
+    /**
+     * The same method as above but suited for KoShell.
+     * We don't need the mimetype, as we will simply use all available
+     * KOffice mimetypes. The Direction enum is omitted, as we only
+     * call this for importing. When saving from KoShell we already
+     * know the KOffice part we're using.
+     */
     static QStringList mimeFilter();
 
-    // Is that filter available at all?
-    // Note: Slow, but cached (static)
+    /**
+     * Method used to check if that filter available at all.
+     * Note: Slow, but cached
+     */
     static bool filterAvailable( KoFilterEntry::Ptr entry );
 
 signals:
     void sigProgress( int );
 
 private:
-    // ### API for KoFilterChains ###
+    // ### API for KoFilterChains ### (internal)
     // The friend methods are private in KoFilterChain and
-    // just forward calls to the shorter methods here.
+    // just forward calls to the methods here. Should be
+    // pretty save.
     friend QString KoFilterChain::filterManagerImportFile() const;
     QString importFile() const { return m_importUrl; }
     friend QString KoFilterChain::filterManagerExportFile() const;
