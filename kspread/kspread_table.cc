@@ -710,6 +710,23 @@ QRect KSpreadTable::selection() const
   return m_rctSelection;
 }
 
+QPoint KSpreadTable::selectionAnchor()
+{
+  /* the anchor is in the opposite corner of the selection rect from the marker */
+
+  /* these show where the marker is */
+  bool atTop;
+  bool atLeft;
+
+  atLeft = m_marker.x() == m_rctSelection.left();
+  atTop = m_marker.y() == m_rctSelection.top();
+
+  QPoint anchor(atLeft ? m_rctSelection.right() : m_rctSelection.left(),
+                atTop ? m_rctSelection.bottom() : m_rctSelection.top());
+  return anchor;
+}
+
+
 bool KSpreadTable::singleCellSelection() const
 {
   const KSpreadCell* cell = cellAt(m_marker.x(), m_marker.y());

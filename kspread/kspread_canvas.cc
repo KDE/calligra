@@ -285,8 +285,6 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   m_defaultGridPen.setWidth( 1 );
   m_defaultGridPen.setStyle( SolidLine );
 
-  m_selectionAnchor = QPoint(1,1);
-
   m_iXOffset = 0;
   m_iYOffset = 0;
   m_pView = _view;
@@ -513,7 +511,6 @@ void KSpreadCanvas::gotoLocation( QPoint location, KSpreadTable* table,
     newSelection = QRect(topLeft, bottomRight);
 
     table->setSelection(newSelection, location, this);
-    m_selectionAnchor = location;
   }
 
   scrollToCell(location);
@@ -861,8 +858,9 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
   // The user started the drag in the lower right corner of the marker ?
   if ( m_eMouseAction == ResizeCell )
   {
-    int x = m_selectionAnchor.x();
-    int y = m_selectionAnchor.y();
+    QPoint selectionAnchor = table->selectionAnchor();
+    int x = selectionAnchor.x();
+    int y = selectionAnchor.y();
     if( x > selection.left())
         x = selection.left();
     if( y > selection.top() )
@@ -907,16 +905,12 @@ void KSpreadCanvas::processClickSelectionHandle(QMouseEvent *event)
   {
     m_eMouseAction = AutoFill;
     m_rctAutoFillSrc = selection;
-    m_selectionAnchor.setX(QMIN(markerColumn(),selection.left()));
-    m_selectionAnchor.setY(QMIN(markerRow(),selection.top()));
   }
   // Resize a cell (done with the right mouse button) ?
   // But for that to work there must not be a selection.
   else if ( event->button() == MidButton && table->singleCellSelection())
   {
     m_eMouseAction = ResizeCell;
-    m_selectionAnchor.setX(markerColumn());
-    m_selectionAnchor.setY(markerRow());
   }
 
   return;
@@ -925,18 +919,15 @@ void KSpreadCanvas::processClickSelectionHandle(QMouseEvent *event)
 void KSpreadCanvas::extendCurrentSelection(QPoint cell)
 {
   KSpreadTable* table = activeTable();
+  QPoint selectionAnchor = table->selectionAnchor();
 
   /* the selection simply becomes a box with the anchor and given cell as opposite corners*/
   int left, top, right, bottom;
-  left = QMIN(m_selectionAnchor.x(), cell.x());
-  top = QMIN(m_selectionAnchor.y(), cell.y());
-  right = QMAX(m_selectionAnchor.x(), cell.x());
-  bottom = QMAX(m_selectionAnchor.y(), cell.y());
+  left = QMIN(selectionAnchor.x(), cell.x());
+  top = QMIN(selectionAnchor.y(), cell.y());
+  right = QMAX(selectionAnchor.x(), cell.x());
+  bottom = QMAX(selectionAnchor.y(), cell.y());
   QRect newSelection(QPoint(left, top), QPoint(right, bottom));
-  newSelection.normalize();
-
-  /* account for merged cell problems */
-  newSelection = table->selectionCellMerged(newSelection);
 
   /* keep the marker at the anchor */
   table->setSelection(newSelection, cell, this);
@@ -1018,7 +1009,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   }
 
   // Unselect a selection ?
-  if ( _ev->button() == LeftButton || !selection.contains( QPoint( col, row ) ) )
+  if ( (_ev->button() == LeftButton || !selection.contains( QPoint( col, row ) ) )
+       && !(_ev->state() & ShiftButton))
     table->unselect();
 
   // Extending an existing selection with the shift button ?
@@ -1051,8 +1043,6 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
                          col + cell->extraXCells(),
                          row + cell->extraYCells() );
     table->setSelection( selection, this );
-    m_selectionAnchor.setX(col);
-    m_selectionAnchor.setY(row);
   }
   else if ( _ev->button() == RightButton )
   {
