@@ -30,5 +30,5 @@ applnkdir = $(kde_appsdir)/Office
 
 ####### Implicit rules
 
-messages: rc.cpp
-	$(XGETTEXT) rc.cpp *.cc -o $(podir)/koshell.pot
+messages:
+	$(XGETTEXT) *.cc -o $(podir)/koshell.pot
