@@ -414,7 +414,6 @@ void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRec
         // NOTE: make all multiplications before any division
         double w = _origSize.width();
         w *= ext.width();
-        // QCursor::pos() is not right.  What is right?
 #if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(kapp->activeWindow());
 #else

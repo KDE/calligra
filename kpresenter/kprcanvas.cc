@@ -2264,8 +2264,7 @@ void KPrCanvas::resizeEvent( QResizeEvent *e )
         QWidget::resizeEvent( new QResizeEvent( QApplication::desktop()->screenGeometry(this).size(),
                                                 e->oldSize() ) );
 #endif
-    if ( editMode ) // ### what happens in fullscreen mode ? No double-buffering !?!?
-        buffer.resize( size() );
+    buffer.resize( size() );
 }
 
 KPObject* KPrCanvas::getObjectAt( const KoPoint&pos )
