@@ -83,12 +83,12 @@ void KImageShopShell::slotFileOpen()
   
   if( KImageIO::isSupported( KImageIO::mimeType( file ) ) )
     {
-      file = KoFilterManager::self()->import( file, nativeFormatMimeType() );
-      if( file.isNull() )
+      QString tempfile = KoFilterManager::self()->import( file, nativeFormatMimeType() );
+      if( tempfile.isNull() )
 	return;
     }
   
-  if( !openDocument( file ) )
+  if( !openDocument( KURL( file ), tempfile != file ) )
     {
       QString tmp;
       tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
