@@ -556,7 +556,7 @@ KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_pa
     preview = new KWTableTemplatePreview( i18n( "Preview" ), m_doc->tableStyleCollection()->findTableStyle("Plain"), this );
     grid->addWidget( preview, 1, 1 );
 
-    bgCustomize = new QButtonGroup( 3, Horizontal, i18n( "Apply to" ), this );
+    bgCustomize = new QButtonGroup( 3, Horizontal, i18n( "Apply To" ), this );
 
     cbFirstRow = new QCheckBox( i18n( "First row" ), bgCustomize );
     cbLastRow = new QCheckBox( i18n( "Last row" ), bgCustomize );

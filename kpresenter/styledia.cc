@@ -183,7 +183,7 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     connect( choosePWidth, SIGNAL( valueChanged( int ) ),
 	     this, SLOT( slotWidthChanged() ) );
 
-    QGroupBox *grp = new QGroupBox(2, Qt::Horizontal, i18n("Line ends:"), right);
+    QGroupBox *grp = new QGroupBox(2, Qt::Horizontal, i18n("Line Ends"), right);
 
     l = new QLabel( i18n( "Begin:" ), grp );
     l->setFixedHeight( l->sizeHint().height() );
