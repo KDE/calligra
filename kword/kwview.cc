@@ -1795,7 +1795,7 @@ void KWView::updateReadWrite( bool readwrite )
         actionViewPageMode->setEnabled( true );
         actionViewPreviewMode->setEnabled( true );
 
-        actionViewTextMode->setEnabled( (m_doc->processingType()==KWDocument::WP) );
+        actionViewTextMode->setEnabled( true );
         actionShowRuler->setEnabled( true );
         actionEditFind->setEnabled( true );
         actionViewFormattingChars->setEnabled( true );
@@ -5712,7 +5712,8 @@ void KWView::switchModeView()
 
     // Now update the actions appropriately
     QString mode = m_gui->canvasWidget()->viewMode()->type();
-    bool state = (mode!="ModeText");
+    bool isTextMode = mode == "ModeText";
+    bool state = !isTextMode;
     actionToolsCreateText->setEnabled(state);
     actionToolsCreatePix->setEnabled(state);
     actionToolsCreatePart->setEnabled(state);
@@ -5722,7 +5723,7 @@ void KWView::switchModeView()
     actionEditFootEndNote->setEnabled( state );
     actionViewFooter->setEnabled( state && m_doc->processingType() == KWDocument::WP );
     actionViewHeader->setEnabled( state && m_doc->processingType() == KWDocument::WP );
-    actionViewTextMode->setEnabled(m_doc->processingType()==KWDocument::WP);
+    //actionViewTextMode->setEnabled(m_doc->processingType()==KWDocument::WP);
     actionShowDocStruct->setEnabled(state);
     actionFormatPage->setEnabled(state);
     actionInsertContents->setEnabled( state );
@@ -5747,7 +5748,7 @@ void KWView::switchModeView()
 
     }
 
-    if ( !state )
+    if ( isTextMode )
     {
         if ( m_doc->showdocStruct() )
         {
@@ -5764,10 +5765,12 @@ void KWView::switchModeView()
     //because in text mode view we display field code and not value
     //normal because we don't have real page in this mode
     m_doc->recalcVariables(  VT_PGNUM );
-    //switch to main frameset when we switch in text-view mode
-    //otherwise we can edit a footnote frame or header/footer
-    if ( !state )
-        m_gui->canvasWidget()->editFrameSet( m_doc->frameSet( 0 ));
+    if ( isTextMode )
+    {
+        // Make sure we edit the same frameset as the one shown in the textview ;-)
+        m_gui->canvasWidget()->editFrameSet( static_cast<KWViewModeText* >(m_doc->viewMode())->textFrameSet() );
+
+    }
     //remove add "zoom to page" not necessary in text mode view
     changeZoomMenu( m_doc->zoom() );
     showZoom( m_doc->zoom() );

@@ -179,13 +179,45 @@ Changes between KWord-1.2-beta1 and KWord-1.2-beta2
 - Fixed handling of embedded documents
 
 Changes between KWord-1.2-beta2 and KWord-1.2-RC1
-=================================================
-- Fix crash when we remove footnote variable
-- Fix save variable value : save real value and not text displaying (problem when we activate display field code)
-- Fix mem leak : delete "special char dialogbox"
-- Fix crash when we close kword and "special char dialogbox" is not closed
-- Fix infini loop when we resize footnote
-- Add menu for readonly mode
-- Fix a lot of crash in framedia 
-- Fix crash when we delete style requested by followingstyle.
-- Fix crash in bookmark
+===================================================
+New:
+- Like all of KOffice: a readonly GUI for embedding into Konqueror
+- More DCOP calls
+
+Layout/painting fixes:
+- Transparency painting fixes: transparent frames, including text frames.
+Note that transparent images do not print properly with the current Qt, Qt 3.1 will fix it.
+- Footnote layout fix, when multiple footnotes are on the same page and the last one won't fit
+- Improved algorithm for the way the text flows between frames of the same frameset.
+- Fixed paragraph height increasing when inserting a footnote.
+- Fixed the white lines during the painting of inline frames
+- Fixed footer layout in some first/even/odd footer settings
+
+Bugfixes:
+- Several fixes for the readonly case
+- Unified picture handling (images and cliparts)
+- Improvements to frame dialog when opened for multiple frames, many crashes fixed.
+- Fixed frame-creation rectangle remaining visible in margin after right click.
+- Many fixes for the background spellchecking
+- Many fixes for "Insert File" (pictures, embedded objects, inline frames...)
+- Ability to use the text view mode for any text frameset
+- Embedded document must be selected before clicking on them starts editing them.
+- More KOffice-1.1 compatibility on saving (when explicitely requested)
+- Save correct variable value even when variable codes are displayed.
+- When making an inline frame non-inline, ensure it appears on top (bigger z-order)
+- 'Copy' exports paragraph numbers with the text.
+- Keep key shortcuts when rebuilding dynamic menus (e.g. style lists)
+- Fixed 'raise frame' and 'lower frame' (handle equality case)
+- Several GUI fixes
+- No header/footer configuration in DTP mode
+- No page layout, frame resizing etc. in the text view mode.
+- More robustness in DCOP calls (to prevent crashes)
+
+Crashes:
+- Do not crash when pasting an embedded object (not implemented though)
+- Fixed crash when removing a footnote variable
+- Fixed crash when we close kword and "special char dialogbox" is not closed
+- Fixed infinite loop when we resizing footnote
+- Fixed crash when we delete style that is also used as a 'following style'.
+- Fixed crash with bookmarks
+- Fixed several memory leaks

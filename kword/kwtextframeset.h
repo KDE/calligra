@@ -283,7 +283,7 @@ protected slots:
     void slotRepaintChanged();
     void slotParagraphDeleted(KoTextParag*_parag);
     void slotParagraphCreated(KoTextParag*_parag);
-    void slotParagraphModified(KoTextParag*_parag, KoTextParag::ParagModifyType, int, int);
+    void slotParagraphModified(KoTextParag*_parag, int /*KoTextParag::ParagModifyType*/, int, int);
 
 protected:
     void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakBegin, int* breakEnd, int paragLeftMargin = 0 );

@@ -446,8 +446,8 @@ void KWDocument::initConfig()
 
   setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
   newZoomAndResolution( false, false );
-  //text mode view doesn't work in not WP paper.
-  if ((processingType()!=KWDocument::WP && m_lastViewMode =="ModeText" )||(!isReadWrite()&& m_lastViewMode =="ModeText") )
+  //text mode view is not a good default for a readonly document...
+  if ( !isReadWrite() && m_lastViewMode =="ModeText" )
       m_lastViewMode= "ModeNormal";
 
   m_viewMode = KWViewMode::create( m_lastViewMode, this );
@@ -455,7 +455,7 @@ void KWDocument::initConfig()
 
 void KWDocument::saveConfig()
 {
-    if ( isEmbedded() || !isReadWrite())
+    if ( isEmbedded() || !isReadWrite() )
         return;
     // Only save the config that is manipulated by the UI directly.
     // The config from the config dialog is saved by the dialog itself.
@@ -1887,11 +1887,6 @@ bool KWDocument::completeLoading( KoStore *_store )
     reactivateBgSpellChecking();
     connect( documentInfo(), SIGNAL( sigDocumentInfoModifed()),this,SLOT(slotDocumentInfoModifed() ) );
 
-    if (processingType()!=KWDocument::WP && m_lastViewMode =="ModeText"  )
-    {
-      m_lastViewMode= "ModeNormal";
-      m_viewMode = KWViewMode::create( m_lastViewMode, this );
-    }
     //desactivate bgspellchecking
     //attributes isReadWrite is not placed at the beginning !
     if ( !isReadWrite())
@@ -1963,7 +1958,7 @@ bool KWDocument::processFootNoteRequests()
     return ret;
 }
 
-QString KWDocument::uniqueFramesetName( const QString oldName )
+QString KWDocument::uniqueFramesetName( const QString& oldName )
 {
     // make up a new name for the frameset, use Copy[digits]-[oldname] as template.
     // Fully translatable naturally :)
@@ -4318,7 +4313,7 @@ QStringList KWDocument::listOfBookmarkName(KWViewMode * viewMode)const
     return list;
 }
 
-void KWDocument::paragraphModified(KoTextParag* /*_parag*/, KoTextParag::ParagModifyType /*_type*/, int /*start*/, int /*lenght*/)
+void KWDocument::paragraphModified(KoTextParag* /*_parag*/, int /*KoTextParag::ParagModifyType*/ /*_type*/, int /*start*/, int /*lenght*/)
 {
     //kdDebug()<<" _parag :"<<_parag<<" start :"<<start<<" lenght :"<<lenght<<endl;
 }

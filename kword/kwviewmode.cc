@@ -310,8 +310,8 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
 }
 
 //////////////////
-KWViewModeText::KWViewModeText( KWDocument * doc ) : KWViewMode( doc, false ) { 
-    m_textFrameSet=NULL; 
+KWViewModeText::KWViewModeText( KWDocument * doc ) : KWViewMode( doc, false ) {
+    m_textFrameSet=NULL;
 }
 
 KWTextFrameSet * KWViewModeText::textFrameSet()
@@ -330,7 +330,8 @@ KWTextFrameSet * KWViewModeText::textFrameSet()
             }
         }
 
-        if (!fs || fs->type() != FT_TEXT) fs = m_doc->frameSet( 0 );  // if not a textFS; fallback to fs 0;
+        if (!fs || fs->type() != FT_TEXT || fs->isHeaderOrFooter() || fs->isFootEndNote())
+            fs = m_doc->frameSet( 0 );  // if not a textFS, or header/footer/footnote: fallback to fs 0
 
         m_textFrameSet=dynamic_cast<KWTextFrameSet *>(fs);
     }
@@ -340,53 +341,11 @@ KWTextFrameSet * KWViewModeText::textFrameSet()
 QPoint KWViewModeText::normalToView( const QPoint & nPoint )
 {
     return nPoint;
-#if 0
-    KWTextFrameSet * textfs = textFrameSet();
-    if ( !textfs )
-        return nPoint;
-    else
-    {
-        QPoint iPoint;
-        // We use documentToInternalMouseSelection to benefit from a bit of tolerance.
-        // This is helpful against rounding errors (e.g. x in pt = 28.0, zoomed = 29, unzooming = 27.8)
-        KWTextFrameSet::RelativePosition relPos;
-        if ( textfs->documentToInternalMouseSelection( m_doc->unzoomPoint( nPoint ), iPoint, relPos ) )
-            return m_doc->layoutUnitToPixel( iPoint );
-        else
-        {
-            kdWarning() << "KWViewModeText: documentToInternal returned 0L for "
-                        << nPoint.x() << "," << nPoint.y() << endl;
-            return nPoint;
-        }
-        return nPoint;
-    }
-#endif
 }
 
 QPoint KWViewModeText::viewToNormal( const QPoint & vPoint )
 {
     return vPoint;
-#if 0
-    KWTextFrameSet * textfs = textFrameSet();
-    QRect contentsRect( QPoint(0,0), contentsSize() );
-    if ( !textfs || !contentsRect.contains(vPoint) )
-        return vPoint;
-    else
-    {
-        QPoint iPoint = m_doc->pixelToLayoutUnit( vPoint );
-        KoPoint dPoint;
-        if ( textfs->internalToDocument( iPoint, dPoint ) )
-            return textfs->kWordDocument()->zoomPoint( dPoint );
-        else
-        {
-            kdWarning() << "KWViewModeText: internalToDocument returned 0L for iPoint "
-                        << iPoint.x() << "," << iPoint.y()
-                        << " (vPoint: " << vPoint << ")" << endl;
-            return vPoint;
-        }
-        return vPoint;
-    }
-#endif
 }
 
 QSize KWViewModeText::contentsSize()
@@ -397,13 +356,16 @@ QSize KWViewModeText::contentsSize()
         return QSize();
 
     // The actual contents only depend on the amount of text.
+    // The width is the one from the text, so that the placement of tabs makes a bit of sense, etc.
+    // The minimum height is the one of a normal page though.
 
-    QSize cSize( m_doc->paperWidth(),
-                 QMAX(m_doc->paperHeight() , 
-                      m_doc->layoutUnitToPixelY( m_textFrameSet->textDocument()->height() ) 
-                  ) );
-    //kdDebug() << "KWViewModeText::contentsSize " << cSize << endl;
-    return cSize;
+    int width = /*m_doc->paperWidth()*/
+        m_doc->layoutUnitToPixelX( m_textFrameSet->textDocument()->width() );
+
+    int height = QMAX((int)m_doc->paperHeight(),
+                      m_doc->layoutUnitToPixelY( m_textFrameSet->textDocument()->height() ) );
+    //kdDebug() << "KWViewModeText::contentsSize " << width << "x" << height << endl;
+    return QSize( width, height );
 }
 
 QSize KWViewModeText::availableSizeForText( KWTextFrameSet* /*textfs*/ )

@@ -125,12 +125,12 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
 
     connect( m_textobj, SIGNAL( paragraphCreated( KoTextParag*) ),
              SLOT( slotParagraphCreated(KoTextParag*) ));
-    connect( m_textobj, SIGNAL( paragraphModified( KoTextParag*, KoTextParag::ParagModifyType, int, int) ),
-             SLOT( slotParagraphModified(KoTextParag*, KoTextParag::ParagModifyType, int, int) ));
+    connect( m_textobj, SIGNAL( paragraphModified( KoTextParag*, int, int, int) ),
+             SLOT( slotParagraphModified(KoTextParag*, int, int, int) ));
 
 }
 
-void KWTextFrameSet::slotParagraphModified(KoTextParag* _parag, KoTextParag::ParagModifyType _type, int start, int lenght)
+void KWTextFrameSet::slotParagraphModified(KoTextParag* _parag, int /*KoTextParag::ParagModifyType*/ _type, int start, int lenght)
 {
     kWordDocument()->paragraphModified(_parag, _type, start, lenght);
 }
@@ -2589,7 +2589,7 @@ KoTextDocCommand *KWTextFrameSet::deleteTextCommand( KoTextDocument *textdoc, in
 KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     : KoTextView( fs->textObject() ), KWFrameSetEdit( fs, canvas )
 {
-    //kdDebug(32001) << "KWTextFrameSetEdit::KWTextFrameSetEdit " << fs->getName() << endl;
+    kdDebug(32001) << "KWTextFrameSetEdit::KWTextFrameSetEdit " << fs->getName() << endl;
     KoTextView::setReadWrite( fs->kWordDocument()->isReadWrite() );
     KoTextObject* textobj = fs->textObject();
     connect( textobj, SIGNAL( selectionChanged(bool) ), canvas, SIGNAL( selectionChanged(bool) ) );
