@@ -46,6 +46,8 @@ k_dcop:
 
     void setBackupFile( bool _b );
     bool backupFile()const;
+    int nbLayer()const;
+    DCOPRef activeLayer();
 
 private:
 	KarbonPart *m_part;

@@ -22,6 +22,7 @@
 #include "karbon_part.h"
 #include "karbon_part_iface.h"
 #include "vselection.h"
+#include <kapplication.h>
 
 KarbonPartIface::KarbonPartIface( KarbonPart *part_ )
 	: KoDocumentIface( part_ )
@@ -85,4 +86,17 @@ void KarbonPartIface::setBackupFile( bool _b )
 bool KarbonPartIface::backupFile()const
 {
     return m_part->backupFile();
+}
+
+int KarbonPartIface::nbLayer()const
+{
+    return m_part->document().layers().count();
+}
+
+DCOPRef KarbonPartIface::activeLayer()
+{
+    if ( !m_part->document().activeLayer() )
+        return DCOPRef();
+    return DCOPRef( kapp->dcopClient()->appId(),
+		    m_part->document().activeLayer()->dcopObject()->objId() );
 }
