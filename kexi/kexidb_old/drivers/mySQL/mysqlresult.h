@@ -58,7 +58,8 @@ class MySqlResult : public KexiDBResult
 	protected:
 		// mysql specific
 		MYSQL_RES	*m_result;
-	        MYSQL_ROW	m_row;
+		MYSQL_ROW	m_row;
+		unsigned long* m_lengths;
 		MYSQL_FIELD	*m_field;
 		unsigned int	m_numFields;
 

@@ -30,6 +30,7 @@ MySqlResult::MySqlResult(MYSQL_RES *result, QObject *parent) : KexiDBResult(pare
 	//various initialisations...
 	m_result = result;
 	m_row = 0;
+	m_lengths = 0;
 	m_field = 0;
 	m_currentRecord = 0;
 	m_numFields = mysql_num_fields(m_result);
@@ -65,8 +66,13 @@ bool
 MySqlResult::next()
 {
 	m_row = mysql_fetch_row(m_result);
+	m_lengths = mysql_fetch_lengths(m_result);
+	
 	if(!m_row)
+	{
 		return false;
+	}
+	
 	m_currentRecord++;
 	return true;
 }
@@ -75,13 +81,22 @@ QVariant
 MySqlResult::value(unsigned int field)
 {
 	if(!m_row)
+	{
 		return 0;
+	}
+	
 	switch(fieldInfo(field)->type())
 	{
 		case QVariant::Date:
 			return QVariant(QDate::fromString((m_row)[field], Qt::ISODate));
 		case QVariant::Int:
 			return QVariant(QString((m_row)[field]).toInt());
+		case QVariant::ByteArray:
+		{
+			QByteArray ba;
+			ba.duplicate((m_row)[field], m_lengths[field]);
+			return QVariant(ba);
+		}
 		default:
 			return QVariant((m_row)[field]);
 	}
