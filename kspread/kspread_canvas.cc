@@ -50,11 +50,11 @@ void KSpreadEditWidget::slotDoneEdit()
 void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
 {
   if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
-  {    
+  {
     QLineEdit::keyPressEvent( _ev );
     return;
   }
-  
+
   switch ( _ev->key() )
   {
     case Key_Down:
@@ -104,7 +104,7 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   m_defaultGridPen.setColor( lightGray );
   m_defaultGridPen.setWidth( 1 );
   m_defaultGridPen.setStyle( SolidLine );
-  
+
   m_iXOffset = 0;
   m_iYOffset = 0;
   m_fZoom = 1.0;
@@ -117,6 +117,8 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
 
   setBackgroundColor( white );
   setMouseTracking( TRUE );
+
+  setBackgroundMode( NoBackground );
 }
 
 
@@ -146,7 +148,7 @@ KSpreadTable* KSpreadCanvas::findTable( const QString& _name )
 KSpreadTable* KSpreadCanvas::activeTable()
 {
   return m_pView->activeTable();
-}   
+}
 
 void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 {
@@ -155,7 +157,7 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
     QMessageBox::critical( this, i18n("KSpread Error"), i18n("Invalid cell reference"), i18n("Ok") );
     return;
   }
-  
+
   KSpreadTable* table = activeTable();
   if ( _cell.isTableKnown() )
     table = _cell.table;
@@ -165,7 +167,7 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 			   i18n("Unknown table name %1").arg( _cell.tableName ), i18n("Ok" ) );
     return;
   }
-  
+
   m_pView->setActiveTable( table );
 
   int xpos = table->columnPos( _cell.pos.x(), this );
@@ -182,7 +184,7 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
   }
 
   setMarkerColumn( _cell.pos.x() );
-  setMarkerRow( _cell.pos.y() );  
+  setMarkerRow( _cell.pos.y() );
 }
 
 void KSpreadCanvas::slotScrollHorz( int _value )
@@ -192,7 +194,7 @@ void KSpreadCanvas::slotScrollHorz( int _value )
 
   if ( _value < 0 )
     _value = 0;
-  
+
   activeTable()->enableScrollBarUpdates( false );
 
   hideMarker();
@@ -645,7 +647,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
       return;
     }
   }
-  
+
   hideMarker();
 
   int xpos, ypos;
@@ -669,7 +671,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   }
 
   // Test wether the mouse is over some anchor
-  {    
+  {
     KSpreadCell *cell = table->visibleCellAt( markerColumn(), markerRow() );
     QString anchor = cell->testAnchor( _ev->pos().x() - xpos,
 				       _ev->pos().y() - ypos, this );
@@ -697,13 +699,13 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     m_pEditWidget->setText( cell->text() );
   else
     m_pEditWidget->setText( "" );
-  
+
   if ( !m_strAnchor.isEmpty() )
   {
     debug("ANCHOR=%s",m_strAnchor.ascii() );
     gotoLocation( KSpreadPoint( m_strAnchor, m_pDoc->map() ) );
   }
-  
+
   showMarker();
 
   // Context menu ?
@@ -803,11 +805,11 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
   // Dont handle accelerators
   if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
-  {    
+  {
     QWidget::keyPressEvent( _ev );
     return;
   }
-  
+
   switch( _ev->key() )
     {
       /**
@@ -1558,7 +1560,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
 void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
-  
+
   if (!table )
 	return;
 
@@ -1570,7 +1572,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   painter.setBackgroundColor( white );
 
   painter.eraseRect( _ev->rect() );
-  
+
   //QFontMetrics fm = painter.fontMetrics();
   // Matthias Elter: This causes a SEGFAULT in ~QPainter!
   // Only god and the trolls know why ;-)
