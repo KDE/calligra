@@ -1403,11 +1403,20 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 insRect.moveBy( -insRect.width(), -insRect.height());
                 insRect.setSize( 2*insRect.size() );
             }
-        }
         insertEllipse( insRect );
+        }
         break;
     case INS_PIE:
-        if ( !insRect.isNull() ) insertPie( insRect );
+        if ( !insRect.isNull() )
+        {
+            if ( m_drawSymetricObject )
+            {
+                m_drawSymetricObject = false;
+                insRect.moveBy( -insRect.width(), -insRect.height());
+                insRect.setSize( 2*insRect.size() );
+            }
+            insertPie( insRect );
+        }
         break;
     case INS_OBJECT:
     case INS_DIAGRAMM:
@@ -1758,12 +1767,31 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		p.setBrush( NoBrush );
 		p.setRasterOp( NotROP );
 		if ( insRect.width() != 0 && insRect.height() != 0 ) {
-                    drawPieObject(&p);
+                    if ( !m_drawSymetricObject)
+                        drawPieObject(&p, insRect);
+                    else
+                    {
+                        QRect tmpRect( insRect );
+                        tmpRect.moveBy( -insRect.width(), -insRect.height());
+                        tmpRect.setSize( 2*insRect.size() );
+                        drawPieObject(&p, tmpRect);
+                    }
 		}
 		insRect.setRight( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx() );
 		insRect.setBottom( ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
                 limitSizeOfObject();
-                drawPieObject(&p);
+
+                QRect lineRect( insRect );
+                if ( e->state() & AltButton )
+                {
+                    m_drawSymetricObject = true;
+                    lineRect.moveBy( -insRect.width(), -insRect.height());
+                    lineRect.setSize( 2*insRect.size() );
+                }
+                else
+                    m_drawSymetricObject = false;
+
+                drawPieObject(&p, lineRect);
 		p.end();
 
 		mouseSelectedObject = true;
@@ -1772,7 +1800,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 m_view->brushColorChanged( m_view->getBrush() );
 	    } break;
             case INS_FREEHAND: {
-                m_dragEndPoint = QPoint( e->x() /*- diffx()*/, e->y() /*- diffy()*/ );
+                m_dragEndPoint = QPoint( e->x() , e->y() );
 
                 QPainter p( this );
                 p.setPen( QPen( black, 1, SolidLine ) );
@@ -1949,20 +1977,20 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     }
 }
 
-void KPrCanvas::drawPieObject(QPainter *p)
+void KPrCanvas::drawPieObject(QPainter *p,  const QRect & rect)
 {
     switch ( m_view->getPieType() ) {
     case PT_PIE:
-        p->drawPie( insRect.x(), insRect.y(), insRect.width() - 2,
-                   insRect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
+        p->drawPie( rect.x(), rect.y(), rect.width() - 2,
+                   rect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
         break;
     case PT_ARC:
-        p->drawArc( insRect.x(), insRect.y(), insRect.width() - 2,
-                   insRect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
+        p->drawArc( rect.x(), insRect.y(), rect.width() - 2,
+                   rect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
         break;
     case PT_CHORD:
-        p->drawChord( insRect.x(), insRect.y(), insRect.width() - 2,
-                     insRect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
+        p->drawChord( rect.x(), rect.y(), rect.width() - 2,
+                     rect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
         break;
     default: break;
     }

@@ -427,7 +427,7 @@ private:
 
     void drawPolygon( const KoPoint &startPoint, const KoPoint &endPoint );
 
-    void drawPieObject(QPainter *p);
+    void drawPieObject(QPainter *p,  const QRect & );
     void limitSizeOfObject();
 
     QPoint limitOfPoint(const QPoint& _point) const;
