@@ -46,3 +46,33 @@ QString correctQString( const char *str )
 {
     return correctQString( QString( str ) );
 }
+
+/*================================================================*/
+QString makeAlphaUpperNumber( int n )
+{
+    QString tmp;
+    char bottomDigit;
+    while ( n > 26 )
+    {
+        bottomDigit = (n-1) % 26;
+        n = (n-1) / 26;
+        tmp.prepend( QChar( 'A' + bottomDigit  ) );
+    }
+    tmp.prepend( QChar( 'A' + n -1 ) );
+    return tmp;
+}
+
+/*================================================================*/
+QString makeAlphaLowerNumber( int n )
+{
+    QString tmp;
+    char bottomDigit;
+    while ( n > 26 )
+    {
+        bottomDigit = (n-1) % 26;
+        n = (n-1) / 26;
+        tmp.prepend( QChar( 'a' + bottomDigit  ) );
+    }
+    tmp.prepend( QChar( 'a' + n - 1 ) );
+    return tmp;
+}

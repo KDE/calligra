@@ -24,6 +24,9 @@
 
 QString makeRomanNumber( int n );
 
+QString makeAlphaUpperNumber( int n );
+QString makeAlphaLowerNumber( int n );
+
 QString correctQString( const QString &str );
 QString correctQString( const char *str );
 

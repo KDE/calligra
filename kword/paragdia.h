@@ -24,7 +24,7 @@
 #include <qstringlist.h>
 #include <qlist.h>
 #include <koRuler.h>
-
+#include <qspinbox.h>
 
 #include "kwtextparag.h"
 #include "counter.h"
@@ -40,7 +40,6 @@ class KButtonBox;
 class QPushButton;
 class KColorDialog;
 class KColorButton;
-class QSpinBox;
 class QButtonGroup;
 class QListBox;
 class QLineEdit;
@@ -50,6 +49,28 @@ class KWPagePreview2;
 class KWBorderPreview;
 class KWNumPreview;
 class QCheckBox;
+
+/******************************************************************/
+/* Class: KWSpinBox                                               */
+/******************************************************************/
+class KWSpinBox : public QSpinBox
+{
+    Q_OBJECT
+
+public:
+    enum counterType{ NONE,NUM,ALPHAB_L,ALPHAB_U,ROM_NUM_L,ROM_NUM_U};
+
+    KWSpinBox( int minValue, int maxValue, int step = 1,
+           QWidget * parent = 0, const char * name = 0 );
+    KWSpinBox( QWidget * parent = 0, const char * name = 0 );
+    virtual ~KWSpinBox();    
+    virtual QString mapValueToText( int value );
+    void setCounterType(counterType _type);
+ private:
+    counterType m_Etype;
+
+};
+
 
 /******************************************************************/
 /* Class: KWParagDia                                              */
@@ -133,7 +154,7 @@ public:
 					 oldLayout.bottomBorder!=bottomBorder() ); }
     //necessary when you used just border dialog
     void setAfterInitBorder(bool _b){m_bAfterInitBorder=_b;}
-
+    void changeKWSpinboxType();
 protected:
     void setupTab1();
     void setupTab2();
@@ -150,7 +171,8 @@ protected:
     QButtonGroup *gNumbering;
     QButtonGroup *gStyle;
     QLineEdit *eCustomNum;
-    QLineEdit *ecLeft, *ecRight, *eStart;
+    QLineEdit *ecLeft, *ecRight/*, *eStart*/;
+    KWSpinBox* eStart;
     QLabel *lStart;
     QRadioButton *rDisc, *rSquare, *rCircle, *rCustom;
     QPushButton *bBullets;

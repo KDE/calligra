@@ -55,9 +55,66 @@
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 #include <koRuler.h>
+#include <kwutils.h>
 
 #include <stdlib.h>
 #include <stdio.h>
+
+
+KWSpinBox::KWSpinBox( QWidget * parent, const char * name )
+    : QSpinBox(parent,name)
+{
+    m_Etype=NONE;
+}
+KWSpinBox::~KWSpinBox( )
+{
+}
+
+KWSpinBox::KWSpinBox( int minValue, int maxValue, int step ,
+           QWidget * parent , const char * name  )
+    : QSpinBox(minValue, maxValue,step ,
+           parent , name)
+{
+    m_Etype=NONE;
+}
+
+void KWSpinBox::setCounterType(counterType _type)
+{
+    m_Etype=_type;
+    textChanged();
+}
+
+
+QString KWSpinBox::mapValueToText( int value )
+{
+    if(value==0 && m_Etype==NUM)
+        return QString("0");
+    else if(value==0 && m_Etype!=NUM)
+        return QString("");
+
+    switch(m_Etype)
+    {
+        case NUM:
+            return QString::number(value);
+        case ALPHAB_L:
+            return makeAlphaLowerNumber( value );
+        case ALPHAB_U:
+            return makeAlphaUpperNumber( value );
+        case ROM_NUM_L:
+            return makeRomanNumber( value );
+        case ROM_NUM_U:
+            return makeRomanNumber( value ).upper();
+        case NONE:
+        default:
+            return QString("");
+    }
+    //never here
+    return QString("");
+}
+
+
+
+
 
 /******************************************************************/
 /* class KWPagePreview                                            */
@@ -864,10 +921,9 @@ void KWParagDia::setupTab4()
 
     // TODO: make this a spinbox or a combo, with values depending on the type
     // of numbering.
-    eStart = new QLineEdit( gText );
+    eStart = new KWSpinBox(gText);
     txtgrid->addWidget( eStart, 2, 1 );
-    eStart->setValidator(new KIntValidator( eStart ));
-    connect( eStart, SIGNAL( textChanged( const QString & ) ), this, SLOT( numStartChanged( const QString & ) ) );
+    connect( eStart, SIGNAL( valueChanged ( const QString &  )  ), this, SLOT( numStartChanged( const QString & ) ) );
 
     QLabel *lDepth = new QLabel( i18n( "Depth:" ), gText );
     lDepth->setAlignment( AlignRight | AlignVCenter );
@@ -1323,12 +1379,40 @@ void KWParagDia::numStyleChanged( int _type )
     bool hasStart = !m_counter.isBullet();
     lStart->setEnabled( hasStart );
     eStart->setEnabled( hasStart );
+    changeKWSpinboxType();
 }
 
 /*================================================================*/
 void KWParagDia::numCounterDefChanged( const QString& _cd )
 {
     m_counter.setCustom( _cd );
+}
+
+void KWParagDia::changeKWSpinboxType()
+{
+    switch(m_counter.style())
+    {
+        case Counter::STYLE_NONE:
+            eStart->setCounterType(KWSpinBox::NONE);
+            break;
+        case Counter::STYLE_NUM:
+            eStart->setCounterType(KWSpinBox::NUM);
+            break;
+        case Counter::STYLE_ALPHAB_L:
+            eStart->setCounterType(KWSpinBox::ALPHAB_L);
+            break;
+        case Counter::STYLE_ALPHAB_U:
+            eStart->setCounterType(KWSpinBox::ALPHAB_U);
+            break;
+        case Counter::STYLE_ROM_NUM_L:
+            eStart->setCounterType(KWSpinBox::ROM_NUM_L);
+            break;
+        case Counter::STYLE_ROM_NUM_U:
+            eStart->setCounterType(KWSpinBox::ROM_NUM_U);
+            break;
+        default:
+            eStart->setCounterType(KWSpinBox::NONE);
+    }
 }
 
 /*================================================================*/
@@ -1353,6 +1437,8 @@ void KWParagDia::numTypeChanged( int _ntype )
         gStyle->setButton( m_counter.style() );
         numStyleChanged( m_counter.style() );
     }
+    changeKWSpinboxType();
+
 }
 
 /*================================================================*/
@@ -1368,9 +1454,9 @@ void KWParagDia::numRightTextChanged( const QString & _c )
 }
 
 /*================================================================*/
-void KWParagDia::numStartChanged( const QString & _c )
+void KWParagDia::numStartChanged( const QString & /*_c*/ )
 {
-    m_counter.setStartNumber( QMAX(_c.toInt(),0) ); // HACK
+    m_counter.setStartNumber( QMAX(eStart->value(),0) ); // HACK
 }
 
 /*================================================================*/
@@ -1403,7 +1489,8 @@ void KWParagDia::setCounter( Counter _counter )
     sDepth->setValue( m_counter.depth() );
     // What we really need is a combobox filled with values depending on
     // the type of numbering - or a spinbox. (DF)
-    eStart->setText( QString::number( m_counter.startNumber() ) ); // HACK
+    //eStart->editor()->setText( QString::number( m_counter.startNumber() ) ); // HACK
+    eStart->setValue(  m_counter.startNumber()  ); // HACK
 }
 
 /*================================================================*/

@@ -390,7 +390,6 @@ QString Counter::text( const KWTextParag *paragraph )
     // Now convert to text.
     QString tmp;
     int n;
-    char bottomDigit;
     switch ( style() )
     {
     case STYLE_NONE:
@@ -401,25 +400,10 @@ QString Counter::text( const KWTextParag *paragraph )
         tmp.setNum( m_cache.number );
         break;
     case STYLE_ALPHAB_L:
-        n = m_cache.number;
-        while ( n > 26 )
-        {
-            bottomDigit = (n-1) % 26;
-            n = (n-1) / 26;
-            tmp.prepend( QChar( 'a' + bottomDigit  ) );
-        }
-        tmp.prepend( QChar( 'a' + n -1 ) );
+        tmp=makeAlphaLowerNumber( m_cache.number );
         break;
     case STYLE_ALPHAB_U:
-        n = m_cache.number;
-
-        while ( n > 26 )
-        {
-            bottomDigit = (n-1) % 26;
-            n = (n-1) / 26;
-            tmp.prepend( QChar( 'A' + bottomDigit  ) );
-        }
-        tmp.prepend( QChar( 'A' + n - 1 ) );
+        tmp=makeAlphaUpperNumber( m_cache.number );
         break;
     case STYLE_ROM_NUM_L:
         tmp = makeRomanNumber( m_cache.number ).lower();
