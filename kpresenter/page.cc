@@ -1553,7 +1553,9 @@ void Page::setTextPointSize( int s )
 void Page::setTextAlign( int align )
 {
     if ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT ) {
-        ( (KPTextObject*)objectList()->at( editNum ) )->textObjectView()->setAlignCommand( align );
+        KCommand *cmd =( (KPTextObject*)objectList()->at( editNum ) )->textObjectView()->setAlignCommand( align );
+        if(cmd)
+            view->kPresenterDoc()->addCommand(cmd);
         repaint( FALSE );
     } else {
         KPObject *kpobject = 0;

@@ -34,14 +34,15 @@ class KPGradient;
 class KoTextView;
 class KoTextObject;
 class KPTextView;
+class KCommand;
 
 /******************************************************************/
 /* Class: KPTextObject                                            */
 /******************************************************************/
 
-class KPTextObject : public KP2DObject
+class KPTextObject :  public QObject, public KP2DObject
 {
-    friend class TextCmd;
+    Q_OBJECT
 public:
     KPTextObject( KPresenterDoc *doc );
     virtual ~KPTextObject() {}
@@ -100,6 +101,9 @@ protected:
     void drawParags( QPainter *p, int from, int to );
 
     bool drawEditRect, drawEmpty;
+
+protected slots:
+    void slotNewCommand( KCommand *cmd );
 
 private:
     KPTextObject &operator=( const KPTextObject & );

@@ -513,10 +513,9 @@ void KPFooterHeaderEditor::headerColor()
 /*================================================================*/
 void KPFooterHeaderEditor::headerAlignLeft()
 {
-    //doc->header()->textObjectView()->setAlignment( Qt::AlignLeft );
-
-    //todo store command
-    doc->header()->textObjectView()->setAlignCommand(Qt::AlignLeft);
+    KCommand *cmd=doc->header()->textObjectView()->setAlignCommand(Qt::AlignLeft);
+    if(cmd)
+        doc->addCommand(cmd);
 
     htool2->setButton( h_aleft, true );
     htool2->setButton( h_acenter, false );
@@ -526,10 +525,9 @@ void KPFooterHeaderEditor::headerAlignLeft()
 /*================================================================*/
 void KPFooterHeaderEditor::headerAlignCenter()
 {
-    //doc->header()->textObjectView()->setAlignment( Qt::AlignCenter );
-
-    //todo store command
-    doc->header()->textObjectView()->setAlignCommand(Qt::AlignCenter);
+    KCommand* cmd=doc->header()->textObjectView()->setAlignCommand(Qt::AlignCenter);
+    if(cmd)
+        doc->addCommand(cmd);
 
     htool2->setButton( h_aleft, false );
     htool2->setButton( h_acenter, true );
@@ -539,10 +537,10 @@ void KPFooterHeaderEditor::headerAlignCenter()
 /*================================================================*/
 void KPFooterHeaderEditor::headerAlignRight()
 {
-    //doc->header()->textObjectView()->setAlignment( Qt::AlignRight );
 
-    //todo store command
-    doc->header()->textObjectView()->setAlignCommand(Qt::AlignRight);
+    KCommand *cmd=doc->header()->textObjectView()->setAlignCommand(Qt::AlignRight);
+    if(cmd)
+        doc->addCommand(cmd);
 
     htool2->setButton( h_aleft, false );
     htool2->setButton( h_acenter, false );
@@ -604,10 +602,9 @@ void KPFooterHeaderEditor::footerColor()
 /*================================================================*/
 void KPFooterHeaderEditor::footerAlignLeft()
 {
-    //doc->footer()->textObjectView()->setAlignment( Qt::AlignLeft );
-
-    //todo store command
-    doc->header()->textObjectView()->setAlignCommand(Qt::AlignLeft);
+    KCommand *cmd=doc->header()->textObjectView()->setAlignCommand(Qt::AlignLeft);
+    if(cmd)
+        doc->addCommand(cmd);
 
     ftool2->setButton( f_aleft, true );
     ftool2->setButton( f_acenter, false );
@@ -617,10 +614,9 @@ void KPFooterHeaderEditor::footerAlignLeft()
 /*================================================================*/
 void KPFooterHeaderEditor::footerAlignCenter()
 {
-    //doc->footer()->textObjectView()->setAlignment( Qt::AlignCenter );
-
-    //todo store command
-    doc->header()->textObjectView()->setAlignCommand(Qt::AlignCenter);
+    KCommand *cmd=doc->header()->textObjectView()->setAlignCommand(Qt::AlignCenter);
+    if(cmd)
+        doc->addCommand(cmd);
 
     ftool2->setButton( f_aleft, false );
     ftool2->setButton( f_acenter, true );
@@ -630,10 +626,9 @@ void KPFooterHeaderEditor::footerAlignCenter()
 /*================================================================*/
 void KPFooterHeaderEditor::footerAlignRight()
 {
-    //doc->footer()->textObjectView()->setAlignment( Qt::AlignRight );
-
-    //todo store command
-    doc->header()->textObjectView()->setAlignCommand(Qt::AlignRight);
+    KCommand *cmd=doc->header()->textObjectView()->setAlignCommand(Qt::AlignRight);
+    if(cmd)
+        doc->addCommand(cmd);
 
     ftool2->setButton( f_aleft, false );
     ftool2->setButton( f_acenter, false );

@@ -97,6 +97,9 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     drawEditRect = true;
     drawEmpty = true;
 
+    connect( m_textobj, SIGNAL( newCommand( KCommand * ) ),
+             SLOT( slotNewCommand( KCommand * ) ) );
+
 }
 
 /*======================= set size ===============================*/
@@ -568,6 +571,11 @@ void KPTextObject::drawParags( QPainter */*p*/, int /*from*/, int /*to*/ )
 KoTextDocument * KPTextObject::textDocument() const
 {
     return m_textobj->textDocument();
+}
+
+void KPTextObject::slotNewCommand( KCommand * cmd)
+{
+    m_doc->addCommand(cmd);
 }
 
 
