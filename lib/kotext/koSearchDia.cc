@@ -35,6 +35,7 @@
 #include <qbuttongroup.h>
 #include <qregexp.h>
 #include <kozoomhandler.h>
+#include <koGlobal.h>
 
 KoSearchContext::KoSearchContext()
 {
@@ -49,6 +50,7 @@ KoSearchContext::KoSearchContext()
     m_underline = KoTextFormat::U_NONE;
     m_strikeOut = KoTextFormat::S_NONE;
     m_attribute = KoTextFormat::ATT_NONE;
+    m_language = QString::null;
 }
 
 KoSearchContext::~KoSearchContext()
@@ -444,6 +446,12 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
         flags |= KoTextFormat::WordByWord;
         newFormat->setShadowText( (bool)(m_replaceContext->m_options & KoSearchContext::WordByWord) );
     }
+    if (m_replaceContext->m_optionsMask & KoSearchContext::Language)
+    {
+        flags |= KoTextFormat::Language;
+        newFormat->setLanguage( m_replaceContext->m_language );
+    }
+
 
     KCommand *cmd=m_currentTextObj->setFormatCommand( cursor, &lastFormat ,newFormat,flags , false, KoTextObject::HighlightSelection );
 
@@ -541,7 +549,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
     connect( this, SIGNAL( user2Clicked() ), this, SLOT(slotClear()));
 
-    QGridLayout *m_grid = new QGridLayout( page, 14, 2, 0, 6 );
+    QGridLayout *m_grid = new QGridLayout( page, 15, 2, 0, 6 );
     m_checkFamily = new QCheckBox( i18n( "Family:" ),page  );
     m_checkSize = new QCheckBox( i18n( "Size:" ), page );
     m_checkColor = new QCheckBox( i18n( "Color:" ), page );
@@ -575,6 +583,11 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_fontAttributeItem->insertItem( i18n("Uppercase"), -1 );
     m_fontAttributeItem->insertItem( i18n("LowerCase"), -1 );
     m_fontAttributeItem->setCurrentItem( (int)m_ctx->m_attribute );
+
+    m_checkLanguage = new QCheckBox( i18n( "Language:" ), page);
+    m_languageItem = new QComboBox( page );
+    m_languageItem->insertStringList( KoGlobal::listOfLanguage());
+    m_languageItem->setCurrentItem( (int)KoGlobal::languageIndexFromTag(m_ctx->m_language));
 
 
     m_checkVertAlign = new QCheckBox( i18n( "Vertical alignment:" ), page );
@@ -653,8 +666,11 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
 
     m_grid->addWidget( m_fontAttributeItem, 12, 1);
 
+    m_grid->addWidget( m_checkLanguage, 13, 0);
+    m_grid->addWidget( m_languageItem, 13, 1);
+
     KSeparator *tmpSep = new KSeparator( page );
-    m_grid->addMultiCellWidget( tmpSep, 13, 13, 0, 1 );
+    m_grid->addMultiCellWidget( tmpSep, 14, 14, 0, 1 );
 
     // signals and slots connections
     QObject::connect( m_checkFamily, SIGNAL( toggled( bool ) ), m_familyItem, SLOT( setEnabled( bool ) ) );
@@ -668,7 +684,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     QObject::connect( m_checkShadow, SIGNAL( toggled( bool ) ), m_shadowYes, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkWordByWord, SIGNAL( toggled( bool ) ), m_wordByWordYes, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkFontAttribute, SIGNAL( toggled( bool ) ), m_fontAttributeItem, SLOT( setEnabled( bool ) ) );
-
+    QObject::connect( m_checkLanguage, SIGNAL( toggled( bool ) ), m_languageItem, SLOT( setEnabled( bool ) ) );
 
 
     QObject::connect( m_checkBold, SIGNAL( toggled( bool ) ), m_boldNo, SLOT( setEnabled( bool ) ) );
@@ -737,6 +753,9 @@ void KoFormatDia::slotReset()
     m_fontAttributeItem->setEnabled(m_checkFontAttribute->isChecked());
 
 
+    m_checkLanguage->setChecked( m_ctx->m_optionsMask & KoSearchContext::Language );
+    m_languageItem->setEnabled(m_checkLanguage->isChecked());
+
 
     if (m_ctx->m_options & KoSearchContext::Bold)
         m_boldYes->setChecked( true );
@@ -786,6 +805,8 @@ void KoFormatDia::ctxOptions( )
         optionsMask |= KoSearchContext::Shadow;
     if ( m_checkWordByWord->isChecked() )
         optionsMask |= KoSearchContext::WordByWord;
+    if ( m_checkLanguage->isChecked() )
+        optionsMask |= KoSearchContext::Language;
 
 
     if ( m_boldYes->isChecked() )
@@ -807,6 +828,8 @@ void KoFormatDia::ctxOptions( )
     m_ctx->m_underline = (KoTextFormat::UnderlineLineType)m_underlineItem->currentItem();
     m_ctx->m_strikeOut = (KoTextFormat::StrikeOutLineType)m_strikeOutItem->currentItem();
     m_ctx->m_attribute = ( KoTextFormat::AttributeStyle)m_fontAttributeItem->currentItem();
+    m_ctx->m_language = KoGlobal::listTagOfLanguage()[m_languageItem->currentItem()];
+
     m_ctx->m_options = options;
 }
 
@@ -881,6 +904,11 @@ bool KoFindReplace::validateMatch( const QString & /*text*/, int index, int matc
         if ( searchContext->m_optionsMask & KoSearchContext::VertAlign)
         {
             if ( format->vAlign() != searchContext->m_vertAlign )
+                return false;
+        }
+        if ( searchContext->m_optionsMask & KoSearchContext::Language)
+        {
+            if ( format->language() != searchContext->m_language )
                 return false;
         }
 

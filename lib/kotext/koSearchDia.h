@@ -67,7 +67,8 @@ public:
         BgColor = 256 *KoFindDialog::MinimumUserOption,
         Shadow = 512 *KoFindDialog::MinimumUserOption,
         WordByWord = 1024 *KoFindDialog::MinimumUserOption,
-        Attribute = 1024 *KoFindDialog::MinimumUserOption
+        Attribute = 1024 *KoFindDialog::MinimumUserOption,
+        Language = 2048 *KoFindDialog::MinimumUserOption
     } Options;
 
     KoSearchContext();
@@ -85,6 +86,7 @@ public:
     QStringList m_strings; // history
     long m_optionsMask;
     long m_options;
+    QString m_language;
 };
 
 //
@@ -285,6 +287,7 @@ private:
     QCheckBox *m_checkVertAlign;
     QCheckBox *m_checkStrikeOut;
     QCheckBox *m_checkFontAttribute;
+    QCheckBox *m_checkLanguage;
 
     KFontCombo *m_familyItem;
     QSpinBox *m_sizeItem;
@@ -303,6 +306,7 @@ private:
     QComboBox *m_underlineItem;
     QComboBox *m_strikeOutItem;
     QComboBox *m_fontAttributeItem;
+    QComboBox *m_languageItem;
     KoSearchContext *m_ctx;
 };
 

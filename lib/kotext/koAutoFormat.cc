@@ -40,6 +40,7 @@
 #include <kcompletion.h>
 #include <koSearchDia.h>
 #include <kozoomhandler.h>
+#include <koGlobal.h>
 
 KoAutoFormatEntry::KoAutoFormatEntry(const QString& replace)
     : m_replace( replace )
@@ -729,6 +730,8 @@ QDomElement KoAutoFormat::saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QD
         {
             data.setAttribute( "TEXTBGCOLOR", tmp->m_backGroundColor.name());
         }
+        if ( tmp->m_optionsMask & KoSearchContext::Language )
+            data.setAttribute( "LANGUAGE", tmp->m_language );
     }
     return data;
 }
@@ -2042,6 +2045,10 @@ void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat
             format->setAttributeFont(formatOptions->m_attribute);
             flags |= KoTextFormat::Attribute;
         }
-
+        if (formatOptions->m_optionsMask & KoSearchContext::Language)
+        {
+            flags |= KoTextFormat::Language;
+            format->setLanguage( formatOptions->m_language );
+        }
     }
 }
