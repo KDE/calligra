@@ -152,6 +152,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	initActions();
 
 	m_strokeFillPreview = 0L;
+	m_ColorManager = 0L;
 	VToolDocker *_toolContainer = m_part->toolContainer();
 	if( shell() )
 	{
@@ -234,11 +235,12 @@ KarbonView::~KarbonView()
 	delete( m_spiralTool );
 	delete( m_starTool );
 	delete( m_polylineTool );
+
 	// widgets:
-	delete ( m_status );
-	delete ( m_painterFactory );
-	delete ( m_canvas );
-	delete ( m_dcop );
+	delete( m_status );
+	delete( m_painterFactory );
+	delete( m_canvas );
+	delete( m_dcop );
 }
 
 DCOPObject* KarbonView::dcopObject()
