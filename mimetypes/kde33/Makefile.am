@@ -1,9 +1,4 @@
 application_DATA = \
- vnd.oasis.openoffice.text.desktop \
- vnd.oasis.openoffice.spreadsheet.desktop \
- vnd.oasis.openoffice.drawing.desktop \
- vnd.oasis.openoffice.presentation.desktop \
- vnd.oasis.openoffice.formula.desktop \
  vnd.oasis.opendocument.graphics-template.desktop \
  vnd.oasis.opendocument.graphics.desktop \
  vnd.oasis.opendocument.formula.desktop \
