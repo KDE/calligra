@@ -6,6 +6,8 @@
 #include "kscript_util.h"
 #include "kscript_proxy.h"
 
+#include <kapp.h>
+
 #include <iostream.h>
 
 bool KSScriptFunction::call( KSContext& context )
@@ -307,6 +309,34 @@ static bool ksfunc_application( KSContext& context )
     return TRUE;
 }
 
+static bool ksfunc_startApplication( KSContext& context )
+{
+    if ( !KSUtil::checkArgumentsCount( context, 2, "startApplication" ) )
+	return false;
+
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::StringType ) )
+	return false;
+    if ( !KSUtil::checkType( context, args[1], KSValue::StringType ) )
+	return false;
+
+    QString error;
+    QCString dcopService;
+    int res = KApplication::startServiceByDesktopName( args[0]->stringValue(),
+						       QString::null, &error, &dcopService );
+    
+    if ( res != 0 )
+    {
+      qDebug( "klauncher error: %s", error.ascii() );
+      return false;
+    }
+    
+    context.setValue( new KSValue( new KSProxy( dcopService, args[1]->stringValue().latin1() ) ) );
+
+    return TRUE;
+}
+
 KSModule::Ptr ksCreateModule_KScript( KSInterpreter* interp )
 {
   KSModule::Ptr module = new KSModule( interp, "kscript" );
@@ -323,6 +353,7 @@ KSModule::Ptr ksCreateModule_KScript( KSInterpreter* interp )
   module->addObject( "toInt", new KSValue( new KSBuiltinFunction( module, "toInt", ksfunc_toInt ) ) );
   module->addObject( "toFloat", new KSValue( new KSBuiltinFunction( module, "toFloat", ksfunc_toFloat ) ) );
   module->addObject( "findApplication", new KSValue( new KSBuiltinFunction( module, "findApplication", ksfunc_application ) ) );
-
+  module->addObject( "startApplication", new KSValue( new KSBuiltinFunction( module, "startApplication", ksfunc_startApplication ) ) );
+  
   return module;
 }
