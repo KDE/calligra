@@ -144,7 +144,10 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
         case Qt::Key_F3:
             document->addSymbol(cursor, Artwork::integral);
             break;
-        }
+        case Qt::Key_F4:
+            document->save("test");
+            break;
+	}
     }
 
     //Is this necessary here ?

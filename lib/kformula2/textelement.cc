@@ -106,3 +106,21 @@ void TextElement::moveRight(FormulaCursor* cursor, BasicElement*)
 {
     getParent()->moveRight(cursor, this);
 }
+
+
+QDomElement TextElement::getElementDom(QDomDocument *doc)
+{
+    
+    QDomElement de=doc->createElement("TEXT");
+    int sz=getRelativeSize();
+    if(sz!=0) {
+        de.setAttribute("SIZE",sz);
+    }
+    //May be this is wrong
+    de.setAttribute("CHAR",QString(character));
+    cerr << "TAG: " << (const char *)de.tagName().latin1() << endl;
+    cerr << "end of text" << endl;
+    return de;
+}
+
+

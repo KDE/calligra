@@ -15,7 +15,7 @@ libkformula2_la_SOURCES	= basicelement.cc contextstyle.cc formulacursor.cc \
 	matrixelement.cc fractionelement.cc rootelement.cc symbolelement.cc \
 	artwork.cc complexelement.cc
 
-include_HEADERS = 
+include_HEADERS =  
 
 libkformula2_la_LDFLAGS = -version-info 3:0 -no-undefined
 libkformula2_la_LIBADD  = $(LIB_KDEUI) $(all_libraries) $(KDE_RPATH)

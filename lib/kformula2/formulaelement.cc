@@ -57,3 +57,6 @@ void FormulaElement::draw(QPainter& painter, ContextStyle& context)
 {
     SequenceElement::draw(painter, context, size, QPoint());
 }
+
+
+

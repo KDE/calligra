@@ -27,6 +27,7 @@
 #include <qlist.h>
 #include <qpoint.h>
 #include <qsize.h>
+#include <qdom.h>
 
 // KDE Include
 
@@ -252,6 +253,16 @@ public:
 
     int getMidline() const { return midline; }
 
+
+    //Save/load support
+    /**
+     * @return a QDomElement that contain as DomChildren the 
+     * children, and as attribute the attribute of this
+     * element.
+     */
+    
+    virtual QDomElement getElementDom(QDomDocument *doc);
+    
 
     // debug
     virtual ostream& output(ostream&);

@@ -273,3 +273,23 @@ void FractionElement::selectChild(FormulaCursor* cursor, BasicElement* child)
         cursor->setTo(this, denominatorPos);
     }
 }
+
+QDomElement FractionElement::getElementDom(QDomDocument *doc)
+{
+    QDomElement de=doc->createElement("FRACTION");
+    int sz=getRelativeSize();
+    if(sz!=0) {
+        de.setAttribute("SIZE",sz);
+    }
+    
+    QDomElement den=doc->createElement("NUMERATOR");
+    den.appendChild(numerator->getElementDom(doc));
+    
+    QDomElement num=doc->createElement("DENOMINATOR");
+    num.appendChild(denominator->getElementDom(doc));
+
+    de.appendChild(den);
+    de.appendChild(num);
+         
+    return de;
+}

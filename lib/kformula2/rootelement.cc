@@ -350,3 +350,26 @@ void RootElement::setToUpperIndex(FormulaCursor* cursor)
 {
     cursor->setTo(this, indexPos);
 }
+
+QDomElement RootElement::getElementDom(QDomDocument *doc)
+{
+    QDomElement de=doc->createElement("ROOT");
+    int sz=getRelativeSize();
+    if(sz!=0) {
+        de.setAttribute("SIZE",sz);
+    }
+    QDomElement con=doc->createElement("CONTENT");
+    con.appendChild(content->getElementDom(doc));
+    de.appendChild(con);
+
+    if(hasIndex()) {
+        QDomElement ind=doc->createElement("INDEX");
+        ind.appendChild(index->getElementDom(doc));
+        de.appendChild(ind);
+    }
+
+
+    return de;
+}
+          
+

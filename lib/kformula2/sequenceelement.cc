@@ -531,3 +531,23 @@ void SequenceElement::selectAllChildren(FormulaCursor* cursor)
     cursor->setTo(this, children.count(), 0);
 }
 
+
+QDomElement SequenceElement::getElementDom(QDomDocument *doc)
+{
+    QDomElement de=doc->createElement("SEQUENCE");
+    int sz=getRelativeSize();
+    if(sz!=0) {
+         de.setAttribute("SIZE",sz);
+    }
+
+    uint count = children.count();
+    for (uint i = 0; i < count; i++) {
+        QDomElement tmpEleDom=children.at(i)->getElementDom(doc);
+	de.appendChild(tmpEleDom);
+    }
+    return de;
+}
+
+
+
+

@@ -137,6 +137,9 @@ public:
     // Tells whether we are allowed to own them.
     // A root will never have a lower index!
     virtual bool mightHaveLowerIndex() const { return false; }
+   
+    virtual QDomElement getElementDom(QDomDocument *doc);
+     
     
 private:
 

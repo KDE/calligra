@@ -17,7 +17,9 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
+#include <qtextstream.h>
+#include <qfile.h>
+#include <qdom.h>
 #include <qpainter.h>
 #include <qevent.h>
 #include <qstring.h>
@@ -234,3 +236,24 @@ void KFormulaContainer::testDirty()
         emit formulaChanged();
     }
 }
+
+QDomDocument KFormulaContainer::domData()
+{
+    QDomDocument doc("KFORMULA");
+    doc.appendChild(rootElement.getElementDom(&doc));
+    return doc;
+}
+
+void KFormulaContainer::save(QString file)
+{
+	
+    QFile f(file);
+    if(!f.open(IO_ReadWrite))
+    cerr << "Error" << endl;   
+   QCString data=domData().toCString();
+   fprintf(stderr,"%s\n",(const char *)data);    
+  
+    QTextStream str(&f);
+    domData().save(str,4);
+    f.close();
+}	

@@ -181,6 +181,10 @@ public:
     
     //BasicElement* getChildAt(int pos);
 
+    //Save&load
+    virtual QDomElement getElementDom(QDomDocument *doc);
+    
+    
     // debug
     virtual ostream& output(ostream&);
     

@@ -70,6 +70,21 @@ public:
      */
     void draw(QPainter& painter);
 
+    /**
+     * This function return all the data contained in
+     * the formula.
+     * @return the content of the formula as a
+     * QDomDocument.
+     */ 
+    QDomDocument domData();
+    
+    /**
+     * Save function.
+     * Save the formula into the specified file.
+     * It overwrite the file if exists.
+     */
+    void save(QString file);
+    
     
 signals:
 

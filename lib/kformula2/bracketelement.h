@@ -104,6 +104,10 @@ public:
      * the position behind it.
      */
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
+   
+
+    virtual QDomElement getElementDom(QDomDocument *doc);
+     
     
 private:
 

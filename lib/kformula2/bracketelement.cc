@@ -388,3 +388,23 @@ void BracketElement::CornerBracket::draw(QPainter& painter, ContextStyle& style,
     }
     painter.drawPolyline(points, 1, /*4*/3);
 }
+
+QDomElement BracketElement::getElementDom(QDomDocument *doc)
+{
+    QDomElement de=doc->createElement("BRACKET");
+    int sz=getRelativeSize();
+    if(sz!=0) {
+        de.setAttribute("SIZE",sz);
+    }
+    QDomElement con=doc->createElement("CONTENT");
+    con.appendChild(content->getElementDom(doc));
+    de.appendChild(con);
+
+#warning TODO bracket type attribute
+
+    de.setAttribute("LEFT","(");
+    de.setAttribute("RIGHT",")");
+				                                                    return de;
+}
+
+

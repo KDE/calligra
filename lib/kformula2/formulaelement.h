@@ -65,6 +65,11 @@ public:
      * Draws the whole thing.
      */
     void draw(QPainter& painter, ContextStyle& context);
+
+
+    //Save&Load
+ //   virtual QDomElement getElementDom();
+	
     
 private:
 

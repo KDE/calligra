@@ -753,3 +753,45 @@ void IndexElement::moveToLowerRight(FormulaCursor* cursor, Direction direction)
     }
 }
 
+QDomElement IndexElement::getElementDom(QDomDocument *doc)
+{
+    QDomElement de=doc->createElement("INDEX");
+    int sz=getRelativeSize();
+    if(sz!=0) {
+        de.setAttribute("SIZE",sz);
+    }
+
+    
+    QDomElement cont=doc->createElement("CONTENT");
+    cont.appendChild(content->getElementDom(doc));
+    de.appendChild(cont);
+     
+
+    if (hasUpperLeft()) {
+        QDomElement ind=doc->createElement("UPPERLEFT");
+        ind.appendChild(upperLeft->getElementDom(doc));
+        de.appendChild(ind);
+    }
+    
+    if (hasUpperRight()) {
+        QDomElement ind=doc->createElement("UPPERRIGHT");
+        ind.appendChild(upperRight->getElementDom(doc));
+        de.appendChild(ind);
+    }
+    if (hasLowerLeft()) {
+        QDomElement ind=doc->createElement("LOWERLEFT");
+        ind.appendChild(lowerLeft->getElementDom(doc));
+        de.appendChild(ind);
+    }
+    if (hasLowerRight()) {
+        QDomElement ind=doc->createElement("LOWERRIGHT");
+        ind.appendChild(lowerRight->getElementDom(doc));
+        de.appendChild(ind);
+    }
+  
+  
+    return de;
+}
+
+
+

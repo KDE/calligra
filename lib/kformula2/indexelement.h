@@ -216,8 +216,10 @@ public:
     // Tells whether we own those indexes
     virtual bool hasUpperIndex() const { return hasUpperRight(); }
     virtual bool hasLowerIndex() const { return hasLowerRight(); }
-
     
+    
+    virtual QDomElement getElementDom(QDomDocument *doc);
+        
     // debug
     virtual ostream& output(ostream&);
 

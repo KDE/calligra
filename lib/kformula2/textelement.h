@@ -79,6 +79,9 @@ public:
      */
     virtual void moveRight(FormulaCursor* cursor, BasicElement* from);
 
+    //Save&load
+    virtual QDomElement getElementDom(QDomDocument *doc);
+    
     // debug
     virtual ostream& output(ostream&);
     
