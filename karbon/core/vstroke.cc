@@ -105,14 +105,17 @@ void
 VStroke::saveOasis( KoGenStyle &style ) const
 {
 	if( m_type == solid )
+	{
 		style.addProperty( "draw:stroke", "solid" );
+		style.addProperty( "svg:stroke-color", QColor(m_color).name() );
+		style.addPropertyPt( "svg:stroke-width", m_lineWidth );
+	}
 	else if( m_type == none )
 		style.addProperty( "draw:stroke", "none" );
 	/*else if( m_type == grad )
 		style.addProperty( "draw:stroke", "gradient" );
 	else if( m_type == patt )
 		style.addProperty( "draw:stroke", "hatch" );*/
-	style.addPropertyPt( "draw:stroke-width", m_lineWidth );
 }
 
 void

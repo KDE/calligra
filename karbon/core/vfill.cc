@@ -76,7 +76,10 @@ void
 VFill::saveOasis( KoGenStyle &style ) const
 {
 	if( m_type == solid )
+	{
 		style.addProperty( "draw:fill", "solid" );
+		style.addProperty( "draw:fill-color", QColor(m_color).name() );
+	}
 	else if( m_type == grad )
 		style.addProperty( "draw:fill", "gradient" );
 	else if( m_type == patt )
