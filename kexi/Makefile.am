@@ -1,9 +1,9 @@
 bin_PROGRAMS = kexi
 
-kexi_SOURCES = kexitable.cpp kexidoc.cpp kexidialogbase.cpp kexibrowseritem.cpp kexiworkspace.cpp kexiinterfacetemplate.cpp kexiformbase.cpp kexiinterfacemanager.cpp kexiinterface.cpp kexicreateproject.cpp kexibrowser.cpp keximainwindow.cpp kexiapplication.cpp main.cpp kexiproject.cpp 
+kexi_SOURCES = kexitablerm.cpp  kexitablelist.cpp kexitableitem.cpp kexitableview.cpp kexidatatable.cpp kexistore.cpp kexidoc.cpp kexidialogbase.cpp kexibrowseritem.cpp kexiworkspace.cpp kexiinterfacetemplate.cpp kexiformbase.cpp kexiinterfacemanager.cpp kexiinterface.cpp kexicreateproject.cpp kexibrowser.cpp keximainwindow.cpp kexiapplication.cpp main.cpp kexiproject.cpp 
 kexi_LDADD   =  $(LIB_KIO) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
 
-SUBDIRS = . interfaces pics 
+SUBDIRS = . pics 
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/
@@ -12,6 +12,8 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/kexiinterface.desktop $(kde_servicetypesdir)/kexiinterface.desktop
 	$(mkinstalldirs) $(kde_servicedir)
 	$(INSTALL_DATA) $(srcdir)/interfaces/mysqlinterface.desktop $(kde_servicesdir)/mysqlinterface.desktop
+	$(mkinstalldirs) $(kde_mimedir)
+	$(INSTALL_DATA) $(srcdir)/x-kexi.desktop $(kde_mimedir)/x-kexi.desktop
 	
 uninstall-local:
 

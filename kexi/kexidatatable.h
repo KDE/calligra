@@ -16,50 +16,23 @@
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/
+ */
 
+#ifndef KEXIDATATABLE_H
+#define KEXIDATATABLE_H
 
-#ifndef KEXI_PROJECT_H
-#define KEXI_PROJECT_H
-
-#include <qobject.h>
-#include <qsqldatabase.h>
-
-class KexiDoc;
-
-struct Credentials
+#include "kexitableview.h"
+ 
+class KexiDataTable : public KexiTableView
 {
-	QString host,
-			database,
-			port,
-			driver,
-			user,
-			password;
-};
-
-class KexiProject : public QObject
-{
-Q_OBJECT
-public:
-	KexiProject(QObject* parent);
-	~KexiProject();
-
-	bool saveProject();
-	bool loadProject();
-	bool initDbConnection(const Credentials& cred);
+	Q_OBJECT
 	
-	QSqlDatabase* db() { return m_db; };
+	public:
 
-signals:
-	void docModified();
-
-protected:
-	void setCurrentDB(){} ;
-	
-private:
-	KexiDoc* m_settings;
-	QSqlDatabase* m_db;
-	Credentials m_cred;
+		KexiDataTable(QWidget *parent, QString content, const char *name=0);
+		~KexiDataTable();
+		
+		void executeQuery(QString query);
 };
-
+ 
 #endif

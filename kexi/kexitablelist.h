@@ -16,50 +16,41 @@
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
+ 
+   Original Author:  Till Busch <till@bux.at>
+   Original Project: buX (www.bux.at)
 */
 
+#ifndef KEXITABLELIST_H
+#define KEXITABLELIST_H
 
-#ifndef KEXI_PROJECT_H
-#define KEXI_PROJECT_H
+#include <qptrlist.h>
 
-#include <qobject.h>
-#include <qsqldatabase.h>
+#include "kexitableitem.h"
+/**re-implements QPtrList to allow sorting
+  *@author till busch
+*/
 
-class KexiDoc;
+typedef QPtrList<KexiTableItem>		KexiTableListBase;
 
-struct Credentials
+class KexiTableList : public KexiTableListBase
 {
-	QString host,
-			database,
-			port,
-			driver,
-			user,
-			password;
-};
-
-class KexiProject : public QObject
-{
-Q_OBJECT
-public:
-	KexiProject(QObject* parent);
-	~KexiProject();
-
-	bool saveProject();
-	bool loadProject();
-	bool initDbConnection(const Credentials& cred);
-	
-	QSqlDatabase* db() { return m_db; };
-
-signals:
-	void docModified();
-
+public: 
+	KexiTableList() : m_key(0), m_order(true), m_type(1) {}
+	~KexiTableList() {/* qDebug("~List"); */}
+	void setSorting(int key, bool order=true, short type=1);
 protected:
-	void setCurrentDB(){} ;
+	virtual int compareItems(Item item1, Item item2);
+
+	int cmpStr(Item item1, Item item2);
+	int cmpInt(Item item1, Item item2);
+
+	int			m_key;
+	short		m_order;
+	short		m_type;
+	static unsigned short charTable[];
 	
-private:
-	KexiDoc* m_settings;
-	QSqlDatabase* m_db;
-	Credentials m_cred;
+	int (KexiTableList::*cmpFunc)(void *, void *);
 };
 
 #endif

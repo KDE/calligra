@@ -34,7 +34,7 @@
 #include "kexiformbase.h"
 #include "kexiworkspace.h"
 #include "kexibrowseritem.h"
-#include "kexitable.h"
+#include "kexidatatable.h"
 
 
 KexiBrowser::KexiBrowser(QWidget *parent, const char *name ) : KListView(parent,name)
@@ -63,6 +63,8 @@ void KexiBrowser::clearView()
 
 void KexiBrowser::generateView()
 {
+	clear();
+
 	m_database = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Table, this, i18n("Database"));
 	m_tables = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Table, m_database, i18n("Tables"));
 	m_queries = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Query, m_database, i18n("Queries"));
@@ -78,6 +80,7 @@ void KexiBrowser::generateView()
 	m_reports->setPixmap(0, iconLoader->loadIcon("reports", KIcon::Small));
 
 	setOpen(m_database, true);
+	setOpen(m_tables, true);
 }
 
 
@@ -139,8 +142,8 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 		{
 			if ( r->type() == KexiBrowserItem::Child )
 			{
-				KexiTable *kt = new KexiTable(kexi->mainWindow()->workspace(), r->text(0) , "table");
-	//			kexi->mainWindow()->workspace()->addItem(kt);
+				KexiDataTable *kt = new KexiDataTable(kexi->mainWindow()->workspace(), r->text(0), "table");
+				kt->executeQuery("select * from " + r->text(0)); 
 				kt->show(); 
 			}
 			break;

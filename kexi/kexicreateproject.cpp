@@ -44,7 +44,7 @@ KexiCreateProject::KexiCreateProject(QWidget *parent, const char *name, bool mod
 {
 	setCaption(i18n("Create Project"));
 
-	m_wpic = QPixmap(locate("data","kexi/createproject.png"));
+	m_wpic = QPixmap(locate("data","kexi/cp-wiz.png"));
 	
 	connect(this, SIGNAL(selected(const QString &)), this, SLOT(nextClicked(const QString &)));
 	

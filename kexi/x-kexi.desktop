@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+MimeType=application/x-kexi
+Comment=Kexi Project File
+Icon=kexi
+Type=MimeType
+Patterns=*.kexi;
+X-KDE-AutoEmed=false
