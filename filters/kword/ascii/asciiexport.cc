@@ -20,13 +20,11 @@
    Boston, MA 02111-1307, USA.
 */
 
-
 #include <qiodevice.h>
 #include <qtextstream.h>
 #include <qdom.h>
 
 #include <kdebug.h>
-
 
 #include <KWEFStructures.h>
 #include <TagProcessing.h>
@@ -50,11 +48,10 @@ public:
     virtual bool doCloseDocument(void);
     virtual bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
 private:
-    void ProcessParagraphData ( QString& paraText, ValueListFormatData& paraFormatDataList);
+    void ProcessParagraphData (const QString& paraText, ValueListFormatData& paraFormatDataList);
 private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
-
 };
 
 bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& to)
@@ -117,14 +114,11 @@ bool ASCIIWorker::doCloseDocument(void)
 // formatting information stored in the FormatData list and prints it
 // out to the export file.
 
-void ASCIIWorker::ProcessParagraphData ( QString& paraText,
+void ASCIIWorker::ProcessParagraphData (const QString& paraText,
     ValueListFormatData& paraFormatDataList)
 {
     if ( paraText.length () > 0 )
     {
-        // TODO: CreateMissingFormatData should be called in the Leader!
-        CreateMissingFormatData(paraText,paraFormatDataList);
-
         ValueListFormatData::Iterator  paraFormatDataIt;
 
         for ( paraFormatDataIt = paraFormatDataList.begin ();
