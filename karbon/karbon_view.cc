@@ -17,7 +17,6 @@
 
 // tools:
 #include "vellipsetool.h"
-#include "vhandletool.h"
 #include "vpolygontool.h"
 #include "vrectangletool.h"
 #include "vrotatetool.h"
@@ -488,14 +487,6 @@ KarbonView::starTool()
 			m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
 		}
 	}
-}
-
-
-void
-KarbonView::handleTool()
-{
-	m_currentTool = VHandleTool::instance( m_part );
-	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
 }
 
 

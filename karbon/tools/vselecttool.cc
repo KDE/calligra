@@ -9,7 +9,6 @@
 
 #include "karbon_part.h"
 #include "karbon_view.h"
-#include "vhandletool.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vselection.h"
@@ -50,7 +49,6 @@ VSelectTool::drawTemporaryObject( KarbonView* view )
 
 	KoPoint fp = view->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
 
-	// already selected, so must be a handle operation (move, scale etc.)
 	KoRect rect = part()->document().selection()->boundingBox();
 
 	kdDebug() << " x: " << rect.x() << " y: " << rect.y() << " rect.width: " << rect.width() << " rect.height: " << rect.height() << endl;
@@ -194,7 +192,7 @@ VSelectTool::eventFilter( KarbonView* view, QEvent* event )
 	if ( event->type() == QEvent::MouseButtonPress )
 	{
 		view->painterFactory()->painter()->end();
-		VHandleTool::instance( m_part )->eventFilter( view, event );
+
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*>( event );
 		m_fp.setX( mouse_event->pos().x() );
 		m_fp.setY( mouse_event->pos().y() );

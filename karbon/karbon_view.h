@@ -108,9 +108,6 @@ protected slots:
 	void starTool();
 	void textTool();
 
-	// handle-tool:
-	void handleTool();
-
 	// path:
 	void pathInsertKnots();
 	void pathPolygonize();

@@ -12,7 +12,6 @@
 
 #include "karbon_part.h"
 #include "karbon_view.h"
-#include "vhandletool.h"
 #include "vscaletool.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
@@ -46,6 +45,7 @@ VScaleTool::instance( KarbonPart* part )
 void
 VScaleTool::setCursor( KarbonView* view ) const
 {
+/*
 	switch( VHandleTool::instance( m_part )->activeNode() )
 	{
 		case node_lt:
@@ -72,6 +72,7 @@ VScaleTool::setCursor( KarbonView* view ) const
 			view->canvasWidget()->viewport()->
 				setCursor( QCursor( Qt::arrowCursor ) );
 	}
+*/
 }
 
 void
@@ -83,7 +84,7 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 	KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 
 	KoRect rect = part()->document().selection()->boundingBox();
-
+/*
 	// already selected, so must be a handle operation (move, scale etc.)
 	if(
 		part()->document().selection()->objects().count() > 0 &&
@@ -164,7 +165,7 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 		}
 		painter->setZoomFactor( 1.0 );
 	}
-	else
+	else*/
 		m_isDragging = false;
 }
 
@@ -184,11 +185,6 @@ VScaleTool::eventFilter( KarbonView* view, QEvent* event )
 
 			// paint new object:
 			drawTemporaryObject( view );
-		}
-		else
-		{
-			VHandleTool::instance( m_part )->eventFilter( view, event );
-			setCursor( view );
 		}
 
 		return true;
@@ -232,7 +228,7 @@ VScaleTool::eventFilter( KarbonView* view, QEvent* event )
 	if ( event->type() == QEvent::MouseButtonPress )
 	{
 		view->painterFactory()->painter()->end();
-		VHandleTool::instance( m_part )->eventFilter( view, event );
+
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*>( event );
 		m_fp.setX( mouse_event->pos().x() );
 		m_fp.setY( mouse_event->pos().y() );

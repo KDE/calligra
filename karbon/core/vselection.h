@@ -10,7 +10,24 @@
 
 
 class QPainter;
+class QPoint;
 class QRect;
+
+
+/// Ids of manipulation nodes.
+enum VHandleNode
+{
+	node_none = 0,
+	node_lt = 1,
+	node_mt = 2,
+	node_rt = 3,
+	node_lm = 4,
+	node_mm = 5,
+	node_rm = 6,
+	node_lb = 7,
+	node_mb = 8,
+	node_rb = 9
+};
 
 
 /**
@@ -31,8 +48,13 @@ public:
 
 	void draw( QPainter* painter, double zoomFactor ) const;
 
+	/// Returns the node id, the QPoint is inside.
+	VHandleNode node( const QPoint& point ) const;
+
 private:
 	QRect* m_qrect;
+
+	static const uint m_nodeSize = 3;
 };
 
 #endif
