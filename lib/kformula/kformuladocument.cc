@@ -423,7 +423,7 @@ void Document::createActions(KActionCollection* collection)
                                     this, SLOT(addLineBracket()),
                                     collection,"formula_addabsbra");
 
-    impl->addMatrixAction   = new KAction(i18n("Add Matrix"),
+    impl->addMatrixAction   = new KAction(i18n("Add Matrix..."),
                                     "matrix",
                                     0,
                                     this, SLOT(addMatrix()),

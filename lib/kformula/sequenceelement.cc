@@ -943,7 +943,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
             cursor->selectActiveElement();
             const SymbolTable& table = container->document()->getSymbolTable();
             if (table.greekLetters().find(element->getCharacter()) != -1) {
-                KFCReplace* command = new KFCReplace( i18n( "Changes the char to a symbol" ), container );
+                KFCReplace* command = new KFCReplace( i18n( "Change Char to Symbol" ), container );
                 TextElement* symbol = new TextElement( table.unicodeFromSymbolFont( element->getCharacter() ), true );
                 command->addElement( symbol );
                 return command;
