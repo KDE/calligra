@@ -221,8 +221,6 @@ public:
 public slots:
 
     virtual void newView();
-    virtual void closeAllViews();
-
 
 protected:
   /**
@@ -246,7 +244,6 @@ protected:
   virtual void setupGlobalActions( void );
 
   KAction *actionNewView;
-  KAction *actionCloseAllViews;
 
 signals:
   void activated( bool active );

@@ -187,7 +187,6 @@ public slots:
     /**
      * Added these as well. (TZ)
      */
-    virtual void slotNewView();
     virtual void slotCloseAllViews();
 
 protected:
