@@ -93,3 +93,16 @@ void KSpreadCellIface::setTextColor(const QString& _c)
     cell->setTextColor(c);
     cell->update();
 }
+
+void KSpreadCellIface::setAngle(int angle)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setAngle(angle);
+    cell->update();
+}
+
+int  KSpreadCellIface::angle() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->getAngle();
+}
