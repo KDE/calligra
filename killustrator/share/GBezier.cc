@@ -127,7 +127,7 @@ static bool bezier_segment_contains (const Coord& p0, const Coord& p1,
 }
 
 GBezier::GBezier () : GPolyline () {
-  wSegment = 0;
+  wSegment = 0; closed = false; 
 }
   
 GBezier::GBezier (const list<XmlAttribute>& attribs) : GPolyline (attribs) {
@@ -136,6 +136,8 @@ GBezier::GBezier (const list<XmlAttribute>& attribs) : GPolyline (attribs) {
 
 GBezier::GBezier (const GBezier& obj) : GPolyline (obj) {
   wSegment = -1;
+  closed = obj.closed;
+  ppoints = obj.ppoints;
 }
   
 void GBezier::setPoint (int idx, const Coord& p) {
@@ -145,29 +147,56 @@ void GBezier::setPoint (int idx, const Coord& p) {
   points.at (idx)->y (np.y());
   if (! isEndPoint (idx)) 
     updateBasePoint (cPoint (idx));
-  else 
+  else {
+    computePPoints ();
     updateRegion ();
+  }
 }
 
 void GBezier::movePoint (int idx, float dx, float dy) {
   float x = points.at (idx)->x ();
   float y = points.at (idx)->y ();
   float ndx, ndy;
+  int cidx = -1; // >= 0, if the curve is closed and we move
+                 // the first or last point
 
   ndx = dx * iMatrix.m11 () + dy * iMatrix.m21 ();
   ndy = dy * iMatrix.m22 () + dx * iMatrix.m12 ();
 
   points.at (idx)->x (x + ndx);
   points.at (idx)->y (y + ndy);
+  if (closed) {
+    int n = points.count ();
+    if (idx < 3) {
+      cidx = n - (3 - idx);
+      points.at (cidx)->x (x + ndx);
+      points.at (cidx)->y (y + ndy);
+    }
+    else if (idx + 3 >= (int) points.count ()) {
+      cidx = 3 - (n - idx);
+      points.at (cidx)->x (x + ndx);
+      points.at (cidx)->y (y + ndy);
+    }
+  }
   if (isEndPoint (idx)) {
     points.at (idx - 1)->x (points.at (idx - 1)->x () + ndx);
     points.at (idx - 1)->y (points.at (idx - 1)->y () + ndy);
     points.at (idx + 1)->x (points.at (idx + 1)->x () + ndx);
     points.at (idx + 1)->y (points.at (idx + 1)->y () + ndy);
+    if (cidx >= 0) {
+      points.at (cidx - 1)->x (points.at (cidx - 1)->x () + ndx);
+      points.at (cidx - 1)->y (points.at (cidx - 1)->y () + ndy);
+      points.at (cidx + 1)->x (points.at (cidx + 1)->x () + ndx);
+      points.at (cidx + 1)->y (points.at (cidx + 1)->y () + ndy);
+    }
+    computePPoints ();
     updateRegion ();
   }
-  else
+  else {
     updateBasePoint (cPoint (idx));
+    if (cidx >=0)
+      updateBasePoint (cPoint (cidx));
+  }
 }
 
 const char* GBezier::typeName () {
@@ -320,6 +349,7 @@ void GBezier::updateBasePoint (int idx) {
   float dy = epoint.y ();
   points.at (idx)->x (2 * dx - points.at (cPoint (idx))->x ());
   points.at (idx)->y (2 * dy - points.at (cPoint (idx))->y ());
+  computePPoints ();
   updateRegion ();
 }
 
@@ -425,4 +455,27 @@ bool GBezier::findNearestPoint (const Coord& p, float max_dist,
     pidx = points.count () - 2;
   }
   return pidx >= 0;
+}
+
+void GBezier::computePPoints () {
+    if (closed && getFillStyle () != NoBrush) {
+    }
+}
+
+void GBezier::setClosed (bool flag) {
+    if (flag && points.count () < 6)
+	return;
+
+    closed = flag;
+    if (closed) {
+	cout << "create closed bezier curve...: " << points.count () << endl;
+	// Point #n-2 := Point #0
+	// Point #n-1 := Point #1
+	// Point #n := Point #2
+	unsigned int n = points.count () - 1;
+	*points.at (n) = *points.at (2);
+	*points.at (n-1) = *points.at (1);
+	*points.at (n-2) = *points.at (0);
+    }
+    computePPoints ();
 }

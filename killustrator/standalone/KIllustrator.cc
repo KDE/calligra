@@ -22,6 +22,7 @@
 
 */
 
+#include <fstream.h>
 #include <qkeycode.h>
 #include <qstrlist.h>
 #include <unistd.h>
@@ -789,8 +790,11 @@ void KIllustrator::menuCallback (int item) {
 
 void KIllustrator::openFile (const char* fname) {
   localFile = fname;
-  document->readFromXml (fname);
-  //  document->objectChanged ();
+  ifstream is (fname);
+  if (is.fail ())
+    return;
+  document->readFromXml (is);
+  document->setFileName (fname);
   document->setModified (false);
   canvas->calculateSize ();
   setFileCaption (fname);
@@ -887,7 +891,13 @@ void KIllustrator::saveFile () {
     saveAsFile ();
   }
   else {
-    document->saveToXml ((const char *) document->fileName ());
+    ofstream os ((const char *) document->fileName ());
+    if (os.fail ())
+      // write out an error message !!
+      return;
+
+    document->saveToXml (os);
+    document->setFileName ((const char *) document->fileName ());
     PStateManager::instance ()->addRecentFile ((const char *) 
 					       document->fileName ());
   }
@@ -907,7 +917,12 @@ void KIllustrator::saveAsFile () {
       if (result != 1)
 	return;
     }
-    document->saveToXml (fname);
+    ofstream os (fname);
+    if (os.fail ())
+      // write out an error message !!
+      return;
+    document->saveToXml (os);
+    document->setFileName (fname);
     PStateManager::instance ()->addRecentFile ((const char *) fname);
     setFileCaption (fname);
   }

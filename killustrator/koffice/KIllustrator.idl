@@ -46,21 +46,19 @@ module KIllustrator {
     oneway void arrangeGroup ();
     oneway void arrangeUngroup ();
 
+    oneway void editLayers ();
+
     oneway void toggleRuler ();
     oneway void toggleGrid ();
 
     oneway void setupGrid ();
     oneway void alignToGrid ();
 
-    oneway void activateSelectionTool ();
-    oneway void activateEditPointTool ();
-    oneway void activateLineTool ();
-    oneway void activateBezierTool ();
-    oneway void activateRectangleTool ();
-    oneway void activatePolygonTool ();
-    oneway void activateEllipseTool ();
-    oneway void activateTextTool ();
-    oneway void activateZoomTool ();
+    oneway void configureTool (in long id);
+    oneway void activateTool (in long id);
+
+    oneway void setPenColor (in long id);
+    oneway void setFillColor (in long id);
   };
   
   interface Document : OPParts::Document {

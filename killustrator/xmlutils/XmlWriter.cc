@@ -24,11 +24,9 @@
 
 #include "XmlWriter.h"
 
-XmlWriter::XmlWriter (ostream& os, const char* doctype, const char* dtd) 
+XmlWriter::XmlWriter (ostream& os) 
   : strm (os.rdbuf ()) {
-  strm << "<?xml version=\"1.0\"?>\n"
-       << "<doctype " << doctype << " system \"" << dtd << "\">"
-       << endl;
+  strm << "<?xml version=\"1.0\"?>" << endl;
 }
 
 XmlWriter::~XmlWriter () {

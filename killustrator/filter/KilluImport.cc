@@ -22,6 +22,7 @@
 
 */
 
+#include <fstream.h>
 #include "KilluImport.h"
 #include "GGroup.h"
 
@@ -41,7 +42,10 @@ bool KilluImport::importFromFile (GDocument *doc) {
   bool flag = false;
 
   // load it
-  if (flag = tmpDoc->readFromXml (inputFileName ())) {
+  ifstream in (inputFileName ());
+  if (in.fail ())
+    return false;
+  if (flag = tmpDoc->readFromXml (in)) {
     GGroup* group = new GGroup ();
     group->ref ();
     // now copy all objects to the group

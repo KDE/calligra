@@ -274,7 +274,7 @@ void GObject::writeToPS (ostream& os) {
   // line width
   os << outlineInfo.width << " setlinewidth\n";
   // pen style
-  os << outlineInfo.style << " SPSt\n";
+  os << (int) outlineInfo.style << " SPSt\n";
   // outline color
   os << outlineInfo.color.red () / 255.0 << ' ' 
      << outlineInfo.color.green () / 255.0

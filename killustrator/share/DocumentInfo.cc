@@ -68,7 +68,6 @@ DocumentInfo::DocumentInfo (GDocument* doc, QWidget* parent,
 
   QString s;
   doc->printInfo (s);
-  cout << "\"" << s << "\"" << endl;
   textfield->setText ((const char *) s);
 }
 

@@ -243,7 +243,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     curve->setPoint (last, Coord (xpos, ypos));
     if (me->button () == RightButton) {
       if ((addAtEnd && last >= 5 && (last % 3 == 2)) ||
-	 (!addAtEnd && last == 0 && (curve->numOfPoints () % 3 == 0))) {
+	  (!addAtEnd && last == 0 && (curve->numOfPoints () % 3 == 0))) {
 	doc->setLastObject (curve);
 	curve->setWorkingSegment (-1);
 	if (newObj) {
@@ -268,6 +268,15 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	    new AddLineSegmentCmd (doc, curve, last, points);
 	  history->addCommand (cmd);
 	}
+	curve = 0L; last = 0;
+      }
+      else if (last >= 7 && last % 3 == 1 &&
+	       curve->getPoint (1).isNear (Coord (xpos, ypos), 
+					   NEAR_DISTANCE)) {
+	  curve->addPoint (last, Coord (xpos, ypos));
+	  curve->setClosed (true);
+	  curve->setWorkingSegment (-1);
+	  doc->setLastObject (curve);
 	curve = 0L; last = 0;
       }
     }

@@ -65,6 +65,7 @@ public:
    */
   bool validHeader ();
 
+#if 0
   /**
    * Return the document type.
    *
@@ -78,6 +79,7 @@ public:
    * @return   The name of the DTD.
    */
   const string& dtd () const;
+#endif
 
   /**
    * Read a XML element from the stream. If the content is plain text

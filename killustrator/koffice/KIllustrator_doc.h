@@ -61,6 +61,7 @@ public:
   // Overloaded methods from KoDocument
 
   bool save (ostream& os);
+  bool load (istream &, bool _randomaccess = false);
   bool loadChildren (OPParts::MimeMultipartDict_ptr dict);
   bool hasToWriteMultipart ();
 

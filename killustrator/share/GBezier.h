@@ -65,6 +65,7 @@ public:
   bool isEndPoint (int idx) { return (idx % 3) == 1; }
   void initBasePoint (int idx);
   void setWorkingSegment (int seg);
+  void setClosed (bool flag);
 
 protected:
   void calcBoundingBox ();
@@ -74,8 +75,12 @@ protected:
   void drawHelpLinesForWorkingSegment (Painter& p);
   void updateBasePoint (int idx);
 
+  void computePPoints ();
+
 private:
   int wSegment;
+  QPointArray ppoints; // Points for the computed polygon
+  bool closed;
 };
 
 #endif

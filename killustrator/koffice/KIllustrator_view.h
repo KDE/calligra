@@ -45,6 +45,7 @@ class Canvas;
 class GDocument;
 class QwViewport;
 class TransformationDialog;
+class LayerDialog;
 class ToolController;
 class Canvas;
 class Ruler;
@@ -112,19 +113,16 @@ public:
   void setupGrid ();
   void alignToGrid ();
 
-  void activateSelectionTool ();
-  void activateEditPointTool ();
-  void activateLineTool ();
-  void activateBezierTool ();
-  void activateRectangleTool ();
-  void activatePolygonTool ();
-  void activateEllipseTool ();
-  void activateTextTool ();
-  void activateZoomTool ();
+  void editLayers ();
+
+  void configureTool (CORBA::Long id);
+  void activateTool (CORBA::Long id);
+
+  void setPenColor (CORBA::Long id);
+  void setFillColor (CORBA::Long id);
 
 protected:
-  CORBA::Long addToolButton (const char* pictname, const char* tooltip,
-			     const char* func);
+  CORBA::Long addToolButton (const char* pictname, const char* tooltip);
   void showTransformationDialog (int id);
 
   void setupMenu ();
@@ -136,6 +134,7 @@ protected:
 
 protected slots:
   void setUndoStatus(bool undoPossible, bool redoPossible);
+  void showCurrentMode (const char* msg);
 
 protected:
 
@@ -172,6 +171,7 @@ protected:
   ToolBar_ref m_rToolBarTools;
   CORBA::Long m_idSelectionTool;
   CORBA::Long m_idEditPointTool;
+  CORBA::Long m_idFreeHandTool;
   CORBA::Long m_idPolylineTool;
   CORBA::Long m_idBezierTool;
   CORBA::Long m_idRectangleTool;
@@ -180,6 +180,11 @@ protected:
   CORBA::Long m_idTextTool;
   CORBA::Long m_idZoomTool;
   CORBA::Long m_idActiveTool;
+
+  /* Toolbar: Colors */
+  ToolBar_ref m_rToolBarColors;
+  CORBA::Long m_idFirstColor;
+  QVector<QColor> colorPalette;
 
   Part_impl *m_pPart;
   KIllustratorDocument *m_pDoc;
@@ -194,6 +199,7 @@ protected:
   Canvas *canvas;
   Ruler *hRuler, *vRuler;
   TransformationDialog *transformationDialog;
+  LayerDialog *layerDialog;
   QWidget *mainWidget;
   QGridLayout *grid;
   CommandHistory cmdHistory;

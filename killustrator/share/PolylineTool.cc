@@ -174,8 +174,11 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     if (me->button () == RightButton) {
       doc->unselectAllObjects ();
 
-      if (last > 0 && line->numOfPoints () >= 3 && 
-	  line->getNeighbourPoint (Coord (xpos, ypos)) == 0) {
+      if ((last > 0 && line->numOfPoints () >= 3 && 
+	  line->getNeighbourPoint (Coord (xpos, ypos)) == 0) ||
+	  (me->state () & ShiftButton)) {
+	if (me->state () & ShiftButton) 
+	    line->removePoint (line->numOfPoints () - 1, false);
 	// the polyline is closed, so convert it into a polygon
 	GPolygon* obj = new GPolygon (line->getPoints ());
 	doc->deleteObject (line);

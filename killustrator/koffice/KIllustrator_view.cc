@@ -38,6 +38,7 @@
 #include "ToolController.h"
 #include "RectangleTool.h"
 #include "PolylineTool.h"
+#include "FreeHandTool.h"
 #include "SelectionTool.h"
 #include "OvalTool.h"
 #include "TextTool.h"
@@ -49,6 +50,7 @@
 #include "AlignmentDialog.h"
 #include "GridDialog.h"
 #include "TransformationDialog.h"
+#include "LayerDialog.h"
 #include "PStateManager.h"
 #include "ExportFilter.h"
 #include "AboutDialog.h"
@@ -95,8 +97,17 @@ QWidget (parent), View_impl (), KIllustrator::View_skel () {
   mainWidget = 0L;
   viewport = 0L;
   transformationDialog = 0L;
+  layerDialog = 0L;
   // restore default settings
   PStateManager* pmgr = PStateManager::instance ();
+
+  const QColor cpalette[] = { white, red, green, blue, cyan, magenta, yellow,
+			      darkRed, darkGreen, darkBlue, darkCyan,
+			      darkMagenta, darkYellow, white, lightGray,
+			      gray, darkGray, black };
+  colorPalette.resize (18);
+  for (int i = 0; i < 18; i++)
+    colorPalette.insert (i, new QColor (cpalette[i]));
 }
 
 KIllustratorView::~KIllustratorView () {
@@ -104,7 +115,6 @@ KIllustratorView::~KIllustratorView () {
 }
 
 void KIllustratorView::createGUI () {
-  cout << "create GUI ..." << endl;
   setupMenu ();
   setupMainToolbar ();
   setupToolsToolbar ();
@@ -116,7 +126,6 @@ void KIllustratorView::createGUI () {
 }
 
 void KIllustratorView::setupCanvas () {
-  cout << "create Canvas ..." << endl;
   QWidget *w = new QWidget (this);
   w->resize (500, 500);
   
@@ -155,64 +164,58 @@ void KIllustratorView::setupCanvas () {
   grid->setRowStretch (1, 20);
   grid->setColStretch (1, 20);
 
-  //  cpalette = new ColorSelectionPalette (18, w);
-  //  QObject::connect (cpalette, SIGNAL(penColorSelected(const QBrush&)),
-  //	   this, SLOT(setPenColor(const QBrush&)));
-  //  QObject::connect (cpalette, SIGNAL(fillColorSelected(const QBrush&)),
-  //	   this, SLOT(setFillColor(const QBrush&)));
-  //  hlayout->addWidget (cpalette, 0, AlignTop);
-  
-//  setView (w);
-  
   tcontroller = new ToolController (this);
   Tool* tool;
   tcontroller->registerTool (m_idSelectionTool, 
 			     tool = new SelectionTool (&cmdHistory));
-  //  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-  //	   this, SLOT(showCurrentMode(const char*)));
+  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+		    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (m_idEditPointTool, 
 			     tool = new EditPointTool (&cmdHistory));
-  //  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-  //	   this, SLOT(showCurrentMode(const char*)));
+  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+		    this, SLOT(showCurrentMode(const char*)));
+  tcontroller->registerTool (m_idFreeHandTool, 
+			     tool = new FreeHandTool (&cmdHistory));
+  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+		    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (m_idPolylineTool, 
 			     tool = new PolylineTool (&cmdHistory));
-  //  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-  //	   this, SLOT(showCurrentMode(const char*)));
+  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+		    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (m_idBezierTool, 
 			     tool = new BezierTool (&cmdHistory));
-  //  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-  //	   this, SLOT(showCurrentMode(const char*)));
+  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+		    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (m_idRectangleTool, 
 			     tool = new RectangleTool (&cmdHistory));
-  //  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-  //	   this, SLOT(showCurrentMode(const char*)));
+  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+		    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (m_idPolygonTool, 
 			     tool = new PolygonTool (&cmdHistory));
-  //  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-  //	   this, SLOT(showCurrentMode(const char*)));
+  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+		    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (m_idEllipseTool, 
 			     tool = new OvalTool (&cmdHistory));
-  //  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-  //	   this, SLOT(showCurrentMode(const char*)));
+  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+		    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (m_idTextTool, 
 			     tool = new TextTool (&cmdHistory));
-  //  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-  //	   this, SLOT(showCurrentMode(const char*)));
+  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+		    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (m_idZoomTool, 
 			     tool = new ZoomTool (&cmdHistory));
-  //  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-  //	   this, SLOT(showCurrentMode(const char*)));
+  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+		    this, SLOT(showCurrentMode(const char*)));
   tcontroller->toolSelected (0);
 
-  //  QObject::connect (tpalette, SIGNAL (toolSelected (int)), tcontroller,
-  // 	   SLOT(toolSelected (int)));
-  // QObject::connect (tpalette, SIGNAL (toolConfigActivated (int)), tcontroller,
-  //	   SLOT(configureTool (int)));
   canvas->setToolController (tcontroller);
   grid->activate ();
   w->show ();
   mainWidget = w;
-//  resizeEvent (0L);
+}
+
+void KIllustratorView::showCurrentMode (const char* msg) {
+    //  statusbar->changeItem (msg, 2);
 }
 
 void KIllustratorView::setupMenu () {
@@ -331,6 +334,12 @@ void KIllustratorView::setupMenu () {
 			      CORBA::string_dup ("setupPage"));
 
     m_rMenuBar->insertSeparator (m_idMenuLayout);
+    m_idMenuLayout_Layers =
+      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Layers")), 
+			      m_idMenuLayout, this, 
+			      CORBA::string_dup ("editLayers"));
+
+    m_rMenuBar->insertSeparator (m_idMenuLayout);
 
     m_idMenuLayout_SetupGrid =
       m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Setup Grid")), 
@@ -427,25 +436,41 @@ void KIllustratorView::setupMenu () {
 }
 
 void KIllustratorView::setupColorToolbar () {
+    m_vToolBarFactory = m_vPartShell->toolBarFactory ();
+    if (! CORBA::is_nil (m_vToolBarFactory)) {
+	m_rToolBarColors = 
+	    m_vToolBarFactory->createToolBar (this, 
+					      CORBA::string_dup 
+					      (i18n ("Colors")));
+
+	for (int i = 0; i < 18; i++) {
+	  CORBA::Long id;
+	  id = m_rToolBarColors->insertColorButton (colorPalette[i]->red (),
+						    colorPalette[i]->green (),
+						    colorPalette[i]->blue ());
+	  if (i == 0)
+	    m_idFirstColor = id;
+	}
+
+	m_rToolBarColors->connect ("rightPressed", this, "setFillColor");
+	m_rToolBarColors->connect ("pressed", this, "setPenColor");
+	m_rToolBarColors->setPos(KToolBar::Right);
+    }
 }
 
 void KIllustratorView::setupMainToolbar () {
 }
 
 CORBA::Long KIllustratorView::addToolButton (const char* pictname,
-					     const char* tooltip,
-					     const char* func) {
+					     const char* tooltip) {
   CORBA::Long id;
 
   QString path = kapp->kde_datadir ().copy ();
   path += "/killustrator/pics/";
   path += pictname;
   QString pix = loadPixmap (path);
-  id = m_rToolBarTools->insertButton (CORBA::string_dup (pix),
-				      CORBA::string_dup (tooltip),
-				      this,
-				      CORBA::string_dup (func));
-  m_rToolBarTools->setToggle (id, true);
+  id = m_rToolBarTools->insertLRButton (CORBA::string_dup (pix),
+				      CORBA::string_dup (tooltip), 0L, 0L);
   return id;
 }
 
@@ -454,25 +479,29 @@ void KIllustratorView::setupToolsToolbar () {
     if (! CORBA::is_nil (m_vToolBarFactory)) {
 	m_rToolBarTools = 
 	    m_vToolBarFactory->createToolBar (this, 
-					      CORBA::string_dup (i18n ("Tools")));
-	m_idSelectionTool = addToolButton ("selecttool.xpm", i18n("Selection Mode"),
-					   "activateSelectionTool");
-	m_idEditPointTool = addToolButton ("pointtool.xpm", i18n("Edit Point"),
-					   "activateEditPointTool");
-	m_idPolylineTool = addToolButton ("linetool.xpm", i18n("Create Polyline"),
-					  "activateLineTool");
-	m_idBezierTool = addToolButton ("beziertool.xpm", i18n("Create Bezier Curve"),
-					"activateBezierTool");
-	m_idRectangleTool = addToolButton ("recttool.xpm", i18n("Create Rectangle"),
-					   "activateRectangleTool");
-	m_idPolygonTool = addToolButton ("polygontool.xpm", i18n("Create Polygon"),
-					 "activatePolygonTool");
-	m_idEllipseTool = addToolButton ("ellipsetool.xpm", i18n("Create Ellipse"),
-					 "activateEllipseTool");
-	m_idTextTool = addToolButton ("texttool.xpm", i18n("Create/Edit Text"),
-				      "activateTextTool");
-	m_idZoomTool = addToolButton ("zoomtool.xpm", i18n("Zoom In"),
-				      "activateZoomTool");
+					      CORBA::string_dup 
+					      (i18n ("Tools")));
+	m_rToolBarTools->connect ("rightPressed", this, "configureTool");
+	m_rToolBarTools->connect ("pressed", this, "activateTool");
+	m_idSelectionTool = addToolButton ("selecttool.xpm", 
+					   i18n("Selection Mode"));
+	m_idEditPointTool = addToolButton ("pointtool.xpm", 
+					   i18n("Edit Point"));
+	m_idFreeHandTool = addToolButton ("freehandtool.xpm", 
+					  i18n("Create FreeHand Line"));
+	m_idPolylineTool = addToolButton ("linetool.xpm", 
+					  i18n("Create Polyline"));
+	m_idBezierTool = addToolButton ("beziertool.xpm", 
+					i18n("Create Bezier Curve"));
+	m_idRectangleTool = addToolButton ("recttool.xpm", 
+					   i18n("Create Rectangle"));
+	m_idPolygonTool = addToolButton ("polygontool.xpm", 
+					 i18n("Create Polygon"));
+	m_idEllipseTool = addToolButton ("ellipsetool.xpm", 
+					 i18n("Create Ellipse"));
+	m_idTextTool = addToolButton ("texttool.xpm", 
+				      i18n("Create/Edit Text"));
+	m_idZoomTool = addToolButton ("zoomtool.xpm", i18n("Zoom In"));
 	
 	m_rToolBarTools->setButton (m_idSelectionTool, true);
 	m_idActiveTool = m_idSelectionTool;
@@ -492,7 +521,6 @@ void KIllustratorView::cleanUp () {
 }
 
 void KIllustratorView::construct () {
-  cout << "KIllustratorView::construct ()" << endl;
   resizeEvent (0L);
 }
 
@@ -528,13 +556,13 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 
 void KIllustratorView::resizeEvent (QResizeEvent* ) {
   if (mainWidget) {
-    cout << "KIllustratorView::resize mainWidget to: " 
-	 << width () << ", " << height () 
-	 << " : showGUI = " << m_bShowGUI << endl;
     mainWidget->resize (width (), height ()); 
     if (m_bShowGUI) {
-      hRuler->show ();
-      vRuler->show ();
+      if (m_bShowRulers) {
+	// draw rulers
+	hRuler->show ();
+	vRuler->show ();
+      }
       viewport->showScrollBars ();
     }
     else {
@@ -563,6 +591,9 @@ void KIllustratorView::setFocus (CORBA::Boolean m) {
   else
     m_bShowGUI = true;
 
+  if (m)
+    activateTool (m_idSelectionTool);
+
   if (! m && m_pDoc != 0L) {
     // we lost the focus, so deselect all objects
     m_pDoc->unselectAllObjects ();
@@ -589,12 +620,14 @@ CORBA::Boolean KIllustratorView::printDlg () {
 
 void KIllustratorView::editUndo () {
   cmdHistory.undo ();
-  activateSelectionTool ();
+  m_rToolBarTools->setButton (m_idActiveTool, false);
+  tcontroller->toolSelected (m_idActiveTool = m_idSelectionTool);
 }
 
 void KIllustratorView::editRedo () {
   cmdHistory.redo ();
-  activateSelectionTool ();
+  m_rToolBarTools->setButton (m_idActiveTool, false);
+  tcontroller->toolSelected (m_idActiveTool = m_idSelectionTool);
 }
 
 void KIllustratorView::editCut () {
@@ -622,51 +655,6 @@ void KIllustratorView::editInsertOject () {
 
 void KIllustratorView::editProperties () {
   PropertyEditor::edit (&cmdHistory, m_pDoc);
-}
-
-void KIllustratorView::activateSelectionTool () {
-  m_rToolBarTools->setButton (m_idActiveTool, false);
-  tcontroller->toolSelected (m_idActiveTool = m_idSelectionTool);
-}
-
-void KIllustratorView::activateEditPointTool () {
-  m_rToolBarTools->setButton (m_idActiveTool, false);
-  tcontroller->toolSelected (m_idActiveTool = m_idEditPointTool);
-}
-
-void KIllustratorView::activateLineTool () {
-  m_rToolBarTools->setButton (m_idActiveTool, false);
-  tcontroller->toolSelected (m_idActiveTool = m_idPolylineTool);
-}
-
-void KIllustratorView::activateBezierTool () {
-  m_rToolBarTools->setButton (m_idActiveTool, false);
-  tcontroller->toolSelected (m_idActiveTool = m_idBezierTool);
-}
-
-void KIllustratorView::activateRectangleTool () {
-  m_rToolBarTools->setButton (m_idActiveTool, false);
-  tcontroller->toolSelected (m_idActiveTool = m_idRectangleTool);
-}
-
-void KIllustratorView::activatePolygonTool () {
-  m_rToolBarTools->setButton (m_idActiveTool, false);
-  tcontroller->toolSelected (m_idActiveTool = m_idPolygonTool);
-}
-
-void KIllustratorView::activateEllipseTool () {
-  m_rToolBarTools->setButton (m_idActiveTool, false);
-  tcontroller->toolSelected (m_idActiveTool = m_idEllipseTool);
-}
-
-void KIllustratorView::activateTextTool () {
-  m_rToolBarTools->setButton (m_idActiveTool, false);
-  tcontroller->toolSelected (m_idActiveTool = m_idTextTool);
-}
-
-void KIllustratorView::activateZoomTool () {
-  m_rToolBarTools->setButton (m_idActiveTool, false);
-  tcontroller->toolSelected (m_idActiveTool = m_idZoomTool);
 }
 
 void KIllustratorView::toggleRuler () {
@@ -745,3 +733,54 @@ void KIllustratorView::alignToGrid () {
   m_rMenuBar->setItemChecked (m_idMenuLayout_AlignToGrid, snap);
 }
 
+void KIllustratorView::configureTool (CORBA::Long id) {
+  tcontroller->configureTool (id);
+}
+
+void KIllustratorView::activateTool (CORBA::Long id) {
+  m_rToolBarTools->setButton (m_idActiveTool, false);
+  tcontroller->toolSelected (m_idActiveTool = id);
+}
+
+void KIllustratorView::setPenColor (CORBA::Long id) {
+  int idx = id - m_idFirstColor;
+  GObject::OutlineInfo oInfo;
+  oInfo.mask = GObject::OutlineInfo::Color | GObject::OutlineInfo::Style;
+  oInfo.color = *(colorPalette[idx]);
+  oInfo.style = (idx == 0 ? NoPen : SolidLine);
+  
+  GObject::FillInfo fInfo;
+  fInfo.mask = 0;
+    
+  if (! m_pDoc->selectionIsEmpty ()) {
+    SetPropertyCmd *cmd = new SetPropertyCmd (m_pDoc, oInfo, fInfo);
+    cmdHistory.addCommand (cmd, true);
+  }
+  else
+    GObject::setDefaultOutlineInfo (oInfo);
+}
+
+void KIllustratorView::setFillColor (CORBA::Long id) {
+  int idx = id - m_idFirstColor;
+  GObject::OutlineInfo oInfo;
+  oInfo.mask = 0;
+  
+  GObject::FillInfo fInfo;
+  fInfo.mask = GObject::FillInfo::Color | GObject::FillInfo::Style;
+  fInfo.color = *(colorPalette[idx]);
+  fInfo.style = (idx == 0 ? NoBrush : SolidPattern);
+
+  if (! m_pDoc->selectionIsEmpty ()) {
+    SetPropertyCmd *cmd = new SetPropertyCmd (m_pDoc, oInfo, fInfo);
+    cmdHistory.addCommand (cmd, true);
+  }
+  else
+    GObject::setDefaultFillInfo (fInfo);
+}
+
+void KIllustratorView::editLayers () {
+  if (!layerDialog) 
+    layerDialog = new LayerDialog ();
+  layerDialog->manageDocument (m_pDoc);
+  layerDialog->show ();
+}

@@ -169,7 +169,7 @@ void KIllustratorShell::enableToolBars () {
   m_idComboFile_Zoom =
     m_rToolBarFile->insertCombo (true, 
 				 CORBA::string_dup (i18n ("Zoom Factor")),
-				 50, this, 
+				 60, this, 
 				 CORBA::string_dup ("setZoomFactor"));
   float zFactors [] = { 0.5, 1.0, 1.5, 2.0, 4.0 };
   for (int i = 0; i < 5; i++) {

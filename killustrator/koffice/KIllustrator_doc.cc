@@ -49,7 +49,8 @@ KIllustratorDocument::~KIllustratorDocument () {
 }
 
 bool KIllustratorDocument::save (ostream& os) {
-  return false;
+  cout << "save KIllu to stream !!!!!!!!!!!!!!!" << endl;
+  return GDocument::saveToXml (os);
 }
 
 void KIllustratorDocument::cleanUp () {
@@ -61,12 +62,18 @@ void KIllustratorDocument::cleanUp () {
   Document_impl::cleanUp ();
 }
 
+
+bool KIllustratorDocument::load (istream& in, bool) {
+  cout << "load KIllu from stream !!!!!!!!!" << endl;
+  return GDocument::readFromXml (in);
+}
+
 bool KIllustratorDocument::loadChildren (OPParts::MimeMultipartDict_ptr dict) {
-  return false;
+  return true;
 }
 
 bool KIllustratorDocument::hasToWriteMultipart () {
-  return true;
+  return false;
 }
 
 CORBA::Boolean KIllustratorDocument::init () {
@@ -74,7 +81,6 @@ CORBA::Boolean KIllustratorDocument::init () {
 }
 
 OPParts::View_ptr KIllustratorDocument::createView () {
-  cout << "KIllustratorDocument::createView ()" << endl;
   KIllustratorView *view = new KIllustratorView (0L, 0L, this);
   view->setGeometry (5000, 5000, 100, 100);
   view->QWidget::show ();
@@ -96,6 +102,6 @@ void KIllustratorDocument::viewList (OPParts::Document::ViewList*& list_ptr) {
 }
 
 CORBA::Boolean KIllustratorDocument::isModified () {
-  return false;
+  return GDocument::isModified ();
 }
 

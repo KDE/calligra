@@ -22,6 +22,7 @@
 
 */
 
+#include <fstream.h>
 #include <qpicture.h>
 #include "Preview.h"
 #include "GDocument.h"
@@ -41,7 +42,10 @@ bool kilPreviewHandler (const KFileInfo* fInfo, const QString fileName,
     GDocument *tmpDoc = new GDocument ();
 
     // load it
-    if (tmpDoc->readFromXml ((const char *) fileName)) {
+    ifstream in ((const char *) fileName);
+    if (in.fail ())
+      return false;
+    if (tmpDoc->readFromXml (in)) {
       float ratio = float (tmpDoc->getPaperHeight ()) / 
                     float (tmpDoc->getPaperWidth ());
       int width = 300;

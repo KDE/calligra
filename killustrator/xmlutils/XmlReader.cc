@@ -58,6 +58,7 @@ bool XmlReader::validHeader () {
   if (tokenizer.nextToken () != XmlTokenizer::Tok_Gt)
     return false;
 
+#if 0
   // Check for: <doctype symbol system string>
   if (tokenizer.nextToken () != XmlTokenizer::Tok_Lt)
     return false;
@@ -82,10 +83,11 @@ bool XmlReader::validHeader () {
 
   if (tokenizer.nextToken () != XmlTokenizer::Tok_Gt)
     return false;
-
+#endif
   return true;
 }
   
+#if 0
 const string& XmlReader::doctype () const {
   return s_dtype;
 }
@@ -93,6 +95,7 @@ const string& XmlReader::doctype () const {
 const string& XmlReader::dtd () const {
   return s_dtd;
 }
+#endif
 
 const string& XmlReader::getText () {
   return text;

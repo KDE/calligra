@@ -40,7 +40,7 @@
  * Sample code:
  * <pre>
  *  ofstream os (fname);
- *  XmlWriter xml (os, DOCTYPE, DTD); // writes the XML header
+ *  XmlWriter xml (os); // writes the XML header
  *
  *  xml.startTag ("head"); // writes &lt;head&gt;
  *
@@ -58,15 +58,11 @@
 class XmlWriter {
 public:
   /**
-   * Create a XmlWriter instance for the given output stream and
-   * the document type. Currently the given DTD is NOT used for
-   * validating purposes.
+   * Create a XmlWriter instance for the given output stream.
    * 
    * @param os       The open output stream for writing.
-   * @param doctype  The document type for the XML output.
-   * @param dtd      The name of the DTD.
    */
-  XmlWriter (ostream& os, const char* doctype, const char* dtd);
+  XmlWriter (ostream& os);
 
   /**
    * Desctructor.

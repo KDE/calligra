@@ -41,6 +41,8 @@
 
 #include "koPageLayoutDia.h"
 
+#define KILLUSTRATOR_MIMETYPE "application/x-killustrator"
+
 #define XML_DOCTYPE "kiml"
 #define XML_DTD     "kiml1.0.dtd"
 #define UNNAMED_FILE "<unnamed>"
@@ -55,7 +57,7 @@ public:
   void setAutoUpdate (bool flag);
 
   const QString& fileName () const { return filename; }
-
+  void setFileName (const char* s) { filename = s; }
   void setPaperSize (int width, int height);
   int getPaperWidth () const;
   int getPaperHeight () const;
@@ -101,19 +103,9 @@ public:
   GObject* lastObject () { return last; }
   void setLastObject (GObject* obj);
 
-#ifdef NO_LAYERS
-  QListIterator<GObject> getObjects () { 
-    return QListIterator<GObject> (objects); }
-  QListIterator<GObject> getSelection () { 
-    return QListIterator<GObject> (selection); }
-  
-  bool selectionIsEmpty () const { return selection.isEmpty (); }
-  unsigned int selectionCount () const { return selection.count (); }
-#else
   list<GObject*>& getSelection () { return selection; }
   bool selectionIsEmpty () const { return selection.empty (); }
   unsigned int selectionCount () const { return selection.size (); }
-#endif
 
   unsigned int objectCount () const;
 
@@ -130,8 +122,8 @@ public:
   bool findContainingObjects (int x, int y, QList<GObject>& olist);
   bool findObjectsContainedIn (const Rect& r, QList<GObject>& olist);
 	
-  bool saveToXml (const char* fname);
-  bool readFromXml (const char* fname);
+  bool saveToXml (ostream& os);
+  bool readFromXml (istream& is);
   
   Handle& handle () { return selHandle; }
   
@@ -169,14 +161,9 @@ private:
   bool modifyFlag;
   QString filename;
   int paperWidth, paperHeight; // pt
-#ifdef NO_LAYERS
-  QList<GObject> objects;
-  QList<GObject> selection;
-#else
   vector<GLayer*> layers; // the array of all layers
   list<GObject*> selection;
   GLayer* active_layer;     // the current layer
-#endif
   GObject *last;
   Handle selHandle;
   Rect selBox;
