@@ -196,6 +196,7 @@ VObjectDlg::VObjectDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	connect (m_Y, SIGNAL( valueChanged( double ) ), this, SLOT( yChanged ( double ) ) );                                                                                    
 	connect (m_Width, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged ( double ) ) );
 	connect (m_Height, SIGNAL( valueChanged( double ) ), this, SLOT( heightChanged ( double ) ) );
+	connect( m_setLineWidth, SIGNAL( valueChanged( value() ) ), this, SLOT( lineWidthChanged( double ) ) );
 	
 	setWidget( mainLayout );
 	setFixedSize( baseSize() );
@@ -283,5 +284,10 @@ VObjectDlg::heightChanged( double height )
 		m_part->addCommand( new VScaleCmd( &m_part->document(), current , width, height ), true );
 }
 
+void
+VObjectDlg::lineWidthChanged ( double width )
+{
+	m_part->addCommand( new VStrokeLineWidthCmd( &m_part->document(), m_setLineWidth->value() ), true );
+}
 #include "vobjectdlg.moc"
 

@@ -60,6 +60,7 @@ private slots:
 	void yChanged( double y );
 	void widthChanged( double width );
 	void heightChanged( double height );
+	void lineWidthChanged( double width );
 };
 
 #endif
