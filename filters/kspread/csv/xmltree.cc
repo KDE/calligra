@@ -19,6 +19,9 @@
 
 #include <xmltree.h>
 
+#include <qdatetime.h>
+#include <kdebug.h>
+
 
 XMLTree::XMLTree(const QString & inputFileName)
 {
@@ -65,7 +68,15 @@ const QString XMLTree::part()
   QString s;
   QTextStream t(s, IO_WriteOnly);
 
-  root->save(t);
+  QTime tmr;
+  tmr.start();
+  kdebug(KDEBUG_INFO, 31000, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
+  root->save(t);  // Why does this take sooooo long (approx. 8s on my Athlon 500 :( )
+
+  kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)tmr.elapsed()));
+  kdebug(KDEBUG_INFO, 31000, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
   t << '\0';
 
   return s;
@@ -79,7 +90,56 @@ bool XMLTree::cell( const QString & contents )
 
   e.setAttribute("row", row);
   e.setAttribute("column", column++);
-  e.appendChild(root->createTextNode(contents));
+
+  QDomElement format=root->createElement("format");
+  format.setAttribute("float", "3");
+  format.setAttribute("alignY", "2");
+  format.setAttribute("floatcolor", "2");
+  format.setAttribute("faktor", "1");
+  format.setAttribute("precision", "-1");
+  format.setAttribute("align", "4");
+
+  QDomElement pen=root->createElement("pen");
+  pen.setAttribute("width", "1");
+  pen.setAttribute("style", "0");
+  pen.setAttribute("color", "#000000");
+
+  QDomElement lborder=root->createElement("left-border");
+  lborder.appendChild(pen);
+  format.appendChild(lborder);
+
+  pen=root->createElement("pen");
+  pen.setAttribute("width", "1");
+  pen.setAttribute("style", "0");
+  pen.setAttribute("color", "#000000");
+
+  QDomElement tborder=root->createElement("top-border");
+  tborder.appendChild(pen);
+  format.appendChild(tborder);
+
+  pen=root->createElement("pen");
+  pen.setAttribute("width", "1");
+  pen.setAttribute("style", "0");
+  pen.setAttribute("color", "#000000");
+
+  QDomElement fdia=root->createElement("fall-diagonal");
+  fdia.appendChild(pen);
+  format.appendChild(fdia);
+
+  pen=root->createElement("pen");
+  pen.setAttribute("width", "1");
+  pen.setAttribute("style", "0");
+  pen.setAttribute("color", "#000000");
+
+  QDomElement udia=root->createElement("up-diagonal");
+  udia.appendChild(pen);
+  format.appendChild(udia);
+
+  e.appendChild(format);
+
+  QDomElement text=root->createElement("text");
+  text.appendChild(root->createTextNode(contents));
+  e.appendChild(text);
 
   table.appendChild(e);
 

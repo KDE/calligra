@@ -126,9 +126,10 @@ const bool CSVFilter::filter(const QCString &fileIn, const QCString &fileOut,
         return false;
     }
     out.write((const char*)tmp, tmp.length());
-    kdebug(KDEBUG_INFO, 31000, "%s", tmp.data());
+    //kdebug(KDEBUG_INFO, 31000, "%s", tmp.data());
     out.close();
 
     in.close();
+
     return bSuccess;
 }
