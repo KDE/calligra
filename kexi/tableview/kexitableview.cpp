@@ -571,6 +571,8 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 	}
 	
 	if (!theSameData) {
+//todo: store sorting?
+		setSorting(-1);
 		connect(m_data, SIGNAL(refreshRequested()), this, SLOT(slotRefreshRequested()));
 		connect(m_data, SIGNAL(destroying()), this, SLOT(slotDataDestroying()));
 		connect(m_data, SIGNAL(rowsDeleted( const QValueList<int> & )), 
