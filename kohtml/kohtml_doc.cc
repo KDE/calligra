@@ -77,6 +77,8 @@ KoHTMLDoc::KoHTMLDoc()
 
   m_bModified = false;
 
+  m_vSaveLoadMode = KoHTML::KoHTMLDocument::URLOnly;
+
   htmlData = "";  
   m_vCurrentURL = "";
   
@@ -184,6 +186,7 @@ void KoHTMLDoc::openURL(const char *_url)
        stopLoading();
        
        m_bLoadError = false;
+       m_bDocumentDone = false;
      
        htmlData = "";
        
@@ -199,11 +202,13 @@ void KoHTMLDoc::openURL(const char *_url)
        m_lstJobs.append(job);
      
        job->start();
+       documentStarted();
      }
 }
 
 void KoHTMLDoc::feedData(const char *url, const char *data)
 {
+  documentStarted();
   m_vCurrentURL = url;
   htmlData = data;
   m_bDocumentDone = true;
@@ -214,11 +219,18 @@ void KoHTMLDoc::feedData(const char *url, const char *data)
 void KoHTMLDoc::documentStarted()
 {
   SIGNAL_CALL0( "documentStarted" );
+  m_bDocumentDone = false;
 }
 
 void KoHTMLDoc::documentDone()
 {
   SIGNAL_CALL0( "documentDone" );
+  m_bDocumentDone = true;
+}
+
+CORBA::Boolean KoHTMLDoc::documentLoading()
+{
+  return (CORBA::Boolean)m_bDocumentDone;
 }
 
 void KoHTMLDoc::stopLoading()
@@ -234,6 +246,16 @@ void KoHTMLDoc::stopLoading()
       }     
       
   assert( m_lstJobs.count() == 0 );      
+}
+
+KoHTML::KoHTMLDocument::SaveLoadMode KoHTMLDoc::saveLoadMode()
+{
+  return m_vSaveLoadMode;
+}
+
+void KoHTMLDoc::setSaveLoadMode( KoHTML::KoHTMLDocument::SaveLoadMode mode )
+{
+  m_vSaveLoadMode = mode;
 }
 
 void KoHTMLDoc::slotHTMLCodeLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *data, int len)
@@ -263,24 +285,36 @@ void KoHTMLDoc::slotHTMLRedirect(int id, const char *url)
 void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
 		     CORBA::Float _scale )
 { 
+  QPainter painter;
+  painter.begin(dev);
+
+  if (_scale != 1.0) painter.translate(_scale, _scale);
+  
   if (m_vCurrentURL.isEmpty())
      {
-       QPainter p;
-       p.begin(dev);
-       
-       if (_scale != 1.0) p.translate(_scale, _scale);
-       
        const char *msg = i18n("KoHTML: No document loaded!");
        
-       QRect r = p.fontMetrics().boundingRect(msg);
+       QRect r = painter.fontMetrics().boundingRect(msg);
        
-       p.drawText((width / 2) - (r.width() / 2), (height / 2) - (r.height() / 2) , msg);
+       painter.drawText((width / 2) - (r.width() / 2), (height / 2) - (r.height() / 2) , msg);
        
-       p.end();
+       drawChildren(&painter, _scale);
+       
+       painter.end();
+       
        return;
      }
      
 //  if (!m_bDocumentDone) return;
+
+  if (m_lstHTMLViews.count() > 1)
+     {
+       KHTMLView *v = m_lstHTMLViews.at(1);
+       int x = v->xOffset();
+       int y = v->yOffset();
+       
+       m_vInternalView->gotoXY(x, y);
+     }
 
   cerr << "void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height)" << endl;
 
@@ -288,10 +322,30 @@ void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
   SavedPage *p = m_vInternalView->saveYourself();
 
   cerr << "drawing" << endl;
-  m_vInternalView->draw(p, dev, width, height, _scale);
+  m_vInternalView->draw(p, &painter, width, height, _scale);
   
   delete p;
+  
+  drawChildren(&painter, _scale);
+  
+  painter.end();
 }
+
+void KoHTMLDoc::drawChildren( QPainter *painter, CORBA::Float _scale)
+{			     
+  QListIterator<KoHTMLChild> it(m_lstChildren);
+  
+  for (; it.current(); ++it)
+      {
+        QRect geom = it.current()->geometry();
+	QPixmap pix(geom.width(), geom.height());
+	QPainter p2;
+	p2.begin(&pix);
+        it.current()->draw(_scale, true)->play(&p2);
+	p2.end();
+	painter->drawPixmap(geom.left(), geom.top(), pix);
+      }	
+}			     
 
 bool KoHTMLDoc::hasToWriteMultipart()
 {
@@ -617,7 +671,7 @@ void KoHTMLDoc::slotDocumentStarted(KHTMLView *view)
        return;
      }
      
-  if (view == topView) documentStarted();     
+//  if (view == topView) documentStarted();
 }
 
 void KoHTMLDoc::slotDocumentDone(KHTMLView *view)

@@ -41,3 +41,10 @@ Thu Jan 7 18:56:56 1999 Simon Hausmann <tronical@gmx.net>
 
         * code cleanups (separated KoHTMLJob)
 
+Sun Jan 10 21:30:09 1999 Simon Hausmann <tronical@gmx.net>
+
+        * fixes
+
+        * embedded children documents are now painted, too (when KoHTMLDoc::draw() gets called)
+
+        * started work on addBookmark() and advanced save/load mode (both not working, yet)

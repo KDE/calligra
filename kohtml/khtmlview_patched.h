@@ -1,7 +1,7 @@
 #ifndef __khtmlview_patched_h_
 #define __khtmlview_patched_h_
 
-#include <qpaintdevice.h>
+#include <qpainter.h>
 
 #include <khtmlview.h>
 
@@ -15,7 +15,7 @@ public:
                     KHTMLView_Patched *parent_view = 0L);
   ~KHTMLView_Patched();
 
-  void draw(SavedPage *p, QPaintDevice *dev, int width, int height, float scale);
+  void draw(SavedPage *p, QPainter *painter, int width, int height, float scale);
 
   virtual KHTMLView *newView(QWidget *parent, const char *name = 0L, int flags = 0L);
 

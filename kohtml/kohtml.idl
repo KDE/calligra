@@ -74,7 +74,14 @@ module KoHTML
 		signal void documentStarted();
 		signal void documentDone();
 		
+		boolean documentLoading();
+		
 		void stopLoading();
+		
+		enum SaveLoadMode { URLOnly, Complete };
+		
+		SaveLoadMode saveLoadMode();
+		void setSaveLoadMode( in SaveLoadMode mode );
         };
 	
 	interface DocumentFactory : KOffice::DocumentFactory

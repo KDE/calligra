@@ -37,8 +37,13 @@
 #include <qkeycode.h>
 #include <qmsgbox.h>
 #include <qclipboard.h>
+#include <qfileinfo.h>
 #include <kiconloader.h>
 #include <kfm.h>
+#include <kmimemagic.h>
+#include <kmimetypes.h>
+#include <kpixmapcache.h>
+#include <kwm.h>
 
 #include <khtmlsavedpage.h>
 
@@ -296,7 +301,7 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
   m_idReload = m_vMainToolBar->insertButton2(pix, ID_RELOAD, SIGNAL(clicked()), this, "slotReload", true, i18n("Reload Page"), -1);
 
   pix = OPUIUtils::convertPixmap(ICON("stop.xpm"));
-  m_idStop = m_vMainToolBar->insertButton2(pix, ID_STOP, SIGNAL(clicked()), this, "slotStop", true, i18n("Stop"), -1);
+  m_idStop = m_vMainToolBar->insertButton2(pix, ID_STOP, SIGNAL(clicked()), this, "slotStop", m_pDoc->documentLoading(), i18n("Stop"), -1);
   
   m_vMainToolBar->insertSeparator(-1);
   
@@ -645,7 +650,35 @@ void KoHTMLView::slotURLEntered()
 
 void KoHTMLView::addBookmark()
 {
-  //TODO
+  QString url = m_pDoc->getURL();
+  QString title = captionText;
+  K2URL u(url);
+  
+  KMimeType::initStatic();
+  KMimeMagic::initStatic();  
+
+  QFileInfo icon(KPixmapCache::pixmapFileForURL(url, 0, u.isLocalFile(), false));
+  QFileInfo miniIcon(KPixmapCache::pixmapFileForURL(url, 0, u.isLocalFile(), true));
+  
+  
+  if (title.isEmpty())
+     title = u.filename().c_str();
+
+  QString p = kapp->localkdedir().data();
+  
+  p += "/share/apps/kfm/bookmarks/";
+  p += title;
+     
+  KSimpleConfig c(p, true);
+  
+  c.setGroup("KDE Desktop Entry");
+  c.writeEntry("Type", "Link");
+  c.writeEntry("URL", url);
+  c.writeEntry("Icon", icon.fileName());
+  c.writeEntry("MiniIcon", miniIcon.fileName());
+  c.writeEntry("Name", title);
+  c.sync();
+  KWM::sendKWMCommand("krootwm:refreshNew");
 }
 
 void KoHTMLView::editBookmarks()
@@ -839,12 +872,9 @@ void KoHTMLView::scanBookmarks( OpenPartsUI::Menu_var menu, const char * path )
 
 void KoHTMLView::slotSetCaption(const char *title)
 {
-  QString caption(title);
-  caption.prepend("KoHTML : ");
-  
-  captionText = caption;
-  
-//  if (m_bFocus) m_vMainWindow->setCaption(captionText);
+  captionText = title;
+
+// OPPartIf::setPartCaption(QString(captionText).prepend("KoHTML : "));  
 }
 
 void KoHTMLView::slotShowURL(KHTMLView *view, const char *url)

@@ -86,11 +86,18 @@ public:
 
   virtual void documentStarted();
   virtual void documentDone();
+
+  virtual CORBA::Boolean documentLoading();
   
   virtual void stopLoading();
 
+  virtual KoHTML::KoHTMLDocument::SaveLoadMode saveLoadMode();
+  virtual void setSaveLoadMode( KoHTML::KoHTMLDocument::SaveLoadMode mode );
+
   virtual void draw( QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
 		     CORBA::Float _scale );
+
+  virtual void drawChildren( QPainter *painter, CORBA::Float _scale);
 
   virtual bool loadXML(KOMLParser &parser, KOStore::Store_ptr store);
   virtual bool loadChildren( KOStore::Store_ptr store);
@@ -176,6 +183,8 @@ private:
   QString htmlData;
   
   QString m_vCurrentURL;
+
+  KoHTML::KoHTMLDocument::SaveLoadMode m_vSaveLoadMode;
 
   KHTMLView_Patched *m_vInternalView;
 
