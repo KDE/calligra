@@ -28,8 +28,11 @@
 typedef QMap<QString, KexiProperty> PropertyBuffer;
 
 /** This class is a QMap<QString, KexiProperty> which holds properties to be shown in 
-    Property Editor. 
+    Property Editor.
+    \sa KexiPropertyEditor for help on how to use KexiPropertyBuffer.
+    \sa KexiProperty to see how to create properties.
 **/
+//! A buffer containing KexiProperty objects
 class KEXIPROPERTYEDITOR_EXPORT KexiPropertyBuffer : public QObject, public PropertyBuffer
 {
 	Q_OBJECT

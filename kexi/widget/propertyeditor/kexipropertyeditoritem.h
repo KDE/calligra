@@ -33,6 +33,7 @@ typedef QDict<KexiPropertyEditorItem> ChildDict;
 /** This class is a subclass of KListViewItem which is associated to a property.
     It also takes care of drawing custom contents.
  **/
+ //! An item in KexiPropertyEditorItem associated to a property
 class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 {
 	public:

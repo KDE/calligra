@@ -28,8 +28,24 @@ class QString;
 class QStringList;
 
 /** This class holds a single property, which can be any of the types supported by QVariant.
-    It includes support for QStringList properties, an i18n'ed label and stores an old value to allow undo. 
+    It includes support for QStringList properties, an i18n'ed label and stores an old value to allow undo.
+    
+    Create a property :
+    \code
+    property = KexiProperty(name, value); // name is a QString, value is whatever type QVariant supports
+    \endcode
+    
+    There are two exceptions :
+    \code
+    property = KexiProperty(name, QVariant(bool, 3));  // You must use QVariant(bool, int) to create a bool property
+    // See QVariant doc for more details
+    
+    // To create a list property
+    property = KexiProperty(name, "Current Value", list); // where list is the list of possible values for this property
+    \endcode
+    
  **/
+ //! A property object for use in KexiPropertyEditor
 class KEXIPROPERTYEDITOR_EXPORT KexiProperty
 {
 	public:

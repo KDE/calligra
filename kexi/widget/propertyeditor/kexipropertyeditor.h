@@ -36,8 +36,29 @@ class KPushButton;
     When an item gets the focus, an editor (eg. a line edit, a spin box, etc.) is shown, which allows to modify property value.
     Pressing Enter key allow to validate the input (ie save it in the buffer), whereas Esc key undo previous input.
     Properties can be reset using "Revert to defaults" push button next to editor.
-    Modified items names are written in bold.
+    Modified items names are written in bold.\n
+    \n
+    Example of usage of KexiPropertyEditor :
+    \code
+    // Create a Property Buffer
+    m_buffer = new KexiPropertyBuffer(this);
+    // Add properties into the buffer
+    m_buffer->add(KexiProperty("Name", "Name"));
+    m_buffer->insert(KexiProperty("Int", 43));
+    
+    // for a string list property
+    QStringList list;
+    list.append("MyItem");
+    list.append("OtherItem");
+    list.append("Item");
+    m_buffer->add(KexiProperty("list","Item" , list));
+    [...]
+    
+    KexiPropertyEditor *edit = new KexiPropertyEditor(this,false);
+    edit->setBuffer(m_buffer);
+    \endcode
 **/
+//! A list view to edit any type of properties
 class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 {
 	Q_OBJECT

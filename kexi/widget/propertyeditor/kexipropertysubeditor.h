@@ -24,8 +24,8 @@
 
 class KexiProperty;
 
-/** The base class for all editors used in KexiPropertyEditor.
- **/
+//! The base class for all editors used in KexiPropertyEditor.
+ 
 class KEXIPROPERTYEDITOR_EXPORT KexiPropertySubEditor : public QWidget
 {
 	Q_OBJECT

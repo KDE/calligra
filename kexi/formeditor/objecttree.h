@@ -38,7 +38,7 @@ typedef QMap<QString, int> Names;
 /**
  *
  * @author Lucijan Busch <lucijan@kde.org>
- * this class holds the classanme, properties and children
+ * This class holds the classanme, properties and children
  **/
 class KFORMEDITOR_EXPORT ObjectTreeItem
 {
@@ -65,6 +65,9 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		virtual void	addChild(ObjectTreeItem *it);
 		void 		remChild(ObjectTreeItem *it);
 		
+		/*! Adds \a property in the list of the modified properties for this object.
+		    These modified properties are written in the .ui files when saving the form.
+		*/
 		void		addModProperty(const QString &property);
 
 	private:

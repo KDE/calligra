@@ -73,9 +73,9 @@ ObjectTreeItem::debug(int ident)
 	for(ObjectTreeItem *it = m_children.first(); it; it = m_children.next())
 	{
 		for(int i=0; i < ident; i++)
-			std::cerr << " ";
+			kdDebug() << " ";
 
-		qDebug("%s (%s): %s", it->className().latin1(), it->name().latin1(), it->parent()->name().latin1() );
+		kdDebug() <<  it->className().latin1() << it->name().latin1() << it->parent()->name().latin1() << endl;
 		it->debug(ident + 4);
 	}
 }
