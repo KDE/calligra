@@ -104,46 +104,36 @@ void KPPresStructObjectItem::setObject( KPObject *o, int num )
     setText(0, type.arg( num + 1 ));
     switch ( object->getType() ) {
     case OT_PICTURE:
-      //setText( 0, i18n( "Picture (%1)" ).arg( num + 1 ) );
       setPixmap( 0, KPBarIcon( "frame_image" ) );
       break;
     case OT_LINE:
-      //setText( 0, i18n( "Line (%1)" ).arg( num + 1 ) );
       setPixmap( 0, KPBarIcon( "mini_line" ) );
       break;
     case OT_RECT:
-      //setText( 0, i18n( "Rectangle (%1)" ).arg( num + 1 ) );
       setPixmap( 0, KPBarIcon( "mini_rect" ) );
       break;
     case OT_ELLIPSE:
-      //setText( 0, i18n( "Circle/Ellipse (%1)" ).arg( num + 1 ) );
       setPixmap( 0, KPBarIcon( "mini_circle" ) );
       break;
     case OT_TEXT:
-      //setText( 0, i18n( "Text (%1)" ).arg( num + 1 ) );
       setPixmap( 0, KPBarIcon( "frame_text" ) );
       break;
     case OT_AUTOFORM:
-      //setText( 0, i18n( "Autoform (%1)" ).arg( num + 1 ) );
       setPixmap( 0, KPBarIcon( "mini_autoform" ) );
       break;
     case OT_CLIPART:
-      //setText( 0, i18n( "Clipart (%1)" ).arg( num + 1 ) );
       setPixmap( 0, KPBarIcon( "mini_clipart" ) );
       break;
     case OT_UNDEFINED:
       setText( 0, i18n( "Undefined (%1)" ).arg( num + 1 ) );
       break;
     case OT_PIE:
-      //setText( 0, i18n( "Pie/Arc/Chord (%1)" ).arg( num + 1 ) );
       setPixmap( 0, KPBarIcon( "mini_pie" ) );
       break;
     case OT_PART:
-      //setText( 0, i18n( "Embedded Part (%1)" ).arg( num + 1 ) );
       setPixmap( 0, KPBarIcon( "frame_query" ) );
       break;
     case OT_GROUP:
-      //setText( 0, i18n( "Group Object (%1)" ).arg( num + 1 ) );
       setPixmap( 0, KPBarIcon( "group" ) );
       break;
     }
