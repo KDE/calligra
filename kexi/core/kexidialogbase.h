@@ -21,6 +21,7 @@
 #define KEXIDIALOGBASE_H
 
 #include "kexipartguiclient.h"
+#include "kexiactionproxy.h"
 
 #include <qguardedptr.h>
 
@@ -34,7 +35,7 @@ namespace KexiPart {
 	class Part;
 }
 
-class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView
+class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionProxy
 {
 	Q_OBJECT
 

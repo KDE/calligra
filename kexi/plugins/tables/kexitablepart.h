@@ -39,7 +39,7 @@ class KexiTablePart : public KexiPart::Part
 
 //		virtual QString instanceName() const;
 	protected:
-		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item);
+		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, bool designMode = false);
 
 		virtual void initPartActions( KActionCollection *col );
 		virtual void initInstanceActions( KActionCollection *col );

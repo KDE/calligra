@@ -46,7 +46,7 @@ class KEXICORE_EXPORT Part : public QObject
 		Part(QObject *parent, const char *name, const QStringList &);
 		virtual ~Part();
 
-		KexiDialogBase* execute(KexiMainWindow *win, const KexiPart::Item &item);
+		KexiDialogBase* openInstance(KexiMainWindow *win, const KexiPart::Item &item, bool designMode=false);
 
 		/*! i18n'd iunstance name usable for displaying in gui.
 		 @todo move this to Info class when the name could be moved as localised property 
@@ -60,7 +60,7 @@ class KEXICORE_EXPORT Part : public QObject
 		inline GUIClient *instanceGuiClient() const { return m_instanceGuiClient; }
 
 	protected:
-		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item) = 0;
+		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, bool designMode=false) = 0;
 
 		//! Creates GUICLient for this part, attached to \a win
 		//! This method is called from KexiMainWindow

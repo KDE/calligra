@@ -24,6 +24,7 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kpopupmenu.h>
 
 #include "kexi.h"
 #include "kexipart.h"
@@ -66,12 +67,19 @@ KexiBrowser::KexiBrowser(KexiMainWindow *parent )
 	connect(this, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotClicked(QListViewItem*)));
 	connect(this, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
 
-/*	if(part)
-	{
-//		connect(part, SIGNAL(itemListChanged(KexiProjectHandler *)), this, SLOT(slotItemListChanged(KexiProjectHandler *)));
-//		slotItemListChanged(part);
-	}
-*/
+	//init popups
+	m_itemPopup = new KPopupMenu(this, "itemPopup");
+	KAction *a = new KAction(i18n("&Open"), SmallIcon("fileopen"), Key_Enter, this, 
+		SLOT(slotOpenObject()), this, "open_object");
+	a->plug(m_itemPopup);
+	a = new KAction(i18n("&Design"), SmallIcon("edit"), CTRL + Key_Enter, this, 
+		SLOT(slotDesignObject()), this, "design_object");
+	a->plug(m_itemPopup);
+	action("edit_remove")->plug(m_itemPopup);
+
+	m_partPopup = new KPopupMenu(this, "partPopup");
+	m_newObjectAction = new KAction("", 0, this, SLOT(slotNewObject()), this, "new_object");
+	m_newObjectAction->plug(m_partPopup);
 }
 
 void
@@ -101,88 +109,28 @@ KexiBrowser::addItem(KexiPart::Item *item)
 //	KexiBrowserItem *bitem = new KexiBrowserItem(parent, item.mime(), item.name(), item.identifier());
 	KexiBrowserItem *bitem = new KexiBrowserItem(parent, parent->info(), item);
 //	bitem->setPixmap(0, SmallIcon(parent->info()->itemIcon()));
-
-#if 0 //nonsense since we have no multi tab bar now
-	if(m_mime == "kexi/db" && m_baseItems.find(item.mime()))
-	{
-		//part object
-		KexiBrowserItem *parent = m_baseItems.find(item.mime());
-		kdDebug() << "KexiBrowser::addItem() found parent:" << parent->name() << endl;
-		KexiBrowserItem *bitem = new KexiBrowserItem(parent, item.mime(), item.name(), item.identifier());
-		bitem->setPixmap(0, SmallIcon(parent->info()->itemIcon()));
-	}
-	else if(m_mime == item.mime())
-	{
-		//part objects group
-		KexiBrowserItem *bitem = new KexiBrowserItem(this, item.mime(), item.name(), item.identifier(), 0);
-		if(m_part)
-			bitem->setPixmap(0, SmallIcon(m_part->itemIcon()));
-	}
-#endif
 }
 
-#if 0
-//js: moved to keximainwindow
 void
-KexiBrowser::slotItemListChanged(KexiPart::Info *parent)
-{
-	kdDebug() << "KexiBrowser::slotItemListChanged()" << endl;
-	if(m_mime == "kexi/db")
-	{
-		KexiBrowserItem *group = m_baseItems.find(parent->mime());
-		kdDebug() << "KexiBrowser::slotItemListChanged(): group=" << group  << " mime=" << parent->mime()<< endl;
-		group->clearChildren();
-	}
-	else
-	{
-		clear();
-	}
-
-	KexiPart::ItemList list = m_parent->project()->items(parent);
-	kdDebug() << "KexiBrowser::slotItemListChanged(): list count:" << list.count() << endl;
-	for(KexiPart::ItemList::Iterator it = list.begin(); it != list.end(); ++it)
-	{
-		kdDebug() << "KexiBrowser::slotItemListChanged() adding item" << (*it).mime() << endl;
-		addItem(*it);
-	}
-}
-#endif
-
-void
-KexiBrowser::slotContextMenu(KListView *list, QListViewItem *item, const QPoint &)
+KexiBrowser::slotContextMenu(KListView *list, QListViewItem *item, const QPoint &pos)
 {
 	if(!item)
 		return;
-//	KexiBrowserItem *bit = static_cast<KexiBrowserItem*>(item);
-//	if (bit
-
-#if 0
-	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(item);
-	if(!it)
-		return;
-
-	if(it->proxy() || it->item())
-	{
-		KexiPartPopupMenu *pg = 0;
-		if(it->identifier().isNull())
-		{
-			// FIXME: Make this less hacky please :)
-			pg = it->proxy()->groupContextMenu();
-		}
-		else
-		{
-			kdDebug() << "KexiBrowser::slotContextMenu() item @ " << it->item() << endl;
-			//a littlebit hacky
-			pg = it->item()->handler()->proxy(
-			static_cast<KexiDialogBase*>(parent()->parent())->kexiView()
-			)->itemContextMenu(it->identifier());
-		}
-
-		pg->setPartItemId(it->identifier());
-		pg->exec(pos);
-//		delete pg;
+	KexiBrowserItem *bit = static_cast<KexiBrowserItem*>(item);
+	KPopupMenu *pm;
+	if (bit->item()) {
+		pm = m_itemPopup;
 	}
-#endif
+	else {
+		pm = m_partPopup;
+		KexiPart::Part * part = Kexi::partManager().part(bit->info());
+		if (part)
+			m_newObjectAction->setText(i18n("&Create Object: %1...").arg( part->instanceName() ));
+		else
+			m_newObjectAction->setText(i18n("&Create Object..."));
+		m_newObjectAction->setIconSet( SmallIconSet(bit->info()->itemIcon()) );
+	}
+	pm->exec(pos);
 }
 
 void
@@ -193,7 +141,7 @@ KexiBrowser::slotExecuteItem(QListViewItem *vitem)
 
 	if (!it->item())
 		return;
-	emit executeItem( it->item() );
+	emit openItem( it->item(), false/*!designMode*/ );
 
 /*	if(m_parent->activateWindow(it->item().identifier()))
 		return;
@@ -251,6 +199,24 @@ KexiBrowser::slotClicked(QListViewItem* i)
 void KexiBrowser::slotRemove()
 {
 	kdDebug() << "KexiBrowser::slotRemove()" << endl;
+	if (!isAvailable("edit_remove"))
+		return;
+	//TODO
+}
+
+void KexiBrowser::slotNewObject()
+{
+	kdDebug() << "slotNewObject()" << endl;
+}
+
+void KexiBrowser::slotOpenObject()
+{
+	kdDebug() << "slotOpenObject()" << endl;
+}
+
+void KexiBrowser::slotDesignObject()
+{
+	kdDebug() << "slotDesignObject()" << endl;
 }
 
 #include "kexibrowser.moc"

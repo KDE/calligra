@@ -37,6 +37,7 @@ class KIconLoader;
 class KexiBrowserItem;
 class KexiView;
 class KexiMainWindow;
+class KPopupMenu;
 
 namespace KexiPart
 {
@@ -59,12 +60,9 @@ class KEXICORE_EXPORT KexiBrowser : public KListView, public KexiActionProxy
 		void		addGroup(KexiPart::Info *info);
 		void		addItem(KexiPart::Item *item);
 
-		//! remove current item
-		void slotRemove();
 
 	signals: 
-		//! item execution requested
-		void executeItem( KexiPart::Item* );
+		void openItem( KexiPart::Item*, bool designMode );
 
 //		void actionAvailable(const char *name, bool avail);
 
@@ -75,12 +73,20 @@ class KEXICORE_EXPORT KexiBrowser : public KListView, public KexiActionProxy
 		void slotSelectionChanged(QListViewItem* i);
 		void slotClicked(QListViewItem* i);
 
+		void slotNewObject();
+		void slotOpenObject();
+		void slotDesignObject();
+		//! remove current item
+		void slotRemove();
+
 	private:
 //		KexiView	*m_view;
 //		KexiPart::Info	*m_part;
 //		QString		m_mime;
 		KexiMainWindow	*m_parent;
 		BaseItemList	m_baseItems;
+		KPopupMenu *m_itemPopup, *m_partPopup;
+		KAction *m_newObjectAction;
 };
 
 #endif

@@ -75,9 +75,7 @@ class KexiMainWindow::Private
 		KXMLGUIClient *curDialogGUIClient, *closedDialogGUIClient;
 		QGuardedPtr<KexiDialogBase> curDialog;
 
-//		QMap< QPair<QObject*,const char*>, KexiActionProxy*> actionProxies;
-//		QMap<QCString, KexiActionProxy*> actionProxies;
-		QMap<QObject*, KexiActionProxy*> actionProxies;
+		QPtrDict<KexiActionProxy> actionProxies;
 
 		QAsciiDict<QPopupMenu> popups; //list of menu popups
 
@@ -106,6 +104,7 @@ class KexiMainWindow::Private
 		bool block_KMdiMainFrm_eventFilter : 1;
 	Private()
 		: dialogs(401)
+		, actionProxies(401)
 	{
 		navToolWindow=0;
 		prj = 0;
@@ -230,7 +229,7 @@ KexiMainWindow::initActions()
 	d->action_edit_cut = KStdAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
 	d->action_edit_copy = KStdAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
 	d->action_edit_paste = KStdAction::paste( this, SLOT( slotEditPaste() ), actionCollection(), "edit_paste" );
-	d->action_edit_remove = new KAction(i18n("Remove"), SmallIcon("button_cancel"), 0, this, 
+	d->action_edit_remove = new KAction(i18n("&Remove"), SmallIcon("button_cancel"), Key_Delete, this, 
 		SLOT(slotEditRemove()), actionCollection(), "edit_remove");
 
 	//VIEW MENU
@@ -270,7 +269,7 @@ void KexiMainWindow::invalidateActions()
 	invalidateSharedActions();
 }
 
-void KexiMainWindow::invalidateSharedActions()
+void KexiMainWindow::invalidateSharedActions(QWidget *w)
 {
 	//TODO: enabling is more complex...
 /*	d->action_edit_cut->setEnabled(true);
@@ -278,7 +277,10 @@ void KexiMainWindow::invalidateSharedActions()
 	d->action_edit_paste->setEnabled(true);*/
 
 //	isActionAvailable
-	QWidget * w = focusWidget();
+
+//js: THIS WILL BE SIMPLIFIED
+	if (!w)
+		w = focusWidget();
 	if (w) {
 		KexiActionProxy *p = d->actionProxies[ w ];
 		setActionAvailable("edit_remove",p && p->isAvailable("edit_remove"));
@@ -313,6 +315,13 @@ void KexiMainWindow::setActionAvailable(const char *name, bool avail)
 	act->setEnabled(avail);
 }
 
+void KexiMainWindow::updateActionAvailable(const char *action_name, bool set, QObject *obj)
+{
+	if (obj !=  static_cast<QObject*>(focusWidget()))
+		return;
+	setActionAvailable(action_name, set);
+}
+
 /*bool KexiMainWindow::isActionAvailable(const char *action_name)
 {
 //	KexiActionProxy *proxy = d->actionProxies[ QCString(action_name)+QCString().setNum((ulong)proxy->receiver()) ];
@@ -323,7 +332,7 @@ void KexiMainWindow::setActionAvailable(const char *name, bool avail)
 void KexiMainWindow::plugActionProxy(KexiActionProxy *proxy)//, const char *action_name)
 {
 //	d->actionProxies[ QCString(action_name)+QCString().setNum((ulong)proxy->receiver()) ] = proxy;
-	d->actionProxies[ proxy->receiver() ] = proxy;
+	d->actionProxies.insert( proxy->receiver(), proxy);
 }
 
 void KexiMainWindow::startup(KexiProjectData *projectData)
@@ -422,7 +431,7 @@ bool KexiMainWindow::openProject(KexiProjectData *projectData)
 	QString not_found_msg;
 	//ok, now open "autoopen: objects
 	for (QValueList< QPair<QString,QString> >::Iterator it = projectData->autoopenObjects.begin(); it != projectData->autoopenObjects.end(); ++it ) {
-		executeObject(QString("kexi/")+(*it).first,(*it).second);
+		openObject(QString("kexi/")+(*it).first,(*it).second);
 		KexiPart::Info *i = Kexi::partManager().info( QString("kexi/")+(*it).first );
 		if (!i) {
 			not_found_msg += ( (*it).second + " - " + i18n("unknown object type \"%1\"").arg((*it).first)+"<br>" );
@@ -435,7 +444,7 @@ bool KexiMainWindow::openProject(KexiProjectData *projectData)
 			not_found_msg += ( (*it).second + " - " + i18n("object not found") +"<br>" );
 			continue;
 		}
-		if (!executeObject(item)) {
+		if (!openObject(item)) {
 			not_found_msg += ( (*it).second + " - " + i18n("cannot open object").arg((*it).first) +"<br>" );
 			continue;
 		}
@@ -503,7 +512,7 @@ KexiMainWindow::initNavigator()
 		d->nav = new KexiBrowser(this);
 		d->nav->installEventFilter(this);
 		d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
-		connect(d->nav,SIGNAL(executeItem(KexiPart::Item*)),this,SLOT(executeObject(KexiPart::Item*)));
+		connect(d->nav,SIGNAL(openItem(KexiPart::Item*,bool)),this,SLOT(openObject(KexiPart::Item*,bool)));
 //		connect(d->nav,SIGNAL(actionAvailable(const char*,bool)),this,SLOT(actionAvailable(const char*,bool)));
 
 	}
@@ -749,7 +758,7 @@ KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 	d->curDialog=dlg;
 
 	if (dialogChanged) {
-		invalidateSharedActions();
+//		invalidateSharedActions();
 	}
 
 	//update caption...
@@ -1084,9 +1093,13 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 	}
 	if (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut) {
 		kdDebug() << "Focus EVENT" << endl;
+		QWidget *w = focusWidget();
+		kdDebug() << (w ? w->name() : "" )  << endl;
+		kdDebug() << "eventFilter: " <<e->type() << " " <<obj->name() <<endl;
 	}
 	if (e->type()==QEvent::WindowActivate) {
 		kdDebug() << "WindowActivate EVENT" << endl;
+		kdDebug() << "eventFilter: " <<e->type() << " " <<obj->name()<<endl;
 	}
 /*	if (e->type()==QEvent::FocusOut) {//after leaving focus from the menu, put it on prev. focused widget
 		if (static_cast<QFocusEvent*>(e)->reason()==QFocusEvent::Popup && !obj->inherits("QMenuBar")) {
@@ -1103,8 +1116,23 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 		if (static_cast<QWidget*>(obj)->hasFocus())
 			d->focus_before_popup = static_cast<QWidget*>(obj);
 	}*/
-	if (e->type()==QEvent::FocusIn && (!obj->inherits("KexiDialogBase"))) {
-		invalidateSharedActions();
+//	if ((e->type()==QEvent::FocusIn /*|| e->type()==QEvent::FocusOut*/) && /*(!obj->inherits("KexiDialogBase")) &&*/ d->actionProxies[ obj ]) {
+	if (e->type()==QEvent::FocusIn) {
+		if (d->actionProxies[ obj ]) {
+			invalidateSharedActions();
+		}
+		else {
+			QObject* o = focusWidget();
+			while (o && !o->inherits("KexiDialogBase"))
+				o = o->parent();
+			if (o)
+				invalidateSharedActions(static_cast<QWidget*>(o));
+		}
+//		/*|| e->type()==QEvent::FocusOut*/) && /*(!obj->inherits("KexiDialogBase")) &&*/ d->actionProxies[ obj ]) {
+//		invalidateSharedActions();
+	}
+	if ((e->type()==QEvent::FocusOut && focusWidget()==d->curDialog && !obj->inherits("KexiDialogBase")) && d->actionProxies[ obj ]) {
+		invalidateSharedActions(d->curDialog);
 	}
 
 	//keep focus in main window:
@@ -1138,16 +1166,16 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 }
 
 bool
-KexiMainWindow::executeObject(const QString& mime, const QString& name)
+KexiMainWindow::openObject(const QString& mime, const QString& name, bool designMode)
 {
 	KexiPart::Item *item = d->prj->item(mime,name);
 	if (!item)
 		return false;
-	return executeObject(item);
+	return openObject(item, designMode);
 }
 
 bool
-KexiMainWindow::executeObject(KexiPart::Item* item)
+KexiMainWindow::openObject(KexiPart::Item* item, bool designMode)
 {
 	if (!item)
 		return false;
@@ -1159,7 +1187,7 @@ KexiMainWindow::executeObject(KexiPart::Item* item)
 		//TODO js: error msg
 		return false;
 	}
-	return part->execute(this, *item) != 0;
+	return part->openInstance(this, *item, designMode) != 0;
 }
 
 #include "keximainwindow.moc"

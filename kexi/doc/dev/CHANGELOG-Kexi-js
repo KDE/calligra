@@ -195,12 +195,131 @@ TODO: improove security for password information in .kexis files
 TODO: for .kexis files' conenction data - if password attr. is not present - ask for password
 IDEA: integrate password information in .kexis files with KWallet
 
+TODO RELATED TO CELL EDITORS AND TABLEVIEWS:
+- signal on situaltion when user e.g. pressed alpha key when only numeric chars is allowed
+- signal when null/empty value forcell isn't permitted
+- signal when repeated value isn't permitted
+- add support for cut, copy & paste of cell's contents (get shortcuts from KStdAccel)
+
+TODO: pass Field* to KexiInputTableEdit, and there - check if value may be null 
+(using appropriate Field's method -- add these methods to Field; add i18n'd messages on errors), etc.
+TODO: on Connection::updateRow(): pass field's name together with error message 
+    -additional mapping is needed, eg QMap<QString,QString> err;
+    err["KexiDB::Field::name"]="ID";
+
+2003-12-21
+- KexiActionProxy introduced
+- New terms introduced: part's gui client and part instance's gui client. 
+  The latter is removed from main window's guifactory when part instance is deactivated 
+  e.g. "Filter" action of tablepart is hidden when needed),
+  while the former is premanent in main window (e.g. "New Table" action is always visible).
+
+- KexiMainWindow: 
+  -dockwidgets' (like e.g. browser) focusing on main window's activate/deactivate 
+   and on menu bar popups - fixed.
+  -removed toolbar item's fileckering when we're closing one kexidialog and another kexidialog 
+   of the same type (guiclient) has to be activated (solution: guiclients are removed not 
+   on kexidialog closing but before activating another, it new activated dialog has different client.
+
+- Global Action availability updates: 1) KexiMainWindow updates its actions on dialog switching, 
+  or even on focusing dockwidget, like e.g. browser; 2) from dialog point of view - when required, 
+  action availiability (true/false) is signalled from currently focused dialog to main window
+- Browser: popup menu re-added, (there is also example how to plug 
+  both custom and global actions to the popup)
+- Opening part instances in design mode prepared (openInstance())
+
+2003-12-20
+- KexiDialogBase remembers its creator (a KexiPart::Part object)
+- KMdiChildFrm's icon is scaled when needed (e.g. when detached/attached)
+
+- KexiPart's classes: some methods are now protected
+- Toolbar buttons are now flicker-free, because gui clients are now attached 
+   to parts instead of part instances
+
+
+2003-12-19
+- KexiDB::Field:
+  -many properties of type int are now of type uint
+  -WIDTH property added
+  -NOTEMPTY property added
+  -canBeEmpty(), typeGroup(), isDateTimeType() added
+
+- KexiDBTableViewColumn merged with KexiTableViewColumn, now column properties are always reused 
+  from KexiDB::Field's properties
+
+- KexiTableView: full handling of NULL or EMPTY values on editor accepting, e.g.:
+   * cells are displayed as empty EVEN for numeric types, if null values are allowed
+   * cell value is forced to NULL if empty values are not allowed (e.g.: for numeric types)
+
+- Updating with NULL values fixed, and it's done only when needed.
+- KexiTableView editors: pressing "left arrow" key at begginning of cell's text moves 
+  to cell on the left hand; the same for end of text+right arrow key
+
+- Finally: new row inserting works (no data integrity checking or warnings added though).
+
+- KexiTableView: cells: fixed displaying of text (and text selection) longer than cell's width
+- KexiDB: 
+	-escapeString() and valueToSQL() moved from Connection to Driver
+	-escaping ' and " chars fixed
+
+2003-12-18
+2003-12-17
+2003-12-16
+2003-12-15
+- tableview: changes in keys behaviour: 
+  -Ctrl+home moves to 1st row, Ctrl+end - to last row,
+   Home -to 1st col., End -to last col.
+   Ctrl+Shift+home moves to 1st row and col, Ctrl+Shift+end - to last row and col,
+  -Key_BackTab is also used to navigate cells
+  -row editing improoved: buffer containing changes for current 
+    edited row introduced (KexiDB::RowEditBuffer)
+- tableview cell editors / items:
+  -KexiTableItem simply inherits from KexiDB::RowData
+  -Tab and Shift+tab, Up, Down, Home, End, etc. keys work also when cell editor is visible
+- FINALLY: row editing fully working: data is updated @ the backend using KexiDB
+
+- keximainwindow:
+  -Tab key pressed on navigator activates current child window
+  -Mainwindow's caption now contains (for Childframe Mode) child window's caption 
+   as the prefix if the child is attached and maximized. This works well with attaching/detaching 
+   and deactivating child windows.
+
+- KMdiChildArea: 2x crash fix for childframe mode
+  -when KMdiChildArea::setTopChild(0) is called and m_pZ is empty, pMaximizedChild is 0
+  -in KMdiChildArea::manageChild(), first - we need to take old references to childwindow 
+   that is added to m_pZ (crash reproduction: detach one childwindow, attach it, detach again)
+
+-KexiDB:
+ -IndexSchema's pkey retrieving for loaded project -fixed
+ -RowEditBuffer class introduced
+ -Object::debugError() shows more error info
+ -Connection::updateRow() and Cursor::updateRow() inttroduced for row updating
+ -some metods goes inline
+ -expanded list (obtained from QuerySchema::fieldsExpanded()) 
+    of Cursor's all query fields is cached within cursor
+ -FieldList - fields lookup is now case insensitive
+ -results of QuerySchema::fieldsExpanded() is cached inside QuerySchema
+ -QuerySchema::pkeyFieldsOrder(), QuerySchema::fieldsOrder() methods introduced (results are cached)
+
+-Drivers:
+ -SQLite driver updated for current API
+ -MySQL driver just compiles
+
+
+2003-12-13
+- browser: focusing fixed: doesn't lose focus when clicked
+
 2003-12-12
 - added caching to KexiProject::items() and KexiPartInfo
 - objects lookup-and-opening functionality moved from navigator (KexiBrowser) to keximainwindow
 - "-open" CLO reintroduced
 - KexiMainWindow: error messaging generalized a bit
 - KexiTableView - editors API and behaviour improoved
+
+- KexiPart::Part objects are cached
+- pointers to KexiPart::Item are used instead of values
+- KexiStartupFileDialog's file selection works on win32
+
 
 2003-12-11
 - Cursor::movePrev() impl. updated

@@ -74,6 +74,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		virtual bool eventFilter( QObject *obj, QEvent * e );
 
 		void plugActionProxy(KexiActionProxy *proxy); //, const char *action_name);
+		void updateActionAvailable(const char *action_name, bool set, QObject *obj);
 
 		QPopupMenu* findPopupMenu(const char *popupName);
 
@@ -109,7 +110,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		/** Invalidates action availability for current application state.
 		 These actions are dependent on curently selected dialog.
 		*/
-		void invalidateSharedActions();
+		void invalidateSharedActions(QWidget *w = 0);
 
 		/** Invalidates action availability for current application state.
 		 These actions are only dependent on project availbility, not on curently selected dialog.
@@ -163,9 +164,9 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		 */
 		void		childClosed(KMdiChildView *dlg);
 
-		bool executeObject(KexiPart::Item *item);
+		bool openObject(KexiPart::Item *item, bool designMode = false);
 		//! for convenience
-		bool executeObject(const QString& mime, const QString& name);
+		bool openObject(const QString& mime, const QString& name, bool designMode = false);
 
 		void slotPartLoaded(KexiPart::Part* p);
 

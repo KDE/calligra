@@ -99,7 +99,7 @@ KexiTablePart::execute(KexiMainWindow *win, const KexiPart::Item &item)
 #endif
 
 KexiDialogBase*
-KexiTablePart::createInstance(KexiMainWindow *win, const KexiPart::Item &item)
+KexiTablePart::createInstance(KexiMainWindow *win, const KexiPart::Item &item, bool designMode)
 {
 	KexiDB::TableSchema *sch = win->project()->dbConnection()->tableSchema(item.name());
 	kdDebug() << "KexiTablePart::execute(): schema is " << sch << endl;

@@ -89,6 +89,7 @@ void KexiActionProxy::setAvailable(const char* action_name, bool set)
 	if (!p)
 		return;
 	p->second = set;
+	m_main->updateActionAvailable(action_name, set, m_receiver);
 }
 
 bool KexiActionProxy::isAvailable(const char* action_name)
