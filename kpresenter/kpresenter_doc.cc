@@ -1256,7 +1256,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         if ( name == "draw:text-box" ) // textbox
         {
             fillStyleStack( o, context );
-            KPTextObject *kptextobject = new KPTextObject( this );
+             KPTextObject *kptextobject = new KPTextObject( this );
             kptextobject->loadOasis(o, context, animationShow);
             if ( groupObject )
                 groupObject->addObjects( kptextobject );
@@ -1482,7 +1482,7 @@ void KPresenterDoc::fillStyleStack( const QDomElement& object, KoOasisContext & 
     }
     if ( object.hasAttribute( "text:style-name" ) )
     {
-        //kdDebug()<<"Add 'text:style-name' \n";
+        kdDebug()<<"Add 'text:style-name' : "<<object.attribute( "text:style-name" )<<endl;
         addStyles( context.oasisStyles().styles()[object.attribute( "text:style-name" )], context );
     }
 }

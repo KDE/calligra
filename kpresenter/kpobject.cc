@@ -1694,6 +1694,7 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
     saveOasisObjectStyle( styleobjectauto );
 
     saveOasisStrokeElement( mainStyles, styleobjectauto );
+    saveOasisMarginElement( styleobjectauto );
 
     return mainStyles.lookup( styleobjectauto, "gr" );
 }

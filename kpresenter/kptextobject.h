@@ -82,7 +82,7 @@ public:
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext& context, QDomElement *animation);
     virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  );
-
+    virtual void saveOasisMarginElement( KoGenStyle &styleobjectauto );
 
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
                         bool drawingShadow, bool drawContour );

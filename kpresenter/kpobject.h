@@ -442,6 +442,8 @@ protected:
     QString saveOasisGradientStyle( KoGenStyles& mainStyles );
     QString saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj );
 
+    virtual void saveOasisMarginElement( KoGenStyle &styleobjectauto ) { /* nothing just used into kptextobject*/};
+
     QColor gColor1, gColor2;
     BCType gType;
     FillType fillType;

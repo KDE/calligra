@@ -222,6 +222,20 @@ bool KPTextObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, 
     return true;
 }
 
+void KPTextObject::saveOasisMarginElement( KoGenStyle &styleobjectauto )
+{
+    kdDebug()<<"void KPTextObject::saveOasisMarginElement( KoGenStyle &styleobjectauto )\n";
+    if ( btop != 0.0 )
+        styleobjectauto.addPropertyPt("fo:padding-top", btop );
+    if ( bbottom != 0.0 )
+        styleobjectauto.addPropertyPt("fo:padding-bottom", bbottom );
+    if ( bleft != 0.0 )
+        styleobjectauto.addPropertyPt("fo:padding-left", bleft );
+    if ( bright != 0.0 )
+        styleobjectauto.addPropertyPt("fo:padding-right", bright );
+
+    // fo:padding-top="1.372cm" fo:padding-bottom="0.711cm" fo:padding-left="1.118cm" fo:padding-right="1.27cm"
+}
 
 void KPTextObject::loadOasis(const QDomElement &element, KoOasisContext& context,
                              QDomElement *animation )
@@ -229,19 +243,19 @@ void KPTextObject::loadOasis(const QDomElement &element, KoOasisContext& context
     KP2DObject::loadOasis(element, context, animation);
     //todo other attribute
     KoStyleStack &styleStack = context.styleStack();
-    if( styleStack.hasAttribute( "fo:padding-top" ) )
-        btop = KoUnit::parseValue( styleStack.attribute( "fo:padding-top" ) );
-    if( styleStack.hasAttribute( "fo:padding-bottom" ) )
-        bbottom = KoUnit::parseValue( styleStack.attribute( "fo:padding-bottom" ) );
-    if( styleStack.hasAttribute( "fo:padding-left" ) )
-        bleft = KoUnit::parseValue( styleStack.attribute( "fo:padding-left" ) );
-    if( styleStack.hasAttribute( "fo:padding-right" ) )
-        bright = KoUnit::parseValue( styleStack.attribute( "fo:padding-right" ) );
+    if( styleStack.hasAttribute( "fo:padding-top", QString::null,"graphic" ) )
+        btop = KoUnit::parseValue( styleStack.attribute( "fo:padding-top", QString::null,"graphic" ) );
+    if( styleStack.hasAttribute( "fo:padding-bottom", QString::null,"graphic" ) )
+        bbottom = KoUnit::parseValue( styleStack.attribute( "fo:padding-bottom", QString::null,"graphic" ) );
+    if( styleStack.hasAttribute( "fo:padding-left", QString::null,"graphic" ) )
+        bleft = KoUnit::parseValue( styleStack.attribute( "fo:padding-left", QString::null,"graphic" ) );
+    if( styleStack.hasAttribute( "fo:padding-right", QString::null,"graphic" ) )
+        bright = KoUnit::parseValue( styleStack.attribute( "fo:padding-right", QString::null,"graphic" ) );
     kdDebug()<<" KPTextObject::loadOasis : btp :"<<btop<<" bbottom :"<<bbottom<<" bleft :"<<bleft<<" bright :"<<bright<<endl;
     // vertical alignment
-    if ( styleStack.hasAttribute( "draw:textarea-vertical-align" ) )
+    if ( styleStack.hasAttribute( "draw:textarea-vertical-align", QString::null,"graphic" ) )
     {
-        QString alignment = styleStack.attribute( "draw:textarea-vertical-align" );
+        QString alignment = styleStack.attribute( "draw:textarea-vertical-align", QString::null,"graphic" );
         if ( alignment == "top" )
             m_textVertAlign= KP_TOP;
         else if ( alignment == "middle" )
