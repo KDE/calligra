@@ -25,6 +25,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kaction.h>
+#include <kpopupmenu.h>
 
 #include <kexidb/cursor.h>
 
@@ -48,6 +49,8 @@ KexiDataTable::KexiDataTable(KexiMainWindow *win, KexiDB::Cursor *cursor,
 
 void KexiDataTable::init()
 {
+	connect(m_view, SIGNAL(cellSelected(int,int)), this, SLOT(slotCellSelected(int,int)));
+
 	QVBoxLayout *box = new QVBoxLayout(this);
 	box->addWidget(m_view);
 	setMinimumSize(m_view->minimumSizeHint().width(),m_view->minimumSizeHint().height());
@@ -60,7 +63,6 @@ void KexiDataTable::init()
 	initActions();
 //js already done in keximainwindow:	registerDialog();
 }
-
 
 KexiDataTable::~KexiDataTable()
 {
@@ -76,6 +78,12 @@ KexiDataTable::initActions()
 	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), actionCollection(), "tablepart_filter");
 	setXMLFile("kexidatatableui.rc");
 */
+//	m_popup = new KPopupMenu(this, "KexiDataTable_popup");
+	plugAction("edit_delete_record", m_view, SLOT(deleteCurrentRow()));
+	plugAction("edit_delete_record", m_view->popup());
+	plugAction("edit_delete",m_view, SLOT(deleteAndStartEditCurrentCell()));
+	plugAction("data_save_row",m_view, SLOT(acceptRowEdit()));
+	m_view->plugSharedAction(action("data_save_row")); //for proper shortcut
 }
 
 void
@@ -89,7 +97,9 @@ void KexiDataTable::filter()
 }
 
 QWidget* KexiDataTable::mainWidget() 
-{ return m_view; }
+{
+	return m_view;
+}
 
 QSize KexiDataTable::minimumSizeHint() const
 {
@@ -101,6 +111,11 @@ QSize KexiDataTable::minimumSizeHint() const
 QSize KexiDataTable::sizeHint() const
 {
 	return m_view->sizeHint();
+}
+
+void KexiDataTable::slotCellSelected(int col, int row)
+{
+	setAvailable("edit_delete_record", !(m_view->isInsertingEnabled() && row==m_view->rows()) );
 }
 
 #include "kexidatatable.moc"

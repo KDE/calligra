@@ -40,12 +40,9 @@
 #include "kexitablerm.h"
 #include "kexitableviewdata.h"
 
-class QHeader;
-class QLineEdit;
-class QPopupMenu;
-class QTimer;
-
+class KPopupMenu;
 class KPrinter;
+class KAction;
 
 class KexiTableHeader;
 class KexiTableRM;
@@ -150,6 +147,10 @@ public:
 	*/
 	void setInsertingEnabled(bool set);
 
+	/*! \return true if row deleting is enabled.
+	*/
+	bool isDeleteEnabled() const;
+
 	/*! \return true if navigation panel is enabled (visible) for the view.
 	  True by default. */
 	bool navigationPanelEnabled() const;
@@ -211,7 +212,9 @@ public:
 
 //	KexiTableRM	*recordMarker() const;
 	KexiTableRM *verticalHeader() const;
-	
+
+	KPopupMenu* popup() const;
+
 //	void		takeInsertItem();
 //	void		setInsertItem(KexiTableItem *i);
 //	KexiTableItem	*insertItem() const;
@@ -250,6 +253,12 @@ public:
 
 	virtual bool eventFilter( QObject *o, QEvent *e );
 
+	/*! Plugs action \a a for this table view. The action will be later looked up (by name) 
+	 on key press event, to get proper shortcut. If not found, default shortcut will be used 
+	 (example: Shift+Enter key for "data_save_row" action). \sa shortCutPressed()
+	*/
+	void plugSharedAction(KAction* a);
+
 public slots:
 	//! Sets sorting on column \a col, or (when \a col == -1) sets rows unsorted
 	//! this will dont work if sorting is disabled with setSortingEnabled()
@@ -271,25 +280,43 @@ public slots:
 //	void			gotoNext();
 //js	int			findString(const QString &string);
 	
-	/*! Removes currently selected record; does nothing if no record 
+	/*! Deletes currently selected record; does nothing if no record 
 	 is currently selected. If record is in edit mode, editing 
-	 is cancelled before removing.  */
-	void removeCurrentRecord();
-	
-//	virtual void		addRecord();
+	 is cancelled before deleting.  */
+	void deleteCurrentRow();
+
+	//! used when Return key is pressed on cell or "+" nav. button is clicked
+	void startEditCurrentCell();
+
+	/*! Deletes currently selected cell's contents, if allowed. 
+	 In most cases delete is not accepted immediately but "row editing" mode is just started. */
+	void deleteAndStartEditCurrentCell();
+
+	/*! Accepts row editing. All changes made to the editing 
+	 row duing this current session will be accepted. */
+	void acceptRowEdit();
+
+	/*! Cancels row editing All changes made to the editing 
+	 row duing this current session will be undone. */
+	void cancelRowEdit();
 
 signals:
 	void itemSelected(KexiTableItem *);
+	void cellSelected(int col, int row);
+
 	void itemReturnPressed(KexiTableItem *, int);
 	void itemDblClicked(KexiTableItem *, int);
 	void itemChanged(KexiTableItem *, int);
 	void itemChanged(KexiTableItem *, int,QVariant oldValue);
-	void itemRemoveRequest(KexiTableItem *);
-	void currentItemRemoveRequest();
+	void itemDeleteRequest(KexiTableItem *);
+	void currentItemDeleteRequest();
 	void addRecordRequest();
 	void dropped(QDropEvent *);
 	void contextMenuRequested(KexiTableItem *, int col, const QPoint &);
 	void sortedColumnChanged(int col);
+
+	void rowUpdated(KexiTableItem*);
+	void rowInserted(KexiTableItem*);
 
 protected slots:
 	void columnWidthChanged( int col, int os, int ns );
@@ -298,13 +325,6 @@ protected slots:
 	virtual void boolToggled();
 	void slotUpdate();
 	void sortColumnInternal(int col);
-
-	/*! Accepts row editing. All changes made to the editing 
-	 row duing this current session will be accepted. */
-	void acceptRowEdit();
-	/*! Cancels row editing All changes made to the editing 
-	 row duing this current session will be undone. */
-	void cancelRowEdit();
 
 	void slotAutoScroll();
 
@@ -354,10 +374,17 @@ protected:
 
 	bool focusNextPrevChild(bool next);
 
+	/*! Used in key event: \return true if event \a e should execute action \a action_name.
+	 Actions' shortcuts defined by shortCutPressed() are reused, if present.
+	*/
+	bool shortCutPressed( QKeyEvent *e, const QCString &action_name );
+
+#if 0 //we have now KexiActionProxy
 	/*! Updates visibility/accesibility of popup menu items,
 	returns false if no items are visible after update. */
 	bool	updateContextMenu();
-	
+#endif
+
 	/*! Shows context menu at \a pos for selected cell
 	 if menu is configured,
 	 else: contextMenuRequested() signal is emmited.
@@ -372,7 +399,7 @@ protected:
 		QPainter *pb, int r, int rowp, int cx, int cy, 
 		int colfirst, int collast, int maxwc);
 
-	void remove(KexiTableItem *item, bool moveCursor=true);
+	void deleteItem(KexiTableItem *item, bool moveCursor=true);
 
 	virtual void setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h );
 
@@ -382,9 +409,6 @@ protected:
 
 	//! used to update info about row count after a change
 	void updateRowCountInfo();
-
-	//! used when Return key is pressed on cell or "+" nav. button is clicked
-	void startEditCurrentCell();
 
 	//! internal, to determine valid row number when navigator text changed
 	int validRowNumber(const QString& text);

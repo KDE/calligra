@@ -20,6 +20,8 @@
 #include "kexiactionproxy.h"
 #include "keximainwindow.h"
 
+#include <kdebug.h>
+
 #include <qwidget.h>
 #include <qsignal.h>
 
@@ -62,12 +64,21 @@ void KexiMainWindow::plugAction(KexiActionProxy *proxy, const char *action_name)
 	m[p]=receiver;
 }*/
 
-void KexiActionProxy::plugAction(const char *action_name, const char *slot)
+void KexiActionProxy::plugAction(const char *action_name, QObject* receiver, const char *slot)
 {
-//	m_main->plugActionProxy( this, action_name );
 	QPair<QSignal*,bool> *p = new QPair<QSignal*,bool>( new QSignal(m_signal_parent), true );
-	p->first->connect( m_receiver, slot );
+	p->first->connect( receiver, slot );
 	m_signals.insert(action_name, p);
+}
+
+void KexiActionProxy::plugAction(const char *action_name, QWidget* w)
+{
+	KAction *a = action(action_name);
+	if (!a) {
+		kdWarning() << "KexiActionProxy::plugAction(): NO SUCH ACTION: " << action_name << endl;
+		return;
+	}
+	a->plug(w);
 }
 
 void KexiActionProxy::activateAction(const char *action_name)

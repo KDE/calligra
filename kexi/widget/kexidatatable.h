@@ -26,6 +26,7 @@
 
 class KexiMainWindow;
 class KexiDataTableView;
+class KPopupMenu;
 
 namespace KexiDB
 {
@@ -59,7 +60,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 
 	protected slots:
 		void filter();
-
+		void slotCellSelected(int col, int row);
 
 	private:
 		KexiDataTableView *m_view;

@@ -45,6 +45,7 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	navigationPanelEnabled = true;
 	navPanel = 0;
 	skipKeyPress = false;
+	vScrollBarValueChanged_enabled = true;
 	navRowNumber = 0;
 	scrollBarTipTimerCnt = 0;
 	scrollBarTip = 0;

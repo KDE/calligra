@@ -21,9 +21,7 @@
 #ifndef KEXIBROWSER_H
 #define KEXIBROWSER_H
 
-#include "kexiactionproxy.h"
-
-#include <klistview.h>
+#include "kexidockbase.h"
 
 #include <qdict.h>
 
@@ -38,6 +36,7 @@ class KexiBrowserItem;
 class KexiView;
 class KexiMainWindow;
 class KPopupMenu;
+class KListView;
 
 namespace KexiPart
 {
@@ -47,22 +46,26 @@ namespace KexiPart
 
 typedef QDict<KexiBrowserItem> BaseItemList;
 
-class KEXICORE_EXPORT KexiBrowser : public KListView, public KexiActionProxy
+
+class KEXICORE_EXPORT KexiBrowser : public KexiDockBase
 {
 	Q_OBJECT
 
 	public:
 		KexiBrowser(KexiMainWindow *parent);
 
-		bool actionAvailable(const char *name);
+		void installEventFilter ( const QObject * filterObj );
 
 	public slots:
 		void		addGroup(KexiPart::Info *info);
 		void		addItem(KexiPart::Item *item);
 
+		void clear();
 
 	signals: 
 		void openItem( KexiPart::Item*, bool designMode );
+		void newItem( KexiPart::Info* );
+		void removeItem( KexiPart::Item* );
 
 //		void actionAvailable(const char *name, bool avail);
 
@@ -83,10 +86,11 @@ class KEXICORE_EXPORT KexiBrowser : public KListView, public KexiActionProxy
 //		KexiView	*m_view;
 //		KexiPart::Info	*m_part;
 //		QString		m_mime;
-		KexiMainWindow	*m_parent;
 		BaseItemList	m_baseItems;
 		KPopupMenu *m_itemPopup, *m_partPopup;
 		KAction *m_newObjectAction;
+
+		KListView *m_list;
 };
 
 #endif

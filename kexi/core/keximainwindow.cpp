@@ -24,6 +24,7 @@
 #include <qfile.h>
 #include <qtimer.h>
 #include <qobjectlist.h>
+#include <qsignalmapper.h>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -38,7 +39,6 @@
 #include <kedittoolbar.h>
 #include <kdeversion.h>
 #include <kglobalsettings.h>
-#include <kuser.h>
 
 #include "kexibrowser.h"
 #include "kexiactionproxy.h"
@@ -61,6 +61,12 @@
 #include "startup/KexiStartup.h"
 #include "kexicontexthelp.h"
 
+#ifdef Q_WS_WIN
+# include <unistd.h>
+#else
+# include <kuser.h>
+#endif
+
 typedef QIntDict<KexiDialogBase> KexiDialogDict;
 
 class KexiMainWindow::Private
@@ -76,6 +82,8 @@ class KexiMainWindow::Private
 		QGuardedPtr<KexiDialogBase> curDialog;
 
 		QPtrDict<KexiActionProxy> actionProxies;
+		KActionPtrList sharedActions;
+		QSignalMapper *actionMapper;
 
 		QAsciiDict<QPopupMenu> popups; //list of menu popups
 
@@ -89,13 +97,15 @@ class KexiMainWindow::Private
 		int action_open_recent_more_id;
 
 		//! edit menu
-		KAction *action_edit_remove, 
+		KAction *action_edit_delete, *action_edit_delete_record,
 			*action_edit_cut, *action_edit_copy, *action_edit_paste;
 		// view menu
 		KAction *action_view_nav;
 #ifndef KEXI_NO_CTXT_HELP
 		KToggleAction *action_show_helper;
 #endif
+		//data menu
+		KAction *action_data_save_row;
 
 		KMdiToolViewAccessor* navToolWindow;
 
@@ -200,6 +210,9 @@ QPopupMenu* KexiMainWindow::findPopupMenu(const char *popupName)
 void
 KexiMainWindow::initActions()
 {
+	d->actionMapper = new QSignalMapper(this, "act_map");
+	connect(d->actionMapper, SIGNAL(mapped(const QString &)), this, SLOT(slotAction(const QString &)));
+
 	// PROJECT MENU
 	KAction *action = new KAction(i18n("&New..."), "filenew", KStdAccel::shortcut(KStdAccel::New), 
 		this, SLOT(slotProjectNew()), actionCollection(), "project_new");
@@ -229,8 +242,10 @@ KexiMainWindow::initActions()
 	d->action_edit_cut = KStdAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
 	d->action_edit_copy = KStdAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
 	d->action_edit_paste = KStdAction::paste( this, SLOT( slotEditPaste() ), actionCollection(), "edit_paste" );
-	d->action_edit_remove = new KAction(i18n("&Remove"), SmallIcon("button_cancel"), Key_Delete, this, 
-		SLOT(slotEditRemove()), actionCollection(), "edit_remove");
+
+	d->action_edit_delete = createSharedAction(i18n("&Delete"), "button_cancel", Key_Delete, "edit_delete");
+	d->action_edit_delete_record = createSharedAction(i18n("Delete Record"), 0/*SmallIcon("button_cancel")*/, 
+		CTRL+Key_Delete, "edit_delete_record");
 
 	//VIEW MENU
 	d->action_view_nav = new KAction(i18n("Navigator"), "", ALT + Key_1,
@@ -240,6 +255,9 @@ KexiMainWindow::initActions()
 		this, SLOT(slotImportFile()), actionCollection(), "import_file");
 	new KAction(i18n("From Server..."), "server", 0, 
 		this, SLOT(slotImportServer()), actionCollection(), "import_server");
+
+	//DATA MENU
+	d->action_data_save_row = createSharedAction(i18n("&Save Row"), "button_ok", SHIFT | Key_Return, "data_save_row");
 
 	//SETTINGS MENU
 	setStandardToolBarMenuEnabled( true );
@@ -263,6 +281,17 @@ KexiMainWindow::initActions()
 	invalidateActions();
 }
 
+KAction* KexiMainWindow::createSharedAction(const QString &text, const QString &pix_name, 
+	const KShortcut &cut, const char *name)
+{
+	KAction *a = new KAction(text, (pix_name.isEmpty() ? QIconSet() : SmallIconSet(pix_name)), cut, 0/*receiver*/, 0/*slot*/, 
+		actionCollection(), name);
+	connect(a,SIGNAL(activated()), d->actionMapper, SLOT(map()));
+	d->actionMapper->setMapping(a, name);
+	d->sharedActions.append( a );
+	return a;
+}
+
 void KexiMainWindow::invalidateActions()
 {
 	invalidateProjectWideActions();
@@ -280,16 +309,14 @@ void KexiMainWindow::invalidateSharedActions(QWidget *w)
 
 //js: THIS WILL BE SIMPLIFIED
 	if (!w)
-		w = focusWidget();
+		w = focusWindow();
 	if (w) {
 		KexiActionProxy *p = d->actionProxies[ w ];
-		setActionAvailable("edit_remove",p && p->isAvailable("edit_remove"));
+		for (KActionPtrList::Iterator it=d->sharedActions.begin(); it!=d->sharedActions.end(); ++it) {
+//			setActionAvailable((*it)->name(),p && p->isAvailable((*it)->name()));
+			(*it)->setEnabled(p && p->isAvailable((*it)->name()));
+		}
 	}
-	/*d->action_edit_remove->setEnabled(true);
-	}
-	if (d->nav && d->nav->hasFocus()) {
-		d->action_edit_remove->setEnabled( d->nav->actionAvailable("edit_remove") );
-	}*/
 }
 
 void KexiMainWindow::invalidateProjectWideActions()
@@ -317,8 +344,13 @@ void KexiMainWindow::setActionAvailable(const char *name, bool avail)
 
 void KexiMainWindow::updateActionAvailable(const char *action_name, bool set, QObject *obj)
 {
-	if (obj !=  static_cast<QObject*>(focusWidget()))
+	QWidget *fw = focusWidget();
+	while (fw && obj!=fw)
+		fw = fw->parentWidget();
+
+	if (!fw)
 		return;
+
 	setActionAvailable(action_name, set);
 }
 
@@ -353,7 +385,11 @@ void KexiMainWindow::startup(KexiProjectData *projectData)
 			conndata->name = "Local pgsql connection";
 			conndata->driverName = "postgresql";
 			conndata->hostName = "localhost"; // -- default //"host.net";
+#ifdef Q_WS_WIN
+			conndata->userName = getlogin(); //-- temporary e.g."jarek"
+#else
 			conndata->userName = KUser().loginName(); //-- temporary e.g."jarek"
+#endif
 		Kexi::connset().addConnectionData(conndata);
 
 		//some recent projects data
@@ -513,6 +549,9 @@ KexiMainWindow::initNavigator()
 		d->nav->installEventFilter(this);
 		d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
 		connect(d->nav,SIGNAL(openItem(KexiPart::Item*,bool)),this,SLOT(openObject(KexiPart::Item*,bool)));
+		connect(d->nav,SIGNAL(newItem( KexiPart::Info* )),this,SLOT(newObject(KexiPart::Info*)));
+		connect(d->nav,SIGNAL(removeItem(KexiPart::Item*)),this,SLOT(removeObject(KexiPart::Item*)));
+
 //		connect(d->nav,SIGNAL(actionAvailable(const char*,bool)),this,SLOT(actionAvailable(const char*,bool)));
 
 	}
@@ -963,20 +1002,19 @@ void KexiMainWindow::slotEditPaste()
 {
 }
 
-void KexiMainWindow::slotEditRemove()
+void KexiMainWindow::slotAction(const QString& act_id)
 {
-	QWidget *w = focusWidget();
+	QWidget *w = focusWindow(); //focusWidget();
+//	while (w && !w->inherits("KexiDialogBase") && !w->inherits("KexiDockBase"))
+//		w = w->parentWidget();
+
 	if (!w)
 		return;
 
-//	KexiActionProxy * proxy = d->actionProxies[ QPair<QObject*,const char *>(w, "edit_remove") ];
-	KexiActionProxy * proxy = d->actionProxies[ w ]; //QCString("edit_remove")+QCString().setNum((ulong)w) ];
+	KexiActionProxy * proxy = d->actionProxies[ w ];
 	if (!proxy)
 		return;
-	proxy->activateAction("edit_remove");
-/*	if (d->nav->hasFocus()) {
-		//TODO
-	}*/
+	proxy->activateAction(act_id.latin1());
 }
 
 void KexiMainWindow::slotImportFile() {
@@ -1082,6 +1120,26 @@ void KexiMainWindow::attachWindow(KMdiChildView *pWnd,bool bShow,bool bAutomatic
 	pWnd->mdiParent()->setIcon( SmallIcon( static_cast<KexiDialogBase *>(pWnd)->part()->info()->itemIcon() ) );
 }
 
+bool KexiMainWindow::isWindow(QObject *o)
+{
+	return o->inherits("KexiDialogBase") || o->inherits("KexiDockBase");
+}
+
+QWidget* KexiMainWindow::findWindow(QWidget *w) const
+{
+	while (w && !w->inherits("KexiDialogBase") && !w->inherits("KexiDockBase"))
+		w = w->parentWidget();
+	return w;
+}
+
+QWidget* KexiMainWindow::focusWindow() const
+{
+	QWidget* fw = focusWidget();
+	while (fw && !fw->inherits("KexiDialogBase") && !fw->inherits("KexiDockBase"))
+		fw = fw->parentWidget();
+	return fw;
+}
+
 bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 {
 //	kdDebug() << "eventFilter: " <<e->type() << " " <<obj->name()<<endl;
@@ -1091,10 +1149,12 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 	if (e->type()==QEvent::AccelOverride) {
 		kdDebug() << "AccelOverride EVENT" << endl;
 	}
+	QWidget *focus_w = 0;
+	QWidget *w = findWindow(static_cast<QWidget*>(obj));
 	if (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut) {
+		focus_w = focusWindow();
 		kdDebug() << "Focus EVENT" << endl;
-		QWidget *w = focusWidget();
-		kdDebug() << (w ? w->name() : "" )  << endl;
+		kdDebug() << (focus_w ? focus_w->name() : "" )  << endl;
 		kdDebug() << "eventFilter: " <<e->type() << " " <<obj->name() <<endl;
 	}
 	if (e->type()==QEvent::WindowActivate) {
@@ -1118,31 +1178,39 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 	}*/
 //	if ((e->type()==QEvent::FocusIn /*|| e->type()==QEvent::FocusOut*/) && /*(!obj->inherits("KexiDialogBase")) &&*/ d->actionProxies[ obj ]) {
 	if (e->type()==QEvent::FocusIn) {
-		if (d->actionProxies[ obj ]) {
-			invalidateSharedActions();
-		}
-		else {
-			QObject* o = focusWidget();
-			while (o && !o->inherits("KexiDialogBase"))
-				o = o->parent();
-			if (o)
-				invalidateSharedActions(static_cast<QWidget*>(o));
+		if (focus_w) {
+//			if (d->actionProxies[ w ])
+			if (d->actionProxies[ focus_w ]) {
+				invalidateSharedActions();
+			}
+			else {
+/*			QObject* o = focusWidget();
+			while (o && !o->inherits("KexiDialogBase") && !o->inherits("KexiDockBase"))
+				o = o->parent();*/
+				invalidateSharedActions(focus_w);
+			}
 		}
 //		/*|| e->type()==QEvent::FocusOut*/) && /*(!obj->inherits("KexiDialogBase")) &&*/ d->actionProxies[ obj ]) {
 //		invalidateSharedActions();
 	}
-	if ((e->type()==QEvent::FocusOut && focusWidget()==d->curDialog && !obj->inherits("KexiDialogBase")) && d->actionProxies[ obj ]) {
+//	if ((e->type()==QEvent::FocusOut && focusWidget()==d->curDialog && !obj->inherits("KexiDialogBase")) && d->actionProxies[ obj ]) {
+	if (e->type()==QEvent::FocusOut && focus_w && focus_w==d->curDialog && d->actionProxies[ obj ]) {
 		invalidateSharedActions(d->curDialog);
 	}
 
+	if (d->focus_before_popup && e->type()==QEvent::FocusOut && obj->inherits("KMenuBar")) {
+		d->nav->setFocus();
+		d->focus_before_popup=0;
+		return true;
+	}
 	//keep focus in main window:
-	if (obj==d->nav) {
+	if (w && w==d->nav) {
 //		kdDebug() << "NAV" << endl;
 		if (e->type()==QEvent::FocusIn) {
 			return true;
-		} else if (e->type()==QEvent::WindowActivate && obj==d->focus_before_popup) {
-			d->focus_before_popup=0;
+		} else if (e->type()==QEvent::WindowActivate && w==d->focus_before_popup) {
 			d->nav->setFocus();
+			d->focus_before_popup=0;
 			return true;
 		} else if (e->type()==QEvent::FocusOut) {
 			if (static_cast<QFocusEvent*>(e)->reason()==QFocusEvent::Tab) {
@@ -1153,7 +1221,7 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 				}
 			}
 			else if (static_cast<QFocusEvent*>(e)->reason()==QFocusEvent::Popup) {
-
+				d->focus_before_popup=w;
 			}
 		} else if (e->type()==QEvent::Hide) {
 			setFocus();
@@ -1188,6 +1256,22 @@ KexiMainWindow::openObject(KexiPart::Item* item, bool designMode)
 		return false;
 	}
 	return part->openInstance(this, *item, designMode) != 0;
+}
+
+bool KexiMainWindow::newObject( KexiPart::Info *info )
+{
+	if (!info)
+		return false;
+	//TODO
+	return true;
+}
+
+bool KexiMainWindow::removeObject( KexiPart::Item *item )
+{
+	if (!item)
+		return false;
+	//TODO
+	return true;
 }
 
 #include "keximainwindow.moc"

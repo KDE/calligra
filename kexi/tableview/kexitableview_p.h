@@ -35,10 +35,13 @@
 #include <qevent.h>
 #include <qtimer.h>
 #include <qvalidator.h>
+#include <qasciidict.h>
 
 #include <kpushbutton.h>
 #include <ktoolbarbutton.h>
 #include <klineedit.h>
+#include <kpopupmenu.h>
+#include <kaction.h>
 
 class KexiTableItem;
 class KexiTableRM;
@@ -81,7 +84,7 @@ class KexiTableViewPrivate
 
 	QPixmap			*pBufferPm;
 	QTimer			*pUpdateTimer;
-	QPopupMenu		*pContextMenu;
+	KPopupMenu		*pContextMenu;
 	int menu_id_addRecord;
 	int menu_id_removeRecord;
 
@@ -125,6 +128,10 @@ class KexiTableViewPrivate
 	/*! used to force single skip keyPress event. */
 	bool skipKeyPress : 1;
 	
+	/*! Used to enable/disable execution of KexiTableView::vScrollBarValueChanged()
+	 when users navigates rows using keyboard, so vscrollbar tooltips are not visible then. */
+	bool vScrollBarValueChanged_enabled : 1;
+
 	/*! 1 if table view is readOnly, 0 if not; 
 	 otherwise (-1 means "dont know") the 'readOnly' flag from table views' 
 	 internal data structure (KexiTableViewData *KexiTableView::m_data) is reused. 
@@ -151,6 +158,9 @@ class KexiTableViewPrivate
 	//! row colors
 	QColor baseColor; 
 	QColor altColor;
+
+	//! Actions pluged for this table view. \sa plugSharedAction()
+	QAsciiDict<KAction> sharedActions;
 };
 
 #endif

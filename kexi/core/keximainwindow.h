@@ -37,6 +37,7 @@ namespace KexiDB {
 }
 namespace KexiPart {
 	class Item;
+	class Info;
 	class Part;
 }
 
@@ -103,6 +104,10 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		 */
 		void		storeSettings();
 		
+		/*! Creates shared action. */
+		KAction* createSharedAction(const QString &text, const QString &pix_name,
+			const KShortcut &cut, const char *name);
+
 		/** Invalidates availability of all actions for current application state.
 		*/
 		void invalidateActions();
@@ -139,6 +144,13 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 
 		void setWindowMenu(QPopupMenu *menu);
 
+		/*! \return focused kexi window (KexiDialogBase or KexiDockBase subclass) */
+		QWidget* focusWindow() const;
+
+		static bool isWindow(QObject *o);
+
+		QWidget* findWindow(QWidget *w) const;
+
 	protected slots:
 
 		/**
@@ -167,6 +179,8 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		bool openObject(KexiPart::Item *item, bool designMode = false);
 		//! for convenience
 		bool openObject(const QString& mime, const QString& name, bool designMode = false);
+		bool newObject( KexiPart::Info *info );
+		bool removeObject( KexiPart::Item *item );
 
 		void slotPartLoaded(KexiPart::Part* p);
 
@@ -180,6 +194,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		void showErrorMessage(const QString &title, const QString &details = QString::null);
 
 		void setActionAvailable(const char *name, bool avail);
+		void slotAction(const QString& act_id);
 
 		void slotViewNavigator();
 		void slotShowSettings();
@@ -199,7 +214,6 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		void slotEditCut();
 		void slotEditCopy();
 		void slotEditPaste();
-		void slotEditRemove();
 
 		void slotImportFile();
 

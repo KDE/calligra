@@ -207,6 +207,31 @@ TODO: on Connection::updateRow(): pass field's name together with error message
     -additional mapping is needed, eg QMap<QString,QString> err;
     err["KexiDB::Field::name"]="ID";
 
+
+2003-12-30
+** Many cleanups and behavioral fixes
+- KexiMainWindow: 
+  -focusing fixed again (now menubar doesn't grab move focus from navigator)
+  -shared action set is now simplified, generalized
+  -getlogin() used at least on win32, cause lack of KUser :)
+- KexiDockBase added as a base for docked widgets hat offer shared actions. 
+  Now it is a pair with KexiDialogBase class (both inherit KexiActionProxy).
+- "Data" menu entry introduced
+- KexiTableView:
+  -added action for current cell removing
+  -added popup menu
+  -cell focus-marker is not grayed when popup menu is executed
+  -Key_Space pressing fixed
+  -added possibility for plugging shared actions to table view (using plugSharedAction()),
+   e.g. "data_save_row" action, so shortcuts are properly handled
+  -deleting row while new row is edited just cancels editing
+  -vscrollbar tooltip is not visible when corliing is dont using keyboard instead of a mouse
+  -stranger's key events (e.g. pressing up arrow in navigator's line edit) 
+   aren't processed by table view (in keyPressEvent())
+
+2003-12-22
+- KexiTableView most keyboard events are now only accesible without key modifiers (eg. CTRL+Key_Up now doesn't work)
+
 2003-12-21
 - KexiActionProxy introduced
 - New terms introduced: part's gui client and part instance's gui client. 

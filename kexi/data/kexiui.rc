@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="104">
+<kpartgui name="kexi" version="106">
 <MenuBar noMerge="0">
   <Menu name="file" noMerge="1">
     <text>&amp;Project</text>
@@ -17,23 +17,26 @@
     <Action name="project_save"/>
     <Action name="project_saveas"/>
     <Separator />
+    <Menu name="project_import">
+      <text>&amp;Import</text>
+      <Action name="import_file" />
+      <Action name="import_server" />
+    </Menu>
+    <Menu name="project_export">
+      <text>&amp;Export</text>
+    </Menu>
+    <Separator />
     <Action name="project_properties"/>
     <Separator />
     <Action name="project_close"/>
     <Separator />
     <Action name="quit"/>
   </Menu>
-	  
-  <!-- Menu name="project" noMerge="1">
-    <text>&amp;Project</text>
-    <Merge/>
-    <Separator/>
-    <Action name="kexi_importfiledata"/>
-    <Action name="kexi_importserverdata"/>
-  </Menu -->
-  <Menu name="edit">
+
+  <Menu name="edit" noMerge="1">
     <text>&amp;Edit</text>
-    <Action name="edit_remove"/>
+    <Action name="edit_delete"/>
+    <Action name="edit_delete_record"/>
     <DefineGroup name="edit_find"/>
     <Separator/>
     <Merge/>
@@ -54,11 +57,14 @@
     <text>&amp;Create</text>
   </Menu>
 
-  <Menu name="import">
-    <text>&amp;Import</text>
-    <Action name="import_file" />
-    <Action name="import_server" />
+  <Menu name="data" noMerge="1">
+    <text>&amp;Data</text>
+    <Action name="data_save_row"/>
   </Menu>
+
+  <!-- (todo) Menu name="tools">
+    <text>&amp;Tools</text>
+  </Menu -->
 
   <Menu name="window" noMerge="1">
     <text>&amp;Window</text>
@@ -107,19 +113,5 @@
   <Action name="edit_copy"/>
   <Action name="edit_paste"/>
 </ToolBar>
-
-<State name="project_opened">
-  <enable>
-    <Action name="project_save"/>
-    <Action name="project_saveas"/>
-    <Action name="project_properties"/>
-    <Action name="project_close"/>
-    <Action name="edit_cut"/>
-    <Action name="edit_copy"/>
-    <Action name="edit_paste"/>
-    <Action name="edit_remove"/>
-    <Action name="view_navigator"/>
-  </enable>
-</State>
 
 </kpartgui>

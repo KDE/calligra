@@ -38,7 +38,24 @@ class KEXICORE_EXPORT KexiActionProxy
 		void activateAction(const char *action_name);
 
 	protected:
-		void plugAction(const char *action_name, const char *slot);
+		/*! Plugs action named \a action_name to slot \a slot in \a receiver.
+		 \a Receiver is usually a child of _this_ widget. */
+		void plugAction(const char *action_name, QObject* receiver, const char *slot);
+
+		/*! Typical version of plugAction() method -- plugs action named \a action_name
+		 to slot \a slot in _this_ widget. */
+		inline void plugAction(const char *action_name, const char *slot) {
+			plugAction(action_name, m_receiver, slot);
+		}
+
+		/*! Plugs action named \a action_name to a widget \a w, so the action is visible on this widget 
+		 as an item. \a w will typically be a menu, popup menu or a toolbar. 
+		 Does nothing if no action found, so generally this is safer than just caling e.g.
+		 <code> action("myaction")->plug(myPopup); </code> 
+		 \sa action(), KAction::plug(QWidget*, int) */
+		void plugAction(const char *action_name, QWidget* w);
+
+		/*! \return action named with \a name or NULL if there is no such action. */
 		KAction* action(const char* name);
 
 		inline QObject *receiver() const { return m_receiver; }
