@@ -119,8 +119,8 @@ public:
 	 */
 	virtual void setState( const VState state ) { m_state = state; }
 
-	VStroke* stroke() const { return m_stroke; }
-	VFill* fill() const { return m_fill; }
+	virtual VStroke* stroke() const { return m_stroke; }
+	virtual VFill* fill() const { return m_fill; }
 
 	virtual void setStroke( const VStroke& stroke );
 	virtual void setFill( const VFill& fill );
