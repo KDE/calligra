@@ -69,14 +69,17 @@ double SheetDlg::getCell(int row,int col)
 
 void SheetDlg::resizeEvent( QResizeEvent * e )
 {
-    resizeHandle( e->size() );
+  resizeHandle( e->size() );
 }
 
 void SheetDlg::resizeHandle( QSize s )
 {
-    t->resize(s.width(), s.height() - (cancel->height()+10));
+  t->resize(s.width(), s.height() - (cancel->height()+10));
 
-    cancel->move(s.width() - 10 - cancel->width(),s.height() - cancel->height() - 5);
-    ok->move(cancel->x() - 5 - ok->width(),s.height() - cancel->height() - 5);
+  cancel->move(s.width() - 10 - cancel->width(),s.height() - cancel->height() - 5);
+  ok->move(cancel->x() - 5 - ok->width(),s.height() - cancel->height() - 5);
 }
+
+
+
 

@@ -30,9 +30,14 @@ SheetTable::SheetTable( int cols, int rows, QWidget *parent,
 		       Tbl_snapToGrid| Tbl_cutCells );
     else
 	setTableFlags( flags );
+ 
     setNumRows(rows);
     setNumCols(cols);
-    table = new QString[rows*cols];
+
+    table = QStrList(true);
+    table.setAutoDelete(true);
+    for (int i = 0;i < rows*cols;i++)
+      table.append(0);
 
     setCellWidth(100);
     setCellHeight(30);
@@ -50,7 +55,6 @@ SheetTable::SheetTable( int cols, int rows, QWidget *parent,
 	connect( input, SIGNAL(returnPressed()), this, SLOT(nextInput()) );
       }
 	
-
     setBackgroundColor(kapp->windowColor);
 }
 
@@ -63,9 +67,10 @@ SheetTable::~SheetTable()
 
 void SheetTable::setText( int row, int col, QString s, bool paint )
 {
-    table[index(row,col)] = s.copy();
-
-    int x,y;
+  //table[index(row,col)].operator=( s.copy() );
+  table.remove(index(row,col));
+  table.insert(index(row,col),s);
+  int x,y;
     if ( paint && rowYPos( row, &y ) && colXPos( col, &x )) 
 	repaint( x,y, cellWidth(col), cellHeight(row));
     if (row == inRow && col == inCol && editable)
@@ -74,7 +79,7 @@ void SheetTable::setText( int row, int col, QString s, bool paint )
 
 bool SheetTable::hasValue(int row,int col)
 {
-  return !table[index(row,col)].copy().isEmpty();
+  return table.at(index(row,col));
 }
 
 void SheetTable::placeInput()
@@ -108,8 +113,9 @@ void SheetTable::paintCell( QPainter *p, int row, int col )
     p->drawLine(0,0,0,y2);
 
     QString str;
-    if (table)
-	str = table[index(row,col)].copy();
+    if (!table.isEmpty())
+      //str = table[index(row,col)].copy();
+      str = table.at(index(row,col));
     //    if ( str.isEmpty() )
     //	str.sprintf( "%c%d", col+'A', row );
     p->drawText( 1, 1, cellWidth()-2, cellHeight()-2,
@@ -141,7 +147,7 @@ void SheetTable::moveInput( int row, int col )
     if ( col == inCol && row == inRow )
 	return;
 
-    if ( inRow >= 0 && inCol >= 0 ) {
+   if ( inRow >= 0 && inCol >= 0 ) {
 	QString str = input->text();
 	setText( inRow, inCol, str );
 	emit newText(inRow, inCol, str );

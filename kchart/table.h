@@ -17,7 +17,7 @@
 #include <qtablevw.h>
 #include <qlined.h>
 #include <qpainter.h>
-
+#include <qstrlist.h>
 
 class SheetTable : public QTableView
 {
@@ -61,8 +61,7 @@ protected slots:
 private:
     int extraW;
     int extraH;
-    QString (*table);
-
+    QStrList table;
     int index( int r, int c ) { return c+r*numCols(); }
 
     QLineEdit *input;

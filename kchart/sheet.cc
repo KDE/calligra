@@ -94,10 +94,10 @@ Sheet::Sheet( QWidget *parent, const char *name, int _tableSize )
 
 Sheet::~Sheet()
 {
-//     delete tableView;
-//     delete side;
-//     delete head;
-//     delete table;
+  delete tableView;
+  delete side;
+  delete head;
+  delete table;
 }
 
 int Sheet::rows()

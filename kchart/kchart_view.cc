@@ -213,8 +213,8 @@ void KChartView::editData()
     } 
   
   // delete dialog
-//   delete _widget; _widget = 0;
-//   delete _dlg; _dlg = 0;
+  delete _widget; _widget = 0;
+  delete _dlg; _dlg = 0;
 }
 
 #include "kchart_view.moc"
