@@ -21,7 +21,6 @@
 #define __komlMime_h__
 
 #include <iostream>
-#include <torben.h>
 #include <map>
 #include <string>
 
