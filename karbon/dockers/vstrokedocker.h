@@ -23,6 +23,7 @@
 
 #include <vdocker.h>
 
+class QHButtonGroup;
 class QWidget;
 
 class TKUFloatSpinBox;
@@ -40,6 +41,8 @@ public:
 	 VStroke stroke() { return *m_stroke; }
   
 private:
+	QHButtonGroup *m_capGroup;
+	QHButtonGroup *m_joinGroup;
 	QWidget *mainWidget;
 	KarbonPart *m_part;
 	KarbonView *m_view;

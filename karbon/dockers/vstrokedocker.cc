@@ -18,10 +18,13 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qhbuttongroup.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qpushbutton.h>
 #include <qwidget.h>
 
+#include <kiconloader.h>
 #include <klocale.h>
 #include <koMainWindow.h>
 
@@ -40,6 +43,7 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 {
 	setCaption( i18n( "Stroke Properties" ) );
 
+	QPushButton *button;
 	mainWidget = new QWidget( this );
 	QGridLayout *mainLayout = new QGridLayout( mainWidget, 4, 2 );
 	
@@ -50,6 +54,47 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	m_setLineWidth->setMinValue(0.0);
 	m_setLineWidth->setLineStep(0.5);
 	mainLayout->addWidget ( m_setLineWidth, 0, 1 );
+	
+	QLabel* capLabel = new QLabel( i18n ( "Cap:" ), mainWidget );
+	mainLayout->addWidget( capLabel, 1, 0 );
+	m_capGroup = new QHButtonGroup( mainWidget );
+	m_capGroup->setFrameShape( NoFrame );
+	m_capGroup->setInsideMargin( 1 );
+	m_capGroup->setExclusive( true );
+	button = new QPushButton( "", m_capGroup );
+	button->setPixmap( SmallIcon( "cap_butt" ) );
+	button->setToggleButton( true );
+	m_capGroup->insert( button );
+	button = new QPushButton( "", m_capGroup );
+	button->setPixmap( SmallIcon( "cap_round" ) );
+	button->setToggleButton( true );
+	m_capGroup->insert( button );
+	button = new QPushButton( "", m_capGroup );
+	button->setPixmap( SmallIcon( "cap_square" ) );
+	button->setToggleButton( true );
+	m_capGroup->insert( button );
+	mainLayout->addWidget( m_capGroup, 1, 1 );
+	
+	QLabel* joinLabel = new QLabel( i18n ( "Join:" ), mainWidget );
+	mainLayout->addWidget( joinLabel, 2, 0 );
+	
+	m_joinGroup = new QHButtonGroup( mainWidget );
+	m_joinGroup->setFrameShape( NoFrame );
+	m_joinGroup->setInsideMargin( 1 );
+	m_joinGroup->setExclusive( true );
+	button = new QPushButton( "", m_joinGroup );
+	button->setPixmap( SmallIcon( "join_miter" ) );
+	button->setToggleButton( true );
+	m_joinGroup->insert( button );
+	button = new QPushButton( "", m_joinGroup );
+	button->setPixmap( SmallIcon( "join_round" ) );
+	button->setToggleButton( true );
+	m_joinGroup->insert( button );
+	button = new QPushButton( "", m_joinGroup );
+	button->setPixmap( SmallIcon( "join_bevel" ) );
+	button->setToggleButton( true );
+	m_joinGroup->insert( button );
+	mainLayout->addWidget( m_joinGroup, 2, 1 );
 	
 	mainLayout->activate();
 	setWidget( mainWidget );
