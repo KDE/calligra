@@ -344,17 +344,17 @@ void StrokeDashStyle::toXML( QDomDocument & doc, QDomElement & e ) const
 {
     QDomElement strokeDash = doc.createElement( "draw:stroke-dash" );
     strokeDash.setAttribute( "draw:name", m_name );
-    if ( m_style != QString::null )
+    if ( !m_style.isNull() )
         strokeDash.setAttribute( "draw:style", m_style );
-    if ( m_dots1 != QString::null )
+    if ( !m_dots1.isNull() )
         strokeDash.setAttribute( "draw:dots1", m_dots1 );
-    if ( m_dots1_length != QString::null )
+    if ( !m_dots1_length.isNull() )
         strokeDash.setAttribute( "draw:dots1-length", m_dots1_length );
-    if ( m_dots2 != QString::null )
+    if ( !m_dots2.isNull() )
         strokeDash.setAttribute( "draw:dots2", m_dots2 );
-    if ( m_dots2_length != QString::null )
+    if ( !m_dots2_length.isNull() )
         strokeDash.setAttribute( "draw:dots2-length", m_dots2_length );
-    if ( m_distance != QString::null )
+    if ( !m_distance.isNull() )
         strokeDash.setAttribute( "draw:distance", m_distance );
 
     e.appendChild( strokeDash );
@@ -463,23 +463,23 @@ void GradientStyle::toXML( QDomDocument & doc, QDomElement & e ) const
 {
     QDomElement gradient = doc.createElement( "draw:gradient" );
     gradient.setAttribute( "draw:name", m_name );
-    if ( m_style != QString::null )
+    if ( !m_style.isNull() )
         gradient.setAttribute( "draw:style", m_style );
-    if ( m_start_color != QString::null )
+    if ( !m_start_color.isNull() )
         gradient.setAttribute( "draw:start-color", m_start_color );
-    if ( m_end_color != QString::null )
+    if ( !m_end_color.isNull() )
         gradient.setAttribute( "draw:end-color", m_end_color );
-    if ( m_start_intensity != QString::null )
+    if ( !m_start_intensity.isNull() )
         gradient.setAttribute( "draw:start-intensity", m_start_intensity );
-    if ( m_end_intensity != QString::null )
+    if ( !m_end_intensity.isNull() )
         gradient.setAttribute( "draw:end-intensity", m_end_intensity );
-    if ( m_angle != QString::null )
+    if ( !m_angle.isNull() )
         gradient.setAttribute( "draw:angle", m_angle );
-    if ( m_border != QString::null )
+    if ( !m_border.isNull() )
         gradient.setAttribute( "draw:border", m_border );
-    if ( m_cx != QString::null )
+    if ( !m_cx.isNull() )
         gradient.setAttribute( "draw:cx", m_cx );
-    if ( m_cy != QString::null )
+    if ( !m_cy.isNull() )
         gradient.setAttribute( "draw:cy", m_cy );
 
     e.appendChild( gradient );
@@ -531,9 +531,9 @@ void MarkerStyle::toXML( QDomDocument & doc, QDomElement & e ) const
 {
     QDomElement marker = doc.createElement( "draw:marker" );
     marker.setAttribute( "draw:name", m_name );
-    if ( m_viewBox != QString::null )
+    if ( !m_viewBox.isNull() )
         marker.setAttribute( "svg:viewBox", m_viewBox );
-    if ( m_d != QString::null )
+    if ( !m_d.isNull() )
         marker.setAttribute( "svg:d", m_d );
 
     e.appendChild( marker );
@@ -588,13 +588,13 @@ void HatchStyle::toXML( QDomDocument & doc, QDomElement & e ) const
 {
     QDomElement hatch = doc.createElement( "draw:hatch" );
     hatch.setAttribute( "draw:name", m_name );
-    if ( m_style != QString::null )
+    if ( !m_style.isNull() )
         hatch.setAttribute( "draw:style", m_style );
-    if ( m_color != QString::null )
+    if ( !m_color.isNull() )
         hatch.setAttribute( "draw:color", m_color );
-    if ( m_distance != QString::null )
+    if ( !m_distance.isNull() )
         hatch.setAttribute( "draw:distance", m_distance );
-    if ( m_rotation != QString::null )
+    if ( !m_rotation.isNull() )
         hatch.setAttribute( "draw:rotation", m_rotation );
 
     e.appendChild( hatch );
@@ -847,21 +847,21 @@ void PageStyle::toXML( QDomDocument & doc, QDomElement & e ) const
     if ( !m_page_effect.isEmpty() )
         properties.setAttribute( "presentation:transition-style",
                                  m_page_effect );
-    if ( m_fill != QString::null )
+    if ( !m_fill.isNull() )
         properties.setAttribute( "draw:fill", m_fill );
-    if ( m_fill_color != QString::null )
+    if ( !m_fill_color.isNull() )
         properties.setAttribute( "draw:fill-color", m_fill_color );
-    if ( m_fill_image_name != QString::null )
+    if ( !m_fill_image_name.isNull() )
         properties.setAttribute( "draw:fill-image-name", m_fill_image_name );
-    if ( m_fill_image_width != QString::null )
+    if ( !m_fill_image_width.isNull() )
         properties.setAttribute( "draw:fill-image-width", m_fill_image_width );
-    if ( m_fill_image_height != QString::null )
+    if ( !m_fill_image_height.isNull() )
         properties.setAttribute( "draw:fill-image-height", m_fill_image_height );
-    if ( m_fill_image_ref_point != QString::null )
+    if ( !m_fill_image_ref_point.isNull() )
         properties.setAttribute( "draw:fill-image-ref-point", m_fill_image_ref_point );
-    if ( m_fill_gradient_name != QString::null )
+    if ( !m_fill_gradient_name.isNull() )
         properties.setAttribute( "draw:fill-gradient-name", m_fill_gradient_name );
-    if ( m_repeat != QString::null )
+    if ( !m_repeat.isNull() )
         properties.setAttribute( "style:repeat", m_repeat );
 
     style.appendChild( properties );
@@ -942,27 +942,27 @@ void TextStyle::toXML( QDomDocument & doc, QDomElement & e ) const
     style.setAttribute( "style:family", "text" );
 
     QDomElement properties = doc.createElement( "style:properties" );
-    if ( m_font_size != QString::null )
+    if ( !m_font_size.isNull() )
         properties.setAttribute( "fo:font-size", m_font_size );
-    if ( m_font_family != QString::null )
+    if ( !m_font_family.isNull() )
         properties.setAttribute( "fo:font-family", m_font_family );
-    if ( m_font_family_generic != QString::null )
+    if ( !m_font_family_generic.isNull() )
         properties.setAttribute( "fo:font-family-generic", m_font_family_generic );
-    if ( m_color != QString::null )
+    if ( !m_color.isNull() )
         properties.setAttribute( "fo:color", m_color );
-    if ( m_font_pitch != QString::null )
+    if ( !m_font_pitch.isNull() )
         properties.setAttribute( "style:font-pitch", m_font_pitch );
-    if ( m_font_style != QString::null )
+    if ( !m_font_style.isNull() )
         properties.setAttribute( "fo:font-style", m_font_style );
-    if ( m_font_weight != QString::null )
+    if ( !m_font_weight.isNull() )
         properties.setAttribute( "fo:font-weight", m_font_weight );
-    if ( m_text_shadow != QString::null )
+    if ( !m_text_shadow.isNull() )
         properties.setAttribute( "fo:text-shadow", m_text_shadow );
-    if ( m_text_underline != QString::null )
+    if ( !m_text_underline.isNull() )
         properties.setAttribute( "style:text-underline", m_text_underline );
-    if ( m_text_underline_color != QString::null )
+    if ( !m_text_underline_color.isNull() )
         properties.setAttribute( "style:text-underline-color", m_text_underline_color );
-    if ( m_text_crossing_out != QString::null )
+    if ( !m_text_crossing_out.isNull() )
         properties.setAttribute( "style:text-crossing-out", m_text_crossing_out );
 
     style.appendChild( properties );
@@ -1198,81 +1198,81 @@ void GraphicStyle::toXML( QDomDocument & doc, QDomElement & e ) const
         style.setAttribute( "style:parent-style-name", "standard" );
 
     QDomElement properties = doc.createElement( "style:properties" );
-    if ( m_stroke != QString::null )
+    if ( !m_stroke.isNull() )
         properties.setAttribute( "draw:stroke", m_stroke );
-    if ( m_stroke_dash != QString::null )
+    if ( !m_stroke_dash.isNull() )
         properties.setAttribute( "draw:stroke-dash", m_stroke_dash );
-    if ( m_stroke_color != QString::null )
+    if ( !m_stroke_color.isNull() )
         properties.setAttribute( "svg:stroke-color", m_stroke_color );
-    if ( m_stroke_width != QString::null )
+    if ( !m_stroke_width.isNull() )
         properties.setAttribute( "svg:stroke-width", m_stroke_width );
-    if ( m_shadow != QString::null )
+    if ( !m_shadow.isNull() )
         properties.setAttribute( "draw:shadow", m_shadow );
-    if ( m_shadow_offset_x != QString::null )
+    if ( !m_shadow_offset_x.isNull() )
         properties.setAttribute( "draw:shadow-offset-x", m_shadow_offset_x );
-    if ( m_shadow_offset_y != QString::null )
+    if ( !m_shadow_offset_y.isNull() )
         properties.setAttribute( "draw:shadow-offset-y", m_shadow_offset_y );
-    if ( m_shadow_color != QString::null )
+    if ( !m_shadow_color.isNull() )
         properties.setAttribute( "draw:shadow-color", m_shadow_color );
-    if ( m_margin_left != QString::null )
+    if ( !m_margin_left.isNull() )
         properties.setAttribute( "fo:margin-left", m_margin_left );
-    if ( m_margin_right != QString::null )
+    if ( !m_margin_right.isNull() )
         properties.setAttribute( "fo:margin-right", m_margin_right );
-    if ( m_margin_top != QString::null )
+    if ( !m_margin_top.isNull() )
         properties.setAttribute( "fo:margin-top", m_margin_top );
-    if ( m_margin_bottom != QString::null )
+    if ( !m_margin_bottom.isNull() )
         properties.setAttribute( "fo:margin-bottom", m_margin_bottom );
-    if ( m_color != QString::null )
+    if ( !m_color.isNull() )
         properties.setAttribute( "fo:color", m_color );
-    if ( m_text_outline != QString::null )
+    if ( !m_text_outline.isNull() )
         properties.setAttribute( "style:text-outline", m_text_outline );
-    if ( m_text_crossing_out != QString::null )
+    if ( !m_text_crossing_out.isNull() )
         properties.setAttribute( "style:text-crossing-out", m_text_crossing_out );
-    if ( m_font_family != QString::null )
+    if ( !m_font_family.isNull() )
         properties.setAttribute( "fo:font-family", m_font_family );
-    if ( m_font_size != QString::null )
+    if ( !m_font_size.isNull() )
         properties.setAttribute( "fo:font-size", m_font_size );
-    if ( m_font_style != QString::null )
+    if ( !m_font_style.isNull() )
         properties.setAttribute( "fo:font-style", m_font_style );
-    if ( m_text_shadow != QString::null )
+    if ( !m_text_shadow.isNull() )
         properties.setAttribute( "fo:text-shadow", m_text_shadow );
-    if ( m_text_underline != QString::null )
+    if ( !m_text_underline.isNull() )
         properties.setAttribute( "style:text-underline", m_text_underline );
-    if ( m_font_weight != QString::null )
+    if ( !m_font_weight.isNull() )
         properties.setAttribute( "fo:font-weight", m_font_weight );
-    if ( m_line_height != QString::null )
+    if ( !m_line_height.isNull() )
         properties.setAttribute( "fo:line-height", m_line_height );
-    if ( m_text_align != QString::null )
+    if ( !m_text_align.isNull() )
         properties.setAttribute( "fo:text-align", m_text_align );
-    if ( m_fill != QString::null )
+    if ( !m_fill.isNull() )
         properties.setAttribute( "draw:fill", m_fill );
-    if ( m_fill_color != QString::null )
+    if ( !m_fill_color.isNull() )
         properties.setAttribute( "draw:fill-color", m_fill_color );
-    if ( m_fill_hatch_name != QString::null )
+    if ( !m_fill_hatch_name.isNull() )
         properties.setAttribute( "draw:fill-hatch-name", m_fill_hatch_name );
-    if ( m_enable_numbering != QString::null )
+    if ( !m_enable_numbering.isNull() )
         properties.setAttribute( "text:enable-numbering", m_enable_numbering );
-    if ( m_marker_start != QString::null )
+    if ( !m_marker_start.isNull() )
         properties.setAttribute( "draw:marker-start", m_marker_start );
-    if ( m_marker_start_width != QString::null )
+    if ( !m_marker_start_width.isNull() )
         properties.setAttribute( "draw:marker-start-width", m_marker_start_width );
-    if ( m_marker_end != QString::null )
+    if ( !m_marker_end.isNull() )
         properties.setAttribute( "draw:marker-end", m_marker_end );
-    if ( m_marker_end_width != QString::null )
+    if ( !m_marker_end_width.isNull() )
         properties.setAttribute( "draw:marker-end-width", m_marker_end_width );
-    if ( m_fill_gradient_name != QString::null )
+    if ( !m_fill_gradient_name.isNull() )
         properties.setAttribute( "draw:fill-gradient-name", m_fill_gradient_name );
-    if ( m_transparency != QString::null )
+    if ( !m_transparency.isNull() )
         properties.setAttribute( "draw:transparency", m_transparency );
-    if ( m_textAlignment != QString::null )
+    if ( !m_textAlignment.isNull() )
         properties.setAttribute( "draw:textarea-vertical-align", m_textAlignment );
-    if ( m_textMarginLeft != QString::null )
+    if ( !m_textMarginLeft.isNull() )
         properties.setAttribute( "fo:padding-left", m_textMarginLeft );
-    if ( m_textMarginBottom != QString::null )
+    if ( !m_textMarginBottom.isNull() )
         properties.setAttribute( "fo:padding-bottom", m_textMarginBottom );
-    if ( m_textMarginTop != QString::null )
+    if ( !m_textMarginTop.isNull() )
         properties.setAttribute( "fo:padding-top", m_textMarginTop );
-    if ( m_textMarginRight != QString::null )
+    if ( !m_textMarginRight.isNull() )
         properties.setAttribute( "fo:padding-right", m_textMarginRight );
 
 
@@ -1421,35 +1421,35 @@ void ParagraphStyle::toXML( QDomDocument & doc, QDomElement & e ) const
     style.setAttribute( "style:family", "paragraph" );
 
     QDomElement properties = doc.createElement( "style:properties" );
-    if ( m_margin_left != QString::null )
+    if ( !m_margin_left.isNull() )
         properties.setAttribute( "fo:margin-left", m_margin_left );
-    if ( m_margin_right != QString::null )
+    if ( !m_margin_right.isNull() )
         properties.setAttribute( "fo:margin-right", m_margin_right );
-    if ( m_text_indent != QString::null )
+    if ( !m_text_indent.isNull() )
         properties.setAttribute( "fo:text-indent", m_text_indent );
-    if ( m_text_align != QString::null )
+    if ( !m_text_align.isNull() )
         properties.setAttribute( "fo:text-align", m_text_align );
-    if ( m_enable_numbering != QString::null )
+    if ( !m_enable_numbering.isNull() )
         properties.setAttribute( "text:enable-numbering", m_enable_numbering );
-    if ( m_text_shadow != QString::null )
+    if ( !m_text_shadow.isNull() )
         properties.setAttribute( "fo:text-shadow", m_text_shadow );
-    if ( m_margin_top != QString::null )
+    if ( !m_margin_top.isNull() )
         properties.setAttribute( "fo:margin-top", m_margin_top );
-    if ( m_margin_bottom != QString::null )
+    if ( !m_margin_bottom.isNull() )
         properties.setAttribute( "fo:margin-bottom", m_margin_bottom );
-    if ( m_border_left != QString::null )
+    if ( !m_border_left.isNull() )
         properties.setAttribute( "fo:border-left", m_border_left );
-    if ( m_border_right != QString::null )
+    if ( !m_border_right.isNull() )
         properties.setAttribute( "fo:border-right", m_border_right );
-    if ( m_border_top != QString::null )
+    if ( !m_border_top.isNull() )
         properties.setAttribute( "fo:border-top", m_border_top );
-    if ( m_border_bottom != QString::null )
+    if ( !m_border_bottom.isNull() )
         properties.setAttribute( "fo:border-bottom", m_border_bottom );
-    if ( m_line_height != QString::null )
+    if ( !m_line_height.isNull() )
         properties.setAttribute( "fo:line-height", m_line_height );
-    if ( m_line_height_at_least != QString::null )
+    if ( !m_line_height_at_least.isNull() )
         properties.setAttribute( "style:line-height-at-least", m_line_height_at_least );
-    if ( m_line_spacing != QString::null )
+    if ( !m_line_spacing.isNull() )
         properties.setAttribute( "style:line-spacing", m_line_spacing );
 
     style.appendChild( properties );
@@ -1568,16 +1568,16 @@ void ListStyle::toXML( QDomDocument & doc, QDomElement & e ) const
         {
             listLevelStyle = doc.createElement( "text:list-level-style-number" );
             listLevelStyle.setAttribute( "text:level", level );
-            if ( m_num_suffix != QString::null )
+            if ( !m_num_suffix.isNull() )
                 listLevelStyle.setAttribute( "style:num-suffix", m_num_suffix );
-            if ( m_num_format != QString::null )
+            if ( !m_num_format.isNull() )
                 listLevelStyle.setAttribute( "style:num-format", m_num_format );
         }
         else
         {
             listLevelStyle = doc.createElement( "text:list-level-style-bullet" );
             listLevelStyle.setAttribute( "text:level", level );
-            if ( m_bullet_char != QString::null )
+            if ( !m_bullet_char.isNull() )
                 listLevelStyle.setAttribute( "text:bullet-char", m_bullet_char );
         }
 
@@ -1590,11 +1590,11 @@ void ListStyle::toXML( QDomDocument & doc, QDomElement & e ) const
                                      QString( "%1cm" ).arg( m_min_label_width * ( level - 1 ) ) );
         }
 
-        if ( m_color != QString::null )
+        if ( !m_color.isNull() )
             properties.setAttribute( "fo:color", m_color );
-        if ( m_font_size != QString::null )
+        if ( !m_font_size.isNull() )
             properties.setAttribute( "fo:font-size", m_font_size );
-        if ( m_font_family != QString::null )
+        if ( !m_font_family.isNull() )
             properties.setAttribute( "fo:font-family", m_font_family );
 
         listLevelStyle.appendChild( properties );
