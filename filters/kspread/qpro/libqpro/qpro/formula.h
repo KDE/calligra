@@ -53,49 +53,49 @@ public:
    char* formula();
 
 
-   static inline void binaryOperand(QpFormula& pThis, const char* pOper)
+   static void binaryOperand(QpFormula& pThis, const char* pOper)
                       {pThis.binaryOperandReal(pOper);}
 
-   static inline void floatFunc(QpFormula& pThis, const char* pFunc)
+   static void floatFunc(QpFormula& pThis, const char* pFunc)
                       {pThis.floatFuncReal(pFunc);}
 
    void               formulaStart(const char* pFirstChar);
 
-   static inline void absKludge(QpFormula& pThis, const char* pFunc)
+   static void absKludge(QpFormula& pThis, const char* pFunc)
                       {pThis.absKludgeReal(pFunc);}
 
-   static inline void func0(QpFormula& pThis, const char* pFunc)
+   static void func0(QpFormula& pThis, const char* pFunc)
                       {pThis.func0Real(pFunc);}
 
-   static inline void func1(QpFormula& pThis, const char* pFunc)
+   static void func1(QpFormula& pThis, const char* pFunc)
                       {pThis.func1Real(pFunc);}
 
-   static inline void func2(QpFormula& pThis, const char* pFunc)
+   static void func2(QpFormula& pThis, const char* pFunc)
                       {pThis.func2Real(pFunc);}
 
-   static inline void func3(QpFormula& pThis, const char* pFunc)
+   static void func3(QpFormula& pThis, const char* pFunc)
                       {pThis.func3Real(pFunc);}
 
-   static inline void func4(QpFormula& pThis, const char* pFunc)
+   static void func4(QpFormula& pThis, const char* pFunc)
                       {pThis.func4Real(pFunc);}
 
-   static inline void funcV(QpFormula& pThis, const char* pFunc)
+   static void funcV(QpFormula& pThis, const char* pFunc)
                       {pThis.funcVReal(pFunc);}
 
-   static inline void intFunc(QpFormula& pThis, const char* pFunc)
+   static void intFunc(QpFormula& pThis, const char* pFunc)
                       {pThis.intFuncReal(pFunc);}
 
    void               dropLeadingAt(int pBool=-1);
 
-   static inline void ref(QpFormula& pThis, const char* pFunc)
+   static void ref(QpFormula& pThis, const char* pFunc)
                       {pThis.refReal(pFunc);}
 
    void               replaceFunc(QpFormulaConv* pFuncEntry);
 
-   static inline void stringFunc(QpFormula& pThis, const char* pFunc)
+   static void stringFunc(QpFormula& pThis, const char* pFunc)
                       {pThis.stringFuncReal(pFunc);}
 
-   static inline void unaryOperand(QpFormula& pThis, const char* pOper)
+   static void unaryOperand(QpFormula& pThis, const char* pOper)
                       {pThis.unaryOperandReal(pOper);}
 
 protected:
