@@ -82,6 +82,7 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode)
 			allfilters += mime->patterns().join(" ");
 		}
 	}
+#ifdef KEXI_SERVER_SUPPORT
 	if (m_mode == KexiStartupFileDialog::Opening 
 		|| m_mode == KexiStartupFileDialog::SavingServerBasedDB) {
 		mime = KMimeType::mimeType("application/x-kexiproject-shortcut");
@@ -90,6 +91,7 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode)
 			allfilters += mime->patterns().join(" ");
 		}
 	}
+#endif
 	mime = KMimeType::mimeType("all/allfiles");
 	if (mime) {
 		filter += QString(mime->patterns().isEmpty() ? "*" : mime->patterns().join(" ")) + "|" + mime->comment()+ " (*)\n";
@@ -126,13 +128,14 @@ QString KexiStartupFileDialog::currentFileName()
 	
 //	KURL url = KFileDialog::selectedURL();
 #ifdef Q_WS_WIN
-	QString path = selectedFile();
+//	QString path = selectedFile();
 	//js @todo
-	kdDebug() << "selectedFile() == " << path <<endl;
+//	kdDebug() << "selectedFile() == " << path << " '" << url().fileName() << "' " << m_lineEdit->text() << endl;
+	QString path = QFileInfo(selectedFile()).dirPath(true) + "/" + m_lineEdit->text();
 #else
 //	QString path = locationEdit->currentText().stripWhiteSpace(); //url.path().stripWhiteSpace(); that does not work, if the full path is not in the location edit !!!!!
 	QString path=KexiStartupFileDialogBase::selectedURL().path();
-	kdDebug() << "KFileDialog::selectedURL() == " << KFileDialog::selectedURL().path() <<endl;
+	kdDebug() << "selectedURL() == " << KFileDialog::selectedURL().path() <<endl;
 #endif
 	
 	if (!currentFilter().isEmpty()) {
@@ -147,7 +150,7 @@ QString KexiStartupFileDialog::currentFileName()
 			}
 		}
 	}
-	kdDebug() << "KexiStartupFileDialog::currentURL() == " << path <<endl;
+	kdDebug() << "KexiStartupFileDialog::currentFileName() == " << path <<endl;
 	return path;
 //	return KFileDialog::selectedURL();
 }
@@ -240,6 +243,14 @@ void KexiStartupFileDialog::setLocationText(const QString& fn)
 #endif
 }
 
+void KexiStartupFileDialog::setFocus()
+{
+#ifdef Q_WS_WIN
+	m_lineEdit->setFocus();
+#else
+	locationEdit->setFocus();
+#endif
+}
 
 #include "KexiStartupFileDialog.moc"
 

@@ -64,10 +64,12 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 //	KexiActionProxy ap;
 	//shared actions
 	plugSharedAction("edit_delete",SLOT(slotRemove()));
+	plugSharedAction("edit_edititem", SLOT(slotRename()));
+#ifdef KEXI_SHOW_UNIMPLEMENTED
 	plugSharedAction("edit_cut",SLOT(slotCut()));
 	plugSharedAction("edit_copy",SLOT(slotCopy()));
 	plugSharedAction("edit_paste",SLOT(slotPaste()));
-	plugSharedAction("edit_edititem", SLOT(slotRename()));
+#endif
 	
 	setCaption(i18n("Project Navigator"));
 	setIcon(*mainWin->icon());

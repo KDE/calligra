@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -228,12 +228,14 @@ KexiStartupDialog::KexiStartupDialog(
 		if (d->singlePage)
 			d->openExistingConnWidget->setFocus();
 	}
+#ifdef KEXI_STARTUP_SHOW_RECENT
 	if (d->dialogType & OpenRecent) {
 		setupPageOpenRecent();
 		d->pageOpenRecentID = id++;
 		if (d->singlePage)
 			d->prj_selector->setFocus();
 	}
+#endif
 
 	if (!d->singlePage) {
 		connect(this, SIGNAL(aboutToShowPage(QWidget*)), this, SLOT(tabShown(QWidget*)));
@@ -354,6 +356,7 @@ void KexiStartupDialog::setupPageTemplates()
 	tmplyr->addWidget( lbl_blank );
 	tmplyr->addStretch(1);
 
+#ifdef KEXI_STARTUP_SHOW_TEMPLATES
 	//- page "personal db"
 	templPageFrame = d->templatesWidget->addPage (
 		i18n("Personal Databases"), i18n("New Personal Database Project Templates"), DesktopIcon("folder_home") );
@@ -374,6 +377,7 @@ void KexiStartupDialog::setupPageTemplates()
 	connect(d->viewBusinessTempl->templates,SIGNAL(doubleClicked(QIconViewItem*)),this,SLOT(templateItemExecuted(QIconViewItem*)));
 	connect(d->viewBusinessTempl->templates,SIGNAL(returnPressed(QIconViewItem*)),this,SLOT(templateItemExecuted(QIconViewItem*)));
 	connect(d->viewBusinessTempl->templates,SIGNAL(currentChanged(QIconViewItem*)),this,SLOT(templateItemSelected(QIconViewItem*)));
+#endif //KEXI_STARTUP_SHOW_TEMPLATES
 }
 
 void KexiStartupDialog::templatesPageShown(QWidget *page)
@@ -455,7 +459,7 @@ void KexiStartupDialog::updateSelectedTemplateKeyInfo()
 
 void KexiStartupDialog::tabShown(QWidget *w)
 {
-	kdDebug() << "KexiStartupDialog::tabShown " << (long)w << " "<< long(d->pageTemplates)<<endl;
+//	kdDebug() << "KexiStartupDialog::tabShown " << (long)w << " "<< long(d->pageTemplates)<<endl;
 
 	updateDialogOKButton(w);
 }
@@ -574,12 +578,14 @@ void KexiStartupDialog::existingFileSelected(const QString &f)
 
 void KexiStartupDialog::setupPageOpenRecent()
 {
+#ifdef KEXI_STARTUP_SHOW_RECENT
 	d->pageOpenRecent = addPage( i18n("Open &Recent Project") );
 	QVBoxLayout *lyr = new QVBoxLayout( d->pageOpenRecent, 0, KDialogBase::spacingHint() );
 	lyr->addWidget( d->prj_selector = new KexiProjectSelectorWidget(
 		d->pageOpenRecent, "prj_selector", d->recentProjects ) );
 	connect(d->prj_selector,SIGNAL(projectExecuted(KexiProjectData*)),
 		this,SLOT(recentProjectItemExecuted(KexiProjectData*)));
+#endif
 }
 
 KexiProjectData* KexiStartupDialog::selectedProjectData() const

@@ -71,6 +71,8 @@ public:
 public slots:
 	virtual void show();
 
+	virtual void setFocus();
+
 signals:
 	//entered file name is accepted
 	void accepted();

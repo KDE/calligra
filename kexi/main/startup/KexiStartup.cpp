@@ -181,20 +181,28 @@ bool KexiStartupHandler::init(int argc, char **argv)
 
 	KexiDB::ConnectionData cdata;
 	cdata.driverName = args->getOption("dbdriver");
+
 //	if (cdata.driverName.isEmpty())
 //		cdata.driverName = KexiDB::Driver::defaultFileBasedDriverName();
+#ifdef KEXI_SERVER_SUPPORT
 	cdata.hostName = args->getOption("host");
 	cdata.localSocketFileName = args->getOption("local-socket");
 	cdata.userName = args->getOption("user");
+#endif
 //	cdata.password = args->getOption("password");
 	bool fileDriverSelected;
 	if (cdata.driverName.isEmpty())
 		fileDriverSelected = true;
 	else {
 		KexiDB::DriverManager dm;
-		fileDriverSelected = dm.driverInfo(cdata.driverName).fileBased;
+		KexiDB::Driver::Info dinfo = dm.driverInfo(cdata.driverName);
+		if (dinfo.name.isEmpty()) {
+			//driver name provided explicity, but not found
+			KMessageBox::sorry(0, dm.errorMsg());
+			return false;
+		}
+		fileDriverSelected = dinfo.fileBased;
 	}
-//	const bool fileDriverSelected = cdata.driverName.lower()==KexiDB::Driver::defaultFileBasedDriverName();
 	bool projectFileExists = false;
 
 	//obfuscate the password, if present
@@ -215,6 +223,7 @@ bool KexiStartupHandler::init(int argc, char **argv)
 	}
 	*/
 	
+#ifdef KEXI_SERVER_SUPPORT
 	const QString portStr = args->getOption("port");
 	if (!portStr.isEmpty()) {
 		bool ok;
@@ -227,9 +236,15 @@ bool KexiStartupHandler::init(int argc, char **argv)
 			return false;
 		}
 	}
+#endif
 
+#ifdef KEXI_SHOW_UNIMPLEMENTED
 	m_forcedFinalMode = args->isSet("final-mode");
 	m_forcedDesignMode = args->isSet("design-mode");
+#else
+	m_forcedFinalMode = false;
+	m_forcedDesignMode = false;
+#endif
 	m_createDB = args->isSet("createdb");
 	m_alsoOpenDB = args->isSet("create-opendb");
 	if (m_alsoOpenDB)
@@ -302,7 +317,7 @@ bool KexiStartupHandler::init(int argc, char **argv)
 			projectFileExists = finfo.exists();
 
 			if (m_dropDB && !projectFileExists) {
-				KMessageBox::sorry(0, i18n("Could not remove project. The file \"%1\" does not exist.")
+				KMessageBox::sorry(0, i18n("Could not remove project.\nThe file \"%1\" does not exist.")
 					.arg(cdata.dbFileName()));
 				return 0;
 			}
@@ -315,8 +330,11 @@ bool KexiStartupHandler::init(int argc, char **argv)
 		}
 		else {
 			if (fileDriverSelected) {
+				int detectOptions = 0;
+				if (m_dropDB)
+					detectOptions |= DontConvert;
 				cdata.driverName = KexiStartupHandler::detectDriverForFile( cdata.driverName,
-					cdata.fileName() );
+					cdata.fileName(), 0, detectOptions );
 				if (cdata.driverName.isEmpty())
 					return false;
 			}
@@ -470,13 +488,13 @@ bool KexiStartupHandler::init(int argc, char **argv)
 }
 
 QString KexiStartupHandler::detectDriverForFile( 
-	const QString& driverName, const QString &dbFileName, QWidget *parent )
+	const QString& driverName, const QString &dbFileName, QWidget *parent, int options )
 {
 	QString ret;
 	QFileInfo finfo(dbFileName);
 	if (dbFileName.isEmpty() || !finfo.isReadable()) {
 		KMessageBox::sorry(parent, i18n(
-			"Could not load project. The file \"%1\" does not exist.").arg(dbFileName));
+			"Could not load project.\nThe file \"%1\" does not exist.").arg(dbFileName));
 		return QString::null;
 	}
 	if (!finfo.isWritable()) {
@@ -504,8 +522,9 @@ QString KexiStartupHandler::detectDriverForFile(
 	kdDebug() << "KexiStartupHandler::detectProjectData(): driver name: " << ret << endl;
 //hardcoded for convenience:
 	const QString newFileFormat = "SQLite3";
-	if (detectedDriverName.lower()=="sqlite2"
-		  && KMessageBox::Yes == KMessageBox::questionYesNo(parent, i18n(
+	if (!(options & DontConvert) 
+		&& detectedDriverName.lower()=="sqlite2" && detectedDriverName.lower()!=driverName.lower()
+		&& KMessageBox::Yes == KMessageBox::questionYesNo(parent, i18n(
 			"Previous version of database file format (\"%1\") is detected in the \"%2\" project file.\n"
 			"Do you want to convert the project to a new \"%3\" format (recommended)?")
 			.arg(detectedDriverName).arg(dbFileName).arg(newFileFormat)) )

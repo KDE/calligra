@@ -53,6 +53,7 @@ protected:
 	void updateAutoSelectExtension() {};
 
 	QPushButton* m_okBtn;
+	QLineEdit* m_lineEdit;
 	KexiStartupFileDialogBasePrivate* d;
 };
 

@@ -55,6 +55,11 @@ public:
 		KexiDB::ConnectionData& cdata, const QString &dbname, QWidget *parent);
 #endif
 
+	/*! Options for detectDriverForFile() */
+	enum DetectDriverForFileOptions { 
+		DontConvert = 1 //skip asking for conversion (used e.g. when dropdb is called)
+	};
+
 	/*! Used for opening existing file-based projects. 
 	 Detects project file type by mime type and returns driver name suitable for it
 	 -- if it can be detected, otherwise - NULL. 
@@ -63,7 +68,7 @@ public:
 	 cdata.driverName is adjusted, if a file-based project has been detected.
 	*/
 	static QString detectDriverForFile( const QString& driverName, 
-		const QString &dbFileName, QWidget *parent = 0 );
+		const QString &dbFileName, QWidget *parent = 0, int options = 0 );
 
 	/*! Allows user to select a project with KexiProjectSelectorDialog.
 		\return selected project's data or NULL if dialog was cancelled.

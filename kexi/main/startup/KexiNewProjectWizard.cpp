@@ -157,6 +157,9 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 	m_project_selector->setSelectable(false);
 
 	addPage(m_server_db_name, i18n("Select Project's Caption & Database Name"));
+
+	setFinishEnabled(m_prjtype_sel,true);
+	setFinishEnabled(m_db_title,false);
 	setFinishEnabled(m_server_db_name,true);
 
 	//finish:
@@ -164,10 +167,15 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 	d->lv_types->setMaximumWidth(width()/2);
 	d->lv_types->setSelected(d->lvi_file, true);
 
+#if KEXI_SERVER_SUPPORT
 	//get settings
 	KGlobal::config()->setGroup("Startup");
 	//"" means goto 1st page
 	QString default_storage = KGlobal::config()->readEntry("DefaultStorageForNewProjects","");
+#else
+	QString default_storage = "file";
+	setBackEnabled(m_db_title, false);
+#endif
 	if (default_storage.lower()=="file") {
 		m_prjtype_sel->chk_always->setChecked(true);
 		showPage(m_db_title);
@@ -176,7 +184,6 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 		m_prjtype_sel->chk_always->setChecked(true);
 		showPage(m_conn_sel);
 	}
-
 }
 
 KexiNewProjectWizard::~KexiNewProjectWizard()

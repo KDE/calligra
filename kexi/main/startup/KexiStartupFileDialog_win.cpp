@@ -27,6 +27,7 @@
 #include <kiconloader.h>
 
 #include <qobjectlist.h>
+#include <qlineedit.h>
 
 class KexiStartupFileDialogBasePrivate
 {
@@ -49,6 +50,9 @@ KexiStartupFileDialogBase::KexiStartupFileDialogBase(
 	//find "OK" button
 	QObjectList *l = queryList( "QPushButton", "OK", false );
 	m_okBtn = dynamic_cast<QPushButton*>(l->first());
+	delete l;
+	l = queryList( "QLineEdit", "name/filter editor", false );
+	m_lineEdit = dynamic_cast<QLineEdit*>(l->first());
 	delete l;
 
 	adjustSize();

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KexiOpenExistingFile</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,9 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>495</width>
-            <height>135</height>
+            <width>352</width>
+            <height>108</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>KexiOpenExistingFile</string>
     </property>
     <vbox>
         <property name="name">
@@ -19,35 +22,25 @@
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QLayoutWidget">
+        <widget class="QLabel">
             <property name="name">
-                <cstring>layout2</cstring>
+                <cstring>lbl</cstring>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>lbl</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>&lt;b&gt;Select existing Kexi project file to open:&lt;/b&gt;
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>&lt;b&gt;Select existing Kexi project file to open:&lt;/b&gt;
 </string>
-                    </property>
-                    <property name="alignment">
-                        <set>WordBreak|AlignTop</set>
-                    </property>
-                </widget>
-            </hbox>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop</set>
+            </property>
         </widget>
         <widget class="QFrame">
             <property name="name">
@@ -66,48 +59,32 @@
                 <enum>Sunken</enum>
             </property>
         </widget>
-        <spacer>
-            <property name="name">
-                <cstring>spacer7</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout_adv</cstring>
+                <cstring>layout5</cstring>
             </property>
-            <hbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QPushButton">
+                <spacer row="0" column="1">
                     <property name="name">
-                        <cstring>btn_advanced</cstring>
+                        <cstring>spacer7</cstring>
                     </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
                     </property>
-                    <property name="text">
-                        <string>&amp;Advanced </string>
+                    <property name="sizeType">
+                        <enum>Fixed</enum>
                     </property>
-                </widget>
-                <widget class="QLabel">
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>12</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QLabel" row="1" column="1">
                     <property name="name">
                         <cstring>label</cstring>
                     </property>
@@ -126,7 +103,26 @@
                         <set>WordBreak|AlignTop</set>
                     </property>
                 </widget>
-            </hbox>
+                <widget class="QPushButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>btn_advanced</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Advanced </string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
+                    </property>
+                </widget>
+            </grid>
         </widget>
     </vbox>
 </widget>

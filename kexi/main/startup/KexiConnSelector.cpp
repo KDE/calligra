@@ -82,7 +82,7 @@ public:
 /*================================================================*/
 
 KexiConnSelectorWidget::KexiConnSelectorWidget( const KexiDBConnectionSet& conn_set, QWidget* parent,  const char* name )
-    : QWidgetStack( parent, name )
+	: QWidgetStack( parent, name )
 	,m_conn_set(&conn_set)
 	,d(new KexiConnSelectorWidgetPrivate())
 {
@@ -181,6 +181,11 @@ void KexiConnSelectorWidget::showSimpleConn()
 		}
 	}
 	raiseWidget(m_file);
+#ifndef KEXI_SERVER_SUPPORT
+	m_file->label->hide();
+	m_file->btn_advanced->hide();
+	m_file->label->parentWidget()->hide();
+#endif
 }
 
 int KexiConnSelectorWidget::selectedConnectionType() const

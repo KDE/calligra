@@ -93,6 +93,10 @@
 //show property editor
 #define KEXI_PROP_EDITOR 1
 
+//! @todo REENABLE when blinking and dock
+//! width changes will be removed in KMDI
+//#define PROPEDITOR_VISIBILITY_CHANGES
+
 //#undef KDOCKWIDGET_P
 #if defined(KDOCKWIDGET_P)
 #include <kdockwidget_private.h>
@@ -157,6 +161,7 @@ class KexiMainWindowImpl::Private
 #endif
 		//data menu
 		KAction *action_data_save_row;
+		KAction *action_data_cancel_row_changes;
 
 		//settings menu
 		KAction *action_configure;
@@ -276,6 +281,19 @@ class KexiMainWindowImpl::Private
 			pm->setItemVisible( pm->idAt(i), false );
 			if (alsoSeparator)
 				pm->setItemVisible( pm->idAt(i+1), false ); //also separator
+		}
+	}
+
+	void updatePropEditorVisibility(int viewMode)
+	{
+		if (propEditorToolWindow) {
+			if (viewMode==0 || viewMode==Kexi::DataViewMode) {
+#ifdef PROPEDITOR_VISIBILITY_CHANGES
+				propEditorToolWindow->hide();
+#endif
+			} else {
+				propEditorToolWindow->show();
+			}
 		}
 	}
 };
@@ -551,6 +569,12 @@ KexiMainWindowImpl::initActions()
 	d->action_data_save_row = createSharedAction(i18n("&Save Row"), "button_ok", SHIFT | Key_Return, "data_save_row");
 	d->action_data_save_row->setToolTip(i18n("Save currently selected table row's data"));
 	d->action_data_save_row->setWhatsThis(i18n("Saves currently selected table row's data."));
+	setActionVolatile( d->action_data_save_row, true );
+
+	d->action_data_cancel_row_changes = createSharedAction(i18n("&Cancel Row Changes"), "button_cancel", 0 , "data_cancel_row_changes");
+	d->action_data_cancel_row_changes->setToolTip(i18n("Cancel changes made to currently selected table row"));
+	d->action_data_cancel_row_changes->setWhatsThis(i18n("Cancels changes made to currently selected table row."));
+	setActionVolatile( d->action_data_cancel_row_changes, true );
 
 	action = createSharedAction(i18n("&Filter"), "filter", 0, "data_filter");
 	setActionVolatile( action, true );
@@ -813,16 +837,21 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 		showErrorMessage(i18n("You have requested selected objects to be opened automatically on startup. Several objects cannot be opened."),
 			QString("<ul>%1</ul>").arg(not_found_msg) );
 
+	d->updatePropEditorVisibility(d->curDialog ? d->curDialog->currentViewMode() : 0);
+#ifndef PROPEDITOR_VISIBILITY_CHANGES
+	d->propEditorToolWindow->hide();
+#endif
 
 	updateAppCaption();
 
+//	d->navToolWindow->wrapperWidget()->setFixedWidth(200);
 //js TODO: make visible FOR OTHER MODES if needed
 	if (mdiMode()==KMdi::ChildframeMode) {
 		//make docks visible again
 		if (!d->navToolWindow->wrapperWidget()->isVisible())
 			static_cast<KDockWidget*>(d->navToolWindow->wrapperWidget())->makeDockVisible();
-		if (!d->propEditorToolWindow->wrapperWidget()->isVisible())
-			static_cast<KDockWidget*>(d->propEditorToolWindow->wrapperWidget())->makeDockVisible();
+//		if (!d->propEditorToolWindow->wrapperWidget()->isVisible())
+//			static_cast<KDockWidget*>(d->propEditorToolWindow->wrapperWidget())->makeDockVisible();
 	}
 	return true;
 }
@@ -1460,6 +1489,8 @@ KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 //			d->propBuffer = d->curDialog->propertyBuffer();
 //			d->propEditor->editor()->setBuffer( d->propBuffer );
 //		}
+		if (d->curDialog->currentViewMode()!=0) //on opening new dialog it can be 0; we don't want this
+			d->updatePropEditorVisibility(d->curDialog->currentViewMode());
 	}
 
 	//update caption...
@@ -1930,6 +1961,7 @@ bool KexiMainWindowImpl::switchToViewMode(int viewMode)
 		guiFactory()->removeClient(d->curDialogViewGUIClient);
 	d->curDialogViewGUIClient=viewClient; //remember
 
+	d->updatePropEditorVisibility(viewMode);
 	invalidateSharedActions();
 	return true;
 }
@@ -2211,8 +2243,11 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 	KMdiMainFrm::closeWindow(dlg, layoutTaskBar);
 
 	//focus navigator if nothing else available
-	if (d->dialogs.isEmpty() && d->nav)
-		d->nav->setFocus();
+	if (d->dialogs.isEmpty()) {
+		if (d->nav)
+			d->nav->setFocus();
+		d->updatePropEditorVisibility(0);
+	}
 
 	invalidateActions();
 	d->insideCloseDialog = false;
@@ -2449,6 +2484,8 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 	}
 	else {
 		dlg = d->prj->openObject(this, *item, viewMode);
+		if (dlg)
+			d->updatePropEditorVisibility(dlg->currentViewMode());
 	}
 
 	if (!dlg || !activateWindow(dlg)) {
