@@ -51,10 +51,12 @@ VSelectToolBar::VSelectToolBar( KarbonView *view, const char* name ) : KToolBar(
 	QLabel *w_label = new QLabel( i18n( "Width:" ), this );
 	insertWidget( 5, w_label->width(), w_label );
 	m_width = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	connect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( slotWidthChanged( double ) ) );
 	insertWidget( 6, m_width->width(), m_width );
 	QLabel *h_label = new QLabel( i18n( "Height:" ), this );
 	insertWidget( 7, h_label->width(), h_label );
 	m_height = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	connect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( slotHeightChanged( double ) ) );
 	insertWidget( 8, m_height->width(), m_height );
 
 	connect( m_view, SIGNAL( selectionChange() ), this, SLOT( slotSelectionChanged() ) );
@@ -76,6 +78,28 @@ VSelectToolBar::slotYChanged( double newval )
 {
 	double dy = newval - m_view->part()->document().selection()->boundingBox().topLeft().y();
 	m_view->part()->addCommand( new VTranslateCmd( &m_view->part()->document(), 0.0, dy ), true );
+}
+
+void
+VSelectToolBar::slotWidthChanged( double newval )
+{
+	if( newval != 0.0 )
+	{
+		double sx = newval / m_view->part()->document().selection()->boundingBox().width();
+		KoPoint sp = m_view->part()->document().selection()->boundingBox().topLeft();
+		m_view->part()->addCommand( new VScaleCmd( &m_view->part()->document(), sp, sx, 1.0 ), true );
+	}
+}
+
+void
+VSelectToolBar::slotHeightChanged( double newval )
+{
+	if( newval != 0.0 )
+	{
+		double sy = newval / m_view->part()->document().selection()->boundingBox().height();
+		KoPoint sp = m_view->part()->document().selection()->boundingBox().bottomLeft();
+		m_view->part()->addCommand( new VScaleCmd( &m_view->part()->document(), sp, 1.0, sy ), true );
+	}
 }
 
 void

@@ -38,6 +38,8 @@ public slots:
 	void slotSelectionChanged();
 	void slotXChanged( double );
 	void slotYChanged( double );
+	void slotWidthChanged( double );
+	void slotHeightChanged( double );
 
 private:
 	KoUnitDoubleSpinBox *m_x;
