@@ -181,20 +181,6 @@ void KPresenterViewIface::extraPenBrush()
     view->extraPenBrush();
 }
 
-void KPresenterViewIface::extraConfigPie()
-{
-    view->extraConfigPie();
-}
-
-void KPresenterViewIface::extraConfigRect()
-{
-    view->extraConfigRect();
-}
-
-void KPresenterViewIface::extraConfigPolygon()
-{
-    view->extraConfigPolygon();
-}
 
 void KPresenterViewIface::extraRaise()
 {

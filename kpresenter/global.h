@@ -236,6 +236,12 @@ enum PictureMirrorType {
     PM_HORIZONTALANDVERTICAL = 3
 };
 
+enum PropValue {
+    STATE_ON = 0,
+    STATE_OFF = 1,
+    STATE_UNDEF = 2
+};
+
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;
 

@@ -980,15 +980,25 @@ void KPresenterView::extraPenBrush()
 
     bool result = m_canvas->getProtect( protect );
     if ( m_canvas->differentProtect( result ) )
-        styleDia->setProtectTripleState();
-    else
-        styleDia->setProtected( result );
 
+        styleDia->setProtected(STATE_UNDEF);
+    else
+    {
+        if (result)
+            styleDia->setProtected( STATE_ON );
+        else
+            styleDia->setProtected( STATE_OFF );
+    }
     result = m_canvas->getKeepRatio( keepRatio );
     if ( m_canvas->differentKeepRatio( result ) )
-        styleDia->setKeepRatioTripleState();
+        styleDia->setKeepRatio(STATE_UNDEF);
     else
-        styleDia->setKeepRatio( result );
+    {
+        if ( result )
+            styleDia->setKeepRatio( STATE_ON );
+        else
+            styleDia->setKeepRatio( STATE_OFF);
+    }
 
     styleDia->setProtectContent( m_canvas->getProtectContent(protectContent));
 
@@ -1000,130 +1010,6 @@ void KPresenterView::extraPenBrush()
     QObject::disconnect( styleDia, SIGNAL( styleOk() ), this, SLOT( styleOk() ) );
     delete styleDia;
     styleDia = 0;
-}
-
-/*===============================================================*/
-void KPresenterView::extraConfigPie()
-{
-//     if ( confPieDia ) {
-//         delete confPieDia;
-//         confPieDia = 0;
-//     }
-
-//     confPieDia = new ConfPieDia( this, "ConfPageDia" );
-//     confPieDia->setMaximumSize( confPieDia->width(), confPieDia->height() );
-//     confPieDia->setMinimumSize( confPieDia->width(), confPieDia->height() );
-//     confPieDia->setType( m_canvas->activePage()->getPieType( pieType ) );
-//     confPieDia->setAngle( m_canvas->activePage()->getPieAngle( pieAngle ) );
-//     confPieDia->setLength( m_canvas->activePage()->getPieLength( pieLength ) );
-//     confPieDia->setPenBrush( m_canvas->activePage()->getPen( pen ), m_canvas->activePage()->getBrush( brush ) );
-
-//     QObject::connect( confPieDia, SIGNAL( confPieDiaOk() ), this, SLOT( confPieOk() ) );
-//     m_canvas->setToolEditMode( TEM_MOUSE );
-//     confPieDia->exec();
-
-//     QObject::disconnect( confPieDia, SIGNAL( confPieDiaOk() ), this, SLOT( confPieOk() ) );
-//     delete confPieDia;
-//     confPieDia = 0;
-}
-
-/*===============================================================*/
-void KPresenterView::extraConfigRect()
-{
-//     if ( confRectDia ) {
-//         delete confRectDia;
-//         confRectDia = 0;
-//     }
-
-//     confRectDia = new ConfRectDia( this, "ConfRectDia" );
-//     confRectDia->setMaximumSize( confRectDia->width(), confRectDia->height() );
-//     confRectDia->setMinimumSize( confRectDia->width(), confRectDia->height() );
-//     confRectDia->setRnds( m_canvas->activePage()->getRndX( rndX ), m_canvas->activePage()->getRndY( rndY ) );
-//     QObject::connect( confRectDia, SIGNAL( confRectDiaOk() ), this, SLOT( confRectOk() ) );
-//     m_canvas->setToolEditMode( TEM_MOUSE );
-//     confRectDia->exec();
-
-//     QObject::disconnect( confRectDia, SIGNAL( confRectDiaOk() ), this, SLOT( confRectOk() ) );
-//     delete confRectDia;
-//     confRectDia = 0;
-}
-
-/*===============================================================*/
-void KPresenterView::extraConfigPolygon()
-{
-//     bool _checkConcavePolygon;
-//     int _cornersValue;
-//     int _sharpnessValue;
-
-//     if ( !m_canvas->activePage()->getPolygonSettings( &_checkConcavePolygon, &_cornersValue, &_sharpnessValue ) ) {
-//         _checkConcavePolygon = checkConcavePolygon;
-//         _cornersValue = cornersValue;
-//         _sharpnessValue = sharpnessValue;
-//     }
-
-//     if ( confPolygonDia ) {
-//         delete confPolygonDia;
-//         confPolygonDia = 0;
-//     }
-
-//     confPolygonDia = new ConfPolygonDia( this, "ConfPolygonDia", _checkConcavePolygon, _cornersValue, _sharpnessValue );
-//     confPolygonDia->setMaximumSize( confPolygonDia->width(), confPolygonDia->height() );
-//     confPolygonDia->setMinimumSize( confPolygonDia->width(), confPolygonDia->height() );
-
-//     QObject::connect( confPolygonDia, SIGNAL( confPolygonDiaOk() ), this, SLOT( confPolygonOk() ) );
-
-//     m_canvas->setToolEditMode( TEM_MOUSE );
-
-//     confPolygonDia->exec();
-
-//     QObject::disconnect( confPolygonDia, SIGNAL( confPolygonDiaOk() ), this, SLOT( confPolygonOk() ) );
-//     delete confPolygonDia;
-//     confPolygonDia = 0;
-}
-
-/*===============================================================*/
-void KPresenterView::extraConfigPicture()
-{
-//     PictureMirrorType _mirrorType;
-//     int _depth;
-//     bool _swapRGB;
-//     bool _grayscal;
-//     int _bright;
-//     QPixmap _origPixmap;
-
-//     if ( !m_canvas->activePage()->getPictureSettingsAndPixmap( &_mirrorType, &_depth, &_swapRGB, &_grayscal, &_bright, &_origPixmap ) ) {
-//         _mirrorType = mirrorType;
-//         _depth = depth;
-//         _swapRGB= swapRGB;
-//         _grayscal = grayscal;
-//         _bright = bright;
-//         _origPixmap = QPixmap();
-//     }
-
-//     if ( _origPixmap.isNull() )
-//     {
-//         _origPixmap=BarIcon("kpresenter", KIcon::SizeMedium);
-//     }
-
-//     if ( confPictureDia ) {
-//         delete confPictureDia;
-//         confPictureDia = 0;
-//     }
-
-
-//     confPictureDia = new ConfPictureDia( this, "ConfPictureDia", _mirrorType, _depth, _swapRGB, _grayscal, _bright, _origPixmap );
-//     confPictureDia->setMaximumSize( confPictureDia->width(), confPictureDia->height() );
-//     confPictureDia->setMinimumSize( confPictureDia->width(), confPictureDia->height() );
-
-//     QObject::connect( confPictureDia, SIGNAL( confPictureDiaOk() ), this, SLOT( confPictureOk() ) );
-
-//     m_canvas->setToolEditMode( TEM_MOUSE );
-
-//     confPictureDia->exec();
-
-//     QObject::disconnect( confPictureDia, SIGNAL( confPictureDiaOk() ), this, SLOT( confPictureOk() ) );
-//     delete confPictureDia;
-//     confPictureDia = 0;
 }
 
 /*===============================================================*/
@@ -2670,25 +2556,6 @@ void KPresenterView::setupActions()
 				       this, SLOT( extraPenBrush() ),
 				       actionCollection(), "extra_properties" );
 
-//     actionExtraConfigPie = new KAction( i18n( "Configure Pie/&Arc/Chord..." ),
-// 					"edit_pie", 0,
-// 					this, SLOT( extraConfigPie() ),
-// 					actionCollection(), "extra_configpie" );
-
-//     actionExtraConfigRect = new KAction( i18n( "Configure &Rectangle..." ),
-// 					 "rectangle2", 0,
-// 					 this, SLOT( extraConfigRect() ),
-// 					 actionCollection(), "extra_configrect" );
-
-//     actionExtraConfigPolygon = new KAction( i18n( "Configure Po&lygon..." ),
-//                                             "edit_polygon", 0,
-//                                             this, SLOT( extraConfigPolygon() ),
-//                                             actionCollection(), "extra_configpolygon" );
-
-//     actionExtraConfigPolygon = new KAction( i18n( "Configure P&icture..." ),
-//                                             "edit_picture", 0,
-//                                             this, SLOT( extraConfigPicture() ),
-//                                             actionCollection(), "extra_configpicture" );
 
     actionExtraRaise = new KAction( i18n( "Ra&ise object(s)" ), "raise",
 				    CTRL +SHIFT+ Key_R, this, SLOT( extraRaise() ),

@@ -197,15 +197,12 @@ public:
 
     bool isOneObject()const {return oneObject;}
 
-    void setProtected( bool p );
+    void setProtected( PropValue p );
     bool isProtected()const;
-    void setProtectTripleState();
     bool protectNoChange()const;
 
-
-    void setKeepRatio( bool p );
+    void setKeepRatio( PropValue p );
     bool isKeepRatio()const;
-    void setKeepRatioTripleState();
     bool keepRatioNoChange()const;
 
 
@@ -250,10 +247,10 @@ private:
     int flags;
     bool lockUpdate, stickyObj, oneObject;
     bool allTextObj;
-    bool oldSticky,  oldProtect, oldKeepRatio;
+    bool oldSticky;
     bool oldProtectContent;
-    bool oldkeepRatiotripleState;
-    bool oldProtectTripleState;
+    PropValue oldProtect;
+    PropValue oldKeepRatio;
 private slots:
     void slotReset();
     void styleDone();

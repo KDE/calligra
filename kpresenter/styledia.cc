@@ -659,10 +659,10 @@ StyleDia::StyleDia( QWidget* parent, const char* name, KPresenterDoc *_doc, bool
     lockUpdate = true;
     m_canvas = m_doc->getKPresenterView()->getCanvas();
     flags = m_canvas->getPenBrushFlags();
-    oldProtect = false;
-    oldkeepRatiotripleState=false;
-    oldProtectTripleState = false;
-    oldKeepRatio=false;
+
+    oldProtect=STATE_OFF;
+    oldKeepRatio=STATE_OFF;
+
     oldRect=KoRect();
 
     // allways create a pen- & brush-dialog or rewrite KPrPage::setPenBrush :-)
@@ -703,15 +703,8 @@ void StyleDia::slotReset()
     if (stickyObj)
         setSticky( oldSticky );
 
-    if ( !oldProtectTripleState )
-        setProtected( oldProtect );
-    else
-        setProtectTripleState();
-
-    if ( !oldkeepRatiotripleState )
-        setKeepRatio( oldKeepRatio );
-    else
-        setKeepRatioTripleState();
+    setProtected( oldProtect );
+    setKeepRatio( oldKeepRatio );
     setSize( oldRect);
 }
 
@@ -942,10 +935,25 @@ bool StyleDia::isSticky() const
     return false;
 }
 
-void StyleDia::setProtected( bool p )
+void StyleDia::setProtected( PropValue p )
 {
     oldProtect=p;
-    protect->setChecked( p );
+    switch( oldProtect )
+    {
+    case STATE_ON:
+        protect->setChecked( true );
+        break;
+    case STATE_OFF:
+        protect->setChecked( false );
+        break;
+    case STATE_UNDEF:
+        protect->setTristate( true );
+        protect->setNoChange();
+        break;
+    default:
+        protect->setChecked( false );
+        break;
+    }
     protectChanged();
 }
 
@@ -954,32 +962,31 @@ bool StyleDia::isProtected() const
     return protect->isChecked();
 }
 
-void StyleDia::setProtectTripleState()
-{
-    oldProtect = false;
-    protect->setTristate( true );
-    protect->setNoChange();
-    oldProtectTripleState =true;
-}
 
 bool StyleDia::protectNoChange()const
 {
     return protect->state()== QButton::NoChange;
 }
 
-void StyleDia::setKeepRatio( bool p )
+void StyleDia::setKeepRatio( PropValue p )
 {
     oldKeepRatio = p;
-    keepRatio->setChecked( p );
-    oldkeepRatiotripleState = false;
-}
-
-void StyleDia::setKeepRatioTripleState()
-{
-    oldKeepRatio = false;
-    keepRatio->setTristate( true );
-    keepRatio->setNoChange();
-    oldkeepRatiotripleState =true;
+    switch( p )
+    {
+    case STATE_ON:
+        keepRatio->setChecked( true );
+        break;
+    case STATE_OFF:
+        keepRatio->setChecked( false );
+        break;
+    case STATE_UNDEF:
+        keepRatio->setTristate( true );
+        keepRatio->setNoChange();
+        break;
+    default:
+        keepRatio->setChecked( false );
+        break;
+    }
 }
 
 bool StyleDia::keepRatioNoChange()const

@@ -197,10 +197,6 @@ public slots:
 
     // extra menu
     void extraPenBrush();
-    void extraConfigPie();
-    void extraConfigRect();
-    void extraConfigPolygon();
-    void extraConfigPicture();
     void extraRaise();
     void extraLower();
     void extraRotate();
@@ -834,10 +830,6 @@ private:
     KAction *actionTextInsertPageNum;
 
     KAction *actionExtraPenBrush;
-    KAction *actionExtraConfigPie;
-    KAction *actionExtraConfigRect;
-    KAction *actionExtraConfigPolygon;
-    KAction *actionExtraConfigPicture;
     KAction *actionExtraRaise;
     KAction *actionExtraLower;
 

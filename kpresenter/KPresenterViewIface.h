@@ -81,9 +81,6 @@ k_dcop:
 
     // extra menu
     virtual void extraPenBrush();
-    virtual void extraConfigPie();
-    virtual void extraConfigRect();
-    virtual void extraConfigPolygon();
     virtual void extraRaise();
     virtual void extraLower();
     virtual void extraRotate();
