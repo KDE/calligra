@@ -4469,7 +4469,7 @@ void KPresenterView::setRanges()
 /*==============================================================*/
 void KPresenterView::skipToPage( int num )
 {
-    if ( num < 0 || num > static_cast<int>( m_pKPresenterDoc->getPageNums() ) - 1 || m_pKPresenterDoc->isEmbedded() || !m_canvas )
+    if ( num < 0 || num > static_cast<int>( m_pKPresenterDoc->getPageNums() ) - 1 /*|| m_pKPresenterDoc->isEmbedded()*/ || !m_canvas )
 	return;
     m_canvas->exitEditMode();
     vert->setValue( 0 );
