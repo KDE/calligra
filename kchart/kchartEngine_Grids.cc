@@ -55,8 +55,10 @@ int kchartEngine::doLabels() {
 
 
 
-void kchartEngine::drawBorder() {
-    if( params->border ) {
+void kchartEngine::drawBorder() 
+{
+    if( params->border ) 
+    {
       p->setPen( LineColor );
       p->drawLine( PX(0), PY(lowest), PX(num_points-1+(params->do_bar()?2:0)), PY(lowest) );
 
@@ -64,7 +66,8 @@ void kchartEngine::drawBorder() {
       p->drawLine( PX(0), PY(highest), PX(num_points-1+(params->do_bar()?2:0)),  PY(highest) );
       setno = 0;
     }
-  if( params->border ) {
+  if( params->border ) 
+   {
     int	x1, y1, x2, y2;
 
     x1 = PX(0);
@@ -299,37 +302,44 @@ void kchartEngine::drawVYAxisTitle() {
       // PENDING(kalle) Check whether this really prints correctly
       p->setFont( params->yTitleFont() );
       p->setPen( titlecolor );
-      p->rotate( 90 );
+      p->rotate( -90 );
       //when you make a rotate axes are rotating
-      // in drawText x=>y and y=>-x
+      // in drawText x=>-y and y=>x
 
       /*p->drawText( imagewidth-(1+params->yTitleFontHeight()),
 		   params->ytitle2.length()*params->yTitleFontWidth()/2 +
 		   grapheight/2, params->ytitle2 );
       */
-      p->drawText(params->ytitle2.length()*params->yTitleFontWidth()/2 +
-		   grapheight/2 ,-(imagewidth-(1+params->yTitleFontHeight())),
+      p->drawText(-(params->ytitle2.length()*params->yTitleFontWidth()/2 +
+		   grapheight/2) ,(imagewidth-(1+params->yTitleFontHeight())),
                    params->ytitle2 );
-      p->rotate( -90 );
+      p->rotate( 90 );
     }
 }
 
 
 void kchartEngine::drawYAxisTitle() {
-    if( params->yaxis && !params->ytitle.isEmpty() ) {
-      int	ytit_len = params->ytitle.length()*params->yTitleFontWidth();
-      QColor	titlecolor = params->YTitleColor==Qt::black?
-	PlotColor: params->YTitleColor;
+    if( params->yaxis && !params->ytitle.isEmpty() ) 
+    {
+      int ytit_len = params->ytitle.length()*params->yTitleFontWidth();
+      /*QColor	titlecolor = params->YTitleColor==Qt::black?
+	PlotColor: params->YTitleColor;*/
+      QColor titlecolor = params->YTitleColor;
       p->setPen( titlecolor );
       p->setFont( params->yTitleFont() );
-      p->drawText( 0, imageheight/2 + ytit_len/2, params->ytitle );
+      p->rotate(-90);
+      //p->drawText( 0, imageheight/2 + ytit_len/2, params->ytitle );
+      p->drawText(- imageheight/2 -ytit_len/2,
+		      params->yTitleFontHeight(),params->ytitle);
+
+      p->rotate(90);
     }
 }
 
-void kchartEngine::draw3DGrids() {
-  for( setno=(params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets: 1) - 1;
-       setno > 0;
-       --setno ) {
+void kchartEngine::draw3DGrids() 
+{
+  for( setno=(params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets: 1) - 1;setno > 0; --setno ) 
+  {
     p->setPen( GridColor );
     p->drawLine( PX(0), PY(lowest), PX(0), PY(highest) );
     p->drawLine( PX(0), PY(lowest), PX(num_points-1+(params->do_bar()?2:0)), PY(lowest) );
@@ -338,7 +348,8 @@ void kchartEngine::draw3DGrids() {
 }
 
 
-void kchartEngine::drawShelfGrids() {
+void kchartEngine::drawShelfGrids() 
+{
   int	x1, x2, y1, y2;
   // tics
   x1 = PX(0);
@@ -420,10 +431,10 @@ void kchartEngine::drawXTicks()
 	                PY(lowest) + 2 + 1 + LBXW*xlen,
 	                (*sublabelit).latin1() );*/
 
-	                p->drawText(15+PY(lowest) + 2 + 1 + LBXW*xlen ,
+	                p->drawText((15+PY(lowest) + 2 + 1 + LBXW*xlen) ,
 	                        -(xlbl_strt + (LBXH-1)*xstrs_num),
 	                        (*sublabelit).latin1() );
-	                        p->rotate( -90 );
+	                p->rotate( -90 );
 
 	                }
 	          #undef LBXW

@@ -100,13 +100,15 @@ void kchartEngine::titleText() {
 
     if( !params->xtitle.isEmpty() )
         {
-        QColor	titlecolor = params->XTitleColor == Qt::black ?
-                        PlotColor: params->XTitleColor;
+        //QColor	titlecolor = params->XTitleColor == Qt::black ?
+        //                PlotColor: params->XTitleColor;
+        
+        QColor	titlecolor = params->XTitleColor;
         p->setPen( titlecolor );
         p->setFont( params->xTitleFont() );
         p->drawText( imagewidth/2 - params->xtitle.length()*params->xTitleFontWidth()/2,
                         imageheight-params->xTitleFontHeight()-1, params->xtitle );
-    }
+    	}
 }
 
 

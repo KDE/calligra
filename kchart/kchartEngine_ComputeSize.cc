@@ -181,12 +181,12 @@ void kchartEngine::computeSize() {
       if( vlowest != 0.0 )
 	vlowest -= (vhighest-vlowest) / (num_yintrvls*2.0);
 
-      if( params->yaxis2 ) {
-	char	svlongest[32];
-	int		lbl_len_low  = sprintf( svlongest, !params->ylabel2_fmt.isEmpty()? params->ylabel2_fmt: QString( "%.0f" ), vlowest );
-	int		lbl_len_high = sprintf( svlongest, !params->ylabel2_fmt.isEmpty()? params->ylabel2_fmt: QString( "%.0f" ), vhighest );
-	vlabel_wth = 1
-	  + QMAX( lbl_len_low,lbl_len_high ) * params->yAxisFontWidth();
+      if( params->yaxis2 )
+      {
+	char svlongest[32];
+	int lbl_len_low  = sprintf( svlongest, !params->ylabel2_fmt.isEmpty()? params->ylabel2_fmt: QString( "%.0f" ), vlowest );
+	int lbl_len_high = sprintf( svlongest, !params->ylabel2_fmt.isEmpty()? params->ylabel2_fmt: QString( "%.0f" ), vhighest );
+	vlabel_wth = 1+ QMAX( lbl_len_low,lbl_len_high ) * params->yAxisFontWidth();
       }
     }
   }

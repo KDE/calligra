@@ -51,8 +51,9 @@ int kchartEngine::init() {
         return -1;
         }
 
-  num_hlc_sets = params->has_hlc_sets() ? num_sets : 0;
-
+  //num_hlc_sets = params->has_hlc_sets() ? num_sets : 0;
+  //you are 2 curves
+  num_hlc_sets = params->has_hlc_sets() ? 1 : 0;
   // And num_points is the number of columns
 
   num_points = data->cols();
