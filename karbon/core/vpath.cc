@@ -310,22 +310,21 @@ VPath::arcTo(
 
 	// We need to calculate the tangent points. Therefore calculate tangents
 	// T10=P1P0 and T12=P1P2 first.
-	KoPoint t10 = currentPoint() - p1;
-	KoPoint t12 = p2 - p1;
+	double dx0 = currentPoint().x() - p1.x();
+	double dy0 = currentPoint().y() - p1.y();
+	double dx2 = p2.x() - p1.x();
+	double dy2 = p2.y() - p1.y();
 
 	// Calculate distance squares.
-	double dsqT10 = t10 * t10;
-	double dsqT12 = t12 * t12;
+	double dsqT10 = dx0 * dx0 + dy0 * dy0;
+	double dsqT12 = dx2 * dx2 + dy2 * dy2;
 
 	// We now calculate tan(a/2) where a is the angle between T10 and T12.
 	// We benefit from the facts T10*T12 = |T10|*|T12|*cos(a),
 	// |T10xT12| = |T10|*|T12|*sin(a) (cross product) and tan(a/2) = sin(a)/[1-cos(a)].
-	double num = t10.x() * t12.y() - t10.y() * t12.x();
+	double num = dy0 * dx2 - dy2 * dx0;
 
-	double denom =
-		sqrt( dsqT10 * dsqT12 )
-		- t10.x() * t12.x()
-		+ t10.y() * t12.y();
+	double denom = sqrt( dsqT10 * dsqT12 ) - ( dx0 * dx2 + dy0 * dy2 );
 
 	// The points are colinear.
 	if( 1.0 + denom == 1.0 )
@@ -339,14 +338,14 @@ VPath::arcTo(
 		double dP1B0 = fabs( r * num / denom );
 
 		// B0 = P1 + |P1B0| * T10/|T10|.
-		KoPoint b0 = p1 + t10 * ( dP1B0 / sqrt( dsqT10 ) );
+		KoPoint b0 = p1 + KoPoint( dx0, dy0 ) * ( dP1B0 / sqrt( dsqT10 ) );
 
 		// If B0 deviates from current point P0, add a line to it.
 		if( !b0.isNear( currentPoint(), VGlobal::isNearRange ) )
 			lineTo( b0 );
 
 		// B3 = P1 + |P1B3| * T12/|T12|.
-		KoPoint b3 = p1 + t12 * ( dP1B0 / sqrt( dsqT12 ) );
+		KoPoint b3 = p1 + KoPoint( dx2, dy2 ) * ( dP1B0 / sqrt( dsqT12 ) );
 
 
 		// The two bezier-control points are located on the tangents at a fraction

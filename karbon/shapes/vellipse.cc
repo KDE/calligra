@@ -54,50 +54,31 @@ VEllipse::init()
 	    nsegs = floor( ( m_endAngle - m_startAngle ) / 90.0 );
 	else
 	    nsegs = 4 - floor( ( m_startAngle - m_endAngle ) / 90.0 );
-	double origEndAngle = m_endAngle;
 	double startAngle = VGlobal::pi_2 * ( m_startAngle / 90.0 );
 	double endAngle   = VGlobal::pi_2 * ( m_endAngle / 90.0 );
 	// Create (half-)unity circle with topLeft at (0|0):
 	double currentAngle = -startAngle - VGlobal::pi_2;
 	KoPoint start( 0.5 * sin( -startAngle ), 0.5 * cos( -startAngle ) );
-	kdDebug() << "start : " << start << endl;
 	moveTo( KoPoint( start.x(), start.y() ) );
-	KoPoint current;
 	double midAngle = currentAngle + VGlobal::pi_2 / 2.0;
 	for( int i = 0;i < nsegs;i++ )
 	{
-		current = KoPoint( 0.5 * sin( currentAngle ), 0.5 * cos( currentAngle ) );
+		KoPoint current = KoPoint( 0.5 * sin( currentAngle ), 0.5 * cos( currentAngle ) );
 		currentAngle -= VGlobal::pi_2;
-		if( currentAngle < 0 )
-			currentAngle += VGlobal::pi * 2.0;
 		midAngle -= VGlobal::pi_2;
-		if( midAngle < 0 )
-			midAngle += VGlobal::pi * 2.0;
 		arcTo( KoPoint( cos( midAngle ) * ( 0.5 / sin( VGlobal::pi_2 / 2.0 ) ) ,
 						-sin( midAngle ) * ( 0.5 / sin( VGlobal::pi_2 / 2.0 ) ) ) , current, 0.5 );
-	kdDebug() << "ctrl x : " << cos( midAngle ) * ( 0.5 / sin( VGlobal::pi_2 / 2.0 ) ) << endl;
-	kdDebug() << "ctrl y : " << -sin( midAngle ) * ( 0.5 / sin( VGlobal::pi_2 / 2.0 ) ) << endl;
-	kdDebug() << "current : " << current << endl;
-	kdDebug() << "currentAngle : " << currentAngle << endl;
-	kdDebug() << "midAngle : " << midAngle << endl;
 	}
-	//currentAngle += VGlobal::pi_2;
-	double rest = (int)origEndAngle % 90;
-	midAngle = currentAngle - ( rest / 360.0 ) * VGlobal::pi;
-	rest = rest / 2.0;
-	rest = ( rest / 90.0 ) * VGlobal::pi_2;
-	KoPoint end( 0.5 * sin( -endAngle ), 0.5 * cos( -endAngle ) );
-	//arcTo( KoPoint( cos( midAngle ) * ( 0.5 / cos( rest ) ), -sin( midAngle ) * ( 0.5 / cos( rest ) ) ), end, 0.5 );
-	lineTo( end );
-	//arcTo( KoPoint( cos( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ),
-	//				-sin( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ) ), end, 0.5 );
-	//kdDebug() << "ctrl x : " << cos( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ) << endl;
-	//kdDebug() << "ctrl y : " << -sin( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ) << endl;
-	kdDebug() << "rest : " << rest << endl;
-	kdDebug() << "endAngle : " << endAngle << endl;
-	kdDebug() << "currentAngle : " << currentAngle << endl;
-	kdDebug() << "midAngle : " << midAngle << endl;
-	kdDebug() << "end : " << end << endl;
+	double rest = ( -endAngle - VGlobal::pi_2 - currentAngle ) * 90.0 / VGlobal::pi_2;
+	if( rest > 0 )
+		rest -= 360.0;
+	if( rest != 0 )
+	{
+		midAngle = currentAngle - ( -rest / 360.0 ) * VGlobal::pi;
+		KoPoint end( 0.5 * sin( -endAngle ), 0.5 * cos( -endAngle ) );
+		arcTo( KoPoint( cos( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ),
+					-sin( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ) ), end, 0.5 );
+	}
 	if( m_type == cut )
 		lineTo( KoPoint( 0.0, 0.0 ) );
 	if( m_type != arc )
