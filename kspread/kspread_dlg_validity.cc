@@ -295,8 +295,8 @@ if( chooseType->currentItem()==0)
         result.m_cond=Equal;
         result.message=message->text();
         result.title=title->text();
-        result.valMin=val_min->text().toDouble();
-        result.valMax=val_max->text().toDouble();
+        result.valMin=0;
+        result.valMax=0;
         }
 else
         {
@@ -356,8 +356,8 @@ else
                 }
         result.message=message->text();
         result.title=title->text();
-        result.valMin=val_min->text().toDouble();
-        result.valMax=val_max->text().toDouble();
+        result.valMin=QMIN(val_min->text().toDouble(),val_max->text().toDouble());
+        result.valMax=QMAX(val_max->text().toDouble(),val_min->text().toDouble());
         }
 
 m_pView->activeTable()->setValidity( QPoint(  m_pView->canvasWidget()->markerColumn(),

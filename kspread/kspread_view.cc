@@ -1505,7 +1505,7 @@ void KSpreadView::replace()
 }
 
 void KSpreadView::conditional()
-{
+{  
 //  KSpreadconditional *dlg=new KSpreadconditional( this,"conditional",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
   QRect rect( activeTable()-> selectionRect() );
 
