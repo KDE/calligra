@@ -2592,6 +2592,7 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 {
 	if (!d->prj || !item)
 		return 0;
+	Kexi::WaitCursor wait;
 	KexiDialogBase *dlg = d->dialogs[ item->identifier() ];
 	bool needsUpdateViewGUIClient = true;
 	if (dlg) {
