@@ -41,6 +41,7 @@ class Rect;
 class QColor;
 class QSize;
 class QScrollBar;
+class KPrinter;
 
 class Canvas : public QWidget {
   Q_OBJECT
@@ -120,8 +121,8 @@ public:
   void setToolController (ToolController *tc);
 
   /* Printing */
-  void setupPrinter( QPrinter &printer );
-  void print( QPrinter &printer );
+  void setupPrinter( KPrinter &printer );
+  void print( KPrinter &printer );
 
   void showBasePoints (bool flag = true);
   void setOutlineMode (bool flag);

@@ -32,7 +32,7 @@
 #include <math.h>
 
 #include <qpainter.h>
-#include <qprinter.h>
+#include <kprinter.h>
 #include <qprintdialog.h>
 #include <qcolor.h>
 #include <qdatetime.h>
@@ -608,32 +608,32 @@ void Canvas::updateRegion (const Rect& reg)
 
 /***********************[PRINTER]*************************/
 
-void Canvas::setupPrinter( QPrinter &printer )
+void Canvas::setupPrinter( KPrinter &printer )
 {
   printer.setDocName (document->fileName ());
   printer.setCreator ("KIllustrator");
   switch (document->activePage()->pageLayout ().format) {
   case PG_DIN_A4:
-    printer.setPageSize (QPrinter::A4);
+    printer.setPageSize (KPrinter::A4);
     break;
   case PG_DIN_A5:
-    printer.setPageSize (QPrinter::B5);
+    printer.setPageSize (KPrinter::B5);
     break;
   case PG_US_LETTER:
-    printer.setPageSize (QPrinter::Letter);
+    printer.setPageSize (KPrinter::Letter);
     break;
   case PG_US_LEGAL:
-    printer.setPageSize (QPrinter::Legal);
+    printer.setPageSize (KPrinter::Legal);
     break;
   default:
     break;
   }
   printer.setOrientation (document->activePage()->pageLayout ().orientation == PG_PORTRAIT ?
-                          QPrinter::Portrait : QPrinter::Landscape);
+                          KPrinter::Portrait : KPrinter::Landscape);
   printer.setFullPage(true);
 }
 
-void Canvas::print( QPrinter &printer )
+void Canvas::print( KPrinter &printer )
 {
     QPainter paint;
     paint.begin (&printer);

@@ -115,8 +115,8 @@ protected:
 
     virtual void updateReadWrite( bool readwrite );
 
-    virtual void setupPrinter( QPrinter &printer );
-    virtual void print( QPrinter &printer );
+    virtual void setupPrinter( KPrinter &printer );
+    virtual void print( KPrinter &printer );
 
 protected slots:
    void toolActivated(Tool::ToolID, bool show);

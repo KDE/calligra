@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <qprinter.h>
+#include <kprinter.h>
 #include <qpainter.h>
 #include <qglobal.h>
 #include "GDocument.h"
@@ -51,7 +51,7 @@ bool EPSExport::exportToFile (GDocument* doc) {
   // compute bounding box
   Rect box = doc->activePage()->boundingBoxForAllObjects ();
 
-  QPrinter printer;
+  KPrinter printer;
   printer.setDocName (doc->fileName ());
   printer.setCreator ("KIllustrator");
   printer.setOutputFileName (outputFileName ());
@@ -59,22 +59,22 @@ bool EPSExport::exportToFile (GDocument* doc) {
   printer.setFullPage (true);
   switch (doc->activePage()->pageLayout ().format) {
   case PG_DIN_A4:
-    printer.setPageSize (QPrinter::A4);
+    printer.setPageSize (KPrinter::A4);
     break;
   case PG_DIN_A5:
-    printer.setPageSize (QPrinter::B5);
+    printer.setPageSize (KPrinter::B5);
     break;
   case PG_US_LETTER:
-    printer.setPageSize (QPrinter::Letter);
+    printer.setPageSize (KPrinter::Letter);
     break;
   case PG_US_LEGAL:
-    printer.setPageSize (QPrinter::Legal);
+    printer.setPageSize (KPrinter::Legal);
     break;
   default:
     break;
   }
   printer.setOrientation (doc->activePage()->pageLayout().orientation == PG_PORTRAIT ?
-                          QPrinter::Portrait : QPrinter::Landscape);
+                          KPrinter::Portrait : KPrinter::Landscape);
 
   QPainter paint;
   paint.begin (&printer);

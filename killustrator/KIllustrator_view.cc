@@ -500,12 +500,12 @@ void KIllustratorView::showTransformationDialog( int id )
     transformationDialog->showTab (id);
 }
 
-void KIllustratorView::setupPrinter( QPrinter &printer )
+void KIllustratorView::setupPrinter( KPrinter &printer )
 {
     canvas->setupPrinter( printer );
 }
 
-void KIllustratorView::print( QPrinter &printer )
+void KIllustratorView::print( KPrinter &printer )
 {
     canvas->print( printer );
 }
