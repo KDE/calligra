@@ -77,9 +77,9 @@
 #define KEXI_NO_CTXT_HELP 1
 
 //show property editor
-//#define KEXI_PROP_EDITOR 1
+#define KEXI_PROP_EDITOR 1
 
-#ifdef KEXI_PROP_EDITOR
+#if defined(KDOCKWIDGET_P)
 #include <kdockwidget_private.h>
 #endif
 
@@ -710,7 +710,7 @@ KexiMainWindowImpl::initNavigator()
 
 void KexiMainWindowImpl::slotLastActions()
 {
-#ifdef KEXI_PROP_EDITOR
+#if defined(KEXI_PROP_EDITOR) && defined(KDOCKWIDGET_P)
 	KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
 	KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 	ds->resize(ds->width()*3, ds->height());
@@ -732,6 +732,7 @@ void KexiMainWindowImpl::initPropertyEditor()
 		KDockWidget::DockRight, getMainDockWidget(), 20);
 
 	KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
+#if defined(KDOCKWIDGET_P)
 	KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 	ds->show();
 //	ds->resize(400, ds->height());
@@ -739,6 +740,7 @@ void KexiMainWindowImpl::initPropertyEditor()
 	ds->setForcedFixedWidth( dw, 400 );
 //	ds->resize(400, ds->height());
 //	dw->resize(400, dw->height());
+#endif
 	dw->setMinimumWidth(200);
 //	ds->setMinimumWidth(200);
 //	ds->setSeparatorPos(d->propEditor->sizeHint().width(), true);

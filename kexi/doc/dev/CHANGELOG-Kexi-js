@@ -301,6 +301,10 @@ Detailed TODO for Beta3:
 - Alter Table Dialog connected to global property editor
 - Kexi Main Window: removed unused code
 - Action for Focusing Property editor (alt+2) added
+- KexiProperty and KexiPropertyBuffer classes moved to core/ 
+   from widget/propertyeditor
+- KexiProperty has now oldValue() and changed() methods -- usable 
+   since we've global property editor
 
 2004-02-09
 --design command-line option added, especially useful for developers
