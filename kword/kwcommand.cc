@@ -729,7 +729,7 @@ void KWDeleteFrameCommand::execute()
 
     KWFrame *frame = frameSet->frame( m_frameIndex.m_iFrameIndex );
     Q_ASSERT( frame );
-
+    frameSet->kWordDocument()->terminateEditing( frameSet );
     frameSet->delFrame( m_frameIndex.m_iFrameIndex );
     //when you delete a frame frame pointer is deleted
     //so used frameChanged with a null pointer.
@@ -747,7 +747,6 @@ void KWDeleteFrameCommand::unexecute()
     KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>( frameSet );
     if ( textfs )
         textfs->textObject()->formatMore();
-
     frameSet->kWordDocument()->frameChanged( frame );
     frameSet->kWordDocument()->refreshDocStructure(frameSet->type());
 }

@@ -1232,15 +1232,13 @@ bool KWFrameDia::applyChanges()
         }
     }
 
-
     // Undo/redo for frame properties
-    if(!isNewFrame && (
-                      frameCopy->isCopy()!=frame->isCopy()
+    if(!isNewFrame && (frameCopy->isCopy()!=frame->isCopy()
                    || frameCopy->frameBehavior()!=frame->frameBehavior()
-                   || frameCopy->newFrameBehavior()!=frame->newFrameBehavior())
+                   || frameCopy->newFrameBehavior()!=frame->newFrameBehavior()
                    || frameCopy->runAround()!=frame->runAround()
                    || frameCopy->runAroundGap()!=frame->runAroundGap()
-                   || (tab5 && frameCopy->backgroundColor()!=frameBrushStyle()))
+                       || (tab5 && frameCopy->backgroundColor()!=frameBrushStyle())))
     {
         if(!macroCmd)
             macroCmd = new KMacroCommand( i18n("Frame Properties") );
