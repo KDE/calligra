@@ -2190,6 +2190,7 @@ void KWTextFrameSetEdit::insertPicture( const QString & file )
     */
 }
 
+// Update the GUI toolbar button etc. to reflect the current cursor position.
 void KWTextFrameSetEdit::updateUI()
 {
     // Update UI - only for those items which have changed
@@ -2222,9 +2223,12 @@ void KWTextFrameSetEdit::updateUI()
     if ( parag->counter() )
         m_paragLayout.counter = *parag->counter();
     else
+    {
+        m_paragLayout.counter.setNumbering( Counter::NUM_NONE );
         m_paragLayout.counter.setStyle( Counter::STYLE_NONE );
+    }
     if ( m_paragLayout.counter.style() != ctype )
-        m_canvas->gui()->getView()->showCounterStyle( m_paragLayout.counter.style() );
+        m_canvas->gui()->getView()->showCounter( m_paragLayout.counter );
 
     if(m_paragLayout.leftBorder!=parag->leftBorder() ||
        m_paragLayout.rightBorder!=parag->rightBorder() ||
