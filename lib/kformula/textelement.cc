@@ -66,7 +66,7 @@ TokenType TextElement::getTokenType() const
         return getSymbolTable().charClass( character );
     }
 
-    switch ( character.latin1() ) {
+    switch ( character.unicode() ) {
     case '+':
     case '-':
     case '*':
@@ -165,12 +165,17 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
 
     // Each starting element draws the whole token
     ElementType* token = getElementType();
-    if ( ( token != 0 ) && ( token->end()-token->start() > 1 ) ) {
+    if ( ( token != 0 ) && !symbol ) {
+        QString text = token->text( static_cast<SequenceElement*>( getParent() ) );
+//         kdDebug() << "draw text: " << text[0].unicode()
+//                   << " " << painter.font().family().latin1()
+//                   << endl;
         painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
                           context.layoutUnitToPixelY( myPos.y()+getBaseline() ),
-                          token->text( static_cast<SequenceElement*>( getParent() ) ) );
+                          text );
     }
     else {
+        //kdDebug() << "draw char" << endl;
         QChar ch = getRealCharacter(context);
         if ( ch != QChar::null ) {
             painter.drawText( context.layoutUnitToPixelX( myPos.x() ),

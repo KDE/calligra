@@ -94,7 +94,7 @@ class AlphaTable {
 public:
 
     virtual ~AlphaTable() {}
-    virtual AlphaTableEntry entry( char pos, CharFamily family, CharStyle style ) const = 0;
+    virtual AlphaTableEntry entry( short pos, CharFamily family, CharStyle style ) const = 0;
 };
 
 

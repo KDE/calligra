@@ -109,7 +109,7 @@ EsstixAlphaTable::EsstixAlphaTable()
 }
 
 
-AlphaTableEntry EsstixAlphaTable::entry( char pos,
+AlphaTableEntry EsstixAlphaTable::entry( short pos,
                                          CharFamily family,
                                          CharStyle /*style*/ ) const
 {

@@ -30,7 +30,7 @@ public:
 
     EsstixAlphaTable();
 
-    virtual AlphaTableEntry entry( char pos, CharFamily family, CharStyle style ) const;
+    virtual AlphaTableEntry entry( short pos, CharFamily family, CharStyle style ) const;
 
 private:
 
