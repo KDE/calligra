@@ -1049,14 +1049,6 @@ void KWPage::vmrEdit()
 /*================================================================*/
 void KWPage::vmrEditFrame( int mx, int my )
 {
-    for ( unsigned int i = 0; i < doc->getNumGroupManagers(); i++ ) {
-        if ( doc->getGroupManager( i )->isActive() ) {
-            doc->getGroupManager( i )->recalcCols();
-            doc->getGroupManager( i )->recalcRows();
-            break;
-        }
-    }
-
     selectedFrameSet = selectedFrame = -1;
     int frameset = doc->getFrameSet( mx, my );
     int frame = -1;
@@ -1073,6 +1065,10 @@ void KWPage::vmrEditFrame( int mx, int my )
     if ( mouseMoved ) {
         doc->recalcFrames();
         doc->updateAllFrames();
+        if(doc->getFrameSet(selectedFrameSet)->getGroupManager()) {
+            doc->getFrameSet(selectedFrameSet)->getGroupManager()->recalcCols();
+            doc->getFrameSet(selectedFrameSet)->getGroupManager()->recalcRows();
+        }
         recalcAll = TRUE;
         recalcText();
         recalcCursor();
@@ -1160,7 +1156,7 @@ void KWPage::vmrCreateTable()
 
     insRect = insRect.normalize();
     if ( insRect.width() > doc->getRastX() && insRect.height() > doc->getRastY() ) {
-        if ( tcols * minColWidth + insRect.x() > doc->getPTPaperWidth() )
+        if ( tcols * minFrameWidth + insRect.x() > doc->getPTPaperWidth() )
             {
                 KMessageBox::sorry(0, i18n("KWord is unable to insert the table because there\n"
                                            "is not enough space available."));
@@ -1174,7 +1170,20 @@ void KWPage::vmrCreateTable()
             else {
                 grpMgr = new KWGroupManager( doc );
                 QString _name;
-                _name.sprintf( "grpmgr_%d", doc->getNumGroupManagers() );
+                int numGroupManagers=doc->getNumGroupManagers();
+                bool found=true; 
+                while(found) { // need a new name for the new groupmanager.
+                    bool same = false;
+                    _name.sprintf( "grpmgr_%d",numGroupManagers);
+                    for ( unsigned int i = 0;!same && i < doc->getNumGroupManagers(); ++i ) {
+                        if ( doc->getGroupManager( i )->getName() == _name ){
+                            same = true;
+                            break;
+                        }
+                    }
+                    if(!same) found=false;
+                    numGroupManagers++;
+                }
                 grpMgr->setName( _name );
             }
             doc->addGroupManager( grpMgr );

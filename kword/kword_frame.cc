@@ -2216,8 +2216,8 @@ void KWGroupManager::init( unsigned int x, unsigned int y, unsigned int width, u
         wid = width / cols - 5;
     }
 
-    if ( wid < minColWidth )
-        wid = minColWidth;
+    if ( wid < minFrameWidth )
+        wid = minFrameWidth;
 
     unsigned int _wid, _hei;
 
@@ -2255,8 +2255,10 @@ void KWGroupManager::init()
 /*================================================================*/
 void KWGroupManager::recalcCols()
 {
+kdDebug() << "recalcCols" << endl;
     unsigned int row=0,col=0;
     if(! cells.isEmpty() && isOneSelected(row,col)) {
+kdDebug() << "selected cell: " << row << ", " << col<< endl;
         // check/set sizes of frames
         // check if leftCoordinate is same as rest of tableRow
         Cell *activeCell = getCell(row,col);
@@ -2294,9 +2296,9 @@ void KWGroupManager::recalcCols()
                 }
                 if(cell) {
                     int newWidth=cell->frameSet->getFrame(0)->width() + difference;
-                    if(newWidth<minColWidth) {
-                        if(minColWidth-newWidth > postAdjust)
-                            postAdjust = minColWidth-newWidth;
+                    if(newWidth<minFrameWidth) {
+                        if(minFrameWidth-newWidth > postAdjust)
+                            postAdjust = minFrameWidth-newWidth;
                     }
                     cell->frameSet->getFrame(0)->setWidth(newWidth);
                 }
@@ -2329,9 +2331,9 @@ void KWGroupManager::recalcCols()
                     if(cell != activeCell) {
                         int newWidth= cell->frameSet->getFrame(0)->width() +
                             activeCell->frameSet->getFrame(0)->right() - coordinate;
-                        if(newWidth<minColWidth) {
-                            if(minColWidth-newWidth > postAdjust)
-                                postAdjust = minColWidth-newWidth;
+                        if(newWidth<minFrameWidth) {
+                            if(minFrameWidth-newWidth > postAdjust)
+                                postAdjust = minFrameWidth-newWidth;
                         }
                         cell->frameSet->getFrame(0)->setWidth(newWidth);
                     }
@@ -2366,7 +2368,8 @@ void KWGroupManager::recalcCols()
 /*================================================================*/
 void KWGroupManager::recalcRows()
 {
-    const int minRowHeight=30;
+kdDebug() << "recalcrows" << endl;
+    const int minFrameHeight=30;
     // remove automatically added headers
     for ( unsigned int j = 0; j < rows; j++ ) {
         if ( getFrameSet( j, 0 )->isRemoveableHeader() ) {
@@ -2378,6 +2381,7 @@ void KWGroupManager::recalcRows()
     // check/set sizes of frames
     unsigned int row=0,col=0;
     if(! cells.isEmpty() && isOneSelected(row,col)) {
+kdDebug() << "selected cell: " << row << ", " << col<< endl;
         // check if topCoordinate is same as rest of tableRow
         Cell *activeCell = getCell(row,col);
         Cell *cell;
@@ -2409,9 +2413,9 @@ void KWGroupManager::recalcRows()
                 }
                 if(cell) {
                     int newHeight= cell->frameSet->getFrame(0)->height() + difference;
-                    if(newHeight<minRowHeight) {
-                        if(minRowHeight-newHeight > postAdjust)
-                            postAdjust = minRowHeight-newHeight;
+                    if(newHeight<minFrameHeight) {
+                        if(minFrameHeight-newHeight > postAdjust)
+                            postAdjust = minFrameHeight-newHeight;
                     }
                     cell->frameSet->getFrame(0)->setHeight(newHeight);
                 }
@@ -2447,9 +2451,9 @@ void KWGroupManager::recalcRows()
                     if(cell != activeCell) {
                         int newHeight= cell->frameSet->getFrame(0)->height() +
                             activeCell->frameSet->getFrame(0)->bottom() - coordinate;
-                        if(newHeight<minRowHeight) {
-                            if(minRowHeight-newHeight > postAdjust)
-                                postAdjust = minRowHeight-newHeight;
+                        if(newHeight<minFrameHeight) {
+                            if(minFrameHeight-newHeight > postAdjust)
+                                postAdjust = minFrameHeight-newHeight;
                         }
                         cell->frameSet->getFrame(0)->setHeight(newHeight);
                     }
@@ -2637,9 +2641,11 @@ void KWGroupManager::selectUntil( KWFrameSet *fs, KWPage *page )
    stay unchanged (and false is returned).
 */
 bool KWGroupManager::isOneSelected(unsigned int &row, unsigned int &col) {
+kdDebug() << "KWGroupManager::isOneSelected" << endl;
     int selectedCell=-1;
     for ( unsigned int i = 0; i < cells.count(); i++ ) {
         if(cells.at(i)->frameSet->getFrame(0)->isSelected())  {
+kdDebug () << "selected: " << i <<" ("<< cells.at(i)->row << "," << cells.at(i)->col << ")" << endl;
             if(selectedCell==-1)
                 selectedCell=i;
             else
