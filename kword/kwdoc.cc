@@ -1038,6 +1038,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     m_imageRequests2.clear();
     m_anchorRequests.clear();
     m_clipartRequests.clear();
+    m_spellListIgnoreAll.clear();
 
     m_pageColumns.columns = 1;
 
@@ -1196,6 +1197,25 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         loadStyleTemplates( stylesElem );
 
     emit sigProgress(20);
+
+    QDomElement spellCheckIgnore = word.namedItem( "SPELLCHECKIGNORELIST" ).toElement();
+    if( !spellCheckIgnore.isNull() )
+    {
+        QDomElement spellWord=word.namedItem("SPELLCHECKIGNORELIST").toElement();
+        spellWord=spellWord.firstChild().toElement();
+        while ( !spellWord.isNull() )
+        {
+            if ( spellWord.tagName()=="SPELLCHECKIGNOREWORD" )
+            {
+                m_spellListIgnoreAll.append(spellWord.attribute("word"));
+            }
+            spellWord=spellWord.nextSibling().toElement();
+        }
+    }
+    m_bgSpellCheck->addIgnoreWordAllList( m_spellListIgnoreAll );
+
+    emit sigProgress(25);
+
 
     QDomElement framesets = word.namedItem( "FRAMESETS" ).toElement();
     if ( !framesets.isNull() )
@@ -1953,6 +1973,18 @@ QDomDocument KWDocument::saveXML()
 
     QDomElement mailMerge=m_slDataBase->save(doc);
     kwdoc.appendChild(mailMerge);
+
+    if( !m_spellListIgnoreAll.isEmpty() )
+    {
+        QDomElement spellCheckIgnore = doc.createElement( "SPELLCHECKIGNORELIST" );
+        kwdoc.appendChild( spellCheckIgnore );
+        for ( QStringList::Iterator it = m_spellListIgnoreAll.begin(); it != m_spellListIgnoreAll.end(); ++it )
+        {
+            QDomElement spellElem = doc.createElement( "SPELLCHECKIGNOREWORD" );
+            spellCheckIgnore.appendChild( spellElem );
+            spellElem.setAttribute( "word", *it );
+        }
+    }
 
     // Write "OBJECT" tag for every child
     QPtrListIterator<KoDocumentChild> chl( children() );
