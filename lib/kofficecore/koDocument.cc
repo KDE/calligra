@@ -409,11 +409,13 @@ void KoDocument::setManager( KParts::PartManager *manager )
     if ( d->m_bSingleViewMode && d->m_views.count() == 1 )
         d->m_views.getFirst()->setPartManager( manager );
 
-    QPtrListIterator<KoDocumentChild> it( d->m_children );
-    for (; it.current(); ++it )
-        if ( it.current()->document() )
-            manager->addPart( it.current()->document(), false );
-
+    if ( manager )
+    {
+        QPtrListIterator<KoDocumentChild> it( d->m_children );
+        for (; it.current(); ++it )
+            if ( it.current()->document() )
+                manager->addPart( it.current()->document(), false );
+    }
 }
 
 void KoDocument::setReadWrite( bool readwrite )
@@ -1708,7 +1710,7 @@ void KoDocument::setCurrent( bool on )
         d->m_current = on;
         if ( !on )
         {
-            doc->setCurrent( true );    // let my next external parrent take over
+            doc->setCurrent( true );    // let my next external parent take over
             return;
         }
         doc->forceCurrent( false ); // everybody else should keep off
@@ -1734,5 +1736,6 @@ bool KoDocument::isCurrent() const
 {
     return d->m_current;
 }
-#include <koDocument.moc>
-#include <koDocument_p.moc>
+
+#include "koDocument.moc"
+#include "koDocument_p.moc"

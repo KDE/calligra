@@ -155,13 +155,13 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
 KoView::~KoView()
 {
   kdDebug(30003) << "KoView::~KoView " << this << endl;
-  d->m_doc->setCurrent( false );
   delete d->m_dcopObject;
   if ( koDocument() && !koDocument()->isSingleViewMode() )
   {
     if ( d->m_manager && d->m_registered ) // if we aren't registered we mustn't unregister :)
       d->m_manager->removePart( koDocument() );
     d->m_doc->removeView(this);
+    d->m_doc->setCurrent( false );
   }
   delete d;
 }
