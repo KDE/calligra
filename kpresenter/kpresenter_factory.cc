@@ -67,7 +67,7 @@ KPresenterFactory::KPresenterFactory( QObject* parent, const char* name )
 
 KPresenterFactory::~KPresenterFactory()
 {
-    if ( s_global ) 
+    if ( s_global )
       delete s_global;
 }
 
@@ -86,7 +86,7 @@ QObject* KPresenterFactory::create( QObject* parent, const char* name,
 
     if ( !bWantKoDocument )
     {
-      doc->initEmpty();
+    //      doc->initEmpty();
       doc->setReadWrite( false );
     }
 
@@ -102,7 +102,7 @@ KInstance* KPresenterFactory::global()
         version, description, KAboutData::License_GPL,
         "(c) 1998-2000, Reginald Stadlbauer");
       aboutData->addAuthor("Reginald Stadlbauer",0, "reggie@kde.org");
-    
+
       s_global = new KInstance(aboutData);
 
       s_global->dirs()->addResourceType("kpresenter_template",
