@@ -33,7 +33,7 @@ public:
      * Change these according to your native mimetype.
      */
     QString nativeFormatPattern() const { return "*.chrt"; }
-    QString nativeFormatName() const { return "KChart"; }
+    QString nativeFormatName() const;
 
 protected:
     virtual KoDocument* createDoc();

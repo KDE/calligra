@@ -21,6 +21,7 @@
 #include "kchart_part.h"
 #include "kchart_factory.h"
 #include <kstddirs.h>
+#include <klocale.h>
 
 KChartShell::KChartShell( const char* name )
     : KoMainWindow( KChartFactory::global(), name )
@@ -32,6 +33,11 @@ KChartShell::~KChartShell()
 {
 }
 
+QString KChartShell::nativeFormatName() const
+{
+  return i18n("KChart");
+}
+ 
 KoDocument* KChartShell::createDoc()
 {
     return new KChartPart;
