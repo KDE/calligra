@@ -21,7 +21,7 @@
 #include "koDocument.h"
 #include "koStore.h"
 #include "koStream.h"
-#include "koQueryTypes.h"
+#include "koQueryTrader.h"
 
 #include <qpainter.h>
 #include <qapplication.h>

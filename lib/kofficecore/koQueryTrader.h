@@ -17,12 +17,12 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __ko_query_types_h__
-#define __ko_query_types_h__
+#ifndef __ko_query_trader_h__
+#define __ko_query_trader_h__
 
 #include <qstring.h>
+#include <kservice.h>
 #include <qstringlist.h>
-#include <qpixmap.h>
 #include <qvaluelist.h>
 
 class KoDocument;
@@ -30,56 +30,34 @@ class KoFilter;
 class KoFilterDialog;
 
 /**
- *  Represents an available component.
- */
-class KoComponentEntry
-{
-
-public:
-  KoComponentEntry() { }
-  KoComponentEntry( const KoComponentEntry& _entry );
-
-  const KoComponentEntry& operator=( const KoComponentEntry& e );
-
-  /**
-   * Releases the @ref #reference.
-   */
-  virtual ~KoComponentEntry();
-
-  QString comment;
-  QString name;
-  QString libname;
-  QString icon;
-
-  bool isEmpty() const { return name.isEmpty(); }
-};
-
-/**
  *  Represents an available koffice component
  *  that supports the document interface.
  */
-class KoDocumentEntry : public KoComponentEntry
+class KoDocumentEntry
 {
 
 public:
 
-  KoDocumentEntry() { }
-  KoDocumentEntry( const KoComponentEntry& _entry );
-  KoDocumentEntry( const KoDocumentEntry& _entry );
+  KoDocumentEntry() { m_service = 0L; } // for QValueList
+  KoDocumentEntry( KService::Ptr _service );
   ~KoDocumentEntry() { }
 
-  const KoDocumentEntry& operator=( const KoDocumentEntry& _entry );
+  KService::Ptr service() const { return m_service; }
+
+  bool isEmpty() const { return m_service == 0L; }
+
+  QString name() const { return m_service->name(); }
 
   /**
-   *  Mimetypes which this document can handle.
+   *  Mimetypes (and other service types) which this document can handle.
    */
-  QStringList mimeTypes;
+  QStringList mimeTypes() const { return m_service->serviceTypes(); }
 
   /**
    *  @return TRUE if the document can handle the requested mimetype.
    */
-  bool supportsMimeType( const char* _mimetype ) const
-  { return ( mimeTypes.find( _mimetype ) != mimeTypes.end() ); }
+  bool supportsMimeType( const QString & _mimetype ) const
+  { return mimeTypes().contains( _mimetype ); }
 
   /**
    *  Uses the factory of the component  to create
@@ -95,7 +73,7 @@ public:
    *                 components.
    *  @param _count  is the amount of query results we are interested in.
    */
-  static QValueList<KoDocumentEntry> query( const char* _constr = "", int _count = 1 );
+  static QValueList<KoDocumentEntry> query( const QString &  _constr = "", unsigned int _count = 1 );
 
   /**
    *  This is only a convenience function.
@@ -103,20 +81,22 @@ public:
    *  @return a document entry for the KOffice component that supports
    *          the requested mimetype and fits the user best.
    */
-  static KoDocumentEntry queryByMimeType( const char *mimetype );
+  static KoDocumentEntry queryByMimeType( const QString & mimetype );
+
+private:
+  KService::Ptr m_service;
 };
 
 /**
  *  Represents an available filter.
  */
-class KoFilterEntry : public KoComponentEntry
+class KoFilterEntry
 {
 
 public:
 
-  KoFilterEntry() { }
-  KoFilterEntry( const KoComponentEntry& _entry );
-  KoFilterEntry( const KoFilterEntry& _entry );
+  KoFilterEntry() { m_service = 0L; } // for QValueList
+  KoFilterEntry( KService::Ptr service );
   ~KoFilterEntry() { }
 
   KoFilter* createFilter( QObject* parent = 0, const char* name = 0);
@@ -149,13 +129,13 @@ public:
   /**
    *  @return TRUE if the filter can imports the requested mimetype.
    */
-  bool imports( const char* _mimetype ) const
+  bool imports( const QString & _mimetype ) const
   { return ( import.find( _mimetype ) != -1 ); }
 
   /**
    *  @return TRUE if the filter can exports the requested mimetype.
    */
-  bool exports( const char *_m ) const
+  bool exports( const QString & _m ) const
   { return ( export_.find( _m ) != -1 ); }
 
   /**
@@ -165,20 +145,22 @@ public:
    *                 You can use it to set additional restrictions on the available
    *                 components.
    */
-  static QValueList<KoFilterEntry> query( const char* _constr = "", int _count = 100 );
+  static QValueList<KoFilterEntry> query( const QString & _constr = "", unsigned int _count = 100 );
+
+private:
+  KService::Ptr m_service;
 };
 
 /**
  *  Represents an available filter dialog.
  */
-class KoFilterDialogEntry : public KoComponentEntry
+class KoFilterDialogEntry
 {
 
 public:
 
-  KoFilterDialogEntry() { }
-  KoFilterDialogEntry( const KoComponentEntry& _entry );
-  KoFilterDialogEntry( const KoFilterDialogEntry& _entry );
+  KoFilterDialogEntry() { m_service = 0L; }
+  KoFilterDialogEntry( KService::Ptr service );
   ~KoFilterDialogEntry() { }
 
   KoFilterDialog* createFilterDialog( QObject* parent = 0, const char* name = 0);
@@ -210,13 +192,15 @@ public:
    *                 You can use it to set additional restrictions on the available
    *                 components.
    */
-  static QValueList<KoFilterDialogEntry> query( const char* _constr = "", int _count = 100 );
+  static QValueList<KoFilterDialogEntry> query( const QString & _constr = "", unsigned int _count = 100 );
+
+private:
+  KService::Ptr m_service;
 };
 
 /**
  * Torben says: DONT USE. Use KoDataToolInfo instead!
- */
-class KoToolEntry : public KoComponentEntry
+class KoToolEntry
 {
 public:
   KoToolEntry() { };
@@ -230,6 +214,10 @@ public:
   bool supports( const QString &_mime_type ) const { return ( mimeTypes.find( _mime_type ) != mimeTypes.end() ); }
 
   static QValueList<KoToolEntry> query( const QString &_mime_type );
+
+private:
+  KService::Ptr m_service;
 };
+*/
 
 #endif

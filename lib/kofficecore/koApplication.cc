@@ -18,7 +18,7 @@
 */
 
 #include "koApplication.h"
-#include "koQueryTypes.h"
+#include "koQueryTrader.h"
 #include "koDocument.h"
 #include "koMainWindow.h"
 #include <klocale.h>

@@ -25,7 +25,7 @@ libkofficecore_la_LDFLAGS = $(KDE_LDFLAGS)  -version-info 1:0:0 -no-undefined
 include_HEADERS = koFilter.h \
 	koStream.h koDocument.h \
 	koMainWindow.h \
-	koApplication.h koQueryTypes.h \
+	koApplication.h koQueryTrader.h \
 	koFilterManager.h koUndo.h koIcons.h \
 	koDataTool.h koDocumentInfo.h \
 	koFilterDialog.h koView.h koFrame.h handler.h koDocumentChild.h \

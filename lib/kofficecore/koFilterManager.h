@@ -24,7 +24,7 @@
 #include <qmap.h>
 #include <qwidgetstack.h>
 
-#include <koQueryTypes.h>
+#include <koQueryTrader.h>
 
 class QDomDocument;
 

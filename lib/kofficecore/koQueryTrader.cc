@@ -19,13 +19,12 @@
 
 #include <klibloader.h>
 
-#include "koQueryTypes.h"
+#include "koQueryTrader.h"
 #include "koDocument.h"
 #include <ktrader.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qmessagebox.h>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -36,51 +35,9 @@
 /**
  * Port from KOffice Trader to KTrader/KActivator (kded) by Simon Hausmann
  * (c) 1999 Simon Hausmann <hausmann@kde.org>
+ * Port to KService and simplifications by David Faure <faure@kde.org>
  */
 
-/*******************************************************************
- *
- * KoComponentEntry
- *
- *******************************************************************/
-
-KoComponentEntry::KoComponentEntry( const KoComponentEntry& e )
-{
-  operator=( e );
-}
-
-const KoComponentEntry& KoComponentEntry::operator=( const KoComponentEntry& e )
-{
-  comment = e.comment;
-  name = e.name;
-  libname = e.libname;
-  icon = e.icon;
-
-  return *this;
-}
-
-KoComponentEntry::~KoComponentEntry()
-{
-}
-
-/*******************************************************************
- *
- * koParseComponentProperties
- *
- *******************************************************************/
-
-static KoComponentEntry koParseComponentProperties( KService::Ptr service )
-{
-  KoComponentEntry e;
-
-  // ### Somehow I wonder if KoComponentEntry shouldn't be (or contain)
-  // a KService::Ptr, directly ;-) (David)
-  e.name = service->name();
-  e.comment = service->comment();
-  e.libname = service->library();
-  e.icon = service->icon();
-  return e;
-}
 
 /*******************************************************************
  *
@@ -88,25 +45,14 @@ static KoComponentEntry koParseComponentProperties( KService::Ptr service )
  *
  *******************************************************************/
 
-KoDocumentEntry::KoDocumentEntry( const KoDocumentEntry& _e ) : KoComponentEntry( _e )
+KoDocumentEntry::KoDocumentEntry( KService::Ptr service )
+  : m_service( service )
 {
-  mimeTypes = _e.mimeTypes;
-}
-
-KoDocumentEntry::KoDocumentEntry( const KoComponentEntry& _e ) : KoComponentEntry( _e )
-{
-}
-
-const KoDocumentEntry& KoDocumentEntry::operator=( const KoDocumentEntry& e )
-{
-    KoComponentEntry::operator=( e );
-    mimeTypes = e.mimeTypes;
-    return *this;
 }
 
 KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name )
 {
-    KLibFactory* factory = KLibLoader::self()->factory( libname );
+    KLibFactory* factory = KLibLoader::self()->factory( m_service->library() );
 
     if( !factory )
 	return 0;
@@ -121,7 +67,7 @@ KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name )
     return (KoDocument*)obj;
 }
 
-KoDocumentEntry KoDocumentEntry::queryByMimeType( const char *mimetype )
+KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
 {
     QString constr( "'%1' in ServiceTypes" );
     constr = constr.arg( mimetype );
@@ -133,55 +79,30 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const char *mimetype )
     return vec[0];
 }
 
-QValueList<KoDocumentEntry> KoDocumentEntry::query( const char *_constr, int /*_count*/ )
+QValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr, unsigned int _count )
 {
   QValueList<KoDocumentEntry> lst;
 
-  KTrader *trader = KTrader::self();
-
-  if ( !_constr )
-    _constr = "";
-
   // Query the trader
-  KTrader::OfferList offers = trader->query( "KOfficePart", _constr );
+  KTrader::OfferList offers = KTrader::self()->query( "KOfficePart", _constr );
 
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
   kdDebug() << "KoDocumentEntry::query " << _constr << " got " << max << " offers " << endl;
+  if ( max > _count )
+    max = _count;
   for( unsigned int i = 0; i < max; i++ )
   {
     // Parse the service
-    KoDocumentEntry d( koParseComponentProperties( *it ) );
-
-    //HACK   // Why ? (David)
-    d.mimeTypes = (*it)->serviceTypes();
+    KoDocumentEntry d( *it );
 
     // Append converted offer
     lst.append( d );
     // Next service
-    it++;
+    ++it;
   }
 
   return lst;
-}
-
-/*******************************************************************
- *
- * koParseFilterProperties
- *
- *******************************************************************/
-
-static KoFilterEntry koParseFilterProperties( KService::Ptr service )
-{
-  KoFilterEntry e( koParseComponentProperties( service ) );
-
-  e.import = service->property( "Import" ).toString();
-  e.importDescription = service->property( "ImportDescription" ).toString();
-  e.export_ = service->property( "Export" ).toString();
-  e.exportDescription = service->property( "ExportDescription" ).toString();
-  e.implemented = service->property( "Implemented" ).toString();
-
-  return e;
 }
 
 /*******************************************************************
@@ -190,35 +111,31 @@ static KoFilterEntry koParseFilterProperties( KService::Ptr service )
  *
  *******************************************************************/
 
-KoFilterEntry::KoFilterEntry( const KoFilterEntry& e ) : KoComponentEntry( e )
+KoFilterEntry::KoFilterEntry( KService::Ptr service )
+  : m_service( service )
 {
-  import = e.import;
-  importDescription = e.importDescription;
-  export_ = e.export_;
-  exportDescription = e.exportDescription;
-  implemented = e.implemented;
+  import = service->property( "Import" ).toString();
+  importDescription = service->property( "ImportDescription" ).toString();
+  export_ = service->property( "Export" ).toString();
+  exportDescription = service->property( "ExportDescription" ).toString();
+  implemented = service->property( "Implemented" ).toString();
 }
 
-KoFilterEntry::KoFilterEntry( const KoComponentEntry& _e ) : KoComponentEntry( _e )
+QValueList<KoFilterEntry> KoFilterEntry::query( const QString & _constr, unsigned int _count )
 {
-}
-
-QValueList<KoFilterEntry> KoFilterEntry::query( const char *_constr, int /*_count*/ )
-{
-  kdDebug(30003) << "KoFilterEntry::query( " << _constr << ", <ignored> )" << endl;
+  kdDebug(30003) << "KoFilterEntry::query( " << _constr << ", " << _count << endl;
   QValueList<KoFilterEntry> lst;
 
-  KTrader *trader = KTrader::self();
-
-  KTrader::OfferList offers = trader->query( "KOfficeFilter", _constr );
+  KTrader::OfferList offers = KTrader::self()->query( "KOfficeFilter", _constr );
 
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
   kdDebug(30003) << "Query returned " << max << " offers" << endl;
+  if ( max > _count )
+    max = _count;
   for( unsigned int i = 0; i < max; i++ )
   {
-    KoFilterEntry f( koParseFilterProperties( *it ) );
-
+    KoFilterEntry f( *it );
     // Append converted offer
     lst.append( f );
     // Next service
@@ -230,7 +147,7 @@ QValueList<KoFilterEntry> KoFilterEntry::query( const char *_constr, int /*_coun
 
 KoFilter* KoFilterEntry::createFilter( QObject* parent, const char* name )
 {
-    KLibFactory* factory = KLibLoader::self()->factory( libname );
+    KLibFactory* factory = KLibLoader::self()->factory( m_service->library() );
 
     if( !factory )
 	return 0;
@@ -247,56 +164,34 @@ KoFilter* KoFilterEntry::createFilter( QObject* parent, const char* name )
 
 /*******************************************************************
  *
- * koParseFilterDialogProperties
- *
- *******************************************************************/
-
-static KoFilterDialogEntry koParseFilterDialogProperties( KService::Ptr service )
-{
-  KoFilterDialogEntry e( koParseComponentProperties( service ) );
-
-  e.import = service->property( "Import" ).toString();
-  e.importDescription = service->property( "ImportDescription" ).toString();
-  e.export_ = service->property( "Export" ).toString();
-  e.exportDescription = service->property( "ExportDescription" ).toString();
-
-  return e;
-}
-
-/*******************************************************************
- *
  * KoFilterDialogEntry
  *
  *******************************************************************/
 
-KoFilterDialogEntry::KoFilterDialogEntry( const KoFilterDialogEntry& e ) : KoComponentEntry( e )
+KoFilterDialogEntry::KoFilterDialogEntry( KService::Ptr service )
+  : m_service( service )
 {
-  import = e.import;
-  importDescription = e.importDescription;
-  export_ = e.export_;
-  exportDescription = e.exportDescription;
+  import = service->property( "Import" ).toString();
+  importDescription = service->property( "ImportDescription" ).toString();
+  export_ = service->property( "Export" ).toString();
+  exportDescription = service->property( "ExportDescription" ).toString();
 }
 
-KoFilterDialogEntry::KoFilterDialogEntry( const KoComponentEntry& _e ) : KoComponentEntry( _e )
+QValueList<KoFilterDialogEntry> KoFilterDialogEntry::query( const QString & _constr, unsigned int _count )
 {
-}
-
-QValueList<KoFilterDialogEntry> KoFilterDialogEntry::query( const char *_constr, int /*_count*/ )
-{
-  kdDebug(30003) << "KoFilterDialogEntry::query( " << _constr << ", <ignored> )" << endl;
+  kdDebug(30003) << "KoFilterDialogEntry::query( " << _constr << ", " << _count << endl;
   QValueList<KoFilterDialogEntry> lst;
 
-  KTrader *trader = KTrader::self();
-
-  KTrader::OfferList offers = trader->query( "KOfficeFilterDialog", _constr );
+  KTrader::OfferList offers = KTrader::self()->query( "KOfficeFilterDialog", _constr );
 
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
   kdDebug(30003) << "Query returned " << max << " offers" << endl;
+  if ( max > _count )
+    max = _count;
   for( unsigned int i = 0; i < max; i++ )
   {
-    KoFilterDialogEntry f( koParseFilterDialogProperties( *it ) );
-
+    KoFilterDialogEntry f( *it );
     // Append converted offer
     lst.append( f );
     // Next service
@@ -308,7 +203,7 @@ QValueList<KoFilterDialogEntry> KoFilterDialogEntry::query( const char *_constr,
 
 KoFilterDialog* KoFilterDialogEntry::createFilterDialog( QObject* parent, const char* name )
 {
-    KLibFactory* factory = KLibLoader::self()->factory( libname );
+    KLibFactory* factory = KLibLoader::self()->factory( m_service->library() );
 
     if( !factory )
 	return 0;
@@ -323,22 +218,7 @@ KoFilterDialog* KoFilterDialogEntry::createFilterDialog( QObject* parent, const 
     return (KoFilterDialog*)obj;
 }
 
-/*******************************************************************
- *
- * koParseToolProperties
- *
- *******************************************************************/
-
-static KoToolEntry koParseToolProperties( KService::Ptr service )
-{
-    KoToolEntry e( koParseComponentProperties( service ) );
-
-    QStringList mimeTypes = service->property( "MimeTypes" ).toString();
-    QStringList commands = service->property( "Commands" ).toString();
-    QStringList commandsI18N = service->property( "CommandsI18N" ).toString();
-
-    return e;
-}
+#if 0
 
 /*******************************************************************
  *
@@ -346,24 +226,19 @@ static KoToolEntry koParseToolProperties( KService::Ptr service )
  *
  *******************************************************************/
 
-KoToolEntry::KoToolEntry( const KoToolEntry& e ) : KoComponentEntry( e )
+KoToolEntry::KoToolEntry( KService::Ptr service )
+  : m_service( service )
 {
-    mimeTypes = e.mimeTypes;
-    commandsI18N = e.commandsI18N;
-    commands = e.commands;
-}
-
-KoToolEntry::KoToolEntry( const KoComponentEntry& _e ) : KoComponentEntry( _e )
-{
+    mimeTypes = service->property( "MimeTypes" ).toString();
+    commands = service->property( "Commands" ).toString();
+    commandsI18N = service->property( "CommandsI18N" ).toString();
 }
 
 QValueList<KoToolEntry> KoToolEntry::query( const QString &_mime_type )
 {
   QValueList<KoToolEntry> lst;
 
-  KTrader *trader = KTrader::self();
-
-  KTrader::OfferList offers = trader->query( "KOfficeTool" );
+  KTrader::OfferList offers = KTrader::self()->query( "KOfficeTool" );
 
   KTrader::OfferList::ConstIterator it = offers.begin();
   for (; it != offers.end(); ++it )
@@ -376,3 +251,5 @@ QValueList<KoToolEntry> KoToolEntry::query( const QString &_mime_type )
 
   return lst;
 }
+
+#endif

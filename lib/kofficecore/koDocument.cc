@@ -25,7 +25,7 @@
 #include "koApplication.h"
 #include "koMainWindow.h"
 #include "koStream.h"
-#include "koQueryTypes.h"
+#include "koQueryTrader.h"
 #include "koFilterManager.h"
 #include "koDocumentInfo.h"
 
