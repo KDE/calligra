@@ -401,7 +401,7 @@ void KWordView::setupActions()
     for ( unsigned int i = 0; i < m_pKWordDoc->paragLayoutList.count(); i++ )
  	lst << m_pKWordDoc->paragLayoutList.at( i )->getName();
     styleList = lst;
-    ( (KSelectAction*)actionFormatStyle )->setItems( lst );
+    ( (QSelectAction*)actionFormatStyle )->setItems( lst );
     actionFormatBold = new KToggleAction( i18n( "&Bold" ), KWBarIcon( "bold" ), CTRL + Key_B,
 					   this, SLOT( textBold() ),
 					   actionCollection(), "format_bold" );
@@ -435,7 +435,7 @@ void KWordView::setupActions()
     lst.clear();
     for ( unsigned int i = 0; i <= 10; i++ )
  	lst << QString( "%1" ).arg( i );
-    ( (KSelectAction*)actionFormatLineSpacing )->setItems( lst );
+    ( (QSelectAction*)actionFormatLineSpacing )->setItems( lst );
     actionFormatEnumList = new KToggleAction( i18n( "Enumerated List" ), KWBarIcon( "enumList" ), 0,
 					      this, SLOT( textEnumList() ),
 					      actionCollection(), "format_enumlist" );
@@ -474,7 +474,7 @@ void KWordView::setupActions()
     lst.clear();
     for ( unsigned int i = 0; i < 10; i++ )
  	lst << QString( "%1" ).arg( i + 1 );
-    ( (KSelectAction*)actionFormatBrdWidth )->setItems( lst );
+    ( (QSelectAction*)actionFormatBrdWidth )->setItems( lst );
     actionFormatBrdStyle = new KSelectAction( i18n( "Paragraph Border Style" ), 0,
 						 actionCollection(), "format_brdstyle" );
     connect( ( ( KSelectAction* )actionFormatBrdStyle ), SIGNAL( activated( const QString & ) ),	
@@ -485,7 +485,7 @@ void KWordView::setupActions()
     lst.append( i18n( "dot line ( **** )" ) );
     lst.append( i18n( "dash dot line ( -*-* )" ) );
     lst.append( i18n( "dash dot dot line ( -**- )" ) );
-    ( (KSelectAction*)actionFormatBrdStyle )->setItems( lst );
+    ( (QSelectAction*)actionFormatBrdStyle )->setItems( lst );
 
     // ---------------------------- frame toolbar actions
 
@@ -508,7 +508,7 @@ void KWordView::setupActions()
 					     actionCollection(), "frame_brdstyle" );
     connect( ( ( KSelectAction* )actionFrameBrdStyle ), SIGNAL( activated( const QString & ) ),	
 	     this, SLOT( frameBorderStyle( const QString & ) ) );
-    ( (KSelectAction*)actionFrameBrdStyle )->setItems( lst );
+    ( (QSelectAction*)actionFrameBrdStyle )->setItems( lst );
     actionFrameBrdWidth = new KSelectAction( i18n( "Frame Border Width" ), 0,
 						 actionCollection(), "frame_brdwidth" );
     connect( ( ( KSelectAction* )actionFrameBrdWidth ), SIGNAL( activated( const QString & ) ),	
@@ -516,7 +516,7 @@ void KWordView::setupActions()
     lst.clear();
     for ( unsigned int i = 0; i < 10; i++ )
  	lst << QString( "%1" ).arg( i + 1 );
-    ( (KSelectAction*)actionFrameBrdWidth )->setItems( lst );
+    ( (QSelectAction*)actionFrameBrdWidth )->setItems( lst );
     actionFrameBackColor = new KColorAction( i18n( "Frame Background Color" ), KColorAction::BackgroundColor, 0,
 					     this, SLOT( frameBackColor() ),
 					     actionCollection(), "frame_backcolor" );
@@ -1258,8 +1258,20 @@ void KWordView::insertPicture()
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    KURL url;
     if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();
+	url = fd.selectedURL();
+
+    if( url.isEmpty() )
+      return;
+
+    if( !url.isLocalFile() )
+    {
+      KMessageBox::sorry( 0L, i18n( "Only local files supported yet." ) );
+      return;
+    }
+
+    file = url.path();
 #endif
     if ( !file.isEmpty() ) m_pKWordDoc->insertPicture( file, gui->getPaperWidget() );
 }
@@ -1558,8 +1570,20 @@ void KWordView::toolsCreatePix()
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    KURL url;
     if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();
+	url = fd.selectedURL();
+
+    if( url.isEmpty() )
+      return;
+
+    if( !url.isLocalFile() )
+    {
+      KMessageBox::sorry( 0L, i18n( "Only local files supported yet." ) );
+      return;
+    }
+
+    file = url.path();
 #endif
 
     if ( !file.isEmpty() ) {
