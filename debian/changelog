@@ -1,4 +1,4 @@
-koffice (2.1-cvs20010211-1) unstable; urgency=low
+koffice (2.1-cvs20010219-1) unstable; urgency=low
  
   * New upstream version
   * Upping standards version
@@ -6,7 +6,7 @@ koffice (2.1-cvs20010211-1) unstable; urgency=low
   * Changing section for kspread (Closes: #85892)
   * Fixes grid color (Closes: #76651)
  
- -- Ivan E. Moore II <rkrusty@debian.org>  Sun, 11 Feb 2001 06:00:00 -0700
+ -- Ivan E. Moore II <rkrusty@debian.org>  Mon, 19 Feb 2001 06:00:00 -0700
 
 koffice (2.1-beta2-0128-1) unstable; urgency=low
  
