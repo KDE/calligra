@@ -449,7 +449,7 @@ void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDe
 
 void KSpreadTable::autofill( QRect &src, QRect &dest )
 {
-    if(src == dest)
+    if (src == dest)
     {
         return;
     }
@@ -501,8 +501,11 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
     }
 
     // Fill from right to left
-    if ( src.left() == dest.right() && src.right() >= dest.right() )
+    if ( ( src.left() == dest.right() || src.left() == dest.right() - 1) && src.right() >= dest.right() )
     {
+        if ( src.left() != dest.right() )
+            dest.setRight( dest.right() - 1 );
+      
         for ( int y = src.top(); y <= src.bottom(); y++ )
         {
             int x;
@@ -522,8 +525,11 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
     }
 
     // Fill from bottom to top
-    if ( src.top() == dest.bottom() && src.bottom() >= dest.bottom() )
+    if ( (src.top() == dest.bottom() || src.top() == (dest.bottom() - 1) ) && src.bottom() >= dest.bottom() )
     {
+        if (src.top() != dest.bottom() )
+            dest.setBottom(dest.bottom() - 1);
+
         for ( int x = src.left(); x <= dest.right(); x++ )
         {
             int y;
