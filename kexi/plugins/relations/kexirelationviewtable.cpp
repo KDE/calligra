@@ -30,7 +30,7 @@
 
 #include <kexidragobjects.h>
 
-KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView *prent, QString table, QStringList fields)
+KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView *parent, QString table, QStringList fields)
  : QFrame(parent,"tv", QFrame::Panel | QFrame::Raised)
 {
 //	setFixedSize(100, 150);
@@ -50,7 +50,7 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 	btnClose->setFixedSize(15, 15);
 //	btnClose->setFlat(true);
 
-	m_tableView = new KexiRelationViewTable(this, prent, table, fields, "tbl-list");
+	m_tableView = new KexiRelationViewTable(this, parent, table, fields, "tbl-list");
 
 	g->addWidget(btnClose, 0, 1);
 	g->addMultiCellWidget(m_tableView, 1, 1, 0, 1);

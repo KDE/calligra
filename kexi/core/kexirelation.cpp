@@ -32,7 +32,7 @@
 #include "kexiDB/kexidbrecord.h"
 
 #include "kexiproject.h"
-#include "kexirelationview.h"
+//#include "kexirelationview.h"
 #include "kexirelation.h"
 
 KexiRelation::KexiRelation(KexiProject *parent,const char * name)
