@@ -91,15 +91,17 @@ GObject::GObject () {
   outlineInfo.shape = OutlineInfo::DefaultShape;
 
   fillInfo = defaultFillInfo;
-  fillInfo.mask = FillInfo::Color | FillInfo::FillStyle;
+  //fillInfo.mask = FillInfo::Color | FillInfo::FillStyle;
 
   rcount = 1;
 }
 
 GObject::GObject (const QDomElement &element) {
 
+    sflag=false;
     layer = 0L;
     inWork = false;
+    rcount=1;
 
     outlineInfo.mask = 0;
     outlineInfo.startArrowId = outlineInfo.endArrowId = 0;

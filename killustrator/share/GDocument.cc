@@ -323,7 +323,7 @@ void GDocument::deleteObject (GObject* obj) {
   if (layer->isEditable ()) {
     selected = obj->isSelected ();
     if (selected)
-      selection.remove (obj);
+      selection.removeRef(obj);
     last = 0L;
     setModified ();
     disconnect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
