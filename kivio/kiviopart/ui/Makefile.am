@@ -37,7 +37,7 @@ EXTRA_DIST = \
 		export_page_dialog.cpp\
 		export_page_dialog.h\
 		kiviotextformatdlg.cpp\
-		kiviotextformatdlg.h
+		kiviotextformatdlg.h \
 		kiviostencilformatdlg.cpp\
 		kiviostencilformatdlg.h\
 		kivioarrowheadformatdlg.cpp\
