@@ -125,7 +125,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_bDontCheckUpperWord=false;
   m_bDontCheckTitleCase=false;
   m_unit = KoUnit::U_MM;
-
+  m_activeTable= 0L;
   m_iZoom = 100;
 }
 
@@ -638,7 +638,11 @@ void KSpreadDoc::enableRedo( bool _b )
 void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
                                bool transparent, double zoomX, double zoomY )
 {
-    KSpreadTable* table = m_pMap->firstTable();
+    KSpreadTable* table = 0L;
+    if ( !m_activeTable )
+        table = m_pMap->firstTable();
+    else
+        table = m_activeTable;
     if ( !table )
         return;
 
@@ -1172,6 +1176,10 @@ void KSpreadDoc::clearIgnoreWordAll( )
     m_spellListIgnoreAll.clear();
 }
 
+void KSpreadDoc::setDisplayTable(KSpreadTable *_table )
+{
+    m_activeTable = _table;
+}
 
 #include "kspread_doc.moc"
 

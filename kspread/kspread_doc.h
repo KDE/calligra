@@ -349,6 +349,7 @@ public:
     void clearIgnoreWordAll( );
     QStringList spellListIgnoreAll() const { return m_spellListIgnoreAll;}
 
+    void setDisplayTable(KSpreadTable *_Table );
 
 public slots:
 
@@ -519,6 +520,7 @@ protected:
   bool m_bDontCheckTitleCase;
     QStringList m_spellListIgnoreAll;
   KoUnit::Unit m_unit;
+    KSpreadTable *m_activeTable;
 private:
 
   /* helper functions for painting */

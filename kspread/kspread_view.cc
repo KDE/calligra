@@ -2644,7 +2644,7 @@ void KSpreadView::setActiveTable( KSpreadTable *_t,bool updateTable )
 
   if ( m_pTable == 0L )
     return;
-
+  m_pDoc->setDisplayTable( m_pTable );
   if(updateTable)
   {
     m_pTabBar->setActiveTab( _t->tableName() );
