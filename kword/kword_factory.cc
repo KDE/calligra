@@ -32,7 +32,8 @@
 #include <qstringlist.h>
 
 static const char* description=I18N_NOOP("KOffice Word Processor");
-static const char* version="0.1";
+// First official public release Oct 2000 version 0.8
+static const char* version="0.8";
 
 extern "C"
 {
@@ -81,6 +82,7 @@ KAboutData* KWordFactory::aboutData()
                                 version, description, KAboutData::License_GPL,
                                 "(c) 1998-2000, Reginald Stadlbauer");
       aboutData->addAuthor("Reginald Stadlbauer",0, "reggie@kde.org");
+      aboutData->addAuthor("Thomas Zander",0, "zander@earthling.net");
       return aboutData;
 }
 
