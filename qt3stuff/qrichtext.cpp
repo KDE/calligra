@@ -5123,7 +5123,7 @@ void QTextFormat::setPointSize( int s )
 
 void QTextFormat::setFont( const QFont &f )
 {
-    if ( f == fn )
+    if ( f == fn && !k.isEmpty() )
 	return;
     fn = f;
     update();
