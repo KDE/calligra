@@ -736,7 +736,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       debug( "decimal_point is '%c'", decimal_point );
       // HACK
       if ( decimal_point == 0 )
-	  decimal_point = ".";
+	  decimal_point = '.';
     }
 
     QString f2;
