@@ -49,7 +49,7 @@ public:
     void setImage( const KWImage &image );
     KWImage image() const { return m_image; }
 
-    virtual void drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, int offset );
+    virtual void drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, const int offset );
 
     // Save to XML
     virtual void save( QDomElement & formatElem );
