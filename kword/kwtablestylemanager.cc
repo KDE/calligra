@@ -588,6 +588,7 @@ void KWTableStyleManager::renameStyle(const QString &theText) {
     bool state=!theText.isEmpty() && (synonyms == 1);
     enableButtonOK(state );
     enableButtonApply(state);
+    enableButton( KDialogBase::User1, state );
     m_deleteButton->setEnabled(state&&(m_stylesList->currentItem() != 0));
     m_newButton->setEnabled(state);
     m_stylesList->setEnabled( state );

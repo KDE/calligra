@@ -532,6 +532,8 @@ void KWFrameStyleManager::renameStyle(const QString &theText) {
     m_deleteButton->setEnabled(state&&(m_stylesList->currentItem() != 0));
     m_newButton->setEnabled(state);
     m_stylesList->setEnabled( state );
+    enableButton( KDialogBase::User1, state );
+
     if ( state )
     {
         m_moveUpButton->setEnabled(m_stylesList->currentItem() != 0);
