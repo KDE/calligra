@@ -89,21 +89,6 @@ void KoPictureShared::draw(QPainter& painter, int x, int y, int width, int heigh
     }
 }
 
-bool KoPictureShared::load(QIODevice* io)
-{
-    kdDebug(30003) << "KoPictureShared::load(QIODevice*)" << endl;
-    if (!io)
-    {
-        kdError(30003) << "No QIODevice!" << endl;
-        return false;
-    }
-
-    if (m_base)
-        return m_base->load(io);
-    kdError(30003) << "KoPIcture was not prepared for loading!" << endl;
-    return false;
-}
-
 bool KoPictureShared::loadWmf(QIODevice* io)
 {
     kdDebug(30003) << "KoPictureShared::loadWmf" << endl;
@@ -116,44 +101,21 @@ bool KoPictureShared::loadWmf(QIODevice* io)
     clear();
 
     // The extension .wmf was used (KOffice 1.1.x) for QPicture files
-    // For an extern file or in future in the storage, .wmf can mean a real Windows Meta File.
+    // For an extern file or in the storage, .wmf can mean a real Windows Meta File.
 
     QByteArray array=io->readAll();
     QPicture picture(KoPictureType::formatVersionQPicture);
     KoPictureClipart* picClip;
     m_base=picClip=new KoPictureClipart();
 
-    QBuffer buffer(array);
-    buffer.open(IO_ReadOnly);
-    bool check = false;
-    // "QPIC" at start of the file?
-    if ((array[0]=='Q') && (array[1]=='P') &&(array[2]=='I') && (array[3]=='C'))
-    {
-        // We have found the signature of a QPicture file
-        kdDebug(30003) << "QPicture file format!" << endl;
-        if (picture.load(&buffer,NULL))
-        {
-            check = picClip->loadQPicture(picture);
-            picClip->setRawData(array);
-            setExtension("qpic"); // Rename extension to "qpic"
-        }
-    }
+    QString extension(picClip->loadWmfFromArray(picture, array));
+    if (extension.isEmpty())
+        return false;
     else
     {
-        // real WMF
-        // TODO: create KoPictureWmf and give the control to that class
-        kdDebug(30003) << "Real WMF file format!" << endl;
-        QWinMetaFile wmf;
-        if (wmf.load(buffer))
-        {
-            wmf.paint(&picture);
-            check = picClip->loadQPicture(picture);
-            picClip->setRawData(array);
-            setExtension("wmf");
-        }
+        setExtension(extension);
+        return true;
     }
-    buffer.close();
-    return check;
 }
 
 bool KoPictureShared::loadXpm(QIODevice* io)
@@ -186,7 +148,7 @@ bool KoPictureShared::loadXpm(QIODevice* io)
     m_base=new KoPictureImage();
 
     QBuffer buffer(array);
-    bool check = m_base->load(&buffer);
+    bool check = m_base->load(&buffer,"xpm");
     setExtension("xpm");
     return check;
 }
@@ -241,14 +203,15 @@ bool KoPictureShared::load(QIODevice* io, const QString& extension)
 {
     kdDebug(30003) << "KoPictureShared::load(QIODevice*, const QString&) " << extension << endl;
     bool flag;
-    QString ext=extension.lower();
+    QString ext(extension.lower());
     if (ext=="wmf")
         flag=loadWmf(io);
     else
     {
-        clearAndSetMode(extension);
-        flag=load(io);
-        setExtension(extension.lower());
+        clearAndSetMode(ext);
+        if (m_base)
+            flag=m_base->load(io,ext);
+        setExtension(ext);
     }
     if (!flag)
     {

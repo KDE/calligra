@@ -72,7 +72,7 @@ public:
      */
     virtual void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1, bool fastMode = false);
 
-    virtual bool load(QIODevice* io);
+    virtual bool load(QIODevice* io, const QString& extension);
 
     virtual bool save(QIODevice* io);
 
@@ -93,6 +93,14 @@ public:
 
     virtual QPixmap generatePixmap(const QSize& size);
 
+    /**
+     * @internal
+     * for KoPictureShared::loadWmf
+     * @return: the file extension or QString::null if an error has occured
+     */
+    QString loadWmfFromArray(QPicture picture, const QByteArray& array);
+
+
 protected:
     QPixmap getPixmap(QImage& image);
     /**
@@ -104,7 +112,6 @@ protected:
     QPicture m_clipart;
     QByteArray m_rawData;
     QSize m_size;
-    QString m_extension;
 };
 
 #endif /* __koPictureClipart_h__ */

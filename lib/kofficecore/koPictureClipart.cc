@@ -19,6 +19,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qbuffer.h>
 #include <qpainter.h>
 #include <qpicture.h>
 #include <qpixmap.h>
@@ -26,6 +27,7 @@
 #include <kdebug.h>
 #include <kdebugclasses.h>
 
+#include <qwmf.h>
 #include "koPictureKey.h"
 #include "koPictureBase.h"
 #include "koPictureClipart.h"
@@ -78,7 +80,7 @@ void KoPictureClipart::draw(QPainter& painter, int x, int y, int width, int heig
     drawQPicture(m_clipart, painter, x, y, width, height, sx, sy, sw, sh);
 }
 
-bool KoPictureClipart::load(QIODevice* io)
+bool KoPictureClipart::load(QIODevice* io, const QString& extension)
 {
     // First, read the raw data
     m_rawData=io->readAll();
@@ -88,7 +90,7 @@ bool KoPictureClipart::load(QIODevice* io)
     QBuffer buffer(m_rawData);
     buffer.open(IO_ReadWrite);
     bool check = true;
-    if (m_extension=="svg")
+    if (extension=="svg")
     {
         if (!m_clipart.load(&buffer, "svg"))
         {
@@ -147,4 +149,39 @@ QPixmap KoPictureClipart::generatePixmap(const QSize& size)
     p.drawPicture( m_clipart );
     p.end();
     return pixmap;
+}
+
+QString KoPictureClipart::loadWmfFromArray(QPicture picture, const QByteArray& array)
+{
+    QString extension;
+    QBuffer buffer(array);
+    buffer.open(IO_ReadOnly);
+    // "QPIC" at start of the file?
+    if ((array[0]=='Q') && (array[1]=='P') &&(array[2]=='I') && (array[3]=='C'))
+    {
+        // We have found the signature of a QPicture file
+        kdDebug(30003) << "QPicture file format!" << endl;
+        if (picture.load(&buffer,NULL))
+        {
+            if (loadQPicture(picture))
+                extension="qpic"; // Set extension to "qpic"
+            setRawData(array);
+        }
+    }
+    else
+    {
+        // real WMF
+        // TODO: create KoPictureWmf and give the control to that class
+        kdDebug(30003) << "Real WMF file format!" << endl;
+        QWinMetaFile wmf;
+        if (wmf.load(buffer))
+        {
+            wmf.paint(&picture);
+            if (loadQPicture(picture))
+                extension="wmf";
+            setRawData(array);
+        }
+    }
+    buffer.close();
+    return extension;
 }

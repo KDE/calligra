@@ -73,7 +73,7 @@ public:
      */
     virtual void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1, bool fastMode = false);
 
-    virtual bool load(QIODevice* io);
+    virtual bool load(QIODevice* io, const QString& extension);
 
     virtual bool save(QIODevice* io);
 
@@ -85,7 +85,6 @@ protected:
     QPixmap getPixmap(QImage& image);
     void scaleAndCreatePixmap(const QSize& size, bool fastMode=false);
 protected:
-public:
     QImage  m_originalImage;
     QByteArray m_rawData;
     // No idea why it is a mutable, but as it was in KoImage I suppose that there is a reason.

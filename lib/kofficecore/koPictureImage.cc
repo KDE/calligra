@@ -152,7 +152,7 @@ void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height
     }
 }
 
-bool KoPictureImage::load(QIODevice* io)
+bool KoPictureImage::load(QIODevice* io, const QString& /*extension*/)
 {
     // First, read the raw data
     m_rawData=io->readAll();
@@ -160,7 +160,7 @@ bool KoPictureImage::load(QIODevice* io)
     // Second, create the original image
     QBuffer buffer(m_rawData);
     buffer.open(IO_ReadWrite);
-    QImageIO imageIO(&buffer,NULL); // JPEG
+    QImageIO imageIO(&buffer,NULL);
 
     if (!imageIO.read())
     {
