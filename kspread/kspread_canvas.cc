@@ -1415,9 +1415,17 @@ void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )
     return;
 
   double tmp;
-  double ev_PosX = doc()->unzoomItX( _ev->pos().x() );
+  double ev_PosX;
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
+  {
+    double dwidth = doc()->unzoomItX( width() );
+    ev_PosX = dwidth - doc()->unzoomItX( _ev->pos().x() );
+  }
+  else
+    ev_PosX = doc()->unzoomItX( _ev->pos().x() );
+
   double ev_PosY = doc()->unzoomItY( _ev->pos().y() );
-  int col = table->leftColumn( (ev_PosX + xOffset()), tmp ); // TODO
+  int col = table->leftColumn( (ev_PosX + xOffset()), tmp );
   int row = table->topRow( (ev_PosY + yOffset()), tmp );
 
   if ( col > KS_colMax || row > KS_rowMax )
@@ -1450,10 +1458,18 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
     return;
 
 
-  double ev_PosX = doc()->unzoomItX( _ev->pos().x() );
+  double ev_PosX;
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
+  {
+    double dwidth = doc()->unzoomItX( width() );
+    ev_PosX = dwidth - doc()->unzoomItX( _ev->pos().x() );
+  }
+  else
+    ev_PosX = doc()->unzoomItX( _ev->pos().x() );
+
   double ev_PosY = doc()->unzoomItY( _ev->pos().y() );
   double ypos, xpos;
-  int col = table->leftColumn( (ev_PosX + xOffset()), xpos ); // TODO rtl
+  int col = table->leftColumn( (ev_PosX + xOffset()), xpos );
   int row = table->topRow( (ev_PosY + yOffset()), ypos );
 
   if ( col > KS_colMax || row > KS_rowMax )
