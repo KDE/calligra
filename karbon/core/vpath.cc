@@ -13,6 +13,7 @@
 #include "vpainter.h"
 #include "vpath.h"
 #include "vsegment.h"
+#include "vvisitor.h"
 
 #include <kdebug.h>
 
@@ -381,3 +382,10 @@ VPath::load( const QDomElement& element )
 		}
 	}
 }
+
+void
+VPath::accept( VVisitor& visitor )
+{
+	visitor.visitVPath( *this, m_segmentLists );
+}
+

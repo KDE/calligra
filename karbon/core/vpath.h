@@ -12,7 +12,6 @@
 
 #include "vobject.h"
 #include "vsegmentlist.h"
-#include "vvisitor.h"
 
 
 class QDomElement;
@@ -107,8 +106,7 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
-	virtual void accept( VVisitor& visitor )
-		{ visitor.visitVPath( *this, m_segmentLists ); }
+	virtual void accept( VVisitor& visitor );
 
 private:
 	QPtrList<VSegmentList> m_segmentLists;		// list of segmentList

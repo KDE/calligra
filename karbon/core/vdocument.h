@@ -97,7 +97,7 @@ public:
 
 private:
 	VLayerList m_layers;			// all layers in this document
-	VSelection* m_selection;        // a list of selected objects.
+	VSelection* m_selection;		// selected objects.
 	VLayer* m_activeLayer;			// the active/current layer.
 
 	VColor m_defaultStrokeColor;        /// keep track of a default stroke color for created shapes
