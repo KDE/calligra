@@ -30,52 +30,78 @@ QSize KWViewModeNormal::contentsSize()
     return QSize( doc->paperWidth(), doc->pageTop( doc->getPages() ) /*i.e. bottom of last one*/ );
 }
 
+void KWViewMode::drawOnePageBorder( QPainter * painter, const QRect & crect, const QRect & _pageRect,
+                                    const QRegion & emptySpaceRegion )
+{
+    if ( !crect.intersects( _pageRect ) )
+        return;
+
+    QRect pageRect( _pageRect );
+    //kdDebug() << "KWViewMode::drawOnePageBorder drawing page rect " << DEBUGRECT( pageRect ) << endl;
+    painter->drawRect( pageRect );
+    // Exclude page border line, to get the page contents rect (avoids flicker)
+    pageRect.rLeft() += 1;
+    pageRect.rTop() += 1;
+    pageRect.rRight() -= 1;
+    pageRect.rBottom() -= 1;
+    // The empty space to clear up inside this page
+    QRegion pageEmptyRegion = emptySpaceRegion.intersect( pageRect ).intersect( crect );
+    if ( !pageEmptyRegion.isEmpty() )
+        m_canvas->kWordDocument()->eraseEmptySpace( painter, pageEmptyRegion );
+}
+
+void KWViewMode::drawRightShadow( QPainter * painter, const QRect & crect, const QRect & pageRect, int topOffset )
+{
+    QRect shadowRect( pageRect.right() + 1, pageRect.top() + topOffset, s_shadowOffset, pageRect.height() - topOffset );
+    shadowRect &= crect; // intersect
+    if ( !shadowRect.isEmpty() )
+    {
+        painter->fillRect( shadowRect,
+                           QApplication::palette().active().brush( QColorGroup::Shadow ) );
+    }
+}
+
+void KWViewMode::drawBottomShadow( QPainter * painter, const QRect & crect, const QRect & pageRect, int leftOffset )
+{
+    QRect shadowRect( pageRect.left() + leftOffset, pageRect.top() + 1, pageRect.width(), s_shadowOffset );
+    shadowRect &= crect; // intersect
+    if ( !shadowRect.isEmpty() )
+        painter->fillRect( shadowRect,
+                           QApplication::palette().active().brush( QColorGroup::Shadow ) );
+}
+
 void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion )
 {
     KWDocument * doc = m_canvas->kWordDocument();
     painter->save();
     painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
     painter->setBrush( Qt::NoBrush );
-    const int shadowOffset = 3;
+    QRect pageRect;
     for ( int page = 0; page < doc->getPages(); page++ )
     {
         // using paperHeight() leads to rounding problems ( one pixel between two pages, belonging to none of them )
         int pagetop = doc->pageTop( page );
         int pagewidth = doc->paperWidth();
         int pageheight = doc->pageTop( page+1 ) - pagetop;
-        QRect pageRect( 0, pagetop, pagewidth, pageheight );
-        if ( crect.intersects( pageRect ) )
-        {
-            //kdDebug() << "KWDocument::drawBorders drawing page rect " << DEBUGRECT( pageRect ) << endl;
-            painter->drawRect( pageRect );
-            // Exclude page border line, to get the page contents rect (avoids flicker)
-            pageRect.rLeft() += 1;
-            pageRect.rTop() += 1;
-            pageRect.rRight() -= 1;
-            pageRect.rBottom() -= 1;
-            // The empty space to clear up inside this page
-            QRegion pageEmptyRegion = emptySpaceRegion.intersect( pageRect );
-            if ( !pageEmptyRegion.isEmpty() )
-                doc->eraseEmptySpace( painter, pageEmptyRegion );
-        }
+        pageRect = QRect( 0, pagetop, pagewidth, pageheight );
+
+        drawOnePageBorder( painter, crect, pageRect, emptySpaceRegion );
+
         if ( crect.right() > pagewidth )
         {
             // The area on the right of the page
             QRect rightArea( pagewidth, pagetop, crect.right() - pagewidth + 1, pageheight );
+
             QRect repaintRect = rightArea.intersect( crect );
             if ( !repaintRect.isEmpty() )
             {
                 painter->fillRect( repaintRect,
                                    QApplication::palette().active().brush( QColorGroup::Mid ) );
+
+
                 // Draw a shadow
-                int topOffset = ( page==0 ) ? shadowOffset : 0; // leave a few pixels on top, only for first page
-                QRect shadowRect( rightArea.left(), rightArea.top() + topOffset, shadowOffset, pageheight - topOffset );
-                shadowRect &= repaintRect; // intersect
-                if ( !shadowRect.isEmpty() )
-                {
-                    painter->fillRect( shadowRect,
-                                       QApplication::palette().active().brush( QColorGroup::Shadow ) );
-                }
+                int topOffset = ( page==0 ) ? s_shadowOffset : 0; // leave a few pixels on top, only for first page
+                drawRightShadow( painter, crect, pageRect, topOffset );
             }
         }
     }
@@ -90,12 +116,7 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
             painter->fillRect( repaintRect,
                                QApplication::palette().active().brush( QColorGroup::Mid ) );
             // Draw a shadow
-            int leftOffset = shadowOffset; // leave a few pixels on the left
-            QRect shadowRect( leftOffset, bottomArea.top(), doc->paperWidth(), shadowOffset );
-            shadowRect &= repaintRect; // intersect
-            if ( !shadowRect.isEmpty() )
-                painter->fillRect( shadowRect,
-                                   QApplication::palette().active().brush( QColorGroup::Shadow ) );
+            drawBottomShadow( painter, crect, pageRect, s_shadowOffset );
         }
     }
 }

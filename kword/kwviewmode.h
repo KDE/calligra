@@ -65,6 +65,13 @@ public:
     virtual int pagesPerRow() {return 0;}
 
 protected:
+    // Draw the border around one page, and clear up the empty space in that page
+    void drawOnePageBorder( QPainter * painter, const QRect & crect, const QRect & pageRect,
+                            const QRegion & emptySpaceRegion );
+    void drawRightShadow( QPainter * painter, const QRect & crect, const QRect & pageRect, int topOffset );
+    void drawBottomShadow( QPainter * painter, const QRect & crect, const QRect & pageRect, int leftOffset );
+    static const unsigned short s_shadowOffset = 3;
+
     KWCanvas * m_canvas;
 };
 

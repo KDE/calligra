@@ -213,9 +213,9 @@ KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int 
 }
 
 /*================================================================*/
-KWTableFrameSet::Cell *KWTableFrameSet::getCellByPos( int mx, int my )
+KWTableFrameSet::Cell *KWTableFrameSet::getCellByPos( double x, double y )
 {
-    KWFrame *f = getFrame(mx,my);
+    KWFrame *f = getFrame(x,y);
     if(f) return static_cast<KWTableFrameSet::Cell *> (f->getFrameSet());
     return 0L;
 }
@@ -531,7 +531,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
             j=fromRow;
             doingPage++;
 
-            if ( y >=  m_doc->ptPaperHeight() * m_doc->getPages() ) 
+            if ( y >=  m_doc->ptPaperHeight() * m_doc->getPages() )
                 m_doc->appendPage();
 
             if ( m_showHeaderOnAllPages ) {
@@ -1326,7 +1326,7 @@ void KWTableFrameSet::validate()
 bool KWTableFrameSet::contains( double mx, double my ) {
     /*  m_pageBoundaries is a list of integers.
         The list contains an entry for each page and that entry points to the first cell
-        on that page. 
+        on that page.
         The list contains integers of the index of the cell in the m_cells list.
 
         the following points to the first cell of the first page.
@@ -1340,7 +1340,7 @@ bool KWTableFrameSet::contains( double mx, double my ) {
 
     if(m_pageBoundaries.count() ==0)
         recalcRows();
-    KWFrame *first, *last; 
+    KWFrame *first, *last;
     for (unsigned int i=1 ; i < m_pageBoundaries.count(); i++) {
 
         first = m_cells.at((m_pageBoundaries[i-1]))->getFrame( 0 );

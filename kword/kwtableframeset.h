@@ -100,7 +100,7 @@ public:
     // Frameset management
     Cell *getCell( int i ) { return m_cells.at( i ); }
     Cell *getCell( unsigned int row, unsigned int col );
-    Cell *getCellByPos( int mx, int my ); // bad naming
+    Cell *getCellByPos( double x, double y );
 
     /** first row and auto-added rows are the table headers.
     * @returns if this frameset is either one.
