@@ -1093,7 +1093,7 @@ static uint getColumnWidths( const Table& table, QMemArray<double>& widthArray )
 {
     bool uniqueColumns = true; // We have not found any horizontally spanned cells yet.
     uint currentColumn = 0;
-    int tryingRow = 1; // We are trying the first row
+    int tryingRow = 0; // We are trying the first row
     QValueList<TableCell>::ConstIterator itCell;
 
     for ( itCell = table.cellList.begin();
@@ -1186,6 +1186,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 
     if ( numberColumns <= 0 )
     {
+        kdDebug(30520) << "Could not get correct column widths, so approximate" << endl;
         // There was a problem, the width array cannot be trusted, so try to do a column width array with the first row
         numberColumns = getFirstRowColumnWidths( anchor.table, widthArray );
         if ( numberColumns <=0 )
@@ -1195,6 +1196,8 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
             return false;
         }
     }
+
+    kdDebug(30520) << "Number of columns: " << numberColumns << endl;
 
     kdDebug(30520) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
 
