@@ -27,7 +27,7 @@
 class KDCOPActionProxy;
 class KoView;
 
-class KoViewIface : public DCOPObject
+class KDE_EXPORT KoViewIface : public DCOPObject
 {
     K_DCOP
 public:

@@ -63,7 +63,7 @@ protected:
  * bother to ask the document. It's legal to directly create
  * or destroy a Container object.
  */
-class Document : public QObject {
+class KDE_EXPORT Document : public QObject {
     Q_OBJECT
 
     friend class DocumentWrapper;
@@ -267,7 +267,7 @@ private:
  * A Wrapper that constracts the actions and must be given a real
  * document to work with.
  */
-class DocumentWrapper : public QObject {
+class KDE_EXPORT DocumentWrapper : public QObject {
     Q_OBJECT
 
 public:

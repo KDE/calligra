@@ -87,7 +87,7 @@ public:
  * The document. Actually only one part of the whole.
  * Provides everything to edit the formula.
  */
-class Container : public QObject, public FormulaDocument {
+class KDE_EXPORT Container : public QObject, public FormulaDocument {
     friend class MimeSource;
     Q_OBJECT
 
