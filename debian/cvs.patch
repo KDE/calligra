@@ -1,6 +1,6 @@
---- admin/Makefile.common	2001/06/17 13:38:09	1.113
-+++ admin/Makefile.common	2001/06/18 06:57:48
-@@ -88,22 +88,32 @@ cvs-clean:
+--- admin/Makefile.common
++++ admin/Makefile.common
+@@ -92,22 +92,32 @@
  	pwd=`pwd` ;\
  	dirs=`find . -type d | grep -v CVS | sed -e "s#^./##"` ;\
  	for i in $$dirs; do \
@@ -49,42 +49,9 @@
  	done
  
  
---- kchart/Makefile.am	2001/06/11 14:37:40	1.83
-+++ kchart/Makefile.am	2001/06/18 06:57:48
-@@ -40,7 +40,7 @@ libkchartpart_la_LIBADD = $(top_builddir
- ## The kdeinit loadable module
- lib_LTLIBRARIES = kchart.la
- kchart_la_SOURCES = main.cc
--kchart_la_LDFLAGS = $(all_libraries) -avoid-version -module
-+kchart_la_LDFLAGS = $(all_libraries) -module
- kchart_la_LIBADD = ../lib/kofficecore/libkofficecore.la
- 
- ## The executable
---- kformula/Makefile.am	2001/05/13 14:45:27	1.60
-+++ kformula/Makefile.am	2001/06/18 06:57:48
-@@ -13,7 +13,7 @@ libkformulapart_la_METASOURCES = AUTO
- ## The kdeinit loadable module
- lib_LTLIBRARIES = kformulamain.la
- kformulamain_la_SOURCES = main.cc
--kformulamain_la_LDFLAGS = $(all_libraries) -module -avoid-version
-+kformulamain_la_LDFLAGS = $(all_libraries) -module
- kformulamain_la_LIBADD = ../lib/kofficecore/libkofficecore.la
- 
- ## The executable
---- kontour/Makefile.am	2001/06/04 16:59:43	1.37
-+++ kontour/Makefile.am	2001/06/18 06:57:48
-@@ -20,7 +20,7 @@ rc_DATA = KIllustrator.rc
- ## The kdeinit loadable module
- lib_LTLIBRARIES = kontour.la
- kontour_la_SOURCES = main.cc
--kontour_la_LDFLAGS = $(all_libraries) -avoid-version -module
-+kontour_la_LDFLAGS = $(all_libraries) -module
- kontour_la_LIBADD = ../lib/kofficecore/libkofficecore.la
- 
- ## The executable
---- kivio/kiviopart/Makefile.am	2001/05/28 21:18:29	1.13
-+++ kivio/kiviopart/Makefile.am	2001/06/18 06:57:58
-@@ -128,7 +128,7 @@ EXTRA_DIST = \
+--- kivio/kiviopart/Makefile.am
++++ kivio/kiviopart/Makefile.am
+@@ -128,7 +128,7 @@
  #2########################################################!@#$
  lib_LTLIBRARIES = kivio.la
  kivio_la_SOURCES = main.cpp
@@ -93,42 +60,9 @@
  kivio_la_LIBADD = ../../lib/kofficecore/libkofficecore.la
  
  libkiviopart_la_LDFLAGS = -avoid-version -module $(LIB_KOFFICEUI) $(all_libraries)
---- kivio/plugins/kivioconnectortool/Makefile.am	2001/04/16 20:43:46	1.8
-+++ kivio/plugins/kivioconnectortool/Makefile.am	2001/06/18 06:57:58
-@@ -31,7 +31,7 @@ EXTRA_DIST = \
- ##############################################################
- ####                  END KDEStudio part                  ####
- #2########################################################!@#$
--libkivioconnectortool_la_LDFLAGS = -avoid-version -module -no-undefined
-+libkivioconnectortool_la_LDFLAGS = -module -no-undefined
- libkivioconnectortool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
- 
- rc_DATA = kivioconnectortool.rc
---- kivio/plugins/kivioselecttool/Makefile.am	2001/04/16 20:43:46	1.6
-+++ kivio/plugins/kivioselecttool/Makefile.am	2001/06/18 06:57:59
-@@ -27,7 +27,7 @@ EXTRA_DIST = \
- ##############################################################
- ####                  END KDEStudio part                  ####
- #2########################################################!@#$
--libkivioselecttool_la_LDFLAGS = -avoid-version -module -no-undefined
-+libkivioselecttool_la_LDFLAGS = -module -no-undefined
- libkivioselecttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
- 
- rc_DATA = kivioselecttool.rc
---- kivio/plugins/kiviotexttool/Makefile.am	2001/04/16 20:43:46	1.6
-+++ kivio/plugins/kiviotexttool/Makefile.am	2001/06/18 06:57:59
-@@ -31,7 +31,7 @@ EXTRA_DIST = \
- ##############################################################
- ####                  END KDEStudio part                  ####
- #2########################################################!@#$
--libkiviotexttool_la_LDFLAGS = -avoid-version -module -no-undefined
-+libkiviotexttool_la_LDFLAGS = -module -no-undefined
- libkiviotexttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
- 
- rc_DATA = kiviotexttool.rc
---- kivio/plugins/kiviozoomtool/Makefile.am	2001/04/16 20:43:46	1.7
-+++ kivio/plugins/kiviozoomtool/Makefile.am	2001/06/18 06:57:59
-@@ -27,7 +27,7 @@ EXTRA_DIST = \
+--- kivio/plugins/kiviozoomtool/Makefile.am
++++ kivio/plugins/kiviozoomtool/Makefile.am
+@@ -27,7 +27,7 @@
  ##############################################################
  ####                  END KDEStudio part                  ####
  #2########################################################!@#$
@@ -137,53 +71,42 @@
  libkiviozoomtool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
  
  rc_DATA = kiviozoomtool.rc
---- koshell/Makefile.am	2001/03/22 14:02:17	1.25
-+++ koshell/Makefile.am	2001/06/18 06:57:59
-@@ -4,7 +4,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) $(all_in
- ## The kdeinit loadable module
- lib_LTLIBRARIES = koshell.la
- koshell_la_SOURCES = koshell_main.cc koshell_shell.cc
--koshell_la_LDFLAGS = $(all_libraries) -avoid-version -module
-+koshell_la_LDFLAGS = $(all_libraries) -module
- koshell_la_LIBADD = $(LIB_KOFFICEUI)
+--- kivio/plugins/kiviotexttool/Makefile.am
++++ kivio/plugins/kiviotexttool/Makefile.am
+@@ -31,7 +31,7 @@
+ ##############################################################
+ ####                  END KDEStudio part                  ####
+ #2########################################################!@#$
+-libkiviotexttool_la_LDFLAGS = -avoid-version -module -no-undefined
++libkiviotexttool_la_LDFLAGS = -module -no-undefined
+ libkiviotexttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
  
- ## The executable
---- kpresenter/Makefile.am	2001/06/08 19:40:33	1.148
-+++ kpresenter/Makefile.am	2001/06/18 06:57:59
-@@ -38,7 +38,7 @@ libkpresenterpart_la_METASOURCES = AUTO
- ## The kdeinit loadable module
- lib_LTLIBRARIES = kpresenter.la
- kpresenter_la_SOURCES = main.cc
--kpresenter_la_LDFLAGS = $(all_libraries) -avoid-version -module
-+kpresenter_la_LDFLAGS = $(all_libraries) -module
- kpresenter_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+ rc_DATA = kiviotexttool.rc
+--- kivio/plugins/kivioconnectortool/Makefile.am
++++ kivio/plugins/kivioconnectortool/Makefile.am
+@@ -31,7 +31,7 @@
+ ##############################################################
+ ####                  END KDEStudio part                  ####
+ #2########################################################!@#$
+-libkivioconnectortool_la_LDFLAGS = -avoid-version -module -no-undefined
++libkivioconnectortool_la_LDFLAGS = -module -no-undefined
+ libkivioconnectortool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
  
- ## The executable
---- kspread/Makefile.am	2001/06/11 13:56:48	1.157
-+++ kspread/Makefile.am	2001/06/18 06:57:59
-@@ -38,7 +38,7 @@ libkspreadpart_la_METASOURCES = AUTO
- ## The kdeinit loadable module
- lib_LTLIBRARIES =  kspread.la
- kspread_la_SOURCES = main.cc
--kspread_la_LDFLAGS = $(all_libraries) -avoid-version -module
-+kspread_la_LDFLAGS = $(all_libraries) -module
- kspread_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+ rc_DATA = kivioconnectortool.rc
+--- kivio/plugins/kivioselecttool/Makefile.am
++++ kivio/plugins/kivioselecttool/Makefile.am
+@@ -27,7 +27,7 @@
+ ##############################################################
+ ####                  END KDEStudio part                  ####
+ #2########################################################!@#$
+-libkivioselecttool_la_LDFLAGS = -avoid-version -module -no-undefined
++libkivioselecttool_la_LDFLAGS = -module -no-undefined
+ libkivioselecttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
  
- ## The executable
---- kugar/part/Makefile.am	2001/04/17 13:51:06	1.4
-+++ kugar/part/Makefile.am	2001/06/18 06:57:59
-@@ -2,7 +2,7 @@ INCLUDES = -I$(srcdir)/../lib $(KOFFICE_
- 
- lib_LTLIBRARIES = libkugarpart.la
- libkugarpart_la_SOURCES = kugar_part.cpp
--libkugarpart_la_LDFLAGS = $(all_libraries) -module -avoid-version
-+libkugarpart_la_LDFLAGS = $(all_libraries) -module
- libkugarpart_la_LIBADD = ../lib/libkugar.la $(LIB_KPARTS) $(LIB_KDEPRINT)
- 
- libkugarpart_la_METASOURCES = AUTO
---- kugar/part/kugar_part.cpp	2001/04/18 11:40:36	1.4
-+++ kugar/part/kugar_part.cpp	2001/06/18 06:57:59
-@@ -78,7 +78,7 @@ KInstance *KugarFactory::instance()
+ rc_DATA = kivioselecttool.rc
+--- kugar/part/kugar_part.cpp
++++ kugar/part/kugar_part.cpp
+@@ -78,7 +78,7 @@
  
  	if (!s_instance)
  	{
@@ -192,8 +115,19 @@
  						   I18N_NOOP("Kugar"),
  						   VERSION);
  
---- kugar/shell/main.cpp	2000/09/21 08:57:22	1.1.1.1
-+++ kugar/shell/main.cpp	2001/06/18 06:57:59
+--- kugar/part/Makefile.am
++++ kugar/part/Makefile.am
+@@ -2,7 +2,7 @@
+ 
+ lib_LTLIBRARIES = libkugarpart.la
+ libkugarpart_la_SOURCES = kugar_part.cpp
+-libkugarpart_la_LDFLAGS = $(all_libraries) -module -avoid-version
++libkugarpart_la_LDFLAGS = $(all_libraries) -module
+ libkugarpart_la_LIBADD = ../lib/libkugar.la $(LIB_KPARTS) $(LIB_KDEPRINT)
+ 
+ libkugarpart_la_METASOURCES = AUTO
+--- kugar/shell/main.cpp
++++ kugar/shell/main.cpp
 @@ -18,7 +18,7 @@
  
  int main(int argc,char **argv)
@@ -203,14 +137,88 @@
  			 I18N_NOOP("A template driven report viewer for XML data."),
  			 KAboutData::License_GPL_V2,
  			 "Copyright (c) 1999-2000 Mutiny Bay Software\n"
---- kword/Makefile.am	2001/06/11 13:22:12	1.136
-+++ kword/Makefile.am	2001/06/18 06:57:59
-@@ -28,7 +28,7 @@ libkwordpart_la_METASOURCES = AUTO
+--- kword/Makefile.am
++++ kword/Makefile.am
+@@ -28,7 +28,7 @@
  ## The kdeinit loadable module
  lib_LTLIBRARIES = kword.la
  kword_la_SOURCES = main.cc
 -kword_la_LDFLAGS = $(all_libraries) -avoid-version -module
 +kword_la_LDFLAGS = $(all_libraries) -module
  kword_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+ 
+ ## The executable
+--- kontour/Makefile.am
++++ kontour/Makefile.am
+@@ -18,7 +18,7 @@
+ ## The kdeinit loadable module
+ lib_LTLIBRARIES = kontour.la
+ kontour_la_SOURCES = main.cc
+-kontour_la_LDFLAGS = $(all_libraries) -avoid-version -module
++kontour_la_LDFLAGS = $(all_libraries) -module
+ kontour_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+ 
+ ## The executable
+--- kontour/kontour.desktop
++++ kontour/kontour.desktop
+@@ -36,4 +36,4 @@
+ ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+ X-KDE-NativeMimeType=application/x-kontour
+ MapNotify=true
+-DocPath=killustrator/index.html
++DocPath=kontour/index.html
+--- koshell/Makefile.am
++++ koshell/Makefile.am
+@@ -4,7 +4,7 @@
+ ## The kdeinit loadable module
+ lib_LTLIBRARIES = koshell.la
+ koshell_la_SOURCES = koshell_main.cc koshell_shell.cc
+-koshell_la_LDFLAGS = $(all_libraries) -avoid-version -module
++koshell_la_LDFLAGS = $(all_libraries) -module
+ koshell_la_LIBADD = $(LIB_KOFFICEUI)
+ 
+ ## The executable
+--- kspread/Makefile.am
++++ kspread/Makefile.am
+@@ -38,7 +38,7 @@
+ ## The kdeinit loadable module
+ lib_LTLIBRARIES =  kspread.la
+ kspread_la_SOURCES = main.cc
+-kspread_la_LDFLAGS = $(all_libraries) -avoid-version -module
++kspread_la_LDFLAGS = $(all_libraries) -module
+ kspread_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+ 
+ ## The executable
+--- kchart/Makefile.am
++++ kchart/Makefile.am
+@@ -40,7 +40,7 @@
+ ## The kdeinit loadable module
+ lib_LTLIBRARIES = kchart.la
+ kchart_la_SOURCES = main.cc
+-kchart_la_LDFLAGS = $(all_libraries) -avoid-version -module
++kchart_la_LDFLAGS = $(all_libraries) -module
+ kchart_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+ 
+ ## The executable
+--- kpresenter/Makefile.am
++++ kpresenter/Makefile.am
+@@ -38,7 +38,7 @@
+ ## The kdeinit loadable module
+ lib_LTLIBRARIES = kpresenter.la
+ kpresenter_la_SOURCES = main.cc
+-kpresenter_la_LDFLAGS = $(all_libraries) -avoid-version -module
++kpresenter_la_LDFLAGS = $(all_libraries) -module
+ kpresenter_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+ 
+ ## The executable
+--- kformula/Makefile.am
++++ kformula/Makefile.am
+@@ -13,7 +13,7 @@
+ ## The kdeinit loadable module
+ lib_LTLIBRARIES = kformulamain.la
+ kformulamain_la_SOURCES = main.cc
+-kformulamain_la_LDFLAGS = $(all_libraries) -module -avoid-version
++kformulamain_la_LDFLAGS = $(all_libraries) -module
+ kformulamain_la_LIBADD = ../lib/kofficecore/libkofficecore.la
  
  ## The executable
