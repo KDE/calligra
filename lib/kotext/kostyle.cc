@@ -23,6 +23,8 @@
 #include <qdom.h>
 #include <koparagcounter.h>
 
+//necessary to create unique shortcut
+int KoStyleCollection::styleNumber = 0;
 
 KoStyleCollection::KoStyleCollection()
 {
@@ -59,6 +61,23 @@ KoStyle* KoStyleCollection::findStyle( const QString & _name )
 }
 
 
+KoStyle* KoStyleCollection::findStyleShortCut( const QString & _shortCut )
+{
+    // Caching, to speed things up
+    if ( m_lastStyle && m_lastStyle->shortCutName() == _shortCut )
+        return m_lastStyle;
+
+    QPtrListIterator<KoStyle> styleIt( m_styleList );
+    for ( ; styleIt.current(); ++styleIt )
+    {
+        if ( styleIt.current()->shortCutName() == _shortCut ) {
+            m_lastStyle = styleIt.current();
+            return m_lastStyle;
+        }
+    }
+    return 0L;
+}
+
 KoStyle* KoStyleCollection::addStyleTemplate( KoStyle * sty )
 {
     // First check for duplicates.
@@ -75,6 +94,9 @@ KoStyle* KoStyleCollection::addStyleTemplate( KoStyle * sty )
         }
     }
     m_styleList.append( sty );
+
+    sty->setShortCutName( QString("shortcut_style_%1").arg(styleNumber).latin1());
+    styleNumber++;
     return sty;
 }
 
@@ -121,6 +143,7 @@ void KoStyleCollection::updateStyleListOrder( const QStringList &list )
 KoStyle::KoStyle( const QString & name )
 {
     m_name = name;
+    m_shortCut_name = QString::null;
     m_followingStyle = this;
 
     // This way, KWTextParag::setParagLayout also sets the style pointer, to this style

@@ -433,6 +433,7 @@ protected:
     int lowerFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
     int bringToFront(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
     int sendToBack(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
+    void textStyleSelected( KoStyle *_sty );
 
 private:
     KWDocument *m_doc;

@@ -1890,6 +1890,7 @@ void KWView::showMouseMode( int _mouseMode )
 
 void KWView::showStyle( const QString & styleName )
 {
+    kdDebug()<<" styleName :"<<styleName<<endl;
     QPtrListIterator<KWStyle> styleIt( m_doc->styleCollection()->styleList() );
     for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
     {
@@ -1897,7 +1898,7 @@ void KWView::showStyle( const QString & styleName )
             // Select style in combo
             actionFormatStyle->setCurrentItem( pos );
             // Check the appropriate action among the actionFormatStyleMenu actions
-            KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( QString("style_%1").arg(pos).latin1() ));
+            KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( /*QString("style_%1").arg(pos).latin1()*/ styleIt.current()->shortCutName().latin1()));
             if ( act )
                 act->setChecked( true );
             return;
@@ -1933,38 +1934,46 @@ void KWView::updateStyleList()
     lstWithAccels = lst;
 #endif
     QMap<QString, KShortcut> shortCut;
-    // Delete previous style actions
-    for ( uint i = 0; ; ++i )
+
+    KActionPtrList lst2 = actionCollection()->actions("styleList");
+    QValueList<KAction *> actions = lst2;
+    QValueList<KAction *>::ConstIterator it = lst2.begin();
+    QValueList<KAction *>::ConstIterator end = lst2.end();
+    for (; it != end; ++it )
     {
-        KAction* act = actionCollection()->action( QString("style_%1").arg(i).latin1() );
-        if ( act )
+        if ( !(*it)->shortcut().toString().isEmpty())
         {
-            if ( !act->shortcut().toString().isEmpty())
-                shortCut.insert( act->name(), KShortcut( act->shortcut()));
-            actionFormatStyleMenu->remove( act );
-            delete act;
+            KoStyle* tmp = m_doc->styleCollection()->findStyleShortCut( (*it)->name() );
+            if ( tmp )
+                shortCut.insert( tmp->shortCutName(), KShortcut( (*it)->shortcut()));
         }
-        else
-            break; // no gaps. As soon as style_N doesn't exist, we're done
+        actionFormatStyleMenu->remove( *it );
+        delete *it;
     }
     uint i = 0;
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act = 0L;
-        QCString name = QString("style_%1").arg(i).latin1();
-        if ( shortCut.contains(name))
+        KoStyle *tmp = m_doc->styleCollection()->findStyle( lst[ i]);
+        if ( tmp )
         {
-            act = new KToggleAction( (*it),
-                                     (shortCut)[name], this, SLOT( slotStyleSelected() ),
-                                     actionCollection(), name );
+            QCString name = tmp->shortCutName().latin1();
+            if ( shortCut.contains(name))
+            {
+                kdDebug()<<" shortCut.contains(name) :"<<(shortCut)[name].toString() <<" name !"<<name<<endl;
+                act = new KToggleAction( (*it),
+                                         (shortCut)[name], this, SLOT( slotStyleSelected() ),
+                                         actionCollection(), name );
 
+            }
+            else
+                act = new KToggleAction( (*it),
+                                         0, this, SLOT( slotStyleSelected() ),
+                                         actionCollection(),name );
+            act->setGroup( "styleList" );
+            act->setExclusiveGroup( "styleListAction" );
+            actionFormatStyleMenu->insert( act );
         }
-        else
-            act = new KToggleAction( (*it),
-                                     0, this, SLOT( slotStyleSelected() ),
-                                     actionCollection(),name );
-        act->setExclusiveGroup( "styleList" );
-        actionFormatStyleMenu->insert( act );
     }
 }
 
@@ -2019,7 +2028,7 @@ void KWView::updateFrameStyleList()
         if ( shortCut.contains(name))
         {
             act = new KToggleAction( (*it),
-                                     (shortCut)[name], this, SLOT( slotStyleSelected() ),
+                                     (shortCut)[name], this, SLOT( slotFrameStyleSelected() ),
                                      actionCollection(), name );
 
         }
@@ -3933,22 +3942,23 @@ void KWView::tableProtectCells()
 void KWView::slotStyleSelected()
 {
     QString actionName = QString::fromLatin1(sender()->name());
-    if ( actionName.startsWith( "style_" ) )
+    if ( actionName.startsWith( "shortcut_style_" ) )//see lib/kotext/kostyle.cc
     {
-        QString styleStr = actionName.mid(6);
-        kdDebug() << "KWView::slotStyleSelected " << styleStr << endl;
-        textStyleSelected( styleStr.toInt() );
+        kdDebug() << "KWView::slotStyleSelected " << actionName << endl;
+        textStyleSelected( m_doc->styleCollection()->findStyleShortCut( actionName) );
     }
 }
 
-// Called by the above, and when selecting a style in the style combobox
-void KWView::textStyleSelected( int index )
+void KWView::textStyleSelected( KoStyle *_sty )
 {
+    if ( !_sty )
+        return;
+
     if ( m_gui->canvasWidget()->currentFrameSetEdit() )
     {
         KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
         if ( edit )
-            edit->applyStyle( m_doc->styleCollection()->styleAt( index ) );
+            edit->applyStyle( _sty );
     }
     else
     { // it might be that a frame (or several frames) are selected
@@ -3966,7 +3976,7 @@ void KWView::textStyleSelected( int index )
             {
                 KoTextObject *textObject = ((KWTextFrameSet*)curFrameSet)->textObject();
                 textObject->textDocument()->selectAll( KoTextDocument::Temp );
-                KCommand *cmd = textObject->applyStyle( 0L, m_doc->styleCollection()->styleAt( index ), KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format, true, true );
+                KCommand *cmd = textObject->applyStyle( 0L, _sty , KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format, true, true );
                 textObject->textDocument()->removeSelection( KoTextDocument::Temp );
                 if (cmd)
                 {
@@ -3980,6 +3990,13 @@ void KWView::textStyleSelected( int index )
             m_doc->addCommand( globalCmd );
     }
     m_gui->canvasWidget()->setFocus(); // the combo keeps focus...*/
+
+}
+
+// Called by the above, and when selecting a style in the style combobox
+void KWView::textStyleSelected( int index )
+{
+    textStyleSelected( m_doc->styleCollection()->styleAt( index ) );
 }
 
 // Slot is called when selecting a framestyle in the Frames / Framestyle menu

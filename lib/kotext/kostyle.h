@@ -34,6 +34,7 @@ public:
     const QPtrList<KoStyle> & styleList() const { return m_styleList; }
 
     KoStyle* findStyle( const QString & name );
+    KoStyle* findStyleShortCut( const QString & _shortCut );
     /**
      * Return style number @p i.
      */
@@ -48,6 +49,7 @@ public:
 private:
     QPtrList<KoStyle> m_styleList;
     QPtrList<KoStyle> m_deletedStyles;
+    static int styleNumber;
     KoStyle *m_lastStyle;
 };
 /**
@@ -72,6 +74,14 @@ public:
     void setName( const QString & name ) { m_name = name; }
     /** The translated name */
     QString translatedName() const;
+
+    QString shortCutName() const {
+        return m_shortCut_name;
+    }
+
+    void setShortCutName( const QString & _shortCut) {
+        m_shortCut_name=_shortCut;
+    }
 
     const KoParagLayout & paragLayout() const { return m_paragLayout; }
     KoParagLayout & paragLayout()  { return m_paragLayout; }
@@ -109,6 +119,7 @@ public:
 private:
     KoParagLayout m_paragLayout;
     QString m_name;
+    QString m_shortCut_name;
     KoTextFormat m_format;
     KoStyle *m_followingStyle;
 };
