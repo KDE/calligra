@@ -27,8 +27,6 @@
 #include "kptmainprojectdialog.h"
 #include "kptproject.h"
 #include "kptmainprojectpanel.h"
-#include "kptresourcespanel.h"
-#include "kptresource.h"
 
 namespace KPlato
 {
