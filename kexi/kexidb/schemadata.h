@@ -45,7 +45,7 @@ class KEXI_DB_EXPORT SchemaData
 		const QString& helpText() const;
 
 		//! returns debug string useful for debugging
-		virtual QString schemaDataDebugString();
+		virtual QString schemaDataDebugString() const;
 	protected:
 		SchemaData();
 		virtual ~SchemaData();

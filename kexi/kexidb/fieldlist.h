@@ -35,26 +35,38 @@ class Connection;
 class KEXI_DB_EXPORT FieldList
 {
 	public:
+		/*! Creates empty list of fields. If \a owner is true, the list will be
+		 owner of any added field, what means that these field 
+		 will be removed on the list destruction. Otherwise, the list
+		 just points any field that was added. 
+		 \sa isOwner()
+		*/
+		FieldList(bool owner = true);
+		
+		/*! Destroys the list. If the list owns fields (see constructor),
+		 these are also deleted. */
+		virtual ~FieldList();
+		
+		/*! \return nomber of fields in the list. */
 		unsigned int fieldCount() const;
+		
 		/*! Adds field at the and of field list. */
 		virtual FieldList& addField(Field *field);
+		
 		/*! \return field #id or NULL if there is no such a field. */
 		KexiDB::Field* field(unsigned int id);
 
 		Field::ListIterator fieldsIterator() { return Field::ListIterator(m_fields); }
 
-//		const QString& name() const;
-//		void setName(const QString& name);
+		/*! \return true if fields in the list are owned by this list. */
+		bool isOwner() const;
 
 		/*! Removes all fields from the list, clears name. */
 		virtual void clear();
-//		Field::List::iterator fields() { return m_fields.begin(); }
-//js		void addPrimaryKey(const QString& key);
 
-		virtual void debug();
+		/*! Shows debug information about all fields in the list. */
+		virtual void debug() const;
 	protected:
-		FieldList();
-		virtual ~FieldList();
 
 	//js	QStringList m_primaryKeys;
 //		QString m_name;
@@ -62,30 +74,6 @@ class KEXI_DB_EXPORT FieldList
 
 //	friend class Connection;
 };
-
-/*
-class KEXI_DB_EXPORT TableDef : protected Table
-{
-	public:
-		TableDef(const QString & name);
-		TableDef();
-		~TableDef();
-		KexiDB::FieldDef field(unsigned int id) const;
-	protected:
-};*/
-
-/*
-class KexiDBTableFields: public QValueList<KexiDBField> {
-public:
-	KexiDBTable(const QString & name);
-	~KexiDBTable();
-	void addField(KexiDBField);
-//	const QString& tableName() const;
-
-private:
-//	QString m_tableName;
-};
-*/
 
 } //namespace KexiDB
 

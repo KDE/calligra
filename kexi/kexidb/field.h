@@ -133,15 +133,16 @@ class KEXI_DB_EXPORT Field
 		static QString typeName(Type type);
 
 		virtual QString		name() const;
-//		virtual QString		table() const;
-		virtual TableSchema*		table() const;
+		
+		/*! \return table schema of table that owns this field. */
+		virtual TableSchema* table() const;
 
 		/*!
 		 *	@returns true if the field is autoincrement (e.g. integer/numeric)
 		 */
 		bool		isAutoIncrement() const { return constraints() & AutoInc; }
 		/*!
-		 *	@returns true if the field is a primary key
+		 *	@returns true if the field is member of primary key
 		 */
 		bool		isPrimaryKey() const { return constraints() & PrimaryKey; }
 		/*!

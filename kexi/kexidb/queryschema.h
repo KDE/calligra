@@ -55,8 +55,6 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		
 		virtual ~QuerySchema();
 		
-//		const QString& name() const;
-//		void setName(const QString& name);
 //		QStringList primaryKeys() const;
 //		bool hasPrimaryKeys() const;
 		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
@@ -69,12 +67,17 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 			\sa FieldList::clear() */
 		virtual void clear();
 
-		//! writes debug information to stderr
-		void debug();
+		//! Outputs debug information.
+		virtual void debug() const;
 
 		/*! If query was created using a connection, 
 			returns this connection object, otherwise NULL. */
 		Connection* connection();
+		
+		/*! Table that is parent to this query. Only potentially-editable fields 
+		 in this query belong to this table. */
+		TableSchema* parentTable() const;
+	
 	protected:
 		/*! Automatically retrieves query schema via connection. */
 		QuerySchema(Connection *conn);

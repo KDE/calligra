@@ -47,14 +47,17 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		TableSchema(const QString & name);
 		TableSchema();
 		virtual ~TableSchema();
-//		const QString& name() const;
-//		void setName(const QString& name);
 		QStringList primaryKeys() const;
 		bool hasPrimaryKeys() const;
-		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
+		
+//		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
 
-//		int id() { return m_id; }
-//		Field::List::iterator fields() { return m_fields.begin(); }
+		/*! \return list of fields that are primary key of this table.
+		 This method never returns NULL value,
+		 if there is no primary key, empty IndexSchema object is returned.
+		 IndexSchema object is owned by the table schema. */
+		IndexSchema* primaryKey() const;
+
 //js		void addPrimaryKey(const QString& key);
 
 		/*! Removes all fields from the list, clears name and all other properties. 
@@ -62,7 +65,7 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		virtual void clear();
 
 		//! writes debug information to stderr
-		virtual void debug();
+		virtual void debug() const;
 
 		/*! if table was created using a connection, 
 			returns this connection object, otherwise NULL. */

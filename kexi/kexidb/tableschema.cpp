@@ -63,6 +63,7 @@ TableSchema::~TableSchema()
 {
 }
 
+/*
 KexiDB::FieldList& TableSchema::addField(KexiDB::Field* field)
 {
 	FieldList::addField(field);
@@ -77,6 +78,7 @@ KexiDB::FieldList& TableSchema::addField(KexiDB::Field* field)
 	}
 	return *this;
 }
+*/
 
 void TableSchema::clear()
 {
@@ -137,7 +139,7 @@ Connection* TableSchema::connection()
 	return m_conn;
 }
 
-void TableSchema::debug()
+void TableSchema::debug() const
 {
 	KexiDBDbg << "TABLE " << schemaDataDebugString() << endl;
 	FieldList::debug();

@@ -67,7 +67,7 @@ void SchemaData::clear()
 	m_helpText = QString::null;
 }
 
-QString SchemaData::schemaDataDebugString()
+QString SchemaData::schemaDataDebugString() const
 {
 	QString helpText = m_helpText;
 	if (helpText.length()>40) {

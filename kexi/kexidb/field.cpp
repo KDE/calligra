@@ -19,9 +19,12 @@
    Boston, MA 02111-1307, USA.
  */
 
-#include "field.h"
+#include <kexidb/field.h>
+
 #include <kexidb/connection.h>
 #include <kexidb/driver.h>
+
+#include <kdebug.h>
 
 #include <qdatetime.h>
 
@@ -53,8 +56,6 @@ Field::Field(TableSchema *tableSchema)
 	m_length = 0;
 	m_precision = 0;
 	m_options = NoOptions;
-//	m_unsigned = false;
-//	m_binary = false;
 	m_defaultValue = QVariant(QString::null);
 }
 

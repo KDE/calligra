@@ -89,9 +89,15 @@ Connection* QuerySchema::connection()
 	return m_conn;
 }
 
-void QuerySchema::debug()
+void QuerySchema::debug() const
 {
 	KexiDBDbg << "QUERY " << schemaDataDebugString() << endl;
 	FieldList::debug();
 }
+
+TableSchema* QuerySchema::parentTable() const
+{
+	return m_parent_table;
+}
+
 

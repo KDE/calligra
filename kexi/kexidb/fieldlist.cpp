@@ -18,15 +18,15 @@
 */
 
 #include <kexidb/fieldlist.h>
+#include <kexidb/object.h>
 
 #include <kdebug.h>
 
 using namespace KexiDB;
 
-FieldList::FieldList(/*const QString& name*/)
-//	: m_name(name)
+FieldList::FieldList(bool owner)
 {
-	m_fields.setAutoDelete( true );
+	m_fields.setAutoDelete( owner );
 }
 
 FieldList::~FieldList()
@@ -45,33 +45,11 @@ FieldList& FieldList::addField(KexiDB::Field *field)
 	m_fields.append(field);
 	return *this;
 }
-/*
-void Table::addPrimaryKey(const QString& key)
-{
-	m_primaryKeys.append(key);
-}*/
 
-/*QStringList Table::primaryKeys() const
+bool FieldList::isOwner() const
 {
-	return m_primaryKeys;
+	return m_fields.autoDelete();
 }
-
-bool Table::hasPrimaryKeys() const
-{
-	return !m_primaryKeys.isEmpty();
-}
-*/
-
-//moved to SchemaData
-//const QString& FieldList::name() const
-//{
-//	return m_name;
-//}
-
-//void FieldList::setName(const QString& name)
-//{
-//	m_name=name;
-//}
 
 KexiDB::Field* FieldList::field(unsigned int id)
 {
@@ -85,7 +63,7 @@ unsigned int FieldList::fieldCount() const
 	return m_fields.count();
 }
 
-void FieldList::debug()
+void FieldList::debug() const
 {
 	QString dbg;
 	Field::ListIterator it( m_fields );
@@ -99,4 +77,6 @@ void FieldList::debug()
 		dbg += "  ";
 		dbg += field->debugString();
 	}
+	KexiDBDbg << dbg;
 }
+
