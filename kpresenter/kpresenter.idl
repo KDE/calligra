@@ -22,7 +22,7 @@ module KPresenter
       slot void editHeaderFooter();
 
       slot void newView();
-	  
+	
       slot void insertPage();
       slot void insertPicture();
       slot void insertClipart();
@@ -108,7 +108,8 @@ module KPresenter
       slot void textDepthMinus();
       slot void textSpacing();
       slot void textContentsToHeight();
-
+      slot void textObjectToContents();
+      
       slot void setPenColor(in long id);
       slot void setFillColor(in long id);
     };

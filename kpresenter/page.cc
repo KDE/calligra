@@ -1453,6 +1453,7 @@ void Page::setupMenus()
     txtMenu->insertItem( ICON( "alignobjs.xpm" ), i18n( "&Align objects" ), alignMenu4 );
     txtMenu->insertSeparator();
     txtMenu->insertItem( i18n( "&Extend Contents to Object Height" ), this, SLOT( slotTextContents2Height() ) );
+    txtMenu->insertItem( i18n( "&Resize Object to fit the Contents" ), this, SLOT( slotTextObj2Contents() ) );
     txtMenu->setMouseTracking( true );
 
     // create right button presentation menu
@@ -1622,6 +1623,21 @@ KTextObject *Page::haveASelectedTextObj()
         kpobject = objectList()->at( i );
         if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT )
             return dynamic_cast<KPTextObject*>( kpobject )->getKTextObject();
+    }
+
+    return 0L;
+}
+
+/*================================================================*/
+KPTextObject *Page::haveASelectedKPTextObj()
+{
+    KPObject *kpobject = 0;
+
+    for ( unsigned int i = 0; i < objectList()->count(); i++ )
+    {
+        kpobject = objectList()->at( i );
+        if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT )
+            return dynamic_cast<KPTextObject*>( kpobject );
     }
 
     return 0L;
@@ -3564,6 +3580,13 @@ KTextObject* Page::kTxtObj()
 }
 
 /*================================================================*/
+KPTextObject* Page::kpTxtObj()
+{
+    return ( ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT ) ?
+             dynamic_cast<KPTextObject*>( objectList()->at( editNum ) ) : 0 );
+}
+
+/*================================================================*/
 void Page::deleteObjs()
 {
     view->kPresenterDoc()->deleteObjs();
@@ -3793,6 +3816,12 @@ void Page::slotEditHF()
 void Page::slotTextContents2Height()
 {
     view->textContentsToHeight();
+}
+
+/*================================================================*/
+void Page::slotTextObj2Contents()
+{
+    view->textObjectToContents();
 }
 
 /*================================================================*/

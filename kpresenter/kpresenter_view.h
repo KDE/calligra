@@ -229,7 +229,8 @@ public:
     virtual void textDepthMinus();
     virtual void textSpacing();
     virtual void textContentsToHeight();
-
+    virtual void textObjectToContents();
+    
     // color bar
     virtual void setPenColor( CORBA::Long id );
     virtual void setFillColor( CORBA::Long id );
@@ -502,6 +503,7 @@ protected:
     CORBA::Long m_idMenuText_TDepthMinus;
     CORBA::Long m_idMenuText_TSpacing;
     CORBA::Long m_idMenuText_TExtentCont2Height;
+    CORBA::Long m_idMenuText_TExtentObj2Cont;
 
     // extra menu
     OpenPartsUI::Menu_var m_vMenuExtra;

@@ -39,6 +39,7 @@ class KPresenterView;
 class KPresenterDoc;
 class QPainter;
 class KTextObject;
+class KPTextObject;
 class KPObject;
 class QPopupMenu;
 class QEvent;
@@ -86,6 +87,7 @@ public:
     void setTextColor( QColor* );
     void setTextAlign( TxtParagraph::HorzAlign );
     KTextObject* kTxtObj();
+    KPTextObject* kpTxtObj();
 
     void startScreenPresentation( bool );
     void stopScreenPresentation();
@@ -110,6 +112,7 @@ public:
     { autoform = _autoform; }
 
     KTextObject *haveASelectedTextObj();
+    KPTextObject *haveASelectedKPTextObj();
 
     void drawPageInPix( QPixmap&, int );
     void drawPageInPix2( QPixmap&, int, int, float _zoom = 1.0 );
@@ -225,7 +228,7 @@ protected:
     QList <KPObject> tmpObjs;
     QString autoform;
     bool inEffect;
-    
+
 public slots:
     void chPic();
     void chClip();
@@ -259,6 +262,7 @@ private slots:
     void slotExitPres();
     void slotEditHF();
     void slotTextContents2Height();
+    void slotTextObj2Contents();
 
 signals:
 

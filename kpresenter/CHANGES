@@ -274,3 +274,8 @@ Reggie, 31.5.1999:
 Reggie, 1.6.1999:
 -----------------
 - Fix in saving pictures/cliparts inline
+
+Reggie, 2.6.1999:
+-----------------
+- Implemented for Textobjects: Resize object to fit contents  
+  (How is this called in real english? :-)

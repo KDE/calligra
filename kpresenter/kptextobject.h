@@ -20,6 +20,8 @@
 #include "ktextobject.h"
 #include "kpgradient.h"
 
+class KPresenterView;
+
 /******************************************************************/
 /* Class: KPTextObject                                            */
 /******************************************************************/
@@ -83,6 +85,8 @@ public:
 
     virtual void zoom( float _fakt );
     virtual void zoomOrig();
+
+    virtual void extendObject2Contents( KPresenterView *view );
 
 protected:
     virtual void saveKTextObject( ostream& out );

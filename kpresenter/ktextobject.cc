@@ -6394,3 +6394,15 @@ void KTextObject::extendContents2Height()
     recalc();
 }
 
+/*================================================================*/
+KSize KTextObject::neededSize()
+{
+    int y;
+    rowYPos( numRows() - 1, &y );
+    
+    unsigned int w = 0;
+    for ( unsigned int i = 0; i < paragraphList.count(); i++ )
+        w = QMAX( w, paragraphList.at( i )->width() );
+        
+    return KSize( w, y + cellHeight( numRows() - 1 ) ); 
+}

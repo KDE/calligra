@@ -1878,6 +1878,8 @@ public:
 
     void extendContents2Height();
 
+    KSize neededSize();
+    
 signals:
 
     /**

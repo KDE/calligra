@@ -15,11 +15,16 @@
 
 #include "kptextobject.h"
 #include "kpgradient.h"
+#include "resizecmd.h"
 
 #include <qwidget.h>
 #include <qpicture.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
+
+#include <klocale.h>
+
+#include "kpresenter_view.h"
 
 /******************************************************************/
 /* Class: KPTextObject                                            */
@@ -549,6 +554,20 @@ void KPTextObject::zoomOrig()
     ktextobject.zoomOrig();
 }
 
+/*================================================================*/
+void KPTextObject::extendObject2Contents( KPresenterView *view )
+{
+    KSize s( ktextobject.neededSize() );
+
+    setSize( s.width(), s.height() );
+    
+//     ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object" ), KPoint( 0, 0 ), KSize( s.width() - ext.width(), 
+//                                                                                           s.height() - ext.height() ),
+//                                           this, view->kPresenterDoc() );
+//     resizeCmd->execute();
+//     view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+}
+
 /*=========================== save ktextobject ===================*/
 void KPTextObject::saveKTextObject( ostream& out )
 {
@@ -561,7 +580,7 @@ void KPTextObject::saveKTextObject( ostream& out )
 
     out << otag << "<TEXTOBJ objType=\"" << static_cast<int>( ktextobject.objType() ) << "\">" << endl;
     out << indent << "<ENUMLISTTYPE type=\"" << ktextobject.enumListType().type << "\" before=\""
-        << ktextobject.enumListType().before.utf8().data() << "\" after=\"" 
+        << ktextobject.enumListType().before.utf8().data() << "\" after=\""
 	<< ktextobject.enumListType().after.utf8().data()
         << "\" start=\"" << ktextobject.enumListType().start << "\" family=\""
         << ktextobject.enumListType().font.family().ascii() << "\" pointSize=\"" << ktextobject.enumListType().font.pointSize()

@@ -48,12 +48,14 @@
 #include "kppartobject.h"
 
 #include <kfiledialog.h>
+
 #include "kpresenter_view.h"
 #include "kpresenter_view.moc"
 #include "kpresenter_shell.h"
 #include "page.h"
 #include "webpresentation.h"
 #include "footer_header.h"
+#include "kptextobject.h"
 
 #include <klocale.h>
 #include <kcolordlg.h>
@@ -1627,6 +1629,25 @@ void KPresenterView::textContentsToHeight()
         txtObj->extendContents2Height();
 
     if ( page->haveASelectedTextObj() )
+        m_pKPresenterDoc->repaint( false );
+
+    sendFocusEvent();
+}
+
+/*===============================================================*/
+void KPresenterView::textObjectToContents()
+{
+    KPTextObject *txtObj = 0L;
+
+    if ( page->kpTxtObj() )
+        txtObj = page->kpTxtObj();
+    else if ( page->haveASelectedKPTextObj() )
+        txtObj = page->haveASelectedKPTextObj();
+
+    if ( txtObj )
+        txtObj->extendObject2Contents( this );
+
+    if ( page->haveASelectedKPTextObj() )
         m_pKPresenterDoc->repaint( false );
 
     sendFocusEvent();
@@ -3224,7 +3245,10 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = Q2C( i18n( "&Extend Contents to Object Height" ) );
     m_idMenuText_TExtentCont2Height = m_vMenuText->insertItem( text, this, "textContentsToHeight", 0 );
 
+    text = Q2C( i18n( "&Resize Object to fit the Contents" ) );
+    m_idMenuText_TExtentObj2Cont = m_vMenuText->insertItem( text, this, "textObjToCont", 0 );
 
+    
     // MENU Extra
     text = Q2C( i18n( "&Extra" ) );
     _menubar->insertMenu( text, m_vMenuExtra, -1, -1 );
