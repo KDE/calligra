@@ -460,7 +460,10 @@ bool KuDesignerDoc::openDocument(const KURL& url, const char *format /*=0*/)
 	    else if (child.nodeName() == "DetailHeader")
 		setDetailHeaderAttributes(&child);
 	    else if(child.nodeName() == "Detail")
+	    {
+		canvas()->templ->detailsCount++;
 		setDetailAttributes(&child);
+	    }
 	    else if(child.nodeName() == "DetailFooter")
 		setDetailFooterAttributes(&child);
 	    else if(child.nodeName() == "PageFooter")
@@ -497,6 +500,7 @@ bool KuDesignerDoc::saveDocument(const KURL& url, const char *format /*=0*/)
     KIO::NetAccess::upload(temp.name(), url);
     KIO::NetAccess::removeTempFile(temp.name());
 
+    setURL(url);
     modified=false;
     return true;
 }
