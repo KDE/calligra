@@ -4860,7 +4860,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		lineStart->baseLine = c->ascent();
 		lineStart->h = c->height();
 		c->lineStart = 1;
-		firstChar = &string->at( i );
+		firstChar = c;
 		tmpBaseLine = lineStart->baseLine;
 		lastBreak = -1;
 		col = 0;
