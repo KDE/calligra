@@ -53,7 +53,7 @@ VEllipse::init()
 	if( m_startAngle < m_endAngle )
 	    nsegs = floor( ( m_endAngle - m_startAngle ) / 90.0 );
 	else
-	    nsegs = 4 - floor( ( m_startAngle - m_endAngle ) / 90.0 );
+	    nsegs = 4 - ceil( ( m_startAngle - m_endAngle ) / 90.0 );
 	double startAngle = VGlobal::pi_2 * ( m_startAngle / 90.0 );
 	double endAngle   = VGlobal::pi_2 * ( m_endAngle / 90.0 );
 	// Create (half-)unity circle with topLeft at (0|0):
