@@ -173,11 +173,9 @@ public slots:
     void extraStylist();
     void extraCreateTemplate();
 
-    //void toolsEdit();
-    //void toolsEditFrame();
     void toolsCreateText();
     void toolsCreatePix();
-    void toolsFormula();
+    void insertFormula();
     void toolsPart();
 
     void tableInsertRow();
@@ -259,6 +257,7 @@ protected:
 
     void createExpressionActions( KActionMenu * parentMenu,const QString& filename );
 
+    QString selectPicture();
 
     KWTextFrameSetEdit *currentTextEdit();
 

@@ -343,7 +343,7 @@ void KWView::setupActions()
                         actionCollection(), "insert_specialchar" );
 
     actionInsertFormula = new KAction( i18n( "For&mula" ), "frame_formula", 0,
-                                       this, SLOT( toolsFormula() ),
+                                       this, SLOT( insertFormula() ),
                                        actionCollection(), "tools_formula" );
 
     actionInsertFrameBreak = new KAction( i18n( "&Hard Frame Break" ), CTRL + Key_Return,
@@ -1400,46 +1400,31 @@ void KWView::setZoom( int zoom, bool updateViews )
 
 void KWView::insertPicture()
 {
-    QString file;
-#ifdef USE_QFD
-    QFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
-    fd.setPreviewMode( FALSE, TRUE );
-    fd.setContentsPreviewWidget( new Preview( &fd ) );
-    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
-    if ( fd.exec() == QDialog::Accepted )
-        file = fd.selectedFile();
-#else
-    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, TRUE );
-    fd.setCaption(i18n("Insert Picture"));
-    //fd.setPreviewMode( FALSE, TRUE );
-    fd.setPreviewWidget( new Preview( &fd ) );
-    //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
-    KURL url;
-    if ( fd.exec() == QDialog::Accepted )
-        url = fd.selectedURL();
-
-    if( url.isEmpty() )
-      return;
-
-    if( !url.isLocalFile() )
-    {
-      KMessageBox::sorry( 0L, i18n( "Only local files supported yet." ) );
-      return;
-    }
-
-    file = url.path();
-#endif
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->insertPicture( file );
-
+    insertPicture( selectPicture() );
 }
 
 void KWView::insertPicture(const QString &filename)
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->insertPicture( filename );
+    if ( !filename.isEmpty() )
+    {
+        KWTextFrameSetEdit * edit = currentTextEdit();
+        if ( edit )
+        {
+            // ### Old way: edit->insertPicture( filename );
+            // New way:
+            KWPictureFrameSet *frameset = new KWPictureFrameSet( doc, QString::null );
+            QPixmap pix( filename );
+            // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
+            int width = qRound( (double)pix.width() * doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
+            int height = qRound( (double)pix.height() * doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
+            frameset->setFileName( filename, QSize( width, height ) );
+            doc->addFrameSet( frameset, false ); // done first since the frame number is stored in the undo/redo
+            KWFrame *frame = new KWFrame(frameset, 0, 0, doc->unzoomItX( width ), doc->unzoomItY( height ) );
+            frameset->addFrame( frame, false );
+            edit->insertFloatingFrameSet( frameset, i18n("Insert Picture Inline") );
+            frameset->finalize(); // done last since it triggers a redraw
+        }
+    }
 }
 
 void KWView::insertSpecialChar()
@@ -1793,41 +1778,34 @@ void KWView::toolsCreatePix()
     }
     gui->canvasWidget()->setMouseMode( MM_EDIT );
 
-    QString file;
-#ifdef USE_QFD
-    QFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
-    fd.setPreviewMode( FALSE, TRUE );
-    fd.setContentsPreviewWidget( new Preview( &fd ) );
-    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
-    if ( fd.exec() == QDialog::Accepted )
-        file = fd.selectedFile();
-#else
-    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Writing), 0, 0, TRUE );
-    //fd.setPreviewMode( FALSE, TRUE );
-    fd.setCaption(i18n("Create Picture"));
-    fd.setPreviewWidget( new Preview( &fd ) );
-    //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
-    KURL url;
-    if ( fd.exec() == QDialog::Accepted )
-        url = fd.selectedURL();
 
-    if( url.isEmpty() )
-      return;
-
-    if( !url.isLocalFile() )
-    {
-      KMessageBox::sorry( 0L, i18n( "Only local files are currently supported." ) );
-      return;
-    }
-
-    file = url.path();
-#endif
-
+    QString file = selectPicture();
     if ( !file.isEmpty() ) {
         gui->canvasWidget()->setMouseMode( MM_CREATE_PIX );
         gui->canvasWidget()->setPixmapFilename( file );
     } else
         gui->canvasWidget()->setMouseMode( MM_EDIT );
+}
+
+QString KWView::selectPicture()
+{
+    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Writing), 0, 0, TRUE );
+    fd.setCaption(i18n("Insert Picture"));
+    fd.setPreviewWidget( new Preview( &fd ) );
+    KURL url;
+    if ( fd.exec() == QDialog::Accepted )
+        url = fd.selectedURL();
+
+    if( url.isEmpty() )
+      return QString::null;
+
+    if( !url.isLocalFile() )
+    {
+      KMessageBox::sorry( 0L, i18n( "Only local files are currently supported." ) );
+      return QString::null;
+    }
+
+    return url.path();
 }
 
 void KWView::insertTable()
@@ -1844,7 +1822,7 @@ void KWView::insertTable()
     delete tableDia;
 }
 
-void KWView::toolsFormula()
+void KWView::insertFormula()
 {
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)

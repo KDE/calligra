@@ -386,16 +386,20 @@ void KWCanvas::mpCreate( int mx, int my )
 void KWCanvas::mpCreatePixmap( int mx, int my )
 {
     if ( !m_PixmapName.isEmpty() ) {
-        QPixmap _pix( m_PixmapName );
+        QPixmap pix( m_PixmapName );
+        // Apply grid for the first corner only
         mx = ( mx / doc->gridX() ) * doc->gridX();
         my = ( my / doc->gridX() ) * doc->gridY();
         double x = mx / doc->zoomedResolutionX();
         double y = my / doc->zoomedResolutionY();
         m_insRect.setCoords( x, y, 0, 0 );
-        deleteMovingRect = FALSE;
-        //doRaster = FALSE;
-        // TODO same zoom stuff as KWImage (for 1x1 at 100%)
-        QPoint nPoint( mx + _pix.width(), my + _pix.height() );
+        deleteMovingRect = false;
+
+        // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
+        int width = qRound( (double)pix.width() * doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
+        int height = qRound( (double)pix.height() * doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
+
+        QPoint nPoint( mx + width, my + height );
         QPoint vPoint = m_viewMode->normalToView( nPoint );
         QCursor::setPos( viewport()->mapToGlobal( contentsToViewport( vPoint ) ) );
     }
@@ -647,8 +651,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     QRect newRect( m_viewMode->normalToView( frame->outerRect() ) );
     // Repaing only the changed rects (oldRect U newRect)
     repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
-    //doRaster = TRUE;
-    frameResized = TRUE;
+    frameResized = true;
 }
 
 void KWCanvas::mmEditFrameMove( int mx, int my )
@@ -810,10 +813,11 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
 
 void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
 {
-    /*if ( doRaster ) {*/
+    if ( m_mouseMode != MM_CREATE_PIX )
+    {
         mx = ( mx / doc->gridX() ) * doc->gridX();
         my = ( my / doc->gridY() ) * doc->gridY();
-    //}
+    }
 
     QPainter p;
     p.begin( viewport() );
@@ -1811,6 +1815,9 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                             break;
                         case Key_F: // 'F' -> frames debug
                             doc->printDebug();
+                            kdDebug(32002) << "Current framesetedit: " << m_currentFrameSetEdit << endl;
+                            if ( m_currentFrameSetEdit )
+                                kdDebug(32002) << m_currentFrameSetEdit->frameSet()->className() << endl;
                             break;
                         default:
                             break;
