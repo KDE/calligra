@@ -85,9 +85,16 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 eventually delete it. Better use Connection destructor. */
 		Connection* removeConnection( Connection *conn );
 
-		/*! The name equal to the service name (X-Kexi-DriverName) 
-		 stored in given service .desktop file. */
-		QString driverName() { return m_driverName; }
+//		/*! \return a name equal to the service name (X-Kexi-DriverName) 
+//		 stored in given service .desktop file. */
+//		QString driverName() { return m_driverName; }
+
+		/*! \return a name of MIME type of files handled by this driver 
+		 if it is a file-based database's driver 
+		 (equal X-Kexi-FileDBDriverMime service property)
+		 otherwise returns null string. \sa isFileDriver()
+		*/
+		QString fileDBDriverMime() { return m_fileDBDriverMime; }
 
 		/*! Info about the driver as a service. */
 		const KService* service() { return m_service; }
@@ -144,10 +151,10 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 Note for driver developers: Reimplement this.
 		 In your reimplementation you should initialize:
 		 - m_typeNames - to types accepted by your engine
-		 - m_driverName - to desired name of your driver (not i18n'd)
 		 - m_isFileDriver - to true or false depending if your driver is file-based
 		 - m_features - to combination of selected values from Features enum
 		 
+		 You may also want to change options in DriverBehaviour *beh member.
 		 See drivers/mySQL/mysqldriver.cpp for usage example.
 		 */
 		Driver( QObject *parent, const char *name, const QStringList &args = QStringList() );
@@ -155,9 +162,15 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		QPtrDict<KexiDB::Connection> m_connections;
 		DriverManager *m_manager;
 
-		/*! The name equal to the service name (X-Kexi-DriverName) 
-		 stored in given service .desktop file. Set this in subclasses. */
-		QString m_driverName;
+//(js)now QObject::name() is reused:
+//		/*! The name equal to the service name (X-Kexi-DriverName) 
+//		 stored in given service .desktop file. Set this in subclasses. */
+//		QString m_driverName;
+		
+		/*! Name of MIME type of files handled by this driver 
+		 if it is a file-based database's driver 
+		 (equal X-Kexi-FileDBDriverMime service property) */
+		QString m_fileDBDriverMime;
 
 		/*! Info about the driver as a service. */
 		KService *m_service;

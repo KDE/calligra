@@ -37,7 +37,6 @@ using namespace KexiDB;
 pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringList &args )
 	: Driver( parent, name, args )
 {
-	m_driverName = "pqxxSql";
 	m_isFileDriver = false;
 	m_features = SingleTransactions | CursorForward | CursorBackward;
 

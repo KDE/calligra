@@ -84,7 +84,7 @@ Driver::~Driver()
 
 bool Driver::isValid()
 {
-	QString not_init = i18n("not initialized for \"%1\" driver.").arg(m_driverName);
+	QString not_init = i18n("not initialized for \"%1\" driver.").arg(name());
 	if (beh->ROW_ID_FIELD_NAME.isEmpty()) {
 		setError(ERR_INVALID_DRIVER_IMPL, QString("DriverBehaviour::ROW_ID_FIELD_NAME ") + not_init);
 		return false;

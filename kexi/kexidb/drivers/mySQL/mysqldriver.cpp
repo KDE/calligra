@@ -47,7 +47,6 @@ MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &a
 {
 	KexiDBDrvDbg << "MySqlDriver::MySqlDriver()" << endl;
 
-	m_driverName = "mySQL";
 	m_isFileDriver=false;
 	m_features=CursorForward;
 

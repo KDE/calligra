@@ -31,7 +31,7 @@ class KEXIDB_MYSQL_DRIVER_EXPORT MySqlDriver : public Driver
 	Q_OBJECT
 
 	public:
-		MySqlDriver(QObject *parent=0, const char *name="mysq", const QStringList &args=QStringList());
+		MySqlDriver(QObject *parent, const char *name, const QStringList &args=QStringList());
 		~MySqlDriver();
 
 	protected:

@@ -39,6 +39,8 @@ namespace KexiDB {
 
 #define KexiDBDbg  kdDebug(44000)   //! Debug area for core KexiDB code
 #define KexiDBDrvDbg kdDebug(44001) //! Debug area for KexiDB's drivers implementation code
+#define KexiDBWarning  kdWarning(44000)
+#define KexiDBDrvWarning kdWarning(44001)
 
 //! returns KexiDB version info (most significant part)
 int KEXI_DB_EXPORT majorVersion();

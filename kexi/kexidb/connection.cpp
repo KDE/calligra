@@ -1010,7 +1010,7 @@ bool Connection::rollbackAutoCommitTransaction(const Transaction& trans)
 
 #define SET_ERR_TRANS_NOT_SUPP \
 	{ setError(ERR_UNSUPPORTED_DRV_FEATURE, \
-	 i18n("Transactions are not supported for \"%1\" driver.").arg(m_driver->driverName() )); }
+	 i18n("Transactions are not supported for \"%1\" driver.").arg(m_driver->name() )); }
 
 #define SET_BEGIN_TR_ERROR \
 	 { if (!error()) \

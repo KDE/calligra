@@ -63,11 +63,12 @@ class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object
 		/*! \return a map structure of the services. Not necessary for everyday use. */
 		const ServicesMap& services();
 
-		/**!
-		 * looks up a driver by it's file database mimetype
-		 * @returns the driver name
-		 */
-		const QString	lookupByMime(const QString &mime);
+		/*! Looks up a drivers list by MIME type of database file.
+		 Only file-based database drivers are checked.
+		 The lookup is case insensitive.
+		 \return driver name or null string if no driver found.
+		*/
+		QString lookupByMime(const QString &mimeType);
 	private:
 		DriverManagerInternal *d_int;
 };

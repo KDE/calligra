@@ -49,7 +49,6 @@ SQLiteDriver::SQLiteDriver( QObject *parent, const char *name, const QStringList
 	: Driver( parent, name, args )
 	,d( new SQLiteDriverPrivate() )
 {
-	m_driverName = "SQLite";
 	m_isFileDriver = true;
 	m_isDBOpenedAfterCreate = true;
 	m_features = SingleTransactions | CursorForward;
