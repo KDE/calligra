@@ -700,7 +700,7 @@ void KSpreadDoc::loadOasisSettings( const QDomElement& setting )
 
 void KSpreadDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 {
-    //todo
+    d->workbook->saveOasisSettings( settingsWriter );
 }
 
 void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const

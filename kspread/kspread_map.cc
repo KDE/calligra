@@ -88,12 +88,32 @@ void KSpreadMap::moveTable( const QString & _from, const QString & _to, bool _be
 
 void KSpreadMap::loadOasisSettings( const QDomElement& setting )
 {
-
 }
 
 void KSpreadMap::saveOasisSettings( KoXmlWriter &settingsWriter )
 {
+  // Save visual info for the first view, such as active table and active cell
+  // It looks like a hack, but reopening a document creates only one view anyway (David)
+  KSpreadView * view = static_cast<KSpreadView*>(this->doc()->views().getFirst());
+  if ( view ) // no view if embedded document
+  {
+      KSpreadCanvas * canvas = view->canvasWidget();
+      //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
+      settingsWriter.startElement( "config:config-item" );
+      settingsWriter.addAttribute( "config:name", "ActiveTable" );
+      settingsWriter.addAttribute( "config:type", "string" );
+      settingsWriter.addTextNode( canvas->activeTable()->tableName() );
+      settingsWriter.endElement();
+      //todo
+      //mymap.setAttribute( "markerColumn", canvas->markerColumn() );
+      //mymap.setAttribute( "markerRow", canvas->markerRow() );
+  }
 
+  QPtrListIterator<KSpreadSheet> it( m_lstTables );
+  for( ; it.current(); ++it )
+  {
+      it.current()->saveOasisSettings( settingsWriter );
+  }
 }
 
 
