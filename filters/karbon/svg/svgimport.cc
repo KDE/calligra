@@ -31,6 +31,7 @@
 #include <qfile.h>
 #include <qregexp.h>
 #include <iostream>
+#include <zlib.h>
 
 typedef KGenericFactory<SvgImport, KoFilter> SvgImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonsvgimport, SvgImportFactory( "karbonsvgimport" ) );
@@ -51,17 +52,47 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 	// check for proper conversion
 	if( to != "application/x-karbon" || from != "image/svg+xml" )
 		return KoFilter::NotImplemented;
-
 	QFile in( m_chain->inputFile() );
-    if( !in.open( IO_ReadOnly ) )
-	{
-		kdError(30502) << "Unable to open input file" << endl;
-		in.close();
-		return KoFilter::FileNotFound;
-	}
 
-	QTextStream stream( &in );
-	inpdoc.setContent( stream.device() );
+	QString path = m_chain->inputFile();
+	if( path.right( 3 ).upper() == "SVG" )
+    {
+	    if( !in.open( IO_ReadOnly ) )
+		{
+			kdError(30502) << "Unable to open input file" << endl;
+			return KoFilter::FileNotFound;
+		}
+		inpdoc.setContent( &in );
+	}
+	else
+	{
+		// svgz loading from kdecore/svgicons
+		gzFile svgz = gzopen( path.latin1(), "ro" );
+		if( !svgz )
+			return false;
+
+		QCString data;
+		bool done = false;
+
+		char *buffer = new char[ 1024 ];
+
+		while( !done )
+		{
+			memset( buffer, 0, 1024 );
+
+			int ret = gzread( svgz, buffer, 1024 );
+			if( ret == 0 )
+				done = true;
+			else if( ret == -1 )
+				return false;
+
+			data += buffer;
+		}
+
+		gzclose( svgz );
+
+		inpdoc.setContent( data );
+	}
 
 	// Do the conversion!
 
@@ -450,7 +481,7 @@ SvgImport::getCoord( const char *ptr, double &number )
 void
 SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 {
-	QString d = e.attribute( "d" );
+	QString d = e.attribute( "d" ).replace( QRegExp( "," ), " ");
 
 	if( !d.isEmpty() )
 	{
