@@ -4567,7 +4567,7 @@ int KSpreadTable::adjustColumn( KSpreadSelection* selectionInfo, int _col )
         {
           if ( !c->isEmpty() && !c->isObscured() )
           {
-              long_max = adjustColumnHelper( c,col, c->row() );
+              long_max = QMAX( adjustColumnHelper( c,col, c->row() ), long_max);
           } // if !isEmpty...
           c = getNextCellDown( col, c->row() );
         }
@@ -4585,7 +4585,7 @@ int KSpreadTable::adjustColumn( KSpreadSelection* selectionInfo, int _col )
         {
           if ( !c->isEmpty() && !c->isObscured())
           {
-              long_max = adjustColumnHelper( c,col, c->row() );
+              long_max = QMAX( adjustColumnHelper( c,col, c->row() ), long_max);
           }
           c = getNextCellDown( col, c->row() );
         } // end while
@@ -4601,7 +4601,7 @@ int KSpreadTable::adjustColumn( KSpreadSelection* selectionInfo, int _col )
         if ( cell != m_pDefaultCell && !cell->isEmpty()
              && !cell->isObscured() )
         {
-            long_max = adjustColumnHelper( cell, x, y );
+            long_max = QMAX( adjustColumnHelper( cell, x, y ), long_max);
         }
       } // for top...bottom
     } // not column selected
@@ -6021,8 +6021,8 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 
                 cell = cellAt( x, y );
                 QRect r( 0, 0, view.width(), view.height() );
-                cell->paintCell( r, _painter, NULL, 
-                                 qMakePair( xpos, ypos ), 
+                cell->paintCell( r, _painter, NULL,
+                                 qMakePair( xpos, ypos ),
                                  QPoint(x,y) );
 
                 xpos += col_lay->dblWidth();
@@ -6056,8 +6056,8 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 
                 cell = cellAt( x, y );
                 QRect r( 0, 0, view.width() + xpos, view.height() );
-                cell->paintCell( r, _painter, NULL, 
-                                 qMakePair( xpos, ypos ), 
+                cell->paintCell( r, _painter, NULL,
+                                 qMakePair( xpos, ypos ),
                                  QPoint(x,y));
 
                 xpos += col_lay->dblWidth();
@@ -6090,8 +6090,8 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 
                 cell = cellAt( x, y );
                 QRect r( 0, 0, view.width() + xpos, view.height() + ypos );
-                cell->paintCell( r, _painter, NULL, 
-                                 qMakePair( xpos, ypos ), 
+                cell->paintCell( r, _painter, NULL,
+                                 qMakePair( xpos, ypos ),
                                  QPoint(x,y));
 
                 xpos += col_lay->dblWidth();
@@ -6122,8 +6122,8 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 
             cell = cellAt( x, y );
             QRect r( 0, 0, view.width() + xpos, view.height() + ypos );
-            cell->paintCell( r, _painter, NULL, 
-                             qMakePair( xpos, ypos ), 
+            cell->paintCell( r, _painter, NULL,
+                             qMakePair( xpos, ypos ),
                              QPoint(x,y) );
 
             xpos += col_lay->dblWidth();
