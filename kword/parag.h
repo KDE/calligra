@@ -4,15 +4,16 @@
 class KWParag;
 class KWordDocument_impl;
 
-#include <sys/timeb.h>
-
 #include "defs.h"
 #include "paraglayout.h"
 #include "fc.h"
+#include "char.h"
+
+#include <assert.h>
 
 /**
  * This class hold a real paragraph. It tells abou the text in this
- * paragraph, its format ect. The complete text is a list of KWParag instances.
+ * paragraph, its format etc. The complete text is a list of KWParag instances.
  */
 class KWParag
 {
@@ -79,13 +80,14 @@ public:
      *         the amount of characters or whatever. The size needed
      *         to store pointers to @ref #KWFormat is included for example.
      */
-    unsigned int getTextLen() { return textLen; }
+    unsigned int getTextLen() { return text.size(); }
     /**
      * @return a pointer to the memory segment, which holds text paragraphs
      *         text.
      */
-    const char* getText() { return text; }
-    
+    KWChar* getText() { return text.data; }
+    KWChar* getChar( unsigned int _pos ) { assert( _pos < text.len ); return text.data + _pos; }
+  
     /**
      * @return the paragraph Llyout of this paragraph.
      */
@@ -115,7 +117,8 @@ public:
     void setPTYStart( unsigned int _y ) { ptYStart = _y; }
 
     void insertText( unsigned int _pos, const char *_text );
-    
+    void setFormat( unsigned int _pos, const KWFormat &format );
+  
 protected:
     /**
      * Pointer to the previous paragraph or 0L if this is the first one.
@@ -135,15 +138,15 @@ protected:
     /**
      * Pointer to the text array.
      */
-    char *text;
+    KWString text;
     /**
      * Length of the array.
      */
-    unsigned int maxTextLen;
+    // unsigned int maxTextLen;
     /**
      * Length of the used text array.
      */
-    unsigned int textLen;
+    // unsigned int textLen;
     /**
      * The document this paragraph is belonging to.
      */

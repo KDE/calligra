@@ -1,7 +1,7 @@
 #include "format.h"
 #include "kword_doc.h"
 
-KWFormat::KWFormat( QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
+KWFormat::KWFormat( const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
 		    char _italic = -1, char _math = -1, char _direct = -1 )
 {
     color = _color;
@@ -23,7 +23,7 @@ KWFormat::KWFormat()
     direct = -1;
 }
 
-KWFormat::KWFormat( KWFormat &_format )
+KWFormat::KWFormat( const KWFormat &_format )
 {
     userFont = _format.getUserFont();
     ptFontSize = _format.getPTFontSize();
@@ -32,6 +32,19 @@ KWFormat::KWFormat( KWFormat &_format )
     color = _format.getColor();
     math = -1;
     direct = -1;
+}
+
+KWFormat& KWFormat::operator=( const KWFormat& _format )
+{
+    userFont = _format.getUserFont();
+    ptFontSize = _format.getPTFontSize();
+    weight = _format.getWeight();
+    italic = _format.getItalic();
+    color = _format.getColor();
+    math = -1;
+    direct = -1;
+
+    return *this;
 }
 
 void KWFormat::setDefaults( KWordDocument_impl *_doc )
@@ -51,7 +64,12 @@ KWDisplayFont* KWFormat::loadFont( KWordDocument_impl *_doc, QPainter &_painter 
     if ( font )
 	return font;
 
-    font = new KWDisplayFont( _doc, _painter, userFont, ptFontSize, weight, italic );
+    KWUserFont* uf = userFont;
+    if ( !uf )
+      uf = _doc->getDefaultUserFont(); 
+    assert( uf );
+    
+    font = new KWDisplayFont( _doc, _painter, uf, ptFontSize, weight, italic );
     return font;
 }
 

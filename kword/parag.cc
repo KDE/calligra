@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdio.h>
+#include <assert.h>
 
 #include "parag.h"
 #include "kword_doc.h"
@@ -19,10 +20,6 @@ KWParag::KWParag( KWordDocument_impl *_doc, KWParag* _prev, KWParag* _next, KWPa
     if ( next )
 	next->setPrev( this );
 
-    maxTextLen = 2048;
-    text = new char[ maxTextLen ];
-    textLen = 0;
-    
     startPage = 1;
     startColumn = 1;
     endColumn = 1;
@@ -32,8 +29,6 @@ KWParag::KWParag( KWordDocument_impl *_doc, KWParag* _prev, KWParag* _next, KWPa
 
 KWParag::~KWParag()
 {
-    if ( text )
-	delete []text;
 }
 
 void KWParag::updateCounters( KWFormatContext *_format )
@@ -94,23 +89,14 @@ QString& KWParag::makeCounterText( QString& _str )
 
 void KWParag::insertText( unsigned int _pos, const char *_text )
 {
-    int len = strlen( _text );
-    if ( textLen + len > maxTextLen )
-    {
-	maxTextLen = textLen + len + 1024;
-	char *p = new char[ maxTextLen ];
-	memcpy( p, text, _pos );
-	memcpy( p + _pos, _text, len );
-	memcpy( p + _pos + len, text + _pos, textLen - _pos );
-	textLen += len;
-	delete []text;
-	text = p;
-    }
-    else
-    {
-	memmove( text + _pos + len, text + _pos, textLen - _pos );
-	memcpy( text + _pos, _text, len );
-	textLen += len;
-    }
+  text.insert( _pos, _text );
 }
 
+void KWParag::setFormat( unsigned int _pos, const KWFormat &_format )
+{
+  assert( _pos < text.len );
+  
+  KWCharFormat *f = new KWCharFormat( _format );
+  freeChar( text.data[ _pos ] );
+  text.data[ _pos ].attrib = &(f->type);
+}

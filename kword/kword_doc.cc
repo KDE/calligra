@@ -97,7 +97,11 @@ CORBA::Boolean KWordDocument_impl::init()
 
   KWParag *p = new KWParag( this, 0L, 0L, defaultParagLayout );
   parags->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-  p = new KWParag( this, parags, 0L, defaultParagLayout );
+  KWFormat f1( green );
+  p->setFormat( 7, f1 );
+  KWFormat f2( black );
+  p->setFormat( 12, f2 );
+  /* p = new KWParag( this, parags, 0L, defaultParagLayout );
   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
   p = new KWParag( this, p, 0L, defaultParagLayout );
   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
@@ -206,7 +210,7 @@ CORBA::Boolean KWordDocument_impl::init()
   p = new KWParag( this, p, 0L, defaultParagLayout );
   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
   p = new KWParag( this, p, 0L, defaultParagLayout );
-  p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
+  p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." ); */
   return true;
 }
 
@@ -459,59 +463,88 @@ KWParag* KWordDocument_impl::findFirstParagOfPage(unsigned int _page)
 }
 
 /*================================================================*/
-void KWordDocument_impl::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffset,int yOffset)
+void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, int xOffset, int yOffset )
 {
   // Shortcut to the text memory segment
-  const char *text = _fc.getParag()->getText();
+  KWChar* text = _fc.getParag()->getText();
   // Shortcut to the current paragraph layout
   KWParagLayout *lay = _fc.getParag()->getParagLayout();
   // Index in the text memory segment that points to the line start
   unsigned int pos = _fc.getLineStartPos();
 
   // First line ? Draw the counter ?
-  if (pos == 0 && lay->getCounterNr() != -1)
-    {
-      KWFormat counterfm(_fc);
-      counterfm.apply(lay->getCounterFormat());
-      _painter.setFont(*(counterfm.loadFont(this,_painter)));
-      _painter.setPen(counterfm.getColor());
+  if ( pos == 0 && lay->getCounterNr() != -1 )
+  {
+    KWFormat counterfm( _fc );
+    counterfm.apply( lay->getCounterFormat() );
+    _painter.setFont( *( counterfm.loadFont( this,_painter ) ) );
+    _painter.setPen( counterfm.getColor() );
 
-      _painter.drawText(_fc.getPTCounterPos() - xOffset, 
-			_fc.getPTY() + _fc.getPTMaxAscender() - yOffset, _fc.getCounterText());
-	
-    }
+    _painter.drawText( _fc.getPTCounterPos() - xOffset, 
+		       _fc.getPTY() + _fc.getPTMaxAscender() - yOffset, _fc.getCounterText() );
+  }
     
   // paint it character for character. Provisionally! !!HACK!!
-  _fc.cursorGotoLineStart(_painter);
+  _fc.cursorGotoLineStart( _painter );
 
+  // Init font and style
+  _painter.setFont( *_fc.loadFont( this, _painter ) );
+  _painter.setPen( _fc.getColor() );
+
+  cerr << "Starting with color " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
+  
   char buffer[200];
-  int i=0;
-  unsigned int tmpPTPos=0;
-  while (!_fc.isCursorAtLineEnd())
+  int i = 0;
+  unsigned int tmpPTPos = 0;
+  while ( !_fc.isCursorAtLineEnd() )
+  {
+    // Init position
+    if ( i == 0 )
     {
-      buffer[i] = text[_fc.getTextPos()];
-      if (i == 0){
-	tmpPTPos = _fc.getPTPos();
-	_painter.setFont(*_fc.loadFont(this,_painter));
-	_painter.setPen(_fc.getColor());
-      }
-      
-      i++;
-      if (_fc.cursorGotoNextChar(_painter) || 
-	  _fc.getParag()->getText()[_fc.getTextPos()] == ' '
-	  || i >= 199)
-	{
-	  // there was a blank _or_ there will be a font switch next, so print 
-	  // what we have so far
-	  buffer[i] = '\0';
-	  _painter.drawText(tmpPTPos - xOffset,_fc.getPTY() + _fc.getPTMaxAscender() - yOffset,
-			    buffer);
-	  i = 0;
-	  // Blanks are not printed at all
-	  if (_fc.getParag()->getText()[_fc.getTextPos()] == ' ')
-	    _fc.cursorGotoNextChar(_painter);
-	}
+      // Change the painter
+      tmpPTPos = _fc.getPTPos();
+      _painter.setFont( *_fc.loadFont( this, _painter ) );
+      _painter.setPen( _fc.getColor() );
+
+      cerr << "Switch1 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
     }
+
+    buffer[i] = text[ _fc.getTextPos() ].c;
+    
+    if ( buffer[i] == 0 )
+    {
+      // Torben: TODO: Handle special objects like images here
+    }
+    else
+    {
+      if ( text[ _fc.getTextPos() ].attrib != 0L )
+      {
+	// Change text format here
+	assert( text[ _fc.getTextPos() ].attrib->classId == ID_KWCharFormat );
+	KWCharFormat *f = (KWCharFormat*)text[ _fc.getTextPos() ].attrib;
+	_fc.apply( f->format );
+	// Change the painter
+	_painter.setFont( *_fc.loadFont( this, _painter ) );
+	_painter.setPen( _fc.getColor() );
+	cerr << "Switch 2 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
+      }
+            
+      // Test next character.
+      i++;
+      if ( _fc.cursorGotoNextChar( _painter ) != 1 || text[_fc.getTextPos()].c == ' ' || i >= 199 )
+      {
+	// there was a blank _or_ there will be a font switch _or_ a special object next, so print 
+	// what we have so far
+	buffer[i] = '\0';
+	_painter.drawText( tmpPTPos - xOffset, _fc.getPTY() + _fc.getPTMaxAscender() - yOffset, buffer );
+	cerr << "#'" << buffer << "'" << endl;
+	i = 0;
+	// Blanks are not printed at all
+	if ( text[_fc.getTextPos()].c == ' ' )
+	  _fc.cursorGotoNextChar(_painter);
+      }
+    }
+  }
 }
 
 /*================================================================*/

@@ -11,9 +11,9 @@ LDADD = ../lib/kofficeui/libkofficeui.la \
 
 bin_PROGRAMS = kword.bin
 
-kword_bin_SOURCES = kword_main.cc kword_doc.cc kword_view.cc kword.cc kword_shell.cc \
+kword_bin_SOURCES = char.cc kword_main.cc kword_doc.cc kword_view.cc kword.cc kword_shell.cc \
 		fc.cc font.cc format.cc kword_page.cc parag.cc paraglayout.cc
-noinst_HEADERS = kword_main.h kword_doc.h kword_view.h kword.h kword_shell.h \
+noinst_HEADERS = char.h kword_main.h kword_doc.h kword_view.h kword.h kword_shell.h \
 		fc.h font.h format.h kword_page.h parag.cc paraglayout.h
 SRCMETA =	kword_main.moc kword_view.moc kword_doc.moc kword_shell.moc
 

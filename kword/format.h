@@ -31,7 +31,7 @@ public:
      *
      * @see KWUserFont
      */
-    KWFormat( QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
+    KWFormat( const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
 	      char _italic = -1, char _math = -1, char _direct = -1 );
     
     /**
@@ -45,37 +45,39 @@ public:
      *
      * @param _format It copies its state from this KWFormat instance.
      */
-    KWFormat( KWFormat& _format );
-    
+    KWFormat( const KWFormat& _format );
+
+    KWFormat& operator=( const KWFormat& _format );
+  
+    void apply( KWFormat &_format );
+
     /**
      * @return The color to use. The color may be not valid ( test with <TT>QColor::isValid()</TT>.
      *         In this case you shoud not use the color returned.
      */
-    QColor& getColor() { return color; }
+    const QColor& getColor() const { return color; }
     
     /**
      * @return The font family to use. The return value may be 0L if the font should not change.
      */
-    KWUserFont* getUserFont() { return userFont; }
+    KWUserFont* getUserFont() const { return userFont; }
 
     KWDisplayFont* loadFont( KWordDocument_impl *_doc, QPainter &_painter );
-    
-    void apply( KWFormat &_format );
     
     /**
      * @return The font size to use in points. The return value may be -1 if the size should not change.
      */
-    int getPTFontSize() { return ptFontSize; }
+    int getPTFontSize() const { return ptFontSize; }
 
     /**
      * @return The fonts weight to use. The return value may be -1 if the weight should not change.
      */
-    int getWeight() { return weight; }
+    int getWeight() const { return weight; }
 
     /**
      * @return The italic mode. The return value may be -1 if the italic mode should not change.
      */
-    char getItalic() { return italic; }
+    char getItalic() const { return italic; }
 
     /**
      * Fills all values with defaults. No value will remain in the 'dont change' state.

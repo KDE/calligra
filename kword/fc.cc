@@ -6,13 +6,15 @@
 
 KWFormatContext::KWFormatContext( KWordDocument_impl *_doc ) : KWFormat()
 {
-    document = _doc;
+  setDefaults( _doc );
+  
+  document = _doc;
 
-    for ( int i = 0; i < 8; i++ )
-	for ( int j = 0; j < 8; j++ )
-	    counters[i][j] = 0;
-
-    during_vertical_cursor_movement = FALSE;
+  for ( int i = 0; i < 8; i++ )
+    for ( int j = 0; j < 8; j++ )
+      counters[i][j] = 0;
+  
+  during_vertical_cursor_movement = FALSE;
 }
 
 KWFormatContext::~KWFormatContext()
@@ -46,16 +48,17 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCou
 void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters = true )
 {
     // Set the context to the given paragraph
-    if (parag != 0L){
-	parag = parag->getNext();
-	if ( parag == 0L )
-	{
-	    warning("ERROR: Parag not found\n");
-	    exit(1);
-	}
+    if ( parag != 0L )
+    {
+      parag = parag->getNext();
+      if ( parag == 0L )
+      {
+	warning("ERROR: Parag not found\n");
+	exit(1);
+      }
     }
     else
-	parag = document->getFirstParag();
+      parag = document->getFirstParag();
     // On which page are we now ...
     parag->setStartPage( page );
     // In which column ...
@@ -64,7 +67,7 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
     parag->setPTYStart( ptY );
 
     if (_updateCounters)
-      {
+    {
 	// Initialize our paragraph counter stuff
 	int cnr = parag->getParagLayout()->getCounterNr();
 	int dep = parag->getParagLayout()->getCounterDepth();
@@ -72,13 +75,15 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
 	if ( cnr != -1 )
 	  counters[cnr][dep]++;
 	parag->updateCounters( this );
-      }
+    }
 
     // We are at the beginning of our paragraph
     lineStartPos = 0;
     
+    // Reset font size, color etc. to the documents default
+    // setDefaults( document );
     // Change fonts & stuff to match the paragraphs layout
-    apply( parag->getParagLayout()->getFormat() );
+    // apply( parag->getParagLayout()->getFormat() );
         
     // Calculate everything about the line we are in.
     makeLineLayout( _painter );
@@ -103,6 +108,14 @@ void KWFormatContext::skipCurrentParag( QPainter &_painter )
 
 void KWFormatContext::gotoStartOfParag( QPainter & )
 {
+}
+
+bool KWFormatContext::isCursorAtLastChar()
+{
+  if ( textPos == lineEndPos - 1 )
+    return true;
+
+  return false;
 }
 
 bool KWFormatContext::isCursorInFirstLine()
@@ -132,15 +145,8 @@ bool KWFormatContext::isCursorAtParagEnd()
     if ( !isCursorInLastLine() )
 	return FALSE;
     
-    unsigned int t = textPos;
-    const char *text = parag->getText();
-    
-    // Skip all KWFormats
-    while ( t < lineEndPos && text[t] == 0 )
-	t += 2 + sizeof( KWFormat* );
-    
     // Are we behind the paragraphs last character now ?
-    if ( t == parag->getTextLen() )
+    if ( textPos == parag->getTextLen() )
 	return TRUE;
 
     return FALSE;
@@ -148,25 +154,20 @@ bool KWFormatContext::isCursorAtParagEnd()
 
 bool KWFormatContext::isCursorAtLineEnd()
 {
-    if (isCursorInLastLine())
-	return isCursorAtParagEnd();
+    // Torben: I commented this out since it looks strange
+  /* if (isCursorInLastLine())
+	return isCursorAtParagEnd(); */
 
-    unsigned int t = textPos;
-    const char *text = parag->getText();
-    
-    // Skip all KWFormats
-    while ( t < lineEndPos && text[t] == 0 )
-	t += 2 + sizeof( KWFormat* );
-    
     // Are we behind the last lines character ?
-    return ( t == lineEndPos || t == lineEndPos - 1 );
-
+    // Torben: I commented this out since it looks strange
+    return ( textPos == lineEndPos /* || textPos == lineEndPos - 1 */ );
 }
 
 void KWFormatContext::cursorGotoRight( QPainter &_painter )
 {
     during_vertical_cursor_movement = FALSE;
 
+    // Are we at the end of a paragraph ?
     if ( isCursorAtParagEnd() )
     {
 	// The last paragraph ?
@@ -182,7 +183,7 @@ void KWFormatContext::cursorGotoRight( QPainter &_painter )
 
     // If the cursor is in the last line of some paragraph,
     // then we should not care here.
-    if ( isCursorAtLineEnd())
+    if ( isCursorAtLastChar() )
     {
 	lineStartPos = lineEndPos;
 	ptY += getLineHeight();
@@ -191,9 +192,6 @@ void KWFormatContext::cursorGotoRight( QPainter &_painter )
 	return;
     }
     
-    // skip formats
-    while ( parag->getText()[textPos] == 0 )
-	textPos += 2+sizeof(void*);
     textPos++;
 
     cursorGotoPos( textPos, _painter );
@@ -244,10 +242,6 @@ void KWFormatContext::cursorGotoLeft( QPainter &_painter )
     }
     
     textPos--;
-    // skip formats
-    while ( parag->getText()[textPos] == 0 )
-	textPos -= 2+sizeof(void*);
-
 
     cursorGotoPos( textPos, _painter );
 }
@@ -310,7 +304,9 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
 
 void KWFormatContext::cursorGotoDown( QPainter &_painter )
 {
-    if (!during_vertical_cursor_movement){
+    // Save the position where we started going down
+    if ( !during_vertical_cursor_movement)
+    {
 	WantedPtPos = ptPos;
     }
 
@@ -340,12 +336,32 @@ void KWFormatContext::cursorGotoDown( QPainter &_painter )
 
 void KWFormatContext::cursorGotoLineStart( QPainter &_painter )
 {
-    cursorGotoPos( lineStartPos, _painter );
+  during_vertical_cursor_movement = FALSE;
+
+  cursorGotoPos( lineStartPos, _painter );
 }
 
 void KWFormatContext::cursorGotoLineEnd( QPainter &_painter )
 {
+  during_vertical_cursor_movement = FALSE;
+
+  if ( isCursorInLastLine() )
+  {
     cursorGotoPos( lineEndPos, _painter );
+    return;
+  }
+  
+  // Is the last character a space ? => it is not really displayed
+  if ( lineEndPos > lineStartPos && parag->getText()[ lineEndPos - 1 ].c == ' ' )
+  {
+    // Go to the last character only.
+    cursorGotoPos( lineEndPos - 1, _painter );
+    return;
+  }
+  
+  // The line is empty or it contains a word which is longer then a line.
+  // In both cases we can go behind the last character
+  cursorGotoPos( lineEndPos, _painter );
 }
 
 void KWFormatContext::cursorGotoNextLine(QPainter &_painter)
@@ -389,48 +405,69 @@ void KWFormatContext::cursorGotoLine( unsigned int _textpos, QPainter &_painter 
 
 void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
 {
-    const char *text = parag->getText();
+    KWChar *text = parag->getText();
     KWParagLayout *lay = parag->getParagLayout();
     
     unsigned int pos = lineStartPos;
     ptPos = ptStartPos;
-
+    *((KWFormat*)this) = lineStartFormat;
         
     while ( pos < _textpos )
     {
-	if ( text[ pos ] == ' ' && lay->getFlow() == KWParagLayout::BLOCK && 
-	     lineEndPos != parag->getTextLen() )
+        if ( text[ pos ].c == 0 )
 	{
+	  // Handle specials here
+	}
+	else
+	{
+	  if ( text[ pos ].attrib )
+	  {
+	    // Change text format here
+	    assert( text[ pos ].attrib->classId == ID_KWCharFormat );
+	    KWCharFormat *f = (KWCharFormat*)text[ pos ].attrib;
+	    apply( f->format );
+	  }
+	  
+	  if ( text[ pos ].c == ' ' && lay->getFlow() == KWParagLayout::BLOCK && 
+	       lineEndPos != parag->getTextLen() )
+	  {
 	    float sp = ptSpacing + spacingError;
 	    float dx = floor( sp );
 	    spacingError = sp - dx;
 	    
-	    ptPos += (unsigned int)dx + displayFont->ptWidth[text[pos]];
+	    ptPos += (unsigned int)dx + displayFont->ptWidth[ text[pos].c ];
 
 	    pos++;
-	}
-	else if ( text[ pos ] == 0 )
-	{
-	    pos += 2 + 2* sizeof(void*);
-	}
-	else
-	{
-	    ptPos += displayFont->ptWidth[text[pos]];
+	  }
+	  else
+	  {
+	    ptPos += displayFont->ptWidth[ text[ pos ].c ];
 	    pos++;   
+	  }
 	}
     }
 
     textPos = _textpos;
 }
 
-bool KWFormatContext::cursorGotoNextChar(QPainter & _painter)
+int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
 {
-    if (!isCursorAtLineEnd()){
-	cursorGotoPos(textPos+1, _painter); //!! HACK !!
-	if (!isCursorAtLineEnd() && parag->getText()[textPos-1]!=0)
-	    return FALSE; // there was no font switch
-    }
-    return TRUE;
+  // If we are already at lineend, then we wont move further
+  if ( isCursorAtLineEnd() )
+    return -2;
+  
+  cursorGotoPos( textPos + 1, _painter ); //!! HACK !! This is DOG SLOW
+  if ( isCursorAtLineEnd() )
+    return -2;
+  
+  if ( parag->getText()[ textPos ].c != 0 && parag->getText()[ textPos ].attrib == 0 )
+    return 1;
+  
+  if ( parag->getText()[ textPos ].c != 0 )
+    return 0;
+  
+  assert( parag->getText()[ textPos ].attrib != 0L );
+  return -1;
 }
 
 
@@ -470,7 +507,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     unsigned left = 0;
     unsigned int right = 0;
     
-    const char *text = parag->getText();
+    KWChar *text = parag->getText();
 
     makeCounterLayout(_painter); // !!! HACK !!!
 
@@ -484,9 +521,16 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     // the user selected.
     unsigned int indent;
     if ( lineStartPos == 0 )
-	indent = parag->getParagLayout()->getPTFirstLineLeftIndent();
+    {
+      // Reset font size, color etc. to the documents default
+      setDefaults( document );
+      // Change fonts & stuff to match the paragraphs layout
+      apply( parag->getParagLayout()->getFormat() );
+      
+      indent = parag->getParagLayout()->getPTFirstLineLeftIndent();
+    }
     else
-	indent = parag->getParagLayout()->getPTLeftIndent();
+      indent = parag->getParagLayout()->getPTLeftIndent();
     
     // First line ? Draw the couter ?
     if ( lineStartPos == 0 && parag->getParagLayout()->getCounterNr() != -1 )
@@ -528,10 +572,12 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 
     // Calculate the counter position
     // Is the counter fixed to the left side ?
-    if ( parag->getParagLayout()->getCounterFlow() == KWParagLayout::C_LEFT ){
+    if ( parag->getParagLayout()->getCounterFlow() == KWParagLayout::C_LEFT )
+    {
 	ptCounterPos = ptStartPos - ptCounterWidth;
     }
-    else { // the counter is fixed to the right side
+    else
+    { // the counter is fixed to the right side
 	ptCounterPos = xShift + document->getPTColumnWidth() - ptCounterWidth; // Attention!
     }
     
@@ -544,10 +590,20 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     tmpPTAscender = font->getPTAscender();
     tmpPTDescender = font->getPTDescender();
 
+    lineStartFormat = *this;
+    
     // Loop until we reach the end of line
     while( ptPos < xShift + document->getPTColumnWidth()  && textPos < parag->getTextLen() )
     {
-	char c = text[ textPos ];
+	char c = text[ textPos ].c;
+	
+	if ( c != 0 && text[ textPos ].attrib )
+	{
+	  // Handle font formats here.
+	  assert( text[ textPos ].attrib->classId == ID_KWCharFormat );
+	  KWCharFormat *f = (KWCharFormat*)text[ textPos ].attrib;
+	  apply( f->format );
+	}
 	
 	// Is it a space character
 	if ( c == ' ' )
@@ -572,15 +628,15 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 	// Do we have some format definition here ?
 	if ( c == 0 )
 	{
-	    // ?????
+	  /* // ?????
 	    font = tmpFormat.loadFont( document, _painter );
 	    // Skip the format definition
 	    textPos += 2 + sizeof( KWFormat* );
 	    tmpPTAscender = font->getPTAscender();
-	    tmpPTDescender = font->getPTDescender();
+	    tmpPTDescender = font->getPTDescender(); */
 	}
 	else // A usual character ...
-	{
+	{ 
 	    // Go right ...
 	    ptPos += font->ptWidth[ c ];
 	    // Increase the lines width

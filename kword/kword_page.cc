@@ -159,6 +159,12 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
   switch(e->key())
     {
+    case Key_Home:
+      fc->cursorGotoLineStart(painter);
+      break;
+    case Key_End:
+      fc->cursorGotoLineEnd(painter);
+      break;
     case Key_Right:
       fc->cursorGotoRight(painter);
       break;

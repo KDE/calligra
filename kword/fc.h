@@ -40,15 +40,27 @@ public:
      */
     void cursorGotoPos( unsigned int _textpos, QPainter &_painter );
     /**
-     * Move the cursor to the next character very fast. Return True
-     * if there was a font change.
+     * Move the cursor to the next character very fast. Return -1 if the next character
+     * is a special object like an image or such, returns 0 if there is a character
+     * but a format change and returns 1 if there is a character without a format change.
+     * Returns -2 if we are at the line end.
+     *
+     * This function does not leave the current line.
      */
-    bool cursorGotoNextChar( QPainter &_painter );
+    int cursorGotoNextChar( QPainter &_painter );
     void cursorGotoRight( QPainter &_painter );
     void cursorGotoLeft( QPainter &_painter );
     void cursorGotoUp( QPainter &_painter );
     void cursorGotoDown( QPainter &_painter );
     void cursorGotoLineStart( QPainter &_painter );
+    /**
+     * Sets the cursor BEHIND the last character of the current line
+     * if the line is the last one of the current paragrph.
+     * Otherwise the cursor is set ON the last character.
+     * The only exception are empty lines or lines which contain a word
+     * that is longer then an entire line. In these cases the cursor
+     * is positioned BEHIN the last character, too.
+     */
     void cursorGotoLineEnd( QPainter &_painter );
     void cursorGotoNextLine(QPainter &_painter);
     bool makeNextLineLayout( QPainter &_painter );
@@ -60,8 +72,13 @@ public:
     bool isCursorInFirstLine();
     bool isCursorAtParagEnd();
     bool isCursorAtLineEnd();
+    /**
+     * @return true if the cursor is currently positioned at the last character of
+     *         a line. This is one character before the linedEndPos.
+     */
+    bool isCursorAtLastChar();
     bool isCursorInLastLine();
-    
+
     KWDisplayFont& getDisplayFont() { return *displayFont; }
 
     /**
@@ -154,9 +171,15 @@ protected:
     unsigned int column;
     
     unsigned int lineStartPos;
+    KWFormat lineStartFormat;
+  
     unsigned int lineEndPos;
     unsigned int textPos;
-    
+
+    /**
+     * Amount of spaces in the line. This is needed if we have "Blocksatz".
+     * We need this to calculate the width of a single space character.
+     */
     unsigned short spaces;
 
     /**
