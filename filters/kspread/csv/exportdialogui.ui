@@ -39,7 +39,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Tables</string>
+                    <string>Sheets</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -54,7 +54,7 @@
                     <widget class="QListView" row="2" column="0">
                         <column>
                             <property name="text">
-                                <string>Available Tables</string>
+                                <string>Available Sheets</string>
                             </property>
                             <property name="clickable">
                                 <bool>false</bool>
@@ -72,7 +72,7 @@
                             <cstring>TextLabel4</cstring>
                         </property>
                         <property name="text">
-                            <string>Export table(s):</string>
+                            <string>Export sheet(s):</string>
                         </property>
                     </widget>
                     <widget class="QGroupBox" row="0" column="0">
@@ -121,7 +121,7 @@
                                     </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>&lt;TABLENAME&gt; gets replaced by the name of the next table.</string>
+                                    <string>&lt;TABLENAME&gt; gets replaced by the name of the next sheet.</string>
                                 </property>
                                 <property name="alignment">
                                     <set>WordBreak|AlignVCenter</set>
@@ -140,7 +140,7 @@
                                     </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>Print delimiter line above every table</string>
+                                    <string>Print delimiter line above every sheet</string>
                                 </property>
                             </widget>
                         </grid>
