@@ -1,3 +1,2 @@
 #modules
-kformula: no-shlibs-control-file usr/lib/libkformulapart.so
-kformula: no-shlibs-control-file usr/lib/kformula.so
+

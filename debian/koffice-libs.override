@@ -1,12 +1,2 @@
-koffice-libs: shlib-missing-in-control-file libhtmlexport usr/lib/libhtmlexport.so
-koffice-libs: shlib-missing-in-control-file libkspelltool usr/lib/libkspelltool.so
-koffice-libs: shlib-missing-in-control-file libcsvexport usr/lib/libcsvexport.so
-koffice-libs: shlib-missing-in-control-file libolefilter usr/lib/libolefilter.so
-koffice-libs: shlib-missing-in-control-file libhtmlimport usr/lib/libhtmlimport.so
-koffice-libs: shlib-missing-in-control-file libcsvfilterdia usr/lib/libcsvfilterdia.so
-koffice-libs: shlib-missing-in-control-file libasciiexport usr/lib/libasciiexport.so
-koffice-libs: shlib-missing-in-control-file libcsvimport usr/lib/libcsvimport.so
-koffice-libs: shlib-missing-in-control-file libasciiimport usr/lib/libasciiimport.so
-koffice-libs: shlib-missing-in-control-file libwmfimport usr/lib/libwmfimport.so
-koffice-libs: shlib-missing-in-control-file libmsodimport usr/lib/libmsodimport.so
-koffice-libs: shlib-missing-in-control-file libapplixwordimport usr/lib/libapplixwordimport.so
+# modules
+

@@ -1,3 +1,2 @@
 # modules
-kword: no-shlibs-control-file usr/lib/kword.so
-kword: no-shlibs-control-file usr/lib/libkwordpart.so
+
