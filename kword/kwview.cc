@@ -117,8 +117,9 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     m_border.common.ptWidth = 1;
     m_currentPage = 0;
     m_specialCharDlg=0L;
-    searchEntry = 0L;
-    replaceEntry = 0L;
+    m_searchEntry = 0L;
+    m_replaceEntry = 0L;
+    m_findReplace = 0L;
     // Default values.
     m_zoomViewModeNormal = m_doc->zoom();
     m_zoomViewModePreview = 33;
@@ -208,6 +209,11 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 KWView::~KWView()
 {
     clearSelection();
+    if ( m_findReplace )
+    {
+        // Abort any find/relace
+        m_findReplace->abort();
+    }
     // Delete gui while we still exist ( it needs documentDeleted() )
     delete m_gui;
     delete m_sbPageLabel;
@@ -223,8 +229,8 @@ void KWView::clearSelection()
             fs->removeHighlight();
         delete m_spell.kspell;
     }
-    delete searchEntry;
-    delete replaceEntry;
+    delete m_searchEntry;
+    delete m_replaceEntry;
     delete m_specialCharDlg;
 }
 
@@ -1419,28 +1425,54 @@ void KWView::editSelectAll()
 
 void KWView::editFind()
 {
-    if (!searchEntry)
-        searchEntry = new KWSearchContext();
-    KWSearchDia dialog( m_gui->canvasWidget(), "find", searchEntry );
+    // Already a find or replace running ?
+    if ( m_findReplace )
+    {
+        m_findReplace->setActiveWindow();
+        return;
+    }
+
+    if (!m_searchEntry)
+        m_searchEntry = new KWSearchContext();
+    KWSearchDia dialog( m_gui->canvasWidget(), "find", m_searchEntry );
     if ( dialog.exec() == QDialog::Accepted )
     {
-        KWFindReplace find( m_gui->canvasWidget(), &dialog );
-        find.proceed();
+        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog );
+        doFindReplace();
     }
 }
 
 void KWView::editReplace()
 {
-    if (!searchEntry)
-        searchEntry = new KWSearchContext();
-    if (!replaceEntry)
-        replaceEntry = new KWSearchContext();
-    KWReplaceDia dialog( m_gui->canvasWidget(), "replace", searchEntry, replaceEntry );
+    // Already a find or replace running ?
+    if ( m_findReplace )
+    {
+        m_findReplace->setActiveWindow();
+        return;
+    }
+
+    if (!m_searchEntry)
+        m_searchEntry = new KWSearchContext();
+    if (!m_replaceEntry)
+        m_replaceEntry = new KWSearchContext();
+    KWReplaceDia dialog( m_gui->canvasWidget(), "replace", m_searchEntry, m_replaceEntry );
     if ( dialog.exec() == QDialog::Accepted )
     {
-        KWFindReplace replace( m_gui->canvasWidget(), &dialog );
-        replace.proceed();
+        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog );
+        doFindReplace();
     }
+}
+
+void KWView::doFindReplace()
+{
+    KWFindReplace* findReplace = m_findReplace; // keep a copy. "this" might be deleted before we exit this method
+
+    findReplace->proceed();
+
+    bool aborted = findReplace->aborted();
+    delete findReplace;
+    if ( !aborted ) // Only if we still exist....
+        m_findReplace = 0L;
 }
 
 void KWView::editDeleteFrame()

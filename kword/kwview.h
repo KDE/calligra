@@ -40,6 +40,7 @@ class KWFrame;
 class KWPartFrameSet;
 class KWSearchContext;
 class KWStyleManager;
+class KWFindReplace;
 class KWTableDia;
 class KWView;
 class QResizeEvent;
@@ -311,6 +312,7 @@ protected:
 
     void setupActions();
     void createKWGUI();
+    void doFindReplace();
 
     virtual void resizeEvent( QResizeEvent *e );
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
@@ -445,7 +447,8 @@ private:
     KCharSelectDia *m_specialCharDlg;
     KWGUI *m_gui;
 
-    KWSearchContext *searchEntry, *replaceEntry;
+    KWSearchContext *m_searchEntry, *m_replaceEntry;
+    KWFindReplace *m_findReplace;
 
     int m_currentPage; // 0-based current page number
 

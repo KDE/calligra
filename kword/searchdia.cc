@@ -261,7 +261,8 @@ KWFindReplace::KWFindReplace( KWCanvas * canvas, KWSearchDia * dialog )
       m_options( dialog->options() ),
       m_canvas( canvas ),
       m_currentFrameSet( 0L ),
-      m_macroCmd( 0L )
+      m_macroCmd( 0L ),
+      m_destroying( false )
 {
     connect( m_find, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
              this, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
@@ -275,7 +276,8 @@ KWFindReplace::KWFindReplace( KWCanvas * canvas, KWReplaceDia * dialog )
       m_options( dialog->options() ),
       m_canvas( canvas ),
       m_currentFrameSet( 0L ),
-      m_macroCmd( 0L )
+      m_macroCmd( 0L ),
+      m_destroying( false )
 {
     connect( m_replace, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
              this, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
@@ -285,8 +287,13 @@ KWFindReplace::KWFindReplace( KWCanvas * canvas, KWReplaceDia * dialog )
 
 KWFindReplace::~KWFindReplace()
 {
-    delete m_find;
-    delete m_replace;
+    kdDebug() << "KWFindReplace::~KWFindReplace m_destroying=" << m_destroying << endl;
+    if ( !m_destroying )
+    {
+        delete m_find;
+        delete m_replace;
+    }
+    // If the KWView was destroyed, it destroyed the child dialog already
 }
 
 void KWFindReplace::proceed()
@@ -318,7 +325,8 @@ void KWFindReplace::proceed()
         QTextCursor c2 = firstFrameSet->textDocument()->selectionEndCursor( QTextDocument::Standard );
         // Find in the selection
         findInFrameSet( firstFrameSet, firstParag, firstIndex, c2.parag(), c2.index() );
-        firstFrameSet->removeHighlight();
+        if ( !m_destroying )
+            firstFrameSet->removeHighlight();
     }
     else // Not 'find in selection', need to iterate over the framesets
     {
@@ -341,13 +349,15 @@ void KWFindReplace::proceed()
                 {
                     ret = findInFrameSet( fs, fs->textDocument()->firstParag(), 0, lastParag, lastParag->length()-1 );
                 }
-                fs->removeHighlight();  // we're done with this frameset
+                if ( !m_destroying )
+                    fs->removeHighlight();  // we're done with this frameset
                 if (!ret) break;      // stop here if the user cancelled
             }
         }
     }
-    if(m_macroCmd)
+    if(!m_destroying && m_macroCmd)
         m_canvas->kWordDocument()->addCommand(m_macroCmd);
+    kdDebug() << "KWFindReplace::findInFrameSet done" << endl;
 }
 
 bool KWFindReplace::findInFrameSet( KWTextFrameSet * fs, Qt3::QTextParag * firstParag, int firstIndex,
@@ -438,6 +448,34 @@ void KWFindReplace::replace( const QString &, int matchingIndex,
     cursor.setIndex( index );
     m_macroCmd->addCommand(m_currentFrameSet->textObject()->replaceSelectionCommand(
         &cursor, m_replaceDlg->replacement(), KoTextObject::HighlightSelection, QString::null ));
+}
+
+void KWFindReplace::setActiveWindow()
+{
+    if ( m_find )
+        m_find->setActiveWindow();
+    else
+        m_replace->setActiveWindow();
+}
+
+void KWFindReplace::abort()
+{
+    // This is called when the KWView is being destroyed.
+    // (Not when the user presses Cancel)
+    kdDebug(32001) << "KWFindReplace::abort" << endl;
+    if ( m_find )
+        m_find->abort();
+    else
+        m_replace->abort();
+    m_destroying = true;
+    // Note that proceed() won't return until we go back to the event loop
+
+    // ~KWView will run immediately though. And we don't want it to destroy m_findDlg/m_replaceDlg
+    // (built on the stack!)
+    if ( m_findDlg )
+       m_findDlg->reparent( 0, QPoint( 0, 0 ) );
+    else if ( m_replaceDlg )
+       m_replaceDlg->reparent( 0, QPoint( 0, 0 ) );
 }
 
 #include "searchdia.moc"

@@ -149,11 +149,11 @@ private:
     KWSearchContextUI *m_replaceUI;
 };
 
-//
-// This class implements the 'find' functionality ( the "search next, prompt" loop )
-// and the 'replace' functionality. Same class, to allow centralizing the code that
-// finds the framesets and paragraphs to look into.
-//
+/**
+ * This class implements the 'find' functionality ( the "search next, prompt" loop )
+ * and the 'replace' functionality. Same class, to allow centralizing the code that
+ * finds the framesets and paragraphs to look into.
+ */
 class KWFindReplace : public QObject
 {
     Q_OBJECT
@@ -161,7 +161,16 @@ public:
     KWFindReplace( KWCanvas * canvas, KWSearchDia * dialog );
     KWFindReplace( KWCanvas * canvas, KWReplaceDia * dialog );
     ~KWFindReplace();
+
+    /** Do the complete loop for find or replace. When it exits, we're done */
     void proceed();
+
+    /** Bring to front (e.g. when menuitem called twice) */
+    void setActiveWindow();
+
+    /** Abort - when closing the view */
+    void abort();
+    bool aborted() const { return m_destroying; }
 
 protected:
     bool findInFrameSet( KWTextFrameSet * fs, Qt3::QTextParag * firstParag, int firstIndex,
@@ -187,6 +196,7 @@ private:
     Qt3::QTextParag *m_currentParag;
     KMacroCommand *m_macroCmd;
     int m_offset;
+    bool m_destroying;
 };
 
 #endif
