@@ -34,6 +34,7 @@ class KListView;
 class KLineEdit;
 class QListBox;
 class QSpinBox;
+class QComboBox;
 class KIntNumInput;
 /**
  *
