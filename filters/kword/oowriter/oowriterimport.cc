@@ -736,54 +736,19 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
                 QDomElement linkElement (doc.createElement("LINK"));
                 linkElement.setAttribute("hrefName",ts.attribute("xlink:href"));
                 linkElement.setAttribute("linkName",text);
-                appendKWordVariable(doc, outputFormats, ts, pos, "STRING", 9, text, linkElement);
+                appendKWordVariable(doc, outputFormats, ts, pos, "STRING", 9, linkElement);
             }
             m_styleStack.restore();
         }
-        // ### Fields should be moved to an appendField method like in OoImpressImport
-        else if (tagName == "text:date")
-        {
-            textData = '#';     // field placeholder
-            QDomElement dateElement ( doc.createElement("DATE") );
-            // As we have no idea about the current date, use the *nix epoch 1970-01-01
-            dateElement.setAttribute("year",1970);
-            dateElement.setAttribute("month",1);
-            dateElement.setAttribute("day",1);
-            dateElement.setAttribute("fix",0);  // Has OOWriter fixed dates?
-            appendKWordVariable(doc, outputFormats, ts, pos, "DATE0Locale", 0, "-", dateElement);
-        }
-        else if (tagName == "text:time")
-        {
-            textData = '#';     // field placeholder
-            QDomElement timeElement (doc.createElement("TIME") );
-            // We cannot calculate the time, so default to midnight
-            timeElement.setAttribute("hour",0);
-            timeElement.setAttribute("minute",0);
-            timeElement.setAttribute("second",0);
-            timeElement.setAttribute("fix",0); // Has OOWriter fixed times?
-            appendKWordVariable(doc, outputFormats, ts, pos, "TIMELocale", 2, "-", timeElement);
-        }
-        else if ( tagName == "text:page-number" )
-        {
-            textData = '#';     // field placeholder
-            QDomElement pgnumElement ( doc.createElement("PGNUM") );
-            pgnumElement.setAttribute("subtype",0);
-            pgnumElement.setAttribute("value",1);
-            appendKWordVariable(doc, outputFormats, ts, pos, "NUMBER", 4, "1", pgnumElement);
-        }
-        else if ( tagName == "text:file-name" )
-        {
-            textData = '#';     // field placeholder
-            QDomElement fieldElement ( doc.createElement("FIELD") );
-            fieldElement.setAttribute("subtype",0);
-            fieldElement.setAttribute("value","?");
-            appendKWordVariable(doc, outputFormats, ts, pos, "STRING", 8, "?", fieldElement);
-        }
-        else if ( tagName == "text:author-name"
+        else if (tagName == "text:date" // fields
+                 || tagName == "text:time"
+                 || tagName == "text:page-number"
+                 || tagName == "text:file-name"
+                 || tagName == "text:author-name"
                  || tagName == "text:author-initials")
         {
-            textData = '#';     // field placeholder
-            // ### TODO
+            textData = "#";     // field placeholder
+            appendField(doc, outputFormats, ts, pos);
         }
         else if ( t.isNull() ) // no textnode, we must ignore
         {
@@ -1328,15 +1293,129 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
     formatElementOut.appendChild(anchor);
 }
 
-void OoWriterImport::appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& /*object*/, uint pos,
-    const QString& key, int type, const QString& text, QDomElement& child)
+void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, const QDomElement& object, uint pos)
+// Note: QDomElement& outputFormats replaces the parameter QDomElement& e in OoImpressImport::appendField
+//  (otherwise it should be the same parameters.)
+{
+    const QString tag (object.tagName());
+
+    if (tag == "text:date")
+    {
+        QDateTime dt(QDate::fromString(object.attribute("text:date-value"), Qt::ISODate));
+
+        bool fixed = (object.hasAttribute("text:fixed") && object.attribute("text:fixed")=="true");
+
+        if (!dt.isValid())
+        {
+            dt = QDateTime::currentDateTime(); // OOo docs say so :)
+            fixed = false;
+        }
+        const QDate date(dt.date());
+        const QTime time(dt.time());
+        QDomElement dateElement ( doc.createElement("DATE") );
+        dateElement.setAttribute("fix", fixed ? 1 : 0);
+        dateElement.setAttribute("day", date.day());
+        dateElement.setAttribute("month", date.month());
+        dateElement.setAttribute("year", date.year());
+        dateElement.setAttribute("hour", time.hour());
+        dateElement.setAttribute("minute", time.minute());
+        dateElement.setAttribute("second", time.second());
+        if (object.hasAttribute("text:date-adjust"))
+            dateElement.setAttribute("correct", object.attribute("text:date-adjust"));
+        appendKWordVariable(doc, outputFormats, object, pos, "DATE0locale", 0, dateElement);
+
+    }
+    else if (tag == "text:time")
+    {
+        // Use QDateTime to work around a possible problem of QTime::FromString in Qt 3.2.2
+        QDateTime dt(QDateTime::fromString(object.attribute("text:time-value"), Qt::ISODate));
+
+        bool fixed = (object.hasAttribute("text:fixed") && object.attribute("text:fixed")=="true");
+
+        if (!dt.isValid()) {
+            dt = QDateTime::currentDateTime(); // OOo docs say so :)
+            fixed = false;
+        }
+
+        const QTime time(dt.time());
+        QDomElement timeElement (doc.createElement("TIME") );
+        timeElement.setAttribute("fix", fixed ? 1 : 0);
+        timeElement.setAttribute("hour", time.hour());
+        timeElement.setAttribute("minute", time.minute());
+        timeElement.setAttribute("second", time.second());
+        /*if (object.hasAttribute("text:time-adjust"))
+          timeElem.setAttribute("correct", object.attribute("text:time-adjust"));*/ // ### TODO
+        appendKWordVariable(doc, outputFormats, object, pos, "TIMElocale", 2, timeElement);
+
+    }
+    else if (tag == "text:page-number")
+    {
+        int subtype = 0;        // VST_PGNUM_CURRENT
+
+        if (object.hasAttribute("text:select-page"))
+        {
+            const QString select = object.attribute("text:select-page");
+
+            if (select == "previous")
+                subtype = 3;    // VST_PGNUM_PREVIOUS
+            else if (select == "next")
+                subtype = 4;    // VST_PGNUM_NEXT
+            else
+                subtype = 0;    // VST_PGNUM_CURRENT
+        }
+
+        QDomElement pgnumElement ( doc.createElement("PGNUM") );
+        pgnumElement.setAttribute("subtype", subtype);
+        pgnumElement.setAttribute("value", object.text());
+        appendKWordVariable(doc, outputFormats, object, pos, "NUMBER", 4, pgnumElement);
+    }
+    else if (tag == "text:file-name")
+    {
+        int subtype = 5;
+
+        if (object.hasAttribute("text:display"))
+        {
+            const QString display = object.attribute("text:display");
+
+            if (display == "path")
+                subtype = 1;    // VST_DIRECTORYNAME
+            else if (display == "name")
+                subtype = 6;    // VST_FILENAMEWITHOUTEXTENSION
+            else if (display == "name-and-extension")
+                subtype = 0;    // VST_FILENAME
+            else
+                subtype = 5;    // VST_PATHFILENAME
+        }
+
+        QDomElement fieldElement ( doc.createElement("FIELD") );
+        fieldElement.setAttribute("subtype", subtype);
+        fieldElement.setAttribute("value", object.text());
+        appendKWordVariable(doc, outputFormats, object, pos, "STRING", 8, fieldElement);
+    }
+    else if (tag == "text:author-name"
+             || tag == "text:author-initials")
+    {
+        int subtype = 2;        // VST_AUTHORNAME
+
+        if (tag == "text:author-initials")
+            subtype = 16;       // VST_INITIAL
+
+        QDomElement authorElem = doc.createElement("FIELD");
+        authorElem.setAttribute("subtype", subtype);
+        authorElem.setAttribute("value", object.text());
+        appendKWordVariable(doc, outputFormats, object, pos, "STRING", 8, authorElem);
+    }
+}
+
+void OoWriterImport::appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos,
+    const QString& key, int type, QDomElement& child)
 {
     QDomElement variableElement ( doc.createElement("VARIABLE") );
 
     QDomElement typeElement ( doc.createElement("TYPE") );
     typeElement.setAttribute("key",key);
     typeElement.setAttribute("type",type);
-    typeElement.setAttribute("text",text);
+    typeElement.setAttribute("text",object.text());
     variableElement.appendChild(typeElement); //Append to <VARIABLE>
 
     variableElement.appendChild(child); //Append to <VARIABLE>

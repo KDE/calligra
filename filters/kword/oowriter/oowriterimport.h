@@ -60,8 +60,9 @@ private:
     void fillStyleStack( const QDomElement& object );
     void addStyles( const QDomElement* style );
     void appendPicture(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos);
+    void appendField(QDomDocument& doc, QDomElement& outputFormats, const QDomElement& object, uint pos);
     void appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos,
-        const QString& key, int type, const QString& text, QDomElement& child);
+        const QString& key, int type, QDomElement& child);
     void parseTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement );
     void parseInsideOfTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement,
         const QString& tableName, const QMemArray<double> & columnLefts, uint& row, uint& column );
