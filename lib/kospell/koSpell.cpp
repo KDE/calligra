@@ -517,18 +517,15 @@ void KOSpell::dialog2 (int result)
         ignorelist.prepend(dlgorigword.lower());
         break;
     case KS_REPLACEALL:
-        replacelist.append (dlgorigword);
-        replacelist.append (replacement());
-
-        offset+=replacement().length()-dlgorigword.length();
-        newbuffer.replace (lastpos + offset, replacement().length(), replacement()+" " );
         emit replaceall( dlgorigword ,  replacement() );
-        emit corrected (dlgorigword ,  replacement(), lastpos+offset);
+        emit corrected (dlgorigword ,  replacement(), lastpos+offset-dlgorigword.length());
+        offset+=replacement().length()-dlgorigword.length();
+        newbuffer.replace (lastpos + offset, replacement().length(), replacement() );
         break;
     case KS_REPLACE:
+        emit corrected (dlgorigword ,  replacement(), lastpos+offset-dlgorigword.length());
         offset+=replacement().length()-dlgorigword.length();
-        newbuffer.replace (lastpos+offset, replacement().length(), replacement()+" " );
-        emit corrected (dlgorigword ,  replacement(), lastpos+offset);
+        newbuffer.replace (lastpos+offset, replacement().length(), replacement() );
         break;
     case KS_CHECKAGAINWITHNEWLANGUAGE:
         changeSpellLanguage( ksdlg->languageIndex());
