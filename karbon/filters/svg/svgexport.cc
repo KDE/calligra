@@ -72,11 +72,13 @@ SvgExport::convert( const QCString& from, const QCString& to )
 	QTextStream s( &fileOut );
 
 
+	// Standard header
 	s <<
 		"<?xml version=\"1.0\" standalone=\"no\"?>\n" <<
 		"<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" <<
 	endl;
 	
+	// TODO: add width and height. But how?
 	s <<
 		"<svg xmlns=\"http://www.w3.org/2000/svg\">" <<
 	endl;
@@ -217,6 +219,7 @@ void
 SvgExport::exportFill( QTextStream& s, const QDomElement& node )
 {
 
+	// maybe change this...
 	if( fill_rule == 1 )
 	{
 		s << " fill-rule=\"evenodd\"";
