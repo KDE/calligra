@@ -387,6 +387,8 @@ Startup
 - added error message when explicity provided db driver name not found
 
 2004-10-21
+Core
+- shared action's "enabler" introduced
 Startup
 - KexiStartupFileDialog: filename handling fixed for win32; fixed focusing
 - avoid asking for conversion when '--dbdriver sqlite2' 
@@ -407,7 +409,7 @@ Compile-time switches
 - KEXI_STARTUP_SHOW_TEMPLATES, KEXI_STARTUP_SHOW_RECENT,
   KEXI_SERVER_SUPPORT, KEXI_FORMS_SUPPORT added (currently all enabled by default)
 Main
-- copy/paset/cut on navigator items enabled only for KEXI_SHOW_UNIMPLEMENTED
+- copy/paste/cut on navigator items enabled only for KEXI_SHOW_UNIMPLEMENTED
 - toolbars redesigned: now "design" toolbar is for kexipart's design view
   and "data" is for data view. This avoids toolbars duplication.
 - propeditor dock window is hidden when a window in data view mode is active 
