@@ -43,6 +43,7 @@ void KoCreateStyleDia::slotOk()
     if ( styleList.findIndex(m_styleName->text() ) != -1 )
     {
         KMessageBox::error(this, i18n("Name already exists! Please choose another name"));
+        m_styleName->clear();
     }
     else
         KDialogBase::slotOk();

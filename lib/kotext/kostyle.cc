@@ -154,6 +154,7 @@ void KoStyle::operator=( const KoStyle &rhs )
 {
     m_paragLayout = rhs.m_paragLayout;
     m_name = rhs.m_name;
+    m_shortCut_name = rhs.m_shortCut_name;
     m_format = rhs.m_format;
     m_followingStyle = rhs.m_followingStyle;
     m_paragLayout.style = this; // must always be "this"
