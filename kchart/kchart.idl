@@ -1,0 +1,24 @@
+#ifndef __kchart_idl__
+#define __kchart_idl__
+
+#include <parts.idl>
+#include <chart.idl>
+
+module KCharter
+{
+	interface View : OPParts::View
+	{
+		slot void newView();
+	};
+
+	interface Document : OPParts::Document, Chart::SimpleChart
+	{
+	};
+
+	interface Factory : OPParts::Factory
+	{
+	};
+};
+
+#endif
+
