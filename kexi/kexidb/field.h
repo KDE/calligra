@@ -24,6 +24,7 @@
 
 #include <qvariant.h>
 #include <qstring.h>
+#include <qpair.h>
 
 namespace KexiDB {
 
@@ -32,10 +33,15 @@ namespace KexiDB {
 
 class TableSchema;
 class FieldList;
+class Expression;
 
 class KEXI_DB_EXPORT Field
 {
 	public:
+		typedef QPtrList<Field> List; //!< list of fields 
+		typedef QPtrListIterator<Field> ListIterator; //!< iterator for list of fields 
+		typedef QPair<Field*,Field*> Pair; //!< fields pair
+		typedef QPtrList<Pair> PairList; //!< list of fields pair
 
 		/*! Unified (most common used) types of fields. */
 		enum Type
@@ -119,9 +125,6 @@ class KEXI_DB_EXPORT Field
 			Unsigned = 1
 		};
 
-		typedef QPtrList<Field> List;
-		typedef QPtrListIterator<Field> ListIterator;
-
 		Field(TableSchema *tableSchema);
 		Field();
 
@@ -142,25 +145,19 @@ class KEXI_DB_EXPORT Field
 		/*! \return table schema of table that owns this field. */
 		virtual TableSchema* table() const;
 
-		/*!
-		 *	@return true if the field is autoincrement (e.g. integer/numeric)
-		 */
+		/*! @return true if the field is autoincrement (e.g. integer/numeric) */
 		bool		isAutoIncrement() const { return constraints() & AutoInc; }
-		/*!
-		 *	@return true if the field is member of single-field primary key
-		 */
+
+		/*! @return true if the field is member of single-field primary key */
 		bool		isPrimaryKey() const { return constraints() & PrimaryKey; }
-		/*!
-		 *	@return true if the field is member of single-field unique key
-		 */
+
+		/*! @return true if the field is member of single-field unique key */
 		bool		isUniqueKey() const { return constraints() & Unique; }
-		/*!
-		 *	@return true if the field is member of single-field foreign key
-		 */
+
+		/*! @return true if the field is member of single-field foreign key */
 		bool		isForeignKey() const { return constraints() & ForeignKey; }
-		/*!
-		 *	@return true if the field is not allowed to be null
-		 */
+
+		/*! @return true if the field is not allowed to be null */
 		bool		isNotNull() const { return constraints() & NotNull; }
 
 //js: we have m_table for this		/*!
@@ -225,6 +222,19 @@ class KEXI_DB_EXPORT Field
 		//! \return string for debugging purposes.
 		virtual QString debugString() const;
 
+		/*! \return KexiDB::Expression object if the field value is a result expression. 
+		 Unless the expression is set with setExpresion(), it is null.
+		*/
+		KexiDB::Expression *expression() { return m_expr; }
+
+		/*! Sets expression data \a expr. If \a expr there was 
+		 already expression set, it is destroyed before new assignment.
+		 this Field object becames owner of passed \a expr object
+		 - you do not have to worry about deleting of \a expr.
+		 \a expr can be null - then current field's expression is cleared.
+		*/
+		void setExpression(KexiDB::Expression *expr);
+
 	protected:
 		FieldList *m_parent; //!< In most cases this points to a TableSchema 
 		                     //!< object that field is assigned.
@@ -239,6 +249,8 @@ class KEXI_DB_EXPORT Field
 		int m_order;
 		QString m_caption;
 		QString m_help;
+
+		Expression *m_expr;
 
 	friend class Connection;
 	friend class TableSchema;

@@ -127,9 +127,9 @@ QString Driver::defaultSQLTypeName(int id_t)
 	return dflt_typeNames[id_t];
 }
 
-bool Driver::isSystemObjectName( const QString& /*n*/ )
+bool Driver::isSystemObjectName( const QString& n )
 {
-	return false;
+	return n.startsWith("kexi__");
 }
 
 bool Driver::isSystemFieldName( const QString& /*n*/ )

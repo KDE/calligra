@@ -23,6 +23,7 @@
 
 #include <kexidb/connection.h>
 #include <kexidb/driver.h>
+#include <kexidb/expression.h>
 
 #include <kdebug.h>
 
@@ -39,6 +40,7 @@ Field::Field()
 	,m_options(NoOptions)
 	,m_defaultValue( QVariant(QString::null) )
 	,m_order(-1)
+	,m_expr(0)
 {
 	setConstraints(NoConstraints);
 }
@@ -53,6 +55,7 @@ Field::Field(TableSchema *tableSchema)
 	,m_options(NoOptions)
 	,m_defaultValue( QVariant(QString::null) )
 	,m_order(tableSchema->fieldCount())
+	,m_expr(0)
 {
 	setConstraints(NoConstraints);
 }
@@ -68,6 +71,7 @@ Field::Field(const QString& name, Type ctype,
 	,m_options(options)
 	,m_defaultValue(defaultValue)
 	,m_order(-1)
+	,m_expr(0)
 {
 	setConstraints(cconst);
 	if (m_length==0) {//0 means default length:
@@ -112,6 +116,7 @@ Field::variantType(Type type)
 
 
 Field::~Field() {
+	delete m_expr;
 }
 
 
@@ -525,3 +530,17 @@ QString Field::debugString() const
 		dbg += " NOTNULL";
 	return dbg;
 }
+
+void Field::setExpression(KexiDB::Expression *expr)
+{
+	if (m_expr==expr)
+		return;
+	if (m_expr) {
+		delete m_expr;
+	}
+	m_expr = expr;
+	if (m_expr) {
+		m_expr->m_field = this;
+	}
+}
+

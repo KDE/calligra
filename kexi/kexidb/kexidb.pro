@@ -30,6 +30,8 @@ indexschema.cpp \
 cursor.cpp \
 fieldlist.cpp \
 global.cpp \
+expression.cpp \
+reference.cpp \
 \
 parser/parser.cpp \
 parser/sqlparser.cpp \

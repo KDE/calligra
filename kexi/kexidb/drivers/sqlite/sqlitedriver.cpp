@@ -87,12 +87,12 @@ SQLiteDriver::drv_createConnection( ConnectionData &conn_data )
 
 bool SQLiteDriver::isSystemObjectName( const QString& n )
 {
-	return n.lower().startsWith("sqlite_");
+	return Driver::isSystemObjectName(n) || n.lower().startsWith("sqlite_");
 }
 
 bool SQLiteDriver::isSystemFieldName( const QString& n )
 {
-	return n.lower()=="_rowid_";
+	return Driver::isSystemFieldName(n) || n.lower()=="_rowid_";
 }
 
 

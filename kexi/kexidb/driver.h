@@ -98,7 +98,8 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! \return true if \a n is a system object name, 
 		 eg. name of build-in system tables that cannot be used by user,
 		 and in most cases user even shouldn't see these. The list is specific for 
-		 a given driver implementation. By default always returns false. 
+		 a given driver implementation. By default returns true is \a n starts with "kexi__".
+		 Note for driver developers: Also call this method from your reimplementation.
 		 \sa isSystemFieldName().
 		*/
 		virtual bool isSystemObjectName( const QString& n );
@@ -106,7 +107,8 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! \return true if \a n is a system field names, build-in system 
 		 fields that cannot be used by user,
 		 and in most cases user even shouldn't see these. The list is specific for 
-		 a given driver implementation. By default always returns false.  
+		 a given driver implementation. By default always returns false. 
+		 Note for driver developers: Also call this method from your reimplementation.
 		 \sa isSystemObjectName().
 		*/
 		virtual bool isSystemFieldName( const QString& n );
@@ -132,7 +134,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 //virtual ConnectionInternal* createConnectionInternalObject( Connection& conn ) = 0;
 
 		/*! Used by DriverManager. 
-		 Note for drivers creators: Reimplement this.
+		 Note for driver developers: Reimplement this.
 		 In your reimplementation you should initialize:
 		 - m_typeNames - to types accepted by your engine
 		 - m_driverName - to desired name of your driver (not i18n'd)

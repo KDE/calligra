@@ -325,8 +325,6 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		#undef A
 		#undef H_INS_REC
 		
-//		bool insertRecord(KexiDB::TableSchema &tableSchema, const QVariant& c1, const QVariant& c2);
-
 		/*! Creates table defined by \a tableSchema.
 		 Schema information is also added into kexi system tables, for later reuse.
 		 \a tableSchema object is inserted to Connection structures - it is
@@ -334,6 +332,12 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 object by hand (or declare it as local-scope variable). 
 		*/
 		bool createTable( KexiDB::TableSchema* tableSchema );
+
+		/*! \return first field from \a fieldlist that has system name, 
+		 null if there are no such field.
+		 For checking Driver::isSystemFieldName() is used, so this check can 
+		 be driver-dependent. */
+		Field* Connection::findSystemFieldName(KexiDB::FieldList *fieldlist);
 
 	protected:
 		/*! Used by Driver */

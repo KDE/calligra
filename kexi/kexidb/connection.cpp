@@ -626,10 +626,41 @@ QString Connection::queryStatement( const KexiDB::QuerySchema& querySchema )
 	{ rollbackAutoCommitTransaction(trans); \
 	  return false; }
 
+Field* Connection::findSystemFieldName(KexiDB::FieldList* fieldlist)
+{
+	Field *f = fieldlist->fields()->first();
+	while (f) {
+		if (m_driver->isSystemFieldName( f->name() ))
+			return f;
+		f = fieldlist->fields()->next();
+	}
+	return 0;
+}
+
 bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 {
-	if (!checkConnected())
+	if (!tableSchema || !checkConnected())
 		return false;
+
+	//check if there are any fields
+	if (tableSchema->fieldCount()<1) {
+		setError(ERR_CANNOT_CREATE_EMPTY_OBJECT, i18n("Cannot create table without fields."));
+		return false;
+	}
+	if (m_driver->isSystemObjectName( tableSchema->name() )) {
+		setError(ERR_SYSTEM_NAME_RESERVED, i18n("System name \"%1\" cannot be used as table name.")
+			.arg(tableSchema->name()));
+		return false;
+	}
+	{
+		Field *sys_field = findSystemFieldName(tableSchema);
+		if (sys_field) {
+			setError(ERR_SYSTEM_NAME_RESERVED, 
+				i18n("System name \"%1\" cannot be used as one of fields in \"%2\" table.")
+				.arg(sys_field->name()).arg(tableSchema->name()));
+			return false;
+		}
+	}
 	
 	Transaction trans;
 	if (!beginAutoCommitTransaction(trans))
