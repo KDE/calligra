@@ -730,7 +730,7 @@ because of the term <i>Tabelle</i> (German, literally means table). The correct
 term is <i>sheet</i> or <i>worksheet</i>. The English version of Microsoft
 uses <i>sheet</i> while the German version uses <i>Tabelle</i>.</p>
 
-<p>Use d-pointer trick whenever possible. Such practice will help when later on
+<p>Use <a href="http://developer.kde.org/documentation/library/kdeqt/kde3arch/devel-binarycompatibility.htm">d-pointer</a> trick (also known pimpl) whenever possible. Such practice will help when later on
 we want to expose the API and need to maintain binary compatibility. But the
 most important thing is to separate the interface and the implementation.
 Furthermore, build time is reduced since modification on the implementation
