@@ -403,10 +403,16 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 {
     KWFrame * frame = frames.at( frameNum );
     ASSERT( frame );
-    if ( frame->topLeft() != position )
+
+    KoPoint pos( position );
+    // position includes the border, we need to adjust accordingly
+    pos.rx() += Border::zoomWidthX( frame->getLeftBorder().ptWidth, m_doc, 1 );
+    pos.ry() += Border::zoomWidthY( frame->getTopBorder().ptWidth, m_doc, 1 );
+
+    if ( frame->topLeft() != pos )
     {
-        kdDebug() << "KWFrameSet::moveFloatingFrame " << position.x() << "," << position.y() << endl;
-        frame->moveTopLeft( position );
+        kdDebug() << "KWFrameSet::moveFloatingFrame " << pos.x() << "," << pos.y() << endl;
+        frame->moveTopLeft( pos );
         kWordDocument()->updateAllFrames();
     }
 }

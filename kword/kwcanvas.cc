@@ -1815,9 +1815,8 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                             break;
                         case Key_F: // 'F' -> frames debug
                             doc->printDebug();
-                            kdDebug(32002) << "Current framesetedit: " << m_currentFrameSetEdit << endl;
-                            if ( m_currentFrameSetEdit )
-                                kdDebug(32002) << m_currentFrameSetEdit->frameSet()->className() << endl;
+                            kdDebug(32002) << "Current framesetedit: " << m_currentFrameSetEdit <<
+                                ( m_currentFrameSetEdit ? m_currentFrameSetEdit->frameSet()->className() : "" ) << endl;
                             break;
                         default:
                             break;

@@ -3426,6 +3426,7 @@ void  KWTextFrameSetEdit::insertExpression(const QString &_c)
     textFrameSet()->insert( cursor, m_currentFormat, _c, false /* no newline */, true, i18n("Insert Expression") );
 }
 
+#if 0
 void KWTextFrameSetEdit::insertPicture( const QString & file )
 {
     KWTextImage * custom = new KWTextImage( textDocument(), file );
@@ -3435,6 +3436,7 @@ void KWTextFrameSetEdit::insertPicture( const QString & file )
                             false, false, i18n("Insert Inline Picture"),
                             customItemsMap );
 }
+#endif
 
 void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString & commandName )
 {
