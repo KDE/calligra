@@ -1787,19 +1787,19 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
     KWViewModeNormal * viewMode = new KWViewModeNormal( 0L ); // m_canvas==0L could be dangerous,
     // but we only use viewToNormal and normalToView.
 
+    QColorGroup cg = QApplication::palette().active();
+
     QRegion emptyRegion( rect );
     drawBorders( &painter, rect, emptyRegion, viewMode );
     if (!transparent)
-        eraseEmptySpace( &painter, emptyRegion, QApplication::palette().active().brush( QColorGroup::Base ) );
-
-    QColorGroup gb = QApplication::palette().active();
+        eraseEmptySpace( &painter, emptyRegion, cg.brush( QColorGroup::Base ) );
 
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameset = fit.current();
         if ( frameset->isVisible() && !frameset->isFloating() )
-            frameset->drawContents( &painter, rect, gb, false /*onlyChanged*/, false /*resetChanged*/,
+            frameset->drawContents( &painter, rect, cg, false /*onlyChanged*/, false /*resetChanged*/,
                                     0L, viewMode );
     }
     delete viewMode;

@@ -1723,8 +1723,38 @@ void KWView::extraStylist()
 
 void KWView::extraCreateTemplate()
 {
-    QPixmap pix( 45, 60 );
+    int width = 60;
+    int height = 60;
+    double ratio = (double)doc->paperHeight() / (double)doc->paperWidth();
+    if ( ratio > 1 )
+        width = qRound( 60 / ratio );
+    else
+        height = qRound( 60 / ratio );
+    kdDebug() << "KWView::extraCreateTemplate ratio=" << ratio << " preview size: " << width << "," << height << endl;
+    QPixmap pix( width, height );
     pix.fill( Qt::white );
+    QPainter painter;
+    painter.begin( &pix );
+    painter.scale( (double)width / (double)doc->paperWidth(), (double)height / (double)doc->paperHeight() );
+    QRect pageRect( 0, 0, doc->paperWidth(), doc->paperHeight() );
+
+    // Draw frame borders
+    QRegion reg;
+    KWViewModeNormal * viewMode = new KWViewModeNormal( 0L );
+    doc->drawBorders( &painter, pageRect, reg, viewMode );
+    QColorGroup cg = QApplication::palette().active();
+
+    // Draw all framesets contents
+    QListIterator<KWFrameSet> fit = doc->framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        KWFrameSet * frameset = fit.current();
+        if ( frameset->isVisible() && !frameset->isFloating() )
+            frameset->drawContents( &painter, pageRect, cg, false, false, 0L, viewMode );
+    }
+
+    painter.end();
+    delete viewMode;
 
     KTempFile tempFile( QString::null, ".kwt" );
     tempFile.setAutoDelete(true);
