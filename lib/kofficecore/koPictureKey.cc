@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
    Copyright 2002 Nicolas GOUTTE <goutte@kde.org>
@@ -26,24 +27,12 @@
 
 #include "koPictureKey.h"
 
-// NOTE: we use the *nix epoch (1970-01-01) as a time base because it is a valid date.
-// That way we do not depend on a behaviour of the current QDateTime that might change in future versions of QT
-// and we are also nice to non-QT programs wanting to read KOffice's files.
-//
-// NOTE 2: this behaviour is also needed for re-saving KWord files having <FORMAT id="2">. When saving again,
-// these files get a <KEY> element as child of <PIXMAPS> but not one as child of <FORMAT> and <IMAGE>.
-// Therefore we need to be careful that the key remains compatible to default values (another good reason for the first note)
-//
-// Notes added by Nicolas GOUTTE <goutte@kde.org>
-
-
-
 static void resetDateTimeToEpoch(QDateTime& dt)
 {
     // set the time point to 1970-01-01
     dt.setDate(QDate(1970,1,1));
     dt.setTime(QTime(0,0));
-    // Note: we cannot use QDateTime;;setTime_t as it makes a local time correction!
+    // Note: we cannot use QDateTime;;setTime_t as it makes a local time correction! (### TODO: not true anymore with recent Qt versions)
 }
 
 KoPictureKey::KoPictureKey()
@@ -149,10 +138,9 @@ void KoPictureKey::loadAttributes( const QDomElement &elem )
 
 QString KoPictureKey::toString() const
 {
-    // m_filename must be the last argument as it can contain a sequence starting with %
     // We do not use the default QDateTime::toString has it does not show microseconds
-    return QString::fromLatin1("%2 %1")
-        .arg(m_lastModified.toString("yyyy-MM-dd hh:mm:ss.zzz")).arg(m_filename);
+    return QString::fromLatin1( "%1 %2" )
+        .arg( m_filename, m_lastModified.toString("yyyy-MM-dd hh:mm:ss.zzz") );
 }
 
 void KoPictureKey::setKeyFromFile (const QString& filename)

@@ -23,6 +23,11 @@
 #include <qstring.h>
 #include <qdatetime.h>
 
+/**
+ * \file koPictureKey.h
+ * \todo correct documentation (for example: sed "s/image/picture/g")
+ */
+
 class QDomElement;
 
 namespace KoPictureType
@@ -31,7 +36,7 @@ namespace KoPictureType
      * QPicture version used by KoPictureClipart
      *
      * Possible values:
-     * \li 3 for Qt 2.1.x and later
+     * \li 3 for Qt 2.1.x and later Qt 2.x
      * \li 4 for QT 3.x
      * \li -1 for current Qt
      */
@@ -39,22 +44,32 @@ namespace KoPictureType
 
     enum Type
     {
-        TypeUnknown = 0,
-        TypeImage,          ///< Image, QImage-based
-        TypeEps,            ///< Encapsulated Postscript
-        TypeClipart,        ///< Clipart, QPicture-based
-        TypeWmf             ///< WMF (Windows Meta File)
+        TypeUnknown = 0,    ///< Unknown or not-an-image @see KoPictureBase
+        TypeImage,          ///< Image, QImage-based @see KoPictureImage
+        TypeEps,            ///< Encapsulated Postscript @see KoPictureEps
+        TypeClipart,        ///< Clipart, QPicture-based @see KoPictureClipart
+        TypeWmf             ///< WMF (Windows Meta File) @see KoPictureWmf
     };
 }
 
-// TODO: correct documentation (for example: sed "s/image/picture/g")
-
 /**
- * KoPictureKey is the structure describing an image in a unique way.
- * It currently includes the original path to the image and the modification
+ * KoPictureKey is the structure describing a picture in a unique way.
+ * It currently includes the original path to the picture and the modification
  * date.
  *
- * @short Structure describing an image on disk
+ * @short Structure describing a picture on disk
+ *
+ * @note We use the *nix epoch (1970-01-01) as a time base because it is a valid date.
+ * That way we do not depend on a behaviour of the current QDateTime that might change in future versions of QT
+ * and we are also nice to non-QT programs wanting to read KOffice's files.
+ *
+ * @note This behaviour is also needed for re-saving KWord files having \<FORMAT id="2"\>. When saving again,
+ * these files get a \<KEY\> element as child of \<PIXMAPS\> but not one as child of \<FORMAT\> and \<IMAGE\>.
+ * Therefore we need to be careful that the key remains compatible to default values 
+ * (another good reason for the *NIX epoch)
+ *
+ * @note In case of a remote path, the "original path" is the name of the temporary file that was
+ *  used to download the file.
  */
 class KoPictureKey
 {
@@ -65,7 +80,8 @@ public:
     KoPictureKey();
 
     /**
-     * Constructs a key, from a filename and a modification date
+     * @brief Constructs a key, from a filename and a modification date
+     *
      * Storing the modification date as part of the key allows the user
      * to update the file and import it into the application again, without
      * the application reusing the old copy from the collection.
@@ -73,7 +89,7 @@ public:
     KoPictureKey( const QString &fn, const QDateTime &mod );
 
     /**
-     * Constructs a key, from a filename 
+     * Constructs a key from a filename 
      * @note The modification date is set to 1970-01-01
      */
     KoPictureKey( const QString &fn );
@@ -94,7 +110,8 @@ public:
     bool operator==( const KoPictureKey &key ) const;
 
     /**
-     * Comparison operator - used for sorting in the collection's map
+     * Comparison operator 
+     * @note Used for sorting in the collection's map
      */
     bool operator<( const KoPictureKey &key ) const;
 
@@ -104,12 +121,12 @@ public:
     QString toString() const;
 
     /**
-     * Save this key in XML.
+     * Save this key in XML (as %KOffice 1.3)
      */
     void saveAttributes( QDomElement &elem ) const;
 
     /**
-     * Load this key from XML.
+     * Load this key from XML (as %KOffice 1.3)
      */
     void loadAttributes( const QDomElement &elem );
 
@@ -124,7 +141,7 @@ public:
     QDateTime lastModified() const { return m_lastModified; }
 
     /**
-     * Sets the key according to @p filename modification time
+     * Sets the key according to @p filename, including modification time
      */
     void setKeyFromFile (const QString& filename);
 
