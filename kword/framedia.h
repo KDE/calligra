@@ -99,6 +99,8 @@ protected slots:
     void slotMarginsChanged( double );
     void slotProtectContentChanged( bool );
     void enableRunAround();
+    void selectExistingFrameset();
+    void selectNewFrameset(bool on);
 
 private:
     // TAB 1:

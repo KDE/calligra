@@ -426,13 +426,12 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     }
 
 
-    // SideHeads definition - is that for text frames only ?
-    if( frameType == FT_TEXT )
+    // SideHeads definition - is that for text frames only ?   - Yes (TZ)
+    if( false && frameType == FT_TEXT ) // disabled in the GUI for now! (TZ June 2002)
     {
         row++;
         sideHeads = new QGroupBox(i18n("SideHead Definition"),tab1);
         sideHeads->setEnabled(false); //###
-        sideHeads->hide(); //###
         grid1->addWidget(sideHeads, row, 0);
 
         sideGrid = new QGridLayout( sideHeads, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
@@ -699,6 +698,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     lFrameSList->addColumn( i18n("Frameset name") );
     lFrameSList->setAllColumnsShowFocus( true );
     lFrameSList->header()->setMovingEnabled( false );
+    connect( lFrameSList, SIGNAL(selectionChanged ()),this,SLOT(selectExistingFrameset ()) );
 
     layout2->addWidget( lFrameSList );
     tabLayout->addLayout( layout2 );
@@ -720,7 +720,6 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     layout1->addWidget( textLabel1 );
 
     eFrameSetName = new QLineEdit( tab3 );
-    connect(eFrameSetName, SIGNAL(textChanged ( const QString & )),this,SLOT(textNameFrameChanged ( const QString & )));
     layout1->addWidget( eFrameSetName );
     tabLayout->addLayout( layout1 );
 
@@ -764,6 +763,24 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
              this, SLOT( connectListSelected( QListViewItem * ) ) );
     connect(eFrameSetName, SIGNAL(textChanged ( const QString & ) ),
              this,SLOT(textNameFrameChanged ( const QString & ) ) );
+    connect(eFrameSetName, SIGNAL(textChanged ( const QString & )),
+             this,SLOT(textNameFrameChanged ( const QString & ) ));
+    connect( rNewFrameset, SIGNAL(toggled (bool)),
+             this,SLOT(selectNewFrameset (bool)) );
+}
+
+void KWFrameDia::selectExistingFrameset() {
+    rExistingFrameset->setChecked(true);
+}
+
+void KWFrameDia::selectNewFrameset(bool on) {
+    if(!on) return;
+
+    QListViewItem *frameSetItem  = lFrameSList->selectedItem();
+    QString str = frameSetItem->text( 0 );
+    KWFrameSet *fs = doc->frameSet(str.toInt() - 1);
+
+    frameSetItem->setText(1, fs->getName() );
 }
 
 void KWFrameDia::textNameFrameChanged ( const QString &text )
