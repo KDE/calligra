@@ -663,6 +663,12 @@ StyleDia::StyleDia( QWidget* parent, const char* name, KPresenterDoc *_doc, bool
     oldProtect=STATE_OFF;
     oldKeepRatio=STATE_OFF;
 
+    oldLeft = 0.0;
+    oldTop = 0.0;
+    oldBottom = 0.0;
+    oldRight = 0.0;
+
+
     oldRect=KoRect();
 
     // allways create a pen- & brush-dialog or rewrite KPrPage::setPenBrush :-)
@@ -822,6 +828,67 @@ void StyleDia::setupTabGeometry()
     m_lineHeight->setRange ( 0, 9999, 1, false);
     pGrid->addWidget( m_lineHeight, 4, 1 );
 
+
+    QGroupBox *grp2 = new QGroupBox( i18n("Margins in %1").arg(m_doc->getUnitName()), tab );
+    QGridLayout *mGrid = new QGridLayout( grp2, 6, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    layout->addWidget( grp2 );
+
+
+    QLabel *lml = new QLabel( i18n( "Left:" ), grp2 );
+    lml->resize( lml->sizeHint() );
+    mGrid->addWidget( lml, 1, 0 );
+
+    sml = new KDoubleNumInput( grp2 );
+
+    sml->setValue( 0.0 );
+    sml->resize( sml->sizeHint() );
+    mGrid->addWidget( sml, 2, 0 );
+
+    QLabel *lmr = new QLabel( i18n( "Right:" ), grp2 );
+    lmr->resize( lmr->sizeHint() );
+    mGrid->addWidget( lmr, 1, 1 );
+
+    smr = new KDoubleNumInput( grp2 );
+
+    smr->setValue( 0.0 );
+    smr->resize( smr->sizeHint() );
+    mGrid->addWidget( smr, 2, 1 );
+
+    QLabel *lmt = new QLabel( i18n( "Top:" ), grp2 );
+    lmt->resize( lmt->sizeHint() );
+    mGrid->addWidget( lmt, 3, 0 );
+
+    smt = new KDoubleNumInput( grp2 );
+
+    smt->setValue( 0.0 );
+    smt->resize( smt->sizeHint() );
+    mGrid->addWidget( smt, 4, 0 );
+
+    QLabel *lmb = new QLabel( i18n( "Bottom:" ), grp2 );
+    lmb->resize( lmb->sizeHint() );
+    mGrid->addWidget( lmb, 3, 1 );
+
+    smb = new KDoubleNumInput( grp2 );
+
+    smb->setValue( 0.0 );
+    smb->resize( smb->sizeHint() );
+    mGrid->addWidget( smb, 4, 1 );
+
+    mGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
+    synchronize=new QCheckBox( i18n("Synchronize"), tab );
+    layout->addWidget( synchronize );
+
+    connect( smb, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
+    connect( sml, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
+    connect( smr, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
+    connect( smt, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
+
+    if ( !allTextObj )
+    {
+        grp2->hide();
+        synchronize->hide();
+    }
+
     addTab( tab, i18n( "&Geometry" ) );
 }
 
@@ -899,6 +966,20 @@ void StyleDia::setupTabRectangle()
     addTab( m_confRectDia, i18n( "&Rectangle" ) );
 }
 
+void StyleDia::slotMarginsChanged( double val)
+{
+    if ( synchronize->isChecked() && lockUpdate)
+    {
+        lockUpdate = false;
+        sml->setValue( val );
+        smb->setValue( val );
+        smr->setValue( val );
+        smt->setValue( val );
+        lockUpdate = true;
+    }
+}
+
+
 void StyleDia::protectChanged()
 {
     if ( lockUpdate )
@@ -920,6 +1001,40 @@ StyleDia::~StyleDia()
     delete m_confPolygonDia;
     delete m_confPictureDia;
 }
+
+void StyleDia::setMargins( double left, double right, double top, double bottom)
+{
+    oldLeft = left;
+    oldTop = top;
+    oldBottom = bottom;
+    oldRight = right;
+    sml->setValue( KoUnit::ptToUnit( QMAX(0.00, left), m_doc->getUnit() ) );
+    smr->setValue( KoUnit::ptToUnit( QMAX(0.00, right), m_doc->getUnit() ) );
+    smt->setValue( KoUnit::ptToUnit( QMAX(0.00, top), m_doc->getUnit() ) );
+    smb->setValue( KoUnit::ptToUnit( QMAX(0.00, bottom), m_doc->getUnit() ) );
+
+}
+
+double StyleDia::marginsLeft()
+{
+    return QMAX(KoUnit::ptFromUnit( sml->value(), m_doc->getUnit() ),0);
+}
+
+double StyleDia::marginsRight()
+{
+    return QMAX(KoUnit::ptFromUnit( smr->value(), m_doc->getUnit() ),0);
+}
+
+double StyleDia::marginsBottom()
+{
+    return QMAX(KoUnit::ptFromUnit( smb->value(), m_doc->getUnit() ),0);
+}
+
+double StyleDia::marginsTop()
+{
+    return QMAX(KoUnit::ptFromUnit( smt->value(), m_doc->getUnit() ),0);
+}
+
 
 void StyleDia::setSticky( PropValue p )
 {

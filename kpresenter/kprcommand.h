@@ -921,6 +921,29 @@ protected:
     KPresenterDoc * doc;
 };
 
+struct MarginsStruct {
+    MarginsStruct() {}
+    MarginsStruct( KPTextObject *obj );
+    MarginsStruct( double _left, double top, double right, double bottom );
+    double topMargin;
+    double bottomMargin;
+    double leftMargin;
+    double rightMargin;
+};
+
+class KPrChangeMarginCommand : public KNamedCommand
+{
+public:
+    KPrChangeMarginCommand( const QString &name, KPTextObject *_obj, MarginsStruct _MarginsBegin, MarginsStruct _MarginsEnd );
+    ~KPrChangeMarginCommand() {}
+
+    virtual void execute();
+    virtual void unexecute();
+protected:
+    KPTextObject *m_obj;
+    MarginsStruct m_marginsBegin;
+    MarginsStruct m_marginsEnd;
+};
 
 #endif
 

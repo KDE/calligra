@@ -207,6 +207,13 @@ public:
     bool keepRatioNoChange()const;
 
 
+    void setMargins( double left, double right, double top, double bottom);
+
+    double marginsLeft();
+    double marginsRight();
+    double marginsBottom();
+    double marginsTop();
+
     KoRect getNewSize() const;
     void setSize(const KoRect &);
 
@@ -234,7 +241,9 @@ private:
 
     KoRect oldRect;
     QCheckBox *sticky, *protect, *keepRatio, *protectContent;
+    QCheckBox *synchronize;
     KDoubleNumInput *m_lineTop, *m_lineLeft, *m_lineWidth, *m_lineHeight;
+    KDoubleNumInput *sml, *smt, *smb, *smr;
 
     KPresenterDoc *m_doc;
     KPrCanvas *m_canvas;
@@ -252,11 +261,16 @@ private:
     bool oldProtectContent;
     PropValue oldProtect;
     PropValue oldKeepRatio;
+    double oldLeft;
+    double oldTop;
+    double oldBottom;
+    double oldRight;
+
 private slots:
     void slotReset();
     void styleDone();
     void protectChanged();
-
+    void slotMarginsChanged( double );
 signals:
     void styleOk();
 };

@@ -1008,6 +1008,13 @@ void KPresenterView::extraPenBrush()
 
     styleDia->setProtectContent( m_canvas->getProtectContent(protectContent));
 
+    if ( state )
+    {
+        KPTextObject * obj = dynamic_cast<KPTextObject*>(m_canvas->getSelectedObj());
+        if ( obj )
+            styleDia->setMargins( obj->bLeft(), obj->bRight(), obj->bTop(), obj->bBottom());
+    }
+
     styleDia->setCaption( i18n( "Properties" ) );
     QObject::connect( styleDia, SIGNAL( styleOk() ), this, SLOT( styleOk() ) );
     m_canvas->setToolEditMode( TEM_MOUSE );
@@ -3198,6 +3205,18 @@ void KPresenterView::styleOk()
             cmd = m_canvas->setProtectContent( styleDia->isProtectContent() );
             if (cmd )
                 macro->addCommand(cmd);
+            KPTextObject *obj=dynamic_cast<KPTextObject *>(m_canvas->getSelectedObj());
+            if (obj )
+            {
+                MarginsStruct _MarginsBegin(obj);
+
+                MarginsStruct _MarginsEnd( styleDia->marginsLeft(),styleDia->marginsTop(), styleDia->marginsRight(), styleDia->marginsBottom());
+
+                KPrChangeMarginCommand * cmd = new KPrChangeMarginCommand( i18n("Change Margins"), obj, _MarginsBegin, _MarginsEnd );
+                cmd->execute();
+                macro->addCommand(cmd);
+            }
+
         }
     }
     bool bSticky=styleDia->isSticky();

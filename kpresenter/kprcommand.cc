@@ -2297,3 +2297,42 @@ void KPrCloseObjectCommand::closeObject(bool close)
         }
     }
 }
+
+MarginsStruct::MarginsStruct( KPTextObject *obj )
+{
+    topMargin = obj->bTop();
+    bottomMargin= obj->bBottom();
+    leftMargin = obj->bLeft();
+    rightMargin= obj->bRight();
+}
+
+MarginsStruct::MarginsStruct( double _left, double _top, double _right, double _bottom ):
+    topMargin(_top),
+    bottomMargin(_bottom),
+    leftMargin(_left),
+    rightMargin(_right)
+{
+}
+
+
+KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, KPTextObject *_obj, MarginsStruct _MarginsBegin, MarginsStruct _MarginsEnd ) :
+    KNamedCommand(name),
+    m_obj( _obj ),
+    m_marginsBegin(_MarginsBegin),
+    m_marginsEnd(_MarginsEnd)
+{
+}
+
+void KPrChangeMarginCommand::execute()
+{
+    m_obj->setTextMargins( m_marginsEnd.leftMargin, m_marginsEnd.topMargin, m_marginsEnd.rightMargin, m_marginsEnd.bottomMargin);
+    m_obj->kPresenterDocument()->layout(m_obj);
+    m_obj->kPresenterDocument()->repaint(m_obj);
+}
+
+void KPrChangeMarginCommand::unexecute()
+{
+    m_obj->setTextMargins( m_marginsBegin.leftMargin, m_marginsBegin.topMargin, m_marginsBegin.rightMargin, m_marginsBegin.bottomMargin);
+    m_obj->kPresenterDocument()->layout(m_obj);
+    m_obj->kPresenterDocument()->repaint(m_obj);
+}

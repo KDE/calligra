@@ -1103,7 +1103,7 @@ void KPTextObject::slotNewCommand( KCommand * cmd)
 
 void KPTextObject::slotAvailableHeightNeeded()
 {
-    int ah = m_doc->zoomHandler()->ptToLayoutUnitPixY( getSize().height() );
+    int ah = m_doc->zoomHandler()->ptToLayoutUnitPixY( innerHeight() );
     m_textobj->setAvailableHeight( ah );
     //kdDebug()<<"slotAvailableHeightNeeded: height=:"<<ah<<endl;
 }
