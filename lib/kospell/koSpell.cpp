@@ -452,7 +452,7 @@ void KOSpell::dialog2 (int result)
 
         offset+=replacement().length()-replacement().length();
         newbuffer.replace (lastpos + offset, replacement().length(), replacement()+" " );
-        kdDebug()<<" apres :"<<newbuffer<<endl;
+        kdDebug()<<" after :"<<newbuffer<<endl;
         emit replaceall( dlgorigword ,  replacement() );
         emit corrected (dlgorigword ,  replacement(), lastpos+offset);
         break;
@@ -461,7 +461,7 @@ void KOSpell::dialog2 (int result)
 
         offset+=replacement().length()-replacement().length();
         newbuffer.replace (lastpos+offset, replacement().length(), replacement()+" " );
-        kdDebug()<<" apres :"<<newbuffer<<endl;
+        kdDebug()<<" after :"<<newbuffer<<endl;
         emit corrected (dlgorigword ,  replacement(), lastpos+offset);
         break;
     case KS_CHECKAGAINWITHNEWLANGUAGE:
