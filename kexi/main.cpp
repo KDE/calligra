@@ -115,6 +115,10 @@ bool startupActions(KexiProjectData * &projectData)
 	return true;
 }
 
+#ifdef Q_WS_WIN //temp. workaround
+# define kdemain main
+#endif
+
 extern "C" int kdemain(int argc, char *argv[])
 {
 	KCmdLineArgs::init( argc, argv, newKexiAboutData() );
@@ -144,3 +148,4 @@ extern "C" int kdemain(int argc, char *argv[])
 
 	return app.exec();
 }
+
