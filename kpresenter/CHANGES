@@ -95,3 +95,8 @@ Crashes:
 - Fixed crash when we duplicate page and there was an embedded document.
 - Fixed crash when we split view and we try to open menu when factory() is null
 - Fixed crash when we didn't select a slide and try to launch presentation
+
+Changes between KPresenter-1.2-RC1 and KPresenter-1.2
+=====================================================
+Bugfixes:
+- Fix undo/redo move object.
