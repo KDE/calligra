@@ -23,6 +23,7 @@
 #include "koMainWindow.h"
 #include <klocale.h>
 #include <kimageio.h>
+#include <kiconloader.h>
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <qstringlist.h>
@@ -36,6 +37,9 @@ KoApplication::KoApplication()
     KGlobal::locale()->insertCatalogue("koffice");
 
     KImageIO::registerFormats();
+
+    // Tell the iconloader about share/apps/koffice/icons
+    KGlobal::iconLoader()->addAppDir("koffice");
 
     // Quit when last window closed
     connect( this, SIGNAL( lastWindowClosed() ), this, SLOT( quit() ) );
