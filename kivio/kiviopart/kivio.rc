@@ -1,6 +1,9 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="6">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="7">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
+  <Separator/>
    <Action name="cutStencil"/>
    <Action name="copyStencil"/>
    <Action name="pasteStencil"/>
@@ -69,6 +72,9 @@
   <Action name="units"/>
 </ToolBar>
 <ToolBar name="StencilBar" fullWidth="false"><text>Edit</text>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
+  <Separator/>
   <Action name="cutStencil"/>
   <Action name="copyStencil"/>
   <Action name="pasteStencil"/>

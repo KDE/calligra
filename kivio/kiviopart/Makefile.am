@@ -53,7 +53,8 @@ libkiviopart_la_SOURCES = \
 		KIvioViewIface.skel KIvioViewIface.cc \
 		KIvioDocIface.skel KIvioDocIface.cc \
 		KIvioMapIface.skel KIvioMapIface.cc \
-		KIvioPageIface.skel KIvioPageIface.cc
+		KIvioPageIface.skel KIvioPageIface.cc \
+		kivio_command.cc
 EXTRA_DIST = \
 		main.cpp\
 		kivio_canvas.cpp\
@@ -128,7 +129,9 @@ EXTRA_DIST = \
 		KIvioViewIface.skel KIvioViewIface.cc KIvioViewIface.h \
 		KIvioDocIface.skel KIvioDocIface.cc KIvioDocIface.h \
 		KIvioMapIface.skel KIvioMapIface.cc KIvioMapIface.h \
-		KIvioPageIface.skel KIvioPageIface.cc KIvioPageIface.h
+		KIvioPageIface.skel KIvioPageIface.cc KIvioPageIface.h \
+		kivio_command.cc kivio_command.h
+		
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$

@@ -40,6 +40,7 @@
 #include "kivio_tabbar.h"
 #include "kivio_map.h"
 #include "kivio_factory.h"
+#include "kivio_command.h"
 
 KivioTabBar::KivioTabBar( QWidget* parent, KivioView* view )
 : QWidget(parent)
@@ -370,7 +371,8 @@ void KivioTabBar::slotRename()
                  // Recursion
                  slotRename();
              }
-             m_pView->koDocument()->setModified( true );
+             KivioChangePageNameCommand *cmd = new KivioChangePageNameCommand(i18n("Rename page"), activeName, newName, page);
+             m_pView->doc()->addCommand( cmd );
         }
     }
 }
