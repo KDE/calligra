@@ -1326,8 +1326,17 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         __pgLayout.ptHeight = getAttribute( paper, "height", 0.0 );
         if ( __pgLayout.ptWidth <= 0 || __pgLayout.ptHeight <= 0 )
         {
-            setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( __pgLayout.ptWidth ).arg( __pgLayout.ptHeight ) );
-            return false;
+            // Old document?
+            __pgLayout.ptWidth = getAttribute( paper, "ptWidth", 0.0 );
+            __pgLayout.ptHeight = getAttribute( paper, "ptHeight", 0.0 );
+
+            // Still wrong?
+            if ( __pgLayout.ptWidth <= 0 || __pgLayout.ptHeight <= 0 )
+            {
+                setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" )
+                    .arg( __pgLayout.ptWidth ).arg( __pgLayout.ptHeight ) );
+                return false;
+            }
         }
 
         __hf.header = static_cast<KoHFType>( KWDocument::getAttribute( paper, "hType", 0 ) );
