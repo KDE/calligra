@@ -373,18 +373,9 @@ void KPresenterView::editSelectAll()
 /*===============================================================*/
 void KPresenterView::editDuplicatePage()
 {
-    QString file = getenv( "HOME" );
-    file += "/.tmp.kpr";
-    m_pKPresenterDoc->savePage( file, currPg );
-    InsertPos pos = IP_AFTER;
-    int pg = m_pKPresenterDoc->insertPage( currPg, pos, FALSE, file );
+    m_pKPresenterDoc->copyPage( currPg, currPg+1 );
     setRanges();
-    sidebar->rebuildItems();
-    if ( pg != -1 )
-	skipToPage( pg );
-    sidebar->setCurrentPage( pg );
-    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
-    pgPrev->setEnabled( currPg > 0 );
+    skipToPage( currPg+1 ); // go to the new page
     actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
 }
 
@@ -398,12 +389,8 @@ void KPresenterView::editDelPage()
         return;
     m_pKPresenterDoc->deletePage( currPg );
     setRanges();
-    sidebar->rebuildItems();
     currPg = QMIN( currPg, (int)m_pKPresenterDoc->getPageNums() - 1 );
     skipToPage( currPg );
-    sidebar->setCurrentPage( currPg );
-    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
-    pgPrev->setEnabled( currPg > 0 );
     actionEditDelPage->setEnabled(  m_pKPresenterDoc->getPageNums() > 1 );
 }
 
@@ -442,12 +429,8 @@ void KPresenterView::insertPage()
     InsertPos pos = (InsertPos)dia.locationCombo->currentItem();
     int pg = m_pKPresenterDoc->insertPage( currPg, pos, dia.radioDifferent->isChecked(), QString::null );
     setRanges();
-    sidebar->rebuildItems();
     if ( pg != -1 )
 	skipToPage( pg );
-    sidebar->setCurrentPage( pg );
-    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
-    pgPrev->setEnabled( currPg > 0 );
     actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
 }
 
@@ -469,7 +452,7 @@ void KPresenterView::insertPicture()
     KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
     fd.setCaption(i18n("Insert Picture"));
     //fd.setPreviewMode( false, true );
-    fd.setPreviewWidget( new Preview( &fd ) );
+    fd.setPreviewWidget( new KImagePreview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
@@ -510,7 +493,7 @@ void KPresenterView::insertClipart()
     KFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, true );
     fd.setCaption(i18n("Insert Clipart"));
     //fd.setPreviewMode( false, true );
-    fd.setPreviewWidget( new Preview( &fd ) );
+    fd.setPreviewWidget( new KImagePreview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
@@ -1157,14 +1140,7 @@ void KPresenterView::screenFirst()
 #endif
     else {
 	if ( !presStarted ) {
-	    currPg = 0;
-	    vert->setValue( 0 );
-	    yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height()  * currPg;
-	    page->repaint( FALSE );
-	    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
-	    pgPrev->setEnabled( currPg > 0 );
-	    emit currentPageChanged( currPg );
-	    sidebar->setCurrentPage( currPg );
+            skipToPage( 0 );
 	} else {
 	    gotoPresPage( 1 );
 	}
@@ -1223,14 +1199,7 @@ void KPresenterView::screenLast()
 #endif
     else {
 	if ( !presStarted ) {
-	    currPg = m_pKPresenterDoc->getPageNums() - 1;
-	    vert->setValue( 0 );
-	    yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height()  * currPg;
-	    page->repaint( FALSE );
-	    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
-	    pgPrev->setEnabled( currPg > 0 );
-	    emit currentPageChanged( currPg );
-	    sidebar->setCurrentPage( currPg );
+	    skipToPage( m_pKPresenterDoc->getPageNums() - 1 );
 	} else {
 	    gotoPresPage( getNumPresPages() );
 	}
@@ -2445,7 +2414,7 @@ void KPresenterView::changePicture( unsigned int, const QString & filename )
     KFileDialog fd( filename, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
     fd.setCaption(i18n("Select new Picture"));
     //fd.setPreviewMode( false, true );
-    fd.setPreviewWidget( new Preview( &fd ) );
+    fd.setPreviewWidget( new KImagePreview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
@@ -2483,7 +2452,7 @@ void KPresenterView::changeClipart( unsigned int, QString filename )
     KFileDialog fd( filename, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, true );
     fd.setCaption(i18n("Select new Clipart"));
     //fd.setPreviewMode( false, true );
-    fd.setPreviewWidget( new Preview( &fd ) );
+    fd.setPreviewWidget( new KImagePreview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
@@ -2799,6 +2768,8 @@ void KPresenterView::skipToPage( int num )
     currPg = num;
     emit currentPageChanged( currPg );
     sidebar->setCurrentPage( currPg );
+    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
+    pgPrev->setEnabled( currPg > 0 );
     yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height() * currPg;
     page->repaint( FALSE );
 }
@@ -2981,65 +2952,21 @@ void KPresenterView::nextPage()
 {
     if ( currPg >= (int)m_pKPresenterDoc->getPageNums() - 1 )
  	return;
-    currPg++;
-    vert->setValue( 0 );
-    yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height() * currPg;
-    page->repaint( FALSE );
-    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
-    pgPrev->setEnabled( currPg > 0 );
-    emit currentPageChanged( currPg );
-    sidebar->setCurrentPage( currPg );
+    skipToPage( currPg+1 );
 }
 
 void KPresenterView::prevPage()
 {
     if ( currPg == 0 )
  	return;
-    currPg--;
-    vert->setValue( 0 );
-    yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height()  * currPg;
-    page->repaint( FALSE );
-    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
-    pgPrev->setEnabled( currPg > 0 );
-    emit currentPageChanged( currPg );
-    sidebar->setCurrentPage( currPg );
+    skipToPage( currPg-1 );
 }
 
-/*
-QValueList<int> KPresenterView::selectedSlides() const
-{
-    QListViewItemIterator it( sidebar );
-    QValueList<int> lst;
-    for ( ; it.current(); ++it ) {
- 	if ( ( (QCheckListItem*)it.current() )->isOn() )
-	    lst << it.current()->text( 1 ).toInt();
-    }
-    return lst;
-}
-
-QMap<int, bool > KPresenterView::selectedSlideMap() const
-{
-    QListViewItemIterator it( sidebar );
-    QMap<int, bool > map;
-    for ( ; it.current(); ++it )
-	map.insert( it.current()->text( 1 ).toInt() - 1, ( (QCheckListItem*)it.current() )->isOn() );
-    return map;
-}
-*/
-
-void KPresenterView::updateSideBar( int newCurrentPg )
+void KPresenterView::updateSideBar()
 {
     sidebar->blockSignals( TRUE );
     sidebar->rebuildItems();
     sidebar->blockSignals( FALSE );
-    currPg = newCurrentPg;
-    vert->setValue( 0 );
-    yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height()  * currPg;
-    page->repaint( FALSE );
-    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
-    pgPrev->setEnabled( currPg > 0 );
-    emit currentPageChanged( currPg );
-    sidebar->setCurrentPage( currPg );
 }
 
 void KPresenterView::updateSideBarItem( int pagenr )

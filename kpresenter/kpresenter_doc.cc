@@ -397,9 +397,9 @@ bool KPresenterDoc::saveToStream(QIODevice * dev)
     out << indent << "<PRESSPEED value=\"" << static_cast<int>( presSpeed ) << "\"/>" << endl;
 
     out << otag << "<SELSLIDES>" << endl;
-    QMap<int,bool>::Iterator sit = m_selectedSlides.begin();
-    for ( ; sit != m_selectedSlides.end(); ++sit )
-	out << indent << "<SLIDE nr=\"" << sit.key() << "\" show=\"" << ( *sit ) << "\"/>" << endl;
+    QValueList<bool>::Iterator sit = m_selectedSlides.begin();
+    for ( int i = 0; sit != m_selectedSlides.end(); ++sit, ++i )
+	out << indent << "<SLIDE nr=\"" << i << "\" show=\"" << ( *sit ) << "\"/>" << endl;
     out << etag << "</SELSLIDES>" << endl;
 
     // Write "OBJECT" tag for every child
@@ -691,6 +691,7 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 	_yRnd = 20;
 	_txtBackCol = white;
 	urlIntern = url().path();
+        m_selectedSlides.clear();
     }
 
     if ( !docAlreadyOpen ) {
@@ -940,24 +941,29 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 	} else if ( name == "SELSLIDES" ) {
 	    parser.parseTag( tag, name, lst );
 	    while ( parser.open( QString::null, tag ) ) {
-		int nr;
-		bool show;
-
 		parser.parseTag( tag, name, lst );
-		if ( name == "SLIDE" ) {
-		    parser.parseTag( tag, name, lst );
-		    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-		    for( ; it != lst.end(); ++it ) {
-			if ( ( *it ).m_strName == "nr" )
-			    nr = ( *it ).m_strValue.toInt();
-			else if ( ( *it ).m_strName == "show" )
-			    show = static_cast<bool>( ( *it ).m_strValue.toInt() );
-		    }
-                    if ( nr >= 0 )
-                        m_selectedSlides.insert( nr, show );
-                    kdDebug() << "KPresenterDoc::loadXML m_selectedSlides nr=" << nr << " show=" << show << endl;
-		} else
-		    kdError() << "Unknown tag '" << tag << "' in SELSLIDES" << endl;
+                if ( _clean ) // Skip this when loading a single page
+                    if ( name == "SLIDE" ) {
+                        int nr = -1;
+                        bool show = false;
+                        parser.parseTag( tag, name, lst );
+                        QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
+                        for( ; it != lst.end(); ++it ) {
+                            if ( ( *it ).m_strName == "nr" )
+                                nr = ( *it ).m_strValue.toInt();
+                            else if ( ( *it ).m_strName == "show" )
+                                show = static_cast<bool>( ( *it ).m_strValue.toInt() );
+                        }
+                        // We assume that the PAGE tags were found before the
+                        // SELSLIDES tag (this is always the case)
+                        if ( nr >= 0 )
+                        {
+                            kdDebug() << "KPresenterDoc::loadXML m_selectedSlides nr=" << nr << " show=" << show << endl;
+                            ASSERT( nr < (int)m_selectedSlides.count() );
+                            m_selectedSlides[nr] = show;
+                        } else kdWarning() << "Parse error. No nr in <SLIDE> !" << endl;
+                    } else
+                        kdError() << "Unknown tag '" << tag << "' in SELSLIDES" << endl;
 
 		if ( !parser.close( tag ) ) {
 		    kdError() << "ERR: Closing Child" << endl;
@@ -1081,14 +1087,11 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 
     addToRecentlyOpenedList( url().url() );
 
-    if ( allSlides ) {
+    if ( allSlides && _clean ) {
         //kdDebug() << "KPresenterDoc::loadXML allSlides" << endl;
-	QMap<int,bool>::Iterator sit = m_selectedSlides.begin();
-	for ( ; sit != m_selectedSlides.end(); ) {
-	    int k = sit.key();
-	    sit++;
-	    m_selectedSlides.replace( k, TRUE );
-	}
+	QValueList<bool>::Iterator sit = m_selectedSlides.begin();
+	for ( ; sit != m_selectedSlides.end(); ++sit )
+	    (*sit) = true;
     }
 
     setModified(false);
@@ -1106,11 +1109,10 @@ void KPresenterDoc::loadBackground( KOMLParser& parser, QValueList<KOMLAttrib>& 
 
 	// page
 	if ( name == "PAGE" ) {
-	    insertNewPage( 0, 0, false );
+	    insertNewPage( 0, 0, false ); // appends an entry to _backgroundList
 	    KPBackGround *kpbackground = _backgroundList.last();
 	    kpbackground->load( parser, lst );
-	    if ( !m_selectedSlides.contains( _backgroundList.count() - 1 ) )
-		m_selectedSlides.insert( _backgroundList.count() - 1, true );
+            m_selectedSlides.append( true ); // create an entry for this page
 	} else
 	    kdWarning() << "Unknown tag '" << tag << "' in BACKGROUND" << endl;
 
@@ -3382,6 +3384,7 @@ int KPresenterDoc::getBottomBorder()
 /*================================================================*/
 void KPresenterDoc::deletePage( int _page )
 {
+    kdDebug() << "KPresenterDoc::deletePage " << _page << endl;
     KPObject *kpobject = 0;
     int _h = getPageRect( 0, 0, 0 ).height();
 
@@ -3405,11 +3408,19 @@ void KPresenterDoc::deletePage( int _page )
 
     _backgroundList.remove( _page );
     repaint( false );
+
+    ASSERT( _page < (int)m_selectedSlides.count() );
+    m_selectedSlides.remove( m_selectedSlides.at( _page ) );
+    // Update the sidebars
+    KoView* view = firstView();
+    for( ; view; view = nextView() )
+        static_cast<KPresenterView*>(view)->updateSideBar();
 }
 
 /*================================================================*/
 int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile )
 {
+    kdDebug() << "KPresenterDoc::insertPage " << _page << endl;
     KPObject *kpobject = 0;
     int _h = getPageRect( 0, 0, 0 ).height();
 
@@ -3440,7 +3451,7 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
 	QFileInfo fileInfo( _template );
 	fileName = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt";
 	QString cmd = "cp " + fileName + " " + QString( getenv( "HOME" )  ) + "/.default.kpr";
-	system( cmd.latin1() );
+	system( cmd.local8Bit().data() );
     }
 
     _clean = false;
@@ -3455,6 +3466,14 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
     KPBackGround *kpbackground = _backgroundList.at( _backgroundList.count() - 1 );
     _backgroundList.take( _backgroundList.count() - 1 );
     _backgroundList.insert( _page, kpbackground );
+    if ( _page < (int)m_selectedSlides.count() )
+        m_selectedSlides.insert( m_selectedSlides.at(_page), true );
+    else
+        m_selectedSlides.append( true );
+    // Update the sidebars
+    KoView* view = firstView();
+    for( ; view; view = nextView() )
+        static_cast<KPresenterView*>(view)->updateSideBar();
     return _page;
 }
 
@@ -4014,23 +4033,32 @@ void KPresenterDoc::ungroupObjects()
 
 void KPresenterDoc::movePage( int from, int to )
 {
-    QString file = getenv( "HOME" );
-    file += "/.tmp.kpr";
-    savePage( file, from );
+    kdDebug() << "KPresenterDoc::movePage from=" << from << " to=" << to << endl;
+    bool wasSelected = isSlideSelected( from );
+    KTempFile tempFile( QString::null, ".kpr" );
+    tempFile.setAutoDelete( true );
+    savePage( tempFile.name(), from );
     deletePage( from );
-    InsertPos ipos;
-    ipos = IP_BEFORE;
-    insertPage( to, ipos, FALSE, file );
-    // Update the views
-    KoView* view = firstView();
-    for( ; view; view = nextView() )
-        static_cast<KPresenterView*>(view)->updateSideBar( to );
+    insertPage( to, IP_BEFORE, FALSE, tempFile.name() );
+    selectPage( to, wasSelected );
+}
+
+void KPresenterDoc::copyPage( int from, int to )
+{
+    kdDebug() << "KPresenterDoc::copyPage from=" << from << " to=" << to << endl;
+    bool wasSelected = isSlideSelected( from );
+    KTempFile tempFile( QString::null, ".kpr" );
+    tempFile.setAutoDelete( true );
+    savePage( tempFile.name(), from );
+    insertPage( to, IP_BEFORE, FALSE, tempFile.name() );
+    selectPage( to, wasSelected );
 }
 
 void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
 {
     ASSERT( pgNum >= 0 );
-    m_selectedSlides.replace( pgNum, select );
+    ASSERT( pgNum < (int)m_selectedSlides.count() );
+    m_selectedSlides[ pgNum ] = select;
     kdDebug() << "KPresenterDoc::selectPage pgNum=" << pgNum << " select=" << select << endl;
     setModified(true);
     // Update the views
@@ -4041,19 +4069,18 @@ void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
 
 bool KPresenterDoc::isSlideSelected( int pgNum /* 0-based */ ) const
 {
-    if ( m_selectedSlides.contains(pgNum) )
-        return m_selectedSlides[ pgNum ];
-    return true;
+    ASSERT( pgNum >= 0 );
+    ASSERT( pgNum < (int)m_selectedSlides.count() );
+    return m_selectedSlides[ pgNum ];
 }
 
 QValueList<int> KPresenterDoc::selectedSlides() const /* returned list is 0-based */
 {
     QValueList<int> result;
-    QMap<int, bool >::ConstIterator it = m_selectedSlides.begin();
-    QMap<int, bool >::ConstIterator end = m_selectedSlides.end();
-    for (  ; it != end; ++it )
-        if ( it.data() )
-            result << it.key();
+    QValueList<bool>::ConstIterator sit = m_selectedSlides.begin();
+    for ( int i = 0; sit != m_selectedSlides.end(); ++sit, ++i )
+        if ( *sit )
+            result << i;
     return result;
 }
 

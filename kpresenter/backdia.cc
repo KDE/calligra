@@ -390,7 +390,7 @@ void BackDia::selectPic()
   //i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" )
     KImageIO::pattern(KImageIO::Reading), 0, 0, true );
     //fd.setPreviewMode( false, true );
-    fd.setPreviewWidget( new Preview( &fd ) );
+    fd.setPreviewWidget( new KImagePreview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
     {
@@ -421,7 +421,7 @@ void BackDia::selectClip()
     KURL url;
     KFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, true );
     //fd.setPreviewMode( false, true );
-    fd.setPreviewWidget( new Preview( &fd ) );
+    fd.setPreviewWidget( new KImagePreview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
     {

@@ -109,11 +109,6 @@ public:
     virtual void setupPrinter( QPrinter &printer );
     virtual void print( QPrinter &printer );
 
-    /* moved to doc
-    QValueList<int> selectedSlides() const;
-    QMap<int, bool > selectedSlideMap() const;
-    */
-
 signals:
     void currentPageChanged( int );
 
@@ -314,7 +309,13 @@ public:
      */
     int canvasYOffset() const;
 
-    void updateSideBar( int newCurrentPg );
+    /**
+     * Rebuild the whole sidebar
+     */
+    void updateSideBar();
+    /**
+     * Update a given item in the sidebar
+     */
     void updateSideBarItem( int pagenr );
 
 protected slots:

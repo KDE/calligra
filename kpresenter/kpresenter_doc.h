@@ -34,7 +34,6 @@ class KTextEditFormatCollection;
 #include <qobject.h>
 #include <qstring.h>
 #include <qvaluelist.h>
-#include <qmap.h>
 #include <qdatetime.h>
 
 #include <koPageLayoutDia.h>
@@ -296,9 +295,10 @@ public:
     void setFooter( bool b );
     KPFooterHeaderEditor *getHeaderFooterEdit() { return headerFooterEdit; }
 
+    // Returns true if the slide pgNum (0 based)
     bool isSlideSelected( int pgNum ) const;
+    // Returns the list of selected slides. Slide numbers are 0-based.
     QValueList<int> selectedSlides() const;
-    QMap<int, bool > selectedSlidesMap() const { return m_selectedSlides; }
 
     virtual DCOPObject* dcopObject();
 
@@ -316,6 +316,7 @@ public:
 
 public slots:
     void movePage( int from, int to );
+    void copyPage( int from, int to );
     void selectPage( int pgNum, bool select );
 
 signals:
@@ -417,7 +418,7 @@ protected:
 
     int saveOnlyPage;
     KTextEditFormatCollection *fCollection;
-    QMap<int, bool> m_selectedSlides;
+    QValueList<bool> m_selectedSlides;
     bool ignoreSticky;
 
 };

@@ -17,35 +17,27 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef preview_h
-#define preview_h
+#ifndef __kimagepreview_h
+#define __kimagepreview_h
 
 #include <qvbox.h>
 
 #include <kurl.h>
 
-class KFileInfo;
-
-// WMF preview
-bool wmfPreviewHandler ( const KFileInfo*, const QString fileName, QString&, QPixmap& pixmap );
-
-// Pixmap preview
-bool pixmapPreviewHandler( const KFileInfo*, const QString fileName, QString&, QPixmap& pixmap );
-
 class PixmapView;
 
-class Preview : public QVBox
+class KImagePreview : public QVBox
 {
     Q_OBJECT
 
 public:
-    Preview( QWidget *parent );
+    KImagePreview( QWidget *parent );
 
 public slots:
-     void showPreview( const KURL &u ); 
+     void showPreview( const KURL &u );
 
 private:
     PixmapView *pixmap;
-
 };
+
 #endif

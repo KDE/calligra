@@ -179,8 +179,8 @@ void Page::draw( QRect _rect, QPainter *p )
 /*======================== paint event ===========================*/
 void Page::paintEvent( QPaintEvent* paintEvent )
 {
-    kdDebug() << "Page::paintEvent " << paintEvent->rect().x() << "," << paintEvent->rect().y()
-              << " " << paintEvent->rect().width() << "x" << paintEvent->rect().height() << endl;
+    //kdDebug() << "Page::paintEvent " << paintEvent->rect().x() << "," << paintEvent->rect().y()
+    //          << " " << paintEvent->rect().width() << "x" << paintEvent->rect().height() << endl;
     QPainter painter;
 
     painter.begin( &buffer );
@@ -241,13 +241,13 @@ void Page::drawBackground( QPainter *painter, QRect rect )
 void Page::drawObjects( QPainter *painter, QRect rect )
 {
     int pgNum = editMode ? (int)view->getCurrPgNum() : currPresPage;
-    kdDebug() << "Page::drawObjects ----- pgNum=" << pgNum << " currPresStep=" << currPresStep << " _presFakt=" << _presFakt << endl;
+    //kdDebug() << "Page::drawObjects ----- pgNum=" << pgNum << " currPresStep=" << currPresStep << " _presFakt=" << _presFakt << endl;
 
     QListIterator<KPObject> it(*objectList());
     for ( int i = 0 ; it.current(); ++it, ++i ) {
         KPObject *kpobject = it.current();
 	int pg = getPageOfObj( i, _presFakt );
-        if (i<10) kdDebug() << "Page::drawObjects object " << i << " page " << pg << " getPresNum=" << kpobject->getPresNum() << endl;
+        //if (i<10) kdDebug() << "Page::drawObjects object " << i << " page " << pg << " getPresNum=" << kpobject->getPresNum() << endl;
 
 	if ( kpobject->isSticky() ||
 	     ( rect.intersects( kpobject->getBoundingRect( diffx(), diffy() ) ) && editMode ) ||
@@ -259,7 +259,7 @@ void Page::drawObjects( QPainter *painter, QRect rect )
  		continue;
 
 	    if ( !editMode && static_cast<int>( currPresStep ) == kpobject->getPresNum() && !goingBack ) {
-                kdDebug() << "                 setSubPresStep " << subPresStep << endl;
+                //kdDebug() << "                 setSubPresStep " << subPresStep << endl;
 		kpobject->setSubPresStep( subPresStep );
 		kpobject->doSpecificEffects( true, false );
 	    }
@@ -274,7 +274,7 @@ void Page::drawObjects( QPainter *painter, QRect rect )
 		kpobject->setOrig( op.x(), op.y() - pg * getPageRect( 0, _presFakt ).height() + pgNum * getPageRect( 0, _presFakt ).height() );
 	    }
 
-            kdDebug() << "                 drawing object at " << diffx() << "," << diffy() << endl;
+            //kdDebug() << "                 drawing object at " << diffx() << "," << diffy() << endl;
 	    kpobject->draw( painter, diffx(), diffy() );
 	    kpobject->setSubPresStep( 0 );
 	    kpobject->doSpecificEffects( false );
@@ -1772,7 +1772,7 @@ void Page::startScreenPresentation( float presFakt, int curPgNum /* 1-based */)
 
     exitEditMode();
 
-    kdDebug() << "Page::startScreenPresentation Zooming backgrounds" << endl;
+    //kdDebug() << "Page::startScreenPresentation Zooming backgrounds" << endl;
     // Zoom backgrounds to the correct size for full screen
     if ( m_showOnlyPage == -1 )
     {
@@ -1784,7 +1784,7 @@ void Page::startScreenPresentation( float presFakt, int curPgNum /* 1-based */)
     else
         backgroundList()->at( m_showOnlyPage-1 )->setBgSize( getPageRect( m_showOnlyPage-1, _presFakt ).size() );
 
-    kdDebug() << "Page::startScreenPresentation Zooming objects" << endl;
+    //kdDebug() << "Page::startScreenPresentation Zooming objects" << endl;
     // Zoom objects to the correct size for full screen
     // (might need a progress bar!)
     QListIterator<KPObject> it(*objectList());
@@ -1831,7 +1831,7 @@ void Page::startScreenPresentation( float presFakt, int curPgNum /* 1-based */)
             *it = (*it)+1;
             debugstr += QString::number(*it) + ',';
         }
-        kdDebug() << "selectedSlides : " << debugstr << endl;
+        //kdDebug() << "selectedSlides : " << debugstr << endl;
     }
     ASSERT( slideList.count() );
     slideListIterator = slideList.begin();
