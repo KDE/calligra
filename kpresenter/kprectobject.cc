@@ -72,10 +72,10 @@ QDomDocumentFragment KPRectObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPRectObject::loadOasis(const QDomElement &element, const KoStyleStack &styleStack)
+void KPRectObject::loadOasis(const QDomElement &element, const KoStyleStack &styleStack, QDomElement *animation)
 {
     kdDebug()<<"void KPRectObject::loadOasis(const QDomElement &element)******************\n";
-    KP2DObject::loadOasis(element, styleStack);
+    KP2DObject::loadOasis(element, styleStack, animation);
     //I don't think that RNDS exist into openoffice
     if ( element.hasAttribute( "draw:corner-radius" ) )
     {

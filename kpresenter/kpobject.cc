@@ -186,13 +186,17 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack)
+void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack, QDomElement *animation)
 {
     orig.setX( KoUnit::parseValue( element.attribute( "svg:x" ) ) );
     orig.setY( KoUnit::parseValue( element.attribute( "svg:y" ) ) );
     ext.setWidth(KoUnit::parseValue( element.attribute( "svg:width" )) );
     ext.setHeight(KoUnit::parseValue( element.attribute( "svg:height" ) ) );
     kdDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
+    if( animation)
+        {
+            //todo load animation
+        }
 #if 0
     QDomElement origSoundEff = origEffect.namedItem("presentation:sound").toElement();
     if (!origSoundEff.isNull())
@@ -897,10 +901,10 @@ QDomDocumentFragment KPShadowObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
-void KPShadowObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack)
+void KPShadowObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack, QDomElement *animation)
 {
     kdDebug()<<"void KPShadowObject::loadOasis(const QDomElement &element)**********************\n";
-    KPObject::loadOasis(element, styleStack);
+    KPObject::loadOasis(element, styleStack, animation);
 
     if ( styleStack.hasAttribute( "draw:stroke" ))
     {
@@ -1055,11 +1059,11 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
-void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack)
+void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack, QDomElement *animation)
 {
     kdDebug()<<"void KP2DObject::loadOasis(const QDomElement &element)\n";
 
-    KPShadowObject::loadOasis(element, styleStack);
+    KPShadowObject::loadOasis(element, styleStack,animation);
 }
 
 double KP2DObject::load(const QDomElement &element)

@@ -1021,19 +1021,21 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             QString name = o.tagName();
             int offset = dp.attribute( "draw:id" ).toInt();
             kdDebug()<<" object offset :"<<offset<<endl;
+	    QDomElement * animation = m_animations[o.attribute("draw:id")];
+; //todo fixme
             m_styleStack.save();
             if ( name == "draw:text-box" ) // textbox
             {
                 fillStyleStack( o, oasisStyles );
                 KPTextObject *kptextobject = new KPTextObject( this );
-                kptextobject->loadOasis(o, m_styleStack);
+                kptextobject->loadOasis(o, m_styleStack, animation);
                 newpage->appendObject(kptextobject);
             }
             else if ( name == "draw:rect" ) // rectangle
             {
                 fillStyleStack( o, oasisStyles );
                 KPRectObject *kprectobject = new KPRectObject();
-                kprectobject->loadOasis(o, m_styleStack);
+                kprectobject->loadOasis(o, m_styleStack, animation);
                 newpage->appendObject(kprectobject);
             }
             else if ( name == "draw:circle" || name == "draw:ellipse" )
@@ -1042,13 +1044,13 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
                 if ( o.hasAttribute( "draw:kind" ) ) // pie, chord or arc
                 {
                    KPPieObject *kppieobject = new KPPieObject();
-                    kppieobject->loadOasis(o, m_styleStack);
+                    kppieobject->loadOasis(o, m_styleStack, animation);
                     newpage->appendObject(kppieobject);
                 }
                 else  // circle or ellipse
                 {
                     KPEllipseObject *kpellipseobject = new KPEllipseObject();
-                    kpellipseobject->loadOasis(o,  m_styleStack);
+                    kpellipseobject->loadOasis(o,  m_styleStack, animation);
                     newpage->appendObject(kpellipseobject);
                 }
             }
@@ -1056,19 +1058,19 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             {
                 fillStyleStack( o, oasisStyles );
                 KPLineObject *kplineobject = new KPLineObject();
-                kplineobject->loadOasis(o, m_styleStack);
+                kplineobject->loadOasis(o, m_styleStack, animation);
                 newpage->appendObject(kplineobject);
             }
             else if (name=="draw:polyline") { // polyline
                 fillStyleStack( o, oasisStyles );
                 KPPolylineObject *kppolylineobject = new KPPolylineObject();
-                kppolylineobject->loadOasis(o, m_styleStack);
+                kppolylineobject->loadOasis(o, m_styleStack, animation);
                 newpage->appendObject(kppolylineobject);
             }
             else if (name=="draw:polygon") { // polygon
                 fillStyleStack( o, oasisStyles );
                 KPPolygonObject *kpPolygonObject = new KPPolygonObject();
-                kpPolygonObject->loadOasis( o,m_styleStack );
+                kpPolygonObject->loadOasis( o,m_styleStack , animation);
                 newpage->appendObject(kpPolygonObject);
             }
             else if ( name == "draw:image" ) // image

@@ -81,10 +81,10 @@ QDomDocumentFragment KPPieObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPPieObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack)
+void KPPieObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack, QDomElement *animation)
 {
     kdDebug()<<"void KPPieObject::loadOasis(const QDomElement &element) ***************\n";
-    KP2DObject::loadOasis(element, styleStack);
+    KP2DObject::loadOasis(element, styleStack, animation);
     QString kind = element.attribute( "draw:kind" );
     if ( kind == "section" )
         pieType = PT_PIE;

@@ -74,9 +74,9 @@ QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPLineObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack)
+void KPLineObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack, QDomElement *animation)
 {
-    KPShadowObject::loadOasis(element, styleStack);
+    KPShadowObject::loadOasis(element, styleStack, animation);
     double x1 = KoUnit::parseValue( element.attribute( "svg:x1" ) );
     double y1 = KoUnit::parseValue( element.attribute( "svg:y1" ) );
     double x2 = KoUnit::parseValue( element.attribute( "svg:x2" ) );

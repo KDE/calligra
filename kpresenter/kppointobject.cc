@@ -92,10 +92,10 @@ QDomDocumentFragment KPPointObject::save( QDomDocument& doc, double offset )
 }
 
 
-void KPPointObject::loadOasis( const QDomElement &element, const KoStyleStack & styleStack )
+void KPPointObject::loadOasis( const QDomElement &element, const KoStyleStack & styleStack, QDomElement *animation )
 {
     kdDebug()<<"void KPPointObject::loadOasis( const QDomElement &element )*************\n";
-    KPShadowObject::loadOasis( element, styleStack );
+    KPShadowObject::loadOasis( element, styleStack, animation );
     //load point.
     QStringList ptList = QStringList::split(' ', element.attribute("draw:points"));
     QString pt_x, pt_y;
