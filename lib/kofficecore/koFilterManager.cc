@@ -69,7 +69,7 @@ QString KoFilterManager::fileSelectorList( Direction direction, const char *_for
   constr += "'";
   vector<KoFilterEntry> vec = koQueryFilters( constr );
   
-  KMimeType::initStatic();
+  // KMimeType::initStatic();
   KMimeMagic::initStatic();
 
   QString ret;
