@@ -219,6 +219,7 @@ void KWView::initGui()
             static_cast<QLabel *>(it.current())->show();
         delete l;
         statusBar()->show();
+        kdDebug() << "KWView::setupActions statusbar is now " << statusBar() << endl;
     }
 
     updatePageInfo();
@@ -840,8 +841,12 @@ void KWView::showRulerIndent( KWUnit _leftMargin, KWUnit _firstLine )
 {
   KWUnits unit = KWUnit::unitType( doc->getUnit() );
   KWUnit relativeValue = KWUnit::createUnit((_firstLine.value( unit )+_leftMargin.value( unit )) , unit );
-  gui->getHorzRuler()->setFirstIndent( relativeValue.value( unit ) );
-  gui->getHorzRuler()->setLeftIndent( _leftMargin.value( unit ) );
+  KoRuler * hRuler = gui ? gui->getHorzRuler() : 0;
+  if ( hRuler )
+  {
+      hRuler->setFirstIndent( relativeValue.value( unit ) );
+      hRuler->setLeftIndent( _leftMargin.value( unit ) );
+  }
 }
 
 /*================================================================*/
@@ -2921,26 +2926,8 @@ KWGUI::KWGUI( QWidget *parent, KWDocument *_doc, KWView *_view )
     r_horz->setUnit( doc->getUnit() );
     r_vert->setUnit( doc->getUnit() );
 
-#if 0
-    switch ( KWUnit::unitType( doc->getUnit() ) ) {
-    case U_MM:
-        r_horz->setLeftIndent( canvas->getLeftIndent().mm() );
-        r_horz->setFirstIndent( canvas->getFirstLineIndent().mm() );
-        break;
-    case U_INCH:
-        r_horz->setLeftIndent( canvas->getLeftIndent().inch() );
-        r_horz->setFirstIndent( canvas->getFirstLineIndent().inch() );
-        break;
-    case U_PT:
-        r_horz->setLeftIndent( canvas->getLeftIndent().pt() );
-        r_horz->setFirstIndent( canvas->getFirstLineIndent().pt() );
-        break;
-    }
-#endif
-
     r_horz->hide();
     r_vert->hide();
-
 
     canvas->show();
     docStruct->show();
@@ -2948,16 +2935,12 @@ KWGUI::KWGUI( QWidget *parent, KWDocument *_doc, KWView *_view )
     reorganize();
 
 #if 0
-    if ( doc->processingType() == KWDocument::DTP )
+    if ( doc->processingType() == KWDocument::DTP )   // ???
         canvas->setRuler2Frame( 0, 0 );
 #endif
 
     connect( r_horz, SIGNAL( tabListChanged( const KoTabulatorList & ) ), view,
              SLOT( tabListChanged( const KoTabulatorList & ) ) );
-
-#if 0
-    canvas->forceFullUpdate();
-#endif
 
     setKeyCompression( TRUE );
     setAcceptDrops( TRUE );
