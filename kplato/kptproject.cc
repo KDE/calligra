@@ -201,7 +201,10 @@ void KPTProject::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrLis
 bool KPTProject::load(QDomElement &element) {
     // Maybe TODO: Delete old stuff here
 
-    m_id = element.attribute("id");
+    QString id = element.attribute("id");
+    if (!setId(id)) {
+        kdWarning()<<k_funcinfo<<"Id must be unique: "<<id<<endl;
+    }
     m_name = element.attribute("name");
     m_leader = element.attribute("leader");
     m_description = element.attribute("description");
