@@ -27,7 +27,7 @@
 class KoFrameButton;
 class QGridLayout;
 class RGBWidget;
-class HSBWidget;
+class HSVWidget;
 class CMYKWidget;
 class LABWidget;
 class GreyWidget;
@@ -35,6 +35,7 @@ class KoColor;
 class KoColorSlider;
 class QLabel;
 class QSpinBox;
+class KHSSelector;
 class KColorPatch;
 
 class KoColorChooser : public QWidget
@@ -47,7 +48,7 @@ public:
 
 public slots:
   void slotShowRGB();
-  void slotShowHSB();
+  void slotShowHSV();
   void slotShowCMYK();
   void slotShowLAB();
   void slotShowGrey();
@@ -56,24 +57,26 @@ signals:
   void colorChanged(const KoColor &c);
 
 protected slots:
+  void slotChangeXY(int h, int s);
   void slotChangeColor(const KoColor &c);
   void slotChangeColor(const QColor &c);
 
 private:
-  KoColor     mColor;
+  KoColor           mColor;
 
-  QGridLayout *mGrid;
-  KoFrameButton *btnRGB;
-  KoFrameButton *btnHSB;
-  KoFrameButton *btnCMYK;
-  KoFrameButton *btnLAB;
-  KoFrameButton *btnGrey;
-  RGBWidget *mRGBWidget;
-  HSBWidget *mHSBWidget;
-  CMYKWidget *mCMYKWidget;
-  LABWidget *mLABWidget;
-  GreyWidget *mGreyWidget;
-  KColorPatch *clr_patch;
+  QGridLayout      *mGrid;
+  KoFrameButton    *btnRGB;
+  KoFrameButton    *btnHSV;
+  KoFrameButton    *btnCMYK;
+  KoFrameButton    *btnLAB;
+  KoFrameButton    *btnGrey;
+  RGBWidget        *mRGBWidget;
+  HSVWidget        *mHSVWidget;
+  CMYKWidget       *mCMYKWidget;
+  LABWidget        *mLABWidget;
+  GreyWidget       *mGreyWidget;
+  KHSSelector      *mColorSelector;
+  KColorPatch      *mColorPatch;
 };
 
 class RGBWidget : public QWidget
@@ -108,6 +111,40 @@ private:
   QSpinBox *mRIn;
   QSpinBox *mGIn;
   QSpinBox *mBIn;
+};
+
+class HSVWidget : public QWidget
+{
+  Q_OBJECT
+public:
+  HSVWidget(KoColorChooser *aCC, QWidget *parent = 0L);
+
+public slots:
+  void slotChangeColor();
+
+protected slots:
+  void slotHSliderChanged(int h);
+  void slotSSliderChanged(int s);
+  void slotVSliderChanged(int v);
+
+  void slotHInChanged(int h);
+  void slotSInChanged(int s);
+  void slotVInChanged(int v);
+
+signals:
+  void colorChanged(const KoColor &c);
+
+private:
+  KoColorChooser   *mCC;
+  KoColorSlider    *mHSlider;
+  KoColorSlider    *mSSlider;
+  KoColorSlider    *mVSlider;
+  QLabel           *mHLabel;
+  QLabel           *mSLabel;
+  QLabel           *mVLabel;
+  QSpinBox         *mHIn;
+  QSpinBox         *mSIn;
+  QSpinBox         *mVIn;
 };
 
 class GreyWidget : public QWidget

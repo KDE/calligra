@@ -27,6 +27,22 @@
 
 KoVectorPath::KoVectorPath()
 {
+  segments.resize(1);
+  segments[0].code = ART_END;
+}
+
+KoVectorPath::KoVectorPath(const KoVectorPath &vp, const QWMatrix &m)
+{
+  double x;
+  double y;
+  segments.resize(vp.segments.size());
+  for(int s = 0; s < segments.size(); s++)
+  {
+    m.map(vp.segments[s].x, vp.segments[s].y, &x, &y);
+    segments[s].x = x;
+    segments[s].y = y;
+    segments[s].code = vp.segments[s].code;
+  }
 }
 
 KoVectorPath::~KoVectorPath()
@@ -42,9 +58,10 @@ void KoVectorPath::moveTo(double x, double y)
 {
   int n = segments.size();
   segments.resize(n + 1);
-  segments[n].code = ART_MOVETO;
-  segments[n].x = x;
-  segments[n].y = y;
+  segments[n - 1].code = ART_MOVETO;
+  segments[n - 1].x = x;
+  segments[n - 1].y = y;
+  segments[n].code = ART_END;
   xe = x;
   ye = y;
 }
@@ -53,9 +70,10 @@ void KoVectorPath::moveToOpen(double x, double y)
 {
   int n = segments.size();
   segments.resize(n + 1);
-  segments[n].code = ART_MOVETO_OPEN;
-  segments[n].x = x;
-  segments[n].y = y;
+  segments[n - 1].code = ART_MOVETO_OPEN;
+  segments[n - 1].x = x;
+  segments[n - 1].y = y;
+  segments[n].code = ART_END;
   xe = x;
   ye = y;
 }
@@ -64,9 +82,10 @@ void KoVectorPath::lineTo(double x, double y)
 {
   int n = segments.size();
   segments.resize(n + 1);
-  segments[n].code = ART_LINETO;
-  segments[n].x = x;
-  segments[n].y = y;
+  segments[n - 1].code = ART_LINETO;
+  segments[n - 1].x = x;
+  segments[n - 1].y = y;
+  segments[n].code = ART_END;
   xe = x;
   ye = y;
 }
@@ -159,9 +178,10 @@ void KoVectorPath::bez(double x0, double y0, double x1, double y1, double x2, do
   /* don't subdivide */
   n = segments.size();
   segments.resize(n + 1);
-  segments[n].code = ART_LINETO;
-  segments[n].x = x3;
-  segments[n].y = y3;
+  segments[n - 1].code = ART_LINETO;
+  segments[n - 1].x = x3;
+  segments[n - 1].y = y3;
+  segments[n].code = ART_END;
   return;
 
  subdivide:
@@ -185,13 +205,6 @@ void KoVectorPath::bezierTo(double x, double y, double x1, double y1, double x2,
   bez(xe, ye, x1, y1, x2, y2, x, y);
   xe = x;
   ye = y;
-}
-
-void KoVectorPath::end()
-{
-  int n = segments.size();
-  segments.resize(n + 1);
-  segments[n].code = ART_END;
 }
 
 void KoVectorPath::transform(const QWMatrix &m)
@@ -228,7 +241,6 @@ KoVectorPath *KoVectorPath::rectangle(double x, double y, double w, double h, do
     vec->bezierTo(x + w - rx, y, x + w, y + ry * (1 - 0.552), x + w - rx * (1 - 0.552), y);
     if(rx < w / 2)
       vec->lineTo(x + rx, y);
-    vec->end();
   }
   else
   {
@@ -268,6 +280,5 @@ KoVectorPath *KoVectorPath::ellipse(double cx, double cy, double rx, double ry)
   vec->bezierTo(cx, cy + ry, cx + rx, cy  + sry, cx + srx, cy + ry);
   vec->bezierTo(cx - rx, cy, cx - srx, cy + ry, cx - rx, cy  + sry);
   vec->bezierTo(cx, cy - ry, cx - rx, cy - sry, cx - srx, cy - ry);
-  vec->end();
   return vec;
 }

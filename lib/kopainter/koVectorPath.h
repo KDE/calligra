@@ -31,6 +31,7 @@ class KoVectorPath
 {
 public:
   KoVectorPath();
+  KoVectorPath(const KoVectorPath &vp, const QWMatrix &m);
   ~KoVectorPath();
 
   ArtVpath *data();
@@ -39,7 +40,6 @@ public:
   void moveToOpen(double x, double y);
   void lineTo(double x, double y);
   void bezierTo(double x, double y, double x1, double y1, double x2, double y2);
-  void end();
 
   void transform(const QWMatrix &m);
 
