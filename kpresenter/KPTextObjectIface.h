@@ -26,6 +26,7 @@
 #include "KPresenterObject2DIface.h"
 #include <qstring.h>
 #include <qcolor.h>
+#include <qfont.h>
 class KPTextObject;
 
 class KPTextObjectIface : virtual public KPresenterObjectIface ,virtual public KPresenterObject2DIface
@@ -40,6 +41,22 @@ k_dcop:
     QString selectedText() const;
     void selectAll( bool select );
     void recalcPageNum( );
+
+    void setBoldText( bool b );
+    void setItalicText( bool b );
+    void setUnderlineText( bool b );
+    void setStrikeOutText( bool b );
+    void setTextColor( const QColor &col );
+    void setTextPointSize( int s );
+    void setTextSubScript( bool b );
+    void setTextSuperScript( bool b );
+    void setTextDefaultFormat();
+    void setTextBackgroundColor(const QColor & col);
+    QColor textColor() const;
+    QFont textFont() const;
+    QString textFontFamily()const;
+    QColor textBackgroundColor()const;
+
 private:
     KPTextObject *m_textobject;
 };

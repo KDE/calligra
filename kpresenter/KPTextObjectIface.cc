@@ -63,3 +63,74 @@ void KPTextObjectIface::recalcPageNum( )
     //m_textobject->recalcPageNum(m_textobject->kPresenterDocument());
 
 }
+
+void KPTextObjectIface::setBoldText( bool b )
+{
+   m_textobject->textObject()->setBoldCommand( b );
+}
+
+void KPTextObjectIface::setItalicText( bool b )
+{
+    m_textobject->textObject()->setItalicCommand(b);
+}
+
+void KPTextObjectIface::setUnderlineText( bool b )
+{
+    m_textobject->textObject()->setUnderlineCommand(b);
+}
+
+void KPTextObjectIface::setStrikeOutText( bool b )
+{
+    m_textobject->textObject()->setStrikeOutCommand(b);
+}
+
+void KPTextObjectIface::setTextColor( const QColor &col )
+{
+    m_textobject->textObject()->setTextColorCommand(col);
+}
+
+void KPTextObjectIface::setTextPointSize( int s )
+{
+    m_textobject->textObject()->setPointSizeCommand( s );
+}
+
+void KPTextObjectIface::setTextSubScript( bool b )
+{
+    m_textobject->textObject()->setTextSubScriptCommand( b );
+}
+
+void KPTextObjectIface::setTextSuperScript( bool b )
+{
+    m_textobject->textObject()->setTextSuperScriptCommand( b );
+}
+
+void KPTextObjectIface::setTextDefaultFormat()
+{
+    m_textobject->textObject()->setDefaultFormatCommand();
+}
+
+void KPTextObjectIface::setTextBackgroundColor(const QColor & col)
+{
+    m_textobject->textObject()->setTextBackgroundColorCommand(col);
+}
+
+QColor KPTextObjectIface::textColor() const
+{
+    return m_textobject->textObject()->textColor();
+}
+
+QFont KPTextObjectIface::textFont() const
+{
+    return m_textobject->textObject()->textFont();
+}
+
+QString KPTextObjectIface::textFontFamily()const
+{
+    return m_textobject->textObject()->textFontFamily();
+}
+
+QColor KPTextObjectIface::textBackgroundColor() const
+{
+    return m_textobject->textObject()->textBackgroundColor();
+}
+
