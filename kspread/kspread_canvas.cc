@@ -703,6 +703,9 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     int row = table->topRow( _ev->pos().y(), ypos, this );
     int col = table->leftColumn( _ev->pos().x(), xpos, this );
 
+    if(col>26*26 || row >0x7FFF)
+      return;
+
     // Find out where the little "corner" (in lower right direction) is.
     QRect corner;
     // No selection or just complete rows/columns ?
@@ -986,6 +989,10 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     int xpos, ypos;
     int row = table->topRow( _ev->pos().y(), ypos, this );
     int col = table->leftColumn( _ev->pos().x(), xpos, this );
+    
+    //you can move marker when col >26*26 or row >0x7fff
+    if(col>26*26 || row>0x7FFF)
+	return;
 
     // Unselect a selection ?
     if ( _ev->button() == LeftButton || !selection.contains( QPoint( col, row ) ) )
@@ -1107,6 +1114,8 @@ void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )
     col = m_iMouseStartColumn;
   if ( row < m_iMouseStartRow )
     row = m_iMouseStartRow;*/
+  if(col>26*26 || row >0x7FFF)
+      return;
 
   // Noting changed ?
   QRect selection( table->chooseRect() );
@@ -1170,6 +1179,9 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
   int ypos, xpos;
   int row = table->topRow( _ev->pos().y(), ypos, this );
   int col = table->leftColumn( _ev->pos().x(), xpos, this );
+
+ if(col>26*26 || row >0x7FFF)
+      return;
 
   if ( (selection.right() != 0x7fff && selection.bottom() != 0x7fff) &&
       ( _ev->state() & ShiftButton ) )
@@ -2744,6 +2756,9 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
 
     int tmp;
     int hit_row = table->topRow( _ev->pos().y(), tmp, m_pCanvas );
+    if(hit_row>0x7FFF)
+	return;
+
     m_iSelectionAnchor = hit_row;
 
     QRect rect = m_pCanvas->activeTable()->selectionRect();
@@ -2943,6 +2958,8 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
   {
     int y = 0;
     int row = table->topRow( _ev->pos().y(), y, m_pCanvas );
+    if(row>0x7FFF)
+	return;
     QRect selection = table->selectionRect();
 
     if ( row < m_iSelectionAnchor )
@@ -3194,6 +3211,8 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     //table->unselect();
     int tmp;
     int hit_col = table->leftColumn( _ev->pos().x(), tmp, m_pCanvas );
+    if(hit_col>26*26)
+	return;
     m_iSelectionAnchor = hit_col;
 
     QRect rect = m_pCanvas->activeTable()->selectionRect();
@@ -3406,6 +3425,8 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
   {
     int x = 0;
     int col = table->leftColumn( _ev->pos().x(), x, m_pCanvas );
+    if(col>26*26)
+	return;
     QRect r = table->selectionRect();
 
     if ( col < m_iSelectionAnchor )
@@ -3540,7 +3561,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   for ( int x = left_col; x <= right_col; x++ )
   {
     bool highlighted = ( area && x >= selection.left() && x <= selection.right());
-    bool selected = ( highlighted && selection.bottom() == 0x7FFF );
+    bool selected = ( highlighted && selection.bottom() == 0x7FFF && (selection.right()!=0x7FFF) );
 
     ColumnLayout *col_lay = table->columnLayout( x );
 
