@@ -29,6 +29,8 @@
 #define MM_TO_POINT(mm) ((mm)*2.83465058)
 #define POINT_TO_CM(px) ((px)*0.0352777167)
 #define CM_TO_POINT(cm) ((cm)*28.3465058)
+#define POINT_TO_DM(px) ((px)*0.00352777167)
+#define DM_TO_POINT(dm) ((dm)*283.465058)
 #define POINT_TO_INCH(px) ((px)*0.01388888888889)
 #define INCH_TO_POINT(inch) ((inch)*72.0)
 #define MM_TO_INCH(mm) ((mm)*0.039370147)
@@ -46,7 +48,8 @@ public:
         U_MM = 0,
         U_PT = 1,
         U_INCH = 2,
-        U_CM = 3
+        U_CM = 3,
+        U_DM = 4
     };
 
     // Prepare ptValue to be displayed in pt
@@ -64,6 +67,11 @@ public:
     // Prepare ptValue to be displayed in cm
     static double toCM( double ptValue ) {
         return qRound( POINT_TO_CM( ptValue ) * 10000.0 ) / 10000.0;
+    }
+
+    // Prepare ptValue to be displayed in dm
+    static double toDM( double ptValue ) {
+        return qRound( POINT_TO_DM( ptValue ) * 10000.0 ) / 10000.0;
     }
 
     // Prepare ptValue to be displayed in inch
@@ -92,6 +100,7 @@ public:
     static Unit unit( const QString &_unitName ) {
         if ( _unitName == QString::fromLatin1( "mm" ) ) return U_MM;
         if ( _unitName == QString::fromLatin1( "cm" ) ) return U_CM;
+        if ( _unitName == QString::fromLatin1( "dm" ) ) return U_DM;
         if ( _unitName == QString::fromLatin1( "in" )
             || _unitName == QString::fromLatin1("inch") /*compat*/ ) return U_INCH;
         return U_PT;
@@ -100,6 +109,7 @@ public:
     static QString unitName( Unit _unit ) {
         if ( _unit == U_MM ) return QString::fromLatin1( "mm" );
         if ( _unit == U_CM ) return QString::fromLatin1( "cm" );
+        if ( _unit == U_DM ) return QString::fromLatin1( "dm" );
         if ( _unit == U_INCH ) return QString::fromLatin1( "in" );
         return QString::fromLatin1( "pt" );
     }

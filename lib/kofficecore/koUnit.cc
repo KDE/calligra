@@ -30,6 +30,8 @@ QString KoUnit::unitDescription( Unit _unit )
         return i18n("Millimeters (mm)");
     case KoUnit::U_CM:
         return i18n("Centimeters (cm)");
+    case KoUnit::U_DM:
+        return i18n("Decimeters (dm)");
     case KoUnit::U_INCH:
         return i18n("Inches (in)");
     case KoUnit::U_PT:
@@ -46,6 +48,8 @@ double KoUnit::ptToUnit( double ptValue, Unit unit )
         return toMM( ptValue );
     case U_CM:
         return toCM( ptValue );
+    case U_DM:
+        return toDM( ptValue );
     case U_INCH:
         return toInch( ptValue );
     case U_PT:
@@ -66,6 +70,8 @@ double KoUnit::ptFromUnit( double value, Unit unit )
         return MM_TO_POINT( value );
     case U_CM:
         return CM_TO_POINT( value );
+    case U_DM:
+        return DM_TO_POINT( value );
     case U_INCH:
         return INCH_TO_POINT( value );
     case U_PT:

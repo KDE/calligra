@@ -40,12 +40,23 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_MM ), m_base->m_unit );
 		else if( s.endsWith( "cm" ) )
 			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_CM ), m_base->m_unit );
+		else if( s.endsWith( "dm" ) )
+			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_DM ), m_base->m_unit );
 		else if( s.endsWith( "in" ) )
 			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_INCH ), m_base->m_unit );
 		else if( s.endsWith( "pt" ) )
 			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_PT ), m_base->m_unit );
-		else if( s.at( pos - 2 ).isDigit() && ( s.endsWith( "m" ) || s.endsWith( "c" ) || s.endsWith( "i" ) || s.endsWith( "p" ) ) )
+		else if(
+			s.at( pos - 2 ).isDigit() &&
+			(
+				s.endsWith( "m" ) ||
+				s.endsWith( "c" ) ||
+				s.endsWith( "d" ) ||
+				s.endsWith( "i" ) ||
+				s.endsWith( "p" ) ) )
+		{
 			result = Intermediate;
+		}
 		else
 			return KDoubleValidator::validate( s, pos );
 	}
