@@ -123,7 +123,7 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		
 		bool m_uniqueDialog : 1; //!< true if createDialogInstance() should return only one dialog
 	
-	friend class KexiInternalPart;
+	//friend class KexiInternalPart;
 };
 
 #endif
