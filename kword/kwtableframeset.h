@@ -121,8 +121,8 @@ public:
                                const QColorGroup & cg, bool onlyChanged, bool resetChanged,
                                KWFrameSetEdit *edit, KWViewMode *viewMode );
     // Dummy since we reimplement drawContents
-    virtual void drawFrame(KWFrame *, QPainter *, const QRect &, const QColorGroup &,
-                           bool, bool, KWFrameSetEdit *, KWViewMode *, bool ) {}
+    virtual void drawFrame(KWFrame *, QPainter *, const QRect &, const QRect&,
+                           const QColorGroup &, bool, bool, KWFrameSetEdit *, KWViewMode *, bool ) {}
 
     // Frameset management
     Cell *getCell( int i ) { return m_cells.at( i ); }

@@ -570,10 +570,11 @@ public:
     /**
      * Draw a particular frame of this frameset.
      * This is called by drawContents and is what framesets must reimplement.
-     * @param crect rectangle to be repainted, in the _frame_'s coordinate system (in pixels).
+     * @param fcrect rectangle to be repainted, in the _frame_'s coordinate system (in pixels).
+     * @param crect rectangle to be repainted, in view coordinates.
      * Default implementation does double-buffering and calls drawFrameContents.
      */
-    virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect &crect,
+    virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcrect, const QRect &crect,
                             const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                             KWFrameSetEdit *edit, KWViewMode *viewMode, bool drawUnderlyingFrames );
 
@@ -581,8 +582,11 @@ public:
      * Implement this one instead of drawFrame to benefit from double-buffering
      * AND transparency handling (painting frames below this one) automatically.
      * You MUST reimplement one or the other, or you'll get infinite recursion ;)
+     *
+     * In this method, the painter has been translated to the frame's coordinate system
+     * @param fcrect rectangle to be repainted, in the _frame_'s coordinate system (in pixels).
      */
-    virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect & crect,
+    virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect& fcrect,
                                     const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                     KWFrameSetEdit * edit, KWViewMode *viewMode );
 
@@ -940,9 +944,9 @@ public:
     /**
      * Paint this frameset
      */
-    virtual void drawFrame(KWFrame *, QPainter*, const QRect&,
-                           const QColorGroup&, bool onlyChanged, bool resetChanged,
-                           KWFrameSetEdit *edit, KWViewMode *viewMode, bool);
+    virtual void drawFrameContents(KWFrame *, QPainter*, const QRect&,
+                                   const QColorGroup&, bool onlyChanged, bool resetChanged,
+                                   KWFrameSetEdit *edit, KWViewMode *viewMode);
 
     virtual void updateFrames();
 

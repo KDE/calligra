@@ -665,7 +665,7 @@ void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
 void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect, const QColorGroup &, KWViewMode *viewMode )
 {
     QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
-    //kdDebug(32001) << "KWFrameSet::drawMargins frame: " << frame
+    //kdDebug(32001) << "KWFrameSet::drawMargins frame: " << frameFromPtr( frame )
     //               << " outerRect: " << outerRect << endl;
 
     if ( !crect.intersects( outerRect ) )
@@ -708,7 +708,7 @@ void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect, c
 void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *settingsFrame, const QRect &crect, KWViewMode *viewMode )
 {
     QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
-    //kdDebug(32001) << "KWFrameSet::drawFrameBorder frame: " << frame
+    //kdDebug(32001) << "KWFrameSet::drawFrameBorder frame: " << frameFromPtr( frame )
     //               << " outerRect: " << outerRect << endl;
 
     if ( !crect.intersects( outerRect ) )
@@ -1145,7 +1145,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, const QColorGro
         }
     } else {
         // Text view mode
-        drawFrame( 0L /*frame*/, p, crect, cg, onlyChanged, resetChanged, edit, viewMode, true );
+        drawFrame( 0L /*frame*/, p, crect, crect, cg, onlyChanged, resetChanged, edit, viewMode, true );
     }
 }
 
@@ -1157,7 +1157,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
 {
     if ( !frame->isValid() )
     {
-        kdDebug(32002) << "KWFrameSet::drawFrameAndBorders invalid frame " << frame << endl;
+        kdDebug(32002) << "KWFrameSet::drawFrameAndBorders " << getName() << " frame " << frameFromPtr( frame ) << " " << frame  << endl;
         return;
     }
 
@@ -1165,7 +1165,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
     QRect outerFrameRect( viewMode->normalToView( normalOuterFrameRect ) );
     QRect outerCRect = crect.intersect( outerFrameRect );
 #ifdef DEBUG_DRAW
-    kdDebug(32001) << "KWFrameSet::drawFrameAndBorders " << getName() << " frame=" << frame << " " << *frame << endl;
+    kdDebug(32001) << "KWFrameSet::drawFrameAndBorders " << getName() << " frame " << frameFromPtr( frame ) << " " << *frame << endl;
     kdDebug(32001) << "                    (outer) normalFrameRect=" << normalOuterFrameRect << " frameRect=" << outerFrameRect << endl;
     kdDebug(32001) << "                    crect=" << crect << " intersec=" << outerCRect << " todraw=" << !outerCRect.isEmpty() << endl;
 #endif
@@ -1187,20 +1187,14 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
         // ( frame and r are up to here in this system )
         // into the frame's own coordinate system.
         int offsetX = normalInnerFrameRect.left();
-        double frameTopPt = frame->internalY();
-        //double frameTopPt = ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight;
-        int offsetY = normalInnerFrameRect.top() - m_doc->zoomItY( frameTopPt );
+        int offsetY = normalInnerFrameRect.top() - m_doc->zoomItY( frame->internalY() );
 
         QRect innerCRect = outerCRect.intersect( innerFrameRect );
         QRect fcrect = viewMode->viewToNormal( innerCRect );
 #ifdef DEBUG_DRAW
         kdDebug(32001) << "                    (inner) normalFrameRect=" << normalInnerFrameRect << " frameRect=" << innerFrameRect << endl;
-        kdDebug(32001) << "                    crect after view-to-normal:" << fcrect << "."
-                       << " Will move by (" << -offsetX << ", -(" << normalInnerFrameRect.top() << "-" << m_doc->zoomItY(frameTopPt) << ") == " << -offsetY << ")." << endl;
+        //kdDebug(32001) << "                    crect after view-to-normal:" << fcrect << "." << " Will move by (" << -offsetX << ", -(" << normalInnerFrameRect.top() << "-" << m_doc->zoomItY(frame->internalY()) << ") == " << -offsetY << ")." << endl;
 #endif
-        // y=-1 means all (in QRT), so let's not go there !
-        //QPoint tl( QMAX( 0, fcrect.left() - offsetX ), QMAX( 0, fcrect.top() - offsetY ) );
-        //fcrect.moveTopLeft( tl );
         fcrect.moveBy( -offsetX, -offsetY );
         Q_ASSERT( fcrect.x() >= 0 );
         Q_ASSERT( fcrect.y() >= 0 );
@@ -1208,7 +1202,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
         // fcrect is now the portion of the frame to be drawn,
         // in the frame's coordinates and in pixels
 #ifdef DEBUG_DRAW
-        kdDebug(32001) << "KWFrameSet::drawFrameAndBorders in internal coords:" << fcrect << ". Will translate painter by intersec-fcrect: " << innerCRect.x()-fcrect.x() << "," << innerCRect.y()-fcrect.y() << "." << endl;
+        kdDebug(32001) << "KWFrameSet::drawFrameAndBorders in frame coords:" << fcrect << ". Will translate painter by intersec-fcrect: " << innerCRect.x()-fcrect.x() << "," << innerCRect.y()-fcrect.y() << "." << endl;
 #endif
         // not clipping against frame for inline frames -> frameClipRegion uses absolute coordinates.
         QRegion reg;
@@ -1221,13 +1215,12 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
             painter->save();
             painter->setClipRegion( reg );
 
-            painter->translate( innerCRect.x() - fcrect.x(), innerCRect.y() - fcrect.y() ); // This assume that viewToNormal() is only a translation
-            painter->setBrushOrigin( painter->brushOrigin() + innerCRect.topLeft() - fcrect.topLeft() );
-
-            drawFrame( frame, painter, fcrect, frameColorGroup, onlyChanged, resetChanged, edit, viewMode, drawUnderlyingFrames );
+            drawFrame( frame, painter, fcrect, innerCRect,
+                       frameColorGroup, onlyChanged, resetChanged, edit, viewMode, drawUnderlyingFrames );
 
             painter->restore();
         }
+
         // Now draw the frame border
         // Clip frames on top, but don't clip to the frame, the border is outside
         // TODO (speed) : calc this one first, then reduce it to get the above inner-frame-region
@@ -1251,17 +1244,19 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
     }
 }
 
-void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crect,
+void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcrect, const QRect &crect,
                             const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                             KWFrameSetEdit *edit, KWViewMode* viewMode, bool drawUnderlyingFrames )
 {
+    // In this method the painter is NOT translated yet. It's still in view coordinates.
     if ( crect.isEmpty() )
         return;
+    Q_ASSERT( fcrect.size() == crect.size() );
 #ifdef DEBUG_DRAW
-    kdDebug(32001) << "\nKWFrameSet::drawFrame " << getName() << " crect=" << crect << " drawUnderlyingFrames=" << drawUnderlyingFrames << endl;
+    kdDebug(32001) << "\nKWFrameSet::drawFrame " << getName() << " crect=" << crect << " frame-crect=" << fcrect << " drawUnderlyingFrames=" << drawUnderlyingFrames << endl;
 #endif
 
-    if ( drawUnderlyingFrames )
+    if ( drawUnderlyingFrames && !frame->framesBelow().isEmpty() )
     {
         // Double-buffering - not when printing
         QPainter* doubleBufPainter = painter;
@@ -1274,53 +1269,62 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crec
             // Initialize the pixmap to the page background color
             // (if the frame is over the page margins, no underlying frame will paint anything there)
             doubleBufPainter->fillRect( 0, 0, crect.width(), crect.height(), QApplication::palette().active().brush( QColorGroup::Base ) );
+
+            // The double-buffer pixmap has (0,0) at crect.topLeft(), so we need to
+            // translate the double-buffer painter; drawFrameAndBorders will draw using view coordinates.
+            doubleBufPainter->translate( -crect.x(), -crect.y() );
+//#ifdef DEBUG_DRAW
+//            kdDebug(32001) << "  ... using double buffering. Portion covered: " << crect << endl;
+//#endif
         }
 
         // Transparency handling
-        QRect myFrameRect( viewMode->normalToView( m_doc->zoomRect( *frame ) ) );
 #ifdef DEBUG_DRAW
-        kdDebug(32001) << "KWFrameSet::drawFrame frame->framesBelow(): " << frame->framesBelow().count() << endl;
+        kdDebug(32001) << "  frame->framesBelow(): " << frame->framesBelow().count() << endl;
 #endif
         QPtrListIterator<KWFrame> it( frame->framesBelow() );
         for ( ; it.current() ; ++it )
         {
             KWFrame* f = it.current();
-            doubleBufPainter->save();
 
-            QRect viewCRect = crect;
-            viewCRect.moveBy( myFrameRect.x(), myFrameRect.y() ); // now in view coordinates
 #ifdef DEBUG_DRAW
-            kdDebug(32001) << "KWFrameSet::drawFrame " << f->frameSet()->getName() << " viewCRect=" << viewCRect << " (translating the painter by " << -viewCRect.x() << " " << -viewCRect.y() << endl;
+            kdDebug(32001) << "  looking at frame below us: " << f->frameSet()->getName() << " frame " << frameFromPtr( frame ) << endl;
 #endif
-
-            // The double-buffer pixmap has (0,0) at viewCRect.topLeft(), so we need to
-            // translate the double-buffer painter; drawFrameAndBorders will draw using view coordinates.
-            doubleBufPainter->translate( -viewCRect.x(), -viewCRect.y() );
-
-            viewCRect &= viewMode->normalToView( f->outerRect() ); // intersect
-            if ( !viewCRect.isEmpty() )
+            QRect viewFrameCRect = crect.intersect( viewMode->normalToView( f->outerRect() ) );
+            if ( !viewFrameCRect.isEmpty() )
             {
 #ifdef DEBUG_DRAW
-                kdDebug(32001) << "KWFrameSet::drawFrame viewCRect&frameRect=" << viewCRect << " calling drawFrameAndBorders." << endl;
+                kdDebug(32001) << "  viewFrameRect=" << viewFrameCRect << " calling drawFrameAndBorders." << endl;
 #endif
-                f->frameSet()->drawFrameAndBorders( f, doubleBufPainter, viewCRect, cg, false, resetChanged,
+                f->frameSet()->drawFrameAndBorders( f, doubleBufPainter, viewFrameCRect, cg, false, resetChanged,
                                                     edit, viewMode, 0L, false );
             }
-
-            doubleBufPainter->restore();
         }
 
+        doubleBufPainter->save();
+#ifdef DEBUG_DRAW
+        kdDebug(32001) << "  translating by " << crect.x() - fcrect.x() << ", " << crect.y() - fcrect.y() << " before drawFrameContents" << endl;
+#endif
+        doubleBufPainter->translate( crect.x() - fcrect.x(), crect.y() - fcrect.y() ); // This assume that viewToNormal() is only a translation
         // We can't "repaint changed parags only" if we just drew the underlying frames, hence the "false"
-        drawFrameContents( frame, doubleBufPainter, crect, cg, false, resetChanged, edit, viewMode );
+        drawFrameContents( frame, doubleBufPainter, fcrect, cg, false, resetChanged, edit, viewMode );
+        doubleBufPainter->restore();
+
         if ( painter->device()->devType() != QInternal::Printer )
         {
-            painter->drawPixmap( crect.topLeft(), *pix, crect );
+            doubleBufPainter->end();
+            painter->drawPixmap( crect.topLeft(), *pix );
             delete doubleBufPainter;
         }
     }
     else
     {
-        drawFrameContents( frame, painter, crect, cg, onlyChanged, resetChanged, edit, viewMode );
+        painter->save();
+        painter->translate( crect.x() - fcrect.x(), crect.y() - fcrect.y() ); // This assume that viewToNormal() is only a translation
+        //painter->setBrushOrigin( painter->brushOrigin() + crect.topLeft() - fcrect.topLeft() );
+
+        drawFrameContents( frame, painter, fcrect, cg, onlyChanged, resetChanged, edit, viewMode );
+        painter->restore();
     }
 }
 
@@ -1328,7 +1332,6 @@ void KWFrameSet::drawFrameContents( KWFrame *, QPainter *, const QRect &,
                                     const QColorGroup &, bool, bool, KWFrameSetEdit*, KWViewMode * )
 {
     kdWarning() << "Default implementation of drawFrameContents called for " << className() << " " << this << " " << getName() << kdBacktrace();
-    //drawFrame( frame, painter, crect, cg, false, false, edit, viewMode, true );
 }
 
 bool KWFrameSet::contains( double mx, double my )
@@ -2198,9 +2201,9 @@ KWFrameSetEdit* KWFormulaFrameSet::createFrameSetEdit(KWCanvas* canvas)
     return new KWFormulaFrameSetEdit(this, canvas);
 }
 
-void KWFormulaFrameSet::drawFrame( KWFrame* /*frame*/, QPainter* painter, const QRect& crect,
-                                   const QColorGroup& cg, bool onlyChanged, bool resetChanged,
-                                   KWFrameSetEdit *edit, KWViewMode *, bool )
+void KWFormulaFrameSet::drawFrameContents( KWFrame* /*frame*/, QPainter* painter, const QRect& crect,
+                                           const QColorGroup& cg, bool onlyChanged, bool resetChanged,
+                                           KWFrameSetEdit *edit, KWViewMode * )
 {
     //kdDebug(32001) << "KWFormulaFrameSet::drawFrame m_changed=" << m_changed << " onlyChanged=" << onlyChanged << endl;
     if ( m_changed || !onlyChanged )

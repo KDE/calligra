@@ -503,7 +503,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, const QColo
     }
 }
 
-void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRect &r,
+void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRect &fcrect, const QRect &crect,
                                 const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                 KWFrameSetEdit *edit, KWViewMode *viewMode, bool drawUnderlyingFrames )
 {
@@ -511,13 +511,16 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
     // In theory this code should be in kwFrameSet, but currently only text frames obey m_backgroundColor.
     bool transparent = theFrame->backgroundColor().style() != Qt::SolidPattern;
     drawUnderlyingFrames &= transparent;
-    KWFrameSet::drawFrame( theFrame, painter, r, cg, onlyChanged, resetChanged, edit, viewMode, drawUnderlyingFrames );
+    KWFrameSet::drawFrame( theFrame, painter, fcrect, crect, cg, onlyChanged, resetChanged, edit, viewMode, drawUnderlyingFrames );
 }
 
 void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, const QRect &r,
                                         const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                         KWFrameSetEdit *edit, KWViewMode *viewMode )
 {
+    // In this method the painter is translated to the frame's coordinate system
+    // (in the first frame (0,0) will be its topleft, in the second frame it will be (0,internalY) etc.
+
     //kdDebug() << "KWTextFrameSet::drawFrameContents " << getName() << "(frame " << frameFromPtr( theFrame ) << ") crect(r)=" << r << " onlyChanged=" << onlyChanged << endl;
     m_currentDrawnFrame = theFrame;
     if ( theFrame ) // 0L in the text viewmode
@@ -560,7 +563,7 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
     if ( m_doc->viewFormattingChars() )
         drawingFlags |= KoTextDocument::DrawFormattingChars;
 
-//kdDebug() << "KWTextFrameSet::drawFrame calling drawWYSIWYG. cg base color:" << DEBUGBRUSH(cg.brush( QColorGroup::Base)) << endl;
+    //kdDebug() << "KWTextFrameSet::drawFrame calling drawWYSIWYG. cg base color:" << DEBUGBRUSH(cg.brush( QColorGroup::Base)) << endl;
     KoTextParag * lastFormatted = textDocument()->drawWYSIWYG(
         painter, r.x(), r.y(), r.width(), r.height(),
         cg, kWordDocument(),
