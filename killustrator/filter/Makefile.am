@@ -1,6 +1,6 @@
-INCLUDES= $(all_includes) -I../share -I..
+
+INCLUDES= -I../share -I.. $(all_includes) 
 DISTCLEANFILES = $(BUILT_SOURCES)
-CXXFLAGS = -Wall -O2
 
 noinst_LIBRARIES = libfilter.a
 
