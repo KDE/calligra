@@ -341,6 +341,9 @@ bool KImageDocument::completeSaving( KoStore* _store )
 {
   QString file = "image.bmp";
 
+  if( !isStoredExtern() )
+    file = url() + "/" + file;
+
   if ( _store->open( file, "image/bmp" ) )
   {
     ostorestream out( _store );
@@ -433,7 +436,12 @@ bool KImageDocument::completeLoading( KoStore* _store )
 {
   kdebug( KDEBUG_INFO, 0, "KImageDocument::completeLoading()" );
 
-  if( _store->open( "image.bmp", "" ) )
+  QString file = "image.bmp";
+
+  if( !isStoredExtern() )
+    file = url() + "/" + file;
+
+ if( _store->open( file, "" ) )
   {
     istorestream in( _store );
     in >> m_image;
