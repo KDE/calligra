@@ -18,14 +18,11 @@
 */
 
 #include <stdlib.h>
-#include <stdio.h>
 #include <ctype.h>
 #include <math.h>
 
 #include <qpainter.h>
 #include <qapplication.h>
-#include <qdrawutil.h>
-#include <qpoint.h>
 #include <qpointarray.h>
 #include <qsimplerichtext.h>
 #include <qpopupmenu.h>
