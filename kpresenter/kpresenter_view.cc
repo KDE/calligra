@@ -28,7 +28,7 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 #include <qfiledialog.h>
-#include <cassert>
+#include <assert.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qradiobutton.h>
