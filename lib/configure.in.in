@@ -43,11 +43,9 @@ AC_MSG_CHECKING([for kprinter.h (kdelibs>2.1)])
 AC_FIND_FILE(kprinter.h, $kde_includes, ac_kprinter_includes)
  
 if test -n "$ac_kprinter_includes" && test -r "$ac_kprinter_includes/kprinter.h"; then
-  HAVE_KDEPRINT=yes
+  AC_DEFINE(HAVE_KDEPRINT, 1, [Define if you have kprinter.h])
   AC_MSG_RESULT([found in $ac_kprinter_includes])
 else
-  HAVE_KDEPRINT=no
   AC_MSG_RESULT([not found -- QPrinter will be used instead)])
 fi
-AC_SUBST(HAVE_KDEPRINT)
 
