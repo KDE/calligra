@@ -191,7 +191,7 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
 
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
   nbPage->setRange(1, 10, 1);
-  nbPage->setLabel(i18n("Number of page open at the beginning :"));
+  nbPage->setLabel(i18n("Number of pages open at the beginning :"));
   lay1->addWidget(nbPage);
 
   showVScrollBar=new QCheckBox(i18n("Show vertical scrollbar"),tmpQGroupBox);
