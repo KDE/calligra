@@ -87,14 +87,14 @@ void kchartDataEditor::column_clicked(int column)
 {
   QString name = KInputDialog::getText(i18n("Column name"), i18n("Type a new column name:"), m_table->horizontalHeader()->label(column), 0, this);
   if ( !name.isEmpty() )
-    m_table->horizontalHeader()->setLabel(column, name);
+    m_table->horizontalHeader()->setLabel(column, name); //rename the column
 }
 
 void kchartDataEditor::row_clicked(int row)
 {
   QString name = KInputDialog::getText(i18n("Row name"), i18n("Type a new row name:"), m_table->verticalHeader()->label(row), 0, this);
   if ( !name.isEmpty() )
-    m_table->verticalHeader()->setLabel(row, name);
+    m_table->verticalHeader()->setLabel(row, name); //rename the row
 }
 
 // Add Tooltips and WhatsThis help to various parts of the Data Editor.
@@ -177,7 +177,7 @@ void kchartDataEditor::setData( KoChart::Data* dat )
     }
 
     // Set column widths.  The default is a little too wide.
-    for (unsigned int col = 1; col < colsCount + 1; col++) 
+    for (unsigned int col = 0; col < colsCount + 1; col++) 
 	m_table->setColumnWidth(col, COLUMNWIDTH);
 
     // and resize the widget to a good size.
@@ -307,19 +307,33 @@ void kchartDataEditor::setRows(int rows)
     kdDebug(35001) << "setRows called: rows = " << rows << endl;;
 
     if (rows > m_table->numRows())
+	{
 	m_table->setNumRows(rows);
+	m_table->verticalHeader()->setLabel(rows -1,""); //default value for the new row: empty string
+	}
     else if (rows < m_table->numRows()) {
-	// Check that the user really wants to shrink the table.
-	if (!m_userWantsToShrink
+	bool ask_user = false;
+	//check if the last row is empty...
+		for (int col=0; col<m_table->numCols(); col++)
+		{
+			if (!m_table->text(rows, col).isEmpty())
+			{
+				ask_user = true;
+				break;
+			}
+		}
+	// if it is not, ask if the user really wants to shrink the table.
+	if ( ask_user && !m_userWantsToShrink
 	    && askUserForConfirmation() == KMessageBox::Cancel) {
 
 	    // The user aborts.  Reset the number of rows and return.
-	    m_rowsSB->setValue(m_table->numRows() - 1);
+	    m_rowsSB->setValue(m_table->numRows());
 	    return;
 	}
 	
 	// Record the fact that the user knows what (s)he is doing.
-	m_userWantsToShrink = true;
+	if (ask_user)
+		m_userWantsToShrink = true;
 
 	// Do the actual shrinking.
 	m_table->setNumRows(rows);
@@ -334,19 +348,33 @@ void kchartDataEditor::setCols(int cols)
     kdDebug(35001) << "setCols called: cols = " << cols << endl;;
 
     if (cols > m_table->numCols())
+    {
 	m_table->setNumCols(cols);
+	m_table->setColumnWidth(cols-1, COLUMNWIDTH);
+	m_table->horizontalHeader()->setLabel(cols -1,""); //default value for the new column: empty string
+    }
     else if (cols < m_table->numCols()) {
-	// Check that the user really wants to shrink the table.
-	if (!m_userWantsToShrink
+	bool ask_user = false;
+	//check if the last column is empty...
+	for (int row=0; row<m_table->numRows(); row++)
+	{
+		if (!m_table->text(row, cols).isEmpty())
+		{
+			ask_user = true;
+			break;
+		}
+	}
+	// if it is not, ask if the user really wants to shrink the table.
+	if (ask_user && !m_userWantsToShrink
 	    && askUserForConfirmation() == KMessageBox::Cancel) {
 
 	    // The user aborts.  Reset the number of rows and return.
-	    m_colsSB->setValue(m_table->numCols() - 1);
+	    m_colsSB->setValue(m_table->numCols());
 	    return;
 	}
-	
 	// Record the fact that the user knows what (s)he is doing.
-	m_userWantsToShrink = true;
+	if (ask_user)
+		m_userWantsToShrink = true;
 
 	// Do the actual shrinking.
 	m_table->setNumCols(cols);

@@ -1,3 +1,11 @@
+
+2005-03-15  Fredrik Edemar <f_edemar@linux.se>
+	Changes in the data editor:
+		* Show the column names in the header column and the row names in the header row. Click on a header column/row to rename it.
+		* Do not ask for confirmation when the user wants to remove an empty row or column.
+	Changes in KDChart:
+		* Fixed bug 101290 (KChart changes font for axes when Polar chart is chosen).
+
 2005-03-14  Inge Wallin  <inge@lysator.liu.se>
 	
 	Remove more unnecessary files
