@@ -32,6 +32,8 @@
 #include "kimage_doc.h"
 #include "kimage.h"
 
+#include "kstartparams.h"
+
 bool g_bWithGUI = true;
 
 list<string> g_openFiles;
@@ -74,12 +76,16 @@ void KImageApp::start()
   }
 }
 
-int main( int argc, char** argv )
+int main( int& argc, char** argv )
 {
+  debug( "Anzahl der Paramter: %i", argc );
+
   int i = 1;
   FormatManager* formatManager;
   KImageAutoLoader loader( "IDL:KImage/DocumentFactory:1.0", "KImage" );
   KImageApp app( argc, argv );
+
+  debug( "Anzahl der Paramter: %i", argc );
 
   formatManager = new FormatManager();
 

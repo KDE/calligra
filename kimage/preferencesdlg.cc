@@ -21,6 +21,7 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qpushbutton.h>
 
 #include "preferencesdlg.h"
 
@@ -30,22 +31,36 @@
  *
  *****************************************************************************/
 
-KImagePreferencesDialog::KImagePreferencesDialog(QWidget *parent, const char *name, const char *inputtitle, WFlags f )
+KImagePreferencesDialog::KImagePreferencesDialog( QWidget* parent, const char* name, WFlags f )
 	: KDialog( parent, name, true, f )
 {
 	// Layout
     QGridLayout* grid = new QGridLayout( this, 5, 5, 7, 15);
 
 	// Inputline
-	m_pLineEdit = new QLineEdit( this, i18n( "Directory for temporary files" ) );
-    grid->addWidget( m_pLineEdit, 0, 0 );	
+	m_pLineEdit = new QLineEdit( this, "tempDir" );
+    grid->addMultiCellWidget( m_pLineEdit, 1, 1, 0, 4 );	
+
 	// Label
-	//QLabel* label = new QLabel( m_pLineEdit, inputtitle, this );
-	new QLabel( m_pLineEdit, inputtitle, this );
-
+	QLabel* label = new QLabel( m_pLineEdit, i18n( "Directory for temporary files" ) , this );
+	grid->addWidget( label, 0, 0 );
+	
 	// OK-Button
-
+    QPushButton* okButton = new QPushButton( this, "OKButton" );
+    okButton->setText( i18n( "&Ok" ) );
+    okButton->setAutoRepeat( false );
+    okButton->setAutoResize( false );
+    okButton->setAutoDefault( true );
+    okButton->setDefault( true );
+    connect( okButton, SIGNAL( clicked() ), this, SLOT( close() ) );
+    grid->addWidget( okButton, 3, 3 );
+        
 	// Cancel-Button
+
+	grid->setRowStretch( 0, 0);
+	grid->setRowStretch( 1, 0);
+	grid->setColStretch( 0, 0);
+	grid->setColStretch( 1, 0);
 }
 
 KImagePreferencesDialog::~KImagePreferencesDialog()

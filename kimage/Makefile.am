@@ -18,6 +18,7 @@ kimage_bin_SOURCES = \
     kinputdialog.cc \
     kintegerinputdialog.cc \
     kzoomfactordialog.cc \
+    kstartparams.cc \
     formats.cc
 
 noinst_HEADERS = \
@@ -30,6 +31,7 @@ noinst_HEADERS = \
     kinputdialog.h \
     kintegerinputdialog.h \
     kzoomfactordialog.h \
+    kstartparams.h \
     formats.h
 
 METASOURCES = \
@@ -78,3 +80,4 @@ kinputdialog.cc: kinputdialog.h
 kintegerinputdialog.cc: kintegerinputdialog.h
 kzoomfactordialog.cc: kzoomfactordialog.h
 formats.cc: formats.h
+kstartparams.cc: kstartparams.h
