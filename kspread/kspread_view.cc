@@ -127,6 +127,7 @@
 #include "dialogs/kspread_dlg_styles.h"
 #include "dialogs/kspread_dlg_subtotal.h"
 #include "dialogs/kspread_dlg_validity.h"
+#include "dialogs/link.h"
 #include "dialogs/sheet_properties.h"
 
 // KSpread DCOP
@@ -4334,21 +4335,27 @@ void KSpreadView::removeHyperlink()
 void KSpreadView::insertHyperlink()
 {
     d->canvas->closeEditor();
-
-    KSpreadLinkDlg dlg( this, "Insert Link" );
-    if( dlg.exec() == KDialog::Accepted )
+    
+    QPoint marker( selectionInfo()->marker() );
+    KSpreadCell* cell = d->activeSheet->cellAt( marker );
+    
+    LinkDialog* dlg = new LinkDialog( this );
+    dlg->setCaption( i18n( "Insert Link" ) );
+    if( cell )
     {
-        QPoint marker( selectionInfo()->marker() );
-        KSpreadCell * cell = d->activeSheet->nonDefaultCell( marker );
+      dlg->setText( cell->text() );
+      if( !cell->link().isEmpty() )
+      {
+        dlg->setCaption( i18n( "Edit Link" ) );
+        dlg->setLink( cell->link() );
+      }
+    }
+    
+    if( dlg->exec() == KDialog::Accepted )
+    {
+        cell = d->activeSheet->nonDefaultCell( marker );
         
-        if ( !cell->isEmpty() )
-        {
-            int ret = KMessageBox::warningYesNo( this, 
-                i18n( "Cell is not empty.\nDo you want to continue?" ) );
-            if ( ret == 4 ) return;
-        }
-
-        LinkCommand* command = new LinkCommand( cell, dlg.text(), dlg.link() );
+        LinkCommand* command = new LinkCommand( cell, dlg->text(), dlg->link() );
         d->doc->addCommand( command );
         command->execute();
         
@@ -4356,6 +4363,7 @@ void KSpreadView::insertHyperlink()
 	    canvasWidget()->setFocus();
 	    editWidget()->setText( cell->text() );
     }
+    delete dlg;
 }
 
 void KSpreadView::insertFromDatabase()
