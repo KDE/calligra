@@ -192,6 +192,7 @@ DCOPObject* KPresenterDoc::dcopObject()
 /*==============================================================*/
 KPresenterDoc::~KPresenterDoc()
 {
+    _commands.clear(); // done before deleting the objectlist (e.g. for lowraicmd)
     headerFooterEdit->allowClose();
     delete headerFooterEdit;
 

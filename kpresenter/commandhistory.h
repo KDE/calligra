@@ -39,6 +39,7 @@ public:
     CommandHistory();
     virtual ~CommandHistory();
 
+    void clear();
     virtual void addCommand( Command *_command );
 
     virtual void undo();

@@ -19,46 +19,58 @@
 
 #include <kpresenter_doc.h>
 #include <lowraicmd.h>
+#include <kdebug.h>
 
 /******************************************************************/
 /* Class: LowerRaiseCmd                                           */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-LowerRaiseCmd::LowerRaiseCmd( QString _name, QList<KPObject> *_old, QList<KPObject> *__new, KPresenterDoc *_doc )
+LowerRaiseCmd::LowerRaiseCmd( QString _name, QList<KPObject> *_oldList, QList<KPObject> *_newList, KPresenterDoc *_doc )
     : Command( _name )
 {
-    old = _old;
-    _new = __new;
-    old->setAutoDelete( false );
-    _new->setAutoDelete( false );
+    oldList = _oldList;
+    newList = _newList;
+    m_executed = false;
+    oldList->setAutoDelete( false );
+    newList->setAutoDelete( false );
     doc = _doc;
 
-    for ( unsigned int i = 0; i < old->count(); i++ )
-        old->at( i )->incCmdRef();
+    for ( unsigned int i = 0; i < oldList->count(); i++ )
+        oldList->at( i )->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 LowerRaiseCmd::~LowerRaiseCmd()
 {
-    for ( unsigned int i = 0; i < old->count(); i++ )
-        old->at( i )->decCmdRef();
+    for ( unsigned int i = 0; i < oldList->count(); i++ )
+        oldList->at( i )->decCmdRef();
 
     // I'm not sure how to handle this here correctly ( to avoid memory leaks and not to crash... )
-    //delete old;
-    //delete _new;
+    //delete oldList;
+    //delete newList;
+
+    // David: well, it's simple: if execute() was done last, only oldList should be deleted
+    // and if unexecute() was done last, only newList should be deleted
+    // (reason: the doc - or another command - holds the other list).
+    if ( m_executed )
+        delete oldList;
+    else
+        delete newList;
 }
 
 /*====================== execute =================================*/
 void LowerRaiseCmd::execute()
 {
-    doc->setObjectList( _new );
+    doc->setObjectList( newList );
     doc->repaint( false );
+    m_executed = true;
 }
 
 /*====================== unexecute ===============================*/
 void LowerRaiseCmd::unexecute()
 {
-    doc->setObjectList( old );
+    doc->setObjectList( oldList );
     doc->repaint( false );
+    m_executed = false;
 }

@@ -33,6 +33,11 @@ CommandHistory::CommandHistory()
 /*======================= destructor =============================*/
 CommandHistory::~CommandHistory()
 {
+    clear();
+}
+
+void CommandHistory::clear()
+{
     commands.clear();
 }
 

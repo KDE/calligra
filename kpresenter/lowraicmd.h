@@ -34,18 +34,18 @@ class KPObject;
 class LowerRaiseCmd : public Command
 {
 public:
-    LowerRaiseCmd( QString _name, QList<KPObject> *_old, QList<KPObject> *__new, KPresenterDoc *_doc );
+    LowerRaiseCmd( QString _name, QList<KPObject> *_oldList, QList<KPObject> *_newList, KPresenterDoc *_doc );
     ~LowerRaiseCmd();
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
-    LowerRaiseCmd()
-    {; }
+    LowerRaiseCmd() {}
 
-    QList<KPObject> *old, *_new;
+    QList<KPObject> *oldList, *newList;
     KPresenterDoc *doc;
+    bool m_executed;
 
 };
 
