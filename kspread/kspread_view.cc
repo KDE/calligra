@@ -2951,13 +2951,8 @@ void KSpreadView::insertFromTextfile()
     m_pCanvas->deleteEditor( true ); // save changes
   }
 
-//  QRect rect = activeTable()->selection();
-
-  KMessageBox::information( this, "Not implemented yet, work in progress...");
-
   KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", activeTable()->selection(), KSpreadCSVDialog::File );
   dialog.exec();
-
 }
 
 void KSpreadView::insertFromClipboard()

@@ -58,7 +58,6 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
   if ( !name )
     setName( "KSpreadCSVDialog" );
 
-  setCaption( i18n( "CSV Import" ) );
   setSizeGripEnabled( TRUE );
   MyDialogLayout = new QGridLayout( this, 1, 1, 11, 6, "MyDialogLayout"); 
   
@@ -206,6 +205,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
 
   if ( m_mode == Clipboard )
   {
+    setCaption( i18n( "Inserting From Clipboard" ) );
     QMimeSource * mime = QApplication::clipboard()->data();
     if ( !mime )
     {
@@ -215,13 +215,14 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
     
     if ( !mime->provides( "text/plain" ) )
     {
-      KMessageBox::information( this, i18n("There is usable data in the clipboard.") );
+      KMessageBox::information( this, i18n("There is no usable data in the clipboard.") );
       return;
     }
     m_fileArray = QByteArray(mime->encodedData( "text/plain" ) );
   }
   else if ( mode == File )
   {
+    setCaption( i18n( "Inserting Text File" ) );
     QString file = KFileDialog::getOpenFileName(":",
                                                 "text/plain",
                                                 this);
@@ -239,6 +240,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
   }
   else 
   {
+    setCaption( i18n( "Text To Columns" ) );
     m_data = "";
     KSpreadCell  * cell;
     KSpreadTable * table = m_pView->activeTable();
