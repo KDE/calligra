@@ -200,6 +200,7 @@ private:
 	KAction			*m_configureAction;
 	KToggleAction		*m_showRulerAction;
 	KoContextHelpAction	*m_contextHelpAction;
+	KAction			*m_deleteSelectionAction;
 	// line width
 	KoUnitDoubleSpinComboBox *m_setLineWidth;
 

@@ -80,6 +80,7 @@
 #include "vcanvas.h"
 #include "vtoolbox.h"
 #include "karbon_drag.h"
+#include "vselectnodestool.h"
 
 #include <unistd.h>
 
@@ -579,6 +580,7 @@ void
 KarbonView::slotActiveToolChanged( VTool *tool )
 {
 	part()->toolController()->setActiveTool( tool );
+	m_deleteSelectionAction->setEnabled( dynamic_cast<VSelectNodesTool *>( tool ) == 0 );
 	m_canvas->repaintAll();
 }
 
@@ -804,8 +806,8 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "&Deselect All" ), QKeySequence( "Ctrl+D" ), this,
 		SLOT( editDeselectAll() ), actionCollection(), "edit_deselect_all" );
-	new KAction(
-		i18n( "D&elete" ), "editdelete", QKeySequence( "Shift+Del" ), this,
+	m_deleteSelectionAction = new KAction(
+		i18n( "D&elete" ), "editdelete", QKeySequence( "Del" ), this,
 		SLOT( editDeleteSelection() ), actionCollection(), "edit_delete" );
 	new KAction(
 		i18n( "&History" ), 0, 0, this,
