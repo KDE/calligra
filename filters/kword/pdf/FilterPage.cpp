@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2002 Nicolas HADACEK (hadacek@kde.org)
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 #include "FilterPage.h"
@@ -47,8 +47,8 @@ uint FilterParagraph::findNbTabs(uint i, double prevXMax) const {
 
 //-----------------------------------------------------------------------------
 FilterString::FilterString(GfxState *state, double x0, double y0,
-                           double fontSize)
-    : TextString(state, x0, y0, fontSize)
+                           double fontSize, uint frameIndex)
+    : TextString(state, x0, y0, fontSize), _link(0), _frameIndex(frameIndex)
 {
     GfxRGB rgb;
     state->getFillRGB(&rgb);
@@ -57,7 +57,6 @@ FilterString::FilterString(GfxState *state, double x0, double y0,
     GString *gname = (font ? font->getName() : 0);
     QString name = (gname ? gname->getCString() : 0);
     _font = new FilterFont(name, qRound(fontSize), color);
-    _link = 0;
 }
 
 FilterString::~FilterString()
@@ -84,34 +83,7 @@ void FilterPage::beginString(GfxState *state, double x0, double y0) {
     return;
   }
 
-  curStr = new FilterString(state, x0, y0, fontSize);
-}
-
-void FilterPage::createParagraph(const QString &text,
-                                 const QValueVector<QDomElement> &layouts,
-                                 const QValueVector<QDomElement> &formats)
-{
-    QDomElement paragraph = _data.document.createElement("PARAGRAPH");
-    _data.textFrameset.appendChild(paragraph);
-
-    QDomElement textElement = _data.document.createElement("TEXT");
-    textElement.appendChild( _data.document.createTextNode(text) );
-    paragraph.appendChild(textElement);
-
-    QDomElement layout = _data.document.createElement("LAYOUT");
-    paragraph.appendChild(layout);
-    QDomElement element = _data.document.createElement("NAME");
-    element.setAttribute("value", "Standard");
-    layout.appendChild(element);
-    for (uint i=0; i<layouts.count(); i++)
-        layout.appendChild(layouts[i]);
-
-    if ( formats.count() ) {
-        QDomElement format = _data.document.createElement("FORMATS");
-        for (uint i=0; i<formats.count(); i++)
-            format.appendChild(formats[i]);
-        paragraph.appendChild(format);
-    }
+  curStr = new FilterString(state, x0, y0, fontSize, _data.frameIndex);
 }
 
 void FilterPage::prepare()
@@ -145,8 +117,13 @@ void FilterPage::prepare()
         qHeapSort(par.tabs);
 
         // new paragraph ?
+        FilterString *nextStr = (line->next ?
+            static_cast<FilterString *>(line->next->blocks->strings) : 0);
+        FilterString *str = static_cast<FilterString *>(line->blocks->strings);
         if ( line->next==0 || (line->next->yMin - line->yMax) >
-             0.5*(line->next->yMax - line->next->yMin) ) {
+             0.5*(line->next->yMax - line->next->yMin) ||
+             nextStr->_frameIndex!=str->_frameIndex ) {
+            par.frameIndex = str->_frameIndex;
             _pars.append(par);
             par.nbLines = 1;
             par.tabs.clear();
@@ -262,14 +239,13 @@ void FilterPage::prepare()
 
 void FilterPage::dump()
 {
-    // add paragraphs
     for (uint i=0; i<_pars.size(); i++) {
         QValueVector<QDomElement> layouts;
         QValueVector<QDomElement> formats;
 
         // tabulations
         for (uint k=0; k<_pars[i].tabs.size(); k++) {
-            QDomElement element = _data.document.createElement("TABULATOR");
+            QDomElement element = _data.createElement("TABULATOR");
             element.setAttribute("type", 0);
             element.setAttribute("ptpos", _pars[i].tabs[k]);
             element.setAttribute("width", 0);
@@ -278,7 +254,7 @@ void FilterPage::dump()
         }
 
         // indents
-        QDomElement element = _data.document.createElement("INDENTS");
+        QDomElement element = _data.createElement("INDENTS");
         element.setAttribute("left", _pars[i].leftIndent);
         double dx = _pars[i].firstIndent - _pars[i].leftIndent;
         if ( dx!=0 ) element.setAttribute("first", dx);
@@ -286,15 +262,8 @@ void FilterPage::dump()
 
         // offset before
         if ( _pars[i].offset>0 ) {
-            QDomElement element = _data.document.createElement("OFFSETS");
+            QDomElement element = _data.createElement("OFFSETS");
             element.setAttribute("before", _pars[i].offset);
-            layouts.append(element);
-        }
-
-        // page break
-        if ( (i+1)==_pars.size() ) {
-            QDomElement element = _data.document.createElement("PAGEBREAKING");
-            element.setAttribute("hardFrameBreakAfter", "true");
             layouts.append(element);
         }
 
@@ -303,14 +272,14 @@ void FilterPage::dump()
         for (uint k=0; k<_pars[i].blocks.size(); k++) {
             const FilterBlock &b = _pars[i].blocks[k];
             text += b.text;
-            QDomElement element = _data.document.createElement("FORMAT");
-            bool r = b.font->format(_data.document, element, b.pos,
+            QDomElement element = _data.createElement("FORMAT");
+            bool r = b.font->format(_data.document(), element, b.pos,
                                     b.text.length());
             if (b.link)
-                b.link->format(_data.document, element, b.pos, b.linkText);
+                b.link->format(_data.document(), element, b.pos, b.linkText);
             if ( r || b.link ) formats.append(element);
         }
 
-        createParagraph(text, layouts, formats);
+        _data.createParagraph(text, layouts, formats);
     }
 }

@@ -79,6 +79,7 @@ class FilterDevice : public OutputDev
     static void computeGeometry(GfxState *, Image &);
     uint initImage(GfxState *, int width, int height, bool mask);
     void addImage();
+    void clear();
 };
 
 #endif

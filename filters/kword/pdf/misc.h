@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2002 Nicolas HADACEK (hadacek@kde.org)
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 #ifndef MISC_H
@@ -33,13 +33,38 @@ class KoFilterChain;
 class FilterData
 {
  public:
-    FilterData() : pageIndex(1), imageIndex(1) {}
+    FilterData(KoFilterChain *, QSize pageSize, KoFormat, KoPageOrientation,
+               uint nbPages);
 
-    KoFilterChain *chain;
-    QDomDocument   document;
-    QDomElement    mainElement, framesets, textFrameset, pictures;
-    uint           pageIndex, imageIndex;
-    double         pageHeight;
+    QDomElement createElement(const QString &name)
+        { return _document.createElement(name); }
+    QDomElement createParagraph(const QString &text,
+                                const QValueVector<QDomElement> &layouts,
+                                const QValueVector<QDomElement> &formats);
+
+    KoFilterChain *chain() const { return _chain; }
+    QDomDocument document() const { return _document; }
+    uint imageIndex() const { return _imageIndex; }
+    QDomElement bookmarks() const { return _bookmarks; }
+    QDomElement pictures() const { return _pictures; }
+
+    QDomElement createPictureFrameset(double left, double right,
+                                      double top, double bottom)
+        { return createFrameset(Picture, left, right, top, bottom); }
+    void newPage();
+
+ private:
+    KoFilterChain *_chain;
+    QDomDocument   _document;
+    uint           _imageIndex, _textIndex;
+    bool           _needNewTextFrameset;
+    double         _pageHeight;
+    QDomElement    _mainElement, _framesets, _pictures, _bookmarks;
+    QDomElement    _textFrameset, _mainTextFrameset, _lastMainLayout;
+
+    enum FramesetType { Text, Picture };
+    QDomElement createFrameset(FramesetType, double left, double right,
+                               double top, double bottom);
 };
 
 //-----------------------------------------------------------------------------

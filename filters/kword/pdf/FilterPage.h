@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2002 Nicolas HADACEK (hadacek@kde.org)
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 #ifndef FILTERPAGE_H
@@ -44,7 +44,7 @@ class FilterBlock
 class FilterParagraph
 {
  public:
-    uint nbLines;
+    uint nbLines, frameIndex;
     double firstIndent, leftIndent, offset;
     QValueVector<double> tabs;
     QValueVector<FilterBlock> blocks;
@@ -60,12 +60,13 @@ class FilterString : public TextString
 {
  public:
     FilterString(GfxState *state, double x0, double y0,
-                 double fontSize);
+                 double fontSize, uint frameIndex);
     ~FilterString();
 
  private:
     FilterFont *_font;
     FilterLink *_link;
+    uint        _frameIndex;
 
     friend class FilterPage;
 };
@@ -89,10 +90,6 @@ class FilterPage : public TextPage
 
     QValueVector<FilterParagraph> _pars;
     QValueVector<FilterLink *>    _links;
-
-    void createParagraph(const QString &text,
-                         const QValueVector<QDomElement> &layouts,
-                         const QValueVector<QDomElement> &formats);
 };
 
 #endif

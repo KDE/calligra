@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2002 Nicolas HADACEK (hadacek@kde.org)
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 #include "misc.h"
@@ -33,6 +33,161 @@ double toPoint(double mm)
 bool equal(double d1, double d2, double delta)
 {
     return ( fabs(d1 - d2)<delta );
+}
+
+//-----------------------------------------------------------------------------
+FilterData::FilterData(KoFilterChain *chain, QSize pageSize, KoFormat format,
+                       KoOrientation orientation, uint nbPages)
+    : _chain(chain), _pageIndex(1), _imageIndex(1), _textIndex(1),
+      _needNewTextFrameset(false)
+{
+    _document = QDomDocument("DOC");
+    _document.appendChild(
+        _document.createProcessingInstruction(
+            "xml","version=\"1.0\" encoding=\"UTF-8\""));
+
+    _mainElement = _document.createElement("DOC");
+    _mainElement.setAttribute("editor", "KWord's PDF Import Filter");
+    _mainElement.setAttribute("mime", "application/x-kword");
+    _mainElement.setAttribute("syntaxVersion", 2);
+    _document.appendChild(_mainElement);
+
+    QDomElement element = _document.createElement("ATTRIBUTES");
+    element.setAttribute("processing", 0);
+    element.setAttribute("hasHeader", 0);
+    element.setAttribute("hasFooter", 0);
+    element.setAttribute("unit", "mm");
+    _mainElement.appendChild(element);
+
+    QDomElement paper = data.document.createElement("PAPER");
+    paper.setAttribute("format", format);
+    paper.setAttribute("width", pageSize.width());
+    paper.setAttribute("height", pageSize.height());
+    paper.setAttribute("orientation", orientation);
+    paper.setAttribute("columns", 1);
+    paper.setAttribute("pages", nbPages);
+    paper.setAttribute("columnspacing", 2);
+    paper.setAttribute("hType", 0);
+    paper.setAttribute("fType", 0);
+    paper.setAttribute("spHeadBody", 9);
+    paper.setAttribute("spFootBody", 9);
+    paper.setAttribute("zoom", 100);
+    data.mainElement.appendChild(paper);
+
+    element = data.document.createElement("PAPERBORDERS");
+    element.setAttribute("left", 0);
+    element.setAttribute("top", 0);
+    element.setAttribute("right", 0);
+    element.setAttribute("bottom", 0);
+    paper.appendChild(element);
+
+    // framesets
+    _framesets = document.createElement("FRAMESETS");
+    mainElement.appendChild(data.framesets);
+
+    // main text frameset
+    _pageHeight = pageHeight;
+    _mainTextFrameset = createFrameset(FilterData::Text, 0, pageSize.width(),
+                                       0, pageSize.height());
+
+    // standard style
+    QDomElement styles = document.createElement("STYLES");
+    mainElement.appendChild(styles);
+
+    QDomElement style = document.createElement("STYLE");
+    styles.appendChild(style);
+
+    QDomElement element = document.createElement("FORMAT");
+    FilterFont::defaultFont->format(document, element, 0, 0, true);
+    style.appendChild(element);
+
+    element = data.document.createElement("NAME");
+    element.setAttribute("value","Standard");
+    style.appendChild(element);
+
+    element = data.document.createElement("FOLLOWING");
+    element.setAttribute("name","Standard");
+    style.appendChild(element);
+
+    // pictures
+    _pictures = document.createElement("PICTURES");
+    mainElement.appendChild(_pictures);
+
+    // treat pages
+    _bookmarks = document.createElement("BOOKMARKS");
+    mainElement.appendChild(_bookmarks);
+}
+
+QDomElement FilterData::createFrameset(FramesetType type, double left,
+                                       double rught, double top, double bottom)
+{
+    bool text = (type==Text);
+    uint &index = (text ? _textIndex : _imageIndex);
+
+    QDomElement frameset = _document.createElement("FRAMESET");
+    frameset.setAttribute("frameType", (text ? 1 : 2));
+    QString name = (text ? QString("Text Frameset %1")
+                    : QString("Picture %1")).arg(index);
+    frameset.setAttribute("name", name);
+    frameset.setAttribute("frameInfo", 0);
+    framesets.appendChild(frameset);
+
+    QDomElement frame = _document.createElement("FRAME");
+    if (text) frame.setAttribute("autoCreateNewFrame", 0); // ?
+    frame.setAttribute("newFrameBehavior", (text && index==1 ? 0 : 1));
+    frame.setAttribute("runaround", 0);
+    frame.setAttribute("left", left);
+    frame.setAttribute("right", right);
+    double offset = (pageIndex-1) * pageHeight;
+    frame.setAttribute("top", top + offset);
+    frame.setAttribute("bottom", bottom + offset);
+    frameset.appendChild(frame);
+
+    if (text) _textFrameset = frameset;
+    _needNewTextFrameset = !text;
+    index++;
+    return frameset;
+}
+
+void FilterData::newPage()
+{
+    _textFrameset = _mainTextFrameset;
+    _needNewTextFrameset = false;
+    if ( !_lastMainLayout.isNull() ) {
+        QDomElement element = _document.createElement("PAGEBREAKING");
+        element.setAttribute("hardFrameBreakAfter", "true");
+        _lastMainLayout.append(element);
+    }
+    _lastMainLayout = QDomElement();
+}
+
+void FilterData::createParagraph(const QString &text,
+                                 const QValueVector<QDomElement> &layouts,
+                                 const QValueVector<QDomElement> &formats)
+{
+    QDomElement paragraph = _document.createElement("PARAGRAPH");
+    _textFrameset.appendChild(paragraph);
+
+    QDomElement textElement = _document.createElement("TEXT");
+    textElement.appendChild( _document.createTextNode(text) );
+    paragraph.appendChild(textElement);
+
+    QDomElement layout = _document.createElement("LAYOUT");
+    paragraph.appendChild(layout);
+    QDomElement element = _document.createElement("NAME");
+    element.setAttribute("value", "Standard");
+    layout.appendChild(element);
+    for (uint i=0; i<layouts.count(); i++)
+        layout.appendChild(layouts[i]);
+    if ( _textFrameset==_mainTextFrameset )
+        _lastMainLayout = layout;
+
+    if ( formats.count() ) {
+        QDomElement format = _document.createElement("FORMATS");
+        paragraph.appendChild(format);
+        for (uint i=0; i<formats.count(); i++)
+            format.appendChild(formats[i]);
+    }
 }
 
 //-----------------------------------------------------------------------------

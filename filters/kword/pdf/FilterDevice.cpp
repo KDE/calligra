@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2002 Nicolas HADACEK (hadacek@kde.org)
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 #include "FilterDevice.h"
@@ -37,13 +37,21 @@ FilterDevice::FilterDevice(FilterData &data)
 
 FilterDevice::~FilterDevice()
 {
+    clear();
+}
+
+void FilterDevice::clear()
+{
     delete _page;
+    _page = 0;
     for (uint i=0; i<_images.size(); i++)
         delete _images[i].ptr;
+    _images.resize(0);
 }
 
 void FilterDevice::startPage(int, GfxState *)
 {
+    _data.newPage();
     _page = new FilterPage(_data);
 }
 
@@ -52,11 +60,9 @@ void FilterDevice::endPage()
     _page->coalesce();
     _page->prepare();
     _page->dump();
-    delete _page;
-    _page = 0;
 
     if (_image.ptr) addImage();
-    _data.pageIndex++;
+    clear();
 }
 
 void FilterDevice::updateFont(GfxState *state)
@@ -113,28 +119,16 @@ void FilterDevice::addImage()
     }
 
     // add image
-    QString name = QString("pictures/picture%1.png").arg(_data.imageIndex);
-    QDomElement frameset = _data.document.createElement("FRAMESET");
-    frameset.setAttribute("frameType", 2);
-    frameset.setAttribute("name", QString("Picture %1").arg(_data.imageIndex));
-    frameset.setAttribute("frameInfo", 0);
-    _data.framesets.appendChild(frameset);
+    QString name = QString("pictures/picture%1.png").arg(_data.imageIndex());
+    QDomElement frameset =
+        _data.createPictureFrameset(_image.left, _image.right,
+                                    _image.top, _image.bottom);
 
-    QDomElement frame = _data.document.createElement("FRAME");
-    frame.setAttribute("newFrameBehavior", 1);
-    frame.setAttribute("runaround", 0);
-    frame.setAttribute("left", _image.left);
-    frame.setAttribute("right", _image.right);
-    double offset = (_data.pageIndex-1) * _data.pageHeight;
-    frame.setAttribute("top", _image.top + offset);
-    frame.setAttribute("bottom", _image.bottom + offset);
-    frameset.appendChild(frame);
-
-    QDomElement picture = _data.document.createElement("PICTURE");
+    QDomElement picture = _data.createElement("PICTURE");
     picture.setAttribute("keepAspectRatio", "false");
     frameset.appendChild(picture);
 
-    QDomElement key = _data.document.createElement("KEY");
+    QDomElement key = _data.createElement("KEY");
     key.setAttribute("msec", 0);
     key.setAttribute("second", 0);
     key.setAttribute("minute", 0);
@@ -145,7 +139,7 @@ void FilterDevice::addImage()
     key.setAttribute("filename", name);
     picture.appendChild(key);
 
-    key = _data.document.createElement("KEY");
+    key = _data.createElement("KEY");
     key.setAttribute("msec", 0);
     key.setAttribute("second", 0);
     key.setAttribute("minute", 0);
@@ -157,7 +151,7 @@ void FilterDevice::addImage()
     key.setAttribute("name", name);
     _data.pictures.appendChild(key);
 
-    KoStoreDevice *sd = _data.chain->storageFile(name, KoStore::Write);
+    KoStoreDevice *sd = _data.chain()->storageFile(name, KoStore::Write);
     QImageIO io(sd, "PNG");
     io.setImage(*_image.ptr);
     bool ok = io.write();
@@ -165,7 +159,6 @@ void FilterDevice::addImage()
     sd->close();
 
     _images.append(_image);
-    _data.imageIndex++;
     _image.ptr = 0;
 }
 

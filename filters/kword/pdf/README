@@ -1,6 +1,7 @@
 PDF Importer for KWord
 ----------------------
-Copyright (c) 2002      Nicolas Hadacek (hadacek@kde.org)
+Copyright (c) 2002 Nicolas Hadacek (hadacek@kde.org)
+Distributed under the GNU General Public License
 
 
 This importer is more or less a wrapper around Xpdf code (see "xpdf"

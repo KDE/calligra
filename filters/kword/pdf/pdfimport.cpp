@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2002 Nicolas HADACEK (hadacek@kde.org)
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 #include "pdfimport.h"
@@ -112,110 +112,24 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
 	titleTag.appendChild(titleText);
 
     // document
-    FilterData data;
-    data.chain = m_chain;
-    data.document = QDomDocument("DOC");
-    data.document.appendChild(
-        data.document.createProcessingInstruction(
-            "xml","version=\"1.0\" encoding=\"UTF-8\""));
-
-    data.mainElement = data.document.createElement("DOC");
-    data.mainElement.setAttribute("editor", "KWord's PDF Import Filter");
-    data.mainElement.setAttribute("mime", "application/x-kword");
-    data.mainElement.setAttribute("syntaxVersion", 2);
-    data.document.appendChild(data.mainElement);
-
-    QDomElement element = data.document.createElement("ATTRIBUTES");
-    element.setAttribute("processing", 0);
-    element.setAttribute("hasHeader", 0);
-    element.setAttribute("hasFooter", 0);
-    element.setAttribute("unit", "mm");
-    data.mainElement.appendChild(element);
-
     KoFormat format;
     QSize size = doc->paperSize(format);
-    data.pageHeight = size.height();
-
-    QDomElement paper = data.document.createElement("PAPER");
-    paper.setAttribute("format", format);
-    paper.setAttribute("width", size.width());
-    paper.setAttribute("height", size.height());
-    paper.setAttribute("orientation", doc->paperOrientation());
-    paper.setAttribute("columns", 1);
-    paper.setAttribute("pages", doc->nbPages());
-    paper.setAttribute("columnspacing", 2);
-    paper.setAttribute("hType", 0);
-    paper.setAttribute("fType", 0);
-    paper.setAttribute("spHeadBody", 9);
-    paper.setAttribute("spFootBody", 9);
-    paper.setAttribute("zoom", 100);
-    data.mainElement.appendChild(paper);
-
-    element = data.document.createElement("PAPERBORDERS");
-    element.setAttribute("left", 0);
-    element.setAttribute("top", 0);
-    element.setAttribute("right", 0);
-    element.setAttribute("bottom", 0);
-    paper.appendChild(element);
-
-    data.framesets = data.document.createElement("FRAMESETS");
-    data.mainElement.appendChild(data.framesets);
-
-    // Text frameset
-    data.textFrameset = data.document.createElement("FRAMESET");
-    data.textFrameset.setAttribute("name", "Text Frameset 1");
-    data.textFrameset.setAttribute("frameType", 1);
-    data.textFrameset.setAttribute("frameInfo", 0);
-    data.textFrameset.setAttribute("autoCreateNewFrame", 1);
-    data.textFrameset.setAttribute("removable", 0);
-    data.framesets.appendChild(data.textFrameset);
-
-    QDomElement frame = data.document.createElement("FRAME");
-    frame.setAttribute("left", 0);
-    frame.setAttribute("top", 0);
-    frame.setAttribute("bottom", size.width());
-    frame.setAttribute("right", size.height());
-    frame.setAttribute("runaround", 1);
-    data.textFrameset.appendChild(frame);
-
-    // standard style
-    QDomElement styles = data.document.createElement("STYLES");
-    data.mainElement.appendChild(styles);
-
-    QDomElement style = data.document.createElement("STYLE");
-    styles.appendChild(style);
-
-    element = data.document.createElement("FORMAT");
-    FilterFont::defaultFont->format(data.document, element, 0, 0, true);
-    style.appendChild(element);
-
-    element = data.document.createElement("NAME");
-    element.setAttribute("value","Standard");
-    style.appendChild(element);
-
-    element = data.document.createElement("FOLLOWING");
-    element.setAttribute("name","Standard");
-    style.appendChild(element);
-
-    // pictures
-    data.pictures = data.document.createElement("PICTURES");
-    data.mainElement.appendChild(data.pictures);
+    FilterData data(m_chain, size, format, doc->paperOrientation(),
+                    doc->nbPages());
 
     // treat pages
-    QDomElement bookmarks = data.document.createElement("BOOKMARKS");
-    data.mainElement.appendChild(bookmarks);
     doc->initDevice(data);
     for (uint i=1; i<=doc->nbPages(); i++) {
         if ( !range.inside(i) ) continue;
         doc->treatPage(i);
-        element = data.document.createElement("BOOKMARKITEM");
+        element = data.createElement("BOOKMARKITEM");
         element.setAttribute("name", QString("page%1").arg(i));
         element.setAttribute("cursorIndexStart", 0); // ?
         element.setAttribute("cursorIndexEnd", 0); // ?
         element.setAttribute("frameset", "Text Frameset 1");
         element.setAttribute("startparag", 0); // ?
         element.setAttribute("endparag", 0); // ?
-        bookmarks.appendChild(element);
+        data.bookmarks().appendChild(element);
     }
 
     // clean up
