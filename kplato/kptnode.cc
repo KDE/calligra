@@ -66,10 +66,11 @@ KPTNode::~KPTNode() {
 void KPTNode::init() {
     m_nodes.setAutoDelete(true);
     m_name="";
-    m_startTime = KPTDateTime();
-    m_endTime = KPTDateTime();
-    earliestStart = KPTDateTime();
-    latestFinish = KPTDateTime();
+    m_startTime = KPTDateTime::currentDateTime();
+    m_endTime = m_startTime.addDays(1);
+    earliestStart = m_startTime;
+    latestFinish = m_endTime;
+    m_duration = m_endTime - m_startTime;
     m_constraint = KPTNode::ASAP;
     m_effort = 0;
     m_resourceOverbooked = false;
@@ -123,6 +124,12 @@ void KPTNode::insertChildNode( unsigned int index, KPTNode *node) {
     }
     m_nodes.insert(index,node);
     node->setParent(this);
+    if (node->m_notScheduled) {
+        // set some sensible start values
+        node->setStartTime(m_startTime);
+        node->setEndTime(m_endTime);
+        node->m_duration = m_duration;
+    }
 }
 
 void KPTNode::addChildNode( KPTNode *node, KPTNode *after) {
@@ -137,6 +144,12 @@ void KPTNode::addChildNode( KPTNode *node, KPTNode *after) {
     }
     m_nodes.insert(index+1, node);
     node->setParent(this);
+    if (node->m_notScheduled) {
+        // set some sensible start values
+        node->setStartTime(m_startTime);
+        node->setEndTime(m_endTime);
+        node->m_duration = m_duration;
+    }
 }
 
 int KPTNode::findChildNode( KPTNode* node )

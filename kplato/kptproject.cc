@@ -45,15 +45,27 @@ KPTProject::KPTProject(KPTNode *parent)
     : KPTNode(parent)
 
 {
-    m_useDateOnly = KPTPart::config().behavior().dateTimeUsage == KPTBehavior::Date;
     m_constraint = KPTNode::MustStartOn;
-    m_startTime = KPTDateTime::currentDateTime();
-    m_endTime = m_startTime;
-
+    m_useDateOnly = KPTPart::config().behavior().dateTimeUsage == KPTBehavior::Date;
     m_standardWorktime = new KPTStandardWorktime();
     m_defaultCalendar = new KPTCalendar(*m_standardWorktime);
+    if (parent == 0) {
+        // set sensible defaults for a project wo parent
+        if (m_useDateOnly) {
+            m_startTime = KPTDateTime(QDate::currentDate(),QTime());
+            m_endTime = m_startTime;
+            m_duration = KPTDuration::zeroDuration;
+            m_duration.addDays(1);
+        } else {
+            m_startTime = KPTDateTime(QDate::currentDate(),m_standardWorktime->startOfDay(QDate::currentDate()));
+            m_endTime = KPTDateTime(QDate::currentDate(),m_standardWorktime->endOfDay(QDate::currentDate()));
+            m_duration = m_endTime - m_startTime;
+            if (m_duration == KPTDuration::zeroDuration)
+                m_duration.addDays(1);
+        }    
+    }
+    
     m_calendars.setAutoDelete(true);
-
 }
 
 
