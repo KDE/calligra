@@ -21,6 +21,8 @@
 /****************************************************************
  *
  * KSpreadEditWidget
+ * The line-editor that appears above the table and allows to
+ * edit the cells content.
  *
  ****************************************************************/
 
@@ -41,31 +43,20 @@ KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadView *_view,
                       this, SLOT( slotAbortEdit() ) );
     QObject::connect( m_pOkButton, SIGNAL( clicked() ),
                       this, SLOT( slotDoneEdit() ) );
-    m_pCancelButton->setEnabled(false);
-    m_pOkButton->setEnabled(false);
   }
+  setEditMode( false ); // disable buttons
 }
 
 void KSpreadEditWidget::slotAbortEdit()
 {
-  m_pView->canvasWidget()->deleteEditor();
-  m_pView->updateEditWidget();
-
-  m_pCancelButton->setEnabled(false);
-  m_pOkButton->setEnabled(false);
+  m_pView->canvasWidget()->deleteEditor( false /*discard changes*/ );
+  // will take care of the buttons
 }
 
 void KSpreadEditWidget::slotDoneEdit()
 {
-  // Delete the cell editor first and after that update the document.
-  // That means we get a syncron repaint after the cell editor
-  // widget is gone. Otherwise we may get painting errors.
-  QString t = text();
-  m_pView->canvasWidget()->deleteEditor();
-  m_pView->setText( t );
-
-  m_pCancelButton->setEnabled(false);
-  m_pOkButton->setEnabled(false);
+  m_pView->canvasWidget()->deleteEditor( true /*keep changes*/ );
+  // will take care of the buttons
 }
 
 void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
@@ -87,8 +78,7 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
     case Key_Return:
     case Key_Enter:
 
-      //slotDoneEdit(); will be called by the canvas anyway
-
+      // Send to the canvas, which will handle it.
       QApplication::sendEvent( m_pView->canvasWidget(), _ev );
 
       _ev->accept();
@@ -112,15 +102,16 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
   }
 }
 
-void KSpreadEditWidget::setEditMode()
+void KSpreadEditWidget::setEditMode( bool mode )
 {
-  m_pCancelButton->setEnabled(true);
-  m_pOkButton->setEnabled(true);
+  m_pCancelButton->setEnabled(mode);
+  m_pOkButton->setEnabled(mode);
 }
 
 void KSpreadEditWidget::focusOutEvent( QFocusEvent* ev )
 {
-  qDebug("************* EditWidget lost focus");
+  kdDebug() << "EditWidget lost focus" << endl;
+  // See comment about setLastEditorWithFocus
   m_pView->canvasWidget()->setLastEditorWithFocus( KSpreadCanvas::EditWidget );
 
   QLineEdit::focusOutEvent( ev );
@@ -654,7 +645,9 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
   // We were editing a cell -> save value and get out of editing mode
   if ( m_pEditor )
-    m_pEditWidget->slotDoneEdit();
+  {
+    deleteEditor( true ); //save changes
+  }
 
   QRect selection( table->selectionRect() );
 
@@ -1028,39 +1021,27 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
 
 void KSpreadCanvas::focusInEvent( QFocusEvent* )
 {
-  // If we are in editing mode, we redirect the
-  // focus to the CellEditor or EditWidget
   if ( !m_pEditor )
     return;
 
-  /*
-    This screws up <Tab>, removed (David)
-    // Strange focus bug. Lets fix it here!
+  kdDebug() << "m_bChoose : " << ( m_bChoose ? "true" : "false" ) << endl;
+  // If we are in editing mode, we redirect the
+  // focus to the CellEditor or EditWidget
+  // And we know which, using lastEditorWithFocus.
+  // This screws up <Tab> though (David)
   if ( lastEditorWithFocus() == EditWidget )
   {
     m_pView->editWidget()->setFocus();
-    qDebug("Focus to EditWidget");
+    kdDebug() << "Focus to EditWidget" << endl;
     return;
   }
 
-  qDebug("Redirecting focus to editor");
+  kdDebug() << "Redirecting focus to editor" << endl;
   m_pEditor->setFocus();
-  */
 }
 
 void KSpreadCanvas::focusOutEvent( QFocusEvent* )
 {
-}
-
-void KSpreadCanvas::deleteEditor()
-{
-  assert( m_pEditor );
-  delete m_pEditor;
-  m_pEditor = 0;
-
-  setFocus();
-
-  m_pView->enableFormulaToolBar( TRUE );
 }
 
 void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
@@ -1096,7 +1077,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   // End of editing a cell
   if ( ( bChangingCells || _ev->key() == Key_Return ) && m_pEditor && !m_bChoose )
   {
-    m_pEditWidget->slotDoneEdit();
+    deleteEditor( true /*save changes*/ );
   }
 
   // Are we making a selection right now ? Go thru this only if no selection is made
@@ -1166,16 +1147,30 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
     case Key_Escape:
 
-      m_pEditWidget->slotAbortEdit();
-      _ev->accept();
+      if ( m_pEditor )
+        deleteEditor( false );
+
+      _ev->accept(); // ?
       return;
 
     case Key_Home:
 
-      if ( m_bChoose )
-        chooseGotoLocation( 1, 1, 0, make_select );
+      // We are in edit mode -> go beginning of line
+      if ( m_pEditor )
+      {
+        // (David) Do this for text editor only, not formula editor...
+        // Don't know how to avoid this hack (member var for editor type ?)
+        if ( m_pEditor->inherits("KSpreadTextEditor") )
+          QApplication::sendEvent( m_pEditWidget, _ev );
+        // What to do for a formula editor ?
+      }
       else
-        gotoLocation( 1, 1, 0, make_select );
+      {
+        if ( m_bChoose )
+          chooseGotoLocation( 1, 1, 0, make_select );
+        else
+          gotoLocation( 1, 1, 0, make_select );
+      }
       return;
 
     case Key_Prior:
@@ -1241,6 +1236,32 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   // m_pView->eventKeyPressed( _ev, m_bChoose );
 }
 
+void KSpreadCanvas::deleteEditor( bool saveChanges )
+{
+  assert( m_pEditor );
+  // We need to set the line-edit out of edit mode,
+  // but only if we are using it (text editor)
+  // A bit of a hack - perhaps we should store the editor mode ?
+  if ( m_pEditor->inherits("KSpreadTextEditor") )
+    m_pEditWidget->setEditMode( false );
+
+  QString t = m_pEditor->text();
+  // Delete the cell editor first and after that update the document.
+  // That means we get a synchronous repaint after the cell editor
+  // widget is gone. Otherwise we may get painting errors.
+  delete m_pEditor;
+  m_pEditor = 0;
+
+  if (saveChanges)
+    m_pView->setText( t );
+  else
+    m_pView->updateEditWidget();
+
+  setFocus();
+
+  m_pView->enableFormulaToolBar( TRUE );
+}
+
 void KSpreadCanvas::createEditor()
 {
   KSpreadCell* cell = activeTable()->cellAt( markerColumn(), markerRow() );
@@ -1250,7 +1271,6 @@ void KSpreadCanvas::createEditor()
     QString tmp = cell->text();
     createEditor( FormulaEditor );
     m_pEditor->setText( tmp.right( tmp.length() - 1 ) );
-    // m_pView->showFormulaToolBar( true );
   }
   else
   {
@@ -1269,7 +1289,7 @@ void KSpreadCanvas::createEditor( EditorType ed )
     if ( ed == CellEditor )
     {
       m_pView->enableFormulaToolBar( FALSE );
-      m_pEditWidget->setEditMode();
+      m_pEditWidget->setEditMode( true );
 
       m_pEditor = new KSpreadTextEditor( cell, this );
     }

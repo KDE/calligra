@@ -41,7 +41,7 @@ public:
     virtual void setText( const QString& t );
 	
     // Go into edit mode (enable the buttons)
-    void setEditMode();
+    void setEditMode( bool mode );
 
 public slots:
     void slotAbortEdit();
@@ -236,14 +236,16 @@ public:
      *
      * @see #createEditor
      * @see #editor
+     * @param saveChanges if true, the edited text is stored in the cell.
+     *                    if false, the changes are discarded.
      */
-    void deleteEditor();
+    void deleteEditor( bool saveChanges );
 
     /**
      * Called from @ref KSpreadEditWidget and KSpreadCellEditor
      * if they loose the focus becuase the user started a "choose selection".
-     * This is done because the editor wants to get ist focus back afterwards.
-     * But somehow KSpreadCanvas must know wether the EditWidget or the CellEditor
+     * This is done because the editor wants to get its focus back afterwards.
+     * But somehow KSpreadCanvas must know whether the EditWidget or the CellEditor
      * lost the focus when the user clicked on the canvas.
      */
     void setLastEditorWithFocus( EditorType type ) { m_focusEditorType = type; }

@@ -74,18 +74,18 @@ void KSpreadTextEditor::checkChoose()
     QString t = m_pEdit->text();
     // QString r = t.mid( t.length() - 1 - canvas()->chooseTextLen(), 1 );
     QString r = t.mid( m_pEdit->cursorPosition() - 1 - canvas()->chooseTextLen(), 1 );
-    qDebug("r='%s'", r.latin1() );
+    kdDebug() << "r='" << r << "'" << endl;
     if ( t.left(1) == "=" && ( r == "*" || r == "|" || r == "&" || r == "-" ||
 			       r == "+" || r == "/" || r == "!" || r == "(" ||
 			       r == "^" || r == "," || r == "%" || r == "[" ||
 			       r == "{" || r == "~" || r == "=" ) )
     {
-	qDebug("Start CHOOSE");
+	kdDebug() << "Start CHOOSE" << endl;
 	canvas()->startChoose();
     }
     else
     {
-	qDebug("End CHOOSE");
+	kdDebug() << "End CHOOSE" << endl;
 	canvas()->endChoose();
     }
 }
@@ -145,7 +145,7 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
 	QKeyEvent* k = (QKeyEvent*)e;
 	if ( k->key() == Key_Right || k->key() == Key_Left || k->key() == Key_Up ||
 	     k->key() == Key_Down || k->key() == Key_Next || k->key() == Key_Prior ||
-	     k->key() == Key_Home || k->key() == Key_Escape )
+	     k->key() == Key_Escape )
         {
 	    // Send directly to canvas
 	    QApplication::sendEvent( parent(), e );
@@ -194,7 +194,7 @@ KSpreadFormulaEditor::~KSpreadFormulaEditor()
 
 void KSpreadFormulaEditor::resizeEvent( QResizeEvent* )
 {
-    qDebug("FORMULA w=%i h=%i", width(), height() );
+  kdDebug() << "FORMULA w=" << width() << " h=" << height() << endl;
   m_pEdit->setGeometry( 0, 0, width(), height() );
 }
 
