@@ -516,7 +516,7 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
         }
 
         // Syllable and Word count
-        // Algorithm taken from Greg Fast's Lingua::EN::Syllable module for Perl.
+        // Algorithm mostly taken from Greg Fast's Lingua::EN::Syllable module for Perl.
         // This guesses correct for 70-90% of English words, but the overall value
         // is quite good, as some words get a number that's too high and others get
         // one that's too low.
@@ -525,13 +525,16 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
         words += wordlist.count();
        	re.setCaseSensitive(false);
         for ( QStringList::Iterator it = wordlist.begin(); it != wordlist.end(); ++it ) {
-            int word_syllables = 0;
             QString word = *it;
+            if ( word.length() <= 3 ) {  // extension to the original algorithm
+                syllables++;
+                continue;
+            }
             re.setPattern("e$");
             word.replace(re, "");
             re.setPattern("[^aeiouy]+");
             QStringList syls = QStringList::split(re, word);
-
+            int word_syllables = 0;
             for ( QStringList::Iterator it = subs_syl.begin(); it != subs_syl.end(); ++it ) {
                 re.setPattern(*it);
                 if( word.contains(re) )
@@ -542,9 +545,6 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
                 if( word.contains(re) )
                     word_syllables++;
             }
-
-            if ( word.length() == 1 )
-	        word_syllables++;
             word_syllables += syls.count();
 	    if ( word_syllables == 0 )
                 word_syllables = 1;
