@@ -506,7 +506,7 @@ void KoAutoFormatDia::setupTab3()
     grid->addMultiCellWidget( lblAutoFormatLanguage, 0, 0, 0, 3 );
 
     cbAdvancedAutoCorrection = new QCheckBox( tab3 );
-    cbAdvancedAutoCorrection->setText( i18n("Enable autocorrection") );
+    cbAdvancedAutoCorrection->setText( i18n("Enable word replacement") );
 
     grid->addMultiCellWidget( cbAdvancedAutoCorrection, 1, 1, 0, 6 );
 
@@ -897,7 +897,6 @@ bool KoAutoFormatDia::applyConfig()
 
     // Save to config file
     m_docAutoFormat->saveConfig();
-
     return true;
 }
 
