@@ -101,7 +101,7 @@ int WinWordDoc::cacheCellEdge(
 //
 
 unsigned WinWordDoc::computeCellEdge(
-    TAP &row,
+    MsWordGenerated::TAP &row,
     unsigned edge)
 {
     unsigned rowWidth = row.rgdxaCenter[row.itcMac] - row.rgdxaCenter[0];
@@ -250,7 +250,7 @@ void WinWordDoc::generateFormats(Attributes &attributes)
     {
         if (typeid(Format) == typeid(*run))
         {
-            const CHP *chp = static_cast<Format *>(run)->values->getChp();
+            const MsWordGenerated::CHP *chp = static_cast<Format *>(run)->values->getChp();
 
             formats.append("<FORMAT id=\"1\" pos=\"");
             formats.append(QString::number(run->start));
@@ -503,8 +503,8 @@ void WinWordDoc::gotTableRow(
     unsigned tableNumber,
     unsigned rowNumber,
     const QString texts[],
-    const PAP /*styles*/[],
-    TAP &row)
+    const MsWordGenerated::PAP /*styles*/[],
+    MsWordGenerated::TAP &row)
 {
     if (m_phase == TEXT_PASS)
     {

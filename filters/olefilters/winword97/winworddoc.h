@@ -101,7 +101,7 @@ private:
     void gotListParagraph(const QString &text, Attributes &attributes);
     void gotTableBegin(unsigned tableNumber);
     void gotTableEnd(unsigned tableNumber);
-    void gotTableRow(unsigned tableNumber, unsigned rowNumber, const QString texts[], const PAP styles[], TAP &row);
+    void gotTableRow(unsigned tableNumber, unsigned rowNumber, const QString texts[], const MsWordGenerated::PAP styles[], MsWordGenerated::TAP &row);
 
     // This is where the result will end up!
 
