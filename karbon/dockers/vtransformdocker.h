@@ -37,6 +37,9 @@ public:
 public slots:
 	void update();
 
+private slots:
+	void transform();
+
 private:
 	KarbonPart *m_part;
 	KarbonView *m_view;

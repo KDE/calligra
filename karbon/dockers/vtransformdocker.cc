@@ -21,6 +21,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qwidget.h>
+#include <qwmatrix.h>
 
 #include <klocale.h>
 #include <koMainWindow.h>
@@ -31,6 +32,7 @@
 #include "karbon_view.h"
 
 #include "vselection.h"
+#include "vtransformcmd.h"
 
 #include "vtransformdocker.h"
 
@@ -67,7 +69,7 @@ VTransformDocker::VTransformDocker( KarbonPart* part, KarbonView* parent, const 
 	m_height = new KoUnitDoubleSpinBox( mainWidget, 0.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
 	mainLayout->addWidget( m_height, 2, 3 );
 
-	//TODO: Add Scale, Rotation, Shear
+	//TODO: Add Rotation, Shear
 
 	setWidget( mainWidget );
 	update();
@@ -76,6 +78,11 @@ VTransformDocker::VTransformDocker( KarbonPart* part, KarbonView* parent, const 
 void
 VTransformDocker::update()
 {
+	disconnect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( transform() ) );
+	disconnect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( transform() ) );
+	disconnect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( transform() ) );
+	disconnect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( transform() ) );
+
 	int objcount = m_view->part()->document().selection()->objects().count();
 	if ( objcount>0 )
 	{
@@ -95,6 +102,18 @@ VTransformDocker::update()
 		m_height->setValue(0.0);
 		mainWidget->setEnabled( false );
 	}
+
+	connect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( transform() ) );
+	connect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( transform() ) );
+	connect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( transform() ) );
+	connect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( transform() ) );
+}
+
+void
+VTransformDocker::transform()
+{
+	//FIXME: Needs an apropriate transform command which takes absolute values of object size
+	m_part->repaintAllViews( true );
 }
 
 #include "vtransformdocker.moc"
