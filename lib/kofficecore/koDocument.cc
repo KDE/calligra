@@ -17,15 +17,12 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <fstream>
-
 #include <koDocument.h>
 #include <KoDocumentIface.h>
 #include <koDocumentChild.h>
 #include <koView.h>
 #include <koApplication.h>
 #include <koMainWindow.h>
-#include <koStream.h>
 #include <koStoreDevice.h>
 #include <koQueryTrader.h>
 #include <koFilterManager.h>
