@@ -44,6 +44,7 @@ public:
 
 	// delete selected vobjects from all vlayers:
 	void deleteObjects( QPtrList<VObject> &list );
+	void undeleteObjects( QPtrList<VObject> &list );
 
 	// insert a command into the undo/redo-history:
 	void addCommand( VCommand* cmd );

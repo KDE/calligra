@@ -20,6 +20,9 @@ public:
 	void draw( QPainter& painter );
 
 	void addObject( const VObject* object );
+	void removeObject( const VObject* object );
+	void deleteObjects( QPtrList<VObject> &objects );
+	void undeleteObjects( QPtrList<VObject> &objects );
 	void reset();
 
 	// read-only access to objects:

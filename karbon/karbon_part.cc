@@ -170,9 +170,16 @@ void
 KarbonPart::deleteObjects( QPtrList<VObject> &list )
 {
 	// delete selected objects from all layers
-	QPtrListIterator<VLayer> itr( m_layers );
+	/*QPtrListIterator<VLayer> itr( m_layers );
 	for ( ; itr.current() ; ++itr )
-		itr.current()->deleteObjects( list );
+		itr.current()->deleteObjects( list );*/
+	m_handle->deleteObjects( list );
+}
+
+void
+KarbonPart::undeleteObjects( QPtrList<VObject> &list )
+{
+	m_handle->undeleteObjects( list );
 }
 
 void

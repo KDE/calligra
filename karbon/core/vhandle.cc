@@ -59,6 +59,35 @@ VHandle::addObject( const VObject* object )
 }
 
 void
+VHandle::removeObject( const VObject* object )
+{
+	m_objects.remove( object );
+}
+
+void
+VHandle::deleteObjects( QPtrList<VObject> &objects )
+{
+	QPtrListIterator<VObject> itr = m_objects;
+	for ( ; itr.current() ; ++itr )
+		itr.current()->setState( VObject::deleted );
+
+	objects = m_objects;
+	m_bbox = QRect();
+	reset();
+}
+
+void
+VHandle::undeleteObjects( QPtrList<VObject> &objects )
+{
+	QPtrListIterator<VObject> itr = objects;
+	for ( ; itr.current() ; ++itr )
+	{
+		itr.current()->setState( VObject::normal );
+		addObject( itr.current() );
+	}
+}
+
+void
 VHandle::reset()
 {
 	m_objects.clear();

@@ -97,6 +97,7 @@ VMToolSelect::createCmd( const QPoint& p, double d1, double d2 )
 	else
 	{
 		// we dont want select to be undoable
+		part()->unselectObjects();
 		VMCmdSelect cmd( part(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
 		cmd.execute();
 		return 0L;
