@@ -59,7 +59,7 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, QWidget *p, const char *n)
     m_generalTab = new KPTTaskGeneralPanelBase(page);
     topLayout->addWidget(m_generalTab);
     
-    page = addPage(i18n("&Notes"));
+    page = addPage(i18n("&Resources"));
     topLayout = new QVBoxLayout(page, 0, spacingHint());
     m_resourcesTab = new KPTRequestResourcesPanel(page, task);
     topLayout->addWidget(m_resourcesTab);
