@@ -1081,20 +1081,24 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
     //ooimpress save it as this line.
     //<config:config-item config:name="SnapLinesDrawing" config:type="string">H2260V14397H7693H12415H15345H1424</config:config-item>
     QString helpLineOasis;
-    //save in pixel
+    //save in mm as in oo
     for(QValueList<double>::Iterator it = m_vertHelplines.begin(); it != m_vertHelplines.end(); ++it)
     {
-        helpLineOasis+="V"+QString::number( zoomHandler()->zoomItX( *it ) );
+        int tmpX = ( int ) ( KoUnit::toMM( *it  )*100 );
+        helpLineOasis+="V"+QString::number( tmpX );
     }
 
     for(QValueList<double>::Iterator it = m_horizHelplines.begin(); it != m_horizHelplines.end(); ++it)
     {
-        helpLineOasis+="H"+QString::number( zoomHandler()->zoomItY(*it ) );
+        int tmpY = ( int ) ( KoUnit::toMM( *it  )*100 );
+        helpLineOasis+="H"+QString::number( tmpY );
     }
     for(QValueList<KoPoint>::Iterator it = m_helpPoints.begin(); it != m_helpPoints.end(); ++it)
     {
         QString str( "P%1,%2" );
-        helpLineOasis+=str.arg( QString::number( zoomHandler()->zoomItX(( *it ).x() ) ) ).arg( QString::number( zoomHandler()->zoomItX(( *it ).y() ) ) );
+        int tmpX = ( int ) ( KoUnit::toMM( ( *it ).x()  )*100 );
+        int tmpY = ( int ) ( KoUnit::toMM( ( *it ).y()  )*100 );
+        helpLineOasis+=str.arg( QString::number( tmpX ) ).arg( QString::number( tmpY ) );
     }
     if ( !helpLineOasis.isEmpty() )
     {
@@ -1129,6 +1133,8 @@ void KPresenterDoc::loadOasisSettings()
 
 void KPresenterDoc::parseOasisHelpLine( const QString &text )
 {
+
+    //FIXME : test it for the moment we doesn't reload it
     QString str;
     int newPos = text.length()-1; //start to element = 1
     for ( int pos = text.length()-1; pos >=0;--pos )
@@ -1137,21 +1143,42 @@ void KPresenterDoc::parseOasisHelpLine( const QString &text )
         {
             //point
             str = text.mid( pos+1, ( newPos-pos ) );
-            kdDebug()<<" point elemetn !!!!!!!!!!!!!!!!! :"<< str <<endl;
+            kdDebug()<<" point element  :"<< str <<endl;
+            QStringList listVal = QStringList::split( ",", str );
+            int posX = ( listVal[0].toInt()/100 );
+            int posY = ( listVal[1].toInt()/100 );
+            QString pt_x;
+            QString pt_y;
+            pt_x.setNum(posX);
+            pt_x+="mm";
+            pt_y.setNum(posY);
+            pt_y+="mm";
+            m_helpPoints.append( KoPoint( KoUnit::parseValue(pt_x), KoUnit::parseValue(pt_y)));
             newPos = pos-1;
         }
         else if ( text[pos]=='V' )
         {
             //vertical element
             str = text.mid( pos+1, ( newPos-pos ) );
-            kdDebug()<<" vertical !!!!!!!!!!!!!!!!! :"<< str <<endl;
+            kdDebug()<<" vertical  :"<< str <<endl;
+            int posX = ( str.toInt()/100 );
+            QString pt_x;
+            pt_x.setNum(posX);
+            pt_x+="mm";
+            m_vertHelplines.append( KoUnit::parseValue(pt_x) );
             newPos = pos-1;
         }
         else if ( text[pos]=='H' )
         {
             //horizontal element
             str = text.mid( pos+1, ( newPos-pos ) );
-            kdDebug()<<" horizontal !!!!!!!!!!!!!!!!! :"<< str <<endl;
+            kdDebug()<<" horizontal  :"<< str <<endl;
+
+            int posY = ( str.toInt()/100 );
+            QString pt_y;
+            pt_y.setNum(posY);
+            pt_y+="mm";
+            m_horizHelplines.append( KoUnit::parseValue(pt_y) );
             newPos = pos-1;
         }
     }
