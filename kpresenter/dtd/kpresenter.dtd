@@ -593,7 +593,9 @@
 <!ATTLIST Point point_x NMTOKEN #REQUIRED
                 point_y NMTOKEN #REQUIRED>
 
-<!ELEMENT HELPLINES (Vertical+ Horizontal+) >
+<!ELEMENT HELPLINES (Vertical+ Horizontal+ HelpPoint+) >
 <!ATTLIST HELPLINES show NMTOKEN #REQUIRED >
 <!ELEMENT Vertical value NMTOKEN #REQUIRED >
 <!ELEMENT Horizontal value NMTOKEN #REQUIRED >
+<!ELEMENT HelpPoint posX NMTOKEN #REQUIRED 
+                    posY NMTOKEN #REQUIRED>
