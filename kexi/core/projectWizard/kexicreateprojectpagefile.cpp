@@ -27,7 +27,7 @@ Boston, MA 02111-1307, USA.
 
 #include <kinstance.h>
 #include <kglobal.h>
-#include <koApplication.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kurlrequester.h>
 #include <kdialog.h>

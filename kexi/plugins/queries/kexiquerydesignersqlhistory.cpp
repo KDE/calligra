@@ -27,7 +27,7 @@
 #include <qregexp.h>
 #include <kglobalsettings.h>
 
-#include <koApplication.h>
+#include <kapplication.h>
 
 #include "kexiquerydesignersqlhistory.h"
 

@@ -24,7 +24,6 @@
 #include <qregexp.h>
 
 #include <kdebug.h>
-#include <koStore.h>
 #include <kmessagebox.h>
 
 #include "kexiquerypartitem.h"

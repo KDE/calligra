@@ -32,7 +32,6 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <koStore.h>
 
 #include <kexidb/connectiondata.h>
 #include <kexidb/drivermanager.h>
