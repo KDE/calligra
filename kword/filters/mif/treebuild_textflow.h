@@ -32,15 +32,51 @@ private:
 	string _value;
 };
 
+
+class TFLineSpacing
+{
+public:
+	TFLineSpacing( double );
+
+private:
+	double _value;
+};
+
+
+class TFSynchronized
+{
+public:
+	TFSynchronized( const char* );
+
+private:
+	bool _value;
+};
+
+
+class TFMinHangHeight
+{
+public:
+	TFMinHangHeight( double );
+
+private:
+	double _value;
+};
+
+
 class TextFlowElement
 {
 public:
-	enum TextFlowElementType { T_Notes, T_Para, T_TFTag, T_TFAutoConnect };
+	enum TextFlowElementType { T_Notes, T_Para, T_TFTag, T_TFAutoConnect,
+							   T_TFSynchronized, T_TFLineSpacing,
+							   T_TFMinHangHeight };
 
 	TextFlowElement( Notes* element );
 	TextFlowElement( Para* element );
 	TextFlowElement( TFTag* element );
 	TextFlowElement( TFAutoConnect* element );
+	TextFlowElement( TFSynchronized* element );
+	TextFlowElement( TFLineSpacing* element );
+	TextFlowElement( TFMinHangHeight* element );
 
 	TextFlowElementType type() const { return _type; }
 	Notes* notes() const { return _type == T_Notes ? _notes : 0; }
@@ -48,6 +84,13 @@ public:
 	TFTag* tftag() const { return _type == T_TFTag ? _tftag : 0; }
 	TFAutoConnect* tfautoconnect() const { return _type == T_TFAutoConnect ?
 											   _tfautoconnect : 0; }
+	TFSynchronized* tfsynchronized() const { return _type == T_TFSynchronized
+												 ? _tfsynchronized : 0; }
+	TFLineSpacing* tflinespacing() const { return _type == T_TFLineSpacing ?
+											   _tflinespacing : 0; }
+	TFMinHangHeight* tfminhangheight() const { return _type ==
+												   T_TFMinHangHeight ?
+												   _tfminhangheight : 0; }
 
 private:
 	TextFlowElementType _type;
@@ -56,6 +99,9 @@ private:
 		Para* _para;
 		TFTag* _tftag;
 		TFAutoConnect* _tfautoconnect;
+		TFSynchronized* _tfsynchronized;
+		TFLineSpacing* _tflinespacing;
+		TFMinHangHeight* _tfminhangheight;
 	};
 };
 

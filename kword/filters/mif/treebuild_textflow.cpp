@@ -46,6 +46,28 @@ TextFlowElement::TextFlowElement(TFAutoConnect * element)
 }
 
 
+TextFlowElement::TextFlowElement( TFSynchronized* element )
+{
+	_type = T_TFSynchronized;
+	_tfsynchronized = element;
+}
+
+
+TextFlowElement::TextFlowElement( TFMinHangHeight* element )
+{
+	_type = T_TFMinHangHeight;
+	_tfminhangheight = element;
+}
+
+
+TextFlowElement::TextFlowElement( TFLineSpacing* element )
+{
+	_type = T_TFLineSpacing;
+	_tflinespacing = element;
+}
+
+
+
 TFTag::TFTag(char const * value) 
 {
 	_value = value;
@@ -56,5 +78,27 @@ TFAutoConnect::TFAutoConnect(char const * value)
 {
 	_value = value;
 }
+
+
+TFLineSpacing::TFLineSpacing( double value )
+{
+	_value = value;
+}
+
+
+TFMinHangHeight::TFMinHangHeight( double value )
+{
+	_value = value;
+}
+
+
+TFSynchronized::TFSynchronized( const char* value )
+{
+	if( strcmp( value, "Yes" ) == 0 )
+		_value = true;
+	else
+		_value = false;
+}
+
 
 

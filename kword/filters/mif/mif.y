@@ -32,6 +32,9 @@ void warning( char*s, char* t );
 	MCurrPage* mif_mcurrpage;
 	TFTag* mif_tftag;
 	TFAutoConnect* mif_tfautoconnect;
+	TFSynchronized* mif_tfsynchronized;
+	TFLineSpacing* mif_tflinespacing;
+	TFMinHangHeight* mif_tfminhangheight;
 	String* mif_string;
 	Char* mif_char;
 	TextRectID* mif_textrectid;
@@ -258,6 +261,7 @@ void warning( char*s, char* t );
 %token <cmd> DACROBATPARAGRAPHBOOKMARKS
 %token <cmd> DASHEDPATTERN 
 %token <cmd> DASHEDSTYLE
+%token <cmd> DASHSEGMENT
 %token <cmd> DAUTOCHBARS 
 %token <cmd> DBORDERSON 
 %token <cmd> DCHBARCOLOR 
@@ -434,6 +438,7 @@ void warning( char*s, char* t );
 %token <cmd> NSOFFSET 
 %token <cmd> NUMCOUNTER
 %token <cmd> NUMPOINTS
+%token <cmd> NUMSEGMENTS
 %token <cmd> OBCOLOR 
 %token <cmd> OKWORD
 %token <cmd> PAGE 
@@ -588,6 +593,9 @@ void warning( char*s, char* t );
 %token <cmd> TEXTFLOW
 %token <cmd> TEXTLINE
 %token <cmd> TEXTRECT 
+%token <cmd> TFLINESPACING
+%token <cmd> TFMINHANGHEIGHT
+%token <cmd> TFSYNCHRONIZED
 %token <cmd> TIPANGLE
 %token <cmd> TLALIGNMENT
 %token <cmd> TLORIGIN
@@ -738,6 +746,9 @@ void warning( char*s, char* t );
 %type <mif_string> tag_string
 %type <mif_tfautoconnect> tag_tfautoconnect
 %type <mif_tftag> tag_tftag
+%type <mif_tfsynchronized> tag_tfsynchronized
+%type <mif_tflinespacing> tag_tflinespacing
+%type <mif_tfminhangheight> tag_tfminhangheight
 %type <mif_tsdecimalchar> tag_tsdecimalchar
 %type <mif_tsleaderstr> tag_tsleaderstr
 %type <mif_tstype> tag_tstype
@@ -2705,11 +2716,29 @@ tag_separation:	'<' SEPARATION INTEGER '>'
 tag_obcolor:	'<' OBCOLOR SQSTRING '>'
 ;
 
-tag_dashedpattern:		'<' DASHEDPATTERN tag_dashedstyle '>'
+tag_dashedpattern:		'<' DASHEDPATTERN dashedpattern_elements '>'
 ;
+
+dashedpattern_elements: dashedpattern_element
+					|	dashedpattern_elements dashedpattern_element
+;
+
+dashedpattern_element:	tag_dashedstyle
+					|	tag_numsegments
+					|	tag_dashsegment
+;
+
 
 tag_dashedstyle:		'<' DASHEDSTYLE ID '>'
 ;
+
+
+tag_numsegments:		'<' NUMSEGMENTS INTEGER '>'
+;
+
+tag_dashsegment:		'<' DASHSEGMENT REAL unit '>'
+;
+
 
 tag_angle:		'<' ANGLE REAL '>'
 ;
@@ -3422,6 +3451,12 @@ textflow_element:		tag_notes
 						{ $$ = new TextFlowElement( $1 ); }
 				|		tag_tfautoconnect
 						{ $$ = new TextFlowElement( $1 ); }
+				|		tag_tfsynchronized
+						{ $$ = new TextFlowElement( $1 ); }
+				|		tag_tflinespacing
+						{ $$ = new TextFlowElement( $1 ); }
+				|		tag_tfminhangheight
+						{ $$ = new TextFlowElement( $1 ); }
 ;
 
 tag_tftag:		'<' TFTAG SQSTRING '>'
@@ -3430,6 +3465,18 @@ tag_tftag:		'<' TFTAG SQSTRING '>'
 
 tag_tfautoconnect:		'<' TFAUTOCONNECT ID '>'
 						{ $$ = new TFAutoConnect( $3 ); }
+;
+
+
+tag_tfsynchronized:		'<' TFSYNCHRONIZED ID '>'
+						{ $$ = new TFSynchronized( $3 ); }
+;
+
+tag_tflinespacing:		'<' TFLINESPACING REAL unit '>'
+						{ $$ = new TFLineSpacing( $3 ); }
+
+tag_tfminhangheight:	'<' TFMINHANGHEIGHT REAL unit '>'
+						{ $$ = new TFMinHangHeight( $3 ); }
 ;
 
 
