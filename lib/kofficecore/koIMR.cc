@@ -49,7 +49,7 @@ KOffice::Document_ptr imr_createDoc( const char *_server_name, const char *_repo
     return 0L;
   }
   
-  cerr << "1" << endl;
+  kdebug( KDEBUG_INFO, 30003, "1" );
   
   KOffice::DocumentFactory_var factory = KOffice::DocumentFactory::_narrow( obj );
   if( CORBA::is_nil( factory ) )
@@ -60,7 +60,7 @@ KOffice::Document_ptr imr_createDoc( const char *_server_name, const char *_repo
     return 0L;
   }
 
-  cerr << "2" << endl;
+  kdebug( KDEBUG_INFO, 30003, "2" );
 
   KOffice::Document_ptr doc = factory->create();
   if( CORBA::is_nil( doc ) )
@@ -71,7 +71,7 @@ KOffice::Document_ptr imr_createDoc( const char *_server_name, const char *_repo
     return 0L;
   }
 
-  cerr << "3" << endl;
+  kdebug( KDEBUG_INFO, 30003, "3" );
 
   return doc;
 }

@@ -31,7 +31,6 @@ class KoDocumentChildPicture;
 
 #include <vector>
 #include <string>
-#include <iostream.h>
 
 #include <qrect.h>
 #include <qpicture.h>
@@ -104,13 +103,13 @@ protected:
    *                       or a @ref istringstream.
    *  @param _store        Pointer to a Store object. May be 0L.
    */
-  virtual bool loadBinary( istream& , bool , KOStore::Store_ptr  )
-  { cerr << "KoDocument::loadBinary not implemented" << endl; return false; };
+  virtual bool loadBinary( istream& _stream, bool _randomaccess, KOStore::Store_ptr _store )
+  { kdebug( KDEBUG_ERROR, 30003, "KoDocument::loadBinary not implemented" ); return false; };
   /**
    *  This function loads a XML document. It is called by @ref KoDocument#load.
    */
   virtual bool loadXML( KOMLParser&, KOStore::Store_ptr  )
-  { cerr << "KoDocument::loadXML not implemented" << endl; return false; };
+  { kdebug( KDEBUG_ERROR, 30003, "KoDocument::loadXML not implemented" ); return false; };
   /**
    *  You need to overload this function if your document may contain
    *  embedded documents. This function is called to load embedded documents.
@@ -148,7 +147,7 @@ protected:
    *  Saves only an OBJECT tag for this document.
    */
   virtual bool save( ostream& , const char * )
-  { cerr << "KoDocument::save not implemented" << endl; return false; };
+  { kdebug( KDEBUG_ERROR, 30003, "KoDocument::save not implemented" ); return false; };
   /**
    *  Usually you dont want to overload this function. It saves all
    *  children which have been registered due to @ref #makeChildListIntern.

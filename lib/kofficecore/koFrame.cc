@@ -23,8 +23,7 @@
 #include <qpainter.h>
 #include <qbrush.h>
 
-// HACK for debugging
-#include <iostream.h>
+#include <kdebug.h>
 
 KoFrame::KoFrame( QWidget *_parent, const char *_name ) :
   OPFrame( _parent, _name ), KOffice::Frame_skel()
@@ -281,7 +280,7 @@ void KoFrame::mousePressEvent( QMouseEvent *_ev )
   /** Experimental code that deal with attaching QPicture as stubs for the real part
   if ( _ev->button() == LeftButton && CORBA::is_nil( m_rPart ) && m_eState == KOffice::View::Marked )
   {
-    cout << "Please activate me" << endl;
+    kdebug( KDEBUG_INFO, 30003, "Please activate me" );
     partChangedState( KOffice::View::Active );
     emit sig_attachPart( this );
   }

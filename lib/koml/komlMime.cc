@@ -17,11 +17,13 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#include "komlMime.h"
-
 #include <string.h>
 #include <assert.h>
 #include <ctype.h>
+
+#include <kdebug.h>
+
+#include "komlMime.h"
 
 void Base64::encode( char *_dest, unsigned char c1, unsigned char c2, unsigned char c3, int _len )
 {
@@ -103,7 +105,7 @@ int Base64DecodeBuffer::underflow()
 
     if ( m_in.eof() )
     {
-      cerr << "Unexpected end of input" << endl;
+      kdebug( KDEBUG_ERROR, 30001, "Unexpected end of input" );
       m_bEnd = true;
     }
     
@@ -134,13 +136,13 @@ int Base64DecodeBuffer::underflow()
       buf[ got ] = c;
       if ( c == '=' )
       {
-	cout << "END OF BASE64" << endl;
+	kdebug( KDEBUG_INFO, 30001, "END OF BASE64" );
 	
 	if ( got % 4 == 2 )
 	{
 	  if ( m_in.eof() )
 	  {
-	    cerr << "Unexpected EOF" << endl;
+	    kdebug( KDEBUG_ERROR, 30001, "Unexpected EOF" );
 	    delete [] buf;
 	    return EOF;
 	  }
@@ -148,7 +150,7 @@ int Base64DecodeBuffer::underflow()
 	  c = m_in.get();
 	  if ( c != '=' )
 	  {
-	    cerr << "Not correct base64" << endl;
+	    kdebug( KDEBUG_ERROR, 30001, "Not correct base64" );
 	    delete [] buf;
 	    return EOF;
 	  }
@@ -162,7 +164,7 @@ int Base64DecodeBuffer::underflow()
 	}
 	else 
 	{
-	  cerr << "Unexpected =" << endl;
+	  kdebug( KDEBUG_ERROR, 30001, "Unexpected =" );
 	  delete [] buf;
 	  return EOF;
 	}
@@ -173,7 +175,7 @@ int Base64DecodeBuffer::underflow()
     
     if( got % 4 != 0 )
     {
-      cerr << "Unexpected EOF 2" << endl;
+      kdebug( KDEBUG_ERROR, 30001, "Unexpected EOF 2" );
       delete [] buf;
       return EOF;
     }

@@ -20,12 +20,13 @@
 #ifndef __koStore_impl_h__
 #define __koStore_impl_h__
 
-#include "koStore_idl.h"
-
-#include <iostream>
 #include <fstream>
 #include <map>
 #include <string>
+
+#include <kdebug.h>
+
+#include "koStore_idl.h"
 
 class KoStore : public KOStore::Store_skel
 {
@@ -179,7 +180,7 @@ public:
    */
   istorestreambuffer( KoStore* _store ) : m_pStore( _store )
   {
-    cerr << "Pointer constructor" << endl;
+    kdebug( KDEBUG_INFO, 30002, "Pointer constructor" );
     setg (puffer+4,     // Putback-Anfang
 	  puffer+4,     // Leseposition
 	  puffer+4);    // Puffer-Ende
@@ -188,7 +189,7 @@ public:
   {
     m_vStore = KOStore::Store::_duplicate( _store );
     
-    cerr << "Var constructor" << endl;
+    kdebug( KDEBUG_INFO, 30002, "Var constructor" );
     setg (puffer+4,     // Putback-Anfang
 	  puffer+4,     // Leseposition
 	  puffer+4);    // Puffer-Ende

@@ -292,8 +292,8 @@ CORBA::Boolean KoMainWindowIf::partClicked( OpenParts::Id _part_id, CORBA::Long 
   part = findPart( _part_id );
   if( CORBA::is_nil( part ) )
   {
-    cerr << "ERROR: void OPMainWindowIf::setActivePart( OpenParts::Id _id )" << endl;
-    cerr << "       id " << _part_id << " is unknown" << endl;
+    kdebug( KDEBUG_ERROR, 30003, "ERROR: void OPMainWindowIf::setActivePart( OpenParts::Id _id )" );
+    kdebug( KDEBUG_ERROR, 30003, "       id %i is unknown", _part_id );
     return false;
   }
 

@@ -20,9 +20,10 @@
 #include "koPrintExt.h"
 
 #include <strstream>
-#include <komlMime.h>
 
-#include <iostream>
+#include <kdebug.h>
+
+#include <komlMime.h>
 
 KoPrintExt::KoPrintExt()
 {
@@ -69,7 +70,7 @@ void KoPrintExt::draw( CORBA::Long _width, CORBA::Long _height, CORBA::Float _sc
   QPicture *p = picture();
   // Paint to it
   draw( p, _width, _height, _scale );
-  cout << "QPicture has " << p->size() << " bytes" << endl;
+  kdebug( KDEBUG_INFO, 30003, "QPicture has %i bytes", p->size() );
 }
 
 

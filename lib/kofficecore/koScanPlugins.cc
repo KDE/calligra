@@ -354,7 +354,7 @@ KOM::Plugin_ptr KoPluginProxy::ref()
 
   const char *repoid = m_pEntry->repoID().current();
   assert( repoid );
-  cerr << "Creating " << repoid << endl;
+  kdebug( KDEBUG_INFO, 30003, "Creating %c", repoid );
   CORBA::Object_var obj = imr_activate( m_pEntry->name(), repoid );
   // CORBA::Object_var obj = imr_activate( m_pEntry->name(), "IDL:KOM/PluginFactory:1.0" );
   if ( CORBA::is_nil( obj ) )
@@ -365,7 +365,7 @@ KOM::Plugin_ptr KoPluginProxy::ref()
     return 0L;
   }
 
-  cerr << "Got factory" << endl;
+  kdebug( KDEBUG_INFO, 30003, "Got factory" );
 
   KOM::PluginFactory_var factory = KOM::PluginFactory::_narrow( obj );
   if ( CORBA::is_nil( factory ) )
@@ -376,7 +376,7 @@ KOM::Plugin_ptr KoPluginProxy::ref()
     return 0L;
   }
 
-  cerr << "Narrow ok" << endl;
+  kdebug( KDEBUG_INFO, 30003, "Narrow ok" );
 
   KOM::Component_var comp = m_pManager->view();
   m_vPlugin = factory->create( comp );
@@ -388,7 +388,7 @@ KOM::Plugin_ptr KoPluginProxy::ref()
     return 0L;
   }
 
-  cerr << "Plugin ok" << endl;
+  kdebug( KDEBUG_INFO, 30003, "Plugin ok" );
 
   return KOM::Plugin::_duplicate( m_vPlugin );
 }

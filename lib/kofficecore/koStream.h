@@ -22,7 +22,7 @@
 
 #include <unistd.h>
 #include <config.h>
-#include <iostream.h>
+//#include <iostream.h>
 #ifdef HAVE_MINI_STL
 #include <ministl/vector.h>
 #else
@@ -39,8 +39,6 @@
 
 class QImage;
 class QPicture;
-
-#include <iostream.h>
 
 ostream& operator<< ( ostream& outs, const QRect &_rect );
 QRect tagToRect( vector<KOMLAttrib>& _attribs );

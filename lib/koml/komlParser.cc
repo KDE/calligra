@@ -18,12 +18,13 @@
 */
 
 #include <ctype.h>
-#include <iostream.h>
-
-#include "komlParser.h"
 
 #include <qstring.h>
 #include <qregexp.h>
+
+#include <kdebug.h>
+
+#include "komlParser.h"
 
 #define PULL if ( m_iPos == m_iLen ) { if ( !pull() ) return false; }
 
@@ -344,7 +345,7 @@ bool KOMLParser::close( string& _tag, bool _emit )
     return true;
   }
 
-  // cerr << "... Closing '" << m_vecStack.back() << "'" << endl;
+  kdebug( KDEBUG_ERROR, 30001, "... Closing '%c'", m_vecStack.back().c_str() );
 
   if ( _emit )
   {
@@ -401,7 +402,7 @@ bool KOMLParser::close( string& _tag, bool _emit )
 	  tmp.assign( m_pData, prev );
 	else
 	  tmp.assign( m_pData + m_iEmitStart, prev - m_iEmitStart );
-	// cerr << "EL:" << tmp << endl;	
+	kdebug( KDEBUG_ERROR, 30001, "EL: %c", tmp.c_str() );	
       }
 
       END_EMIT;
@@ -424,11 +425,10 @@ void KOMLParser::free( KOMLData* _data )
 
   if ( m_iEmitStart != -1 )
   {
-    // cerr << "EF:" << _data->data() + m_iEmitStart << endl;
+    kdebug( KDEBUG_ERROR, 30001, "EF: %i %i", _data->data(), m_iEmitStart );
     m_iEmitStart = -1;
   }
-  // else
-  // cerr << "E:" << _data->data() << endl;
+  else kdebug( KDEBUG_ERROR, 30001, "E: %i", _data->data() );
 
   m_pFeed->free( _data );
 }

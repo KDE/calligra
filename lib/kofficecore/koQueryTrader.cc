@@ -30,11 +30,11 @@
 #include <kapp.h>
 #include <opApplication.h>
 #include <k2config.h>
+#include <kdebug.h>
 
 #include <string>
 #include <list>
 #include <string.h>
-#include <iostream>
 #include <sys/stat.h>
 
 /*******************************************************************
@@ -267,9 +267,9 @@ void koQueryTrader( const char *_service_type, const char *_constr, unsigned int
    * DEBUG
    ****/
   /* if ( offers != 0L )
-    cout << "Got " <<  offers->length() << " results" << endl;
+    kdebug( KDEBUG_INFO, 30003, "Got %i results", offers->length() );
   else
-    cout << "Got no results" << endl;
+    kdebug( KDEBUG_INFO, 30003, "Got no results" );
 
   int max = offers->length();
   int i;
@@ -277,20 +277,16 @@ void koQueryTrader( const char *_service_type, const char *_constr, unsigned int
   {
     CosTrading::PropertySeq &p = (*offers)[i].properties;
     int max2 = p.length();
-    cout << max2 << " Properties" << endl;
+    kdebug( KDEBUG_INFO, 30003, "%i Properties", max2 );
     int j;
     for( j = 0; j < max2; j++ )
     {
-      cout << "Property " << (const char*)p[j].name << " = ";
       char *s;
       if ( p[j].value >>= s )
       {  
-	cout << (const char*)s;
-	cout << endl;
+	kdebug( KDEBUG_INFO, 30003, "Property %c = %c", (const char*) p[ j ].name, (const char*) s );
 	CORBA::string_free( s );
       }
-      else
-	cout << endl;
     }
     } */
   /***
@@ -423,9 +419,9 @@ vector<KoDocumentEntry> koQueryDocuments( const char *_constr, int _count )
 
   // DEBUG
   if ( offers->length() != 0 )
-    cout << "Got " <<  offers->length() << " results" << endl;
+    kdebug( KDEBUG_INFO, 30003, "Got %i results", offers->length() );
   else
-    cout << "Got no results" << endl;
+    kdebug( KDEBUG_INFO, 30003, "Got no results" );
   // END DEBUG
 
   lst.reserve( offers->length() );
@@ -517,9 +513,9 @@ vector<KoFilterEntry> koQueryFilters( const char *_constr, int _count )
 
   // DEBUG
   if ( offers->length() != 0 )
-    cout << "Got " <<  offers->length() << " results" << endl;
+    kdebug( KDEBUG_INFO, 30003, "Got %i results", offers->length() );
   else
-    cout << "Got no results" << endl;
+    kdebug( KDEBUG_INFO, 30003, "Got no results" );
   // END DEBUG
 
   lst.reserve( offers->length() );

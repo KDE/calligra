@@ -20,7 +20,7 @@
 #include "koView.h"
 #include "koDocument.h"
 
-#include <iostream>
+#include <kdebug.h>
 
 KoViewIf::KoViewIf( KoDocument* _doc ) : OPViewIf( _doc )
 {
@@ -41,8 +41,8 @@ void KoViewIf::setMainWindow( OpenParts::MainWindow_ptr _main )
   m_vKoMainWindow = KOffice::MainWindow::_narrow( _main );
   if ( CORBA::is_nil( m_vKoMainWindow ) )
   {
-    cerr << "You must NOT combine KOffice Views with an OpenParts MainWindow." << endl
-	 << "Please use KoMainWindow." << endl;
+    kdebug( KDEBUG_ERROR, 30003, "You must NOT combine KOffice Views with an OpenParts MainWindow." );
+	kdebug( KDEBUG_ERROR, 30003, "Please use KoMainWindow." );
     return;
   }
   

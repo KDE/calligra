@@ -27,13 +27,13 @@
 #include <kregfactories.h>
 #include <kmimetypes.h>
 #include <kmimemagic.h>
+#include <kdebug.h>
 
 #include <qmsgbox.h>
 #include <qstringlist.h>
 
 #include <assert.h>
 #include <string.h>
-#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -147,17 +147,17 @@ QString KoFilterManager::import( const char* _url, const char *_native_format )
   KMimeType *t = KMimeType::findByURL( url, 0, url.isLocalFile() );
   QString mimeType;
   if (t) {
-    cerr << "######### FOUND MimeType " << t->mimeType().ascii() << endl;
+    kdebug( KDEBUG_INFO, 30003, "######### FOUND MimeType %c", t->mimeType().ascii() );
     mimeType = t->mimeType();
   }
   else {
-    cerr << "####### No MimeType found. findByURL returned 0. Setting text/plain" << endl;
+    kdebug( KDEBUG_INFO, 30003, "####### No MimeType found. findByURL returned 0. Setting text/plain" );
     mimeType = "text/plain";
   }
 
   if ( (strcmp( mimeType, _native_format ) == 0) )
   {
-    cerr << "strcmp( mimeType, _native_format ) == 0 !! Returning without conversion. " << endl;
+    kdebug( KDEBUG_INFO, 30003, "strcmp( mimeType, _native_format ) == 0 !! Returning without conversion. " );
     // TODO: fetch remote file!
     assert( url.isLocalFile() );
 
