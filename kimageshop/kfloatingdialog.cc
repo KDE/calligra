@@ -56,21 +56,21 @@ KFloatingDialog::KFloatingDialog(QWidget *parent, const char* name) : QFrame(par
   setLineWidth(FRAMEBORDER);
 
   m_pCloseButton = new QPushButton(this);
-  QPixmap close_pm(locate("data", "kimageshop/pics/close.xpm"));
+  QPixmap close_pm(locate("appdata", "pics/close.xpm"));
   m_pCloseButton->setPixmap(close_pm);
   m_pCloseButton->setStyle(new QWindowsStyle);
   m_pCloseButton->setGeometry(width()-FRAMEBORDER-13, FRAMEBORDER+1, 12, 12);
   connect(m_pCloseButton, SIGNAL(clicked()), this, SLOT(slotClose()));
 
   m_pMinButton = new QPushButton(this);
-  QPixmap min_pm(locate("data", "kimageshop/pics/minimize.xpm"));
+  QPixmap min_pm(locate("appdata", "pics/minimize.xpm"));
   m_pMinButton->setPixmap(min_pm);
   m_pMinButton->setStyle(new QWindowsStyle);
   m_pMinButton->setGeometry(width()-FRAMEBORDER-26, FRAMEBORDER+1, 12, 12);
   connect(m_pMinButton, SIGNAL(clicked()), this, SLOT(slotMinimize()));
 
   m_pDockButton = new QPushButton(this);
-  QPixmap dock_pm(locate("data", "kimageshop/pics/dock.xpm"));
+  QPixmap dock_pm(locate("appdata", "pics/dock.xpm"));
   m_pDockButton->setPixmap(dock_pm);
   m_pDockButton->setStyle(new QWindowsStyle);
   m_pDockButton->setGeometry(width()-FRAMEBORDER-39, FRAMEBORDER+1, 12, 12);

@@ -360,7 +360,7 @@ void KImageShopView::createGUI()
   m_pTool = m_pMoveTool;
 
   // create a default brush
-  QString _image = locate("data", "kimageshop/brushes/brush.jpg");
+  QString _image = locate("appdata", "brushes/brush.jpg");
   m_pBrush = new Brush(_image);
   m_pBrush->setHotSpot(QPoint(25,25));
   
@@ -614,7 +614,7 @@ void KImageShopView::slotActivateBrushTool()
   if (!m_pBrush)
     {
       // we have no brush -> create a default one
-      QString _image = locate("data", "kimageshop/brushes/brush.jpg");
+      QString _image = locate("appdata", "brushes/brush.jpg");
       m_pBrush = new Brush(_image);
       m_pBrush->setHotSpot(QPoint(25,25));
     }
