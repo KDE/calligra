@@ -68,7 +68,6 @@
 #include <kfiledialog.h>
 
 #include <koView.h>
-#include <koIMR.h>
 #include <koTemplateChooseDia.h>
 #include <koRuler.h>
 
@@ -1340,7 +1339,7 @@ void KPresenterDoc::removeView( KPresenterView *_view )
 /*========================= insert an object =====================*/
 void KPresenterDoc::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _diffx, int _diffy )
 {
-    KOffice::Document_var doc = imr_createDoc( _e );
+    KOffice::Document_var doc = _e.createDoc();
     if ( CORBA::is_nil( doc ) )
         return;
 

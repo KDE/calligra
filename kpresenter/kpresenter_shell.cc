@@ -113,7 +113,7 @@ void KPresenterShell::setDocument( KPresenterDoc *_doc )
 
     m_pDoc = _doc;
     m_pDoc->_ref();
-    m_pView = _doc->createPresenterView( getFrame() );
+    m_pView = _doc->createPresenterView( frame() );
     m_pView->setShell( this );
     m_pView->incRef();
     m_pView->setMode( KOffice::View::RootMode );
@@ -154,7 +154,7 @@ bool KPresenterShell::newDocument()
         return false;
     }
 
-    m_pView = m_pDoc->createPresenterView( getFrame() );
+    m_pView = m_pDoc->createPresenterView( frame() );
     m_pView->setShell( this );
     m_pView->incRef();
     m_pView->setMode( KOffice::View::RootMode );
@@ -204,7 +204,7 @@ bool KPresenterShell::openDocument( const char *_url, const char *_format )
     if ( !m_pDoc->loadFromURL( _url, _format ) )
         return false;
 
-    m_pView = m_pDoc->createPresenterView( getFrame() );
+    m_pView = m_pDoc->createPresenterView( frame() );
     m_pView->setShell( this );
     m_pView->incRef();
     m_pView->setMode( KOffice::View::RootMode );

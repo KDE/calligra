@@ -615,8 +615,8 @@ void KPresenterView::toolsDiagramm()
     page->deSelectAllObj();
     page->setToolEditMode( INS_DIAGRAMM );
 
-    vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KDiagramm/DocumentFactory:1.0#KDiagramm' in RepoIds", 1 );
-    if ( vec.size() == 0 )
+    QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'IDL:KDiagramm/DocumentFactory:1.0#KDiagramm' in RepoIds", 1 );
+    if ( vec.isEmpty() )
     {
         cout << "Got no results" << endl;
         QMessageBox::critical( this, i18n( "Error" ), i18n( "Sorry, no charting component registered" ), i18n( "Ok" ) );
@@ -635,8 +635,8 @@ void KPresenterView::toolsTable()
     page->deSelectAllObj();
     page->setToolEditMode( INS_TABLE );
 
-    vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KSpread/DocumentFactory:1.0#KSpread' in RepoIds", 1 );
-    if ( vec.size() == 0 )
+    QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'IDL:KSpread/DocumentFactory:1.0#KSpread' in RepoIds", 1 );
+    if ( vec.isEmpty() )
     {
         cout << "Got no results" << endl;
         QMessageBox::critical( this, i18n( "Error" ), i18n( "Sorry, no table component registered" ), i18n( "Ok" ) );
@@ -655,8 +655,8 @@ void KPresenterView::toolsFormula()
     page->deSelectAllObj();
     page->setToolEditMode( INS_FORMULA );
 
-    vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KFormula/DocumentFactory:1.0#KFormula' in RepoIds", 1 );
-    if ( vec.size() == 0 )
+    QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'IDL:KFormula/DocumentFactory:1.0#KFormula' in RepoIds", 1 );
+    if ( vec.isEmpty() )
     {
         cout << "Got no results" << endl;
         QMessageBox::critical( this, i18n( "Error" ), i18n( "Sorry, no formula component registered" ), i18n( "Ok" ) );
@@ -4356,7 +4356,7 @@ void KPresenterView::getFonts( QStringList &lst )
 void KPresenterView::sendFocusEvent()
 {
     QFocusEvent e( ( QEvent::Type ) 9 );
-    QApplication::sendEvent( shell->getFrame(), &e );
+    QApplication::sendEvent( shell->frame(), &e );
 }
 
 /*================================================================*/

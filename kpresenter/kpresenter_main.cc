@@ -15,13 +15,9 @@
 #include "kpresenter_main.h"
 #include "kpresenter_main.moc"
 #include "kpresenter_doc.h"
-#include <string.h>
 #include <koFactory.h>
 #include <koDocument.h>
 #include <opAutoLoader.h>
-#include "kpresenter_shell.h"
-#include <koIMR.h>
-#include <koQueryTypes.h>
 #include <kimgio.h>
 
 KOFFICE_DOCUMENT_FACTORY( KPresenterDoc, KPresenterFactory, KPresenter::DocumentFactory_skel )
