@@ -164,7 +164,8 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 					fill.gradient().setOrigin( KoPoint( FILL_TOPX, 10 ) );
 					fill.gradient().setVector( KoPoint( FILL_TOPX, 40 ) );
 				}
-				else if( s.gradient().type() == VGradient::radial )
+				else if( s.gradient().type() == VGradient::radial ||
+						 s.gradient().type() == VGradient::conic )
 				{
 					fill.gradient().setOrigin( KoPoint( FILL_TOPX, 25 ) );
 					fill.gradient().setFocalPoint( KoPoint( FILL_TOPX, 25 ) );
@@ -293,7 +294,8 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 					fill.gradient().setOrigin( KoPoint( 30, 20 ) );
 					fill.gradient().setVector( KoPoint( 30, 50 ) );
 				}
-				else if( f.gradient().type() == VGradient::radial )
+				else if( f.gradient().type() == VGradient::radial ||
+						 f.gradient().type() == VGradient::conic )
 				{
 					fill.gradient().setOrigin( KoPoint( 30, 35 ) );
 					fill.gradient().setFocalPoint( KoPoint( 30, 35 ) );
