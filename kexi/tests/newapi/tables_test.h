@@ -32,6 +32,7 @@ int tablesTest()
 		return 1;
 	}
 	kdDebug() << "-- PERSONS created --" << endl;
+	t_persons->debug();
 
 	if (!conn->insertRecord(*t_persons, QVariant(1), QVariant(27), QVariant("Jaroslaw"), QVariant("Staniek"))
 	  ||!conn->insertRecord(*t_persons, QVariant(2), QVariant(60), QVariant("Lech"), QVariant("Walesa"))

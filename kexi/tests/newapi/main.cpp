@@ -21,9 +21,11 @@
 #include <qguardedptr.h>
 
 #include <kdebug.h>
-#include <kinstance.h>
+#include <kcmdlineargs.h>
 #include <kapplication.h>
+#include <kinstance.h>
 #include <kiconloader.h>
+#include <kaboutdata.h>
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver.h>
@@ -33,6 +35,7 @@
 #include <kexidb/tableschema.h>
 #include <kexidb/queryschema.h>
 #include <kexidb/indexschema.h>
+#include <kexidb/parser/parser.h>
 
 #include <iostream>
 
@@ -46,68 +49,107 @@ int cursor_options = 0;
 
 KexiDB::ConnectionData conn_data;
 QGuardedPtr<KexiDB::Connection> conn;
-KInstance *instance;
-KApplication *app;
+KApplication *app = 0;
+KInstance *instance = 0;
 
-void usage()
+static KCmdLineOptions options[] =
 {
-	kdWarning() << "usage: " << endl;
-	kdWarning() << prgname << " <driver_name> cursors <db_name>" << endl;
-	kdWarning() << "  - test for cursors behaviour" << endl;
-	kdWarning() << prgname << " <driver_name> schema <db_name>" << endl;
-	kdWarning() << "  - test for db schema retrieving" << endl;
-	kdWarning() << prgname << " <driver_name> dbcreation <new_db_name>" << endl;
-	kdWarning() << "  - test for new db creation" << endl;
-	kdWarning() << prgname << " <driver_name> tables <new_db_name>" << endl;
-	kdWarning() << "  - test for tables creation and data inserting" << endl;
-	kdWarning() << prgname << " <driver_name> tableview <db_name>" << endl;
-	kdWarning() << "  - test for KexiDataTableView data-aware widget" << endl;
-	kdWarning() << " Notes:\n 'tables' test, automatically runs 'dbcreation' test.\n" 
+	{ "test <test_name>",
+		"Available tests:\n"
+		"cursors: test for cursors behaviour\n"
+  	"schema: test for db schema retrieving\n"
+  	"dbcreation: test for new db creation\n"
+  	"tables: test for tables creation and data inserting\n"
+  	"tableview: test for KexiDataTableView data-aware widget\n"
+		"parser: test for parsing sql statements,\n"
+		" returns debug string for a given\n"
+		" sql statement or error message", 0},
+	{ "buffered-cursors",
+		"Optional switch :turns cursors used in any tests to be buffered", 0},
+	{ "", " Notes:\n"
+		"All tests require <driver_name>, <db_name>.\n"
+		"Parser test also requires <sql_statement>\n"
+		"'tables' test, automatically runs 'dbcreation' test.\n" 
 		" <new_db_name> is removed if already exists.\n"
-		" <db_name> must be a valid kexi database e.g. created with 'tables' test." 
-		<< endl;
-	kdWarning() << " Optional switches, you can append at the end:\n"
-		" -buffered-cursors -- turns cursors used in any tests to be buffered"
-		<< endl;
-}
+		" <db_name> must be a valid kexi database e.g. created with 'tables' test.", 0},
+  { "+driver_name", "Driver name", 0},
+  { "+db_name", "Database name", 0},
+  { "+[statement]", "Optional SQL statement (for parser test)", 0},
+	KCmdLineLastOption
+};
 
 #include "dbcreation_test.h"
 #include "cursors_test.h"
 #include "schema_test.h"
 #include "tables_test.h"
 #include "tableview_test.h"
+#include "parser_test.h"
 
 #define RETURN(code) \
-	kdWarning()<< test_name << " TEST: " << (code==0?"PASSED":"ERROR") << endl; \
+	kdDebug()<< test_name << " TEST: " << (code==0?"PASSED":"ERROR") << endl; \
 	return code
 
 int main(int argc, char** argv)
 {
-	if (argc<=2) {
+	int minargs = 2;
+	bool gui = false;
+/*	if (argc < minargs) {
 		usage();
 		RETURN(0);
-	}
+	}*/
 	QFileInfo info=QFileInfo(argv[0]);
 	prgname = info.baseName().latin1();
-	drv_name = argv[1];
-	test_name = QString(argv[2]).lower().latin1();
-
+	
+	KCmdLineArgs::init(argc, argv, 
+		new KAboutData( prgname, "KexiDBTest",
+			"0.1.2", "", KAboutData::License_GPL,
+			"(c) 2003-2004, Kexi Team\n"
+			"(c) 2003-2004, OpenOffice Polska Ltd.\n",
+			"",
+			"http://www.koffice.org/kexi",
+			"submit@bugs.kde.org"
+		)
+	);
+//	KCmdLineArgs::init(argc, argv, (const char*)prgname, "KexiDBTest", "", "");
+	KCmdLineArgs::addCmdLineOptions( options );
+	
+	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+	QCStringList tests;
+	tests << "cursors" << "schema" << "dbcreation" << "tables" 
+		<< "tableview" << "parser";
+	if (!args->isSet("test") || !tests.contains(args->getOption("test"))) {
+		kdDebug() << "No test specified. Use --help." << endl;
+		RETURN(0);
+	}
+	test_name = args->getOption("test");
+	
 	if (test_name=="tableview") {
-		//GUI test
-		app = new KApplication(argc, argv, prgname);
+		gui = true;
+	}
+	else if (test_name=="parser") {
+		minargs = 3;
+	}
+	if ((int)args->count()<minargs) {
+		kdDebug() << QString("Not enough args (%1 required). Use --help.").arg(minargs) << endl;
+		RETURN(1);
+	}
+	
+	if (gui) {
+		app = new KApplication(true, true);
+		instance = app;
 		KGlobal::iconLoader()->addAppDir("kexi");
-			instance = app;
 	}
 	else {
-		//CLI test
-		instance = new KInstance( prgname );
+		instance = new KInstance(prgname);
 	}
 
+	drv_name = args->arg(0);
+			 
 	KexiDB::DriverManager manager;// = new KexiDB::DriverManager;
 	QStringList names = manager.driverNames();
-	kdWarning() << "DRIVERS: " << endl;
+	kdDebug() << "DRIVERS: " << endl;
 	for (QStringList::iterator it = names.begin(); it != names.end() ; ++it)
-		kdWarning() << *it << endl;
+		kdDebug() << *it << endl;
 	if (manager.error() || names.isEmpty()) {
 		manager.debugError();
 		RETURN(1);
@@ -119,37 +161,35 @@ int main(int argc, char** argv)
 		manager.debugError();
 		RETURN(1);
 	}
-	kdWarning() << "MIME type for '" << driver->name() << "': " << driver->fileDBDriverMime() << endl;
+	kdDebug() << "MIME type for '" << driver->name() << "': " << driver->fileDBDriverMime() << endl;
 
 //connection data
 //	conn_data.host = "myhost";
 //	conn_data.password = "mypwd";
 
 //open connection
-	
-	if (argc<=3) {
-		kdWarning() << prgname << ": database name?" << endl;
-		usage();
+	db_name = args->arg(1);
+	if (db_name.isEmpty()) {
+		kdDebug() << prgname << ": database name?" << endl;
 		RETURN(1);
 	}
-	db_name = QCString(argv[3]);
+//	db_name = QCString(argv[3]);
 	//additional switches:
-	for (int i=4;i<argc;i++) {
-		if (QCString(argv[i]).contains("-buffered-cursors",false)) {
-			cursor_options |= KexiDB::Cursor::Buffered;
-		}
-		else {
+	if (args->isSet("buffered-cursors")) {
+		cursor_options |= KexiDB::Cursor::Buffered;
+	}
+/*		else {
 			kdWarning() << "Unknown switch: '" << QCString(argv[i]) << "'" << endl;
 			usage();
 			RETURN(1);
 		}
-	}
+	}*/
 	
 	conn_data.setFileName( db_name );
 
 	conn = driver->createConnection(conn_data);
 
-	if (driver->error()) {
+	if (!conn || driver->error()) {
 		driver->debugError();
 		RETURN(1);
 	}
@@ -170,27 +210,28 @@ int main(int argc, char** argv)
 		r=tablesTest();
 	else if (test_name == "tableview")
 		r=tableViewTest();
+	else if (test_name == "parser")
+		r=parserTest(args->arg(2));
 	else {
 		kdWarning() << "No such test: " << test_name << endl;
-		usage();
+//		usage();
 		RETURN(1);
 	}
 
 	if (app && r==0)
 		app->exec();
 
-	if (conn) {
-	    if (!conn->disconnect())
+	if (r)
+		kdDebug() << "RECENT SQL STATEMENT: " << conn->recentSQLString() << endl;
+
+	if (conn && !conn->disconnect())
 		r = 1;
-	}
-	else
-	    r = 1;
 	
-	kdWarning() << "!!! KexiDB::Transaction::globalcount == " << KexiDB::Transaction::globalCount() << endl;
-	kdWarning() << "!!! KexiDB::TransactionData::globalcount == " << KexiDB::TransactionData::globalCount() << endl;
+//	kdDebug() << "!!! KexiDB::Transaction::globalcount == " << KexiDB::Transaction::globalCount() << endl;
+//	kdDebug() << "!!! KexiDB::TransactionData::globalcount == " << KexiDB::TransactionData::globalCount() << endl;
 
 //	delete manager;
-	delete instance;
+	delete app;
 
 	RETURN(r);
 }

@@ -10,7 +10,7 @@ Usage
 
 newapi - New KexiDB API test in few aspects
 
-Run 'kexidbtest' program without parameters for usage details.
+Run 'kexidbtest --help' for usage details.
 
 
 Important documents
@@ -38,6 +38,7 @@ test to more complicated):
 -tables
 -cursors
 -tableview
+-parser
 
 If the given driver does not pass one of these tests, and you have found:
 - that the problem is at the KexiDB library side (e.g. crash, or improper
