@@ -28,12 +28,13 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <klineeditdlg.h>
+#include <knotifyclient.h>
 
 #include "kivio_canvas.h"
 #include "kivio_doc.h"
 #include "kivio_view.h"
 #include "kivio_page.h"
-#include "kivio_dlg_pagename.h"
 #include "kivio_tabbar.h"
 #include "kivio_map.h"
 
@@ -367,27 +368,34 @@ void KivioTabBar::renameTab( const QString& old_name, const QString& new_name )
 
 void KivioTabBar::slotRename()
 {
-    QString activeName;
-    QString newName;
-
     // Store the current name of the active page
     KivioPage* page = m_pView->activePage();
-    activeName = page->pageName();
 
-    KivioPageName tndlg( m_pView, "PageName" , activeName );
-    if ( tndlg.exec() )
+    bool ok;
+    QString activeName = page->pageName();
+    QString newName = KLineEditDlg::getText( i18n("Page Name"), activeName, &ok, this );
+
+    // Have a different name ?
+    if ( ok ) // User pushed an OK button.
     {
-        // Have a different name ?
-        if ( ( newName = tndlg.pageName() ) != activeName )
+        if ( (newName.stripWhiteSpace()).isEmpty() ) // Page name is empty.
         {
-            // Is the name already used
-            if ( !page->setPageName( newName ) )
-            {
-                KMessageBox::error( this, i18n("This name is already used."));
-                // Recursion
-                slotRename();
-                return;
-            }
+            KNotifyClient::beep();
+            KMessageBox::information( this, i18n("Page name cannot be empty."), i18n("Change page name") );
+            // Recursion
+            slotRename();
+        }
+        else if ( newName != activeName ) // Page name changed.
+        {
+             // Is the name already used
+             if ( !page->setPageName( newName ) )
+             {
+                KNotifyClient::beep();
+                KMessageBox::information( this, i18n("This name is already used."), i18n("Change page name") );
+                 // Recursion
+                 slotRename();
+             }
+             m_pView->koDocument()->setModified( true );
         }
     }
 }

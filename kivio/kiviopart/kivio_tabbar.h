@@ -23,7 +23,6 @@
 #include <qpainter.h>
 #include <qstrlist.h>
 
-class KivioPageName;
 class KivioView;
 
 /**

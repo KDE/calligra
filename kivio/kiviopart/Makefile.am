@@ -30,7 +30,6 @@ libkiviopart_la_SOURCES = \
 		kivio_view.cpp\
 		kivio_map.cpp\
 		kivio_page.cpp\
-		kivio_dlg_pagename.cpp\
 		kivio_dlg_pageshow.cpp\
 		kivio_ruler.cpp\
 		kivio_zoomaction.cpp\
@@ -69,8 +68,6 @@ EXTRA_DIST = \
 		kivio_map.h\
 		kivio_page.cpp\
 		kivio_page.h\
-		kivio_dlg_pagename.cpp\
-		kivio_dlg_pagename.h\
 		kivio.desktop\
 		x-kivio.desktop\
 		kivio.rc\
