@@ -29,7 +29,6 @@
 class KoDataTool;
 class QPixmap;
 class QStringList;
-class KoDocument;
 class KInstance;
 
 // If you're only looking at implementing a data-tool, skip directly to the last
@@ -123,10 +122,11 @@ public:
 
     /**
      * Creates the data tool described by this KoDataToolInfo.
-     * @param part the part (document) that creates this tool.
+     * @param instance the instance that creates this tool.
+     * Your KPart's instance, or KGlobal::instance().
      * @return a pointer to the created data tool or 0 on error.
      */
-    KoDataTool* createTool( KoDocument * part, QObject* parent = 0, const char* name = 0 ) const;
+    KoDataTool* createTool( KInstance *instance, QObject* parent = 0, const char* name = 0 ) const;
 
     KService::Ptr service() const;
 
@@ -145,9 +145,9 @@ public:
      * Queries the @ref KTrader about installed @ref KoDataTool implementations.
      * @param datatype a type that the application can 'export' to the tools (e.g. QString)
      * @param mimetype the mimetype of the data (e.g. text/plain)
-     * @param part the application's part (to check if a tool is excluded from this part)
+     * @param instance the application or the part (to check if a tool is excluded from this part)
      */
-    static QValueList<KoDataToolInfo> query( const QString& datatype, const QString& mimetype, KoDocument * part );
+    static QValueList<KoDataToolInfo> query( const QString& datatype, const QString& mimetype, KInstance * instance );
 
 private:
     KService::Ptr m_service;
@@ -213,7 +213,7 @@ public:
     /**
      * @internal. Do not use under any circumstance (including bad weather).
      */
-    void setPart( KoDocument* part ) { m_part = part; }
+    void setInstance( KInstance* instance ) { m_instance = instance; }
 
     /**
      * @return the instance of the part that created this tool.
@@ -235,7 +235,7 @@ public:
     virtual bool run( const QString& command, void* data, const QString& datatype, const QString& mimetype) = 0;
 
 private:
-    KoDocument * m_part;
+    KInstance * m_instance;
     class KoDataToolPrivate;
     KoDataToolPrivate * d;
 };

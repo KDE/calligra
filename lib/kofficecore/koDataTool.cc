@@ -139,7 +139,7 @@ QStringList KoDataToolInfo::userCommands() const
     return QStringList::split( ',', m_service->comment() );
 }
 
-KoDataTool* KoDataToolInfo::createTool( KoDocument* part, QObject* parent, const char* name ) const
+KoDataTool* KoDataToolInfo::createTool( KInstance* instance, QObject* parent, const char* name ) const
 {
     if ( !m_service )
         return 0;
@@ -156,7 +156,7 @@ KoDataTool* KoDataToolInfo::createTool( KoDocument* part, QObject* parent, const
         return 0;
     }
     KoDataTool * tool = static_cast<KoDataTool *>(obj);
-    tool->setPart( part );
+    tool->setInstance( instance );
     return tool;
 }
 
@@ -170,7 +170,7 @@ QValueList<KoDataToolInfo> KoDataToolInfo::query( const QString& datatype, const
     return query( datatype, mimetype, 0L );
 }
 
-QValueList<KoDataToolInfo> KoDataToolInfo::query( const QString& datatype, const QString& mimetype, KoDocument * part )
+QValueList<KoDataToolInfo> KoDataToolInfo::query( const QString& datatype, const QString& mimetype, KInstance* instance )
 {
     QValueList<KoDataToolInfo> lst;
 
@@ -189,9 +189,9 @@ QValueList<KoDataToolInfo> KoDataToolInfo::query( const QString& datatype, const
             constr = constr + " and " + tmp;
     }
 /* Bug in KTrader ? Test with HEAD-kdelibs!
-    if ( part )
+    if ( instance )
     {
-        QString tmp = QString::fromLatin1( "not ('%1' in ExcludeFrom)" ).arg( part->instance()->instanceName() );
+        QString tmp = QString::fromLatin1( "not ('%1' in ExcludeFrom)" ).arg( instance->instanceName() );
         if ( constr.isEmpty() )
             constr = tmp;
         else
@@ -206,8 +206,8 @@ QValueList<KoDataToolInfo> KoDataToolInfo::query( const QString& datatype, const
     for( ; it != offers.end(); ++it )
     {
         // Temporary replacement for the non-working trader query above
-        if ( !part || !(*it)->property("ExcludeFrom").toStringList()
-             .contains( part->instance()->instanceName() ) )
+        if ( !instance || !(*it)->property("ExcludeFrom").toStringList()
+             .contains( instance->instanceName() ) )
             lst.append( KoDataToolInfo( *it ) );
         else
             kdDebug() << (*it)->entryPath() << " excluded." << endl;
@@ -278,13 +278,13 @@ QPtrList<KAction> KoDataToolAction::dataToolActionList( const QValueList<KoDataT
  *************************************************/
 
 KoDataTool::KoDataTool( QObject* parent, const char* name )
-    : QObject( parent, name ), m_part( 0L )
+    : QObject( parent, name ), m_instance( 0L )
 {
 }
 
 KInstance* KoDataTool::instance() const
 {
-   return m_part ? m_part->instance() : 0L;
+   return m_instance;
 }
 
 #include <koDataTool.moc>
