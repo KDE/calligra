@@ -39,8 +39,8 @@
 #include "vdocument.h"
 #include "vselection.h"
 
-VClipartIconItem::VClipartIconItem( const VObject* clipart, QString filename )
-		: m_filename( filename )
+VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double height, QString filename )
+		: m_filename( filename ), m_width( width ), m_height( height )
 {
 	m_clipart = clipart->clone();
 	m_clipart->setState( VObject::normal );
@@ -78,6 +78,8 @@ VClipartIconItem::VClipartIconItem( const VClipartIconItem& item )
 	m_thumbPixmap = item.m_thumbPixmap;
 	validPixmap   = item.validPixmap;
 	validThumb    = item.validThumb;
+	m_width       = item.m_width;
+	m_height      = item.m_height;
 } // VClipartIconItem::VClipartIconItem
 
 VClipartIconItem::~VClipartIconItem()
@@ -170,12 +172,17 @@ void VClipartWidget::addClipart()
 		double scaleFactor = 1. / QMAX( clipartBox.width(), clipartBox.height() );
 		QWMatrix trMatrix( scaleFactor, 0, 0, scaleFactor, -clipartBox.x() * scaleFactor, -clipartBox.y() * scaleFactor );
 		clipart->transform( trMatrix );
+		 // center the clipart
+		trMatrix.reset();
+		double size = QMAX( clipart->boundingBox().width(), clipart->boundingBox().height() );
+		trMatrix.translate( ( size - clipart->boundingBox().width() ) / 2, ( size - clipart->boundingBox().height() ) / 2 );
+		clipart->transform( trMatrix );
 		 // remove Y-mirroring
 		trMatrix.reset();
 		trMatrix.scale( 1, -1 );
 		trMatrix.translate( 0, -1 );
 		clipart->transform( trMatrix );
-		m_clipartChooser->addItem( KarbonFactory::rServer()->addClipart( clipart ) );
+		m_clipartChooser->addItem( KarbonFactory::rServer()->addClipart( clipart, clipartBox.width(), clipartBox.height() ) );
 	}
 	m_clipartChooser->updateContents();
 } // VClipartWidget::addClipart
@@ -217,7 +224,9 @@ QString VClipartTool::contextHelp()
 	QString s = "<qt><b>Clipart tool:</b><br>";
 	s += "Choose the clipart in the options docker.<br>";
 	s += "<i>Click and drag</i> to place the clipart.<br>";
-	s += "<i>Click and drag</i> while pressing <i>SHIFT</i> to place the clipart using the original sizeof the cliaprt.</qt>";
+	s += "<i>Click</i> to place the clipart using its original size.<br>";
+	s += "While dragging press<br> - <i>SHIFT</i> to place the clipart using the original height/width ratio of the clipart,<br>";
+	s += " - <i>CTRL</i> to make it centered.</qt>";
 	return s;
 } // VClipartTool::contextHelp
 
@@ -229,14 +238,14 @@ void VClipartTool::activate()
 
 void VClipartTool::draw()
 {
-	if ( ( m_clipart ) && ( m_last.x() - first().x() != 0 ) && ( m_last.y() - first().y() != 0 ) )
+	if ( ( m_clipart ) && ( m_bottomright.x() - m_topleft.x() != 0 ) && ( m_bottomright.y() - m_topleft.y() != 0 ) )
 	{
 		VPainter* painter = view()->painterFactory()->editpainter();
 		view()->canvasWidget()->setYMirroring( true );
 		painter->setZoomFactor( view()->zoom() );
 		painter->setRasterOp( Qt::NotROP );
 
-		QWMatrix mat( m_last.x() - first().x(), 0, 0, m_last.y() - first().y(), first().x(), first().y() );
+		QWMatrix mat( m_bottomright.x() - m_topleft.x(), 0, 0, m_bottomright.y() - m_topleft.y(), m_topleft.x(), m_topleft.y() );
 		m_clipart->transform( mat );
 		m_clipart->draw( painter, &m_clipart->boundingBox() );
 		m_clipart->transform( mat.invert() );
@@ -251,27 +260,17 @@ void VClipartTool::mouseButtonPress()
 	m_clipart = clipartItem->clipart()->clone();
 	m_clipart->setState( VObject::edit );
 
-	m_last = last();
+	m_topleft = m_bottomright = last();
 	
 	draw();
 } // VClipartTool::mouseButtonPress
 
-#define DEFAULTSIZE	100
 void VClipartTool::mouseButtonRelease()
 {
+	double s = QMAX( m_optionsWidget->selectedClipart()->originalWidth(), m_optionsWidget->selectedClipart()->originalHeight() );
 	if ( m_clipart )
 	{
-		//draw();
-
-		if ( m_keepRatio )
-		{
-			double s = QMAX( DEFAULTSIZE, DEFAULTSIZE );
-			m_last.setCoords( first().x() + s, first().y() - s );
-		}
-		else
-			m_last = last();
-
-		QWMatrix mat( DEFAULTSIZE, 0, 0, -DEFAULTSIZE, first().x() - ( DEFAULTSIZE / 2), first().y() + ( DEFAULTSIZE / 2) );
+		QWMatrix mat( s, 0, 0, -s, first().x() - ( s / 2 ), first().y() + ( s / 2 ) );
 		m_clipart->transform( mat );
 		VClipartCmd* cmd = new VClipartCmd(
 			&view()->part()->document(),
@@ -291,13 +290,22 @@ void VClipartTool::mouseDrag()
 	{
 		draw();
 
+		double s = QMAX( last().x() - first().x(), -last().y() + first().y() );
+		if ( m_centered )
+			if ( m_keepRatio )
+				m_topleft.setCoords( first().x() - s, first().y() + s );
+			else
+				m_topleft.setCoords( first().x() - ( last().x() - first().x() ), first().y() + ( first().y() - last().y() ) );
+		else 
+			m_topleft = first();
+
 		if ( m_keepRatio )
-		{
-			double s = QMAX( last().x() - first().x(), -last().y() + first().y() );
-			m_last.setCoords( first().x() + s, first().y() - s );
-		}
+			if ( m_centered )
+				m_bottomright.setCoords( m_topleft.x() + s * 2, m_topleft.y() - s * 2 );
+			else
+				m_bottomright.setCoords( m_topleft.x() + s, m_topleft.y() - s );
 		else
-			m_last = last();
+			m_bottomright = last();
 
 		draw();
 	}
@@ -307,17 +315,24 @@ void VClipartTool::mouseDragRelease()
 {
 	if ( m_clipart )
 	{
-		//draw();
+		double s = QMAX( last().x() - first().x(), -last().y() + first().y() );
+		if ( m_centered )
+			if ( m_keepRatio )
+				m_topleft.setCoords( first().x() - s, first().y() + s );
+			else
+				m_topleft.setCoords( first().x() - ( last().x() - first().x() ), first().y() + ( first().y() - last().y() ) );
+		else
+			m_topleft = first();
 
 		if ( m_keepRatio )
-		{
-			double s = QMAX( last().x() - first().x(), -last().y() + first().y() );
-			m_last.setCoords( first().x() + s, first().y() - s );
-		}
+			if ( m_centered )
+				m_bottomright.setCoords( m_topleft.x() + s * 2, m_topleft.y() - s * 2 );
+			else
+				m_bottomright.setCoords( m_topleft.x() + s, m_topleft.y() - s );
 		else
-			m_last = last();
+			m_bottomright = last();
 
-		QWMatrix mat( m_last.x() - first().x(), 0, 0, m_last.y() - first().y(), first().x(), first().y() );
+		QWMatrix mat( m_bottomright.x() - m_topleft.x(), 0, 0, m_bottomright.y() - m_topleft.y(), m_topleft.x(), m_topleft.y() );
 		m_clipart->transform( mat );
 		VClipartCmd* cmd = new VClipartCmd(
 			&view()->part()->document(),
@@ -340,6 +355,16 @@ void VClipartTool::mouseDragShiftReleased()
 {
 	m_keepRatio = false;
 } // VClipartTool::mouseDragShiftReleased
+
+void VClipartTool::mouseDragCtrlPressed()
+{
+	m_centered = true;
+} // VClipartTool::mouseDragCtrlPressed
+
+void VClipartTool::mouseDragCtrlReleased()
+{
+	m_centered = false;
+} // VClipartTool::mouseDragCtrlReleased
 
 void VClipartTool::cancel()
 {

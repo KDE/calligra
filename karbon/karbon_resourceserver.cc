@@ -37,6 +37,7 @@
 #include "vobject.h"
 #include "vcomposite.h"
 #include "vgroup.h"
+#include "vtext.h"
 
 KarbonResourceServer::KarbonResourceServer()
 {
@@ -219,7 +220,7 @@ void KarbonResourceServer::saveGradient( VGradient* gradient, const QString& fil
 	file.close();
 } // KarbonResourceServer::saveGradient
 
-VClipartIconItem* KarbonResourceServer::addClipart( VObject* clipart )
+VClipartIconItem* KarbonResourceServer::addClipart( VObject* clipart, double width, double height )
 {
 	int i = 1;
 	char buffer[20];
@@ -229,9 +230,9 @@ VClipartIconItem* KarbonResourceServer::addClipart( VObject* clipart )
 
 	QString filename = KarbonFactory::instance()->dirs()->saveLocation( "karbon_clipart" ) + buffer;
 
-	saveClipart( clipart, filename );
+	saveClipart( clipart, width, height, filename );
 
-	m_cliparts->append( new VClipartIconItem( clipart, filename ) );
+	m_cliparts->append( new VClipartIconItem( clipart, width, height, filename ) );
 	
 	return m_cliparts->last();
 } // KarbonResourceServer::addClipart
@@ -246,6 +247,7 @@ void KarbonResourceServer::removeClipart( VClipartIconItem* clipart )
 void KarbonResourceServer::loadClipart( const QString& filename )
 {
 	VObject* clipart = 0L;
+	double width, height;
 	
 	QFile f( filename );
 	if ( f.open( IO_ReadOnly ) )
@@ -255,41 +257,47 @@ void KarbonResourceServer::loadClipart( const QString& filename )
 			f.close();
 		else
 		{
-			QDomElement e;
-			QDomNode n = doc.documentElement().firstChild();
-			if ( !n.isNull() )
+			QDomElement de = doc.documentElement();
+			if ( !de.isNull() && de.tagName() == "PREDEFCLIPART" )
 			{
-				e = n.toElement();
-				if ( !e.isNull() )
+				width  = de.attribute( "width", "100.0" ).toFloat();
+				height = de.attribute( "height", "100.0" ).toFloat();
+			
+				QDomNode n = de.firstChild();
+				if ( !n.isNull() )
 				{
-					/*if ( e.tagName() == "TEXT" )
+					QDomElement e;
+					e = n.toElement();
+					if ( !e.isNull() )
 					{
-						clipart = new VText(); 
-						clipart->load( e );
+						if ( e.tagName() == "TEXT" )
+							clipart = new VText( 0L ); 
+						else if (e.tagName() == "COMPOSITE" )
+							clipart = new VComposite( 0L ); 
+						else if (e.tagName() == "GROUP" )
+							clipart = new VGroup( 0L ); 
+						if ( clipart )
+							clipart->load( e );
 					}
-					else*/ if (e.tagName() == "COMPOSITE" )
-						clipart = new VComposite( 0L ); 
-					else if (e.tagName() == "GROUP" )
-						clipart = new VGroup( 0L ); 
-					if ( clipart )
-						clipart->load( e );
 				}
 			}
 		}
 	}
 
 	if ( clipart )
-		m_cliparts->append( new VClipartIconItem( clipart, filename ) );
+		m_cliparts->append( new VClipartIconItem( clipart, width, height, filename ) );
 
 	delete clipart;
 } // KarbonResourceServer::loadClipart
 
-void KarbonResourceServer::saveClipart( VObject* clipart, const QString& filename )
+void KarbonResourceServer::saveClipart( VObject* clipart, double width, double height, const QString& filename )
 {
 	QFile file( filename );
 	QDomDocument doc;
 	QDomElement me = doc.createElement( "PREDEFCLIPART" );
 	doc.appendChild( me );
+	me.setAttribute( "width", width );
+	me.setAttribute( "height", height );
 	clipart->save( me );
 	if (!(file.open(IO_WriteOnly)))
 		return;

@@ -38,7 +38,7 @@ class QHButtonGroup;
 class VClipartIconItem : public KoIconItem
 {
 public:
-	VClipartIconItem( const VObject* clipart, QString filename );
+	VClipartIconItem( const VObject* clipart, double width, double height, QString filename );
 	VClipartIconItem( const VClipartIconItem& item );
 	~VClipartIconItem();
 		
@@ -47,6 +47,8 @@ public:
 	const VObject* clipart() const { return m_clipart; }
 	QString filename() const { return m_filename; }
 	bool canDelete() const { return m_delete; }
+	double originalWidth() const { return m_width; }
+	double originalHeight() const { return m_height; }
 	VClipartIconItem* clone();
 
 private:
@@ -55,6 +57,8 @@ private:
 	VObject* m_clipart;
 	QString  m_filename;
 	bool     m_delete;
+	double   m_width;
+	double   m_height;
 }; // VClipartIconItem
 
 class VClipartWidget : public QFrame
@@ -103,6 +107,8 @@ protected:
 	virtual void mouseDrag();
 	virtual void mouseDragShiftPressed();
 	virtual void mouseDragShiftReleased();
+	virtual void mouseDragCtrlPressed();
+	virtual void mouseDragCtrlReleased();
 	virtual void mouseDragRelease();
 	virtual void cancel();
 
@@ -123,9 +129,11 @@ private:
 	}; // VClipartCmd
 
 	VObject*        m_clipart;
-	KoPoint         m_last;
+	KoPoint         m_topleft;
+	KoPoint         m_bottomright;
 	VClipartWidget* m_optionsWidget;
 	bool            m_keepRatio;
+	bool            m_centered;
 }; // VClipartTool
 
 #endif /* __VCLIPARTTOOL_H__ */

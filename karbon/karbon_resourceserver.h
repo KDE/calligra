@@ -53,7 +53,7 @@ public:
 
 	int clipartCount() { return m_cliparts->count(); }
 	QPtrList<VClipartIconItem>* cliparts() { return m_cliparts; }
-	VClipartIconItem* addClipart( VObject* clipart );
+	VClipartIconItem* addClipart( VObject* clipart, double width, double height );
 	void removeClipart( VClipartIconItem* clipartIcon );
 
 protected:
@@ -63,7 +63,7 @@ protected:
 	void saveGradient( VGradient* gradient, const QString& filename );
 	
 	void loadClipart( const QString& filename );
-	void saveClipart( VObject* object, const QString& filename );
+	void saveClipart( VObject* object, double width, double height, const QString& filename );
  
 private:
 	QPtrList<KoIconItem>         m_patterns;
