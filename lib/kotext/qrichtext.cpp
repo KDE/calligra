@@ -5844,6 +5844,7 @@ void KoTextFormatCollection::setPainter( QPainter *p )
     }
 }
 
+#ifndef NDEBUG
 void KoTextFormatCollection::debug()
 {
     qDebug( "------------ KoTextFormatCollection: debug --------------- BEGIN" );
@@ -5857,6 +5858,7 @@ void KoTextFormatCollection::debug()
     }
     qDebug( "------------ KoTextFormatCollection: debug --------------- END" );
 }
+#endif
 
 void KoTextFormatCollection::updateStyles()
 {
