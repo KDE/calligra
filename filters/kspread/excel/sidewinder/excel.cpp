@@ -992,9 +992,19 @@ unsigned ColInfoRecord::width() const
   return d->width;
 }
 
+void ColInfoRecord::setWidth( unsigned w )
+{
+  d->width = w;
+}
+
 unsigned ColInfoRecord::xfIndex() const
 {
   return d->xfIndex;
+}
+
+void ColInfoRecord::setXfIndex( unsigned i )
+{
+  d->xfIndex = i;
 }
 
 bool ColInfoRecord::hidden() const
@@ -1002,14 +1012,29 @@ bool ColInfoRecord::hidden() const
   return d->hidden;
 }
 
+void ColInfoRecord::setHidden( bool h )
+{
+  d->hidden = h;
+}
+
 bool ColInfoRecord::collapsed() const
 {
   return d->collapsed;
 }
 
+void ColInfoRecord::setCollapsed( bool c )
+{
+  d->collapsed = c;
+}
+
 unsigned ColInfoRecord::outlineLevel() const
 {
   return d->outlineLevel;
+}
+
+void ColInfoRecord::setOutlineLevel( unsigned l )
+{
+  d->outlineLevel = l;
 }
 
 void ColInfoRecord::setData( unsigned size, const unsigned char* data )
@@ -1018,13 +1043,13 @@ void ColInfoRecord::setData( unsigned size, const unsigned char* data )
 
   setFirstColumn( readU16( data ) );
   setLastColumn( readU16( data+2 ) );
-  d->width = readU16( data+4 );
-  d->xfIndex = readU16( data+6 );
+  setWidth( readU16( data+4 ) );
+  setXfIndex( readU16( data+6 ) );
   
   unsigned options = readU16( data+8 );
-  d->hidden = ( options & 1 );
-  d->collapsed = ( options & 0x1000 );
-  d->outlineLevel = ( options >> 8 ) & 7;
+  setHidden ( options & 1 );
+  setCollapsed ( options & 0x1000 );
+  setOutlineLevel( ( options >> 8 ) & 7 );
 }
 
 void ColInfoRecord::dump( std::ostream& out ) const

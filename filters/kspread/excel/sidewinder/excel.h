@@ -526,15 +526,79 @@ public:
    */
   virtual ~ColInfoRecord();
   
+  /**
+   * Returns the XF index for the formatting of the column(s).
+   *
+   * \sa setXfIndex
+   */
   unsigned xfIndex() const;
   
+  /**
+   * Sets the XF index for the formatting of the column(s).
+   *
+   * \sa xfIndex
+   */
+  void setXfIndex( unsigned i );
+  
+  /**
+   * Returns the width of the column(s), specified in 1/256 of 
+   * a character width.
+   *
+   * \sa setWidth
+   */
   unsigned width() const;
   
+  /**
+   * Sets the width of the column(s), specified in 1/256 of 
+   * a character width.
+   *
+   * \sa width
+   */
+  void setWidth( unsigned w );
+  
+  /**
+   * Returns true if the columns should be hidden, i.e not visible.
+   *
+   * \sa setHidden
+   */
   bool hidden() const;
+  
+  /**
+   * Sets whether columns should be hidden or visible.
+   *
+   * \sa hidden
+   */
+  void setHidden( bool h );
 
+  /**
+   * Returns true if the columns should be collapsed.
+   *
+   * \sa setCollapsed
+   */
   bool collapsed() const;
   
+  /**
+   * Sets whether columns should be collapsed or not.
+   *
+   * \sa collapsed
+   */
+  void setCollapsed( bool c );
+  
+  /**
+   * Returns the outline level of the columns. If it is 0, then
+   * the columns are not outlined.
+   *
+   * \sa setOutlineLevel
+   */
   unsigned outlineLevel() const;
+  
+  /**
+   * Sets the outline level of the columns. If it is 0, then
+   * the columns are not outlined.
+   *
+   * \sa outlineLevel
+   */
+  void setOutlineLevel( unsigned l );
   
   /**
    \reimpl
