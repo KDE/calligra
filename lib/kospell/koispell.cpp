@@ -126,11 +126,11 @@ void KOISpell::startIspell()
         switch ( type )
         {
         case HTML:
-            //different for aspell/ispell
-            if ( ksconfig->client() == KOS_CLIENT_ISPELL )
-                *proc << "-h";
-            else
-                *proc << "-H";
+            //Debian uses an ispell version that has the -h option instead.
+            //Not sure what they did, but the prefered spell checker
+            //on that platform is aspell anyway, so use -H untill I'll come
+            //up with something better.
+            *proc << "-H";
             break;
         case TeX:
             //same for aspell and ispell
