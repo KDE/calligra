@@ -753,3 +753,13 @@ double KPresenterDocIface::helpPointPosY( int index ) const
         return -1.0;
     return doc->helpPoints()[index].y();
 }
+
+void KPresenterDocIface::addIgnoreWordAll( const QString &word)
+{
+    doc->addIgnoreWordAll( word );
+}
+
+void KPresenterDocIface::clearIgnoreWordAll( )
+{
+    doc->clearIgnoreWordAll();
+}

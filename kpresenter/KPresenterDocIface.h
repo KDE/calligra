@@ -217,6 +217,10 @@ k_dcop:
     bool configAutoSuperScript() const;
     void setConfigAutoSuperScript( bool b);
 
+    void addIgnoreWordAll( const QString &);
+    void clearIgnoreWordAll( );
+
+
 private:
     KPresenterDoc *doc;
 
