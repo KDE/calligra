@@ -58,6 +58,7 @@ bool WPFiveWorker::doCloseFile(void)
   if( !outfile.open( IO_ReadWrite ) )
     return false;
   output.setDevice( &outfile );
+  output.setByteOrder (QDataStream::LittleEndian);
 
   // now it's time to fix-up some header fields
 
