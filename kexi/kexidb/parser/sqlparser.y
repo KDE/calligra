@@ -1,4 +1,23 @@
-%token PERCENT
+/* This file is part of the KDE project
+   Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 %token SQL_TYPE
 %token SQL_ABS
 %token ACOS
@@ -19,15 +38,11 @@
 %token AND
 %token ANY
 %token ARE
-%token ARITHMETIC_MINUS
-%token ARITHMETIC_PLUS
 %token AS
 %token ASIN
 %token ASC
 %token ASCII
 %token ASSERTION
-%token ASTERISK
-%token AT
 %token ATAN
 %token ATAN2
 %token AUTHORIZATION
@@ -58,9 +73,7 @@
 %token COBOL
 %token COLLATE
 %token COLLATION
-%token COLON
 %token COLUMN
-%token COMMA
 %token COMMIT
 %token COMPUTE
 %token CONCAT
@@ -108,9 +121,7 @@
 %token DISCONNECT
 %token DISPLACEMENT
 %token DISTINCT
-%token DOLLAR_SIGN
 %token DOMAIN_TOKEN
-%token DOT
 %token SQL_DOUBLE
 %token DOUBLE_QUOTED_STRING
 %token DROP
@@ -146,8 +157,8 @@
 %token GO
 %token GOTO
 %token GRANT
-%token GREATER_THAN
 %token GREATER_OR_EQUAL
+%token GREATER_THAN
 %token GROUP
 %token HAVING
 %token HOUR
@@ -178,7 +189,6 @@
 %token LAST
 %token LCASE
 %token LEFT
-%token LEFTPAREN
 %token LENGTH
 %token LESS_OR_EQUAL
 %token LESS_THAN
@@ -247,7 +257,6 @@
 %token PRODUCT
 %token PUBLIC
 %token QUARTER
-%token QUESTION_MARK
 %token QUIT
 %token RAND
 %token READ_ONLY
@@ -258,7 +267,6 @@
 %token RESTRICT
 %token REVOKE
 %token RIGHT
-%token RIGHTPAREN
 %token ROLLBACK
 %token ROWS
 %token RPAD
@@ -269,17 +277,15 @@
 %token SECOND
 %token SECONDS_BETWEEN
 %token SELECT
-%token SEMICOLON
 %token SEQUENCE
 %token SETOPT
 %token SET
 %token SHOWOPT
 %token SIGN
-%token SIGNED_INTEGER
+%token INTEGER_CONST
+%token REAL_CONST
 %token SIN
-%token SINGLE_QUOTE
 %token SQL_SIZE
-%token SLASH
 %token SMALLINT
 %token SOME
 %token SPACE
@@ -320,12 +326,13 @@
 %token UNION
 %token UNIQUE
 %token SQL_UNKNOWN
-%token UNSIGNED_INTEGER
+//%token UNSIGNED_INTEGER
 %token UPDATE
 %token UPPER
 %token USAGE
 %token USER
 %token USER_DEFINED_NAME
+%token USER_DEFINED_NAME_DOT_ASTERISK
 %token USING
 %token VALUE
 %token VALUES
@@ -346,20 +353,43 @@
 %token YEAR
 %token YEARS_BETWEEN
 
+%token '-' '+'
+%token '*'
+%token '%'
+%token '@'
+%token ';'
+%token ','
+%token '.'
+%token '$'
+//%token '<'
+//%token '>'
+%token '(' ')'
+%token '?'
+%token '\''
+%token '/'
+
 %type <stringValue> USER_DEFINED_NAME
+%type <stringValue> USER_DEFINED_NAME_DOT_ASTERISK
 %type <stringValue> CHARACTER_STRING_LITERAL
 %type <stringValue> DOUBLE_QUOTED_STRING
 
+/*
 %type <field> ColExpression
 %type <field> ColView
+*/
+%type <expr> ColExpression
+%type <expr> ColWildCard
+//%type <expr> ColView
+%type <expr> ColItem
+%type <exprlist> ColViews
+%type <expr> aExpr
+%type <exprlist> aExprList
+%type <expr> WhereClause
 
 %type <coltype> SQL_TYPE
-%type <integerValue> UNSIGNED_INTEGER
-%type <integerValue> SIGNED_INTEGER
-
-%left EQUAL NOT_EQUAL GREATER_THAN GREATER_OR_EQUAL LESS_THAN LESS_OR_EQUAL LIKE PERCENT NOT
-%left ARITHMETIC_PLUS ARITHMETIC_MINUS
-%left ASTERISK SLASH
+%type <integerValue> INTEGER_CONST
+%type <realValue> REAL_CONST
+/*%type <integerValue> SIGNED_INTEGER */
 
 %{
 #include <stdio.h>
@@ -395,7 +425,8 @@
 	KexiDB::Field *field;
 	bool requiresTable;
 	QPtrList<KexiDB::Field> fieldList;
-	QPtrList<KexiDB::TableSchema> tableList;
+//	QPtrList<KexiDB::TableSchema> tableList;
+	QDict<KexiDB::TableSchema> tableDict;
 	KexiDB::TableSchema *dummy = 0;
 	int current = 0;
 	QString ctoken = "";
@@ -426,11 +457,23 @@
 		}
 	}
 
-	void parseData(KexiDB::Parser *p, const char *data)
+	void setError(const QString& errName, const QString& errDesc)
+	{
+		parser->setError( KexiDB::ParserError(errName, errDesc, ctoken, current) );
+		yyerror(errName.latin1());
+	}
+
+	void tableNotFoundError(const QString& tableName)
+	{
+		setError( i18n("Table not found"), i18n("Unknown table \"%1\"").arg(tableName) );
+	}
+
+	bool parseData(KexiDB::Parser *p, const char *data)
 	{
 		if (!dummy)
 			dummy = new KexiDB::TableSchema();
 		parser = p;
+		parser->clear();
 		field = 0;
 		fieldList.clear();
 		requiresTable = false;
@@ -439,20 +482,22 @@
 			KexiDB::ParserError err(i18n("Error"), i18n("No query specified"), ctoken, current);
 			parser->setError(err);
 			yyerror("");
-			return;
+			return false;
 		}
 	
 		tokenize(data);
 		yyparse();
 
+		bool ok = true;
 		if(parser->operation() == KexiDB::Parser::OP_Select)
 		{
-			kdDebug() << "parseData(): " << tableList.count() << " loaded tables" << endl;
-			for(KexiDB::TableSchema *s = tableList.first(); s; s = tableList.next())
+			kdDebug() << "parseData(): " << tableDict.count() << " loaded tables" << endl;
+/*			KexiDB::TableSchema *ts;
+			for(QDictIterator<KexiDB::TableSchema> it(tableDict); KexiDB::TableSchema *s = tableList.first(); s; s = tableList.next())
 			{
 				kdDebug() << "  " << s->name() << endl;
-			}
-
+			}*/
+/*removed
 			KexiDB::Field::ListIterator it = parser->select()->fieldsIterator();
 			for(KexiDB::Field *item; (item = it.current()); ++it)
 			{
@@ -462,13 +507,18 @@
 					parser->setError(err);
 
 					yyerror("fieldlisterror");
+					ok = false;
 				}
-			}
+			}*/
 			//take the dummy table out of the query
 			parser->select()->removeTable(dummy);
 		}
+		else {
+			ok = false;
+		}
 
-		tableList.clear();
+		tableDict.clear();
+		return ok;
 	}
 
 	void addTable(const QString &table)
@@ -483,7 +533,7 @@
 		}
 		else
 		{
-			tableList.append(s);
+			tableDict.insert(s->name(), s);
 		}
 	}
 
@@ -508,14 +558,62 @@
 %union {
 	char stringValue[255];
 	int integerValue;
+	struct realType realValue;
 	KexiDB::Field::Type coltype;
 	KexiDB::Field *field;
+	KexiDB::BaseExpr *expr;
+	KexiDB::NArgExpr *exprlist;
 }
 
+//%left '=' NOT_EQUAL '>' GREATER_OR_EQUAL '<' LESS_OR_EQUAL LIKE '%' NOT
+//%left '+' '-'
+//%left ASTERISK SLASH
+
+/* precedence: lowest to highest */
+%left		UNION EXCEPT
+%left		INTERSECT
+%left		OR
+%left		AND
+%right	NOT
+//%right		'='
+//%nonassoc	'<' '>'
+//%nonassoc '=' '<' '>' "<=" ">=" "<>" ":=" LIKE ILIKE SIMILAR
+%nonassoc '=' LESS_THAN GREATER_THAN LESS_OR_EQUAL GREATER_OR_EQUAL NOT_EQUAL 
+%nonassoc SQL_IN LIKE ILIKE SIMILAR
+//%nonassoc	LIKE ILIKE SIMILAR
+//%nonassoc	ESCAPE
+//%nonassoc	OVERLAPS
+%nonassoc	BETWEEN
+//%nonassoc	IN_P
+//%left		POSTFIXOP		// dummy for postfix Op rules 
+//%left		Op OPERATOR		// multi-character ops and user-defined operators 
+//%nonassoc	NOTNULL
+//%nonassoc	ISNULL
+//%nonassoc	IS NULL_P TRUE_P FALSE_P UNKNOWN // sets precedence for IS NULL, etc 
+%left		'+' '-'
+%left		'*' '/' '%'
+%left		'^'
+// Unary Operators 
+//%left		AT ZONE			// sets precedence for AT TIME ZONE
+//%right		UMINUS
+%left		'[' ']'
+%left		'(' ')'
+//%left		TYPECAST
+%left		'.'
+
+/*
+ * These might seem to be low-precedence, but actually they are not part
+ * of the arithmetic hierarchy at all in their use as JOIN operators.
+ * We make them high-precedence to support their use as function names.
+ * They wouldn't be given a precedence at all, were it not that we need
+ * left-associativity among the JOIN rules themselves.
+ */
+/*%left		JOIN UNIONJOIN CROSS LEFT FULL RIGHT INNER_P NATURAL
+*/
 %%
 
 TopLevelStatement :
-	Statement SEMICOLON { }
+	Statement ';' { }
 	| Statement   { }
 	;
 
@@ -531,11 +629,11 @@ CREATE TABLE USER_DEFINED_NAME
 	parser->setOperation(KexiDB::Parser::OP_CreateTable);
 	parser->createTable($3);
 }
-LEFTPAREN ColDefs RIGHTPAREN
+'(' ColDefs ')'
 ;
 
 ColDefs:
-ColDefs COMMA ColDef|ColDef
+ColDefs ',' ColDef|ColDef
 {
 }
 ;
@@ -594,14 +692,14 @@ SQL_TYPE
 	field = new KexiDB::Field();
 	field->setType($1);
 }
-| SQL_TYPE LEFTPAREN UNSIGNED_INTEGER RIGHTPAREN
+| SQL_TYPE '(' INTEGER_CONST ')'
 {
 	kdDebug() << "sql + length" << endl;
 	field = new KexiDB::Field();
 	field->setPrecision($3);
 	field->setType($1);
 }
-| VARCHAR LEFTPAREN UNSIGNED_INTEGER RIGHTPAREN
+| VARCHAR '(' INTEGER_CONST ')'
 {
 	field = new KexiDB::Field();
 	field->setPrecision($3);
@@ -637,17 +735,85 @@ Select ColViews
 }
 | Select ColViews Tables
 {
+//TODO: move this to all SELECT versions
+	//fix fields
+	KexiDB::BaseExpr *e;
+	for (KexiDB::BaseExpr::ListIterator it($2->list); (e = it.current()); ++it)
+	{
+		if (e->cl == KexiDBExpr_Variable) {
+			KexiDB::VariableExpr *v_e = static_cast<KexiDB::VariableExpr *>(e);
+			QString varName = v_e->name;
+			kdDebug() << "found variable name: " << varName << endl;
+			int dotPos = varName.find('.');
+			QString tableName, fieldName;
+//TODO: shall we also support db name?
+			if (dotPos>0) {
+				tableName = varName.left(dotPos);
+				fieldName = varName.mid(dotPos+1);
+			}
+			if (tableName.isEmpty()) {//fieldname only
+				fieldName = varName;
+				if (fieldName=="*") {
+					parser->select()->addAsterisk( new KexiDB::QueryAsterisk(parser->select()) );
+				}
+				else {
+				//find first table that has this field
+				//TODO
+				}
+			}
+			else {//table.fieldname
+				KexiDB::TableSchema *ts = tableDict[tableName];
+				if (ts) {
+					if (fieldName=="*") {
+						parser->select()->addAsterisk( new KexiDB::QueryAsterisk(parser->select(), ts) );
+					}
+					else {
+						kdDebug() << " --it's a table.name" << endl;
+						KexiDB::Field *realField = ts->field(fieldName);
+						if (realField) {
+	//						const int pos = parser->select()->fieldPos(f);
+	//						parser->select()->removeField(f);
+	//						parser->select()->insertField(pos, realField);
+							parser->select()->addField(realField);
+	//							f->setExpression( 0 ); //remove expr.
+		//						f->setTable( ts );
+	//						fieldRemoved = true;
+						}
+						else {
+							setError(i18n("Field not found"), i18n("Table \"%1\" has no \"%2\" field")
+								.arg(tableName).arg(fieldName));
+							break;
+						}
+					}
+				}
+				else {
+					tableNotFoundError(tableName);
+					break;
+				}
+			}
+		}
+	}
+	delete $2; //no longer needed
+	
+	for (QDictIterator<KexiDB::TableSchema> it(tableDict); it.current(); ++it) {
+		parser->select()->addTable( it.current() );
+	}
+
+	/* set parent table if there's only one */
+	if (parser->select()->tables()->count()==1)
+		parser->select()->setParentTable(parser->select()->tables()->first());
+
 	kdDebug() << "Select ColViews Tables" << endl;
 }
 | Select Tables
 {
 	kdDebug() << "Select ColViews Tables" << endl;
 }
-| Select ColViews Conditions
+| Select ColViews WhereClause
 {
 	kdDebug() << "Select ColViews Conditions" << endl;
 }
-| Select ColViews Tables Conditions
+| Select ColViews Tables WhereClause
 {
 	kdDebug() << "Select ColViews Tables Conditions" << endl;
 }
@@ -662,22 +828,155 @@ SELECT
 }
 ;
 
-Conditions:
-WHERE ColExpression
+WhereClause:
+WHERE aExpr
 {
-	kdDebug() << "WHERE " << $2 << endl;
+	$$ = $2;
 }
-| Conditions AND ColExpression
+/*|
 {
-	kdDebug() << "AND " << $3 << endl;
+	$$ = NULL;
+}*/
+;
+
+aExpr:
+aExpr AND aExpr
+{
+//	kdDebug() << "AND " << $3.debugString() << endl;
+	$$ = new KexiDB::BinaryExpr( KexiDBExpr_Logical, $1, AND, $3 );
 }
-| Conditions OR ColExpression
+| aExpr OR aExpr
 {
-	kdDebug() << "OR " << $3 << endl;
+//	kdDebug() << "OR " << $3 << endl;
+	$$ = new KexiDB::BinaryExpr( KexiDBExpr_Logical, $1, OR, $3 );
 }
-| LEFTPAREN Conditions RIGHTPAREN
+| NOT aExpr
 {
-	kdDebug() << "()" << endl;
+	$$ = new KexiDB::UnaryExpr( NOT, $2 );
+//	$$->setName($1->name() + " NOT " + $3->name());
+}
+| aExpr '+' aExpr
+{
+	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, $1, '+', $3);
+}
+| aExpr '-' aExpr
+{
+	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, $1, '-', $3);
+}
+| aExpr '/' aExpr
+{
+	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, $1, '/', $3);
+}
+| aExpr '*' aExpr
+{
+	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, $1, '*', $3);
+}
+| aExpr '%' aExpr
+{
+	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, $1, '%', $3);
+}
+| aExpr NOT_EQUAL aExpr
+{
+	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Relational, $1, NOT_EQUAL, $3);
+}
+| aExpr GREATER_THAN %prec GREATER_OR_EQUAL aExpr
+{
+	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Relational, $1, GREATER_THAN, $3);
+}
+| aExpr GREATER_OR_EQUAL aExpr
+{
+	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Relational, $1, GREATER_OR_EQUAL, $3);
+}
+| aExpr LESS_THAN %prec LESS_OR_EQUAL aExpr
+{
+	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Relational, $1, LESS_THAN, $3);
+}
+| aExpr LESS_OR_EQUAL aExpr
+{
+	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Relational, $1, LESS_OR_EQUAL, $3);
+}
+| aExpr LIKE aExpr
+{
+	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Relational, $1, LIKE, $3);
+}
+| aExpr SQL_IN aExpr
+{
+	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Relational, $1, SQL_IN, $3);
+}
+| USER_DEFINED_NAME '(' aExprList ')'
+{
+	kdDebug() << "  + function: " << $1 << "(" << $3->debugString() << ")" << endl;
+	$$ = new KexiDB::FunctionExpr($1, $3);
+}
+| USER_DEFINED_NAME
+{
+	$$ = new KexiDB::VariableExpr( $1 );
+	
+//TODO: simplify this later if that's 'only one field name' expression
+	kdDebug() << "  + identifier: " << $1 << endl;
+//	$$ = new KexiDB::Field();
+//	$$->setName($1);
+//	$$->setTable(dummy);
+
+//	parser->select()->addField(field);
+	requiresTable = true;
+}
+/*TODO: shall we also support db name? */
+| USER_DEFINED_NAME '.' USER_DEFINED_NAME
+{
+	$$ = new KexiDB::VariableExpr( QString($1) + "." + QString($3) );
+	kdDebug() << "  + identifier.identifier: " << $3 << "." << $1 << endl;
+//	$$ = new KexiDB::Field();
+//	s->setTable($1);
+//	$$->setName($3);
+	//$$->setTable(parser->db()->tableSchema($1));
+//	parser->select()->addField(field);
+//??	requiresTable = true;
+}
+| SQL_NULL
+{
+	$$ = new KexiDB::ConstExpr( SQL_NULL, QVariant() );
+	kdDebug() << "  + NULL" << endl;
+//	$$ = new KexiDB::Field();
+	//$$->setName(QString::null);
+}
+| CHARACTER_STRING_LITERAL
+{
+	$$ = new KexiDB::ConstExpr( CHARACTER_STRING_LITERAL, $1 );
+//	$$ = new KexiDB::Field();
+//	$$->setName($1);
+//	parser->select()->addField(field);
+	kdDebug() << "  + constant \"" << $1 << "\"" << endl;
+}
+| INTEGER_CONST
+{
+	$$ = new KexiDB::ConstExpr( INTEGER_CONST, $1 );
+//	$$ = new KexiDB::Field();
+//	$$->setName(QString::number($1));
+//	parser->select()->addField(field);
+	kdDebug() << "  + int constant: " << $1 << endl;
+}
+| REAL_CONST
+{
+	$$ = new KexiDB::ConstExpr( REAL_CONST, QPoint( $1.integer, $1.fractional ) );
+	kdDebug() << "  + real constant: " << $1.integer << "." << $1.fractional << endl;
+}
+| '(' aExpr ')'
+{
+	kdDebug() << "(expr)" << endl;
+	$$ = $2;
+}
+;
+
+aExprList:
+aExprList ',' aExpr
+{
+	$1->add( $3 );
+	$$ = $1;
+}
+|/* EMPTY */
+{
+	$$ = new KexiDB::NArgExpr(0/*unknown*/);
 }
 ;
 
@@ -713,7 +1012,13 @@ FROM FlatTableList
 ;
 
 FlatTableList:
-FlatTableList COMMA FlatTable|FlatTable
+aFlatTableList
+{
+}
+;
+
+aFlatTableList:
+aFlatTableList ',' FlatTable|FlatTable
 {
 }
 ;
@@ -723,12 +1028,14 @@ USER_DEFINED_NAME
 {
 	kdDebug() << "FROM: '" << $1 << "'" << endl;
 
-	KexiDB::TableSchema *schema = parser->db()->tableSchema($1);
-	parser->select()->setParentTable(schema);
-	parser->select()->addTable(schema);
-	requiresTable = false;
+//	KexiDB::TableSchema *schema = parser->db()->tableSchema($1);
+//	parser->select()->setParentTable(schema);
+//	parser->select()->addTable(schema);
+//	requiresTable = false;
 	addTable($1);
 
+	/*
+//TODO: this isn't ok for more tables:
 	KexiDB::Field::ListIterator it = parser->select()->fieldsIterator();
 	for(KexiDB::Field *item; (item = it.current()); ++it)
 	{
@@ -747,222 +1054,126 @@ USER_DEFINED_NAME
 				yyerror("fieldlisterror");
 			}	
 		}
-	}
+	}*/
 }
 ;
 
 
 
 ColViews:
-ColViews COMMA ColItem|ColItem
+ColViews ',' ColItem
 {
+	$$ = $1;
+	$$->add( $3 );
+	kdDebug() << "ColViews: ColViews , ColItem" << endl;
+}
+|ColItem
+{
+	$$ = new KexiDB::NArgExpr(0);
+	$$->add( $1 );
+	kdDebug() << "ColViews: ColItem" << endl;
 }
 ;
 
 ColItem:
 ColExpression
 {
-	kdDebug() << " adding field '" << $1->name() << "'" << endl;
-	parser->select()->addField($1);
-//	parser->fieldList()->append($1);
+//	$$ = new KexiDB::Field();
+//	dummy->addField($$);
+//	$$->setExpression( $1 );
+//	parser->select()->addField($$);
+	$$ = $1;
+	kdDebug() << " added column expr: '" << $1->debugString() << "'" << endl;
 }
 | ColWildCard
 {
+	$$ = $1;
+	kdDebug() << " added column wildcard: '" << $1->debugString() << "'" << endl;
 }
 | ColExpression AS USER_DEFINED_NAME
 {
-	kdDebug() << " adding field '" << $1->name() << "' as '" << $3 << "'" << endl;
-//	parser->fieldList()->append($1);
-	parser->select()->addField($1);
-	parser->select()->setAlias($1, $3);
+//	$$ = new KexiDB::Field();
+//	$$->setExpression( $1 );
+//	parser->select()->addField($$);
+	$$ = $1;
+//TODO	parser->select()->setAlias($$, $3);
+	kdDebug() << " added column expr: '" << $1->debugString() << "' as '" << $3 << "'" << endl;
 }
 | ColExpression USER_DEFINED_NAME
 {
-	kdDebug() << " adding field '" << $1->name() << "' as '" << $2 << "'" << endl;
-//	parser->fieldList()->append($1);
-	parser->select()->addField($1);
-	parser->select()->setAlias($1, $2);
-}
-;
-
-ColView:
-USER_DEFINED_NAME
-{
-	kdDebug() << "  + col " << $1 << endl;
-	$$ = new KexiDB::Field();
-	$$->setName($1);
-	$$->setTable(dummy);
-//	parser->select()->addField(field);
-	requiresTable = true;
-}
-| USER_DEFINED_NAME DOT USER_DEFINED_NAME
-{
-	kdDebug() << "  + col " << $3 << " from " << $1 << endl;
-	$$ = new KexiDB::Field();
-//	s->setTable($1);
-	$$->setName($3);
-	$$->setTable(parser->db()->tableSchema($1));
-//	parser->select()->addField(field);
-	requiresTable = true;
-}
-| SQL_NULL
-{
-	$$ = new KexiDB::Field();
-	$$->setName(QString::null);
-}
-| CHARACTER_STRING_LITERAL
-{
-	$$ = new KexiDB::Field();
-	$$->setName($1);
-//	parser->select()->addField(field);
-	kdDebug() << "  + constant " << $1 << endl;
-}
-| SIGNED_INTEGER
-{
-	$$ = new KexiDB::Field();
-	$$->setName(QString::number($1));
-//	parser->select()->addField(field);
-	kdDebug() << "  + numerical constant " << $1 << endl;
-}
-| UNSIGNED_INTEGER
-{
-	$$ = new KexiDB::Field();
-	$$->setName(QString::number($1));
-//	parser->select()->addField(field);
-	kdDebug() << "  + numerical constant " << $1 << endl;
+//	$$ = new KexiDB::Field();
+//	$$->setExpression( $1 );
+//	parser->select()->addField($$);
+	$$ = $1;
+//TODO	parser->select()->setAlias($$, $2);
+	kdDebug() << " added column expr: '" << $1->debugString() << "' as '" << $2 << "'" << endl;
 }
 ;
 
 ColExpression:
-ColView
+aExpr
 {
 	$$ = $1;
-	kdDebug() << "to expression: " << $$->name() << endl;
 }
-| ColExpression ARITHMETIC_PLUS ColExpression
+/*
+| SUM '(' ColExpression ')'
 {
-	kdDebug() << $1->name() << " + " << $3->name() << endl;
-	$$->setName($1->name() + " + " + $3->name());
-}
-| ColExpression ARITHMETIC_MINUS ColExpression
-{
-	kdDebug() << $1->name() << " - " << $3->name() << endl;
-	$$->setName($1->name() + " - " + $3->name());
-}
-| ColExpression SLASH ColExpression
-{
-	kdDebug() << $1->name() << " / " << $3->name() << endl;
-	$$->setName($1->name() + " / " + $3->name());
-}
-| ColExpression ASTERISK ColExpression
-{
-	kdDebug() << $1->name() << " * " << $3->name() << endl;
-	$$->setName($1->name() + " * " + $3->name());
-}
-| ColExpression NOT ColExpression
-{
-	kdDebug() << $1->name() << " NOT " << $3->name() << endl;
-	$$->setName($1->name() + " NOT " + $3->name());
-}
-| ColExpression EQUAL ColExpression
-{
-	kdDebug() << $1->name() << " = " << $3->name() << endl;
-	$$->setName($1->name() + " = " + $3->name());
-}
-| ColExpression NOT_EQUAL ColExpression
-{
-	kdDebug() << $1->name() << " <> " << $3->name() << endl;
-	$$->setName($1->name() + " <> " + $3->name());
-}
-| ColExpression GREATER_THAN ColExpression
-{
-	kdDebug() << $1->name() << " > " << $3->name() << endl;
-	$$->setName($1->name() + " > " + $3->name());
-}
-| ColExpression GREATER_OR_EQUAL ColExpression
-{
-	kdDebug() << $1->name() << " >= " << $3->name() << endl;
-	$$->setName($1->name() + " >= " + $3->name());
-}
-| ColExpression LESS_THAN ColExpression
-{
-	kdDebug() << $1->name() << " < " << $3->name() << endl;
-	$$->setName($1->name() + " < " + $3->name());
-}
-| ColExpression LESS_OR_EQUAL ColExpression
-{
-	kdDebug() << $1->name() << " <= " << $3->name() << endl;
-	$$->setName($1->name() + " <= " + $3->name());
-}
-| ColExpression LIKE ColExpression
-{
-	kdDebug() << $1->name() << " LIKE " << $3->name() << endl;
-	$$->setName($1->name() + " LIKE " + $3->name());
-}
-| ColExpression PERCENT ColExpression
-{
-	kdDebug() << $1->name() << " % " << $3->name() << endl;
-	$$->setName($1->name() + " % " + $3->name());
-}
-| LEFTPAREN ColExpression RIGHTPAREN
-{
-	kdDebug() << "(" << $2->name() << ")" << endl;
-	$$ = $2;
-	$$->setName("(" + $2->name() + ")");
-}
-| SUM LEFTPAREN ColExpression RIGHTPAREN
-{
-	$$ = $3;
-	$$->setName("SUM(" + $3->name() + ")");
+//	$$ = new KexiDB::AggregationExpr( SUM,  );
+//TODO
+//	$$->setName("SUM(" + $3->name() + ")");
 //wait	$$->containsGroupingAggregate(true);
 //wait	parser->select()->grouped(true);
 }
-| SQL_MIN LEFTPAREN ColExpression RIGHTPAREN
+| SQL_MIN '(' ColExpression ')'
 {
 	$$ = $3;
-	$$->setName("MIN(" + $3->name() + ")");
+//TODO
+//	$$->setName("MIN(" + $3->name() + ")");
 //wait	$$->containsGroupingAggregate(true);
 //wait	parser->select()->grouped(true);
 }
-| SQL_MAX LEFTPAREN ColExpression RIGHTPAREN
+| SQL_MAX '(' ColExpression ')'
 {
 	$$ = $3;
-	$$->setName("MAX(" + $3->name() + ")");
+//TODO
+//	$$->setName("MAX(" + $3->name() + ")");
 //wait	$$->containsGroupingAggregate(true);
 //wait	parser->select()->grouped(true);
 }
-| AVG LEFTPAREN ColExpression RIGHTPAREN
+| AVG '(' ColExpression ')'
 {
 	$$ = $3;
-	$$->setName("AVG(" + $3->name() + ")");
+//TODO
+//	$$->setName("AVG(" + $3->name() + ")");
 //wait	$$->containsGroupingAggregate(true);
 //wait	parser->select()->grouped(true);
-}
-| DISTINCT LEFTPAREN ColExpression RIGHTPAREN
+}*/
+//?
+| DISTINCT '(' ColExpression ')' 
 {
 	$$ = $3;
-	$$->setName("DISTINCT(" + $3->name() + ")");
+//TODO
+//	$$->setName("DISTINCT(" + $3->name() + ")");
 }
 ;
 
 ColWildCard:
-ASTERISK
+'*'
 {
+	$$ = new KexiDB::VariableExpr("*");
 	kdDebug() << "all columns" << endl;
-//	field = new KexiDB::Field();
-//	field->setName("*");
-	KexiDB::QueryAsterisk *ast = new KexiDB::QueryAsterisk(parser->select(), dummy);
-	parser->select()->addAsterisk(ast);
-//	fieldList.append(ast);
-	requiresTable = true;
+
+//	KexiDB::QueryAsterisk *ast = new KexiDB::QueryAsterisk(parser->select(), dummy);
+//	parser->select()->addAsterisk(ast);
+//	requiresTable = true;
 }
-| USER_DEFINED_NAME DOT ASTERISK
+| USER_DEFINED_NAME_DOT_ASTERISK
 {
+	$$ = new KexiDB::VariableExpr($1);
 	kdDebug() << "  + all columns from " << $1 << endl;
-	KexiDB::QueryAsterisk *ast = new KexiDB::QueryAsterisk(parser->select(), parser->db()->tableSchema($1));
-	parser->select()->addAsterisk(ast);
-//	fieldList.append(ast);
-	requiresTable = true;
+//	KexiDB::QueryAsterisk *ast = new KexiDB::QueryAsterisk(parser->select(), parser->db()->tableSchema($1));
+//	parser->select()->addAsterisk(ast);
+//	requiresTable = true;
 }
 ;
 

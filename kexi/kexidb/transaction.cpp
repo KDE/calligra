@@ -24,6 +24,10 @@
 
 #include <assert.h>
 
+//remove debug
+#undef KexiDBDbg
+#define KexiDBDbg if (0) kdDebug()
+
 using namespace KexiDB;
 
 //helper for debugging

@@ -403,14 +403,18 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 		return;
 	}
 
+	const uint fieldsExpandedCount = m_fieldsExpanded->count();
 	for( uint i=0, j=0; i<m_fieldCount; i++, col++, j++ ) {
-		while (j < m_detailedVisibility.count() && !m_detailedVisibility[j]) //!m_query->isFieldVisible(j))
+//		while (j < m_detailedVisibility.count() && !m_detailedVisibility[j]) //!m_query->isFieldVisible(j))
+			//j++;
+		while (j < fieldsExpandedCount && !m_fieldsExpanded->at(j)->visible)
 			j++;
-		if (j >= m_detailedVisibility.count()) {
+		if (j >= fieldsExpandedCount) {
 			//ERR!
 			break;
 		}
-		KexiDB::Field *f = m_fieldsExpanded->at(j);
+//		KexiDB::Field *f = m_fieldsExpanded->at(j);
+		KexiDB::Field *f = m_fieldsExpanded->at(j)->field;
 		KexiDBDrvDbg << "SQLiteCursor::storeCurrentRow(): col=" << (col ? *col : 0) << endl;
 
 		if (!*col)
@@ -434,7 +438,7 @@ QVariant SQLiteCursor::value(uint i)
 		return QVariant();
 //TODO: allow disable range checking! - performance reasons
 //	const KexiDB::Field *f = m_query ? m_query->field(i) : 0;
-	KexiDB::Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(i) : 0;
+	KexiDB::Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(i)->field : 0;
 	//from most to least frequently used types:
 	if (!f || f->isTextType())
 		return QVariant( d->curr_coldata[i] );

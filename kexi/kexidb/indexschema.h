@@ -143,8 +143,8 @@ class KEXI_DB_EXPORT IndexSchema : public FieldList, public SchemaData
 		 is the requirement for PRIMARY KEYS. */
 		void setUnique(bool set);
 
-		/*! Shows debug information about the index. */
-		virtual void debug() const;
+		/*! \return String for debugging purposes. */
+		virtual QString debugString();
 	protected:
 
 		/*! Internal constructor for convenience.

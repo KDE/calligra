@@ -20,12 +20,9 @@
  */
 
 #include <kexidb/field.h>
-
 #include <kexidb/connection.h>
 #include <kexidb/driver.h>
-#if 0
 #include <kexidb/expression.h>
-#endif
 
 // we use here i18n() but this depends on kde libs: TODO: add #ifdefs
 #include <kdebug.h>
@@ -48,7 +45,7 @@ Field::Field()
 	,m_defaultValue( QVariant(QString::null) )
 	,m_order(-1)
 	,m_width(0)
-//	,m_expr(0)
+	,m_expr(0)
 {
 	setConstraints(NoConstraints);
 }
@@ -64,7 +61,7 @@ Field::Field(TableSchema *tableSchema)
 	,m_defaultValue( QVariant(QString::null) )
 	,m_order(tableSchema->fieldCount())
 	,m_width(0)
-//	,m_expr(0)
+	,m_expr(0)
 {
 	setConstraints(NoConstraints);
 }
@@ -84,7 +81,7 @@ Field::Field(const QString& name, Type ctype,
 	,m_caption(caption)
 	,m_desc(description)
 	,m_width(width)
-//	,m_expr(0)
+	,m_expr(0)
 {
 	setConstraints(cconst);
 	if (m_length==0) {//0 means default length:
@@ -97,20 +94,16 @@ Field::Field(const QString& name, Type ctype,
 Field::Field(const Field& f)
 {
 	(*this) = f;
-#if 0
 	if (f.m_expr) {//deep copy the expresion
-		m_expr = new Expression(*f.m_expr);
-		m_expr->m_field = this;
+		m_expr = new BaseExpr(*f.m_expr);
+//		m_expr->m_field = this;
 	} else
 		m_expr = 0;
-#endif
 }
 
 Field::~Field()
 {
-#if 0
 	delete m_expr;
-#endif
 }
 
 QVariant::Type Field::variantType(uint type)
@@ -508,17 +501,18 @@ void Field::setIndexed(bool s)
 }
 
 
-QString Field::debugString() const
+QString Field::debugString()
 {
 	KexiDB::Connection *conn = table() ? table()->connection() : 0;
 	QString dbg = m_name + " ";
 	if (m_options & Field::Unsigned)
 		dbg += " UNSIGNED ";
 	dbg += (conn && conn->driver()) ? conn->driver()->sqlTypeName(m_type) : Driver::defaultSQLTypeName(m_type);
+	QString prec_str;
+	if (m_precision > 0 && isFPNumericType())
+		prec_str = QString(", ") + QString::number(m_precision);
 	if (m_length > 0)
-		dbg += "(" + QString::number(m_length) + ")";
-	if (m_precision > 0)
-		dbg += " PRECISION(" + QString::number(m_precision) + ")";
+		dbg += "(" + QString::number(m_length) + prec_str + ")";
 	if (m_constraints & Field::AutoInc)
 		dbg += " AUTOINC";
 	if (m_constraints & Field::Unique)
@@ -534,8 +528,12 @@ QString Field::debugString() const
 	return dbg;
 }
 
-#if 0
-void Field::setExpression(KexiDB::Expression *expr)
+void Field::debug()
+{
+	KexiDBDbg << debugString() << endl;
+}
+
+void Field::setExpression(KexiDB::BaseExpr *expr)
 {
 	if (m_expr==expr)
 		return;
@@ -543,11 +541,10 @@ void Field::setExpression(KexiDB::Expression *expr)
 		delete m_expr;
 	}
 	m_expr = expr;
-	if (m_expr) {
-		m_expr->m_field = this;
-	}
+//	if (m_expr) {
+	//	m_expr->m_field = this;
+//	}
 }
-#endif
 
 //-------------------------------------------------------
 #define ADDTYPE(type, i18, str) this->at(Field::type) = i18; \

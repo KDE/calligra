@@ -27,6 +27,7 @@
 #include <qmap.h>
 #include <qptrlist.h>
 #include <qptrdict.h>
+#include <qintdict.h>
 #include <qbitarray.h>
 
 #include <kexidb/fieldlist.h>
@@ -38,12 +39,33 @@ namespace KexiDB {
 
 class Connection;
 class QueryAsterisk;
+class QuerySchemaPrivate;
+
+/*! Helper class that assigns additional information for the field in a query:
+	- alias
+	- visibility
+	QueryFieldInfo::Vector is created and returned by QuerySchema::fieldsExpanded().
+	It's efficiently cached there.
+*/
+class KEXI_DB_EXPORT QueryFieldInfo
+{
+	public:
+		typedef QPtrVector<QueryFieldInfo> Vector;
+		typedef QPtrList<QueryFieldInfo> List;
+		typedef QPtrListIterator<QueryFieldInfo> ListIterator;
+		
+		QueryFieldInfo(Field *f, QCString _alias, bool _visible)
+		 : field(f), alias(_alias), visible(_visible)
+		{
+		}
+		Field *field;
+		QCString alias;
+		bool visible : 1;
+};
 
 /*! KexiDB::QuerySchema provides information about database query
 	that can be executed using SQL database engine. 
-	
 */
-
 class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 {
 	public:
@@ -64,18 +86,27 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		
 		virtual ~QuerySchema();
 		
-		/*! Adds \a field to 
-		 Added field will not be owned by this QuerySchema object,
+		/*! Inserts \a field to the field list at \a index position.
+		 Inserted field will not be owned by this QuerySchema object,
 		 but still by corresponding TableSchema. 
 		 
 		 As \a field object you can also pass KexiDB::QueryAsterisk,
 		 (see QueryAsterisk class description).
 		 
-		 Note: After adding a field, corresponding table will be automatically 
+		 Note: After inserting a field, corresponding table will be automatically 
 		 added to query's tables list if it is not present there (see tables()).
-		 Field bust have its table assigned. 
+		 Field must have its table assigned. 
 		 */
+		virtual FieldList& insertField(uint index, Field *field);
+
+		virtual FieldList& insertField(uint index, Field *field, bool visible);
+		
+		/*! Adds \a field to the field list.
+		 \sa insertField() */
 		virtual KexiDB::FieldList& addField(KexiDB::Field* field, bool visible = true);
+
+		/*! Removes field from the field list. Use with care. */
+		virtual void removeField(KexiDB::Field *field);
 
 		/*! \return field's \a number visibility. By default field is visible. */
 		bool isFieldVisible(uint number) const;
@@ -104,8 +135,8 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 \sa FieldList::clear() */
 		virtual void clear();
 
-		//! Outputs debug information.
-		virtual void debug();
+		/*! \return String for debugging purposes. */
+		virtual QString debugString();
 
 		/*! If query was created using a connection, 
 			returns this connection object, otherwise NULL. */
@@ -129,7 +160,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! \return list of tables used in a query. 
 		 This also includes parent table. 
 		 \sa parentTable() */
-		TableSchema::List* tables() { return &m_tables; }
+		TableSchema::List* tables() const;
 
 		/*! Adds \a table schema as one of tables used in a query. */
 		void addTable(TableSchema *table);
@@ -141,25 +172,25 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		void removeTable(TableSchema *table);
 		
 		/*! \return true if the query uses \a table. */
-		bool contains(TableSchema *table) { return m_tables.find(table)!=-1; }
-		
-		/*! \return alias of \a field ot empty string 
+		bool contains(TableSchema *table) const;
+
+		/*! \return alias of a field at \a index or null string 
 		 if there is no alias for \a field 
 		 or if there is no such field within the query defined */
-		QString alias(Field *field) const { return m_aliases[field]; }
+		QCString alias(uint index) const;
 		
 		/*! This is convenience method. 
-		 \return true if \a field has non empty alias defined within the query.
-		 if there is no alias for \a field
+		 \return true if a field at \a index has non empty alias defined within the query.
+		 if there is no alias for this field,
 		 or if there is no such field in the query defined, false is returned. */
-		bool hasAlias(Field *field) const { return !m_aliases[field].isEmpty(); }
+		bool hasAlias(uint index) const;
 
-		/*! Sets \a alias for \a field within the query. 
-		 Passing empty sting to \a alias clears alias for given field. */
-		void setAlias(Field *field, const QString& alias);
+		/*! Sets \a alias for a field at \a index, within the query. 
+		 Passing empty sting to \a alias clears alias for a given field. */
+		void setAlias(uint index, const QCString& alias);
 
 		/*! \return a list of relationships defined for this query */
-		Relationship::List* relationships() { return &m_relations; }
+		Relationship::List* relationships() const;
 
 		/*! Adds a new relationship defined by \a field1 and \a field2.
 		 Both fields should belong to two different tables of this query.
@@ -171,7 +202,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		Relationship* addRelationship( Field *field1, Field *field2 );
 
 		/*! \return list of QueryAsterisk objects defined for this query */
-		Field::List* asterisks() { return &m_asterisks; }
+		Field::List* asterisks() const;
 
 		/*! QuerySchema::fields() returns vector of fields used in the query, but 
 		 in a case when there are asterisks defined for the query,
@@ -184,14 +215,14 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 This method's result is cached by QuerySchema object.
 @todo js: UPDATE CACHE!
 		*/
-		Field::Vector fieldsExpanded(QValueList<bool> *detailedVisibility = 0);
+		QueryFieldInfo::Vector fieldsExpanded();//QValueList<bool> *detailedVisibility = 0);
 
 		/*! \return a map for fast lookup of query fields' order.
 		 This is exactly opposite information compared to vector returned by fieldsExpanded()
 		 This method's result is cached by QuerySchema object.
 @todo js: UPDATE CACHE!
 		*/
-		QMap<Field*,uint> fieldsOrder();
+		QMap<QueryFieldInfo*,uint> fieldsOrder();
 
 		/*! \return table describing order of PKEY fields within the query.
 		 It is usable foe e.g. Conenction::updateRow(), when we need 
@@ -205,63 +236,41 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		*/
 		QValueVector<uint> pkeyFieldsOrder();
 
+		/*! \return a list of field infos for all auto-incremented fields
+		 from parent table of this query. This result is cached for efficiency. 
+		 fieldsExpanded() is used for that.
+		*/
+		QueryFieldInfo::List* autoIncrementFields();
+
 		/*! \return a preset statement (if any). */
-		QString      statement() { return m_statement; }
+		QString statement() const;
 
 		//! forces a query statement (i.e. no statement is composed from QuerySchema's content)
-		void         setStatement(const QString &s) { m_statement = s; }
+		void setStatement(const QString &s);
 
+		/*! \return a string that is a result of concatenating all field names for \a infolist,
+		 with "," between each one. This is usable e.g. as argument like "field1,field2" 
+		 for "INSERT INTO (xxx) ..". The result of this method is effectively cached,
+		 and it is invalidated when set of fields changes (e.g. using clear() 
+		 or addField()).
+		 
+		 This method is similar to FieldList::sqlFieldsList() it just uses
+		 QueryFieldInfo::List instead of Field::List.
+		*/
+		static QString sqlFieldsList(QueryFieldInfo::List* infolist);
+
+		/*! \return cached sql list created using sqlFieldsList() on a list returned
+		 by autoIncrementFields(). */
+		QString autoIncrementSQLFieldsList();
+		
 	protected:
 		void init();
 
 	//		/*! Automatically retrieves query schema via connection. */
 //		QuerySchema(Connection *conn);
 
-	//js	QStringList m_primaryKeys;
-//		Index::List m_indices;
-//		QString m_name;
-
-//		int m_id; //! unique identifier used in kexi__objects for this query
-
-//		/*! Connection that was used to retrieve this query schema (may be NULL). */
-//js: conn from m_parent_table will be reused		Connection *m_conn; 
-		/*! Parent table of the query. (may be NULL)
-			Any data modifications can be performed if we know parent table.
-			If null, query's records cannot be modified. */
-		TableSchema *m_parent_table;
+		QuerySchemaPrivate *d;
 		
-		/*! List of tables used in this query */
-		TableSchema::List m_tables;
-		
-		/*! Used to mapping Fields to its aliases for this query */
-		QMap<Field*, QString> m_aliases;
-
-		/*! Used to store visibility flag for every field */
-		QBitArray m_visibility;
-//		QPtrDict<Field> m_visibility;
-
-		/*! List of asterisks defined for this query  */
-		Field::List m_asterisks;
-
-		/*! Temporary field vector for using in fieldsExpanded() */
-		Field::Vector *m_fieldsExpanded;
-
-		/*! A map for fast lookup of query fields' order.
-		 This is exactly opposite information compared to vector returned by fieldsExpanded()
-		*/
-		QMap<Field*,uint> *m_fieldsOrder;
-
-		QValueList<bool> m_detailedVisibility;
-
-		//! order of PKEY fields (e.g. for updateRow() )
-		QValueVector<uint> *m_pkeyFieldsOrder;
-
-		/*! forced (predefined) statement */
-		QString      m_statement;
-
-		/*! Relationships defined for this query. */
-		Relationship::List m_relations;
-
 	friend class Connection;
 };
 
@@ -325,7 +334,7 @@ class KEXI_DB_EXPORT QueryAsterisk : protected Field
 		bool isAllTableAsterisk() const { return m_table==NULL; }
 		
 		/*! \return String for debugging purposes. */
-		virtual QString debugString() const;
+		virtual QString debugString();
 
 	protected:
 		/*! Table schema for this asterisk */

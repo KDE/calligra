@@ -27,11 +27,102 @@
 
 using namespace KexiDB;
 
+//=======================================
+namespace KexiDB {
+class QuerySchemaPrivate
+{
+	public:
+		QuerySchemaPrivate()
+		 : parent_table(0)
+		 , maxIndexWithAlias(-1)
+		 , visibility(64)
+		 , fieldsExpanded(0)
+		 , autoincFields(0)
+		 , fieldsOrder(0)
+		 , pkeyFieldsOrder(0)
+		{
+			aliases.setAutoDelete(true);
+			asterisks.setAutoDelete(true);
+			relations.setAutoDelete(true);
+			visibility.fill(false);
+		}
+		~QuerySchemaPrivate()
+		{
+			delete fieldsExpanded;
+			delete autoincFields;
+			delete fieldsOrder;
+			delete pkeyFieldsOrder;
+		}
+
+		void clearCachedData()
+		{
+			if (fieldsExpanded) {
+				delete fieldsExpanded;
+				fieldsExpanded = 0;
+				delete fieldsOrder;
+				fieldsOrder = 0;
+				delete autoincFields;
+				autoincFields = 0;
+				autoIncrementSQLFieldsList = QString::null;
+			}
+		}
+		
+		/*! Parent table of the query. (may be NULL)
+			Any data modifications can be performed if we know parent table.
+			If null, query's records cannot be modified. */
+		TableSchema *parent_table;
+		
+		/*! List of tables used in this query */
+		TableSchema::List tables;
+		
+		/*! Used to mapping Fields to its aliases for this query */
+		QIntDict<QCString> aliases;
+		
+		/*! Helper */
+		int maxIndexWithAlias;
+
+		/*! Used to store visibility flag for every field */
+		QBitArray visibility;
+
+		/*! List of asterisks defined for this query  */
+		Field::List asterisks;
+
+		/*! Temporary field vector for using in fieldsExpanded() */
+//		Field::Vector *fieldsExpanded;
+		QueryFieldInfo::Vector *fieldsExpanded;
+
+		/*! A cache for autoIncrementFields(). */
+		QueryFieldInfo::List *autoincFields;
+		
+		/*! A cache for autoIncrementSQLFieldsList(). */
+		QString autoIncrementSQLFieldsList;
+
+		/*! A map for fast lookup of query fields' order.
+		 This is exactly opposite information compared to vector returned 
+		 by fieldsExpanded() */
+		QMap<QueryFieldInfo*,uint> *fieldsOrder;
+
+//		QValueList<bool> detailedVisibility;
+
+		/*! order of PKEY fields (e.g. for updateRow() ) */
+		QValueVector<uint> *pkeyFieldsOrder;
+
+		/*! forced (predefined) statement */
+		QString statement;
+
+		/*! Relationships defined for this query. */
+		Relationship::List relations;
+};
+}
+
+//=======================================
+
+//=======================================
+
 QuerySchema::QuerySchema()
 	: FieldList(false)//fields are not owned by QuerySchema object
 	, SchemaData(KexiDB::QueryObjectType)
-//	, m_conn(0)
-	, m_parent_table(0)
+	, d( new QuerySchemaPrivate() )
 {
 	init();
 }
@@ -39,124 +130,135 @@ QuerySchema::QuerySchema()
 QuerySchema::QuerySchema(TableSchema* tableSchema)
 	: FieldList(false)
 	, SchemaData(KexiDB::QueryObjectType)
-//	, m_conn(0)
-	, m_parent_table(tableSchema)
+	, d( new QuerySchemaPrivate() )
 {
+	d->parent_table = tableSchema;
+	assert(d->parent_table);
 	init();
-	assert(m_parent_table);
-	if (!m_parent_table) {
+	if (!d->parent_table) {
 		m_name = QString::null;
 		return;
 	}
-	addTable(m_parent_table);
+	addTable(d->parent_table);
 	//defaults:
 	//inherit name from a table
-	m_name = m_parent_table->name();
+	m_name = d->parent_table->name();
 	//inherit caption from a table
-	m_caption = m_parent_table->caption();
+	m_caption = d->parent_table->caption();
 	//add all fields of the table as asterisk:
 	addField( new QueryAsterisk(this) );
 }
 
 QuerySchema::~QuerySchema()
 {
-	delete m_fieldsExpanded;
-	delete m_pkeyFieldsOrder;
+	delete d;
 }
 
 void QuerySchema::init()
 {
-	m_visibility = 64;
 	m_type = KexiDB::QueryObjectType;
-	m_tables.setAutoDelete(false);
-	m_asterisks.setAutoDelete(true);
-	m_relations.setAutoDelete(true);
-	m_fieldsExpanded=0;
-	m_fieldsOrder=0;
-	m_pkeyFieldsOrder=0;
-	m_visibility.fill(false);
 }
 
 void QuerySchema::clear()
 {
 	FieldList::clear();
 	SchemaData::clear();
-	m_aliases.clear();
-	m_asterisks.clear();
-	m_relations.clear();
-	m_parent_table = 0;
-	m_tables.clear();
-	if (m_fieldsExpanded) {
-		delete m_fieldsExpanded;
-		m_fieldsExpanded=0;
-		delete m_fieldsOrder;
-		m_fieldsOrder=0;
+	d->aliases.clear();
+	d->asterisks.clear();
+	d->relations.clear();
+	d->parent_table = 0;
+	d->tables.clear();
+	d->clearCachedData();
+	if (d->pkeyFieldsOrder) {
+		delete d->pkeyFieldsOrder;
+		d->pkeyFieldsOrder=0;
 	}
-	if (m_pkeyFieldsOrder) {
-		delete m_pkeyFieldsOrder;
-		m_pkeyFieldsOrder=0;
-	}
-	m_visibility.fill(false);
+	d->visibility.fill(false);
 }
 
-KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field, bool visible)
+//KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field, bool visible)
+FieldList& QuerySchema::insertField(uint index, Field *field, bool visible)
 {
 	if (!field)
 		return *this;
-	if (fieldCount()>=m_visibility.size())
-		m_visibility.resize(m_visibility.size()*2);
-	if (m_fieldsExpanded) {
-		delete m_fieldsExpanded;
-		m_fieldsExpanded = 0;
-		delete m_fieldsOrder;
-		m_fieldsOrder = 0;
-		m_detailedVisibility.clear();
+	if (index>m_fields.count()) {
+		kdWarning() << "QuerySchema::insertField(): index (" << index << ") out of range" << endl;
+		return *this;
 	}
+	if (fieldCount()>=d->visibility.size())
+		d->visibility.resize(d->visibility.size()*2);
+	d->clearCachedData();
 	if (!field->isQueryAsterisk() && !field->table()) {
 		KexiDBDbg << "QuerySchema::addField(): WARNING: field '"<<field->name()<<"' must contain table information!" <<endl;
 		return *this;
 	}
-	FieldList::addField(field);
+	FieldList::insertField(index, field);
 	if (field->isQueryAsterisk()) {
-		m_asterisks.append(field);
+		d->asterisks.append(field);
 		//if this is single-table asterisk,
 		//add a table to list if not exists there:
-		if (field->table() && (m_tables.findRef(field->table())==-1))
-			m_tables.append(field->table());
+		if (field->table() && (d->tables.findRef(field->table())==-1))
+			d->tables.append(field->table());
 	}
 	else {
 		//add a table to list if not exists there:
-		if (m_tables.findRef(field->table())==-1)
-			m_tables.append(field->table());
+		if (d->tables.findRef(field->table())==-1)
+			d->tables.append(field->table());
 	}
 //	//visible by default
 //	setFieldVisible(field, true);
-	m_visibility.setBit(fieldCount()-1, visible);
+//	d->visibility.setBit(fieldCount()-1, visible);
+	//update visibility (move bits to make a place for new one)
+	for (uint i=fieldCount()-1; i>index; i--)
+		d->visibility.setBit(i, d->visibility.testBit(i-1));
+	d->visibility.setBit(index, visible);
 	return *this;
+}
+
+FieldList& QuerySchema::insertField(uint index, Field *field)
+{
+	return insertField( index, field, true );
+}
+
+KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field, bool visible)
+{
+	return insertField(m_fields.count(), field, visible);
+}
+
+void QuerySchema::removeField(KexiDB::Field *field)
+{
+	if (!field)
+		return;
+	d->clearCachedData();
+	if (field->isQueryAsterisk()) {
+		d->asterisks.remove(field); //this will destroy this asterisk
+	}
+//TODO: should we also remove table for this field or asterisk?
+	FieldList::removeField(field);
 }
 
 bool QuerySchema::isFieldVisible(uint number) const
 {
-	return (number < fieldCount()) ? m_visibility.testBit(number) : false;
+	return (number < fieldCount()) ? d->visibility.testBit(number) : false;
 }
 
 void QuerySchema::setFieldVisible(uint number, bool v)
 {
-	m_visibility.setBit(number, v);
+	d->visibility.setBit(number, v);
 }
 
 #if 0
 bool QuerySchema::isFieldVisible(KexiDB::Field *f) const
 {
-	return m_visibility[f]!=0;
+	return d->visibility[f]!=0;
 }
 
 void QuerySchema::setFieldVisible(KexiDB::Field *f, bool v)
 {
-	m_visibility.take(f);
+	d->visibility.take(f);
 	if (!v)
 		return;
-	m_visibility.insert(f, f);
+	d->visibility.insert(f, f);
 }
 #endif
 
@@ -172,45 +274,60 @@ FieldList& QuerySchema::addAsterisk(QueryAsterisk *asterisk, bool visible)
 
 Connection* QuerySchema::connection()
 {
-	return m_parent_table ? m_parent_table->connection() : 0;
+	return d->parent_table ? d->parent_table->connection() : 0;
 }
 
-void QuerySchema::debug()
+QString QuerySchema::debugString()
 {
-	KexiDBDbg << "QUERY " << schemaDataDebugString() << endl;
-	KexiDBDbg << "  -PARENT_TABLE=" << (m_parent_table ? m_parent_table->name() :"(NULL)") << endl;
-	KexiDBDbg << "  -FIELDS/ASTERISKS: " << endl;
-	FieldList::debug();
+	QString dbg;
+	dbg.reserve(1024);
+	dbg = QString("QUERY ") + schemaDataDebugString() + "\n"
+		+ "-PARENT_TABLE=" + (d->parent_table ? d->parent_table->name() :"(NULL)")
+		+ "\n-COLUMNS:\n"
+		+ FieldList::debugString();
 
 	TableSchema *table;
 	QString table_names;
-	for ( table = m_tables.first(); table; table = m_tables.next() ) {
+	table_names.reserve(512);
+	for ( table = d->tables.first(); table; table = d->tables.next() ) {
 		if (!table_names.isEmpty())
 			table_names += ", ";
 		table_names += (QString("'") + table->name() + "'");
 	}
-	if (m_tables.isEmpty())
+	if (d->tables.isEmpty())
 		table_names = "<NONE>";
-	KexiDBDbg << "  -TABLES: " << table_names << endl;
-	QMap<Field*, QString>::Iterator it;
+	dbg += (QString("\n-TABLES:\n") + table_names);
 	QString aliases;
-	for ( it = m_aliases.begin(); it != m_aliases.end(); ++it ) {
-		aliases += (it.key()->name() + " -> " + it.data() + "\n");
-	}
-	if (m_aliases.isEmpty())
+	Field::ListIterator it( m_fields );
+	if (d->aliases.isEmpty())
 		aliases = "<NONE>";
-	KexiDBDbg << "  -ALIASES: " << aliases << endl;
+	else {
+		for (int i=0; it.current(); ++it, i++) {
+			QCString *alias = d->aliases[i];
+			if (alias)
+				aliases += (QString("field #%1: ").arg(i) 
+					+ (it.current()->name().isEmpty() ? "<noname>" : it.current()->name())
+					+ " -> " + (const char*)*alias + "\n");
+		}
+	}
+	dbg += QString("\n-ALIASES:\n" + aliases);
+	return dbg;
 }
 
 TableSchema* QuerySchema::parentTable() const
 {
-	return m_parent_table;
+	return d->parent_table;
 }
 
 void QuerySchema::setParentTable(TableSchema *table)
 { 
 	if (table)
-		m_parent_table=table; 
+		d->parent_table=table; 
+}
+
+TableSchema::List* QuerySchema::tables() const
+{
+	return &d->tables;
 }
 
 void QuerySchema::addTable(TableSchema *table)
@@ -218,103 +335,158 @@ void QuerySchema::addTable(TableSchema *table)
 	kdDebug() << "QuerySchema::addTable() " << (void *)table << endl;
 	if (!table)
 		return;
-	if (m_tables.findRef(table)==-1)
-		m_tables.append(table);
+	if (d->tables.findRef(table)==-1)
+		d->tables.append(table);
 }
 
 void QuerySchema::removeTable(TableSchema *table)
 {
 	if (!table)
 		return;
-	if (m_parent_table == table)
-		m_parent_table = 0;
-	m_tables.remove(table);
+	if (d->parent_table == table)
+		d->parent_table = 0;
+	d->tables.remove(table);
 	//todo: remove fields!
 }
 
-void QuerySchema::setAlias(Field *field, const QString& alias)
+bool QuerySchema::contains(TableSchema *table) const
 {
-	if (!field)
-		return;
-	if (alias.isEmpty()) {
-		m_aliases.remove(field);
-		return;
-	}
-	m_aliases[field] = alias;
+	return d->tables.find(table)!=-1;
 }
 
-Field::Vector QuerySchema::fieldsExpanded(QValueList<bool> *detailedVisibility)
+QCString QuerySchema::alias(uint index) const
 {
-	if (m_fieldsExpanded) {
-		if (detailedVisibility)
-			*detailedVisibility = m_detailedVisibility;
-		return *m_fieldsExpanded;
+	QCString *a = d->aliases[index];
+	return a ? *a : QCString();
+}
+
+bool QuerySchema::hasAlias(uint index) const
+{
+	return d->aliases[index]!=0;
+}
+
+void QuerySchema::setAlias(uint index, const QCString& alias)
+{
+	if (index >= m_fields.count()) {
+		KexiDBWarning << "QuerySchema::setAlias(): index ("  << index << ") out of range!" << endl;
+		return;
+	}
+	QCString fixedAlias = alias.lower().stripWhiteSpace();
+	if (fixedAlias.isEmpty()) {
+		d->aliases.remove(index);
+		d->maxIndexWithAlias = -1;
+	}
+	else {
+		d->aliases.replace(index, new QCString(fixedAlias));
+		d->maxIndexWithAlias = QMAX( d->maxIndexWithAlias, (int)index );
+	}
+}
+
+Relationship::List* QuerySchema::relationships() const
+{
+	return &d->relations;
+}
+
+Field::List* QuerySchema::asterisks() const
+{
+	return &d->asterisks;
+}
+		
+QString QuerySchema::statement() const
+{
+	return d->statement;
+}
+
+void QuerySchema::setStatement(const QString &s)
+{
+	d->statement = s;
+}
+
+QueryFieldInfo::Vector QuerySchema::fieldsExpanded()
+{
+	if (d->fieldsExpanded) {
+//		if (detailedVisibility)
+//			*detailedVisibility = d->detailedVisibility;
+		return *d->fieldsExpanded;
 	}
 
-	if (detailedVisibility)
-		detailedVisibility->clear();
+//	if (detailedVisibility)
+//		detailedVisibility->clear();
 
-	m_detailedVisibility.clear();
+//	d->detailedVisibility.clear();
 
-	Field::List list;
+	//collect all fields in a list (not a vector yet, because we do not know its size)
+	QueryFieldInfo::List list;
 	int i = 0;
-	Field *f;
 	int fieldNumber = 0;
-	for (f = m_fields.first(); f; f = m_fields.next(), fieldNumber++) {
+	for (Field *f = m_fields.first(); f; f = m_fields.next(), fieldNumber++) {
 		if (f->isQueryAsterisk()) {
 			if (static_cast<QueryAsterisk*>(f)->isSingleTableAsterisk()) {
 				Field::List *ast_fields = static_cast<QueryAsterisk*>(f)->table()->fields();
 				for (Field *ast_f = ast_fields->first(); ast_f; ast_f=ast_fields->next()) {
-					m_detailedVisibility += isFieldVisible(fieldNumber);
-					list.append(ast_f);
+//					d->detailedVisibility += isFieldVisible(fieldNumber);
+					list.append( new QueryFieldInfo(ast_f, QCString()/*no field for asterisk!*/,
+						isFieldVisible(fieldNumber)) 
+					);
+//					list.append(ast_f);
 				}
 			}
 			else {//all-tables asterisk: itereate through table list
-				for (TableSchema *table = m_tables.first(); table; table = m_tables.next()) {
+				for (TableSchema *table = d->tables.first(); table; table = d->tables.next()) {
 					//add all fields from this table
 					Field::List *tab_fields = table->fields();
 					for (Field *tab_f = tab_fields->first(); tab_f; tab_f = tab_fields->next()) {
 //! \todo (js): perhaps not all fields should be appended here
-						m_detailedVisibility += isFieldVisible(fieldNumber);
-						list.append(tab_f);
+//						d->detailedVisibility += isFieldVisible(fieldNumber);
+//						list.append(tab_f);
+						list.append( new QueryFieldInfo(tab_f, QCString()/*no field for asterisk!*/,
+							isFieldVisible(fieldNumber)) 
+						);
 					}
 				}
 			}
 		}
 		else {
-			m_detailedVisibility += isFieldVisible(fieldNumber);
-			list.append(f);
+			//a single field
+//			d->detailedVisibility += isFieldVisible(fieldNumber);
+			list.append( new QueryFieldInfo(f, alias(fieldNumber), isFieldVisible(fieldNumber)) );
+//			list.append(f);
 		}
 	}
-	if (!m_fieldsExpanded) {
-		m_fieldsExpanded = new Field::Vector( list.count() );
-		m_fieldsOrder = new QMap<Field*,uint>();
+	//prepare clean vector for expanded list, and a map for order information
+	if (!d->fieldsExpanded) {
+		d->fieldsExpanded = new QueryFieldInfo::Vector( list.count() );// Field::Vector( list.count() );
+		d->fieldsExpanded->setAutoDelete(true);
+		d->fieldsOrder = new QMap<QueryFieldInfo*,uint>();
 	}
 	else {//for future:
-		m_fieldsExpanded->clear();
-		m_fieldsExpanded->resize( list.count() );
-		m_fieldsOrder->clear();
+		d->fieldsExpanded->clear();
+		d->fieldsExpanded->resize( list.count() );
+		d->fieldsOrder->clear();
 	}
-	for (i=0, f = list.first(); f; f = list.next(), i++) {
-		m_fieldsExpanded->insert(i,f);
-		m_fieldsOrder->insert(f,i);
+	//fill the vector and the map
+	QueryFieldInfo::ListIterator it(list);
+	for (i=0; it.current(); ++it, i++)
+	{
+		d->fieldsExpanded->insert(i,it.current());
+		d->fieldsOrder->insert(it.current(),i);
 	}
-	if (detailedVisibility)
-		*detailedVisibility = m_detailedVisibility;
-	return *m_fieldsExpanded;
+//	if (detailedVisibility)
+//		*detailedVisibility = d->detailedVisibility;
+	return *d->fieldsExpanded;
 }
 
-QMap<Field*,uint> QuerySchema::fieldsOrder()
+QMap<QueryFieldInfo*,uint> QuerySchema::fieldsOrder()
 {
-	if (!m_fieldsOrder)
+	if (!d->fieldsOrder)
 		(void)fieldsExpanded();
-	return *m_fieldsOrder;
+	return *d->fieldsOrder;
 }
 
 QValueVector<uint> QuerySchema::pkeyFieldsOrder()
 {
-	if (m_pkeyFieldsOrder)
-		return *m_pkeyFieldsOrder;
+	if (d->pkeyFieldsOrder)
+		return *d->pkeyFieldsOrder;
 
 	TableSchema *tbl = parentTable();
 	if (!tbl || !tbl->primaryKey())
@@ -322,20 +494,20 @@ QValueVector<uint> QuerySchema::pkeyFieldsOrder()
 
 	//get order of PKEY fields (e.g. for save() )
 	IndexSchema *pkey = tbl->primaryKey();
-	if (!m_pkeyFieldsOrder) {
-		m_pkeyFieldsOrder = new QValueVector<uint>( pkey->fieldCount() );
+	if (!d->pkeyFieldsOrder) {
+		d->pkeyFieldsOrder = new QValueVector<uint>( pkey->fieldCount() );
 	}
-//			m_pkeyFieldsOrder->reserve(pkey->fieldCount());
+//			d->pkeyFieldsOrder->reserve(pkey->fieldCount());
 	const uint fCount = fieldsExpanded().count();
 	for (uint i=0, j=0; i<fCount; i++) {
-		Field *f = m_fieldsExpanded->at(i);
-		if (f->table()==tbl && pkey->field(f->name())!=0) {
-			KexiDBDbg << "Cursor::init(): FIELD " << f->name() << " IS IN PKEY" << endl;
-			(*m_pkeyFieldsOrder)[j]=i;
+		QueryFieldInfo *fi = d->fieldsExpanded->at(i);
+		if (fi->field->table()==tbl && pkey->field(fi->field->name())!=0) {
+			KexiDBDbg << "Cursor::init(): FIELD " << fi->field->name() << " IS IN PKEY" << endl;
+			(*d->pkeyFieldsOrder)[j]=i;
 			j++;
 		}
 	}
-	return *m_pkeyFieldsOrder;
+	return *d->pkeyFieldsOrder;
 }
 
 
@@ -348,8 +520,55 @@ Relationship* QuerySchema::addRelationship( Field *field1, Field *field2 )
 		return 0;
 	}
 
-	m_relations.append( r );
+	d->relations.append( r );
 	return r;
+}
+
+QueryFieldInfo::List* QuerySchema::autoIncrementFields()
+{
+	bool noCache = d->autoincFields;
+	if (!d->autoincFields) {
+		d->autoincFields = new QueryFieldInfo::List();
+	}
+	if (!d->parent_table) {
+		KexiDBWarning << "QuerySchema::autoIncrementFields(): no parent table!" << endl;
+		return d->autoincFields;
+	}
+	if (noCache) {
+		QueryFieldInfo::Vector fexp = fieldsExpanded();
+		for (int i=0; i<(int)fexp.count(); i++) {
+			QueryFieldInfo *fi = fexp[i];
+			if (fi->field->table() == d->parent_table && fi->field->isAutoIncrement()) {
+				d->autoincFields->append( fi );
+			}
+		}
+	}
+	return d->autoincFields;
+}
+
+QString QuerySchema::sqlFieldsList(QueryFieldInfo::List* infolist)
+{
+	if (!infolist)
+		return QString::null;
+	QString result;
+	result.reserve(256);
+	QueryFieldInfo::ListIterator it( *infolist );
+	bool start = true;
+	for (; it.current(); ++it) {
+		if (!start)
+			result += ",";
+		else
+			start = false;
+		result += it.current()->field->name();
+	}
+	return result;
+}
+
+QString QuerySchema::autoIncrementSQLFieldsList()
+{
+	if (d->autoIncrementSQLFieldsList.isEmpty())
+		d->autoIncrementSQLFieldsList = QuerySchema::sqlFieldsList( autoIncrementFields() );
+	return d->autoIncrementSQLFieldsList;
 }
 
 /*
@@ -404,7 +623,7 @@ Relationship* QuerySchema::addRelationship( Field *field1, Field *field2 )
 
 	Relationship *rel = new Relationship(masterIndex, detailsIndex);
 
-	m_relations.append( rel );
+	d->relations.append( rel );
 }*/
 
 //---------------------------------------------------
@@ -428,7 +647,7 @@ void QueryAsterisk::setTable(TableSchema *table)
 	m_table=table;
 }
 
-QString QueryAsterisk::debugString() const
+QString QueryAsterisk::debugString()
 {
 	QString dbg;
 	if (isAllTableAsterisk()) {

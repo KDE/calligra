@@ -52,15 +52,15 @@ Parser::createSelect()
 
 	m_select = new QuerySchema();
 	m_select->setStatement(m_statement);
-	m_fieldList = new PFieldList();
+	m_fieldList = new Field::List();
 }
 
-void
+bool
 Parser::parse(const QString &statement)
 {
 	clear();
 	m_statement = statement;
-	parseData(this, statement.latin1());
+	return parseData(this, statement.latin1());
 }
 
 void

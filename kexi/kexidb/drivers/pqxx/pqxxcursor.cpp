@@ -184,7 +184,7 @@ QVariant pqxxSqlCursor::pValue(uint pos) const
 		return QVariant();
 	}
 
-	KexiDB::Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(pos) : 0;
+	KexiDB::Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(pos)->field : 0;
 	//from most to least frequently used types:
 	if (!f || f->isTextType())
 	{

@@ -32,7 +32,7 @@ namespace KexiDB {
 
 class TableSchema;
 class FieldList;
-class Expression;
+class BaseExpr;
 
 //! Meta-data for a field
 /*! KexiDB::Field provides information about single database field.
@@ -394,13 +394,15 @@ class KEXI_DB_EXPORT Field
 		inline bool isQueryAsterisk() const { return m_type == Asterisk; }
 		
 		/*! \return string for debugging purposes. */
-		virtual QString debugString() const;
+		virtual QString debugString();
 
-#if 0
-		/*! \return KexiDB::Expression object if the field value is a result
+		/*! Shows debug information about this field. */
+		void debug();
+
+		/*! \return KexiDB::BaseExpr object if the field value is an
 		 expression.  Unless the expression is set with setExpresion(), it is null.
 		*/
-		inline KexiDB::Expression *expression() { return m_expr; }
+		inline KexiDB::BaseExpr *expression() { return m_expr; }
 
 		/*! Sets expression data \a expr. If \a expr there was 
 		 already expression set, it is destroyed before new assignment.
@@ -408,8 +410,10 @@ class KEXI_DB_EXPORT Field
 		 - you do not have to worry about deleting of \a expr.
 		 \a expr can be null - then current field's expression is cleared.
 		*/
-		void setExpression(KexiDB::Expression *expr);
-#endif
+		void setExpression(KexiDB::BaseExpr *expr);
+		
+		inline bool isExpression() const { return m_expr!=NULL; }
+
 //<TMP>
 		/*! \return the hints for enum fields. */
 		QValueVector<QString> enumHints() const { return m_hints; }
@@ -434,9 +438,7 @@ class KEXI_DB_EXPORT Field
 		uint m_width;
 		QValueVector<QString> m_hints;
 
-#if 0
-		Expression *m_expr;
-#endif
+		KexiDB::BaseExpr *m_expr;
 
 		class KEXI_DB_EXPORT FieldTypeNames : public QValueVector<QString> {
 			public:

@@ -31,15 +31,9 @@
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
-#if 0
-//! macro for storing last error message
-#define SQLiteConnection_STORE_ERROR \
-	if (d->errmsg_p) { \
-		d->errmsg = d->errmsg_p; \
-		sqlite_freemem(d->errmsg_p); \
-		d->errmsg_p = 0; \
-	}
-#endif
+//remove debug
+#undef KexiDBDrvDbg
+#define KexiDBDrvDbg if (0) kdDebug()
 
 using namespace KexiDB;
 

@@ -36,6 +36,10 @@
 
 #include <qapplication.h>
 
+//remove debug
+#undef KexiDBDbg
+#define KexiDBDbg if (0) kdDebug()
+
 using namespace KexiDB;
 
 DriverManagerInternal::DriverManagerInternal() /* protected */

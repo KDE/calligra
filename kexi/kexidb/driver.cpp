@@ -65,22 +65,14 @@ Driver::Driver( QObject *parent, const char *name, const QStringList & )
 
 Driver::~Driver()
 {
-	KexiDBDbg << "Driver::~Driver()" << endl;
-//	Connection *conn;
+//	KexiDBDbg << "Driver::~Driver()" << endl;
 	QPtrDictIterator<Connection> it( m_connections );
 	Connection *conn;
 	while ( (conn = it.toFirst()) ) {
 		delete conn;
 	}
-//	m_connections.clear();
 	delete beh;
-/*	for ( conn = m_connections.first(); conn ; conn = m_connections.next() ) {
-		conn->disconnect();
-		conn->m_driver = 0; //don't let the connection touch our driver now
-		m_connections.remove();
-		delete conn;
-	}*/
-	KexiDBDbg << "Driver::~Driver() ok" << endl;
+//	KexiDBDbg << "Driver::~Driver() ok" << endl;
 }
 
 bool Driver::isValid()

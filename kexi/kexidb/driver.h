@@ -68,21 +68,24 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 			//! (this implies !SingleTransactions)
 			MultipleTransactions = 2, 
 //(js) NOT YET IN USE:
-			//! if nested trasactions are supported
-			//! (this implies !SingleTransactions 
-			//! and MultipleTransactions)
+			/*! if nested trasactions are supported
+			 (this implies !SingleTransactions and MultipleTransactions) */
 			NestedTransactions = (MultipleTransactions+4),
-			//! if forward moving is supported for cursors
-			//! (if not available, no cursors available at all)
+			/*! if forward moving is supported for cursors
+			 (if not available, no cursors available at all) */
 			CursorForward = 8, 
-			//! if backward moving is supported for cursors
-			//! (this implies CursorForward)
-			CursorBackward = (CursorForward+16)
+			/*! if backward moving is supported for cursors (this implies CursorForward) */
+			CursorBackward = (CursorForward+16),
+			//-- temporary options: can be removed later, use at your own risk --
+			/*! If set, actions related to transactions will be silently bypassed
+			 with success. Set this if your driver does not support transactions at all
+			 Currently, this is only way to get it working with KexiDB.
+			 Keep in mind that this hack do not provide data integrity!
+			 This flag is currently used for MySQL driver. */
+			IgnoreTransactions = 1024
 		};
 		
 		virtual ~Driver();
-
-//		typedef QPtrList<Connection> ConnectionsList;
 
 		/*! Creates connection using \a conn_data as parameters. 
 		 \return 0 and sets error message on error.
@@ -225,13 +228,15 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! Internal constant flag: Set this in subclass if driver is a file driver */
 		bool m_isFileDriver : 1;
 
-		/*! Internal constant flag: Set this in subclass if after successfull drv_createDatabased()
-		 database is in opened state (as after useDatabase()). For most engines this is not true. */
+		/*! Internal constant flag: Set this in subclass if after successfull
+		 drv_createDatabased() database is in opened state (as after useDatabase()). 
+		 For most engines this is not true. */
 		bool m_isDBOpenedAfterCreate : 1;
 
-		/*! List of system objects names, eg. build-in system tables that cannot be used by user,
-		 and in most cases user even shouldn't see these.
-		 The list contents is driver dependent (by default is empty) - fill this in subclass ctor. */
+		/*! List of system objects names, eg. build-in system tables that 
+		 cannot be used by user, and in most cases user even shouldn't see these.
+		 The list contents is driver dependent (by default is empty) 
+		 - fill this in subclass ctor. */
 //		QStringList m_systemObjectNames;
 
 		/*! List of system fields names, build-in system fields that cannot be used by user,
@@ -259,8 +264,8 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 
 } //namespace KexiDB
 
-//! driver's static version information, automatically impemented for KexiDB drivers
-//! put this into Driver class declaration just like Q_OBJECT macro
+/*! driver's static version information, automatically impemented for KexiDB drivers
+ put this into Driver class declaration just like Q_OBJECT macro */
 #define KEXIDB_DRIVER \
 	public: \
 	virtual int versionMajor() const; \

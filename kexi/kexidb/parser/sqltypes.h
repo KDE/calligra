@@ -8,11 +8,17 @@
 extern int current;
 extern QString ctoken;
 
-struct sql_date
+struct dateType
 {
 		int year;
 		int month;
 		int day;
+};
+
+struct realType
+{
+	int integer;
+	int fractional;
 };
 
 #endif

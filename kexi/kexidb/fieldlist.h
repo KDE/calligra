@@ -54,13 +54,21 @@ class KEXI_DB_EXPORT FieldList
 		/*! \return number of fields in the list. */
 		unsigned int fieldCount() const;
 		
-		/*! Adds field at the and of field list. 
+		/*! Adds \a field at the and of field list. */
+		FieldList& addField(Field *field);
+
+		/*! Inserts \a field into a specified position (\a index).
 		
 		 Note: You can reimplement this method but you should still call 
-		 this implementation in your subclass. 
-		*/
-		virtual FieldList& addField(Field *field);
+		 this implementation in your subclass. */
+		virtual FieldList& insertField(uint index, Field *field);
 		
+		/*! Removes field from the field list. Use with care. 
+		 
+		 Note: You can reimplement this method but you should still call 
+		 this implementation in your subclass. */
+		virtual void removeField(KexiDB::Field *field);
+
 		/*! \return field #id or NULL if there is no such a field. */
 		Field* field(unsigned int id);
 		
@@ -86,8 +94,11 @@ class KEXI_DB_EXPORT FieldList
 		/*! Removes all fields from the list, clears name. */
 		virtual void clear();
 
+		/*! \return String for debugging purposes. */
+		virtual QString debugString();
+		
 		/*! Shows debug information about all fields in the list. */
-		virtual void debug() const;
+		void debug();
 
 		/*! Creates and returns list that contain fields selected by name.
 		 At least field (exising on this list) should be selected, otherwise NULL is

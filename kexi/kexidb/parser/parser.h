@@ -23,7 +23,8 @@
 #include <qobject.h>
 #include <qptrlist.h>
 
-typedef QPtrList<KexiDB::Field> PFieldList;
+#include <kexidb/field.h>
+#include <kexidb/expression.h>
 
 namespace KexiDB
 {
@@ -85,7 +86,7 @@ class KEXI_DB_EXPORT Parser
 		/**
 		 * clears previous results and runs the parser
 		 */
-		void		parse(const QString &statement);
+		bool parse(const QString &statement);
 
 		/**
 		 * rests results
@@ -148,7 +149,7 @@ class KEXI_DB_EXPORT Parser
 		 * @internal
 		 * \return a INTERNAL list of fields
 		 */
-		PFieldList	*fieldList() { return m_fieldList; }
+		Field::List *fieldList() { return m_fieldList; }
 
 		/**
 		 * @internal
@@ -168,7 +169,7 @@ class KEXI_DB_EXPORT Parser
 		TableSchema	*m_table;
 		QuerySchema	*m_select;
 		Connection	*m_db;
-		PFieldList	*m_fieldList;
+		Field::List	*m_fieldList;
 		QString		m_statement;
 		ParserError	m_error;
 };

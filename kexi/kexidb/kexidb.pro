@@ -38,8 +38,7 @@ roweditbuffer.cpp \
 \
 parser/parser.cpp \
 parser/sqlparser.cpp \
-parser/sqlscanner.cpp
-
-#expression.cpp \
+parser/sqlscanner.cpp \
+expression.cpp
 
 #HEADERS =

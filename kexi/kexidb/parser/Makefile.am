@@ -11,18 +11,17 @@ METASOURCES = AUTO
 
 parser:
 	lex -osqlscanner.cpp sqlscanner.l
-	yacc -d sqlparser.y
+	bison -dv sqlparser.y
 	echo '#include <field.h>' > sqlparser.h
 	echo '#include "parser.h"' >> sqlparser.h
-#	echo 'using namespace KexiDB;' >> sqlparser.h
+	echo '#include "sqltypes.h"' >> sqlparser.h
 	echo '' >> sqlparser.h
-	echo 'void parseData(KexiDB::Parser *p, const char *data);' >> sqlparser.h
-	cat y.tab.h >> sqlparser.h
+	echo 'bool parseData(KexiDB::Parser *p, const char *data);' >> sqlparser.h
+	cat sqlparser.tab.h >> sqlparser.h
 
-	cat y.tab.c > sqlparser.cpp
+	cat sqlparser.tab.c > sqlparser.cpp
 
-	rm -rf y.tab.h
-	rm -rf y.tab.c
+	rm -f sqlparser.tab.h sqlparser.tab.c
 
 coffie:
 	echo 'making coffie...'

@@ -23,6 +23,7 @@
 #include <qmap.h>
 
 #include <kexidb/field.h>
+#include <kexidb/queryschema.h>
 
 namespace KexiDB {
 
@@ -53,7 +54,7 @@ namespace KexiDB {
 class KEXI_DB_EXPORT RowEditBuffer {
 public:
 	typedef QMap<QString,QVariant> SimpleMap;
-	typedef QMap<Field*,QVariant> DBMap;
+	typedef QMap<QueryFieldInfo*,QVariant> DBMap;
 
 	RowEditBuffer(bool dbAwareBuffer);
 	~RowEditBuffer();
@@ -64,12 +65,16 @@ public:
 
 	bool isEmpty() const;
 
-	inline void insert( Field& f, QVariant &val )
-		{ if (m_dbBuffer) m_dbBuffer->insert(&f,val); }
+	inline void insert( QueryFieldInfo& fi, QVariant &val )
+		{ if (m_dbBuffer) m_dbBuffer->insert(&fi,val); }
 
 	inline void insert( const QString& fname, QVariant &val ) 
 		{ if (m_simpleBuffer) m_simpleBuffer->insert(fname,val); }
 
+	//! useful only for db-aware buffer
+	QVariant* at( QueryFieldInfo& fi );
+	
+	//! useful only for not-db-aware buffer
 	QVariant* at( Field& f );
 	QVariant* at( const QString& fname );
 

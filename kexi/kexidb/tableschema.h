@@ -55,9 +55,10 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 //		QStringList primaryKeys() const;
 //		bool hasPrimaryKeys() const;
 		
-		/*! Appends \a field to list of table fields. 
+		/*! Inserts \a field into a specified position (\a index).
 		 'order' property of \a field is set automatically. */
-		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
+		virtual FieldList& insertField(uint index, Field *field);
+//		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
 
 		/*! \return list of fields that are primary key of this table.
 		 This method never returns NULL value,
@@ -88,8 +89,8 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 			\sa FieldList::clear() */
 		virtual void clear();
 
-		//! writes debug information to stderr
-		virtual void debug() const;
+		/*! \return String for debugging purposes. */
+		virtual QString debugString();
 
 		/*! if table was created using a connection, 
 			returns this connection object, otherwise NULL. */

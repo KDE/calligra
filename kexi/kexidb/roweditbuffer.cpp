@@ -40,14 +40,21 @@ RowEditBuffer::~RowEditBuffer()
 	delete m_dbBufferIt;
 }
 
-QVariant* RowEditBuffer::at( Field& f ) 
+QVariant* RowEditBuffer::at( QueryFieldInfo& fi ) 
 { 
 	if (m_dbBuffer) {
-		*m_dbBufferIt = m_dbBuffer->find( &f );
+		*m_dbBufferIt = m_dbBuffer->find( &fi );
 		if (*m_dbBufferIt==m_dbBuffer->end())
 			return 0;
 		return &(*m_dbBufferIt).data();
 	}
+	return 0;
+}
+
+QVariant* RowEditBuffer::at( Field& f )
+{
+	if (!m_simpleBuffer)
+		return 0;
 	*m_simpleBufferIt = m_simpleBuffer->find( f.name() );
 	if (*m_simpleBufferIt==m_simpleBuffer->end())
 		return 0;
@@ -85,7 +92,7 @@ void RowEditBuffer::debug()
 	if (isDBAware()) {
 		kdDebug() << "RowEditBuffer type=DB-AWARE, " << m_dbBuffer->count() <<" items"<< endl;
 		for (DBMap::Iterator it = m_dbBuffer->begin(); it!=m_dbBuffer->end(); ++it) {
-			kdDebug() << "* field name=" <<it.key()->name()<<" val="
+			kdDebug() << "* field name=" <<it.key()->field->name()<<" val="
 				<< (it.data().isNull() ? QString("<NULL>") : it.data().toString()) <<endl;
 		}
 		return;

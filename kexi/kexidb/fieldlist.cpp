@@ -65,16 +65,36 @@ void FieldList::clear()
 	m_autoinc_fields = 0;
 }
 
-FieldList& FieldList::addField(KexiDB::Field *field)
+FieldList& FieldList::insertField(uint index, KexiDB::Field *field)
 {
-//	field.setTable(m_name);
 	assert(field);
 	if (!field)
 		return *this;
-	m_fields.append(field);
-	m_fields_by_name.insert(field->name().lower(),field);
+	if (index>m_fields.count()) {
+		kdWarning() << "FieldList::insertField(): index (" << index << ") out of range" << endl;
+		return *this;
+	}
+	if (!m_fields.insert(index, field))
+		return *this;
+	if (!field->name().isEmpty())
+		m_fields_by_name.insert(field->name().lower(),field);
 	m_sqlFields = QString::null;
 	return *this;
+}
+
+FieldList& FieldList::addField(KexiDB::Field *field)
+{
+	return insertField(m_fields.count(), field);
+}
+
+void FieldList::removeField(KexiDB::Field *field)
+{
+	assert(field);
+	if (!field)
+		return;
+	m_fields_by_name.remove(field->name().lower());
+	m_fields.remove(field);
+	m_sqlFields = QString::null;
 }
 
 bool FieldList::isOwner() const
@@ -104,9 +124,10 @@ unsigned int FieldList::fieldCount() const
 	return m_fields.count();
 }
 
-void FieldList::debug() const
+QString FieldList::debugString()
 {
 	QString dbg;
+	dbg.reserve(512);
 	Field::ListIterator it( m_fields );
 	Field *field;
 	bool start = true;
@@ -120,9 +141,13 @@ void FieldList::debug() const
 		dbg += "  ";
 		dbg += field->debugString();
 	}
-	KexiDBDbg << dbg << endl;
+	return dbg;
 }
 
+void FieldList::debug()
+{
+	KexiDBDbg << debugString() << endl;
+}
 
 #define _ADD_FIELD(fname) \
 { \
@@ -181,6 +206,7 @@ QString FieldList::sqlFieldsList(Field::List* list)
 	if (!list)
 		return QString::null;
 	QString result;
+	result.reserve(256);
 	Field::ListIterator it( *list );
 	bool start = true;
 	for (; it.current(); ++it) {

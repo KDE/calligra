@@ -1,15 +1,346 @@
-#ifndef lint
-/*static char yysccsid[] = "from: @(#)yaccpar	1.9 (Berkeley) 02/21/93";*/
-static char yyrcsid[] = "$Id$";
-#endif
-#define YYBYACC 1
-#define YYMAJOR 1
-#define YYMINOR 9
-#define yyclearin (yychar=(-1))
-#define yyerrok (yyerrflag=0)
-#define YYRECOVERING (yyerrflag!=0)
-#define YYPREFIX "yy"
-#line 365 "sqlparser.y"
+
+/*  A Bison parser, made from sqlparser.y
+    by GNU Bison version 1.28  */
+
+#define YYBISON 1  /* Identify Bison output.  */
+
+#define	SQL_TYPE	257
+#define	SQL_ABS	258
+#define	ACOS	259
+#define	AMPERSAND	260
+#define	SQL_ABSOLUTE	261
+#define	ADA	262
+#define	ADD	263
+#define	ADD_DAYS	264
+#define	ADD_HOURS	265
+#define	ADD_MINUTES	266
+#define	ADD_MONTHS	267
+#define	ADD_SECONDS	268
+#define	ADD_YEARS	269
+#define	ALL	270
+#define	ALLOCATE	271
+#define	ALTER	272
+#define	AND	273
+#define	ANY	274
+#define	ARE	275
+#define	AS	276
+#define	ASIN	277
+#define	ASC	278
+#define	ASCII	279
+#define	ASSERTION	280
+#define	ATAN	281
+#define	ATAN2	282
+#define	AUTHORIZATION	283
+#define	AUTO_INCREMENT	284
+#define	AVG	285
+#define	BEFORE	286
+#define	SQL_BEGIN	287
+#define	BETWEEN	288
+#define	BIGINT	289
+#define	BINARY	290
+#define	BIT	291
+#define	BIT_LENGTH	292
+#define	BREAK	293
+#define	BY	294
+#define	CASCADE	295
+#define	CASCADED	296
+#define	CASE	297
+#define	CAST	298
+#define	CATALOG	299
+#define	CEILING	300
+#define	CENTER	301
+#define	SQL_CHAR	302
+#define	CHAR_LENGTH	303
+#define	CHARACTER_STRING_LITERAL	304
+#define	CHECK	305
+#define	CLOSE	306
+#define	COALESCE	307
+#define	COBOL	308
+#define	COLLATE	309
+#define	COLLATION	310
+#define	COLUMN	311
+#define	COMMIT	312
+#define	COMPUTE	313
+#define	CONCAT	314
+#define	CONNECT	315
+#define	CONNECTION	316
+#define	CONSTRAINT	317
+#define	CONSTRAINTS	318
+#define	CONTINUE	319
+#define	CONVERT	320
+#define	CORRESPONDING	321
+#define	COS	322
+#define	COT	323
+#define	COUNT	324
+#define	CREATE	325
+#define	CURDATE	326
+#define	CURRENT	327
+#define	CURRENT_DATE	328
+#define	CURRENT_TIME	329
+#define	CURRENT_TIMESTAMP	330
+#define	CURTIME	331
+#define	CURSOR	332
+#define	DATABASE	333
+#define	SQL_DATE	334
+#define	DATE_FORMAT	335
+#define	DATE_REMAINDER	336
+#define	DATE_VALUE	337
+#define	DAY	338
+#define	DAYOFMONTH	339
+#define	DAYOFWEEK	340
+#define	DAYOFYEAR	341
+#define	DAYS_BETWEEN	342
+#define	DEALLOCATE	343
+#define	DEC	344
+#define	DECLARE	345
+#define	DEFAULT	346
+#define	DEFERRABLE	347
+#define	DEFERRED	348
+#define	SQL_DELETE	349
+#define	DESC	350
+#define	DESCRIBE	351
+#define	DESCRIPTOR	352
+#define	DIAGNOSTICS	353
+#define	DICTIONARY	354
+#define	DIRECTORY	355
+#define	DISCONNECT	356
+#define	DISPLACEMENT	357
+#define	DISTINCT	358
+#define	DOMAIN_TOKEN	359
+#define	SQL_DOUBLE	360
+#define	DOUBLE_QUOTED_STRING	361
+#define	DROP	362
+#define	ELSE	363
+#define	END	364
+#define	END_EXEC	365
+#define	EQUAL	366
+#define	ESCAPE	367
+#define	EXCEPT	368
+#define	SQL_EXCEPTION	369
+#define	EXEC	370
+#define	EXECUTE	371
+#define	EXISTS	372
+#define	EXP	373
+#define	EXPONENT	374
+#define	EXTERNAL	375
+#define	EXTRACT	376
+#define	SQL_FALSE	377
+#define	FETCH	378
+#define	FIRST	379
+#define	SQL_FLOAT	380
+#define	FLOOR	381
+#define	FN	382
+#define	FOR	383
+#define	FOREIGN	384
+#define	FORTRAN	385
+#define	FOUND	386
+#define	FOUR_DIGITS	387
+#define	FROM	388
+#define	FULL	389
+#define	GET	390
+#define	GLOBAL	391
+#define	GO	392
+#define	GOTO	393
+#define	GRANT	394
+#define	GREATER_OR_EQUAL	395
+#define	GREATER_THAN	396
+#define	GROUP	397
+#define	HAVING	398
+#define	HOUR	399
+#define	HOURS_BETWEEN	400
+#define	IDENTITY	401
+#define	IFNULL	402
+#define	SQL_IGNORE	403
+#define	IMMEDIATE	404
+#define	SQL_IN	405
+#define	INCLUDE	406
+#define	INDEX	407
+#define	INDICATOR	408
+#define	INITIALLY	409
+#define	INNER	410
+#define	INPUT	411
+#define	INSENSITIVE	412
+#define	INSERT	413
+#define	INTEGER	414
+#define	INTERSECT	415
+#define	INTERVAL	416
+#define	INTO	417
+#define	IS	418
+#define	ISOLATION	419
+#define	JOIN	420
+#define	JUSTIFY	421
+#define	KEY	422
+#define	LANGUAGE	423
+#define	LAST	424
+#define	LCASE	425
+#define	LEFT	426
+#define	LENGTH	427
+#define	LESS_OR_EQUAL	428
+#define	LESS_THAN	429
+#define	LEVEL	430
+#define	LIKE	431
+#define	LINE_WIDTH	432
+#define	LOCAL	433
+#define	LOCATE	434
+#define	LOG	435
+#define	SQL_LONG	436
+#define	LOWER	437
+#define	LTRIM	438
+#define	LTRIP	439
+#define	MATCH	440
+#define	SQL_MAX	441
+#define	MICROSOFT	442
+#define	SQL_MIN	443
+#define	MINUS	444
+#define	MINUTE	445
+#define	MINUTES_BETWEEN	446
+#define	MOD	447
+#define	MODIFY	448
+#define	MODULE	449
+#define	MONTH	450
+#define	MONTHS_BETWEEN	451
+#define	MUMPS	452
+#define	NAMES	453
+#define	NATIONAL	454
+#define	NCHAR	455
+#define	NEXT	456
+#define	NODUP	457
+#define	NONE	458
+#define	NOT	459
+#define	NOT_EQUAL	460
+#define	NOW	461
+#define	SQL_NULL	462
+#define	NULLIF	463
+#define	NUMERIC	464
+#define	OCTET_LENGTH	465
+#define	ODBC	466
+#define	OF	467
+#define	SQL_OFF	468
+#define	SQL_ON	469
+#define	ONLY	470
+#define	OPEN	471
+#define	OPTION	472
+#define	OR	473
+#define	ORDER	474
+#define	OUTER	475
+#define	OUTPUT	476
+#define	OVERLAPS	477
+#define	PAGE	478
+#define	PARTIAL	479
+#define	SQL_PASCAL	480
+#define	PERSISTENT	481
+#define	CQL_PI	482
+#define	PLI	483
+#define	POSITION	484
+#define	PRECISION	485
+#define	PREPARE	486
+#define	PRESERVE	487
+#define	PRIMARY	488
+#define	PRIOR	489
+#define	PRIVILEGES	490
+#define	PROCEDURE	491
+#define	PRODUCT	492
+#define	PUBLIC	493
+#define	QUARTER	494
+#define	QUIT	495
+#define	RAND	496
+#define	READ_ONLY	497
+#define	REAL	498
+#define	REFERENCES	499
+#define	REPEAT	500
+#define	REPLACE	501
+#define	RESTRICT	502
+#define	REVOKE	503
+#define	RIGHT	504
+#define	ROLLBACK	505
+#define	ROWS	506
+#define	RPAD	507
+#define	RTRIM	508
+#define	SCHEMA	509
+#define	SCREEN_WIDTH	510
+#define	SCROLL	511
+#define	SECOND	512
+#define	SECONDS_BETWEEN	513
+#define	SELECT	514
+#define	SEQUENCE	515
+#define	SETOPT	516
+#define	SET	517
+#define	SHOWOPT	518
+#define	SIGN	519
+#define	INTEGER_CONST	520
+#define	REAL_CONST	521
+#define	SIN	522
+#define	SQL_SIZE	523
+#define	SMALLINT	524
+#define	SOME	525
+#define	SPACE	526
+#define	SQL	527
+#define	SQL_TRUE	528
+#define	SQLCA	529
+#define	SQLCODE	530
+#define	SQLERROR	531
+#define	SQLSTATE	532
+#define	SQLWARNING	533
+#define	SQRT	534
+#define	STDEV	535
+#define	SUBSTRING	536
+#define	SUM	537
+#define	SYSDATE	538
+#define	SYSDATE_FORMAT	539
+#define	SYSTEM	540
+#define	TABLE	541
+#define	TAN	542
+#define	TEMPORARY	543
+#define	THEN	544
+#define	THREE_DIGITS	545
+#define	TIME	546
+#define	TIMESTAMP	547
+#define	TIMEZONE_HOUR	548
+#define	TIMEZONE_MINUTE	549
+#define	TINYINT	550
+#define	TO	551
+#define	TO_CHAR	552
+#define	TO_DATE	553
+#define	TRANSACTION	554
+#define	TRANSLATE	555
+#define	TRANSLATION	556
+#define	TRUNCATE	557
+#define	GENERAL_TITLE	558
+#define	TWO_DIGITS	559
+#define	UCASE	560
+#define	UNION	561
+#define	UNIQUE	562
+#define	SQL_UNKNOWN	563
+#define	UPDATE	564
+#define	UPPER	565
+#define	USAGE	566
+#define	USER	567
+#define	USER_DEFINED_NAME	568
+#define	USER_DEFINED_NAME_DOT_ASTERISK	569
+#define	USING	570
+#define	VALUE	571
+#define	VALUES	572
+#define	VARBINARY	573
+#define	VARCHAR	574
+#define	VARYING	575
+#define	VENDOR	576
+#define	VIEW	577
+#define	WEEK	578
+#define	WHEN	579
+#define	WHENEVER	580
+#define	WHERE	581
+#define	WHERE_CURRENT_OF	582
+#define	WITH	583
+#define	WORD_WRAPPED	584
+#define	WORK	585
+#define	WRAPPED	586
+#define	YEAR	587
+#define	YEARS_BETWEEN	588
+#define	ILIKE	589
+#define	SIMILAR	590
+
+#line 394 "sqlparser.y"
+
 #include <stdio.h>
 #include <string.h>
 #include <string>
@@ -30,10 +361,10 @@ static char yyrcsid[] = "$Id$";
 #include <tableschema.h>
 
 #include "parser.h"
-/*#include "sqlparser.h"*/
+//#include "sqlparser.h"
 #include "sqltypes.h"
 
-/*	using namespace std;*/
+//	using namespace std;
 
 	#define YY_NO_UNPUT
 	#define YYSTACK_USE_ALLOCA 1
@@ -43,7 +374,8 @@ static char yyrcsid[] = "$Id$";
 	KexiDB::Field *field;
 	bool requiresTable;
 	QPtrList<KexiDB::Field> fieldList;
-	QPtrList<KexiDB::TableSchema> tableList;
+//	QPtrList<KexiDB::TableSchema> tableList;
+	QDict<KexiDB::TableSchema> tableDict;
 	KexiDB::TableSchema *dummy = 0;
 	int current = 0;
 	QString ctoken = "";
@@ -74,11 +406,23 @@ static char yyrcsid[] = "$Id$";
 		}
 	}
 
-	void parseData(KexiDB::Parser *p, const char *data)
+	void setError(const QString& errName, const QString& errDesc)
+	{
+		parser->setError( KexiDB::ParserError(errName, errDesc, ctoken, current) );
+		yyerror(errName.latin1());
+	}
+
+	void tableNotFoundError(const QString& tableName)
+	{
+		setError( i18n("Table not found"), i18n("Unknown table \"%1\"").arg(tableName) );
+	}
+
+	bool parseData(KexiDB::Parser *p, const char *data)
 	{
 		if (!dummy)
 			dummy = new KexiDB::TableSchema();
 		parser = p;
+		parser->clear();
 		field = 0;
 		fieldList.clear();
 		requiresTable = false;
@@ -87,20 +431,22 @@ static char yyrcsid[] = "$Id$";
 			KexiDB::ParserError err(i18n("Error"), i18n("No query specified"), ctoken, current);
 			parser->setError(err);
 			yyerror("");
-			return;
+			return false;
 		}
 	
 		tokenize(data);
 		yyparse();
 
+		bool ok = true;
 		if(parser->operation() == KexiDB::Parser::OP_Select)
 		{
-			kdDebug() << "parseData(): " << tableList.count() << " loaded tables" << endl;
-			for(KexiDB::TableSchema *s = tableList.first(); s; s = tableList.next())
+			kdDebug() << "parseData(): " << tableDict.count() << " loaded tables" << endl;
+/*			KexiDB::TableSchema *ts;
+			for(QDictIterator<KexiDB::TableSchema> it(tableDict); KexiDB::TableSchema *s = tableList.first(); s; s = tableList.next())
 			{
 				kdDebug() << "  " << s->name() << endl;
-			}
-
+			}*/
+/*removed
 			KexiDB::Field::ListIterator it = parser->select()->fieldsIterator();
 			for(KexiDB::Field *item; (item = it.current()); ++it)
 			{
@@ -110,13 +456,18 @@ static char yyrcsid[] = "$Id$";
 					parser->setError(err);
 
 					yyerror("fieldlisterror");
+					ok = false;
 				}
-			}
-			/*take the dummy table out of the query*/
+			}*/
+			//take the dummy table out of the query
 			parser->select()->removeTable(dummy);
 		}
+		else {
+			ok = false;
+		}
 
-		tableList.clear();
+		tableDict.clear();
+		return ok;
 	}
 
 	void addTable(const QString &table)
@@ -131,7 +482,7 @@ static char yyrcsid[] = "$Id$";
 		}
 		else
 		{
-			tableList.append(s);
+			tableDict.insert(s->name(), s);
 		}
 	}
 
@@ -151,1169 +502,1019 @@ static char yyrcsid[] = "$Id$";
 		KexiDBField::ColumnType coltype;
 	}
 #endif
-#line 508 "sqlparser.y"
+
+#line 558 "sqlparser.y"
 typedef union {
 	char stringValue[255];
 	int integerValue;
+	struct realType realValue;
 	KexiDB::Field::Type coltype;
 	KexiDB::Field *field;
+	KexiDB::BaseExpr *expr;
+	KexiDB::NArgExpr *exprlist;
 } YYSTYPE;
-#line 162 "y.tab.c"
-#define PERCENT 257
-#define SQL_TYPE 258
-#define SQL_ABS 259
-#define ACOS 260
-#define AMPERSAND 261
-#define SQL_ABSOLUTE 262
-#define ADA 263
-#define ADD 264
-#define ADD_DAYS 265
-#define ADD_HOURS 266
-#define ADD_MINUTES 267
-#define ADD_MONTHS 268
-#define ADD_SECONDS 269
-#define ADD_YEARS 270
-#define ALL 271
-#define ALLOCATE 272
-#define ALTER 273
-#define AND 274
-#define ANY 275
-#define ARE 276
-#define ARITHMETIC_MINUS 277
-#define ARITHMETIC_PLUS 278
-#define AS 279
-#define ASIN 280
-#define ASC 281
-#define ASCII 282
-#define ASSERTION 283
-#define ASTERISK 284
-#define AT 285
-#define ATAN 286
-#define ATAN2 287
-#define AUTHORIZATION 288
-#define AUTO_INCREMENT 289
-#define AVG 290
-#define BEFORE 291
-#define SQL_BEGIN 292
-#define BETWEEN 293
-#define BIGINT 294
-#define BINARY 295
-#define BIT 296
-#define BIT_LENGTH 297
-#define BREAK 298
-#define BY 299
-#define CASCADE 300
-#define CASCADED 301
-#define CASE 302
-#define CAST 303
-#define CATALOG 304
-#define CEILING 305
-#define CENTER 306
-#define SQL_CHAR 307
-#define CHAR_LENGTH 308
-#define CHARACTER_STRING_LITERAL 309
-#define CHECK 310
-#define CLOSE 311
-#define COALESCE 312
-#define COBOL 313
-#define COLLATE 314
-#define COLLATION 315
-#define COLON 316
-#define COLUMN 317
-#define COMMA 318
-#define COMMIT 319
-#define COMPUTE 320
-#define CONCAT 321
-#define CONNECT 322
-#define CONNECTION 323
-#define CONSTRAINT 324
-#define CONSTRAINTS 325
-#define CONTINUE 326
-#define CONVERT 327
-#define CORRESPONDING 328
-#define COS 329
-#define COT 330
-#define COUNT 331
-#define CREATE 332
-#define CURDATE 333
-#define CURRENT 334
-#define CURRENT_DATE 335
-#define CURRENT_TIME 336
-#define CURRENT_TIMESTAMP 337
-#define CURTIME 338
-#define CURSOR 339
-#define DATABASE 340
-#define SQL_DATE 341
-#define DATE_FORMAT 342
-#define DATE_REMAINDER 343
-#define DATE_VALUE 344
-#define DAY 345
-#define DAYOFMONTH 346
-#define DAYOFWEEK 347
-#define DAYOFYEAR 348
-#define DAYS_BETWEEN 349
-#define DEALLOCATE 350
-#define DEC 351
-#define DECLARE 352
-#define DEFAULT 353
-#define DEFERRABLE 354
-#define DEFERRED 355
-#define SQL_DELETE 356
-#define DESC 357
-#define DESCRIBE 358
-#define DESCRIPTOR 359
-#define DIAGNOSTICS 360
-#define DICTIONARY 361
-#define DIRECTORY 362
-#define DISCONNECT 363
-#define DISPLACEMENT 364
-#define DISTINCT 365
-#define DOLLAR_SIGN 366
-#define DOMAIN_TOKEN 367
-#define DOT 368
-#define SQL_DOUBLE 369
-#define DOUBLE_QUOTED_STRING 370
-#define DROP 371
-#define ELSE 372
-#define END 373
-#define END_EXEC 374
-#define EQUAL 375
-#define ESCAPE 376
-#define EXCEPT 377
-#define SQL_EXCEPTION 378
-#define EXEC 379
-#define EXECUTE 380
-#define EXISTS 381
-#define EXP 382
-#define EXPONENT 383
-#define EXTERNAL 384
-#define EXTRACT 385
-#define SQL_FALSE 386
-#define FETCH 387
-#define FIRST 388
-#define SQL_FLOAT 389
-#define FLOOR 390
-#define FN 391
-#define FOR 392
-#define FOREIGN 393
-#define FORTRAN 394
-#define FOUND 395
-#define FOUR_DIGITS 396
-#define FROM 397
-#define FULL 398
-#define GET 399
-#define GLOBAL 400
-#define GO 401
-#define GOTO 402
-#define GRANT 403
-#define GREATER_THAN 404
-#define GREATER_OR_EQUAL 405
-#define GROUP 406
-#define HAVING 407
-#define HOUR 408
-#define HOURS_BETWEEN 409
-#define IDENTITY 410
-#define IFNULL 411
-#define SQL_IGNORE 412
-#define IMMEDIATE 413
-#define SQL_IN 414
-#define INCLUDE 415
-#define INDEX 416
-#define INDICATOR 417
-#define INITIALLY 418
-#define INNER 419
-#define INPUT 420
-#define INSENSITIVE 421
-#define INSERT 422
-#define INTEGER 423
-#define INTERSECT 424
-#define INTERVAL 425
-#define INTO 426
-#define IS 427
-#define ISOLATION 428
-#define JOIN 429
-#define JUSTIFY 430
-#define KEY 431
-#define LANGUAGE 432
-#define LAST 433
-#define LCASE 434
-#define LEFT 435
-#define LEFTPAREN 436
-#define LENGTH 437
-#define LESS_OR_EQUAL 438
-#define LESS_THAN 439
-#define LEVEL 440
-#define LIKE 441
-#define LINE_WIDTH 442
-#define LOCAL 443
-#define LOCATE 444
-#define LOG 445
-#define SQL_LONG 446
-#define LOWER 447
-#define LTRIM 448
-#define LTRIP 449
-#define MATCH 450
-#define SQL_MAX 451
-#define MICROSOFT 452
-#define SQL_MIN 453
-#define MINUS 454
-#define MINUTE 455
-#define MINUTES_BETWEEN 456
-#define MOD 457
-#define MODIFY 458
-#define MODULE 459
-#define MONTH 460
-#define MONTHS_BETWEEN 461
-#define MUMPS 462
-#define NAMES 463
-#define NATIONAL 464
-#define NCHAR 465
-#define NEXT 466
-#define NODUP 467
-#define NONE 468
-#define NOT 469
-#define NOT_EQUAL 470
-#define NOW 471
-#define SQL_NULL 472
-#define NULLIF 473
-#define NUMERIC 474
-#define OCTET_LENGTH 475
-#define ODBC 476
-#define OF 477
-#define SQL_OFF 478
-#define SQL_ON 479
-#define ONLY 480
-#define OPEN 481
-#define OPTION 482
-#define OR 483
-#define ORDER 484
-#define OUTER 485
-#define OUTPUT 486
-#define OVERLAPS 487
-#define PAGE 488
-#define PARTIAL 489
-#define SQL_PASCAL 490
-#define PERSISTENT 491
-#define CQL_PI 492
-#define PLI 493
-#define POSITION 494
-#define PRECISION 495
-#define PREPARE 496
-#define PRESERVE 497
-#define PRIMARY 498
-#define PRIOR 499
-#define PRIVILEGES 500
-#define PROCEDURE 501
-#define PRODUCT 502
-#define PUBLIC 503
-#define QUARTER 504
-#define QUESTION_MARK 505
-#define QUIT 506
-#define RAND 507
-#define READ_ONLY 508
-#define REAL 509
-#define REFERENCES 510
-#define REPEAT 511
-#define REPLACE 512
-#define RESTRICT 513
-#define REVOKE 514
-#define RIGHT 515
-#define RIGHTPAREN 516
-#define ROLLBACK 517
-#define ROWS 518
-#define RPAD 519
-#define RTRIM 520
-#define SCHEMA 521
-#define SCREEN_WIDTH 522
-#define SCROLL 523
-#define SECOND 524
-#define SECONDS_BETWEEN 525
-#define SELECT 526
-#define SEMICOLON 527
-#define SEQUENCE 528
-#define SETOPT 529
-#define SET 530
-#define SHOWOPT 531
-#define SIGN 532
-#define SIGNED_INTEGER 533
-#define SIN 534
-#define SINGLE_QUOTE 535
-#define SQL_SIZE 536
-#define SLASH 537
-#define SMALLINT 538
-#define SOME 539
-#define SPACE 540
-#define SQL 541
-#define SQL_TRUE 542
-#define SQLCA 543
-#define SQLCODE 544
-#define SQLERROR 545
-#define SQLSTATE 546
-#define SQLWARNING 547
-#define SQRT 548
-#define STDEV 549
-#define SUBSTRING 550
-#define SUM 551
-#define SYSDATE 552
-#define SYSDATE_FORMAT 553
-#define SYSTEM 554
-#define TABLE 555
-#define TAN 556
-#define TEMPORARY 557
-#define THEN 558
-#define THREE_DIGITS 559
-#define TIME 560
-#define TIMESTAMP 561
-#define TIMEZONE_HOUR 562
-#define TIMEZONE_MINUTE 563
-#define TINYINT 564
-#define TO 565
-#define TO_CHAR 566
-#define TO_DATE 567
-#define TRANSACTION 568
-#define TRANSLATE 569
-#define TRANSLATION 570
-#define TRUNCATE 571
-#define GENERAL_TITLE 572
-#define TWO_DIGITS 573
-#define UCASE 574
-#define UNION 575
-#define UNIQUE 576
-#define SQL_UNKNOWN 577
-#define UNSIGNED_INTEGER 578
-#define UPDATE 579
-#define UPPER 580
-#define USAGE 581
-#define USER 582
-#define USER_DEFINED_NAME 583
-#define USING 584
-#define VALUE 585
-#define VALUES 586
-#define VARBINARY 587
-#define VARCHAR 588
-#define VARYING 589
-#define VENDOR 590
-#define VIEW 591
-#define WEEK 592
-#define WHEN 593
-#define WHENEVER 594
-#define WHERE 595
-#define WHERE_CURRENT_OF 596
-#define WITH 597
-#define WORD_WRAPPED 598
-#define WORK 599
-#define WRAPPED 600
-#define YEAR 601
-#define YEARS_BETWEEN 602
-#define YYERRCODE 256
-short yylhs[] = {                                        -1,
-    0,    0,    3,    3,    3,    6,    4,    7,    7,    8,
-    8,   10,   10,   11,   11,   11,    9,    9,    9,    9,
-    5,    5,    5,    5,    5,   12,   15,   15,   15,   15,
-   14,   14,   14,   14,   14,   14,   16,   16,   17,   13,
-   13,   18,   18,   18,   18,    2,    2,    2,    2,    2,
-    2,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-    1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-    1,   19,   19,
-};
-short yylen[] = {                                         2,
-    2,    1,    2,    2,    0,    0,    7,    3,    1,    2,
-    3,    2,    1,    2,    2,    1,    1,    4,    4,    0,
-    2,    3,    2,    3,    4,    1,    2,    3,    3,    3,
-    2,    6,    7,    6,    6,    7,    3,    1,    1,    3,
-    1,    1,    1,    3,    2,    1,    3,    1,    1,    1,
-    1,    1,    3,    3,    3,    3,    3,    3,    3,    3,
-    3,    3,    3,    3,    3,    3,    4,    4,    4,    4,
-    4,    1,    3,
-};
-short yydefred[] = {                                      5,
-    0,    0,    0,   26,    1,    3,    4,    0,    0,   72,
-    0,   49,    0,    0,    0,    0,    0,   48,   50,    0,
-   51,    0,    0,   52,    0,    0,   41,   43,    6,    0,
-    0,   39,    0,   38,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,   45,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,   66,    0,
-    0,    0,   73,   47,    0,    0,    0,   44,   56,    0,
-    0,    0,    0,    0,    0,    0,    0,   55,   40,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-   70,   71,   37,   69,   68,   67,   30,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    9,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    7,    0,    0,    0,
-    0,    0,    0,    0,   16,    0,    0,    0,   13,    8,
-    0,    0,    0,    0,   15,   14,   12,   18,   19,
-};
-short yydgoto[] = {                                       1,
-   23,   24,    2,    6,    7,   64,  116,  117,  125,  138,
-  139,    8,   25,   26,   60,   33,   34,   27,   28,
-};
-short yysindex[] = {                                      0,
-    0, -304, -517,    0,    0,    0,    0, -277, -544,    0,
- -388,    0, -387, -529, -247, -381, -379,    0,    0, -378,
-    0, -309, -254,    0, -313, -390,    0,    0,    0, -247,
- -247,    0, -258,    0, -307,  700, -247, -247, -247, -284,
- -247, -247, -247, -520, -247, -247, -247, -247, -247, -247,
- -247, -247, -247, -247,    0, -243, -430, -247, -383, -262,
- -365, -396, -395, -371,  845,  883, -529, -516,    0,  887,
-  895,  899,    0,    0, -269, -280, -280,    0,    0, -269,
- -269, -269, -269, -269, -269, -269, -269,    0,    0, -263,
-  467, -262, -247, -247, -515, -514, -359, -512, -357, -510,
-    0,    0,    0,    0,    0,    0,    0,  467,  467, -405,
- -404, -507, -401, -504, -256, -302,    0, -247, -247, -399,
- -247, -398, -354, -353, -271, -510,    0,  467,  467, -247,
-  467, -247, -493, -492,    0, -385, -340, -271,    0,    0,
-  467,  467, -424, -422,    0,    0,    0,    0,    0,
-};
-short yyrindex[] = {                                      0,
-    0,   95,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,  783,   37,    0,   14,   22,    0,    0,    0,    0,
-    0,    0,   40,    0,    1,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,   27,   51,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,  190,   10,   19,    0,    0,  211,
-  295,  377,  400,  482,  505,  610,  712,    0,    0,    0,
-   31,   93,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,   35,   56,    0,
-    0,    0,    0,    0, -272,    0,    0,    0,    0,    0,
-    0,    0, -268,    0, -298,    0,    0,   77,   96,    0,
-  140,    0,    0,    0,    0,    0,    0, -292,    0,    0,
-  162,  171,    0,    0,    0,    0,    0,    0,    0,
-};
-short yygindex[] = {                                      0,
- 1392,    0,    0,    0,    0,    0,    0,  -29,    0,    0,
-  -40,    0,    0,   74,  -15,    0,   33,   45,    0,
-};
-#define YYTABLESIZE 1524
-short yytable[] = {                                      73,
-   46,  123,   41,   45,   56,   57,   10,   42,   43,   54,
-   93,   93,   11,   21,   45,  126,   20,  135,   53,   10,
-   17,   23,   42,   43,   44,   11,   22,    3,   61,   45,
-   27,   12,   96,   98,   28,   61,   42,    9,   29,   31,
-   10,   90,   11,   92,   62,   20,   11,   30,   31,   17,
-   24,   62,   57,   32,   37,   29,   38,   39,   40,   67,
-   68,   12,   78,   95,  100,   12,   74,  110,  111,  112,
-  113,  114,  115,  118,  119,  120,   34,  121,  122,  130,
-  132,  133,  134,   14,  143,  144,  145,   13,   97,   99,
-  146,  148,   25,  149,    2,   32,  140,  147,   59,  103,
-   89,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,   13,    0,   14,
-   46,   13,   57,    0,   63,    0,    0,    0,    0,    0,
-    0,   63,    0,    0,    0,    0,    0,    0,    0,   35,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,   47,
-   48,    0,    0,    0,    0,    0,    0,    0,   15,    0,
-    0,   33,    0,    0,   58,    0,    0,    0,    0,    0,
-   36,    0,    0,   16,    0,   17,    0,    0,    0,    0,
-    0,    0,    0,   49,   50,    0,   51,    0,   15,   65,
-    0,    0,   15,    0,   18,    0,   20,  136,    0,    0,
-   17,    0,    0,   16,    0,   17,    0,   16,    0,   17,
-   58,   58,    0,  127,   52,   53,    0,   10,    0,   94,
-   94,    4,    5,   11,   18,   20,  137,    0,   18,   17,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,   20,    0,    0,    0,   17,    0,    0,
-    0,    0,  107,    0,    0,   19,   54,   46,    0,    0,
-    0,    0,    0,    0,    0,    0,   54,   54,    0,    0,
-    0,    0,    0,   20,   46,   53,    0,   46,   46,   46,
-    0,   58,   54,   54,   46,   19,   54,   54,   54,   19,
-    0,    0,   53,    0,   60,   53,   53,   53,   74,    0,
-   21,    0,    0,   20,   27,   22,    0,   20,   28,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,   46,    0,
-    0,    0,    0,    0,    0,    0,    0,   54,   55,   29,
-   21,  124,   46,    0,   21,   35,   53,    0,    0,   22,
-    0,   54,    0,    0,    0,   21,    0,    0,    0,    0,
-   53,    0,    0,   23,   42,    0,    0,    0,   22,    0,
-    0,    0,   27,    0,    0,    0,   28,    0,   42,    0,
-    0,   31,    0,    0,    0,   46,   61,    0,    0,    0,
-    0,    0,   24,    0,   54,    0,    0,   29,    0,    0,
-    0,    0,    0,   53,    0,    0,    0,   46,    0,   63,
-    0,    0,    0,    0,   46,   46,   54,    0,   34,    0,
-    0,    0,    0,   54,   54,   53,    0,    0,    0,   46,
-    0,    0,   53,   53,   25,    0,    0,   32,   54,    0,
-    0,    0,    0,   42,    0,   46,   46,   53,   46,   46,
-    0,   46,    0,    0,   54,   54,   65,   54,   54,    0,
-   54,    0,    0,   53,   53,    0,   53,   53,   31,   53,
-    0,    0,    0,   65,    0,    0,    0,   58,   65,   46,
-   46,   35,   42,    0,   31,   31,    0,    0,   54,   54,
-    0,   62,    0,   46,   58,    0,    0,   53,   53,   58,
-    0,    0,   54,   33,    0,   34,    0,    0,    0,    0,
-    0,   53,   36,    0,   64,    0,    0,   65,    0,    0,
-    0,   34,   34,   27,   32,   46,   46,   28,    0,    0,
-    0,   65,    0,    0,   54,   54,   46,   46,   58,    0,
-   32,   32,    0,   53,   53,   54,   54,   46,   29,   21,
-   21,    0,   58,    0,   53,   53,   27,   23,   23,    0,
-   28,   60,   22,   22,   31,    0,   27,   27,   35,    0,
-   28,   28,   42,   42,   65,   31,   31,    0,   60,    0,
-    0,   29,    0,   60,   35,   35,   24,   24,    0,    0,
-   33,   29,   29,   46,    0,   58,   65,    0,    0,   36,
-    0,   34,   54,   65,   65,   46,   33,   33,    0,    0,
-    0,   53,   34,   34,   54,   36,   36,   58,   65,   57,
-   32,    0,   60,   53,   58,   58,    0,    0,   25,   25,
-    0,   32,   32,    0,   65,   65,   60,   65,   65,   58,
-   65,   42,    0,   61,   31,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,   58,   58,    0,   58,   58,
-   61,   58,    0,    0,   35,   61,   63,    0,   65,   65,
-    0,    0,    0,    0,    0,   35,   35,    0,    0,   60,
-    0,   34,   65,   63,    0,    0,   33,    0,   63,   58,
-   58,    0,    0,    0,    0,   36,    0,   33,   33,    0,
-   32,   60,    0,   58,   61,    0,   36,   36,   60,   60,
-    0,    0,    0,    0,   65,   65,    0,    0,   61,    0,
-    0,   59,    0,   60,    0,   65,   65,   63,    0,    0,
-    0,    0,    0,   41,    0,   58,   58,    0,    0,   60,
-   60,   63,   60,   60,   35,   60,   58,   58,   62,    0,
-    0,    0,    0,   42,   43,    0,    0,    0,    0,    0,
-   45,   61,    0,    0,    0,   62,   33,    0,    0,    0,
-   62,   64,    0,   60,   60,   36,    0,    0,    0,    0,
-    0,    0,   65,   61,   63,    0,    0,   60,   64,    0,
-   61,   61,   46,   64,   65,    0,    0,    0,    0,    0,
-    0,    0,    0,   58,    0,   61,   63,    0,    0,   62,
-    0,    0,    0,   63,   63,   58,    0,    0,    0,   60,
-   60,   61,   61,   62,   61,   61,    0,   61,   63,    0,
-   60,   60,   64,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,   63,   63,   64,   63,   63,    0,
-   63,   46,    0,    0,    0,   61,   61,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,   62,    0,    0,   61,
-    0,    0,    0,    0,    0,    0,   57,    0,   63,   63,
-   47,   48,    0,    0,    0,    0,    0,   60,   62,   64,
-    0,    0,   63,   57,    0,   62,   62,    0,   57,   60,
-    0,   61,   61,    0,    0,    0,    0,    0,    0,    0,
-   62,   64,   61,   61,   49,   50,    0,   51,   64,   64,
-    0,    0,    0,    0,   63,   63,   62,   62,    0,   62,
-   62,    0,   62,   64,    0,   63,   63,   57,    0,    0,
-    0,    0,    0,    0,    0,   52,   53,    0,    0,   64,
-   64,   57,   64,   64,    0,   64,    0,    0,    0,    0,
-   62,   62,    0,    0,    0,    0,   41,    0,    0,   61,
-    0,    0,    0,    0,   62,    0,    0,    0,   59,    0,
-    0,   61,    0,   64,   64,    0,   42,   43,    0,    0,
-    0,    0,   63,   45,   57,   59,    0,   64,    0,    0,
-   59,    0,    0,    0,   63,    0,   62,   62,    0,    0,
-    0,    0,    0,   54,    0,    0,   57,   62,   62,    0,
-    0,    0,    0,   57,   57,    0,    0,    0,    0,   64,
-   64,    0,    0,    0,    0,    0,    0,    0,   57,   59,
-   64,   64,    0,    0,    0,    0,    0,    0,    0,   46,
-    0,    0,    0,   59,   57,   57,    0,   57,   57,    0,
-   57,    0,    0,    0,    0,    0,    0,    0,    0,   46,
-   46,   46,    0,    0,   62,    0,   46,    0,    0,    0,
-    0,    0,    0,    0,   46,    0,   62,    0,   57,   57,
-    0,    0,    0,    0,    0,    0,   59,   64,    0,    0,
-    0,    0,   57,    0,    0,    0,    0,    0,    0,   64,
-   46,   41,    0,   47,   48,    0,    0,    0,   59,    0,
-    0,    0,    0,    0,   46,   59,   59,    0,    0,    0,
-    0,   42,   43,    0,   57,   57,    0,    0,   45,    0,
-   59,    0,    0,    0,    0,   57,   57,   49,   50,   41,
-   51,    0,    0,   41,    0,    0,   59,   59,    0,   59,
-   59,   41,   59,    0,    0,   41,    0,   46,    0,   42,
-   43,    0,    0,   42,   43,    0,   45,    0,   52,   53,
-   45,   42,   43,    0,    0,   42,   43,    0,   45,   46,
-   59,   59,   45,    0,    0,    0,   46,   46,    0,    0,
-    0,    0,   57,    0,   59,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,   57,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,   69,    0,    0,   46,   46,
-   46,   46,    0,   46,    0,    0,   59,   59,    0,    0,
-    0,    0,    0,    0,    0,    0,   54,   59,   59,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,   47,   48,
-    0,   46,   46,    0,    0,    0,    0,   46,    0,    0,
-    0,   46,    0,    0,    0,    0,    0,    0,    0,   46,
-    0,    0,    0,   46,    0,    0,    0,    0,    0,    0,
-    0,    0,   49,   50,    0,   51,   47,   48,    0,    0,
-   47,   48,    0,    0,   59,    0,    0,    0,   47,   48,
-    0,    0,   47,   48,    0,    0,   59,    0,   46,   46,
-    0,    0,    0,   52,   53,    0,    0,    0,    0,   46,
-   49,   50,    0,   51,   49,   50,    0,   51,    0,    0,
-    0,    0,   49,   50,    0,   51,   49,   50,    0,   51,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,   52,   53,    0,    0,   52,   53,    0,    0,    0,
-  101,    0,    0,   52,   53,   46,    0,   52,   53,    0,
-    0,    0,    0,    0,    0,    0,    0,   46,    0,    0,
-    0,   54,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,  102,    0,
-    0,    0,  104,    0,    0,    0,   36,    0,    0,    0,
-  105,    0,    0,    0,  106,    0,    0,    0,    0,   54,
-    0,   65,   66,   54,    0,    0,    0,    0,   70,   71,
-   72,   54,   75,   76,   77,   54,   79,   80,   81,   82,
-   83,   84,   85,   86,   87,   88,    0,    0,    0,   91,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,  108,  109,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,  128,
-  129,    0,  131,    0,    0,    0,    0,    0,    0,    0,
-    0,  141,    0,  142,
-};
-short yycheck[] = {                                     284,
-    0,  258,  257,  284,  318,  436,  284,  277,  278,    0,
-  274,  274,  290,    0,  284,  318,  289,  289,    0,  318,
-  289,    0,  277,  278,  279,  318,    0,  332,  419,  284,
-    0,  309,  429,  429,    0,  419,    0,  555,  583,    0,
-  284,   57,  290,   59,  435,  318,  290,  436,  436,  318,
-    0,  435,  436,  583,  436,    0,  436,  436,  368,  318,
-  368,  309,  583,  429,  436,  309,  583,  583,  583,  429,
-  583,  429,  583,  479,  479,  583,    0,  479,  583,  479,
-  479,  436,  436,  397,  578,  578,  472,  365,  485,  485,
-  431,  516,    0,  516,    0,    0,  126,  138,   25,   67,
-   56,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,  365,   -1,  397,
-  375,  365,  436,   -1,  515,   -1,   -1,   -1,   -1,   -1,
-   -1,  515,   -1,   -1,   -1,   -1,   -1,   -1,   -1,    0,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  404,
-  405,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  436,   -1,
-   -1,    0,   -1,   -1,  595,   -1,   -1,   -1,   -1,   -1,
-    0,   -1,   -1,  451,   -1,  453,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,  438,  439,   -1,  441,   -1,  436,    0,
-   -1,   -1,  436,   -1,  472,   -1,  469,  469,   -1,   -1,
-  469,   -1,   -1,  451,   -1,  453,   -1,  451,   -1,  453,
-    0,  595,   -1,  516,  469,  470,   -1,  516,   -1,  483,
-  483,  526,  527,  516,  472,  498,  498,   -1,  472,  498,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,  516,   -1,   -1,   -1,  516,   -1,   -1,
-   -1,   -1,  516,   -1,   -1,  533,  537,  257,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,  257,  537,   -1,   -1,
-   -1,   -1,   -1,  551,  274,  257,   -1,  277,  278,  279,
-   -1,  595,  537,  274,  284,  533,  277,  278,  279,  533,
-   -1,   -1,  274,   -1,    0,  277,  278,  279,  583,   -1,
-  578,   -1,   -1,  551,  274,  583,   -1,  551,  274,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  318,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,  318,  583,  274,
-  578,  588,  332,   -1,  578,  583,  318,   -1,   -1,  583,
-   -1,  332,   -1,   -1,   -1,  332,   -1,   -1,   -1,   -1,
-  332,   -1,   -1,  332,  318,   -1,   -1,   -1,  332,   -1,
-   -1,   -1,  332,   -1,   -1,   -1,  332,   -1,  332,   -1,
-   -1,  332,   -1,   -1,   -1,  375,    0,   -1,   -1,   -1,
-   -1,   -1,  332,   -1,  375,   -1,   -1,  332,   -1,   -1,
-   -1,   -1,   -1,  375,   -1,   -1,   -1,  397,   -1,    0,
-   -1,   -1,   -1,   -1,  404,  405,  397,   -1,  332,   -1,
-   -1,   -1,   -1,  404,  405,  397,   -1,   -1,   -1,  419,
-   -1,   -1,  404,  405,  332,   -1,   -1,  332,  419,   -1,
-   -1,   -1,   -1,  397,   -1,  435,  436,  419,  438,  439,
-   -1,  441,   -1,   -1,  435,  436,  257,  438,  439,   -1,
-  441,   -1,   -1,  435,  436,   -1,  438,  439,  419,  441,
-   -1,   -1,   -1,  274,   -1,   -1,   -1,  257,  279,  469,
-  470,  332,  436,   -1,  435,  436,   -1,   -1,  469,  470,
-   -1,    0,   -1,  483,  274,   -1,   -1,  469,  470,  279,
-   -1,   -1,  483,  332,   -1,  419,   -1,   -1,   -1,   -1,
-   -1,  483,  332,   -1,    0,   -1,   -1,  318,   -1,   -1,
-   -1,  435,  436,  483,  419,  515,  516,  483,   -1,   -1,
-   -1,  332,   -1,   -1,  515,  516,  526,  527,  318,   -1,
-  435,  436,   -1,  515,  516,  526,  527,  537,  483,  526,
-  527,   -1,  332,   -1,  526,  527,  516,  526,  527,   -1,
-  516,  257,  526,  527,  515,   -1,  526,  527,  419,   -1,
-  526,  527,  526,  527,  375,  526,  527,   -1,  274,   -1,
-   -1,  516,   -1,  279,  435,  436,  526,  527,   -1,   -1,
-  419,  526,  527,  583,   -1,  375,  397,   -1,   -1,  419,
-   -1,  515,  583,  404,  405,  595,  435,  436,   -1,   -1,
-   -1,  583,  526,  527,  595,  435,  436,  397,  419,    0,
-  515,   -1,  318,  595,  404,  405,   -1,   -1,  526,  527,
-   -1,  526,  527,   -1,  435,  436,  332,  438,  439,  419,
-  441,  595,   -1,  257,  595,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,  435,  436,   -1,  438,  439,
-  274,  441,   -1,   -1,  515,  279,  257,   -1,  469,  470,
-   -1,   -1,   -1,   -1,   -1,  526,  527,   -1,   -1,  375,
-   -1,  595,  483,  274,   -1,   -1,  515,   -1,  279,  469,
-  470,   -1,   -1,   -1,   -1,  515,   -1,  526,  527,   -1,
-  595,  397,   -1,  483,  318,   -1,  526,  527,  404,  405,
-   -1,   -1,   -1,   -1,  515,  516,   -1,   -1,  332,   -1,
-   -1,    0,   -1,  419,   -1,  526,  527,  318,   -1,   -1,
-   -1,   -1,   -1,  257,   -1,  515,  516,   -1,   -1,  435,
-  436,  332,  438,  439,  595,  441,  526,  527,  257,   -1,
-   -1,   -1,   -1,  277,  278,   -1,   -1,   -1,   -1,   -1,
-  284,  375,   -1,   -1,   -1,  274,  595,   -1,   -1,   -1,
-  279,  257,   -1,  469,  470,  595,   -1,   -1,   -1,   -1,
-   -1,   -1,  583,  397,  375,   -1,   -1,  483,  274,   -1,
-  404,  405,    0,  279,  595,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,  583,   -1,  419,  397,   -1,   -1,  318,
-   -1,   -1,   -1,  404,  405,  595,   -1,   -1,   -1,  515,
-  516,  435,  436,  332,  438,  439,   -1,  441,  419,   -1,
-  526,  527,  318,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,  435,  436,  332,  438,  439,   -1,
-  441,  375,   -1,   -1,   -1,  469,  470,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,  375,   -1,   -1,  483,
-   -1,   -1,   -1,   -1,   -1,   -1,  257,   -1,  469,  470,
-  404,  405,   -1,   -1,   -1,   -1,   -1,  583,  397,  375,
-   -1,   -1,  483,  274,   -1,  404,  405,   -1,  279,  595,
-   -1,  515,  516,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-  419,  397,  526,  527,  438,  439,   -1,  441,  404,  405,
-   -1,   -1,   -1,   -1,  515,  516,  435,  436,   -1,  438,
-  439,   -1,  441,  419,   -1,  526,  527,  318,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,  469,  470,   -1,   -1,  435,
-  436,  332,  438,  439,   -1,  441,   -1,   -1,   -1,   -1,
-  469,  470,   -1,   -1,   -1,   -1,  257,   -1,   -1,  583,
-   -1,   -1,   -1,   -1,  483,   -1,   -1,   -1,  257,   -1,
-   -1,  595,   -1,  469,  470,   -1,  277,  278,   -1,   -1,
-   -1,   -1,  583,  284,  375,  274,   -1,  483,   -1,   -1,
-  279,   -1,   -1,   -1,  595,   -1,  515,  516,   -1,   -1,
-   -1,   -1,   -1,  537,   -1,   -1,  397,  526,  527,   -1,
-   -1,   -1,   -1,  404,  405,   -1,   -1,   -1,   -1,  515,
-  516,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  419,  318,
-  526,  527,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  257,
-   -1,   -1,   -1,  332,  435,  436,   -1,  438,  439,   -1,
-  441,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  277,
-  278,  279,   -1,   -1,  583,   -1,  284,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,  375,   -1,  595,   -1,  469,  470,
-   -1,   -1,   -1,   -1,   -1,   -1,  375,  583,   -1,   -1,
-   -1,   -1,  483,   -1,   -1,   -1,   -1,   -1,   -1,  595,
-  318,  257,   -1,  404,  405,   -1,   -1,   -1,  397,   -1,
-   -1,   -1,   -1,   -1,  332,  404,  405,   -1,   -1,   -1,
-   -1,  277,  278,   -1,  515,  516,   -1,   -1,  284,   -1,
-  419,   -1,   -1,   -1,   -1,  526,  527,  438,  439,  257,
-  441,   -1,   -1,  257,   -1,   -1,  435,  436,   -1,  438,
-  439,  257,  441,   -1,   -1,  257,   -1,  375,   -1,  277,
-  278,   -1,   -1,  277,  278,   -1,  284,   -1,  469,  470,
-  284,  277,  278,   -1,   -1,  277,  278,   -1,  284,  397,
-  469,  470,  284,   -1,   -1,   -1,  404,  405,   -1,   -1,
-   -1,   -1,  583,   -1,  483,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,  595,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,  516,   -1,   -1,  436,  375,
-  438,  439,   -1,  441,   -1,   -1,  515,  516,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,  537,  526,  527,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  404,  405,
-   -1,  469,  470,   -1,   -1,   -1,   -1,  375,   -1,   -1,
-   -1,  375,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  375,
-   -1,   -1,   -1,  375,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,  438,  439,   -1,  441,  404,  405,   -1,   -1,
-  404,  405,   -1,   -1,  583,   -1,   -1,   -1,  404,  405,
-   -1,   -1,  404,  405,   -1,   -1,  595,   -1,  526,  527,
-   -1,   -1,   -1,  469,  470,   -1,   -1,   -1,   -1,  537,
-  438,  439,   -1,  441,  438,  439,   -1,  441,   -1,   -1,
-   -1,   -1,  438,  439,   -1,  441,  438,  439,   -1,  441,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,  469,  470,   -1,   -1,  469,  470,   -1,   -1,   -1,
-  516,   -1,   -1,  469,  470,  583,   -1,  469,  470,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,  595,   -1,   -1,
-   -1,  537,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  516,   -1,
-   -1,   -1,  516,   -1,   -1,   -1,   15,   -1,   -1,   -1,
-  516,   -1,   -1,   -1,  516,   -1,   -1,   -1,   -1,  537,
-   -1,   30,   31,  537,   -1,   -1,   -1,   -1,   37,   38,
-   39,  537,   41,   42,   43,  537,   45,   46,   47,   48,
-   49,   50,   51,   52,   53,   54,   -1,   -1,   -1,   58,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   93,   94,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  118,
-  119,   -1,  121,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,  130,   -1,  132,
-};
-#define YYFINAL 1
-#ifndef YYDEBUG
-#define YYDEBUG 0
+#include <stdio.h>
+
+#ifndef __cplusplus
+#ifndef __STDC__
+#define const
 #endif
-#define YYMAXTOKEN 602
-#if YYDEBUG
-char *yyname[] = {
-"end-of-file",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"PERCENT","SQL_TYPE","SQL_ABS",
-"ACOS","AMPERSAND","SQL_ABSOLUTE","ADA","ADD","ADD_DAYS","ADD_HOURS",
+#endif
+
+
+
+#define	YYFINAL		136
+#define	YYFLAG		-32768
+#define	YYNTBASE	355
+
+#define YYTRANSLATE(x) ((unsigned)(x) <= 590 ? yytranslate[x] : 377)
+
+static const short yytranslate[] = {     0,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,   343,   338,     2,   347,   344,
+   345,   337,   336,   341,   335,   342,   348,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,   340,     2,
+   349,     2,   346,   339,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+   353,     2,   354,   352,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     1,     3,     4,     5,     6,
+     7,     8,     9,    10,    11,    12,    13,    14,    15,    16,
+    17,    18,    19,    20,    21,    22,    23,    24,    25,    26,
+    27,    28,    29,    30,    31,    32,    33,    34,    35,    36,
+    37,    38,    39,    40,    41,    42,    43,    44,    45,    46,
+    47,    48,    49,    50,    51,    52,    53,    54,    55,    56,
+    57,    58,    59,    60,    61,    62,    63,    64,    65,    66,
+    67,    68,    69,    70,    71,    72,    73,    74,    75,    76,
+    77,    78,    79,    80,    81,    82,    83,    84,    85,    86,
+    87,    88,    89,    90,    91,    92,    93,    94,    95,    96,
+    97,    98,    99,   100,   101,   102,   103,   104,   105,   106,
+   107,   108,   109,   110,   111,   112,   113,   114,   115,   116,
+   117,   118,   119,   120,   121,   122,   123,   124,   125,   126,
+   127,   128,   129,   130,   131,   132,   133,   134,   135,   136,
+   137,   138,   139,   140,   141,   142,   143,   144,   145,   146,
+   147,   148,   149,   150,   151,   152,   153,   154,   155,   156,
+   157,   158,   159,   160,   161,   162,   163,   164,   165,   166,
+   167,   168,   169,   170,   171,   172,   173,   174,   175,   176,
+   177,   178,   179,   180,   181,   182,   183,   184,   185,   186,
+   187,   188,   189,   190,   191,   192,   193,   194,   195,   196,
+   197,   198,   199,   200,   201,   202,   203,   204,   205,   206,
+   207,   208,   209,   210,   211,   212,   213,   214,   215,   216,
+   217,   218,   219,   220,   221,   222,   223,   224,   225,   226,
+   227,   228,   229,   230,   231,   232,   233,   234,   235,   236,
+   237,   238,   239,   240,   241,   242,   243,   244,   245,   246,
+   247,   248,   249,   250,   251,   252,   253,   254,   255,   256,
+   257,   258,   259,   260,   261,   262,   263,   264,   265,   266,
+   267,   268,   269,   270,   271,   272,   273,   274,   275,   276,
+   277,   278,   279,   280,   281,   282,   283,   284,   285,   286,
+   287,   288,   289,   290,   291,   292,   293,   294,   295,   296,
+   297,   298,   299,   300,   301,   302,   303,   304,   305,   306,
+   307,   308,   309,   310,   311,   312,   313,   314,   315,   316,
+   317,   318,   319,   320,   321,   322,   323,   324,   325,   326,
+   327,   328,   329,   330,   331,   332,   333,   334,   350,   351
+};
+
+#if YYDEBUG != 0
+static const short yyprhs[] = {     0,
+     0,     3,     5,     8,    11,    12,    13,    21,    25,    27,
+    30,    34,    37,    39,    42,    45,    47,    49,    54,    59,
+    60,    63,    67,    70,    74,    79,    81,    84,    88,    92,
+    95,    99,   103,   107,   111,   115,   119,   123,   127,   131,
+   135,   139,   143,   148,   150,   154,   156,   158,   160,   162,
+   166,   170,   171,   174,   181,   189,   196,   203,   211,   213,
+   217,   219,   221,   225,   227,   229,   231,   235,   238,   240,
+   245,   247
+};
+
+static const short yyrhs[] = {   356,
+   340,     0,   356,     0,   356,   357,     0,   356,   364,     0,
+     0,     0,    71,   287,   314,   358,   344,   359,   345,     0,
+   359,   341,   360,     0,   360,     0,   314,   363,     0,   314,
+   363,   361,     0,   361,   362,     0,   362,     0,   234,   168,
+     0,   205,   208,     0,    30,     0,     3,     0,     3,   344,
+   266,   345,     0,   320,   344,   266,   345,     0,     0,   365,
+   373,     0,   365,   373,   369,     0,   365,   369,     0,   365,
+   373,   366,     0,   365,   373,   369,   366,     0,   260,     0,
+   327,   367,     0,   367,    19,   367,     0,   367,   219,   367,
+     0,   205,   367,     0,   367,   336,   367,     0,   367,   335,
+   367,     0,   367,   348,   367,     0,   367,   337,   367,     0,
+   367,   338,   367,     0,   367,   206,   367,     0,   367,   142,
+   367,     0,   367,   141,   367,     0,   367,   175,   367,     0,
+   367,   174,   367,     0,   367,   177,   367,     0,   367,   151,
+   367,     0,   314,   344,   368,   345,     0,   314,     0,   314,
+   342,   314,     0,   208,     0,    50,     0,   266,     0,   267,
+     0,   344,   367,   345,     0,   368,   341,   367,     0,     0,
+   134,   370,     0,   369,   172,   166,   314,   215,   375,     0,
+   369,   172,   221,   166,   314,   215,   375,     0,   369,   156,
+   166,   314,   215,   375,     0,   369,   250,   166,   314,   215,
+   375,     0,   369,   250,   221,   166,   314,   215,   375,     0,
+   371,     0,   371,   341,   372,     0,   372,     0,   314,     0,
+   373,   341,   374,     0,   374,     0,   375,     0,   376,     0,
+   375,    22,   314,     0,   375,   314,     0,   367,     0,   104,
+   344,   375,   345,     0,   337,     0,   315,     0
+};
+
+#endif
+
+#if YYDEBUG != 0
+static const short yyrline[] = { 0,
+   615,   617,   620,   622,   623,   626,   632,   635,   636,   641,
+   651,   665,   666,   671,   677,   682,   689,   695,   702,   708,
+   716,   736,   808,   812,   816,   822,   831,   842,   848,   853,
+   858,   862,   866,   870,   874,   878,   882,   886,   890,   894,
+   898,   902,   906,   911,   925,   936,   943,   951,   959,   964,
+   971,   977,   983,   987,   992,   997,  1002,  1007,  1014,  1020,
+  1021,  1026,  1063,  1070,  1078,  1088,  1093,  1102,  1113,  1152,
+  1160,  1170
+};
+#endif
+
+
+#if YYDEBUG != 0 || defined (YYERROR_VERBOSE)
+
+static const char * const yytname[] = {   "$","error","$undefined.","SQL_TYPE",
+"SQL_ABS","ACOS","AMPERSAND","SQL_ABSOLUTE","ADA","ADD","ADD_DAYS","ADD_HOURS",
 "ADD_MINUTES","ADD_MONTHS","ADD_SECONDS","ADD_YEARS","ALL","ALLOCATE","ALTER",
-"AND","ANY","ARE","ARITHMETIC_MINUS","ARITHMETIC_PLUS","AS","ASIN","ASC",
-"ASCII","ASSERTION","ASTERISK","AT","ATAN","ATAN2","AUTHORIZATION",
+"AND","ANY","ARE","AS","ASIN","ASC","ASCII","ASSERTION","ATAN","ATAN2","AUTHORIZATION",
 "AUTO_INCREMENT","AVG","BEFORE","SQL_BEGIN","BETWEEN","BIGINT","BINARY","BIT",
-"BIT_LENGTH","BREAK","BY","CASCADE","CASCADED","CASE","CAST","CATALOG",
-"CEILING","CENTER","SQL_CHAR","CHAR_LENGTH","CHARACTER_STRING_LITERAL","CHECK",
-"CLOSE","COALESCE","COBOL","COLLATE","COLLATION","COLON","COLUMN","COMMA",
-"COMMIT","COMPUTE","CONCAT","CONNECT","CONNECTION","CONSTRAINT","CONSTRAINTS",
-"CONTINUE","CONVERT","CORRESPONDING","COS","COT","COUNT","CREATE","CURDATE",
-"CURRENT","CURRENT_DATE","CURRENT_TIME","CURRENT_TIMESTAMP","CURTIME","CURSOR",
-"DATABASE","SQL_DATE","DATE_FORMAT","DATE_REMAINDER","DATE_VALUE","DAY",
-"DAYOFMONTH","DAYOFWEEK","DAYOFYEAR","DAYS_BETWEEN","DEALLOCATE","DEC",
-"DECLARE","DEFAULT","DEFERRABLE","DEFERRED","SQL_DELETE","DESC","DESCRIBE",
+"BIT_LENGTH","BREAK","BY","CASCADE","CASCADED","CASE","CAST","CATALOG","CEILING",
+"CENTER","SQL_CHAR","CHAR_LENGTH","CHARACTER_STRING_LITERAL","CHECK","CLOSE",
+"COALESCE","COBOL","COLLATE","COLLATION","COLUMN","COMMIT","COMPUTE","CONCAT",
+"CONNECT","CONNECTION","CONSTRAINT","CONSTRAINTS","CONTINUE","CONVERT","CORRESPONDING",
+"COS","COT","COUNT","CREATE","CURDATE","CURRENT","CURRENT_DATE","CURRENT_TIME",
+"CURRENT_TIMESTAMP","CURTIME","CURSOR","DATABASE","SQL_DATE","DATE_FORMAT","DATE_REMAINDER",
+"DATE_VALUE","DAY","DAYOFMONTH","DAYOFWEEK","DAYOFYEAR","DAYS_BETWEEN","DEALLOCATE",
+"DEC","DECLARE","DEFAULT","DEFERRABLE","DEFERRED","SQL_DELETE","DESC","DESCRIBE",
 "DESCRIPTOR","DIAGNOSTICS","DICTIONARY","DIRECTORY","DISCONNECT","DISPLACEMENT",
-"DISTINCT","DOLLAR_SIGN","DOMAIN_TOKEN","DOT","SQL_DOUBLE",
-"DOUBLE_QUOTED_STRING","DROP","ELSE","END","END_EXEC","EQUAL","ESCAPE","EXCEPT",
-"SQL_EXCEPTION","EXEC","EXECUTE","EXISTS","EXP","EXPONENT","EXTERNAL","EXTRACT",
-"SQL_FALSE","FETCH","FIRST","SQL_FLOAT","FLOOR","FN","FOR","FOREIGN","FORTRAN",
-"FOUND","FOUR_DIGITS","FROM","FULL","GET","GLOBAL","GO","GOTO","GRANT",
-"GREATER_THAN","GREATER_OR_EQUAL","GROUP","HAVING","HOUR","HOURS_BETWEEN",
-"IDENTITY","IFNULL","SQL_IGNORE","IMMEDIATE","SQL_IN","INCLUDE","INDEX",
-"INDICATOR","INITIALLY","INNER","INPUT","INSENSITIVE","INSERT","INTEGER",
-"INTERSECT","INTERVAL","INTO","IS","ISOLATION","JOIN","JUSTIFY","KEY",
-"LANGUAGE","LAST","LCASE","LEFT","LEFTPAREN","LENGTH","LESS_OR_EQUAL",
-"LESS_THAN","LEVEL","LIKE","LINE_WIDTH","LOCAL","LOCATE","LOG","SQL_LONG",
-"LOWER","LTRIM","LTRIP","MATCH","SQL_MAX","MICROSOFT","SQL_MIN","MINUS",
-"MINUTE","MINUTES_BETWEEN","MOD","MODIFY","MODULE","MONTH","MONTHS_BETWEEN",
-"MUMPS","NAMES","NATIONAL","NCHAR","NEXT","NODUP","NONE","NOT","NOT_EQUAL",
-"NOW","SQL_NULL","NULLIF","NUMERIC","OCTET_LENGTH","ODBC","OF","SQL_OFF",
-"SQL_ON","ONLY","OPEN","OPTION","OR","ORDER","OUTER","OUTPUT","OVERLAPS","PAGE",
-"PARTIAL","SQL_PASCAL","PERSISTENT","CQL_PI","PLI","POSITION","PRECISION",
-"PREPARE","PRESERVE","PRIMARY","PRIOR","PRIVILEGES","PROCEDURE","PRODUCT",
-"PUBLIC","QUARTER","QUESTION_MARK","QUIT","RAND","READ_ONLY","REAL",
-"REFERENCES","REPEAT","REPLACE","RESTRICT","REVOKE","RIGHT","RIGHTPAREN",
-"ROLLBACK","ROWS","RPAD","RTRIM","SCHEMA","SCREEN_WIDTH","SCROLL","SECOND",
-"SECONDS_BETWEEN","SELECT","SEMICOLON","SEQUENCE","SETOPT","SET","SHOWOPT",
-"SIGN","SIGNED_INTEGER","SIN","SINGLE_QUOTE","SQL_SIZE","SLASH","SMALLINT",
-"SOME","SPACE","SQL","SQL_TRUE","SQLCA","SQLCODE","SQLERROR","SQLSTATE",
-"SQLWARNING","SQRT","STDEV","SUBSTRING","SUM","SYSDATE","SYSDATE_FORMAT",
-"SYSTEM","TABLE","TAN","TEMPORARY","THEN","THREE_DIGITS","TIME","TIMESTAMP",
-"TIMEZONE_HOUR","TIMEZONE_MINUTE","TINYINT","TO","TO_CHAR","TO_DATE",
-"TRANSACTION","TRANSLATE","TRANSLATION","TRUNCATE","GENERAL_TITLE","TWO_DIGITS",
-"UCASE","UNION","UNIQUE","SQL_UNKNOWN","UNSIGNED_INTEGER","UPDATE","UPPER",
-"USAGE","USER","USER_DEFINED_NAME","USING","VALUE","VALUES","VARBINARY",
-"VARCHAR","VARYING","VENDOR","VIEW","WEEK","WHEN","WHENEVER","WHERE",
-"WHERE_CURRENT_OF","WITH","WORD_WRAPPED","WORK","WRAPPED","YEAR",
-"YEARS_BETWEEN",
-};
-char *yyrule[] = {
-"$accept : TopLevelStatement",
-"TopLevelStatement : Statement SEMICOLON",
-"TopLevelStatement : Statement",
-"Statement : Statement CreateTableStatement",
-"Statement : Statement SelectStatement",
-"Statement :",
-"$$1 :",
-"CreateTableStatement : CREATE TABLE USER_DEFINED_NAME $$1 LEFTPAREN ColDefs RIGHTPAREN",
-"ColDefs : ColDefs COMMA ColDef",
-"ColDefs : ColDef",
-"ColDef : USER_DEFINED_NAME ColType",
-"ColDef : USER_DEFINED_NAME ColType ColKeys",
-"ColKeys : ColKeys ColKey",
-"ColKeys : ColKey",
-"ColKey : PRIMARY KEY",
-"ColKey : NOT SQL_NULL",
-"ColKey : AUTO_INCREMENT",
-"ColType : SQL_TYPE",
-"ColType : SQL_TYPE LEFTPAREN UNSIGNED_INTEGER RIGHTPAREN",
-"ColType : VARCHAR LEFTPAREN UNSIGNED_INTEGER RIGHTPAREN",
-"ColType :",
-"SelectStatement : Select ColViews",
-"SelectStatement : Select ColViews Tables",
-"SelectStatement : Select Tables",
-"SelectStatement : Select ColViews Conditions",
-"SelectStatement : Select ColViews Tables Conditions",
-"Select : SELECT",
-"Conditions : WHERE ColExpression",
-"Conditions : Conditions AND ColExpression",
-"Conditions : Conditions OR ColExpression",
-"Conditions : LEFTPAREN Conditions RIGHTPAREN",
-"Tables : FROM FlatTableList",
-"Tables : Tables LEFT JOIN USER_DEFINED_NAME SQL_ON ColExpression",
-"Tables : Tables LEFT OUTER JOIN USER_DEFINED_NAME SQL_ON ColExpression",
-"Tables : Tables INNER JOIN USER_DEFINED_NAME SQL_ON ColExpression",
-"Tables : Tables RIGHT JOIN USER_DEFINED_NAME SQL_ON ColExpression",
-"Tables : Tables RIGHT OUTER JOIN USER_DEFINED_NAME SQL_ON ColExpression",
-"FlatTableList : FlatTableList COMMA FlatTable",
-"FlatTableList : FlatTable",
-"FlatTable : USER_DEFINED_NAME",
-"ColViews : ColViews COMMA ColItem",
-"ColViews : ColItem",
-"ColItem : ColExpression",
-"ColItem : ColWildCard",
-"ColItem : ColExpression AS USER_DEFINED_NAME",
-"ColItem : ColExpression USER_DEFINED_NAME",
-"ColView : USER_DEFINED_NAME",
-"ColView : USER_DEFINED_NAME DOT USER_DEFINED_NAME",
-"ColView : SQL_NULL",
-"ColView : CHARACTER_STRING_LITERAL",
-"ColView : SIGNED_INTEGER",
-"ColView : UNSIGNED_INTEGER",
-"ColExpression : ColView",
-"ColExpression : ColExpression ARITHMETIC_PLUS ColExpression",
-"ColExpression : ColExpression ARITHMETIC_MINUS ColExpression",
-"ColExpression : ColExpression SLASH ColExpression",
-"ColExpression : ColExpression ASTERISK ColExpression",
-"ColExpression : ColExpression NOT ColExpression",
-"ColExpression : ColExpression EQUAL ColExpression",
-"ColExpression : ColExpression NOT_EQUAL ColExpression",
-"ColExpression : ColExpression GREATER_THAN ColExpression",
-"ColExpression : ColExpression GREATER_OR_EQUAL ColExpression",
-"ColExpression : ColExpression LESS_THAN ColExpression",
-"ColExpression : ColExpression LESS_OR_EQUAL ColExpression",
-"ColExpression : ColExpression LIKE ColExpression",
-"ColExpression : ColExpression PERCENT ColExpression",
-"ColExpression : LEFTPAREN ColExpression RIGHTPAREN",
-"ColExpression : SUM LEFTPAREN ColExpression RIGHTPAREN",
-"ColExpression : SQL_MIN LEFTPAREN ColExpression RIGHTPAREN",
-"ColExpression : SQL_MAX LEFTPAREN ColExpression RIGHTPAREN",
-"ColExpression : AVG LEFTPAREN ColExpression RIGHTPAREN",
-"ColExpression : DISTINCT LEFTPAREN ColExpression RIGHTPAREN",
-"ColWildCard : ASTERISK",
-"ColWildCard : USER_DEFINED_NAME DOT ASTERISK",
+"DISTINCT","DOMAIN_TOKEN","SQL_DOUBLE","DOUBLE_QUOTED_STRING","DROP","ELSE",
+"END","END_EXEC","EQUAL","ESCAPE","EXCEPT","SQL_EXCEPTION","EXEC","EXECUTE",
+"EXISTS","EXP","EXPONENT","EXTERNAL","EXTRACT","SQL_FALSE","FETCH","FIRST","SQL_FLOAT",
+"FLOOR","FN","FOR","FOREIGN","FORTRAN","FOUND","FOUR_DIGITS","FROM","FULL","GET",
+"GLOBAL","GO","GOTO","GRANT","GREATER_OR_EQUAL","GREATER_THAN","GROUP","HAVING",
+"HOUR","HOURS_BETWEEN","IDENTITY","IFNULL","SQL_IGNORE","IMMEDIATE","SQL_IN",
+"INCLUDE","INDEX","INDICATOR","INITIALLY","INNER","INPUT","INSENSITIVE","INSERT",
+"INTEGER","INTERSECT","INTERVAL","INTO","IS","ISOLATION","JOIN","JUSTIFY","KEY",
+"LANGUAGE","LAST","LCASE","LEFT","LENGTH","LESS_OR_EQUAL","LESS_THAN","LEVEL",
+"LIKE","LINE_WIDTH","LOCAL","LOCATE","LOG","SQL_LONG","LOWER","LTRIM","LTRIP",
+"MATCH","SQL_MAX","MICROSOFT","SQL_MIN","MINUS","MINUTE","MINUTES_BETWEEN","MOD",
+"MODIFY","MODULE","MONTH","MONTHS_BETWEEN","MUMPS","NAMES","NATIONAL","NCHAR",
+"NEXT","NODUP","NONE","NOT","NOT_EQUAL","NOW","SQL_NULL","NULLIF","NUMERIC",
+"OCTET_LENGTH","ODBC","OF","SQL_OFF","SQL_ON","ONLY","OPEN","OPTION","OR","ORDER",
+"OUTER","OUTPUT","OVERLAPS","PAGE","PARTIAL","SQL_PASCAL","PERSISTENT","CQL_PI",
+"PLI","POSITION","PRECISION","PREPARE","PRESERVE","PRIMARY","PRIOR","PRIVILEGES",
+"PROCEDURE","PRODUCT","PUBLIC","QUARTER","QUIT","RAND","READ_ONLY","REAL","REFERENCES",
+"REPEAT","REPLACE","RESTRICT","REVOKE","RIGHT","ROLLBACK","ROWS","RPAD","RTRIM",
+"SCHEMA","SCREEN_WIDTH","SCROLL","SECOND","SECONDS_BETWEEN","SELECT","SEQUENCE",
+"SETOPT","SET","SHOWOPT","SIGN","INTEGER_CONST","REAL_CONST","SIN","SQL_SIZE",
+"SMALLINT","SOME","SPACE","SQL","SQL_TRUE","SQLCA","SQLCODE","SQLERROR","SQLSTATE",
+"SQLWARNING","SQRT","STDEV","SUBSTRING","SUM","SYSDATE","SYSDATE_FORMAT","SYSTEM",
+"TABLE","TAN","TEMPORARY","THEN","THREE_DIGITS","TIME","TIMESTAMP","TIMEZONE_HOUR",
+"TIMEZONE_MINUTE","TINYINT","TO","TO_CHAR","TO_DATE","TRANSACTION","TRANSLATE",
+"TRANSLATION","TRUNCATE","GENERAL_TITLE","TWO_DIGITS","UCASE","UNION","UNIQUE",
+"SQL_UNKNOWN","UPDATE","UPPER","USAGE","USER","USER_DEFINED_NAME","USER_DEFINED_NAME_DOT_ASTERISK",
+"USING","VALUE","VALUES","VARBINARY","VARCHAR","VARYING","VENDOR","VIEW","WEEK",
+"WHEN","WHENEVER","WHERE","WHERE_CURRENT_OF","WITH","WORD_WRAPPED","WORK","WRAPPED",
+"YEAR","YEARS_BETWEEN","'-'","'+'","'*'","'%'","'@'","';'","','","'.'","'$'",
+"'('","')'","'?'","'\\''","'/'","'='","ILIKE","SIMILAR","'^'","'['","']'","TopLevelStatement",
+"Statement","CreateTableStatement","@1","ColDefs","ColDef","ColKeys","ColKey",
+"ColType","SelectStatement","Select","WhereClause","aExpr","aExprList","Tables",
+"FlatTableList","aFlatTableList","FlatTable","ColViews","ColItem","ColExpression",
+"ColWildCard", NULL
 };
 #endif
-#ifdef YYSTACKSIZE
+
+static const short yyr1[] = {     0,
+   355,   355,   356,   356,   356,   358,   357,   359,   359,   360,
+   360,   361,   361,   362,   362,   362,   363,   363,   363,   363,
+   364,   364,   364,   364,   364,   365,   366,   367,   367,   367,
+   367,   367,   367,   367,   367,   367,   367,   367,   367,   367,
+   367,   367,   367,   367,   367,   367,   367,   367,   367,   367,
+   368,   368,   369,   369,   369,   369,   369,   369,   370,   371,
+   371,   372,   373,   373,   374,   374,   374,   374,   375,   375,
+   376,   376
+};
+
+static const short yyr2[] = {     0,
+     2,     1,     2,     2,     0,     0,     7,     3,     1,     2,
+     3,     2,     1,     2,     2,     1,     1,     4,     4,     0,
+     2,     3,     2,     3,     4,     1,     2,     3,     3,     2,
+     3,     3,     3,     3,     3,     3,     3,     3,     3,     3,
+     3,     3,     4,     1,     3,     1,     1,     1,     1,     3,
+     3,     0,     2,     6,     7,     6,     6,     7,     1,     3,
+     1,     1,     3,     1,     1,     1,     3,     2,     1,     4,
+     1,     1
+};
+
+static const short yydefact[] = {     5,
+     2,     0,    26,     1,     3,     4,     0,     0,    47,     0,
+     0,     0,    46,    48,    49,    44,    72,    71,     0,    69,
+    23,    21,    64,    65,    66,     6,     0,    62,    53,    59,
+    61,    30,     0,    52,     0,     0,     0,     0,     0,     0,
+     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+     0,     0,     0,     0,    24,    22,     0,    68,     0,     0,
+     0,    45,     0,    50,    28,    38,    37,    42,    40,    39,
+    41,    36,    29,    32,    31,    34,    35,    33,     0,     0,
+     0,     0,     0,    27,    63,    25,    67,     0,    70,    60,
+     0,    43,     0,     0,     0,     0,     0,    20,     0,     9,
+    51,     0,     0,     0,     0,     0,    17,     0,    10,     0,
+     7,    56,    54,     0,    57,     0,     0,     0,    16,     0,
+     0,    11,    13,     8,    55,    58,     0,     0,    15,    14,
+    12,    18,    19,     0,     0,     0
+};
+
+static const short yydefgoto[] = {   134,
+     1,     5,    59,    99,   100,   122,   123,   109,     6,     7,
+    55,    20,    63,    21,    29,    30,    31,    22,    23,    24,
+    25
+};
+
+static const short yypact[] = {-32768,
+   -62,  -271,-32768,-32768,-32768,-32768,   -44,  -282,-32768,  -311,
+  -280,   -38,-32768,-32768,-32768,  -314,-32768,-32768,   -38,   -15,
+  -153,  -110,-32768,   -20,-32768,-32768,   -40,-32768,-32768,  -306,
+-32768,  -128,  -278,-32768,   -19,   -38,   -38,   -38,   -38,   -38,
+   -38,   -38,   -38,   -38,   -38,   -38,   -38,   -38,   -38,  -129,
+  -165,  -151,   -38,   -42,-32768,  -145,  -274,-32768,  -303,  -302,
+  -280,-32768,  -319,-32768,  -128,  -103,  -103,   -98,  -103,  -103,
+   -98,  -103,    -1,  -317,  -317,-32768,-32768,-32768,  -272,  -270,
+  -121,  -264,  -115,   -15,-32768,-32768,-32768,  -262,-32768,-32768,
+   -38,-32768,  -161,  -160,  -257,  -157,  -255,     4,  -316,-32768,
+   -15,   -40,   -40,  -154,   -40,  -152,  -279,  -277,   -13,  -262,
+-32768,-32768,-32768,   -40,-32768,   -40,  -200,  -198,-32768,  -139,
+   -95,   -13,-32768,-32768,-32768,-32768,  -269,  -268,-32768,-32768,
+-32768,-32768,-32768,    75,    82,-32768
+};
+
+static const short yypgoto[] = {-32768,
+-32768,-32768,-32768,-32768,   -26,-32768,   -37,-32768,-32768,-32768,
+    30,   313,-32768,    65,-32768,-32768,    27,-32768,    35,   -22,
+-32768
+};
+
+
+#define	YYLAST		404
+
+
+static const short yytable[] = {    36,
+    80,    57,    50,    36,    60,     9,   107,     9,     2,     9,
+    50,     9,    37,    38,    82,     8,   119,    36,    51,    47,
+    48,    91,    39,    11,   110,    92,    51,    33,   111,    34,
+    49,    26,    27,    28,    61,    62,    79,-32768,-32768,    87,
+    88,    93,    89,    94,    95,    40,    41,    39,    42,    96,
+    97,    98,-32768,   102,   103,    81,   104,   105,   106,    10,
+   114,    10,   116,    10,   117,   127,   118,   128,   129,    83,
+-32768,-32768,   130,    42,   135,   132,   133,    43,-32768,   112,
+   113,   136,   115,   124,   131,    86,    56,    90,    85,    11,
+     0,   125,     0,   126,     0,     0,    52,     0,     0,     0,
+     0,     0,-32768,     0,    52,     0,     0,     0,     0,     0,
+     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+     0,    37,    38,     0,     0,    37,    38,     0,     0,     0,
+     0,    39,     0,     0,     0,    39,     0,     0,     0,    37,
+    38,     0,     0,     0,     0,     0,     0,     0,     0,    39,
+     0,     0,     0,     0,    40,    41,     0,    42,    40,    41,
+    12,    42,    12,    13,    12,    13,    12,    13,     0,    13,
+     0,     0,    40,    41,     0,    42,     0,     0,     0,     0,
+     0,    53,     0,     0,     0,     0,    43,     0,     0,     0,
+    43,   120,     0,     0,     0,     0,     0,     3,     0,    44,
+     0,     0,     0,    44,    43,     0,    45,    46,    47,    48,
+     0,     0,     0,     0,     0,     0,    53,     0,     0,    49,
+   121,    14,    15,    14,    15,    14,    15,    14,    15,     0,
+    54,    45,    46,    47,    48,     0,    45,    46,    47,    48,
+     0,     0,     0,     0,    49,     0,     0,     0,     0,    49,
+     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+     0,     0,     0,     0,     0,     0,     0,     0,     0,    16,
+    17,    16,    17,    16,     0,    16,     0,     4,     0,     0,
+     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+     0,     0,    18,    58,    18,     0,     0,     0,     0,    19,
+     0,    19,     0,    19,     0,    19,     0,     0,     0,     0,
+     0,     0,     0,     0,     0,    45,    46,    47,    48,    45,
+    46,    47,    48,   108,    32,    64,     0,     0,    49,     0,
+     0,    35,    49,    45,    46,    47,    48,     0,     0,     0,
+     0,     0,     0,     0,     0,     0,    49,     0,    65,    66,
+    67,    68,    69,    70,    71,    72,    73,    74,    75,    76,
+    77,    78,     0,     0,     0,    84,     0,     0,     0,     0,
+     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+     0,     0,     0,   101
+};
+
+static const short yycheck[] = {    19,
+   166,    22,   156,    19,    27,    50,     3,    50,    71,    50,
+   156,    50,   141,   142,   166,   287,    30,    19,   172,   337,
+   338,   341,   151,   134,   341,   345,   172,   342,   345,   344,
+   348,   314,   344,   314,   341,   314,   166,   141,   142,   314,
+   344,   314,   345,   314,   166,   174,   175,   151,   177,   314,
+   166,   314,   151,   215,   215,   221,   314,   215,   314,   104,
+   215,   104,   215,   104,   344,   266,   344,   266,   208,   221,
+   174,   175,   168,   177,     0,   345,   345,   206,   177,   102,
+   103,     0,   105,   110,   122,    56,    22,    61,    54,   134,
+    -1,   114,    -1,   116,    -1,    -1,   250,    -1,    -1,    -1,
+    -1,    -1,   206,    -1,   250,    -1,    -1,    -1,    -1,    -1,
+    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+    -1,   141,   142,    -1,    -1,   141,   142,    -1,    -1,    -1,
+    -1,   151,    -1,    -1,    -1,   151,    -1,    -1,    -1,   141,
+   142,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,   151,
+    -1,    -1,    -1,    -1,   174,   175,    -1,   177,   174,   175,
+   205,   177,   205,   208,   205,   208,   205,   208,    -1,   208,
+    -1,    -1,   174,   175,    -1,   177,    -1,    -1,    -1,    -1,
+    -1,   327,    -1,    -1,    -1,    -1,   206,    -1,    -1,    -1,
+   206,   205,    -1,    -1,    -1,    -1,    -1,   260,    -1,   219,
+    -1,    -1,    -1,   219,   206,    -1,   335,   336,   337,   338,
+    -1,    -1,    -1,    -1,    -1,    -1,   327,    -1,    -1,   348,
+   234,   266,   267,   266,   267,   266,   267,   266,   267,    -1,
+   341,   335,   336,   337,   338,    -1,   335,   336,   337,   338,
+    -1,    -1,    -1,    -1,   348,    -1,    -1,    -1,    -1,   348,
+    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,   314,
+   315,   314,   315,   314,    -1,   314,    -1,   340,    -1,    -1,
+    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+    -1,    -1,   337,   314,   337,    -1,    -1,    -1,    -1,   344,
+    -1,   344,    -1,   344,    -1,   344,    -1,    -1,    -1,    -1,
+    -1,    -1,    -1,    -1,    -1,   335,   336,   337,   338,   335,
+   336,   337,   338,   320,    12,   345,    -1,    -1,   348,    -1,
+    -1,    19,   348,   335,   336,   337,   338,    -1,    -1,    -1,
+    -1,    -1,    -1,    -1,    -1,    -1,   348,    -1,    36,    37,
+    38,    39,    40,    41,    42,    43,    44,    45,    46,    47,
+    48,    49,    -1,    -1,    -1,    53,    -1,    -1,    -1,    -1,
+    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+    -1,    -1,    -1,    91
+};
+/* -*-C-*-  Note some compilers choke on comments on `#line' lines.  */
+#line 3 "/usr/local/share/bison.simple"
+/* This file comes from bison-1.28.  */
+
+/* Skeleton output parser for bison,
+   Copyright (C) 1984, 1989, 1990 Free Software Foundation, Inc.
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.  */
+
+/* As a special exception, when this file is copied by Bison into a
+   Bison output file, you may use that output file without restriction.
+   This special exception was added by the Free Software Foundation
+   in version 1.24 of Bison.  */
+
+/* This is the parser code that is written into each bison parser
+  when the %semantic_parser declaration is not specified in the grammar.
+  It was written by Richard Stallman by simplifying the hairy parser
+  used when %semantic_parser is specified.  */
+
+#ifndef YYSTACK_USE_ALLOCA
+#ifdef alloca
+#define YYSTACK_USE_ALLOCA
+#else /* alloca not defined */
+#ifdef __GNUC__
+#define YYSTACK_USE_ALLOCA
+#define alloca __builtin_alloca
+#else /* not GNU C.  */
+#if (!defined (__STDC__) && defined (sparc)) || defined (__sparc__) || defined (__sparc) || defined (__sgi) || (defined (__sun) && defined (__i386))
+#define YYSTACK_USE_ALLOCA
+#include <alloca.h>
+#else /* not sparc */
+/* We think this test detects Watcom and Microsoft C.  */
+/* This used to test MSDOS, but that is a bad idea
+   since that symbol is in the user namespace.  */
+#if (defined (_MSDOS) || defined (_MSDOS_)) && !defined (__TURBOC__)
+#if 0 /* No need for malloc.h, which pollutes the namespace;
+	 instead, just don't use alloca.  */
+#include <malloc.h>
+#endif
+#else /* not MSDOS, or __TURBOC__ */
+#if defined(_AIX)
+/* I don't know what this was needed for, but it pollutes the namespace.
+   So I turned it off.   rms, 2 May 1997.  */
+/* #include <malloc.h>  */
+ #pragma alloca
+#define YYSTACK_USE_ALLOCA
+#else /* not MSDOS, or __TURBOC__, or _AIX */
+#if 0
+#ifdef __hpux /* haible@ilog.fr says this works for HPUX 9.05 and up,
+		 and on HPUX 10.  Eventually we can turn this on.  */
+#define YYSTACK_USE_ALLOCA
+#define alloca __builtin_alloca
+#endif /* __hpux */
+#endif
+#endif /* not _AIX */
+#endif /* not MSDOS, or __TURBOC__ */
+#endif /* not sparc */
+#endif /* not GNU C */
+#endif /* alloca not defined */
+#endif /* YYSTACK_USE_ALLOCA not defined */
+
+#ifdef YYSTACK_USE_ALLOCA
+#define YYSTACK_ALLOC alloca
+#else
+#define YYSTACK_ALLOC malloc
+#endif
+
+/* Note: there must be only one dollar sign in this file.
+   It is replaced by the list of actions, each action
+   as one case of the switch.  */
+
+#define yyerrok		(yyerrstatus = 0)
+#define yyclearin	(yychar = YYEMPTY)
+#define YYEMPTY		-2
+#define YYEOF		0
+#define YYACCEPT	goto yyacceptlab
+#define YYABORT 	goto yyabortlab
+#define YYERROR		goto yyerrlab1
+/* Like YYERROR except do call yyerror.
+   This remains here temporarily to ease the
+   transition to the new meaning of YYERROR, for GCC.
+   Once GCC version 2 has supplanted version 1, this can go.  */
+#define YYFAIL		goto yyerrlab
+#define YYRECOVERING()  (!!yyerrstatus)
+#define YYBACKUP(token, value) \
+do								\
+  if (yychar == YYEMPTY && yylen == 1)				\
+    { yychar = (token), yylval = (value);			\
+      yychar1 = YYTRANSLATE (yychar);				\
+      YYPOPSTACK;						\
+      goto yybackup;						\
+    }								\
+  else								\
+    { yyerror ("syntax error: cannot back up"); YYERROR; }	\
+while (0)
+
+#define YYTERROR	1
+#define YYERRCODE	256
+
+#ifndef YYPURE
+#define YYLEX		yylex()
+#endif
+
+#ifdef YYPURE
+#ifdef YYLSP_NEEDED
+#ifdef YYLEX_PARAM
+#define YYLEX		yylex(&yylval, &yylloc, YYLEX_PARAM)
+#else
+#define YYLEX		yylex(&yylval, &yylloc)
+#endif
+#else /* not YYLSP_NEEDED */
+#ifdef YYLEX_PARAM
+#define YYLEX		yylex(&yylval, YYLEX_PARAM)
+#else
+#define YYLEX		yylex(&yylval)
+#endif
+#endif /* not YYLSP_NEEDED */
+#endif
+
+/* If nonreentrant, generate the variables here */
+
+#ifndef YYPURE
+
+int	yychar;			/*  the lookahead symbol		*/
+YYSTYPE	yylval;			/*  the semantic value of the		*/
+				/*  lookahead symbol			*/
+
+#ifdef YYLSP_NEEDED
+YYLTYPE yylloc;			/*  location data for the lookahead	*/
+				/*  symbol				*/
+#endif
+
+int yynerrs;			/*  number of parse errors so far       */
+#endif  /* not YYPURE */
+
+#if YYDEBUG != 0
+int yydebug;			/*  nonzero means print parse trace	*/
+/* Since this is uninitialized, it does not stop multiple parsers
+   from coexisting.  */
+#endif
+
+/*  YYINITDEPTH indicates the initial size of the parser's stacks	*/
+
+#ifndef	YYINITDEPTH
+#define YYINITDEPTH 200
+#endif
+
+/*  YYMAXDEPTH is the maximum size the stacks can grow to
+    (effective only if the built-in stack extension method is used).  */
+
+#if YYMAXDEPTH == 0
 #undef YYMAXDEPTH
-#define YYMAXDEPTH YYSTACKSIZE
-#else
-#ifdef YYMAXDEPTH
-#define YYSTACKSIZE YYMAXDEPTH
-#else
-#define YYSTACKSIZE 500
-#define YYMAXDEPTH 500
 #endif
-#endif
-int yydebug;
-int yynerrs;
-int yyerrflag;
-int yychar;
-short *yyssp;
-YYSTYPE *yyvsp;
-YYSTYPE yyval;
-YYSTYPE yylval;
-short yyss[YYSTACKSIZE];
-YYSTYPE yyvs[YYSTACKSIZE];
-#define yystacksize YYSTACKSIZE
-#line 970 "sqlparser.y"
 
-#line 1064 "y.tab.c"
-#define YYABORT goto yyabort
-#define YYREJECT goto yyabort
-#define YYACCEPT goto yyaccept
-#define YYERROR goto yyerrlab
-int
-#if defined(__STDC__)
-yyparse(void)
-#else
-yyparse()
+#ifndef YYMAXDEPTH
+#define YYMAXDEPTH 10000
 #endif
+
+/* Define __yy_memcpy.  Note that the size argument
+   should be passed with type unsigned int, because that is what the non-GCC
+   definitions require.  With GCC, __builtin_memcpy takes an arg
+   of type size_t, but it can handle unsigned int.  */
+
+#if __GNUC__ > 1		/* GNU C and GNU C++ define this.  */
+#define __yy_memcpy(TO,FROM,COUNT)	__builtin_memcpy(TO,FROM,COUNT)
+#else				/* not GNU C or C++ */
+#ifndef __cplusplus
+
+/* This is the most reliable way to avoid incompatibilities
+   in available built-in functions on various systems.  */
+static void
+__yy_memcpy (to, from, count)
+     char *to;
+     char *from;
+     unsigned int count;
 {
-    register int yym, yyn, yystate;
-#if YYDEBUG
-    register char *yys;
-    extern char *getenv();
+  register char *f = from;
+  register char *t = to;
+  register int i = count;
 
-    if (yys = getenv("YYDEBUG"))
-    {
-        yyn = *yys;
-        if (yyn >= '0' && yyn <= '9')
-            yydebug = yyn - '0';
-    }
+  while (i-- > 0)
+    *t++ = *f++;
+}
+
+#else /* __cplusplus */
+
+/* This is the most reliable way to avoid incompatibilities
+   in available built-in functions on various systems.  */
+static void
+__yy_memcpy (char *to, char *from, unsigned int count)
+{
+  register char *t = to;
+  register char *f = from;
+  register int i = count;
+
+  while (i-- > 0)
+    *t++ = *f++;
+}
+
+#endif
+#endif
+
+#line 217 "/usr/local/share/bison.simple"
+
+/* The user can define YYPARSE_PARAM as the name of an argument to be passed
+   into yyparse.  The argument should have type void *.
+   It should actually point to an object.
+   Grammar actions can access the variable by casting it
+   to the proper pointer type.  */
+
+#ifdef YYPARSE_PARAM
+#ifdef __cplusplus
+#define YYPARSE_PARAM_ARG void *YYPARSE_PARAM
+#define YYPARSE_PARAM_DECL
+#else /* not __cplusplus */
+#define YYPARSE_PARAM_ARG YYPARSE_PARAM
+#define YYPARSE_PARAM_DECL void *YYPARSE_PARAM;
+#endif /* not __cplusplus */
+#else /* not YYPARSE_PARAM */
+#define YYPARSE_PARAM_ARG
+#define YYPARSE_PARAM_DECL
+#endif /* not YYPARSE_PARAM */
+
+/* Prevent warning if -Wstrict-prototypes.  */
+#ifdef __GNUC__
+#ifdef YYPARSE_PARAM
+int yyparse (void *);
+#else
+int yyparse (void);
+#endif
 #endif
 
-    yynerrs = 0;
-    yyerrflag = 0;
-    yychar = (-1);
+int
+yyparse(YYPARSE_PARAM_ARG)
+     YYPARSE_PARAM_DECL
+{
+  register int yystate;
+  register int yyn;
+  register short *yyssp;
+  register YYSTYPE *yyvsp;
+  int yyerrstatus;	/*  number of tokens to shift before error messages enabled */
+  int yychar1 = 0;		/*  lookahead token as an internal (translated) token number */
 
-    yyssp = yyss;
-    yyvsp = yyvs;
-    *yyssp = yystate = 0;
+  short	yyssa[YYINITDEPTH];	/*  the state stack			*/
+  YYSTYPE yyvsa[YYINITDEPTH];	/*  the semantic value stack		*/
 
-yyloop:
-    if ((yyn = yydefred[yystate]) != 0) goto yyreduce;
-    if (yychar < 0)
+  short *yyss = yyssa;		/*  refer to the stacks thru separate pointers */
+  YYSTYPE *yyvs = yyvsa;	/*  to allow yyoverflow to reallocate them elsewhere */
+
+#ifdef YYLSP_NEEDED
+  YYLTYPE yylsa[YYINITDEPTH];	/*  the location stack			*/
+  YYLTYPE *yyls = yylsa;
+  YYLTYPE *yylsp;
+
+#define YYPOPSTACK   (yyvsp--, yyssp--, yylsp--)
+#else
+#define YYPOPSTACK   (yyvsp--, yyssp--)
+#endif
+
+  int yystacksize = YYINITDEPTH;
+  int yyfree_stacks = 0;
+
+#ifdef YYPURE
+  int yychar;
+  YYSTYPE yylval;
+  int yynerrs;
+#ifdef YYLSP_NEEDED
+  YYLTYPE yylloc;
+#endif
+#endif
+
+  YYSTYPE yyval;		/*  the variable used to return		*/
+				/*  semantic values from the action	*/
+				/*  routines				*/
+
+  int yylen;
+
+#if YYDEBUG != 0
+  if (yydebug)
+    fprintf(stderr, "Starting parse\n");
+#endif
+
+  yystate = 0;
+  yyerrstatus = 0;
+  yynerrs = 0;
+  yychar = YYEMPTY;		/* Cause a token to be read.  */
+
+  /* Initialize stack pointers.
+     Waste one element of value and location stack
+     so that they stay on the same level as the state stack.
+     The wasted elements are never initialized.  */
+
+  yyssp = yyss - 1;
+  yyvsp = yyvs;
+#ifdef YYLSP_NEEDED
+  yylsp = yyls;
+#endif
+
+/* Push a new state, which is found in  yystate  .  */
+/* In all cases, when you get here, the value and location stacks
+   have just been pushed. so pushing a state here evens the stacks.  */
+yynewstate:
+
+  *++yyssp = yystate;
+
+  if (yyssp >= yyss + yystacksize - 1)
     {
-        if ((yychar = yylex()) < 0) yychar = 0;
-#if YYDEBUG
-        if (yydebug)
-        {
-            yys = 0;
-            if (yychar <= YYMAXTOKEN) yys = yyname[yychar];
-            if (!yys) yys = "illegal-symbol";
-            printf("%sdebug: state %d, reading %d (%s)\n",
-                    YYPREFIX, yystate, yychar, yys);
-        }
+      /* Give user a chance to reallocate the stack */
+      /* Use copies of these so that the &'s don't force the real ones into memory. */
+      YYSTYPE *yyvs1 = yyvs;
+      short *yyss1 = yyss;
+#ifdef YYLSP_NEEDED
+      YYLTYPE *yyls1 = yyls;
+#endif
+
+      /* Get the current used size of the three stacks, in elements.  */
+      int size = yyssp - yyss + 1;
+
+#ifdef yyoverflow
+      /* Each stack pointer address is followed by the size of
+	 the data in use in that stack, in bytes.  */
+#ifdef YYLSP_NEEDED
+      /* This used to be a conditional around just the two extra args,
+	 but that might be undefined if yyoverflow is a macro.  */
+      yyoverflow("parser stack overflow",
+		 &yyss1, size * sizeof (*yyssp),
+		 &yyvs1, size * sizeof (*yyvsp),
+		 &yyls1, size * sizeof (*yylsp),
+		 &yystacksize);
+#else
+      yyoverflow("parser stack overflow",
+		 &yyss1, size * sizeof (*yyssp),
+		 &yyvs1, size * sizeof (*yyvsp),
+		 &yystacksize);
+#endif
+
+      yyss = yyss1; yyvs = yyvs1;
+#ifdef YYLSP_NEEDED
+      yyls = yyls1;
+#endif
+#else /* no yyoverflow */
+      /* Extend the stack our own way.  */
+      if (yystacksize >= YYMAXDEPTH)
+	{
+	  yyerror("parser stack overflow");
+	  if (yyfree_stacks)
+	    {
+	      free (yyss);
+	      free (yyvs);
+#ifdef YYLSP_NEEDED
+	      free (yyls);
+#endif
+	    }
+	  return 2;
+	}
+      yystacksize *= 2;
+      if (yystacksize > YYMAXDEPTH)
+	yystacksize = YYMAXDEPTH;
+#ifndef YYSTACK_USE_ALLOCA
+      yyfree_stacks = 1;
+#endif
+      yyss = (short *) YYSTACK_ALLOC (yystacksize * sizeof (*yyssp));
+      __yy_memcpy ((char *)yyss, (char *)yyss1,
+		   size * (unsigned int) sizeof (*yyssp));
+      yyvs = (YYSTYPE *) YYSTACK_ALLOC (yystacksize * sizeof (*yyvsp));
+      __yy_memcpy ((char *)yyvs, (char *)yyvs1,
+		   size * (unsigned int) sizeof (*yyvsp));
+#ifdef YYLSP_NEEDED
+      yyls = (YYLTYPE *) YYSTACK_ALLOC (yystacksize * sizeof (*yylsp));
+      __yy_memcpy ((char *)yyls, (char *)yyls1,
+		   size * (unsigned int) sizeof (*yylsp));
+#endif
+#endif /* no yyoverflow */
+
+      yyssp = yyss + size - 1;
+      yyvsp = yyvs + size - 1;
+#ifdef YYLSP_NEEDED
+      yylsp = yyls + size - 1;
+#endif
+
+#if YYDEBUG != 0
+      if (yydebug)
+	fprintf(stderr, "Stack size increased to %d\n", yystacksize);
+#endif
+
+      if (yyssp >= yyss + yystacksize - 1)
+	YYABORT;
+    }
+
+#if YYDEBUG != 0
+  if (yydebug)
+    fprintf(stderr, "Entering state %d\n", yystate);
+#endif
+
+  goto yybackup;
+ yybackup:
+
+/* Do appropriate processing given the current state.  */
+/* Read a lookahead token if we need one and don't already have one.  */
+/* yyresume: */
+
+  /* First try to decide what to do without reference to lookahead token.  */
+
+  yyn = yypact[yystate];
+  if (yyn == YYFLAG)
+    goto yydefault;
+
+  /* Not known => get a lookahead token if don't already have one.  */
+
+  /* yychar is either YYEMPTY or YYEOF
+     or a valid token in external form.  */
+
+  if (yychar == YYEMPTY)
+    {
+#if YYDEBUG != 0
+      if (yydebug)
+	fprintf(stderr, "Reading a token: ");
+#endif
+      yychar = YYLEX;
+    }
+
+  /* Convert token to internal form (in yychar1) for indexing tables with */
+
+  if (yychar <= 0)		/* This means end of input. */
+    {
+      yychar1 = 0;
+      yychar = YYEOF;		/* Don't call YYLEX any more */
+
+#if YYDEBUG != 0
+      if (yydebug)
+	fprintf(stderr, "Now at end of input.\n");
 #endif
     }
-    if ((yyn = yysindex[yystate]) && (yyn += yychar) >= 0 &&
-            yyn <= YYTABLESIZE && yycheck[yyn] == yychar)
+  else
     {
-#if YYDEBUG
-        if (yydebug)
-            printf("%sdebug: state %d, shifting to state %d\n",
-                    YYPREFIX, yystate, yytable[yyn]);
+      yychar1 = YYTRANSLATE(yychar);
+
+#if YYDEBUG != 0
+      if (yydebug)
+	{
+	  fprintf (stderr, "Next token is %d (%s", yychar, yytname[yychar1]);
+	  /* Give the individual parser a way to print the precise meaning
+	     of a token, for further debugging info.  */
+#ifdef YYPRINT
+	  YYPRINT (stderr, yychar, yylval);
 #endif
-        if (yyssp >= yyss + yystacksize - 1)
-        {
-            goto yyoverflow;
-        }
-        *++yyssp = yystate = yytable[yyn];
-        *++yyvsp = yylval;
-        yychar = (-1);
-        if (yyerrflag > 0)  --yyerrflag;
-        goto yyloop;
+	  fprintf (stderr, ")\n");
+	}
+#endif
     }
-    if ((yyn = yyrindex[yystate]) && (yyn += yychar) >= 0 &&
-            yyn <= YYTABLESIZE && yycheck[yyn] == yychar)
+
+  yyn += yychar1;
+  if (yyn < 0 || yyn > YYLAST || yycheck[yyn] != yychar1)
+    goto yydefault;
+
+  yyn = yytable[yyn];
+
+  /* yyn is what to do for this token type in this state.
+     Negative => reduce, -yyn is rule number.
+     Positive => shift, yyn is new state.
+       New state is final state => don't bother to shift,
+       just return success.
+     0, or most negative number => error.  */
+
+  if (yyn < 0)
     {
-        yyn = yytable[yyn];
-        goto yyreduce;
+      if (yyn == YYFLAG)
+	goto yyerrlab;
+      yyn = -yyn;
+      goto yyreduce;
     }
-    if (yyerrflag) goto yyinrecovery;
-    yyerror("syntax error");
-#ifdef lint
+  else if (yyn == 0)
     goto yyerrlab;
+
+  if (yyn == YYFINAL)
+    YYACCEPT;
+
+  /* Shift the lookahead token.  */
+
+#if YYDEBUG != 0
+  if (yydebug)
+    fprintf(stderr, "Shifting token %d (%s), ", yychar, yytname[yychar1]);
 #endif
-yyerrlab:
-    ++yynerrs;
-yyinrecovery:
-    if (yyerrflag < 3)
-    {
-        yyerrflag = 3;
-        for (;;)
-        {
-            if ((yyn = yysindex[*yyssp]) && (yyn += YYERRCODE) >= 0 &&
-                    yyn <= YYTABLESIZE && yycheck[yyn] == YYERRCODE)
-            {
-#if YYDEBUG
-                if (yydebug)
-                    printf("%sdebug: state %d, error recovery shifting\
- to state %d\n", YYPREFIX, *yyssp, yytable[yyn]);
+
+  /* Discard the token being shifted unless it is eof.  */
+  if (yychar != YYEOF)
+    yychar = YYEMPTY;
+
+  *++yyvsp = yylval;
+#ifdef YYLSP_NEEDED
+  *++yylsp = yylloc;
 #endif
-                if (yyssp >= yyss + yystacksize - 1)
-                {
-                    goto yyoverflow;
-                }
-                *++yyssp = yystate = yytable[yyn];
-                *++yyvsp = yylval;
-                goto yyloop;
-            }
-            else
-            {
-#if YYDEBUG
-                if (yydebug)
-                    printf("%sdebug: error recovery discarding state %d\n",
-                            YYPREFIX, *yyssp);
-#endif
-                if (yyssp <= yyss) goto yyabort;
-                --yyssp;
-                --yyvsp;
-            }
-        }
-    }
-    else
-    {
-        if (yychar == 0) goto yyabort;
-#if YYDEBUG
-        if (yydebug)
-        {
-            yys = 0;
-            if (yychar <= YYMAXTOKEN) yys = yyname[yychar];
-            if (!yys) yys = "illegal-symbol";
-            printf("%sdebug: state %d, error recovery discards token %d (%s)\n",
-                    YYPREFIX, yystate, yychar, yys);
-        }
-#endif
-        yychar = (-1);
-        goto yyloop;
-    }
+
+  /* count tokens shifted since error; after three, turn off error status.  */
+  if (yyerrstatus) yyerrstatus--;
+
+  yystate = yyn;
+  goto yynewstate;
+
+/* Do the default action for the current state.  */
+yydefault:
+
+  yyn = yydefact[yystate];
+  if (yyn == 0)
+    goto yyerrlab;
+
+/* Do a reduction.  yyn is the number of a rule to reduce with.  */
 yyreduce:
-#if YYDEBUG
-    if (yydebug)
-        printf("%sdebug: state %d, reducing by rule %d (%s)\n",
-                YYPREFIX, yystate, yyn, yyrule[yyn]);
-#endif
-    yym = yylen[yyn];
-    yyval = yyvsp[1-yym];
-    switch (yyn)
+  yylen = yyr2[yyn];
+  if (yylen > 0)
+    yyval = yyvsp[1-yylen]; /* implement default value of the action */
+
+#if YYDEBUG != 0
+  if (yydebug)
     {
+      int i;
+
+      fprintf (stderr, "Reducing via rule %d (line %d), ",
+	       yyn, yyrline[yyn]);
+
+      /* Print the symbols being reduced, and their result.  */
+      for (i = yyprhs[yyn]; yyrhs[i] > 0; i++)
+	fprintf (stderr, "%s ", yytname[yyrhs[i]]);
+      fprintf (stderr, " -> %s\n", yytname[yyr1[yyn]]);
+    }
+#endif
+
+
+  switch (yyn) {
+
 case 1:
-#line 518 "sqlparser.y"
-{ }
-break;
+#line 616 "sqlparser.y"
+{ ;
+    break;}
 case 2:
-#line 519 "sqlparser.y"
-{ }
-break;
+#line 617 "sqlparser.y"
+{ ;
+    break;}
 case 3:
-#line 523 "sqlparser.y"
-{ YYACCEPT; }
-break;
+#line 621 "sqlparser.y"
+{ YYACCEPT; ;
+    break;}
 case 4:
-#line 524 "sqlparser.y"
-{  }
-break;
+#line 622 "sqlparser.y"
+{  ;
+    break;}
 case 6:
-#line 530 "sqlparser.y"
+#line 628 "sqlparser.y"
 {
 	parser->setOperation(KexiDB::Parser::OP_CreateTable);
 	parser->createTable(yyvsp[0].stringValue);
-}
-break;
+;
+    break;}
 case 9:
-#line 539 "sqlparser.y"
+#line 637 "sqlparser.y"
 {
-}
-break;
+;
+    break;}
 case 10:
-#line 545 "sqlparser.y"
+#line 643 "sqlparser.y"
 {
 	kdDebug() << "adding field " << yyvsp[-1].stringValue << endl;
 	field->setName(yyvsp[-1].stringValue);
 	parser->table()->addField(field);
 
-/*	delete field;*/
+//	delete field;
 	field = 0;
-}
-break;
+;
+    break;}
 case 11:
-#line 554 "sqlparser.y"
+#line 652 "sqlparser.y"
 {
 	kdDebug() << "adding field " << yyvsp[-2].stringValue << endl;
 	field->setName(yyvsp[-2].stringValue);
 	parser->table()->addField(field);
 
-/*	if(field->isPrimaryKey())*/
-/*		parser->table()->addPrimaryKey(field->name());*/
+//	if(field->isPrimaryKey())
+//		parser->table()->addPrimaryKey(field->name());
 
-/*	delete field;*/
-/*	field = 0;*/
-}
-break;
+//	delete field;
+//	field = 0;
+;
+    break;}
 case 13:
-#line 569 "sqlparser.y"
+#line 667 "sqlparser.y"
 {
-}
-break;
+;
+    break;}
 case 14:
-#line 575 "sqlparser.y"
+#line 673 "sqlparser.y"
 {
 	field->setPrimaryKey(true);
 	kdDebug() << "primary" << endl;
-}
-break;
+;
+    break;}
 case 15:
-#line 580 "sqlparser.y"
+#line 678 "sqlparser.y"
 {
 	field->setNotNull(true);
 	kdDebug() << "not_null" << endl;
-}
-break;
+;
+    break;}
 case 16:
-#line 585 "sqlparser.y"
+#line 683 "sqlparser.y"
 {
 	field->setAutoIncrement(true);
 	kdDebug() << "ainc" << endl;
-}
-break;
+;
+    break;}
 case 17:
-#line 593 "sqlparser.y"
+#line 691 "sqlparser.y"
 {
 	field = new KexiDB::Field();
 	field->setType(yyvsp[0].coltype);
-}
-break;
+;
+    break;}
 case 18:
-#line 598 "sqlparser.y"
+#line 696 "sqlparser.y"
 {
 	kdDebug() << "sql + length" << endl;
 	field = new KexiDB::Field();
 	field->setPrecision(yyvsp[-1].integerValue);
 	field->setType(yyvsp[-3].coltype);
-}
-break;
+;
+    break;}
 case 19:
-#line 605 "sqlparser.y"
+#line 703 "sqlparser.y"
 {
 	field = new KexiDB::Field();
 	field->setPrecision(yyvsp[-1].integerValue);
 	field->setType(KexiDB::Field::Text);
-}
-break;
+;
+    break;}
 case 20:
-#line 611 "sqlparser.y"
+#line 709 "sqlparser.y"
 {
-	/* SQLITE compatibillity*/
+	// SQLITE compatibillity
 	field = new KexiDB::Field();
 	field->setType(KexiDB::Field::InvalidType);
-}
-break;
+;
+    break;}
 case 21:
-#line 620 "sqlparser.y"
+#line 718 "sqlparser.y"
 {
 	kdDebug() << "Select ColViews" << endl;
 /*
@@ -1331,120 +1532,361 @@ case 21:
 		parser->select()->setUnresolvedWildcard(false);
 	}
 */
-}
-break;
+;
+    break;}
 case 22:
-#line 639 "sqlparser.y"
+#line 737 "sqlparser.y"
 {
+//TODO: move this to all SELECT versions
+	//fix fields
+	KexiDB::BaseExpr *e;
+	for (KexiDB::BaseExpr::ListIterator it(yyvsp[-1].exprlist->list); (e = it.current()); ++it)
+	{
+		if (e->cl == KexiDBExpr_Variable) {
+			KexiDB::VariableExpr *v_e = static_cast<KexiDB::VariableExpr *>(e);
+			QString varName = v_e->name;
+			kdDebug() << "found variable name: " << varName << endl;
+			int dotPos = varName.find('.');
+			QString tableName, fieldName;
+//TODO: shall we also support db name?
+			if (dotPos>0) {
+				tableName = varName.left(dotPos);
+				fieldName = varName.mid(dotPos+1);
+			}
+			if (tableName.isEmpty()) {//fieldname only
+				fieldName = varName;
+				if (fieldName=="*") {
+					parser->select()->addAsterisk( new KexiDB::QueryAsterisk(parser->select()) );
+				}
+				else {
+				//find first table that has this field
+				//TODO
+				}
+			}
+			else {//table.fieldname
+				KexiDB::TableSchema *ts = tableDict[tableName];
+				if (ts) {
+					if (fieldName=="*") {
+						parser->select()->addAsterisk( new KexiDB::QueryAsterisk(parser->select(), ts) );
+					}
+					else {
+						kdDebug() << " --it's a table.name" << endl;
+						KexiDB::Field *realField = ts->field(fieldName);
+						if (realField) {
+	//						const int pos = parser->select()->fieldPos(f);
+	//						parser->select()->removeField(f);
+	//						parser->select()->insertField(pos, realField);
+							parser->select()->addField(realField);
+	//							f->setExpression( 0 ); //remove expr.
+		//						f->setTable( ts );
+	//						fieldRemoved = true;
+						}
+						else {
+							setError(i18n("Field not found"), i18n("Table \"%1\" has no \"%2\" field")
+								.arg(tableName).arg(fieldName));
+							break;
+						}
+					}
+				}
+				else {
+					tableNotFoundError(tableName);
+					break;
+				}
+			}
+		}
+	}
+	delete yyvsp[-1].exprlist; //no longer needed
+	
+	for (QDictIterator<KexiDB::TableSchema> it(tableDict); it.current(); ++it) {
+		parser->select()->addTable( it.current() );
+	}
+
+	/* set parent table if there's only one */
+	if (parser->select()->tables()->count()==1)
+		parser->select()->setParentTable(parser->select()->tables()->first());
+
 	kdDebug() << "Select ColViews Tables" << endl;
-}
-break;
+;
+    break;}
 case 23:
-#line 643 "sqlparser.y"
+#line 809 "sqlparser.y"
 {
 	kdDebug() << "Select ColViews Tables" << endl;
-}
-break;
+;
+    break;}
 case 24:
-#line 647 "sqlparser.y"
+#line 813 "sqlparser.y"
 {
 	kdDebug() << "Select ColViews Conditions" << endl;
-}
-break;
+;
+    break;}
 case 25:
-#line 651 "sqlparser.y"
+#line 817 "sqlparser.y"
 {
 	kdDebug() << "Select ColViews Tables Conditions" << endl;
-}
-break;
+;
+    break;}
 case 26:
-#line 658 "sqlparser.y"
+#line 824 "sqlparser.y"
 {
 	kdDebug() << "SELECT" << endl;
 	parser->createSelect();
 	parser->setOperation(KexiDB::Parser::OP_Select);
-}
-break;
+;
+    break;}
 case 27:
-#line 667 "sqlparser.y"
+#line 833 "sqlparser.y"
 {
-	kdDebug() << "WHERE " << yyvsp[0].field << endl;
-}
-break;
+	yyval.expr = yyvsp[0].expr;
+;
+    break;}
 case 28:
-#line 671 "sqlparser.y"
+#line 844 "sqlparser.y"
 {
-	kdDebug() << "AND " << yyvsp[0].field << endl;
-}
-break;
+//	kdDebug() << "AND " << $3.debugString() << endl;
+	yyval.expr = new KexiDB::BinaryExpr( KexiDBExpr_Logical, yyvsp[-2].expr, AND, yyvsp[0].expr );
+;
+    break;}
 case 29:
-#line 675 "sqlparser.y"
+#line 849 "sqlparser.y"
 {
-	kdDebug() << "OR " << yyvsp[0].field << endl;
-}
-break;
+//	kdDebug() << "OR " << $3 << endl;
+	yyval.expr = new KexiDB::BinaryExpr( KexiDBExpr_Logical, yyvsp[-2].expr, OR, yyvsp[0].expr );
+;
+    break;}
 case 30:
-#line 679 "sqlparser.y"
+#line 854 "sqlparser.y"
 {
-	kdDebug() << "()" << endl;
-}
-break;
+	yyval.expr = new KexiDB::UnaryExpr( NOT, yyvsp[0].expr );
+//	$$->setName($1->name() + " NOT " + $3->name());
+;
+    break;}
 case 31:
-#line 686 "sqlparser.y"
+#line 859 "sqlparser.y"
 {
-}
-break;
+	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '+', yyvsp[0].expr);
+;
+    break;}
 case 32:
-#line 689 "sqlparser.y"
+#line 863 "sqlparser.y"
 {
-	kdDebug() << "LEFT JOIN: '" << yyvsp[-2].stringValue << "' ON " << yyvsp[0].field << endl;
-	addTable(yyvsp[-2].stringValue);
-}
-break;
+	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '-', yyvsp[0].expr);
+;
+    break;}
 case 33:
-#line 694 "sqlparser.y"
+#line 867 "sqlparser.y"
 {
-	kdDebug() << "LEFT OUTER JOIN: '" << yyvsp[-2].stringValue << "' ON " << yyvsp[0].field << endl;
-	addTable(yyvsp[-2].stringValue);
-}
-break;
+	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '/', yyvsp[0].expr);
+;
+    break;}
 case 34:
-#line 699 "sqlparser.y"
+#line 871 "sqlparser.y"
 {
-	kdDebug() << "INNER JOIN: '" << yyvsp[-2].stringValue << "' ON " << yyvsp[0].field << endl;
-	addTable(yyvsp[-2].stringValue);
-}
-break;
+	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '*', yyvsp[0].expr);
+;
+    break;}
 case 35:
-#line 704 "sqlparser.y"
+#line 875 "sqlparser.y"
 {
-	kdDebug() << "RIGHT JOIN: '" << yyvsp[-2].stringValue << "' ON " << yyvsp[0].field << endl;
-	addTable(yyvsp[-2].stringValue);
-}
-break;
+	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '%', yyvsp[0].expr);
+;
+    break;}
 case 36:
-#line 709 "sqlparser.y"
+#line 879 "sqlparser.y"
 {
-	kdDebug() << "RIGHT OUTER JOIN: '" << yyvsp[-2].stringValue << "' ON " << yyvsp[0].field << endl;
-	addTable(yyvsp[-2].stringValue);
-}
-break;
+	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, NOT_EQUAL, yyvsp[0].expr);
+;
+    break;}
+case 37:
+#line 883 "sqlparser.y"
+{
+	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, GREATER_THAN, yyvsp[0].expr);
+;
+    break;}
 case 38:
-#line 717 "sqlparser.y"
+#line 887 "sqlparser.y"
 {
-}
-break;
+	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, GREATER_OR_EQUAL, yyvsp[0].expr);
+;
+    break;}
 case 39:
-#line 723 "sqlparser.y"
+#line 891 "sqlparser.y"
+{
+	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, LESS_THAN, yyvsp[0].expr);
+;
+    break;}
+case 40:
+#line 895 "sqlparser.y"
+{
+	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, LESS_OR_EQUAL, yyvsp[0].expr);
+;
+    break;}
+case 41:
+#line 899 "sqlparser.y"
+{
+	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, LIKE, yyvsp[0].expr);
+;
+    break;}
+case 42:
+#line 903 "sqlparser.y"
+{
+	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, SQL_IN, yyvsp[0].expr);
+;
+    break;}
+case 43:
+#line 907 "sqlparser.y"
+{
+	kdDebug() << "  + function: " << yyvsp[-3].stringValue << "(" << yyvsp[-1].exprlist->debugString() << ")" << endl;
+	yyval.expr = new KexiDB::FunctionExpr(yyvsp[-3].stringValue, yyvsp[-1].exprlist);
+;
+    break;}
+case 44:
+#line 912 "sqlparser.y"
+{
+	yyval.expr = new KexiDB::VariableExpr( yyvsp[0].stringValue );
+	
+//TODO: simplify this later if that's 'only one field name' expression
+	kdDebug() << "  + identifier: " << yyvsp[0].stringValue << endl;
+//	$$ = new KexiDB::Field();
+//	$$->setName($1);
+//	$$->setTable(dummy);
+
+//	parser->select()->addField(field);
+	requiresTable = true;
+;
+    break;}
+case 45:
+#line 926 "sqlparser.y"
+{
+	yyval.expr = new KexiDB::VariableExpr( QString(yyvsp[-2].stringValue) + "." + QString(yyvsp[0].stringValue) );
+	kdDebug() << "  + identifier.identifier: " << yyvsp[0].stringValue << "." << yyvsp[-2].stringValue << endl;
+//	$$ = new KexiDB::Field();
+//	s->setTable($1);
+//	$$->setName($3);
+	//$$->setTable(parser->db()->tableSchema($1));
+//	parser->select()->addField(field);
+//??	requiresTable = true;
+;
+    break;}
+case 46:
+#line 937 "sqlparser.y"
+{
+	yyval.expr = new KexiDB::ConstExpr( SQL_NULL, QVariant() );
+	kdDebug() << "  + NULL" << endl;
+//	$$ = new KexiDB::Field();
+	//$$->setName(QString::null);
+;
+    break;}
+case 47:
+#line 944 "sqlparser.y"
+{
+	yyval.expr = new KexiDB::ConstExpr( CHARACTER_STRING_LITERAL, yyvsp[0].stringValue );
+//	$$ = new KexiDB::Field();
+//	$$->setName($1);
+//	parser->select()->addField(field);
+	kdDebug() << "  + constant \"" << yyvsp[0].stringValue << "\"" << endl;
+;
+    break;}
+case 48:
+#line 952 "sqlparser.y"
+{
+	yyval.expr = new KexiDB::ConstExpr( INTEGER_CONST, yyvsp[0].integerValue );
+//	$$ = new KexiDB::Field();
+//	$$->setName(QString::number($1));
+//	parser->select()->addField(field);
+	kdDebug() << "  + int constant: " << yyvsp[0].integerValue << endl;
+;
+    break;}
+case 49:
+#line 960 "sqlparser.y"
+{
+	yyval.expr = new KexiDB::ConstExpr( REAL_CONST, QPoint( yyvsp[0].realValue.integer, yyvsp[0].realValue.fractional ) );
+	kdDebug() << "  + real constant: " << yyvsp[0].realValue.integer << "." << yyvsp[0].realValue.fractional << endl;
+;
+    break;}
+case 50:
+#line 965 "sqlparser.y"
+{
+	kdDebug() << "(expr)" << endl;
+	yyval.expr = yyvsp[-1].expr;
+;
+    break;}
+case 51:
+#line 973 "sqlparser.y"
+{
+	yyvsp[-2].exprlist->add( yyvsp[0].expr );
+	yyval.exprlist = yyvsp[-2].exprlist;
+;
+    break;}
+case 52:
+#line 978 "sqlparser.y"
+{
+	yyval.exprlist = new KexiDB::NArgExpr(0/*unknown*/);
+;
+    break;}
+case 53:
+#line 985 "sqlparser.y"
+{
+;
+    break;}
+case 54:
+#line 988 "sqlparser.y"
+{
+	kdDebug() << "LEFT JOIN: '" << yyvsp[-2].stringValue << "' ON " << yyvsp[0].expr << endl;
+	addTable(yyvsp[-2].stringValue);
+;
+    break;}
+case 55:
+#line 993 "sqlparser.y"
+{
+	kdDebug() << "LEFT OUTER JOIN: '" << yyvsp[-2].stringValue << "' ON " << yyvsp[0].expr << endl;
+	addTable(yyvsp[-2].stringValue);
+;
+    break;}
+case 56:
+#line 998 "sqlparser.y"
+{
+	kdDebug() << "INNER JOIN: '" << yyvsp[-2].stringValue << "' ON " << yyvsp[0].expr << endl;
+	addTable(yyvsp[-2].stringValue);
+;
+    break;}
+case 57:
+#line 1003 "sqlparser.y"
+{
+	kdDebug() << "RIGHT JOIN: '" << yyvsp[-2].stringValue << "' ON " << yyvsp[0].expr << endl;
+	addTable(yyvsp[-2].stringValue);
+;
+    break;}
+case 58:
+#line 1008 "sqlparser.y"
+{
+	kdDebug() << "RIGHT OUTER JOIN: '" << yyvsp[-2].stringValue << "' ON " << yyvsp[0].expr << endl;
+	addTable(yyvsp[-2].stringValue);
+;
+    break;}
+case 59:
+#line 1016 "sqlparser.y"
+{
+;
+    break;}
+case 61:
+#line 1022 "sqlparser.y"
+{
+;
+    break;}
+case 62:
+#line 1028 "sqlparser.y"
 {
 	kdDebug() << "FROM: '" << yyvsp[0].stringValue << "'" << endl;
 
-	KexiDB::TableSchema *schema = parser->db()->tableSchema(yyvsp[0].stringValue);
-	parser->select()->setParentTable(schema);
-	parser->select()->addTable(schema);
-	requiresTable = false;
+//	KexiDB::TableSchema *schema = parser->db()->tableSchema($1);
+//	parser->select()->setParentTable(schema);
+//	parser->select()->addTable(schema);
+//	requiresTable = false;
 	addTable(yyvsp[0].stringValue);
 
+	/*
+//TODO: this isn't ok for more tables:
 	KexiDB::Field::ListIterator it = parser->select()->fieldsIterator();
 	for(KexiDB::Field *item; (item = it.current()); ++it)
 	{
@@ -1463,327 +1905,322 @@ case 39:
 				yyerror("fieldlisterror");
 			}	
 		}
-	}
-}
-break;
-case 41:
-#line 758 "sqlparser.y"
-{
-}
-break;
-case 42:
-#line 764 "sqlparser.y"
-{
-	kdDebug() << " adding field '" << yyvsp[0].field->name() << "'" << endl;
-	parser->select()->addField(yyvsp[0].field);
-/*	parser->fieldList()->append($1);*/
-}
-break;
-case 43:
-#line 770 "sqlparser.y"
-{
-}
-break;
-case 44:
-#line 773 "sqlparser.y"
-{
-	kdDebug() << " adding field '" << yyvsp[-2].field->name() << "' as '" << yyvsp[0].stringValue << "'" << endl;
-/*	parser->fieldList()->append($1);*/
-	parser->select()->addField(yyvsp[-2].field);
-	parser->select()->setAlias(yyvsp[-2].field, yyvsp[0].stringValue);
-}
-break;
-case 45:
-#line 780 "sqlparser.y"
-{
-	kdDebug() << " adding field '" << yyvsp[-1].field->name() << "' as '" << yyvsp[0].stringValue << "'" << endl;
-/*	parser->fieldList()->append($1);*/
-	parser->select()->addField(yyvsp[-1].field);
-	parser->select()->setAlias(yyvsp[-1].field, yyvsp[0].stringValue);
-}
-break;
-case 46:
-#line 790 "sqlparser.y"
-{
-	kdDebug() << "  + col " << yyvsp[0].stringValue << endl;
-	yyval.field = new KexiDB::Field();
-	yyval.field->setName(yyvsp[0].stringValue);
-	yyval.field->setTable(dummy);
-/*	parser->select()->addField(field);*/
-	requiresTable = true;
-}
-break;
-case 47:
-#line 799 "sqlparser.y"
-{
-	kdDebug() << "  + col " << yyvsp[0].stringValue << " from " << yyvsp[-2].stringValue << endl;
-	yyval.field = new KexiDB::Field();
-/*	s->setTable($1);*/
-	yyval.field->setName(yyvsp[0].stringValue);
-	yyval.field->setTable(parser->db()->tableSchema(yyvsp[-2].stringValue));
-/*	parser->select()->addField(field);*/
-	requiresTable = true;
-}
-break;
-case 48:
-#line 809 "sqlparser.y"
-{
-	yyval.field = new KexiDB::Field();
-	yyval.field->setName(QString::null);
-}
-break;
-case 49:
-#line 814 "sqlparser.y"
-{
-	yyval.field = new KexiDB::Field();
-	yyval.field->setName(yyvsp[0].stringValue);
-/*	parser->select()->addField(field);*/
-	kdDebug() << "  + constant " << yyvsp[0].stringValue << endl;
-}
-break;
-case 50:
-#line 821 "sqlparser.y"
-{
-	yyval.field = new KexiDB::Field();
-	yyval.field->setName(QString::number(yyvsp[0].integerValue));
-/*	parser->select()->addField(field);*/
-	kdDebug() << "  + numerical constant " << yyvsp[0].integerValue << endl;
-}
-break;
-case 51:
-#line 828 "sqlparser.y"
-{
-	yyval.field = new KexiDB::Field();
-	yyval.field->setName(QString::number(yyvsp[0].integerValue));
-/*	parser->select()->addField(field);*/
-	kdDebug() << "  + numerical constant " << yyvsp[0].integerValue << endl;
-}
-break;
-case 52:
-#line 838 "sqlparser.y"
-{
-	yyval.field = yyvsp[0].field;
-	kdDebug() << "to expression: " << yyval.field->name() << endl;
-}
-break;
-case 53:
-#line 843 "sqlparser.y"
-{
-	kdDebug() << yyvsp[-2].field->name() << " + " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " + " + yyvsp[0].field->name());
-}
-break;
-case 54:
-#line 848 "sqlparser.y"
-{
-	kdDebug() << yyvsp[-2].field->name() << " - " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " - " + yyvsp[0].field->name());
-}
-break;
-case 55:
-#line 853 "sqlparser.y"
-{
-	kdDebug() << yyvsp[-2].field->name() << " / " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " / " + yyvsp[0].field->name());
-}
-break;
-case 56:
-#line 858 "sqlparser.y"
-{
-	kdDebug() << yyvsp[-2].field->name() << " * " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " * " + yyvsp[0].field->name());
-}
-break;
-case 57:
-#line 863 "sqlparser.y"
-{
-	kdDebug() << yyvsp[-2].field->name() << " NOT " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " NOT " + yyvsp[0].field->name());
-}
-break;
-case 58:
-#line 868 "sqlparser.y"
-{
-	kdDebug() << yyvsp[-2].field->name() << " = " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " = " + yyvsp[0].field->name());
-}
-break;
-case 59:
-#line 873 "sqlparser.y"
-{
-	kdDebug() << yyvsp[-2].field->name() << " <> " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " <> " + yyvsp[0].field->name());
-}
-break;
-case 60:
-#line 878 "sqlparser.y"
-{
-	kdDebug() << yyvsp[-2].field->name() << " > " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " > " + yyvsp[0].field->name());
-}
-break;
-case 61:
-#line 883 "sqlparser.y"
-{
-	kdDebug() << yyvsp[-2].field->name() << " >= " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " >= " + yyvsp[0].field->name());
-}
-break;
-case 62:
-#line 888 "sqlparser.y"
-{
-	kdDebug() << yyvsp[-2].field->name() << " < " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " < " + yyvsp[0].field->name());
-}
-break;
+	}*/
+;
+    break;}
 case 63:
-#line 893 "sqlparser.y"
+#line 1065 "sqlparser.y"
 {
-	kdDebug() << yyvsp[-2].field->name() << " <= " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " <= " + yyvsp[0].field->name());
-}
-break;
+	yyval.exprlist = yyvsp[-2].exprlist;
+	yyval.exprlist->add( yyvsp[0].expr );
+	kdDebug() << "ColViews: ColViews , ColItem" << endl;
+;
+    break;}
 case 64:
-#line 898 "sqlparser.y"
+#line 1071 "sqlparser.y"
 {
-	kdDebug() << yyvsp[-2].field->name() << " LIKE " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " LIKE " + yyvsp[0].field->name());
-}
-break;
+	yyval.exprlist = new KexiDB::NArgExpr(0);
+	yyval.exprlist->add( yyvsp[0].expr );
+	kdDebug() << "ColViews: ColItem" << endl;
+;
+    break;}
 case 65:
-#line 903 "sqlparser.y"
+#line 1080 "sqlparser.y"
 {
-	kdDebug() << yyvsp[-2].field->name() << " % " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " % " + yyvsp[0].field->name());
-}
-break;
+//	$$ = new KexiDB::Field();
+//	dummy->addField($$);
+//	$$->setExpression( $1 );
+//	parser->select()->addField($$);
+	yyval.expr = yyvsp[0].expr;
+	kdDebug() << " added column expr: '" << yyvsp[0].expr->debugString() << "'" << endl;
+;
+    break;}
 case 66:
-#line 908 "sqlparser.y"
+#line 1089 "sqlparser.y"
 {
-	kdDebug() << "(" << yyvsp[-1].field->name() << ")" << endl;
-	yyval.field = yyvsp[-1].field;
-	yyval.field->setName("(" + yyvsp[-1].field->name() + ")");
-}
-break;
+	yyval.expr = yyvsp[0].expr;
+	kdDebug() << " added column wildcard: '" << yyvsp[0].expr->debugString() << "'" << endl;
+;
+    break;}
 case 67:
-#line 914 "sqlparser.y"
+#line 1094 "sqlparser.y"
 {
-	yyval.field = yyvsp[-1].field;
-	yyval.field->setName("SUM(" + yyvsp[-1].field->name() + ")");
-/*wait	$$->containsGroupingAggregate(true);*/
-/*wait	parser->select()->grouped(true);*/
-}
-break;
+//	$$ = new KexiDB::Field();
+//	$$->setExpression( $1 );
+//	parser->select()->addField($$);
+	yyval.expr = yyvsp[-2].expr;
+//TODO	parser->select()->setAlias($$, $3);
+	kdDebug() << " added column expr: '" << yyvsp[-2].expr->debugString() << "' as '" << yyvsp[0].stringValue << "'" << endl;
+;
+    break;}
 case 68:
-#line 921 "sqlparser.y"
+#line 1103 "sqlparser.y"
 {
-	yyval.field = yyvsp[-1].field;
-	yyval.field->setName("MIN(" + yyvsp[-1].field->name() + ")");
-/*wait	$$->containsGroupingAggregate(true);*/
-/*wait	parser->select()->grouped(true);*/
-}
-break;
+//	$$ = new KexiDB::Field();
+//	$$->setExpression( $1 );
+//	parser->select()->addField($$);
+	yyval.expr = yyvsp[-1].expr;
+//TODO	parser->select()->setAlias($$, $2);
+	kdDebug() << " added column expr: '" << yyvsp[-1].expr->debugString() << "' as '" << yyvsp[0].stringValue << "'" << endl;
+;
+    break;}
 case 69:
-#line 928 "sqlparser.y"
+#line 1115 "sqlparser.y"
 {
-	yyval.field = yyvsp[-1].field;
-	yyval.field->setName("MAX(" + yyvsp[-1].field->name() + ")");
-/*wait	$$->containsGroupingAggregate(true);*/
-/*wait	parser->select()->grouped(true);*/
-}
-break;
+	yyval.expr = yyvsp[0].expr;
+;
+    break;}
 case 70:
-#line 935 "sqlparser.y"
+#line 1153 "sqlparser.y"
 {
-	yyval.field = yyvsp[-1].field;
-	yyval.field->setName("AVG(" + yyvsp[-1].field->name() + ")");
-/*wait	$$->containsGroupingAggregate(true);*/
-/*wait	parser->select()->grouped(true);*/
-}
-break;
+	yyval.expr = yyvsp[-1].expr;
+//TODO
+//	$$->setName("DISTINCT(" + $3->name() + ")");
+;
+    break;}
 case 71:
-#line 942 "sqlparser.y"
+#line 1162 "sqlparser.y"
 {
-	yyval.field = yyvsp[-1].field;
-	yyval.field->setName("DISTINCT(" + yyvsp[-1].field->name() + ")");
-}
-break;
-case 72:
-#line 950 "sqlparser.y"
-{
+	yyval.expr = new KexiDB::VariableExpr("*");
 	kdDebug() << "all columns" << endl;
-/*	field = new KexiDB::Field();*/
-/*	field->setName("*");*/
-	KexiDB::QueryAsterisk *ast = new KexiDB::QueryAsterisk(parser->select(), dummy);
-	parser->select()->addAsterisk(ast);
-/*	fieldList.append(ast);*/
-	requiresTable = true;
-}
-break;
-case 73:
-#line 960 "sqlparser.y"
+
+//	KexiDB::QueryAsterisk *ast = new KexiDB::QueryAsterisk(parser->select(), dummy);
+//	parser->select()->addAsterisk(ast);
+//	requiresTable = true;
+;
+    break;}
+case 72:
+#line 1171 "sqlparser.y"
 {
-	kdDebug() << "  + all columns from " << yyvsp[-2].stringValue << endl;
-	KexiDB::QueryAsterisk *ast = new KexiDB::QueryAsterisk(parser->select(), parser->db()->tableSchema(yyvsp[-2].stringValue));
-	parser->select()->addAsterisk(ast);
-/*	fieldList.append(ast);*/
-	requiresTable = true;
+	yyval.expr = new KexiDB::VariableExpr(yyvsp[0].stringValue);
+	kdDebug() << "  + all columns from " << yyvsp[0].stringValue << endl;
+//	KexiDB::QueryAsterisk *ast = new KexiDB::QueryAsterisk(parser->select(), parser->db()->tableSchema($1));
+//	parser->select()->addAsterisk(ast);
+//	requiresTable = true;
+;
+    break;}
 }
-break;
-#line 1734 "y.tab.c"
-    }
-    yyssp -= yym;
-    yystate = *yyssp;
-    yyvsp -= yym;
-    yym = yylhs[yyn];
-    if (yystate == 0 && yym == 0)
+   /* the action file gets copied in in place of this dollarsign */
+#line 543 "/usr/local/share/bison.simple"
+
+  yyvsp -= yylen;
+  yyssp -= yylen;
+#ifdef YYLSP_NEEDED
+  yylsp -= yylen;
+#endif
+
+#if YYDEBUG != 0
+  if (yydebug)
     {
-#if YYDEBUG
-        if (yydebug)
-            printf("%sdebug: after reduction, shifting from state 0 to\
- state %d\n", YYPREFIX, YYFINAL);
-#endif
-        yystate = YYFINAL;
-        *++yyssp = YYFINAL;
-        *++yyvsp = yyval;
-        if (yychar < 0)
-        {
-            if ((yychar = yylex()) < 0) yychar = 0;
-#if YYDEBUG
-            if (yydebug)
-            {
-                yys = 0;
-                if (yychar <= YYMAXTOKEN) yys = yyname[yychar];
-                if (!yys) yys = "illegal-symbol";
-                printf("%sdebug: state %d, reading %d (%s)\n",
-                        YYPREFIX, YYFINAL, yychar, yys);
-            }
-#endif
-        }
-        if (yychar == 0) goto yyaccept;
-        goto yyloop;
+      short *ssp1 = yyss - 1;
+      fprintf (stderr, "state stack now");
+      while (ssp1 != yyssp)
+	fprintf (stderr, " %d", *++ssp1);
+      fprintf (stderr, "\n");
     }
-    if ((yyn = yygindex[yym]) && (yyn += yystate) >= 0 &&
-            yyn <= YYTABLESIZE && yycheck[yyn] == yystate)
-        yystate = yytable[yyn];
-    else
-        yystate = yydgoto[yym];
-#if YYDEBUG
-    if (yydebug)
-        printf("%sdebug: after reduction, shifting from state %d \
-to state %d\n", YYPREFIX, *yyssp, yystate);
 #endif
-    if (yyssp >= yyss + yystacksize - 1)
+
+  *++yyvsp = yyval;
+
+#ifdef YYLSP_NEEDED
+  yylsp++;
+  if (yylen == 0)
     {
-        goto yyoverflow;
+      yylsp->first_line = yylloc.first_line;
+      yylsp->first_column = yylloc.first_column;
+      yylsp->last_line = (yylsp-1)->last_line;
+      yylsp->last_column = (yylsp-1)->last_column;
+      yylsp->text = 0;
     }
-    *++yyssp = yystate;
-    *++yyvsp = yyval;
-    goto yyloop;
-yyoverflow:
-    yyerror("yacc stack overflow");
-yyabort:
-    return (1);
-yyaccept:
-    return (0);
+  else
+    {
+      yylsp->last_line = (yylsp+yylen-1)->last_line;
+      yylsp->last_column = (yylsp+yylen-1)->last_column;
+    }
+#endif
+
+  /* Now "shift" the result of the reduction.
+     Determine what state that goes to,
+     based on the state we popped back to
+     and the rule number reduced by.  */
+
+  yyn = yyr1[yyn];
+
+  yystate = yypgoto[yyn - YYNTBASE] + *yyssp;
+  if (yystate >= 0 && yystate <= YYLAST && yycheck[yystate] == *yyssp)
+    yystate = yytable[yystate];
+  else
+    yystate = yydefgoto[yyn - YYNTBASE];
+
+  goto yynewstate;
+
+yyerrlab:   /* here on detecting error */
+
+  if (! yyerrstatus)
+    /* If not already recovering from an error, report this error.  */
+    {
+      ++yynerrs;
+
+#ifdef YYERROR_VERBOSE
+      yyn = yypact[yystate];
+
+      if (yyn > YYFLAG && yyn < YYLAST)
+	{
+	  int size = 0;
+	  char *msg;
+	  int x, count;
+
+	  count = 0;
+	  /* Start X at -yyn if nec to avoid negative indexes in yycheck.  */
+	  for (x = (yyn < 0 ? -yyn : 0);
+	       x < (sizeof(yytname) / sizeof(char *)); x++)
+	    if (yycheck[x + yyn] == x)
+	      size += strlen(yytname[x]) + 15, count++;
+	  msg = (char *) malloc(size + 15);
+	  if (msg != 0)
+	    {
+	      strcpy(msg, "parse error");
+
+	      if (count < 5)
+		{
+		  count = 0;
+		  for (x = (yyn < 0 ? -yyn : 0);
+		       x < (sizeof(yytname) / sizeof(char *)); x++)
+		    if (yycheck[x + yyn] == x)
+		      {
+			strcat(msg, count == 0 ? ", expecting `" : " or `");
+			strcat(msg, yytname[x]);
+			strcat(msg, "'");
+			count++;
+		      }
+		}
+	      yyerror(msg);
+	      free(msg);
+	    }
+	  else
+	    yyerror ("parse error; also virtual memory exceeded");
+	}
+      else
+#endif /* YYERROR_VERBOSE */
+	yyerror("parse error");
+    }
+
+  goto yyerrlab1;
+yyerrlab1:   /* here on error raised explicitly by an action */
+
+  if (yyerrstatus == 3)
+    {
+      /* if just tried and failed to reuse lookahead token after an error, discard it.  */
+
+      /* return failure if at end of input */
+      if (yychar == YYEOF)
+	YYABORT;
+
+#if YYDEBUG != 0
+      if (yydebug)
+	fprintf(stderr, "Discarding token %d (%s).\n", yychar, yytname[yychar1]);
+#endif
+
+      yychar = YYEMPTY;
+    }
+
+  /* Else will try to reuse lookahead token
+     after shifting the error token.  */
+
+  yyerrstatus = 3;		/* Each real token shifted decrements this */
+
+  goto yyerrhandle;
+
+yyerrdefault:  /* current state does not do anything special for the error token. */
+
+#if 0
+  /* This is wrong; only states that explicitly want error tokens
+     should shift them.  */
+  yyn = yydefact[yystate];  /* If its default is to accept any token, ok.  Otherwise pop it.*/
+  if (yyn) goto yydefault;
+#endif
+
+yyerrpop:   /* pop the current state because it cannot handle the error token */
+
+  if (yyssp == yyss) YYABORT;
+  yyvsp--;
+  yystate = *--yyssp;
+#ifdef YYLSP_NEEDED
+  yylsp--;
+#endif
+
+#if YYDEBUG != 0
+  if (yydebug)
+    {
+      short *ssp1 = yyss - 1;
+      fprintf (stderr, "Error: state stack now");
+      while (ssp1 != yyssp)
+	fprintf (stderr, " %d", *++ssp1);
+      fprintf (stderr, "\n");
+    }
+#endif
+
+yyerrhandle:
+
+  yyn = yypact[yystate];
+  if (yyn == YYFLAG)
+    goto yyerrdefault;
+
+  yyn += YYTERROR;
+  if (yyn < 0 || yyn > YYLAST || yycheck[yyn] != YYTERROR)
+    goto yyerrdefault;
+
+  yyn = yytable[yyn];
+  if (yyn < 0)
+    {
+      if (yyn == YYFLAG)
+	goto yyerrpop;
+      yyn = -yyn;
+      goto yyreduce;
+    }
+  else if (yyn == 0)
+    goto yyerrpop;
+
+  if (yyn == YYFINAL)
+    YYACCEPT;
+
+#if YYDEBUG != 0
+  if (yydebug)
+    fprintf(stderr, "Shifting error token, ");
+#endif
+
+  *++yyvsp = yylval;
+#ifdef YYLSP_NEEDED
+  *++yylsp = yylloc;
+#endif
+
+  yystate = yyn;
+  goto yynewstate;
+
+ yyacceptlab:
+  /* YYACCEPT comes here.  */
+  if (yyfree_stacks)
+    {
+      free (yyss);
+      free (yyvs);
+#ifdef YYLSP_NEEDED
+      free (yyls);
+#endif
+    }
+  return 0;
+
+ yyabortlab:
+  /* YYABORT comes here.  */
+  if (yyfree_stacks)
+    {
+      free (yyss);
+      free (yyvs);
+#ifdef YYLSP_NEEDED
+      free (yyls);
+#endif
+    }
+  return 1;
 }
+#line 1180 "sqlparser.y"
+
+

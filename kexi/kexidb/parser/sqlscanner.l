@@ -19,23 +19,32 @@
 */
 
 %{
+#include <field.h>
+#include <expression.h>
+
 #include "sqlparser.h"
 #include "sqltypes.h"
 #include <iostream>
 #include <kdebug.h>
 
-#include <field.h>
-
 #define YY_NO_UNPUT
-#define ECOUNT current += yyleng; ctoken = yytext;
+#define ECOUNT current += yyleng; ctoken = yytext
 %}
 
 %option case-insensitive
 %option noyywrap
 %option never-interactive
 
-whitespace [ \t\n]
-%%
+whitespace	[ \t\n]
+digit				[0-9]
+identifier	[a-zA-Z_][a-zA-Z_0-9]*
+integer			{digit}+
+decimal			(({digit}*\.{digit}+)|({digit}+\.{digit}*))
+real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}+))
+/* todo: support for real numbers */
+
+
+/*
 "@" return AT;
 ";" return SEMICOLON;
 "*" {
@@ -88,29 +97,14 @@ whitespace [ \t\n]
 	return EQUAL;
 }
 
-"<>" {
-	ECOUNT;
-	return NOT_EQUAL;
-}
-
 "<" {
 	ECOUNT;
 	return LESS_THAN;
 }
 
-"<=" {
-	ECOUNT;
-	return LESS_OR_EQUAL;
-}
-
 ">" {
 	ECOUNT;
 	return GREATER_THAN;
-}
-
-">=" {
-	ECOUNT;
-	return GREATER_OR_EQUAL;
 }
 
 "'" {
@@ -132,17 +126,57 @@ whitespace [ \t\n]
 	ECOUNT;
 	return COMMA;
 }
+*/
 
-[-][0-9]+ {
-	yylval.integerValue = atoi(yytext);
+%%
+
+("<>"|"!=") {
 	ECOUNT;
-	return SIGNED_INTEGER;
+	return NOT_EQUAL;
 }
 
-[0-9]+ {
+"<=" {
+	ECOUNT;
+	return LESS_OR_EQUAL;
+}
+
+">=" {
+	ECOUNT;
+	return GREATER_OR_EQUAL;
+}
+
+"IN" {
+	ECOUNT;
+	return SQL_IN;
+}
+
+{integer} {
 	yylval.integerValue = atoi(yytext);
 	ECOUNT;
-	return UNSIGNED_INTEGER;
+	return INTEGER_CONST;
+}
+
+{decimal} {
+	char *p = yytext;
+	if (yytext[0]=='.') { /* no integer part */
+		yylval.realValue.integer = 0;
+	}
+	else {
+		yylval.realValue.integer = atoi(p);
+		int i=0;
+		while (p && i < yyleng && *p != '.') {
+			i++;
+			p++;
+		}
+		if (i==0 || !p || *p!='.') {
+			yylval.realValue.fractional = 0;
+			return REAL_CONST;
+		}
+	}
+	/* fractional part */
+	p++;
+	yylval.realValue.fractional = atoi(p);
+	return REAL_CONST;
 }
 
 "AND" {
@@ -225,13 +259,21 @@ whitespace [ \t\n]
 	return WHERE;
 }
 
+
 ['][^']*['] {
 	ECOUNT;
 	strncpy(yylval.stringValue, yytext, yyleng + 1);
 	return CHARACTER_STRING_LITERAL;
 }
 
-[a-zA-Z_][a-zA-Z_0-9]* {
+{identifier}"\.\*" {
+	kdDebug() << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
+	strncpy(yylval.stringValue, yytext, yyleng + 1);
+	ECOUNT;
+	return USER_DEFINED_NAME_DOT_ASTERISK;
+}
+
+{identifier} {
 	kdDebug() << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
 	strncpy(yylval.stringValue, yytext, yyleng + 1);
 	ECOUNT;
@@ -240,6 +282,12 @@ whitespace [ \t\n]
 
 {whitespace}+ {
 	ECOUNT;
+}
+
+[\~\!\@\#\^\&\|\`\?,()\[\]\.;\:\+\-\*\/\%\^\<\>\=] {
+	kdDebug() << "char: '" << yytext[0] << "'" << endl;
+	ECOUNT;
+	return yytext[0];
 }
 
 %%

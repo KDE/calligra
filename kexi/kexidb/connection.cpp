@@ -128,7 +128,7 @@ void Connection::destroy()
 Connection::~Connection()
 {
 	m_destructor_started = true;
-	KexiDBDbg << "Connection::~Connection()" << endl;
+//	KexiDBDbg << "Connection::~Connection()" << endl;
 	delete d;
 /*	if (m_driver) {
 		if (m_is_connected) {
@@ -261,7 +261,7 @@ bool Connection::drv_databaseExists( const QString &dbName, bool ignoreErrors )
 
 bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 {
-	KexiDBDbg << "Connection::databaseExists(" << dbName << "," << ignoreErrors << ")" << endl;
+//	KexiDBDbg << "Connection::databaseExists(" << dbName << "," << ignoreErrors << ")" << endl;
 	if (!checkConnected())
 		return false;
 	clearError();
@@ -524,7 +524,7 @@ bool Connection::closeDatabase()
 		return false;
 
 	m_usedDatabase = "";
-	KexiDBDbg << "Connection::closeDatabase(): " << ret << endl;
+//	KexiDBDbg << "Connection::closeDatabase(): " << ret << endl;
 	return ret;
 }
 
@@ -640,9 +640,9 @@ const QStringList& Connection::kexiDBSystemTableNames()
 		<< "kexi__objects"
 		<< "kexi__objectdata"
 		<< "kexi__fields"
-		<< "kexi__querydata"
-		<< "kexi__queryfields"
-		<< "kexi__querytables"
+//		<< "kexi__querydata"
+//		<< "kexi__queryfields"
+//		<< "kexi__querytables"
 		<< "kexi__db"
 		;
 	}
@@ -1202,7 +1202,7 @@ bool Connection::dropQuery( KexiDB::QuerySchema* querySchema )
 		return false;
 
 //js TODO DO THIS INSIDE TRANSACTION!!!!
-	TableSchema *ts = m_tables_byname["kexi__querydata"];
+/*	TableSchema *ts = m_tables_byname["kexi__querydata"];
 	if (!KexiDB::deleteRow(*this, ts, "q_id", querySchema->id()))
 		return false;
 
@@ -1212,7 +1212,7 @@ bool Connection::dropQuery( KexiDB::QuerySchema* querySchema )
 
 	ts = m_tables_byname["kexi__querytables"];
 	if (!KexiDB::deleteRow(*this, ts, "q_id", querySchema->id()))
-		return false;
+		return false;*/
 
 	//remove query schema from kexi__objects table
 	if (!removeObject( querySchema->id() )) {
@@ -1242,6 +1242,8 @@ bool Connection::drv_createTable( const QString& tableSchemaName )
 
 bool Connection::beginAutoCommitTransaction(Transaction &trans)
 {
+	if (m_driver->m_features & Driver::IgnoreTransactions)
+		return true;
 	if (!m_autoCommit)
 		return true;
 		
@@ -1260,6 +1262,8 @@ bool Connection::beginAutoCommitTransaction(Transaction &trans)
 
 bool Connection::commitAutoCommitTransaction(const Transaction& trans)
 {
+	if (m_driver->m_features & Driver::IgnoreTransactions)
+		return true;
 	if (trans.isNull() || !m_driver->transactionsSupported())
 		return true;
 	return commitTransaction(trans, true);
@@ -1285,6 +1289,13 @@ Transaction Connection::beginTransaction()
 	if (!isDatabaseUsed())
 		return Transaction::null;
 	Transaction trans;
+	if (m_driver->m_features & Driver::IgnoreTransactions) {
+		//we're creating dummy transaction data here,
+		//so it will look like active
+		trans.m_data = new TransactionData(this);
+		d->m_transactions.append(trans);
+		return trans;
+	}
 	if (m_driver->m_features & Driver::SingleTransactions) {
 		if (d->m_default_trans.active()) {
 			setError(ERR_TRANSACTION_ACTIVE, i18n("Transaction already started.") );
@@ -1298,7 +1309,7 @@ Transaction Connection::beginTransaction()
 		d->m_transactions.append(trans);
 		return d->m_default_trans;
 	}
-	else if (m_driver->m_features & Driver::MultipleTransactions) {
+	if (m_driver->m_features & Driver::MultipleTransactions) {
 		if (!(trans.m_data = drv_beginTransaction())) {
 			SET_BEGIN_TR_ERROR;
 			return Transaction::null;
@@ -1344,7 +1355,9 @@ bool Connection::rollbackTransaction(const Transaction trans, bool ignore_inacti
 {
 	if (!isDatabaseUsed())
 		return false;
-	if (!m_driver->transactionsSupported()) {
+	if ( !m_driver->transactionsSupported() 
+		&& !(m_driver->m_features & Driver::IgnoreTransactions)) 
+	{
 		SET_ERR_TRANS_NOT_SUPP;
 		return false;
 	}
@@ -1359,7 +1372,9 @@ bool Connection::rollbackTransaction(const Transaction trans, bool ignore_inacti
 		t = d->m_default_trans;
 		d->m_default_trans = Transaction::null; //now: no default tr.
 	}
-	bool ret = drv_rollbackTransaction(t.m_data);
+	bool ret = true;
+	if (! (m_driver->m_features & Driver::IgnoreTransactions) )
+	 	ret = drv_rollbackTransaction(t.m_data);
 	if (t.m_data)
 		t.m_data->m_active = false; //now this transaction if inactive
 	if (!d->m_dont_remove_transactions) //true=transaction obj will be later removed from list
@@ -1386,8 +1401,11 @@ void Connection::setDefaultTransaction(const Transaction& trans)
 {
 	if (!checkIsDatabaseUsed())
 		return;
-	if (!trans.active() || !m_driver->transactionsSupported())
+	if ( !(m_driver->m_features & Driver::IgnoreTransactions)
+		&& (!trans.active() || !m_driver->transactionsSupported()) )
+	{
 		return;
+	}
 	d->m_default_trans = trans;
 }
 
@@ -1403,7 +1421,7 @@ bool Connection::autoCommit() const
 
 bool Connection::setAutoCommit(bool on)
 {
-	if (m_autoCommit == on)
+	if (m_autoCommit == on || m_driver->m_features & Driver::IgnoreTransactions)
 		return true;
 	if (!drv_setAutoCommit(on))
 		return false;
@@ -1524,7 +1542,7 @@ bool Connection::setupObjectSchemaData( const KexiDB::RowData &data, SchemaData 
 	sdata.m_caption = data[3].toString();
 	sdata.m_desc = data[4].toString();
 	
-	KexiDBDbg<<"@@@ Connection::setupObjectSchemaData() == " << sdata.schemaDataDebugString() << endl;
+//	KexiDBDbg<<"@@@ Connection::setupObjectSchemaData() == " << sdata.schemaDataDebugString() << endl;
 	return true;
 }
 
@@ -1668,7 +1686,7 @@ KexiDB::TableSchema* Connection::setupTableSchema( const KexiDB::RowData &data )
 	}
 	bool ok;
 	while (!cursor->eof()) {
-		KexiDBDbg<<"@@@ f_name=="<<cursor->value(2).asCString()<<endl;
+//		KexiDBDbg<<"@@@ f_name=="<<cursor->value(2).asCString()<<endl;
 
 		int f_type = cursor->value(1).toInt(&ok);
 		if (!ok)
@@ -1827,7 +1845,7 @@ bool Connection::setupKexiDBSystemSchema()
 	.addField( new Field("f_caption", Field::Text ) )
 	.addField( new Field("f_help", Field::LongText ) );
 
-	TableSchema *t_querydata = newKexiDBSystemTableSchema("kexi__querydata");
+/*	TableSchema *t_querydata = newKexiDBSystemTableSchema("kexi__querydata");
 	t_querydata->addField( new Field("q_id", Field::Integer, 0, Field::Unsigned) )
 	.addField( new Field("q_sql", Field::LongText ) )
 	.addField( new Field("q_valid", Field::Boolean ) );
@@ -1842,7 +1860,7 @@ bool Connection::setupKexiDBSystemSchema()
 	TableSchema *t_querytables = newKexiDBSystemTableSchema("kexi__querytables");
 	t_querytables->addField( new Field("q_id", Field::Integer, 0, Field::Unsigned) )
 	.addField( new Field("t_id", Field::Integer, 0, Field::Unsigned) )
-	.addField( new Field("t_order", Field::Integer, 0, Field::Unsigned) );
+	.addField( new Field("t_order", Field::Integer, 0, Field::Unsigned) );*/
 
 	TableSchema *t_db = newKexiDBSystemTableSchema("kexi__db");
 	t_db->addField( new Field("db_property", Field::Text, Field::NoConstraints, Field::NoOptions, 32 ) )
@@ -1921,7 +1939,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
 		if (!sqlset.isEmpty())
 			sqlset+=",";
-		sqlset += (it.key()->name() + "=" + m_driver->valueToSQL(it.key(),it.data()));
+		sqlset += (it.key()->field->name() + "=" + m_driver->valueToSQL(it.key()->field,it.data()));
 	}
 	QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
 	if (pkey->fieldCount()>0) {
@@ -1949,7 +1967,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		return false;
 	}
 	//success: now also assign new value in memory:
-	QMap<Field*,uint> fieldsOrder = query.fieldsOrder();
+	QMap<QueryFieldInfo*,uint> fieldsOrder = query.fieldsOrder();
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
 		data[ fieldsOrder[it.key()] ] = it.data();
 	}
@@ -1985,8 +2003,8 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			sqlcols+=",";
 			sqlvals+=",";
 		}
-		sqlcols += it.key()->name();
-		sqlvals += m_driver->valueToSQL(it.key(),it.data());
+		sqlcols += it.key()->field->name();
+		sqlvals += m_driver->valueToSQL(it.key()->field,it.data());
 	}
 	m_sql += (sqlcols + ") VALUES (" + sqlvals + ")");
 	KexiDBDrvDbg << " -- SQL == " << m_sql << endl;
@@ -1998,11 +2016,41 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	return false;
 	}
 	//success: now also assign new value in memory:
-	QMap<Field*,uint> fieldsOrder = query.fieldsOrder();
+	QMap<QueryFieldInfo*,uint> fieldsOrder = query.fieldsOrder();
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
 		data[ fieldsOrder[it.key()] ] = it.data();
 	}
 
+	//fetch autoincremented values
+	QueryFieldInfo::List *aif_list = query.autoIncrementFields();
+	if (pkey && !aif_list->isEmpty()) {
+		//now only if PKEY is present:
+		//js TODO more...
+		QueryFieldInfo *id_fieldinfo = aif_list->first();
+		int last_id = lastInsertedAutoIncValue(id_fieldinfo->field->name(), id_fieldinfo->field->table()->name());
+		if (last_id==-1) {
+			//err...
+			return false;
+		}
+		KexiDB::RowData aif_data;
+//		if (!querySingleRecord(QString("SELECT ")+ FieldList::sqlFieldsList( aif_list ) + " FROM " 
+		if (!querySingleRecord(QString("SELECT ")+ query.autoIncrementSQLFieldsList() + " FROM " 
+			+ id_fieldinfo->field->table()->name() + " WHERE "+ id_fieldinfo->field->name() + "=" + QString::number(last_id),
+			aif_data))
+		{
+			//err...
+			return false;
+		}
+		QueryFieldInfo::ListIterator fi_it(*aif_list);
+		QueryFieldInfo *fi;
+		for (uint i=0; (fi = fi_it.current()); ++fi_it, i++) {
+			KexiDBDbg << "Connection::insertRow(): AUTOINCREMENTED FIELD " << fi->field->name() << " == " 
+				<< aif_data[i].toInt() << endl;
+			data[ fieldsOrder[ fi ] ] = aif_data[i];
+		}
+	}
+
+#if 0 //js: orig code
 	//fetch autoincremented values
 	Field::List *aif_list = query.parentTable()->autoIncrementFields();
 	if (pkey && !aif_list->isEmpty()) {
@@ -2023,13 +2071,14 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			return false;
 		}
 		Field::ListIterator f_it(*aif_list);
-		Field *f;
-		for (uint i=0; (f = f_it.current()); ++f_it, i++) {
+		QueryFieldInfo *fi;
+		for (uint i=0; (fi = f_it.current()); ++f_it, i++) {
 			kdDebug() << "Connection::insertRow(): AUTOINCREMENTED FIELD " << f->name() << " == " 
 				<< aif_data[i].toInt() << endl;
 			data[ fieldsOrder[ f ] ] = aif_data[i];
 		}
 	}
+#endif
 	return true;
 }
 
