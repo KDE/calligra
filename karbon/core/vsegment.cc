@@ -59,7 +59,7 @@ height(
 }
 
 
-VSegment::VSegment( unsigned degree )
+VSegment::VSegment( int degree )
 {
 	m_degree = degree;
 
@@ -98,7 +98,7 @@ VSegment::VSegment( const VSegment& segment )
 	m_next = segment.m_next;
 
 	// Copy points.
-	for( unsigned i = 0; i < degree(); ++i )
+	for( int i = 0; i < degree(); ++i )
 	{
 		setPoint( i, segment.point( i ) );
 	}
@@ -120,7 +120,7 @@ VSegment::~VSegment()
 }
 
 void
-VSegment::setDegree( unsigned degree )
+VSegment::setDegree( int degree )
 {
 	// Do nothing if old and new degrees are identical.
 	if( m_degree == degree )
@@ -170,9 +170,9 @@ VSegment::isFlat( double flatness ) const
 
 	if( m_type == curve )
 	{
-		bool flat;
+		bool flat = false;
 
-		for( unsigned i = 0; i < degree() - 1; ++i )
+		for( int i = 0; i < degree() - 1; ++i )
 		{
 			flat =
 				height( m_prev->knot(), point( i ), knot() ) / chordLength()
@@ -235,16 +235,16 @@ VSegment::pointDerivativesAt( double t, KoPoint* p,
 
 	q[ 0 ] = m_prev->knot();
 
-	for( unsigned i = 0; i < degree(); ++i )
+	for( int i = 0; i < degree(); ++i )
 	{
 		q[ i + 1 ] = point( i );
 	}
 
 
 	// The De Casteljau algorithm.
-	for( unsigned j = 1; j <= degree(); ++j )
+	for( int j = 1; j <= degree(); ++j )
 	{
-		for( unsigned i = 0; i <= degree() - j; ++i )
+		for( int i = 0; i <= degree() - j; ++i )
 		{
 			q[ i ] = ( 1.0 - t ) * q[ i ] + t * q[ i + 1 ];
 		}
@@ -428,7 +428,7 @@ VSegment::polyLength() const
 	double length = sqrt( d * d );
 
 	// Iterate over remaining points.
-	for( unsigned i = 1; i < degree(); ++i )
+	for( int i = 1; i < degree(); ++i )
 	{
 		d = point( i ) - point( i - 1 );
 		length += sqrt( d * d );
@@ -485,7 +485,7 @@ VSegment::lengthParam( double len ) const
 }
 
 double
-VSegment::nearestPointParam( const KoPoint& /*p*/ ) const
+VSegment::nearestPointParam( const KoPoint& p ) const
 {
 	if(
 		!m_prev ||
@@ -536,12 +536,106 @@ VSegment::nearestPointParam( const KoPoint& /*p*/ ) const
 	 *
 	 * with w_{ij} = c_i * d_j * z_{ij} and
 	 *
-	 *          BinomialCoeff( n, i ) * BinomialCoeff( n-i ,j )
+	 *          BinomialCoeff( n, i ) * BinomialCoeff( n - i ,j )
 	 * z_{ij} = -----------------------------------------------
-	 *                   BinomialCoeff( 2n-1, i!=j )
+	 *                   BinomialCoeff( 2n - 1, i + j )
 	 *
 	 * This Bernstein-Bezier polynom representation can now be solved for it's roots.
 	 */
+
+
+	// Calculate the c_i = point( i ) - p.
+	KoPoint* c = new KoPoint[ degree() + 1 ];
+
+	c[ 0 ] = m_prev->knot() - p;
+
+	for( int i = 0; i < degree(); ++i )
+	{
+		c[ i + 1 ] = point( i ) - p;
+	}
+
+
+	// Calculate the d_j = point( j + 1 ) - point( j ).
+	KoPoint* d = new KoPoint[ degree() ];
+
+	d[ 0 ] = point( 0 ) - m_prev->knot();
+
+	for( int j = 0; j < degree() - 1; ++j )
+	{
+		d[ j + 1 ] = point( j + 1 ) - point( j );
+	}
+
+
+	// Calculate the z_{ij}.
+	double* z = new double[ degree() * ( degree() + 1 ) ];
+
+	for( int j = 0; j < degree(); ++j )
+	{
+		for( int i = 0; i <= degree(); ++i )
+		{
+			z[ j * ( degree() + 1 ) + i ] =
+				VGlobal::binomialCoeff( degree(), i ) *
+				VGlobal::binomialCoeff( degree() - i, j ) /
+				VGlobal::binomialCoeff( 2 * degree() - 1, i + j );
+		}
+	}
+
+
+	// Calculate the dot products of c_i and d_i.
+	double* products = new double[ degree() * ( degree() + 1 ) ];
+
+	for( int j = 0; j < degree(); ++j )
+	{
+		for( int i = 0; i <= degree(); ++i )
+		{
+			products[ j * ( degree() + 1 ) + i ] =
+				d[ j ] * c[ i ];
+		}
+	}
+
+	// We don't need the c_i and d_i anymore.
+	delete[]( d );
+	delete[]( c );
+
+
+	// Calculate the control points of the 2n-1th degree curve.
+	KoPoint* control = new KoPoint[ 2 * degree() ];
+
+	// Set up control points in the ( u, f(u) )-plane.
+	for( int u = 0; u <= 2 * degree(); ++u )
+	{
+		control[ u ].setX(
+			static_cast<double>( u ) / static_cast<double>( 2 * degree() ) );
+
+		control[ u ].setY( 0.0 );
+	}
+
+	for( int k = 0; k < 2 * degree() - 1; ++k )
+	{
+		int min = QMIN( k, degree() );
+
+		for(
+			int i = QMAX( 0, k - degree() + 1 );
+			i <= min;
+			++i )
+		{
+			int j = k - i;
+
+			control[ i + j ].setY(
+				control[ i + j ].y() +
+					products[ j * ( degree() + 1 ) + i ] *
+					z[ j * ( degree() + 1 ) + i ] );
+		}
+	}
+
+	// We don't need the c_i/d_i dot products and the z_{ij} anymore.
+	delete[]( products );
+	delete[]( z );
+
+
+
+	// We don't need the new control points anymore.
+	delete[]( control );
 
 
 // TODO
@@ -596,7 +690,7 @@ VSegment::boundingBox() const
 	}
 
 
-	for( unsigned i = 0; i < degree() - 1; ++i )
+	for( int i = 0; i < degree() - 1; ++i )
 	{
 		if( point( i ).x() < rect.left() )
 			rect.setLeft( point( i ).x() );
@@ -657,16 +751,16 @@ VSegment::splitAt( double t )
 
 	q[ 0 ] = m_prev->knot();
 
-	for( unsigned i = 0; i < degree(); ++i )
+	for( int i = 0; i < degree(); ++i )
 	{
 		q[ i + 1 ] = point( i );
 	}
 
 
 	// The De Casteljau algorithm.
-	for( unsigned j = 1; j <= degree(); ++j )
+	for( int j = 1; j <= degree(); ++j )
 	{
-		for( unsigned i = 0; i <= degree() - j; ++i )
+		for( int i = 0; i <= degree() - j; ++i )
 		{
 			q[ i ] = ( 1.0 - t ) * q[ i ] + t * q[ i + 1 ];
 		}
@@ -676,7 +770,7 @@ VSegment::splitAt( double t )
 	}
 
 	// Modify the current segment (no need to modify the knot though).
-	for( unsigned i = 1; i < degree(); ++i )
+	for( int i = 1; i < degree(); ++i )
 	{
 		setPoint( i - 1, q[ i ] );
 	}
@@ -721,9 +815,9 @@ VSegment::linesIntersect(
 uint
 VSegment::nodeNear( const KoPoint& p, double isNearRange ) const
 {
-	unsigned index = 0;
+	int index = 0;
 
-	for( unsigned i = 0; i < degree(); ++i )
+	for( int i = 0; i < degree(); ++i )
 	{
 		if( point( 0 ).isNear( p, isNearRange ) )
 		{
@@ -754,7 +848,7 @@ VSegment::revert() const
 
 
 	// Swap points.
-	for( unsigned i = 0; i < degree() - 1; ++i )
+	for( int i = 0; i < degree() - 1; ++i )
 	{
 		segment->setPoint( i, point( degree() - 2 - i ) );
 	}
@@ -807,7 +901,7 @@ VSegment::next() const
 void
 VSegment::transform( const QWMatrix& m )
 {
-	for( unsigned i = 0; i < degree(); ++i )
+	for( int i = 0; i < degree(); ++i )
 	{
 		setPoint( i, point( i ).transform( m ) );
 	}

@@ -28,23 +28,27 @@ int
 VGlobal::binomialCoeff( unsigned n, unsigned k )
 {
 	return
-		0.5 +
-		exp(
-			factorialLn( n ) -
-			factorialLn( k ) -
-			factorialLn( n - k ) );
+		static_cast<int>(
+			0.5 +
+			exp(
+				factorialLn( n ) -
+				factorialLn( k ) -
+				factorialLn( n - k ) ) );
 }
 
 double
 VGlobal::factorialLn( unsigned n )
 {
+	const unsigned cacheSize = 100;
+
 	// A static array is initalized to zero.
-	static double cache[ 101 ];
+	static double cache[ cacheSize ];
+
 
 	if( n <= 1 )
 		return 0.0;
 
-	if( n <= 100 )
+	if( n <= cacheSize - 1 )
 	{
 		return cache[ n ]
 			   ? cache[ n ]
@@ -76,7 +80,7 @@ VGlobal::gammaLn( double x )
 
 	double ser = 1.000000000190015;
 
-	for( int i; i < 5; ++i )
+	for( int i = 0; i < 5; ++i )
 	{
 		ser += coeff[ i ] / ++y;
 	}

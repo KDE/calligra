@@ -84,7 +84,7 @@ namespace VGlobal
 
 
 	/**
-	 * Calculates the binomial coeeficient( n, k ).
+	 * Calculates the binomial coefficient n! / ( k! * ( n - k)! ).
 	 */
 	int binomialCoeff( unsigned n, unsigned k );
 

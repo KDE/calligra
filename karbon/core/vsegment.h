@@ -76,7 +76,7 @@ public:
 	};
 
 
-	VSegment( unsigned degree = 3 );
+	VSegment( int degree = 3 );
 
 	VSegment( const VSegment& segment );
 
@@ -86,7 +86,7 @@ public:
 	 * Returns the segment's degree, which is identical to the number of node data.
 	 * For cubic beziers it is "three" and "one" for lines.
 	 */
-	unsigned degree() const
+	int degree() const
 	{
 		return m_degree;
 	}
@@ -95,7 +95,7 @@ public:
 	 * Sets the segment's degree and thus resizes the array of node data. All old node data
 	 * are lost. You will have to backup them on your own.
 	 */
-	void setDegree( unsigned degree );
+	void setDegree( int degree );
 
 
 	/**
@@ -135,7 +135,7 @@ public:
 	/**
 	 * Returns the point with index 0 <= i < degree(),
 	 */
-	const KoPoint& point( unsigned i ) const
+	const KoPoint& point( int i ) const
 	{
 		return m_nodes[ i ].m_vector;
 	}
@@ -151,7 +151,7 @@ public:
 	/**
 	 * Sets the point with index 0 <= i < degree() to "p".
 	 */
-	void setPoint( unsigned i, const KoPoint& p )
+	void setPoint( int i, const KoPoint& p )
 	{
 		m_nodes[ i ].m_vector = p;
 	}
@@ -186,20 +186,20 @@ public:
 
 
 	/**
-	 * Returns a pointer to the previous not deleted segment, if stored in a
-	 * VPath.
+	 * Returns a pointer to the previous not deleted segment, if
+	 * stored in a VPath.
 	 */
 	VSegment* prev() const;
 
 	/**
-	 * Returns a pointer to the next not deleted segment, if stored in a
-	 * VPath.
+	 * Returns a pointer to the next not deleted segment, if
+	 * stored in a VPath.
 	 */
 	VSegment* next() const;
 
 	/**
-	 * Returns true if the segment is flat. That means it's height is
-	 * smaller than flatness.
+	 * Returns true if the segment is flat. That means it's height
+	 * is smaller than flatness.
 	 */
 	bool isFlat( double flatness = VGlobal::flatnessTolerance ) const;
 
@@ -211,8 +211,8 @@ public:
 	KoPoint pointAt( double t ) const;
 
 	/**
-	 * Calculates the point and the derivatives of first and second order
-	 * for 0 <= t <= 1.
+	 * Calculates the point and the derivatives of first and
+	 * second order for 0 <= t <= 1.
 	 */
 	void pointDerivativesAt( double t, KoPoint* p = 0L,
 							 KoPoint* d1 = 0L, KoPoint* d2 = 0L ) const;
@@ -261,14 +261,16 @@ public:
 	double lengthParam( double len ) const;
 
 	/**
-	 * Calculates the parameter of the nearest point to the point p on this segment.
+	 * Calculates the parameter of the nearest point to the point p
+	 * on this segment. This function is pretty expensive.
 	 */
 	double nearestPointParam( const KoPoint& p ) const;
 
 
 	/**
-	 * Calculates wether the tangent at knot is exactly parallel to the tangent at
-	 * p0 of the next segment. Returns false if the current segment is a "begin".
+	 * Calculates wether the tangent at knot is exactly parallel to
+	 * the tangent at p0 of the next segment. Returns false if the
+	 * current segment is a "begin".
 	 */
 	bool isSmooth( const VSegment& next ) const;
 
@@ -282,8 +284,8 @@ public:
 
 	/**
 	 * Creates a reverted version of this segment. For example:
-	 * if this segment is a line from A to B, the result is a line from
-	 * B to A.
+	 * if this segment is a line from A to B, the result is a
+	 * line from B to A.
 	 */
 	VSegment* revert() const;
 
@@ -385,7 +387,7 @@ private:
 	/**
 	 * Degree. For beziers most likely "three", "one" for lines.
 	 */
-	unsigned m_degree;
+	int m_degree;
 
 	/**
 	 * The segment type.
