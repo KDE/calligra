@@ -159,5 +159,10 @@ private:
     QMap<QString,QString> m_mapTextStyleKeys; ///< Map of keys to automatic text styles
     QMap<QString,QString> m_mapParaStyleKeys; ///< Map of keys to automatic paragraph styles
     VariableSettingsData m_varSet; ///< KWord's \<VARIABLESETTINGS\>
+private: // Variable that would need a link/glue from libexport
+    int m_columns; ///< Number of columns \todo: connection to libexport
+    QValueList<FrameAnchor> m_nonInlinedPictureAnchors; ///< Pseudo-anchors for non-inlined anchors  \todo: connection to libexport
+    QValueList<FrameAnchor> m_nonInlinedTableAnchors; ///< Pseudo-anchors for non-inlined tables  \todo: connection to libexport
+
 };
 #endif // _EXPORTFILTER_H

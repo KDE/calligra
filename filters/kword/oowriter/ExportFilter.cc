@@ -57,7 +57,7 @@ OOWriterWorker::OOWriterWorker(void) : m_streamOut(NULL),
     m_paperBorderTop(0.0),m_paperBorderLeft(0.0),
     m_paperBorderBottom(0.0),m_paperBorderRight(0.0), m_zip(NULL), m_pictureNumber(0),
     m_automaticParagraphStyleNumber(0), m_automaticTextStyleNumber(0),
-    m_footnoteNumber(0), m_tableNumber(0), m_textBoxNumber( 0 )
+    m_footnoteNumber(0), m_tableNumber(0), m_textBoxNumber( 0 ), m_columns( 1 )
 {
 }
 
