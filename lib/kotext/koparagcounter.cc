@@ -161,7 +161,7 @@ static int importCounterType( QChar numFormat )
 void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level )
 {
     const QDomElement listStyle = context.listStyleStack().currentListStyle();
-    //const QDomElement listStyleProperties = context.listStyleStack().currentListStyleProperties();
+    const QDomElement listStyleProperties = context.listStyleStack().currentListStyleProperties();
     m_numbering = heading ? 1 : 0;
     m_depth = level - 1; // depth start at 0
     // restartNumbering can either be provided by caller, or taken from the style
@@ -180,39 +180,31 @@ void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering, b
         m_style = STYLE_CUSTOMBULLET;
         QString bulletChar = listStyle.attribute( "text:bullet-char" );
         if ( !bulletChar.isEmpty() ) {
-#if 0 // doesn't work well. Fonts lack those symbols!
-            m_customBulletChar = bulletChar[0];
-            kdDebug() << "bullet code " << m_customBulletChar.unicode() << endl;
-            m_customBulletFont = listStyleProperties.attribute( "style:font-name" );
-#endif
             // Reverse engineering, I found those codes:
             switch( bulletChar[0].unicode() ) {
-            case 8226: // small disc
+            case 0x2022: // small disc
                 m_style = STYLE_DISCBULLET;
                 break;
-            case 9679: // large disc
+            case 0x25CF: // large disc
                 m_style = STYLE_DISCBULLET;
                 break;
-            case 57356: // losange - TODO in KWord
+            case 0xE00C: // losange - TODO in KWord. Not in OASIS either (reserved Unicode area!)
                 m_style = STYLE_DISCBULLET;
                 break;
-            case 57354: // square
+            case 0xE00A: // square. Not in OASIS (reserved Unicode area!)
                 m_style = STYLE_SQUAREBULLET;
                 break;
-            case 10132: // arrow
-            case 10146: // two-colors right-pointing triangle (TODO)
-                m_customBulletChar = 206; // simpler arrow symbol
-                m_customBulletFont = "symbol";
-                break;
-            case 10007: // cross
-                m_customBulletChar = 212; // simpler cross symbol
-                m_customBulletFont = "symbol";
-                break;
-            case 10004: // checkmark
-                m_customBulletChar = 246; // hmm that's sqrt
-                m_customBulletFont = "symbol";
+            case 0x2794: // arrow
+            case 0x27A2: // two-colors right-pointing triangle
+            case 0x2717: // cross
+            case 0x2714: // checkmark
+                m_customBulletChar = bulletChar[0];
+                // often StarSymbol when it comes from OO; doesn't matter, Qt finds it in another font if needed.
+                m_customBulletFont = listStyleProperties.attribute( "style:font-name" );
                 break;
             default:
+                kdWarning() << "Unhandled bullet code 0x" << QString::number( m_customBulletChar.unicode(), 16 ) << endl;
+
                 m_style = STYLE_CIRCLEBULLET;
                 break;
             }
