@@ -7,9 +7,8 @@ INCLUDES = -I../lib/store -I../lib/kofficecore -I../lib/kofficeui \
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = ../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
-	../lib/store/libkstore.la \
-	-lkparts -lkpartsui -lkom -lkfile -lkfm $(LIB_KIMGIO) -lkdeui \
-	-lkdeutil -lkdecore $(LIBMICO) -lXext $(LIB_QT $(LIBDL)
+	../lib/store/libkstore.la -lkparts -lkpartsui -lkom -lkfile \
+	-lkfm $(LIB_KIMGIO)  -lkdeutil $(LIB_KDEUI) $(LIBMICO) $(LIBDL)
 
 ####### Files
 

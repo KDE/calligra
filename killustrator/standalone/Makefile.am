@@ -43,9 +43,7 @@ FILTER_LIBS = ../filter/libfilter.a
 XML_LIBS = ../xmlutils/libxml.a
 KSHARE_LIBS = ../share/libkillu.a
 killustrator_LDADD   =  $(FILTER_LIBS) $(KSHARE_LIBS) $(XML_LIBS) \
-	-lkfile -lkfm -lkdeui -lkdecore \
-	-lqt $(LIBQIMGIO) \
-	-lXext  $(LIB_X11)
+	-lkfile -lkfm  $(LIBQIMGIO) $(LIB_KDEUI)
 
 # this option you can leave out. Just, if you use "make dist", you need it
 noinst_HEADERS = KIllustrator.h

@@ -1,7 +1,7 @@
 
 INCLUDES = $(all_includes) $(MICO_INCLUDES) -I$(idldir)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = -lkom -lkfile -lkfm $(LIB_KIMGIO) -lkspell -lkdeui -lkdeutil -lkdecore $(LIBMICO) -lXext $(LIB_QT) $(LIBDL)
+LDADD = -lkom -lkfile -lkfm $(LIB_KIMGIO) -lkspell  -lkdeutil  $(LIBMICO)   $(LIB_KDEUI) $(LIBDL)
 
 ####### Files
 

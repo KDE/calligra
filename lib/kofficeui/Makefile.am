@@ -2,7 +2,7 @@
 
 INCLUDES=	-I../kofficecore $(all_includes) $(MICO_INCLUDES) -I$(idldir)
 LDFLAGS	=	$(all_libraries) -version-info 1:0:0
-LIBADD  =       -lkdeui -lkdecore -lXext $(LIB_QT)
+LIBADD  =           $(LIB_KDEUI)
 
 ####### Files
 
