@@ -1,8 +1,8 @@
-// $Header$
+// 
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,6 +43,11 @@ void ProcessTextTag         ( QDomNode myNode, void *tagData, KWEFKWordLeader *l
  * @internal
  */
 void ProcessDocumentInfoTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader );
+/**
+ * @internal
+ * @since 1.4 (made public)
+ */
+void ProcessImageTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader );
 
 #endif /* PROCESS_DOCUMENT_H */
 

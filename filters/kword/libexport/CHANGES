@@ -5,3 +5,5 @@ KOffice 1.3post
 - improved handling of footnotes and endnotes (which are now differenciated.)
 - add support for notes
 - support language as character property
+- text images (original from KWord 0.8 or re-saved by KWord 1.2 or 1.3)
+- old tabulators (from KWord 0.8)

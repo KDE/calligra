@@ -497,6 +497,10 @@ static void SubProcessFormatOneTag(QDomNode myNode,
                         << myNode.nodeName()
                         << " = " << myNode.nodeValue()
                         << endl;
+
+        // In the old syntax (KWord 0.8), the comment would be displayed for each paragraph, so do not show it.
+        if ( ! leader->m_oldSyntax )
+            kdDebug (30508) << "Missing formatting for <FORMAT> (style or syntax version 1 ?)" << endl;
     }
 
     FormatData formatData(1, formatPos, formatLen);
@@ -507,6 +511,62 @@ static void SubProcessFormatOneTag(QDomNode myNode,
     (*formatDataList) << formatData;
 }
 
+
+static void SubProcessFormatTwoTag(QDomNode myNode,
+    ValueListFormatData *formatDataList, int formatPos, int formatLen,
+    KWEFKWordLeader *leader)
+{
+    if ( (formatPos == -1) )
+    {
+        // We have no position defined
+        kdWarning(30508) << "Missing text image position!" << endl;
+        return;
+    }
+    // In KWord 0.8, the len attribute was not defined
+    if (formatLen == -1)
+        formatLen = 1;
+
+    FormatData formatData(2, formatPos, formatLen);
+    QValueList<TagProcessing> tagProcessingList;
+
+    QString fileName; // KWord 0.8
+    KoPictureKey key; // Re-saved by KWord 1.2 or KWord 1.3
+    tagProcessingList.append(TagProcessing( "FILENAME", ProcessStringValueTag, &fileName));
+    tagProcessingList.append(TagProcessing( "PICTURE",  ProcessImageTag, &key ));
+    ProcessSubtags (myNode, tagProcessingList, leader);
+
+    if ( !fileName.isEmpty() )
+    {
+        kdDebug(30508) << "KWord 0.8 text image: " << fileName << endl;
+        key = KoPictureKey( fileName );
+    }
+    else
+    {
+        kdDebug(30508) << "KWord 1.2/1.3 text image: " << key.toString() << endl;
+    }
+
+    formatData.frameAnchor.key = key;
+    formatData.frameAnchor.picture.key = key;
+
+    (*formatDataList) << formatData;
+}
+
+
+static void SubProcessFormatThreeTag(QDomNode myNode,
+    ValueListFormatData *formatDataList, int formatPos, int /*formatLen*/,
+    KWEFKWordLeader *leader)
+{
+    if ( (formatPos == -1) ) // formatLen is never there but is 1.
+    {
+        // We have no position and no length defined
+        kdWarning(30508) << "Missing variable formatting!" << endl;
+        return;
+    }
+    AllowNoSubtags (myNode, leader);
+
+    const FormatData formatData(3, formatPos, 1);
+    (*formatDataList) << formatData;
+}
 
 static void SubProcessFormatFourTag(QDomNode myNode,
     ValueListFormatData *formatDataList, int formatPos, int formatLen,
@@ -569,11 +629,26 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
     attrProcessingList << AttrProcessing ( "len", formatLen );
     ProcessAttributes (myNode, attrProcessingList);
 
+    if ( ( formatId == -1 ) && ( leader->m_oldSyntax ) )
+    {
+        formatId = 1; // KWord 0.8 did not define it in <LAYOUT>
+    }
+
     switch ( formatId )
     {
     case 1: // regular texts
         {
             SubProcessFormatOneTag(myNode, formatDataList, formatPos, formatLen, leader);
+            break;
+        }
+    case 2: // text image (KWord 0.8)
+        {
+            SubProcessFormatTwoTag(myNode, formatDataList, formatPos, formatLen, leader);
+            break;
+        }
+    case 3: // KWord 0.8 tabulator
+        {
+            SubProcessFormatThreeTag(myNode, formatDataList, formatPos, formatLen, leader);
             break;
         }
     case 4: // variables
@@ -592,8 +667,9 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
             AllowNoSubtags (myNode, leader);
             break;
         }
+    case 5: // KWord 0.8 footnote
     default:
-            kdWarning(30508) << "Unexpected FORMAT attribute id value " << formatId << " !" << endl;
+            kdWarning(30508) << "Unexpected FORMAT attribute id value " << formatId << endl;
             AllowNoSubtags (myNode, leader);
     }
 
@@ -854,3 +930,26 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     }
 
 }
+
+
+static void ProcessImageKeyTag ( QDomNode myNode,
+    void *tagData, KWEFKWordLeader *)
+{
+    KoPictureKey *key = (KoPictureKey*) tagData;
+
+    // Let KoPicture do the loading
+    key->loadAttributes(myNode.toElement());
+}
+
+void ProcessImageTag ( QDomNode myNode,
+    void *tagData, KWEFKWordLeader *leader )
+{ // <PICTURE>
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "keepAspectRatio" );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList << TagProcessing ( "KEY", ProcessImageKeyTag, tagData );
+    ProcessSubtags (myNode, tagProcessingList, leader);
+}
+
