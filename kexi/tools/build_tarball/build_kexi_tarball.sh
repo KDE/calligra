@@ -122,7 +122,7 @@ for dir in $EXC; do
 	rm -rf $dir
 done
 #fix exectutable bits for sources:
-find . -name \*.h -o -name \*.cpp -o -name \*.c -o -name \*.cc | xargs chmod a-x
+find . -name \*.h -o -name \*.cpp -o -name \*.c -o -name \*.cc -o -name \*.1 | xargs chmod a-x
 #--cvs2dist will do this
 #cd $DESTINATION/source/$MODULE
 #make -f Makefile.cvs >> $DESTINATION/LOG 2>&1
