@@ -65,11 +65,11 @@ void KWTextImage::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int c
 
     if ( m_image.isNull() ) {
         kdDebug() << "KWTextImage::draw null image!" << endl;
-        p->fillRect( x , y, 50, 50, cg.dark() );
+        p->fillRect( x, y, 50, 50, cg.dark() );
         return;
     }
 
-    if ( placement() != PlaceInline && !QRect( xpos, ypos, m_image.size().width(), m_image.size().height() ).intersects( QRect( cx, cy, cw, ch ) ) )
+    if ( !QRect( x, y, m_image.size().width(), m_image.size().height() ).intersects( QRect( cx, cy, cw, ch ) ) )
         return;
     if ( placement() == PlaceInline )
         p->drawPixmap( x, y, m_image.pixmap() );

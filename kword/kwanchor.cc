@@ -42,9 +42,13 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     }
 
     int paragy = paragraph()->rect().y();
-    kdDebug(32001) << "KWAnchor::draw " << x << "," << y << "  paragy=" << paragy << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
+    //kdDebug(32001) << "KWAnchor::draw " << x << "," << y << " paragy=" << paragy
+    //               << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
     KWDocument * doc = m_frame->getFrameSet()->kWordDocument();
     KWTextFrameSet * fs = textDocument()->textFrameSet();
+
+    // 1 - move frame. We have to do this here since QTextCustomItem doesn't
+    // have a way to tell us when we are placed (during formatting)
     QPoint cPoint;
     if ( fs->internalToContents( QPoint( x, y+paragy ), cPoint ) )
     {
@@ -52,15 +56,25 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
         // Move the frame to position x,y.
         m_frame->moveTopLeft( KoPoint( cPoint.x() / doc->zoomedResolutionX(), cPoint.y() / doc->zoomedResolutionY() ) );
     }
-    QColorGroup cg2( cg );
+
+    // 2 - draw
+
+    p->save();
     // Determine crect in contents coords
     QRect crect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
     if ( fs->internalToContents( crect.topLeft(), cPoint ) )
         crect.moveTopLeft( cPoint );
+    // and go back to contents coord system
+    QPoint iPoint( 0, paragy );
+    if ( fs->internalToContents( iPoint, cPoint ) )
+    {
+        //kdDebug(32002) << "translate " << -cPoint.x() << "," << -cPoint.y() << endl;
+        p->translate( -cPoint.x(), -cPoint.y() );
+    }
     // Draw the frame
-    p->translate( 0, -paragy ); // undo what the caller did
+    QColorGroup cg2( cg );
     m_frame->getFrameSet()->drawContents( p, crect, cg2, false /*?*/, false /*?*/ );
-    p->translate( 0, paragy );
+    p->restore;
 }
 
 QSize KWAnchor::size() const

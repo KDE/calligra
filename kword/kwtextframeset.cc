@@ -860,7 +860,7 @@ void KWTextFrameSet::zoom()
     QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
     for ( ; cit.current() ; ++cit )
     {
-        // ## This is only valid as long as we only have KWTextImage, which updates
+        // ## This is only valid as long as all our custom items update
         // the size in adjustToPainter and doesn't use the painter.
         // If other classes do it differently, make a KWTextCustomItem base class with zoom().
         cit.current()->adjustToPainter( 0L );
@@ -877,6 +877,7 @@ void KWTextFrameSet::zoom()
     m_lastFormatted = textdoc->firstParag();
     m_availableHeight = -1; // to be recalculated
     emit ensureCursorVisible();
+    KWFrameSet::zoom();
 }
 
 void KWTextFrameSet::unzoom()

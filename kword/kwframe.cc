@@ -560,8 +560,7 @@ void KWFrameSet::deleteAnchors()
         if ( frameIt.current()->anchor() )
         {
             // Delete anchor (after removing anchor char)
-            m_anchorPos.parag->at( index )->loseCustomItem();
-            m_anchorPos.parag->remove( index, 1 );
+            m_anchorPos.parag->removeCustomItem( index );
             frameIt.current()->deleteAnchor();
         }
 }
@@ -954,6 +953,10 @@ bool KWFrameSet::isVisible()
              !isAWrongFooter( m_doc->getFooterType() ) );
 }
 
+void KWFrameSet::zoom()
+{
+}
+
 void KWFrameSet::finalize()
 {
     //kdDebug() << "KWFrameSet::finalize" << endl;
@@ -1253,10 +1256,16 @@ void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
             //kdDebug(32001) << "KWFormulaFrameSet::drawContents1" << endl;
             QRegion reg = frameClipRegion( painter, frames.first(), crect );
             if ( !reg.isEmpty() ) {
-                kdDebug() << "KWFormulaFrameSet::drawContents" << endl;
+                //kdDebug() << "KWFormulaFrameSet::drawContents" << endl;
                 painter->save();
                 painter->setClipRegion( reg );
                 cg.setBrush(QColorGroup::Base,frames.first()->getBackgroundColor());
+
+                // The frame moves without us knowing about it, so doing this in updateFrames
+                // isn't enough. Moved here.
+                formula->moveTo( kWordDocument()->zoomItX( frames.at(0)->x() ),
+                                 kWordDocument()->zoomItY( frames.at(0)->y() ) );
+
                 formula->draw( *painter, crect, cg );
                 painter->restore();
             }
@@ -1328,12 +1337,6 @@ void KWFormulaFrameSet::slotFormulaChanged(int width, int height)
 void KWFormulaFrameSet::updateFrames()
 {
     KWFrameSet::updateFrames();
-    if ( !formula || frames.isEmpty() )
-        return;
-
-    formula->moveTo( kWordDocument()->zoomItX( frames.at(0)->x() ),
-                     kWordDocument()->zoomItY( frames.at(0)->y() ) );
-
 }
 
 void KWFormulaFrameSet::save(QDomElement& parentElem)
@@ -1375,6 +1378,7 @@ void KWFormulaFrameSet::load(QDomElement& attributes)
 void KWFormulaFrameSet::zoom()
 {
     formula->recalc();
+    KWFrameSet::zoom();
 }
 
 

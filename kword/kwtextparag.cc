@@ -390,6 +390,16 @@ void KWTextParag::setCustomItem( int index, QTextCustomItem * custom, QTextForma
     invalidate( 0 );
 }
 
+void KWTextParag::removeCustomItem( int index )
+{
+    ASSERT( at( index )->isCustom() );
+    QTextCustomItem * item = at( index )->customItem();
+    at( index )->loseCustomItem();
+    remove( index, 1 );
+    QTextParag::removeCustomItem();
+    document()->unregisterCustomItem( item, this );
+}
+
 int KWTextParag::findCustomItem( QTextCustomItem * custom ) const
 {
     int len = string()->length();
