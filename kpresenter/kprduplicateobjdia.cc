@@ -35,6 +35,9 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent,KPresenterDoc * _doc,const
     : KDialogBase( parent, name , true, "", Ok | Cancel , Ok, true )
 {
     m_doc=_doc;
+    KoUnit::Unit unit = m_doc->getUnit();
+
+    QRect pageRect = m_doc->stickyPage()->getZoomPageRect();
 
     setCaption( i18n("Duplicate Object") );
 
@@ -54,17 +57,21 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent,KPresenterDoc * _doc,const
 
     lab=new QLabel(i18n("Increase X (%1):").arg(m_doc->getUnitName()), page);
     m_increaseX= new KDoubleNumInput( page );
+    m_increaseX->setRange( 0.0, KoUnit::ptToUnit( pageRect.width(), unit ), KoUnit::ptToUnit( 1, unit ), false);
 
     lab=new QLabel(i18n("Increase Y (%1):").arg(m_doc->getUnitName()), page);
     m_increaseY= new KDoubleNumInput( page );
+    m_increaseY->setRange( 0.0, KoUnit::ptToUnit( pageRect.height(), unit ), KoUnit::ptToUnit( 1, unit ), false);
+
 
     tmp=new KSeparator(page);
     lab=new QLabel(i18n("Move X (%1):").arg(m_doc->getUnitName()), page);
     m_moveX= new KDoubleNumInput( page );
+    m_moveX->setRange( 0.0, KoUnit::ptToUnit( pageRect.width(), unit ), KoUnit::ptToUnit( 1, unit ) , false);
 
     lab=new QLabel(i18n("Move Y (%1):").arg(m_doc->getUnitName()), page);
     m_moveY= new KDoubleNumInput( page );
-
+    m_moveY->setRange( 0.0, KoUnit::ptToUnit( pageRect.height(), unit ), KoUnit::ptToUnit( 1, unit ), false);
 
     resize( 200,100 );
 }

@@ -20,7 +20,6 @@
 #ifndef __kpresenter_doc_h__
 #define __kpresenter_doc_h__
 
-class KPresenterDoc;
 class KPresenterView;
 class DCOPObject;
 class KCommand;
