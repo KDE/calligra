@@ -157,6 +157,8 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 
     connect( gui->canvasWidget(), SIGNAL(docStructChanged(TypeStructDocItem)),
              this, SLOT(docStructChanged(TypeStructDocItem)));
+    if(shell())
+        connect( shell(), SIGNAL( documentSaved()),doc,SLOT(slotDocumentInfoModifed() ) );
 
     gui->canvasWidget()->updateCurrentFormat();
     setFocusProxy( gui->canvasWidget() );
@@ -662,8 +664,8 @@ void KWView::showFormulaToolbar( bool show )
   doc->getFormulaDocument()->getAddGenericLowerAction()->setEnabled( show );
   doc->getFormulaDocument()->getRemoveEnclosingAction()->setEnabled( show );
   doc->getFormulaDocument()->getInsertSymbolAction()->setEnabled( show );
-
-  shell()->showToolbar( "formula_toolbar", show );
+  if(shell())
+      shell()->showToolbar( "formula_toolbar", show );
 }
 
 void KWView::updatePageInfo()
