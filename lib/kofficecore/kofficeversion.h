@@ -24,6 +24,11 @@
 
 // Remmber to synchronize the version number with the file(s):
 // - koffice/configure.in.in
+//
+// NOT synchronized are:
+// - karbon/karbon_aboutdata.h
+//
+
 #define KOFFICE_VERSION_STRING "1.3post"
 #define KOFFICE_VERSION_MAJOR 1
 #define KOFFICE_VERSION_MINOR 3
