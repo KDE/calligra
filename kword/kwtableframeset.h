@@ -43,11 +43,11 @@ class QPainter;
  * Class: KWTableFrameSet
  *
  * This class implements tables by acting as the manager for
- * the frame(set)s which make up the table cells (hence share a
- * common grpMgr attribute).
+ * the frame(set)s which make up the table cells.
  *
  * A table can be anchored, in which case its frame(set)s are
  * located relative to the Y position of the anchor.
+ *
  * We have a cell structure which contains one frameset, because
  * of the nature of the table this frameset will always hold
  * exactly one frame. Therefore the terms cell, frameSet and frame
@@ -197,4 +197,46 @@ protected:
     void addCell( Cell *cell );
 };
 
+/**
+ * The object created to edit this table - in fact at a given moment,
+ * it edits one cell (frameset) of the table, the one in which the cursor is.
+ */
+class KWTableFrameSetEdit : public KWFrameSetEdit
+{
+public:
+    KWTableFrameSetEdit( KWTableFrameSet * fs, KWCanvas * canvas )
+        : KWFrameSetEdit( fs, canvas ), m_currentCell( 0L ) {}
+    virtual ~KWTableFrameSetEdit() {}
+
+    KWTableFrameSet * tableFrameSet() const {
+        return static_cast<KWTableFrameSet *>( m_fs );
+    }
+
+    // Forward all events to the current cell
+    virtual void keyPressEvent( QKeyEvent * e ) { m_currentCell->keyPressEvent( e ); }
+    virtual void mousePressEvent( QMouseEvent * e );
+    virtual void mouseMoveEvent( QMouseEvent * e ) { m_currentCell->mouseMoveEvent( e ); }
+    virtual void mouseReleaseEvent( QMouseEvent * e ) { m_currentCell->mouseReleaseEvent( e ); }
+    virtual void mouseDoubleClickEvent( QMouseEvent * e ) { m_currentCell->mouseDoubleClickEvent( e ); } // TODO check current cell
+    virtual void dragEnterEvent( QDragEnterEvent * e ) { m_currentCell->dragEnterEvent( e ); }
+    virtual void dragMoveEvent( QDragMoveEvent * e ) { m_currentCell->dragMoveEvent( e ); }
+    virtual void dragLeaveEvent( QDragLeaveEvent * e ) { m_currentCell->dragLeaveEvent( e ); }
+    virtual void dropEvent( QDropEvent * e ) { m_currentCell->dropEvent( e ); } // TODO check current cell
+    virtual void focusInEvent() { m_currentCell->focusInEvent(); }
+    virtual void focusOutEvent() { m_currentCell->focusOutEvent(); }
+    virtual void doAutoScroll( QPoint p ) { m_currentCell->doAutoScroll( p ); }
+    virtual void copy() { m_currentCell->copy(); }
+    virtual void cut() { m_currentCell->cut(); }
+    virtual void paste() { m_currentCell->paste(); }
+    // should selectAll select all cells ? etc.
+    virtual void selectAll() { m_currentCell->selectAll(); }
+
+    // Set the cell which is currently being edited
+    void setCurrentCell( KWFrameSet * fs );
+    void setCurrentCell( int mx, int my );
+
+protected:
+    KWFrameSetEdit * m_currentCell;
+
+};
 #endif

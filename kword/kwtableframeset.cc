@@ -2,6 +2,8 @@
     Copyright (C) 2001, S.R.Haque (srhaque@iee.org).
     This file is part of the KDE project
 
+#include "kwtableframeset.h"
+
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
     License as published by the Free Software Foundation; either
@@ -1230,4 +1232,29 @@ bool KWTableFrameSet::Cell::isAboveOrLeftOf( unsigned row, unsigned col )
     return ( m_row < row ) || ( ( m_row == row ) && ( m_col < col ) );
 }
 
-#include <kwtableframeset.moc>
+void KWTableFrameSetEdit::mousePressEvent( QMouseEvent * e )
+{
+    int mx = e->pos().x();
+    int my = e->pos().y();
+    setCurrentCell( mx,  my );
+    m_currentCell->mousePressEvent( e );
+}
+
+void KWTableFrameSetEdit::setCurrentCell( int mx, int my )
+{
+    KWDocument * doc = m_fs->kWordDocument();
+    int x = static_cast<int>( mx / doc->zoomedResolutionX() );
+    int y = static_cast<int>( my / doc->zoomedResolutionY() );
+    KWFrameSet *fs = doc->getFrameSet( x, y ); // ######### change to tableFrameSet()->getFrameSet( x, y ) or so when the cells are inside the table
+    if ( fs )
+        setCurrentCell( fs );
+}
+
+void KWTableFrameSetEdit::setCurrentCell( KWFrameSet * fs )
+{
+    delete m_currentCell;
+    m_currentCell = fs->createFrameSetEdit( m_canvas );
+    m_currentFrame = fs->getFrame( 0 );
+}
+
+#include "kwtableframeset.moc"
