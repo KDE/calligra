@@ -424,6 +424,7 @@ void KWFrameStyleCommand::execute()
 
     if ( repaintViews )
         m_frame->frameSet()->kWordDocument()->repaintAllViews();
+    m_frame->frameSet()->kWordDocument()->refreshFrameBorderButton();
 }
 
 void KWFrameStyleCommand::unexecute()
@@ -436,6 +437,7 @@ void KWFrameStyleCommand::unexecute()
 
     if ( repaintViews )
         m_frame->frameSet()->kWordDocument()->repaintAllViews();
+    m_frame->frameSet()->kWordDocument()->refreshFrameBorderButton();
 }
 
 KWTableStyleCommand::KWTableStyleCommand( const QString &name, KWFrame *_frame, KWTableStyle *_ts, bool _repaintViews ) :
@@ -471,6 +473,8 @@ void KWTableStyleCommand::execute()
 
     if ( repaintViews )
         m_frame->frameSet()->kWordDocument()->repaintAllViews();
+    m_frame->frameSet()->kWordDocument()->refreshFrameBorderButton();
+
 }
 
 void KWTableStyleCommand::unexecute()
@@ -482,6 +486,7 @@ void KWTableStyleCommand::unexecute()
 
     if ( repaintViews )
         m_frame->frameSet()->kWordDocument()->repaintAllViews();
+    m_frame->frameSet()->kWordDocument()->refreshFrameBorderButton();
 }
 
 KWTableTemplateCommand::KWTableTemplateCommand( const QString &name, KWTableFrameSet *_table, KWTableTemplate *_tt ) :
