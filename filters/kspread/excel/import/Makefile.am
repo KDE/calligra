@@ -7,7 +7,7 @@ INCLUDES= -I$(srcdir) -I$(srcdir)/../sidewinder $(KOFFICE_INCLUDES) $(all_includ
 kde_module_LTLIBRARIES = libexcelimport.la
 
 libexcelimport_la_SOURCES = excelimport.cc 
-libexcelimport_la_LIBADD = $(KOFFICE_LIBS) $(srcdir)/../sidewinder/libsidewinder.la
+libexcelimport_la_LIBADD = $(KOFFICE_LIBS) ../sidewinder/libsidewinder.la
 libexcelimport_la_LDFLAGS = -module $(KDE_PLUGIN)
 noinst_HEADERS = excelimport.h
 
