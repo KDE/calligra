@@ -47,8 +47,10 @@ WinWordDoc::WinWordDoc(
     m_body = "";
     m_tables = "";
     m_pixmaps = "";
+    m_pixmapCount = 0;
     m_embedded = "";
-    m_embeddedFrameSet = 0;
+    m_embeddedCount = 0;
+    m_extraFrameSets = "";
     m_cellEdges.setAutoDelete(true);
     m_table.setAutoDelete(true);
 }
@@ -207,6 +209,7 @@ bool WinWordDoc::convert()
         m_body.append(
             "  </FRAMESET>\n");
         m_body.append(m_tables);
+        m_body.append(m_extraFrameSets);
         m_body.append(
             " </FRAMESETS>\n");
 
@@ -379,13 +382,28 @@ QString WinWordDoc::generateFormats(
                     image->type,
                     image->length,
                     image->data);
-            formats.append("<FORMAT id=\"2\" pos=\"");
+
+            // Add an anchor for this frameset.
+
+            m_pixmapCount++;
+            formats.append("<FORMAT id=\"6\" pos=\"");
             formats.append(QString::number(image->start));
-            formats.append("\">\n");
-            formats.append("<FILENAME value=\"");
-            formats.append(ourKey);
+            formats.append("\" len=\"1\">\n");
+            formats.append("<ANCHOR type=\"frameset\" instance=\"");
+            formats.append(i18n("Picture %1").arg(m_pixmapCount));
             formats.append("\"/>\n");
             formats.append("</FORMAT>\n");
+
+            m_extraFrameSets.append("<FRAMESET frameType=\"2\" frameInfo=\"0\" name=\"");
+            m_extraFrameSets.append(i18n("Picture %1").arg(m_pixmapCount));
+            m_extraFrameSets.append("\">\n");
+            m_extraFrameSets.append("<FRAME runaround=\"1\" right=\"74.92\" left=\"32.68\" newFrameBehaviour=\"0\" bottom=\"87.4\" runaroundGap=\"2.83465\" top=\"45.16\" />\n");
+            m_extraFrameSets.append("<IMAGE>\n");
+            m_extraFrameSets.append("<FILENAME value=\"");
+            m_extraFrameSets.append(ourKey);
+            m_extraFrameSets.append("\"/>\n");
+            m_extraFrameSets.append("</IMAGE>\n");
+            m_extraFrameSets.append("</FRAMESET>\n");
 
             // Add an entry to the list of pixmaps too.
 
@@ -462,12 +480,12 @@ QString WinWordDoc::generateFormats(
 
             // Add an anchor for this frameset.
 
-            m_embeddedFrameSet++;
+            m_embeddedCount++;
             formats.append("<FORMAT id=\"6\" pos=\"");
             formats.append(QString::number(object->start));
             formats.append("\" len=\"1\">\n");
             formats.append("<ANCHOR type=\"frameset\" instance=\"");
-            formats.append(i18n("Object %1").arg(m_embeddedFrameSet));
+            formats.append(i18n("Object %1").arg(m_embeddedCount));
             formats.append("\"/>\n");
             formats.append("</FORMAT>\n");
 
@@ -484,7 +502,7 @@ QString WinWordDoc::generateFormats(
             m_embedded.append("</OBJECT>\n");
             m_embedded.append("<SETTINGS>\n");
             m_embedded.append("<NAME value=\"");
-            m_embedded.append(i18n("Object %1").arg(m_embeddedFrameSet));
+            m_embedded.append(i18n("Object %1").arg(m_embeddedCount));
             m_embedded.append("\"/>\n");
             m_embedded.append("<FRAME left=\"30\" top=\"190\" right=\"149\" bottom=\"269\" tRed=\"0\" tGreen=\"0\" tBlue=\"0\" bRed=\"0\" bGreen=\"0\" bBlue=\"0\"/>\n");
             m_embedded.append("</SETTINGS>\n");
@@ -739,7 +757,9 @@ void WinWordDoc::gotTableBegin(
 
     m_cellEdges.resize(tableNumber);
     m_cellEdges.insert(tableNumber - 1, new QArray<unsigned>);
-    m_body.append("<PARAGRAPH>\n<TEXT>@</TEXT>\n");
+    m_body.append("<PARAGRAPH>\n<TEXT>");
+    m_body.append(Document::s_anchor);
+    m_body.append("</TEXT>\n");
     m_body.append("<FORMATS>\n<FORMAT id=\"6\" pos=\"0\" len=\"1\">\n");
     m_body.append("<ANCHOR type=\"frameset\" instance=\"");
     m_body.append(i18n("Table %1").arg(tableNumber));

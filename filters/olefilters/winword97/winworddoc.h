@@ -187,8 +187,10 @@ private:
     QString m_body;
     QString m_tables;
     QString m_pixmaps;
+    unsigned m_pixmapCount;
     QString m_embedded;
-    unsigned m_embeddedFrameSet;
+    unsigned m_embeddedCount;
+    QString m_extraFrameSets;
 
     // Page sizes, margins etc. all in points.
 

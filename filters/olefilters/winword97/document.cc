@@ -31,6 +31,8 @@ DESCRIPTION
 #include <properties.h>
 #include <typeinfo>
 
+const QString Document::s_anchor = "#";
+
 Document::Document(
     const myFile &mainStream,
     const myFile &table0Stream,
@@ -220,7 +222,7 @@ void Document::Attributes::rewriteField(
         m_field.separator = m_field.end;
     }
     kdDebug(s_area) << "Document::rewriteField: before: " << text << endl;
-    unsigned lhsLength = chpxs[m_field.separator].startFc - chpxs[m_field.start].startFc;
+    unsigned lhsLength = chpxs[m_field.separator].startFc - chpxs[m_field.start].startFc + 1;
     unsigned rhsLength = chpxs[m_field.end].startFc - chpxs[m_field.separator].startFc;
     unsigned run;
     int length;
@@ -230,9 +232,12 @@ void Document::Attributes::rewriteField(
     switch (m_field.fieldType)
     {
     case FIELD_TYPE_EMBEDDED_OBJECT:
+        newLhs = "";
+        newRhs = s_anchor;
         break;
     case 0: // TBD: some (second?, mailto:?) HYPERLINKs look like this!
     case FIELD_TYPE_HYPERLINK:
+        newLhs = "";
         newRhs = text.mid(chpxs[m_field.separator].startFc + 1, rhsLength - 1);
         break;
     default:
@@ -241,11 +246,11 @@ void Document::Attributes::rewriteField(
         return;
     }
 
-    // Adjust LHS if required.
+    // Adjust LHS and separator as required.
 
     {
         run = m_field.start;
-        text.replace(chpxs[run].startFc, lhsLength + 1, newLhs);
+        text.replace(chpxs[run].startFc, lhsLength, newLhs);
         length = lhsLength - newLhs.length();
         chpxs[run].endFc -= length;
         run++;
@@ -257,11 +262,11 @@ void Document::Attributes::rewriteField(
         }
     }
 
-    // Adjust RHS if required.
+    // Adjust RHS as required.
 
     {
         run = m_field.separator;
-        text.replace(chpxs[run].startFc, rhsLength + 1, newRhs);
+        text.replace(chpxs[run].startFc + 1, rhsLength, newRhs);
         length = rhsLength - newRhs.length();
         chpxs[run].endFc -= length;
         run++;

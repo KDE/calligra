@@ -49,6 +49,7 @@ protected:
     // Call the parse() function to process the document. The callbacks return
     // the text along with any relevant attributes.
 
+public:
     void parse();
 
     // We describe the data we return to a client in terms of a "run" of
@@ -57,10 +58,14 @@ protected:
     // associated with the object. Thus, we have a base class called Run
     // and a set of derivations for each specialisation...
     //
+    // Where a run of text is associated with an object, the character
+    // concerned is set to a known s_anchor (whose value is chosen so
+    // as not to upset KSpell).
+    //
     // We derive from KSharedPtr since some overrides of our callback
     // functions may choose to store the data for later processing.
 
-public:
+    static const QString s_anchor;
 
     class Run: public KShared
     {
