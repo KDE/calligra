@@ -192,10 +192,10 @@ void StyleDia::setupTab1()
     l->setFixedHeight( l->sizeHint().height() );
 
     clineBegin = new QComboBox( false, right, "lineBegin" );
-    clineBegin->insertItem( "Normal" );
-    clineBegin->insertItem( "Arrow" );
-    clineBegin->insertItem( "Square" );
-    clineBegin->insertItem( "Circle" );
+    clineBegin->insertItem( i18n("Normal") );
+    clineBegin->insertItem( i18n("Arrow") );
+    clineBegin->insertItem( i18n("Square") );
+    clineBegin->insertItem( i18n("Circle") );
     connect( clineBegin, SIGNAL( activated( int ) ),
 	     this, SLOT( updatePenConfiguration() ) );
 
@@ -203,10 +203,10 @@ void StyleDia::setupTab1()
     l->setFixedHeight( l->sizeHint().height() );
 
     clineEnd = new QComboBox( false, right, "lineEnd" );
-    clineEnd->insertItem( "Normal" );
-    clineEnd->insertItem( "Arrow" );
-    clineEnd->insertItem( "Square" );
-    clineEnd->insertItem( "Circle" );
+    clineEnd->insertItem( i18n("Normal") );
+    clineEnd->insertItem( i18n("Arrow") );
+    clineEnd->insertItem( i18n("Square") );
+    clineEnd->insertItem( i18n("Circle") );
     connect( clineEnd, SIGNAL( activated( int ) ),
 	     this, SLOT( updatePenConfiguration() ) );
 
