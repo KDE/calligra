@@ -48,6 +48,7 @@ public slots:
 
 protected:
     void init();
+    void updateButton();
 
     QListBox * list;
     QPushButton* m_pRemove;

@@ -84,6 +84,10 @@ void CustomSlideShowDia::init()
     //init qmap
 }
 
+void CustomSlideShowDia::updateButton()
+{
+}
+
 void CustomSlideShowDia::slotTextClicked(QListBoxItem*)
 {
     //todo update button
@@ -228,6 +232,8 @@ void DefineCustomSlideShow::init()
   m_moveDownSlide->setIconSet( SmallIconSet( "down" ) );
 
   updateButton();
+  resize( 600, 250 );
+
 }
 
 void DefineCustomSlideShow::updateButton()
@@ -263,18 +269,40 @@ void DefineCustomSlideShow::slotMoveDownSlide()
 
 void DefineCustomSlideShow::slotMoveRemoveSlide()
 {
+    // move all selected items from selected to available listbox
+    QListBoxItem *item = listSlideShow->firstItem();
+    while ( item ) {
+        if ( item->isSelected() ) {
+            listSlideShow->takeItem( item );
+        }
+        item = item->next();
+    }
     updateButton();
 }
 
 void DefineCustomSlideShow::slotMoveInsertSlide()
 {
+    QListBoxItem *item = listSlide->firstItem();
+    while ( item ) {
+        if ( item->isSelected() ) {
+            listSlideShow->insertItem( item, 0 );
+            listSlideShow->setCurrentItem( item );
+        }
+        item = item->next();
+    }
+    listSlideShow->setFocus();
     updateButton();
 }
 
 QStringList DefineCustomSlideShow::customListSlideShow()
 {
-    //todo
-    return QStringList();
+    QStringList lst;
+    QListBoxItem *item = listSlideShow->firstItem();
+    while ( item ) {
+        lst << item->text();
+        item = item->next();
+    }
+    return lst;
 }
 
 QString DefineCustomSlideShow::customSlideShowName() const
