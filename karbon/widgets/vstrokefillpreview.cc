@@ -80,6 +80,19 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 		QMouseEvent *e = static_cast<QMouseEvent *>( event );
 		if( e->x() >= 15 && e->x() <= 45 && e->y() >= 20 && e->y() <= 50 )
 		{
+			emit fillSelected();
+		}
+		else if( e->x() >= 5 && e->x() <= 35 && e->y() >= 10 && e->y() <= 40 )
+		{
+			emit strokeSelected();
+		}
+	}
+	
+	if( event && event->type() == QEvent::MouseButtonDblClick )
+	{
+		QMouseEvent *e = static_cast<QMouseEvent *>( event );
+		if( e->x() >= 15 && e->x() <= 45 && e->y() >= 20 && e->y() <= 50 )
+		{
 			VFillDlg* dialog = new VFillDlg( m_part );
 			connect( dialog, SIGNAL( fillChanged( const VFill & ) ), this, SIGNAL( fillChanged( const VFill & ) ) );
 			dialog->exec();

@@ -38,10 +38,12 @@ class VColorDocker : public VDocker
 public:
 	 VColorDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
 	 virtual bool isStrokeDocker() { return m_isStrokeDocker; };
-	 virtual void setFillDocker();
-	 virtual void setStrokeDocker();
 	 VColor color() { return *m_Color; }
   
+public slots:
+	virtual void setFillDocker();
+	virtual void setStrokeDocker();
+
 private:
 	QWidget *mainWidget;
 	QTabWidget *mTabWidget;

@@ -50,6 +50,8 @@ public:
 signals:
 	void strokeChanged( const VStroke & );
 	void fillChanged( const VFill& );
+	void fillSelected();
+	void strokeSelected();
 
 protected:
 	virtual void paintEvent( QPaintEvent* event );

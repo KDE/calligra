@@ -106,17 +106,15 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 
 void VColorDocker::updateCanvas()
 {
-	switch( m_isStrokeDocker ) {
-	case false:
-		if( m_part )
-			m_part->addCommand( new VFillCmd( &m_part->document(), VFill( *m_Color ) ), true );
+	if ( m_isStrokeDocker && m_part)
+	{
+		m_part->addCommand( new VStrokeColorCmd( &m_part->document(), m_Color ), true );
 		m_view->selectionChanged();
-		break;
-	case true:
-		if( m_part )
-			m_part->addCommand( new VStrokeColorCmd( &m_part->document(), m_Color ), true );
+	}
+	else if( m_part )
+	{
+		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( *m_Color ) ), true );
 		m_view->selectionChanged();
-		break;
 	}
 }
 
