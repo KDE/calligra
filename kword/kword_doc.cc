@@ -324,7 +324,7 @@ void KWordDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHead
 }
 
 /*================================================================*/
-void KWordDocument::recalcFrames( bool _cursor, bool _fast )
+void KWordDocument::recalcFrames( bool _cursor)
 {
     if ( processingType != DTP )
         pages = 1;
@@ -706,7 +706,7 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
     }
 
     updateAllViewportSizes();
-    recalcWholeText( _cursor, _fast );
+    recalcWholeText( _cursor );
 }
 
 /*================================================================*/
@@ -1352,20 +1352,20 @@ bool KWordDocument::loadXML( QIODevice *, const QDomDocument & doc )
     // do some sanity checking on document.
     for (int i = getNumFrameSets()-1; i>-1; i--) {
         if(! getFrameSet(i)) {
-            kdDebug () << "frameset " << i << " is NULL!!" << endl;
+            kdWarning () << "frameset " << i << " is NULL!!" << endl;
             frames.remove(i);
         } else if(! getFrameSet(i)->getFrame(0)) {
-            kdDebug () << "frameset " << i << " has no frames" << endl;
+            kdWarning () << "frameset " << i << " has no frames" << endl;
             delFrameSet(getFrameSet(i));
         } else if (getFrameSet(i)->getFrameType() == FT_TEXT) {
             for (int f=getFrameSet(i)->getNumFrames()-1; f>=0; f--) {
                 if(getFrameSet(i)->getFrame(f)->height() < static_cast <int>(minFrameHeight)) {
-                    kdDebug() << "frame height is so small no text will fit, adjusting (was: "
+                    kdWarning() << "frame height is so small no text will fit, adjusting (was: "
                       << getFrameSet(i)->getFrame(f)->height() << " is: " << minFrameHeight << ")" << endl;
                     getFrameSet(i)->getFrame(f)->setHeight(minFrameHeight);
                 }
                 if(getFrameSet(i)->getFrame(f)->width() < static_cast <int>(minFrameWidth)) {
-                    kdDebug() << "frame width is so small no text will fit, adjusting (was: "  
+                    kdWarning() << "frame width is so small no text will fit, adjusting (was: "  
                      << getFrameSet(i)->getFrame(f)->width() << " is: " << minFrameWidth  << ")" << endl;
                     getFrameSet(i)->getFrame(f)->setWidth(minFrameWidth);
                 }
@@ -1374,13 +1374,14 @@ bool KWordDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
     for (int i = getNumGroupManagers()-1; i>-1; i--) {
         if(! getGroupManager(i)) {
-            kdDebug () << "GroupManager " << i << " is NULL!!" << endl;
+            kdWarning () << "GroupManager " << i << " is NULL!!" << endl;
             grpMgrs.remove(i);
         } else {
             getGroupManager(i)->validate();
         }
     }
-
+    recalcFrames();
+    //updateAllFrames();
     return TRUE;
 }
 
@@ -1437,28 +1438,27 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, QValueList<KOMLAttrib>& l
             parser.parseTag( tag, name, lst );
             QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
             for( ; it != lst.end(); ++it ) {
-                // else if constructs please...
                 if ( ( *it ).m_strName == "frameType" )
                     frameType = static_cast<FrameType>( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "frameInfo" )
+                else if ( ( *it ).m_strName == "frameInfo" )
                     frameInfo = static_cast<FrameInfo>( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "grpMgr" )
+                else if ( ( *it ).m_strName == "grpMgr" )
                     _name = correctQString( ( *it ).m_strValue );
-                if ( ( *it ).m_strName == "row" )
+                else if ( ( *it ).m_strName == "row" )
                     _row = ( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "col" )
+                else if ( ( *it ).m_strName == "col" )
                     _col = ( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "removeable" )
+                else if ( ( *it ).m_strName == "removeable" )
                     removeable = static_cast<bool>( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "removable" )
+                else if ( ( *it ).m_strName == "removable" )
                     removeable = static_cast<bool>( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "rows" )
+                else if ( ( *it ).m_strName == "rows" )
                     _rows = ( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "cols" )
+                else if ( ( *it ).m_strName == "cols" )
                     _cols = ( *it ).m_strValue.toInt();
-                if ( ( *it ).m_strName == "visible" )
+                else if ( ( *it ).m_strName == "visible" )
                     _visible = static_cast<bool>( ( *it ).m_strValue.toInt() );
-                if ( ( *it ).m_strName == "name" )
+                else if ( ( *it ).m_strName == "name" )
                     fsname = ( *it ).m_strValue;
             }
 
@@ -3113,7 +3113,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString pasteString, KWPage *_p
                 *str = *firstParag->getKWString();
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
 
-                for ( unsigned int j = 0; j <= firstParag->getTextLen(); j++ )
+                for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
                     _fc->cursorGotoRight();
 
                 delete firstParag;
@@ -3306,7 +3306,7 @@ void KWordDocument::appendPage( unsigned int /*_page*/, bool redrawBackgroundWhe
     updateAllViewportSizes();
 
     if ( hasHeader() || hasFooter() )
-        recalcFrames( FALSE, TRUE );
+        recalcFrames( false);
     setModified(TRUE);
 }
 
@@ -3515,11 +3515,11 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
         kapp->processEvents();
         // don't print if outside the bounduaries printer->fromPage() / printer->toPage()
         if ( 0 != printer->fromPage()  && i + 1 < static_cast<unsigned int>( printer->fromPage() ) ) {
-            kdDebug(32001) << "skipping page " << i+1 << ": it is less than " << printer->fromPage() << endl;
+            //kdDebug(32001) << "skipping page " << i+1 << ": it is less than " << printer->fromPage() << endl;
             continue;
         }
         if ( 0 != printer->toPage() && i + 1 > static_cast<unsigned int>( printer->toPage() ) ) {
-            kdDebug(32001) << "end print on page " << i+1 << ": it is greater than " << printer->toPage() << endl;
+            //kdDebug(32001) << "end print on page " << i+1 << ": it is greater than " << printer->toPage() << endl;
             break;
         }
 
@@ -3739,14 +3739,35 @@ void KWordDocument::updateAllFrames()
 }
 
 /*================================================================*/
-void KWordDocument::recalcWholeText( bool _cursor, bool _fast )
+void KWordDocument::recalcWholeText( bool _cursor )
 {
-    KWordView *viewPtr;
+    KWordView *viewPtr=0;
 
-    if ( !m_lstViews.isEmpty() ) {
+    if ( !m_lstViews.isEmpty())
         viewPtr = m_lstViews.first();
+
+    if(viewPtr) {
         if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() )
-            viewPtr->getGUI()->getPaperWidget()->recalcWholeText( _cursor, _fast );
+            viewPtr->getGUI()->getPaperWidget()->recalcWholeText( _cursor);
+    } else { // we don't have a view. Take this chance to recalculate everything.
+        // first tell the floating frames to be invisible so they won't 
+        // interfere with rendering of other frames. (since they are probably 
+        // not positioned correctly, just yet)
+        for ( int i = getNumFrameSets()-1; i >= 0; i-- ) 
+            if (getFrameSet(i)->getGroupManager())
+                getFrameSet(i)->setVisible(false);
+
+        // next, render all non-floating frame
+/*
+        for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
+            KWFrameSet *fs = getFrameSet(i);
+            if ( fs->getFrameType() == FT_TEXT && fs->getNumFrames() >0  && fs->getGroupManager()!=0 ) {
+                KWFormatContext _fc( this, i + 1 );
+                _fc.init( getFirstParag( i ) );
+     
+                while ( _fc.makeNextLineLayout());
+            }
+        } */
     }
 }
 
@@ -3802,7 +3823,7 @@ void KWordDocument::setHeader( bool h )
         }
     }
 
-    recalcFrames( TRUE, TRUE );
+    recalcFrames( TRUE );
     updateAllViews( 0L, TRUE );
 }
 
@@ -3819,7 +3840,7 @@ void KWordDocument::setFooter( bool f )
         }
     }
 
-    recalcFrames( TRUE, TRUE );
+    recalcFrames( TRUE );
     updateAllViews( 0L, TRUE );
 }
 

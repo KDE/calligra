@@ -302,7 +302,7 @@ protected:
 
     virtual void updateReadWrite( bool readwrite );
 
-    KWordDocument *m_pKWordDoc;
+    KWordDocument *doc;
 
     bool m_bUnderConstruction, m_bKWordModified;
 

@@ -27,6 +27,8 @@
 #include "autoformat.h"
 #include "font.h"
 
+#include <kdebug.h>
+
 /******************************************************************/
 /* Class: KWFormatContext                                         */
 /******************************************************************/
@@ -643,8 +645,8 @@ void KWFormatContext::cursorGotoLine( unsigned int _textpos )
 
     if ( !doc->isEmpty() )
     {
-      qWarning( "ERROR: Textpos behind content of parag! Strange things may happen now!" );
-      qWarning( "(If you just opened an empty document you can IGNORE this message!!!" );
+      kdWarning() << "ERROR: Textpos behind content of parag! Strange things may happen now!"<< endl ;
+      kdWarning() << "(If you just opened an empty document you can IGNORE this message!!!)" << endl;
     }
 }
 
@@ -956,13 +958,13 @@ int KWFormatContext::cursorGotoNextChar()
 
 
 /*================================================================*/
+/* render next line, return false if there is no next line.       */
 bool KWFormatContext::makeNextLineLayout( bool redrawBackgroundWhenAppendPage )
 {
     if ( !pFrameSet->isVisible() )
         return FALSE;
 
     if ( !parag ) {
-        //qDebug( "1" );
         doc->checkNumberOfPages( this );
         return FALSE;
     }
@@ -971,9 +973,9 @@ bool KWFormatContext::makeNextLineLayout( bool redrawBackgroundWhenAppendPage )
         if ( parag->getNext() == 0L || outOfFrame ) {
             ptY += getLineHeight();
             parag->setPTYEnd( ptY );
-            outOfFrame = FALSE;
-            if ( !outOfFrame )
-                doc->checkNumberOfPages( this );
+            //outOfFrame = FALSE;
+            //if ( !outOfFrame )
+            //    doc->checkNumberOfPages( this );
             return FALSE;
         }
 
@@ -981,8 +983,9 @@ bool KWFormatContext::makeNextLineLayout( bool redrawBackgroundWhenAppendPage )
         enterNextParag();
     } else {
         lineStartPos = lineEndPos;
+        //if(getLineHeight() ==0) return false;
         ptY += getLineHeight();
-        makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
+        return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
     }
 
     return TRUE;
@@ -1062,7 +1065,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
               pFrame->getBLeft().pt() -
               pFrame->getBRight().pt() - indent - _right);
 
-    // First line ? Draw the couter ?
+    // First line ? Draw the counter ?
     if ( lineStartPos == 0 && parag->getParagLayout()->getCounterType() != KWParagLayout::CT_NONE ) {
         KWFormat counterfm( doc, *this );
         counterfm.apply( parag->getParagLayout()->getFormat() );
@@ -1074,8 +1077,6 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
         left += ptCounterWidth;
     }
 
-
-    //ptPos = 0;
 
     // Calculate the first characters position in screen coordinates
     ptPos = xShift + left;
@@ -1099,7 +1100,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
         if(ptY != newptY) {
             ptY = newptY+2;
             return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
-        } else return TRUE;
+        } else return false;
     }
 
     bool _broken = FALSE;
@@ -1138,28 +1139,52 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
             if ( ptPos + displayFont->getPTWidth( c ) >=
                  xShift + ( pFrame->width() -
                             pFrame->getBLeft().pt() -
-                            pFrame->getBRight().pt() ) - indent - _right && _broken )
-                break;
-        } else if ( c == KWSpecialChar && text[ textPos ].attrib->getClassId() == ID_KWCharImage ) {
+                            pFrame->getBRight().pt() ) - indent - _right ) {
+                if(_broken) // we have a break in the line..
+                    break;
+                else {      // lets break the line here.
+                   lineEndPos=textPos+1;
+                    break;
+                }
+            }
+        } else if ( text[ textPos ].attrib->getClassId() == ID_KWCharImage ) {
             if ( ( ( KWCharImage* )text[ textPos ].attrib )->getImage()->width() + ptPos >=
                  xShift + ( pFrame->width() -
                             pFrame->getBLeft().pt() -
-                            pFrame->getBRight().pt() ) - indent - _right && _broken )
-                break;
-        } else if ( c == KWSpecialChar && text[ textPos ].attrib->getClassId() == ID_KWCharVariable ) {
+                            pFrame->getBRight().pt() ) - indent - _right && _broken ) {
+                if(_broken) // we have a break in the line..
+                    break;
+                else {      // lets break the line here.
+                   lineEndPos=textPos+1;
+                    break;
+                }
+            }
+        } else if ( text[ textPos ].attrib->getClassId() == ID_KWCharVariable ) {
             if ( displayFont->getPTWidth( dynamic_cast<KWCharVariable*>( text[ textPos ].attrib )->getText() ) +
                  ptPos >=
                  xShift + ( pFrame->width() -
                             pFrame->getBLeft().pt() -
-                            pFrame->getBRight().pt() ) - indent - _right && _broken )
-                break;
-        } else if ( c == KWSpecialChar && text[ textPos ].attrib->getClassId() == ID_KWCharFootNote ) {
+                            pFrame->getBRight().pt() ) - indent - _right && _broken ) {
+                if(_broken) // we have a break in the line..
+                    break;
+                else {      // lets break the line here.
+                   lineEndPos=textPos+1;
+                    break;
+                }
+            }
+        } else if ( text[ textPos ].attrib->getClassId() == ID_KWCharFootNote ) {
             if ( displayFont->getPTWidth( dynamic_cast<KWCharFootNote*>( text[ textPos ].attrib )->getText() ) +
                  ptPos >=
                  xShift + ( pFrame->width() -
                             pFrame->getBLeft().pt() -
-                            pFrame->getBRight().pt() ) - indent - _right && _broken )
-                break;
+                            pFrame->getBRight().pt() ) - indent - _right && _broken ) {
+                if(_broken) // we have a break in the line..
+                    break;
+                else {      // lets break the line here.
+                   lineEndPos=textPos+1;
+                    break;
+                }
+            }
         }
 
         // Is it a space character
@@ -1247,7 +1272,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
                 textPos++;
             } break;
             }
-        } else { // An usual character ...
+        } else { // A usual character ...
             // Go right ...
             ptPos += displayFont->getPTWidth( c );
             // Increase the lines width
@@ -1322,7 +1347,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
                     pFrameSet->getGroupManager()->recalcRows();
                 }
 
-                doc->recalcFrames( FALSE, TRUE );
+                doc->recalcFrames( false );
                 doc->updateAllFrames();
                 doc->setNeedRedraw( TRUE );
             } else {
@@ -1342,7 +1367,9 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
             if ( pFrame->getFrameBehaviour() == AutoExtendFrame && !parag->hasHardBreak() ) { // Resize frame
                 int diff = static_cast<int>(( ptY + getLineHeight() ) - ( pFrame->bottom() -
                                                          pFrame->getBBottom().pt() ));
+//kdDebug() << pFrameSet << " ptY: " << ptY << ", resize frame by " << diff << endl;
 
+                //if(diff<0) kdWarning() << "trying to rescale to a negative size!!" << endl;
                 if ( doc->canResize( pFrameSet,
                                           pFrame,
                                           pFrameSet->getPageOfFrame( frame - 1 ), diff + 1 ) ) {
@@ -1354,7 +1381,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
                         pFrameSet->getGroupManager()->recalcRows();
                     }
 
-                    doc->recalcFrames( FALSE, TRUE );
+                    doc->recalcFrames( false );
                     doc->updateAllFrames();
                     doc->setNeedRedraw( TRUE );
                     doc->drawAllBorders( );

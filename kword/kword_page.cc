@@ -135,7 +135,7 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
     currFindLen = 0;
 
     fc->init( fc->getParag(), TRUE );
-    recalcWholeText( FALSE );
+    recalcWholeText( );
     recalcCursor( FALSE, 0, fc );
 
     editMode = EM_NONE;
@@ -1449,16 +1449,16 @@ void KWPage::editDeleteFrame()
 }
 
 /*================================================================*/
-void KWPage::deleteTable( KWGroupManager *g )
+void KWPage::deleteTable( KWGroupManager *groupManager )
 {
-    if ( !g )
+    if ( !groupManager )
         return;
 
     bool blinking = blinkTimer.isActive();
     if ( blinking )
         stopBlinkCursor();
 
-    doc->delGroupManager( g );
+    doc->delGroupManager( groupManager );
     doc->recalcFrames();
     doc->updateAllFrames();
 
@@ -1583,7 +1583,7 @@ void KWPage::recalcText()
 }
 
 /*================================================================*/
-void KWPage::recalcWholeText( bool _cursor, bool )
+void KWPage::recalcWholeText( bool _cursor)
 {
     if ( recalcingText )
         return;
@@ -1597,8 +1597,26 @@ void KWPage::recalcWholeText( bool _cursor, bool )
 
     recalcingText = TRUE;
 
+    // first do all floating frames
+/*
+    for ( int i = doc->getNumFrameSets()-1; i >= 0; i-- ) {
+        if (doc->getFrameSet( i )->getGroupManager()) {
+            KWFormatContext _fc( doc, i + 1 );
+            _fc.init( doc->getFirstParag( i ) );
+
+            bool bend = FALSE;
+
+            while ( !bend ) {
+                bend = !_fc.makeNextLineLayout();
+                if ( doc->getFrameSet( _fc.getFrameSet() - 1 )->getFrame( _fc.getFrame() - 1 )->y() >
+                     static_cast<int>( contentsY() + height() + height() / 2 ) )
+                    bend = TRUE;
+            }
+        }
+    }*/
+    
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
-        if ( doc->getFrameSet( i )->getFrameType() != FT_TEXT || doc->getFrameSet( i )->getNumFrames() == 0 )
+        if ( doc->getFrameSet( i )->getFrameType() != FT_TEXT || doc->getFrameSet( i )->getNumFrames() == 0 || doc->getFrameSet(i)->getGroupManager())
             continue;
         KWFormatContext _fc( doc, i + 1 );
         _fc.init( doc->getFirstParag( i ) );
@@ -1607,7 +1625,7 @@ void KWPage::recalcWholeText( bool _cursor, bool )
 
         while ( !bend ) {
             bend = !_fc.makeNextLineLayout();
-            if ( /*_fast &&*/ doc->getFrameSet( _fc.getFrameSet() - 1 )->getFrame( _fc.getFrame() - 1 )->y() >
+            if ( doc->getFrameSet( _fc.getFrameSet() - 1 )->getFrame( _fc.getFrame() - 1 )->y() >
                  static_cast<int>( contentsY() + height() + height() / 2 ) )
                 bend = TRUE;
         }
@@ -1645,7 +1663,7 @@ void KWPage::recalcWholeText( KWParag *start, unsigned int fs )
     while ( !bend )
         {
             bend = !_fc.makeNextLineLayout();
-            if ( /*_fast &&*/ doc->getFrameSet( _fc.getFrameSet() - 1 )->getFrame( _fc.getFrame() - 1 )->y() >
+            if ( doc->getFrameSet( _fc.getFrameSet() - 1 )->getFrame( _fc.getFrame() - 1 )->y() >
                  static_cast<int>( contentsY() + height() + height() / 2 ) )
                 bend = TRUE;
         }

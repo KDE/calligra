@@ -42,6 +42,7 @@ cleanup:
   doc->getFrame(int) to retrieve the pointer.
   I would suggest using pointers there, and only storing the frame, since the frameset can be 
   retrieved with frame->getFrameSet();
+- groupmanager variable active is used to 'Deactivate' a groupmanager. Deleting would be a better option ;)
 
 The whole images thing needs to be rethought:
 -----------------------------------------

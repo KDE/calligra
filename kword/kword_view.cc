@@ -94,7 +94,7 @@
 KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
     : KoView( _doc, _parent, _name ), format( _doc )
 {
-    m_pKWordDoc = 0L;
+    doc = 0L;
     m_bUnderConstruction = TRUE;
     m_bShowGUI = TRUE;
     gui = 0;
@@ -128,16 +128,16 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
     replaceEntry = 0L;
     searchDia = 0L;
     tableDia = 0L;
-    m_pKWordDoc = _doc;
+    doc = _doc;
     backColor = QBrush( white );
     spc=0;  // default line spacing (Werner)
 
     setInstance( KWordFactory::global() );
     setXMLFile( "kword.rc" );
 
-    QObject::connect( m_pKWordDoc, SIGNAL( sig_insertObject( KWordChild*, KWPartFrameSet* ) ),
+    QObject::connect( doc, SIGNAL( sig_insertObject( KWordChild*, KWPartFrameSet* ) ),
                       this, SLOT( slotInsertObject( KWordChild*, KWPartFrameSet* ) ) );
-    QObject::connect( m_pKWordDoc, SIGNAL( sig_updateChildGeometry( KWordChild* ) ),
+    QObject::connect( doc, SIGNAL( sig_updateChildGeometry( KWordChild* ) ),
                       this, SLOT( slotUpdateChildGeometry( KWordChild* ) ) );
 
 
@@ -184,7 +184,7 @@ void KWordView::initGui()
     ( (KToggleAction*)actionViewTableGrid )->blockSignals( TRUE );
     ( (KToggleAction*)actionViewTableGrid )->setChecked( TRUE );
     ( (KToggleAction*)actionViewTableGrid )->blockSignals( FALSE );
-    setNoteType(m_pKWordDoc->getNoteType(), false);
+    setNoteType(doc->getNoteType(), false);
 
     ( (KColorAction*)actionFormatColor )->blockSignals( TRUE );
     ( (KColorAction*)actionFormatColor )->setColor( Qt::black );
@@ -402,8 +402,8 @@ void KWordView::setupActions()
     connect( ( ( KSelectAction* )actionFormatStyle ), SIGNAL( activated( const QString & ) ),
              this, SLOT( textStyleSelected( const QString & ) ) );
     lst.clear();
-    for ( unsigned int i = 0; i < m_pKWordDoc->paragLayoutList.count(); i++ )
-        lst << m_pKWordDoc->paragLayoutList.at( i )->getName();
+    for ( unsigned int i = 0; i < doc->paragLayoutList.count(); i++ )
+        lst << doc->paragLayoutList.at( i )->getName();
     styleList = lst;
     ( (KSelectAction*)actionFormatStyle )->setItems( lst );
     actionFormatBold = new KToggleAction( i18n( "&Bold" ), "text_bold", CTRL + Key_B,
@@ -614,9 +614,9 @@ void KWordView::setupActions()
 /*====================== construct ==============================*/
 void KWordView::construct()
 {
-    if ( m_pKWordDoc == 0L && !m_bUnderConstruction ) return;
+    if ( doc == 0L && !m_bUnderConstruction ) return;
 
-    assert( m_pKWordDoc != 0L );
+    assert( doc != 0L );
 
     m_bUnderConstruction = false;
 
@@ -632,7 +632,7 @@ void KWordView::createKWordGUI()
     // setup GUI
     setupActions();
 
-    gui = new KWordGUI( this, m_bShowGUI, m_pKWordDoc, this );
+    gui = new KWordGUI( this, m_bShowGUI, doc, this );
     gui->setGeometry( 0, 0, width(), height() );
     gui->show();
 
@@ -641,15 +641,15 @@ void KWordView::createKWordGUI()
     setFormat( format, FALSE );
 
     if ( gui )
-        gui->setDocument( m_pKWordDoc );
+        gui->setDocument( doc );
 
-    format = m_pKWordDoc->getDefaultParagLayout()->getFormat();
+    format = doc->getDefaultParagLayout()->getFormat();
     if ( gui )
         gui->getPaperWidget()->formatChanged( format );
 
     KWFrameSet *frameset;
-    for ( unsigned int i = 0; i < m_pKWordDoc->getNumFrameSets(); i++ ) {
-        frameset = m_pKWordDoc->getFrameSet( i );
+    for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
+        frameset = doc->getFrameSet( i );
         if ( frameset->getFrameType() == FT_PART )
             slotInsertObject( dynamic_cast<KWPartFrameSet*>( frameset )->getChild(),
                               dynamic_cast<KWPartFrameSet*>( frameset ) );
@@ -689,13 +689,13 @@ void KWordView::clipboardDataChanged()
 /*=========================== file print =======================*/
 void KWordView::setupPrinter( QPrinter &prt )
 {
-    prt.setMinMax( 1, m_pKWordDoc->getPages() );
+    prt.setMinMax( 1, doc->getPages() );
     bool makeLandscape = FALSE;
 
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter hf;
-    m_pKWordDoc->getPageLayout( pgLayout, cl, hf );
+    doc->getPageLayout( pgLayout, cl, hf );
 
     switch ( pgLayout.format ) {
     case PG_DIN_A3: prt.setPageSize( QPrinter::A3 );
@@ -745,7 +745,7 @@ void KWordView::print( QPrinter &prt )
     setCursor( waitCursor );
     gui->getPaperWidget()->viewport()->setCursor( waitCursor );
 
-    QList<KWVariable> *vars = m_pKWordDoc->getVariables();
+    QList<KWVariable> *vars = doc->getVariables();
     KWVariable *v = 0;
     bool serialLetter = FALSE;
     for ( v = vars->first(); v; v = vars->next() ) {
@@ -755,8 +755,8 @@ void KWordView::print( QPrinter &prt )
         }
     }
 
-    if ( !m_pKWordDoc->getSerialLetterDataBase() ||
-         m_pKWordDoc->getSerialLetterDataBase()->getNumRecords() == 0 )
+    if ( !doc->getSerialLetterDataBase() ||
+         doc->getSerialLetterDataBase()->getNumRecords() == 0 )
         serialLetter = FALSE;
 
     float left_margin = 0.0;
@@ -765,7 +765,7 @@ void KWordView::print( QPrinter &prt )
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter hf;
-    m_pKWordDoc->getPageLayout( pgLayout, cl, hf );
+    doc->getPageLayout( pgLayout, cl, hf );
 
     if ( pgLayout.format == PG_SCREEN )
     {
@@ -776,18 +776,18 @@ void KWordView::print( QPrinter &prt )
     if ( !serialLetter ) {
         QPainter painter;
         painter.begin( &prt );
-        m_pKWordDoc->print( &painter, &prt, left_margin, top_margin );
+        doc->print( &painter, &prt, left_margin, top_margin );
         painter.end();
     } else {
         QPainter painter;
         painter.begin( &prt );
-        for ( int i = 0;i < m_pKWordDoc->getSerialLetterDataBase()->getNumRecords(); ++i ) {
-            m_pKWordDoc->setSerialLetterRecord( i );
-            m_pKWordDoc->print( &painter, &prt, left_margin, top_margin );
-            if ( i < m_pKWordDoc->getSerialLetterDataBase()->getNumRecords() - 1 )
+        for ( int i = 0;i < doc->getSerialLetterDataBase()->getNumRecords(); ++i ) {
+            doc->setSerialLetterRecord( i );
+            doc->print( &painter, &prt, left_margin, top_margin );
+            if ( i < doc->getSerialLetterDataBase()->getNumRecords() - 1 )
                 prt.newPage();
         }
-        m_pKWordDoc->setSerialLetterRecord( -1 );
+        doc->setSerialLetterRecord( -1 );
         painter.end();
     }
 
@@ -1075,18 +1075,18 @@ void KWordView::updateStyle( QString _styleName, bool _updateFormat )
     ( (KToggleAction*)actionFormatUnsortList )->setChecked( _styleName == "Bullet List" );
     ( (KToggleAction*)actionFormatUnsortList )->blockSignals( FALSE );
 
-    setFormat( m_pKWordDoc->findParagLayout( _styleName )->getFormat(), FALSE, _updateFormat, FALSE );
+    setFormat( doc->findParagLayout( _styleName )->getFormat(), FALSE, _updateFormat, FALSE );
 
     if ( gui )
-        gui->getHorzRuler()->setTabList( m_pKWordDoc->findParagLayout( _styleName )->getTabList() );
+        gui->getHorzRuler()->setTabList( doc->findParagLayout( _styleName )->getTabList() );
 }
 
 /*===============================================================*/
 void KWordView::updateStyleList()
 {
     styleList.clear();
-    for ( unsigned int i = 0; i < m_pKWordDoc->paragLayoutList.count(); i++ ) {
-        styleList.append( m_pKWordDoc->paragLayoutList.at( i )->getName() );
+    for ( unsigned int i = 0; i < doc->paragLayoutList.count(); i++ ) {
+        styleList.append( doc->paragLayoutList.at( i )->getName() );
     }
     ( (KSelectAction*)actionFormatStyle )->setItems( styleList );
     updateStyle( gui->getPaperWidget()->getParagLayout()->getName() );
@@ -1095,7 +1095,7 @@ void KWordView::updateStyleList()
 /*===============================================================*/
 void KWordView::editUndo()
 {
-    m_pKWordDoc->undo();
+    doc->undo();
     gui->getPaperWidget()->recalcWholeText( TRUE );
     if ( gui->getPaperWidget()->formulaIsActive() )
         gui->getPaperWidget()->insertFormulaChar( UNDO_CHAR );
@@ -1104,7 +1104,7 @@ void KWordView::editUndo()
 /*===============================================================*/
 void KWordView::editRedo()
 {
-    m_pKWordDoc->redo();
+    doc->redo();
     gui->getPaperWidget()->recalcWholeText( TRUE );
     if ( gui->getPaperWidget()->formulaIsActive() )
         gui->getPaperWidget()->insertFormulaChar( REDO_CHAR );
@@ -1158,7 +1158,7 @@ void KWordView::editFind()
 {
     if ( searchDia ) return;
 
-    searchDia = new KWSearchDia( this, "", m_pKWordDoc, gui->getPaperWidget(), this, searchEntry, replaceEntry, fontList );
+    searchDia = new KWSearchDia( this, "", doc, gui->getPaperWidget(), this, searchEntry, replaceEntry, fontList );
     searchDia->setCaption( i18n( "Search & Replace" ) );
     connect( searchDia, SIGNAL( closeClicked() ), this, SLOT( searchDiaClosed() ) );
     searchDia->show();
@@ -1179,7 +1179,7 @@ void KWordView::editReconnectFrame()
 /*===============================================================*/
 void KWordView::editCustomVars()
 {
-    KWVariableValueDia *dia = new KWVariableValueDia( this, m_pKWordDoc->getVariables() );
+    KWVariableValueDia *dia = new KWVariableValueDia( this, doc->getVariables() );
     dia->exec();
     gui->getPaperWidget()->recalcWholeText();
     gui->getPaperWidget()->repaintScreen( FALSE );
@@ -1189,7 +1189,7 @@ void KWordView::editCustomVars()
 /*===============================================================*/
 void KWordView::editSerialLetterDataBase()
 {
-    KWSerialLetterEditor *dia = new KWSerialLetterEditor( this, m_pKWordDoc->getSerialLetterDataBase() );
+    KWSerialLetterEditor *dia = new KWSerialLetterEditor( this, doc->getSerialLetterDataBase() );
     dia->exec();
     gui->getPaperWidget()->recalcWholeText();
     gui->getPaperWidget()->repaintScreen( FALSE );
@@ -1220,23 +1220,23 @@ void KWordView::viewTableGrid()
 /*===============================================================*/
 void KWordView::viewHeader()
 {
-    m_pKWordDoc->setHeader( ( (KToggleAction*)actionViewHeader )->isChecked() );
+    doc->setHeader( ( (KToggleAction*)actionViewHeader )->isChecked() );
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter hf;
-    m_pKWordDoc->getPageLayout( pgLayout, cl, hf );
-    m_pKWordDoc->setPageLayout( pgLayout, cl, hf );
+    doc->getPageLayout( pgLayout, cl, hf );
+    doc->setPageLayout( pgLayout, cl, hf );
 }
 
 /*===============================================================*/
 void KWordView::viewFooter()
 {
-    m_pKWordDoc->setFooter( ( (KToggleAction*)actionViewFooter )->isChecked() );
+    doc->setFooter( ( (KToggleAction*)actionViewFooter )->isChecked() );
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter hf;
-    m_pKWordDoc->getPageLayout( pgLayout, cl, hf );
-    m_pKWordDoc->setPageLayout( pgLayout, cl, hf );
+    doc->getPageLayout( pgLayout, cl, hf );
+    doc->setPageLayout( pgLayout, cl, hf );
 }
 
 /*===============================================================*/
@@ -1258,7 +1258,7 @@ void KWordView::viewEndNotes()
 void KWordView::setNoteType( KWFootNoteManager::NoteType nt, bool change)
 {
     if (change)
-        m_pKWordDoc->setNoteType( nt );
+        doc->setNoteType( nt );
     switch (nt)
     {
       case KWFootNoteManager::FootNotes:
@@ -1283,15 +1283,15 @@ void KWordView::viewZoom( const QString &s )
     z = z.replace( QRegExp( "%" ), "" );
     z = z.simplifyWhiteSpace();
     int zoom = z.toInt();
-    int oldZoom = m_pKWordDoc->getZoom();
-    if ( zoom != m_pKWordDoc->getZoom() ) {
+    int oldZoom = doc->getZoom();
+    if ( zoom != doc->getZoom() ) {
         KoPageLayout pgLayout;
         KoColumns cl;
         KoKWHeaderFooter hf;
-        m_pKWordDoc->setZoom( 100 );
-        m_pKWordDoc->getPageLayout( pgLayout, cl, hf );
-        m_pKWordDoc->setZoom( zoom );
-        m_pKWordDoc->updateFrameSizes( oldZoom );
+        doc->setZoom( 100 );
+        doc->getPageLayout( pgLayout, cl, hf );
+        doc->setZoom( zoom );
+        doc->updateFrameSizes( oldZoom );
         newPageLayout( pgLayout );
         gui->getVertRuler()->setZoom(static_cast<double>(zoom)/100.0);
         gui->getHorzRuler()->setZoom(static_cast<double>(zoom)/100.0);
@@ -1331,7 +1331,7 @@ void KWordView::insertPicture()
 
     file = url.path();
 #endif
-    if ( !file.isEmpty() ) m_pKWordDoc->insertPicture( file, gui->getPaperWidget() );
+    if ( !file.isEmpty() ) doc->insertPicture( file, gui->getPaperWidget() );
 }
 
 /*===============================================================*/
@@ -1404,7 +1404,7 @@ void KWordView::insertVariableSerialLetter()
 /*===============================================================*/
 void KWordView::insertFootNoteEndNote()
 {
-    int start = m_pKWordDoc->getFootNoteManager().findStart( gui->getPaperWidget()->getCursor() );
+    int start = doc->getFootNoteManager().findStart( gui->getPaperWidget()->getCursor() );
 
     if ( start == -1 )
     {
@@ -1413,8 +1413,8 @@ void KWordView::insertFootNoteEndNote()
                                   "endnotes into the first frameset."),
                             i18n("Insert Footnote/Endnote"));
     } else {
-        KWFootNoteDia dia( 0L, "", m_pKWordDoc, gui->getPaperWidget(), start,
-                 m_pKWordDoc->getNoteType() == KWFootNoteManager::FootNotes );
+        KWFootNoteDia dia( 0L, "", doc, gui->getPaperWidget(), start,
+                 doc->getNoteType() == KWFootNoteManager::FootNotes );
         dia.show();
     }
 }
@@ -1422,7 +1422,7 @@ void KWordView::insertFootNoteEndNote()
 /*===============================================================*/
 void KWordView::insertContents()
 {
-    m_pKWordDoc->createContents();
+    doc->createContents();
     gui->getPaperWidget()->recalcWholeText();
     gui->getPaperWidget()->repaintScreen( FALSE );
 }
@@ -1434,7 +1434,7 @@ void KWordView::formatFont()
 
     if ( KFontDialog::getFont( tmpFont ) ) {
         tbFont = tmpFont;
-        format.setUserFont( m_pKWordDoc->findUserFont( tbFont.family() ) );
+        format.setUserFont( doc->findUserFont( tbFont.family() ) );
         format.setPTFontSize( tbFont.pointSize() );
         format.setWeight( tbFont.weight() );
         format.setItalic( tbFont.italic() );
@@ -1466,7 +1466,7 @@ void KWordView::formatParagraph()
 {
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_SPACING | KWParagDia::PD_FLOW |
                                KWParagDia::PD_BORDERS |
-                               KWParagDia::PD_NUMBERING | KWParagDia::PD_TABS, m_pKWordDoc );
+                               KWParagDia::PD_NUMBERING | KWParagDia::PD_TABS, doc );
     paragDia->setCaption( i18n( "Paragraph settings" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->setLeftIndent( gui->getPaperWidget()->getLeftIndent() );
@@ -1492,17 +1492,17 @@ void KWordView::formatPage()
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter kwhf;
-    m_pKWordDoc->getPageLayout( pgLayout, cl, kwhf );
+    doc->getPageLayout( pgLayout, cl, kwhf );
 
     KoHeadFoot hf;
     int flags = FORMAT_AND_BORDERS | KW_HEADER_AND_FOOTER | DISABLE_UNIT;
-    if ( m_pKWordDoc->getProcessingType() == KWordDocument::WP )
+    if ( doc->getProcessingType() == KWordDocument::WP )
         flags = flags | COLUMNS;
     else
         flags = flags | DISABLE_BORDERS;
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags ) ) {
-        m_pKWordDoc->setPageLayout( pgLayout, cl, kwhf );
+        doc->setPageLayout( pgLayout, cl, kwhf );
         gui->getVertRuler()->setPageLayout( pgLayout );
         gui->getHorzRuler()->setPageLayout( pgLayout );
         gui->getPaperWidget()->frameSizeChanged( pgLayout );
@@ -1512,7 +1512,7 @@ void KWordView::formatPage()
 /*===============================================================*/
 void KWordView::formatFrameSet()
 {
-    if ( m_pKWordDoc->getFirstSelectedFrame() )
+    if ( doc->getFirstSelectedFrame() )
     {
         gui->getPaperWidget()->femProps();
     } else {
@@ -1542,19 +1542,20 @@ void KWordView::extraSpelling()
 /*===============================================================*/
 void KWordView::extraAutoFormat()
 {
-    KWAutoFormatDia dia( this, "", m_pKWordDoc, gui->getPaperWidget() );
+    KWAutoFormatDia dia( this, "", doc, gui->getPaperWidget() );
     dia.show();
 }
 
 /*===============================================================*/
 void KWordView::extraStylist()
 {
+    doc->setSelection(false);
     if ( styleManager ) {
         styleManager->close();
         delete styleManager;
         styleManager = 0;
     }
-    styleManager = new KWStyleManager( this, m_pKWordDoc, fontList );
+    styleManager = new KWStyleManager( this, doc, fontList );
     connect( styleManager, SIGNAL( okClicked() ), this, SLOT( styleManagerOk() ) );
     styleManager->setCaption( i18n( "Stylist" ) );
     styleManager->show();
@@ -1567,7 +1568,7 @@ void KWordView::extraCreateTemplate()
     pix.fill( Qt::white );
 
     QString file = "/tmp/kwt.kwt";
-    m_pKWordDoc->saveNativeFormat( file );
+    doc->saveNativeFormat( file );
 
     KoTemplateCreateDia::createTemplate( "kword_template", KWordFactory::global(),
                                          file, pix, this );
@@ -1669,7 +1670,7 @@ void KWordView::toolsTable()
         tableDia = 0L;
     }
 
-    tableDia = new KWTableDia( this, "", gui->getPaperWidget(), m_pKWordDoc,
+    tableDia = new KWTableDia( this, "", gui->getPaperWidget(), doc,
                                gui->getPaperWidget()->tableRows(),
                                gui->getPaperWidget()->tableCols(),
                                gui->getPaperWidget()->tableWidthMode(),
@@ -1731,7 +1732,7 @@ void KWordView::tableInsertRow()
                                   "before inserting a new row." ),
                             i18n( "Insert Row" ) );
     } else {
-        KWInsertDia dia( this, "", grpMgr, m_pKWordDoc, KWInsertDia::ROW, gui->getPaperWidget() );
+        KWInsertDia dia( this, "", grpMgr, doc, KWInsertDia::ROW, gui->getPaperWidget() );
         dia.setCaption( i18n( "Insert Row" ) );
         dia.show();
     }
@@ -1750,7 +1751,7 @@ void KWordView::tableInsertCol()
                                   "before inserting a new column." ),
                             i18n( "Insert Column" ) );
     } else {
-        if ( grpMgr->getBoundingRect().right() + 62 > static_cast<int>( m_pKWordDoc->getPTPaperWidth() ) )
+        if ( grpMgr->getBoundingRect().right() + 62 > static_cast<int>( doc->getPTPaperWidth() ) )
         {
             KMessageBox::sorry( this,
                             i18n( "There is not enough space at the right of the table\n"
@@ -1759,7 +1760,7 @@ void KWordView::tableInsertCol()
         }
         else
         {
-            KWInsertDia dia( this, "", grpMgr, m_pKWordDoc, KWInsertDia::COL, gui->getPaperWidget() );
+            KWInsertDia dia( this, "", grpMgr, doc, KWInsertDia::COL, gui->getPaperWidget() );
             dia.setCaption( i18n( "Insert Column" ) );
             dia.show();
         }
@@ -1793,7 +1794,7 @@ void KWordView::tableDeleteRow()
                 gui->getPaperWidget()->deleteTable( grpMgr );
             }
         } else {
-            KWDeleteDia dia( this, "", grpMgr, m_pKWordDoc, KWDeleteDia::ROW, gui->getPaperWidget() );
+            KWDeleteDia dia( this, "", grpMgr, doc, KWDeleteDia::ROW, gui->getPaperWidget() );
             dia.setCaption( i18n( "Delete Row" ) );
             dia.show();
         }
@@ -1827,7 +1828,7 @@ void KWordView::tableDeleteCol()
                 gui->getPaperWidget()->deleteTable( grpMgr );
             }
         } else {
-            KWDeleteDia dia( this, "", grpMgr, m_pKWordDoc, KWDeleteDia::COL, gui->getPaperWidget() );
+            KWDeleteDia dia( this, "", grpMgr, doc, KWDeleteDia::COL, gui->getPaperWidget() );
             dia.setCaption( i18n( "Delete Column" ) );
             dia.show();
         }
@@ -1870,7 +1871,7 @@ void KWordView::tableSplitCells()
 {
     gui->getPaperWidget()->mmEditFrame();
 
-    QList <KWFrame> selectedFrames = m_pKWordDoc->getSelectedFrames();
+    QList <KWFrame> selectedFrames = doc->getSelectedFrames();
     KWGroupManager *grpMgr = gui->getPaperWidget()->getCurrentTable();
     if ( !grpMgr && selectedFrames.count() > 0) {
         grpMgr=selectedFrames.at(0)->getFrameSet()->getGroupManager();
@@ -1879,6 +1880,7 @@ void KWordView::tableSplitCells()
     if(selectedFrames.count() >1 || grpMgr == 0) {
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
+                            //i18n( "You have to select one table cell\n"
                                   "before splitting cells." ),
                             i18n( "Split Cells" ) );
         return;
@@ -1890,6 +1892,7 @@ void KWordView::tableSplitCells()
     if ( !grpMgr->splitCell(rows,cols) ) {
         KMessageBox::sorry( this,
                             i18n("You have to select a joined cell."),
+                            //i18n("There is not enough space to split the cell into that many parts"),
                             i18n("Split Cells") );
     }
     painter.end();
@@ -1926,7 +1929,7 @@ void KWordView::tableUngroupTable()
                        r.y() - gui->getPaperWidget()->contentsY(),
                        r.width(), r.height() );
             gui->getPaperWidget()->repaintScreen( r, TRUE );
-            m_pKWordDoc->delGroupManager(grpMgr);
+            doc->delGroupManager(grpMgr);
         }
     }
 }
@@ -1954,7 +1957,7 @@ void KWordView::textStyleSelected( const QString &_style )
     QString style = _style;
     if ( gui )
         gui->getPaperWidget()->applyStyle( style );
-    format = m_pKWordDoc->findParagLayout( style )->getFormat();
+    format = doc->findParagLayout( style )->getFormat();
     if ( gui ) {
         gui->getPaperWidget()->formatChanged( format, FALSE );
         gui->getPaperWidget()->setFocus();
@@ -1979,7 +1982,7 @@ void KWordView::textFontSelected( const QString &_font )
 {
     QString font = _font;
     tbFont.setFamily( font );
-    format.setUserFont( m_pKWordDoc->findUserFont( font ) );
+    format.setUserFont( doc->findUserFont( font ) );
     if ( gui ) {
         gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::FontFamily );
         gui->getPaperWidget()->setFocus();
@@ -2468,7 +2471,7 @@ void KWordView::paragDiaOk()
     gui->getPaperWidget()->setSpaceAfterParag( paragDia->getSpaceAfterParag() );
     gui->getPaperWidget()->setLineSpacing( paragDia->getLineSpacing() );
 
-    switch ( KWUnit::unitType( m_pKWordDoc->getUnit() ) )
+    switch ( KWUnit::unitType( doc->getUnit() ) )
     {
     case U_MM:
     {
@@ -2500,7 +2503,7 @@ void KWordView::paragDiaOk()
 /*================================================================*/
 void KWordView::styleManagerOk()
 {
-    m_pKWordDoc->updateAllStyles();
+    doc->updateAllStyles();
 }
 
 /*================================================================*/
@@ -2509,9 +2512,9 @@ void KWordView::newPageLayout( KoPageLayout _layout )
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter hf;
-    m_pKWordDoc->getPageLayout( pgLayout, cl, hf );
+    doc->getPageLayout( pgLayout, cl, hf );
 
-    m_pKWordDoc->setPageLayout( _layout, cl, hf );
+    doc->setPageLayout( _layout, cl, hf );
     gui->getHorzRuler()->setPageLayout( _layout );
     gui->getVertRuler()->setPageLayout( _layout );
 
@@ -2525,8 +2528,8 @@ void KWordView::spellCheckerReady()
     // #### currently only the first available textframeset is checked!!!
 
     currParag = 0;
-    for ( unsigned int i = 0; i < m_pKWordDoc->getNumFrameSets(); i++ ) {
-        KWFrameSet *frameset = m_pKWordDoc->getFrameSet( i );
+    for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
+        KWFrameSet *frameset = doc->getFrameSet( i );
         if ( frameset->getFrameType() != FT_TEXT )
             continue;
         currFrameSetNum = i;
@@ -2567,7 +2570,7 @@ void KWordView::spellCheckerCorrected( QString old, QString corr, unsigned )
         text = currParag->getKWString()->toString();
         int pos = text.find( old, lastTextPos );
         if ( pos != -1 ) {
-            KWFormat f( m_pKWordDoc );
+            KWFormat f( doc );
             f = *( ( (KWCharFormat*)currParag->getKWString()->data()[ pos ].attrib )->getFormat() );
             currParag->getKWString()->remove( pos, old.length() );
             currParag->insertText( pos, corr );
@@ -2854,7 +2857,6 @@ void KWordView::canvasAddChild( KoViewChild *child )
 
 /*===============================================================*/
 void KWordView::printDebug() {
-    KWordDocument *doc = m_pKWordDoc ;
     kdDebug() << "----------------------------------------"<<endl;
     kdDebug() << "                 Debug info"<<endl;
     kdDebug() << "Document:" << doc <<endl;

@@ -176,7 +176,7 @@ public:
     void deleteTable( KWGroupManager *g );
 
     void recalcText();
-    void recalcWholeText( bool _cursor = false, bool _fast = false );
+    void recalcWholeText( bool _cursor = false);
     void recalcWholeText( KWParag *start, unsigned int fs );
     void footerHeaderDisappeared();
     void drawBorders( QPainter &_painter, QRect v_area, bool drawBack = true, QRegion *region = 0 );

@@ -611,6 +611,9 @@ public:
     // and wrong values will be detected (and corrected)
     void validate();
 
+    // Prerender the whole table to resize the table cells so all text will fitt.
+    void preRender();
+
     QString anchorType();
     QString anchorInstance();
 
@@ -621,6 +624,7 @@ protected:
     QString name;
     bool showHeaderOnAllPages, hasTmpHeaders;
     bool active;
+    bool isRendered;
 };
 
 bool isAHeader( FrameInfo fi );

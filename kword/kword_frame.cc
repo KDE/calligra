@@ -503,10 +503,11 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
     if ( _num == -1 )
         return;
 
-    KWFrame *f;
+    //KWFrame *f;
 
     // This check is totally irrelevant since we allready check
     // for duplicate occurences on addFrame (TZ)
+/*
     bool del = true;
     int i = 0;
     for ( f = frames.first(); f != 0; f = frames.next(), i++ ) {
@@ -514,10 +515,11 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
             del = false;
             break;
         }
-    }
+    } */
 
     frm->setFrameSet(0L);
-    if ( !del || !remove )
+    if ( !remove )
+    //if ( !del || !remove )
         frames.take( _num );
     else
         frames.remove( _num );
@@ -2130,6 +2132,7 @@ KWGroupManager::KWGroupManager( KWordDocument *_doc ) :
     rows = 0;
     cols = 0;
     name = QString::null;
+    isRendered=false;
 }
 
 /*================================================================*/
@@ -2143,6 +2146,7 @@ KWGroupManager::KWGroupManager( const KWGroupManager &original ) :
     rows = original.rows;
     cols = original.cols;
     name = original.name;
+    isRendered=original.isRendered;
 
     // copy all cells
     cells.setAutoDelete( true );
@@ -2186,10 +2190,10 @@ void KWGroupManager::addFrameSet( KWFrameSet *fs, unsigned int row, unsigned int
 
     // If the group is anchored, we must adjust the incoming frameset.
     if ( anchored ) {
-        KWFrame *topLeftFrame = fs->getFrame( 0 );
+        KWFrame *newFrame = fs->getFrame( 0 );
 
-        if (topLeftFrame)
-            topLeftFrame->moveBy( origin.x(), origin.y() );
+        if (newFrame)
+            newFrame->moveBy( origin.x(), origin.y() );
     }
 
     Cell *cell = new Cell;
@@ -2625,10 +2629,13 @@ void KWGroupManager::moveBy( int dx, int dy )
 {
     dx = 0; // Ignore the x-offset.
     if(dy==0) return;
-    for ( unsigned int i = 0; i < cells.count(); i++ )
+    for ( unsigned int i = 0; i < cells.count(); i++ ) {
         cells.at( i )->frameSet->getFrame( 0 )->moveBy( dx, dy );
-
+        cells.at( i )->frameSet->setVisible(true);
+    }
+    preRender();
     doc->updateAllFrames();
+
     recalcRows();
     recalcCols();
 }
@@ -2655,8 +2662,6 @@ void KWGroupManager::deselectAll()
 /*================================================================*/
 /* the selectUntil method will select all frames from the first 
    selected to the frame of the argument frameset.
-   The page argument is the page where the resize handles will be
-    drawn/erased.
 */
 void KWGroupManager::selectUntil( KWFrameSet *fs) {
     unsigned int toRow = 0, toCol = 0;
@@ -2781,10 +2786,10 @@ void KWGroupManager::insertRow( unsigned int _idx, bool _recalc, bool isAHeader 
         // If the group is anchored, we must avoid double-application of
         // the anchor offset.
         if ( anchored ) {
-            KWFrame *topLeftFrame = _frameSet->getFrame( 0 );
+            KWFrame *newFrame = _frameSet->getFrame( 0 );
 
-            if (topLeftFrame)
-                topLeftFrame->moveBy( -origin.x(), -origin.y() );
+            if (newFrame)
+                newFrame->moveBy( -origin.x(), -origin.y() );
         }
         addFrameSet( _frameSet, _idx, i );
 
@@ -2855,10 +2860,7 @@ void KWGroupManager::insertCol( unsigned int _idx )
         // If the group is anchored, we must avoid double-application of
         // the anchor offset.
         if ( anchored ) {
-            KWFrame *topLeftFrame = _frameSet->getFrame( 0 );
-
-            if (topLeftFrame)
-                topLeftFrame->moveBy( -origin.x(), -origin.y() );
+            frame->moveBy( -origin.x(), -origin.y() );
         }
         addFrameSet( _frameSet, i, _idx );
 
@@ -3138,10 +3140,10 @@ bool KWGroupManager::splitCell(unsigned int intoRows, unsigned int intoCols)
             frame->setNewFrameBehaviour(NoFollowup);
             lastFrameSet->addFrame( frame );
             if ( anchored ) { // is this needed?
-                KWFrame *topLeftFrame = lastFrameSet->getFrame( 0 );
+                KWFrame *aFrame = lastFrameSet->getFrame( 0 );
      
-                if (topLeftFrame)
-                    topLeftFrame->moveBy( -origin.x(), -origin.y() );
+                if (aFrame)
+                    aFrame->moveBy( -origin.x(), -origin.y() );
             } 
             doc->addFrameSet(lastFrameSet);
 
@@ -3189,15 +3191,32 @@ QString KWGroupManager::anchorInstance()
 /*================================================================*/
 void KWGroupManager::viewFormatting( QPainter &painter, int )
 {
-    KWFrame *topLeftFrame;
+    KWFrame *frame;
 
     // If we have been populated, then draw a line from the origin to the
     // top left corner.
     if ( cells.count() > 0 )
     {
-        topLeftFrame = cells.at( 0 )->frameSet->getFrame( 0 );
-        painter.drawLine( origin.x(), origin.y(), topLeftFrame->x(), topLeftFrame->y());
+        frame = cells.at( 0 )->frameSet->getFrame( 0 );
+        painter.drawLine( origin.x(), origin.y(), frame->x(), frame->y());
     }
+}
+
+/*================================================================*/
+void KWGroupManager::preRender() {
+    for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
+        if ( doc->getFrameSet( i )->getGroupManager() == this) {
+            KWFormatContext fc( doc, i + 1 );
+            fc.init( doc->getFirstParag( i ) );
+    
+            // and render
+            if(!isRendered) {
+                while ( fc.makeNextLineLayout());
+                recalcRows();
+            }
+        }
+    }
+    isRendered=true;
 }
 
 /*================================================================*/
@@ -3210,10 +3229,10 @@ void KWGroupManager::validate()
         KWFrame *frame = getCell(j)->frameSet->getFrame(0);
         if(frame->getFrameBehaviour()==AutoCreateNewFrame) {
             frame->setFrameBehaviour(AutoExtendFrame);
-            kdDebug() << "Table cell property frameBehaviour was incorrect; fixed" << endl;
+            kdWarning() << "Table cell property frameBehaviour was incorrect; fixed" << endl;
         }
         if(frame->getNewFrameBehaviour()!=NoFollowup) {
-            kdDebug() << "Table cell property newFrameBehaviour was incorrect; fixed" << endl;
+            kdWarning() << "Table cell property newFrameBehaviour was incorrect; fixed" << endl;
             frame->setNewFrameBehaviour(NoFollowup);
         }
     }
@@ -3229,14 +3248,14 @@ void KWGroupManager::validate()
                         cells.at( i )->row+cells.at( i )->rows > row &&
                         cells.at( i )->col+cells.at( i )->cols > col ) {
                     if(found==true) {
-                        kdDebug() << "Found duplicate cell, (" << cells.at(i)->row << ", " << cells.at(i)->col << ") moving one out of the way" << endl;
+                        kdWarning() << "Found duplicate cell, (" << cells.at(i)->row << ", " << cells.at(i)->col << ") moving one out of the way" << endl;
                         misplacedCells.append(cells.take(i--));
                     }
                     found=true;
                 }
             }
             if(! found) { 
-                kdDebug() << "Missing cell, creating a new one; ("<< row << "," << col<<")" << endl;
+                kdWarning() << "Missing cell, creating a new one; ("<< row << "," << col<<")" << endl;
                 Cell *cell = new Cell;
                 KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
                 _frameSet->setName(QString("Auto added cell"));
@@ -3258,16 +3277,16 @@ void KWGroupManager::validate()
                 if(y== -1) y=0;
                 if(width== -1) width=minFrameWidth;
                 if(height== -1) height=minFrameHeight;
-                kdDebug() << " x: " << x << ", y:" << y << ", width: " << width << ", height: " << height << endl;
+                kdWarning() << " x: " << x << ", y:" << y << ", width: " << width << ", height: " << height << endl;
                 KWFrame *frame = new KWFrame(_frameSet, x, y, width, height );
                 frame->setFrameBehaviour(AutoExtendFrame);
                 frame->setNewFrameBehaviour(NoFollowup);
                 _frameSet->addFrame( frame );
                 if ( anchored ) {
-                    KWFrame *topLeftFrame = _frameSet->getFrame( 0 );
+                    KWFrame *newFrame = _frameSet->getFrame( 0 );
          
-                    if (topLeftFrame)
-                        topLeftFrame->moveBy( -origin.x(), -origin.y() );
+                    if (newFrame)
+                        newFrame->moveBy( -origin.x(), -origin.y() );
                 }
                 doc->addFrameSet(_frameSet);
 

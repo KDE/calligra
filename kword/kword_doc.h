@@ -193,7 +193,7 @@ public:
     void setUnitToAll();
     void updateAllCursors();
     void drawAllBorders( bool back = true);
-    void recalcWholeText( bool _cursor = false, bool _fast = false );
+    void recalcWholeText( bool _cursor = false);
     void recalcWholeText( KWParag *start, unsigned int fs );
 
     int getPages() { return pages; }
@@ -291,7 +291,7 @@ public:
     void setHeader( bool h );
     void setFooter( bool f );
 
-    void recalcFrames( bool _cursor = false, bool _fast = false );
+    void recalcFrames( bool _cursor = false );
 
     KoHFType getHeaderType() { return pageHeaderFooter.header; }
     KoHFType getFooterType() { return pageHeaderFooter.footer; }
