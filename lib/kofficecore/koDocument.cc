@@ -371,11 +371,7 @@ bool KoDocument::saveFile()
 
     if ( backupFile() ) {
         KIO::UDSEntry entry;
-#if KDE_IS_VERSION(3,1,90)
         if ( KIO::NetAccess::stat( url(), entry, shells().current() ) ) { // this file exists => backup
-#else
-        if ( KIO::NetAccess::stat( url(), entry ) ) { // this file exists => backup
-#endif
             emit sigStatusBarMessage( i18n("Making backup...") );
             KURL backup;
             if ( d->m_backupPath.isEmpty())
@@ -385,15 +381,7 @@ bool KoDocument::saveFile()
             backup.setPath( backup.path() + QString::fromLatin1("~") );
             KFileItem item( entry, url() );
             Q_ASSERT( item.name() == url().fileName() );
-#if KDE_IS_VERSION(3,1,90)
             KIO::NetAccess::file_copy( url(), backup, item.permissions(), true /*overwrite*/, false /*resume*/, shells().current() );
-#else
-            KIO::NetAccess::del( backup ); // Copy does not remove existing destination file
-            KIO::NetAccess::copy( url(), backup );
-            // Not network transparent.
-            if ( backup.isLocalFile() )
-                ::chmod( QFile::encodeName( backup.path() ), item.permissions() );
-#endif
         }
     }
 
@@ -941,7 +929,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
     KoStore* store = KoStore::createStore( file, KoStore::Write, mimeType, backend );
     if ( store->bad() )
     {
-        d->lastErrorMessage = i18n( "Couldn't open the file for saving" ); // more details needed?
+        d->lastErrorMessage = i18n( "Could not create the file for saving" ); // more details needed?
         delete store;
         return false;
     }
@@ -996,6 +984,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
         if ( store->open( "Thumbnails/thumbnail.png" ) )
         {
             if ( !saveOasisPreview( store ) || !store->close() ) {
+                d->lastErrorMessage = i18n( "Error while trying to write '%1'. Partition full?" ).arg( "Thumbnails/thumbnail.png" );
                 delete store;
                 return false;
             }
@@ -1017,9 +1006,16 @@ bool KoDocument::saveNativeFormat( const QString & file )
         {
             Q_LONG ret = store->write( manifestData );
             if ( ret != (Q_LONG)manifestData.size() || !store->close() ) {
+                d->lastErrorMessage = i18n( "Error while trying to write '%1'. Partition full?" ).arg( "META-INF/manifest.xml" );
                 delete store;
                 return false;
             }
+        }
+        else
+        {
+            d->lastErrorMessage = i18n( "Not able to write '%1'. Partition full?" ).arg( "META-INF/manifest.xml" );
+            delete store;
+            return false;
         }
         delete store;
     }
@@ -1054,6 +1050,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
 
         if ( store->open( "preview.png" ) )
         {
+            // ### TODO: missing error checking (The partition could be full!)
             savePreview( store );
             (void)store->close();
         }
@@ -1177,9 +1174,10 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
 
 bool KoDocument::saveOasisPreview( KoStore* store )
 {
-    QPixmap pix = generatePreview( QSize( 128, 128 ) );
-    QImage preview ( pix.convertToImage().convertDepth( 32 ) );
-    // ### TODO: alpha channel OASIS 16.6 and freedesktop.org Thumbnail specification
+    const QPixmap pix = generatePreview( QSize( 128, 128 ) );
+    // ### TODO: test if this really works!
+    const QImage preview ( pix.convertToImage().convertDepth( 32, Qt::ColorOnly | Qt::ThresholdAlphaDither ) );
+    // ### TODO: freedesktop.org Thumbnail specification (date...)
     KoStoreDevice io ( store );
     if ( !io.open( IO_WriteOnly ) )
         return false;
@@ -1250,6 +1248,7 @@ QPixmap KoDocument::generatePreview( const QSize& size )
     paintEverything(p, rc, false);
     p.end();
 
+    // ### TODO: why reconvert it to a QPixmap, when mostly it will be re-cobverted back to a QIMage in the calling function
     pix.convertFromImage(pix.convertToImage().smoothScale(previewWidth, previewHeight));
 
     return pix;
@@ -1363,6 +1362,7 @@ bool KoDocument::openURL( const KURL & _url )
                     autosaveOpened = true;
                     break;
                 case KMessageBox::No :
+                    // ### TODO (JJ:) use QFile::remove instead of ::unlink
                     unlink( QFile::encodeName( asf ) );
                     break;
                 default: // Cancel
@@ -1467,7 +1467,7 @@ bool KoDocument::openFile()
             if ( status != KoFilter::UserCancelled &&
                  status != KoFilter::BadConversionGraph &&
                  d->m_autoErrorHandlingEnabled )
-                // Any way of passing a better error message from the filter?
+                // ### TODO Any way of passing a better error message from the filter?
                 KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ) ) );
 
             return false;
@@ -1543,7 +1543,7 @@ bool KoDocument::openFile()
     return ok;
 }
 
-// shared between openFile and komainwindow's "create new empty document" code
+// shared between openFile and koMainWindow's "create new empty document" code
 void KoDocument::setMimeTypeAfterLoading( const QString& mimeType )
 {
     d->mimeType = mimeType.latin1();
@@ -1636,6 +1636,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
             d->lastErrorMessage = i18n( "Couldn't read the beginning of the file." );
             return false;
         }
+        // ### TODO: allow UTF-16
         isRawXML = (strncasecmp( buf, "<?xm", 4 ) == 0);
         //kdDebug(30003) << "PATTERN=" << buf << endl;
     }
