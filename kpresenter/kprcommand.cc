@@ -433,7 +433,7 @@ void DeleteCmd::execute()
     QPtrList<KPObject> list (m_page->objectList());
     for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-	oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect(doc->zoomHandler()));
+	oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect());
 	if ( list.findRef( objects.at( i ) ) != -1 )
 	{
             m_page->takeObject(objects.at(i));
@@ -585,7 +585,7 @@ void GroupObjCmd::execute()
         it.current()->setSelected( false );
         m_page->takeObject(it.current() );
         it.current()->removeFromObjList();
-        r |= it.current()->getBoundingRect( doc->zoomHandler() );
+        r |= it.current()->getBoundingRect();
 
         if ( it.current()->getType() == OT_GROUP ) {
             KPGroupObject *_groupObj = static_cast<KPGroupObject*>( it.current() );
@@ -694,7 +694,7 @@ void UnGroupObjCmd::unexecute()
         it.current()->setSelected( false );
         m_page->takeObject( it.current() );
         it.current()->removeFromObjList();
-        r |= it.current()->getBoundingRect( doc->zoomHandler() );
+        r |= it.current()->getBoundingRect();
 
         if ( it.current()->getType() == OT_GROUP ) {
             KPGroupObject *_groupObj = static_cast<KPGroupObject*>( it.current() );
@@ -758,7 +758,7 @@ void InsertCmd::execute()
 /*====================== unexecute ===============================*/
 void InsertCmd::unexecute()
 {
-    QRect oldRect = doc->zoomHandler()->zoomRect(object->getBoundingRect( doc->zoomHandler() ));
+    QRect oldRect = doc->zoomHandler()->zoomRect(object->getBoundingRect());
     QPtrList<KPObject> list(m_page->objectList());
     if ( list.findRef( object ) != -1 ) {
 	m_page->takeObject(  object );
@@ -869,7 +869,7 @@ void MoveByCmd::execute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect( doc->zoomHandler() ));
+	oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect());
 	objects.at( i )->moveBy( diff );
 	if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -893,7 +893,7 @@ void MoveByCmd::unexecute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect(doc->zoomHandler() ));
+	oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect());
 	objects.at( i )->moveBy( -diff.x(), -diff.y() );
 	if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -953,7 +953,7 @@ void MoveByCmd2::execute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-        oldRect = doc->zoomHandler()->zoomRect( objects.at( i )->getBoundingRect( doc->zoomHandler() ));
+        oldRect = doc->zoomHandler()->zoomRect( objects.at( i )->getBoundingRect());
         objects.at( i )->moveBy( *diffs.at( i ) );
         if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -977,7 +977,7 @@ void MoveByCmd2::unexecute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-        oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect( doc->zoomHandler() ));
+        oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect());
         objects.at( i )->moveBy( -diffs.at( i )->x(), -diffs.at( i )->y() );
         if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -1878,7 +1878,7 @@ void ResizeCmd::execute()
 {
     QRect oldRect;
 
-    oldRect = doc->zoomHandler()->zoomRect( object->getBoundingRect(doc->zoomHandler() ));
+    oldRect = doc->zoomHandler()->zoomRect( object->getBoundingRect());
     object->moveBy( m_diff );
     object->resizeBy( r_diff );
     if ( object->getType() == OT_TEXT )
@@ -1912,7 +1912,7 @@ void ResizeCmd::unexecute( bool _repaint )
 {
     QRect oldRect;
 
-    oldRect = doc->zoomHandler()->zoomRect(object->getBoundingRect(doc->zoomHandler() ));
+    oldRect = doc->zoomHandler()->zoomRect(object->getBoundingRect());
     object->moveBy( -m_diff.x(), -m_diff.y() );
     object->resizeBy( -r_diff.width(), -r_diff.height() );
     if ( object->getType() == OT_TEXT )

@@ -1999,13 +1999,13 @@ void KPresenterDoc::setPageLayout( const KoPageLayout &pgLayout )
 void KPresenterDoc::updateHeaderFooterPosition( )
 {
     KoRect pageRect=m_stickyPage->getPageRect();
-    QRect oldBoundingRect=zoomHandler()->zoomRect(_header->getBoundingRect(zoomHandler()));
+    QRect oldBoundingRect=zoomHandler()->zoomRect(_header->getBoundingRect());
     _header->setOrig(pageRect.topLeft ());
     _header->setSize(pageRect.width(),_header->getSize().height());
     repaint( oldBoundingRect );
     repaint(_header);
 
-    oldBoundingRect=zoomHandler()->zoomRect(_footer->getBoundingRect(zoomHandler()));
+    oldBoundingRect=zoomHandler()->zoomRect(_footer->getBoundingRect());
     _footer->setOrig(pageRect.left(),pageRect.bottom()-_footer->getSize().height());
     _footer->setSize(pageRect.width(),_footer->getSize().height());
     repaint(oldBoundingRect);
@@ -2118,7 +2118,7 @@ void KPresenterDoc::layout()
 /*===================== repaint =================================*/
 void KPresenterDoc::repaint( KPObject *kpobject )
 {
-    repaint( m_zoomHandler->zoomRect(kpobject->getBoundingRect(m_zoomHandler)) );
+    repaint( m_zoomHandler->zoomRect(kpobject->getBoundingRect()) );
 }
 
 QValueList<int> KPresenterDoc::reorderPage( unsigned int num )

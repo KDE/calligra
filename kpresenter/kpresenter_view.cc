@@ -2602,10 +2602,10 @@ void KPresenterView::setupActions()
     /*actionEditCopyPage = */new KAction( i18n( "Copy Page" ), "editcopy",
                                           0, this, SLOT( editCopyPage() ),
                                           actionCollection(), "edit_copypage" );
-    actionEditDuplicatePage = new KAction( i18n( "Duplicate Page" ), "newslide",
+    /*actionEditDuplicatePage =*/ new KAction( i18n( "Duplicate Page" ), "newslide",
                                            0, this, SLOT( editDuplicatePage() ),
                                            actionCollection(), "edit_duplicatepage" );
-    actionEditDelPage = new KAction( i18n( "Delete &Page..." ), "delslide", 0,
+    actionEditDelPage = new KAction( i18n( "Delete Page" ), "delslide", 0,
                                      this, SLOT( editDelPage() ),
                                      actionCollection(), "edit_delpage" );
 
@@ -5963,7 +5963,7 @@ void KPresenterView::slotUpdateRuler()
         KPTextObject *txtobj= m_canvas->applicableTextObjects().first();
         if ( txtobj )
         {
-            QRect r= zoomHandler()->zoomRect(txtobj->getBoundingRect(zoomHandler() ));
+            QRect r= zoomHandler()->zoomRect(txtobj->getBoundingRect());
             getHRuler()->setFrameStartEnd( r.left() /*+ m_canvas->diffx()*//*- pc.x()*/, r.right()/*+m_canvas->diffx()*/ /*- pc.x()*/ );
             getVRuler()->setFrameStartEnd( r.top()/*+ m_canvas->diffy()*//*- pc.y()*/, r.bottom()/*+m_canvas->diffy()*//*- pc.y()*/ );
             if( getHRuler())

@@ -123,7 +123,7 @@ public:
     virtual QString getTypeString() const
     { return QString(); }
 
-    virtual KoRect getBoundingRect( KoZoomHandler *_zoomHandler ) const;
+    KoRect getBoundingRect() const;
     virtual bool isSelected() const
     { return selected; }
     virtual float getAngle() const
@@ -182,7 +182,7 @@ public:
     virtual bool intersects( const KoRect & _rect,KoZoomHandler *_zoomHandler  ) const;
     virtual QCursor getCursor( const KoPoint &_point, ModifyType &_modType, KPresenterDoc *doc ) const;
 
-    KoRect rotateRectObject(KoZoomHandler *_zoomHandler ) const;
+    KoRect rotateRectObject() const;
     void rotateObject(QPainter *paint,KoZoomHandler *_zoomHandler);
     void rotateObjectWithShadow(QPainter *paint,KoZoomHandler *_zoomHandler);
 

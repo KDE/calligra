@@ -3086,7 +3086,7 @@ KoRect KPrPage::getBoundingRect(const KoRect &rect, KPresenterDoc *doc) const
 
         if(it.current()->isSelected() && !it.current()->isProtect())
         {
-            boundingRect|=it.current()->getBoundingRect(doc->zoomHandler());
+            boundingRect|=it.current()->getBoundingRect();
         }
     }
     return boundingRect;
@@ -3147,7 +3147,7 @@ KCommand *KPrPage::moveObject(KPresenterView *_view,int diffx,int diffy)
         if ( it.current()->isSelected() && !it.current()->isProtect())
         {
             _objects.append( it.current() );
-            QRect br = _view->zoomHandler()->zoomRect(it.current()->getBoundingRect(_view->zoomHandler()) );
+            QRect br = _view->zoomHandler()->zoomRect(it.current()->getBoundingRect() );
             br.moveBy( diffx, diffy );
             m_doc->repaint( br ); // Previous position
             m_doc->repaint( it.current() ); // New position
@@ -3179,7 +3179,7 @@ KCommand *KPrPage::moveObject(KPresenterView *m_view,const KoPoint &_move,bool k
             continue;
         if ( it.current()->isSelected() && !it.current()->isProtect()) {
 
-            KoRect oldKoBoundingRect = it.current()->getBoundingRect(m_view->zoomHandler());
+            KoRect oldKoBoundingRect = it.current()->getBoundingRect();
             double _dx = oldKoBoundingRect.x() - 5.0;
             double _dy = oldKoBoundingRect.y() - 5.0;
             double _dw = oldKoBoundingRect.width() + 10.0;
@@ -3190,7 +3190,7 @@ KCommand *KPrPage::moveObject(KPresenterView *m_view,const KoPoint &_move,bool k
             it.current()->moveBy( _move );
             _objects.append( it.current() );
             m_doc->repaint( oldBoundingRect );
-            QRect br = m_view->zoomHandler()->zoomRect( it.current()->getBoundingRect(m_view->zoomHandler()) );
+            QRect br = m_view->zoomHandler()->zoomRect( it.current()->getBoundingRect() );
             m_doc->repaint( br );
             m_doc->repaint( it.current() );
         }
@@ -3562,7 +3562,7 @@ KoRect KPrPage::getBoundingAllObjectRect(const KoRect &rect, KPresenterDoc *doc)
     {
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
             continue;
-        boundingRect|=it.current()->getBoundingRect(doc->zoomHandler());
+        boundingRect|=it.current()->getBoundingRect();
     }
     return boundingRect;
 }

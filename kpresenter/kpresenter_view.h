@@ -834,7 +834,6 @@ private:
     KAction *actionEditDelete;
     KAction *actionEditSelectAll;
     KAction *actionEditDeSelectAll;
-    KAction *actionEditDuplicatePage;
     KAction *actionEditDelPage;
 
     KToggleAction *actionViewShowSideBar;

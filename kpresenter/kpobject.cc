@@ -310,7 +310,7 @@ double KPObject::load(const QDomElement &element) {
 }
 
 /*======================= get bounding rect ======================*/
-KoRect KPObject::getBoundingRect( KoZoomHandler *_zoomHandler ) const
+KoRect KPObject::getBoundingRect() const
 {
     KoRect r( orig, ext );
 
@@ -325,10 +325,10 @@ KoRect KPObject::getBoundingRect( KoZoomHandler *_zoomHandler ) const
     if ( angle == 0.0 )
         return r;
     else
-	return rotateRectObject(_zoomHandler );
+	return rotateRectObject();
 }
 
-KoRect KPObject::rotateRectObject(KoZoomHandler */*_zoomHandler*/ ) const
+KoRect KPObject::rotateRectObject() const
 {
     KoRect br = KoRect( 0,0, ext.width(), ext.height() );
     double pw = br.width();
