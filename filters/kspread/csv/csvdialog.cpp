@@ -72,7 +72,6 @@ CSVDialog::~CSVDialog()
 
 void CSVDialog::fillTable()
 {
-    int const maxRow=25;
     int row, column;
     enum { S_START, S_QUOTED_FIELD, S_MAYBE_END_OF_QUOTED_FIELD, S_END_OF_QUOTED_FIELD,
            S_MAYBE_NORMAL_FIELD, S_NORMAL_FIELD } state = S_START;
@@ -93,9 +92,6 @@ void CSVDialog::fillTable()
 
         if (x == '\r') inputStream >> x; // eat '\r', to handle DOS/LOSEDOWS files correctly
 
-        if (row >= maxRow) {
-            break;
-        }
         switch (state)
         {
         case S_START :
