@@ -117,20 +117,19 @@
 		row	the row number of the cell (starts at 1)
 		column	the column number of the cell (starts at 1)
 -->
-<!ELEMENT CELL (#PCDATA|FORMAT)*>
+<!ELEMENT CELL (TEXT|FORMAT)*>
 <!ATTLIST CELL  row      CDATA #REQUIRED
                 column   CDATA #REQUIRED>
 
+<!--    Describes the contents of the cell.
+        For instance, <text>My string</text> or
+	<text>=A4+B5</text>
+-->
+<!ELEMENT TEXT #PCDATA>
 
 <!--	Describes the format of one cell.
 
-		Attributes:
-
-		align:			alignment (???fill in meaning of numerical values here???)
-		precision:		precision (???)
-		float:			???
-		floatcolor:		???
-		faktor:			???
+        TODO: describe attributes
 -->
 <!ELEMENT FORMAT (FONT?,PEN?)>
 <!ATTLIST FORMAT        align            CDATA #REQUIRED
