@@ -9,6 +9,13 @@ KPresenter's homepage: http://www.koffice.org/kpresenter
 This is free software, released under GPL v2.
 Author: Lukas Tinkl <lukas@kde.org>, 2002
 
+TODO (in order of priority):
+- support parsing the document defaults (%default and %tab)
+- support horizontal bars (hard to position them properly)
+- make it use the ZIP store instead of a plain XML file (needed for images below)
+- support images
+- support for MNG animations (KPresenter doesn't know about them ATM)
+
 $Id$
 """
 
@@ -31,6 +38,7 @@ def getYDpi():
       return dpi
   return 75
 
+PAGE_WIDTH=680
 Y_OFFSET=510
 
 class MgpImporter:
@@ -58,7 +66,7 @@ class MgpImporter:
     # background properties
     self.backtype="0"
     self.backview="0"
-    self.bctype="0"          #single color (0) or gradient (non 0)
+    self.bctype="0"          #single color (0) or gradient (>0)
     self.color1="black"
     self.color2="white"
 
@@ -142,6 +150,8 @@ class MgpImporter:
       value="3"
     elif (dir=="135"): #diagonal 2
       value="4" #TODO swap colors for diagonals too?
+    elif (dir=="-45"): #circular, what an easter egg ;)
+      value="5"
     else:
       value="1"
 
@@ -186,7 +196,8 @@ class MgpImporter:
     parent.appendChild(pageElem)
 
   def __handlePage(self,parent,bgParent):
-    self.__setBackground(bgParent) #set the background for this page
+    if (self.pageCount!=-1):
+      self.__setBackground(bgParent) #set the background for this page
       
     self.pageCount=self.pageCount+1
     objElem=self.document.createElement("OBJECT") #KPresenter text object
@@ -243,9 +254,21 @@ class MgpImporter:
   def __handleBar(self,command):
     tokens=string.split(command,' ')
 
+    try:
+      color=string.replace(tokens[1].strip(),'"', '') #strip quotes and \n
+      width=tokens[2].strip()/1000*Y_OFFSET           #in per mils of display height
+      start=tokens[3].strip()/100*PAGE_WIDTH          #start position percent of display width
+      length=tokens[4].strip()/100*PAGE_WIDTH         #length percent of display width
+    except:                                           #default values
+      color=self.textColor
+      width=0.01*Y_OFFSET
+      start=0
+      length=PAGE_WIDTH
+      
+
   def __setPaper(self,parent):
     paperElem=self.document.createElement("PAPER")
-    paperElem.setAttribute("ptWidth", "680")
+    paperElem.setAttribute("ptWidth", str(PAGE_WIDTH))
     paperElem.setAttribute("ptHeight", str(Y_OFFSET))
     paperElem.setAttribute("orientation", "0") #landscape
     paperElem.setAttribute("format", "5")      #screen
@@ -322,6 +345,8 @@ class MgpImporter:
             continue
       else:
         self.__handleText(line)                           #text
+
+    self.__setBackground(bgElem)                          #flush the background
 
     rootElem.appendChild(bgElem)
     rootElem.appendChild(objsElem)
