@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KPlato
+Exec=kplato
+X-KDE-Library=libkplatopart
+MimeType=application/x-kplato
+Type=Application
+Icon=kword
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-NativeMimeType=application/x-kplato
