@@ -99,7 +99,6 @@ class KWFootNoteVariable : public KoVariable
 {
 public:
     KWFootNoteVariable( KoTextDocument *textdoc, NoteType noteType, KoVariableFormat *varFormat, KoVariableCollection *varColl );
-
     virtual VariableType type() const
     { return VT_FOOTNOTE; }
 
@@ -118,14 +117,13 @@ public:
 
     // Important: we need a sequence number, to order footnotes.
     // Don't remove this when implementing the QVariant-based solution ;)
-    void setNum( int num ) { m_num = num; }
-    int num() const { return m_num; }
+    void setNum( int num ) { m_varType = QVariant(num); }
+    int num() const { return m_varType.toInt(); }
 
     // Called whenever this item is being moved by the text formatter
     virtual void move( int x, int y );
 
 private:
-    unsigned short int m_num;
     NoteType m_noteType;
     KWTextFrameSet* m_frameset;
 };

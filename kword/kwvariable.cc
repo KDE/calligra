@@ -61,7 +61,9 @@ KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVaria
     case VT_MAILMERGE:
 	return new KWMailMergeVariable( textdoc, QString::null, coll->format("STRING"), this, m_doc );
     case VT_FOOTNOTE:
-        return new KWFootNoteVariable( textdoc, (NoteType)subtype /*TODO*/, coll->format("NUMBER"), this );
+        if ( !varFormat )
+            varFormat = (subtype == FootNoteAuto|| subtype == EndNoteAuto) ? coll->format("NUMBER") : coll->format("STRING");
+        return new KWFootNoteVariable( textdoc, (NoteType)subtype /*TODO*/, varFormat, this );
     default:
         return KoVariableCollection::createVariable( type, subtype, coll, varFormat, textdoc, doc );
     }
@@ -123,8 +125,11 @@ void KWMailMergeVariable::recalc()
 /////////////
 
 KWFootNoteVariable::KWFootNoteVariable( KoTextDocument *textdoc, NoteType noteType, KoVariableFormat *varFormat, KoVariableCollection *varColl )
-    : KoVariable( textdoc, varFormat, varColl ), m_num( 0 ), m_noteType( noteType ), m_frameset( 0L )
+    : KoVariable( textdoc, varFormat, varColl ),
+      m_noteType( noteType ),
+      m_frameset( 0L )
 {
+    m_varType = QVariant( 0 );
 }
 
 void KWFootNoteVariable::saveVariable( QDomElement &parentElem )
@@ -132,7 +137,7 @@ void KWFootNoteVariable::saveVariable( QDomElement &parentElem )
     QDomElement pgNumElem = parentElem.ownerDocument().createElement( "FOOTNOTE" );
     parentElem.appendChild( pgNumElem );
     pgNumElem.setAttribute( "subtype", 0 ); // the only kind currently
-    pgNumElem.setAttribute( "value", m_num );
+    pgNumElem.setAttribute( "value", m_varType.toString() );
 }
 
 void KWFootNoteVariable::load( QDomElement &elem )
@@ -142,16 +147,16 @@ void KWFootNoteVariable::load( QDomElement &elem )
     if (!footnoteElem.isNull())
     {
         //m_subtype = footnoteElem.attribute("subtype").toInt();
-        m_num = footnoteElem.attribute("value").toInt();
+        m_varType = QVariant(footnoteElem.attribute("value").toInt());
     }
 }
 
 QString KWFootNoteVariable::text()
 {
-    KoVariableNumberFormat * format = dynamic_cast<KoVariableNumberFormat *>( m_varFormat );
-    if ( format )
-        return format->convert( m_num + static_cast<KWVariableSettings*>(m_varColl->variableSetting())->startFootNoteValue() );
-    return QString::null;
+    if ( m_noteType == FootNoteAuto || m_noteType == EndNoteAuto)
+        return m_varFormat->convert( QVariant( m_varType.toInt() + static_cast<KWVariableSettings*>(m_varColl->variableSetting())->startFootNoteValue()) );
+    else if ( m_noteType == FootNoteManual || m_noteType == EndNoteManual )
+        return m_varFormat->convert( m_varType );
 }
 
 void KWFootNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int _offset ) // TODO s/const int/int/

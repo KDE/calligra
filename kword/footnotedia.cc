@@ -68,5 +68,5 @@ void KWFootNoteDia::setupTab1()
 
 NoteType KWFootNoteDia::noteType() const
 {
-    return m_rbFootNote->isChecked() ? FootNote : EndNote;
+    return m_rbFootNote->isChecked() ? FootNoteAuto : EndNoteAuto;
 }
