@@ -2381,7 +2381,7 @@ static bool kspreadfunc_normdist(KSContext& context ) {
   double x = args[0]->doubleValue();
   double mue = args[1]->doubleValue();
   double sigma = args[2]->doubleValue();
-  double k = args[3]->doubleValue();
+  double k = args[3]->intValue();
 
   if (sigma <= 0.0)
     return false;
@@ -2432,6 +2432,45 @@ static bool kspreadfunc_stdnormdist(KSContext& context ) {
   double x = args[0]->doubleValue();
   
   context.setValue( new KSValue(0.5 + gauss_helper(x)));
+  return true;
+}
+
+static bool kspreadfunc_expondist(KSContext& context ) {
+  //returns the exponential distribution
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "EXPONDIST", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
+    return false;
+
+  double x = args[0]->doubleValue();
+  double lambda = args[1]->doubleValue();
+  double kum = args[2]->intValue();
+
+  double result;
+
+  if (lambda <= 0.0)
+    return false;
+  else if (kum == 0) {	//density
+    if (x >= 0.0)
+      result = lambda * exp(-lambda*x);
+    else
+      result = 0;
+  }
+  else {  //distribution
+    if (x > 0.0)
+      result = 1.0 - exp(-lambda*x);
+    else
+      result = 0;
+  }
+  
+  context.setValue( new KSValue(result));
   return true;
 }
 
@@ -4935,6 +4974,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "NORMDIST", new KSValue( new KSBuiltinFunction( module, "NORMDIST", kspreadfunc_normdist) ) );
   module->addObject( "LOGNORMDIST", new KSValue( new KSBuiltinFunction( module, "LOGNORMDIST", kspreadfunc_lognormdist) ) );
   module->addObject( "NORMSDIST", new KSValue( new KSBuiltinFunction( module, "NORMSDIST", kspreadfunc_stdnormdist) ) );
+  module->addObject( "EXPONDIST", new KSValue( new KSBuiltinFunction( module, "EXPONDIST", kspreadfunc_expondist) ) );
 
   return module;
 }

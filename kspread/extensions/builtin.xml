@@ -2660,6 +2660,33 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>EXPONDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>lambda parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>0 = density, 1 = distribution</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Returns the exponential distribution.
+          The lambda parameter must be positive.
+          Cumulative = 0 calculates the density function; cumulative = 1 calculates the distribution.
+        </Text>
+        <Syntax>EXPONDIST(number;lambda;cumulative)</Syntax>
+        <Example>EXPONDIST(3;0.5;0) equals 0.111565</Example>
+        <Example>EXPONDIST(3;0.5;1) equals 0.776870</Example>
+      </Help>
+    </Function>
+
   </Group>
   <Group>
     <GroupName>Financial</GroupName>
