@@ -49,7 +49,7 @@ QString KWMailMergeKSpread::getValue( const QString &name, int record ) const
   const KSpreadCell* cell = _sheet->cellAt( _columnMap[ name ], record + 2 );
 
   if ( cell )
-    return cell->text();
+    return cellText( cell );
   else
     return i18n( "Unkown mail merge variable: %1" ).arg( name );
 }
@@ -129,8 +129,8 @@ void KWMailMergeKSpread::initSpreadSheets()
     const KSpreadCell* cell = _sheet->cellAt( i, 1 );
 
     // init record list
-    sampleRecord[ cell->text() ] = cell->text();
-    _columnMap.insert( cell->text(), i );
+    sampleRecord[ cellText( cell ) ] = cellText( cell );
+    _columnMap.insert( cellText( cell ), i );
   }
 }
 
@@ -143,7 +143,7 @@ int KWMailMergeKSpread::rows() const
 
   for (; row < _sheet->maxRow(); ) {
     const KSpreadCell* cell = _sheet->cellAt( 1, row );
-    if ( cell->text().isEmpty() )
+    if ( cellText( cell ).isEmpty() )
       break;
 
     row++;
@@ -161,13 +161,33 @@ int KWMailMergeKSpread::columns() const
 
   for (; col < _sheet->maxColumn(); ) {
     const KSpreadCell* cell = _sheet->cellAt( col, 1 );
-    if ( cell->text().isEmpty() )
+    if ( cellText( cell ).isEmpty() )
       break;
 
     col++;
   }
 
   return col;
+}
+
+QString KWMailMergeKSpread::cellText( const KSpreadCell *cell ) const
+{
+  QString text = QString::null;
+
+  if ( !cell->isDefault() && !cell->isEmpty() ) {
+    switch( cell->content() ) {
+     case KSpreadCell::Text:
+     case KSpreadCell::Formula:
+      text = cell->strOutText();
+      break;
+     case KSpreadCell::RichText:
+     case KSpreadCell::VisualFormula:
+      text = cell->text(); // untested
+      break;
+    }
+  }
+
+  return text;
 }
 
 extern "C"
