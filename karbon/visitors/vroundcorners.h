@@ -24,12 +24,6 @@ public:
 	virtual void visitVSegmentList( VSegmentList& segmentList );
 
 private:
-	/**
-	 * Calculates the parameter where to split each segment to insert the "round
-	 * corner".
-	 */
-	double parameter( const VSegment& segment ) const;
-
 	/// The "radius" of the round corners.
 	double m_radius;
 };

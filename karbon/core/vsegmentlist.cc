@@ -330,30 +330,29 @@ VSegmentList::arcTo(
 void
 VSegmentList::close()
 {
+	// In the case the list is empty (which should actually never happen),
+	// append a "begin" first, to avoid a crash:
+	if( count() == 0 )
+		append( new VSegment() );
 
-	if ( !getLast() || !getFirst() ) {
-            kdDebug() << "File seems to be corrupt!" << endl;
-            Q_ASSERT( 0 );
-        }
-
-	// move end-segment if we are already closed:
+	// Move end-segment if we are already closed:
 	if( m_isClosed )
 	{
 		getLast()->setKnot( getFirst()->knot() );
 	}
-	// append a line, if necessary:
+	// Append a line, if necessary:
 	else
 	{
 		if(
 			getLast()->knot().isNear(
 				getFirst()->knot(), VGlobal::isNearRange ) )
 		{
-			// move last knot:
+			// Move last knot:
 			getLast()->setKnot( getFirst()->knot() );
 		}
 		else
 		{
-			// add a line:
+			// Add a line:
 			lineTo( getFirst()->knot() );
 		}
 

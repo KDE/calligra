@@ -53,7 +53,6 @@ VPath::VPath( const VPath& path )
 
 	if ( path.fill() )
 		setFill( *path.fill() );
-
 }
 
 VPath::~VPath()

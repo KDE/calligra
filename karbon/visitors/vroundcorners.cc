@@ -27,16 +27,19 @@ VRoundCorners::visitVPath( VPath& path )
 void
 VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 {
-	// Temporary list:
-	VSegmentList newList( 0L );
-
 	// We'll change segments from segmentList. that doesnt hurt, since we
 	// replace segmentList with newList afterwards.
+
+	// Temporary list:
+	VSegmentList newList( 0L );
 
 	segmentList.first();
 	// skip "begin":
 	segmentList.next();
 
+
+	double length;
+	double param;
 
 	// begin:
 	if(
@@ -45,11 +48,19 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 			segmentList.current()->type() == segment_curve &&
 			segmentList.getLast()->type() == segment_curve ) )
 	{
+		length = segmentList.current()->length();
+
+		param = length > 2 * m_radius
+			? segmentList.current()->param( m_radius )
+			: param = 0.5;
+
+
 		segmentList.insert(
-			segmentList.current()->splitAt(
-				parameter( *segmentList.current() ) ) );
+			segmentList.current()->splitAt( param ) );
+
 		newList.moveTo(
 			segmentList.current()->knot() );
+
 		segmentList.next();
 	}
 	else
@@ -60,9 +71,6 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 
 
 	// middle part:
-	double t1;
-	double t2;
-
 	while(
 		segmentList.current() &&
 		segmentList.current()->next() )
@@ -72,18 +80,31 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 				segmentList.current()->type() == segment_curve &&
 				segmentList.current()->next()->type() == segment_curve ) )
 		{
-			t1 = parameter( *segmentList.current() );
-			t2 = parameter( *segmentList.current()->next() );
+			length = segmentList.current()->length();
+
+			param = length > 2 * m_radius
+				? segmentList.current()->param( length - m_radius )
+				: param = 0.5;
 
 			segmentList.insert(
-				segmentList.current()->splitAt( 1.0 - t1 ) );
+				segmentList.current()->splitAt( param ) );
 			newList.append(
 				segmentList.current()->clone() );
 			segmentList.next();
 
+
 			segmentList.next();
+
+
+			length = segmentList.current()->length();
+
+			param = length > 2 * m_radius
+				? segmentList.current()->param( m_radius )
+				: param = 0.5;
+
 			segmentList.insert(
-				segmentList.current()->splitAt( t2 ) );
+				segmentList.current()->splitAt( param ) );
+
 
 			newList.curveTo(
 				segmentList.current()->prev()->prev()->knot() +
@@ -107,23 +128,25 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 				segmentList.current()->type() == segment_curve &&
 				segmentList.getFirst()->next()->type() == segment_curve ) )
 		{
-			t1 = parameter( *segmentList.current() );
-			t2 = parameter( *segmentList.getFirst()->next() );
+			length = segmentList.current()->length();
+
+			param = length > 2 * m_radius
+				? segmentList.current()->param( length - m_radius )
+				: param = 0.5;
 
 			segmentList.insert(
-				segmentList.current()->splitAt( 1.0 - t1 ) );
+				segmentList.current()->splitAt( param ) );
 			newList.append(
 				segmentList.current()->clone() );
 			segmentList.next();
 
+
 			segmentList.first();
 			segmentList.next();
-			segmentList.insert(
-				segmentList.current()->splitAt( t2 ) );
 
 			newList.curveTo(
 				segmentList.getLast()->prev()->knot() +
-					0.5 * m_radius * segmentList.current()->prev()->tangent( 0.0 ),
+					0.5 * m_radius * segmentList.getLast()->tangent( 0.0 ),
 				segmentList.current()->knot() -
 					0.5 * m_radius * segmentList.current()->tangent( 1.0 ),
 				segmentList.current()->knot() );
@@ -141,15 +164,5 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 
 	// invalidate bounding box once:
 	segmentList.invalidateBoundingBox();
-}
-
-double
-VRoundCorners::parameter( const VSegment& segment ) const
-{
-	return
-		segment.length() > 2 * m_radius
-// TODO: this very calculation isnt quite correct. it assumes uniform velocity:
-			? m_radius / segment.length()
-			: 0.5;
 }
 

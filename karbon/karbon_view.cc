@@ -388,7 +388,6 @@ kdDebug() << "KarbonView::dummyForTesting()" << endl;
 	KoPoint N;
 
 	double length = s.getLast()->length() / 10.0;
-	double t;
 
 	for( uint i = 0; i < 10; ++i )
 	{

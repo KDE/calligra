@@ -1,14 +1,15 @@
 REAL BUGS:
 -	mirror coordinate-system so origin is bottom-left
--	to be save: add operator=() everywhere we use pointers as members
--	introduce polygonizevisitor in vselectool for more precise selection (lenny)
+-	scale tool should only scale in one direction while dragging a slection node
 -	painting (NotROP) while shape creation isnt good. creation should instead
 	insert a temporary object (state "edit") right from the start.
 	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.
 -	examine the problem with non closed paths (polygonize combined.karbon for example
 	to make the inner circles rectangles)
 -	implement gradients after libart code reorganisations (Rob)
--	vroundcorners needs to be imrpoved for beziers and big radii
+-	vroundcorners needs to be imrpoved for beziers and big radii (lenny)
+-	introduce polygonizevisitor in vselectool for more precise selection (lenny)
+-	fix spiral. looking at the file output, there are unwanted small lines included.
 
 OPTIMIZATION:
 -	make fill/stroke shared so copying for undo/redo is more efficient
