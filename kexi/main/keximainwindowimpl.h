@@ -287,6 +287,8 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		void importantInfo(bool onStartup);
 		void slotImportantInfo(); //!< just importantInfo(false);
 
+		void slotOptionsEnableForms(bool show, bool noMessage = false); //temp.
+
 		void slotImportFile();
 		void slotImportServer();
 

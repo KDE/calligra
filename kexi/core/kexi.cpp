@@ -36,6 +36,10 @@ KexiProjectSet& Kexi::recentProjects() { return _recentProjects; }
 KexiDB::DriverManager& Kexi::driverManager() { return _driverManager; }
 KexiPart::Manager& Kexi::partManager() { return _partManager; }
 
+//temp
+bool _tempShowForms = 0;
+bool& Kexi::tempShowForms() { return _tempShowForms; }
+
 //--------------------------------------------------------------------------------
 
 QString Kexi::string2FileName(const QString &s)

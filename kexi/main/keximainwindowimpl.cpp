@@ -450,6 +450,14 @@ KexiMainWindowImpl::initActions()
 	 actionCollection(), "options_show_contexthelp");
 #endif
 
+	KToggleAction *toggleaction = new KToggleAction(i18n("Enable Forms"), "", 0, actionCollection(), "options_enable_forms");
+	d->config->setGroup("Unfinished");
+	if (d->config->readBoolEntry("EnableForms", false)) {
+		slotOptionsEnableForms( true, true );
+		toggleaction->setChecked(true);
+	}
+	connect(toggleaction, SIGNAL(toggled(bool)), this, SLOT(slotOptionsEnableForms(bool)));
+
 	d->action_configure = KStdAction::preferences(this, SLOT(slotShowSettings()), actionCollection());
 	action->setWhatsThis(i18n("Lets you configure Kexi."));
 
@@ -2239,6 +2247,23 @@ void KexiMainWindowImpl::importantInfo(bool onStartup)
 	d->showImportantInfoOnStartup = false;
 }
 
+void KexiMainWindowImpl::slotOptionsEnableForms(bool show, bool noMessage)
+{
+	Kexi::tempShowForms() = show;
+	d->config->setGroup("Unfinished");
+	d->config->writeEntry("EnableForms", Kexi::tempShowForms());
+	if (noMessage)
+		return;
+	QString note = i18n("Please note that forms are currently unstable functionality, provided <u>only for your preview</u>.");
+	if (show) {
+		KMessageBox::information(this, 
+			"<p>"+i18n("Forms will be available after restarting Kexi application.")+"</p>"+note+"<p>");
+	}
+	else {
+		KMessageBox::information(this, 
+			"<p>"+i18n("Forms will be hidden after restarting Kexi application.")+"</p><p>"+note+"<p>");
+	}
+}
 
 #include "keximainwindowimpl.moc"
 

@@ -51,6 +51,11 @@ namespace Kexi
 	//! shared part manager
 	KEXICORE_EXPORT KexiPart::Manager& partManager();
 
+	//some temporary flags
+
+	//! false by default, flag loaded on main window startup
+	KEXICORE_EXPORT bool& tempShowForms(); 
+
 	//some utils
 	
 	//! \return valid filename based on \a s

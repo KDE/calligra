@@ -40,6 +40,13 @@ namespace KexiPart {
 }
 class KexiPropertyBuffer;
 
+class KEXICORE_EXPORT KexiDialogTempData : public QObject
+{
+	public:
+	KexiDialogTempData(QObject* parent)
+	 : QObject(parent, "KexiDialogTempData") {}
+};
+
 class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionProxy
 {
 	Q_OBJECT
@@ -211,6 +218,11 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 \sa storeDataBlock(). */
 		bool loadDataBlock( QString &dataString, const QString& dataID = QString::null);
 
+		/*! \return temporary data shared between views */
+		KexiDialogTempData *tempData() const { return m_tempData; }
+
+		void setTempData( KexiDialogTempData* data ) { m_tempData = data; }
+
 	private:
 		KexiMainWindow *m_parentWindow;
 		bool m_isRegistered;
@@ -224,6 +236,9 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		QWidgetStack *m_stack;
 		QString m_origCaption; //helper
 		KexiDB::SchemaData* m_schemaData;
+
+		/*! temporary data shared between views */
+		QGuardedPtr<KexiDialogTempData> m_tempData;
 //		bool m_neverSaved : 1; //!< true, if this dialog's contents were never saved 
 		bool m_destroying : 1; //!< true after entering to the dctor
 

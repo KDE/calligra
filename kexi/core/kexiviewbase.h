@@ -79,7 +79,10 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 dirty(bool) signal is emitted by parent dialog (KexiDialog),
 		 to inform the world about that. 
 		 Always use this function to update 'dirty' flag information. */
-		void setDirty(bool set = true);
+		void setDirty(bool set);
+
+		/*! Equal to setDirty(true). */
+		void setDirty() { setDirty(true); }
 
 	signals:
 		//! emitted when the view is about to close

@@ -66,8 +66,12 @@ Manager::lookup()
 	for(KTrader::OfferList::Iterator it(tlist.begin()); it != tlist.end(); ++it)
 	{
 		KService::Ptr ptr = (*it);
-		kdDebug() << "Manager::lookup(): " << ptr->property("X-Kexi-TypeMime").toString() << endl;
-		
+		QString mime = ptr->property("X-Kexi-TypeMime").toString();
+		kdDebug() << "Manager::lookup(): " << mime << endl;
+//<TEMP>: disable some parts if needed
+		if (!Kexi::tempShowForms() && mime=="kexi/form")
+			continue;
+//</TEMP>
 		int idx = sl_order.findIndex( ptr->library() );
 		if (idx!=-1)
 			ordered.insert(idx, ptr);

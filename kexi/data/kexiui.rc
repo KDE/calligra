@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="116">
+<kpartgui name="kexi" version="117">
 <MenuBar noMerge="0">
   <Menu name="file" noMerge="1">
     <text>&amp;Project</text>
@@ -97,6 +97,7 @@
       <Text>&amp;Other</Text>
       <!-- Action name="options_show_nav"/ -->
       <Action name="options_show_contexthelp"/>
+      <Action name="options_enable_forms"/>
     </Menu>
     <Separator/>
     <Action name="options_configure_keybinding"/>
