@@ -519,7 +519,7 @@ KexiMainWindowImpl::initActions()
 	d->action_project_properties = d->dummy_action;
 #endif
 
-	d->action_close = new KAction(i18n("&Close Project"), "fileclose", KStdAccel::shortcut(KStdAccel::Close),
+	d->action_close = new KAction(i18n("&Close Project"), "fileclose", 0,
 		this, SLOT(slotProjectClose()), actionCollection(), "project_close" );
 	d->action_close->setToolTip(i18n("Close the current project"));
 	d->action_close->setWhatsThis(i18n("Closes the current project."));
