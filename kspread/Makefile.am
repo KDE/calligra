@@ -10,6 +10,7 @@ kde_module_LTLIBRARIES = libkspreadpart.la
 libkspreadcommon_la_SOURCES =  \
         digest.cc \
         commands.cc \
+				convert.cc \
         damages.cc \
         dependencies.cc \
         formula.cc \
