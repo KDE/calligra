@@ -457,6 +457,7 @@ void WinWordDoc::gotListParagraph(
     const QString &text,
     Attributes &styles)
 {
+    QString paragraph;
     QString xml_friendly = text;
 
     int styleIndex = styles.baseStyle.istd;
@@ -465,29 +466,31 @@ void WinWordDoc::gotListParagraph(
     if (styleIndex == 4095)
         styleIndex = 0;
     encode(xml_friendly);
-    m_body.append("<PARAGRAPH>\n<TEXT>");
-    m_body.append(xml_friendly);
-    m_body.append("</TEXT>\n"
+    paragraph.append("<PARAGRAPH>\n<TEXT>");
+    paragraph.append(xml_friendly);
+    paragraph.append("</TEXT>\n"
         " <LAYOUT>\n"
         "  <NAME value=\"");
-    m_body.append(m_styles.names[styleIndex]);
-    m_body.append("\"/>\n");
-    m_body.append(
+    paragraph.append(m_styles.names[styleIndex]);
+    paragraph.append("\"/>\n");
+    paragraph.append(
         "  <FOLLOWING name=\"");
-    m_body.append(m_styles.names[styleIndex]);
-    m_body.append("\"/>\n");
-    m_body.append(
+    paragraph.append(m_styles.names[styleIndex]);
+    paragraph.append("\"/>\n");
+    paragraph.append(
         "  <COUNTER type=\"");
-    m_body.append(numbering(styles.baseStyle.anld.nfc));
-    m_body.append("\" depth=\"");
-    m_body.append(QString::number((int)styles.baseStyle.ilvl));
-    m_body.append("\" bullet=\"183\" start=\"");
-    m_body.append(QString::number((int)styles.baseStyle.anld.iStartAt));
-    m_body.append("\" numberingtype=\"0\" lefttext=\"\" righttext=\"\" bulletfont=\"symbol\"/>\n");
-    m_body.append(
+    paragraph.append(numbering(styles.baseStyle.anld.nfc));
+    paragraph.append("\" depth=\"");
+    paragraph.append(QString::number((int)styles.baseStyle.ilvl));
+    paragraph.append("\" bullet=\"183\" start=\"");
+    paragraph.append(QString::number((int)styles.baseStyle.anld.iStartAt));
+    paragraph.append("\" numberingtype=\"0\" lefttext=\"\" righttext=\"\" bulletfont=\"symbol\"/>\n");
+    paragraph.append(
         " </LAYOUT>\n");
 //    generateFormats(styles);
-    m_body.append("</PARAGRAPH>\n");
+    paragraph.append("</PARAGRAPH>\n");
+//    kdDebug() << paragraph << endl;
+    m_body.append(paragraph);
 }
 
 // Create a <STYLE>.
@@ -552,8 +555,8 @@ void WinWordDoc::gotStyle(
     if (isListAlpha(styleIndex) || isListBullet(styleIndex) || isListNumber(styleIndex) || isListContination(styleIndex))
     {
         // Note: it is quite common to encounter list paragraphs which do not
-        // use a list style (!!). Instead, these seem to be encoded as Normal
-        // text with a number!
+        // use one of these list styles (!!). Instead, they often seem to be
+        // encoded as Normal text with a number!
         unsigned i;
         ANLD anld;
 
@@ -575,7 +578,7 @@ void WinWordDoc::gotStyle(
         for (i = anld.cxchTextBefore; i < anld.cxchTextAfter; i++)
             styleDef.append(anld.rgxch[i]);
         styleDef.append("\" start=\"1\" depth=\"");
-        styleDef.append(QString::number(style.getPap()->ilvl - 1));
+        styleDef.append(QString::number(style.getPap()->ilvl));
         styleDef.append("\" customdef=\"\"/>\n");
     }
     else
