@@ -1,7 +1,7 @@
 //
 
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,10 +40,9 @@
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
 
-class KZip;
-
-// ### TODO: as we have now OASIS support, this filter should only output strict OOWriter format
 #define STRICT_OOWRITER_VERSION_1
+
+class KZip;
 
 class StyleMap : public QMap<QString,LayoutData>
 {
@@ -57,7 +56,7 @@ class OOWriterWorker : public KWEFBaseWorker
 public:
     OOWriterWorker(void);
     virtual ~OOWriterWorker(void) { delete m_streamOut; }
- public:
+public:
     /// What is the type of the frameset anchor
     enum AnchorType
     {
@@ -68,7 +67,7 @@ public:
     };
 public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
-    virtual bool doCloseFile(void); // Close file in normal conditions
+    virtual bool doCloseFile(void); ///< Close file in normal conditions
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
     virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
@@ -82,6 +81,7 @@ public:
     virtual bool doFullDefineStyle(LayoutData& layout);
     virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
     virtual bool doVariableSettings(const VariableSettingsData& vs);
+    //virtual bool doOpenBody (void);
 private:
     void processParagraphData (const QString& paraText,
         const TextFormatting& formatLayout,
@@ -122,39 +122,42 @@ private:
      * (Yes, the counter is increased by the method.)
      */
     QString makeAutomaticStyleName(const QString& prefix, ulong& counter) const;
-private: // ZIP methids
+private: // ZIP methods
     bool zipPrepareWriting(const QString& name);
     bool zipDoneWriting(void);
     bool zipWriteData(const char* str);
     bool zipWriteData(const QByteArray& array);
     bool zipWriteData(const QCString& cstr);
-    bool zipWriteData(const QString& str); // Assumes UTF-8
+    bool zipWriteData(const QString& str); ///< Assumes UTF-8
 private:
     QTextStream* m_streamOut;
     QString m_pagesize;
     StyleMap m_styleMap;
     double m_paperBorderTop,m_paperBorderLeft,m_paperBorderBottom,m_paperBorderRight;
-    KWEFDocumentInfo m_docInfo; // document information
-    QByteArray m_contentBody; // office:body element of content.xml
-    KZip* m_zip; // Output OOWriter file
-    QMap<QString,QString> m_fontNames; // List of used font names (the data() are extra attributes for font declaration time.)
+    KWEFDocumentInfo m_docInfo; ///< document information
+    QByteArray m_contentBody; ///< office:body element of content.xml
+    KZip* m_zip; ///< Output OOWriter file
+    QMap<QString,QString> m_fontNames; ///< List of used font names (the data() are extra attributes for font declaration time.)
 
-    ulong m_pictureNumber; // Number of picture (increment *before* use)
-    ulong m_automaticParagraphStyleNumber; // Number of paragraph-based automatic styles (increment *before* use)
-    ulong m_automaticTextStyleNumber; // Number of text-based automatic styles (increment *before* use)
-    ulong m_footnoteNumber; // Number of footnote (for text:id) (increment *before* use)
+    ulong m_pictureNumber; ///< Number of picture (increment *before* use)
+    ulong m_automaticParagraphStyleNumber; ///< Number of paragraph-based automatic styles (increment *before* use)
+    ulong m_automaticTextStyleNumber; ///< Number of text-based automatic styles (increment *before* use)
+    ulong m_footnoteNumber; ///< Number of footnote (for text:id) (increment *before* use)
+    ulong m_tableNumber; ///< Number of table (for table:name) (increment *before* use)
+    ulong m_textBoxNumber; ///< Number of a textbox (for draw:text-box) (increment *before* use)
+    
 
-    QString m_styles; // Normal paragraph styles (in OO format)
-    QString m_contentAutomaticStyles; // Automatic styles for content.xml (in OO format)
+    QString m_styles; ///< Normal paragraph styles (in OO format)
+    QString m_contentAutomaticStyles; ///< Automatic styles for content.xml (in OO format)
 
-    uint m_size; // Size of ZIP entry
+    uint m_size; ///< Size of ZIP entry
     int m_paperFormat;
     double m_paperWidth;
     double m_paperHeight;
     int m_paperOrientation;
 
-    QMap<QString,QString> m_mapTextStyleKeys; // Map of keys to automatic text styles
-    QMap<QString,QString> m_mapParaStyleKeys; // Map of keys to automatic paragraph styles
-    VariableSettingsData m_varSet; // KWord's <VARIABLESETTINGS>
+    QMap<QString,QString> m_mapTextStyleKeys; ///< Map of keys to automatic text styles
+    QMap<QString,QString> m_mapParaStyleKeys; ///< Map of keys to automatic paragraph styles
+    VariableSettingsData m_varSet; ///< KWord's \<VARIABLESETTINGS\>
 };
 #endif // _EXPORTFILTER_H
