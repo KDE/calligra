@@ -116,7 +116,7 @@ public:
 			int to /* default length()-2 */ );
     KoParagLayout loadParagLayout( QDomElement & parentElem, KPresenterDoc *doc, bool useRefStyle);
 
-    KoTextFormat loadFormat( QDomElement &n, KoTextFormat * refFormat, const QFont & defaultFont );
+    static KoTextFormat loadFormat( QDomElement &n, KoTextFormat * refFormat, const QFont & defaultFont );
 
     void setEditingTextObj( bool _edit ) { editingTextObj = _edit; }
 
@@ -159,6 +159,7 @@ public:
     void setVerticalAligment( VerticalAlignmentType _type) ;
     double alignmentValue() const {  return alignVertical; }
     virtual KPTextObject *nextTextObject() { return this;}
+    static void saveFormat( QDomElement & element, KoTextFormat*lastFormat );
 signals:
     void repaintChanged( KPTextObject* );
 
@@ -168,7 +169,6 @@ protected slots:
 protected:
     virtual QDomElement saveKTextObject( QDomDocument& doc );
     QDomElement saveHelper(const QString &tmpText,KoTextFormat*lastFormat ,QDomDocument &doc);
-    void saveFormat( QDomElement & element, KoTextFormat*lastFormat );
 
     virtual void loadKTextObject( const QDomElement &e, int type );
     void drawText( QPainter* _painter, KoZoomHandler* zoomHandler, bool onlyChanged, KoTextCursor* cursor, bool resetChanged );

@@ -2776,15 +2776,14 @@ void KPresenterDoc::loadStyleTemplates( QDomElement stylesElem )
 
         sty->setFollowingStyle( sty );
 
-#if 0 //FIXME
+
         QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
-            sty->format() = KWTextParag::loadFormat( formatElem, 0L, defaultFont() );
+            sty->format() = KPTextObject::loadFormat( formatElem, 0L, defaultFont() );
         else
             kdWarning(33001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
-#endif
-        // Style created, now let's try to add it
 
+        // Style created, now let's try to add it
         sty = m_styleColl->addStyleTemplate( sty );
         if(m_styleList.count() > followingStyles.count() )
         {
@@ -2832,10 +2831,9 @@ void KPresenterDoc::saveStyle( KoStyle *sty, QDomElement parentElem )
     parentElem.appendChild( styleElem );
 
     sty->saveStyle( styleElem );
-#if 0 //fixme
-    QDomElement formatElem = KWTextParag::saveFormat( doc, &sty->format(), 0L, 0, 0 );
+    QDomElement formatElem = doc.createElement("FORMAT");
+    KPTextObject::saveFormat( formatElem, &sty->format() );
     styleElem.appendChild( formatElem );
-#endif
 }
 
 void KPresenterDoc::startBackgroundSpellCheck()

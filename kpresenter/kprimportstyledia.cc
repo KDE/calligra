@@ -31,6 +31,7 @@
 #include <kfiledialog.h>
 #include <kdebug.h>
 #include <qlabel.h>
+#include "kptextobject.h"
 
 KPrImportStyleDia::KPrImportStyleDia( KPresenterDoc *_doc, const QStringList &_list, QWidget *parent, const char *name )
     :KoImportStyleDia( _list, parent, name ),
@@ -108,13 +109,14 @@ void KPrImportStyleDia::loadFile()
 
                     // followingStyle is set by KWDocument::loadStyleTemplates after loading all the styles
                     sty->setFollowingStyle( sty );
-#if 0
+
                     QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
                     if ( !formatElem.isNull() )
-                        sty->format() = KWTextParag::loadFormat( formatElem, 0L, m_doc->defaultFont() );
+                        sty->format() = KPTextObject::loadFormat( formatElem, 0L, m_doc->defaultFont() );
                     else
-                        kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
-#endif
+                        kdWarning(33001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
+
+
                     // Style created, now let's try to add it
                     m_styleList.append(sty);
 
