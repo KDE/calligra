@@ -76,7 +76,10 @@ bool KOfficeCreator::create(const QString &path, int width, int height, QImage &
 
     connect(m_doc, SIGNAL(completed()), SLOT(slotCompleted()));
 
-    m_doc->openURL(path);
+    KURL url;
+    url.setPath( path );
+    m_doc->setCheckAutoSaveFile( false );
+    m_doc->openURL( url );
     m_completed = false;
     startTimer(5000);
     while (!m_completed)
