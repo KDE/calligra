@@ -1088,7 +1088,13 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
     // Always write out the alignment, it's required
     QDomElement flowElement = doc.createElement("FLOW");
 
-    if ( m_styleStack.attribute( "style:text-auto-align" ) == "true" ) // OASIS extension
+    /* This was only an intermediate OASIS decision. The final decision is:
+     *  fo:text-align can be "left", "right", "center", "justify", and
+     *  "start" will mean direction-dependent. However if we use this right now,
+     *  OOo won't understand it. So that's for later, we keep our own attribute
+     *  for now, so that export-import works.
+     */
+    if ( m_styleStack.attribute( "style:text-auto-align" ) == "true" )
         flowElement.setAttribute( "align", "auto" );
     else
     {
