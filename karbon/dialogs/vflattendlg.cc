@@ -31,13 +31,13 @@ VFlattenDlg::VFlattenDlg( QWidget* parent, const char* name )
 	// add input fields on the left:
 	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 	new QLabel( i18n( "Flatness:" ), group );
-	m_flatness = new KDoubleNumInput( 0, group );
+	m_flatness = new KDoubleNumInput( group );
 	group->setMinimumWidth( 300 );
 
 	// signals and slots:
 	connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
 	connect( this, SIGNAL( cancelClicked() ), this, SLOT( reject() ) );
-	
+
 	setMainWidget( group );
 	setFixedSize( baseSize() );
 }
