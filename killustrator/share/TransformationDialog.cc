@@ -27,7 +27,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <kmynuminput.h>
+#include <knuminput.h>
 
 #include <qpushbutton.h>
 #include <qhbuttongroup.h>
@@ -158,36 +158,35 @@ void TransformationDialog::createRotationWidget (QWidget* parent) {
     layout->addMultiCellWidget(box, 0, 0, 0, 1);
     QBoxLayout *vboxlayout=new QVBoxLayout(box, KDialogBase::marginHint(), KDialogBase::spacingHint());
     vboxlayout->addSpacing(fontMetrics().height()/2);
+    QGridLayout *grid=new QGridLayout(vboxlayout, 3, 2);
 
-    QBoxLayout *hboxlayout=new QHBoxLayout(vboxlayout);
     QLabel *label = new QLabel(i18n("Horizontal:"), box);
-    hboxlayout->addWidget(label);
+    grid->addWidget(label, 0, 0);
 
     horizRotCenter = new UnitBox(box);
     horizRotCenter->setRange (-1000.0, 1000.0);
     horizRotCenter->setStep (0.1);
     horizRotCenter->setEditable (true);
-    hboxlayout->addWidget(horizRotCenter);
+    grid->addWidget(horizRotCenter, 0, 1);
 
-    hboxlayout=new QHBoxLayout(vboxlayout);
     label = new QLabel(i18n("Vertical:"), box);
-    hboxlayout->addWidget(label);
+    grid->addWidget(label, 1, 0);
 
     vertRotCenter = new UnitBox(box);
     vertRotCenter->setRange (-1000.0, 1000.0);
     vertRotCenter->setStep (0.1);
     vertRotCenter->setEditable (true);
-    hboxlayout->addWidget(vertRotCenter);
+    grid->addWidget(vertRotCenter, 1, 1);
 
     relativeRotCenter = new QCheckBox(i18n("Relative Position"), box);
     connect( relativeRotCenter, SIGNAL(clicked()),
              this, SLOT(relativeRotCenterSlot()) );
-    vboxlayout->addWidget(relativeRotCenter);
+    grid->addMultiCellWidget(relativeRotCenter, 2, 2, 0, 1);
 
     QHBox *hbox=new QHBox(parent);
     label = new QLabel(i18n("Angle:"), hbox);
 
-    rotAngle = new KMyDoubleNumInput(hbox);
+    rotAngle = new KDoubleNumInput(hbox);
     rotAngle->setRange(-360.0, 360.0, 0.1, false);
     horizPosition->setStep (0.1);
     layout->addMultiCellWidget(hbox, 1, 1, 0, 1);
@@ -399,7 +398,7 @@ void TransformationDialog::rotate (bool onDuplicate) {
 
   xcenter = horizRotCenter->getValue ();
   ycenter = vertRotCenter->getValue ();
-  angle = rotAngle->value(true);
+  angle = rotAngle->value();
 
   if (relativeRotCenter->isChecked ()) {
     // the given values are relative to the current bounding box

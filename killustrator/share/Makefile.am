@@ -15,7 +15,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 Coord.h PropertyEditor.h \
                              AlignmentDialog.h \
 		 GridDialog.h PolygonConfigDialog.h PolygonPreview.h \
-                 Command.h AlignCmd.h DistributeCmd.h InsertClipartCmd.h \
+		 Command.h AlignCmd.h DistributeCmd.h InsertClipartCmd.h \
 		 TranslateCmd.h ScaleCmd.h RotateCmd.h \
 		 CreateOvalCmd.h CreatePolylineCmd.h \
 		 CreateTextCmd.h CreateRectangleCmd.h \
@@ -39,7 +39,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 BrushCells.h PathTextTool.h \
 		 EllipseConfigDialog.h HelplineDialog.h \
 		 GCurve.h ToCurveCmd.h BlendDialog.h BlendCmd.h \
-		 filter_utils.h kmynuminput.h
+		 filter_utils.h
 
 libkillu_la_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  PathTextTool.cc GOval.cc GClipart.cc GBezier.cc GPixmap.cc \
@@ -54,7 +54,7 @@ libkillu_la_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
                                             AlignmentDialog.cc \
 			  PolygonConfigDialog.cc PolygonPreview.cc \
 			  GridDialog.cc Command.cc DuplicateCmd.cc \
-                          AlignCmd.cc DistributeCmd.cc InsertClipartCmd.cc \
+	                              AlignCmd.cc DistributeCmd.cc InsertClipartCmd.cc \
 			  TranslateCmd.cc ScaleCmd.cc RotateCmd.cc \
 			  CreateOvalCmd.cc CreatePolylineCmd.cc \
 			  CreateTextCmd.cc CreateRectangleCmd.cc \
@@ -80,6 +80,6 @@ libkillu_la_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  EllipseConfigDialog.cc \
 			  HelplineDialog.cc GCurve.cc ToCurveCmd.cc \
 			  BlendDialog.cc BlendCmd.cc \
-			  filter_utils.cc kmynuminput.cc
+			  filter_utils.cc
 
 METASOURCES =	AUTO
