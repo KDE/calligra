@@ -17,28 +17,36 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kgobjectpool.h>
+// This class is used to store the group information
 
-KGObjectPool *KGObjectPool::m_self=0L;
+#ifndef kggroup_h
+#define kggroup_h
 
-KGObjectPool *KGObjectPool::self() {
-    if(m_self==0L) 
-        m_self=new KGObjectPool;
-    return m_self;
-}
+#include <qlist.h>
+#include <qguardedptr.h>
 
-KGObjectPool::KGObjectPool() {
-    objects.setAutoDelete(true);
-}
+#include <kgobject.h>
 
-const bool KGObjectPool::remove(const unsigned int &index) {
-    // if the object is member of a group, tell the
-    // group to remove it (TODO)
-    return objects.remove(index);
-}
+class QDomElement;
+class QDomDocument;
 
-const bool KGObjectPool::remove(const KGObject *object) {
-    // if the object is member of a group, tell the
-    // group to remove it (TODO)
-    return objects.remove(object);
-}
+
+class KGGroup {
+    
+public:
+    KGGroup();                           // creates an empty group with a unique ID
+    KGGroup(const QDomElement &element); // "loads" a group from XML
+    ~KGGroup();
+
+    const int id() { return m_id; }
+    const QDomElement save(const QDomDocument &document);  // save the group
+    
+    void addMember(KGObject *member);
+    void removeMember(KGObject *member);
+    
+private:
+    QList< QGuardedPtr<KGObject> > members;
+    static int ID;   // This is the counter for a unique group ID
+    const int m_id;  // This is the id of this group
+};
+#endif // kggroup_h

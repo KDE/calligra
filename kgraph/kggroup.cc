@@ -17,28 +17,15 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kgobjectpool.h>
+#include <kggroup.h>
 
-KGObjectPool *KGObjectPool::m_self=0L;
+int KGGroup::ID=0;
 
-KGObjectPool *KGObjectPool::self() {
-    if(m_self==0L) 
-        m_self=new KGObjectPool;
-    return m_self;
+KGGroup::KGGroup() : m_id(++ID) {
 }
 
-KGObjectPool::KGObjectPool() {
-    objects.setAutoDelete(true);
+KGGroup::KGGroup(const QDomElement &/*element*/) : m_id(++ID) {
 }
 
-const bool KGObjectPool::remove(const unsigned int &index) {
-    // if the object is member of a group, tell the
-    // group to remove it (TODO)
-    return objects.remove(index);
-}
-
-const bool KGObjectPool::remove(const KGObject *object) {
-    // if the object is member of a group, tell the
-    // group to remove it (TODO)
-    return objects.remove(object);
+KGGroup::~KGGroup() {
 }

@@ -29,8 +29,7 @@ KGCanvas::KGCanvas(QWidget *parent, const char *name) :
     viewport()->setMouseTracking(true);
     setFocus();
     setBackgroundMode(NoBackground);
-    //setBackgroundMode(PaletteBackground);
-    resizeContents(1000, 1000);
+    //resizeContents(480, 300);
 }
 
 KGCanvas::~KGCanvas() {

@@ -25,6 +25,7 @@
 #include <qobject.h>
 #include <qbrush.h>
 #include <qpen.h>
+#include <qguardedptr.h>
 
 #include <kgraph_global.h>
 
@@ -47,6 +48,8 @@ class KGObject : public QObject {
     Q_ENUMS(STATE)
     Q_ENUMS(FILL_STYLE)
     Q_PROPERTY(FILL_STYLE fillStyle READ fillStyle WRITE setFillStyle)
+    Q_ENUMS(Gradient)
+    Q_PROPERTY(Gradient gradient READ gradient WRITE setGradient)
     Q_PROPERTY(QBrush brush READ brush WRITE setBrush)
     Q_PROPERTY(QPen pen READ pen WRITE setPen)
 
@@ -56,7 +59,7 @@ public:
     virtual ~KGObject();
 
     virtual QDomElement save(const QDomDocument &doc) const; // save the object to xml
-    // Just add this element to the one from the derived object and call the KGObject()
+    // Just add this element to the one from the derived object. Call the KGObject()
     // CTOR on loading (from the virtual CTOR in the part)
 
     virtual void draw(const QPainter &p, const bool toPrinter=false) const = 0;  // guess :)
@@ -106,7 +109,7 @@ protected:
     KGObject(const QDomElement &element);        // create an object from xml (loading)
 
     STATE m_state;                               // are there handles to draw or not?
-    KGGroup *tempGroup;
+    QGuardedPtr<KGGroup> tempGroup;
 
     mutable bool boundingRectDirty;              // is the cached bounding rect still correct?
     mutable QRect bounds;                        // bounding rect (cache)
@@ -118,7 +121,7 @@ protected:
     QBrush m_brush;
     Gradient m_gradient;
     QPen m_pen;
-    KGGroup *m_group;
+    QGuardedPtr<KGGroup> m_group;
     QPoint m_origin;
 
 private:

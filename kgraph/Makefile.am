@@ -15,13 +15,13 @@ lib_LTLIBRARIES = libkgraph.la
 
 libkgraph_la_SOURCES = kgraph_shell.cc kgraph_part.cc \
     kgraph_view.cc kgraph_factory.cc kgobject.cc \
-    kgcanvas.cc kgobjectpool.cc
+    kgcanvas.cc kgobjectpool.cc kggroup.cc
 
 kgraph_SOURCES = main.cc
 
 noinst_HEADERS =  kgraph_global.h kgraph_shell.h \
     kgraph_part.h kgraph_view.h kgraph_factory.h \
-    kgobject.h kgcanvas.h kgobjectpool.h
+    kgobject.h kgcanvas.h kgobjectpool.h kggroup.h
 
 libkgraph_la_METASOURCES = AUTO
 

@@ -33,25 +33,32 @@
 class KGObjectPool {
 
 public:
-    KGObjectPool();
-    ~KGObjectPool();
+    static KGObjectPool *self();   // allow only one object pool!
     
-    //KGObject *first() const;
-    //KGObject *last() const;
-    //KGObject *next() const;
-    //KGObject *prev() const;
-    //unsigned int count() const;
-    //... (some more methods from QList)
+    KGObject *first() { return objects.first(); }
+    KGObject *last() { return objects.last(); }
+    KGObject *next() { return objects.next(); }
+    KGObject *prev() { return objects.prev(); }
+    KGObject *current() { return objects.current(); }
+    KGObject *at(const unsigned int &index) { return objects.at(index); }
+
+    const bool remove(const unsigned int &index);
+    const bool remove(const KGObject *object);
+
+    const unsigned int count() const { return objects.count(); }
+    const bool isEmpty() const { return objects.isEmpty(); }
     
     //KGLine *createLine(); // default line (from (0|0) to (1|1))
     //KGLine *createLine(const QDomElement &e);
     //KGLine *createLine(const QPoint &a, const QPoint &b);
-    //...
-    //void addLine(KGLine *line); // transfer ownership :)
-    
-    //KGObject *findObject(const QString &name);
-    
+
+
+protected:
+    KGObjectPool();
+    ~KGObjectPool();
+
 private:
     QList<KGObject> objects;
+    static KGObjectPool *m_self;
 };
 #endif // kgobjectpool_h
