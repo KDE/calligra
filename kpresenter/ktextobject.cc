@@ -970,6 +970,17 @@ void KTextObject::zoom(float _fakt)
 	    }
 	}
     }
+  
+  font.operator=(objEnumListType.font);
+  objEnumListType.ofont.operator=(font);
+  font.setPointSize(((int)((float)font.pointSize() * _fakt)));
+  objEnumListType.font.operator=(font);
+
+  font.operator=(objUnsortListType.font);
+  objUnsortListType.ofont.operator=(font);
+  font.setPointSize(((int)((float)font.pointSize() * _fakt)));
+  objUnsortListType.font.operator=(font);
+
   recalc();
   repaint(false);
 }
@@ -1000,6 +1011,10 @@ void KTextObject::zoomOrig()
 	    }
 	}
     }
+
+  objEnumListType.font.operator=(objEnumListType.ofont);
+  objUnsortListType.font.operator=(objUnsortListType.ofont);
+
   recalc();
   repaint(false);
 }

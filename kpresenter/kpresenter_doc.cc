@@ -726,7 +726,19 @@ void KPresenterDocument_impl::loadBackground(KOMLParser& parser,vector<KOMLAttri
 		  for(;it != lst.end();it++)
 		    {
 		      if ((*it).m_strName == "value")
-			setBackPic(_num,(*it).m_strValue.c_str());
+			{
+			  QString _fileName = (*it).m_strValue.c_str();
+			  if (!_fileName.isEmpty())
+			    {
+			      if (int _envVarB = _fileName.find('$') >= 0)
+				{
+				  int _envVarE = _fileName.find('/',_envVarB);
+				  QString path = (const char*)getenv((const char*)_fileName.mid(_envVarB,_envVarE-_envVarB));
+				  _fileName.replace(_envVarB-1,_envVarE-_envVarB+1,path);
+				}
+			    }
+			  setBackPic(_num,(const char*)_fileName);
+			}
 		    }
 		}
 	      
@@ -739,7 +751,19 @@ void KPresenterDocument_impl::loadBackground(KOMLParser& parser,vector<KOMLAttri
 		  for(;it != lst.end();it++)
 		    {
 		      if ((*it).m_strName == "value")
-			setBackClip(_num,(*it).m_strValue.c_str());
+			{
+			  QString _fileName = (*it).m_strValue.c_str();
+			  if (!_fileName.isEmpty())
+			    {
+			      if (int _envVarB = _fileName.find('$') >= 0)
+				{
+				  int _envVarE = _fileName.find('/',_envVarB);
+				  QString path = (const char*)getenv((const char*)_fileName.mid(_envVarB,_envVarE-_envVarB));
+				  _fileName.replace(_envVarB-1,_envVarE-_envVarB+1,path);
+				}
+			    }
+			  setBackClip(_num,(const char*)_fileName);
+			}
 		    }
 		}
 
@@ -1835,7 +1859,7 @@ void KPresenterDocument_impl::repaint(unsigned int x,unsigned int y,unsigned int
 }
 
 /*==================== reorder page =============================*/
-QList<int> KPresenterDocument_impl::reorderPage(unsigned int num,int diffx,int diffy)
+QList<int> KPresenterDocument_impl::reorderPage(unsigned int num,int diffx,int diffy,float fakt = 1.0)
 {
   QList<int> orderList;
 
@@ -1844,10 +1868,10 @@ QList<int> KPresenterDocument_impl::reorderPage(unsigned int num,int diffx,int d
       for (unsigned int i = 0;i <= _objList.count()-1;i++)
 	{
 	  objPtr = _objList.at(i);
-	  if (getPageOfObj(objPtr->objNum,diffx,diffy) == num)
+	  if (getPageOfObj(objPtr->objNum,diffx,diffy,fakt) == num)
 	    {
 	      objPtr = _objList.at(i);
-	      if (!orderList.find((int*)objPtr->presNum))
+	      if (orderList.find((int*)objPtr->presNum) == -1)
 		{
 		  if (orderList.isEmpty())
 		    orderList.append((int*)objPtr->presNum);
@@ -1866,15 +1890,12 @@ QList<int> KPresenterDocument_impl::reorderPage(unsigned int num,int diffx,int d
 	    }
 	}
     } 
-  printf("-----------------------------\n");
-  for (unsigned int k = 0;k < orderList.count();k++)
-    printf("%d ------------------\n",(int)orderList.at(k));
 
   return orderList;
 }
 
 /*====================== get page of object ======================*/
-int KPresenterDocument_impl::getPageOfObj(int objNum,int diffx,int diffy)
+int KPresenterDocument_impl::getPageOfObj(int objNum,int diffx,int diffy,float fakt = 1.0)
 {
   int i,j;
 
@@ -1885,8 +1906,8 @@ int KPresenterDocument_impl::getPageOfObj(int objNum,int diffx,int diffy)
 	{
 	  for (j = 0;j < _pageList.count();j++)
 	    {
-	      if (getPageSize(j+1,diffx,diffy).intersects(QRect(objPtr->ox - diffx,objPtr->oy - diffy,
-								objPtr->ow,objPtr->oh)))	  
+	      if (getPageSize(j+1,diffx,diffy,fakt).intersects(QRect(objPtr->ox - diffx,objPtr->oy - diffy,
+								     objPtr->ow,objPtr->oh)))	  
 		return j+1;
 	    }
 	}

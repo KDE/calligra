@@ -373,6 +373,7 @@ public:
     QFont font;
     QColor color;
     int chr;
+    QFont ofont;
   };
 
   // structure for enum list
@@ -387,6 +388,7 @@ public:
     int start;
     QFont font;
     QColor color;
+    QFont ofont;
   };
 
   // structure for cell width/height

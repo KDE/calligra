@@ -40,6 +40,7 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
       show();
       editMode = true;
       currPresPage = 1;
+      currPresStep = 0;
       _presFakt = 1.0;
     }
   else 
@@ -222,7 +223,8 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 			      objPtr->ow,objPtr->oh).intersects(QRect((width() - getPageSize(currPresPage,_presFakt).width()) / 2 + 10,
 								      (height() - getPageSize(currPresPage,_presFakt).height()) / 2 + 10,
 								      getPageSize(currPresPage,_presFakt).width(),
-								      getPageSize(currPresPage,_presFakt).height()))))
+								      getPageSize(currPresPage,_presFakt).height())) &&
+	   objPtr->presNum <= currPresStep))
 	{     
 	  switch (objPtr->objType)
 	    {
@@ -618,6 +620,8 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
 	      objPtr->textObj->setBackgroundColor(txtBackCol());
 	      //objPtr->textObj->setSelectionColor(txtSelCol());
 	      objPtr->textObj->show();
+	      setFocusProxy(objPtr->textObj);
+	      setFocusPolicy(QWidget::StrongFocus);
 	      objPtr->textObj->setFocus();
 	      txtPtr = objPtr->textObj;
 	      txtPtr->setShowCursor(true);
@@ -625,8 +629,6 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
 	      connect(objPtr->textObj,SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
 	      connect(objPtr->textObj,SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
 	      //objPtr->textObj->initActive();
-	      setFocusProxy(objPtr->textObj);
-	      setFocusPolicy(QWidget::StrongFocus);
 	      txtPtr->setCursor(ibeamCursor);
 	    }
 	}
@@ -1124,20 +1126,16 @@ void Page::startScreenPresentation()
   currPresPage = 1;
   editMode = false;
   drawBack = true;
-  grabKeyboard();
-  grabMouse();
+  presStepList = view->KPresenterDoc()->reorderPage(1,diffx(),diffy(),_presFakt);
+  currPresStep = (int)presStepList.first();
+  repaint(true);
   setFocusPolicy(QWidget::StrongFocus);
   setFocus();
-  view->KPresenterDoc()->reorderPage(1,diffx(),diffy());
-  repaint(true);
 }
 
 /*====================== stop screenpresentation =================*/
 void Page::stopScreenPresentation()
 {
-  setFocusPolicy(QWidget::NoFocus);
-  releaseMouse();
-  releaseKeyboard();
   unsigned int i;
 
   for (i = 0;i < objList()->count();i++)
@@ -1184,21 +1182,63 @@ void Page::stopScreenPresentation()
 /*========================== next ================================*/
 bool Page::pNext(bool manual)
 {
-  if (currPresPage+1 > pageNums())
-    return false;
-
-  currPresPage++;
-  return true;
+  if ((int*)currPresStep < presStepList.last())
+    {
+      presStepList.find((int*)currPresStep);
+      currPresStep = (int)presStepList.next();
+      drawBack = false;
+      repaint(drawBack);
+      drawBack = true;
+      return false;
+    }
+  else
+    {
+      if (currPresPage+1 > pageNums())
+	{
+	  presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
+	  currPresStep = (int)presStepList.last();
+	  drawBack = false;
+	  repaint(drawBack);
+	  drawBack = true;
+	  return false;
+	}
+      currPresPage++;
+      presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
+      currPresStep = (int)presStepList.first();
+      drawBack = true;
+      return true;
+    }
 }
 
 /*====================== previous ================================*/
 bool Page::pPrev(bool manual)
 {
-  if (currPresPage-1 <= 0)
-    return false;
-
-  currPresPage--;
-  return true;
+  if ((int*)currPresStep > presStepList.first())
+    {
+      presStepList.find((int*)currPresStep);
+      currPresStep = (int)presStepList.prev();
+      drawBack = true;
+      repaint(drawBack);
+      drawBack = true;
+      return false;
+    }
+  else
+    {
+      if (currPresPage-1 <= 0)
+	{
+	  presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
+	  currPresStep = (int)presStepList.first();
+	  drawBack = false;
+	  repaint(drawBack);
+	  drawBack = true;
+	  return false;
+	}
+      currPresPage--;
+      presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
+      currPresStep = (int)presStepList.last();
+      drawBack = true;
+      return true;
+    }
 }
 
 /*======================== can we assign an effect ? =============*/

@@ -433,6 +433,8 @@ void KPresenterView_impl::screenStart()
       page->topLevelWidget()->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
       page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
       page->topLevelWidget()->setBackgroundColor(black);
+      page->setFocusPolicy(QWidget::StrongFocus);
+      page->setFocus();
     }
 }
 
@@ -477,6 +479,12 @@ void KPresenterView_impl::screenPrev()
 	  yOffset -= KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height()+10; 
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 	  page->repaint(true);
+	  page->setFocus();
+	}
+      else
+	{
+	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
+	  page->setFocus();
 	}
     }
 }
@@ -491,6 +499,12 @@ void KPresenterView_impl::screenNext()
 	  yOffset += KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height()+10; 
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 	  page->repaint(true);
+	  page->setFocus();
+	}
+      else
+	{
+	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
+	  page->setFocus();
 	}
     }
 }
@@ -1201,6 +1215,12 @@ void KPresenterView_impl::resizeEvent(QResizeEvent *e)
       vert->hide();
       //page->resize(widget()->width(),widget()->height());
     }  
+}
+
+/*======================= key press event =======================*/
+void KPresenterView_impl::keyPressEvent(QKeyEvent *e)
+{
+  page->keyPressEvent(e);
 }
 
 /*======================= setup menu ============================*/

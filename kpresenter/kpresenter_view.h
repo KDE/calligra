@@ -224,6 +224,8 @@ public:
   void changePicture(unsigned int,const char*);
   void changeClipart(unsigned int,const char*);
 
+  QPen getPen() {return pen;} 
+
 public slots:
 
   // Document signals
@@ -294,7 +296,8 @@ protected:
   void mousePressEvent(QMouseEvent*);
   void mouseReleaseEvent(QMouseEvent*);
   void mouseMoveEvent(QMouseEvent*);
-
+  void keyPressEvent(QKeyEvent*);
+  
   // ********** variables **********
 
   // document

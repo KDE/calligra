@@ -16,6 +16,8 @@
 #ifndef GRAPHOBJ_H
 #define GRAPHOBJ_H
 
+#include <stdlib.h>
+
 #include <qwidget.h>
 #include <qpainter.h>
 #include <qpicture.h>

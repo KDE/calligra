@@ -229,6 +229,15 @@ void GraphObj::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	      if ((*it).m_strName == "value")
 		{
 		  fileName = (*it).m_strValue.c_str();
+		  if (!fileName.isEmpty())
+		    {
+		      if (int _envVarB = fileName.find('$') >= 0)
+			{
+			  int _envVarE = fileName.find('/',_envVarB);
+			  QString path = (const char*)getenv((const char*)fileName.mid(_envVarB,_envVarE-_envVarB));
+			  fileName.replace(_envVarB-1,_envVarE-_envVarB+1,path);
+			}
+		    }
 		  if (objType == OT_AUTOFORM)
 		    {
 		      QString afDir = qstrdup(KApplication::kde_datadir());

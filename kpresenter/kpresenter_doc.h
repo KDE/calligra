@@ -274,8 +274,8 @@ public:
   void repaint(unsigned int,unsigned int,unsigned int,unsigned int,bool);
 
   // stuff for screen-presentations
-  QList<int> reorderPage(unsigned int,int,int);
-  int getPageOfObj(int,int,int);
+  QList<int> reorderPage(unsigned int,int,int,float fakt = 1.0);
+  int getPageOfObj(int,int,int,float fakt = 1.0);
 
 signals:
 

@@ -90,6 +90,8 @@ public:
 
   bool canAssignEffect(int&,int&);
 
+  void keyPressEvent(QKeyEvent *e);
+
 public slots:
 
   // public slots
@@ -110,7 +112,6 @@ protected:
   void mouseReleaseEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
   void mouseDoubleClickEvent(QMouseEvent *e);
-  void keyPressEvent(QKeyEvent *e);
   void resizeEvent(QResizeEvent *e);
   int getObjectAt(int x,int y); 
   struct PageObjects* getObject(int num);
@@ -158,8 +159,9 @@ protected:
   GraphObj *graphPtr;
   KPresenterView_impl *view;
   bool editMode;
-  unsigned int currPresPage;
+  unsigned int currPresPage,currPresStep;
   float _presFakt;
+  QList<int> presStepList;
 
 private slots:
 
