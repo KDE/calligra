@@ -500,6 +500,17 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
         flags |= KoTextFormat::VAlign;
         newFormat->setVAlign( m_replaceContext->m_vertAlign);
     }
+    if ( m_replaceContext->m_optionsMask & KoSearchContext::StrikeOut)
+    {
+        flags |= KoTextFormat::StrikeOut;
+        newFormat->setDoubleUnderline( (bool)(m_replaceContext->m_options & KoSearchContext::StrikeOut));
+    }
+    if ( m_replaceContext->m_optionsMask & KoSearchContext::DoubleUnderLine)
+    {
+        flags |= KoTextFormat::DoubleUnderline;
+        newFormat->setStrikeOut( (bool)(m_replaceContext->m_options & KoSearchContext::DoubleUnderLine));
+    }
+
     KCommand *cmd=m_currentTextObj->setFormatCommand( cursor, &lastFormat ,newFormat,flags , false, KoTextObject::HighlightSelection );
 
     if( cmd )
