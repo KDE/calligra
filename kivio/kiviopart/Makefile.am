@@ -11,7 +11,7 @@ libkiviopart_la_LIBADD = \
 		$(top_builddir)/kivio/kiviopart/tools/libtools.la\
 		$(top_builddir)/kivio/kiviopart/tklib/libtklib.la\
 		$(top_builddir)/kivio/kiviopart/kiviosdk/libkiviosdk.la\
-		$(top_builddir)/kivio/kiviopart/ui/libui.la
+		$(top_builddir)/kivio/kiviopart/ui/libui.la $(LIBPYTHON) $(PYTHONLIB)
 
 INCLUDES = -I$(srcdir)/ui\
 	-Iui\

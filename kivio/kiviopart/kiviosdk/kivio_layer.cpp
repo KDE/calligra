@@ -177,7 +177,7 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
     while( !node.isNull() )
     {
         QString name = node.nodeName();
-        if( name == "KivioSMLStencil" )
+        if( name == "KivioSMLStencil" || name == "KivioPyStencil" )
         {
             KivioStencil *pStencil = loadSMLStencil( node.toElement() );
             if( pStencil )

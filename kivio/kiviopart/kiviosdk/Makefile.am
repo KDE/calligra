@@ -8,10 +8,12 @@ noinst_LTLIBRARIES =libkiviosdk.la
 
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
-	-I$(top_srcdir)/kivio/kiviopart/tklib $(KOFFICE_INCLUDES) $(all_includes)
+	-I$(top_srcdir)/kivio/kiviopart/tklib $(KOFFICE_INCLUDES) $(all_includes) $(PYTHONINC)
 libkiviosdk_la_METASOURCES = AUTO
 libkiviosdk_la_SOURCES = \
 		kivio_common.cpp\
+		kivio_py_stencil.cpp\
+		kivio_py_stencil_spawner.cpp\
 		kivio_fill_style.cpp\
 		kivio_gradient.cpp\
 		kivio_point.cpp\
@@ -42,6 +44,10 @@ libkiviosdk_la_SOURCES = \
 		kivio_1d_stencil.cpp
 EXTRA_DIST = \
 		kivio_common.cpp\
+		kivio_py_stencil.cpp\
+		kivio_py_stencil.h\
+		kivio_py_stencil_spawner.cpp\
+		kivio_py_stencil_spawner.h\
 		kivio_common.h\
 		kivio_fill_style.cpp\
 		kivio_fill_style.h\

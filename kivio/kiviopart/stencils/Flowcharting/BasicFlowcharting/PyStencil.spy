@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<KivioPyStencil creator="vi">
+    <KivioPyStencilSpawnerInfo>
+        <Author data="Dima"/>
+        <Title data="Python"/>
+        <Description data="Basic flowcharting card shape"/>
+        <Version data="0.1"/>
+        <Web data="www.thekompany.com"/>
+        <Email data="dima@kde.org"/>
+        <Copyright data="Copyright (C) 2000 theKompany.com. All rights reserved."/>
+        <AutoUpdate data="off"/>
+    </KivioPyStencilSpawnerInfo>
+
+<init code="Python">
+<![CDATA[
+
+# defined variables : x, y, w, h, x2=x+w, y2=y+h
+
+x=70
+y=40
+w=100
+h=100
+
+x2=x+w
+y2=y+w
+
+style = {
+          "color" : "blue",
+          "bgcolor" : "white",
+          "linewidth" : 1
+        }
+
+connections = []
+
+connector_targets = [ { "x":x+2,  "y":y-2 },
+                      { "x":x+2,  "y":y2-2 },
+                      { "x":x2-2, "y":y+2 },
+                      { "x":x2-2, "y":y2-2 },
+                      { "x": x+w/2, "y":y }
+                    ]
+
+
+shapes = {
+          "rect" :{
+                   "type"  : "Rectangle",
+                   "fillstyle" : "solid",
+                   "x" : x+2,
+                   "y" : y+2,
+                   "w" : w-4,
+                   "h" : w-4
+                   },
+          "rect2" :{
+                   "type"  : "Rectangle",
+                   "color" : [250,40,40],
+                   "bgcolor" : "darkgreen",
+                   "selected" : { "bgcolor" : "blue", "fillstyle":"solid" },
+                   "fillstyle" : "solid",
+                   "x" : x+w-35,
+                   "y" : y+h-35,
+                   "w" : 20,
+                   "h" : 20
+                   },
+          "rect3" :{
+                   "type"  : "RoundRect",
+                   "color" : [250,40,40],
+                   "selected" : { "color":[40,220,40] },
+                   "x" : x+15,
+                   "y" : y+15,
+                   "w" : 20,
+                   "h" : 20,
+                   "rx": 8,
+                   "ry": 8
+                   },
+          "text"  : {
+                   "type" : "TextBox",
+                   "x"    : x,
+                   "y"    : y,
+                   "w"    : w,
+                   "h"    : h,
+                   "text" : "abc"
+                   }
+       }
+
+]]>
+</init>
+
+<resize>
+<![CDATA[
+
+# as default all coords are scalled, and this code will be runned
+# defined variables : x, y, w, h, x2=x+w, y2=y+h  and all variables , defined in <init>
+connector_targets = [ { "x":x+2,  "y":y-2 },
+                            { "x":x+2,  "y":y2-2 },
+                            { "x":x2-2, "y":y+2 },
+                            { "x":x2-2, "y":y2-2 },
+                            { "x":(x+x2)/2, "y":y }
+                          ]
+
+shapes["rect2"]["x"] = x+w-35
+shapes["rect2"]["y"] = y+h-35
+shapes["rect2"]["w"] = 20
+shapes["rect2"]["h"] = 20
+
+
+]]>
+</resize>
+
+</KivioPyStencil>
+

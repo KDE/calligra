@@ -220,7 +220,7 @@ bool KivioGroupStencil::loadXML( const QDomElement &e, KivioLayer *pLayer )
 	       kdDebug() << "KivioGroupStencil::loadXML() - Error loading group stencil" << endl;
             }
         }
-        else if( name == "KivioSMLStencil" )
+        else if( name == "KivioSMLStencil" || name == "KivioPyStencil" )
         {
             pStencil = pLayer->loadSMLStencil( node.toElement() );
             if( pStencil )

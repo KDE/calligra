@@ -19,6 +19,7 @@
 #include "kivio_common.h"
 #include "kivio_plugin_stencil_spawner.h"
 #include "kivio_sml_stencil_spawner.h"
+#include "kivio_py_stencil_spawner.h"
 #include "kivio_stencil_spawner.h"
 #include "kivio_stencil_spawner_set.h"
 
@@ -99,7 +100,7 @@ bool KivioStencilSpawnerSet::loadDir( const QString &dirName )
     m_dir = dirName;
     m_name = readDesc( dirName );
 
-    d.setNameFilter("*.sml *.ksp");
+    d.setNameFilter("*.sml *.ksp *.spy");
 
     for( int i=0; i<(int)d.count(); i++ )
     {
@@ -125,6 +126,10 @@ KivioStencilSpawner* KivioStencilSpawnerSet::loadFile( const QString &fileName )
     else if( fileName.contains( ".ksp", false ) )
     {
         pSpawner = new KivioPluginStencilSpawner(this);
+    }
+	else if( fileName.contains( ".spy", false ) )
+    {
+        pSpawner = new KivioPyStencilSpawner(this);
     }
     else
     {
