@@ -144,11 +144,11 @@ KWFrameStyle::KWFrameStyle( QDomElement & parentElem, int /*docVersion=2*/ )
         m_borderBottom.setPenWidth( 0 );
 
     QColor c("white");
-    if ( parentElem.hasAttribute("bkRed") )
+    if ( parentElem.hasAttribute("red") )
         c.setRgb(
-            KWDocument::getAttribute( parentElem, "bkRed", 0 ),
-            KWDocument::getAttribute( parentElem, "bkGreen", 0 ),
-            KWDocument::getAttribute( parentElem, "bkBlue", 0 ) );
+            KWDocument::getAttribute( parentElem, "red", 0 ),
+            KWDocument::getAttribute( parentElem, "green", 0 ),
+            KWDocument::getAttribute( parentElem, "blue", 0 ) );
 
     m_backgroundColor = QBrush( c );
 }
@@ -218,9 +218,9 @@ void KWFrameStyle::saveFrameStyle( QDomElement & parentElem )
 
     if(m_backgroundColor.color().isValid())
     {
-        parentElem.setAttribute( "bkRed", m_backgroundColor.color().red() );
-        parentElem.setAttribute( "bkGreen", m_backgroundColor.color().green() );
-        parentElem.setAttribute( "bkBlue", m_backgroundColor.color().blue() );
+        parentElem.setAttribute( "red", m_backgroundColor.color().red() );
+        parentElem.setAttribute( "green", m_backgroundColor.color().green() );
+        parentElem.setAttribute( "blue", m_backgroundColor.color().blue() );
     }
 }
 
