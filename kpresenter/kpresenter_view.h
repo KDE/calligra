@@ -79,6 +79,7 @@ class Page;
 #include "setbackcmd.h"
 #include "pgconfcmd.h"
 #include "confpiedia.h"
+#include "spacingdia.h"
 #include "pglayoutcmd.h"
 #include "shadowcmd.h"
 #include "rotatecmd.h"
@@ -237,6 +238,7 @@ public:
   virtual void textNormalText();
   virtual void textDepthPlus();
   virtual void textDepthMinus();
+  virtual void textSpacing();
   
   // ------ C++ ------
 
@@ -332,6 +334,7 @@ protected slots:
   void delPageOk(int,DelPageMode);
   void insPageOk(int,InsPageMode,InsertPos);
   void confPieOk();
+  void spacingOk(int,int,int);
 
   // scrolling
   void scrollH(int);
@@ -461,20 +464,24 @@ protected:
   CORBA::Long m_idMenuTools_Text;
   CORBA::Long m_idMenuTools_Part;
  
+  // text menu
+  OpenPartsUI::Menu_var m_vMenuText;
+  CORBA::Long m_idMenuText_TFont;
+  CORBA::Long m_idMenuText_TColor;
+  OpenPartsUI::Menu_var m_vMenuText_TAlign;
+  CORBA::Long m_idMenuText_TAlign_Left;
+  CORBA::Long m_idMenuText_TAlign_Center;
+  CORBA::Long m_idMenuText_TAlign_Right;
+  OpenPartsUI::Menu_var m_vMenuText_TType;
+  CORBA::Long m_idMenuText_TType_EnumList;
+  CORBA::Long m_idMenuText_TType_UnsortList;
+  CORBA::Long m_idMenuText_TType_NormalText;
+  CORBA::Long m_idMenuText_TDepthPlus;
+  CORBA::Long m_idMenuText_TDepthMinus;
+  CORBA::Long m_idMenuText_TSpacing;
+
   // extra menu
   OpenPartsUI::Menu_var m_vMenuExtra;
-  CORBA::Long m_idMenuExtra_TFont;
-  CORBA::Long m_idMenuExtra_TColor;
-  OpenPartsUI::Menu_var m_vMenuExtra_TAlign;
-  CORBA::Long m_idMenuExtra_TAlign_Left;
-  CORBA::Long m_idMenuExtra_TAlign_Center;
-  CORBA::Long m_idMenuExtra_TAlign_Right;
-  OpenPartsUI::Menu_var m_vMenuExtra_TType;
-  CORBA::Long m_idMenuExtra_TType_EnumList;
-  CORBA::Long m_idMenuExtra_TType_UnsortList;
-  CORBA::Long m_idMenuExtra_TType_NormalText;
-  CORBA::Long m_idMenuExtra_TDepthPlus;
-  CORBA::Long m_idMenuExtra_TDepthMinus;
   CORBA::Long m_idMenuExtra_PenBrush;
   CORBA::Long m_idMenuExtra_Pie;
   CORBA::Long m_idMenuExtra_Raise;
@@ -571,6 +578,7 @@ protected:
   CORBA::Long m_idButtonText_NormalText;
   CORBA::Long m_idButtonText_DepthPlus;
   CORBA::Long m_idButtonText_DepthMinus;
+  CORBA::Long m_idButtonText_Spacing;
 
   // extra toolbar
   OpenPartsUI::ToolBar_var m_vToolBarExtra;
@@ -618,6 +626,7 @@ protected:
   DelPageDia *delPageDia;
   InsPageDia *insPageDia;
   ConfPieDia *confPieDia;
+  SpacingDia *spacingDia;
 
   // default pen and brush
   QPen pen;

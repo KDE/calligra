@@ -392,7 +392,8 @@ void KPTextObject::saveKTextObject(ostream& out)
       txtParagraph = ktextobject.paragraphAt(i);
 
       out << otag << "<PARAGRAPH horzAlign=\"" << static_cast<int>(txtParagraph->horzAlign()) << "\" depth=\""
-	  << txtParagraph->getDepth() << "\">" << endl; 
+	  << txtParagraph->getDepth() << "\" lineSpacing=\"" << txtParagraph->getLineSpacing() << "\" distBefore=\""
+	  << txtParagraph->getDistBefore() << "\" distAfter=\"" << txtParagraph->getDistAfter() << "\">" << endl; 
 
       lastWasSpace = false;
 
@@ -540,6 +541,12 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		txtParagraph->setHorzAlign((TxtParagraph::HorzAlign)atoi((*it).m_strValue.c_str()));
 	      if ((*it).m_strName == "depth")
 		txtParagraph->setDepth(atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "lineSpacing")
+		txtParagraph->setLineSpacing(atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "distBefore")
+		txtParagraph->setDistBefore(atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "distAfter")
+		txtParagraph->setDistAfter(atoi((*it).m_strValue.c_str()));
 	    }
 
 	  while (parser.open(0L,tag))

@@ -560,34 +560,42 @@ unsigned int TxtLine::width()
 }
 
 /*==================== height of the line ========================*/
-unsigned int TxtLine::height()
+unsigned int TxtLine::height(TxtParagraph *_parag)
 {
   unsigned int h = 0;
   
   for (objPtr = objList.first();objPtr != 0;objPtr = objList.next())
     h = max(h,objPtr->height());
 
+  h += _parag->getLineSpacing();
+  if (_parag->find(this) == 0) h += _parag->getDistBefore();
+  if (_parag->find(this) == static_cast<int>(_parag->lines() - 1)) h += _parag->getDistAfter();
+
   return h;
 }
 
 /*==================== ascent of the line ========================*/
-unsigned int TxtLine::ascent()
+unsigned int TxtLine::ascent(TxtParagraph *_parag)
 {
   unsigned int a = 0;
   
   for (objPtr = objList.first();objPtr != 0;objPtr = objList.next())
     a = max(a,objPtr->ascent());
 
+  if (_parag->find(this) == 0) a += _parag->getDistBefore();
+
   return a;
 }
 
 /*==================== descent of the line =======================*/
-unsigned int TxtLine::descent()
+unsigned int TxtLine::descent(TxtParagraph *_parag)
 {
   unsigned int d = 0;
   
   for (objPtr = objList.first();objPtr != 0;objPtr = objList.next())
     d = max(d,objPtr->ascent());
+
+  if (_parag->find(this) == static_cast<int>(_parag->lines() - 1)) d += _parag->getDistAfter();
 
   return d;
 }
@@ -832,6 +840,9 @@ TxtParagraph::TxtParagraph(bool init = false)
   objHorzAlign = LEFT;
   _depth = 0;
   _leftIndent = 0;
+  lineSpacing = 0;
+  distBefore = 0;
+  distAfter = 0;
 
   if (init)
     {
@@ -921,7 +932,9 @@ unsigned int TxtParagraph::height()
   unsigned int h = 0;
 
   for (linePtr = lineList.first();linePtr != 0;linePtr = lineList.next())
-    h += linePtr->height();
+    h += linePtr->height(this);
+
+  h += distBefore + distAfter;
 
   return h;
 }
@@ -4117,6 +4130,7 @@ void KTextObject::setFontToAll(QFont _font)
 	    }
 	}
     }
+  recalc();
 }
 
 /*================================================================*/
@@ -4132,6 +4146,7 @@ void KTextObject::setColorToAll(QColor _color)
 	    }
 	}
     }
+  recalc();
 }
 
 /*================================================================*/
@@ -4141,6 +4156,7 @@ void KTextObject::setHorzAlignToAll(TxtParagraph::HorzAlign _align)
     {
       paragraphList.at(i)->setHorzAlign(_align);
     }
+  recalc();
 }
 
 /*====================== paint cell ==============================*/
@@ -4199,8 +4215,8 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 	    else
 	      p->setPen(allColor);
 	    if (!paragraphPtr->isEmpty())
-	      p->drawText(0,(!drawPic ? 0 : y) + paragraphPtr->lineAt(0)->ascent()-p->fontMetrics().ascent(),
-			  xstart + getLeftIndent(row),p->fontMetrics().height(),
+	      p->drawText(0,(!drawPic ? 0 : y) + paragraphPtr->lineAt(0)->ascent(paragraphPtr) - p->fontMetrics().ascent(),
+			  xstart + getLeftIndent(row),p->fontMetrics().height() + paragraphPtr->getLineSpacing(),
 			  AlignRight,chr);	    
 
 	    if (!drawPic)
@@ -4213,7 +4229,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 	  {
 	    if (!drawPic)
 	      {
-		pix.resize(xstart + getLeftIndent(row),paragraphPtr->height());
+		pix.resize(xstart + getLeftIndent(row),paragraphPtr->height() + paragraphPtr->getLineSpacing());
 		pix.fill(backgroundColor());
 		p->begin(&pix);
 	      }
@@ -4225,8 +4241,8 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 	      p->setPen(allColor);
 	    sprintf(chr,"%c",*objUnsortListType.chr->at(paragraphPtr->getDepth()));
 	    if (!paragraphPtr->isEmpty())
-	      p->drawText(0,(!drawPic ? 0 : y) + paragraphPtr->lineAt(0)->ascent()-p->fontMetrics().ascent(),
-			  xstart + getLeftIndent(row),p->fontMetrics().height(),AlignRight,chr);
+	      p->drawText(0,(!drawPic ? 0 : y) + paragraphPtr->lineAt(0)->ascent(paragraphPtr)-p->fontMetrics().ascent(),
+			  xstart + getLeftIndent(row),p->fontMetrics().height() + paragraphPtr->getLineSpacing(),AlignRight,chr);
 	    
 	    if (!drawPic)
 	      {
@@ -4250,9 +4266,9 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 
 	      if (!drawPic)
 		{
-		  if (w > 0 && linePtr->height() > 0)
+		  if (w > 0 && linePtr->height(paragraphPtr) > 0)
 		    {
-		      pix.resize(w - getLeftIndent(row),linePtr->height());
+		      pix.resize(w - getLeftIndent(row),linePtr->height(paragraphPtr));
 		      pix.fill(backgroundColor());
 		      p->begin(&pix);
 		    }
@@ -4283,7 +4299,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 		      c1.setX(x + p->fontMetrics().width(objPtr->text().left(txtCursor->positionInLine()-chars)));
 		      c1.setY(!drawPic ? 0 : y);
 		      c2.setX(c1.x());
-		      c2.setY((!drawPic ? 0 : y) + linePtr->height());
+		      c2.setY((!drawPic ? 0 : y) + linePtr->height(paragraphPtr));
 		    }
 		  
 		  // draw Text
@@ -4292,7 +4308,8 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 		  else
 		    p->setPen(allColor);
 
-		  p->drawText(x,(!drawPic ? 0 : y) + linePtr->ascent()-objPtr->ascent(),w,linePtr->height(),AlignLeft,objPtr->text());
+		  p->drawText(x,(!drawPic ? 0 : y) + linePtr->ascent(paragraphPtr)-objPtr->ascent(),w,linePtr->height(paragraphPtr),
+			      AlignLeft,objPtr->text());
 
 		  // draw Cursor
 		  if (drawCursor) 
@@ -4311,7 +4328,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 		      txtCursor->setYPos(y + ry);
 		      txtCursor->setHeight(c2.y() - c1.y());
 		      p->setPen(QPen(black,1,SolidLine));
-		      if (p->font().italic()) c1.setX(c1.x() + static_cast<int>(static_cast<float>(linePtr->height()) / 3.732));
+		      if (p->font().italic()) c1.setX(c1.x() + static_cast<int>(static_cast<float>(linePtr->height(paragraphPtr)) / 3.732));
 		      p->drawLine(c1,c2);
 		      cursorDrawn = true;
 		    }
@@ -4324,9 +4341,9 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 		      int sx,sw;
 		      bool select_full = selectFull(row,i,j,sx,sw);
 		      if (select_full)
-			p->fillRect(x,(!drawPic ? 0 : y),objPtr->width(),linePtr->height(),black);
+			p->fillRect(x,(!drawPic ? 0 : y),objPtr->width(),linePtr->height(paragraphPtr),black);
 		      else
-			p->fillRect(x + sx,(!drawPic ? 0 : y),sw,linePtr->height(),black);
+			p->fillRect(x + sx,(!drawPic ? 0 : y),sw,linePtr->height(paragraphPtr),black);
 		      p->setRasterOp(ro);
 		    }
 
@@ -4342,7 +4359,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 	    }
 
 	  // calculate coordinates for the next line
-	  y += linePtr->height();
+	  y += linePtr->height(paragraphPtr);
 	  x = xstart + getLeftIndent(row);
 	  chars = 0;
 	}
@@ -4856,6 +4873,15 @@ void KTextObject::splitParagraph()
   para1->setLeftIndent(paragraphList.at(txtCursor->positionParagraph())->getLeftIndent());
   para2->setLeftIndent(paragraphList.at(txtCursor->positionParagraph())->getLeftIndent());
   para3->setLeftIndent(paragraphList.at(txtCursor->positionParagraph())->getLeftIndent());
+  para1->setLineSpacing(paragraphList.at(txtCursor->positionParagraph())->getLineSpacing());
+  para1->setDistBefore(paragraphList.at(txtCursor->positionParagraph())->getDistBefore());
+  para1->setDistAfter(paragraphList.at(txtCursor->positionParagraph())->getDistAfter());
+  para2->setLineSpacing(paragraphList.at(txtCursor->positionParagraph())->getLineSpacing());
+  para2->setDistBefore(paragraphList.at(txtCursor->positionParagraph())->getDistBefore());
+  para2->setDistAfter(paragraphList.at(txtCursor->positionParagraph())->getDistAfter());
+  para3->setLineSpacing(paragraphList.at(txtCursor->positionParagraph())->getLineSpacing());
+  para3->setDistBefore(paragraphList.at(txtCursor->positionParagraph())->getDistBefore());
+  para3->setDistAfter(paragraphList.at(txtCursor->positionParagraph())->getDistAfter());
 
   int i;
   unsigned int para = txtCursor->positionParagraph();
@@ -5057,6 +5083,11 @@ void KTextObject::joinParagraphs(unsigned int p1,unsigned int p2)
   lin = new TxtLine();
   para1 = new TxtParagraph();
   para1->append(lin);
+  para1->setDepth(paragraphList.at(txtCursor->positionParagraph())->getDepth());
+  para1->setLeftIndent(paragraphList.at(txtCursor->positionParagraph())->getLeftIndent());
+  para1->setLineSpacing(paragraphList.at(txtCursor->positionParagraph())->getLineSpacing());
+  para1->setDistBefore(paragraphList.at(txtCursor->positionParagraph())->getDistBefore());
+  para1->setDistAfter(paragraphList.at(txtCursor->positionParagraph())->getDistAfter());
 
   lin = paragraphAt(para1n)->toOneLine();
   linePtr = paragraphAt(para2n)->toOneLine();
@@ -5379,12 +5410,12 @@ TxtCursor KTextObject::getCursorPos(int _x,int _y,bool &changed,bool set=false,b
   line = paragraphAt(para)->lines() - 1;
   for (i = 0;i < static_cast<int>(paragraphAt(para)->lines());i++)
     {
-      if (y >= h && y <= h + static_cast<int>(paragraphAt(para)->lineAt(i)->height()))
+      if (y >= h && y <= h + static_cast<int>(paragraphAt(para)->lineAt(i)->height(paragraphPtr)))
 	{
 	  line = i;
 	  break;
 	}
-      h += paragraphAt(para)->lineAt(i)->height();
+      h += paragraphAt(para)->lineAt(i)->height(paragraphPtr);
     }
   
   paragraphPtr = paragraphAt(para);
@@ -5914,3 +5945,74 @@ int KTextObject::getLeftIndent(int _parag)
   return paragraphList.at(_parag)->getLeftIndent();
 }
 
+/*================================================================*/
+int KTextObject::getLineSpacing()
+{
+  return paragraphList.at(txtCursor->positionParagraph())->getLineSpacing();
+}
+
+/*================================================================*/
+int KTextObject::getDistBefore()
+{
+  return paragraphList.at(txtCursor->positionParagraph())->getDistBefore();
+}
+
+/*================================================================*/
+int KTextObject::getDistAfter()
+{
+  return paragraphList.at(txtCursor->positionParagraph())->getDistAfter();
+}
+
+/*================================================================*/
+void KTextObject::setLineSpacing(int l)
+{
+  paragraphList.at(txtCursor->positionParagraph())->setLineSpacing(l);
+  recalc(); 
+  repaint(true);
+}
+
+/*================================================================*/
+void KTextObject::setDistBefore(int d)
+{
+  paragraphList.at(txtCursor->positionParagraph())->setDistBefore(d);
+  recalc(); 
+  repaint(true);
+}
+
+/*================================================================*/
+void KTextObject::setDistAfter(int d)
+{
+  paragraphList.at(txtCursor->positionParagraph())->setDistAfter(d);
+  recalc(); 
+  repaint(true);
+}
+
+/*================================================================*/
+void KTextObject::setAllLineSpacing(int l)
+{
+  for (unsigned int i = 0;i < paragraphList.count();i++)
+    {
+      paragraphList.at(i)->setLineSpacing(l);
+    }
+  recalc();
+}
+
+/*================================================================*/
+void KTextObject::setAllDistBefore(int d)
+{
+  for (unsigned int i = 0;i < paragraphList.count();i++)
+    {
+      paragraphList.at(i)->setDistBefore(d);
+    }
+  recalc();
+}
+
+/*================================================================*/
+void KTextObject::setAllDistAfter(int d)
+{
+  for (unsigned int i = 0;i < paragraphList.count();i++)
+    {
+      paragraphList.at(i)->setDistAfter(d);
+    }
+  recalc();
+}

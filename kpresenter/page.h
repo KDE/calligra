@@ -110,6 +110,8 @@ public:
     { partEntry = pe; }
   void setToolEditMode(ToolEditMode _m);
 
+  KTextObject *haveASelectedTextObj();
+
 public slots:
 
   // public slots

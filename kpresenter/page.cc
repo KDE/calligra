@@ -1479,6 +1479,21 @@ void Page::setTextAlign(TxtParagraph::HorzAlign align)
     }
 }
 
+/*================================================================*/
+KTextObject *Page::haveASelectedTextObj()
+{
+  KPObject *kpobject = 0;
+  
+  for (unsigned int i = 0;i < objectList()->count();i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected() && kpobject->getType() == OT_TEXT)
+	return dynamic_cast<KPTextObject*>(kpobject)->getKTextObject();
+    }
+
+  return 0L;
+}
+
 /*====================== start screenpresentation ================*/
 void Page::startScreenPresentation(bool zoom)
 {

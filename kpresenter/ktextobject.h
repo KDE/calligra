@@ -555,17 +555,17 @@ public:
   /**
    * Returns the height of the line.
    */
-  unsigned int height();
+  unsigned int height(TxtParagraph *_parag);
 
   /**
    * Returns the maximal ascent of the line.
    */
-  unsigned int ascent();
+  unsigned int ascent(TxtParagraph *_parag);
 
   /**
    * Returns the maximal descent of the line.
    */
-  unsigned int descent();
+  unsigned int descent(TxtParagraph *_parag);
 
   /**
    * Assigns a textline.
@@ -835,6 +835,41 @@ public:
   void setLeftIndent(int l)
     { _leftIndent = l; }
 
+  /**
+   * Set the line spacing
+   */
+  void setLineSpacing(int l) { lineSpacing = l; }
+
+  /**
+   * Set distance before the parag.
+   */
+  void setDistBefore(int d) { distBefore = d; }
+
+  /**
+   * Set distance after the parag.
+   */
+  void setDistAfter(int d) { distAfter = d; }
+
+  /**
+   * Returns line spacing.
+   */
+  int getLineSpacing() { return lineSpacing; }
+
+  /**
+   * Returns distance before the parag.
+   */
+  int getDistBefore() { return distBefore; }
+
+  /**
+   * Returns distance after the parag.
+   */
+  int getDistAfter() { return distAfter; }
+
+  /**
+   * Search a line and return the index.
+   */
+  int find(TxtLine *l) { return lineList.findRef(l); }
+
 protected:
 
   unsigned int widthToNextSep(unsigned int);
@@ -852,6 +887,7 @@ protected:
   TxtObj *obj;
   QList<RegExpMode> *regExpList;
   int _depth,_leftIndent;
+  int lineSpacing,distBefore,distAfter;
   
 };
 
@@ -1818,6 +1854,51 @@ public:
 							       paragraphList.at(txtCursor->positionParagraph())->getDepth() - 1 : 0);
     recalc(); repaint(true);
   }
+
+  /**
+   * Returns line spacing of the current paragraph.
+   */
+  int getLineSpacing();
+
+  /**
+   * Returns distance before the current paragraph.
+   */
+  int getDistBefore();
+
+  /**
+   * Returns distance after the current paragraph.
+   */
+  int getDistAfter();
+
+  /**
+   * Set line spacing for the current paragraph.
+   */
+  void setLineSpacing(int l);
+
+  /**
+   * Set distance before the current paragraph.
+   */
+  void setDistBefore(int d);
+
+  /**
+   * Set distance after the current paragraph.
+   */
+  void setDistAfter(int d);
+
+  /**
+   * Set line spacing for all paragraphs.
+   */
+  void setAllLineSpacing(int l);
+
+  /**
+   * Set distance before all paragraphs.
+   */
+  void setAllDistBefore(int d);
+
+  /**
+   * Set distance after all paragraphs.
+   */
+  void setAllDistAfter(int d);
 
 signals:
 

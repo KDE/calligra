@@ -101,6 +101,7 @@ module KPresenter
       slot void textNormalText();
       slot void textDepthPlus();
       slot void textDepthMinus();
+      slot void textSpacing();
     };
   
   interface KPresenterDocument : KOffice::Document, KOffice::Print

@@ -13,7 +13,7 @@ toolbar_DATA = 121.xpm alignCenter.xpm alignLeft.xpm alignRight.xpm \
 	aocenterh.xpm aocenterv.xpm alignobjs.xpm dot.xpm \
 	mini_autoform.xpm mini_clipart.xpm  mini_picture.xpm  mini_text.xpm \
 	mini_circle.xpm mini_line.xpm mini_rect.xpm pie.xpm mini_pie.xpm \
-	edit_text.xpm edit_pie.xpm mouse.xpm depth-.xpm depth+.xpm
+	edit_text.xpm edit_pie.xpm mouse.xpm depth-.xpm depth+.xpm spacing.xpm
 
 toolbardir = $(kde_datadir)/kpresenter/toolbar
 

@@ -69,6 +69,7 @@ KPresenterView::KPresenterView( QWidget *_parent, const char *_name, KPresenterD
   delPageDia = 0;
   insPageDia = 0;
   confPieDia = 0;
+  spacingDia = 0;
   xOffset = 0;
   yOffset = 0;
   v_ruler = 0;
@@ -1067,9 +1068,9 @@ void KPresenterView::textAlignLeft()
   m_vToolBarText->setButton(ID_ALEFT,true);
   m_vToolBarText->setButton(ID_ACENTER,false);
   m_vToolBarText->setButton(ID_ARIGHT,false);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Left,true);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Center,false);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Right,false);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Left,true);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Center,false);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Right,false);
 }
 
 /*======================= text align center =====================*/
@@ -1081,9 +1082,9 @@ void KPresenterView::textAlignCenter()
   m_vToolBarText->setButton(ID_ALEFT,false);
   m_vToolBarText->setButton(ID_ACENTER,true);
   m_vToolBarText->setButton(ID_ARIGHT,false);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Left,false);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Center,true);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Right,false);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Left,false);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Center,true);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Right,false);
 }
 
 /*======================= text align right ======================*/
@@ -1095,9 +1096,9 @@ void KPresenterView::textAlignRight()
   m_vToolBarText->setButton(ID_ALEFT,false);
   m_vToolBarText->setButton(ID_ACENTER,false);
   m_vToolBarText->setButton(ID_ARIGHT,true);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Left,false);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Center,false);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Right,true);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Left,false);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Center,false);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Right,true);
 }
 
 /*======================= text align left =======================*/
@@ -1109,9 +1110,9 @@ void KPresenterView::mtextAlignLeft()
   m_vToolBarText->setButton(ID_ALEFT,true);
   m_vToolBarText->setButton(ID_ACENTER,false);
   m_vToolBarText->setButton(ID_ARIGHT,false);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Left,true);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Center,false);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Right,false);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Left,true);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Center,false);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Right,false);
 }
 
 /*======================= text align center =====================*/
@@ -1123,9 +1124,9 @@ void KPresenterView::mtextAlignCenter()
   m_vToolBarText->setButton(ID_ALEFT,false);
   m_vToolBarText->setButton(ID_ACENTER,true);
   m_vToolBarText->setButton(ID_ARIGHT,false);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Left,false);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Center,true);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Right,false);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Left,false);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Center,true);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Right,false);
 }
 
 /*======================= text align right ======================*/
@@ -1137,9 +1138,9 @@ void KPresenterView::mtextAlignRight()
   m_vToolBarText->setButton(ID_ALEFT,false);
   m_vToolBarText->setButton(ID_ACENTER,false);
   m_vToolBarText->setButton(ID_ARIGHT,true);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Left,false);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Center,false);
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Right,true);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Left,false);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Center,false);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Right,true);
 }
 
 /*====================== font selected ==========================*/
@@ -1221,6 +1222,33 @@ void KPresenterView::textDepthPlus()
 void KPresenterView::textDepthMinus()
 {
   if (page->kTxtObj()) page->kTxtObj()->decDepth();
+}
+
+/*===============================================================*/
+void KPresenterView::textSpacing()
+{
+  KTextObject *obj = 0L;
+
+  if (page->kTxtObj()) obj = page->kTxtObj();
+  else if (page->haveASelectedTextObj()) obj = page->haveASelectedTextObj();
+
+  if (obj)
+    {
+      if (spacingDia)
+	{
+	  QObject::disconnect(spacingDia,SIGNAL(spacingDiaOk()),this,SLOT(spacingOk()));
+	  spacingDia->close();
+	  delete spacingDia;
+	  spacingDia = 0;
+	}
+      
+      spacingDia = new SpacingDia(0,obj->getLineSpacing(),obj->getDistBefore(),obj->getDistAfter());
+      spacingDia->setMaximumSize(spacingDia->width(),spacingDia->height());
+      spacingDia->setMinimumSize(spacingDia->width(),spacingDia->height());
+      spacingDia->setCaption(i18n("KPresenter - Spacings"));
+      QObject::connect(spacingDia,SIGNAL(spacingDiaOk(int,int,int)),this,SLOT(spacingOk(int,int,int)));
+      spacingDia->show();
+    }
 }
 
 /*======================= align object left =====================*/
@@ -1590,7 +1618,7 @@ void KPresenterView::insPageOk(int _page,InsPageMode _insPageMode,InsertPos _ins
   setRanges();
 }
 
-/*===============================================================*/
+/*================================================================*/
 void KPresenterView::confPieOk()
 {
   if (!m_pKPresenterDoc->setPieSettings(confPieDia->getType(),confPieDia->getAngle(),confPieDia->getLength()))
@@ -1598,6 +1626,25 @@ void KPresenterView::confPieOk()
       pieType = confPieDia->getType();
       pieAngle = confPieDia->getAngle();
       pieLength = confPieDia->getLength();
+    }
+}
+
+/*================================================================*/
+void KPresenterView::spacingOk(int _lineSpacing,int _distBefore,int _distAfter)
+{
+  if (page->kTxtObj())
+    {
+      page->kTxtObj()->setLineSpacing(_lineSpacing);
+      page->kTxtObj()->setDistBefore(_distBefore);
+      page->kTxtObj()->setDistAfter(_distAfter);
+    }
+  else if (page->haveASelectedTextObj())
+    {
+      KTextObject *obj = page->haveASelectedTextObj();
+      obj->setAllLineSpacing(_lineSpacing);
+      obj->setAllDistBefore(_distBefore);
+      obj->setAllDistAfter(_distAfter);
+      repaint(false);
     }
 }
 
@@ -1674,25 +1721,25 @@ void KPresenterView::alignChanged(TxtParagraph::HorzAlign align)
       m_vToolBarText->setButton(ID_ALEFT,false);
       m_vToolBarText->setButton(ID_ARIGHT,false);
       m_vToolBarText->setButton(ID_ACENTER,false);
-      m_vMenuExtra->setItemChecked(m_idMenuExtra_TAlign_Left,false);
-      m_vMenuExtra->setItemChecked(m_idMenuExtra_TAlign_Center,false);
-      m_vMenuExtra->setItemChecked(m_idMenuExtra_TAlign_Right,false);
+      m_vMenuText->setItemChecked(m_idMenuText_TAlign_Left,false);
+      m_vMenuText->setItemChecked(m_idMenuText_TAlign_Center,false);
+      m_vMenuText->setItemChecked(m_idMenuText_TAlign_Right,false);
       switch (tbAlign)
 	{
 	case TxtParagraph::LEFT: 
 	  {
 	    m_vToolBarText->setButton(ID_ALEFT,true); 
-	    m_vMenuExtra->setItemChecked(m_idMenuExtra_TAlign_Left,true);
+	    m_vMenuText->setItemChecked(m_idMenuText_TAlign_Left,true);
 	  } break;
 	case TxtParagraph::CENTER:
 	  {
 	    m_vToolBarText->setButton(ID_ACENTER,true); 
-	    m_vMenuExtra->setItemChecked(m_idMenuExtra_TAlign_Center,true);
+	    m_vMenuText->setItemChecked(m_idMenuText_TAlign_Center,true);
 	  } break;
 	case TxtParagraph::RIGHT:
 	  {
 	    m_vToolBarText->setButton(ID_ARIGHT,true); 
-	    m_vMenuExtra->setItemChecked(m_idMenuExtra_TAlign_Right,true);
+	    m_vMenuText->setItemChecked(m_idMenuText_TAlign_Right,true);
 	  } break;
 	default: break;
 	}
@@ -2433,6 +2480,8 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     m_vMenuView = 0L;
     m_vMenuInsert = 0L;
     m_vMenuExtra = 0L;
+    m_vMenuText = 0L;
+    m_vMenuTools = 0L;
     m_vMenuScreen = 0L;
     m_vMenuHelp = 0L;
     return true;
@@ -2570,62 +2619,69 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuTools->setCheckable( true );
   m_vMenuTools_Rectangle->setCheckable( true );
 
-  // MENU Extra
-  _menubar->insertMenu( i18n( "&Extra" ), m_vMenuExtra, -1, -1 );
+  // MENU Text
+  _menubar->insertMenu( i18n( "T&ext" ), m_vMenuText, -1, -1 );
 
-  m_idMenuExtra_TFont = m_vMenuExtra->insertItem(i18n("&Font..."), this, "mtextFont", 0 );
+  m_idMenuText_TFont = m_vMenuText->insertItem(i18n("&Font..."), this, "mtextFont", 0 );
 
-  m_idMenuExtra_TColor = m_vMenuExtra->insertItem(i18n("Text &Color..."), this,"textColor", 0 );
+  m_idMenuText_TColor = m_vMenuText->insertItem(i18n("Text &Color..."), this,"textColor", 0 );
 
-  m_vMenuExtra->insertItem8( i18n("Text &Alignment"), m_vMenuExtra_TAlign, -1, -1 );
-  m_vMenuExtra_TAlign->setCheckable( true );
+  m_vMenuText->insertItem8( i18n("Text &Alignment"), m_vMenuText_TAlign, -1, -1 );
+  m_vMenuText_TAlign->setCheckable( true );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/alignLeft.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuExtra_TAlign_Left = m_vMenuExtra_TAlign->insertItem6(pix, i18n("Align &Left"), this,"mtextAlignLeft", 0, -1, -1 );
-  // m_vMenuExtra_TAlign->setCheckable(m_idMenuExtra_TAlign_Left,true);
+  m_idMenuText_TAlign_Left = m_vMenuText_TAlign->insertItem6(pix, i18n("Align &Left"), this,"mtextAlignLeft", 0, -1, -1 );
+  // m_vMenuText_TAlign->setCheckable(m_idMenuText_TAlign_Left,true);
       
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/alignCenter.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuExtra_TAlign_Center = m_vMenuExtra_TAlign->insertItem6(pix, i18n("Align &Center"), this,"mtextAlignCenter", 0, -1, -1 );
-  // m_vMenuExtra_TAlign->setCheckable(m_idMenuExtra_TAlign_Center,true);
+  m_idMenuText_TAlign_Center = m_vMenuText_TAlign->insertItem6(pix, i18n("Align &Center"), this,"mtextAlignCenter", 0, -1, -1 );
+  // m_vMenuText_TAlign->setCheckable(m_idMenuText_TAlign_Center,true);
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/alignRight.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuExtra_TAlign_Right = m_vMenuExtra_TAlign->insertItem6(pix, i18n("Align &Right"), this,"mtextAlignRight", 0, -1, -1 );
-  // m_vMenuExtra_TAlign->setCheckable(m_idMenuExtra_TAlign_Right,true);
+  m_idMenuText_TAlign_Right = m_vMenuText_TAlign->insertItem6(pix, i18n("Align &Right"), this,"mtextAlignRight", 0, -1, -1 );
+  // m_vMenuText_TAlign->setCheckable(m_idMenuText_TAlign_Right,true);
 
-  m_vMenuExtra->insertItem8( i18n("Text &Type"), m_vMenuExtra_TType, -1, -1 );
+  m_vMenuText->insertItem8( i18n("Text &Type"), m_vMenuText_TType, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/enumList.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuExtra_TType_EnumList = m_vMenuExtra_TType->insertItem6(pix, i18n("&Enumerated List"), this,"textEnumList", 0, -1, -1 );
+  m_idMenuText_TType_EnumList = m_vMenuText_TType->insertItem6(pix, i18n("&Enumerated List"), this,"textEnumList", 0, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/unsortedList.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuExtra_TType_UnsortList = m_vMenuExtra_TType->insertItem6(pix, i18n("&Unsorted List"), this,"textUnsortList", 0, -1, -1 );
+  m_idMenuText_TType_UnsortList = m_vMenuText_TType->insertItem6(pix, i18n("&Unsorted List"), this,"textUnsortList", 0, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/normalText.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuExtra_TType_NormalText = m_vMenuExtra_TType->insertItem6(pix, i18n("&Normal Text"), this,"textNormalText", 0, -1, -1 );
+  m_idMenuText_TType_NormalText = m_vMenuText_TType->insertItem6(pix, i18n("&Normal Text"), this,"textNormalText", 0, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/depth+.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuExtra_TDepthPlus = m_vMenuExtra->insertItem6(pix, i18n("&Increase Depth"), this,"textDepthPlus", 0, -1, -1 );
+  m_idMenuText_TDepthPlus = m_vMenuText->insertItem6(pix, i18n("&Increase Depth"), this,"textDepthPlus", 0, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/depth-.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuExtra_TDepthMinus = m_vMenuExtra->insertItem6(pix, i18n("&Decrease Depth"), this,"textDepthMinus", 0, -1, -1 );
+  m_idMenuText_TDepthMinus = m_vMenuText->insertItem6(pix, i18n("&Decrease Depth"), this,"textDepthMinus", 0, -1, -1 );
 
-  m_vMenuExtra->insertSeparator( -1 );
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/spacing.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuText_TSpacing = m_vMenuText->insertItem6(pix, i18n("Paragraph &Spacing..."), this,"textSpacing", 0, -1, -1 );
+
+
+  // MENU Extra
+  _menubar->insertMenu( i18n( "&Extra" ), m_vMenuExtra, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/style.xpm";
@@ -2806,7 +2862,7 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuHelp_Contents = m_vMenuHelp->insertItem( i18n( "&Contents" ), this, "helpContents", 0 );
 
   // Torben: Reggie, Check/uncheck all checked menu items to their actual value in this function
-  m_vMenuExtra_TAlign->setItemChecked(m_idMenuExtra_TAlign_Left,true);
+  m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Left,true);
   m_vMenuScreen_PenWidth->setItemChecked(m_idMenuScreen_PenW3,true);
 
 //   setupAccelerators();
@@ -3187,6 +3243,12 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   tmp += "/kpresenter/toolbar/depth-.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_DepthPlus = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textDepthMinus", true, i18n("Decrease Depth"), -1 );
+
+  // spacing
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/spacing.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonText_Spacing = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textSpacing", true, i18n("Paragraph Spacing"), -1 );
 
   m_vToolBarText->enable( OpenPartsUI::Show );
 
