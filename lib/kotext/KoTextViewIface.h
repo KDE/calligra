@@ -50,6 +50,14 @@ k_dcop:
     QColor textColor() const;
     QString textFontFamily()const;
     QColor textBackgroundColor()const;
+    bool textDoubleUnderline() const;
+
+    bool textItalic() const;
+    bool textBold() const;
+    bool textUnderline()const;
+    bool textStrikeOut()const;
+    bool textSubScript() const;
+    bool textSuperScript() const;
 
     void setTextColor(const QColor &color);
     void setTextBackgroundColor(const QColor &);

@@ -149,6 +149,41 @@ void KoTextViewIface::setAlign(const QString &align)
     delete cmd;
 }
 
+bool KoTextViewIface::textDoubleUnderline() const
+{
+    return m_textView->textDoubleUnderline();
+}
+
+bool KoTextViewIface::textItalic() const
+{
+    return m_textView->textItalic();
+}
+
+bool KoTextViewIface::textBold() const
+{
+    return m_textView->textBold();
+}
+
+bool KoTextViewIface::textUnderline()const
+{
+    return m_textView->textUnderline();
+}
+
+bool KoTextViewIface::textStrikeOut()const
+{
+    return m_textView->textStrikeOut();
+}
+
+bool KoTextViewIface::textSubScript() const
+{
+    return m_textView->textSubScript();
+}
+
+bool KoTextViewIface::textSuperScript() const
+{
+    return m_textView->textSuperScript();
+}
+
 bool KoTextViewIface::isReadWrite() const
 {
     return m_textView->isReadWrite();

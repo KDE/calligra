@@ -1885,6 +1885,41 @@ QColor KoTextFormatInterface::textColor() const
     return currentFormat()->color();
 }
 
+bool KoTextFormatInterface::textDoubleUnderline()const
+{
+    return currentFormat()->doubleUnderline();
+}
+
+bool KoTextFormatInterface::textUnderline()const
+{
+    return currentFormat()->font().underline();
+}
+
+bool KoTextFormatInterface::textBold()const
+{
+    return currentFormat()->font().bold();
+}
+
+bool KoTextFormatInterface::textStrikeOut()const
+{
+    return currentFormat()->font().strikeOut();
+}
+
+bool KoTextFormatInterface::textItalic() const
+{
+    return currentFormat()->font().italic();
+}
+
+bool KoTextFormatInterface::textSubScript() const
+{
+    return (currentFormat()->vAlign()==KoTextFormat::AlignSubScript);
+}
+
+bool KoTextFormatInterface::textSuperScript() const
+{
+    return (currentFormat()->vAlign()==KoTextFormat::AlignSuperScript);
+}
+
 QFont KoTextFormatInterface::textFont() const
 {
     QFont fn( currentFormat()->font() );

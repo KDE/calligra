@@ -110,6 +110,13 @@ public:
     QString textFontFamily()const;
 
     QColor textBackgroundColor()const;
+    bool textDoubleUnderline()const;
+    bool textUnderline()const;
+    bool textBold()const;
+    bool textStrikeOut()const;
+    bool textItalic() const;
+    bool textSubScript() const;
+    bool textSuperScript() const;
 };
 
 /**
