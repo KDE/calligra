@@ -2467,18 +2467,7 @@ void OpenCalcImport::loadOasisValidationValue( KSpreadValidity* val, const QStri
 void OpenCalcImport::loadOasisValidationCondition( KSpreadValidity* val,QString &valExpression )
 {
     QString value;
-
-    if ( valExpression.contains( "<" ) )
-    {
-        value = valExpression.remove( "<" );
-        val->m_cond = Inferior;
-    }
-    else if(valExpression.contains( ">" ) )
-    {
-        value = valExpression.remove( ">" );
-        val->m_cond = Superior;
-    }
-    else if (valExpression.contains( "<=" ) )
+    if (valExpression.contains( "<=" ) )
     {
         value = valExpression.remove( "<=" );
         val->m_cond = InferiorEqual;
@@ -2488,16 +2477,26 @@ void OpenCalcImport::loadOasisValidationCondition( KSpreadValidity* val,QString 
         value = valExpression.remove( ">=" );
         val->m_cond = SuperiorEqual;
     }
-    else if (valExpression.contains( "=" ) )
-    {
-        value = valExpression.remove( "=" );
-        val->m_cond = Equal;
-    }
     else if (valExpression.contains( "!=" ) )
     {
         //add Differentto attribute
         value = valExpression.remove( "!=" );
         val->m_cond = DifferentTo;
+    }
+    else if ( valExpression.contains( "<" ) )
+    {
+        value = valExpression.remove( "<" );
+        val->m_cond = Inferior;
+    }
+    else if(valExpression.contains( ">" ) )
+    {
+        value = valExpression.remove( ">" );
+        val->m_cond = Superior;
+    }
+    else if (valExpression.contains( "=" ) )
+    {
+        value = valExpression.remove( "=" );
+        val->m_cond = Equal;
     }
     else
         kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
