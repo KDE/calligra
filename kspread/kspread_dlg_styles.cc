@@ -94,7 +94,6 @@ KSpreadStyleDlg::~KSpreadStyleDlg()
 void KSpreadStyleDlg::slotDisplayMode( int mode )
 {
   m_dlg->m_styleList->clear();
-  kdDebug() << "Mode: " << mode << endl;
 
   if ( mode != 2 )
     new KListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
@@ -114,6 +113,11 @@ void KSpreadStyleDlg::slotDisplayMode( int mode )
     if ( mode == 2 )
     {
       if ( styleData->type() == KSpreadStyle::CUSTOM )
+        new KListViewItem( m_dlg->m_styleList, styleData->name() );
+    }
+    else if ( mode == 1 )
+    {
+      if ( styleData->usage() > 0 )
         new KListViewItem( m_dlg->m_styleList, styleData->name() );
     }
     else

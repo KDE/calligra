@@ -95,6 +95,8 @@ class KSpreadStyle
   bool release();
   void addRef();
 
+  int usage() const { return m_usageCount; }
+
   bool   hasProperty( Properties p ) const;
   bool   hasFeature( FlagsSet f ) const;
 
