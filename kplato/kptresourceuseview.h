@@ -25,6 +25,8 @@
 #include "chart/kpttimescale.h"
 
 class KListView;
+class KAction;
+class KActionCollection;
 class QPaintEvent;
 class QListViewItem;
 class QPoint;
@@ -49,10 +51,21 @@ public:
     KPTResourceUseView(KPTView *view, QWidget* parent = 0, const char* name = 0);
     ~KPTResourceUseView();
 
+    void initMenu(KActionCollection *collection);
+    
 public slots:
     void draw(KPTProject &project);
+    void slotLoadPrMinute();
+    void slotLoadPrHour();
+    void slotLoadPrDay();
+    void slotLoadPrWeek();
+    void slotLoadPrMonth();
+    void slotAccumulated();
     
 protected:
+    KPTResource *currentResource();
+    KPTResourceGroup *currentGroup();
+    
     void drawResources(ResourceGroupItemPrivate *parent);
     void drawChart();
     void drawBarLoad(KPTResource *resource);
@@ -68,7 +81,6 @@ protected:
     
 protected slots:
     void executed(QListViewItem *item);
-    void slotTimeScaleUnitChanged(int unit);
     void slotChartMenuRequested(const QPoint &pos);
     
 private:
@@ -78,6 +90,16 @@ private:
     QListViewItem *m_selectedItem;
     KPTTimeHeaderWidget::Scale m_timeScaleUnit;
     KPTProject *m_project;
+
+    enum ShowData { LoadPrMinute, LoadPrHour, LoadPrDay, LoadPrWeek, LoadPrMonth };
+    ShowData m_dataShown;
+     
+    KAction *actionResourceuseLoadMinute;
+    KAction *actionResourceuseLoadHour;
+    KAction *actionResourceuseLoadDay;
+    KAction *actionResourceuseLoadWeek;
+    KAction *actionResourceuseLoadMonth;
+    KAction *actionResourceuseAccumulated;
 
 };
 

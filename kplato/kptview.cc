@@ -122,7 +122,8 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
     m_resourceuseview = new KPTResourceUseView( this, m_tab );
     m_tab->addWidget(m_resourceuseview);
-
+    m_resourceuseview->initMenu(actionCollection());
+    
     m_reportview = new KPTReportView(this, m_tab);
     m_tab->addWidget(m_reportview);
 
@@ -203,7 +204,6 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
     actionEditResource = new KAction(i18n("Edit Resource..."), "edit_resource", 0, this,
         SLOT(slotEditResource()), actionCollection(), "edit_resource");
-
 
     // ------------------- Actions with a key binding and no GUI item
 #ifndef NDEBUG

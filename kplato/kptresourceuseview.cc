@@ -24,13 +24,17 @@
 #include "chart/kptchartdataset.h"
 #include "kptproject.h"
 #include "kptresource.h"
+#include "kptview.h"
+#include <kactioncollection.h>
 
 #include <qpainter.h>
 #include <qpoint.h>
+#include <qpopupmenu.h>
 
 #include <klistview.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kaction.h>
 #include <kdebug.h>
 
 namespace KPlato
@@ -59,7 +63,7 @@ KPTResourceUseView::KPTResourceUseView(KPTView *view, QWidget* parent, const cha
     : QSplitter(parent, name),
       m_mainview(view),
       m_selectedItem(0),
-      m_timeScaleUnit(KPTTimeHeaderWidget::Day)
+      m_dataShown(LoadPrDay)
 {
     setOrientation(QSplitter::Horizontal);
 
@@ -72,7 +76,6 @@ KPTResourceUseView::KPTResourceUseView(KPTView *view, QWidget* parent, const cha
     connect(m_resourcelist, SIGNAL(selectionChanged(QListViewItem*)), SLOT(executed(QListViewItem*)));
     connect(m_resourcelist, SIGNAL(currentChanged(QListViewItem*)), SLOT(executed(QListViewItem*)));
     
-    connect(m_chartview, SIGNAL(timeScaleUnitChanged(int)), SLOT(slotTimeScaleUnitChanged(int)));
     connect(m_chartview, SIGNAL(chartMenuRequest(const QPoint&)), SLOT(slotChartMenuRequested(const QPoint&)));
 
 }
@@ -98,9 +101,6 @@ void KPTResourceUseView::draw(KPTProject &project)
     if (m_selectedItem) {
         m_resourcelist->setSelected(m_selectedItem, true);
     }
-    if (m_selectedItem) {
-    
-    }
     drawChart();
 }
 
@@ -118,8 +118,8 @@ void KPTResourceUseView::drawResources(ResourceGroupItemPrivate *parent)
 }
 
 void KPTResourceUseView::drawChart() {
+    QTime t; t.start();
     m_chartview->clear();
-    m_chartview->setTimeScaleUnit(m_timeScaleUnit);
     if (!m_selectedItem) {
         kdDebug()<<k_funcinfo<<"No selected item"<<endl;
         // Empty chart
@@ -128,6 +128,7 @@ void KPTResourceUseView::drawChart() {
     if (m_selectedItem->parent() == 0) {
         //kdDebug()<<k_funcinfo<<"All selected"<<endl;
         drawLineAccumulated();
+        return;
     }
     ResourceGroupItemPrivate *gi = dynamic_cast<ResourceGroupItemPrivate*>(m_selectedItem);
     if (gi) {
@@ -160,7 +161,6 @@ void KPTResourceUseView::drawBarPeekLoad(KPTResource *resource) {
 
 KPTChartDataSet *KPTResourceUseView::drawBarLoadPrMinute(KPTResource *resource) {
     m_chartview->setDescription(resource->name()+": Load pr minute");
-    m_chartview->setTimeScaleUnit(m_timeScaleUnit);
     m_chartview->setYScaleUnit("%");
     m_chartview->enableYZeroLine(true);    
     KPTChartDataSetItem *item = new KPTChartDataSetItem(100.0, new QPen(QColor(red)));
@@ -195,7 +195,6 @@ KPTChartDataSet *KPTResourceUseView::drawBarLoadPrMinute(KPTResource *resource) 
 
 KPTChartDataSet *KPTResourceUseView::drawBarLoadPrHour(KPTResource *resource) {
     m_chartview->setDescription(resource->name()+": Load pr hour");
-    m_chartview->setTimeScaleUnit(m_timeScaleUnit);
     m_chartview->setYScaleUnit("%");
     m_chartview->enableYZeroLine(true);    
     KPTChartDataSetItem *item = new KPTChartDataSetItem(100.0, new QPen(QColor(red)));
@@ -230,7 +229,6 @@ KPTChartDataSet *KPTResourceUseView::drawBarLoadPrHour(KPTResource *resource) {
 
 KPTChartDataSet *KPTResourceUseView::drawBarLoadPrDay(KPTResource *resource) {
     m_chartview->setDescription(resource->name()+": Load pr day");
-    m_chartview->setTimeScaleUnit(m_timeScaleUnit);
     m_chartview->setYScaleUnit("%");
     m_chartview->enableYZeroLine(true);    
     KPTChartDataSetItem *item = new KPTChartDataSetItem(100.0, new QPen(QColor(red)));
@@ -263,7 +261,6 @@ KPTChartDataSet *KPTResourceUseView::drawBarLoadPrDay(KPTResource *resource) {
 
 KPTChartDataSet *KPTResourceUseView::drawBarLoadPrWeek(KPTResource *resource) {
     m_chartview->setDescription(resource->name()+": Load pr week");
-    m_chartview->setTimeScaleUnit(m_timeScaleUnit);
     m_chartview->setYScaleUnit("%");
     m_chartview->enableYZeroLine(true);    
     KPTChartDataSetItem *item = new KPTChartDataSetItem(100.0, new QPen(QColor(red)));
@@ -304,7 +301,6 @@ KPTChartDataSet *KPTResourceUseView::drawBarLoadPrWeek(KPTResource *resource) {
 
 KPTChartDataSet *KPTResourceUseView::drawBarLoadPrMonth(KPTResource *resource) {
     m_chartview->setDescription(resource->name()+": Load pr month");
-    m_chartview->setTimeScaleUnit(m_timeScaleUnit);
     m_chartview->setYScaleUnit("%");
     m_chartview->enableYZeroLine(true);    
     KPTChartDataSetItem *item = new KPTChartDataSetItem(100.0, new QPen(QColor(red)));
@@ -322,7 +318,7 @@ KPTChartDataSet *KPTResourceUseView::drawBarLoadPrMonth(KPTResource *resource) {
         KPTDuration aMonth = KPTDuration(dt.date().daysInMonth(), 0, 0);
         KPTDuration e = resource->effort(dt, aMonth);
         KPTDuration l = a.effort(dt, aMonth);
-        kdDebug()<<dt.date().toString()<<": e="<<e.toString()<<" l="<<l.toString()<<endl;
+        //kdDebug()<<dt.date().toString()<<": e="<<e.toString()<<" l="<<l.toString()<<endl;
         if (e == KPTDuration::zeroDuration) {
             load = 0.0;
         } else {
@@ -338,23 +334,23 @@ KPTChartDataSet *KPTResourceUseView::drawBarLoadPrMonth(KPTResource *resource) {
 }
 
 void KPTResourceUseView::drawBarLoad(KPTResource *resource) {
-    //kdDebug()<<k_funcinfo<<resource->name()<<endl;
-
+    kdDebug()<<k_funcinfo<<resource->name()<<endl;
+    QTime t; t.start();
     KPTChartDataSet *set = new KPTChartDataSet();
-    switch (m_timeScaleUnit) {
-        case KPTTimeHeaderWidget::Minute:
+    switch (m_dataShown) {
+        case LoadPrMinute:
             set = drawBarLoadPrMinute(resource);
             break;
-        case KPTTimeHeaderWidget::Hour:
+        case LoadPrHour:
             set = drawBarLoadPrHour(resource);
             break;
-        case KPTTimeHeaderWidget::Day:
+        case LoadPrDay:
             set = drawBarLoadPrDay(resource);
             break;
-        case KPTTimeHeaderWidget::Week:
+        case LoadPrWeek:
             set = drawBarLoadPrWeek(resource);
             break;
-        case KPTTimeHeaderWidget::Month:
+        case LoadPrMonth:
             set = drawBarLoadPrMonth(resource);
             break;
         default:
@@ -362,12 +358,12 @@ void KPTResourceUseView::drawBarLoad(KPTResource *resource) {
     }
     m_chartview->addData(set);
     m_chartview->draw();
+    kdDebug()<<k_funcinfo<<" takes: "<<t.elapsed()<<" ms"<<endl;
 }
 
 void KPTResourceUseView::drawLineAccumulated(KPTResource *resource) {
     //kdDebug()<<k_funcinfo<<resource->name()<<endl;
     m_chartview->setDescription(resource->name()+": Accumulated (Hours)");
-    m_chartview->setTimeScaleUnit(m_timeScaleUnit);
     m_chartview->setYScaleUnit("Hours");
     KPTAppointment a = resource->appointmentIntervals();        
     KPTChartDataSet *set = new KPTChartDataSet();
@@ -397,7 +393,6 @@ void KPTResourceUseView::drawLineAccumulated(KPTResource *resource) {
 void KPTResourceUseView::drawLineAccumulated(KPTResourceGroup *resource) {
     //kdDebug()<<k_funcinfo<<resource->name()<<endl;
     m_chartview->setDescription(resource->name()+": Accumulated (Hours)");
-    m_chartview->setTimeScaleUnit(m_timeScaleUnit);
     m_chartview->setYScaleUnit("Hours");
     KPTAppointment a = resource->appointmentIntervals();        
     KPTChartDataSet *set = new KPTChartDataSet();
@@ -427,7 +422,6 @@ void KPTResourceUseView::drawLineAccumulated(KPTResourceGroup *resource) {
 void KPTResourceUseView::drawLineAccumulated() {
     //kdDebug()<<k_funcinfo<<resource->name()<<endl;
     m_chartview->setDescription("Accumulated (Hours)");
-    m_chartview->setTimeScaleUnit(m_timeScaleUnit);
     m_chartview->setYScaleUnit("Hours");
     KPTAppointment a;
     QPtrListIterator<KPTResourceGroup> rit = m_project->resourceGroups();
@@ -465,17 +459,138 @@ void KPTResourceUseView::executed(QListViewItem *item) {
     drawChart();
 }
 
-void KPTResourceUseView::slotTimeScaleUnitChanged(int unit) {
-    kdDebug()<<k_funcinfo<<unit<<endl;
-    m_timeScaleUnit = (KPTTimeHeaderWidget::Scale)unit;
-    drawChart();
-}
-
 void KPTResourceUseView::slotChartMenuRequested(const QPoint &pos) {
-    kdDebug()<<k_funcinfo<<pos.x()<<","<<pos.y()<<endl;
+    //kdDebug()<<k_funcinfo<<pos.x()<<","<<pos.y()<<endl;
+    QPopupMenu *menu = m_mainview->popupMenu("resourceuse_popup");
+    if (menu) {
+        (void)menu->exec(pos);
+    }
 }
 
+void KPTResourceUseView::slotLoadPrMinute() {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_dataShown = LoadPrMinute;
+    m_chartview->clear();
+    KPTResource *r = currentResource();
+    if (r) {
+        drawBarLoad(r);
+        return;
+    }
+    KPTResourceGroup *g = currentGroup();
+    if (g) {
+        //kdDebug()<<k_funcinfo<<g->name()<<endl;
+        drawLineAccumulated(g);
+        return;
+    }
+}
 
+void KPTResourceUseView::slotLoadPrHour() {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_dataShown = LoadPrHour;
+    m_chartview->clear();
+    
+    KPTResource *r = currentResource();
+    if (r) {
+        drawBarLoad(r);
+        return;
+    }
+    KPTResourceGroup *g = currentGroup();
+    if (g) {
+        //kdDebug()<<k_funcinfo<<g->name()<<endl;
+        drawLineAccumulated(g);
+        return;
+    }
+}
+
+void KPTResourceUseView::slotLoadPrDay() {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_dataShown = LoadPrDay;
+    m_chartview->clear();
+    
+    KPTResource *r = currentResource();
+    if (r) {
+        drawBarLoad(r);
+        return;
+    }
+    KPTResourceGroup *g = currentGroup();
+    if (g) {
+        //kdDebug()<<k_funcinfo<<g->name()<<endl;
+        drawLineAccumulated(g);
+        return;
+    }
+}
+
+void KPTResourceUseView::slotLoadPrWeek() {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_dataShown = LoadPrWeek;
+    m_chartview->clear();
+    KPTResource *r = currentResource();
+    if (r) {
+        drawBarLoad(r);
+        return;
+    }
+    KPTResourceGroup *g = currentGroup();
+    if (g) {
+        //kdDebug()<<k_funcinfo<<g->name()<<endl;
+        drawLineAccumulated(g);
+        return;
+    }
+}
+
+void KPTResourceUseView::slotLoadPrMonth() {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_dataShown = LoadPrMonth;
+    m_chartview->clear();
+    KPTResource *r = currentResource();
+    if (r) {
+        drawBarLoad(r);
+        return;
+    }
+    KPTResourceGroup *g = currentGroup();
+    if (g) {
+        //kdDebug()<<k_funcinfo<<g->name()<<endl;
+        drawLineAccumulated(g);
+        return;
+    }
+}
+
+void KPTResourceUseView::slotAccumulated() {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_chartview->clear();
+    KPTResource *r = currentResource();
+    if (r) {
+        drawLineAccumulated(r);
+        return;
+    }
+    KPTResourceGroup *g = currentGroup();
+    if (g) {
+        //kdDebug()<<k_funcinfo<<g->name()<<endl;
+        drawLineAccumulated(g);
+        return;
+    }
+    drawLineAccumulated();
+}
+
+void KPTResourceUseView::initMenu(KActionCollection *collection) {
+    //kdDebug()<<k_funcinfo<<endl;
+    actionResourceuseLoadMinute = new KAction(i18n("Load pr Minute"), 0, 0, this, SLOT(slotLoadPrMinute()), collection, "resourceuse_load_minute");
+    actionResourceuseLoadHour = new KAction(i18n("Load pr Hour"), 0, 0, this, SLOT(slotLoadPrHour()), collection, "resourceuse_load_hour");
+    actionResourceuseLoadDay = new KAction(i18n("Load pr Day"), 0, 0, this, SLOT(slotLoadPrDay()), collection, "resourceuse_load_day");
+    actionResourceuseLoadWeek = new KAction(i18n("Load pr Week"), 0, 0, this, SLOT(slotLoadPrWeek()), collection, "resourceuse_load_week");
+    actionResourceuseLoadMonth = new KAction(i18n("Load pr Month"), 0, 0, this, SLOT(slotLoadPrMonth()), collection, "resourceuse_load_month");
+    actionResourceuseAccumulated = new KAction(i18n("Accumulated"), 0, 0, this, SLOT(slotAccumulated()), collection, "resourceuse_accumulated");
+
+}
+
+KPTResource *KPTResourceUseView::currentResource() {
+    ResourceItemPrivate *r = dynamic_cast<ResourceItemPrivate*>(m_selectedItem);
+    return r == 0 ? 0 : r->resource;
+}
+
+KPTResourceGroup *KPTResourceUseView::currentGroup() {
+    ResourceGroupItemPrivate *g = dynamic_cast<ResourceGroupItemPrivate*>(m_selectedItem);
+    return g == 0 ? 0 : g->group;
+}
 
 } //KPlato namespace
 

@@ -73,7 +73,7 @@ KPTChartView::KPTChartView(QWidget* parent, const char* name )
     m_yRangeMax = 100.0;
     m_yStep = 10.0;
     
-    connect(m_timeScale->horizontalScrollBar(), SIGNAL(valueChanged(int)), m_chart->horizontalScrollBar(), SLOT(setValue(int)));    
+    connect(m_timeScale->horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(hScrollBarValueChanged(int)));
     connect(m_timeScale, SIGNAL(unitChanged(int)), SLOT(slotTimeScaleUnitChanged(int)));
     connect(m_timeScale, SIGNAL(timeFormatChanged(int)), SLOT(slotTimeFormatChanged(int)));
     connect(m_timeScale, SIGNAL(headerWidthChanged(int)), SLOT(slotTimeScaleWidthChanged(int)));
@@ -128,6 +128,7 @@ void KPTChartView::clear() {
     clearData();
     m_yLines.clear();
     m_chart->clear();
+    m_timeScale->horizontalScrollBar()->setValue(0);
     m_chart->canvasUpdate();
 }
 
@@ -190,6 +191,7 @@ void KPTChartView::draw() {
     m_timeScale->setRange(m_startTime, m_endTime);
     m_yScale->setRange(m_yRangeMin, m_yRangeMax, m_yStep);
     m_yScale->draw();
+    m_timeScale->horizontalScrollBar()->setValue(0);
     lh->activate();
     
     drawChart();
@@ -197,7 +199,10 @@ void KPTChartView::draw() {
 
 void KPTChartView::slotTimeScaleUnitChanged(int unit) {
     //kdDebug()<<k_funcinfo<<endl;
-    emit timeScaleUnitChanged(unit);
+    m_timeScaleUnit = KPTTimeHeaderWidget::Scale(unit);
+    m_timeScale->setScale(m_timeScaleUnit);
+    drawChart();
+    //emit timeScaleUnitChanged(unit);
 }
 
 void KPTChartView::slotTimeFormatChanged(int format) {
@@ -215,6 +220,12 @@ void KPTChartView::slotTimeScaleWidthChanged(int w) {
     //kdDebug()<<k_funcinfo<<endl;
     m_chart->canvas()->resize(QMAX(w, width()), m_chart->canvas()->height());
     drawChart();
+}
+
+void KPTChartView::hScrollBarValueChanged(int value) {
+    //kdDebug()<<k_funcinfo<<value<<endl;
+    m_chart->horizontalScrollBar()->setValue(value);
+    drawData();
 }
 
 }  //KPlato namespace

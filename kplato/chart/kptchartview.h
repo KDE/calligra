@@ -90,7 +90,7 @@ public slots:
     void activateLayout();
 
 signals:
-    /// The timescale unit has been changed, so the data should be redrawn
+    /// The timescale unit has been changed
     void timeScaleUnitChanged(int unit);
     /// Context menu requested by the chart
     void chartMenuRequest(const QPoint &pos);
@@ -102,6 +102,7 @@ protected slots:
     void slotTimeScaleUnitChanged(int unit);
     void slotTimeFormatChanged(int format);
     void slotChartMenuRequested(const QPoint &pos);
+    void hScrollBarValueChanged(int value);
     
 protected:    
     virtual void resizeEvent(QResizeEvent *);

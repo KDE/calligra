@@ -25,7 +25,6 @@
 #include <kdebug.h>
 
 #include <qpopupmenu.h>
-#include <qpainter.h>
 #include <qdrawutil.h>
 #include <qsize.h>
 #include <qstringlist.h>
@@ -38,6 +37,7 @@ KPTChartCanvasView::KPTChartCanvasView(QWidget *parent, const char * name)
     : QCanvasView(parent, name)
 {
     setHScrollBarMode(QScrollView::AlwaysOff);
+    setVScrollBarMode(QScrollView::AlwaysOff);
     setCanvas(new KPTChartCanvasView::Canvas(this));
     
     m_yZeroLine = new QCanvasLine(canvas());
@@ -134,9 +134,15 @@ void KPTChartCanvasView::drawXMinorGrid(KPTTimeScale *scale) {
 }
 
 void KPTChartCanvasView::drawBar(KPTChartDataSetItem *data, KPTTimeScale *x, KPTNumberScale *y) {
+    //kdDebug()<<k_funcinfo<<contentsX()<<","<<contentsY()<<" "<<visibleWidth()<<"x"<<visibleHeight()<<endl;
+    int cx1 = contentsX();
+    int cx2 = cx1 + visibleWidth();
     int x1 = (int)x->posX(data->x1());
-    int y1 = (int)y->posY(data->y1());
     int x2 = (int)x->posX(data->x2());
+    if ((x1 < cx1 || x1 > cx2) && (x2 < cx1 || x2 > cx2)) {
+        return; // don't paint outside view
+    }
+    int y1 = (int)y->posY(data->y1());
     int y2 = (int)y->posY(data->y2());
     QPen *pen = data->pen();
     QBrush *brush = data->brush();
@@ -195,7 +201,7 @@ void KPTChartCanvasView::drawDescription(const QString &desc) {
 
 void KPTChartCanvasView::contentsContextMenuEvent(QContextMenuEvent *e) {
     kdDebug()<<k_funcinfo<<endl;
-    emit contextMenuRequest(e->pos());
+    emit contextMenuRequest(e->globalPos());
 }
 
 /********************************************/

@@ -77,11 +77,14 @@ int KPTTimeScale::fullHeight() {
 }
 
 void KPTTimeScale::setScale(KPTTimeHeaderWidget::Scale unit) {
-    m_header->setScale(unit);
+    if (unit != m_header->scale())
+        m_header->setScale(unit);
 }
 
 void KPTTimeScale::setRange(const QDateTime& start, const QDateTime& end) {
     //kdDebug()<<k_funcinfo<<endl;
+    if (start == m_startTime && end == m_endTime)
+        return;
     m_startTime = start;
     m_endTime = end;
     QDateTime s = start;
@@ -165,6 +168,8 @@ void KPTTimeScale::slotTimeFormatChanged(int format) {
 
 void KPTTimeScale::slotHeaderWidthChanged(int w) {
     //kdDebug()<<k_funcinfo<<"w="<<w<<endl;
+    resizeContents(w, m_header->height());
+    horizontalScrollBar()->setValue(0);
     emit headerWidthChanged(w);
 }
 
