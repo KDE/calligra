@@ -356,7 +356,7 @@ void KIllustratorView::setupCanvas()
     QScrollBar* hBar = new QScrollBar(QScrollBar::Horizontal, this);
 
     canvas = new Canvas (m_pDoc->gdoc(), 72.0, hBar, vBar, this);
-    canvas->centerPage();
+    canvas->center();
     canvas->setCursor(Qt::arrowCursor);
 
     QGridLayout* layout = new QGridLayout(this,3,3);
@@ -377,17 +377,10 @@ void KIllustratorView::setupCanvas()
     connect(mLayerDockBase, SIGNAL(visibleChange(bool)), SLOT(slotLayersPanel(bool)));
     slotLayersPanel(false);
     
-//    QObject::connect (canvas, SIGNAL(sizeChanged ()),
-//                      scrollview, SLOT(updateScrollBars()));
     QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
                       hRuler, SLOT(updateVisibleArea (int, int)));
     QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
                       vRuler, SLOT(updateVisibleArea (int, int)));
-
-/*    QObject::connect (canvas, SIGNAL(zoomFactorChanged (float, int ,int)),
-                      hRuler, SLOT(setZoomFactor (float, int ,int)));
-    QObject::connect (canvas, SIGNAL(zoomFactorChanged (float, int ,int)),
-                      vRuler, SLOT(setZoomFactor (float, int ,int)));*/
 
     connect (canvas, SIGNAL(zoomFactorChanged (float)),
                       this, SLOT(slotZoomFactorChanged(float)));
@@ -398,9 +391,6 @@ void KIllustratorView::setupCanvas()
                       vRuler, SLOT(updatePointer(int, int)));
     connect (canvas, SIGNAL(rightButtonAtSelectionClicked (int, int)),
                       this, SLOT(popupForSelection (int, int)));
-    
-//    QObject::connect (scrollview, SIGNAL( viewportResize ()),
-//                      this, SLOT( slotViewResize ()));
     
     // helpline creation
     connect (hRuler, SIGNAL (drawHelpline(int, int, bool)),
@@ -1258,8 +1248,8 @@ void KIllustratorView::slotZoomFactorChanged(float factor)
 
     //QObject::connect (canvas, SIGNAL(zoomFactorChanged (float, int ,int)),
                       //vRuler, SLOT(setZoomFactor (float, int ,int)));*/
-   vRuler->setZoomFactor(factor,0,0);
-   hRuler->setZoomFactor(factor,50,50);
+   vRuler->setZoomFactor(factor,canvas->relativePaperArea().left(),canvas->relativePaperArea().top());
+   hRuler->setZoomFactor(factor,canvas->relativePaperArea().left(),canvas->relativePaperArea().top());
    QStringList list=m_viewZoom->items();
    QString f=QString::number(qRound(factor*100.0));
    int i=0;
