@@ -445,16 +445,12 @@ void KPBackGround::loadOasis(KoOasisContext & context )
             kdDebug()<<" presentation:visibility parameter not implemented :"<<str<<endl;
     }
 
-    kdDebug()<<"stylePage->hasAttribute( draw:fill ) :"<<styleStack.hasAttribute( "draw:fill", QString::null, "drawing-page" )<<endl;
-
     if ( styleStack.hasAttribute( "draw:fill", QString::null, "drawing-page" ) )
     {
-        kdDebug()<<" fill page \n";
         const QString fill = styleStack.attribute( "draw:fill", QString::null, "drawing-page" );
-        kdDebug()<<" type :"<<fill<<endl;
+        kdDebug()<<"fill page  type :"<<fill<<endl;
         if ( fill == "solid" )
         {
-            kdDebug()<<"solid \n";
             setBackColor1(QColor(styleStack.attribute( "draw:fill-color", QString::null, "drawing-page" ) ) );
             setBackColorType(BCT_PLAIN);
             setBackType(BT_COLOR);
@@ -506,7 +502,6 @@ void KPBackGround::loadOasis(KoOasisContext & context )
         }
         else if ( fill == "gradient" )
         {
-            kdDebug()<<"gradient \n";
             QString style = styleStack.attribute( "draw:fill-gradient-name", QString::null, "drawing-page" );
             QDomElement *draw = context.oasisStyles().drawStyles()[style];
             if ( draw )

@@ -900,15 +900,16 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     if ( saveOnlyPage == -1 ) {
         emit sigProgress( 0 );
     }
-    m_varColl->variableSetting()->setModificationDate(QDateTime::currentDateTime());
-    recalcVariables( VT_DATE );
-    recalcVariables( VT_TIME );
-
     if ( !store->open( "content.xml" ) )
         return false;
 
     KoStoreDevice contentDev( store );
     KoXmlWriter contentWriter( &contentDev, "office:document-content" );
+
+
+    m_varColl->variableSetting()->setModificationDate(QDateTime::currentDateTime());
+    recalcVariables( VT_DATE );
+    recalcVariables( VT_TIME );
 
 
     KoGenStyles mainStyles;
@@ -1179,7 +1180,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             context.addStyles( backgroundStyle );
             m_pageList.at( pos )->background()->loadOasis(context);
             context.styleStack().restore();
-            kdDebug()<<" load standard bacground \n";
+            kdDebug()<<" load standard background \n";
         }
 
 	//All animation object for current page is store into this element

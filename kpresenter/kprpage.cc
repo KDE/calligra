@@ -75,6 +75,7 @@ KPrPage::KPrPage(KPresenterDoc *_doc )
     m_manualTitle=QString::null;
     m_noteText=QString::null;
     m_selectedSlides=true;
+
     //don't create dcopobject by default
     //dcopObject();
 }
@@ -100,11 +101,9 @@ DCOPObject* KPrPage::dcopObject()
 
 bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoGenStyles& mainStyles, int & indexObj )
 {
-    kdDebug()<<"saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoGenStyles& mainStyles )*****************\n";
     //store use to save picture and co
     xmlWriter.startElement( "draw:page" );
     xmlWriter.addAttribute( "draw:name", m_manualTitle );
-    //xmlWriter.addAttribute( "draw:style-name", style );
     xmlWriter.addAttribute( "draw:id", posPage );
     //xmlWriter.addAttribute( "draw:master-page-name", master-page-name); ??? FIXME
 
@@ -112,6 +111,7 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     kdDebug()<<" styleName :"<<styleName<<endl;
     if ( !styleName.isEmpty() )
         xmlWriter.addAttribute( "draw:style-name", styleName );
+
 
     KTempFile animationTmpFile;
     animationTmpFile.setAutoDelete( true );
@@ -144,7 +144,6 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
         }
     }
     animationTmpFile.close();
-
 
     saveOasisNote( xmlWriter );
     xmlWriter.endElement();
