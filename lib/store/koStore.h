@@ -26,12 +26,9 @@
 #include <qiodevice.h>
 #include <qvaluestack.h>
 
-class QBuffer;
-class KTar;
-class KArchiveDirectory;
-
 /**
- * Saves and loads koffice documents using a tar file called "the tar store".
+ * Saves and loads koffice documents using various backends. Currently supported
+ * backends are ZIP, tar and directory.
  * We call a "store" the file on the hard disk (the one the users sees)
  * and call a "file" a file inside the store.
  */
@@ -40,30 +37,39 @@ class KoStore
 public:
 
   enum Mode { Read, Write };
-  /**
-   * Creates a Tar Store (i.e. a file on the hard disk, to save a document)
-   * if _mode is KoStore::Write
-   * Opens a Tar Store for reading if _mode is KoStore::Read.
-   * @param appIdentification a string that identifies the application,
-   * to be written in the gzip header (see KTar::setOrigFileName)
-   */
-  KoStore( const QString & _filename, Mode _mode, const QCString & appIdentification = "" );
+  enum Backend { Auto, Tar, Zip, Directory };
 
   /**
-   * Creates a tar store on a given i/o device.
-   * This can be used to read/write a koffice document from/to a QByteArray, for instance.
+   * Open a store (i.e. the representation on disk of a KOffice document).
+   *
+   * @param fileName the name of the file to open
+   * @param mode if KoStore::Read, open an existing store to read it.
+   *             if KoStore::Write, create or replace a store.
+   * @param backend the backend to use for the data storage.
+   * Auto means automatically-determined for reading,
+   * and the current format (now Zip) for writing.
+   *
+   * @param appIdentification a string that identifies the application,
+   * to be written in the store header. Only meaningful if mode is Write, and if backend!=Directory.
    */
-  KoStore( QIODevice *dev, Mode mode );
+  static KoStore* createStore( const QString& fileName, Mode mode, const QCString & appIdentification = "", Backend backend = Auto );
+
+  /**
+   * Create a store for any kind of iodevice: file, memory buffer...
+   * This method doesn't support the Directory store!
+   */
+  static KoStore* createStore( QIODevice *device, Mode mode, const QCString & appIdentification = "", Backend backend = Auto );
 
   /**
    * Destroys the store (i.e. closes the file on the hard disk)
    */
-  ~KoStore();
+  virtual ~KoStore();
 
   /**
    * Open a new file inside the store
    * @param name The filename, internal representation ("root", "tar:/0"... ).
    *        If the tar:/ prefix is missing it's assumed to be a relative URI.
+   * @return true on success.
    */
   bool open( const QString & name );
 
@@ -74,8 +80,9 @@ public:
 
   /**
    * Close the file inside the store
+   * @return true on success.
    */
-  void close();
+  bool close();
 
   /**
    * Get a device for reading a file from the store directly
@@ -120,7 +127,7 @@ public:
    * @param src the source part, internal representation ("root", "tar:0"...).
    * @return the success of the operation.
    */
-  bool embed( const QString &dest, KoStore &store, const QString &src = "root" );
+  bool embed( const QString &dest, KoStore *store, const QString &src = "root" );
 
   /**
    * @return the size of the currently opened file, -1 on error.
@@ -179,9 +186,52 @@ public:
   QIODevice::Offset at() const;
   bool atEnd() const;
 
+
+protected:
+
+  KoStore() {}
+
+  /**
+   * Init store - called by constructor.
+   * @return true on success
+   */
+  virtual bool init( Mode mode );
+  /**
+   * Open the file @p name in the store, for writing
+   * @return true on success
+   */
+  virtual bool openWrite( const QString& name ) = 0;
+  /**
+   * Open the file @p name in the store, for reading.
+   * This method must set m_iSize to the size of the file.
+   * @return true on success
+   */
+  virtual bool openRead( const QString& name ) = 0;
+
+  /**
+   * @return true on success
+   */
+  virtual bool closeRead() = 0;
+  /**
+   * @return true on success
+   */
+  virtual bool closeWrite() = 0;
+
+  /**
+   * Enter a subdirectory of the current directory.
+   * The directory might not exist yet in Write mode.
+   */
+  virtual bool enterRelativeDirectory( const QString& dirName ) = 0;
+  /**
+   * Enter a directory where we've been before.
+   * It is guaranteed to always exist.
+   */
+  virtual bool enterAbsoluteDirectory( const QString& path ) = 0;
+
+  virtual bool fileExists( const QString& absPath ) = 0;
+
 private:
-  KoStore( const KoStore& store );  // don't copy
-  KoStore& operator=( const KoStore& store );  // don't assign
+  static Backend determineBackend( QIODevice* dev );
 
   /**
    * Conversion routine
@@ -211,11 +261,11 @@ private:
       NAMING_VERSION_2_2
   } m_namingVersion;
 
-  void init( Mode _mode );
-
   // Enter *one* single directory. Nothing like foo/bar/bleh allowed.
   // Performs some checking when in Read mode
   bool enterDirectoryInternal( const QString& directory );
+
+protected:
 
   Mode m_mode;
 
@@ -224,10 +274,6 @@ private:
 
   // The "current directory" (path)
   QStringList m_currentPath;
-
-  // In "Read" mode this pointer is pointing to the
-  // current directory in the archive to speed up the verification process
-  const KArchiveDirectory* m_currentDir;
 
   // Used to push/pop directories to make it easy to save/restore
   // the state
@@ -238,21 +284,22 @@ private:
   // Current size of the file named m_sName
   QIODevice::Offset m_iSize;
 
-  // The tar archive
-  KTar * m_pTar;
   // The stream for the current read or write operation
-  // When reading, it comes directly from KArchiveFile::device()
-  // When writing, it buffers the data into m_byteArray
   QIODevice * m_stream;
-  QByteArray m_byteArray;
 
   bool m_bIsOpen;
+  // Must be set by the constructor.
   bool m_bGood;
+
+  static const int s_area = 30002;
+
+private:
+  KoStore( const KoStore& store );  // don't copy
+  KoStore& operator=( const KoStore& store );  // don't assign
 
   class Private;
   Private * d;
 
-  static const int s_area = 30002;
 };
 
 #endif

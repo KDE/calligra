@@ -1,6 +1,7 @@
 // -*- c-basic-offset: 2 -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 2000-2002 David Faure <david@mandrakesoft.com>, Werner Trobin <trobin@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,44 +23,109 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include <koStore.h>
+#include "koStore.h"
+#include "koTarStore.h"
+//#include "koZipStore.h"
+#include "koDirectoryStore.h"
 
-#include <qbuffer.h>
 #include <kdebug.h>
-#include <ktar.h>
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
+#include <qfileinfo.h>
+#include <qfile.h>
+
+#define DefaultFormat KoStore::Tar
+//#define DefaultFormat KoStore::Zip
+
+KoStore::Backend KoStore::determineBackend( QIODevice* dev )
+{
+    unsigned char buf[5];
+    if ( dev->readBlock( (char *)buf, 4 ) < 4 )
+      return DefaultFormat; // will create a "bad" store (bad()==true)
+    if ( buf[0] == 0037 && buf[1] == 0213 ) // gzip -> tar.gz
+      return Tar;
+    if ( buf[0] == 'P' && buf[1] == 'K' && buf[2] == 3 && buf[3] == 4 )
+      return Zip;
+    return DefaultFormat; // fallback
+}
+
+KoStore* KoStore::createStore( const QString& fileName, Mode mode, const QCString & appIdentification, Backend backend )
+{
+  if ( backend == Auto ) {
+    if ( mode == KoStore::Write )
+      backend = DefaultFormat;
+    else
+    {
+      QFileInfo inf( fileName );
+      if ( inf.isDir() )
+        backend = Directory;
+      else
+      {
+        QFile file( fileName );
+        if ( file.open( IO_ReadOnly ) )
+          backend = determineBackend( &file );
+        else
+          backend = DefaultFormat; // will create a "bad" store (bad()==true)
+      }
+    }
+  }
+  switch ( backend )
+  {
+  case Tar:
+    return new KoTarStore( fileName, mode, appIdentification );
+  case Zip:
+    //return new KoZipStore( fileName, mode, appIdentification );
+  case Directory:
+    return new KoDirectoryStore( fileName /* should be a dir name.... */, mode );
+  default:
+    kdWarning(s_area) << "Unsupported backend requested for KoStore : " << backend << endl;
+    return 0L;
+  }
+}
+
+KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QCString & appIdentification, Backend backend )
+{
+  if ( backend == Auto )
+  {
+    if ( mode == KoStore::Write )
+      backend = DefaultFormat;
+    else
+      backend = determineBackend( device );
+  }
+  switch ( backend )
+  {
+  case Zip:
+    //return new KoZipStore( device, mode, appIdentification );
+  case Directory:
+    kdError(s_area) << "Can't create a Directory store for a memory buffer!" << endl;
+    // fallback
+  case Tar:
+    return new KoTarStore( device, mode, appIdentification );
+  default:
+    kdWarning(s_area) << "Unsupported backend requested for KoStore : " << backend << endl;
+    return 0L;
+  }
+}
 
 namespace {
   const char* const ROOTPART = "root";
   const char* const MAINNAME = "maindoc.xml";
 }
 
-KoStore::KoStore( const QString & _filename, Mode _mode, const QCString & appIdentification )
+bool KoStore::init( Mode _mode )
 {
-  kdDebug(s_area) << "KoStore Constructor filename = " << _filename
-    << " mode = " << int(_mode) << endl;
+  d = 0;
+  m_bIsOpen = false;
+  m_mode = _mode;
+  m_stream = 0;
 
-  m_pTar = new KTarGz( _filename, "application/x-gzip" );
-
-  init( _mode ); // open the targz file and init some vars
-
-  if ( m_bGood && _mode == Write )
-      m_pTar->setOrigFileName( appIdentification );
-}
-
-KoStore::KoStore( QIODevice *dev, Mode mode )
-{
-  m_pTar = new KTarGz( dev );
-  init( mode );
+  // Assume new style names.
+  m_namingVersion = NAMING_VERSION_2_2;
+  return true;
 }
 
 KoStore::~KoStore()
 {
-  m_pTar->close();
-  delete m_pTar;
   delete m_stream;
 }
 
@@ -70,13 +136,15 @@ bool KoStore::open( const QString & _name )
   if ( m_bIsOpen )
   {
     kdWarning(s_area) << "KoStore: File is already opened" << endl;
+    //return KIO::ERR_INTERNAL;
     return false;
   }
 
   if ( m_sName.length() > 512 )
   {
       kdError(s_area) << "KoStore: Filename " << m_sName << " is too long" << endl;
-    return false;
+      //return KIO::ERR_MALFORMED_URL;
+      return false;
   }
 
   if ( m_mode == Write )
@@ -85,41 +153,27 @@ bool KoStore::open( const QString & _name )
     if ( m_strFiles.findIndex( m_sName ) != -1 ) // just check if it's there
     {
       kdWarning(s_area) << "KoStore: Duplicate filename " << m_sName << endl;
+      //return KIO::ERR_FILE_ALREADY_EXIST;
       return false;
     }
 
     m_strFiles.append( m_sName );
+
     m_iSize = 0;
-    m_byteArray.resize( 0 );
-    m_stream = new QBuffer( m_byteArray );
-    m_stream->open( IO_WriteOnly );
+    if ( !openWrite( m_sName ) )
+      return false;
   }
   else if ( m_mode == Read )
   {
     kdDebug(s_area) << "Opening for reading '" << m_sName << "'" << endl;
-
-    const KTarEntry * entry = m_pTar->directory()->entry( m_sName );
-    if ( entry == 0L )
-    {
-      kdWarning(s_area) << "Unknown filename " << m_sName << endl;
+    if ( !openRead( m_sName ) )
       return false;
-    }
-    if ( entry->isDirectory() )
-    {
-      kdWarning(s_area) << m_sName << " is a directory !" << endl;
-      return false;
-    }
-    KTarFile * f = (KTarFile *) entry;
-    m_byteArray.resize( 0 );
-    delete m_stream;
-    m_stream = f->device();
-    m_iSize = f->size();
   }
   else
-    assert( 0 );
+    //return KIO::ERR_UNSUPPORTED_ACTION;
+    return false;
 
   m_bIsOpen = true;
-
   return true;
 }
 
@@ -128,30 +182,23 @@ bool KoStore::isOpen() const
   return m_bIsOpen;
 }
 
-void KoStore::close()
+bool KoStore::close()
 {
   kdDebug(s_area) << "KoStore: Closing" << endl;
 
   if ( !m_bIsOpen )
   {
     kdWarning(s_area) << "KoStore: You must open before closing" << endl;
-    return;
+    //return KIO::ERR_INTERNAL;
+    return false;
   }
 
-  if ( m_mode == Write )
-  {
-    // write the whole bytearray at once into the tar file
-
-    kdDebug(s_area) << "Writing file " << m_sName << " into TAR archive. size "
-                    << m_iSize << endl;
-    if ( !m_pTar->writeFile( m_sName , "user", "group", m_iSize, m_byteArray.data() ) )
-      kdWarning( s_area ) << "Failed to write " << m_sName << endl;
-    m_byteArray.resize( 0 ); // save memory
-  }
+  bool ret = m_mode == Write ? closeWrite() : closeRead();
 
   delete m_stream;
   m_stream = 0L;
   m_bIsOpen = false;
+  return ret;
 }
 
 QIODevice* KoStore::device() const
@@ -252,8 +299,11 @@ Q_LONG KoStore::write( const char* _data, Q_ULONG _len )
   return nwritten;
 }
 
-bool KoStore::embed( const QString &dest, KoStore &store, const QString &src )
+bool KoStore::embed( const QString &dest, KoStore *store, const QString &src )
 {
+#warning TODO: implement or remove
+#if 0
+
   if ( dest == ROOTPART )
   {
     kdError(s_area) << "KoStore: cannot embed root part" << endl;
@@ -340,6 +390,8 @@ bool KoStore::embed( const QString &dest, KoStore &store, const QString &src )
     }
   }
   return i == entries.count();
+#endif
+  return false;
 }
 
 QIODevice::Offset KoStore::size() const
@@ -379,13 +431,7 @@ bool KoStore::leaveDirectory()
 
   m_currentPath.pop_back();
 
-  if ( m_currentPath.isEmpty() )
-    m_currentDir = 0;
-  else {
-    m_currentDir = dynamic_cast<const KArchiveDirectory*>( m_pTar->directory()->entry( expandEncodedDirectory( currentPath() ) ) );
-    Q_ASSERT( m_currentDir );
-  }
-  return true;
+  return enterAbsoluteDirectory( expandEncodedDirectory( currentPath() ) );
 }
 
 QString KoStore::currentPath() const
@@ -408,7 +454,8 @@ void KoStore::pushDirectory()
 void KoStore::popDirectory()
 {
   m_currentPath.clear();
-  m_currentDir = 0;
+  //m_currentDir = 0;
+  enterAbsoluteDirectory( QString::null );
   enterDirectory( m_directoryStack.pop() );
 }
 
@@ -460,7 +507,7 @@ QString KoStore::expandEncodedPath( QString intern )
     // old-style names.
     if ( ( m_namingVersion == NAMING_VERSION_2_2 ) &&
          ( m_mode == Read ) &&
-         ( m_pTar->directory()->entry( result + "part" + intern + ".xml" ) ) )
+         ( fileExists( result + "part" + intern + ".xml" ) ) )
       m_namingVersion = NAMING_VERSION_2_1;
 
     if ( m_namingVersion == NAMING_VERSION_2_1 )
@@ -490,40 +537,12 @@ QString KoStore::expandEncodedDirectory( QString intern )
   return result;
 }
 
-void KoStore::init( Mode _mode )
-{
-  d = 0;
-  m_bIsOpen = false;
-  m_mode = _mode;
-  m_stream = 0;
-  m_currentDir = 0;
-
-  m_bGood = m_pTar->open( _mode == Write ? IO_WriteOnly : IO_ReadOnly );
-
-  if ( m_bGood && _mode == Read )
-      m_bGood = m_pTar->directory() != 0;
-
-  // Assume new style names.
-  m_namingVersion = NAMING_VERSION_2_2;
-}
-
 bool KoStore::enterDirectoryInternal( const QString& directory )
 {
-  if ( m_mode == Read ) {
-    if ( !m_currentDir ) {
-      m_currentDir = m_pTar->directory(); // initialize
-      Q_ASSERT( m_currentPath.isEmpty() );
-    }
-    const KArchiveEntry *entry = m_currentDir->entry( expandEncodedDirectory( directory ) );
-    if ( entry && entry->isDirectory() ) {
+    if ( enterRelativeDirectory( expandEncodedDirectory( directory ) ) )
+    {
       m_currentPath.append( directory );
-      m_currentDir = dynamic_cast<const KArchiveDirectory*>( entry );
-      return m_currentDir != 0;
+      return true;
     }
     return false;
-  }
-  else { // Write, no checking here
-    m_currentPath.append( directory );
-    return true;
-  }
 }

@@ -59,7 +59,7 @@ int main( int argc, char **argv )
         QFile::remove( testFile );
 
     kdDebug() << "===========================================================" << endl;
-    KoStore* store = new KoStore( testFile, KoStore::Write );
+    KoStore* store = KoStore::createStore( testFile, KoStore::Write );
     if ( store->bad() )
         return cleanUp( store, badStorage );
 
@@ -107,7 +107,7 @@ int main( int argc, char **argv )
 
     kdDebug() << "===========================================================" << endl;
 
-    store = new KoStore( testFile, KoStore::Read );
+    store = KoStore::createStore( testFile, KoStore::Read );
     if ( store->bad() )
         return cleanUp( store, badStorage );
 
