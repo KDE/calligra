@@ -103,6 +103,7 @@ protected slots:
     void columnSizeChange( int c, int os, int ns );
     void sectionClicked( int c );
 
+private:
     class Private;
     Private* d; // currently unused
 };
