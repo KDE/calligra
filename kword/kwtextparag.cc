@@ -39,7 +39,7 @@
 KoTextParag::KoTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool updateIds)
     : QTextParag( d, pr, nx, updateIds )
 {
-    kdDebug() << "KoTextParag::KoTextParag " << this << endl;
+    //kdDebug() << "KoTextParag::KoTextParag " << this << endl;
     m_item = 0L;
 }
 
@@ -47,7 +47,7 @@ KoTextParag::~KoTextParag()
 {
     if ( !textDocument()->isDestroying() )
         invalidateCounters();
-    kdDebug() << "KoTextParag::~KoTextParag " << this << endl;
+    //kdDebug() << "KoTextParag::~KoTextParag " << this << endl;
     delete m_item;
 }
 
