@@ -77,19 +77,19 @@ public:
     /**
      * Get the current file to read from. This part of the API
      * is for the filters in our chain.
-     * Note: Call that only once for your filter
      */
     QString inputFile();
     /**
      * Get the current file to write to. This part of the API
      * is for the filters in our chain.
-     * Note: Call that only once for your filter
      */
     QString outputFile();
 
     /**
      * Get a file from a storage. May return 0!
      * This part of the API is for the filters in our chain.
+     * If you call it multiple times with the same stream name
+     * the stream will be closed and re-opened!
      * @param name The name of the stream inside the storage
      * @param mode Whether we want to read or write from/to the stream
      * @return The storage device to access the stream. May be 0!

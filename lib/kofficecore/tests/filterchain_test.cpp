@@ -36,15 +36,19 @@ int main( int /*argc*/, char **/*argv*/ )
     KoFilterChain::Ptr chain = g.chain( manager, mimeType );
     if ( !chain )
         kdDebug() << "Chain for 'foo/bar' is not available, OK" << endl;
-    else
+    else {
         kdError() << "Chain for 'foo/bar' is available!" << endl;
+        chain->dump();
+    }
 
-    mimeType = "application/x-kpresenter";
+    mimeType = "application/x-graphite";
     chain = g.chain( manager, mimeType );
     if ( !chain )
-        kdDebug() << "Chain for 'application/x-kpresenter' is not available, OK" << endl;
-    else
-        kdError() << "Chain 'application/x-kpresenter' is available!" << endl;
+        kdDebug() << "Chain for 'application/x-graphite' is not available, OK" << endl;
+    else {
+        kdError() << "Chain 'application/x-graphite' is available!" << endl;
+        chain->dump();
+    }
 
     mimeType = "text/x-csv";
     chain = g.chain( manager, mimeType );

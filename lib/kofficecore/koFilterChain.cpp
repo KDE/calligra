@@ -540,23 +540,11 @@ namespace KOffice {
             return 0;
         const Edge* edge = 0;
         QPtrListIterator<Edge> it( m_edges );
-        for ( ; it.current(); ++it ) {
-            if ( it.current()->vertex() == vertex ) {
-                edge = it.current(); // we found an edge...
-                ++it;
-                break;
-            }
-        }
 
-        // Okay, we didn't find any matching edge
-        if ( !edge )
-            return 0;
-
-        // Apparently we found one - is there a lighter one left?
         for ( ; it.current(); ++it ) {
             if ( it.current()->vertex() == vertex &&
-                 it.current()->weight() < edge->weight() )
-                edge = it.current(); // we found a lighter one.. keep on trying
+                 ( !edge || it.current()->weight() < edge->weight() ) )
+                edge = it.current();
         }
         return edge;
     }
