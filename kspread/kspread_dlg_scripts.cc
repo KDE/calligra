@@ -6,6 +6,9 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <qlineedit.h>
+#include <qlistbox.h>
+#include <qpushbutton.h>
 
 #include <stdlib.h>
 

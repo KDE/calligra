@@ -3,10 +3,10 @@
 
 #include <qdialog.h>
 #include <qstringlist.h>
-#include <qlineedit.h>
-#include <qlistbox.h>
-#include <qpushbutton.h>
 
+class QLineEdit;
+class QListBox;
+class QPushButton;
 class KSpreadScriptsData
 {
 public:
@@ -34,7 +34,7 @@ public slots:
     void slotDelete();
     void slotAdd();
     void slotRename();
-    
+
     void slotHighlighted( int );
     void slotSelected( int );
 
@@ -42,7 +42,7 @@ protected:
     void updateList();
 
     QStringList nameList;
-    
+
     // KMetaEditor *editor;
 };
 
