@@ -371,14 +371,6 @@ int KPTextObject::getSubPresSteps() const
     return paragraphs;
 }
 
-/*================================================================*/
-void KPTextObject::extendObject2Contents( KPresenterView */*view*/ )
-{
-#if 0
-    QSize s( ktextobject.neededSize() );
-    setSize( s.width(), s.height() );
-#endif
-}
 
 /*=========================== save ktextobject ===================*/
 QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
@@ -1082,6 +1074,18 @@ void KPTextObject::slotAfterFormatting( int, KoTextParag* lastFormatted, bool* )
     {
         setSize( getRect().width(), m_doc->zoomHandler()->layoutUnitPtToPt(lastFormatted->rect().height())+getRect().height());
         m_textobj->setLastFormattedParag( 0 );
+        m_doc->updateRuler();
+    }
+}
+
+void KPTextObject::textContentsToHeight()
+{
+    KoTextParag * parag = m_textobj->textDocument()->lastParag();
+    double txtHeight = m_doc->zoomHandler()->unzoomItY( m_doc->zoomHandler()->layoutUnitToPixelY( parag->rect().bottom() ));
+    if( getRect().height()> txtHeight )
+    {
+        m_doc->repaint(this);
+        setSize( getRect().width(), txtHeight);
         m_doc->updateRuler();
     }
 }

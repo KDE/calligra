@@ -91,8 +91,6 @@ public:
 
     void drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KPrCanvas* /*canvas*/ );
 
-    virtual void extendObject2Contents( KPresenterView *view = 0 );
-
     void recalcPageNum( KPresenterDoc *doc, KPrPage *page );
 
 
@@ -121,6 +119,8 @@ public:
     KoTextFormat loadFormat( QDomElement &n );
 
     void setEditingTextObj( bool _edit ) { editingTextObj = _edit; }
+
+    void textContentsToHeight();
 
 signals:
     void repaintChanged( KPTextObject* );

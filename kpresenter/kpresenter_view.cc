@@ -1814,42 +1814,14 @@ void KPresenterView::textDepthMinus()
     m_canvas->setTextDepthMinus();
 }
 
-/*===============================================================*/
 void KPresenterView::textContentsToHeight()
 {
-#if 0
-    KPTextObject *txtObj = m_canvas->currentTextObjectView();
-    if ( !txtObj )
-	txtObj = m_canvas->selectedTextObj();
-
-    if ( txtObj )
-	txtObj->extendContents2Height();
-
-    if ( m_canvas->selectedTextObj() )
-	m_pKPresenterDoc->repaint( false );
-    else if ( txtObj )
-	txtObj->repaint( FALSE );
-#endif
+    m_canvas->textContentsToHeight();
 }
 
-/*===============================================================*/
 void KPresenterView::textObjectToContents()
 {
-#if 0
-    KPTextObject *txtObj = m_canvas->currentTextObjectView();
-    if ( !txtObj )
-	txtObj = m_canvas->selectedTextObj();
-
-    if ( txtObj )
-	txtObj->extendObject2Contents( this );
-
-    if ( m_canvas->selectedKPTextObj() )
-	m_pKPresenterDoc->repaint( false );
-    else if ( txtObj )
-    {
-	txtObj->textObject()->repaint( FALSE );
-    }
-#endif
+    m_canvas->textObjectToContents();
 }
 
 /*===============================================================*/

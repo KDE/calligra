@@ -6673,3 +6673,27 @@ void KPrCanvas::ensureVisible( int x, int y, int xmargin, int ymargin )
     }
 
 }
+
+void KPrCanvas::textContentsToHeight()
+{
+    QPtrList<KPTextObject> lst = applicableTextObjects();
+    if ( lst.isEmpty() )
+        return;
+    QPtrListIterator<KPTextObject> it( lst );
+    for ( ; it.current() ; ++it ) {
+        it.current()->textContentsToHeight();
+        _repaint( it.current() );
+    }
+}
+
+void KPrCanvas::textObjectToContents()
+{
+    QPtrList<KPTextObject> lst = applicableTextObjects();
+    if ( lst.isEmpty() )
+        return;
+    QPtrListIterator<KPTextObject> it( lst );
+    for ( ; it.current() ; ++it ) {
+        //todo
+    }
+}
+

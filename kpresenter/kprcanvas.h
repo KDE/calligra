@@ -243,6 +243,9 @@ public:
 
     void scrollTopLeftPoint( const QPoint & pos );
 
+    void textContentsToHeight();
+    void textObjectToContents();
+
 public slots:
     void exitEditMode();
 
