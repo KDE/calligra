@@ -15,6 +15,7 @@
 #include "kpresenter_doc.h"
 #include "kpresenter_doc.moc"
 #include "kpresenter_shell.h"
+#include "kpresenter_view.h"
 #include "page.h"
 #include "kpresenter_view.h"
 #include "ktextobject.h"
@@ -297,7 +298,14 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
     out << indent << "<INFINITLOOP value=\"" << _spInfinitLoop << "\"/>" << endl;
     out << indent << "<MANUALSWITCH value=\"" << _spManualSwitch << "\"/>" << endl;
     out << indent << "<PRESSPEED value=\"" << static_cast<int>( presSpeed ) << "\"/>" << endl;
-
+    out << indent << "<PRESSLIDES value=\"" << static_cast<int>( presentSlides ) << "\"/>" << endl;
+    
+    out << otag << "<SELSLIDES>" << endl;
+    QMap<int,bool>::Iterator sit = selectedSlides.begin();
+    for ( ; sit != selectedSlides.end(); ++sit )
+        out << indent << "<SLIDE nr=\"" << sit.key() << "\" show=\"" << ( *sit ) << "\"/>" << endl;
+    out << etag << "</SELSLIDES>" << endl;
+    
     // Write "OBJECT" tag for every child
     QListIterator<KPresenterChild> chl( m_lstChildren );
     for( ; chl.current(); ++chl )
@@ -517,6 +525,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
         _yRnd = 20;
         _txtBackCol = white;
         urlIntern = url();
+        presentSlides = PS_ALL;
     }
 
     // DOC
@@ -804,6 +813,56 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
             }
         }
 
+        else if ( name == "PRESSLIDES" )
+        {
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "value" )
+                    presentSlides = static_cast<PresentSlides>( atoi( ( *it ).m_strValue.c_str() ) );
+            }
+        }
+
+        else if ( name == "SELSLIDES" )
+        {
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+            }
+
+            while ( parser.open( 0L, tag ) )
+            {
+                int nr;
+                bool show;
+
+                KOMLParser::parseTag( tag.c_str(), name, lst );
+                if ( name == "SLIDE" )
+                {
+                    KOMLParser::parseTag( tag.c_str(), name, lst );
+                    vector<KOMLAttrib>::const_iterator it = lst.begin();
+                    for( ; it != lst.end(); it++ )
+                    {
+                        if ( ( *it ).m_strName == "nr" )
+                            nr = atoi( ( *it ).m_strValue.c_str() );
+                        else if ( ( *it ).m_strName == "show" )
+                            show = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+                    }
+                    selectedSlides.insert( nr, show );
+                }
+                else
+                    cerr << "Unknown tag '" << tag << "' in SELSLIDES" << endl;
+
+                if ( !parser.close( tag ) )
+                {
+                    cerr << "ERR: Closing Child" << endl;
+                    QApplication::restoreOverrideCursor();
+                    return false;
+                }
+            }
+        }
+
         else if ( name == "PIXMAPS" )
         {
             KOMLParser::parseTag( tag.c_str(), name, lst );
@@ -966,6 +1025,8 @@ void KPresenterDoc::loadBackground( KOMLParser& parser, vector<KOMLAttrib>& lst 
             insertNewPage( 0, 0, false );
             KPBackGround *kpbackground = _backgroundList.last();
             kpbackground->load( parser, lst );
+            if ( !selectedSlides.contains( _backgroundList.count() - 1 ) )
+                selectedSlides.insert( _backgroundList.count() - 1, true );
         }
         else
             cerr << "Unknown tag '" << tag << "' in BACKGROUND" << endl;
@@ -3686,3 +3747,27 @@ void KPresenterDoc::setFooter( bool b )
 {
     _hasFooter = b;
 }
+
+/*================================================================*/
+QValueList<int> KPresenterDoc::getSlides( int currPgNum )
+{
+    QValueList<int> lst;
+    switch ( presentSlides )
+    {
+    case PS_ALL:
+        for ( unsigned int i = 0;i < _backgroundList.count(); ++i )
+            lst.append( i + 1 );
+        break;
+    case PS_CURRENT:
+        lst.append( currPgNum );
+        break;
+    case PS_SELECTED:
+        QMap<int,bool>::Iterator it = selectedSlides.begin();
+        for ( ; it != selectedSlides.end(); ++it )
+            if ( ( *it ) )
+                lst.append( it.key() + 1 );
+        break;
+    }
+    
+    return lst;
+}   

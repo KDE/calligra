@@ -1645,7 +1645,7 @@ KPTextObject *Page::haveASelectedKPTextObj()
 }
 
 /*====================== start screenpresentation ================*/
-void Page::startScreenPresentation( bool zoom )
+void Page::startScreenPresentation( bool zoom, int curPgNum )
 {
     presMenu->setItemChecked( PM_SM, true );
     presMenu->setItemChecked( PM_DM, false );
@@ -1718,10 +1718,12 @@ void Page::startScreenPresentation( bool zoom )
     if ( view->kPresenterDoc()->hasFooter() && view->kPresenterDoc()->footer() )
         view->kPresenterDoc()->footer()->zoom( _presFakt );
 
-    currPresPage = 1;
+    slideList = view->kPresenterDoc()->getSlides( curPgNum );
+    slideListIterator = slideList.begin();
+    currPresPage = *slideListIterator;
     editMode = false;
     drawMode = false;
-    presStepList = view->kPresenterDoc()->reorderPage( 1, diffx(), diffy(), _presFakt );
+    presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
     currPresStep = *presStepList.begin();
     subPresStep = 0;
     repaint( true );
@@ -1818,7 +1820,8 @@ bool Page::pNext( bool )
     }
     else
     {
-        if ( currPresPage + 1 > pageNums() )
+        QValueList<int>::Iterator test(  slideListIterator ); 
+        if ( /*currPresPage + 1 > pageNums()*/ ++test == slideList.end() )
         {
             for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ )
             {
@@ -1876,8 +1879,8 @@ bool Page::pNext( bool )
         QPixmap _pix1( QApplication::desktop()->width(), QApplication::desktop()->height() );
         drawPageInPix( _pix1, view->getDiffY() );
 
-        currPresPage++;
-
+        currPresPage = *( ++slideListIterator );
+        
         tmpObjs.clear();
         for ( int j = 0; j < static_cast<int>( objectList()->count() ); j++ )
         {
@@ -1889,9 +1892,14 @@ bool Page::pNext( bool )
         currPresStep = *presStepList.begin();
 
         QPixmap _pix2( QApplication::desktop()->width(), QApplication::desktop()->height() );
-        drawPageInPix( _pix2, view->getDiffY() + view->kPresenterDoc()->getPageSize( 0, 0, 0, _presFakt, false ).height() );
+        int yOffset = ( presPage() - 1 ) * view->kPresenterDoc()->getPageSize( 0, 0, 0, presFakt(), false ).height();
+        if ( height() > view->kPresenterDoc()->getPageSize( 0, 0, 0, presFakt(), false ).height() )
+            yOffset -= ( height() - view->kPresenterDoc()->getPageSize( 0, 0, 0, presFakt(), false ).height() ) / 2;
+        drawPageInPix( _pix2, yOffset );
 
-        changePages( _pix1, _pix2, backgroundList()->at( currPresPage - 2 )->getPageEffect() );
+        QValueList<int>::Iterator it( slideListIterator );
+        --it;
+        changePages( _pix1, _pix2, backgroundList()->at( ( *it ) - 1 )->getPageEffect() );
 
         return true;
     }
@@ -1913,14 +1921,14 @@ bool Page::pPrev( bool /*manual*/ )
     }
     else
     {
-        if ( currPresPage-1 <= 0 )
+        if ( /*currPresPage-1 <= 0*/ slideListIterator == slideList.begin() )
         {
             presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
             currPresStep = *presStepList.begin();
             repaint( false );
             return false;
         }
-        currPresPage--;
+        currPresPage = *( --slideListIterator );
 
         tmpObjs.clear();
         for ( int j = 0; j < static_cast<int>( objectList()->count() ); j++ )
@@ -1930,7 +1938,7 @@ bool Page::pPrev( bool /*manual*/ )
         }
 
         presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
-        currPresStep = *presStepList.begin();
+        currPresStep = *( --presStepList.end() );
         return true;
     }
 
@@ -2860,7 +2868,7 @@ void Page::doObjEffects()
                     }
                     else
                     {
-                        if ( subPresStep == 0 ) 
+                        if ( subPresStep == 0 )
                         {
                             switch ( kpobject->getEffect3() )
                             {
@@ -3550,11 +3558,12 @@ void Page::slotGotoPage()
 {
     setCursor( blankCursor );
     int pg = currPresPage;
-    pg = KPGotoPage::gotoPage( 1, pageNums(), pg, this );
+    pg = KPGotoPage::gotoPage( slideList, pg, this );
 
     if ( pg != static_cast<int>( currPresPage ) )
     {
         currPresPage = pg;
+        slideListIterator = slideList.find( currPresPage );
         editMode = false;
         drawMode = false;
         presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );

@@ -1028,12 +1028,11 @@ void KPresenterView::screenConfigPages()
         delete pgConfDia;
         pgConfDia = 0;
     }
-    pgConfDia = new PgConfDia( 0, "PageConfig", kPresenterDoc()->spInfinitLoop(),
+    pgConfDia = new PgConfDia( 0L, kPresenterDoc(), "PageConfig", kPresenterDoc()->spInfinitLoop(),
                                kPresenterDoc()->spManualSwitch(), getCurrPgNum(),
                                kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageEffect(),
-                               kPresenterDoc()->getPresSpeed() );
-    pgConfDia->setMaximumSize( pgConfDia->width(), pgConfDia->height() );
-    pgConfDia->setMinimumSize( pgConfDia->width(), pgConfDia->height() );
+                               kPresenterDoc()->getPresSpeed(), kPresenterDoc()->getPresentSlides(),
+                               kPresenterDoc()->getSelectedSlides() );
     pgConfDia->setCaption( i18n( "KPresenter - Page Configuration for Screenpresentations" ) );
     QObject::connect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
     pgConfDia->show();
@@ -1093,7 +1092,8 @@ void KPresenterView::screenAssignEffect()
 void KPresenterView::screenStart()
 {
     bool fullScreen = true; //m_rToolBarScreen->isButtonOn( m_idButtonScreen_Full );
-
+    int curPg = getCurrPgNum();
+    
     if ( page && !presStarted )
     {
         // disable screensaver
@@ -1148,8 +1148,12 @@ void KPresenterView::screenStart()
         oldSize = widget()->size();
         widget()->resize( page->size() );
         setSize( page->size().width(), page->size().height() );
-        page->startScreenPresentation( fullScreen );
+        page->startScreenPresentation( fullScreen, curPg );
 
+        yOffset = ( page->presPage() - 1 ) * kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height();
+        if ( page->height() > kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() )
+            yOffset -= ( page->height() - kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() ) / 2;
+        
         if ( fullScreen )
         {
             page->recreate( ( QWidget* )0L, WStyle_Customize | WStyle_NoBorder | WType_Popup, QPoint( 0, 0 ), true );
@@ -1166,10 +1170,10 @@ void KPresenterView::screenStart()
             page->setFocusPolicy( QWidget::StrongFocus );
             page->setFocus();
         }
-        QPainter p;
-        p.begin( page );
-        presentParts( page->presFakt(), &p, QRect( 0, 0, 0, 0 ), xOffset, yOffset );
-        p.end();
+//         QPainter p;
+//         p.begin( page );
+//         presentParts( page->presFakt(), &p, QRect( 0, 0, 0, 0 ), xOffset, yOffset );
+//         p.end();
 
         if ( !kPresenterDoc()->spManualSwitch() )
         {
@@ -1246,7 +1250,10 @@ void KPresenterView::screenPrev()
     {
         if ( page->pPrev( true ) )
         {
-            yOffset -= kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height();
+            yOffset = ( page->presPage() - 1 ) * kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height();
+            if ( page->height() > kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() )
+                yOffset -= ( page->height() - kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() ) / 2;
+            //yOffset -= kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height();
             page->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
             page->repaint( false );
             page->setFocus();
@@ -1256,9 +1263,9 @@ void KPresenterView::screenPrev()
             page->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
             page->setFocus();
         }
-        QPainter p( page );
-        presentParts( page->presFakt(), &p, QRect( 0, 0, 0, 0 ), xOffset, yOffset );
-        p.end();
+//         QPainter p( page );
+//         presentParts( page->presFakt(), &p, QRect( 0, 0, 0, 0 ), xOffset, yOffset );
+//         p.end();
     }
     else
     {
@@ -1274,7 +1281,10 @@ void KPresenterView::screenNext()
     {
         if ( page->pNext( true ) )
         {
-            yOffset += kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height();
+            yOffset = ( page->presPage() - 1 ) * kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height();
+            if ( page->height() > kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() )
+                yOffset -= ( page->height() - kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() ) / 2;
+            //yOffset += kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height();
             page->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
             //page->repaint( false );
             page->setFocus();
@@ -1284,9 +1294,9 @@ void KPresenterView::screenNext()
             page->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
             page->setFocus();
         }
-        QPainter p( page );
-        presentParts( page->presFakt(), &p, QRect( 0, 0, 0, 0 ), xOffset, yOffset );
-        p.end();
+//         QPainter p( page );
+//         presentParts( page->presFakt(), &p, QRect( 0, 0, 0, 0 ), xOffset, yOffset );
+//         p.end();
     }
     else
     {
@@ -2044,9 +2054,12 @@ void KPresenterView::pgConfOk()
     PgConfCmd *pgConfCmd = new PgConfCmd( i18n( "Configure Page for Screenpresentations" ),
                                           pgConfDia->getManualSwitch(), pgConfDia->getInfinitLoop(),
                                           pgConfDia->getPageEffect(), pgConfDia->getPresSpeed(),
-                                          kPresenterDoc()->spInfinitLoop(), kPresenterDoc()->spManualSwitch(),
+                                          pgConfDia->getPresentSlides(), pgConfDia->getSelectedSlides(),
+                                          kPresenterDoc()->spManualSwitch(), kPresenterDoc()->spInfinitLoop(),
                                           kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageEffect(),
-                                          kPresenterDoc()->getPresSpeed(), kPresenterDoc(), getCurrPgNum() - 1 );
+                                          kPresenterDoc()->getPresSpeed(), 
+                                          kPresenterDoc()->getPresentSlides(), kPresenterDoc()->getSelectedSlides(),
+                                          kPresenterDoc(), getCurrPgNum() - 1 );
     pgConfCmd->execute();
     kPresenterDoc()->commands()->addCommand( pgConfCmd );
 }
@@ -3257,7 +3270,7 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = Q2C( i18n( "&Resize Object to fit the Contents" ) );
     m_idMenuText_TExtentObj2Cont = m_vMenuText->insertItem( text, this, "textObjToCont", 0 );
 
-    
+
     // MENU Extra
     text = Q2C( i18n( "&Extra" ) );
     _menubar->insertMenu( text, m_vMenuExtra, -1, -1 );

@@ -286,3 +286,15 @@ Reggie, 5.6.1999:
 - KRect/KPoint/KSize -> QRect/QPoint/QSize
 - Some source cleanups
 - More work on copying pages
+
+Reggie, 6.6.1999:
+-----------------
+- It's now possible to choose for screenpresentations, if
+  - all slides should be shown
+  - only the current slide should be shown (that's the slide/page which is the current one in edit mode
+    at the moment)
+  - selected ones should be shown (you can select them in a listview)
+  All this configuration can be done in the page-config dialog (menu Screenpresentations).
+  The second point (only current slide) is also convinient, when you are just creating/editing
+  a presentation to view only the slide on which you currently are working for testing :-)
+

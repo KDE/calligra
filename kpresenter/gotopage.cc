@@ -17,7 +17,7 @@
 #include "gotopage.moc"
 
 #include <qlabel.h>
-#include <qspinbox.h>
+#include <qcombobox.h>
 #include <qvalidator.h>
 #include <qevent.h>
 
@@ -29,17 +29,26 @@
 /******************************************************************/
 
 /*================================================================*/
-KPGotoPage::KPGotoPage(int minValue,int maxValue,int start,
-                       QWidget *parent, const char *name, WFlags f )
+KPGotoPage::KPGotoPage( const QValueList<int> &slides, int start,
+                        QWidget *parent, const char *name, WFlags f )
     : QFrame( parent, name, f ), _default( start ), page( start )
 {
     label = new QLabel( i18n( "Goto Page:" ), this );
     label->resize( label->sizeHint() );
 
-    spinbox = new QSpinBox(minValue,maxValue,1,this);
-    spinbox->setValue( page );
+    spinbox = new QComboBox( false, this );
     spinbox->resize( spinbox->sizeHint() );
 
+    QValueList<int>::ConstIterator it = slides.begin();
+    unsigned int i = 0;
+    for ( unsigned int j = 0; it != slides.end(); ++it, ++j )
+    {
+        spinbox->insertItem( QString( "%1" ).arg( *it ), -1 );
+        if ( *it == start )
+            i = j;
+    }
+    spinbox->setCurrentItem( i );
+    
     spinbox->installEventFilter( this );
     label->installEventFilter( this );
 
@@ -61,10 +70,10 @@ KPGotoPage::KPGotoPage(int minValue,int maxValue,int start,
 }
 
 /*================================================================*/
-int KPGotoPage::gotoPage(int minValue,int maxValue,int start,QWidget *parent)
+int KPGotoPage::gotoPage( const QValueList<int> &slides, int start, QWidget *parent)
 {
-    KPGotoPage dia(minValue,maxValue,start,parent,0L,
-                   Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::WType_Popup );
+    KPGotoPage dia( slides, start,parent, 0L,
+                    Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::WType_Popup );
 
     kapp->enter_loop();
 
@@ -83,7 +92,7 @@ bool KPGotoPage::eventFilter( QObject * /*obj*/, QEvent *e )
         QKeyEvent *ke = dynamic_cast<QKeyEvent*>( e );
         if ( ke->key() == Key_Enter || ke->key() == Key_Return )
         {
-            page = spinbox->value();
+            page = spinbox->currentText().toInt();
 
             spinbox->releaseMouse();
             spinbox->releaseKeyboard();
@@ -105,14 +114,22 @@ bool KPGotoPage::eventFilter( QObject * /*obj*/, QEvent *e )
 
             return true;
         }
-        else if ( ke->key() == Key_Up )
-        {
-            spinbox->stepUp();
-            return true;
-        }
         else if ( ke->key() == Key_Down )
         {
-            spinbox->stepDown();
+            if ( spinbox->currentItem() < spinbox->count() )
+            {
+                spinbox->setCurrentItem( spinbox->currentItem() + 1 );
+                page = spinbox->currentText().toInt();
+            }
+            return true;
+        }
+        else if ( ke->key() == Key_Up )
+        {
+            if ( spinbox->currentItem() > 0 )
+            {
+                spinbox->setCurrentItem( spinbox->currentItem() - 1 );
+                page = spinbox->currentText().toInt();
+            }
             return true;
         }
     }

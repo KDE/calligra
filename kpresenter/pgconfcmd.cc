@@ -21,11 +21,13 @@
 /* Class: PgConfCmd                                               */
 /******************************************************************/
 
-/*======================== constructor ===========================*/
+/*================================================================*/
 PgConfCmd::PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
                       PageEffect _pageEffect, PresSpeed _presSpeed,
+                      PresentSlides _presSlides, const QMap<int,bool> &_selectedSlides,
                       bool _oldManualSwitch, bool _oldInfinitLoop,
                       PageEffect _oldPageEffect, PresSpeed _oldPresSpeed,
+                      PresentSlides _oldPresSlides, const QMap<int,bool> &_oldSelectedSlides,
                       KPresenterDoc *_doc, int _pgNum )
     : Command( _name )
 {
@@ -39,23 +41,31 @@ PgConfCmd::PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
     oldPresSpeed = _oldPresSpeed;
     doc = _doc;
     pgNum = _pgNum;
+    presSlides = _presSlides;
+    oldPresSlides = _oldPresSlides;
+    selectedSlides = QMap<int,bool>( _selectedSlides );
+    oldSelectedSlides = QMap<int,bool>( _oldSelectedSlides );
 }
 
-/*====================== execute =================================*/
+/*================================================================*/
 void PgConfCmd::execute()
 {
     doc->setManualSwitch( manualSwitch );
     doc->setInfinitLoop( infinitLoop );
     doc->setPageEffect( pgNum, pageEffect );
     doc->setPresSpeed( presSpeed );
+    doc->setPresentSlides( presSlides );
+    doc->setSelectedSlides( selectedSlides );
 }
 
-/*====================== unexecute ===============================*/
+/*================================================================*/
 void PgConfCmd::unexecute()
 {
     doc->setManualSwitch( oldManualSwitch );
     doc->setInfinitLoop( oldInfinitLoop );
     doc->setPageEffect( pgNum, oldPageEffect );
     doc->setPresSpeed( oldPresSpeed );
+    doc->setPresentSlides( oldPresSlides );
+    doc->setSelectedSlides( oldSelectedSlides );
 }
 

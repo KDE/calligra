@@ -89,7 +89,7 @@ public:
     KTextObject* kTxtObj();
     KPTextObject* kpTxtObj();
 
-    void startScreenPresentation( bool );
+    void startScreenPresentation( bool, int );
     void stopScreenPresentation();
     bool pNext( bool );
     bool pPrev( bool );
@@ -217,7 +217,8 @@ protected:
     unsigned int currPresPage, currPresStep, subPresStep;
     unsigned int oldPresPage, oldPresStep, oldSubPresStep;
     float _presFakt;
-    QValueList<int> presStepList;
+    QValueList<int> presStepList, slideList;
+    QValueList<int>::Iterator slideListIterator;
     int PM_DM, PM_SM;
     int firstX, firstY;
     bool drawRubber;
@@ -228,7 +229,7 @@ protected:
     QList <KPObject> tmpObjs;
     QString autoform;
     bool inEffect;
-
+    
 public slots:
     void chPic();
     void chClip();

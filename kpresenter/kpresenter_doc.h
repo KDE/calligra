@@ -18,7 +18,6 @@
 class KPresenterDoc;
 class KPresenterView;
 
-
 #include <koDocument.h>
 #include <koQueryTypes.h>
 #include <koPrintExt.h>
@@ -28,6 +27,7 @@ class KPresenterView;
 #include <qobject.h>
 #include <qstring.h>
 #include <qvaluelist.h>
+#include <qmap.h>
 
 #include <koPageLayoutDia.h>
 
@@ -321,6 +321,13 @@ public:
     void setFooter( bool b );
     KPFooterHeaderEditor *getHeaderFooterEdit() { return headerFooterEdit; }
 
+    PresentSlides getPresentSlides() { return presentSlides; }
+    const QMap<int,bool> &getSelectedSlides() { return selectedSlides; }
+    void setPresentSlides( PresentSlides ps ) { presentSlides = ps; }
+    void setSelectedSlides( const QMap<int,bool> &ss ) { selectedSlides = QMap<int,bool>( ss ); }
+
+    QValueList<int> getSlides( int currPgNum );
+    
 signals:
 
     // document modified
@@ -423,6 +430,9 @@ protected:
     KoPageLayout __pgLayout;
 
     QString urlIntern;
+
+    PresentSlides presentSlides;
+    QMap<int,bool> selectedSlides;
     
 };
 

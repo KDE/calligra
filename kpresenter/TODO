@@ -9,7 +9,6 @@ MISSING FEATURES :
 ==================
 - Restart with last presentation (suggesting it in initial "open" dialog)
   (using kapp->getConfig)
-- View current page full-screen
 - Resize an image keeping contrainsts (e.g. Ctrl+click)
 - Window title : kpresenter - filename
 - Current "align objects" aligns in relation with the page, is there a

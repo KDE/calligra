@@ -17,14 +17,20 @@
 #define PGCONFDIA_H
 
 #include <qdialog.h>
-#include <qchkbox.h>
-#include <qcombo.h>
+#include <qmap.h>
 
 #include "global.h"
 
 class QButtonGroup;
 class QLabel;
 class QPushButton;
+class QVBox;
+class QResizeEvent;
+class QListView;
+class KPresenterDoc;
+class QRadioButton;
+class QComboBox;
+class QCheckBox;
 
 /******************************************************************/
 /* class PgConfDia                                                */
@@ -37,27 +43,38 @@ class PgConfDia : public QDialog
 public:
 
     // constructor - destructor
-    PgConfDia( QWidget* parent=0, const char* name=0,
-               bool infLoop = false, bool swMan = true, int pgNum = 1, PageEffect pageEffect = PEF_NONE, PresSpeed = PS_NORMAL );
-    ~PgConfDia();
-    bool getInfinitLoop() {return infinitLoop->isChecked(); }
-    bool getManualSwitch() {return manualSwitch->isChecked(); }
-    PageEffect getPageEffect() {return static_cast<PageEffect>( effectCombo->currentItem() ); }
-    PresSpeed getPresSpeed() {return static_cast<PresSpeed>( speedCombo->currentItem() ); }
+    PgConfDia( QWidget* parent, KPresenterDoc *doc, const char* name,
+               bool infLoop, bool swMan, int pgNum, 
+               PageEffect pageEffect, PresSpeed presSpeed,
+               PresentSlides presSlides, const QMap<int,bool> &selectedSlides );
+    bool getInfinitLoop();
+    bool getManualSwitch();
+    PageEffect getPageEffect();
+    PresSpeed getPresSpeed();
+    PresentSlides getPresentSlides();
+    QMap<int,bool> getSelectedSlides();
 
 protected:
-    QButtonGroup *general, *page;
+    void resizeEvent( QResizeEvent *e );
+    
+    QButtonGroup *general, *page, *slides;
     QCheckBox *infinitLoop, *manualSwitch;
+    QRadioButton *slidesAll, *slidesCurrent, *slidesSelected;
     QLabel *label1, *label2, *label3, *label4;
     QPushButton *cancelBut, *okBut;
     QComboBox *effectCombo, *speedCombo;
-
+    QVBox *back;
+    QListView *lSlides;
+    
 public slots:
-    void confDiaOk() {emit pgConfDiaOk(); }
+    void confDiaOk() { emit pgConfDiaOk(); }
 
+protected slots:
+    void presSlidesChanged( int );
+    
 signals:
     void pgConfDiaOk();
 
 };
 
-#endif //PGCONFDIA_H
+#endif 
