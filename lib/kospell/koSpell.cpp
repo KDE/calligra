@@ -299,6 +299,7 @@ bool KOSpell::spellWord( const QString &_word )
     if ( lst.isEmpty() && (lastpos >= (int)origbuffer.length()-1) )
     {
         emit death();
+        m_status = Finished;
         return false;
     }
     if ( lst.contains( _word ))
@@ -327,7 +328,7 @@ void KOSpell::nextWord()
     }
     while ( word.isEmpty() && (lastpos+offset < (int)origbuffer.length()-1));
 
-    if ( !spellWord( word ))
+    if ( m_status != Finished && !spellWord( word ))
     {
         checkNextWord();
     }
@@ -348,7 +349,7 @@ void KOSpell::testIgnoreWord( QString & word )
     //We don't take advantage of ispell's ignore function because
     //we can't interrupt ispell's output (when checking a large
     //buffer) to add a word to _it's_ ignore-list.
-    if (ignorelist.findIndex(word.lower())!=-1)
+    if (!word.isEmpty() &&ignorelist.findIndex(word.lower())!=-1)
         word ="";
 
 }
@@ -372,7 +373,7 @@ void KOSpell::previousWord()
     }
     while ( word.isEmpty() && (lastpos+offset > 0/*todo fixme !!!!!!!!!!)*/));
 
-    if ( !spellWord( word ))
+    if ( m_status != Finished && !spellWord( word ))
     {
         checkNextWord();
     }
