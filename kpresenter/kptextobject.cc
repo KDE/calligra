@@ -1761,7 +1761,7 @@ QPoint KPTextObject::cursorPos(KPrCanvas *canvas, KoTextCursor *cursor) const
   QPoint origPix = zh->zoomPoint( orig+KoPoint(bLeft(), bTop()+alignVertical) );
   KoTextParag* parag = cursor->parag();
   QPoint topLeft = parag->rect().topLeft();         // in QRT coords
-  int lineY;
+  int lineY = 0;
     // Cursor height, in pixels
   //int cursorHeight = zh->layoutUnitToPixelY( topLeft.y(), parag->lineHeightOfChar( cursor->index(), 0, &lineY ) );
   QPoint iPoint( topLeft.x() + cursor->x(), topLeft.y() + lineY );
