@@ -474,9 +474,10 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             cursor->parag()->setChanged( wasChanged );      // Maybe we have more changes to draw!
 
             //XIM Position
+            QPoint ximPoint = viewMode->normalToView( nPoint );
             int line;
             cursor->parag()->lineStartOfChar( cursor->index(), 0, &line );
-            canvas->setXimPosition( cPoint.x(), cPoint.y(), 0, h - cursor->parag()->lineSpacing( line ) );
+            canvas->setXimPosition( ximPoint.x(), ximPoint.y(), 0, h - cursor->parag()->lineSpacing( line ) );
         }
     }
     m_currentDrawnCanvas = 0L;
