@@ -1745,7 +1745,7 @@ void KWDocument::drawBorders( QPainter *painter, const QRect & crect, bool clear
     if ( painter->device()->devType() != QInternal::Printer )
     {
         painter->save();
-        painter->setPen( red );
+        painter->setPen( QApplication::palette().active().color( QColorGroup::Highlight ) );
         painter->setBrush( Qt::NoBrush );
 
         for ( int k = 0; k < getPages(); k++ )
@@ -1767,7 +1767,7 @@ void KWDocument::drawBorders( QPainter *painter, const QRect & crect, bool clear
 
                     if ( !embedded )
                     {
-                        // Exclude red border line, to get the page contents rect
+                        // Exclude page border line, to get the page contents rect
                         pageRect.rLeft() += 1;
                         pageRect.rTop() += 1;
                         pageRect.rRight() -= 1;
@@ -1792,7 +1792,7 @@ void KWDocument::drawBorders( QPainter *painter, const QRect & crect, bool clear
                     painter->setClipRegion( devReg );
 
                     //kdDebug() << "KWDocument::drawBorders clearEmptySpace in " << DEBUGRECT( emptySpaceRegion.boundingRect() ) << endl;
-                    painter->fillRect( emptySpaceRegion.boundingRect(), QApplication::palette().active().brush( QColorGroup::Base ) );
+                    painter->fillRect( emptySpaceRegion.boundingRect(), QApplication::palette().active().brush( QColorGroup::Mid ) );
                     painter->restore();
                 }
             }
