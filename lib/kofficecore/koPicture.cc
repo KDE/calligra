@@ -76,7 +76,7 @@ void KoPicture::createSharedData(void)
     if (!m_sharedData)
     {
         m_sharedData=new KoPictureShared();
-        linkSharedData();
+        // Do not call m_sharedData->ref()
     }
 }
 
