@@ -37,11 +37,10 @@
 
 /*================================================================*/
 KWFrame::KWFrame() 
-  : KRect(), runAroundGap(1.0), intersections(), oldIntersects(), bleft(), bright(), btop(), bbottom()
+  : KRect(), runAroundGap(1.0), intersections(), bleft(), bright(), btop(), bbottom()
 { 
   runAround = RA_NO; 
-  intersections.setAutoDelete(false);
-  oldIntersects.setAutoDelete(true);
+  intersections.setAutoDelete(true);
   selected = false;
   runAroundGap = 1;
   mostRight = false;
@@ -63,11 +62,10 @@ KWFrame::KWFrame()
 
 /*================================================================*/
 KWFrame::KWFrame(const KPoint &topleft,const QPoint &bottomright) 
-  : KRect(topleft,bottomright), runAroundGap(1.0), intersections(), oldIntersects(), bleft(), bright(), btop(), bbottom()
+  : KRect(topleft,bottomright), runAroundGap(1.0), intersections(), bleft(), bright(), btop(), bbottom()
 { 
   runAround = RA_NO; 
-  intersections.setAutoDelete(false); 
-  oldIntersects.setAutoDelete(true);
+  intersections.setAutoDelete(true); 
   selected = false;
   mostRight = false;
 
@@ -88,11 +86,10 @@ KWFrame::KWFrame(const KPoint &topleft,const QPoint &bottomright)
 
 /*================================================================*/
 KWFrame::KWFrame(const KPoint &topleft,const KSize &size) 
-  : KRect(topleft,size), runAroundGap(1.0), intersections(), oldIntersects(), bleft(), bright(), btop(), bbottom()
+  : KRect(topleft,size), runAroundGap(1.0), intersections(), bleft(), bright(), btop(), bbottom()
 { 
   runAround = RA_NO; 
-  intersections.setAutoDelete(false); 
-  oldIntersects.setAutoDelete(true);
+  intersections.setAutoDelete(true); 
   selected = false;
   mostRight = false;
 
@@ -113,11 +110,10 @@ KWFrame::KWFrame(const KPoint &topleft,const KSize &size)
 
 /*================================================================*/
 KWFrame::KWFrame(int left,int top,int width,int height) 
-  : KRect(left,top,width,height), runAroundGap(1.0), intersections(), oldIntersects(), bleft(), bright(), btop(), bbottom()
+  : KRect(left,top,width,height), runAroundGap(1.0), intersections(), bleft(), bright(), btop(), bbottom()
 { 
   runAround = RA_NO; 
-  intersections.setAutoDelete(false); 
-  oldIntersects.setAutoDelete(true);
+  intersections.setAutoDelete(true); 
   selected = false;
   mostRight = false;
 
@@ -138,11 +134,10 @@ KWFrame::KWFrame(int left,int top,int width,int height)
 
 /*================================================================*/
 KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,KWUnit _gap) 
-  : KRect(left,top,width,height), runAroundGap(_gap), intersections(), oldIntersects(), bleft(), bright(), btop(), bbottom()
+  : KRect(left,top,width,height), runAroundGap(_gap), intersections(), bleft(), bright(), btop(), bbottom()
 { 
   runAround = _ra; 
-  intersections.setAutoDelete(false); 
-  oldIntersects.setAutoDelete(true);
+  intersections.setAutoDelete(true); 
   selected = false;
   mostRight = false;
 
@@ -163,11 +158,10 @@ KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,KWUnit _gap
 
 /*================================================================*/
 KWFrame::KWFrame(const QRect &_rect)
-  : KRect(_rect), runAroundGap(1.0), intersections(), oldIntersects(), bleft(), bright(), btop(), bbottom()
+  : KRect(_rect), runAroundGap(1.0), intersections(), bleft(), bright(), btop(), bbottom()
 {
   runAround = RA_NO; 
-  intersections.setAutoDelete(false); 
-  oldIntersects.setAutoDelete(true);
+  intersections.setAutoDelete(true); 
   selected = false;
   mostRight = false;
 
@@ -187,26 +181,9 @@ KWFrame::KWFrame(const QRect &_rect)
 }
 
 /*================================================================*/
-void KWFrame::addIntersect(KRect _r)
+void KWFrame::addIntersect(KRect &_r)
 { 
-  intersections.append(new KRect(_r)); 
-}
-
-/*================================================================*/
-bool KWFrame::intersectChanged()
-{
-  return true;
-
-  if (intersections.count() == oldIntersects.count())
-    {
-      for (unsigned int i = 0;i < intersections.count();i++)
-	{
-	  if (*(intersections.at(i)) != *(oldIntersects.at(i)))
-	    return true;
-	}
-      return false;
-    }
-  else return true;
+  intersections.append(new KRect(_r.x(),_r.y(),_r.width(),_r.height())); 
 }
 
 /*================================================================*/
@@ -1356,9 +1333,9 @@ QPicture *KWPartFrameSet::getPicture()
 }
 
 /*================================================================*/
-void KWPartFrameSet::activate(QWidget *_widget,int diffx,int diffy)
+void KWPartFrameSet::activate(QWidget *_widget,int diffx,int diffy,int diffxx)
 {
-  view->setGeometry(frames.at(0)->x() - diffx + 20,frames.at(0)->y() - diffy + 20,frames.at(0)->width(),frames.at(0)->height());
+  view->setGeometry(frames.at(0)->x() - diffx + diffxx,frames.at(0)->y() - diffy + 20,frames.at(0)->width(),frames.at(0)->height());
   view->show();
   view->view()->mainWindow()->setActivePart(view->view()->id());
 }

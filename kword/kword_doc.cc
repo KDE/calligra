@@ -802,11 +802,11 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	  ch->load(parser,lst);
 	  QRect r = ch->geometry();
 	  insertChild(ch);
-	  KWPartFrameSet *frameset = new KWPartFrameSet(this,ch);
-	  KWFrame *frame = new KWFrame(r.x(),r.y(),r.width(),r.height());
-	  frameset->addFrame(frame);
-	  addFrameSet(frameset);
-	  emit sig_insertObject(ch,frameset);
+// 	  KWPartFrameSet *frameset = new KWPartFrameSet(this,ch);
+// 	  KWFrame *frame = new KWFrame(r.x(),r.y(),r.width(),r.height());
+// 	  frameset->addFrame(frame);
+// 	  addFrameSet(frameset);
+// 	  emit sig_insertObject(ch,frameset);
 	}
       else if (name == "PAPER")
 	{
@@ -1100,6 +1100,17 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 
   for (unsigned int i = 0;i < getNumGroupManagers();i++)
     getGroupManager(i)->init();
+
+  KWordChild *ch = 0L;
+  for (ch = m_lstChildren.first();ch != 0;ch = m_lstChildren.next())
+    {
+      KWPartFrameSet *frameset = new KWPartFrameSet(this,ch);
+      KRect r = ch->geometry();
+      KWFrame *frame = new KWFrame(r.x(),r.y(),r.width(),r.height());
+      frameset->addFrame(frame);
+      addFrameSet(frameset);
+      emit sig_insertObject(ch,frameset);
+    }
 
   return true;
 }

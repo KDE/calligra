@@ -72,10 +72,9 @@ public:
   bool isSelected()
     { return selected; }
 
-  void addIntersect(KRect _r);
+  void addIntersect(KRect &_r);
   void clearIntersects()
     { intersections.clear(); }
-  bool intersectChanged();
 
   int getLeftIndent(int _y,int _h);
   int getRightIndent(int _y,int _h);
@@ -138,7 +137,7 @@ protected:
   bool mostRight;
   int pageNum;
 
-  QList<KRect> intersections,oldIntersects;
+  QList<KRect> intersections;
 
   KWParagLayout::Border brd_left,brd_right,brd_top,brd_bottom;
   QBrush backgroundColor;
@@ -333,7 +332,7 @@ public:
 
   virtual QPicture *getPicture();
 
-  virtual void activate(QWidget *_widget,int diffx,int diffy);
+  virtual void activate(QWidget *_widget,int diffx,int diffy,int diffxx);
   virtual void deactivate();
 
   KWordFrame *getView() { return view; }

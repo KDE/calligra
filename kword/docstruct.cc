@@ -63,7 +63,7 @@ KWDocStructFrameItem::KWDocStructFrameItem(QListViewItem *_parent,QString _text,
 void KWDocStructFrameItem::slotDoubleClicked(QListViewItem *_item)
 {
   if (_item == this)
-    ;
+    gui->getPaperWidget()->scrollToOffset(frame->x(),frame->y(),*gui->getPaperWidget()->getCursor());
 }
 
 /******************************************************************/
@@ -82,7 +82,10 @@ KWDocStructTableItem::KWDocStructTableItem(QListViewItem *_parent,QString _text,
 void KWDocStructTableItem::slotDoubleClicked(QListViewItem *_item)
 {
   if (_item == this)
-    ;
+    {
+      KWFrame *frame = table->getFrameSet(0,0)->getFrame(0);
+      gui->getPaperWidget()->scrollToOffset(frame->x(),frame->y(),*gui->getPaperWidget()->getCursor());
+    }
 }
 
 /******************************************************************/
@@ -101,7 +104,10 @@ KWDocStructPictureItem::KWDocStructPictureItem(QListViewItem *_parent,QString _t
 void KWDocStructPictureItem::slotDoubleClicked(QListViewItem *_item)
 {
   if (_item == this)
-    ;
+    {
+      KWFrame *frame = pic->getFrame(0);
+      gui->getPaperWidget()->scrollToOffset(frame->x(),frame->y(),*gui->getPaperWidget()->getCursor());
+    }
 }
 
 /******************************************************************/
@@ -120,7 +126,10 @@ KWDocStructPartItem::KWDocStructPartItem(QListViewItem *_parent,QString _text,KW
 void KWDocStructPartItem::slotDoubleClicked(QListViewItem *_item)
 {
   if (_item == this)
-    ;
+    {
+      KWFrame *frame = part->getFrame(0);
+      gui->getPaperWidget()->scrollToOffset(frame->x(),frame->y(),*gui->getPaperWidget()->getCursor());
+    }
 }
 
 /******************************************************************/

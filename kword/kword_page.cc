@@ -1018,7 +1018,7 @@ void KWPage::mouseDoubleClickEvent(QMouseEvent *e)
 	  KWPartFrameSet *fs = dynamic_cast<KWPartFrameSet*>(doc->getFrameSet(frameset));
 	  doc->hideAllFrames();
 	  gui->getView()->setFramesToParts();
-	  fs->activate(this,xOffset,yOffset);
+	  fs->activate(this,xOffset,yOffset,gui->getVertRuler()->width() + gui->getDocStruct()->width());
 	  setFocusProxy(fs->getView());
 	  setFocusPolicy(QWidget::StrongFocus);
 	  fs->getView()->setFocusPolicy(QWidget::StrongFocus);

@@ -803,3 +803,16 @@ Reggie, 4.2.1999:
 - Tables are listed in the docu structure viewer
 - Pictures are listed in the docu structure viewer
 - Embedded objects are listed in the docu structure viewer
+
+Reggie, 5.2.1999:
+-----------------
+- Double click on a text frame branch in the document
+  structur viewer scrolls to this text frame in the text view
+- Double click on a table branch in the document
+  structur viewer scrolls to this table in the text view
+- Double click on a picture branch in the document
+  structur viewer scrolls to this picture in the text view
+- Double click on a embedded object branch in the document
+  structur viewer scrolls to this embedded object in the text view
+- Fix with activating an embedded part
+- Loading embedded parts doesn't crash anymore
