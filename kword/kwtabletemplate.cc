@@ -243,7 +243,7 @@ void KWTableTemplate::operator=( const KWTableTemplate &rhs )
     m_bottomLeftCorner = rhs.pBottomLeftCorner();
 }
 
-QString KWTableTemplate::translatedName() const
+QString KWTableTemplate::displayName() const
 {
     return i18n( "Style name", name().utf8() );
 }

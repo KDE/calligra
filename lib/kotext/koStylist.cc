@@ -139,7 +139,7 @@ void KoStyleManager::setupWidget(const QPtrList<KoParagStyle> & styleList)
     m_stylesList = new QListBox( frame1, "stylesList" );
     for ( ; style.current() ; ++style )
     {
-        m_stylesList->insertItem( style.current()->translatedName() );
+        m_stylesList->insertItem( style.current()->displayName() );
         m_origStyles.append( style.current() );
         m_changedStyles.append( style.current() );
         m_styleOrder<< style.current()->name();
@@ -307,9 +307,9 @@ void KoStyleManager::updateGUI() {
         it.current()->update();
     }
 
-    m_nameString->setText(m_currentStyle->translatedName());
+    m_nameString->setText(m_currentStyle->displayName());
 
-    QString followingName = m_currentStyle->followingStyle() ? m_currentStyle->followingStyle()->translatedName() : QString::null;
+    QString followingName = m_currentStyle->followingStyle() ? m_currentStyle->followingStyle()->displayName() : QString::null;
     kdDebug(32500) << "KoStyleManager::updateGUI updating combo to " << followingName << endl;
     for ( int i = 0; i < m_styleCombo->count(); i++ ) {
         if ( m_styleCombo->text( i ) == followingName ) {
@@ -319,7 +319,7 @@ void KoStyleManager::updateGUI() {
         }
     }
 
-    QString inheritName = m_currentStyle->parentStyle() ? m_currentStyle->parentStyle()->translatedName() : QString::null;
+    QString inheritName = m_currentStyle->parentStyle() ? m_currentStyle->parentStyle()->displayName() : QString::null;
     kdDebug(32500) << "KoStyleManager::updateGUI updating combo to " << inheritName << endl;
     for ( int i = 0; i < m_inheritCombo->count(); i++ ) {
         if ( m_inheritCombo->text( i ) == inheritName ) {
@@ -357,12 +357,10 @@ void KoStyleManager::save() {
             it.current()->save();
 
 	// Rename the style - only if it's actually been renamed.
-	// Take care of not renaming a style from its English name to its translated name by mistake,
-	// this would break the TOC stuff.
         if ( m_currentStyle->name() != m_nameString->text() &&
-            m_currentStyle->translatedName() != m_nameString->text() )
+            m_currentStyle->displayName() != m_nameString->text() )
         {
-            m_currentStyle->setName( m_nameString->text() );
+            m_currentStyle->setDisplayName( m_nameString->text() );
         }
 
         int indexNextStyle = styleIndex( m_styleCombo->currentItem() );
@@ -392,7 +390,7 @@ void KoStyleManager::addStyle() {
     if ( m_currentStyle )
     {
         m_currentStyle = new KoParagStyle( *m_currentStyle ); // Create a new style, initializing from the current one
-        m_currentStyle->setName( str );
+        m_currentStyle->setDisplayName( str );
     }
     else
         m_currentStyle = new KoParagStyle( str );

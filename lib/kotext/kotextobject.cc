@@ -759,7 +759,7 @@ KCommand *KoTextObject::applyStyleCommand( KoTextCursor * cursor, const KoParagS
     /// 3 - Changing the character formatting for the whole paragraph (setFormat()) [just in case]
     /// -> We need a macro command to hold the 3 commands
     KMacroCommand * macroCmd = createUndoRedo ? new KMacroCommand( i18n("Apply Style %1").
-                                                                   arg(newStyle->translatedName() ) ) : 0;
+                                                                   arg(newStyle->displayName() ) ) : 0;
 
     // 1
     //kdDebug(32500) << "KoTextObject::applyStyle setParagLayout" << endl;

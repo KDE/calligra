@@ -205,7 +205,7 @@ void KWTableStyle::operator=( const KWTableStyle &rhs )
     m_frameStyle = rhs.pFrameStyle();
 }
 
-QString KWTableStyle::translatedName() const
+QString KWTableStyle::displayName() const
 {
     return i18n( "Style name", name().utf8() );
 }

@@ -219,7 +219,7 @@ void KWFrameStyle::operator=( const KWFrameStyle &rhs )
     m_borderBottom = rhs.m_borderBottom;
 }
 
-QString KWFrameStyle::translatedName() const
+QString KWFrameStyle::displayName() const
 {
     return i18n( "Style name", name().utf8() );
 }

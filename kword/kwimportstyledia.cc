@@ -95,7 +95,7 @@ void KWImportStyleDia::loadFile()
 
                     QString name = sty->name();
                     if ( m_list.findIndex( name )!=-1 )
-                        sty->setName(generateStyleName( sty->translatedName() + QString( "-%1")));
+                        sty->setDisplayName(generateStyleName( sty->displayName() + QString( "-%1")));
                     insertStyle.insert( name, sty->name());
 
                     QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
@@ -220,7 +220,7 @@ void KWImportFrameTableStyleDia::loadFile()
                     KWFrameStyle *sty = new KWFrameStyle( styleElem );
                     QString name =sty->name();
                     if ( m_list.findIndex( name )!=-1 )
-                        sty->setName(generateStyleName( sty->translatedName() + QString( "-%1")));
+                        sty->setName(generateStyleName( sty->displayName() + QString( "-%1")));
                     m_frameStyleList.append( sty);
                 }
             }
@@ -232,7 +232,7 @@ void KWImportFrameTableStyleDia::loadFile()
                     KWTableStyle *sty = new KWTableStyle( styleElem,m_doc,2 );
                     QString name =sty->name();
                     if ( m_list.findIndex( name )!=-1 )
-                        sty->setName(generateStyleName( sty->translatedName() + QString( "-%1")));
+                        sty->setName(generateStyleName( sty->displayName() + QString( "-%1")));
                     m_tableStyleList.append( sty);
                 }
             }
@@ -264,14 +264,14 @@ void KWImportFrameTableStyleDia::initList()
     {
         for ( KWFrameStyle * p = m_frameStyleList.first(); p != 0L; p = m_frameStyleList.next() )
         {
-            lst<<p->translatedName();
+            lst<<p->displayName();
         }
     }
     else
     {
         for ( KWTableStyle * p = m_tableStyleList.first(); p != 0L; p = m_tableStyleList.next() )
         {
-            lst<<p->translatedName();
+            lst<<p->displayName();
         }
     }
 

@@ -2723,7 +2723,15 @@ void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) 
         if ( frameset ) {
             frameset->saveOasisContent( writer, context );
         }
-        // TODO write out the other (non-inline) framesets
+        // Write out the other (non-inline) framesets
+        QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+        ++fit; // skip main text frameset
+        for ( ; fit.current() ; ++fit ) {
+            if ( fit.current()->isVisible() && // HACK to avoid saving headers/footers for now
+                 !fit.current()->isFloating() )
+                fit.current()->saveOasis( writer, context );
+        }
+
     } else {
         // TODO write the contents page-by-page
     }
@@ -4375,7 +4383,7 @@ void KWDocument::printStyleDebug()
         kdDebug() << "Style " << p << "  " << p->name() <<endl;
         kdDebug() << "   format: " << p->format().key() <<endl;
         static const char * const s_align[] = { "Auto", "Left", "Right", "ERROR", "HCenter", "ERR", "ERR", "ERR", "Justify", };
-        kdDebug() << "  align: " << s_align[p->paragLayout().alignment] << endl;
+        kdDebug() << "  align: " << s_align[(Qt::AlignmentFlags)p->paragLayout().alignment] << endl;
 
         kdDebug() << "   following style: " << p->followingStyle() << " "
                   << ( p->followingStyle() ? p->followingStyle()->name() : QString::null ) << endl;

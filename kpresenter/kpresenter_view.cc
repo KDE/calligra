@@ -5805,7 +5805,7 @@ void KPresenterView::updateStyleList()
     QPtrListIterator<KoParagStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
     int pos = -1;
     for ( int i = 0; styleIt.current(); ++styleIt, ++i ) {
-        QString name = styleIt.current()->translatedName();
+        QString name = styleIt.current()->displayName();
         lst << name;
         if ( pos == -1 && name == currentStyle )
             pos = i;
@@ -5876,7 +5876,7 @@ void KPresenterView::extraStylist()
     {
         edit->hideCursor();
         if (edit->cursor() && edit->cursor()->parag() && edit->cursor()->parag()->style())
-            activeStyleName = edit->cursor()->parag()->style()->translatedName();
+            activeStyleName = edit->cursor()->parag()->style()->displayName();
     }
     KPrStyleManager * styleManager = new KPrStyleManager( this, m_pKPresenterDoc->getUnit(), m_pKPresenterDoc,
                                                           m_pKPresenterDoc->styleCollection()->styleList(), activeStyleName);
@@ -6680,7 +6680,7 @@ void KPresenterView::importStyle()
     QPtrListIterator<KoParagStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
 
     for ( ; styleIt.current(); ++styleIt )
-        lst<<styleIt.current()->translatedName();
+        lst<<styleIt.current()->displayName();
 
     KPrImportStyleDia dia( m_pKPresenterDoc, lst, this, 0L );
     if ( dia.exec() ) {
@@ -6690,7 +6690,7 @@ void KPresenterView::importStyle()
 
         for ( ; style.current() ; ++style )
         {
-            followStyle.insert( style.current()->translatedName(), style.current()->followingStyle()->translatedName());
+            followStyle.insert( style.current()->displayName(), style.current()->followingStyle()->displayName());
             m_pKPresenterDoc->styleCollection()->addStyleTemplate(new KoParagStyle(*style.current()));
         }
         if ( style.count()>0)

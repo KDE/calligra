@@ -64,7 +64,7 @@ void KoImportStyleDia::generateStyleList()
             {
                 if ( styleIt.current()->name() == name )
                 {
-                    updateFollowingStyle( styleIt.current()->translatedName() );
+                    updateFollowingStyle( styleIt.current()->displayName() );
                     m_styleList.remove(styleIt.current());
                     break;
                 }
@@ -78,7 +78,7 @@ void KoImportStyleDia::updateFollowingStyle(const QString & _name)
     QPtrListIterator<KoParagStyle> styleIt( m_styleList );
     for ( ; styleIt.current(); ++styleIt )
     {
-        if ( styleIt.current()->followingStyle()->translatedName() == _name )
+        if ( styleIt.current()->followingStyle()->displayName() == _name )
         {
             styleIt.current()->setFollowingStyle(styleIt.current());
         }
@@ -96,7 +96,7 @@ void KoImportStyleDia::initList()
     QStringList lst;
     for ( KoParagStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
     {
-        lst<<p->translatedName();
+        lst<<p->displayName();
     }
     m_listStyleName->insertStringList(lst);
 }

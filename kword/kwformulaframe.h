@@ -75,6 +75,7 @@ public:
 
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
+    virtual void saveOasis(KoXmlWriter&, KoSavingContext&) const;
     void paste( QDomNode& formulaElem );
 
     /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */

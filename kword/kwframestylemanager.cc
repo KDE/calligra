@@ -177,7 +177,7 @@ void KWFrameStyleManager::setupWidget(const QPtrList<KWFrameStyle> & styleList)
     m_stylesList = new QListBox( frame1, "stylesList" );
     for ( ; style.current() ; ++style )
     {
-        m_stylesList->insertItem( style.current()->translatedName() );
+        m_stylesList->insertItem( style.current()->displayName() );
         m_frameStyles.append( new KWFrameStyleListItem( style.current(),new KWFrameStyle(*style.current())) );
         m_styleOrder<<style.current()->name();
     }
@@ -309,7 +309,7 @@ void KWFrameStyleManager::updateGUI()
         it.current()->update();
     }
 
-    m_nameString->setText(m_currentFrameStyle->translatedName());
+    m_nameString->setText(m_currentFrameStyle->displayName());
 
     // update delete button (can't delete first style);
     m_deleteButton->setEnabled(m_stylesList->currentItem() != 0);
@@ -359,7 +359,7 @@ void KWFrameStyleManager::addStyle(const QPtrList<KWFrameStyle> &listStyle )
     for ( ; style.current() ; ++style )
     {
         noSignals=true;
-        m_stylesList->insertItem( style.current()->translatedName() );
+        m_stylesList->insertItem( style.current()->displayName() );
         m_frameStyles.append( new KWFrameStyleListItem( 0L,new KWFrameStyle(*style.current())) );
         m_styleOrder<<style.current()->name();
         noSignals=false;

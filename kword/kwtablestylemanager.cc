@@ -225,7 +225,7 @@ void KWTableStyleManager::setupWidget(const QPtrList<KWTableStyle> & styleList)
     m_stylesList = new QListBox( frame1, "stylesList" );
     for ( ; style.current() ; ++style )
     {
-        m_stylesList->insertItem( style.current()->translatedName() );
+        m_stylesList->insertItem( style.current()->displayName() );
         m_tableStyles.append( new KWTableStyleListItem(style.current(),new KWTableStyle(*style.current()) ) );
         m_styleOrder<<style.current()->name();
     }
@@ -378,12 +378,12 @@ void KWTableStyleManager::updateGUI()
     kdDebug() << "KWTableStyleManager::updateGUI m_currentTableStyle=" << m_currentTableStyle << " " << m_currentTableStyle->name() << endl;
 
     // Update name
-    m_nameString->setText(m_currentTableStyle->translatedName());
+    m_nameString->setText(m_currentTableStyle->displayName());
     // Update style and framestyle
     if ( m_doc->styleCollection()->findStyle( m_currentTableStyle->pStyle()->name() ) )
-        m_style->setCurrentText(m_currentTableStyle->pStyle()->translatedName());
+        m_style->setCurrentText(m_currentTableStyle->pStyle()->displayName());
     if ( m_doc->frameStyleCollection()->findFrameStyle( m_currentTableStyle->pFrameStyle()->name() ) )
-        m_frameStyle->setCurrentText(m_currentTableStyle->pFrameStyle()->translatedName());
+        m_frameStyle->setCurrentText(m_currentTableStyle->pFrameStyle()->displayName());
 
     // update delete button (can't delete first style);
     m_deleteButton->setEnabled(m_stylesList->currentItem() != 0);
@@ -444,7 +444,7 @@ void KWTableStyleManager::addStyle(const QPtrList<KWTableStyle> &listStyle )
     for ( ; style.current() ; ++style )
     {
         noSignals=true;
-        m_stylesList->insertItem( style.current()->translatedName() );
+        m_stylesList->insertItem( style.current()->displayName() );
         m_styleOrder<<style.current()->name();
         m_tableStyles.append( new KWTableStyleListItem( 0L,new KWTableStyle(*style.current())) );
         noSignals=false;

@@ -1885,16 +1885,20 @@ void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoSavingContext& con
 
 void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
-    // TODO save the frame stuff
+    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+        return;
+
+    // Save first frame with the whole contents
+    KWFrame* frame = frames.getFirst();
+    frame->startOasisFrame( writer, context.mainStyles() );
+    KWFrameSet::saveOasisCommon( writer ); /// ###
+
     writer.startElement( "draw:text-box" );
-
     saveOasisContent( writer, context );
-
-    KWFrameSet::saveOasisCommon( writer );
-
-    writer.addAttribute( "draw:style-name", KWFrameSet::saveOasisFrameStyle( context.mainStyles() ) );
-
     writer.endElement();
+
+    writer.endElement(); // draw:frame
+    // TODO: save other frames using chaining
 }
 
 void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )

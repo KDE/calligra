@@ -2047,7 +2047,7 @@ void KWView::updateStyleList()
     QPtrListIterator<KWStyle> styleIt( m_doc->styleCollection()->styleList() );
     int pos = -1;
     for ( int i = 0; styleIt.current(); ++styleIt, ++i ) {
-        QString name = styleIt.current()->translatedName();
+        QString name = styleIt.current()->displayName();
         lst << name;
         if ( pos == -1 && name == currentStyle )
             pos = i;
@@ -2113,7 +2113,7 @@ void KWView::updateFrameStyleList()
     QPtrListIterator<KWFrameStyle> styleIt( m_doc->frameStyleCollection()->frameStyleList() );
     int pos = -1;
     for ( int i = 0; styleIt.current(); ++styleIt, ++i ) {
-        QString name = styleIt.current()->translatedName();
+        QString name = styleIt.current()->displayName();
         lst << name;
         if ( pos == -1 && name == currentStyle )
             pos = i;
@@ -2184,7 +2184,7 @@ void KWView::updateTableStyleList()
     QPtrListIterator<KWTableStyle> styleIt( m_doc->tableStyleCollection()->tableStyleList() );
     int pos = -1;
     for ( int i = 0; styleIt.current(); ++styleIt, ++i ) {
-        QString name = styleIt.current()->translatedName();
+        QString name = styleIt.current()->displayName();
         lst << name;
         if ( pos == -1 && name == currentStyle )
             pos = i;
@@ -3718,7 +3718,7 @@ void KWView::extraStylist()
     {
         edit->hideCursor();
         if (edit->cursor() && edit->cursor()->parag() && edit->cursor()->parag()->style())
-            activeStyleName = edit->cursor()->parag()->style()->translatedName();
+            activeStyleName = edit->cursor()->parag()->style()->displayName();
     }
     KWStyleManager * styleManager = new KWStyleManager( this, m_doc->getUnit(),m_doc, m_doc->styleCollection()->styleList(), activeStyleName );
     styleManager->exec();
@@ -6859,7 +6859,7 @@ void KWView::importStyle()
     QPtrListIterator<KWStyle> styleIt( m_doc->styleCollection()->styleList() );
     for ( ; styleIt.current(); ++styleIt )
     {
-        lst<<styleIt.current()->translatedName();
+        lst<<styleIt.current()->displayName();
     }
     KWImportStyleDia dia( m_doc, lst, this, 0L );
     if ( dia.exec() ) {
@@ -6868,7 +6868,7 @@ void KWView::importStyle()
         QPtrListIterator<KWStyle> style(  list );
         for ( ; style.current() ; ++style )
         {
-            followStyle.insert( style.current()->translatedName(), style.current()->followingStyle()->translatedName());
+            followStyle.insert( style.current()->name(), style.current()->followingStyle()->name());
             m_doc->styleCollection()->addStyleTemplate(new KWStyle(*style.current()));
         }
         if ( style.count() > 0 )

@@ -643,6 +643,48 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
     setRunAroundSide( runAroundSide );
 }
 
+void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles ) const
+{
+    writer.startElement( "draw:frame" );
+    writer.addAttribute( "draw:style-name", saveOasisFrameStyle( mainStyles ) );
+
+    if ( !frameSet()->isFloating() )
+    { // non-inline frame, anchored to page
+        int pgNum = pageNum();
+        double yInPage = top() - pgNum * frameSet()->kWordDocument()->ptPaperHeight();
+        writer.addAttributePt( "svg:x", left() );
+        writer.addAttributePt( "svg:y", yInPage );
+    }
+    writer.addAttributePt( "svg:width", right() );
+    writer.addAttributePt( "svg:height", bottom() );
+
+    // the caller fills in the child element, then closes draw:frame
+}
+
+QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
+{
+    KoGenStyle frameStyle( KWDocument::STYLE_FRAME, "graphic" /*correct?*/ );
+    QString protect;
+    if ( frameSet()->protectContent() )
+        protect = "content";
+    if ( frameSet()->isProtectSize() ) // ## should be moved for frame
+    {
+        if ( !protect.isEmpty() )
+            protect+=" ";
+        protect+="size";
+    }
+    if ( !protect.isEmpty() )
+        frameStyle.addProperty("style:protect", protect );
+
+    if ( !frameSet()->isFloating() )
+    { // non-inline frame: anchor to page
+        frameStyle.addProperty( "text:anchor-type", "page" );
+        int pgNum = pageNum();
+        frameStyle.addProperty( "text:anchor-page-number", pgNum + 1 ); // OASIS starts at 1
+    }
+    return mainStyles.lookup( frameStyle, "fr" );
+}
+
 bool KWFrame::frameAtPos( const QPoint& point, bool borderOfFrameOnly) {
     // Forwarded to KWFrameSet to make it virtual
     return frameSet()->isFrameAtPos( this, point, borderOfFrameOnly );
@@ -1516,35 +1558,14 @@ MouseMeaning KWFrameSet::getMouseMeaningInsideFrame( const KoPoint& )
     return isMoveable() ? MEANING_MOUSE_MOVE : MEANING_MOUSE_SELECT;
 }
 
-QString KWFrameSet::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
-{
-    KoGenStyle frameStyle( KWDocument::STYLE_FRAME, "presentation" );
-    QString protect;
-    if ( protectContent() )
-        protect = "content";
-    if ( m_protectSize )
-    {
-        if ( !protect.isEmpty() )
-            protect+=" ";
-        protect+="size";
-    }
-    frameStyle.addProperty("style:protect", protect );
-
-    return mainStyles.lookup( frameStyle, "fr" );
-}
-
-
-void KWFrameSet::saveOasisCommon( KoXmlWriter &xmlWriter ) const
+//// ######## remove?
+void KWFrameSet::saveOasisCommon( KoXmlWriter &writer ) const
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
         return;
     //todo common element.
-    xmlWriter.addAttribute( "draw:name", m_name );
+    writer.addAttribute( "draw:name", m_name );
     //it's not into kwframset but into kwframe
-    //xmlWriter.addAttributePt( "svg:x", left() );
-    //xmlWriter.addAttributePt( "svg:y", top() );
-    //xmlWriter.addAttributePt( "svg:width", right() );
-    //xmlWriter.addAttributePt( "svg:height", bottom() );
 }
 
 void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
@@ -2138,14 +2159,19 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
 
 void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
+    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+        return;
+    KWFrame* frame = frames.getFirst();
+    frame->startOasisFrame( writer, context.mainStyles() );
     writer.startElement( "draw:image" );
-
-    KWFrameSet::saveOasisCommon( writer );
     writer.addAttribute( "xlink:type", "simple" );
     writer.addAttribute( "xlink:show", "embed" );
     writer.addAttribute( "xlink:actuate", "onLoad" );
     writer.addAttribute( "xlink:href", "#"+ m_doc->pictureCollection()->getOasisFileName(m_picture) );
     writer.endElement();
+
+    writer.endElement(); // draw:frame
+
 }
 
 void KWPictureFrameSet::loadOasis( const QDomElement& tag, KoOasisContext& context )

@@ -397,7 +397,7 @@ void KWTableTemplatePreview::setTableTemplate( KWTableTemplate *_tableTemplate )
 
     delete tableTemplate;
 
-    tableTemplate = new KWTableTemplate(_tableTemplate->translatedName());
+    tableTemplate = new KWTableTemplate(_tableTemplate->displayName());
     tableTemplate->setBodyCell( _tableTemplate->pBodyCell() );
 
     setSpecialCells(_tableTemplate);
@@ -559,7 +559,7 @@ KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_pa
     QPtrListIterator<KWTableTemplate> it( m_doc->tableTemplateCollection()->tableTemplateList() );
     for ( ; it.current() ; ++it )
     {
-        lbTemplates->insertItem( it.current()->translatedName() );
+        lbTemplates->insertItem( it.current()->displayName() );
     }
 
     innerGrid->addWidget( lbTemplates, 0, 0 );

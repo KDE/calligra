@@ -154,7 +154,7 @@ public:
         void addCell( Cell *cell );
         void removeCell( Cell* cell );
 
-        /** 
+        /**
          * @brief Array of cells in the row.
          *
          * If a cell has m_cols = N, the N-1 following entries are 0.
@@ -172,7 +172,7 @@ public:
          * iterator will visit those cells more than once.
          */
         VISIT_GRID = 1,
-        
+
         /**
          * This iterator visits each cell in the table once, whether
          * or not some of the cells are joined. If you want to visit all the cells
@@ -217,7 +217,7 @@ public:
       of a method when table data structures are being manipulated.
 
       This table shows what conditions are necessary for each type of iterator:
-        
+
       <TABLE>
       <TR><TD>                           </TD><TD>A</TD><TD>B</TD><TD>C</TD></TR>
       <TR><TD>TableIterator\<VISIT_GRID\></TD><TD>x</TD><TD> </TD><TD>x</TD></TR>
@@ -406,18 +406,18 @@ public:
 
     /** move the whole of the table, this is mainly for anchored frames. */
     void moveBy( double dx, double dy );
-    
+
     // /** point the outlines of all the cells */
     //void drawAllRects( QPainter &p, int xOffset, int yOffset );
 
-    /** 
+    /**
      * @brief select all frames from the first selected to the argument frameset.
      *
      * the selectUntil method will select all frames from the first
      * selected to the frame of the argument frameset.
      */
     void selectUntil( Cell *cell );
-    
+
     /** @overload KWTableFrameSet::selectUntil */
     void selectUntil( double x, double y);
 
@@ -490,6 +490,10 @@ public:
 
     /** override save so we save in table style.. */
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
+
+    /// No-op
+    virtual void saveOasis( KoXmlWriter&, KoSavingContext& ) const {}
+
     /** load one cell */
     Cell* loadCell( QDomElement &frameElem, bool loadFrames = true, bool useNames = true );
 
@@ -586,7 +590,7 @@ protected:
     void addCellToArray( Cell* cell );
 
 private:
-    /** 
+    /**
      * @brief position an individual cell in the grid
      *
      * Adjusts the size of the cell frames.
@@ -597,8 +601,8 @@ private:
      * </ol>
      */
     void position(Cell *theCell, bool setMinFrameHeight=false);
-    
-    /** 
+
+    /**
      * @brief Returns the absolute top-position of the row in the grid
      *
      * Returns a double value from m_rowPositions. This is either the bottom
@@ -733,7 +737,7 @@ public:
 };
 
 /**
- * @brief The object created to edit this table 
+ * @brief The object created to edit this table
  *
  * In fact at a given moment,
  * it edits one cell (frameset) of the table, the one in which the cursor is.

@@ -71,7 +71,7 @@ bool KoOasisSettings::selectItemMapNamed( const QString &itemMapName )
         for ( ; !n.isNull() ; n = n.nextSibling() ) {
             const QDomElement element = n.toElement();
             if ( element.isNull() ) continue;
-            if ( element.tagName() ==  "config:config-item-map-entry" )
+            if ( element.tagName() == "config:config-item-map-entry" )
             {
                 QDomNode tmp = element.firstChild();
                 for ( ; !tmp.isNull() ; tmp = tmp.nextSibling() )

@@ -281,19 +281,17 @@ KoParagStyle* KoStyleCollection::defaultStyle() const
 KoCharStyle::KoCharStyle( const QString & name )
 {
     m_name = name;
-    m_shortCut_name = QString::null;
+    m_displayName = i18n( "Style name", m_name.utf8() );
 }
 
-void KoCharStyle::operator=( const KoCharStyle &rhs )
+QString KoCharStyle::displayName() const
 {
-    m_name = rhs.m_name;
-    m_shortCut_name = rhs.m_shortCut_name;
-    m_format = rhs.m_format;
+    return m_displayName;
 }
 
-QString KoCharStyle::translatedName() const
+void KoCharStyle::setDisplayName( const QString& name )
 {
-    return i18n( "Style name", name().utf8() );
+    m_displayName = name;
 }
 
 const KoTextFormat & KoCharStyle::format() const
@@ -312,7 +310,7 @@ KoParagStyle::KoParagStyle( const QString & name )
     : KoCharStyle( name )
 {
     m_name = name;
-    m_shortCut_name = QString::null;
+    m_shortCutName = QString::null;
     m_followingStyle = this;
 
     // This way, KoTextParag::setParagLayout also sets the style pointer, to this style
@@ -334,7 +332,7 @@ void KoParagStyle::operator=( const KoParagStyle &rhs )
     KoCharStyle::operator=( rhs );
     m_paragLayout = rhs.m_paragLayout;
     m_name = rhs.m_name;
-    m_shortCut_name = rhs.m_shortCut_name;
+    m_shortCutName = rhs.m_shortCutName;
     m_followingStyle = rhs.m_followingStyle;
     m_paragLayout.style = this; // must always be "this"
     m_parentStyle = rhs.m_parentStyle;

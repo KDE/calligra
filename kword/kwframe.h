@@ -287,6 +287,9 @@ public:
     void load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVersion );
     void loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* frameSet );
 
+    QString saveOasisFrameStyle( KoGenStyles& mainStyles ) const;
+    void startOasisFrame( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles ) const;
+
     void setMinFrameHeight(double h);
     double minFrameHeight(void)const {return m_minFrameHeight;}
 
@@ -662,20 +665,22 @@ public:
      */
     virtual void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
 
-    /** save to XML - when saving */
+    /// save to XML - when saving
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true ) = 0;
-    /** save to XML - when copying to clipboard */
+    /// save to XML - when copying to clipboard
     virtual QDomElement toXML( QDomElement &parentElem, bool saveFrames = true )
     { return save( parentElem, saveFrames ); }
+    /// Save to OASIS format
+    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const = 0;
 
-    /** load from XML - when loading */
+    /// load from XML - when loading
     virtual void load( QDomElement &framesetElem, bool loadFrames = true );
     KWFrame* loadOasisFrame( const QDomElement& tag, KoOasisContext& context );
-    /** load from XML - when pasting from clipboard */
+    /// load from XML - when pasting from clipboard
     virtual void fromXML( QDomElement &framesetElem, bool loadFrames = true, bool /*useNames*/ = true )
     { load( framesetElem, loadFrames ); }
 
-    /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
+    /// Apply the new zoom/resolution - values are to be taken from kWordDocument()
     virtual void zoom( bool forPrint );
 
     //virtual void preparePrinting( QPainter *, QProgressDialog *, int & ) { }
@@ -697,7 +702,7 @@ public:
     //Note: none of those floating-frameset methods creates undo/redo
     //They are _called_ by the undo/redo commands.
 
-    /** Make this frameset floating (anchored), as close to its current position as possible. */
+    /// Make this frameset floating (anchored), as close to its current position as possible.
     void setFloating();
     /**
      * Make this frameset anchored, with the anchor at @p paragId,@p index in the text frameset @p textfs.
@@ -708,18 +713,18 @@ public:
     void setAnchored( KWTextFrameSet* textfs, int paragId, int index, bool placeHolderExists = false, bool repaint = true );
     /** Note that this frameset has been made floating already, and store anchor position */
     void setAnchored( KWTextFrameSet* textfs );
-    /** Make this frameset fixed, i.e. not anchored */
+    /// Make this frameset fixed, i.e. not anchored
     void setFixed();
-    /** Return true if this frameset is floating (inline), false if it's fixed */
+    /// Return true if this frameset is floating (inline), false if it's fixed
     bool isFloating() const { return m_anchorTextFs; }
-    /** Return the frameset in which our anchor is - assuming isFloating() */
+    /// Return the frameset in which our anchor is - assuming isFloating()
     KWTextFrameSet * anchorFrameset() const { return m_anchorTextFs; }
-    /** Return the anchor object for this frame number */
+    /// Return the anchor object for this frame number
     KWAnchor * findAnchor( int frameNum );
-    /** Tell this frame the format of it's anchor */
+    /// Tell this frame the format of it's anchor
     virtual void setAnchorFormat( KoTextFormat* /*format*/, int /*frameNum*/ ) {}
 
-    /** Create an anchor for the floating frame identified by frameNum */
+    /// Create an anchor for the floating frame identified by frameNum
     virtual KWAnchor * createAnchor( KoTextDocument *txt, int frameNum );
 
     /** Move the frame frameNum to the given position - this is called when
@@ -735,9 +740,9 @@ public:
     /** Get the 'baseline' to use for the "floating frame" identified by frameNum.
         -1 means same as the height (usual case) */
     virtual int floatingFrameBaseline( int /*frameNum*/ ) { return -1; }
-    /** Store command for creating an anchored object */
+    /// Store command for creating an anchored object
     virtual KCommand * anchoredObjectCreateCommand( int frameNum );
-    /** Store command for deleting an anchored object */
+    /// Store command for deleting an anchored object
     virtual KCommand * anchoredObjectDeleteCommand( int frameNum );
 
     /** make this frameset part of a groupmanager
@@ -752,7 +757,7 @@ public:
     void setIsRemoveableHeader( bool h ) { m_removeableHeader = h; }
     bool isRemoveableHeader()const { return m_removeableHeader; }
 
-    /** returns if one of our frames has been selected. */
+    /// returns if one of our frames has been selected.
     bool hasSelectedFrame();
 
     bool isProtectSize()const { return m_protectSize; }
@@ -769,17 +774,17 @@ public:
      */
     bool isVisible( KWViewMode* viewMode = 0L ) const;
 
-    /** set the visibility of the frameset. */
+    /// set the visibility of the frameset.
     virtual void setVisible( bool v );
 
-    /** get/set frameset name. For tables in particular, this _must_ be unique */
+    /// get/set frameset name. For tables in particular, this _must_ be unique
     QString getName() const { return m_name; }
     void setName( const QString &_name );
 
-    /** set frameBehavior on all frames, see KWFrame for specifics */
+    /// set frameBehavior on all frames, see KWFrame for specifics
     void setFrameBehavior( KWFrame::FrameBehavior fb );
 
-    /** set newFrameBehavior on all frames, see KWFrame for specifics */
+    /// set newFrameBehavior on all frames, see KWFrame for specifics
     void setNewFrameBehavior( KWFrame::NewFrameBehavior nfb );
 
 #ifndef NDEBUG
@@ -791,7 +796,7 @@ public:
 
     bool isPaintedBy( KWFrameSet* fs ) const;
 
-    /** set z-order for all frames */
+    /// set z-order for all frames
     virtual void setZOrder();
 
     virtual void setProtectContent ( bool protect ) = 0;
@@ -799,19 +804,17 @@ public:
 
 signals:
 
-    // Emitted when something has changed in this frameset,
-    // so that all views repaint it. KWDocument connects to it,
-    // and KWCanvas connects to KWDocument.
+    /// Emitted when something has changed in this frameset,
+    /// so that all views repaint it. KWDocument connects to it,
+    /// and KWCanvas connects to KWDocument.
     void repaintChanged( KWFrameSet * frameset );
 
 protected:
 
-    /** save the common attributes for the frameset */
+    /// save the common attributes for the frameset
     void saveCommon( QDomElement &parentElem, bool saveFrames );
 
     void saveOasisCommon( KoXmlWriter &xmlWriter )const;
-
-    QString saveOasisFrameStyle( KoGenStyles& mainStyles ) const;
 
     /**Determine the clipping rectangle for drawing the contents of @p frame with @p painter
      * in the rectangle delimited by @p crect.
@@ -829,11 +832,11 @@ protected:
     QPtrList<KWFrame> frames;        // Our frames
 
     // Cached info for optimization
-    /** This array provides a direct access to the frames on page N */
+    /// This array provides a direct access to the frames on page N
     QPtrVector< QPtrList<KWFrame> > m_framesInPage;
-    /** always equal to m_framesInPage[0].first()->pageNum() :) */
+    /// always equal to m_framesInPage[0].first()->pageNum() :)
     int m_firstPage;
-    /** always empty, for convenience in @ref framesInPage */
+    /// always empty, for convenience in @ref framesInPage
     QPtrList<KWFrame> m_emptyList; // ## make static pointer to save memory ?
 
     Info m_info;
@@ -894,6 +897,7 @@ public:
 
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
+    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
 
     virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect & crect,
                                     const QColorGroup &cg, bool onlyChanged, bool resetChanged,
@@ -914,7 +918,6 @@ public:
 
 protected:
     void loadOasis( const QDomElement& tag, KoOasisContext& context );
-    void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
 
     /// The picture
     KoPicture m_picture;

@@ -89,7 +89,7 @@ public:
     QString name() const { return m_name; }
     void setName( const QString & name ) { m_name = name; }
     /** The translated name */
-    QString translatedName() const;
+    QString displayName() const;
 
     // ATTRIBUTES
     QBrush backgroundColor() const { return m_backgroundColor; }

@@ -85,7 +85,7 @@ public:
     QString name() const { return m_name; }
     void setName( const QString & name ) { m_name = name; }
     /** The translated name */
-    QString translatedName() const;
+    QString displayName() const;
 
     // ATTRIBUTES
     KWStyle style() const { return *m_style; }

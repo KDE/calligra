@@ -114,25 +114,25 @@ public:
     const KoTextFormat & format() const;
     KoTextFormat & format();
 
-    void operator=( const KoCharStyle & );
-
     /** The internal name (untranslated if a standard style) */
     QString name() const { return m_name; }
-    void setName( const QString & name ) { m_name = name; }
-    /** The translated name */
-    QString translatedName() const;
+    //void setInternalName( const QString & name ) { m_name = name; }
+    /** The user-visible name (e.g. translated) */
+    QString displayName() const;
+    void setDisplayName( const QString& name );
 
     QString shortCutName() const {
-        return m_shortCut_name;
+        return m_shortCutName;
     }
 
-    void setShortCutName( const QString & _shortCut) {
-        m_shortCut_name=_shortCut;
+    void setShortCutName( const QString & shortCut) {
+        m_shortCutName = shortCut;
     }
 
 protected:
     QString m_name;
-    QString m_shortCut_name;
+    QString m_shortCutName;
+    QString m_displayName;
     KoTextFormat m_format;
 };
 

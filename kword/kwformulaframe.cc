@@ -247,6 +247,11 @@ QDomElement KWFormulaFrameSet::save(QDomElement& parentElem, bool saveFrames)
     return framesetElem;
 }
 
+void KWFormulaFrameSet::saveOasis(KoXmlWriter&, KoSavingContext&) const
+{
+    // TODO
+}
+
 void KWFormulaFrameSet::load(QDomElement& attributes, bool loadFrames)
 {
     KWFrameSet::load(attributes, loadFrames);
