@@ -27,7 +27,8 @@
 #include <assert.h>
 #include <kdebug.h>
 #include "koVariable.h"
-/////
+
+//#define DEBUG_PAINT
 
 // Return the counter associated with this paragraph.
 KoParagCounter *KoTextParag::counter()
@@ -425,11 +426,12 @@ QRect KoTextParag::pixelRect( KoZoomHandler *zh ) const
 void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor *cursor, bool drawSelections,
                          int clipx, int clipy, int clipw, int cliph )
 {
-    //kdDebug(32500) << "KoTextParag::paint clipx=" << clipx << " clipy=" << clipy << " clipw=" << clipw << " cliph=" << cliph << endl;
-    //kdDebug(32500) << " clipw in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( clipw ) << endl;
-    //kdDebug(32500) << " cliph in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( cliph ) << endl;
+#ifdef DEBUG_PAINT
+    kdDebug(32500) << "KoTextParag::paint clipx=" << clipx << " clipy=" << clipy << " clipw=" << clipw << " cliph=" << cliph << endl;
+    kdDebug(32500) << " clipw in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( clipw ) << " cliph in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( cliph ) << endl;
+#endif
 
-    // Let's call drawLabel ourselves, rather than having to deal with QStyleSheetItem to get paintDefault to call it!
+    // Let's call drawLabel ourselves, rather than having to deal with QStyleSheetItem to get paintLines to call it!
     if ( m_layout.counter && m_layout.counter->numbering() != KoParagCounter::NUM_NONE && m_lineChanged <= 0 )
     {
         int cy, h, baseLine;
@@ -441,7 +443,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
     }
 
     //qDebug("KoTextParag::paint %p", this);
-    KoTextParag::paintDefault( painter, cg, cursor, drawSelections, clipx, clipy, clipw, cliph );
+    paintLines( painter, cg, cursor, drawSelections, clipx, clipy, clipw, cliph );
 
     // Now draw paragraph border
     if ( m_layout.hasBorder() &&!textDocument()->drawingShadow())
@@ -472,33 +474,214 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
     }
 }
 
-// Called by KoTextParag::paintDefault
+
+void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCursor *cursor, bool drawSelections,
+			int clipx, int clipy, int clipw, int cliph )
+{
+    if ( !visible )
+	return;
+    //KoTextStringChar *chr = at( 0 );
+    //if (!chr) { qDebug("paragraph %p %d, can't paint, EMPTY !", (void*)this, paragId()); return; }
+
+    // This is necessary with the current code, but in theory it shouldn't
+    // be necessary, if Xft really gives us fully proportionnal chars....
+#define CHECK_PIXELXADJ
+
+    int curx = -1, cury = 0, curh = 0, curline = 0;
+    int xstart, xend = 0;
+
+    QString qstr = str->toString();
+
+    const int nSels = doc ? doc->numSelections() : 1;
+    QMemArray<int> selectionStarts( nSels );
+    QMemArray<int> selectionEnds( nSels );
+    if ( drawSelections ) {
+	bool hasASelection = FALSE;
+	for ( int i = 0; i < nSels; ++i ) {
+	    if ( !hasSelection( i ) ) {
+		selectionStarts[ i ] = -1;
+		selectionEnds[ i ] = -1;
+	    } else {
+		hasASelection = TRUE;
+		selectionStarts[ i ] = selectionStart( i );
+		int end = selectionEnd( i );
+		if ( end == length() - 1 && n && n->hasSelection( i ) )
+		    end++;
+		selectionEnds[ i ] = end;
+	    }
+	}
+	if ( !hasASelection )
+	    drawSelections = FALSE;
+    }
+
+    // Draw the lines!
+    int line = m_lineChanged;
+    if (line<0) line = 0;
+
+    int numLines = lines();
+    for( ; line<numLines ; line++ )
+    {
+	// get the start and length of the line
+	int nextLine;
+        int startOfLine;
+    	lineStartOfLine(line, &startOfLine);
+	if (line == numLines-1 )
+            nextLine = length();
+	else
+            lineStartOfLine(line+1, &nextLine);
+
+	// init this line
+        int cy, h, baseLine;
+	lineInfo( line, cy, h, baseLine );
+	if ( clipy != -1 && cy > clipy - r.y() + cliph ) // outside clip area, leave
+	    break;
+
+        // Vars related to the current "run of text"
+	int paintStart = startOfLine;
+	KoTextStringChar* chr = at(startOfLine);
+        KoTextStringChar* nextchr = chr;
+
+	// okay, paint the line!
+	for(int i=startOfLine;i<nextLine;i++)
+	{
+            chr = nextchr;
+            if ( i < nextLine-1 )
+                nextchr = at( i+1 );
+
+            // we flush at end of line
+            bool flush = ( i == nextLine - 1 );
+            // Optimization note: QRT uses "flush |=", which doesn't have shortcut optimization
+
+            // we flush on format changes
+	    flush = flush || ( nextchr->format() != chr->format() );
+	    // we flush on link changes
+	    //flush = flush || ( nextchr->isLink() != chr->isLink() );
+            // we flush on small caps changes
+            if ( !flush && chr->format()->attributeFont() == KoTextFormat::ATT_SMALL_CAPS )
+            {
+                bool isLowercase = chr->c.upper() != chr->c;
+                bool nextLowercase = nextchr->c.upper() != nextchr->c;
+                flush = isLowercase != nextLowercase;
+            }
+
+	    // we flush on start of run
+	    flush = flush || nextchr->startOfRun;
+	    // we flush on bidi changes
+	    flush = flush || ( nextchr->rightToLeft != chr->rightToLeft );
+#ifdef CHECK_PIXELXADJ
+            // we flush when the value of pixelxadj changes
+            flush = flush || ( nextchr->pixelxadj != chr->pixelxadj );
+#endif
+	    // we flush on tab
+	    flush = flush || ( chr->c == '\t' );
+	    // we flush on soft hypens
+	    flush = flush || ( chr->c.unicode() == 0xad );
+	    // we flush on custom items
+	    flush = flush || chr->isCustom();
+	    // we flush before custom items
+	    flush = flush || nextchr->isCustom();
+	    // when painting justified, we flush on spaces
+	    if ((alignment() & Qt::AlignJustify) == Qt::AlignJustify )
+		//flush = flush || QTextFormatter::isBreakable( str, i );
+                flush = flush || chr->c.isSpace();
+	    // we flush when the string is getting too long
+	    flush = flush || ( i - paintStart >= 256 );
+	    // we flush when the selection state changes
+	    if ( drawSelections ) {
+                // check if selection state changed - TODO update from QRT
+		bool selectionChange = FALSE;
+		if ( drawSelections ) {
+		    for ( int j = 0; j < nSels; ++j ) {
+			selectionChange = selectionStarts[ j ] == i+1 || selectionEnds[ j ] == i+1;
+			if ( selectionChange )
+			    break;
+		    }
+		}
+                flush = flush || selectionChange;
+            }
+
+            // check for cursor mark
+            if ( cursor && this == cursor->parag() && i == cursor->index() ) {
+                curx = cursor->x();
+                curline = line;
+                KoTextStringChar *c = chr;
+                if ( i > 0 )
+                    --c;
+                curh = c->height();
+                cury = cy + baseLine - c->ascent();
+            }
+
+            if ( flush ) {  // something changed, draw what we have so far
+
+                KoTextStringChar* cStart = at( paintStart );
+                if ( chr->rightToLeft ) {
+                    xstart = chr->x;
+                    xend = cStart->x + cStart->width;
+                } else {
+                    xstart = cStart->x;
+                        if ( i < length() - 1 && !str->at( i + 1 ).lineStart &&
+                         str->at( i + 1 ).rightToLeft == chr->rightToLeft )
+                        xend = str->at( i + 1 ).x;
+                    else
+                        xend = chr->x + chr->width;
+                }
+
+                if ( (clipx == -1 || clipw == -1) || (xend >= clipx && xstart <= clipx + clipw) ) {
+                    if ( !chr->isCustom() )
+                        drawParagString( painter, qstr, paintStart, i - paintStart + 1, xstart, cy,
+                                         baseLine, xend-xstart, h, drawSelections,
+                                         chr->format(), selectionStarts, selectionEnds,
+                                         cg, chr->rightToLeft, line );
+                        else
+                            if ( chr->customItem()->placement() == KoTextCustomItem::PlaceInline ) {
+                                chr->customItem()->draw( &painter, chr->x, cy + baseLine - chr->customItem()->ascent(), clipx - r.x(), clipy - r.y(), clipw, cliph, cg,
+                                drawSelections && nSels && selectionStarts[ 0 ] <= i && selectionEnds[ 0 ] > i );
+                                }
+                }
+                paintStart = i+1;
+            }
+        } // end of character loop
+    } // end of line loop
+
+    // if we should draw a cursor, draw it now
+    if ( curx != -1 && cursor ) {
+        drawCursor( painter, cursor, curx, cury, curh, cg );
+    }
+}
+
+// Called by KoTextParag::paintText
 // Draw a set of characters with the same formattings.
 // Reimplemented here to convert coordinates first, and call @ref drawFormattingChars.
 void KoTextParag::drawParagString( QPainter &painter, const QString &s, int start, int len, int startX,
                                    int lastY, int baseLine, int bw, int h, bool drawSelections,
-                                   KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
-                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft )
+                                   KoTextFormat *format, const QMemArray<int> &selectionStarts,
+                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line )
 {
-    //kdDebug() << "KoTextParag::drawParagString drawing from " << start << " to " << start+len << endl;
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     assert(zh);
 
-    //kdDebug(32500) << "startX in LU: " << startX << " layoutUnitToPt( startX )*zoomedResolutionX : " << zh->layoutUnitToPt( startX ) << "*" << zh->zoomedResolutionX() << endl;
+#ifdef DEBUG_PAINT
+    kdDebug(32500) << "KoTextParag::drawParagString drawing from " << start << " to " << start+len << endl;
+    kdDebug(32500) << " startX in LU: " << startX << endl;
+#endif
 
     // Calculate startX in pixels
     int startX_pix = zh->layoutUnitToPixelX( startX ) /* + at( rightToLeft ? start+len-1 : start )->pixelxadj */;
-    //kdDebug(32500) << "KoTextParag::drawParagString startX in pixels : " << startX_pix << " adjustment:" << at( rightToLeft ? start+len-1 : start )->pixelxadj << " bw=" << bw << endl;
+#ifdef DEBUG_PAINT
+    kdDebug(32500) << "KoTextParag::drawParagString startX in pixels : " << startX_pix /*<< " adjustment:" << at( rightToLeft ? start+len-1 : start )->pixelxadj*/ << " bw=" << bw << endl;
+#endif
 
     int bw_pix = zh->layoutUnitToPixelX( startX, bw );
     int lastY_pix = zh->layoutUnitToPixelY( lastY );
     int baseLine_pix = zh->layoutUnitToPixelY( lastY, baseLine );
     int h_pix = zh->layoutUnitToPixelY( lastY, h );
-    //kdDebug(32500) << "KoTextParag::drawParagString h(LU)=" << h << " lastY(LU)=" << lastY
-    //        << " h(PIX)=" << h_pix << " lastY(PIX)=" << lastY_pix << endl;
+#ifdef DEBUG_PAINT
+    kdDebug(32500) << "KoTextParag::drawParagString h(LU)=" << h << " lastY(LU)=" << lastY
+            << " h(PIX)=" << h_pix << " lastY(PIX)=" << lastY_pix << endl;
+#endif
 
-    if ( lastFormat->textBackgroundColor().isValid() )
-        painter.fillRect( startX_pix, lastY_pix, bw_pix, h_pix, lastFormat->textBackgroundColor() );
+    if ( format->textBackgroundColor().isValid() )
+        painter.fillRect( startX_pix, lastY_pix, bw_pix, h_pix, format->textBackgroundColor() );
 
     // don't want to draw line breaks but want them when drawing formatting chars
     int draw_len = len;
@@ -519,8 +702,8 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
       drawParagStringInternal( painter, s, start, draw_len, draw_startX_pix,
                                lastY_pix, baseLine_pix,
                                draw_bw,
-                               h_pix, drawSelections, lastFormat, i, selectionStarts,
-                               selectionEnds, cg, rightToLeft, zh );
+                               h_pix, drawSelections, format, selectionStarts,
+                               selectionEnds, cg, rightToLeft, line, zh );
     }
 
     if ( !textDocument()->drawingShadow() && textDocument()->drawFormattingChars() )
@@ -529,7 +712,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
                              startX, lastY, baseLine, h,
                              startX_pix, lastY_pix, baseLine_pix, bw_pix, h_pix,
                              drawSelections,
-                             lastFormat, i, selectionStarts,
+                             format, start+len-1 /*TODO remove*/, selectionStarts,
                              selectionEnds, cg, rightToLeft );
     }
 }
@@ -540,29 +723,31 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
 // And we have to keep it separate from drawParagString to avoid s/startX/startX_pix/ etc.
 void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, int start, int len, int startX,
                                    int lastY, int baseLine, int bw, int h, bool drawSelections,
-                                   KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
-                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, KoZoomHandler* zh )
+                                   KoTextFormat *format, const QMemArray<int> &selectionStarts,
+                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoZoomHandler* zh )
 {
-    //kdDebug(32500) << "KoTextParag::drawParagStringInternal start=" << start << " len=" << len << endl;
-    //kdDebug(32500) << "In pixels:  startX=" << startX << " lastY=" << lastY << " baseLine=" << baseLine
-    //               << " bw=" << bw << " h=" << h << " rightToLeft=" << rightToLeft << endl;
-    if ( textDocument()->drawingShadow() && !lastFormat->shadowText())
+#ifdef DEBUG_PAINT
+    kdDebug(32500) << "KoTextParag::drawParagStringInternal start=" << start << " len=" << len << endl;
+    kdDebug(32500) << "In pixels:  startX=" << startX << " lastY=" << lastY << " baseLine=" << baseLine
+                   << " bw=" << bw << " h=" << h << " rightToLeft=" << rightToLeft << endl;
+#endif
+    if ( textDocument()->drawingShadow() && !format->shadowText())
         return;
     // 1) Sort out the color
-    QColor textColor( lastFormat->color() );
+    QColor textColor( format->color() );
     if ( textDocument()->drawingShadow() ) // Use shadow color if drawing a shadow
         textColor = shadowColor();
     if ( !textColor.isValid() ) // Resolve the color at this point
         textColor = KoTextFormat::defaultTextColor( &painter );
 
     // 2) Sort out the font
-    QFont font( lastFormat->screenFont( zh ) );
-    if ( lastFormat->attributeFont() == KoTextFormat::ATT_SMALL_CAPS && s[start].upper() != s[start] )
-        font = lastFormat->smallCapsFont( zh, true );
+    QFont font( format->screenFont( zh ) );
+    if ( format->attributeFont() == KoTextFormat::ATT_SMALL_CAPS && s[start].upper() != s[start] )
+        font = format->smallCapsFont( zh, true );
 
 #if 0
     QFontInfo fi( font );
-    kdDebug(32500) << "KoTextParag::drawParagStringInternal requested font " << font.pointSizeFloat() << " using font " << fi.pointSize() << "pt (format font: " << lastFormat->font().pointSizeFloat() << "pt)" << endl;
+    kdDebug(32500) << "KoTextParag::drawParagStringInternal requested font " << font.pointSizeFloat() << " using font " << fi.pointSize() << "pt (format font: " << format->font().pointSizeFloat() << "pt)" << endl;
     QFontMetrics fm( font );
     kdDebug(32500) << "Real font: " << fi.family() << ". Font height in pixels: " << fm.height() << endl;
 #endif
@@ -579,7 +764,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     if ( drawSelections ) {
 	const int nSels = doc ? doc->numSelections() : 1;
 	for ( int j = 0; j < nSels; ++j ) {
-	    if ( i > selectionStarts[ j ] && i <= selectionEnds[ j ] ) {
+	    if ( start >= selectionStarts[ j ] && start < selectionEnds[ j ] ) {
 		if ( !doc || doc->invertSelectionText( j ) )
 		    textColor = cg.color( QColorGroup::HighlightedText );
 		    painter.setPen( QPen( textColor ) );
@@ -591,7 +776,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	}
     }
 
-    KoTextParag::drawFontEffectsHelper( &painter, lastFormat, zh, font, textColor, startX, baseLine, bw, lastY, h, start, len, this);
+    KoTextParag::drawFontEffectsHelper( &painter, format, zh, font, textColor, startX, baseLine, bw, lastY, h, start, len, this);
 
     QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
 
@@ -599,9 +784,9 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
        len--;
 
     if ( str[ start ] != '\t' && str[ start ].unicode() != 0xad ) {
-        str = lastFormat->displayedString( str );
-	if ( lastFormat->vAlign() == KoTextFormat::AlignNormal ) {
-            int posY =lastY + baseLine - lastFormat->offsetFromBaseLine();
+        str = format->displayedString( str );
+	if ( format->vAlign() == KoTextFormat::AlignNormal ) {
+            int posY =lastY + baseLine - format->offsetFromBaseLine();
             //we must move to bottom text because we create
             //shadow to 'top'.
             if ( shadowY( zh ) < 0)
@@ -621,15 +806,15 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	    painter.drawLine( startX + w - 1, lastY + baseLine/2, startX + w - 1 - 10, lastY + baseLine/2 );
 	    painter.restore();
 #endif
-	} else if ( lastFormat->vAlign() == KoTextFormat::AlignSuperScript ) {
-            int posY =lastY + baseLine - ( painter.fontMetrics().height() / 2 )-lastFormat->offsetFromBaseLine();
+	} else if ( format->vAlign() == KoTextFormat::AlignSuperScript ) {
+            int posY =lastY + baseLine - ( painter.fontMetrics().height() / 2 )-format->offsetFromBaseLine();
             //we must move to bottom text because we create
             //shadow to 'top'.
             if ( shadowY( zh ) < 0)
                 posY -=shadowY( zh );
 	    painter.drawText( startX, posY, str, start, len, dir );
-	} else if ( lastFormat->vAlign() == KoTextFormat::AlignSubScript ) {
-            int posY =lastY + baseLine + ( painter.fontMetrics().height() / 6 )-lastFormat->offsetFromBaseLine();
+	} else if ( format->vAlign() == KoTextFormat::AlignSubScript ) {
+            int posY =lastY + baseLine + ( painter.fontMetrics().height() / 6 )-format->offsetFromBaseLine();
             //we must move to bottom text because we create
             //shadow to 'top'.
             if ( shadowY( zh ) < 0)
@@ -668,14 +853,19 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	}
 	painter.restore();
     }
-    if ( i + 1 < length() && at( i + 1 )->lineStart && at( i )->c.unicode() == 0xad ) {
-	painter.drawText( startX + bw, lastY + baseLine, "\xad" );
+
+    if ( start+len < length() && at( start+len )->lineStart )
+    {
+        bool drawHyphen = at( start+len-1 )->c.unicode() == 0xad;
+        drawHyphen = drawHyphen || lineHyphenated( line );
+        if ( drawHyphen )
+            painter.drawText( startX + bw, lastY + baseLine, "\xad" );
     }
 
 	// Paint a zigzag line for "wrong" background spellchecking checked words:
     if(
 		painter.device()->devType() != QInternal::Printer &&
-		lastFormat->isMisspelled() &&
+		format->isMisspelled() &&
 		!textDocument()->drawingShadow() &&
 		textDocument()->drawingMissingSpellLine() )
 	{
@@ -706,13 +896,29 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 
 #if 0
     i -= len;
-    if ( doc && lastFormat->isAnchor() && !lastFormat->anchorHref().isEmpty() &&
+    if ( doc && format->isAnchor() && !format->anchorHref().isEmpty() &&
          doc->focusIndicator.parag == this &&
          doc->focusIndicator.start >= i &&
          doc->focusIndicator.start + doc->focusIndicator.len <= i + len ) {
 	painter.drawWinFocusRect( QRect( startX, lastY, bw, h ) );
     }
 #endif
+}
+
+bool KoTextParag::lineHyphenated( int l ) const
+{
+    if ( l > (int)lineStarts.count() - 1 ) {
+	qWarning( "KoTextParag::lineHyphenated: line %d out of range!", l );
+	return false;
+    }
+
+    if ( !isValid() )
+	const_cast<KoTextParag*>(this)->format();
+
+    QMap<int, KoTextParagLineStart*>::ConstIterator it = lineStarts.begin();
+    while ( l-- > 0 )
+	++it;
+    return ( *it )->hyphenated;
 }
 
 /** Draw the cursor mark. Reimplemented from KoTextParag to convert coordinates first. */
@@ -1116,7 +1322,9 @@ void KoTextParag::printRTDebug( int info )
         for ( int line = 0 ; line < lines(); ++ line ) {
             int y, h, baseLine;
             lineInfo( line, y, h, baseLine );
-            kdDebug(32500) << "  Line " << line << " y=" << y << " height=" << h << " baseLine=" << baseLine << endl;
+            int startOfLine;
+            lineStartOfLine( line, &startOfLine );
+            kdDebug(32500) << "  Line " << line << " y=" << y << " height=" << h << " baseLine=" << baseLine << " startOfLine(index)=" << startOfLine << endl;
         }
         kdDebug(32500) << endl;
         KoTextString * s = string();
@@ -1127,6 +1335,8 @@ void KoTextParag::printRTDebug( int info )
             KoTextStringChar & ch = s->at(i);
             int pixelx =  textDocument()->formattingZoomHandler()->layoutUnitToPixelX( ch.x )
                           + ch.pixelxadj;
+            if ( ch.lineStart )
+                kdDebug(32500) << "LINESTART" << endl;
             kdDebug(32500) << i << ": '" << QString(ch.c) << "' (" << ch.c.unicode() << ")"
                       << " x(LU)=" << ch.x
                       << " w(LU)=" << ch.width//s->width(i)

@@ -39,7 +39,6 @@ KoTextFormatter::KoTextFormatter()
 
 KoTextFormatter::~KoTextFormatter()
 {
-    delete m_hyphenator;
 }
 
 // Originally based on QTextFormatterBreakWords::format()
@@ -220,7 +219,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 #endif
 
 #ifdef DEBUG_FORMATTER
-	qDebug("c='%c' i=%d/%d x=%d ww=%d availableWidth=%d (test is x+ww>w) lastBreak=%d isBreakable=%d",c->c.latin1(),i,len,x,ww,availableWidth,lastBreak,isBreakable(string,i));
+	qDebug("c='%c' i=%d/%d x=%d ww=%d availableWidth=%d (test is x+ww>aW) lastBreak=%d isBreakable=%d",c->c.latin1(),i,len,x,ww,availableWidth,lastBreak,isBreakable(string,i));
 #endif
 	// Wrapping at end of line
 	if ( wrapEnabled
@@ -238,6 +237,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	    if ( wrapAtColumn() != -1 )
 		minw = QMAX( minw, x + ww );
 
+            bool hyphenated = false;
             // Hyphenation: check if we can break somewhere between lastBreak and i
             if ( m_hyphenator )
             {
@@ -262,12 +262,12 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                     for ( int hypos = maxlen-1 ; hypos >= 0 ; --hypos )
                         if ( hyphens[hypos] % 2 ) // odd number -> can break there
                         {
-                            // TODO insert a soft hyphen?
-                            // Or mark the LineStart object as "hyphenated", and check that flag when painting
+                            lineStart->hyphenated = true;
                             lastBreak = hypos + wordStart;
-//#ifdef DEBUG_FORMATTER
+                            hyphenated = true;
+#ifdef DEBUG_FORMATTER
                             qDebug( "Hyphenation: will break at %d", lastBreak );
-//#endif
+#endif
                             break;
                         }
                     delete[] hyphens;
@@ -325,14 +325,21 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		// Breakable char was found
 		i = lastBreak;
 		c = &string->at( i ); // The last char in the last line
-                int lineWidth = availableWidth - c->x - ( string->isRightToLeft() && lastChr->c == '\n'? c->width : 0 );
-                if ( c->c.unicode() == 0xad ) // soft hyphen
+                int spaceAfterLine = availableWidth - c->x;
+                // ?? AFAICS we should always deduce the char's width from the available space....
+                //if ( string->isRightToLeft() && lastChr->c == '\n' )
+                spaceAfterLine -= c->width;
+
+                //else
+                if ( c->c.unicode() == 0xad || hyphenated ) // soft hyphen or hyphenation
                 {
                     // Recalculate its width, the hyphen will appear finally (important for the parag rect)
-                    c->width = KoTextZoomHandler::ptToLayoutUnitPt( c->format()->refFontMetrics().width( c->c ) );
-                    lineWidth += c->width;
+                    int width = KoTextZoomHandler::ptToLayoutUnitPt( c->format()->refFontMetrics().width( QChar(0xad) ) );
+                    if ( c->c.unicode() == 0xad )
+                        c->width = width;
+                    spaceAfterLine -= width;
                 }
-		KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align, lineWidth );
+		KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align, spaceAfterLine );
 		lineStart->h += doc ? parag->lineSpacing( linenr++ ) : 0;
 		y += lineStart->h;
 		lineStart = lineStart2;
@@ -341,6 +348,9 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 #endif
 
 		c = &string->at( i + 1 ); // The first char in the new line
+#ifdef DEBUG_FORMATTER
+		qDebug("Next line will start at i+1=%d, char=%c",i+1,c->c.latin1());
+#endif
 		tmph = c->height();
 		h = tmph;
 		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), h, left, 4, parag ) : left;
@@ -594,9 +604,11 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
 	}
     }
 
-    if ( last >= 0 && last < string->length() )
-	line->w = string->at( last ).x + string->at( last ).width; //string->width( last );
-    else
+    if ( last >= 0 && last < string->length() ) {
+        KoTextStringChar &chr = string->at( last );
+	line->w = chr.x + chr.width; //string->width( last );
+        kdDebug() << "koFormatLine: line->w=" << line->w << endl;
+    } else
 	line->w = 0;
 
     return new KoTextParagLineStart();

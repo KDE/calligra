@@ -156,11 +156,19 @@ public:
 
 protected:
     void invalidateCounters();
+    bool lineHyphenated( int l ) const;
 
+    void paintLines( QPainter &painter, const QColorGroup &cg, KoTextCursor *cursor, bool drawSelections,
+                     int clipx, int clipy, int clipw, int cliph );
+
+    void drawParagString( QPainter &painter, const QString &str, int start, int len, int startX,
+                          int lastY, int baseLine, int bw, int h, bool drawSelections,
+                          KoTextFormat *lastFormat, const QMemArray<int> &selectionStarts,
+                          const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line  );
     void drawParagStringInternal( QPainter &painter, const QString &s, int start, int len, int startX,
                                   int lastY, int baseLine, int bw, int h, bool drawSelections,
-                                  KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
-                                  const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, KoZoomHandler* zh );
+                                  KoTextFormat *lastFormat, const QMemArray<int> &selectionStarts,
+                                  const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoZoomHandler* zh );
 
     /** Hook for KWTextParag. Default implementation does nothing. See KWTextParag for params meaning */
     virtual void drawFormattingChars( QPainter &, const QString &, int, int, // start, len

@@ -1071,19 +1071,19 @@ struct Q_EXPORT KoTextParagSelection
 
 struct Q_EXPORT KoTextParagLineStart
 {
-    KoTextParagLineStart() : y( 0 ), baseLine( 0 ), h( 0 )
+    KoTextParagLineStart() : y( 0 ), baseLine( 0 ), h( 0 ), hyphenated( false )
 #ifndef QT_NO_COMPLEXTEXT
 	, bidicontext( 0 )
 #endif
     {  }
-    KoTextParagLineStart( ushort y_, ushort bl, ushort h_ ) : y( y_ ), baseLine( bl ), h( h_ ),
+    KoTextParagLineStart( ushort y_, ushort bl, ushort h_ ) : y( y_ ), baseLine( bl ), h( h_ ), hyphenated( false ),
 	w( 0 )
 #ifndef QT_NO_COMPLEXTEXT
 	, bidicontext( 0 )
 #endif
     {  }
 #ifndef QT_NO_COMPLEXTEXT
-    KoTextParagLineStart( KoBidiContext *c, KoBidiStatus s ) : y(0), baseLine(0), h(0),
+    KoTextParagLineStart( KoBidiContext *c, KoBidiStatus s ) : y(0), baseLine(0), h(0), hyphenated( false ),
 	status( s ), bidicontext( c ) { if ( bidicontext ) bidicontext->ref(); }
 #endif
 
@@ -1110,6 +1110,7 @@ struct Q_EXPORT KoTextParagLineStart
 
 public:
     ushort y, baseLine, h;
+    bool hyphenated;
 #ifndef QT_NO_COMPLEXTEXT
     KoBidiStatus status;
 #endif
@@ -1239,8 +1240,6 @@ public:
     void setAlignmentDirect( int a ) { align = a; }
     int alignment() const;
 
-    void paintDefault( QPainter &painter, const QColorGroup &cg, KoTextCursor *cursor, bool drawSelections,
-                       int clipx, int clipy, int clipw, int cliph );
     virtual void paint( QPainter &painter, const QColorGroup &cg, KoTextCursor *cursor, bool drawSelections,
                        int clipx, int clipy, int clipw, int cliph ); // kotextparag.cc
 
@@ -1321,10 +1320,6 @@ protected:
     void drawLabel( QPainter* p, int x, int y, int w, int h, int base, const QColorGroup& cg );
     void drawCursorDefault( QPainter &painter, KoTextCursor *cursor, int curx, int cury, int curh, const QColorGroup &cg );
     void drawCursor( QPainter &painter, KoTextCursor *cursor, int curx, int cury, int curh, const QColorGroup &cg );
-    void drawParagString( QPainter &painter, const QString &str, int start, int len, int startX,
-                          int lastY, int baseLine, int bw, int h, bool drawSelections,
-                          KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
-                          const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft  );
 
 #include "kotextparag.h"
 
