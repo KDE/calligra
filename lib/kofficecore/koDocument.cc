@@ -725,12 +725,15 @@ bool KoDocument::isStoredExtern()
   return ( m_url.protocol() != STORE_PROTOCOL );
 }
 
-void KoDocument::setModified( bool _mod )
+void KoDocument::setModified( bool mod )
 {
-    kdDebug(30003) << "KoDocument::setModified( " << (_mod ? "true" : "false") << ")" << endl;
-    KParts::ReadWritePart::setModified( _mod );
+    if ( mod == isModified() )
+	return;
+    
+    kdDebug(30003) << "KoDocument::setModified( " << (mod ? "true" : "false") << ")" << endl;
+    KParts::ReadWritePart::setModified( mod );
 
-    if ( _mod )
+    if ( mod )
 	m_bEmpty = FALSE;
 }
 
