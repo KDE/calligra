@@ -197,7 +197,7 @@ Esc_Sequence            ({Esc_Sequence1}|{Esc_Sequence2}|{Esc_Sequence3})
 Char                    ([^\n\t\"\'\\]|{Esc_Sequence})
 Char_Literal            "'"({Char}|\")"'"
 String_Literal          \"({Char}|"'")*\"
-Table_Name              [A-Za-z0-9_.\x80-\xff][A-Z a-z0-9_.\x80-\xff]*
+Table_Name              [A-Za-z0-9_.\x80-\xff][A-Z a-z0-9_.\x80-\xff]*[A-Za-z0-9_.\x80-\xff]
 
 Plain_Float_Literal1    {Digits}"."{Digits}(e|E)("+"|"-")?{Digits}
 Plain_Float_Literal2    {Digits}(e|E)("+"|"-")?{Digits}
