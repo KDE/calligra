@@ -2837,8 +2837,10 @@ void KWDocument::removePage( int num )
 
 void KWDocument::afterRemovePages()
 {
-    recalcVariables( VT_PGNUM );
     recalcFrames();
+    updateAllFrames(); // Do this before recalcVariables (which repaints). The removed frames must be removed from the frame caches. 
+    //### IMHO recalcFrames should take care of updateAllFrames (it already does it partially).
+    recalcVariables( VT_PGNUM );
     emit newContentsSize();
 }
 
