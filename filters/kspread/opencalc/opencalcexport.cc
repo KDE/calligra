@@ -121,7 +121,7 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QCString & from,
     kdWarning(30518) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
     return KoFilter::NotImplemented;
   }
-  
+
   m_locale = static_cast<KSpreadDoc*>(document)->locale();
   if ( !writeFile( ksdoc ) )
     return KoFilter::CreationError;
@@ -206,6 +206,16 @@ bool OpenCalcExport::exportDocInfo( KoStore * store, const KSpreadDoc* ksdoc )
   data.appendChild( meta.createTextNode( authorPage->fullName() ) );
   officeMeta.appendChild( data );
 
+  data = meta.createElement( "dc:description" );
+  data.appendChild( meta.createTextNode( aboutPage->abstract() ) );
+  officeMeta.appendChild( data );
+
+  data = meta.createElement( "meta:keywords" );
+  QDomElement dataItem = meta.createElement( "meta:keyword" );
+  dataItem.appendChild( meta.createTextNode( aboutPage->keywords() ) );
+  data.appendChild( dataItem );
+  officeMeta.appendChild( data );
+
   data = meta.createElement( "meta:user-defined" );
   data.setAttribute( "meta:name", "Info 1" );
   data.appendChild( meta.createTextNode( aboutPage->title() ) );
@@ -223,7 +233,7 @@ bool OpenCalcExport::exportDocInfo( KoStore * store, const KSpreadDoc* ksdoc )
     data.appendChild( meta.createTextNode( dt.toString( Qt::ISODate ) ) );
     officeMeta.appendChild( data );
   }
-  
+
   /* TODO:
     <meta:creation-date>2003-01-08T23:57:31</meta:creation-date>
     <dc:language>en-US</dc:language>
@@ -232,7 +242,7 @@ bool OpenCalcExport::exportDocInfo( KoStore * store, const KSpreadDoc* ksdoc )
     <meta:user-defined meta:name="Info 3"/>
     <meta:user-defined meta:name="Info 4"/>
   */
-  
+
   data = meta.createElement( "meta:document-statistic" );
   data.setAttribute( "meta:table-count", QString::number( ksdoc->map()->count() ) );
   //  TODO: data.setAttribute( "meta:cell-count",  );
@@ -1208,7 +1218,7 @@ QString OpenCalcExport::convertFormula( QString const & formula ) const
         decimalSymbol = decimal.at( 0 );
     }
   }
-  
+
   QString s;
   QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)");
   int n = exp.search( formula, 0 );
