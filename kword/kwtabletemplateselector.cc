@@ -407,7 +407,7 @@ void KWTableTemplatePreview::fillContents()
 
 }
 
-KWTableTemplate* KWTableTemplatePreview::getTableTemplate()
+KWTableTemplate* KWTableTemplatePreview::getTableTemplate() const
 {
       return tableTemplate;
 }
@@ -602,7 +602,7 @@ void KWTableTemplateSelector::changeTableTemplate()
     selectedTableTemplate = lbTemplates->currentItem();
 }
 
-KWTableTemplate* KWTableTemplateSelector::getTableTemplate()
+KWTableTemplate* KWTableTemplateSelector::getTableTemplate() const
 {
   return (selectedTableTemplate) ? preview->getTableTemplate() : 0L;
 }

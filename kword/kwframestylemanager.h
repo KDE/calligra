@@ -75,8 +75,8 @@ class KWFrameStyleListItem
         m_changedFrameStyle = changed;
     }
 
-    KWFrameStyle *origFrameStyle() { return m_origFrameStyle; }
-    KWFrameStyle *changedFrameStyle() { return m_changedFrameStyle; }
+    KWFrameStyle *origFrameStyle()const { return m_origFrameStyle; }
+    KWFrameStyle *changedFrameStyle()const { return m_changedFrameStyle; }
     void setOrigFrameStyle( KWFrameStyle *_orig ) { m_origFrameStyle = _orig; }
     void setChangedFrameStyle( KWFrameStyle *_changed ) { m_changedFrameStyle = _changed; }
     void deleteOrigFrameStyle() { delete m_changedFrameStyle; }

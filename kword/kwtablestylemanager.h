@@ -71,8 +71,8 @@ class KWTableStyleListItem
         m_changedTableStyle = changed;
     }
 
-    KWTableStyle *origTableStyle() { return m_origTableStyle; }
-    KWTableStyle *changedTableStyle() { return m_changedTableStyle; }
+    KWTableStyle *origTableStyle()const { return m_origTableStyle; }
+    KWTableStyle *changedTableStyle()const { return m_changedTableStyle; }
     void setOrigTableStyle( KWTableStyle *_orig ) { m_origTableStyle = _orig; }
     void setChangedTableStyle( KWTableStyle *_changed ) { m_changedTableStyle = _changed; }
     void deleteOrigTableStyle() { delete m_changedTableStyle; }

@@ -58,7 +58,7 @@ public:
     KWTableTemplatePreview( const QString& title, KWTableStyle *_emptyStyle, QWidget* parent, const char* name=0L );
     ~KWTableTemplatePreview();
     void setTableTemplate(KWTableTemplate *_tableTemplate);
-    KWTableTemplate *getTableTemplate();
+    KWTableTemplate *getTableTemplate()const ;
 
 public slots:
     void cbFirstRowChanged( bool );
@@ -98,7 +98,7 @@ class KWTableTemplateSelector : public QWidget
 public:
     KWTableTemplateSelector( KWDocument *_doc, QWidget * _parent, const QString & _tableTemplate, const char * _name = 0 );
 
-    KWTableTemplate *getTableTemplate();
+    KWTableTemplate *getTableTemplate()const ;
 
 protected:
     KWDocument *m_doc;

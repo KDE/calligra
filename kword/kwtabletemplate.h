@@ -69,9 +69,9 @@ public:
                      KWTableStyle *_bottomLeftCorner=0L, KWTableStyle *_bottomRightCorner=0L );
 
     KWTableTemplate( const KWTableTemplate & rhs ) { *this = rhs; }
-    
+
     KWTableTemplate( QDomElement & parentElem, KWDocument *_doc, int docVersion=2 );
-    
+
     ~KWTableTemplate() {}
 
     void operator=( const KWTableTemplate & );
@@ -86,7 +86,7 @@ public:
     KWTableStyle firstRow() const { return *m_firstRow; }
     KWTableStyle* pFirstRow() const { return m_firstRow; }
     void setFirstRow( KWTableStyle *_tableStyle ) { m_firstRow = _tableStyle; }
-    
+
     KWTableStyle lastRow() const { return *m_lastRow; }
     KWTableStyle* pLastRow() const { return m_lastRow; }
     void setLastRow( KWTableStyle *_tableStyle ) { m_lastRow = _tableStyle; }
@@ -94,7 +94,7 @@ public:
     KWTableStyle firstCol() const { return *m_firstCol; }
     KWTableStyle* pFirstCol() const { return m_firstCol; }
     void setFirstCol( KWTableStyle *_tableStyle ) { m_firstCol = _tableStyle; }
-    
+
     KWTableStyle lastCol() const { return *m_lastCol; }
     KWTableStyle* pLastCol() const { return m_lastCol; }
     void setLastCol( KWTableStyle *_tableStyle ) { m_lastCol = _tableStyle; }
@@ -110,15 +110,15 @@ public:
     KWTableStyle topRightCorner() const { return *m_topRightCorner; }
     KWTableStyle* pTopRightCorner() const { return m_topRightCorner; }
     void setTopRightCorner( KWTableStyle *_tableStyle ) { m_topRightCorner = _tableStyle; }
-        
+
     KWTableStyle bottomRightCorner() const { return *m_bottomRightCorner; }
     KWTableStyle* pBottomRightCorner() const { return m_bottomRightCorner; }
-    void setBottomRightCorner( KWTableStyle *_tableStyle ) { m_bottomRightCorner = _tableStyle; }            
-    
+    void setBottomRightCorner( KWTableStyle *_tableStyle ) { m_bottomRightCorner = _tableStyle; }
+
     KWTableStyle bottomLeftCorner() const { return *m_bottomLeftCorner; }
     KWTableStyle* pBottomLeftCorner() const { return m_bottomLeftCorner; }
-    void setBottomLeftCorner( KWTableStyle *_tableStyle ) { m_bottomLeftCorner = _tableStyle; }            
-    
+    void setBottomLeftCorner( KWTableStyle *_tableStyle ) { m_bottomLeftCorner = _tableStyle; }
+
     // SAVING METHODS
     void save( QDomElement parentElem, KoZoomHandler* zh );
     void saveTableTemplate( QDomElement & parentElem );
@@ -151,12 +151,12 @@ private:
     KWTableStyle *m_firstCol;
     KWTableStyle *m_lastCol;
     KWTableStyle *m_bodyCell;
-    
+
     KWTableStyle *m_topLeftCorner;
     KWTableStyle *m_topRightCorner;
     KWTableStyle *m_bottomRightCorner;
     KWTableStyle *m_bottomLeftCorner;
-    
+
 };
 
 #endif
