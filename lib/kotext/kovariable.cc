@@ -965,6 +965,138 @@ void KoVariable::setVariableFormat( KoVariableFormat *_varFormat )
     // TODO m_varFormat->ref();
 }
 
+#define addText( text, newFormat ) { \
+        if ( !text.isEmpty() ) \
+        { \
+            newFormat +=text; \
+            text=""; \
+        } \
+}
+
+QString KoVariable::convertKlocaleToQDateTimeFormat( const QString & _format )
+{
+    QString newFormat;
+    QString format( _format );
+    QString text;
+    do
+    {
+        if ( format.startsWith( "%Y" ) )
+        {
+            addText( text, newFormat );
+            newFormat+="yyyy";
+            format = format.remove( 0, 2 );
+        }
+        else if ( format.startsWith( "%y" ) )
+        {
+            addText( text, newFormat );
+            newFormat+="yyyy";
+
+            format = format.remove( 0, 2 );
+        }
+        else if ( format.startsWith( "%n" ) )
+        {
+            addText( text, newFormat );
+            newFormat+="M";
+            format = format.remove( 0, 2 );
+        }
+        else if ( format.startsWith( "%m" ) )
+        {
+            addText( text, newFormat );
+            newFormat+="MM";
+            format = format.remove( 0, 2 );
+        }
+        else if ( format.startsWith( "%e" ) )
+        {
+            addText( text, newFormat );
+            newFormat+="d";
+            format = format.remove( 0, 2 );
+        }
+        else if ( format.startsWith( "%d" ) )
+        {
+            addText( text, newFormat );
+            newFormat+="dd";
+            format = format.remove( 0, 2 );
+        }
+        else if ( format.startsWith( "%b" ) )
+        {
+            addText( text, newFormat );
+            newFormat+="MMM";
+            format = format.remove( 0, 2 );
+        }
+        else if ( format.startsWith( "%B" ) )
+        {
+            addText( text, newFormat );
+            newFormat+="MMMM";
+            format = format.remove( 0, 2 );
+        }
+        else if ( format.startsWith( "%a" ) )
+        {
+            addText( text, newFormat );
+            newFormat+="ddd";
+
+            format = format.remove( 0, 2 );
+        }
+        else if ( format.startsWith( "%A" ) )
+        {
+            addText( text, newFormat );
+            newFormat+="dddd";
+            format = format.remove( 0, 2 );
+        }
+        if ( format.startsWith( "%H" ) ) //hh
+        {
+            //hour in 24h
+            addText( text, newFormat );
+            newFormat+="hh";
+            format = format.remove( 0, 2 );
+        }
+        else if ( format.startsWith( "%k" ) )//h
+        {
+            addText( text, newFormat );
+            newFormat+="h";
+            format = format.remove( 0, 2 );
+        }
+        else if ( format.startsWith( "%I" ) )// ?????
+        {
+            addText( text, newFormat );
+            //TODO hour in 12h
+        }
+        else if ( format.startsWith( "%l" ) )
+        {
+            addText( text, newFormat );
+            //TODO hour in 12h with 1 digit
+        }
+        else if ( format.startsWith( "%M" ) )// mm
+        {
+            addText( text, newFormat );
+            newFormat+="mm";
+            format = format.remove( 0, 2 );
+        }
+        else if ( format.startsWith( "%S" ) ) //ss
+        {
+            addText( text, newFormat );
+            newFormat+="ss";
+            format = format.remove( 0, 2 );
+        }
+        else if ( format.startsWith( "%p" ) )
+        {
+            //TODO am or pm
+            addText( text, newFormat );
+            newFormat+="ap";
+            format = format.remove( 0, 2 );
+        }
+
+        else
+        {
+            text += format[0];
+            format = format.remove( 0, 1 );
+        }
+    }
+    while ( format.length() > 0 );
+    addText( text, format );
+    return format;
+}
+
+
 /******************************************************************/
 /* Class: KoDateVariable                                          */
 /******************************************************************/

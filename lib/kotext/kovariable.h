@@ -412,6 +412,8 @@ public:
      */
     virtual short int variableSubType(short int menuNumber){ return menuNumber; }
 
+    QString convertKlocaleToQDateTimeFormat( const QString & _format );
+
 protected:
     /** Variable should reimplement this to implement saving. */
     virtual void saveVariable( QDomElement &parentElem ) = 0;
