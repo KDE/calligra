@@ -2983,7 +2983,7 @@ void CellFormatPageFont::apply( KSpreadCustomStyle * style )
        && !family_combo->currentText().isEmpty() )
     style->changeFontFamily( selFont.family() );
   
-  uint flags;
+  uint flags = 0;
   
   if ( weight_combo->currentItem() != 0 && selFont.bold() )
     flags |= KSpreadStyle::FBold;
@@ -3360,9 +3360,6 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     grid2->addWidget(tmpLabel, 1, 0);
 
     width = new KDoubleNumInput( grp );
-    width->setRange( KoUnit::ptToUnit( 2.0, dlg->getDoc()->getUnit() ),
-                     KoUnit::ptToUnit( 400.0, dlg->getDoc()->getUnit() ),
-                     KoUnit::ptToUnit( 1.0, dlg->getDoc()->getUnit() ) );
     width->setPrecision ( 2 );
     width->setValue ( KoUnit::ptToUnit( dlg->widthSize, dlg->getDoc()->getUnit() ) );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
@@ -3383,9 +3380,6 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     grid2->addWidget(tmpLabel, 1, 2);
 
     height=new KDoubleNumInput( grp );
-    height->setRange( KoUnit::ptToUnit( 2.0, dlg->getDoc()->getUnit() ),
-                      KoUnit::ptToUnit( 400.0, dlg->getDoc()->getUnit() ),
-                      KoUnit::ptToUnit( 1.0, dlg->getDoc()->getUnit() ) );
     height->setPrecision( 2 );
     height->setValue( KoUnit::ptToUnit( dlg->heigthSize, dlg->getDoc()->getUnit() ) );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
@@ -3535,6 +3529,8 @@ void CellFormatPagePosition::apply( ColumnFormat *_obj )
     ay = KSpreadCell::Bottom;
   else if ( middle->isChecked() )
     ay = KSpreadCell::Middle;
+  else
+    ay = KSpreadCell::Middle; //Default, just in case
 
   if ( left->isChecked() )
     ax = KSpreadCell::Left;
@@ -3544,6 +3540,8 @@ void CellFormatPagePosition::apply( ColumnFormat *_obj )
     ax = KSpreadCell::Center;
   else if ( standard->isChecked() )
     ax = KSpreadCell::Undefined;
+  else
+    ax = KSpreadCell::Undefined; //Default, just in case
 
 
   KSpreadSheet * table = dlg->getTable();
@@ -3619,6 +3617,8 @@ void CellFormatPagePosition::apply( RowFormat *_obj )
     ay = KSpreadCell::Bottom;
   else if ( middle->isChecked() )
     ay = KSpreadCell::Middle;
+  else
+    ay = KSpreadCell::Middle; //Default, just in case
 
   if ( left->isChecked() )
     ax = KSpreadCell::Left;
@@ -3628,6 +3628,8 @@ void CellFormatPagePosition::apply( RowFormat *_obj )
     ax = KSpreadCell::Center;
   else if ( standard->isChecked() )
     ax = KSpreadCell::Undefined;
+  else
+    ax = KSpreadCell::Undefined; //Default, just in case
 
   KSpreadSheet* table = dlg->getTable();
   KSpreadCell* c= NULL;
@@ -3689,6 +3691,8 @@ void CellFormatPagePosition::applyFormat( KSpreadFormat * _obj )
     ay = KSpreadCell::Bottom;
   else if ( middle->isChecked() )
     ay = KSpreadCell::Middle;
+  else
+    ay = KSpreadCell::Middle; // Default, just in case
 
   if ( left->isChecked() )
     ax = KSpreadCell::Left;
@@ -3698,6 +3702,8 @@ void CellFormatPagePosition::applyFormat( KSpreadFormat * _obj )
     ax = KSpreadCell::Center;
   else if ( standard->isChecked() )
     ax = KSpreadCell::Undefined;
+  else
+    ax = KSpreadCell::Undefined; //Default, just in case
 
   if ( top->isChecked() && ay != dlg->alignY )
     _obj->setAlignY( KSpreadCell::Top );
