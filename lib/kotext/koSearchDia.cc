@@ -389,6 +389,8 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
     if (m_replaceContext->m_optionsMask & KoSearchContext::Size)
     {
         flags |= KoTextFormat::Size;
+        newFormat->setPointSize( KoTextZoomHandler::ptToLayoutUnitPt(m_replaceContext->m_size) );
+
     }
     if ( m_replaceContext->m_optionsMask & KoSearchContext::Family)
     {
@@ -420,6 +422,11 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
     {
         flags |= KoTextFormat::StrikeOut;
         newFormat->setStrikeOutLineType( m_replaceContext->m_strikeOut);
+    }
+    if ( m_replaceContext->m_optionsMask & KoSearchContext::BgColor)
+    {
+        newFormat->setTextBackgroundColor(m_replaceContext->m_backGroungColor);
+        flags |=KoTextFormat::TextBackgroundColor;
     }
 
     KCommand *cmd=m_currentTextObj->setFormatCommand( cursor, &lastFormat ,newFormat,flags , false, KoTextObject::HighlightSelection );
