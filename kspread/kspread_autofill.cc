@@ -29,7 +29,9 @@
 #include <qregexp.h>
 
 QStringList *AutoFillSequenceItem::month = 0L;
+QStringList *AutoFillSequenceItem::shortMonth = 0L;
 QStringList *AutoFillSequenceItem::day = 0L;
+QStringList *AutoFillSequenceItem::shortDay = 0L;
 QStringList *AutoFillSequenceItem::other = 0L;
 /**********************************************************************************
  *
@@ -138,6 +140,23 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
         month->append( i18n("December") );
     }
 
+    if ( shortMonth == 0L )
+    {
+        shortMonth = new QStringList();
+        shortMonth->append( i18n("Jan") );
+        shortMonth->append( i18n("Feb") );
+        shortMonth->append( i18n("Mar") );
+        shortMonth->append( i18n("Apr") );
+        shortMonth->append( i18n("May") );
+        shortMonth->append( i18n("Jun") );
+        shortMonth->append( i18n("Jul") );
+        shortMonth->append( i18n("Aug") );
+        shortMonth->append( i18n("Sep") );
+        shortMonth->append( i18n("Oct") );
+        shortMonth->append( i18n("Nov") );
+        shortMonth->append( i18n("Dec") );
+    }
+
     if ( day == 0L )
     {
         day = new QStringList();
@@ -149,6 +168,19 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
         day->append( i18n("Saturday") );
         day->append( i18n("Sunday") );
     }
+
+    if ( shortDay == 0L )
+    {
+        shortDay = new QStringList();
+        shortDay->append( i18n("Mon") );
+        shortDay->append( i18n("Tue") );
+        shortDay->append( i18n("Wed") );
+        shortDay->append( i18n("Thu") );
+        shortDay->append( i18n("Fri") );
+        shortDay->append( i18n("Sat") );
+        shortDay->append( i18n("Sun") );
+    }
+
     if( other==0L)
       {
 	//	other=new QStringList();
@@ -156,15 +188,28 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
 	config->setGroup( "Parameters" );
 	other=new QStringList(config->readListEntry("Other list"));
       }
+
     if ( month->find( _str ) != month->end() )
     {
         m_Type = MONTH;
         return;
     }
 
+    if ( shortMonth->find( _str ) != shortMonth->end() )
+    {
+        m_Type = SHORTMONTH;
+        return;
+    }
+
     if ( day->find( _str ) != day->end() )
     {
       m_Type = DAY;
+      return;
+    }
+
+    if ( shortDay->find( _str ) != shortDay->end() )
+    {
+      m_Type = SHORTDAY;
       return;
     }
 
@@ -235,6 +280,19 @@ bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
             return TRUE;
         }
 
+    case SHORTMONTH:
+        {
+            int i = shortMonth->findIndex( m_String );
+            int j = shortMonth->findIndex( seq->getString() );
+            int k = j;
+
+            if ( j + 1 == i )
+                _delta = -1.0;
+            else
+                _delta = ( double )( k - i );
+            return TRUE;
+        }
+
     case DAY:
         {
             int i = day->findIndex( m_String );
@@ -246,6 +304,19 @@ bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
             else
                 _delta = ( double )( k - i );
             kdDebug() << m_String << " i: " << i << " j: " << j << " k: " << k << " delta: " << _delta << endl;
+            return TRUE;
+        }
+
+    case SHORTDAY:
+        {
+            int i = shortDay->findIndex( m_String );
+            int j = shortDay->findIndex( seq->getString() );
+            int k = j;
+
+            if ( j + 1 == i )
+                _delta = -1.0;
+            else
+                _delta = ( double )( k - i );
             return TRUE;
         }
     case OTHER:
@@ -293,6 +364,16 @@ QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
             erg = (*month->at( k ));
         }
         break;
+    case SHORTMONTH:
+        {
+            int i = shortMonth->findIndex( m_String );
+            int j = i + _no * (int) _delta;
+            while (j < 0)
+              j += shortMonth->count();
+            int k = j % shortMonth->count();
+            erg = (*shortMonth->at( k ));
+        }
+        break;
     case DAY:
         {
             int i = day->findIndex( m_String );
@@ -303,6 +384,16 @@ QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
             erg = (*day->at( k ));
         }
 	break;
+    case SHORTDAY:
+        {
+            int i = shortDay->findIndex( m_String );
+            int j = i + _no * (int) _delta;
+            while (j < 0)
+              j += shortDay->count();
+            int k = j % shortDay->count();
+            erg = (*shortDay->at( k ));
+        }
+        break;
     case OTHER:
       {
 	 int i = other->findIndex( m_String )-(m_OtherBegin+1);
@@ -344,6 +435,16 @@ QString AutoFillSequenceItem::getPredecessor( int _no, double _delta )
       erg = (*month->at( k ));
     }
     break;
+   case SHORTMONTH:
+    {
+      int i = shortMonth->findIndex( m_String );
+      int j = i - _no * (int) _delta;
+      while ( j < 0 )
+        j += shortMonth->count();
+      int k = j % shortMonth->count();
+      erg = (*shortMonth->at( k ));
+    }
+    break;
    case DAY:
     {
       int i = day->findIndex( m_String );
@@ -352,6 +453,15 @@ QString AutoFillSequenceItem::getPredecessor( int _no, double _delta )
         j += day->count();
       int k = j % day->count();
       erg = (*day->at( k ));
+    }
+   case SHORTDAY:
+    {
+      int i = shortDay->findIndex( m_String );
+      int j = i - _no * (int) _delta;
+      while ( j < 0 )
+        j += shortDay->count();
+      int k = j % shortDay->count();
+      erg = (*shortDay->at( k ));
     }
     break;
    case OTHER:

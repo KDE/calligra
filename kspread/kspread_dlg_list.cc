@@ -119,6 +119,20 @@ void KSpreadList::init()
     QStringList lst;
     lst.append(month);
 
+    QString smonth;
+    smonth+=i18n("Jan")+", ";
+    smonth+=i18n("Feb")+", ";
+    smonth+=i18n("Mar") +", ";
+    smonth+=i18n("Aprl")+", ";
+    smonth+=i18n("May")+", ";
+    smonth+=i18n("Jun")+", ";
+    smonth+=i18n("Jul")+", ";
+    smonth+=i18n("Aug")+", ";
+    smonth+=i18n("Sep")+", ";
+    smonth+=i18n("Oct")+", ";
+    smonth+=i18n("Nov")+", ";
+    smonth+=i18n("Dec");
+    lst.append(smonth);
 
     QString day=i18n("Monday")+", ";
     day+=i18n("Tuesday")+", ";
@@ -128,6 +142,15 @@ void KSpreadList::init()
     day+=i18n("Saturday")+", ";
     day+=i18n("Sunday");
     lst.append(day);
+
+    QString sday=i18n("Mon")+", ";
+    sday+=i18n("Tue")+", ";
+    sday+=i18n("Wed")+", ";
+    sday+=i18n("Thu")+", ";
+    sday+=i18n("Fri")+", ";
+    sday+=i18n("Sat")+", ";
+    sday+=i18n("Sun");
+    lst.append(sday);
 
     config = KSpreadFactory::global()->config();
     config->setGroup( "Parameters" );
