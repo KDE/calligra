@@ -170,7 +170,7 @@ bool KivioDoc::initDoc()
   KoTemplateChooseDia::ReturnType ret;
   KoTemplateChooseDia::DialogType dlgtype;
 
-  if (KoApplication::isStarting()) {
+  if (initDocFlags() != KoDocument::InitDocFileNew) {
     dlgtype = KoTemplateChooseDia::Everything;
     initConfig();
   } else {

@@ -55,11 +55,15 @@ bool KPTPart::initDoc() {
     bool result = true;
     QString templateDoc;
     KoTemplateChooseDia::ReturnType ret;
+    KoTemplateChooseDia::DialogType dlgtype;
+    if (initDocFlags() != KoDocument::InitDocFileNew )
+	    dlgtype = KoTemplateChooseDia::Everything;
+    else
+	    dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
     ret = KoTemplateChooseDia::choose(KPTFactory::global(), templateDoc,
 				      "application/x-vnd.kde.kplato", "*.kplato",
-				      i18n("KPlato"),
-				      KoTemplateChooseDia::Everything,
+				      i18n("KPlato"), dlgtype,
 				      "kplato_template");
     if (ret == KoTemplateChooseDia::Template) {
         QFileInfo fileInfo(templateDoc);

@@ -578,7 +578,7 @@ bool KWDocument::initDoc()
     bool ok = FALSE;
 
     KoTemplateChooseDia::DialogType dlgtype;
-    if (initDocFlags() != KoDocument::InitDocFileNew )
+    if (initDocFlags() != KoDocument::InitDocFileNew)
 	    dlgtype = KoTemplateChooseDia::Everything;
     else
 	    dlgtype = KoTemplateChooseDia::OnlyTemplates;

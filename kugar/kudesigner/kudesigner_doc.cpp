@@ -80,10 +80,15 @@ bool KudesignerDoc::initDoc()
     bool ok = FALSE;
 
     QString _template;
+    KoTemplateChooseDia::DialogType dlgtype;
+    if (initDocFlags() != KoDocument::InitDocFileNew)
+        dlgtype = KoTemplateChooseDia::Everything;
+    else
+        dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::choose(
         KudesignerFactory::global(), _template, "application/x-kudesigner", "*.kut", i18n("Kugar Designer"),
-        KoTemplateChooseDia::Everything, "kudesigner_template");
+        dlgtype, "kudesigner_template");
     if ( ret == KoTemplateChooseDia::Template ) {
         QFileInfo fileInfo( _template );
         QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".ktm" );

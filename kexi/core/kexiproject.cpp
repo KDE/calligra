@@ -119,11 +119,11 @@ bool KexiProject::completeLoading( KoStore* store )
 bool KexiProject::initDoc()
 {
 	QString filename;
-    
-    	KoTemplateChooseDia::DialogType dlgtype;
-    	if (KoApplication::isStarting())
+
+	KoTemplateChooseDia::DialogType dlgtype;
+	if (initDocFlags() != KoDocument::InitDocFileNew)
         	dlgtype = KoTemplateChooseDia::Everything;
-    	else
+	else
         	dlgtype = KoTemplateChooseDia::OnlyTemplates;
 	
 	KoTemplateChooseDia::ReturnType ret=KoTemplateChooseDia::choose(

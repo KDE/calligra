@@ -310,6 +310,9 @@ void KoShellWindow::slotKoolBar( int _grp, int _item )
     KoDocument *doc = m_documentEntry.createDoc();
     if (doc)
     {
+        // koshell isn't starting, but this is like starting a new app:
+        // offer both "open existing file" and "open new file".
+        doc->setInitDocFlags( KoDocument::InitDocAppStarting );
         if ( doc->initDoc() )
         {
             partManager()->addPart( doc, false );
@@ -376,7 +379,10 @@ void KoShellWindow::slotFileNew()
     if ( m_documentEntry.isEmpty() )
       return;
     KoDocument* newdoc = m_documentEntry.createDoc();
-    if ( !newdoc || !newdoc->initDoc() )
+    if ( !newdoc )
+        return;
+    newdoc->setInitDocFlags( KoDocument::InitDocFileNew );
+    if ( !newdoc->initDoc() )
     {
       delete newdoc;
       return;
