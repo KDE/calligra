@@ -430,6 +430,11 @@ public:
 
     void clearConditionalSelection(const QPoint &_marker );
 
+
+    void setWordSpelling(const QPoint &_marker,const QString _listWord );
+
+    QString getWordSpelling(const QPoint &_marker );
+
     /**
      * A convenience function which retrieves the data to be pasted
      * from the clipboard.

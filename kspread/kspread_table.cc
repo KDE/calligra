@@ -5794,6 +5794,170 @@ void KSpreadTable::setValidity(const QPoint &_marker,KSpreadValidity tmp )
 }
 
 
+QString KSpreadTable::getWordSpelling(const QPoint &_marker )
+{
+    QString listWord;
+
+    QRect r( m_rctSelection );
+    bool selected = ( m_rctSelection.left() != 0 );
+    if ( !selected )
+        r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+
+    // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
+    {
+        KSpreadCell* c = m_cells.firstCell();
+        for( ;c; c = c->nextCell() )
+        {
+            int row = c->row();
+            if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+                 && !c->isObscured())
+            {
+                if ( !c->isFormular() && !c->isValue() && !c->valueString().isEmpty()
+                     && !c->isTime() &&!c->isDate()
+                     && c->content() != KSpreadCell::VisualFormula
+                     && !c->text().isEmpty())
+                {
+                    listWord+=c->text()+'\n';
+                }
+            }
+        }
+
+
+        return listWord;
+    }
+    // Complete columns selected ?
+    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+        KSpreadCell* c = m_cells.firstCell();
+        for( ;c; c = c->nextCell() )
+        {
+            int col = c->column();
+            if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+                 && !c->isObscured())
+            {
+                if ( !c->isFormular() && !c->isValue() && !c->valueString().isEmpty()
+                     && !c->isTime() &&!c->isDate()
+                     && c->content() != KSpreadCell::VisualFormula
+                     && !c->text().isEmpty())
+                {
+                    listWord+=c->text()+'\n';
+                }
+            }
+        }
+
+        return listWord;
+    }
+    else
+    {
+        for ( int x = r.left(); x <= r.right(); x++ )
+            for ( int y = r.top(); y <= r.bottom(); y++ )
+            {
+                KSpreadCell *cell = cellAt( x, y );
+
+                if ( cell != m_pDefaultCell )
+                {
+                    if ( !cell->isFormular() && !cell->isValue() && !cell->valueString().isEmpty()
+                         && !cell->isTime() &&!cell->isDate()
+                         && cell->content() != KSpreadCell::VisualFormula
+                         && !cell->text().isEmpty())
+                    {
+                        listWord+=cell->text()+'\n';
+                    }
+                }
+
+            }
+    }
+    return listWord;
+}
+
+void KSpreadTable::setWordSpelling(const QPoint &_marker,const QString _listWord )
+{
+    QStringList list=QStringList::split ( '\n', _listWord );
+
+    QRect r( m_rctSelection );
+    bool selected = ( m_rctSelection.left() != 0 );
+    if ( !selected )
+        r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+        KSpreadUndoChangeAreaTextCell* undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this,r );
+        m_pDoc->undoBuffer()->appendUndo( undo );
+    }
+
+
+    // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
+    {
+        int pos=0;
+        KSpreadCell* c = m_cells.firstCell();
+        for( ;c; c = c->nextCell() )
+        {
+            int row = c->row();
+            if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+                 && !c->isObscured())
+            {
+                if ( !c->isFormular() && !c->isValue() && !c->valueString().isEmpty()
+                     && !c->isTime() &&!c->isDate()
+                     && c->content() != KSpreadCell::VisualFormula
+                     && !c->text().isEmpty())
+                {
+                    c->setCellText( list[pos]);
+                    pos++;
+                }
+            }
+        }
+
+    }
+    // Complete columns selected ?
+    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+        int pos=0;
+        KSpreadCell* c = m_cells.firstCell();
+        for( ;c; c = c->nextCell() )
+        {
+            int col = c->column();
+            if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+                 && !c->isObscured())
+            {
+                if ( !c->isFormular() && !c->isValue() && !c->valueString().isEmpty()
+                     && !c->isTime() &&!c->isDate()
+                     && c->content() != KSpreadCell::VisualFormula
+                     && !c->text().isEmpty())
+                {
+                    c->setCellText( list[pos]);
+                    pos++;
+                }
+            }
+        }
+
+
+    }
+    else
+    {
+        int pos=0;
+        for ( int x = r.left(); x <= r.right(); x++ )
+            for ( int y = r.top(); y <= r.bottom(); y++ )
+            {
+                KSpreadCell *cell = cellAt( x, y );
+
+                if ( cell != m_pDefaultCell )
+                {
+                    if ( !cell->isFormular() && !cell->isValue() && !cell->valueString().isEmpty()
+                         && !cell->isTime() &&!cell->isDate()
+                         && cell->content() != KSpreadCell::VisualFormula
+                         && !cell->text().isEmpty())
+                    {
+                        cell->setCellText( list[pos]);
+                        pos++;
+                    }
+                }
+
+            }
+    }
+}
+
 void KSpreadTable::copySelection( const QPoint &_marker )
 {
     QRect rct;
@@ -5901,10 +6065,10 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
     int columnsInClpbrd =  e.attribute( "columns" ).toInt();
     // find size of rectangle that we want to paste to (either clipboard size or current selection)
     const int pasteWidth = ( selectionRect().left() != 0 && selectionRect().width() >= columnsInClpbrd &&
-                             selectionRect().right() != 0x7fff && e.namedItem( "rows" ).toElement().isNull() ) 
+                             selectionRect().right() != 0x7fff && e.namedItem( "rows" ).toElement().isNull() )
         ? selectionRect().width() : columnsInClpbrd;
     const int pasteHeight = ( selectionRect().left() != 0 && selectionRect().height() >= rowsInClpbrd &&
-                              selectionRect().bottom() != 0x7fff && e.namedItem( "columns" ).toElement().isNull() ) 
+                              selectionRect().bottom() != 0x7fff && e.namedItem( "columns" ).toElement().isNull() )
         ? selectionRect().height() : rowsInClpbrd;
     //kdDebug(36001) << "loadSelection: paste area has size " << pasteHeight << " rows * "
     //               << pasteWidth << " columns " << endl;
@@ -6028,10 +6192,10 @@ void KSpreadTable::loadSelectionUndo( const QDomDocument & doc,int _xshift, int 
     int columnsInClpbrd =  e.attribute( "columns" ).toInt();
     // find rect that we paste to
     const int pasteWidth = ( selectionRect().left() != 0 && selectionRect().width() >= columnsInClpbrd &&
-                             selectionRect().right() != 0x7fff && e.namedItem( "rows" ).toElement().isNull() ) 
+                             selectionRect().right() != 0x7fff && e.namedItem( "rows" ).toElement().isNull() )
         ? selectionRect().width() : columnsInClpbrd;
     const int pasteHeight = ( selectionRect().left() != 0 && selectionRect().height() >= rowsInClpbrd &&
-                              selectionRect().bottom() != 0x7fff && e.namedItem( "columns" ).toElement().isNull() ) 
+                              selectionRect().bottom() != 0x7fff && e.namedItem( "columns" ).toElement().isNull() )
         ? selectionRect().height() : rowsInClpbrd;
     QRect rect;
     if ( !e.namedItem( "columns" ).toElement().isNull() )

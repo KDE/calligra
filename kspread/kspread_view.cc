@@ -2432,9 +2432,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_lstTools.clear();
     m_lstTools.setAutoDelete( true );
 
-    if ( !cell->isFormular() && !cell->isValue() && !cell->valueString().isEmpty()
-         && !cell->isTime() &&!cell->isDate()
-         && cell->content() != KSpreadCell::VisualFormula)
+    if(!activeTable()->getWordSpelling( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() )).isEmpty())
     {
       m_popupMenuFirstToolId = 10;
       int i = 0;
@@ -2487,24 +2485,20 @@ void KSpreadView::slotActivateTool( int _id )
       return;
   }
 
-  KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-  ASSERT( !cell->isFormular() && !cell->isValue() );
 
-  QString text = cell->text();
-  QString tmpText=cell->text();
+  QString text = activeTable()->getWordSpelling( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+
   spellStruct tmpStruct;
   tmpStruct._data=text;
   tmpStruct._ksconf=m_pDoc->getKSpellConfig();
   if ( tool->run( entry->command, &tmpStruct, "QString", "text/plain") )
       {
-      if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-        KSpreadUndoSetText* undo = new KSpreadUndoSetText( m_pDoc, m_pTable, tmpText, m_pCanvas->markerColumn(), m_pCanvas->markerRow() ,cell->getFormatNumber( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
-        m_pDoc->undoBuffer()->appendUndo( undo );
-        }
       text= tmpStruct._data;
-      cell->setCellText( text, true );
-      editWidget()->setText( text );
+
+      activeTable()->setWordSpelling( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),text);
+
+      KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+      editWidget()->setText( cell->text() );
       }
 }
 
