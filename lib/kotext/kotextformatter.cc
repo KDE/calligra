@@ -180,11 +180,15 @@ bool KoTextFormatterCore::format()
 
     int currentRightMargin = rightMargin( true );
     int initialRMargin = currentRightMargin;
-    // Those two things must be done before calling determineCharWidth
+    // Those three things must be done before calling determineCharWidth
     i = start;
     parag->tabCache().clear();
+    x = 0;
 
     // We need the width of the first char for adjustMargins
+    // The result might not be 100% accurate when using a tab (it'll use x=0
+    // but with counters/margins this might be different). This is why
+    // we call determineCharWidth() again from within the loop.
     QPair<int, int> widths = determineCharWidth();
     int ww = widths.first; // width in layout units
 #ifndef REF_IS_LU
@@ -276,12 +280,9 @@ bool KoTextFormatterCore::format()
         else
             lastWasNonInlineCustom = FALSE;
 
-        if ( i > 0 ) // first one was done above already
-        {
-            QPair<int, int> widths = determineCharWidth();
-            ww = widths.first;
-            pixelww = widths.second;
-        }
+        QPair<int, int> widths = determineCharWidth();
+        ww = widths.first;
+        pixelww = widths.second;
 
         // We're "aborting" the formatting. This still means we need to set the
         // lineStart bools to false (trouble ahead, otherwise!), and while we're at

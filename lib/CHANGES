@@ -13,7 +13,7 @@ KoText:
 - Fixed wrong position of suffix in numbered right-to-left paragraphs (#47178)
 - Fixed formatting bug, where an inline formula or any other big character after
 the paragraph counter, would make the paragraph counter disappear (#82609).
-
+- Fixed wrong alignment when using numbered paragraphs and a tab as first character.
 
 Changes between KOffice-1.3 and KOffice-1.3.1
 =============================================
