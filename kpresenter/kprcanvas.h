@@ -345,6 +345,7 @@ protected:
 #endif
 
     KPrPage *stickyPage();
+    void scrollCanvas();
 
 private:
     QValueList<int> pages(const QString &range);

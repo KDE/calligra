@@ -64,6 +64,7 @@
 #include <kozoomhandler.h>
 #include <stdlib.h>
 #include <qclipboard.h>
+#include <krandomsequence.h>
 
 #include "kprpage.h"
 #include <koRect.h>
@@ -2937,6 +2938,696 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
             }
         }
     } break;
+
+    // Blinds Horizontal
+    case PEF_BLINDS_HOR:
+    {
+        unsigned blockSize = kapp->desktop()->height() / 8;
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->height() ) / pageSpeedFakt() );
+        if( _steps < 1 ) _steps = 1;
+
+        _time.start();
+
+        _h = 0;
+        for ( ; ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _h = _step * blockSize / _steps;
+
+                for( unsigned i=0; i < _pix2.height(); i += blockSize ) 
+                  bitBlt( this, 0, i, &_pix2, 0, i, _pix2.width(), _h );
+
+                _time.restart();
+            }
+            if( _h >= blockSize ) break;
+        }
+    } break;
+
+    // Blinds Vertical
+    case PEF_BLINDS_VER:
+    {
+        unsigned blockSize = kapp->desktop()->width() / 8;
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );        if( _steps < 1 ) _steps = 1;
+
+        _time.start();
+
+        _w = 0;
+        for ( ; ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _w = _step * blockSize / _steps;
+
+                for( unsigned i=0; i < _pix2.width(); i += blockSize )
+                  bitBlt( this, i, 0, &_pix2, i, 0, _w, _pix2.height() );
+
+                _time.restart();
+            }
+            if( _w >= blockSize ) break;
+        }
+    } break;
+
+    // Box In
+    case PEF_BOX_IN:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        _w = _h = 0;
+        for ( ; ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _w = ( _pix2.width()/( 2 * _steps ) ) * _step;
+                _w = _w > _pix2.width() / 2 ? _pix2.width() / 2 : _w;
+                _h = _w * _pix2.height() / _pix2.width();
+                _h = _h > _pix2.height() / 2 ? _pix2.height() / 2 : _h; 
+
+                bitBlt( this, 0, 0, &_pix2, 0, 0, _w, _pix2.height() );
+                bitBlt( this, _pix2.width()-_w, 0, &_pix2, _pix2.width()-_w, 0, _w, _pix2.height() );
+                bitBlt( this, 0, 0, &_pix2, 0, 0, _pix2.width(), _h );
+                bitBlt( this, 0, _pix2.height()-_h, &_pix2, 0, _pix2.height()-_h, _pix2.width(), _h ); 
+                _time.restart();
+            }
+            if( _w >= _pix2.width()/2 ) break;
+        }
+    } break;
+
+    // Box Out
+    case PEF_BOX_OUT:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        _w = _h = 0;
+        for ( ; ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _w = ( _pix2.width()/( 2 * _steps ) ) * _step;
+                _w = _w > _pix2.width() / 2 ? _pix2.width() / 2 : _w;
+                _h = _w * _pix2.height() / _pix2.width();
+                _h = _h > _pix2.height() / 2 ? _pix2.height() / 2 : _h; 
+
+                bitBlt( this, _pix2.width()/2-_w, _pix2.height()/2-_h, &_pix2, 
+                   _pix2.width()/2-_w, _pix2.height()/2-_h, _w*2, _h*2 );
+                _time.restart();
+            }
+            if( _w >= _pix2.width()/2 ) break;
+        }
+    } break;
+
+    // Checkboard Across
+    case PEF_CHECKBOARD_ACROSS:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        unsigned blocksize = _pix2.height() / 8;
+
+        _steps /= 2;
+        for ( ; ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _w = blocksize * _step / _steps;
+                _w = _w > (blocksize * 2) ? (blocksize * 2) : _w;
+
+                for( unsigned yp = 0; yp < _pix2.height(); yp += blocksize )
+                {
+                  unsigned xp = ((yp/blocksize) & 1) ? blocksize : 0;
+                  if( ( xp > 0 ) && ( _w > blocksize ) ) 
+                    bitBlt( this, 0, yp, &_pix2, 0, yp, _w-blocksize, blocksize );
+                  for( ; xp < _pix2.width(); xp += 2*blocksize )
+                    bitBlt( this, xp, yp, &_pix2, xp, yp, _w, blocksize );
+                }
+
+                _time.restart();
+            }
+            if( _w >= blocksize*2 ) break;
+        }
+    } break;
+
+    // Checkboard Down
+    case PEF_CHECKBOARD_DOWN:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        unsigned blocksize = _pix2.height() / 8;
+
+        _steps /= 2;
+        for ( ; ; ) 
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _h = blocksize * _step / _steps;
+                _h = _h > (blocksize * 2) ? (blocksize * 2) : _h;
+
+                for( unsigned xp = 0; xp < _pix2.width(); xp += blocksize )
+                {
+                  unsigned yp = ((xp/blocksize) & 1) ? blocksize : 0;
+                  if( ( yp > 0 ) && ( _h > blocksize ) ) 
+                    bitBlt( this, xp, 0, &_pix2, xp, 0, blocksize, _h-blocksize );
+                  for( ; yp < _pix2.height(); yp += 2*blocksize )
+                    bitBlt( this, xp, yp, &_pix2, xp, yp, blocksize, _h );
+                }
+
+                _time.restart();
+            }
+            if( _h >= blocksize*2 ) break;
+        }
+    } break;
+
+    // Cover Down
+    case PEF_COVER_DOWN:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();
+ 
+        _h = 0;
+        for ( ; ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _h = ( dheight/ _steps ) * _step;
+                _h = _h > dheight ? dheight : _h;
+
+                bitBlt( this, 0, 0, &_pix2, 0, dheight-_h, dwidth, _h );
+
+                _time.restart();
+            }
+            if( _h >= dheight ) break;
+        }
+    } break;
+
+    // Uncover Down
+    case PEF_UNCOVER_DOWN:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();
+
+        for ( ; ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _h = ( dheight/ _steps ) * _step;
+                _h = _h > dheight ? dheight : _h;
+
+                bitBlt( this, 0, 0, &_pix2, 0, 0, _pix2.width(), _h );
+                bitBlt( this, 0, _h, &_pix1, 0, 0, _pix1.width(), _pix1.height()-_h );
+
+                _time.restart();
+            }
+            if( _h >= dheight ) break;
+        }
+
+    } break;
+
+    // Cover Up
+    case PEF_COVER_UP:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();
+
+        _h = 0;
+        for ( ; ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _h = ( dheight/ _steps ) * _step;
+                _h = _h > dheight ? dheight : _h;
+
+                bitBlt( this, 0, dheight-_h, &_pix2, 0, 0, dwidth, _h );
+
+                _time.restart();
+            }
+            if( _h >= dheight ) break;
+        }
+    } break;
+
+    // Uncover Up
+    case PEF_UNCOVER_UP:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();
+
+        for ( ; ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _h = ( dheight/ _steps ) * _step;
+                _h = _h > dheight ? dheight : _h;
+
+                bitBlt( this, 0, dheight-_h, &_pix2, 0, dheight-_h, _pix2.width(), _h );
+                bitBlt( this, 0, 0, &_pix1, 0, _h, _pix1.width(), _pix1.height()-_h );
+
+                _time.restart();
+            }
+            if( _h >= dheight ) break;
+        }
+
+    } break;
+
+    // Cover Left
+    case PEF_COVER_LEFT:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();
+
+        _w = 0;
+        for ( ; ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _w = ( dwidth / _steps ) * _step;
+                _w = _w > dwidth ? dwidth : _w;
+
+                bitBlt( this, dwidth-_w, 0, &_pix2, 0, 0, _w, dheight );
+
+                _time.restart();
+            }
+            if( _w >= dwidth ) break;
+        }
+    } break;
+
+    // Uncover Left
+    case PEF_UNCOVER_LEFT:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();
+
+        _w = 0;
+        for ( ; ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _w = ( dwidth / _steps ) * _step;
+                _w = _w > dwidth ? dwidth : _w;
+
+                bitBlt( this, 0, 0, &_pix1, _w, 0, dwidth-_w, dheight );
+                bitBlt( this, dwidth-_w, 0, &_pix2, dwidth-_w, 0, _w, dheight );
+
+                _time.restart();
+            }
+            if( _w >= dwidth ) break;
+        }
+    } break;
+
+    // Cover Right
+    case PEF_COVER_RIGHT:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();;
+
+        _w = 0;
+        for ( ; ; ) 
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _w = ( dwidth / _steps ) * _step;
+                _w = _w > dwidth ? dwidth : _w;
+
+                bitBlt( this, 0, 0, &_pix2, dwidth-_w, 0, _w, dheight );
+
+                _time.restart();
+            }
+            if( _w >= dwidth ) break;
+        }
+    } break;
+
+    // Uncover Right
+    case PEF_UNCOVER_RIGHT:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();;
+
+        _w = 0;
+        for ( ; ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _w = ( dwidth / _steps ) * _step;
+                _w = _w > dwidth ? dwidth : _w;
+
+                bitBlt( this, _w, 0, &_pix1, 0, 0, dwidth-_w, dheight );
+                bitBlt( this, 0, 0, &_pix2, 0, 0, _w, dheight );
+
+                _time.restart();
+            }
+            if( _w >= dwidth ) break;
+        }
+    } break;
+
+    // Cover Left-Up
+    case PEF_COVER_LEFT_UP:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();;
+
+        _w = _h = 0;
+        for ( ; ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _w = ( dwidth / _steps ) * _step;
+                _w = _w > dwidth ? dwidth : _w;
+                _h = ( dheight / _steps ) * _step;
+                _h = _h > dheight ? dheight : _h;
+
+                bitBlt( this, dwidth-_w, dheight-_h, &_pix2, 0, 0, _w, _h );
+
+                _time.restart();
+            }
+            if( _w >= dwidth ) break;
+        }
+    } break;
+
+    // Uncover Left-Up
+    case PEF_UNCOVER_LEFT_UP:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();;
+
+        _w = _h = 0;
+        for ( ; ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _w = ( dwidth / _steps ) * _step;
+                _w = _w > dwidth ? dwidth : _w;
+                _h = ( dheight / _steps ) * _step;
+                _h = _h > dheight ? dheight : _h;
+
+                bitBlt( this, 0, 0, &_pix1, _w, _h, dwidth-_w, dheight-_h );
+                bitBlt( this, dwidth-_w, 0, &_pix2, dwidth-_w, 0, _w, dheight );
+                bitBlt( this, 0, dheight-_h, &_pix2, 0, dheight-_h, dwidth, _h );
+
+                _time.restart();
+            }
+            if( _w >= dwidth ) break;
+        }
+    } break;
+
+    // Cover Left-Down
+    case PEF_COVER_LEFT_DOWN:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();;
+
+        _w = _h = 0;
+        for ( ; ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _w = ( dwidth / _steps ) * _step;
+                _w = _w > dwidth ? dwidth : _w;
+                _h = ( dheight / _steps ) * _step;
+                _h = _h > dheight ? dheight : _h;
+
+                bitBlt( this, dwidth-_w, 0, &_pix2, 0, dheight-_h, _w, _h );
+
+                _time.restart();
+            }
+            if( _w >= dwidth ) break;
+        }
+    } break;
+
+    // Uncover Left-Down
+    case PEF_UNCOVER_LEFT_DOWN:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();;
+
+        _w = _h = 0;
+        for ( ; ; )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _w = ( dwidth / _steps ) * _step;
+                _w = _w > dwidth ? dwidth : _w;
+                _h = ( dheight / _steps ) * _step;
+                _h = _h > dheight ? dheight : _h;
+
+                bitBlt( this, 0, _h, &_pix1, _w, 0, dwidth-_w, dheight-_h );
+                bitBlt( this, dwidth-_w, 0, &_pix2, dwidth-_w, 0, _w, dheight );
+                bitBlt( this, 0, 0, &_pix2, 0, 0, dwidth, _h );
+
+                _time.restart();
+            }
+            if( _w >= dwidth ) break;
+        }
+    } break;
+
+    // Cover Right-Up
+    case PEF_COVER_RIGHT_UP:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();;
+
+        _w = _h = 0;
+        for ( ; ; ) 
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _w = ( dwidth / _steps ) * _step;
+                _w = _w > dwidth ? dwidth : _w;
+                _h = ( dheight / _steps ) * _step;
+                _h = _h > dheight ? dheight : _h;
+
+                bitBlt( this, 0, dheight-_h, &_pix2, dwidth-_w, 0, _w, _h );
+
+                _time.restart();
+            }
+            if( _w >= dwidth ) break;
+        }
+    } break;
+
+    // Uncover Right-Up
+    case PEF_UNCOVER_RIGHT_UP:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();;
+
+        _w = _h = 0;
+        for ( ; ; ) 
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _w = ( dwidth / _steps ) * _step;
+                _w = _w > dwidth ? dwidth : _w;
+                _h = ( dheight / _steps ) * _step;
+                _h = _h > dheight ? dheight : _h;
+
+                bitBlt( this, _w, 0, &_pix1, 0, _h, dwidth-_w, dheight-_h );
+                bitBlt( this, 0, 0, &_pix2, 0, 0, _w, dheight );
+                bitBlt( this, 0, dheight-_h, &_pix2, 0, dheight-_h, dwidth, _h );
+
+                _time.restart();
+            }
+            if( _w >= dwidth ) break;
+        }
+    } break;
+
+    // Cover Right-Down
+    case PEF_COVER_RIGHT_DOWN:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();;
+
+        _w = _h = 0;
+        for ( ; ; ) 
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _w = ( dwidth / _steps ) * _step;
+                _w = _w > dwidth ? dwidth : _w;
+                _h = ( dheight / _steps ) * _step;
+                _h = _h > dheight ? dheight : _h;
+
+                bitBlt( this, 0, 0, &_pix2, dwidth-_w, dheight-_h, _w, _h );
+
+                _time.restart();
+            }
+            if( _w >= dwidth ) break;
+        }
+    } break;
+
+    // Uncover Right-Down
+    case PEF_UNCOVER_RIGHT_DOWN:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        _time.start();
+
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();;
+
+        _w = _h = 0; 
+        for ( ; ; ) 
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                _w = ( dwidth / _steps ) * _step;
+                _w = _w > dwidth ? dwidth : _w;
+                _h = ( dheight / _steps ) * _step;
+                _h = _h > dheight ? dheight : _h;
+
+                bitBlt( this, _w, _h, &_pix1, 0, 0, dwidth-_w, dheight-_h );
+                bitBlt( this, 0, 0, &_pix2, 0, 0, _w, dheight );
+                bitBlt( this, 0, 0, &_pix2, 0, 0, dwidth, _h );
+
+                _time.restart();
+            }
+            if( _w >= dwidth ) break;
+        }
+    } break;
+
+    // Dissolve
+    case PEF_DISSOLVE:
+    {
+        KRandomSequence random;
+
+        unsigned blockSize = kapp->desktop()->height() / 32; // small enough
+        unsigned rowno = ( kapp->desktop()->height() + blockSize - 1 ) / blockSize;
+        unsigned colno = ( kapp->desktop()->width() + blockSize - 1 ) / blockSize;
+        unsigned cellno = rowno * colno;
+
+        QPtrList<int> cells;
+        for( unsigned x=0; x<colno; x++ )
+          for( unsigned y=0; y<rowno; y++ )
+            cells.append( new int( y*colno + x ) );
+
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->height() ) / pageSpeedFakt() );
+
+        int k = 0;
+        _steps *= 10;
+
+        while( cells.count() > 0 )
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                _step++;
+                k = cellno - cellno * _step / _steps;
+
+                while( cells.count() > k )
+                {
+                  unsigned index = random.getLong( cells.count() );
+                  int *data = cells.take( index );
+                  unsigned y = *data / colno;
+                  unsigned x = *data - y*colno;
+                  delete data;
+
+                  bitBlt( this, x * blockSize, y * blockSize, &_pix2,
+                    x * blockSize, y * blockSize, blockSize, blockSize );
+               }
+
+              _time.restart();
+            }
+        }
+
+    } break;
+
+    // Random (just pick up one of the above effect)
+    case PEF_RANDOM:
+    {
+        KRandomSequence random;
+        
+        // assume PEF_RANDOM is the last effect !
+        changePages( _pix1, _pix2, static_cast<PageEffect>( random.getLong( PEF_RANDOM ) ) ); 
+
+    } break;
+
     }
 }
 
@@ -5283,4 +5974,9 @@ void KPrCanvas::groupObjects()
 KPrPage *KPrCanvas::stickyPage()
 {
     return m_view->kPresenterDoc()->stickyPage();
+}
+
+void KPrCanvas::scrollCanvas()
+{
+    //todo
 }

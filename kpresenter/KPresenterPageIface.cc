@@ -278,6 +278,54 @@ void KPresenterPageIface::setPageEffect(const QString &effect )
         m_page->setPageEffect(PEF_SURROUND1);
     else if(effect=="FLY1")
         m_page->setPageEffect(PEF_FLY1);
+    else if(effect=="BLINDS_HOR")
+        m_page->setPageEffect(PEF_BLINDS_HOR);
+    else if(effect=="BLINDS_VER")
+        m_page->setPageEffect(PEF_BLINDS_VER);
+    else if(effect=="BOX_IN")
+        m_page->setPageEffect(PEF_BOX_IN);
+    else if(effect=="BOX_OUT")
+        m_page->setPageEffect(PEF_BOX_OUT);
+    else if(effect=="CHECKBOARD_ACROSS")
+        m_page->setPageEffect(PEF_CHECKBOARD_ACROSS);
+    else if(effect=="CHECKBOARD_DOWN")
+        m_page->setPageEffect(PEF_CHECKBOARD_DOWN);
+    else if(effect=="COVER_DOWN")
+        m_page->setPageEffect(PEF_COVER_DOWN);
+    else if(effect=="UNCOVER_DOWN")
+        m_page->setPageEffect(PEF_UNCOVER_DOWN);
+    else if(effect=="COVER_UP")
+        m_page->setPageEffect(PEF_COVER_UP);
+    else if(effect=="UNCOVER_UP")
+        m_page->setPageEffect(PEF_UNCOVER_UP);
+    else if(effect=="COVER_LEFT")
+        m_page->setPageEffect(PEF_COVER_LEFT);
+    else if(effect=="UNCOVER_LEFT")
+        m_page->setPageEffect(PEF_UNCOVER_LEFT);
+    else if(effect=="COVER_RIGHT")
+        m_page->setPageEffect(PEF_COVER_RIGHT);
+    else if(effect=="UNCOVER_RIGHT")
+        m_page->setPageEffect(PEF_UNCOVER_RIGHT);
+    else if(effect=="COVER_LEFT_UP")
+        m_page->setPageEffect(PEF_COVER_LEFT_UP);
+    else if(effect=="UNCOVER_LEFT_UP")
+        m_page->setPageEffect(PEF_UNCOVER_LEFT_UP);
+    else if(effect=="COVER_LEFT_DOWN")
+        m_page->setPageEffect(PEF_COVER_LEFT_DOWN);
+    else if(effect=="UNCOVER_LEFT_DOWN")
+        m_page->setPageEffect(PEF_UNCOVER_LEFT_DOWN);
+    else if(effect=="COVER_RIGHT_UP")
+        m_page->setPageEffect(PEF_COVER_RIGHT_UP);
+    else if(effect=="UNCOVER_RIGHT_UP")
+        m_page->setPageEffect(PEF_UNCOVER_RIGHT_UP);
+    else if(effect=="COVER_RIGHT_DOWN")
+        m_page->setPageEffect(PEF_COVER_RIGHT_DOWN);
+    else if(effect=="UNCOVER_RIGHT_DOWN")
+        m_page->setPageEffect(PEF_UNCOVER_RIGHT_DOWN);
+    else if(effect=="DISSOLVE")
+        m_page->setPageEffect(PEF_DISSOLVE);
+    else if(effect=="RANDOM")
+        m_page->setPageEffect(PEF_RANDOM);
     else
         kdDebug()<<"Error in setPageEffect\n";
 }
