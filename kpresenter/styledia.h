@@ -192,8 +192,9 @@ public:
               bool _noStickyObj = true, bool _oneObject=true, bool _alltextobj=false );
     ~StyleDia();
 
-    void setSticky( bool s );
+    void setSticky( PropValue p );
     bool isSticky()const;
+    bool stickyNoChange()const;
 
     bool isOneObject()const {return oneObject;}
 
@@ -247,7 +248,7 @@ private:
     int flags;
     bool lockUpdate, stickyObj, oneObject;
     bool allTextObj;
-    bool oldSticky;
+    PropValue oldSticky;
     bool oldProtectContent;
     PropValue oldProtect;
     PropValue oldKeepRatio;

@@ -975,12 +975,18 @@ void KPresenterView::extraPenBrush()
     {
         styleDia->setSize( m_canvas->getSelectedObj()->getRect());
     }
-    //now all sticky object are stored in sticky page
-    styleDia->setSticky( stickyPage()->getSticky( sticky ) );
+
+    int nbStickyObjSelected= m_pKPresenterDoc->stickyPage()->numSelected();
+    int nbActivePageObjSelected = m_canvas->activePage()->numSelected();
+    if ( nbActivePageObjSelected >0 && nbStickyObjSelected>0)
+        styleDia->setSticky( STATE_UNDEF );
+    else if ( nbStickyObjSelected == 0)
+        styleDia->setSticky( STATE_OFF );
+    else if ( nbStickyObjSelected> 0 && nbActivePageObjSelected == 0)
+        styleDia->setSticky( STATE_ON );
 
     bool result = m_canvas->getProtect( protect );
     if ( m_canvas->differentProtect( result ) )
-
         styleDia->setProtected(STATE_UNDEF);
     else
     {
@@ -3190,18 +3196,20 @@ void KPresenterView::styleOk()
                 macro->addCommand(cmd);
         }
     }
-
     bool bSticky=styleDia->isSticky();
-    //all sticky obj are sticky page => when sticky=false test sticky page
-    if(bSticky)
-        cmd=m_canvas->activePage()->stickyObj(bSticky,m_canvas->activePage() );
-    else
-        cmd=stickyPage()->stickyObj(bSticky,m_canvas->activePage());
-
-    if(cmd)
+    if ( !styleDia->stickyNoChange())
     {
-        macro->addCommand(cmd);
-        createMacro=true;
+        bSticky=styleDia->isSticky();
+        //all sticky obj are sticky page => when sticky=false test sticky page
+        if(bSticky)
+            cmd=m_canvas->activePage()->stickyObj(bSticky,m_canvas->activePage() );
+        else
+            cmd=stickyPage()->stickyObj(bSticky,m_canvas->activePage());
+        if(cmd)
+        {
+            macro->addCommand(cmd);
+            createMacro=true;
+        }
     }
 
     cmd=stickyPage()->setPenBrush(

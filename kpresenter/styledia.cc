@@ -921,11 +921,35 @@ StyleDia::~StyleDia()
     delete m_confPictureDia;
 }
 
-void StyleDia::setSticky( bool s )
+void StyleDia::setSticky( PropValue p )
 {
-    oldSticky=s;
+    oldSticky=p;
     if( stickyObj)
-        sticky->setChecked( s );
+    {
+        switch( p )
+        {
+        case STATE_ON:
+            sticky->setChecked( true );
+            break;
+        case STATE_OFF:
+            sticky->setChecked( false );
+            break;
+        case STATE_UNDEF:
+            sticky->setTristate( true );
+            sticky->setNoChange();
+        break;
+        default:
+            sticky->setChecked( false );
+            break;
+        }
+    }
+}
+
+bool StyleDia::stickyNoChange()const
+{
+    if( stickyObj)
+        return sticky->state()== QButton::NoChange;
+    return true;
 }
 
 bool StyleDia::isSticky() const
