@@ -1406,7 +1406,6 @@ void KWPictureFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRec
                                    QColorGroup &, bool, bool, KWFrameSetEdit * )
 {
     kdDebug() << "KWPictureFrameSet::drawFrame crect=" << DEBUGRECT(crect) << endl;
-    // TODO: test passing crect into the sx, sy, sw and sh parameters
     m_image.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->width() ), kWordDocument()->zoomItY( frame->height() ),
                   crect.x(), crect.y(), crect.width(), crect.height() );
 }
