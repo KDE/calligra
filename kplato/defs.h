@@ -20,6 +20,8 @@
 #ifndef defs_h
 #define defs_h
 
+#define KPTBarIcon( x ) BarIcon( x, KPTFactory::global() )
+
 /** 
   * A relation between 2 nodes (represented with a @ref KPTRelation) states 
   * that one is dependent on the other. When scheduling a node in time we look

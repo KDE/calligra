@@ -26,8 +26,38 @@ KPTNodeItem::KPTNodeItem(KListView *lv, KPTNode &n)
 {
 }
 
-
 KPTNodeItem::KPTNodeItem(KPTNodeItem *p, KPTNode &n)
     : KListViewItem(p, n.name(), n.leader(), n.description()), node(n)
 {
+}
+
+KPTNodeItem::KPTNodeItem(KPTNodeItem *p, KPTNode *n)
+    : KListViewItem(p, n->name(), n->leader(), n->description()), node(*n)
+{
+}
+
+KPTNodeItem::KPTNodeItem(KPTNodeItem *p, QListViewItem *after, KPTNode *n)
+    : KListViewItem(p, after, n->name(), n->leader(), n->description()), node(*n)
+{
+}
+
+void KPTNodeItem::openDialog()
+{
+    if (node.openDialog())
+    {
+        setText(0,node.name());
+        setText(1,node.leader());
+        setText(2,node.description());
+        repaint();
+    }
+}
+
+QListViewItem *KPTNodeItem::lastChild()
+{
+    QListViewItem *i = firstChild();
+    if (i) {
+        while (i->nextSibling())
+            i = i->nextSibling();
+    }
+    return i;
 }

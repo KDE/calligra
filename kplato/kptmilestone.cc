@@ -18,6 +18,9 @@
 */
 
 #include "kptmilestone.h"
+#include "kptmilestonedialog.h"
+
+#include <kdebug.h>
 
 KPTMilestone::KPTMilestone() : KPTNode() {
 }
@@ -39,4 +42,13 @@ KPTDuration *KPTMilestone::getStartTime() {
 
 KPTDuration *KPTMilestone::getFloat() {
     return 0L;
+}
+
+
+bool KPTMilestone::openDialog() {
+    kdDebug()<<k_funcinfo<<endl;
+    KPTMilestoneDialog *dialog = new KPTMilestoneDialog(*this);
+    bool ret = dialog->exec();
+    delete dialog;
+    return ret;
 }

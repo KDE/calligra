@@ -22,6 +22,7 @@
 
 #include <klistview.h>
 
+class QLIstViewItem;
 class KPTNode;
 
 
@@ -33,10 +34,15 @@ class KPTNodeItem : public KListViewItem {
 public:
     KPTNodeItem(KListView *listView, KPTNode &node);
     KPTNodeItem(KPTNodeItem *parent, KPTNode &node);
+    KPTNodeItem(KPTNodeItem *parent, KPTNode *node);
+    KPTNodeItem(KPTNodeItem *parent, QListViewItem *after, KPTNode *node);
 
     KPTNode &getNode() { return node; }
     const KPTNode &getNode() const { return node; }
 
+    virtual void openDialog();
+    virtual QListViewItem *lastChild();
+    
 private:
     KPTNode &node;
 };

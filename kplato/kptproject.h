@@ -84,6 +84,8 @@ public:
     virtual bool load(QDomElement &element);
     virtual void save(QDomElement &element) const;
 
+    virtual bool openDialog();
+
 protected:
     /**
      * @return The start node.

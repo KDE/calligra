@@ -22,7 +22,7 @@
 
 #include <koView.h>
 
-
+class QListViewItem;
 class KListView;
 
 class KPTPart;
@@ -42,11 +42,27 @@ public:
     virtual void setZoom(double zoom);
 
 protected slots:
-    void slotEditProject();
+    void slotEditCut();
+    void slotEditCopy();
+    void slotEditPaste();
+    void slotViewGantt();
+    void slotViewPert();
+    void slotViewResources();
     void slotAddSubProject();
     void slotAddTask();
     void slotAddMilestone();
+    void slotEditProject();
+    void slotEditResource();
+    void slotConfigure();
+    
+    void slotKoolBar(int,int);
+    
     void slotSelectionChanged();
+    void slotOpen(QListViewItem *item);
+    
+#ifndef NDEBUG
+    void slotPrintDebug();
+#endif
 
 protected:
     virtual void updateReadWrite(bool readwrite);
@@ -58,6 +74,13 @@ private:
     KListView *m_listview;
 
     int m_defaultFontSize;
+    
+    int m_viewGrp;
+    
+    KAction *actionEditCut;
+    KAction *actionEditCopy;
+    KAction *actionEditPaste;
+
 };
 
 #endif

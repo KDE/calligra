@@ -19,6 +19,7 @@
 
 #include "kptproject.h"
 #include "kpttask.h"
+#include "kptprojectdialog.h"
 
 #include <qdom.h>
 #include <kdebug.h>
@@ -238,6 +239,14 @@ void KPTProject::save(QDomElement &element) const {
 	getChildNode(i).save(me);
 }
 
+
+bool KPTProject::openDialog() {
+    kdDebug()<<k_funcinfo<<endl;
+    KPTProjectDialog *dialog = new KPTProjectDialog(*this);
+    bool ret = dialog->exec();
+    delete dialog;
+    return ret;
+}
 
 void KPTProject::pert_cpm() {
     std::list<KPTNode*> nodelist;

@@ -17,7 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 #include "kptnode.h"
+
 #include <qptrlist.h>
+#include <kdebug.h>
 
 KPTNode::KPTNode() : m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
     m_name="";
@@ -59,6 +61,19 @@ const KPTNode &KPTNode::getChildNode(int number) const {
     return *(const_cast<QPtrList<KPTNode> &>(nodes)).at(number);
 }
 
+#ifndef NDEBUG
+void KPTNode::printDebug(bool children, QCString indent) {
+    indent += "---";
+    kdDebug() << indent << " Name: " << name() << endl;
+    if (children) {
+        QPtrListIterator<KPTNode> it(m_nodes); 
+        for ( ; it.current(); ++it ) {
+            it.current()->printDebug(true,indent);
+        }
+    }
+        
+}
+#endif
 
 KPTDuration *KPTNode::getDelay() {
     /* TODO

@@ -19,6 +19,7 @@
 #include "kptresource.h"
 #include "kpttask.h"
 
+#include <kdebug.h>
 
 KPTResourceGroup::KPTResourceGroup() {
 }
@@ -60,6 +61,7 @@ void KPTResource::setName(QString) {
 }
 
 void KPTResource::addWorkingHour(KPTDuration from, KPTDuration until) {
+    kdDebug()<<k_funcinfo<<endl;
 }
 
 KPTDuration *KPTResource::getFirstAvailableTime(KPTDuration after) {

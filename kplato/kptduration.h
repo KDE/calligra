@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef kptduration
-#define kptduration
+#ifndef kptduration_h
+#define kptduration_h
 
 #include <qdatetime.h> 
 
@@ -33,6 +33,7 @@ class KPTDuration {
         KPTDuration();
         KPTDuration(const KPTDuration &d);
         KPTDuration(int h, int m, int s=0, int ms=0);
+        KPTDuration(const QTime time);
         ~KPTDuration();
 
         void add(KPTDuration time);

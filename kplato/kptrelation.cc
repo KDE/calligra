@@ -19,6 +19,8 @@
 #include "kptrelation.h"
 #include "defs.h"
 
+#include <kdebug.h>
+
 KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, KPTDuration lag) {
     m_parent=parent;
     m_child=child;

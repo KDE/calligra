@@ -19,6 +19,7 @@
 
 #include "kpttask.h"
 #include "kptproject.h"
+#include "kpttaskdialog.h"
 
 #include <qdom.h>
 #include <kdebug.h>
@@ -149,4 +150,12 @@ void KPTTask::save(QDomElement &element) const {
     for (int i=0; i<numChildren(); i++)
 	// First add the child
 	getChildNode(i).save(me);
+}
+
+bool KPTTask::openDialog() {
+    kdDebug()<<k_funcinfo<<endl;
+    KPTTaskDialog *dialog = new KPTTaskDialog(*this);
+    bool ret = dialog->exec();
+    delete dialog;
+    return ret;
 }

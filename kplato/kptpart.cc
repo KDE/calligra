@@ -22,6 +22,8 @@
 #include "kptfactory.h"
 #include "kptproject.h"
 #include "kptprojectdialog.h"
+#include "kptresource.h"
+#include "kptresourcedialog.h"
 
 #include <qpainter.h>
 #include <qfileinfo.h>
@@ -189,6 +191,12 @@ void KPTPart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/,
 //         painter.drawLine( x * 40, top * 20, 40 * 20, bottom * 20 );
 //     for( int y = left; y < right; ++y )
 //         painter.drawLine( left * 20, y * 20, right * 20, y * 20 );
+}
+
+void KPTPart::openResourceDialog() {
+    kdDebug()<<k_funcinfo<<endl;
+    KPTResourceDialog *dial = new KPTResourceDialog(m_resourceGroups);
+    dial->exec();
 }
 
 #include "kptpart.moc"

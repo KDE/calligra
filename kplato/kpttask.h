@@ -85,6 +85,8 @@ public:
     virtual bool load(QDomElement &element);
     virtual void save(QDomElement &element) const;
 
+    virtual bool openDialog();
+    
 private:
     QPtrList<KPTResourceGroup> m_resource;
 };

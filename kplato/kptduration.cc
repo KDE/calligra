@@ -19,6 +19,8 @@
 
 #include "kptduration.h"
 
+#include <kdebug.h>
+
 // Set the value of KPTDuration::zeroDuration to zero.
 const KPTDuration KPTDuration::zeroDuration( 0, 0 );
 
@@ -33,8 +35,15 @@ KPTDuration::KPTDuration(const KPTDuration &d) {
 }
 
 KPTDuration::KPTDuration(int h, int m, int s, int ms) {
+    kdDebug()<<k_funcinfo<<endl;
     zero = QDateTime(QDate(0,1,1));
     m_theTime = QDateTime(QDate(0,1,1),QTime(h,m,s,ms));
+}
+
+KPTDuration::KPTDuration(const QTime time) {
+    kdDebug()<<k_funcinfo<<endl;
+    zero = QDateTime(QDate(0,1,1));
+    m_theTime = QDateTime(QDate(0,1,1),time);
 }
 
 KPTDuration::~KPTDuration() {

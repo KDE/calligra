@@ -76,6 +76,6 @@ class KPTMilestone : public KPTNode {
         virtual bool load(QDomElement &element);
         virtual void save(QDomElement &element) const;
 
-
+        virtual bool openDialog();
 };
 #endif

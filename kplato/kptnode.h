@@ -63,6 +63,8 @@ public:
     virtual bool load(QDomElement &element) = 0;
     virtual void save(QDomElement &element) const = 0;
 
+    virtual bool openDialog() {return false;}
+    
     // simple child node management
     // Child nodes are things like subtasks, basically a task can exists of
     // several sub-tasks. Creating a table has 4 subtasks, 1) measuring
@@ -168,6 +170,9 @@ public:
     void setLeader(const QString &l) { m_leader = l; }
     void setDescription(const QString &d) { m_description = d; }
 
+#ifndef NDEBUG
+    virtual void printDebug(bool children, QCString indent);
+#endif
 
 protected:
     /**

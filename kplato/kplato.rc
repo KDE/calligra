@@ -1,11 +1,29 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
 <kpartgui name="KPlato" version="1">
     <MenuBar>
-	<Menu name="project"><text>&amp;Project</text>
-	    <Action name="edit_project"/>
+    <Menu name="edit"><text>&amp;Edit</text>
+        <Action name="edit_cut"/>
+        <Action name="edit_copy"/>
+        <Action name="edit_paste"/>
+    </Menu>    
+	<Menu name="view"><text>&amp;View</text>
+        <Action name="view_gantt"/>
+        <Action name="view_pert"/>
+        <Action name="view_resources"/>
+    </Menu>    
+	<Menu name="insert"><text>&amp;Insert</text>
 	    <Action name="add_sub_project"/>
 	    <Action name="add_task"/>
 	    <Action name="add_milestone"/>
+	</Menu>
+	<Menu name="project"><text>&amp;Project</text>
+	    <Action name="project_edit"/>
+	</Menu>
+	<Menu name="tools"><text>&amp;Tools</text>
+	    <Action name="edit_resource"/>
+	</Menu>
+    <Menu name="settings"><text>&amp;Settings</text>
+    <Action name="configure" group="settings_configure"/>
 	</Menu>
     </MenuBar>
 </kpartgui>
