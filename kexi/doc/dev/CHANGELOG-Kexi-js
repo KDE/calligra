@@ -308,9 +308,13 @@ TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where n
 - make SQL text designer working again
 - implement query storage
 
-
 HOT TODO:
 -combobox tv: fix row highlighting for 'related table data' model
+
+PROBLEMS
+1. katepart on win32: void KateSyntaxDocument::setupModeList (bool force)
+   Works slowly for the 1st time because there is no cache. 
+   Workaround: removed most of apps/katepart/syntac/*.xml files
 
 CC_MAIL: dkite@shaw.ca
 
@@ -324,6 +328,51 @@ TODO:
 1. there 's just a problem with the dirty() flag
  if you switch to dataview then back to design, dirty() is restted
 2. add KexiViewBase::removeDataBlock() so we can use it in KexiFormPart::remove()
+
+===================== Kexi 0.1 Beta 4 =====================
+
+
+
+
+2004-07-02..05
+XMLGUI
+- Tools menu added
+- undo/redo global actions added
+- tolbar setup consistent with ui_standards.rc and incoming katepart
+Main Window
+- hack: `window' menu moved right before settings menu
+Widgets
+- KexiSectionHeader: adding buttons connected to actions allowed on the right hand
+- Relation View: saved table widgets' geometries are better setup on loading 
+  (fix for differences between font sizes on differens computers)
+- SQL Editor: better integration with katepart's actions using new shared action's API
+Core
+- KexiDialogBase now has activate(), deactivate() handlers, 
+  KexiViewBase::updateActions(bool activated) is called for a current view
+- Workaround found for integrating katepart's actions with Kexi's shared actions:
+   - katepart KXMLGUIClient's KActions are now pluggable to KexiActionProxy
+   - KXMLGUIClient's KAction::enabled(bool) signals are now automatically mapped 
+      to KexiActionProxy::setAvailable(bool)
+<TODO>: introduce KexiSharedXMLGUIClient class: 
+  ctor: KexiSharedXMLGUIClient(KexiSharedActionHost *host, KXMLGUIClient *client).
+  A single instance is created for particular xml file (eg. katepartui.rc) and inserted
+  int KexiMainWindow's internal dictionary. This GUI client will be attached when needed 
+  (ie. when given KexiViewBase object that is activated asks for this) and detached 
+  when not needed. 
+  showOnlyActions(QCStringList) - declares custom action list that will only be available
+  In any time, no KActions will be created if these already are available globally 
+  within KexiMainWindow.
+</TODO>
+SQL View
+- history behaviour reverted to previous
+- added "clear history" and "select this query text" buttons in KexiSectionHeader
+- added popup menu with above actions
+
+2004-07-01
+SQL View
+- kate part now better integrates its actions with kexi menus/toolbars
+TODO fix it: actions, shortcuts
+- 'Tools' menu added, 'Window' menu is now repositioned before 'settings' menu
 
 2004-06-30
 SQL View
@@ -2379,6 +2428,6 @@ dock windows visiblity fixed, simplified code
 - kexicore and kexidb libs ported
 - kexi at least now compiles (but crushes)
 
-
 2003-03-28
-- f
+- first touch on Kexi sources for porting
+
