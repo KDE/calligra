@@ -147,9 +147,9 @@ protected:
   int getPageOfObj(int i,float fakt = 1.0) {return view->KPresenterDoc()->getPageOfObj(i,diffx(),diffy(),fakt);}
 
   void drawBackColor(QColor,QColor,BCType,QPainter*,QSize);
-  void _repaint(bool erase=true) {view->KPresenterDoc()->repaint(erase);}
+  void _repaint(bool erase=true) {view->KPresenterDoc()->repaint(false);}
   void _repaint(int _x,int _y,int _w,int _h,bool erase=true)
-    {view->KPresenterDoc()->repaint(_x+diffx(),_y+diffy(),_w,_h,erase);}
+    {view->KPresenterDoc()->repaint(_x+diffx(),_y+diffy(),_w,_h,false);}
 
   // changing pages with effects
   void drawPageInPix(QPixmap&,int);

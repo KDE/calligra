@@ -65,13 +65,17 @@ void Page::paintEvent(QPaintEvent* paintEvent)
   QBrush brush(darkGray);
   QPen pen(NoPen);
 
-  painter.begin(this);
+  QPixmap pix(width(),height());
+
+  painter.begin(&pix);
   painter.setClipping(true);
   painter.setClipRect(paintEvent->rect());
-  /* paint background */
   if (drawBack) paintBackground(&painter,paintEvent->rect());
   if (!objList()->isEmpty()) paintObjects(&painter,paintEvent->rect());
   painter.end();
+
+  bitBlt(this,paintEvent->rect().x(),paintEvent->rect().y(),&pix,
+	 paintEvent->rect().x(),paintEvent->rect().y(),paintEvent->rect().width(),paintEvent->rect().height());
 }
 
 /*====================== paint background ========================*/
