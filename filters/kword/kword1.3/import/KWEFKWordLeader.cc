@@ -792,6 +792,33 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
+static void ProcessBookmarkTag ( QDomNode myNode, void *, KWEFKWordLeader *leader )
+{
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList
+        << AttrProcessing ( "name" )
+        << AttrProcessing ( "cursorIndexStart" )
+        << AttrProcessing ( "cursorIndexEnd" )
+        << AttrProcessing ( "frameset" )
+        << AttrProcessing ( "startparag" )
+        << AttrProcessing ( "endparag" )
+        ;
+
+    ProcessAttributes (myNode, attrProcessingList);
+
+    AllowNoSubtags( myNode, leader );
+
+}
+
+static void ProcessBookmarksTag ( QDomNode myNode, void *, KWEFKWordLeader *leader )
+{
+    AllowNoAttributes (myNode);
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList << TagProcessing ( "BOOKMARK", ProcessBookmarkTag, 0L );
+    ProcessSubtags (myNode, tagProcessingList, leader);
+}
+
 /*static*/ void ProcessDocTag ( QDomNode         myNode,
     void* /*tagData*/, KWEFKWordLeader* leader )
 {
@@ -864,7 +891,7 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
     else
         ProcessStylesPluralTag (nodeStyles, NULL, leader);
 
-    // Process framesets, but only to find and extract footnotes (### TODO: also endnotes)
+    // Process framesets, but only to find and extract footnotes (also endnotes)
     QValueList<FootnoteData> footnotes;
     QDomNode nodeFramesets=myNode.namedItem("FRAMESETS");
     if ( !nodeFramesets.isNull() )
@@ -883,6 +910,7 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
         << TagProcessing ( "PIXMAPS",     ProcessPixmapsTag,      &paraList )
         << TagProcessing ( "CLIPARTS",    ProcessPixmapsTag,      &paraList )
         << TagProcessing ( "EMBEDDED",    NULL,                   NULL      )
+        << TagProcessing ( "BOOKMARKS",   ProcessBookmarksTag,    0 )
         ;
 
     // TODO: why are the followings used by KWord 1.2 but are not in its DTD?
