@@ -20,6 +20,8 @@
 #ifndef KEXIDB_GLOBAL_H
 #define KEXIDB_GLOBAL_H
 
+#include <kexidb/kexidb_export.h>
+
 //global public definitions
 
 /*! KexiDB implementation version.

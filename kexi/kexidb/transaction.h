@@ -22,7 +22,7 @@
 
 #include <qguardedptr.h>
 
-#include <kexi_export.h>
+#include <kexidb/kexidb_export.h>
 
 namespace KexiDB {
 

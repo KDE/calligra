@@ -16,7 +16,13 @@ libkexidb_la_SOURCES = drivermanager.cpp driver.cpp driver_p.cpp connection.cpp 
 
 noinst_HEADERS = drivermanager_p.h
 
-#parser/parser.cpp parser/sqlscanner.cpp parser/sqlparser.cpp
+kexidbincludedir=$(includedir)/kexidb
+kexidbinclude_HEADERS=connection.h connectiondata.h cursor.h \
+  driver.h drivermanager.h \
+  error.h expression.h field.h fieldlist.h global.h object.h \
+  schemadata.h tableschema.h queryschema.h indexschema.h \
+  relationship.h parser/parser.h transaction.h \
+  kexidb_export.h ../tristate.h
 
 libkexidb_la_LIBADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KIO)
 libkexidb_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)

@@ -20,18 +20,7 @@
 #ifndef _KEXI_EXPORT_H_
 #define _KEXI_EXPORT_H_
 
-#ifdef __cplusplus
-# include <kdeversion.h> /* this will also include <kdelibs_export.h>, if available */
-#endif 
-/* KDE_EXPORT will be defined multiple times without this on kdelibs 3.3 (tested on 3.3.1) */
-#include <kdemacros.h>
-
-/* workaround for KDElibs < 3.2 on !win32 */
-#ifndef KDE_EXPORT
-# define KDE_EXPORT
-#endif
-
-/* TODO: #include <koffice_export.h> */
+#include <kexidb/kexidb_export.h>
 
 #ifdef MAKE_KEXICORE_LIB
 # define KEXICORE_EXPORT KDE_EXPORT
@@ -47,14 +36,6 @@
 # define KEXIMAIN_EXPORT KDE_IMPORT
 #else
 # define KEXIMAIN_EXPORT 
-#endif
-
-#ifdef MAKE_KEXI_DB_LIB
-# define KEXI_DB_EXPORT KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXI_DB_EXPORT KDE_IMPORT
-#else
-# define KEXI_DB_EXPORT 
 #endif
 
 #ifdef MAKE_KEXITABLEFILTERS_LIB
@@ -139,14 +120,6 @@
 # define KEXIRELATIONSVIEW_EXPORT //for apps
 #endif
 
-#ifdef MAKE_KEXIMIGR_LIB
-# define KEXIMIGR_EXPORT  KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIMIGR_EXPORT  KDE_IMPORT
-#else
-# define KEXIMIGR_EXPORT //for apps
-#endif
-
 #ifdef MAKE_KEXIGUIUTILS_LIB
 # define KEXIGUIUTILS_EXPORT KDE_EXPORT
 #elif defined(KDE_MAKE_LIB)
@@ -163,28 +136,10 @@
 # define KROSS_MAIN_EXPORT //for apps
 #endif
 
-/* -- compile-time settings -- */
-#if defined(Q_WS_WIN) || defined(KEXI_OPTIONS)
-/* defined in a .pro file or 'KEXI_OPTIONS' env. variable */
-#else
-
-
-/* unfinished features visibility */
-/* -- undefined because people asked why these doesn't work: --
-# define KEXI_SHOW_UNIMPLEMENTED 
-# define KEXI_STARTUP_SHOW_TEMPLATES 
-# define KEXI_STARTUP_SHOW_RECENT*/
-# define KEXI_SERVER_SUPPORT
-# define KEXI_FORMS_SUPPORT
-# define KEXI_REPORTS_SUPPORT
-# define KEXI_NO_MIGRATION
-#endif
-
 /* additional default options */
 #ifndef KEXI_NO_CTXT_HELP
 # define KEXI_NO_CTXT_HELP
 #endif
 # define KDE_CXXFLAGS
-
 
 #endif //KEXI_EXPORT_H

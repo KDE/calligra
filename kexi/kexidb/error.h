@@ -23,7 +23,7 @@
 
 #include <qstring.h>
 
-#include <kexi_export.h>
+#include "kexidb/kexidb_export.h"
 
 /*! KexiDB error codes */
 
@@ -76,7 +76,7 @@ namespace KexiDB {
 
 /*! This class contains a result information 
  for various data manipulation operations, like cell/row updating/inserting. */
-class KEXIDATATABLE_EXPORT ResultInfo
+class KEXI_DB_EXPORT ResultInfo
 {
 	public:
 		ResultInfo()
