@@ -722,17 +722,12 @@ QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget 
   if ( _parent == 0L )
     _parent = this;
 
-  QPixmap *pixmap = 0L;
-
-  pixmap = new QPixmap( KSBarIcon(_file) );
-
   QButton *pb;
   if ( !_kbutton )
     pb = new QPushButton( _parent );
   else
     pb = new QToolButton( _parent );
-  if ( pixmap )
-    pb->setPixmap( *pixmap );
+  pb->setPixmap( QPixmap( KSBarIcon(_file) ) );
 
   return pb;
 }
