@@ -539,6 +539,7 @@ void KoAutoFormatDia::initTab5()
     cbAddCompletionWord->setChecked( m_autoFormat.getConfigAddCompletionWord());
     m_listCompletion->clear();
     m_listCompletion->insertStringList( saveCompletionList );
+    m_docAutoFormat->getCompletion()->setItems( saveCompletionList );
     if( saveCompletionList.count()==0 || m_listCompletion->currentText().isEmpty())
         pbRemoveCompletionEntry->setEnabled( false );
     m_minWordLength->setValue ( m_docAutoFormat->getConfigMinWordLength() );
@@ -558,6 +559,7 @@ void KoAutoFormatDia::slotRemoveCompletionEntry()
     {
         m_autoFormat.getCompletion()->removeItem( text );
         m_listCompletion->removeItem( m_listCompletion->currentItem () );
+        m_docAutoFormat->getCompletion()->removeItem( text );
         if( m_listCompletion->count()==0 )
             pbRemoveCompletionEntry->setEnabled( false );
     }
