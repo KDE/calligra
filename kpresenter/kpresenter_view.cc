@@ -3098,8 +3098,8 @@ void KPresenterView::objectSelectedChanged()
     actionTextAlignRight->setEnabled(isText);
     actionTextAlignBlock->setEnabled(isText);
 
-    actionFormatBullet->setEnabled(rw);
-    actionFormatNumber->setEnabled(rw);
+    actionFormatBullet->setEnabled(rw && isText );
+    actionFormatNumber->setEnabled(rw && isText );
 
     actionTextDepthPlus->setEnabled(isText);
     actionFormatDefault->setEnabled(isText);
