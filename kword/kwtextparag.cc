@@ -340,6 +340,7 @@ void KWTextParag::copyParagData( QTextParag *_parag )
             setParagLayout( newStyle->paragLayout() );
             QTextFormat * format = document()->formatCollection()->format( &newStyle->format() );
             setFormat( format );
+            format->addRef();
             string()->setFormat( 0, format, true ); // prepare format for text insertion
             styleApplied = true;
         }
@@ -696,6 +697,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                     ASSERT( len == 1 );
                     KWTextImage * custom = new KWTextImage( textDocument(), QString::null );
                     kdDebug() << "KWTextParag::loadFormatting insertCustomItem" << endl;
+                    paragFormat()->addRef();
                     setCustomItem( index, custom, paragFormat() );
                     custom->load( formatElem );
                     break;

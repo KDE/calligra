@@ -27,8 +27,7 @@ KWTextFormatCollection::KWTextFormatCollection( KWDocument * doc )
     delete defaultFormat();
 
     QColor color = QApplication::palette().color( QPalette::Active, QColorGroup::Text );
-    setDefaultFormat( new KWTextFormat( doc->defaultFont(), color, this ) );
-
+    setDefaultFormat( format( doc->defaultFont(), color ) /* this inserts it in the dict as well */ );
 }
 
 QTextFormat *KWTextFormatCollection::format( const QFont &f, const QColor &c )
@@ -60,6 +59,7 @@ void KWTextFormatCollection::remove( QTextFormat *f )
     kdDebug() << "KWTextFormatCollection::remove " << f << endl;
     if ( m_cachedFormat == f )
         m_cachedFormat = 0;
+    assert( defaultFormat() != f ); // well if this happens, the refcounting's busted !
     QTextFormatCollection::remove( f );
 }
 

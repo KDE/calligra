@@ -42,6 +42,7 @@
 #include <kdebug.h>
 
 //#define DEBUG_FLOW
+//#define DEBUG_FORMATS
 
 KWTextFrameSet::KWTextFrameSet( KWDocument *_doc )
     : KWFrameSet( _doc ), undoRedoInfo( this )
@@ -839,25 +840,31 @@ void KWTextFrameSet::zoom()
         unzoom();
     QTextFormatCollection * coll = textdoc->formatCollection();
     double factor = kWordDocument()->zoomedResolutionY() * 72.0 / QPaintDevice::x11AppDpiY();
+#ifdef DEBUG_FORMATS
     kdDebug(32002) << this << " KWTextFrameSet::zoom " << factor << " coll=" << coll << " " << coll->dict().count() << " items " << endl;
-    /*kdDebug(32002) << this << " firstparag:" << textdoc->firstParag()
+    kdDebug(32002) << this << " firstparag:" << textdoc->firstParag()
                    << " format:" << textdoc->firstParag()->paragFormat()
                    << " first-char's format:" << textdoc->firstParag()->at(0)->format()
-                   << endl;*/
+                   << endl;
+#endif
     QDictIterator<QTextFormat> it( coll->dict() );
     for ( ; it.current() ; ++it ) {
         KWTextFormat * format = dynamic_cast<KWTextFormat *>(it.current());
         ASSERT( format );
         m_origFontSizes.insert( format, new int( format->font().pointSize() ) );
-        /*kdDebugBody(32002) << this << " KWTextFrameSet::zooming format " << format
+#ifdef DEBUG_FORMATS
+        kdDebugBody(32002) << this << " KWTextFrameSet::zooming format " << format
                            << " key=" << format->key()
                            << " from " << format->font().pointSizeFloat()
-                           << " to " << format->font().pointSizeFloat() * factor << endl;*/
+                           << " to " << format->font().pointSizeFloat() * factor << endl;
+#endif
         format->setPointSizeFloat( format->font().pointSizeFloat() * factor );
     }
     // Do the same to the default format !
     KWTextFormat * format = static_cast<KWTextFormat *>(coll->defaultFormat());
-    //kdDebug() << "KWTextFrameSet::zoom default format " << format << " " << format->key() << endl;
+#ifdef DEBUG_FORMATS
+    kdDebug() << "KWTextFrameSet::zoom default format " << format << " " << format->key() << endl;
+#endif
     m_origFontSizes.insert( format, new int( format->font().pointSize() ) );
     format->setPointSizeFloat( format->font().pointSizeFloat() * factor );
 
@@ -892,9 +899,11 @@ void KWTextFrameSet::unzoom()
             kdWarning() << "Can't unzoom: format=" << format << " " << it.current()->key() << endl;
         else
         {
-            /*kdDebugBody(32002) << "KWTextFrameSet::unzoom format=" << format
+#ifdef DEBUG_FORMATS
+            kdDebugBody(32002) << "KWTextFrameSet::unzoom format=" << format
                                << " key=" << format->key()
-                               << " oldSize=" << *oldSize << endl;*/
+                               << " oldSize=" << *oldSize << endl;
+#endif
             format->setPointSizeFloat( *oldSize );
         }
     }
@@ -1916,6 +1925,7 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
     if ( textdoc->useFormatCollection() ) { // (always true)   apply the formatting
         textdoc->setSelectionStart( QTextDocument::Temp, &oldCursor );
         textdoc->setSelectionEnd( QTextDocument::Temp, cursor );
+        //kdDebug() << "KWTextFrameSet::insert setting format " << currentFormat << endl;
         textdoc->setFormat( QTextDocument::Temp, currentFormat, QTextFormat::Format );
         textdoc->removeSelection( QTextDocument::Temp );
     }
@@ -3072,6 +3082,9 @@ void KWTextFrameSetEdit::insertVariable( int type )
         CustomItemsMap customItemsMap;
         customItemsMap.insert( 0, var );
         kdDebug() << "KWTextFrameSetEdit::insertVariable inserting into paragraph" << endl;
+#ifdef DEBUG_FORMATS
+        kdDebug() << "KWTextFrameSetEdit::insertVariable currentFormat=" << currentFormat << endl;
+#endif
         textFrameSet()->insert( cursor, currentFormat, QChar('&') /*whatever*/,
                                 false, false, i18n("Insert Variable"),
                                 customItemsMap );
@@ -3086,11 +3099,12 @@ void KWTextFrameSetEdit::updateUI()
     int i = cursor->index();
     if ( i > 0 )
         --i;
-    /*if ( currentFormat )
+#ifdef DEBUG_FORMATS
+    if ( currentFormat )
         kdDebug(32003) << "KWTextFrameSet::updateUI currentFormat=" << currentFormat
                        << " " << currentFormat->key()
-                       << " parag format=" << cursor->parag()->at( i )->format()->key() << endl;*/
-
+                       << " parag format=" << cursor->parag()->at( i )->format()->key() << endl;
+#endif
     if ( !currentFormat || currentFormat->key() != cursor->parag()->at( i )->format()->key() )
     {
         if ( currentFormat )
