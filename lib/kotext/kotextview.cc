@@ -885,4 +885,24 @@ const KoParagLayout * KoTextView::currentParagLayoutFormat() const
     return &(parag->paragLayout());
 }
 
+void KoTextView::setParagLayoutFormat( KoParagLayout *newLayout,int flags)
+{
+    KCommand *cmd =0L;
+    switch(flags)
+    {
+    case KoParagLayout::Alignment:
+    {
+        cmd = textObject()->setAlignCommand( m_cursor, newLayout->alignment );
+        break;
+    }
+    case KoParagLayout::Tabulator:
+        cmd= textObject()->setTabListCommand( m_cursor, newLayout->tabList() );
+        break;
+    default:
+        break;
+    }
+    if (cmd)
+       textObject()->emitNewCommand( cmd );
+}
+
 #include "kotextview.moc"

@@ -79,6 +79,8 @@ public:
      */
     virtual const KoParagLayout * currentParagLayoutFormat() const;
 
+    void setParagLayoutFormat( KoParagLayout *newLayout,int flags);
+
     /** Implement the KoTextFormatInterface */
     virtual void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont );
 

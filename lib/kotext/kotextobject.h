@@ -50,6 +50,8 @@ public:
 
     virtual const KoParagLayout * currentParagLayoutFormat() const =0;
 
+    virtual void setParagLayoutFormat( KoParagLayout *newLayout,int flags)=0;
+
     void setBold(bool on);
     void setItalic(bool on);
     void setUnderline(bool on);
@@ -64,6 +66,12 @@ public:
     void setDefaultFormat();
 
     void setTextBackgroundColor(const QColor &);
+
+    void setAlign(int align);
+
+    void setMargin(QStyleSheetItem::Margin m, double margin);
+
+    void setTabList(const KoTabulatorList & tabList );
 
     QColor textColor() const;
     QFont textFont() const;
@@ -179,12 +187,12 @@ public:
     void doKeyboardAction( QTextCursor * cursor, KoTextFormat * & currentFormat, KeyboardAction action );
 
     // -- Paragraph settings --
-    KCommand * setCounterCommand( QTextCursor * cursor, const KoParagCounter & counter );
-    KCommand * setAlignCommand( QTextCursor * cursor, int align );
-    KCommand * setLineSpacingCommand( QTextCursor * cursor, double spacing );
-    KCommand * setBordersCommand( QTextCursor * cursor, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder );
-    KCommand * setMarginCommand( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin );
-    KCommand* setTabListCommand( QTextCursor * cursor,const KoTabulatorList & tabList );
+    KCommand * setCounterCommand( QTextCursor * cursor, const KoParagCounter & counter, int selectionId = QTextDocument::Standard );
+    KCommand * setAlignCommand( QTextCursor * cursor, int align , int selectionId = QTextDocument::Standard);
+    KCommand * setLineSpacingCommand( QTextCursor * cursor, double spacing, int selectionId = QTextDocument::Standard );
+    KCommand * setBordersCommand( QTextCursor * cursor, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder, int selectionId = QTextDocument::Standard );
+    KCommand * setMarginCommand( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin, int selectionId = QTextDocument::Standard);
+    KCommand* setTabListCommand( QTextCursor * cursor,const KoTabulatorList & tabList , int selectionId = QTextDocument::Standard );
 
     void applyStyle( QTextCursor * cursor, const KoStyle * style,
                      int selectionId = QTextDocument::Standard,
@@ -200,6 +208,7 @@ public:
         Creates a command if the format was applied to a selection */
     void setFormat( QTextCursor * cursor, KoTextFormat * & currentFormat, KoTextFormat *format, int flags, bool zoomFont = false );
 
+
     /**
      * Support for treating the whole textobject as a single object
      * Use this format for displaying the properties (font/color/...) of the object.
@@ -211,6 +220,11 @@ public:
      * Use this format for displaying the properties (Align/counter/...) of the object
      */
     virtual const KoParagLayout * currentParagLayoutFormat() const;
+
+    /**
+     * Support for changing the format in the whole textobject
+     */
+    virtual void setParagLayoutFormat( KoParagLayout *newLayout,int flags);
 
     /**
      * Support for changing the format in the whole textobject
