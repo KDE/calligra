@@ -105,7 +105,7 @@ public:
     void mmEditFrameMove( int mx, int my );
     void mmCreate( int mx, int my );
     // Mouse release
-    void mrEditFrame();
+    void mrEditFrame( QMouseEvent *e, const QPoint &nPoint );
     void mrCreateText();
     void mrCreatePixmap();
     void mrCreatePart();
@@ -236,6 +236,7 @@ private:
     KoRect m_boundingRect; // when moving frame(s)
     KoPoint m_hotSpot; // when moving frame(s)
     bool deleteMovingRect, frameMoved, frameResized;
+    bool m_ctrlClickOnSelectedFrame;
     QString m_PixmapName; // when inserting a pixmap
     KoDocumentEntry m_partEntry; // when inserting a part
 

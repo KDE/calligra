@@ -123,10 +123,12 @@ void KWResizeHandle::mousePressEvent( QMouseEvent *e )
     m_canvas->mpEditFrame( 0, nPoint );
 }
 
-void KWResizeHandle::mouseReleaseEvent( QMouseEvent * )
+void KWResizeHandle::mouseReleaseEvent( QMouseEvent *e )
 {
     mousePressed = false;
-    m_canvas->mrEditFrame();
+    QPoint vPoint( x() + e->x(), y() + e->y() );
+    QPoint nPoint = m_canvas->viewMode()->viewToNormal( vPoint );
+    m_canvas->mrEditFrame( e, nPoint );
 }
 
 void KWResizeHandle::updateGeometry()

@@ -284,8 +284,14 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
     m_mousePressed = true;
     frameMoved = false;
     frameResized = false;
+    m_ctrlClickOnSelectedFrame = false;
+
     if ( e )
     {
+        KoPoint docPoint( doc->unzoomPoint( nPoint ) );
+        double x = docPoint.x();
+        double y = docPoint.y();
+
         // Find the frame we clicked upon (try by border, fallback on frame's internal rect)
         KWFrame * frame = doc->frameByBorder( nPoint );
         if ( !frame )
@@ -299,17 +305,22 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
         }
         else if ( frame && !frame->isSelected() ) // clicked on a frame that wasn't selected
         {
-            if ( !( e->state() & ControlButton || e->state() & ShiftButton ) )
+            if ( ! ( e->state() & ShiftButton || e->state() & ControlButton ) )
                 selectAllFrames( FALSE );
             selectFrame( frame, TRUE );
         }
         else if(frame)  // clicked on a frame that was already selected
         {
-            if ( e->state() & ControlButton || e->state() & ShiftButton ) {
-                selectFrame( frame, FALSE );
-            } else if ( viewport()->cursor().shape() != SizeAllCursor ) {
-                selectAllFrames( FALSE );
-                selectFrame( frame, TRUE );
+            if ( e->state() & ControlButton )
+                m_ctrlClickOnSelectedFrame = true;
+            else
+            {
+                if ( e->state() & ShiftButton )
+                    selectFrame( frame, FALSE );
+                else if ( viewport()->cursor().shape() != SizeAllCursor ) {
+                    selectAllFrames( FALSE );
+                    selectFrame( frame, TRUE );
+                }
             }
         }
         curTable = table;
@@ -338,7 +349,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
         // If one cell belongs to a table, we are in fact moving the whole table
         KWTableFrameSet *table = fs->getGroupManager();
         // We'll have to do better in the long run
-         if ( table )
+        if ( table )
             m_boundingRect |= table->boundingRect();
         else
             m_boundingRect |= *frame;
@@ -525,8 +536,8 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
 
 void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
 {
-    kdDebug() << "KWCanvas::mmEditFrameResize top,bottom,left,right: "
-              << top << "," << bottom << "," << left << "," << right << endl;
+    //kdDebug() << "KWCanvas::mmEditFrameResize top,bottom,left,right: "
+    //          << top << "," << bottom << "," << left << "," << right << endl;
     // This one is called by KWResizeHandle
 
     // Can't resize the main frame of a WP document
@@ -561,7 +572,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     if ( page == oldPage )
     {
 
-        kdDebug() << "KWCanvas::mmEditFrameResize old rect " << DEBUGRECT( *frame ) << endl;
+        //kdDebug() << "KWCanvas::mmEditFrameResize old rect " << DEBUGRECT( *frame ) << endl;
 
         if ( top && newTop != y && !fs->isAHeader()/*!fs->isAFooter()*/ )
         {
@@ -608,7 +619,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
         frame2->setBottom(newBottom);
     }
 
-    kdDebug() << "KWCanvas::mmEditFrameResize new rect " << DEBUGRECT( *frame ) << endl;
+    //kdDebug() << "KWCanvas::mmEditFrameResize new rect " << DEBUGRECT( *frame ) << endl;
 
 #if 0
     int drawX, drawWidth, drawY, drawHeight;
@@ -873,21 +884,20 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
     }
 }
 
-void KWCanvas::mrEditFrame() // Can be called from KWCanvas and from KWResizeHandle's mouseReleaseEvents
+void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be called from KWCanvas and from KWResizeHandle's mouseReleaseEvents
 {
     //kdDebug() << "KWCanvas::mrEditFrame" << endl;
     KWFrame *firstFrame = doc->getFirstSelectedFrame();
-    if (!firstFrame) return;
-#if 0
-    if ( doc->processingType() == KWDocument::DTP ) // ?
-        setRuler2Frame( firstFrame );
-#endif
-    QPoint p = m_viewMode->normalToView( doc->zoomPoint( firstFrame->topLeft() ) );
-    m_gui->getHorzRuler()->setFrameStart( p.x() );
-    // Only done with X since this is for relative position of tabs
+
+    if ( firstFrame )
+    {
+        QPoint p = m_viewMode->normalToView( doc->zoomPoint( firstFrame->topLeft() ) );
+        m_gui->getHorzRuler()->setFrameStart( p.x() );
+        // Only done with X since this is for relative position of tabs
+    }
 
     //kdDebug() << "KWCanvas::mrEditFrame frameMoved=" << frameMoved << " frameResized=" << frameResized << endl;
-    if ( frameMoved || frameResized )
+    if ( firstFrame && ( frameMoved || frameResized ) )
     {
         KWTableFrameSet *table = firstFrame->getFrameSet()->getGroupManager();
         if (table) {
@@ -920,10 +930,10 @@ void KWCanvas::mrEditFrame() // Can be called from KWCanvas and from KWResizeHan
 
                 doc->frameChanged( frame, m_gui->getView() ); // repaint etc.
                 if(frame->getFrameSet()->isAHeader() || frame->getFrameSet()->isAFooter())
-                    {
-                        doc->recalcFrames();
-                        frame->updateResizeHandles();
-                    }
+                {
+                    doc->recalcFrames();
+                    frame->updateResizeHandles();
+                }
             }
             delete cmdMoveFrame; // Unused after all
             cmdMoveFrame = 0L;
@@ -946,8 +956,24 @@ void KWCanvas::mrEditFrame() // Can be called from KWCanvas and from KWResizeHan
             }
         }
     }
+    else
+    {
+        // No frame was moved or resized.
+        // If CTRL+click on selected frame, unselect it
+        if ( e->state() & ControlButton )
+        {
+            KoPoint docPoint( doc->unzoomPoint( nPoint ) );
+            // Find the frame we clicked upon (try by border, fallback on frame's internal rect)
+            KWFrame * frame = doc->frameByBorder( nPoint );
+            if ( !frame )
+                frame = doc->frameAtPos( docPoint.x(), docPoint.y() );
+            if ( m_ctrlClickOnSelectedFrame && frame->isSelected() )
+                selectFrame( frame, false );
+        }
+    }
     doc->repaintAllViews();
     m_mousePressed = false;
+    m_ctrlClickOnSelectedFrame = false;
 }
 
 void KWCanvas::mrCreateText()
@@ -1082,7 +1108,7 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
                 if ( m_currentFrameSetEdit )
                     m_currentFrameSetEdit->mouseReleaseEvent( e, normalPoint, docPoint );
                 else
-                    mrEditFrame();
+                    mrEditFrame( e, normalPoint );
                 break;
             case MM_CREATE_TEXT:
                 mrCreateText();
@@ -1808,7 +1834,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 {
                     QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
                     QPoint normalPoint = m_viewMode->viewToNormal( mousep );
-                    viewport()->setCursor( doc->getMouseCursor( normalPoint, true ));
+                    viewport()->setCursor( doc->getMouseCursor( normalPoint, true ) );
                 }
             } break;
             case QEvent::KeyRelease:
@@ -1818,7 +1844,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 {
                     QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
                     QPoint normalPoint = m_viewMode->viewToNormal( mousep );
-                    viewport()->setCursor( doc->getMouseCursor( normalPoint, false ));
+                    viewport()->setCursor( doc->getMouseCursor( normalPoint, false ) );
                 }
             }
             break;
