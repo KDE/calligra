@@ -110,6 +110,8 @@ KarbonFactory::instance()
 
 		s_instance->dirs()->addResourceType( "karbon_clipart",
 											  KStandardDirs::kde_default( "data" ) + "karbon/cliparts/" );
+                // Tell the iconloader about share/apps/koffice/icons
+                s_instance->iconLoader()->addAppDir("koffice");
 	}
 
 	return s_instance;
