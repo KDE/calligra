@@ -206,38 +206,6 @@ bool KoDocument::saveFile()
   return ret;
 }
 
-QWidget *KoDocument::widget()
-{
-  return KParts::ReadWritePart::widget();
-/*
-  if ( !d->m_bSingleViewMode )
-    return 0L;
-
-  if ( d->m_views.count() == 0 )
-  {
-    QWidget *parentWidget = 0L;
-
-    if ( parent() )
-    {
-      if ( parent()->inherits( "QWidget" ) )
-        parentWidget = (QWidget *)parent();
-      else if ( parent()->inherits( "KoDocument" ) )
-      {
-        KoDocument *parentDoc = (KoDocument *)parent();
-	if ( parentDoc->singleViewMode() )
-	  parentWidget = parentDoc->widget();
-      }
-    }
-
-    QWidget *w = createView( parentWidget );
-    assert( w );
-    setWidget( w );
-  }
-
-  return d->m_views.getFirst();
-*/
-}
-
 KAction *KoDocument::action( const QDomElement &element )
 {
   return d->m_views.getFirst()->action( element );

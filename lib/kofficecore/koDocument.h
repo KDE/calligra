@@ -83,14 +83,7 @@ public:
    */
   bool singleViewMode() const;
 
-    // ####### Why not return KoViewWrapperWidget ?
-  /**
-   * If the widget is in singleview mode, then this method returns a pointer to the
-   * wrapper widget (@ref KoViewWrapperWidget).
-   */
-  virtual QWidget *widget();
-
-    // ######## Where and why is this needed ?
+  // ######## Where and why is this needed ?
   /**
    * Returns the action described action object. In fact only the "name" attribute
    * of @ref #element is of interest here. The method searches first in the
@@ -104,7 +97,7 @@ public:
    * @see KoView::action
    */
   virtual KAction *action( const QDomElement &element );
-    
+
     // ######## Where and why is this needed ?
   /**
    * Returns the DOM document which describes the GUI of the
@@ -305,7 +298,7 @@ public:
   /**
    *  Loads a document from a store.
    *  You should never have to reimplement.
-   
+
    *  @param url An internal url, like tar:/1/2
    */
   virtual bool loadFromStore( KoStore* store, const KURL& url );
