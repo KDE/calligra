@@ -1592,7 +1592,7 @@ per year and year */
   double interest = args[1]->doubleValue();
   double periods = args[2]->doubleValue();
   double years = args[3]->doubleValue();
-
+  
   context.setValue( new KSValue( principal * pow(1+(interest/periods),
 periods*years)));
 
@@ -1601,6 +1601,8 @@ periods*years)));
 
 static bool kspreadfunc_continuous( KSContext& context )
 {
+    // TODO: Torben: I dont understand what this one does!
+    
 /* Returns value after continuous compounding of interest, given prinicpal,
 rate and years */
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
