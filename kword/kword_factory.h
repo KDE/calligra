@@ -31,7 +31,7 @@ public:
     KWordFactory( QObject* parent = 0, const char* name = 0 );
     ~KWordFactory();
 
-    virtual QObject* create( QObject* parent = 0, const char* name = 0, const char* classname = "QObject", const QStringList &args = QStringList() );
+    virtual KParts::Part* createPart( QWidget * = 0, const char * = 0, QObject* parent = 0, const char* name = 0, const char* classname = "KoDocument", const QStringList &args = QStringList() );
 
     static KInstance* global();
 

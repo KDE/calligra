@@ -44,16 +44,9 @@ KAboutData* KIllustratorFactory::aboutData()
   aboutData->addAuthor("Kai-Uwe Sattler", 0, "kus@iti.cs.uni-magdeburg.de");
   return aboutData;
 }
-QObject* KIllustratorFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
-{
-/*
-   if ( parent && !parent->inherits("KoDocument") )
-    {
-	qDebug("KIllustratorFactory: parent does not inherit KoDocument");
-	return 0;
-    }
-*/
 
+KParts::Part* KIllustratorFactory::createPart( QWidget *, const char *, QObject* parent, const char* name, const char* classname, const QStringList & )
+{
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
     KIllustratorDocument *doc = new KIllustratorDocument( parent, name, !bWantKoDocument );

@@ -39,15 +39,8 @@ KChartFactory::~KChartFactory()
     }
 }
 
-QObject* KChartFactory::create( QObject* parent, const char* name, const char *classname, const QStringList & )
+KParts::Part* KChartFactory::createPart( QWidget *, const char *, QObject* parent, const char* name, const char *classname, const QStringList & )
 {
-/*
-    if ( parent && !parent->inherits("KoDocument") ) {
-		kdDebug(35001) << "KChartFactory: parent does not inherit KoDocument" << endl;
-		return 0;
-    }
-*/
-
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
     KChartPart *part = new KChartPart( (KoDocument*)parent, name, !bWantKoDocument );

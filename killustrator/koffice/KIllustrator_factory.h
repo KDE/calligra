@@ -13,7 +13,7 @@ public:
     KIllustratorFactory( QObject* parent = 0, const char* name = 0 );
     ~KIllustratorFactory();
 
-    virtual QObject* create( QObject* parent = 0, const char* oname = 0, const char* name = "QObject", const QStringList &args = QStringList() );
+    virtual KParts::Part *createPart( QWidget *parentWidget = 0, const char *widgetName = 0, QObject *parent = 0, const char *name = 0, const char *classname = "KoDocument", const QStringList &args = QStringList() );
 
     static KInstance* global();
     static KAboutData* aboutData();
