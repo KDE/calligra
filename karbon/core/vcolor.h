@@ -15,11 +15,13 @@ class QColor;
 class VColor
 {
 public:
-	enum VColorSpace{
+	enum VColorSpace
+	{
 		rgb  = 0,
 		cmyk = 1,
 		hsb  = 2,
-		gray = 3 };
+		gray = 3
+	};
 
 	VColor();
 
