@@ -72,6 +72,8 @@ VShapeTool::mouseButtonPress()
 void
 VShapeTool::mouseButtonRelease()
 {
+	draw();
+
 	recalc();
 
 	VComposite* composite = shape( true );
@@ -106,7 +108,7 @@ VShapeTool::mouseDrag()
 void
 VShapeTool::mouseDragRelease()
 {
-	recalc();
+	//recalc();
 
 	VShapeCmd* cmd = new VShapeCmd(
 		&view()->part()->document(),

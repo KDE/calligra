@@ -194,7 +194,7 @@ VSelectTool::mouseButtonRelease()
 void
 VSelectTool::mouseDragRelease()
 {
-	draw();
+	//draw();
 
 	if( m_state == normal )
 	{

@@ -3,7 +3,6 @@ REAL BUGS:
 	canvas is "fragmented")
 -	if selecting many shapes, the fill/stroke state should be "unknown",
 	preview widgets needs to paint questionmarks or something in this case
--	shape creation: the last temporary shape looks slightly different than the final shape
 -	shear tool: the last temporary shape looks slightly different than the final shape
 -	canvas doesn't repaint correctly while scrolling with the scrollbar
 -	CMYK color model has a bug (in VColor.cc) - weird things happen when K value is used
