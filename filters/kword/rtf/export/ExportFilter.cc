@@ -1035,15 +1035,28 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
         || (layoutOrigin.lineSpacingType!=layoutOrigin.lineSpacingType)
         || (layoutOrigin.lineSpacing!=layoutOrigin.lineSpacing))
     {
-        if ( layout.lineSpacingType==10  )
+        if ( layout.lineSpacingType==LayoutData::LS_SINGLE  )
            ;// do nothing, single linespace is default in RTF
-        else if ( layout.lineSpacingType==15  )
+
+        else if ( layout.lineSpacingType==LayoutData::LS_ONEANDHALF  )
            strLayout += "\\sl360\\slmult1"; // one-and-half linespace
-        else if ( layout.lineSpacingType==20  )
+
+        else if ( layout.lineSpacingType==LayoutData::LS_DOUBLE  )
            strLayout += "\\sl480\\slmult1"; // double linespace
-        else if ( layout.lineSpacingType==0 )
+
+        else if ( layout.lineSpacingType==LayoutData::LS_ATLEAST  )
+           strLayout += QString("\\sl%1\\slmult0").arg(int(layout.lineSpacing)*20);
+
+        else if ( layout.lineSpacingType==LayoutData::LS_EXACTLY  )
+           strLayout += QString("\\sl-%1\\slmult0").arg(int(layout.lineSpacing)*20);
+
+        else if ( layout.lineSpacingType==LayoutData::LS_MULTIPLE  )
+           strLayout += QString("\\sl%1\\slmult1").arg( int(layout.lineSpacing)*120 );
+
+        else if ( layout.lineSpacingType==LayoutData::LS_CUSTOM )
            // custom line spacing (in points)
            strLayout += QString("\\sl-%1\\slmult0").arg(int(layout.lineSpacing)*20);
+
         else 
         kdWarning(30503) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
     }
