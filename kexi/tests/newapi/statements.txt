@@ -1,0 +1,4 @@
+-- aliases for columns
+select id myid from persons
+-- aliases for tables
+select id from persons p
