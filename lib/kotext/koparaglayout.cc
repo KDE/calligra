@@ -581,7 +581,7 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
     int pageBreaking = 0;
     if( context.styleStack().hasAttribute("fo:break-before") ||
         context.styleStack().hasAttribute("fo:break-after") ||
-        context.styleStack().hasAttribute("style:break-inside") ||
+        context.styleStack().hasAttribute("fo:keep-together") ||
         context.styleStack().hasAttribute("style:keep-with-next") ||
         context.styleStack().hasAttribute("fo:keep-with-next") )
     {
@@ -596,8 +596,8 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
                 pageBreaking |= KoParagLayout::HardFrameBreakAfter;
         }
 
-        if ( context.styleStack().hasAttribute( "style:break-inside" ) ) { // 3.11.7
-            if ( context.styleStack().attribute( "style:break-inside" ) == "avoid" )
+        if ( context.styleStack().hasAttribute( "fo:keep-together" ) ) { // was style:break-inside in OOo-1.1, renamed in OASIS
+            if ( context.styleStack().attribute( "fo:keep-together" ) != "auto" )
                  pageBreaking |= KoParagLayout::KeepLinesTogether;
         }
         if ( context.styleStack().hasAttribute( "fo:keep-with-next" ) ) {
@@ -886,7 +886,8 @@ void KoParagLayout::saveOasis( KoGenStyle& gs ) const
         gs.addProperty( "fo:break-before", "column" );
     else if ( pageBreaking & KoParagLayout::HardFrameBreakAfter )
         gs.addProperty( "fo:break-after", "column" );
-    gs.addProperty( "style:break-inside", pageBreaking & KoParagLayout::KeepLinesTogether ? "avoid" : "auto" );
+    if ( pageBreaking & KoParagLayout::KeepLinesTogether )
+        gs.addProperty( "fo:keep-together", "always" );
     if ( pageBreaking & KoParagLayout::KeepWithNext )
         gs.addProperty( "fo:keep-with-next", "always" );
 }
