@@ -234,7 +234,7 @@ public:
     unsigned int getCurrPgNum();
 
     // return pointer to document
-    class KPresenterDoc *kPresenterDoc() {return m_pKPresenterDoc; }
+    class KPresenterDoc *kPresenterDoc() const {return m_pKPresenterDoc; }
 
     // repaint page
     void repaint( bool );

@@ -46,6 +46,7 @@ class KPObject
 {
 public:
     KPObject();
+    virtual ~KPObject();
 
     KPObject &operator=( const KPObject & );
 

@@ -67,6 +67,10 @@ KPObject::KPObject()
     dcop = 0;
 }
 
+KPObject::~KPObject()
+{
+}
+
 /*================================================================*/
 KPObject &KPObject::operator=( const KPObject & )
 {

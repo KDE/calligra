@@ -295,9 +295,12 @@ KPresenterDoc::~KPresenterDoc()
     delete _header;
     delete _footer;
 
+    _objectList->setAutoDelete( true );
     _objectList->clear();
     delete _objectList;
     _backgroundList.clear();
+
+    delete fCollection;
 }
 
 /*======================== draw contents as QPicture =============*/

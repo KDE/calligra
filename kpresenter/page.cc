@@ -70,6 +70,24 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
 {
     setWFlags( WResizeNoErase );
 
+    alignMenu1 = 0;
+    alignMenu2 = 0;
+    alignMenu3 = 0;
+    alignMenu4 = 0;
+    alignMenu5 = 0;
+    alignMenu6 = 0;
+    alignMenu7 = 0;
+    graphMenu = 0;
+    partMenu = 0;
+    rectMenu = 0;
+    pieMenu = 0;
+    picResizeMenu = 0;
+    picMenu = 0;
+    clipMenu = 0;
+    txtMenu = 0;
+    presMenu = 0;
+    pageMenu = 0;
+
     if ( parent ) {
         mousePressed = false;
         modType = MT_NONE;
@@ -130,6 +148,24 @@ Page::~Page()
             return;
         }
     }
+
+    delete alignMenu1;
+    delete alignMenu2;
+    delete alignMenu3;
+    delete alignMenu4;
+    delete alignMenu5;
+    delete alignMenu6;
+    delete alignMenu7;
+    delete graphMenu;
+    delete partMenu;
+    delete rectMenu;
+    delete pieMenu;
+    delete picResizeMenu;
+    delete picMenu;
+    delete clipMenu;
+    delete txtMenu;
+    delete presMenu;
+    delete pageMenu;
 }
 
 /*============================ draw contents ====================*/
@@ -1365,7 +1401,7 @@ void Page::setupMenus()
     pieMenu->setMouseTracking( true );
 
     // pic-resize menu
-    QPopupMenu *picResizeMenu = new QPopupMenu();
+    picResizeMenu = new QPopupMenu();
     picResizeMenu->insertItem( i18n( "640x480" ), this, SLOT( picViewOrig640x480() ) );
     picResizeMenu->insertItem( i18n( "800x600" ), this, SLOT( picViewOrig800x600() ) );
     picResizeMenu->insertItem( i18n( "1024x768" ), this, SLOT( picViewOrig1024x768() ) );

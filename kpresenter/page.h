@@ -219,6 +219,7 @@ protected:
     QPopupMenu *graphMenu, *picMenu, *txtMenu, *clipMenu, *presMenu;
     QPopupMenu *alignMenu1, *alignMenu2, *alignMenu3, *alignMenu4, *alignMenu5;
     QPopupMenu *pageMenu, *pieMenu, *rectMenu, *alignMenu6, *partMenu, *alignMenu7;
+    QPopupMenu *picResizeMenu;
     bool mousePressed;
     ModifyType modType;
     unsigned int oldMx, oldMy;

@@ -189,6 +189,9 @@ KPresenterView::~KPresenterView()
 {
     // ######### Reggie: Why that ?
 //    page->setToolEditMode( TEM_MOUSE );
+    delete rb_oalign;
+    delete rb_lbegin;
+    delete rb_lend;
     delete dcop;
 }
 
@@ -2531,11 +2534,16 @@ void KPresenterView::doAutomaticScreenPres()
     screenStop();
 }
 
-void KPresenterView::updateReadWrite( bool /*readwrite*/ )
+void KPresenterView::updateReadWrite( bool readwrite )
 {
 #ifdef __GNUC__
 #warning TODO
 #endif
+    QValueList<KAction *> actions = actionCollection()->actions();
+    QValueList<KAction *>::ConstIterator aIt = actions.begin();
+    QValueList<KAction *>::ConstIterator aEnd = actions.end();
+    for (; aIt != aEnd; ++aIt )
+        (*aIt)->setEnabled( readwrite );
 }
 
 /*========================= change undo =========================*/
