@@ -83,6 +83,7 @@ void GDocument::initialize ()
   pages.clear ();
 
   active_page = addPage();
+  active_page->setName("list1");
   
   autoUpdate = true;
   emit changed ();
@@ -201,6 +202,7 @@ QDomDocument GDocument::saveToXml ()
 
       QDomElement page;
       page = p->saveToXml(document);
+      killustrator.appendChild(page);
     }
     setModified (false);
     return document;
@@ -256,6 +258,7 @@ bool GDocument::readFromXml (const  QDomDocument &document)
   while(!n.isNull())
   {
     QDomElement pe=n.toElement();
+    kdDebug(0) << "Tag=" << pe.tagName() << endl;
     if (pe.tagName() == "page")
     {
       GPage *page = addPage();

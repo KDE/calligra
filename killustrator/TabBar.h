@@ -81,7 +81,7 @@ public:
     /**
      * Highlights this tab.
      */
-    void setActiveTab( const QString& _text );
+    void setActiveTab( int a );
 
     /**
      * Open a context menu.
@@ -116,7 +116,7 @@ signals:
      * Emitted if the active tab changed. This will cause the
      * KivioView to change its active page, too.
      */
-    void tabChanged( const QString& _text );
+    void tabChanged( int );
 
 
 public slots:

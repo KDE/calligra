@@ -348,8 +348,7 @@ void KIllustratorView::setupCanvas()
     connect(vRuler,SIGNAL(rmbPressed()),this,SLOT(popupForRulers()));
     
     TabBar *tabBar = new TabBar(this, this);
-    tabBar->addTab("Page1");
-    tabBar->setActiveTab("Page1");
+    tabBar->setActiveTab(1);
 
     QScrollBar* vBar = new QScrollBar(QScrollBar::Vertical, this);
     QScrollBar* hBar = new QScrollBar(QScrollBar::Horizontal, this);

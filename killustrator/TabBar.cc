@@ -29,6 +29,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 #include "TabBar.h"
 #include "Canvas.h"
@@ -41,13 +42,14 @@ TabBar::TabBar( QWidget *parent, KIllustratorView *view )
 : QWidget(parent), m_pView(view)
 {
   m_pPopupMenu = 0L;
+  doc = view->activeDocument();
 
   m_pAutoScrollTimer = new QTimer(this);
   connect( m_pAutoScrollTimer, SIGNAL(timeout()), SLOT(slotAutoScroll()));
 
   leftTab = 1;
   m_rightTab = 0;
-  activeTab = 0;
+  activeTab = 1;
   m_moveTab = 0;
   m_autoScroll = 0;
 
@@ -193,19 +195,23 @@ void TabBar::scrollLast()
     repaint( false );
 }
 
-void TabBar::setActiveTab( const QString& _text )
+void TabBar::setActiveTab( int a )
 {
-    int i = tabsList.findIndex( _text );
-    if ( i == -1 )
-        return;
+// GPage *page = doc->getPages().take(a-1);
+ 
+ activeTab = a;
+ update();
+ /* int i = tabsList.findIndex( _text );
+  if ( i == -1 )
+    return;
 
-    if ( i + 1 == activeTab )
-        return;
+  if ( i + 1 == activeTab )
+    return;
 
-    activeTab = i + 1;
-    repaint( false );
+  activeTab = i + 1;
+  repaint( false );
 
-    emit tabChanged( _text );
+  emit tabChanged( _text );*/
 }
 
 void TabBar::slotRemove( )
@@ -229,17 +235,16 @@ void TabBar::slotRemove( )
 
 void TabBar::slotAdd()
 {
-//    m_pView->insertPage();
-//    m_pView->activePage()->setHidden(false);
+  GPage *page = doc->addPage();
 }
 
 void TabBar::paintEvent( QPaintEvent* )
 {
-    if ( tabsList.count() == 0 )
+/*    if ( tabsList.count() == 0 )
     {
         erase();
         return;
-    }
+    }*/
 
     QPainter painter;
     QPixmap pm(size());
@@ -257,10 +262,9 @@ void TabBar::paintEvent( QPaintEvent* )
     int active_width = 0;
     int active_y = 0;
 
-    QStringList::Iterator it;
-    for ( it = tabsList.begin(); it != tabsList.end(); ++it )
+    for(QListIterator<GPage> it(doc->getPages()); it.current(); ++it)
     {
-        text = *it;
+        text = ((GPage *)it)->name();
         QFontMetrics fm = painter.fontMetrics();
         int text_width = fm.width( text );
         int text_y = ( height() - fm.ascent() - fm.descent() ) / 2 + fm.ascent();
@@ -294,7 +298,6 @@ void TabBar::paintEvent( QPaintEvent* )
     painter.end();
     bitBlt( this, 0, 0, &pm );
 }
-
 
 void TabBar::paintTab( QPainter & painter, int x, const QString& text, int text_width, int text_y,
                               bool isactive, bool ismovemarked )
@@ -370,36 +373,38 @@ void TabBar::slotRename()
     QString newName;
 
     // Store the current name of the active page
-/*    GPage* page = doc->activePage();
-    activeName = page->pageName();
+    GPage* page = doc->activePage();
+    activeName = page->name();
 
     PageNameDialog tndlg( m_pView, "PageName" , activeName );
-    if ( tndlg.exec() )
+    if ( tndlg.exec() );
     {
         // Have a different name ?
         if ( ( newName = tndlg.pageName() ) != activeName )
         {
+	page->setName( newName );
+	update();
             // Is the name already used
-            if ( !page->setPageName( newName ) )
+        /*    if ( !page->setName( newName ) )
             {
                 KMessageBox::error( this, i18n("This name is already used."));
                 // Recursion
                 slotRename();
                 return;
-            }
+            }*/
         }
-    }*/
+    }
 }
 
 void TabBar::mousePressEvent( QMouseEvent* _ev )
 {
     int old_active = activeTab;
 
-    if ( tabsList.count() == 0 )
+/*    if ( tabsList.count() == 0 )
     {
         erase();
         return;
-    }
+    }*/
 
     QPainter painter;
     painter.begin( this );
@@ -409,10 +414,9 @@ void TabBar::mousePressEvent( QMouseEvent* _ev )
     QString text;
     const char *active_text = 0L;
 
-    QStringList::Iterator it;
-    for ( it = tabsList.begin(); it != tabsList.end(); ++it )
+    for(QListIterator<GPage> it(doc->getPages()); it.current(); ++it)
     {
-        text = *it;
+        text = ((GPage *)it)->name();
         QFontMetrics fm = painter.fontMetrics();
         int text_width = fm.width( text );
 
@@ -434,7 +438,7 @@ void TabBar::mousePressEvent( QMouseEvent* _ev )
     if ( activeTab != old_active )
     {
         repaint( false );
-        emit tabChanged( active_text );
+        emit tabChanged( activeTab );
     }
 
     if ( _ev->button() == LeftButton )
