@@ -1452,7 +1452,7 @@ void KoCustomVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*con
 
 void KoCustomVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
 {
-    //todo save value into meta:user-defined
+    //TODO save value into meta:user-defined
     writer.startElement( "text:user-defined" );
     writer.addAttribute( "text:name", m_varValue.toString() );
     writer.addTextNode( value() );
@@ -2174,7 +2174,7 @@ QString KoNoteVariable::fieldCode()
 
 void KoNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
-    //todo save date
+    //TODO save date
     const QCString afterText( elem.tagName().latin1() );
     QString note;
     if (afterText == "office:annotation") {
@@ -2194,7 +2194,7 @@ void KoNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*
 //    <office:annotation><dc:date>2004-11-10</dc:date><text:p/><text:p>---- 10/11/2004, 16:18 ----</text:p><text:p>dfgsdfsdfg</text:p><text:p>---- 10/11/2004, 16:18 ----</text:p><text:p/><text:p>---- 10/11/2004, 16:18 ----</text:p><text:p>gs</text:p><text:p>---- 10/11/2004, 16:18 ----</text:p><text:p>fg</text:p></office:annotation>
     writer.startElement( "office:annotation" );
     writer.startElement( "dc:date" );
-    writer.addTextNode( QDate::currentDate().toString(Qt::ISODate) ); //todo fixme add date when we create it.
+    writer.addTextNode( QDate::currentDate().toString(Qt::ISODate) ); //TODO fixme add date when we create it.
     QStringList text = QStringList::split( "\n", m_varValue.toString() );
     for ( QStringList::Iterator it = text.begin(); it != text.end(); ++it ) {
         writer.startElement( "text:p" );
