@@ -2355,7 +2355,23 @@ void KSpreadCanvas::deleteEditor( bool saveChanges )
   m_pEditor = 0;
 
   if (saveChanges && textEditor)
+  {
+      if ( t.at(0)=='=' )
+      {
+          //a formula
+          int openParenthese = t.contains('(' );
+          int closeParenthese = t.contains(')' );
+          int diff = QABS( openParenthese - closeParenthese );
+          if ( openParenthese > closeParenthese )
+          {
+              for (int i=0; i < diff;i++)
+              {
+                  t=t+')';
+              }
+          }
+      }
     m_pView->setText( t );
+  }
   else
     m_pView->updateEditWidget();
 
