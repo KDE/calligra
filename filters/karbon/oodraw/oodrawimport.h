@@ -46,6 +46,7 @@ public:
 private:
 	void createStyleMap( QDomDocument &docstyles );
 	void insertStyles( const QDomElement& styles );
+	void insertDraws( const QDomElement& styles );
 	void fillStyleStack( const QDomElement& object );
 	void addStyles( const QDomElement* style );
 	void storeObjectStyles( const QDomElement& object );
@@ -63,7 +64,7 @@ private:
 	QDomDocument			m_content;
 	QDomDocument			m_meta;
 	QDomDocument			m_settings;
-	QDict<QDomElement>		m_styles;
+	QDict<QDomElement>		m_styles, m_draws;
 	StyleStack			m_styleStack;
 };
 

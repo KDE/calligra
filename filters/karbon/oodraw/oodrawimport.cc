@@ -415,7 +415,7 @@ OoDrawImport::appendBrush( VObject &obj )
 			VGradient gradient;
 			QString style = m_styleStack.attribute( "draw:fill-gradient-name" );
 
-			QDomElement* draw = 0L;//m_draws[style];
+			QDomElement* draw = m_draws[style];
 			if( draw )
 			{
 				VColor c;
@@ -528,8 +528,10 @@ void OoDrawImport::createStyleMap( QDomDocument &docstyles )
 
 	QDomNode fixedStyles = styles.namedItem( "office:styles" );
 	if( !fixedStyles.isNull() )
+	{
+		insertDraws( fixedStyles.toElement() );
 		insertStyles( fixedStyles.toElement() );
-
+	}
 	QDomNode automaticStyles = styles.namedItem( "office:automatic-styles" );
 	if( !automaticStyles.isNull() )
 		insertStyles( automaticStyles.toElement() );
@@ -539,7 +541,24 @@ void OoDrawImport::createStyleMap( QDomDocument &docstyles )
 		insertStyles( masterStyles.toElement() );
 }
 
-void OoDrawImport::insertStyles( const QDomElement& styles )
+void
+OoDrawImport::insertDraws( const QDomElement& styles )
+{
+	for( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
+	{
+		QDomElement e = n.toElement();
+
+		if( !e.hasAttribute( "draw:name" ) )
+			continue;
+
+		QString name = e.attribute( "draw:name" );
+		m_draws.insert( name, new QDomElement( e ) );
+	}
+}
+
+
+void
+OoDrawImport::insertStyles( const QDomElement& styles )
 {
 	for ( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
 	{
