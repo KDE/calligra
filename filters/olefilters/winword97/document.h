@@ -138,7 +138,7 @@ private:
         const QString &text,
         const PAP &style,
         const CHPXarray &chpxs,
-        Attributes &style);
+        Attributes &attributes);
 
     // Override the base class functions.
 
