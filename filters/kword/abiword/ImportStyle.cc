@@ -46,8 +46,6 @@ QString StyleDataMap::getDefaultStyle(void)
     strReturn += QString::number(fontInfo.pointSize());
     strReturn += "pt;";
 
-    //strReturn += "font-style:normal; font-weight:normal; text-decoration:none; color:000000; bgcolor: FFFFFF;";
-    
     // Note: the last property must have a semi-colon!
 
     return strReturn;
@@ -66,7 +64,6 @@ void StyleDataMap::defineNewStyle(const QString& strName, const int level,
     }
     StyleData& styleData=it.data();
     styleData.m_level=level;
-    // We must add the default style, as KWord's style manager is sensitive
     styleData.m_props+=getDefaultStyle();
     styleData.m_props+=strProps;
     styleData.m_props+=";"; // Security if other properties are appended later
@@ -81,7 +78,6 @@ StyleDataMap::Iterator StyleDataMap::useOrCreateStyle(const QString& strName)
         // The style is not yet defined!
         StyleData data;
         data.m_level=-1;
-        // We must add the default style, as KWord's style manager is sensitive
         data.m_props=getDefaultStyle();
         it=insert(strName,data);
     }

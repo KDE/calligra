@@ -41,14 +41,23 @@ enum StackItemElementType{
     ElementTypeBottom,      // Bottom of the stack
     ElementTypeIgnore,      // Element is known but ignored
     ElementTypeEmpty,       // Element is empty ( <pagesize>, <s>, <image>, <field>)
-    ElementTypeAbiWord,     // <abiword>
     ElementTypeSection,     // <section>
     ElementTypeParagraph,   // <p>
-    ElementTypeContent,     // <c> (not child of <a>)
+    ElementTypeContent,     // <c> (not child of <a>), also <a> if it points to a bookmark
     ElementTypeRealData,    // <d>
     ElementTypeAnchor,      // <a>
     ElementTypeAnchorContent// <c>, when child of <a>
 };
+
+// Tags that we do not care of:
+//  <abiword> (or <awml>), <data>, <styles>, <ignorewords>, <lists>
+//
+// Tags that we do not or cannot support:
+//  <iw>, <bookmark>, <l>
+//
+// Properties that we do not or cannot support:
+//  page-margin-footer, page-margin-header, lang, font-stretch
+
 
 class StackItem
 {

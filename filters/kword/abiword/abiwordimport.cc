@@ -25,6 +25,7 @@
 #include <unistd.h>
 #endif
 
+#include <qfontinfo.h>
 #include <qxml.h>
 #include <qdom.h>
 
@@ -32,6 +33,7 @@
 #include <kmdcodec.h>
 #include <kfilterdev.h>
 #include <kgenericfactory.h>
+#include <kglobalsettings.h>
 
 #include <koGlobal.h>
 #include <koStore.h>
@@ -191,8 +193,18 @@ static bool StartElementA(StackItem* stackItem, StackItem* stackCurrent, const Q
         stackItem->stackElementText=stackCurrent->stackElementText;   // <TEXT>
         stackItem->stackElementFormatsPlural=stackCurrent->stackElementFormatsPlural; // <FORMATS>
         stackItem->pos=stackCurrent->pos; //Propagate the position
-        stackItem->strTemp1=attributes.value("xlink:href"); // link reference
+        stackItem->strTemp1=attributes.value("xlink:href").stripWhiteSpace(); // link reference
         stackItem->strTemp2=QString::null; // link name
+
+        // We must be careful: AbiWord permits anchors to bookmarks.
+        //  However, KWord does not know what a bookmark is.
+        if (stackItem->strTemp1[0]=='#')
+        {
+            kdWarning(30506) << "Anchor <a> to bookmark: " << stackItem->strTemp1 << endl
+                << " Processing <a> like <c>" << endl;
+            // We have a reference to a bookmark. Therefore treat it as a normal content <c>
+            return StartElementC(stackItem, stackCurrent, attributes);
+        }
     }
     else
     {//we are not nested correctly, so consider it a parse error!
@@ -220,7 +232,6 @@ static bool EndElementA (StackItem* stackItem, StackItem* stackCurrent, QDomDocu
 
     QDomElement elementText=stackItem->stackElementText;
     elementText.appendChild(mainDocument.createTextNode("#"));
-    elementText.normalize();
 
     QDomElement formatElement=mainDocument.createElement("FORMAT");
     formatElement.setAttribute("id",4); // Variable
@@ -636,11 +647,6 @@ static bool EndElementD (StackItem* stackItem, KoFilterChain* chain,
     else if (stackItem->strTemp1=="image/jpeg")
     {
         strStoreName+=".jpeg";
-    }
-    // TODO: verify BMP (including AbiWord's mime type for it)
-    else if (stackItem->strTemp1=="image/x-bmp")
-    {
-        strStoreName+=".bmp";
     }
     else
     {
@@ -1086,7 +1092,16 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     }
     else if (name=="a")
     {
-        success=EndElementA(stackItem,structureStack.current(), mainDocument);
+        if (stackItem->elementType==ElementTypeContent)
+        {
+            // Anchor to a bookmark (not supported by KWord))
+            success=EndElementC(stackItem,structureStack.current());
+        }
+        else
+        {
+            // Normal anchor
+            success=EndElementA(stackItem,structureStack.current(), mainDocument);
+        }
     }
     else if (name=="d")
     {
@@ -1135,7 +1150,7 @@ bool StructureParser :: characters ( const QString & ch )
     }
     else if (stackItem->elementType==ElementTypeParagraph)
     { // <p>
-        success=charactersElementC(stackItem,mainDocument,ch);
+        success=charactersElementP(stackItem,mainDocument,ch);
     }
     else if (stackItem->elementType==ElementTypeAnchor)
     { // <a>
@@ -1175,7 +1190,11 @@ bool StructureParser::startDocument(void)
     styleDataMap.defineNewStyle("Heading 1",1,"font-weight: bold; font-size: 24pt");
     styleDataMap.defineNewStyle("Heading 2",2,"font-weight: bold; font-size: 16pt");
     styleDataMap.defineNewStyle("Heading 3",3,"font-weight: bold; font-size: 12pt");
-    styleDataMap.defineNewStyle("Block Text",-1,QString::null);
+    QFontInfo fixedInfo(KGlobalSettings::fixedFont());
+    QString strBlockText=QString("font-family: %1; font-size: %2pt")
+        .arg(fixedInfo.family()).arg(fixedInfo.pointSize());
+    kdDebug(30506) << "Block Text: " << strBlockText << endl;
+    styleDataMap.defineNewStyle("Block Text",-1,strBlockText);
     return true;
 }
 
