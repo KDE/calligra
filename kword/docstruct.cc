@@ -162,27 +162,27 @@ KWDocStructRootItem::KWDocStructRootItem( QListView *_parent, KWordDocument *_do
     switch ( type ) {
     case Arrangement: {
         setText( 0, i18n( "Arrangement" ) );
-        setPixmap( 0, BarIcon( "tree_arrange" ) );
+        setPixmap( 0, KWBarIcon( "tree_arrange" ) );
     } break;
     case TextFrames: {
         setText( 0, i18n( "Text Frames/Frame Sets" ) );
-        setPixmap( 0, BarIcon( "tree_textframes" ) );
+        setPixmap( 0, KWBarIcon( "tree_textframes" ) );
     } break;
     case Tables: {
         setText( 0, i18n( "Tables" ) );
-        setPixmap( 0, BarIcon( "tree_table" ) );
+        setPixmap( 0, KWBarIcon( "tree_table" ) );
     } break;
     case Pictures: {
         setText( 0, i18n( "Pictures" ) );
-        setPixmap( 0, BarIcon( "tree_picture" ) );
+        setPixmap( 0, KWBarIcon( "tree_picture" ) );
     } break;
     case Cliparts: {
         setText( 0, i18n( "Cliparts" ) );
-        setPixmap( 0, BarIcon( "tree_clipart" ) );
+        setPixmap( 0, KWBarIcon( "tree_clipart" ) );
     } break;
     case Embedded: {
         setText( 0, i18n( "Embedded Objects" ) );
-        setPixmap( 0, BarIcon( "tree_embedded" ) );
+        setPixmap( 0, KWBarIcon( "tree_embedded" ) );
     } break;
     }
 }

@@ -488,28 +488,28 @@ KWSerialLetterEditor::KWSerialLetterEditor( QWidget *parent, KWSerialLetterDataB
     sep->setMaximumWidth( 10 );
 
     QToolButton *newRecord = new QToolButton( toolbar );
-    newRecord->setPixmap( BarIcon( "sl_addrecord" ) );
+    newRecord->setPixmap( KWBarIcon( "sl_addrecord" ) );
     newRecord->setFixedSize( newRecord->sizeHint() );
     connect( newRecord, SIGNAL( clicked() ),
 	     this, SLOT( addRecord() ) );
     QToolTip::add( newRecord, i18n( "Add Record" ) );
 
     QToolButton *newEntry = new QToolButton( toolbar );
-    newEntry->setPixmap( BarIcon( "sl_addentry" ) );
+    newEntry->setPixmap( KWBarIcon( "sl_addentry" ) );
     newEntry->setFixedSize( newEntry->sizeHint() );
     connect( newEntry, SIGNAL( clicked() ),
 	     this, SLOT( addEntry() ) );
     QToolTip::add( newEntry, i18n( "Add Entry" ) );
 
     QToolButton *deleteRecord = new QToolButton( toolbar );
-    deleteRecord->setPixmap( BarIcon( "sl_delrecord" ) );
+    deleteRecord->setPixmap( KWBarIcon( "sl_delrecord" ) );
     deleteRecord->setFixedSize( deleteRecord->sizeHint() );
     connect( deleteRecord, SIGNAL( clicked() ),
 	     this, SLOT( removeRecord() ) );
     QToolTip::add( deleteRecord, i18n( "Remove Record" ) );
 
     QToolButton *deleteEntry = new QToolButton( toolbar );
-    deleteEntry->setPixmap( BarIcon( "sl_delentry" ) );
+    deleteEntry->setPixmap( KWBarIcon( "sl_delentry" ) );
     deleteEntry->setFixedSize( deleteEntry->sizeHint() );
     connect( deleteEntry, SIGNAL( clicked() ),
 	     this, SLOT( removeEntry() ) );

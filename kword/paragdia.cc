@@ -102,14 +102,14 @@ void KWPagePreview::drawContents( QPainter* p )
     p->setBrush( QBrush( darkGray ) );
 
     for ( int i = 5; i <= 8; i++ )
-	p->drawRect( ( i == 5 ? df : dl ) + _x + 6, _y + 6 + ( i - 1 ) * 12 + 2 + ( i - 5 ) * spc + 
+	p->drawRect( ( i == 5 ? df : dl ) + _x + 6, _y + 6 + ( i - 1 ) * 12 + 2 + ( i - 5 ) * spc +
 		     static_cast<int>( before / 2 ),
 		     wid - 12 - ( ( i / 4 ) * 4 == i ? 50 : 0 ) - ( ( i == 12 ? 0 : dr ) + ( i == 5 ? df : dl ) ), 6 );
 
     p->setBrush( QBrush( lightGray ) );
 
     for ( int i = 9; i <= 12; i++ )
-	p->drawRect( _x + 6, _y + 6 + ( i - 1 ) * 12 + 2 + 3 * spc + 
+	p->drawRect( _x + 6, _y + 6 + ( i - 1 ) * 12 + 2 + 3 * spc +
 		     static_cast<int>( before / 2 ) + static_cast<int>( after / 2 ),
 		     wid - 12 - ( ( i / 4 ) * 4 == i ? 50 : 0 ), 6 );
 
@@ -208,9 +208,9 @@ void KWBorderPreview::drawContents( QPainter* painter )
     QRect r = contentsRect();
     QFontMetrics fm( font() );
 
-    painter->fillRect( r.x() + fm.width( 'W' ), r.y() + fm.height(), r.width() - 2 * fm.width( 'W' ), 
+    painter->fillRect( r.x() + fm.width( 'W' ), r.y() + fm.height(), r.width() - 2 * fm.width( 'W' ),
 		       r.height() - 2 * fm.height(), white );
-    painter->setClipRect( r.x() + fm.width( 'W' ), r.y() + fm.height(), r.width() - 2 * fm.width( 'W' ), 
+    painter->setClipRect( r.x() + fm.width( 'W' ), r.y() + fm.height(), r.width() - 2 * fm.width( 'W' ),
 			  r.height() - 2 * fm.height() );
 
     if ( topBorder.ptWidth > 0 ) {
@@ -716,16 +716,16 @@ void KWParagDia::setupTab3()
     bb = new KButtonBox( tab3 );
     bb->addStretch();
     bLeft = bb->addButton( "", true );
-    bLeft->setPixmap( BarIcon( "borderleft" ) );
+    bLeft->setPixmap( KWBarIcon( "borderleft" ) );
     bLeft->setToggleButton( true );
     bRight = bb->addButton( "", true );
-    bRight->setPixmap( BarIcon( "borderright" ) );
+    bRight->setPixmap( KWBarIcon( "borderright" ) );
     bRight->setToggleButton( true );
     bTop = bb->addButton( "", true );
-    bTop->setPixmap( BarIcon( "bordertop" ) );
+    bTop->setPixmap( KWBarIcon( "bordertop" ) );
     bTop->setToggleButton( true );
     bBottom = bb->addButton( "", true );
-    bBottom->setPixmap( BarIcon( "borderbottom" ) );
+    bBottom->setPixmap( KWBarIcon( "borderbottom" ) );
     bBottom->setToggleButton( true );
     bb->addStretch();
     bb->layout();
@@ -828,7 +828,7 @@ void KWParagDia::setupTab4()
     QString custcountwt(i18n("<h1>Create custom counters</h1>\n"
 	"<p>You can enter a string describing your custom counter, consisting of \n"
 	" the following symbols. For now, this string may not contain any whitespace \n"
-	" or additional text. This will change.</p>\n" 
+	" or additional text. This will change.</p>\n"
 	"<ul><li>\\arabic - arabic numbers (1, 2, 3, ...)</li><li>\\roman or \\Roman - lower or uppercase roman numbers</li>\n"
 	"<li>\\alph or \\Alph - lower or uppercase latin letters</li></ul>\n"
 	"<p>This will hopefully have more options in the future (like enumerated lists or greek letters).</p>" ));

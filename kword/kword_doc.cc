@@ -96,7 +96,7 @@ KoDocument *KWordChild::hitTest( const QPoint &, const QWMatrix & )
 KWordDocument::KWordDocument(QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parent, name, singleViewMode ),
       formatCollection( this ), imageCollection( this ), selStart( this, 1 ), selEnd( this, 1 ),
-      ret_pix( BarIcon( "return" ) ), unit( "mm" ), numParags( 0 ), footNoteManager( this ),
+      ret_pix( KWBarIcon( "return" ) ), unit( "mm" ), numParags( 0 ), footNoteManager( this ),
       autoFormat( this ), urlIntern(), pglChanged( TRUE )
 {
     m_lstViews.setAutoDelete( FALSE );
