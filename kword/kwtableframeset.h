@@ -733,7 +733,9 @@ public:
 };
 
 /**
- * The object created to edit this table - in fact at a given moment,
+ * @brief The object created to edit this table 
+ *
+ * In fact at a given moment,
  * it edits one cell (frameset) of the table, the one in which the cursor is.
  */
 class KWTableFrameSetEdit : public KWFrameSetEdit
