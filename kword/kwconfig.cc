@@ -46,6 +46,7 @@
 #include <kformulaconfigpage.h>
 
 #include <float.h>
+#include <kmessagebox.h>
 
 // little helper stolen from kmail
 // (Note: KDialogBase should have version of the methods that take a QString for the icon name)
@@ -202,7 +203,10 @@ void ConfigureSpellPage::apply()
 
 void ConfigureSpellPage::slotClearIgnoreAllHistory()
 {
-    m_pView->kWordDocument()->clearIgnoreWordAll();
+    int ret = KMessageBox::warningContinueCancel(0L,
+                                                 i18n("Be carefull,you go to erase all the Ignore word history."));
+    if (ret == KMessageBox::Continue)
+        m_pView->kWordDocument()->clearIgnoreWordAll();
 }
 
 
