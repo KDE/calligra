@@ -709,7 +709,7 @@ private:
     KStatusBarLabel* m_sbCalcLabel;
 
   KSpreadSelection* m_selectionInfo;
-  QMap<KSpreadTable*, QRect> savedSelections;
+  QMap<KSpreadTable*, QPoint> savedAnchors;
   QMap<KSpreadTable*, QPoint> savedMarkers;
 
   /* helper functions */

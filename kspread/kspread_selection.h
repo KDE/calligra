@@ -64,15 +64,14 @@ public:
    */
   QRect getSelectionHandleArea(KSpreadCanvas* canvas);
 
-  void setSelection( QRect _rect, KSpreadTable* table );
-  void setSelection( QRect _rect, QPoint marker, KSpreadTable* table );
+  void setSelection( QPoint marker, QPoint anchor, KSpreadTable* table );
 
   void setMarker( QPoint _point, KSpreadTable* table );
 
   /**
    * @return the 'anchor' point of the selection -- i.e. the fixed corner
    */
-   QRect selectionAnchor()const;
+   QPoint selectionAnchor()const;
 
   /**
    * The 'cursor position' is used to keep track of where on the spreadsheet the
@@ -118,9 +117,10 @@ private: /* private data for the above functions on selections */
    * If complete rows are selected, then selection.right() == KS_colMax and
    * selection.left()=1.
    */
-  QRect m_rctSelection;
+//  QRect m_rctSelection;
   QPoint m_marker;
   QPoint m_cursorPosition;
+  QPoint m_anchor;
 
   QPoint m_chooseMarker;
   QPoint m_chooseAnchor;
@@ -131,7 +131,7 @@ private: /* private data for the above functions on selections */
 
 private:
   /* helper functions */
-  QRect extendToMergedAreas(QRect area);
+  QRect extendToMergedAreas(QRect area) const;
 
 };
 

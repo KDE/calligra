@@ -188,7 +188,7 @@ void KSpreadreference::slotEdit()
   KSpreadEditAreaName editDlg( m_pView, "EditArea", name );
   editDlg.exec();
 
-  m_rangeName->setText(i18n("Area: %1").arg(""));  
+  m_rangeName->setText(i18n("Area: %1").arg(""));
   QString tmp = m_list->text(m_list->currentItem());
   if (tmp.length() > 0)
   {
@@ -196,7 +196,7 @@ void KSpreadreference::slotEdit()
   }
   else
   {
-  }    
+  }
 }
 
 void KSpreadreference::slotOk()
@@ -217,7 +217,8 @@ void KSpreadreference::slotOk()
 
     m_pView->canvasWidget()->gotoLocation(KSpreadPoint( m_pView->activeTable()->tableName()
                                                         + "!"+util_cellName(area[ index ].rect.left(), area[ index ].rect.top()  ), m_pView->doc()->map() ) );
-    m_pView->selectionInfo()->setSelection(area[ index ].rect ,
+    m_pView->selectionInfo()->setSelection(area[ index ].rect.topLeft(),
+                                           area[index].rect.bottomRight(),
                                            m_pView->activeTable() );
   }
   accept();

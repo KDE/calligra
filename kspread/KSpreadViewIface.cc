@@ -254,7 +254,8 @@ void KSpreadViewIface::copyAsText()
 
 void KSpreadViewIface::setSelection(QRect selection)
 {
-  m_view->selectionInfo()->setSelection(selection, m_view->activeTable());
+  m_view->selectionInfo()->setSelection(selection.topLeft(), selection.bottomRight(),
+                                        m_view->activeTable());
 }
 
 void KSpreadViewIface::setSelectionMoneyFormat( bool b )

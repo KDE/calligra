@@ -284,7 +284,7 @@ void KSpreadFormatDlg::slotOk()
         }
     }
 
-    m_view->selectionInfo()->setSelection( QRect(), r.topLeft(),
+    m_view->selectionInfo()->setSelection( r.topLeft(), r.bottomRight(),
                                            m_view->activeTable() );
     m_view->doc()->setModified( true );
     accept();

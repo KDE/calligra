@@ -2093,8 +2093,8 @@ void KSpreadView::deleteColumn()
     m_pTable->removeColumn( r.left(),(r.right()-r.left()) );
 
     updateEditWidget();
-    m_selectionInfo->setSelection(QRect(m_selectionInfo->marker(),
-                                        m_selectionInfo->marker()), m_pTable);
+    m_selectionInfo->setSelection(m_selectionInfo->marker(),
+                                  m_selectionInfo->marker(), m_pTable);
 }
 
 void KSpreadView::deleteRow()
@@ -2105,8 +2105,8 @@ void KSpreadView::deleteRow()
     m_pTable->removeRow( r.top(),(r.bottom()-r.top()) );
 
     updateEditWidget();
-    m_selectionInfo->setSelection(QRect(m_selectionInfo->marker(),
-                                        m_selectionInfo->marker()), m_pTable);
+    m_selectionInfo->setSelection(m_selectionInfo->marker(),
+                                  m_selectionInfo->marker(), m_pTable);
 }
 
 void KSpreadView::insertColumn()
@@ -2643,7 +2643,7 @@ void KSpreadView::setActiveTable( KSpreadTable *_t,bool updateTable )
   /* save the current selection on this table */
   if (m_pTable != NULL)
   {
-    savedSelections.replace(m_pTable, selectionInfo()->selection());
+    savedAnchors.replace(m_pTable, selectionInfo()->selectionAnchor());
     savedMarkers.replace(m_pTable, selectionInfo()->marker());
   }
 
@@ -2663,12 +2663,12 @@ void KSpreadView::setActiveTable( KSpreadTable *_t,bool updateTable )
   }
 
   /* see if there was a previous selection on this other table */
-  QMapIterator<KSpreadTable*, QRect> it = savedSelections.find(m_pTable);
+  QMapIterator<KSpreadTable*, QPoint> it = savedAnchors.find(m_pTable);
   QMapIterator<KSpreadTable*, QPoint> it2 = savedMarkers.find(m_pTable);
 
-  QRect newSelection = (it == savedSelections.end()) ? QRect(1,1,1,1) : *it;
+  QPoint newAnchor = (it == savedAnchors.end()) ? QPoint(1,1) : *it;
   QPoint newMarker = (it2 == savedMarkers.end()) ? QPoint(1,1) : *it2;
-  selectionInfo()->setSelection(newSelection, newMarker, m_pTable);
+  selectionInfo()->setSelection(newMarker, newAnchor, m_pTable);
 
   m_pCanvas->scrollToCell(newMarker);
   resultOfCalc();

@@ -524,7 +524,8 @@ void KSpreadCanvas::gotoLocation( QPoint location, KSpreadTable* table,
     }
     else
     {
-      selectionInfo()->setSelection(newSelection, location, table);
+      /* anchor and marker should be on the same cell here */
+      selectionInfo()->setSelection(topLeft, topLeft, table);
     }
   }
 
@@ -785,9 +786,9 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
   // The user started the drag in the lower right corner of the marker ?
   if ( m_eMouseAction == ResizeCell )
   {
-    QRect selectionAnchor = selectionInfo->selectionAnchor();
-    int x = selectionAnchor.left();
-    int y = selectionAnchor.top();
+    QPoint selectionAnchor = selectionInfo->selectionAnchor();
+    int x = selectionAnchor.x();
+    int y = selectionAnchor.y();
     if( x > selection.left())
         x = selection.left();
     if( y > selection.top() )
@@ -840,10 +841,12 @@ void KSpreadCanvas::processClickSelectionHandle(QMouseEvent *event)
   return;
 }
 
+#define DBGRCT(name, x)    kdDebug(36001) << (name) << " " << (x).left() << "," << (x).top() << "," \
+                   << (x).right() << "," << (x).bottom() << endl;
+
 void KSpreadCanvas::extendCurrentSelection(QPoint cell)
 {
   KSpreadTable* table = activeTable();
-  QRect selectionAnchor;
   QPoint chooseAnchor = selectionInfo()->getChooseAnchor();
   QRect newCellArea;
 //  KSpreadCell* destinationCell = table->cellAt(cell);
@@ -863,11 +866,13 @@ void KSpreadCanvas::extendCurrentSelection(QPoint cell)
   }
   else
   {
-    selectionAnchor = selectionInfo()->selectionAnchor();
 
     /* the selection simply becomes a box with the anchor and given cell as
        opposite corners
     */
+/*
+    DBGRCT("selectionAnchor", selectionAnchor);
+    DBGRCT("newCellArea", newCellArea);
     int left, top, right, bottom;
     left = QMIN(selectionAnchor.left(), newCellArea.left());
     top = QMIN(selectionAnchor.top(), newCellArea.top());
@@ -881,7 +886,13 @@ void KSpreadCanvas::extendCurrentSelection(QPoint cell)
       newSelection.setRight(newSelection.left() + testCell->extraXCells());
       newSelection.setBottom(newSelection.top() + testCell->extraYCells());
     }
+
+    DBGRCT("newSelection", newSelection);
+
     selectionInfo()->setSelection(newSelection, cell, table);
+*/
+    selectionInfo()->setSelection(cell, selectionInfo()->selectionAnchor(),
+                                  table);
   }
 }
 
@@ -2871,9 +2882,9 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
     if(!rect.contains( QPoint(1,hit_row)) || !(_ev->button() == RightButton)
                 || (!util_isRowSelected(rect)) )
         {
-          QRect newSelection;
-          newSelection.setCoords( 1, hit_row, KS_colMax, hit_row );
-          m_pView->selectionInfo()->setSelection( newSelection,
+          QPoint newMarker(1, hit_row);
+          QPoint newAnchor(KS_colMax, hit_row);
+          m_pView->selectionInfo()->setSelection( newMarker, newAnchor,
                                                   m_pView->activeTable() );
         }
 
@@ -3110,19 +3121,14 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
     int row = table->topRow( _ev->pos().y(), y, m_pCanvas );
     if( row > KS_rowMax )
 	return;
-    QRect newSelection = m_pView->selection();
 
-    if ( row < m_iSelectionAnchor )
-    {
-      newSelection.setTop( row );
-      newSelection.setBottom( m_iSelectionAnchor );
-    }
-    else
-    {
-      newSelection.setBottom( row );
-      newSelection.setTop( m_iSelectionAnchor );
-    }
-    m_pView->selectionInfo()->setSelection( newSelection, m_pView->activeTable() );
+    QPoint newAnchor = m_pView->selectionInfo()->selectionAnchor();
+    QPoint newMarker = m_pView->selectionInfo()->marker();
+    newMarker.setY(row);
+    newAnchor.setY(m_iSelectionAnchor);
+
+    m_pView->selectionInfo()->setSelection( newMarker, newAnchor,
+                                            m_pView->activeTable() );
 
     if ( _ev->pos().y() < 0 )
       m_pCanvas->vertScrollBar()->setValue( m_pCanvas->yOffset() + y );
@@ -3410,12 +3416,13 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 	return;
     m_iSelectionAnchor = hit_col;
 
-    QRect r;
     if(!rect.contains( QPoint(hit_col,1)) || !(_ev->button() == RightButton)
                                           || !(util_isRowSelected(m_pView->selection())) )
     {
-        r.setCoords( hit_col, 1, hit_col, KS_rowMax );
-        m_pView->selectionInfo()->setSelection( r, m_pView->activeTable() );
+      QPoint newMarker(hit_col, 1);
+      QPoint newAnchor(hit_col, KS_rowMax);
+      m_pView->selectionInfo()->setSelection( newMarker, newAnchor,
+                                              m_pView->activeTable() );
     }
     if ( _ev->button() == RightButton )
     {
@@ -3666,19 +3673,15 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
     int col = table->leftColumn( _ev->pos().x(), x, m_pCanvas );
     if( col > KS_colMax )
 	return;
-    QRect r = m_pView->selection();
 
-    if ( col < m_iSelectionAnchor )
-    {
-      r.setLeft( col );
-      r.setRight( m_iSelectionAnchor );
-    }
-    else
-    {
-      r.setRight( col );
-      r.setLeft( m_iSelectionAnchor );
-    }
-    m_pView->selectionInfo()->setSelection( r, m_pView->activeTable() );
+    QPoint newMarker = m_pView->selectionInfo()->marker();
+    QPoint newAnchor = m_pView->selectionInfo()->selectionAnchor();
+
+    newMarker.setX(col);
+    newAnchor.setX(m_iSelectionAnchor);
+
+    m_pView->selectionInfo()->setSelection( newMarker, newAnchor,
+                                            m_pView->activeTable() );
 
     if ( _ev->pos().x() < 0 )
       m_pCanvas->horzScrollBar()->setValue( m_pCanvas->xOffset() + x );

@@ -27,7 +27,7 @@ KSpreadSelection::KSpreadSelection(KSpreadView* view)
 {
   m_marker = QPoint(1,1);
   m_cursorPosition = QPoint(1,1);
-  m_rctSelection = QRect(m_marker, m_marker);
+  m_anchor = QPoint(1,1);
 
   m_chooseMarker = QPoint(0,0);
   m_chooseAnchor = QPoint(0,0);
@@ -70,7 +70,14 @@ QPoint KSpreadSelection::marker() const
 
 QRect KSpreadSelection::selection() const
 {
-  return m_rctSelection;
+  int left, top, right, bottom;
+  left = QMIN(m_anchor.x(), m_marker.x());
+  top = QMIN(m_anchor.y(), m_marker.y());
+  right = QMAX(m_anchor.x(), m_marker.x());
+  bottom = QMAX(m_anchor.y(), m_marker.y());
+  QRect selection(QPoint(left, top), QPoint(right, bottom));
+
+  return extendToMergedAreas(selection);
 }
 
 bool KSpreadSelection::singleCellSelection() const
@@ -78,9 +85,10 @@ bool KSpreadSelection::singleCellSelection() const
   const KSpreadCell* cell =
     m_pView->activeTable()->cellAt(m_marker.x(), m_marker.y());
 
-  return ((m_rctSelection.topLeft() == m_marker) &&
-          (m_rctSelection.width() - 1 == cell->extraXCells()) &&
-          (m_rctSelection.height() - 1 == cell->extraYCells()));
+  QRect currentSelection = selection();
+  return ((currentSelection.topLeft() == m_marker) &&
+          (currentSelection.width() - 1 == cell->extraXCells()) &&
+          (currentSelection.height() - 1 == cell->extraYCells()));
 }
 
 QRect KSpreadSelection::getSelectionHandleArea(KSpreadCanvas* canvas)
@@ -106,30 +114,15 @@ QRect KSpreadSelection::getSelectionHandleArea(KSpreadCanvas* canvas)
   ypos = m_pView->activeTable()->rowPos( row, canvas );
   width = cell->width( column, canvas ) + 1;
   height = cell->height( row, canvas ) + 1; //+1, due to rounding issue at default height at 100% zoom
-  
+
   QRect handle( (xpos + width - (int)(2.0 * canvas->zoom())), (ypos + height - (int)(2.0 * canvas->zoom())),
                 (int) (5.0 * canvas->zoom()), (int)(5.0 * canvas->zoom()) );
   return handle;
 }
 
-void KSpreadSelection::setSelection( QRect _sel, KSpreadTable* table )
-{
-  Q_ASSERT(_sel.left() != 0);
-
-  if (_sel.contains(m_marker) && table == m_pView->activeTable())
-  {
-    setSelection( _sel, m_marker, table);
-  }
-  else
-  {
-    setSelection( _sel, _sel.topLeft(), table );
-  }
-}
-
-void KSpreadSelection::setSelection( QRect  newSelection, QPoint newMarker,
+void KSpreadSelection::setSelection( QPoint newMarker, QPoint newAnchor,
                                      KSpreadTable *table )
 {
-
   KSpreadCell* cell = table->cellAt(newMarker);
   if (cell->isObscured() && cell->isObscuringForced())
   {
@@ -137,19 +130,18 @@ void KSpreadSelection::setSelection( QRect  newSelection, QPoint newMarker,
     newMarker = QPoint(cell->column(), cell->row());
   }
 
-  newSelection = extendToMergedAreas(newSelection);
+  QRect oldSelection = selection();
 
-  Q_ASSERT(newSelection.contains(newMarker));
-
-  /* see if we've actually changed anything */
-  if ( newSelection == m_rctSelection && newMarker == m_marker &&
-       m_pView->activeTable() == table )
-    return;
 
   QPoint oldMarker = m_marker;
-  QRect oldSelection( m_rctSelection );
-  m_rctSelection = newSelection;
   m_marker = newMarker;
+  m_anchor = newAnchor;
+  QRect newSelection = selection();
+
+  /* see if we've actually changed anything */
+  if ( newSelection == oldSelection && newMarker == oldMarker &&
+       m_pView->activeTable() == table )
+    return;
 
   /* see if the cursor position is still valid */
   if (!setCursorPosition(m_cursorPosition))
@@ -172,14 +164,16 @@ void KSpreadSelection::setMarker( QPoint _point, KSpreadTable* table )
 
   QPoint botRight(topLeft.x() + cell->extraXCells(),
                   topLeft.y() + cell->extraYCells());
-  setSelection( QRect(topLeft, botRight), topLeft, table );
+  setSelection( topLeft, botRight, table );
 }
 
-QRect KSpreadSelection::selectionAnchor()const
+QPoint KSpreadSelection::selectionAnchor()const
 {
+  return m_anchor;
   /* the anchor is in the opposite corner of the selection rect from the marker */
 
   /* these show where the marker is */
+/*
   bool atTop;
   bool atLeft;
   QRect anchorArea;
@@ -204,6 +198,7 @@ QRect KSpreadSelection::selectionAnchor()const
   }
 
   return anchorArea;
+*/
 }
 
 bool KSpreadSelection::setCursorPosition(QPoint position)
@@ -240,14 +235,14 @@ QRect KSpreadSelection::getChooseRect()const
 
 
 
-QRect KSpreadSelection::extendToMergedAreas(QRect area)
+QRect KSpreadSelection::extendToMergedAreas(QRect area) const
 {
   KSpreadCell *cell;
 
   cell = m_pView->activeTable()->cellAt(area.left(), area.top());
 
-  if( util_isColumnSelected(selection()) ||
-      util_isRowSelected(selection()) )
+  if( util_isColumnSelected(area) ||
+      util_isRowSelected(area) )
     return area;
 
   else if ( !(cell->isObscured() && cell->isObscuringForced()) &&
