@@ -223,8 +223,6 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   m_pDoc = _map->doc();
   m_dcop = 0;
   dcopObject();
-  m_bShowPageBorders = FALSE;
-
   m_lstCellBindings.setAutoDelete( FALSE );
 
   m_strName = tableName;
@@ -261,6 +259,8 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   m_bPrintFormulaIndicator=false;
   m_bShowFormula=false;
   m_bShowFormulaIndicator=true;
+  m_bShowPageBorders = FALSE;
+
   m_bLcMode=false;
   m_bShowColumnNumber=false;
   m_bHideZero=false;
@@ -286,6 +286,8 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   m_paperHeight = PG_A4_HEIGHT;
   m_orientation = PG_PORTRAIT;
   m_printRange = QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) );
+  m_lnewPageListX.append( 1 );
+  m_lnewPageListY.append( 1 );
   m_dPrintRepeatColumnsWidth = 0.0;
   m_dPrintRepeatRowsHeight = 0.0;
   m_printRepeatColumns = qMakePair( 0, 0 );
@@ -7031,26 +7033,47 @@ bool KSpreadTable::isOnNewPageX( int _column )
     if ( _column == m_printRange.left() || _column == m_printRange.right() + 1 )
         return true;
 
-    int col = m_printRange.left();
-    float x = columnLayout( col )->mmWidth();
-    while ( ( col <= _column ) && ( col < m_printRange.right() ) )
+    //beyond the print range it's always false
+    if ( _column < m_printRange.left() || _column > m_printRange.right() )
+        return false;
+
+    //If we start, then add the printrange 
+    if ( m_lnewPageListX.empty() )
+        m_lnewPageListX.append( m_printRange.left() ); //Add the first entry
+
+    //Now check if we find the column already
+    if ( m_lnewPageListX.findIndex( _column ) != -1 )
+        return true;
+
+    //If _column is greater than the last entry, we need to calculate the result
+    if ( _column > m_lnewPageListX.last() ) //this columns hasn't been calculated before
     {
-        if ( x > printableWidth() )
+        int col = m_lnewPageListX.last();
+        float x = columnLayout( col )->mmWidth();
+        //Add repeated column width, when necessary
+        if ( col > m_printRepeatColumns.first )
+            x += m_dPrintRepeatColumnsWidth;
+
+        while ( ( col <= _column ) && ( col < m_printRange.right() ) )
         {
-            if ( col == _column )
-                return TRUE;
-            else
+            if ( x > printableWidth() )
             {
-                x = columnLayout( col )->mmWidth();
-                if ( col >= m_printRepeatColumns.first )
-                    x += m_dPrintRepeatColumnsWidth;
+                //We found a new page, so add it to the list
+                m_lnewPageListX.append( col );
+                if ( col == _column )
+                    return TRUE;
+                else
+                {
+                    x = columnLayout( col )->mmWidth();
+                    if ( col >= m_printRepeatColumns.first )
+                        x += m_dPrintRepeatColumnsWidth;
+                }
             }
+
+            col++;
+            x += columnLayout( col )->mmWidth();
         }
-
-        col++;
-        x += columnLayout( col )->mmWidth();
     }
-
     return FALSE;
 }
 
@@ -7060,26 +7083,68 @@ bool KSpreadTable::isOnNewPageY( int _row )
     if ( _row == m_printRange.top() || _row == m_printRange.bottom() + 1 )
         return true;
 
-    int row = m_printRange.top();
-    float y = rowLayout( row )->mmHeight();
-    while ( ( row <= _row ) && ( row < m_printRange.bottom() ) )
+     //beyond the print range it's always false
+    if ( _row < m_printRange.top() || _row > m_printRange.bottom() )
+        return false;
+
+    //If we start, then add the printrange 
+    if ( m_lnewPageListY.empty() )
+        m_lnewPageListY.append( m_printRange.top() ); //Add the first entry
+
+    //Now check if we find the row already
+    if ( m_lnewPageListY.findIndex( _row ) != -1 )
+        return true;
+
+    //If _column is greater than the last entry, we need to calculate the result
+    if ( _row > m_lnewPageListY.last() ) //this columns hasn't been calculated before
     {
-        if ( y > printableHeight() )
+        int row = m_lnewPageListY.last();
+        float y = rowLayout( row )->mmHeight();
+        //Add repeated row height, when necessary
+        if ( row > m_printRepeatRows.first )
+            y += m_dPrintRepeatRowsHeight;
+        while ( ( row <= _row ) && ( row < m_printRange.bottom() ) )
         {
-            if ( row == _row )
-                return TRUE;
-            else
+            if ( y > printableHeight() )
             {
-                y = rowLayout( row )->mmHeight();
-                if ( row >= m_printRepeatRows.first )
-                    y += m_dPrintRepeatRowsHeight;
+                //We found a new page, so add it to the list
+                m_lnewPageListY.append( row );
+
+                if ( row == _row )
+                    return TRUE;
+                else
+                {
+                    y = rowLayout( row )->mmHeight();
+                    if ( row >= m_printRepeatRows.first )
+                        y += m_dPrintRepeatRowsHeight;
+                }
             }
+            row++;
+            y += rowLayout( row )->mmHeight();
         }
-        row++;
-        y += rowLayout( row )->mmHeight();
     }
 
     return FALSE;
+}
+
+void KSpreadTable::updateNewPageListX( int _col )
+{
+    if ( _col < m_lnewPageListX.last() )
+    {
+        QValueList<int>::iterator it = m_lnewPageListX.find( _col );
+        while ( it != m_lnewPageListX.end() )
+            it = m_lnewPageListX.remove( it );
+    }
+}
+
+void KSpreadTable::updateNewPageListY( int _row )
+{
+    if ( _row < m_lnewPageListY.last() )
+    {
+        QValueList<int>::iterator it = m_lnewPageListY.find( _row );
+        while ( it != m_lnewPageListY.end() )
+            it = m_lnewPageListY.remove( it );
+    }
 }
 
 void KSpreadTable::addCellBinding( CellBinding *_bind )

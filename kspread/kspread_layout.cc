@@ -1753,6 +1753,7 @@ void RowLayout::setHeight( int _h, KSpreadCanvas *_canvas )
 
   // Rise maximum size by new height
   _table->adjustSizeMaxY ( height() );
+  _table->updateNewPageListY ( row() );
 
   UPDATE_END;
 }
@@ -2019,6 +2020,7 @@ void ColumnLayout::setWidth( int _w, KSpreadCanvas *_canvas )
 
   // Rise maximum size by new width
   _table->adjustSizeMaxX ( width() );
+  _table->updateNewPageListX ( column() );
 
   UPDATE_END;
 }

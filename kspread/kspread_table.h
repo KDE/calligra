@@ -1459,6 +1459,16 @@ public:
     void setPrintRepeatRows( QPair<int, int> _printRepeatRows );
 
     /**
+     * Updates the new page list for columns starting at column @arg _col
+     */
+    void updateNewPageListX( int _col );
+
+    /**
+     * Updates the new page list for rows starting at row @arg _row
+     */
+    void updateNewPageListY( int _row );
+
+    /**
      * Replaces in _text all _search text parts by _replace text parts.
      * Included is a test to not change if _search == _replace.
      * The arguments should not include neither the beginning "<" nor the leading ">", this is already
@@ -1651,6 +1661,16 @@ protected:
      * Height of repeated rows in mm, stored for perfomance reasons
      */
     double m_dPrintRepeatRowsHeight;
+
+    /**
+     * Stores the new page columns
+     */
+     QValueList<int> m_lnewPageListX;
+
+    /**
+     * Stores the new page columns
+     */
+     QValueList<int> m_lnewPageListY;
 
 public:
     // see kspread_table.cc for an explanation of this
