@@ -2355,17 +2355,17 @@ KoStatisticVariable::KoStatisticVariable( KoTextDocument *textdoc,  short int su
 QStringList KoStatisticVariable::actionTexts()
 {
     QStringList lst;
-    lst << i18n( "Number of Word" );
-    lst << i18n( "Number of Sentence" );
+    lst << i18n( "Number of Words" );
+    lst << i18n( "Number of Sentences" );
     lst << i18n( "Number of Lines" );
-    lst << i18n( "Number of Characteres" );
-    lst << i18n( "Number of Non Whitespace characteres" );
-    lst << i18n( "Number of Syllable" );
-    lst << i18n( "Number of Frame" );
-    lst << i18n( "Number of Embedded Object" );
-    lst << i18n( "Number of Picture" );
+    lst << i18n( "Number of Characters" );
+    lst << i18n( "Number of Non-Whitespace Characters" );
+    lst << i18n( "Number of Syllables" );
+    lst << i18n( "Number of Frames" );
+    lst << i18n( "Number of Embedded Objects" );
+    lst << i18n( "Number of Pictures" );
     if (  m_extendedType )
-        lst << i18n( "Number of Table" );
+        lst << i18n( "Number of Tables" );
     return lst;
 }
 
@@ -2459,57 +2459,57 @@ void KoStatisticVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*con
     {
     case VST_STATISTIC_NB_EMBEDDED:
         writer.startElement( "text:object-count" );
-        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.addTextNode( QString::number( m_varValue.toInt() ) );
         writer.endElement();
         break;
     case VST_STATISTIC_NB_TABLE:
         writer.startElement( "text:table-count" );
-        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.addTextNode( QString::number( m_varValue.toInt() ) );
         writer.endElement();
         break;
     case VST_STATISTIC_NB_PICTURE:
         writer.startElement( "text:picture-count" );
-        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.addTextNode( QString::number( m_varValue.toInt() ) );
         writer.endElement();
         break;
     case VST_STATISTIC_NB_FRAME:
         //TODO verify that it's implemented into oasis file format
         writer.startElement( "text:frame-count" );
-        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.addTextNode( QString::number( m_varValue.toInt() ) );
         writer.endElement();
         break;
     case VST_STATISTIC_NB_WORD:
         writer.startElement( "text:word-count" );
-        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.addTextNode( QString::number( m_varValue.toInt() ) );
         writer.endElement();
         break;
     case VST_STATISTIC_NB_SENTENCE:
         //TODO verify that it's implemented into oasis file format
         writer.startElement( "text:sentence-count" );
-        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.addTextNode( QString::number( m_varValue.toInt() ) );
         writer.endElement();
         break;
     case VST_STATISTIC_NB_CHARACTERE:
         writer.startElement( "text:character-count" );
-        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.addTextNode( QString::number( m_varValue.toInt() ) );
         writer.endElement();
         break;
     case VST_STATISTIC_NB_LINES:
         //TODO verify that it's implemented into oasis file format
         writer.startElement( "text:line-count" );
-        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.addTextNode( QString::number( m_varValue.toInt() ) );
         writer.endElement();
         break;
     case VST_STATISTIC_NB_NON_WHITESPACE_CHARACTERE:
         //TODO verify that it's implemented into oasis file format
-        writer.startElement( "text:character-without-space-count" );
-        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.startElement( "text:non-whitespace-character-count" );
+        writer.addTextNode( QString::number( m_varValue.toInt() ) );
         writer.endElement();
         break;
     case VST_STATISTIC_NB_SYLLABLE:
         //TODO verify that it's implemented into oasis file format
         writer.startElement( "text:syllable-count" );
-        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.addTextNode( QString::number( m_varValue.toInt() ) );
         writer.endElement();
         break;
     }
@@ -2519,27 +2519,27 @@ QString KoStatisticVariable::fieldCode()
 {
     if ( m_subtype == VST_STATISTIC_NB_FRAME )
     {
-        return i18n( "Number of Frame" );
+        return i18n( "Number of Frames" );
     }
     else if( m_subtype == VST_STATISTIC_NB_PICTURE )
     {
-        return i18n( "Number of Picture" );
+        return i18n( "Number of Pictures" );
     }
     else if( m_subtype == VST_STATISTIC_NB_TABLE )
     {
-        return i18n( "Number of Table" );
+        return i18n( "Number of Tables" );
     }
     else if( m_subtype == VST_STATISTIC_NB_EMBEDDED )
     {
-        return i18n( "Number of Embedded Object" );
+        return i18n( "Number of Embedded Objects" );
     }
     else if( m_subtype == VST_STATISTIC_NB_WORD )
     {
-        return i18n( "Number of Word" );
+        return i18n( "Number of Words" );
     }
     else if( m_subtype == VST_STATISTIC_NB_SENTENCE )
     {
-        return i18n( "Number of Sentence" );
+        return i18n( "Number of Sentences" );
     }
     else if( m_subtype == VST_STATISTIC_NB_LINES )
     {
@@ -2547,18 +2547,18 @@ QString KoStatisticVariable::fieldCode()
     }
     else if ( m_subtype == VST_STATISTIC_NB_CHARACTERE )
     {
-        return i18n( "Number of Characteres" );
+        return i18n( "Number of Characters" );
     }
     else if ( m_subtype == VST_STATISTIC_NB_NON_WHITESPACE_CHARACTERE )
     {
-        return i18n( "Number of non whitespace character" );
+        return i18n( "Number of Non-Whitespace Characters" );
     }
     else if ( m_subtype == VST_STATISTIC_NB_SYLLABLE )
     {
-        return i18n( "Number of syllable" );
+        return i18n( "Number of Syllables" );
     }
     else
-        return i18n( "Number of Frame" );
+        return i18n( "Number of Frames" );
 }
 
 
