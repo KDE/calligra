@@ -39,8 +39,8 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 	KSpreadLayoutIface.skel KSpreadLayoutIface.cc \
         KSpreadColumnIface.skel KSpreadColumnIface.cc \
 	KSpreadRowIface.skel KSpreadRowIface.cc \
-	kspread_selection.cc
-	
+	kspread_selection.cc kspread_dlg_paperlayout.cc
+
 libkspreadpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkspreadpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
 	$(LIB_KOSCRIPT) $(LIB_KOFFICEUI) -lkspell
@@ -83,7 +83,7 @@ noinst_HEADERS = kspread_doc.h kspread_functions.h \
 	KSpreadCellIface.h KSpreadMapIface.h KSpreadTableIface.h KSpreadDocIface.h \
 	KSpreadAppIface.h kspread_dlg_format.h kspread_aboutdata.h \
 	kspread_depend.h kspread_condition.h KSpreadLayoutIface.h \
-	KSpreadColumnIface.h KSpreadRowIface.h kspread_selection.h
+	KSpreadColumnIface.h KSpreadRowIface.h kspread_selection.h kspread_dlg_paperlayout.h
 
 kdelnk_DATA = kspread.desktop
 kdelnkdir = $(kde_appsdir)/Office

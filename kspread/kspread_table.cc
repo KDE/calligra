@@ -47,6 +47,7 @@
 #include "kspread_doc.h"
 #include "kspread_util.h"
 #include "kspread_canvas.h"
+#include "kspread_dlg_paperlayout.h"
 
 #include "KSpreadTableIface.h"
 
@@ -54,7 +55,7 @@
 #include <assert.h>
 
 #include <koChart.h>
-
+#include "kspread_table.moc"
 /*****************************************************************************
  *
  * CellBinding
@@ -7287,7 +7288,7 @@ void KSpreadTable::convertObscuringBorders()
  * Printout Functions *
  **********************/
 
-void KSpreadTable::paperLayoutDlg()
+void KSpreadTable::paperLayoutDlg(KSpreadView *view)
 {
     KoPageLayout pl;
     pl.format = paperFormat();
@@ -7309,191 +7310,10 @@ void KSpreadTable::paperLayoutDlg()
 
     KoUnit::Unit unit = m_pDoc->getUnit();
 
-    KoPageLayoutDia dlg( 0, "PageLayout", pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit );
 
-    // ------------- options ---------------
-    QWidget *tab = dlg.addPage(i18n( "Options" ));
-    QGridLayout *grid = new QGridLayout( tab, 7, 2, KDialog::marginHint(), KDialog::spacingHint() );
-
-    QCheckBox *pPrintGrid = new QCheckBox ( i18n("Print &grid"), tab );
-    pPrintGrid->setChecked( getPrintGrid() );
-    grid->addWidget( pPrintGrid, 0, 0 );
-
-    QCheckBox *pPrintCommentIndicator = new QCheckBox ( i18n("Print &comment indicator"), tab );
-    pPrintCommentIndicator->setChecked( getPrintCommentIndicator() );
-    grid->addWidget( pPrintCommentIndicator, 1, 0 );
-
-    QCheckBox *pPrintFormulaIndicator = new QCheckBox ( i18n("Print &formula indicator"), tab );
-    pPrintFormulaIndicator->setChecked( getPrintFormulaIndicator() );
-    grid->addWidget( pPrintFormulaIndicator, 2, 0 );
-
-    QLabel *pPrintRange = new QLabel ( i18n("Print range:"), tab );
-    grid->addWidget( pPrintRange, 3, 0 );
-
-    QLineEdit *ePrintRange = new QLineEdit( tab );
-    grid->addWidget( ePrintRange, 3, 1 );
-    ePrintRange->setText( util_rangeName( m_printRange ) );
-
-    QLabel *pRepeatCols = new QLabel ( i18n("Repeat columns on each page:"), tab );
-    grid->addWidget( pRepeatCols, 4, 0 );
-
-    QLineEdit *eRepeatCols = new QLineEdit( tab );
-    grid->addWidget( eRepeatCols, 4, 1 );
-    if ( m_printRepeatColumns.first != 0 )
-        eRepeatCols->setText( util_encodeColumnLabelText( m_printRepeatColumns.first ) +
-                              ":" +
-                              util_encodeColumnLabelText( m_printRepeatColumns.second ) );
-
-    QLabel *pRepeatRows = new QLabel ( i18n("Repeat rows on each page:"), tab );
-    grid->addWidget( pRepeatRows, 5, 0 );
-
-    QLineEdit *eRepeatRows = new QLineEdit( tab );
-    grid->addWidget( eRepeatRows, 5, 1 );
-    if ( m_printRepeatRows.first != 0 )
-        eRepeatRows->setText( QString().setNum( m_printRepeatRows.first ) +
-                              ":" +
-                              QString().setNum( m_printRepeatRows.second ) );
-
-    // --------------- main grid ------------------
-    grid->addColSpacing( 0, pPrintGrid->width() );
-    grid->addColSpacing( 0, pPrintCommentIndicator->width() );
-    grid->addColSpacing( 0, pPrintFormulaIndicator->width() );
-    grid->addColSpacing( 0, pPrintRange->width() );
-    grid->addColSpacing( 0, pRepeatRows->width() );
-    grid->addColSpacing( 0, pRepeatCols->width() );
-    grid->addColSpacing( 1, ePrintRange->width() );
-    grid->addColSpacing( 1, eRepeatRows->width() );
-    grid->addColSpacing( 1, eRepeatCols->width() );
-
-    grid->addRowSpacing( 0, pPrintGrid->height() );
-    grid->addRowSpacing( 1, pPrintCommentIndicator->height() );
-    grid->addRowSpacing( 2, pPrintFormulaIndicator->height() );
-    grid->addRowSpacing( 3, pPrintRange->height() );
-    grid->addRowSpacing( 3, ePrintRange->height() );
-    grid->addRowSpacing( 4, pRepeatRows->height() );
-    grid->addRowSpacing( 4, eRepeatRows->height() );
-    grid->addRowSpacing( 5, pRepeatCols->height() );
-    grid->addRowSpacing( 5, eRepeatCols->height() );
-    grid->setRowStretch( 6, 1 );
-
-    int result = dlg.exec();
-    if ( result == QDialog::Accepted )
-    {
-        if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-             KSpreadUndoAction* undo = new KSpreadUndoPaperLayout( doc(), this );
-             m_pDoc->undoBuffer()->appendUndo( undo );
-        }
-
-        pl = dlg.getLayout();
-        hf = dlg.getHeadFoot();
-        unit = dlg.unit();
-        setPrintGrid( pPrintGrid->isChecked() );
-        setPrintCommentIndicator( pPrintCommentIndicator->isChecked() );
-        setPrintFormulaIndicator( pPrintFormulaIndicator->isChecked() );
-        QString tmpPrintRange = ePrintRange->text();
-        QString tmpRepeatCols = eRepeatCols->text();
-        QString tmpRepeatRows = eRepeatRows->text();
-        if ( tmpPrintRange.isEmpty() )
-        {
-            setPrintRange( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) );
-        }
-        else
-        {
-            bool error = true;
-            int first = tmpPrintRange.find(":");
-            if ( ( first != -1 ) && ( (int)tmpPrintRange.length() > first ) )
-            {
-                KSpreadPoint point1 ( tmpPrintRange.left( first ) );
-                if ( point1.isValid() )
-                {
-                    KSpreadPoint point2 ( tmpPrintRange.mid( first+1 ) );
-                    if ( point2.isValid() )
-                    {
-                        error = false;
-                        setPrintRange ( QRect( QPoint( QMIN( point1.pos.x(), point2.pos.x() ),
-                                                       QMIN( point1.pos.y(), point2.pos.y() ) ),
-                                               QPoint( QMAX( point1.pos.x(), point2.pos.x() ),
-                                                       QMAX( point1.pos.y(), point2.pos.y() ) ) ) );
-                    }
-                }
-            }
-
-            if ( error ) KMessageBox::information( 0, i18n( "Print range wrong, changes are ignored." ) );
-        }
-
-        if ( tmpRepeatCols.isEmpty() )
-        {
-            setPrintRepeatColumns( qMakePair( 0, 0 ) );
-        }
-        else
-        {
-            bool error = true;
-            int first = tmpRepeatCols.find(":");
-            if ( ( first != -1 ) && ( (int)tmpRepeatCols.length() > first ) )
-            {
-                int col1 = util_decodeColumnLabelText( tmpRepeatCols.left( first ) );
-                if ( col1 > 0 && col1 <= KS_colMax )
-                {
-                    int col2 = util_decodeColumnLabelText( tmpRepeatCols.mid( first+1 ) );
-                    if ( col2 > 0 && col2 <= KS_colMax )
-                    {
-                        error = false;
-                        setPrintRepeatColumns ( qMakePair( col1, col2 ) );
-                    }
-                }
-            }
-
-            if ( error ) KMessageBox::information( 0, i18n( "Repeated columns range wrong, changes are ignored.\nMust be in format column:column (eg. B:C)" ) );
-        }
-
-        if ( tmpRepeatRows.isEmpty() )
-        {
-            setPrintRepeatRows ( qMakePair( 0, 0 ) );
-        }
-        else
-        {
-            bool error = true;
-            int first = tmpRepeatRows.find(":");
-            if ( ( first != -1 ) && ( (int)tmpRepeatRows.length() > first ) )
-            {
-                int row1 = tmpRepeatRows.left( first ).toInt();
-                if ( row1 > 0 && row1 <= KS_rowMax )
-                {
-                    int row2 = tmpRepeatRows.mid( first+1 ).toInt();
-                    if ( row2 > 0 && row2 <= KS_rowMax )
-                    {
-                        error = false;
-                        setPrintRepeatRows ( qMakePair( row1, row2 ) );
-                    }
-                }
-            }
-
-            if ( error ) KMessageBox::information( 0, i18n( "Repeated rows range wrong, changes are ignored.\nMust be in format row:row (eg. 2:3)" ) );
-        }
-        m_pDoc->setModified( true );
-    }
-    else
-    {
-        return;
-    }
-
-    if ( pl.format == PG_CUSTOM )
-    {
-        m_paperWidth = POINT_TO_MM(pl.ptWidth);
-        m_paperHeight = POINT_TO_MM(pl.ptHeight);
-    }
-
-    setPaperLayout( POINT_TO_MM(pl.ptLeft), POINT_TO_MM(pl.ptTop), POINT_TO_MM(pl.ptRight), POINT_TO_MM(pl.ptBottom), pl.format, pl.orientation );
-
-    setHeadFootLine( localizeHeadFootLine( hf.headLeft  ),
-                     localizeHeadFootLine( hf.headMid   ),
-                     localizeHeadFootLine( hf.headRight ),
-                     localizeHeadFootLine( hf.footLeft  ),
-                     localizeHeadFootLine( hf.footMid   ),
-                     localizeHeadFootLine( hf.footRight ) );
-
-    m_pDoc->setUnit( unit );
+    KSpreadPaperLayout *dlg=new KSpreadPaperLayout( 0, "PageLayout", pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit, this, view);
+    dlg->exec();
+    delete dlg;
 }
 
 void KSpreadTable::definePrintRange (KSpreadSelection* selectionInfo)
@@ -8092,5 +7912,3 @@ KoChart::Part* ChartChild::chart()
     assert( document()->inherits( "KoChart::Part" ) );
     return static_cast<KoChart::Part *>( document() );
 }
-
-#include "kspread_table.moc"

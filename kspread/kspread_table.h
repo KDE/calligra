@@ -1250,6 +1250,9 @@ public:
     float paperHeight()const { return m_paperHeight; }
     float paperWidth()const { return m_paperWidth; }
 
+    void setPaperHeight(float _val) { m_paperHeight=_val; }
+    void setPaperWidth(float _val) { m_paperWidth=_val; }
+
     /**
      * @return the left border in millimeters
      */
@@ -1437,14 +1440,12 @@ public:
      */
     void updatePrintRepeatRowsHeight();
 
-
-public slots:
     /**
      * Open a dialog for the "Page Layout".
      *
      * @see KoPageLayoutDia
      */
-    void paperLayoutDlg();
+    void paperLayoutDlg(KSpreadView *view);
     /**
      * Define the print range with the current selection
      */

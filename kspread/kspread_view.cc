@@ -4130,7 +4130,7 @@ void KSpreadView::layoutDlg()
 
 void KSpreadView::paperLayoutDlg()
 {
-    m_pTable->paperLayoutDlg();
+    m_pTable->paperLayoutDlg(this);
 }
 
 void KSpreadView::definePrintRange()
