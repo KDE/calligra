@@ -135,6 +135,6 @@ inline kndbgstream operator<<( kndbgstream str, const KoRect & )  { return str; 
 /** Show the rectangles that form a region (use as a standalone statement) */
 #define DEBUGREGION(reg) { QMemArray<QRect>rs=reg.rects(); for (int i=0;i<rs.size();++i) \
                            kdDebug()<<"  "<<DEBUGRECT(rs[i] )<<endl; }
-// You can know use kdDebug() << theregion << endl; (kdebugclasses.h)
+// You can now use kdDebug() << theregion << endl; (kdebugclasses.h)
 
 #endif
