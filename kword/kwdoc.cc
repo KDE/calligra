@@ -491,10 +491,12 @@ void KWDocument::initConfig()
   if(config->hasGroup("Kword Path" ) )
   {
       config->setGroup( "Kword Path" );
-      m_personalExpressionPath=config->readListEntry( "expression path"/*,KWFactory::global()->dirs()->resourceDirs("expression")*/ );
-      m_horizontalLinePath=config->readListEntry( "horizontal line path"/*,KWFactory::global()->dirs()->resourceDirs("expression")*/ );
-
-      m_picturePath=config->readEntry( "picture path",KGlobalSettings::documentPath());
+      if ( config->hasKey( "expression path" ) )
+          m_personalExpressionPath = config->readListEntry( "expression path" );
+      if ( config->hasKey( "horizontal line path" ) )
+          m_horizontalLinePath = config->readListEntry( "horizontal line path" );
+      if ( config->hasKey( "picture path" ) )
+          m_picturePath = config->readEntry( "picture path" );
       setBackupPath(config->readEntry( "backup path", QString::null ));
   }
 }
