@@ -519,7 +519,7 @@ void KisView::scrollV(int)
 
 void KisView::slotDocUpdated()
 {
-  //qDebug("KisView::slotDocUpdated");
+  //kdDebug() << "KisView::slotDocUpdated" << endl;
   m_pCanvas->repaint();
 }
 
@@ -707,31 +707,31 @@ void KisView::tool_gradient()
 
 void KisView::undo()
 {
-    qDebug("UNDO called");
+    kdDebug() << "UNDO called" << endl;
 
     m_pDoc->commandHistory()->undo();
 }
 
 void KisView::redo()
 {
-    qDebug("REDO called");
+    kdDebug() << "REDO called" << endl;
 
     m_pDoc->commandHistory()->redo();
 }
 
 void KisView::copy()
 {
-    qDebug("COPY called");
+    kdDebug() << "COPY called" << endl;
 }
 
 void KisView::cut()
 {
-    qDebug("CUT called");
+    kdDebug() << "CUT called" << endl;
 }
 
 void KisView::paste()
 {
-    qDebug("PASTE called");
+    kdDebug() << "PASTE called" << endl;
 }
 
 /*
@@ -816,7 +816,7 @@ void KisView::dialog_gradienteditor()
 
 void KisView::updateToolbarButtons()
 {
-  kDebugInfo( "KisView::updateToolbarButtons" );
+  kdDebug() << "KisView::updateToolbarButtons" << endl;
 
   m_dialog_gradient->setChecked( m_pGradientDialog->isVisible() );
   m_dialog_gradienteditor->setChecked( m_pGradientEditorDialog->isVisible() );
@@ -916,7 +916,7 @@ void KisView::saveOptions()
 
 void KisView::preferences()
 {
-  qDebug( "PREFERENCES called" );
+  kdDebug() << "PREFERENCES called" << endl;
 
   PreferencesDialog::editPreferences();
 }
