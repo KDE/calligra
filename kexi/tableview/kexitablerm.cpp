@@ -162,7 +162,7 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 		QPointArray points(3);
 		int ofs = m_rowHeight / 4;
 		int ofs2 = (width() - ofs) / 2 -1;
-		int pos = ((m_rowHeight*m_currentRow)-m_offset)-ofs/2+1;
+		int pos = ((m_rowHeight*m_currentRow)-m_offset)-ofs/2+2;
 		points.putPoints(0, 3, ofs2, pos+ofs, ofs2 + ofs, pos+ofs*2, 
 			ofs2,pos+ofs*3);
 		p.drawPolygon(points);
