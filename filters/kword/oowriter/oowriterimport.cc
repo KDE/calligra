@@ -50,7 +50,7 @@ K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory( "oowriteri
 
 
 OoWriterImport::OoWriterImport( KoFilter *, const char *, const QStringList & )
-  : KoFilter(), m_pictureNumber(0)
+  : KoFilter(), m_pictureNumber(0), m_oostore(NULL)
 {
     m_styles.setAutoDelete( true );
 }
@@ -69,10 +69,24 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
         return KoFilter::NotImplemented;
     }
 
+    m_oostore = KoStore::createStore( m_chain->inputFile(), KoStore::Read);
+    m_oostore->disallowNameExpansion();
+
+    kdDebug(30518) << "Store created" << endl;
+
+    if ( !m_oostore )
+    {
+        kdError(30518) << "Couldn't open the requested file." << endl;
+        return KoFilter::FileNotFound;
+    }
+    
     KoFilter::ConversionStatus preStatus = openFile();
 
     if ( preStatus != KoFilter::OK )
+    {
+        delete m_oostore;
         return preStatus;
+    }
 
     QDomDocument mainDocument;
     QDomElement framesetsElem;
@@ -89,6 +103,8 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
     createStyles( mainDocument );
     createDocumentContent( mainDocument, mainFramesetElement );
 
+    delete m_oostore; // It has to be so late, as pictures might be read.
+        
     KoStoreDevice* out = m_chain->storageFile( "maindoc.xml", KoStore::Write );
     if ( !out ) {
         kdError(30518) << "Unable to open output file!" << endl;
@@ -284,43 +300,30 @@ void OoWriterImport::createInitialFrame( QDomElement& parentFramesetElem, int to
     parentFramesetElem.appendChild( frameElementOut );
 }
 
-// Very related to OoImpressImport::openFile()
+// Very related to OoImpressImport::openFile(), except KoStore creation/destruction/handling
 KoFilter::ConversionStatus OoWriterImport::openFile()
 {
-    KoStore * store = KoStore::createStore( m_chain->inputFile(), KoStore::Read);
-
-    kdDebug(30518) << "Store created" << endl;
-
-    if ( !store )
-    {
-        kdWarning(30518) << "Couldn't open the requested file." << endl;
-        return KoFilter::FileNotFound;
-    }
-
     // Error variables for QDomDocument::setContent
     QString errorMsg;
     int errorLine, errorColumn;
 
     kdDebug(30518) << "Trying to open content.xml" << endl;
-    if ( !store->open( "content.xml" ) )
+    if ( !m_oostore->open( "content.xml" ) )
     {
-        kdWarning(30518) << "This file doesn't seem to be a valid OpenWriter file" << endl;
-        delete store;
+        kdError(30518) << "This file doesn't seem to be a valid OpenWriter file" << endl;
         return KoFilter::WrongFormat;
     }
     
-    
-    if ( !m_content.setContent( store->device(),
+    if ( !m_content.setContent( m_oostore->device(),
         &errorMsg, &errorLine, &errorColumn ) )
     {
         kdError(30518) << "Parsing error in content.xml! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
             << " Error message: " << errorMsg << endl;
-        store->close();
-        delete store;
+        m_oostore->close();
         return KoFilter::ParsingError;
     }
-    store->close();
+    m_oostore->close();
 
     //kdDebug(30518)<<" m_content.toCString() :"<<m_content.toCString()<<endl;
     kdDebug(30518) << "file content.xml loaded " << endl;
@@ -334,66 +337,57 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
     
     // NOTE: If we have not have a correct styles.xml, we have to abort or the filter will crash later.
     
-    if ( store->open( "styles.xml" ) )
+    if ( m_oostore->open( "styles.xml" ) )
     {
-        if ( !m_stylesDoc.setContent( store->device(),
+        if ( !m_stylesDoc.setContent( m_oostore->device(),
              &errorMsg, &errorLine, &errorColumn ) )
         {
-            kdError(30518) << "Parsing error in styles.xml! Aborting!" << endl
+            kdWarning(30518) << "Parsing error in styles.xml! Aborting!" << endl
                 << " In line: " << errorLine << ", column: " << errorColumn << endl
                 << " Error message: " << errorMsg << endl;
-            store->close();
-            delete store;
-            return KoFilter::ParsingError;
         }
+        else
+            kdDebug(30518) << "file containing styles loaded" << endl;
         
-        store->close();
-        kdDebug(30518) << "file containing styles loaded" << endl;
-
+        m_oostore->close();
         //kdDebug(30518)<<" styles.toCString() :"<<m_stylesDoc.toCString()<<endl;
     }
     else
-    {
-        kdWarning(30518) << "Style definitions do not exist! Aborting!" << endl;
-        delete store;
-        return KoFilter::WrongFormat;
-    }
+        kdWarning(30518) << "Style definitions do not exist!" << endl;
 
-    if ( store->open( "meta.xml" ) )
+    if ( m_oostore->open( "meta.xml" ) )
     {
-        if ( !m_meta.setContent( store->device(),
+        if ( !m_meta.setContent( m_oostore->device(),
              &errorMsg, &errorLine, &errorColumn ) )
-	{
-	    kdWarning(30518) << "Parsing error in meta.xml" << endl
-		<< " In line: " << errorLine << ", column: " << errorColumn << endl
-		<< " Error message: " << errorMsg << endl;
-	}
+        {
+            kdWarning(30518) << "Parsing error in meta.xml" << endl
+                << " In line: " << errorLine << ", column: " << errorColumn << endl
+                << " Error message: " << errorMsg << endl;
+        }
         else
             kdDebug(30518) << "File containing meta definitions loaded" << endl;
         
-        store->close();
+        m_oostore->close();
     }
     else
         kdWarning(30518) << "Meta definitions do not exist!" << endl;
 
-    if ( store->open( "settings.xml" ) )
+    if ( m_oostore->open( "settings.xml" ) )
     {
-        if ( !m_settings.setContent( store->device(),
+        if ( !m_settings.setContent( m_oostore->device(),
              &errorMsg, &errorLine, &errorColumn ) )
-	{
-	    kdWarning(30518) << "Parsing error in settings.xml" << endl
-		<< " In line: " << errorLine << ", column: " << errorColumn << endl
-		<< " Error message: " << errorMsg << endl;
-	}
+        {
+            kdWarning(30518) << "Parsing error in settings.xml" << endl
+                << " In line: " << errorLine << ", column: " << errorColumn << endl
+                << " Error message: " << errorMsg << endl;
+        }
         else
             kdDebug(30518) << "File containing settings loaded" << endl;
 
-        store->close();
+        m_oostore->close();
     }
     else
         kdWarning(30518) << "Settings do not exist!" << endl;
-
-    delete store;
 
     emit sigProgress( 10 );
 
@@ -1122,54 +1116,20 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
         KoPictureKey key(filename, QDateTime::currentDateTime(Qt::UTC));
         picture.setKey(key);
         
-        // We cannot use KoStore, as it cooks the file names starting with a digit
-        // So we must open the file "by hand." The code is similar to what is insige KoZipStore
-        KZip* zip=new KZip(m_chain->inputFile());
-        if (!zip->open(IO_ReadOnly))
-        {
-            kdWarning(30518) << "Cannot open zip file! Skipping picture  " << frameName << " " << href << endl;
-            delete zip;
-            return;
-        }   
-        if (!zip->directory())
-        {
-            kdWarning(30518) << "Zip file is empty! Skipping picture  " << frameName << " " << href << endl;
-            zip->close();
-            delete zip;
-            return;
-        }
-        const KArchiveEntry* entry = zip->directory()->entry( filename );
-        if (!entry)
+        if ( !m_oostore->open( filename ) )
         {
             kdWarning(30518) << "Cannot find picture  " << frameName << " " << href << endl;
-            zip->close();
-            delete zip;
             return;
         }
-        if ( entry->isDirectory() )
-        {
-            kdWarning(30518) << "Picture is a directory! " << frameName << " " << href << endl;
-            zip->close();
-            delete zip;
-            return;
-        }
-        // Must cast to KZipFileEntry, not only KArchiveFile, because device() isn't virtual! (in KDE 3.1.x)
-        const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
-        QIODevice* io=f->device(); // Now the device is ours, so we will need to delete it.
-        kdDebug(30518) << "Size in KZipFileEntry: " << f->size() << endl;
+        QIODevice* io=m_oostore->device();
         if (!io)
         {
             kdWarning(30518) << "No QIODevice for picture  " << frameName << " " << href << endl;
-            zip->close();
-            delete zip;
             return;
         }
         if (!picture.load(io,strExtension))
             kdWarning(30518) << "Cannot load picture: " << frameName << " " << href << endl;
-        
-        delete io;
-        zip->close();
-        delete zip;        
+        m_oostore->close();
     }
     else
     {

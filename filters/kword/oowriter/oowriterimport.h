@@ -27,6 +27,8 @@
 #include <qdom.h>
 #include <stylestack.h>
 
+class KoStore;
+
 class OoWriterImport : public KoFilter
 {
     Q_OBJECT
@@ -69,6 +71,7 @@ private:
     StyleStack m_styleStack;
     
     uint m_pictureNumber; // Number of the picture (increment *before* use)
+    KoStore* m_oostore; // Input KoStore
 };
 
 #endif
