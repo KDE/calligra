@@ -365,6 +365,9 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
         //QDate doesn't encode it as this format.
         QString timeIso = QString( "PT%1H%2M%3S" ).arg( hours ).arg( ms ).arg( sec );
         stylepageauto.addProperty("presentation:duration", timeIso );
+        //not used into kpresenter but necessary into ooimpress
+        //keep compatible
+        stylepageauto.addProperty( "presentation:transition-type", "automatic" );
     }
     if ( m_presSpeed != 5 )
     {
@@ -647,6 +650,12 @@ void KPBackGround::loadOasis(KoOasisContext & context )
         pageTimer = second + minute*60 + hour*60*60;
         kdDebug()<<" second : "<<second<<" minute :"<<minute<<" hour "<<hour<<endl;
 
+    }
+    if ( styleStack.hasAttribute( "presentation:transition-type", QString::null, "drawing-page" ) )
+    {
+        //Not defined into kpresenter
+        //it's global for the moment.
+        kdDebug()<<" presentation:transition-type :"<<styleStack.attribute( "presentation:transition-type", QString::null, "drawing-page" )<<endl;
     }
     if ( styleStack.hasAttribute("presentation:transition-style", QString::null, "drawing-page"))
     {
