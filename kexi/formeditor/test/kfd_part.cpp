@@ -196,7 +196,7 @@ KFormDesignerPart::setupActions()
 	sizeMenu->insert( new KAction(i18n("To Widest"), "aowidest", KShortcut(0), m_manager, SLOT(adjustWidthToBig()), actionCollection(), "adjust_width_big") );
 
 	m_manager->createActions(actionCollection());
-	setXMLFile("kfd_part.rc");
+	setXMLFile("kformdesigner_part.rc");
 }
 
 void
