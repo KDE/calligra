@@ -44,7 +44,6 @@ GPolyline::GPolyline () {
 
 GPolyline::GPolyline (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
 
-    kdDebug() << "GPolyline() - element: " << element.tagName() << endl;
     connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
 	     SLOT(updateProperties (GObject::Property, int)));
     points.setAutoDelete (true);
@@ -62,18 +61,14 @@ GPolyline::GPolyline (const QDomElement &element) : GObject (element.namedItem("
     Coord point;
     int i=0;
     for( ; !p.isNull(); p = p.nextSibling().toElement() ) {
-	kdDebug() << "point???" << endl;
 	if(p.tagName()=="point") {
-	    kdDebug() << "yeah :)" << endl;
 	    point.x(p.attribute("x").toFloat());
 	    point.y(p.attribute("y").toFloat());
-	    kdDebug() << "x " << point.x() << " y " << point.y() << endl;
 	    addPoint(i, point);
 	    ++i;
 	}
     }
     calcBoundingBox ();
-    kdDebug() << "see ya" << endl;
 }
 
 GPolyline::GPolyline (const GPolyline& obj) : GObject (obj) {

@@ -159,16 +159,22 @@ int GDocument::getPaperHeight () const {
 }
 
 void GDocument::drawContents (QPainter& p, bool withBasePoints, bool outline) {
-  vector<GLayer*>::iterator i = layers.begin ();
-  for (; i != layers.end (); i++) {
-    GLayer* layer = *i;
-    if (! layer->isInternal () && layer->isVisible ()) {
-      const list<GObject*>& contents = layer->objects ();
-      for (list<GObject*>::const_iterator oi = contents.begin ();
-	   oi != contents.end (); oi++)
-	(*oi)->draw (p, withBasePoints && (*oi)->isSelected (), outline);
+
+    kdDebug() << "painEvent :)" << endl;
+    vector<GLayer*>::iterator i = layers.begin ();
+    for (; i != layers.end (); i++) {
+	kdDebug() << "layer" << endl;
+	GLayer* layer = *i;
+	if (! layer->isInternal () && layer->isVisible ()) {
+	    kdDebug() << "visible :)" << endl;
+	    const list<GObject*>& contents = layer->objects ();
+	    for (list<GObject*>::const_iterator oi = contents.begin ();
+		 oi != contents.end (); oi++) {
+		kdDebug() << "draw object" << endl;
+		(*oi)->draw (p, withBasePoints && (*oi)->isSelected (), outline);
+	    }
+	}
     }
-  }
 }
 
 void GDocument::drawContentsInRegion (QPainter& p, const Rect& r,
@@ -200,14 +206,16 @@ unsigned int GDocument::objectCount () const {
 }
 
 void GDocument::insertObject (GObject* obj) {
-  obj->ref ();
-  active_layer->insertObject (obj);
-  connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
-  connect (obj, SIGNAL(changed(const Rect&)),
-	   this, SLOT(objectChanged (const Rect&)));
-  setModified ();
-  if (autoUpdate)
-    emit changed ();
+
+    kdDebug() << "insertObject" << endl;
+    obj->ref ();
+    active_layer->insertObject (obj);
+    connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
+    connect (obj, SIGNAL(changed(const Rect&)),
+	     this, SLOT(objectChanged (const Rect&)));
+    setModified ();
+    if (autoUpdate)
+	emit changed ();
 }
 
 void GDocument::selectObject (GObject* obj) {
@@ -553,7 +561,7 @@ QDomDocument GDocument::saveToXml () {
     }
     grid.appendChild(helplines);
 
-    bool save_layer_info = (layers.size () > 2);
+    //bool save_layer_info = (layers.size () > 2);
     for (vector<GLayer*>::iterator li = layers.begin ();
 	 li != layers.end (); li++) {
 	if ((*li)->isInternal ())
@@ -561,14 +569,11 @@ QDomDocument GDocument::saveToXml () {
 
 	QDomElement layer;
 	layer=document.createElement("layer");
-	if (save_layer_info) {
-	    int flags = ((*li)->isVisible () ? LAYER_VISIBLE : 0) +
-			((*li)->isPrintable () ? LAYER_PRINTABLE : 0) +
-			((*li)->isEditable () ? LAYER_EDITABLE : 0);
-	    layer.setAttribute ("id", (*li)->name ());
-	    layer.setAttribute ("flags", flags);
-	    kdDebug() << "fooooooooooooooo - layer" << endl;
-	}
+	int flags = ((*li)->isVisible () ? LAYER_VISIBLE : 0) +
+		    ((*li)->isPrintable () ? LAYER_PRINTABLE : 0) +
+		    ((*li)->isEditable () ? LAYER_EDITABLE : 0);
+	layer.setAttribute ("id", (*li)->name ());
+	layer.setAttribute ("flags", QString::number(flags));
 	list<GObject*>& contents = (*li)->objects ();
 	for (list<GObject*>::iterator oi = contents.begin ();
 	     oi != contents.end (); oi++)
@@ -605,7 +610,9 @@ bool GDocument::parseBody (const QDomElement &element, std::list<GObject*>& /*ne
 	    active_layer = addLayer ();
 	    active_layer->setName (layerelem.attribute("id"));
 	    int flags = layerelem.attribute("flags").toInt();
+	    kdDebug() << "flags: " << flags << endl;
 	    active_layer->setVisible (flags & LAYER_VISIBLE);
+	    kdDebug() << "layer visible? - " << (active_layer->isVisible() ? "yep" : "nop") << endl;
 	    active_layer->setPrintable (flags & LAYER_EDITABLE);
 	    active_layer->setEditable (flags & LAYER_PRINTABLE);
 
@@ -636,16 +643,20 @@ bool GDocument::parseBody (const QDomElement &element, std::list<GObject*>& /*ne
     // update object connections
     vector<GLayer*>::iterator i = layers.begin ();
     for (; i != layers.end (); i++) {
+	kdDebug() << "layer" << endl;
 	GLayer* layer = *i;
 	list<GObject*>& contents = layer->objects ();
 	for (list<GObject*>::iterator oi = contents.begin ();
 	     oi != contents.end (); oi++) {
+	    kdDebug() << "object!!!" << endl;
 	    // this should be more general !!
 	    if ((*oi)->hasRefId () && (*oi)->isA ("GText")) {
+		kdDebug() << "test object" << endl;
 		GObject *o = refDict[(*oi)->getRefId ()];
 		if(o) {
 		    GText *tobj = (GText *) *oi;
 		    tobj->setPathObject (o);
+		    kdDebug() << "connected" << endl;
 		}
 	    }
 	}
@@ -725,11 +736,6 @@ bool GDocument::readFromXml (const  QDomDocument &document) {
 
     list<GObject*> dummy;
     bool result = parseBody (killustrator, dummy, false);
-
-    if(result)
-	kdDebug() << "okay :)" << endl;
-    else
-	kdDebug() << "not okay :(" << endl;
 
     setModified (false);
     emit gridChanged ();
