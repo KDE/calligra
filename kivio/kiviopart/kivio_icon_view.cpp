@@ -28,6 +28,7 @@
 #include <qbrush.h>
 #include <qpalette.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 
 KivioStencilSpawner* KivioIconView::m_pCurDrag = 0L;
@@ -40,7 +41,7 @@ KivioIconViewItem::KivioIconViewItem( QIconView *parent )
     : QIconViewItem( parent )
 {
     m_pSpawner = NULL;
-    setText("stencil");
+    setText(i18n("stencil"));
 }
 
 KivioIconViewItem::~KivioIconViewItem()
@@ -56,7 +57,7 @@ void KivioIconViewItem::setStencilSpawner( KivioStencilSpawner *pSpawn )
 
     if( !m_pSpawner )
     {
-        setText( "Untitled" );
+        setText( i18n("Untitled") );
     }
     else
     {
