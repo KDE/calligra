@@ -209,13 +209,13 @@ void VGradientTabWidget::setupUI()
 	addTab( m_editGroup, i18n( "Edit" ) );
 
 	QGroupBox* predefGroup  = new QGroupBox( i18n( "Predefined Gradients" ) );
-	QGridLayout* predefLayout = new QGridLayout( predefGroup );
+	QGridLayout* predefLayout = new QGridLayout( predefGroup, 3, 2 );
 	predefLayout->setSpacing( 3 );
 	predefLayout->setMargin( 6 );
 	predefLayout->addRowSpacing( 0, 12 );
-	predefLayout->addMultiCellWidget( m_predefGradientsView = new KListBox( predefGroup ), 0, 0, 0, 1 );
-	predefLayout->addWidget( m_predefDelete = new QPushButton( i18n( "&Delete" ), predefGroup ), 1, 0 );
-	predefLayout->addWidget( m_predefImport = new QPushButton( i18n( "&Import" ), predefGroup ), 1, 1 );
+	predefLayout->addMultiCellWidget( m_predefGradientsView = new KListBox( predefGroup ), 1, 1, 0, 2 );
+	predefLayout->addWidget( m_predefDelete = new QPushButton( i18n( "&Delete" ), predefGroup ), 2, 0 );
+	predefLayout->addWidget( m_predefImport = new QPushButton( i18n( "&Import" ), predefGroup ), 2, 1 );
 	m_predefImport->setEnabled( false );
 	addTab( predefGroup, i18n( "Predefined" ) );
 } // VGradientTabWidget::setupUI
