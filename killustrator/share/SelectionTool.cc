@@ -605,7 +605,10 @@ void SelectionTool::shear (GDocument* doc, int mask, float dx, float dy,
 void SelectionTool::activate (GDocument* doc, Canvas*) {
   doc->handle ().show (true);
   if (doc->lastObject ()) {
-    doc->selectObject (doc->lastObject ());
+    if (doc->selectionIsEmpty ())
+      doc->selectObject (doc->lastObject ());
+    else
+      doc->setAutoUpdate (true);
     state = S_Pick;
   }
   else

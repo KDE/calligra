@@ -57,10 +57,12 @@ private slots:
   void addHorizLine ();
   void updateHorizLine ();
   void deleteHorizLine ();
+  void horizLineSelected (int idx);
 
   void addVertLine ();
   void updateVertLine ();
   void deleteVertLine ();
+  void vertLineSelected (int idx);
 
 private:
   void initLists ();

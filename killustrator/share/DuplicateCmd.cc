@@ -64,8 +64,11 @@ void DuplicateCmd::execute () {
 }
 
 void DuplicateCmd::unexecute () {
-  for (list<GObject*>::iterator it = new_objects.begin ();
-       it != new_objects.end (); it++)
+  document->unselectAllObjects ();
+  list<GObject*>::iterator it = new_objects.begin ();
+  for (it = new_objects.begin (); it != new_objects.end (); it++)
       document->deleteObject (*it);
+  for (it = objects.begin (); it != objects.end (); it++)
+      document->selectObject (*it);
 }
 

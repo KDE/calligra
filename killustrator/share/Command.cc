@@ -68,6 +68,10 @@ void ObjectManipCmd::execute () {
 }
 
 void ObjectManipCmd::unexecute () {
-  for (unsigned int i = 0; i < objects.count (); i++)
+  if (document)
+    document->unselectAllObjects ();
+  for (unsigned int i = 0; i < objects.count (); i++) {
     objects[i]->restoreState (states[i]);
+    document->selectObject (objects[i]);
+  }
 }

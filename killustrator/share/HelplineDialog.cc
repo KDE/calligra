@@ -79,6 +79,8 @@ QWidget* HelplineDialog::createHorizLineWidget (QWidget* parent) {
   horizList->setFixedVisibleLines (6);
   horizList->move (10, 60);
   horizList->setMultiSelection (false);
+  connect (horizList, SIGNAL(highlighted (int)), 
+	   this, SLOT(horizLineSelected(int)));
 
   button = new QPushButton (w);
   button->setText (i18n ("Add"));
@@ -114,6 +116,8 @@ QWidget* HelplineDialog::createVertLineWidget (QWidget* parent) {
   vertList->setFixedVisibleLines (6);
   vertList->move (10, 60);
   vertList->setMultiSelection (false);
+  connect (vertList, SIGNAL(highlighted (int)), 
+	   this, SLOT(vertLineSelected(int)));
 
   button = new QPushButton (w);
   button->setText (i18n ("Add"));
@@ -227,6 +231,18 @@ void HelplineDialog::deleteVertLine () {
     advance (it, idx);
     vertLines.erase (it);
   }
+}
+
+void HelplineDialog::horizLineSelected (int idx) {
+    vector<float>::iterator it = horizLines.begin ();
+    advance (it, idx);
+    horizValue->setValue (*it);
+}
+
+void HelplineDialog::vertLineSelected (int idx) {
+    vector<float>::iterator it = vertLines.begin ();
+    advance (it, idx);
+    vertValue->setValue (*it);
 }
 
 void HelplineDialog::setup (Canvas *c) {
