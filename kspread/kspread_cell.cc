@@ -2287,7 +2287,21 @@ bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset,QString name 
         }
   if ( !m_strText.isEmpty()&& isFormular())
   	{
-  	out << indent << "<FORMULA formula=\"" << m_strText.utf8() <<"\"/>"<<endl;
+  	//this is a bad code
+  	//so fixme
+  	//I do that because when you write '>' in tag
+  	//it doesn't work
+  	//So I transform =A1>A2 in ~=A1~A2
+  	if( m_strText.find(">")!=-1)
+  		{
+  		QString tmp=m_strText;
+  		tmp="~"+tmp;
+  		int pos=tmp.find(">");
+  		tmp=tmp.replace(pos,1,"~");
+  		out << indent << "<FORMULA formula=\"" << tmp.utf8() <<"\"/>"<<endl;
+  		}
+  	else
+  		out << indent << "<FORMULA formula=\"" << m_strText.utf8() <<"\"/>"<<endl;
   	}
   if ( !m_strText.isEmpty() )
   {
@@ -2649,7 +2663,15 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
 	    cout <<"Err in TABLE\n";
 	    }
 	  }
-	cout <<"Formule reelle : "<<formula.ascii()<<endl;
+	  if( formula.find("~")==0)
+  		{
+  		QString tmp=formula;
+  		tmp=formula.remove(0,1);
+  		int pos=tmp.find("~");
+  		tmp=tmp.replace(pos,1,">");
+  		formula=tmp;
+  		}
+	//cout <<"Formule reelle : "<<formula.ascii()<<endl;
 	}
 	else
 	  cerr << "Unknown tag '" << tag << "' in CELL" << endl;

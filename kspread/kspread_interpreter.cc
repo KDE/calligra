@@ -831,19 +831,19 @@ static bool kspreadfunc_if( KSContext& context )
 	{
  	 context.setValue( new KSValue(args[2]->doubleValue()));
 	}
-   /* else if(KSUtil::checkType( context, args[2], KSValue::BoolType, true ) )
+   /*else if(KSUtil::checkType( context, args[2], KSValue::BoolType, true ) )
 	{
-          cout <<"booleen :\n";*/
-        /*   bool toto;
+          cout <<"booleen :\n";
+           bool toto;
   	if( args[2]->boolValue()==true)
   		toto=false;
    	else if  (args[2]->boolValue()==false)
    		toto=true;
    	else		
-   		cout <<"Pb in function IF\n"; */
-  	//context.setValue( new KSValue(toto));
-          //context.setValue( new KSValue(args[2]->boolValue()));
-	//}
+   		cout <<"Pb in function IF\n";
+  	context.setValue( new KSValue(toto));
+          /*context.setValue( new KSValue(args[2]->boolValue()));*/
+	/*}*/
     else
     	{
     	cout <<"Pb in function IF\n";
@@ -991,6 +991,60 @@ static bool kspreadfunc_REPT( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_islogic( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "ISLOGIC", true ) )
+    return false;
+
+  bool logic;
+  if ( KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
+  	logic=true;
+  else
+  	logic=false;
+ 	
+
+  context.setValue( new KSValue(logic)); 	
+  return true;
+}
+
+static bool kspreadfunc_istext( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "ISTEXT", true ) )
+    return false;
+
+  bool logic;
+  if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+  	logic=true;
+  else
+  	logic=false;
+ 	
+
+  context.setValue( new KSValue(logic)); 	
+  return true;
+}
+
+static bool kspreadfunc_isnum( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "ISNUM", true ) )
+    return false;
+
+  bool logic;
+  if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+  	logic=true;
+  else
+  	logic=false;
+ 	
+
+  context.setValue( new KSValue(logic)); 	
+  return true;
+}
+
 static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
 {
   KSModule::Ptr module = new KSModule( interp, "kspread" );
@@ -1036,6 +1090,9 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "ENT", new KSValue( new KSBuiltinFunction( module, "ENT",kspreadfunc_ENT) ) );
   module->addObject( "PI", new KSValue( new KSBuiltinFunction( module, "PI",kspreadfunc_PI) ) );
   module->addObject( "REPT", new KSValue( new KSBuiltinFunction( module, "REPT",kspreadfunc_REPT) ) );
+  module->addObject( "ISLOGIC", new KSValue( new KSBuiltinFunction( module, "ISLOGIC",kspreadfunc_islogic) ) );
+  module->addObject( "ISTEXT", new KSValue( new KSBuiltinFunction( module, "ISTEXT",kspreadfunc_istext) ) );
+  module->addObject( "ISNUM", new KSValue( new KSBuiltinFunction( module, "ISNUM",kspreadfunc_isnum) ) );
   return module;
 }
 

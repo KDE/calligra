@@ -90,6 +90,12 @@ inside so you can add text in this cell.
 	format->Column->Width
 -bugfix
 
+1999-09-25 -Montel laurent<montell@club-internet.fr>
+-----------------------------------------------------
+-Now you can hide different tables
+         format->table->hide
+         format->table->show
+and it's saving.
 
 
  

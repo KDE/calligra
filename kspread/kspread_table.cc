@@ -202,6 +202,7 @@ KSpreadTable::KSpreadTable( KSpreadDoc *_doc, const char *_name )
   m_iMaxRow = 256;
   m_bScrollbarUpdates = true;
   setSort(false);
+  setHide(false);
   initInterpreter();
 }
 
@@ -2788,8 +2789,14 @@ bool KSpreadTable::saveCellRect( ostream &out, const QRect &_rect )
 
 bool KSpreadTable::save( ostream &out )
 {
-  out << otag << "<TABLE name=\"" << m_strName.ascii() << "\">" << endl;
-
+  if(!isHide())
+  	{
+  	  out << otag << "<TABLE name=\"" << m_strName.ascii()<< "\">" << endl;
+  	}
+  else
+  	{
+  	 out << otag << "<TABLE name=\"" << m_strName.ascii()<< "\" hide" << ">" << endl;
+  	}
   // Save all cells.
   QIntDictIterator<KSpreadCell> it( m_dctCells );
   for ( ; it.current(); ++it )
@@ -2840,6 +2847,11 @@ bool KSpreadTable::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
     if ( (*it).m_strName == "name" )
     {
       m_strName = (*it).m_strValue.c_str();
+    }
+    else if( (*it).m_strName =="hide")
+    {
+      setHide(true);
+      cout <<"Hide";
     }
     else
       cerr << "Unknown attrib 'TABLE:" << (*it).m_strName << "'" << endl;

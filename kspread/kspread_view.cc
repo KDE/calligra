@@ -64,6 +64,7 @@
 #include "kspread_dlg_sort.h"
 #include "kspread_dlg_anchor.h"
 #include "kspread_dlg_resize.h"
+#include "kspread_dlg_show.h"
 
 /*****************************************************************************
  *
@@ -165,6 +166,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
   KSpreadTable *tbl;
   for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
     addTable( tbl );
+
+  setActiveTable(doc()->map()->findTable(m_pTabBar->listshow().first()));
 
   QObject::connect( m_pDoc, SIGNAL( sig_addTable( KSpreadTable* ) ), SLOT( slotAddTable( KSpreadTable* ) ) );
 }
@@ -878,6 +881,7 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     m_vMenuEdit_Remove = 0L;
     m_vMenuFormat_ResizeColumn = 0L;
     m_vMenuFormat_ResizeRow = 0L;
+    m_vMenuFormat_Table = 0L;
     return true;
   }
 
@@ -971,6 +975,12 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_vMenuFormat->insertItem8( i18n( "Column" ),m_vMenuFormat_ResizeColumn , -1, -1 );
   m_idMenuFormat_Width = m_vMenuFormat_ResizeColumn->insertItem( i18n( "Width" ), this, "resizewidth", 0 );
+
+  m_vMenuFormat->insertSeparator( -1 );
+  m_vMenuFormat->insertItem8( i18n( "Table" ),m_vMenuFormat_Table , -1, -1 );
+  m_idMenuFormat_Rename = m_vMenuFormat_Table->insertItem( i18n( "Rename" ), this, "renametable", 0 );
+  m_idMenuFormat_Hide = m_vMenuFormat_Table->insertItem( i18n( "Hide" ), this, "hidetable", 0 );
+  m_idMenuFormat_Show = m_vMenuFormat_Table->insertItem( i18n( "Show" ), this, "showtable", 0 );
 
 
   // Scripts
@@ -1410,9 +1420,17 @@ void KSpreadView::editLocalScripts()
 
 void KSpreadView::addTable( KSpreadTable *_t )
 {
-  m_pTabBar->addTab( _t->name() );
+  if(!_t->isHide())
+  	{
+  	m_pTabBar->addTab( _t->name() );
+  	}
+  else
+  	{
+  	m_pTabBar->init(_t->name());
+  	}
 
   setActiveTable( _t );
+
 
   QObject::connect( _t, SIGNAL( sig_updateView( KSpreadTable* ) ), SLOT( slotUpdateView( KSpreadTable* ) ) );
   QObject::connect( _t, SIGNAL( sig_updateView( KSpreadTable *, const QRect& ) ),
@@ -1439,8 +1457,9 @@ void KSpreadView::removeTable( KSpreadTable *_t )
 {
   m_pTabBar->removeTab( _t->name() );
 
-  if ( m_pDoc->map()->firstTable() )
-    setActiveTable( m_pDoc->map()->firstTable() );
+  //if ( m_pDoc->map()->firstTable() )
+  if(m_pDoc->map()->findTable( m_pTabBar->listshow().first()))
+    setActiveTable( m_pDoc->map()->findTable( m_pTabBar->listshow().first() ));
   else
     m_pTable = 0L;
 }
@@ -1637,6 +1656,27 @@ else
 	}
 }
 
+void KSpreadView::renametable()
+{
+if ( !m_pTable )
+       return;
+m_pTabBar->renameTab();
+}
+
+void KSpreadView::hidetable()
+{
+if ( !m_pTable )
+       return;
+m_pTabBar->hidetable();
+}
+
+void KSpreadView::showtable()
+{
+if ( !m_pTable )
+       return;
+KSpreadshow* dlg = new KSpreadshow( this, "Table show");
+dlg->show();
+}
 
 void KSpreadView::newView()
 {

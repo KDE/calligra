@@ -381,6 +381,8 @@ public:
     void Column(int ref_column,Mode_sort=Increase);
     bool isSort(){return _sort;}
     void setSort(bool sort) { _sort=sort;}
+    bool isHide(){return table_hide;}
+    void setHide(bool _table_hide){table_hide=_table_hide;}
     /**
      * Unselects all selected columns/rows/cells and redraws these cells.
      */
@@ -656,6 +658,8 @@ protected:
     static int s_id;
     static QIntDict<KSpreadTable>* s_mapTables;
     bool _sort;
+
+    bool table_hide;
     static QString currency;
 };
 

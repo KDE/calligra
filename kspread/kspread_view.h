@@ -281,6 +281,18 @@ public:
      * Menu Format
      */
      void resizewidth();
+      /**
+     * Menu Format
+     */
+     void renametable();
+     /**
+     * Menu Format
+     */
+     void hidetable();
+     /**
+     * Menu Format
+     */
+     void showtable();
      /**
      * Menu Format
      */
@@ -621,8 +633,12 @@ protected:
     long int m_idMenuFormat_Height;
     OpenPartsUI::Menu_var m_vMenuFormat_ResizeColumn;
     long int m_idMenuFormat_Width;
-
     long int m_idMenuFormat_Cell;
+
+    OpenPartsUI::Menu_var m_vMenuFormat_Table;
+    long int m_idMenuFormat_Rename;
+    long int m_idMenuFormat_Hide;
+    long int m_idMenuFormat_Show;
 
     OpenPartsUI::Menu_var m_vMenuScripts;
     long int m_idMenuScripts_EditGlobal;

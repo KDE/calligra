@@ -121,6 +121,9 @@ module KSpread
 		slot void resizeheight();
 		slot void resizewidth();
                 slot void layoutcell();
+                slot void renametable();
+		slot void hidetable();
+		slot void showtable();
 		Book book();
 
 		struct EventSelectionChanged

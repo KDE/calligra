@@ -158,6 +158,26 @@ QString exp_funct;
   	tmp_label->setText(exp_funct);
   	edit[0]=type_double;
    	}
+   else if (name=="ISLOGIC"||name=="ISTEXT"||name=="ISNUM")
+   	{
+   	nb_param=1;
+   	
+   	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label,0,0);
+   	tmp_label->setText(i18n("Value"));
+
+        f_param = new QLineEdit( this );
+  	lay1->addWidget(f_param,1,0);
+  	
+  	exp_funct=name+"("+"Value"+")";
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label,2,0);
+  	tmp_label->setText(exp_funct);
+  	if(name=="ISTEXT")
+  		edit[0]=type_string;
+  	else	
+  		edit[0]=type_double;
+   	}
    else if(name=="sum"||name=="max"||name=="min"
    	||name=="mult"||name=="average"||name=="variante"||name=="ecartype")
    	{

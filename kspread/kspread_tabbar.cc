@@ -80,6 +80,7 @@ void KSpreadTabBar::removeTab( const QString& _text )
 void KSpreadTabBar::removeAllTabs()
 {
     tabsList.clear();
+    tablehide.clear();
     activeTab = 0;
     leftTab = 1;
 
@@ -203,7 +204,7 @@ void KSpreadTabBar::setActiveTab( const QString& _text )
 
 void KSpreadTabBar::slotRemove( )
 {
-    if ( m_pView->doc()->map()->count() <= 1 )
+    if ( (m_pView->doc()->map()->count() <= 1)|| (tabsList.count()<=1) )
     {
         QApplication::beep();
         QMessageBox::warning( this, i18n("Remove table"), i18n("You cannot delete the only table of the map."), i18n("OK") ); // FIXME bad english? no english!
@@ -230,6 +231,7 @@ void KSpreadTabBar::slotAdd()
 {
 m_pView->insertNewTable();
 m_pView->editWidget()->setText("");
+m_pView->activeTable()->setHide(false);
 
 }
 
@@ -562,4 +564,37 @@ void KSpreadTabBar::mouseDoubleClickEvent( QMouseEvent*  )
     renameTab();
 }
 
+
+void KSpreadTabBar::hidetable()
+{
+if ( tabsList.count() ==  1)
+    {
+        QMessageBox::warning( this, i18n("Hide table"), i18n("You cannot hide the only table visible."), i18n("OK") ); // FIXME bad english? no english!
+        return;
+    }
+else
+    {
+    KSpreadTable* table = m_pView->activeTable();
+    m_pView->activeTable()->setHide(true);
+    QString activeName = table->name();
+    removeTab( activeName );
+    tablehide.append( activeName );
+    m_pView->setActiveTable( m_pView->doc()->map()->findTable( tabsList.first()) );
+
+    emit tabChanged( tabsList.first() );
+    }
+}
+
+void KSpreadTabBar::showtable(const QString& text)
+{
+addTab(text);
+tablehide.remove( text );
+
+emit tabChanged( text);
+m_pView->activeTable()->setHide(false);
+}
+void KSpreadTabBar::init(const QString & text)
+{
+tablehide.append( text );
+}
 #include "kspread_tabbar.moc"

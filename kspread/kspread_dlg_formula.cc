@@ -69,6 +69,7 @@ KSpreaddlgformula::KSpreaddlgformula( KSpreadView* parent, const char* name )
   type_formula->insertItem(i18n("Analytic"));
   type_formula->insertItem(i18n("Logic"));
   type_formula->insertItem(i18n("Text"));
+  type_formula->insertItem(i18n("Info"));
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   QObject::connect( type_formula, SIGNAL( highlighted(const QString &) ), this, SLOT( slotselected(const QString &) ) );
@@ -190,6 +191,16 @@ list_text+="EXACT";
 list_text+="STXT";
 list_text+="REPT";
 
+QStringList list_info;
+list_info+="ISLOGIC";
+list_info+="ISNUM";
+list_info+="ISTEXT";
+
+if(string== "Info")
+	{
+	formula->clear();
+	formula->insertStringList(list_info);
+	}
 if(string== "Statistic" )
 	{
 	formula->clear();
@@ -223,6 +234,7 @@ if(string == "All")
 	formula->insertStringList(list_anal);
 	formula->insertStringList(list_text);
 	formula->insertStringList(list_logic);
+	formula->insertStringList(list_info);
 	}		
 }
 
