@@ -8,4 +8,9 @@
 -Now you can put a format in Ylabel (ex: mV => you look at 1 mV 2mV in yaxis)
 -Save and load colors
 -Save and load ylabel_fmt and ylabel2_fmt
- 
+
+2000-01-06 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Bug fix
+-Now you can choose font and color in KchartWizard
+-Save others parameters

@@ -70,7 +70,7 @@ void kchartEngine::computeSize() {
   */
 
   grapheight = imageheight - ( xtics          +
-			       xtitle_hgt     +
+			       2*xtitle_hgt     +
 			       xlabel_hgt     +
 			       title_hgt      +
 									 annote_hgt     +

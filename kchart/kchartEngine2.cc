@@ -70,14 +70,14 @@ void kchartEngine::drawAnnotation() {
 		   Qt::AlignLeft, params->annotation->note );
     }
   }
-  setno = 0;  
+  setno = 0;
 }
 
 void kchartEngine::titleText() {
     if( !params->title.isEmpty() ) {
 		int	tlen;
 		QColor	titlecolor = params->TitleColor;
-	
+
 		cnt_nl( params->title.latin1(), &tlen );
 		p->setFont( params->titleFont() );
 		p->setPen( titlecolor );
@@ -99,7 +99,7 @@ void kchartEngine::titleText() {
 		QColor	titlecolor = params->XTitleColor == Qt::black ?
 			PlotColor: params->XTitleColor;
 		p->setPen( titlecolor );
-		p->setFont( params->titleFont() );
+		p->setFont( params->xTitleFont() );
 		p->drawText( imagewidth/2 - params->xtitle.length()*params->xTitleFontWidth()/2,
 					 imageheight-params->xTitleFontHeight()-1, params->xtitle );
     }

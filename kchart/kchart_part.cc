@@ -239,10 +239,17 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
                 }
 
         }
-
   QDomElement labelfont = doc.createElement("labelfont");
   labelfont.appendChild( doc.createElement( "font",_params->labelFont() ) );
   params.appendChild(labelfont);
+
+  QDomElement yaxisfont = doc.createElement("yaxisfont");
+  yaxisfont.appendChild( doc.createElement( "font",_params->yAxisFont() ) );
+  params.appendChild(yaxisfont);
+
+  QDomElement xaxisfont = doc.createElement("xaxisfont");
+  xaxisfont.appendChild( doc.createElement( "font",_params->xAxisFont() ) );
+  params.appendChild(xaxisfont);
 
   QDomElement yaxis = doc.createElement("yaxis");
   yaxis.setAttribute("ymin",_params->requested_ymin);
@@ -415,6 +422,22 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
         QDomElement font = labelfont.namedItem( "font" ).toElement();
 	    if ( !font.isNull() )
 		_params->setLabelFont(font.toFont());
+        }
+
+  QDomElement yaxisfont = params.namedItem( "yaxisfont" ).toElement();
+    if ( !yaxisfont.isNull())
+        {
+        QDomElement font = yaxisfont.namedItem( "font" ).toElement();
+	    if ( !font.isNull() )
+		_params->setYAxisFont(font.toFont());
+        }
+
+ QDomElement xaxisfont = params.namedItem( "xaxisfont" ).toElement();
+    if ( !xaxisfont.isNull())
+        {
+        QDomElement font = xaxisfont.namedItem( "font" ).toElement();
+	    if ( !font.isNull() )
+		_params->setXAxisFont(font.toFont());
         }
 
   QDomElement yaxis = params.namedItem( "yaxis" ).toElement();
@@ -590,6 +613,9 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.16  2000/01/05 20:09:51  mlaurent
+ * Improved save parameters
+ *
  * Revision 1.15  2000/01/05 07:50:22  mlaurent
  * Improved save parameters
  *

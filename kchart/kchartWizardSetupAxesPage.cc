@@ -10,6 +10,7 @@
 #include <qcheckbox.h>
 #include <qgroupbox.h>
 #include <klocale.h>
+#include <kfontdialog.h>
 
 kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
 													  KChartPart* chart ) :
@@ -33,6 +34,11 @@ kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
   grid = new QCheckBox( i18n( "Has grid" ), this );
   grid->setGeometry( 70, 250, 110, 30 );
   grid->setChecked( _chart->params()->grid );
+
+  gridColor=new KColorButton(this);
+  gridColor->setGeometry( 190,250,80,30 );
+  colorGrid=_chart->params()->GridColor;
+  gridColor->setColor( colorGrid );
 
   tmpLabel=new QLabel(this);
   tmpLabel->setText(i18n("Y interval : "));
@@ -63,6 +69,11 @@ kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
   border->setGeometry( 70, 410, 110, 30 );
   border->setChecked( _chart->params()->border );
 
+  borderColor=new KColorButton(this);
+  borderColor->setGeometry( 190,410,80,30 );
+  colorBorder=_chart->params()->LineColor;
+  borderColor->setColor( colorBorder );
+
   tmpLabel=new QLabel(this);
   tmpLabel->setText(i18n("Angle 3D : "));
   tmpLabel->setGeometry(10,440,50,30);
@@ -81,9 +92,17 @@ kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
          ylabel_fmt->setText(_chart->params()->ylabel_fmt.right(len-3));
         }
   ylabel_fmt->setGeometry( 100, 480, 110, 30 );
-  /*connect( grid, SIGNAL( toggled( bool ) ),
-	   this, SLOT( setGrid( bool ) ) );
-    */
+  ylabelFont = new QPushButton( this);
+  ylabelFont->setGeometry( 220,480,80,30 );
+  ylabelFont->setText(i18n("Font"));
+  ylabel=_chart->params()->yAxisFont();
+
+  ylabelColor=new KColorButton(this);
+  ylabelColor->setGeometry( 310,480,80,30 );
+  ycolor=_chart->params()->YLabelColor;
+  ylabelColor->setColor( ycolor );
+
+
   /*
   QGroupBox* ticksettingsGB = new QGroupBox( i18n( "Tick settings" ), this );
   ticksettingsGB->setGeometry( 260, 10, 330, 120 );
@@ -178,6 +197,15 @@ kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
   QLabel* showeveryy2KA = new QLabel( i18n( ". value on Y axis" ), this );
   showeveryy2KA->setGeometry( 360, 250, 100, 30 );
   */
+  connect(ylabelFont,SIGNAL(clicked()),this,SLOT(changeLabelFont()));
+
+
+  connect(ylabelColor,SIGNAL(changed( const QColor & )),
+                this,SLOT(changeLabelColor(const QColor &)));
+  connect(borderColor,SIGNAL(changed( const QColor & )),
+                this,SLOT(changeBorderColor(const QColor &)));
+  connect(gridColor,SIGNAL(changed( const QColor & )),
+                this,SLOT(changeGridColor(const QColor &)));
 }
 
 
@@ -186,10 +214,26 @@ kchartWizardSetupAxesPage::~kchartWizardSetupAxesPage()
   // _chart->removeAutoUpdate( preview );
 }
 
-/*void kchartWizardSetupAxesPage::setGrid( bool value )
+void kchartWizardSetupAxesPage::changeLabelColor(const QColor &_color)
 {
-  _chart->params()->grid = value;
-}*/
+ ycolor=_color;
+}
+
+void kchartWizardSetupAxesPage::changeBorderColor(const QColor &_color)
+{
+ colorBorder=_color;
+}
+
+void kchartWizardSetupAxesPage::changeGridColor(const QColor &_color)
+{
+ colorGrid=_color;
+}
+
+void kchartWizardSetupAxesPage::changeLabelFont()
+{
+ if (KFontDialog::getFont( ylabel,true,this ) == QDialog::Rejected )
+      return;
+}
 
 void kchartWizardSetupAxesPage::apply()
 {
@@ -218,6 +262,10 @@ void kchartWizardSetupAxesPage::apply()
         {
         _chart->params()->ylabel_fmt="";
         }
+ _chart->params()->setYAxisFont(ylabel);
+ _chart->params()->YLabelColor=ycolor;
+ _chart->params()->GridColor=colorGrid;
+ _chart->params()->LineColor=colorBorder;
 }
 /*
 void kchartWizardSetupAxesPage::setYTicksNum( const QString & newValue )

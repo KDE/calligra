@@ -9,43 +9,69 @@
 #include <qlabel.h>
 #include "kchartparams.h"
 #include <klocale.h>
+#include <kfontdialog.h>
 
 kchartWizardLabelsLegendPage::kchartWizardLabelsLegendPage( QWidget* parent, KChartPart* chart ) :
   QWidget( parent ),
   _chart( chart )
 {
-  QLabel* xlabelLA = new QLabel( i18n( "X-Label:" ), this );
-  xlabelLA->setGeometry( 270, 10, 100, 30 );
-
-  _xlabelED = new QLineEdit( this );
-  _xlabelED->setGeometry( 270, 40, 100, 30 );
-  _xlabelED->setText(_chart->params()->xtitle);
-  /*
-  connect( _xlabelED, SIGNAL( textChanged( const QString & ) ),
-		   _chart, SLOT( setXLabel( const QString & ) ) );
-  */
-
-  QLabel* ylabelLA = new QLabel( i18n( "Y-Label:" ), this );
-  ylabelLA->setGeometry( 270, 90, 100, 30 );
-
-  _ylabelED = new QLineEdit( this );
-  _ylabelED->setGeometry( 270, 120, 100, 30 );
-  _ylabelED->setText(_chart->params()->ytitle);
-  /*
-  connect( _ylabelED, SIGNAL( textChanged( const QString & ) ),
-		   _chart, SLOT( setYLabel( const QString & ) ) );
-  */
 
   QLabel* titleLA = new QLabel( i18n( "Title:" ), this );
-  titleLA->setGeometry( 270, 170, 100, 30 );
+  titleLA->setGeometry( 270, 10, 100, 30 );
 
   _titleED = new QLineEdit( this );
-  _titleED->setGeometry( 270, 200, 100, 30 );
+  _titleED->setGeometry( 270, 40, 100, 30 );
   _titleED->setText(_chart->params()->title);
-  /*
-  connect( _titleED, SIGNAL( textChanged( const QString & ) ),
-		   _chart, SLOT( setTitle( const QString & ) ) );
-  */
+
+  titlefont = new QPushButton( this);
+  titlefont->setGeometry( 380,40,80,30 );
+  titlefont->setText(i18n("Font"));
+
+  titlecolor=new KColorButton(this);
+  titlecolor->setGeometry( 470,40,80,30 );
+  title_color=_chart->params()->TitleColor;
+  titlecolor->setColor( title_color );
+
+
+  QLabel* xlabelLA = new QLabel( i18n( "X-Title:" ), this );
+  xlabelLA->setGeometry( 270, 90, 100, 30 );
+
+  _xlabelED = new QLineEdit( this );
+  _xlabelED->setGeometry( 270, 120, 100, 30 );
+  _xlabelED->setText(_chart->params()->xtitle);
+
+  xtitlefont = new QPushButton( this);
+  xtitlefont->setGeometry( 380,120,80,30 );
+  xtitlefont->setText(i18n("Font"));
+
+  xtitlecolor=new KColorButton(this);
+  xtitlecolor->setGeometry( 470,120,80,30 );
+  x_color=_chart->params()->XTitleColor;
+  xtitlecolor->setColor( x_color );
+
+
+
+  QLabel* ylabelLA = new QLabel( i18n( "Y-Title:" ), this );
+  ylabelLA->setGeometry( 270, 170, 100, 30 );
+
+  _ylabelED = new QLineEdit( this );
+  _ylabelED->setGeometry( 270, 200, 100, 30 );
+  _ylabelED->setText(_chart->params()->ytitle);
+
+  ytitlefont = new QPushButton( this);
+  ytitlefont->setGeometry( 380,200,80,30 );
+  ytitlefont->setText(i18n("Font"));
+
+  ytitlecolor=new KColorButton(this);
+  ytitlecolor->setGeometry( 470,200,80,30 );
+  y_color=_chart->params()->YTitleColor;
+  ytitlecolor->setColor( y_color );
+
+
+  xlabel=_chart->params()->xTitleFont();
+  ylabel=_chart->params()->yTitleFont();
+  title=_chart->params()->titleFont();
+
 
   /*
   QButtonGroup* placementBG = new QButtonGroup( i18n( "Legend placement" ),
@@ -95,6 +121,17 @@ kchartWizardLabelsLegendPage::kchartWizardLabelsLegendPage( QWidget* parent, KCh
   preview->resize( tmpQFrame->contentsRect().width(),
 				   tmpQFrame->contentsRect().height() );
   */
+  connect(xtitlefont,SIGNAL(clicked()),this,SLOT(changeXLabelFont()));
+  connect(ytitlefont,SIGNAL(clicked()),this,SLOT(changeYLabelFont()));
+  connect(titlefont,SIGNAL(clicked()),this,SLOT(changeTitleFont()));
+
+
+  connect(xtitlecolor,SIGNAL(changed( const QColor & )),
+                this,SLOT(changeXLabelColor(const QColor &)));
+  connect(ytitlecolor,SIGNAL(changed( const QColor & )),
+                this,SLOT(changeYLabelColor(const QColor &)));
+  connect(titlecolor,SIGNAL(changed( const QColor & )),
+                this,SLOT(changeTitleColor(const QColor &)));
   resize( 600, 300 );
 }
 
@@ -104,10 +141,52 @@ kchartWizardLabelsLegendPage::~kchartWizardLabelsLegendPage()
   //  _chart->removeAutoUpdate( preview );
 }
 
+void kchartWizardLabelsLegendPage::changeXLabelFont()
+{
+    if (KFontDialog::getFont( xlabel,true,this ) == QDialog::Rejected )
+      return;
+
+}
+void kchartWizardLabelsLegendPage::changeYLabelFont()
+{
+    if (KFontDialog::getFont( ylabel ,true,this ) == QDialog::Rejected )
+      return;
+
+}
+void kchartWizardLabelsLegendPage::changeTitleFont()
+{
+    if (KFontDialog::getFont( title ,true,this ) == QDialog::Rejected )
+      return;
+
+}
+
+void kchartWizardLabelsLegendPage::changeXLabelColor(const QColor &_color)
+{
+ x_color=_color;
+}
+
+void kchartWizardLabelsLegendPage::changeYLabelColor(const QColor &_color)
+{
+y_color=_color;
+}
+
+void kchartWizardLabelsLegendPage::changeTitleColor(const QColor &_color)
+{
+title_color=_color;
+}
+
 void kchartWizardLabelsLegendPage::apply(  )
 {
+   _chart->params()->setXTitleFont(xlabel);
+   _chart->params()->setYTitleFont(ylabel);
+   _chart->params()->setTitleFont(title);
    _chart->params()->title= _titleED->text();
    _chart->params()->xtitle= _xlabelED->text();
    _chart->params()->ytitle= _ylabelED->text();
+   _chart->params()->XTitleColor=x_color;
+   _chart->params()->YTitleColor=y_color;
+   _chart->params()->TitleColor=title_color;
+
+
 }
 #include "kchartWizardLabelsLegendPage.moc"

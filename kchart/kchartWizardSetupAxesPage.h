@@ -6,6 +6,9 @@
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qspinbox.h>
+#include <qpushbutton.h>
+#include <kcolorbtn.h>
+#include <qcolor.h>
 
 class KChartPart;
 class kchartWidget;
@@ -19,8 +22,11 @@ public:
   ~kchartWizardSetupAxesPage();
 
 public slots:
-      //void setGrid(bool value);
       void apply();
+      void changeLabelColor(const QColor &);
+      void changeLabelFont();
+      void changeBorderColor(const QColor &);
+      void changeGridColor(const QColor &);
 private:
   kchartWidget* preview;
   KChartPart* _chart;
@@ -31,6 +37,14 @@ private:
   QLineEdit *y_min;
   QLineEdit *ylabel_fmt;
   QSpinBox *angle;
+  QPushButton *ylabelFont;
+  KColorButton *borderColor;
+  KColorButton *gridColor;
+  KColorButton *ylabelColor;
+  QFont ylabel;
+  QColor ycolor;
+  QColor colorGrid;
+  QColor colorBorder;
 };
 
 #endif
