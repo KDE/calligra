@@ -24,6 +24,7 @@
 #include "kwdoc.h"
 #include "kwformat.h"
 #include "kwanchorpos.h"
+#include "kwanchor.h"
 #include "kwtextimage.h"
 #include "kwtextframeset.h"
 #include "variable.h"
@@ -684,7 +685,9 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KWTextFormat * curForma
     return formatElem;
 }
 
-void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int to /* default length()-2 */ )
+void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
+                        int to /* default length()-2 */,
+                        bool saveAnchorsFramesets /* default false */ )
 {
     QDomDocument doc = parentElem.ownerDocument();
     QDomElement paragElem = doc.createElement( "PARAGRAPH" );
@@ -717,6 +720,9 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
             formatElem.setAttribute( "len", 1 );
             static_cast<KWTextCustomItem *>( ch.customItem() )->save( formatElem );
             startPos = -1;
+
+            if ( saveAnchorsFramesets && dynamic_cast<KWAnchor *>( ch.customItem() ) )
+                static_cast<KWAnchor *>( ch.customItem() )->frameSet()->save( parentElem );
         }
         else
         {

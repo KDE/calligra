@@ -184,7 +184,7 @@ public:
 
     void save( QDomElement &parentElem )
     { save( parentElem, 0, length()-2 ); }
-    void save( QDomElement &parentElem, int from, int to );
+    void save( QDomElement &parentElem, int from, int to, bool saveAnchorsFramesets = false );
 
     void load( QDomElement &attributes );
 

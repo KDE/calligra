@@ -63,18 +63,20 @@ Zoom value can be set arbitrarily by the user (editable combobox).
 Auto-correction, typographical quotes.
 Formatting Characters feature.
 "1.5 lines" and "double" linespacing (also as part of styles).
-Insertion of predefined expressions.
+Insertion of predefined expressions (configurable).
 Auto-switching between editing of text and editing of frames.
 All types of frames can be set as "copy".
 Flesch reading ease score and enhanced layout added to the statistics dialog.
 Insert clipart (WMF).
+More spellchecking options (needs kdelibs-2.2-cvs).
 Added the ability for frames to grow and shrink when more or less text flows in them.
 Added undo-redo availability to many user-actions.
 New bullets-numbering dialog (visible in the stylist and the paragraph editor)
-Anhanced context-menus (Right mouse buttons popup)
-Added the possebility to change the case (capitals) of a selection of text.
+Enhanced context-menus (Right mouse buttons popup)
+Added the possibility to change the case (capitals) of a selection of text.
 
 Useability improvements (better mouse selection, a few new keybindings).
+Custom variables appear in a submenu.
 Major speedups for long documents (paragraph formatting, loading),
 and painting fixes.
 Fixed recalculation of "page number" variable in header or footer.
