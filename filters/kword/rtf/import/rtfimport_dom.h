@@ -32,12 +32,13 @@ public:
     void addBorder( int id, const QColor &color, int style, double width );
     void addColor( const QColor &color );
     void addRect( int left, int top, int right, int bottom );
-    void addKey( const QDateTime& dt, const char *filename, const char *name = 0L );
+    void addKey( const QDateTime& dt, const QString& filename, const QString& name = QString::null );
     void addFrameSet( const char *name, int frameType, int frameInfo );
     void addFrame( int left, int top, int right, int bottom,
 		   int autoCreateNewFrame, int newFrameBehaviour,
 		   int sheetSide );
     void setAttribute( const char *name, const char *value );
+    void setAttribute( const QString& attribute, const QString& value );
     void setAttribute( const char *name, int value );
     void setAttribute( const char *name, double value );
     void closeNode( const char *name );

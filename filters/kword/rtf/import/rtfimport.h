@@ -104,7 +104,7 @@ struct RTFPicture
     int scalex, scaley;
     int nibble;
     bool scaled;
-    QCString identifier; // \blipuid
+    QString identifier; // \blipuid
 };
 
 // Paragraph-formatting properties
@@ -267,7 +267,7 @@ public:
     void addFormat( DomNode &node, KWFormat &format, RTFFormat *baseFormat );
     void addLayout( DomNode &node, QCString &name, RTFLayout &layout, bool frameBreak );
     void addParagraph( DomNode &node, bool frameBreak );
-    void addVariable(DomNode& spec, int type, QCString key, RTFFormat* fmt=0);
+    void addVariable(const DomNode& spec, int type, const QString& key, const RTFFormat* fmt=0);
     void addImportedPicture( const QString& rawFileName );
     void addDateTime( const QString& format, const bool isDate, RTFFormat& fmt );
     void finishTable();
@@ -283,7 +283,7 @@ public:
     int fnnum; //number of last footnote
     RTFTextState firstPageHeader, oddPagesHeader, evenPagesHeader;
     RTFTextState firstPageFooter, oddPagesFooter, evenPagesFooter;
-    QMap<int,QCString> fontTable;
+    QMap<int,QString> fontTable;
     QValueList<RTFStyle> styleSheet;
     QValueList<QColor> colorTable;
     QValueStack<RTFGroupState> stateStack;

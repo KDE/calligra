@@ -67,6 +67,7 @@ static RTFProperty destinationPropertyTable[] =
 	MEMBER(	"@rtf",		"@headerr",	parseRichText,		evenPagesHeader, true ),
 	PROP(	"@rtf",		"@info",	parseGroup,		0L, true ),
 	PROP(	"Text",		"@nonshppict",	skipGroup,		0L, false ),
+	PROP(	0L,		"@panose",		skipGroup,	0L, 0 ), // Not supported
 	PROP(	"Text",		"@pict",	parsePicture,		0L, true ),
 	MEMBER(	"@",		"@rtf",		parseRichText,		bodyText, true ),
 	PROP(	"Text",		"@shpinst",	skipGroup,		0L, true ),
@@ -176,7 +177,6 @@ static RTFProperty propertyTable[] =
 	MEMBER(	"@rtf",		"margr",	setNumericProperty,	rightMargin, 0 ),
 	MEMBER(	"@rtf",		"margt",	setNumericProperty,	topMargin, 0 ),
 	MEMBER(	0L,		"nosupersub",	setEnumProperty,	state.format.vertAlign, RTFFormat::Normal ),
-	PROP(	0L,		"panose",		ignoreKeyword,	0L, 0 ), // Not supported
 	PROP(	"Text",		"page",		insertPageBreak,	0L, 0 ),
 	MEMBER(	0L,		"pagebb",	setFlagProperty,	state.layout.pageBB, true ),
 	MEMBER(	"@rtf",		"paperh",	setNumericProperty,	paperHeight, 0 ),
@@ -1199,7 +1199,7 @@ void RTFImport::parseFontTable( RTFProperty * )
 {
     if (token.type == RTFTokenizer::OpenGroup)
     {
-	font.name = "";
+	font.name = QString::null;
 	font.styleHint = QFont::AnyStyle;
 	font.fixedPitch = 0;
     }
@@ -1207,12 +1207,12 @@ void RTFImport::parseFontTable( RTFProperty * )
     {
 	// Semicolons separate fonts
 	if (strchr( token.text, ';' ) == 0L)
-	    font.name += token.text;
+	    font.name += QString::fromUtf8( token.text );
 	else
 	{
 	    // Add font to font table
 	    *strchr( token.text, ';' ) = 0;
-	    font.name += token.text;
+	    font.name += QString::fromUtf8( token.text );
 
 	    // Use Qt to look up the closest matching installed font
 	    QFont qFont( font.name );
@@ -1227,7 +1227,8 @@ void RTFImport::parseFontTable( RTFProperty * )
 		qFont.setFamily( font.name );
 	    }
 	    QFontInfo *info=new QFontInfo( qFont );
-	    fontTable.insert( state.format.font, info->family().utf8() );
+	    fontTable.insert( state.format.font, info->family() );
+	    // kdDebug(30515) << "Font " << state.format.font << " asked: " << font.name << " given: " << info->family() << endl;
 	    font.name.truncate( 0 );
 	    font.styleHint = QFont::AnyStyle;
 	    font.fixedPitch = 0;
@@ -1296,11 +1297,11 @@ void RTFImport::parseBlipUid( RTFProperty * )
 {
     if (token.type == RTFTokenizer::OpenGroup)
     {
-        picture.identifier.resize(0);
+        picture.identifier = QString::null;
     }
     else if (token.type == RTFTokenizer::PlainText)
     {
-        picture.identifier += token.text;
+        picture.identifier += QString::fromUtf8( token.text );
     }
     else if (token.type == RTFTokenizer::CloseGroup)
     {
@@ -1331,7 +1332,7 @@ void RTFImport::parsePicture( RTFProperty * )
 	picture.cropBottom	= 0;
 	picture.nibble		= 0;
 	picture.bits.truncate( 0 );
-	picture.identifier.resize(0);
+	picture.identifier = QString::null;
     }
     else if (token.type == RTFTokenizer::PlainText)
     {
@@ -1361,8 +1362,6 @@ void RTFImport::parsePicture( RTFProperty * )
     }
     else if (token.type == RTFTokenizer::CloseGroup)
     {
-        char pictName[64];
-        char frameName[64];
         const char *ext;
 
         // Select file extension based on picture type
@@ -1370,35 +1369,40 @@ void RTFImport::parsePicture( RTFProperty * )
         {
         case RTFPicture::WMF:
         case RTFPicture::EMF:
-            ext = "wmf";
+            ext = ".wmf";
             break;
         case RTFPicture::BMP:
-            ext = "bmp";
+            ext = ".bmp";
             break;
         case RTFPicture::MacPict:
-            ext = "pict";
+            ext = ".pict";
             break;
         case RTFPicture::JPEG:
-            ext = "jpg";
+            ext = ".jpg";
             break;
         case RTFPicture::PNG:
         default:
-            ext = "png";
+            ext = ".png";
             break;
         }
         const int id = ++pictureNumber;
-        sprintf( pictName, "pictures/picture%d.%s", id, ext );
-        sprintf( frameName, "Picture %d", id );
+        QString pictName("pictures/picture");
+        pictName += QString::number(id);
+        pictName += ext;
 
+        QCString frameName;
+        frameName.setNum(id);
+        frameName.prepend("Picture ");
+
+        QString idStr;
         if (picture.identifier.isEmpty())
         {
-            picture.identifier = pictName;
+            idStr = pictName;
         }
         else
         {
-            picture.identifier.stripWhiteSpace();
-            picture.identifier += '.';
-            picture.identifier += ext;
+            idStr += picture.identifier.stripWhiteSpace();
+            idStr += ext;
         }
 
         kdDebug(30515) << "Picture: " << pictName << " Frame: " << frameName << endl;
@@ -1415,10 +1419,10 @@ void RTFImport::parsePicture( RTFProperty * )
         addAnchor( frameName );
 
         // It is safe, as we call currentDateTime only once for each picture
-        QDateTime dt(QDateTime::currentDateTime());
+        const QDateTime dt(QDateTime::currentDateTime());
 
         // Add pixmap or clipart (key)
-        pictures.addKey( dt, picture.identifier, pictName );
+        pictures.addKey( dt, idStr, pictName );
 
         // Add picture or clipart frameset
         frameSets.addFrameSet( frameName, 2, 0 );
@@ -1429,10 +1433,10 @@ void RTFImport::parsePicture( RTFProperty * )
                 (picture.desiredHeight * picture.scaley) /100 , 0, 1, 0 );
         frameSets.closeNode( "FRAME" );
         frameSets.addNode( "PICTURE" );
-        frameSets.addKey( dt, picture.identifier );
+        frameSets.addKey( dt, idStr );
         frameSets.closeNode( "PICTURE" );
         frameSets.closeNode( "FRAMESET" );
-        picture.identifier.resize(0);
+        picture.identifier = QString::null;
     }
 }
 
@@ -1494,7 +1498,7 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
     const QDateTime dt( pic.getKey().lastModified() );
 
     // Add picture key
-    pictures.addKey( dt, rawFileName.utf8(), pictName.utf8() );
+    pictures.addKey( dt, rawFileName, pictName );
 
     // Add picture frameset
     const QSize size ( pic.getOriginalSize() * 20 );  // We need twips for addFrame
@@ -1502,7 +1506,7 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
     frameSets.addFrame( 0, 0, size.width(), size.height(), 0, 1, 0 );
     frameSets.closeNode( "FRAME" );
     frameSets.addNode( "PICTURE" );
-    frameSets.addKey( dt, rawFileName.utf8() );
+    frameSets.addKey( dt, rawFileName );
     frameSets.closeNode( "PICTURE" );
     frameSets.closeNode( "FRAMESET" );
 }
@@ -1562,7 +1566,7 @@ void RTFImport::addDateTime( const QString& format, const bool isDate, RTFFormat
         node.setAttribute("day", 0);
         node.setAttribute("fix", 0);
         node.closeNode("DATE");
-        addVariable(node, 0, kwordFormat.utf8(), &fmt);
+        addVariable(node, 0, kwordFormat, &fmt);
     }
     else
     {
@@ -1573,7 +1577,7 @@ void RTFImport::addDateTime( const QString& format, const bool isDate, RTFFormat
         node.setAttribute("second", 0);
         node.setAttribute("fix", 0);
         node.closeNode("TIME");
-        addVariable(node, 2, kwordFormat.utf8(), &fmt);
+        addVariable(node, 2, kwordFormat, &fmt);
     }
 }
 
@@ -1640,7 +1644,7 @@ void RTFImport::parseField( RTFProperty * )
 	    }
 	    else if (fieldTable[i].type == 9)
 	    {
-		QString hrefName = "";
+		QString hrefName = QString::null;
 
 		for (uint i=1; i < list.count(); i++)
 		{
@@ -1659,7 +1663,7 @@ void RTFImport::parseField( RTFProperty * )
 		}
 		node.addNode( "LINK" );
 		node.setAttribute( "linkName", fldrslt );
-		node.setAttribute( "hrefName", hrefName.utf8() );
+		node.setAttribute( "hrefName", hrefName );
 		node.closeNode( "LINK" );
 		addVariable( node, 9, "STRING", &fldfmt);
 	    }
@@ -1753,7 +1757,7 @@ void RTFImport::parseFldrslt( RTFProperty * )
     }
 }
 
-void RTFImport::addVariable(DomNode& spec, int type, QCString key, RTFFormat* fmt)
+void RTFImport::addVariable (const DomNode& spec, int type, const QString& key, const RTFFormat* fmt)
 {
     DomNode node;
 
@@ -1762,7 +1766,7 @@ void RTFImport::addVariable(DomNode& spec, int type, QCString key, RTFFormat* fm
     node.closeTag(true);
         node.addNode("TYPE");
         node.setAttribute( "type", type );
-        node.setAttribute( "key", key ); // ### TODO: escape
+        node.setAttribute( "key", CheckAndEscapeXmlText(key) );
         node.setAttribute( "text", 1 );
         node.closeNode("TYPE");
 
@@ -1772,8 +1776,8 @@ void RTFImport::addVariable(DomNode& spec, int type, QCString key, RTFFormat* fm
     kwFormat.id  = 4;
     kwFormat.pos = textState->length++;
     kwFormat.len = 1;
-    if(fmt)
-	kwFormat.fmt = *fmt;
+    if (fmt)
+        kwFormat.fmt = *fmt;
     textState->text.append( '#' );
     textState->formats << kwFormat;
 }
@@ -2134,8 +2138,7 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
                 node.setAttribute( "styleline", styleline );
             if ( underlinecolor >= 0 && uint(underlinecolor) < colorTable.count() )
             {
-                QCString colorstr( colorTable[underlinecolor].name().utf8() );
-                node.setAttribute( "underlinecolor", colorstr );
+                node.setAttribute( "underlinecolor", colorTable[underlinecolor].name() );
             }
 
 	    node.closeNode( "UNDERLINE" );

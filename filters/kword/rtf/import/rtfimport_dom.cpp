@@ -10,7 +10,6 @@
 */
 
 #include <stdio.h>
-#include <string.h>
 
 #include <qdatetime.h>
 #include <qtextcodec.h>
@@ -165,13 +164,13 @@ void DomNode::addRect( int left, int top, int right, int bottom )
  * @param filename the filename of the image
  * @param name the relative path to the image in the store (optional)
  */
-void DomNode::addKey( const QDateTime& dt, const char *filename, const char *name )
+void DomNode::addKey( const QDateTime& dt, const QString& filename, const QString& name )
 {
     const QDate date ( dt.date() );
     const QTime time ( dt.time() );
 
     addNode( "KEY" );
-    setAttribute( "filename", filename );// ### TODO: escape
+    setAttribute( "filename", CheckAndEscapeXmlText(filename) );
     setAttribute( "year", date.year() );
     setAttribute( "month", date.month() );
     setAttribute( "day", date.day() );
@@ -180,9 +179,9 @@ void DomNode::addKey( const QDateTime& dt, const char *filename, const char *nam
     setAttribute( "second", time.second() );
     setAttribute( "msec", time.msec() );
 
-    if (name)
+    if (name.isEmpty())
     {
-	setAttribute( "name", name );// ### TODO: escape
+        setAttribute( "name", CheckAndEscapeXmlText(name) );
     }
     closeNode( "KEY" );
 }
@@ -220,6 +219,21 @@ void DomNode::addFrame( int left, int top, int right, int bottom,
  * Sets a new attribute to a string value.
  */
 void DomNode::setAttribute( const char *attribute, const char *value )
+{
+    str += ' ';
+    str += attribute;
+    str += '=';
+    str += '"';
+    str += value;
+    str += '"';
+    hasAttributes = true;
+}
+
+
+/**
+ * Sets a new attribute to a string value.
+ */
+void DomNode::setAttribute( const QString& attribute, const QString& value )
 {
     str += ' ';
     str += attribute;
