@@ -147,3 +147,4 @@ Changes after KPresenter 1.2
 - Now right button gives spell check result
 - Transition effect dialog (with preview)
 - Better loading of background pictures (especially for remote files.)
+- Better generation of HTML code in the web presentation
