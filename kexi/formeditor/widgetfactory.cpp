@@ -89,49 +89,38 @@ WidgetFactory::disableFilter(QWidget *w, Container *container)
 bool
 WidgetFactory::editList(QWidget *w, QStringList &list)
 {
-	KDialogBase* dialog = new KDialogBase(w->topLevelWidget(), "stringlist_dialog", true, i18n("Edit list of items"),
+	KDialogBase dialog(w->topLevelWidget(), "stringlist_dialog", true, i18n("Edit list of items"),
 	    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, false);
 
-	KEditListBox *edit = new KEditListBox(i18n("%1 contents").arg(w->name()), dialog, "editlist");
+	KEditListBox *edit = new KEditListBox(i18n("%1 contents").arg(w->name()), &dialog, "editlist");
 	dialog->setMainWidget(edit);
 	edit->insertStringList(list);
-	edit->show();
+//	edit->show();
 
-	if(dialog->exec() == QDialog::Accepted)
+	if(dialog.exec() == QDialog::Accepted)
 	{
 		list = edit->items();
-		delete dialog;
 		return true;
 	}
-	else
-	{
-		delete dialog;
-		return false;
-	}
+	return false;
 }
 
 bool
 WidgetFactory::editRichText(QWidget *w, QString &text)
 {
-	RichTextDialog *d = new RichTextDialog(w, text);
-	if( ((QDialog*)d)->exec()== QDialog::Accepted)
+	RichTextDialog dlg(w, text);
+	if(dlg.exec()== QDialog::Accepted)
 	{
-		text = d->text();
-		delete d;
+		text = dlg.text();
 		return true;
 	}
-	else
-	{
-		delete d;
-		return false;
-	}
+	return false;
 }
 
 void
 WidgetFactory::editListView(QListView *listview)
 {
-	EditListViewDialog *d = new EditListViewDialog(listview, ((QWidget*)listview)->topLevelWidget());
-	delete d;
+	EditListViewDialog dlg(listview, ((QWidget*)listview)->topLevelWidget());
 }
 
 bool

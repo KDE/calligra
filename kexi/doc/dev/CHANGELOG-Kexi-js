@@ -276,6 +276,8 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 -in propeditor: auto-sync pkey, unique, required & indexed properties on changing;
   add message boxes if needed
 -for 'column width' property: add 'default' value at the beginning
+-propose index key (ask for name) on saving tables without index (allow to bypass this message)
+
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -291,9 +293,6 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 - reuse KexiDataTable
 - make actions work
 - fix connections drawing
-- make "table" field work as combo
-- make "field" field work as combo
-- add "sort" field (as combo)
 - make "1" and "inf" signs a bit larger (scalable)
 - 'criteria' and 'totals' are unused yet
 
@@ -318,6 +317,17 @@ HOT TODO:
 CC_MAIL: dkite@shaw.ca
 
 ===================== Kexi 0.1 Beta 3 =====================
+
+2004-05-08
+Form Designer: Extra widgets
+- fixes for kde3.1 compatibility
+- implicit deleting is cleaner than explicit
+
+2004-05-06
+Main Window
+- Messages are displayed on failed switching to othe view.
+Lucijan's stuff
+- Compile fixes, will be backported
 
 2004-05-03
 Kexi Main Window

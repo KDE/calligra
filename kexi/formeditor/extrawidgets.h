@@ -45,7 +45,7 @@ namespace KFormDesigner {
 class ObjectTreeView;
 class Form;
 
-class KFORMEDITOR_EXPORT RichTextDialog : KDialogBase
+class KFORMEDITOR_EXPORT RichTextDialog : public KDialogBase
 {
 	Q_OBJECT
 
