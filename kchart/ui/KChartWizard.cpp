@@ -100,3 +100,6 @@ QString KChartWizard::dataArea() const
 {
   return selectDataPage()->rangeED->text();
 }
+
+
+#include "KChartWizard.moc"

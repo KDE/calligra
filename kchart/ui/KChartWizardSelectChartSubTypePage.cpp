@@ -141,3 +141,6 @@ void KChartWizardSelectChartSubTypePage::createChildren( int no )
   connect( _typeBG, SIGNAL( clicked( int ) ),
 		   this, SLOT( chartSubTypeSelected( int ) ) );
 }
+
+
+#include "KChartWizardSelectChartSubTypePage.moc"

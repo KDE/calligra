@@ -90,5 +90,6 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 }
 
 
+#include "KChartWizardLabelsLegendPage.moc"
 
 

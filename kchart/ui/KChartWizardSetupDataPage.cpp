@@ -101,3 +101,4 @@ void KChartWizardSetupDataPage::firstRowIsDescriptionToggled( bool )
 }
 
 
+#include "KChartWizardSetupDataPage.moc"
