@@ -832,7 +832,7 @@ void KWord13OasisGenerator::writePictures( void )
         }
         const QString fileName( it.current()->m_tempFile->name() );
         const QString oasisName( it.current()->getOasisPictureName() );
-        kdDebug(30520) << "Copying... " << it.currentKey() << " => " << oasisName << endl;
+        kdDebug(30520) << "Copying... " << it.currentKey() << endl << " => " << oasisName << endl;
         QFile file( fileName );
         if ( !file.open( IO_ReadOnly ) )
         {
@@ -854,8 +854,12 @@ void KWord13OasisGenerator::writePictures( void )
         
         if ( m_manifestWriter )
         {
-            // ### TODO: better mime type detection (probably need a correct extension for th etemporary file)
-            const QString mimeType ( KMimeType::findByPath( fileName, 0, false )->name() );
+            const QString mimeType ( KMimeType::findByContent( array, 0 )->name() );
+            if ( mimeType == "application/octet-stream" )
+            {
+                kdWarning(30520) << "Generic mime type for " << it.currentKey() << endl;
+                // ### TODO: try harder to find a mime type
+            }
             m_manifestWriter->addManifestEntry( oasisName, mimeType );
         }
         

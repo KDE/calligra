@@ -1,7 +1,6 @@
 - OASIS thumbnail needs alpha channel
 - OASIS thumbnail seems to need some text property (according to freedesktop.org thumbnail spec.)
-- better mime type detected of picture by giving a correct extension to the temporary file
-- btter picture numbering (direct at load?) instead of using the pointer to the KTempFile
+- better picture numbering (direct at load?) instead of using the pointer to the KTempFile
 ...
 
 === Old Filter To-do ===
