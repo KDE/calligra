@@ -432,8 +432,12 @@ public:
     bool viewTableGrid() const { return m_viewTableGrid; }
     void setViewTableGrid(bool _b) { m_viewTableGrid = _b;}
 
-    bool dontCheckMajWord() const { return m_bDontCheckMajWord; }
-    void setDontCheckMajWord(bool _b) { m_bDontCheckMajWord=_b;}
+    bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
+    void setDontCheckUpperWord(bool _b) { m_bDontCheckUpperWord=_b;}
+
+
+    bool dontCheckTitleCase() const {return  m_bDontCheckTitleCase;}
+    void setDontCheckTitleCase(bool _b) {m_bDontCheckTitleCase=_b;}
 
     // in pt
     double getIndentValue() { return m_indent; }
@@ -569,7 +573,9 @@ private:
     QFont m_defaultFont;
     bool m_viewFormattingChars, m_viewFrameBorders, m_viewTableGrid;
     bool m_bShowRuler;
-    bool m_bDontCheckMajWord;
+    bool m_bDontCheckUpperWord;
+    bool m_bDontCheckTitleCase;
+
     //bool m_onlineSpellCheck;
 
     // The document that is used by all formulas

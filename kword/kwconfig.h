@@ -40,6 +40,7 @@ private:
     KWView* m_pView;
     KSpellConfig *_spellConfig;
     QCheckBox *_dontCheckUpperWord;
+    QCheckBox *_dontCheckTilteCase;
     KConfig* config;
 };
 

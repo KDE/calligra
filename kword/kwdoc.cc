@@ -166,7 +166,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_viewFrameBorders = true;
     m_viewTableGrid = true;
 
-    m_bDontCheckMajWord = false;
+    m_bDontCheckUpperWord = false;
+    m_bDontCheckTitleCase = false;
     //m_onlineSpellCheck = false;
 
     m_autoFormat = new KWAutoFormat(this);

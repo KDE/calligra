@@ -272,7 +272,6 @@ void KWCanvas::switchViewMode( KWViewMode * newViewMode )
     delete m_viewMode;
     m_viewMode = newViewMode;
     refreshViewMode();
-    emit updateRuler();
 }
 
 void KWCanvas::refreshViewMode()
@@ -280,6 +279,7 @@ void KWCanvas::refreshViewMode()
     slotNewContentsSize();
     m_doc->updateResizeHandles( );
     repaintAll( true );
+    emit updateRuler();
 }
 
 void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse press in edit-frame mode

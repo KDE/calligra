@@ -212,7 +212,8 @@ void KWView::initConfig()
       ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
       ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
       m_doc->setKSpellConfig(ksconfig);
-      m_doc->setDontCheckMajWord(config->readBoolEntry("KSpell_dont_check_maj",false));
+      m_doc->setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
+      m_doc->setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
   }
   if(config->hasGroup("Interface" ) )
   {
@@ -2674,16 +2675,13 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
 
 void KWView::startKSpell()
 {
-    KSpellConfig *_spellConf(m_doc->getKSpellConfig());
-    if(m_doc->dontCheckMajWord())
-    {
-        if(!_spellConf)
-            _spellConf=new KSpellConfig;
-        QStringList toto;
-        _spellConf->setIgnoreList(toto);
-    }
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
-    m_kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), _spellConf );
+    m_kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_doc->getKSpellConfig() );
+
+#ifdef KSPELL_IGNORE_UPPER_WORD
+     m_kspell->setIgnoreUpperWords(m_doc->dontCheckUpperWord());
+     m_kspell->setIgnoreTitleCase(m_doc->dontCheckTitleCase());
+#endif
 
     QObject::connect( m_kspell, SIGNAL( death() ),
                       this, SLOT( spellCheckerFinished() ) );
@@ -2694,41 +2692,6 @@ void KWView::startKSpell()
     QObject::connect( m_kspell, SIGNAL( done( const QString & ) ),
                       this, SLOT( spellCheckerDone( const QString & ) ) );
 }
-
-QStringList KWView::ignoreWord()
-{
-    QStringList ignore;
-    for ( unsigned int i = 0; i < m_doc->getNumFrameSets(); i++ )
-    {
-        KWFrameSet *frameset = m_doc->getFrameSet( i );
-        if ( !frameset->isVisible() || frameset->type() != FT_TEXT )
-            continue;
-        KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet*>( frameset );
-        QTextParag * p = textfs->textDocument()->firstParag();
-        QString word;
-        while ( p ) {
-            QString str = p->string()->toString();
-            str.truncate( str.length() - 1 ); // damn trailing space
-
-            for ( int j = 0; j <str.length(); j++ )
-            {
-                QChar ch = str.at(j);
-                if ( ch.isSpace() || ch.isPunct() )
-                {
-                    if(word.upper()==word && !word.isEmpty())
-                    {
-                        ignore<<word;
-                    }
-                    word="";
-                }
-                word.append( ch );
-            }
-            p = p->next();
-        }
-    }
-    return ignore;
-}
-
 
 void KWView::spellCheckerReady()
 {
