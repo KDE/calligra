@@ -82,13 +82,10 @@ KexiTablePartProxy::slotCreate()
 
 	if(ok && name.length() > 0)
 	{
-		if(kexiView()->project()->db()->query("CREATE TABLE " + name + " (id INT(10))"))
-		{
-			KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, name, "alterTable");
-			kat->show();
-			list->insert("kexi/table" + name,new KexiProjectHandlerItem(part(), name, "kexi/table",  name));
-			emit m_tablePart->itemListChanged(part());
-		}
+		KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, name, true, "alterTable");
+		kat->show();
+		list->insert("kexi/table" + name, new KexiProjectHandlerItem(part(), name, "kexi/table",  name));
+		emit m_tablePart->itemListChanged(part());
 	}
 }
 
@@ -113,7 +110,7 @@ KexiTablePartProxy::slotOpen(const QString& identifier)
 void
 KexiTablePartProxy::slotAlter(const QString& identifier)
 {
-	KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, part()->items()->find(identifier)->name(), "alterTable");
+	KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, part()->items()->find(identifier)->name(), false, "alterTable");
 	kat->show();
 }
 

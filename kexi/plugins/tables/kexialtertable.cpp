@@ -33,10 +33,12 @@
 #include <kdialog.h>
 #include <klistview.h>
 
-KexiAlterTable::KexiAlterTable(KexiView *view, QWidget *parent, const QString &table, const char *name)
- : KexiDialogBase(view,parent, name)
+KexiAlterTable::KexiAlterTable(KexiView *view, QWidget *parent,
+	const QString &table, bool create, const char *name)
+	: KexiDialogBase(view,parent, name)
 {
 	m_table = table;
+	m_create = create;
 	initView();
 	getFields();
 	setCaption(i18n("%1 - Table Editor").arg(m_table));
@@ -94,21 +96,29 @@ KexiAlterTable::initView()
 void
 KexiAlterTable::getFields()
 {
-	m_tableFields = kexiProject()->db()->getStructure(m_table);
 	int fc = 0;
-
-	for(KexiDBField* field = m_tableFields.first(); field; field = m_tableFields.next())
+	if(!m_create)
 	{
-		KexiTableItem *it = new KexiTableItem(m_fieldTable);
-		it->setValue(0, field->name());
-		it->setValue(1, field->sqlType() - 1);
-		it->setValue(2, field->primary_key());
-		it->setHint(QVariant(fc++));
+		m_tableFields = kexiProject()->db()->getStructure(m_table);
+
+		for(KexiDBField* field = m_tableFields.first(); field; field = m_tableFields.next())
+		{
+			KexiTableItem *it = new KexiTableItem(m_fieldTable);
+			it->setValue(0, field->name());
+			it->setValue(1, field->sqlType() - 1);
+			it->setValue(2, field->primary_key());
+			it->setHint(QVariant(fc++));
+		}
+	}
+	else
+	{
+		m_tableFields.clear();
 	}
 
 	// Insert item
 	KexiTableItem *insert = new KexiTableItem(m_fieldTable);
 	insert->setValue(1, KexiDBField::SQLVarchar - 1);
+	insert->setValue(2, false);
 	insert->setHint(QVariant(fc));
 	insert->setInsertItem(true);
 
@@ -192,7 +202,7 @@ KexiAlterTable::changeTable()
 	field->setName(m_nameItem->value().toString());
 	field->setColumnType(static_cast<KexiDBField::ColumnType>(m_datatypeItem->value().toInt() + 1));
 	field->setLength(m_lengthItem->value().toInt());
-	field->setNotNull(m_requiredItem->value().toBool());
+	field->setNotNull(m_requiredItem->value().toBool() || m_primaryItem->value().toBool());
 	field->setDefaultValue(m_defaultItem->value());
 	field->setUnsigned(m_unsignedItem->value().toBool());
 	field->setPrecision(m_precisionItem->value().toInt());
@@ -206,7 +216,8 @@ KexiAlterTable::changeTable()
 		if(i->getValue(0).toString() != "" && i->getValue(1).toInt() != 0)
 		{
 			kdDebug() << "Create new field!" << endl;
-			ok = kexiProject()->db()->createField(*field, m_tableFields);
+			ok = kexiProject()->db()->createField(*field, m_tableFields, m_create);
+			m_create = !ok;
 
 			if(ok)
 			{
@@ -232,6 +243,7 @@ KexiAlterTable::changeTable()
 		{
 			kdDebug() << "Field changed!" << endl;
 			m_tableFields.replace(index, field);
+			changeShownField(i);
 		}
 		else
 		{

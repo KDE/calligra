@@ -550,7 +550,11 @@ MySqlDB::alterField(const KexiDBField& changedField, unsigned int index,
 	qstr += " " + createDefinition(changedField, index, fields);
 	kdDebug() << "MySqlDB::alterField: Query: " << qstr << endl;
 	bool ok = query(qstr);
-	ok = changeKeys(changedField, index, fields);
+
+	if(ok)
+	{
+		ok = changeKeys(changedField, index, fields);
+	}
 
 	return ok;
 }
@@ -562,11 +566,27 @@ MySqlDB::createField(const KexiDBField& newField, KexiDBTableStruct fields,
 	kdDebug() << "MySqlDB::createField: Table: " << newField.table() << " Field: " << newField.name() << endl;
 	kdDebug() << "MySqlDB::createField: DataType: " << getNativeDataType(
 		newField.sqlType()) << "ColumnType: " << newField.sqlType() << endl;
-	QString qstr = "ALTER TABLE " + newField.table() + " ADD " + newField.name();
-	qstr += " " + createDefinition(newField, -1, fields);
+	QString qstr;
+
+	if(!createTable)
+	{
+		qstr = "ALTER TABLE " + newField.table() + " ADD " + newField.name();
+		qstr += " " + createDefinition(newField, -1, fields);
+	}
+	else
+	{
+		qstr = "CREATE TABLE " + newField.table() + " (" + newField.name();
+		qstr += " " + createDefinition(newField, -1, fields);
+		qstr += ")";
+	}
+
 	kdDebug() << "MySqlDB::createField: Query: " << qstr << endl;
 	bool ok = query(qstr);
-	ok = changeKeys(newField, -1, fields);
+
+	if(ok)
+	{
+		ok = changeKeys(newField, -1, fields);
+	}
 
 	return ok;
 }
@@ -609,7 +629,7 @@ MySqlDB::createDefinition(const KexiDBField& field, int index,
 			break;
 	}
 
-	if(field.constraints() & KexiDBField::CCNotNull)
+	if((field.constraints() & KexiDBField::CCNotNull) || field.primary_key())
 	{
 		qstr += " NOT NULL";
 	}

@@ -32,7 +32,8 @@ class KexiAlterTable : public KexiDialogBase
 {
 	Q_OBJECT
 	public:
-		KexiAlterTable(KexiView *view, QWidget *parent, const QString &table, const char *name=0);
+		KexiAlterTable(KexiView *view, QWidget *parent, const QString &table,
+			bool create = false, const char *name=0);
 
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 
@@ -51,6 +52,7 @@ class KexiAlterTable : public KexiDialogBase
 		KexiTableView* m_fieldTable;
 		PropertyEditor* m_propList;
 		KexiDBTableStruct m_tableFields;
+		bool m_create;
 		PropertyEditorItem* m_nameItem;
 		PropertyEditorItem* m_datatypeItem;
 		PropertyEditorItem* m_lengthItem;
