@@ -177,6 +177,14 @@ void KoXmlWriter::addAttribute( const char* attrName, double value )
     addAttribute( attrName, str.data() );
 }
 
+void KoXmlWriter::addAttributePt( const char* attrName, double value )
+{
+    QCString str;
+    str.setNum( value, 'g', DBL_DIG );
+    str += "pt";
+    addAttribute( attrName, str.data() );
+}
+
 void KoXmlWriter::writeIndent()
 {
     // +1 because of the leading '\n'

@@ -100,17 +100,44 @@ public:
      * (unlike QString::number and setNum, which default to 6 digits)
      */
     void addAttribute( const char* attrName, double value );
+    /**
+     * Add an attribute which represents a distance, measured in pt
+     * The number is written out with the highest possible precision
+     * (unlike QString::number and setNum, which default to 6 digits),
+     * and the unit name ("pt") is appended to it.
+     */
+    void addAttributePt( const char* attrName, double value );
+
+    /// Overloaded version of the one taking a const char* argument, for convenience
     inline void addAttribute( const char* attrName, const QCString& value ) {
         addAttribute( attrName, value.data() );
     }
+    /**
+     * Add an attribute to the current element.
+     */
     void addAttribute( const char* attrName, const char* value );
+    /**
+     * Terminate the current element. After this you should start a new one (sibling),
+     * add a sibling text node, or close another one (end of siblings).
+     */
     void endElement();
+    /**
+     * Overloaded version of addTextNode( const char* ),
+     * which is a bit slower because it needs to convert @p str to utf8 first.
+     */
     inline void addTextNode( const QString& str ) {
         addTextNode( str.utf8() );
     }
+    /// Overloaded version of the one taking a const char* argument
     inline void addTextNode( const QCString& cstr ) {
         addTextNode( cstr.data() );
     }
+    /**
+     * Adds a text node as a child of the current element.
+     * This is appends the litteral content of @p str to the contents of the element.
+     * E.g. addTextNode( "foo" ) inside a <p> element gives <p>foo</p>,
+     * and startElement( "b" ); endElement( "b" ); addTextNode( "foo" ) gives <p><b/>foo</p>
+     */
     void addTextNode( const char* cstr );
 
 private:
@@ -153,8 +180,8 @@ private:
     QIODevice* m_dev;
     QValueStack<Tag> m_tags;
 
-    char* m_indentBuffer;
-    char* m_escapeBuffer;
+    char* m_indentBuffer; // TODO make it static, but then it needs a KStaticDeleter
+    char* m_escapeBuffer; // can't really be static if we want to be thread-safe
     static const int s_escapeBufferLen = 10000;
 
     KoXmlWriter( const KoXmlWriter & ); // forbidden
