@@ -36,6 +36,7 @@
 **********************************************************************/
 
 #include "qrichtext_p.h"
+#include <assert.h>
 
 //void KoTextCustomItem::setPainter( QPainter*, bool adjust ){ if ( adjust ) width = 0; }
 void KoTextCustomItem::setPainter( QPainter*, bool ){ resize(); } // changed for kotext
