@@ -17,9 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-//#include <qpainter.h>
-//#include <qevent.h>
-
 #include <kaction.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -76,22 +73,6 @@ GraphiteView::~GraphiteView() {
     delete m_canvas;
     m_canvas=0L;
 }
-
-// Is done in GCanvas :)
-/*void GraphiteView::paintEvent(QPaintEvent *ev) {
-
-    kdDebug(37001) << "GraphiteView::painEvent()" << endl;
-
-    QPainter painter;
-    painter.begin(this);
-
-    // ### TODO: Scaling
-
-    // Let the document do the drawing
-    koDocument()->paintEverything(painter, ev->rect(), false, this);
-
-    painter.end();
-}*/
 
 void GraphiteView::slotViewNew() {
 

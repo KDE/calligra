@@ -44,7 +44,7 @@ const bool operator!=(const Gradient &lhs, const Gradient &rhs);
 class GraphiteGlobal {
 
 public:
-    enum Unit { MM, Inch, Pt };
+    enum Unit { MM, Pt, Inch };
 
     static GraphiteGlobal *self();
 
@@ -164,6 +164,7 @@ public:
 
     const QPoint pxPoint() { return QPoint(pxX(), pxY()); }
     void setPxPoint(const int &x, const int &y);
+    void setPxPoint(const QPoint &p);
 
     void recalculate();
 

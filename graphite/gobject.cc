@@ -515,6 +515,27 @@ void G2DObjectM9r::updatePreview(int btn) {
 }
 
 
+QString GObject::tagObject=QString::fromLatin1("gobject");
+QString GObject::attrName=QString::fromLatin1("name");
+QString GObject::attrState=QString::fromLatin1("state");
+QString GObject::attrAngle=QString::fromLatin1("angle");
+QString GObject::tagFormat=QString::fromLatin1("format");
+QString GObject::attrFillStyle=QString::fromLatin1("fillStyle");
+QString GObject::attrBrushStyle=QString::fromLatin1("brushStyle");
+QString GObject::attrBrushColor=QString::fromLatin1("brushColor");
+QString GObject::tagGradient=QString::fromLatin1("gradient");
+QString GObject::attrColorA=QString::fromLatin1("colorA");
+QString GObject::attrColorB=QString::fromLatin1("colorB");
+QString GObject::attrType=QString::fromLatin1("type");
+QString GObject::attrXFactor=QString::fromLatin1("xfactor");
+QString GObject::attrYFactor=QString::fromLatin1("yfactor");
+QString GObject::tagPen=QString::fromLatin1("pen");
+QString GObject::attrPenColor=QString::fromLatin1("color");
+QString GObject::attrPenStyle=QString::fromLatin1("style");
+QString GObject::attrPenWidth=QString::fromLatin1("width");
+QString GObject::attrPenJoinStyle=QString::fromLatin1("joinstyle");
+QString GObject::attrPenCapStyle=QString::fromLatin1("capstyle");
+
 QDomElement GObject::save(QDomDocument &doc) const {
 
     // A GObject is saved to a node which is stored inside
@@ -524,22 +545,6 @@ QDomElement GObject::save(QDomDocument &doc) const {
     // would call GObject). The returned DOM Element has
     // to be saved. On loading, this Element is passed to
     // the XML CTOR of the superclass :)
-    static QString tagObject=QString::fromLatin1("gobject");
-    static QString attrName=QString::fromLatin1("name");
-    static QString attrState=QString::fromLatin1("state");
-    static QString attrAngle=QString::fromLatin1("angle");
-    static QString tagFormat=QString::fromLatin1("format");
-    static QString attrFillStyle=QString::fromLatin1("fillStyle");
-    static QString attrBrushStyle=QString::fromLatin1("brushStyle");
-    static QString attrBrushColor=QString::fromLatin1("brushColor");
-    static QString tagGradient=QString::fromLatin1("gradient");
-    static QString attrColorA=QString::fromLatin1("colorA");
-    static QString attrColorB=QString::fromLatin1("colorB");
-    static QString attrType=QString::fromLatin1("type");
-    static QString attrXFactor=QString::fromLatin1("xfactor");
-    static QString attrYFactor=QString::fromLatin1("yfactor");
-    static QString tagPen=QString::fromLatin1("pen");
-
     QDomElement e=doc.createElement(tagObject);
     e.setAttribute(attrName, m_name);
     e.setAttribute(attrState, m_state);
@@ -555,7 +560,13 @@ QDomElement GObject::save(QDomDocument &doc) const {
     gradient.setAttribute(attrXFactor, m_gradient.xfactor);
     gradient.setAttribute(attrYFactor, m_gradient.yfactor);
     format.appendChild(gradient);
-    format.appendChild(doc.createElement(tagPen, m_pen));
+    QDomElement pen=doc.createElement(tagPen);
+    pen.setAttribute(attrPenColor, m_pen.color().name());
+    pen.setAttribute(attrPenStyle, static_cast<int>(m_pen.style()));
+    pen.setAttribute(attrPenWidth, m_pen.width());
+    pen.setAttribute(attrPenJoinStyle, m_pen.joinStyle());
+    pen.setAttribute(attrPenCapStyle, m_pen.capStyle());
+    format.appendChild(pen);
     e.appendChild(format);		
     return e;
 }
@@ -687,20 +698,6 @@ GObject::GObject(const QDomElement &element) : m_parent(0L), m_boundingRectDirty
 	return;
 
     bool ok;
-    static QString attrName=QString::fromLatin1("name");
-    static QString attrState=QString::fromLatin1("state");
-    static QString attrAngle=QString::fromLatin1("angle");
-    static QString tagFormat=QString::fromLatin1("format");
-    static QString attrFillStyle=QString::fromLatin1("fillStyle");
-    static QString attrBrushStyle=QString::fromLatin1("brushStyle");
-    static QString attrBrushColor=QString::fromLatin1("brushColor");
-    static QString tagGradient=QString::fromLatin1("gradient");
-    static QString attrColorA=QString::fromLatin1("colorA");
-    static QString attrColorB=QString::fromLatin1("colorB");
-    static QString attrType=QString::fromLatin1("type");
-    static QString attrXFactor=QString::fromLatin1("xfactor");
-    static QString attrYFactor=QString::fromLatin1("yfactor");
-    static QString tagPen=QString::fromLatin1("pen");
 
     if(element.hasAttribute(attrName))
 	m_name=element.attribute(attrName);
@@ -753,8 +750,18 @@ GObject::GObject(const QDomElement &element) : m_parent(0L), m_boundingRectDirty
 	}
 	
 	QDomElement pen=format.namedItem(tagPen).toElement();
-	if(!pen.isNull())
-	    m_pen=pen.toPen();	
+	if(!pen.isNull()) {
+	    if(pen.hasAttribute(attrPenColor))
+		m_pen.setColor(QColor(pen.attribute(attrPenColor)));
+	    if(pen.hasAttribute(attrPenStyle))
+		m_pen.setStyle(static_cast<Qt::PenStyle>(pen.attribute(attrPenStyle).toInt()));
+	    if(pen.hasAttribute(attrPenWidth))
+		m_pen.setWidth(pen.attribute(attrPenWidth).toInt());
+	    if(pen.hasAttribute(attrPenJoinStyle))
+		m_pen.setJoinStyle(static_cast<Qt::PenJoinStyle>(pen.attribute(attrPenJoinStyle).toInt()));
+	    if(pen.hasAttribute(attrPenCapStyle))
+		m_pen.setCapStyle(static_cast<Qt::PenCapStyle>(pen.attribute(attrPenCapStyle).toInt()));
+	}
     }
     else {
 	m_fillStyle=Brush;

@@ -344,6 +344,27 @@ protected:
 
 private:
     GObject &operator=(const GObject &rhs); // don't assign the objects, clone them
+
+    static QString tagObject;
+    static QString attrName;
+    static QString attrState;
+    static QString attrAngle;
+    static QString tagFormat;
+    static QString attrFillStyle;
+    static QString attrBrushStyle;
+    static QString attrBrushColor;
+    static QString tagGradient;
+    static QString attrColorA;
+    static QString attrColorB;
+    static QString attrType;
+    static QString attrXFactor;
+    static QString attrYFactor;
+    static QString tagPen;
+    static QString attrPenColor;
+    static QString attrPenStyle;
+    static QString attrPenWidth;
+    static QString attrPenJoinStyle;
+    static QString attrPenCapStyle;
 };
 
 

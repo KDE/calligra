@@ -21,6 +21,7 @@
 
 #include <gcanvas.h>
 #include <graphiteview.h>
+#include <kdebug.h>
 
 
 GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
@@ -110,10 +111,12 @@ void GCanvasWidget::paintEvent(QPaintEvent */*e*/) {
 void GCanvasWidget::leaveEvent(QEvent *) {
     m_updateRulers=false;
     m_canvas->showMousePos(false);
+    kdDebug(37001) << "leaving Canvas" << endl;
 }
 
 void GCanvasWidget::enterEvent(QEvent *) {
     m_updateRulers=true;
     m_canvas->showMousePos(true);
+    kdDebug(37001) << "entering Canvas" << endl;
 }
 #include <gcanvas.moc>
