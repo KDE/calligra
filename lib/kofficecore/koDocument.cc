@@ -782,8 +782,9 @@ bool KoDocument::openFile()
   if ( d->m_bSingleViewMode && !d->m_views.isEmpty() )
   {
      // We already had a view (this happens when doing reload in konqueror)
+     removeView( d->m_views.first() );
      delete d->m_views.first();
-     d->m_views.clear();
+     ASSERT( d->m_views.isEmpty() );
   }
 
   d->m_changed=false;
