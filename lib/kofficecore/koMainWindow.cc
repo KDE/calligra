@@ -365,7 +365,7 @@ void KoMainWindow::updateCaption()
       // Get caption from document info (title(), in about page)
       if ( rootDocument()->documentInfo() )
       {
-          KoDocumentInfoPage * page = rootDocument()->documentInfo()->page( QString::fromLatin1("about"));
+          KoDocumentInfoPage * page = rootDocument()->documentInfo()->page( QString::fromLatin1("about") );
           if (page)
               caption = static_cast<KoDocumentInfoAbout *>(page)->title();
       }
@@ -373,8 +373,7 @@ void KoMainWindow::updateCaption()
           // Fall back to document URL
           caption = rootDocument()->url().prettyURL();
 
-      // KTMW hides some of the functionality of kapp->makeStdCaption !
-      QWidget::setCaption( kapp->makeStdCaption( caption, true, rootDocument()->isModified() ) );
+      setCaption( caption, rootDocument()->isModified() );
   }
 }
 
