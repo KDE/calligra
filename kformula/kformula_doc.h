@@ -77,7 +77,6 @@ public slots:
 
 protected slots:
 
-    void addBracket();
     void commandExecuted();
     void documentRestored();
     
@@ -91,7 +90,7 @@ private:
     /**
      * Our undo stack.
      */
-    KCommandHistory history;
+    KCommandHistory* history;
     
     /**
      * The place where all formula related work is done.

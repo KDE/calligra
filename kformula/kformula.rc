@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KFormula" version="1">
 <MenuBar>
- <Menu name="Edit"><text>Edit</text>
+ <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>
@@ -11,7 +11,7 @@
   <Action name="edit_select_all"/>
   <Action name="addtext"/>
  </Menu>
- <Menu name="Element"><text>Element</text>
+ <Menu name="Element"><text>E&amp;lement</text>
   <Menu name="Add"><text>Add...</text>
   <Action name="addtext"/>
   <Action name="addroot"/>
@@ -68,6 +68,14 @@
 
 </MenuBar>
 
+ <ToolBar fullWidth="false" name="edit_toolbar" position="top"><Text>Edit</Text>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
+  <Separator/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+ </ToolBar>
  <ToolBar name="Add"><Text>Add</Text>
   <Action name="addtext"/>
   <Action name="addroot"/>
@@ -77,7 +85,10 @@
   <Action name="addintegral"/>
   <Action name="addsymbol"/>
   <Action name="addmatrix"/>
-  <Action name="addindex"/>
+  <Action name="addupperleft"/>
+  <Action name="addlowerleft"/>
+  <Action name="addupperright"/>
+  <Action name="addlowerright"/>
  </ToolBar>
  <ToolBar name="Font"><Text>Font</Text>
   <Action name="textfont"/>

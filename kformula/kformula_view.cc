@@ -30,6 +30,7 @@
 #include <kstdaction.h>
 //#include <kglobal.h>
 
+#include <kformulacontainer.h>
 #include <kformulawidget.h>
 
 #include "kformula_view.h"
@@ -48,12 +49,76 @@ KFormulaView::KFormulaView(KFormulaDoc* _doc, QWidget* _parent, const char* _nam
 
     setInstance(KFormulaFactory::global());
     setXMLFile("kformula.rc");
-
+    
     scrollview = new QScrollView(this, "scrollview");
     formulaWidget = new KFormulaWidget(_doc->getFormula(), scrollview->viewport(), "formulaWidget");
     scrollview->addChild(formulaWidget);
     formulaWidget->setFocus();
+
+    // Nice parts start in read only mode.
+    formulaWidget->setReadOnly(true);
     
+    // copy&paste
+    cutAction   = KStdAction::cut(this, SLOT(cut()), actionCollection());
+    copyAction  = KStdAction::copy(this, SLOT(copy()), actionCollection());
+    pasteAction = KStdAction::paste(this, SLOT(paste()), actionCollection());
+    cutAction->setEnabled(false);
+    copyAction->setEnabled(false);
+
+    // elements
+    addIntegralAction = new KAction(i18n("Add/change to integral"),
+                                    "mini-integral",
+                                    CTRL + Key_6 ,
+                                    this, SLOT(addIntegral()),
+                                    actionCollection(), "addintegral");
+    addSumAction      = new KAction(i18n("Add/change to symbol"),
+                                    "mini-symbol",
+                                    CTRL + Key_7 ,
+                                    this, SLOT(addSum()),
+                                    actionCollection(), "addsymbol");
+    addRootAction     = new KAction(i18n("Add/change to root"),
+                                    "mini-root",
+                                    CTRL + Key_2 ,
+                                    this, SLOT(addRoot()),
+                                    actionCollection(), "addroot");
+    addFractionAction = new KAction(i18n("Add/change to fraction"),
+                                    "mini-frac",
+                                    CTRL + Key_3 ,
+                                    this, SLOT(addFraction()),
+                                    actionCollection(), "addfrac");
+    addBracketAction  = new KAction(i18n("Add/change to bracket"),
+                                    "mini-bra",
+                                    CTRL + Key_5 ,
+                                    this, SLOT(addBracket()),
+                                    actionCollection(),"addbra");
+
+    addMatrixAction   = new KAction(i18n("Add/change to matrix"),
+                                    "matrix",
+                                    CTRL + Key_8,
+                                    this, SLOT(addMatrix()),
+                                    actionCollection(), "addmatrix");
+
+    addUpperLeftAction  = new KAction(i18n("Add upper left index"),
+                                      "index3",
+                                      0,
+                                      this, SLOT(addUpperLeft()),
+                                      actionCollection(), "addupperleft");
+    addLowerLeftAction  = new KAction(i18n("Add lower left index"),
+                                      "index2",
+                                      0,
+                                      this, SLOT(addLowerLeft()),
+                                      actionCollection(), "addlowerleft");
+    addUpperRightAction = new KAction(i18n("Add upper right index"),
+                                      "index1",
+                                      0,
+                                      this, SLOT(addUpperRight()),
+                                      actionCollection(), "addupperright");
+    addLowerRightAction = new KAction(i18n("Add lower right index"),
+                                      "index0",
+                                      0,
+                                      this, SLOT(addLowerRight()),
+                                      actionCollection(), "addlowerright");
+
     mn_indexList = new QPopupMenu();
     mn_indexList->insertItem(BarIcon("index0"),0);
     mn_indexList->insertSeparator();
@@ -79,51 +144,45 @@ KFormulaView::KFormulaView(KFormulaDoc* _doc, QWidget* _parent, const char* _nam
 //                                              this,SLOT(addVertSpace()),
 //                                              actionCollection(),"addvspace");
     
-    
-//     actionElement_AddElement_M = new KAction(i18n( "Add/change to matrix" ),
-//                                              "matrix",
-//                                              CTRL + Key_8 ,
-//                                              this,SLOT(addMatrix()),
-//                                              actionCollection(),"addmatrix");
-    
 //     actionElement_AddElement_L = new KAction(i18n( "Add index at pos..." ),
 //                                              "index",
 //                                              CTRL + Key_9 ,
 //                                              this,SLOT(indexList()),
 //                                              actionCollection(),"addindex");
 
-//      actionElement_Text_Font = new KFontAction(i18n( "Font family" ),0,
-//                                                actionCollection(),"textfont");
-//      connect( actionElement_Text_Font, SIGNAL( activated( const QString& ) ), this, SLOT( fontSelected( const QString& ) ) );
+    // font stuff
+    KFontAction* actionElement_Text_Font = new KFontAction(i18n( "Font family" ),0,
+                                              actionCollection(),"textfont");
+    connect( actionElement_Text_Font, SIGNAL( activated( const QString& ) ), this, SLOT( fontSelected( const QString& ) ) );
 
-//      actionElement_Text_Size = new KFontSizeAction(i18n( "Size" ),0,
-//                                                    actionCollection(),"textsize");
+    KFontSizeAction* actionElement_Text_Size = new KFontSizeAction(i18n( "Size" ),0,
+                                                  actionCollection(),"textsize");
 
-//      connect( actionElement_Text_Size, SIGNAL( fontSizeChanged( int ) ), this, SLOT( sizeSelected( int ) ) );
+    connect( actionElement_Text_Size, SIGNAL( fontSizeChanged( int ) ), this, SLOT( sizeSelected( int ) ) );
 
-//      actionElement_Text_Bold = new KToggleAction(i18n( "Bold" ),
-//                                                  "bold",
-//                                                  CTRL + Key_B ,
-//                                                  actionCollection(),"textbold");
-//      connect( actionElement_Text_Bold, SIGNAL( toggled( bool ) ), this, SLOT( bold( bool ) ) );
+    KToggleAction* actionElement_Text_Bold = new KToggleAction(i18n( "Bold" ),
+                                                  "bold",
+                                                  CTRL + Key_B ,
+                                                  actionCollection(),"textbold");
+    connect( actionElement_Text_Bold, SIGNAL( toggled( bool ) ), this, SLOT( bold( bool ) ) );
 
-//     actionElement_Text_Italic = new KToggleAction(i18n( "Italic" ),
-//                                                   "italic",
-//                                                   CTRL + Key_I ,
-//                                                   actionCollection(),"textitalic");
-//     connect( actionElement_Text_Italic, SIGNAL( toggled( bool ) ), this, SLOT( italic( bool ) ) );
+    KToggleAction* actionElement_Text_Italic = new KToggleAction(i18n( "Italic" ),
+                                                   "italic",
+                                                   CTRL + Key_I ,
+                                                   actionCollection(),"textitalic");
+    connect( actionElement_Text_Italic, SIGNAL( toggled( bool ) ), this, SLOT( italic( bool ) ) );
 
-//     actionElement_Text_Under = new KToggleAction(i18n( "Underlined" ),
-//                                                  "underl",
-//                                                  CTRL + Key_U,
-//                                                  actionCollection(),"textunder");
-//     connect(actionElement_Text_Under, SIGNAL( toggled( bool ) ), this, SLOT( underline( bool ) ) );
+    KToggleAction* actionElement_Text_Under = new KToggleAction(i18n( "Underlined" ),
+                                                  "underl",
+                                                  CTRL + Key_U,
+                                                  actionCollection(),"textunder");
+    connect(actionElement_Text_Under, SIGNAL( toggled( bool ) ), this, SLOT( underline( bool ) ) );
 
-//     actionElement_Font_Element = new KToggleAction(i18n( "Resize element" ),
-//                                                    "elementsw",
-//                                                    CTRL + ALT + Key_E,
-//                                                    this,SLOT(fontSwitch()),
-//                                                    actionCollection(),"fontelement");
+//     KToggleAction* actionElement_Font_Element = new KToggleAction(i18n( "Resize element" ),
+//                                                     "elementsw",
+//                                                     CTRL + ALT + Key_E,
+//                                                     this,SLOT(fontSwitch()),
+//                                                     actionCollection(),"fontelement");
     
 //     //actionElement_Font_Element->setEnabled(false);
 
@@ -275,7 +334,6 @@ KFormulaView::KFormulaView(KFormulaDoc* _doc, QWidget* _parent, const char* _nam
 //                                                this,SLOT(matrixRemCol()),
 //                                                actionCollection(),"matrixremcol");
 
-//     m_pDoc->setModified( true );
     QStringList delimiter;
     delimiter.append(QString("("));
     delimiter.append(QString("["));
@@ -286,10 +344,11 @@ KFormulaView::KFormulaView(KFormulaDoc* _doc, QWidget* _parent, const char* _nam
     delimiter.append(QString("]"));
     delimiter.append(QString(">"));
     delimiter.append(QString("|"));
-    KSelectAction* leftBracket = new KSelectAction(i18n("Left delimiter"),
-                                                   0, this, SLOT(delimiterLeft()),
-                                                   actionCollection(), "typeleft");
+    leftBracket = new KSelectAction(i18n("Left delimiter"),
+                                    0, this, SLOT(delimiterLeft()),
+                                    actionCollection(), "typeleft");
     leftBracket->setItems(delimiter);
+    leftBracket->setCurrentItem(0);
 
     delimiter.clear();
     delimiter.append(QString(")"));
@@ -301,36 +360,43 @@ KFormulaView::KFormulaView(KFormulaDoc* _doc, QWidget* _parent, const char* _nam
     delimiter.append(QString("["));
     delimiter.append(QString("<"));
     delimiter.append(QString("|"));
-    KSelectAction* rightBracket = new KSelectAction(i18n("Right delimiter"),
-                                                    0, this, SLOT(delimiterRight()),
-                                                    actionCollection(), "typeright");
+    rightBracket = new KSelectAction(i18n("Right delimiter"),
+                                     0, this, SLOT(delimiterRight()),
+                                     actionCollection(), "typeright");
     rightBracket->setItems(delimiter);
+    rightBracket->setCurrentItem(0);
+
+    // notify on cursor change
+    connect(formulaWidget, SIGNAL(cursorChanged(bool, bool)),
+            this, SLOT(cursorChanged(bool, bool)));
 }
 
-
-void KFormulaView::init()
-{
-}
 
 KFormulaView::~KFormulaView()
 {
-    cleanUp();
     delete mn_indexList;
 }
 
-void KFormulaView::cleanUp()
+void KFormulaView::updateReadWrite(bool readwrite)
 {
+    formulaWidget->setReadOnly(!readwrite);
+    setEnabled(readwrite);
 }
 
-void KFormulaView::updateReadWrite( bool readwrite )
-{
-    QValueList<KAction*> actions = actionCollection()->actions();
-    QValueList<KAction*>::ConstIterator aIt = actions.begin();
-    QValueList<KAction*>::ConstIterator aEnd = actions.end();
-    for (; aIt != aEnd; ++aIt )
-        (*aIt)->setEnabled( readwrite );
-}
 
+void KFormulaView::setEnabled(bool enabled)
+{
+    addBracketAction->setEnabled(enabled);
+    addFractionAction->setEnabled(enabled);
+    addRootAction->setEnabled(enabled);
+    addSumAction->setEnabled(enabled);
+    addIntegralAction->setEnabled(enabled);
+    addMatrixAction->setEnabled(enabled);
+    addUpperLeftAction->setEnabled(enabled);
+    addLowerLeftAction->setEnabled(enabled);
+    addUpperRightAction->setEnabled(enabled);
+    addLowerRightAction->setEnabled(enabled);
+}
 
 void KFormulaView::resizeEvent( QResizeEvent * )
 {
@@ -845,24 +911,14 @@ void KFormulaView::generalFont()
 
 void KFormulaView::delimiterLeft()
 {
-//     QString left =  ((KSelectAction *)actionElement_Bracket_Type_Left)->currentText();
-//     QString content=m_pDoc->currentElement()->getContent();
-//     kdDebug(39001) <<content<<endl;
-//     content[0]=QString(left)[0];
-//     kdDebug(39001) <<content<<endl;
-//     m_pDoc->currentElement()->setContent(content);
-//     update();
+    QString left = leftBracket->currentText();
+    formulaWidget->setLeftBracket(left.at(0).latin1());
 }
 
 void KFormulaView::delimiterRight()
 {
-//     QString right=  ((KSelectAction *)actionElement_Bracket_Type_Right)->currentText();
-//     QString content=m_pDoc->currentElement()->getContent();
-//     kdDebug(39001) <<content<<endl;
-//     content[1]=QString(right)[0];
-//     kdDebug(39001) <<content<<endl;
-//     m_pDoc->currentElement()->setContent(content);
-//     update();
+    QString right = rightBracket->currentText();
+    formulaWidget->setRightBracket(right.at(0).latin1());
 }
 
 bool KFormulaView::printDlg()
@@ -874,6 +930,91 @@ bool KFormulaView::printDlg()
             m_pDoc->print(&thePrt);
     }
     return true;
+}
+
+void KFormulaView::cut()
+{
+    m_pDoc->getFormula()->cut();
+}
+
+void KFormulaView::copy()
+{
+    m_pDoc->getFormula()->copy();
+}
+
+void KFormulaView::paste()
+{
+    m_pDoc->getFormula()->paste();
+}
+
+void KFormulaView::addIntegral()
+{
+    m_pDoc->getFormula()->addIntegral();
+}
+
+void KFormulaView::addSum()
+{
+    m_pDoc->getFormula()->addSum();
+}
+
+void KFormulaView::addRoot()
+{
+    m_pDoc->getFormula()->addRoot();
+}
+
+void KFormulaView::addFraction()
+{
+    m_pDoc->getFormula()->addFraction();
+}
+
+void KFormulaView::addBracket()
+{
+    QString left = leftBracket->currentText();
+    QString right = rightBracket->currentText();
+    kdDebug(10001) << "Brackets: " << left.latin1() << "\t" << right.latin1() << endl;
+    m_pDoc->getFormula()->addBracket(left.at(0).latin1(), right.at(0).latin1());
+}
+
+void KFormulaView::addMatrix()
+{
+    m_pDoc->getFormula()->addMatrix(this);
+}
+
+void KFormulaView::addUpperLeft()
+{
+    m_pDoc->getFormula()->addUpperLeftIndex();
+}
+
+void KFormulaView::addLowerLeft()
+{
+    m_pDoc->getFormula()->addLowerLeftIndex();
+}
+
+void KFormulaView::addUpperRight()
+{
+    m_pDoc->getFormula()->addUpperRightIndex();
+}
+
+void KFormulaView::addLowerRight()
+{
+    m_pDoc->getFormula()->addLowerRightIndex();
+}
+
+void KFormulaView::cursorChanged(bool visible, bool selecting)
+{
+    cutAction->setEnabled(visible && selecting);
+    copyAction->setEnabled(visible && selecting);
+
+    if (addBracketAction->isEnabled() != visible) {
+        //kdDebug(10001) << "cursorChanged" << endl;
+        setEnabled(visible);
+    }
+
+    if (visible) {
+        int x = formulaWidget->getCursorPoint().x();
+        int y = formulaWidget->getCursorPoint().y();
+        scrollview->ensureVisible(x, y);
+    }
 }
 
 #include "kformula_view.moc"

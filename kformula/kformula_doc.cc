@@ -48,57 +48,25 @@
 
 
 KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode)
-        : KoDocument(parentWidget, widgetName, parent, name, singleViewMode),
-          history(actionCollection())
+        : KoDocument(parentWidget, widgetName, parent, name, singleViewMode)
 {
     setInstance(KFormulaFactory::global(), false);
     //kdDebug(39001) << "General Settings" << endl;
-    
-    formula = new KFormulaContainer(history);
+
+    history = new KCommandHistory(actionCollection());
+    formula = new KFormulaContainer(*history);
 
     // the modify flag
-    connect(&history, SIGNAL(commandExecuted()), this, SLOT(commandExecuted()));
-    connect(&history, SIGNAL(documentRestored()), this, SLOT(documentRestored()));
-    history.documentSaved();
-
-    // copy&paste
-    (void) KStdAction::cut(formula, SLOT(cut()), actionCollection());
-    (void) KStdAction::copy(formula, SLOT(copy()), actionCollection());
-    (void) KStdAction::paste(formula, SLOT(paste()), actionCollection());
-    
-    (void) new KAction(i18n("Add/change to integral"),
-                       "mini-integral",
-                       CTRL + Key_6 ,
-                       formula, SLOT(addIntegral()),
-                       actionCollection(), "addintegral");
-    (void) new KAction(i18n("Add/change to symbol"),
-                       "mini-symbol",
-                       CTRL + Key_7 ,
-                       formula, SLOT(addSum()),
-                       actionCollection(), "addsymbol");
-    (void) new KAction(i18n("Add/change to root"),
-                       "mini-root",
-                       CTRL + Key_2 ,
-                       formula, SLOT(addRoot()),
-                       actionCollection(), "addroot");
-    (void) new KAction(i18n("Add/change to fraction"),
-                       "mini-frac",
-                       CTRL + Key_3 ,
-                       formula, SLOT(addFraction()),
-                       actionCollection(), "addfrac");
-    (void) new KAction(i18n("Add/change to bracket"),
-                       "mini-bra",
-                       CTRL + Key_5 ,
-                       this, SLOT(addBracket()),
-                       actionCollection(),"addbra");
-
-    
-    //KAction* matrixElement     = new KAction(i18n("Matrix"),      CTRL+Key_M, formula, SLOT(addMatrix()), actionCollection());
+    connect(history, SIGNAL(commandExecuted()), this, SLOT(commandExecuted()));
+    connect(history, SIGNAL(documentRestored()), this, SLOT(documentRestored()));
+    history->documentSaved();
 }
 
 
 KFormulaDoc::~KFormulaDoc()
 {
+    delete formula;
+    delete history;
 }
 
 
@@ -106,7 +74,7 @@ QDomDocument KFormulaDoc::saveXML()
 {
     QDomDocument doc("FORMULA");
     formula->save(doc);
-    history.documentSaved();
+    history->documentSaved();
     return doc;
 }
 
@@ -117,8 +85,8 @@ bool KFormulaDoc::loadXML(QIODevice *, const QDomDocument& doc)
     }
 
     if (formula->load(doc)) {
-        history.clear();
-        history.documentSaved();
+        history->clear();
+        history->documentSaved();
         return true;
     }
     return false;
@@ -141,12 +109,6 @@ void KFormulaDoc::commandExecuted()
 void KFormulaDoc::documentRestored()
 {
     setModified(false);
-}
-
-
-void KFormulaDoc::addBracket()
-{
-    formula->addBracket('(', ')');
 }
 
 
