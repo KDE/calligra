@@ -10,3 +10,7 @@ koffice-libs: shlib-missing-in-control-file libcsvfilterdia usr/lib/libcsvfilter
 koffice-libs: shlib-missing-in-control-file libasciiexport usr/lib/libasciiexport.so
 koffice-libs: shlib-missing-in-control-file libcsvimport usr/lib/libcsvimport.so
 koffice-libs: shlib-missing-in-control-file libasciiimport usr/lib/libasciiimport.so
+koffice-libs: shlib-missing-in-control-file libwmfimport usr/lib/libwmfimport.so
+koffice-libs: shlib-missing-in-control-file libdocbookexport usr/lib/libdocbookexport.so
+koffice-libs: shlib-missing-in-control-file liblatexexport usr/lib/liblatexexport.so
+koffice-libs: shlib-missing-in-control-file libkwmf usr/lib/libkwmf.so

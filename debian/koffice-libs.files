@@ -18,6 +18,10 @@ usr/share/services/kword_html_export.desktop
 usr/share/services/ole_excel97_import.desktop
 usr/share/services/ole_powerpoint97_import.desktop
 usr/share/services/ole_winword97_import.desktop
+usr/share/services/killustrator_wmf_import.desktop
+usr/share/services/kword_docbook_export.desktop
+usr/share/services/kword_latex_export.desktop
+usr/share/mimelnk/image/x-wmf.desktop
 usr/lib/libkspelltool.so
 usr/lib/libkspelltool.la
 usr/bin/koscript
@@ -67,6 +71,7 @@ usr/share/icons/hicolor/32x32/actions/sum.png
 usr/share/doc/kde/HTML/en/koffice/*
 usr/share/doc/kde/HTML/en/doc/*
 usr/share/mimelnk/text/x-csv.desktop
+
 usr/lib/libkoml.so.1.0.0
 usr/lib/libkoml.so.1
 usr/lib/libkoml.la
@@ -123,3 +128,11 @@ usr/share/templates/Illustration.desktop
 usr/share/services/kword_applixword_import.desktop
 usr/lib/libapplixwordimport.so
 usr/lib/libapplixwordimport.la
+usr/lib/libkwmf.so
+usr/lib/libkwmf.la
+usr/lib/libwmfimport.so
+usr/lib/libwmfimport.la
+usr/lib/libdocbookexport.so
+usr/lib/libdocbookexport.la
+usr/lib/liblatexexport.so
+usr/lib/liblatexexport.la
