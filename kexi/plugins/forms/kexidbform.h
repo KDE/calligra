@@ -33,11 +33,6 @@
 	QApplication::sendEvent( widget, &fe ); \
 	QFocusEvent::resetReason(); }
 
-//QEvent foe( QEvent::FocusOut ); \
-//	QFocusEvent::setReason(reason); \
-//	QApplication::sendEvent( widget, &foe ); \
-//	QFocusEvent::resetReason(); \
-
 //! A DB-aware form widget
 class KexiDBForm : 
 	public KexiGradientWidget,

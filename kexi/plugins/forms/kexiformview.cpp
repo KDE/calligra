@@ -42,7 +42,8 @@
 
 #define NO_DSWIZARD
 
-KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent, const char *name, bool dbAware)
+KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent, 
+	const char *name, bool /*dbAware*/)
  : KexiDataAwareView( mainWin, parent, name )
  , m_buffer(0)
  , m_resizeMode(KexiFormView::ResizeDefault)
