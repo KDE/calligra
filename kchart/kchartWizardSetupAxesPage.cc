@@ -233,6 +233,9 @@ void KChartWizardSetupAxesPage::paintEvent( QPaintEvent *)
 
 void KChartWizardSetupAxesPage::apply()
 {
+    _chart->params()->setAxisShowGrid(KDChartAxisParams::AxisPosLeft,grid->isChecked() );
+    _chart->params()->setAxisShowGrid(KDChartAxisParams::AxisPosBottom,grid->isChecked() );
+
     // PENDING(kalle) Put back in
     //     _chart->params()->grid =grid->isChecked() ;
 //     if( !y_interval->text().isEmpty())
