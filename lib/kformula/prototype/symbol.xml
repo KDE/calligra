@@ -428,6 +428,9 @@
     <entry key="115" number="" name="neq" class="RELATION"/>
     <entry key="121" number="0x2245" name="cong" class="RELATION"/>
     <entry key="162" number="0x223C" name="sim" class="RELATION"/>
+    <entry key="108" number="0x00AC" name="neg" class="ORDINARY"/>
+    <entry key="115" number="0x2260" name="neq" class="RELATION"/>
+    <entry key="60" number="0x2284" name="nsubset" class="RELATION"/>
   </unicodetable>
   <unicodetable font="euclid%20math%20two">
     <entry key="33" number="0x25B3" name="bigtriangleup" class="ORDINARY"/>
@@ -1018,6 +1021,7 @@
     <entry key="118" number="0xE2B4" name="succnapprox" class="RELATION"/>
     <entry key="119" number="" name="" class="RELATION"/>
     <entry key="120" number="0xE5F1" name="nsucceq" class="RELATION"/>
+    <entry key="101" number="0x2204" name="nexists" class="ORDINARY"/>
   </unicodetable>
   <unicodetable font="esstixseven">
     <entry key="33" number="" name="" class="ORDINARY"/>

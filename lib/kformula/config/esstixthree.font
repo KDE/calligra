@@ -5,6 +5,7 @@
 #
 # Each line consist of a char position and its unicode value.
 #
+101, 0x2204
 95, 0x227B
 45, 0xE2F9
 51, 0x227A

@@ -1,5 +1,5 @@
 //
-// Created: Fri May  3 13:53:49 2002
+// Created: Tue Aug  6 20:44:52 2002
 //      by: gensymbolfontmap.py
 //    from: symbol.xml
 //
