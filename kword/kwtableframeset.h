@@ -369,7 +369,7 @@ public:
 #ifndef NDEBUG
     virtual void printDebug( KWFrame * frame );
     virtual void printDebug();
-    virtual void printArrayDebug();
+    void printArrayDebug();
 #endif
     static const uint m_sDefaultColWidth = 60;
 protected:
