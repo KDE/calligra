@@ -588,7 +588,7 @@ public:
     /**
      * Draw a particular frame of this frameset.
      * This is called by drawContents and is what framesets must reimplement.
-     * @param fcrect rectangle to be repainted, in the _frame_'s coordinate system (in pixels).
+     * @param fcrect rectangle to be repainted, in the _frame_'s coordinate system, in pixels.
      * Doesn't include padding.
      *
      * @param crect rectangle to be repainted, in view coordinates. Includes padding.
@@ -605,7 +605,8 @@ public:
      * You MUST reimplement one or the other, or you'll get infinite recursion ;)
      *
      * In this method, the painter has been translated to the frame's coordinate system
-     * @param fcrect rectangle to be repainted, in the _frame_'s coordinate system (in pixels). Doesn't include padding.
+     * @param fcrect rectangle to be repainted, in the _frame_'s coordinate system, in pixels.
+     * Doesn't include padding.
      */
     virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect& fcrect,
                                     const QColorGroup &cg, bool onlyChanged, bool resetChanged,
