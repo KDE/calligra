@@ -366,7 +366,7 @@ public:
 
     void setShadowDirection( short int sd );
     void setShadowDistance( int sd );
-    void setShadowColor( QColor sc );
+    void setShadowColor( const QColor & sc );
 
     short int getShadowDirection() { return shadowDirection; }
     int getShadowDistance() { return shadowDistance; }

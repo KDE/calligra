@@ -1906,7 +1906,7 @@ void KoParagShadowWidget::setShadowDistance( int sd )
     distance->setValue( shadowDistance );
 }
 
-void KoParagShadowWidget::setShadowColor( QColor sc )
+void KoParagShadowWidget::setShadowColor( const QColor &sc )
 {
     shadowColor = sc;
     m_shadowPreview->setShadowColor( shadowColor );
