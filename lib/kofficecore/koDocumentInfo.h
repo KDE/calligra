@@ -101,6 +101,8 @@ public:
     void setCity( const QString& n );
     void setStreet( const QString& n );
 
+    void initParameters();
+
 private:
     QString m_fullName;
     QString m_title;

@@ -81,7 +81,12 @@ KoDocumentInfoDlg::KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent, 
   d = new KoDocumentInfoDlgPrivate;
   d->m_info = docInfo;
   d->m_emailCfg = new KConfig( "emaildefaults", true );
-  d->m_emailCfg->setGroup( "UserInfo" );
+
+  d->m_emailCfg->setGroup( "Defaults" );
+
+  QString group = d->m_emailCfg->readEntry("Profile","Default");
+
+  d->m_emailCfg->setGroup(QString("PROFILE_%1").arg(group));
 
   d->m_dialog = dialog;
   d->m_bDeleteDialog = false;
@@ -246,6 +251,18 @@ void KoDocumentInfoDlg::save( KoDocumentInfoAuthor *authorInfo )
   authorInfo->setPostalCode( d->m_lePostalCode->text() );
   authorInfo->setCity( d->m_leCity->text() );
   authorInfo->setStreet( d->m_leStreet->text() );
+
+  KConfig config("kofficerc");
+  config.setGroup( "Author" );
+  config.writeEntry("full-name",d->m_leFullName->text());
+  config.writeEntry("company",d->m_leCompany->text() );
+  config.writeEntry("email", d->m_leEmail->text());
+  config.writeEntry("telephone", d->m_leTelephone->text());
+  config.writeEntry("fax", d->m_leFax->text());
+  config.writeEntry("country",d->m_leCountry->text());
+  config.writeEntry("postal-code",d->m_lePostalCode->text());
+  config.writeEntry("city",  d->m_leCity->text());
+  config.writeEntry("street", d->m_leStreet->text());
 }
 
 void KoDocumentInfoDlg::save( KoDocumentInfoAbout *aboutInfo )

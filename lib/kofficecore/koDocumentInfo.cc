@@ -21,6 +21,7 @@
 
 #include <qdom.h>
 #include <qobjectlist.h>
+#include <kconfig.h>
 
 /*****************************************
  *
@@ -181,6 +182,25 @@ QString KoDocumentInfoLog::newLog() const
 KoDocumentInfoAuthor::KoDocumentInfoAuthor( KoDocumentInfo* info )
     : KoDocumentInfoPage( info, "author" )
 {
+    initParameters();
+}
+
+void KoDocumentInfoAuthor::initParameters()
+{
+    KConfig config("kofficerc");
+    if( config.hasGroup( "Author" ))
+    {
+        config.setGroup( "Author" );
+        m_fullName=config.readEntry("full-name","");
+        m_company=config.readEntry("company", "");
+        m_email=config.readEntry("email", "");
+        m_telephone=config.readEntry("telephone", "");
+        m_fax=config.readEntry("fax", "");
+        m_country=config.readEntry("country", "");
+        m_postalCode=config.readEntry("postal-code", "");
+        m_city=config.readEntry("city", "");
+        m_street=config.readEntry("street", "");
+    }
 }
 
 bool KoDocumentInfoAuthor::load( const QDomElement& e )
@@ -209,7 +229,6 @@ bool KoDocumentInfoAuthor::load( const QDomElement& e )
         else if ( n.tagName() == "street" )
             m_street = n.text();
     }
-
     return true;
 }
 
