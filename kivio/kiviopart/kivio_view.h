@@ -148,6 +148,7 @@ class KivioView : public KoView
 
   signals:
     void zoomChanged(int);
+    void updateStencilSetList();
 
   protected:
     void createGeometryDock();

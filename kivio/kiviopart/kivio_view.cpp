@@ -370,14 +370,16 @@ void KivioView::createAddStencilSetDock()
   connect(showAddStencilSet, SIGNAL(toggled(bool)), addStencilSetBase, SLOT(makeVisible(bool)));
   connect(addStencilSetBase, SIGNAL(visibleChange(bool)), SLOT(toggleAddStencilSetPanel(bool)));
   connect(m_addStencilSetPanel, SIGNAL(addStencilSet(const QString&)), this, SLOT(addStencilSet(const QString&)));
+  connect(this, SIGNAL(updateStencilSetList()), m_addStencilSetPanel, SLOT(updateList()));
 }
 
 
 void KivioView::setupActions()
 {
-  KivioStencilSetAction* addSpSet =  new KivioStencilSetAction( i18n("Add Stencil Set"),
+  KivioStencilSetAction* addStSet =  new KivioStencilSetAction( i18n("Add Stencil Set"),
     "open_stencilset", actionCollection(), "addStencilSet" );
-  connect(addSpSet,SIGNAL(activated(const QString&)),SLOT(addStencilSet(const QString&)));
+  connect(addStSet,SIGNAL(activated(const QString&)),SLOT(addStencilSet(const QString&)));
+  connect(this, SIGNAL(updateStencilSetList()), addStSet, SLOT(updateMenu()));
 
   m_alignAndDistribute = new KAction( i18n("Align && Distribute..."), CTRL+ALT+Key_A, this,
     SLOT(alignStencilsDlg()), actionCollection(), "alignStencils" );
@@ -2140,6 +2142,7 @@ void KivioView::installStencilSet()
 {
   Kivio::StencilSetInstaller dlg(this);
   dlg.exec();
+  emit updateStencilSetList();
 }
 
 #include "kivio_view.moc"

@@ -33,6 +33,9 @@ namespace Kivio {
     public:
       AddStencilSetPanel(QWidget *parent = 0, const char *name = 0);
       ~AddStencilSetPanel();
+    
+    public slots:
+      void updateList();
       
     signals:
       void addStencilSet(const QString&);

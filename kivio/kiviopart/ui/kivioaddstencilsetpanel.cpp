@@ -36,15 +36,7 @@ namespace Kivio {
   AddStencilSetPanel::AddStencilSetPanel(QWidget *parent, const char *name)
     : KivioStencilSetWidget(parent, name)
   {
-    KStandardDirs *dirs = KGlobal::dirs();
-    QStringList dirList = dirs->findDirs("data", "kivio/stencils");
-    dirList.sort();
-  
-    for(QStringList::Iterator it = dirList.begin(); it != dirList.end(); ++it)
-    {
-      QString dir = (*it);
-      loadCollections(dir);
-    }
+    updateList();
     
     m_stencilIView->setResizeMode(QIconView::Adjust);
     m_addToDocBtn->setEnabled(false);
@@ -56,6 +48,20 @@ namespace Kivio {
   
   AddStencilSetPanel::~AddStencilSetPanel()
   {
+  }
+  
+  void AddStencilSetPanel::updateList()
+  {
+    KStandardDirs *dirs = KGlobal::dirs();
+    QStringList dirList = dirs->findDirs("data", "kivio/stencils");
+    dirList.sort();
+    m_stencilSetLView->clear();
+    
+    for(QStringList::Iterator it = dirList.begin(); it != dirList.end(); ++it)
+    {
+      QString dir = (*it);
+      loadCollections(dir);
+    }
   }
 
   void AddStencilSetPanel::loadCollections(const QString& dir)
