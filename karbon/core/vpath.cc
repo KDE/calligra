@@ -637,17 +637,6 @@ VPath::draw( QPainter& painter, const QRect& rect,
 
 	if( state() == selected )
 	{
-		// draw bbox:
-		// TODO : selection -> handle, editing -> nodes/boxes ?
-/*		painter.setBrush( Qt::NoBrush );
-		painter.setPen( Qt::blue.light() );
-		QRect rect = boundingBox(); // only calculate once
-		painter.drawRect( rect ); */
-
-		// rotation center
-		//painter.setBrush( Qt::blue );
-		//drawBox( painter, rect.left() + rect.width() / 2, rect.top() + rect.height() / 2, 2 );
-
 		// draw small boxes for path nodes
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
@@ -657,17 +646,6 @@ VPath::draw( QPainter& painter, const QRect& rect,
 			drawBox( painter, itr.current()->p3()->x(), itr.current()->p3()->y(), 1 );
 		}
 
-		// draw boxes
-/*		painter.setPen( Qt::blue.light() );
-		painter.setBrush( Qt::white );
-		drawBox( painter, rect.left(), rect.top() );
-		drawBox( painter, rect.left() + rect.width() / 2, rect.top() );
-		drawBox( painter, rect.right(), rect.top() );
-		drawBox( painter, rect.right(), rect.top() + rect.height() / 2 );
-		drawBox( painter, rect.right(), rect.bottom() );
-		drawBox( painter, rect.left() + rect.width() / 2, rect.bottom() );
-		drawBox( painter, rect.left(), rect.bottom() );
-		drawBox( painter, rect.left(), rect.top() + rect.height() / 2 ); */
 	}
 	if( state() == edit )
 	{

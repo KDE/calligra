@@ -27,6 +27,7 @@ protected:
 
 private:
 	static VMToolSelect* s_instance;
+	enum { NoTransform, Moving, Scaling } m_TransformState;
 };
 
 #endif

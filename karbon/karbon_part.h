@@ -54,6 +54,8 @@ public:
 	VLayer* activeLayer() const { return m_activeLayer; }
 	// draw handle
 	void drawHandle( QPainter &p ) const;
+	// access handle
+	const VHandle *handle() const { return m_handle; } 
 
 public slots:
     void repaintAllViews( bool erase = false );

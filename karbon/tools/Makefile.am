@@ -23,6 +23,7 @@ noinst_HEADERS = \
 	vctool_star.h \
 	vmcmd_delete.h \
 	vmcmd_select.h \
+	vmcmd_transform.h \
 	vmtool_select.h \
 	vtool.h
 
@@ -42,6 +43,7 @@ libkarbontools_la_SOURCES = \
 	vctool_star.cc \
 	vmcmd_delete.cc \
 	vmcmd_select.cc \
+	vmcmd_transform.cc \
 	vmtool_select.cc \
 	vtool.cc
 

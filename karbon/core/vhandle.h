@@ -6,7 +6,7 @@
 #define __VHANDLE_H__
 
 #include <qptrlist.h>
-//#include "vobject.h"
+#include <qrect.h>
 
 class QPainter;
 class VObject;
@@ -25,12 +25,15 @@ public:
 	// read-only access to objects:
 	const QPtrList<VObject>& objects() const { return m_objects; }
 
+	QRect boundingBox() const { return m_bbox; }
+
 private:
 	// TODO : we must probably have 1 drawBox helper method, but where ?
 	void drawBox( QPainter& painter, double x, double y, uint handleSize = 3 );
 
 private:
 	QPtrList<VObject> m_objects;
+	QRect m_bbox;
 };
 
 #endif

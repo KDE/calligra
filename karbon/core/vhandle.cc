@@ -20,36 +20,35 @@ void
 VHandle::draw( QPainter& painter )
 {
 	// calculate bbox
-	QRect rect;
 	QPtrListIterator<VObject> itr = m_objects;
 	if( !itr.current() )
 		return;
 	else
-		rect = itr.current()->boundingBox();
+		m_bbox = itr.current()->boundingBox();
 	++itr;
 
 	for ( ; itr.current() ; ++itr )
 	{
-		rect = rect.unite( itr.current()->boundingBox() );
+		m_bbox = m_bbox.unite( itr.current()->boundingBox() );
 	}
 
 	// Draw selection handle
 	// TODO : selection -> handle, editing -> nodes/boxes ?
 	painter.setBrush( Qt::NoBrush );
 	painter.setPen( Qt::blue.light() );
-	painter.drawRect( rect );
+	painter.drawRect( m_bbox );
 
 	// draw boxes
 	painter.setPen( Qt::blue.light() );
 	painter.setBrush( Qt::white );
-	drawBox( painter, rect.left(), rect.top() );
-	drawBox( painter, rect.left() + rect.width() / 2, rect.top() );
-	drawBox( painter, rect.right(), rect.top() );
-	drawBox( painter, rect.right(), rect.top() + rect.height() / 2 );
-	drawBox( painter, rect.right(), rect.bottom() );
-	drawBox( painter, rect.left() + rect.width() / 2, rect.bottom() );
-	drawBox( painter, rect.left(), rect.bottom() );
-	drawBox( painter, rect.left(), rect.top() + rect.height() / 2 );
+	drawBox( painter, m_bbox.left(), m_bbox.top() );
+	drawBox( painter, m_bbox.left() + m_bbox.width() / 2, m_bbox.top() );
+	drawBox( painter, m_bbox.right(), m_bbox.top() );
+	drawBox( painter, m_bbox.right(), m_bbox.top() + m_bbox.height() / 2 );
+	drawBox( painter, m_bbox.right(), m_bbox.bottom() );
+	drawBox( painter, m_bbox.left() + m_bbox.width() / 2, m_bbox.bottom() );
+	drawBox( painter, m_bbox.left(), m_bbox.bottom() );
+	drawBox( painter, m_bbox.left(), m_bbox.top() + m_bbox.height() / 2 );
 }
 
 void
