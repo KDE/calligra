@@ -11,6 +11,36 @@ Bugs from above bug page:
   and resize it to fit an A4 page. 
 ------------------------------------
 
+* The menu entries should obey the standard that a ... follows commands which
+  exec a dialog(ue), what should appear when a flowing window is open (something
+  like "Layer") "..." as with "Layer..." or "" as in Arrange|Transform|* ?
+
+* Available menu commands and toolbar arrangement differ between
+  the standardalone version and the koffice version.
+  - Extras|Options is not available in the koffice version
+  - The toolbar with filenew and copy is in fact two toolbars in the koffice
+    version
+  - Recent files don't appear in ko, whereas no icons are shown in the s-alone
+  - KO: No checkmarks appear in the view menu
+  - Page dialog:
+    - draw area right: ok in KO, some line draw and orientation change gliches
+    - Unit menu: KO: greyed out, SO: enabled
+    - Arrange menu: KO misses convert to curve
+    - Effects menu missing in KO
+    - KO: Help: contents and about killustrator are missing
+    - Toolbar: KO contains redo, undo and delete buttons, which are not present
+      in SO; icon of copy is equal to cut (in KO); zoom combobox is editable in
+      KO.
+
+* Align/Distribute is empty (might be a local problem of mine, burnus@gmx.de)
+  KO+SO
+
+* In the koffice version the properties dialogue doesn't seem to work
+  (it doesn't appear)
+
+* Disableing of the ruler doesn't work (everything is painted in the colour of
+  the ruler background)
+
 * undo/redo for layers
   Presently delated layers disappear in the nirvana
 
