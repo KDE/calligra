@@ -108,10 +108,6 @@ KInstance* KPresenterFactory::global()
 				        KStandardDirs::kde_default("data") + "kpresenter/templates/");
       s_global->dirs()->addResourceType("autoforms",
 				        KStandardDirs::kde_default("data") + "kpresenter/autoforms/");
-      s_global->dirs()->addResourceType("toolbar",
-				        KStandardDirs::kde_default("data") + "koffice/toolbar/");
-      s_global->dirs()->addResourceType("toolbar",
- 				        KStandardDirs::kde_default("data") + "kpresenter/toolbar/");
       // Tell the iconloader about share/apps/koffice/icons
       s_global->iconLoader()->addAppDir("koffice");
     }
