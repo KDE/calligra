@@ -252,7 +252,8 @@ double KPTextObject::load(const QDomElement &element)
         }
         loadKTextObject( e, t );
     }
-    resizeTextDocument(); // this will to formatMore()
+    m_textobj->formatMore();
+    //resizeTextDocument(); // this will to formatMore()
     return offset;
 }
 
@@ -1294,7 +1295,7 @@ void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, 
 {
     int availHeight = availableHeight();
     if ( ( bottom > availHeight ) /*||   // this parag is already off page
-                                    ( lastFormatted && (bottom + lastFormatted->rect().height() > availHeight) ) */) // or next parag will be off page
+                                    ( lastFormatted && (bottom + lastFormatted->rect().height() > availHeight) )*/ ) // or next parag will be off page
     {
         int difference = ( bottom + 2 ) - availHeight; // in layout unit pixels
         if( lastFormatted && bottom + lastFormatted->rect().height() > availHeight )
