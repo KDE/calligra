@@ -128,7 +128,8 @@ void KWPage::paintEvent(QPaintEvent* e)
     }
   
   doc->drawMarker(*fc,&painter,xOffset,yOffset);
-    
+  markerIsVisible = true;
+
   painter.end();
 
   if (!paint_directly) drawBuffer();
@@ -387,12 +388,21 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    
 	    draw_buffer = true;
 	    char tmpString[2] = {0,0};
+	    bool isPrev = false;
 	    tmpString[0] = (char)e->ascii();
 	    unsigned int tmpTextPos = fc->getTextPos();
 	    fc->getParag()->insertText(fc->getTextPos(),tmpString);
 	    fc->getParag()->setFormat(fc->getTextPos(),1,format);
 	    fc->makeLineLayout(painter);
 	    KWFormatContext paintfc(doc);
+
+	    if (e->ascii() == ' ' && !fc->isCursorInFirstLine())
+	      {
+		fc->cursorGotoPrevLine(painter);
+		fc->makeLineLayout(painter);
+		isPrev = true;
+	      }
+
 	    paintfc = *fc;
 	    bool bend = false;
 	    
@@ -411,6 +421,9 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		  bend = true; 
 	      }
 	    
+	    if (isPrev)
+	      fc->cursorGotoNextLine(painter);
+
 	    if (tmpTextPos + 1 <= fc->getLineEndPos())
 	      fc->cursorGotoPos(tmpTextPos + 1,painter);
 	    else 
@@ -423,7 +436,9 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  }
       }  break;
     }
-  painter.end();
+
+  if (painter.isActive())
+    painter.end();
   if (draw_buffer) drawBuffer();
 
   scrollToCursor(*fc);

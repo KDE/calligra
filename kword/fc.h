@@ -63,6 +63,7 @@ public:
      */
     void cursorGotoLineEnd( QPainter &_painter );
     void cursorGotoNextLine(QPainter &_painter);
+    void cursorGotoPrevLine(QPainter &_painter);
     bool makeNextLineLayout( QPainter &_painter );
     bool makeLineLayout( QPainter &_painter );
     void makeCounterLayout( QPainter &_painter );

@@ -375,13 +375,35 @@ void KWFormatContext::cursorGotoLineEnd( QPainter &_painter )
 
 void KWFormatContext::cursorGotoNextLine(QPainter &_painter)
 {
-    during_vertical_cursor_movement = true;
+    during_vertical_cursor_movement = false;
 
     lineStartPos = lineEndPos;
     ptY += getLineHeight();
     makeLineLayout( _painter );
     cursorGotoLineStart( _painter );
     return;
+}
+
+void KWFormatContext::cursorGotoPrevLine(QPainter &_painter)
+{
+  // Re-Enter the current paragraph
+  unsigned int tmpPos = lineStartPos;
+  init (parag, _painter, false);
+  do 
+    {
+      makeLineLayout( _painter );
+      if (lineEndPos < tmpPos){
+	ptY += getLineHeight();
+	// next line
+	lineStartPos = lineEndPos;
+      }
+  } 
+  while(lineEndPos < tmpPos);    
+
+  
+  cursorGotoLineStart( _painter );
+
+  during_vertical_cursor_movement = false;
 }
 
 void KWFormatContext::cursorGotoLine( unsigned int _textpos, QPainter &_painter )
@@ -518,7 +540,7 @@ bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
 
 bool KWFormatContext::makeLineLayout( QPainter &_painter )
 {
-  if (parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK || 
+  if (parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT || 
       parag->getParagLayout()->getFlow() == KWParagLayout::CENTER)
     calcTextLen();
 
@@ -643,7 +665,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 	    // This is the correct point to make a line break
 	    lineEndPos = textPos + 1;
 	    // If we break here, then the line has the following width ...
-	    //ptTextLen = tmpPTWidth;
+	    ptTextLen = tmpPTWidth;
 	    ptAscender = tmpPTAscender;
 	    ptDescender = tmpPTDescender;
 	    if ( ptAscender > ptMaxAscender )
@@ -683,7 +705,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     {
 	// We have to take the last possible linebreak
 	lineEndPos = textPos;
-	//ptTextLen = tmpPTWidth;
+	ptTextLen = tmpPTWidth;
 	ptAscender = tmpPTAscender;
 	ptDescender = tmpPTDescender;
 	if ( ptAscender > ptMaxAscender )

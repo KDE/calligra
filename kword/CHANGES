@@ -85,3 +85,10 @@ Reggie, 18.9.1998:
 ------------------
 - Worked on paragraph settings dialog (started a cool preview widget)
 - Fixed a redraw problem (with setting some clippings)
+
+Reggie, 19.9.1998:
+------------------
+- Worked on paragraph settings dialog
+- Some improvements with linebreaking
+- Fixed bug in cursor navigation
+- Fixed bug in "Blocksatz"

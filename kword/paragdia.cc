@@ -42,6 +42,8 @@ void KWPagePreview::drawContents(QPainter* p)
   int dr = static_cast<int>(right / 2);
   int df = static_cast<int>(first / 2 + left / 2);
 
+  //int spc = static_cast<int>(POINT_TO_MM(spacing / 2));
+
   // draw page
   p->setPen(QPen(black));
   p->setBrush(QBrush(black));
@@ -97,7 +99,7 @@ void KWParagDia::setupTab1()
 {
   tab1 = new QWidget(this);
 
-  grid1 = new QGridLayout(tab1,3,2,15,7);
+  grid1 = new QGridLayout(tab1,4,2,15,7);
 
   // --------------- indent ---------------
   indentFrame = new QGroupBox(i18n("Indent"),tab1);
@@ -171,7 +173,7 @@ void KWParagDia::setupTab1()
   cSpacing->insertItem(i18n("1.0 line"));
   cSpacing->insertItem(i18n("1.5 lines"));
   cSpacing->insertItem(i18n("2.0 lines"));
-  cSpacing->insertItem(i18n("Custom (mm)"));
+  cSpacing->insertItem(i18n("Custom (pt)"));
   cSpacing->resize(cSpacing->sizeHint());
   connect(cSpacing,SIGNAL(activated(int)),this,SLOT(spacingActivated(int)));
   spacingGrid->addWidget(cSpacing,1,0);
@@ -197,20 +199,67 @@ void KWParagDia::setupTab1()
   spacingGrid->activate();
   grid1->addWidget(spacingFrame,1,0);
 
+  // --------------- paragraph spacing ---------------
+  pSpaceFrame = new QGroupBox(i18n("Paragraph Space"),tab1);
+  pSpaceGrid = new QGridLayout(pSpaceFrame,3,2,15,7);
+  
+  lBefore = new QLabel(i18n("Before (mm):"),pSpaceFrame);
+  lBefore->resize(lBefore->sizeHint());
+  lBefore->setAlignment(AlignRight);
+  pSpaceGrid->addWidget(lBefore,1,0);
+
+  eBefore = new KRestrictedLine(pSpaceFrame,"","1234567890.");
+  eBefore->setText("0.00");
+  eBefore->setMaxLength(5);
+  eBefore->setEchoMode(QLineEdit::Normal);
+  eBefore->setFrame(true);
+  eBefore->resize(eBefore->sizeHint().width() / 2,eBefore->sizeHint().height());
+  pSpaceGrid->addWidget(eBefore,1,1);
+ 
+  lAfter = new QLabel(i18n("After (mm):"),pSpaceFrame);
+  lAfter->resize(lAfter->sizeHint());
+  lAfter->setAlignment(AlignRight);
+  pSpaceGrid->addWidget(lAfter,2,0);
+
+  eAfter = new KRestrictedLine(pSpaceFrame,"","1234567890.");
+  eAfter->setText("0.00");
+  eAfter->setMaxLength(5);
+  eAfter->setEchoMode(QLineEdit::Normal);
+  eAfter->setFrame(true);
+  eAfter->resize(eAfter->sizeHint().width() / 2,eAfter->sizeHint().height());
+  pSpaceGrid->addWidget(eAfter,2,1);
+
+  // grid col spacing
+  pSpaceGrid->addColSpacing(0,lBefore->width());
+  pSpaceGrid->addColSpacing(0,lAfter->width());
+  pSpaceGrid->addColSpacing(1,eBefore->width());
+  pSpaceGrid->addColSpacing(1,eAfter->width());
+
+  // grid row spacing
+  pSpaceGrid->addRowSpacing(0,5);
+  pSpaceGrid->addRowSpacing(1,eBefore->height());
+  pSpaceGrid->addRowSpacing(2,eAfter->height());
+
+  // activate grid
+  pSpaceGrid->activate();
+  grid1->addWidget(pSpaceFrame,2,0);
+
   // --------------- preview --------------------
   prev1 = new KWPagePreview(tab1,"");
-  grid1->addMultiCellWidget(prev1,0,2,1,1);
+  grid1->addMultiCellWidget(prev1,0,3,1,1);
 
   // --------------- main grid ------------------
   grid1->addColSpacing(0,indentFrame->width());
   grid1->addColSpacing(0,spacingFrame->width());
+  grid1->addColSpacing(0,pSpaceFrame->width());
   grid1->addColSpacing(1,250);
   grid1->setColStretch(1,1);
 
   grid1->addRowSpacing(0,indentFrame->height());
   grid1->addRowSpacing(1,spacingFrame->height());
-  grid1->addRowSpacing(2,20);
-  grid1->setRowStretch(2,1);
+  grid1->addRowSpacing(2,pSpaceFrame->height());
+  grid1->addRowSpacing(3,20);
+  grid1->setRowStretch(3,1);
 
   grid1->activate();
 
@@ -244,7 +293,25 @@ void KWParagDia::firstChanged(const char* _text)
 void KWParagDia::spacingActivated(int _index)
 {
   if (_index == 4)
-    eSpacing->setEnabled(true);
+    {
+      eSpacing->setEnabled(true);
+      eSpacing->setText("12.0");
+      eSpacing->setFocus();
+    }
   else
-    eSpacing->setEnabled(false);
+    {
+      eSpacing->setEnabled(false);
+      switch (_index)
+	{
+	case 0: eSpacing->setText("14.0");
+	  break;
+	case 1: eSpacing->setText("28.0");
+	  break;
+	case 2: eSpacing->setText("42.0");
+	  break;
+	case 3: eSpacing->setText("56.0");
+	  break;
+	}
+    }
+  prev1->setSpacing(atof(eSpacing->text()));
 }

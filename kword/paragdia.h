@@ -33,6 +33,8 @@
 
 #include <stdlib.h>
 
+#include "defs.h"
+
 /******************************************************************/
 /* class KWPagePreview                                            */
 /******************************************************************/
@@ -51,6 +53,8 @@ public:
     { right = _right; repaint(false); }
   void setFirst(float _first)
     { first = _first; repaint(false); }
+  void setSpacing(float _spacing)
+    { spacing = _spacing; repaint(false); }
 
 protected:
   void drawContents(QPainter*);
@@ -76,10 +80,10 @@ protected:
   void setupTab2();
 
   QWidget *tab1,*tab2;
-  QGridLayout *grid1,*indentGrid,*spacingGrid;
-  KRestrictedLine *eLeft,*eRight,*eFirstLine,*eSpacing;
-  QLabel *lLeft,*lRight,*lFirstLine;
-  QGroupBox *indentFrame,*spacingFrame;
+  QGridLayout *grid1,*indentGrid,*spacingGrid,*pSpaceGrid;
+  KRestrictedLine *eLeft,*eRight,*eFirstLine,*eSpacing,*eBefore,*eAfter;
+  QLabel *lLeft,*lRight,*lFirstLine,*lBefore,*lAfter;
+  QGroupBox *indentFrame,*spacingFrame,*pSpaceFrame;
   QComboBox *cSpacing;
   KWPagePreview *prev1;
 
