@@ -325,12 +325,6 @@ KSpreadMap* KSpreadDoc::workbook() const
   return d->workbook;
 }
 
-// obsoleted, removed in future version
-KSpreadMap* KSpreadDoc::map() const
-{
-  return workbook();
-}
-
 KSpreadStyleManager* KSpreadDoc::styleManager()
 {
   return d->styleManager;
@@ -809,17 +803,17 @@ void KSpreadDoc::setShowVerticalScrollBar(bool _show)
   d->verticalScrollBar=_show;
 }
 
+bool KSpreadDoc::showVerticalScrollBar()const 
+{ 
+  return  d->verticalScrollBar;
+}
+
 void KSpreadDoc::setShowHorizontalScrollBar(bool _show) 
 {   
   d->horizontalScrollBar=_show;
 }
 
-bool KSpreadDoc::getShowVerticalScrollBar()const 
-{ 
-  return  d->verticalScrollBar;
-}
-
-bool KSpreadDoc::getShowHorizontalScrollBar()const 
+bool KSpreadDoc::showHorizontalScrollBar()const 
 {  
   return  d->horizontalScrollBar;
 }
@@ -829,14 +823,14 @@ KGlobalSettings::Completion KSpreadDoc::completionMode( ) const
   return d->completionMode;
 }
 
-void KSpreadDoc::setCompletionMode( KGlobalSettings::Completion complMode)
-{  
-  d->completionMode= complMode;
-}
-
-void KSpreadDoc::setShowColHeader(bool _show)
+void KSpreadDoc::setShowColumnHeader(bool _show)
 { 
   d->columnHeader=_show; 
+}
+
+bool KSpreadDoc::showColumnHeader() const
+{ 
+  return  d->columnHeader;
 }
 
 void KSpreadDoc::setShowRowHeader(bool _show)
@@ -844,14 +838,14 @@ void KSpreadDoc::setShowRowHeader(bool _show)
   d->rowHeader=_show;
 }
 
-bool KSpreadDoc::getShowColHeader() const
-{ 
-  return  d->columnHeader;
-}
-
-bool KSpreadDoc::getShowRowHeader() const
+bool KSpreadDoc::showRowHeader() const
 { 
   return  d->rowHeader; 
+}
+
+void KSpreadDoc::setCompletionMode( KGlobalSettings::Completion complMode)
+{  
+  d->completionMode= complMode;
 }
 
 double KSpreadDoc::getIndentValue()const 
@@ -981,7 +975,7 @@ void KSpreadDoc::setDontCheckTitleCase( bool b )
   d->dontCheckTitleCase = b; 
 }
 
-KoUnit::Unit KSpreadDoc::getUnit() const
+KoUnit::Unit KSpreadDoc::unit() const
 { 
   return d->unit;
 }
@@ -991,7 +985,7 @@ void KSpreadDoc::setUnit( KoUnit::Unit _unit )
     d->unit = _unit;
 }
 
-QString KSpreadDoc::getUnitName() const
+QString KSpreadDoc::unitName() const
 { 
   return KoUnit::unitName( d->unit ); 
 }

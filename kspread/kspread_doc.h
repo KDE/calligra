@@ -85,13 +85,20 @@ class KSpreadDoc : public KoDocument, public KoZoomHandler
   Q_PROPERTY( bool getShowMessageError READ getShowMessageError WRITE setShowMessageError)
   Q_PROPERTY( bool dontCheckUpperWord READ dontCheckUpperWord WRITE setDontCheckUpperWord)
   Q_PROPERTY( bool dontCheckTitleCase READ dontCheckTitleCase WRITE setDontCheckTitleCase)
-
+  
+  Q_PROPERTY( int syntaxVersion READ syntaxVersion )
+  Q_PROPERTY( bool showVerticalToolBar READ showVerticalToolBar WRITE setShowVerticalToolBar )
+  Q_PROPERTY( bool showHorizontalToolBar READ showHorizontalToolBar WRITE setShowHorizontalToolBar )
+  Q_PROPERTY( bool showColumnHeader READ showColumnHeader WRITE setShowColumnHeader )
+  Q_PROPERTY( bool showRowHeader READ showRowHeader WRITE setShowRowHeader )
+  
 public:
 
   /**
    * Creates a new document.
    */
-  KSpreadDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+  KSpreadDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0,
+  const char* name = 0, bool singleViewMode = false );
   
   /**
    * Destroys the document.
@@ -107,7 +114,7 @@ public:
    * Same as workbook().
    * This function is obsolete and will be removed in future version.
    */
-  KSpreadMap * map() const;
+  KSpreadMap* map() const { return workbook(); }
   
   /**
    * Returns the MIME type of KSpread document.
@@ -124,15 +131,129 @@ public:
    */
   void redo();
 
-  /*
+  /**
    * Returns the style manager for this document.
    */  
-  KSpreadStyleManager * styleManager();
+  KSpreadStyleManager* styleManager();
 
+  /**
+   * Returns the unit used to display margins.
+   */  
+  KoUnit::Unit unit() const;
+  
+  /**
+   * Same as unit().
+   * This function is obsolete and will be removed in future version.
+   */  
+  KoUnit::Unit getUnit() const { return unit(); }
+  
+  /**
+   * Sets the unit used to display margins.
+   */  
+  void setUnit( KoUnit::Unit u );
+  
+  /**
+   * Returns the name of the unit used to display margins.
+   * For example, if unit() returns KoUnit::U_MM, then 
+   * this functions return "mm".
+   */  
+  QString unitName() const;
+  
+  /**
+   * Same as unitName().
+   * This function is obsolete and will be removed in future version.
+   */  
+  QString getUnitName() const { return unitName(); }
+  
+  /**
+   * Returns the locale which was used for creating this document.
+   */
+  KLocale* locale();
+
+  /**
+   * Returns the syntax version of the currently opened file
+   */
+  int syntaxVersion( ) const;
+  
+  /**
+   * If b is true, vertical scrollbar is visible, otherwise
+   * it will be hidden.
+   */
+  void setShowVerticalScrollBar( bool b );
+  
+  /**
+   * Returns true if vertical scroll bar is visible.
+   */
+  bool showVerticalScrollBar() const;
+
+  /**
+   * Same as showVerticalScrollBar().
+   * This function is obsolete and will be removed in future version.
+   */  
+  bool getShowVerticalScrollBar() const { return showVerticalScrollBar(); }
+  
+  /**
+   * If b is true, horizontal scrollbar is visible, otherwise
+   * it will be hidden.
+   */
+  void setShowHorizontalScrollBar( bool b );
+  
+  /**
+   * Returns true if horizontal scroll bar is visible.
+   */
+  bool showHorizontalScrollBar() const;
+  
+  /**
+   * Same as showHorizontalScrollBar().
+   * This function is obsolete and will be removed in future version.
+   */  
+  bool getShowHorizontalScrollBar() const { return showHorizontalScrollBar(); }
+
+  /**
+   * If b is true, column header is visible, otherwise
+   * it will be hidden.
+   */
+  void setShowColumnHeader( bool b );
+  
+  /**
+   * Returns true if column header is visible.
+   */
+  bool showColumnHeader() const;
+  
+  /**
+   * Same as setShowColumnHeader().
+   * This function is obsolete and will be removed in future version.
+   */  
+  void setShowColHeader( bool b ){ setShowColumnHeader( b ) ; }
+  
+  /**
+   * Same as showColumnHeader().
+   * This function is obsolete and will be removed in future version.
+   */  
+  bool getShowColHeader() const { return showColumnHeader(); } 
+  
+  /**
+   * If b is true, row header is visible, otherwise
+   * it will be hidden.
+   */  
+  void setShowRowHeader( bool b );
+
+  /**
+   * Returns true if row header is visible.
+   */
+  bool showRowHeader() const;
+
+  /**
+   * Same as showRowHeader().
+   * This function is obsolete and will be removed in future version.
+   */  
+  bool getShowRowHeader() const { return showRowHeader(); } 
+  
   virtual QDomDocument saveXML();
 
-  virtual bool loadChildren( KoStore* _store );
   virtual bool loadXML( QIODevice *, const QDomDocument& doc );
+  
+  virtual bool loadChildren( KoStore* _store );
   QDomElement saveAreaName( QDomDocument& doc ) ;
   void loadAreaName( const QDomElement& element );
   virtual void addView( KoView *_view );
@@ -154,11 +275,6 @@ public:
    * @see KSpreadMap
    */
   void addTable( KSpreadSheet * _table );
-
-  /**
-   * @return the locale which was used for creating this document.
-   */
-  KLocale * locale();
 
   /**
    * Change the zoom factor to @p z (e.g. 150 for 150%)
@@ -263,29 +379,11 @@ public:
   QRect getRectArea(const QString &  _tableName);
 
   /**
-  * hide/show scrollbar
-  */
-  void setShowVerticalScrollBar( bool b );
-  void setShowHorizontalScrollBar( bool b );
-
-  bool getShowVerticalScrollBar() const;
-  bool getShowHorizontalScrollBar() const;
-
-  /**
   * completion mode
   */
 
   KGlobalSettings::Completion completionMode( )const ;
   void setCompletionMode( KGlobalSettings::Completion _complMode);
-
-  /**
-  * hide/show row/col header
-  */
-  void setShowColHeader(bool _show);
-  void setShowRowHeader(bool _show);
-
-  bool getShowColHeader()const;
-  bool getShowRowHeader()const;
 
   /**
   * value of indent
@@ -401,14 +499,6 @@ public:
   void takeTable( KSpreadSheet * table );
   
   // The user-chosen global unit
-  QString getUnitName()const ;
-  KoUnit::Unit getUnit()const;
-  void setUnit( KoUnit::Unit _unit );
-
-  /**
-   * Returns the syntax version of the currently opened file
-   */
-  int syntaxVersion( ) const;
 
   static QString getAttribute(const QDomElement &element, const char *attributeName, const QString &defaultValue)
   {
