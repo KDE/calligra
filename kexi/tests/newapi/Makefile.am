@@ -1,7 +1,5 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-bin_PROGRAMS = kexidbtest 
-
 # unused: kexidbmysqlcursor kexidbfirebirdcursor
 
 noinst_PROGRAMS = kexidbtest
