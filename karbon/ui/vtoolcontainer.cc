@@ -45,21 +45,21 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 	btngroup->insert( button, Select );
 
 	button = new QToolButton(btngroup);
-	pixmap = BarIcon("scale",KarbonFactory::instance());
+	pixmap = BarIcon("14_scale",KarbonFactory::instance());
 	button->setPixmap(pixmap);
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( scaleToolActivated() ) );
 	btngroup->insert( button, Scale );
 
 	button = new QToolButton(btngroup);
-	pixmap = BarIcon("rotate",KarbonFactory::instance());
+	pixmap = BarIcon("14_rotate",KarbonFactory::instance());
 	button->setPixmap(pixmap);
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( rotateToolActivated() ) );
 	btngroup->insert( button, Rotate );
 
 	button = new QToolButton(btngroup);
-	pixmap = BarIcon("shear",KarbonFactory::instance());
+	pixmap = BarIcon("14_shear",KarbonFactory::instance());
 	button->setPixmap(pixmap);
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( shearToolActivated() ) );
@@ -73,7 +73,7 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 	btngroup->insert( button, Ellipse );
 
 	button = new QToolButton(btngroup);
-	pixmap = BarIcon("rectangle",KarbonFactory::instance());
+	pixmap = BarIcon("14_rectangle",KarbonFactory::instance());
 	button->setPixmap(pixmap);
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( rectangleToolActivated() ) );
@@ -94,28 +94,28 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 	btngroup->insert( button, Polygon );
 
 	button = new QToolButton(btngroup);
-	pixmap = BarIcon("star",KarbonFactory::instance());
+	pixmap = BarIcon("14_star",KarbonFactory::instance());
 	button->setPixmap(pixmap);
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( starToolActivated() ) );
 	btngroup->insert( button, Star );
 
 	button = new QToolButton(btngroup);
-	pixmap = BarIcon("sinus",KarbonFactory::instance());
+	pixmap = BarIcon("14_sinus",KarbonFactory::instance());
 	button->setPixmap(pixmap);
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( sinusToolActivated() ) );
 	btngroup->insert( button, Sinus );
 
 	button = new QToolButton(btngroup);
-	pixmap = BarIcon("spiral",KarbonFactory::instance());
+	pixmap = BarIcon("14_spiral",KarbonFactory::instance());
 	button->setPixmap(pixmap);
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( spiralToolActivated() ) );
 	btngroup->insert( button, Spiral );
 
 	button = new QToolButton(btngroup);
-	pixmap = BarIcon("text",KarbonFactory::instance());
+	pixmap = BarIcon("14_text",KarbonFactory::instance());
 	button->setPixmap(pixmap);
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( textToolActivated() ) );

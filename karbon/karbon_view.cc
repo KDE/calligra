@@ -580,34 +580,34 @@ KarbonView::initActions()
 		i18n( "&Polygon" ), "14_polygon", 0, this,
 		SLOT( polygonTool() ), actionCollection(), "tool_polygon" );
 	m_rectangleToolAction = new KToggleAction(
-		i18n( "&Rectangle" ), "rectangle", 0, this,
+		i18n( "&Rectangle" ), "14_rectangle", 0, this,
 		SLOT( rectangleTool() ), actionCollection(), "tool_rectangle" );
 	m_roundRectToolAction = new KToggleAction(
 		i18n( "&Round Rectangle" ), "14_roundrect", 0, this,
 		SLOT( roundRectTool() ), actionCollection(), "tool_roundrect" );
 	m_sinusToolAction = new KToggleAction(
-		i18n( "S&inus" ), "sinus", 0, this,
+		i18n( "S&inus" ), "14_sinus", 0, this,
 		SLOT( sinusTool() ), actionCollection(), "tool_sinus" );
 	m_selectToolAction = new KToggleAction(
 		i18n( "&Select Objects" ), "select", 0, this,
 		SLOT( selectTool() ), actionCollection(), "tool_select" );
 	m_rotateToolAction = new KToggleAction(
-		i18n( "&Rotate Objects" ), "rotate", 0, this,
+		i18n( "&Rotate Objects" ), "14_rotate", 0, this,
 		SLOT( rotateTool() ), actionCollection(), "tool_rotate" );
 	m_scaleToolAction = new KToggleAction(
-		i18n( "&Scale Objects" ), "scale", 0, this,
+		i18n( "&Scale Objects" ), "14_scale", 0, this,
 		SLOT( scaleTool() ), actionCollection(), "tool_scale" );
 	m_shearToolAction = new KToggleAction(
-		i18n( "&Shear Objects" ), "shear", 0, this,
+		i18n( "&Shear Objects" ), "14_shear", 0, this,
 		SLOT( shearTool() ), actionCollection(), "tool_shear" );
 	m_spiralToolAction = new KToggleAction(
-		i18n( "S&piral" ), "spiral", 0, this,
+		i18n( "S&piral" ), "14_spiral", 0, this,
 		SLOT( spiralTool() ), actionCollection(), "tool_spiral" );
 	m_starToolAction = new KToggleAction(
-		i18n( "S&tar" ), "star", 0, this,
+		i18n( "S&tar" ), "14_star", 0, this,
 		SLOT( starTool() ), actionCollection(), "tool_star" );
 	m_textToolAction = new KToggleAction(
-		i18n( "Text" ), "text", 0, this,
+		i18n( "Text" ), "14_text", 0, this,
 		SLOT( textTool() ), actionCollection(), "tool_text" );
 
 	m_ellipseToolAction->setExclusiveGroup( "Tools" );
