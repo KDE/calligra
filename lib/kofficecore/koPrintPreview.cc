@@ -28,6 +28,8 @@
 #include <ktrader.h>
 #include <krun.h>
 
+#include <qfile.h>
+
 #include <unistd.h>
 
 void KoPrintPreview::preview(QWidget* parent, const char* /*name*/, const QString & tmpFile )
@@ -41,7 +43,7 @@ void KoPrintPreview::preview(QWidget* parent, const char* /*name*/, const QStrin
     for( ; it != offers.end(); ++it)
     {
         KService::Ptr ptr = (*it);
-        factory = KLibLoader::self()->factory( ptr->library().latin1() );
+        factory = KLibLoader::self()->factory( QFile::encodeName(ptr->library()) );
         if (factory)
         {
             KDialogBase *dialog = new KDialogBase( parent, "preview", false, i18n("Preview"), KDialogBase::Ok);
