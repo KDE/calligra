@@ -148,7 +148,9 @@ void KSpreadFormatDlg::slotOk()
     {
 	int pos = 1 + ( ( x - r.left() - 1 ) % 2 );
 	KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( x, r.top() );
-	cell->copy( *m_cells[ pos ] );
+        if(!cell->isObscuringForced())
+        {
+        cell->copy( *m_cells[ pos ] );
 
 	KSpreadLayout* c;
 	if ( x == r.right() )
@@ -158,14 +160,15 @@ void KSpreadFormatDlg::slotOk()
 
 	if ( c )
 	    cell->setTopBorderPen( c->topBorderPen( 0, 0 ) );
-	
+
 	if ( x == r.left() + 1 )
 	    c = m_cells[1];
 	else
 	    c = m_cells[2];
-	
+
 	if ( c )
 	    cell->setLeftBorderPen( c->leftBorderPen( 0, 0 ) );
+        }
     }
 
     cell = m_view->activeTable()->nonDefaultCell( r.right(), r.top() );
@@ -177,14 +180,16 @@ void KSpreadFormatDlg::slotOk()
     {
 	int pos = 4 + ( ( y - r.top() - 1 ) % 2 ) * 4;
 	KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( r.left(), y );
-	cell->copy( *m_cells[ pos ] );
+        if(!cell->isObscuringForced())
+        {
+        cell->copy( *m_cells[ pos ] );
 
 	KSpreadLayout* c;
 	if ( y == r.bottom() )
 	    c = m_cells[8];
 	else
 	    c = m_cells[4];
-	
+
 	if ( c )
 	    cell->setLeftBorderPen( c->leftBorderPen( 0, 0 ) );
 
@@ -192,9 +197,10 @@ void KSpreadFormatDlg::slotOk()
 	    c = m_cells[4];
 	else
 	    c = m_cells[8];
-	
+
 	if ( c )
 	    cell->setTopBorderPen( c->topBorderPen( 0, 0 ) );
+        }
     }
 
     // Body
@@ -203,7 +209,9 @@ void KSpreadFormatDlg::slotOk()
         {
 	    int pos = 5 + ( ( y - r.top() - 1 ) % 2 ) * 4 + ( ( x - r.left() - 1 ) % 2 );
 	    KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( x, y );
-	    cell->copy( *m_cells[ pos ] );
+            if(!cell->isObscuringForced())
+            {
+            cell->copy( *m_cells[ pos ] );
 
 	    KSpreadLayout* c;
 	    if ( x == r.left() + 1 )
@@ -221,12 +229,15 @@ void KSpreadFormatDlg::slotOk()
 
 	    if ( c )
 		cell->setTopBorderPen( c->topBorderPen( 0, 0 ) );
+            }
 	}
 
     // Outer right border
     for( y = r.top(); y <= r.bottom(); ++y )
     {
 	KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( r.right(), y );
+        if(!cell->isObscuringForced())
+        {
 	if ( y == r.top() )
         {
 	    if ( m_cells[3] )
@@ -242,13 +253,16 @@ void KSpreadFormatDlg::slotOk()
 	    if ( m_cells[7] )
 		cell->setRightBorderPen( m_cells[7]->leftBorderPen( 0, 0 ) );
 	}
+        }
     }
 
     // Outer bottom border
     for( x = r.left(); x <= r.right(); ++x )
     {
 	KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( x, r.bottom() );
-	if ( x == r.left() )
+        if(!cell->isObscuringForced())
+        {
+        if ( x == r.left() )
         {
 	    if ( m_cells[12] )
 		cell->setBottomBorderPen( m_cells[12]->topBorderPen( 0, 0 ) );
@@ -263,6 +277,7 @@ void KSpreadFormatDlg::slotOk()
 	    if ( m_cells[13] )
 		cell->setBottomBorderPen( m_cells[13]->topBorderPen( 0, 0 ) );
 	}
+        }
     }
 
     m_view->activeTable()->setSelection( QRect(), r.topLeft() );
@@ -285,7 +300,7 @@ bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
         {
 	    KSpreadTable* table = m_view->activeTable();
 	    KSpreadLayout* cell = new KSpreadLayout( table );
-	    
+
 	    if ( !cell->load( e.namedItem("format").toElement() ) )
 		return false;
 

@@ -1019,7 +1019,6 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
         selection.setCoords( col, row,
                              col + cell->extraXCells(),
                              row + cell->extraYCells() );
-
         table->setSelection( selection, this );
         m_iMouseStartColumn = col;
         m_iMouseStartRow = row;
@@ -1988,7 +1987,12 @@ void KSpreadCanvas::updatePosWidget()
     QRect selection = m_pView->activeTable()->selectionRect();
     QString buffer;
     QString tmp;
-    if ( selection.left() == 0 || (selection.width()==1 && selection.height()==1))
+    KSpreadCell *cell=activeTable()->cellAt(markerColumn(),markerRow());
+    QRect extraCell;
+    extraCell.setCoords(markerColumn(),markerRow(),
+    markerColumn()+cell->extraXCells(),markerRow()+cell->extraYCells());
+    // No selection, or only one cell merged selected
+    if ( selection.left() == 0||extraCell==selection)
     {
         if(activeTable()->getLcMode())
         {
@@ -2586,10 +2590,17 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   QFont boldFont = normalFont;
   boldFont.setBold( TRUE );
 
+  KSpreadCell *cell=table->cellAt(m_pCanvas->markerColumn(),m_pCanvas->markerRow());
+  QRect extraCell;
+  extraCell.setCoords(m_pCanvas->markerColumn(),m_pCanvas->markerRow(),
+  m_pCanvas->markerColumn()+cell->extraXCells(),m_pCanvas->markerRow()+cell->extraYCells());
+
+  //several cells selected but not just a cell merged
+  bool area= (selection.left() != 0 && extraCell!=selection);
+
   for ( int y = top_row; y <= bottom_row; y++ )
   {
-    bool highlighted = ( selection.left() != 0 && y >= selection.top() &&
-                      y <= selection.bottom() && (selection.width()!=1  ||selection.height()!=1));
+    bool highlighted = (area && y >= selection.top() && y <= selection.bottom() );
     bool selected = ( highlighted && selection.right() == 0x7FFF );
 
     RowLayout *row_lay = table->rowLayout( y );
@@ -3043,11 +3054,17 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   QFont normalFont = painter.font();
   QFont boldFont = normalFont;
   boldFont.setBold( TRUE );
+  KSpreadCell *cell=table->cellAt(m_pCanvas->markerColumn(),m_pCanvas->markerRow());
+  QRect extraCell;
+  extraCell.setCoords(m_pCanvas->markerColumn(),m_pCanvas->markerRow(),
+  m_pCanvas->markerColumn()+cell->extraXCells(),m_pCanvas->markerRow()+cell->extraYCells());
+
+  //several cells selected but not just a cell merged
+  bool area= (selection.left() != 0&&extraCell!=selection);
 
   for ( int x = left_col; x <= right_col; x++ )
   {
-    bool highlighted = ( selection.left() != 0 && x >= selection.left() &&
-                      x <= selection.right() && (selection.width()!=1 || selection.height()!=1));
+    bool highlighted = ( area && x >= selection.left() && x <= selection.right());
     bool selected = ( highlighted && selection.bottom() == 0x7FFF );
 
     ColumnLayout *col_lay = table->columnLayout( x );

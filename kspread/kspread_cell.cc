@@ -2308,15 +2308,25 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     if ( m_pObscuringCell )
         selected = m_pTable->selectionRect().contains( QPoint( m_pObscuringCell->column(),
                                                                     m_pObscuringCell->row() ) );
+
     // Dont draw any selection when printing.
     if ( _painter.device()->isExtDev() )
         selected = FALSE;
 
     QColorGroup defaultColorGroup = QApplication::palette().active();
-
     QRect m = m_pTable->marker();
+
+    int moveX=0;
+    int moveY=0;
+    if( isObscured() && isObscuringForced() )
+    {
+    moveX=obscuringCellsColumn();
+    moveY=obscuringCellsRow();
+    }
+
     // Determine the correct background color
-    if ( selected && ( _col != m.left() || _row != m.top() )  )
+    if ( selected && ( _col != m.left() || _row != m.top() )
+    && (moveX!=m.left() || moveY!=m.top()))
         _painter.setBackgroundColor( defaultColorGroup.highlight() );
     else
     {

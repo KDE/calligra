@@ -2378,7 +2378,7 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
     // Empty selection ?
     // Activate or deactivate some actions. This code is duplicated
     // in KSpreadView::slotUnselect
-    if ( n.left() == 0 && n.right() == 0 )
+    if ( n.left() == 0 && n.top() == 0 )
         m_tableFormat->setEnabled( FALSE );
     else
         m_tableFormat->setEnabled( TRUE );
