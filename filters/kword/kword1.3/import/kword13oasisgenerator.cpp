@@ -22,9 +22,11 @@
 #include <qstring.h>
 #include <qtextstream.h>
 #include <qbuffer.h>
+#include <qimage.h>
 
 #include <kdebug.h>
 #include <kzip.h>
+#include <ktempfile.h>
 
 #include <kofficeversion.h>
 #include <koStore.h>
@@ -1092,6 +1094,40 @@ void KWord13OasisGenerator::writeMetaXml(void)
     }
 }
 
+void KWord13OasisGenerator::writePreviewFile(void)
+{
+    if ( !m_store || !m_kwordDocument )
+    {
+        kdError(30520) << "Not possible to generate preview file" << endl;
+        return;
+    }
+
+    // Load image
+    QImage image( m_kwordDocument->m_previewFile->name() );
+    if ( image.isNull() )
+    {
+        kdWarning(30520) << "Could not re-read preview from temp file!" << endl;
+        return;
+    }
+    
+    // We have a 256x256x8 preview and we need a 128x128x32 preview with alpha channel
+    QImage preview( image.convertDepth( 32 ) );
+    preview.smoothScale( 128, 128 );
+    if ( !preview.hasAlphaBuffer() )
+    {
+        // ### TODO: this probably sets garbage as alpha
+        //preview.setAlphaBuffer( true );
+    }
+    m_store->open("Thumbnails/Thumbnail.png");
+    KoStoreDevice io ( m_store );
+    io.open( IO_WriteOnly );  // ### TODO: check error!
+    preview.save( &io, "png" ); // ### TODO What is -9 in quality terms?
+    io.close();
+    m_store->close();
+
+    // No manifest entry, as it is supposed not to be part of the document.
+}
+
 bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document& kwordDocument )
 {
 #if 1
@@ -1136,6 +1172,11 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
         m_store->close();
     }
 
+    if ( kwordDocument.m_previewFile )
+    {
+        writePreviewFile();
+    }
+    
     
 # if 1 // DEBUG (out of specification)
     m_store->open("debug.xml"); // ### TODO: check error!

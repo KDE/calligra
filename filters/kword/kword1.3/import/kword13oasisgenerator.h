@@ -61,6 +61,7 @@ protected: // Generating phase
     void writeStylesXml( void );
     void writeContentXml( void );
     void writeMetaXml( void );
+    void writePreviewFile(void);
 protected: // Preparing phase
     void prepareTextFrameset( KWordTextFrameset* frameset );
     /// Also sets the name of the automatical style
