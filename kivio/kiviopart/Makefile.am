@@ -17,16 +17,7 @@ INCLUDES = -I$(srcdir)/ui\
 	$(all_includes)
 
 libkiviopart_la_METASOURCES = AUTO
-libkiviopart_la_SOURCES = kivio_canvas.cpp kivio_doc.cpp kivio_factory.cpp kivio_tabbar.cpp \
-	kivio_view.cpp kivio_map.cpp kivio_page.cpp kivio_dlg_pageshow.cpp kivio_zoomaction.cpp \
-	kivio_icon_view.cpp kivio_config.cpp kivio_spawner_drag.cpp kivio_intra_stencil_data.cpp\
-	kivio_stackbar.cpp stencilbarbutton.cpp stencilbardockmanager.cpp stencilbarmovemanager.cpp\
-	tooldockbase.cpp tooldockmanager.cpp stencil_text_dlg.cpp kivio_grid_data.cpp kivio_guidelines.cpp\
-	kivio_stencil_geometry_panel.cpp kivio_viewmanager_panel.cpp KIvioViewIface.skel\
-	KIvioViewIface.cc KIvioDocIface.skel KIvioDocIface.cc KIvioMapIface.skel KIvioMapIface.cc\
-	KIvioPageIface.skel KIvioPageIface.cc kivio_command.cc KIvioLayerIface.skel KIvioLayerIface.cc\
-	kivioglobal.cpp kiviostencilsetaction.cpp kivioarrowheadaction.cpp KIvioStencilIface.skel\
-	KIvioStencilIface.cc
+libkiviopart_la_SOURCES = kivio_canvas.cpp kivio_doc.cpp kivio_factory.cpp kivio_tabbar.cpp 	kivio_view.cpp kivio_map.cpp kivio_page.cpp kivio_dlg_pageshow.cpp kivio_zoomaction.cpp 	kivio_icon_view.cpp kivio_config.cpp kivio_spawner_drag.cpp kivio_intra_stencil_data.cpp	kivio_stackbar.cpp stencilbarbutton.cpp stencilbardockmanager.cpp stencilbarmovemanager.cpp	tooldockbase.cpp tooldockmanager.cpp stencil_text_dlg.cpp kivio_grid_data.cpp kivio_guidelines.cpp	kivio_stencil_geometry_panel.cpp kivio_viewmanager_panel.cpp KIvioViewIface.skel	KIvioViewIface.cc KIvioDocIface.skel KIvioDocIface.cc KIvioMapIface.skel KIvioMapIface.cc	KIvioPageIface.skel KIvioPageIface.cc kivio_command.cc KIvioLayerIface.skel KIvioLayerIface.cc	kivioglobal.cpp kiviostencilsetaction.cpp kivioarrowheadaction.cpp KIvioStencilIface.skel	KIvioStencilIface.cc kiviodragobject.cpp
 
 EXTRA_DIST = \
 		main.cpp\
@@ -100,7 +91,9 @@ EXTRA_DIST = \
 		KIvioLayerIface.h \
 		kivioglobal.h \
 		kivioarrowheadaction.h \
-		kivioarrowheadaction.cpp
+		kivioarrowheadaction.cpp \
+		kiviodragobject.h \
+		kiviodragobject.cpp
 
 
 lib_LTLIBRARIES = kivio.la

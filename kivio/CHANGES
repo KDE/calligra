@@ -15,5 +15,9 @@ Kivio 1.2 -> 1.2.1
 Kivio 1.2.1 -> 1.3beta1
 ------------------------
 - Cleaned up the gui
-- Fixed embeding of kivio in other KÓffice app.
+
+Kivio 1.3beta1 -> 1.3beta2
+---------------------------
+- Fixed embeding of kivio in other KOffice app.
+- Implemented real clipboard support.
 

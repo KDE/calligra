@@ -37,6 +37,7 @@
 #include <qdragobject.h>
 #include <qmime.h>
 #include <qsortedlist.h>
+#include <qvaluelist.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -44,6 +45,7 @@
 #include <kmessagebox.h>
 #include <koUnit.h>
 #include <kozoomhandler.h>
+#include <kapplication.h>
 
 #include "kivio_page.h"
 #include "kivio_map.h"
@@ -64,6 +66,7 @@
 #include "KIvioPageIface.h"
 #include "kivio_command.h"
 #include "kivioglobal.h"
+#include "kiviodragobject.h"
 
 int KivioPage::s_id = 0L;
 QIntDict<KivioPage>* KivioPage::s_mapPages;
@@ -932,27 +935,13 @@ void KivioPage::sendToBack()
 
 void KivioPage::copy()
 {
-    KivioGroupStencil *pGroup = new KivioGroupStencil();
-    KivioStencil *pStencil;
-    KivioLayer *pLayer;
+  if(m_lstSelection.count() <= 0)
+    return;
 
-    if( m_lstSelection.count() <= 0 )
-        return;
-
-    pLayer = m_pCurLayer;
-
-    pStencil = pLayer->firstStencil();
-    while( pStencil )
-    {
-        if( isStencilSelected( pStencil )==true )
-        {
-            pGroup->addToGroup( pStencil->duplicate() );
-        }
-
-        pStencil = pLayer->nextStencil();
-    }
-
-    m_pDoc->setClipboard( pGroup );
+  // push to clipbaord
+  KivioDragObject* kdo = new KivioDragObject();
+  kdo->setStencilList(m_lstSelection);
+  QApplication::clipboard()->setData(kdo);
 }
 
 void KivioPage::cut()
@@ -1007,7 +996,7 @@ void KivioPage::cut()
 
 void KivioPage::paste(KoZoomHandler* zoom)
 {
-  KivioStencil *pGroup;
+/*  KivioStencil *pGroup;
   KivioStencil *pStencil, *pDup;
   QPtrList<KivioStencil> *pList;
   QPtrList<KivioStencil> *pSelectThese = new QPtrList<KivioStencil>;
@@ -1058,6 +1047,32 @@ void KivioPage::paste(KoZoomHandler* zoom)
 
 
   delete pSelectThese;
+*/
+  QPtrList<KivioStencil> list;
+  list.setAutoDelete(false);
+  KivioDragObject kdo;
+
+  if(kdo.decode(QApplication::clipboard()->data(), list, this)) {
+    unselectAllStencils();
+    KivioStencil* stencil = list.first();
+
+    while(stencil) {
+      stencil->setPosition( stencil->x() + 10.0f, stencil->y() + 10.0f );
+      addStencil(stencil);
+      stencil = list.next();
+    }
+
+    stencil = list.first();
+
+    while(stencil) {
+      if(stencil->type() == kstConnector) {
+	stencil->searchForConnections(this, zoom->unzoomItY(4));
+      }
+
+      selectStencil(stencil);
+      stencil = list.next();
+    }
+}
 }
 
 int KivioPage::generateStencilIds(int next)

@@ -1524,7 +1524,7 @@ void KivioSMLStencil::updateGeometry()
   KivioConnectorTarget *pTarget, *pOriginal;
   double _x, _y;
   double defWidth, defHeight;
-  kdDebug() << "m_x = " << m_x << " m_y = " << m_y << endl;
+  //kdDebug() << "m_x = " << m_x << " m_y = " << m_y << endl;
 
   defWidth = m_pSpawner->defWidth();
   defHeight = m_pSpawner->defHeight();
