@@ -301,7 +301,7 @@ KoRect KPObject::getBoundingRect( KoZoomHandler *_zoomHandler ) const
 
 KoRect KPObject::rotateRectObject(KoZoomHandler *_zoomHandler ) const
 {
-    KoRect br = KoRect( 0, 0, ext.width(), ext.height() );
+    KoRect br = KoRect( 0,0, ext.width(), ext.height() );
     double pw = br.width();
     double ph = br.height();
     KoRect rr = br;
@@ -309,9 +309,9 @@ KoRect KPObject::rotateRectObject(KoZoomHandler *_zoomHandler ) const
     double xPos = -rr.x();
     rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
     QWMatrix m;
-    m.translate( _zoomHandler->zoomItX(pw / 2.0), _zoomHandler->zoomItY(ph / 2.0) );
+    m.translate( pw / 2.0,ph / 2.0 );
     m.rotate( angle );
-    m.translate( _zoomHandler->zoomItX(rr.left() + xPos), _zoomHandler->zoomItY(rr.top() + yPos) );
+    m.translate( rr.left() + xPos, rr.top() + yPos );
     KoRect r = KoRect::fromQRect(m.mapRect( br.toQRect() )); // see above TODO
     r.moveBy( orig.x() , orig.y() );
     return r;
