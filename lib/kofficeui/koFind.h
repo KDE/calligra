@@ -33,7 +33,7 @@ class QRect;
 class QGridLayout;
 
 /**
- * @short A generic "find" widget.
+ * @short A generic "find" widget. DEPRECATED - use kdelibs/kutils/kfind.h instead
  *
  * @author S.R.Haque <srhaque@iee.org>
  *
@@ -217,7 +217,7 @@ private:
 };
 
 /**
- * @short A generic implementation of the "find" function.
+ * @short A generic implementation of the "find" function. DEPRECATED - use kdelibs/kutils/kfind.h instead
  *
  * @author S.R.Haque <srhaque@iee.org>
  *

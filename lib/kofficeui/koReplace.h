@@ -32,7 +32,7 @@ class QPushButton;
 class QRect;
 
 /**
- * @short A generic "replace" widget.
+ * @short A generic "replace" widget. - DEPRECATED, use kdelibs/kutils/kreplace.h
  *
  * @author S.R.Haque <srhaque@iee.org>
  *
@@ -145,7 +145,7 @@ private:
 };
 
 /**
- * @short A generic implementation of the "replace" function.
+ * @short A generic implementation of the "replace" function. - DEPRECATED, use kdelibs/kutils/kreplace.h
  *
  * @author S.R.Haque <srhaque@iee.org>
  *
