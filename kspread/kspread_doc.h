@@ -323,8 +323,8 @@ public:
   /**
    * show/hide formula bar
    */
-  void setShowFormularBar(bool _formulaBar) {  m_bShowFormularBar=_formulaBar;}
-  bool getShowFormularBar() { return  m_bShowFormularBar;}
+  void setShowFormulaBar(bool _formulaBar) {  m_bShowFormulaBar=_formulaBar;}
+  bool getShowFormulaBar() { return  m_bShowFormulaBar;}
 
   /**
    * get custom kspell config
@@ -576,7 +576,7 @@ protected:
   bool m_bShowTabBar;
 
   bool m_bShowCommentIndicator;
-  bool m_bShowFormularBar;
+  bool m_bShowFormulaBar;
   bool m_bShowStatusBar;
 
   KSpellConfig *m_pKSpellConfig;

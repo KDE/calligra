@@ -114,6 +114,7 @@ KSpreadScripts* KSpreadView::m_pGlobalScriptsDialog = 0L;
 KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc ) :
   KoView( doc, _parent, _name )
 {
+    kdDebug(36001) << "sizeof(KSpreadCell)=" << sizeof(KSpreadCell) <<endl;
     setInstance( KSpreadFactory::global() );
     setXMLFile( "kspread.rc" );
 
@@ -505,7 +506,7 @@ void KSpreadView::initConfig()
 
 	m_pDoc->setShowCommentIndicator(config->readBoolEntry("Comment Indicator",true));
 
-	m_pDoc->setShowFormularBar(config->readBoolEntry("Formula bar",true));
+	m_pDoc->setShowFormulaBar(config->readBoolEntry("Formula bar",true));
         m_pDoc->setShowStatusBar(config->readBoolEntry("Status bar",true));
 
         changeNbOfRecentFiles(config->readNumEntry("NbRecentFile",10));
@@ -624,7 +625,7 @@ void KSpreadView::initialPosition()
 
 void KSpreadView::updateEditWidget()
 {
-    bool active=activeTable()->getShowFormular();
+    bool active=activeTable()->getShowFormula();
     m_alignLeft->setEnabled(!active);
     m_alignCenter->setEnabled(!active);
     m_alignRight->setEnabled(!active);
@@ -677,11 +678,9 @@ void KSpreadView::updateEditWidget()
 
     m_multiRow->setChecked( cell->multiRow( column,row ) );
 
-    bool state=cell->getFormatNumber( column,row) == KSpreadCell::Percentage ;
-    m_percent->setChecked( state );
-
-    state=cell->getFormatNumber( column,row) == KSpreadCell::Money;
-    m_money->setChecked( state );
+    KSpreadCell::FormatType ft = cell->formatType();
+    m_percent->setChecked( ft == KSpreadCell::Percentage );
+    m_money->setChecked( ft == KSpreadCell::Money );
 
     m_removeComment->setEnabled( !cell->comment(column,row).isEmpty() );
 
@@ -747,7 +746,7 @@ void KSpreadView::autoSum()
         {
             cell = activeTable()->cellAt( m_pCanvas->markerColumn(), --r );
         }
-        while ( cell && cell->isValue() );
+        while ( cell && cell->isNumeric() );
 
         if ( r + 1 < m_pCanvas->markerRow() )
         {
@@ -765,7 +764,7 @@ void KSpreadView::autoSum()
         {
             cell = activeTable()->cellAt( --c, m_pCanvas->markerRow() );
         }
-        while ( cell && cell->isValue() );
+        while ( cell && cell->isNumeric() );
 
         if ( c + 1 < m_pCanvas->markerColumn() )
         {
@@ -1830,7 +1829,7 @@ void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
 
     if ( _ev->state() & ( Qt::ControlButton ) ){
 
-      // Universally reserved spreadsheet bavigators known to all professional
+      // Universally reserved spreadsheet navigators known to all professional
       // spreadsheet users around the world -- Bernd
 
       switch( _ev->key() ){
@@ -1843,6 +1842,11 @@ void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
 	previousTable();
 	return;
 
+#ifndef NDEBUG
+      case Key_V: // Ctrl+Shift+V to show debug (similar to KWord)
+        if ( _ev->state() & Qt::ShiftButton )
+          m_pTable->printDebug();
+#endif
       default:
 	  QWidget::keyPressEvent( _ev );
 	  return;
@@ -1928,11 +1932,11 @@ int KSpreadView::bottomBorder() const
 
 void KSpreadView::refreshView()
 {
-    bool active=activeTable()->getShowFormular();
+    bool active=activeTable()->getShowFormula();
     m_alignLeft->setEnabled(!active);
     m_alignCenter->setEnabled(!active);
     m_alignRight->setEnabled(!active);
-    active=m_pDoc->getShowFormularBar();
+    active=m_pDoc->getShowFormulaBar();
     editWidget()->showEditWidget(active);
     int posFrame=30;
     if(active)
@@ -2196,7 +2200,7 @@ void KSpreadView::slotListChoosePopupMenu( )
      if ( selection.left() <= col && selection.right() >= col
 	  &&!c->isObscuringForced()&& !(col==m_pCanvas->markerColumn()&& c->row()==m_pCanvas->markerRow()))
        {
-	 if(c->isText() && c->text()!=tmp)
+	 if(c->isString() && c->text()!=tmp)
 	   {
 	     if(itemList.findIndex(c->text())==-1)
                  itemList.append(c->text());
@@ -2242,7 +2246,7 @@ void KSpreadView::slotItemSelected( int id)
 
   if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-      KSpreadUndoSetText* undo = new KSpreadUndoSetText( m_pDoc, m_pTable, cell->text(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() ,cell->getFormatNumber( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+      KSpreadUndoSetText* undo = new KSpreadUndoSetText( m_pDoc, m_pTable, cell->text(), m_pCanvas->markerColumn(), m_pCanvas->markerRow(), cell->formatType());
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -2764,11 +2768,8 @@ void KSpreadView::setText( const QString& _text )
 
   m_pTable->setText( m_pCanvas->markerRow(), m_pCanvas->markerColumn(), _text );
   KSpreadCell* cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-  if(cell->isText())
-        {
-        if(_text.at(0)<'0' || _text.at(0)>'9')
-                m_pDoc->addStringCompletion(_text);
-        }
+  if(cell->isString() && !_text.isEmpty() && !_text.at(0).isDigit())
+      m_pDoc->addStringCompletion(_text);
 }
 
 //------------------------------------------------
@@ -2923,7 +2924,7 @@ void KSpreadView::resultOfCalc()
             if ( tmpRect.left() <= col && tmpRect.right() >= col
                  &&!c->isObscuringForced())
             {
-                if(c->isValue())
+                if(c->isNumeric())
                 {
                     double val=c->valueDouble();
                     switch(tmpMethod)
@@ -2965,7 +2966,7 @@ void KSpreadView::resultOfCalc()
             if ( tmpRect.top() <= row && tmpRect.bottom() >= row
                  &&!c->isObscuringForced())
             {
-                if(c->isValue())
+                if(c->isNumeric())
                 {
                     double val=c->valueDouble();
                     switch(tmpMethod )
@@ -3004,7 +3005,7 @@ void KSpreadView::resultOfCalc()
             for(int j=tmpRect.top();j<=tmpRect.bottom();j++)
             {
                 KSpreadCell *cell = activeTable()->cellAt( i, j );
-                if(!cell->isDefault() && cell->isValue())
+                if(!cell->isDefault() && cell->isNumeric())
                 {
                     double val= cell->valueDouble();
                     switch(tmpMethod )

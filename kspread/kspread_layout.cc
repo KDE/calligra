@@ -62,11 +62,11 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_fallDiagonalPen=pen;
     m_goUpDiagonalPen=pen;
     m_backGroundBrush=brush;
-    m_dFaktor = 1.0;
+    m_dFactor = 1.0;
     m_bMultiRow = FALSE;
     m_bVerticalText = FALSE;
     m_textPen.setColor( QColor()/*QApplication::palette().active().text()*/ );
-    m_eFormatNumber=KSpreadLayout::Number;
+    m_eFormatType=KSpreadLayout::Number;
     m_rotateAngle=0;
     m_strComment="";
     m_indent=0;
@@ -97,13 +97,13 @@ void KSpreadLayout::defaultStyleLayout()
   setBackGroundBrush(brush);
   setTextColor( QColor() );
   setBgColor( QColor() );
-  setFaktor( 1.0);
+  setFactor( 1.0);
   setPrecision( -1 );
   setPostfix( "" );
   setPrefix( "" );
   setVerticalText(false);
   setAngle(0);
-  setFormatNumber(Number);
+  setFormatType(Number);
   setComment("");
   setDontPrintText(false);
 }
@@ -125,14 +125,14 @@ void KSpreadLayout::copy( KSpreadLayout &_l )
     m_fallDiagonalPen = _l.m_fallDiagonalPen;
     m_goUpDiagonalPen = _l.m_goUpDiagonalPen;
     m_backGroundBrush = _l.m_backGroundBrush;
-    m_dFaktor = _l.m_dFaktor;
+    m_dFactor = _l.m_dFactor;
     m_bMultiRow = _l.m_bMultiRow;
     m_textPen = _l.m_textPen;
     m_textFont = _l.m_textFont;
     m_strPrefix = _l.m_strPrefix;
     m_strPostfix = _l.m_strPostfix;
     m_bVerticalText = _l.m_bVerticalText;
-    m_eFormatNumber = _l.m_eFormatNumber;
+    m_eFormatType = _l.m_eFormatType;
     m_rotateAngle = _l.m_rotateAngle;
     m_strComment = _l.m_strComment;
     m_indent=_l.m_indent;
@@ -273,271 +273,270 @@ QPen KSpreadLayout::toPen(QDomElement &element) const
     return p;
 }
 
-QDomElement KSpreadLayout::saveLayout( QDomDocument& doc ) const
+QDomElement KSpreadLayout::saveLayout( QDomDocument& doc, bool force ) const
 {
     QDomElement format = doc.createElement( "format" );
 
-    if ( hasProperty( PAlign ) )
+    if ( hasProperty( PAlign ) || force )
 	format.setAttribute( "align", (int)m_eAlign );
-    if ( hasProperty( PAlignY ) )
+    if ( hasProperty( PAlignY ) || force  )
 	format.setAttribute( "alignY", (int)m_eAlignY );
-    if ( hasProperty( PBackgroundColor ) && m_bgColor.isValid() )
+    if ( ( hasProperty( PBackgroundColor ) || force ) && m_bgColor.isValid() )
 	format.setAttribute( "bgcolor", m_bgColor.name() );
-    if ( hasProperty( PMultiRow ) &&  m_bMultiRow )
+    if ( ( hasProperty( PMultiRow ) || force ) && m_bMultiRow )
 	format.setAttribute( "multirow", "yes" );
-    if ( hasProperty( PVerticalText ) && m_bVerticalText )
+    if ( ( hasProperty( PVerticalText ) || force ) && m_bVerticalText )
 	format.setAttribute( "verticaltext", "yes" );
-    if ( hasProperty( PPrecision ) )
+    if ( hasProperty( PPrecision ) || force )
 	format.setAttribute( "precision", m_iPrecision );
-    if ( hasProperty( PPrefix ) && !m_strPrefix.isEmpty() )
+    if ( ( hasProperty( PPrefix ) || force ) && !m_strPrefix.isEmpty() )
 	format.setAttribute( "prefix", m_strPrefix );
-    if ( hasProperty( PPostfix ) && !m_strPostfix.isEmpty() )
+    if ( ( hasProperty( PPostfix ) || force ) && !m_strPostfix.isEmpty() )
 	format.setAttribute( "postfix", m_strPostfix );
-    if ( hasProperty( PFloatFormat ) )
+    if ( hasProperty( PFloatFormat ) || force )
 	format.setAttribute( "float", (int)m_eFloatFormat );
-    if ( hasProperty( PFloatColor ) )
+    if ( hasProperty( PFloatColor ) || force )
 	format.setAttribute( "floatcolor", (int)m_eFloatColor );
-    if ( hasProperty( PFaktor ) )
-	format.setAttribute( "faktor", m_dFaktor );
-    if ( hasProperty( PFormatNumber ) )
-	format.setAttribute( "format",(int) m_eFormatNumber);
-    if ( hasProperty( PAngle ) )
+    if ( hasProperty( PFactor ) || force )
+	format.setAttribute( "faktor", m_dFactor );
+    if ( hasProperty( PFormatType ) || force )
+	format.setAttribute( "format",(int) m_eFormatType);
+    if ( hasProperty( PAngle ) || force )
 	format.setAttribute( "angle", m_rotateAngle );
-    if ( hasProperty( PIndent ) )
+    if ( hasProperty( PIndent ) || force )
 	format.setAttribute( "indent", m_indent );
-    if( hasProperty( PDontPrintText )  && m_bDontPrintText)
+    if( ( hasProperty( PDontPrintText ) || force ) && m_bDontPrintText)
 	format.setAttribute( "dontprinttext", "yes" );
-    if ( hasProperty( PFont ) )
+    if ( hasProperty( PFont ) || force )
 	format.appendChild( createElement( "font", m_textFont, doc ) );
-    if ( hasProperty( PTextPen ) && m_textPen.color().isValid())
+    if ( ( hasProperty( PTextPen ) || force ) && m_textPen.color().isValid() )
 	format.appendChild( createElement( "pen", m_textPen, doc ) );
-    if ( hasProperty( PBackgroundBrush ) )
+    if ( hasProperty( PBackgroundBrush ) || force )
     {
 	format.setAttribute( "brushcolor", m_backGroundBrush.color().name() );
 	format.setAttribute( "brushstyle",(int)m_backGroundBrush.style() );
     }
-    if ( hasProperty( PLeftBorder ) )
+    if ( hasProperty( PLeftBorder ) || force )
     {
 	QDomElement left = doc.createElement( "left-border" );
 	left.appendChild( createElement( "pen", m_leftBorderPen, doc ) );
 	format.appendChild( left );
     }
-    if ( hasProperty( PTopBorder ) )
+    if ( hasProperty( PTopBorder ) || force )
     {
 	QDomElement top = doc.createElement( "top-border" );
 	top.appendChild( createElement( "pen", m_topBorderPen, doc ) );
 	format.appendChild( top );
     }
-    if ( hasProperty( PRightBorder ) )
+    if ( hasProperty( PRightBorder ) || force )
     {
 	QDomElement right = doc.createElement( "right-border" );
 	right.appendChild( createElement( "pen", m_rightBorderPen, doc ) );
 	format.appendChild( right );
     }
-    if ( hasProperty( PBottomBorder ) )
+    if ( hasProperty( PBottomBorder ) || force )
     {
 	QDomElement bottom = doc.createElement( "bottom-border" );
 	bottom.appendChild( createElement( "pen", m_bottomBorderPen, doc ) );
 	format.appendChild( bottom );
     }
-    if ( hasProperty( PFallDiagonal ) )
+    if ( hasProperty( PFallDiagonal ) || force )
     {
 	QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
 	fallDiagonal.appendChild( createElement( "pen", m_fallDiagonalPen, doc ) );
 	format.appendChild( fallDiagonal );
     }
-    if ( hasProperty( PGoUpDiagonal ) )
+    if ( hasProperty( PGoUpDiagonal ) || force )
     {
 	QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
 	goUpDiagonal.appendChild( createElement( "pen", m_goUpDiagonalPen, doc ) );
 	format.appendChild( goUpDiagonal );
     }
-
-return format;
-}
-QDomElement KSpreadLayout::save( QDomDocument& doc ) const
-{
-    QDomElement format = saveLayout(doc);
     return format;
 }
 
-bool KSpreadLayout::loadLayout( const QDomElement& f,PasteMode pm )
+QDomElement KSpreadLayout::save( QDomDocument& doc, bool force ) const
 {
-  bool ok;
-  if ( f.hasAttribute( "align" ) )
+    QDomElement format = saveLayout(doc, force);
+    return format;
+}
+
+bool KSpreadLayout::loadLayout( const QDomElement& f, PasteMode pm )
+{
+    bool ok;
+    if ( f.hasAttribute( "align" ) )
     {
-	Align a = (Align)f.attribute("align").toInt( &ok );
-	if ( !ok )
-	    return false;
-	// Validation
-	if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
+        Align a = (Align)f.attribute("align").toInt( &ok );
+        if ( !ok )
+            return false;
+        // Validation
+        if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
         {
-	    kdDebug(36001) << "Value out of range Cell::align=" << (unsigned int)a << endl;
-	    return false;
-	}
-	// Assignment
-	setAlign( a );
+            kdDebug(36001) << "Value out of range Cell::align=" << (unsigned int)a << endl;
+            return false;
+        }
+        // Assignment
+        setAlign( a );
     }
     if ( f.hasAttribute( "alignY" ) )
     {
-	AlignY a = (AlignY)f.attribute("alignY").toInt( &ok );
-	if ( !ok )
-	    return false;
-	// Validation
-	if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
+        AlignY a = (AlignY)f.attribute("alignY").toInt( &ok );
+        if ( !ok )
+            return false;
+        // Validation
+        if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
         {
-	    kdDebug(36001) << "Value out of range Cell::alignY=" << (unsigned int)a << endl;
-	    return false;
-	}
-	// Assignment
-	setAlignY( a );
+            kdDebug(36001) << "Value out of range Cell::alignY=" << (unsigned int)a << endl;
+            return false;
+        }
+        // Assignment
+        setAlignY( a );
     }
 
     if ( f.hasAttribute( "bgcolor" ) )
-	setBgColor( QColor( f.attribute( "bgcolor" ) ) );
+        setBgColor( QColor( f.attribute( "bgcolor" ) ) );
 
     if ( f.hasAttribute( "multirow" ) )
-	setMultiRow( true );
+        setMultiRow( true );
 
     if ( f.hasAttribute( "verticaltext" ) )
-	setVerticalText( true );
+        setVerticalText( true );
 
     if ( f.hasAttribute( "precision" ) )
     {
-	int i = f.attribute("precision").toInt( &ok );
-	if ( i < -1 )
+        int i = f.attribute("precision").toInt( &ok );
+        if ( i < -1 )
         {
-	    kdDebug(36001) << "Value out of range Cell::precision=" << i << endl;
-	    return false;
-	}
+            kdDebug(36001) << "Value out of range Cell::precision=" << i << endl;
+            return false;
+        }
         // Assignment
         setPrecision(i);
     }
 
     if ( f.hasAttribute( "float" ) )
     {
-	FloatFormat a = (FloatFormat)f.attribute("float").toInt( &ok );
-	if ( !ok ) return false;
-	if ( (unsigned int)a < 1 || (unsigned int)a > 3 )
+        FloatFormat a = (FloatFormat)f.attribute("float").toInt( &ok );
+        if ( !ok ) return false;
+        if ( (unsigned int)a < 1 || (unsigned int)a > 3 )
         {
-	    kdDebug(36001) << "Value out of range Cell::float=" << (unsigned int)a << endl;
-	    return false;
-	}
-	// Assignment
-	setFloatFormat( a );
+            kdDebug(36001) << "Value out of range Cell::float=" << (unsigned int)a << endl;
+            return false;
+        }
+        // Assignment
+        setFloatFormat( a );
     }
 
     if ( f.hasAttribute( "floatcolor" ) )
     {
-	FloatColor a = (FloatColor)f.attribute("floatcolor").toInt( &ok );
-	if ( !ok ) return false;
-	if ( (unsigned int)a < 1 || (unsigned int)a > 2 )
+        FloatColor a = (FloatColor)f.attribute("floatcolor").toInt( &ok );
+        if ( !ok ) return false;
+        if ( (unsigned int)a < 1 || (unsigned int)a > 2 )
         {
-	    kdDebug(36001) << "Value out of range Cell::floatcolor=" << (unsigned int)a << endl;
-	    return false;
-	}
-	// Assignment
-	setFloatColor( a );
+            kdDebug(36001) << "Value out of range Cell::floatcolor=" << (unsigned int)a << endl;
+            return false;
+        }
+        // Assignment
+        setFloatColor( a );
     }
 
     if ( f.hasAttribute( "faktor" ) )
     {
-	setFaktor( f.attribute("faktor").toDouble( &ok ) );
-	if ( !ok ) return false;
+        setFactor( f.attribute("faktor").toDouble( &ok ) );
+        if ( !ok ) return false;
     }
     if ( f.hasAttribute( "format" ) )
     {
-	setFormatNumber((formatNumber)f.attribute("format").toInt( &ok ));
-	if ( !ok ) return false;
+        setFormatType((FormatType)f.attribute("format").toInt( &ok ));
+        if ( !ok ) return false;
     }
     if ( f.hasAttribute( "angle" ) )
     {
-            setAngle(f.attribute( "angle").toInt( &ok ));
-	    if ( !ok )
-		return false;
+        setAngle(f.attribute( "angle").toInt( &ok ));
+        if ( !ok )
+            return false;
     }
     if ( f.hasAttribute( "indent" ) )
     {
-            setIndent(f.attribute( "indent").toInt( &ok ));
-	    if ( !ok )
-		return false;
+        setIndent(f.attribute( "indent").toInt( &ok ));
+        if ( !ok )
+            return false;
     }
     if(f.hasAttribute( "dontprinttext" ) )
-      setDontPrintText(true);
+        setDontPrintText(true);
 
     if ( f.hasAttribute( "brushcolor" ) )
-	setBackGroundBrushColor( QColor( f.attribute( "brushcolor" ) ) );
+        setBackGroundBrushColor( QColor( f.attribute( "brushcolor" ) ) );
 
     if ( f.hasAttribute( "brushstyle" ) )
     {
-	setBackGroundBrushStyle((Qt::BrushStyle) f.attribute( "brushstyle" ).toInt(&ok)  );
-	if(!ok) return false;
+        setBackGroundBrushStyle((Qt::BrushStyle) f.attribute( "brushstyle" ).toInt(&ok)  );
+        if(!ok) return false;
     }
 
     QDomElement pen = f.namedItem( "pen" ).toElement();
     if ( !pen.isNull() )
-	setTextPen( toPen(pen) );
+        setTextPen( toPen(pen) );
 
     QDomElement font = f.namedItem( "font" ).toElement();
     if ( !font.isNull() )
-	setTextFont( toFont(font) );
+        setTextFont( toFont(font) );
 
     if(pm!=NoBorder)
     {
-    QDomElement left = f.namedItem( "left-border" ).toElement();
-    if ( !left.isNull() )
-    {
-	QDomElement pen = left.namedItem( "pen" ).toElement();
-	if ( !pen.isNull() )
-	    setLeftBorderPen( toPen(pen) );
-    }
+        QDomElement left = f.namedItem( "left-border" ).toElement();
+        if ( !left.isNull() )
+        {
+            QDomElement pen = left.namedItem( "pen" ).toElement();
+            if ( !pen.isNull() )
+                setLeftBorderPen( toPen(pen) );
+        }
 
-    QDomElement top = f.namedItem( "top-border" ).toElement();
-    if ( !top.isNull() )
-    {
-	QDomElement pen = top.namedItem( "pen" ).toElement();
-	if ( !pen.isNull() )
-	    setTopBorderPen( toPen(pen) );
-    }
+        QDomElement top = f.namedItem( "top-border" ).toElement();
+        if ( !top.isNull() )
+        {
+            QDomElement pen = top.namedItem( "pen" ).toElement();
+            if ( !pen.isNull() )
+                setTopBorderPen( toPen(pen) );
+        }
 
-    QDomElement right = f.namedItem( "right-border" ).toElement();
-    if ( !right.isNull() )
-    {
-	QDomElement pen = right.namedItem( "pen" ).toElement();
-	if ( !pen.isNull() )
-	    setRightBorderPen( toPen(pen) );
-    }
+        QDomElement right = f.namedItem( "right-border" ).toElement();
+        if ( !right.isNull() )
+        {
+            QDomElement pen = right.namedItem( "pen" ).toElement();
+            if ( !pen.isNull() )
+                setRightBorderPen( toPen(pen) );
+        }
 
-    QDomElement bottom = f.namedItem( "bottom-border" ).toElement();
-    if ( !bottom.isNull() )
-    {
-	QDomElement pen = bottom.namedItem( "pen" ).toElement();
-	if ( !pen.isNull() )
-	    setBottomBorderPen( toPen(pen) );
-    }
+        QDomElement bottom = f.namedItem( "bottom-border" ).toElement();
+        if ( !bottom.isNull() )
+        {
+            QDomElement pen = bottom.namedItem( "pen" ).toElement();
+            if ( !pen.isNull() )
+                setBottomBorderPen( toPen(pen) );
+        }
 
-    QDomElement fallDiagonal = f.namedItem( "fall-diagonal" ).toElement();
-    if ( !fallDiagonal.isNull() )
-    {
-	QDomElement pen = fallDiagonal.namedItem( "pen" ).toElement();
-	if ( !pen.isNull() )
-	    setFallDiagonalPen( toPen(pen) );
-    }
+        QDomElement fallDiagonal = f.namedItem( "fall-diagonal" ).toElement();
+        if ( !fallDiagonal.isNull() )
+        {
+            QDomElement pen = fallDiagonal.namedItem( "pen" ).toElement();
+            if ( !pen.isNull() )
+                setFallDiagonalPen( toPen(pen) );
+        }
 
-    QDomElement goUpDiagonal = f.namedItem( "up-diagonal" ).toElement();
-    if ( !goUpDiagonal.isNull() )
-    {
-	QDomElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
-	if ( !pen.isNull() )
-	    setGoUpDiagonalPen( toPen(pen) );
-    }
-
+        QDomElement goUpDiagonal = f.namedItem( "up-diagonal" ).toElement();
+        if ( !goUpDiagonal.isNull() )
+        {
+            QDomElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
+            if ( !pen.isNull() )
+                setGoUpDiagonalPen( toPen(pen) );
+        }
     }
 
     if ( f.hasAttribute( "prefix" ) )
-	setPrefix( f.attribute( "prefix" ) );
+        setPrefix( f.attribute( "prefix" ) );
     if ( f.hasAttribute( "postfix" ) )
-	setPostfix( f.attribute( "postfix" ) );
+        setPostfix( f.attribute( "postfix" ) );
     return true;
 }
 
@@ -588,19 +587,19 @@ void KSpreadLayout::setAlignY( AlignY _alignY)
     layoutChanged();
 }
 
-void KSpreadLayout::setFaktor( double _d )
+void KSpreadLayout::setFactor( double _d )
 {
     if(_d==1.0)
         {
-        clearProperty( PFaktor );
-        setNoFallBackProperties(PFaktor );
+        clearProperty( PFactor );
+        setNoFallBackProperties(PFactor );
         }
     else
         {
-        setProperty( PFaktor );
-        clearNoFallBackProperties( PFaktor );
+        setProperty( PFactor );
+        clearNoFallBackProperties( PFactor );
         }
-    m_dFaktor = _d;
+    m_dFactor = _d;
     layoutChanged();
 }
 
@@ -1069,20 +1068,20 @@ void KSpreadLayout::setVerticalText( bool _b )
     layoutChanged();
 }
 
-void KSpreadLayout::setFormatNumber(formatNumber _format)
+void KSpreadLayout::setFormatType(FormatType _format)
 {
     if ( _format == KSpreadLayout::Number )
         {
-        clearProperty( PFormatNumber );
-        setNoFallBackProperties( PFormatNumber);
+        clearProperty( PFormatType );
+        setNoFallBackProperties( PFormatType);
         }
     else
         {
-        setProperty( PFormatNumber );
-        clearNoFallBackProperties( PFormatNumber);
+        setProperty( PFormatType );
+        clearNoFallBackProperties( PFormatType);
         }
 
-    m_eFormatNumber=_format;
+    m_eFormatType=_format;
     layoutChanged();
 
 }
@@ -1496,16 +1495,16 @@ KSpreadLayout::AlignY KSpreadLayout::alignY( int col, int row ) const
     return m_eAlignY;
 }
 
-double KSpreadLayout::faktor( int col, int row ) const
+double KSpreadLayout::factor( int col, int row ) const
 {
-    if ( !hasProperty( PFaktor ) && !hasNoFallBackProperties(PFaktor ))
+    if ( !hasProperty( PFactor ) && !hasNoFallBackProperties(PFactor ))
     {
 	const KSpreadLayout* l = fallbackLayout( col, row );
 	if ( l )
-	    return l->faktor( col, row );
+	    return l->factor( col, row );
     }
 
-    return m_dFaktor;
+    return m_dFactor;
 }
 
 bool KSpreadLayout::multiRow( int col, int row ) const
@@ -1532,16 +1531,16 @@ bool KSpreadLayout::verticalText( int col, int row ) const
     return m_bVerticalText;
 }
 
-KSpreadLayout::formatNumber KSpreadLayout::getFormatNumber( int col, int row ) const
+KSpreadLayout::FormatType KSpreadLayout::getFormatType( int col, int row ) const
 {
-    if ( !hasProperty( PFormatNumber ) && !hasNoFallBackProperties( PFormatNumber ))
+    if ( !hasProperty( PFormatType ) && !hasNoFallBackProperties( PFormatType ))
     {
 	const KSpreadLayout* l = fallbackLayout( col, row );
 	if ( l )
-	    return l->getFormatNumber( col, row );
+	    return l->getFormatType( col, row );
     }
 
-    return m_eFormatNumber;
+    return m_eFormatType;
 }
 
 int KSpreadLayout::getAngle( int col, int row ) const

@@ -43,20 +43,21 @@ public:
     enum AlignY { Top = 1, Middle = 2, Bottom =3 };
     enum FloatFormat { AlwaysSigned = 1, AlwaysUnsigned = 2, OnlyNegSigned = 3 };
     enum FloatColor { NegRed = 1, AllBlack = 2 };
-    enum formatNumber { Number=0,Text_format=5,Money=10,Percentage=25,Scientific=30,ShortDate=35,TextDate=36, Time=50,
-    SecondeTime=51,Time_format1=52,Time_format2=53,Time_format3=54,
-    fraction_half=70,fraction_quarter=71,fraction_eighth=72,fraction_sixteenth=73,
-     fraction_tenth=74,fraction_hundredth=75,fraction_one_digit=76,
-     fraction_two_digits=77,fraction_three_digits=78,
-     date_format1=200,date_format2=201,date_format3=202,date_format4=203,
-     date_format5=204,date_format6=205,date_format7=206,date_format8=207,
-     date_format9=208,date_format10=209,date_format11=210,date_format12=211,
-     date_format13=212,date_format14=213,date_format15=214,date_format16=215,
-     date_format17=216 };
+    enum FormatType { Number=0, Text_format=5, Money=10, Percentage=25, Scientific=30,
+                      ShortDate=35, TextDate=36, Time=50, SecondeTime=51,
+                      Time_format1=52, Time_format2=53, Time_format3=54,
+                      fraction_half=70,fraction_quarter=71,fraction_eighth=72,fraction_sixteenth=73,
+                      fraction_tenth=74,fraction_hundredth=75,fraction_one_digit=76,
+                      fraction_two_digits=77,fraction_three_digits=78,
+                      date_format1=200,date_format2=201,date_format3=202,date_format4=203,
+                      date_format5=204,date_format6=205,date_format7=206,date_format8=207,
+                      date_format9=208,date_format10=209,date_format11=210,date_format12=211,
+                      date_format13=212,date_format14=213,date_format15=214,date_format16=215,
+                      date_format17=216 };
 
     enum Properties{ PAlign  = 0x01,
 		     PAlignY = 0x02,
-		     PFaktor = 0x04,
+		     PFactor = 0x04,
 		     PPrefix = 0x08,
 		     PPostfix = 0x10,
 		     PLeftBorder = 0x20,
@@ -74,7 +75,7 @@ public:
 		     PMultiRow = 0x20000,
 		     PVerticalText = 0x40000,
                      PPrecision = 0x80000,
-                     PFormatNumber = 0x100000,
+                     PFormatType = 0x100000,
                      PAngle = 0x200000,
                      PComment = 0x400000,
                      PIndent = 0x800000,
@@ -93,11 +94,10 @@ public:
     //
     ////////////////////////////////
 
-    bool load( const QDomElement& f,PasteMode pm );
-    bool loadLayout( const QDomElement& f,PasteMode pm=Normal);
-    QDomElement save( QDomDocument& doc ) const;
-
-    QDomElement saveLayout( QDomDocument& doc ) const;
+    bool load( const QDomElement& f, PasteMode pm );
+    bool loadLayout( const QDomElement& f, PasteMode pm=Normal);
+    QDomElement save( QDomDocument& doc, bool force = false ) const;
+    QDomElement saveLayout( QDomDocument& doc, bool force = false ) const;
 
     ////////////////////////////////
     //
@@ -122,7 +122,7 @@ public:
 
     virtual void setAlign( Align _align );
     virtual void setAlignY( AlignY _alignY );
-    virtual void setFaktor( double _d );
+    virtual void setFactor( double _d );
     virtual void setPrefix( const QString& _prefix );
     virtual void setPostfix( const QString& _postfix );
     virtual void setPrecision( int _p );
@@ -181,7 +181,7 @@ public:
 
     virtual void setVerticalText( bool _b );
 
-    virtual void setFormatNumber(formatNumber _format);
+    virtual void setFormatType(FormatType _format);
 
     virtual void setAngle(int _angle);
 
@@ -276,13 +276,13 @@ public:
     virtual Align align( int col, int row ) const;
     virtual AlignY alignY( int col, int row ) const;
 
-    virtual double faktor( int col, int row ) const;
+    virtual double factor( int col, int row ) const;
 
     virtual bool multiRow( int col, int row ) const;
 
     virtual bool verticalText( int col, int row ) const;
 
-    virtual formatNumber getFormatNumber(int col, int row )const ;
+    virtual FormatType getFormatType(int col, int row )const ;
 
     virtual int getAngle(int col, int row) const;
 
@@ -418,7 +418,7 @@ protected:
     /**
      * Used to display 0.15 as 15% for example.
      */
-    double m_dFaktor;
+    double m_dFactor;
 
     bool m_bVerticalText;
 
@@ -432,7 +432,7 @@ protected:
     */
     uint m_bNoFallBack;
 
-    formatNumber m_eFormatNumber;
+    FormatType m_eFormatType;
 
     /**
     * give angle of rotation
@@ -449,7 +449,7 @@ protected:
     * Give indent
     */
     int m_indent;
-    /** 
+    /**
      * Don't print text
      */
     bool m_bDontPrintText;

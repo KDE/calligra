@@ -71,7 +71,7 @@ void KSpreadTextEditor::slotTextChanged( const QString& t )
     // m_pEdit->setCursorPosition( canvas->chooseCursorPosition() );
     checkChoose();
 
-  if((cell()->getFormatNumber(cell()->column(),cell()->row()))==KSpreadCell::Percentage)
+  if((cell()->formatType())==KSpreadCell::Percentage)
         {
         if((t.length()==1) && t[0].isDigit())
                 {
@@ -97,19 +97,19 @@ void KSpreadTextEditor::checkChoose()
     else
     {
       QChar r = t[ m_pEdit->cursorPosition() - 1 - canvas()->chooseTextLen() ];
-      kdDebug(36001) << "r='" << QString(r) << "'" << endl;
+      //kdDebug(36001) << "r='" << QString(r) << "'" << endl;
       if ( ( r == '*' || r == '|' || r == '&' || r == '-' ||
              r == '+' || r == '/' || r == '!' || r == '(' ||
              r == '^' || r == ',' || r == '%' || r == '[' ||
              r == '{' || r == '~' || r == '=' || r == ';' ||
 	     r == '>' || r == '<') )
       {
-          kdDebug(36001) << "Start CHOOSE" << endl;
+          //kdDebug(36001) << "Start CHOOSE" << endl;
           canvas()->startChoose();
       }
       else
       {
-          kdDebug(36001) << "End CHOOSE" << endl;
+          //kdDebug(36001) << "End CHOOSE" << endl;
           canvas()->endChoose();
       }
     }
@@ -182,9 +182,9 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
         // End choosing. May be restarted by KSpreadTextEditor::slotTextChanged
         if ( e->type() == QEvent::KeyPress && !k->text().isEmpty() )
         {
-            kdDebug(36001) << "eventFilter End Choose" << endl;
+            //kdDebug(36001) << "eventFilter End Choose" << endl;
             canvas()->endChoose();
-            kdDebug(36001) << "Cont" << endl;
+            //kdDebug(36001) << "Cont" << endl;
         }
     }
 

@@ -198,7 +198,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
       }
 
     if ( string[0] == '=' )
-        type = FORMULAR;
+        type = FORMULA;
 }
 
 bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
@@ -214,7 +214,7 @@ bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
     case FLOAT:
         _delta = seq->getDValue() - dvalue;
         return TRUE;
-    case FORMULAR:
+    case FORMULA:
     case STRING:
         if ( string == seq->getString() )
         {
@@ -280,7 +280,7 @@ QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
     case FLOAT:
         erg.sprintf("%f", dvalue + (double)_no * _delta );
         break;
-    case FORMULAR:
+    case FORMULA:
     case STRING:
         erg = string;
         break;
@@ -322,12 +322,12 @@ AutoFillSequence::AutoFillSequence( KSpreadCell *_cell )
 {
     sequence.setAutoDelete( TRUE );
 
-    if ( _cell->isFormular() )
+    if ( _cell->isFormula() )
     {
-        QString d = _cell->encodeFormular();
+        QString d = _cell->encodeFormula();
         sequence.append( new AutoFillSequenceItem( d ) );
     }
-    else if ( _cell->isValue() )
+    else if ( _cell->isNumeric() )
     {
         if ( floor( _cell->valueDouble() ) == _cell->valueDouble() )
         {
@@ -357,9 +357,9 @@ void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDe
     QString erg = "";
 
     // Special handling for formulas
-    if ( sequence.first() != 0L && sequence.first()->getType() == AutoFillSequenceItem::FORMULAR )
+    if ( sequence.first() != 0L && sequence.first()->getType() == AutoFillSequenceItem::FORMULA )
     {
-        QString f = dest->decodeFormular( sequence.first()->getString() );
+        QString f = dest->decodeFormula( sequence.first()->getString() );
         dest->setCellText( f, true );
         dest->copyLayout( src );
         return;
@@ -527,12 +527,12 @@ void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpre
 
         if ( _srcList.at( s )->text() != 0L )
         {
-            if ( _srcList.at( s )->isFormular() )
+            if ( _srcList.at( s )->isFormula() )
             {
-                QString d = _srcList.at( s )->encodeFormular();
-                cell->setCellText( cell->decodeFormular( d ), true );
+                QString d = _srcList.at( s )->encodeFormula();
+                cell->setCellText( cell->decodeFormula( d ), true );
             }
-            else if(_srcList.at( s )->isValue() && _srcList.count()==1)
+            else if(_srcList.at( s )->isNumeric() && _srcList.count()==1)
                 {
                 double val=(_srcList.at( s )->valueDouble())+incre;
                 incre++;

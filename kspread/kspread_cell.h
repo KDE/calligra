@@ -133,7 +133,17 @@ class KSpreadCell : public KSpreadLayout
   friend class SelectPrivate;
 
 public:
+    /** The type of content in the cell */
     enum Content { Text, RichText, Formula, VisualFormula };
+    /**
+     * The type of data in the cell, for Content == Text or Formula.
+     * RichText always is StringData, and VisualFormula is OtherData
+     * If you edit this, keep s_dataTypeToString uptodate.
+     */
+    enum DataType { StringData = 0, BoolData, NumericData, DateData, TimeData,
+                    OtherData, // see docu
+                    LastDataType = OtherData };
+    /** */
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
 
     KSpreadCell( KSpreadTable *_table, int _column, int _row );
@@ -160,21 +170,25 @@ public:
      *
      * The purpose of this method is to clear up some variables so that the destructor
      * runs without any crash. Especially all variables referencing other cells
-     * must be voided. This method may not call anz other method since the whole table
+     * must be voided. This method may not call any other method since the whole table
      * and all remaining cells are in an inconsistent state now.
      */
     void tableDies();
 
-    virtual QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool fallBack=false );
+    /**
+     * Save this cell.
+     * @param _x_offset ...
+     * @param _y_offset ...
+     * @param force if set to true, all the properties of the layout are stored (used for "Copy")
+     * Usually this is false, to only store the properties explicitely set.
+     */
+    QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false );
+
     bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal,
 	       Operation op = OverWrite );
+
     QTime toTime(QDomElement &element) ;
     QDate toDate(QDomElement &element);
-    /**
-    * save layout parameters when you copy cell
-    * used fallback
-    */
-    QDomElement saveParameters( QDomDocument& doc ) const;
 
     /**
      * Copyies the layout from the cell at the position (_column|_row).
@@ -249,8 +263,6 @@ public:
      */
     bool isEmpty() const;
 
-
-    bool isText() const;
     /**
      * @return TRUE if the cell should be printed in a print out.
      *         That si the case if it has any content, border, backgroundcolor,
@@ -261,9 +273,18 @@ public:
     bool needsPrinting() const;
 
     /**
-     * Tells whether the cell contains, text, a formula, richtext or a visual formula.
+     * Tells what is the content of the cell (its nature).
+     * Text, formula, richtext, or visual formula.
+     * Set by @ref setDisplayText().
      */
     Content content() const { return m_content; }
+
+    /**
+     * Tells what is the type of data in the cell:
+     * string, numeric, date, time etc.
+     * Set by @ref checkTextInput(), and by @ref load().
+     */
+    DataType dataType() const { return m_dataType; }
 
     /**
      * Increases the precison of the
@@ -283,14 +304,19 @@ public:
     void decPrecision();
 
     /**
-     * When we are in the progress of loading, then this function will only store the
-     * text. KSpreadDoc::completeLoading takes care of updating dependencies etc.
-     * For this, we call it with updateDepends=false.
-     * Most of the time, call this with updateDepends=true so that dependencies are updated.
+     * The high-level method for setting text, when the user inputs it.
+     * It will revert back to the old text if testValidity() returns action==stop.
+     * @param updateDepends whether to recalculate the dependent cells (always true nowadays)
      */
     void setCellText( const QString& _text, bool updateDepends = true );
 
+    /**
+     * Sets the text in the cell when the user inputs it.
+     * Will determine the type of contents automatically.
+     * Called by setCellText.
+     */
     void setDisplayText( const QString& _text, bool updateDepends = true );
+
     /**
      * @return the text the user entered.
      */
@@ -379,16 +405,27 @@ public:
      */
     QString action() const { return m_strAction; }
 
-    bool isValue() const { return m_bValue; }
-    bool isBool() const {  return m_bBool; }
+    /**
+     * Return the format of this cell.
+     * Convenience method for KSpreadLayout::getFormatType
+     * Note that this is "how the user would like the data to be displayed if possible".
+     * If he selects a date format, and the cell contains a string, we won't apply that format.
+     */
+    FormatType formatType() const { return getFormatType( m_iColumn, m_iRow ); }
+
+    bool isString() const { return m_dataType == StringData; }
+    bool isNumeric() const { return m_dataType == NumericData; }
+    bool isBool() const { return m_dataType == BoolData; }
+    bool isDate() const { return m_dataType == DateData; }
+    bool isTime() const { return m_dataType == TimeData; }
+
     bool valueBool() const { return ( m_dValue != 0.0 ); }
-    bool isDate() const {  return m_bDate; }
-    bool isTime() const {  return m_bTime; }
     double valueDouble() const { return m_dValue; }
     QString valueString() const;
+    QDate valueDate() const { return m_Date; }
+    QTime valueTime() const { return m_Time; }
+
     void setValue( double _d );
-    QDate valueDate() const {return m_Date;}
-    QTime valueTime() const {return m_Time;}
 
     /**
      * return size of the text
@@ -553,16 +590,16 @@ public:
     int extraWidth() const { return m_iExtraWidth; }
     int extraHeight() const { return m_iExtraHeight; }
 
-    bool isFormular() const { return m_content == Formula; }
+    bool isFormula() const { return m_content == Formula; }
 
-    QString encodeFormular( int _col = -1, int _row = -1 );
-    QString decodeFormular( const QString &_text, int _col = -1, int _row = -1 );
+    QString encodeFormula( int _col = -1, int _row = -1 );
+    QString decodeFormula( const QString &_text, int _col = -1, int _row = -1 );
 
     /**
      * Merges the @p new_text with @p old_text during a paste operation.
      * If both texts represent doubles, then the operation is performed on both
-     * values and the result is returned. If both texts represents a formular or
-     * one a formular and the other a double value, then a formular is returned.
+     * values and the result is returned. If both texts represents a formula or
+     * one a formula and the other a double value, then a formula is returned.
      * In all other cases @p new_text is returned.
      *
      * @return the merged text.
@@ -576,16 +613,17 @@ public:
     bool hasError() const { return m_bError; }
 
     /**
-     * Calculates the layout of the cell.
+     * Calculates the layout of the cell, i,e, determines what should be shown
+     * for this cell, m_strOutText.
      */
-    virtual void makeLayout( QPainter &_painter, int _col, int _row );
+    void makeLayout( QPainter &_painter, int _col, int _row );
 
     /**
      * Parses the formula.
      * Fills @ref #dependList and @ref #formula.
      * @return FALSE on error.
      */
-    bool makeFormular();
+    bool makeFormula();
 
 
     void defaultStyle();
@@ -677,6 +715,9 @@ public:
     void freeAllObscuredCells();
 
 
+    QString dataTypeToString( DataType dt ) const;
+    DataType stringToDataType( const QString& str ) const;
+
 protected:
     /**
      * @reimp
@@ -691,6 +732,9 @@ protected:
      */
     const KSpreadLayout* fallbackLayout( int col, int row ) const;
 
+    /**
+     * Format a numeric value (isNumeric()==true) using the user-specified format
+     */
     QString createFormat( double value, int col, int row );
 
     /**
@@ -717,29 +761,24 @@ protected:
      * Call this before you store a new formula or to delete the
      * formula.
      */
-    void clearFormular();
+    void clearFormula();
 
     /**
-     * Parses a cell description ( like $A1 or so ).
-     * If '_second' is set, it will store the data in '**_dep' as second corner.
-     * Make shure that '**_dep' is a valid address in this case.
-     * Otherwise a new KSpreadDepend will be created and the data is stored as first corner.
-     * A pointer to the new KSpreadDepend will be stored in '**_dep*'.
+     * Check the input from the user, and determine the contents of the cell accordingly
+     * (in particular the data type).
+     * This is to be called only when m_content == Text.
      *
-     * @return FALSE on error, what means that the string starting at '_p' is not a valid
-     *         cell description. If an error is detected, '**dep' nor '*dep' get modified.
+     * Input: m_strText
+     * Output: m_dataType
      */
-    // bool makeDepend( const char *_p, KSpreadDepend ** _dep, bool _second = FALSE );
+    void checkTextInput();
 
-    /**
-     * Set the @ref #m_bValue flag.
-     * If the cell holds a numerical value ( calculated or as a constant value )
-     * @ref #m_bValue is set to TRUE otherwise to FALSE. If the @ref #m_bValue changed, the
-     * @ref #m_bLayoutDirtyFlag is set to TRUE, since this will cause the alignment
-     * to change ( if align == KSpreadCell::Undefined ).
-     * If @ref #m_bValue is set, a new value for @ref m_dValue is calculated.
-      */
-    void checkValue();
+    // Try to parse the text as a bool/number/date/time/etc.
+    // Helpers for checkTextInput.
+    bool tryParseBool( const QString& str );
+    bool tryParseNumber( const QString& str );
+    bool tryParseDate( const QString& str );
+    bool tryParseTime( const QString& str );
 
     /**
      * Automatically chooses between a number format and
@@ -747,8 +786,9 @@ protected:
      */
     void checkNumberFormat();
 
+private:
     /**
-     * This cells row.
+     * This cell's row.
      * If it is 0, this is the default cell and its row/column can
      * not be determined.
      *
@@ -756,7 +796,7 @@ protected:
      */
     int m_iRow;
     /**
-     * This cells column.
+     * This cell's column.
      * If it is 0, this is the default cell and its row/column can
      * not be determined.
      *
@@ -765,14 +805,15 @@ protected:
     int m_iColumn;
 
     /**
-     * Holds the users input
+     * Holds the user's input
      *
      * @persistent
      */
     QString m_strText;
 
     /**
-     * This is the text we want to print
+     * This is the text we want to display
+     * Not necessarily the same as m_strText, e.g. m_strText="1" and m_strOutText="1.00".
      */
     QString m_strOutText;
     int m_iOutTextWidth;
@@ -784,15 +825,12 @@ protected:
      */
     int m_fmAscent;
 
-    double m_dValue;
-    bool m_bValue;
-    bool m_bBool;
+    /**
+     * True if the cell is calculated and there was an error during calculation
+     * In that case the cell usually displays "#####"
+     */
     bool m_bError;
-    bool m_bDate;
-    bool m_bTime;
-    bool m_bText;
-    QDate m_Date;
-    QTime m_Time;
+
     /**
      * Flag showing whether the current layout is OK.
      * If you change for example the fonts point size, set this flag. When the cell
@@ -801,21 +839,12 @@ protected:
     bool m_bLayoutDirtyFlag;
 
     /**
-     * Shows whether recalculation is neccessary.
+     * Shows whether recalculation is necessary.
      * If this cell must be recalculated for some reason, for example the user entered
-     * a new formula, then this flag is set. If @ref #bFormular is FALSE nothing will happen
+     * a new formula, then this flag is set. If @ref #bFormula is FALSE nothing will happen
      * at all.
      */
     bool m_bCalcDirtyFlag;
-
-    QPtrList<KSpreadDepend> m_lstDepends;
-
-    /**
-     * The value we got from calculation.
-     * If @ref #isFormular is TRUE, @ref #makeLayout will use @ref #m_strFormularOut
-     * instead of @ref m_strText since m_strText stores the formula the user entered.
-     */
-    QString m_strFormularOut;
 
     /**
      * Tells whether this cell it currently under calculation.
@@ -901,6 +930,16 @@ protected:
      */
     QString m_strAction;
 
+
+    QPtrList<KSpreadDepend> m_lstDepends;
+
+    /**
+     * The value we got from calculation.
+     * If @ref isFormula() is TRUE, @ref makeLayout() will use @ref m_strFormulaOut
+     * instead of @ref m_strText since m_strText stores the formula the user entered.
+     */
+    QString m_strFormulaOut;
+
     KSpreadCellPrivate *m_pPrivate;
 
     /**
@@ -912,19 +951,15 @@ protected:
     Content m_content;
 
     /**
-     * Perhaps this cell contains QML ?
+     * Tells which kind of data is present in the cell, assuming m_content == Text
      */
-    QSimpleRichText *m_pQML;
+    DataType m_dataType;
 
-    /**
-     * The parse tree of the real formula (e.g: "=A1*A2").
-     */
-    KSParseNode* m_pCode;
-
-    /**
-     * A pointer to the decimal separator
-     */
-    static QChar decimal_point;
+    // ### union ?
+    double m_dValue;
+    QDate m_Date;
+    QTime m_Time;
+    QSimpleRichText *m_pQML; // Set when the cell contains QML
 
     /**
      * Width of richText
@@ -935,6 +970,12 @@ protected:
      */
     int m_richHeight;
 
+
+    /**
+     * The parse tree of the real formula (e.g: "=A1*A2").
+     */
+    KSParseNode* m_pCode;
+
     /**
      * Set to TRUE if one of the conditions apply.
      *
@@ -944,6 +985,13 @@ protected:
      * @see #m_numberOfCond
      */
     bool m_conditionIsTrue;
+
+    /**
+     * When it's True displays **
+     * it's true when text size is bigger that cell size
+     * and when Align is center or left
+     */
+    bool m_bCellTooShort;
 
     /**
      * Pointer to the first condition. May be 0.
@@ -978,16 +1026,14 @@ protected:
 
     KSpreadValidity * m_Validity;
 
-    /**
-    * When it's True displays **
-    * it's true when text size is bigger that cell size
-    * and when Align is center or left
-    */
-    bool m_bCellTooShort;
-
     KSpreadCell* m_nextCell;
     KSpreadCell* m_previousCell;
 
+    /**
+     * A pointer to the decimal separator
+     */
+    static QChar decimal_point;
+    static const char* s_dataTypeToString[];
 };
 
 #endif

@@ -131,7 +131,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_EMethodOfCalc=SumOfNumber;
   m_bShowCommentIndicator=true;
   m_bShowTabBar=true;
-  m_bShowFormularBar=true;
+  m_bShowFormulaBar=true;
   m_bShowStatusBar=true;
   m_pKSpellConfig=0;
 }
@@ -297,17 +297,12 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   m_bLoading = TRUE;
 
   // <spreadsheet>
-  // TBD: this check removed since the value is not set by filters for embedded objects.
-  //if ( doc.doctype().name() != "spreadsheet" )
-  //{
-  //  m_bLoading = false;
-  //  return false;
-  //}
   QDomElement spread = doc.documentElement();
 
   if ( spread.attribute( "mime" ) != "application/x-kspread" )
   {
     m_bLoading = false;
+    setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-kspread, got %1" ).arg( spread.attribute("mime") ) );
     return false;
   }
 
@@ -378,12 +373,17 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
 
   // <map>
   QDomElement mymap = spread.namedItem( "map" ).toElement();
-  if ( !mymap.isNull() )
-    if ( !m_pMap->loadXML( mymap ) )
-    {
+  if ( mymap.isNull() )
+  {
+      setErrorMessage( i18n("Invalid document. No map tag.") );
       m_bLoading = false;
       return false;
-    }
+  }
+  if ( !m_pMap->loadXML( mymap ) )
+  {
+      m_bLoading = false;
+      return false;
+  }
   initConfig();
   return true;
 }

@@ -34,7 +34,7 @@ class KSpreadCell;
 class AutoFillSequenceItem
 {
 public:
-    enum Type { INTEGER, FLOAT, STRING, DAY, MONTH, FORMULAR, OTHER };
+    enum Type { INTEGER, FLOAT, STRING, DAY, MONTH, FORMULA, OTHER };
 
     AutoFillSequenceItem( int _i );
     AutoFillSequenceItem( double _d );

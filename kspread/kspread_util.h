@@ -112,11 +112,11 @@ QString util_rangeName( QRect _area );
 QString util_rangeName( KSpreadTable *_table, QRect _area );
 QString util_columnLabel( int column );
 
-QString util_dateFormat( KLocale* locale, QDate _date, KSpreadCell::formatNumber _tmpFormat); 
+QString util_dateFormat( KLocale* locale, QDate _date, KSpreadCell::FormatType fmtType);
 
-QString util_timeFormat( KLocale* locale, QTime _time, KSpreadCell::formatNumber _tmpFormat); 
+QString util_timeFormat( KLocale* locale, QTime _time, KSpreadCell::FormatType fmtType);
 
-QString util_fractionFormat( double value , KSpreadCell::formatNumber _tmpFormat); 
+QString util_fractionFormat( double value , KSpreadCell::FormatType fmtType);
 
 #endif
 

@@ -42,8 +42,12 @@ k_dcop:
     virtual QString prefix() const;
     virtual void setPostfix(const QString &_postfix);
     virtual QString postfix() const;
-    virtual void setFormatNumber(const QString &_formatNumber);
-    virtual QString getFormatNumber() const;
+    /** @deprecated use setFormatType*/
+    virtual void setFormatNumber(const QString &ft) { setFormatType(ft); }
+    virtual void setFormatType(const QString &formatType);
+    /** @deprecated use getFormatType */
+    virtual QString getFormatNumber() const { return getFormatType(); }
+    virtual QString getFormatType() const;
     virtual void setPrecision(int  _p);
     virtual int precision() const;
     virtual void setFaktor( double _factor );

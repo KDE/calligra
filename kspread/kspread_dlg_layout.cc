@@ -162,7 +162,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     bStrike = TRUE;
     bUnderline = TRUE;
     bTextRotation = TRUE;
-    bFormatNumber = TRUE;
+    bFormatType = TRUE;
     bDontprintText = TRUE;
 
     if( left == right )
@@ -278,13 +278,13 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     bVerticalText=obj->verticalText( _left, _top );
     bDontprintText=obj->getDontprintText( _left, _top );
     textRotation = obj->getAngle(_left, _top);
-    formatNumber = obj->getFormatNumber(_left, _top);
+    formatType = obj->getFormatType(_left, _top);
 
     indent = obj->getIndent(_left, _top);
 
     cellText=obj->text();
 
-    if( obj->isValue())
+    if( obj->isNumeric() || obj->isBool())
         {
         m_bValue=true;
         m_value=obj->valueDouble();
@@ -669,8 +669,8 @@ void CellLayoutDlg::initParameters(KSpreadLayout *obj,int x,int y)
                 bBgColor = FALSE;
         if( textRotation != obj->getAngle(left, top) )
                 bTextRotation = FALSE;
-        if( formatNumber != obj->getFormatNumber(left, top) )
-                bFormatNumber = FALSE;
+        if( formatType != obj->getFormatType(left, top) )
+                bFormatType = FALSE;
         if( bMultiRow != obj->multiRow( left, top ) )
                 bMultiRow = FALSE;
         if( bVerticalText!=obj->verticalText( left, top ) )
@@ -1059,41 +1059,41 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     grid->addMultiCellWidget(listFormat,2,7,1,1);
     layout->addWidget(grp);
 
-    cellFormatNumber=dlg->formatNumber;
+    cellFormatType=dlg->formatType;
 
-    if(!cellFormatNumber)
+    if(!cellFormatType)
           number->setChecked(true);
     else
         {
-        if(cellFormatNumber==KSpreadCell::Number)
+        if(cellFormatType==KSpreadCell::Number)
                 number->setChecked(true);
-        else if(cellFormatNumber==KSpreadCell::Percentage)
+        else if(cellFormatType==KSpreadCell::Percentage)
                 percent->setChecked(true);
-        else if(cellFormatNumber==KSpreadCell::Money)
+        else if(cellFormatType==KSpreadCell::Money)
                 money->setChecked(true);
-        else if(cellFormatNumber==KSpreadCell::Scientific)
+        else if(cellFormatType==KSpreadCell::Scientific)
                 scientific->setChecked(true);
-        else if(cellFormatNumber==KSpreadCell::TextDate ||
-        cellFormatNumber==KSpreadCell::ShortDate
-        ||((int)(cellFormatNumber)>=200 && (int)(cellFormatNumber)<=217))
+        else if(cellFormatType==KSpreadCell::TextDate ||
+        cellFormatType==KSpreadCell::ShortDate
+        ||((int)(cellFormatType)>=200 && (int)(cellFormatType)<=217))
                 date->setChecked(true);
-        else if(cellFormatNumber==KSpreadCell::Time ||
-        cellFormatNumber==KSpreadCell::SecondeTime
-        ||cellFormatNumber==KSpreadCell::Time_format1
-        ||cellFormatNumber==KSpreadCell::Time_format2
-        ||cellFormatNumber==KSpreadCell::Time_format3)
+        else if(cellFormatType==KSpreadCell::Time ||
+        cellFormatType==KSpreadCell::SecondeTime
+        ||cellFormatType==KSpreadCell::Time_format1
+        ||cellFormatType==KSpreadCell::Time_format2
+        ||cellFormatType==KSpreadCell::Time_format3)
                 time->setChecked(true);
-        else if(cellFormatNumber==KSpreadCell::fraction_half ||
-        cellFormatNumber==KSpreadCell::fraction_quarter ||
-        cellFormatNumber==KSpreadCell::fraction_eighth ||
-        cellFormatNumber==KSpreadCell::fraction_sixteenth ||
-        cellFormatNumber==KSpreadCell::fraction_tenth ||
-        cellFormatNumber==KSpreadCell::fraction_hundredth ||
-        cellFormatNumber==KSpreadCell::fraction_one_digit ||
-        cellFormatNumber==KSpreadCell::fraction_two_digits ||
-        cellFormatNumber==KSpreadCell::fraction_three_digits)
+        else if(cellFormatType==KSpreadCell::fraction_half ||
+        cellFormatType==KSpreadCell::fraction_quarter ||
+        cellFormatType==KSpreadCell::fraction_eighth ||
+        cellFormatType==KSpreadCell::fraction_sixteenth ||
+        cellFormatType==KSpreadCell::fraction_tenth ||
+        cellFormatType==KSpreadCell::fraction_hundredth ||
+        cellFormatType==KSpreadCell::fraction_one_digit ||
+        cellFormatType==KSpreadCell::fraction_two_digits ||
+        cellFormatType==KSpreadCell::fraction_three_digits)
                 fraction->setChecked(true);
-	else if(cellFormatNumber==KSpreadCell::Text_format)
+	else if(cellFormatType==KSpreadCell::Text_format)
 	  textFormat->setChecked(true);
         }
 
@@ -1113,7 +1113,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     connect(format,SIGNAL(activated ( int ) ),this,SLOT(formatChanged(int)));
     slotChangeState();
     m_bFormatColorChanged=false;
-    m_bFormatNumberChanged=false;
+    m_bFormatTypeChanged=false;
     this->resize( 400, 400 );
 }
 
@@ -1130,7 +1130,7 @@ void CellLayoutPageFloat::slotChangeState()
 {
     QStringList list;
     listFormat->clear();
-    if(dlg->cellText.isEmpty() || dlg->m_bValue)
+    if(dlg->cellText.isEmpty() || dlg->m_bValue || !dlg->isSingleCell())
         {
             precision->setEnabled(true);
             prefix->setEnabled(true);
@@ -1175,23 +1175,23 @@ void CellLayoutPageFloat::slotChangeState()
             list+=i18n("Two digits 15/22");
             list+=i18n("Three digits 153/652");
             listFormat->insertStringList(list);
-            if(cellFormatNumber==KSpreadCell::fraction_half)
+            if(cellFormatType==KSpreadCell::fraction_half)
                 listFormat->setCurrentItem(0);
-            else if(cellFormatNumber==KSpreadCell::fraction_quarter)
+            else if(cellFormatType==KSpreadCell::fraction_quarter)
                 listFormat->setCurrentItem(1);
-            else if(cellFormatNumber==KSpreadCell::fraction_eighth )
+            else if(cellFormatType==KSpreadCell::fraction_eighth )
                 listFormat->setCurrentItem(2);
-            else if(cellFormatNumber==KSpreadCell::fraction_sixteenth )
+            else if(cellFormatType==KSpreadCell::fraction_sixteenth )
                 listFormat->setCurrentItem(3);
-            else if(cellFormatNumber==KSpreadCell::fraction_tenth )
+            else if(cellFormatType==KSpreadCell::fraction_tenth )
                 listFormat->setCurrentItem(4);
-            else if(cellFormatNumber==KSpreadCell::fraction_hundredth )
+            else if(cellFormatType==KSpreadCell::fraction_hundredth )
                 listFormat->setCurrentItem(5);
-            else if(cellFormatNumber==KSpreadCell::fraction_one_digit )
+            else if(cellFormatType==KSpreadCell::fraction_one_digit )
                 listFormat->setCurrentItem(6);
-            else if(cellFormatNumber==KSpreadCell::fraction_two_digits )
+            else if(cellFormatType==KSpreadCell::fraction_two_digits )
                 listFormat->setCurrentItem(7);
-            else if(cellFormatNumber==KSpreadCell::fraction_three_digits )
+            else if(cellFormatType==KSpreadCell::fraction_three_digits )
                 listFormat->setCurrentItem(8);
             else
                 listFormat->setCurrentItem(0);
@@ -1213,15 +1213,15 @@ void CellLayoutPageFloat::slotChangeState()
             list+= util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format3);
             listFormat->insertStringList(list);
 
-            if( cellFormatNumber==KSpreadCell::Time )
+            if( cellFormatType==KSpreadCell::Time )
                 listFormat->setCurrentItem(0);
-            else if(cellFormatNumber==KSpreadCell::SecondeTime)
+            else if(cellFormatType==KSpreadCell::SecondeTime)
                 listFormat->setCurrentItem(1);
-            else if(cellFormatNumber==KSpreadCell::Time_format1)
+            else if(cellFormatType==KSpreadCell::Time_format1)
                 listFormat->setCurrentItem(2);
-            else if(cellFormatNumber==KSpreadCell::Time_format2)
+            else if(cellFormatType==KSpreadCell::Time_format2)
                 listFormat->setCurrentItem(3);
-            else if(cellFormatNumber==KSpreadCell::Time_format3)
+            else if(cellFormatType==KSpreadCell::Time_format3)
                 listFormat->setCurrentItem(4);
             else
                 listFormat->setCurrentItem(0);
@@ -1230,7 +1230,7 @@ void CellLayoutPageFloat::slotChangeState()
       {
 	listFormat->setEnabled(false);
       }
-    m_bFormatNumberChanged=true;
+    m_bFormatTypeChanged=true;
     if( date->isChecked() && dlg->m_bDate)
         makeDateFormat();
     else
@@ -1239,7 +1239,7 @@ void CellLayoutPageFloat::slotChangeState()
 
 void CellLayoutPageFloat::makeDateFormat()
 {
-    KSpreadCell::formatNumber tmpFormat=KSpreadCell::ShortDate;
+    KSpreadCell::FormatType tmpFormat=KSpreadCell::ShortDate;
     QString tmp;
     if( listFormat->currentItem()==0)
         tmpFormat=KSpreadCell::ShortDate;
@@ -1328,43 +1328,43 @@ void CellLayoutPageFloat::init()
     list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format17);
 
     listFormat->insertStringList(list);
-    if( cellFormatNumber==KSpreadCell::ShortDate )
+    if( cellFormatType==KSpreadCell::ShortDate )
         listFormat->setCurrentItem(0);
-    else if(cellFormatNumber==KSpreadCell::TextDate)
+    else if(cellFormatType==KSpreadCell::TextDate)
         listFormat->setCurrentItem(1);
-    else if(cellFormatNumber==KSpreadCell::date_format1)
+    else if(cellFormatType==KSpreadCell::date_format1)
         listFormat->setCurrentItem(2);
-    else if(cellFormatNumber==KSpreadCell::date_format2)
+    else if(cellFormatType==KSpreadCell::date_format2)
         listFormat->setCurrentItem(3);
-    else if(cellFormatNumber==KSpreadCell::date_format3)
+    else if(cellFormatType==KSpreadCell::date_format3)
         listFormat->setCurrentItem(4);
-    else if(cellFormatNumber==KSpreadCell::date_format4)
+    else if(cellFormatType==KSpreadCell::date_format4)
         listFormat->setCurrentItem(5);
-    else if(cellFormatNumber==KSpreadCell::date_format5)
+    else if(cellFormatType==KSpreadCell::date_format5)
         listFormat->setCurrentItem(6);
-    else if(cellFormatNumber==KSpreadCell::date_format6)
+    else if(cellFormatType==KSpreadCell::date_format6)
         listFormat->setCurrentItem(7);
-    else if(cellFormatNumber==KSpreadCell::date_format7)
+    else if(cellFormatType==KSpreadCell::date_format7)
         listFormat->setCurrentItem(8);
-    else if(cellFormatNumber==KSpreadCell::date_format8)
+    else if(cellFormatType==KSpreadCell::date_format8)
         listFormat->setCurrentItem(9);
-    else if(cellFormatNumber==KSpreadCell::date_format9)
+    else if(cellFormatType==KSpreadCell::date_format9)
         listFormat->setCurrentItem(10);
-    else if(cellFormatNumber==KSpreadCell::date_format10)
+    else if(cellFormatType==KSpreadCell::date_format10)
         listFormat->setCurrentItem(11);
-    else if(cellFormatNumber==KSpreadCell::date_format11)
+    else if(cellFormatType==KSpreadCell::date_format11)
         listFormat->setCurrentItem(12);
-    else if(cellFormatNumber==KSpreadCell::date_format12)
+    else if(cellFormatType==KSpreadCell::date_format12)
         listFormat->setCurrentItem(13);
-    else if(cellFormatNumber==KSpreadCell::date_format13)
+    else if(cellFormatType==KSpreadCell::date_format13)
         listFormat->setCurrentItem(14);
-    else if(cellFormatNumber==KSpreadCell::date_format14)
+    else if(cellFormatType==KSpreadCell::date_format14)
         listFormat->setCurrentItem(15);
-    else if(cellFormatNumber==KSpreadCell::date_format15)
+    else if(cellFormatType==KSpreadCell::date_format15)
         listFormat->setCurrentItem(16);
-    else if(cellFormatNumber==KSpreadCell::date_format16)
+    else if(cellFormatType==KSpreadCell::date_format16)
         listFormat->setCurrentItem(17);
-    else if(cellFormatNumber==KSpreadCell::date_format17)
+    else if(cellFormatType==KSpreadCell::date_format17)
         listFormat->setCurrentItem(18);
     else
         listFormat->setCurrentItem(0);
@@ -1375,7 +1375,7 @@ void CellLayoutPageFloat::makeTimeFormat()
 {
     QString tmp;
     QString tmpTime;
-    KSpreadCell::formatNumber tmpFormat=KSpreadCell::Time;
+    KSpreadCell::FormatType tmpFormat=KSpreadCell::Time;
     if( listFormat->currentItem()==0)
         tmpFormat=KSpreadCell::Time;
     else if(listFormat->currentItem()==1)
@@ -1400,7 +1400,7 @@ QString CellLayoutPageFloat::makeFractionFormat()
     }
     else
     {
-        KSpreadCell::formatNumber tmpFormat=KSpreadCell::fraction_half;
+        KSpreadCell::FormatType tmpFormat=KSpreadCell::fraction_half;
         switch( listFormat->currentItem())
         {
             case 0:
@@ -1437,7 +1437,7 @@ QString CellLayoutPageFloat::makeFractionFormat()
 
 void CellLayoutPageFloat::makeformat()
 {
-    m_bFormatNumberChanged=true;
+    m_bFormatTypeChanged=true;
     QString tmp;
     int p;
     p = (precision->value() == -1) ? 8 : precision->value();
@@ -1583,103 +1583,103 @@ void CellLayoutPageFloat::applyLayout( KSpreadLayout *_obj )
                     break;
                 }
         }
-    if(m_bFormatNumberChanged)
+    if(m_bFormatTypeChanged)
         {
-            _obj->setFaktor(1.0);
+            _obj->setFactor(1.0);
             if(number->isChecked())
-                _obj->setFormatNumber(KSpreadCell::Number);
+                _obj->setFormatType(KSpreadCell::Number);
             else if(percent->isChecked())
                 {
-                    _obj->setFormatNumber(KSpreadCell::Percentage);
-                    _obj->setFaktor(100.0);
+                    _obj->setFormatType(KSpreadCell::Percentage);
+                    _obj->setFactor(100.0);
                 }
             else if(fraction->isChecked())
                 {
                     if( listFormat->currentItem()==0)
-                        _obj->setFormatNumber(KSpreadCell::fraction_half);
+                        _obj->setFormatType(KSpreadCell::fraction_half);
                     else if( listFormat->currentItem()==1)
-                        _obj->setFormatNumber(KSpreadCell::fraction_quarter);
+                        _obj->setFormatType(KSpreadCell::fraction_quarter);
                     else if( listFormat->currentItem()==2)
-                        _obj->setFormatNumber(KSpreadCell::fraction_eighth);
+                        _obj->setFormatType(KSpreadCell::fraction_eighth);
                     else if( listFormat->currentItem()==3)
-                        _obj->setFormatNumber(KSpreadCell::fraction_sixteenth);
+                        _obj->setFormatType(KSpreadCell::fraction_sixteenth);
                     else if( listFormat->currentItem()==4)
-                        _obj->setFormatNumber(KSpreadCell::fraction_tenth);
+                        _obj->setFormatType(KSpreadCell::fraction_tenth);
                     else if( listFormat->currentItem()==5)
-                        _obj->setFormatNumber(KSpreadCell::fraction_hundredth);
+                        _obj->setFormatType(KSpreadCell::fraction_hundredth);
                     else if( listFormat->currentItem()==6)
-                        _obj->setFormatNumber(KSpreadCell::fraction_one_digit);
+                        _obj->setFormatType(KSpreadCell::fraction_one_digit);
                     else if( listFormat->currentItem()==7)
-                        _obj->setFormatNumber(KSpreadCell::fraction_two_digits);
+                        _obj->setFormatType(KSpreadCell::fraction_two_digits);
                     else if( listFormat->currentItem()==8)
-                        _obj->setFormatNumber(KSpreadCell::fraction_three_digits);
+                        _obj->setFormatType(KSpreadCell::fraction_three_digits);
                 }
             else if(date->isChecked())
                 {
                     if( listFormat->currentItem()==0)
-                        _obj->setFormatNumber(KSpreadCell::ShortDate );
+                        _obj->setFormatType(KSpreadCell::ShortDate );
                     else if(listFormat->currentItem()==1)
-                        _obj->setFormatNumber(KSpreadCell::TextDate );
+                        _obj->setFormatType(KSpreadCell::TextDate );
                     else if(listFormat->currentItem()==2)
-                        _obj->setFormatNumber(KSpreadCell::date_format1 );
+                        _obj->setFormatType(KSpreadCell::date_format1 );
                     else if(listFormat->currentItem()==3)
-                        _obj->setFormatNumber(KSpreadCell::date_format2 );
+                        _obj->setFormatType(KSpreadCell::date_format2 );
                     else if(listFormat->currentItem()==4)
-                        _obj->setFormatNumber(KSpreadCell::date_format3 );
+                        _obj->setFormatType(KSpreadCell::date_format3 );
                     else if(listFormat->currentItem()==5)
-                        _obj->setFormatNumber(KSpreadCell::date_format4 );
+                        _obj->setFormatType(KSpreadCell::date_format4 );
                     else if(listFormat->currentItem()==6)
-                        _obj->setFormatNumber(KSpreadCell::date_format5 );
+                        _obj->setFormatType(KSpreadCell::date_format5 );
                     else if(listFormat->currentItem()==7)
-                        _obj->setFormatNumber(KSpreadCell::date_format6 );
+                        _obj->setFormatType(KSpreadCell::date_format6 );
                     else if(listFormat->currentItem()==8)
-                        _obj->setFormatNumber(KSpreadCell::date_format7 );
+                        _obj->setFormatType(KSpreadCell::date_format7 );
                     else if(listFormat->currentItem()==9)
-                        _obj->setFormatNumber(KSpreadCell::date_format8 );
+                        _obj->setFormatType(KSpreadCell::date_format8 );
                     else if(listFormat->currentItem()==10)
-                        _obj->setFormatNumber(KSpreadCell::date_format9 );
+                        _obj->setFormatType(KSpreadCell::date_format9 );
                     else if(listFormat->currentItem()==11)
-                        _obj->setFormatNumber(KSpreadCell::date_format10 );
+                        _obj->setFormatType(KSpreadCell::date_format10 );
                     else if(listFormat->currentItem()==12)
-                        _obj->setFormatNumber(KSpreadCell::date_format11 );
+                        _obj->setFormatType(KSpreadCell::date_format11 );
                     else if(listFormat->currentItem()==13)
-                        _obj->setFormatNumber(KSpreadCell::date_format12 );
+                        _obj->setFormatType(KSpreadCell::date_format12 );
                     else if(listFormat->currentItem()==14)
-                        _obj->setFormatNumber(KSpreadCell::date_format13 );
+                        _obj->setFormatType(KSpreadCell::date_format13 );
                     else if(listFormat->currentItem()==15)
-                        _obj->setFormatNumber(KSpreadCell::date_format14 );
+                        _obj->setFormatType(KSpreadCell::date_format14 );
                     else if(listFormat->currentItem()==16)
-                        _obj->setFormatNumber(KSpreadCell::date_format15 );
+                        _obj->setFormatType(KSpreadCell::date_format15 );
                     else if(listFormat->currentItem()==17)
-                        _obj->setFormatNumber(KSpreadCell::date_format16 );
+                        _obj->setFormatType(KSpreadCell::date_format16 );
                     else if(listFormat->currentItem()==18)
-                        _obj->setFormatNumber(KSpreadCell::date_format17 );
+                        _obj->setFormatType(KSpreadCell::date_format17 );
                 }
             else if(time->isChecked())
                 {
                     if( listFormat->currentItem()==0)
-                        _obj->setFormatNumber(KSpreadCell::Time );
+                        _obj->setFormatType(KSpreadCell::Time );
                     else if(listFormat->currentItem()==1)
-                        _obj->setFormatNumber(KSpreadCell::SecondeTime );
+                        _obj->setFormatType(KSpreadCell::SecondeTime );
                     else if(listFormat->currentItem()==2)
-                        _obj->setFormatNumber(KSpreadCell::Time_format1 );
+                        _obj->setFormatType(KSpreadCell::Time_format1 );
                     else if(listFormat->currentItem()==3)
-                        _obj->setFormatNumber(KSpreadCell::Time_format2 );
+                        _obj->setFormatType(KSpreadCell::Time_format2 );
                     else if(listFormat->currentItem()==4)
-                        _obj->setFormatNumber(KSpreadCell::Time_format3 );
+                        _obj->setFormatType(KSpreadCell::Time_format3 );
                 }
             else if(money->isChecked())
-                _obj->setFormatNumber(KSpreadCell::Money);
+                _obj->setFormatType(KSpreadCell::Money);
             else if(scientific->isChecked())
-                _obj->setFormatNumber(KSpreadCell::Scientific);
+                _obj->setFormatType(KSpreadCell::Scientific);
 	    else if(textFormat->isChecked())
-	      _obj->setFormatNumber(KSpreadCell::Text_format);
+	      _obj->setFormatType(KSpreadCell::Text_format);
         }
 }
 
 void CellLayoutPageFloat::apply( KSpreadCell *_obj )
 {
-applyLayout(_obj);
+    applyLayout(_obj);
 }
 
 void CellLayoutPageFloat::apply( RowLayout *_obj )
@@ -1719,12 +1719,12 @@ void CellLayoutPageFloat::apply( RowLayout *_obj )
                             c->clearProperty(KSpreadCell::PFloatColor);
                             c->clearNoFallBackProperties( KSpreadCell::PFloatColor );
                         }
-                    if(m_bFormatNumberChanged)
+                    if(m_bFormatTypeChanged)
                         {
-                            c->clearProperty(KSpreadCell::PFormatNumber);
-                            c->clearNoFallBackProperties( KSpreadCell::PFormatNumber );
-                            c->clearProperty(KSpreadCell::PFaktor);
-                            c->clearNoFallBackProperties( KSpreadCell::PFaktor );
+                            c->clearProperty(KSpreadCell::PFormatType);
+                            c->clearNoFallBackProperties( KSpreadCell::PFormatType );
+                            c->clearProperty(KSpreadCell::PFactor);
+                            c->clearNoFallBackProperties( KSpreadCell::PFactor );
                         }
                 }
         }
@@ -1768,12 +1768,12 @@ void CellLayoutPageFloat::apply( ColumnLayout *_obj )
                 c->clearProperty(KSpreadCell::PFloatColor);
                 c->clearNoFallBackProperties( KSpreadCell::PFloatColor );
                 }
-           if(m_bFormatNumberChanged)
+           if(m_bFormatTypeChanged)
                 {
-                c->clearProperty(KSpreadCell::PFormatNumber);
-                c->clearNoFallBackProperties( KSpreadCell::PFormatNumber );
-                c->clearProperty(KSpreadCell::PFaktor);
-                c->clearNoFallBackProperties( KSpreadCell::PFaktor );
+                c->clearProperty(KSpreadCell::PFormatType);
+                c->clearNoFallBackProperties( KSpreadCell::PFormatType );
+                c->clearProperty(KSpreadCell::PFactor);
+                c->clearNoFallBackProperties( KSpreadCell::PFactor );
                 }
         }
       }
@@ -1784,8 +1784,8 @@ void CellLayoutPageFloat::apply( ColumnLayout *_obj )
         {
         if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PPrecision) || rw->hasProperty(KSpreadCell::PPostfix)
         || rw->hasProperty(KSpreadCell::PPrefix) || rw->hasProperty(KSpreadCell::PFloatFormat)
-        || rw->hasProperty(KSpreadCell::PFloatColor) || rw->hasProperty(KSpreadCell::PFormatNumber)
-        || rw->hasProperty(KSpreadCell::PFaktor) ))
+        || rw->hasProperty(KSpreadCell::PFloatColor) || rw->hasProperty(KSpreadCell::PFormatType)
+        || rw->hasProperty(KSpreadCell::PFactor) ))
                 {
                 for(int i=dlg->left;i<=dlg->right;i++)
                         {

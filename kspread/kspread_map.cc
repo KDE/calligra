@@ -121,6 +121,12 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
   m_initialMarkerColumn = mymap.attribute( "markerColumn" ).toInt();
   m_initialMarkerRow = mymap.attribute( "markerRow" ).toInt();
   QDomNode n = mymap.firstChild();
+  if ( n.isNull() )
+  {
+      // We need at least one table !
+      m_pDoc->setErrorMessage( i18n("This document has no table.") );
+      return false;
+  }
   while( !n.isNull() )
   {
     QDomElement e = n.toElement();

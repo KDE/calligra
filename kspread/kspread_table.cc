@@ -123,7 +123,7 @@ void ChartBinding::cellChanged( KSpreadCell* )
         for ( int x = 0; x < m_rctDataArea.width(); x++ )
         {
             KSpreadCell* cell = m_pTable->cellAt( m_rctDataArea.left() + x, m_rctDataArea.top() + y );
-            if ( cell && cell->isValue() )
+            if ( cell && cell->isNumeric() )
                 matrix.cell( y, x ) = KoChart::Value( cell->valueDouble() );
             else if ( cell )
                 matrix.cell( y, x ) = KoChart::Value( cell->valueString() );
@@ -211,7 +211,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
 
   setHidden( false );
   m_bShowGrid=true;
-  m_bShowFormular=false;
+  m_bShowFormula=false;
   m_bLcMode=false;
   m_bShowColumnNumber=false;
   m_bHideZero=false;
@@ -520,7 +520,7 @@ void KSpreadTable::setText( int _row, int _column, const QString& _text, bool up
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-        KSpreadUndoSetText *undo = new KSpreadUndoSetText( m_pDoc, this, cell->text(), _column, _row,cell->getFormatNumber(_column, _row) );
+        KSpreadUndoSetText *undo = new KSpreadUndoSetText( m_pDoc, this, cell->text(), _column, _row,cell->formatType() );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -1052,7 +1052,7 @@ struct SetSelectionUpperLowerWorker : public KSpreadTable::CellWorker {
 	return new KSpreadUndoChangeAreaTextCell( doc, table, r );
     }
     bool testCondition( KSpreadCell* c ) {
-	return ( !c->isValue() && !c->isBool() &&!c->isFormular() && !c->isDefault()
+	return ( !c->isNumeric() && !c->isBool() &&!c->isFormula() && !c->isDefault()
 		 && !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!'
 		 && !c->isObscuringForced() );
     }
@@ -1080,7 +1080,7 @@ struct SetSelectionFirstLetterUpperWorker : public KSpreadTable::CellWorker {
 	return   new KSpreadUndoChangeAreaTextCell( doc, table, r );
     }
     bool testCondition( KSpreadCell* c ) {
-	return ( !c->isValue() && !c->isBool() &&!c->isFormular() && !c->isDefault()
+	return ( !c->isNumeric() && !c->isBool() &&!c->isFormula() && !c->isDefault()
 		 && !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!'
 		 && !c->isObscuringForced() );
     }
@@ -1429,25 +1429,25 @@ struct SetSelectionPercentWorker : public KSpreadTable::CellWorkerTypeA {
 
     QString getUndoTitle() { return i18n("Format percent"); }
     bool testCondition( RowLayout* rw ) {
-        return ( rw->hasProperty( KSpreadCell::PFaktor ) );
+        return ( rw->hasProperty( KSpreadCell::PFactor ) );
     }
     void doWork( RowLayout* rw ) {
-	rw->setFaktor( b ? 100.0 : 1.0 );
+	rw->setFactor( b ? 100.0 : 1.0 );
 	rw->setPrecision( 0 );
-	rw->setFormatNumber( b ? KSpreadCell::Percentage : KSpreadCell::Number);
+	rw->setFormatType( b ? KSpreadCell::Percentage : KSpreadCell::Number);
     }
     void doWork( ColumnLayout* cl ) {
-	cl->setFaktor( b ? 100.0 : 1.0 );
+	cl->setFactor( b ? 100.0 : 1.0 );
 	cl->setPrecision( 0 );
-	cl->setFormatNumber( b ? KSpreadCell::Percentage : KSpreadCell::Number);
+	cl->setFormatType( b ? KSpreadCell::Percentage : KSpreadCell::Number);
     }
     void prepareCell( KSpreadCell* cell ) {
-	cell->clearProperty(KSpreadCell::PFaktor);
-	cell->clearNoFallBackProperties( KSpreadCell::PFaktor );
+	cell->clearProperty(KSpreadCell::PFactor);
+	cell->clearNoFallBackProperties( KSpreadCell::PFactor );
 	cell->clearProperty(KSpreadCell::PPrecision);
 	cell->clearNoFallBackProperties( KSpreadCell::PPrecision );
-	cell->clearProperty(KSpreadCell::PFormatNumber);
-	cell->clearNoFallBackProperties( KSpreadCell::PFormatNumber );
+	cell->clearProperty(KSpreadCell::PFormatType);
+	cell->clearNoFallBackProperties( KSpreadCell::PFormatType );
     }
     bool testCondition( KSpreadCell* cell ) {
 	return ( !cell->isObscuringForced() );
@@ -1455,9 +1455,9 @@ struct SetSelectionPercentWorker : public KSpreadTable::CellWorkerTypeA {
     void doWork( KSpreadCell* cell, bool cellRegion, int, int ) {
 	if ( cellRegion )
 	    cell->setDisplayDirtyFlag();
-	cell->setFaktor( b ? 100.0 : 1.0 );
+	cell->setFactor( b ? 100.0 : 1.0 );
 	cell->setPrecision( 0 );
-	cell->setFormatNumber( b ? KSpreadCell::Percentage : KSpreadCell::Number);
+	cell->setFormatType( b ? KSpreadCell::Percentage : KSpreadCell::Number);
 	if ( cellRegion )
 	    cell->clearDisplayDirtyFlag();
     }
@@ -1476,12 +1476,12 @@ void KSpreadTable::refreshRemoveAreaName(const QString &_areaName)
  QString tmp="'"+_areaName+"'";
     for( ;c; c = c->nextCell() )
     {
-        if(c->isFormular() )
+        if(c->isFormula() )
         {
 
 	  if(c->text().find(tmp)!=-1)
 	    {
-	      if ( !c->makeFormular() )
+	      if ( !c->makeFormula() )
 		kdError(36002) << "ERROR: Syntax ERROR" << endl;
 	    }
 	}
@@ -1493,7 +1493,7 @@ void KSpreadTable::changeCellTabName(QString old_name,QString new_name)
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
     {
-        if(c->isFormular() || c->content()==KSpreadCell::RichText)
+        if(c->isFormula() || c->content()==KSpreadCell::RichText)
         {
             if(c->text().find(old_name)!=-1)
             {
@@ -1970,7 +1970,7 @@ void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, C
   KSpreadCell* c = m_cells.firstCell();
   for( ;c; c = c->nextCell() )
   {
-    if(c->isFormular())
+    if(c->isFormula())
     {
       QString origText = c->text();
       unsigned int i = 0;
@@ -2124,7 +2124,7 @@ void KSpreadTable::find( const QPoint &_marker, QString _find, long options )
         if ( region.top() <= row && region.bottom() >= row &&
             region.left() <= col && region.right() >= col )
         {
-            if ( !cell->isObscured() && !cell->isValue() && !cell->isBool() && !cell->isFormular() )
+            if ( !cell->isObscured() && !cell->isNumeric() && !cell->isBool() && !cell->isFormula() )
             {
                 QString text;
 
@@ -2208,7 +2208,7 @@ void KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
         if ( region.top() <= row && region.bottom() >= row &&
             region.left() <= col && region.right() >= col )
         {
-            if ( !cell->isObscured() && !cell->isValue() && !cell->isBool() && !cell->isFormular() )
+            if ( !cell->isObscured() && !cell->isNumeric() && !cell->isBool() && !cell->isFormula() )
             {
                 QString text;
 
@@ -3053,7 +3053,7 @@ void KSpreadTable::swapCells( int x1, int y1, int x2, int y2 )
 
   // Dummy cell used for swapping cells.
   // In fact we copy only content and no layout
-  // information. Imagine sortting in a table. Swapping
+  // information. Imagine sorting in a table. Swapping
   // the layout while sorting is not what you would expect
   // as a user.
   KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
@@ -3258,27 +3258,27 @@ struct SetSelectionMoneyFormatWorker : public KSpreadTable::CellWorkerTypeA {
     SetSelectionMoneyFormatWorker( bool _b,KSpreadDoc* _doc ) : b( _b ), m_pDoc(_doc) { }
     QString getUndoTitle() { return i18n("Format money"); }
     bool testCondition( RowLayout* rw ) {
-	return ( rw->hasProperty( KSpreadCell::PFormatNumber )
+	return ( rw->hasProperty( KSpreadCell::PFormatType )
 		 || rw->hasProperty( KSpreadCell::PPrecision )
-		 || rw->hasProperty( KSpreadCell::PFaktor ) );
+		 || rw->hasProperty( KSpreadCell::PFactor ) );
     }
     void doWork( RowLayout* rw ) {
-	rw->setFormatNumber( b ? KSpreadCell::Money : KSpreadCell::Number );
-	rw->setFaktor( 1.0 );
+	rw->setFormatType( b ? KSpreadCell::Money : KSpreadCell::Number );
+	rw->setFactor( 1.0 );
 	rw->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
     }
     void doWork( ColumnLayout* cl ) {
-	cl->setFormatNumber( b ? KSpreadCell::Money : KSpreadCell::Number );
-	cl->setFaktor( 1.0 );
+	cl->setFormatType( b ? KSpreadCell::Money : KSpreadCell::Number );
+	cl->setFactor( 1.0 );
 	cl->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
     }
     void prepareCell( KSpreadCell* c ) {
-	c->clearProperty( KSpreadCell::PFaktor );
-	c->clearNoFallBackProperties( KSpreadCell::PFaktor );
+	c->clearProperty( KSpreadCell::PFactor );
+	c->clearNoFallBackProperties( KSpreadCell::PFactor );
 	c->clearProperty( KSpreadCell::PPrecision );
 	c->clearNoFallBackProperties( KSpreadCell::PPrecision );
-	c->clearProperty( KSpreadCell::PFormatNumber );
-	c->clearNoFallBackProperties( KSpreadCell::PFormatNumber );
+	c->clearProperty( KSpreadCell::PFormatType );
+	c->clearNoFallBackProperties( KSpreadCell::PFormatType );
     }
     bool testCondition( KSpreadCell* cell ) {
 	return ( !cell->isObscuringForced() );
@@ -3286,8 +3286,8 @@ struct SetSelectionMoneyFormatWorker : public KSpreadTable::CellWorkerTypeA {
     void doWork( KSpreadCell* cell, bool cellRegion, int, int ) {
 	if ( cellRegion )
 	    cell->setDisplayDirtyFlag();
-	cell->setFormatNumber( b ? KSpreadCell::Money : KSpreadCell::Number );
-	cell->setFaktor( 1.0 );
+	cell->setFormatType( b ? KSpreadCell::Money : KSpreadCell::Number );
+	cell->setFactor( 1.0 );
 	cell->setPrecision( b ?  m_pDoc->locale()->fracDigits() : 0 );
 	if ( cellRegion )
 	    cell->clearDisplayDirtyFlag();
@@ -3363,10 +3363,10 @@ struct DecreaseIndentWorker : public KSpreadTable::CellWorkerTypeA {
 	return ( rw->hasProperty( KSpreadCell::PIndent ) );
     }
     void doWork( RowLayout* rw ) {
-	rw->setIndent( (tmpIndent-valIndent)>=0 ? tmpIndent-valIndent : 0 );
+        rw->setIndent( QMAX(0, tmpIndent - valIndent) );
     }
     void doWork( ColumnLayout* cl ) {
-	cl->setIndent( (tmpIndent-valIndent)>=0 ? tmpIndent-valIndent : 0 );
+        cl->setIndent( QMAX(0, tmpIndent - valIndent) );
     }
     void prepareCell( KSpreadCell* c ) {
 	c->clearProperty( KSpreadCell::PIndent );
@@ -3378,10 +3378,10 @@ struct DecreaseIndentWorker : public KSpreadTable::CellWorkerTypeA {
     void doWork( KSpreadCell* cell, bool cellRegion, int x, int y ) {
 	if ( cellRegion ) {
 	    cell->setDisplayDirtyFlag();
-	    cell->setIndent( (cell->getIndent(x,y)-valIndent)>=0 ? /* ### ??? --> */ cell->getIndent(x,y) /* <-- */ -valIndent : 0 );
+	    cell->setIndent( QMAX(0, cell->getIndent(x,y) - valIndent) );
 	    cell->clearDisplayDirtyFlag();
 	} else {
-	    cell->setIndent( (tmpIndent-valIndent)>=0 ? tmpIndent-valIndent : 0 );
+	    cell->setIndent( QMAX(0, tmpIndent - valIndent) );
 	}
     }
 };
@@ -3420,7 +3420,7 @@ int KSpreadTable::adjustColumn( const QPoint& _marker, int _col )
                                 int a = c->align(c->column(),c->row());
                                 if ( a == KSpreadCell::Undefined )
                                         {
-                                        if ( c->isValue() || c->isDate() || c->isTime())
+                                        if ( c->isNumeric() || c->isDate() || c->isTime())
                                                 a = KSpreadCell::Right;
                                         else
                                                 a = KSpreadCell::Left;
@@ -3464,7 +3464,7 @@ int KSpreadTable::adjustColumn( const QPoint& _marker, int _col )
                                 int a = c->align(c->column(),c->row());
                                 if ( a == KSpreadCell::Undefined )
                                         {
-                                        if ( c->isValue() || c->isDate() || c->isTime())
+                                        if ( c->isNumeric() || c->isDate() || c->isTime())
                                                 a = KSpreadCell::Right;
                                         else
                                                 a = KSpreadCell::Left;
@@ -3498,7 +3498,7 @@ int KSpreadTable::adjustColumn( const QPoint& _marker, int _col )
                                 int a = cell->align(x,y);
                                 if ( a == KSpreadCell::Undefined )
                                         {
-                                        if ( cell->isValue() || cell->isDate() || cell->isTime())
+                                        if ( cell->isNumeric() || cell->isDate() || cell->isTime())
                                                 a = KSpreadCell::Right;
                                         else
                                                 a = KSpreadCell::Left;
@@ -3821,7 +3821,7 @@ struct GetWordSpellingWorker : public KSpreadTable::CellWorker {
     }
     void doWork( KSpreadCell* c, bool cellRegion, int, int ) {
 	if ( !c->isObscured() || cellRegion /* ### ??? */ ) {
-	    if ( !c->isFormular() && !c->isValue() && !c->valueString().isEmpty() && !c->isTime()
+	    if ( !c->isFormula() && !c->isNumeric() && !c->valueString().isEmpty() && !c->isTime()
 		 && !c->isDate() && c->content() != KSpreadCell::VisualFormula
 		 && !c->text().isEmpty())
 	    {
@@ -3853,7 +3853,7 @@ struct SetWordSpellingWorker : public KSpreadTable::CellWorker {
     }
     void doWork( KSpreadCell* c, bool cellRegion, int, int ) {
 	if ( !c->isObscured() || cellRegion /* ### ??? */ ) {
-	    if ( !c->isFormular() && !c->isValue() && !c->valueString().isEmpty() && !c->isTime()
+	    if ( !c->isFormula() && !c->isNumeric() && !c->valueString().isEmpty() && !c->isTime()
 		 && !c->isDate() && c->content() != KSpreadCell::VisualFormula
 		 && !c->text().isEmpty())
 	    {
@@ -3941,7 +3941,7 @@ void KSpreadTable::pasteTextPlain( QMimeSource * _mime, const QPoint &_marker)
   KSpreadCell* cell = cellAt( _marker.x(), _marker.y() );
   if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-      KSpreadUndoSetText *undo =new KSpreadUndoSetText( m_pDoc, this , cell->text(), _marker.x(), _marker.y(),cell->getFormatNumber( _marker.x(), _marker.y() ) );
+      KSpreadUndoSetText *undo =new KSpreadUndoSetText( m_pDoc, this , cell->text(), _marker.x(), _marker.y(),cell->formatType() );
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
   if ( cell->isDefault() )
@@ -4437,7 +4437,7 @@ bool KSpreadTable::testListChoose(const QPoint &_marker)
        if ( selection.left() <= col && selection.right() >= col
 	    &&!c->isObscuringForced()&& !(col==_marker.x()&& c->row()==_marker.y()))
 	 {
-	   if(!c->isFormular() && !c->isValue() && !c->valueString().isEmpty()
+	   if(!c->isFormula() && !c->isNumeric() && !c->valueString().isEmpty()
 	      && !c->isTime() &&!c->isDate()
 	      && c->content() != KSpreadCell::VisualFormula)
 	     {
@@ -4836,7 +4836,7 @@ QDomElement KSpreadTable::save( QDomDocument& doc )
     table.setAttribute( "name", m_strName );
     table.setAttribute( "grid", (int)m_bShowGrid);
     table.setAttribute( "hide", (int)m_bTableHide);
-    table.setAttribute( "formular", (int)m_bShowFormular);
+    table.setAttribute( "formular", (int)m_bShowFormula);
     table.setAttribute( "borders", (int)m_bShowPageBorders);
     table.setAttribute( "lcmode", (int)m_bLcMode);
     table.setAttribute( "columnnumber", (int)m_bShowColumnNumber);
@@ -4849,9 +4849,8 @@ QDomElement KSpreadTable::save( QDomDocument& doc )
         if ( !c->isDefault() )
         {
             QDomElement e = c->save( doc );
-            if ( e.isNull() )
-                return QDomElement();
-            table.appendChild( e );
+            if ( !e.isNull() )
+                table.appendChild( e );
         }
     }
 
@@ -4906,8 +4905,10 @@ bool KSpreadTable::loadXML( const QDomElement& table )
     bool ok = false;
     m_strName = table.attribute( "name" );
     if ( m_strName.isEmpty() )
+    {
+        m_pDoc->setErrorMessage( i18n("Invalid document. Table name is empty") );
         return false;
-
+    }
     if( table.hasAttribute( "grid" ) )
     {
         m_bShowGrid = (int)table.attribute("grid").toInt( &ok );
@@ -4920,7 +4921,7 @@ bool KSpreadTable::loadXML( const QDomElement& table )
     }
     if( table.hasAttribute( "formular" ) )
     {
-        m_bShowFormular = (int)table.attribute("formular").toInt( &ok );
+        m_bShowFormula = (int)table.attribute("formular").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "borders" ) )
@@ -5006,8 +5007,8 @@ void KSpreadTable::update()
   KSpreadCell* c = m_cells.firstCell();
   for( ;c; c = c->nextCell() )
   {
-      if ( c->isFormular() )
-          c->makeFormular();
+      if ( c->isFormula() )
+          c->makeFormula();
       if ( c->calcDirtyFlag() )
           c->update();
   }
@@ -5389,6 +5390,43 @@ bool KSpreadTable::setTableName( const QString& name, bool init, bool makeUndo )
 
     return TRUE;
 }
+
+
+#ifndef NDEBUG
+void KSpreadTable::printDebug()
+{
+    int iMaxColumn = maxColumn();
+    int iMaxRow = maxRow();
+
+    kdDebug(36001) << "Cell | Content  | DataT | Text" << endl;
+    for ( int currentrow = 1 ; currentrow < iMaxRow ; ++currentrow )
+    {
+        for ( int currentcolumn = 1 ; currentcolumn < iMaxColumn ; currentcolumn++ )
+        {
+            KSpreadCell * cell = cellAt( currentcolumn, currentrow, true );
+            if ( !cell->isDefault() && !cell->isEmpty() )
+            {
+                QString cellDescr = util_cellName( currentcolumn, currentrow );
+                cellDescr = cellDescr.rightJustify( 4,' ' );
+                //QString cellDescr = "Cell ";
+                //cellDescr += QString::number(currentrow).rightJustify(3,'0') + ',';
+                //cellDescr += QString::number(currentcolumn).rightJustify(3,'0') + ' ';
+                cellDescr += " | ";
+                static const char* s_contentString[] = {
+                        "Text    ", "RichTxt ", "Formula ", "VisForm ", "ERROR   " };
+                cellDescr += s_contentString[ cell->content() ];
+                cellDescr += " | ";
+                cellDescr += cell->dataTypeToString( cell->dataType() ).rightJustify(5,' ');
+                cellDescr += " | ";
+                cellDescr += cell->text();
+                if ( cell->content() == KSpreadCell::Formula )
+                    cellDescr += QString("  [result: %1]").arg( cell->valueString() );
+                kdDebug(36001) << cellDescr << endl;
+            }
+        }
+    }
+}
+#endif
 
 /**********************************************************
  *

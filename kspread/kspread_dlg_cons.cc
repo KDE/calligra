@@ -209,7 +209,7 @@ void KSpreadConsolidate::slotOk()
     for( ; it != ranges.end(); ++it )
     {
       KSpreadTable *t = (*it).table;
-      assert( t );
+      Q_ASSERT( t );
       QRect r;
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
       if ( t == table && r.intersects( dest ) )
@@ -232,7 +232,7 @@ void KSpreadConsolidate::slotOk()
 	else if ( f == F_SUM )
 	  formel = "=";
 	else
-	  assert( 0 );
+	  Q_ASSERT( 0 );
 
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
@@ -243,12 +243,12 @@ void KSpreadConsolidate::slotOk()
 	  KSpreadCell *c = t->cellAt( x + (*it).range.left(), y + (*it).range.top() );
           if(!c->isDefault())
                 novalue=false;
-          if ( c && c->isValue() )
+          if ( c && c->isNumeric() )
 	  {
 	    if ( f == F_SUM || f == F_AVERAGE )
 	      dbl += c->valueDouble();
 	    else
-	      assert( 0 );
+	      Q_ASSERT( 0 );
 	  }
 
 	  // Built formula
@@ -261,7 +261,7 @@ void KSpreadConsolidate::slotOk()
 	    formel += util_cellName( x + (*it).range.left(), y + (*it).range.top() );
 	  }
 	  else
-	    assert( 0 );
+	    Q_ASSERT( 0 );
 	}
 
 	if ( f == F_AVERAGE )
@@ -338,7 +338,7 @@ void KSpreadConsolidate::slotOk()
 	else if ( f == F_SUM )
 	  formel = "=";
 	else
-	  assert( 0 );
+	  Q_ASSERT( 0 );
 
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
@@ -355,12 +355,12 @@ void KSpreadConsolidate::slotOk()
 		KSpreadCell *c2 = t->cellAt( i, y + (*it).range.top() );
 		count++;
 		// Calculate value
-		if ( c2 && c2->isValue() )
+		if ( c2 && c2->isNumeric() )
 		{
 		  if ( f == F_SUM || f == F_AVERAGE )
 		    dbl += c2->valueDouble();
 		  else
-		    assert( 0 );
+		    Q_ASSERT( 0 );
 		}
 		// Create formula
 		if ( f == F_SUM || f == F_AVERAGE )
@@ -372,7 +372,7 @@ void KSpreadConsolidate::slotOk()
 		  formel += util_cellName( i, y + (*it).range.top() );
 		}
 		else
-		  assert( 0 );
+		  Q_ASSERT( 0 );
 	      }
 	    }
 	  }
@@ -450,7 +450,7 @@ void KSpreadConsolidate::slotOk()
 	else if ( f == F_SUM )
 	  formel = "=";
 	else
-	  assert( 0 );
+	  Q_ASSERT( 0 );
 
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
@@ -468,12 +468,12 @@ void KSpreadConsolidate::slotOk()
 		KSpreadCell *c2 = t->cellAt( x + (*it).range.left(), i );
 		count++;
 		// Calculate value
-		if ( c2 && c2->isValue() )
+		if ( c2 && c2->isNumeric() )
 		{
 		  if ( f == F_SUM || f == F_AVERAGE )
 		    dbl += c2->valueDouble();
 		  else
-		    assert( 0 );
+		    Q_ASSERT( 0 );
 		}
 		// Create formula
 		if ( f == F_SUM || f == F_AVERAGE )
@@ -485,7 +485,7 @@ void KSpreadConsolidate::slotOk()
 		  formel += util_cellName( x + (*it).range.left(), i );
 		}
 		else
-		  assert( 0 );
+		  Q_ASSERT( 0 );
 	      }
 	    }
 	  }
@@ -586,7 +586,7 @@ void KSpreadConsolidate::slotOk()
 	    {
 	      QString xdesc = c2->valueString();
 	      KSpreadCell *c3 = t->cellAt( x, y );
-	      if ( c3 && c3->isValue() )
+	      if ( c3 && c3->isNumeric() )
 	      {
 		st_cell k;
 		k.xdesc = xdesc;
@@ -632,7 +632,7 @@ void KSpreadConsolidate::slotOk()
 	else if ( f == F_SUM )
 	  formel = "=";
 	else
-	  assert( 0 );
+	  Q_ASSERT( 0 );
 
 	QValueList<st_cell>::Iterator lit = lst.begin();
 	for( ; lit != lst.end(); ++lit )
@@ -644,7 +644,7 @@ void KSpreadConsolidate::slotOk()
 	    if ( f == F_SUM || f == F_AVERAGE )
 	      dbl += (*lit).cell->valueDouble();
 	    else
-	      assert( 0 );
+	      Q_ASSERT( 0 );
 	    // Create formula
 	    if ( f == F_SUM || f == F_AVERAGE )
 	    {
@@ -655,7 +655,7 @@ void KSpreadConsolidate::slotOk()
 	      formel += util_cellName( (*lit).x, (*lit).y );
 	    }
 	    else
-	      assert( 0 );
+	      Q_ASSERT( 0 );
 	  }
 	}
 

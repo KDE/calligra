@@ -201,7 +201,7 @@ public:
      */
     QString tableName() { return m_strName; }
     /**
-     * Renames a table. This will automatically adapt all formulars
+     * Renames a table. This will automatically adapt all formulas
      * in all tables and all cells to reflect the new name.
      *
      * If the name really changed then @ref #sig_nameChanged is emitted
@@ -529,31 +529,31 @@ public:
 
     void setValidity( const QPoint &_marker,KSpreadValidity tmp );
 
-    bool getShowGrid() {return m_bShowGrid;}
+    bool getShowGrid() const {return m_bShowGrid;}
 
     void setShowGrid(bool _showGrid) {m_bShowGrid=_showGrid;}
 
-    bool getShowFormular() {return m_bShowFormular;}
+    bool getShowFormula() const {return m_bShowFormula;}
 
-    void setShowFormular(bool _showFormular) {m_bShowFormular=_showFormular;}
+    void setShowFormula(bool _showFormula) {m_bShowFormula=_showFormula;}
 
-    bool getLcMode() {return m_bLcMode;}
+    bool getLcMode() const {return m_bLcMode;}
 
     void setLcMode(bool _lcMode) {m_bLcMode=_lcMode;}
 
-    bool getAutoCalc() {return m_bAutoCalc;}
+    bool getAutoCalc() const {return m_bAutoCalc;}
 
     void setAutoCalc(bool _AutoCalc) {m_bAutoCalc=_AutoCalc;}
 
-    bool getShowColumnNumber() {return m_bShowColumnNumber;}
+    bool getShowColumnNumber() const {return m_bShowColumnNumber;}
 
     void setShowColumnNumber(bool _showColumnNumber) {m_bShowColumnNumber=_showColumnNumber;}
 
-    bool getHideZero() {return m_bHideZero;}
+    bool getHideZero() const {return m_bHideZero;}
 
     void setHideZero(bool _hideZero) {m_bHideZero=_hideZero;}
 
-    bool getFirstLetterUpper() {return m_bFirstLetterUpper;}
+    bool getFirstLetterUpper() const {return m_bFirstLetterUpper;}
 
     void setFirstLetterUpper(bool _firstUpper) {m_bFirstLetterUpper=_firstUpper;}
 
@@ -808,6 +808,10 @@ public:
 
     static KSpreadTable* find( int _id );
 
+#ifndef NDEBUG
+    void printDebug();
+#endif
+
     /**
      * Calculates the cell if necessary, makes its layout if necessary,
      * and force redraw.
@@ -989,7 +993,7 @@ protected:
     static QIntDict<KSpreadTable>* s_mapTables;
 
     bool m_bShowGrid;
-    bool m_bShowFormular;
+    bool m_bShowFormula;
     bool m_bAutoCalc;
     bool m_bLcMode;
     bool m_bShowColumnNumber;

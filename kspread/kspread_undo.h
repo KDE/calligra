@@ -103,9 +103,9 @@ class KSpreadMacroUndoAction : public KSpreadUndoAction
 public:
     KSpreadMacroUndoAction( KSpreadDoc *_doc,const QString& _name );
     virtual ~KSpreadMacroUndoAction();
-    
+
     void addCommand(KSpreadUndoAction *command);
-    
+
     virtual void undo();
     virtual void redo();
 
@@ -218,7 +218,7 @@ public:
 
     virtual void undo();
     virtual void redo();
-    void createList( QValueList<int>&list,KSpreadTable *_tab ); 
+    void createList( QValueList<int>&list,KSpreadTable *_tab );
 
 protected:
     QString m_tableName;
@@ -249,7 +249,7 @@ protected:
 class KSpreadUndoSetText : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadTable *_table, const QString& _text, int _column, int _row,KSpreadCell::formatNumber _formatNumber );
+    KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadTable *_table, const QString& _text, int _column, int _row,KSpreadCell::FormatType _formatType );
     virtual ~KSpreadUndoSetText();
 
     virtual void undo();
@@ -261,8 +261,8 @@ protected:
     int m_iColumn;
     QString m_strText;
     QString m_strRedoText;
-    KSpreadCell::formatNumber m_eFormatNumber;
-    KSpreadCell::formatNumber m_eFormatNumberRedo;
+    KSpreadCell::FormatType m_eFormatType;
+    KSpreadCell::FormatType m_eFormatTypeRedo;
 };
 
 class KSpreadUndoCellLayout : public KSpreadUndoAction

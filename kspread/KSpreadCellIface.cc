@@ -240,60 +240,60 @@ QString KSpreadCellIface::postfix() const
     return cell->postfix( m_point.x(), m_point.y() );
 }
 
-void KSpreadCellIface::setFormatNumber(const QString &_formatNumber)
+void KSpreadCellIface::setFormatType(const QString &_formatType)
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    KSpreadCell::formatNumber format;
-    cell->setFaktor( 1.0);
+    KSpreadCell::FormatType format;
+    cell->setFactor( 1.0);
     cell->setPrecision(2);
-    if(_formatNumber=="Number")
+    if(_formatType=="Number")
         format=KSpreadCell::Number;
-    else if(_formatNumber=="Money")
+    else if(_formatType=="Money")
         format=KSpreadCell::Money;
-    else if(_formatNumber=="Percentage")
+    else if(_formatType=="Percentage")
         {
         format=KSpreadCell::Percentage;
-        cell->setFaktor( 100.0);
+        cell->setFactor( 100.0);
         }
-    else if(_formatNumber=="Scientific")
+    else if(_formatType=="Scientific")
         format=KSpreadCell::Scientific;
-    else if(_formatNumber=="ShortDate")
+    else if(_formatType=="ShortDate")
         format=KSpreadCell::ShortDate;
-    else if(_formatNumber=="TextDate")
+    else if(_formatType=="TextDate")
         format=KSpreadCell::TextDate;
-    else if(_formatNumber=="Time")
+    else if(_formatType=="Time")
         format=KSpreadCell::Time;
-    else if(_formatNumber=="SecondeTime")
+    else if(_formatType=="SecondeTime")
         format=KSpreadCell::SecondeTime;
-    else if(_formatNumber=="fraction_half")
+    else if(_formatType=="fraction_half")
         format=KSpreadCell::fraction_half;
-    else if(_formatNumber=="fraction_quarter")
+    else if(_formatType=="fraction_quarter")
         format=KSpreadCell::fraction_quarter;
-    else if(_formatNumber=="fraction_eighth")
+    else if(_formatType=="fraction_eighth")
         format=KSpreadCell::fraction_eighth;
-    else if(_formatNumber=="fraction_sixteenth")
+    else if(_formatType=="fraction_sixteenth")
         format=KSpreadCell::fraction_sixteenth;
-    else if(_formatNumber=="fraction_tenth")
+    else if(_formatType=="fraction_tenth")
         format=KSpreadCell::fraction_tenth;
-    else if(_formatNumber=="fraction_hundredth")
+    else if(_formatType=="fraction_hundredth")
         format=KSpreadCell::fraction_hundredth;
-    else if(_formatNumber=="fraction_one_digit")
+    else if(_formatType=="fraction_one_digit")
         format=KSpreadCell::fraction_one_digit;
-    else if(_formatNumber=="fraction_two_digits")
+    else if(_formatType=="fraction_two_digits")
         format=KSpreadCell::fraction_two_digits;
-    else if(_formatNumber=="fraction_three_digits")
+    else if(_formatType=="fraction_three_digits")
         format=KSpreadCell::fraction_three_digits;
     else
         format=KSpreadCell::Number;
-    cell->setFormatNumber( format);
+    cell->setFormatType( format);
     cell->update();
 }
 
-QString KSpreadCellIface::getFormatNumber() const
+QString KSpreadCellIface::getFormatType() const
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QString stringFormat;
-    switch( cell->getFormatNumber(m_point.x(), m_point.y()))
+    switch( cell->getFormatType(m_point.x(), m_point.y()))
         {
         case KSpreadCell::Number:
                 stringFormat="Number";
@@ -469,14 +469,14 @@ QString KSpreadCellIface::textFontFamily() const
 void KSpreadCellIface::setFaktor( double _factor )
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setFaktor( _factor );
+    cell->setFactor( _factor );
     cell->update();
 }
 
 double KSpreadCellIface::faktor() const
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->faktor( m_point.x(), m_point.y() );
+    return cell->factor( m_point.x(), m_point.y() );
 }
 
 //border left

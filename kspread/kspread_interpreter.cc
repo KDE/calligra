@@ -4457,7 +4457,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
       context.setValue( new KSValue(  /*KSValue::Empty*/ 0.0 ) );
     else if(cell->isObscured() && cell->isObscuringForced())
       context.setValue( new KSValue( 0.0 ) );
-    else if ( cell->isValue() )
+    else if ( cell->isNumeric() )
       context.setValue( new KSValue( cell->valueDouble() ) );
     else if ( cell->isBool() )
       context.setValue( new KSValue( cell->valueBool() ) );
@@ -4508,7 +4508,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
 
         if ( cell->isDefault() )
           c = new KSValue( 0.0 /*KSValue::Empty*/);
-        else if ( cell->isValue() )
+        else if ( cell->isNumeric() )
           c = new KSValue( cell->valueDouble() );
         else if ( cell->isBool() )
           c = new KSValue( cell->valueBool() );

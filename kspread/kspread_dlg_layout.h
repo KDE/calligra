@@ -227,9 +227,9 @@ protected:
     QListBox *listFormat;
     QLabel *exampleLabel;
     CellLayoutDlg *dlg;
-    KSpreadCell::formatNumber cellFormatNumber;
+    KSpreadCell::FormatType cellFormatType;
     //test if value changed
-    bool m_bFormatNumberChanged;
+    bool m_bFormatTypeChanged;
     bool m_bFormatColorChanged;
 };
 
@@ -478,7 +478,7 @@ public:
     KSpreadTable* getTable() {	return table; }
 
     bool isSingleCell() { return ( left == right && top == bottom ); }
-    
+
     KLocale* locale(){return m_pView->doc()->locale();}
 
     // The layout of the selected area
@@ -581,8 +581,8 @@ public:
     int textRotation;
     bool bTextRotation;
 
-    KSpreadCell::formatNumber formatNumber;
-    bool bFormatNumber;
+    KSpreadCell::FormatType formatType;
+    bool bFormatType;
 
     bool m_bValue;
     bool m_bDate;

@@ -619,7 +619,7 @@ void KSpreadUndoShowColumn::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoSetText::KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadTable *_table, const QString& _text, int _column, int _row,KSpreadCell::formatNumber _formatNumber ) :
+KSpreadUndoSetText::KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadTable *_table, const QString& _text, int _column, int _row,KSpreadCell::FormatType _formatType ) :
     KSpreadUndoAction( _doc )
 {
     name=i18n("Change text");
@@ -628,7 +628,7 @@ KSpreadUndoSetText::KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadTable *_table, 
     m_iColumn= _column;
     m_iRow = _row;
     m_tableName = _table->tableName();
-    m_eFormatNumber=_formatNumber;
+    m_eFormatType=_formatType;
 }
 
 KSpreadUndoSetText::~KSpreadUndoSetText()
@@ -645,8 +645,8 @@ void KSpreadUndoSetText::undo()
 
     KSpreadCell *cell = table->nonDefaultCell( m_iColumn, m_iRow );
     m_strRedoText = cell->text();
-    m_eFormatNumberRedo=cell->getFormatNumber( m_iColumn, m_iRow );
-    cell->setFormatNumber(m_eFormatNumber);
+    m_eFormatTypeRedo=cell->getFormatType( m_iColumn, m_iRow );
+    cell->setFormatType(m_eFormatType);
 
     if ( m_strText.isNull() )
 	cell->setCellText( "" );
@@ -666,12 +666,12 @@ void KSpreadUndoSetText::redo()
 
     KSpreadCell *cell = table->nonDefaultCell( m_iColumn, m_iRow );
     m_strText = cell->text();
-    m_eFormatNumber=cell->getFormatNumber( m_iColumn, m_iRow );
+    m_eFormatType=cell->getFormatType( m_iColumn, m_iRow );
     if ( m_strRedoText.isNull() )
 	cell->setCellText( "" );
     else
 	cell->setCellText( m_strRedoText );
-    cell->setFormatNumber(m_eFormatNumberRedo);
+    cell->setFormatType(m_eFormatTypeRedo);
     doc()->undoBuffer()->unlock();
 }
 
