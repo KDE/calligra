@@ -275,8 +275,7 @@ public:
     KPObject * getCursor(const QPoint &pos );
     KPObject * getCursor(const KoPoint &pos );
 
-    KPObject * getObjectResized(const KoPoint &pos, ModifyType modType, bool &desel, bool &_over, bool &_resize );
-    KPObject* getObjectAt( const KoPoint&pos ) const;
+    KPObject* getObjectAt( const KoPoint &pos, bool withoutProtected = false ) const;
     KPPixmapObject * picViewOrigHelper() const;
     void applyStyleChange( StyleChangeDefMap changed );
 

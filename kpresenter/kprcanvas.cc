@@ -109,7 +109,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         mousePressed = false;
         drawContour = false;
         modType = MT_NONE;
-        resizeObjNum = 0L;
+        m_resizeObject = 0L;
         editNum = 0L;
         rotateNum = 0L;
         setBackgroundMode( Qt::NoBackground );
@@ -131,8 +131,8 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         tmpObjs.setAutoDelete( false );
         setAcceptDrops( true );
         inEffect = false;
-        ratio = 0.0;
-        keepRatio = false;
+        m_ratio = 0.0;
+        m_keepRatio = false;
         mouseSelectedObject = false;
         selectedObjectPosition = -1;
         nextPageTimer = true;
@@ -529,8 +529,7 @@ QRect KPrCanvas::getOldBoundingRect( const KPObject *obj )
     double _dw = oldKoBoundingRect.width() + 10.0;
     double _dh = oldKoBoundingRect.height() + 10.0;
     oldKoBoundingRect.setRect( _dx, _dy, _dw, _dh );
-    oldBoundingRect = m_view->zoomHandler()->zoomRect( oldKoBoundingRect );
-    return oldBoundingRect;
+    return m_view->zoomHandler()->zoomRect( oldKoBoundingRect );
 }
 
 void KPrCanvas::mousePressEvent( QMouseEvent *e )
@@ -566,17 +565,12 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
     }
 
 
-    if ( e->state() & ControlButton )
-        keepRatio = true;
-
     KPObject *kpobject = 0;
 
     oldMx = contentsPoint.x();
     oldMy = contentsPoint.y();
 
     QPoint rasterPoint=applyGrid( e->pos(), true );
-
-    resizeObjNum = 0L;
 
     exitEditMode();
 
@@ -660,54 +654,60 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
             switch ( toolEditMode ) {
             case TEM_MOUSE: {
-                bool overObject = false;
-                bool deSelAll = true;
-                bool _resizeObj = false;
-                KPObject *kpobject = 0;
+                KPObject *kpobject = NULL;
 
                 firstX = contentsPoint.x();
                 firstY = contentsPoint.y();
-                kpobject = m_activePage->getObjectResized( docPoint, modType, deSelAll, overObject, _resizeObj );
-                if ( kpobject ) {
-                    if(_resizeObj)
-                    {
-                        oldBoundingRect = getOldBoundingRect( kpobject );
-                        resizeObjNum = kpobject;
-                    }
-                }
-                else
+                kpobject = m_activePage->getObjectAt( docPoint, true );
+                if ( ! kpobject )
                 {
-                    _resizeObj = false;
-                    kpobject = stickyPage()->getObjectResized( docPoint, modType, deSelAll, overObject, _resizeObj );
-                    if( kpobject && m_view->kPresenterDoc()->isHeaderFooter(kpobject))
+                    kpobject = stickyPage()->getObjectAt( docPoint, true );
+                    if(objectIsAHeaderFooterHidden(kpobject))
                     {
-                        if(objectIsAHeaderFooterHidden(kpobject))
-                        {
-                            kpobject=0L;
-                            overObject=false;
-                        }
-                    }
-                    if( kpobject && _resizeObj ) {
-                        oldBoundingRect = getOldBoundingRect( kpobject );
-                        resizeObjNum = kpobject;
+                        kpobject = NULL;
                     }
                 }
-                if ( resizeObjNum )
-                    keepRatio = keepRatio || resizeObjNum->isKeepRatio();
-
-                if ( deSelAll && !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
-                    deSelectAllObj();
-
-                if ( overObject && kpobject) {
-                    if ( !(e->state() & ShiftButton)) {
+                if ( kpobject ) {
+                    // use ctrl + Button to select / deselect object
+                    if ( e->state() & ControlButton && kpobject->isSelected() )
+                        deSelectObj( kpobject );
+                    else if ( e->state() & ControlButton )
+                    {
                         selectObj( kpobject );
                         raiseObject( kpobject );
                         moveStartPosMouse = objectSelectedBoundingRect().topLeft();
                     }
-                    else
-                        deSelectObj( kpobject );
+                    else 
+                    {
+                        if ( modType != MT_MOVE || !kpobject->isSelected() )
+                            deSelectAllObj();
+
+                        selectObj( kpobject );
+                        raiseObject( kpobject );
+                        moveStartPosMouse = objectSelectedBoundingRect().topLeft();
+                    }
+
+                    // start resizing
+                    if ( modType != MT_MOVE && modType != MT_NONE )
+                    {
+                        deSelectAllObj();
+                        selectObj( kpobject );
+                        raiseObject( kpobject );
+                        
+                        m_resizeObject = kpobject;
+                        
+                        m_keepRatio = false;
+                        if ( e->state() & ControlButton )
+                            m_keepRatio = true;
+
+                        m_keepRatio = m_keepRatio || m_resizeObject->isKeepRatio();
+                        m_ratio = static_cast<double>( kpobject->getSize().width() ) /
+                                static_cast<double>( kpobject->getSize().height() );
+                        m_rectBeforeResize = kpobject->getRect();
+                    }
                 }
                 else {
+                    deSelectAllObj();
                     modType = MT_NONE;
                     if( editMode && m_view->kPresenterDoc()->showHelplines())
                     {
@@ -1104,14 +1104,6 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
     if ( toolEditMode == TEM_MOUSE )
         mouseMoveEvent( e );
 #endif
-    if ( modType != MT_NONE && modType != MT_MOVE ) {
-        KPObject *kpobject=resizeObjNum;
-        if ( kpobject ) {
-            ratio = static_cast<double>( kpobject->getSize().width() ) /
-                    static_cast<double>( kpobject->getSize().height() );
-            resizeRect = kpobject->getRect();
-        }
-    }
 }
 
 void KPrCanvas::calcBoundingRect()
@@ -1164,11 +1156,8 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         return;
     }
 
-    if ( e->button() != LeftButton ) {
-        ratio = 0.0;
-        keepRatio = false;
+    if ( e->button() != LeftButton )
         return;
-    }
 
     if ( drawMode ) {
         drawLineInDrawMode = false;
@@ -1181,7 +1170,6 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     firstY = state ? applyGridOnPosY( firstY) : firstY;
     QPtrList<KPObject> _objects;
     _objects.setAutoDelete( false );
-    KPObject *kpobject = 0;
 
     if ( ( m_drawPolyline && ( toolEditMode == INS_POLYLINE || toolEditMode == INS_CLOSED_POLYLINE ) )
          || ( m_drawCubicBezierCurve && ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE
@@ -1191,19 +1179,6 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
     if ( toolEditMode != INS_LINE )
         insRect = insRect.normalize();
-
-    KoPoint mv;
-    KoSize sz;
-    if ( toolEditMode == TEM_MOUSE && modType != MT_NONE && modType != MT_MOVE  && resizeObjNum ) {
-        kpobject = resizeObjNum;
-        if ( kpobject ) {
-            mv = KoPoint( kpobject->getOrig().x() - resizeRect.x(),
-                          kpobject->getOrig().y() - resizeRect.y() );
-            sz = KoSize( kpobject->getSize().width() - resizeRect.width(),
-                         kpobject->getSize().height() - resizeRect.height() );
-        }
-        kpobject = 0L;
-    }
 
     switch ( toolEditMode ) {
     case TEM_MOUSE: {
@@ -1278,118 +1253,30 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             }
         }
             break;
-        case MT_RESIZE_UP: {
-            if ( !resizeObjNum ) break;
-            kpobject = resizeObjNum;
-            if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Up" ), mv, sz,
-                                                      kpobject, m_view->kPresenterDoc() );
-                resizeCmd->unexecute( false );
-                resizeCmd->execute();
-                m_view->kPresenterDoc()->addCommand( resizeCmd );
-            }
-            _repaint( oldBoundingRect );
-            m_view->kPresenterDoc()->layout(kpobject);
-            _repaint( kpobject );
-        } break;
-        case MT_RESIZE_DN: {
-            if ( !resizeObjNum ) break;
-            kpobject =  resizeObjNum;
-            if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Down" ), mv, sz,
-                                                      kpobject, m_view->kPresenterDoc() );
-                resizeCmd->unexecute( false );
-                resizeCmd->execute();
-                m_view->kPresenterDoc()->addCommand( resizeCmd );
-            }
-            _repaint( oldBoundingRect );
-            _repaint( kpobject );
-        } break;
-        case MT_RESIZE_LF: {
-            if ( !resizeObjNum ) break;
-            kpobject = resizeObjNum;
-            if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Left" ), mv, sz,
-                                                      kpobject, m_view->kPresenterDoc() );
-                resizeCmd->unexecute( false );
-                resizeCmd->execute();
-                m_view->kPresenterDoc()->addCommand( resizeCmd );
-            }
-            _repaint( oldBoundingRect );
-            m_view->kPresenterDoc()->layout(kpobject);
-            _repaint( kpobject );
-        } break;
-        case MT_RESIZE_RT: {
-            if ( !resizeObjNum ) break;
-            kpobject =  resizeObjNum ;
-
-            if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Right" ), mv, sz,
-                                                      kpobject, m_view->kPresenterDoc() );
-                resizeCmd->unexecute( false );
-                resizeCmd->execute();
-                m_view->kPresenterDoc()->addCommand( resizeCmd );
-            }
-            _repaint( oldBoundingRect );
-            m_view->kPresenterDoc()->layout(kpobject);
-            _repaint( kpobject );
-        } break;
-        case MT_RESIZE_LU: {
-            if ( !resizeObjNum ) break;
-            kpobject = resizeObjNum;
-            if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Left && Up" ), mv, sz,
-                                                      kpobject, m_view->kPresenterDoc() );
-                resizeCmd->unexecute( false );
-                resizeCmd->execute();
-                m_view->kPresenterDoc()->addCommand( resizeCmd );
-            }
-            _repaint( oldBoundingRect );
-            m_view->kPresenterDoc()->layout(kpobject);
-            _repaint( kpobject );
-        } break;
-        case MT_RESIZE_LD: {
-            if ( !resizeObjNum ) break;
-            kpobject =  resizeObjNum;
-            if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Left && Down" ), mv, sz,
-                                                      kpobject, m_view->kPresenterDoc() );
-                resizeCmd->unexecute( false );
-                resizeCmd->execute();
-                m_view->kPresenterDoc()->addCommand( resizeCmd );
-            }
-            _repaint( oldBoundingRect );
-            m_view->kPresenterDoc()->layout(kpobject);
-            _repaint( kpobject );
-        } break;
-        case MT_RESIZE_RU: {
-            if ( !resizeObjNum ) break;
-            kpobject =  resizeObjNum;
-            if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Right && Up" ), mv, sz,
-                                                      kpobject, m_view->kPresenterDoc() );
-                resizeCmd->unexecute( false );
-                resizeCmd->execute();
-                m_view->kPresenterDoc()->addCommand( resizeCmd );
-            }
-            _repaint( oldBoundingRect );
-            m_view->kPresenterDoc()->layout(kpobject);
-            _repaint( kpobject );
-        } break;
-        case MT_RESIZE_RD: {
-            if ( !resizeObjNum ) break;
-            kpobject = resizeObjNum;
-            if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Right && Down" ), mv, sz,
-                                                      kpobject, m_view->kPresenterDoc() );
-                resizeCmd->unexecute( false );
-                resizeCmd->execute();
-                m_view->kPresenterDoc()->addCommand( resizeCmd );
-            }
-            _repaint( oldBoundingRect );
-            m_view->kPresenterDoc()->layout(kpobject);
-            _repaint( kpobject );
-        } break;
+        case MT_RESIZE_UP:
+            finishResizeObject( i18n( "Resize Object Up" ), mx, my );
+            break;
+        case MT_RESIZE_DN:
+            finishResizeObject( i18n( "Resize Object Down" ), mx, my, false );
+            break;
+        case MT_RESIZE_LF:
+            finishResizeObject( i18n( "Resize Object Left" ), mx, my );
+            break;
+        case MT_RESIZE_RT:
+            finishResizeObject( i18n( "Resize Object Right" ), mx, my );
+            break;
+        case MT_RESIZE_LU:
+            finishResizeObject( i18n( "Resize Object Left && Up" ), mx, my );
+            break;
+        case MT_RESIZE_LD:
+            finishResizeObject( i18n( "Resize Object Left && Down" ), mx, my );
+            break;
+        case MT_RESIZE_RU:
+            finishResizeObject( i18n( "Resize Object Right && Up" ), mx, my );
+            break;
+        case MT_RESIZE_RD:
+            finishResizeObject( i18n( "Resize Object Right && Down" ), mx, my );
+            break;
         }
     } break;
     case INS_TEXT: {
@@ -1542,10 +1429,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
     mousePressed = false;
     modType = MT_NONE;
-    resizeObjNum = 0L;
     mouseMoveEvent( e );
-    ratio = 0.0;
-    keepRatio = false;
     calcBoundingRect();
 }
 
@@ -1646,7 +1530,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     int x = e->x() + diffx();
                     int y = e->y() + diffy();
                     moveObject( x - m_origPos.x(), y - m_origPos.y(), false );
-                } else if ( modType != MT_NONE && resizeObjNum ) {
+                } else if ( modType != MT_NONE && m_resizeObject ) {
                     int mx = e->x()+diffx();
                     int my = e->y()+diffy();
                     
@@ -4713,9 +4597,6 @@ void KPrCanvas::endDrawPolyline()
         repaint( false );
     mousePressed = false;
     modType = MT_NONE;
-    resizeObjNum = 0L;
-    ratio = 0.0;
-    keepRatio = false;
 }
 
 void KPrCanvas::endDrawCubicBezierCurve()
@@ -4728,9 +4609,6 @@ void KPrCanvas::endDrawCubicBezierCurve()
         repaint( false );
     mousePressed = false;
     modType = MT_NONE;
-    resizeObjNum = 0L;
-    ratio = 0.0;
-    keepRatio = false;
 }
 
 void KPrCanvas::selectNext()
@@ -5462,9 +5340,9 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
 {
     double dx = m_view->zoomHandler()->unzoomItX( _dx);
     double dy = m_view->zoomHandler()->unzoomItY( _dy);
-    KPObject *kpobject=resizeObjNum;
+    KPObject *kpobject = m_resizeObject;
 
-    //keepRatio = keepRatio || kpobject->isKeepRatio();
+    QRect oldBoundingRect( getOldBoundingRect(kpobject) ); 
 
     KoSize objSize = kpobject->getSize();
     KoRect objRect=kpobject->getBoundingRect();
@@ -5485,8 +5363,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         // align to the grid
         dx = applyGridX( objRect.left() + dx ) - objRect.left();
         dy = applyGridY( objRect.top() + dy ) - objRect.top();
-        if ( keepRatio && ratio != 0.0 )
-            calcRatio( dx, dy, _modType, ratio );
+        if ( m_keepRatio && m_ratio != 0.0 )
+            calcRatio( dx, dy, _modType, m_ratio );
         kpobject->resizeBy( -dx, -dy );
         if ( objSize.width() != (kpobject->getSize()).width() )
             kpobject->moveBy( KoPoint( dx, 0 ) );
@@ -5498,8 +5376,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         if( (objRect.left() + dx) < (pageRect.left() - 1))
             dx = pageRect.left() - objRect.left();
         dx = applyGridX( objRect.left() + dx ) - objRect.left();
-        if ( keepRatio && ratio != 0.0 )
-            calcRatio( dx, dy, _modType, ratio );
+        if ( m_keepRatio && m_ratio != 0.0 )
+            calcRatio( dx, dy, _modType, m_ratio );
         kpobject->resizeBy( -dx, -dy );
         if ( objSize != kpobject->getSize() )
             kpobject->moveBy( KoPoint( dx, 0 ) );
@@ -5511,8 +5389,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
             dx = pageRect.left() - objRect.left();
         dx = applyGridX( objRect.left() + dx ) - objRect.left();
         dy = applyGridY( objRect.bottom() + dy ) - objRect.bottom();
-        if ( keepRatio && ratio != 0.0 )
-            calcRatio( dx, dy, _modType, ratio );
+        if ( m_keepRatio && m_ratio != 0.0 )
+            calcRatio( dx, dy, _modType, m_ratio );
         kpobject->resizeBy( -dx, dy );
         if ( objSize.width() != (kpobject->getSize()).width() )
             kpobject->moveBy( KoPoint( dx, 0 ) );
@@ -5524,8 +5402,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
             dy = pageRect.top() - objRect.top();
         dx = applyGridX( objRect.right() + dx ) - objRect.right();
         dy = applyGridY( objRect.top() + dy ) - objRect.top();
-        if ( keepRatio && ratio != 0.0 )
-            calcRatio( dx, dy, _modType, ratio );
+        if ( m_keepRatio && m_ratio != 0.0 )
+            calcRatio( dx, dy, _modType, m_ratio );
         kpobject->resizeBy( dx, -dy );
         if ( objSize.height() != (kpobject->getSize()).height() )
             kpobject->moveBy( KoPoint( 0, dy ) );
@@ -5535,8 +5413,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         if( (objRect.right() + dx) > pageRect.width() )
             dx = pageRect.right() - objRect.right();
         dx = applyGridX( objRect.right() + dx ) - objRect.right();
-        if ( keepRatio && ratio != 0.0 )
-            calcRatio( dx, dy, _modType, ratio );
+        if ( m_keepRatio && m_ratio != 0.0 )
+            calcRatio( dx, dy, _modType, m_ratio );
         kpobject->resizeBy( dx, dy );
     } break;
     case MT_RESIZE_RD: {
@@ -5546,8 +5424,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
             dx = pageRect.right() - objRect.right();
         dx = applyGridX( objRect.right() + dx ) - objRect.right();
         dy = applyGridY( objRect.bottom() + dy ) - objRect.bottom();
-        if ( keepRatio && ratio != 0.0 )
-            calcRatio( dx, dy, _modType, ratio );
+        if ( m_keepRatio && m_ratio != 0.0 )
+            calcRatio( dx, dy, _modType, m_ratio );
         kpobject->resizeBy( dx, dy );
     } break;
     case MT_RESIZE_UP: {
@@ -5555,8 +5433,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         if( (objRect.top() + dy) < (pageRect.top() - 1) )
             dy = pageRect.top() - objRect.top();
         dy = applyGridY( objRect.top() + dy) - objRect.top();
-        if ( keepRatio && ratio != 0.0 )
-            calcRatio( dx, dy, _modType, ratio );
+        if ( m_keepRatio && m_ratio != 0.0 )
+            calcRatio( dx, dy, _modType, m_ratio );
         kpobject->resizeBy( -dx, -dy );
         if ( objSize != kpobject->getSize() )
             kpobject->moveBy( KoPoint( 0, dy ) );
@@ -5567,8 +5445,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         if( (objRect.bottom() + dy) > pageRect.height() )
             dy = pageRect.bottom() - objRect.bottom();
         dy = applyGridY( objRect.bottom() + dy ) - objRect.bottom();
-        if ( keepRatio && ratio != 0.0 )
-            calcRatio( dx, dy, _modType, ratio );
+        if ( m_keepRatio && m_ratio != 0.0 )
+            calcRatio( dx, dy, _modType, m_ratio );
         kpobject->resizeBy( dx, dy );
     } break;
     default: break;
@@ -5581,7 +5459,32 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     _repaint( oldBoundingRect );
     _repaint( kpobject );
     emit objectSizeChanged();
-    oldBoundingRect = getOldBoundingRect(kpobject);
+}
+
+void KPrCanvas::finishResizeObject( const QString &name, int mx, int my, bool layout )
+{
+    if ( m_resizeObject )
+    {
+        KoPoint move = KoPoint( m_resizeObject->getOrig().x() - m_rectBeforeResize.x(),
+                                m_resizeObject->getOrig().y() - m_rectBeforeResize.y() );
+        KoSize size = KoSize( m_resizeObject->getSize().width() - m_rectBeforeResize.width(),
+                              m_resizeObject->getSize().height() - m_rectBeforeResize.height() );
+            
+        if ( firstX != mx || firstY != my ) {
+            ResizeCmd *resizeCmd = new ResizeCmd( name, move, size, m_resizeObject, 
+                                                  m_view->kPresenterDoc() );
+            // the command is not executed as the object is allready resized.
+            m_view->kPresenterDoc()->addCommand( resizeCmd );
+        }
+        
+        if ( layout )
+            m_view->kPresenterDoc()->layout( m_resizeObject );
+        _repaint( m_resizeObject );
+
+        m_resizeObject = NULL;
+        m_ratio = 0.0;
+        m_keepRatio = false;
+    }
 }
 
 void KPrCanvas::raiseObject( KPObject *_kpobject )

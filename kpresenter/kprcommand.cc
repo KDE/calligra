@@ -1583,11 +1583,6 @@ void ResizeCmd::execute()
 
 void ResizeCmd::unexecute()
 {
-    unexecute(true);
-}
-
-void ResizeCmd::unexecute( bool _repaint )
-{
     QRect oldRect;
 
     oldRect = doc->zoomHandler()->zoomRect(object->getBoundingRect());
@@ -1602,10 +1597,8 @@ void ResizeCmd::unexecute( bool _repaint )
     if ( object->isSelected())
         doc->updateObjectStatusBarItem();
 
-    if ( _repaint ) {
-        doc->repaint( oldRect );
-        doc->repaint( object );
-    }
+    doc->repaint( oldRect );
+    doc->repaint( object );
 
     int pos=doc->pageList().findRef(m_page);
     doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );

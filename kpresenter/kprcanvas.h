@@ -467,7 +467,12 @@ private:
     void picViewOrigHelper(int x, int y);
 
     void moveObject( int x, int y, bool key );
+
+    //---- stuff needed for resizing ----
+    // resize the m_resizeObject
     void resizeObject( ModifyType _modType, int _dx, int _dy );
+    // create ResizeCmd
+    void finishResizeObject( const QString &name, int mx, int my, bool layout = true );
 
     void raiseObject( KPObject *_kpobject );
     void lowerObject();
@@ -518,7 +523,7 @@ private:
     ModifyType modType;
     unsigned int oldMx, oldMy;
 
-    KPObject *resizeObjNum, *editNum, *rotateNum;
+    KPObject *editNum, *rotateNum;
 
     bool fillBlack;
     KPresenterView *m_view;
@@ -536,8 +541,18 @@ private:
     double axisX, axisY;
     int delPageId;
     bool drawRubber;
-    QRect rubber, oldBoundingRect;
-    KoRect resizeRect;
+    QRect rubber;
+    
+    //---- stuff needed for resizing ----
+    // object which gets resized
+    KPObject *m_resizeObject;
+    // size of the object at when resizing is started
+    KoRect m_rectBeforeResize;
+    // should the ratio of the object kept during resize
+    bool m_keepRatio;
+    // ratio of the object ( width / height )
+    double m_ratio;
+    
     ToolEditMode toolEditMode;
     QRect insRect;
     KoDocumentEntry partEntry;
@@ -545,8 +560,7 @@ private:
     // (those that remain on screen between two steps)
     QPtrList <KPObject> tmpObjs;
     QString autoform;
-    bool inEffect, keepRatio;
-    double ratio;
+    bool inEffect;
     QPixmap buffer;
 
     KPTextView *m_currentTextObjectView;

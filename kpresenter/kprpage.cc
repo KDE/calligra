@@ -2426,31 +2426,12 @@ KPObject * KPrPage::getCursor(const KoPoint &pos )
     return 0L;
 }
 
-KPObject * KPrPage::getObjectResized( const KoPoint &pos, ModifyType modType, bool &desel,
-                                      bool &_over, bool &_resize )
-{
-    QPtrListIterator<KPObject> it( m_objectList );
-    KPObject *kpobject = it.toLast();
-    while ( kpobject ) {
-        if ( !kpobject->isProtect() && kpobject->contains( pos ) ) {
-            _over = true;
-            if ( kpobject->isSelected() && modType == MT_MOVE )
-                desel = false;
-            if ( kpobject->isSelected() && modType != MT_MOVE && modType != MT_NONE )
-                _resize = true;
-            return kpobject;
-        }
-        kpobject = --it;
-    }
-    return 0L;
-}
-
-KPObject* KPrPage::getObjectAt( const KoPoint&pos ) const
+KPObject* KPrPage::getObjectAt( const KoPoint &pos, bool withoutProtected ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     KPObject *o = it.toLast();
     while ( o ) {
-        if ( o->contains( pos ) )
+        if ( o->contains( pos ) && !( o->isProtect() && withoutProtected ) )
             return o;
         o = --it;
     }

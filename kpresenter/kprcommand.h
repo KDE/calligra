@@ -175,7 +175,6 @@ public:
 
     virtual void execute();
     virtual void unexecute();
-    virtual void unexecute( bool _repaint );
 
 protected:
 
