@@ -27,9 +27,9 @@
 #include <tools/vtool.h>
 #include <core/vkarbonplugin.h>
 
+class QCursor;
+
 class KarbonViewBase;
-/**
- */
 
 class VZoomTool : public VTool, public VKarbonPlugin
 {
@@ -57,8 +57,12 @@ protected:
 
 	void recalc();
 
-protected:
 	KoPoint m_current;
+
+private:
+	QCursor* m_minusCursor;
+	QCursor* m_plusCursor;
+
 };
 
 #endif
