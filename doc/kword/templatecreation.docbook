@@ -1,7 +1,7 @@
 <sect1 id="template-creation">
 <title>Creating Templates, Saving a document as a template and Deleting Templates</title>
 
-<para>&kword; comes with several pre-defined templates (both
+<para>&kword; comes with several predefined templates (both
 Page Layout and Text Oriented templates), which are designed
 to provide initial formatting of documents.</para>
 
@@ -13,7 +13,7 @@ exactly matches the documents needs.</para>
 they can be organized into categories for easy recall.</para>
 <sect2 id="template-add"><title>Creating a new template</title>
 <para>Templates are created by first generating the layout in
-&kword; based on one of the pre-defined templates, and then saving the
+&kword; based on one of the predefined templates, and then saving the
 file.  Instead of saving it as a traditional file, it is saved as a
 template.</para>
 
@@ -24,7 +24,7 @@ document as a template.</para>
 <step>
 <para>When the document is a completed template, Select <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Create Template From
-Document</guimenuitem></menuchoice> from the menubar.</para>
+Document...</guimenuitem></menuchoice> from the menubar.</para>
 
 <para>This brings up a dialog:</para>
 
@@ -67,7 +67,7 @@ dialog.</para>
 <step>
 <para>Select <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Create Template From
-Document</guimenuitem></menuchoice> from the menubar.</para>
+Document...</guimenuitem></menuchoice> from the menubar.</para>
 <para>This will bring up a dialog</para>
 </step>
 <step><para>Click on the small plus sign (+) in front of the template group where the template can be found.</para>
@@ -85,7 +85,7 @@ the template.  Simply click <guibutton>Yes</guibutton>.</para></step>
 <step>
 <para>Select <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Create Template From
-Document</guimenuitem></menuchoice> from the menubar.</para>
+Document...</guimenuitem></menuchoice> from the menubar.</para>
 <para>This will bring up a dialog</para>
 </step>
 <step><para>Click once on the group name</para></step>

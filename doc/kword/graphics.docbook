@@ -13,8 +13,8 @@ stay in the same area of the page as the text that surrounds it.</para>
 <itemizedlist>
 <listitem>
 <para>By selecting <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Picture</guimenuitem></menuchoice> from
-the Menu Bar</para>
+<guimenu>Insert</guimenu><guimenuitem>Picture...</guimenuitem></menuchoice> from
+the menubar</para>
 </listitem>
 
 <listitem>
@@ -28,7 +28,7 @@ format="PNG"/></imageobject></inlinemediaobject> on the toolbar.</para>
 </listitem>
 </itemizedlist>
 
-<para>All three methods create a file selection dialog to appear.</para>
+<para>All three methods open a file selection dialog.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
@@ -36,11 +36,9 @@ format="PNG"/></imageobject></inlinemediaobject> on the toolbar.</para>
 </mediaobject>
 </screenshot>
 
-<para>Use this dialog to select the picture.</para>
+<para><link linkend="file-dialog">Use this dialog</link> to select the picture.</para>
 
 <tip><para>Pressing <keycap>Esc</keycap> at this point will cancel the insertion of a picture into your document.</para></tip>
-
-<para>For more information on using this dialog, click <link linkend="file-dialog">here</link>.</para>
 
 <para>Once the appropriate picture file is located, click on the filename once with the &LMB;.  Click
 <guibutton>OK</guibutton> to continue.</para>
@@ -97,7 +95,7 @@ is causing problems, the picture can always be <link linkend="switch-graphics">c
 </sect2>
 <sect2 id="save-graphics"><title>Saving Graphic in separate file</title>
 <para>You can save a picture or graph to a separate file (for use in another document or to archive the graphic).</para>
-<para>Simply click once on the graphic with the &RMB;.  A submenu will appear.  Select <guilabel>Save Picture</guilabel>. 
+<para>Simply click once on the graphic with the &RMB;.  A submenu will appear.  Select <guilabel>Save Picture...</guilabel>. 
 A dialog will appear that will allow you to specify where to save the graphic.</para>
 <note><para>This does not remove the picture from the &kword; document file.  It is simply a way to extract a picture from a 
 document so it can be archived or used in another application.</para></note>

@@ -1,5 +1,5 @@
 <sect1 id="toc"><title>Table of Contents</title>
-<para>When writing a large document, it is helpful to be able to automatically generate a table of contents.  This can be done automatically
+<para>When writing a large document, it is useful to include a table of contents.  This can be done automatically
 with &kword;.</para>
 <para>To begin creating a table of contents &kword; needs to know what to include in the table of contents.
 The first part of this chapter describes how to prepare the document to generate an accurate table of contents.</para>
@@ -41,7 +41,7 @@ the <guilabel>Head 3</guilabel> style), are now formatted
 using <guilabel>Contents Head 3</guilabel> paragraph style. </para>
 <para>By <link linkend="style-edit">changing the look</link> of those three styles, 
 the appearance of the
-table of contents can be radically changed..</para>
+table of contents can be radically changed.</para>
 <para></para>
 </sect2>
 </sect1>

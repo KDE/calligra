@@ -63,7 +63,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-07-09</date>
+<date>2002-07-14</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -84,12 +84,6 @@ This manual describes KWord 1.2.
 </keywordset>
 
 </bookinfo>
-
-<!-- **************************************************************************************************** -->
-
-&deleteme;
-
-<!-- **************************************************************************************************** -->
 
 <chapter id="introduction">
 <title>Introduction</title>
@@ -424,15 +418,15 @@ insert other types of &koffice; data into a document.</para>
 <orderedlist>
 <listitem><para>This information will always be available for reference.  This is especially important in situations where 
 there are many possible authors (employees) and hundreds (or thousands) of documents.</para></listitem>
-<listitem><para>The information supplied here, can be used to automatically fill this information in using
-<link linkend="variables">document variables</link>.</para></listitem>
+<listitem><para>The information supplied here, can be inserted automatically into the document as a
+<link linkend="variables">document variable</link>.</para></listitem>
 </orderedlist>
 <para>To enter document information, simply select <menuchoice>
-<guimenu>File</guimenu><guimenuitem>Document Information</guimenuitem>
+<guimenu>File</guimenu><guimenuitem>Document Information...</guimenuitem>
 </menuchoice> from the menubar.  This will bring up a dialog box with two tabs.</para>
 <para>The first tab is labled <guilabel>Author</guilabel> and has blanks to enter the authors name, title, company and contact
 information (email address, telephone numbers and physical address).</para>
-<tip><para>The authors name, company, email address, telephone number, fax number and address can be accessed through
+<tip><para>Every value entered in this dialog can be inserted as a
 <link linkend="variables">document variables</link>.</para></tip>
 <para>The second tab is labled <guilabel>About</guilabel>. Enter a document title and an abstract.</para>
 <tip><para>Both the document title and the abstract can be accessed through
@@ -442,7 +436,6 @@ If any document variables were changed, &kword; will update their values through
 </sect1>
 &graphics;
 &toc;
-<!--&misc;-->
 &variables;
 &expressions;
 &links;
@@ -453,7 +446,7 @@ If any document variables were changed, &kword; will update their values through
 &bookmarks;
 &formulas;
 </chapter>
-<!--&guides4; -->
+
 
 <!-- **************************************************************************************************** -->
 <chapter id="advanced-topics"><title>Advanced Topics</title>
