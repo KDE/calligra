@@ -2395,10 +2395,10 @@ void KP2DObject::flip( bool horizontal ) {
         else if ( gType == BCT_GDIAGONAL2 ) {
             gType = BCT_GDIAGONAL1;
         }
-        if ( ( horizontal && gType == BCT_GDIAGONAL1 ) ||
-             ( horizontal && gType == BCT_GDIAGONAL2 ) ||
-             ( horizontal && gType == BCT_GHORZ ) ||
-             ( ! horizontal && gType == BCT_GVERT ) ) {
+        if ( ( ! horizontal && gType == BCT_GDIAGONAL1 ) ||
+             ( ! horizontal && gType == BCT_GDIAGONAL2 ) ||
+             ( ! horizontal && gType == BCT_GHORZ ) ||
+             ( horizontal && gType == BCT_GVERT ) ) {
             QColor gColorTemp;
             gColorTemp = gColor1;
             gColor1 = gColor2;

@@ -259,7 +259,7 @@ void KPClosedLineObject::flip( bool horizontal )
     // flip the points
     KoPointArray tmpPoints;
     int index = 0;
-    if ( horizontal )
+    if ( ! horizontal )
     {
         KoPointArray::ConstIterator it;
         double horiz = getSize().height()/2;

@@ -586,7 +586,7 @@ void KPGroupObject::flip( bool horizontal ) {
         it.current()->flip( horizontal );
         double mx = 0;
         double my = 0;
-        if ( horizontal )
+        if ( ! horizontal )
         {
             double disttop = it.current()->getOrig().y() - orig.y();
             double distbottom = ext.height() - disttop - it.current()->getSize().height();
