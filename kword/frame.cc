@@ -1274,8 +1274,8 @@ void KWPictureFrameSet::setSize( QSize _imgSize )
 QDomElement KWPictureFrameSet::save( QDomDocument &doc )
 {
     QDomElement frameset = KWFrameSet::save( doc );
-    frameset.setAttribute( "frameType", (int)getFrameType() );
-    frameset.setAttribute( "frameInfo", (int)frameInfo );
+    frameset.setAttribute( "frame-type", (int)getFrameType() );
+    frameset.setAttribute( "frame-info", (int)frameInfo );
 
     QDomElement img = image->save( doc );
     if ( img.isNull() )
