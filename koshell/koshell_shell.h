@@ -32,6 +32,9 @@ class KoKoolBar;
 class KoDocumentEntry;
 class KoShellFrame;
 class KoView;
+class KoShellGUIClient;
+
+/////// class KoShellWindow ////////
 
 class KoShellWindow : public KoMainWindow
 {
@@ -63,10 +66,8 @@ protected slots:
 
 protected:
 
-  void setupActions();
-  
   virtual bool queryClose();
-  
+
   virtual bool openDocumentInternal( const KURL & url, KoDocument * newdoc = 0L );
   void closeDocument();
 
@@ -83,7 +84,7 @@ protected:
   void switchToPage( QValueList<Page>::Iterator it );
 
   KoKoolBar* m_pKoolBar;
-    
+
   int m_grpFile;
   int m_grpDocuments;
 
@@ -97,9 +98,13 @@ protected:
 
   KoShellFrame *m_pFrame;
 
+  KoShellGUIClient *m_client;
+  void createShellGUI();
+
   QHBox *m_pLayout;
 };
 
+///////// class KoShellFrame ////////////
 class KoShellFrame : public QWidget
 {
   Q_OBJECT
@@ -113,6 +118,17 @@ protected:
 
 private:
   KoView *m_pView;
+};
+
+//////// class KoShellGUIClient //////////
+
+class KoShellGUIClient : public KXMLGUIClient
+{
+public:
+	KoShellGUIClient( KoShellWindow *window );
+	~KoShellGUIClient();
+protected:
+	KToggleAction *sidebar;
 };
 
 #endif // __koshell_window_h__

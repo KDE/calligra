@@ -53,7 +53,7 @@ KoShellWindow::KoShellWindow()
   m_pLayout = new QHBox( centralWidget() );
 
   m_pKoolBar = new KoKoolBar( m_pLayout );
-     
+
   m_pFrame = new KoShellFrame( m_pLayout );
 
   m_grpFile = m_pKoolBar->insertGroup(i18n("Parts"));
@@ -93,18 +93,13 @@ KoShellWindow::KoShellWindow()
 
   m_pKoolBar->setFixedWidth( 80 );
   m_pKoolBar->setMinimumHeight( 300 );
-  
-  setupActions(); 
-}
 
-void KoShellWindow::setupActions()
-{
-	// Not implemented yet
-  	actionCollection()->action("view_split")->setEnabled(false);
-  	actionCollection()->action("view_splitter_orientation")->setEnabled(false);
-	
-	(void)new KToggleAction(i18n("Show Sidebar"), "view_choose", this, SLOT( slotShowSidebar() ),
-                      actionCollection(), "show_sidebar");
+  // Not implemented yet
+  actionCollection()->action("view_split")->setEnabled(false);
+  actionCollection()->action("view_splitter_orientation")->setEnabled(false);
+
+  m_client = new KoShellGUIClient( this );
+  createShellGUI();
 }
 
 KoShellWindow::~KoShellWindow()
@@ -520,6 +515,11 @@ void KoShellWindow::slotFilePrint()
 }
 */
 
+void KoShellWindow::createShellGUI()
+{
+	guiFactory()->addClient( m_client );
+}
+
 ///////
 
 KoShellFrame::KoShellFrame( QWidget *parent )
@@ -537,6 +537,20 @@ void KoShellFrame::resizeEvent( QResizeEvent * )
 {
   if ( m_pView )
     m_pView->setGeometry( 0, 0, width(), height() );
+}
+
+KoShellGUIClient::KoShellGUIClient( KoShellWindow *window ) : KXMLGUIClient()
+{
+	setXMLFile( "koshellui.rc", true, false );
+
+	sidebar = new KToggleAction(i18n("Show Sidebar"), "view_choose", 0, window,
+			SLOT( slotShowSidebar() ), actionCollection(), "show_sidebar");
+	sidebar->setChecked( true );
+}
+
+KoShellGUIClient::~KoShellGUIClient()
+{
+	delete sidebar;
 }
 
 #include "koshell_shell.moc"
