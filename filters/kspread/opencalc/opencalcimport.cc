@@ -906,7 +906,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, KSpreadSheet * table
 
       if ( defaultStyle )
       {
-        kdDebug() << "Copying default style, Font: " << defaultStyle->font().toString() << endl;
+        //        kdDebug() << "Copying default style, Font: " << defaultStyle->font().toString() << endl;
         styleLayout.copy( *defaultStyle );
       }
     }
@@ -1950,8 +1950,8 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
       kdDebug() << "Default style " << e.attribute( "style:family" ) << "default" << " loaded " << endl;
 
       m_defaultStyles.insert( e.attribute( "style:family" ) + "default", layout );
-      QFont font = layout->font();
-      kdDebug() << "Font: " << font.family() << ", " << font.toString() << endl;
+      //      QFont font = layout->font();
+      //      kdDebug() << "Font: " << font.family() << ", " << font.toString() << endl;
     }
 
     def = def.nextSibling();
@@ -1975,7 +1975,7 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
     kdDebug() << "Default style " << defs.attribute( "style:name" ) << " loaded " << endl;
 
     m_defaultStyles.insert( defs.attribute( "style:name" ), layout );
-    kdDebug() << "Font: " << layout->font().family() << ", " << layout->font().toString() << endl;
+    //    kdDebug() << "Font: " << layout->font().family() << ", " << layout->font().toString() << endl;
 
     defs = defs.nextSibling().toElement();
   }
