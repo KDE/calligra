@@ -1146,6 +1146,11 @@ void KWView::setupActions()
                                             this, SLOT( editFrameSet() ),
                                             actionCollection(), "edit_frameset" );
 
+    actionDeleteFrameSet = new KAction( i18n( "Delete Frameset" ), 0,
+                                        this, SLOT( deleteFrameSet() ),
+                                        actionCollection(), "delete_frameset" );
+
+
     actionSelectedFrameSet = new KAction( i18n( "Select Frameset" ), 0,
                                             this, SLOT( selectFrameSet() ),
                                             actionCollection(), "select_frameset" );
@@ -6288,6 +6293,14 @@ void KWView::editFrameSet()
     }
 }
 
+void KWView::deleteFrameSet()
+{
+    if ( m_gui->getDocStruct() )
+    {
+        m_gui->getDocStruct()->deleteFrameSet();
+    }
+}
+
 void KWView::insertFile()
 {
     KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
@@ -7014,6 +7027,16 @@ void KWView::addWordToDictionary()
             m_doc->addWordToDictionary( word);
     }
 }
+
+void KWView::deleteFrameSet( KWFrameSet * frameset)
+{
+    if ( frameset  && frameset->frame(0))
+    {
+        frameset->frame(0)->setSelected( true );
+        deleteFrame();
+    }
+}
+
 
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */

@@ -40,6 +40,7 @@ public:
     KWDocListViewItem( QListViewItem *_parent, QListViewItem *_after, QString _text );
     virtual void selectFrameSet() {};
     virtual void editFrameSet() {};
+    virtual void deleteFrameSet() {};
 };
 
 /******************************************************************/
@@ -54,6 +55,7 @@ public:
     KWDocStructParagItem( QListViewItem *_parent, QListViewItem *_after, QString _text, KWTextParag *_parag, KWGUI*__parent );
     virtual void selectFrameSet();
     virtual void editFrameSet();
+    virtual void deleteFrameSet();
 
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
@@ -77,7 +79,7 @@ public:
     KWDocStructFrameItem( QListViewItem *_parent, QString _text, KWFrameSet *_frameset, KWFrame *_frame, KWGUI *__parent );
     virtual void selectFrameSet();
     virtual void editFrameSet();
-
+    virtual void deleteFrameSet();
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
     void slotRightButtonClicked( QListViewItem *, const QPoint &, int );
@@ -100,7 +102,7 @@ public:
     KWDocStructTableItem( QListViewItem *_parent, QString _text, KWTableFrameSet *_table, KWGUI*__parent );
     virtual void selectFrameSet();
     virtual void editFrameSet();
-
+    virtual void deleteFrameSet();
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
     void slotRightButtonClicked( QListViewItem *, const QPoint &, int );
@@ -123,7 +125,7 @@ public:
     KWDocStructFormulaItem( QListViewItem *_parent, QString _text, KWFormulaFrameSet *_form, KWGUI*__parent );
     virtual void selectFrameSet();
     virtual void editFrameSet();
-
+    virtual void deleteFrameSet();
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
     void slotRightButtonClicked( QListViewItem *, const QPoint &, int );
@@ -146,6 +148,7 @@ class KWDocStructPictureItem : public KWDocListViewItem
 public:
     KWDocStructPictureItem( QListViewItem *_parent, QString _text, KWPictureFrameSet *_pic, KWGUI*__parent );
     virtual void selectFrameSet();
+    virtual void deleteFrameSet();
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
     void slotRightButtonClicked( QListViewItem *, const QPoint &, int );
@@ -168,7 +171,7 @@ public:
     KWDocStructPartItem( QListViewItem *_parent, QString _text, KWPartFrameSet *_part, KWGUI*__parent );
     virtual void selectFrameSet();
     virtual void editFrameSet();
-
+    virtual void deleteFrameSet();
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
     void slotRightButtonClicked( QListViewItem *, const QPoint &, int );
@@ -223,7 +226,7 @@ public:
     bool testExistTypeOfFrame(TypeStructDocItem _type);
     void selectFrameSet();
     void editFrameSet();
-
+    void deleteFrameSet();
 protected:
     KWDocument *doc;
     KWGUI *gui;
@@ -245,6 +248,7 @@ public:
     KWDocStructTree * getDocStructTree()const {return tree;}
     void selectFrameSet();
     void editFrameSet();
+    void deleteFrameSet();
 protected:
     KWDocStructTree *tree;
     QGridLayout *layout;

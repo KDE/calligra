@@ -90,6 +90,10 @@ void KWDocStructParagItem::editFrameSet()
     gui->canvasWidget()->editTextFrameSet( parag->kwTextDocument()->textFrameSet(), parag, 0 );
 }
 
+void KWDocStructParagItem::deleteFrameSet()
+{
+}
+
 
 /******************************************************************/
 /* Class: KWDocStructFrameItem                                    */
@@ -125,6 +129,10 @@ void KWDocStructFrameItem::editFrameSet()
     gui->canvasWidget()->editTextFrameSet( frameset, 0L, 0 );
 }
 
+void KWDocStructFrameItem::deleteFrameSet()
+{
+    gui->getView()->deleteFrameSet( frameset );
+}
 
 /******************************************************************/
 /* Class: KWDocStructTableItem                                    */
@@ -162,6 +170,11 @@ void KWDocStructTableItem::editFrameSet()
     gui->canvasWidget()->editTextFrameSet( table->getCell(0), 0L, 0 );
 }
 
+void KWDocStructTableItem::deleteFrameSet()
+{
+    gui->getView()->deleteFrameSet( table );
+}
+
 /******************************************************************/
 /* Class: KWDocStructPictureItem                                  */
 /******************************************************************/
@@ -191,6 +204,11 @@ void KWDocStructPictureItem::selectFrameSet()
     KWFrame *frame = pic->frame( 0 );
     gui->canvasWidget()->scrollToOffset( frame->topLeft() );
 
+}
+
+void KWDocStructPictureItem::deleteFrameSet()
+{
+    gui->getView()->deleteFrameSet( pic );
 }
 
 
@@ -229,6 +247,11 @@ void KWDocStructFormulaItem::editFrameSet()
 
 }
 
+void KWDocStructFormulaItem::deleteFrameSet()
+{
+    gui->getView()->deleteFrameSet( form );
+}
+
 /******************************************************************/
 /* Class: KWDocStructPartItem                                     */
 /******************************************************************/
@@ -261,6 +284,11 @@ void KWDocStructPartItem::selectFrameSet()
 void KWDocStructPartItem::editFrameSet()
 {
     //todo
+}
+
+void KWDocStructPartItem::deleteFrameSet()
+{
+    gui->getView()->deleteFrameSet( part );
 }
 
 /******************************************************************/
@@ -782,9 +810,7 @@ void KWDocStructTree::selectFrameSet()
     QListViewItem * select=currentItem ();
     KWDocListViewItem *tmp = dynamic_cast<KWDocListViewItem *>(select);
     if ( tmp )
-    {
         tmp->selectFrameSet();
-    }
 }
 
 void KWDocStructTree::editFrameSet()
@@ -792,9 +818,16 @@ void KWDocStructTree::editFrameSet()
     QListViewItem * select=currentItem ();
     KWDocListViewItem *tmp = dynamic_cast<KWDocListViewItem *>(select);
     if ( tmp )
-    {
         tmp->editFrameSet();
-    }
+}
+
+
+void KWDocStructTree::deleteFrameSet()
+{
+    QListViewItem * select=currentItem ();
+    KWDocListViewItem *tmp = dynamic_cast<KWDocListViewItem *>(select);
+    if ( tmp )
+        tmp->deleteFrameSet();
 }
 
 
@@ -833,3 +866,7 @@ void KWDocStruct::editFrameSet()
     tree->editFrameSet();
 }
 
+void KWDocStruct::deleteFrameSet()
+{
+    tree->deleteFrameSet();
+}

@@ -184,6 +184,8 @@ public:
     void insertDirectCursor(bool b);
     void updateDirectCursorButton();
 
+    void deleteFrameSet( KWFrameSet *);
+
 public slots:
     void fileStatistics();
     void editCut();
@@ -396,6 +398,8 @@ public slots:
     void changeHorizontalLine();
 
     void addWordToDictionary();
+
+    void deleteFrameSet();
 
 protected slots:
     void slotSetInitialPosition();
@@ -640,6 +644,7 @@ private:
 
 
     KAction *actionEditFrameSet;
+    KAction *actionDeleteFrameSet;
     KAction *actionSelectedFrameSet;
     KAction *actionInsertFile;
 

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="84">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="85">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -463,6 +463,7 @@
 <Menu name="docstruct_popup">
   <ActionList name="edit_action"/>
   <Action name="select_frameset"/>
+  <Action name="delete_frameset"/>
 </Menu>
 </kpartgui>
 
