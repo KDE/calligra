@@ -25,9 +25,8 @@
 
 
 VLayerIface::VLayerIface( VLayer* layer )
-	: DCOPObject( )
+	: VGroupIface( layer ), m_layer( layer )
 {
-	m_layer = layer;
 }
 
 void

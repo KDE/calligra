@@ -35,7 +35,7 @@
 #include "vclipgroup.h"
 
 VLayer::VLayer( VObject* parent, VState state )
-	: VGroup( parent, state ), m_name( i18n( "Layer" ) )
+	: VGroup( parent, state ), m_name( i18n( "Layer" ) ), dcop( 0L )
 {
 }
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
+   Copyright (C) 2002, The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,35 +17,17 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __VLAYER_IFACE_H__
-#define __VLAYER_IFACE_H__
-
 #include "vgroup_iface.h"
-#include <qstring.h>
+#include "vgroup.h"
 
-#include <dcopobject.h>
-#include <dcopref.h>
-
-class VLayer;
-
-
-class VLayerIface : public VGroupIface
+VGroupIface::VGroupIface( VGroup *group )
+	: DCOPObject(), m_group( group )
 {
-	K_DCOP
+}
 
-public:
-	VLayerIface( VLayer* layer );
-
-k_dcop:
-	void setName( const QString& name );
-	QString name() const;
-
-	void setSelected( bool state );
-	bool selected() const;
-
-private:
-	VLayer* m_layer;
-};
-
-#endif
+void
+VGroupIface::clear()
+{
+	m_group->clear();
+}
 
