@@ -416,7 +416,7 @@ CORBA::Long KIllustratorView::addToolButton (const char* pictname,
   path += pictname;
   QString pix = loadPixmap (path);
   id = m_rToolBarTools->insertButton (CORBA::string_dup (pix),
-				      CORBA::string_dup (i18n (tooltip)),
+				      CORBA::string_dup (tooltip),
 				      this,
 				      CORBA::string_dup (func));
   m_rToolBarTools->setToggle (id, true);
@@ -429,23 +429,23 @@ void KIllustratorView::setupToolsToolbar () {
     m_rToolBarTools = 
       m_vToolBarFactory->createToolBar (this, 
 					CORBA::string_dup (i18n ("Tools")));
-    m_idSelectionTool = addToolButton ("selecttool.xpm", "Selection Mode",
+    m_idSelectionTool = addToolButton ("selecttool.xpm", i18n("Selection Mode"),
 				       "activateSelectionTool");
-    m_idEditPointTool = addToolButton ("pointtool.xpm", "Edit Point",
+    m_idEditPointTool = addToolButton ("pointtool.xpm", i18n("Edit Point"),
 				       "activateEditPointTool");
-    m_idPolylineTool = addToolButton ("linetool.xpm", "Create Polyline",
+    m_idPolylineTool = addToolButton ("linetool.xpm", i18n("Create Polyline"),
 				      "activateLineTool");
-    m_idBezierTool = addToolButton ("beziertool.xpm", "Create Bezier Curve",
+    m_idBezierTool = addToolButton ("beziertool.xpm", i18n("Create Bezier Curve"),
 				    "activateBezierTool");
-    m_idRectangleTool = addToolButton ("recttool.xpm", "Create Rectangle",
+    m_idRectangleTool = addToolButton ("recttool.xpm", i18n("Create Rectangle"),
 				       "activateRectangleTool");
-    m_idPolygonTool = addToolButton ("polygontool.xpm", "Create Polygon",
+    m_idPolygonTool = addToolButton ("polygontool.xpm", i18n("Create Polygon"),
 				     "activatePolygonTool");
-    m_idEllipseTool = addToolButton ("ellipsetool.xpm", "Create Ellipse",
+    m_idEllipseTool = addToolButton ("ellipsetool.xpm", i18n("Create Ellipse"),
 				     "activateEllipseTool");
-    m_idTextTool = addToolButton ("texttool.xpm", "Create/Edit Text",
+    m_idTextTool = addToolButton ("texttool.xpm", i18n("Create/Edit Text"),
 				  "activateTextTool");
-    m_idZoomTool = addToolButton ("zoomtool.xpm", "Zoom In",
+    m_idZoomTool = addToolButton ("zoomtool.xpm", i18n("Zoom In"),
 				  "activateZoomTool");
 
     m_rToolBarTools->setButton (m_idSelectionTool, true);
