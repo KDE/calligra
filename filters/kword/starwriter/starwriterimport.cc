@@ -192,9 +192,9 @@ bool StarWriterImport::addBody()
     return parseNodes(data);
 
     // add proper tags
-    bodyStuff.prepend("<FRAMESET removable=\"0\" frameType=\"1\" frameInfo=\"0\" name=\"Text Frameset 1\" autoCreateNewFrame=\"1\">\n");
-    bodyStuff.prepend("<FRAME right=\"567\" left=\"28\" top=\"42\" bottom=\"799\" />\n");
-    bodyStuff.append("</FRAMESET>\n");
+    bodyStuff.prepend(" <FRAMESET removable=\"0\" frameType=\"1\" frameInfo=\"0\" name=\"Text Frameset 1\" autoCreateNewFrame=\"1\">\n");
+    bodyStuff.prepend(" <FRAME right=\"567\" left=\"28\" top=\"42\" bottom=\"799\" />\n");
+    bodyStuff.append(" </FRAMESET>\n");
 }
 
 QString StarWriterImport::convertToKWordString(QByteArray s)
@@ -266,9 +266,9 @@ bool StarWriterImport::parseText(QByteArray n)
 
     // Write it to the variable
     text = convertToKWordString(s);
-    bodyStuff.append("<PARAGRAPH>\n");
-    bodyStuff.append("<TEXT>" + text + "</TEXT>\n");
-    bodyStuff.append("</PARAGRAPH>\n");
+    bodyStuff.append("  <PARAGRAPH>\n");
+    bodyStuff.append("   <TEXT>" + text + "</TEXT>\n");
+    bodyStuff.append("  </PARAGRAPH>\n");
 
     return true;
 }
@@ -279,11 +279,15 @@ bool StarWriterImport::parseTable(QByteArray n)
     QByteArray s;
     Q_UINT32 len, p, p2;
     QString text;
-    QString tableCell, tableText;
+    QString tableCell, tableText, tableName;
     Q_UINT8 row, column, columns;   // no need to have 'rows'
 
     // Preliminary check
     if (n[0x00] != 'E') return false;
+
+    // Set table name
+    tableName = QString("Table in Frame %1").arg(framesNumber);
+    framesNumber++;
 
     // Skip useless sections and retrieve the right point
     p = 0x13;
@@ -332,12 +336,17 @@ bool StarWriterImport::parseTable(QByteArray n)
     // FIXME
 
     // Add everything to tablesStuff
-    // FIXME
+    tableStuff.append(tableText);
 
     // Add anchor to bodyStuff
-    // FIXME
-
-    framesNumber++;
+    bodyStuff.append("  <PARAGRAPH>\n");
+    bodyStuff.append("   <TEXT xml:space=\"preserve\">#</TEXT>\n");
+    bodyStuff.append("   <FORMATS>");
+    bodyStuff.append("    <FORMAT id=\"6\" pos=\"0\" len=\"1\">\n");
+    bodyStuff.append(QString("    <ANCHOR type=\"frameset\" instance=\"%1\" />\n").arg(tableName));
+    bodyStuff.append("    </FORMAT>\n");
+    bodyStuff.append("   </FORMATS>\n");
+    bodyStuff.append("  </PARAGRAPH>\n");
     */
 
     return (n[0x00] == 'E');
