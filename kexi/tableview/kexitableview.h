@@ -385,7 +385,7 @@ protected:
 	virtual void keyPressEvent(QKeyEvent*);
 	virtual void focusInEvent(QFocusEvent*);
 	virtual void focusOutEvent(QFocusEvent*);
-	virtual bool event ( QEvent * e );
+//	virtual bool event ( QEvent * e );
 	virtual void resizeEvent(QResizeEvent *);
 	virtual void viewportResizeEvent( QResizeEvent *e );//js
 	virtual void showEvent(QShowEvent *e);

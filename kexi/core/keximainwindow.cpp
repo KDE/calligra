@@ -1336,6 +1336,12 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 	if (e->type()==QEvent::Close) {
 		kdDebug() << "Close EVENT" << endl;
 	}
+	if (e->type()==QEvent::Resize) {
+		kdDebug() << "Resize EVENT" << endl;
+	}
+	if (e->type()==QEvent::ShowMaximized) {
+		kdDebug() << "ShowMaximized EVENT" << endl;
+	}
 	QWidget *focus_w = 0;
 	QWidget *w = findWindow(static_cast<QWidget*>(obj));
 	if (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut) {

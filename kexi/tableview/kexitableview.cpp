@@ -141,9 +141,9 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 		QMIN(d->pTopHeader->sizeHint().height(), d->rowHeight),
 		d->pTopHeader->sizeHint().height(), 0, 0);
 
-	setMinimumHeight(horizontalScrollBar()->height() + d->rowHeight + topMargin());
-
 	setupNavigator();
+
+//	setMinimumHeight(horizontalScrollBar()->height() + d->rowHeight + topMargin());
 
 //	navPanelLyr->addStretch(25);
 //	enableClipper(true);
@@ -168,6 +168,9 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	
 //	horizontalScrollBar()->show();
 //	updateScrollBars();
+//	resize(sizeHint());
+//	updateContents();
+//	setMinimumHeight(horizontalScrollBar()->height() + d->rowHeight + topMargin());
 }
 
 KexiTableView::~KexiTableView()
@@ -755,11 +758,11 @@ QSizePolicy KexiTableView::sizePolicy() const
 QSize KexiTableView::sizeHint() const
 {
 	const QSize &ts = tableSize();
-/*	kdDebug() << "KexiTableView::sizeHint()= " << 
+	kdDebug() << "KexiTableView::sizeHint()= " << 
 		QMAX( ts.width() + leftMargin() + 2*2, (d->navPanel ? d->navPanel->width() : 0) )
 		<< ", " <<
 		QMAX( ts.height()+topMargin()+horizontalScrollBar()->sizeHint().height(), 
-			minimumSizeHint().height() ) << endl;*/
+			minimumSizeHint().height() ) << endl;
 
 	return QSize(
 		QMAX( ts.width() + leftMargin() + 2*2, (d->navPanel ? d->navPanel->width() : 0) ),
@@ -1233,8 +1236,8 @@ void KexiTableView::paintEmptyArea( QPainter *p, int cx, int cy, int cw, int ch 
     // Regions work with shorts, so avoid an overflow and adjust the
     // table size to the visible size
     QSize ts( tableSize() );
-    ts.setWidth( QMIN( ts.width(), visibleWidth() ) );
-	ts.setHeight( QMIN( ts.height() - (d->navPanel ? d->navPanel->height() : 0), visibleHeight()) );
+//    ts.setWidth( QMIN( ts.width(), visibleWidth() ) );
+//	ts.setHeight( QMIN( ts.height() - (d->navPanel ? d->navPanel->height() : 0), visibleHeight()) );
 /*	kdDebug(44021) << QString(" (cx:%1 cy:%2 cw:%3 ch:%4)")
 			.arg(cx).arg(cy).arg(cw).arg(ch) << endl;
 	kdDebug(44021) << QString(" (w:%3 h:%4)")
@@ -1246,7 +1249,7 @@ void KexiTableView::paintEmptyArea( QPainter *p, int cx, int cy, int cw, int ch 
     QRegion reg( QRect( cx, cy, cw, ch ) );
 
     // Subtract the table from it
-    reg = reg.subtract( QRect( QPoint( 0, 0 ), ts ) );
+    reg = reg.subtract( QRect( QPoint( 0, 0 ), ts-QSize(0,d->navPanel ? d->navPanel->height() : 0) ) );
 
     // And draw the rectangles (transformed inc contents coordinates as needed)
     QMemArray<QRect> r = reg.rects();
@@ -1880,11 +1883,6 @@ void KexiTableView::focusOutEvent(QFocusEvent*)
 	updateCell(d->curRow, d->curCol);
 }
 
-bool KexiTableView::event ( QEvent * e )
-{
-	return QScrollView::event(e);
-}
-
 bool KexiTableView::focusNextPrevChild(bool next)
 {
 	if (d->pEditor)
@@ -1895,7 +1893,7 @@ bool KexiTableView::focusNextPrevChild(bool next)
 void KexiTableView::resizeEvent(QResizeEvent *e)
 {
 	QScrollView::resizeEvent(e);
-	updateGeometries();
+	//updateGeometries();
 	
 	if (d->navPanel) {
 		QRect g = d->navPanel->geometry();
@@ -1906,11 +1904,20 @@ void KexiTableView::resizeEvent(QResizeEvent *e)
 			d->navPanel->sizeHint().width(), // - verticalScrollBar()->sizeHint().width() - horizontalScrollBar()->sizeHint().width(),
 			horizontalScrollBar()->sizeHint().height()
 		);
+
+/*		d->navPanel->setGeometry(
+			frameWidth(),
+			viewport()->height() +d->pTopHeader->height() 
+			-(horizontalScrollBar()->isVisible() ? 0 : horizontalScrollBar()->sizeHint().height())
+			+frameWidth(),
+			d->navPanel->sizeHint().width(), // - verticalScrollBar()->sizeHint().width() - horizontalScrollBar()->sizeHint().width(),
+			horizontalScrollBar()->sizeHint().height()
+		);*/
 //		updateContents();
 //		d->navPanel->setGeometry(1,horizontalScrollBar()->pos().y(),
 	//		d->navPanel->width(), horizontalScrollBar()->height());
 	}
-//	updateContents(0,0,1000,1000);//js
+//	updateContents(0,0,2000,2000);//js
 //	erase(); repaint();
 }
 
@@ -2047,15 +2054,17 @@ QRect KexiTableView::cellGeometry(int row, int col) const
 QSize KexiTableView::tableSize() const
 {
 	if (rows() > 0 && cols() > 0) {
-/*		kdDebug() << "tableSize()= " << columnPos( cols() - 1 ) + columnWidth( cols() - 1 ) 
-			<< rowPos( rows()-1+(isInsertingEnabled()?1:0)) + d->rowHeight
-			+horizontalScrollBar()->sizeHint().height() + margin() << endl;*/
+		kdDebug() << "tableSize()= " << columnPos( cols() - 1 ) + columnWidth( cols() - 1 ) 
+			<< ", " << rowPos( rows()-1+(isInsertingEnabled()?1:0)) + d->rowHeight
+			+ QMAX(d->navPanel ? d->navPanel->height() : 0, horizontalScrollBar()->sizeHint().height())
+			+ margin() << endl;
 
 		return QSize( 
 			columnPos( cols() - 1 ) + columnWidth( cols() - 1 ),
 			rowPos( rows()-1+(isInsertingEnabled()?1:0)) + d->rowHeight
 			+ QMAX(d->navPanel ? d->navPanel->height() : 0, horizontalScrollBar()->sizeHint().height())
 			+ margin() 
+//-2*d->rowHeight
 		);
 //			+horizontalScrollBar()->sizeHint().height() + margin() );
 	}
@@ -2834,7 +2843,6 @@ QVariant* KexiTableView::bufferedValueAt(int col)
 	}
 	return &d->pCurrentItem->at(col);
 }
-
 
 #include "kexitableview.moc"
 

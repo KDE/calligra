@@ -68,7 +68,7 @@ QSize KexiDialogBase::minimumSizeHint() const
 	QWidget *v = m_stack->visibleWidget();
 	if (!v)
 		return KMdiChildView::minimumSizeHint();
-	return v->minimumSizeHint();
+	return v->minimumSizeHint() + QSize(0, mdiParent() ? mdiParent()->captionHeight() : 0);
 }
 
 QSize KexiDialogBase::sizeHint() const
