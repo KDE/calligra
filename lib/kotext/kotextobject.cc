@@ -1249,7 +1249,6 @@ KCommand* KoTextObject::replaceSelectionCommand( QTextCursor * cursor, const QSt
 
     format->removeRef();
 
-    //kWordDocument()->addCommand( macroCmd );
 
     setLastFormattedParag( c1.parag() );
     formatMore();
