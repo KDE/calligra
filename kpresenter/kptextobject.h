@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -44,10 +45,6 @@ class DCOPObject;
 class KPrPage;
 class KoStyle;
 
-/******************************************************************/
-/* Class: KPTextObject                                            */
-/******************************************************************/
-
 class KPTextObject :  public QObject, public KP2DObject
 {
     Q_OBJECT
@@ -60,19 +57,19 @@ public:
     virtual void setSize( double _width, double _height );
 
     virtual void setDrawEditRect( bool b )
-    { drawEditRect = b; }
+        { drawEditRect = b; }
     virtual void setDrawEmpty( bool b )
-    { drawEmpty = b; }
+        { drawEmpty = b; }
 
     virtual ObjType getType() const
-    { return OT_TEXT; }
+        { return OT_TEXT; }
     virtual QString getTypeString() const
-    { return i18n("Text"); }
+        { return i18n("Text"); }
 
     virtual bool getDrawEditRect() const
-    { return drawEditRect; }
+        { return drawEditRect; }
     virtual bool getDrawEmpty() const
-    { return drawEmpty; }
+        { return drawEmpty; }
     virtual int getSubPresSteps() const;
 
     virtual QBrush getBrush() const;
@@ -83,8 +80,9 @@ public:
     virtual double load(const QDomElement &element);
 
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
-			bool drawingShadow, bool drawContour );
-    void paint( QPainter *_painter, KoZoomHandler*_zoomHandler, bool onlyChanged, KoTextCursor* cursor, bool resetChanged, bool drawingShadow,bool drawContour );
+                        bool drawingShadow, bool drawContour );
+    void paint( QPainter *_painter, KoZoomHandler*_zoomHandler, bool onlyChanged, KoTextCursor* cursor,
+                bool resetChanged, bool drawingShadow,bool drawContour );
     void paintEdited( QPainter *_painter, KoZoomHandler*_zoomHandler,
                       bool onlyChanged, KoTextCursor* cursor, bool resetChanged );
 
@@ -113,13 +111,14 @@ public:
     KCommand * pasteKPresenter( KoTextCursor * cursor, const QCString & data, bool removeSelected );
 
     void saveParagraph( QDomDocument& doc,
-			KoTextParag * parag,
-			QDomElement &parentElem,
-			int from /* default 0 */,
-			int to /* default length()-2 */ );
+                        KoTextParag * parag,
+                        QDomElement &parentElem,
+                        int from /* default 0 */,
+                        int to /* default length()-2 */ );
     KoParagLayout loadParagLayout( QDomElement & parentElem, KPresenterDoc *doc, bool useRefStyle);
 
-    static KoTextFormat loadFormat( QDomElement &n, KoTextFormat * refFormat, const QFont & defaultFont, const QString & defaultLanguage, bool hyphen );
+    static KoTextFormat loadFormat( QDomElement &n, KoTextFormat * refFormat, const QFont & defaultFont,
+                                    const QString & defaultLanguage, bool hyphen );
 
     void setEditingTextObj( bool _edit ) { editingTextObj = _edit; }
 
@@ -188,12 +187,14 @@ private:
     KPTextObject &operator=( const KPTextObject & );
     void shadowCompatibility();
     static const QString &tagTEXTOBJ, &attrLineSpacing, &attrParagSpacing,
-                           &attrMargin, &attrBulletType1, &attrBulletType2,
-                           &attrBulletType3, &attrBulletType4, &attrBulletColor1,
-                           &attrBulletColor2, &attrBulletColor3, &attrBulletColor4,
-                           &attrObjType, &tagP, &attrAlign, &attrType,
-                           &attrDepth, &tagTEXT, &attrFamily, &attrPointSize,
-                           &attrBold, &attrItalic, & attrUnderline,& attrStrikeOut,&attrColor, &attrWhitespace, &attrTextBackColor, &attrVertAlign, &attrLinkName, &attrHrefName;
+        &attrMargin, &attrBulletType1, &attrBulletType2,
+        &attrBulletType3, &attrBulletType4, &attrBulletColor1,
+        &attrBulletColor2, &attrBulletColor3, &attrBulletColor4,
+        &attrObjType, &tagP, &attrAlign, &attrType,
+        &attrDepth, &tagTEXT, &attrFamily, &attrPointSize,
+        &attrBold, &attrItalic, & attrUnderline,& attrStrikeOut,
+        &attrColor, &attrWhitespace, &attrTextBackColor,
+        &attrVertAlign, &attrLinkName, &attrHrefName;
 
     /** The contained text object */
     KoTextObject *m_textobj;
@@ -209,7 +210,7 @@ private:
 
 class KPTextView : public KoTextView
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     KPTextView( KPTextObject * txtObj, KPrCanvas *_canvas );
     virtual ~KPTextView();
@@ -239,7 +240,8 @@ public:
     void insertVariable( int type, int subtype = 0 );
     void insertCustomVariable( const QString &name);
     void insertLink(const QString &_linkName, const QString & hrefName);
-    void insertVariable( KoVariable *var, KoTextFormat *format =0, bool removeSelectedText=true,bool refreshCustomMenu =false /*don't refresh variable custom menu all the time */);
+    void insertVariable( KoVariable *var, KoTextFormat *format =0, bool removeSelectedText=true,
+                         bool refreshCustomMenu =false /*don't refresh variable custom menu all the time */);
 
     void terminate(bool removeSelection=true);
     void insertComment(const QString &_note);

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2002, 2003 Ariya Hidayat <ariya@kde.org>
@@ -39,10 +40,6 @@ class QListView;
 class KIntNumInput;
 class KColorButton;
 class QSlider;
-
-/******************************************************************/
-/* class PgConfDia                                                */
-/******************************************************************/
 
 class PgConfDia : public KDialogBase
 {

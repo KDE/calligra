@@ -42,7 +42,7 @@ int main( int argc, char **argv )
     app.dcopClient()->registerAs( "kpresenter" );
 
     if (!app.start())
-	return 1;
+        return 1;
 
     return app.exec();
 }

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2002, 2003 Ariya Hidayat <ariya@kde.org>
@@ -39,14 +40,9 @@
 #include <knuminput.h>
 #include <qslider.h>
 
-/******************************************************************/
-/* class PgConfDia                                                */
-/******************************************************************/
-
-/*================================================================*/
 PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc* doc )
     : KDialogBase( KDialogBase::Tabbed, i18n("Configure Slide Show"),
-      Ok|Cancel, Ok, parent, "pgConfDia", true ),
+                   Ok|Cancel, Ok, parent, "pgConfDia", true ),
       m_doc( doc )
 {
     setupPageGeneral();
@@ -56,7 +52,6 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc* doc )
     connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
 }
 
-/*================================================================*/
 void PgConfDia::setupPageGeneral()
 {
     QFrame* generalPage = addPage( i18n("&General") );
@@ -107,7 +102,6 @@ void PgConfDia::setupPageGeneral()
     spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 }
 
-/*================================================================*/
 void PgConfDia::setupPageSlides()
 {
     QFrame* slidesPage = addPage( i18n("&Slides") );
@@ -123,8 +117,8 @@ void PgConfDia::setupPageSlides()
     {
         KPrPage *page=m_doc->pageList().at( i );
         QCheckListItem* item = new QCheckListItem( slides,
-            page->pageTitle( i18n( "Slide %1" ).arg( i + 1 ) ),
-            QCheckListItem::CheckBox );
+                                                   page->pageTitle( i18n( "Slide %1" ).arg( i + 1 ) ),
+                                                   QCheckListItem::CheckBox );
         item->setOn( page->isSlideSelected() );
     }
 
@@ -141,36 +135,30 @@ void PgConfDia::setupPageSlides()
     spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 }
 
-/*================================================================*/
 PgConfDia::~PgConfDia()
 {
 }
 
-/*================================================================*/
 bool PgConfDia::getInfiniteLoop() const
 {
     return infiniteLoop->isChecked();
 }
 
-/*================================================================*/
 bool PgConfDia::getManualSwitch() const
 {
     return manualSwitch->isChecked();
 }
 
-/*================================================================*/
 bool PgConfDia::getPresentationDuration() const
 {
     return presentationDuration->isChecked();
 }
 
-/*================================================================*/
 QPen PgConfDia::getPen() const
 {
     return QPen( penColor->color(), penWidth->value() );
 }
 
-/*================================================================*/
 QValueList<bool> PgConfDia::getSelectedSlides() const
 {
     QValueList<bool> selectedSlides;
@@ -187,7 +175,6 @@ QValueList<bool> PgConfDia::getSelectedSlides() const
     return selectedSlides;
 }
 
-/*================================================================*/
 void PgConfDia::selectAllSlides()
 {
     QListViewItem *item = slides->firstChild();
@@ -199,7 +186,6 @@ void PgConfDia::selectAllSlides()
     }
 }
 
-/*================================================================*/
 void PgConfDia::deselectAllSlides()
 {
     QListViewItem *item = slides->firstChild();
@@ -223,4 +209,4 @@ PresSpeed PgConfDia::getPresSpeed() const
     return static_cast<PresSpeed>(value);
 }
 
-#include <pgconfdia.moc>
+#include "pgconfdia.moc"

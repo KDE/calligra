@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent MONTEL <lmontel@mandrakesoft.com>
 
@@ -26,9 +27,8 @@
 KPTextViewIface::KPTextViewIface( KPTextView *_textview )
     :KoTextViewIface(_textview)
 {
-   m_textview = _textview;
+    m_textview = _textview;
 }
-
 
 void KPTextViewIface::insertVariable( int type, int subtype )
 {
@@ -72,48 +72,48 @@ void KPTextViewIface::paste()
 
 void KPTextViewIface::insertVariable( const QString & var)
 {
-  if( var=="DATE")
-    m_textview->insertVariable(0,1);
-  else if (var=="FIXED-DATE")
-    m_textview->insertVariable(0,0);
-  else if (var=="TIME")
-    m_textview->insertVariable(2,1);
-  else if (var=="FIXED-TIME")
-    m_textview->insertVariable(2,0);
-  else if (var=="FILENAME")
-    m_textview->insertVariable(8,0);
-  else if (var=="AUTHORNAME")
-    m_textview->insertVariable(8,2);
-  else if (var=="EMAIL")
-    m_textview->insertVariable(8,3);
-  else if (var=="TITLE")
-    m_textview->insertVariable(8,10);
-  else if (var=="ABSTRACT")
-    m_textview->insertVariable(8,11);
-  else if (var=="DIRECTORYNAME")
-    m_textview->insertVariable(8,1);
-  else if (var=="COMPANYNAME")
-    m_textview->insertVariable(8,4);
-  else if (var=="PATHFILENAME")
-    m_textview->insertVariable(8,5);
-  else if (var=="FILENAMEWITHOUTEXTENSION")
-    m_textview->insertVariable(8,6);
-  else if (var=="CURRENTPAGE")
-    m_textview->insertVariable(4,0);
-  else if (var=="TOTALPAGE")
-    m_textview->insertVariable(4,1);
-  else if (var=="TELEPHONE")
-    m_textview->insertVariable(8,7);
-  else if (var=="FAX")
-    m_textview->insertVariable(8,8);
-  else if (var=="COUNTRY")
-    m_textview->insertVariable(8,9);
-  else if (var=="POSTAL_CODE")
-    m_textview->insertVariable(8,12);
-  else if (var=="CITY")
-    m_textview->insertVariable(8,13);
-  else if (var=="STREET")
-    m_textview->insertVariable(8,14);
+    if( var=="DATE")
+        m_textview->insertVariable(0,1);
+    else if (var=="FIXED-DATE")
+        m_textview->insertVariable(0,0);
+    else if (var=="TIME")
+        m_textview->insertVariable(2,1);
+    else if (var=="FIXED-TIME")
+        m_textview->insertVariable(2,0);
+    else if (var=="FILENAME")
+        m_textview->insertVariable(8,0);
+    else if (var=="AUTHORNAME")
+        m_textview->insertVariable(8,2);
+    else if (var=="EMAIL")
+        m_textview->insertVariable(8,3);
+    else if (var=="TITLE")
+        m_textview->insertVariable(8,10);
+    else if (var=="ABSTRACT")
+        m_textview->insertVariable(8,11);
+    else if (var=="DIRECTORYNAME")
+        m_textview->insertVariable(8,1);
+    else if (var=="COMPANYNAME")
+        m_textview->insertVariable(8,4);
+    else if (var=="PATHFILENAME")
+        m_textview->insertVariable(8,5);
+    else if (var=="FILENAMEWITHOUTEXTENSION")
+        m_textview->insertVariable(8,6);
+    else if (var=="CURRENTPAGE")
+        m_textview->insertVariable(4,0);
+    else if (var=="TOTALPAGE")
+        m_textview->insertVariable(4,1);
+    else if (var=="TELEPHONE")
+        m_textview->insertVariable(8,7);
+    else if (var=="FAX")
+        m_textview->insertVariable(8,8);
+    else if (var=="COUNTRY")
+        m_textview->insertVariable(8,9);
+    else if (var=="POSTAL_CODE")
+        m_textview->insertVariable(8,12);
+    else if (var=="CITY")
+        m_textview->insertVariable(8,13);
+    else if (var=="STREET")
+        m_textview->insertVariable(8,14);
 }
 
 void KPTextViewIface::insertNote(const QString &_note)

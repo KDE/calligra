@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent MONTEL <lmontel@mandrakesoft.com>
 
@@ -32,7 +33,7 @@
 KPTextObjectIface::KPTextObjectIface( KPTextObject *_textobject )
     : KPresenterObject2DIface(_textobject)
 {
-   m_textobject = _textobject;
+    m_textobject = _textobject;
 }
 
 DCOPRef KPTextObjectIface::startEditing()
@@ -41,7 +42,7 @@ DCOPRef KPTextObjectIface::startEditing()
     KPresenterView *view=doc->firstView();
     view->getCanvas()->createEditing( m_textobject);
     return DCOPRef( kapp->dcopClient()->appId(),
-		    view->getCanvas()->currentTextObjectView()->dcopObject()->objId() );
+                    view->getCanvas()->currentTextObjectView()->dcopObject()->objId() );
 }
 
 bool KPTextObjectIface::hasSelection() const
@@ -63,13 +64,12 @@ void KPTextObjectIface::recalcPageNum( )
 {
     //FIXME
     //m_textobject->recalcPageNum(m_textobject->kPresenterDocument());
-
 }
 
 void KPTextObjectIface::setBoldText( bool b )
 {
-   KCommand *cmd=m_textobject->textObject()->setBoldCommand( b );
-   delete cmd;
+    KCommand *cmd=m_textobject->textObject()->setBoldCommand( b );
+    delete cmd;
 }
 
 void KPTextObjectIface::setItalicText( bool b )
@@ -209,26 +209,15 @@ void KPTextObjectIface::changeCaseOfText( const QString & caseType)
 {
     KCommand *cmd = 0L;
     if( caseType.lower() == "uppercase" )
-    {
         cmd=m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::UpperCase );
-    }
     else if( caseType.lower() =="lowercase" )
-    {
         cmd=m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::LowerCase );
-    }
     else if( caseType.lower() =="titlecase" )
-    {
         cmd=m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::TitleCase );
-    }
     else if( caseType.lower() =="togglecase" )
-    {
         cmd=m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::ToggleCase );
-    }
     else if( caseType.lower() =="sentencecase" )
-    {
         cmd = m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::SentenceCase );
-    }
-
     else
         kdDebug(33001)<<"Error in void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType) parameter\n";
     delete cmd;

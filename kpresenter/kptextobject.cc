@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -63,10 +64,6 @@ using namespace std;
 
 #undef S_NONE // Solaris defines it in sys/signal.h
 
-/******************************************************************/
-/* Class: KPTextObject                                            */
-/******************************************************************/
-
 const QString &KPTextObject::tagTEXTOBJ=KGlobal::staticQString("TEXTOBJ");
 const QString &KPTextObject::attrLineSpacing=KGlobal::staticQString("lineSpacing");
 const QString &KPTextObject::attrParagSpacing=KGlobal::staticQString("paragSpacing");
@@ -79,7 +76,6 @@ const QString &KPTextObject::attrBulletColor1=KGlobal::staticQString("bulletColo
 const QString &KPTextObject::attrBulletColor2=KGlobal::staticQString("bulletColor2");
 const QString &KPTextObject::attrBulletColor3=KGlobal::staticQString("bulletColor3");
 const QString &KPTextObject::attrBulletColor4=KGlobal::staticQString("bulletColor4");
-//const QString &KPTextObject::attrObjType=KGlobal::staticQString("objType"); //lukas: was never used AFAIK
 const QString &KPTextObject::tagP=KGlobal::staticQString("P");
 const QString &KPTextObject::attrAlign=KGlobal::staticQString("align");
 const QString &KPTextObject::attrType=KGlobal::staticQString("type");
@@ -97,7 +93,6 @@ const QString &KPTextObject::attrTextBackColor=KGlobal::staticQString("textbackc
 const QString &KPTextObject::attrVertAlign=KGlobal::staticQString("VERTALIGN");
 
 
-/*================ default constructor ===========================*/
 KPTextObject::KPTextObject(  KPresenterDoc *doc )
     : KP2DObject()
 {
@@ -135,7 +130,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     connect( this, SIGNAL( repaintChanged( KPTextObject * ) ),
              m_doc, SLOT( slotRepaintChanged( KPTextObject * ) ) );
     connect(m_textobj, SIGNAL( showFormatObject(const KoTextFormat &) ),
-             SLOT( slotFormatChanged(const KoTextFormat &)) );
+            SLOT( slotFormatChanged(const KoTextFormat &)) );
     connect( m_textobj, SIGNAL( afterFormatting( int, KoTextParag*, bool* ) ),
              SLOT( slotAfterFormatting( int, KoTextParag*, bool* ) ) );
     connect( m_textobj, SIGNAL( paragraphDeleted( KoTextParag*) ),
@@ -190,7 +185,6 @@ void KPTextObject::resizeTextDocument( bool widthChanged, bool heightChanged )
     }
 }
 
-/*======================= set size ===============================*/
 void KPTextObject::setSize( double _width, double _height )
 {
     bool widthModified = KABS( _width - ext.width() ) > DBL_EPSILON ; // floating-point equality test
@@ -202,7 +196,6 @@ void KPTextObject::setSize( double _width, double _height )
     }
 }
 
-/*========================= save =================================*/
 QDomDocumentFragment KPTextObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
@@ -210,7 +203,6 @@ QDomDocumentFragment KPTextObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-/*========================== load ================================*/
 double KPTextObject::load(const QDomElement &element)
 {
     double offset=KP2DObject::load(element);
@@ -268,7 +260,7 @@ void KPTextObject::shadowCompatibility()
 
 // Standard paint method for KP2DObjects.
 void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
-			  bool /*drawingShadow*/, bool drawContour )
+                          bool /*drawingShadow*/, bool drawContour )
 {
     //never draw Shadow.
     //shadow in text obj is a properties from paragraph
@@ -277,7 +269,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
 // Special method for drawing a text object that is being edited
 void KPTextObject::paintEdited( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                         bool onlyChanged, KoTextCursor* cursor, bool resetChanged )
+                                bool onlyChanged, KoTextCursor* cursor, bool resetChanged )
 {
     _painter->save();
     _painter->translate( _zoomHandler->zoomItX(orig.x()), _zoomHandler->zoomItY(orig.y()) );
@@ -290,20 +282,20 @@ void KPTextObject::paintEdited( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
 // Common functionality for the above 2 methods
 void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                         bool onlyChanged, KoTextCursor* cursor, bool resetChanged,
-                         bool drawingShadow,bool drawContour )
+                          bool onlyChanged, KoTextCursor* cursor, bool resetChanged,
+                          bool drawingShadow,bool drawContour )
 {
     double ow = ext.width();
     double oh = ext.height();
     double pw = pen.width() / 2;
     drawingShadow=false;
     if ( drawContour ) {
-	QPen pen3( Qt::black, 1, Qt::DotLine );
-	_painter->setPen( pen3 );
+        QPen pen3( Qt::black, 1, Qt::DotLine );
+        _painter->setPen( pen3 );
         _painter->setRasterOp( Qt::NotXorROP );
         _painter->drawRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow), _zoomHandler->zoomItY( oh) );
 
-	return;
+        return;
     }
 
     _painter->save();
@@ -386,8 +378,8 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
         drawingFlags |= KoTextDocument::DrawMisspelledLine;
     if ( !editMode )
         drawingFlags |=KoTextDocument::DontDrawNoteVariable;
-            //if ( m_doc->viewFormattingChars() )
-            //    drawingFlags |= KoTextDocument::DrawFormattingChars;
+    //if ( m_doc->viewFormattingChars() )
+    //    drawingFlags |= KoTextDocument::DrawFormattingChars;
 
     if ( specEffects )
     {
@@ -426,7 +418,6 @@ int KPTextObject::getSubPresSteps() const
 }
 
 
-/*=========================== save ktextobject ===================*/
 QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
 {
 #if 0
@@ -565,7 +556,6 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFor
     return element;
 }
 
-/*====================== load ktextobject ========================*/
 void KPTextObject::loadKTextObject( const QDomElement &elem )
 {
     QDomElement e = elem.firstChild().toElement();
@@ -663,7 +653,8 @@ void KPTextObject::loadKTextObject( const QDomElement &elem )
                         lastParag->remove( 0, 1 ); // Remove current trailing space
                         firstTextTag = false;
                     }
-                    KoTextFormat fm = loadFormat( n, lastParag->paragraphFormat(), m_doc->defaultFont(), m_doc->globalLanguage(), m_doc->globalHyphenation() );
+                    KoTextFormat fm = loadFormat( n, lastParag->paragraphFormat(), m_doc->defaultFont(), m_doc->globalLanguage(),
+                                                  m_doc->globalHyphenation() );
 
                     QString txt = n.firstChild().toText().data();
 
@@ -728,11 +719,14 @@ void KPTextObject::loadVariable( QValueList<QDomElement> & listVariable,KoTextPa
             kdDebug(33001) << "loadKTextObject variable type=" << type << " key=" << key << endl;
             KoVariableFormat * varFormat = key.isEmpty() ? 0 : m_doc->variableFormatCollection()->format( key.latin1() );
             // If varFormat is 0 (no key specified), the default format will be used.
-            KoVariable * var =m_doc->getVariableCollection()->createVariable( type, -1, m_doc->variableFormatCollection(), varFormat, lastParag->textDocument(),m_doc, correct, true/* force default format for date/time*/ );
+            KoVariable * var =m_doc->getVariableCollection()->createVariable( type, -1, m_doc->variableFormatCollection(),
+                                                                              varFormat, lastParag->textDocument(),
+                                                                              m_doc, correct, true/* force default format for date/time*/ );
             if ( var )
             {
                 var->load( varElem );
-                KoTextFormat format = loadFormat( *it, lastParag->paragraphFormat(), m_doc->defaultFont(), m_doc->globalLanguage(), m_doc->globalHyphenation() );
+                KoTextFormat format = loadFormat( *it, lastParag->paragraphFormat(), m_doc->defaultFont(), m_doc->globalLanguage(),
+                                                  m_doc->globalHyphenation() );
                 lastParag->setCustomItem( index, var, lastParag->document()->formatCollection()->format( &format ));
                 var->recalc();
             }
@@ -741,7 +735,8 @@ void KPTextObject::loadVariable( QValueList<QDomElement> & listVariable,KoTextPa
 
 }
 
-KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat, const QFont & defaultFont, const QString & defaultLanguage, bool hyphen )
+KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat, const QFont & defaultFont,
+                                       const QString & defaultLanguage, bool hyphen )
 {
     KoTextFormat format;
     format.setHyphenation( hyphen );
@@ -753,9 +748,7 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
         fn = format.font();
     }
     else
-    {
         fn = defaultFont;
-    }
 
     if ( !n.isNull() )
     {
@@ -795,13 +788,11 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
             format.setUnderlineLineType ( (bool)value.toInt() ? KoTextFormat::U_SIMPLE :KoTextFormat::U_NONE);
     }
     if (n.hasAttribute("underlinestyleline") )
-    {
         format.setUnderlineLineStyle( KoTextFormat::stringToUnderlineStyle( n.attribute("underlinestyleline") ));
-    }
+
     if (n.hasAttribute("underlinecolor"))
-    {
         format.setTextUnderlineColor(QColor(n.attribute("underlinecolor")));
-    }
+
     if(n.hasAttribute(attrStrikeOut))
     {
         QString value = n.attribute( attrStrikeOut );
@@ -814,6 +805,7 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
         else
             format.setStrikeOutLineType ( (bool)value.toInt() ? KoTextFormat::S_SIMPLE :KoTextFormat::S_NONE);
     }
+
     if (n.hasAttribute("strikeoutstyleline"))
     {
         QString strLineType = n.attribute("strikeoutstyleline");
@@ -1038,7 +1030,7 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem, KPresente
         layout.shadowDistance=element.attribute("distance").toInt();
         layout.shadowDirection=element.attribute("direction").toInt();
         if ( element.hasAttribute(attrColor) ) {
-          layout.shadowColor.setNamedColor(element.attribute(attrColor));
+            layout.shadowColor.setNamedColor(element.attribute(attrColor));
         }
         else if ( element.hasAttribute("red") )  //compatibility
         {
@@ -1174,7 +1166,6 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
     }
 }
 
-/*================================================================*/
 void KPTextObject::recalcPageNum( KPrPage *page )
 {
     int pgnum=m_doc->pageList().findRef(page);
@@ -1195,25 +1186,18 @@ void KPTextObject::recalcPageNum( KPrPage *page )
         if ( var && !var->isDeleted()  )
         {
 
-           if ( var->subtype() == KPrPgNumVariable::VST_PGNUM_CURRENT )
-           {
-               var->setPgNum( pgnum + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage()-1);
-           }
-           else if ( var->subtype() == KPrPgNumVariable::VST_CURRENT_SECTION )
-           {
-               var->setSectionTitle( page->pageTitle("") );
-           }
-           else if ( var->subtype() == KPrPgNumVariable::VST_PGNUM_PREVIOUS )
-           {
-               var->setPgNum( QMAX( pgnum -1 , 0) + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage());
-           }
-           else if ( var->subtype() == KPrPgNumVariable::VST_PGNUM_NEXT )
-           {
-               var->setPgNum( QMIN( m_doc->getPageNums(), pgnum +1) + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage());
-           }
-           var->resize();
-           var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
-           var->paragraph()->setChanged( true );
+            if ( var->subtype() == KPrPgNumVariable::VST_PGNUM_CURRENT )
+                var->setPgNum( pgnum + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage()-1);
+            else if ( var->subtype() == KPrPgNumVariable::VST_CURRENT_SECTION )
+                var->setSectionTitle( page->pageTitle("") );
+            else if ( var->subtype() == KPrPgNumVariable::VST_PGNUM_PREVIOUS )
+                var->setPgNum( QMAX( pgnum -1 , 0) + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage());
+            else if ( var->subtype() == KPrPgNumVariable::VST_PGNUM_NEXT )
+                var->setPgNum( QMIN( m_doc->getPageNums(), pgnum +1) + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage());
+
+            var->resize();
+            var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
+            var->paragraph()->setChanged( true );
         }
     }
 }
@@ -1250,9 +1234,8 @@ void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, co
     while ( parag ) {
         if ( !parag->isValid() )
             parag->format();
-        if ( i == from ) {
+        if ( i == from )
             r.setTop( m_doc->zoomHandler()->layoutUnitToPixelY( parag->rect().top() ) );
-        }
         if ( i == to ) {
             r.setBottom( m_doc->zoomHandler()->layoutUnitToPixelY( parag->rect().bottom() ) );
             break;
@@ -1367,7 +1350,6 @@ KPTextView * KPTextObject::createKPTextView( KPrCanvas * _canvas )
     return new KPTextView( this, _canvas );
 }
 
-
 void KPTextObject::removeHighlight ()
 {
     m_textobj->removeHighlight( true /*repaint*/ );
@@ -1403,9 +1385,9 @@ void KPTextObject::highlightPortion( KoTextParag * parag, int index, int length,
         QRect expose = m_doc->zoomHandler()->layoutUnitToPixel( parag->rect() );
         expose.moveBy( rect.x(), rect.y() );
         canvas->ensureVisible( (expose.left()+expose.right()) / 2,  // point = center of the rect
-                                 (expose.top()+expose.bottom()) / 2,
-                                 (expose.right()-expose.left()) / 2,  // margin = half-width of the rect
-                                 (expose.bottom()-expose.top()) / 2);
+                               (expose.top()+expose.bottom()) / 2,
+                               (expose.right()-expose.left()) / 2,  // margin = half-width of the rect
+                               (expose.bottom()-expose.top()) / 2);
     }
 }
 
@@ -1420,7 +1402,7 @@ KCommand * KPTextObject::pasteKPresenter( KoTextCursor * cursor, const QCString 
         macroCmd->addCommand( m_textobj->removeSelectedTextCommand( cursor, KoTextDocument::Standard ) );
     m_textobj->emitHideCursor();
     m_textobj->setLastFormattedParag( cursor->parag()->prev() ?
-                           cursor->parag()->prev() : cursor->parag() );
+                                      cursor->parag()->prev() : cursor->parag() );
 
     // We have our own command for this.
     // Using insert() wouldn't help storing the parag stuff for redo
@@ -1469,7 +1451,6 @@ void KPTextObject::applyStyleChange( StyleChangeDefMap changed )
 {
     m_textobj->applyStyleChange( changed );
 }
-
 
 void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, bool* abort)
 {
@@ -1598,7 +1579,6 @@ void KPTextObject::setTextMargins( double _left, double _top, double _right, dou
     bbottom = _bottom;
 }
 
-
 KoRect KPTextObject::innerRect() const
 {
     KoRect inner( getRect());
@@ -1651,7 +1631,8 @@ KPTextView::KPTextView( KPTextObject * txtObj,KPrCanvas *_canvas )
 {
     m_canvas=_canvas;
     m_kptextobj=txtObj;
-    connect( txtObj->textObject(), SIGNAL( selectionChanged(bool) ), m_canvas, SIGNAL( selectionChanged(bool) ) );
+    connect( txtObj->textObject(), SIGNAL( selectionChanged(bool) ),
+             m_canvas, SIGNAL( selectionChanged(bool) ) );
     KoTextView::setReadWrite( txtObj->kPresenterDocument()->isReadWrite() );
     connect( textView(), SIGNAL( cut() ), SLOT( cut() ) );
     connect( textView(), SIGNAL( copy() ), SLOT( copy() ) );
@@ -1668,15 +1649,15 @@ KPTextView::~KPTextView()
 KoTextViewIface* KPTextView::dcopObject()
 {
     if ( !dcop )
-	dcop = new KPTextViewIface( this );
+        dcop = new KPTextViewIface( this );
 
     return dcop;
 }
 
-
 void KPTextView::terminate(bool removeSelection)
 {
-    disconnect( textView()->textObject(), SIGNAL( selectionChanged(bool) ), m_canvas, SIGNAL( selectionChanged(bool) ) );
+    disconnect( textView()->textObject(), SIGNAL( selectionChanged(bool) ),
+                m_canvas, SIGNAL( selectionChanged(bool) ) );
     textView()->terminate(removeSelection);
 }
 
@@ -1776,7 +1757,9 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
         m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] = parag->margin(QStyleSheetItem::MarginFirstLine);
         m_paragLayout.margins[QStyleSheetItem::MarginLeft] = parag->margin(QStyleSheetItem::MarginLeft);
         m_paragLayout.margins[QStyleSheetItem::MarginRight] = parag->margin(QStyleSheetItem::MarginRight);
-        m_canvas->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft], m_paragLayout.margins[QStyleSheetItem::MarginFirstLine], m_paragLayout.margins[QStyleSheetItem::MarginRight], parag->string()->isRightToLeft() );
+        m_canvas->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft],
+                                              m_paragLayout.margins[QStyleSheetItem::MarginFirstLine],
+                                              m_paragLayout.margins[QStyleSheetItem::MarginRight], parag->string()->isRightToLeft() );
     }
 
     if( m_paragLayout.tabList() != parag->tabList() || force )
@@ -1833,17 +1816,14 @@ void KPTextView::doAutoFormat( KoTextCursor* cursor, KoTextParag *parag, int ind
     }
 }
 
-bool KPTextView::doIgnoreDoubleSpace(KoTextParag * parag,
-        int index,QChar ch )
+bool KPTextView::doIgnoreDoubleSpace(KoTextParag * parag, int index,QChar ch )
 {
     if( m_kptextobj->kPresenterDocument()->allowAutoFormat())
     {
 
         KoAutoFormat * autoFormat = m_kptextobj->kPresenterDocument()->getAutoFormat();
         if( autoFormat )
-        {
             return autoFormat->doIgnoreDoubleSpace( parag, index,ch );
-        }
     }
     return false;
 }
@@ -1855,13 +1835,12 @@ void KPTextView::startDrag()
     KPrTextDrag *drag = newDrag( m_canvas );
     if ( !kpTextObject()->kPresenterDocument()->isReadWrite() )
         drag->dragCopy();
-    else {
-        if ( drag->drag() && QDragObject::target() != m_canvas  ) {
+    else
+    {
+        if ( drag->drag() && QDragObject::target() != m_canvas  )
             textObject()->removeSelectedText( cursor() );
-        }
     }
 }
-
 
 void KPTextView::showFormat( KoTextFormat *format )
 {
@@ -1900,9 +1879,7 @@ void KPTextView::keyReleaseEvent( QKeyEvent *e )
 void KPTextView::clearSelection()
 {
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
-    {
         textDocument()->removeSelection(KoTextDocument::Standard );
-    }
 }
 
 void KPTextView::selectAll(bool select)
@@ -1930,16 +1907,18 @@ QPoint KPTextView::cursorPosition( const QPoint & pos )
 #if 0
     QPoint tmp(pos);
     QWMatrix m;
-    m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(kpTextObject()->getSize().width() / 2.0), kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(kpTextObject()->getSize().height() /  2.0) );
+    m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(kpTextObject()->getSize().width() / 2.0),
+                 kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(kpTextObject()->getSize().height() /  2.0) );
     m.rotate( kpTextObject()->getAngle() );
 
 
 
-    m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(kpTextObject()->getOrig().x()), kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(kpTextObject()->getOrig().y()) );
+    m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(kpTextObject()->getOrig().x()),
+                 kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(kpTextObject()->getOrig().y()) );
     //m = m.invert();
-     tmp = m * pos;
+    tmp = m * pos;
 
-     kdDebug()<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
+    kdDebug()<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
 
     KoRect br = KoRect( 0, 0, kpTextObject()->getSize().width(), kpTextObject()->getSize().height() );
     double pw = br.width();
@@ -1949,27 +1928,31 @@ QPoint KPTextView::cursorPosition( const QPoint & pos )
     double xPos = -rr.x();
     rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
 
-    m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(pw / 2.0), kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(ph / 2.0 ));
+    m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(pw / 2.0),
+                 kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(ph / 2.0 ));
     m.rotate( kpTextObject()->getAngle() );
-    m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(rr.left() + xPos), kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(rr.top() + yPos) );
+    m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(rr.left() + xPos),
+                 kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(rr.top() + yPos) );
 
     m = m.invert();
 
-     tmp = m * pos;
+    tmp = m * pos;
 
-     kdDebug()<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
+    kdDebug()<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
 
 #endif
 
 
-    QPoint iPoint=pos - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint(kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()) );
+    QPoint iPoint=pos - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint(
+        kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()) );
     iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
     return iPoint;
 }
 
 void KPTextView::mousePressEvent( QMouseEvent *e, const QPoint &/*_pos*/)
 {
-    bool addParag = handleMousePressEvent( e, cursorPosition( e->pos() ),true /*bool canStartDrag*/, kpTextObject()->kPresenterDocument()->insertDirectCursor() );
+    bool addParag = handleMousePressEvent( e, cursorPosition( e->pos() ),true /*bool canStartDrag*/,
+                                           kpTextObject()->kPresenterDocument()->insertDirectCursor() );
     if ( addParag )
         kpTextObject()->kPresenterDocument()->setModified( true );
 }
@@ -1984,9 +1967,7 @@ void KPTextView::mouseMoveEvent( QMouseEvent *e, const QPoint &_pos )
     if ( textView()->maybeStartDrag( e ) )
         return;
     if ( _pos.y() > 0  )
-    {
         textView()->handleMouseMoveEvent( e,cursorPosition( e->pos() ) );
-    }
 }
 
 void KPTextView::mouseReleaseEvent( QMouseEvent *, const QPoint & )
@@ -2053,9 +2034,7 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
             }
             Q_ASSERT(popup);
             if (popup)
-            {
                 popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
-            }
         }
         else
         {
@@ -2070,17 +2049,19 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
 
 void KPTextView::insertCustomVariable( const QString &name)
 {
-     KoVariable * var = 0L;
-     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
-     var = new KoCustomVariable( textObject()->textDocument(), name, doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
-     insertVariable( var);
+    KoVariable * var = 0L;
+    KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
+    var = new KoCustomVariable( textObject()->textDocument(), name, doc->variableFormatCollection()->format( "STRING" ),
+                                doc->getVariableCollection());
+    insertVariable( var);
 }
 
 void KPTextView::insertLink(const QString &_linkName, const QString & hrefName)
 {
     KoVariable * var = 0L;
     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
-    var = new KoLinkVariable( textObject()->textDocument(),_linkName,hrefName , doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
+    var = new KoLinkVariable( textObject()->textDocument(),_linkName,hrefName , doc->variableFormatCollection()->format( "STRING" ),
+                              doc->getVariableCollection());
     insertVariable( var);
 }
 
@@ -2090,7 +2071,8 @@ void KPTextView::insertComment(const QString &_comment)
     KoVariable * var = 0L;
     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
 
-    var = new KoNoteVariable( textObject()->textDocument(),_comment, doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
+    var = new KoNoteVariable( textObject()->textDocument(),_comment, doc->variableFormatCollection()->format( "STRING" ),
+                              doc->getVariableCollection());
     insertVariable( var, 0,false/*don't delete selected text*/);
 }
 
@@ -2105,7 +2087,9 @@ void KPTextView::insertVariable( int type, int subtype )
         KoCustomVarDialog dia( m_canvas );
         if ( dia.exec() == QDialog::Accepted )
         {
-            KoCustomVariable *v = new KoCustomVariable( textObject()->textDocument(), dia.name(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection() );
+            KoCustomVariable *v = new KoCustomVariable( textObject()->textDocument(), dia.name(),
+                                                        doc->variableFormatCollection()->format( "STRING" ),
+                                                        doc->getVariableCollection() );
             v->setValue( dia.value() );
             var = v;
             refreshCustomMenu = true;
@@ -2133,8 +2117,8 @@ void KPTextView::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, b
         kdDebug(33001) << "KPTextView::insertVariable currentFormat=" << currentFormat() << endl;
 #endif
         textObject()->insert( cursor(), format, KoTextObject::customItemChar(),
-                                false, removeSelectedText, i18n("Insert Variable"),
-                                customItemsMap );
+                              false, removeSelectedText, i18n("Insert Variable"),
+                              customItemsMap );
         var->recalc();
         cursor()->parag()->invalidate(0);
         cursor()->parag()->setChanged( true );
@@ -2199,8 +2183,10 @@ void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
         e->ignore();
         return;
     }
-    QPoint iPoint=e->pos() - doc->zoomHandler()->zoomPoint(kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()));
-    iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
+    QPoint iPoint=e->pos() - doc->zoomHandler()->zoomPoint(
+        kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()));
+    iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit(
+        QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
 
     textObject()->emitHideCursor();
     placeCursor( iPoint );
@@ -2215,7 +2201,8 @@ void KPTextView::dropEvent( QDropEvent * e )
     {
         e->acceptAction();
         KoTextCursor dropCursor( textDocument() );
-        QPoint dropPoint=e->pos() - doc->zoomHandler()->zoomPoint( kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()));
+        QPoint dropPoint=e->pos() - doc->zoomHandler()->zoomPoint(
+            kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()));
         dropPoint=doc->zoomHandler()->pixelToLayoutUnit( QPoint(dropPoint.x()+ m_canvas->diffx(),dropPoint.y()+m_canvas->diffy()) );
         KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));
         dropCursor.place( dropPoint, textDocument()->firstParag() );
@@ -2269,8 +2256,8 @@ void KPTextView::dropEvent( QDropEvent * e )
 }
 
 void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElement &parentElem,
-                         int from /* default 0 */,
-                         int to /* default length()-2 */ )
+                                  int from /* default 0 */,
+                                  int to /* default length()-2 */ )
 {
     if(!parag)
         return;
