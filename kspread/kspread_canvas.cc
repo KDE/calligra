@@ -2133,7 +2133,7 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
     }
 
     if (cell == NULL)
-      row = KS_rowMax;
+      row = marker.y();
     else
       row = cell->row();
 
@@ -2226,7 +2226,7 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
     }
 
     if (cell == NULL)
-      col = KS_colMax;
+      col = marker.x();
     else
       col = cell->column();
 
