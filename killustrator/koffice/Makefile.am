@@ -37,5 +37,8 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/killustrator
 rc_DATA = KIllustrator.rc
 
-# SUBDIRS =  . plugins pics dtd toolbar
+messages: rc.cpp
+	$(XGETTEXT) rc.cpp *.cc -o $(podir)/killustrator.pot
+
 SUBDIRS = templates
+
