@@ -585,8 +585,8 @@
       </Parameter>
       <Help>
 	<Text>The ROOTN() function returns the non-negative nth root of x.</Text>
-	<Syntax>SQRTN(x;n)</Syntax>
-	<Example>SQRTN(9;2) equals 3</Example>
+	<Syntax>ROOTN(x;n)</Syntax>
+	<Example>ROOTN(9;2) equals 3</Example>
 	<Related>SQRT</Related>
       </Help>
     </Function>
