@@ -324,13 +324,7 @@ bool WMLParser::doCloseCard()
   return TRUE;
 }
 
-bool WMLParser::doParagraph( QString, WMLFormatList )
-{
-  return TRUE;
-}
-
 bool WMLParser::doParagraph( QString, WMLFormatList, WMLLayout )
 {
   return TRUE;
 }
-

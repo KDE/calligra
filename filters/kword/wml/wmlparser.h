@@ -58,7 +58,6 @@ class WMLParser
     virtual bool doCloseDocument();
     virtual bool doOpenCard( QString id, QString title );
     virtual bool doCloseCard();
-    virtual bool doParagraph( QString text, WMLFormatList list );
     virtual bool doParagraph( QString, WMLFormatList, WMLLayout );
 };
 
