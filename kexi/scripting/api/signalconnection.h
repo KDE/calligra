@@ -33,6 +33,8 @@ namespace Kross { namespace Api {
 
     // Forward declarations.
     class ScriptContainer;
+    class Object;
+    class List;
     class QtObject;
     class SignalHandler;
 
@@ -44,20 +46,40 @@ namespace Kross { namespace Api {
     class SignalConnection : public QObject
     {
             Q_OBJECT
+            friend class SignalHandler;
 
         public:
-            SignalConnection(SignalHandler* signalhandler);
+
+            /**
+             * Constructor.
+             *
+             * \param signalhandler The \a SignalHandler instance
+             *       used to create this SignalConnection.
+             * \param senderobj The sender QObject that emits
+             *       the signal.
+             * \param signal The signal itself defined with
+             *       Qt's SIGNAL(mysignalname()) macro.
+             * \param function The name of the function we should
+             *        call if the signal got emitted.
+             */
+            SignalConnection(SignalHandler* signalhandler, QObject* senderobj, const char* signal, QString function);
+
+            /**
+             * Destructor.
+             */
             virtual ~SignalConnection() {}
 
-            QGuardedPtr<QObject> senderobj;
-            //QGuardedPtr<QObject> receiver;
-            const char* signal;
-            QString function;
-
+            /**
+             * Connect now.
+             */
             bool connect();
 
         private:
             SignalHandler* m_signalhandler;
+            QGuardedPtr<QObject> m_sender;
+            //QGuardedPtr<QObject> m_receiver;
+            const char* m_signal;
+            QString m_function;
 
         public slots:
             // Stupid signals and slots. To get the passed
@@ -66,7 +88,7 @@ namespace Kross { namespace Api {
             void callback();
             void callback_short(short);
             void callback_int(int);
-            void callback_int(int, int);
+            void callback_intint(int, int);
             void callback_intintint(int, int, int);
             void callback_intintintint(int, int, int, int);
             void callback_intintintintint(int, int, int, int, int);
@@ -91,6 +113,10 @@ namespace Kross { namespace Api {
             void callback_stringstringstring(const QString&, const QString&, const QString&);
             void callback_stringlist(const QStringList&);
             void callback_variant(const QVariant&);
+            // The following both slots are more generic to
+            // handle Kross::Api::Object instances.
+            void callback_object(Kross::Api::Object*);
+            void callback_list(Kross::Api::List*);
     };
 
 }}

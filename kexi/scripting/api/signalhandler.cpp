@@ -39,19 +39,15 @@ SignalHandler::~SignalHandler()
 bool SignalHandler::connect(QObject *sender, const char *signal, const QString& functionname)
 {
     // create the matching SignalConnection
-    SignalConnection* conn = new SignalConnection(this);
-    conn->senderobj = sender;
-    conn->signal = signal;
-    conn->function = functionname;
-    m_connections << conn;
+    SignalConnection* conn = new SignalConnection(this, sender, signal, functionname);
 
     // and try to connect the signal
     if(! conn->connect()) {
-        m_connections.remove(conn);
         delete conn;
         return false;
     }
 
+    m_connections << conn; // remember the SignalConnection instance.
     return true;
 }
 
@@ -59,9 +55,9 @@ bool SignalHandler::disconnect(QObject *sender, const char *signal, const QStrin
 {
     bool ok = false;
     for(QValueList<SignalConnection*>::Iterator it = m_connections.begin(); it != m_connections.end(); ++it) {
-        if( (QObject*)(*it)->senderobj == sender
-            && qstrcmp((*it)->signal, signal) == 0
-            && (*it)->function == functionname )
+        if( (QObject*)(*it)->m_sender == sender
+            && qstrcmp((*it)->m_signal, signal) == 0
+            && (*it)->m_function == functionname )
         {
             if( QObject::disconnect(sender, signal, *it, SLOT(callback())) ) {
                 m_connections.remove(it);

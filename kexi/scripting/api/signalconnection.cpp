@@ -20,6 +20,8 @@
 #include "signalconnection.h"
 
 #include "interpreter.h"
+#include "object.h"
+#include "list.h"
 #include "qtobject.h"
 #include "variant.h"
 #include "../main/scriptcontainer.h"
@@ -29,21 +31,24 @@
 
 using namespace Kross::Api;
 
-SignalConnection::SignalConnection(SignalHandler* signalhandler)
+SignalConnection::SignalConnection(SignalHandler* signalhandler, QObject* senderobj, const char* signal, QString function)
     : QObject(signalhandler)
     , m_signalhandler(signalhandler)
+    , m_sender(senderobj)
+    , m_signal(signal)
+    , m_function(function)
 {
 }
 
 bool SignalConnection::connect()
 {
     // try to determinate Qt parameters from signal
-    QString signature = QString(signal).mid(1);
+    QString signature = QString(m_signal).mid(1);
     int startpos = signature.find("(");
     int endpos = signature.findRev(")");
     if(startpos < 0 || startpos > endpos) {
         kdWarning() << QString("SignalHandler::connect() Invalid signal '%1' from sender '%2' on the try to connect with function '%3'.")
-                       .arg(signal).arg(senderobj->name()).arg(function) << endl;
+                       .arg(m_signal).arg(m_sender->name()).arg(m_function) << endl;
         return false;
     }
     QString params = signature.mid(startpos + 1, endpos - startpos - 1);
@@ -51,79 +56,86 @@ bool SignalConnection::connect()
     QString signalname = signature.left(startpos);
 
     kdDebug() << QString("SignalHandler::connect signal='%1' signalname='%2' params='%3' function='%4'")
-                         .arg(signal).arg(signalname).arg(params).arg(function) << endl;
+                         .arg(m_signal).arg(signalname).arg(params).arg(m_function) << endl;
 
+    // We need to try the matching slot now.
     if(paramlist.isEmpty())
-        return QObject::connect((QObject*)senderobj, signal, SLOT(callback()));
+        return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback()));
 
     if(paramlist.count() >= 5) {
-        if(checkConnectArgs(signal, this, SLOT(callback_intintintintint(int, int, int, int, int))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_int(int, int)));
-        if(checkConnectArgs(signal, this, SLOT(callback_intintintintbool(int, int, int, int, bool))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_int(int, int)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_intintintintint(int, int, int, int, int))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_int(int, int)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_intintintintbool(int, int, int, int, bool))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_int(int, int)));
     }
     if(paramlist.count() >= 4) {
-        if(checkConnectArgs(signal, this, SLOT(callback_intintintint(int, int, int, int))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_intintintint(int, int, int, int)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_intintintint(int, int, int, int))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_intintintint(int, int, int, int)));
     }
     if(paramlist.count() >= 3) {
-        if(checkConnectArgs(signal, this, SLOT(callback_intintint(int, int, int))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_intintint(int, int, int)));
-        if(checkConnectArgs(signal, this, SLOT(callback_intintbool(int, int, bool))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_intintbool(int, int, bool)));
-        if(checkConnectArgs(signal, this, SLOT(callback_intintstring(int, int, const QString&))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_intintstring(int, int, const QString&)));
-        if(checkConnectArgs(signal, this, SLOT(callback_stringintint(const QString&, int, int))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_stringintint(const QString&, int, int)));
-        if(checkConnectArgs(signal, this, SLOT(callback_stringboolbool(const QString&, bool, bool))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_stringboolbool(const QString&, bool, bool)));
-        if(checkConnectArgs(signal, this, SLOT(callback_stringboolint(const QString&, bool, int))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_stringboolint(const QString&, bool, int)));
-        if(checkConnectArgs(signal, this, SLOT(callback_stringstringstring(const QString&, const QString&, const QString&))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_stringstringstring(const QString&, const QString&, const QString&)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_intintint(int, int, int))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_intintint(int, int, int)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_intintbool(int, int, bool))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_intintbool(int, int, bool)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_intintstring(int, int, const QString&))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_intintstring(int, int, const QString&)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_stringintint(const QString&, int, int))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_stringintint(const QString&, int, int)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_stringboolbool(const QString&, bool, bool))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_stringboolbool(const QString&, bool, bool)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_stringboolint(const QString&, bool, int))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_stringboolint(const QString&, bool, int)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_stringstringstring(const QString&, const QString&, const QString&))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_stringstringstring(const QString&, const QString&, const QString&)));
     }
 
     if(paramlist.count() >= 2) {
-        if(checkConnectArgs(signal, this, SLOT(callback_int(int, int))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_int(int, int)));
-        if(checkConnectArgs(signal, this, SLOT(callback_intbool(int, bool))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_intbool(int, bool)));
-        if(checkConnectArgs(signal, this, SLOT(callback_stringint(const QString&, int))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_stringint(const QString&, int)));
-        if(checkConnectArgs(signal, this, SLOT(callback_stringuint(const QString&, uint))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_stringuint(const QString&, uint)));
-        if(checkConnectArgs(signal, this, SLOT(callback_stringbool(const QString&, bool))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_stringbool(const QString&, bool)));
-        if(checkConnectArgs(signal, this, SLOT(callback_stringstring(const QString&, const QString&))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_stringstring(const QString&, const QString&)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_intint(int, int))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_intint(int, int)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_intbool(int, bool))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_intbool(int, bool)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_stringint(const QString&, int))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_stringint(const QString&, int)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_stringuint(const QString&, uint))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_stringuint(const QString&, uint)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_stringbool(const QString&, bool))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_stringbool(const QString&, bool)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_stringstring(const QString&, const QString&))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_stringstring(const QString&, const QString&)));
     }
 
     if(paramlist.count() >= 1) {
-        if(checkConnectArgs(signal, this, SLOT(callback_short(short))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_short(short)));
-        if(checkConnectArgs(signal, this, SLOT(callback_int(int))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_int(int)));
-        if(checkConnectArgs(signal, this, SLOT(callback_uint(uint))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_uint(uint)));
-        if(checkConnectArgs(signal, this, SLOT(callback_long(long))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_ulong(long)));
-        if(checkConnectArgs(signal, this, SLOT(callback_ulong(ulong))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_ulong(ulong)));
-        if(checkConnectArgs(signal, this, SLOT(callback_double(double))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_double(double)));
-        if(checkConnectArgs(signal, this, SLOT(callback_char(const char*))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_char(const char*)));
-        if(checkConnectArgs(signal, this, SLOT(callback_bool(bool))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_bool(bool)));
-        if(checkConnectArgs(signal, this, SLOT(callback_string(const QString&))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_string(const QString&)));
-        if(checkConnectArgs(signal, this, SLOT(callback_stringlist(const QStringList&))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_stringlist(const QStringList&)));
-        if(checkConnectArgs(signal, this, SLOT(callback_variant(const QVariant&))))
-            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_variant(const QVariant&)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_short(short))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_short(short)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_int(int))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_int(int)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_uint(uint))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_uint(uint)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_long(long))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_ulong(long)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_ulong(ulong))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_ulong(ulong)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_double(double))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_double(double)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_char(const char*))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_char(const char*)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_bool(bool))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_bool(bool)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_string(const QString&))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_string(const QString&)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_stringlist(const QStringList&))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_stringlist(const QStringList&)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_variant(const QVariant&))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_variant(const QVariant&)));
+
+        if(checkConnectArgs(m_signal, this, SLOT(callback_object(Kross::Api::Object*))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_object(Kross::Api::Object*)));
+        if(checkConnectArgs(m_signal, this, SLOT(callback_list(Kross::Api::List*))))
+            return QObject::connect((QObject*)m_sender, m_signal, SLOT(callback_list(Kross::Api::List*)));
     }
 
-    kdWarning() << QString("SignalHandler::connect Failed to connect signal='%1'").arg(signature) << endl;
+    // No matching slot found.
+    kdWarning() << QString("SignalHandler::connect Failed to connect m_signal='%1'").arg(signature) << endl;
     return false;
 }
 
@@ -133,7 +145,7 @@ void SignalConnection::callback_short(short s) {
     callback_variant(QVariant(s)); }
 void SignalConnection::callback_int(int i) {
     callback_variant(QVariant(i)); }
-void SignalConnection::callback_int(int i1, int i2) {
+void SignalConnection::callback_intint(int i1, int i2) {
     callback_variant(QVariant( QValueList<QVariant>() << i1 << i2 )); }
 void SignalConnection::callback_intintint(int i1, int i2, int i3) {
     callback_variant(QVariant( QValueList<QVariant>() << i1 << i2 << i3 )); }
@@ -181,25 +193,17 @@ void SignalConnection::callback_stringstringstring(const QString& s1, const QStr
     callback_variant(QVariant( QValueList<QVariant>() << s1 << s2 << s3 )); }
 void SignalConnection::callback_stringlist(const QStringList& sl) {
     callback_variant(QVariant(sl)); }
+void SignalConnection::callback_variant(const QVariant& variant) {
+    callback_object(variant.isValid() ? Kross::Api::Variant::create(variant) : 0); }
+void SignalConnection::callback_object(Kross::Api::Object* obj) {
+    callback_list(obj ? Kross::Api::List::create(QValueList<Object*>() << obj) : 0); }
 
-void SignalConnection::callback_variant(const QVariant& variant)
+void SignalConnection::callback_list(Kross::Api::List* args)
 {
-    QObject* obj = (QObject*)sender();
-    if(! obj) {
-        kdWarning() << "SignalHandler::callback() failed cause sender is not a QObject." << endl;
-        return;
-    }
-
     kdDebug() << QString("SignalConnection::callback() sender='%1' signal='%2' function='%3'")
-                 .arg(obj->name()).arg(signal).arg(function) << endl;
+                 .arg(m_sender->name()).arg(m_signal).arg(m_function) << endl;
 
-    QValueList<Object*> args;
-    if(variant.isValid())
-        args.append( Kross::Api::Variant::create(variant) );
-
-    m_signalhandler->m_scriptcontainer->callFunction(
-        function,
-        args.isEmpty() ? 0 : Kross::Api::List::create(args)
-    );
+    m_signalhandler->m_scriptcontainer->callFunction(m_function, args);
 }
+
 
