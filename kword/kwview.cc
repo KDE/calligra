@@ -144,7 +144,6 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
              actionEditCopy, SLOT(setEnabled(bool)) );
 
     gui->canvasWidget()->updateCurrentFormat();
-    updateButtons();
     setFocusProxy( gui->canvasWidget() );
 }
 
@@ -237,6 +236,7 @@ void KWView::initGui()
     }
 
     updatePageInfo();
+    updateButtons();
 }
 
 void KWView::setupActions()
@@ -991,16 +991,19 @@ void KWView::setTool( MouseMode _mouseMode )
     actionTableSplitCells->setEnabled( FALSE );
     actionTableDelete->setEnabled( FALSE );
     actionTableUngroup->setEnabled( FALSE );
+    KWTableFrameSet *table = gui->canvasWidget()->getTable();
 
     switch ( _mouseMode ) {
     case MM_EDIT: {
-        actionTableInsertRow->setEnabled( TRUE );
-        actionTableInsertCol->setEnabled( TRUE );
-        actionTableDelRow->setEnabled( TRUE );
-        actionTableDelCol->setEnabled( TRUE );
+        actionTableInsertRow->setEnabled( table );
+        actionTableInsertCol->setEnabled( table );
+        actionTableDelRow->setEnabled( table );
+        actionTableDelCol->setEnabled( table );
+        actionTableDelete->setEnabled( table );
+
         actionTableJoinCells->setEnabled( TRUE );
         actionTableSplitCells->setEnabled( TRUE );
-        actionTableDelete->setEnabled( TRUE );
+
         actionTableUngroup->setEnabled( TRUE );
         actionBackgroundColor->setEnabled(FALSE);
     } break;
@@ -2740,6 +2743,13 @@ void KWView::updateButtons()
     actionInsertVarEmail->setEnabled(state);
     actionInsertVarAuthorName->setEnabled(state);
     actionInsertVarCompanyName->setEnabled(state);
+
+    KWTableFrameSet *table = gui->canvasWidget()->getTable();
+    actionTableInsertRow->setEnabled( table );
+    actionTableInsertCol->setEnabled( table );
+    actionTableDelRow->setEnabled( table );
+    actionTableDelCol->setEnabled( table );
+    actionTableDelete->setEnabled( table );
 
 }
 
