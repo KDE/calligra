@@ -53,10 +53,11 @@ class KFORMEDITOR_EXPORT FormWidget
 {
 	public:
 		FormWidget() {;}
-		/*! This function draws the rect \a r in the Form, above of all widgets,
+		/*! This function draws the rects in the \a list  in the Form, above of all widgets,
 		 using double-buffering. \a type can be 1 (selection rect)
 		 or 2 (insert rect, dotted). */
-		virtual void drawRect(const QRect& r, int type) = 0;
+		virtual void drawRects(const QValueList<QRect> &list, int type) = 0;
+		virtual void drawRect(const QRect &r, int type) = 0;
 		/*! This function inits the buffer used for double-buffering. Called before drawing rect. */
 		virtual void initBuffer() = 0;
 		/*! Clears the form, ie pastes the whole buffer to repaint the Form. */

@@ -193,7 +193,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 						unSelectWidget(m_moving);
 					else // the widget is the only selected, so it means we want to copy it
 					{
-						m_copyRect = m_moving->geometry();
+						//m_copyRect = m_moving->geometry();
 						m_state = CopyingWidget;
 						if(m_form->formWidget())
 							m_form->formWidget()->initBuffer();
@@ -288,18 +288,19 @@ Container::eventFilter(QObject *s, QEvent *e)
 			{
 				m_form->manager()->createContextMenu((QWidget*)s, this);
 			}
-			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton) && (m_copyRect.isValid()))
+			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton))// && (m_copyRect.isValid()))
 			{
 				// copying a widget by Ctrl+dragging
-				m_state = DoingNothing;
-				m_copyRect = QRect();
+				//m_state = DoingNothing;
+				//m_copyRect = QRect();
+
 				if(m_form->formWidget())
 					m_form->formWidget()->clearForm();
 				if(s == m_container) // should have no effect on form
 					return true;
 
 				//if(m_container->mapFromGlobal(mev->globalPos()) == m_moving->pos())
-				if(mev->pos() == m_grab)
+				if(mev->globalPos() == m_container->mapToGlobal(m_grab))
 				{
 					kdDebug() << "The widget has not been moved. No copying" << endl;
 					return true;
@@ -308,20 +309,23 @@ Container::eventFilter(QObject *s, QEvent *e)
 				m_form->setInteractiveMode(false);
 				// We simulate copy and paste
 				m_form->manager()->copyWidget();
-				m_form->manager()->setInsertPoint(m_container->mapFromGlobal(mev->globalPos()) - m_grab);
+				if(m_form->selectedWidgets()->count() > 1)
+					m_form->manager()->setInsertPoint( mev->pos() );
+				else
+					m_form->manager()->setInsertPoint( ((QWidget*)s)->mapTo(m_container, mev->pos() - m_grab) );
 				m_form->manager()->pasteWidget();
 				m_form->setInteractiveMode(true);
 
-				m_initialPos = QPoint();
+				//m_initialPos = QPoint();
 			}
 			else if(/*m_move*/m_state == MovingWidget) // one widget has been moved, so we need to update the layout
 			{
 				reloadLayout();
-				m_initialPos = QPoint();
+				//m_initialPos = QPoint();
 			}
 			// cancel copying as user released Ctrl before releasing mouse button
 
-			m_copyRect = QRect();
+			//m_copyRect = QRect();
 			m_insertRect = QRect();
 			m_state = DoingNothing;
 			return true; // eat
@@ -405,13 +409,14 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			else if(mev->state() == (LeftButton|ControlButton)) // draw the insert rect for the copied widget
 			{
-				if((s == m_container) || (m_form->selectedWidgets()->count() > 1))
+				if(s == m_container)// || (m_form->selectedWidgets()->count() > 1))
 					return true;
 
 				// We've been dragging a widget, but Ctrl was hold, so we start copy
 				if(m_state == MovingWidget)
 				{
-					m_moving->move(m_initialPos);
+					m_form->manager()->undo(); // undo last moving
+					//m_moving->move(m_initialPos);
 					if(m_form->formWidget())
 					{
 						m_container->repaint();
@@ -420,13 +425,23 @@ Container::eventFilter(QObject *s, QEvent *e)
 					m_state = CopyingWidget;
 				}
 
-				m_copyRect.moveTopLeft(m_container->mapFromGlobal( mev->globalPos()) - m_grab);
+				//m_copyRect.moveTopLeft(m_container->mapFromGlobal( mev->globalPos()) - m_grab);
 
 				if(m_form->formWidget())
 				{
-					QRect drawRect = QRect(m_container->mapTo(m_form->widget(), m_copyRect.topLeft())
-						 , m_copyRect.size());
-					m_form->formWidget()->drawRect(drawRect, 2);
+					QValueList<QRect> rectList;
+					for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next()) {
+						QRect drawRect = w->geometry();
+						QPoint p = mev->pos() - m_grab;
+						kdDebug() << mev->pos() << m_grab << s->name() << "  " << p.x() << "  " << p.y() << endl;
+						drawRect.moveBy(p.x(), p.y());
+						p = m_container->mapTo(m_form->widget(), QPoint(0, 0));
+						//drawRect = QRect( ((QWidget*)s)->mapTo(m_form->widget(), drawRect.topLeft()), drawRect.size());
+						drawRect.moveBy(p.x(), p.y());
+						rectList.append(drawRect);
+					}
+					
+					m_form->formWidget()->drawRects(rectList, 2);
 				}
 				return true;
 			}
@@ -445,13 +460,13 @@ Container::eventFilter(QObject *s, QEvent *e)
 				int dx=realdx, dy=realdy;
 
 				// If we later switch to copy mode, we need to store those info
-				if(m_form->selectedWidgets()->count() == 1)
+				/*if(m_form->selectedWidgets()->count() == 1)
 				{
 					if(m_initialPos.isNull())
 						m_initialPos = m_form->selectedWidgets()->first()->pos();
 					if(!m_insertRect.isValid())
 						m_copyRect = m_form->selectedWidgets()->first()->geometry();
-				}
+				}*/
 
 				for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
 				{
@@ -610,7 +625,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			if((kev->key() == Key_Control) && (m_state == CopyingWidget))
 			{
 				// cancel copying
-				m_copyRect = QRect();
+				//m_copyRect = QRect();
 				if(m_form->formWidget())
 					m_form->formWidget()->clearForm();
 			}

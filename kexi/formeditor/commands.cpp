@@ -812,11 +812,43 @@ BreakLayoutCommand::name() const
 // PasteWidgetCommand
 
 PasteWidgetCommand::PasteWidgetCommand(QDomDocument &domDoc, Container *container, QPoint p)
-  : m_point(p)
+ : m_point(p)
 {
 	m_data = domDoc.toCString();
 	m_containername = container->widget()->name();
 	m_form = container->form();
+
+	if(domDoc.namedItem("UI").firstChild().nextSibling().toElement().tagName() != "widget")
+		return;
+
+	QRect boundingRect;
+	for(QDomNode n = domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling()) // more than one widget
+	{
+		if(n.toElement().tagName() != "widget")
+			continue;
+		QDomElement el = n.toElement();
+
+		QDomElement rect;
+		for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
+		{
+			if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
+				rect = n.firstChild().toElement();
+		}
+	
+		QDomElement x = rect.namedItem("x").toElement();
+		QDomElement y = rect.namedItem("y").toElement();
+		QDomElement wi = rect.namedItem("width").toElement();
+		QDomElement h = rect.namedItem("height").toElement();
+	
+		int rx = x.text().toInt();
+		int ry = y.text().toInt();
+		int rw = wi.text().toInt();
+		int rh = h.text().toInt();
+		QRect r(rx, ry, rw, rh);
+		boundingRect = boundingRect.unite(r);
+	}
+
+	m_point = m_point - boundingRect.topLeft();
 }
 
 void
@@ -860,12 +892,16 @@ PasteWidgetCommand::execute()
 			continue;
 		QDomElement el = n.toElement();
 		fixNames(el);
-		fixPos(el, m_container);
+		if(!m_point.isNull())
+			moveWidgetBy(el, m_container, m_point);
+		else {
+			fixPos(el, m_container);
+			kdDebug() << "jdkjfldfksmfkdfjmqdsklfjdkkfmsqfksdfsm" << endl;
+		}
 
 		m_form->setInteractiveMode(false);
 		FormIO::loadWidget(m_container, m_form->manager()->lib(), el);
 		m_form->setInteractiveMode(true);
-
 	}
 
 	//FormIO::setCurrentForm(0);
@@ -941,10 +977,9 @@ PasteWidgetCommand::changePos(QDomElement &el, const QPoint &newpos)
 }
 
 void
-//QDomElement
 PasteWidgetCommand::fixPos(QDomElement &el, Container *container)
 {
-	QDomElement rect;
+/*	QDomElement rect;
 	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
@@ -987,7 +1022,55 @@ PasteWidgetCommand::fixPos(QDomElement &el, Container *container)
 		//return el;
 	//else
 		changePos(el, QPoint(r.x(), r.y()));
+*/
+	moveWidgetBy(el, container, QPoint(0, 0));
+}
 
+void
+PasteWidgetCommand::moveWidgetBy(QDomElement &el, Container *container, const QPoint &p)
+{
+	QDomElement rect;
+	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
+	{
+		if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
+			rect = n.firstChild().toElement();
+	}
+
+	QDomElement x = rect.namedItem("x").toElement();
+	QDomElement y = rect.namedItem("y").toElement();
+	QDomElement wi = rect.namedItem("width").toElement();
+	QDomElement h = rect.namedItem("height").toElement();
+
+	int rx = x.text().toInt();
+	int ry = y.text().toInt();
+	int rw = wi.text().toInt();
+	int rh = h.text().toInt();
+	QRect r(rx + p.x(), ry + p.y(), rw, rh);
+	kdDebug() << "Moving widget by " << p << " from " << rx << "  " << ry << " to " << r.topLeft() << endl; 
+
+	QWidget *w = m_form->widget()->childAt(r.x() + 6, r.y() + 6, false);
+
+	while(w && (w->geometry() == r))// there is already a widget there, with the same size
+	{
+		w = m_form->widget()->childAt(w->x() + 16, w->y() + 16, false);
+		r.moveBy(10,10);
+	}
+
+	// the pasted wigdet should stay inside container's boudaries
+	if(r.x() < 0)
+		r.setX(0);
+	else if(r.right() > container->widget()->width())
+		r.setX(container->widget()->width() - r.width());
+
+	if(r.y() < 0)
+		r.setY(0);
+	else if(r.bottom() > container->widget()->height())
+		r.setY(container->widget()->height() - r.height());
+
+	if(r != QRect(rx, ry, rw, rh))
+		//return el;
+	//else
+		changePos(el, QPoint(r.x(), r.y()));
 }
 
 void

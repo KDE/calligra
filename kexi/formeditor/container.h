@@ -181,9 +181,9 @@ class KFORMEDITOR_EXPORT Container : public QObject
 
 		// moving etc.
 		QPoint		m_grab;
-		QPoint		m_initialPos;
+		//QPoint		m_initialPos;
 		QGuardedPtr<QWidget>	m_moving;
-		QRect		m_copyRect;
+		//QRect		m_copyRect;
 
 		//inserting
 		QPoint		m_insertBegin;

@@ -223,6 +223,7 @@ class KFORMEDITOR_EXPORT PasteWidgetCommand : public KCommand
 		   (to avoid having two widgets at the same position). It moves the widget by
 		   (10, 10) increment (several times if there are already pasted widgets at this position). */
 		void fixPos(QDomElement &el, Container *container);
+		void moveWidgetBy(QDomElement &el, Container *container, const QPoint &p);
 		/*! Internal function used to fix the names of the widgets before pasting them.
 		  It prevents from pasting a widget with
 		  the same name as an actual widget. The child widgets are also fixed recursively.\n
