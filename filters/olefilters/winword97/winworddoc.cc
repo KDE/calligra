@@ -222,13 +222,57 @@ void WinWordDoc::encode(QString &text)
   text.replace(QRegExp("'"), "&apos;");
 }
 
+QColor WinWordDoc::colorForNumber(int number)
+{
+    switch(number)
+    {
+	case 0:
+	case 1:
+	    return QColor("black");
+	case 2:
+	    return QColor("blue");
+	case 3:
+	    return QColor("cyan");
+	case 4:
+	    return QColor("green");
+	case 5:
+	    return QColor("magenta");
+	case 6:
+	    return QColor("red");
+	case 7:
+	    return QColor("yellow");
+	case 8:
+	    return QColor("white");
+	case 9:
+	    return QColor("darkBlue");
+	case 10:
+	    return QColor("darkCyan");
+	case 11:
+	    return QColor("darkGreen");
+	case 12:
+	    return QColor("darkMagenta");
+	case 13:
+	    return QColor("darkRed");
+	case 14:
+	    return QColor("darkYellow");
+	case 15:
+	    return QColor("darkGray");	
+	case 16:	
+	    return QColor("lightGray");
+
+	default:
+	    return QColor("black");
+    }
+}
+
 QString WinWordDoc::generateFormat(
     const CHP *chp)
 {
     QString format;
+    QColor color = colorForNumber(chp->ico);
 kdError() <<"------ftc="<<chp->ftc<<endl;
 kdError() <<"      ascii="<<chp->ftcAscii<<" fe="<<chp->ftcFE<<" other="<<chp->ftcOther<<endl;
-    format.append("<COLOR red=\"0\" green=\"0\" blue=\"0\"/>\n");
+    format.append(QString::fromLatin1("<COLOR red=\"%1\" green=\"%2\" blue=\"%3\"/>\n").arg(color.red()).arg(color.green()).arg(color.blue()));
     format.append("<FONT name=\"");
     format.append(getFont(chp->ftcAscii));
     format.append("\"/>\n");

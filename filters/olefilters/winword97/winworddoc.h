@@ -134,6 +134,9 @@ private:
         unsigned tableNumber, unsigned rowNumber, const QString texts[], const MsWordGenerated::PAP styles[],
         MsWordGenerated::TAP &row);
 
+    // Helper functions
+    QColor colorForNumber(int number);
+
     // This is where the result will end up!
 
     QCString &m_result;
