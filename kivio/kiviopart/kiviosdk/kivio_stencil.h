@@ -184,6 +184,7 @@ public:
     virtual bool isSelected() { return m_selected; }
     virtual void select() { m_selected = true; }
     virtual void unselect() { m_selected = false; }
+    virtual void subSelect( const float &, const float & ) { ; }
 
     virtual QBitArray *protection() { return m_pProtection; }
     virtual QBitArray *canProtect() { return m_pCanProtect; }

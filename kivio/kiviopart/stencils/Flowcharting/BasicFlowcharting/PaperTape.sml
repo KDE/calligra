@@ -1,35 +1,57 @@
 <?xml version="1.0"?>
-<KivioShapeStencil creator="vi">
+<KivioShapeStencil creator="magic">
 	<KivioSMLStencilSpawnerInfo>
-		<Author data="Landshark"/>
-		<Title data="Paper Tape"/>
-		<Description data="Basic flowcharting paper tape"/>
+	   <Author data="Landshark"/>
+	   <Title data="Paper Tape"/>
+		<Description data="Flowcharting Paper Tape Stencil"/>
 		<Version data="1.0"/>
 		<Web data="www.thekompany.com"/>
 		<Email data="landshark@ameritech.net"/>
 		<Copyright data="Copyright (C) 2000 theKompany.com. All rights reserved."/>
 		<AutoUpdate data="off"/>
 	</KivioSMLStencilSpawnerInfo>
-	<Dimensions w="72.0" h="54.0"/>
-	<KivioConnectorTarget x="0.0" y="0.0"/>
-	<KivioConnectorTarget x="36.0" y="0.0"/>
-	<KivioConnectorTarget x="72.0" y="0.0"/>
-	<KivioConnectorTarget x="72.0" y="27.0"/>
-	<KivioConnectorTarget x="72.0" y="54.0"/>
-	<KivioConnectorTarget x="36.0" y="54.0"/>
-	<KivioConnectorTarget x="0.0" y="54.0"/>
-	<KivioConnectorTarget x="0.0" y="27.0"/>
-	<KivioShape type="ClosedPath" name="Paper Tape" x="0.0" y="0.0">
-		<KivioPoint x="0.0" y="27.0"/>
-		<KivioPoint x="0.0" y="0.0" type="bezier"/>
-		<KivioPoint x="21.6" y="16.2" type="bezier"/>
-		<KivioPoint x="50.4" y="-16.2" type="bezier"/>
-		<KivioPoint x="72.0" y="0.0" type="bezier"/>
-		<KivioPoint x="72.0" y="54.0" type="bezier"/>
-		<KivioPoint x="50.4" y="37.8" type="bezier"/>
-		<KivioPoint x="21.6" y="70.2" type="bezier"/>
-		<KivioPoint x="0.0" y="54.0" type="bezier"/>
-		<KivioPoint x="0.0" y="27.0"/>
-	</KivioShape>
-	<KivioShape type="TextBox" name="Text" html="0" x="0.0" y="0.0" w="72.0" h="54.0" text="" />
+	<Dimensions w="72" h="54"/>
+    <KivioConnectorTarget x="71.9922" y="5.0719"/>
+    <KivioConnectorTarget x="0.0316901" y="5.0719"/>
+    <KivioConnectorTarget x="36.0485" y="5.0719"/>
+    <KivioConnectorTarget x="0.00174427" y="27.0902"/>
+    <KivioConnectorTarget x="0.0488968" y="49.0783"/>
+    <KivioConnectorTarget x="71.9654" y="49.0742"/>
+    <KivioConnectorTarget x="36.0017" y="49.027"/>
+    <KivioConnectorTarget x="72.0087" y="27.068"/>
+    <KivioShape type="ClosedPath" name="Path">
+        <KivioFillStyle colorStyle="1" color="#ffffff"/>
+        <KivioLineStyle color="#000000" width="1" capStyle="0x00" joinStyle="0x00"/>
+
+        <KivioPoint x="0" y="5.0" type="bezier"/>
+        <KivioPoint x="0.0" y="5.0" type="bezier"/>
+        <KivioPoint x="15.4914" y="16.2206" type="bezier"/>
+        <KivioPoint x="36.0" y="5.0" type="bezier"/>
+
+        <KivioPoint x="36.0" y="5.0" type="bezier"/>
+        <KivioPoint x="56.5341" y="-6.15444" type="bezier"/>
+        <KivioPoint x="72.0" y="5.0" type="bezier"/>
+        <KivioPoint x="72.0" y="5.0" type="bezier"/>
+
+        <KivioPoint x="72" y="5.0" type="bezier"/>
+        <KivioPoint x="72" y="5.0" type="bezier"/>
+        <KivioPoint x="72" y="49.0" type="bezier"/>
+        <KivioPoint x="72" y="49.0" type="bezier"/>
+
+        <KivioPoint x="72" y="49.0" type="bezier"/>
+        <KivioPoint x="72" y="49.0" type="bezier"/>
+        <KivioPoint x="56.5341" y="37.84556" type="bezier"/>
+        <KivioPoint x="36" y="48.9715" type="bezier"/>
+
+        <KivioPoint x="36" y="48.9715" type="bezier"/>
+        <KivioPoint x="15.4914" y="60.2202" type="bezier"/>
+        <KivioPoint x="0" y="49.0" type="bezier"/>
+        <KivioPoint x="0" y="49.0" type="bezier"/>
+
+        <KivioPoint x="0" y="49.0" type="bezier"/>
+        <KivioPoint x="0" y="49.0" type="bezier"/>
+        <KivioPoint x="0.0" y="5.0" type="bezier"/>
+        <KivioPoint x="0.0" y="5.0" type="bezier"/>
+    </KivioShape>
+    <KivioShape type="TextBox" text="" name="text" x="0.0" y="10.2" w="72.0" h="33.6"/>
 </KivioShapeStencil>

@@ -99,6 +99,8 @@ public:
   void drawStencilXOR( KivioStencil * );
 
   TKPoint snapToGrid(TKPoint);
+  TKPoint snapToGuides(TKPoint, bool &, bool &);
+  TKPoint snapToGridAndGuides(TKPoint);
   float snapToGridX(float);
   float snapToGridY(float);
 

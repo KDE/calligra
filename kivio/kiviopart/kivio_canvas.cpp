@@ -17,6 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include "kivio_canvas.h"
+#include "kivio_guidelines.h"
 #include "kivio_page.h"
 #include "kivio_map.h"
 #include "kivio_view.h"
@@ -739,6 +740,8 @@ void KivioCanvas::startSpawnerDragDraw( const QPoint &p )
  */
 void KivioCanvas::continueSpawnerDragDraw( const QPoint &p )
 {
+   bool snappedX, snappedY;
+
     QPoint pos = p;
     QPoint p2 = pos;
 
@@ -754,13 +757,31 @@ void KivioCanvas::continueSpawnerDragDraw( const QPoint &p )
     }
 
     // Map the new point from screenspace to page space
-    TKPoint qp = mapFromScreen( p2 );
-    qp = snapToGrid(qp);
+    TKPoint orig = mapFromScreen(p2);
+    TKPoint qp = snapToGrid( orig );
 
-    // Set it in the stencil
+    // First snap to screen
+    qp = snapToGrid(qp);
     m_pDragStencil->setPosition( qp.x, qp.y );
-//    m_pDragStencil->setX( qp.x );
-  //  m_pDragStencil->setY( qp.y );
+
+    // Now snap to the guides
+    qp.set( orig.x + m_pDragStencil->w(), orig.y + m_pDragStencil->h(), UnitPoint );
+    qp = snapToGuides(qp, snappedX, snappedY);
+    if( snappedX==true ) {
+       m_pDragStencil->setX(qp.x - m_pDragStencil->w());
+    }
+    if( snappedY==true ) {
+       m_pDragStencil->setY(qp.y - m_pDragStencil->h());
+    }
+
+    qp.set( orig.x, orig.y, UnitPoint );
+    qp = snapToGuides(qp, snappedX, snappedY);
+    if( snappedX==true ) {
+       m_pDragStencil->setX(qp.x);
+    }
+    if( snappedY==true ) {
+       m_pDragStencil->setY(qp.y);
+    }
 
     // Redraw the new outline
     oldRectValid = true;
@@ -1118,6 +1139,63 @@ void KivioCanvas::keyReleaseEvent( QKeyEvent *e )
     }
 }
 
+TKPoint KivioCanvas::snapToGridAndGuides(TKPoint point)
+{
+    TKPoint p = point;
+
+    TKSize dist = m_pDoc->grid().snap;
+    TKSize dxy = m_pDoc->grid().freq;
+
+    dxy.convertToPt();
+    dist.convertToPt();
+
+    int dx = (int)(p.x/dxy.w);
+    int dy = (int)(p.y/dxy.h);
+
+    float distx = QMIN(QABS(p.x-dxy.w*dx),QABS(p.x-dxy.w*(dx+1)));
+    float disty = QMIN(QABS(p.y-dxy.h*dy),QABS(p.y-dxy.h*(dy+1)));
+
+    if( m_pDoc->grid().isSnap)
+    {
+       if ( distx < dist.w) {
+	  if ( QABS(p.x-dxy.w*dx) < QABS(p.x-dxy.w*(dx+1)) )
+	     p.x = dxy.w*dx;
+	  else
+	     p.x = dxy.w*(dx+1);
+       }
+       
+       if ( disty < dist.h) {
+	  if ( QABS(p.y-dxy.h*dy) < QABS(p.y-dxy.h*(dy+1)) )
+	     p.y = dxy.h*dy;
+	  else
+	     p.y = dxy.h*(dy+1);
+       }
+    }
+
+    /*
+     * Now if the point is within 4 pixels of a gridline, snap
+     * to the grid line.
+     */
+    if (m_pView->isSnapGuides())
+    {
+       float four = 4.0f / m_pZoom;
+       KivioGuideLines *pGuides = activePage()->guideLines();
+       KivioGuideLineData *pData = pGuides->findHorizontal( point.y, four );
+       if( pData )
+       {
+	  p.y = (float)pData->position();
+       }
+       
+       pData = pGuides->findVertical( point.x, four );
+       if( pData )
+       {
+	  p.x = (float)pData->position();
+       }
+    }
+
+    return p;
+}
+
 TKPoint KivioCanvas::snapToGrid(TKPoint point)
 {
     if (!m_pDoc->grid().isSnap)
@@ -1149,6 +1227,34 @@ TKPoint KivioCanvas::snapToGrid(TKPoint point)
         p.y = dxy.h*dy;
       else
         p.y = dxy.h*(dy+1);
+    }
+
+    return p;
+}
+
+TKPoint KivioCanvas::snapToGuides(TKPoint point, bool &snappedX, bool &snappedY)
+{
+    snappedX = false;
+    snappedY = false;
+    TKPoint p = point;
+    
+    if (m_pView->isSnapGuides())
+    {
+       float four = 4.0f / m_pZoom;
+       KivioGuideLines *pGuides = activePage()->guideLines();
+       KivioGuideLineData *pData = pGuides->findHorizontal( point.y, four );
+       if( pData )
+       {
+	  snappedY = true;
+	  p.y = (float)pData->position();
+       }
+       
+       pData = pGuides->findVertical( point.x, four );
+       if( pData )
+       {
+	  snappedX = true;
+	  p.x = (float)pData->position();
+       }
     }
 
     return p;

@@ -7,6 +7,7 @@
 
 #include <qpainter.h>
 #include <qwmatrix.h>
+#include <kdebug.h>
 
 QPixmap* KivioGuideLines::vGuideLines = 0;
 QPixmap* KivioGuideLines::hGuideLines = 0;
@@ -60,6 +61,7 @@ KivioGuideLines::KivioGuideLines(KivioPage* page)
 KivioGuideLines::~KivioGuideLines()
 {
   unselectAll();
+  kdDebug() << "************* GUIDES DYING" << "\n";
 }
 
 void KivioGuideLines::resize(QSize s,KivioDoc* doc)
@@ -211,9 +213,28 @@ void KivioGuideLines::remove(KivioGuideLineData* gd)
 KivioGuideLineData* KivioGuideLines::find(double x, double y, double d)
 {
   for (KivioGuideLineData* g = lines.first(); g; g = lines.next()) {
+    if (g->orientation() == Qt::Horizontal && QABS(g->position()-y) < d )
+      return g;
     if (g->orientation() == Qt::Vertical && QABS(g->position()-x) < d )
       return g;
+  }
+
+  return 0;
+}
+KivioGuideLineData* KivioGuideLines::findHorizontal(double y, double d)
+{
+  for (KivioGuideLineData* g = lines.first(); g; g = lines.next()) {
     if (g->orientation() == Qt::Horizontal && QABS(g->position()-y) < d )
+      return g;
+  }
+
+  return 0;
+}
+
+KivioGuideLineData* KivioGuideLines::findVertical(double x, double d)
+{
+  for (KivioGuideLineData* g = lines.first(); g; g = lines.next()) {
+    if (g->orientation() == Qt::Vertical && QABS(g->position()-x) < d )
       return g;
   }
 

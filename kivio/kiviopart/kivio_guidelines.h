@@ -67,6 +67,8 @@ public:
   KivioGuideLineData* add(double, Qt::Orientation);
   void remove(KivioGuideLineData*);
   KivioGuideLineData* find(double x, double y, double d);
+  KivioGuideLineData* findHorizontal( double y, double d );
+  KivioGuideLineData* findVertical( double x, double d );
 
   bool hasSelected();
   int selectedCount();

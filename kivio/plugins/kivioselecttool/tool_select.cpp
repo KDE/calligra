@@ -461,6 +461,9 @@ void SelectTool::continueDragging(QPoint pos)
     float dx = pagePoint.x - m_origPoint.x;
     float dy = pagePoint.y - m_origPoint.y;
 
+    bool snappedX;
+    bool snappedY;
+
     // Undraw the old stencils
     m_pCanvas->drawSelectedStencilsXOR();
 
@@ -472,12 +475,31 @@ void SelectTool::continueDragging(QPoint pos)
 
     while( pStencil && pData )
     {
-        TKPoint p;
+        TKPoint p, oldP;
 
-        p.set( pData->rect.x() + dx, pData->rect.y() + dy, UnitPoint );
-        p = m_pCanvas->snapToGrid(p);
-
-        pStencil->setPosition( p.x, p.y );
+	// First attempt a snap-to-grid
+	p.set( pData->rect.x() + dx, pData->rect.y() + dy, UnitPoint );
+	p = m_pCanvas->snapToGrid(p);
+	pStencil->setPosition(p.x, p.y);
+	
+	// Now the guides override the grid so we attempt to snap to them
+	p.set( pData->rect.x() + dx + pStencil->w(), pData->rect.y() + dy + pStencil->h(), UnitPoint );
+	p = m_pCanvas->snapToGuides(p, snappedX, snappedY);
+	if( snappedX==true ) {
+	   pStencil->setX(p.x - pStencil->w());
+	}
+	if( snappedY==true ) {
+	   pStencil->setY(p.y - pStencil->h());
+	}
+	
+	p.set( pData->rect.x() + dx, pData->rect.y() + dy, UnitPoint );
+	p = m_pCanvas->snapToGuides(p, snappedX, snappedY);
+	if( snappedX==true ) {
+	   pStencil->setX(p.x);
+	}
+	if( snappedY==true ) {
+	   pStencil->setY(p.y);
+	}
 
         pData = m_lstOldGeometry.next();
         pStencil = m_pCanvas->activePage()->selectedStencils()->next();
@@ -519,7 +541,7 @@ void SelectTool::continueCustomDragging(QPoint pos)
 
 void SelectTool::continueResizing(QPoint pos)
 {
-    TKPoint pagePoint = m_pCanvas->snapToGrid( m_pCanvas->mapFromScreen(pos) );
+    TKPoint pagePoint = m_pCanvas->snapToGridAndGuides( m_pCanvas->mapFromScreen(pos) );
     KivioSelectDragData *pData = m_lstOldGeometry.first();
 
     if( !pData )
@@ -822,13 +844,17 @@ void SelectTool::mouseRelease(QPoint pos)
     m_pView->doc()->updateView(m_pView->activePage());
 }
 
-void SelectTool::endRubberBanding(QPoint)
+void SelectTool::endRubberBanding(QPoint pos)
 {
-    // End the rubber-band drawing
-    m_pCanvas->endRectDraw();
+   // End the rubber-band drawing
+   m_pCanvas->endRectDraw();
+
+   TKPoint p = m_pCanvas->mapFromScreen(pos);
 
     // We can't select if the start and end points are the same
-    if( m_startPoint != m_releasePoint )
+//    if( m_startPoint != m_releasePoint )
+    if( m_origPoint.x != p.x &&
+	m_origPoint.y != p.y )
     {
         select(m_pCanvas->rect());
     }

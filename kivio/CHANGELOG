@@ -122,3 +122,12 @@
     - Added a parameter to drawContent() of the doc and page classes so you could
       choose if you wanted targets and selection handles drawn.  This allows the
       bird's eye view to be a bit more usable without those x's in the way.
+
+(Dave Marotti)
+12/17/2000
+    - Fixed unselect-but where clicking on an area without a stencil would
+      select random stencils.
+    - Placed the common primary'sh colors in the front of the color action widgets
+      and added a grayscale gradient of colors. Capitalized all color names.
+    - Implemented snap-to-guides
+    - Fixed the stencils which went out of their bounding-boxes, now they don't.
