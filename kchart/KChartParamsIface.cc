@@ -101,3 +101,33 @@ int KChartParamsIface::pieStart()
     return params->pieStart();
 }
 
+void KChartParamsIface::hideLegend()
+{
+    params->setLegendPosition(KDChartParams::NoLegend);
+}
+
+void KChartParamsIface::setLegendPosition(const QString & pos)
+{
+    params->setLegendPosition(params->stringToLegendPosition(pos));
+}
+
+QString KChartParamsIface::legendPostion() const
+{
+    return params->legendPositionToString(params->legendPosition());
+}
+
+void KChartParamsIface::setLegendTitleText( const QString& text )
+{
+    params->setLegendTitleText( text );
+}
+
+void KChartParamsIface::setLegendSpacing( uint space )
+{
+    params->setLegendSpacing(space );
+}
+
+
+uint KChartParamsIface::legendSpacing()
+{
+    return params->legendSpacing();
+}

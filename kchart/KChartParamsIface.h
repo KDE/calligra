@@ -53,6 +53,14 @@ k_dcop:
     virtual void setPieStart( int degrees );
     virtual int pieStart();
 
+    //legend
+    virtual void hideLegend();
+    virtual void setLegendPosition(const QString &);
+    virtual QString legendPostion() const;
+    virtual void setLegendTitleText( const QString& text );
+    virtual void setLegendSpacing( uint space );
+    virtual uint legendSpacing();
+
 private:
     KChartParams *params;
 
