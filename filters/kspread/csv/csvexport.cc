@@ -63,7 +63,7 @@ bool CSVExport::filterExport(const QString &file, KoDocument * document,
         kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
         return false;
     }
-    if(to!="text/x-csv" || from!="application/x-kspread")
+    if((to!="text/x-csv" && to!="text/plain") || from!="application/x-kspread")
     {
         kdWarning(30501) << "Invalid mimetypes " << to << " " << from << endl;
         return false;
