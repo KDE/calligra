@@ -12,7 +12,7 @@
 VCCmdEllipse::VCCmdEllipse( KarbonPart* part,
 		const double tlX, const double tlY,
 		const double brX, const double brY )
-	: VCommand( part, i18n("Create ellipse-shape") ), m_object( 0L ),
+	: VCommand( part, i18n("Create Ellipse") ), m_object( 0L ),
 	  m_tlX( tlX ), m_tlY( tlY ), m_brX( brX ), m_brY( brY )
 {
 }

@@ -347,7 +347,7 @@ VPath::draw( QPainter& painter, const QRect& rect, const double zoomFactor )
 
 // TODO: remove hardcoded values:
 	painter.setPen( Qt::black );
-	painter.setBrush( QColor( 205, 201, 165 ) );
+	painter.setBrush( QColor( 121, 205, 205 ) );
 
 // TODO: filling not-closed shapes?
 	// draw open or closed path ?
@@ -564,12 +564,12 @@ VPath::close()
 
 	// draw a line if last point differs from first point:
 	if (
-		*(m_segments.getFirst()->firstPoint() ) !=
-		*(m_segments.getLast()->lastPoint() ) )
+		*( m_segments.getFirst()->firstPoint( 0L ) ) !=
+		*( m_segments.getLast()->lastPoint() ) )
 	{
 		lineTo(
-			m_segments.getFirst()->firstPoint()->x(),
-			m_segments.getFirst()->firstPoint()->y() );
+			m_segments.getFirst()->firstPoint( 0L )->x(),
+			m_segments.getFirst()->firstPoint( 0L )->y() );
 	}
 
 	m_isClosed = true;

@@ -14,7 +14,6 @@
 
 // only for test-object:
 #include "vccmd_rectangle.h"
-#include "vccmd_sinus.h"
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
@@ -26,12 +25,8 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	m_layers.append( new VLayer() );
 
 // <test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	VCCmdRectangle* cmd2 = new VCCmdRectangle( this, 100, 200, 300, 50 );
-	cmd2->execute();
-	VCCmdSinus* cmd = new VCCmdSinus( this, 100, 200, 300, 50, 2 );
+	VCCmdRectangle* cmd = new VCCmdRectangle( this, 100, 200, 300, 50, 30 );
 	cmd->execute();
-	VCCmdSinus* cmd3 = new VCCmdSinus( this, 50, 300, 700, 500 );
-	cmd3->execute();
 // </test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }
 

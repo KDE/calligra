@@ -15,7 +15,7 @@ class VCCmdRectangle : public VCommand
 {
 public:
 	VCCmdRectangle( KarbonPart* part, const double tlX, const double tlY,
-		 const double brX, const double brY );
+		 const double brX, const double brY, const double edgeR = 0.0 );
 	virtual ~VCCmdRectangle() {}
 
 	virtual void execute();
@@ -27,6 +27,7 @@ private:
 	double m_tlY;
 	double m_brX;
 	double m_brY;
+	double m_edgeR;
 };
 
 #endif

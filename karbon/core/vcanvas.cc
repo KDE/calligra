@@ -19,7 +19,8 @@ VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
 	viewport()->setMouseTracking( true );
 	setMouseTracking( true );
 	setFocus();
-	viewport()->setBackgroundMode( QWidget::NoBackground );
+	viewport()->setBackgroundColor( Qt::white );
+//	viewport()->setBackgroundMode( QWidget::NoBackground );
 }
 
 void

@@ -4,7 +4,7 @@ noinst_LTLIBRARIES = libkarbonui.la
 
 libkarbonui_la_SOURCES = \
 	dummy.cc \
-	object.ui
+	vtransformdlg_stub.ui
 
 METASOURCES = AUTO
 

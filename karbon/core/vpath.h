@@ -25,10 +25,10 @@ public:
 	VSegment();
 	VSegment( const double lpX, const double lpY );
 
-	virtual const VPoint* firstPoint( const VSegment* prevSeg = 0L ) const
+	virtual const VPoint* firstPoint( const VSegment* prevSeg ) const
 		{ return prevSeg ? prevSeg->lastPoint() : 0L; }
-	virtual const VPoint* firstCtrlPoint( const VSegment* prevSeg = 0L ) const = 0;
-	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg = 0L ) const = 0;
+	virtual const VPoint* firstCtrlPoint( const VSegment* prevSeg ) const = 0;
+	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg ) const = 0;
 	// we dont need prevSeg for lastPoint(). we allow passing it for esthetical
 	// reasons:
 	const VPoint* lastPoint( const VSegment* prevSeg = 0L ) const
@@ -39,7 +39,7 @@ public:
 		const bool smooth = false ) = 0;
 
 	// revert the segment order:
-	virtual const VSegment* revert( const VSegment* prevSeg = 0L ) = 0;
+	virtual const VSegment* revert( const VSegment* prevSeg ) = 0;
 
 	// apply a affine map:
 	virtual void transform( const VAffineMap& affMap ) = 0;
@@ -47,7 +47,7 @@ public:
 	// getQPointArray returns the QPoints which define the segment's contour.
 	// beziers need the previous segment's lastpoint to calculate all their
 	// QPoints, that's why we pass prevSeg.
-	virtual const QPointArray& getQPointArray( const VSegment* prevSeg = 0L,
+	virtual const QPointArray& getQPointArray( const VSegment* prevSeg,
 		const double zoomFactor = 1.0 ) const = 0;
 
 protected:
@@ -65,23 +65,23 @@ class VFirstPoint : public VSegment
 {
 public:
 	VFirstPoint( const double lpX = 0.0, const double lpY = 0.0 );
-	virtual const VPoint* firstPoint( const VSegment* prevSeg = 0L ) const
+	virtual const VPoint* firstPoint( const VSegment* prevSeg ) const
 		{ return &m_lastPoint; }
-	virtual const VPoint* firstCtrlPoint( const VSegment* prevSeg = 0L ) const
+	virtual const VPoint* firstCtrlPoint( const VSegment* prevSeg ) const
 		{ return 0L; }
-	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg = 0L ) const
+	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg ) const
 		{ return 0L; }
 
 	virtual void movePointTo( const VPoint* point, const double x, const double y,
 		const bool smooth = false );
 
-	virtual const VSegment* revert( const VSegment* prevSeg = 0L )
+	virtual const VSegment* revert( const VSegment* prevSeg )
 		{ return 0L; }
 
 	// apply a affine map:
 	virtual void transform( const VAffineMap& affMap );
 
-	virtual const QPointArray& getQPointArray( const VSegment* prevSeg = 0L,
+	virtual const QPointArray& getQPointArray( const VSegment* prevSeg,
 		const double zoomFactor = 1.0 ) const;
 };
 
@@ -92,19 +92,19 @@ class VLine : public VSegment
 public:
 	VLine( const double lpX = 0.0, const double lpY = 0.0 );
 
-	virtual const VPoint* firstCtrlPoint( const VSegment* prevSeg = 0L ) const
+	virtual const VPoint* firstCtrlPoint( const VSegment* prevSeg ) const
 		{ return 0L; }
-	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg = 0L ) const
+	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg ) const
 		{ return 0L; }
 
 	virtual void movePointTo( const VPoint* point, const double x, const double y,
 		const bool smooth = false );
 
-	virtual const VSegment* revert( const VSegment* prevSeg = 0L );
+	virtual const VSegment* revert( const VSegment* prevSeg );
 
 	virtual void transform( const VAffineMap& affMap );
 
-	virtual const QPointArray& getQPointArray( const VSegment* prevSeg = 0L,
+	virtual const QPointArray& getQPointArray( const VSegment* prevSeg,
 		const double zoomFactor = 1.0 ) const;
 };
 
@@ -121,19 +121,19 @@ public:
 		const double lcpX = 0.0, const double lcpY = 0.0,
 		const double lpX = 0.0, const double lpY = 0.0 );
 
-	virtual const VPoint* firstCtrlPoint( const VSegment* prevSeg = 0L ) const
+	virtual const VPoint* firstCtrlPoint( const VSegment* prevSeg ) const
 		{ return &m_firstCtrlPoint; }
-	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg = 0L ) const
+	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg ) const
 		{ return &m_lastCtrlPoint; }
 
 	virtual void movePointTo( const VPoint* point, const double x, const double y,
 		const bool smooth = false );
 
-	virtual const VSegment* revert( const VSegment* prevSeg = 0L );
+	virtual const VSegment* revert( const VSegment* prevSeg );
 
 	virtual void transform( const VAffineMap& affMap );
 
-	virtual const QPointArray& getQPointArray( const VSegment* prevSeg = 0L,
+	virtual const QPointArray& getQPointArray( const VSegment* prevSeg,
 		const double zoomFactor = 1.0 ) const;
 
 private:
@@ -151,19 +151,19 @@ public:
 		const double lcpX = 0.0, const double lcpY = 0.0,
 		const double lpX = 0.0, const double lpY = 0.0 );
 
-	virtual const VPoint* firstCtrlPoint( const VSegment* prevSeg = 0L ) const
+	virtual const VPoint* firstCtrlPoint( const VSegment* prevSeg ) const
 		{ return prevSeg ? prevSeg->lastPoint() : 0L; }
-	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg = 0L ) const
+	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg ) const
 		{ return &m_lastCtrlPoint; }
 
 	virtual void movePointTo( const VPoint* point, const double x, const double y,
 		const bool smooth = false );
 
-	virtual const VSegment* revert( const VSegment* prevSeg = 0L );
+	virtual const VSegment* revert( const VSegment* prevSeg );
 
 	virtual void transform( const VAffineMap& affMap );
 
-	virtual const QPointArray& getQPointArray( const VSegment* prevSeg = 0L,
+	virtual const QPointArray& getQPointArray( const VSegment* prevSeg,
 		const double zoomFactor = 1.0 ) const;
 
 private:
@@ -180,19 +180,19 @@ public:
 		const double fcpX = 0.0, const double fcpY = 0.0,
 		const double lpX = 0.0, const double lpY = 0.0 );
 
-	virtual const VPoint* firstCtrlPoint( const VSegment* prevSeg = 0L ) const
+	virtual const VPoint* firstCtrlPoint( const VSegment* prevSeg ) const
 		{ return &m_firstCtrlPoint; }
-	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg = 0L ) const
+	virtual const VPoint* lastCtrlPoint( const VSegment* prevSeg ) const
 		{ return &m_lastPoint; }
 
 	virtual void movePointTo( const VPoint* point, const double x, const double y,
 		const bool smooth = false );
 
-	virtual const VSegment* revert( const VSegment* prevSeg = 0L );
+	virtual const VSegment* revert( const VSegment* prevSeg );
 
 	virtual void transform( const VAffineMap& affMap );
 
-	virtual const QPointArray& getQPointArray( const VSegment* prevSeg = 0L,
+	virtual const QPointArray& getQPointArray( const VSegment* prevSeg,
 		const double zoomFactor = 1.0 ) const;
 
 private:

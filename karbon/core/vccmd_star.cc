@@ -14,7 +14,7 @@
 VCCmdStar::VCCmdStar( KarbonPart* part,
 		const double centerX, const double centerY,
 		const double outerR, const double innerR, const uint edges )
-	: VCommand( part, i18n("Create star-shape") ), m_object( 0L ),
+	: VCommand( part, i18n("Create Star") ), m_object( 0L ),
 	  m_centerX( centerX ), m_centerY( centerY )
 {
 	// a star should have at least 3 edges:

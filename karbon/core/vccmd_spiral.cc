@@ -14,7 +14,7 @@
 VCCmdSpiral::VCCmdSpiral( KarbonPart* part,
 		const double centerX, const double centerY,
 		const double radius, const uint segments, const double fade, const bool cw )
-	: VCommand( part, i18n("Create spiral-shape") ), m_object( 0L ),
+	: VCommand( part, i18n("Create Spiral") ), m_object( 0L ),
 	  m_centerX( centerX ), m_centerY( centerY ),
 	  m_clockWise( cw )
 {

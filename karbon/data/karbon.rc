@@ -1,25 +1,40 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
 <kpartgui name="Karbon" version="1">
 <MenuBar>
- <Menu name="edit"><text>&amp;Edit</text>
-  <Action name="edit_undo"/>
-  <Action name="edit_redo"/>
-  <Separator/>
-  <Action name="edit_cut"/>
-  <Action name="edit_copy"/>
-  <Action name="edit_paste"/>
-  <Action name="edit_selectall"/>
- </Menu>
- <Menu name="view"><text>&amp;View</text>
-  <Action name="view_zoom"/>
- </Menu>
-</MenuBar>
-<ToolBar name="edit_bar" fullWidth="false"><Text>Edit</Text>
-  <Action name="edit_undo"/>
-  <Action name="edit_do"/>
-  <Action name="edit_cut"/>
-</ToolBar>
-<ToolBar name="zoom_bar" fullWidth="false"><Text>Zoom</Text>
-  <Action name="view_zoom"/>
-</ToolBar>
+	<Menu name="edit"><text>&amp;Edit</text>
+		<Action name="edit_undo"/>
+		<Action name="edit_redo"/>
+		<Separator/>
+		<Action name="edit_cut"/>
+		<Action name="edit_copy"/>
+		<Action name="edit_paste"/>
+		<Action name="edit_selectall"/>
+	</Menu>
+	<Menu name="object"><text>&amp;Object</text>
+		<Separator/>
+		<Menu name="insert"><text>&amp;Insert</text>
+			<Action name="insert_ellipse"/>
+			<Action name="insert_polygon"/>
+			<Action name="insert_rectangle"/>
+			<Action name="insert_sinus"/>
+			<Action name="insert_spiral"/>
+			<Action name="insert_star"/>
+		</Menu>
+	</Menu>
+	<Menu name="view"><text>&amp;View</text>
+		<Action name="view_newview"/>
+		<ActionList name="view_closeallviews"/>
+		<Separator/>
+		<ActionList name="view_split"/>
+		<Action name="view_zoom"/>
+	</Menu>
+	</MenuBar>
+	<ToolBar name="edit_bar" fullWidth="false"><Text>Edit</Text>
+		<Action name="edit_undo"/>
+		<Action name="edit_do"/>
+		<Action name="edit_cut"/>
+	</ToolBar>
+	<ToolBar name="zoom_bar" fullWidth="false"><Text>Zoom</Text>
+		<Action name="view_zoom"/>
+	</ToolBar>
 </kpartgui>

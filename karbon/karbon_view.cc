@@ -2,15 +2,16 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#include <qpainter.h>
 #include <qiconset.h>
-#include <kaction.h>
-#include <kstdaction.h>
-#include <klocale.h>
+#include <qpainter.h>
 
-#include "karbon_view.h"
+#include <kaction.h>
+#include <klocale.h>
+#include <kstdaction.h>
+
 #include "karbon_factory.h"
 #include "karbon_part.h"
+#include "karbon_view.h"
 
 #include <kdebug.h>
 
@@ -65,15 +66,31 @@ KarbonView::editSelectAll()
 void
 KarbonView::initActions()
 {
-	KStdAction::cut( this,
-		SLOT( editCut() ), actionCollection(), "edit_cut" );
-	KStdAction::copy( this,
-		SLOT( editCopy() ), actionCollection(), "edit_copy");
-	KStdAction::paste( this,
-		SLOT( editPaste() ), actionCollection(), "edit_paste" );
- 	KStdAction::selectAll( this,
-		SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
+	// edit
+	KStdAction::cut( this, SLOT( editCut() ), actionCollection(),
+		"edit_cut" );
+	KStdAction::copy( this, SLOT( editCopy() ), actionCollection(),
+		"edit_copy");
+	KStdAction::paste( this, SLOT( editPaste() ), actionCollection(),
+		"edit_paste" );
+  	KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(),
+		"edit_selectall" );
 
+	// object
+	new KAction( i18n("&Ellipse"), 0, actionCollection(),
+		"insert_ellipse" );
+	new KAction( i18n("&Polygon"), 0, actionCollection(),
+		"insert_polygon" );
+	new KAction( i18n("&Rectangle"), 0, actionCollection(),
+		"insert_rectangle" );
+	new KAction( i18n("S&inus"), 0, actionCollection(),
+		"insert_sinus" );
+	new KAction( i18n("&Spiral"), 0, actionCollection(),
+		"insert_spiral" );
+	new KAction( i18n("S&tar"), 0, actionCollection(),
+		"insert_star" );
+
+	// view
 	m_zoomAction = new KSelectAction( i18n("&Zoom"), 0, actionCollection(),
 		"view_zoom" );
 	QStringList stl;

@@ -43,6 +43,7 @@ private:
 	KarbonPart* m_part;
 	VCanvas* m_canvas;
 
+	// actions:
 	KSelectAction* m_zoomAction;
 };
 
