@@ -73,6 +73,7 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"}",		insertSymbol,		0L, '}' ),
 	PROP(	0L,		"~",		insertSymbol,		0L, 0x00a0 ),
 	PROP(	0L,		"-",		insertSymbol,		0L, 0x00ad ),
+	PROP(	0L,		"ansi",	setAnsiCodepage,		0L, 0 ),
 	PROP(	0L,		"ansicpg",	setCodepage,		0L, 0 ),
 	MEMBER(	0L,		"b",		setToggleProperty,	state.format.bold, 0 ),
 	MEMBER(	"@colortbl",	"blue",		setNumericProperty,	blue, 0 ),
@@ -141,6 +142,7 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"line",		insertSymbol,		0L, 0x000a ),
 	PROP(	0L,		"lquote",	insertSymbol,		0L, 0x2018 ),
 	PROP(	0L,		"ltrmark",	insertSymbol,		0L, 0x200e ),
+	PROP(	0L,		"mac",	setMacCodepage,		0L, 0 ),
 	MEMBER(	"@pict",	"macpict",	setEnumProperty,	picture.type, RTFPicture::MacPict ),
 	MEMBER(	"@rtf",		"margb",	setNumericProperty,	bottomMargin, 0 ),
 	MEMBER(	"@rtf",		"margl",	setNumericProperty,	leftMargin, 0 ),
@@ -149,6 +151,8 @@ static RTFProperty propertyTable[] =
 	MEMBER(	0L,		"nosupersub",	setEnumProperty,	state.format.vertAlign, RTFFormat::Normal ),
 	PROP(	"Text",		"page",		insertPageBreak,	0L, 0 ),
 	MEMBER(	0L,		"pagebb",	setFlagProperty,	state.layout.pageBB, true ),
+	PROP(	0L,		"pc",	setPcaCodepage,		0L, 0 ), // ### This is an approximation CP437 != IBM 850
+	PROP(	0L,		"pca",	setPcaCodepage,		0L, 0 ),
 	MEMBER(	0L,		"pgbrk",	setToggleProperty,	state.layout.pageBA, true ),
 	MEMBER(	"@rtf",		"paperh",	setNumericProperty,	paperHeight, 0 ),
 	MEMBER(	"@rtf",		"paperw",	setNumericProperty,	paperWidth, 0 ),
@@ -426,6 +430,10 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 		    changeDestination( properties["@*"] );
 		}
 	    }
+            else
+            {
+                kdWarning(30515) << "Unknown control word: " << token.text << endl;
+            }
 	}
 	else if (token.type == RTFTokenizer::PlainText)
 	{
@@ -627,6 +635,31 @@ void RTFImport::setCodepage( RTFProperty * )
 {
     codepage.setNum( token.value );
     codepage.prepend( "CP" );
+}
+
+/**
+ * Set document codepage to Mac
+ */
+void RTFImport::setMacCodepage( RTFProperty * )
+{
+    codepage="Apple Roman";
+}
+
+/**
+ * Set document codepage to CP1252
+ * (Old RTF files have a \ansi keyword but no \ansicpg keyword)
+ */
+void RTFImport::setAnsiCodepage( RTFProperty * )
+{
+    codepage="CP1252";
+}
+
+/**
+ * Set document codepage to IBM 850
+ */
+void RTFImport::setPcaCodepage( RTFProperty * )
+{
+    codepage="IBM 850";
 }
 
 /**

@@ -214,6 +214,9 @@ public:
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
     void setCodepage( RTFProperty * );
+    void setMacCodepage( RTFProperty * );
+    void setAnsiCodepage( RTFProperty * );
+    void setPcaCodepage( RTFProperty * );
     void setToggleProperty( RTFProperty * );
     void setFlagProperty( RTFProperty *property );
     void setNumericProperty( RTFProperty *property );
