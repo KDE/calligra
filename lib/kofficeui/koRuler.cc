@@ -86,6 +86,7 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
     d->flags = _flags;
 
     d->m_bReadWrite=true;
+    d->doubleClickedIndent=false;
     diffx = 0;
     diffy = 0;
     i_left=0.0;
@@ -892,7 +893,7 @@ void KoRuler::handleDoubleClick()
             emit doubleClicked( d->currTab.ptPos ); // usually paragraph dialog
             return;
         }
-    } 
+    }
 
     // When Binary Compatibility is broken this will hopefully emit a
     // doubleClicked(int) to differentiate between double-clicking an
