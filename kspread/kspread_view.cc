@@ -1671,6 +1671,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     QObject::connect( d->doc, SIGNAL( sig_refreshLocale() ), this, SLOT( refreshLocale()));
 
+    QObject::connect( d->doc, SIGNAL( sig_addAreaName( const QString & ) ), d->posWidget, SLOT( slotAddAreaName( const QString & ) ) );
+
+    QObject::connect( d->doc, SIGNAL( sig_removeAreaName( const QString & ) ), d->posWidget, SLOT( slotRemoveAreaName( const QString & ) ) );
+
     KoView::setZoom( d->doc->zoomedResolutionY() /* KoView only supports one zoom */ ); // initial value
     //when kspread is embedded into konqueror apply a zoom=100
     //in konqueror we can't change zoom -- ### TODO ?

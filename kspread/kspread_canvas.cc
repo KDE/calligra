@@ -52,9 +52,19 @@ KSpreadComboboxLocationEditWidget::KSpreadComboboxLocationEditWidget( QWidget * 
     setLineEdit( m_locationWidget );
 }
 
-void KSpreadComboboxLocationEditWidget::refreshCombobox()
+void KSpreadComboboxLocationEditWidget::slotAddAreaName( const QString &_name)
 {
-    //todo
+    insertItem( _name );
+}
+
+void KSpreadComboboxLocationEditWidget::slotRemoveAreaName( const QString &_name )
+{
+    for ( int i = 0; i<count(); i++ )
+        if ( text(i)==_name )
+        {
+            removeItem( i );
+            return;
+        }
 }
 
 KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent,

@@ -34,9 +34,14 @@ class QLabel;
 
 class KSpreadComboboxLocationEditWidget : public KComboBox
 {
+    Q_OBJECT
 public:
     KSpreadComboboxLocationEditWidget( QWidget *_parent, KSpreadView * _canvas );
-    void refreshCombobox();
+
+public slots:
+    void slotAddAreaName( const QString & );
+    void slotRemoveAreaName( const QString & );
+
 private:
     KSpreadLocationEditWidget *m_locationWidget;
 };

@@ -662,6 +662,9 @@ signals:
    */
   void sig_refreshLocale();
 
+  void sig_addAreaName( const QString & );
+  void sig_removeAreaName( const QString & );
+
 protected:
   KoView* createViewInstance( QWidget* parent, const char* name );
 

@@ -1723,19 +1723,21 @@ void KSpreadDoc::addAreaName(const QRect &_rect,const QString & name,const QStri
   tmp.table_name = tableName;
   tmp.ref_name = name;
   d->refs.append( tmp);
+  emit sig_addAreaName( name );
 }
 
 void KSpreadDoc::removeArea( const QString & name)
 {
-  QValueList<Reference>::Iterator it2;
-  for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
-        {
+    QValueList<Reference>::Iterator it2;
+    for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
+    {
         if((*it2).ref_name==name)
-                {
-                d->refs.remove(it2);
-                return;
-                }
+        {
+            d->refs.remove(it2);
+            emit sig_removeAreaName( name );
+            return;
         }
+    }
 }
 
 void KSpreadDoc::changeAreaTableName(const QString & oldName,const QString & tableName)
