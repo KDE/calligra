@@ -280,9 +280,10 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
         QString filename = pics[ index ];
         filename += ".png";
         srcurl.setPath( locate( "slideshow", filename, KPresenterFactory::global() ) );
+        kdDebug(33001) << "Path: " << srcurl.path() << endl;
         desturl = path;
         desturl.addPath( "/pics/" + filename );
-        KIO::NetAccess::file_move( srcurl, desturl, -1, true /*overwrite*/);
+        KIO::NetAccess::file_copy( srcurl, desturl, -1, true /*overwrite*/);
         p = progressBar->progress();
         progressBar->setProgress( ++p );
         kapp->processEvents();
