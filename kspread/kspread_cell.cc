@@ -29,7 +29,6 @@
 #include <qpopupmenu.h>
 
 #include "kspread_canvas.h"
-#include "kspread_changes.h"
 #include "kspread_doc.h"
 #include "kspread_global.h"
 #include "kspread_map.h"
@@ -5257,14 +5256,6 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
 {
   QString t = text.text();
   t = t.stripWhiteSpace();
-
-  // feed the change recorder
-  if ( !m_pTable->isLoading() && m_pTable->map() && m_pTable->map()->changes() )
-  {
-    m_pTable->map()->changes()->addChange( m_pTable, this, QPoint( m_iColumn, m_iRow ),
-                                           getFormatString( m_iColumn, m_iRow ), this->text() );
-  }
-
 
   setFlag(Flag_LayoutDirty);
   setFlag(Flag_TextFormatDirty);

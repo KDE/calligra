@@ -13,7 +13,6 @@ libkspreadpart_la_SOURCES =  \
         kspread_autofill.cc \
         kspread_canvas.cc \
         kspread_cell.cc \
-        kspread_changes.cc \
         kspread_cluster.cc \
         kspread_condition.cc \
         kspread_doc.cc \

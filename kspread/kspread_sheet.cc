@@ -45,7 +45,6 @@
 #include <kprinter.h>
 #include <koDocumentInfo.h>
 
-#include "kspread_changes.h"
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
 #include "kspread_global.h"
@@ -710,14 +709,6 @@ void KSpreadSheet::setText( int _row, int _column, const QString& _text, bool up
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    // feed the change recorder
-    if ( map() && map()->changes() )
-    {
-      map()->changes()->addChange( this, cell, QPoint( _column, _row ),
-                                   cell->getFormatString( _column, _row ),
-                                   cell->text() );
-    }
-
     // The cell will force a display refresh itself, so we dont have to care here.
     cell->setCellText( _text, updateDepends, asString );
     //refresh anchor
@@ -1298,10 +1289,9 @@ void KSpreadSheet::setSelectionSize( KSpreadSelection* selectionInfo, int _size 
 
 struct SetSelectionUpperLowerWorker : public KSpreadSheet::CellWorker {
     int _type;
-    KSpreadChanges * _c;
     KSpreadSheet   * _s;
-    SetSelectionUpperLowerWorker( int type, KSpreadChanges * c, KSpreadSheet * s )
-      : KSpreadSheet::CellWorker( false ), _type( type ), _c( c ), _s( s ) { }
+    SetSelectionUpperLowerWorker( int type, KSpreadSheet * s )
+      : KSpreadSheet::CellWorker( false ), _type( type ),  _s( s ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
 	return new KSpreadUndoChangeAreaTextCell( doc, table, r );
@@ -1313,11 +1303,6 @@ struct SetSelectionUpperLowerWorker : public KSpreadSheet::CellWorker {
     }
     void doWork( KSpreadCell* cell, bool, int, int )
     {
-        if ( _c )
-            _c->addChange( _s, cell, QPoint( cell->column(), cell->row() ),
-                           cell->getFormatString( cell->column(), cell->row() ),
-                           cell->text() );
-
 	cell->setDisplayDirtyFlag();
 	if ( _type == -1 )
 	    cell->setCellText( (cell->text().lower()));
@@ -1330,11 +1315,7 @@ struct SetSelectionUpperLowerWorker : public KSpreadSheet::CellWorker {
 void KSpreadSheet::setSelectionUpperLower( KSpreadSelection* selectionInfo,
                                            int _type )
 {
-  KSpreadChanges * c = 0;
-  if ( map() && map()->changes() )
-    c = map()->changes();
-
-  SetSelectionUpperLowerWorker w( _type, c, this );
+  SetSelectionUpperLowerWorker w( _type, this );
   workOnCells( selectionInfo, w );
 }
 
@@ -1343,8 +1324,8 @@ struct SetSelectionFirstLetterUpperWorker : public KSpreadSheet::CellWorker
 {
     KSpreadChanges * _c;
     KSpreadSheet   * _s;
-    SetSelectionFirstLetterUpperWorker( KSpreadChanges * c, KSpreadSheet * s )
-      : KSpreadSheet::CellWorker( false ), _c( c ), _s( s ) { }
+    SetSelectionFirstLetterUpperWorker( KSpreadSheet * s )
+      : KSpreadSheet::CellWorker( false ),  _s( s ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
 	return   new KSpreadUndoChangeAreaTextCell( doc, table, r );
@@ -1356,10 +1337,7 @@ struct SetSelectionFirstLetterUpperWorker : public KSpreadSheet::CellWorker
     }
     void doWork( KSpreadCell* cell, bool, int, int )
     {
-        if ( _c )
-            _c->addChange( _s, cell, QPoint( cell->column(), cell->row() ),
-                           cell->getFormatString( cell->column(), cell->row() ),
-                           cell->text() );
+
 	cell->setDisplayDirtyFlag();
 	QString tmp = cell->text();
 	int len = tmp.length();
@@ -1371,9 +1349,7 @@ struct SetSelectionFirstLetterUpperWorker : public KSpreadSheet::CellWorker
 void KSpreadSheet::setSelectionfirstLetterUpper( KSpreadSelection* selectionInfo)
 {
   KSpreadChanges * c = 0;
-  if ( map() && map()->changes() )
-    c = map()->changes();
-  SetSelectionFirstLetterUpperWorker w( c, this );
+  SetSelectionFirstLetterUpperWorker w(  this );
   workOnCells( selectionInfo, w );
 }
 
@@ -1738,13 +1714,7 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
       }
 
       //      cell->setCellText(cellText.setNum( incr ));
-      // feed the change recorder
-      if ( map() && map()->changes() )
-      {
-        map()->changes()->addChange( this, cell, QPoint( x, y ),
-                                     cell->getFormatString( x, y ),
-                                     cell->text(), !cell->isEmpty() );
-      }
+
       cell->setNumber( incr );
       if (mode == Column)
       {
@@ -1791,13 +1761,6 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
         cell = cell->obscuringCells().first();
       }
 
-      // feed the change recorder
-      if ( map() && map()->changes() )
-      {
-        map()->changes()->addChange( this, cell, QPoint( x, y ),
-                                     cell->getFormatString( x, y ),
-                                     cell->text() );
-      }
       //      cell->setCellText(cellText.setNum( incr ));
       cell->setNumber( incr );
       if (mode == Column)
@@ -1844,13 +1807,6 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
         cell = cell->obscuringCells().first();
       }
 
-      // feed the change recorder
-      if ( map() && map()->changes() )
-      {
-        map()->changes()->addChange( this, cell, QPoint( x, y ),
-                                     cell->getFormatString( x, y ),
-                                     cell->text() );
-      }
       //cell->setCellText(cellText.setNum( incr ));
       cell->setNumber( incr );
       if (mode == Column)
@@ -4885,11 +4841,10 @@ int KSpreadSheet::adjustRow( KSpreadSelection* selectionInfo, int _row )
 }
 
 struct ClearTextSelectionWorker : public KSpreadSheet::CellWorker {
-    KSpreadChanges * _c;
     KSpreadSheet   * _s;
 
-    ClearTextSelectionWorker( KSpreadChanges * c, KSpreadSheet * s )
-      : KSpreadSheet::CellWorker( ), _c( c ), _s( s ) { }
+    ClearTextSelectionWorker(  KSpreadSheet * s )
+      : KSpreadSheet::CellWorker( ),  _s( s ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
 	return new KSpreadUndoChangeAreaTextCell( doc, table, r );
@@ -4899,11 +4854,6 @@ struct ClearTextSelectionWorker : public KSpreadSheet::CellWorker {
     }
     void doWork( KSpreadCell* cell, bool, int, int )
     {
-        if ( _c )
-            _c->addChange( _s, cell, QPoint( cell->column(), cell->row() ),
-                           cell->getFormatString( cell->column(), cell->row() ),
-                           cell->text() );
-
 	cell->setCellText( "" );
     }
 };
@@ -4912,11 +4862,8 @@ void KSpreadSheet::clearTextSelection( KSpreadSelection* selectionInfo )
 {
   if (areaIsEmpty(selectionInfo->selection()))
     return;
-  KSpreadChanges * c = 0;
-  if ( map() && map()->changes() )
-    c = map()->changes();
 
-  ClearTextSelectionWorker w( c, this );
+  ClearTextSelectionWorker w( this );
   workOnCells( selectionInfo, w );
 }
 
@@ -5229,10 +5176,9 @@ QString KSpreadSheet::getWordSpelling(KSpreadSelection* selectionInfo )
 struct SetWordSpellingWorker : public KSpreadSheet::CellWorker {
     QStringList& list;
     int pos;
-    KSpreadChanges * ch;
     KSpreadSheet   * sheet;
-    SetWordSpellingWorker( QStringList & _list, KSpreadChanges * _c, KSpreadSheet * s )
-      : KSpreadSheet::CellWorker( false, false, true ), list( _list ), pos( 0 ), ch( _c ), sheet( s ) { }
+    SetWordSpellingWorker( QStringList & _list,KSpreadSheet * s )
+      : KSpreadSheet::CellWorker( false, false, true ), list( _list ), pos( 0 ),  sheet( s ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
 	return new KSpreadUndoChangeAreaTextCell( doc, table, r );
@@ -5247,10 +5193,7 @@ struct SetWordSpellingWorker : public KSpreadSheet::CellWorker {
 		 && !c->isDate() && c->content() != KSpreadCell::VisualFormula
 		 && !c->text().isEmpty())
 	    {
-              if ( ch )
-                ch->addChange( sheet, c, QPoint( c->column(), c->row() ),
-                               c->getFormatString( c->column(), c->row() ),
-                               c->text() );
+
 
 		c->setCellText( list[pos] );
 		pos++;
@@ -5262,12 +5205,8 @@ struct SetWordSpellingWorker : public KSpreadSheet::CellWorker {
 void KSpreadSheet::setWordSpelling(KSpreadSelection* selectionInfo,
                                    const QString _listWord )
 {
-    KSpreadChanges * c = 0;
-    if ( map() && map()->changes() )
-      c = map()->changes();
-
     QStringList list = QStringList::split ( '\n', _listWord );
-    SetWordSpellingWorker w( list, c, this );
+    SetWordSpellingWorker w( list,  this );
     workOnCells( selectionInfo, w );
 }
 
@@ -5498,14 +5437,6 @@ void KSpreadSheet::pasteTextPlain( QString &_text, QRect pasteArea)
 
     if ( !isProtected() || cell->notProtected( mx, my + i ) )
     {
-      // feed the change recorder
-      if ( map() && map()->changes() )
-      {
-        map()->changes()->addChange( this, cell, QPoint( mx, my + i ),
-                                     cell->getFormatString( mx, my + 1 ),
-                                     cell->text() );
-      }
-
       cell->setCellText( rowtext );
       cell->updateChart();
     }

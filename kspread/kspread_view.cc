@@ -69,10 +69,8 @@
 
 #include <kparts/partmanager.h>
 
-#include "kspread_changes.h"
 #include "kspread_sheetprint.h"
 #include "kspread_map.h"
-#include "kspread_dlg_changes.h"
 #include "kspread_dlg_csv.h"
 #include "kspread_dlg_cons.h"
 #include "kspread_dlg_database.h"
@@ -1203,40 +1201,6 @@ void ViewPrivate::initActions()
       view, SLOT( menuCalc( bool ) ) );
   actions->calcCount->setExclusiveGroup( "Calc" );
   actions->calcCount->setToolTip(i18n("Calculate using the count."));
-
-  // -- running calculation actions --
-
-  actions->recordChanges = new KToggleAction( i18n( "&Record Changes" ),
-      0, ac, "recordChanges" );
-  actions->recordChanges->setToolTip( i18n( "Record changes made to this document." ) );
-  QObject::connect( actions->recordChanges, SIGNAL( toggled( bool ) ),
-      view, SLOT( toggleRecordChanges( bool ) ) );
-
-  actions->protectChanges = new KToggleAction( i18n( "&Protect Changes..." ),
-      0, ac, "protectRecords" );
-  actions->protectChanges->setToolTip( i18n( "Protect the change records from being accepted or rejected." ) );
-  actions->protectChanges->setEnabled( false );
-  QObject::connect( actions->protectChanges, SIGNAL( toggled( bool ) ),
-      view, SLOT( toggleProtectChanges( bool ) ) );
-
-  actions->filterChanges = new KAction( i18n( "&Filter Changes..." ),
-      0, view, SLOT( filterChanges() ), ac, "filterChanges" );
-  actions->filterChanges->setToolTip( i18n( "Change display settings for changes." ) );
-  actions->filterChanges->setEnabled( false );
-
-  actions->acceptRejectChanges = new KAction( i18n( "&Accept or Reject..." ),
-      0, view, SLOT( acceptRejectChanges() ), ac, "acceptRejectChanges" );
-  actions->acceptRejectChanges->setToolTip( i18n( "Accept or reject changes made to this document." ) );
-  actions->acceptRejectChanges->setEnabled( false );
-
-  actions->commentChanges = new KAction( i18n( "&Comment Changes..." ),
-      0, view, SLOT( commentChanges() ), ac, "commentChanges" );
-  actions->commentChanges->setToolTip( i18n( "Add comments to changes you made." ) );
-  actions->commentChanges->setEnabled( false );
-
-  actions->mergeDocument = new KAction( i18n( "&Merge Document..." ),
-      0, view, SLOT( mergeDocument() ), ac, "mergeDocument" );
-  actions->mergeDocument->setToolTip( i18n( "Merge this document with a document that recorded changes." ) );
 
 }
 
@@ -2373,12 +2337,6 @@ void KSpreadView::initialPosition()
     d->actions->fillRight->setEnabled( false );
     d->actions->fillDown->setEnabled( false );
     d->actions->fillLeft->setEnabled( false );
-
-    d->actions->recordChanges->setChecked( d->workbook->changes() );
-    d->actions->acceptRejectChanges->setEnabled( d->workbook->changes() );
-    d->actions->filterChanges->setEnabled( d->workbook->changes() );
-    d->actions->protectChanges->setEnabled( d->workbook->changes() );
-    d->actions->commentChanges->setEnabled( d->workbook->changes() );
 
     // make paint effective:
     d->doc->decreaseNumOperation();
@@ -4524,128 +4482,6 @@ void KSpreadView::toggleProtectSheet( bool mode )
    refreshView();
    updateEditWidget();
    d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
-}
-
-void KSpreadView::toggleRecordChanges( bool mode )
-{
-  if ( !mode )
-  {
-    if ( KMessageBox::questionYesNo( this,
-                                     i18n( "You are about to exit the change recording mode. All the informations about changes will be lost. Do you want to continue?" ) )
-         != KMessageBox::Yes )
-      return;
-  }
-
-  if ( d->actions->protectChanges->isChecked() )
-  {
-    if ( !checkChangeRecordPassword() )
-      return;
-    d->actions->protectChanges->setChecked( false );
-  }
-
-  if ( mode )
-    d->activeSheet->map()->startRecordingChanges();
-  else
-    d->activeSheet->map()->stopRecordingChanges();
-
-  d->actions->protectChanges->setEnabled( mode );
-  d->actions->filterChanges->setEnabled( mode );
-  d->actions->acceptRejectChanges->setEnabled( mode );
-  d->actions->commentChanges->setEnabled( mode );
-}
-
-void KSpreadView::toggleProtectChanges( bool mode )
-{
-  if ( !d->actions->recordChanges->isChecked() )
-  {
-    d->actions->protectChanges->setChecked( false );
-    return;
-  }
-
-   if ( mode )
-   {
-     QCString passwd;
-     int result = KPasswordDialog::getNewPassword( passwd, i18n( "Protect Recorded Changes" ) );
-     if ( result != KPasswordDialog::Accepted )
-     {
-       d->actions->protectChanges->setChecked( false );
-       return;
-     }
-
-     QCString hash( "" );
-     QString password( passwd );
-     if ( password.length() > 0 )
-       SHA1::getHash( password, hash );
-     d->activeSheet->map()->changes()->setProtected( hash );
-   }
-   else
-   {
-     checkChangeRecordPassword();
-   }
-}
-
-bool KSpreadView::checkChangeRecordPassword()
-{
-  QCString passwd;
-  d->activeSheet->map()->changes()->password( passwd );
-  if ( passwd.isNull() || passwd.length() == 0 )
-  {
-    d->activeSheet->map()->changes()->setProtected( QCString() );
-    return true;
-  }
-
-  int result = KPasswordDialog::getPassword( passwd, i18n( "Unprotect Recorded Changes" ) );
-  if ( result != KPasswordDialog::Accepted )
-  {
-    d->actions->protectChanges->setChecked( true );
-    return false;
-  }
-
-  QCString hash( "" );
-  QString password( passwd );
-  if ( password.length() > 0 )
-    SHA1::getHash( password, hash );
-  if ( !d->activeSheet->map()->changes()->checkPassword( hash ) )
-  {
-    KMessageBox::error( 0, i18n( "Incorrect password" ) );
-    d->actions->protectChanges->setChecked( true );
-    return false;
-  }
-
-  d->activeSheet->map()->changes()->setProtected( QCString() );
-  d->actions->protectChanges->setChecked( false );
-  return true;
-}
-
-void KSpreadView::filterChanges()
-{
-  if ( !d->actions->recordChanges->isChecked() )
-    return;
-
-  KSpreadFilterDlg dlg( this, d->activeSheet->map()->changes() );
-  dlg.exec();
-}
-
-void KSpreadView::acceptRejectChanges()
-{
-  if ( !d->actions->recordChanges->isChecked() )
-    return;
-
-  KSpreadAcceptDlg dlg( this, d->activeSheet->map()->changes() );
-  dlg.exec();
-}
-
-void KSpreadView::commentChanges()
-{
-  if ( !d->actions->recordChanges->isChecked() )
-    return;
-
-  KSpreadCommentDlg dlg( this, d->activeSheet->map()->changes() );
-  dlg.exec();
-}
-
-void KSpreadView::mergeDocument()
-{
 }
 
 void KSpreadView::togglePageBorders( bool mode )

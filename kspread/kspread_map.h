@@ -67,9 +67,6 @@ public:
   void setProtected( QCString const & passwd );
   bool checkPassword( QCString const & passwd ) const { return ( passwd == m_strPassword ); }
 
-  void startRecordingChanges();
-  void stopRecordingChanges();
-
   /**
    * The table named @param _from is being moved to the table @param _to.
    * If @param _before is true @param _from is inserted before (after otherwise)   * @param _to.
@@ -128,7 +125,6 @@ public:
   virtual DCOPObject* dcopObject();
 
   KSpreadDoc * doc()const;
-  KSpreadChanges * changes() const { return m_pChanges; }
 
   void takeTable( KSpreadSheet * table );
   void insertTable( KSpreadSheet * table );
@@ -148,11 +144,6 @@ private:
    * Pointer to the part which holds this map.
    */
   KSpreadDoc *m_pDoc;
-
-  /**
-   * Class that tracks changes
-   */
-  KSpreadChanges * m_pChanges;
 
   /** 
    * Password to protect the map from being changed.

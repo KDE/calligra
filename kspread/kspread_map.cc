@@ -18,7 +18,6 @@
 */
 
 
-#include "kspread_changes.h"
 #include "kspread_map.h"
 #include "kspread_doc.h"
 #include "kspread_canvas.h"
@@ -33,7 +32,6 @@
 KSpreadMap::KSpreadMap( KSpreadDoc *_doc, const char* name )
   : QObject( _doc, name ),
     m_pDoc( _doc ),
-    m_pChanges( 0 ),
     m_initialActiveTable( 0 ),
     m_initialMarkerColumn( 0 ),
     m_initialMarkerRow( 0 ),
@@ -50,18 +48,6 @@ KSpreadMap::~KSpreadMap()
 void KSpreadMap::setProtected( QCString const & passwd )
 {
   m_strPassword = passwd;
-}
-
-void KSpreadMap::startRecordingChanges()
-{
-  delete m_pChanges;
-  m_pChanges = new KSpreadChanges( this );
-}
-
-void KSpreadMap::stopRecordingChanges()
-{
-  delete m_pChanges;
-  m_pChanges = 0;
 }
 
 void KSpreadMap::addTable( KSpreadSheet *_table )
@@ -121,9 +107,6 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
       mymap.setAttribute( "protected", "" );      
   }
 
-  if ( m_pChanges )
-    m_pChanges->saveXml( doc, mymap );
-
   QPtrListIterator<KSpreadSheet> it( m_lstTables );
   for( ; it.current(); ++it )
   {
@@ -160,17 +143,6 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
         return false;
     }
     n = n.nextSibling();
-  }
-
-  n = mymap.namedItem( "tracked-changes" );
-  if ( !n.isNull() )
-  {
-    QDomElement ch = n.toElement();
-    if ( !ch.isNull() )
-    {
-      m_pChanges = new KSpreadChanges( this );
-      m_pChanges->loadXml( ch );
-    }
   }
 
   if ( mymap.hasAttribute( "protected" ) )

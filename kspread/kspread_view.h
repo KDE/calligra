@@ -288,12 +288,6 @@ public slots:
     void togglePageBorders( bool );
     void toggleProtectSheet( bool );
     void toggleProtectDoc( bool );
-    void toggleRecordChanges( bool );
-    void toggleProtectChanges( bool );
-    void filterChanges();
-    void acceptRejectChanges();
-    void commentChanges();
-    void mergeDocument();
     void viewZoom( const QString & );
     void find();
     void findNext();
@@ -568,11 +562,7 @@ private:
     bool spellSwitchToOtherTable();
     void spellCleanup();
 
-
-  /* helper functions */
-  bool checkChangeRecordPassword();
-  void endOperation( QRect const & rect );
-
+    void endOperation( QRect const & rect );
 };
 
 #endif // KSPREAD_VIEW
