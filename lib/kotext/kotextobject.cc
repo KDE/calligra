@@ -1242,7 +1242,7 @@ KCommand * KoTextObject::removeSelectedTextCommand( KoTextCursor * cursor, int s
 
     undoRedoInfo.type = UndoRedoInfo::Invalid; // we don't want clear() to create a command
     undoRedoInfo.clear();
-
+    selectionChangedNotify();
     return macroCmd;
 }
 
