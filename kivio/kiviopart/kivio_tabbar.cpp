@@ -44,7 +44,6 @@ KivioTabBar::KivioTabBar( QWidget* parent, KivioView* view )
 : QWidget(parent)
 {
   m_pView = view;
-  m_pPopupMenu = 0L;
 
   m_pAutoScrollTimer = new QTimer(this);
   connect( m_pAutoScrollTimer, SIGNAL(timeout()), SLOT(slotAutoScroll()));
@@ -349,15 +348,7 @@ void KivioTabBar::openPopupMenu( const QPoint &_global )
 {
     if ( !m_pView->koDocument()->isReadWrite() )
       return;
-
-    if ( m_pPopupMenu != 0L )
-        delete m_pPopupMenu;
-    m_pPopupMenu = new QPopupMenu();
-
-    m_pPopupMenu->insertItem( BarIcon("item_rename",KivioFactory::global()), i18n( "Rename page..." ), this, SLOT( slotRename() ) );
-    m_pPopupMenu->insertItem( BarIcon("item_add",KivioFactory::global()), i18n( "Insert page" ), this, SLOT( slotAdd() ) );
-    m_pPopupMenu->insertItem( BarIcon("item_remove",KivioFactory::global()),i18n( "Remove page" ), this, SLOT( slotRemove() ) );
-    m_pPopupMenu->popup( _global );
+    m_pView->openPopupMenuMenuPage( _global );
 }
 
 void KivioTabBar::renameTab( const QString& old_name, const QString& new_name )

@@ -389,6 +389,9 @@ void KivioView::setupActions()
   m_paperLayout = new KAction( i18n("Paper Layout..."), 0, this, SLOT(paperLayoutDlg()), actionCollection(), "paperLayout" );
   m_insertPage = new KAction( i18n("Insert Page"),"item_add", 0, this, SLOT(insertPage()), actionCollection(), "insertPage" );
   m_removePage = new KAction( i18n("Remove Page"), "item_remove",0,this, SLOT(removePage()), actionCollection(), "removePage" );
+
+  m_renamePage = new KAction( i18n("Rename page..."), "item_rename",0,this, SLOT(renamePage()), actionCollection(), "renamePage" );
+
   m_showPage = new KAction( i18n("Show Page..."),0 ,this,SLOT(showPage()), actionCollection(), "showPage" );
   m_hidePage = new KAction( i18n("Hide Page"),0 ,this,SLOT(hidePage()), actionCollection(), "hidePage" );
   m_exportPage = new KAction( i18n("Export Page..."),0,this,SLOT(exportPage()), actionCollection(), "exportPage");
@@ -513,6 +516,11 @@ void KivioView::removePage( KivioPage *_t )
   QString m_pageName=_t->pageName();
   m_pTabBar->removeTab( _t->pageName() );
   setActivePage( m_pDoc->map()->findPage( m_pTabBar->listshow().first() ));
+}
+
+void KivioView::renamePage()
+{
+    m_pTabBar->slotRename();
 }
 
 void KivioView::setActivePage( KivioPage* page )
@@ -1420,6 +1428,13 @@ void KivioView::exportPage()
    }
 
    kdDebug() << "KivioView::exportPage() succeeded\n";
+}
+
+void KivioView::openPopupMenuMenuPage( const QPoint & _point )
+{
+    if(!koDocument()->isReadWrite() )
+        return;
+     static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
 }
 
 #include "kivio_view.moc"

@@ -123,12 +123,12 @@ public slots:
     void scrollRight();
     void scrollFirst();
     void scrollLast();
+    void slotRename( );
 
 protected slots:
     /**
      * Opens a dialog to rename active tab.
      */
-    void slotRename( );
     void slotRemove( );
     void slotAdd();
     void slotAutoScroll( );
@@ -148,11 +148,6 @@ protected:
 
     enum { autoScrollNo = 0, autoScrollLeft, autoScrollRight };
     enum { moveTabNo = 0, moveTabBefore, moveTabAfter };
-    /**
-     * Pointer to the last popup menu.
-     * If this pointer is not 0L delete before usage.
-     */
-    QPopupMenu *m_pPopupMenu;
 
     /**
      * List with the names of all tabs. The order in this list determines the

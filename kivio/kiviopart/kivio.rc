@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="5">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="6">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
    <Action name="cutStencil"/>
@@ -109,4 +109,9 @@
 </ToolBar>
 <ToolBar name="ToolsToolBar" fullWidth="false" position="left"><text>Tools</text>
 </ToolBar>
+<Menu name="menupage_popup">
+  <Action name="renamePage"/>
+  <Action name="insertPage"/>
+  <Action name="removePage"/>
+</Menu>
 </kpartgui>

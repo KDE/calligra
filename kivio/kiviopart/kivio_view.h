@@ -97,6 +97,7 @@ public:
 
   KivioTabBar* tabBar() { return  m_pTabBar;}
   ToolDockManager* toolDockManager() { return m_pToolDock; }
+  void openPopupMenuMenuPage( const QPoint & _point );
 
   virtual void setupPrinter(KPrinter&);
   virtual void print(KPrinter&);
@@ -152,6 +153,7 @@ public slots:
 
   void insertPage();
   void removePage();
+  void renamePage();
   void hidePage();
   void showPage();
   void exportPage();
@@ -236,6 +238,7 @@ private:
   KAction* m_paperLayout;
   KAction* m_insertPage;
   KAction* m_removePage;
+  KAction* m_renamePage;
   KAction* m_hidePage;
   KAction* m_showPage;
   KAction* m_exportPage;
