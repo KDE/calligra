@@ -13,7 +13,8 @@
 
 #include "vtoolcontainer.h"
 
-VToolContainer::VToolContainer( KoView* parent, const char* name ) : QToolBar( parent->shell() )
+VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
+	: QToolBar( parent->shell() )
 {
 	QToolButton *button;
 	QHBoxLayout *layout = new QHBoxLayout(this, 1);
@@ -106,7 +107,7 @@ VToolContainer::VToolContainer( KoView* parent, const char* name ) : QToolBar( p
 	layout->activate();
 }
 
-void VToolContainer::slotButton( int ID)
+void VToolContainer::slotButton( int /*ID*/ )
 {
 }
 

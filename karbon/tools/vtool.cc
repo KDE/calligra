@@ -15,7 +15,7 @@ VTool::VTool( KarbonPart* part )
 }
 
 bool
-VTool::eventFilter( KarbonView* view, QEvent* event )
+VTool::eventFilter( KarbonView* /*view*/, QEvent* /*event*/ )
 {
 	return false;
 }

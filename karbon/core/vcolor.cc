@@ -54,8 +54,8 @@ VColor::values(
 
 void
 VColor::setValues(
-	const double* v1 = 0L, const double* v2 = 0L,
-	const double* v3 = 0L, const double* v4 = 0L )
+	const double* v1, const double* v2,
+	const double* v3, const double* v4 )
 {
 	if( v1 )
 		m_value[0] = *v1;
@@ -79,7 +79,7 @@ VColor::setColorSpace( const VColorSpace colorSpace )
 	m_colorSpace = colorSpace;
 }
 
-bool
+void
 VColor::convertToColorSpace( const VColorSpace colorSpace,
 	double* v1, double* v2, double* v3, double* v4 ) const
 {

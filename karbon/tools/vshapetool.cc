@@ -10,9 +10,9 @@
 #include "vshapetool.h"
 
 VShapeTool::VShapeTool( KarbonPart* part, bool polar )
-	: VTool( part ),
+	: VTool( part ), m_calcPolar( polar ),
 		m_isDragging( false ), m_isSquare( false ),
-		m_isCentered( false ), m_calcPolar( polar )
+		m_isCentered( false )
 {
 }
 

@@ -22,7 +22,7 @@ class VStroke;
 class VPainter
 {
 public:
-	VPainter( QWidget *, int w = 0, int h = 0 ) {};
+	VPainter( QWidget *, int /*w*/ = 0, int /*h*/ = 0 ) {};
 	virtual ~VPainter() {};
 
 	//

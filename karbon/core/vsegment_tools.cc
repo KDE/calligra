@@ -149,9 +149,9 @@ VSegmentTools::boundingBox( const KoPoint& previous, const VSegment& segment )
 
 void
 VSegmentTools::polygonize(
-	const KoPoint& previous, const VSegment& segment,
-	const double zoomFactor,
-	VSegmentList& list )
+	const KoPoint& /*previous*/, const VSegment& /*segment*/,
+	const double /*zoomFactor*/,
+	VSegmentList& /*list*/ )
 {
 
 }

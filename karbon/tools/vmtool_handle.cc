@@ -36,7 +36,7 @@ VMToolHandle::instance( KarbonPart* part )
 
 void
 VMToolHandle::drawTemporaryObject(
-	KarbonView* view, const QPoint& p, double d1, double d2 )
+	KarbonView* /*view*/, const QPoint& /*p*/, double /*d1*/, double /*d2*/ )
 {
 /*
 	QPainter painter( view->canvasWidget()->viewport() );
@@ -47,7 +47,7 @@ VMToolHandle::drawTemporaryObject(
 }
 
 VCommand*
-VMToolHandle::createCmd( double x, double y, double d1, double d2 )
+VMToolHandle::createCmd( double /*x*/, double /*y*/, double /*d1*/, double /*d2*/ )
 {
 /*
 	part()->unselectAllObjects();

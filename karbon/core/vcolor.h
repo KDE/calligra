@@ -33,11 +33,11 @@ public:
 	VColorSpace colorSpace() const { return m_colorSpace; }
 	void setColorSpace( const VColorSpace colorSpace );
 
-	virtual void save( QDomElement& element ) const;
-	virtual void load( const QDomElement& element );
+	void save( QDomElement& element ) const;
+	void load( const QDomElement& element );
 
 private:
-	bool convertToColorSpace( const VColorSpace colorSpace,
+	void convertToColorSpace( const VColorSpace colorSpace,
 		double* v1 = 0L, double* v2 = 0L,
 		double* v3 = 0L, double* v4 = 0L ) const;
 

@@ -63,7 +63,7 @@ KarbonFactory::createPartObject( QWidget* parentWidget, const char* widgetName,
 	  part->setReadWrite( false );
 
 	// Tell the factory base class that we created the object (mandatory)
-	emit objectCreated(part);
+	emit objectCreated( part );
 
 	return part;
 }
@@ -77,17 +77,19 @@ KarbonFactory::aboutData()
 			"karbon",
 			I18N_NOOP( "Karbon14" ),
 			"0.0.1",
-			I18N_NOOP( "Yet Another Vector Graphics Program" ),
+			I18N_NOOP( "Yet another vector graphics application." ),
 			KAboutData::License_GPL,
-			I18N_NOOP( "(c) 2001, 2002 The Karbon Developers" ) );
+			I18N_NOOP( "(c) 2001, 2002 The Karbon Developers" ),
+			I18N_NOOP( "You are invited to participate in any way." ),
+			I18N_NOOP( "http://www.xs4all.nl/~rwlbuis/karbon/" ) );
 		s_aboutData->addAuthor(
 			"Lennart Kudling",
-			I18N_NOOP( "idea" ),
+			0,
 			"kudling@kde.org",
 			0 );
 		s_aboutData->addAuthor(
 			"Rob Buis",
-			I18N_NOOP( "" ),
+			0,
 			"buis@kde.org",
 			0 );
 // TODO: add the names of some helpfull souls

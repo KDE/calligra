@@ -17,6 +17,7 @@ class VPathFill : public VFill, VSegmentListTraverser
 {
 public:
 	VPathFill();
+	virtual ~VPathFill() {}
 
 	void begin_draw( VPainter *painter, const double zoomFactor, VFillRule rule );
 	void draw( const VSegmentList& list );

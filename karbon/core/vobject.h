@@ -31,8 +31,8 @@ public:
 
 	virtual VObject& transform( const QWMatrix& m ) = 0;
 
-	virtual QRect boundingBox( const double zoomFactor ) const { return QRect(); }
-	virtual bool intersects( const QRect& rect, const double zoomFactor ) const
+	virtual QRect boundingBox( const double /*zoomFactor*/ ) const { return QRect(); }
+	virtual bool intersects( const QRect& /*rect*/, const double /*zoomFactor*/ ) const
 		{ return false; };
 
 	void setState( const VState state ) { m_state = state; }

@@ -16,6 +16,7 @@ class VPathStroke : public VStroke, VSegmentListTraverser
 public:
 	VPathStroke( const double width = 1.0, const VLineCap cap = cap_butt,
 		const VLineJoin join = join_miter );
+	virtual ~VPathStroke() {}
 
 	void draw( VPainter *painter, const double zoomFactor, const VSegmentList& list,
 		bool plain = false );	// "plain" is for drawing objects while editing them

@@ -155,7 +155,7 @@ m_numberStack.clear();
 				continue;
 			}
 
-kdDebug() << *itr << "\t" << m_stringStack.count() << "\t" << m_numberStack.count() << endl;
+//kdDebug() << *itr << "\t" << m_stringStack.count() << "\t" << m_numberStack.count() << endl;
 
 			if( m_stringStack.count() == 1 )
 			{

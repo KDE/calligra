@@ -40,7 +40,7 @@ VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
 }
 
 void
-VCanvas::drawDocument( QPainter* painter, const QRect& rect )
+VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 {
 	VPainter *p = VPainterFactory::painter();
 	p->begin();

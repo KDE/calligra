@@ -23,6 +23,7 @@ class VSegmentListTraverser
 {
 public:
 	VSegmentListTraverser();
+	virtual ~VSegmentListTraverser() {}
 
 	bool traverse( const VSegmentList& list );
 
@@ -77,8 +78,8 @@ public:
 	void setPoint( uint i, const KoPoint& p )
 		{ if( i > 0 && i < 4 ) m_point[--i] = p; }
 
-	virtual void save( QDomElement& element ) const;
-	virtual void load( const QDomElement& element );
+	void save( QDomElement& element ) const;
+	void load( const QDomElement& element );
 
 private:
 	VSegmentType m_type;

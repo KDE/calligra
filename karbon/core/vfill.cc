@@ -21,7 +21,7 @@ VFill::save( QDomElement& element ) const
 }
 
 void
-VFill::load( const QDomElement& element )
+VFill::load( const QDomElement& /*element*/ )
 {
 
 }

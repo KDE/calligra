@@ -102,8 +102,8 @@ VMToolScale::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 
 		// adjust to real viewport contents instead of raw mouse coords:
-		QPoint fp = view->canvasWidget()->viewportToContents( m_fp );
-		QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
+		//QPoint fp = view->canvasWidget()->viewportToContents( m_fp );
+		//QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
 
 		part()->addCommand(
 			new VMCmdScale(

@@ -348,7 +348,7 @@ VPath::revert() const
 }
 
 VPath*
-VPath::booleanOp( const VPath* path, int /*type*/ ) const
+VPath::booleanOp( const VPath* /*path*/, int /*type*/ ) const
 {
 	return 0L;
 }

@@ -41,8 +41,8 @@ public:
 	// read-only access to objects:
 	const VObjectList& objects() const { return m_objects; }
 
-	virtual void save( QDomElement& element ) const;
-	virtual void load( const QDomElement& element );
+	void save( QDomElement& element ) const;
+	void load( const QDomElement& element );
 
 private:
 	VObjectList m_objects;

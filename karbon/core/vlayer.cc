@@ -15,7 +15,7 @@
 #include <kdebug.h>
 
 VLayer::VLayer()
-	: m_visible( true ), m_readOnly( false ), m_name( i18n( "Layer" ) )
+	: m_name( i18n( "Layer" ) ), m_visible( true ), m_readOnly( false )
 {
 }
 
