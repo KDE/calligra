@@ -83,7 +83,8 @@ VImage::draw( VPainter *painter, const KoRect * ) const
 	//*m_image = m_image->smoothScale( m_image->width() * zoomFactor, m_image->height() * zoomFactor, QImage::ScaleMin );
 	m_boundingBox = KoRect( 0, 0, m_image->width(), m_image->height() );
 	m_boundingBox = m_boundingBox.transform( m_matrix );
-	painter->drawImage( *m_image, m_matrix );
+	if( !m_image->isNull() )
+		painter->drawImage( *m_image, m_matrix );
 }
 
 void
