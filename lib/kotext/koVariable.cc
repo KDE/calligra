@@ -42,16 +42,18 @@
 KoVariableSettings::KoVariableSettings()
 {
     m_startingpage=1;
+    m_displayLink=true;
 }
 
 void KoVariableSettings::save( QDomElement &parentElem )
 {
+     QDomElement elem = parentElem.ownerDocument().createElement( "VARIABLESETTINGS" );
+     parentElem.appendChild( elem );
     if(m_startingpage!=1)
     {
-        QDomElement elem = parentElem.ownerDocument().createElement( "VARIABLESETTINGS" );
-        parentElem.appendChild( elem );
         elem.setAttribute( "startingPageNumber", m_startingpage );
     }
+    elem.setAttribute("displaylink",(int)m_displayLink);
 }
 
 void KoVariableSettings::load( QDomElement &elem )
@@ -59,7 +61,11 @@ void KoVariableSettings::load( QDomElement &elem )
     QDomElement e = elem.namedItem( "VARIABLESETTINGS" ).toElement();
     if (!e.isNull())
     {
-        m_startingpage = e.attribute("startingPageNumber").toInt();
+        if(e.hasAttribute("startingPageNumber"))
+            m_startingpage = e.attribute("startingPageNumber").toInt();
+        if(e.hasAttribute("displaylink"))
+            m_displayLink=(bool)e.attribute("displaylink").toInt();
+
     }
 }
 
@@ -514,6 +520,9 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
         case VT_SERIALLETTER:
             varFormat = coll->format( "STRING" );
             break;
+        case VT_LINK:
+            varFormat = coll->format( "STRING" );
+            break;
         }
     }
     Q_ASSERT( varFormat );
@@ -539,6 +548,9 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             break;
         case VT_SERIALLETTER:
             var = new KoSerialLetterVariable( textdoc, QString::null, varFormat ,this);
+            break;
+    case VT_LINK:
+            var = new KoLinkVariable( textdoc,QString::null, QString::null, varFormat ,this);
             break;
     }
     Q_ASSERT( var );
@@ -946,3 +958,72 @@ QStringList KoFieldVariable::actionTexts()
     return lst;
 }
 
+
+/******************************************************************/
+/* Class: KoPgNumVariable                                         */
+/******************************************************************/
+KoLinkVariable::KoLinkVariable( KoTextDocument *textdoc, const QString & _linkName, const QString & _ulr,KoVariableFormat *varFormat,KoVariableCollection *_varColl )
+    : KoVariable( textdoc, varFormat,_varColl ), m_linkName(_linkName),m_url(_ulr)
+{
+}
+
+void KoLinkVariable::save( QDomElement& parentElem )
+{
+    KoVariable::save( parentElem );
+    QDomElement linkElem = parentElem.ownerDocument().createElement( "LINK" );
+    parentElem.appendChild( linkElem );
+    linkElem.setAttribute( "linkName", m_linkName );
+    linkElem.setAttribute( "hrefName", m_url );
+}
+
+void KoLinkVariable::load( QDomElement& elem )
+{
+    KoVariable::load( elem );
+    QDomElement linkElem = elem.namedItem( "LINK" ).toElement();
+    if (!linkElem.isNull())
+    {
+        m_linkName = linkElem.attribute("linkName");
+        m_url = linkElem.attribute("hrefName");
+    }
+}
+
+void KoLinkVariable::recalc()
+{
+    resize();
+}
+
+QStringList KoLinkVariable::actionTexts()
+{
+    return QStringList( i18n( "Link..." ) );
+}
+
+
+void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
+{
+    KoTextFormat * f = static_cast<KoTextFormat *>(format());
+    KoZoomHandler * zh = textDocument()->paintingZoomHandler();
+    int bl, _y;
+    KoTextParag * parag = static_cast<KoTextParag *>( paragraph() );
+    //kdDebug() << "KoVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
+    int h = parag->lineHeightOfChar( index(), &bl, &_y /*unused*/);
+
+    h = zh->layoutUnitToPixelY( y, h );
+    bl = zh->layoutUnitToPixelY( y, bl );
+
+    bool linkColor=m_varColl->variableSetting()->displayLink();
+    p->save();
+    QColor textColor=linkColor ? Qt::blue :  f->color();
+    p->setPen( QPen( textColor ) );
+    if ( f->textBackgroundColor().isValid() )
+        p->fillRect( x, y, zh->layoutUnitToPixelX( width ), h, f->textBackgroundColor() );
+    if ( selected )
+    {
+        p->setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
+        p->fillRect( x, y,  zh->layoutUnitToPixelX( width ), h, cg.color( QColorGroup::Highlight ) );
+
+    }
+    //p->setFont( customItemFont ); // already done by the caller
+    //kdDebug() << "KoVariable::draw bl=" << bl << << endl;
+    p->drawText( x, y + bl + offset, text() );
+    p->restore();
+}

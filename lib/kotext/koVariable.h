@@ -31,7 +31,7 @@ class QDomElement;
 // (and update KWView::setupActions)
 enum VariableType { VT_NONE = -1,
                     VT_DATE = 0, VT_TIME = 2, VT_PGNUM = 4,
-                    VT_CUSTOM = 6, VT_SERIALLETTER = 7, VT_FIELD = 8, VT_ALL=256 };
+                    VT_CUSTOM = 6, VT_SERIALLETTER = 7, VT_FIELD = 8, VT_LINK=9, VT_ALL=256 };
 
 enum VariableFormat { VF_DATE = 0, VF_TIME = 1, VF_STRING = 2, VF_NUM = 3 };
 
@@ -45,11 +45,15 @@ class KoVariableSettings
     int startingPage(){return m_startingpage;}
     void setStartingPage(int _startingpage){ m_startingpage=_startingpage;}
 
+    bool displayLink(){return m_displayLink;}
+    void setDisplayLink( bool b){ m_displayLink=b;}
+
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
  private:
     int m_startingpage;
+    bool m_displayLink;
 };
 
 /**
@@ -422,6 +426,38 @@ public:
 protected:
     short int m_subtype;
     int m_pgNum;
+};
+
+class KoLinkVariable : public KoVariable
+{
+public:
+    KoLinkVariable( KoTextDocument *textdoc, const QString & _linkName, const QString & _ulr,KoVariableFormat *varFormat, KoVariableCollection *_varColl );
+    virtual void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset );
+
+    virtual VariableType type() const
+    { return VT_LINK; }
+
+    static QStringList actionTexts();
+    
+    virtual void save( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
+
+    virtual QString text() { return value(); } 
+    QString value() const { return m_linkName; }
+    QString url() const { return m_url;}
+    
+    virtual void recalc();
+    
+    void setLink(const QString & _linkName, const QString &_url)
+	{
+	    m_linkName=_linkName;
+	    m_url=_url;
+	}
+
+protected:
+    QString m_linkName;
+    QString m_url;
+
 };
 
 #endif

@@ -915,14 +915,6 @@ void KoTextView::insertSpecialChar(QChar _c)
         textObject()->insert( cursor(), currentFormat(), _c, false /* no newline */, true, i18n("Insert Special Char") );
 }
 
-void KoTextView::insertLink(const QString &_linkName, const QString & hrefName)
-{
-    KoTextFormat format=*currentFormat();
-    format.setAnchorName(_linkName);
-    format.setAnchorHref( hrefName);
-    textObject()->insert( cursor(), &format, _linkName+" " , false , true, i18n("Insert Link") );
-}
-
 const KoParagLayout * KoTextView::currentParagLayoutFormat() const
 {
     KoTextParag * parag = static_cast<KoTextParag *>(m_cursor->parag());
