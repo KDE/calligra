@@ -149,6 +149,8 @@ void KFloatingDialog::readSettings()
 void KFloatingDialog::setBaseWidget(QWidget *w)
 {
   m_pBase = w;
+
+  setBaseSize( m_pBase->sizeHint() );
 }
 
 void KFloatingDialog::slotClose()

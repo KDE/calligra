@@ -20,7 +20,7 @@ GradientEditorDialog::GradientEditorDialog( KisDoc *_doc, QWidget *_parent, cons
   QWidget *area = new QWidget( this, "GradientEditorDialogArea" );
   setBaseWidget( area );
 
-  QGridLayout *layout = new QGridLayout( area, 7, 2 );
+  QGridLayout *layout = new QGridLayout( area, 7, 2, 5 );
 
   QListBox *listbox = new QListBox( area, "GradientListBox" );
   layout->addMultiCellWidget( listbox, 0, 4, 0, 0 );
@@ -44,13 +44,7 @@ GradientEditorDialog::GradientEditorDialog( KisDoc *_doc, QWidget *_parent, cons
   layout->addMultiCellWidget( scroll, 6, 6, 0, 1 );
 
   layout->setColStretch( 1, 0 );
-
-//layout->setRowStretch( 0, 0 );
-//layout->setRowStretch( 1, 0 );
-//layout->setRowStretch( 2, 0 );
-//layout->setRowStretch( 3, 0 );
   layout->setRowStretch( 4, 1 );
-//layout->setRowStretch( 5, 0 );
 
   // reading GIMP gradient filenames
 
@@ -69,13 +63,3 @@ GradientEditorDialog::~GradientEditorDialog()
 }
 
 #include "kis_dlg_gradienteditor.moc"
-
-
-
-
-
-
-
-
-
-

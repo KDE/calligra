@@ -1,9 +1,7 @@
 /*
- *  blendchooser.h - part of KImageShop
+ *  selecttool.h - part of KImageShop
  *
- *  A Combobox showing all available blendings for KImageShop
- *
- *  Copyright (c) 1999 Carsten Pfeiffer <pfeiffer@kde.org>
+ *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,33 +18,39 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#ifndef __selecttool_h__
+#define __selecttool_h__
 
-#ifndef BLENDHOOSER_H
-#define BLENDHOOSER_H
+#include <qpoint.h>
 
-#include <qcombobox.h>
+#include "kis_tool.h"
 
-#include "kis_config.h"
+class KisDoc;
+class KisCanvas;
 
-class BlendChooser : public QComboBox
+class SelectTool : public KisTool
 {
-  Q_OBJECT
-
 public:
 
-  BlendChooser( QWidget* parent = 0, const char* name = 0 );
-  ~BlendChooser();
+  SelectTool( KisDoc* _doc, KisCanvas* _canvas );
+  ~SelectTool();
 
-  KisConfig::Blending currentBlending()	const;
-  void setCurrentBlending( KisConfig::Blending );
+  virtual QString toolName() { return QString( "SelectTool" ); }
 
-signals:
+  virtual void mousePress( QMouseEvent *_event );
+  virtual void mouseMove( QMouseEvent *_event );
+  virtual void mouseRelease( QMouseEvent *_event );
 
-  void blendingActivated( KisConfig::Blending );
+protected:
 
-private slots:
+  void drawRect( const QPoint&, const QPoint& ); 
 
-  void slotBlendChanged( int );
+protected:
+
+  QPoint     m_dragStart;
+  QPoint     m_dragEnd;
+  bool       m_dragging;
+  KisCanvas *m_canvas;
 };
 
-#endif // BLENDHOOSER_H
+#endif //__selecttool_h__

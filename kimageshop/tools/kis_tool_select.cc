@@ -1,5 +1,5 @@
 /*
- *  gradienttool.h - part of KImageShop
+ *  selecttool.h - part of KImageShop
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *
@@ -18,26 +18,24 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <qpainter.h>
+#include "qpainter.h"
 
 #include "kis_doc.h"
 #include "kis_canvas.h"
-#include "kis_gradient.h"
-#include "kis_tool_gradient.h"
+#include "kis_tool_select.h"
 
-GradientTool::GradientTool( KisDoc* _doc, KisCanvas* _canvas, KisGradient* _gradient )
+SelectTool::SelectTool( KisDoc* _doc, KisCanvas* _canvas )
   : KisTool( _doc )
-  , m_pCanvas( _canvas )
-  , m_gradient( _gradient )
-  , m_dragging( false )
+  , m_canvas( _canvas )
+  , m_dragging( false ) 
 {
 }
 
-GradientTool::~GradientTool()
+SelectTool::~SelectTool()
 {
 }
 
-void GradientTool::mousePress( QMouseEvent* event )
+void SelectTool::mousePress( QMouseEvent* event )
 {
   if ( m_pDoc->isEmpty() )
     return;
@@ -50,38 +48,38 @@ void GradientTool::mousePress( QMouseEvent* event )
   }
 }
 
-void GradientTool::mouseMove( QMouseEvent* event )
+void SelectTool::mouseMove( QMouseEvent* event )
 {
   if ( m_pDoc->isEmpty() )
     return;
 
   if( m_dragging )
   {
-    drawLine( m_dragStart, m_dragEnd );
+    drawRect( m_dragStart, m_dragEnd );
     m_dragEnd = event->pos();
-    drawLine( m_dragStart, m_dragEnd );
+    drawRect( m_dragStart, m_dragEnd );
   }
 }
 
-void GradientTool::mouseRelease( QMouseEvent* event )
+void SelectTool::mouseRelease( QMouseEvent* event )
 {
   if ( m_pDoc->isEmpty() )
     return;
 
   if( ( m_dragging ) &&
-      ( event->state() == LeftButton ) )
+      ( event->button() == LeftButton ) )
   {
-    drawLine( m_dragStart, m_dragEnd );
     m_dragging = false;
+    drawRect( m_dragStart, m_dragEnd );
   }
 }
 
-void GradientTool::drawLine( const QPoint& start, const QPoint& end )
+void SelectTool::drawRect( const QPoint& start, const QPoint& end )
 {
   QPainter p;
 
-  p.begin( m_pCanvas );
+  p.begin( m_canvas );
   p.setRasterOp( Qt::NotROP );
-  p.drawLine( start, end );
+  p.drawRect( QRect( start, end ) );
   p.end();
 }

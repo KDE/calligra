@@ -26,30 +26,33 @@
 #include "kis_tool.h"
 
 class KisDoc;
-class Gradient;
+class KisCanvas;
+class KisGradient;
 
 class GradientTool : public KisTool
 {
 public:
 
-  GradientTool( KisDoc *_doc, Gradient *_gradient );
+  GradientTool( KisDoc* _doc, KisCanvas* _canvas, KisGradient* _gradient );
   ~GradientTool();
 
-  virtual QString toolName() { return QString("GradientTool"); }
+  virtual QString toolName() { return QString( "GradientTool" ); }
 
-  virtual void mousePress(QMouseEvent *_event );
-  virtual void mouseMove(QMouseEvent *_event );
-  virtual void mouseRelease(QMouseEvent *_event );
-
+  virtual void mousePress( QMouseEvent* event );
+  virtual void mouseMove( QMouseEvent* event );
+  virtual void mouseRelease( QMouseEvent* event );
 
 protected:
 
-  QPoint   m_dragStart;
-  bool     m_dragging;
-  Gradient *m_gradient;
+  void drawLine( const QPoint&, const QPoint& );
+
+protected:
+
+  QPoint       m_dragStart;
+  QPoint       m_dragEnd;
+  bool         m_dragging;
+  KisCanvas   *m_pCanvas;
+  KisGradient *m_gradient;
 };
 
 #endif //__gradienttool_h__
-
-
-

@@ -40,6 +40,7 @@ class KisDoc : public KoDocument
     Q_OBJECT
 
 public:
+
     enum {RGB=0, CMYK, LAB, GREYSCALE } ColorModel;
     enum {BACKGROUND=0, FOREGROUND, WHITE, TRANSPARENT } BgColor;
 
@@ -109,13 +110,13 @@ public:
     void setCurrentImage(KisImage *img);
 
     bool isEmpty();
-    
 
     QStringList images();
 
     void renameImage(const QString& oldname, const QString &newname);
     
 public slots:
+
   void setCurrentLayerOpacity( double opacity )
     {  setLayerOpacity( (uchar) ( opacity * 255 / 100 ) ); };
   void slotImageUpdated();
@@ -128,19 +129,22 @@ public slots:
   void slotRemoveImage( const QString& name );
  
 signals:
+
   void docUpdated();
   void docUpdated( const QRect& rect );
   void layersUpdated();
   void imageListUpdated();
     
 protected:
+
   virtual QString configFile() const;
   KoCommandHistory m_commands;
 
 private:
+
   QList <KisImage> m_Images;
   KisImage *m_pCurrent;
   NewDialog       *m_pNewDialog;
 };
 
-#endif
+#endif // __kis_doc_h__

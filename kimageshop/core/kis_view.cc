@@ -39,6 +39,7 @@
 #include "kis_brush.h"
 #include "kis_tool.h"
 #include "kis_util.h"
+#include "kis_gradient.h"
 #include "kis_pluginserver.h"
 
 #include "kis_dlg_color.h"
@@ -49,6 +50,7 @@
 #include "kis_dlg_new.h"
 #include "brusheswidget.h"
 
+#include "kis_tool_select.h"
 #include "kis_tool_move.h"
 #include "kis_tool_zoom.h"
 #include "kis_tool_brush.h"
@@ -170,6 +172,9 @@ void KisView::setupTabBar()
 
 void KisView::setupTools()
 {
+  // select tool
+  m_pSelectTool = new SelectTool( m_pDoc, m_pCanvas );
+
   // move tool
   m_pMoveTool = new MoveTool(m_pDoc);
   
@@ -192,7 +197,10 @@ void KisView::setupTools()
   
   // zoom tool
   m_pZoomTool = new ZoomTool(this);
-  
+ 
+  // gradient tool
+  m_pGradientTool = new GradientTool( m_pDoc, m_pCanvas, m_pGradient );
+ 
   m_tool_brush->setChecked( true );
   activateTool(m_pBrushTool);
 }
@@ -276,6 +284,9 @@ void KisView::setupActions()
 
   // tool actions
 
+  m_tool_select_rect = new KToggleAction( i18n( "&Rectangular select" ), KISBarIcon( "areaselect" ), 0, this,
+                             SLOT( tool_select_rect() ), actionCollection(), "tool_select_rect" );
+  m_tool_select_rect->setExclusiveGroup( "tools" );
   m_tool_move = new KToggleAction( i18n("&Move tool"), KISBarIcon("move"), 0, this,
 			     SLOT( tool_move() ),actionCollection(), "tool_move");
   m_tool_move->setExclusiveGroup( "tools" );
@@ -568,6 +579,11 @@ void KisView::activateTool(KisTool* t)
  * tool action slots
  */
 
+void KisView::tool_select_rect()
+{
+  activateTool(m_pSelectTool);
+}
+
 void KisView::tool_move()
 {
   activateTool(m_pMoveTool);
@@ -605,6 +621,9 @@ void KisView::tool_colorpicker()
 
 void KisView::tool_gradient()
 {
+  debug( "Gradient Tool activated" );
+
+  activateTool( m_pGradientTool );
 }
 
 /*

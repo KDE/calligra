@@ -45,6 +45,7 @@ class KisSideBar;
 class QScrollBar;
 class KRuler;
 
+class SelectTool;
 class KisBrush;
 class BrushesWidget;
 class KisTool;
@@ -54,6 +55,7 @@ class AirBrushTool;
 class EraserTool;
 class PenTool;
 class ZoomTool;
+class KisGradient;
 class GradientTool;
 class ColorPicker;
 class QButton;
@@ -112,6 +114,7 @@ class KisView : public ContainerView
   void merge_linked_layers();
   
   // tool action slots
+  void tool_select_rect();
   void tool_move();
   void tool_zoom();
   void tool_brush();
@@ -163,7 +166,7 @@ class KisView : public ContainerView
   // dialog actions
   KToggleAction *m_dialog_layer, *m_dialog_color, *m_dialog_brush, *m_dialog_gradient, *m_dialog_gradienteditor;
   // tool actions
-  KToggleAction *m_tool_move, *m_tool_zoom, *m_tool_brush, *m_tool_pen
+  KToggleAction *m_tool_select_rect, *m_tool_move, *m_tool_zoom, *m_tool_brush, *m_tool_pen
     , *m_tool_gradient, *m_tool_colorpicker, *m_tool_airbrush, *m_tool_eraser;
   // layer actions
   KAction *m_layer_rotate180, *m_layer_rotateleft90, *m_layer_rotateright90, *m_layer_mirrorX, *m_layer_mirrorY;
@@ -174,12 +177,14 @@ class KisView : public ContainerView
 
   KisDoc               *m_pDoc;
   KisTool              *m_pTool; // currently active tool
+  SelectTool           *m_pSelectTool;
   MoveTool             *m_pMoveTool;
   BrushTool            *m_pBrushTool;
   EraserTool           *m_pEraserTool;
   AirBrushTool         *m_pAirBrushTool;
   PenTool              *m_pPenTool;
   ZoomTool             *m_pZoomTool;
+  KisGradient    *m_pGradient;
   GradientTool         *m_pGradientTool;
   ColorPicker          *m_pColorPicker;
   const KisBrush       *m_pBrush; // current brush
