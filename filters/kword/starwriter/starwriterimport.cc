@@ -65,7 +65,7 @@ KoFilter::ConversionStatus StarWriterImport::convert(const QCString& from, const
     if ((to != "application/x-kword") || (from != "application/vnd.stardivision.writer"))
         return KoFilter::NotImplemented;
 
-    // Read the streams
+    // Read streams
     KOLE::Storage storage;
     storage.open(m_chain->inputFile());
 
@@ -81,7 +81,7 @@ KoFilter::ConversionStatus StarWriterImport::convert(const QCString& from, const
     SwPageStyleSheets.resize(stream->device()->size());
     stream->readRawBytes(SwPageStyleSheets.data(), SwPageStyleSheets.size());
 
-    // Check the document version
+    // Check document version
     if (!checkDocumentVersion()) return KoFilter::WrongFormat;
 
     // Algorithm for creating the main document
@@ -231,13 +231,14 @@ QString StarWriterImport::convertToKWordString(QByteArray s)
 bool StarWriterImport::parseNodes(QByteArray n)
 {
     QByteArray s;
+    Q_UINT32 len, p;
 
     // Loop
-    Q_UINT32 p = 0x09;   // is this a fixed value? is it the same for headers/footers?
+    p = 0x09;   // is this a fixed value? is it the same for headers/footers?
 
     while (p < n.size()) {
         char c = n[p];
-        Q_UINT32 len = readU24(n, p+1);
+        len = readU24(n, p+1);
 
         s.resize(len);
         for (Q_UINT32 k = 0x00; k < len; k++)
