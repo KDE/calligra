@@ -143,20 +143,20 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     connect( unbalanced, SIGNAL( clicked() ),
 	     this, SLOT( unbalancedChanged() ) );
     
-    yfactor = new QSlider( -200, 200, 2, 100, QSlider::Vertical, grp1 );
+    yfactor = new QSlider( -200, 200, 1, 100, QSlider::Vertical, grp1 );
     yfactor->resize( yfactor->sizeHint().width(), 
-		     cType->width() - yfactor->sizeHint().width() );
-    yfactor->move( cType->width() - yfactor->sizeHint().width(), 
+		     cType->width() - yfactor->sizeHint().width() - 10 );
+    yfactor->move( cType->width() - yfactor->sizeHint().width() , 
 		   unbalanced->y() + unbalanced->height() + 20 );
     connect( yfactor, SIGNAL( valueChanged( int ) ),
 	     this, SLOT( yFactorChanged( int ) ) );
 
     colorPreview = new QLabel( grp1 );
-    colorPreview->resize( cType->width() - yfactor->width(), 
-			  cType->width() - yfactor->width()  );
+    colorPreview->resize( cType->width() - yfactor->width() - 10, 
+			  cType->width() - yfactor->width() - 10 );
     colorPreview->move( 10, unbalanced->y() + unbalanced->height()+20 );
 
-    xfactor = new QSlider( -200, 200, 2, 100, QSlider::Horizontal, grp1 ); 
+    xfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, grp1 ); 
 
     xfactor->resize( colorPreview->width(), xfactor->sizeHint().height() );
     xfactor->move( 10, colorPreview->y() + colorPreview->height() );
@@ -333,6 +333,20 @@ void BackDia::unbalancedChanged()
 /*==================== select color type =========================*/
 void BackDia::selectCType( int i )
 {
+
+  // let's be smart about what plain does :-)
+  if (!i) {
+    color2Choose->setEnabled(false);
+    unbalanced->setEnabled(false);
+    xfactor->setEnabled(false);
+    yfactor->setEnabled(false);
+  }
+  else {
+    color2Choose->setEnabled(true);
+    unbalanced->setEnabled(true);
+    xfactor->setEnabled(true);
+    yfactor->setEnabled(true);
+  }    
     radioPic->setChecked( false );
     radioColor->setChecked( true );
     radioClip->setChecked( false );
