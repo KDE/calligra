@@ -931,7 +931,7 @@ Reggie, 17.3.1999:
 ------------------
 - Fixes in tables
 - Improved variables
- 
+
 Reggie, 18.3.1999:
 ------------------
 - Implemented saving of different types of variables
@@ -944,3 +944,9 @@ Reggie, 19.3.1999:
 - Using QChar instead of char in the KWString class now => KWord supports Unicode (at least I hope so :-)
 - edit->paste gets enabled/disabled according to the clipboard data
 - edit->copy/cut gets enabled/disbaled according to the text selection
+
+Reggie, 20.3.1999:
+------------------
+- Fixes
+- Fixed saving variables
+- Implemented loading variables

@@ -101,11 +101,13 @@ public:
 
   KWVariable *getVar() { return var; }
 
-  virtual void save(ostream &out)
-  { var->save(out); }
-  virtual void load(KOMLParser& parser,vector<KOMLAttrib>& lst)
-  { var->load(parser,lst); }
-  
+  virtual void save(ostream &out) { 
+    var->save(out); 
+    out << otag << "<FRMAT>" << endl;
+    KWCharFormat::save(out);
+    out << etag << "</FRMAT>" << endl;
+  }
+
 protected:
   KWVariable *var;
 

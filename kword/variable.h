@@ -27,6 +27,8 @@
 #include <fstream>
 #include <unistd.h>
 
+#include <string>
+
 class KWordDocument;
 class KWVariable;
 class KWParag;
@@ -110,13 +112,13 @@ public:
 
   void setPre(const QString &_pre) { pre = _pre; }
   void setPost(const QString &_post) { pre = _post; }
-  
+
   QString getPre() { return pre; }
   QString getPost() { return post; }
-  
+
 protected:
   QString pre,post;
-  
+
 };
 
 /******************************************************************/
@@ -153,7 +155,7 @@ public:
   virtual void recalc() {}
 
   virtual void save(ostream &out);
-  virtual void load(KOMLParser&,vector<KOMLAttrib>&);
+  virtual void load(string name,string tag,vector<KOMLAttrib>& lst);
 
 protected:
   KWordDocument *doc;
@@ -172,7 +174,7 @@ class KWPgNumVariable : public KWVariable
 {
 public:
   KWPgNumVariable(KWordDocument *_doc) : KWVariable(_doc) { pgNum = 0; }
-
+  
   virtual KWVariable *copy() {
     KWPgNumVariable *var = new KWPgNumVariable(doc);
     var->setVariableFormat(varFormat);
@@ -187,7 +189,7 @@ public:
   long unsigned int getPgNum() { return pgNum; }
 
   virtual void save(ostream &out);
-  virtual void load(KOMLParser&,vector<KOMLAttrib>&);
+  virtual void load(string name,string tag,vector<KOMLAttrib>& lst);
 
 protected:
   long unsigned int pgNum;
@@ -202,7 +204,8 @@ class KWDateVariable : public KWVariable
 {
 public:
   KWDateVariable(KWordDocument *_doc,bool _fix,QDate _date);
-
+  KWDateVariable(KWordDocument *_doc) : KWVariable(_doc) {}
+  
   virtual KWVariable *copy() {
     KWDateVariable *var = new KWDateVariable(doc,fix,date);
     var->setVariableFormat(varFormat);
@@ -219,7 +222,7 @@ public:
   void setDate(QDate _date) { date = _date; }
 
   virtual void save(ostream &out);
-  virtual void load(KOMLParser&,vector<KOMLAttrib>&);
+  virtual void load(string name,string tag,vector<KOMLAttrib>& lst);
 
 protected:
   QDate date;
@@ -235,7 +238,8 @@ class KWTimeVariable : public KWVariable
 {
 public:
   KWTimeVariable(KWordDocument *_doc,bool _fix,QTime _time);
-
+  KWTimeVariable(KWordDocument *_doc) : KWVariable(_doc) {}
+  
   virtual KWVariable *copy() {
     KWTimeVariable *var = new KWTimeVariable(doc,fix,time);
     var->setVariableFormat(varFormat);
@@ -252,7 +256,7 @@ public:
   void setTime(QTime _time) { time = _time; }
 
   virtual void save(ostream &out);
-  virtual void load(KOMLParser&,vector<KOMLAttrib>&);
+  virtual void load(string name,string tag,vector<KOMLAttrib>& lst);
 
 protected:
   QTime time;

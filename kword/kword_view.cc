@@ -168,9 +168,6 @@ void KWordView::init()
       if (frameset->getFrameType() == FT_PART)
 	slotInsertObject(dynamic_cast<KWPartFrameSet*>(frameset)->getChild(),dynamic_cast<KWPartFrameSet*>(frameset));
     }
-
-//    clipboardDataChanged();
-//    selectionOnOff();
 }
 
 /*================================================================*/
@@ -2350,6 +2347,9 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   setFormat(format,false);
   gui->getPaperWidget()->forceFullUpdate();
   gui->getPaperWidget()->init();
+
+  clipboardDataChanged();
+  selectionOnOff();
 
   return true;
 }

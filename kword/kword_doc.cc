@@ -756,6 +756,16 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
   lay->setCounterRightText("");
   lay->setNumberingType(KWParagLayout::NT_LIST);
 
+  if (true /*no variable formats were loaded*/)
+    {
+      varFormats.insert(VT_DATE_FIX,new KWVariableDateFormat());
+      varFormats.insert(VT_DATE_VAR,new KWVariableDateFormat());
+      varFormats.insert(VT_TIME_FIX,new KWVariableTimeFormat());
+      varFormats.insert(VT_TIME_VAR,new KWVariableTimeFormat());
+      varFormats.insert(VT_PGNUM,new KWVariablePgNumFormat());
+      // ... and so on ...
+    }
+
   pages = 1;
 
   string tag;
@@ -1110,16 +1120,6 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
       frameset->addFrame(frame);
       addFrameSet(frameset);
       emit sig_insertObject(ch,frameset);
-    }
-
-  if (true /*no variable formats were loaded*/)
-    {
-      varFormats.insert(VT_DATE_FIX,new KWVariableDateFormat());
-      varFormats.insert(VT_DATE_VAR,new KWVariableDateFormat());
-      varFormats.insert(VT_TIME_FIX,new KWVariableTimeFormat());
-      varFormats.insert(VT_TIME_VAR,new KWVariableTimeFormat());
-      varFormats.insert(VT_PGNUM,new KWVariablePgNumFormat());
-      // ... and so on ...
     }
 
   return true;

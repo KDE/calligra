@@ -368,25 +368,80 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 		    _data_[__pos].c = 0;
 		    _data_[__pos].attrib = _kwtab;
 		  } break;
-//  		case ID_KWCharVariable:
-//  		  {
-//  		     = new KWImage();
-//  		    _image->load(parser,lst,_doc);
-//  		    QString key;
-//  		    image = _doc->getImageCollection()->getImage(*_image,key);
-//  		    _kwimage = new KWCharImage(image);
-//  		    freeChar(_data_[__pos]);
-//  		    _data_[__pos].c = 0;
-//  		    _data_[__pos].attrib = _kwimage;
-//  		    delete _image;
-//  		    _image = 0;
-//  		  } break;
+		case ID_KWCharVariable:
+		  {
+		    VariableType vart;
+		    KWVariable *var = 0L;
+		    KWCharVariable *v = 0L;
+		      
+		    while (parser.open(0L,tag))
+		      {
+			KOMLParser::parseTag(tag.c_str(),name,lst);
+						
+			if (name == "TYPE")
+			  {
+			    KOMLParser::parseTag(tag.c_str(),name,lst);
+			    vector<KOMLAttrib>::const_iterator it = lst.begin();
+			    for(;it != lst.end();it++)
+			      {
+				if ((*it).m_strName == "type")
+				  {
+				    vart = static_cast<VariableType>(atoi((*it).m_strValue.c_str()));
+				    switch (vart)
+				      {
+				      case VT_DATE_FIX:
+					var = new KWDateVariable(_doc);
+					break;
+				      case VT_DATE_VAR:
+					var = new KWDateVariable(_doc);
+					break;
+				      case VT_TIME_FIX:
+					var = new KWTimeVariable(_doc);
+					break;
+				      case VT_TIME_VAR:
+					var = new KWTimeVariable(_doc);
+					break;
+				      case VT_PGNUM:
+					var = new KWPgNumVariable(_doc);
+					break;
+				      }
+				
+				    var->setVariableFormat(_doc->getVarFormats().find(static_cast<int>(vart)));
+				    v = new KWCharVariable(var);
+				  }
+			      }
+			  }
+			else if (name == "FRMAT" && v)
+			  {
+			    _format = new KWFormat();
+			    _format->load(parser,lst,_doc);
+			    format = _doc->getFormatCollection()->getFormat(*_format);
+			    freeChar(_data_[__pos]);
+			    v->setFormat(format);
+			    _data_[__pos].attrib = v;
+			    _data_[__pos].c = 0;
+			    delete _format;
+			    _format = 0;
+			  }
+			else
+			  {
+			    if (var)
+			      var->load(name,tag,lst);
+			  }
+				    
+			if (!parser.close(tag))
+			  {
+			    cerr << "ERR: Closing Child" << endl;
+			    return;
+			  }	
+		      }
+		  } break;
 		default: break;
-		}
+		}	
 	      _load = false;
 	    }
 	}
-
+      
       if (!parser.close(tag))
 	{
 	  cerr << "ERR: Closing Child" << endl;
