@@ -173,7 +173,10 @@ public:
     static QDomElement saveFormat( QDomDocument & doc, KWTextFormat * curFormat, KWTextFormat * refFormat, int pos, int len );
     static KWTextFormat loadFormat( QDomElement &formatElem, KWTextFormat * refFormat, const QFont & defaultFont );
 
-    void save( QDomElement &parentElem, int from = 0, int to = -1 );
+    void save( QDomElement &parentElem )
+    { save( parentElem, 0, length()-2 ); }
+    void save( QDomElement &parentElem, int from, int to );
+
     void load( QDomElement &attributes );
 
     // Load and apply <FORMAT> tags (used by KWTextParag::load and by KWPasteCommand)

@@ -592,7 +592,7 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KWTextFormat * curForma
     return formatElem;
 }
 
-void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int to /* default -1 */ )
+void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int to /* default length()-2 */ )
 {
     QDomDocument doc = parentElem.ownerDocument();
     QDomElement paragElem = doc.createElement( "PARAGRAPH" );
@@ -601,8 +601,6 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
     paragElem.appendChild( textElem );
     QString text = string()->toString();
     ASSERT( text.right(1)[0] == ' ' );
-    if ( to == -1 )
-        to = string()->length()-2; // 'to' is inclusive, and length-1 is the trailing space
     textElem.appendChild( doc.createTextNode( text.mid( from, to - from + 1 ) ) );
 
     QDomElement formatsElem = doc.createElement( "FORMATS" );

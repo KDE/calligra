@@ -2898,7 +2898,7 @@ KWDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
     else
     {
         text += c1.parag()->string()->toString().mid( c1.index() ) + "\n";
-        static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), -1 );
+        static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c1.parag()->length()-2 );
         QTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
             text += p->string()->toString() + "\n";
