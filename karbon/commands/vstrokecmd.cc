@@ -40,20 +40,20 @@ VStrokeCmd::execute()
 		stroke.setLineJoin( m_stroke.lineJoin() );
 		stroke.setParent( 0L );
 		stroke.setLineWidth( m_stroke.lineWidth() );
-		if( m_stroke.type() == stroke_gradient )
+		if( m_stroke.type() == VStroke::grad )
 		{
 			stroke.gradient() = m_stroke.gradient();
-			stroke.setType( stroke_gradient );
+			stroke.setType( VStroke::grad );
 			stroke.setLineWidth( m_stroke.lineWidth() );
 		}
-		else if( m_stroke.type() == stroke_stroke )
+		else if( m_stroke.type() == VStroke::solid )
 		{
 			stroke.setColor( m_stroke.color() );
-			stroke.setType( stroke_stroke );
+			stroke.setType( VStroke::solid );
 		}
-		else if( m_stroke.type() == stroke_none )
+		else if( m_stroke.type() == VStroke::none )
 		{
-			stroke.setType( stroke_none );
+			stroke.setType( VStroke::none );
 		}
 		itr.current()->setStroke( stroke );
 	}

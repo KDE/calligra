@@ -10,21 +10,8 @@
 #include "vgradient.h"
 
 
-enum VFillRule
-{
-	fillrule_evenOdd = 0,
-	fillrule_winding = 1
-};
-
-enum VFillType
-{
-	fill_none     = 0,	/// no fill at all
-	fill_fill     = 1,	/// solid fill
-	fill_gradient = 2,	/// gradient fill
-	fill_unknown  = 3
-};
-
 class QDomElement;
+
 
 /**
  * Manages the fill of shapes.
@@ -38,12 +25,26 @@ class QDomElement;
 class VFill
 {
 public:
+	enum VFillRule
+	{
+		evenOdd = 0,
+		winding = 1
+	};
+
+	enum VFillType
+	{
+		none     = 0,	/// no fill at all
+		solid    = 1,	/// solid fill
+		grad     = 2,	/// gradient fill
+		unknown  = 3
+	};
+
 	VFill();
 	VFill( const VColor & );
 	VFill( const VFill & );
 
 	const VColor& color() const { return m_color; }
-	void setColor( const VColor& color ) { m_color = color; m_type = fill_fill; }
+	void setColor( const VColor& color ) { m_color = color; m_type = solid; }
 
 	VGradient& gradient() { return m_gradient; }
 	const VGradient& gradient() const { return m_gradient; }

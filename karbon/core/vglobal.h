@@ -41,7 +41,7 @@ namespace VGlobal
 
 	/**
 	 * A tolerance used to calculate param t on a segment at a given arc
-	 * length (calculated from t=0).
+	 * length (counting from t=0).
 	 * If the relative difference between a length approximation and the given
 	 * length is smaller than this value, they are assumed to be identical.
 	 */
@@ -59,3 +59,4 @@ namespace VGlobal
 }
 
 #endif
+

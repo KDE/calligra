@@ -49,8 +49,8 @@ VSegment::VSegment()
 	m_prev = 0L;
 	m_next = 0L;
 
-	m_type = segment_begin;
-	m_ctrlPointFixing = segment_none;
+	m_type = begin;
+	m_ctrlPointFixing = none;
 	m_smooth = false;
 }
 
@@ -75,13 +75,13 @@ VSegment::isFlat( double flatness ) const
 {
 	if(
 		!m_prev ||
-		m_type == segment_begin ||
-		m_type == segment_line )
+		m_type == begin ||
+		m_type == line )
 	{
 		return true;
 	}
 
-	if( m_type == segment_curve )
+	if( m_type == curve )
 		return
 			height( m_prev->m_point[2], m_point[0], m_point[2] )
 				< flatness &&
@@ -103,11 +103,11 @@ void
 VSegment::pointDerivatives( double t, KoPoint* p,
 	KoPoint* d1, KoPoint* d2 ) const
 {
-	if( !m_prev || m_type == segment_begin )
+	if( !m_prev || m_type == begin )
 		return;
 
 	// Lines:
-	if( m_type == segment_line )
+	if( m_type == line )
 	{
 		const KoPoint diff = m_point[2] - m_prev->m_point[2];
 
@@ -202,13 +202,13 @@ VSegment::length( double t ) const
 		return 0.0;
 
 	// Length of a line:
-	if( m_type == segment_line )
+	if( m_type == line )
 	{
 		return
 			t * chordLength();
 	}
 	// Length of a bezier:
-	else if( m_type == segment_curve )
+	else if( m_type == curve )
 	{
 		// This algortihm is based on an idea by Jens Gravesen <gravesen@mat.dth.dk>.
 		// We calculate the chord length chord=|P0P3| and the length of the control point
@@ -313,13 +313,13 @@ VSegment::param( double len ) const
 		return 0.0;
 
 	// Line:
-	if( m_type == segment_line )
+	if( m_type == line )
 	{
 		return
 			len / chordLength();
 	}
 	// Bezier:
-	else if( m_type == segment_curve )
+	else if( m_type == curve )
 	{
 		// Perform a successive interval bisection:
 		double param1   = 0.0;
@@ -362,7 +362,7 @@ VSegment::boundingBox() const
 			rect.setBottom( m_prev->m_point[2].y() );
 	}
 
-	if( m_type == segment_curve )
+	if( m_type == curve )
 	{
 		if( m_point[0].x() < rect.left() )
 			rect.setLeft( m_point[0].x() );
@@ -389,19 +389,19 @@ VSegment::boundingBox() const
 VSegment*
 VSegment::splitAt( double t )
 {
-	if( !m_prev || m_type == segment_begin )
+	if( !m_prev || m_type == begin )
 		return 0L;
 
 	VSegment* segment = new VSegment();
 
 	// Lines are easy: no need to change the current segment:
-	if( m_type == segment_line )
+	if( m_type == line )
 	{
 		segment->m_point[2] =
 			m_prev->m_point[2] +
 			( m_point[2] - m_prev->m_point[2] ) * t;
 
-		segment->m_type = segment_line;
+		segment->m_type = line;
 		return segment;
 	}
 
@@ -424,7 +424,7 @@ VSegment::splitAt( double t )
 		segment->m_point[1] + ( p1 - segment->m_point[1] ) * t;
 
 	// Set the new segment type:
-	segment->m_type = segment_curve;
+	segment->m_type = curve;
 
 	return segment;
 }
@@ -434,19 +434,19 @@ VSegment::convertToCurve( double t )
 {
 	if(
 		!m_prev ||
-		m_type == segment_begin )
+		m_type == begin )
 	{
 		return;
 	}
 
-	if( m_type == segment_line )
+	if( m_type == line )
 	{
 		m_point[0] = point( t );
 		m_point[1] = point( 1.0 - t );
 	}
 
-	m_type = segment_curve;
-	m_ctrlPointFixing = segment_none;
+	m_type = curve;
+	m_ctrlPointFixing = none;
 }
 
 bool
@@ -482,7 +482,7 @@ VSegment::save( QDomElement& element ) const
 {
 	QDomElement me;
 
-	if( m_type == segment_curve )
+	if( m_type == curve )
 	{
 		me = element.ownerDocument().createElement( "CURVE" );
 		me.setAttribute( "x1", m_point[0].x() );
@@ -492,13 +492,13 @@ VSegment::save( QDomElement& element ) const
 		me.setAttribute( "x3", m_point[2].x() );
 		me.setAttribute( "y3", m_point[2].y() );
 	}
-	else if( m_type == segment_line )
+	else if( m_type == line )
 	{
 		me = element.ownerDocument().createElement( "LINE" );
 		me.setAttribute( "x", m_point[2].x() );
 		me.setAttribute( "y", m_point[2].y() );
 	}
-	else if( m_type == segment_begin )
+	else if( m_type == begin )
 	{
 		me = element.ownerDocument().createElement( "MOVE" );
 		me.setAttribute( "x", m_point[2].x() );
@@ -517,16 +517,16 @@ VSegment::load( const QDomElement& element )
 	switch( element.attribute( "ctrlPointFixing", "0" ).toUShort() )
 	{
 		case 1:
-			m_ctrlPointFixing = segment_first; break;
+			m_ctrlPointFixing = first; break;
 		case 2:
-			m_ctrlPointFixing = segment_second; break;
+			m_ctrlPointFixing = second; break;
 		default:
-			m_ctrlPointFixing = segment_none;
+			m_ctrlPointFixing = none;
 	}
 
 	if( element.tagName() == "CURVE" )
 	{
-		m_type = segment_curve;
+		m_type = curve;
 		m_point[0].setX( element.attribute( "x1" ).toDouble() );
 		m_point[0].setY( element.attribute( "y1" ).toDouble() );
 		m_point[1].setX( element.attribute( "x2" ).toDouble() );
@@ -536,13 +536,13 @@ VSegment::load( const QDomElement& element )
 	}
 	else if( element.tagName() == "LINE" )
 	{
-		m_type = segment_line;
+		m_type = line;
 		m_point[2].setX( element.attribute( "x" ).toDouble() );
 		m_point[2].setY( element.attribute( "y" ).toDouble() );
 	}
 	else if( element.tagName() == "MOVE" )
 	{
-		m_type = segment_begin;
+		m_type = begin;
 		m_point[2].setX( element.attribute( "x" ).toDouble() );
 		m_point[2].setY( element.attribute( "y" ).toDouble() );
 	}

@@ -8,7 +8,7 @@
 #include "vfill.h"
 
 VFill::VFill()
-	: m_type( fill_none ), m_fillRule( fillrule_evenOdd )
+	: m_type( none ), m_fillRule( evenOdd )
 {
 	/*m_gradient.addStop( VColor( Qt::red.rgb() ), 0.0 );
 	m_gradient.addStop( VColor( Qt::yellow.rgb() ), 1.0 );
@@ -18,7 +18,7 @@ VFill::VFill()
 }
 
 VFill::VFill( const VColor &c )
-	: m_type( fill_fill ), m_fillRule( fillrule_evenOdd )
+	: m_type( solid ), m_fillRule( evenOdd )
 {
 	m_color = c;
 }
@@ -35,19 +35,19 @@ VFill::save( QDomElement& element ) const
 	QDomElement me = element.ownerDocument().createElement( "FILL" );
 	element.appendChild( me );
 
-	if( m_type == fill_fill )
+	if( m_type == solid )
 	{
 		// save color:
 		m_color.save( me );
 	}
-	else if( m_type == fill_gradient )
+	else if( m_type == grad )
 	{
 		// save gradient:
 		m_gradient.save( me );
 	}
 
 	// save fill rule if necessary:
-	if( m_fillRule != fillrule_evenOdd )
+	if( m_fillRule != evenOdd )
 		me.setAttribute( "fillRule", m_fillRule );
 }
 
@@ -55,7 +55,7 @@ void
 VFill::load( const QDomElement& element )
 {
 	m_fillRule = element.attribute( "fillRule" ) == 0 ?
-		fillrule_evenOdd : fillrule_winding;
+		evenOdd : winding;
 
 	// load color:
 	QDomNodeList list = element.childNodes();
@@ -66,12 +66,12 @@ VFill::load( const QDomElement& element )
 			QDomElement e = list.item( i ).toElement();
 			if( e.tagName() == "COLOR" )
 			{
-				m_type = fill_fill;
+				m_type = solid;
 				m_color.load( e );
 			}
 			else if( e.tagName() == "GRADIENT" )
 			{
-				m_type = fill_gradient;
+				m_type = grad;
 				m_gradient.load( e );
 			}
 		}

@@ -182,7 +182,7 @@ EpsExport::visitVSegmentList( VSegmentList& segmentList )
 	{
 		switch( itr.current()->type() )
 		{
-			case segment_curve:
+			case VSegment::curve:
 				*m_stream <<
 					itr.current()->ctrlPoint1().x() << " " <<
 					itr.current()->ctrlPoint1().y() << " " <<
@@ -192,13 +192,13 @@ EpsExport::visitVSegmentList( VSegmentList& segmentList )
 					itr.current()->knot().y() << " " <<
 					"c\n";
 			break;
-			case segment_line:
+			case VSegment::line:
 				*m_stream <<
 					itr.current()->knot().x() << " " <<
 					itr.current()->knot().y() << " " <<
 					"l\n";
 			break;
-			case segment_begin:
+			case VSegment::begin:
 				*m_stream <<
 					itr.current()->knot().x() << " " <<
 					itr.current()->knot().y() << " " <<
@@ -216,7 +216,7 @@ EpsExport::visitVSegmentList( VSegmentList& segmentList )
 void
 EpsExport::getStroke( const VStroke& stroke )
 {
-	if( stroke.type() != stroke_none )
+	if( stroke.type() != VStroke::none )
 	{
 		// gsave:
 		*m_stream << "S ";
@@ -244,7 +244,7 @@ EpsExport::getStroke( const VStroke& stroke )
 void
 EpsExport::getFill( const VFill& fill )
 {
-	if( fill.type() != fill_none )
+	if( fill.type() != VFill::none )
 	{
 		// gsave:
 		*m_stream << "S ";

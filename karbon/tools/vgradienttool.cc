@@ -22,8 +22,8 @@ VGradientTool::VGradientTool( KarbonView* view )
 	: VTool( view ), m_isDragging( false )
 {
 	m_dialog = new VGradientDlg();
-	m_dialog->setGradientRepeat( gradient_repeat_none );
-	m_dialog->setGradientType( gradient_linear );
+	m_dialog->setGradientRepeat( VGradient::none );
+	m_dialog->setGradientType( VGradient::linear );
 	m_dialog->setGradientFill( 1 );
 	m_dialog->setStartColor( Qt::red );
 	m_dialog->setEndColor( Qt::yellow );
@@ -89,22 +89,24 @@ VGradientTool::eventFilter( QEvent* event )
 		gradient.addStop( VColor( m_dialog->endColor().rgb() ), 1.0, 0.5 );
 		gradient.setOrigin( fp * ( 1.0 / view()->zoom() ) );
 		gradient.setVector( lp * ( 1.0 / view()->zoom() ) );
-		gradient.setType( (VGradientType)m_dialog->gradientType() );
-		gradient.setRepeatMethod( (VGradientRepeatMethod)m_dialog->gradientRepeat() );
+		gradient.setType( (VGradient::VGradientType)m_dialog->gradientType() );
+		gradient.setRepeatMethod( (VGradient::VGradientRepeatMethod)m_dialog->gradientRepeat() );
 
 		if( m_dialog->gradientFill() )
 		{
 			VFill fill;
 			fill.gradient() = gradient;
-			fill.setType( fill_gradient );
-			view()->part()->addCommand( new VFillCmd( &view()->part()->document(), fill ), true );
+			fill.setType( VFill::grad );
+			view()->part()->addCommand(
+				new VFillCmd( &view()->part()->document(), fill ), true );
 		}
 		else
 		{
 			VStroke stroke;
 			stroke.gradient() = gradient;
-			stroke.setType( stroke_gradient );
-			view()->part()->addCommand( new VStrokeCmd( &view()->part()->document(), stroke ), true );
+			stroke.setType( VStroke::grad );
+			view()->part()->addCommand(
+				new VStrokeCmd( &view()->part()->document(), stroke ), true );
 		}
 
 		view()->selectionChanged();

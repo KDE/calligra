@@ -13,7 +13,7 @@ VStroke::VStroke( VObject* parent, float width, const VLineCap cap, const VLineJ
 			float miterLimit )
 {
 	m_parent = parent;
-	m_type = stroke_stroke;
+	m_type = solid;
 	m_lineWidth = width;
 	m_lineCap = cap;
 	m_lineJoin = join;
@@ -24,7 +24,7 @@ VStroke::VStroke( const VColor &c, VObject* parent, float width, const VLineCap 
 			float miterLimit )
 {
 	m_parent = parent;
-	m_type = stroke_stroke;
+	m_type = solid;
 	m_lineWidth = width;
 	m_lineCap = cap;
 	m_lineJoin = join;
@@ -60,12 +60,12 @@ VStroke::save( QDomElement& element ) const
 	me.setAttribute( "lineJoin", m_lineJoin );
 	me.setAttribute( "miterLimit", m_miterLimit );
 
-	if( m_type == stroke_stroke )
+	if( m_type == solid )
 	{
 		// save color:
 		m_color.save( me );
 	}
-	else if( m_type == stroke_gradient )
+	else if( m_type == grad )
 	{
 		// save gradient:
 		m_gradient.save( me );
@@ -86,21 +86,21 @@ VStroke::load( const QDomElement& element )
 	switch( element.attribute( "lineCap", "0" ).toUShort() )
 	{
 		case 1:
-			m_lineCap = cap_round; break;
+			m_lineCap = capRound; break;
 		case 2:
-			m_lineCap = cap_square; break;
+			m_lineCap = capSquare; break;
 		default:
-			m_lineCap = cap_butt;
+			m_lineCap = capButt;
 	}
 
 	switch( element.attribute( "lineJoin", "0" ).toUShort() )
 	{
 		case 1:
-			m_lineJoin = join_round; break;
+			m_lineJoin = joinRound; break;
 		case 2:
-			m_lineJoin = join_bevel; break;
+			m_lineJoin = joinBevel; break;
 		default:
-			m_lineJoin = join_miter;
+			m_lineJoin = joinMiter;
 	}
 
 	m_miterLimit = element.attribute( "miterLimit", "0.0" ).toDouble();
@@ -125,7 +125,7 @@ VStroke::load( const QDomElement& element )
 			}
 			else if( e.tagName() == "GRADIENT" )
 			{
-				m_type = stroke_gradient;
+				m_type = grad;
 				m_gradient.load( e );
 			}
 		}

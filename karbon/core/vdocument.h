@@ -37,24 +37,33 @@ public:
 	VDocument();
 	VDocument( const VDocument& document );
 
-	~VDocument();
+	virtual ~VDocument();
 
 	virtual void draw( VPainter* painter, const KoRect& rect ) const;
 
 	// TODO
-	virtual void transform( const QWMatrix& ) {}
+	virtual void transform( const QWMatrix& )
+		{}
 
-	const QString& mime() { return m_mime; }
-	void setMime( const QString& mime ) { m_mime = mime; }
+	const QString& mime()
+		{ return m_mime; }
+	void setMime( const QString& mime )
+		{ m_mime = mime; }
 
-	const QString& version() { return m_version; }
-	void setVersion( const QString& version ) { m_version = version; }
+	const QString& version()
+		{ return m_version; }
+	void setVersion( const QString& version )
+		{ m_version = version; }
 
-	const QString& editor() { return m_editor; }
-	void setEditor( const QString& editor ) { m_editor = editor; }
+	const QString& editor()
+		{ return m_editor; }
+	void setEditor( const QString& editor )
+		{ m_editor = editor; }
 
-	const QString& syntaxVersion() { return m_syntaxVersion; }
-	void setSyntaxVersion( const QString& syntaxVersion ) { m_syntaxVersion = syntaxVersion; }
+	const QString& syntaxVersion()
+		{ return m_syntaxVersion; }
+	void setSyntaxVersion( const QString& syntaxVersion )
+		{ m_syntaxVersion = syntaxVersion; }
 
 	void insertLayer( VLayer* layer );
 
@@ -62,24 +71,49 @@ public:
 
 	void saveXML( QDomDocument& doc ) const;
 	bool loadXML( const QDomElement& element );
-	virtual void save( QDomElement& ) const {}
-	virtual void load( const QDomElement& element ) { loadXML( element ); }
+	virtual void save( QDomElement& ) const
+		{}
+	virtual void load( const QDomElement& element )
+		{ loadXML( element ); }
 
 	virtual VDocument* clone() const;
 
 	virtual void accept( VVisitor& visitor );
 
 
-	// manipulate selection:
-	VSelection* selection() const { return m_selection; }
+	/**
+	 * Returns a pointer to the selection.
+	 */
+	VSelection* selection() const
+		{ return m_selection; }
 
-	void select() const;	// select all vobjects period.
-	void deselect() const;	// unselect all vobjects from all vlayers.
+	/**
+	 * Selects all objects.
+	 */
+	void select() const;
 
+	/**
+	 * Deselects all objects.
+	 */
+	void deselect() const;
+
+	/**
+	 * Adds one objects to the selection. If exclusive is true
+	 * the selection is cleared before, in order to make the newly
+	 * selected object the only selected object.
+	 */
 	void select( VObject& object, bool exclusive = false ) const;
+
+	/**
+	 * Deselects one object.
+	 */
 	void deselect( VObject& object ) const;
 
-	/// Select all objects within rect.
+	/**
+	 * Selects all objects located within rect. If exclusive is true
+	 * the selection is cleared before, in order to make the newly
+	 * selected objects the only selected objects.
+	 */
 	void select( const KoRect& rect, bool exclusive = false ) const;
 
 
@@ -90,28 +124,65 @@ public:
 	void moveSelectionDown();
 	void moveSelectionUp();
 
-	VStroke defaultStroke() { return m_defaultStroke; }
-	VFill defaultFill() { return m_defaultFill; }
-	void setDefaultStroke( const VStroke &s ) { m_defaultStroke = s; }
-	void setDefaultFill( const VFill &f ) { m_defaultFill = f; }
+	/**
+	 * Returns the default stroke.
+	 */
+	VStroke defaultStroke()
+		{ return m_defaultStroke; }
+
+	/**
+	 * Returns the default fill.
+	 */
+	VFill defaultFill()
+		{ return m_defaultFill; }
+
+	/**
+	 * Sets the default stroke.
+	 */
+	void setDefaultStroke( const VStroke &s )
+		{ m_defaultStroke = s; }
+
+	/**
+	 * Sets the default fill.
+	 */
+	void setDefaultFill( const VFill &f )
+		{ m_defaultFill = f; }
+
 	/// all newly created shapes in this document get the default color by using this method
 	void applyDefaultColors( VObject & ) const;
 
-	void append( VObject* object ); // insert a new vobject
+	/**
+	 * Append a new object.
+	 */
+	void append( VObject* object );
 
-	VLayer* activeLayer() const { return m_activeLayer; }   // active layer.
+	/**
+	 * Returns a pointer to the active layer.
+	 */
+	VLayer* activeLayer() const
+		{ return m_activeLayer; }
 
 private:
-	VLayerList m_layers;			// all layers in this document
-	VSelection* m_selection;		// selected objects.
-	VLayer* m_activeLayer;			// the active/current layer.
+	/// The layers in this document.
+	VLayerList m_layers;
+	/// The active layer.
+	VLayer* m_activeLayer;
 
-	VStroke m_defaultStroke;      /// keep track of a default stroke color for created shapes
-	VFill m_defaultFill;          /// keep track of a default fill color for created shapes
+	/// The selection. A list of selected objects.
+	VSelection* m_selection;
 
+	/// Default stroke for new objects.
+	VStroke m_defaultStroke;
+	/// Default fill for new objects.
+	VFill m_defaultFill;
+
+	/// The mime type.
 	QString m_mime;
+	/// The version.
 	QString m_version;
+	/// The editor name.
 	QString m_editor;
+	/// The snytax version.
 	QString m_syntaxVersion;
 };
 

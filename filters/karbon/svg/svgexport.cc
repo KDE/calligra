@@ -160,7 +160,7 @@ SvgExport::visitVSegmentList( VSegmentList& segmentList )
 	{
 		switch( itr.current()->type() )
 		{
-			case segment_curve:
+			case VSegment::curve:
 				*m_stream << " C " <<
 					itr.current()->ctrlPoint1().x() << " " <<
 					itr.current()->ctrlPoint1().y() << " " <<
@@ -169,12 +169,12 @@ SvgExport::visitVSegmentList( VSegmentList& segmentList )
 					itr.current()->knot().x() << " " <<
 					itr.current()->knot().y();
 			break;
-			case segment_line:
+			case VSegment::line:
 				*m_stream << " L " <<
 					itr.current()->knot().x() << " " <<
 					itr.current()->knot().y();
 			break;
-			case segment_begin:
+			case VSegment::begin:
 				*m_stream << " M " <<
 					itr.current()->knot().x() << " " <<
 					itr.current()->knot().y();
@@ -194,13 +194,13 @@ void
 SvgExport::getFill( const VFill& fill )
 {
 	*m_stream << " fill=\"";
-	if( fill.type() == fill_none )
+	if( fill.type() == VFill::none )
 		*m_stream << "none";
 	else // TODO : gradient fills
 		getHexColor( fill.color() );
 	*m_stream << "\"";
 	*m_stream << " fill-opacity=\"" << fill.color().opacity() << "\"";
-	if( fill.fillRule() == fillrule_evenOdd )
+	if( fill.fillRule() == VFill::evenOdd )
 		*m_stream << " fill-rule=\"evenodd\"";
 	else
 		*m_stream << " fill-rule=\"nonzero\"";
@@ -210,7 +210,7 @@ void
 SvgExport::getStroke( const VStroke& stroke )
 {
 	*m_stream << " stroke=\"";
-	if( stroke.type() == stroke_none )
+	if( stroke.type() == VStroke::none )
 		*m_stream << "none";
 	else // TODO : gradient fills
 		getHexColor( stroke.color() );
@@ -219,21 +219,21 @@ SvgExport::getStroke( const VStroke& stroke )
 
 	*m_stream << " stroke-width=\"" << stroke.lineWidth() << "\"";
 
-	if( stroke.lineCap() == cap_butt )
+	if( stroke.lineCap() == VStroke::capButt )
 		*m_stream << " stroke-linecap=\"butt\"";
-	else if( stroke.lineCap() == cap_round )
+	else if( stroke.lineCap() == VStroke::capRound )
 		*m_stream << " stroke-linecap=\"round\"";
-	else if( stroke.lineCap() == cap_square )
+	else if( stroke.lineCap() == VStroke::capSquare )
 			*m_stream << " stroke-linecap=\"square\"";
 
-	if( stroke.lineJoin() == join_miter )
+	if( stroke.lineJoin() == VStroke::joinMiter )
 	{
 		*m_stream << " stroke-linejoin=\"miter\"";
 		*m_stream << " stroke-miterlimit=\"" << stroke.miterLimit() << "\"";
 	}
-	else if( stroke.lineJoin() == join_round )
+	else if( stroke.lineJoin() == VStroke::joinRound )
 		*m_stream << " stroke-linejoin=\"round\"";
-	else if( stroke.lineJoin() == join_bevel )
+	else if( stroke.lineJoin() == VStroke::joinBevel )
 			*m_stream << " stroke-linejoin=\"bevel\"";
 
 	// dash
@@ -273,7 +273,7 @@ SvgExport::getHexColor( const VColor& color )
 	}
 
 	// hsb
-	else if( color.colorSpace() == VColor::hsb )	
+	else if( color.colorSpace() == VColor::hsb )
 	{
 		// maybe do this manually - or could it stay like this?
 		QColor hsvColor;

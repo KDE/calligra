@@ -176,7 +176,7 @@ VSegmentList::moveTo( const KoPoint& p )
 	if( isClosed() ) return false;
 
 	// move "begin" when path is still empty:
-	if( getLast()->type() == segment_begin )
+	if( getLast()->type() == VSegment::begin )
 	{
 		getLast()->setKnot( p );
 		return true;
@@ -191,7 +191,7 @@ VSegmentList::lineTo( const KoPoint& p )
 	if( isClosed() ) return false;
 
 	VSegment* s = new VSegment();
-	s->setType( segment_line );
+	s->setType( VSegment::line );
 	s->setKnot( p );
 	append( s );
 
@@ -205,7 +205,7 @@ VSegmentList::curveTo(
 	if( isClosed() ) return false;
 
 	VSegment* s = new VSegment();
-	s->setType( segment_curve );
+	s->setType( VSegment::curve );
 	s->setCtrlPoint1( p1 );
 	s->setCtrlPoint2( p2 );
 	s->setKnot( p3 );
@@ -220,8 +220,8 @@ VSegmentList::curve1To( const KoPoint& p2, const KoPoint& p3 )
 	if( isClosed() ) return false;
 
 	VSegment* s = new VSegment();
-	s->setType( segment_curve );
-	s->setCtrlPointFixing( segment_first );
+	s->setType( VSegment::curve );
+	s->setCtrlPointFixing( VSegment::first );
 	s->setCtrlPoint2( p2 );
 	s->setKnot( p3 );
 	append( s );
@@ -235,8 +235,8 @@ VSegmentList::curve2To( const KoPoint& p1, const KoPoint& p3 )
 	if( isClosed() ) return false;
 
 	VSegment* s = new VSegment();
-	s->setType( segment_curve );
-	s->setCtrlPointFixing( segment_second );
+	s->setType( VSegment::curve );
+	s->setCtrlPointFixing( VSegment::second );
 	s->setCtrlPoint1( p1 );
 	s->setKnot( p3 );
 	append( s );

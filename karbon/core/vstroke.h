@@ -13,31 +13,9 @@
 #include "vgradient.h"
 
 
-enum VStrokeType
-{
-	stroke_none     = 0,	/// no stroke at all
-	stroke_stroke   = 1,	/// solid stroke
-	stroke_gradient = 2,	/// gradient as stroke
-	stroke_unknown  = 3
-};
-
-enum VLineCap
-{
-	cap_butt   = 0,
-	cap_round  = 1,
-	cap_square = 2
-};
-
-enum VLineJoin
-{
-	join_miter = 0,
-	join_round = 1,
-	join_bevel = 2
-};
-
-
 class QDomElement;
 class VObject;
+
 
 /**
  * Manages stroke properties.
@@ -52,10 +30,33 @@ class VObject;
 class VStroke
 {
 public:
-	VStroke( VObject* parent = 0L, float width = 1.0, const VLineCap cap = cap_butt,
-			 const VLineJoin join = join_miter, float miterLimit = 10.0 );
-	VStroke( const VColor &c, VObject* parent = 0L, float width = 1.0, const VLineCap cap = cap_butt,
-			 const VLineJoin join = join_miter, float miterLimit = 10.0 );
+	enum VStrokeType
+	{
+		none     = 0,	/// no stroke at all
+		solid    = 1,	/// solid stroke
+		grad     = 2,	/// gradient as stroke
+		unknown  = 3
+	};
+
+	enum VLineCap
+	{
+		capButt   = 0,
+		capRound  = 1,
+		capSquare = 2
+	};
+
+	enum VLineJoin
+	{
+		joinMiter = 0,
+		joinRound = 1,
+		joinBevel = 2
+	};
+
+
+	VStroke( VObject* parent = 0L, float width = 1.0, const VLineCap cap = capButt,
+			 const VLineJoin join = joinMiter, float miterLimit = 10.0 );
+	VStroke( const VColor &c, VObject* parent = 0L, float width = 1.0, const VLineCap cap = capButt,
+			 const VLineJoin join = joinMiter, float miterLimit = 10.0 );
 	VStroke( const VStroke& stroke );
 
 	void setParent( VObject* parent ) { m_parent = parent; }

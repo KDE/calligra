@@ -148,11 +148,11 @@ VQPainter::setPen( const VStroke &stroke )
 	pen.setWidth( static_cast<int>(stroke.lineWidth()) );
 
 	// caps
-	if( stroke.lineCap() == cap_butt )
+	if( stroke.lineCap() == VStroke::capButt )
 		pen.setCapStyle( Qt::FlatCap );
-	else if( stroke.lineCap() == cap_round )
+	else if( stroke.lineCap() == VStroke::capRound )
 		pen.setCapStyle( Qt::RoundCap );
-	else if( stroke.lineCap() == cap_square )
+	else if( stroke.lineCap() == VStroke::capSquare )
 		pen.setCapStyle( Qt::SquareCap );
 
 	m_painter->setPen( pen );

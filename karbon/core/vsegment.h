@@ -16,22 +16,6 @@
 class QDomElement;
 
 
-// segment types:
-enum VSegmentType
-{
-	segment_begin,		// initial moveto
-	segment_curve,		// curveto (bezier)
-	segment_line		// lineto
-};
-
-enum VCtrlPointFixing
-{
-	segment_none   = 0,
-	segment_first  = 1,
-	segment_second = 2
-};
-
-
 /**
  * A class representing lines and beziers. We waste some KoPoints, if we
  * would use only lines, but this makes it easy to convert the segment types
@@ -45,35 +29,68 @@ friend class VSegmentList;
 friend class VSegmentListIterator;
 
 public:
+	/**
+	 * Segment types.
+	 */
+	enum VSegmentType
+	{
+		begin,		// initial moveto
+		curve,		// curveto (bezier)
+		line		// lineto
+	};
+
+	/**
+	 * Tells which control point is "fixed" i.e. located at the
+	 * corresponding knot and invisible. This flag makes no sense for
+	 * line segments.
+	 */
+	enum VCtrlPointFixing
+	{
+		none   = 0,
+		first  = 1,
+		second = 2
+	};
+
+
 	VSegment();
 	VSegment( const VSegment& segment );
 
-	VSegmentType type() const { return m_type; }
-	void setType( VSegmentType type ) { m_type = type; }
+	VSegmentType type() const
+		{ return m_type; }
+	void setType( VSegmentType type )
+		{ m_type = type; }
 
 	VCtrlPointFixing ctrlPointFixing() const
 		{ return m_ctrlPointFixing; }
 	void setCtrlPointFixing( VCtrlPointFixing fixing )
 		{ m_ctrlPointFixing = fixing; }
 
-	const KoPoint& ctrlPoint1() const { return m_point[0]; }
-	const KoPoint& ctrlPoint2() const { return m_point[1]; }
-	const KoPoint& knot() const { return m_point[2]; }
+	const KoPoint& ctrlPoint1() const
+		{ return m_point[0]; }
+	const KoPoint& ctrlPoint2() const
+		{ return m_point[1]; }
+	const KoPoint& knot() const
+		{ return m_point[2]; }
 
-	void setCtrlPoint1( const KoPoint& p ) { m_point[0] = p; }
-	void setCtrlPoint2( const KoPoint& p ) { m_point[1] = p; }
-	void setKnot( const KoPoint& p ) { m_point[2] = p; }
+	void setCtrlPoint1( const KoPoint& p )
+		{ m_point[0] = p; }
+	void setCtrlPoint2( const KoPoint& p )
+		{ m_point[1] = p; }
+	void setKnot( const KoPoint& p )
+		{ m_point[2] = p; }
 
 	/**
 	 * Returns a pointer to the previous segment, if stored in a
 	 * VSegmentList.
 	 */
-	const VSegment* prev() const { return m_prev; }
+	const VSegment* prev() const
+		{ return m_prev; }
 	/**
 	 * Returns a pointer to the next segment, if stored in a
 	 * VSegmentList.
 	 */
-	const VSegment* next() const { return m_next; }
+	const VSegment* next() const
+		{ return m_next; }
 
 	/**
 	 * Returns true if the segment is flat.
@@ -162,13 +179,16 @@ public:
 	VSegment* clone() const;
 
 private:
+	KoPoint m_point[3];
+
 	VSegment* m_prev;
 	VSegment* m_next;
 
 	VSegmentType m_type;
 	VCtrlPointFixing m_ctrlPointFixing;
-	bool m_smooth;			// first ctrl-point is "smooth".
-	KoPoint m_point[3];
+
+	/// Second control point is "smooth".
+	bool m_smooth;
 };
 
 #endif

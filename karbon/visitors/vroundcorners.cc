@@ -123,8 +123,8 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 	if(
 		segmentList.isClosed() &&
 		!(
-			segmentList.current()->type() == segment_curve &&
-			segmentList.getLast()->type() == segment_curve ) )
+			segmentList.current()->type() == VSegment::curve &&
+			segmentList.getLast()->type() == VSegment::curve ) )
 	{
 		length = segmentList.current()->length();
 
@@ -155,8 +155,8 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 	{
 		if(
 			!(
-				segmentList.current()->type() == segment_curve &&
-				segmentList.current()->next()->type() == segment_curve ) )
+				segmentList.current()->type() == VSegment::curve &&
+				segmentList.current()->next()->type() == VSegment::curve ) )
 		{
 			length = segmentList.current()->length();
 
@@ -202,8 +202,8 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 	{
 		if(
 			!(
-				segmentList.current()->type() == segment_curve &&
-				segmentList.getFirst()->next()->type() == segment_curve ) )
+				segmentList.current()->type() == VSegment::curve &&
+				segmentList.getFirst()->next()->type() == VSegment::curve ) )
 		{
 			length = segmentList.current()->length();
 

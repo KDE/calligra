@@ -213,7 +213,7 @@ VKoPainter::fillPath()
 	else
 		m_path[ m_index++ ].code = ART_END;
 
-	if( m_fill && m_fill->type() != fill_none )
+	if( m_fill && m_fill->type() != VFill::none )
 	{
 		ArtVpath *path;
 		path = art_bez_path_to_vec( m_path , 0.25 );
@@ -377,7 +377,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	int a = 0;
 	art_u32 fillColor = 0;
     // filling
-	if( m_fill && ( m_fill->type() == fill_fill || m_fill->type() == fill_gradient ) )
+	if( m_fill && ( m_fill->type() == VFill::solid || m_fill->type() == VFill::grad ) )
 	{
 		m_fill->color().pseudoValues( r, g, b );
 		a = qRound( 255 * m_fill->color().opacity() );
@@ -387,7 +387,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		ArtSVP *temp;
 		temp = art_svp_from_vpath( vec );
 
-		if( m_fill->fillRule() == fillrule_evenOdd )
+		if( m_fill->fillRule() == VFill::evenOdd )
 			swr = art_svp_writer_rewind_new( ART_WIND_RULE_ODDEVEN );
 		else
 			swr = art_svp_writer_rewind_new( ART_WIND_RULE_NONZERO );
@@ -400,7 +400,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 
 	art_u32 strokeColor = 0;
 	// stroke
-	if( m_stroke && m_stroke->type() != stroke_none )
+	if( m_stroke && m_stroke->type() != VStroke::none )
 	{
 		ArtPathStrokeCapType capStyle = ART_PATH_STROKE_CAP_BUTT;
 		ArtPathStrokeJoinType joinStyle = ART_PATH_STROKE_JOIN_MITER;
@@ -430,15 +430,15 @@ VKoPainter::drawVPath( ArtVpath *vec )
 			delete [] dashes;
 		}
 		// caps translation karbon -> art
-		if( m_stroke->lineCap() == cap_round )
+		if( m_stroke->lineCap() == VStroke::capRound )
 			capStyle = ART_PATH_STROKE_CAP_ROUND;
-		else if( m_stroke->lineCap() == cap_square )
+		else if( m_stroke->lineCap() == VStroke::capSquare )
 			capStyle = ART_PATH_STROKE_CAP_SQUARE;
 
 		// join translation karbon -> art
-		if( m_stroke->lineJoin() == join_round )
+		if( m_stroke->lineJoin() == VStroke::joinRound )
 			joinStyle = ART_PATH_STROKE_JOIN_ROUND;
-		else if( m_stroke->lineJoin() == join_bevel )
+		else if( m_stroke->lineJoin() == VStroke::joinBevel )
 			joinStyle = ART_PATH_STROKE_JOIN_BEVEL;
 
 		// zoom stroke width;
@@ -450,7 +450,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	// render the svp to the buffer
 	if( strokeSvp )
 	{
-		if( m_stroke && m_stroke->type() == stroke_gradient )
+		if( m_stroke && m_stroke->type() == VStroke::grad )
 			applyGradient( strokeSvp, false );
 		else
 		{
@@ -463,7 +463,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 
 	if( fillSvp )
 	{
-		if( m_fill && m_fill->type() == fill_gradient )
+		if( m_fill && m_fill->type() == VFill::grad )
 			applyGradient( fillSvp, true );
 		else
 		{
@@ -492,16 +492,16 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 
 	VGradient gradient = fill ? m_fill->gradient() : m_stroke->gradient();
 
-	if( gradient.type() == gradient_linear )
+	if( gradient.type() == VGradient::linear )
 	{
 		ArtGradientLinear *linear = new ArtGradientLinear();
 
 		// TODO : make variable
-		if( gradient.repeatMethod() == gradient_repeat_none )
+		if( gradient.repeatMethod() == VGradient::none )
 			linear->spread = ART_GRADIENT_PAD;
-		else if( gradient.repeatMethod() == gradient_repeat )
+		else if( gradient.repeatMethod() == VGradient::repeat )
 			linear->spread = ART_GRADIENT_REPEAT;
-		else if( gradient.repeatMethod() == gradient_repeat_reflect )
+		else if( gradient.repeatMethod() == VGradient::reflect )
 			linear->spread = ART_GRADIENT_REFLECT;
 
 		//kdDebug() << "x1 : " << x1 << ", x0 " << x0 << endl;
@@ -530,7 +530,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 			art_render_gradient_linear( render, linear, ART_FILTER_HYPER );
 		}
 	}
-	else if( gradient.type() == gradient_radial )
+	else if( gradient.type() == VGradient::radial )
 	{
 		//kdDebug() << "x1 : " << x1 << ", x0 " << x0 << endl;
 		//kdDebug() << "y1 : " << y1 << ", y0 " << y0 << endl;

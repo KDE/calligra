@@ -10,27 +10,26 @@
 #include "vcolor.h"
 
 
-enum VGradientType
-{
-	gradient_linear = 0,
-	gradient_radial = 1,
-	gradient_conic  = 2
-};
-
-enum VGradientRepeatMethod
-{
-	gradient_repeat_none = 0,
-	gradient_repeat_reflect = 1,
-	gradient_repeat = 2
-};
-
-
 class QDomElement;
 
 
 class VGradient
 {
 public:
+	enum VGradientType
+	{
+		linear = 0,
+		radial = 1,
+		conic  = 2
+	};
+
+	enum VGradientRepeatMethod
+	{
+		none    = 0,
+		reflect = 1,
+		repeat  = 2
+	};
+
 	struct VColorStop
 	{
 		VColor color;
@@ -43,7 +42,7 @@ public:
 		float midPoint;
 	};
 
-	VGradient( VGradientType type = gradient_linear );
+	VGradient( VGradientType type = linear );
 
 	VGradientType type() const { return m_type; }
 	void setType( VGradientType type ) { m_type = type; }

@@ -42,7 +42,7 @@ VFlatten::visitVSegmentList( VSegmentList& segmentList )
 		}
 
 		// convert to line:
-		segmentList.current()->setType( segment_line );
+		segmentList.current()->setType( VSegment::line );
 	}
 }
 

@@ -89,12 +89,12 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 			VSegmentListIterator jtr( *( itr.current() ) );
 			for( ; jtr.current(); ++jtr )
 			{
-				if( jtr.current()->type() == segment_curve  )
+				if( jtr.current()->type() == VSegment::curve  )
 					painter->curveTo(
 						jtr.current()->ctrlPoint1(),
 						jtr.current()->ctrlPoint2(),
 						jtr.current()->knot() );
-				else if( jtr.current()->type() == segment_line )
+				else if( jtr.current()->type() == VSegment::line )
 				{
 					painter->lineTo( jtr.current()->knot() );
 				}
@@ -128,12 +128,12 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 			VSegmentListIterator jtr( *( itr.current() ) );
 			for( ; jtr.current(); ++jtr )
 			{
-				if( jtr.current()->type() == segment_curve  )
+				if( jtr.current()->type() == VSegment::curve  )
 					painter->curveTo(
 						jtr.current()->ctrlPoint1(),
 						jtr.current()->ctrlPoint2(),
 						jtr.current()->knot() );
-				else if( jtr.current()->type() == segment_line )
+				else if( jtr.current()->type() == VSegment::line )
 				{
 					painter->lineTo( jtr.current()->knot() );
 				}
@@ -332,9 +332,9 @@ VPath::transform( const QWMatrix& m )
 		itr.current()->transform( m );
 	}
 
-	if( m_stroke->type() == stroke_gradient )
+	if( m_stroke->type() == VStroke::grad )
 		m_stroke->gradient().transform( m );
-	if( m_fill->type() == fill_gradient )
+	if( m_fill->type() == VFill::grad )
 		m_fill->gradient().transform( m );
 }
 

@@ -221,13 +221,13 @@ void KarbonAIParserBase::gotFlatness (double /*val*/)
 void KarbonAIParserBase::gotLineCaps (int val)
 {
 //  m_lineCaps = val;
-  VLineCap lineCap = cap_butt;
+  VStroke::VLineCap lineCap = VStroke::capButt;
 
   switch (val)
   {
-	  case 0 : lineCap = cap_butt; break;
-	  case 1 : lineCap = cap_round; break;
-	  case 2 : lineCap = cap_square; break;
+	  case 0 : lineCap = VStroke::capButt; break;
+	  case 1 : lineCap = VStroke::capRound; break;
+	  case 2 : lineCap = VStroke::capSquare; break;
   }
 
   m_stroke.setLineCap (lineCap);
@@ -237,13 +237,13 @@ void KarbonAIParserBase::gotLineJoin (int val)
 {
 //  m_lineJoin = val;
 
-  VLineJoin lineJoin = join_miter;
+  VStroke::VLineJoin lineJoin = VStroke::joinMiter;
 
   switch (val)
   {
-	  case 0 : lineJoin = join_miter; break;
-	  case 1 : lineJoin = join_round; break;
-	  case 2 : lineJoin = join_bevel; break;
+	  case 0 : lineJoin = VStroke::joinMiter; break;
+	  case 1 : lineJoin = VStroke::joinRound; break;
+	  case 2 : lineJoin = VStroke::joinBevel; break;
   }
 
   m_stroke.setLineJoin (lineJoin);
@@ -399,3 +399,4 @@ bool KarbonAIParserBase::parse (QIODevice& fin, QDomDocument &doc)
 
   return res;
 }
+

@@ -98,36 +98,36 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 void VStrokeDlg::slotTypeChanged( int ID )
 {
 	switch ( ID ) {
-	case 1:
-		m_stroke.setType ( stroke_stroke ); break;
-	case 2:
-		m_stroke.setType ( stroke_gradient ); break;
-	default:
-		m_stroke.setType ( stroke_none );
+		case 1:
+			m_stroke.setType ( VStroke::solid ); break;
+		case 2:
+			m_stroke.setType ( VStroke::grad ); break;
+		default:
+			m_stroke.setType ( VStroke::none );
 	}
 }
 
 void VStrokeDlg::slotCapChanged( int ID )
 {
 	switch ( ID ) {
-	case 1:
-		m_stroke.setLineCap ( cap_round ); break;
-	case 2:
-		m_stroke.setLineCap ( cap_square ); break;
-	default:
-		m_stroke.setLineCap ( cap_butt );
+		case 1:
+			m_stroke.setLineCap ( VStroke::capRound ); break;
+		case 2:
+			m_stroke.setLineCap ( VStroke::capSquare ); break;
+		default:
+			m_stroke.setLineCap ( VStroke::capButt );
 	}
 }
 
 void VStrokeDlg::slotJoinChanged( int ID )
 {
 	switch ( ID ) {
-	case 1:
-		m_stroke.setLineJoin ( join_round ); break;
-	case 2:
-		m_stroke.setLineJoin ( join_bevel ); break;
-	default:
-		m_stroke.setLineJoin ( join_miter );
+		case 1:
+			m_stroke.setLineJoin ( VStroke::joinRound ); break;
+		case 2:
+			m_stroke.setLineJoin ( VStroke::joinBevel ); break;
+		default:
+			m_stroke.setLineJoin ( VStroke::joinMiter );
 	}
 }
 
@@ -143,34 +143,37 @@ void VStrokeDlg::slotOKClicked()
 
 void VStrokeDlg::slotUpdateDialog()
 {
-	switch ( m_stroke.type() ){
-	case stroke_stroke:
-		m_typeOption->setButton(1); break;
-	case stroke_gradient:
-		m_typeOption->setButton(2); break;
-	default:
-		m_typeOption->setButton(0);
+	switch( m_stroke.type() )
+	{
+		case VStroke::solid:
+			m_typeOption->setButton( 1 ); break;
+		case VStroke::grad:
+			m_typeOption->setButton( 2 ); break;
+		default:
+			m_typeOption->setButton( 0 );
+	}
+
+	switch( m_stroke.lineCap() )
+	{
+		case VStroke::capRound:
+			m_capOption->setButton( 1 ); break;
+		case VStroke::capSquare:
+			m_capOption->setButton( 2 ); break;
+		default:
+			m_capOption->setButton( 0 );
+	}
+
+	switch( m_stroke.lineJoin() )
+	{
+		case VStroke::joinRound:
+			m_joinOption->setButton( 1 ); break;
+		case VStroke::joinBevel:
+			m_joinOption->setButton( 2 ); break;
+		default:
+			m_joinOption->setButton( 0 );
 	}
 	
-	switch ( m_stroke.lineCap() ){
-	case cap_round:
-		m_capOption->setButton(1); break;
-	case cap_square:
-		m_capOption->setButton(2); break;
-	default:
-		m_capOption->setButton(0);
-	}
-	
-	switch ( m_stroke.lineJoin() ){
-	case join_round:
-		m_joinOption->setButton(1); break;
-	case join_bevel:
-		m_joinOption->setButton(2); break;
-	default:
-		m_joinOption->setButton(0);
-	}
-	
-	m_setLineWidth->setValue( ( m_stroke.lineWidth() ) );
+	m_setLineWidth->setValue( m_stroke.lineWidth() );
 }
 
 /*void VStrokeDlg::slotApplyButtonPressed()

@@ -37,7 +37,7 @@ VSpiralCmd::createPath()
 	VPath* path = new VPath( 0L );
 
 	VFill fill;
-	fill.setFillRule( fillrule_winding );
+	fill.setFillRule( VFill::winding );
 	path->setFill( fill );
 
 	// advance by pi/2 clockwise or cclockwise?

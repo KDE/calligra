@@ -2,18 +2,21 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vstrokefillpreview.h"
-#include "vkopainter.h"
-#include "koPoint.h"
-#include "kdebug.h"
 #include <qcolor.h>
-#include "vstroke.h"
+
+#include <koPoint.h>
+
+#include "karbon_part.h"
 #include "vfill.h"
 #include "vfilldlg.h"
-#include "vstrokedlg.h"
+#include "vkopainter.h"
 #include "vselection.h"
-#include "karbon_part.h"
+#include "vstroke.h"
+#include "vstrokedlg.h"
+#include "vstrokefillpreview.h"
+
 #include <kdebug.h>
+
 
 #define FILL_TOPX		15.0
 #define FILL_TOPY		20.0
@@ -30,8 +33,10 @@
 #define STROKE_BOTTOMX_INNER	STROKE_BOTTOMX - 4
 #define STROKE_BOTTOMY_INNER	STROKE_BOTTOMY - 4
 
-VStrokeFillPreview::VStrokeFillPreview( KarbonPart *part, QWidget* parent = 0L, const char* name = 0L )
-	: QFrame( parent, name ), m_part( part )
+
+VStrokeFillPreview::VStrokeFillPreview(
+	KarbonPart *part, QWidget* parent = 0L, const char* name = 0L )
+		: QFrame( parent, name ), m_part( part )
 {
 	setFocusPolicy( QWidget::NoFocus );
 	setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
@@ -89,23 +94,23 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	stroke.setLineWidth( 2.0 );
 
 	m_painter->setPen( Qt::NoPen );
-	if( s.type() != stroke_none )
+	if( s.type() != VStroke::none )
 	{
-		if( s.type() == stroke_gradient )
+		if( s.type() == VStroke::grad )
 		{
 			VFill fill;
 			fill.gradient() = s.gradient();
-			if( s.gradient().type() == gradient_linear )
+			if( s.gradient().type() == VGradient::linear )
 			{
 				fill.gradient().setOrigin( KoPoint( 20, 10 ) );
 				fill.gradient().setVector( KoPoint( 20, 40 ) );
 			}
-			else if( s.gradient().type() == gradient_radial )
+			else if( s.gradient().type() == VGradient::radial )
 			{
 				fill.gradient().setOrigin( KoPoint( 20, 25 ) );
 				fill.gradient().setVector( KoPoint( 20, 40 ) );
 			}
-			fill.setType( fill_gradient );
+			fill.setType( VFill::grad );
 			m_painter->setBrush( fill );
 		}
 		else
@@ -159,18 +164,18 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	m_painter->lineTo( KoPoint( STROKE_TOPX_INNER + 1, STROKE_BOTTOMY_INNER - 1 ) );
 	m_painter->strokePath();
 
-	if( f.type() != fill_none )
+	if( f.type() != VFill::none )
 	{
-		if( f.type() == fill_gradient )
+		if( f.type() == VFill::grad )
 		{
 			VFill fill;
 			fill = f;
-			if( f.gradient().type() == gradient_linear )
+			if( f.gradient().type() == VGradient::linear )
 			{
 				fill.gradient().setOrigin( KoPoint( 30, 20 ) );
 				fill.gradient().setVector( KoPoint( 30, 50 ) );
 			}
-			else if( f.gradient().type() == gradient_radial )
+			else if( f.gradient().type() == VGradient::radial )
 			{
 				fill.gradient().setOrigin( KoPoint( 30, 35 ) );
 				fill.gradient().setVector( KoPoint( 30, 50 ) );
