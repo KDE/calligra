@@ -16,6 +16,7 @@ class QRect;
 
 class VCommand;
 class VCommandHistory;
+class DCOPObject;
 
 namespace Karbon
 {
@@ -37,6 +38,8 @@ public:
 
 	virtual bool loadXML( QIODevice*, const QDomDocument& document );
 	virtual QDomDocument saveXML();
+
+    virtual DCOPObject* dcopObject();
 
 	// manipulate selection:
 	const VObjectList& selection() const { return m_selection; }
@@ -101,6 +104,7 @@ private:
 
     bool m_bShowStatusBar;
     int m_maxRecentFiles;
+    DCOPObject *dcop;
 };
 
 #endif

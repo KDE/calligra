@@ -14,6 +14,7 @@
 #include "vpainter.h"
 #include <kconfig.h>
 #include <kdebug.h>
+#include "karbon_part_iface.h"
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
@@ -23,6 +24,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
         m_bShowStatusBar = true;
         m_maxRecentFiles = 10;
 	m_layers.setAutoDelete( true );
+        dcop = 0;
 
 	// create a layer. we need at least one:
 	m_layers.append( new VLayer() );
@@ -34,13 +36,26 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	m_defaultFillColor.setValues( &r, &g, &b, 0L );
 
         initConfig();
+        if ( name )
+            dcopObject();
+
 }
 
 KarbonPart::~KarbonPart()
 {
 	// delete the command-history:
 	delete m_commandHistory;
+        delete dcop;
 }
+
+DCOPObject* KarbonPart::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KarbonPartIface( this );
+
+    return dcop;
+}
+
 
 bool
 KarbonPart::initDoc()
