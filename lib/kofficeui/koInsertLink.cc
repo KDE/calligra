@@ -316,14 +316,16 @@ fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
 
   QStringList fileList = KRecentDocument::recentDocuments();
   QStringList lst;
+  lst <<"";
   for (QStringList::ConstIterator it = fileList.begin();it != fileList.end(); ++it)
   {
       KDesktopFile f(*it, true /* read only */);
       if ( !f.readURL().isEmpty())
           lst.append( f.readURL());
   }
-  if ( lst.isEmpty())
+  if ( lst.count()<= 1 )
   {
+      recentFile->clear();
       recentFile->insertItem( i18n("No Entries") );
       recentFile->setEnabled( false );
   }
