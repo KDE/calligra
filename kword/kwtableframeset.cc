@@ -83,6 +83,12 @@ void KWTableFrameSet::updateFrames( int flags )
         return;
     for(QPtrListIterator<Cell> c(m_cells); c.current(); ++c)
         c.current()->updateFrames( flags );
+    if ( isFloating() )  {
+        KWAnchor * anchor = findAnchor( 0 );
+        if ( anchor )
+            anchor->resize();
+    }
+
     KWFrameSet::updateFrames( flags );
 }
 
@@ -616,6 +622,7 @@ kdDebug() << "j--";
     }
     redrawFromCol=getCols();
     kdDebug(32004) << "KWTableFrameSet::recalcRows done" << endl;
+    updateFrames();
 }
 
 void KWTableFrameSet::resizeWidth( double width ) {
