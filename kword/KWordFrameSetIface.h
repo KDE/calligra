@@ -60,6 +60,11 @@ k_dcop:
     virtual void setPtMarginTop(double val);
     virtual void setPtMarginBottom(double val);
 
+    virtual QColor leftBorderColor() const;
+    virtual QColor rightBorderColor() const;
+    virtual QColor topBorderColor() const;
+    virtual QColor bottomBorderColor() const;
+
     virtual bool isCopy()const;
 
 private:

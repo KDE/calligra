@@ -149,3 +149,24 @@ void KWordFrameSetIface::setPtMarginBottom(double val)
     m_frame->frame( 0 )->setBBottom(val);
     m_frame->kWordDocument()->layout();
 }
+
+QColor KWordFrameSetIface::leftBorderColor() const
+{
+    return m_frame->frame( 0 )->leftBorder().color;
+}
+
+QColor KWordFrameSetIface::rightBorderColor() const
+{
+    return m_frame->frame( 0 )->rightBorder().color;
+}
+
+QColor KWordFrameSetIface::topBorderColor() const
+{
+    return m_frame->frame( 0 )->topBorder().color;
+}
+
+QColor KWordFrameSetIface::bottomBorderColor() const
+{
+    return m_frame->frame( 0 )->bottomBorder().color;
+}
+
