@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -54,7 +53,7 @@ VStar::VStar( VObject* parent,
 
 	double inAngle = VGlobal::twopi / 360 * innerAngle;
 
-	if( m_type == star || m_type == framed_star )
+	if( m_type == star )
 	{
 		int j = (edges % 2 == 0 ) ? ( edges - 2 ) / 2 : ( edges - 1 ) / 2;
 		//innerRadius = getOptimalInnerRadius( outerRadius, edges, innerAngle );

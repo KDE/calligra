@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +22,28 @@
 
 #include "vcomposite.h"
 
+/**
+ * This shape offers star-like shapes with a lot of parameters :
+ *
+ * Types :
+ *
+ * Star           - fully connected star shape.
+ * Star outline   - like star but without the cross connections.
+ * Framed star    - like star outline but with an enclosing path.
+ * Spoke          - basically a star outline with inner radius of zero.
+ * Wheel          - like spoke but with enclosing path.
+ * Polygon        - like VPolygon.
+ * Gear           - variant on star outline, resembling the KDE gear.
+ *
+ * Parameters :
+ *
+ * Edges          - number of edges, which must be greater or equal to 3.
+ * Outer radius   - radius amount of circumcircle of the star.
+ * Inner radius   - inner radius where star has to connect to. This value
+ *                  doesnt apply to polygon, spoke and wheel.
+ * Inner angle    - extra radius amount for inner radius.
+ * Roundness      - uses curves instead of lines for the star shape.
+ */
 class VStar : public VComposite
 {
 public:
