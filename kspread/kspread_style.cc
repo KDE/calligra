@@ -444,9 +444,133 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
 
 QString KSpreadStyle::saveOasisStyleNumeric( KoGenStyles &mainStyles )
 {
-    //todo
+    QString styleName;
+    switch( m_formatType )
+    {
+    case KSpreadFormat::Number:
+        styleName = saveOasisStyleNumericNumber( mainStyles );
+        break;
+    case KSpreadFormat::Text_format:
+        styleName = saveOasisStyleNumericText( mainStyles );
+        break;
+    case KSpreadFormat::Money:
+        styleName = saveOasisStyleNumericMoney( mainStyles );
+        break;
+    case KSpreadFormat::Percentage:
+        styleName = saveOasisStyleNumericPercentage( mainStyles );
+        break;
+    case KSpreadFormat::Scientific:
+        styleName = saveOasisStyleNumericScientific( mainStyles );
+        break;
+    case KSpreadFormat::ShortDate:
+    case KSpreadFormat::TextDate:
+        styleName = saveOasisStyleNumericDate( mainStyles );
+        break;
+    case KSpreadFormat::Time:
+    case KSpreadFormat::SecondeTime:
+    case KSpreadFormat::Time_format1:
+    case KSpreadFormat::Time_format2:
+    case KSpreadFormat::Time_format3:
+    case KSpreadFormat::Time_format4:
+    case KSpreadFormat::Time_format5:
+    case KSpreadFormat::Time_format6:
+    case KSpreadFormat::Time_format7:
+    case KSpreadFormat::Time_format8:
+        styleName = saveOasisStyleNumericTime( mainStyles );
+        break;
+    case KSpreadFormat::fraction_half:
+    case KSpreadFormat::fraction_quarter:
+    case KSpreadFormat::fraction_eighth:
+    case KSpreadFormat::fraction_sixteenth:
+    case KSpreadFormat::fraction_tenth:
+    case KSpreadFormat::fraction_hundredth:
+    case KSpreadFormat::fraction_one_digit:
+    case KSpreadFormat::fraction_two_digits:
+    case KSpreadFormat::fraction_three_digits:
+        styleName = saveOasisStyleNumericFraction( mainStyles );
+        break;
+    case KSpreadFormat::date_format1:
+    case KSpreadFormat::date_format2:
+    case KSpreadFormat::date_format3:
+    case KSpreadFormat::date_format4:
+    case KSpreadFormat::date_format5:
+    case KSpreadFormat::date_format6:
+    case KSpreadFormat::date_format7:
+    case KSpreadFormat::date_format8:
+    case KSpreadFormat::date_format9:
+    case KSpreadFormat::date_format10:
+    case KSpreadFormat::date_format11:
+    case KSpreadFormat::date_format12:
+    case KSpreadFormat::date_format13:
+    case KSpreadFormat::date_format14:
+    case KSpreadFormat::date_format15:
+    case KSpreadFormat::date_format16:
+    case KSpreadFormat::date_format17:
+    case KSpreadFormat::date_format18:
+    case KSpreadFormat::date_format19:
+    case KSpreadFormat::date_format20:
+    case KSpreadFormat::date_format21:
+    case KSpreadFormat::date_format22:
+    case KSpreadFormat::date_format23:
+    case KSpreadFormat::date_format24:
+    case KSpreadFormat::date_format25:
+    case KSpreadFormat::date_format26:
+        styleName = saveOasisStyleNumericDate( mainStyles );
+        break;
+    case KSpreadFormat::Custom:
+        styleName = saveOasisStyleNumericCustom( mainStyles );
+        break;
+    }
+    return styleName;
+}
+
+QString KSpreadStyle::saveOasisStyleNumericNumber( KoGenStyles&mainStyles )
+{
     return "";
 }
+
+QString KSpreadStyle::saveOasisStyleNumericText( KoGenStyles&mainStyles )
+{
+    return "";
+}
+
+QString KSpreadStyle::saveOasisStyleNumericMoney( KoGenStyles&mainStyles )
+{
+    return "";
+}
+
+QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles )
+{
+    return "";
+}
+
+
+QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles )
+{
+    return "";
+}
+
+QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles )
+{
+    return "";
+}
+
+QString KSpreadStyle::saveOasisStyleNumericCustom( KoGenStyles&mainStyles )
+{
+    return "";
+}
+
+QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles )
+{
+    return "";
+}
+
+
+QString KSpreadStyle::saveOasisStyleNumericFraction( KoGenStyles &mainStyles )
+{
+    return "";
+}
+
 
 QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
 {

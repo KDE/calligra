@@ -303,6 +303,16 @@ class KSpreadStyle
   uint m_topPenValue;
 
     QString saveOasisStyleNumeric( KoGenStyles &mainStyles );
+    QString saveOasisStyleNumericDate( KoGenStyles &mainStyles );
+    QString saveOasisStyleNumericFraction( KoGenStyles &mainStyles );
+    QString saveOasisStyleNumericTime( KoGenStyles& mainStyles );
+    QString saveOasisStyleNumericCustom( KoGenStyles&mainStyles );
+    QString saveOasisStyleNumericScientific( KoGenStyles&mainStyles );
+    QString saveOasisStyleNumericPercentage( KoGenStyles&mainStyles );
+    QString saveOasisStyleNumericMoney( KoGenStyles&mainStyles );
+    QString saveOasisStyleNumericText( KoGenStyles&mainStyles );
+    QString saveOasisStyleNumericNumber( KoGenStyles&mainStyles );
+
 
   bool featureSet( FlagsSet f ) const { return ( !m_parent || ( m_featuresSet & (uint) f ) ); }
 };
