@@ -54,6 +54,12 @@ private:
 	KDoubleNumInput *m_Rotation;
 	TKUFloatSpinBox *m_setLineWidth;
 	VStroke m_stroke;
+	
+private slots:
+	void xChanged( double x );
+	void yChanged( double y );
+	void widthChanged( double width );
+	void heightChanged( double height );
 };
 
 #endif

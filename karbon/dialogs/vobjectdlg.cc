@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <koMainWindow.h>
+#include <koPoint.h>
 #include <koRect.h>
 #include <koView.h>
 
@@ -33,6 +34,7 @@
 #include "karbon_part.h"
 
 #include "vobjectdlg.h"
+#include "vtransformcmd.h"
 #include "vselection.h"
 #include "vstrokecmd.h"
 
@@ -155,7 +157,7 @@ static const char *stroke_xpm[] = {
 VObjectDlg::VObjectDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	: QDockWindow( QDockWindow::OutsideDock, parent->shell() ), m_part ( part )
 {
-	setCaption( i18n( "Selection Properties" ) );
+	setCaption( i18n( "Geometry Panel" ) );
 	setCloseMode( QDockWindow::Always );
 	
 	//Widgets layout:
@@ -190,13 +192,17 @@ VObjectDlg::VObjectDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	m_setLineWidth->setMinValue(0.0);
 	m_setLineWidth->setLineStep(0.5);
 	
+	connect (m_X, SIGNAL( valueChanged( double ) ), this, SLOT( xChanged ( double ) ) );
+	connect (m_Y, SIGNAL( valueChanged( double ) ), this, SLOT( yChanged ( double ) ) );                                                                                    
+	connect (m_Width, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged ( double ) ) );
+	connect (m_Height, SIGNAL( valueChanged( double ) ), this, SLOT( heightChanged ( double ) ) );
+	
 	setWidget( mainLayout );
 	setFixedSize( baseSize() );
 }
 
 VObjectDlg::~VObjectDlg()
 {
-
 }
 
 void
@@ -226,8 +232,8 @@ VObjectDlg::update( KarbonPart* part )
 {
 	if( part->document().selection()->objects().count() > 0 ) // there is a selection, so take the stroke of first selected object
 	{
-		m_X->setValue ( part->document().selection()->objects().getFirst()->boundingBox().left() );
-		m_Y->setValue ( part->document().selection()->objects().getFirst()->boundingBox().top() );
+		m_X->setValue ( 0.00 );
+		m_Y->setValue ( 0.00 );
 		m_Width->setValue ( part->document().selection()->objects().getFirst()->boundingBox().width() );
 		m_Height->setValue ( part->document().selection()->objects().getFirst()->boundingBox().height() );
 		
@@ -239,6 +245,42 @@ VObjectDlg::update( KarbonPart* part )
 		m_stroke.setMiterLimit ( part->document().selection()->objects().getFirst()->stroke()->miterLimit() );
 		m_setLineWidth->setValue( m_stroke.lineWidth() );
 	}
+}
+
+void
+VObjectDlg::xChanged ( double x )
+{
+	if( m_part && m_part->document().selection()->objects().count() > 0 && x !=0.00)
+		m_part->addCommand( new VTranslateCmd( &m_part->document(), x, 0 ), true );
+	m_X->setValue( 0.00 );
+}
+
+void
+VObjectDlg::yChanged ( double y )
+{
+	if( m_part && m_part->document().selection()->objects().count() > 0 && y !=0.00)
+		m_part->addCommand( new VTranslateCmd( &m_part->document(), 0, y ), true );
+	m_Y->setValue( 0.00 );
+}
+
+void
+VObjectDlg::widthChanged( double width )
+{
+	double height = m_Height->value();
+	KoPoint current = KoPoint ( m_part->document().selection()->objects().getFirst()->boundingBox().left(), 
+		m_part->document().selection()->objects().getFirst()->boundingBox().top() );
+	if( m_part && m_part->document().selection()->objects().count() > 0 )
+		m_part->addCommand( new VScaleCmd( &m_part->document(), current , width, height ), true );
+}
+
+void
+VObjectDlg::heightChanged( double height )
+{
+	double width = m_Width->value();
+	KoPoint current = KoPoint ( m_part->document().selection()->objects().getFirst()->boundingBox().left(), 
+		m_part->document().selection()->objects().getFirst()->boundingBox().top() );
+	if( m_part && m_part->document().selection()->objects().count() > 0 )
+		m_part->addCommand( new VScaleCmd( &m_part->document(), current , width, height ), true );
 }
 
 #include "vobjectdlg.moc"
