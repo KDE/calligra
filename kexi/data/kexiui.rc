@@ -1,18 +1,6 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexi" version="98">
+<kpartgui name="kexi" version="99">
 <MenuBar>
-  <Menu name="edit"><text>&amp;Edit</text>
-    <Merge/>
-  </Menu>
-  <Menu name="view"><text>&amp;View</text>
-    <Action name="view_newview"/>
-    <ActionList name="view_closeallviews"/>
-    <Separator/>
-    <Action name="view_viewmode"/>
-    <Separator/>
-    <Action name="show_nav"/>
-    <Action name="show_contexthelp"/>
-  </Menu>
   <Menu name="project" noMerge="1">
     <text>&amp;Project</text>
     <Merge/>
@@ -22,9 +10,38 @@
     <Separator/>
     <Action name="project_props"/>
   </Menu>
-  <Menu name="settings"><text>&amp;Settings</text>
-    <Separator group="settings_show"/>
-    <Action name="kexi_settings" group="settings_configure"/>
+  <Menu name="edit"><text>&amp;Edit</text>
+    <DefineGroup name="edit_find"/>
+    <Separator/>
+    <Merge/>
+  </Menu>
+  <Menu name="view"><text>&amp;View</text>
+    <Action name="view_viewmode"/>
+    <Separator/>
+    <Action name="show_nav"/>
+    <Action name="show_contexthelp"/>
+  </Menu>
+  
+  <Menu name="settings">
+    <text>&amp;Settings</text>
+    <DefineGroup name="settings_top"/>
+    <Merge/>
+<!--  <ActionList name="toolbarlist"/> -->
+    <Separator/>
+    <DefineGroup name="settings_show"/>
+    <Separator/>
+    <Action name="preferences"/>
+    <DefineGroup name="configure_merge" />
+  </Menu>
+  
+  <Menu name="window"><text>&amp;Window</text>
+    <text>&amp;View</text>
+    <Separator/>
+    <Action name="window_next"/>
+    <Action name="window_previous"/>
+    <Action name="window_switchto"/>
+    <Separator/>
+    <DefineGroup name="window_list"/>
   </Menu>
   <Menu name="help">
     <Menu name="help_licenses" noMerge="1"><text>Other &amp;Licenses</text>
