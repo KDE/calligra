@@ -74,6 +74,9 @@ public:
 
   virtual bool loadChildren( KoStore* _store );
   virtual bool loadXML( QIODevice *, const QDomDocument& doc );
+  QDomElement saveAreaName( QDomDocument& doc ) ;
+  void loadAreaName( QDomElement& element );
+
 
   virtual bool initDoc();
 

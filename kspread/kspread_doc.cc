@@ -216,7 +216,13 @@ QDomDocument KSpreadDoc::saveXML()
 
   QDomElement locale = m_locale.save( doc );
   spread.appendChild( locale );
-  
+
+  if(m_refs.count()!=0)
+        {
+        QDomElement areaname = saveAreaName( doc );
+        spread.appendChild( areaname );
+        }
+
   QDomElement e = m_pMap->save( doc );
   spread.appendChild( e );
 
@@ -254,7 +260,11 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   QDomElement locale = spread.namedItem( "locale" ).toElement();
   if ( !locale.isNull() )
       m_locale.load( locale );
-  
+    //areaname
+   QDomElement areaname = spread.namedItem( "areaname" ).toElement();
+    if ( !areaname.isNull())
+        loadAreaName(areaname);
+
   // <paper>
   QDomElement paper = spread.namedItem( "paper" ).toElement();
   if ( !paper.isNull() )
@@ -859,7 +869,7 @@ DCOPObject* KSpreadDoc::dcopObject()
 }
 
 void KSpreadDoc::addAreaName(QRect &_rect,QString name,QString tableName)
-{
+{  
   setModified( true );
   Reference tmp;
   tmp.rect = _rect;
@@ -889,6 +899,73 @@ void KSpreadDoc::changeAreaTableName(QString oldName,QString tableName)
         if((*it2).table_name==oldName)
                    (*it2).table_name=tableName;
         }
+}
+
+QDomElement KSpreadDoc::saveAreaName( QDomDocument& doc )
+{
+   QDomElement element = doc.createElement( "areaname" );
+   QValueList<Reference>::Iterator it2;
+   for ( it2 = m_refs.begin(); it2 != m_refs.end(); ++it2 )
+        {
+        QDomElement e = doc.createElement("reference");
+        QDomElement tabname = doc.createElement( "tabname" );
+        tabname.appendChild( doc.createTextNode( (*it2).table_name ) );
+        e.appendChild( tabname );
+        QDomElement refname = doc.createElement( "refname" );
+        refname.appendChild( doc.createTextNode( (*it2).ref_name ) );
+        e.appendChild( refname );
+        QDomElement rect = doc.createElement( "rect" );
+        rect.setAttribute( "left-rect", ((*it2).rect).left() );
+        rect.setAttribute( "right-rect",((*it2).rect).right() );
+        rect.setAttribute( "top-rect", ((*it2).rect).top() );
+        rect.setAttribute( "bottom-rect", ((*it2).rect).bottom() );
+        e.appendChild( rect );
+        element.appendChild(e);
+        }
+ return element;
+}
+
+void KSpreadDoc::loadAreaName( QDomElement& element )
+{
+for( ; !element.isNull(); element = element.nextSibling().toElement() )
+    {
+    QDomElement reference= element.namedItem( "reference" ).toElement();
+    if ( !reference.isNull())
+    {
+        QString tabname;
+        QString refname;
+        int left=0;
+        int right=0;
+        int top=0;
+        int bottom=0;
+        QDomElement tableName = reference.namedItem( "tabname" ).toElement();
+        if ( !tableName.isNull() )
+                {
+                tabname=tableName.text();
+                }
+        QDomElement referenceName = reference.namedItem( "refname" ).toElement();
+        if ( !referenceName.isNull() )
+                {
+                refname=referenceName.text();
+                }
+        QDomElement rect =reference.namedItem( "rect" ).toElement();
+        if(!rect.isNull())
+                {
+                bool ok;
+                if ( rect.hasAttribute( "left-rect" ) )
+                        left=rect.attribute("left-rect").toInt( &ok );
+                if ( rect.hasAttribute( "right-rect" ) )
+		  right=rect.attribute("right-rect").toInt( &ok );
+                if ( rect.hasAttribute( "top-rect" ) )
+                        top=rect.attribute("top-rect").toInt( &ok );
+                if ( rect.hasAttribute( "bottom-rect" ) )
+                        bottom=rect.attribute("bottom-rect").toInt( &ok );
+                 }
+        QRect _rect;
+        _rect.setCoords(left,top,right,bottom);
+        addAreaName(_rect,refname,tabname);
+        }
+    }
 }
 
 void KSpreadDoc::addStringCompletion(QString stringCompletion)
