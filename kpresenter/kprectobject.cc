@@ -495,40 +495,20 @@ void KPRectObject::paint( QPainter* _painter )
 {
     int ow = ext.width();
     int oh = ext.height();
-
-    _painter->setPen( pen );
     int pw = pen.width() / 2;
-    _painter->setBrush( brush );
-    if ( xRnd == 0 && yRnd == 0 )
-        _painter->drawRect( pw, pw, ow - 2 * pw, oh - 2 * pw );
-    else
-        _painter->drawRoundRect( pw, pw, ow - 2 * pw, oh - 2 * pw, xRnd, yRnd );
 
     if ( drawShadow || fillType == FT_BRUSH || !gradient )
     {
-        int ow = ext.width();
-        int oh = ext.height();
-
         _painter->setPen( pen );
-        int pw = pen.width() / 2;
         _painter->setBrush( brush );
-        if ( xRnd == 0 && yRnd == 0 )
-            _painter->drawRect( pw, pw, ow - 2 * pw, oh - 2 * pw );
-        else
-            _painter->drawRoundRect( pw, pw, ow - 2 * pw, oh - 2 * pw, xRnd, yRnd );
+        _painter->drawRoundRect( pw, pw, ow - 2 * pw, oh - 2 * pw, xRnd, yRnd );
     }
     else
     {
-        if ( xRnd == 0 && yRnd == 0 )
-        {
-            int ow = ext.width();
-            int oh = ext.height();
-            int pw = pen.width() / 2;
-
-            if ( angle == 0 )
+          if ( angle == 0 || angle==360 )
                 _painter->drawPixmap( pw, pw, *gradient->getGradient(), 0, 0, ow - 2 * pw, oh - 2 * pw );
-            else
-            {
+          else  //rotated
+          {
                 QPixmap pix( ow - 2 * pw, oh - 2 * pw );
                 QPainter p;
                 p.begin( &pix );
@@ -536,18 +516,11 @@ void KPRectObject::paint( QPainter* _painter )
                 p.end();
 
                 _painter->drawPixmap( pw, pw, pix );
-            }
+          }
 
-            _painter->setPen( pen );
-            _painter->setBrush( Qt::NoBrush );
-            _painter->drawRect( pw, pw, ow - 2 * pw, oh - 2 * pw );
-        }
-        else
-        {
-            _painter->setPen( pen );
-            _painter->setBrush( brush );
-            _painter->drawRoundRect( pw, pw, ow - 2 * pw, oh - 2 * pw, xRnd, yRnd );
-        }
+          _painter->setPen( pen );
+          _painter->setBrush( Qt::NoBrush );
+          _painter->drawRoundRect( pw, pw, ow - 2 * pw, oh - 2 * pw, xRnd, yRnd );
     }
 }
 
