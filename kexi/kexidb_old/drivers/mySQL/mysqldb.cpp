@@ -212,6 +212,7 @@ MySqlDB::tableNames()
 	while(result->next())
 	{
 		s.append(result->value(0).toString());
+//    kdDebug() << "* tableNames():" << result->value(0).toString() << endl;
 	}
 
 	delete result;
@@ -663,7 +664,12 @@ MySqlDB::createField(const KexiDBField& newField, KexiDBTableStruct fields,
 	{
 		ok = changeKeys(newField, -1, fields);
 	}
-
+  //<js> This is a fresh created table: add its def to our set of tabledefs:
+  //TODO: tableNames() do this on as a side effect -THIS IS BAD IMPL.- fix tableNames()
+  if (ok && createTable) {
+		m_tableDefs.insert(newField.table(),createTableDef(newField.table()));
+  }
+  //</js>
 	return ok;
 }
 
