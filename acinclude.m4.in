@@ -1457,7 +1457,7 @@ AC_DEFUN(AC_HAVE_XPM,
     AC_LANG_C
     ac_save_ldflags="$LDFLAGS"
     ac_save_cflags="$CFLAGS"
-    LDFLAGS="$LDFLAGS $XPM_LDFLAGS $X_LDFLAGS $QT_LDFLAGS -lXpm -lX11 -lXext $LIBSOCKET"
+    LDFLAGS="$LDFLAGS $XPM_LDFLAGS $all_libraries -lXpm -lX11 -lXext $LIBSOCKET"
     CFLAGS="$CFLAGS $X_INCLUDES"
     test ! -z "$XPM_INCLUDE" && CFLAGS="-I$XPM_INCLUDE $CFLAGS"
     AC_TRY_LINK([#include <X11/xpm.h>],[],
@@ -1508,7 +1508,7 @@ AC_DEFUN(AC_HAVE_GL,
     AC_LANG_C
     ac_save_ldflags="$LDFLAGS"
     ac_save_cflags="$CFLAGS"
-    LDFLAGS="$LDFLAGS $GL_LDFLAGS $X_LDFLAGS $QT_LDFLAGS -lMesaGL -lMesaGLU -lX11 -lXext -lm $LIBSOCKET"
+    LDFLAGS="$LDFLAGS $GL_LDFLAGS $all_libraries -lMesaGL -lMesaGLU -lX11 -lXext -lm $LIBSOCKET"
     CFLAGS="$CFLAGS $X_INCLUDES"
     test ! -z "$GL_INCLUDE" && CFLAGS="-I$GL_INCLUDE $CFLAGS"
     AC_TRY_LINK([],[],
@@ -1917,35 +1917,57 @@ AC_MSG_RESULT(header $python_incdir library $python_libdir)
 ])
 
 
+AC_DEFUN(KDE_CHECK_STL_SGI,
+[
+    AC_MSG_CHECKING([if STL implementation is SGI like])
+    AC_CACHE_VAL(kde_cv_stl_type_sgi,
+    [
+      AC_TRY_COMPILE([#include <list.h>],[
+#ifndef __SGI_STL_LIST_H
+#error SGI
+#endif
+], kde_cv_stl_type_sgi=yes,
+   kde_cv_stl_type_sgi=no)
+])
+
+   AC_MSG_RESULT($kde_cv_stl_type_sgi)
+
+   if test "$kde_cv_stl_type_sgi" = "yes"; then
+	AC_DEFINE_UNQUOTED(HAVE_SGI_STL) 
+   fi
+])
+
+AC_DEFUN(KDE_CHECK_STL_HP,
+[
+    AC_MSG_CHECKING([if STL implementation is HP like])
+    AC_CACHE_VAL(kde_cv_stl_type_hp,
+    [
+      AC_TRY_COMPILE([
+#include <list.h>
+],[
+#ifndef __HP_STL_LIST_H
+#error HP
+#endif
+], kde_cv_stl_type_hp=yes,
+   kde_cv_stl_type_hp=no)
+])
+   AC_MSG_RESULT($kde_cv_stl_type_hp)
+
+   if test "$kde_cv_stl_type_hp" = "yes"; then
+	AC_DEFINE_UNQUOTED(HAVE_HP_STL) 
+   fi
+])
+
 AC_DEFUN(KDE_CHECK_STL,
 [
-    AC_MSG_CHECKING([for type of STL implementation])
-    AC_CACHE_VAL(kde_cv_stl_type,
-    [
-	cat > conftest.C << EOF
-#include <list.h>
+    KDE_CHECK_STL_SGI
     
-#ifdef __SGI_STL_LIST_H
-Type: SGI
-#else
-Type: HP
-#endif
+    if test "$kde_cv_stl_type_sgi" = "no"; then
+       KDE_CHECK_STL_HP
 
-EOF
-	try='$ac_cpp conftest.C | grep "Type:" | tail -1 | sed -e "s#Type: ##"'
-	kde_cv_stl_type=
-	if test=`eval $try 2> /dev/null`; then
-	    kde_cv_stl_type=$test;
-	fi
-	
-    ])
-
-    AC_MSG_RESULT($kde_cv_stl_type)
-    if test "$kde_cv_stl_type" = "SGI";
-    then
-	AC_DEFINE_UNQUOTED(HAVE_SGI_STL) 
-    else
-        AC_DEFINE_UNQUOTED(HAVE_HP_STL)
+       if test "$kde_cv_stl_type_hp" = "no"; then
+         AC_MSG_ERROR("no known STL type found")
+       fi
     fi
-    
+
 ])
