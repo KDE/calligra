@@ -40,15 +40,7 @@ class KSParseNode;
 #include "kspread_layout.h"
 #include "kspread_global.h"
 #include "kspread_depend.h"
-
-struct KSpreadConditional
-{
- double val1;
- double val2;
- QColor colorcond;
- QFont fontcond;
- Conditional m_cond;
-};
+#include "kspread_condition.h"
 
 struct KSpreadValidity
 {
@@ -116,7 +108,7 @@ public slots:
 class KSpreadCell : public KSpreadLayout
 {
   friend class SelectPrivate;
-
+  friend class KSpreadConditions;
 public:
     /** The type of content in the cell */
     enum Content { Text, RichText, Formula, VisualFormula };
@@ -534,7 +526,7 @@ public:
      * @param _col is the column of the obscuring cell.
      * @param _row is the row of the obscuring cell.
      */
-    void obscure( KSpreadCell *_cell, int _col, int _row );
+    void obscure( KSpreadCell *_cell );
     /**
      * Tells this cell that it is no longer obscured.
      */
@@ -553,11 +545,11 @@ public:
     /**
      * @return the column of the obscuring cell.
      */
-    int obscuringCellsColumn() const { return m_iObscuringCellsColumn; }
+    int obscuringCellsColumn();
     /**
      * @return the row of the obscuring cell.
      */
-    int obscuringCellsRow() const { return m_iObscuringCellsRow; }
+    int obscuringCellsRow();
 
     /**
      * Force the cell to occupy other cells space.
@@ -625,48 +617,15 @@ public:
 
     void defaultStyle();
 
+    /**
+     * Gets a copy of the list of current conditions
+     */
+    QValueList<KSpreadConditional> GetConditionList();
 
-    //valid or not conditionIsTrue
-    void verifyCondition();
-    KSpreadConditional * getFirstCondition(int newStruct=-1)
-    	{
-    	if((m_firstCondition==0)&&(newStruct==-1))
-    		m_firstCondition=new KSpreadConditional;
-    	return  m_firstCondition;
-    	}
-
-    KSpreadConditional * getSecondCondition(int newStruct=-1)
-    	{
-    	if((m_secondCondition==0)&&(newStruct==-1))
-    		m_secondCondition=new KSpreadConditional;
-    	return m_secondCondition;
-    	}
-
-    KSpreadConditional * getThirdCondition(int newStruct=-1)
-    	{
-    	if((m_thirdCondition==0)&&(newStruct==-1))
-    		m_thirdCondition=new KSpreadConditional;
-    	return  m_thirdCondition;
-    	}
-    void removeThirdCondition()
-    	{
-    	if(m_thirdCondition!=0)
-    		delete m_thirdCondition;
-    	m_thirdCondition=0;
-    	}
-
-    void removeSecondCondition()
-    	{
-    	if(m_secondCondition!=0)
-    		delete m_secondCondition;
-    	m_secondCondition=0;
-    	}
-    void removeFirstCondition()
-    	{
-    	if(m_firstCondition!=0)
-    		delete m_firstCondition;
-    	m_firstCondition=0;
-    	}
+    /**
+     * Replace the old set of conditions with a new one
+     */
+    void SetConditionList(QValueList<KSpreadConditional> newList);
 
     void verifyValidity();
     KSpreadValidity * getValidity(int newStruct=-1)
@@ -908,14 +867,6 @@ private:
      * of painting it for example instead of painting 'this'.
      */
     KSpreadCell *m_pObscuringCell;
-    /**
-     * The column of the cell obscuring this one
-     */
-    int m_iObscuringCellsColumn;
-    /**
-     * The row of the cell obscuring this one
-     */
-    int m_iObscuringCellsRow;
 
     /**
      * Tells wether the cell is a button, combobox etc.
@@ -969,10 +920,11 @@ private:
      */
     DataType m_dataType;
 
-    // ### union ?
+    /* no union -- classes can't be in a union */
     double m_dValue;
     QDate m_Date;
     QTime m_Time;
+
     QSimpleRichText *m_pQML; // Set when the cell contains QML
 
     /**
@@ -991,46 +943,13 @@ private:
     KSParseNode* m_pCode;
 
     /**
-     * Set to TRUE if one of the conditions apply.
-     *
-     * @see #m_firstCondition
-     * @see #m_secondCondition
-     * @see #m_thirdCondition
-     * @see #m_numberOfCond
-     */
-    bool m_conditionIsTrue;
-
-    /**
      * When it's True displays **
      * it's true when text size is bigger that cell size
      * and when Align is center or left
      */
     bool m_bCellTooShort;
 
-    /**
-     * Pointer to the first condition. May be 0.
-     *
-     * @persistent
-     */
-    KSpreadConditional *m_firstCondition;
-    /**
-     * Pointer to the second condition. May be 0.
-     *
-     * @persistent
-     */
-    KSpreadConditional *m_secondCondition;
-    /**
-     * Pointer to the third condition. May be 0.
-     *
-     * @persistent
-     */
-    KSpreadConditional *m_thirdCondition;
-    /**
-     * If a condition apples, then this variable tells which.
-     * The value if always in the range of 0..2 if a condition
-     * applies and undefined otherwise.
-     */
-    int m_numberOfCond;
+    KSpreadConditions conditions;
 
     /**
     * Store the number of line when you used multirow

@@ -117,43 +117,43 @@ KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const QStrin
   emit(fontSelected());
 }
 
-void KSpreadWidgetconditional::init(KSpreadConditional *tmp)
+void KSpreadWidgetconditional::init(KSpreadConditional tmp)
 {
-font=tmp->fontcond;
-color->setColor(tmp->colorcond);
+  font=tmp.fontcond;
+  color->setColor(tmp.colorcond);
 QString val;
-switch(tmp->m_cond)
+switch(tmp.m_cond)
         {
         case None :
                 break;
         case Equal :
                 choose->setCurrentItem(1);
                 edit1->setEnabled(true);
-                val=val.setNum(tmp->val1);
+                val=val.setNum(tmp.val1);
                 edit1->setText(val);
                 break;
         case Superior :
                 choose->setCurrentItem(2);
                 edit1->setEnabled(true);
-                val=val.setNum(tmp->val1);
+                val=val.setNum(tmp.val1);
                 edit1->setText(val);
                 break;
         case Inferior :
                 choose->setCurrentItem(3);
                 edit1->setEnabled(true);
-                val=val.setNum(tmp->val1);
+                val=val.setNum(tmp.val1);
                 edit1->setText(val);
                 break;
         case SuperiorEqual :
                 choose->setCurrentItem(4);
                 edit1->setEnabled(true);
-                val=val.setNum(tmp->val1);
+                val=val.setNum(tmp.val1);
                 edit1->setText(val);
                 break;
         case InferiorEqual :
                 choose->setCurrentItem(5);
                 edit1->setEnabled(true);
-                val=val.setNum(tmp->val1);
+                val=val.setNum(tmp.val1);
                 edit1->setText(val);
                 break;
 
@@ -161,18 +161,18 @@ switch(tmp->m_cond)
                 choose->setCurrentItem(6);
                 edit1->setEnabled(true);
                 edit2->setEnabled(true);
-                val=val.setNum(tmp->val1);
+                val=val.setNum(tmp.val1);
                 edit1->setText(val);
-                val=val.setNum(tmp->val2);
+                val=val.setNum(tmp.val2);
                 edit2->setText(val);
                 break;
         case Different :
                 choose->setCurrentItem(7);
                 edit1->setEnabled(true);
                 edit2->setEnabled(true);
-                val=val.setNum(tmp->val1);
+                val=val.setNum(tmp.val1);
                 edit1->setText(val);
-                val=val.setNum(tmp->val2);
+                val=val.setNum(tmp.val2);
                 edit2->setText(val);
                 break;
         }
@@ -298,14 +298,15 @@ KSpreadconditional::KSpreadconditional( KSpreadView* parent, const char* name,co
   setMainWidget(page);
 
   QGridLayout *grid1 = new QGridLayout(page,4,1,15,7);
-  firstCond=new KSpreadWidgetconditional(page,i18n("First condition"));
-  grid1->addWidget(firstCond,0,0);
+  conditionals[0] = new KSpreadWidgetconditional(page,i18n("First condition"));
+  grid1->addWidget(conditionals[0], 0, 0);
 
-  secondCond=new KSpreadWidgetconditional(page,i18n("Second condition"));
-  grid1->addWidget(secondCond,1,0);
+  conditionals[1] = new KSpreadWidgetconditional(page,
+						 i18n("Second condition"));
+  grid1->addWidget(conditionals[1], 1, 0);
 
-  thirdCond=new KSpreadWidgetconditional(page,i18n("Third condition"));
-  grid1->addWidget(thirdCond,2,0);
+  conditionals[2] = new KSpreadWidgetconditional(page,i18n("Third condition"));
+  grid1->addWidget(conditionals[2], 2, 0);
 
   init();
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
@@ -314,217 +315,99 @@ KSpreadconditional::KSpreadconditional( KSpreadView* parent, const char* name,co
 
 void KSpreadconditional::init()
 {
-//init different condition
-//KSpreadConditional *tmpCondition=0;
-bool bFirstCond=false;
-bool bSecondCond=false;
-bool bThirdCond=false;
+  QValueList<KSpreadConditional> conditionList;
+  QValueList<KSpreadConditional> otherList;
+  bool found;
+  int numCondition;
 
-KSpreadConditional *tmpCondition=0;
-KSpreadConditional *tmpCondition2=0;
-KSpreadConditional *tmpCondition3=0;
-KSpreadCell *obj = m_pView->activeTable()->cellAt( marker.left(), marker.top() );
-tmpCondition=obj->getFirstCondition(0);
-if(tmpCondition!=0)
-       bFirstCond=true;
-tmpCondition2=obj->getSecondCondition(0);
-if(tmpCondition2!=0)
-       bSecondCond=true;
-tmpCondition3=obj->getThirdCondition(0);
-if(tmpCondition3!=0)
-       bThirdCond=true;
+  QValueList<KSpreadConditional>::iterator it1;
+  QValueList<KSpreadConditional>::iterator it2;
+      
+  KSpreadCell *obj = m_pView->activeTable()->cellAt( marker.left(), 
+						     marker.top() );
 
-for ( int x = marker.left(); x <= marker.right(); x++ )
-        {
-        for ( int y = marker.top(); y <= marker.bottom(); y++ )
-                {
-                KSpreadCell *obj2 = m_pView->activeTable()->cellAt( x, y );
-                if((obj2->getFirstCondition(0)!=0)&& bFirstCond)
-                        {
-                        if((obj2->getFirstCondition(0)->val1==tmpCondition->val1)&&
-                           (obj2->getFirstCondition(0)->val2==tmpCondition->val2)&&
-                           (obj2->getFirstCondition(0)->fontcond==tmpCondition->fontcond)&&
-                           (obj2->getFirstCondition(0)->colorcond==tmpCondition->colorcond)&&
-                           (obj2->getFirstCondition(0)->m_cond==tmpCondition->m_cond))
-                                {
-                                 bFirstCond=true;
-                                }
-                        else
-                                {
-                                 bFirstCond=false;
-                                }
-                        }
-                else
-                        bFirstCond=false;
+  conditionList = obj->GetConditionList(); 
+  /* this is the list, but only display the conditions common to all selected 
+     cells*/
 
-                if((obj2->getSecondCondition(0)!=0)&& bSecondCond)
-                        {
-                        if((obj2->getSecondCondition(0)->val1==tmpCondition2->val1)&&
-                           (obj2->getSecondCondition(0)->val2==tmpCondition2->val2)&&
-                           (obj2->getSecondCondition(0)->fontcond==tmpCondition2->fontcond)&&
-                           (obj2->getSecondCondition(0)->colorcond==tmpCondition2->colorcond)&&
-                           (obj2->getSecondCondition(0)->m_cond==tmpCondition2->m_cond))
-                                {
-                                 bSecondCond=true;
-                                }
-                        else
-                                {
-                                 bSecondCond=false;
-                                }
-                        }
-                else
-                        bSecondCond=false;
-
-                if((obj2->getThirdCondition(0)!=0)&& bThirdCond)
-                        {
-                        if((obj2->getThirdCondition(0)->val1==tmpCondition3->val1)&&
-                           (obj2->getThirdCondition(0)->val2==tmpCondition3->val2)&&
-                           (obj2->getThirdCondition(0)->fontcond==tmpCondition3->fontcond)&&
-                           (obj2->getThirdCondition(0)->colorcond==tmpCondition3->colorcond)&&
-                           (obj2->getThirdCondition(0)->m_cond==tmpCondition3->m_cond))
-                                {
-                                 bThirdCond=true;
-                                }
-                        else
-                                {
-                                 bThirdCond=false;
-                                }
-                        }
-                else
-                        bThirdCond=false;
-
-                }
-        }
-//kdDebug(36001)<<"Condition1 :"<<bFirstCond<<endl;
-//kdDebug(36001)<<"Condition2 :"<<bSecondCond<<endl;
-//kdDebug(36001)<<"Condition3 :"<<bThirdCond<<endl;
-
-for(int i=0;i<3;i++)
-   {
-   switch(i)
-        {
-        case 0:
-                //tmpCondition=obj->getFirstCondition(0);
-                if(bFirstCond)//tmpCondition!=0)
-                        {
-                        firstCond->init(tmpCondition);
-                        }
-                else
-                    {
-                    firstCond->disabled();
-                    }
-                break;
-        case 1:
-                //tmpCondition=obj->getSecondCondition(0);
-                if(bSecondCond)//tmpCondition!=0)
-                        {
-                        secondCond->init(tmpCondition2);
-                        }
-                else
-                    {
-                    secondCond->disabled();
-                    }
-                break;
-        case 2:
-                //tmpCondition=obj->getThirdCondition(0);
-                if(bThirdCond)//tmpCondition!=0)
-                        {
-                        thirdCond->init(tmpCondition3);
-                        }
-                else
-                    {
-                    thirdCond->disabled();
-                    }
-                break;
-        }
-
-
+  for ( int x = marker.left(); x <= marker.right(); x++ )
+  {
+    for ( int y = marker.top(); y <= marker.bottom(); y++ )
+    {
+      KSpreadCell *obj2 = m_pView->activeTable()->cellAt( x, y );
+      otherList = obj2->GetConditionList();
+      
+      it1 = conditionList.begin();
+      while(it1 != conditionList.end())
+      {
+	found = false;
+	for (it2 = otherList.begin(); !found && it2 != otherList.end(); it2++)
+	{
+	  found = ((*it1).val1 == (*it2).val1 &&
+		   (*it1).val2 == (*it2).val2 &&
+		   (*it1).colorcond == (*it2).colorcond &&
+		   (*it1).fontcond == (*it2).fontcond &&
+		   (*it1).m_cond == (*it2).m_cond);
+	}
+	
+	if (!found)  /* if it's not here, don't display this condition */
+	{
+	  it1 = conditionList.remove(it1);
+	}
+	else
+	{
+	  it1++;
+	}
+      }
     }
+  }
 
+  numCondition = 0;
+  for (it1 = conditionList.begin(); 
+       numCondition < KSPREAD_NUM_CONDITIONALS && it1 != conditionList.end(); 
+       it1++)
+  {
+    conditionals[numCondition]->init(*it1);
+    numCondition++;
+  }
+
+  /* disable the unused ones */
+  for (; numCondition < KSPREAD_NUM_CONDITIONALS; numCondition++)
+  {
+    conditionals[numCondition]->disabled();
+  }
 }
 
 void KSpreadconditional::slotOk()
 {
-KSpreadConditional tmpCond[3];
+  QValueList<KSpreadConditional> newList;
+  KSpreadConditional newCondition;
 
-if(firstCond->typeOfCondition()!=None)
+  /* copy the information from the form, put it in a list and send it to the
+     appropriate cells */
+  for (int i=0; i < KSPREAD_NUM_CONDITIONALS; i++)
   {
-    tmpCond[0].val1=firstCond->getBackFirstValue();
-    tmpCond[0].fontcond=firstCond->getFont();
-    tmpCond[0].colorcond=firstCond->getColor();
-    tmpCond[0].m_cond=firstCond->typeOfCondition();
-    if((firstCond->typeOfCondition()==Different)||
-       (firstCond->typeOfCondition()==Between))
+    if (conditionals[i]->typeOfCondition() != None)
+    {
+      newCondition.val1 = conditionals[i]->getBackFirstValue();
+      newCondition.fontcond = conditionals[i]->getFont();
+      newCondition.colorcond = conditionals[i]->getColor();
+      newCondition.m_cond = conditionals[i]->typeOfCondition();
+      if (newCondition.m_cond == Different || newCondition.m_cond == Between)
       {
-        tmpCond[0].val2=firstCond->getBackSecondValue();
+	newCondition.val2 = conditionals[i]->getBackSecondValue();
       }
-        else
-          tmpCond[0].val2=-1;
+      else
+      {
+	newCondition.val2 = -1;
+      }
+      newList.append(newCondition);
+    }
   }
- else
-   {
-     QFont font = KoGlobal::defaultFont();
-     tmpCond[0].m_cond=None;
-     tmpCond[0].fontcond=font;
-     tmpCond[0].colorcond=Qt::black;
-     tmpCond[0].val2=0;
-     tmpCond[0].val1=0;
-   }
-
- if(secondCond->typeOfCondition()!=None)
-   {
-     tmpCond[1].val1=secondCond->getBackFirstValue();
-     tmpCond[1].fontcond=secondCond->getFont();
-     tmpCond[1].colorcond=secondCond->getColor();
-     tmpCond[1].m_cond=secondCond->typeOfCondition();
-     if((secondCond->typeOfCondition()==Different)||
-        (secondCond->typeOfCondition()==Between))
-       {
-         tmpCond[1].val2=secondCond->getBackSecondValue();
-       }
-     else
-       tmpCond[1].val2=-1;
-   }
- else
-   {
-     QFont font = KoGlobal::defaultFont();
-     tmpCond[1].m_cond=None;
-     tmpCond[1].fontcond=font;
-     tmpCond[1].colorcond=Qt::black;
-     tmpCond[1].val2=0;
-     tmpCond[1].val1=0;
-   }
-
- if(thirdCond->typeOfCondition()!=None)
-   {
-     tmpCond[2].val1=thirdCond->getBackFirstValue();
-     tmpCond[2].fontcond=thirdCond->getFont();
-     tmpCond[2].colorcond=thirdCond->getColor();
-     tmpCond[2].m_cond=thirdCond->typeOfCondition();
-     if((thirdCond->typeOfCondition()==Different)||
-        (thirdCond->typeOfCondition()==Between))
-       {
-         tmpCond[2].val2=thirdCond->getBackSecondValue();
-       }
-     else
-       tmpCond[2].val2=-1;
-   }
- else
-   {
-     QFont font = KoGlobal::defaultFont();
-     tmpCond[2].m_cond=None;
-     tmpCond[2].fontcond=font;
-     tmpCond[2].colorcond=Qt::black;
-     tmpCond[2].val2=0;
-     tmpCond[2].val1=0;
-   }
-
- m_pView->activeTable()->setConditional( QPoint(  m_pView->canvasWidget()->markerColumn(),
-                                                  m_pView->canvasWidget()->markerRow() ), tmpCond );
-
- accept();
 
 
+  m_pView->activeTable()->setConditional(marker, newList);
+  accept();
 }
 
 

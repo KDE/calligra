@@ -31,6 +31,7 @@ class QFont;
 class KColorButton;
 class QComboBox;
 
+#define KSPREAD_NUM_CONDITIONALS 3
 
 class KSpreadWidgetconditional : public QWidget
 {
@@ -42,7 +43,7 @@ public:
   QFont getFont(){return font;}
   QColor getColor();
   Conditional typeOfCondition();
-  void init(KSpreadConditional *tmp);
+  void init(KSpreadConditional tmp);
 public slots:
   void changeLabelFont();
   void changeIndex(const QString &text);
@@ -65,17 +66,16 @@ class KSpreadconditional : public KDialogBase
 {
   Q_OBJECT
 public:
-KSpreadconditional(KSpreadView* parent, const char* name,const QRect &_marker );
-void init();
-public slots:
+  KSpreadconditional(KSpreadView* parent, const char* name,
+		     const QRect &_marker );
+  void init();
+  public slots:
   void slotOk();
 
 protected:
   KSpreadView* m_pView;
   QRect  marker;
-  KSpreadWidgetconditional *firstCond;
-  KSpreadWidgetconditional *secondCond;
-  KSpreadWidgetconditional *thirdCond;
+  KSpreadWidgetconditional *conditionals[KSPREAD_NUM_CONDITIONALS];
   KSpreadConditional result;
 };
 

@@ -3658,20 +3658,25 @@ void KSpreadTable::clearValiditySelection( const QPoint &_marker )
 }
 
 
-struct ClearConditionalSelectionWorker : public KSpreadTable::CellWorker {
-    ClearConditionalSelectionWorker( ) : KSpreadTable::CellWorker( ) { }
+struct ClearConditionalSelectionWorker : public KSpreadTable::CellWorker 
+{
+  ClearConditionalSelectionWorker( ) : KSpreadTable::CellWorker( ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
-	return new KSpreadUndoConditional( doc, table, r );
-    }
-    bool testCondition( KSpreadCell* cell ) {
-	return ( !cell->isObscured() );
-    }
-    void doWork( KSpreadCell* cell, bool, int, int ) {
-	cell->removeFirstCondition();
-	cell->removeSecondCondition();
-	cell->removeThirdCondition();
-    }
+  class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, 
+					     KSpreadTable* table, 
+					     QRect& r ) 
+  {
+    return new KSpreadUndoConditional( doc, table, r );
+  }
+  bool testCondition( KSpreadCell* cell ) 
+  {
+    return ( !cell->isObscured() );
+  }
+  void doWork( KSpreadCell* cell, bool, int, int ) 
+  {
+    QValueList<KSpreadConditional> emptyList;
+    cell->SetConditionList(emptyList);
+  }
 };
 
 void KSpreadTable::clearConditionalSelection( const QPoint &_marker )
@@ -3727,51 +3732,44 @@ void KSpreadTable::defaultSelection( const QPoint &_marker )
 }
 
 
-struct SetConditionalWorker : public KSpreadTable::CellWorker {
-    KSpreadConditional* tmp;
-    SetConditionalWorker( KSpreadConditional* _tmp ) : KSpreadTable::CellWorker( ), tmp( _tmp ) { }
+struct SetConditionalWorker : public KSpreadTable::CellWorker 
+{
+  QValueList<KSpreadConditional> conditionList;
+  SetConditionalWorker( QValueList<KSpreadConditional> _tmp ) : 
+    KSpreadTable::CellWorker( ), conditionList( _tmp ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
-	return new KSpreadUndoConditional( doc, table, r );
+  class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, 
+					     KSpreadTable* table, QRect& r ) 
+  {
+    return new KSpreadUndoConditional( doc, table, r );
+  }
+    
+  bool testCondition( KSpreadCell* ) 
+  {
+    return true;
+  }
+  
+  void doWork( KSpreadCell* cell, bool, int, int ) 
+  {
+    if ( !cell->isObscured() ) 
+    {
+      cell->SetConditionList(conditionList);
+      cell->setDisplayDirtyFlag();
     }
-    bool testCondition( KSpreadCell* ) {
-        return true;
-    }
-    void doWork( KSpreadCell* cell, bool, int, int ) {
-	if ( !cell->isObscured() ) {
-	    KSpreadConditional *tmpCondition = 0L;
-	    cell->setDisplayDirtyFlag();
-	    for(int i=0;i<3;i++)
-	    {
-		if(tmp[i].m_cond==None)
-		    switch ( i ) {
-                    case 0: cell->removeFirstCondition(); break;
-		    case 1: cell->removeSecondCondition(); break;
-		    case 2: cell->removeThirdCondition(); break;
-		    }
-		else
-		{
-		    switch ( i ) {
-		    case 0: tmpCondition=cell->getFirstCondition(); break;
-		    case 1: tmpCondition=cell->getSecondCondition(); break;
-		    case 2: tmpCondition=cell->getThirdCondition(); break;
-		    }
-		    tmpCondition->val1=tmp[i].val1;
-		    tmpCondition->val2=tmp[i].val2;
-		    tmpCondition->colorcond=tmp[i].colorcond;
-		    tmpCondition->fontcond=tmp[i].fontcond;
-		    tmpCondition->m_cond=tmp[i].m_cond;
-		}
-	    }
-	    cell->clearDisplayDirtyFlag();
-	}
-    }
+  }
 };
 
-void KSpreadTable::setConditional( const QPoint &_marker,KSpreadConditional tmp[3] )
+void KSpreadTable::setConditional
+  ( const QRect &_marker, QValueList<KSpreadConditional> newConditions)
 {
-    SetConditionalWorker w( tmp );
-    workOnCells( _marker, w );
+    SetConditionalWorker w( newConditions );
+    for (int x = _marker.left(); x <= _marker.right(); x++)
+    {
+      for (int y=_marker.top(); y <= _marker.bottom(); y++)
+      {
+	workOnCells( QPoint(x,y), w );
+      }
+    }
 }
 
 

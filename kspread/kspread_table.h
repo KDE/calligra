@@ -532,7 +532,8 @@ public:
     void borderBottom( const QPoint &_marker,const QColor &_color );
     void borderRight( const QPoint &_marker,const QColor &_color );
 
-    void setConditional( const QPoint &_marker,KSpreadConditional tmp[3] );
+    void setConditional( const QRect &_marker, 
+			 QValueList<KSpreadConditional> newConditions );
 
     void setValidity( const QPoint &_marker,KSpreadValidity tmp );
 

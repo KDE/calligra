@@ -46,14 +46,14 @@ QChar KSpreadCell::decimal_point = '\0';
  *****************************************************************************/
 
 KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
-  : KSpreadLayout( _table )
+  : KSpreadLayout( _table ), conditions(this)
 {
-    m_nextCell = 0;
-    m_previousCell = 0;
+  m_nextCell = 0;
+  m_previousCell = 0;
 
   m_pCode = 0;
   m_pPrivate = 0L;
-  m_pQML = 0;
+  m_pQML = NULL;
 
   m_bError = false;
 
@@ -83,11 +83,7 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_iPrecision = -1;
   m_iOutTextWidth = 0;
   m_iOutTextHeight = 0;
-  m_firstCondition = 0;
-  m_secondCondition = 0;
-  m_thirdCondition = 0;
-  m_conditionIsTrue=false;
-  m_numberOfCond=-1;
+
   m_nbLines=0;
   m_bCellTooShort=false;
   m_Validity=0;
@@ -127,34 +123,9 @@ void KSpreadCell::copyLayout( int _column, int _row )
     setDontPrintText(o->getDontprintText(_column, _row ) );
     setIndent( o->getIndent(_column, _row ) );
 
-    KSpreadConditional *tmpCondition;
-    if( o->getFirstCondition(0) )
-    {
-        tmpCondition=getFirstCondition();
-        tmpCondition->val1=o->getFirstCondition(0)->val1;
-        tmpCondition->val2=o->getFirstCondition(0)->val2;
-        tmpCondition->colorcond=o->getFirstCondition(0)->colorcond;
-        tmpCondition->fontcond=o->getFirstCondition(0)->fontcond;
-        tmpCondition->m_cond=o->getFirstCondition(0)->m_cond;
-    }
-    if( o->getSecondCondition(0) )
-    {
-        tmpCondition=getSecondCondition();
-        tmpCondition->val1=o->getSecondCondition(0)->val1;
-        tmpCondition->val2=o->getSecondCondition(0)->val2;
-        tmpCondition->colorcond=o->getSecondCondition(0)->colorcond;
-        tmpCondition->fontcond=o->getSecondCondition(0)->fontcond;
-        tmpCondition->m_cond=o->getSecondCondition(0)->m_cond;
-    }
-    if( o->getThirdCondition(0) )
-    {
-        tmpCondition=getThirdCondition();
-        tmpCondition->val1=o->getThirdCondition(0)->val1;
-        tmpCondition->val2=o->getThirdCondition(0)->val2;
-        tmpCondition->colorcond=o->getThirdCondition(0)->colorcond;
-        tmpCondition->fontcond=o->getThirdCondition(0)->fontcond;
-        tmpCondition->m_cond=o->getThirdCondition(0)->m_cond;
-    }
+    QValueList<KSpreadConditional> conditionList = o->GetConditionList();
+    conditions.SetConditionList(conditionList);
+
     setComment( o->comment(_column, _row) );
     setAngle( o->getAngle(_column, _row) );
     setFormatType( o->getFormatType(_column, _row) );
@@ -184,24 +155,13 @@ void KSpreadCell::copyContent( KSpreadCell* cell )
 void KSpreadCell::defaultStyle()
 {
   defaultStyleLayout();
-  if(m_firstCondition!=0)
-        delete m_firstCondition;
-  m_firstCondition=0;
 
-  if(m_thirdCondition!=0)
-        delete m_thirdCondition;
-  m_thirdCondition=0;
+  QValueList<KSpreadConditional> emptyList;
+  conditions.SetConditionList(emptyList);
 
-  if(m_secondCondition!=0)
-        delete m_secondCondition;
-  m_secondCondition=0;
-
-  m_conditionIsTrue=false;
-  m_numberOfCond=-1;
-
-  if(m_Validity!=0)
+  if(m_Validity != NULL)
         delete m_Validity;
-  m_Validity=0;
+  m_Validity = NULL;
 }
 
 void KSpreadCell::layoutChanged()
@@ -251,7 +211,7 @@ void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
             if ( x != _col || y != _row )
             {
                 KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
-                cell->obscure( this, _col, _row );
+                cell->obscure( this );
             }
 
     // Refresh the layout
@@ -329,11 +289,9 @@ bool KSpreadCell::isObscuringForced()
     return m_pObscuringCell->isForceExtraCells();
 }
 
-void KSpreadCell::obscure( KSpreadCell *_cell, int _col, int _row )
+void KSpreadCell::obscure( KSpreadCell *_cell )
 {
   m_pObscuringCell = _cell;
-  m_iObscuringCellsColumn = _col;
-  m_iObscuringCellsRow = _row;
 }
 
 void KSpreadCell::unobscure()
@@ -716,7 +674,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         for( c = _col + 1; !ende && c <= _col + right; ++c )
         {
             KSpreadCell *cell = m_pTable->nonDefaultCell( c, _row );
-            cell->obscure( this, _col, _row );
+            cell->obscure( this );
             ColumnLayout *cl = m_pTable->columnLayout( c );
             max_width += cl->width();
             if ( max_width >= w )
@@ -746,7 +704,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
                 for( c = _col; c <= _col + m_iExtraXCells; ++c )
                 {
                     KSpreadCell *cell = m_pTable->nonDefaultCell( c, r );
-                    cell->obscure( this, _col, _row );
+                    cell->obscure( this );
                 }
                 RowLayout *rl = m_pTable->rowLayout( r );
                 max_height += rl->height();
@@ -772,7 +730,11 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     //QPen tmpPen;
     //tmpPen.setColor( textColor( _col, _row ) );
     //setTextPen(tmpPen);
-    m_conditionIsTrue = false;
+
+
+    //    m_conditionIsTrue = false;
+
+
     //tmpPen = textPen(_col,_row);
     //// Warning: if you re-enable the line above, apply the textColorPrint
     // stuff. Never call QPainter::setPen with an invalid pen ! (David)
@@ -793,18 +755,15 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
     else if ( isBool() )
     {
-        if ( m_dValue == 0 )
-            m_strOutText = i18n("False");
-        else
-            m_strOutText = i18n("True");
+      m_strOutText = (valueBool()) ? i18n("True") : i18n("False");
     }
     else if( isDate() )
     {
-        m_strOutText=util_dateFormat( locale(), m_Date, formatType() );
+        m_strOutText=util_dateFormat( locale(), valueDate(), formatType() );
     }
     else if( isTime() )
     {
-        m_strOutText=util_timeFormat( locale(), m_Time, formatType() );
+        m_strOutText=util_timeFormat( locale(), valueTime(), formatType() );
     }
     else if ( isNumeric() )
     {
@@ -819,7 +778,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         }
 
         // Scale the value as desired by the user.
-        double v = m_dValue * factor(column(),row());
+        double v = valueDouble() * factor(column(),row());
 
         // Always unsigned ?
         if ( floatFormat( _col, _row ) == KSpreadCell::AlwaysUnsigned && v < 0.0)
@@ -868,31 +827,19 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         if( !postfix( _col, _row ).isEmpty())
                 m_strOutText += " "+postfix( _col, _row );
 
-        verifyCondition();
 
 	// This method only calculates the text, and its width.
 	// No need to bother about the color (David)
 #if 0
         // Find the correct color which depends on the conditions
         // and the sign of the value.
+	KSpreadCondition condition;
+
         if ( floatColor( _col, _row ) == KSpreadCell::NegRed && v < 0.0 )
             tmpPen.setColor( Qt::red );
-        else if( m_conditionIsTrue )
+        else if( conditions.GetCurrentCondition(condition) )
         {
-            KSpreadConditional *tmpCondition=0;
-            switch(m_numberOfCond)
-            {
-            case 0:
-                tmpCondition=m_firstCondition;
-                break;
-            case 1:
-                tmpCondition=m_secondCondition;
-                break;
-            case 2:
-                tmpCondition=m_thirdCondition;
-                break;
-            }
-            tmpPen.setColor(tmpCondition->colorcond);
+            tmpPen.setColor(condition.colorcond);
         }
 #endif
     }
@@ -924,27 +871,16 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     //
     // Determine the correct font
     //
-    if( m_conditionIsTrue && !m_pTable->getShowFormula() )
+    KSpreadConditional condition;
+    if( conditions.GetCurrentCondition(condition) && 
+	!m_pTable->getShowFormula() )
     {
-        /// ### this kind of code would be much better handled with an array or a list.....
-        KSpreadConditional *tmpCondition=0;
-        switch(m_numberOfCond)
-        {
-        case 0:
-            tmpCondition = m_firstCondition;
-            break;
-        case 1:
-            tmpCondition = m_secondCondition;
-            break;
-        case 2:
-            tmpCondition = m_thirdCondition;
-            break;
-        }
-        _painter.setFont( tmpCondition->fontcond );
+        _painter.setFont( condition.fontcond );
     }
     else
+    {
         _painter.setFont( textFont(_col,_row ) );
-
+    }
     // Calculate text dimensions
     textSize(_painter);
 
@@ -1116,7 +1052,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
                 for( int i = m_iColumn + 1; i <= c; ++i )
                 {
                     KSpreadCell *cell = m_pTable->nonDefaultCell( i, m_iRow );
-                    cell->obscure( this, m_iColumn, m_iRow );
+                    cell->obscure( this );
                 }
                 m_iExtraXCells = c - m_iColumn;
                 //Not enough space
@@ -1222,104 +1158,6 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     return localizedNumber;
 }
 
-void KSpreadCell::verifyCondition()
-{
-    m_numberOfCond=-1;
-    double v = m_dValue * factor(column(),row());
-    m_conditionIsTrue = false;
-    KSpreadConditional *tmpCondition = 0;
-
-    if( isNumeric() && !m_pTable->getShowFormula())
-    {
-        for(int i=0;i<3;i++)
-        {
-            switch(i)
-            {
-            case 0:
-                tmpCondition=m_firstCondition;
-                break;
-            case 1:
-                tmpCondition=m_secondCondition;
-                break;
-            case 2:
-                tmpCondition=m_thirdCondition;
-                break;
-            }
-
-            if( tmpCondition != 0 && tmpCondition->m_cond != None )
-            {
-
-                switch(tmpCondition->m_cond)
-                {
-                case Equal :
-                    if(v == tmpCondition->val1 )
-                    {
-                        m_conditionIsTrue=true;
-                        m_numberOfCond=i;
-                    }
-                    break;
-
-                case Superior :
-                    if( v > tmpCondition->val1 )
-                    {
-                        m_conditionIsTrue=true;
-                        m_numberOfCond=i;
-                    }
-                    break;
-
-                case Inferior :
-                    if(v < tmpCondition->val1 )
-                    {
-                        m_conditionIsTrue=true;
-                        m_numberOfCond=i;
-                    }
-                    break;
-
-                case SuperiorEqual :
-                    if( v >= tmpCondition->val1 )
-                    {
-                        m_conditionIsTrue=true;
-                        m_numberOfCond=i;
-                    }
-                    break;
-
-                case InferiorEqual :
-                    if(v <= tmpCondition->val1 )
-                    {
-                        m_conditionIsTrue=true;
-                        m_numberOfCond=i;
-                    }
-                    break;
-
-                case Between :
-                    if( ( v > QMIN(tmpCondition->val1, tmpCondition->val2 ) ) &&
-                        ( v < QMAX(tmpCondition->val1, tmpCondition->val2 ) ) )
-                    {
-                        m_conditionIsTrue=true;
-                        m_numberOfCond=i;
-                    }
-                    break;
-
-                case Different :
-                    if( ( v < QMIN(tmpCondition->val1, tmpCondition->val2 ) ) ||
-                        ( v > QMAX(tmpCondition->val1, tmpCondition->val2) ) )
-                    {
-                        m_conditionIsTrue=true;
-                        m_numberOfCond=i;
-                    }
-                    break;
-
-                default:
-                    kdDebug(36001) << "Pb in Conditional" << endl;
-
-                    m_conditionIsTrue = false;
-                    break;
-                }
-
-            }
-        }
-    }
-}
 
 void KSpreadCell::offsetAlign( int _col,int _row )
 {
@@ -1476,23 +1314,12 @@ void KSpreadCell::textSize( QPainter &_paint )
 
 void KSpreadCell::conditionAlign(QPainter &_paint,int _col,int _row)
 {
-    KSpreadConditional *tmpCondition = 0;
+    KSpreadConditional condition;
 
-    if( m_conditionIsTrue && !m_pTable->getShowFormula() )
+    if( conditions.GetCurrentCondition(condition) && 
+	!m_pTable->getShowFormula() )
     {
-        switch(m_numberOfCond)
-        {
-        case 0:
-            tmpCondition=m_firstCondition;
-            break;
-        case 1:
-            tmpCondition=m_secondCondition;
-            break;
-        case 2:
-            tmpCondition=m_thirdCondition;
-            break;
-        }
-        _paint.setFont( tmpCondition->fontcond );
+        _paint.setFont( condition.fontcond );
     }
     else
     {
@@ -1689,7 +1516,7 @@ bool KSpreadCell::calc()
     m_dataType = NumericData;
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
-    m_strFormulaOut = createFormat( m_dValue, m_iColumn, m_iRow );
+    m_strFormulaOut = createFormat( valueDouble(), m_iColumn, m_iRow );
   }
   else if ( context.value()->type() == KSValue::IntType )
   {
@@ -1699,7 +1526,7 @@ bool KSpreadCell::calc()
 
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
-    m_strFormulaOut = createFormat( m_dValue, m_iColumn, m_iRow );
+    m_strFormulaOut = createFormat( valueDouble(), m_iColumn, m_iRow );
   }
   else if ( context.value()->type() == KSValue::BoolType )
   {
@@ -1713,36 +1540,36 @@ bool KSpreadCell::calc()
   {
     m_bError =false;
     m_dataType = TimeData;
-    m_Time=context.value()->timeValue();
+    m_Time = context.value()->timeValue();
 
     //change format
     FormatType tmpFormat = formatType();
     if( tmpFormat != SecondeTime &&  tmpFormat != Time_format1 &&  tmpFormat != Time_format2
     && tmpFormat != Time_format3)
         {
-        m_strFormulaOut = locale()->formatTime(m_Time,false);
+        m_strFormulaOut = locale()->formatTime(valueTime(), false);
         setFormatType(Time);
         }
     else
         {
-        m_strFormulaOut = util_timeFormat( locale(), m_Time, formatType());
+        m_strFormulaOut = util_timeFormat(locale(), valueTime(), formatType());
         }
   }
   else if ( context.value()->type() == KSValue::DateType)
   {
     m_bError =false;
     m_dataType = DateData;
-    m_Date=context.value()->dateValue();
+    m_Date = context.value()->dateValue();
     FormatType tmpFormat = formatType();
     if( tmpFormat != TextDate
         && !(tmpFormat>=200 &&tmpFormat<=216))
     {
         setFormatType(ShortDate);
-        m_strFormulaOut = locale()->formatDate(m_Date,true);
+        m_strFormulaOut = locale()->formatDate(valueDate(), true);
     }
     else
     {
-        m_strFormulaOut = util_dateFormat( locale(), m_Date, tmpFormat);
+        m_strFormulaOut = util_dateFormat( locale(), valueDate(), tmpFormat);
     }
   }
   else if ( context.value()->type() == KSValue::Empty )
@@ -1752,7 +1579,7 @@ bool KSpreadCell::calc()
     m_dataType = StringData;
     // Format the result appropriately
     setFormatType(Number);
-    m_strFormulaOut = createFormat( m_dValue, m_iColumn, m_iRow );
+    m_strFormulaOut = createFormat( valueDouble(), m_iColumn, m_iRow );
   }
   else
   {
@@ -1897,7 +1724,8 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     {
         _painter.save();
         m_pObscuringCell->paintCell( _rect, _painter,
-                                     m_iObscuringCellsColumn, m_iObscuringCellsRow, _prect );
+                                     m_pObscuringCell->column(), 
+				     m_pObscuringCell->row(), _prect );
         _painter.restore();
         m_bLayoutDirtyFlag = FALSE;
         return;
@@ -2275,31 +2103,20 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         //_painter.setPen( textPen(_col,_row) );
 
         // #### Torben: This looks like duplication to me
-        verifyCondition();
-        if(m_conditionIsTrue && !m_pTable->getShowFormula())
+	KSpreadConditional condition;
+
+        if(conditions.GetCurrentCondition(condition) && 
+	   !m_pTable->getShowFormula())
         {
-            KSpreadConditional *tmpCondition=0;
-            switch(m_numberOfCond)
-            {
-            case 0:
-                tmpCondition=m_firstCondition;
-                break;
-            case 1:
-                tmpCondition=m_secondCondition;
-                break;
-            case 2:
-                tmpCondition=m_thirdCondition;
-                break;
-            }
-            _painter.setFont( tmpCondition->fontcond );
-            tmpPen.setColor( tmpCondition->colorcond );
+            _painter.setFont( condition.fontcond );
+            tmpPen.setColor( condition.colorcond );
         }
         else
         {
             _painter.setFont( textFont(_col,_row ) );
             if( isNumeric() && !m_pTable->getShowFormula() )
             {
-                double v = m_dValue * factor(column(),row());
+                double v = valueDouble() * factor(column(),row());
                 if ( floatColor( _col, _row) == KSpreadCell::NegRed && v < 0.0 && !m_pTable->getShowFormula() )
                     tmpPen.setColor( Qt::red );
                 //else
@@ -2326,7 +2143,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                 m_strOutText=textDisplaying(_painter);
 
         //hide zero
-        if(m_pTable->getHideZero() && isNumeric() && m_dValue * factor(column(),row())==0)
+        if(m_pTable->getHideZero() && isNumeric() && valueDouble() * factor(column(),row())==0)
             m_strOutText=QString::null;
         ColumnLayout *cl1 = m_pTable->columnLayout( column() );
         RowLayout *rl1 = m_pTable->rowLayout( row() );
@@ -2444,7 +2261,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	    m_iOutTextHeight=tmpHeight;
 	    m_iOutTextWidth=tmpWidth;
 	  }
-        if(m_pTable->getHideZero() && isNumeric() &&   m_dValue * factor(column(),row())==0)
+        if(m_pTable->getHideZero() && isNumeric() &&   valueDouble() * factor(column(),row())==0)
                 m_strOutText=tmpText;
         cl1 = m_pTable->columnLayout( column() );
         rl1 = m_pTable->rowLayout( row() );
@@ -2647,7 +2464,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter)
         if( formatType()!=Scientific)
                 {
                 int p = (precision(column(),row())  == -1) ? 8 : precision(column(),row());
-                double value =m_dValue * factor(column(),row());
+                double value =valueDouble() * factor(column(),row());
                 int pos=0;
                 QString localizedNumber= QString::number( (value), 'E', p);
                 if((pos=localizedNumber.find('.'))!=-1)
@@ -3261,243 +3078,179 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
 
 bool KSpreadCell::testValidity()
 {
-    bool valid=false;
-    if(m_Validity!=0)
+    bool valid = false;
+    if( m_Validity != NULL )
     {
-        if(m_Validity->m_allow==Allow_Number)
-        {
-            if(isNumeric())
-            {
-                switch( m_Validity->m_cond)
-                {
-                    case Equal:
-                        if(m_dValue ==m_Validity->valMin)
-                            valid=true;
-                        break;
-                    case Superior:
-                        if(m_dValue >m_Validity->valMin)
-                            valid=true;
-                        break;
-                    case Inferior:
-                        if(m_dValue <m_Validity->valMin)
-                            valid=true;
-                        break;
-                    case SuperiorEqual:
-                        if(m_dValue >=m_Validity->valMin)
-                            valid=true;
-                        break;
-                    case InferiorEqual:
-                        if(m_dValue <=m_Validity->valMin)
-                            valid=true;
-                        break;
-                    case Between:
-                        if(m_dValue >=m_Validity->valMin && m_dValue <=m_Validity->valMax)
-                            valid=true;
-                        break;
-                    case Different:
-                        if(m_dValue <m_Validity->valMin || m_dValue >m_Validity->valMax)
-                            valid=true;
-                        break;
-                    default :
-                        break;
-
-                }
-
-            }
-
+      if( isNumeric() &&
+	  (m_Validity->m_allow == Allow_Number || 
+	   (m_Validity->m_allow == Allow_Integer && 
+	    valueDouble() == ceil(valueDouble()))))
+      {
+	switch( m_Validity->m_cond)
+	{
+	  case Equal:
+	    valid = ( valueDouble() - m_Validity->valMin < DBL_EPSILON
+		      && valueDouble() - m_Validity->valMin > 
+		      (0.0 - DBL_EPSILON));
+	    break;
+          case Superior:
+	    valid = (valueDouble() > m_Validity->valMin);
+	    break;
+          case Inferior:
+	    valid = (valueDouble()  <m_Validity->valMin);
+	    break;
+          case SuperiorEqual:
+	    valid = (valueDouble() >= m_Validity->valMin);
+            break;
+          case InferiorEqual:
+	    valid = (valueDouble() <= m_Validity->valMin);
+	    break;
+	  case Between:
+	    valid = ( valueDouble() >= m_Validity->valMin && 
+		      valueDouble() <= m_Validity->valMax);
+	    break;
+	  case Different:
+	    valid = (valueDouble() < m_Validity->valMin || 
+		     valueDouble() > m_Validity->valMax);
+	    break;
+	  default :
+	    break;
         }
-        if(m_Validity->m_allow==Allow_Integer)
+      }
+      else if(m_Validity->m_allow==Allow_Text)
+      {
+	valid = ( m_dataType == StringData );
+      }
+      else if(m_Validity->m_allow==Allow_TextLength)
+      {
+	if( m_dataType == StringData )
         {
-            if(isNumeric() && (m_dValue==ceil(m_dValue)) )
-            {
-                switch( m_Validity->m_cond)
-                {
-                    case Equal:
-                        if(m_dValue ==m_Validity->valMin)
-                            valid=true;
-                        break;
-                    case Superior:
-                        if(m_dValue >m_Validity->valMin)
-                            valid=true;
-                        break;
-                    case Inferior:
-                        if(m_dValue <m_Validity->valMin)
-                            valid=true;
-                        break;
-                    case SuperiorEqual:
-                        if(m_dValue >=m_Validity->valMin)
-                            valid=true;
-                        break;
-                    case InferiorEqual:
-                        if(m_dValue <=m_Validity->valMin)
-                            valid=true;
-                        break;
-                    case Between:
-                        if(m_dValue >=m_Validity->valMin && m_dValue <=m_Validity->valMax)
-                            valid=true;
-                        break;
-                    case Different:
-                        if(m_dValue <m_Validity->valMin || m_dValue >m_Validity->valMax)
-                            valid=true;
-                        break;
-                    default :
-                        break;
+	  int len = m_strOutText.length();
+	  switch( m_Validity->m_cond)
+	  {
+	    case Equal:
+	      if (len == m_Validity->valMin)
+		valid = true;
+	      break;
+	    case Superior:
+	      if(len > m_Validity->valMin)
+		valid = true;
+	      break;
+	    case Inferior:
+	      if(len < m_Validity->valMin)
+		valid = true;
+	      break;
+	    case SuperiorEqual:
+	      if(len >= m_Validity->valMin)
+		valid = true;
+	      break;
+	    case InferiorEqual:
+	      if(len <= m_Validity->valMin)
+		valid = true;
+	      break;
+	    case Between:
+	      if(len >= m_Validity->valMin && len <= m_Validity->valMax)
+		valid = true;
+	      break;
+	    case Different:
+	      if(len <m_Validity->valMin || len >m_Validity->valMax)
+		valid = true;
+	      break;
+	    default :
+	      break;
+	  }
+	}
+      }
 
-                }
+      else if(m_Validity->m_allow == Allow_Time && isTime())
+      {
+	switch( m_Validity->m_cond)
+	{
+	  case Equal:
+	    valid = (valueTime() == m_Validity->timeMin);
+	    break;
+	  case Superior:
+	    valid = (valueTime() > m_Validity->timeMin);
+	    break;
+	  case Inferior:
+	    valid = (valueTime() < m_Validity->timeMin);
+	    break;
+	  case SuperiorEqual:
+	    valid = (valueTime() >= m_Validity->timeMin);
+	    break;
+	  case InferiorEqual:
+	    valid = (valueTime() <= m_Validity->timeMin);
+	    break;
+	  case Between:
+	    valid = (valueTime() >= m_Validity->timeMin && 
+		     valueTime() <= m_Validity->timeMax);
+	    break;
+  	  case Different:
+	    valid = (valueTime() < m_Validity->timeMin || 
+		     valueTime() > m_Validity->timeMax);
+	    break;
+	  default :
+	    break;
 
-            }
+	}
+      }
+      else if(m_Validity->m_allow == Allow_Date && isDate())
+      {
+	switch( m_Validity->m_cond)
+	{
+	  case Equal:
+	    valid = (valueDate() == m_Validity->dateMin);
+	    break;
+	  case Superior:
+	    valid = (valueDate() > m_Validity->dateMin);
+	    break;
+	  case Inferior:
+	    valid = (valueDate() < m_Validity->dateMin);
+	    break;
+	  case SuperiorEqual:
+	    valid = (valueDate() >= m_Validity->dateMin);
+	    break;
+	  case InferiorEqual:
+	    valid = (valueDate() <= m_Validity->dateMin);
+	    break;
+	  case Between:
+	    valid = (valueDate() >= m_Validity->dateMin && 
+		     valueDate() <= m_Validity->dateMax);
+	    break;
+	  case Different:
+	    valid = (valueDate() < m_Validity->dateMin || 
+		     valueDate() > m_Validity->dateMax);
+	    break;
+	  default :
+	    break;
 
-        }
-        else if(m_Validity->m_allow==Allow_Text)
-        {
-            if( m_dataType == StringData )
-                valid=true;
-        }
-        else if(m_Validity->m_allow==Allow_TextLength)
-        {
-            if( m_dataType == StringData )
-            {
-                int len=m_strOutText.length();
-                switch( m_Validity->m_cond)
-                {
-                    case Equal:
-                        if(len ==m_Validity->valMin)
-                            valid=true;
-                        break;
-                    case Superior:
-                        if(len >m_Validity->valMin)
-                            valid=true;
-                        break;
-                    case Inferior:
-                        if(len <m_Validity->valMin)
-                            valid=true;
-                        break;
-                    case SuperiorEqual:
-                        if(len >=m_Validity->valMin)
-                            valid=true;
-                        break;
-                    case InferiorEqual:
-                        if(len <=m_Validity->valMin)
-                            valid=true;
-                        break;
-                    case Between:
-                        if(len >=m_Validity->valMin && len <=m_Validity->valMax)
-                            valid=true;
-                        break;
-                    case Different:
-                        if(len <m_Validity->valMin || len >m_Validity->valMax)
-                            valid=true;
-                        break;
-                    default :
-                        break;
-                }
-            }
-        }
-
-        else if(m_Validity->m_allow==Allow_Time)
-        {
-            if(isTime())
-            {
-                switch( m_Validity->m_cond)
-                {
-                    case Equal:
-                        if(m_Time ==m_Validity->timeMin)
-                            valid=true;
-                        break;
-                    case Superior:
-                        if(m_Time >m_Validity->timeMin)
-                            valid=true;
-                        break;
-                    case Inferior:
-                        if(m_Time <m_Validity->timeMin)
-                            valid=true;
-                        break;
-                    case SuperiorEqual:
-                        if(m_Time >=m_Validity->timeMin)
-                            valid=true;
-                        break;
-                    case InferiorEqual:
-                        if(m_Time <=m_Validity->timeMin)
-                            valid=true;
-                        break;
-                    case Between:
-                        if(m_Time >=m_Validity->timeMin && m_Time <=m_Validity->timeMax)
-                            valid=true;
-                        break;
-                    case Different:
-                        if(m_Time <m_Validity->timeMin || m_Time >m_Validity->timeMax)
-                            valid=true;
-                        break;
-                    default :
-                        break;
-
-                }
-            }
-        }
-        else if(m_Validity->m_allow==Allow_Date)
-        {
-            if(isDate())
-            {
-                switch( m_Validity->m_cond)
-                {
-                    case Equal:
-                        if(m_Date ==m_Validity->dateMin)
-                            valid=true;
-                        break;
-                    case Superior:
-                        if(m_Date >m_Validity->dateMin)
-                            valid=true;
-                        break;
-                    case Inferior:
-                        if(m_Date <m_Validity->dateMin)
-                            valid=true;
-                        break;
-                    case SuperiorEqual:
-                        if(m_Date>=m_Validity->dateMin)
-                            valid=true;
-                        break;
-                    case InferiorEqual:
-                        if(m_Date <=m_Validity->dateMin)
-                            valid=true;
-                        break;
-                    case Between:
-                        if(m_Date >=m_Validity->dateMin && m_Date <=m_Validity->dateMax)
-                            valid=true;
-                        break;
-                    case Different:
-                        if(m_Date <m_Validity->dateMin || m_Date >m_Validity->dateMax)
-                            valid=true;
-                        break;
-                    default :
-                        break;
-
-                }
-            }
-        }
-
+	}
+      }
     }
     else
-        valid= true;
-
-    if(!valid &&m_Validity!=0 )
     {
-        switch (m_Validity->m_action)
-        {
-            case Stop:
-                KMessageBox::error((QWidget*)0L , m_Validity->message,m_Validity->title);
-                break;
-            case Warning:
-                KMessageBox::warningYesNo((QWidget*)0L , m_Validity->message,m_Validity->title);
-                break;
-            case Information:
-                KMessageBox::information((QWidget*)0L , m_Validity->message,m_Validity->title);
-                break;
-        }
+      valid= true;
     }
-    if(!valid && m_Validity!=0 && m_Validity->m_action==Stop)
-        return false;
-    else
-        return true;
+
+    if(!valid &&m_Validity != NULL )
+    {
+      switch (m_Validity->m_action)
+      {
+        case Stop:
+	  KMessageBox::error((QWidget*)0L, m_Validity->message,
+			     m_Validity->title);
+	  break;
+        case Warning:
+	  KMessageBox::warningYesNo((QWidget*)0L, m_Validity->message,
+				    m_Validity->title);
+	  break;
+        case Information:
+	  KMessageBox::information((QWidget*)0L, m_Validity->message,
+				   m_Validity->title);
+	  break;
+      }
+    }
+    return (valid || m_Validity == NULL || m_Validity->m_action != Stop);
 }
 
 void KSpreadCell::setValue( double _d )
@@ -3707,7 +3460,6 @@ void KSpreadCell::checkTextInput()
         m_dValue = money;
         m_dataType = NumericData;
         setFormatType(Money);
-        //m_strText=QString::number(m_dValue); ?
         setFactor(1.0);
         setPrecision(2);
         return;
@@ -3720,13 +3472,13 @@ void KSpreadCell::checkTextInput()
            !(tmpFormat>=200 && tmpFormat<=216)) // ###
         {
             //test if it's a short date or text date.
-            if((locale()->formatDate(m_Date,false)==str))
+            if((locale()->formatDate(valueDate(), false) == str))
                 setFormatType(TextDate);
             else
                 setFormatType(ShortDate);
         }
         // Parsing as date acts like an autoformat: we even change m_strText
-        m_strText = locale()->formatDate(m_Date,true); //short format date
+        m_strText = locale()->formatDate(valueDate(), true); //short format date
         return;
     }
 
@@ -3738,7 +3490,7 @@ void KSpreadCell::checkTextInput()
             && tmpFormat!=Time_format2 && tmpFormat!=Time_format3)
             setFormatType(Time);
         // Parsing as time acts like an autoformat: we even change m_strText
-        m_strText=locale()->formatTime(m_Time,true);
+        m_strText=locale()->formatTime(valueTime(), true);
         return;
     }
 
@@ -3827,7 +3579,6 @@ bool KSpreadCell::tryParseDate( const QString& str )
         //if ( str.contains( ' ' ) == 0 )  //No spaces " " in short dates...
         {
             m_dataType = DateData;
-            m_dValue = 0;
             m_Date = tmpDate;
             return true;
         }
@@ -3867,7 +3618,6 @@ bool KSpreadCell::tryParseTime( const QString& str )
     if(valid)
     {
         m_dataType = TimeData;
-        m_dValue = 0;
         m_Time = tmpTime;
     }
     return valid;
@@ -3877,11 +3627,8 @@ void KSpreadCell::checkNumberFormat()
 {
     if ( formatType() == Number && m_dataType == NumericData )
     {
-        if ( m_dValue > 1e+10 )
+        if ( valueDouble() > 1e+10 )
             setFormatType( Scientific );
-        // We're already in Number format !
-        //else
-        //    setFormatType( Number );
     }
 }
 
@@ -3930,46 +3677,11 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         format.setAttribute( "style", (int)m_style );
 
 
-    if( ( m_firstCondition != 0 ) || ( m_secondCondition != 0 ) || ( m_thirdCondition != 0 ) )
+    QDomElement conditionElement = conditions.SaveConditions(doc);
+    
+    if ( !conditionElement.isNull() )
     {
-        QDomElement condition = doc.createElement("condition");
-
-        if( m_firstCondition != 0 )
-        {
-            QDomElement first=doc.createElement("first");
-            first.setAttribute("cond",(int)m_firstCondition->m_cond);
-            first.setAttribute("val1",m_firstCondition->val1);
-            first.setAttribute("val2",m_firstCondition->val2);
-            first.setAttribute("color",m_firstCondition->colorcond.name());
-            first.appendChild( createElement( "font", m_firstCondition->fontcond, doc ) );
-
-            condition.appendChild(first);
-        }
-        if( m_secondCondition != 0 )
-        {
-            QDomElement second=doc.createElement("second");
-            second.setAttribute("cond",(int)m_secondCondition->m_cond);
-            second.setAttribute("val1",m_secondCondition->val1);
-            second.setAttribute("val2",m_secondCondition->val2);
-            second.setAttribute("color",m_secondCondition->colorcond.name());
-            second.appendChild( createElement( "font", m_secondCondition->fontcond, doc ) );
-
-
-            condition.appendChild(second);
-        }
-        if( m_thirdCondition != 0 )
-        {
-            QDomElement third=doc.createElement("third");
-            third.setAttribute("cond",(int)m_thirdCondition->m_cond);
-            third.setAttribute("val1",m_thirdCondition->val1);
-            third.setAttribute("val2",m_thirdCondition->val2);
-            third.setAttribute("color",m_thirdCondition->colorcond.name());
-            third.appendChild( createElement( "font", m_thirdCondition->fontcond, doc ) );
-
-
-            condition.appendChild(third);
-        }
-        cell.appendChild( condition );
+      cell.appendChild( conditionElement );
     }
 
     if( m_Validity!=0 )
@@ -4065,11 +3777,11 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
             if( m_dataType == DateData )
             {
                 str = "%1/%2/%3";
-                str = str.arg(m_Date.year()).arg(m_Date.month()).arg(m_Date.day());
+                str = str.arg(valueDate().year()).arg(valueDate().month()).arg(valueDate().day());
             }
             else if( m_dataType == TimeData )
             {
-                str = m_Time.toString();
+                str = valueTime().toString();
             }
             else if ( m_dataType == BoolData )
             {
@@ -4079,7 +3791,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
             }
             else if ( m_dataType == NumericData )
             {
-                str = QString::number(m_dValue, 'g', DBL_DIG);
+                str = QString::number(valueDouble(), 'g', DBL_DIG);
             }
             text.appendChild( doc.createTextNode( str ) );
             cell.appendChild( text );
@@ -4170,94 +3882,10 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     //
     // Load the condition section of a cell.
     //
-    QDomElement condition = cell.namedItem( "condition" ).toElement();
-    if ( !condition.isNull())
+    QDomElement conditionsElement = cell.namedItem( "condition" ).toElement();
+    if ( !conditionsElement.isNull())
     {
-        QDomElement first = condition.namedItem( "first" ).toElement();
-        if(!first.isNull())
-        {
-            m_firstCondition=new KSpreadConditional;
-            if ( first.hasAttribute( "cond" ) )
-            {
-                m_firstCondition->m_cond =(Conditional) first.attribute("cond").toInt( &ok );
-                if ( !ok ) return false;
-            }
-            if(first.hasAttribute("val1"))
-            {
-                m_firstCondition->val1 =first.attribute("val1").toDouble( &ok );
-                if ( !ok ) return false;
-            }
-            if(first.hasAttribute("val2"))
-            {
-                m_firstCondition->val2 =first.attribute("val2").toDouble( &ok );
-                if ( !ok ) return false;
-            }
-            if(first.hasAttribute("color"))
-            {
-                m_firstCondition->colorcond=QColor(first.attribute( "color"));
-            }
-            QDomElement font = first.namedItem( "font" ).toElement();
-            if ( !font.isNull() )
-                m_firstCondition->fontcond=toFont(font) ;
-
-        }
-
-        QDomElement second = condition.namedItem( "second" ).toElement();
-        if(!second.isNull())
-        {
-            m_secondCondition=new KSpreadConditional;
-            if ( second.hasAttribute( "cond" ) )
-            {
-                m_secondCondition->m_cond =(Conditional) second.attribute("cond").toInt( &ok );
-                if ( !ok ) return false;
-            }
-            if(second.hasAttribute("val1"))
-            {
-                m_secondCondition->val1 =second.attribute("val1").toDouble( &ok );
-                if ( !ok ) return false;
-            }
-            if(second.hasAttribute("val2"))
-            {
-                m_secondCondition->val2 =second.attribute("val2").toDouble( &ok );
-                if ( !ok ) return false;
-            }
-            if(second.hasAttribute("color"))
-            {
-                m_secondCondition->colorcond=QColor(second.attribute( "color"));
-            }
-            QDomElement font = second.namedItem( "font" ).toElement();
-            if ( !font.isNull() )
-                m_secondCondition->fontcond=toFont(font) ;
-
-        }
-
-        QDomElement third = condition.namedItem( "third" ).toElement();
-        if(!third.isNull())
-        {
-            m_thirdCondition=new KSpreadConditional;
-            if ( third.hasAttribute( "cond" ) )
-            {
-                m_thirdCondition->m_cond =(Conditional) third.attribute("cond").toInt( &ok );
-                if ( !ok ) return false;
-            }
-            if(third.hasAttribute("val1"))
-            {
-                m_thirdCondition->val1 =third.attribute("val1").toDouble( &ok );
-                if ( !ok ) return false;
-            }
-            if(third.hasAttribute("val2"))
-            {
-                m_thirdCondition->val2 =third.attribute("val2").toDouble( &ok );
-                if ( !ok ) return false;
-            }
-            if(third.hasAttribute("color"))
-            {
-                m_thirdCondition->colorcond=QColor(third.attribute( "color"));
-            }
-            QDomElement font = third.namedItem( "font" ).toElement();
-            if ( !font.isNull() )
-                m_thirdCondition->fontcond=toFont(font) ;
-        }
+      conditions.LoadConditions( conditionsElement );
     }
 
     QDomElement validity = cell.namedItem( "validity" ).toElement();
@@ -4398,7 +4026,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 
             if ( newStyleLoading )
             {
-                m_dValue = 0;
+                m_dValue = 0.0;
                 m_bError = false;
                 switch ( m_dataType ) {
                 case BoolData:
@@ -4443,8 +4071,8 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
                     int month = t.mid(pos+1,((pos1-1)-pos)).toInt();
                     int day = t.right(t.length()-pos1-1).toInt();
                     m_Date = QDate(year,month,day);
-                    if(m_Date.isValid() ) // Should always be the case for new docs
-                        m_strText = locale()->formatDate( m_Date, true );
+                    if(valueDate().isValid() ) // Should always be the case for new docs
+                        m_strText = locale()->formatDate( valueDate(), true );
                     else { // This happens with old docs, when format is set wrongly to date
                         m_strText = pasteOperation( t, m_strText, op );
                         checkTextInput();
@@ -4463,8 +4091,8 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
                     minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
                     second = t.right(t.length()-pos1-1).toInt();
                     m_Time = QTime(hours,minutes,second);
-                    if(m_Time.isValid() ) // Should always be the case for new docs
-                        m_strText = locale()->formatTime( m_Time, true );
+                    if(valueTime().isValid() ) // Should always be the case for new docs
+                        m_strText = locale()->formatTime( valueTime(), true );
                     else { // This happens with old docs, when format is set wrongly to time
                         m_strText = pasteOperation( t, m_strText, op );
                         checkTextInput();
@@ -4501,7 +4129,7 @@ QTime KSpreadCell::toTime(QDomElement &element)
     minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
     second = t.right(t.length()-pos1-1).toInt();
     m_Time = QTime(hours,minutes,second);
-    return m_Time;
+    return valueTime();
 }
 
 QDate KSpreadCell::toDate(QDomElement &element)
@@ -4518,7 +4146,7 @@ QDate KSpreadCell::toDate(QDomElement &element)
     month = t.mid(pos+1,((pos1-1)-pos)).toInt();
     day = t.right(t.length()-pos1-1).toInt();
     m_Date = QDate(year,month,day);
-    return m_Date;
+    return valueDate();
 }
 
 const char* KSpreadCell::s_dataTypeToString[] = {
@@ -4676,13 +4304,6 @@ KSpreadCell::~KSpreadCell()
     if ( m_pQML )
         delete m_pQML;
 
-    if(m_firstCondition!=0)
-        delete m_firstCondition;
-    if(m_thirdCondition!=0)
-        delete m_thirdCondition;
-    if(m_secondCondition!=0)
-        delete m_secondCondition;
-
     if(m_Validity!=0)
         delete m_Validity;
 
@@ -4816,6 +4437,26 @@ void KSpreadCell::NotifyDependancyList(QPtrList<KSpreadDependency> lst, bool isD
       }
     }
   }
+}
+
+int KSpreadCell::obscuringCellsColumn()
+{
+  return (m_pObscuringCell != NULL) ? m_pObscuringCell->column() : 0;
+}
+
+int KSpreadCell::obscuringCellsRow()
+{
+  return (m_pObscuringCell != NULL) ? m_pObscuringCell->row() : 0;
+}
+
+QValueList<KSpreadConditional> KSpreadCell::GetConditionList()
+{
+  return conditions.GetConditionList();
+}
+
+void KSpreadCell::SetConditionList(QValueList<KSpreadConditional> newList)
+{
+  conditions.SetConditionList(newList);
 }
 
 /***************************************************
