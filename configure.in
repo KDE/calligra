@@ -150,8 +150,10 @@ AC_OUTPUT( \
 	kimage/Makefile \
 	kimage/pics/Makefile \
 	kimageshop/Makefile \
-	kimageshop/canvas/Makefile \
 	kimageshop/pics/Makefile \
+	kimageshop/data/Makefile \
+	kimageshop/data/brushes/Makefile \
+	kimageshop/data/images/Makefile \
    	kpresenter/Makefile \
 	kpresenter/autoformEdit/Makefile \
 	kpresenter/autoforms/Makefile \

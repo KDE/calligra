@@ -7,4 +7,4 @@ data_DATA = add_point.xpm airbrush.xpm areaselect.xpm centrejust.xpm \
             filenew.xpm fileopen.xpm line.xpm pen.xpm rectangle.xpm redo.xpm \
             roundangle.xpm spraycan.xpm undo.xpm viewmag+.xpm viewmag-.xpm \
             viewmag.xpm viewzoom.xpm originalsize.xpm fittoview.xpm \
-            fitwithprops.xpm
+            fitwithprops.xpm eye.xpm link.xpm

@@ -25,6 +25,8 @@
 
 #include <kapp.h>
 #include <kimgio.h>
+#include <kstddirs.h>
+#include <kglobal.h>
 
 #include <komlParser.h>
 #include <komlStreamFeed.h>
@@ -72,21 +74,30 @@ KImageShopDoc::KImageShopDoc()
   m_pCanvas = new Canvas( 510, 515 );
 
   // load some test layers
-  m_pCanvas->addRGBLayer("canvas/images/cam9b.jpg");
+  QString _image = locate("data", "kimageshop/images/cam9b.jpg");	
+  m_pCanvas->addRGBLayer(_image);
   m_pCanvas->setLayerOpacity(200);
 
-  m_pCanvas->addRGBLayer("canvas/images/cambw12.jpg");
+  _image = locate("data", "kimageshop/images/cambw12.jpg");
+  m_pCanvas->addRGBLayer(_image);
   m_pCanvas->moveLayer(256,384);
   m_pCanvas->setLayerOpacity(180);
-  m_pCanvas->addRGBLayer("canvas/images/cam05.jpg");
+
+  _image = locate("data", "kimageshop/images/cam05.jpg");
+  m_pCanvas->addRGBLayer(_image);
   m_pCanvas->setLayerOpacity(255);
-  m_pCanvas->addRGBLayer("canvas/images/cam6.jpg");
+
+  _image = locate("data", "kimageshop/images/cam6.jpg");
+  m_pCanvas->addRGBLayer(_image);
   m_pCanvas->moveLayer(240,280);
   m_pCanvas->setLayerOpacity(255);
-  m_pCanvas->addRGBLayer("canvas/images/img2.jpg");
+
+  _image = locate("data", "kimageshop/images/img2.jpg");
+  m_pCanvas->addRGBLayer(_image);
   m_pCanvas->setLayerOpacity(80);
   
-  brush br("canvas/images/brush.jpg");
+  _image = locate("data", "kimageshop/brushes/brush.jpg");
+  brush br(_image);
   br.setHotSpot(QPoint(25,25));
   m_pCanvas->currentBrush=&br;
   

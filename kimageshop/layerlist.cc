@@ -15,6 +15,9 @@
 #include <qmessagebox.h>
 #include "misc.h"
 
+#include <kstddirs.h>
+#include <kglobal.h>
+
 QPixmap *layerList::eyeIcon, *layerList::linkIcon;
 QRect layerList::eyeRect, layerList::linkRect;
 
@@ -41,19 +44,21 @@ layerList::init(Canvas *c)
 	setCellWidth(150);
 	setCellHeight(40);
 	selected=c->layerList().count()-1;
-	if (!eyeIcon) {
-		eyeIcon=new QPixmap;
-		if (!eyeIcon->load("icons/kab.xpm"))
-      QMessageBox::critical( this, "canvas","Can't find kab.xpm");
-		eyeRect=QRect(QPoint(5,(cellHeight()-eyeIcon->height())/2),
-									eyeIcon->size());
-	}
-	if (!linkIcon) {
-		linkIcon=new QPixmap;
-		if (!linkIcon->load("icons/socket.xpm"))
-      QMessageBox::critical( this, "canvas","Can't find socket.xpm");
-		linkRect=QRect(QPoint(25,(cellHeight()-linkIcon->height())/2),
-									linkIcon->size());
+	if (!eyeIcon)
+	  {
+	    QString _icon = locate("data", "kimageshop/pics/eye.xpm");
+	    eyeIcon=new QPixmap;
+	    if (!eyeIcon->load(_icon))
+	      QMessageBox::critical( this, "Canvas","Can't find eye.xpm");
+	    eyeRect=QRect(QPoint(5,(cellHeight()-eyeIcon->height())/2),eyeIcon->size());
+	  }
+	if (!linkIcon)
+	  {
+	    QString _icon = locate("data", "kimageshop/pics/link.xpm");
+	    linkIcon=new QPixmap;
+	    if (!linkIcon->load(_icon))
+	      QMessageBox::critical( this, "Canvas","Can't find link.xpm");
+	    linkRect=QRect(QPoint(25,(cellHeight()-linkIcon->height())/2), linkIcon->size());
 	}
 }
 
