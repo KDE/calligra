@@ -95,7 +95,7 @@ Todo:
 	-> picture effect (extend oasis format)
 	-> depth
 	-> mirror type (we must use rotate and draw:mirror element)
-
+-> Save/load masterpage (ask by Thorsten Zachmann)
 
 Bugs:
 -> fix default value
