@@ -110,6 +110,7 @@ KPTResourceDialog::KPTResourceDialog(KPTProject &project, KPTResource &resource,
     dia->nameEdit->setText(resource.name());
     dia->initialsEdit->setText(resource.initials());
     dia->emailEdit->setText(resource.email());
+    dia->type->setCurrentItem((int)resource.type()); // NOTE: must match enum
     dia->units->setValue(resource.units());
     dia->rateEdit->setText(KGlobal::locale()->formatMoney(resource.normalRate()));
     dia->overtimeEdit->setText(KGlobal::locale()->formatMoney(resource.overtimeRate()));
