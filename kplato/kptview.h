@@ -46,13 +46,13 @@ public:
      */
     virtual void setZoom(double zoom);
 
-    KPTPart *getPart();
-    
+    KPTPart *getPart()const;
+
     QPopupMenu *popupMenu( const QString& name );
 	void updateViews();
 
 public slots:
-    
+
 protected slots:
     void slotEditCut();
     void slotEditCopy();
@@ -66,15 +66,15 @@ protected slots:
     void slotProjectEdit();
     void slotProjectCalculate();
     void slotConfigure();
-    
-    void slotOpenNode();     
+
+    void slotOpenNode();
     void slotOpen(QListViewItem *item);
-    
+
     void slotConnectNode();
 	void slotChanged(QWidget *);
 	void slotChanged();
 	void slotUpdate(bool calculate);
-    
+
 #ifndef NDEBUG
     void slotPrintDebug();
 #endif
@@ -88,10 +88,10 @@ private:
     KPTPertView *m_pertview;
     QHBoxLayout *m_pertlayout;
 	QTabWidget *m_tab;
-    
+
     int m_viewGrp;
     int m_defaultFontSize;
-    
+
     KAction *actionEditCut;
     KAction *actionEditCopy;
     KAction *actionEditPaste;

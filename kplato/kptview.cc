@@ -67,19 +67,19 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     kdDebug()<<k_funcinfo<<endl;
     setInstance(KPTFactory::global());
     setXMLFile("kplato.rc");
-  
+
 	m_tab = new QTabWidget(this, "Main QTabWidget");
     QVBoxLayout *layout = new QVBoxLayout(this);
 	layout->add(m_tab);
-	
+
 	m_pertview = new KPTPertView( this, m_tab, layout );
     m_tab->addTab(m_pertview, "Pert");
-	
+
 	m_ganttview = new KPTGanttView( this, m_tab, layout );
 	m_tab->addTab(m_ganttview, "Gantt");
-    
+
     connect(m_tab, SIGNAL(currentChanged(QWidget *)), this, SLOT(slotChanged(QWidget *)));
-	
+
 	// The menu items
     // ------ Edit
     actionEditCut = KStdAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
@@ -92,7 +92,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 		SLOT(slotViewPert()), actionCollection(), "view_pert");
     new KAction(i18n("Resources"), "resources", 0, this,
 		SLOT(slotViewResources()), actionCollection(), "view_resources");
-    
+
     // ------ Insert
     new KAction(i18n("Sub-Project..."), "add_sub_project", 0, this,
 		SLOT(slotAddSubProject()), actionCollection(), "add_sub_project");
@@ -106,7 +106,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 		SLOT(slotProjectEdit()), actionCollection(), "project_edit");
     new KAction(i18n("Calculate..."), "project_calculate", 0, this,
 		SLOT(slotProjectCalculate()), actionCollection(), "project_calculate");
-        
+
     // ------ Tools
     new KAction(i18n("Resource Editor..."), "edit_resource", 0, this,
 		SLOT(slotEditResource()), actionCollection(), "edit_resource");
@@ -119,14 +119,14 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     new KAction(i18n("Node properties..."), "node_properties", 0, this,
 		SLOT(slotOpenNode()), actionCollection(), "node_properties");
 
-            
+
     // ------------------- Actions with a key binding and no GUI item
 #ifndef NDEBUG
     KAction* actDebugLayout = new KAction( i18n( "Debug layout" ), CTRL+SHIFT+Key_L,
                         this, SLOT( debugLayout() ), actionCollection(), "debug_layout" );
     KAction* actPrintDebug = new KAction( i18n( "Print debug" ), CTRL+SHIFT+Key_P,
                         this, SLOT( slotPrintDebug() ), actionCollection(), "print_debug" );
-#endif 
+#endif
     // Necessary for the actions that are not plugged anywhere
     // Deprecated with KDE-3.1.
     // Not entirely sure it's necessary for 3.0, please test and report.
@@ -143,7 +143,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     Q_UNUSED( actPrintDebug );
 #endif
 #endif
-        
+
 }
 
 
@@ -205,19 +205,19 @@ void KPTView::slotAddSubProject() {
             newItem = new KPTNodeItem(curr, (KPTNode *)proj);
         }
         newItem->setOpen(true);
-        
-        KPTNode &currNode = curr->getNode(); 
+
+        KPTNode &currNode = curr->getNode();
         currNode.addChildNode(proj);
-        
+
         int n = currNode.numChildren();
         if (n > 1) {
             KPTNode &prev = currNode.getChildNode(n-2);
             kdDebug(42000) << "Added node[" << n-1 << "] '" << proj->name() <<  "' after '" << prev.name() << "' to '" << currNode.name().latin1() << "'" << endl;
         } else
             kdDebug(42000) << "Added node[" << n-1 << "] '" << proj->name() << "' to '" << currNode.name().latin1() << "'" << endl;
-		
+
 		slotUpdate(true);
-        
+
     } else
         delete proj;
 }
@@ -237,11 +237,11 @@ void KPTView::slotAddTask() {
             newItem = new KPTNodeItem(curr, (KPTNode *)task);
         }
         newItem->setOpen(true);
-        
-        KPTNode &currNode = curr->getNode(); 
+
+        KPTNode &currNode = curr->getNode();
         kdDebug(42000) << "Adding '" << task->name() << "' to '" << currNode.name().latin1() << "'"<< endl;
-        currNode.addChildNode(task);        
-    
+        currNode.addChildNode(task);
+
 		slotUpdate(true);
     } else
         delete task;
@@ -263,18 +263,18 @@ void KPTView::slotAddMilestone() {
             newItem = new KPTNodeItem(curr, (KPTNode *)ms);
         }
         newItem->setOpen(true);
-        
-        KPTNode &currNode = curr->getNode(); 
+
+        KPTNode &currNode = curr->getNode();
         kdDebug(42000) << "Adding '" << ms->name() << "' to '" << currNode.name().latin1() << "'"<< endl;
-        currNode.addChildNode(ms);        
-   
+        currNode.addChildNode(ms);
+
 		slotUpdate(true);
 	} else
         delete ms;
 }
 
  void KPTView::slotConfigure() {
- 
+
 }
 
 void KPTView::slotOpenNode() {
@@ -302,7 +302,7 @@ void KPTView::slotOpen(QListViewItem *item) {
 void KPTView::updateReadWrite(bool /*readwrite*/) {
 }
 
-KPTPart *KPTView::getPart() {
+KPTPart *KPTView::getPart()const {
     return (KPTPart *)koDocument();
 }
 
@@ -311,7 +311,7 @@ void KPTView::slotConnectNode() {
     KPTNodeItem *curr = m_ganttview->currentItem();
     if (curr) {
         kdDebug()<<k_funcinfo<<"node="<<curr->getNode().name()<<endl;
-    }   
+    }
 }
 
 QPopupMenu * KPTView::popupMenu( const QString& name )
@@ -344,12 +344,12 @@ void KPTView::slotUpdate(bool calculate)
 	{
     	m_ganttview->draw();
 	    m_ganttview->show();
-	} 
+	}
 	else if (m_tab->currentPage() == m_pertview)
 	{
     	m_pertview->draw();
 	    m_pertview->show();
-	} 
+	}
 }
 
 #ifndef NDEBUG

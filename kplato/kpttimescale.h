@@ -44,29 +44,29 @@ public:
     KPTTimeScale( QWidget *parent, const KPTDuration &startTime,  const KPTDuration &endTime, int height );
     KPTTimeScale( QWidget *parent, KPTDuration *startTime,  KPTDuration *duration, int height );
     ~KPTTimeScale();
-    
+
     enum Format { Day, Week, Month };
-    
-    int totalWidth() { return m_totalWidth; }
+
+    int totalWidth()const { return m_totalWidth; }
 
     int getX(const KPTDuration* time);
     int getWidth(const KPTDuration* dur);
-    
+
     void draw(const KPTDuration &startTime,  const KPTDuration &endTime, int height );
     void draw();
 	void setCanvasBackgroundColor(const QColor &c) { m_canvas->setBackgroundColor(c); }
-    
+
 public slots:
     void slotSetContents(int x, int /*y*/);
-    
+
 protected:
     int calcTotalWidth();
-    
+
 private:
     void init();
     void addWeekDays(int x, int size);
     void clear();
-    
+
     QCanvas *m_canvas;
 
     int m_defaultFontSize;
@@ -76,7 +76,7 @@ private:
     QHBox *m_topBox, *m_bottomBox;
     QPtrList<QLabel> m_topLabels;
     QPtrList<QLabel> m_bottomLabels;
-    
+
     QDateTime m_startTime;
     QDateTime m_endTime;
     Format m_unit;
