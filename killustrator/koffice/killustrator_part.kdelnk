@@ -10,6 +10,7 @@ Exec=killustrator.bin --server
 Comment=KIllustrator Vector Graphics Application
 Comment[es]=Aplicación de Gráficos Vectoriales KIllustrator
 Comment[fi]=Vektorigrafiikkaohjelmisto
+Comment[fr]=KIllustrator est une Application de dessin vectoriel
 Comment[is]=killustrator:  Hlutbundið teikniforrit K vöndulsins
 Comment[no]=Vektorgrafikkprogrammet KIllustrator
 Comment[pt_BR]=Programa de gráficos vetoriais KIllustrator

@@ -6,6 +6,7 @@ Icon=killustrator.xpm
 Patterns=*.kil;
 DefaultApp=killustrator
 Comment=KIllustrator file
+Comment[fr]=Fichier KIllustrator
 Comment[pt_BR]=Arquivo do KIllustrator
 Comment[ru]=Ê¡ Ã KIllustrator'¡
 Comment[sk]=KIllustrator s˙bor

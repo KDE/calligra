@@ -10,6 +10,7 @@ Exec=kformula.bin --server
 Comment=The Formula Editor
 Comment[es]=El Editor de Formulas
 Comment[fi]=Kaavaeditori
+Comment[fr]=L'éditeur de formules
 Comment[is]=kformula:  Tól til að vinna með formúlur
 Comment[no]=Formelregidereren
 Comment[pt_BR]=Editor de Fórmulas

@@ -3,6 +3,7 @@
 Name=KoHTML
 Exec=kohtml.bin --server
 Comment=KOffice HTML Viewer
+Comment[fr]=Visualiseur de fichiers HTML de KOffice
 Comment[pt_BR]=Visualizador HTML do KOffice
 Comment[ru]=Просмотрщик HTML для KOffice
 Comment[sk]=PrehliadaХ HTML z balМka KOffice
