@@ -40,7 +40,7 @@ VSpiralDlg::VSpiralDlg( QWidget* parent, const char* name )
 	m_segments = new KIntSpinBox( group );
 	m_segments->setMinValue( 1 );
 	new QLabel( i18n( "Fade:" ), group );
-	m_fade = new KDoubleNumInput( 0, group );
+	m_fade = new KDoubleNumInput( 0.0, 1.0, 0.0, 0.05, 1, group );
 	new QLabel( i18n( "Orientation:" ), group );
 	m_clockwise = new KComboBox( false, group );
 	m_clockwise->insertItem( i18n( "Clockwise" ), 0 );

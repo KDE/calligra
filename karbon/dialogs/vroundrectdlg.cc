@@ -35,11 +35,11 @@ VRoundRectDlg::VRoundRectDlg( KarbonPart*part,QWidget* parent, const char* name 
 
 	// add width/height-input:
 	m_widthLabel=new QLabel( i18n( "Width(%1):" ).arg(m_part->getUnitName()), group );
-	m_width = new KDoubleNumInput( 0, group );
+	m_width = new KDoubleNumInput( 0, 1000, 0, 0.1, 2, group );
 	m_heightLabel = new QLabel( i18n( "Height(%1):" ).arg(m_part->getUnitName()), group );
-	m_height = new KDoubleNumInput( 0, group );
+	m_height = new KDoubleNumInput( 0, 1000, 0, 0.1, 2, group );
 	new QLabel( i18n( "Edge Radius:" ), group );
-	m_round = new KDoubleNumInput( 0, group );
+	m_round = new KDoubleNumInput( 0, 1000, 0, 0.1, 2, group );
 	group->setMinimumWidth( 300 );
 	
 	// signals and slots:

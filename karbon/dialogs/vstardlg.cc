@@ -35,9 +35,9 @@ VStarDlg::VStarDlg( KarbonPart*part, QWidget* parent, const char* name )
 
 	// add width/height-input:
 	m_outerRLabel=new QLabel( i18n( "Outer Radius(%1):" ).arg(m_part->getUnitName()), group );
-	m_outerR = new KDoubleNumInput( 0, group );
+	m_outerR = new KDoubleNumInput( 0, 1000, 0, 0.1, 2, group );
 	m_innerRLabel=new QLabel( i18n( "Inner Radius(%1):" ).arg(m_part->getUnitName()), group );
-	m_innerR = new KDoubleNumInput( 0, group );
+	m_innerR = new KDoubleNumInput( 0, 1000, 0, 0.1, 2, group );
 	new QLabel( i18n( "Edges:" ), group );
 	m_edges = new KIntSpinBox( group );
 	m_edges->setMinValue( 3 );
