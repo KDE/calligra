@@ -57,6 +57,7 @@
 #include "kwtablestyle.h"
 #include "kwtabletemplate.h"
 #include <X11/Xlib.h>
+#include <kglobalsettings.h>
 
 //#define DEBUG_PAGES
 
@@ -221,6 +222,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_tableTemplateColl = new KWTableTemplateCollection();
 
     m_personalExpressionPath = KWFactory::global()->dirs()->resourceDirs("expression");
+    m_picturePath= KGlobalSettings::documentPath();
 
     setInstance( KWFactory::global(), false );
 
@@ -456,10 +458,11 @@ void KWDocument::initConfig()
 
   m_viewMode = KWViewMode::create( m_lastViewMode, this );
 
-  if(config->hasGroup("Expression Path" ) )
+  if(config->hasGroup("Kword Path" ) )
   {
-      config->setGroup( "Expression Path" );
-      m_personalExpressionPath=config->readListEntry( "path");
+      config->setGroup( "Kword Path" );
+      m_personalExpressionPath=config->readListEntry( "expression path"/*,KWFactory::global()->dirs()->resourceDirs("expression")*/ );
+      m_personalExpressionPath=config->readEntry( "picture path",KGlobalSettings::documentPath());
   }
 }
 

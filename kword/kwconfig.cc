@@ -873,6 +873,8 @@ ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
     m_pPathView->addColumn( i18n( "Type" ) );
     m_pPathView->addColumn( i18n( "Path" ) );
     (void) new QListViewItem( m_pPathView, i18n("Personal Expression"), doc->personalExpresssionPath().join(";") );
+    (void) new QListViewItem( m_pPathView, i18n("Picture path"),doc->picturePath() );
+
     m_modifyPath = new QPushButton( i18n("Modify path..."), gbPathGroup);
     connect( m_modifyPath, SIGNAL( clicked ()), this, SLOT( slotModifyPath()));
     connect( m_pPathView, SIGNAL( doubleClicked (QListViewItem *, const QPoint &, int  )), this, SLOT( slotModifyPath()));
@@ -913,8 +915,15 @@ void ConfigurePathPage::apply()
     {
         QStringList lst = QStringList::split(QString(";"), item->text(1));
         m_pView->kWordDocument()->setPersonalExpressionPath(lst);
-        config->setGroup( "Expression Path" );
-        config->writeEntry( "path", lst);
+        config->setGroup( "Kword Path" );
+        config->writeEntry( "expression path", lst);
+    }
+    item = m_pPathView->findItem(i18n("Picture path"), 0);
+    if ( item )
+    {
+        config->setGroup( "Kword Path" );
+        m_pView->kWordDocument()->setPicturePath( item->text(1) );
+        config->writeEntry( "picture path",item->text(1) );
     }
 }
 

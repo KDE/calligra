@@ -727,6 +727,9 @@ public:
     QStringList personalExpresssionPath() const { return m_personalExpressionPath;}
     void setPersonalExpressionPath( const QStringList & );
 
+    QString picturePath()const { return m_picturePath; }
+    void setPicturePath( const QString & _path ) { m_picturePath = _path ; }
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 
@@ -920,7 +923,7 @@ private:
     QPtrList<bookMark>m_tmpBookMarkList;
 
     QStringList m_personalExpressionPath;
-
+    QString m_picturePath;
 };
 
 
