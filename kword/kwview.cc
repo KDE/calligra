@@ -2665,8 +2665,8 @@ void KWView::updateButtons()
 void KWView::frameSelectedChanged()
 {
     KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
-    actionTableJoinCells->setEnabled( table );
-    actionTableSplitCells->setEnabled( table );
+    actionTableJoinCells->setEnabled( table && (doc->getSelectedFrames().count()>1));
+    actionTableSplitCells->setEnabled( table && (doc->getSelectedFrames().count()==1) );
 }
 
 void KWView::docStructChanged(TypeStructDocItem _type)
