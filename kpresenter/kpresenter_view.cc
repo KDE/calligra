@@ -1681,8 +1681,12 @@ void KPresenterView::createGUI()
     QObject::connect( page, SIGNAL( alignChanged( int ) ),
 		      this, SLOT( alignChanged( int ) ) );
 
-    splitter->setResizeMode( sidebar, QSplitter::FollowSizeHint );
-    splitter->setResizeMode( pageBase, QSplitter::Stretch );
+    // This sucks when resizing the window
+    //splitter->setResizeMode( sidebar, QSplitter::FollowSizeHint );
+    //splitter->setResizeMode( pageBase, QSplitter::Stretch );
+
+    splitter->setResizeMode( sidebar, QSplitter::KeepSize );
+
     connect( sidebar, SIGNAL( showPage( int ) ), this, SLOT( skipToPage( int ) ) );
 
     // setup GUI
