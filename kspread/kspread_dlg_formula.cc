@@ -934,7 +934,9 @@ void KSpreadDlgFormula::changeFunction()
                 }
         else if( m_funcName=="sinh")
                 {
-                tmp1=i18n("The  sinh()  function  returns the hyperbolic\nsine of x,which is defined\nmathematically as (exp(x) - exp(-x)) / 2.\n");
+                tmp1=i18n("The sinh() function returns the hyperbolic\n"
+			  "sine of x, which is defined\n"
+			  "mathematically as (exp(x) - exp(-x)) / 2.\n");
                 tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
                 tmp1+=i18n("Example : \n");
                 tmp1+=i18n("sinh(0.8) equals 0.88810598.\nsinh(0) equals 0.");
@@ -1022,7 +1024,7 @@ void KSpreadDlgFormula::changeFunction()
     {
         tmp.nb_param = 0;
         tmp1=i18n("The currentDate() function returns the current\n"
-                "date formated with local parameters.\n");
+                "date formatted with local parameters.\n");
         tmp1+=i18n("Syntax : %1()\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("currentDate() returns saturday 15 July 2000");
@@ -1033,18 +1035,18 @@ void KSpreadDlgFormula::changeFunction()
     {
         tmp.nb_param = 0;
         tmp1=i18n("The currentDateTime() function returns\n"
-                "the current date and time formated\n"
+                "the current date and time formatted\n"
                 "with local parameters.\n");
         tmp1+=i18n("Syntax : %1()\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
-        tmp1+=i18n("currentDateTime() returns\nsaturday 15 July 2000 19:12:01\n");
+        tmp1+=i18n("currentDateTime() returns\nSaturday 15 July 2000 19:12:01\n");
         tmp.help=tmp1;
     }
     else if( m_funcName=="currentTime")
     {
         tmp.nb_param = 0;
         QString tmp1=i18n("The currentTime() function returns the current time\n"
-                        "formated with local parameters.\n");
+                        "formatted with local parameters.\n");
         tmp1+=i18n("Syntax : %1()\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("currentTime() returns 19:12:01");
@@ -1105,7 +1107,7 @@ void KSpreadDlgFormula::changeFunction()
         if( m_funcName=="upper")
         {
                 tmp1=i18n("The upper() function converts\n"
-                                "a string to upper case\n");
+                          "a string to upper case\n");
                 tmp1+=tmp2;
                 tmp1+=i18n("upper(\"hello\") returns HELLO\nupper(\"HELLO\") returns HELLO");
         }
@@ -1149,7 +1151,7 @@ void KSpreadDlgFormula::changeFunction()
                 tmp1=i18n("The sqrt() function returns\n"
                           "the non-negative square root\n"
                           "of x. It fails and sets errno to\n"
-                          "EDOM, if x is  negative.\n");
+                          "EDOM, if x is negative.\n");
                 tmp1+=i18n("Syntax : %1(Double)").arg(m_funcName);
                 tmp1+=i18n("\nExample : \n");
                 tmp1+=i18n("sqrt(9) equals 3.\nsqrt(-9) equals nan.");
@@ -1370,7 +1372,7 @@ void KSpreadDlgFormula::changeFunction()
                 "formatted with local parameters\n");
         tmp1+=i18n("Syntax : %1(Year,Month,Day)\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
-        tmp1+=i18n("date(2000,5,5) return Friday 05 May 2000");
+        tmp1+=i18n("date(2000,5,5) returns Friday 05 May 2000");
         tmp.help=tmp1;
         tmp.firstElementType=type_int;
         tmp.secondElementType=type_int;
@@ -1398,7 +1400,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp.firstElementLabel=i18n("Day (int)");
         tmp.firstElementLabel=i18n("Int");
         tmp1=i18n("The day() function returns name of day\n"
-                "of the week (0...7).\n");
+                "of the week (1..7).\n");
         tmp1+=i18n("Syntax : %1(Int)\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("day(1) returns Monday (if the week starts on Monday)");
@@ -1413,7 +1415,7 @@ void KSpreadDlgFormula::changeFunction()
                         "of the month (1...12).\n");
         tmp1+=i18n("Syntax : %1(Int)\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
-        tmp1+=i18n("month(5) return May");
+        tmp1+=i18n("month(5) returns May");
         tmp.help=tmp1;
         tmp.firstElementType=type_int;
     }
@@ -1422,7 +1424,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp.nb_param=1;
         tmp.firstElementLabel=i18n("int");
         tmp1=i18n("The fact() function calculates the factorial of the\n"
-                "parameter.The mathematic expression is (value)!.\n");
+                "parameter. The mathematical expression is (value)!.\n");
         tmp1+=i18n("Syntax : %1(Int)\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("fact(10) returns 3628800\nfact(0) returns 1");
@@ -1439,9 +1441,9 @@ void KSpreadDlgFormula::changeFunction()
         if(m_funcName=="COMBIN")
         {
                 tmp1=i18n("The COMBIN() function calculates a number\n"
-                "of combination.The first parameter is the total\n"
-                "number of element.The second parameter is the number\n"
-                "of element chosen.This two parameters should be positive,\n"
+                "of combination. The first parameter is the total\n"
+                "number of element. The second parameter is the number\n"
+                "of element chosen. These two parameters should be positive,\n"
                 "otherwise the function returns an error.\n"
                 "The first parameter should be bigger than the second one\n"
                 "otherwise the function returns an error, too.\n");
@@ -1493,7 +1495,7 @@ void KSpreadDlgFormula::changeFunction()
         {
                 tmp1=i18n("The EXACT() function returns True\n"
                 "if these two strings are equal,\n"
-                "otherwise returns False\n");
+                "otherwise returns False.\n");
                 tmp1+=tmp2;
                 tmp1+=i18n("EXACT(\"Koffice\",\"Koffice\") returns True\n"
                 "EXACT(\"kspread\",\"Koffice\") returns False");
@@ -1596,7 +1598,7 @@ void KSpreadDlgFormula::changeFunction()
         {
                 tmp1=i18n("The NOR() function returns True\n"
                 "if all the values given as parameters are of type bool\n"
-                "and have the value false. Otherwise it returns False\n");
+                "and have the value false. Otherwise it returns False.\n");
                 tmp1+=tmp2;
                 tmp1+=i18n("NOR(True,False,False) returns False\nNOR(False,False) returns True");
 
@@ -1634,10 +1636,10 @@ void KSpreadDlgFormula::changeFunction()
         tmp2+=i18n("Example : \n");
         if(m_funcName=="BINO")
         {
-                tmp1=i18n("The BINO function returns the binomial distribution\n"
+                tmp1=i18n("The BINO function returns the binomial distribution.\n"
                         "The first parameter is the number of trial, the second\n"
                         "parameter is the number of success, and the third is\n"
-                        "the probability of success.The number of trials should\n"
+                        "the probability of success. The number of trials should\n"
                         "be bigger than the number of successes.\n");
                 tmp1+=tmp2;
                 tmp1+=i18n("BINO(12,9,0.8) returns 0.236223201");
@@ -1745,7 +1747,7 @@ void KSpreadDlgFormula::changeFunction()
 
         tmp1=i18n("The STXT functions returns a substring.\n"
                 "The first parameter is the string, the second\n"
-                "is the postion of start and the third is\n"
+                "is the position of start and the third is\n"
                 "the number of characters chosen.\n");
         tmp1+=i18n("Syntax : %1(String,Int,Int)\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
