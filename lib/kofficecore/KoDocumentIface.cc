@@ -89,3 +89,13 @@ QMap<QCString,DCOPRef> KoDocumentIface::actionMap()
 {
     return m_actionProxy->actionMap();
 }
+
+void KoDocumentIface::saveAs( const QString & url )
+{
+    m_pDoc->saveAs( KURL( url ) );
+}
+
+void KoDocumentIface::setOutputMimeType( const QCString & mimetype )
+{
+    m_pDoc->setOutputMimeType( mimetype );
+}

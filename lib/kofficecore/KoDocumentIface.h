@@ -55,9 +55,13 @@ k_dcop:
     int viewCount();
     DCOPRef view( int idx );
 
+    // DCOP-action proxy
     DCOPRef action( const QCString &name );
     QCStringList actions();
     QMap<QCString,DCOPRef> actionMap();
+
+    void saveAs( const QString & url );
+    void setOutputMimeType( const QCString & mimetype );
 protected:
     KoDocument * m_pDoc;
     KDCOPActionProxy *m_actionProxy;
