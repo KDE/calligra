@@ -96,7 +96,9 @@
 #include "kwframe.h"
 #include "kwanchor.h"
 #include "kwinserthorizontallinedia.h"
-
+#include <qtabwidget.h>
+#include <qcheckbox.h>
+#include <qvbox.h>
 #undef Bool
 #include <kspell.h>
 #include <kspelldlg.h>
@@ -7193,18 +7195,15 @@ void KWGUI::unitChanged( QString  u )
     view->kWordDocument()->setUnit( KoUnit::unit( u ) );
 }
 
-
 // Implementation of KWStatisticsDialog
 KWStatisticsDialog::KWStatisticsDialog( QWidget *_parent, KWDocument *_doc )
-    : KDialogBase( KJanusWidget::Tabbed,
-                   i18n("Statistics"),
-                   KDialogBase::Ok,
-                   KDialogBase::Ok,
-                   _parent,
-                   "statistics",
-                   true,
-                   false )
+    : KDialogBase(_parent, "statistics", true, i18n("Statistics"),KDialogBase::Ok, KDialogBase::Ok, false )
 {
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
+    QVBoxLayout *topLayout = new QVBoxLayout( page, 0, spacingHint() );
+
+    QTabWidget *tab = new QTabWidget( page );
     QFrame *pageAll = 0;
     QFrame *pageGeneral = 0;
     QFrame *pageSelected = 0;
@@ -7220,35 +7219,67 @@ KWStatisticsDialog::KWStatisticsDialog( QWidget *_parent, KWDocument *_doc )
 
 
     // add Tab "General"
-    pageGeneral = addPage( i18n( "General" ) );
+    pageGeneral = new QFrame( this );
+    tab->addTab( pageGeneral,  i18n( "General" ) );
+
     addBoxGeneral( pageGeneral, resultGeneralLabel );
     calcGeneral( resultGeneralLabel );
 
     // add Tab "All"
-    pageAll = addPage( i18n( "All" ) );
+    pageAll = new QFrame( this );
+    tab->addTab( pageAll,  i18n( "All" ) );
+
     addBox( pageAll, resultLabelAll );
 
+    m_canceled = true;
     // let's see if there's selected text
     bool b = docHasSelection();
     if ( b ) {
         // add Tab "Selected"
-        pageSelected = addPage( i18n( "Selected" ) );
+        pageSelected = new QFrame( this );
+        tab->addTab( pageSelected,  i18n( "Selected" ) );
         addBox( pageSelected, resultLabelSelected);
         // assign results
-        if ( !calcStats( resultLabelSelected, true ) )
+        if ( !calcStats( resultLabelSelected, true,false ) )
             return;
-        if ( !calcStats( resultLabelAll, false ) )
+        if ( !calcStats( resultLabelAll, false,false ) )
             return;
         showPage( 2 );
     } else {
         // assign results
-        if ( !calcStats( resultLabelAll, false ) )
+        if ( !calcStats( resultLabelAll, false, false ) )
             return;
-        //if ( !calcStats( resultLabelAll, false ) ) return;
         showPage( 1 );
+    }
+    topLayout->addWidget( tab );
+    QCheckBox *calcWithFootNote = new QCheckBox( i18n("Calc with foot/endnote"), page);
+    topLayout->addWidget( calcWithFootNote );
+    connect( calcWithFootNote, SIGNAL(toggled ( bool )), this, SLOT( slotRefreshValue(bool)));
+    m_canceled = false;
+
+}
+
+void KWStatisticsDialog::slotRefreshValue(bool state)
+{
+    m_canceled = true;
+    // let's see if there's selected text
+    bool b = docHasSelection();
+    if ( b )
+    {
+        if ( !calcStats( resultLabelSelected, true, state ) )
+            return;
+        if ( !calcStats( resultLabelAll, false, state ) )
+            return;
+    }
+    else
+    {
+        // assign results
+        if ( !calcStats( resultLabelAll, false, state ) )
+            return;
     }
     m_canceled = false;
 }
+
 
 void KWStatisticsDialog::calcGeneral( QLabel **resultLabel )
 {
@@ -7284,7 +7315,7 @@ void KWStatisticsDialog::calcGeneral( QLabel **resultLabel )
     resultLabel[5]->setText( locale->formatNumber( nbFormula, 0 ) );
 }
 
-bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection )
+bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection, bool useFootEndNote  )
 {
     ulong charsWithSpace = 0L;
     ulong charsWithoutSpace = 0L;
@@ -7306,11 +7337,16 @@ bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection )
     QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
     for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt ) {
         KWFrameSet *frameSet = framesetIt.current();
-        if ( (frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE || frameSet->frameSetInfo() == KWFrameSet::FI_BODY) && frameSet->isVisible() ) {
-            if ( selection && false )
-                paragraphs += frameSet->paragraphsSelected();
-            else
-                paragraphs += frameSet->paragraphs();
+        if ( (frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE || frameSet->frameSetInfo() == KWFrameSet::FI_BODY) && frameSet->isVisible() )
+        {
+            if ( (useFootEndNote && frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE) || frameSet->frameSetInfo() == KWFrameSet::FI_BODY )
+            {
+                if ( selection && false )
+                    paragraphs += frameSet->paragraphsSelected();
+                else
+                    paragraphs += frameSet->paragraphs();
+            }
+
         }
     }
     QProgressDialog progress( i18n( "Counting..." ), i18n( "Cancel" ), paragraphs, this, "count", true );
@@ -7322,10 +7358,14 @@ bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection )
         KWFrameSet *frameSet = framesetIt.current();
         // Exclude headers and footers
         if ( (frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE || frameSet->frameSetInfo() == KWFrameSet::FI_BODY) && frameSet->isVisible() ) {
-            if( ! frameSet->statistics( &progress, charsWithSpace, charsWithoutSpace,
-                                        words, sentences, syllables, lines, selection ) ) {
-                // someone pressed "Cancel"
-                return false;
+            if ( (useFootEndNote && frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE) || frameSet->frameSetInfo() == KWFrameSet::FI_BODY )
+            {
+
+                if( ! frameSet->statistics( &progress, charsWithSpace, charsWithoutSpace,
+                                            words, sentences, syllables, lines, selection ) ) {
+                    // someone pressed "Cancel"
+                    return false;
+                }
             }
         }
     }

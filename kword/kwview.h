@@ -789,13 +789,12 @@ private:
     void addBox( QFrame *page, QLabel **resultLabel );
     void addBoxGeneral( QFrame *page, QLabel **resultLabel );
 
-    bool calcStats( QLabel **resultLabel, bool selection );
+    bool calcStats( QLabel **resultLabel, bool selection, bool useFootEndNote );
     void calcGeneral( QLabel **resultLabel );
     bool docHasSelection();
     double calcFlesch(ulong sentences, ulong words, ulong syllables);
-
-protected:
-
+private slots:
+    void slotRefreshValue(bool);
 };
 
 #endif
