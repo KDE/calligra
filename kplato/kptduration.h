@@ -47,7 +47,7 @@ class KPTDuration {
         bool   operator>=( const KPTDuration &d ) const { return m_theTime >= d.m_theTime; }
         KPTDuration &operator = ( const KPTDuration &d ) { set(d); return *this;}
 
-        QString toString() const { return m_theTime.toString(); }
+        QString toString() const { return m_theTime.time().toString(); }
 
     private:
         QDateTime zero, m_theTime;

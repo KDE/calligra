@@ -55,15 +55,14 @@ int main( int /*argc*/, char /***argv */) {
     KPTTask *ta1 = new KPTTask();
     ta1->setEffort(new KPTEffort(KPTDuration(1,0)));
     ta1->setName("Subtask A1");
-    p->addChildNode(ta1);
     ta->addChildNode(ta1);
     kdDebug() << "\n";
     kdDebug() << "Added subtask A1 with effort 1 hour\n";
     kdDebug() << "  Project\n";
     kdDebug() << "  +-- > Task A\n";
-    kdDebug() << "          -> "<< ta->getExpectedDuration()->toString() << endl;
-    kdDebug() << "          +-- > Task A1\n";
-    kdDebug() << "                  -> "<< ta1->getExpectedDuration()->toString() << endl;
+    kdDebug() << "  |       -> "<< ta->getExpectedDuration()->toString() << " (implied)" << endl;
+    kdDebug() << "  |       +-- > Task A1\n";
+    kdDebug() << "  |               -> "<< ta1->getExpectedDuration()->toString() << endl;
     kdDebug() << "  +-- > Task B\n";
     kdDebug() << "          -> "<< tb->getExpectedDuration()->toString() << endl;
 
