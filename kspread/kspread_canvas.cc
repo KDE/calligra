@@ -132,13 +132,13 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
     case Key_Escape:
         // #### Torben says: This is duplicated code. Bad.
         if ( m_pView->selectionInfo()->singleCellSelection() ) {
-            setText( util_encodeColumnLabelText( m_pView->canvasWidget()->markerColumn() )
+            setText( KSpreadCell::columnName( m_pView->canvasWidget()->markerColumn() )
                      + QString::number( m_pView->canvasWidget()->markerRow() ) );
         } else {
-            setText( util_encodeColumnLabelText( m_pView->selection().left() )
+            setText( KSpreadCell::columnName( m_pView->selection().left() )
                      + QString::number( m_pView->selection().top() )
                      + ":"
-                     + util_encodeColumnLabelText( m_pView->selection().right() )
+                     + KSpreadCell::columnName( m_pView->selection().right() )
                      + QString::number( m_pView->selection().bottom() ) );
         }
         m_pView->canvasWidget()->setFocus();
@@ -3243,7 +3243,7 @@ void KSpreadCanvas::updatePosWidget()
         }
         else
         {
-            buffer = util_encodeColumnLabelText( markerColumn() ) +
+            buffer = KSpreadCell::columnName( markerColumn() ) +
 		QString::number( markerRow() );
         }
     }
@@ -3262,9 +3262,9 @@ void KSpreadCanvas::updatePosWidget()
                 //encodeColumnLabelText return @@@@ when column >KS_colMax
                 //=> it's not a good display
                 //=> for the moment I display pos of marker
-                buffer=util_encodeColumnLabelText( selection().left() ) +
+                buffer=KSpreadCell::columnName( selection().left() ) +
 		    QString::number(selection().top()) + ":" +
-		    util_encodeColumnLabelText( QMIN( KS_colMax, selection().right() ) ) +
+		    KSpreadCell::columnName( QMIN( KS_colMax, selection().right() ) ) +
 		    QString::number(selection().bottom());
                 //buffer=activeTable()->columnLabel( m_iMarkerColumn );
                 //buffer+=tmp.setNum(m_iMarkerRow);
@@ -5140,7 +5140,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
         painter.setFont( boldFont );
       if ( !m_pView->activeTable()->getShowColumnNumber() )
       {
-        QString colText = util_encodeColumnLabelText( x );
+        QString colText = KSpreadCell::columnName( x );
         int len = painter.fontMetrics().width( colText );
         if ( !col_lay->isHide() )
           painter.drawText( zoomedXPos + ( width - len ) / 2,
@@ -5206,7 +5206,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
         painter.setFont( boldFont );
       if ( !m_pView->activeTable()->getShowColumnNumber() )
       {
-        QString colText = util_encodeColumnLabelText( x );
+        QString colText = KSpreadCell::columnName( x );
         int len = painter.fontMetrics().width( colText );
         if (!col_lay->isHide())
           painter.drawText( zoomedXPos + ( width - len ) / 2,
