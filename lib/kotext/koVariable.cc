@@ -153,23 +153,24 @@ KoVariableDateFormat::KoVariableDateFormat() : KoVariableFormat()
 
 QString KoVariableDateFormat::convert( const QVariant& data ) const
 {
-    if ( data.type() != QVariant::Date )
+    if ( data.type() != QVariant::Date && data.type() != QVariant::DateTime )
     {
         kdDebug(32500)<<" Error in KoVariableDateFormat::convert. Value is a "
                       << data.typeName() << "(" << data.type() << ")" << endl;
         return QString::null;
     }
-    if ( !data.toDate().isValid() )
+    QDate date = data.type() == QVariant::Date ? data.toDate() : data.toDateTime().date();
+    if ( !date.isValid() )
         return QString("");
 
     if (m_strFormat.lower()=="locale" || m_strFormat.isEmpty())
-	return KGlobal::locale()->formatDate( data.toDate(), false );
+	return KGlobal::locale()->formatDate( date, false );
     else if ( m_strFormat.lower() == "localeshort" )
-	return KGlobal::locale()->formatDate( data.toDate(), true );
+	return KGlobal::locale()->formatDate( date, true );
 
     QString tmp=data.toDate().toString(m_strFormat);
-    tmp.replace("PPPP", KGlobal::locale()->monthNamePossessive(data.toDate().month(), false)); //long possessive month name
-    tmp.replace("PPP", KGlobal::locale()->monthNamePossessive(data.toDate().month(), true)); //short possessive month name
+    tmp.replace("PPPP", KGlobal::locale()->monthNamePossessive(date.month(), false)); //long possessive month name
+    tmp.replace("PPP", KGlobal::locale()->monthNamePossessive(date.month(), true)); //short possessive month name
     return tmp;
 }
 
@@ -293,7 +294,7 @@ QStringList KoVariableTimeFormat::staticFormatPropsList()
 QStringList KoVariableTimeFormat::staticTranslatedFormatPropsList()
 {
     QStringList listTimeFormat;
-    listTimeFormat<<i18n("locale");
+    listTimeFormat<<i18n("Locale format");
     listTimeFormat<<"hh:mm";
     listTimeFormat<<"hh:mm:ss";
     listTimeFormat<<"hh:mm AP";
@@ -922,9 +923,7 @@ QStringList KoDateVariable::subTypeText()
 
 QCString KoDateVariable::defaultFormat()
 {
-    return QCString(QCString("DATE")
-                    + QCString("0") // no support for short locale dates yet - TODO
-                    + QCString("locale"));
+    return QCString("DATE") + "locale";
 }
 
 QCString KoDateVariable::formatStr(int & correct)
@@ -974,10 +973,7 @@ QCString KoDateVariable::formatStr(int & correct)
 
     if(dialog->exec()==QDialog::Accepted)
     {
-        if ( widget->resultString() == i18n("Locale") )
-            string = "locale"; // untranslated form
-        else
-            string=widget->resultString().utf8();
+        string = widget->resultString().utf8();
         correct = widget->correctValue();
     }
     else
@@ -995,8 +991,7 @@ QCString KoDateVariable::formatStr(int & correct)
     }
     config.sync();
     delete dialog;
-    return QCString(QCString("DATE") + QCString("0") + // no support for short locale dates yet - TODO
-                    string );
+    return QCString(QCString("DATE") + string );
 }
 
 /******************************************************************/
@@ -1143,10 +1138,7 @@ QCString KoTimeVariable::formatStr(int & _correct)
     }
     if(dialog->exec()==QDialog::Accepted)
     {
-        if ( widget->resultString() == i18n("Locale") )
-            string = "locale"; // untranslated form
-        else
-            string=widget->resultString().utf8();
+        string = widget->resultString().utf8();
         _correct = widget->correctValue();
     }
     else

@@ -115,7 +115,14 @@ void TimeFormatWidget::updateLabel()
 
 QString TimeFormatWidget::resultString()
 {
-    return combo1->currentText();
+    // Lookup untranslated format
+    QStringList listTimeFormat = KoVariableTimeFormat::staticFormatPropsList();
+
+    QStringList::Iterator it = listTimeFormat.at(combo1->currentItem());
+    Q_ASSERT( it != listTimeFormat.end() );
+    if ( it != listTimeFormat.end() )
+        return *it;
+    return QString::null;
 }
 
 int TimeFormatWidget::correctValue()

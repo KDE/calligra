@@ -128,7 +128,14 @@ void DateFormatWidget::updateLabel()
 
 QString DateFormatWidget::resultString()
 {
-    return combo1->currentText();
+    // Lookup untranslated format
+    QStringList listDateFormat = KoVariableDateFormat::staticFormatPropsList();
+
+    QStringList::Iterator it = listDateFormat.at(combo1->currentItem());
+    Q_ASSERT( it != listDateFormat.end() );
+    if ( it != listDateFormat.end() )
+        return *it;
+    return QString::null;
 }
 
 int DateFormatWidget::correctValue()
