@@ -101,7 +101,7 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
     QString html_center= "center";
     QString html_top="top";
     QString html_bottom="bottom";
-    QString html_middle="center";
+    QString html_middle="middle";
 
     // Ah ah ah - the document is const, but the map and table aren't. Safety:0.
     QString str;
