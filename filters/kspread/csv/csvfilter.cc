@@ -19,6 +19,7 @@
 
 #include <csvfilter.h>
 #include <csvfilter.moc>
+#include <qmessagebox.h>
 
 CSVFilter::CSVFilter(KoFilter *parent, QString name) :
                      KoFilter(parent, name) {
@@ -42,13 +43,25 @@ const bool CSVFilter::filter(const QCString &fileIn, const QCString &fileOut,
     QTextStream inputStream(&in);
     XMLTree tree("");
 
+    /*
+    KGlobal::locale()->enableNumericLocale();
+    kdebug(KDEBUG_INFO, 31000, "Decimal Symbol : %s", KGlobal::locale()->decimalSymbol().ascii());
     QChar decimal_point = KGlobal::locale()->decimalSymbol()[0];
+     I've dropped the idea of determining the separator automatically
+     after trying to load an English CSV file into a French kspread... :-)
     // English-speaking countries : decimal_point = '.', CSV delimiter = ','
     // France :                     decimal_point = ',', CSV delimiter = ';'
     // Germany (Austria) :          decimal_point = ',', CSV delimiter = ';'
     // I need more input !!!
-    // Current hack :
-    QChar csv_delimiter = (decimal_point == ',') ? ';' : ',';
+    */
+    QChar csv_delimiter; // = (decimal_point == ',') ? ';' : ',';
+    switch (QMessageBox::information( 0L, i18n( "Information needed" ),
+                              i18n( "What is the separator used in this file ?" ),
+                              i18n( "Comma" ), i18n( "Semicolon" ) ))
+    {
+      case 1 : csv_delimiter = ';'; break;
+      default : csv_delimiter = ','; // "Comma" chosen or Escape typed
+    }
 
     QChar x;
     enum { S_START, S_QUOTED_FIELD, S_MAYBE_END_OF_QUOTED_FIELD, S_NORMAL_FIELD } state = S_START;
@@ -113,6 +126,7 @@ const bool CSVFilter::filter(const QCString &fileIn, const QCString &fileOut,
         return false;
     }
     out.write((const char*)tmp, tmp.length());
+    kdebug(KDEBUG_INFO, 31000, "%s", tmp.data());
     out.close();
 
     in.close();
