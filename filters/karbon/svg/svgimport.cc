@@ -115,6 +115,8 @@ void
 SvgImport::convert()
 {
 	QDomElement docElem = inpdoc.documentElement();
+	m_document.setWidth( 550.0);
+	m_document.setHeight( 841.0 );
 	// undo y-mirroring
 	GraphicsContext *gc = new GraphicsContext;
 	gc->matrix.scale( 1, -1 );
