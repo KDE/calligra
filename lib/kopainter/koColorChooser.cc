@@ -32,22 +32,33 @@
 KoColorChooser::KoColorChooser(QWidget *parent, const char *name):
 QWidget(parent, name)
 {
-  mGrid = new QGridLayout(this, 2, 5);
+  mGrid = new QGridLayout(this, 3, 5);
+
   btnRGB = new KoFrameButton("RGB", this);
+  btnRGB->setFixedHeight(16);
+  btnRGB->setToggleButton(true);
   btnHSB = new KoFrameButton("HSB", this);
+  btnHSB->setFixedHeight(16);
+  btnHSB->setToggleButton(true);
   btnHSB->setEnabled(false);
   btnCMYK = new KoFrameButton("CMYK", this);
+  btnCMYK->setFixedHeight(16);
+  btnCMYK->setToggleButton(true);
   btnCMYK->setEnabled(false);
   btnLAB = new KoFrameButton("LAB", this);
+  btnLAB->setFixedHeight(16);
+  btnLAB->setToggleButton(true);
   btnLAB->setEnabled(false);
   btnGrey = new KoFrameButton("Grey", this);
-  btnRGB->setMaximumHeight(20);
-  btnCMYK->setMaximumHeight(20);
-  btnGrey->setMaximumHeight(20);
-  btnHSB->setMaximumHeight(20);
-  btnLAB->setMaximumHeight(20);
+  btnGrey->setFixedHeight(16);
+  btnGrey->setToggleButton(true);
 
   clr_patch = new KColorPatch(this);
+
+  KoColorFrame *fff = new KoColorFrame(this);   //Temp widget (will be changed to palette)
+  fff->setFixedHeight(20);
+  fff->slotSetColor1(red);
+  fff->slotSetColor2(green);
 
   mRGBWidget = new RGBWidget(this, this);
   mGreyWidget = new GreyWidget(this, this);
@@ -60,6 +71,7 @@ QWidget(parent, name)
   mGrid->addMultiCellWidget(mRGBWidget, 1, 1, 1, 4);
   mGrid->addMultiCellWidget(mGreyWidget, 1, 1, 1, 4);
   mGrid->addWidget(clr_patch, 1, 0);
+  mGrid->addMultiCellWidget(fff, 2, 2, 0, 4);
 
   connect(btnRGB, SIGNAL(clicked()), this, SLOT(slotShowRGB()));
   connect(btnHSB, SIGNAL(clicked()), this, SLOT(slotShowHSB()));
@@ -81,6 +93,8 @@ void KoColorChooser::slotShowRGB()
 {
   mRGBWidget->show();
   mGreyWidget->hide();
+  btnRGB->setOn(true);
+  btnGrey->setOn(false);
 }
 
 void KoColorChooser::slotShowHSB()
@@ -105,6 +119,8 @@ void KoColorChooser::slotShowGrey()
 {
   mRGBWidget->hide();
   mGreyWidget->show();
+  btnRGB->setOn(false);
+  btnGrey->setOn(true);
 }
 
 void KoColorChooser::slotChangeColor(const QColor &c)
@@ -171,6 +187,8 @@ QWidget(parent)
   mGrid->addWidget(mRIn, 0, 2);
   mGrid->addWidget(mGIn, 1, 2);
   mGrid->addWidget(mBIn, 2, 2);
+
+  setFixedHeight(60);
 
   /* connect color sliders */
   connect(mRSlider, SIGNAL(valueChanged(int)), this, SLOT(slotRSliderChanged(int)));
@@ -275,6 +293,8 @@ QWidget(parent)
   mGrid->addWidget(mVLabel, 0, 0);
   mGrid->addWidget(mVSlider, 0, 1);
   mGrid->addWidget(mVIn, 0, 2);
+
+  setFixedHeight(60);
 
   /* connect color slider */
   connect(mVSlider, SIGNAL(valueChanged(int)), this, SLOT(slotVSliderChanged(int)));

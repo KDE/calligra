@@ -1,101 +1,102 @@
-/*
- *
- *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
+/* This file is part of the KDE project
+  Copyright (c) 1999 Matthias Elter <me@kde.org>
+  Copyright (c) 2001 Igor Janssen <rm@linux.ru.net>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 
 #include "koFrameButton.h"
 
-KoFrameButton::KoFrameButton(QWidget *parent, const char *name )
-  : QLabel( parent, name )
+KoFrameButton::KoFrameButton(QWidget *parent, const char *name):
+QLabel(parent, name)
 {
   setAutoResize(true);
   setFrameStyle(Panel | Raised);
   setLineWidth(1);
   setMaximumHeight(8);
-  m_active = false;
-  m_toggle = false;
+  mActive = false;
+  mToggle = false;
 }
 
-KoFrameButton::KoFrameButton( const QString& text, QWidget* parent, const char* name )
-  : QLabel( parent, name )
+KoFrameButton::KoFrameButton(const QString &text, QWidget *parent, const char *name):
+QLabel(parent, name)
 {
   setFrameStyle(Panel | Raised);
   setLineWidth(1);
   setText(text);
-  m_active = false;
-  m_toggle = false;
+  setAlignment(AlignHCenter | AlignVCenter);
+  mActive = false;
+  mToggle = false;
 }
 
-KoFrameButton::KoFrameButton( const QPixmap& pixmap, QWidget* parent, const char* name )
-  : QLabel( parent, name )
+KoFrameButton::KoFrameButton(const QPixmap &pixmap, QWidget *parent, const char *name):
+QLabel(parent, name)
 {
   setFrameStyle(Panel | Raised);
   setLineWidth(1);
   setPixmap(pixmap);
-  m_active = false;
-  m_toggle = false;
+  mActive = false;
+  mToggle = false;
 }
 
-void KoFrameButton::mousePressEvent( QMouseEvent * )
+void KoFrameButton::mousePressEvent(QMouseEvent *)
 {
   setFrameStyle(Panel | Sunken);
 }
 
-void KoFrameButton::mouseReleaseEvent( QMouseEvent * )
+void KoFrameButton::mouseReleaseEvent(QMouseEvent *)
 {
-  if (m_toggle)
-	{
-	  m_active = !m_active;
-	  
-	  if (m_active)
-		setFrameStyle(Panel | Sunken);
-	  else
-		setFrameStyle(Panel | Raised);
-	}
+  if(mToggle)
+  {
+    mActive = !mActive;
+    if(mActive)
+      setFrameStyle(Panel | Sunken);
+    else
+      setFrameStyle(Panel | Raised);
+  }
   else
-	setFrameStyle(Panel | Raised);
+    setFrameStyle(Panel | Raised);
 
   emit clicked();
-  emit clicked(m_text);
+  emit clicked(mText);
 }
 
 void KoFrameButton::setOn(bool v)
 {
-  if (!m_toggle)
-	return;
+  if(!mToggle)
+    return;
 
-  m_active = v;
-  
-  if (m_active)
-	setFrameStyle(Panel | Sunken);
+  mActive = v;
+
+  if(mActive)
+    setFrameStyle(Panel | Sunken);
   else
-	setFrameStyle(Panel | Raised);	
+    setFrameStyle(Panel | Raised);	
 }
 
 
 void KoFrameButton::setToggleButton(bool v)
 {
-  m_toggle = v;
+  mToggle = v;
 }
 
-void KoFrameButton::setText( const QString &t )
+void KoFrameButton::setText(const QString &t)
 {
-  m_text = t;
+  mText = t;
   QLabel::setText(t);
 }
 
-#include <koFrameButton.moc>
+#include "koFrameButton.moc"
