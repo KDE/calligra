@@ -145,29 +145,10 @@ QPoint KWTextFrameSet::internalToContents( QPoint p ) const
     return p;
 }
 
-// This determines where to clip the painter to draw the contents of a given frame
-// It clips to the frame, and clips out any "on top" frame.
-QRegion KWTextFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame )
-{
-    QRect rc = painter->xForm( *frame );
-    //kdDebug() << "KWTextFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame) << " clip region rect=" << DEBUGRECT(rc) << endl;
-    QRegion reg( rc );
-    QListIterator<KWFrame> fIt( m_framesOnTop );
-    for ( ; fIt.current() ; ++fIt )
-    {
-        QRect r = painter->xForm( *fIt.current() );
-        r = QRect( r.x() - 1, r.y() - 1,  // ### plan for a one-pixel border. Maybe we should use the real border width.
-                   r.width() + 2, r.height() + 2 );
-        //kdDebug() << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
-        reg -= r; // subtract
-    }
-    return reg;
-}
-
-void KWTextFrameSet::drawContents( QPainter *p, int cx, int cy, int cw, int ch, QColorGroup &gb, bool onlyChanged, bool drawCursor, QTextCursor *cursor )
+void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &gb, bool onlyChanged, bool drawCursor, QTextCursor *cursor )
 {
     //if ( !cursorVisible )
-         //drawCur = FALSE;
+    //drawCur = FALSE;
     if ( !text->firstParag() )
         return;
 
@@ -177,37 +158,45 @@ void KWTextFrameSet::drawContents( QPainter *p, int cx, int cy, int cw, int ch, 
     {
         KWFrame *frame = frameIt.current();
         if ( !frame->isValid() )
+        {
+            kdDebug() << "KWTextFrameSet::drawContents invalid frame " << frame << endl;
             continue;
+        }
 
-        QRect r(cx, cy, cw, ch);
+        QRect r(crect);
+        //kdDebug() << "KWTFS::drawContents frame=" << frame << " cr=" << DEBUGRECT(r) << endl;
         r = r.intersect( *frame );
+        //kdDebug() << "                    framerect=" << DEBUGRECT(*frame) << " intersec=" << DEBUGRECT(r) << " todraw=" << !r.isEmpty() << endl;
         if ( !r.isEmpty() )
         {
-            p->save();
             // This translates the coordinates in the document contents
             // ( frame and r are up to here in this system )
             // into the QTextDocument's coordinate system
             // (which doesn't have frames, borders, etc.)
-            // ##### This will not work with multiple frames in the same page (DTP)
             r.moveBy( -frame->left(), -frame->top() + totalHeight );   // portion of the frame to be drawn, in qrt coords
-            p->setClipRegion( frameClipRegion( p, frame ) );
-            //p->setClipRect( p->xForm( r ) );                           // don't draw out of the frame
-
-            p->translate( frame->left(), frame->top() - totalHeight ); // translate to qrt coords - after setting the clip region !
-
-            gb.setBrush(QColorGroup::Base,frame->getBackgroundColor());
-            m_lastFormatted = text->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor );
-
-            // Blank area under the last paragraph
-            if ( (m_lastFormatted == text->lastParag() || !m_lastFormatted) && !onlyChanged /*VERY IMPORTANT*/)
+            QRegion reg = frameClipRegion( p, frame );
+            if ( !reg.isEmpty() )
             {
-                int docHeight = text->height();
-                QRect blank( 0, docHeight, frame->width(), totalHeight+frame->height() - docHeight );
-                //kdDebug() << this << " Blank area: " << DEBUGRECT(blank) << endl;
-                p->fillRect( blank, gb.brush( QColorGroup::Base ) );
-                // for debugging :) p->setPen( QPen(Qt::yellow, 1, DashLine) );  p->drawRect( blank );
+                p->save();
+                p->setClipRegion( reg );
+
+                p->translate( frame->left(), frame->top() - totalHeight ); // translate to qrt coords - after setting the clip region !
+
+                gb.setBrush(QColorGroup::Base,frame->getBackgroundColor());
+                m_lastFormatted = text->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor );
+
+                // Blank area under the last paragraph
+                if ( (m_lastFormatted == text->lastParag() || !m_lastFormatted) && !onlyChanged)
+                {
+                    int docHeight = text->height();
+                    QRect blank( 0, docHeight, frame->width(), totalHeight+frame->height() - docHeight );
+                    //kdDebug() << this << " Blank area: " << DEBUGRECT(blank) << endl;
+                    p->fillRect( blank, gb.brush( QColorGroup::Base ) );
+                    // for debugging :)
+                    //p->setPen( QPen(Qt::blue, 1, DashLine) );  p->drawRect( blank );
+                }
+                p->restore();
             }
-            p->restore();
         }
         totalHeight += frame->height();
     }
@@ -236,31 +225,30 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
         rf = rf.intersect( cursor->topParag()->rect() );
         if ( !rf.isEmpty() )
         {
-            p->save();
-
-            // Hmmm... This probably concentrates on the parag rect itself ? Or ?
-            //p->translate( cursor->totalOffsetX(), cursor->totalOffsetY() );
-            //r.moveBy( -cursor->totalOffsetX(), -cursor->totalOffsetY() );
-
             QPoint topLeft = cursor->topParag()->rect().topLeft();                    // in QRT coords
             int h = cursor->parag()->lineHeightOfChar( cursor->index() );             //
-            QPoint real = p->xForm( internalToContents( topLeft ) );                  // From QRT to contents to viewport
-            QRect clip( real.x() + cursor->x() - 5, real.y() + cursor->y(), 10, h );
+            QPoint real = p->xForm( internalToContents( topLeft ) );                  // from QRT to contents to viewport
+            QRect clip = p->xForm( QRect( real.x() + cursor->x() - 5, real.y() + cursor->y(), 10, h ) );  // very small clipping around the cursor
 
             //kdDebug() << "KWTextFrameSet::drawCursor topLeft=(" << topLeft.x() << "," << topLeft.y() << ")  h=" << h << "  real=(" << real.x() << "," << real.y() << ")" << endl;
             //kdDebug() << this << " Clip for cursor: " << DEBUGRECT(clip) << endl;
 
-            p->setClipRegion( frameClipRegion( p, frame ).intersect( clip ) );
+            QRegion reg = frameClipRegion( p, frame ).intersect( clip );
+            if ( !reg.isEmpty() )
+            {
+                p->save();
 
-            p->translate( frame->left(), frame->top() - totalHeight ); // translate to qrt coords - after setting the clip region !
+                p->setClipRegion( reg );
+                p->translate( frame->left(), frame->top() - totalHeight ); // translate to qrt coords - after setting the clip region !
 
-            QPixmap *pix = 0;
-            QColorGroup cg = QApplication::palette().active();
-            cg.setBrush(QColorGroup::Base, frame->getBackgroundColor());
-            text->drawParag( p, cursor->parag(), topLeft.x() - cursor->totalOffsetX() + cursor->x() - 5,
-                             topLeft.y() - cursor->totalOffsetY() + cursor->y(), 10, h,
-                             pix, cg, cursorVisible, cursor );
-            p->restore();
+                QPixmap *pix = 0;
+                QColorGroup cg = QApplication::palette().active();
+                cg.setBrush(QColorGroup::Base, frame->getBackgroundColor());
+                text->drawParag( p, cursor->parag(), topLeft.x() - cursor->totalOffsetX() + cursor->x() - 5,
+                                 topLeft.y() - cursor->totalOffsetY() + cursor->y(), 10, h,
+                                 pix, cg, cursorVisible, cursor );
+                p->restore();
+            }
             drawn = true;
         }
         else
@@ -558,43 +546,7 @@ void KWTextFrameSet::updateFrames()
     ASSERT( m_availableHeight >= text->height() );
     frames.setAutoDelete( true );
 
-
-    // Now iterate over ALL framesets, to find those which have frames on top of us.
-    // We'll use this information in various methods (adjust[LR]Margin, drawContents etc.)
-    // So we want it cached.
-    m_framesOnTop.clear();
-    QListIterator<KWFrameSet> framesetIt( doc->framesetsIterator() );
-    bool foundThis = false;
-    for (; framesetIt.current(); ++framesetIt )
-    {
-        KWFrameSet *frameSet = framesetIt.current();
-
-        if ( frameSet == this )
-        {
-            foundThis = true;
-            continue;
-        }
-
-        if ( !foundThis || !frameSet->isVisible() )
-            continue;
-
-        QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
-        for ( ; frameIt.current(); ++frameIt )
-        {
-            KWFrame *frame = frameIt.current();
-            // Is this frame over any of our frames ?
-            QListIterator<KWFrame> fIt( frameIterator() );
-            for ( ; fIt.current(); ++fIt )
-            {
-                if ( frame->intersects( *fIt.current() ) )
-                {
-                    m_framesOnTop.append( frame );
-                    break;
-                }
-            }
-        }
-    }
-    kdDebug() << "KWTextFrameSet::updateFrames frame on top:" << m_framesOnTop.count() << endl;
+    KWFrameSet::updateFrames();
 }
 
 /*================================================================*/
@@ -1596,7 +1548,7 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     connect( fs, SIGNAL( showCursor() ), this, SLOT( showCursor() ) );
     connect( fs, SIGNAL( updateUI() ), this, SLOT( updateUI() ) );
     connect( fs, SIGNAL( showCurrentFormat() ), this, SLOT( showCurrentFormat() ) );
-    connect( fs, SIGNAL( repaintChanged() ), canvas, SLOT( repaintChanged() ) );
+    connect( fs, SIGNAL( repaintChanged() ), this, SLOT( repaintChanged() ) );
     connect( fs, SIGNAL( ensureCursorVisible() ), this, SLOT( ensureCursorVisible() ) );
 
     cursor = new QTextCursor( textDocument() );
@@ -1621,6 +1573,8 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
 
 KWTextFrameSetEdit::~KWTextFrameSetEdit()
 {
+    textDocument()->removeSelection( QTextDocument::Standard );
+    repaintChanged();
     hideCursor();
     delete cursor;
 }
@@ -1639,7 +1593,7 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
 
     if ( selChanged ) {
 	// cursor->parag()->document()->nextDoubleBuffered = TRUE; ######## we need that only if we have nested items/documents
-	m_canvas->repaintChanged();
+	repaintChanged();
     }
 
     bool clearUndoRedoInfo = TRUE;
@@ -1773,7 +1727,7 @@ void KWTextFrameSetEdit::moveCursor( MoveDirectionPrivate direction, bool shift,
 	moveCursor( direction, control );
 	if ( textDocument()->setSelectionEnd( QTextDocument::Standard, cursor ) ) {
 	    //	    cursor->parag()->document()->nextDoubleBuffered = TRUE; ##### we need that only if we have nested items/documents
-	    m_canvas->repaintChanged();
+	    repaintChanged();
 	} else {
 	    showCursor();
 	}
@@ -1786,7 +1740,7 @@ void KWTextFrameSetEdit::moveCursor( MoveDirectionPrivate direction, bool shift,
 	    showCursor();
 	} else {
 	    //	    cursor->parag()->document()->nextDoubleBuffered = TRUE; ############# we need that only if we have nested items/documents
-	    m_canvas->repaintChanged();
+	    repaintChanged();
 	    ensureCursorVisible();
 	    showCursor();
 	}
@@ -1889,7 +1843,7 @@ void KWTextFrameSetEdit::startDrag()
     QDragObject *drag = new QTextDrag( textDocument()->selectedText( QTextDocument::Standard ), m_canvas->viewport() );
     if ( drag->drag() && QDragObject::target() != m_canvas && QDragObject::target() != m_canvas->viewport() ) {
 	textDocument()->removeSelectedText( QTextDocument::Standard, cursor );
-	m_canvas->repaintChanged();
+	repaintChanged();
     }
 }
 
@@ -1936,7 +1890,7 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent * e )
     if ( !redraw ) {
         emit showCursor();
     } else {
-        m_canvas->repaintChanged();
+        repaintChanged();
     }
 }
 
@@ -2069,7 +2023,7 @@ void KWTextFrameSetEdit::doAutoScroll( QPoint pos )
     }
 
     if ( redraw )
-      m_canvas->repaintChanged();
+      repaintChanged();
 
     showCursor();
 }
@@ -2101,7 +2055,7 @@ void KWTextFrameSetEdit::selectAll( bool select )
 	textDocument()->removeSelection( QTextDocument::Standard );
     else
 	textDocument()->selectAll( QTextDocument::Standard );
-    m_canvas->repaintChanged();
+    repaintChanged();
 }
 
 void KWTextFrameSetEdit::drawCursor( bool visible )
@@ -2293,6 +2247,11 @@ void KWTextFrameSetEdit::updateUI()
 void KWTextFrameSetEdit::showCurrentFormat()
 {
     m_canvas->gui()->getView()->showFormat(*currentFormat);
+}
+
+void KWTextFrameSetEdit::repaintChanged()
+{
+    m_canvas->repaintChanged( frameSet() );
 }
 
 #include "kwtextframeset.moc"

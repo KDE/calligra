@@ -39,9 +39,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     : QScrollView( parent ), doc( d )
 {
     m_gui = lGui;
-    m_currentFrameSet = doc->getFrameSet( 0 );
-    m_currentFrameSetEdit = m_currentFrameSet->createFrameSetEdit( this );
-    drawAll = TRUE;
+    m_currentFrameSetEdit = doc->getFrameSet( 0 )->createFrameSetEdit( this );
     mousePressed = FALSE;
     setMouseMode( MM_EDIT );
 
@@ -89,17 +87,17 @@ KWCanvas::~KWCanvas()
     selectAllFrames( false ); // destroy resize handles properly (they are our children at the Qt level!)
 }
 
-void KWCanvas::repaintChanged()
+void KWCanvas::repaintChanged( KWFrameSet * fs )
 {
-    kdDebug() << "KWCanvas::repaintChanged" << endl;
-    drawAll = FALSE;
-    viewport()->repaint( FALSE );
-    drawAll = TRUE;
+    //kdDebug() << "KWCanvas::repaintChanged " << fs << endl;
+    QPainter p( viewport() );
+    p.translate( -contentsX(), -contentsY() );
+    drawDocument( fs, &p, contentsX(), contentsY(), visibleWidth(), visibleHeight() );
 }
 
 void KWCanvas::repaintAll( bool erase /* = false */ )
 {
-    kdDebug() << "KWCanvas::repaintAll erase=" << erase << endl;
+    //kdDebug() << "KWCanvas::repaintAll erase=" << erase << endl;
     viewport()->repaint( erase );
 }
 
@@ -114,44 +112,45 @@ bool KWCanvas::isOutOfPage( QRect & r, int page ) const
 
 void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 {
+    // Note: in drawContents, the painter is already to the contents coordinates
+    drawDocument( 0L, painter, cx, cy, cw, ch );
+}
+
+void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int cx, int cy, int cw, int ch )
+{
+    //kdDebug() << "KWCanvas::drawDocument onlyFrameset=" << onlyFrameset << endl;
     bool focus = hasFocus() || viewport()->hasFocus();
-#if 0
-    // Can't see what this is good for - if we need it it should be moved to KWTextFrameSet
-    if ( contentsY() == 0 ) {
-        QColorGroup g = colorGroup();
-	painter->fillRect( contentsX(), contentsY(), visibleWidth(), m_currentFrameSet->textDocument()->y(),
-                           g.brush( QColorGroup::Base ) );
-    }
-#endif
+    bool onlyChanged = (onlyFrameset != 0L);
+
     painter->setBrushOrigin( -contentsX(), -contentsY() );
-    // Note: this is drawContents. The painter is already translated correctly.
 
     QRect crect( cx, cy, cw, ch );
-    bool _erase = drawAll; // ### To be checked. Old KWord had stuff like if (_scrolled) erase=true; etc.
-    drawBorders( painter, crect, _erase, crect );
+    if ( !onlyFrameset )      // no need for borders if we're only repainting the text
+        drawBorders( 0L /*onlyFrameset*/, painter, crect );
 
     // Draw all framesets
     QListIterator<KWFrameSet> fit = doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameset = fit.current();
-        if ( frameset->isVisible() )
+        if ( !onlyFrameset || (frameset == onlyFrameset) ) // Draw all, or draw only one
         {
-            //if ( redrawOnlyCurrFrameset && frameset != m_currentFrameSet )
-            //    continue;
-
-            QColorGroup gb=QApplication::palette().active();
-            if ( focus && frameset == m_currentFrameSet && m_currentFrameSetEdit )
-                m_currentFrameSetEdit->drawContents( painter, cx, cy, cw, ch, gb, !drawAll );
-            else
-                frameset->drawContents( painter, cx, cy, cw, ch, gb, !drawAll );
+            if ( frameset->isVisible() )
+            {
+                QColorGroup gb=QApplication::palette().active();
+                if ( focus && m_currentFrameSetEdit && frameset == m_currentFrameSetEdit->frameSet() )     // Currently edited frameset
+                    m_currentFrameSetEdit->drawContents( painter, crect, gb, onlyChanged );
+                else
+                    frameset->drawContents( painter, crect, gb, onlyChanged );
+            }
         }
     }
 }
 
-void KWCanvas::drawBorders( QPainter *painter, QRect v_area, bool drawBack, const QRect &crect )
+void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const QRect & crect )
 {
-    bool clearEmptySpace = true; // we might want to make this a parameter
+    bool clearEmptySpace = onlyFrameset == 0L;
+    bool drawBack = onlyFrameset == 0L;
     QRegion region( crect );
     painter->save();
     painter->setBrush( NoBrush );
@@ -169,9 +168,10 @@ void KWCanvas::drawBorders( QPainter *painter, QRect v_area, bool drawBack, cons
             KWFrame * frame = frameIt.current();
             QRect frameRect( frame->x() - 1, frame->y() - 1,
                              frame->width() + 2, frame->height() + 2 );
-            if ( !v_area.intersects( frameRect ) )
+            if ( !crect.intersects( frameRect ) )
                 continue;
 
+            // set the background color from the main frameset (why?)
             painter->setBrush( isAHeader( frameset->getFrameInfo() ) || isAFooter( frameset->getFrameInfo() ) ?
                                frameset->getFrame( 0 )->getBackgroundColor() : frame->getBackgroundColor() );
             painter->setPen( lightGray );
@@ -187,84 +187,85 @@ void KWCanvas::drawBorders( QPainter *painter, QRect v_area, bool drawBack, cons
             else if ( !doc->getViewFrameBorders() )
                 should_draw = FALSE;
 
-            if ( v_area.intersects( frameRect ) && should_draw && !frameset->getGroupManager() ) {
+            if ( should_draw && !frameset->getGroupManager() ) {
                 if ( clearEmptySpace )
                     region = region.subtract( frameRect );
-                //if ( redrawOnlyCurrFrameset && m_currentFrameSet != frameset )
-                //    ;
-                /*else*/ {
+                if ( !onlyFrameset || frameset == onlyFrameset )
+                {
                     if ( !drawBack )
                         painter->setBrush( Qt::NoBrush );
                     painter->drawRect( frameRect );
                 }
             }
 
+            // Draw cell borders
             painter->setBrush( Qt::NoBrush );
-            if ( v_area.intersects( frameRect ) && frameset->getGroupManager() ) {
+            if ( frameset->getGroupManager() ) {
                 if ( clearEmptySpace )
                     region = region.subtract( frameRect );
-                //if ( redrawOnlyCurrFrameset && m_currentFrameSet != frameset )
-                //    ;
-                /*else*/ {
-                    painter->fillRect( frameRect, frame->getBackgroundColor() );
+                if ( !onlyFrameset || frameset == onlyFrameset )
+                {
+                    if ( drawBack )
+                        painter->fillRect( frameRect, frame->getBackgroundColor() );
+                    // Always draw right and bottom
                     painter->drawLine( frame->right() + 1, frame->y() - 1,
                                        frame->right() + 1, frame->bottom()  + 1 );
                     painter->drawLine( frame->x() - 1, frame->bottom() + 1,
                                        frame->right() + 1, frame->bottom() + 1 );
                     uint row = frameset->getGroupManager()->getCell( frameset )->row;
                     uint col = frameset->getGroupManager()->getCell( frameset )->col;
-                    if ( row == 0 )
-                        painter->drawLine( frame->x() - 1, frame->y() - contentsY() - 1,
-                                           frame->right() + 1, frame->y() - contentsY() - 1 );
-                    if ( col == 0 )
+                    if ( row == 0 ) // draw top only for 1st row
+                        painter->drawLine( frame->x() - 1, frame->y() - 1,
+                                           frame->right() + 1, frame->y() - 1 );
+                    if ( col == 0 ) // draw left only for 1st column
                         painter->drawLine( frame->x() - 1, frame->y() - 1,
                                            frame->x() - 1, frame->bottom() + 1 );
                 }
             }
 
-            //if ( redrawOnlyCurrFrameset && m_currentFrameSet != frameset )
-            //    continue;
+            if ( !onlyFrameset || frameset == onlyFrameset )
+            {
+                // Draw frame borders
 
-            // Draw frame borders
+                if ( isAHeader( frameset->getFrameInfo() ) || isAFooter( frameset->getFrameInfo() ) )
+                    frame = frameset->getFrame( 0 );
 
-            if ( isAHeader( frameset->getFrameInfo() ) || isAFooter( frameset->getFrameInfo() ) )
-                frame = frameset->getFrame( 0 );
-
-            if ( frame->getLeftBorder().ptWidth > 0 && frame->getLeftBorder().color !=
-                 frame->getBackgroundColor().color() ) {
-                QPen p( Border::borderPen( frame->getLeftBorder() ) );
-                painter->setPen( p );
-                painter->drawLine( frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.y(),
-                                   frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.bottom() + 1 );
-            }
-            if ( frame->getRightBorder().ptWidth > 0 && frame->getRightBorder().color !=
-                 frame->getBackgroundColor().color() ) {
-                QPen p( Border::borderPen( frame->getRightBorder() ) );
-                painter->setPen( p );
-                int w = frame->getRightBorder().ptWidth;
-                if ( ( w / 2 ) * 2 == w ) w--;
-                w /= 2;
-                painter->drawLine( frameRect.right() - w, frameRect.y(),
-                                   frameRect.right() - w, frameRect.bottom() + 1 );
-            }
-            if ( frame->getTopBorder().ptWidth > 0 && frame->getTopBorder().color !=
-                 frame->getBackgroundColor().color() ) {
-                QPen p( Border::borderPen( frame->getTopBorder() ) );
-                painter->setPen( p );
-                painter->drawLine( frameRect.x(), frameRect.y() + frame->getTopBorder().ptWidth / 2,
-                                   frameRect.right() + 1,
-                                   frameRect.y() + frame->getTopBorder().ptWidth / 2 );
-            }
-            if ( frame->getBottomBorder().ptWidth > 0 && frame->getBottomBorder().color !=
-                 frame->getBackgroundColor().color() ) {
-                int w = frame->getBottomBorder().ptWidth;
-                if ( ( w / 2 ) * 2 == w ) w--;
-                w /= 2;
-                QPen p( Border::borderPen( frame->getBottomBorder() ) );
-                painter->setPen( p );
-                painter->drawLine( frameRect.x(), frameRect.bottom() - w,
-                                   frameRect.right() + 1,
-                                   frameRect.bottom() - w );
+                if ( frame->getLeftBorder().ptWidth > 0 && frame->getLeftBorder().color !=
+                     frame->getBackgroundColor().color() ) {
+                    QPen p( Border::borderPen( frame->getLeftBorder() ) );
+                    painter->setPen( p );
+                    painter->drawLine( frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.y(),
+                                       frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.bottom() + 1 );
+                }
+                if ( frame->getRightBorder().ptWidth > 0 && frame->getRightBorder().color !=
+                     frame->getBackgroundColor().color() ) {
+                    QPen p( Border::borderPen( frame->getRightBorder() ) );
+                    painter->setPen( p );
+                    int w = frame->getRightBorder().ptWidth;
+                    if ( ( w / 2 ) * 2 == w ) w--;
+                    w /= 2;
+                    painter->drawLine( frameRect.right() - w, frameRect.y(),
+                                       frameRect.right() - w, frameRect.bottom() + 1 );
+                }
+                if ( frame->getTopBorder().ptWidth > 0 && frame->getTopBorder().color !=
+                     frame->getBackgroundColor().color() ) {
+                    QPen p( Border::borderPen( frame->getTopBorder() ) );
+                    painter->setPen( p );
+                    painter->drawLine( frameRect.x(), frameRect.y() + frame->getTopBorder().ptWidth / 2,
+                                       frameRect.right() + 1,
+                                       frameRect.y() + frame->getTopBorder().ptWidth / 2 );
+                }
+                if ( frame->getBottomBorder().ptWidth > 0 && frame->getBottomBorder().color !=
+                     frame->getBackgroundColor().color() ) {
+                    int w = frame->getBottomBorder().ptWidth;
+                    if ( ( w / 2 ) * 2 == w ) w--;
+                    w /= 2;
+                    QPen p( Border::borderPen( frame->getBottomBorder() ) );
+                    painter->setPen( p );
+                    painter->drawLine( frameRect.x(), frameRect.bottom() - w,
+                                       frameRect.right() + 1,
+                                       frameRect.bottom() - w );
+                }
             }
         }
     }
@@ -278,7 +279,7 @@ void KWCanvas::drawBorders( QPainter *painter, QRect v_area, bool drawBack, cons
     for ( int k = 0; k < doc->getPages(); k++ ) {
         QRect pageRect( 0, ( k * doc->ptPaperHeight() ),
                         doc->ptPaperWidth(), doc->ptPaperHeight() );
-        if ( v_area.intersects( pageRect ) )
+        if ( crect.intersects( pageRect ) )
             painter->drawRect( pageRect );
         // Exclude red border line
         pageRect.rLeft() += 1;
@@ -655,7 +656,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
         }
 
         if ( !updates.isEmpty() ) {
-            kdDebug() << "KWCanvas::mmEditFrameMove UPDATES" << endl;
+            //kdDebug() << "KWCanvas::mmEditFrameMove UPDATES" << endl;
             for ( unsigned int i = 0; i < updates.count(); i++ ) {
                 KWGroupManager *grpMgr = updates.at( i );
                 for ( unsigned k = 0; k < grpMgr->getNumCells(); k++ ) {
@@ -825,7 +826,7 @@ void KWCanvas::mrEditFrame()
 
 void KWCanvas::mrCreateText()
 {
-    repaintChanged();
+    repaintAll();
     KWFrame *frame = new KWFrame(0L, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
 
     m_insRect = m_insRect.normalize();
@@ -840,7 +841,7 @@ void KWCanvas::mrCreateText()
 
 void KWCanvas::mrCreatePixmap()
 {
-    repaintChanged();
+    repaintAll();
 
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() && !m_PixmapName.isEmpty() ) {
@@ -851,14 +852,14 @@ void KWCanvas::mrCreatePixmap()
                                      m_insRect.height() );
         frameset->addFrame( frame );
         doc->addFrameSet( frameset );
-        repaintChanged();
+        repaintAll();
     }
     setMouseMode( MM_EDIT );
 }
 
 void KWCanvas::mrCreatePart() // mouse release, when creating part or kspread table
 {
-    repaintChanged();
+    repaintAll();
 
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
@@ -870,7 +871,7 @@ void KWCanvas::mrCreatePart() // mouse release, when creating part or kspread ta
 
 void KWCanvas::mrCreateFormula()
 {
-    repaintChanged();
+    repaintAll();
 
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
@@ -878,14 +879,14 @@ void KWCanvas::mrCreateFormula()
         KWFrame *frame = new KWFrame(frameset, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
         frameset->addFrame( frame );
         doc->addFrameSet( frameset );
-        repaintChanged();
+        repaintAll();
     }
     setMouseMode( MM_EDIT );
 }
 
 void KWCanvas::mrCreateTable()
 {
-    repaintChanged();
+    repaintAll();
 
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
@@ -971,7 +972,7 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
                 mrCreateFormula();
                 break;
             default:
-                repaintChanged();
+                repaintAll();
         }
 
 	mousePressed = FALSE;
@@ -994,7 +995,7 @@ void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
             break;
     }
 
-    repaintChanged();
+    repaintAll();
     mousePressed = TRUE;
 }
 
@@ -1035,7 +1036,7 @@ void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
     KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Left Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
     doc->addCommand(cmd);
 
-    repaintChanged();
+    repaintAll();
 }
 
 /*================================================================*/
@@ -1074,7 +1075,7 @@ void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
     KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Right Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
     doc->addCommand(cmd);
 
-    repaintChanged();
+    repaintAll();
 }
 
 /*================================================================*/
@@ -1112,7 +1113,7 @@ void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
     KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Top Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
     doc->addCommand(cmd);
 
-    repaintChanged();
+    repaintAll();
 }
 
 /*================================================================*/
@@ -1151,7 +1152,7 @@ void KWCanvas::setBottomFrameBorder( Border _frmBrd, bool _b )
     KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Bottom Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
     doc->addCommand(cmd);
 
-    repaintChanged();
+    repaintAll();
 }
 
 /*================================================================*/
@@ -1244,7 +1245,7 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
     macroCmd->addCommand(cmd);
 
     doc->addCommand(macroCmd);
-    repaintChanged();
+    repaintAll();
 }
 
 /*================================================================*/
@@ -1270,7 +1271,7 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
     }
     KWFrameBackGroundColorCommand *cmd=new KWFrameBackGroundColorCommand(i18n("Change Frame BackGroundColor"),doc,frameindexList,oldColor,_backColor);
     doc->addCommand(cmd);
-    repaintChanged();
+    repaintAll();
 }
 
 
@@ -1556,7 +1557,7 @@ void KWCanvas::setMouseMode( MouseMode _mm )
         } break;
     }
 
-    repaintChanged();
+    repaintAll();
 }
 
 void KWCanvas::contentsDragEnterEvent( QDragEnterEvent *e )
@@ -1649,7 +1650,11 @@ void KWCanvas::updateCurrentFormat()
 
 void KWCanvas::printRTDebug()
 {
-    KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>(m_currentFrameSet);
+    KWTextFrameSet * textfs = 0L;
+    if ( m_currentFrameSetEdit )
+        textfs = dynamic_cast<KWTextFrameSet *>(m_currentFrameSetEdit->frameSet());
+    if ( !textfs )
+        textfs = dynamic_cast<KWTextFrameSet *>(doc->getFrameSet( 0 ) );
     if ( !textfs )
         return;
     static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };

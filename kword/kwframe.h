@@ -244,7 +244,7 @@ public:
     /**
      * Paint this frameset in "has focus" mode (e.g. with a cursor)
      */
-    virtual void drawContents( QPainter *, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/,
+    virtual void drawContents( QPainter *, const QRect &,
                                QColorGroup &, bool /*onlyChanged*/ ) {}
 
     // Events forwarded by the canvas (when being in "edit" mode)
@@ -316,12 +316,15 @@ public:
      * Paint this frameset
      * When the frameset is being edited, KWFrameSetEdit's drawContents is called instead.
      */
-    virtual void drawContents( QPainter *, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/,
+    virtual void drawContents( QPainter *, const QRect &,
                                QColorGroup &, bool /*onlyChanged*/ )
     {}
 
-    /** reshuffle frames so text is always displayed from top-left down and then right. */
-    virtual void updateFrames() {}
+    /**
+     * Called when our frames change, or when another frameset's frames change.
+     * Framesets can reimplement it, but should always call the parent method.
+     */
+    virtual void updateFrames();
 
     /** relayout text in frames, so that it flows correctly around other frames */
     virtual void layout() {}
@@ -382,11 +385,13 @@ public:
     void setName( const QString &_name ) { name = _name; }
 
 protected:
-    // document
-    KWDocument *doc;
 
-    // frames
-    QList<KWFrame> frames;
+    // Determine the clipping rectangle for drawing the contents of @p frame with @p painter
+    QRegion frameClipRegion( QPainter * painter, KWFrame *frame );
+
+    KWDocument *doc;              // Document
+    QList<KWFrame> frames;        // Our frames
+    QList<KWFrame> m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
 
     FrameInfo frameInfo;
     int current;
@@ -420,7 +425,7 @@ public:
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &attributes );
 
-    virtual void drawContents( QPainter *painter, int cx, int cy, int cw, int ch,
+    virtual void drawContents( QPainter *painter, const QRect & crect,
                                QColorGroup &, bool /*onlyChanged*/ );
 
 protected:
@@ -450,7 +455,7 @@ public:
 
     virtual void updateFrames();
 
-    void drawContents( QPainter * p, int cx, int cy, int cw, int ch,
+    void drawContents( QPainter * p, const QRect & crect,
                        QColorGroup &, bool onlyChanged );
 
     //void enableDrawing( bool f ) { _enableDrawing = f; }

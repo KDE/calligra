@@ -79,14 +79,14 @@ public:
     /** returns a deep copy of self (and all it contains) */
     KWTextFrameSet *getCopy();
 
-    virtual void drawContents( QPainter *p, int cx, int cy, int cw, int ch,
+    virtual void drawContents( QPainter *p, const QRect & crect,
                                QColorGroup &cg, bool onlyChanged )
     {
         // Called by KWCanvas when no focus (->no cursor)
-        drawContents( p, cx, cy, cw, ch, cg, onlyChanged, false, 0L );
+        drawContents( p, crect, cg, onlyChanged, false, 0L );
     }
 
-    void drawContents( QPainter *p, int cx, int cy, int cw, int ch,
+    void drawContents( QPainter *p, const QRect & crect,
                        QColorGroup &gb, bool onlyChanged,
                        bool drawCursor, QTextCursor *cursor );
 
@@ -154,9 +154,6 @@ protected:
     void readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, QTextString &text, bool fillStyles = false );
     void setLastFormattedParag( QTextParag *parag ) { m_lastFormatted = parag; }
 
-    // Determine the clipping rectangle for drawing the contents of @p frame with @p painter
-    QRegion frameClipRegion( QPainter * painter, KWFrame *frame );
-
 private:
     /**
      * The undo-redo structure holds the _temporary_ information that _will_
@@ -201,7 +198,6 @@ private:
     int m_width;                               // Copy of private QTextFlow::width
     int m_availableHeight;                     // Sum of the height of all our frames
     QMap<QWidget *, int> m_mapViewAreas;       // Store the "needs" of each view
-    QList<KWFrame> m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
 };
 
 /**
@@ -221,10 +217,10 @@ public:
     /**
      * Paint this frameset with a cursor
      */
-    virtual void drawContents( QPainter *p, int cx, int cy, int cw, int ch,
+    virtual void drawContents( QPainter *p, const QRect & crect,
                                QColorGroup &gb, bool onlyChanged )
     {
-        textFrameSet()->drawContents( p, cx, cy, cw, ch, gb, onlyChanged, true, cursor );
+        textFrameSet()->drawContents( p, crect, gb, onlyChanged, true, cursor );
     }
 
     KWTextFrameSet * textFrameSet() const
@@ -302,6 +298,7 @@ private slots:
     void showCursor() { drawCursor( true ); }
     void ensureCursorVisible();
     void showCurrentFormat();
+    void repaintChanged();
 
 private:
 

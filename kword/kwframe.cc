@@ -416,6 +416,47 @@ int KWFrameSet::getFrameFromPtr( KWFrame *frame )
 }
 
 /*================================================================*/
+void KWFrameSet::updateFrames()
+{
+    // Iterate over ALL framesets, to find those which have frames on top of us.
+    // We'll use this information in various methods (adjust[LR]Margin, drawContents etc.)
+    // So we want it cached.
+    m_framesOnTop.clear();
+    QListIterator<KWFrameSet> framesetIt( doc->framesetsIterator() );
+    bool foundThis = false;
+    for (; framesetIt.current(); ++framesetIt )
+    {
+        KWFrameSet *frameSet = framesetIt.current();
+
+        if ( frameSet == this )
+        {
+            foundThis = true;
+            continue;
+        }
+
+        if ( !foundThis || !frameSet->isVisible() )
+            continue;
+
+        QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
+        for ( ; frameIt.current(); ++frameIt )
+        {
+            KWFrame *frame = frameIt.current();
+            // Is this frame over any of our frames ?
+            QListIterator<KWFrame> fIt( frameIterator() );
+            for ( ; fIt.current(); ++fIt )
+            {
+                if ( frame->intersects( *fIt.current() ) )
+                {
+                    m_framesOnTop.append( frame );
+                    break;
+                }
+            }
+        }
+    }
+    kdDebug() << "KWTextFrameSet::updateFrames frame on top:" << m_framesOnTop.count() << endl;
+}
+
+/*================================================================*/
 bool KWFrameSet::contains( unsigned int mx, unsigned int my )
 {
     for ( unsigned int i = 0; i < frames.count(); i++ ) {
@@ -722,6 +763,27 @@ bool KWFrameSet::isVisible() const
              !isAWrongFooter( frameInfo, doc->getFooterType() ) );
 }
 
+
+// This determines where to clip the painter to draw the contents of a given frame
+// It clips to the frame, and clips out any "on top" frame.
+QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame )
+{
+    QRect rc = painter->xForm( *frame );
+    //kdDebug() << "KWTextFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame) << " clip region rect=" << DEBUGRECT(rc) << endl;
+    QRegion reg( rc );
+    QListIterator<KWFrame> fIt( m_framesOnTop );
+    for ( ; fIt.current() ; ++fIt )
+    {
+        QRect r = painter->xForm( *fIt.current() );
+        r = QRect( r.x() - 1, r.y() - 1,  // ### plan for a one-pixel border. Maybe we should use the real border width.
+                   r.width() + 2, r.height() + 2 );
+        //kdDebug() << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
+        reg -= r; // subtract
+    }
+    return reg;
+}
+
+
 /******************************************************************/
 /* Class: KWPictureFrameSet                                       */
 /******************************************************************/
@@ -794,15 +856,21 @@ void KWPictureFrameSet::load( QDomElement &attributes )
     }
 }
 
-void KWPictureFrameSet::drawContents( QPainter *painter, int cx, int cy, int cw, int ch,
+void KWPictureFrameSet::drawContents( QPainter *painter, const QRect & crect,
                                       QColorGroup &, bool /*onlyChanged*/ )
 {
     QRect r = *frames.first();
 
     if ( r.size() != m_image.image().size() )
         m_image = m_image.scale( r.size() );
-
-    painter->drawPixmap( r.left(), r.top(), m_image.pixmap() );
+    QRegion reg = frameClipRegion( painter, frames.first() ).intersect( crect );
+    if ( !reg.isEmpty() )
+    {
+        painter->save();
+        painter->setClipRegion( reg );
+        painter->drawPixmap( r.left(), r.top(), m_image.pixmap() );
+        painter->restore();
+    }
 }
 
 /******************************************************************/
@@ -837,23 +905,26 @@ QPicture *KWPartFrameSet::getPicture()
     return &pic;
 }
 
-void KWPartFrameSet::drawContents( QPainter * painter, int cx, int cy, int cw, int ch,
+void KWPartFrameSet::drawContents( QPainter * painter, const QRect & crect,
                                    QColorGroup &, bool onlyChanged )
 {
     if (!onlyChanged)
     {
         QPicture *pic = getPicture();
-        if ( !pic )
+        if ( !pic || frames.isEmpty() )
             return;
-        painter->save();
-        QRect r = painter->viewport();
         KWFrame *frame = frames.first();
-        painter->setClipRect( frame->x(), frame->y(),
-                              frame->width() - 1, frame->height() - 1 ); // why -1 ?
-        painter->setViewport( frame->x(), frame->y(), r.width(), r.height() );
-        painter->drawPicture( *pic );
-        painter->setViewport( r );
-        painter->restore();
+        QRegion reg = frameClipRegion( painter, frame ).intersect( crect );
+        if ( !reg.isEmpty() )
+        {
+            painter->save();
+            QRect r = painter->viewport();
+            painter->setClipRegion( reg );
+            painter->setViewport( frame->x(), frame->y(), r.width(), r.height() );
+            painter->drawPicture( *pic );
+            painter->setViewport( r );
+            painter->restore();
+        }
     }
 }
 
@@ -880,6 +951,7 @@ void KWPartFrameSet::updateFrames()
 {
     child->setGeometry( QRect( frames.at( 0 )->x(), frames.at( 0 )->y(),
                                frames.at( 0 )->width(), frames.at( 0 )->height() ) );
+    KWFrameSet::updateFrames();
 }
 
 /*================================================================*/
@@ -1037,6 +1109,7 @@ void KWFormulaFrameSet::create( QWidget *parent )
 /*================================================================*/
 void KWFormulaFrameSet::updateFrames()
 {
+    KWFrameSet::updateFrames();
     if ( !formulaEdit )
         return;
     formulaEdit->setFont( font );

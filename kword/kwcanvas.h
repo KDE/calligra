@@ -58,7 +58,7 @@ public:
 
     KWDocument * kWordDocument() const { return doc; }
     KWGUI * gui() const { return m_gui; }
-    KWFrameSet *currentFrameSet() const { return m_currentFrameSet; }
+    //KWFrameSet *currentFrameSet() const { return m_currentFrameSet; }
     KWFrameSetEdit *currentFrameSetEdit() const { return m_currentFrameSetEdit; }
 
     void repaintAll( bool erase = false );
@@ -125,24 +125,43 @@ public:
 
 public slots:
     void printRTDebug();
-    void repaintChanged();
+    /**
+     * Only repaint the frameset @p fs
+     */
+    void repaintChanged( KWFrameSet * fs );
 
 protected:
     /** Set format changes on selection on current cursor */
     void setFormat( QTextFormat *, int flags);
 
-    void drawContents( QPainter *p, int cx, int cy, int cw, int ch );
-    void drawBorders( QPainter *painter, QRect v_area, bool drawBack, const QRect &crect );
+    /**
+     * Reimplemented from QScrollView, to draw the contents of the canvas
+     */
+    virtual void drawContents( QPainter *p, int cx, int cy, int cw, int ch );
+    /**
+     * The main drawing method.
+     * @param onlyFrameset if 0L, repaint everything, otherwise repaint only what has changed inside this frameset.
+     * @param painter
+     * @param cx, cy, cw, ch the area to be repainted, in contents coordinates
+     */
+    void drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int cx, int cy, int cw, int ch );
+    /**
+     * Draw the borders of the frames
+     * @param onlyFrameset if 0L, all frames of all frameset, otherwise only those of this particular frameset.
+     * @param painter
+     * @param crect the area to be repainted, in contents coordinates
+     */
+    void drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const QRect &crect );
 
-    void keyPressEvent( QKeyEvent *e );
-    void contentsMousePressEvent( QMouseEvent *e );
-    void contentsMouseMoveEvent( QMouseEvent *e );
-    void contentsMouseReleaseEvent( QMouseEvent *e );
-    void contentsMouseDoubleClickEvent( QMouseEvent *e );
-    void contentsDragEnterEvent( QDragEnterEvent *e );
-    void contentsDragMoveEvent( QDragMoveEvent *e );
-    void contentsDragLeaveEvent( QDragLeaveEvent *e );
-    void contentsDropEvent( QDropEvent *e );
+    virtual void keyPressEvent( QKeyEvent *e );
+    virtual void contentsMousePressEvent( QMouseEvent *e );
+    virtual void contentsMouseMoveEvent( QMouseEvent *e );
+    virtual void contentsMouseReleaseEvent( QMouseEvent *e );
+    virtual void contentsMouseDoubleClickEvent( QMouseEvent *e );
+    virtual void contentsDragEnterEvent( QDragEnterEvent *e );
+    virtual void contentsDragMoveEvent( QDragMoveEvent *e );
+    virtual void contentsDragLeaveEvent( QDragLeaveEvent *e );
+    virtual void contentsDropEvent( QDropEvent *e );
 
     void selectAllFrames( bool select );
     void selectFrame( int mx, int my, bool select );
@@ -157,9 +176,8 @@ private slots:
 
 private:
     KWDocument *doc;
-    KWFrameSet *m_currentFrameSet;
     KWFrameSetEdit *m_currentFrameSetEdit;
-    bool drawAll, mousePressed;
+    bool mousePressed;
     KWGUI *m_gui;
     QTimer *scrollTimer;
 
