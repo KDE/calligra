@@ -379,6 +379,11 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
         parag->setChanged( TRUE );
         parag = static_cast<KWTextParag *>(parag->next());
     }
+    // In case loadFormatting queued any image request
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(c->parag()->document());
+    KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
+    doc->processImageRequests();
+
     m_lastParag = c->parag()->paragId();
     m_lastIndex = c->index();
     return c;

@@ -111,9 +111,9 @@ public:
     virtual bool loadXML( QIODevice *, const QDomDocument & dom );
     virtual bool loadChildren( KoStore *_store );
     virtual QDomDocument saveXML();
-    virtual bool completeSaving( KoStore *_store );
+    void processImageRequests();
 
-    int getSyntaxVersion( ) const { return syntaxVersion; }
+    //int getSyntaxVersion( ) const { return syntaxVersion; }
 
     // Called by KWFrame*'s loading code to emit correct progress info
     void progressItemLoaded();
@@ -458,7 +458,8 @@ protected:
     KoView* createViewInstance( QWidget* parent, const char* name );
     virtual bool saveChildren( KoStore *_store, const QString &_path );
 
-    virtual bool completeLoading( KoStore* /* _store */ );
+    virtual bool completeLoading( KoStore* _store );
+    virtual bool completeSaving( KoStore *_store );
 
     virtual void draw( QPaintDevice*, long int _width, long int _height,
                        float _scale );

@@ -1425,7 +1425,18 @@ bool KWDocument::completeLoading( KoStore *_store )
         }
     }
 
+    processImageRequests();
 
+    // Finalize all the existing framesets
+    QListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+        fit.current()->finalize();
+
+    return TRUE;
+}
+
+void KWDocument::processImageRequests()
+{
     QMapIterator<QString,KWTextImage *> it2 = imageRequests.begin();
     for ( ; it2 != imageRequests.end(); ++it2 )
     {
@@ -1438,13 +1449,6 @@ bool KWDocument::completeLoading( KoStore *_store )
     for ( ; it3 != imageRequests2.end(); ++it3 )
         it3.data()->setImage( m_imageCollection.findImage( it3.key() ) );
     imageRequests2.clear();
-
-    // Finalize all the existing framesets
-    QListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-        fit.current()->finalize();
-
-    return TRUE;
 }
 
 /*================================================================*/
