@@ -46,7 +46,7 @@ HTMLExportDia::HTMLExportDia(QWidget *parent, const char *name) :
     r2=new QRadioButton(i18n("XHTML 1.0"), box1);
     bl1->addWidget(r2);
     box1->setExclusive(true);
-    box1->setButton(0);
+    box1->setButton(1); // XHTML 1.0 is default.
     bl1->activate();
 //    ml->addStretch(5);
     box2=new QVButtonGroup(i18n("Mode"),this);
@@ -59,7 +59,7 @@ HTMLExportDia::HTMLExportDia(QWidget *parent, const char *name) :
     ra3=new QRadioButton(i18n("Style (Formatting coded using CSS2, no style sheets)"), box2);
     bl2->addWidget(ra3);
     box2->setExclusive(true);
-    box2->setButton(1);
+    box2->setButton(1); // "Direct" mode is default.
     bl2->activate();
     ml->addStretch(5);
     ml->activate();
