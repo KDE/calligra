@@ -13,9 +13,8 @@ SUBDIRS = core shapes widgets dialogs commands tools render visitors . data pics
 
 bin_PROGRAMS = karbon
 
-lib_LTLIBRARIES = \
-	karbon.la \
-	libkarbonpart.la
+lib_LTLIBRARIES = karbon.la
+kde_module_LTLIBRARIES = libkarbonpart.la
 
 libkarbonpart_la_SOURCES = \
 	karbon_factory.cc \

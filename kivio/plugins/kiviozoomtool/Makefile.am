@@ -3,7 +3,7 @@
 #### WARNING! All changes made in this part will be lost! ####
 ##############################################################
 SUBDIRS = zoom_pics 
-lib_LTLIBRARIES =libkiviozoomtool.la
+kde_module_LTLIBRARIES =libkiviozoomtool.la
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
@@ -24,7 +24,7 @@ EXTRA_DIST = \
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$
-libkiviozoomtool_la_LDFLAGS = -avoid-version -module -no-undefined
+libkiviozoomtool_la_LDFLAGS = -module $(KDE_PLUGIN)
 libkiviozoomtool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
 
 rc_DATA = kiviozoomtool.rc

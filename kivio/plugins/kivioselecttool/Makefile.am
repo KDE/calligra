@@ -3,7 +3,7 @@
 #### WARNING! All changes made in this part will be lost! ####
 ##############################################################
 SUBDIRS = select_pics 
-lib_LTLIBRARIES =libkivioselecttool.la
+kde_module_LTLIBRARIES =libkivioselecttool.la
 
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
@@ -25,7 +25,7 @@ EXTRA_DIST = \
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$
-libkivioselecttool_la_LDFLAGS = -avoid-version -module -no-undefined
+libkivioselecttool_la_LDFLAGS = -module $(KDE_PLUGIN)
 libkivioselecttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
 
 rc_DATA = kivioselecttool.rc

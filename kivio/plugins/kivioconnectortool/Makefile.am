@@ -3,7 +3,7 @@
 #### WARNING! All changes made in this part will be lost! ####
 ##############################################################
 SUBDIRS = straight_connector 
-lib_LTLIBRARIES =libkivioconnectortool.la
+kde_module_LTLIBRARIES =libkivioconnectortool.la
 
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
@@ -29,7 +29,7 @@ EXTRA_DIST = \
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$
-libkivioconnectortool_la_LDFLAGS = -avoid-version -module -no-undefined
+libkivioconnectortool_la_LDFLAGS = -module $(KDE_PLUGIN)
 libkivioconnectortool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
 
 rc_DATA = kivioconnectortool.rc

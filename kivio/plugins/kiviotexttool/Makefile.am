@@ -3,7 +3,7 @@
 #### WARNING! All changes made in this part will be lost! ####
 ##############################################################
 
-lib_LTLIBRARIES =libkiviotexttool.la
+kde_module_LTLIBRARIES =libkiviotexttool.la
 
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
@@ -29,7 +29,7 @@ EXTRA_DIST = \
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$
-libkiviotexttool_la_LDFLAGS = -avoid-version -module -no-undefined
+libkiviotexttool_la_LDFLAGS = -module $(KDE_PLUGIN)
 libkiviotexttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
 
 rc_DATA = kiviotexttool.rc
