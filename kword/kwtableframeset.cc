@@ -717,7 +717,7 @@ void KWTableFrameSet::setBoundingRect( KoRect rect )
             frame->setRect( rect.x() + j * (baseWidth + tableCellSpacing),
                 rect.y() + i * (baseHeight + tableCellSpacing), baseWidth, baseHeight );
             //frame->setPageNum(m_doc->getPageOfRect( *frame ));
-            frame->setMinFrameHeight(minBaseHeight);
+            frame->setMinFrameHeight(baseHeight);
         }
     }
 }
