@@ -139,6 +139,7 @@ class KexiMainWindowImpl::Private
 		//! edit menu
 		KAction *action_edit_delete, *action_edit_delete_row,
 			*action_edit_cut, *action_edit_copy, *action_edit_paste,
+			*action_edit_undo, *action_edit_redo,
 			*action_edit_insert_empty_row;
 
 		// view menu
@@ -315,8 +316,22 @@ KexiProject	*KexiMainWindowImpl::project()
 
 void KexiMainWindowImpl::setWindowMenu(QPopupMenu *menu)
 {
-    delete m_pWindowMenu;
+	delete m_pWindowMenu;
 	m_pWindowMenu = menu;
+	int count = menuBar()->count();
+	//try to move "window" menu just before "Settings" menu (count-3)
+	const QString txt = i18n("&Window");
+	int i;
+	for (i=0; i<count; i++) {
+		kdDebug() << menuBar()->text( menuBar()->idAt(i) ) << endl;
+		if (txt==menuBar()->text( menuBar()->idAt(i) ))
+			break;
+	}
+	if (i<count) {
+		const int id = menuBar()->idAt(i);
+		menuBar()->removeItemAt(i);
+		menuBar()->insertItem(txt, m_pWindowMenu, id, count-3);
+	}
 	m_pWindowMenu->setCheckable(TRUE);
 	QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
 }
@@ -379,6 +394,9 @@ KexiMainWindowImpl::initActions()
 	d->action_edit_cut = createSharedAction( KStdAction::Cut, "edit_cut");
 	d->action_edit_copy = createSharedAction( KStdAction::Copy, "edit_copy");
 	d->action_edit_paste = createSharedAction( KStdAction::Paste, "edit_paste");
+
+	d->action_edit_undo = createSharedAction( KStdAction::Undo, "edit_undo");
+	d->action_edit_redo = createSharedAction( KStdAction::Redo, "edit_redo");
 
 	d->action_edit_delete = createSharedAction(i18n("&Delete"), "button_cancel", Key_Delete, "edit_delete");
 	d->action_edit_delete->setToolTip(i18n("Delete object"));
@@ -1232,7 +1250,8 @@ KexiMainWindowImpl::updateDialogViewGUIClient(KXMLGUIClient *viewClient)
 	if (viewClient!=d->curDialogViewGUIClient) {
 		//view clients differ
 		kdDebug()<<"KexiMainWindowImpl::activeWindowChanged(): old view gui client:"
-			<<d->curDialogViewGUIClient<<" new view gui client: "<<viewClient<<endl;
+			<<(d->curDialogViewGUIClient ? d->curDialogViewGUIClient->xmlFile() : "")
+			<<" new view gui client: "<<( viewClient ? viewClient->xmlFile() : "") <<endl;
 		if (d->curDialogViewGUIClient) {
 			guiFactory()->removeClient(d->curDialogViewGUIClient);
 		}
@@ -1280,7 +1299,8 @@ KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 		if (client!=d->curDialogGUIClient) {
 			//clients differ
 			kdDebug()<<"KexiMainWindowImpl::activeWindowChanged(): old gui client:"
-				<<d->curDialogGUIClient<<" new gui client: "<<client<<endl;
+				<<(d->curDialogGUIClient ? d->curDialogGUIClient->xmlFile() : "")
+				<<" new gui client: "<<( client ? client->xmlFile() : "") <<endl;
 			if (d->curDialogGUIClient) {
 				guiFactory()->removeClient(d->curDialogGUIClient);
 				d->curDialog->detachFromGUIClient();
@@ -1334,6 +1354,13 @@ KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 	d->curDialogViewGUIClient=viewClient;
 
 	bool dialogChanged = ((KexiDialogBase*)d->curDialog)!=dlg;
+
+	if (dialogChanged) {
+		if (d->curDialog) {
+			//inform previously activated dialog about deactivation
+			d->curDialog->deactivate();
+		}
+	}
 	d->curDialog=dlg;
 
 	propertyBufferSwitched(d->curDialog);
@@ -1868,12 +1895,18 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled,
 
 bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool layoutTaskBar)
 {
+
 	cancelled = false;
 	if (!dlg)
 		return true;
 	if (d->insideCloseDialog)
 		return true;
 	d->insideCloseDialog = true;
+
+/*this crashes but is nice:
+	QWidget *www = guiFactory()->container("query", dlg->commonGUIClient()); 
+	delete www;*/
+	
 	bool remove_on_closing = dlg->partItem() ? dlg->partItem()->neverSaved() : false;
 	if (dlg->dirty() && !d->forceDialogClosing) {
 		//dialog's data is dirty:
