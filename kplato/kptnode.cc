@@ -399,6 +399,7 @@ void KPTNode::saveRelations(QDomElement &element) {
 }
 
 void KPTNode::setConstraint(QString &type) {
+    // Do not i18n these, they are used in load()
     if (type == "ASAP")
         setConstraint(ASAP);
     else if (type == "ALAP")
@@ -409,11 +410,14 @@ void KPTNode::setConstraint(QString &type) {
         setConstraint(FinishNotLater);
     else if (type == "MustStartOn")
         setConstraint(MustStartOn);
+    else if (type == "MustFinishOn")
+        setConstraint(MustFinishOn);
     else
         setConstraint(ASAP);  // default
 }
 
 QString KPTNode::constraintToString() const {
+    // Do not i18n these, they are used in save()
     if (m_constraint == ASAP)
         return QString("ASAP");
     else if (m_constraint == ALAP)
@@ -424,6 +428,8 @@ QString KPTNode::constraintToString() const {
         return QString("FinishNotLater");
     else if (m_constraint == MustStartOn)
         return QString("MustStartOn");
+    else if (m_constraint == MustFinishOn)
+        return QString("MustFinishOn");
 
     return QString();
 }

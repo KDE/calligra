@@ -62,7 +62,7 @@ class KPTNode {
     friend class KPTProject;
 
 public:
-    enum ConstraintType { ASAP, ALAP, StartNotEarlier, FinishNotLater, MustStartOn };
+    enum ConstraintType { ASAP, ALAP, StartNotEarlier, FinishNotLater, MustStartOn, MustFinishOn };
 
     KPTNode(KPTNode *parent = 0);
 
