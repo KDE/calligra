@@ -252,10 +252,10 @@ KexiMainWindow::initActions()
 	d->action_close->setWhatsThis(i18n("Close the current project."));
 	KStdAction::quit( this, SLOT(slotQuit()), actionCollection(), "quit");
 
-	d->action_project_relations = new KAction(i18n("&Relations..."), "relation", CTRL + Key_R, 
+	d->action_project_relations = new KAction(i18n("&Relationships..."), "relation", CTRL + Key_R, 
 		this, SLOT(slotProjectRelations()), actionCollection(), "project_relations");
-	d->action_project_relations->setToolTip(i18n("Project relations"));
-	d->action_project_relations->setWhatsThis(i18n("Show project relations"));
+	d->action_project_relations->setToolTip(i18n("Project relationships"));
+	d->action_project_relations->setWhatsThis(i18n("Show project relationships"));
 
 	//EDIT MENU
 	d->action_edit_cut = createSharedAction( KStdAction::Cut, "edit_cut");
