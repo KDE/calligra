@@ -230,7 +230,8 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect, bool drawVObjec
 void
 VCanvas::repaintAll( bool drawVObjects )
 {
-	m_view->layersDocker()->updatePreviews();
+	//if( m_view->layersDocker() )
+	//	m_view->layersDocker()->updatePreviews();
 	//drawContents( 0, 0, 0, width(), height() );
 	drawDocument( 0, QRect( 0, 0, width(), height() ), drawVObjects );
 	//viewport()->repaint( erase );
@@ -240,7 +241,8 @@ VCanvas::repaintAll( bool drawVObjects )
 void
 VCanvas::repaintAll( const KoRect & )
 {
-	m_view->layersDocker()->updatePreviews();
+	//if( m_view->layersDocker() )
+//		m_view->layersDocker()->updatePreviews();
 	VPainter *p = m_view->painterFactory()->painter();
 	QRect rect( rect().x(), rect().y(), rect().width(), rect().height() );
 	p->blit( rect );

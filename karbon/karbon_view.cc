@@ -142,18 +142,10 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_whirlPinchDlg->setPinch( 0.0 );
 	m_whirlPinchDlg->setRadius( 100.0 );
 
-	m_layersDocker = new VLayersDocker( this );
-	if( shell() )
-		mainWindow()->addDockWindow( m_layersDocker, DockRight );
-	m_contextHelpDocker = new VContextHelpDocker( this );
-	if( shell() )
-		mainWindow()->addDockWindow( m_contextHelpDocker, DockRight );
-	m_historyDocker = new VHistoryDocker( this );
-	if( shell() )
-		mainWindow()->addDockWindow( m_historyDocker, DockRight );
+	m_layersDocker = 0L;
 	m_toolOptionsDocker = new VToolOptionsDocker( this );
 	m_toolOptionsDocker->show();
-	
+
 	// tools:
 	m_ellipseTool = new VEllipseTool( this );
 	m_gradTool = new VGradientTool( this );
@@ -212,7 +204,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_painterFactory->setPainter( canvasWidget()->pixmap(), width(), height() );
 	m_painterFactory->setEditPainter( canvasWidget()->viewport(), width(), height() );
 
-	selectTool();
 	zoomChanged();
 }
 
@@ -226,7 +217,6 @@ KarbonView::~KarbonView()
 	delete( m_ColorManager );
 	delete( m_TransformDlg );
 
-	delete( m_contextHelpDocker );
 	delete( m_toolOptionsDocker );
 	delete( m_strokeDocker );
 
@@ -283,6 +273,14 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 			connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
 			connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
 			selectionChanged();
+
+			m_historyDocker = new VHistoryDocker( this );
+			mainWindow()->addDockWindow( m_historyDocker, DockRight );
+			m_contextHelpDocker = new VContextHelpDocker( this );
+			mainWindow()->addDockWindow( m_contextHelpDocker, DockRight );
+			m_layersDocker = new VLayersDocker( this );
+			mainWindow()->addDockWindow( m_layersDocker, DockRight );
+			selectTool();
 		}
 		mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0);
 		return m_toolbox;
@@ -299,6 +297,9 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 	{
 		kdDebug() << "GOT IT! parent :" << parent << endl;
 		delete m_toolbox;
+		delete m_historyDocker;
+		delete m_contextHelpDocker;
+		delete m_layersDocker;
 		m_toolbox = 0L;
 		return;
 	}
