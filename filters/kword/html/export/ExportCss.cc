@@ -37,19 +37,35 @@ QString HtmlCssWorker::escapeCssIdentifier(const QString& strText) const
 {
     // Reference: section 4.1.3 of the CSS2 recommendation
     // NOTE: when we need to escape, we choose the numerical CSS escape as it is encoding neutral.
+    // But be careful, we cannot have spaces in identifiers, even after CSS escapes
+    // Therefore we must take care that the character after the CSS escape is not part of it.
 
     QString strReturn;
+    bool lastEscaped=false; // Was the last character escaped?
 
     for (uint i=0; i<strText.length(); i++)
     {
-        const QChar ch=strText[i];
-        if (((ch>='a') && (ch<='z'))
+        const QChar ch(strText[i]);
+
+        if (lastEscaped
+            && (((ch>='a') && (ch<='f'))
+            || ((ch>='A') && (ch<='F'))
+            || ((ch>='0') && (ch<='9')) ))
+        {
+             // The previous characters was escaped and the current character could be an hexadecimal digit
+             // Therefore we need to escape it too.
+            strReturn+='\\'; // start escape
+            strReturn+=QString::number(ch.unicode(),16);
+            lastEscaped=true;
+        }
+        else if (((ch>='a') && (ch<='z'))
             || ((ch>='A') && (ch<='Z')))
         {
             strReturn+=ch;
+            lastEscaped=false;
         }
         else if (((ch>='0') && (ch<='9'))
-            || (ch=='-'))
+            || (ch=='-') || (ch=='_')) // The underscore is allowed in the CSS2 errata
         {
             if (!i)
             {
@@ -57,11 +73,12 @@ QString HtmlCssWorker::escapeCssIdentifier(const QString& strText) const
                 //  therefore we must escape it
                 strReturn+='\\'; // start escape
                 strReturn+=QString::number(ch.unicode(),16);
-                strReturn+=' '; // end escape (the space is not part of the following text!)
+                lastEscaped=true;
             }
             else
             {
                 strReturn+=ch;
+                lastEscaped=false;
             }
         }
         else if ((ch>=QChar(161)) && (getCodec()->canEncode(ch)))
@@ -69,15 +86,17 @@ QString HtmlCssWorker::escapeCssIdentifier(const QString& strText) const
             // Any Unicode character greater or egual to 161 is allowed too, even at start.
             // Except if the encoding cannot write the character
             strReturn+=ch;
+            lastEscaped=false;
         }
         else
         {
             // We have a non-acceptable character, so escape it!
             strReturn+='\\'; // start escape
             strReturn+=QString::number(ch.unicode(),16);
-            strReturn+=' '; // end escape (the space is not part of the following text!)
+            lastEscaped=true;
         }
     }
+    // It is supposed that a last escape do not need an extra space
     return strReturn;
 }
 
