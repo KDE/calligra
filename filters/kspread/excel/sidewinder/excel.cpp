@@ -781,7 +781,7 @@ const char* BOFRecord::typeAsString() const
 void BOFRecord::dump( std::ostream& out ) const
 {
   out << "BOF" << std::endl;
-  out << "            Version : " << std::hex << d->version << " (0x" << versionAsString() << ")" << std::endl;
+  out << "            Version : 0x" << std::hex << d->version << " (" << versionAsString() << ")" << std::endl;
   out << "               Type : 0x" << d->type << " (" << typeAsString() << ")" << std::endl;
   out << "              Build : 0x" << d->build << std::endl;
   out << "               Year : " << std::dec << d->year << std::endl;
