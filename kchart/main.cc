@@ -22,17 +22,18 @@
 #include <koMainWindow.h>
 #include <koQueryTypes.h>
 
-#include <kregfactories.h>
-#include <kregistry.h>
+// #include <kregfactories.h>
+// #include <kregistry.h>
 
 int main( int argc, char **argv )
 {
     KoApplication app( argc, argv );
 
-    KRegistry* registry = new KRegistry;
-    registry->load();
-    KRegistry::self()->addFactory( new KServiceTypeFactory );
-    KRegistry::self()->addFactory( new KServiceFactory );
+#warning "David, please fix me"
+//     KRegistry* registry = new KRegistry;
+//     registry->load();
+//     KRegistry::self()->addFactory( new KServiceTypeFactory );
+//     KRegistry::self()->addFactory( new KServiceFactory );
 
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kchart" );
     ASSERT( !entry.isEmpty() );

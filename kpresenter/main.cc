@@ -22,8 +22,8 @@
 
 #include <koApplication.h>
 
-#include <kregfactories.h>
-#include <kregistry.h>
+// #include <kregfactories.h>
+// #include <kregistry.h>
 
 extern "C"
 {
@@ -36,10 +36,11 @@ int main( int argc, char **argv )
 
     init_kpresenter();
 	
-    KRegistry* registry = new KRegistry;
-    registry->load();
-    KRegistry::self()->addFactory( new KServiceTypeFactory );
-    KRegistry::self()->addFactory( new KServiceFactory );
+#warning "David, please fix me"
+//     KRegistry* registry = new KRegistry;
+//     registry->load();
+//     KRegistry::self()->addFactory( new KServiceTypeFactory );
+//     KRegistry::self()->addFactory( new KServiceFactory );
 
     KPresenterShell* shell = new KPresenterShell;
 
