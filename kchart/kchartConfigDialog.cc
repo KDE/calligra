@@ -68,27 +68,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     }
     else if(flags & KC_SUBTYPE)
     {
-        // Lines and pies might need config pages as well, but not yet
-        switch( _params->chartType() ) {
-        case KDChartParams::Bar:
-            _subTypePage = new KChartBarSubTypeChartPage( _params, this );
-            addTab( _subTypePage, i18n( "Chart &Subtype" ) );
-            break;
-        case KDChartParams::Area:
-            _subTypePage = new KChartAreaSubTypeChartPage( _params, this );
-            addTab( _subTypePage, i18n( "Chart &Subtype" ) );
-            break;
-        case KDChartParams::Line:
-            _subTypePage = new KChartLineSubTypeChartPage( _params, this );
-            addTab( _subTypePage, i18n( "Chart &Subtype" ) );
-            break;
-        case KDChartParams::HiLo:
-            _subTypePage = new KChartHiloSubTypeChartPage( _params, this );
-            addTab( _subTypePage, i18n( "Chart &Subtype" ) );
-            break;
-        default:
-            ; // do nothing
-        }
+        init3dPage();
     }
     else if( flags & KC_ALL )
     {
@@ -118,27 +98,8 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
             _parameter3dpage = new KChartParameter3dConfigPage(_params,this );
             addTab( _parameter3dpage,i18n("3D Parameters"));
         }
-        // Lines and pies might need config pages as well, but not yet
-        switch( _params->chartType() ) {
-        case KDChartParams::Bar:
-            _subTypePage = new KChartBarSubTypeChartPage( _params, this );
-            addTab( _subTypePage, i18n( "Chart &Subtype" ) );
-            break;
-        case KDChartParams::Area:
-            _subTypePage = new KChartAreaSubTypeChartPage( _params, this );
-            addTab( _subTypePage, i18n( "Chart &Subtype" ) );
-            break;
-        case KDChartParams::Line:
-            _subTypePage = new KChartLineSubTypeChartPage( _params, this );
-            addTab( _subTypePage, i18n( "Chart &Subtype" ) );
-            break;
-        case KDChartParams::HiLo:
-            _subTypePage = new KChartHiloSubTypeChartPage( _params, this );
-            addTab( _subTypePage, i18n( "Chart &Subtype" ) );
-            break;
-        default:
-            ; // do nothing
-        }
+
+        init3dPage();
 
         if( _params->chartType() == KDChartParams::HiLo &&
             ( _params->hiLoChartSubType() == KDChartParams::HiLoClose ||
@@ -305,5 +266,30 @@ void KChartConfigDialog::defaults()
         _parameterLegend->init();
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 //      	_colorpage->setDataColor( i, _params->dataColor( i ) );
+}
+
+
+void KChartConfigDialog::init3dPage()
+{
+    switch( _params->chartType() ) {
+    case KDChartParams::Bar:
+        _subTypePage = new KChartBarSubTypeChartPage( _params, this );
+        addTab( _subTypePage, i18n( "Chart &Subtype" ) );
+        break;
+    case KDChartParams::Area:
+        _subTypePage = new KChartAreaSubTypeChartPage( _params, this );
+        addTab( _subTypePage, i18n( "Chart &Subtype" ) );
+        break;
+    case KDChartParams::Line:
+        _subTypePage = new KChartLineSubTypeChartPage( _params, this );
+        addTab( _subTypePage, i18n( "Chart &Subtype" ) );
+        break;
+    case KDChartParams::HiLo:
+        _subTypePage = new KChartHiloSubTypeChartPage( _params, this );
+        addTab( _subTypePage, i18n( "Chart &Subtype" ) );
+        break;
+    default:
+        ; // do nothing
+    }
 }
 

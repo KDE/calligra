@@ -28,7 +28,7 @@ public:
     KChartConfigDialog( KChartParams* params,
                         QWidget* parent, int flags,KoChart::Data *dat );
 
-    void setCurrentPage( int page );
+    void init3dPage();
 signals:
 	void dataChanged();
 
