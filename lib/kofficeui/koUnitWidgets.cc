@@ -88,9 +88,10 @@ KoUnitDoubleSpinBox::changeValue( double val )
 void
 KoUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
 {
+	double oldvalue = KoUnit::ptFromUnit( value(), m_unit );
 	setMinValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( minValue(), m_unit ), unit ) );
 	setMaxValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( maxValue(), m_unit ), unit ) );
-	KDoubleSpinBox::setValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( value(), m_unit ), unit ) );
+	KDoubleSpinBox::setValue( KoUnit::ptToUnit( oldvalue, unit ) );
 	m_unit = unit;
 	setSuffix( KoUnit::unitName( unit ) );
 }
