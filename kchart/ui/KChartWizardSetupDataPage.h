@@ -8,15 +8,22 @@ class QCheckBox;
 
 class KChartWizardSetupDataPage : public QWidget
 {
+  Q_OBJECT 
+
 public:
   KChartWizardSetupDataPage( QWidget* parent );
+
+private slots:
+  void dataInRowsClicked();
+  void dataInColsClicked();
+  void firstColumnIsDescriptionToggled( bool );
+  void firstRowIsDescriptionToggled( bool );
 
 private:
   QRadioButton* datacol;
   QRadioButton* datarow;
-  QCheckBox* rowdescript;
-  QCheckBox* coldescript;
-  QCheckBox* grid;
+  QRadioButton* rowdescript;
+  QRadioButton* coldescript;
 };
 
 #endif

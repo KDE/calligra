@@ -28,6 +28,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   _barsPB->setToggleButton( true );
   _barsPB->resize( barsFR->contentsRect().width(), 
 				  barsFR->contentsRect().height() );
+  _barsPB->setOn( true );
   _typeBG->insert( _barsPB, Bars );
   _barsPM.load( KApplication::kde_toolbardir() + "/chart_bars.gif" );
   _barsPB->setPixmap( _barsPM );

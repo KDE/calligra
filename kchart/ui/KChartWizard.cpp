@@ -48,7 +48,8 @@ KChartWizard::KChartWizard ( KChart* chart, QWidget *parent, const char* name,
   _selectchartsubtypepage->w = selectchartsubtypewidget;
   _selectchartsubtypepage->title = i18n( "Select chart subtype" );
   _selectchartsubtypepage->enabled = true;
-  addPage( _selectchartsubtypepage );
+  int page = addPage( _selectchartsubtypepage );
+  ((KChartWizardSelectChartSubTypePage*)selectchartsubtypewidget)->setNumber( page );
 
   // Fourth page: data setup
   _setupdatapage = new KWizardPage;
