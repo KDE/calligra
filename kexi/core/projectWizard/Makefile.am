@@ -4,7 +4,7 @@ kexiprojectwizard_la_SOURCES = kexicreateproject.cpp kexicreateprojectpageauth.c
 	kexicreateprojectpagefile.cpp
 
 kexiprojectwizard_la_LDFLAGS = $(all_libraries) -Wnounresolved -module
-kexiprojectwizard_la_LIBADD = $(LIB_KOFFICEUI) -lkpath -lktexteditor  ../../kexiDB/libkexidb.la ../libkexicore.la
+kexiprojectwizard_la_LIBADD = $(LIB_KOFFICEUI) -lktexteditor  ../../kexiDB/libkexidb.la ../libkexicore.la
 
 SUBDIRS = .
 

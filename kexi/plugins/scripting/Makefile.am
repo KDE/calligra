@@ -4,7 +4,7 @@ kexihandler_script_la_SOURCES = kexiscripthandler.cpp kexiscripthandlerproxy.cpp
 kexiscripthandleritem.cpp kexiqsaeventhandler.cpp kexiqsahost.cpp kexiqsaeditor.cpp \
 kexiqsaclasses.cpp
 kexihandler_script_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
-kexihandler_script_la_LIBADD = -lkpath ../../core/libkexicore.la ../../kexiDB/libkexidb.la \
+kexihandler_script_la_LIBADD = ../../core/libkexicore.la ../../kexiDB/libkexidb.la \
 	-lqsa ../../formeditor/libkformeditor.la
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKEXI_HAND_TBL_EXPORT= -DKEXICORE_EXPORT= -DKEXIDB_EXPORT= \
