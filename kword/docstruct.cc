@@ -481,7 +481,6 @@ void KWDocStructRootItem::setupEmbedded()
     QString _name;
     KWDocStructPartItem *child;
 
-    int j = 0;
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->getFrameSet( i );

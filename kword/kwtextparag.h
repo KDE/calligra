@@ -86,9 +86,11 @@ public:
 
 protected:
     virtual void copyParagData( QTextParag *_parag );
-    virtual void drawFormattingChars( QPainter &painter, const QString &s, int start, int len, int startX,
-                                      int lastY, int baseLine, int bw, int h, bool drawSelections,
-                                      QTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
+    virtual void drawFormattingChars( QPainter &painter, const QString &s, int start, int len,
+                                      int startX, int lastY, int baseLine, int h, // in LU
+                                      int startX_pix, int lastY_pix, int baseLine_pix, int bw, int h_pix, // in pixels
+                                      bool drawSelections,
+                                      KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
                                       const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft );
 
 };

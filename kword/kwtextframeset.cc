@@ -1024,7 +1024,7 @@ int KWTextFrameSet::formatVertically( Qt3::QTextParag * _parag )
         }
         else if ( parag->lineStartList().count() == 1 ) // don't use lines() here, parag not formatted yet
         {
-            KoTextFormat* lastFormat = static_cast<KoTextFormat *>( parag->at( parag->length() - 1 )->format() );
+            QTextFormat * lastFormat = parag->at( parag->length() - 1 )->format();
             parag->setWidth( parag->rect().width() + lastFormat->width('x') );
         }
     }
@@ -1035,6 +1035,7 @@ int KWTextFrameSet::formatVertically( Qt3::QTextParag * _parag )
         QRect r = parag->rect();
         r.moveBy( 0, yp - oldY );
         parag->setRect( r );
+        parag->setMovedDown( true );
     }
 #ifdef DEBUG_FLOW
     kdDebug() << "KWTextFrameSet::formatVertically returning " << ( yp + hp ) - ( oldY + oldHeight ) << endl;
@@ -2733,7 +2734,7 @@ void KWTextFrameSetEdit::pgUpKeyPressed()
         firstVis = firstVis->next();
 #endif
     // Go up of 90% of crect.height()
-    int h = static_cast<int>( (double)crect.height() * 0.9 );
+    int h = frameSet()->kWordDocument()->pixelToLayoutUnitY( (int)( (double)crect.height() * 0.9 ) );
     Qt3::QTextParag *s = textView()->cursor()->parag();
     int y = s->rect().y();
     while ( s ) {
@@ -2755,7 +2756,7 @@ void KWTextFrameSetEdit::pgDownKeyPressed()
                  m_canvas->visibleWidth(), m_canvas->visibleHeight() );
     crect = m_canvas->viewMode()->viewToNormal( crect );
     // Go down of 90% of crect.height()
-    int h = static_cast<int>( (double)crect.height() * 0.9 );
+    int h = frameSet()->kWordDocument()->pixelToLayoutUnitY( (int)( (double)crect.height() * 0.9 ) );
 
     QTextCursor *cursor = textView()->cursor();
     Qt3::QTextParag *s = cursor->parag();

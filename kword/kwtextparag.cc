@@ -35,9 +35,11 @@
 #include <assert.h>
 
 // Called by KoTextParag::drawParagString - all params are in pixel coordinates
-void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/, int start, int len, int startX,
-                                       int lastY, int baseLine, int bw, int h, bool drawSelections,
-                                       QTextFormat *lastFormat, int /*i*/, const QMemArray<int> &selectionStarts,
+void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/, int start, int len,
+                                       int /*startX*/, int lastY, int baseLine, int /*h*/, // in LU
+                                       int startX_pix, int lastY_pix, int baseLine_pix, int bw, int h_pix, // in pixels
+                                       bool drawSelections,
+                                       KoTextFormat *lastFormat, int /*i*/, const QMemArray<int> &selectionStarts,
                                        const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft )
 {
     KWTextFrameSet * textfs = kwTextDocument()->textFrameSet();
@@ -49,14 +51,6 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
         drawSelections=textfs->currentViewMode()->drawSelections();
         if ( doc && doc->viewFormattingChars() && !forPrint )
         {
-            // Calculate startX in pixels (using the xadj value of the corresponding char)
-            startX = zh->layoutUnitToPixelX( startX ) + at( rightToLeft ? start+len-1 : start )->pixelxadj;
-            lastY = zh->layoutUnitToPixelY( lastY );
-            baseLine = zh->layoutUnitToPixelY( baseLine );
-            // already in pixels: bw = zh->layoutUnitToPixelX( bw );
-            h = zh->layoutUnitToPixelY( h );
-            // From now on lastFormat, startX, lastY etc. have zoom-related (pixel) sizes.
-
             painter.save();
             QPen pen( cg.color( QColorGroup::Highlight ) );
             painter.setPen( pen );
@@ -65,33 +59,39 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
             {
                 if ( hardFrameBreakAfter() )
                 {
-                    QTextFormat format = *lastFormat;
-                    format.setColor( pen.color() );
-                    // keep in sync with KWTextFrameSet::adjustFlow
+                    // keep in sync with KWTextFrameSet::formatVertically
                     QString str = i18n( "--- Frame Break ---" );
                     int width = 0;
-                    for ( int i = 0 ; i < (int)str.length() ; ++i )
-                        width +=  lastFormat->width( str, i );
+                    //for ( int i = 0 ; i < (int)str.length() ; ++i )
+                        // width += ...
+                    width = lastFormat->screenFontMetrics(zh).width(str);
                     QColorGroup cg2( cg );
-                    cg2.setColor( QColorGroup::Base, Qt::green ); // for debug
+                    //cg2.setColor( QColorGroup::Base, Qt::green ); // for debug
                     int last = length() - 1;
-                    QTextParag::drawParagString( painter, str, 0, str.length(),
-                                                 last, lastY, at( last )->ascent(),
-                                                 width, lastFormat->height(),
-                                                 drawSelections, &format, last, selectionStarts,
-                                                 selectionEnds, cg2, rightToLeft );
+                    QTextStringChar &ch = string()->at( last );
+                    int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj;
+
+                    KoTextFormat format( *lastFormat );
+                    format.setColor( pen.color() ); // ### A bit slow, maybe pass the color to drawParagStringInternal ?
+                    KoTextParag::drawParagStringInternal(
+                        painter, str, 0, str.length(),
+                        x, lastY_pix, // startX and lastY
+                        zh->pixelToLayoutUnitY( ch.ascent() ), // baseline
+                        width, zh->pixelToLayoutUnitY( ch.height() ), // bw and h
+                        drawSelections, &format, last, selectionStarts,
+                        selectionEnds, cg2, rightToLeft, zh );
                 }
                 else
                 {
                     // drawing the end of the parag
                     KoTextFormat* format = static_cast<KoTextFormat *>( at( length() - 1 )->format() );
                     int w = format->screenFontMetrics(zh).width('x'); // see KWTextFrameSet::formatVertically
-                    int size = QMIN( w, h * 3 / 4 );
+                    int size = QMIN( w, h_pix * 3 / 4 );
                     int arrowsize = zh->zoomItY( 2 );
                     // x,y is the bottom right corner of the reversed L
                     //kdDebug() << "startX=" << startX << " bw=" << bw << " w=" << w << endl;
-                    int x = ( startX + bw ) + w - 1;
-                    int y = lastY + baseLine - arrowsize;
+                    int x = ( startX_pix + bw ) + w - 1;
+                    int y = lastY_pix + baseLine_pix - arrowsize;
                     //kdDebug() << "KWTextParag::drawFormattingChars drawing CR at " << x << "," << y << endl;
                     painter.drawLine( x, y - size, x, y );
                     painter.drawLine( x, y, x - size, y );
@@ -115,7 +115,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                     int height = zh->layoutUnitToPixelY( ch.ascent() );
                     int size = QMAX( 2, QMIN( w/2, height/3 ) ); // Enfore that it's a square, and that it's visible
                     int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj;
-                    painter.drawRect( x + (ch.pixelwidth - size) / 2, lastY + baseLine - (height - size) / 2, size, size );
+                    painter.drawRect( x + (ch.pixelwidth - size) / 2, lastY_pix + baseLine_pix - (height - size) / 2, size, size );
                 }
                 else if ( ch.c == '\t' )
                 {
