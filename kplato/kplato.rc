@@ -26,6 +26,16 @@
             <Action name="project_edit"/>
             <Action name="project_calculate"/>
         </Menu>
+        <Menu name="Reports"><text>&amp;Reports</text>
+            <Action name="report_generate" />
+            <Separator/>
+            <Action name="go_firstpage"/>
+            <Action name="go_nextpage"/>
+            <Action name="go_prevpage"/>
+            <Action name="go_lastpage"/>
+            <!--<Separator/>
+            <Action name="report_design"/> -->
+        </Menu>
         <Menu name="settings"><text>&amp;Settings</text>
         <Action name="configure" group="settings_configure"/>
         </Menu>
@@ -47,6 +57,12 @@
         <Action name="unindent_task"/>
         <Action name="move_task_up"/>
         <Action name="move_task_down"/>
+    </ToolBar>
+    <ToolBar name="report" position="top"><Text>Report</Text>
+        <Action name="go_firstpage"/>
+        <Action name="go_nextpage"/>
+        <Action name="go_prevpage"/>
+        <Action name="go_lastpage"/>
     </ToolBar>
     <Menu name="node_popup">
         <Action name="edit_cut"/>

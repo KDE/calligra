@@ -33,6 +33,8 @@
 #include <qheader.h>
 #include <qpopupmenu.h>
 
+#include <kprinter.h>
+
  KPTPertView::KPTPertView( KPTView *view, QWidget *parent, QLayout *layout )
     : QWidget( parent, "Pert view" ),
     m_mainview( view ),
@@ -74,6 +76,9 @@ void KPTPertView::slotRMBPressed(KPTNode *node, const QPoint & point)
 	}
 }
 
+void KPTPertView::print(KPrinter &printer) {
+    kdDebug()<<k_funcinfo<<endl;
 
+}
 
 #include "kptpertview.moc"

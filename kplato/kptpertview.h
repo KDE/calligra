@@ -28,6 +28,8 @@ class KPTNode;
 class QLayout;
 class QListViewItem;
 
+class KPrinter;
+
  class KPTPertView : public QWidget
 {
     Q_OBJECT
@@ -43,7 +45,9 @@ class QListViewItem;
     void draw();
     KPTView *mainView();
     KPTNode *currentNode() { return m_node; }
-	
+
+    void print(KPrinter &printer);
+
  public slots:
     void slotRMBPressed(KPTNode *node, const QPoint & point);
 

@@ -32,6 +32,8 @@ class KPTDuration;
  */
 class KPTDuration {
     public:
+        enum Format { Format_DateTime, Format_Hour, Format_Day, Format_Week };
+
         KPTDuration();
         KPTDuration(const KPTDuration &d);
         KPTDuration(int h, int m, int s=0, int ms=0);
@@ -61,8 +63,7 @@ class KPTDuration {
         bool   operator>=( const KPTDuration &d ) const { return m_theTime >= d.m_theTime; }
         KPTDuration &operator = ( const KPTDuration &d ) { set(d); return *this;}
 
-        QString toString() const { return m_theTime.toString(); }
-        QString toString(int format) const { return QString("%1h").arg(hours()); } //FIXME
+        QString toString(Format format = Format_DateTime) const;
         static KPTDuration fromString(const QString &s) { return KPTDuration(QDateTime::fromString(s)); }
 
         QDateTime dateTime() const { return m_theTime; }
@@ -77,6 +78,7 @@ class KPTDuration {
         int days() const { return zero.daysTo(m_theTime); }
         int hours() const { return zero.secsTo(m_theTime) / 3600; }
         int hoursTo(const QDateTime &dt) const { return m_theTime.secsTo(dt) / 3600; }
+
 
     /**
      * This is useful for occasions where we need a zero duration.

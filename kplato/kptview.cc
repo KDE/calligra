@@ -26,6 +26,7 @@
 #include "kpttaskdialog.h"
 #include "kptganttview.h"
 #include "kptpertview.h"
+#include "kptreportview.h"
 #include "kptdatetime.h"
 
 #include "kptresourceview.h"
@@ -49,6 +50,7 @@
 #include <qcolor.h>
 #include <qlabel.h>
 #include <qstring.h>
+#include <qstringlist.h>
 #include <qvbox.h>
 #include <qgrid.h>
 #include <qsize.h>
@@ -68,13 +70,16 @@
 #include <kaccelgen.h>
 #include <kdeversion.h>
 #include <kxmlguifactory.h>
+#include <kprinter.h>
+#include <kstandarddirs.h>
 
 KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     : KoView(part, parent, "Main View"),
     m_ganttview(0),
     m_ganttlayout(0),
     m_pertview(0),
-    m_pertlayout(0)
+    m_pertlayout(0),
+    m_reportview(0)
 {
     //kdDebug()<<k_funcinfo<<endl;
     setInstance(KPTFactory::global());
@@ -92,6 +97,9 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
     m_resourceview = new KPTResourceView( this, m_tab );
     m_tab->addWidget(m_resourceview);
+
+    m_reportview = new KPTReportView(this, m_tab);
+    m_tab->addWidget(m_reportview);
 
     connect(m_tab, SIGNAL(aboutToShow(QWidget *)), this, SLOT(slotChanged(QWidget *)));
 
@@ -131,6 +139,20 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 		SLOT(slotProjectEdit()), actionCollection(), "project_edit");
     new KAction(i18n("Calculate..."), "project_calculate", 0, this,
 		SLOT(slotProjectCalculate()), actionCollection(), "project_calculate");
+
+    // ------ Reports
+    actionReportGenerate = new KSelectAction(i18n("Generate"), 0, actionCollection(), "report_generate");
+    setReportGenerateMenu();
+    connect(actionReportGenerate, SIGNAL(activated(int)), SLOT(slotReportGenerate(int)));
+
+	KStdAction::firstPage(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_firstpage");
+	KStdAction::prior(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_prevpage");
+	KStdAction::next(m_reportview,SLOT(slotNextPage()),actionCollection(), "go_nextpage");
+	KStdAction::lastPage(m_reportview,SLOT(slotLastPage()),actionCollection(), "go_lastpage");
+
+//     new KAction(i18n("Design..."), "report_design", 0, this,
+//         SLOT(slotReportDesign()), actionCollection(), "report_design");
+
 
     // ------ Tools
     //new KAction(i18n("Resource Editor..."), "edit_resource", 0, this,
@@ -182,6 +204,31 @@ void KPTView::setZoom(double zoom) {
 	m_pertview->zoom(zoom);
 }
 
+void KPTView::setupPrinter(KPrinter &printer) {
+    kdDebug()<<k_funcinfo<<endl;
+
+}
+
+void KPTView::print(KPrinter &printer) {
+    kdDebug()<<k_funcinfo<<endl;
+	if (m_tab->visibleWidget() == m_ganttview)
+	{
+        m_ganttview->print(printer);
+    }
+	else if (m_tab->visibleWidget() == m_pertview)
+	{
+        m_pertview->print(printer);
+	}
+	else if (m_tab->visibleWidget() == m_resourceview)
+	{
+        m_resourceview->print(printer);
+	}
+	else if (m_tab->visibleWidget() == m_reportview)
+	{
+        m_reportview->print(printer);
+	}
+
+}
 
 void KPTView::slotEditCut() {
     //kdDebug()<<k_funcinfo<<endl;
@@ -228,6 +275,20 @@ void KPTView::slotProjectCalculate() {
     delete t;
 }
 
+void KPTView::slotReportDesign() {
+    //kdDebug()<<k_funcinfo<<endl;
+}
+
+void KPTView::slotReportGenerate(int idx) {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_tab->raiseWidget(m_reportview);
+    if (idx != -1) {
+        QStringList::iterator it = m_reportTemplateFiles.at(idx);
+        if (it != m_reportTemplateFiles.end())
+            m_reportview->draw(*it);
+    }
+    actionReportGenerate->setCurrentItem(-1);
+}
 
 void KPTView::slotAddSubTask() {
 	// If we are positionend on the root project, then what we really want to
@@ -518,6 +579,25 @@ void KPTView::slotUpdate(bool calculate)
     	m_resourceview->draw(getPart()->getProject());
 	    m_resourceview->show();
 	}
+	else if (m_tab->visibleWidget() == m_reportview)
+	{
+	}
+}
+
+//FIXME: This is temporary. We need a solution that takes care of translation, project specific reports etc.
+void KPTView::setReportGenerateMenu() {
+    kdDebug()<<k_funcinfo<<endl;
+    QStringList list;
+    m_reportTemplateFiles.clear();
+    KStandardDirs std;
+    m_reportTemplateFiles = std.findAllResources("data", "kplato/reports/*.kut", true, true);
+    for (QStringList::iterator it = m_reportTemplateFiles.begin(); it != m_reportTemplateFiles.end(); ++it) {
+        //kdDebug()<<" data: "<<*it<<endl;
+        QString s = (*it).section('/', -1);
+        s = s.remove(s.length()-4, 4); // remove extension
+        list.append(s);
+    }
+    actionReportGenerate->setItems(list);
 }
 
 #ifndef NDEBUG

@@ -37,6 +37,8 @@ class KDGanttView;
 class KDGanttViewSummaryItem;
 class KDGanttViewItem;
 
+class KPrinter;
+
 class KPTTaskAppointmentsView : QWidget
 {
     Q_OBJECT
@@ -79,6 +81,7 @@ private:
 	KPTNode *currentNode();
 
 	void clear();
+    void print(KPrinter &printer);
 
 public slots:
     void popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, int);

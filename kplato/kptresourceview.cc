@@ -26,9 +26,6 @@
 #include "kptresource.h"
 #include "kptdatetime.h"
 
-#include <KDGanttView.h>
-#include <KDGanttViewSummaryItem.h>
-#include <KDGanttViewTaskItem.h>
 #include <qlistview.h>
 #include <qtabwidget.h>
 #include <qpopupmenu.h>
@@ -36,6 +33,7 @@
 
 #include <klocale.h>
 #include <kglobal.h>
+#include <kprinter.h>
 
 #include <kdebug.h>
 
@@ -165,7 +163,7 @@ void KPTResourceView::drawAppointments(KPTResource *resource)
             QListViewItem *item = new QListViewItem(appList,
                     t->name(), t->leader(),
                     t->startTime().date().toString(), t->endTime().date().toString(),
-                    dur->toString(0)); // FIXME
+                    dur->toString(KPTDuration::Format_Hour)); // FIXME
             delete dur;
         }
     }
@@ -186,6 +184,11 @@ void KPTResourceView::popupMenuRequested(QListViewItem * item, const QPoint & po
         else
             kdDebug()<<k_funcinfo<<"No menu!"<<endl;
     }
+}
+
+void KPTResourceView::print(KPrinter &printer) {
+    kdDebug()<<k_funcinfo<<endl;
+
 }
 
 #include "kptresourceview.moc"

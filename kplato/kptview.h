@@ -29,15 +29,16 @@ class QTabWidget;
 class QWidgetStack;
 
 class KListView;
+class KPrinter;
+class KSelectAction;
 
 class KPTGanttView;
 class KPTPertView;
+class KPTResourceView;
+class KPTReportView;
 class KPTPart;
 class KPTNode;
 class KPTProject;
-
-class KDGanttView;
-class KPTResourceView;
 
 class KPTView : public KoView {
     Q_OBJECT
@@ -54,7 +55,11 @@ public:
 
 	KPTProject& getProject() const;
 
-    QPopupMenu *popupMenu( const QString& name );
+    virtual void setupPrinter(KPrinter &printer);
+    virtual void print(KPrinter &printer);
+
+    QPopupMenu *popupMenu(const QString& name);
+    void setReportGenerateMenu();
 
 public slots:
 
@@ -70,6 +75,8 @@ protected slots:
     void slotAddMilestone();
     void slotProjectEdit();
     void slotProjectCalculate();
+    void slotReportDesign();
+    void slotReportGenerate(int);
     void slotConfigure();
 
     void slotOpenNode();
@@ -101,6 +108,8 @@ private:
     QHBoxLayout *m_pertlayout;
 	QWidgetStack *m_tab;
 	KPTResourceView *m_resourceview;
+	KPTReportView *m_reportview;
+    QStringList m_reportTemplateFiles;
 
     int m_viewGrp;
     int m_defaultFontSize;
@@ -108,6 +117,8 @@ private:
     KAction *actionEditCut;
     KAction *actionEditCopy;
     KAction *actionEditPaste;
+    KSelectAction *actionReportGenerate;
+
 
 };
 

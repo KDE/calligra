@@ -52,6 +52,7 @@
 
 #include <klocale.h>
 #include <kglobal.h>
+#include <kprinter.h>
 
 KPTTaskAppointmentsView::KPTTaskAppointmentsView(QWidget *parent, const char* name)
     : QWidget(parent, name),
@@ -168,7 +169,7 @@ void KPTTaskAppointmentsView::draw(KPTTask *task)
                     QListViewItem *item = new QListViewItem(appList, r->name());
                     item->setText(1, r->typeToString());
                     item->setText(2, ait.current()->startTime().date().toString());
-                    item->setText(3, ait.current()->duration().toString(0));
+                    item->setText(3, ait.current()->duration().toString(KPTDuration::Format_Hour));
                     item->setText(4, KGlobal::locale()->formatMoney(r->normalRate()));
                     item->setText(5, KGlobal::locale()->formatMoney(r->overtimeRate()));
                     item->setText(6, KGlobal::locale()->formatMoney(r->fixedCost()));
@@ -463,6 +464,11 @@ void KPTGanttView::popupMenuRequested(KDGanttViewItem * /*item*/, const QPoint &
 
 void KPTGanttView::slotItemDoubleClicked(KDGanttViewItem* /*item*/)
 {
+}
+
+void KPTGanttView::print(KPrinter &printer) {
+    kdDebug()<<k_funcinfo<<endl;
+
 }
 
 #include "kptganttview.moc"

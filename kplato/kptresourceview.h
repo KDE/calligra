@@ -36,6 +36,8 @@ class KPTResourceGroup;
 class KPTResource;
 class ResourceItemPrivate;
 
+class KPrinter;
+
  class KPTResourceView : public QSplitter
 {
     Q_OBJECT
@@ -52,6 +54,8 @@ class ResourceItemPrivate;
     KPTView *mainView();
 
     KPTResource *currentResource();
+
+    void print(KPrinter &printer);
 
 public slots:
     void resSelectionChanged(QListViewItem *item);

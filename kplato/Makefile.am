@@ -1,6 +1,6 @@
-SUBDIRS = templates pics
+SUBDIRS = templates pics reports
 
-INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kdgantt -I../kdgantt \
+INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kdgantt -I$(top_srcdir)/kugar/lib \
                    $(all_includes)
 
 libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
@@ -14,7 +14,7 @@ libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
     kptresourceview.cc \
     requestresourcespanelbase.ui kptrequestresourcespanel.cc \
     kpttaskdialogbase.ui resourcedialogbase.ui kptresourcedialog.cc \
-    kptdatetime.cc
+    kptdatetime.cc kptreportview.cc
 
 noinst_HEADERS = defs.h kptaboutdata.h kptduration.h kptfactory.h \
     kptnode.h kptpart.h kptproject.h kptrelation.h \
@@ -24,12 +24,12 @@ noinst_HEADERS = defs.h kptaboutdata.h kptduration.h kptfactory.h \
     kptpertview.h kptpertcanvas.h kptrelationdialog.h \
     kptresourcespanel.h kptdurationdialog.h kptresourceview.h \
     kptrequestresourcespanel.h kptresourcedialog.h\
-    kptdatetime.h
+    kptdatetime.h kptreportview.h
 
 ## The part
 kde_module_LTLIBRARIES = libkplatopart.la
 libkplatopart_la_LDFLAGS = $(KDE_PLUGIN)
-libkplatopart_la_LIBADD = ../kdgantt/libkdgantt.la $(LIB_KOFFICEUI) $(LIB_KABC)
+libkplatopart_la_LIBADD = $(top_srcdir)/kdgantt/libkdgantt.la $(LIB_KOFFICEUI) $(LIB_KABC) $(top_srcdir)/kugar/lib/libkugar.la
 libkplatopart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
