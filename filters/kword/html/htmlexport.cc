@@ -20,8 +20,10 @@
 #include <htmlexport.h>
 #include <htmlexport.moc>
 #include <kdebug.h>
+#include <kglobal.h>
+#include <klocale.h>
 
-void mainFunc(const char*);
+void mainFunc(const char*,const char*);
 
 HTMLExport::HTMLExport(KoFilter *parent, QString name) :
                      KoFilter(parent, name) {
@@ -40,7 +42,7 @@ const bool HTMLExport::filter(const QCString &fileIn, const QCString &fileOut,
         in.close();
         return false;
     }
-    // read the whole file - at least I hope it does :)
+    // read the whole file
     QCString buf( in.size() );
     int count = in.read( buf.data(), in.size() );
     if ( count != in.size() ) {
@@ -49,10 +51,15 @@ const bool HTMLExport::filter(const QCString &fileIn, const QCString &fileOut,
       return false;
     }
 
-    //kdDebug() << buf << endl;
+    //kdDebug(30503) << buf << endl;
+    // Note: I have no idea if I should use KLocale::charset or KGlocal::charset....
+    //QCString charset = KGlobal::locale()->charset().ascii();
+    // Problem: the charset of the document may not be the one of the user
+    // (for instance, someone sent me a non-latin 1 doc :-)
+    QCString charset( "utf-8" );
 
     int begin = buf.find( "<DOC" ); // skip <?...?>
-    mainFunc( (const char*)buf + begin );
+    mainFunc( (const char*)buf + begin, charset );
 
     QFile f( "/tmp/kword2html" );
     if ( !f.open( IO_ReadOnly ) ) {
@@ -64,7 +71,7 @@ const bool HTMLExport::filter(const QCString &fileIn, const QCString &fileOut,
     QString str = s.read();
     f.close();
 
-    QCString cstr=QCString(str.utf8());
+    QCString cstr(str.utf8());
 
     QFile out(fileOut);
     if(!out.open(IO_WriteOnly)) {

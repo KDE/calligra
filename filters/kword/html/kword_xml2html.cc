@@ -287,7 +287,7 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
         return;
     }
 
-    //kdDebug() << "SearchText. Markup found. Token=" << pToken->zText << endl;
+    kdDebug(30503) << "SearchText. Markup found. Token=" << pToken->zText << endl;
 
     if(!(strcmp(pToken->zText,"FRAMESET"))) {
         int iValue = 0;
@@ -306,7 +306,7 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
                 if(iValue==2) {
                     iAmImage = 1;
                 }
-                //kdDebug() << "This frame has a frame type of " << iValue << endl;
+                kdDebug(30503) << "This frame has a frame type of " << iValue << endl;
             }
             else if(!(strcmp(pArg->zName,"ROW"))) {
                 iHaveRow = 1;
@@ -520,7 +520,7 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
                 if(pHTMLTree->ObjectType != HTML_Text)
                     kdWarning() << "Shouldn't that be a text ? " << (int)pHTMLTree->ObjectType << endl;
                 pFormat = pHTMLTree->u.TextStruct.pFormat;
-                //kdDebug() << "Format set to " << pFormat << endl;
+                kdDebug(30503) << "Format set to " << pFormat << endl;
             }
             pArg = ((Markup *)pToken)->pArg;
             while(pFormat->pNext) {
@@ -1257,7 +1257,7 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                             fprintf(Outfile,"<H1>%d.  %s</H1>\n",iNumHead1s,Scratch);
 #else
                             fprintf(Outfile,"<H1>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.\n"
-				    "%s</FONT>%s%s</H1>\n",zItalic,zWeight,pFormat->iRed,
+                                    "%s</FONT>%s%s</H1>\n",zItalic,zWeight,pFormat->iRed,
                                     pFormat->iGreen,pFormat->iBlue,iNumHead1s,Scratch,
                                     zWeightEnd,zItalicEnd);
 #endif
@@ -1272,7 +1272,7 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                             fprintf(Outfile,"<H2>%d.%d.%s</H2>\n",iNumHead1s,iNumHead2s,Scratch);
 #else
                             fprintf(Outfile,"<H2>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.%d.\n"
-				    "%s</FONT>%s%s</H2>\n",zItalic,zWeight,
+                                    "%s</FONT>%s%s</H2>\n",zItalic,zWeight,
                                     pFormat->iRed,pFormat->iGreen,pFormat->iBlue,
                                     iNumHead1s,iNumHead2s,Scratch,zWeightEnd,zItalicEnd);
 #endif
@@ -1284,7 +1284,7 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                                     iNumHead3s,Scratch);
 #else
                             fprintf(Outfile,"<H3>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.%d.%d.\n"
-				    "%s</FONT>%s%s</H3>\n",zItalic,zWeight,
+                                    "%s</FONT>%s%s</H3>\n",zItalic,zWeight,
                                     pFormat->iRed,pFormat->iGreen,pFormat->iBlue,
                                     iNumHead1s,iNumHead2s,iNumHead3s,Scratch,zWeightEnd,
                                     zItalicEnd);
@@ -1755,7 +1755,7 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                                 fprintf(Outfile,"<H1>%d.  %s</H1>\n",iNumHead1s,Scratch);
 #else
                                 fprintf(Outfile,"<H1>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.\n"
-					"%s</FONT>%s%s</H1>\n",zItalic,zWeight,pFormat->iRed,
+                                        "%s</FONT>%s%s</H1>\n",zItalic,zWeight,pFormat->iRed,
                                         pFormat->iGreen,pFormat->iBlue,iNumHead1s,Scratch,
                                         zWeightEnd,zItalicEnd);
 #endif
@@ -1770,7 +1770,7 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                                 fprintf(Outfile,"<H2>%d.%d.%s</H2>\n",iNumHead1s,iNumHead2s,Scratch);
 #else
                                 fprintf(Outfile,"<H2>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.%d.\n"
-					"%s</FONT>%s%s</H2>\n",zItalic,zWeight,
+                                        "%s</FONT>%s%s</H2>\n",zItalic,zWeight,
                                         pFormat->iRed,pFormat->iGreen,pFormat->iBlue,
                                         iNumHead1s,iNumHead2s,Scratch,zWeightEnd,zItalicEnd);
 #endif
@@ -1782,7 +1782,7 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                                         iNumHead3s,Scratch);
 #else
                                 fprintf(Outfile,"<H3>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.%d.%d.\n"
-					"%s</FONT>%s%s</H3>\n",zItalic,zWeight,
+                                        "%s</FONT>%s%s</H3>\n",zItalic,zWeight,
                                         pFormat->iRed,pFormat->iGreen,pFormat->iBlue,
                                         iNumHead1s,iNumHead2s,iNumHead3s,Scratch,zWeightEnd,
                                         zItalicEnd);
@@ -2006,14 +2006,8 @@ HTMLTree *ProcessImage(HTMLTree *pHTMLTree,HTMLObject /*egObject*/,FILE *Outfile
 
 /* Main Function.
 **
-** Inputs:
-** nInputFiles:  Acts just like 'argc'.  Equals the number of
-** input files to process + 1 (the name of the function).
-**
-** OutputFiles:  Acts just like 'argv'.  An array of strings that
-** specify the output file names.
 */
-void mainFunc( const char *data ) {
+void mainFunc( const char *data, const char *charset ) {
   // ListMarkup *pCurrentListMarkup = 0;
     int iSizeXmlFile;
     // tTextStruct sTextStruct;
@@ -2042,12 +2036,14 @@ void mainFunc( const char *data ) {
 
     OutputFile = fopen( "/tmp/kword2html" , "w" );
     Scratch = (char *)malloc(iSizeXmlFile);
-#ifdef SPARTAN
     fprintf(OutputFile,"<HTML>\n");
-#else
-    fprintf(OutputFile,"<HTML>\n<body bgcolor=white>\n");
+    fprintf(OutputFile,"<HEAD>\n");
+    fprintf(OutputFile,"<META HTTP-EQUIV=\"Content-Type\" content=\"text/html; charset=%s\">\n", charset);
+    fprintf(OutputFile,"</HEAD>\n");
+#ifndef SPARTAN
+    fprintf(OutputFile,"<body bgcolor=white>\n");
 #endif
-    kdDebug() << "Calling ParseXml" << endl;
+    kdDebug(30503) << "Calling ParseXml" << endl;
 
     /* Since the entire XML content that we are parsing is contained within
     ** one giant <DOC>......</DOC> markup, we only need to call the XML

@@ -612,7 +612,7 @@ Token * ParseXml(
         }
       }
       pM->token.zText[n] = 0;
-      //kdDebug() << "Token=" << pM->token.zText << endl;
+      //kdDebug(30503) << "Token=" << pM->token.zText << endl;
       pM->pContent = 0;
       pM->pArg = 0;
       while( isspace(zFile[i]) ){ i++; }
