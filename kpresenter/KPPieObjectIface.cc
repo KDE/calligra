@@ -97,3 +97,13 @@ void KPPieObjectIface::setLineEnd( const QString & type)
         kdDebug()<<"Error in KPPieObjectIface::setLineEnd\n";
 
 }
+
+void KPPieObjectIface::horizontalFlips()
+{
+    obj->flip( true);
+}
+
+void KPPieObjectIface::verticalFlips()
+{
+    obj->flip( false );
+}

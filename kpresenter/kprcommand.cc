@@ -2109,8 +2109,15 @@ void KPrFlipPolyLineCommand::execute()
             m_doc->repaint( obj );
         }
     }
-
-
+    else if ( m_object->getType() == OT_PIE )
+    {
+        KPPieObject *obj=dynamic_cast<KPPieObject *>(m_object);
+        if ( obj)
+        {
+            obj->flip(horizontal);
+            m_doc->repaint( obj );
+        }
+    }
 }
 
 void KPrFlipPolyLineCommand::unexecute()
@@ -2160,6 +2167,16 @@ void KPrFlipPolyLineCommand::unexecute()
             m_doc->repaint( obj );
         }
     }
+    else if ( m_object->getType() == OT_PIE )
+    {
+        KPPieObject *obj=dynamic_cast<KPPieObject *>(m_object);
+        if ( obj)
+        {
+            obj->flip(horizontal);
+            m_doc->repaint( obj );
+        }
+    }
+
 }
 
 KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &_name, QValueList<bool> &_protect, QValueList<bool> &_ratio, QPtrList<KPObject> &_objects, bool _newProtect, bool _newRatio, KPresenterDoc *_doc ):

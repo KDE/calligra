@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="67">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="68">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -452,6 +452,11 @@
   <Action name="extra_configpie"/>
   <Separator/>
   <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Flip Objects"><text>Flips Objects</text>
+   <Action name="horizontal_flip"/>
+   <Action name="vertical_flip"/>
+  </Menu>
   <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>

@@ -6977,13 +6977,13 @@ void KPrCanvas::flipObject( bool _horizontal )
     QPtrList<KPObject> lst;
     QPtrListIterator<KPObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_LINE || it.current()->getType() == OT_CUBICBEZIERCURVE || it.current()->getType() == OT_QUADRICBEZIERCURVE || it.current()->getType() == OT_FREEHAND) )
+        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_LINE || it.current()->getType() == OT_CUBICBEZIERCURVE || it.current()->getType() == OT_QUADRICBEZIERCURVE || it.current()->getType() == OT_FREEHAND || it.current()->getType() == OT_PIE) )
             lst.append( it.current()  );
     }
     //get sticky obj
     it=m_view->kPresenterDoc()->stickyPage()->objectList();
     for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_LINE || it.current()->getType() == OT_CUBICBEZIERCURVE || it.current()->getType() == OT_QUADRICBEZIERCURVE || it.current()->getType() == OT_FREEHAND))
+        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_LINE || it.current()->getType() == OT_CUBICBEZIERCURVE || it.current()->getType() == OT_QUADRICBEZIERCURVE || it.current()->getType() == OT_FREEHAND || it.current()->getType() == OT_PIE))
             lst.append(  it.current() );
     }
     if ( lst.isEmpty())

@@ -171,3 +171,16 @@ void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
     default: break;
     }
 }
+
+void KPPieObject::flip(bool horizontal )
+{
+    if ( horizontal )
+    {
+        p_angle = (p_angle + 180* 16)%(16*360);
+    }
+    else
+    {
+        p_angle = (p_angle + 90* 16)%(16*360);
+
+    }
+}
