@@ -21,39 +21,24 @@
 */
 
 #include <qstring.h>
+#include <qregexp.h>
+#include <qtextcodec.h>
+#include <qfile.h>
+
+#include <klocale.h>
+#include <kdebug.h>
 
 #include <KWEFUtil.h>
 #include <TagProcessing.h>
 #include <KWEFBaseClass.h>
+#include <KWEFBaseWorker.h>
+#include <KWEFKWordLeader.h>
 
 #include "ExportFilter.h"
 
 
-QString ClassExportFilterHtml::getHtmlOpeningTagExtraAttributes(void) const
+QString HtmlWorker::escapeCssIdentifier(const QString& strText) const
 {
-    if (isXML())
-    {
-        // XHTML must return an extra attribute defining its namespace (in the <html> opening tag)
-        return " xmlns=\"http://www.w3.org/1999/xhtml\""; // Leading space is important!
-    }
-    return QString::null;
-}
-
-QString ClassExportFilterHtml::getDocType(void) const
-{
-    // We are STRICT
-
-    if (isXML())
-    {
-        return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"DTD/xhtml1-strict.dtd\">";
-    }
-
-    return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">";
-}
-
-QString ClassExportFilterHtml::escapeCssIdentifier(const QString& strText) const
-{
-    kdDebug(30503) << "Entering ClassExportFilterHtml::escapeCssIdentifier" << endl;
     // Reference: section 4.1.3 of the CSS2 recommendation
     // NOTE: when we need to escape, we choose the numerical CSS escape as it is encoding neutral.
 
@@ -97,16 +82,13 @@ QString ClassExportFilterHtml::escapeCssIdentifier(const QString& strText) const
             strReturn+=' '; // end escape (the space is not part of the following text!)
         }
     }
-    kdDebug(30503) << "Exiting ClassExportFilterHtml::escapeCssIdentifier" << endl;
     return strReturn;
 }
 
-void ClassExportFilterHtml::ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText)
+void HtmlWorker::ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText)
 {
     if (! paraText.isEmpty() )
     {
-
-        CreateMissingFormatData(paraText,paraFormatDataList);
 
         ValueListFormatData::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
 
@@ -122,7 +104,7 @@ void ClassExportFilterHtml::ProcessParagraphData ( QString &paraText, ValueListF
             if ((*paraFormatDataIt).missing)
             {   //Format is not issued from KWord. Therefore is only the layout
                 // So it is only the text
-                if (outputText==" ")
+                if (partialText==" ")
                 {//Just a space as text. Therefore we must use a non-breaking space.
                     outputText += "&nbsp;";
                 }
@@ -224,7 +206,7 @@ void ClassExportFilterHtml::ProcessParagraphData ( QString &paraText, ValueListF
                 outputText += EscapeXmlText(partialText,true,false);
             }
 
-			// Closing elements
+            // Closing elements
             if ( 2==(*paraFormatDataIt).verticalAlignment )
             {
                 outputText+="</sup>"; //Superscript
@@ -238,12 +220,7 @@ void ClassExportFilterHtml::ProcessParagraphData ( QString &paraText, ValueListF
     }
 }
 
-QString ClassExportFilterHtml::getBodyOpeningTagExtraAttributes(void) const
-{
-    return QString::null;
-}
-
-QString ClassExportFilterHtml::getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)
+QString HtmlWorker::getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)
 {
     QString strResult;
     switch (typeList)
@@ -251,68 +228,68 @@ QString ClassExportFilterHtml::getStartOfListOpeningTag(const CounterData::Style
     case CounterData::STYLE_CUSTOMBULLET: // We cannot keep the custom type/style
     default:
         {
-            orderedList=false;
+            m_orderedList=false;
             strResult="<ul>\n";
             break;
         }
     case CounterData::STYLE_NONE:
         {
-            orderedList=false;
+            m_orderedList=false;
             strResult="<ul style=\"list-style-type:none\">\n";
             break;
         }
     case CounterData::STYLE_CIRCLEBULLET:
         {
-            orderedList=false;
+            m_orderedList=false;
             strResult="<ul style=\"list-style-type:circle\">\n";
             break;
         }
     case CounterData::STYLE_SQUAREBULLET:
         {
-            orderedList=false;
+            m_orderedList=false;
             strResult="<ul style=\"list-style-type:square\">\n";
             break;
         }
     case CounterData::STYLE_DISCBULLET:
         {
-            orderedList=false;
+            m_orderedList=false;
             strResult="<ul style=\"list-style-type:disc\">\n";
             break;
         }
     case CounterData::STYLE_NUM:
         {
-            orderedList=true;
+            m_orderedList=true;
             strResult="<ol style=\"list-style-type:decimal\">\n";
             break;
         }
     case CounterData::STYLE_ALPHAB_L:
         {
-            orderedList=true;
+            m_orderedList=true;
             strResult="<ol style=\"list-style-type:lower-alpha\">\n";
             break;
         }
     case CounterData::STYLE_ALPHAB_U:
         {
-            orderedList=true;
+            m_orderedList=true;
             strResult="<ol style=\"list-style-type:upper-alpha\">\n";
             break;
         }
     case CounterData::STYLE_ROM_NUM_L:
         {
-            orderedList=true;
+            m_orderedList=true;
             strResult="<ol style=\"list-style-type:lower-roman\">\n";
             break;
         }
     case CounterData::STYLE_ROM_NUM_U:
         {
-            orderedList=true;
+            m_orderedList=true;
             strResult="<ol style=\"list-style-type:upper-roman\">\n";
             break;
         }
     case CounterData::STYLE_CUSTOM:
         {
             // We cannot keep the custom type/style
-            orderedList=true;
+            m_orderedList=true;
             strResult="<ol>\n";
             break;
         }
@@ -320,7 +297,7 @@ QString ClassExportFilterHtml::getStartOfListOpeningTag(const CounterData::Style
     return strResult;
 }
 
-QString ClassExportFilterHtml::layoutToCss(LayoutData& layout) const
+QString HtmlWorker::layoutToCss(LayoutData& layout) const
 {
     QString strElement; // TODO: rename this variable
     // We do not set "left" explicitly, since KWord cannot do bi-di
@@ -410,129 +387,351 @@ QString ClassExportFilterHtml::layoutToCss(LayoutData& layout) const
     return strElement;
 }
 
-QString ClassExportFilterHtml::getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout)
+bool HtmlWorker::doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList)
 {
-    QString strElement;
-    strElement+='<';
-    strElement+=strTag;
+    QString strParaText=paraText;
+    QString strTag; // Tag that will be written.
+
+    if (strParaText.isEmpty())
+    {
+        //An empty paragraph is not allowed in HTML, so add a non-breaking space!
+        strParaText="&nbsp;";
+    }
+
+    // As KWord has only one depth of lists, we can process lists very simply.
+    if ( layout.counter.numbering == CounterData::NUM_LIST )
+    {
+        if (m_inList)
+        {
+            // We are in a list but does it have the right type?
+            if ( layout.counter.style!=m_typeList)
+            {
+                // No, then close the previous list
+                if (m_orderedList)
+                {
+                    *m_streamOut << "</ol>\n";
+                }
+                else
+                {
+                    *m_streamOut << "</ul>\n";
+                }
+                m_inList=false; // We are not in a list anymore
+            }
+        }
+
+        // Are we still in a list?
+        if (!m_inList)
+        {
+            // We are not yet part of a list
+            m_inList=true;
+            *m_streamOut << getStartOfListOpeningTag(layout.counter.style,m_orderedList);
+            m_typeList=layout.counter.style;
+        }
+        // TODO: with Cascaded Style Sheet, we could add the exact counter type we want
+        strTag="li";
+    }
+    else
+    {
+        if (m_inList)
+        {
+            // The previous paragraphs were in a list, so we have to close it
+            if (m_orderedList)
+            {
+                *m_streamOut << "</ol>\n";
+            }
+            else
+            {
+                *m_streamOut << "</ul>\n";
+            }
+            m_inList=false;
+        }
+        if ( layout.counter.numbering == CounterData::NUM_CHAPTER )
+        {
+            strTag=QString("h%1").arg(layout.counter.depth + 1);
+        }
+        else
+        {
+            strTag="p";
+        }
+    }
+
+    *m_streamOut << '<' << strTag;
 
     // Opening elements
-    strElement+=" class=\"";
-    strElement+=escapeCssIdentifier(layout.styleName);
-    strElement+="\"";
-
-    strElement+=" style=\"";
-
-    strElement+=layoutToCss(layout);
-
-    //strElement+="; ";
-    strElement+="\">"; // close opening tag
+    *m_streamOut << " class=\"" << escapeCssIdentifier(layout.styleName);
+    *m_streamOut << "\" style=\"" << layoutToCss(layout) << "\">";
 
     if ( 1==layout.formatData.verticalAlignment )
     {
-        strElement+="<sub>"; //Subscript
+        *m_streamOut << "<sub>"; //Subscript
     }
     if ( 2==layout.formatData.verticalAlignment )
     {
-        strElement+="<sup>"; //Superscript
+        *m_streamOut << "<sup>"; //Superscript
     }
 
-    // The text
-    strElement+=strParagraphText;
-    // Closing elements
+    QString strText;
+    ProcessParagraphData(strParaText, paraFormatDataList, strText);
+    *m_streamOut << strText;
 
     if ( 2==layout.formatData.verticalAlignment )
     {
-        strElement+="</sup>"; //Superscript
+        *m_streamOut << "</sup>"; //Superscript
     }
     if ( 1==layout.formatData.verticalAlignment )
     {
-        strElement+="</sub>"; //Subscript
+        *m_streamOut << "</sub>"; //Subscript
     }
 
-    strElement+="</";
-    strElement+=strTag;
-    strElement+=">\n";
-    return strElement;
+    *m_streamOut << "</" << strTag << ">\n";
+
+    return true;
 }
 
-void ClassExportFilterHtml::processStyleTag (QDomNode myNode, void *, QString   &strStyles)
+bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& to)
 {
-    kdDebug(30503) << "Entering ClassExportFilterHtml::processStyleTag" << endl;
-    AllowNoAttributes (myNode);
+    m_ioDevice=new QFile(filenameOut);
 
-    LayoutData *layout = new LayoutData (); // TODO: memory error recovery
-
-    helpStyleProcessing(myNode,layout);
-
-    kdDebug(30503) << "Style: " << layout->styleName << endl;
-
-    if ( layout->counter.numbering == CounterData::NUM_CHAPTER )
+    if (!m_ioDevice)
     {
-        strStyles+="H";
-        strStyles+=QString::number(layout->counter.depth+1,10);
+        kdError(30503) << "No output file! Aborting!" << endl;
+        return false;
     }
 
-    strStyles+=".";
-    strStyles+=escapeCssIdentifier(layout->styleName);
-    kdDebug(30503) << "Class: " << escapeCssIdentifier(layout->styleName) << endl;
-    strStyles+="\n{\n ";
-    strStyles+=layoutToCss(*layout);
-    strStyles+="\n}\n";
+    if ( !m_ioDevice->open (IO_WriteOnly) )
+    {
+        kdError(30503) << "Unable to open output file!" << endl;
+        return false;
+    }
 
-    delete layout;
-    kdDebug(30503) << "Exiting ClassExportFilterHtml::processStyleTag" << endl;
+    m_streamOut=new QTextStream(m_ioDevice);
+    if (!m_ioDevice)
+    {
+        kdError(30503) << "Could not create output stream! Aborting!" << endl;
+        m_ioDevice->close();
+        return false;
+    }
+
+    // Find out IANA/mime charset name
+    if ( isUTF8() )
+    {
+        m_strCharset="UTF-8";
+    }
+    else
+    {
+        m_strCharset=QTextCodec::codecForLocale()->mimeName();
+    }
+
+    kdDebug(30501) << "Charset used: " << m_strCharset << endl;
+
+    if (m_strCharset.isEmpty())
+    {
+        // We have a (X)HTML file to write and we have a no charset name
+        // => change to UTF-8
+        setUTF8(true);
+        m_strCharset="UTF-8";
+        kdWarning(30503) << "Encoding of (X)HTML file has been forced to UTF-8!"
+            << endl;
+    }
+    if ( isUTF8() )
+    {
+        m_streamOut->setEncoding( QTextStream::UnicodeUTF8 );
+    }
+    else
+    {
+        m_streamOut->setEncoding( QTextStream::Locale );
+    }
+
+    // Make the default title
+    const int result=filenameOut.findRev("/");
+    if (result>=0)
+    {
+        m_strTitle=filenameOut.mid(result+1);
+    }
+    else
+    {
+        m_strTitle=filenameOut;
+    }
+    return true;
 }
 
-static void ProcessStyleTag (QDomNode myNode, void *, QString &strStyles, KWEFBaseClass* exportFilter )
+bool HtmlWorker::doCloseFile(void)
 {
-    kdDebug(30503) << "Entering ProcessStyleTag" << endl;
-    exportFilter->processStyleTag(myNode,NULL,strStyles);
-    kdDebug(30503) << "Exiting ProcessStyleTag" << endl;
+    if (m_ioDevice)
+        m_ioDevice->close();
+    return (m_ioDevice);
 }
 
-static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText, KWEFBaseClass* exportFilter )
+bool HtmlWorker::doOpenDocument(void)
 {
-    kdDebug(30503) << "Entering ProcessStylesPluralTag" << endl;
-    AllowNoAttributes (myNode);
+    // Make the file header
 
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "STYLE", ProcessStyleTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
-    kdDebug(30503) << "Exiting ProcessStylesPluralTag" << endl;
+    if (isXML())
+    {   //Write out the XML declaration
+        *m_streamOut << "<?xml version=\"1.0\" encoding=\"" << m_strCharset << "\"?>" << endl;
+    }
+
+    // write <!DOCTYPE
+    *m_streamOut << "<!DOCTYPE ";
+    if (isXML())
+    {
+        *m_streamOut << "html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"DTD/xhtml1-strict.dtd\">\n";
+    }
+    else
+    {
+        *m_streamOut << "HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n";
+    }
+
+    // No "lang" or "xml:lang" attribute for <html>, as we do not know in which language the document is!
+    *m_streamOut << "<html";
+    if (isXML())
+    {
+        // XHTML has an extra attribute defining its namespace (in the <html> opening tag)
+        *m_streamOut << " xmlns=\"http://www.w3.org/1999/xhtml\"";
+    }
+    *m_streamOut << ">\n";
+    return true;
 }
 
-QString ClassExportFilterHtml::processDocTagStylesOnly(QDomElement myNode)
+bool HtmlWorker::doCloseDocument(void)
 {
-    kdDebug(30503) << "Entering ClassExportFilterHtml::processDocTagStylesOnly" << endl;
-    QString strReturn;
+    *m_streamOut << "</html>\n";
+    return true;
+}
 
-    QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ( "editor",        "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "mime",          "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "syntaxVersion", "", NULL ) );
-    ProcessAttributes (myNode, attrProcessingList);
+bool HtmlWorker::doFullDocumentInfo(QDomDocument& info)
+{
+    // Search <title> element (be carefull: there are two of them!)
+    QDomNodeList docNodeList = info.elementsByTagName("title");
 
-    strReturn+="<style type=\"text/css\">\n";
+    // Now find the <title> element that is child of a <about> element
+    for (uint i=0; i<docNodeList.count(); i++)
+    {
+        QDomNode node=docNodeList.item(i);
+        kdDebug(30503) << " Parent name: " << node.parentNode().nodeName() << endl;
+        if (node.parentNode().nodeName()=="about")
+        {
+            // We have the one we want!
+            //  Therefore retrieve text of element (may be empty!)
+            QString strText=node.toElement().text();
+            if (!strText.isEmpty())
+                m_strTitle=strText; // Set title only if it is not empty!
+            kdDebug(30503) << "Found new title " << m_strTitle << endl;
+        }
+    }
+    return true;
+}
+
+bool HtmlWorker::doOpenHead(void)
+{
+    *m_streamOut << "<head>" << endl;
+
+    // Declare what charset we are using
+    *m_streamOut << "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=";
+    *m_streamOut << m_strCharset << '"';
+    *m_streamOut << (isXML()?" /":"") << ">\n" ;
+
+    // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
+    QString strVersion("$Revision$");
+    // Eliminate the dollar signs
+    //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
+    *m_streamOut << "<meta name=\"Generator\" content=\"KWord HTML Export Filter Version"
+              << strVersion.mid(10).replace(QRegExp("\\$"),"") // Note: double character (one for C++, one for QRegExp!)
+              << "\""<< (isXML()?" /":"") // X(HT)ML closes empty elements, HTML not!
+              << ">\n";
+
+    if (m_strTitle.isEmpty())
+    {
+        // Somehow we have still an empty title (this should not happen!)
+        kdWarning(30503) << "Title still empty! (HtmlWorker::doOpenHead)" << endl;
+        m_strTitle=i18n("Untitled");
+    }
+    *m_streamOut << "<title>"<< EscapeXmlText(m_strTitle,true,false) <<"</title>\n";  // <TITLE> is mandatory!
+
+    //TODO: transform documentinfo.xml into many <META> elements (at least the author!)
+
+    return true;
+}
+
+bool HtmlWorker::doCloseHead(void)
+{
+    *m_streamOut << "</head>\n";
+    return true;
+}
+
+bool HtmlWorker::doOpenBody(void)
+{
+    *m_streamOut << "<body>\n";
+    return true;
+}
+
+bool HtmlWorker::doCloseBody(void)
+{
+    *m_streamOut << "</body>\n";
+    return true;
+}
+
+bool HtmlWorker::doOpenTextFrameSet(void)
+{
+    *m_streamOut << "<div>\n"; // For compatibility with AbiWord's XHTML import filter
+    return true;
+}
+
+bool HtmlWorker::doCloseTextFrameSet(void)
+{
+    // Are we still in a list?
+    if (m_inList)
+    {
+        // We are in a list, so close it!
+        if (m_orderedList)
+        {
+            *m_streamOut << "</ol>\n";
+        }
+        else
+        {
+            *m_streamOut << "</ul>\n";
+        }
+        m_inList=false;
+    }
+    *m_streamOut << "</div>\n"; // For compatibility with AbiWord's XHTML import filter
+    return true;
+}
+
+bool HtmlWorker::doOpenStyles(void)
+{
+    *m_streamOut << "<style type=\"text/css\">\n";
     if (!isXML())
     {
         // Put the style under comments to increase the compatibility with old browsers
         // However in XHTML 1.0, you cannot put the style definition into HTML comments
-        strReturn+="<!--\n";
+        *m_streamOut << "<!--\n";
     }
-    strReturn+="BODY { background-color: #FFFFFF }\n";
+    *m_streamOut << "BODY\n{\n background-color: #FFFFFF\n}\n";
 
-    // We are only interested in <STYLES>
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "STYLES",ProcessStylesPluralTag,NULL));
-    ProcessSubtags (myNode, tagProcessingList, strReturn, this);
+    return true;
+}
 
+bool HtmlWorker::doFullDefineStyle(LayoutData& layout)
+{
+    kdDebug(30503) << "Style: " << layout.styleName << endl;
+
+    if ( layout.counter.numbering == CounterData::NUM_CHAPTER )
+    {
+        *m_streamOut << "H" << QString::number(layout.counter.depth+1,10);
+    }
+
+    *m_streamOut << "." << escapeCssIdentifier(layout.styleName);
+    kdDebug(30503) << "Class: " << escapeCssIdentifier(layout.styleName) << endl;
+    *m_streamOut << "\n{\n " << layoutToCss(layout) << "\n}\n";
+
+}
+
+bool HtmlWorker::doCloseStyles(void)
+{
     if (!isXML())
     {
-        strReturn+="-->\n";
+        *m_streamOut << "-->\n";
     }
-    strReturn+="</style>\n";
-
-    kdDebug(30503) << "Exiting ClassExportFilterHtml::processDocTagStylesOnly" << endl;
-    return strReturn;
+    *m_streamOut << "</style>\n";
+    return true;
 }

@@ -23,36 +23,51 @@
 #ifndef EXPORTFILTERFULLPOWER_H
 #define EXPORTFILTERFULLPOWER_H
 
-class ClassExportFilterHtml : public KWEFBaseClass
+#include <KWEFBaseWorker.h>
+
+class HtmlWorker : public KWEFBaseWorker
 {
-    public:
-        ClassExportFilterHtml (void) {}
-        virtual ~ClassExportFilterHtml (void) {}
-    public:
-        inline bool isXML  (void) const { return m_xml; }
-        inline bool isUTF8 (void) const { return m_utf8; }
-        inline void setXML (const bool flag ) { m_xml=flag; }
-        inline void setUTF8 (const bool flag ) { m_utf8=flag; }
-        bool filter(const QString  &filenameIn, const QString  &filenameOut);
-    public: //virtual
-        virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
-        virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
-        virtual QString getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout);
-        virtual void processStyleTag (QDomNode myNode, void * tagData, QString &strStyles);
-    protected:
-        QString processDocTagStylesOnly(QDomElement myNode);
-        QString getBodyOpeningTagExtraAttributes(void) const;
-        QString getHtmlOpeningTagExtraAttributes(void) const;
-        QString escapeCssIdentifier(const QString& strText) const;
-        QString layoutToCss(LayoutData& layout) const;
-        QString getDocType(void) const;
-    protected:
-        virtual void helpStyleProcessing(QDomNode myNode,LayoutData* layout);
-    protected:
-        QDomDocument qDomDocumentIn;
-    private:
-        bool m_utf8;
-        bool m_xml;
+public:
+    HtmlWorker(void) : m_ioDevice(NULL), m_streamOut(NULL), m_inList(false) { }
+    virtual ~HtmlWorker(void) { }
+public:
+    virtual bool doOpenFile(const QString& filenameOut, const QString& to);
+    virtual bool doCloseFile(void); // Close file in normal conditions
+    virtual bool doOpenDocument(void);
+    virtual bool doCloseDocument(void);
+    virtual bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
+    virtual bool doFullDocumentInfo(QDomDocument& info);
+    virtual bool doOpenTextFrameSet(void);
+    virtual bool doCloseTextFrameSet(void);
+    virtual bool doOpenHead(void); // HTML's <head>
+    virtual bool doCloseHead(void); // HTML's </head>
+    virtual bool doOpenBody(void); // HTML's <body>
+    virtual bool doCloseBody(void); // HTML's </body>
+    virtual bool doOpenStyles(void); // HTML's <style>
+    virtual bool doCloseStyles(void); // HTML's </style>
+    virtual bool doFullDefineStyle(LayoutData& layout);
+public:
+    inline bool isXML  (void) const { return m_xml; }
+    inline bool isUTF8 (void) const { return m_utf8; }
+    inline void setXML (const bool flag ) { m_xml=flag; }
+    inline void setUTF8 (const bool flag ) { m_utf8=flag; }
+private:
+    void ProcessParagraphData (const QString& paraText, ValueListFormatData& paraFormatDataList);
+    QString FormatDataToAbiProps(FormatData& formatData);
+    QString escapeCssIdentifier(const QString& strText) const;
+    QString layoutToCss(LayoutData& layout) const;
+    void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
+    QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
+private:
+    QIODevice* m_ioDevice;
+    QTextStream* m_streamOut;
+    QString m_strCharset; // Mime charset
+    QString m_strTitle;
+    CounterData::Style m_typeList; // What is the style of the current list (undefined, if we are not in a list)
+    bool m_inList; // Are we currently in a list?
+    bool m_orderedList; // Is the current list ordered or not (undefined, if we are not in a list)
+    bool m_utf8;
+    bool m_xml;
 };
 
 #endif /* EXPORTFILTERFULLPOWER_H */
