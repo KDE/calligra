@@ -239,7 +239,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
       getShadowCoords( sx, sy );
 
       if ( angle == 0 )
-        {                        
+        {
             _painter->setPen( QPen( shadowColor ) );
             _painter->setBrush( shadowColor );
             _painter->drawRect( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ),
@@ -300,9 +300,9 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         if ( !drawContour ) {
             QSize _pixSize =  QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
             QPixmap _pixmap = image.generatePixmap( _pixSize );
-	    
+
 	    QPixmap tmpPix = changePictureSettings( _pixmap );
-	    
+
             _painter->drawPixmap( QRect( (int)( _zoomHandler->zoomItX( ox ) + penw ),
                                          (int)( _zoomHandler->zoomItY( oy ) + penw ),
                                          (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),

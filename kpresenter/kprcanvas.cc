@@ -378,7 +378,7 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
         if( m_view->kPresenterDoc()->isHeaderFooter(it.current()) || it.current()->isProtect())
             selectionMode=SM_PROTECT;
 
-	if ( it.current()->isSticky() || editMode ||
+	if (
 	     ( rect2.intersects( it.current()->getBoundingRect(m_view->zoomHandler() ) ) && editMode ) ||
 	     ( !editMode &&
 	       it.current()->getPresNum() <= static_cast<int>( currPresStep ) &&

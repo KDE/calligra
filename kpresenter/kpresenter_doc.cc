@@ -1917,7 +1917,6 @@ void KPresenterDoc::repaint( bool erase )
 void KPresenterDoc::repaint( const QRect& rect )
 {
     QRect r;
-
     QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it ) {
 	r = rect;

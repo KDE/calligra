@@ -80,7 +80,7 @@ public:
     KPrCanvas( QWidget *parent=0,const char *name=0,KPresenterView *_view=0 );
     ~KPrCanvas();
 
-    KPresenterView * getView() { return m_view; }
+    KPresenterView * getView()const { return m_view; }
 
     // The equivalent of contentsX() and contentsY() for a QScrollView
     // The Canvas is a widget, not a scrollview (because we handle the scrollbars ourselves,
