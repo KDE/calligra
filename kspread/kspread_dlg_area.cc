@@ -26,6 +26,7 @@
 #include "kspread_doc.h"
 
 #include <qlayout.h>
+#include <qlabel.h>
 #include <qlineedit.h>
 #include <kmessagebox.h>
 
@@ -38,6 +39,9 @@ KSpreadarea::KSpreadarea( KSpreadView * parent, const char * name, const QPoint 
   QWidget * page = new QWidget( this );
   setMainWidget(page);
   QVBoxLayout * lay1 = new QVBoxLayout( page, 0, spacingHint() );
+
+  QLabel * label = new QLabel( i18n("Enter the area name:"), page );
+  lay1->addWidget( label );
 
   m_areaName = new QLineEdit(page);
   m_areaName->setMinimumWidth( m_areaName->sizeHint().width() * 3 );
