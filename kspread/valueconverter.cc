@@ -28,6 +28,11 @@ ValueConverter::ValueConverter (ValueParser* p) : parser( p )
 {
 }
 
+KLocale* ValueConverter::locale()
+{
+  return parser->locale();
+}
+
 KSpreadValue ValueConverter::asBoolean (const KSpreadValue &value) const
 {
   KSpreadValue val;

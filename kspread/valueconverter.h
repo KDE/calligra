@@ -46,6 +46,8 @@ class ValueConverter {
   KSpreadValue asDate (const KSpreadValue &value) const;
   KSpreadValue asTime (const KSpreadValue &value) const;
   
+  KLocale* locale();
+  
  private:
    ValueParser *parser; 
 };
