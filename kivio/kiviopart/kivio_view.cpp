@@ -1358,3 +1358,4 @@ void KivioView::setupPrinter(QPrinter &p)
     p.setMinMax(1, m_pDoc->map()->pageList().count());
     p.setFromTo(1, m_pDoc->map()->pageList().count());
 }
+#include "kivio_view.moc"

@@ -264,3 +264,4 @@ void KivioParagraphAction::setCurrentItem(int index)
   }
   TKBaseSelectAction::setCurrentItem(index);
 }
+#include "kivio_paragraph_action.moc"

@@ -178,3 +178,4 @@ void KivioStencilGeometryPanel::setSize( float w, float h )
     m_pW->setValue(w);
     m_pH->setValue(h);
 }
+#include "kivio_stencil_geometry_panel.moc"

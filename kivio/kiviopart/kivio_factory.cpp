@@ -104,3 +104,4 @@ KInstance* KivioFactory::global()
 
   return s_global;
 }
+#include "kivio_factory.moc"

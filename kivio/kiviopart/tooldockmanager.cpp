@@ -93,3 +93,4 @@ ToolDockBase* ToolDockManager::createToolDock( QWidget* view, const QString& cap
   addToolWindow(b);
   return b;
 }
+#include "tooldockmanager.moc"

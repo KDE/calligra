@@ -1365,3 +1365,4 @@ void KivioCanvas::setVisibleAreaByHeight(KivioRect r, int margin)
   setViewCenterPoint(c);
   setUpdatesEnabled(true);
 }
+#include "kivio_canvas.moc"

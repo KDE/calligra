@@ -344,3 +344,4 @@ QRect StencilBarMoveManager::geometry()
 
   return QRect(x0,y0,w0,h0);
 }
+#include "stencilbarmovemanager.moc"

@@ -214,3 +214,4 @@ void KivioIconView::slotDoubleClicked( QIconViewItem *pQtItem )
 
     emit createNewStencil( pSpawner );
 }
+#include "kivio_icon_view.moc"

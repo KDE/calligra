@@ -332,3 +332,4 @@ void KivioRuler::drawNums(QPainter* p, int x, int y, QString& num,  bool orienta
       y += 8;
   }
 }
+#include "kivio_ruler.moc"

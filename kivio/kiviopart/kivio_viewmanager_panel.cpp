@@ -338,3 +338,4 @@ void KivioViewManagerPanel::reset()
   updateButtons(list->currentItem());
 }
 
+#include "kivio_viewmanager_panel.moc"

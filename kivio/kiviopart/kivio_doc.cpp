@@ -699,3 +699,4 @@ void KivioDoc::updateView(KivioPage* page, bool modified)
   if (modified)
     setModified(true);
 }
+#include "kivio_doc.moc"

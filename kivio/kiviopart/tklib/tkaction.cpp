@@ -295,3 +295,4 @@ void TKSelectAction::setEditText(const QString& text)
 }
 
 #undef SET_FOR_ALL_CONTAINER
+#include "tkaction.moc"

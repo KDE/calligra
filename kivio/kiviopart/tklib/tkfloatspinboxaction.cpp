@@ -224,3 +224,4 @@ void TKUFloatSpinBoxAction::setValue(float value,int unit)
   TKFloatSpinBoxAction::setValue( cvtPtToUnit(m_unit,cvtUnitToPt(unit,value)) );
 }
 
+#include "tkfloatspinboxaction.moc"
