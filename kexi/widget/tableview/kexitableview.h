@@ -44,7 +44,7 @@
 #include "tristate.h"
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
-#include <kexidataawareobjectiface.h>
+#include "kexidataawareobjectiface.h"
 
 class KPopupMenu;
 class KPrinter;
