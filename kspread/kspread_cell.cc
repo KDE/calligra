@@ -103,6 +103,8 @@ public:
     // Store the number of line when you used multirow (default is 0)
     int nbLines;
 
+private:
+    CellExtra& operator=( const CellExtra& );
 };
 
 
@@ -157,13 +159,14 @@ public:
     KSpreadCell* nextCell;
     KSpreadCell* previousCell;
 
-    // "extra stuff", see explanation for CellExtra
-    CellExtra* cellExtra;
-
     CellPrivate();
     ~CellPrivate();
 
     CellExtra* extra();
+    
+private:    
+    // "extra stuff", see explanation for CellExtra
+    CellExtra* cellExtra;
 };
 
 CellPrivate::CellPrivate()
@@ -198,7 +201,7 @@ CellExtra* CellPrivate::extra()
 {
     if( !cellExtra )
     {
-        cellExtra = new CellExtra();
+        cellExtra = new CellExtra;
         cellExtra->QML = 0;
         cellExtra->conditions = 0;
         cellExtra->validity = 0;
