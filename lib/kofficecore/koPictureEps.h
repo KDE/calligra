@@ -98,6 +98,20 @@ protected:
 
 private:
     int tryScaleWithGhostScript(QImage &image, const QSize& size, const int resolutionx, const int resolutiony, const char* device );
+    /**
+     * @brief Read a line from a PostScript stream in a QByteArray
+     *
+     * The PosctScript stream is somewhere in the QByteArray and therefore has to be
+     * determined by the start and length of this stream and the current position
+     *
+     * @param array the array which is read
+     * @param start start position of the PostScript stream
+     * @param lenght lenght of the PostScript stream
+     * @param pos current position (which is also returned)
+     * @param lastCharWasCr defines if the previous line ended with a Carriage Return,
+     *   to skip an eventual Line Feed at the start of this line
+     * @return the read line
+     */
     QString KoPictureEps::readLine( const QByteArray& array, const uint start, const uint length, uint& pos, bool& lastCharWasCr );
 
 private:

@@ -351,16 +351,10 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
         m_psStreamLength = m_rawData.size();
     }
 
-    QString lineBox;
-#if 1
-    bool lastWasCr = false;
-    uint pos = m_psStreamStart;
+    QString lineBox; // Line with the bounding box
+    bool lastWasCr = false; // Was the last character of the line a carriage return?
+    uint pos = m_psStreamStart; // We start to search the bounding box at the start of the PostScript stream
     QString line( readLine( m_rawData, m_psStreamStart, m_psStreamLength, pos, lastWasCr ) );
-    kdDebug(30003) << "Pos: " << pos << endl;
-#else    
-    QTextStream stream(m_rawData, IO_ReadOnly);
-    QString line( stream.readLine() );
-#endif
     kdDebug(30003) << "Header: " << line << endl;
     if (!line.startsWith("%!"))
     {
@@ -370,13 +364,8 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
     QRect rect;
     for(;;)
     {
-#if 1
         ++pos; // Get over the previous line end (CR or LF)
         line = readLine( m_rawData,  m_psStreamStart, m_psStreamLength, pos, lastWasCr );
-        kdDebug(30003) << "Pos: " << pos << endl;
-#else
-        line=stream.readLine();
-#endif
         kdDebug(30003) << "Checking line: " << line << endl;
         // ### TODO: it seems that the bounding box can be delayed in the trailer (GhostScript 7.07 does not support it either.)
         if (line.startsWith("%%BoundingBox:"))
