@@ -1272,8 +1272,15 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
     switch ( fillType )
     {
     case FT_BRUSH:
-        styleobjectauto.addProperty( "draw:fill","solid" );
-        styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+        //todo FIXME when text object doesn't have a background
+        if(brush.color()!=Qt::black || brush.style()!=Qt::NoBrush)
+        {
+            styleobjectauto.addProperty( "draw:fill","solid" );
+            styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+        }
+        else
+            styleobjectauto.addProperty( "draw:fill","none" );
+
         break;
     case FT_GRADIENT:
         //todo
