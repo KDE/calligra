@@ -119,7 +119,7 @@ QString  XmlParser::getChildName(QDomNode balise, int index)
 	return balise.childNodes().item(index).nodeName();
 }
 
-QString  XmlParser::getAttr(const QDomNode balise, QString name) const
+QString  XmlParser::getAttr(QDomNode balise, QString name) const
 {
 	if(balise.isElement())
 		return balise.toElement().attributeNode(name).value();

@@ -68,7 +68,7 @@ class XmlParser
 		QDomNode    getChild(QDomNode, int);
 		int         getNbChild(QDomNode, QString);
 		int         getNbChild(QDomNode);
-		QString     getAttr(const QDomNode, QString) const;
+		QString     getAttr(QDomNode, QString) const;
 		bool        isChild(QDomNode, QString);
 
 		void setFileHeader(FileHeader* h) { _fileHeader = h; }
