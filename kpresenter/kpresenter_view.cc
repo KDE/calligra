@@ -306,6 +306,9 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
 
     connect (m_canvas, SIGNAL(selectionChanged(bool)),
              actionChangeCase, SLOT(setEnabled(bool)));
+    connect (m_canvas, SIGNAL(selectionChanged(bool)),
+             actionCreateStyleFromSelection, SLOT(setEnabled(bool)));
+
     connect( m_canvas, SIGNAL( currentObjectEditChanged() ), this,  SLOT( slotObjectEditChanged()));
 
     connect( h_ruler, SIGNAL( tabListChanged( const KoTabulatorList & ) ), this,
@@ -6240,7 +6243,6 @@ void KPresenterView::slotObjectEditChanged()
     }
 
     KPTextView *edit=m_canvas->currentTextObjectView();
-    actionCreateStyleFromSelection->setEnabled((edit!=0));
     bool val=(edit!=0) && isText && !edit->kpTextObject()->isProtectContent();
     actionInsertSpecialChar->setEnabled(val);
     actionInsertComment->setEnabled( val );
@@ -6262,6 +6264,7 @@ void KPresenterView::slotObjectEditChanged()
         actionTextDepthMinus->setEnabled( val && leftMargin>0);
         hasSelection = edit->textObject()->hasSelection();
     }
+    actionCreateStyleFromSelection->setEnabled((edit!=0)&& hasSelection);
 
     actionChangeCase->setEnabled( (val && rw && hasSelection ) || (rw && !edit && isText));
 
