@@ -3199,4 +3199,10 @@ void KPresenterDoc::insertFile(const QString & file )
     _clean = clean;
 }
 
+void KPresenterDoc::spellCheckParagraphDeleted( KoTextParag *_parag,  KPTextObject *frm)
+{
+    m_bgSpellCheck->spellCheckParagraphDeleted( _parag, frm->textObject());
+}
+
+
 #include <kpresenter_doc.moc>

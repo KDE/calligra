@@ -166,6 +166,7 @@ signals:
 protected slots:
     void slotFormatChanged(const KoTextFormat &);
     void slotAfterFormatting( int, KoTextParag*, bool* );
+    void slotParagraphDeleted(KoTextParag*_parag);
 protected:
     virtual QDomElement saveKTextObject( QDomDocument& doc );
     QDomElement saveHelper(const QString &tmpText,KoTextFormat*lastFormat ,QDomDocument &doc);

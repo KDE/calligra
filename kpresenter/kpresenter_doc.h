@@ -34,7 +34,7 @@ class KPrVariableCollection;
 class KTempFile;
 class KoStyle;
 class KPrBgSpellCheck;
-
+class KoTextParag;
 #include "kprpage.h"
 
 #include <koDocument.h>
@@ -405,6 +405,9 @@ public:
 
     void setRefreshSideBar( bool _b ) { m_refreshSideBar = _b;}
     bool refreshSideBar()const  { return m_refreshSideBar;}
+
+    void spellCheckParagraphDeleted( KoTextParag *_parag,  KPTextObject *frm);
+
 
 public slots:
     void movePage( int from, int to );

@@ -135,6 +135,8 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
              SLOT( slotFormatChanged(const KoTextFormat &)) );
     connect( m_textobj, SIGNAL( afterFormatting( int, KoTextParag*, bool* ) ),
              SLOT( slotAfterFormatting( int, KoTextParag*, bool* ) ) );
+    connect( m_textobj, SIGNAL( paragraphDeleted( KoTextParag*) ),
+             SLOT( slotParagraphDeleted(KoTextParag*) ));
 
 }
 
@@ -149,6 +151,12 @@ DCOPObject* KPTextObject::dcopObject()
     if ( !dcop )
 	dcop = new KPTextObjectIface( this );
     return dcop;
+}
+
+
+void KPTextObject::slotParagraphDeleted(KoTextParag*_parag)
+{
+    m_doc->spellCheckParagraphDeleted( _parag,  this);
 }
 
 

@@ -132,6 +132,8 @@ void KPresenterDocIface::recalcVariables(const QString &varName)
         doc->recalcVariables(8);
     else if(varName=="VT_LINK")
         doc->recalcVariables(9);
+    else if(varName=="VT_NOTE")
+        doc->recalcVariables(10);
     else if(varName=="VT_ALL")
         doc->recalcVariables(256);
 }
