@@ -711,7 +711,9 @@ void KSpreadDoc::loadOasisSettings( const QDomDocument&settingsDoc )
 
     if ( tmp )
     {
-        //todo
+        tmp = settings.selectItemMap( "Views" );
+        if (  tmp )
+            d->workbook->loadOasisSettings( settings );
     }
 }
 

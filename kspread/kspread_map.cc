@@ -24,6 +24,7 @@
 #include "kspread_genvalidationstyle.h"
 #include "KSpreadMapIface.h"
 
+#include <koOasisSettings.h>
 #include <kmdcodec.h>
 #include <koGenStyles.h>
 #include <time.h>
@@ -88,6 +89,20 @@ void KSpreadMap::moveTable( const QString & _from, const QString & _to, bool _be
 
 void KSpreadMap::loadOasisSettings( KoOasisSettings &settings )
 {
+    QString activeTable = settings.parseConfigItemString( "ActiveTable" );
+    kdDebug()<<" loadOasisSettings( KoOasisSettings &settings ) activeTable :"<<activeTable<<endl;
+
+    QPtrListIterator<KSpreadSheet> it( m_lstTables );
+    for( ; it.current(); ++it )
+    {
+        //todo
+    }
+
+    if (!activeTable.isEmpty())
+    {
+        // Used by KSpreadView's constructor
+        m_initialActiveTable = findTable( activeTable );
+    }
 
 }
 
