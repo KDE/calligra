@@ -28,14 +28,8 @@
 // #include <config.h>
 #endif
 
-#include "version.h"
 #include "FontSelector.h"
-
-#ifdef NEWKDE
-#include "FontSelector2.moc"
-#else
-#include "FontSelector1.moc"
-#endif
+#include "FontSelector.moc"
 
 #include "stdio.h"
 #include "stdlib.h"
@@ -48,6 +42,8 @@
 
 #include <klocale.h>
 #include <kapp.h>
+
+#include "version.h"
 
 #define YOFFSET  5
 #define XOFFSET  5
@@ -347,37 +343,32 @@ void FontSelector::setFont( const QFont& aFont){
   display_example(selFont);
 }  
 
-#ifdef NEWKDE
-void FontSelector::family_chosen_slot(const QString &family)
-#else
-void FontSelector::family_chosen_slot(const char* family)
-#endif
-{
+void FontSelector::family_chosen_slot(const char *family){
+  family_chosen_slot(QString(family));
+}
+
+void FontSelector::family_chosen_slot(const QString &family){
 
   selFont.setFamily(family);
   //display_example();
   emit fontSelected(selFont);
 }
 
-#ifdef NEWKDE
-void FontSelector::size_chosen_slot(const QString &size_string){
-#else
 void FontSelector::size_chosen_slot(const char* size){
-  QString size_string = size;
-#endif
+  size_chosen_slot(QString(size));
+}
 
+void FontSelector::size_chosen_slot(const QString &size_string){
   selFont.setPointSize(size_string.toInt());
   //display_example();
   emit fontSelected(selFont);
 }
 
-#ifdef NEWKDE
-void FontSelector::weight_chosen_slot(const QString &weight_string){
-#else
 void FontSelector::weight_chosen_slot(const char* weight) {
-  QString weight_string = weight;
-#endif
+  weight_chosen_slot(QString(weight));
+}
 
+void FontSelector::weight_chosen_slot(const QString &weight_string){
   if ( weight_string == QString(i18n("normal")))
     selFont.setBold(false);
   if ( weight_string == QString(i18n("bold")))
@@ -386,13 +377,11 @@ void FontSelector::weight_chosen_slot(const char* weight) {
   emit fontSelected(selFont);
 }
 
-#ifdef NEWKDE
-void FontSelector::style_chosen_slot(const QString &style_string){
-#else
 void FontSelector::style_chosen_slot(const char* style){
-  QString style_string = style;
-#endif
+  style_chosen_slot(QString(style));
+}
 
+void FontSelector::style_chosen_slot(const QString &style_string){
   if ( style_string == QString(i18n("roman")))
     selFont.setItalic(false);
   if ( style_string == QString(i18n("italic")))
