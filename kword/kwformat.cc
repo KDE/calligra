@@ -46,7 +46,9 @@ QTextFormat * KWTextFormatCollection::format( const QFont &f, const QColor &c )
     QString key = QTextFormat::getKey( f, c, FALSE, QString::null, QString::null, QTextFormat::AlignNormal );
     //kdDebug() << "format() textformat=" << this << " pointsizefloat=" << f.pointSizeFloat() << endl;
      // SYNC any changes with generateKey below
+    key += '/';
     key += QString::number( (int)f.strikeOut() );
+    key += '/';
     key += QString::number( (int)(f.pointSizeFloat() * 10) );
     m_cachedFormat = static_cast<KWTextFormat *>( dict().find( key ) );
     m_cfont = f;
@@ -118,7 +120,9 @@ void KWTextFormat::generateKey()
     QTextFormat::generateKey();
     QString k = key();
     // SYNC any changes to the key format with ::format above
+    k += '/';
     k += QString::number( (int)fn.strikeOut() );
+    k += '/';
     k += QString::number( (int)(fn.pointSizeFloat() * 10) );
     setKey( k );
     //kdDebug() << "generateKey textformat=" << this << " k=" << k << " pointsizefloat=" << fn.pointSizeFloat() << endl;

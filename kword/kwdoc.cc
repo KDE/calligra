@@ -866,7 +866,7 @@ void KWDocument::recalcFrames()
         }
     }
 
-    emit newContentsSize();
+    // ## why ?? ## emit newContentsSize();
 }
 
 KWDocument::~KWDocument()
