@@ -1385,7 +1385,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     // Looks like support for the old way of naming images internally,
     // see completeLoading.
     value = KWDocument::getAttribute( word, "url", QString::null );
-    if ( value != QString::null )
+    if ( !value.isNull() )
     {
         m_urlIntern = KURL( value ).path();
     }
