@@ -55,6 +55,9 @@ public:
 	/// standard koDocument inherited methods
 	virtual bool initDoc();
 
+    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles ) {
+        return true;
+    }
 	/// file-> open calls this method
 	virtual bool loadXML( QIODevice*, const QDomDocument& document );
 	/// file-> save and file-> save as call this method
