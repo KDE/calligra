@@ -1,17 +1,23 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexi" version="0.8">
+<kpartgui name="kexi" version="0.9">
 <MenuBar>
-  <Menu name="file"><text>&amp;File</text>
-  </Menu>
   <Menu name="project">
-   <text>&amp;Project</text>
-   <Action name="project_props"/>
+    <text>&amp;Project</text>
+    <Action name="relations"/>
+    <Separator/>
+    <Action name="project_props"/>
   </Menu>
 </MenuBar>
 
-<ToolBar name="mainToolBar">
-  <text>Main Toolbar</text>
-  <Action name="save_as"/>
+<ToolBar name="mainToolBar" fullWidth="false" noMerge="1">
+  <text>File</text>
+  <Action name="file_new"/>
+  <Action name="file_open"/>
+  <Action name="file_save"/>
+  <Action name="file_save_as"/>
+</ToolBar>
+<ToolBar name="projectToolBar" fullWidth="false">
+  <text>Project</text>
   <Action name="relations"/>
 </ToolBar>
 </kpartgui>
