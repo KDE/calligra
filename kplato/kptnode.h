@@ -345,6 +345,8 @@ public:
     virtual void addParentProxyRelation(KPTNode *, const KPTRelation *) {}
     virtual void addChildProxyRelation(KPTNode *, const KPTRelation *) {}
 
+    virtual bool useDateOnly();
+
 protected:
     QPtrList<KPTNode> m_nodes;
     QPtrList<KPTRelation> m_dependChildNodes;

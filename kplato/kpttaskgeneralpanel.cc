@@ -49,7 +49,7 @@ KPTTaskGeneralPanel::KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *wor
       m_task(task),
       m_dayLength(24)
 {
-    useTime = KPTPart::config().behavior().dateTimeUsage != KPTBehavior::Date;
+    useTime = !task.useDateOnly();
     setStartValues(task, workTime);
     namefield->setFocus();
 }

@@ -141,7 +141,7 @@ public:
     bool legalToLink(KPTNode *par, KPTNode *child);
     
     void setUseDateOnly(bool on) { m_useDateOnly = on; }
-    bool useDateOnly() const { return m_useDateOnly; }
+    bool useDateOnly() { return m_useDateOnly; }
 
 protected:
     QPtrList<KPTResourceGroup> m_resourceGroups;

@@ -89,6 +89,10 @@ KPTNode *KPTNode::projectNode() {
     kdError()<<k_funcinfo<<"Ooops, no parent and no project found"<<endl;
     return 0;
 }
+bool KPTNode::useDateOnly() { 
+    KPTNode *n = projectNode();
+    return (n ? n->useDateOnly() : false); 
+}
 
 void KPTNode::delChildNode( KPTNode *node, bool remove) {
     //kdDebug()<<k_funcinfo<<"find="<<m_nodes.findRef(node)<<endl;
