@@ -1334,11 +1334,11 @@ bool kspreadfunc_trunc( KSContext & context )
 
   double result = args[0]->doubleValue();
 
-  // if negative, do some rounding
+  // TRUNC(254;-2) is 200
   if( precision < 0 )
   {
       precision = -precision;
-      result = floor( result/pow(10.0,precision)+0.5 ) * pow(10.0,precision);
+      result = floor( result/pow(10.0,precision) ) * pow(10.0,precision);
       precision = 0;
   }
 
