@@ -220,8 +220,10 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
 
     QDomElement *style = m_styles[master->attribute( "style:page-master-name" )];
     QDomElement properties = style->namedItem( "style:properties" ).toElement();
-    QDomElement *backgroundStyle = m_styles[ "Standard-background"];
+    //kdDebug()<<" master->attribute( draw:style-name ) :"<<master->attribute("draw:style-name" )<<endl;
+    QDomElement *backgroundStyle = m_stylesPresentation[ master->attribute("draw:style-name" ).isEmpty() ? "Standard-background" : master->attribute("draw:style-name" ) ];
 
+    //kdDebug()<<" backgroundStyle :"<<backgroundStyle<<endl;
     double pageHeight;
     QDomElement paperElement = doc.createElement( "PAPER" );
     if ( properties.isNull() )
