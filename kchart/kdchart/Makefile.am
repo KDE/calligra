@@ -16,10 +16,10 @@ libkdchart_la_SOURCES = KDChart.cpp 		\
 			KDChartRingPainter.cpp	\
 			KDChartTextPiece.cpp	\
 			KDChartWidget.cpp 	\
-			KDDrawText.cpp		\ 
+			KDDrawText.cpp		\
 			KDFrame.cpp 		\
 			KDFrameProfileSection.cpp \
-			KDXMLTools.cpp
+			KDXMLTools.cpp 
 
 noinst_HEADERS =	KDChart.h 		\
 			KDChartAreaPainter.h	\
@@ -45,8 +45,6 @@ noinst_HEADERS =	KDChart.h 		\
 			KDFrame.h 		\
 			KDFrameProfileSection.h \
 			KDXMLTools.h
-			
-
 METASOURCES = AUTO
 
 INCLUDES  = -I../include $(all_includes)
