@@ -961,6 +961,8 @@ void StyleDia::setupTabGeometry()
 
     keepRatio= new QCheckBox( i18n("Keep ratio"), tab);
     layout->addWidget(keepRatio);
+    connect( keepRatio, SIGNAL(toggled(bool)),
+	     this, SLOT(slotKeepRatioToggled(bool)));
 
     if ( allTextObj )
     {
@@ -991,6 +993,8 @@ void StyleDia::setupTabGeometry()
 
     m_lineWidth= new KDoubleNumInput( grp1 );
     m_lineWidth->setRange ( 0, 9999, 1, false);
+    connect( m_lineWidth, SIGNAL(valueChanged(double)),
+	     this, SLOT(slotUpdateHeightForWidth(double)) );
 
     pGrid->addWidget( m_lineWidth, 4, 0 );
 
@@ -1009,6 +1013,9 @@ void StyleDia::setupTabGeometry()
 
     m_lineHeight= new KDoubleNumInput( grp1 );
     m_lineHeight->setRange ( 0, 9999, 1, false);
+    connect( m_lineHeight, SIGNAL(valueChanged(double)),
+	     this, SLOT(slotUpdateWidthForHeight(double)) );
+
     pGrid->addWidget( m_lineHeight, 4, 1 );
 
 
@@ -1152,6 +1159,27 @@ void StyleDia::slotMarginsChanged( double val)
     }
 }
 
+
+void StyleDia::slotUpdateWidthForHeight( double height )
+{
+    if ( !isKeepRatio() ) return;
+    if ( heightByWidthRatio == 0 ) return; // avoid DBZ
+    m_lineWidth->setValue( height / heightByWidthRatio );
+}
+
+void StyleDia::slotUpdateHeightForWidth( double width )
+{
+    if ( !isKeepRatio() ) return;
+    m_lineHeight->setValue( width * heightByWidthRatio );
+}
+
+void StyleDia::slotKeepRatioToggled( bool on ) {
+    if ( !on ) return;
+    if ( m_lineWidth->value() == 0 )
+        heightByWidthRatio = 1.0; // arbitrary
+    else
+        heightByWidthRatio = m_lineHeight->value() / m_lineWidth->value();
+}
 
 void StyleDia::protectChanged()
 {
@@ -1329,6 +1357,7 @@ void StyleDia::setSize(const KoRect & _rect)
     m_lineLeft->setValue(KoUnit::ptToUnit( QMAX(0.00, _rect.left()), m_doc->getUnit() ));
     m_lineWidth->setValue(KoUnit::ptToUnit( QMAX(0.00, _rect.width()), m_doc->getUnit() ));
     m_lineHeight->setValue(KoUnit::ptToUnit( QMAX(0.00, _rect.height()), m_doc->getUnit() ));
+    heightByWidthRatio = m_lineHeight->value() / m_lineWidth->value();
 }
 
 void StyleDia::setProtectContent( bool p )

@@ -76,6 +76,8 @@ Bugfixes:
 - Fix update sidebar
 - Fix key event when text object is protect content.
 - Fix group object : allow to change text object attribute, fix load close object etc...
+- Width and height spin boxes in the style dialog are now coupled when
+  keep aspect ratio is in effect.
 
 Crashes:
 - Fixed crash when we close kword and "special char dialogbox" is not closed

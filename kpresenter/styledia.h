@@ -285,6 +285,7 @@ private:
     double oldTop;
     double oldBottom;
     double oldRight;
+    double heightByWidthRatio;
 
 private slots:
     void slotReset();
@@ -292,6 +293,9 @@ private slots:
     void protectChanged();
     void slotMarginsChanged( double );
     void slotProtectContentChanged( bool );
+    void slotUpdateWidthForHeight( double );
+    void slotUpdateHeightForWidth( double );
+    void slotKeepRatioToggled( bool );
 signals:
     void styleOk();
 };
