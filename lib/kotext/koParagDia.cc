@@ -20,7 +20,6 @@
 #include "koParagDia.h"
 #include "koParagDia_p.h"
 #include "koDocument.h"
-//#include "defs.h"
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -1773,7 +1772,7 @@ KoParagShadowWidget::KoParagShadowWidget( QWidget * parent, const char * name )
     QLabel *lcolor = new QLabel( i18n( "Color:" ), shadow );
     grid2->addWidget(lcolor,0,0);
 
-    color = new KColorButton( shadow );
+    color = new KColorButton( black,shadow );
     grid2->addWidget(color,1,0);
     connect( color, SIGNAL( changed( const QColor& ) ), this, SLOT( colorChanged( const QColor& ) ) );
 
@@ -2037,9 +2036,8 @@ void KoParagShadowWidget::distanceChanged( int _val )
 void KoParagShadowWidget::display( const KoParagLayout &lay ) {
     distanceChanged((int)lay.shadowDistance);
     distance->setValue((int)lay.shadowDistance);
-    colorChanged(lay.shadowColor);
+    setShadowColor(lay.shadowColor);
     setShadowDirection( lay.shadowDirection );
-    color->setColor(lay.shadowColor);
 }
 
 QString KoParagShadowWidget::tabName() {

@@ -1263,16 +1263,6 @@ void Page::selectObj( int num )
 {
     if ( num < static_cast<int>( objectList()->count() ) ) {
         selectObj( objectList()->at( num ) );
-        if ( objectList()->at( num )->getType() == OT_TEXT ) {
-#if 0
-            KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( objectList()->at( num ) );
-            QFont f( kptextobject->textObjectView()->textFont() );
-            QColor c( kptextobject->textObjectView()->textColor() );
-            toFontChanged( f );
-            toColorChanged( c );
-            toAlignChanged( kptextobject->textObjectView()->alignment() );
-#endif
-        }
         emit objectSelectedChanged();
     }
 }
@@ -1288,17 +1278,6 @@ void Page::deSelectObj( int num )
 void Page::selectObj( KPObject *kpobject )
 {
     kpobject->setSelected( true );
-    if ( kpobject->getType() == OT_TEXT ) {
-#if 0
-        KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-        QFont f( kptextobject->textObjectView()->textFont() );
-        QColor c( kptextobject->textObjectView()->textColor() );
-        toFontChanged( f );
-        toColorChanged( c );
-        toAlignChanged( kptextobject->textObjectView()->alignment() );
-#endif
-    }
-
     view->penColorChanged( view->kPresenterDoc()->getPen( QPen( Qt::black, 1, Qt::SolidLine ) ) );
     view->brushColorChanged( view->kPresenterDoc()->getBrush( QBrush( Qt::white, Qt::SolidPattern ) ) );
 
