@@ -440,7 +440,7 @@ void KPMSPresentationSetup::finish()
     QString pathname = path->lineEdit()->text();
 
     // path doesn't exist. ask user if it should be created.
-    if ( !KIO::NetAccess::exists(pathname, this) ) {
+    if ( !KIO::NetAccess::exists(pathname, false, this) ) {
         QString msg = i18n( "<qt>The directory <b>%1</b> does not exist.<br>"
                             "Do you want create it?</qt>" );
         if( KMessageBox::questionYesNo( this, msg.arg( pathname ),
@@ -466,7 +466,7 @@ void KPMSPresentationSetup::finish()
     }
 
     QString sppFile( pathname + "/MSSONY/PJ/" + title->text() + ".SPP" );
-    if (KIO::NetAccess::exists(sppFile,this ) ) {
+    if (KIO::NetAccess::exists(sppFile, false, this ) ) {
         if ( KMessageBox::warningYesNo( 0,
                                    i18n( "You are about to overwrite an existing index "
                                          "file : %1.\n "
