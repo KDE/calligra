@@ -819,7 +819,6 @@ QString encodeSevenBit ( QString text )
    // initialize strings
    QString escapedText;
    uint length = text.length();
-   QChar Qch;
    for ( uint i = 0; i < length; i++ )
    {
       QChar Qch ( text.at( i ) );  // get out one unicode char from the string
@@ -833,8 +832,8 @@ QString encodeSevenBit ( QString text )
       }
       else if ( ch >= 127 ) // check for a non-ASCII character (127 is already non-ASCII)
       {
-         escapeText += "\\u";
-         escapeText += QString::number ( ch, 10 );
+         escapedText += "\\u";
+         escapedText += QString::number ( ch, 10 );
       }
       else
          escapedText += Qch ;
