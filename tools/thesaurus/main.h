@@ -29,6 +29,7 @@
 #include <qlayout.h>
 #include <qlistbox.h>
 #include <qobject.h>
+#include <qpushbutton.h>
 #include <qregexp.h>
 #include <qstring.h>
 #include <qstringlist.h>
@@ -41,6 +42,7 @@
 
 #include <kapplication.h>
 #include <kcombobox.h>
+#include <kconfig.h>
 #include <kcursor.h>
 #include <kdatatool.h>
 #include <kdebug.h>
@@ -68,6 +70,8 @@ public:
         const QString& datatype, const QString& mimetype);
 
 protected slots:
+    void slotChangeLanguage();
+
     void slotFindTerm();
     void slotFindTerm(const QString &term, bool add_to_history = true);
 
@@ -95,12 +99,15 @@ protected:
     void findTermWordnet(const QString &term);
     QString formatLine(QString l);
     QStringList sortQStringList(QStringList list);
+    void setCaption();
 
     QString m_no_match;
 
     int m_history_pos;
 
     bool m_replacement;        // does this dialog offer a replace button etc.?
+
+    KConfig *m_config;
 
     KProcess *m_thesproc;
     QString m_thesproc_stdout;
@@ -122,12 +129,15 @@ protected:
 
     QToolButton *m_back;
     QToolButton *m_forward;
+    QPushButton *m_lang;
 
     KHistoryCombo *m_edit;
     QLabel *m_edit_label;
 
     QLabel *m_replace_label;
     KLineEdit *m_replace;
+
+    QString m_data_file;
 
     // WordNet:
     QTextBrowser *m_resultbox;

@@ -45,6 +45,7 @@ NOT TODO:
 
 #include <qtoolbutton.h>
 #include <kiconloader.h>
+#include <kfiledialog.h>
 
 /***************************************************
  *
@@ -64,10 +65,18 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     : KDataTool(parent, name)
 {
     
-    m_dialog = new KDialogBase(KJanusWidget::Plain, i18n("Related Words"),
+    m_dialog = new KDialogBase(KJanusWidget::Plain, QString::null,
         KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok);
     m_dialog->setHelp(QString::null, "thesaurus");
-    m_dialog->resize(700, 500);
+    m_dialog->resize(600, 400);
+
+    m_config = new KConfig("kthesaurusrc");
+    m_data_file = m_config->readEntry("datafile");
+    if( ! m_data_file ) {
+        m_data_file = KGlobal::dirs()->findResourceDir("data", "thesaurus/")
+           + "thesaurus/thesaurus.txt";
+    }
+    setCaption();
 
     m_no_match = i18n("(No match)");
     
@@ -90,6 +99,13 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     m_forward->setPixmap(BarIcon(QString::fromLatin1("forward")));
     QToolTip::add(m_forward, i18n("Forward"));
     row1->addWidget(m_forward, 0);
+    m_lang = new QPushButton(i18n("Change language"), m_page);
+    connect(m_lang, SIGNAL(clicked()), this, SLOT(slotChangeLanguage()));
+    row1->addWidget(m_lang, 0);
+
+    // fixme: remove this to add the language selection feature
+    // Don't forget to update the documentation!
+    m_lang->hide();
 
     connect(m_back, SIGNAL(clicked()), this, SLOT(slotBack()));
     connect(m_forward, SIGNAL(clicked()), this, SLOT(slotForward()));
@@ -202,6 +218,9 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
 
 Thesaurus::~Thesaurus()
 {
+    m_config->writeEntry("datafile", m_data_file);
+    m_config->sync();
+    delete m_config;
     // FIXME?: this hopefully fixes the problem of a wrong cursor
     // and a crash (when closing e.g. konqueror) when the thesaurus dialog 
     // gets close while it was still working and showing the wait cursor
@@ -273,6 +292,22 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
     return TRUE;
 }
 
+
+void Thesaurus::slotChangeLanguage()
+{
+    m_data_file = KFileDialog::getOpenFileName(
+        KGlobal::dirs()->findResourceDir("data", "thesaurus/")+"thesaurus/");
+    if( m_data_file != QString::null ) {
+        setCaption();
+    }
+}
+
+void Thesaurus::setCaption()
+{
+    KURL url = KURL();
+    url.setPath(m_data_file);
+    m_dialog->setCaption(i18n("Related Words - %1").arg(url.fileName()));
+}
 
 // Enbale or disable back and forward button
 void Thesaurus::slotUpdateNavButtons()
@@ -374,8 +409,7 @@ void Thesaurus::findTermThesaurus(const QString &term)
     QString term_tmp = ";" + term.stripWhiteSpace() + ";";
     m_thesproc->clearArguments();
     *m_thesproc << "grep" << "-i" << term_tmp;
-    *m_thesproc << KGlobal::dirs()->findResourceDir("data", "thesaurus/")
-        + "thesaurus/thesaurus.txt";
+    *m_thesproc << m_data_file;
 
     if( !m_thesproc->start(KProcess::NotifyOnExit, KProcess::AllOutput) ) {
         KMessageBox::error(0, i18n("<b>Error:</b> Failed to execute grep."));
