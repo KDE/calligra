@@ -36,6 +36,7 @@
 #include <qprogressdialog.h>
 #include <qobjectlist.h>
 
+#include <ktempfile.h>
 #include <kaction.h>
 #include <kdebug.h>
 #include <kapp.h>
@@ -49,6 +50,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     m_gui = lGui;
     m_currentFrameSetEdit = 0L;
     m_mousePressed = false;
+    m_imageDrag = false;
     m_viewMode = new KWViewModeNormal( this ); // maybe pass as parameter, for initial value ( loaded from doc ) ?
     cmdMoveFrame=0L;
 
@@ -1824,13 +1826,22 @@ void KWCanvas::insertPart( const KoDocumentEntry &entry )
 
 void KWCanvas::contentsDragEnterEvent( QDragEnterEvent *e )
 {
-    if ( m_currentFrameSetEdit )
-        m_currentFrameSetEdit->dragEnterEvent( e );
+    if ( QImageDrag::canDecode( e ) )
+    {
+        m_imageDrag = true;
+        e->acceptAction();
+    }
+    else
+    {
+        m_imageDrag = false;
+        if ( m_currentFrameSetEdit )
+            m_currentFrameSetEdit->dragEnterEvent( e );
+    }
 }
 
 void KWCanvas::contentsDragMoveEvent( QDragMoveEvent *e )
 {
-    if ( m_currentFrameSetEdit )
+    if ( !m_imageDrag && m_currentFrameSetEdit )
     {
         QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
         KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
@@ -1840,19 +1851,35 @@ void KWCanvas::contentsDragMoveEvent( QDragMoveEvent *e )
 
 void KWCanvas::contentsDragLeaveEvent( QDragLeaveEvent *e )
 {
-    if ( m_currentFrameSetEdit )
+    if ( !m_imageDrag && m_currentFrameSetEdit )
         m_currentFrameSetEdit->dragLeaveEvent( e );
 }
 
 void KWCanvas::contentsDropEvent( QDropEvent *e )
 {
-    if ( m_currentFrameSetEdit )
+    QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
+    KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+    if ( m_imageDrag )
     {
-        QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
-        KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+        QImage i;
+        QImageDrag::decode(e, i);
+        KTempFile tmpFile( QString::null, ".png");
+        tmpFile.setAutoDelete( true );
+        i.save(tmpFile.name(), "PNG");
+        // Prepare things for mrCreatePixmap
+        m_pictureFilename = tmpFile.name();
+        m_isClipart = false;
+        m_pixmapSize = i.size();
+        m_insRect = KoRect( docPoint.x(), docPoint.y(), m_doc->unzoomItX( i.width() ), m_doc->unzoomItY( i.height() ) );
+        m_keepRatio = true;
+        mrCreatePixmap();
+    }
+    else if ( m_currentFrameSetEdit )
+    {
         m_currentFrameSetEdit->dropEvent( e, normalPoint, docPoint );
     }
     m_mousePressed = false;
+    m_imageDrag = false;
 }
 
 void KWCanvas::doAutoScroll()

@@ -241,6 +241,7 @@ private:
     QTimer *m_scrollTimer;
     bool m_mousePressed;
     bool m_printing;
+    bool m_imageDrag;
     KWViewMode *m_viewMode;
 
     // Frame stuff
