@@ -179,6 +179,9 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_manager->setSelectionPolicy( KParts::PartManager::TriState );
     d->m_manager->setAllowNestedParts( true );
     d->m_manager->setIgnoreScrollBars( true );
+#ifdef KDE_VERSION > 305
+    d->m_manager->setActivationButtonMask( Qt::LeftButton | Qt::MidButton );
+#endif
 
     connect( d->m_manager, SIGNAL( activePartChanged( KParts::Part * ) ),
              this, SLOT( slotActivePartChanged( KParts::Part * ) ) );
