@@ -553,7 +553,6 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	y = lastY + baseLine + zh->layoutUnitToPixelY( lastFormat->descent() ) - KoBorder::zoomWidthY( 1, zh, 0 );
         //kdDebug() << "KoTextParag::drawParagStringInternal drawing second line at " << y << endl;
 	painter.drawLine( startX, y, startX + bw, y );
-	painter.setFont( font );
     }
 
     QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
