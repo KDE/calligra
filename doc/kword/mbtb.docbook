@@ -2537,7 +2537,7 @@ Clicking this will take you to your home directory.</para>
 button, causes &kword; to reload the current directory if new files have been
 added or deleted.</para>
 
-<para>Next to the reload button, is a button with a grey ribbon on it.
+<para>Next to the reload button, is a button with a gray ribbon on it.
 This button allows you to set and navigate through bookmarks.  This is
 a quick way to jump to commonly accessed directories.  By clicking
 this button, a submenu appears which allows you to add bookmarks or

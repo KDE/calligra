@@ -76,7 +76,7 @@
 <sect1 id="grid">
 <title>The Grid</title>
 <para>&kivio; displays a regularly spaced grid over the document to aid stencil positioning. The visibility of the grid can be toggled by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>Show Grid</guimenuitem></menuchoice>.</para>
-<para>Objects edges are snapped to the nearest point on the grid regardless of whether it is visible. To toggle this behaviour select <menuchoice><guimenu>View</guimenu><guimenuitem>Snap Grid</guimenuitem></menuchoice>.</para>
+<para>Objects edges are snapped to the nearest point on the grid regardless of whether it is visible. To toggle this behavior select <menuchoice><guimenu>View</guimenu><guimenuitem>Snap Grid</guimenuitem></menuchoice>.</para>
 <para>To customise the grid select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Kivio...</guimenuitem></menuchoice> and click on the <guiicon>Grid</guiicon> on the icon list.</para>
 <para>This dialog box will let you adjust the color the grid is drawn in, the horizontal and vertical spacing and the snap distance.</para>
 <para>Tip: It is possible to have a non-square grid by specifying different horizontal and vertical spacings.</para>
@@ -111,7 +111,7 @@
 <sect2>
 <title>Visibility and Snapping</title>
 <para>To hide guides select <menuchoice><guimenu>View</guimenu><guimenuitem>Show Guides</guimenuitem></menuchoice>, this toggles the visibility.</para>
-<para>By default stencil edges are snapped to the nearest guide, to toggle this behaviour select <menuchoice><guimenu>View</guimenu><guimenuitem>Snap Guides</guimenuitem></menuchoice>.</para>
+<para>By default stencil edges are snapped to the nearest guide, to toggle this behavior select <menuchoice><guimenu>View</guimenu><guimenuitem>Snap Guides</guimenuitem></menuchoice>.</para>
 </sect2>
 
 </sect1>

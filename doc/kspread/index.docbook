@@ -225,7 +225,7 @@ HH:MIN:SS am|pm format such as <userinput>9:42 am</userinput> or <userinput>
 </para></listitem>
 <listitem><para>
 &kspread; defines any input data as <quote>text</quote> if it can not 
-recognise as being a number, date or time.
+recognize as being a number, date or time.
 </para></listitem>
 </itemizedlist>
 <note><para>By default, &kspread; right justifies numbers, dates and times 
@@ -794,7 +794,7 @@ the step value is not a constant value but is itself a series. So that if you
 start with 1, 3, 4, 6 Drag and Copy will extend it to 1, 3, 4, 6, 7, 9, 10, 
 12..., the step value in this example being the series 2, 1, 2, 1...</para>
 
-<para>&kspread; also recognises some special <quote>series</quote> such as 
+<para>&kspread; also recognizes some special <quote>series</quote> such as
 the days of the week. Try entering <userinput>Friday</userinput> into a cell 
 (note the capitalization) then Drag and Copy it down. To see what special series 
 are available, and perhaps create your own, select <menuchoice><guimenu>Tools
@@ -1726,8 +1726,8 @@ checker.</para>
 <term><guilabel>Create root/affix combinations not in dictionary</guilabel>
 </term>
 <listitem><para>If this box is checked then when &kspread; finds a word in 
-the document which it does not recognise but which consists of a recognised 
-root word plus a recognised prefix or suffix it will accept it, whereas if 
+the document which it does not recognize but which consists of a recognized
+root word plus a recognized prefix or suffix it will accept it, whereas if
 the box is not checked the spelling checker will reject it.
 </para></listitem>
 </varlistentry>
@@ -2564,7 +2564,7 @@ item into a different cell in the row.
 <guimenu>Tools</guimenu>
 <guimenuitem>Custom Lists...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>View or amend the special series of words recognised 
+<listitem><para><action>View or amend the special series of words recognized 
 by &kspread;.</action>
 </para></listitem>
 </varlistentry>

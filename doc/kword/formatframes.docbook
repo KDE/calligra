@@ -359,7 +359,7 @@ from the menubar. A dialog box will appear.</para>
 
 <para>All of the currently defined framestyles are listed in the listbox on the left.  The currently selected framestyle is highlighted, and 
 the name of the currently selected framestyle is listed in the text box labeled <guilabel>Name</guilabel>. (In this example, 
-the currently selected framestyle is <emphasis>Light grey</emphasis>.)</para>
+the currently selected framestyle is <emphasis>Light gray</emphasis>.)</para>
 <para>Select the name of the framestyle you want to change by clicking on the name of the framestyle in the listbox on the left.</para>
 <para>There are three tabs in on the right side of the dialog box:  <guilabel>General</guilabel>, <guilabel>Borders</guilabel> 
 and <guilabel>Background</guilabel></para>

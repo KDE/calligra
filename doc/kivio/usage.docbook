@@ -49,7 +49,7 @@ Move the mouse pointer over one of the handles and note the mouse pointer change
 </sect2>
 
 <sect2>
-<title>Labelling Stencils</title>
+<title>Labeling Stencils</title>
 <para>Stencils can contain text to describe their function. To add text to a stencil move the mouse pointer over the stencil and double-click. A dialog box will appear prompting for some text. Enter some text and click <guibutton>OK</guibutton>, the text should be shown inside the stencil.</para>
 <para>The font, size, alignment and style of the text can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Text</guimenuitem></menuchoice>. Alternatively by using the buttons on the Format toolbar.
 The adjustments will only affect the currently selected stencil.</para>
@@ -71,13 +71,13 @@ The adjustments will only affect the currently selected stencil.</para>
 
 <sect2>
 <title>Adjusting the Fill Color and Line Color</title>
-<para>Stencils can be filled with a solid colour and the colour of the outline can be changed. Select a stencil then select <menuchoice><guimenu>Format</guimenu><guimenuitem>Stencils and Connectors</guimenuitem></menuchoice>.</para>
-<para>There is also a <guibutton>Set Background Color</guibutton> button on the Format toolbar. Clicking on the arrow to the right-hand side of this button will produce a drop-down colour selector, clicking on the button itself will display a color palette allowing you to choose any colour. A similar toolbar button exists to adjust the line colour.</para>
+<para>Stencils can be filled with a solid color and the color of the outline can be changed. Select a stencil then select <menuchoice><guimenu>Format</guimenu><guimenuitem>Stencils and Connectors</guimenuitem></menuchoice>.</para>
+<para>There is also a <guibutton>Set Background Color</guibutton> button on the Format toolbar. Clicking on the arrow to the right-hand side of this button will produce a drop-down color selector, clicking on the button itself will display a color palette allowing you to choose any color. A similar toolbar button exists to adjust the line color.</para>
 </sect2>
 
 <sect2>
 <title>Adjusting the Line Thickness</title>
-<para>The width of a stencil's border can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Stencils and Connectors</guimenuitem></menuchoice> or by using the <guibutton>Line Thickness</guibutton> spinbox on the Format toolbar. The line width can be entered in millimetres or increased/decreased using the arrows next to the text box.</para>
+<para>The width of a stencil's border can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Stencils and Connectors</guimenuitem></menuchoice> or by using the <guibutton>Line Thickness</guibutton> spinbox on the Format toolbar. The line width can be entered in millimeters or increased/decreased using the arrows next to the text box.</para>
 </sect2>
 
 <sect2>
@@ -147,7 +147,7 @@ The adjustments will only affect the currently selected stencil.</para>
 
 <sect2>
 <title>Using Dockers</title>
-<para>All dockers can have a handle on one edge which enables them to be moved around and positioned on any edge of the main view. The can also float anywhere on the screen. If not floating they shrink when not in use to remain unobtrusive, however, this behaviour can be toggled by clicking on the icon that looks like a small pin. Next to this is a button marked with a cross that removes the docker.</para>
+<para>All dockers can have a handle on one edge which enables them to be moved around and positioned on any edge of the main view. The can also float anywhere on the screen. If not floating they shrink when not in use to remain unobtrusive, however, this behavior can be toggled by clicking on the icon that looks like a small pin. Next to this is a button marked with a cross that removes the docker.</para>
 </sect2>
 
 <sect2>
