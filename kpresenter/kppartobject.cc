@@ -158,7 +158,7 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler, bool d
             _painter->drawRect(_zoomhandler->zoomItX(penw), _zoomhandler->zoomItY(penw), _zoomhandler->zoomItX(ext.width() - 2 * penw), _zoomhandler->zoomItY(ext.height() - 2 * penw) );
         else {
             gradient->setSize( size );
-            _painter->drawPixmap( penw, penw, gradient->pixmap(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+            _painter->drawPixmap( penw, penw, gradient->pixmap(), 0, 0, _zoomhandler->zoomItX(ow - 2 * penw), _zoomhandler->zoomItY(oh - 2 * penw) );
         }
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
