@@ -37,7 +37,9 @@ FACTORY(KIllustratorDocument, KIllustrator::Factory_skel, KIllustratorFactory)
 typedef AutoLoader<KIllustratorFactory> KIllustratorAutoLoader;
 
 KIllustratorOPApp::KIllustratorOPApp (int argc, char** argv) :
-  OPApplication (argc, argv) {
+    OPApplication (argc, argv, "killustrator") 
+{
+    getLocale()->insertCatalogue("koffice");
 }
 
 KIllustratorOPApp::~KIllustratorOPApp () {
