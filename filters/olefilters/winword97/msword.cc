@@ -32,7 +32,6 @@
 
 short MsWord::char2unicode(unsigned char c)
 {
-/*
     static const short CP2UNI[] =
     {
         0x20ac, 0x0000, 0x201a, 0x0192,
@@ -49,53 +48,51 @@ short MsWord::char2unicode(unsigned char c)
         return static_cast<short>(c);
     else
         return CP2UNI[c-0x80];
-*/
+/*
+    char f_code[33];            // From CCSID
+    char t_code[33];            // To CCSID
+    iconv_t iconv_handle;       // Conversion Descriptor returned
+                                // from iconv_open() function
+    char *obuf;                 // Buffer for converted characters
+    char *p;
+    size_t ibuflen;             // Length of input buffer
+    size_t obuflen;             // Length of output buffer
+    const char *ibuf;
+    char *codepage;
+    char buffer[1];
+    char buffer2[2];
+    U16 eachchar = c;
+    buffer[0]=eachchar;
+    ibuf = buffer;
+    obuf = buffer2;
 
-        char f_code[33];            /* From CCSID                           */
-        char t_code[33];            /* To CCSID                             */
-        iconv_t iconv_handle;       /* Conversion Descriptor returned       */
-                                /* from iconv_open() function           */
-        char *obuf;                 /* Buffer for converted characters      */
-        char *p;
-        size_t ibuflen;               /* Length of input buffer               */        size_t obuflen;               /* Length of output buffer              */        const char *ibuf;
-        char *codepage;
-        char buffer[1];
-        char buffer2[2];
-        U16 eachchar = c;
-        buffer[0]=eachchar;
-        ibuf = buffer;
-        obuf = buffer2;
+    // All reserved positions of from code (last 12 characters) and to code
+    // (last 19 characters) must be set to hexadecimal zeros.
 
+    memset(f_code,'\0',33);
+    memset(t_code,'\0',33);
 
+    strcpy(f_code,"CP1252");
+    strcpy(t_code,"UCS-2");
 
-        /* All reserved positions of from code (last 12 characters) and to code
-  */
-        /* (last 19 characters) must be set to hexadecimal zeros.
-  */
+    iconv_handle = iconv_open(t_code,f_code);
+    if (iconv_handle == (iconv_t)-1)
+    {
+        kdError(s_area) << "iconv_open fail: " << errno << " cannot convertto unicode" << endl;
+        return('?');
+    }
 
-        memset(f_code,'\0',33);
-        memset(t_code,'\0',33);
-
-        strcpy(f_code,"CP1252");
-        strcpy(t_code,"UCS-2");
-
-        iconv_handle = iconv_open(t_code,f_code);
-        if (iconv_handle == (iconv_t)-1)
-                {
-                kdError(s_area) << "iconv_open fail: " << errno << " cannot convertto unicode" << endl;
-                return('?');
-                }
-
-        ibuflen = 1;
+    ibuflen = 1;
     obuflen = 2;
-        p = obuf;
+    p = obuf;
     iconv(iconv_handle, &ibuf, &ibuflen, &obuf, &obuflen);
     eachchar = (U8)*p++;
     eachchar = (eachchar << 8)&0xFF00;
     eachchar += (U8)*p;
 
-        iconv_close(iconv_handle);
-        return(eachchar);
+    iconv_close(iconv_handle);
+    return(eachchar);
+*/
 }
 
 void MsWord::constructionError(unsigned line, const char *reason)
@@ -300,18 +297,17 @@ bool MsWord::Fkp<T1, T2>::getNext(
     m_fcNext += MsWordGenerated::read(m_fcNext, startFc);
     MsWordGenerated::read(m_fcNext, endFc);
 
-    // Get word offset to the second piece of data, and the first piece of data.
+    // Get word offset to the second piece of data, and the first piece of data
+    // if required.
 
     m_dataNext += MsWordGenerated::read(m_dataNext, rgb);
-    m_dataNext += read(m_fib.nFib, m_dataNext, data1);
-
-    // If the word offset is zero, then the second piece of data is not explicitly
-    // stored.
+    if (data1)
+        m_dataNext += read(m_fib.nFib, m_dataNext, data1);
 
     if (!(*rgb))
     {
-        kdDebug(s_area) << "MsWord::Fkp::getNext: " << *startFc << ":" << endFc
-                << ": default PAPX/CHPX, rgb: " << *rgb << endl;
+        // If the word offset is zero, then the second piece of data is
+        // not explicitly stored.
     }
     else
     {
@@ -333,6 +329,42 @@ void MsWord::Fkp<T1, T2>::startIteration(const U8 *fkp)
     m_fcNext = m_fkp;
     m_dataNext = m_fkp + ((m_crun + 1) * sizeof(startFc));
     m_i = 0;
+}
+
+void MsWord::getCHPXFKP()
+{
+    // A bin table is a plex of BTEs.
+
+    Plex<BTE, 2> btes = Plex<BTE, 2>(m_fib);
+    U32 startFc;
+    U32 endFc;
+    BTE data;
+
+    // Walk the BTEs.
+
+    btes.startIteration(m_tableStream + m_fib.fcPlcfbteChpx, m_fib.lcbPlcfbteChpx);
+    while (btes.getNext(&startFc, &endFc, &data))
+    {
+        getCHPX(m_mainStream + (data.pn * 512));
+    }
+}
+
+void MsWord::getCHPX(const U8 *fkp)
+{
+    // A CHPX FKP contains no extra data, specify a dummy PHE for the template.
+
+    Fkp<PHE, CHPXFKP> chpx = Fkp<PHE, CHPXFKP>(m_fib);
+
+    U32 startFc;
+    U32 endFc;
+    U8 rgb;
+    CHPXFKP style;
+
+    chpx.startIteration(fkp);
+    while (chpx.getNext(&startFc, &endFc, &rgb, NULL, &style))
+    {
+        //kdDebug(s_area) << "chp from: " << startFc << ".." << endFc << ": rgb: " << rgb << endl;
+    }
 }
 
 void MsWord::getPAPXFKP(const U8 *textStartFc, U32 textLength, bool unicode)
@@ -378,6 +410,7 @@ void MsWord::getPAPX(
     {
         QString text;
 
+        //kdDebug(s_area) << "pap from: " << startFc << ".." << endFc << ": rgb: " << rgb << endl;
         read(m_mainStream + startFc, &text, endFc - startFc, unicode);
         decodeParagraph(text, layout, style);
     }
@@ -567,6 +600,7 @@ MsWord::MsWord(
         return;
     }
     kdDebug(s_area) << "MsWord::MsWord: nFib: " << m_fib.nFib << endl;
+    kdDebug(s_area) << "MsWord::MsWord: lid: " << m_fib.lid << " lidFE: " << m_fib.lidFE << endl;
 
     // Store away the streams for future use. Note that we do not
     // copy the contents of the streams, and that we rely on the storage
@@ -591,6 +625,7 @@ MsWord::MsWord(
     }
     getStyles();
     getListStyles();
+    getCHPXFKP();
 }
 
 MsWord::~MsWord()
@@ -793,7 +828,20 @@ unsigned MsWord::read(const U8 *in, QString *out, unsigned count, bool unicode)
 }
 
 //
-// Read a PAPX as stored in an FKP.
+// Read a CHPX as stored in a FKP.
+//
+unsigned MsWord::read(unsigned nFib, const U8 *in, CHPXFKP *out)
+{
+    unsigned bytes = 0;
+
+    bytes += MsWordGenerated::read(in + bytes, &out->grpprlBytes);
+    out->grpprl = (U8 *)(in + bytes);
+    bytes += out->grpprlBytes;
+    return bytes;
+}
+
+//
+// Read a PAPX as stored in a FKP.
 //
 unsigned MsWord::read(unsigned nFib, const U8 *in, PAPXFKP *out)
 {

@@ -74,6 +74,13 @@ public:
         unsigned count = 1,
         bool unicode = false);
 
+    typedef struct CHPXFKP
+    {
+        U8 grpprlBytes;
+        U8 *grpprl;
+    } CHPXFKP;
+    static unsigned read(unsigned nFib, const U8 *in, CHPXFKP *out);
+
     typedef struct PAPXFKP
     {
         U16 istd;
@@ -240,6 +247,9 @@ private:
     void constructionError(unsigned line, const char *reason);
     static const unsigned s_minWordVersion = 100;
     static const unsigned s_maxWord6Version = 105;
+
+    void getCHPXFKP();
+    void getCHPX(const U8 *fkp);
 
     void getPAPXFKP(const U8 *textStartFc, U32 textLength, bool unicode);
     void getPAPX(
