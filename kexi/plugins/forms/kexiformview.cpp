@@ -308,7 +308,7 @@ void KexiFormView::initDataSource()
 	m_scrollView->dataProvider()->setMainWidget(m_dbform);
 //			if (m_cursor)
 //				m_conn->deleteCursor(m_cursor);
-	KexiDB::Cursor *cursor;
+	KexiDB::Cursor *cursor = 0;
 	delete m_query;
 	m_query = new KexiDB::QuerySchema();
 	QStringList sources( m_scrollView->dataProvider()->usedDataSources() );
@@ -316,16 +316,29 @@ void KexiFormView::initDataSource()
 	KexiDB::TableSchema *tableSchema = conn->tableSchema( dataSourceString );
 	ok = tableSchema != 0;
 	if (ok) {
-		for (QStringList::ConstIterator it = sources.constBegin(); it!=sources.constEnd(); ++it) {
+		QValueList<uint> invalidSources;
+		uint index = 0;
+		for (QStringList::ConstIterator it = sources.constBegin(); 
+			it!=sources.constEnd(); ++it, index++) {
 /*! @todo add expression support */
 			KexiDB::Field *f = tableSchema->field(*it);
 			if (!f) {
-/*! @todo show error, remove this widget from the set of data widgets in provider */
+/*! @todo show error */
+				//remove this widget from the set of data widgets in the provider
+				invalidSources += index;
 				continue;
 			}
 			m_query->addField( f );
 		}
-		cursor = conn->executeQuery( *m_query );//, KexiDB::Cursor::Buffered );
+		if (invalidSources.count()==sources.count()) {
+			//all data sources are invalid! don't execute the query
+			delete m_query;
+			m_query = 0;
+		}
+		else {
+			cursor = conn->executeQuery( *m_query );
+		}
+		m_scrollView->dataProvider()->invalidateDataSources( invalidSources );
 		ok = cursor!=0;
 	}
 //			delete m_data;

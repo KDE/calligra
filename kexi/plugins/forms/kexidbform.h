@@ -44,6 +44,8 @@ class KexiDBForm : public KexiGradientWidget, public KFormDesigner::FormWidget, 
 		//! no effect
 		QVariant value() { return QVariant(); }
 
+		virtual void setInvalidState( const QString& displayText );
+
 		virtual void drawRect(const QRect& r, int type);
 		virtual void drawRects(const QValueList<QRect> &list, int type);
 		virtual void initBuffer();

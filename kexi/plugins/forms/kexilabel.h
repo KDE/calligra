@@ -72,6 +72,8 @@ class KexiLabel : public QLabel, public KexiDataItemInterface {
 			return p_shadowEnabled;
 		}
 
+		virtual void setInvalidState( const QString& displayText );
+
 	public slots:
 		/*!
 		Sets the datasource to \a ds

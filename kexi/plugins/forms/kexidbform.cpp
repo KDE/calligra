@@ -187,5 +187,10 @@ KexiDBForm::sizeHint() const
 	return QSize(400,300);
 }
 
+void KexiDBForm::setInvalidState( const QString& displayText )
+{
+	//! @todo draw "invalid data source" text on the surface?
+}
+
 #include "kexidbform.moc"
 

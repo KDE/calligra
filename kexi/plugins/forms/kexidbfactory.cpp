@@ -114,6 +114,12 @@ KexiDBLineEdit::~KexiDBLineEdit()
 {
 }
 
+void KexiDBLineEdit::setInvalidState( const QString& displayText )
+{
+	setReadOnly(true);
+	setText(displayText);
+}
+
 void KexiDBLineEdit::setValueInternal(const QVariant& value)
 {
 	setText( value.toString() );

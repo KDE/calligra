@@ -371,4 +371,9 @@ QVariant KexiLabel::value() {
 	return text();
 }
 
+void KexiLabel::setInvalidState( const QString& displayText )
+{
+	setText( displayText );
+}
+
 #include "kexilabel.moc"

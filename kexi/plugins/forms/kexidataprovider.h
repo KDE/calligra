@@ -57,8 +57,15 @@ class KexiDataProvider : public KexiDataItemChangesListener
 		//! Reaction for change of \a item.
 		virtual void valueChanged(KexiDataItemInterface* item);
 
+		/*! Invalidates data sources collected by this provided.
+		 \a invalidSources is the list of data sources that should 
+		 be ommited for fillDataItems(). 
+		 Used by KexiFormView::initDataSource(). */
+		void invalidateDataSources( const QValueList<uint>& invalidSources );
+
 	protected:
 		QWidget *m_mainWidget;
+		typedef QMap<KexiDataItemInterface*,uint> KexiDataItemInterfaceToIntMap;
 		QPtrList<KexiDataItemInterface> m_dataItems;
 		QStringList m_usedDataSources;
 		QMap<KexiDataItemInterface*,uint> m_fieldNumbersForDataItems;
