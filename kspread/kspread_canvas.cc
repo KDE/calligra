@@ -3818,8 +3818,6 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   if ( table->columnLayout( tmpCol )->isHide() && tmpCol == 1 )
       m_bResize = false;
 
-  QRect rect = m_pView->selection();
-
   // So he clicked between two rows ?
   if ( m_bResize )
   {
@@ -3828,32 +3826,28 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     m_iResizedColumn = table->leftColumn( ev_PosX - 1, tmp );
     paintSizeIndicator( _ev->pos().x(), true );
   }
-  else if ( ( rect.left() != rect.right() )
-            && ( tmpCol >= rect.left() )
-            && ( tmpCol <= rect.right() )
-            && ( _ev->button() == RightButton ) )
-  {
-      QPoint p = mapToGlobal( _ev->pos() );
-      m_pView->popupColumnMenu( p );
-  }
   else
   {
     m_bSelection = TRUE;
+
     double tmp;
     int hit_col = table->leftColumn( ev_PosX, tmp );
     if( hit_col > KS_colMax )
         return;
+
     m_iSelectionAnchor = hit_col;
 
-    if( !rect.contains( QPoint(hit_col,1) ) ||
+    QRect rect = m_pView->selection();
+    if( !rect.contains( QPoint( hit_col, 1 ) ) ||
         !( _ev->button() == RightButton ) ||
-        !( util_isRowSelected( m_pView->selection() ) ) )
+        ( !util_isColumnSelected( rect ) ) )
     {
       QPoint newMarker( hit_col, 1 );
       QPoint newAnchor( hit_col, KS_rowMax );
       m_pView->selectionInfo()->setSelection( newMarker, newAnchor,
                                               m_pView->activeTable() );
     }
+
     if ( _ev->button() == RightButton )
     {
       QPoint p = mapToGlobal( _ev->pos() );
