@@ -664,7 +664,6 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
     // Set the new selection
     table->setSelection( selection, QPoint( col, row ), this );
-    cout <<"selection.right()"<<selection.right()<<"selection.left()"<<selection.left()<<endl;
     // Scroll the table if necessary
     if ( _ev->pos().x() < 0 )
         horzScrollBar()->setValue( xOffset() + xpos );

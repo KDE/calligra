@@ -348,6 +348,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     lst.append( "sqrt");
     lst.append( i18n("Others...") );
     ((KSelectAction*) m_formulaSelection)->setItems( lst );
+    m_formulaSelection->setCurrentItem(0);
     connect( m_formulaSelection, SIGNAL( activated( const QString& ) ),
              this, SLOT( formulaSelection( const QString& ) ) );
 
