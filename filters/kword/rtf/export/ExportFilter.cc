@@ -1067,15 +1067,12 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
         else if ( layout.lineSpacingType==LayoutData::LS_ATLEAST  )
            strLayout += QString("\\sl%1\\slmult0").arg(int(layout.lineSpacing)*20);
 
-        else if ( layout.lineSpacingType==LayoutData::LS_EXACTLY  )
-           strLayout += QString("\\sl-%1\\slmult0").arg(int(layout.lineSpacing)*20);
-
         else if ( layout.lineSpacingType==LayoutData::LS_MULTIPLE  )
            strLayout += QString("\\sl%1\\slmult1").arg( int(layout.lineSpacing)*240 );
 
         else if ( layout.lineSpacingType==LayoutData::LS_CUSTOM )
-           // custom line spacing (in points)
-           strLayout += QString("\\sl%1\\slmult0").arg(int(layout.lineSpacing)*20);
+           // "Custom" in KWord is like "Exactly" in MS Word
+           strLayout += QString("\\sl-%1\\slmult0").arg(int(layout.lineSpacing)*20);
 
         else 
         kdWarning(30503) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
