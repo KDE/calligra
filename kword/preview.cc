@@ -79,6 +79,7 @@ Preview::Preview( QWidget *parent )
 
 void Preview::showPreview( const KURL &u )
 {
+    pixmap->setPixmap(QPixmap(""));
     if ( u.isLocalFile() ) {
 	QString path = u.path();
 	QFileInfo fi( path );
