@@ -28,11 +28,17 @@ DateFormatWidget::DateFormatWidget( QWidget* parent,  const char* name, WFlags f
     listDateFormat<<i18n("MMM dd,yyyy");
     listDateFormat<<i18n("dd.MMM.yyyy");
     listDateFormat<<i18n("MMMM dd, yyyy");
+    listDateFormat<<i18n("ddd, MMM dd,yy");
     listDateFormat<<i18n("dddd, MMM dd,yy");
     listDateFormat<<i18n("MM-dd");
     listDateFormat<<i18n("yyyy-MM-dd");
+    listDateFormat<<i18n("dd/yy");
     listDateFormat<<i18n("MMMM");
 
+    combo2->insertItem( i18n( "Days"));
+    combo2->insertItem( i18n( "Days (2 digits)"));
+    combo2->insertItem( i18n( "Abbrevated day name"));
+    combo2->insertItem( i18n( "Long day name"));
     combo2->insertItem( i18n( "Month" ) );
     combo2->insertItem( i18n( "Month (2 digit)" ) );
     combo2->insertItem( i18n( "Abbrevated month name" ) );
@@ -76,23 +82,31 @@ void DateFormatWidget::slotPersonalizeChanged(bool b)
 
 void DateFormatWidget::comboActivated()
 {
-	QString string=combo2->currentText();
-	if(combo1->currentText().lower()==i18n("Locale").lower())
-		combo1->setCurrentText("");
-        if(string==i18n( "Month" ) )
-            combo1->lineEdit()->insert("M");
-        if(string==i18n( "Month (2 digit)" ) )
-            combo1->lineEdit()->insert("MM");
-        if(string==i18n( "Abbrevated month name" ) )
-            combo1->lineEdit()->insert("MMM");
-        if(string==i18n( "Long month name" ) )
-            combo1->lineEdit()->insert("MMMM");
-        if(string==i18n( "The year as two digit" ) )
-            combo1->lineEdit()->insert("yy");
-        if(string==i18n( "The year as four digit" ) )
-            combo1->lineEdit()->insert("yyyy");
-	updateLabel();
-	combo1->setFocus();
+    QString string=combo2->currentText();
+    if(combo1->currentText().lower()==i18n("Locale").lower())
+        combo1->setCurrentText("");
+    else if(string==i18n( "Days"))
+        combo1->lineEdit()->insert("d");
+    else if(string==i18n( "Days (2 digits)"))
+        combo1->lineEdit()->insert("dd");
+    else if(string==i18n( "Abbrevated day name"))
+        combo1->lineEdit()->insert("ddd");
+    else if(string==i18n( "Long day name"))
+        combo1->lineEdit()->insert("dddd");
+    else if(string==i18n( "Month" ) )
+        combo1->lineEdit()->insert("M");
+    else if(string==i18n( "Month (2 digit)" ) )
+        combo1->lineEdit()->insert("MM");
+    else if(string==i18n( "Abbrevated month name" ) )
+        combo1->lineEdit()->insert("MMM");
+    else if(string==i18n( "Long month name" ) )
+        combo1->lineEdit()->insert("MMMM");
+    else if(string==i18n( "The year as two digit" ) )
+        combo1->lineEdit()->insert("yy");
+    else if(string==i18n( "The year as four digit" ) )
+        combo1->lineEdit()->insert("yyyy");
+    updateLabel();
+    combo1->setFocus();
 }
 
 /*

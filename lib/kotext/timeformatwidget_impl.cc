@@ -28,13 +28,13 @@ TimeFormatWidget::TimeFormatWidget( QWidget* parent,  const char* name, WFlags f
     listTimeFormat<<i18n("hh:mm:ss AP");
     listTimeFormat<<i18n("mm:ss.zzz");
 
-    combo2->insertItem( tr2i18n( "Hour" ) );
-    combo2->insertItem( tr2i18n( "Hour (2 digit)" ) );
-    combo2->insertItem( tr2i18n( "Minute" ) );
-    combo2->insertItem( tr2i18n( "Minute (2 digit)" ) );
-    combo2->insertItem( tr2i18n( "Second" ) );
-    combo2->insertItem( tr2i18n( "am/pm" ) );
-    combo2->insertItem( tr2i18n( "AM/PM" ) );
+    combo2->insertItem( i18n( "Hour" ) );
+    combo2->insertItem( i18n( "Hour (2 digit)" ) );
+    combo2->insertItem( i18n( "Minute" ) );
+    combo2->insertItem( i18n( "Minute (2 digit)" ) );
+    combo2->insertItem( i18n( "Second" ) );
+    combo2->insertItem( i18n( "am/pm" ) );
+    combo2->insertItem( i18n( "AM/PM" ) );
     combo2->setCurrentItem( 0 );
 
     ComboBox3->insertStringList(listTimeFormat);
@@ -72,25 +72,25 @@ void TimeFormatWidget::slotPersonalizeChanged(bool b)
 
 void TimeFormatWidget::comboActivated()
 {
-	QString string=combo2->currentText();
-	if(combo1->currentText().lower()==i18n("Locale").lower())
-		combo1->setCurrentText("");
-	if(string==i18n("Hour"))
-		combo1->lineEdit()->insert("h");
-	if(string==i18n("Hour (2 digit)"))
-		combo1->lineEdit()->insert("hh");
-	if(string==i18n("Minute"))
-		combo1->lineEdit()->insert("m");
-	if(string==i18n("Minute (2 digit)"))
-		combo1->lineEdit()->insert("mm");
-	if(string==i18n("Second"))
-		combo1->lineEdit()->insert("s");
-	if(string==i18n("AM/PM"))
-		combo1->lineEdit()->insert("AP");
-	if(string==i18n("am/pm"))
-		combo1->lineEdit()->insert("ap");
-	updateLabel();
-	combo1->setFocus();
+    QString string=combo2->currentText();
+    if(combo1->currentText().lower()==i18n("Locale").lower())
+        combo1->setCurrentText("");
+    else if(string==i18n("Hour"))
+        combo1->lineEdit()->insert("h");
+    else if(string==i18n("Hour (2 digit)"))
+        combo1->lineEdit()->insert("hh");
+    else if(string==i18n("Minute"))
+        combo1->lineEdit()->insert("m");
+    else if(string==i18n("Minute (2 digit)"))
+        combo1->lineEdit()->insert("mm");
+    else if(string==i18n("Second"))
+        combo1->lineEdit()->insert("s");
+    else if(string==i18n("AM/PM"))
+        combo1->lineEdit()->insert("AP");
+    else if(string==i18n("am/pm"))
+        combo1->lineEdit()->insert("ap");
+    updateLabel();
+    combo1->setFocus();
 }
 
 /*
