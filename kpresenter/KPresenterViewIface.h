@@ -182,6 +182,8 @@ k_dcop:
     void saveClipart();
     void savePicture();
     void insertFile();
+    void importStyle();
+
 private:
     KPresenterView *view;
 

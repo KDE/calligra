@@ -612,3 +612,8 @@ void KPresenterViewIface::insertFile()
 {
     view->insertFile();
 }
+
+void KPresenterViewIface::importStyle()
+{
+    view->importStyle();
+}

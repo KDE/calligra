@@ -136,6 +136,7 @@
 #include <kstdaccel.h>
 #include <koDocumentInfo.h>
 #include <kaccelgen.h>
+#include "kprimportstyledia.h"
 
 #define DEBUG
 
@@ -3392,6 +3393,10 @@ void KPresenterView::setupActions()
     actionInsertFile= new KAction( i18n( "File..." ), 0,
                                    this, SLOT( insertFile() ),
                                    actionCollection(), "insert_file" );
+    actionImportStyle= new KAction( i18n( "Import Style..." ), 0,
+                                    this, SLOT( importStyle() ),
+                                    actionCollection(), "import_style" );
+
 }
 
 void KPresenterView::textSubScript()
@@ -7067,5 +7072,19 @@ void KPresenterView::insertFile()
     else
         return;
 }
+
+void KPresenterView::importStyle()
+{
+    QStringList lst;
+    QPtrListIterator<KoStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
+    for ( ; styleIt.current(); ++styleIt )
+    {
+        lst<<styleIt.current()->translatedName();
+    }
+    KPrImportStyleDia dia( m_pKPresenterDoc, lst, this, 0L );
+    if ( dia.exec() ) {
+    }
+}
+
 
 #include <kpresenter_view.moc>

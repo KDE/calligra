@@ -408,7 +408,7 @@ public slots:
 
     void insertFile();
     void editCustomVariable();
-
+    void importStyle();
 public:
     // create GUI
     virtual void createGUI();
@@ -949,6 +949,7 @@ private:
     KAction *actionEditComment;
     KAction *actionRemoveComment;
 
+    KAction *actionImportStyle;
 
     DCOPObject *dcop;
 
