@@ -177,6 +177,10 @@ public:
     void addProperty( const QString& propName, int propValue, PropertyType type = DefaultType ) {
         m_properties[type].insert( propName, QString::number( propValue ), type );
     }
+    /// Overloaded of addProperty version that converts a bool to a string (false/true)
+    void addProperty( const QString& propName, bool propValue, PropertyType type = DefaultType ) {
+        m_properties[type].insert( propName, propValue ? "true" : "false", type );
+    }
 
     /**
      *  Add a property which represents a distance, measured in pt
@@ -197,6 +201,11 @@ public:
     /// Overloaded of version of addAttribute that converts an int to a string
     void addAttribute( const QString& attrName, int attrValue ) {
         m_attributes.insert( attrName, QString::number( attrValue ) );
+    }
+
+    /// Overloaded of version of addAttribute that converts a bool to a string
+    void addAttribute( const QString& attrName, bool attrValue ) {
+        m_attributes.insert( attrName, attrValue ? "true" : "false" );
     }
 
     void addAttributePt( const QString& attrName, int attrValue );

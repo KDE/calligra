@@ -129,7 +129,7 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
     }
     if ( !m_familyName.isEmpty() )
         const_cast<KoGenStyle *>( this )->
-            addAttribute( "style:family", m_familyName );
+            addAttribute( "style:family", QString::fromLatin1( m_familyName ) );
 
 #if 0 // #ifndef NDEBUG
     kdDebug() << "style: " << name << endl;
