@@ -11,8 +11,6 @@ INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/tklib\
 	$(KOFFICE_INCLUDES) $(all_includes)
 
-CXXFLAGS = -O2 -Wall
-DEFS = -I. -I$(srcdir) -I$(top_srcdir)
 libui_la_METASOURCES = AUTO
 libui_la_SOURCES = \
 		guidessetupdialogbase.ui\
