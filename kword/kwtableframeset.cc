@@ -1183,9 +1183,7 @@ bool KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin, uns
     return true;
 }
 
-bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
-{
-
+bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols) {
     if(intoRows < 1 || intoCols < 1) return false; // assertion.
 
     unsigned int col, row;
@@ -1200,10 +1198,14 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
 
     double height = (firstFrame->height() -  tableCellSpacing * (intoRows-1)) / intoRows ;
     double width = (firstFrame->width() -  tableCellSpacing * (intoCols-1))/ intoCols  ;
+    double extraHeight = 0;
 
     // will it fit?
-    if(height < minFrameHeight) return false;
     if(width < minFrameWidth) return false;
+    if(height < minFrameHeight) {
+        extraHeight = minFrameHeight * intoRows - firstFrame->height();
+        height = minFrameHeight;
+    }
 
     int rowsDiff = intoRows-cell->m_rows;
     int colsDiff = intoCols-cell->m_cols;
@@ -1216,12 +1218,18 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
         if(rowsDiff>0) {
             if(row >= theCell->m_row && row < theCell->m_row + theCell->m_rows)
                 theCell->m_rows+=rowsDiff;
-            if(theCell->m_row > row) theCell->m_row+=rowsDiff;
+            if(theCell->m_row > row) {
+                theCell->m_row+=rowsDiff;
+                theCell->getFrame(0)->setTop(theCell->getFrame(0)->top()+extraHeight);
+        }
         }
         if(colsDiff>0) {
             if(col >= theCell->m_col && col < theCell->m_col + theCell->m_cols)
                 theCell->m_cols+=colsDiff;
             if(theCell->m_col > col) theCell->m_col+=colsDiff;
+        }
+        if(extraHeight != 0 && theCell->m_row == row) {
+            theCell->getFrame(0)->setHeight(theCell->getFrame(0)->height()+extraHeight);
         }
     }
 
