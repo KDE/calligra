@@ -112,3 +112,35 @@ AC_DEFUN(KOFFICE_PKG_CHECK_MODULES, [
 #    ifelse([$4], , AC_MSG_ERROR([Library requirements ($2) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them.]), [$4])
   fi
 ])
+
+# --- Check for KDE 3.1 ---
+
+AC_MSG_CHECKING([for KDE newer than 3.1.x])
+
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+kdeversion_save_CXXFLAGS="$CXXFLAGS"
+kdeversion_safe_LIBS="$LIBS"
+LIBS="$LIBS $X_EXTRA_LIBS"
+CXXFLAGS="$CXXFLAGS $all_includes"
+
+AC_TRY_COMPILE([
+#include <kdeversion.h>
+#if ! ( KDE_IS_VERSION( 3, 1, 90 ) )
+#error KDE 3.1
+#endif
+],
+[],
+	old_kde_version="no"
+	AC_MSG_RESULT(yes)
+,
+	old_kde_version="yes"
+	AC_MSG_RESULT(no)
+)
+CXXFLAGS="$kdeversion_save_CXXFLAGS"
+LIBS="$kdeversion_safe_LIBS"
+AC_LANG_RESTORE
+
+AM_CONDITIONAL(need_kde31_compatibility, test "$old_kde_version" = "yes")
+
+# --- End KDE 3.1 check ---
