@@ -1205,8 +1205,6 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles 
 
     KoOasisContext context( oasisStyles );
     Q_ASSERT( !oasisStyles.officeStyle().isNull() );
-    QDomElement outlineStyle = oasisStyles.officeStyle().namedItem( "text:outline-style" ).toElement();
-    Q_ASSERT( !outlineStyle.isNull() );
 
     // Load all styles before the corresponding paragraphs try to use them!
     loadOasisStyleTemplates( context );
@@ -1218,7 +1216,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles 
     if ( m_processingType == WP ) {
         // Create main frameset
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Main Text Frameset" ) );
-        fs->loadOasis( body, context, outlineStyle );
+        fs->loadOasis( body, context );
         KWFrame* frame = new KWFrame( fs, 29, 798, 42, 566 );
         frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
         frame->setNewFrameBehavior( KWFrame::Reconnect );
@@ -1718,6 +1716,8 @@ void KWDocument::loadOasisStyleTemplates( KoOasisContext& context )
     }
     for (unsigned int item = 0; item < nStyles; item++) {
         QDomElement styleElem = context.oasisStyles().userStyles()[item];
+        // TODO check style:family/style:class (for other styles than paragraph styles)
+
         KoStyle *sty = new KoStyle( QString::null );
         // Load the style
         sty->loadStyle( styleElem, context );
@@ -1747,6 +1747,9 @@ void KWDocument::loadOasisStyleTemplates( KoOasisContext& context )
         KoStyle * style = m_styleColl->findStyle(*it);
         m_styleColl->styleAt(i++)->setFollowingStyle( style );
     }
+
+    // TODO the same thing for style inheritance (style:parent-style-name) and setParentStyle()
+
     Q_ASSERT( m_styleColl->findStyle( "Standard" ) );
 }
 

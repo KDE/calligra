@@ -62,7 +62,7 @@
 //#define DEBUG_MARGINS
 //#define DEBUG_FORMATVERTICALLY
 //#define DEBUG_FORMATS
-#define DEBUG_FORMAT_MORE
+//#define DEBUG_FORMAT_MORE
 //#define DEBUG_VIEWAREA
 //#define DEBUG_CURSOR
 
@@ -1768,7 +1768,7 @@ QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFram
 }
 
 // How to share this code with KPresenter?
-KWTextParag* KWTextFrameSet::loadList( const QDomElement& list, KoOasisContext& context, KWTextParag* lastParagraph, const QDomElement& outlineStyle )
+KWTextParag* KWTextFrameSet::loadList( const QDomElement& list, KoOasisContext& context, KWTextParag* lastParagraph )
 {
     //kdDebug(30518) << k_funcinfo << "parsing list"<< endl;
 
@@ -1787,11 +1787,12 @@ KWTextParag* KWTextFrameSet::loadList( const QDomElement& list, KoOasisContext& 
         if ( listItem.hasAttribute( "text:start-value" ) )
             restartNumbering = listItem.attribute( "text:start-value" ).toInt();
         KWTextParag* oldLast = lastParagraph;
-        lastParagraph = loadOasisText( listItem, context, lastParagraph, outlineStyle );
+        lastParagraph = loadOasisText( listItem, context, lastParagraph );
+        KoTextParag* firstListItem = oldLast ? oldLast->next() : textDocument()->firstParag();
         // It's either list-header (normal text on top of list) or list-item
-        if ( listItem.tagName() != "text:list-header" && oldLast && oldLast->next() ) {
+        if ( listItem.tagName() != "text:list-header" && firstListItem ) {
             // Apply list style to first paragraph inside list-item
-            oldLast->next()->applyListStyle( context, restartNumbering, orderedList, false, context.listStyleStack().level() );
+            firstListItem->applyListStyle( context, restartNumbering, orderedList, false, context.listStyleStack().level() );
         }
     }
     if ( listOK )
@@ -1799,7 +1800,7 @@ KWTextParag* KWTextFrameSet::loadList( const QDomElement& list, KoOasisContext& 
     return lastParagraph;
 }
 
-KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KWTextParag* lastParagraph, const QDomElement& outlineStyle )
+KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KWTextParag* lastParagraph )
 {
     // was OoWriterImport::parseBodyOrSimilar
     for ( QDomNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
@@ -1833,11 +1834,12 @@ KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasi
             // So we use the style for the outline level only if we're not inside a list:
             //if ( !context.atStartOfListItem() )
             // === The new method for this is that we simply override it in parseList, afterwards.
-            listOK = context.pushListLevelStyle( "<outline-style>", outlineStyle, level );
+            listOK = context.pushOutlineListLevelStyle( level );
             int restartNumbering = -1;
             if ( e.hasAttribute( "text:start-value" ) )
-                 // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
-                 restartNumbering = e.attribute( "text:start-value" ).toInt();
+                // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
+                restartNumbering = e.attribute( "text:start-value" ).toInt();
+
             KWTextParag *parag = new KWTextParag( textDocument(), lastParagraph );
             parag->loadOasis( e, context, m_doc->styleCollection() );
             if ( !lastParagraph )        // First parag
@@ -1848,9 +1850,10 @@ KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasi
                 context.listStyleStack().pop();
             }
         }
-        else if ( name == "text:unordered-list" || name == "text:ordered-list" ) // list
+        else if ( name == "text:unordered-list" || name == "text:ordered-list" // OOo-1.1
+                  || name == "text:list" )  // OASIS
         {
-            lastParagraph = loadList( e, context, lastParagraph, outlineStyle );
+            lastParagraph = loadList( e, context, lastParagraph );
             context.styleStack().restore();
             continue;
         }
@@ -1858,7 +1861,7 @@ KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasi
         {
             kdDebug(32002) << "Section found!" << endl;
             context.fillStyleStack( e, "text:style-name" );
-            lastParagraph = loadOasisText( e, context, lastParagraph, outlineStyle );
+            lastParagraph = loadOasisText( e, context, lastParagraph );
         }
 #if 0
         else if ( name == "table:table" )
@@ -1895,12 +1898,12 @@ KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasi
     return lastParagraph;
 }
 
-void KWTextFrameSet::loadOasis( const QDomElement &bodyElem, KoOasisContext& context, const QDomElement& outlineStyle )
+void KWTextFrameSet::loadOasis( const QDomElement &bodyElem, KoOasisContext& context )
 {
     textDocument()->clear(false); // Get rid of dummy paragraph (and more if any)
     m_textobj->setLastFormattedParag( 0L ); // no more parags, avoid UMR in next setLastFormattedParag call
 
-    KWTextParag *lastParagraph = loadOasisText( bodyElem, context, 0, outlineStyle );
+    KWTextParag *lastParagraph = loadOasisText( bodyElem, context, 0 );
 
     if ( !lastParagraph )                // We created no paragraph
     {
