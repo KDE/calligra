@@ -135,7 +135,7 @@ void KoPainter::drawLine(double x1, double y1, double x2, double y2)
 
 void KoPainter::drawRect(double x, double y, double w, double h, double rx, double ry)
 {
-  if((int) rx != 0 && (int) ry != 0)
+/*  if((int) rx != 0 && (int) ry != 0)
 	{
 		ArtVpath *res;
 		ArtBpath *vec = art_new(ArtBpath, 10);
@@ -264,6 +264,7 @@ void KoPainter::drawRect(double x, double y, double w, double h, double rx, doub
 
 		drawVPath(vec);
 	}
+*/
 }
 
 void KoPainter::drawVectorPath(KoVectorPath *vp)
