@@ -29,7 +29,7 @@
 using namespace std;
 
 FractionElement::FractionElement(BasicElement* parent)
-    : BasicElement(parent)
+        : BasicElement(parent), withLine(true)
 {
     numerator = new SequenceElement(this);
     denominator = new SequenceElement(this);
@@ -131,10 +131,12 @@ void FractionElement::draw(QPainter& painter, const QRect& r,
 		      style.convertTextStyleFraction( tstyle ),
 		      style.convertIndexStyleLower( istyle ), myPos);
 
-    int distX = style.getDistanceX(tstyle);
-    painter.setPen(QPen(style.getDefaultColor(), style.getLineWidth()));
-    painter.drawLine(myPos.x() + distX/2, myPos.y() + getMidline(),
-                     myPos.x() + getWidth() - (distX - distX/2), myPos.y() + getMidline());
+    if (withLine) {
+        int distX = style.getDistanceX(tstyle);
+        painter.setPen(QPen(style.getDefaultColor(), style.getLineWidth()));
+        painter.drawLine(myPos.x() + distX/2, myPos.y() + getMidline(),
+                         myPos.x() + getWidth() - (distX - distX/2), myPos.y() + getMidline());
+    }
 }
 
 
@@ -350,6 +352,7 @@ void FractionElement::writeDom(QDomElement& element)
     BasicElement::writeDom(element);
 
     QDomDocument doc = element.ownerDocument();
+    if (!withLine) element.setAttribute("NOLINE", 1);
 
     QDomElement num = doc.createElement("NUMERATOR");
     num.appendChild(numerator->getElementDom(doc));
@@ -368,6 +371,10 @@ bool FractionElement::readAttributesFromDom(QDomElement& element)
 {
     if (!BasicElement::readAttributesFromDom(element)) {
         return false;
+    }
+    QString lineStr = element.attribute("NOLINE");
+    if(!lineStr.isNull()) {
+        withLine = lineStr.toInt() == 0;
     }
     return true;
 }

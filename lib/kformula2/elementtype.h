@@ -31,6 +31,7 @@ class QPainter;
 class SequenceElement;
 class SequenceParser;
 class SymbolTableEntry;
+class TextElement;
 
 
 /**
@@ -48,6 +49,11 @@ public:
      */
     virtual QString getName() const { return QString::null; }
 
+    /**
+     * @returns whether we want to see this element.
+     */
+    virtual bool isPhantom(const TextElement&) const { return false; }
+    
     /**
      * @returns the position of the first character
      */
@@ -147,6 +153,11 @@ public:
      * to have a name.
      */
     virtual QString getName() const { return name; }
+
+    /**
+     * @returns whether we want to see this element.
+     */
+    virtual bool isPhantom(const TextElement& element) const;
 
     /**
      * @returns the font to be used for this kind of element

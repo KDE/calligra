@@ -28,6 +28,7 @@
 #include "contextstyle.h"
 #include "elementtype.h"
 #include "sequenceparser.h"
+#include "textelement.h"
 
 
 int ElementType::evilDestructionCount = 0;
@@ -190,6 +191,11 @@ NameType::NameType(SequenceParser* parser, QString n)
 {
 }
 
+bool NameType::isPhantom(const TextElement& element) const
+{
+    // Only this first char of a name might be a backslash.
+    return element.getCharacter() == QChar('\\');
+}
 
 TextSymbolType::TextSymbolType(SequenceParser* parser)
         : MultiElementType(parser)

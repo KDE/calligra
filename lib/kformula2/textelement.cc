@@ -70,6 +70,15 @@ TokenType TextElement::getTokenType() const
 }
 
 
+bool TextElement::isPhantom() const
+{
+    if (getElementType() != 0) {
+        return getElementType()->isPhantom(*this);
+    }
+    return false;
+}
+
+
 /**
  * Calculates our width and height and
  * our children's parentPosition.

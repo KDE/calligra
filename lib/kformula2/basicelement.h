@@ -375,7 +375,7 @@ protected:
      * @returns our type. This is an object from our parent's syntax tree
      * or 0 if there was a very bad parsing error.
      */
-    ElementType* getElementType() { return elementType; }
+    ElementType* getElementType() const { return elementType; }
 
 
     /**

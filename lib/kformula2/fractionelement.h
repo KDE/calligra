@@ -113,7 +113,6 @@ public:
     // If an element has children one has to become the main one.
 
     virtual SequenceElement* getMainChild();
-    //virtual void setMainChild(SequenceElement*);
 
     /**
      * Returns wether the element has no more useful
@@ -134,15 +133,11 @@ public:
      */
     //virtual void childWillVanish(FormulaCursor* cursor, BasicElement* child) = 0;
 
-    // Save&load
     /**
-     * @return a QDomElement that contain as DomChildren the
-     * children, and as attribute the attribute of this
-     * element.
+     * Tells whether the fraction should be drawn with a line.
      */
-    //virtual QDomElement getElementDom(QDomDocument *doc);
-    //virtual bool buildFromDom(QDomElement *elem);
-
+    void showLine(bool line) { withLine = line; }
+    
     /**
      * @returns the latex representation of the element and
      * of the element's children
@@ -180,6 +175,8 @@ private:
 
     SequenceElement* numerator;
     SequenceElement* denominator;
+
+    bool withLine;
 };
 
 
