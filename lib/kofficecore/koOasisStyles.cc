@@ -926,9 +926,17 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
     QString text;
     int decimalplaces = 0;
     int integerdigits = 0;
+    bool beforeSeparator = true;
     do
     {
-        //TODO parse value
+        if ( format[0]=='.' || format[0]==',' )
+            beforeSeparator = true;
+        else if ( format[0]=='0' && beforeSeparator )
+            integerdigits++;
+        else if ( format[0]=='0' && !beforeSeparator )
+            decimalplaces++;
+        else
+            kdDebug()<<" error format 0 \n";
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
@@ -937,6 +945,7 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
     addTextNumber(text, elementWriter );
     elementWriter.addAttribute( "number:decimal-places", decimalplaces );
     elementWriter.addAttribute( "number:min-integer-digits", integerdigits );
+    addTextNumber(QString( "%" ), elementWriter );
     text =_suffix ;
     addTextNumber(text, elementWriter );
     elementWriter.endElement();
@@ -954,6 +963,7 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
     //<number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
     //</number:number-style>
 
+    //example 000,000e+0000
     kdDebug()<<"QString saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
@@ -965,9 +975,40 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
     int exponentdigits = 0;
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
     QString text;
+    bool beforeSeparator = true;
+    bool exponential = false;
+    bool positive = true;
     do
     {
-        //TODO parse value.
+        if ( !exponential )
+        {
+            if ( format[0]=='0' && beforeSeparator )
+                integerdigits++;
+            else if ( format[0]==',' || format[0]=='.' )
+                beforeSeparator = false;
+            else if (  format[0]=='0' && !beforeSeparator )
+                decimalplace++;
+            else if ( format[0].lower()=='e' )
+            {
+                format.remove( 0, 1 );
+                if ( format[0]=='+' )
+                    positive = true;
+                else if ( format[0]=='-' )
+                    positive = false;
+                else
+                    kdDebug()<<"Error into scientific number\n";
+                exponential = true;
+            }
+        }
+        else
+        {
+            if ( format[0]=='0' && positive )
+                exponential++;
+            else if ( format[0]=='0' && !positive )
+                exponential=exponential-1;
+            else
+                kdDebug()<<" error into scientific number exponential value\n";
+        }
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
