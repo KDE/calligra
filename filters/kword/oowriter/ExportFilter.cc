@@ -1636,7 +1636,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
 
     if (force || (layoutOrigin.alignment!=layout.alignment))
     {
-        // NOTE: OO 1.0.x uses start and left like left and right (section 3.11.4)
+        // NOTE: OO 1.0.x uses start and end like left and right (section 3.11.4)
         // Unfortunately in XSL-FO's text-align, they are really supposed to be the start and the end.
         if (layout.alignment == "left")
         {
@@ -1660,7 +1660,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
         }
         else if (layout.alignment == "auto")
         {
-            props += "fo:text-align=\"left\" ";
+            props += "fo:text-align=\"start\" ";
             props += "style:text-auto-align=\"true\" "; // rejected draft OASIS extension
             styleKey += 'A';
         }
