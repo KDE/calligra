@@ -66,7 +66,7 @@ class KSpreadconditional : public QDialog
 {
   Q_OBJECT
 public:
-KSpreadconditional(KSpreadView* parent, const char* name,const QPoint &_marker );
+KSpreadconditional(KSpreadView* parent, const char* name,const QRect &_marker );
 void init();
 public slots:
   void slotOk();
@@ -76,7 +76,7 @@ protected:
   KSpreadView* m_pView;
   QPushButton* m_pOk;
   QPushButton* m_pClose;
-  QPoint  marker;
+  QRect  marker;
   KSpreadWidgetconditional *firstCond;
   KSpreadWidgetconditional *secondCond;
   KSpreadWidgetconditional *thirdCond;

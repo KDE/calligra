@@ -668,6 +668,7 @@ void KSpreadDlgFormula::slotActivated(const QString & string)
     list_anal+="PI";
     list_anal+="pow";
     list_anal+="MOD";
+    list_anal+="sign";
     list_anal.sort();
 
     QStringList list_trig;
@@ -690,6 +691,7 @@ void KSpreadDlgFormula::slotActivated(const QString & string)
     list_trig+="fact";
     list_trig+="BINO";
     list_trig+="INVBINO";
+    list_trig+="atan2";
     list_trig.sort();
 
     QStringList list_logic;
@@ -800,7 +802,33 @@ void KSpreadDlgFormula::changeFunction()
 	    tmp.firstElementLabel=i18n("Angle (deg)");
   	else
 	    tmp.firstElementLabel=i18n("Angle (rd)");
-	tmp.help=i18n("Help");
+	QString tmp1;
+	if( m_funcName =="cos")
+		{
+		tmp1=i18n("The  cos()  function  returns  the cosine of x,\nwhere x is given in radians.\n");
+	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+	        tmp1+=i18n("Example : \n");
+                tmp1+="cos(0.98) equals 0.5502255.\ncos(0) equals 1.";
+                tmp.help=tmp1;
+		}
+	else if( m_funcName=="sin")
+		{
+		tmp1=i18n("The  sin()  function  returns  the sine of x,\nwhere x is given in radians.\n");
+	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+	        tmp1+=i18n("Example : \n");
+                tmp1+="sin(0.12) equals 0.11971221.\nsin(0) equals 0.";
+                tmp.help=tmp1;
+		}
+	else if( m_funcName=="tan")
+		{
+		tmp1=i18n("The  tan()  function  returns  the tangent of x,\nwhere x is given in radians.\n");
+	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+	        tmp1+=i18n("Example : \n");
+                tmp1+="tan(0.7) equals 0.84228838.\ntan(0) equals 0.";
+                tmp.help=tmp1;
+		}
+	else
+		tmp.help=i18n("Help");
   	tmp.firstElementType=type_double;
     }
     else if( m_funcName == "PI" || m_funcName=="currentDate"
@@ -1103,12 +1131,52 @@ void KSpreadDlgFormula::changeFunction()
    	tmp.secondElementType=type_int;
    	tmp.thirdElementType=type_int;
     }
-    else if (m_funcName=="pow" ||m_funcName=="MOD" )
+    else if (m_funcName=="pow"  )
     {
         tmp.nb_param=2;
         tmp.firstElementLabel=i18n("Double");
         tmp.secondElementLabel=i18n("Double");
+
+        QString tmp1=i18n("The  pow(x,y)  function  returns\nthe value of x raised to the power of y.\n");
+        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double,Double"+")\n";
+        tmp1+=i18n("Example : \n");
+        tmp1+="pow(1.2,3.4) equals 1.8572.\npow(2,3) equals 8";
+        tmp.help=tmp1;
+        tmp.firstElementType=type_double;
+        tmp.secondElementType=type_double;
+    }
+    else if (m_funcName=="MOD" )
+    {
+        tmp.nb_param=2;
+        tmp.firstElementLabel=i18n("Double");
+        tmp.secondElementLabel=i18n("Double");
+
+       
         tmp.help=m_funcName+"("+"Double,Double"+")";
+        tmp.firstElementType=type_double;
+        tmp.secondElementType=type_double;
+    }
+    else if (m_funcName=="sign")
+    {
+        tmp.nb_param=1;
+        tmp.firstElementLabel=i18n("Double");
+        QString tmp1=i18n("This function return :\n-1 if the number is negative\n0 if the number is null\nand 1 if the number is positive.\n");
+        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+        tmp1+=i18n("Example : \n");
+        tmp1+="sign(5) equals 5.\nsign(-5) equals -1.\nsign(0) equals 0.\n";
+        tmp.help=tmp1;
+        tmp.firstElementType=type_double;
+    }
+    else if (m_funcName=="atan2" )
+    {
+        tmp.nb_param=2;
+        tmp.firstElementLabel=i18n("Double");
+        tmp.secondElementLabel=i18n("Double");
+        QString tmp1=i18n("This function calculates the arc tangent\n of the two variables x and y.\nIt is similar to calculating the arc tangent of y/x,\n except that the signs of both arguments\n are used to determine the quadrant of the result.\n");
+	tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double,Double"+")\n";
+	tmp1+=i18n("Example : \n");
+        tmp1+="ATAN2(0.5,1.0) equals 1.107149.\nATAN2(-0.5,2.0) equals 1.815775.";
+        tmp.help=tmp1;
         tmp.firstElementType=type_double;
         tmp.secondElementType=type_double;
     }

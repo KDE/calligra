@@ -289,7 +289,7 @@ switch(  choose->currentItem())
 return result;
 }
 
-KSpreadconditional::KSpreadconditional( KSpreadView* parent, const char* name,const QPoint &_marker)
+KSpreadconditional::KSpreadconditional( KSpreadView* parent, const char* name,const QRect &_marker)
 	: QDialog( parent, name )
 {
   m_pView = parent;
@@ -322,45 +322,126 @@ KSpreadconditional::KSpreadconditional( KSpreadView* parent, const char* name,co
 void KSpreadconditional::init()
 {
 //init different condition
+//KSpreadConditional *tmpCondition=0;
+bool bFirstCond=false;
+bool bSecondCond=false;
+bool bThirdCond=false;
+
 KSpreadConditional *tmpCondition=0;
-KSpreadCell *obj = m_pView->activeTable()->cellAt( marker.x(), marker.y() );
+KSpreadConditional *tmpCondition2=0;
+KSpreadConditional *tmpCondition3=0;
+KSpreadCell *obj = m_pView->activeTable()->cellAt( marker.left(), marker.top() );
+tmpCondition=obj->getFirstCondition(0);
+if(tmpCondition!=0)
+       bFirstCond=true;
+tmpCondition2=obj->getSecondCondition(0);
+if(tmpCondition2!=0)
+       bSecondCond=true;
+tmpCondition3=obj->getThirdCondition(0);
+if(tmpCondition3!=0)
+       bThirdCond=true;
+
+for ( int x = marker.left(); x <= marker.right(); x++ )
+        {
+        for ( int y = marker.top(); y <= marker.bottom(); y++ )
+	        {
+	        KSpreadCell *obj2 = m_pView->activeTable()->cellAt( x, y );
+                if((obj2->getFirstCondition(0)!=0)&& bFirstCond)
+                        {
+                        if((obj2->getFirstCondition(0)->val1==tmpCondition->val1)&&
+                           (obj2->getFirstCondition(0)->val2==tmpCondition->val2)&&
+                           (obj2->getFirstCondition(0)->fontcond==tmpCondition->fontcond)&&
+                           (obj2->getFirstCondition(0)->colorcond==tmpCondition->colorcond)&&
+                           (obj2->getFirstCondition(0)->m_cond==tmpCondition->m_cond))
+                                {
+                                 bFirstCond=true;
+                                }
+                        else
+                                {
+                                 bFirstCond=false;
+                                }
+                        }
+                else
+                        bFirstCond=false;
+
+		if((obj2->getSecondCondition(0)!=0)&& bSecondCond)
+                        {
+                        if((obj2->getSecondCondition(0)->val1==tmpCondition2->val1)&&
+                           (obj2->getSecondCondition(0)->val2==tmpCondition2->val2)&&
+                           (obj2->getSecondCondition(0)->fontcond==tmpCondition2->fontcond)&&
+                           (obj2->getSecondCondition(0)->colorcond==tmpCondition2->colorcond)&&
+                           (obj2->getSecondCondition(0)->m_cond==tmpCondition2->m_cond))
+                                {
+                                 bSecondCond=true;
+                                }
+                        else
+                                {
+                                 bSecondCond=false;
+                                }
+                        }
+                else
+                        bSecondCond=false;
+                        
+		if((obj2->getThirdCondition(0)!=0)&& bThirdCond)
+                        {
+                        if((obj2->getThirdCondition(0)->val1==tmpCondition3->val1)&&
+                           (obj2->getThirdCondition(0)->val2==tmpCondition3->val2)&&
+                           (obj2->getThirdCondition(0)->fontcond==tmpCondition3->fontcond)&&
+                           (obj2->getThirdCondition(0)->colorcond==tmpCondition3->colorcond)&&
+                           (obj2->getThirdCondition(0)->m_cond==tmpCondition3->m_cond))
+                                {
+                                 bThirdCond=true;
+                                }
+                        else
+                                {
+                                 bThirdCond=false;
+                                }
+                        }
+                else
+                        bThirdCond=false;
+
+	        }
+        }
+//kdDebug(36001)<<"Condition1 :"<<bFirstCond<<endl;
+//kdDebug(36001)<<"Condition2 :"<<bSecondCond<<endl;
+//kdDebug(36001)<<"Condition3 :"<<bThirdCond<<endl;
+
 for(int i=0;i<3;i++)
    {
    switch(i)
 	{
 	case 0:
-		tmpCondition=obj->getFirstCondition(0);
-		if(tmpCondition!=0)
+		//tmpCondition=obj->getFirstCondition(0);
+		if(bFirstCond)//tmpCondition!=0)
     			{
     			firstCond->init(tmpCondition);
     			}
                 else
-                        {
-                        firstCond->disabled();
-                        }
+                    {
+                    firstCond->disabled();
+                    }
 		break;
 	case 1:
-		tmpCondition=obj->getSecondCondition(0);
-		if(tmpCondition!=0)
+		//tmpCondition=obj->getSecondCondition(0);
+		if(bSecondCond)//tmpCondition!=0)
     			{
-    			secondCond->init(tmpCondition);
+    			secondCond->init(tmpCondition2);
     			}
                 else
-                        {
-                        secondCond->disabled();
-                        }
-
+                    {
+                    secondCond->disabled();
+                    }
 		break;
 	case 2:
-		tmpCondition=obj->getThirdCondition(0);
-		if(tmpCondition!=0)
+		//tmpCondition=obj->getThirdCondition(0);
+		if(bThirdCond)//tmpCondition!=0)
     			{
-    			thirdCond->init(tmpCondition);
+    			thirdCond->init(tmpCondition3);
     			}
                 else
-                        {
-                        thirdCond->disabled();
-                        }
+                    {
+                    thirdCond->disabled();
+                    }
 		break;
 	}
 

@@ -1779,6 +1779,46 @@ static bool kspreadfunc_nominal( KSContext& context )
 }
 
 
+static bool kspreadfunc_sign( KSContext& context )
+{
+  int value=0;
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  
+  if ( !KSUtil::checkArgumentsCount( context, 1, "sign", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  if(args[0]->doubleValue()>0)
+  	value=1;
+  else if(args[0]->doubleValue()<0)
+  	value=-1;
+  else if(args[0]->doubleValue()==0)
+  	value=0;
+  	
+  context.setValue( new KSValue( value ) );
+
+  return true;
+}
+
+static bool kspreadfunc_atan2( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "atan2", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  context.setValue( new KSValue( atan2( args[1]->doubleValue(),args[0]->doubleValue() ) ) );
+
+  return true;
+}
+
+
 static bool kspreadfunc_cell( KSContext& context )
 {
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -1996,7 +2036,10 @@ module,"PV_annuity",kspreadfunc_pv_annuity) ) );
 module,"PV",kspreadfunc_pv) ) );
   module->addObject( "FV_annuity", new KSValue( new KSBuiltinFunction(
 module,"FV_annuity",kspreadfunc_fv_annuity) ) );
-
+  module->addObject( "sign", new KSValue( new KSBuiltinFunction(
+module,"sign",kspreadfunc_sign) ) );
+  module->addObject( "atan2", new KSValue( new KSBuiltinFunction(
+module,"atan2",kspreadfunc_atan2) ) );
   return module;
 }
 

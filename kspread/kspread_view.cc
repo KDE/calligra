@@ -1542,7 +1542,18 @@ void KSpreadView::replace()
 
 void KSpreadView::conditional()
 {
-  KSpreadconditional *dlg=new KSpreadconditional( this,"conditional",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+
+//  KSpreadconditional *dlg=new KSpreadconditional( this,"conditional",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+  
+  QRect rect( activeTable()-> selectionRect() );
+  if ( rect.left() == 0 || rect.top() == 0 ||
+	 rect.right() == 0 || rect.bottom() == 0 )
+    {
+     rect.setCoords(  m_pCanvas->markerColumn(), m_pCanvas->markerRow(),m_pCanvas->markerColumn(), m_pCanvas->markerRow());
+
+    }
+    
+  KSpreadconditional *dlg=new KSpreadconditional(this,"conditional",rect);
   dlg->show();
 
 }
