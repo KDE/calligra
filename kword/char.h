@@ -127,6 +127,8 @@ public:
   void saveFormat(ostream &out);
   void loadFormat(KOMLParser&,vector<KOMLAttrib>&,KWordDocument*,KWTextFrameSet*);
 
+  int find(QString _expr,int _index,bool _cs);
+
 protected:
   KWChar* alloc(unsigned int _size);
   void free(KWChar* _data,unsigned int _len);

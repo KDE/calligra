@@ -1112,54 +1112,12 @@ void KWordView::textBorderColor()
     pix.data = CORBA::string_dup( colorToPixString( tmpBrd.color ) );
     m_vToolBarText->setButtonPixmap( ID_BORDER_COLOR , pix );
   }
-  
-//   if (m_vToolBarText->isButtonOn(m_idButtonText_BorderLeft))
-//     {
-//       left = tmpBrd;
-//       gui->getPaperWidget()->setParagLeftBorder(left);
-//     }
-//   if (m_vToolBarText->isButtonOn(m_idButtonText_BorderRight))
-//     {
-//       right = tmpBrd;
-//       gui->getPaperWidget()->setParagRightBorder(right);
-//     }
-//   if (m_vToolBarText->isButtonOn(m_idButtonText_BorderTop))
-//     {
-//       top = tmpBrd;
-//       gui->getPaperWidget()->setParagTopBorder(top);
-//     }
-//   if (m_vToolBarText->isButtonOn(m_idButtonText_BorderBottom))
-//     {
-//       bottom = tmpBrd;
-//       gui->getPaperWidget()->setParagBottomBorder(bottom);
-//     }
 }
 
 /*================================================================*/
 void KWordView::textBorderWidth(const char *width)
 {
   tmpBrd.ptWidth = atoi(width);
-
-//   if (m_vToolBarText->isButtonOn(m_idButtonText_BorderLeft))
-//     {
-//       left = tmpBrd;
-//       gui->getPaperWidget()->setParagLeftBorder(left);
-//     }
-//   if (m_vToolBarText->isButtonOn(m_idButtonText_BorderRight))
-//     {
-//       right = tmpBrd;
-//       gui->getPaperWidget()->setParagRightBorder(right);
-//     }
-//   if (m_vToolBarText->isButtonOn(m_idButtonText_BorderTop))
-//     {
-//       top = tmpBrd;
-//       gui->getPaperWidget()->setParagTopBorder(top);
-//     }
-//   if (m_vToolBarText->isButtonOn(m_idButtonText_BorderBottom))
-//     {
-//       bottom = tmpBrd;
-//       gui->getPaperWidget()->setParagBottomBorder(bottom);
-//     }
 }
 
 /*================================================================*/
@@ -1177,27 +1135,6 @@ void KWordView::textBorderStyle(const char *style)
     tmpBrd.style = KWParagLayout::DASH_DOT;
   else if (stl == i18n("dash dot dot line (-**-)"))
     tmpBrd.style = KWParagLayout::DASH_DOT_DOT;
-
-//   if (m_vToolBarText->isButtonOn(m_idButtonText_BorderLeft))
-//     {
-//       left = tmpBrd;
-//       gui->getPaperWidget()->setParagLeftBorder(left);
-//     }
-//   if (m_vToolBarText->isButtonOn(m_idButtonText_BorderRight))
-//     {
-//       right = tmpBrd;
-//       gui->getPaperWidget()->setParagRightBorder(right);
-//     }
-//   if (m_vToolBarText->isButtonOn(m_idButtonText_BorderTop))
-//     {
-//       top = tmpBrd;
-//       gui->getPaperWidget()->setParagTopBorder(top);
-//     }
-//   if (m_vToolBarText->isButtonOn(m_idButtonText_BorderBottom))
-//     {
-//       bottom = tmpBrd;
-//       gui->getPaperWidget()->setParagBottomBorder(bottom);
-//     }
 }
 
 /*================================================================*/
@@ -1279,7 +1216,6 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuView_Footer = m_vMenuView->insertItem4( i18n("F&ooter"), this, "viewFooter", 0, -1, -1 );
 
   m_vMenuView->setCheckable(true);
-  //m_vMenuView->setItemChecked(m_idMenuView_FormattingChars,true);
   m_vMenuView->setItemChecked(m_idMenuView_FrameBorders,true);
   m_vMenuView->setItemChecked(m_idMenuView_Header,m_pKWordDoc->hasHeader());
   m_vMenuView->setItemChecked(m_idMenuView_Footer,m_pKWordDoc->hasFooter());
@@ -1341,7 +1277,6 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_vMenuFormat->insertSeparator( -1 );
 
-  //m_idMenuFormat_Numbering = m_vMenuFormat->insertItem4( i18n("Numbering..."), this, "formatNumbering", 0, -1, -1 );
   m_idMenuFormat_Style = m_vMenuFormat->insertItem4( i18n("&Style..."), this, "formatStyle", ALT + Key_A, -1, -1 );
 
   // extra menu
@@ -1922,7 +1857,6 @@ void KWordView::newPageLayout(KoPageLayout _layout)
   gui->getHorzRuler()->setPageLayout(_layout);
   gui->getVertRuler()->setPageLayout(_layout);
 
-  //if (m_pKWordDoc->getProcessingType() == KWordDocument::DTP)
   gui->getPaperWidget()->frameSizeChanged(_layout);
 }
 
@@ -2091,12 +2025,6 @@ KWordGUI::KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView
   r_horz->setLeftIndent(static_cast<int>(MM_TO_POINT(paperWidget->getLeftIndent())));
   r_horz->setFirstIndent(static_cast<int>(MM_TO_POINT(paperWidget->getFirstLineIndent())));
 
-//   if (doc->getProcessingType() == KWordDocument_impl::DTP)
-//     {
-//       connect(r_horz,SIGNAL(newPageLayout(KoPageLayout)),paperWidget,SLOT(frameSizeChanged(KoPageLayout)));
-//       connect(r_vert,SIGNAL(newPageLayout(KoPageLayout)),paperWidget,SLOT(frameSizeChanged(KoPageLayout)));
-//     }
-
   r_horz->hide();
   r_vert->hide();
 
@@ -2128,7 +2056,6 @@ KWordGUI::KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView
     }
 
   connect(r_horz,SIGNAL(tabListChanged(QList<KoTabulator>*)),paperWidget,SLOT(tabListChanged(QList<KoTabulator>*)));
-  //r_horz->setTabList(paperWidget->getParagLayout()->getTabList());
 
   paperWidget->forceFullUpdate();
 }

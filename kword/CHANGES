@@ -580,3 +580,8 @@ Reggie, 28.12.1998:
 Reggie, 29.12.1998:
 -------------------
 - Fixes with tabulators and moving/resizing frames/borders
+
+Reggie, 30.12.1998:
+-------------------
+- Cleanups
+- Implemented internals for searching and replacing text (will be used for autoformat too)

@@ -87,8 +87,6 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCou
     {
       parag = _parag;
       ptY = parag->getPTYStart();
-//       if (isCursorInFirstLine() && getParag() && getParag()->getParagLayout()->getPTParagHeadOffset() != 0)
-// 	ptY += getParag()->getParagLayout()->getPTParagHeadOffset(); 
   
       lineStartPos = 0;
       frame = parag->getStartFrame();
@@ -103,8 +101,6 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
     // Set the context to the given paragraph
     if ( parag != 0L )
     {
-//       if (isCursorInLastLine() && getParag() && getParag()->getParagLayout()->getPTParagFootOffset() != 0)
-// 	ptY += getParag()->getParagLayout()->getPTParagFootOffset(); 
       parag->setPTYEnd( ptY );
       parag = parag->getNext();
       if ( parag == 0L )
@@ -122,8 +118,6 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
     parag->setStartFrame( frame );
     parag->setEndFrame( frame );
     // Vertical position ...
-//     if (isCursorInFirstLine() && getParag() && getParag()->getParagLayout()->getPTParagHeadOffset() != 0)
-//       ptY += getParag()->getParagLayout()->getPTParagHeadOffset(); 
     parag->setPTYStart( ptY );
 
     // We are at the beginning of our paragraph
@@ -205,15 +199,9 @@ bool KWFormatContext::isCursorAtParagEnd()
 
 bool KWFormatContext::isCursorAtLineEnd()
 {
-  //debug("pos: %d, end: %d",textPos,lineEndPos);
-
-    // Torben: I commented this out since it looks strange
-  /* if (isCursorInLastLine())
-	return isCursorAtParagEnd(); */
-
-    // Are we behind the last lines character ?
-    // Torben: I commented this out since it looks strange
-    return ( textPos == lineEndPos /* || textPos == lineEndPos - 1 */ );
+  // Are we behind the last lines character ?
+  // Torben: I commented this out since it looks strange
+  return ( textPos == lineEndPos /* || textPos == lineEndPos - 1 */ );
 }
 
 void KWFormatContext::cursorGotoRight( QPainter &_painter )
@@ -524,13 +512,9 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
     KWChar *text = parag->getText();
     KWParagLayout *lay = parag->getParagLayout();
     
-    //unsigned int bp = 0;
-    //float ddx = 0.0;
-    //char buffer[_textpos + 2];
     unsigned int pos = lineStartPos;
     spacingError = 0;
     ptPos = ptStartPos;
-    //*((KWFormat*)this) = lineStartFormat;
     compare_formats = false;
     apply(lineStartFormat);
     compare_formats = true;
@@ -570,13 +554,11 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
 			    break;
 			  case T_RIGHT:
 			    {
-			      //if (!_checkTabs) break;
 			      if (ptPos + (ptTextLen - (ptPos - ptStartPos)) < tabPos)
 				ptPos = tabPos - (ptTextLen - (ptPos - ptStartPos));
  			    } break;
 			  case T_CENTER:
 			    {
-			      //if (!_checkTabs) break;
 			      if (ptPos + (ptTextLen - (ptPos - ptStartPos)) / 2 < tabPos)
 				ptPos = tabPos - (ptTextLen - (ptPos - ptStartPos)) / 2;
  			    } break;
@@ -611,22 +593,17 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
 	    float dx = floor( sp );
 	    spacingError = sp - dx;
 	    
-	    //ddx += dx;
-	    //buffer[bp++] = text[pos].c;
 	    ptPos += (unsigned int)dx + displayFont->getPTWidth( text[pos].c );
 
 	    pos++;
 	  }
 	  else
 	  {
-	    //buffer[bp++] = text[pos].c;
 	    ptPos += displayFont->getPTWidth( text[ pos ].c );
 	    pos++;   
 	  }
 	}
     }
-    //buffer[bp] = '\0';
-    //ptPos += (unsigned int)ddx + displayFont->getPTWidth(buffer);
     
     textPos = _textpos;
 }
@@ -906,8 +883,6 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     
     // Calculate the first characters position in screen coordinates
     ptPos = xShift + left;
-
-    //debug("%d %d %d",ptPos,ptTextLen,xShift + document->getPTColumnWidth());
 
     ptStartPos = ptPos;
 

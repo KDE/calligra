@@ -141,6 +141,9 @@ public:
     void applyStyle(QString _style);
     void tabListChanged(QList<KoTabulator>*);
 
+    int find(QString _expr,int _index,bool _cs);
+    void replace(int _pos,int _len,QString _text,KWFormat &_format);
+
 protected:
     /**
      * Pointer to the previous paragraph or 0L if this is the first one.

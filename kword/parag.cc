@@ -412,5 +412,16 @@ void KWParag::tabListChanged(QList<KoTabulator>* _tabList)
   paragLayout->setTabList(_tabList);
 }
 
+int KWParag::find(QString _expr,int _index,bool _cs)
+{
+  return text.find(_expr,_index,_cs);
+}
+
+void KWParag::replace(int _pos,int _len,QString _text,KWFormat &_format)
+{
+  deleteText(_pos,_len);
+  insertText(_pos,_text);
+  setFormat(_pos,_text.length(),_format);
+}
 
 

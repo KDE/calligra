@@ -399,6 +399,12 @@ KWChar* KWString::copy(KWChar *_data,unsigned int _len)
   return __data;
 }
 
+int KWString::find(QString _expr,int _index,bool _cs)
+{
+  QString str = toString(0,size());
+  return str.find(_expr,_index,_cs);
+}
+
 void freeChar( KWChar& _char )
 {
   if ( _char.attrib )
