@@ -154,8 +154,11 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& r,
 
     // Debug
     //painter.setBrush(Qt::NoBrush);
-    //painter.setPen(Qt::red);
-    //painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());
+//     painter.setPen( Qt::red );
+//     painter.drawRect( context.layoutUnitToPixelX( myPos.x() ),
+//                       context.layoutUnitToPixelX( myPos.y() ),
+//                       context.layoutUnitToPixelX( getWidth() ),
+//                       context.layoutUnitToPixelX( getHeight() ) );
     //painter.setPen(Qt::green);
     //painter.drawLine(myPos.x(), myPos.y()+getMidline(),
     //                 myPos.x()+getWidth(), myPos.y()+getMidline());
@@ -210,7 +213,7 @@ void TextElement::writeDom(QDomElement& element)
 {
     BasicElement::writeDom(element);
     element.setAttribute("CHAR", QString(character));
-    if (symbol) element.setAttribute("SYMBOL", "2");
+    if (symbol) element.setAttribute("SYMBOL", "3");
 }
 
 /**
@@ -231,6 +234,23 @@ bool TextElement::readAttributesFromDom(QDomElement& element)
         int symbolInt = symbolStr.toInt();
         if ( symbolInt == 1 ) {
             character = getSymbolTable().unicodeFromSymbolFont(character);
+        }
+        if ( symbolInt == 2 ) {
+            switch ( character.unicode() ) {
+            case 0x03D5: character = 0x03C6; break;
+            case 0x03C6: character = 0x03D5; break;
+            case 0x03Ba: character = 0x03BA; break;
+            case 0x00B4: character = 0x2032; break;
+            case 0x2215: character = 0x2244; break;
+            case 0x00B7: character = 0x2022; break;
+            case 0x1D574: character = 0x2111; break;
+            case 0x1D579: character = 0x211C; break;
+            case 0x2219: character = 0x22C5; break;
+            case 0x2662: character = 0x26C4; break;
+            case 0x220B: character = 0x220D; break;
+            case 0x224C: character = 0x2245; break;
+            case 0x03DB: character = 0x03C2; break;
+            }
         }
         symbol = symbolInt != 0;
     }

@@ -148,7 +148,7 @@ void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextS
 
             luPixel spaceBefore = 0;
             if ( isFirstOfToken( child ) ) {
-                spaceBefore = context.layoutUnitToPixelX( child->getElementType()->getSpaceBefore( context, tstyle ) );
+                spaceBefore = context.ptToPixelX( child->getElementType()->getSpaceBefore( context, tstyle ) );
             }
 
             if ( !child->isInvisible() ) {
@@ -805,7 +805,46 @@ bool SequenceElement::onlyTextSelected( FormulaCursor* cursor )
 }
 
 
-void SequenceElement::input( Container* container, QChar ch )
+bool SequenceElement::input( Container* container, QKeyEvent* event )
+{
+    QChar ch = event->text().at( 0 );
+    if ( ch.isPrint() ) {
+        return input( container, ch );
+    }
+    else {
+        int action = event->key();
+        int state = event->state();
+
+	switch ( action ) {
+        case Qt::Key_BackSpace:
+            container->remove( beforeCursor );
+            return true;
+        case Qt::Key_Delete:
+            container->remove( afterCursor );
+            return true;
+        case Qt::Key_Return:
+            container->addLineBreak();
+            return true;
+        default:
+            if ( state & Qt::ControlButton ) {
+                switch ( event->key() ) {
+                case Qt::Key_AsciiCircum:
+                    container->addUpperLeftIndex();
+                    return true;
+                case Qt::Key_Underscore:
+                    container->addLowerLeftIndex();
+                    return true;
+                default:
+                    break;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+
+bool SequenceElement::input( Container* container, QChar ch )
 {
     int latin1 = ch.latin1();
     switch (latin1) {
@@ -840,6 +879,7 @@ void SequenceElement::input( Container* container, QChar ch )
     default:
         container->addText(ch);
     }
+    return true;
 }
 
 /**
@@ -1052,7 +1092,7 @@ void NameSequence::moveWordRight( FormulaCursor* cursor )
     }
 }
 
-void NameSequence::input( Container* container, QChar ch )
+bool NameSequence::input( Container* container, QChar ch )
 {
     int latin1 = ch.latin1();
     switch (latin1) {
@@ -1073,6 +1113,7 @@ void NameSequence::input( Container* container, QChar ch )
     default:
         container->addText( ch );
     }
+    return true;
 }
 
 void NameSequence::setElementType( ElementType* t )

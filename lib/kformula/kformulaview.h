@@ -155,6 +155,8 @@ protected slots:
      */
     void slotElementWillVanish(BasicElement*);
 
+    void slotFormulaChanged( int, int );
+
 protected:
 
     /**

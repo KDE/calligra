@@ -26,6 +26,8 @@
 
 #include "basicelement.h"
 
+class QKeyEvent;
+
 KFORMULA_NAMESPACE_BEGIN
 
 class Container;
@@ -234,7 +236,8 @@ public:
      * new elements because it owns the undo stack. But only the
      * sequence knows what chars are allowed.
      */
-    virtual void input( Container* container, QChar ch );
+    virtual bool input( Container* container, QChar ch );
+    virtual bool input( Container* container, QKeyEvent* event );
 
     /**
      * Stores the given childrens dom in the element.
@@ -392,7 +395,7 @@ public:
      * new elements because it owns the undo stack. But only the
      * sequence knows what chars are allowed.
      */
-    virtual void input( Container* container, QChar ch );
+    virtual bool input( Container* container, QChar ch );
 
     /**
      * Sets a new type. This is done during parsing.

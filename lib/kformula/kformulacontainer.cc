@@ -207,12 +207,12 @@ void Container::recalc()
     impl->dirty = false;
     ContextStyle& context = document()->getContextStyle();
     rootElement()->calcSizes( context );
-    emit cursorChanged(activeCursor());
 
     emit formulaChanged( context.layoutUnitToPixelX( rootElement()->getWidth() ),
                          context.layoutUnitToPixelY( rootElement()->getHeight() ) );
-    emit formulaChanged( context.layoutUnitPtToPt( rootElement()->getWidth() ),
-                         context.layoutUnitPtToPt( rootElement()->getHeight() ) );
+    emit formulaChanged( context.layoutUnitPtToPt( context.pixelXToPt( rootElement()->getWidth() ) ),
+                         context.layoutUnitPtToPt( context.pixelYToPt( rootElement()->getHeight() ) ) );
+    emit cursorChanged( activeCursor() );
     emit cursorMoved( activeCursor() );
 }
 
@@ -242,14 +242,15 @@ void Container::draw(QPainter& painter, const QRect& r)
 }
 
 
-void Container::input( QChar ch )
+bool Container::input( QKeyEvent* event )
 {
     if ( !hasValidCursor() )
-        return;
+        return false;
     SequenceElement* current = activeCursor()->normal();
     if ( current != 0 ) {
-        current->input( this, ch );
+        return current->input( this, event );
     }
+    return false;
 }
 
 

@@ -48,6 +48,8 @@ struct View::View_Impl {
                 view, SLOT(slotCursorMoved(FormulaCursor*)));
         connect(document, SIGNAL(cursorChanged(FormulaCursor*)),
                 view, SLOT(slotCursorChanged(FormulaCursor*)));
+        connect( document, SIGNAL( formulaChanged( int, int ) ),
+                 view, SLOT( slotFormulaChanged( int, int ) ) );
 
         cursor = document->createCursor();
     }
@@ -88,6 +90,8 @@ struct View::View_Impl {
      * Out cursor.
      */
     FormulaCursor* cursor;
+
+    QPixmap buffer;
 };
 
 
@@ -104,6 +108,8 @@ View::View(Container* doc)
 {
     impl = new View_Impl(doc, this);
     cursor()->calcCursorSize( contextStyle(), smallCursor() );
+    QRect r = doc->boundingRect();
+    slotFormulaChanged( r.width(), r.height() );
 }
 
 View::~View()
@@ -131,8 +137,7 @@ void View::draw(QPainter& painter, const QRect& rect, const QColorGroup& cg)
     QRect formulaRect = container()->boundingRect();
     formulaRect.setWidth(formulaRect.width()+5);
     formulaRect.setHeight(formulaRect.height()+5);
-    QPixmap buffer(formulaRect.width(), formulaRect.height());
-    QPainter p(&buffer);
+    QPainter p( &impl->buffer );
     p.translate(-formulaRect.x(), -formulaRect.y());
 
     container()->draw( p, rect, cg );
@@ -144,20 +149,12 @@ void View::draw(QPainter& painter, const QRect& rect, const QColorGroup& cg)
     int sw = static_cast<int>( QMIN(formulaRect.width() - sx, rect.width()) );
     int sh = static_cast<int>( QMIN(formulaRect.height() - sy, rect.height()) );
     painter.drawPixmap(QMAX(formulaRect.x(), rect.x()), QMAX(formulaRect.y(), rect.y()),
-                       buffer, sx, sy, sw, sh);
+                       impl->buffer, sx, sy, sw, sh);
 }
 
-void View::keyPressEvent(QKeyEvent* event)
+void View::keyPressEvent( QKeyEvent* event )
 {
-    if (cursor()->isReadOnly()) {
-        return;
-    }
-
-    QChar ch = event->text().at(0);
-    if ( ch.isPrint() ) {
-        container()->input( ch );
-    }
-    else {
+    if ( !container()->input( event ) ) {
         int action = event->key();
         int state = event->state();
 	MoveFlag flag = movementFlag(state);
@@ -175,12 +172,6 @@ void View::keyPressEvent(QKeyEvent* event)
         case Qt::Key_Down:
             slotMoveDown(flag);
             break;
-        case Qt::Key_BackSpace:
-            container()->remove(beforeCursor);
-            break;
-        case Qt::Key_Delete:
-            container()->remove(afterCursor);
-            break;
         case Qt::Key_Home:
             slotMoveHome(flag);
             break;
@@ -190,20 +181,6 @@ void View::keyPressEvent(QKeyEvent* event)
         case Qt::Key_Return:
             container()->addLineBreak();
             break;
-        default:
-            if (state & Qt::ControlButton) {
-                switch (event->key()) {
-                case Qt::Key_AsciiCircum:
-                    container()->addUpperLeftIndex();
-                    break;
-                case Qt::Key_Underscore:
-                    container()->addLowerLeftIndex();
-                    break;
-                default:
-                    // cerr << "Key: " << event->key() << endl;
-                    break;
-                }
-            }
         }
     }
 }
@@ -344,6 +321,11 @@ void View::slotFormulaLoaded(FormulaElement* formula)
 void View::slotElementWillVanish(BasicElement* element)
 {
     cursor()->elementWillVanish(element);
+}
+
+void View::slotFormulaChanged( int width, int height )
+{
+    impl->buffer.resize( width+5, height+5 );
 }
 
 void View::slotSelectAll()

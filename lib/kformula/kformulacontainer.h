@@ -264,10 +264,9 @@ signals:
 public:
 
     /**
-     * General input. ch must be a printable char. We still need
-     * to figure out what to do with it.
+     * General input.
      */
-    void input( QChar ch );
+    bool input( QKeyEvent* event );
 
     // There are a lot of thing we can do with the formula.
 

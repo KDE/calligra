@@ -23,7 +23,7 @@ class Form1(QWidget):
         for i in range(begin, end):
 
             charLabel = QLabel(self,'charLabel' + chr(i))
-            charLabel.setFont(QFont("symbol", 16, QFont.Normal, 0, QFont.AnyCharSet))
+            charLabel.setFont(QFont("symbol", 16))
             charLabel.setText(self.tr(chr(i)))
             grid.addWidget(charLabel, i-begin, 0)
             
