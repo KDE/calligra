@@ -283,6 +283,8 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     QDomElement backgroundElement = doc.createElement( "BACKGROUND" );
     QDomElement soundElement = doc.createElement( "SOUNDS" );
     QDomElement selSlideElement = doc.createElement( "SELSLIDES" );
+    QDomElement helpLineElement = doc.createElement( "HELPLINES" );
+
 
     QDomElement dp = drawPage.toElement();
     QDomElement *master = m_styles[dp.attribute( "draw:master-page-name" )];
@@ -398,6 +400,8 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
 
     docElement.appendChild( paperElement );
     docElement.appendChild( backgroundElement );
+    if ( appendHelpLine( doc, settingsDoc, helpLineElement ) )
+        docElement.appendChild( helpLineElement );
     docElement.appendChild( pageTitleElement );
     docElement.appendChild( pageNoteElement );
     docElement.appendChild( objectElement );
@@ -407,6 +411,116 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
 
     doccontent.appendChild( doc );
 }
+
+bool OoImpressImport::appendHelpLine( QDomDocument &doc,const QDomElement &settingElement, QDomElement &helpLineElement )
+{
+    bool foundElement = false;
+    //<config:config-item config:name="SnapLinesDrawing" config:type="string">V7939H1139</config:config-item>
+    //by default show line
+    QDomNode tmp = settingElement.namedItem( "office:settings" );
+    if (tmp.isNull() )
+        return false;
+
+    for ( QDomNode n = tmp.firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement e = n.toElement();
+        //kdDebug()<<"e.tagName() :"<<e.tagName()<<endl;
+        if ( e.hasAttribute( "config:name" ) && ( e.attribute( "config:name" )=="view-settings" ) )
+        {
+            for ( QDomNode viewSetting = n.firstChild(); !viewSetting.isNull(); viewSetting = viewSetting.nextSibling() )
+            {
+                QDomElement configItem = viewSetting.toElement();
+                if ( configItem.tagName()== "config:config-item-map-indexed"
+                     && ( configItem.attribute( "config:name" )=="Views" ) )
+                {
+                    QDomNode item = configItem.firstChild(); //<config:config-item-map-entry>
+                    for ( QDomNode item2 = item.firstChild(); !item2.isNull(); item2 = item2.nextSibling() )
+                    {
+                        QDomElement viewItem = item2.toElement();
+                        //kdDebug()<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
+                        if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")=="SnapLinesDrawing" ) )
+                        {
+                            kdDebug()<<"SnapLinesDrawing****************:"<<viewItem.text()<<endl;
+                            parseHelpLine( doc, helpLineElement, viewItem.text() );
+                            //display it by default
+                            helpLineElement.setAttribute( "show", true );
+                            foundElement = true;
+                            break;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    return foundElement;
+}
+
+void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElement, const QString &text )
+{
+    QString str;
+    int newPos = text.length()-1; //start to element = 1
+    for ( int pos = text.length()-1; pos >=0;--pos )
+    {
+        if ( text[pos]=='P' )
+        {
+
+            //point
+            str = text.mid( pos+1, ( newPos-pos ) );
+            QDomElement point=doc.createElement("HelpPoint");
+
+            kdDebug()<<" point element  :"<< str <<endl;
+            QStringList listVal = QStringList::split( ",", str );
+            int posX = ( listVal[0].toInt()/100 );
+            int posY = ( listVal[1].toInt()/100 );
+            QString pt_x;
+            QString pt_y;
+            pt_x.setNum(posX);
+            pt_x+="mm";
+            pt_y.setNum(posY);
+            pt_y+="mm";
+            point.setAttribute("posX", KoUnit::parseValue(pt_x));
+            point.setAttribute("posY", KoUnit::parseValue(pt_y));
+
+            helpLineElement.appendChild( point );
+            newPos = pos-1;
+        }
+        else if ( text[pos]=='V' )
+        {
+            QDomElement lines=doc.createElement("Vertical");
+            //vertical element
+            str = text.mid( pos+1, ( newPos-pos ) );
+            kdDebug()<<" vertical  :"<< str <<endl;
+            int posX = ( str.toInt()/100 );
+            QString pt_x;
+            pt_x.setNum(posX);
+            pt_x+="mm";
+            lines.setAttribute( "value",  KoUnit::parseValue(pt_x) );
+            helpLineElement.appendChild( lines );
+
+            newPos = ( pos-1 );
+
+        }
+        else if ( text[pos]=='H' )
+        {
+            //horizontal element
+            QDomElement lines=doc.createElement("Horizontal");
+            str = text.mid( pos+1, ( newPos-pos ) );
+            kdDebug()<<" horizontal  :"<< str <<endl;
+
+            int posY = ( str.toInt()/100 );
+            QString pt_y;
+            pt_y.setNum(posY);
+            pt_y+="mm";
+
+            lines.setAttribute( "value", KoUnit::parseValue(pt_y)  );
+            helpLineElement.appendChild( lines );
+            newPos = pos-1;
+        }
+    }
+}
+
 
 void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QDomElement & soundElement, QDomElement & pictureElement, QDomElement & pageNoteElement, QDomElement &objectElement, double offset, bool sticky)
 {
