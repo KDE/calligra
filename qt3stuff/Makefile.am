@@ -7,5 +7,4 @@ libqt3stuff_la_LDFLAGS = $(all_libraries) -no-undefined
 libqt3stuff_la_LIBADD = $(LIB_QT)
 libqt3stuff_la_METASOURCES = qrichtext_p.moc qstylesheet.moc
 
-SUBDIRS = .
 KDE_OPTIONS = qtonly
