@@ -205,6 +205,7 @@ public:
 
     bool showTable(const QString& tableName);
     void saveCurrentSheetSelection();
+    QPoint markerFromSheet( KSpreadSheet *_sheet ) const;
 
 public slots:
     /**

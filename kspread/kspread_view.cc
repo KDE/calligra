@@ -6626,6 +6626,13 @@ void KSpreadView::paintUpdates()
   m_pCanvas->paintUpdates();
 }
 
+QPoint KSpreadView::markerFromSheet( KSpreadSheet *_sheet ) const
+{
+    QMapIterator<KSpreadSheet*, QPoint> it2 = savedMarkers.find(_sheet);
+    QPoint newMarker = (it2 == savedMarkers.end()) ? QPoint(1,1) : *it2;
+    return newMarker;
+}
+
 void KSpreadView::saveCurrentSheetSelection()
 {
     /* save the current selection on this table */
