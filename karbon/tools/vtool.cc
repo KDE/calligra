@@ -72,6 +72,8 @@ VTool::mouseEvent( QMouseEvent* mouseEvent, const KoPoint &canvasCoordinate )
 
 	setCursor();
 
+	m_altPressed = mouseEvent->state() & Qt::AltButton;
+
 	// Mouse events:
 	if( mouseEvent->type() == QEvent::MouseButtonDblClick )
 	{
@@ -189,12 +191,6 @@ VTool::keyEvent( QEvent* event )
 			}
 		}
 
-		// 
-		if( keyEvent->key() == Qt::Key_Alt )
-		{
-			m_altPressed = true;
-			return true;
-		}
 	}
 
 	// Key release events:
@@ -223,12 +219,6 @@ VTool::keyEvent( QEvent* event )
 
 				return true;
 			}
-		}
-
-		if( keyEvent->key() == Qt::Key_Alt )
-		{
-			m_altPressed = false;
-			return true;
 		}
 
 		if( key == Qt::Key_Left || key == Qt::Key_Right || key == Qt::Key_Up || key == Qt::Key_Down )
