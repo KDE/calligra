@@ -30,7 +30,7 @@
 #include <qbuttongroup.h>
 
 #include <klocale.h>
-
+#include <kmessagebox.h>
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
 
@@ -55,6 +55,7 @@ KPTMainProjectDialog::KPTMainProjectDialog(KPTProject &p, QWidget *parent, const
     enableButtonOK(false);
 
 	dia->namefield->setText(project.name());
+	dia->idfield->setText(project.id());
 	dia->leaderfield->setText(project.leader());
 
     dia->startDateTime->setDateTime(project.startTime());
@@ -77,7 +78,13 @@ KPTMainProjectDialog::KPTMainProjectDialog(KPTProject &p, QWidget *parent, const
 
 
 void KPTMainProjectDialog::slotOk() {
-
+    if (dia->idfield->text() != project.id() && 
+        KPTNode::find(dia->idfield->text())) 
+    {
+        KMessageBox::sorry(this, "Project id must be unique");
+        dia->idfield->setFocus();
+        return;
+    }
     project.setConstraint(KPTNode::MustStartOn); // default
     if (dia->bEndDate->state())
         project.setConstraint(KPTNode::MustFinishOn);
@@ -88,6 +95,7 @@ void KPTMainProjectDialog::slotOk() {
         project.setEndTime(dia->endDateTime->dateTime());
 
     project.setName(dia->namefield->text());
+    project.setId(dia->idfield->text());
     project.setLeader(dia->leaderfield->text());
     project.setDescription(dia->descriptionfield->text());
 
@@ -101,6 +109,7 @@ KPTMainProjectDialogImpl::KPTMainProjectDialogImpl (QWidget *parent) : KPTMainPr
     endDateTime->setEnabled(false);
 
     connect (namefield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFieldsFilled()) );
+    connect (idfield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFieldsFilled()) );
     connect (leaderfield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFieldsFilled()) );
 	connect (chooseLeader, SIGNAL(pressed()), this, SLOT(slotChooseLeader()));
 
@@ -113,7 +122,7 @@ KPTMainProjectDialogImpl::KPTMainProjectDialogImpl (QWidget *parent) : KPTMainPr
 
 void KPTMainProjectDialogImpl::slotCheckAllFieldsFilled() {
     kdDebug()<<k_funcinfo<<endl;
-    emit obligatedFieldsFilled( !(namefield->text().isEmpty() || leaderfield->text().isEmpty()));
+    emit obligatedFieldsFilled( !(namefield->text().isEmpty() || leaderfield->text().isEmpty() || idfield->text().isEmpty()) );
 }
 
 void KPTMainProjectDialogImpl::slotChooseLeader() {

@@ -315,6 +315,7 @@ void KPTProject::save(QDomElement &element)  {
 
     me.setAttribute("name", m_name);
     me.setAttribute("leader", m_leader);
+    me.setAttribute("id", m_id);
     me.setAttribute("description", m_description);
 
     me.setAttribute("project-start",startTime().toString());
