@@ -253,6 +253,22 @@ bool KoDocument::saveFile()
   QCString outputMimeType = t->name().latin1();
 #endif
 
+  if ( outputMimeType != _native_format )
+  {
+      // Warn the user
+      KMimeType::Ptr mime = KMimeType::mimeType( outputMimeType );
+      QString comment = ( mime->name() == KMimeType::defaultMimeType() ) ? i18n( "Unknown file type %1" ) : mime->comment();
+      int res = KMessageBox::warningContinueCancel(
+          0, i18n( "<qt>You are about to save the document using the format %1"
+                   "This might lose parts of the formatting of the document. Proceed?</qt>" )
+          .arg( QString( "<b>%1</b><p>" ).arg( comment ) ), // in case we want to remove the bold later
+          i18n( "File Export: Confirmation Required" ),
+          i18n( "Continue" ),
+          "FileExportConfirmation", true );
+      if (res == KMessageBox::Cancel )
+          return false;
+  }
+
   QApplication::setOverrideCursor( waitCursor );
 
   if ( KIO::NetAccess::exists( m_url ) ) { // this file exists => backup
@@ -262,6 +278,8 @@ bool KoDocument::saveFile()
         (void) KIO::NetAccess::del( backup );
         (void) KIO::NetAccess::copy( m_url, backup );
 
+        // This is noticeably faster, but not network transparent, and more importantly
+        // it fails with '(' and other special chars in the filename.
         //QString cmd = QString( "rm -rf %1~" ).arg( url.path() );
         //system( cmd.local8Bit() );
         //cmd = QString("cp %1 %2~").arg( url.path() ).arg( url.path() );
