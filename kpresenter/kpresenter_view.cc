@@ -699,7 +699,7 @@ void KPresenterView_impl::slotInsertObject(KPresenterChild *_child)
   p->setGeometry(_child->geometry());
   p->show();
   m_lstFrames.append(p);
-  CORBA::release(p);
+  //CORBA::release(p);
   
   QObject::connect(p,SIGNAL(sig_geometryEnd(PartFrame_impl*)),
 		   this,SLOT(slotGeometryEnd(PartFrame_impl*)));
