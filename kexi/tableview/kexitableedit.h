@@ -105,8 +105,8 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		virtual void paintFocusBorders( QPainter *p, QVariant &cal, int x, int y, int w, int h );
 
 		/*! For reimplementation.
-		 Sets up cell's contents using context of \a val value. 
-		 \a focusd is true if the cell is focused. \a align is set using Qt::AlignmentFlags.
+		 Sets up anmd paints cell's contents using context of \a val value. 
+		 \a focused is true if the cell is focused. \a align is set using Qt::AlignmentFlags.
 		 Some additional things may be painted using \a p,
 		 it's not needed to paint the text (this is done automatically outside.
 

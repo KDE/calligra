@@ -67,9 +67,14 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiViewBase
 		virtual QSize sizeHint() const;
 
 	protected slots:
+		/*! Updates shared actions related to currently selected row. 
+		 Called for KexiTableView::rowEditStarted(), KexiTableView::rowEditTerminated(),
+		 and KexiTableView::slotCellSelected() signals. 
+		 Call this implementation if you are reimplementing this method. */
+		virtual void slotUpdateRowActions(int row);
+
 		void filter();
-		void slotCellSelected(int col, int row);
-		void slotUpdateRowActions(int row);
+		virtual void slotCellSelected(int col, int row);
 		void reloadActions();
 
 	protected:

@@ -29,8 +29,8 @@
 #include <kglobalsettings.h>
 
 
-KexiBoolTableEdit::KexiBoolTableEdit(KexiTableViewColumn &column, QScrollView *parent, const char* name)
- : KexiTableEdit(column, parent, name ? name : "KexiBoolTableEdit")
+KexiBoolTableEdit::KexiBoolTableEdit(KexiTableViewColumn &column, QScrollView *parent)
+ : KexiTableEdit(column, parent, "KexiBoolTableEdit")
 {
 	init();
 }

@@ -125,7 +125,7 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWid
 	b->addWidget(d->splitter);
 
 	plugSharedAction("querypart_check_query", this, SLOT(slotCheckQuery())); 
-	plugSharedAction("querypart_view_toggle_history", this, SLOT(slotUpdateMode())); 
+	plugSharedAction("querypart_view_toggle_history", this, SLOT(slotUpdateMode()));
 	d->action_toggle_history = static_cast<KToggleAction*>( sharedAction( "querypart_view_toggle_history" ) );
 
 	d->historyHead = new KexiSectionHeader(i18n("SQL Query History"), Vertical, d->history_section);

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexitablepartinst" version="1">
+<kpartgui name="kexitablepartinst" version="2">
 
 <MenuBar>
 </MenuBar>
@@ -7,6 +7,7 @@
 <ToolBar name="table" fullWidth="false" noMerge="1">
   <text>Table</text>
   <Action name="tablepart_filter"/>
+  <Action name="tablepart_toggle_pkey"/>
 </ToolBar>
 
 </kpartgui>

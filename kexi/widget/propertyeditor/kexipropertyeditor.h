@@ -154,6 +154,8 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 
 		void showDefaultsButton( bool show );
 
+		int baseRowHeight() const { return m_baseRowHeight; }
+
 	protected slots:
 		void slotPropertyReset(KexiPropertyBuffer &buf,KexiProperty &prop);
 
@@ -164,8 +166,11 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		QGuardedPtr<KexiPropertyBuffer> m_buffer;
 		KPushButton *m_defaults; // "Revert to defaults" button
 		KexiPropertyEditorItem::Dict m_items;
+		int m_baseRowHeight;
 		bool m_sync : 1;
 		bool slotValueChanged_enabled : 1;
+
+	friend class KexiPropertyEditorItem;
 };
 
 #endif

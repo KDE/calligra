@@ -464,8 +464,11 @@ Field::setPrimaryKey(bool p)
 void
 Field::setUniqueKey(bool u)
 {
-	if(isUniqueKey() != u)
+	if(isUniqueKey() != u) {
 		m_constraints = static_cast<Field::Constraints>(m_constraints ^ Field::Unique);
+		if (u)
+			setNotNull(true);
+	}
 }
 
 void

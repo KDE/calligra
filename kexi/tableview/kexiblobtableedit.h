@@ -22,6 +22,7 @@
 #define _KEXIBLOBTABLEEDIT_H_
 
 #include <qcstring.h>
+#include <qcache.h>
 
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
@@ -76,5 +77,60 @@ class KexiBlobEditorFactoryItem : public KexiCellEditorFactoryItem
 	protected:
 		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0);
 };
+
+//=======================
+//This class is temporarily here:
+
+/*! @short Cell editor for displaying kde icon (using icon name provided as string).
+ Read only.
+*/
+class KEXIDATATABLE_EXPORT KexiKIconTableEdit : public KexiTableEdit
+{
+	public:
+		KexiKIconTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
+
+		virtual ~KexiKIconTableEdit();
+
+		//! \return true if editor's value is null (not empty)
+		virtual bool valueIsNull();
+
+		//! \return true if editor's value is empty (not null). 
+		//! Only few field types can accept "EMPTY" property 
+		//! (check this with KexiDB::Field::hasEmptyProperty()), 
+		virtual bool valueIsEmpty();
+
+		virtual QVariant value(bool &ok);
+
+		virtual bool cursorAtStart();
+		virtual bool cursorAtEnd();
+
+		virtual void clear();
+
+		virtual void setupContents( QPainter *p, bool focused, QVariant val, 
+			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
+
+	protected:
+		//! initializes this editor with \a add value
+		virtual void init(const QString& add, bool removeOld);
+
+		void showHintButton();
+		void init();
+
+		//! We've no editor widget that would store current value, so we do this here
+		QVariant m_currentValue;
+
+		QCache<QPixmap> m_pixmapCache;
+};
+
+class KexiKIconTableEditorFactoryItem : public KexiCellEditorFactoryItem
+{
+	public:
+		KexiKIconTableEditorFactoryItem();
+		virtual ~KexiKIconTableEditorFactoryItem();
+
+	protected:
+		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0);
+};
+
 
 #endif

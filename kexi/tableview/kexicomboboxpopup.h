@@ -59,6 +59,7 @@ class KexiComboBoxPopup : public QFrame
 	signals:
 		void rowAccepted(KexiTableItem *item, int row);
 		void cancelled();
+		void hidden();
 
 	public slots:
 		virtual void resize( int w, int h );

@@ -165,9 +165,23 @@ class KEXICORE_EXPORT Part : public QObject
 			const QString &pix_name, const KShortcut &cut, const char *name, 
 			const char *subclassName = 0);
 
+		/*! Convenience version of above method - creates shared toggle action. */
+		KAction* createSharedToggleAction(int mode, const QString &text,
+			const QString &pix_name, const KShortcut &cut, const char *name);
+
+		/*! Creates shared action for action collection declared 
+		 for 'part actions' of this part.
+		 See KexiSharedActionHost::createSharedAction() for details.
+		 Pass desired KAction subclass with \a subclassName (e.g. "KToggleAction") to have
+		 that subclass allocated instead just KAction (what is the default). */
 		KAction* createSharedPartAction(const QString &text, 
 			const QString &pix_name, const KShortcut &cut, const char *name,
 			const char *subclassName = 0);
+
+		/*! Convenience version of above method - creates shared toggle action 
+		 for 'part actions' of this part. */
+		KAction* createSharedPartToggleAction(const QString &text,
+			const QString &pix_name, const KShortcut &cut, const char *name);
 
 		void setActionAvailable(const char *action_name, bool avail);
 

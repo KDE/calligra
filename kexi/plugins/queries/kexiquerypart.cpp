@@ -112,9 +112,9 @@ void KexiQueryPart::initActions()
 	a->setToolTip(i18n("Check query"));
 	a->setWhatsThis(i18n("Checks query for validity."));
 
-	a = createSharedAction(
+	a = createSharedToggleAction(
 		Kexi::TextViewMode, i18n("Show SQL History"), "view_top_bottom"/*TODO other icon*/,
-		0, "querypart_view_toggle_history", "KToggleAction");
+		0, "querypart_view_toggle_history");
 	a->setWhatsThis(i18n("Shows or hides SQL editor's history."));
 
 //	setActionAvailable("querypart_check_query", true);

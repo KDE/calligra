@@ -526,7 +526,6 @@ Relationship* QuerySchema::addRelationship( Field *field1, Field *field2 )
 
 QueryFieldInfo::List* QuerySchema::autoIncrementFields()
 {
-	bool noCache = d->autoincFields;
 	if (!d->autoincFields) {
 		d->autoincFields = new QueryFieldInfo::List();
 	}
@@ -534,7 +533,7 @@ QueryFieldInfo::List* QuerySchema::autoIncrementFields()
 		KexiDBWarning << "QuerySchema::autoIncrementFields(): no parent table!" << endl;
 		return d->autoincFields;
 	}
-	if (noCache) {
+	if (d->autoincFields->isEmpty()) {//no cache
 		QueryFieldInfo::Vector fexp = fieldsExpanded();
 		for (int i=0; i<(int)fexp.count(); i++) {
 			QueryFieldInfo *fi = fexp[i];

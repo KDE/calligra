@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Till Busch <till@bux.at>
-   Lucijan Busch <lucijan@gmx.at>
-   Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
    Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
@@ -34,6 +34,7 @@
 #include <qtimer.h>
 #include <qvariant.h>
 #include <qptrlist.h>
+#include <qheader.h>
 
 #include <kdebug.h>
 
@@ -538,6 +539,10 @@ protected slots:
 	void columnWidthChanged( int col, int os, int ns );
 	void cancelEditor();
 	virtual bool acceptEditor();
+	/*! Typically handles pressing Enter or F2 key: 
+	 if current cell has boolean type, toggles it's value, 
+	 otherwise starts editing (startEditCurrentCell()). */
+	void startEditOrToggleValue();
 	virtual void boolToggled();
 	void slotUpdate();
 	void sortColumnInternal(int col);
@@ -563,8 +568,22 @@ protected slots:
 	//! receives a signal from cell editors
 	void slotEditRequested();
 
-	//! Handles KexiTableViewData::refreshRequested()
+	//! Handles KexiTableViewData::refreshRequested() signal
 	void slotRefreshRequested();
+
+	//! Handles KexiTableViewData::rowRepaintRequested() signal
+	void slotRowRepaintRequested(KexiTableItem& item);
+
+	//! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
+	void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint);
+
+	//! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
+	void slotRowDeleted();
+
+	//! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
+	void slotRowInserted(KexiTableItem *item, bool repaint);
+	//! Like above, not db-aware version
+	void slotRowInserted(KexiTableItem *item, uint row, bool repaint);
 
 protected:
 	/*! Initializes data contents (resizes it, sets cursor at 1st row).
@@ -660,6 +679,8 @@ protected:
 
 	void removeEditor();
 
+//	//! Called to repaint contents after a row is deleted.
+//	void repaintAfterDelete();
 
 	//--------------------------
 		
@@ -684,34 +705,39 @@ inline KexiTableItem *KexiTableView::itemAt(int row) const
 	}
 	return item;
 }
-/*
-inline int KexiTableView::currentRow()
-{
-	return m_curRow;
-}
 
-inline KexiTableItem *KexiTableView::selectedItem()
-{
-	return m_pCurrentItem;
-}
+/*! A header with additional actions.
+ Displays field description (Field::description()) text as tool tip, if available.
+ Displays tool tips if a pointed section is not wide enough to fit its label text.
 
-inline QVariant::Type KexiTableView::columnType(int col)
-{
-	return m_pColumnTypes->at(col);
-}
-
-inline bool	KexiTableView::columnEditable(int col)
-{
-	return m_pColumnModes->at(col);
-	if(m_pColumnModes->at(col) & ColumnEditable)
-		return true;
-
-	return false;
-}
-
-inline QVariant KexiTableView::columnDefault(int col)
-{
-	return *m_pColumnDefaults->at(col);
-}
+ \todo react on indexChange ( int section, int fromIndex, int toIndex ) signal
 */
+class KEXIDATATABLE_EXPORT TableViewHeader : public QHeader
+{
+	Q_OBJECT
+
+	public:
+		TableViewHeader(QWidget * parent = 0, const char * name = 0);
+
+		int addLabel ( const QString & s, int size = -1 );
+
+		int addLabel ( const QIconSet & iconset, const QString & s, int size = -1 );
+
+		void removeLabel( int section );
+
+		/*! Sets \a toolTip for \a section. */
+		void setToolTip( int section, const QString & toolTip );
+
+		virtual bool eventFilter(QObject * watched, QEvent * e);
+
+	protected slots:
+		void slotSizeChange(int section, int oldSize, int newSize );
+
+	protected:
+		int m_lastToolTipSection;
+		QRect m_toolTipRect;
+
+		QStringList m_toolTips;
+};
+
 #endif

@@ -59,30 +59,11 @@ void KexiTableViewPropertyBuffer::slotDataSet( KexiTableViewData *data )
 		connect(m_currentTVData, SIGNAL(rowDeleted()), this, SLOT(slotRowDeleted()));
 		connect(m_currentTVData, SIGNAL(rowsDeleted( const QValueList<int> & )), 
 			this, SLOT(slotRowsDeleted( const QValueList<int> & )));
-		connect(m_currentTVData, SIGNAL(rowInserted(KexiTableItem*,uint)), 
-			this, SLOT(slotRowInserted(KexiTableItem*,uint)));
+		connect(m_currentTVData, SIGNAL(rowInserted(KexiTableItem*,uint,bool)), 
+			this, SLOT(slotRowInserted(KexiTableItem*,uint,bool)));
 		connect(m_currentTVData, SIGNAL(refreshRequested()), 
 			this, SLOT(slotRefreshRequested()));
 	}
-}
-
-void KexiTableViewPropertyBuffer::currentRowDeleted()
-{
-	m_view->setDirty();
-	//remove current prop. buffer
-	removeCurrentPropertyBuffer();
-
-	//let's move up all buffers that are below that deleted
-	m_buffers.setAutoDelete(false);//to avoid auto deleting in insert()
-	const int r = m_tableView->currentRow();
-	for (int i=r;i<int(m_buffers.size()-1);i++) {
-		KexiPropertyBuffer *b = m_buffers[i+1];
-		m_buffers.insert( i , b );
-	}
-	m_buffers.insert( m_buffers.size()-1, 0 );
-	m_buffers.setAutoDelete(true);//revert the flag
-
-	m_view->propertyBufferSwitched();
 }
 
 void KexiTableViewPropertyBuffer::removeCurrentPropertyBuffer()
@@ -166,6 +147,7 @@ void KexiTableViewPropertyBuffer::slotRowDeleted()
 	m_buffers.setAutoDelete(true);//revert the flag
 
 	m_view->propertyBufferSwitched();
+	emit rowDeleted();
 }
 
 void KexiTableViewPropertyBuffer::slotRowsDeleted( const QValueList<int> &rows )
@@ -215,7 +197,7 @@ void KexiTableViewPropertyBuffer::slotRowsDeleted( const QValueList<int> &rows )
 }
 
 //void KexiTableViewPropertyBuffer::slotEmptyRowInserted(KexiTableItem*, uint /*index*/)
-void KexiTableViewPropertyBuffer::slotRowInserted(KexiTableItem*, uint row)
+void KexiTableViewPropertyBuffer::slotRowInserted(KexiTableItem*, uint row, bool /*repaint*/)
 {
 	m_view->setDirty();
 
@@ -231,6 +213,8 @@ void KexiTableViewPropertyBuffer::slotRowInserted(KexiTableItem*, uint row)
 	m_buffers.setAutoDelete(true);//revert the flag
 
 	m_view->propertyBufferSwitched();
+
+	emit rowInserted();
 }
 
 void KexiTableViewPropertyBuffer::slotCellSelected(int, int row)

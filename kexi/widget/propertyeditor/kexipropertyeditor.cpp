@@ -73,6 +73,8 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const cha
 	header()->setMovingEnabled( false );
 
 	setTreeStepSize(KexiPropertyEditorItem_BranchBoxSize + 2/*left*/ + 1/*right*/);
+
+	m_baseRowHeight = QFontMetrics(font()).height() + itemMargin()*2;
 }
 
 KexiPropertyEditor::~KexiPropertyEditor()
@@ -218,7 +220,7 @@ KexiPropertyEditor::showDefaultsButton( bool show )
 {
 	int y = viewportToContents(QPoint(0, itemRect(m_editItem).y())).y();
 	QRect geometry(columnWidth(0), y, columnWidth(1), m_editItem->height());
-	m_defaults->resize(geometry.height(), geometry.height());
+	m_defaults->resize(m_baseRowHeight, m_baseRowHeight);
 
 	if (!show) {
 		if (m_currentEditor) {

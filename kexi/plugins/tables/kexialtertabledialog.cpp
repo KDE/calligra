@@ -49,150 +49,147 @@
 
 //#define MAX_FIELDS 101 //nice prime number
 
+class KexiAlterTableDialogPrivate
+{
+	public:
+		KexiAlterTableDialogPrivate()
+		 : buffers(0)
+		 , dontAskOnStoreData(false)
+		 , slotTogglePrimaryKeyCalled(false)
+		{}
+
+		KexiTableViewData *data;
+
+		KexiTableViewPropertyBuffer *buffers;
+
+		int row; //!< used to know if a new row is selected in slotCellSelected()
+
+		KToggleAction *action_toggle_pkey;
+
+		//! internal
+		int maxTypeNameTextWidth;
+		//! Set to true in beforeSwitchTo() to avoid asking again in storeData()
+		bool dontAskOnStoreData : 1;
+
+		bool slotTogglePrimaryKeyCalled : 1;
+};
+
+//----------------------------------------------
+
 KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent, 
 	KexiDB::TableSchema *table, const char *name)
  : KexiDataTable(win, parent, name, false/*not db-aware*/)
-// , m_table(table) //orig table
- , m_dontAskOnStoreData(false)
+ , d( new KexiAlterTableDialogPrivate() )
 {
-	init();
-}
+	d->data = new KexiTableViewData();
+	d->data->setInsertingEnabled( false );
 
-KexiAlterTableDialog::~KexiAlterTableDialog()
-{
-//	removeCurrentPropertyBuffer();
-}
+	KexiTableViewColumn *col = new KexiTableViewColumn(i18n("Primary Key", "PK"), KexiDB::Field::Text);
+	col->field()->setDescription(i18n("Primary Key"));
+	col->field()->setSubType("KIcon");
+	col->setReadOnly(true);
+	d->data->addColumn( col );
 
-void KexiAlterTableDialog::init()
-{
-	m_data = new KexiTableViewData();
-	m_data->setInsertingEnabled( false );
-	KexiTableViewColumn *col = new KexiTableViewColumn(i18n("Field name"), KexiDB::Field::Text);
+	col = new KexiTableViewColumn(i18n("Field name"), KexiDB::Field::Text);
 //		KexiDB::Field::PrimaryKey);
 	KexiValidator *vd = new Kexi::IdentifierValidator();
 	vd->setAcceptsEmptyValue(true);
 	col->setValidator( vd );
 
-	m_data->addColumn( col );
+	d->data->addColumn( col );
 	KexiDB::Field *f = new KexiDB::Field(i18n("Data type"), KexiDB::Field::Enum);
 //		KexiDB::Field::NotEmpty | KexiDB::Field::NotNull);
 	QValueVector<QString> types(KexiDB::Field::LastTypeGroup);
-	m_maxTypeNameTextWidth = 0;
+	d->maxTypeNameTextWidth = 0;
 	QFontMetrics fm(font());
 	for (int i=1; i<=KexiDB::Field::LastTypeGroup; i++) {
 		types[i-1] = KexiDB::Field::typeGroupName(i);
-		m_maxTypeNameTextWidth = QMAX(m_maxTypeNameTextWidth, fm.width(types[i-1]));
+		d->maxTypeNameTextWidth = QMAX(d->maxTypeNameTextWidth, fm.width(types[i-1]));
 	}
 	f->setEnumHints(types);
 
-	m_data->addColumn( new KexiTableViewColumn(*f) );
-	m_data->addColumn( new KexiTableViewColumn(i18n("Comments"), KexiDB::Field::Text) );
-
-/*	KexiTableItem *item = new KexiTableItem(0);
-	item->push_back(QVariant("name"));
-	item->push_back(QVariant("Text"));
-	item->push_back(QVariant(""));
-	data->append(item);
-*/
-
-//	m_view = new KexiTableView(data, this, "tableview");
-//	QVBoxLayout *box = new QVBoxLayout(this);
-//	box->addWidget(m_view);
+	d->data->addColumn( new KexiTableViewColumn(*f) );
+	d->data->addColumn( new KexiTableViewColumn(i18n("Comments"), KexiDB::Field::Text) );
 
 	m_view->setSpreadSheetMode();
-#if 0 //moved down
-	m_view->adjustColumnWidthToContents(0); //adjust column width
-	m_view->setColumnWidth(1, maxTypeNameTextWidth + 2*m_view->rowHeight());
-	m_view->setColumnStretchEnabled( true, 2 ); //last column occupies the rest of the area
-#endif
-
 //	setFocusProxy(m_view);
 
-//	connect(m_view, SIGNAL(cellSelected(int,int)), 
-//		this, SLOT(slotCellSelected(int,int)));
-	connect(m_data, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant,KexiDB::ResultInfo*)),
+	connect(d->data, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant,KexiDB::ResultInfo*)),
 		this, SLOT(slotBeforeCellChanged(KexiTableItem*,int,QVariant,KexiDB::ResultInfo*)));
-	connect(m_data, SIGNAL(rowUpdated(KexiTableItem*)),
+	connect(d->data, SIGNAL(rowUpdated(KexiTableItem*)),
 		this, SLOT(slotRowUpdated(KexiTableItem*)));
-	connect(m_data, SIGNAL(aboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*)),
+	connect(d->data, SIGNAL(aboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*)),
 		this, SLOT(slotAboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*)));
-//	connect(data, SIGNAL(aboutToUpdateRow(KexiTableItem*,KexiDB::RowEditBuffer*,KexiDB::ResultInfo*)),
-//		this, SLOT(slotAboutToUpdateRow(KexiTableItem*,KexiDB::RowEditBuffer*,KexiDB::ResultInfo*)));
-
-//	connect(m_data, SIGNAL(rowDeleted()), this, SLOT(slotRowDeleted()));
-//	connect(m_data, SIGNAL(rowInserted(KexiTableItem*,uint)), 
-//		this, SLOT(slotEmptyRowInserted(KexiTableItem*,uint)));
-	
-
-/*	//! before closing - we'are accepting editing
-	connect(this,SIGNAL(closing()),m_view,SLOT(acceptRowEdit()));
-
-	//! updating actions on start/stop editing
-	connect(m_view, SIGNAL(rowEditStarted(int)), this, SLOT(slotUpdateRowActions(int)));
-	connect(m_view, SIGNAL(rowEditTerminated(int)), this, SLOT(slotUpdateRowActions(int)));
-
-*/
-//	m_properties = new KexiPropertyEditor(splitter);
-//	m_properties->setBuffer(m_constraints.at(0));
 
 	setMinimumSize(m_view->minimumSizeHint().width(),m_view->minimumSizeHint().height());
-//	resize( preferredSizeHint( m_view->sizeHint() ) );
 	m_view->setFocus();
-	initActions();
 
-	m_buffers = new KexiTableViewPropertyBuffer( this, m_view );
+	d->buffers = new KexiTableViewPropertyBuffer( this, m_view );
+	connect(d->buffers, SIGNAL(rowDeleted()), this, SLOT(updateActions()));
+	connect(d->buffers, SIGNAL(rowInserted()), this, SLOT(updateActions()));
+	
+	plugSharedAction("tablepart_toggle_pkey", this, SLOT(slotTogglePrimaryKey()));
+	d->action_toggle_pkey = static_cast<KToggleAction*>( sharedAction("tablepart_toggle_pkey") );
+}
+
+KexiAlterTableDialog::~KexiAlterTableDialog()
+{
+//	removeCurrentPropertyBuffer();
+	delete d;
 }
 
 void KexiAlterTableDialog::initData()
 {
-//	m_buffers->clear();
+//	d->buffers->clear();
 
-//	m_buffers.resize(MAX_FIELDS);
-//	m_buffers.setAutoDelete(true);
+//	d->buffers.resize(MAX_FIELDS);
+//	d->buffers.setAutoDelete(true);
 //	m_row = -99;
 
 	//add column data
-	m_data->clear();
+	d->data->clear();
 	int tableFieldCount = 0;
 	if (tempData()->table) {
 		tableFieldCount = tempData()->table->fieldCount();
-		m_buffers->clear(tableFieldCount);
+		d->buffers->clear(tableFieldCount);
 
 		for(int i=0; i < tableFieldCount; i++)
 		{
 			KexiDB::Field *field = tempData()->table->field(i);
 			KexiTableItem *item = new KexiTableItem(0);
+			item->push_back(QVariant(field->isPrimaryKey() ? "key" : ""));
 			item->push_back(QVariant(field->name()));
 			item->push_back(QVariant(field->typeGroup()-1)); //-1 because type groups are counted from 1
 			item->push_back(QVariant(field->description()));
-			m_data->append(item);
+			d->data->append(item);
 	
 			createPropertyBuffer( i, field );
 		}
 	}
 	else {
-		m_buffers->clear();//default size
+		d->buffers->clear();//default size
 	}
 	//add empty space
 //	for (int i=tableFieldCount; i<MAX_FIELDS; i++) {
-	for (int i=tableFieldCount; i<(int)m_buffers->size(); i++) {
+	for (int i=tableFieldCount; i<(int)d->buffers->size(); i++) {
 //		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
 //		buff->insert("primaryKey", KexiProperty("pkey", QVariant(false, 4), i18n("Primary Key")));
 //		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
 //		m_fields.insert(i, buff);
 		KexiTableItem *item = new KexiTableItem(3);//3 empty fields
-		m_data->append(item);
+		d->data->append(item);
 	}
 
 //	QSplitter *splitter = new QSplitter(Vertical, this);
 
-	kdDebug() << "KexiAlterTableDialog::init(): vector contains " << m_buffers->size() << " items" << endl;
+	kdDebug() << "KexiAlterTableDialog::init(): vector contains " << d->buffers->size() << " items" << endl;
 
-	m_view->setData(m_data);
+	m_view->setData(d->data);
 
-	m_view->adjustColumnWidthToContents(0); //adjust column width
-	m_view->setColumnWidth(1, m_maxTypeNameTextWidth + 2*m_view->rowHeight());
-	m_view->setColumnStretchEnabled( true, 2 ); //last column occupies the rest of the area
+	m_view->setColumnWidth(0, IconSize( KIcon::Small ) + 10);
+	m_view->adjustColumnWidthToContents(1); //adjust column width
+	m_view->setColumnWidth(2, d->maxTypeNameTextWidth + 2*m_view->rowHeight());
+	m_view->setColumnStretchEnabled( true, 3 ); //last column occupies the rest of the area
 
 	setDirty(false);
 }
@@ -228,7 +225,7 @@ static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KexiProper
 		prop->setVisible( visible );
 		changed = true;
 	}
-	prop = &buf["notEmpty"];
+	prop = &buf["allowEmpty"];
 	visible = KexiDB::Field::hasEmptyProperty(fieldType);
 	if (prop->isVisible()!=visible) {
 		prop->setVisible( visible );
@@ -284,7 +281,7 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field, bool 
 
 	buff->add(new KexiProperty("notNull", QVariant(field->isNotNull(), 4), i18n("Required")));
 	
-	buff->add(prop = new KexiProperty("notEmpty", QVariant(field->isNotEmpty(), 4), i18n("Not Empty")));
+	buff->add(prop = new KexiProperty("allowEmpty", QVariant(!field->isNotEmpty(), 4), i18n("Allow Zero\nSize")));
 
 	buff->add(new KexiProperty("indexed", QVariant(field->isIndexed(), 4), i18n("Indexed")));
 
@@ -293,14 +290,70 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field, bool 
 	connect(buff, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)),
 		this, SLOT(slotPropertyChanged(KexiPropertyBuffer&, KexiProperty&)));
 
-	m_buffers->insert(row, buff, newOne);
+	d->buffers->insert(row, buff, newOne);
 	return buff;
 }
 
-void
-KexiAlterTableDialog::initActions()
+void KexiAlterTableDialog::updateActions(bool activated)
 {
+/*! \todo check if we can set pkey for this column type (eg. BLOB?) */
+	setAvailable("tablepart_toggle_pkey", propertyBuffer()!=0);
+	if (!propertyBuffer())
+		return;
+	KexiPropertyBuffer &buf = *propertyBuffer();
+	d->slotTogglePrimaryKeyCalled = true;
+	 d->action_toggle_pkey->setChecked(buf["primaryKey"].value().toBool());
+	d->slotTogglePrimaryKeyCalled = false;
+}
 
+void KexiAlterTableDialog::slotUpdateRowActions(int row)
+{
+	KexiDataTable::slotUpdateRowActions(row);
+	updateActions();
+}
+
+void KexiAlterTableDialog::slotTogglePrimaryKey()
+{
+	if (d->slotTogglePrimaryKeyCalled)
+		return;
+	d->slotTogglePrimaryKeyCalled = true;
+	if (!propertyBuffer())
+		return;
+	KexiPropertyBuffer &buf = *propertyBuffer();
+	bool set = !buf["primaryKey"].value().toBool();
+	buf["primaryKey"] = QVariant(set, 1);
+	d->action_toggle_pkey->setChecked(set);
+
+	if (m_view->selectedItem()) {
+		//show key in the table
+		m_view->data()->clearRowEditBuffer();
+		m_view->data()->updateRowEditBuffer(m_view->selectedItem(), 0, QVariant(set ? "key" : ""));
+		m_view->data()->saveRowChanges(*m_view->selectedItem(), true);
+	}
+
+	if (set) {
+		//primary key is set, remove old pkey if exists
+		KexiPropertyBuffer *b = 0;
+		int i;
+		const count = (int)d->buffers->size();
+		for (i=0; i<count; i++) {
+			b = d->buffers->at(i);
+			if (b && b!=&buf && (*b)["primaryKey"].value().toBool())
+				break;
+		}
+		if (i<count) {//remove
+			(*b)["primaryKey"] = QVariant(false, 0);
+			//remove key from table
+			m_view->data()->clearRowEditBuffer();
+			KexiTableItem *item = m_view->itemAt(i);
+			if (item) {
+				m_view->data()->updateRowEditBuffer(item, 0, QVariant());
+				m_view->data()->saveRowChanges(*item, true);
+			}
+		}
+	}
+	updateActions();
+	d->slotTogglePrimaryKeyCalled = false;
 }
 
 /*void KexiAlterTableDialog::slotCellSelected(int, int row)
@@ -346,7 +399,7 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled, bool &dontS
 				+"\n"+messageForSavingChanges(emptyTable)));
 			dontStore = cancelled;
 			if (!dontStore)
-				m_dontAskOnStoreData = true;
+				d->dontAskOnStoreData = true;
 //			if (dontStore)
 //				setDirty(false);
 		}
@@ -371,33 +424,24 @@ KexiAlterTableDialog::afterSwitchFrom(int mode, bool &cancelled)
 
 KexiPropertyBuffer *KexiAlterTableDialog::propertyBuffer()
 {
-	return m_buffers->currentPropertyBuffer();
-//	return (m_view->currentRow() >= 0) ? 
-//		m_buffers.at( m_view->currentRow() ) : 0;
+	return d->buffers ? d->buffers->currentPropertyBuffer() : 0;
 }
 
 /*
 void KexiAlterTableDialog::removeCurrentPropertyBuffer()
 {
 	const int r = m_view->currentRow();
-	KexiPropertyBuffer *buf = m_buffers.at(r);
+	KexiPropertyBuffer *buf = d->buffers.at(r);
 	if (!buf)
 		return;
 	buf->debug();
 //	m_currentBufferCleared = true;
-	m_buffers.remove(r);
+	d->buffers.remove(r);
 	propertyBufferSwitched();
 //	delete buf;
 //	m_currentBufferCleared = false;
 }
 */
-
-/*
-void KexiAlterTableDialog::slotUpdateRowActions(int row)
-{
-	setAvailable("edit_delete_row", !m_view->isReadOnly() && !(m_view->isInsertingEnabled() && row==m_view->rows()) );
-	setAvailable("data_save_row", m_view->rowEditing());
-}*/
 
 static KexiDB::Field::Type firstTypeForSelectedGroup( int typegroup )
 {
@@ -488,7 +532,7 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 
 	if (!buffer_allowed && propertyBuffer()) {
 		//there is a buffer, but it's not allowed - remove it:
-		m_buffers->removeCurrentPropertyBuffer();
+		d->buffers->removeCurrentPropertyBuffer();
 
 		//clear 'type' column:
 		m_view->data()->clearRowEditBuffer();
@@ -532,6 +576,11 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 	}
 }
 
+void KexiAlterTableDialog::updateActions()
+{
+	updateActions(false);
+}
+
 void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer &buf, KexiProperty &property)
 {
 	if (property.name()=="primaryKey") {
@@ -539,7 +588,7 @@ void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer &buf, KexiProp
 			//primary key implies some rules
 			buf["unique"] = QVariant(true,1);
 			buf["notNull"] = QVariant(true,1);
-			buf["notEmpty"] = QVariant(true,1);
+			buf["allowEmpty"] = QVariant(false,1);
 			buf["indexed"] = QVariant(true,1);
 		}
 	}
@@ -548,7 +597,7 @@ void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer &buf, KexiProp
 		if (property.name()=="indexed" || property.name()=="unique" || property.name()=="notNull")
 			buf["primaryKey"] = QVariant(false,1);
 		if (property.name()=="notNull")
-			buf["notEmpty"] = QVariant(false,1);
+			buf["allowEmpty"] = QVariant(true,1);
 	}
 }
 
@@ -572,8 +621,8 @@ bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel
 	int i;
 	QDict<char> names(101, false);
 	char dummy;
-	for (i=0;i<(int)m_buffers->size();i++) {
-		b = m_buffers->at(i);
+	for (i=0;i<(int)d->buffers->size();i++) {
+		b = d->buffers->at(i);
 		if (b) {
 			no_fields = false;
 			const QString name = (*b)["name"].value().toString();
@@ -596,7 +645,7 @@ bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel
 		cancel = true;
 		ok = false;
 	}
-	if (ok && b && i<(int)m_buffers->size()) {//found a duplicate
+	if (ok && b && i<(int)d->buffers->size()) {//found a duplicate
 		m_view->setCursor(i, 0);
 		m_view->startEditCurrentCell();
 		KMessageBox::information(this, i18n("You have added \"%1\" field name twice.\nField names cannot be repeated. Correct name of the field.")
@@ -606,8 +655,8 @@ bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel
 	}
 	if (ok) {
 		//for every field, create KexiDB::Field definition
-		for (i=0;i<(int)m_buffers->size();i++) {
-			KexiPropertyBuffer *b = m_buffers->at(i);
+		for (i=0;i<(int)d->buffers->size();i++) {
+			KexiPropertyBuffer *b = d->buffers->at(i);
 			if (!b)
 				continue;
 			KexiPropertyBuffer &buf = *b;
@@ -619,7 +668,7 @@ bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel
 				constraints |= KexiDB::Field::Unique;
 			if (buf["notnull"].value().toBool())
 				constraints |= KexiDB::Field::NotNull;
-			if (buf["notEmpty"].value().toBool())
+			if (!buf["allowEmpty"].value().toBool())
 				constraints |= KexiDB::Field::NotEmpty;
 
 			if (buf["unsigned"].value().toBool())
@@ -690,13 +739,13 @@ bool KexiAlterTableDialog::storeData(bool &cancel)
 	if (!tempData()->table || !m_dialog->schemaData())
 		return 0;
 
-	if (!m_dontAskOnStoreData) {
+	if (!d->dontAskOnStoreData) {
 		bool emptyTable;
 		const QString msg = messageForSavingChanges(emptyTable);
 		if (!emptyTable)
 			cancel = (KMessageBox::No == KMessageBox::questionYesNo(this, msg));
 	}
-	m_dontAskOnStoreData = false; //one-time use
+	d->dontAskOnStoreData = false; //one-time use
 	if (cancel)
 		return false;
 //		KMessageBox::information(this, i18n("Saving changes for existing table design is not yet supported."));

@@ -302,10 +302,37 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 
 === KexiDB Parser TODO ===
 - add clever query relatins parsing 
-      (needed for switching back to GUI editor from texdt mode)
+      (needed for switching back to GUI editor from text mode)
 - remove single-char token names with chars (more readable + more effective)
 
 === 2004 LT TODO ===
+-....
+
+2004-08-17..18
+Core
+- added KexiViewBase::setAvailable() overload. This one and sharedAction()
+  now call parent's method, when needed.
+- Shared actions: some fixes for plugging/unplugging
+KexiBrowser
+- "rename" action is now shared as "edit_edititem" action
+KexiTableView
+- "start edit" action (for F2/Enter key) is now shared 
+  as "edit_edititem" action
+- KexiKIconTableEdit introduced: Cell editor for displaying kde icon 
+  (using icon name provided as string).
+- TableViewHeader (inherits QHeader) introduced: supports tooltips 
+  when needed (for column description of if column is not wide enough)
+KexiTableView ComboBox
+- QStyle primitives are better used for drawing combo button
+- button is depressed after popup hidding
+Table Designer
+- "tablepart_toggle_pkey" shared action added for design view
+- "Not empty" field's property is now called "Allow Zero Size" 
+  (and has opposite meaning)
+- 1st column with "key" icon (for pkey) added (using KexiKIconTableEdit)
+KexiDB
+- QString Field::subType() added
+- QuerySchema::autoIncrementFields() fixed (caused crash sometimes)
 
 2004-08-06
 Table Designer

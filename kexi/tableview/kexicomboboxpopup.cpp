@@ -93,6 +93,7 @@ void KexiComboBoxPopup::init()
 	d->tv->setContextMenuEnabled( false );
 	d->tv->setScrollbarToolTipsEnabled( false );
 	d->tv->installEventFilter(this);
+	installEventFilter(this);
 	
 	connect(d->tv, SIGNAL(itemReturnPressed(KexiTableItem*,int,int)),
 		this, SLOT(slotTVItemAccepted(KexiTableItem*,int,int)));
@@ -197,11 +198,13 @@ void KexiComboBoxPopup::slotTVItemAccepted(KexiTableItem *item, int row, int)
 
 bool KexiComboBoxPopup::eventFilter( QObject *o, QEvent *e )
 {
-	if (e->type()==QEvent::MouseButtonPress) {
+	if (o==this && e->type()==QEvent::Hide) {
+		emit hidden();
+	}
+	else if (e->type()==QEvent::MouseButtonPress) {
 		kdDebug() << "QEvent::MousePress" << endl;
 	}
-
-	if (o==d->tv) {
+	else if (o==d->tv) {
 		if (e->type()==QEvent::KeyPress) {
 			QKeyEvent *ke = static_cast<QKeyEvent*>(e);
 			const int k = ke->key();

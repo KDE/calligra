@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Till Busch <till@bux.at>
-   Lucijan Busch <lucijan@gmx.at>
-   Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
    Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
@@ -61,8 +61,10 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	acceptsRowEditAfterCellAccepting = false;
 	emptyRowInsertingEnabled = false;
 	dragIndicatorLine = -1;
+	rowWillBeDeleted = -1;
 	dropsAtRowEnabled = false;
 	initDataContentsOnShow = false;
+	pVerticalHeaderAlreadyAdded = false;
 	ensureCellVisibleOnShow = QPoint(-1,-1);
 }
 

@@ -40,11 +40,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 	Q_OBJECT
 
 	public:
-//		KexiComboBoxTableEdit(KexiDB::Field &f, QScrollView *parent=0);
 		KexiComboBoxTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
-//		KexiComboBoxTableEdit(KexiDB::Field::Type t, const QStringList list,
-//			QWidget *parent=0, const char *name=0);
-
 
 		//! Note: Generally in current implementation this is integer > 0; may be null if no value is set
 		virtual QVariant value(bool &ok);
@@ -88,6 +84,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 		void slotRowAccepted(KexiTableItem *item, int row);
 		void slotItemSelected(KexiTableItem*);
 		void slotLineEditTextChanged(const QString &newtext);
+		void slotPopupHidden();
 
 	protected:
 		//! internal

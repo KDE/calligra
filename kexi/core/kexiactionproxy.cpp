@@ -109,7 +109,7 @@ void KexiActionProxy::unplugSharedAction(const char *action_name, QWidget* w)
 {
 	KAction *a = sharedAction(action_name);
 	if (!a) {
-		kdWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name << endl;
+		kdWarning() << "KexiActionProxy::unplugSharedAction(): NO SUCH ACTION: " << action_name << endl;
 		return;
 	}
 	a->unplug(w);
@@ -167,9 +167,9 @@ bool KexiActionProxy::activateSharedAction(const char *action_name, bool alsoChe
 	return true;
 }
 
-KAction* KexiActionProxy::sharedAction(const char* name)
+KAction* KexiActionProxy::sharedAction(const char* action_name)
 {
-	return m_host->mainWindow()->actionCollection()->action(name);
+	return m_host->mainWindow()->actionCollection()->action(action_name);
 }
 
 bool KexiActionProxy::isSupported(const char* action_name) const

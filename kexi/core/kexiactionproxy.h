@@ -104,11 +104,11 @@ class KEXICORE_EXPORT KexiActionProxy
 		KAction* plugSharedAction(const char *action_name, const QString& alternativeText, QWidget* w);
 
 		/*! \return action named with \a name or NULL if there is no such action. */
-		virtual KAction* sharedAction(const char* name);
+		virtual KAction* sharedAction(const char* action_name);
 
 		inline QObject *receiver() const { return m_receiver; }
 
-		void setAvailable(const char* action_name, bool set);
+		virtual void setAvailable(const char* action_name, bool set);
 
 		/*! Adds \a child of this proxy. Children will receive activateSharedAction() event,
 		 If activateSharedAction() "event" is not consumed by the main proxy,

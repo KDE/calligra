@@ -34,8 +34,7 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 	Q_OBJECT
 
 	public:
-//		KexiInputTableEdit(KexiDB::Field &f, QScrollView *parent=0, const char* name = 0);
-		KexiInputTableEdit(KexiTableViewColumn &column, QScrollView *parent=0, const char* name = 0);
+		KexiInputTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
 
 		virtual ~KexiInputTableEdit();
 

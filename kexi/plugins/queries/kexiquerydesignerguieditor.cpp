@@ -137,8 +137,8 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 		this, SLOT(slotDroppedAtRow(KexiTableItem*,int,QDropEvent*,KexiTableItem*&)));
 	connect(d->data, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant,KexiDB::ResultInfo*)),
 		this, SLOT(slotBeforeCellChanged(KexiTableItem*,int,QVariant,KexiDB::ResultInfo*)));
-	connect(d->data, SIGNAL(rowInserted(KexiTableItem*,uint)), 
-		this, SLOT(slotRowInserted(KexiTableItem*,uint)));
+	connect(d->data, SIGNAL(rowInserted(KexiTableItem*,uint,bool)), 
+		this, SLOT(slotRowInserted(KexiTableItem*,uint,bool)));
 	connect(d->relations, SIGNAL(tablePositionChanged(KexiRelationViewTableContainer*)),
 		this, SLOT(slotTablePositionChanged(KexiRelationViewTableContainer*)));
 	connect(d->relations, SIGNAL(aboutConnectionRemove(KexiRelationViewConnection*)),
@@ -697,7 +697,7 @@ KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem * /*item*/, int /*row
 	//TODO
 }
 
-void KexiQueryDesignerGuiEditor::slotRowInserted(KexiTableItem* item, uint row)
+void KexiQueryDesignerGuiEditor::slotRowInserted(KexiTableItem* item, uint row, bool /*repaint*/)
 {
 	if (d->droppedNewItem && d->droppedNewItem==item) {
 		createPropertyBuffer( row, d->droppedNewTable, d->droppedNewField, true );

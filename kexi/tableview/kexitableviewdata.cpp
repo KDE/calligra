@@ -451,7 +451,7 @@ bool KexiTableViewData::updateRowEditBuffer(KexiTableItem *item,
 }
 
 //js TODO: if there can be multiple views for this data, we need multiple buffers!
-bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert)
+bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 {
 	if (!m_pRowEditBuffer)
 		return true; //nothing to do
@@ -522,10 +522,12 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 			}
 		}
 	}
+	if (repaint)
+		emit rowRepaintRequested(item);
 	return true;
 }
 
-bool KexiTableViewData::saveRowChanges(KexiTableItem& item)
+bool KexiTableViewData::saveRowChanges(KexiTableItem& item, bool repaint)
 {
 	kdDebug() << "KexiTableViewData::saveRowChanges()..." << endl;
 	m_result.clear();
@@ -533,32 +535,32 @@ bool KexiTableViewData::saveRowChanges(KexiTableItem& item)
 	if (!m_result.success)
 		return false;
 
-	if (saveRow(item, false /*update*/)) {
+	if (saveRow(item, false /*update*/, repaint)) {
 		emit rowUpdated(&item);
 		return true;
 	}
 	return false;
 }
 
-bool KexiTableViewData::saveNewRow(KexiTableItem& item)
+bool KexiTableViewData::saveNewRow(KexiTableItem& item, bool repaint)
 {
 	kdDebug() << "KexiTableViewData::saveNewRow()..." << endl;
 	m_result.clear();
-	emit aboutToInsertRow(&item, &m_result);
+	emit aboutToInsertRow(&item, &m_result, repaint);
 	if (!m_result.success)
 		return false;
 	
-	if (saveRow(item, true /*insert*/)) {
-		emit rowInserted(&item);
+	if (saveRow(item, true /*insert*/, repaint)) {
+		emit rowInserted(&item, repaint);
 		return true;
 	}
 	return false;
 }
 
-bool KexiTableViewData::deleteRow(KexiTableItem& item)
+bool KexiTableViewData::deleteRow(KexiTableItem& item, bool repaint)
 {
 	m_result.clear();
-	emit aboutToDeleteRow(item, &m_result);
+	emit aboutToDeleteRow(item, &m_result, repaint);
 	if (!m_result.success)
 		return false;
 
@@ -583,7 +585,7 @@ bool KexiTableViewData::deleteRow(KexiTableItem& item)
 	return true;
 }
 
-void KexiTableViewData::deleteRows( const QValueList<int> &rowsToDelete )
+void KexiTableViewData::deleteRows( const QValueList<int> &rowsToDelete, bool repaint )
 {
 	int last_r=0;
 	first();
@@ -594,14 +596,15 @@ void KexiTableViewData::deleteRows( const QValueList<int> &rowsToDelete )
 		remove();
 		last_r++;
 	}
+	emit refreshRequested(); //! \todo more effective?
 	emit rowsDeleted( rowsToDelete );
 }
 
-void KexiTableViewData::insertRow(KexiTableItem& item, uint index)
+void KexiTableViewData::insertRow(KexiTableItem& item, uint index, bool repaint)
 {
 	if (!insert( index = QMIN(index, count()), &item ))
 		return;
-	emit rowInserted(&item, index);
+	emit rowInserted(&item, index, repaint);
 }
 
 void KexiTableViewData::clear()

@@ -108,6 +108,9 @@ KexiDataTable::initActions()
 	plugSharedAction("edit_delete",m_view, SLOT(deleteAndStartEditCurrentCell()));
 	m_view->plugSharedAction(sharedAction("edit_delete")); //for proper shortcut
 
+	plugSharedAction("edit_edititem",m_view, SLOT(startEditOrToggleValue()));
+	m_view->plugSharedAction(sharedAction("edit_edititem")); //for proper shortcut
+
 	plugSharedAction("data_save_row",m_view, SLOT(acceptRowEdit()));
 	m_view->plugSharedAction(sharedAction("data_save_row")); //for proper shortcut
 }

@@ -57,8 +57,8 @@ class MyLineEdit : public KLineEdit
 //======================================================
 
 //KexiInputTableEdit::KexiInputTableEdit(KexiDB::Field &f, QScrollView *parent, const char* name)
-KexiInputTableEdit::KexiInputTableEdit(KexiTableViewColumn &column, QScrollView *parent, const char* name)
- : KexiTableEdit(column, parent, name ? name : "KexiInputTableEdit")
+KexiInputTableEdit::KexiInputTableEdit(KexiTableViewColumn &column, QScrollView *parent)
+ : KexiTableEdit(column, parent, "KexiInputTableEdit")
 {
 //	m_type = f.type(); //copied because the rest of code uses m_type
 //	m_field = &f;

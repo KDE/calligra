@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Till Busch <till@bux.at>
-   Lucijan Busch <lucijan@gmx.at>
-   Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
    Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
@@ -47,6 +47,7 @@ class KexiTableItem;
 class KexiTableRM;
 class KexiTableEdit;
 class QLabel;
+class TableViewHeader;
 
 class KexiTableViewPrivate 
 {
@@ -59,19 +60,18 @@ class KexiTableViewPrivate
 	bool editOnDoubleClick : 1;
 //	bool recordIndicator : 1;
 
-	// cursor position
-	int			curRow;
-	int			curCol;
+	//! cursor position
+	int curRow;
+	int curCol;
 	KexiTableItem	*pCurrentItem;
 
 	//! when (current or new) row is edited - changed field values are temporary stored here
 	KexiDB::RowEditBuffer *pRowEditBuffer; 
 
 	// foreign widgets
-	QHeader			*pTopHeader;
-	KexiTableRM	*pVerticalHeader;
-//	KexiTableRM		*pRecordMarker;
-	KexiTableEdit	*pEditor;
+	TableViewHeader *pTopHeader;
+	KexiTableRM *pVerticalHeader;
+	KexiTableEdit *pEditor;
 
 	//! editors: one for each column (indexed by KexiTableViewColumn)
 	QPtrDict<KexiTableEdit> editors;
@@ -85,9 +85,9 @@ class KexiTableViewPrivate
 //	KexiTableView::InsertionPolicy insertionPolicy;
 	KexiTableView::DeletionPolicy deletionPolicy;
 
-	QPixmap			*pBufferPm;
-	QTimer			*pUpdateTimer;
-	KPopupMenu		*pContextMenu;
+	QPixmap *pBufferPm;
+	QTimer *pUpdateTimer;
+	KPopupMenu *pContextMenu;
 	int menu_id_addRecord;
 	int menu_id_removeRecord;
 
@@ -96,11 +96,11 @@ class KexiTableViewPrivate
 //	QPtrList<QVariant> pColumnDefaults;
 
 #if 0//(js) doesn't work!
-	QTimer			*scrollTimer;
+	QTimer *scrollTimer;
 #endif
-	KexiTableItem	*pInsertItem;
+	KexiTableItem *pInsertItem;
 	
-//	QStringList		dropFilters;
+//	QStringList	dropFilters;
 
 	KexiTableView::ScrollDirection scrollDirection;
 
@@ -170,6 +170,11 @@ class KexiTableViewPrivate
 	/*! true, if initDataContents() should be called on show event. */
 	bool initDataContentsOnShow : 1;
 
+	/*! true, if certical header shouldn't be increased in
+	 KexiTableView::slotRowInserted() because it was already done 
+	 in KexiTableView::createEditor(). */
+	bool pVerticalHeaderAlreadyAdded : 1;
+
 	/*! 1 if table view is readOnly, 0 if not; 
 	 otherwise (-1 means "dont know") the 'readOnly' flag from table views' 
 	 internal data structure (KexiTableViewData *KexiTableView::m_data) is reused. 
@@ -205,6 +210,13 @@ class KexiTableViewPrivate
 	 Equal -1 if no indication is needed.
 	*/
 	int dragIndicatorLine;
+
+	/*! Row number (>=0 or -1 == no row) that will be deleted in KexiTableViewData::deleteRow().
+	 It is set in slotAboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)) slot
+	 received from KexiTableViewData member. 
+	 This value will be used in slotRowDeleted() after rowDeleted() signal 
+	 is received from KexiTableViewData member and the cleared (set to -1). */
+	int rowWillBeDeleted;
 
 	//! Used by delayed mode of maximizeColumnsWidth() 
 	QValueList<int> maximizeColumnsWidthOnShow;

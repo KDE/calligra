@@ -35,13 +35,17 @@ class KexiCellEditorFactory
 		KexiCellEditorFactory();
 		virtual ~KexiCellEditorFactory();
 
-		/*! Registers factory item for \a type. Passing KExiDB::Field::Invalid as type
-		 will set default item, i.e. the one that will be used when no other item is 
-		 defined for given data type. */
-		static void registerItem( uint type, KexiCellEditorFactoryItem& item );
+		/*! Registers factory item for \a type and (optional) \a subType. 
+		 \a subType is usually obtained (e.g. in KexiTableView) from KexiDB::Field::subType().
+		 Passing KexiDB::Field::Invalid as type will set default item, 
+		 i.e. the one that will be used when no other item is defined for given data type. */
+		static void registerItem( KexiCellEditorFactoryItem& item, uint type, 
+			const QString& subType = QString::null );
 
-		//! \return item for \a type. It no item found, the default is tried. Eventually, may return NULL.
-		static KexiCellEditorFactoryItem* item( uint type );
+		/*! \return item for \a type and (optional) \a subType. 
+		 If no item found, the one with empty subtype is tried.
+		 If still no item found, the default is tried. Eventually, may return NULL. */
+		static KexiCellEditorFactoryItem* item( uint type, const QString& subType = QString::null );
 
 //		static KexiTableEdit* createEditor(KexiDB::Field &f, QScrollView* parent = 0);
 		static KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0);

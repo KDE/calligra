@@ -57,7 +57,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		KexiTableViewColumn(KexiDB::Field& f, bool owner = false);
 
 		/*! Convenience ctor, like above. The field is created using specifed parameters that are 
-		 equal to these accepted nby KexiDB::Field ctor. The column will be the owner 
+		 equal to these accepted by KexiDB::Field ctor. The column will be the owner 
 		 of this automatically generated field.
 		 */
 		KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype,
@@ -83,7 +83,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 
 //TODO: syncroize this with table view:
 		//! forces readOnly flag to be set to \a ro
-		void setReadOnly(bool ro) { m_visible=ro; }
+		void setReadOnly(bool ro) { m_readOnly=ro; }
 
 		//! Column visibility. By default column is visible.
 		bool visible() const { return m_visible; }
@@ -266,20 +266,20 @@ public:
 	/*! \return last operation's result information (always not null). */
 	inline KexiDB::ResultInfo* result() { return &m_result; }
 
-	bool saveRowChanges(KexiTableItem& item);
+	bool saveRowChanges(KexiTableItem& item, bool repaint = false);
 
-	bool saveNewRow(KexiTableItem& item);
+	bool saveNewRow(KexiTableItem& item, bool repaint = false);
 
-	bool deleteRow(KexiTableItem& item);
+	bool deleteRow(KexiTableItem& item, bool repaint = false);
 
 	/*! Deletes rows (by number) passed with \a rowsToDelete. 
 	 Currently, this method is only for non data-aware tables */
-	void deleteRows( const QValueList<int> &rowsToDelete );
+	void deleteRows( const QValueList<int> &rowsToDelete, bool repaint = false );
 
 	/*! Inserts new \a item at index \a index. 
 	 \a item will be owned by this data object.
 	 Note: Reasonable only for not not-db-aware version. */
-	void insertRow(KexiTableItem& item, uint index);
+	void insertRow(KexiTableItem& item, uint index, bool repaint = false);
 
 /*TODO: add this as well? 
 	void insertRow(KexiTableItem& item, KexiTableItem& aboveItem); */
@@ -300,7 +300,7 @@ signals:
 	/*! Emited before inserting of a new, current row.
 	 Connect this signal to your slot and set \a result->success to false 
 	 to disallow this inserting. */
-	void aboutToInsertRow(KexiTableItem *, KexiDB::ResultInfo* result);
+	void aboutToInsertRow(KexiTableItem *, KexiDB::ResultInfo* result, bool repaint);
 
 	/*! Emited before changing of an edited, current row.
 	 Connect this signal to your slot and set \a result->success to false 
@@ -310,15 +310,15 @@ signals:
 
 	void rowUpdated(KexiTableItem*); //!< Current row has been updated
 
-	void rowInserted(KexiTableItem*); //!< A row has been inserted
+	void rowInserted(KexiTableItem*, bool repaint); //!< A row has been inserted
 
 	//! A row has been inserted at \a index position (not db-aware data only)
-	void rowInserted(KexiTableItem*, uint index);
+	void rowInserted(KexiTableItem*, uint index, bool repaint);
 
 	/*! Emited before deleting of a current row.
 	 Connect this signal to your slot and set \a result->success to false 
 	 to disallow this deleting. */
-	void aboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result);
+	void aboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint);
 
 	//! Current row has been deleted
 	void rowDeleted(); 
@@ -329,6 +329,8 @@ signals:
 	//! Displayed data needs to be refreshed in all presenters.
 	void refreshRequested();
 
+	void rowRepaintRequested(KexiTableItem&);
+
 protected:
 	void init();
 
@@ -337,7 +339,7 @@ protected:
 	int cmpInt(Item item1, Item item2);
 
 	//! internal: for saveRowChanges() and saveNewRow()
-	bool saveRow(KexiTableItem& item, bool insert);
+	bool saveRow(KexiTableItem& item, bool insert, bool repaint);
 
 	int			m_key;
 	short		m_order;

@@ -260,6 +260,17 @@ class KEXI_DB_EXPORT Field
 
 		inline QString typeGroupString() const { return Field::typeGroupString(m_type); }
 
+		/*! \return (optional) subtype for this field. 
+		 Subtype is a string providing additional hint for field's type. 
+		 E.g. for BLOB type, it can be a MIME type or certain QVariant type name, 
+		 for example: "QPixmap", "QColor" or "QFont"
+		 */
+		inline QString subType() const { return m_subType; }
+
+		/*! Sets (optional) subtype for this field. 
+		 \sa subType() */
+		inline void setSubType(const QString& subType) { m_subType = subType; }
+
 		inline QVariant defaultValue() const { return m_defaultValue; }
 		
 		/*! \return length of text is the field type is text. */
@@ -427,6 +438,7 @@ class KEXI_DB_EXPORT Field
 		                     //!< object that field is assigned.
 		QString m_name;
 		Type m_type;
+		QString m_subType;
 		uint m_constraints;
 		uint m_length;
 		uint m_precision;

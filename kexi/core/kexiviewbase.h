@@ -89,7 +89,15 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		/*! \return the view mode for this view. */
 		int viewMode() const { return m_viewMode; }
 
-		virtual KAction* sharedAction( const char *name ) const;
+		/*! Reimpelmented from KexiActionProxy.
+		 \return shared action with name \a action_name for this view.
+		 If there's no such action declared in Kexi Part (part()), 
+		 global shared action is returned (if exists). */
+		virtual KAction* sharedAction( const char *action_name );
+
+		/*! Enables or disables shared action declared in Kexi Part (part()). 
+		 If there's no such action, global shared action is enabled or disabled (if exists). */
+		virtual void setAvailable(const char* action_name, bool set);
 
 	public slots:
 		virtual void setFocus();

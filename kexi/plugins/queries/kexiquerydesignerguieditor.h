@@ -112,7 +112,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		void slotBeforeCellChanged(KexiTableItem *item, int colnum, 
 			QVariant newValue, KexiDB::ResultInfo* result);
 
-		void slotRowInserted(KexiTableItem* item, uint row);
+		void slotRowInserted(KexiTableItem* item, uint row, bool repaint);
 		void slotTablePositionChanged(KexiRelationViewTableContainer*);
 		void slotAboutConnectionRemove(KexiRelationViewConnection*);
 		void slotTableFieldDoubleClicked( KexiDB::TableSchema* table, const QString& fieldName );

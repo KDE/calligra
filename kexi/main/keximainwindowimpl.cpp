@@ -139,7 +139,8 @@ class KexiMainWindowImpl::Private
 		KAction *action_edit_delete, *action_edit_delete_row,
 			*action_edit_cut, *action_edit_copy, *action_edit_paste,
 			*action_edit_undo, *action_edit_redo,
-			*action_edit_insert_empty_row;
+			*action_edit_insert_empty_row,
+			*action_edit_edititem;
 
 		// view menu
 		KAction *action_view_nav, *action_view_propeditor;
@@ -442,6 +443,10 @@ KexiMainWindowImpl::initActions()
 		SHIFT+Key_Delete, "edit_delete_row");
 	d->action_edit_delete_row->setToolTip(i18n("Delete currently selected row from a table."));
 	d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected row from a table."));
+
+	d->action_edit_edititem = createSharedAction(i18n("Edit Item"), 0, Key_F2, "edit_edititem");
+	d->action_edit_edititem->setToolTip(i18n("Edit currently selected item."));
+	d->action_edit_edititem->setWhatsThis(i18n("Edits currently selected item."));
 
 	//VIEW MENU
 	d->action_view_data_mode = new KRadioAction(i18n("&Data View"), "table", KShortcut(),

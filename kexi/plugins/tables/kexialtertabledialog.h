@@ -26,6 +26,7 @@
 
 class KexiTableViewPropertyBuffer;
 class KexiTableItem;
+class KexiAlterTableDialogPrivate;
 
 class KexiAlterTableDialog : public KexiDataTable
 {
@@ -49,9 +50,7 @@ class KexiAlterTableDialog : public KexiDataTable
 
 
 	protected:
-		//! called just once from ctor
-		void init();
-		void initActions();
+		virtual void updateActions(bool activated);
 
 		//! called whenever data should be reloaded (on switching to this view mode)
 		void initData();
@@ -82,8 +81,12 @@ class KexiAlterTableDialog : public KexiDataTable
 		QString messageForSavingChanges(bool &emptyTable);
 
 	protected slots:
+		/*! Equivalent to updateActions(false). Called on row insert/delete 
+		 in a KexiTableViewPropertyBuffer. */
+		void updateActions();
+
 //		void slotCellSelected(int col, int row);
-//		void slotUpdateRowActions(int row);
+		virtual void slotUpdateRowActions(int row);
 
 		//! Called before cell change in tableview.
 		void slotBeforeCellChanged(KexiTableItem *item, int colnum, 
@@ -99,36 +102,18 @@ class KexiAlterTableDialog : public KexiDataTable
 		 to perform some actions (like updating other dependent properties) */
 		void slotPropertyChanged(KexiPropertyBuffer &buf, KexiProperty &property);
 
+		/*! Toggles primary key for currently selected field. 
+		 Does nothing for empty row. */
+		void slotTogglePrimaryKey();
+
 /*		//! Called before row updating in tableview.
 		void slotAboutToUpdateRow(KexiTableItem* item, 
 			KexiDB::RowEditBuffer* buffer, KexiDB::ResultInfo* result);
 */
-		//! Called on row delete in a tableview.
-//		void slotRowDeleted();
 //		void slotEmptyRowInserted(KexiTableItem*, uint index);
 
 	private:
-
-//		KexiTableView *m_view;
-//		KexiDB::TableSchema *m_table; //!< original table schema
-
-		KexiTableViewData *m_data;
-//		KexiDB::TableSchema *m_newTable; //!< new table schema
-//		KexiPropertyEditor *m_properties;
-
-		KexiTableViewPropertyBuffer *m_buffers;
-
-//		KexiPropertyBuffer::Vector m_buffers; //!< prop. buffers vector
-
-//		QPtrDict<KexiDB::Field> m_newFields; //!< newly created fields 
-//		                                     //!< assigned for property buffers
-		int m_row; //!< used to know if a new row is selected in slotCellSelected()
-//		bool m_currentBufferCleared : 1;
-
-		//! internal
-		int m_maxTypeNameTextWidth;
-		//! Set to true in beforeSwitchTo() to avoid asking again in storeData()
-		bool m_dontAskOnStoreData : 1; 
+		KexiAlterTableDialogPrivate *d;
 };
 
 #endif

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Till Busch <till@bux.at>
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
    Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
@@ -25,7 +26,6 @@
 
 #include <qpainter.h>
 #include <qkeycode.h>
-#include <qheader.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
 #include <qwmatrix.h>
@@ -68,6 +68,89 @@
 
 #include "kexitableview_p.h"
 
+
+TableViewHeader::TableViewHeader(QWidget * parent, const char * name) 
+	: QHeader(parent, name)
+	, m_lastToolTipSection(-1)
+{
+	installEventFilter(this);
+	connect(this, SIGNAL(sizeChange(int,int,int)), 
+		this, SLOT(slotSizeChange(int,int,int)));
+}
+
+int TableViewHeader::addLabel ( const QString & s, int size )
+{
+	m_toolTips += "";
+	slotSizeChange(0,0,0);//refresh
+	return QHeader::addLabel(s, size);
+}
+
+int TableViewHeader::addLabel ( const QIconSet & iconset, const QString & s, int size )
+{
+	m_toolTips += "";
+	slotSizeChange(0,0,0);//refresh
+	return QHeader::addLabel(iconset, s, size);
+}
+
+void TableViewHeader::removeLabel( int section )
+{
+	if (section < 0 || section >= count())
+		return;
+	QStringList::Iterator it = m_toolTips.begin();
+	it += section;
+	m_toolTips.remove(it);
+	slotSizeChange(0,0,0);//refresh
+	QHeader::removeLabel(section);
+}
+
+void TableViewHeader::setToolTip( int section, const QString & toolTip )
+{
+	if (section < 0 || section >= (int)m_toolTips.count())
+		return;
+	m_toolTips[ section ] = toolTip;
+}
+
+bool TableViewHeader::eventFilter(QObject * watched, QEvent * e)
+{
+	if (e->type()==QEvent::MouseMove) {
+		const int section = sectionAt( static_cast<QMouseEvent*>(e)->x() );
+		if (section != m_lastToolTipSection && section >= 0 && section < (int)m_toolTips.count()) {
+			QToolTip::remove(this, m_toolTipRect);
+			QString tip = m_toolTips[ section ];
+			if (tip.isEmpty()) { //try label
+				QFontMetrics fm(font());
+				int minWidth = fm.width( label( section ) ) + style().pixelMetric( QStyle::PM_HeaderMargin );
+				QIconSet *iset = iconSet( section );
+				if (iset)
+					minWidth += (2+iset->pixmap( QIconSet::Small, QIconSet::Normal ).width()); //taken from QHeader::sectionSizeHint()
+				if (minWidth > sectionSize( section ))
+					tip = label( section );
+			}
+			if (tip.isEmpty()) {
+				m_lastToolTipSection = -1;
+			}
+			else {
+				QToolTip::add(this, m_toolTipRect = sectionRect(section), tip);
+				m_lastToolTipSection = section;
+			}
+		}
+	}
+//			if (e->type()==QEvent::MouseButtonPress) {
+//	todo
+//			}
+	return QHeader::eventFilter(watched, e);
+}
+
+void TableViewHeader::slotSizeChange(int /*section*/, int /*oldSize*/, int /*newSize*/ )
+{
+	if (m_lastToolTipSection>0)
+		QToolTip::remove(this, m_toolTipRect);
+	m_lastToolTipSection = -1; //tooltip's rect is now invalid
+}
+
+
+//-----------------------------------------
+
 //sanity check
 #define CHECK_DATA(r) \
 	if (!m_data) { kdWarning() << "KexiTableView: No data assigned!" << endl; return r; }
@@ -83,20 +166,23 @@ void KexiTableView::initCellEditorFactories()
 		return;
 	KexiCellEditorFactoryItem* item;
 	item = new KexiBlobEditorFactoryItem();
-	KexiCellEditorFactory::registerItem( KexiDB::Field::BLOB, *item );
+	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::BLOB );
 
 	item = new KexiDateEditorFactoryItem();
-	KexiCellEditorFactory::registerItem( KexiDB::Field::Date, *item );
+	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::Date );
 
 	item = new KexiComboBoxEditorFactoryItem();
-	KexiCellEditorFactory::registerItem( KexiDB::Field::Enum, *item );
+	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::Enum );
 
 	item = new KexiBoolEditorFactoryItem();
-	KexiCellEditorFactory::registerItem( KexiDB::Field::Boolean, *item );
+	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::Boolean );
+
+	item = new KexiKIconTableEditorFactoryItem();
+	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::Text, "KIcon" );
 
 	//default type
 	item = new KexiInputEditorFactoryItem();
-	KexiCellEditorFactory::registerItem( KexiDB::Field::InvalidType, *item );
+	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::InvalidType );
 
 	KexiTableView_cellEditorFactoriesInitialized = true;
 }
@@ -173,7 +259,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 //	setMargins(14, fontMetrics().height() + 4, 0, 0);
 
 	// Create headers
-	d->pTopHeader = new QHeader(this, "topHeader");
+	d->pTopHeader = new TableViewHeader(this, "topHeader");
 	d->pTopHeader->setOrientation(Horizontal);
 	d->pTopHeader->setTracking(false);
 	d->pTopHeader->setMovingEnabled(false);
@@ -400,8 +486,9 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 			d->pTopHeader->removeLabel(0);
 
 		{
+			int i=0;
 			for (KexiTableViewColumn::ListIterator it(m_data->columns);
-				it.current(); ++it) 
+				it.current(); ++it, i++) 
 			{
 				KexiDB::Field *f = it.current()->field();
 				if (!it.current()->fieldinfo || it.current()->fieldinfo->visible) {
@@ -409,8 +496,9 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 					if (wid==0)
 						wid=KEXITV_DEFAULT_COLUMN_WIDTH;//default col width in pixels
 //js: TODO - add col width configuration and storage
-kdDebug() << ">>" << f <<endl;
 					d->pTopHeader->addLabel(f->captionOrName(), wid);
+					if (!f->description().isEmpty())
+						d->pTopHeader->setToolTip( i, f->description() );
 				}
 			}
 		}
@@ -426,6 +514,15 @@ kdDebug() << ">>" << f <<endl;
 		connect(m_data, SIGNAL(destroying()), this, SLOT(slotDataDestroying()));
 		connect(m_data, SIGNAL(rowsDeleted( const QValueList<int> & )), 
 			this, SLOT(slotRowsDeleted( const QValueList<int> & )));
+		connect(m_data, SIGNAL(aboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)),
+			this, SLOT(slotAboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)));
+		connect(m_data, SIGNAL(rowDeleted()), this, SLOT(slotRowDeleted()));
+		connect(m_data, SIGNAL(rowInserted(KexiTableItem*,bool)), 
+			this, SLOT(slotRowInserted(KexiTableItem*,bool)));
+		connect(m_data, SIGNAL(rowInserted(KexiTableItem*,uint,bool)), 
+			this, SLOT(slotRowInserted(KexiTableItem*,uint,bool))); //not db-aware
+		connect(m_data, SIGNAL(rowRepaintRequested(KexiTableItem&)), 
+			this, SLOT(slotRowRepaintRequested(KexiTableItem&)));
 	}
 
 	if (!data) {
@@ -540,7 +637,8 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 		return false;
 
 	QString msg, desc;
-	if (!m_data->deleteRow(*d->pCurrentItem)) {
+	bool current = (item == d->pCurrentItem);
+	if (!m_data->deleteRow(*item, true /*repaint*/)) {
 		//error
 		if (m_data->result()->desc.isEmpty())
 			KMessageBox::sorry(this, m_data->result()->msg);
@@ -549,9 +647,16 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 		return false;
 	}
 	else {
-		d->pCurrentItem = m_data->current();
+		if (current)
+			d->pCurrentItem = m_data->current();
 	}
 
+//	repaintAfterDelete();
+	return true;
+}
+/*
+void KexiTableView::repaintAfterDelete()
+{
 	int row = d->curRow;
 	if (!isInsertingEnabled() && row>=rows())
 		row--; //move up
@@ -559,7 +664,7 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 	QSize s(tableSize());
 	resizeContents(s.width(),s.height());
 
-	setCursor(row, d->curCol, true/*forceSet*/);
+	setCursor(row, d->curCol, true);
 
 	d->pVerticalHeader->removeLabel();
 //		if(moveCursor)
@@ -575,9 +680,7 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 
 	//update navigator's data
 	setNavRowCount(rows());
-
-	return true;
-}
+}*/
 
 void KexiTableView::deleteCurrentRow()
 {
@@ -609,6 +712,74 @@ void KexiTableView::deleteCurrentRow()
 	}
 }
 
+void KexiTableView::slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* /*result*/, bool repaint)
+{
+	if (repaint) {
+		d->rowWillBeDeleted = m_data->findRef(&item);
+	}
+}
+
+void KexiTableView::slotRowDeleted()
+{
+	if (d->rowWillBeDeleted >= 0) {
+//		if (!isInsertingEnabled() && d->rowWillBeDeleted>=rows())
+		if (d->rowWillBeDeleted >= rows())//+(isInsertingEnabled()?1:0) ))
+			d->rowWillBeDeleted--; //move up
+		QSize s(tableSize());
+		resizeContents(s.width(),s.height());
+
+		setCursor(d->rowWillBeDeleted, d->curCol, true/*forceSet*/);
+
+		d->pVerticalHeader->removeLabel();
+		//get last visible row
+		int r = rowAt(clipper()->height());
+		if (r==-1) {
+			r = rows()+1+(isInsertingEnabled()?1:0);
+		}
+		//update all visible rows below 
+		updateContents( contentsX(), rowPos(d->curRow), clipper()->width(), d->rowHeight*(r - d->curRow));
+
+		//update navigator's data
+		setNavRowCount(rows());
+
+		d->rowWillBeDeleted = -1;
+	}
+}
+
+void KexiTableView::slotRowInserted(KexiTableItem *item, bool repaint)
+{
+	int row = m_data->findRef(item);
+	slotRowInserted( item, row, repaint );
+}
+
+void KexiTableView::slotRowInserted(KexiTableItem *item, uint row, bool repaint)
+{
+	if (repaint && row >= 0 && (int)row<rows()) {
+		QSize s(tableSize());
+		resizeContents(s.width(),s.height());
+
+		//redraw only this row and below:
+		int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
+	//	updateContents( columnPos( leftcol ), rowPos(d->curRow), 
+	//		clipper()->width(), clipper()->height() - (rowPos(d->curRow) - contentsY()) );
+		updateContents( columnPos( leftcol ), rowPos(row), 
+			clipper()->width(), clipper()->height() - (rowPos(row) - contentsY()) );
+
+		if (!d->pVerticalHeaderAlreadyAdded)
+			d->pVerticalHeader->addLabel();
+		else //it was added because this inserting was interactive
+			d->pVerticalHeaderAlreadyAdded = false;
+
+		//update navigator's data
+		setNavRowCount(rows());
+
+		if (d->curRow >= (int)row) {
+			//update
+			editorShowFocus( d->curRow, d->curCol );
+		}
+	}
+}
+
 KexiTableItem *KexiTableView::insertEmptyRow(int row)
 {
 	if ( !acceptRowEdit() || !isEmptyRowInsertingEnabled() 
@@ -631,8 +802,9 @@ void KexiTableView::insertItem(KexiTableItem *newItem, int row)
 	else if (d->curRow >= row) {
 		d->curRow++;
 	}
-	m_data->insertRow(*newItem, row);
+	m_data->insertRow(*newItem, row, true /*repaint*/);
 
+/*
 	QSize s(tableSize());
 	resizeContents(s.width(),s.height());
 
@@ -652,6 +824,7 @@ void KexiTableView::insertItem(KexiTableItem *newItem, int row)
 		//update
 		editorShowFocus( d->curRow, d->curCol );
 	}
+	*/
 }
 
 void KexiTableView::clearData(bool repaint)
@@ -1639,6 +1812,8 @@ bool KexiTableView::shortCutPressed( QKeyEvent *e, const QCString &action_name )
 		return e->key() == Key_Delete && e->state()==ShiftButton;
 	if (action_name=="edit_delete")
 		return e->key() == Key_Delete && e->state()==NoButton;
+	if (action_name=="edit_edititem")
+		return e->key() == Key_F2 && e->state()==NoButton;
 	if (action_name=="data_insert_empty_row")
 		return e->key() == Key_Insert && e->state()==(ShiftButton | ControlButton);
 
@@ -1839,22 +2014,6 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			}
 		}
 		break;
-	case Key_Enter:
-	case Key_Return:
-	case Key_F2:
-		if (nobtn && !ro && columnEditable(curCol)) {
-			if (columnType(d->curCol) == KexiDB::Field::Boolean) {
-				if (e->key()==Key_Enter || e->key()==Key_Return) {
-					boolToggled();
-					return;
-				}
-			}
-			else {
-				startEditCurrentCell();
-				return;
-			}
-		}
-		break;
 	case Key_Backspace:
 		if (nobtn && !ro && columnType(curCol) != KexiDB::Field::Boolean && columnEditable(curCol))
 			createEditor(curRow, curCol, QString::null, true);
@@ -1876,7 +2035,10 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		break;
 	default:
 		//others:
-		if (nobtn && e->key()==KGlobalSettings::contextMenuKey()) { //Key_Menu:
+		if ( nobtn && (e->key()==Key_Enter || e->key()==Key_Return || shortCutPressed(e, "edit_edititem")) ) {
+			startEditOrToggleValue();
+		}
+		else if (nobtn && e->key()==KGlobalSettings::contextMenuKey()) { //Key_Menu:
 			showContextMenu();
 		}
 		else {
@@ -1916,6 +2078,19 @@ void KexiTableView::emitSelected()
 {
 	if(d->pCurrentItem)
 		emit itemSelected(d->pCurrentItem);
+}
+
+void KexiTableView::startEditOrToggleValue()
+{
+	if ( !isReadOnly() && columnEditable(d->curCol) ) {
+		if (columnType(d->curCol) == KexiDB::Field::Boolean) {
+			boolToggled();
+		}
+		else {
+			startEditCurrentCell();
+			return;
+		}
+	}
 }
 
 void KexiTableView::boolToggled()
@@ -2104,6 +2279,7 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 			d->pInsertItem = new KexiTableItem(columns());
 //			updateContents();
 			d->pVerticalHeader->addLabel();
+			d->pVerticalHeaderAlreadyAdded = true;
 			QSize s(tableSize());
 			resizeContents(s.width(), s.height());
 			updateContents(columnPos(0), rowPos(row+1), viewport()->width(), d->rowHeight);
@@ -2343,6 +2519,8 @@ void KexiTableView::updateCell(int row, int col)
 void KexiTableView::updateRow(int row)
 {
 //	kdDebug(44021) << "updateRow("<<row<<")"<<endl;
+	if (row < 0 || row >= rows())
+		return;
 	int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
 //	int rightcol = d->pTopHeader->sectionAt( clipper()->width() );
 	updateContents( QRect( columnPos( leftcol ), rowPos(row), clipper()->width(), rowHeight() ) ); //columnPos(rightcol)+columnWidth(rightcol), rowHeight() ) );
@@ -2895,6 +3073,11 @@ bool KexiTableView::acceptRowEdit()
 	}
 
 	return success;
+}
+
+void KexiTableView::slotRowRepaintRequested(KexiTableItem& item)
+{
+	updateRow( m_data->findRef(&item) );
 }
 
 void KexiTableView::cancelRowEdit()

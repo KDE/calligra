@@ -63,8 +63,18 @@ class KEXIDATATABLE_EXPORT KexiTableViewPropertyBuffer : public QObject
 		KexiPropertyBuffer* currentPropertyBuffer() const;
 		KexiPropertyBuffer* at(uint row) const { return m_buffers[row]; }
 
+	signals:
+		/*! Emmited when row is deleted. 
+		 KexiTableViewData::rowDeleted() signal is usuallly used but when you're using
+		 KexiTableViewPropertyBuffer, you never know if currentPropertyBuffer() is updated. 
+		 So use this signal instead. */
+		void rowDeleted();
+	
+		/*! Emmited when row is inserted. 
+		 Purpose of this signal is similar to rowDeleted() signal. */
+		void rowInserted();
+
 	public slots:
-		void currentRowDeleted();
 		void removeCurrentPropertyBuffer();
 		void clear(uint minimumSize = 0);
 		/*! Inserts \a buf buffer at \a row position. 
@@ -86,7 +96,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewPropertyBuffer : public QObject
 		void slotRowsDeleted( const QValueList<int> &rows );
 
 		//! Called on \a row insertion in a tableview.
-		void slotRowInserted(KexiTableItem* item, uint row);
+		void slotRowInserted(KexiTableItem* item, uint row, bool repaint);
 
 		//! Called on selecting another cell in a tableview.
 		void slotCellSelected(int, int row);

@@ -124,6 +124,18 @@ KAction* Part::createSharedPartAction(const QString &text,
 		m_guiClient->actionCollection(), subclassName);
 }
 
+KAction* Part::createSharedToggleAction(int mode, const QString &text, 
+	const QString &pix_name, const KShortcut &cut, const char *name)
+{
+	return createSharedAction(mode, text, pix_name, cut, name, "KToggleAction");
+}
+
+KAction* Part::createSharedPartToggleAction(const QString &text, 
+	const QString &pix_name, const KShortcut &cut, const char *name)
+{
+	return createSharedPartAction(text, pix_name, cut, name, "KToggleAction");
+}
+
 /*KAction* Part::sharedAction(int mode, const char* name, const char *classname)
 {
 	GUIClient *instanceGuiClient = m_instanceGuiClients[mode];

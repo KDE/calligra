@@ -20,6 +20,7 @@
 
 #include <qlayout.h>
 #include <qstyle.h>
+#include <qwindowsstyle.h>
 #include <qpainter.h>
 
 #include "kexicomboboxtableedit.h"
@@ -38,42 +39,52 @@ class KDownArrowPushButton : public KPushButton
 		 : KPushButton(parent)
 		{
 			setToggleButton(true);
+			styleChange(style());
 		}
 	protected:
 		/**
 		 * Reimplemented from @ref QPushButton. */
 		virtual void drawButton(QPainter *p) {
-			KPushButton::drawButton(p);
 //			QStyle::PrimitiveElement e = QStyle::PE_ArrowDown;
-			int flags = QStyle::Style_Enabled;
-			if ( isDown() )
+			int flags = QStyle::Style_Enabled | QStyle::Style_HasFocus;
+			if (isDown())
 				flags |= QStyle::Style_Down;
-//			const unsigned int arrowSize = 16;
-//			unsigned int x = (width() - arrowSize) / 2;
-//			unsigned int y = (height() - arrowSize) / 2;
-//			style().drawPrimitive( e, p, QRect( QPoint( x, y ), QSize( arrowSize, arrowSize ) ),
-//				colorGroup(), flags );
-//	QRect r = style().querySubControlMetrics( QStyle::CC_ComboBox, this,
-//					QStyle::SC_ComboBoxArrow );
-//	resize(r.size());
-	
-//	style().drawComplexControl( QStyle::CC_ComboBox, p, this, rect(), colorGroup(),
-//				    flags, QStyle::SC_All,
-//				     QStyle::SC_ComboBoxArrow);
-			style().drawPrimitive( QStyle::PE_ArrowDown, p, rect(), colorGroup(),
-				flags);
+
+			KPushButton::drawButton(p);
+
+			if (m_drawComplexControl) {
+//				style().drawControl(QStyle::CE_PushButton, p, this, rect(), colorGroup(), flags);
+				style().drawComplexControl( QStyle::CC_ComboBox, p, this, rect(), colorGroup(),
+				    flags, (uint)(QStyle::SC_ComboBoxArrow /*| QStyle::SC_ComboBoxFrame*/), //QStyle::SC_All ^ QStyle::SC_ComboBoxFrame,
+				     /*QStyle::SC_ComboBoxArrow */ QStyle::SC_None );
+			}
+			else {
+				QRect r = rect();
+				r.setWidth(r.width()+2);
+				style().drawPrimitive( QStyle::PE_ArrowDown, p, r, colorGroup(), flags);
+			}
 		}
+		virtual void styleChange( QStyle & oldStyle ) {
+			m_drawComplexControl = style().inherits("KStyle") || qstricmp(style().name(),"platinum")==0;
+			setFixedWidth( style().querySubControlMetrics( QStyle::CC_ComboBox, 
+				this, QStyle::SC_ComboBoxArrow ).width() +1 );
+			KPushButton::styleChange(oldStyle);
+		}
+
+		bool m_drawComplexControl : 1;
 };
 
 //======================================================
 
 //KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::Field &f, QScrollView *parent)
 KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiTableViewColumn &column, QScrollView *parent)
- : KexiInputTableEdit(column, parent,"KexiComboBoxTableEdit")
+ : KexiInputTableEdit(column, parent)
 {
+	setName("KexiComboBoxTableEdit");
 //	QHBoxLayout* layout = new QHBoxLayout(this);
 	m_popup = 0;
 	m_button = new KDownArrowPushButton( parent->viewport() );
+//	m_button->setFixedWidth(35);
 	m_button->hide();
 	m_button->setFocusPolicy( NoFocus );
 	connect(m_button, SIGNAL(clicked()), this, SLOT(slotButtonClicked()));
@@ -309,6 +320,7 @@ void KexiComboBoxTableEdit::showPopup()
 		connect(m_popup, SIGNAL(rowAccepted(KexiTableItem*,int)), 
 			this, SLOT(slotRowAccepted(KexiTableItem*,int)));
 		connect(m_popup, SIGNAL(cancelled()), this, SIGNAL(cancelRequested()));
+		connect(m_popup, SIGNAL(hidden()), this, SLOT(slotPopupHidden()));
 		connect(m_popup->tableView(), SIGNAL(itemSelected(KexiTableItem*)),
 			this, SLOT(slotItemSelected(KexiTableItem*)));
 
@@ -339,6 +351,11 @@ void KexiComboBoxTableEdit::showPopup()
 	}
 
 	m_lineedit->setFocus();
+}
+
+void KexiComboBoxTableEdit::slotPopupHidden()
+{
+	m_button->setOn(false);
 }
 
 /*int KexiComboBoxTableEdit::rightMargin()

@@ -31,6 +31,7 @@
 #include <qlabel.h>
 #include <qpixmap.h>
 #include <qimage.h>
+#include <qpainter.h>
 
 #include <kdebug.h>
 #include <ktempfile.h>
@@ -45,6 +46,8 @@
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kio/job.h>
+#include <kglobal.h>
+#include <kiconloader.h>
 
 
 //KexiBlobTableEdit::KexiBlobTableEdit(KexiDB::Field &f, QScrollView *parent)
@@ -321,6 +324,118 @@ KexiTableEdit* KexiBlobEditorFactoryItem::createEditor(
 //DISABLED
 //	return new KexiBlobTableEdit(f, parent);
 	return 0;
+}
+
+
+//=======================
+//This class is temporarily here:
+
+
+KexiKIconTableEdit::KexiKIconTableEdit(KexiTableViewColumn &column, QScrollView *parent)
+ : KexiTableEdit(column, parent, "KexiKIconTableEdit")
+ , m_pixmapCache(17, 17, false)
+{
+	init();
+}
+
+KexiKIconTableEdit::~KexiKIconTableEdit()
+{
+}
+
+void KexiKIconTableEdit::init()
+{
+	m_hasFocusableWidget = false;
+	m_pixmapCache.setAutoDelete(true);
+}
+	
+void KexiKIconTableEdit::init(const QString& /*add*/, bool /*removeOld*/)
+{
+	m_currentValue = m_origValue;
+}
+
+bool KexiKIconTableEdit::valueIsNull()
+{
+	return m_currentValue.isNull();
+}
+
+bool KexiKIconTableEdit::valueIsEmpty()
+{
+	return m_currentValue.isNull();
+}
+
+QVariant KexiKIconTableEdit::value(bool &ok)
+{
+	ok = true;
+	return m_currentValue;
+}
+
+void KexiKIconTableEdit::clear()
+{
+	m_currentValue = QVariant();
+}
+
+bool KexiKIconTableEdit::cursorAtStart()
+{
+	return true;
+}
+
+bool KexiKIconTableEdit::cursorAtEnd()
+{
+	return true;
+}
+
+void KexiKIconTableEdit::setupContents( QPainter *p, bool /*focused*/, QVariant val, 
+	QString &/*txt*/, int &/*align*/, int &/*x*/, int &y_offset, int &w, int &h  )
+{
+#if 0
+#ifdef Q_WS_WIN
+	y_offset = -1;
+#else
+	y_offset = 0;
+#endif
+	int s = QMAX(h - 5, 12);
+	s = QMIN( h-3, s );
+	s = QMIN( w-3, s );//avoid too large box
+	QRect r( QMAX( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s, s);
+	p->setPen(QPen(colorGroup().text(), 1));
+	p->drawRect(r);
+	if (val.asBool()) {
+		p->drawLine(r.x(), r.y(), r.right(), r.bottom());
+		p->drawLine(r.x(), r.bottom(), r.right(), r.y());
+	}
+#endif
+
+	QString key = val.toString();
+	QPixmap *pix = 0;
+	if (!key.isEmpty() && !(pix = m_pixmapCache[ key ])) {
+		//cache pixmap
+		QPixmap p = KGlobal::iconLoader()->loadIcon( key, KIcon::Small, 
+			0, KIcon::DefaultState, 0L, true/*canReturnNull*/ );
+		if (!p.isNull()) {
+			pix = new QPixmap(p);
+			m_pixmapCache.insert(key, pix);
+		}
+	}
+
+	if (pix) {
+		p->drawPixmap( (w-pix->width())/2, (h-pix->height())/2, *pix );
+	}
+}
+
+//======================================================
+
+KexiKIconTableEditorFactoryItem::KexiKIconTableEditorFactoryItem()
+{
+}
+
+KexiKIconTableEditorFactoryItem::~KexiKIconTableEditorFactoryItem()
+{
+}
+
+KexiTableEdit* KexiKIconTableEditorFactoryItem::createEditor(
+	KexiTableViewColumn &column, QScrollView* parent)
+{
+	return new KexiKIconTableEdit(column, parent);
 }
 
 

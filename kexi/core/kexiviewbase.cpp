@@ -265,11 +265,32 @@ void KexiViewBase::setFocus()
 	m_mainWin->invalidateSharedActions(this);
 }
 
-KAction* KexiViewBase::sharedAction( const char *name ) const
+KAction* KexiViewBase::sharedAction( const char *action_name )
 {
-	if (!part() || !part()->actionCollectionForMode( viewMode() ))
-		return 0;
-	return part()->actionCollectionForMode( viewMode() )->action( name );
+	if (part()) {
+		KActionCollection *ac;
+		if ( (ac = part()->actionCollectionForMode( viewMode() )) ) {
+			KAction* a = ac->action( action_name );
+			if (a)
+				return a;
+		}
+	}
+	return KexiActionProxy::sharedAction(action_name);
+}
+
+void KexiViewBase::setAvailable(const char* action_name, bool set)
+{
+	if (part()) {
+		KActionCollection *ac;
+		if ( (ac = part()->actionCollectionForMode( viewMode() )) && ac->action( action_name ) ) {
+			KAction* a = ac->action( action_name );
+			if (a) {
+				a->setEnabled(set);
+				return;
+			}
+		}
+	}
+	KexiActionProxy::setAvailable(action_name, set);
 }
 
 void KexiViewBase::updateActions(bool activated)

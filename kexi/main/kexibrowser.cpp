@@ -67,7 +67,8 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	plugSharedAction("edit_cut",SLOT(slotCut()));
 	plugSharedAction("edit_copy",SLOT(slotCopy()));
 	plugSharedAction("edit_paste",SLOT(slotPaste()));
-
+	plugSharedAction("edit_edititem", SLOT(slotRename()));
+	
 	setCaption(i18n("Project Navigator"));
 	setIcon(*mainWin->icon());
 
@@ -126,9 +127,10 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	plugSharedAction("edit_cut", m_itemPopup);
 	plugSharedAction("edit_copy", m_itemPopup);
 	m_itemPopup->insertSeparator();
-	m_renameObjectAction = new KAction(i18n("&Rename"), 0, Key_F2, this, 
-		SLOT(slotRename()), this, "rename_object");
-	m_renameObjectAction->plug(m_itemPopup);
+	plugSharedAction("edit_edititem", i18n("&Rename"), m_itemPopup);
+//	m_renameObjectAction = new KAction(i18n("&Rename"), 0, Key_F2, this, 
+//		SLOT(slotRename()), this, "rename_object");
+//	m_renameObjectAction->plug(m_itemPopup);
 	plugSharedAction("edit_delete", m_itemPopup);
 
 	m_partPopup = new KPopupMenu(this, "partPopup");
@@ -256,7 +258,8 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 //	setAvailable("edit_paste",gotgroup);
 	m_openAction->setEnabled(gotitem);
 	m_designAction->setEnabled(gotitem);
-	m_renameObjectAction->setEnabled(gotitem);
+//	m_renameObjectAction->setEnabled(gotitem);
+	setAvailable("edit_edititem",gotitem);
 
 	KexiPart::Part* part = Kexi::partManager().part(it->info());
 	if (!part) {

@@ -115,7 +115,7 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		QAsciiDict<KexiBrowserItem> m_baseItems;
 		QIntDict<KexiBrowserItem> m_normalItems;
 		KPopupMenu *m_itemPopup, *m_partPopup;
-		KAction *m_newObjectAction, *m_newObjectToolbarAction, *m_renameObjectAction, 
+		KAction *m_newObjectAction, *m_newObjectToolbarAction,// *m_renameObjectAction, 
 			*m_openAction, *m_designAction;
 		int m_itemPopupTitle_id, m_partPopupTitle_id;
 

@@ -42,23 +42,44 @@ class KexiCellEditorFactoryPrivate
 {
 	public:
 		KexiCellEditorFactoryPrivate()
+		 : items(101)
+		 , items_by_type(101, false)
 		{
 			items.setAutoDelete( true );
 			items_by_type.setAutoDelete( false );
 		}
 		~KexiCellEditorFactoryPrivate() {}
 
-		void registerItem( uint type, KexiCellEditorFactoryItem& item )
+		QString key(uint type, const QString& subType) const
+		{
+			QString key = QString::number(type);
+			if (!subType.isEmpty())
+				key += (QString(" ") + subType);
+			return key;
+		}
+
+		void registerItem( KexiCellEditorFactoryItem& item, uint type, const QString& subType )
 		{
 			if (!items[ &item ])
 				items.insert( &item, &item );
 
-			items_by_type.insert( type, &item );
+			items_by_type.insert( key(type, subType), &item );
+		}
+		
+		KexiCellEditorFactoryItem *findItem(uint type, const QString& subType)
+		{
+			KexiCellEditorFactoryItem *item = items_by_type[ key(type, subType) ];
+			if (item)
+				return item;
+			item = items_by_type[ key(type, QString::null) ];
+			if (item)
+				return item;
+			return items_by_type[ key( KexiDB::Field::InvalidType, QString::null ) ];
 		}
 
 		QPtrDict<KexiCellEditorFactoryItem> items; //!< list of editor factory items (for later destroy)
 
-		QIntDict<KexiCellEditorFactoryItem> items_by_type; //!< editor factory items accessed by a type (from KexiDB::Field::Type)
+		QDict<KexiCellEditorFactoryItem> items_by_type; //!< editor factory items accessed by a key
 };
 
 KexiCellEditorFactoryPrivate static_KexiCellEditorFactory;
@@ -74,9 +95,9 @@ KexiCellEditorFactory::~KexiCellEditorFactory()
 {
 }
 
-void KexiCellEditorFactory::registerItem( uint type, KexiCellEditorFactoryItem& item )
+void KexiCellEditorFactory::registerItem( KexiCellEditorFactoryItem& item, uint type, const QString& subType )
 {
-	static_KexiCellEditorFactory.registerItem( type, item );
+	static_KexiCellEditorFactory.registerItem( item, type, subType );
 }
 
 KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, QScrollView* parent)
@@ -88,7 +109,7 @@ KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, 
 		item = KexiCellEditorFactory::item( KexiDB::Field::Enum );
 	}
 	else {
-		item = KexiCellEditorFactory::item( column.field()->type() );
+		item = KexiCellEditorFactory::item( column.field()->type(), column.field()->subType() );
 	}
 	
 #if 0 //js: TODO LATER
@@ -114,12 +135,8 @@ KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, 
 	return item->createEditor(column, parent);
 }
 
-KexiCellEditorFactoryItem* KexiCellEditorFactory::item( uint type )
+KexiCellEditorFactoryItem* KexiCellEditorFactory::item( uint type, const QString& subType )
 {
-	KexiCellEditorFactoryItem *item = static_KexiCellEditorFactory.items_by_type[ type ];
-	if (item)
-		return item;
-	//try the default
-	return static_KexiCellEditorFactory.items_by_type[ KexiDB::Field::InvalidType ];
+	return static_KexiCellEditorFactory.findItem(type, subType);
 }
 

@@ -32,11 +32,9 @@ class KEXIDATATABLE_EXPORT KexiBoolTableEdit : public KexiTableEdit
 	Q_OBJECT
 
 	public:
-		KexiBoolTableEdit(KexiTableViewColumn &column, QScrollView *parent=0, const char* name = 0);
+		KexiBoolTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
 
 		virtual ~KexiBoolTableEdit();
-
-//		virtual bool valueChanged();
 
 		//! \return true if editor's value is null (not empty)
 		virtual bool valueIsNull();
@@ -51,13 +49,7 @@ class KEXIDATATABLE_EXPORT KexiBoolTableEdit : public KexiTableEdit
 		virtual bool cursorAtStart();
 		virtual bool cursorAtEnd();
 
-//		virtual bool eventFilter(QObject* watched, QEvent* e);
-//js		void end(bool mark);
-//js		void backspace();
 		virtual void clear();
-
-		/*! \return total size of this editor, including any buttons, etc. (if present). */
-//		virtual QSize totalSize();
 
 		virtual void setupContents( QPainter *p, bool focused, QVariant val, 
 			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
@@ -65,8 +57,6 @@ class KEXIDATATABLE_EXPORT KexiBoolTableEdit : public KexiTableEdit
 		virtual void clickedOnContents();
 
 	protected slots:
-//		void setRestrictedCompletion();
-//		void completed(const QString &);
 
 	protected:
 		//! initializes this editor with \a add value
@@ -75,17 +65,8 @@ class KEXIDATATABLE_EXPORT KexiBoolTableEdit : public KexiTableEdit
 		void showHintButton();
 		void init();
 
-//		virtual void paintEvent ( QPaintEvent *e );
-	//virtual void drawFrame ( QPainter * p );
-
 		//! We've no editor widget that would store current value, so we do this here
 		QVariant m_currentValue;
-
-//		bool		m_calculatedCell;
-//js		QStringList	m_comp;
-
-//		QString m_decsym; //! decimal symbol
-//		QString m_origText; //! orig. Line Edit's text after conversion - for easy comparing
 
 	signals:
 		void hintClicked();

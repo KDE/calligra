@@ -33,6 +33,7 @@
 #include <klocale.h>
 
 #include "kexipropertyeditoritem.h"
+#include "kexipropertyeditor.h"
 
 // Helper class for QSizePolicy Editor
 
@@ -116,6 +117,10 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *par, Kexi
 
 //	m_childprop->setAutoDelete(true);
 	updateValue();
+
+	//3 rows per item is enough?
+	setMultiLinesEnabled( true );
+	setHeight(static_cast<KexiPropertyEditor*>(listView())->baseRowHeight()*3);
 }
 
 KexiPropertyEditorItem::KexiPropertyEditorItem(KListView *par, const QString &text)
@@ -129,6 +134,10 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KListView *par, const QString &te
 	m_children = 0;
 	setSelectable(false);
 	setOpen(true);
+
+	//3 rows per item is enough?
+	setMultiLinesEnabled( true );
+	setHeight(static_cast<KexiPropertyEditor*>(par)->baseRowHeight()*3);
 }
 
 /*KexiPropertyEditorItem* KexiPropertyEditorItem::createChildItem(const QString& name)
