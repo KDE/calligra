@@ -412,10 +412,9 @@ void KWFrameResizeCommand::unexecute()
 KWFrameChangePictureClipartCommand::KWFrameChangePictureClipartCommand( const QString &name, FrameIndex _frameIndex, const QString & _oldFile, const QString &_newFile, bool _isAPicture ) :
     KCommand(name),
     m_indexFrame(_frameIndex),
-    m_isAPicture(_isAPicture),
     m_oldFile(_oldFile),
-    m_newFile(_newFile)
-
+    m_newFile(_newFile),
+    m_isAPicture(_isAPicture)
 {
 }
 
