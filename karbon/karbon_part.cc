@@ -154,21 +154,7 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 
 	if( m_merge )
 	{
-		QDomNodeList list = doc.childNodes();
-		for( uint i = 0; i < list.count(); ++i )
-		{
-			if( list.item( i ).isElement() )
-			{
-				QDomElement e = list.item( i ).toElement();
-	
-				if( e.tagName() == "LAYER" )
-				{
-					VLayer* layer = new VLayer( &m_doc );
-					layer->load( e );
-					m_doc.insertLayer( layer );
-				}
-			}
-		}
+		m_doc.loadDocumentContent( doc );
 		return true;
 	}
 
@@ -359,12 +345,14 @@ KarbonPart::setUnit( KoUnit::Unit _unit )
 		static_cast<KarbonView*>( itr.current() )->setUnit( _unit );
 	}
 }
+
 bool
 KarbonPart::mergeNativeFormat( const QString &file )
 {
 	m_merge = true;
-	loadNativeFormat( file );
+	bool result = loadNativeFormat( file );
 	m_merge = false;
+	return result;
 }
 
 #include "karbon_part.moc"

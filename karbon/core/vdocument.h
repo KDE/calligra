@@ -160,6 +160,7 @@ public:
 	bool loadXML( const QDomElement& doc );
 	virtual void save( QDomElement& me ) const;
 	virtual void load( const QDomElement& me );
+	void loadDocumentContent( const QDomElement& doc );
 
 	virtual VDocument* clone() const;
 

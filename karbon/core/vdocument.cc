@@ -215,6 +215,13 @@ VDocument::loadXML( const QDomElement& doc )
 
 	m_unit = KoUnit::unit( doc.attribute( "unit", "mm" ) );
 
+	loadDocumentContent( doc );
+	return true;
+}
+
+void
+VDocument::loadDocumentContent( const QDomElement& doc )
+{
 	QDomNodeList list = doc.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
 	{
@@ -230,7 +237,6 @@ VDocument::loadXML( const QDomElement& doc )
 			}
 		}
 	}
-	return true;
 }
 
 void

@@ -345,10 +345,10 @@ KarbonView::print( KPrinter &printer )
 void
 KarbonView::fileImportGraphic()
 {
-	KFileDialog *dialog = new KFileDialog( QString::null, QString::null, 0L, "Choose Graphic to Add", true);
 	QStringList filter;
-	filter << "image/svg+xml" << "application/x-karbon" << "image/x-wmf";
-	dialog->setMimeFilter( filter, "text/plain" );
+	filter << "application/x-karbon" << "image/svg+xml" << "image/x-wmf" << "image/x-eps" << "application/postscript";
+	KFileDialog *dialog = new KFileDialog( "foo", QString::null, 0L, "Choose Graphic to Add", true);
+	dialog->setMimeFilter( filter, "application/x-karbon" );
 	if(dialog->exec()!=QDialog::Accepted) {
 		delete dialog;
 		return;
