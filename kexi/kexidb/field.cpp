@@ -135,9 +135,19 @@ QString Field::typeName(uint type)
 	return (type <= LastType) ? m_typeNames.at(type) : QString::number(type);
 }
 
+QString Field::typeString(uint type)
+{
+	return (type <= LastType) ? m_typeNames.at((int)LastType+1 + type) : QString("Type%1").arg(type);
+}
+
 QString Field::typeGroupName(uint typeGroup)
 {
-	return (typeGroup <= LastTypeGroup) ? m_typeGroupNames.at(typeGroup) : QString::number(typeGroup);
+	return (typeGroup <= LastTypeGroup) ? m_typeGroupNames.at(typeGroup) : typeGroupString(typeGroup);
+}
+
+QString Field::typeGroupString(uint typeGroup)
+{
+	return (typeGroup <= LastTypeGroup) ? m_typeGroupNames.at((int)LastTypeGroup+1 + typeGroup) : QString("TypeGroup%1").arg(typeGroup);
 }
 
 bool Field::isIntegerType( uint type )
@@ -491,26 +501,30 @@ void Field::setExpression(KexiDB::Expression *expr)
 }
 
 //-------------------------------------------------------
+#define ADDTYPE(type, i18, str) this->at(Field::type) = i18; \
+	this->at(Field::type+Field::LastType) = str
+#define ADDGROUP(type, i18, str) this->at(Field::type) = i18; \
+	this->at(Field::type+Field::LastTypeGroup) = str
 
 Field::FieldTypeNames::FieldTypeNames()
  : QValueVector<QString>()
 {
-		resize(Field::LastType + 1);
-		this->at(Field::InvalidType) = I18N_NOOP("Invalid type");
-		this->at(Field::Byte) = I18N_NOOP("Byte");
-		this->at(Field::ShortInteger) = I18N_NOOP("Short integer number");
-		this->at(Field::Integer) = I18N_NOOP("Integer number");
-		this->at(Field::BigInteger) = I18N_NOOP("Big integer number");
-//		this->at(Field::AutoIncrement) = I18N_NOOP("Auto increment number");
-		this->at(Field::Boolean) = I18N_NOOP("Yes/No value");
-		this->at(Field::Date) = I18N_NOOP("Date");
-		this->at(Field::DateTime) = I18N_NOOP("Date and time");
-		this->at(Field::Time) = I18N_NOOP("Time");
-		this->at(Field::Float) = I18N_NOOP("Single precision number");
-		this->at(Field::Double) = I18N_NOOP("Double precision number");
-		this->at(Field::Text) = I18N_NOOP("Text");
-		this->at(Field::LongText) = I18N_NOOP("Long text");
-		this->at(Field::BLOB) = I18N_NOOP("Object");
+	resize((Field::LastType + 1)*2);
+
+	ADDTYPE( InvalidType, I18N_NOOP("Invalid type"), "InvalidType" );
+	ADDTYPE( Byte, I18N_NOOP("Byte"), "Byte" );
+	ADDTYPE( ShortInteger, I18N_NOOP("Short integer number"), "ShortInteger" );
+	ADDTYPE( Integer, I18N_NOOP("Integer number"), "Integer" );
+	ADDTYPE( BigInteger, I18N_NOOP("Big integer number"), "BigInteger" );
+	ADDTYPE( Boolean, I18N_NOOP("Yes/No value"), "Boolean" );
+	ADDTYPE( Date, I18N_NOOP("Date"), "Date" );
+	ADDTYPE( DateTime, I18N_NOOP("Date and time"), "DateTime" );
+	ADDTYPE( Time, I18N_NOOP("Time"), "Time" );
+	ADDTYPE( Float, I18N_NOOP("Single precision number"), "Float" );
+	ADDTYPE( Double, I18N_NOOP("Double precision number"), "Double" );
+	ADDTYPE( Text, I18N_NOOP("Text"), "Text" );
+	ADDTYPE( LongText, I18N_NOOP("Long text"), "LongText" );
+	ADDTYPE( BLOB, I18N_NOOP("Object"), "BLOB" );
 }
 
 //-------------------------------------------------------
@@ -518,14 +532,14 @@ Field::FieldTypeNames::FieldTypeNames()
 Field::FieldTypeGroupNames::FieldTypeGroupNames()
  : QValueVector<QString>()
 {
-	resize(Field::LastTypeGroup + 1);
-	this->at(Field::InvalidGroup) = I18N_NOOP("Invalid group");
-	this->at(Field::TextGroup) = I18N_NOOP("Text");
-	this->at(Field::IntegerGroup) = I18N_NOOP("Integer number");
-	this->at(Field::FloatGroup) = I18N_NOOP("Floating point number");
-	this->at(Field::BooleanGroup) = I18N_NOOP("Yes/No");
-	this->at(Field::DateTimeGroup) = I18N_NOOP("Date/Time");
-	this->at(Field::BLOBGroup) = I18N_NOOP("Object");
+	resize((Field::LastTypeGroup + 1)*2);
+	ADDGROUP( InvalidGroup, I18N_NOOP("Invalid group"), "InvalidGroup" );
+	ADDGROUP( TextGroup, I18N_NOOP("Text"), "TextGroup" );
+	ADDGROUP( IntegerGroup, I18N_NOOP("Integer number"), "IntegerGroup" );
+	ADDGROUP( FloatGroup, I18N_NOOP("Floating point number"), "FloatGroup" );
+	ADDGROUP( BooleanGroup, I18N_NOOP("Yes/No"), "BooleanGroup" );
+	ADDGROUP( DateTimeGroup, I18N_NOOP("Date/Time"), "DateTimeGroup" );
+	ADDGROUP( BLOBGroup, I18N_NOOP("Object"), "BLOBGroup" );
 }
 
 //-------------------------------------------------------

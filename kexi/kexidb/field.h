@@ -146,11 +146,25 @@ class KEXI_DB_EXPORT Field
 		//! Converts field \a type to QVariant equivalent as accurate as possible
 		static QVariant::Type variantType(uint type);
 
-		//! \return type name (\a type has to be an element from Field::Type)
+		/*! \return a i18n'd type name for \a type (\a type has to be an element from Field::Type, 
+		 not greater than Field::LastType) */
 		static QString typeName(uint type);
 
-		//! \return group name (\a typeGroup has to be an element from Field::TypeGroup)
+		/*! \return type string for \a type, e.g. "Integer" for Integer type 
+		 (not-i18n'd, \a type has to be an element from Field::Type, 
+		 not greater than Field::LastType) */
+		static QString typeString(uint type);
+
+		static TypeGroup typeGroup(uint type);
+
+		/*! \return a i18n'd group name for \a typeGroup 
+		 (\a typeGroup has to be an element from Field::TypeGroup) */
 		static QString typeGroupName(uint typeGroup);
+
+		/*! \return type group string for \a typeGroup, e.g. "IntegerGroup" for IntegerGroup type 
+		 (not-i18n'd, \a type has to be an element from Field::Type, 
+		 not greater than Field::LastType) */
+		static QString typeGroupString(uint typeGroup);
 
 		//! \return the name of this field
 		inline QString name() const { return m_name; }
@@ -219,15 +233,16 @@ class KEXI_DB_EXPORT Field
 		uint options() const { return m_options; }
 		void setOptions(uint options) { m_options = options; }
 
-		inline QVariant::Type variantType() const
-		{
-			return variantType(m_type);
-		}
+		inline QVariant::Type variantType() const { return variantType(m_type); }
 
 		inline Type type() const { return m_type; }
 		inline QString typeName() const { return Field::typeName(m_type); }
 		inline TypeGroup typeGroup() const { return Field::typeGroup(m_type); }
-		static TypeGroup typeGroup(uint type);
+		inline QString typeGroupName() const { return Field::typeGroupName(m_type); }
+
+		inline QString typeString() const { return Field::typeString(m_type); }
+		inline QString typeGroupString() const { return Field::typeGroupString(m_type); }
+
 		inline QVariant defaultValue() const { return m_defaultValue; }
 		
 		//! \return length of text is the field type is text
@@ -343,10 +358,10 @@ class KEXI_DB_EXPORT Field
 			public: FieldTypeGroupNames();
 		};
 
-		//! real i18n'd type names
+		//! real i18n'd type names (and not-i18n'd type name strings)
 		static FieldTypeNames m_typeNames;
 
-		//! real i18n'd type group names
+		//! real i18n'd type group names (and not-i18n'd group name strings)
 		static FieldTypeGroupNames m_typeGroupNames;
 
 
