@@ -4970,6 +4970,26 @@ void KSpreadView::refreshView()
 
   d->vBorderWidget->setGeometry( left, heightColHeader + 1, widthRowHeader,
                                  d->frame->height() - heightColHeader );
+                                 
+  if ( table->isRightToLeft() )
+  {
+    int hswidth = d->doc->showTabBar() ? (width()/2) : width();
+    d->horzScrollBar->setGeometry( 0, height() - heightHScrollbar, 
+        hswidth - widthVScrollbar,                                   heightHScrollbar );
+    d->horzScrollBar->setSteps( 20 /*linestep*/, d->horzScrollBar->width() /*pagestep*/);
+  
+    if (!d->doc->showHorizontalScrollBar())
+      d->tabBar->setGeometry( 0, height() - heightHScrollbar,
+                            width(), heightHScrollbar );
+    else
+      d->tabBar->setGeometry( width()/2, height() - heightHScrollbar,
+                            width() / 2, heightHScrollbar );
+    if ( d->doc->showTabBar() )
+      d->tabBar->show();
+    else
+      d->tabBar->hide();
+  }
+
 }
 
 void KSpreadView::resizeEvent( QResizeEvent * )
