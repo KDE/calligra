@@ -137,7 +137,7 @@ int main(int argc, char** argv)
                          "0.01", "test", KAboutData::License_GPL,
                          "(c) 2001, Andrea Rizzi, Ulrich Kuettler");
     aboutData.addAuthor("Andrea Rizzi",0, "rizzi@kde.org");
-    aboutData.addAuthor("Ulrich Kuettler",0, "ulrich.kuettler@mailbox.tu-dresden.delete");
+    aboutData.addAuthor("Ulrich Kuettler",0, "ulrich.kuettler@mailbox.tu-dresden.de");
 
     KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineArgs::addCmdLineOptions(options);

@@ -243,6 +243,7 @@ signals:
      * The formula has changed and needs to be redrawn.
      */
     void formulaChanged( int width, int height );
+    void formulaChanged( double width, double height );
 
     /**
      * The element is going to leave the formula with and all its children.

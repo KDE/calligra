@@ -186,7 +186,7 @@ bool FormulaCursor::isEnd() const
                   ( getPos() == getNormal()->countChildren() );
 }
 
-void FormulaCursor::mousePress(const QPoint& pos, int flag)
+void FormulaCursor::mousePress( const LuPoint& pos, int flag )
 {
     FormulaElement* formula = getElement()->formula();
     formula->goToPos( this, pos );
@@ -202,7 +202,7 @@ void FormulaCursor::mousePress(const QPoint& pos, int flag)
     }
 }
 
-void FormulaCursor::mouseMove(const QPoint& point, int)
+void FormulaCursor::mouseMove( const LuPoint& point, int )
 {
     setSelection(true);
     BasicElement* element = getElement();
@@ -256,7 +256,7 @@ void FormulaCursor::mouseMove(const QPoint& point, int)
     }
 }
 
-void FormulaCursor::mouseRelease(const QPoint&, int)
+void FormulaCursor::mouseRelease( const LuPoint&, int )
 {
     //mouseSelectionFlag = false;
 }

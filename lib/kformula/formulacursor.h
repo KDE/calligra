@@ -138,9 +138,9 @@ public:
 
     // mouse selection
 
-    void mousePress(const QPoint&, int flags);
-    void mouseMove(const QPoint&, int flags);
-    void mouseRelease(const QPoint&, int flags);
+    void mousePress( const LuPoint&, int flags );
+    void mouseMove( const LuPoint&, int flags );
+    void mouseRelease( const LuPoint&, int flags );
 
     /**
      * Inserts the child at the current position.
