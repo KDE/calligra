@@ -237,10 +237,11 @@ signals:
     void changeCustomBullet( const QString & , QChar );
     void changeStyle( KoParagCounter::Style );
 protected slots:
-    void startChanged(int i) {emit sig_startChanged(i);}
-    void depthChanged(int i) {emit sig_depthChanged(i);}
-    void suffixChanged(const QString & txt) {emit sig_suffixChanged(txt); }
-    void prefixChanged(const QString & txt) {emit sig_prefixChanged(txt); }
+    void startChanged(int i) {m_counter.setStartNumber(i);emit sig_startChanged(i);}
+    void depthChanged(int i) {m_counter.setDepth(i);emit sig_depthChanged(i);}
+    void suffixChanged(const QString & txt) {m_counter.setSuffix(txt);emit sig_suffixChanged(txt); }
+    void prefixChanged(const QString & txt) {m_counter.setPrefix(txt);emit sig_prefixChanged(txt); }
+
     void numStyleChanged();
     void selectCustomBullet();
 private:
