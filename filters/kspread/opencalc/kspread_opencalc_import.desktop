@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Service
-Name=OpenCalc Import Filter for KSpread
+Name=OpenOffice.org Calc Import Filter for KSpread
 Name[ar]=مِرْشَح استيراد OpenCalc لدى KSpread
 Name[bg]=Филтър за импорт от OpenOffice.org Calc в KSpread
 Name[ca]=Filtre d'importació OpenCalc per a KSpread
@@ -13,7 +13,6 @@ Name[el]=Φίλτρο εισαγωγής OpenCalc για το KSpread
 Name[es]=Filtro de importación de OpenCalc para KSpread
 Name[et]=KSpreadi OpenCalc impordifilter
 Name[fi]=OpenCalc-tuontisuodin KSpreadille
-Name[fr]=Filtre d'importation OpenCalc de KSpread
 Name[he]=מסנן ייצוא מ-KSpread ל-OpenCalc
 Name[hu]=OpenCalc exportszűrő a KSpreadhez
 Name[it]=Filtro di importazione OpenCalc per KSpread
@@ -27,6 +26,7 @@ Name[se]=KSpread:a OpenCalc-sisafievrridansilli
 Name[sk]=OpenCalc filter pre import z KSpread
 Name[sl]=Uvozni filter OpenCalc za KSpread
 Name[sr]=KSpread-ов филтер за увоз из OpenCalc-а
+Name[sr@Latn]=KSpread-ов филтер за увоз из OpenCalc-а
 Name[sv]=OpenCalc-importfilter för Kspread
 Name[ta]=opencalc இறக்குமதி வடிகட்டி kspread
 Name[tg]=Филтри Воридоти OpenCalc барои KSpread

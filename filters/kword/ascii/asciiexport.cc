@@ -134,7 +134,7 @@ bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
     }
 
     m_streamOut = new QTextStream(m_ioDevice);
-    if (!m_ioDevice)
+    if (!m_streamOut)
     {
         kdError(30502) << "Could not create output stream! Aborting!" << endl;
         m_ioDevice->close();

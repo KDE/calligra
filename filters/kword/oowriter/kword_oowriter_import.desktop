@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Service
-Name=OpenWriter Import Filter for KWord
+Name=OpenOffice.org Writer Import Filter for KWord
 Name[ar]=مِرْشَح استيراد OpenWriter لدى KWord
 Name[bg]=Филтър за импорт от OpenOffice.org Writer в KWord
 Name[ca]=Filtre d'importació OpenWriter per a KWord
@@ -13,7 +13,6 @@ Name[el]=Φίλτρο εισαγωγής OpenWriter για το KWord
 Name[es]=Filtro de importación de OpenOffice.org Writer para KWord
 Name[et]=KWordi OpenWriteri impordifilter
 Name[fi]=OpenWriten tuontisuodin KWordille
-Name[fr]=Filtre d'importation OpenWriter de KWord
 Name[he]=מסנן ייבוא מ-OpenWriter ל-KWord
 Name[hu]=OpenWriter importszűrő a KWordhöz
 Name[it]=Filtro di importazione OpenWriter per KWord
@@ -27,6 +26,7 @@ Name[se]=KWord:a OpenOffice.org Writer-sisafievrridansilli
 Name[sk]=Filter pre import OpenWriter pre KWord
 Name[sl]=Uvozni filter OpenWriter za KWord
 Name[sr]=KWord-ов филтер за увоз из OpenWriter-а
+Name[sr@Latn]=KWord-ов филтер за увоз из OpenWriter-а
 Name[sv]=OpenWriter-importfilter för Kword
 Name[ta]=open writer இறக்குமதி வடிகட்டி kword
 Name[tg]=Филтри Воридоти OpenWriter барои KWord
