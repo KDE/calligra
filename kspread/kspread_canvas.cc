@@ -3186,7 +3186,16 @@ bool KSpreadCanvas::createEditor( EditorType ed, bool addFocus )
       h = cell->extraHeight();
       //kdDebug(36001) << "HEIGHT=" << min_h << " EXTRA=" << h << endl;
     }
-    double xpos = table->dblColumnPos( markerColumn() ) - xOffset();
+
+    double xpos;
+    if ( table->layoutDirection() == KSpreadSheet::RightToLeft )
+    {
+      double dwidth = doc()->unzoomItX( width() );
+      xpos = dwidth - min_w - table->dblColumnPos( markerColumn() ) - xOffset();
+    }
+    else
+      xpos = table->dblColumnPos( markerColumn() ) - xOffset();
+
     double ypos = table->dblRowPos( markerRow() ) - yOffset();
     QPalette p = m_pEditor->palette();
     QColorGroup g( p.active() );
