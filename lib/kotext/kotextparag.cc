@@ -505,16 +505,20 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     {
       draw_len--;
       draw_bw -= at( start + len - 1 )->pixelwidth;
-      if ( rightToLeft )
+      if ( rightToLeft && draw_len > 0 )
         draw_startX = at( start + draw_len - 1 )->x;
     }
-    int draw_startX_pix = zh->layoutUnitToPixelX( draw_startX ) /* + at( rightToLeft ? start+draw_len-1 : start )->pixelxadj*/;
 
-    drawParagStringInternal( painter, s, start, draw_len, draw_startX_pix,
-                             lastY_pix, baseLine_pix,
-                             draw_bw,
-                             h_pix, drawSelections, lastFormat, i, selectionStarts,
-                             selectionEnds, cg, rightToLeft, zh );
+    if ( draw_len > 0 )
+    {
+      int draw_startX_pix = zh->layoutUnitToPixelX( draw_startX ) /* + at( rightToLeft ? start+draw_len-1 : start )->pixelxadj*/;
+
+      drawParagStringInternal( painter, s, start, draw_len, draw_startX_pix,
+                               lastY_pix, baseLine_pix,
+                               draw_bw,
+                               h_pix, drawSelections, lastFormat, i, selectionStarts,
+                               selectionEnds, cg, rightToLeft, zh );
+    }
 
     if ( !textDocument()->drawingShadow() && textDocument()->drawFormattingChars() )
     {
