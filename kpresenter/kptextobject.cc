@@ -109,6 +109,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     m_textobj = new KoTextObject( textdoc, doc->standardStyle());
 
     brush = Qt::NoBrush;
+    brush.setColor(QColor());
     pen = QPen( Qt::black, 1, Qt::NoPen );
     drawEditRect = true;
     drawEmpty = true;
@@ -129,6 +130,14 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
 
 KPTextObject::~KPTextObject()
 {
+}
+
+QBrush KPTextObject::getBrush() const
+{
+    QBrush tmpBrush(brush);
+    if(!tmpBrush.color().isValid())
+        tmpBrush.setColor(QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
+    return tmpBrush;
 }
 
 /*======================= set size ===============================*/

@@ -71,6 +71,8 @@ public:
     { return drawEmpty; }
     virtual int getSubPresSteps() const;
 
+    virtual QBrush getBrush() const;
+
     void setShadowParameter(int _distance,ShadowDirection _direction,QColor _color);
 
     virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
