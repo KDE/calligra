@@ -1179,7 +1179,7 @@ public:
     QTextFormatter *formatter() const;
     int minimumWidth() const;
 
-    int nextTab( int x );
+    virtual int nextTab( int i, int x );
     void setTabArray( int *a );
     void setTabStops( int tw );
     int *tabArray() const { return tArray; }

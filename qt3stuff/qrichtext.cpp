@@ -3959,7 +3959,7 @@ void QTextParag::decDepth()
     flm = -1;
 }
 
-int QTextParag::nextTab( int x )
+int QTextParag::nextTab( int, int x )
 {
     if ( doc ) {
 #if 0
@@ -4558,7 +4558,7 @@ int QTextFormatterBreakInWords::format( QTextDocument *doc,QTextParag *parag,
 	if ( c->c.unicode() >= 32 || c->isCustom() ) {
 	    ww = parag->string()->width( i );
 	} else if ( c->c == '\t' ) {
-	    int nx = parag->nextTab( x );
+	    int nx = parag->nextTab( i, x );
 	    if ( nx < x )
 		ww = w - x;
 	    else
@@ -4701,7 +4701,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	if ( c->c.unicode() >= 32 || c->isCustom() ) {
 	    ww = string->width( i );
 	} else if ( c->c == '\t' ) {
-	    int nx = parag->nextTab( x );
+	    int nx = parag->nextTab( i, x );
 	    if ( nx < x )
 		ww = w - x;
 	    else
@@ -4762,7 +4762,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), left, 4 ) : left;
 		w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), parag->rect().height(), rm, 4 ) : 0 );
 		if ( parag->isNewLinesAllowed() && c->c == '\t' ) {
-		    int nx = parag->nextTab( x );
+		    int nx = parag->nextTab( i, x );
 		    if ( nx < x )
 			ww = w - x;
 		    else
@@ -4789,7 +4789,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), left, 4 ) : left;
 		w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), parag->rect().height(), rm, 4 ) : 0 );
 		if ( parag->isNewLinesAllowed() && c->c == '\t' ) {
-		    int nx = parag->nextTab( x );
+		    int nx = parag->nextTab( i, x );
 		    if ( nx < x )
 			ww = w - x;
 		    else
