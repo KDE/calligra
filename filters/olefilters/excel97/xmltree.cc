@@ -891,7 +891,6 @@ bool XMLTree::_bottommargin(Q_UINT16, QDataStream& body)
 bool XMLTree::_boundsheet(Q_UINT16, QDataStream& body)
 {
   QDomElement *e;
-
   if (biff == BIFF_5_7) {
     Q_UINT8 length;
     Q_UINT16 type;
@@ -914,17 +913,31 @@ bool XMLTree::_boundsheet(Q_UINT16, QDataStream& body)
     Q_UINT16 type, length;
     Q_UINT32 skip;
     body >> skip >> type >> length;
+    //hack for test if table is hidden
+    // it works but I don't know if it's good
+    
     if ((type & 0x0f) == 0) {
       char *name = new char[length];
       body.readRawBytes(name, length);
       QString s = QString::fromLatin1(name, length);
-
       delete []name;
       e = new QDomElement(root->createElement("table"));
       e->setAttribute("name", s);
       map.appendChild(*e);
       tables.enqueue(e);
-    }
+      }
+    if((type & 0x0f)==1)
+      {
+	char *name = new char[length];
+	body.readRawBytes(name, length);
+	QString s = QString::fromLatin1(name, length);
+	delete []name;
+	e = new QDomElement(root->createElement("table"));
+	e->setAttribute("name", s);
+	e->setAttribute("hide",true);
+	map.appendChild(*e);
+	tables.enqueue(e);
+      }
   }
   return true;
 }
