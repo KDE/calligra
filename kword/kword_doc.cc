@@ -1755,10 +1755,10 @@ void KWordDocument::paintContent( QPainter& painter, const QRect& rect, bool /*t
 // 	tmpShell->resize( rect.width(), rect.height() );
 //     }
 //     tmpShell->resize( 1000, 1000 );
-    
+
 //     KWordView *view = (KWordView*)tmpShell->rootView();
 //     KWPage *page = view->getGUI()->getPaperWidget();
- 
+
 //     page->calcVisiblePages();
 
 //     painter.save();
@@ -1766,7 +1766,7 @@ void KWordDocument::paintContent( QPainter& painter, const QRect& rect, bool /*t
 //     QRect rr( rect );
 //     rr.moveBy( painter.worldMatrix().dx(), painter.worldMatrix().dy() );
 //     painter.setClipRect( rr );
-    
+
 //     QRegion r;
 //     page->drawBorders( painter, rect, TRUE, &r );
 
@@ -2387,7 +2387,8 @@ void KWordDocument::drawMarker( KWFormatContext &_fc, QPainter *_painter, int xO
     _painter->drawLine( _fc.getPTPos() - xOffset + diffx1,
 			_fc.getPTY() - yOffset,
 			_fc.getPTPos() - xOffset + diffx2,
-			_fc.getPTY() + _fc.getLineHeight() - _fc.getParag()->getParagLayout()->getLineSpacing().pt()
+			_fc.getPTY() + _fc.getLineHeight() - 
+			_fc.getParag()->getParagLayout()->getLineSpacing().pt()
 			- yOffset );
 
     _painter->setRasterOp( rop );
@@ -2418,7 +2419,8 @@ void KWordDocument::updateAllViewportSizes()
     if ( !m_lstViews.isEmpty() ) {
 	for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
 	    if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() )
-		viewPtr->getGUI()->getPaperWidget()->resizeContents( getPTPaperWidth(), getPTPaperHeight() * pages );
+		viewPtr->getGUI()->getPaperWidget()->resizeContents( getPTPaperWidth(), 
+								     getPTPaperHeight() * pages );
 	}
     }
 }
@@ -3950,4 +3952,63 @@ void KWordDocument::createContents()
     recalcWholeText();
     updateAllCursors();
     updateAllViews( 0, TRUE );
+}
+
+/*================================================================*/
+void KWordDocument::checkNumberOfPages( KWFormatContext *fc )
+{
+    // ### finish this stuff!
+    return;
+    
+    if ( processingType == DTP || fc->getParag()->getNext() || fc->getFrameSet() != 1 )
+	return;
+    
+    int num = fc->getPage() - 1;
+    if ( pages - 1 > num && pages > 1 ) {
+	pages = num + 1;
+	KWFrameSet *fs = 0;
+	KWFrame *f = 0;
+	bool changed = FALSE;
+	fs = getFrameSet( fc->getFrameSet() - 1 );
+	if ( !fs || fs->getFrameType() != FT_TEXT )
+		return;
+	int del = 0;
+	for ( unsigned int i = 0; i < fs->getNumFrames() - del; ++i ) {
+	    if ( i >= fs->getNumFrames() )
+		break;
+	    f = fs->getFrame( i );
+	    if ( f && f->getPageNum() > num ) {
+		if ( canRemovePage( f->getPageNum(), f ) ) {
+		    qDebug( "remove page > %d, frame; %d", f->getPageNum(), i ); 
+		    fs->delFrame( i );
+		    changed = TRUE;
+		    del++;
+		    i--;
+		}
+	    }
+	}
+	if ( fs->getNumFrames() == 0 )
+	    frames.removeRef( fs );
+	if ( changed )
+	    recalcFrames();
+    }
+}
+
+/*================================================================*/
+bool KWordDocument::canRemovePage( int num, KWFrame *f )
+{
+    KWFrameSet *fs = 0;
+    KWFrame *frm = 0;
+    
+    for ( fs = frames.first(); fs; fs = frames.next() ) {
+	if ( fs->getFrameInfo() != FI_BODY )
+	    continue;
+	for ( unsigned int i = 0; i < fs->getNumFrames(); ++i ) {
+	    frm = fs->getFrame( i );
+	    if ( frm != f && frm->getPageNum() == num )
+		return FALSE;
+	}
+    }
+	
+    return TRUE;
 }

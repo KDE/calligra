@@ -943,14 +943,19 @@ bool KWFormatContext::makeNextLineLayout( bool redrawBackgroundWhenAppendPage )
     if ( !pFrameSet->isVisible() )
 	return FALSE;
 
-    if ( !parag )
+    if ( !parag ) {
+	qDebug( "1" );
+	doc->checkNumberOfPages( this );
 	return FALSE;
-
+    }
+    
     if ( lineEndPos == parag->getTextLen() ) {
 	if ( parag->getNext() == 0L || outOfFrame ) {
 	    ptY += getLineHeight();
 	    parag->setPTYEnd( ptY );
 	    outOfFrame = FALSE;
+	    if ( !outOfFrame )
+		doc->checkNumberOfPages( this );
 	    return FALSE;
 	}
 

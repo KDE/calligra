@@ -382,6 +382,9 @@ public:
 	return contents;
     }
 
+    void checkNumberOfPages( KWFormatContext *fc );
+    bool canRemovePage( int num, KWFrame *f );
+    
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
@@ -473,7 +476,7 @@ protected:
 
     Shell *tmpShell;
     QRect tmpShellSize;
-    
+
 };
 
 #endif
