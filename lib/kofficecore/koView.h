@@ -25,8 +25,8 @@
 #include <kparts/part.h>
 #include <kparts/partmanager.h>
 
-#include "koDocumentChild.h"
-#include "koChild.h"
+#include <koDocumentChild.h>
+#include <koChild.h>
 
 #include <klocale.h>
 

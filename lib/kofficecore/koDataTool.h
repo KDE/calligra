@@ -2,14 +2,14 @@
 #define KODATATOOL_H
 
 #include <qstring.h>
-#include <qstringlist.h>
 #include <qobject.h>
 #include <qvaluelist.h>
-#include <qpixmap.h>
 
 #include <kservice.h>
 
 class KoDataTool;
+class QPixmap;
+class QStringList;
 
 /**
  * This is a convenience class for @ref KService. You can use it if you have
@@ -35,7 +35,7 @@ public:
      * Assignment operator.
      */
     KoDataToolInfo& operator= ( const KoDataToolInfo& info );
-    
+
     /**
      * @return the C++ data type that this DataTool accepts.
      *         For example "QString" or "QImage" or something more
@@ -53,7 +53,7 @@ public:
      * or "text/html" or "text/xml".
      */
     QStringList mimeTypes() const;
-    
+
     /**
      * @return TRUE if the DataTool does not modiy the data passed to it by @ref KoDataTool::run.
      */
@@ -83,16 +83,16 @@ public:
      *
      * Each of the strings returned corresponds to a string in the list returned by
      * @ref #userCommands.
-     */     
+     */
     QStringList commands() const;
-    
+
     /**
      * Creates the data tool described by this KoDataToolInfo.
      *
      * @return a pointer to the created data tool or 0 on error.
      */
     KoDataTool* createTool( QObject* parent = 0, const char* name = 0 );
-    
+
     KService::Ptr service() const;
 
     /**
@@ -100,12 +100,12 @@ public:
      * not feature the service type "KoDataTool".
      */
     bool isValid() const;
-   
+
     /**
      * Queries the @ref KTrader about installed @ref KoDataTool implementations.
      */
     static QValueList<KoDataToolInfo> query( const QString& datatype = QString::null, const QString& mimetype = QString::null );
-    
+
 private:
     KService::Ptr m_service;
 };
@@ -115,7 +115,7 @@ class KoDataTool : public QObject
     Q_OBJECT
 public:
     KoDataTool( QObject* parent = 0, const char* name = 0 );
-    
+
     virtual bool run( const QString& command, void* data, const QString& datatype, const QString& mimetype ) = 0;
 };
 

@@ -19,8 +19,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "koDocumentInfoDlg.h"
-#include "koDocumentInfo.h"
+#include <koDocumentInfoDlg.h>
+#include <koDocumentInfo.h>
 
 #include <sys/stat.h>
 #include <unistd.h>
@@ -428,3 +428,5 @@ void KoDocumentInfoPropsPage::copy( const QString &path, const KTarEntry *entry 
       copy( p, dir->entry( *it ) );
   }
 }
+
+#include <koDocumentInfoDlg.moc>

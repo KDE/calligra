@@ -2,10 +2,11 @@
 #define KO_DOCUMENT_INFO_H
 
 #include <qobject.h>
-#include <qstringlist.h>
-#include <qdom.h>
 
 class QString;
+class QStringList;
+class QDomDocument;
+class QDomElement;
 
 class KoDocumentInfoPage;
 

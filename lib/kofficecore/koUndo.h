@@ -1,16 +1,16 @@
 /* This file is part of the KDE project
    Copyright (C) 1999 Michael Koch <koch@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -22,10 +22,10 @@
 
 #include <qlist.h>
 #include <qobject.h>
-#include <qstring.h>
-#include <qstringlist.h>
 
 class KoCommand;
+class QString;
+class QStringList;
 
 typedef QList<KoCommand> KoCommandList;
 
@@ -52,7 +52,7 @@ public:
 
   /**
    *  Destructor.
-   */   
+   */
   virtual ~KoCommand() {}
 
   /**
@@ -98,7 +98,7 @@ private:
  *  for all KOffice-apps. It uses derived classes from KoCommand.
  *
  *  @see KoCommand
- * 
+ *
  *  @short The KoCommandHistory class provides undo/redo functionality.
  *  @author Michael Koch <koch@kde.org>
  */
@@ -111,7 +111,7 @@ public:
   /**
    *  Constructor.
    *
-   *  @param _number      The number of strings that will be returned by 
+   *  @param _number      The number of strings that will be returned by
    *                      @ref #getUndoList and @ref #getRedoList.
    *  @param _maxundoredo The number of commands that can be stored in the
    *                      history maximal.
@@ -157,7 +157,7 @@ public:
    *  @return List of UNDO-strings.
    *
    *  @see #getUndoName, #setNumToolbarItems, #numToolbarItems
-   */ 
+   */
   QStringList getUndoList();
 
   /**

@@ -19,13 +19,13 @@
 
 #include <config.h>
 
-#include "koApplication.h"
-#include "koMainWindow.h"
-#include "koDocument.h"
-#include "koView.h"
-#include "koFilterManager.h"
-#include "koDocumentInfo.h"
-#include "koDocumentInfoDlg.h"
+#include <koApplication.h>
+#include <koMainWindow.h>
+#include <koDocument.h>
+#include <koView.h>
+#include <koFilterManager.h>
+#include <koDocumentInfo.h>
+#include <koDocumentInfoDlg.h>
 
 #include <qkeycode.h>
 #include <qfile.h>
@@ -779,4 +779,4 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
   setUpdatesEnabled( true );
   updateRects();
 }
-#include "koMainWindow.moc"
+#include <koMainWindow.moc>

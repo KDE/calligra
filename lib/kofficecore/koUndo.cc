@@ -1,23 +1,26 @@
 /* This file is part of the KDE project
    Copyright (C) 1999 Michael Koch <koch@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
 
-#include "koUndo.h"
+#include <koUndo.h>
+
+#include <qstring.h>
+#include <qstringlist.h>
 
 KoCommandHistory::KoCommandHistory( int _number, int _maxundoredo )
   : m_current( -1 )
@@ -87,7 +90,7 @@ void KoCommandHistory::redo()
     {
       m_current++;
       m_history.at( m_current )->execute();
- 
+
       emitSignals();
     }
   }
@@ -167,13 +170,13 @@ void KoCommandHistory::setMaxUndoRedo( int _maxundoredo )
   {
     KoCommandList commands;
     commands.setAutoDelete( false );
- 
+
     for( uint i = 0; i <= m_maxUndoRedo; i++ )
     {
       commands.insert( i, m_history.at( 0 ) );
       m_history.take( 0 );
     }
- 
+
     m_history.clear();
     m_history = commands;
     m_history.setAutoDelete( true );  }

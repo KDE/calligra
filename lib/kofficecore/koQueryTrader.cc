@@ -20,11 +20,10 @@
 #include <klibloader.h>
 #include <kparts/factory.h>
 
-#include "koQueryTrader.h"
-#include "koDocument.h"
+#include <koQueryTrader.h>
+#include <koDocument.h>
 #include <ktrader.h>
 
-#include <qstring.h>
 #include <qstringlist.h>
 
 #include <klocale.h>

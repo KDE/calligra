@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "koStream.h"
+#include <koStream.h>
 
 #include <stdlib.h>
 
@@ -25,6 +25,9 @@
 #include <qiodevice.h>
 #include <qbuffer.h>
 #include <qpicture.h>
+#include <qpen.h>
+#include <qfont.h>
+
 
 using namespace std;
 
@@ -273,7 +276,7 @@ void writeImageToStream( ostream &outs, const QImage &_img, const QString &_form
   QImageIO io( &out, _format.upper() );
   io.setImage( _img );
   io.write();
-}    
+}
 
 ostream& operator<< ( ostream& outs, const QPicture &_pic )
 {

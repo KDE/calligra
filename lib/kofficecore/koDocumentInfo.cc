@@ -1,5 +1,6 @@
-#include "koDocumentInfo.h"
+#include <koDocumentInfo.h>
 
+#include <qdom.h>
 #include <qobjectlist.h>
 
 /*****************************************
@@ -25,10 +26,10 @@ bool KoDocumentInfo::load( const QDomDocument& doc )
 	KoDocumentInfoPage* p = page( *it );
 	ASSERT( p );
 	if ( !p->load( doc.documentElement() ) )
-	    return FALSE;
+	    return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 QDomDocument KoDocumentInfo::save()
@@ -112,7 +113,7 @@ bool KoDocumentInfoLog::load( const QDomElement& e )
 	    m_oldLog = n.text();
     }
 
-    return TRUE;
+    return true;
 }
 
 QDomElement KoDocumentInfoLog::save( QDomDocument& doc )
@@ -190,7 +191,7 @@ bool KoDocumentInfoAuthor::load( const QDomElement& e )
 	    m_street = n.text();
     }
 
-    return TRUE;
+    return true;
 }
 
 QDomElement KoDocumentInfoAuthor::save( QDomDocument& doc )
@@ -362,7 +363,7 @@ bool KoDocumentInfoAbout::load( const QDomElement& e )
 	    m_title = n.text();
     }
 
-    return TRUE;
+    return true;
 }
 
 QDomElement KoDocumentInfoAbout::save( QDomDocument& doc )
@@ -399,3 +400,5 @@ void KoDocumentInfoAbout::setAbstract( const QString& n )
 {
     m_abstract = n;
 }
+
+#include <koDocumentInfo.moc>

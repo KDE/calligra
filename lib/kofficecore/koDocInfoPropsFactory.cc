@@ -19,8 +19,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "koDocInfoPropsFactory.h"
-#include "koDocumentInfoDlg.h"
+#include <koDocInfoPropsFactory.h>
+#include <koDocumentInfoDlg.h>
 
 #include <kpropsdlg.h>
 #include <kdebug.h>
@@ -63,5 +63,4 @@ QObject* KoDocInfoPropsFactory::create( QObject* parent, const char*, const char
   return 0L;
 }
 
-#include "koDocInfoPropsFactory.moc"
-
+#include <koDocInfoPropsFactory.moc>

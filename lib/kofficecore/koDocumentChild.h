@@ -19,16 +19,13 @@
 #ifndef __koDocumentChild_h__
 #define __koDocumentChild_h__
 
-#include <qobject.h>
 #include <qwmatrix.h>
-#include <qdom.h>
-
-#include <kurl.h>
-
 #include <komlParser.h>
+#include <koChild.h>
 
-#include "koChild.h"
-
+class QDomDocument;
+class QDomElement;
+class KURL;
 class KoStore;
 class KoDocument;
 class KoDocumentChildPrivate;
@@ -149,6 +146,5 @@ private:
 
   KoDocumentChildPrivate *d;
 };
-
 
 #endif

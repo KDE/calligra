@@ -1,4 +1,5 @@
-#include "koDataTool.h"
+#include <qpixmap.h>
+#include <koDataTool.h>
 #include <ktrader.h>
 
 #include <kglobal.h>
@@ -184,4 +185,4 @@ KoDataTool::KoDataTool( QObject* parent, const char* name )
 {
 }
 
-#include "koDataTool.moc"
+#include <koDataTool.moc>

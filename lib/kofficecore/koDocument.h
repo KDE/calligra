@@ -243,7 +243,7 @@ public:
    *
    *  @param painter     The painter object into that should be drawn.
    *  @param rect        The rect that should be used in the painter object.
-   *  @param transparent If TRUE then the entire rectangle is erased before painting.
+   *  @param transparent If true then the entire rectangle is erased before painting.
    *  @param view        The KoView is needed to fid about about the active widget.
    */
   virtual void paintEverything( QPainter &painter, const QRect &rect, bool transparent = false, KoView *view = 0L );
@@ -529,12 +529,15 @@ protected:
    */
   virtual bool save( ostream&, const char* format );
 
+
+  // ######### Now that we've got aboutdata this seems to be obsolete (Werner)
   /**
    *  Overload this function with your personal text.
    *  By default an empty string is returned.
    */
   virtual QString copyright() const;
 
+  // ######### Now that we've got aboutdata this seems to be obsolete (Werner)
   /**
    *  Retrieves a comment of the document.
    *  By default an empty string is returned.

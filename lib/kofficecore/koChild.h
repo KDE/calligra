@@ -101,7 +101,7 @@ public:
   virtual QPoint rotationPoint() const;
 
   /**
-   * @return TRUE if the child part is an orthogonal rectangle relative
+   * @return true if the child part is an orthogonal rectangle relative
    *         to its parents corrdinate system.
    */
   virtual bool isRectangle() const;
@@ -114,7 +114,7 @@ public:
    *        of the current region with the childs region or wether only
    *        the childs region is set.
    */
-  virtual void setClipRegion( QPainter& painter, bool combine = TRUE );
+  virtual void setClipRegion( QPainter& painter, bool combine = true );
 
   /**
    * Transforms the painter (its worldmatrix and the clipping)
@@ -132,7 +132,7 @@ public:
    */
   virtual QRect contentRect() const;
 
-  virtual QRegion frameRegion( const QWMatrix& matrix, bool solid = FALSE ) const;
+  virtual QRegion frameRegion( const QWMatrix& matrix, bool solid = false ) const;
 
   virtual QPointArray framePointArray( const QWMatrix &matrix = QWMatrix() ) const;
 
@@ -149,7 +149,7 @@ public:
   virtual bool isTransparent() const;
 
   virtual Gadget gadgetHitTest( const QPoint& p, const QWMatrix& matrix );
-  
+
 signals:
   void changed( KoChild *thisChild );
 

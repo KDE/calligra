@@ -17,10 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "koApplication.h"
-#include "koQueryTrader.h"
-#include "koDocument.h"
-#include "koMainWindow.h"
+#include <koApplication.h>
+#include <koQueryTrader.h>
+#include <koDocument.h>
+#include <koMainWindow.h>
 #include <klocale.h>
 #include <kimageio.h>
 #include <kiconloader.h>
@@ -117,4 +117,4 @@ KoApplication::~KoApplication()
 {
 }
 
-#include "koApplication.moc"
+#include <koApplication.moc>

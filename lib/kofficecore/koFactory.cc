@@ -1,6 +1,6 @@
 
-#include "koFactory.h"
-#include "koFilterManager.h"
+#include <koFactory.h>
+#include <koFilterManager.h>
 
 #include <kinstance.h>
 
@@ -28,3 +28,4 @@ KoFactory::~KoFactory()
   KoFilterManager::decRef();
 }
 
+#include <koFactory.moc>

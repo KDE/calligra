@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "koChild.h"
+#include <koChild.h>
 
 #include <qpainter.h>
 
@@ -127,6 +127,9 @@ void KoChild::setScaling( double x, double y )
   d->m_scaleY = y;
 
   // why is that commented out? (Simon)
+  // This is commented out, because KoChild::transform() scales
+  // the world martix explicitly and updateMartix() doesn't even
+  // handle scaling (Werner)
   //updateMatrix()
 
   if ( !d->m_lock )
@@ -334,3 +337,5 @@ KoChild::Gadget KoChild::gadgetHitTest( const QPoint &p, const QWMatrix &matrix 
 
   return Move;
 }
+
+#include <koChild.moc>

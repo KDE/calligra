@@ -26,17 +26,17 @@
 #include <komlParser.h>
 #include <komlWriter.h>
 
-#include <qrect.h>
-#include <qcolor.h>
-#include <qpen.h>
-#include <qfont.h>
-
 using std::vector;
 using std::ostream;
 using std::istream;
 
 class QImage;
 class QPicture;
+class QRect;
+class QPen;
+class QColor;
+class QFont;
+class QString;
 
 ostream& operator<< ( ostream& outs, const QRect &_rect );
 QRect tagToRect( std::vector<KOMLAttrib>& _attribs );
@@ -59,6 +59,3 @@ ostream& operator<< ( ostream& outs, const QPicture &_pic );
 istream& operator>> ( istream& ins, QPicture &_pic );
 
 #endif
-
-
-

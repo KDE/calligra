@@ -1,6 +1,6 @@
 
-#include "koFrame.h"
-#include "koView.h"
+#include <koFrame.h>
+#include <koView.h>
 
 #include <qpainter.h>
 #include <kparts/event.h>
@@ -380,5 +380,7 @@ bool KoFrame::eventFilter( QObject* obj, QEvent* ev )
     }
   }
 
-  return FALSE;
+  return false;
 }
+
+#include <koFrame.moc>
