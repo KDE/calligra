@@ -46,8 +46,8 @@ VMToolHandle::drawBox( QPainter& painter, short index )
 QRect
 computeRect( int cx, int cy, const double zoomFactor )
 {
-	return QRect( QPoint( cx - 2 / zoomFactor, cy - 2 / zoomFactor ),
-				  QPoint( cx + 2 / zoomFactor, cy + 2 / zoomFactor ) );
+	return QRect( QPoint( cx - 2 /* zoomFactor */, cy - 2 /* zoomFactor */ ),
+				  QPoint( cx + 2 /* zoomFactor */, cy + 2 /* zoomFactor */ ) );
 }
 
 void
@@ -56,11 +56,12 @@ VMToolHandle::draw( QPainter& painter, const double zoomFactor )
 	painter.setBrush( Qt::NoBrush );
 	painter.setPen( Qt::blue.light() );
 	QWMatrix mat = painter.worldMatrix();
-	painter.setWorldMatrix( mat.scale( zoomFactor, zoomFactor ) );
+	painter.setWorldMatrix( mat.scale( 1 / zoomFactor, 1 / zoomFactor ) );
 
 	if( part()->selection().count() > 0 )
 	{
-		m_bbox =  part()->selection().boundingBox( 1 );
+		m_bbox =  part()->selection().boundingBox( 1 / zoomFactor );
+		kdDebug() << " x : " << m_bbox.x() << ", " << m_bbox.y() << ", " << m_bbox.width() << ", " << m_bbox.height() << endl;
 		painter.drawRect( m_bbox );
 
 		// draw boxes
@@ -90,42 +91,45 @@ VMToolHandle::eventFilter( KarbonView* view, QEvent* event )
 	m_activeNode = NODE_MM;
 
 	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-	if( m_nodes[ NODE_LT ].contains( mouse_event->pos() ) )
+	QPoint p = QPoint( mouse_event->pos().x(), mouse_event->pos().y() );
+	kdDebug() << "p.x() : " << p.x() << endl;
+	kdDebug() << "p.y() : " << p.y() << endl;
+	if( m_nodes[ NODE_LT ].contains( p ) )
 	{
 		m_activeNode = NODE_LT;
 		return true;
 	}
-	else if( m_nodes[ NODE_MT ].contains( mouse_event->pos() ) )
+	else if( m_nodes[ NODE_MT ].contains( p ) )
 	{
 		m_activeNode = NODE_MT;
 		return true;
 	}
-	else if( m_nodes[ NODE_RT ].contains( mouse_event->pos() ) )
+	else if( m_nodes[ NODE_RT ].contains( p ) )
 	{
 		m_activeNode = NODE_RT;
 		return true;
 	}
-	else if( m_nodes[ NODE_RM ].contains( mouse_event->pos() ) )
+	else if( m_nodes[ NODE_RM ].contains( p ) )
 	{
 		m_activeNode = NODE_RM;
 		return true;
 	}
-	else if( m_nodes[ NODE_RB ].contains( mouse_event->pos() ) )
+	else if( m_nodes[ NODE_RB ].contains( p ) )
 	{
 		m_activeNode = NODE_RB;
 		return true;
 	}
-	else if( m_nodes[ NODE_MB ].contains( mouse_event->pos() ) )
+	else if( m_nodes[ NODE_MB ].contains( p ) )
 	{
 		m_activeNode = NODE_MB;
 		return true;
 	}
-	else if( m_nodes[ NODE_LB ].contains( mouse_event->pos() ) )
+	else if( m_nodes[ NODE_LB ].contains( p ) )
 	{
 		m_activeNode = NODE_LB;
 		return true;
 	}
-	else if( m_nodes[ NODE_LM ].contains( mouse_event->pos() ) )
+	else if( m_nodes[ NODE_LM ].contains( p ) )
 	{
 		m_activeNode = NODE_LM;
 		return true;
