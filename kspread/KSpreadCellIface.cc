@@ -42,3 +42,43 @@ double KSpreadCellIface::value() const
     KSpreadCell* cell = m_table->cellAt( m_point );
     return cell->valueDouble();
 }
+
+void KSpreadCellIface::setBgColor(const QString& _c)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    QColor c(_c);
+    cell->setBgColor(c);
+}
+
+void KSpreadCellIface::setBgColor(int r,int g,int b)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    QColor c(r,g,b);
+    cell->setBgColor(c);
+}
+
+QString KSpreadCellIface::bgColor() const
+{
+    KSpreadCell* cell = m_table->cellAt( m_point );
+    return cell->bgColor().name();
+}
+
+QString KSpreadCellIface::textColor() const
+{
+    KSpreadCell* cell = m_table->cellAt( m_point );
+    return cell->textColor().name();
+}
+
+void KSpreadCellIface::setTextColor(int r,int g,int b)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    QColor c(r,g,b);
+    cell->setTextColor(c);
+}
+
+void KSpreadCellIface::setTextColor(const QString& _c)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    QColor c(_c);
+    cell->setTextColor(c);
+}

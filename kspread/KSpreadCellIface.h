@@ -4,7 +4,7 @@
 class QPoint;
 class KSpreadTable;
 class KSpreadCell;
-
+#include <qcolor.h>
 #include <dcopobject.h>
 
 class KSpreadCellIface
@@ -21,7 +21,13 @@ k_dcop:
     virtual void setValue( int value );
     virtual void setValue( double value );
     virtual double value() const;
-    
+    virtual void setBgColor(const QString& _c);
+    virtual void setBgColor(int r,int g,int b);
+    virtual QString bgColor() const;
+    virtual void setTextColor(const QString& _c);
+    virtual void setTextColor(int r,int g,int b);
+    virtual QString textColor()const ;
+
 private:
     QPoint m_point;
     KSpreadTable* m_table;

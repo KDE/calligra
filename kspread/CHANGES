@@ -152,3 +152,14 @@ thanks.
 -bugfix Now changeref works
 -Now you can put and remove percent in a cell.
 -Now you can put and remove format money in a cell
+
+1999-11-12 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add new functions for script
+	-bgColor()
+	-setBgColor(int,int,int)
+	-setBgColor(QString)
+	-textColor()
+	-setTextColor(int,int,int)
+	-setTextColor(QString)  (ex: setTextColor("#39fd59"))
+see result in  example15.ks
