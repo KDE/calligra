@@ -56,6 +56,9 @@ public:
     virtual void scale(const QPoint &origin, const double &xfactor, const double &yfactor);
     virtual void resize(const QRect &boundingRect);
 
+    // Do we need this for lines?
+    //virtual KDialogBase *createPropertyDialog(QWidget *parent);
+
     const QPoint &a() const { return m_a; }
     void setA(const QPoint &a) { m_a=a; }
     const QPoint &b() const { return m_b; }
@@ -69,19 +72,27 @@ private:
 
 class GLineM9r : public GObjectM9r {
 
+    Q_OBJECT
 public:
     GLineM9r(GLine *line, const Mode &mode);
     virtual ~GLineM9r();
 
-    virtual void draw(const QPainter &p, const QRegion &reg, const bool toPrinter=false) const;
+    virtual void draw(const QPainter &p, const QRegion &reg,
+		      const bool toPrinter=false) const;
 
-    virtual const bool mouseMoveEvent(QMouseEvent *e, QRect &/*dirty*/);
-    virtual const bool mousePressEvent(QMouseEvent *e, QRect &/*dirty*/);
-    virtual const bool mouseReleaseEvent(QMouseEvent *e, QRect &/*dirty*/);
-    virtual const bool mouseDoubleClickEvent(QMouseEvent *e, QRect &/*dirty*/);
+    virtual const bool mouseMoveEvent(QMouseEvent *e, const GraphiteView *view,
+				      QRect &dirty);
+    virtual const bool mousePressEvent(QMouseEvent *e, const GraphiteView *view,
+				       QRect &dirty);
+    virtual const bool mouseReleaseEvent(QMouseEvent *e, const GraphiteView *view,
+					 QRect &dirty);
+    virtual const bool mouseDoubleClickEvent(QMouseEvent *e, const GraphiteView *view,
+					     QRect &dirty);
 
-    virtual const bool keyPressEvent(QKeyEvent *e, QRect &/*dirty*/);
-    virtual const bool keyReleaseEvent(QKeyEvent *e, QRect &/*dirty*/);
+    virtual const bool keyPressEvent(QKeyEvent *e, const GraphiteView *view,
+				     QRect &dirty);
+    virtual const bool keyReleaseEvent(QKeyEvent *e, const GraphiteView *view,
+				       QRect &dirty);
 
     virtual GObject *gobject() { return m_line; }
 

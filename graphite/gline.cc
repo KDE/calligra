@@ -27,7 +27,7 @@ GLine::GLine(const QPoint &a, const QPoint &b, const QString &name) : GObject(na
 								      m_a(a), m_b(b) {
 }
 
-GLine::GLine(const QString &name) : GObject(name), m_a(QPoint()), m_b(QPoint()) {
+GLine::GLine(const QString &name) : GObject(name) {
 }
 
 GLine::GLine(const GLine &rhs) : GObject(rhs), m_a(rhs.a()), m_b(rhs.b()) {
@@ -190,32 +190,39 @@ void GLineM9r::draw(const QPainter &p, const QRegion &reg, const bool toPrinter)
     m_line->draw(p, reg, toPrinter);
 }
 
-const bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+const bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, const GraphiteView */*view*/,
+				    QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+const bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, const GraphiteView */*view*/,
+				     QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+const bool GLineM9r::mouseReleaseEvent(QMouseEvent */*e*/, const GraphiteView */*view*/,
+				       QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+const bool GLineM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, const GraphiteView */*view*/,
+					   QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
+const bool GLineM9r::keyPressEvent(QKeyEvent */*e*/, const GraphiteView */*view*/,
+				   QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
+const bool GLineM9r::keyReleaseEvent(QKeyEvent */*e*/, const GraphiteView */*view*/,
+				     QRect &/*dirty*/) {
     // TODO
     return false;
 }
+#include <gline.moc>

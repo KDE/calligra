@@ -20,6 +20,7 @@
 #ifndef gobject_h
 #define gobject_h
 
+#include <qobject.h>
 #include <qbrush.h>
 #include <qpen.h>
 #include <qrect.h>
@@ -37,7 +38,10 @@ class QPainter;
 class QMouseEvent;
 class QKeyEvent;
 
+class KDialogBase;
+
 class GObject;
+class GraphiteView;
 
 
 // This is the manipulator class for GObject. Manipulators (M9r's)
@@ -53,10 +57,12 @@ class GObject;
 // remains unhandled, the M9r returns false and the Event has to be processed
 // by the calling method.
 // Whenever a repaint is needed (movement,...), the dirty rect has to be
-// set (i.e. something different to (0, 0, 0, 0).
-// A M9r can be in two different "modes": Create and Manipulate
-class GObjectM9r {
+// set (i.e. something different to (0, 0, 0, 0)).
+// Some of the M9rs can be in two different "modes": Create and Manipulate
+// General rule: simple M9rs support Create, complex ones do not :)
+class GObjectM9r : public QObject {
 
+    Q_OBJECT
 public:
     enum Mode { Create, Manipulate };
 
@@ -65,20 +71,27 @@ public:
     const Mode &mode() const { return m_mode; }
     void setMode(const Mode &mode) { m_mode=mode; }
 
-    virtual void draw(const QPainter &p, const QRegion &reg, const bool toPrinter=false) const = 0;
+    virtual void draw(const QPainter &p, const QRegion &reg,
+		      const bool toPrinter=false) const = 0;
 
-    virtual const bool mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
-    virtual const bool mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
-    virtual const bool mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
-    virtual const bool mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual const bool mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
+				      QRect &/*dirty*/) { return false; }
+    virtual const bool mousePressEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
+				       QRect &/*dirty*/) { return false; }
+    virtual const bool mouseReleaseEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
+					 QRect &/*dirty*/) { return false; }
+    virtual const bool mouseDoubleClickEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
+					     QRect &/*dirty*/) { return false; }
 
-    virtual const bool keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
-    virtual const bool keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual const bool keyPressEvent(QKeyEvent */*e*/, GraphiteView */*view*/,
+				     QRect &/*dirty*/) { return false; }
+    virtual const bool keyReleaseEvent(QKeyEvent */*e*/, GraphiteView */*view*/,
+				       QRect &/*dirty*/) { return false; }
 
     virtual GObject *gobject() = 0;
 
 protected:
-    GObjectM9r(const Mode &mode) : m_mode(mode) {}
+    GObjectM9r(const Mode &mode) : QObject(), m_mode(mode) {}
 
     // TODO - Whenever an object is deleted its Status should be
     // set correctly form the M9r handler. Check this in the
@@ -102,7 +115,7 @@ public:
 
     virtual ~GObject() {}
 
-    const bool isOk() { return m_ok; }
+    const bool isOk() const { return m_ok; }
     void setOk(const bool &ok=true) { m_ok=ok; }
 
     virtual GObject *clone() const = 0;           // exact copy of "this" (calls the Copy-CTOR)
@@ -173,6 +186,20 @@ public:
     const QPen &pen() const { return m_pen; }               // Pen for the lines
     virtual void setPen(const QPen &pen) { m_pen=pen; }
 
+    // This menthod creates a property dialog for a gobject. It
+    // creates a KDialogBase and adds a few pages (IconList mode!).
+    // If you decide to override this method make sure that the first
+    // thing you do in your implementation is calling this method.
+    // Then add your pages to the returned dialog.
+    // Note: This dialog is modal and it has an "Apply" button. The
+    // user is able to change the properties and see the result after
+    // pressing 'Apply'. Create this via a M9r on DC and add
+    // a 'Properties...' entry to the context-menu.
+    // All the dialog management (changing values, closing,...)
+    // is done in the M9r class.
+    // Don't forget to call delayedDestruct()!!!
+    virtual KDialogBase *createPropertyDialog(QWidget *parent);
+
 protected:
     GObject(const QString &name=QString::null);
     GObject(const GObject &rhs);
@@ -225,6 +252,7 @@ private:
     GObject &operator=(const GObject &rhs);    // don't assign the objects, clone them
 };
 
+
 inline const double GObject::zoomIt(const double &value) const {
     if(m_zoom==100)
 	return value;
@@ -257,8 +285,11 @@ inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoi
 }
 
 inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center) {
-    int _x = static_cast<int>( x );
-    int _y = static_cast<int>( y );
+
+    // This awkward stuff with the two tmp references is a workaround for
+    // "old" compilers (egcs-1.1.2 :)
+    int &_x=static_cast<int>(x);
+    int &_y=static_cast<int>(y);
     rotatePoint(_x, _y, angle, center);
 }
 
@@ -283,8 +314,10 @@ inline void GObject::scalePoint(int &x, int &y, const double &xfactor, const dou
 
 inline void GObject::scalePoint(unsigned int &x, unsigned int &y, const double &xfactor,
 			 const double &yfactor, const QPoint &center) {
-    int _x = static_cast<int>( x );
-    int _y = static_cast<int>( y );
+    // This awkward stuff with the two tmp references is a workaround for
+    // "old" compilers (egcs-1.1.2 :)
+    int &_x=static_cast<int>(x);
+    int &_y=static_cast<int>(y);
     scalePoint(_x, _y, xfactor, yfactor, center);
 }
 
@@ -295,7 +328,6 @@ inline void GObject::scalePoint(double &x, double &y, const double &xfactor, con
     x=static_cast<double>(center.x()) + static_cast<double>(x-center.x())*xfactor;
     y=static_cast<double>(center.y()) + static_cast<double>(y-center.y())*yfactor;
 }
-
 
 inline void GObject::scalePoint(QPoint &p, const double &xfactor, const double &yfactor,
 			 const QPoint &center) {

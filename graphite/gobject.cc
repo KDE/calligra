@@ -18,7 +18,13 @@
 */
 
 #include <qdom.h>
+
+#include <kdialogbase.h>
+#include <klocale.h>
+#include <kiconloader.h>
+
 #include <gobject.h>
+#include <graphitefactory.h>
 
 
 QDomElement GObject::save(QDomDocument &doc) const {
@@ -33,6 +39,7 @@ QDomElement GObject::save(QDomDocument &doc) const {
     QDomElement e=doc.createElement("gobject");
     e.setAttribute("name", m_name);
     e.setAttribute("state", m_state);
+    e.setAttribute("angle", m_angle);
     QDomElement format=doc.createElement("format");
     format.setAttribute("fillStyle", m_fillStyle);
     format.setAttribute("brushStyle", m_brush.style());
@@ -52,28 +59,51 @@ QDomElement GObject::save(QDomDocument &doc) const {
 
 void GObject::setParent(GObject *parent) {
 
-    if(parent!=this)   // it's illegal to be oneselves parent!
+    if(parent!=this)   // it's illegal to be oneselves parent! (parent==0L -> no parent :)
 	m_parent=parent;
+}
+
+KDialogBase *GObject::createPropertyDialog(QWidget *parent) {
+
+    KDialogBase *dia=new KDialogBase(KDialogBase::IconList,
+				     i18n("Change Properties"),
+				     KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel,
+				     KDialogBase::Ok, parent, "property dia", true, true);
+    /*QFrame *frame=*/dia->addPage(i18n("Pen"), i18n("Pen Settings"),
+				   DesktopIcon("configure", GraphiteFactory::global()));
+    
+    // TODO - add all the remaining pages (fill style=brush/gradient)
+    // and draw some nice icons (or ask the artists :)
+    return dia;
 }
 
 GObject::GObject(const QString &name) : m_name(name) {
 
     m_state=Visible;
+    m_parent=0L;
+    m_zoom=100;
+    m_angle=0.0;
     m_boundingRectDirty=true;
     m_fillStyle=Brush;
     m_ok=true;
 }
 
 GObject::GObject(const GObject &rhs) :  m_name(rhs.name()),
-    m_state(rhs.state()), m_boundingRectDirty(true), m_fillStyle(rhs.fillStyle()),
-    m_brush(rhs.brush()), m_gradient(rhs.gradient()), m_pen(rhs.pen()), m_ok(true) {
+    m_state(rhs.state()), m_parent(0L), m_zoom(rhs.zoom()), m_angle(rhs.angle()),
+    m_boundingRectDirty(true), m_fillStyle(rhs.fillStyle()), m_brush(rhs.brush()),
+    m_gradient(rhs.gradient()), m_pen(rhs.pen()), m_ok(true) {
 }
 
-GObject::GObject(const QDomElement &element) {
+GObject::GObject(const QDomElement &element) : m_parent(0L), m_zoom(100),
+					       m_boundingRectDirty(true), m_ok(false) {
+
+    if(element.tagName()!="gobject")
+	return;
 
     bool ok;
     static QString tagName=QString::fromLatin1("name");
     static QString tagState=QString::fromLatin1("state");
+    static QString tagAngle=QString::fromLatin1("angle");
     static QString tagFormat=QString::fromLatin1("format");
     static QString tagFillStyle=QString::fromLatin1("fillStyle");
     static QString tagBrushStyle=QString::fromLatin1("brushStyle");
@@ -95,6 +125,10 @@ GObject::GObject(const QDomElement &element) {
     m_state=static_cast<State>(element.attribute(tagState).toInt(&ok));
     if(!ok)
 	m_state=Visible;
+
+    m_angle=element.attribute(tagAngle).toDouble(&ok);
+    if(!ok)
+	m_angle=0.0;
 
     QDomElement format=element.namedItem(tagFormat).toElement();
     if(!format.isNull()) {
@@ -147,5 +181,7 @@ GObject::GObject(const QDomElement &element) {
 	m_gradient.xfactor=1;
 	m_gradient.yfactor=1;
 	m_gradient.ncols=1;	
-    }	
+    }
+    m_ok=true;   // CTOR was successful :)
 }
+#include <gobject.moc>

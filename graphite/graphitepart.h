@@ -52,7 +52,7 @@ public:
     // object has been hit (z-order!) and handle the event.
     // (Normally we create a Manipulator (M9r) class for the
     // object which has been hit. This class is the first
-    // one which gets the Events before testing the whole tree.
+    // one which gets the Events before testing the whole tree.)
     void mouseMoveEvent(QMouseEvent *e, GraphiteView *view);
     void mousePressEvent(QMouseEvent *e, GraphiteView *view);
     void mouseReleaseEvent(QMouseEvent *e, GraphiteView *view);
@@ -72,8 +72,7 @@ private:
     GCommandHistory *history;
     // TODO: Do we need isLoading() like in KSpread?
     // TODO: If an object is selected, store a pointer
-    //       to it here and draw the handles after
-    //       drawing the whole tree. This object is
-    //       the first one which is hit-tested...
+    //       to its M9r here and draw the handles after
+    //       drawing the whole tree.
 };
 #endif
