@@ -108,6 +108,8 @@ void KoZoomAction::init()
   values << i18n("%1%").arg("500");
   setItems( values );
   
+  setCurrentItem( values.findIndex( QString("%1%").arg( 100 ) ) );
+  
   connect( this, SIGNAL( activated( const QString& ) ), 
     SLOT( activated( const QString& ) ) );
 }
