@@ -30,7 +30,7 @@ KAboutData * newKSpreadAboutData()
 {
     KAboutData * aboutData = new KAboutData( "kspread", I18N_NOOP("KSpread"),
                                              version, description, KAboutData::License_GPL,
-                                             "(c) 1998-2001, Torben Weis", 0, 
+                                             I18N_NOOP("(c) 1998-2001, The KSpread Team"), 0,
 					     "http://www.koffice.org/kspread/");
     aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
     aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
