@@ -123,3 +123,8 @@ Reggie, 27.4.1999:
 Reggie, 28.4.1999:
 ------------------
 - Fix with line begins and line ends
+
+Reggie, 1.5.1999:
+-----------------
+- Using new template dialog
+- Fix in autoformat choose dialog

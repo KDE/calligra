@@ -988,7 +988,7 @@ unsigned int KPresenterDoc::insertNewPage(int diffx,int diffy,bool _restore=true
   return getPageNums();
 }
 
-/*==================== insert a new page with template ===========*/
+/*================================================================*/
 bool KPresenterDoc::insertNewTemplate(int diffx,int diffy,bool clean=false)
 {
   QString templateDir = KApplication::kde_datadir();
@@ -997,7 +997,10 @@ bool KPresenterDoc::insertNewTemplate(int diffx,int diffy,bool clean=false)
   QString _globalTemplatePath = kapp->kde_datadir() + "/kpresenter/templates/";
   QString _personalTemplatePath = kapp->localkdedir() + "/share/apps/kpresenter/templates/";
 
-  if (KoTemplateChooseDia::chooseTemplate(_globalTemplatePath,_personalTemplatePath,_template,true))
+  KoTemplateChooseDia::ReturnType ret;
+  ret = KoTemplateChooseDia::chooseTemplate(_globalTemplatePath,_personalTemplatePath,_template,true,false);
+
+  if (ret == KoTemplateChooseDia::Template)
     {
       QFileInfo fileInfo(_template);
       QString fileName(fileInfo.dirPath(true) + "/" + fileInfo.baseName() + ".kpt");
@@ -1007,6 +1010,24 @@ bool KPresenterDoc::insertNewTemplate(int diffx,int diffy,bool clean=false)
       objStartY = 0;
       _clean = true;
       m_bModified = true;
+      return true;
+    }
+  else if (ret == KoTemplateChooseDia::File)
+    {
+      objStartY = 0;
+      _clean = true;
+      m_bModified = true;
+      load_template(_template);
+      setURL(_template);
+      return true;
+    }
+  else if (ret == KoTemplateChooseDia::Empty)
+    {
+      QString fileName(_globalTemplatePath + "Screenpresentations/Plain.kpt");
+      objStartY = 0;
+      _clean = true;
+      m_bModified = true;
+      load_template(fileName);
       return true;
     }
   else
@@ -2720,7 +2741,7 @@ void KPresenterDoc::insertPage(int _page,InsPageMode _insPageMode,InsertPos _ins
   QString _globalTemplatePath = kapp->kde_datadir() + "/kpresenter/templates/";
   QString _personalTemplatePath = kapp->localkdedir() + "/share/apps/kpresenter/templates/";
 
-  if (KoTemplateChooseDia::chooseTemplate(_globalTemplatePath,_personalTemplatePath,_template,true))
+  if (KoTemplateChooseDia::chooseTemplate(_globalTemplatePath,_personalTemplatePath,_template,true,true) != KoTemplateChooseDia::Cancel)
     {
       QFileInfo fileInfo(_template);
       QString fileName(fileInfo.dirPath(true) + "/" + fileInfo.baseName() + ".kpt");

@@ -84,6 +84,7 @@ void AFChoose::setupTabs()
  	  grpPtr->loadWid = new KIconLoaderCanvas(grpPtr->tab);
   	  grpPtr->loadWid->loadDir(grpPtr->dir.absFilePath(),"*.xpm");
 	  grpPtr->loadWid->setBackgroundColor(colorGroup().base());
+	  grpPtr->loadWid->show();
  	  connect(grpPtr->loadWid,SIGNAL(nameChanged(const QString &)),
  		  this,SLOT(nameChanged(const QString &)));
 // 	  connect(grpPtr->loadWid,SIGNAL(doubleClicked()),
