@@ -1011,7 +1011,12 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     // Save sound file list.
 //todo ????
-    makeUsedSoundFileList();
+
+
+
+    //reset progressbar
+    emit sigProgress( 100 );
+    emit sigProgress( -1 );
 
     setModified( false );
 
