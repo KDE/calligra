@@ -338,15 +338,9 @@ int KoTextParag::bottomMargin() const
 int KoTextParag::leftMargin() const
 {
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
-    int cw=0;
-    if( m_layout.counter && !str->isRightToLeft() &&
-    	(( m_layout.counter->alignment() == Qt::AlignLeft ) || ( m_layout.counter->alignment() == Qt::AlignAuto )))
-	    cw = counterWidth();
-
     return zh->ptToLayoutUnitPixX(
         m_layout.margins[ QStyleSheetItem::MarginLeft ]
-        + m_layout.leftBorder.width() )
-        + cw; /* in layout units already */
+        + m_layout.leftBorder.width() );
 }
 
 int KoTextParag::rightMargin() const
