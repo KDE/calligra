@@ -1290,4 +1290,10 @@ void KisDoc::slotLayersUpdated()
     emit layersUpdated();
 }
 
+QRect KisDoc::getImageRect()
+{
+    QRect imageRect( 0, 0, m_pCurrent->width(), m_pCurrent->height() );
+    return imageRect;
+}
+
 #include "kis_doc.moc"

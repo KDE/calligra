@@ -43,6 +43,7 @@
 #include <kiconloader.h>
 #include <kimageeffect.h>
 #include <kapp.h>
+#include <koprinter.h>
 
 // core classes
 #include "kis_view.h"
@@ -3026,6 +3027,48 @@ void KisView::slotUndoRedoChanged( QStringList /*undo*/, QStringList /*redo*/ )
     m_redo->setEnabled( false );
   }
 #endif
+}
+
+void KisView::setupPrinter( KPrinter &printer )
+{
+#ifdef HAVE_KDEPRINT
+    printer.setPageSelection( KPrinter::ApplicationSide );
+    printer.setCurrentPage( 1 );
+#endif
+    printer.setMinMax( 1, 1 );
+    printer.setPageSize( KPrinter::A4 );
+    printer.setOrientation( KPrinter::Portrait );
+}
+
+void KisView::print( KPrinter &printer )
+{
+    printer.setFullPage( true );
+    QPainter paint;
+    paint.begin( &printer );
+    paint.setClipping( false );
+    QValueList<int> imageList;
+#ifndef HAVE_KDEPRINT
+    int from = printer.fromPage();
+    int to = printer.toPage();
+    if( !from && !to )
+    {
+        from = printer.minPage();
+        to = printer.maxPage();
+    }
+    for ( int i = from; i <= to; i++ )
+        imageList.append( i );
+#else
+    imageList = printer.pageList();
+#endif
+    QValueList<int>::Iterator it = imageList.begin();
+    for ( ; it != imageList.end(); ++it )
+    {
+        if ( it != imageList.begin() )
+            printer.newPage();
+
+        m_pDoc->paintContent( paint, m_pDoc->getImageRect() );
+    }
+    paint.end ();
 }
 
 #include "kis_view.moc"

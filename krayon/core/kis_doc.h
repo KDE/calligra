@@ -198,6 +198,8 @@ public:
 	 */
     KisFrameBuffer *frameBuffer() { return m_pFrameBuffer; }
 
+    QRect getImageRect();
+
 public slots:
     void slotImageUpdated();
     void slotImageUpdated( const QRect& rect);

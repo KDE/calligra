@@ -116,6 +116,9 @@ class KisView : public KoView
     void	zoom_out( int x, int y );
     float   zoomFactor();
     void    setZoomFactor( float zf );
+
+    virtual void setupPrinter( KPrinter &printer );
+    virtual void print( KPrinter &printer );
     
  signals:
  
