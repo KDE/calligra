@@ -5,7 +5,7 @@
 		<Action name="object_shadow"/>
 	</Menu>
 </MenuBar>
-<ToolBar name="PenProp">
+<ToolBar name="Plugins">
 	<Action name="object_shadow"/>
 </ToolBar>
 </kpartplugin>
