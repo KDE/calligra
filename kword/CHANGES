@@ -148,6 +148,7 @@ Changes between KWord-1.2-beta1 and KWord-1.2-beta2
 - Extended Find/Replace to allow specifying text formatting
 - Support for frame margins
 - Support for frame "runaround gap"
+- Choice of which side of the frame the text should run around (left, right, biggest)
 - Creating a style directly from the selection
 - Paragraph selection, clicking on the left of the text frame
 - "Protect content" feature
@@ -161,5 +162,5 @@ Changes between KWord-1.2-beta1 and KWord-1.2-beta2
   on odd/even pages" at the same time.
 - Ability to save an image from a document to the disk
 - Cursor position is saved into the file, to restore it when reopening the document
-- The "text" view mode is finally operationnal.
+- The "text" view mode is finally operational.
 - Add option "Enable cursor in protected text object"

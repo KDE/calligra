@@ -78,7 +78,6 @@ public:
 
     /** Load from XML, optionally using styles from document. */
     static KoParagLayout loadParagLayout( QDomElement & parentElem, KWDocument *doc, bool useRefStyle );
-    static void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
 
     virtual void join( KoTextParag *parag );
 protected:
