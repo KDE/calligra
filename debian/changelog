@@ -1,3 +1,9 @@
+koffice (1:1.2.1-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Ben Burton <bab@debian.org>  Wed,  4 Dec 2002 15:32:53 +1100
+
 koffice (1:1.2.0-2) unstable; urgency=low
 
   * Built with g++-3.2.
