@@ -11,7 +11,6 @@
 //
 #include "importwizard.h"
 #include "keximigrate.h"
-#include "pqxxmigrate.h"
 
 #include <qhbox.h>
 #include <qlabel.h>
@@ -256,7 +255,7 @@ void importWizard::accept()
     //Create connections to the kexi database
     kexi_conn = driver->createConnection(*cdata);
 
-    import = new pqxxMigrate(srcConn->selectedConnectionData(), srcdbname->selectedProjectData()->databaseName(), kexi_conn, dbname, false);
+    //import = new pqxxMigrate(srcConn->selectedConnectionData(), srcdbname->selectedProjectData()->databaseName(), kexi_conn, dbname, false);
     
     if (import->performImport())
     {

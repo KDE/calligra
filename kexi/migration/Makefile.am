@@ -1,24 +1,20 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-bin_PROGRAMS = keximigratetest
+lib_LTLIBRARIES = libkeximigrate.la
 
-noinst_PROGRAMS = keximigratetest 
+INCLUDES = -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi $(all_includes) -I$(PG_INCDIR) -I$(PQXX_INCDIR)
 
-noinst_HEADERS = keximigrate.h pqxxmigrate.h pg_type.h txtmigrate.h \
-	importwizard.h
+SUBDIRS = . pqxx
 
-INCLUDES = -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi $(all_includes) \
-	-I$(PG_INCDIR) -I$(PQXX_INCDIR)
+libkeximigrate_la_METASOURCES = AUTO
 
-SUBDIRS = .
+libkeximigrate_la_SOURCES = keximigrate.cpp importwizard.cpp migratemanager.cpp
 
-METASOURCES = AUTO
+libkeximigrate_la_LIBADD = $(top_builddir)/kexi/main/libkeximain.la \
+	$(top_builddir)/kexi/core/libkexicore.la $(LIB_QT) $(LIB_KDECORE) $(top_builddir)/kexi/kexidb/libkexidb.la
 
-keximigratetest_SOURCES = keximigratetest.cpp keximigrate.cpp pqxxmigrate.cpp \
-	importwizard.cpp
-keximigratetest_LDADD = $(top_builddir)/kexi/main/libkeximain.la \
-	$(top_builddir)/kexi/core/libkexicore.la $(LIB_QT) $(LIB_KDECORE) $(top_builddir)/kexi/kexidb/libkexidb.la \
-	-lpqxx
-keximigratetest_LDFLAGS = -no-undefined $(all_libraries) $(KDE_RPATH) \
-	-L$(PQXX_LIBDIR) -L$(PG_LIBDIR)
+libkeximigrate_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -L$(PQXX_LIBDIR) -L$(PG_LIBDIR)
+	
+noinst_HEADERS = keximigrate.h migratemanager.h importwizard.h migratemanager_p.h
+
 

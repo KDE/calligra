@@ -102,7 +102,7 @@ namespace KexiMigration
 			std::vector<KexiDB::TableSchema*>v_tableSchemas;
 	};
 
-} //namespace KexiDB
+} //namespace KexiMigration
 
 #endif
 
