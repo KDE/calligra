@@ -91,7 +91,7 @@ void KPPartObject::draw(QPainter *_painter,int _diffx,int _diffy)
 void KPPartObject::paint(QPainter *_painter)
 {
   QPicture* pic;
-  pic = child->draw();
+  pic = child->draw((zoomed ? presFakt : 1.0),true);
 
   _painter->setPen(pen);
   _painter->setBrush(brush);

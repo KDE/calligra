@@ -159,6 +159,8 @@ void KPObject::zoom(float _fakt)
 
   zoomed = true;
 
+  if (getType() == OT_PART) return;
+
   oldOrig = orig;
   oldExt = ext;
 
@@ -175,6 +177,8 @@ void KPObject::zoom(float _fakt)
 void KPObject::zoomOrig()
 {
   zoomed = false;
+  if (getType() == OT_PART) return;
+
   orig = oldOrig;
   ext = oldExt;
 
