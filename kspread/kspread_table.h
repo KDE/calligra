@@ -838,8 +838,8 @@ public:
 
 private slots:
 
-    void highlight( QString &text, int matchingIndex, int matchedLength, QRect &cellRect );
-    void replace( QString &newText, int index, int replacedLength, QRect &cellRect );
+    void highlight( const QString &text, int matchingIndex, int matchedLength, const QRect &cellRect );
+    void replace( const QString &newText, int index, int replacedLength, const QRect &cellRect );
 
 signals:
     void sig_updateView( KSpreadTable *_table );
@@ -1036,7 +1036,7 @@ public:
 	class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r );
     };
 
-protected:    
+protected:
     typedef enum { CompleteRows, CompleteColumns, CellRegion } SelectionType;
 
     SelectionType workOnCells( const QPoint& _marker, CellWorker& worker );

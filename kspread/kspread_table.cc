@@ -2096,8 +2096,8 @@ void KSpreadTable::find( const QPoint &_marker, QString _find, long options )
     // local slots.
     KoFind dialog( _find, options );
     QObject::connect(
-        &dialog, SIGNAL( highlight( QString &, int, int, QRect & ) ),
-        this, SLOT( highlight( QString &, int, int, QRect & ) ) );
+        &dialog, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
+        this, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
 
     // Now do the finding...
     KSpreadCell *cell;
@@ -2129,7 +2129,7 @@ void KSpreadTable::find( const QPoint &_marker, QString _find, long options )
 }
 
 // Used by find() and replace() logic to highlight a cell.
-void KSpreadTable::highlight( QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/, QRect &cellRect )
+void KSpreadTable::highlight( const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/, const QRect &cellRect )
 {
     // Which cell was this again?
     KSpreadCell *cell = cellAt( cellRect.left(), cellRect.top() );
@@ -2170,11 +2170,11 @@ void KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
     // local slots.
     KoReplace dialog( _find, _replace, options );
     QObject::connect(
-        &dialog, SIGNAL( highlight( QString &, int, int, QRect & ) ),
-        this, SLOT( highlight( QString &, int, int, QRect & ) ) );
+        &dialog, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
+        this, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
     QObject::connect(
-        &dialog, SIGNAL( replace( QString &, int, int, QRect & ) ),
-        this, SLOT( replace( QString &, int, int, QRect & ) ) );
+        &dialog, SIGNAL( replace( const QString &, int, int, const QRect & ) ),
+        this, SLOT( replace( const QString &, int, int, const QRect & ) ) );
 
     // Now do the replacing...
     if ( !m_pDoc->undoBuffer()->isLocked() )
@@ -2212,7 +2212,7 @@ void KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
 }
 
 // Used by replace() logic to modify a cell.
-void KSpreadTable::replace( QString &newText, int /*index*/, int /*replacedLength*/, QRect &cellRect )
+void KSpreadTable::replace( const QString &newText, int /*index*/, int /*replacedLength*/, const QRect &cellRect )
 {
     // Which cell was this again?
     KSpreadCell *cell = cellAt( cellRect.left(), cellRect.top() );
