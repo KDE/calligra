@@ -94,7 +94,10 @@ VGradientTool::mouseButtonRelease()
 	gradient.addStop( VColor( m_dialog->startColor() ), 0.0, 0.5 );
 	gradient.addStop( VColor( m_dialog->endColor() ), 1.0, 0.5 );
 	gradient.setOrigin( first() );
-	gradient.setVector( last() );
+	KoPoint p = last();
+	if(first().x() == last().x() && first().y() == last().y()) // workaround for a libart 2.3.10 bug
+		p.setX( first().x() + 1 );
+	gradient.setVector( p );
 	gradient.setType( (VGradient::VGradientType)m_dialog->gradientType() );
 	gradient.setRepeatMethod( (VGradient::VGradientRepeatMethod)m_dialog->gradientRepeat() );
 
