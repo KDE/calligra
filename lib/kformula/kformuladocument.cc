@@ -239,6 +239,7 @@ Document::~Document()
 void Document::lazyInit()
 {
     if ( impl->firstTime ) {
+        kdDebug( DEBUGID ) << "Document::lazyInit" << endl;
         impl->firstTime = false;
         impl->contextStyle.init();
 
@@ -277,7 +278,7 @@ ContextStyle& Document::getContextStyle( bool edit )
 
 void Document::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
-    lazyInit();
+    //lazyInit();
     impl->contextStyle.setZoomAndResolution( zoom, dpiX, dpiY );
 }
 

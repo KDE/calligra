@@ -395,7 +395,7 @@ QStringList SymbolTable::allNames() const
 {
     QStringList list;
 
-    for ( QMap<QString, QChar>::const_iterator iter = entries.begin();
+    for ( EntryTable::const_iterator iter = entries.begin();
           iter != entries.end();
           ++iter ) {
         if ( QChar( character( iter.data() ) ) != QChar::null ) {
