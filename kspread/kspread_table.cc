@@ -5099,13 +5099,17 @@ void KSpreadTable::paste( QRect pasteArea, bool makeUndo,
         // Note: QClipboard::text() seems to do a better job than encodedData( "text/plain" )
         // In particular it handles charsets (in the mimetype). Copied from KPresenter ;-)
 	QString _text = QApplication::clipboard()->text();
+        doc()->emitBeginOperation();
 	pasteTextPlain( _text, pasteArea);
+        doc()->emitEndOperation();
 	return;
     }
     else
         return;
-
+    doc()->emitBeginOperation();
     paste( b, pasteArea, makeUndo, sp, op, insert, insertTo );
+    doc()->emitEndOperation();
+
 }
 
 void KSpreadTable::pasteTextPlain( QString &_text, QRect pasteArea)
@@ -5980,9 +5984,9 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 //      << "  offsety: " << _childOffset.y() << endl;
 
     //Don't paint on the page borders
-    QRegion clipRegion( MM_TO_POINT ( leftBorder() ), 
-                        MM_TO_POINT ( topBorder() ), 
-                        _childOffset.x() + view.width(), 
+    QRegion clipRegion( MM_TO_POINT ( leftBorder() ),
+                        MM_TO_POINT ( topBorder() ),
+                        _childOffset.x() + view.width(),
                         _childOffset.y() + view.height() );
     _painter.setClipRegion( clipRegion );
 
@@ -6026,9 +6030,9 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
         ypos_Start = ypos;
         xpos_Start = xpos;
         //Don't let obscuring cells and children overpaint this area
-        clipRegion -= QRegion ( MM_TO_POINT ( leftBorder() ), 
-                                MM_TO_POINT ( topBorder() ), 
-                                xpos, 
+        clipRegion -= QRegion ( MM_TO_POINT ( leftBorder() ),
+                                MM_TO_POINT ( topBorder() ),
+                                xpos,
                                 ypos );
         _painter.setClipRegion( clipRegion );
     }
@@ -6058,9 +6062,9 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
         }
         ypos_Start = ypos;
         //Don't let obscuring cells and children overpaint this area
-        clipRegion -= QRegion( MM_TO_POINT ( leftBorder() + xpos_Start ), 
-                               MM_TO_POINT ( topBorder() ), 
-                               xpos - xpos_Start, 
+        clipRegion -= QRegion( MM_TO_POINT ( leftBorder() + xpos_Start ),
+                               MM_TO_POINT ( topBorder() ),
+                               xpos - xpos_Start,
                                ypos );
         _painter.setClipRegion( clipRegion );
     }
@@ -6090,9 +6094,9 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
         }
         xpos_Start = xpos;
         //Don't let obscuring cells and children overpaint this area
-        clipRegion -= QRegion( MM_TO_POINT ( leftBorder() ), 
-                               MM_TO_POINT ( topBorder() + ypos_Start ), 
-                               xpos, 
+        clipRegion -= QRegion( MM_TO_POINT ( leftBorder() ),
+                               MM_TO_POINT ( topBorder() + ypos_Start ),
+                               xpos,
                                ypos - ypos_Start );
         _painter.setClipRegion( clipRegion );
     }
