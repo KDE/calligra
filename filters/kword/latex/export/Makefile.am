@@ -34,4 +34,4 @@ service_DATA = kword_latex_export.desktop
 servicedir = $(kde_servicesdir)
 
 messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/kwordlatexfilter.pot
+	$(XGETTEXT) *.cc *.cpp -o $(podir)/kwordlatexexportfilter.pot

@@ -197,7 +197,7 @@ void FileHeader::generateLatinPreambule(QTextStream &out)
 		case TC_NONE:
 			break;
 	}
-	/* The font and the type of the doc. can not be changed, hmm ? */
+	
 	out << Config::instance()->getDefaultFontSize() << "pt";
 	if(Config::instance()->getQuality() == "draft")
 		out << ", draft";
@@ -269,7 +269,7 @@ void FileHeader::generateUnicodePreambule(QTextStream &out)
 		case TC_NONE:
 			break;
 	}
-	/* The font and the type of the doc. can not be changed, hmm ? */
+	
 	out << Config::instance()->getDefaultFontSize() << "pt";
 	if(Config::instance()->getQuality() == "draft")
 		out << ", draft";
@@ -312,7 +312,8 @@ void FileHeader::generatePackage(QTextStream &out)
 	out << endl;
 
 	if(langs.count() > 1)
-			out <<"\\selectLanguage{" << Config::instance()->getDefaultLanguage() << "}" << endl << endl;
+			out <<"\\selectlanguage{" << Config::instance()->getDefaultLanguage() 
+				<< "}" << endl << endl;
 }
 
 FileHeader* FileHeader::instance()
