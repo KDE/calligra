@@ -40,7 +40,8 @@ we want to have in the 1.0 release:
 
 BUGS
 
-- Paste tool and paste is broken
 - Selection tools don't get redrawed when they need to
+- Paint offset causes mispaint
 - Select Ellipse Tool is broken
+
 
