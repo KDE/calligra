@@ -34,8 +34,8 @@
 #include "core/kexiproject.h"
 #include "core/keximainwindow.h"
 #include "core/kexidialogbase.h"
-
 #include "core/kexi.h"
+#include "core/startup/KexiStartup.h"
 
 #include <qfileinfo.h>
 
@@ -59,35 +59,9 @@ bool startupActions(KexiProjectData * &projectData)
 	}
 	QString fname;
 	fname = args->arg(0);
-	QFileInfo finfo(fname);
-	if (fname.isEmpty() || !finfo.isReadable()) {
-		KMessageBox::sorry(0, QString( I18N_NOOP("<qt>The file <b>%1</b> does not exist.</qt>") ).arg(fname));
+	projectData = Kexi::detectProjectData( fname, 0 );
+	if (!projectData)
 		return false;
-	}
-	if (!finfo.isWritable()) {
-		//TODO: if file is ro: change project mode
-	}
-	KMimeType::Ptr ptr = KMimeType::findByFileContent(fname);
-	QString mimename = ptr.data()->name();
-	kdDebug() << "startupActions(): found mime is: " << ptr.data()->name() << endl;
-	if (mimename=="application/x-kexiproject-shortcut") {
-		//TODO: get information for xml shortcut file
-	}
-	// "application/x-kexiproject-sqlite", etc
-	QString drivername = Kexi::driverManager.lookupByMime(mimename);
-	kdDebug() << "KexiProject::open(): driver name: " << drivername << endl;
-	if(drivername.isEmpty()) {
-		KMessageBox::detailedSorry(0, QString( I18N_NOOP("<qt>File <b>%1</b> is not recognized as supported by Kexi.</qt>") ).arg(fname),
-			QString( I18N_NOOP("Database driver for this file not found.<br>Detected MIME type: %1") ).arg(mimename));
-		return false;
-	}
-	else {
-		KexiDB::ConnectionData cdata;
-		cdata.driverName = drivername;
-		cdata.setFileName( fname );
-		projectData = new KexiProjectData(cdata,fname);
-		kdDebug() << "file is a living databse of engine " << drivername << endl;
-	}
 	if (args->count()>1) {
 		//TODO: KRun another Kexi instances
 	}
@@ -140,7 +114,8 @@ int main(int argc, char *argv[])
 	KCmdLineArgs::init( argc, argv, newKexiAboutData() );
 	KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
-	KApplication app;
+	KApplication app(true, true);
+//TODO: switch GUIenabled off when needed
 	
 	KexiProjectData *projectData=0;
 	
