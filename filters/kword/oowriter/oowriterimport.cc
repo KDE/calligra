@@ -119,7 +119,7 @@ void OoWriterImport::createStyles( QDomDocument& doc )
 
     QDomNode fixedStyles = m_stylesDoc.documentElement().namedItem( "office:styles" );
     Q_ASSERT( !fixedStyles.isNull() );
-    kdDebug() << "Generating " << fixedStyles.childNodes().count() << " kword styles." << endl;
+    kdDebug(30518) << "Generating " << fixedStyles.childNodes().count() << " kword styles." << endl;
     for ( QDomNode n = fixedStyles.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement e = n.toElement();
@@ -269,7 +269,7 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
     kdDebug(30518) << "Trying to open content.xml" << endl;
     if ( !store->open( "content.xml" ) )
     {
-        kdWarning(30518) << "This file doesn't seem to be a valid OpenWrite file" << endl;
+        kdWarning(30518) << "This file doesn't seem to be a valid OpenWriter file" << endl;
         delete store;
         return KoFilter::WrongFormat;
     }
@@ -719,10 +719,13 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
         colorElem.setAttribute( "green", color.green() );
         format.appendChild( colorElem );
     }
-    if ( m_styleStack.hasAttribute( "fo:font-family" ) ) // 3.10.9
+    if ( m_styleStack.hasAttribute( "fo:font-family" )  // 3.10.9
+         || m_styleStack.hasAttribute("style:font-name") ) // 3.10.8
     {
         // Hmm, the remove "'" could break it's in the middle of the fontname...
         QString fontName = m_styleStack.attribute( "fo:font-family" ).remove( "'" );
+        if (fontName.isEmpty())
+            fontName = m_styleStack.attribute( "style:font-name" ).remove( "'" );
         // 'Thorndale' is not known outside OpenOffice so we substitute it
         // with 'Times New Roman' that looks nearly the same.
         if ( fontName == "Thorndale" )
@@ -874,7 +877,6 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
       Missing properties:
       style:use-window-font-color, 3.10.4 - what is it?
       style:text-outline, 3.10.5 - not implemented in kotext
-      style:font-name, 3.10.8 - what difference with fo:font-family?
       style:font-family-generic, 3.10.10 - roman, swiss, modern -> map to a font?
       style:font-style-name, 3.10.11 - ?
       style:font-pitch, 3.10.12 - fixed or variable -> map to a font?
