@@ -31,7 +31,7 @@ lib_LTLIBRARIES = kword.la libkwserialletter_interface.la
 
 ## The serial letter interface library
 libkwserialletter_interface_la_SOURCES = serialletter_interface.cc
-libkwserialletter_interface_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
+libkwserialletter_interface_la_LDFLAGS = $(all_libraries) -version-info 4:0 -no-undefined
 
 ## The kdeinit loadable module
 kword_la_SOURCES = main.cc
