@@ -58,16 +58,16 @@ public:
   KoDocument *m_doc;
   QRect m_geometry;
 
-    double m_rotation;
-    double m_shearX;
-    double m_shearY;
-    QPoint m_rotationPoint;
-    double m_scaleX;
-    double m_scaleY;
-    QWMatrix m_matrix;
-    bool m_lock;
-    QPointArray m_old;
-    bool m_transparent;
+  double m_rotation;
+  double m_shearX;
+  double m_shearY;
+  QPoint m_rotationPoint;
+  double m_scaleX;
+  double m_scaleY;
+  QWMatrix m_matrix;
+  bool m_lock;
+  QPointArray m_old;
+  bool m_transparent;
 };
 
 KoDocumentChild::KoDocumentChild( KoDocument* parent, KoDocument* doc, const QRect& geometry )
@@ -542,7 +542,7 @@ bool KoDocumentChild::loadDocument( KoStore* _store )
 
 QDomElement KoDocumentChild::save( QDomDocument& doc )
 {
-    assert( document() ); 
+    assert( document() );
     QDomElement e = doc.createElement( "object" );
     e.setAttribute( "url", document()->url().url() );
     e.setAttribute( "mime", document()->mimeType() );
@@ -557,7 +557,7 @@ QDomElement KoDocumentChild::save( QDomDocument& doc )
 
 bool KoDocumentChild::save( ostream& out )
 {
-  assert( document() ); 
+  assert( document() );
   QString u = document()->url().url();
   QString mime = document()->mimeType();
 

@@ -81,6 +81,8 @@ public:
   bool m_bSingleViewMode;
 
   QWidget *m_wrapperWidget;
+
+  QValueList<QMap<QString,QByteArray> > m_viewContainerStates;
 };
 
 class KoViewWrapperWidget : public QWidget
@@ -118,7 +120,7 @@ KoDocument::KoDocument( QObject* parent, const char* name, bool singleViewMode )
       else if ( parent->inherits( "KParts::Part" ) )
         d->m_bSingleViewMode = true;
     }
-    
+
   if ( singleViewMode )
   {
     d->m_wrapperWidget = new KoViewWrapperWidget( (QWidget *)parent );
@@ -189,8 +191,8 @@ bool KoDocument::saveFile()
 
 QWidget *KoDocument::widget()
 {
-  return KParts::ReadWritePart::widget(); 
-/* 
+  return KParts::ReadWritePart::widget();
+/*
   if ( !d->m_bSingleViewMode )
     return 0L;
 
@@ -333,6 +335,35 @@ KoDocumentChild *KoDocument::child( KoDocument *doc )
 
   return 0L;
 }
+
+void KoDocument::setViewContainerStates( KoView *view, const QMap<QString,QByteArray> &states )
+{
+  if ( d->m_views.find( view ) == -1 )
+    return;
+  
+  uint viewIdx = d->m_views.at();
+  
+  if ( d->m_viewContainerStates.count() == viewIdx )
+    d->m_viewContainerStates.append( states );
+  else if ( d->m_viewContainerStates.count() > viewIdx )
+    d->m_viewContainerStates[ viewIdx ] = states;
+}
+
+QMap<QString,QByteArray> KoDocument::viewContainerStates( KoView *view )
+{
+  QMap<QString,QByteArray> res;
+  
+  if ( d->m_views.find( view ) == -1 )
+    return res;
+  
+  uint viewIdx = d->m_views.at();
+  
+  if ( viewIdx >= d->m_viewContainerStates.count() )
+    return res;
+ 
+  res = d->m_viewContainerStates[ viewIdx ];
+  return res;
+} 
 
 void KoDocument::paintEverything( QPainter &painter, const QRect &rect, bool transparent, KoView *view )
 {
@@ -532,14 +563,14 @@ bool KoDocument::openFile()
     // and remove temp file
     unlink( importedFile.ascii() );
   }
-  
+
   if ( loadOk && d->m_bSingleViewMode )
   {
     QWidget *view = createView( d->m_wrapperWidget );
     view->show();
   }
 
-  
+
   return loadOk;
 }
 

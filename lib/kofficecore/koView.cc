@@ -199,6 +199,7 @@ void KoView::partActivateEvent( KParts::PartActivateEvent *event )
       {
         KoFrame *frame = new KoFrame( canvas() );
 	KoView *view = child->document()->createView( frame );
+	view->setContainerStates( child->document()->viewContainerStates( view ) );
 	
 	view->setPartManager( partManager() );
 	
@@ -350,6 +351,11 @@ void KoView::slotChildActivated( bool a )
   d->m_tempActiveWidget = activeWidget;
   d->m_manager->setActivePart( 0L );
 
+  QGuardedPtr<KoDocumentChild> docChild = ch->documentChild();
+  QGuardedPtr<KoFrame> chFrame = ch->frame();
+  if ( docChild && chFrame && chFrame->view() )
+    docChild->document()->setViewContainerStates( chFrame->view(), chFrame->view()->containerStates() );
+  
   d->m_children.remove( ch );
 
   // #### HACK

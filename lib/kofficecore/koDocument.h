@@ -273,6 +273,9 @@ public:
    */
   KoDocumentChild *child( KoDocument *doc );
 
+  void setViewContainerStates( KoView *view, const QMap<QString,QByteArray> &states );
+  QMap<QString,QByteArray> viewContainerStates( KoView *view );
+
 signals:
   /**
    * This signal is emitted, if a direct or indirect child document changes
