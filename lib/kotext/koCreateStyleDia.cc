@@ -31,7 +31,7 @@ KoCreateStyleDia::KoCreateStyleDia( const QStringList & _list, QWidget *parent, 
     styleList=_list;
     setCaption( i18n("Create New Style") );
     QVBox *page = makeVBoxMainWidget();
-    QLabel *l = new QLabel(i18n("Please specify a new style name:"), page);
+    new QLabel(i18n("Please specify a new style name:"), page);
     m_styleName = new QLineEdit( page );
     connect( m_styleName, SIGNAL(textChanged ( const QString & )), this, SLOT(nameChanged( const QString &)));
     m_styleName->setFocus();
