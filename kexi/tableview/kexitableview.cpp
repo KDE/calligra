@@ -786,6 +786,8 @@ inline void KexiTableView::paintRow(KexiTableItem *item,
 	QPainter *pb, int r, int rowp, int cx, int cy, 
 	int colfirst, int collast, int maxwc)
 {
+	if (!item)
+		return;
 	// Go through the columns in the row r
 	// if we know from where to where, go through [colfirst, collast],
 	// else go through all of them
@@ -1154,9 +1156,10 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	// draw selection background
 	const bool has_focus = hasFocus() || viewport()->hasFocus() || d->pContextMenu->hasFocus();
 
-	
+	const bool columnReadOnly = m_data->column(col)->readOnly();
+
 	if (!txt.isEmpty() && d->pCurrentItem == item 
-		&& col == d->curCol && !m_data->column(col)->readOnly()) //js: && !d->recordIndicator)
+		&& col == d->curCol && !columnReadOnly) //js: && !d->recordIndicator)
 	{
 //		QRect bound=fontMetrics().boundingRect(x, y_offset, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, item->at(col).toString());
 		QRect bound=fontMetrics().boundingRect(x, y_offset, w - (x+x), h, align, txt);
@@ -1190,7 +1193,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	
 	// draw text
 	if (!txt.isEmpty()) {
-		if (d->pCurrentItem == item && col == d->curCol)
+		if (d->pCurrentItem == item && col == d->curCol && !columnReadOnly)
 			p->setPen(colorGroup().highlightedText());
 		else
 			p->setPen(colorGroup().text());
