@@ -1,5 +1,5 @@
 
-SUBDIRS = komma
+SUBDIRS = csv  # komma
 
 messages:
 	for subdir in $(SUBDIRS); do \
