@@ -237,6 +237,26 @@ QDomDocumentFragment KPPartObject::save( QDomDocument& doc, double offset )
     elem.setAttribute("doit", static_cast<int>( disappear ));
     elem.setAttribute("num", disappearNum);
     fragment.appendChild(elem);
+
+    if(appearTimer!=1 || disappearTimer!=1) {
+        elem=doc.createElement("TIMER");
+        elem.setAttribute("appearTimer", appearTimer);
+        elem.setAttribute("disappearTimer", disappearTimer);
+        fragment.appendChild(elem);
+    }
+    if(appearSoundEffect || !a_fileName.isEmpty()) {
+        elem=doc.createElement("APPEARSOUNDEFFECT");
+        elem.setAttribute("appearSoundEffect", static_cast<int>(appearSoundEffect));
+        elem.setAttribute("appearSoundFileName", a_fileName);
+        fragment.appendChild(elem);
+    }
+    if(disappearSoundEffect || !d_fileName.isEmpty()) {
+        elem=doc.createElement("DISAPPEARSOUNDEFFECT");
+        elem.setAttribute("disappearSoundEffect", static_cast<int>(disappearSoundEffect));
+        elem.setAttribute("disappearSoundFileName", d_fileName);
+        fragment.appendChild(elem);
+    }
+
     return fragment;
 }
 

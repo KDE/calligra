@@ -491,7 +491,19 @@ QDomDocument KPresenterDoc::saveXML()
                 {
                     QDomElement embedded=doc.createElement("EMBEDDED");
                     KPresenterChild* curr = (KPresenterChild*)chl.current();
+
+                    // geometry is no zoom value !
+                    QRect _rect = curr->geometry();
+                    int tmpX = (int)zoomHandler()->unzoomItX( _rect.x() );
+                    int tmpY = (int)zoomHandler()->unzoomItY( _rect.y() );
+                    int tmpWidth = (int)zoomHandler()->unzoomItX( _rect.width() );
+                    int tmpHeight = (int)zoomHandler()->unzoomItY( _rect.height() );
+                    curr->setGeometry( QRect( tmpX, tmpY, tmpWidth, tmpHeight ) );
+
                     embedded.appendChild(curr->save(doc, true));
+
+                    curr->setGeometry( _rect ); // replace zoom value
+
                     QDomElement settings=doc.createElement("SETTINGS");
                     QPtrListIterator<KPObject> setOIt(m_pageList.at(i)->objectList());
                     for (; setOIt.current(); ++setOIt )

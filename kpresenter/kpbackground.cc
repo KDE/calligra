@@ -428,6 +428,14 @@ void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRec
               << " crect=" << DEBUGRECT(crect) << endl;*/
     if ( !backImage.isNull() )
     {
+        // depend on page size and desktop size
+        QSize _origSize = backImage.originalSize();
+        double faktX = (double)_origSize.width() / (double)QApplication::desktop()->width();
+        double faktY = (double)_origSize.height() / (double)QApplication::desktop()->height();
+        double w = (double)ext.width() * faktX;
+        double h = (double)ext.height() * faktY;
+        QSize _pixSize = QSize( (int)w, (int)h );
+
         switch ( backView )
         {
         case BV_ZOOM:
@@ -437,7 +445,9 @@ void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRec
         case BV_TILED:
             // crect unused, would be too complex
 	    // Note that the tiling is done with the orig pixmap at all zoom levels.
-            backImage = backImage.scale( backImage.originalSize() );
+            // backImage = backImage.scale( backImage.originalSize() );
+
+            backImage = backImage.scale( _pixSize );
             _painter->drawTiledPixmap( 0, 0, ext.width(), ext.height(), backImage.pixmap() );
             break;
         case BV_CENTER:
@@ -445,7 +455,9 @@ void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRec
 	    // ### How do zooming and centering go together ?
 	    // Is it ok to use the same pixmap size at all zoom levels ? Probably not.....
 	    // Should this be implemented as "zooming but keeping aspect ratio"?
-            backImage = backImage.scale( backImage.originalSize() );
+
+            backImage = backImage.scale( _pixSize );
+
             QPixmap *pix = new QPixmap( ext.width(), ext.height() );
             bool delPix = true;
             int _x = 0, _y = 0;

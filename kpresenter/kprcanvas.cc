@@ -4603,14 +4603,14 @@ void KPrCanvas::moveObject( int x, int y, bool key )
     KoRect pageRect=m_activePage->getPageRect();
     point.setX( (m_boundingRect.x()+newPosX) );
     m_boundingRect.moveTopLeft( point );
-    if((boundingRect.left()+m_hotSpot.x()<pageRect.left()-1)|| (m_boundingRect.left() <pageRect.left()-1))
+    if ( ( boundingRect.left()+m_hotSpot.x() < pageRect.left() ) || ( m_boundingRect.left() < pageRect.left() ) )
     {
-        point.setX( pageRect.left()+1 );
+        point.setX( pageRect.left() );
         m_boundingRect.moveTopLeft( point );
     }
-    else if ( (boundingRect.left()+m_hotSpot.x()>pageRect.width()-1) || (m_boundingRect.right() > pageRect.width() - 1) )
+    else if ( ( boundingRect.left()+m_hotSpot.x() > pageRect.width() ) || ( m_boundingRect.right() > pageRect.width() ) )
     {
-        point.setX(pageRect.width()-m_boundingRect.width() - 2  );
+        point.setX( pageRect.width()-m_boundingRect.width() );
         m_boundingRect.moveTopLeft( point );
     }
 
@@ -4618,14 +4618,14 @@ void KPrCanvas::moveObject( int x, int y, bool key )
     point.setY( m_boundingRect.y()+newPosY );
     m_boundingRect.moveTopLeft( point );
 
-    if( (boundingRect.top()+m_hotSpot.y()<pageRect.top()-1)|| (m_boundingRect.top() < pageRect.top()-1))
+    if ( ( boundingRect.top()+m_hotSpot.y() < pageRect.top() ) || ( m_boundingRect.top() < pageRect.top() ) )
     {
-        point.setY(pageRect.top()+1);
+        point.setY( pageRect.top() );
         m_boundingRect.moveTopLeft( point );
     }
-    else if( (boundingRect.top()+m_hotSpot.y()>pageRect.height()-1)|| (m_boundingRect.bottom()> pageRect.height()-1))
+    else if( ( boundingRect.top()+m_hotSpot.y() > pageRect.height() ) || ( m_boundingRect.bottom() > pageRect.height() ) )
     {
-        point.setY( pageRect.height() - m_boundingRect.height() - 2 );
+        point.setY( pageRect.height() - m_boundingRect.height() );
         m_boundingRect.moveTopLeft( point );
     }
 

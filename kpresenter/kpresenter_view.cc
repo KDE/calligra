@@ -2851,7 +2851,7 @@ void KPresenterView::setupActions()
                      SLOT( renamePageTitle() ),
                      actionCollection(), "rename_page" );
 
-    actionPicOriginalSize = new KAction( i18n( "Original Size" ), 0, this,
+    actionPicOriginalSize = new KAction( i18n( "Sca&le to original size" ), 0, this,
                                          SLOT( picViewOrignalSize() ),
                                          actionCollection(), "pic_original_size" );
 
