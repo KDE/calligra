@@ -57,7 +57,10 @@ QString Kexi::string2Identifier(const QString &s)
 	QChar c = id[0].lower();
 	if (!(c>='a' && c<='z') && c!='_')
 		r="_";
-	r+=id[0];
+	else
+		r+=id[0];
+	if (c>='0' && c<='9')
+		r+=c;
 	for (uint i=1; i<id.length(); i++) {
 		QChar c = id.at(i).lower();
 		if (!(c>='a' && c<='z') && !(c>='0' && c<='9') && c!='_')
@@ -109,3 +112,30 @@ KexiValidator::Result IdentifierValidator::internalCheck(
 
 //--------------------------------------------------------------------------------
 
+KexiDBObjectNameValidator::KexiDBObjectNameValidator(
+	KexiDB::Driver *drv, QObject * parent, const char * name)
+: KexiValidator(parent,name)
+{
+	m_drv = drv;
+}
+
+KexiDBObjectNameValidator::~KexiDBObjectNameValidator()
+{
+}
+
+KexiValidator::Result KexiDBObjectNameValidator::internalCheck(
+	const QString &valueName, const QVariant& v, 
+	QString &message, QString &details)
+{
+
+	if (m_drv.isNull() ? !KexiDB::Driver::isKexiDBSystemObjectName(v.toString())
+		 : !m_drv->isSystemObjectName(v.toString()))
+		return KexiValidator::Ok;
+	message = i18n("You cannot use name \"%1\" for your object.\n"
+		"It is reserved for internal Kexi objects. Please choose another name.")
+		.arg(v.toString());
+	details = i18n("Names of internal Kexi objects are starting with \"kexi__\".");
+	return KexiValidator::Error;
+}
+
+//--------------------------------------------------------------------------------

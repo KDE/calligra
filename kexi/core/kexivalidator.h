@@ -30,7 +30,7 @@
  for value's validity (check() method).
  Thus, it groups two purposes into one container:
  -string validator for line editors (online checking, "on typing")
- -offline-checking for QVariant values.
+ -offline-checking for QVariant values, reimplementing validate().
 
  It also offers error and warning messages for check() method. 
  You may need to reimplement: 
@@ -43,6 +43,7 @@ class KEXICORE_EXPORT KexiValidator : public QValidator
 		typedef enum Result { Error = 0, Ok = 1, Warning = 2 };
 
 		KexiValidator(QObject * parent = 0, const char * name = 0);
+		virtual ~KexiValidator();
 
 		/*! Sets accepting empty values on (true) or off (false). 
 		 By default the validator does not accepts empty values. */
@@ -62,10 +63,15 @@ class KEXICORE_EXPORT KexiValidator : public QValidator
 		Result check(const QString &valueName, const QVariant& v, QString &message,
 			QString &details);
 
+		/*! This implementation always return value QValidator::Acceptable. */
+		virtual QValidator::State validate ( QString & input, int & pos ) const;
+
 		//!Generic error/warning messages:
 		static const QString msgColumnNotEmpty() {
 			return I18N_NOOP("\"%1\" value has to be entered.");
 		}
+
+		void addChildValidator( KexiValidator* v );
 
 	protected:
 		/* Used by check(), for reimplementation, 
@@ -74,6 +80,66 @@ class KEXICORE_EXPORT KexiValidator : public QValidator
 			QString &message, QString &details);
 
 		bool m_acceptsEmptyValue : 1;
+
+	friend class KexiMultiValidator;
+};
+
+/*! KexiMultiValidator behaves like normal KexiValidator,
+ but it allows to add define more than one different validator.
+ Given validation is successfull if every subvalidator accepted given value.
+
+ - acceptsEmptyValue() is used globally here 
+   (no matter what is defined in subvalidators).
+
+ - result of calling check() depends on value of check() returned by subvalidators:
+   - Error is returned if at least one subvalidator returned Error;
+   - Warning is returned if at least one subvalidator returned Warning and 
+     no validator returned error;
+   - Ok is returned only if exactly all subvalidators returned Ok.
+   - If there is no subvalidators defined, Error is always returned.
+
+ - result of calling validate() (a method implemented for QValidator)
+   depends on value of validate() returned by subvalidators:
+   - Invalid is returned if at least one subvalidator returned Invalid
+   - Intermediate is returned if at least one subvalidator returned Intermediate
+   - Acceptable is returned if exactly all subvalidators returned Acceptable.
+   - If there is no subvalidators defined, Invalid is always returned.
+
+*/
+class KEXICORE_EXPORT KexiMultiValidator : public KexiValidator
+{
+	public:
+		/*! Constructs multivalidator with no subvalidators defined.
+		 You can add more validators with addSubvalidator(). */
+		KexiMultiValidator(QObject * parent = 0, const char * name = 0);
+
+		/*! Constructs multivalidator with one \a validator.
+		 It will be owned if has no parent defined.
+		 You can add more validators with addSubvalidator(). */
+		KexiMultiValidator(KexiValidator *validator, QObject * parent = 0, const char * name = 0);
+
+		/*! Adds validator \a validator as another subvalidator.
+		 Subvalidator will be owned by this multivalidator if \a owned is true
+		 and its parent is NULL. */
+		void addSubvalidator( KexiValidator* validator, bool owned = true );
+
+		/*! Reimplemented to call validate() on subvalidators. */
+		virtual QValidator::State validate ( QString & input, int & pos ) const;
+
+		/*! Calls QValidator::fixup() on every subvalidator. 
+		 This may be senseless to use this methog in certain cases 
+		 (can return weir results), so think twice before.. */
+		virtual void fixup ( QString & input ) const;
+
+	private:
+		virtual KexiValidator::Result internalCheck(
+			const QString &valueName, const QVariant& v, 
+			QString &message, QString &details);
+
+
+	protected:
+		QPtrList<KexiValidator> m_ownedSubValidators;
+		QValueList<KexiValidator*> m_subValidators;
 };
 
 #endif

@@ -20,13 +20,15 @@
 #ifndef __KEXI_H__
 #define __KEXI_H__
 
+#include <qguardedptr.h>
+
 #include "kexiprojectdata.h"
 #include "kexipartmanager.h"
 #include "kexidbconnectionset.h"
 #include "kexiprojectset.h"
 #include "kexivalidator.h"
 #include <kexidb/drivermanager.h>
-
+#include <kexidb/driver.h>
 
 namespace Kexi
 {
@@ -61,7 +63,7 @@ namespace Kexi
 	*/
 	KEXICORE_EXPORT QString string2Identifier(const QString &s);
 	
-	//! class validates input for identifier name
+	//! Validates input for identifier name.
 	class KEXICORE_EXPORT IdentifierValidator : public KexiValidator
 	{
 		public:
@@ -74,6 +76,22 @@ namespace Kexi
 				QString &message, QString &details);
 	};
 
+	/*! Validates input: 
+	 accepts if the name is not reserved for internal kexi objects. */
+	class KEXICORE_EXPORT KexiDBObjectNameValidator : public KexiValidator
+	{
+		public:
+			/*! \a drv is a KexiDB driver on which isSystemObjectName() will be 
+			 called inside check(). If \a drv is 0, KexiDB::Driver::isKexiDBSystemObjectName()
+			 static function is called instead. */
+			KexiDBObjectNameValidator(KexiDB::Driver *drv, QObject * parent = 0, const char * name = 0);
+			virtual ~KexiDBObjectNameValidator();
+
+		protected:
+			virtual Result internalCheck(const QString &valueName, const QVariant& v, 
+				QString &message, QString &details);
+			QGuardedPtr<KexiDB::Driver> m_drv;
+	};
 }
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here

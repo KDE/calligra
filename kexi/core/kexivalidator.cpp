@@ -25,6 +25,10 @@ KexiValidator::KexiValidator(QObject * parent, const char * name)
 {
 }
 
+KexiValidator::~KexiValidator()
+{
+}
+
 KexiValidator::Result KexiValidator::check(const QString &valueName, const QVariant& v, 
 	QString &message, QString &details)
 {
@@ -42,5 +46,76 @@ KexiValidator::Result KexiValidator::internalCheck(const QString &valueName,
 	const QVariant& v, QString &message, QString &details)
 {
 	return Error;
+}
+
+QValidator::State KexiValidator::validate ( QString & , int & ) const
+{
+	return QValidator::Acceptable;
+}
+
+//-----------------------------------------------------------
+
+KexiMultiValidator::KexiMultiValidator(QObject* parent, const char * name)
+ : KexiValidator(parent, name)
+{
+	m_ownedSubValidators.setAutoDelete(true);
+}
+
+KexiMultiValidator::KexiMultiValidator(KexiValidator *validator, 
+	QObject * parent, const char * name)
+ : KexiValidator(parent, name)
+{
+	addSubvalidator(validator);
+}
+
+
+void KexiMultiValidator::addSubvalidator( KexiValidator* validator, bool owned )
+{
+	if (!validator)
+		return;
+	m_subValidators.append(validator);
+	if (owned && !validator->parent())
+		m_ownedSubValidators.append(validator);
+}
+
+QValidator::State KexiMultiValidator::validate( QString & input, int & pos ) const
+{
+	if (m_subValidators.isEmpty())
+		return Invalid;
+	State s;
+	QValueList<KexiValidator*>::const_iterator it;
+	for ( it=m_subValidators.begin(); it!=m_subValidators.end(); ++it) {
+		s = (*it)->validate(input, pos);
+		if (s==Intermediate || s==Invalid)
+			return s;
+	}
+	return Acceptable;
+}
+
+void KexiMultiValidator::fixup ( QString & input ) const
+{
+	QValueList<KexiValidator*>::const_iterator it;
+	for ( it=m_subValidators.begin(); it!=m_subValidators.end(); ++it) {
+		(*it)->fixup(input);
+	}
+}
+
+KexiValidator::Result KexiMultiValidator::internalCheck(
+	const QString &valueName, const QVariant& v, 
+	QString &message, QString &details)
+{
+	if (m_subValidators.isEmpty())
+		return Error;
+	Result r;
+	bool warning = false;
+	QValueList<KexiValidator*>::const_iterator it;
+	for ( it=m_subValidators.begin(); it!=m_subValidators.end(); ++it) {
+		r = (*it)->internalCheck(valueName, v, message, details);
+		if (r==Error)
+			return Error;
+		if (r==Warning)
+			warning = true;
+	}
+	return warning ? Warning : Ok;
 }
 
