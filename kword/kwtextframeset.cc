@@ -600,12 +600,16 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
         // This guesses correct for 70-90% of English words, but the overall value
         // is quite good, as some words get a number that's too high and others get
         // one that's too low.
+        // IMPORTANT: please test any changes against demos/statistics.kwd
         QRegExp re("\\s+");
         QStringList wordlist = QStringList::split(re, s);
         words += wordlist.count();
         re.setCaseSensitive(false);
         for ( QStringList::Iterator it = wordlist.begin(); it != wordlist.end(); ++it ) {
             QString word = *it;
+            re.setPattern("[!?.,:_\"-]");    // clean word from punctuation
+            word.replace(re, "");
+			//kdDebug(32002) << "word: " << word << endl;
             if ( word.length() <= 3 ) {  // extension to the original algorithm
                 syllables++;
                 continue;
