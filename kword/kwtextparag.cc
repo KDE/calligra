@@ -313,8 +313,11 @@ int KoTextParag::lineSpacing( int line ) const
             m_layout.lineSpacing );
     else {
         KoTextParag * that = const_cast<KoTextParag *>(this);
-        ASSERT( line < (int)that->lineStartList().count() );
-        //kdDebug() << "KoTextParag::lineSpacing line=" << line << " lines=" << that->lineStartList().count() << endl;
+        if( line >= (int)that->lineStartList().count() )
+        {
+            kdError() << "KoTextParag::lineSpacing assert(line<lines) failed: line=" << line << " lines=" << that->lineStartList().count() << endl;
+            return 0;
+        }
         QMap<int, QTextParagLineStart*>::ConstIterator it = that->lineStartList().begin();
         while ( line-- > 0 )
             ++it;
