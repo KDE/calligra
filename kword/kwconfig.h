@@ -120,6 +120,7 @@ private:
     QCheckBox *m_createBackupFile;
     QCheckBox *m_directInsertCursor;
     QComboBox *m_globalLanguage;
+    QString m_oldLanguage;
 };
 
 class ConfigurePathPage : public QObject

@@ -713,6 +713,17 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     fontLayout->addWidget(fontName, 0, 1);
     fontLayout->addWidget(chooseButton, 0, 2);
 
+
+    oldAutoSaveValue=KoDocument::defaultAutoSave() / 60;
+    m_oldLanguage = doc->globalLanguage();
+    if( config->hasGroup("Interface") )
+    {
+        config->setGroup( "Interface" );
+        oldAutoSaveValue=config->readNumEntry("AutoSave",oldAutoSaveValue);
+        m_oldLanguage = config->readEntry( "language", m_oldLanguage);
+    }
+
+
     QWidget *languageContainer = new QWidget(gbDocumentDefaults);
     QGridLayout * languageLayout = new QGridLayout(languageContainer, 1, 3);
 
@@ -725,7 +736,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     m_globalLanguage->insertStringList( KoGlobal::listOfLanguages());
 
 
-    m_globalLanguage->setCurrentItem(KoGlobal::languageIndexFromTag(doc->globalLanguage()));
+    m_globalLanguage->setCurrentItem(KoGlobal::languageIndexFromTag(m_oldLanguage));
 
     languageLayout->addWidget(languageTitle, 0, 0);
     languageLayout->addWidget(m_globalLanguage, 0, 1);
@@ -734,12 +745,6 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     gbDocumentSettings->setMargin( 10 );
     gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
-    oldAutoSaveValue=KoDocument::defaultAutoSave() / 60;
-    if( config->hasGroup("Interface") )
-    {
-        config->setGroup( "Interface" );
-        oldAutoSaveValue=config->readNumEntry("AutoSave",oldAutoSaveValue);
-    }
     autoSave = new KIntNumInput( oldAutoSaveValue, gbDocumentSettings );
     autoSave->setRange(0, 60, 1);
     autoSave->setLabel(i18n("Autosave every (min):"));
@@ -827,7 +832,10 @@ KCommand *ConfigureDefaultDocPage::apply()
     //global language will change after re-launch kword
     QString lang = KoGlobal::tagOfLanguage( m_globalLanguage->currentText() );
     config->writeEntry( "language" , lang);
-    doc->setGlobalLanguage( lang );
+    m_oldLanguage = lang;
+    //don't call this fiunction otherwise we can have a textobject with
+    // a default language and other textobject with other default language.
+    //doc->setGlobalLanguage( lang );
 
     KMacroCommand * macroCmd=0L;
     int newStartingPage=m_variableNumberOffset->value();
