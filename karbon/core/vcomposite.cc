@@ -281,7 +281,7 @@ VComposite::save( QDomElement& element ) const
 {
 	if( state() != deleted )
 	{
-		QDomElement me = element.ownerDocument().createElement( "COMPOSITE" );
+		QDomElement me = element.ownerDocument().createElement( "PATH" );
 		element.appendChild( me );
 
 		VObject::save( me );

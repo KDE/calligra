@@ -172,7 +172,7 @@ VGroup::load( const QDomElement& element )
 		{
 			QDomElement e = list.item( i ).toElement();
 
-			if( e.tagName() == "COMPOSITE" )
+			if( e.tagName() == "COMPOSITE" || e.tagName() == "PATH" ) // TODO : remove COMPOSITE later
 			{
 				VComposite* composite = new VComposite( this );
 				composite->load( e );
