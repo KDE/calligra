@@ -130,7 +130,7 @@ class KTextEditDeleteCommand : public KTextEditCommand
 {
 public:
     KTextEditDeleteCommand( KTextEditDocument *d, int i, int idx, const QString &str )
-	: KTextEditCommand( d ), id( i ), index( idx ), text( str ) {}
+        : KTextEditCommand( d ), id( i ), index( idx ), text( str ) {}
     virtual Commands type() const { return Delete; };
 
     virtual KTextEditCursor *execute( KTextEditCursor *c );
@@ -146,7 +146,7 @@ class KTextEditInsertCommand : public KTextEditDeleteCommand
 {
 public:
     KTextEditInsertCommand( KTextEditDocument *d, int i, int idx, const QString &str )
-	: KTextEditDeleteCommand( d, i, idx, str ) {}
+        : KTextEditDeleteCommand( d, i, idx, str ) {}
     Commands type() const { return Insert; };
 
     virtual KTextEditCursor *execute( KTextEditCursor *c ) { return KTextEditDeleteCommand::unexecute( c ); }
@@ -177,19 +177,19 @@ class KTextEditDocument
 {
 public:
     enum SelectionIds {
-	Standard = 0,
-	Search,
-	Temp // This selection must not be drawn, it's used e.g. by undo/redo to
-	// remove multiple lines with removeSelectedText()
+        Standard = 0,
+        Search,
+        Temp // This selection must not be drawn, it's used e.g. by undo/redo to
+        // remove multiple lines with removeSelectedText()
     };
 
     static const int numSelections;
 
     enum Bullet {
-	FilledCircle,
-	FilledSquare,
-	OutlinedCircle,
-	OutlinedSquare
+        FilledCircle,
+        FilledSquare,
+        OutlinedCircle,
+        OutlinedSquare
     };
 
     KTextEditDocument( KPresenterDoc *doc );
@@ -275,18 +275,18 @@ public:
 
     struct TextSettings
     {
-	TextSettings() {
-	    bulletType[0] = KTextEditDocument::FilledCircle;
-	    bulletType[1] = KTextEditDocument::FilledSquare;
-	    bulletType[2] = KTextEditDocument::OutlinedCircle;
-	    bulletType[3] = KTextEditDocument::OutlinedSquare;
-	    bulletColor[0] = bulletColor[1] = bulletColor[2] = bulletColor[3] = Qt::black;
-	    lineSpacing = paragSpacing = margin = 0;
-	}
-	
-	KTextEditDocument::Bullet bulletType[4];
-	QColor bulletColor[4];
-	int lineSpacing, paragSpacing, margin;
+        TextSettings() {
+            bulletType[0] = KTextEditDocument::FilledCircle;
+            bulletType[1] = KTextEditDocument::FilledSquare;
+            bulletType[2] = KTextEditDocument::OutlinedCircle;
+            bulletType[3] = KTextEditDocument::OutlinedSquare;
+            bulletColor[0] = bulletColor[1] = bulletColor[2] = bulletColor[3] = Qt::black;
+            lineSpacing = paragSpacing = margin = 0;
+        }
+
+        KTextEditDocument::Bullet bulletType[4];
+        QColor bulletColor[4];
+        int lineSpacing, paragSpacing, margin;
     };
 
     TextSettings textSettings() const { return txtSettings; }
@@ -294,8 +294,8 @@ public:
 
 private:
     struct Selection {
-	KTextEditParag *startParag, *endParag;
-	int startIndex;
+        KTextEditParag *startParag, *endParag;
+        int startIndex;
     };
 
     int cx, cy, cw;
@@ -313,7 +313,7 @@ private:
     TextSettings txtSettings;
     int marg;
     KPresenterDoc *kpr_doc;
-    
+
 };
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -323,17 +323,17 @@ class KTextEditString
 public:
     struct Char {
     public:
-	Char() : format( 0 ), lineStart( 0 ) {}
-	~Char() { format = 0; }
-	QChar c;
-	ushort x;
-	KTextEditFormat *format;
-	uint lineStart : 1;
+        Char() : format( 0 ), lineStart( 0 ) {}
+        ~Char() { format = 0; }
+        QChar c;
+        ushort x;
+        KTextEditFormat *format;
+        uint lineStart : 1;
     private:
-	Char &operator=( const Char & ) {
-	    return *this;
-	}
-	
+        Char &operator=( const Char & ) {
+            return *this;
+        }
+
     };
 
     KTextEditString();
@@ -361,15 +361,15 @@ class KTextEditParag
 {
 public:
     struct LineStart {
-	LineStart() : y( 0 ), baseLine( 0 ), h( 0 ) {}
-	LineStart( ushort y_, ushort bl, ushort h_ ) : y( y_ ), baseLine( bl ), h( h_ ) {}
-	ushort y, baseLine, h;
+        LineStart() : y( 0 ), baseLine( 0 ), h( 0 ) {}
+        LineStart( ushort y_, ushort bl, ushort h_ ) : y( y_ ), baseLine( bl ), h( h_ ) {}
+        ushort y, baseLine, h;
     };
 
     enum Type {
-	Normal = 0,
-	BulletList,
-	EnumList
+        Normal = 0,
+        BulletList,
+        EnumList
     };
 
     KTextEditParag( KTextEditDocument *d, KTextEditParag *pr, KTextEditParag *nx, bool updateIds = TRUE );
@@ -440,17 +440,17 @@ public:
     int alignment() const;
 
     virtual void paint( QPainter &painter, const QColorGroup &cg,
-			KTextEditCursor *cusror = 0, bool drawSelections = FALSE );
+                        KTextEditCursor *cusror = 0, bool drawSelections = FALSE );
 
 private:
     void drawParagBuffer( QPainter &painter, const QString &buffer, int startX,
-			  int lastY, int baseLine, int bw, int h, bool drawSelections,
-			  KTextEditFormat *lastFormat, int i, int *selectionStarts,
-			  int *selectionEnds, const QColorGroup &cg  );
+                          int lastY, int baseLine, int bw, int h, bool drawSelections,
+                          KTextEditFormat *lastFormat, int i, int *selectionStarts,
+                          int *selectionEnds, const QColorGroup &cg  );
 
 private:
     struct Selection {
-	int start, end;
+        int start, end;
     };
 
     QMap<int, LineStart*> lineStarts;
@@ -502,14 +502,14 @@ class KTextEditFormat
 
 public:
     enum Flags {
-	Bold = 1,
-	Italic = 2,
-	Underline = 4,
-	Family = 8,
-	Size = 16,
-	Color = 32,
-	Font = Bold | Italic | Underline | Family | Size,
-	Format = Font | Color
+        Bold = 1,
+        Italic = 2,
+        Underline = 4,
+        Family = 8,
+        Size = 16,
+        Color = 32,
+        Font = Bold | Italic | Underline | Family | Size,
+        Format = Font | Color
     };
 
     KTextEditFormat( const QFont &f, const QColor &c );
@@ -556,7 +556,7 @@ private:
     KTextEditFormatCollection *collection;
     int ref;
     QString k;
-    
+
 };
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -599,9 +599,9 @@ class KTextEdit : public QWidget
 
 public:
     enum ParagType {
-	Normal = 0,
-	BulletList,
-	EnumList
+        Normal = 0,
+        BulletList,
+        EnumList
     };
 
     KTextEdit( KPresenterDoc *doc, QWidget *parent, const QString &fn, bool tabify = FALSE );
@@ -617,9 +617,9 @@ public:
 
     void cursorPosition( int &parag, int &index );
     void selection( int &parag_from, int &index_from,
-		    int &parag_to, int &index_to );
+                    int &parag_to, int &index_to );
     virtual bool find( const QString &expr, bool cs, bool wo, bool forward = TRUE,
-		       int *parag = 0, int *index = 0 );
+                       int *parag = 0, int *index = 0 );
     void insert( const QString &text, bool checkNewLine = FALSE );
 
     int paragraphs() const;
@@ -671,7 +671,7 @@ public slots:
 
     virtual void setCursorPosition( int parag, int index );
     virtual void setSelection( int parag_from, int index_from,
-			       int parag_to, int index_to );
+                               int parag_to, int index_to );
 
     virtual void setReadOnly( bool ro );
     virtual void setModified( bool m );
@@ -717,33 +717,33 @@ private slots:
 
 private:
     enum MoveDirection {
-	MoveLeft,
-	MoveRight,
-	MoveUp,
-	MoveDown,
-	MoveHome,
-	MoveEnd,
-	MovePgUp,
-	MovePgDown
+        MoveLeft,
+        MoveRight,
+        MoveUp,
+        MoveDown,
+        MoveHome,
+        MoveEnd,
+        MovePgUp,
+        MovePgDown
     };
     enum KeyboardAction {
-	ActionBackspace,
-	ActionDelete,
-	ActionReturn
+        ActionBackspace,
+        ActionDelete,
+        ActionReturn
     };
 
     struct UndoRedoInfo {
-	enum Type { Invalid, Insert, Delete, Backspace, Return, RemoveSelected };
-	UndoRedoInfo( KTextEditDocument *d ) : type( Invalid ), doc( d )
-	{ text = QString::null; id = -1; index = -1; }
-	void clear();
-	inline bool valid() const { return !text.isEmpty() && id >= 0&& index >= 0; }
+        enum Type { Invalid, Insert, Delete, Backspace, Return, RemoveSelected };
+        UndoRedoInfo( KTextEditDocument *d ) : type( Invalid ), doc( d )
+        { text = QString::null; id = -1; index = -1; }
+        void clear();
+        inline bool valid() const { return !text.isEmpty() && id >= 0&& index >= 0; }
 
-    	QString text;
-	int id;
-	int index;
-	Type type;
-	KTextEditDocument *doc;
+        QString text;
+        int id;
+        int index;
+        Type type;
+        KTextEditDocument *doc;
     };
 
 private:
@@ -812,7 +812,7 @@ inline void KTextEditCursor::setParag( KTextEditParag *s )
 inline void KTextEditCursor::checkIndex()
 {
     if ( idx >= string->length() )
-	idx = string->length() - 1;
+        idx = string->length() - 1;
 }
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -835,7 +835,7 @@ inline int KTextEditDocument::width() const
 inline int KTextEditDocument::height() const
 {
     if ( !lParag )
-	return 0;
+        return 0;
     return lParag->rect().bottom() + 1;
 }
 
@@ -903,9 +903,9 @@ inline KTextEditParag *KTextEditDocument::paragAt( int i ) const
 {
     KTextEditParag *s = fParag;
     while ( s ) {
-	if ( s->paragId() == i )
-	    return s;
-	s = s->next();
+        if ( s->paragId() == i )
+            return s;
+        s = s->next();
     }
     return 0;
 }
@@ -919,29 +919,29 @@ inline int KTextEditDocument::listIndent( int depth ) const
 inline KTextEditDocument::Bullet KTextEditDocument::bullet( int depth ) const
 {
     if ( depth == 0 )
-	return txtSettings.bulletType[ 0 ];
+        return txtSettings.bulletType[ 0 ];
     else if ( depth == 1 )
-	return txtSettings.bulletType[ 1 ];
+        return txtSettings.bulletType[ 1 ];
     else if ( depth == 2 )
-	return txtSettings.bulletType[ 2 ];
+        return txtSettings.bulletType[ 2 ];
     else if ( depth == 3 )
-	return txtSettings.bulletType[ 3 ];
+        return txtSettings.bulletType[ 3 ];
     else
-	return txtSettings.bulletType[ 0 ];
+        return txtSettings.bulletType[ 0 ];
 }
 
 inline QColor KTextEditDocument::bulletColor( int depth ) const
 {
     if ( depth == 0 )
-	return txtSettings.bulletColor[ 0 ];
+        return txtSettings.bulletColor[ 0 ];
     else if ( depth == 1 )
-	return txtSettings.bulletColor[ 1 ];
+        return txtSettings.bulletColor[ 1 ];
     else if ( depth == 2 )
-	return txtSettings.bulletColor[ 2 ];
+        return txtSettings.bulletColor[ 2 ];
     else if ( depth == 3 )
-	return txtSettings.bulletColor[ 3 ];
+        return txtSettings.bulletColor[ 3 ];
     else
-	return txtSettings.bulletColor[ 0 ];
+        return txtSettings.bulletColor[ 0 ];
 }
 
 inline int KTextEditDocument::paragSpacing( KTextEditParag * ) const
@@ -957,7 +957,7 @@ inline int KTextEditDocument::lineSpacing() const
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 inline KTextEditFormat::KTextEditFormat( const QFont &f, const QColor &c )
-    : fn( f ), col( c ), fm( new QFontMetrics( f ) )
+    : fn( f ), col( c ), fm( new QFontMetrics( f ) ), collection( 0L )
 {
     leftBearing = fm->minLeftBearing();
     rightBearing = fm->minRightBearing();
@@ -965,20 +965,21 @@ inline KTextEditFormat::KTextEditFormat( const QFont &f, const QColor &c )
     asc = fm->ascent();
     dsc = fm->descent();
     for ( int i = 0; i < 256; ++i )
-	widths[ i ] = 0;
+        widths[ i ] = 0;
     generateKey();
     addRef();
 }
 
-inline KTextEditFormat::KTextEditFormat( const KTextEditFormat &f )
+inline KTextEditFormat::KTextEditFormat( const KTextEditFormat &f ) : collection( 0L )
 {
+    qDebug("constructing a format from another one");
     fn = f.fn;
     col = f.col;
     fm = new QFontMetrics( fn );
     leftBearing = f.leftBearing;
     rightBearing = f.rightBearing;
     for ( int i = 0; i < 256; ++i )
-	widths[ i ] = f.widths[ i ];
+        widths[ i ] = f.widths[ i ];
     hei = f.hei;
     asc = f.asc;
     dsc = f.dsc;
@@ -995,7 +996,7 @@ inline void KTextEditFormat::update()
     asc = fm->ascent();
     dsc = fm->descent();
     for ( int i = 0; i < 256; ++i )
-	widths[ i ] = 0;
+        widths[ i ] = 0;
     generateKey();
 }
 
@@ -1027,14 +1028,14 @@ inline int KTextEditFormat::minRightBearing() const
 inline int KTextEditFormat::width( const QChar &c ) const
 {
     if ( c == '\t' )
-	return 30;
+        return 30;
     int w = 0;
     if ( c.unicode() < 256 )
-	w = widths[ c.unicode() ];
+        w = widths[ c.unicode() ];
     if ( w == 0 ) {
-	w = fm->width( c );
-	if ( c.unicode() < 256 )
-	    ( (KTextEditFormat*)this )->widths[ c.unicode() ] = w;
+        w = fm->width( c );
+        if ( c.unicode() < 256 )
+            ( (KTextEditFormat*)this )->widths[ c.unicode() ] = w;
     }
     return w;
 }
@@ -1076,12 +1077,12 @@ inline void KTextEditFormat::removeRef()
 {
     ref--;
     if ( !collection )
-	return;
+        return;
 #ifdef DEBUG_COLLECTION
     qDebug( "remove ref of '%s' to %d (%p)", k.latin1(), ref, this );
 #endif
     if ( ref == 0 )
-	collection->remove( this );
+        collection->remove( this );
 }
 
 inline QString KTextEditFormat::key() const
@@ -1181,8 +1182,8 @@ inline void KTextEditParag::setSelection( int id, int start, int end )
 {
     QMap<int, Selection>::ConstIterator it = selections.find( id );
     if ( it != selections.end() ) {
-	if ( start == ( *it ).start && end == ( *it ).end )
-	    return;
+        if ( start == ( *it ).start && end == ( *it ).end )
+            return;
     }
 
     Selection sel;
@@ -1202,7 +1203,7 @@ inline int KTextEditParag::selectionStart( int id ) const
 {
     QMap<int, Selection>::ConstIterator it = selections.find( id );
     if ( it == selections.end() )
-	return -1;
+        return -1;
     return ( *it ).start;
 }
 
@@ -1210,7 +1211,7 @@ inline int KTextEditParag::selectionEnd( int id ) const
 {
     QMap<int, Selection>::ConstIterator it = selections.find( id );
     if ( it == selections.end() )
-	return -1;
+        return -1;
     return ( *it ).end;
 }
 
@@ -1218,7 +1219,7 @@ inline bool KTextEditParag::hasSelection( int id ) const
 {
     QMap<int, Selection>::ConstIterator it = selections.find( id );
     if ( it == selections.end() )
-	return FALSE;
+        return FALSE;
     return ( *it ).start != ( *it ).end || length() == 1;
 }
 
@@ -1231,7 +1232,7 @@ inline bool KTextEditParag::fullSelected( int id ) const
 {
     QMap<int, Selection>::ConstIterator it = selections.find( id );
     if ( it == selections.end() )
-	return FALSE;
+        return FALSE;
     return ( *it ).start == 0 && ( *it ).end == str->length() - 1;
 }
 
@@ -1243,7 +1244,7 @@ inline void KTextEditParag::setParagId( int i )
 inline int KTextEditParag::paragId() const
 {
     if ( id == -1 )
-	qWarning( "invalid parag id!!!!!!!! (%p)", this );
+        qWarning( "invalid parag id!!!!!!!! (%p)", this );
     return id;
 }
 
@@ -1255,16 +1256,16 @@ inline QMap<int, KTextEditParag::LineStart*> &KTextEditParag::lineStartList()
 inline int KTextEditParag::lineY( int l ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
-	qWarning( "KTextEditParag::lineY: line %d out of range!", l );
-	return 0;
+        qWarning( "KTextEditParag::lineY: line %d out of range!", l );
+        return 0;
     }
 
     if ( !isValid() )
-	( (KTextEditParag*)this )->format();
+        ( (KTextEditParag*)this )->format();
 
     QMap<int, LineStart*>::ConstIterator it = lineStarts.begin();
     while ( l-- > 0 )
-	++it;
+        ++it;
     return ( *it )->y;
 }
 
@@ -1272,52 +1273,52 @@ inline int KTextEditParag::lineY( int l ) const
 inline int KTextEditParag::lineBaseLine( int l ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
-	qWarning( "KTextEditParag::lineBaseLine: line %d out of range!", l );
-	return 10;
+        qWarning( "KTextEditParag::lineBaseLine: line %d out of range!", l );
+        return 10;
     }
 
     if ( !isValid() )
-	( (KTextEditParag*)this )->format();
+        ( (KTextEditParag*)this )->format();
 
     QMap<int, LineStart*>::ConstIterator it = lineStarts.begin();
     while ( l-- > 0 )
-	++it;
+        ++it;
     return ( *it )->baseLine;
 }
 
 inline int KTextEditParag::lineHeight( int l ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
-	qWarning( "KTextEditParag::lineHeight: line %d out of range!", l );
-	return 15;
+        qWarning( "KTextEditParag::lineHeight: line %d out of range!", l );
+        return 15;
     }
 
     if ( !isValid() )
-	( (KTextEditParag*)this )->format();
+        ( (KTextEditParag*)this )->format();
 
     QMap<int, LineStart*>::ConstIterator it = lineStarts.begin();
     while ( l-- > 0 )
-	++it;
+        ++it;
     return ( *it )->h;
 }
 
 inline void KTextEditParag::lineInfo( int l, int &y, int &h, int &bl ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
-	qWarning( "KTextEditParag::lineInfo: line %d out of range!", l );
-	qDebug( "%d %d", lineStarts.count() - 1, l );
-	y = 0;
-	h = 15;
-	bl = 10;
-	return;
+        qWarning( "KTextEditParag::lineInfo: line %d out of range!", l );
+        qDebug( "%d %d", lineStarts.count() - 1, l );
+        y = 0;
+        h = 15;
+        bl = 10;
+        return;
     }
 
     if ( !isValid() )
-	( (KTextEditParag*)this )->format();
+        ( (KTextEditParag*)this )->format();
 
     QMap<int, LineStart*>::ConstIterator it = lineStarts.begin();
     while ( l-- > 0 )
-	++it;
+        ++it;
     y = ( *it )->y;
     h = ( *it )->h;
     bl = ( *it )->baseLine;
@@ -1341,13 +1342,13 @@ inline KTextEditParag::Type KTextEditParag::type() const
 inline void KTextEditParag::setType( Type t )
 {
     if ( t != typ ) {
-	invalidate( 0 );
-	if ( p  && p->type() == typ )
-	    p->invalidate( 0 );
+        invalidate( 0 );
+        if ( p  && p->type() == typ )
+            p->invalidate( 0 );
     }
     typ = t;
     if ( t == Normal )
-	left = 0;
+        left = 0;
 }
 
 inline int KTextEditParag::leftIndent() const
@@ -1363,7 +1364,7 @@ inline int KTextEditParag::listDepth() const
 inline void KTextEditParag::setAlignment( int a )
 {
     if ( a == align )
-	return;
+        return;
     align = a;
     invalidate( 0 );
 }
