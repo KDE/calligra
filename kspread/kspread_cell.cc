@@ -4137,6 +4137,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
                         setFactor(100.0); // should have been already done by loadLayout
                         m_strText += '%';
                     }
+
                     break;
                 }
                 case DateData:
@@ -4294,6 +4295,12 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
         default:
             Q_ASSERT( 0 );
         }
+
+        tmp_op = decodeFormula( tmp_op, m_iColumn, m_iRow );
+        setFlag(Flag_LayoutDirty);
+        clearFlag(Flag_Error);
+        m_content = Formula;
+
         return tmp_op;
     }
     else if ( ( new_text[0] == '=' && old_text[0] == '=' ) ||
@@ -4316,8 +4323,20 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
         default :
             Q_ASSERT( 0 );
         }
+
+        clearFormula();
+        tmp_op = decodeFormula( tmp_op, m_iColumn, m_iRow );
+        setFlag(Flag_LayoutDirty);
+        clearFlag(Flag_Error);
+        m_content = Formula;
+
         return tmp_op;
     }
+
+    new_text = decodeFormula( new_text, m_iColumn, m_iRow );
+    setFlag(Flag_LayoutDirty);
+    clearFlag(Flag_Error);
+    m_content = Formula;
 
     return new_text;
 }
