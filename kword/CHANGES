@@ -58,3 +58,6 @@ Reggie, 14.9.1998:
 - Fixed a redraw problem with delete/backspace, but there are still
   problems with setting the cursor.
 - Bugfix in printLine
+- Bugfix in Key_Delete
+- Improoved speed of deleting/inserting text and scrolling the canvas
+  (now only the visible text is repainted) 
