@@ -1,35 +1,20 @@
-INCLUDES  = -I$(srcdir)/widgets -I$(srcdir)/dialogs -I$(srcdir)/tools\
- $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) 
+INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) 
 
 kimageshop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 kimageshop_LDADD = ../lib/kofficeui/libkofficeui.la
 
 libkimageshop_la_LDFLAGS = $(all_libraries) -avoid-version -module
-libkimageshop_la_LIBADD =  widgets/libkiswidgets.la dialogs/libkisdialogs.la tools/libkistools.la ../lib/kofficeui/libkofficeui.la
+libkimageshop_la_LIBADD =  core/libkiscore.la ui/libkisui.la tools/libkistools.la \
+	../lib/kofficeui/libkofficeui.la
 
-SUBDIRS = widgets dialogs tools . data pics
-
-####### Files
+SUBDIRS = core tools ui . data pics
 
 bin_PROGRAMS = kimageshop
 lib_LTLIBRARIES = libkimageshop.la
 
-libkimageshop_la_SOURCES = kimageshop_shell.cc kimageshop_doc.cc kimageshop_view.cc \
-	kimageshop_factory.cc kimageshop_config.cc kimageshop_undo.cc brush.cc \
-	channeldata.cc misc.cc layer.cc tool.cc  vec.cc color.cc kimageshop_canvas.cc \
-	kimageshop_image.cc kimageshop_tabbar.cc
+libkimageshop_la_SOURCES = dummy.cc
 
 kimageshop_SOURCES = main.cc
-
-
-noinst_HEADERS =  kimageshop_global.h  kimageshop_shell.h kimageshop_doc.h \
-	kimageshop_view.h kimageshop_factory.h kimageshop_config.h \
-	kimageshop_undo.h vec.h color.h channeldata.h misc.h layer.h tool.h \
-	kimageshop_canvas.h kimageshop_image.h kimageshop_tabbar.h
-
-libkimageshop_la_METASOURCES = kimageshop_shell.moc kimageshop_doc.moc \
-	kimageshop_view.moc kimageshop_factory.moc kimageshop_config.moc layer.moc \
-	tool.moc kimageshop_canvas.moc kimageshop_image.moc kimageshop_tabbar.moc
 
 kdelnk_DATA = kimageshop.desktop
 kdelnkdir = $(kde_appsdir)/Applications/KOffice
@@ -41,7 +26,7 @@ rcdir = $(kde_datadir)/kimageshop
 rc_DATA = kimageshop.rc kimageshop_shell.rc
 
 check_PROGRAMS = linktest
-linktest_SOURCES = $(libkimageshop_la_SOURCES)
+linktest_SOURCES = $(libkimageshop_la_SOURCES) $(kimageshop_SOURCES)
 linktest_LDADD = $(lib_LTLIBRARIES)
 linktest_LDFLAGS = $(libkimageshop_LDFLAGS) 
 

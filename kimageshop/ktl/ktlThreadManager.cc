@@ -57,7 +57,7 @@ KTL::Thread *KTL::ThreadManager::getThread(pthread_t threadHandle)
 	it = threadList.find(threadHandle);
 
 	if ( it == threadList.end() )
-		throw KTL::UnknownThreadException("Thread is not known");
+	  throw KTL::UnknownThreadException("Thread is not known");
 
 	return it->second; 
 }

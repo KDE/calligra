@@ -1,8 +1,9 @@
-INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../widgets -I$(srcdir)/../dialogs $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES = -I$(srcdir)/../core -I$(srcdir)/../ui $(KOFFICE_INCLUDES) $(all_includes)
 
 noinst_LTLIBRARIES = libkistools.la
 
-libkistools_la_SOURCES = movetool.cc zoomtool.cc brushtool.cc gradienttool.cc pentool.cc colorpicker.cc
+libkistools_la_SOURCES = kis_tool_move.cc kis_tool_zoom.cc kis_tool_brush.cc \
+	kis_tool_pen.cc kis_tool_colorpicker.cc kis_tool_gradient.cc
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc *.h && mv messages.po ../../po/libkistools.pot
