@@ -335,7 +335,7 @@ bool StarWriterImport::parseTable(QByteArray n)
             // FIXME: check this stuff
             QString frameName = QString("%1 Cell %2,%3").arg(tableName).arg(row).arg(column);
             tableText.append(QString(" <FRAMESET name=\"%1\" frameType=\"1\" frameInfo=\"0\" removable=\"0\" visible=\"1\" grpMgr=\"%2\" row=\"%3\" col=\"%4\" rows=\"1\" cols=\"1\" protectSize=\"0\">\n").arg(frameName).arg(tableName).arg(row).arg(column));
-            tableText.append(" <FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"1\" runaroundSide=\"biggest\" autoCreateNewFrame=\"0\" />\n");
+            tableText.append(" <FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"1\" runaroundSide=\"biggest\" autoCreateNewFrame=\"0\" bleftpt=\"2.8\" brightpt=\"2.8\" btoppt=\"2.8\" bbottompt=\"2.8\"/>\n");
             tableText.append("  <PARAGRAPH>\n");
             tableText.append("   <TEXT xml:space=\"preserve\">" + text + "</TEXT>\n");
             tableText.append("  </PARAGRAPH>\n");
