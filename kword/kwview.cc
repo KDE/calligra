@@ -4145,8 +4145,10 @@ void KWView::slotUpdateRuler()
         frame = edit->currentFrame();
     else
         frame = m_doc->getFirstSelectedFrame();
-    if( !frame)
-        frame=m_doc->frameSet(0)->frame(0);
+    if( !frame) {
+        KWFrameSet *fs= m_doc->frameSet(0);
+        if(fs) frame=fs->frame(0);
+    }
     if ( frame )
     {
         QRect r = m_doc->zoomRect( *frame );
