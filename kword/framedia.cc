@@ -876,7 +876,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
     grid4->addMultiCellWidget( grp1, row, (++row), 0,1 );
 
-    if(frame && (frameType == FT_TEXT || frameType == FT_TABLE)) {
+    if(frame) {
         QGroupBox *grp2 = new QGroupBox( i18n("Margins in %1").arg(doc->getUnitName()), tab4 );
         mGrid = new QGridLayout( grp2, 6, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
@@ -888,65 +888,73 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         lml->resize( lml->sizeHint() );
         mGrid->addWidget( lml, 2, 0 );
 
-        sml = new KDoubleNumInput( grp2 );
+        m_inputLeftMargin = new KDoubleNumInput( grp2 );
 
-        sml->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bLeft()), doc->getUnit() ) );
-        sml->resize( sml->sizeHint() );
-        mGrid->addWidget( sml, 3, 0 );
+        m_inputLeftMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bLeft()), doc->getUnit() ) );
+        m_inputLeftMargin->resize( m_inputLeftMargin->sizeHint() );
+        mGrid->addWidget( m_inputLeftMargin, 3, 0 );
 
         lmr = new QLabel( i18n( "Right:" ), grp2 );
         lmr->resize( lmr->sizeHint() );
         mGrid->addWidget( lmr, 2, 1 );
 
-        smr = new KDoubleNumInput( grp2 );
+        m_inputRightMargin = new KDoubleNumInput( grp2 );
 
-        smr->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bRight()), doc->getUnit() ) );
-        smr->resize( smr->sizeHint() );
-        mGrid->addWidget( smr, 3, 1 );
+        m_inputRightMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bRight()), doc->getUnit() ) );
+        m_inputRightMargin->resize( m_inputRightMargin->sizeHint() );
+        mGrid->addWidget( m_inputRightMargin, 3, 1 );
 
         lmt = new QLabel( i18n( "Top:" ), grp2 );
         lmt->resize( lmt->sizeHint() );
         mGrid->addWidget( lmt, 4, 0 );
 
-        smt = new KDoubleNumInput( grp2 );
+        m_inputTopMargin = new KDoubleNumInput( grp2 );
 
-        smt->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bTop()), doc->getUnit() ) );
-        smt->resize( smt->sizeHint() );
-        mGrid->addWidget( smt, 5, 0 );
+        m_inputTopMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bTop()), doc->getUnit() ) );
+        m_inputTopMargin->resize( m_inputTopMargin->sizeHint() );
+        mGrid->addWidget( m_inputTopMargin, 5, 0 );
 
         lmb = new QLabel( i18n( "Bottom:" ), grp2 );
         lmb->resize( lmb->sizeHint() );
         mGrid->addWidget( lmb, 4, 1 );
 
-        smb = new KDoubleNumInput( grp2 );
+        m_inputBottomMargin = new KDoubleNumInput( grp2 );
 
-        smb->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bBottom()), doc->getUnit() ) );
-        smb->resize( smb->sizeHint() );
-        mGrid->addWidget( smb, 5, 1 );
+        m_inputBottomMargin->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bBottom()), doc->getUnit() ) );
+        m_inputBottomMargin->resize( m_inputBottomMargin->sizeHint() );
+        mGrid->addWidget( m_inputBottomMargin, 5, 1 );
 
-    
-        oldMarginLeft=sml->value();
-        oldMarginRight=smr->value();
-        oldMarginTop=smt->value();
-        oldMarginBottom=smb->value();
 
-        connect( smb, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
-        connect( sml, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
-        connect( smr, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
-        connect( smt, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
+        oldMarginLeft=m_inputLeftMargin->value();
+        oldMarginRight=m_inputRightMargin->value();
+        oldMarginTop=m_inputTopMargin->value();
+        oldMarginBottom=m_inputBottomMargin->value();
+
+        connect( m_inputBottomMargin, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
+        connect( m_inputLeftMargin, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
+        connect( m_inputRightMargin, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
+        connect( m_inputTopMargin, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
         grid4->addMultiCellWidget( grp2, row, (++row), 0,1 );
         mGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
 
         if (tab1 && cbProtectContent )
         {
             bool state = !cbProtectContent->isChecked();
-            smb->setEnabled( state );
-            smr->setEnabled( state );
-            smt->setEnabled( state );
-            sml->setEnabled( state );
+            m_inputBottomMargin->setEnabled( state );
+            m_inputRightMargin->setEnabled( state );
+            m_inputTopMargin->setEnabled( state );
+            m_inputLeftMargin->setEnabled( state );
             synchronize->setEnabled( state );
         }
     }
+    else
+    {
+        m_inputLeftMargin = 0L;
+        m_inputRightMargin = 0L;
+        m_inputTopMargin = 0L;
+        m_inputBottomMargin = 0L;
+    }
+
 
     bool isMainFrame = false;
     if ( frame ) {
@@ -1005,8 +1013,8 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         }
     }
 
-    if ( !frame || frame->frameSet() && ( frame->frameSet()->isHeaderOrFooter() || 
-            isMainFrame || frame->frameSet()->isFootEndNote()) ) { 
+    if ( !frame || frame->frameSet() && ( frame->frameSet()->isHeaderOrFooter() ||
+            isMainFrame || frame->frameSet()->isFootEndNote()) ) {
         // is multi frame, positions don't work for that..
         // also not for default frames.
         sx->setEnabled( false );
@@ -1081,12 +1089,12 @@ void KWFrameDia::setupTab5() { // Tab Background fill/color
 
 void KWFrameDia::slotProtectContentChanged( bool b)
 {
-    if (tab4&& !noSignal)
+    if (tab4 && !noSignal && m_inputLeftMargin)
     {
-        sml->setEnabled( !b );
-        smr->setEnabled( !b );
-        smt->setEnabled( !b );
-        smb->setEnabled( !b );
+        m_inputLeftMargin->setEnabled( !b );
+        m_inputRightMargin->setEnabled( !b );
+        m_inputTopMargin->setEnabled( !b );
+        m_inputBottomMargin->setEnabled( !b );
         synchronize->setEnabled( !b);
     }
 }
@@ -1308,13 +1316,13 @@ void KWFrameDia::slotFloatingToggled(bool b)
 
 void KWFrameDia::slotMarginsChanged( double val)
 {
-    if ( synchronize->isChecked() && !noSignal)
+    if ( synchronize->isChecked() && !noSignal && m_inputLeftMargin )
     {
         noSignal = true;
-        sml->setValue( val );
-        smb->setValue( val );
-        smr->setValue( val );
-        smt->setValue( val );
+        m_inputLeftMargin->setValue( val );
+        m_inputBottomMargin->setValue( val );
+        m_inputRightMargin->setValue( val );
+        m_inputTopMargin->setValue( val );
         noSignal = false;
     }
 }
@@ -1641,10 +1649,13 @@ bool KWFrameDia::applyChanges()
         py = QMAX(0, KoUnit::ptFromUnit(sy->value(),doc->getUnit())) +pageNum * doc->ptPaperHeight();
         pw = QMAX(KoUnit::ptFromUnit( sw->value(), doc->getUnit() ),0);
         ph = QMAX(KoUnit::ptFromUnit(sh->value(), doc->getUnit() ),0);
-        uLeft=QMAX(0, KoUnit::ptFromUnit( sml->value(), doc->getUnit() ));
-        uRight=QMAX(0, KoUnit::ptFromUnit( smr->value(), doc->getUnit() ));
-        uTop=QMAX(0, KoUnit::ptFromUnit( smt->value(), doc->getUnit() ));
-        uBottom=QMAX(0, KoUnit::ptFromUnit( smb->value(), doc->getUnit() ));
+        if ( m_inputLeftMargin )
+        {
+            uLeft=QMAX(0, KoUnit::ptFromUnit( m_inputLeftMargin->value(), doc->getUnit() ));
+            uRight=QMAX(0, KoUnit::ptFromUnit( m_inputRightMargin->value(), doc->getUnit() ));
+            uTop=QMAX(0, KoUnit::ptFromUnit( m_inputTopMargin->value(), doc->getUnit() ));
+            uBottom=QMAX(0, KoUnit::ptFromUnit( m_inputBottomMargin->value(), doc->getUnit() ));
+        }
     }
     KoRect rect( px, py, pw, ph );
 
@@ -1677,7 +1688,7 @@ bool KWFrameDia::applyChanges()
             if( !doc->isOutOfPage( rect , frame->pageNum() ) ) {
                 frame->setRect( px, py, pw, ph );
                 //don't change margins when frame is protected.
-                if ( !tab1 || (tab1 && cbProtectContent && !cbProtectContent->isChecked()))
+                if ( m_inputLeftMargin && ( !tab1 || (tab1 && cbProtectContent && !cbProtectContent->isChecked())) )
                     frame->setFrameMargins( uLeft, uTop, uRight, uBottom);
                 doc->frameChanged( frame );
             } else {
@@ -1747,9 +1758,6 @@ bool KWFrameDia::applyChanges()
 
             }
             if ( frame ) {
-                bool state = ( doc->processingType() == KWDocument::DTP ||
-                               ( doc->processingType() == KWDocument::WP &&
-                                 doc->frameSetNum( f->frameSet() ) > 0 ) );
                 if ( frame->frameSet()->isMainFrameset() &&
                         (oldX != sx->value() || oldY != sy->value() || oldW != sw->value() || oldH != sh->value() )) {
                     //kdDebug() << "Old geom: " << oldX << ", " << oldY<< " " << oldW << "x" << oldH << endl;
@@ -1775,10 +1783,10 @@ bool KWFrameDia::applyChanges()
                         KMessageBox::sorry( this,i18n("The frame will not be resized because the new size would be greater than the size of the page."));
                     }
                 }
-                if (!tab1 || (tab1 && cbProtectContent && !cbProtectContent->isChecked()))
+                if (m_inputLeftMargin && (!tab1 || (tab1 && cbProtectContent && !cbProtectContent->isChecked())))
                 {
-                    if ( oldMarginLeft!=sml->value() || oldMarginRight!=smr->value() ||
-                         oldMarginTop!=smt->value() || oldMarginBottom!=smb->value())
+                    if ( oldMarginLeft!=m_inputLeftMargin->value() || oldMarginRight!=m_inputRightMargin->value() ||
+                         oldMarginTop!=m_inputTopMargin->value() || oldMarginBottom!=m_inputBottomMargin->value())
                     {
                         FrameIndex index( f );
                         FrameMarginsStruct tmpMargBegin(f);

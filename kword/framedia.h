@@ -134,7 +134,7 @@ private:
     QGridLayout *grid4, *pGrid, *mGrid;
     QLabel *lx, *lml, *lmr, *lmt, *lmb, *ly, *lw, *lh;
     KDoubleNumInput *sx, *sy, *sw, *sh;
-    KDoubleNumInput *sml, *smr, *smt, *smb;
+    KDoubleNumInput *m_inputLeftMargin, *m_inputRightMargin, *m_inputTopMargin, *m_inputBottomMargin;
     QCheckBox *synchronize;
     QCheckBox *floating;
     QCheckBox *protectSize;
