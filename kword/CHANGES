@@ -570,3 +570,9 @@ Reggie, 27.12.1998:
 - Worked a bit on the DTD
 - Reorganized UI of stylist (with german translation ig got much too wide)
 - Started implementing spellchecking
+
+Reggie, 28.12.1998:
+-------------------
+- More work on spell checking
+- Started with the tab for tabulator settings in the parag layout dia
+- Some small fixes

@@ -32,6 +32,7 @@
 #include <qbuttongroup.h>
 #include <qlineedit.h>
 #include <qstrlist.h>
+#include <qlistbox.h>
 
 #include <kapp.h>
 #include <krestrictedline.h>
@@ -39,6 +40,8 @@
 #include <kcolorbtn.h>
 #include <kspinbox.h>
 #include "kcharselectdia.h"
+
+#include <koRuler.h>
 
 #include <stdlib.h>
 
@@ -177,6 +180,8 @@ public:
 
   void setFlow(KWParagLayout::Flow _flow);
 
+  void setTabList(QList<KoTabulator> *tabList);
+
   float getLeftIndent()
     { return atof(eLeft->text()); } 
   float getFirstLineIndent()
@@ -212,22 +217,26 @@ protected:
   void updateBorders();
 
   QWidget *tab1,*tab2,*tab3,*tab4,*tab5;
-  QGridLayout *grid1,*grid2,*grid3,*grid4,*indentGrid,*spacingGrid,*pSpaceGrid,*tgrid,*txtgrid,*ogrid;
-  KRestrictedLine *eLeft,*eRight,*eFirstLine,*eSpacing,*eBefore,*eAfter;
+  QGridLayout *grid1,*grid2,*grid3,*grid4,*grid5,*indentGrid,*spacingGrid,*pSpaceGrid,*tgrid,*txtgrid,*ogrid,*tabGrid;
+  KRestrictedLine *eLeft,*eRight,*eFirstLine,*eSpacing,*eBefore,*eAfter,*eTabPos;
   QLabel *lLeft,*lRight,*lFirstLine,*lBefore,*lAfter,*lFlow,*lStyle,*lWidth,*lColor,*lDepth,*lcLeft,*lcRight,*lStart;
   QGroupBox *indentFrame,*spacingFrame,*pSpaceFrame,*gType,*gText,*gOther;
   QComboBox *cSpacing,*cStyle,*cWidth;
   QRadioButton *rLeft,*rCenter,*rRight,*rBlock,*rANums,*rLRNums,*rURNums,*rLAlph,*rUAlph,*rBullets,*rList,*rChapter,*rNone;
   KWPagePreview *prev1;
   KWPagePreview2 *prev2;
-  KButtonBox *bb;
-  QPushButton *bLeft,*bRight,*bTop,*bBottom,*bBullets,*bFont;
+  KButtonBox *bb,*bbTabs;
+  QPushButton *bLeft,*bRight,*bTop,*bBottom,*bBullets,*bFont,*bAdd,*bDel,*bModify;
   KWBorderPreview *prev3;
   KColorButton *bColor;
   KNumericSpinBox *sDepth;
-  QButtonGroup *g1,*g2;
+  QButtonGroup *g1,*g2,*g3;
   KWNumPreview *prev4;
   QLineEdit *ecLeft,*ecRight,*eStart;
+  QListBox *lTabs;
+  QLabel *lTab;
+  QRadioButton *rtLeft,*rtCenter,*rtRight,*rtDecimal;
+  
 
   KWParagLayout::Border leftBorder,rightBorder,topBorder,bottomBorder;
   int flags;

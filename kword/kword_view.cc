@@ -723,6 +723,7 @@ void KWordView::formatParagraph()
   paragDia->setTopBorder(gui->getPaperWidget()->getTopBorder());
   paragDia->setBottomBorder(gui->getPaperWidget()->getBottomBorder());
   paragDia->setCounter(gui->getPaperWidget()->getCounter());
+  paragDia->setTabList(gui->getPaperWidget()->getParagLayout()->getTabList());
   paragDia->show();
 }
 
@@ -1305,6 +1306,8 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   pix = OPUIUtils::convertPixmap(ICON("editframetool.xpm"));
   m_idMenuTools_EditFrame = m_vMenuTools->insertItem6(pix, i18n("&Edit Frames"), this, "toolsEditFrame", Key_F5, -1, -1 );
+
+  m_vMenuTools->insertSeparator( -1 );
 
   pix = OPUIUtils::convertPixmap(ICON("textframetool.xpm"));
   m_idMenuTools_CreateText = m_vMenuTools->insertItem6(pix, i18n("&Create Text Frame"), this, "toolsCreateText", Key_F6, -1, -1 );

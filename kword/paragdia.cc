@@ -925,6 +925,91 @@ void KWParagDia::setupTab4()
 void KWParagDia::setupTab5()
 {
   tab5 = new QWidget(this);
+  grid5 = new QGridLayout(tab5,4,2,15,7);
+
+  lTab = new QLabel(i18n("Tabulator positions are given in millimeters"),tab5);
+  lTab->resize(lTab->sizeHint());
+  grid5->addWidget(lTab,0,0);
+
+  eTabPos = new KRestrictedLine(tab5,"","1234567890.");
+  eTabPos->resize(eTabPos->sizeHint());
+  grid5->addWidget(eTabPos,1,0);
+
+  bbTabs = new KButtonBox(tab5);
+  bAdd = bbTabs->addButton(i18n("Add"),false);
+  bDel = bbTabs->addButton(i18n("Delete"),false);
+  bModify = bbTabs->addButton(i18n("Modify"),false);
+  bbTabs->layout();
+  bbTabs->resize(bbTabs->sizeHint());
+  grid5->addWidget(bbTabs,2,0);
+  
+  lTabs = new QListBox(tab5);
+  lTabs->resize(lTabs->sizeHint());
+  grid5->addWidget(lTabs,3,0);
+
+  g3 = new QButtonGroup("",tab5);
+  tabGrid = new QGridLayout(g3,5,1,15,7);
+  g3->setExclusive(true);
+
+  rtLeft = new QRadioButton(i18n("Left"),g3);
+  rtLeft->resize(rtLeft->sizeHint());
+  tabGrid->addWidget(rtLeft,0,0);
+  g3->insert(rtLeft);
+
+  rtCenter = new QRadioButton(i18n("Center"),g3);
+  rtCenter->resize(rtCenter->sizeHint());
+  tabGrid->addWidget(rtCenter,1,0);
+  g3->insert(rtCenter);
+
+  rtRight = new QRadioButton(i18n("Right"),g3);
+  rtRight->resize(rtRight->sizeHint());
+  tabGrid->addWidget(rtRight,2,0);
+  g3->insert(rtRight);
+
+  rtDecimal = new QRadioButton(i18n("Decimal"),g3);
+  rtDecimal->resize(rtDecimal->sizeHint());
+  tabGrid->addWidget(rtDecimal,3,0);
+  g3->insert(rtDecimal);
+
+  tabGrid->addRowSpacing(0,rtLeft->height());
+  tabGrid->addRowSpacing(1,rtRight->height());
+  tabGrid->addRowSpacing(2,rtCenter->height());
+  tabGrid->addRowSpacing(3,rtDecimal->height());
+  tabGrid->setRowStretch(0,0);
+  tabGrid->setRowStretch(1,0);
+  tabGrid->setRowStretch(2,0);
+  tabGrid->setRowStretch(3,0);
+  tabGrid->setRowStretch(4,1);
+ 
+  tabGrid->addColSpacing(0,rtLeft->width());
+  tabGrid->addColSpacing(0,rtRight->width());
+  tabGrid->addColSpacing(0,rtCenter->width());
+  tabGrid->addColSpacing(0,rtDecimal->width());
+  tabGrid->setColStretch(0,1);
+
+  tabGrid->activate();
+
+  grid5->addWidget(g3,3,1);
+
+  grid5->addRowSpacing(0,lTab->height());
+  grid5->addRowSpacing(1,eTabPos->height());
+  grid5->addRowSpacing(2,bbTabs->height());
+  grid5->addRowSpacing(3,lTabs->height());
+  grid5->addRowSpacing(3,g3->height());
+  grid5->setRowStretch(0,0);
+  grid5->setRowStretch(1,0);
+  grid5->setRowStretch(2,0);
+  grid5->setRowStretch(3,1);
+
+  grid5->addColSpacing(0,lTab->width());
+  grid5->addColSpacing(0,eTabPos->width());
+  grid5->addColSpacing(0,bbTabs->width());
+  grid5->addColSpacing(0,lTabs->width());
+  grid5->addColSpacing(1,g3->width());
+  grid5->setColStretch(0,1);
+  grid5->setColStretch(1,1);
+
+  grid5->activate();
 
   addTab(tab5,i18n("Tabulators"));
 }
@@ -1273,4 +1358,17 @@ void KWParagDia::setCounter(KWParagLayout::Counter _counter)
 
   sDepth->setValue(counter.counterDepth);
   eStart->setText(counter.startCounter);
+}
+
+/*================================================================*/
+void KWParagDia::setTabList(QList<KoTabulator> *tabList)
+{
+  lTabs->clear();
+  QString str;
+
+  for (unsigned int i = 0;i < tabList->count();i++)
+    {
+      str.sprintf("%d",tabList->at(i)->mmPos);
+      lTabs->insertItem(str);
+    }
 }
