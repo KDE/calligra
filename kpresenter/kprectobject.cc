@@ -103,34 +103,47 @@ void KPRectObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
     double oh = ext.height();
     double pw = pen.width() / 2;
 
+    if ( drawContour ) {
+	QPen pen3( Qt::black, 1, Qt::DotLine );
+	_painter->setPen( pen3 );
+
+	_painter->drawRoundRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw),
+				 _zoomHandler->zoomItX(ow - 2 * pw),
+				 _zoomHandler->zoomItY(oh - 2 * pw),
+				 _zoomHandler->zoomItX(xRnd),_zoomHandler->zoomItY( yRnd) );
+	return;
+    }
+
     QPen pen2(pen);
     pen2.setWidth(_zoomHandler->zoomItX(pen.width()));
+    _painter->setPen( pen2 );
 
-    if ( drawingShadow || fillType == FT_BRUSH || !gradient )
-    {
+    if ( drawingShadow || fillType == FT_BRUSH || !gradient ) {
         _painter->setPen( pen2 );
-        _painter->setBrush( brush );
-        _painter->drawRoundRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw), _zoomHandler->zoomItX(xRnd),_zoomHandler->zoomItY( yRnd) );
+	_painter->setBrush( brush );
+
     }
-    else
-    {
-        QSize size( _zoomHandler->zoomSize( ext ) );
+    else {
+	QSize size( _zoomHandler->zoomSize( ext ) );
         gradient->setSize( size );
         if ( angle == 0 || angle==360 )
-            _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), gradient->pixmap(), 0, 0, _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw) );
-        else  //rotated
-        {
+            _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw),
+				  gradient->pixmap(), 0, 0, _zoomHandler->zoomItX(ow - 2 * pw),
+				  _zoomHandler->zoomItY(oh - 2 * pw) );
+        else {
             QPixmap pix( _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw ));
             QPainter p;
             p.begin( &pix );
             p.drawPixmap( 0, 0, gradient->pixmap() );
             p.end();
-
             _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), pix );
         }
 
-        _painter->setPen( pen2 );
-        _painter->setBrush( Qt::NoBrush );
-        _painter->drawRoundRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw), _zoomHandler->zoomItX(xRnd), _zoomHandler->zoomItY(yRnd) );
+	_painter->setBrush( Qt::NoBrush );
     }
+
+    _painter->drawRoundRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw),
+			     _zoomHandler->zoomItX(ow - 2 * pw),
+			     _zoomHandler->zoomItY(oh - 2 * pw),
+			     _zoomHandler->zoomItX(xRnd),_zoomHandler->zoomItY( yRnd) );
 }

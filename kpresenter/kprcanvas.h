@@ -378,6 +378,7 @@ private:
     // variables
     QPopupMenu *presMenu;
     bool mousePressed;
+    bool drawContour;
     double startAngle;
     ModifyType modType;
     unsigned int oldMx, oldMy;

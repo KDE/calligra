@@ -97,21 +97,29 @@ void KPEllipseObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
     double oh = ext.height();
     QSize size( _zoomHandler->zoomSize( ext ) );
     double pw = pen.width() / 2;
+
+    if ( drawContour ) {
+	QPen pen3( Qt::black, 1, Qt::DotLine );
+	_painter->setPen( pen3 );
+	_painter->drawEllipse( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw),
+			       _zoomHandler->zoomItX(ow - 2 * pw),
+			       _zoomHandler->zoomItY(oh - 2 * pw) );
+	return;
+    }
+
     QPen pen2(pen);
     pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
-    if ( drawingShadow || fillType == FT_BRUSH || !gradient )
-    {
-        _painter->setPen( pen2 );
+    _painter->setPen( pen2 );
+
+    if ( drawingShadow || fillType == FT_BRUSH || !gradient ) {
         _painter->setBrush( brush );
-        _painter->drawEllipse( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw) );
     }
-    else
-    {
-        if ( redrawPix || gradient->size() != size )
-        {
+    else {
+        if ( redrawPix || gradient->size() != size ) {
             redrawPix = false;
             gradient->setSize( size );
-            QRegion clipregion( 0, 0, _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw), QRegion::Ellipse );
+            QRegion clipregion( 0, 0, _zoomHandler->zoomItX(ow - 2 * pw),
+				_zoomHandler->zoomItY(oh - 2 * pw), QRegion::Ellipse );
             pix.resize ( _zoomHandler->zoomItX(ow),_zoomHandler->zoomItY(oh) );
             pix.fill( Qt::white );
             QPainter p;
@@ -123,11 +131,13 @@ void KPEllipseObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
             pix.setMask( pix.createHeuristicMask() );
         }
 
-        _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), pix, 0, 0, _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw) );
+        _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), pix,
+			      0, 0, _zoomHandler->zoomItX(ow - 2 * pw),
+			      _zoomHandler->zoomItY(oh - 2 * pw) );
 
-        _painter->setPen( pen2 );
         _painter->setBrush( Qt::NoBrush );
-        _painter->drawEllipse( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw) );
-
     }
+    _painter->drawEllipse( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw),
+			   _zoomHandler->zoomItX(ow - 2 * pw),
+			   _zoomHandler->zoomItY(oh - 2 * pw) );
 }

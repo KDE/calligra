@@ -85,6 +85,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
 
     if ( parent ) {
         mousePressed = false;
+	drawContour = false;
         modType = MT_NONE;
         resizeObjNum = 0L;
         editNum = 0L;
@@ -341,12 +342,15 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
                                              false /*onlyChanged. Pass as param ?*/,
                                              m_currentTextObjectView->cursor(), true /* idem */ );
                 }
-                else
-                    it.current()->draw( painter, m_view->zoomHandler(), drawSelection );
+		else
+                    it.current()->draw( painter, m_view->zoomHandler(), drawSelection,
+				    (it.current() == rotateNum) && drawContour );
             }
             else
             {
-                it.current()->draw( painter, m_view->zoomHandler(), drawSelection );
+                it.current()->draw( painter, m_view->zoomHandler(), drawSelection,
+				    (it.current() == rotateNum) && drawContour );
+
             }
 	    it.current()->setSubPresStep( 0 );
 	    it.current()->doSpecificEffects( false );
@@ -378,7 +382,7 @@ void KPrCanvas::drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject
     for ( ; it.current(); ++it ) {
         if ( objectIsAHeaderFooterHidden( it.current() ) )
             continue;
-        it.current()->draw( painter, m_view->zoomHandler(), false );
+        it.current()->draw( painter, m_view->zoomHandler(), false, false );
     }
 }
 
@@ -600,6 +604,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 		    // select and raise object
 		    else {
 			rotateNum = kpobject;
+			drawContour = TRUE;
 			startAngle = -kpobject->getAngle();
 			selectObj( kpobject );
 			raiseObject( kpobject );
@@ -1070,6 +1075,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 	if ( !rotateNum )
 	    break;
 
+	drawContour = FALSE;
 	if ( startAngle != rotateNum->getAngle() ) {
 	    QPtrList<RotateCmd::RotateValues> list;
 	    RotateCmd::RotateValues *v = new RotateCmd::RotateValues;

@@ -480,7 +480,7 @@ void KPObject::draw( QPainter *_painter, KoZoomHandler *_zoomHandler,
 		     bool drawSelection, bool drawContour )
 {
     if ( drawSelection &&  !drawContour )
-        paintSelection( _painter, _zoomHandler );
+	paintSelection( _painter, _zoomHandler );
 }
 
 /*====================== get shadow coordinates ==================*/
@@ -805,7 +805,7 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     _painter->save();
 
     // Draw the shadow if any
-    if ( shadowDistance > 0 )
+    if ( shadowDistance > 0 && !drawContour )
     {
         _painter->save();
         QPen tmpPen( pen );
@@ -838,9 +838,9 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
     if ( angle != 0 )
         rotateObject(_painter,_zoomHandler);
-    paint( _painter, _zoomHandler, false );
+    paint( _painter, _zoomHandler, false, drawContour );
 
     _painter->restore();
 
-    KPObject::draw( _painter, _zoomHandler, drawSelection );
+    KPObject::draw( _painter, _zoomHandler, drawSelection, drawContour );
 }
