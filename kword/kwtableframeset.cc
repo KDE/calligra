@@ -2594,8 +2594,8 @@ void KWTableFrameSetEdit::setCurrentCell( KWFrameSet * fs, bool eraseSelection )
     if ( m_currentCell )
         m_currentCell->terminate(eraseSelection);
     delete m_currentCell;
-    m_currentCell =  fs->createFrameSetEdit( m_canvas );
-    textframeSet=dynamic_cast<KWTextFrameSet *>(m_currentCell->frameSet());
+    m_currentCell = fs->createFrameSetEdit( m_canvas );
+    textframeSet = dynamic_cast<KWTextFrameSet *>(m_currentCell->frameSet());
     if ( textframeSet )
     {
         if ( oldProtectContent != textframeSet->protectContent())
@@ -2606,6 +2606,8 @@ void KWTableFrameSetEdit::setCurrentCell( KWFrameSet * fs, bool eraseSelection )
 
 
     m_currentFrame = fs->frame( 0 );
+    KWTextFrameSetEdit *textframeSetEdit = dynamic_cast<KWTextFrameSetEdit *>(m_currentCell);
+    textframeSetEdit->ensureCursorVisible();
     //refresh koruler
     m_canvas->gui()->getView()->slotUpdateRuler();
 }
@@ -2618,15 +2620,15 @@ KWFrameSetEdit* KWTableFrameSetEdit::currentTextEdit()
 
 void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
 {
+    // This method handles the up/left/down/right navigation keys in tables
     if ( !m_currentCell )
         return;
     KWTableFrameSet::Cell *cell = static_cast<KWTableFrameSet::Cell *>(m_currentCell->frameSet());
-    KWTextFrameSet *textframeSet=dynamic_cast<KWTextFrameSet *>(m_currentCell->frameSet());
-    bool moveToOtherCell=true;
+    KWTextFrameSet *textframeSet = dynamic_cast<KWTextFrameSet *>(m_currentCell->frameSet());
+    bool moveToOtherCell = true;
     if(textframeSet)
     {
-        //don't move to other cell when we try to select
-        //a text
+        // don't move to an adjacent cell when we are selecting text
         KoTextDocument * textdoc = textframeSet->textDocument();
         if(textdoc->hasSelection( KoTextDocument::Standard ))
             moveToOtherCell=false;
@@ -2734,7 +2736,7 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
     }
     if ( fs )
     {
-        //don't switch to cell protected and cursor not display in protected area.
+        //don't switch to a protected cell protected when cursor in protected areas was disabled.
         if ( fs->textObject()->protectContent() && !tableFrameSet()->kWordDocument()->cursorInProtectedArea())
             return;
         setCurrentCell( fs );
