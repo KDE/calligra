@@ -82,8 +82,7 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     m_gantt->setShowHeaderPopupMenu();
     m_taskView = new KPTTaskAppointmentsView(this, "Task widget");
 	draw(view->getPart()->getProject());
-
-
+    
 	connect(m_gantt, SIGNAL(lvContextMenuRequested ( KDGanttViewItem *, const QPoint &, int )),
 	             this, SLOT (popupMenuRequested(KDGanttViewItem *, const QPoint &, int)));
 
@@ -100,6 +99,12 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     connect(m_gantt, SIGNAL(taskLinkDoubleClicked(KDGanttViewTaskLink*)), SLOT(slotModifyLink(KDGanttViewTaskLink*)));
     
     m_taskLinks.setAutoDelete(true);
+    
+    if (m_gantt->firstChild()) {
+        m_gantt->firstChild()->listView()->setCurrentItem(m_gantt->firstChild());
+        
+        m_gantt->firstChild()->listView()->setFocus();
+    }
 }
 
 void KPTGanttView::zoom(double /*zoom*/)
@@ -121,8 +126,6 @@ void KPTGanttView::draw(KPTProject &project)
     drawChildren(NULL, project);
     drawRelations();
     
-    currentItemChanged(m_gantt->firstChild());
-    
     if (m_firstTime) {
         m_gantt->centerTimelineAfterShow(project.startTime().addDays(-1));
         m_firstTime = false;
@@ -142,6 +145,10 @@ void KPTGanttView::drawChanges(KPTProject &project)
     drawRelations();
     
     m_gantt->setUpdateEnabled(true);
+    if (m_currentItem == 0 && m_gantt->firstChild()) {
+        m_gantt->firstChild()->listView()->setCurrentItem(m_gantt->firstChild());
+        currentItemChanged(m_gantt->firstChild()); //hmmm
+    }
 }
 
 KDGanttViewItem *KPTGanttView::findItem(KPTNode *node)
@@ -728,8 +735,13 @@ KPTNode *KPTGanttView::currentNode()
     return getNode(m_currentItem);
 }
 
-void KPTGanttView::popupMenuRequested(KDGanttViewItem * /*item*/, const QPoint & pos, int)
+void KPTGanttView::popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, int)
 {
+    //kdDebug()<<k_funcinfo<<(item?item->listViewText(0):"0")<<endl;
+    if (item == 0) {
+        kdDebug()<<"No item selected"<<endl;
+        return;
+    }
 	QPopupMenu *menu = m_mainview->popupMenu("node_popup");
 	if (menu)
 	{
