@@ -34,6 +34,8 @@ class KoRect;
 class KoPageLayout;
 class KCommand;
 class KoPointArray;
+class DCOPObject;
+
 class KPrPage
 {
 public:
@@ -41,6 +43,8 @@ public:
     // constructor - destructor
     KPrPage(KPresenterDoc *_doc);
     virtual ~KPrPage();
+
+    virtual DCOPObject* dcopObject();
 
     KPresenterDoc * kPresenterDoc() const {return m_doc; }
 
@@ -197,5 +201,6 @@ private:
     KPBackGround *kpbackground;
     QString manualTitle;
     QString noteText;
+    DCOPObject *dcop;
 };
 #endif //KPRPAGE_H

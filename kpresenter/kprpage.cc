@@ -19,6 +19,7 @@
 
 #include <kprpage.h>
 #include <kpresenter_view.h>
+#include "KPresenterPageIface.h"
 
 #include <kplineobject.h>
 #include <kprectobject.h>
@@ -61,12 +62,16 @@ KPrPage::KPrPage(KPresenterDoc *_doc )
 {
     kdDebug()<<"create page : KPrPage::KPrPage(KPresenterDoc *_doc )\n";
     m_doc=_doc;
+    dcop = 0;
     kpbackground= new KPBackGround( (m_doc->getImageCollection()), (m_doc->getGradientCollection()),
                                     (m_doc->getClipartCollection()), this );
     //create object list for each page.
     m_objectList.setAutoDelete( false );
     manualTitle=QString::null;
     noteText=QString::null;
+
+    dcopObject();
+
 }
 
 KPrPage::~KPrPage()
@@ -76,6 +81,15 @@ KPrPage::~KPrPage()
     m_objectList.setAutoDelete( true );
     m_objectList.clear();
     delete kpbackground;
+    delete dcop;
+}
+
+DCOPObject* KPrPage::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPresenterPageIface( this );
+
+    return dcop;
 }
 
 void KPrPage::updateBackgroundSize()
