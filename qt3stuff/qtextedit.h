@@ -79,6 +79,8 @@ public slots:
     virtual void cut();
     virtual void paste();
     virtual void pasteSubType( const QCString &subtype );
+    virtual void clear();
+    virtual void del();
     virtual void indent();
     virtual void setItalic( bool b );
     virtual void setBold( bool b );
@@ -247,6 +249,16 @@ inline void QTextEdit::pasteSubType( const QCString &subtype )
     QTextView::pasteSubType( subtype );
 }
 
+inline void QTextEdit::clear()
+{
+    QTextView::clear();
+}
+
+inline void QTextEdit::del()
+{
+    QTextView::del();
+}
+
 inline void QTextEdit::indent()
 {
     QTextView::indent();
@@ -371,9 +383,6 @@ inline bool QTextEdit::getFormat( int parag, int index, QFont &font, QColor &col
 {
     return QTextView::getFormat( parag, index, font, color );
 }
-
-
-
 
 #endif // QT_NO_TEXTEDIT
 

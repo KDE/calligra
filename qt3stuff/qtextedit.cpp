@@ -294,6 +294,20 @@
   position.
 */
 
+/*! \fn void QTextEdit::clear()
+
+  Removes all text. 
+
+*/
+
+/*! \fn void QTextEdit::del()
+
+  Deletes the character on the right side of the text cursor. If a
+  text has been marked by the user (e.g. by clicking and dragging) the
+  cursor is put at the beginning of the marked text and the marked
+  text is removed.
+*/
+
 /*! \fn void QTextEdit::indent()
 
   Re-indents the current paragraph.

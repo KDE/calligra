@@ -1195,6 +1195,8 @@ void QTextView::contentsDragLeaveEvent( QDragLeaveEvent * )
 
 void QTextView::contentsDropEvent( QDropEvent *e )
 {
+    if ( isReadOnly() )
+	return;
     inDnD = FALSE;
     e->acceptAction();
     QString text;
@@ -1369,7 +1371,7 @@ void QTextView::insert( const QString &text, bool indent, bool checkNewLine, boo
     QTextCursor c2 = *cursor;
     QString txt( text );
     drawCursor( FALSE );
-    if ( doc->hasSelection( QTextDocument::Standard ) && removeSelected ) {
+    if ( !isReadOnly() && doc->hasSelection( QTextDocument::Standard ) && removeSelected ) {
 	checkUndoRedoInfo( UndoRedoInfo::RemoveSelected );
 	if ( !undoRedoInfo.valid() ) {
 	    doc->selectionStart( QTextDocument::Standard, undoRedoInfo.id, undoRedoInfo.index );
@@ -1588,7 +1590,7 @@ void QTextView::setFormat( QTextFormat *f, int flags )
 	}
 	emitCurrentFontChanged( currentFormat->font() );
 	emitCurrentColorChanged( currentFormat->color() );
-	if ( cursor->index() == cursor->parag()->length() < 1 ) {
+	if ( cursor->index() == cursor->parag()->length() - 1 ) {
 	    currentFormat->addRef();
 	    cursor->parag()->string()->setFormat( cursor->index(), currentFormat, TRUE );
 	}
@@ -1602,7 +1604,7 @@ void QTextView::setPalette( const QPalette &p )
     QScrollView::setPalette( p );
     if ( textFormat() == PlainText ) {
 	QTextFormat *f = doc->formatCollection()->defaultFormat();
-	f->setColor( colorGroup().color( QColorGroup::Text ) );
+	f->setColor( colorGroup().text() );
 	viewport()->repaint( FALSE );
     }
 }
@@ -1616,6 +1618,7 @@ void QTextView::setParagType( QStyleSheetItem::DisplayMode dm, QStyleSheetItem::
     if ( !doc->hasSelection( QTextDocument::Standard ) ) {
 	clearUndoRedo();
 	undoRedoInfo.type = UndoRedoInfo::ParagType;
+	QValueList< QVector<QStyleSheetItem> > oldStyles;
 	undoRedoInfo.oldStyles.clear();
 	undoRedoInfo.oldStyles << cursor->parag()->styleSheetItems();
 	undoRedoInfo.oldListStyles.clear();
@@ -2201,6 +2204,23 @@ void QTextView::UndoRedoInfo::clear()
     oldAligns.resize( 0 );
 }
 
+/*! Deletes the character on the right side of the text cursor. If a
+  text has been marked by the user (e.g. by clicking and dragging) the
+  cursor is put at the beginning of the marked text and the marked
+  text is removed.
+*/
+
+void QTextView::del()
+{
+    if ( doc->hasSelection( QTextDocument::Standard ) ) {
+	removeSelectedText();
+	return;
+    }
+
+    doKeyboardAction( ActionDelete );
+}
+
+
 QTextView::UndoRedoInfo::UndoRedoInfo( QTextDocument *dc )
     : type( Invalid ), doc( dc )
 {
@@ -2335,6 +2355,7 @@ int QTextView::heightForWidth( int w ) const
 
 void QTextView::append( const QString &text )
 {
+    doc->removeSelection( QTextDocument::Standard );
     TextFormat f = doc->textFormat();
     if ( f == AutoText ) {
 	if ( QStyleSheet::mightBeRichText( text ) )
@@ -2345,7 +2366,7 @@ void QTextView::append( const QString &text )
     if ( f == PlainText ) {
 	QTextCursor oldc( *cursor );
 	cursor->gotoEnd();
-	insert( text + "\n", FALSE, TRUE );
+	insert( text, FALSE, TRUE );
 	*cursor = oldc;
     } else if ( f == RichText ) {
 	doc->setRichTextInternal( text );
@@ -2904,4 +2925,16 @@ void QTextView::sync()
 	p = p->next();
     }
     resizeContents( contentsWidth(), doc->height() );
+}
+
+/*! \reimp */
+
+void QTextView::setEnabled( bool b )
+{
+    QScrollView::setEnabled( b );
+    if ( textFormat() == PlainText ) {
+	QTextFormat *f = doc->formatCollection()->defaultFormat();
+	f->setColor( colorGroup().text() );
+	viewport()->repaint( FALSE );
+    }
 }

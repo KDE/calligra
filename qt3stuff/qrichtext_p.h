@@ -111,7 +111,7 @@ public:
     uint hasCursor : 1;
     uint canBreak : 1;
     Type type : 3;
-
+	
     int x;
     int height() const;
     int ascent() const;
@@ -122,38 +122,31 @@ public:
     void setFormat( QTextFormat *f );
     void setCustomItem( QTextCustomItem *i );
     QTextStringChar *clone() const;
-
-private:
-    struct CustomData
+	    struct CustomData
     {
 	QTextFormat *format;
 	QTextCustomItem *custom;
     };
-
+	
     struct MarkData
     {
 	QTextFormat *format;
 	short xoff; // x offset for painting the Mark
 	short yoff; // y offset for painting the Mark
     };
-
+	
     struct ShapedData
     {
 	QTextFormat *format;
 	QChar shapedGlyph;
     };
-
+	
     struct LigatureData
     {
 	QTextFormat *format;
 	QChar ligature;
 	unsigned short nchars; // length of the ligature in decomposed form
     };
-
-    QTextStringChar &operator=( const QTextStringChar & ) {
-	//abort();
-	return *this;
-    }
 
     union {
 	QTextFormat* format;
@@ -162,6 +155,12 @@ private:
 	ShapedData *shaped;
 	LigatureData *ligature;
     } d;
+
+private:	
+    QTextStringChar &operator=( const QTextStringChar & ) {
+	//abort();
+	return *this;
+    }
     friend class QComplexText;
     friend class QTextParag;
 };
@@ -1034,7 +1033,7 @@ public:
     ushort y, baseLine, h;
     QBidiStatus status;
     int w;
-
+	
 private:
     QBidiContext *bidicontext;
 
@@ -1149,7 +1148,9 @@ public:
     int topMargin() const;
     int bottomMargin() const;
     int leftMargin() const;
+    int firstLineMargin() const;
     int rightMargin() const;
+    int lineSpacing() const;
 
     int numberOfSubParagraph() const;
     void registerFloatingItem( QTextCustomItem *i );
@@ -1193,9 +1194,12 @@ public:
     QTextCursor *undo( QTextCursor *c = 0 );
     QTextCursor *redo( QTextCursor *c  = 0 );
     QTextCommandHistory *commands() const { return commandHistory; }
+    virtual void copyParagData( QTextParag *parag );
+
+protected:
+    virtual void drawLabel( QPainter* p, int x, int y, int w, int h, int base, const QColorGroup& cg );
 
 private:
-    void drawLabel( QPainter* p, int x, int y, int w, int h, int base, const QColorGroup& cg );
     void drawParagString( QPainter &painter, const QString &str, int start, int len, int startX,
 			  int lastY, int baseLine, int bw, int h, bool drawSelections,
 			  QTextFormat *lastFormat, int i, int *selectionStarts,
@@ -1223,7 +1227,7 @@ private:
     QVector<QStyleSheetItem> styleSheetItemsVec;
     QStyleSheetItem::ListStyle listS;
     int numSubParag;
-    int tm, bm, lm, rm;
+    int tm, bm, lm, rm, flm;
     QTextFormat *defFormat;
     QList<QTextCustomItem> floatingItems;
     QTextTableCell *tc;
@@ -1333,9 +1337,12 @@ public:
 	Size = 16,
 	Color = 32,
 	Misspelled = 64,
+	HAlign = 128,
 	Font = Bold | Italic | Underline | Family | Size,
-	Format = Font | Color | Misspelled
+	Format = Font | Color | Misspelled | HAlign
     };
+
+    enum HorizontalAlignemnt { AlignNormal, AlignSubScript, AlignSuperScript };
 
     QTextFormat();
     QTextFormat( const QStyleSheetItem *s );
@@ -1346,6 +1353,7 @@ public:
     QColor color() const;
     QFont font() const;
     bool isMisspelled() const;
+    HorizontalAlignemnt hAlign() const;
     int minLeftBearing() const;
     int minRightBearing() const;
     int width( const QChar &c ) const;
@@ -1366,12 +1374,13 @@ public:
     void setFont( const QFont &f );
     void setColor( const QColor &c );
     void setMisspelled( bool b );
+    void setHAlign( HorizontalAlignemnt a );
 
     bool operator==( const QTextFormat &f ) const;
     QTextFormatCollection *parent() const;
     QString key() const;
 
-    static QString getKey( const QFont &f, const QColor &c, bool misspelled, const QString &lhref, const QString &lnm );
+    static QString getKey( const QFont &f, const QColor &c, bool misspelled, const QString &lhref, const QString &lnm, HorizontalAlignemnt hAlign );
 
     void addRef();
     void removeRef();
@@ -1398,6 +1407,7 @@ private:
     uint missp : 1;
     uint linkColor : 1;
     int leftBearing, rightBearing;
+    HorizontalAlignemnt ha;
     uchar widths[ 256 ];
     int hei, asc, dsc;
     QTextFormatCollection *collection;
@@ -1699,6 +1709,7 @@ inline QTextFormat::QTextFormat()
 {
     ref = 0;
     missp = FALSE;
+    ha = AlignNormal;
     collection = 0;
 }
 
@@ -1709,6 +1720,7 @@ inline QTextFormat::QTextFormat( const QStyleSheetItem *style )
     ref = 0;
     this->style = style->name();
     missp = FALSE;
+    ha = AlignNormal;
     collection = 0;
     fn = QFont( style->fontFamily(),
 		style->fontSize(),
@@ -1720,9 +1732,10 @@ inline QTextFormat::QTextFormat( const QStyleSheetItem *style )
     leftBearing = fm.minLeftBearing();
     rightBearing = fm.minRightBearing();
     hei = fm.height();
-    asc = fm.ascent() + fm.leading();
+    asc = fm.ascent();
     dsc = fm.descent();
     missp = FALSE;
+    ha = AlignNormal;
     memset( widths, 0, 256 );
     generateKey();
     addRef();
@@ -1739,9 +1752,10 @@ inline QTextFormat::QTextFormat( const QFont &f, const QColor &c )
     leftBearing = fm.minLeftBearing();
     rightBearing = fm.minRightBearing();
     hei = fm.height();
-    asc = fm.ascent() + fm.leading();
+    asc = fm.ascent();
     dsc = fm.descent();
     missp = FALSE;
+    ha = AlignNormal;
     memset( widths, 0, 256 );
     generateKey();
     addRef();
@@ -1765,6 +1779,7 @@ inline QTextFormat::QTextFormat( const QTextFormat &f )
     stdPointSize = f.stdPointSize;
     logicalFontSize = f.logicalFontSize;
     missp = f.missp;
+    ha = f.ha;
     k = f.k;
     anchor_name = f.anchor_name;
     anchor_href = f.anchor_href;
@@ -1790,6 +1805,7 @@ inline QTextFormat& QTextFormat::operator=( const QTextFormat &f )
     stdPointSize = f.stdPointSize;
     logicalFontSize = f.logicalFontSize;
     missp = f.missp;
+    ha = f.ha;
     k = f.k;
     anchor_name = f.anchor_name;
     anchor_href = f.anchor_href;
@@ -1806,7 +1822,7 @@ inline void QTextFormat::update()
     leftBearing = fm.minLeftBearing();
     rightBearing = fm.minRightBearing();
     hei = fm.height();
-    asc = fm.ascent() + fm.leading();
+    asc = fm.ascent();
     dsc = fm.descent();
     memset( widths, 0, 256 );
     generateKey();
@@ -1826,6 +1842,11 @@ inline QFont QTextFormat::font() const
 inline bool QTextFormat::isMisspelled() const
 {
     return missp;
+}
+
+inline QTextFormat::HorizontalAlignemnt QTextFormat::hAlign() const
+{
+    return ha;
 }
 
 inline int QTextFormat::minLeftBearing() const
@@ -1857,7 +1878,7 @@ inline int QTextFormat::ascent() const
     if ( !painter || !painter->isActive() )
 	return asc;
     painter->setFont( fn );
-    return painter->fontMetrics().ascent() + painter->fontMetrics().leading();
+    return painter->fontMetrics().ascent();
 }
 
 inline int QTextFormat::descent() const
@@ -1914,10 +1935,12 @@ inline void QTextFormat::generateKey()
        << fn.family()
        << (int)isMisspelled()
        << anchor_href
-       << anchor_name;
+       << anchor_name
+       << (int)hAlign();
 }
 
-inline QString QTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelled, const QString &lhref, const QString &lnm )
+inline QString QTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelled,
+				    const QString &lhref, const QString &lnm, HorizontalAlignemnt a )
 {
     QString k;
     QTextOStream ts( &k );
@@ -1929,7 +1952,8 @@ inline QString QTextFormat::getKey( const QFont &fn, const QColor &col, bool mis
        << fn.family()
        << (int)misspelled
        << lhref
-       << lnm;
+       << lnm
+       << (int)a;
     return k;
 }
 
@@ -2024,7 +2048,7 @@ inline QString QTextString::toString( const QArray<QTextStringChar> &data )
 	uc++;
 	c++;
     }
-
+	
     return s;
 }
 
@@ -2045,7 +2069,7 @@ inline QString QTextString::toReverseString() const
 	uc++;
 	c--;
     }
-
+	
     return s;
 }
 
@@ -2324,108 +2348,6 @@ inline QStyleSheetItem *QTextParag::style() const
     if ( styleSheetItemsVec.size() == 0 )
 	return 0;
     return styleSheetItemsVec[ styleSheetItemsVec.size() - 1 ];
-}
-
-inline int QTextParag::topMargin() const
-{
-    if ( tm != -1 )
-	return tm;
-    QStyleSheetItem *item = style();
-    if ( !item ) {
-	( (QTextParag*)this )->tm = 0;
-	return 0;
-    }
-
-    int m = 0;
-    if ( item->margin( QStyleSheetItem::MarginTop ) != QStyleSheetItem::Undefined )
-	m = item->margin( QStyleSheetItem::MarginTop );
-    QStyleSheetItem *it = 0;
-    QStyleSheetItem *p = prev() ? prev()->style() : 0;
-    for ( int i = (int)styleSheetItemsVec.size() - 2 ; i >= 0; --i ) {
-	it = styleSheetItemsVec[ i ];
-	if ( it != p )
-	    break;
-	int mar = it->margin( QStyleSheetItem::MarginTop );
-	m += mar != QStyleSheetItem::Undefined ? mar : 0;
-	if ( it->displayMode() != QStyleSheetItem::DisplayInline )
-	    break;
-    }
-
-    ( (QTextParag*)this )->tm = m;
-    return tm;
-}
-
-inline int QTextParag::bottomMargin() const
-{
-    if ( bm != -1 )
-	return bm;
-    QStyleSheetItem *item = style();
-    if ( !item ) {
-	( (QTextParag*)this )->bm = 0;
-	return 0;
-    }
-
-    int m = 0;
-    if ( item->margin( QStyleSheetItem::MarginBottom ) != QStyleSheetItem::Undefined )
-	m = item->margin( QStyleSheetItem::MarginBottom );
-    QStyleSheetItem *it = 0;
-    QStyleSheetItem *n = next() ? next()->style() : 0;
-    for ( int i =(int)styleSheetItemsVec.size() - 2 ; i >= 0; --i ) {
-	it = styleSheetItemsVec[ i ];
-	if ( it != n )
-	    break;
-	int mar = it->margin( QStyleSheetItem::MarginBottom );
-	m += mar != QStyleSheetItem::Undefined ? mar : 0;
-	if ( it->displayMode() != QStyleSheetItem::DisplayInline )
-	    break;
-    }
-
-    ( (QTextParag*)this )->bm = m;
-    return bm;
-}
-
-inline int QTextParag::leftMargin() const
-{
-    if ( lm != -1 )
-	return lm;
-    QStyleSheetItem *item = style();
-    if ( !item ) {
-	( (QTextParag*)this )->lm = 0;
-	return 0;
-    }
-    int m = 0;
-    for ( int i = 0; i < (int)styleSheetItemsVec.size(); ++i ) {
-	item = styleSheetItemsVec[ i ];
-	int mar = item->margin( QStyleSheetItem::MarginLeft );
-	m += mar != QStyleSheetItem::Undefined ? mar : 0;
-	if ( item->name() == "ol" || item->name() == "ul" ) {
-	    m += defFormat->width( '1' ) +
-		 defFormat->width( '2' ) +
-		 defFormat->width( '3' ) +
-		 defFormat->width( '.' );
-	}
-    }
-    ( (QTextParag*)this )->lm = m;
-    return lm;
-}
-
-inline int QTextParag::rightMargin() const
-{
-    if ( rm != -1 )
-	return rm;
-    QStyleSheetItem *item = style();
-    if ( !item ) {
-	( (QTextParag*)this )->rm = 0;
-	return 0;
-    }
-    int m = 0;
-    for ( int i = 0; i < (int)styleSheetItemsVec.size(); ++i ) {
-	item = styleSheetItemsVec[ i ];
-	int mar = item->margin( QStyleSheetItem::MarginRight );
-	m += mar != QStyleSheetItem::Undefined ? mar : 0;
-    }
-    ( (QTextParag*)this )->rm = m;
-    return rm;
 }
 
 inline int QTextParag::numberOfSubParagraph() const

@@ -46,7 +46,7 @@
 
 #include <stdio.h>
 
-class QStyleSheetItemData
+class QStyleSheetItem::Data
 {
 public:
     QStyleSheetItem::DisplayMode disp;
@@ -56,6 +56,7 @@ public:
     int fontsize;
     int fontsizelog;
     int fontsizestep;
+    int lineSpacing;
     QString fontfamily;
     QStyleSheetItem *parentstyle;
     QString stylename;
@@ -63,7 +64,7 @@ public:
     QColor col;
     bool anchor;
     int align;
-    int margin[4];
+    int margin[5];
     QStyleSheetItem::ListStyle list;
     QStyleSheetItem::WhiteSpaceMode whitespacemode;
     QString contxt;
@@ -107,6 +108,7 @@ public:
   \value MarginAll  all margins (left, right, top and bottom)
   \value MarginVertical  top and bottom margins
   \value MarginHorizontal  left and right margins
+  \value MarginFirstLine  margin (indentation) of the first line of a paragarph (in addition to the MarginLeft of the paragraph)
 */
 
 /*!
@@ -118,7 +120,7 @@ public:
 */
 QStyleSheetItem::QStyleSheetItem( QStyleSheet* parent, const QString& name )
 {
-    d = new QStyleSheetItemData;
+    d = new Data;
     d->stylename = name.lower();
     d->sheet = parent;
     init();
@@ -132,7 +134,7 @@ QStyleSheetItem::QStyleSheetItem( QStyleSheet* parent, const QString& name )
  */
 QStyleSheetItem::QStyleSheetItem( const QStyleSheetItem & other )
 {
-    d = new QStyleSheetItemData;
+    d = new Data;
     *d = *other.d;
 }
 
@@ -186,9 +188,11 @@ void QStyleSheetItem::init()
     d->margin[1] = Undefined;
     d->margin[2] = Undefined;
     d->margin[3] = Undefined;
+    d->margin[4] = Undefined;
     d->list = QStyleSheetItem::ListDisc;
     d->whitespacemode = QStyleSheetItem::WhiteSpaceNormal;
     d->selfnest = TRUE;
+    d->lineSpacing = Undefined;
 }
 
 /*!
@@ -215,7 +219,7 @@ QStyleSheetItem::DisplayMode QStyleSheetItem::displayMode() const
 
   \value DisplayBlock  elements are displayed as a rectangular block (e.g.,
     &lt;P&gt; ... &lt;/P&gt;).
-  
+
   \value DisplayInline  elements are displayed in a horizontally flowing
      sequence (e.g., &lt;EM&gt; ... &lt;/EM&gt;).
 
@@ -571,17 +575,16 @@ void QStyleSheetItem::setMargin(Margin m, int v)
 	d->margin[1] = v;
 	d->margin[2] = v;
 	d->margin[3] = v;
-    }
-    else if (m == MarginVertical ) {
+	d->margin[5] = v;
+    } else if (m == MarginVertical ) {
 	d->margin[MarginTop] = v;
 	d->margin[MarginBottom] = v;
-    }
-    else if (m == MarginHorizontal ) {
+    } else if (m == MarginHorizontal ) {
 	d->margin[MarginLeft] = v;
 	d->margin[MarginRight] = v;
-    }
-    else
+    } else {
 	d->margin[m] = v;
+    }
 }
 
 
@@ -683,6 +686,19 @@ void QStyleSheetItem::setSelfNesting( bool nesting )
     d->selfnest = nesting;
 }
 
+/*! Sets the linespacing to be \a ls pixels */
+
+void QStyleSheetItem::setLineSpacing( int ls )
+{
+    d->lineSpacing = ls;
+}
+
+/*! Returns the linespacing */
+
+int QStyleSheetItem::lineSpacing() const
+{
+    return d->lineSpacing;
+}
 
 //************************************************************************
 
@@ -1158,7 +1174,7 @@ QTextCustomItem* QStyleSheet::tag(  const QString& name,
     if ( style->name() == s_img )
 	return new QTextImage( doc, attr, context, (QMimeSourceFactory&)factory);
     if ( style->name() == s_hr )
- 	return new QTextHorizontalLine( doc );
+	return new QTextHorizontalLine( doc );
    return 0;
 }
 
@@ -1219,7 +1235,7 @@ QString QStyleSheet::convertFromPlainText( const QString& plain)
 
   \value RichText The text string is interpreted as a rich text
   according to the current QStyleSheet::defaultSheet().
-  
+
   \value AutoText The text string is interpreted as for \c RichText if
   QStyleSheet::mightBeRichText() returns TRUE, otherwise as for \c
   PlainText.

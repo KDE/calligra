@@ -148,6 +148,7 @@ public:
     QSize sizeHint() const;
 
 public slots:
+    void setEnabled( bool );
     virtual void setMimeSourceFactory( QMimeSourceFactory* factory );
     virtual void setStyleSheet( QStyleSheet* styleSheet );
     virtual void scrollToAnchor( const QString& name );
@@ -168,8 +169,6 @@ public slots:
 
     virtual void selectAll( bool select = TRUE );
     virtual void setTabStops( int ts );
-    virtual void clear();
-
     virtual void zoomIn();
     virtual void zoomOut();
 
@@ -308,6 +307,8 @@ private: // these are functions which actually do editing stuff, but
     void redo();
     void cut();
     void paste();
+    void del();
+    void clear();
     void pasteSubType( const QCString &subtype );
     void indent();
     void setItalic( bool b );

@@ -50,7 +50,6 @@
 #ifndef QT_NO_RICHTEXT
 
 class QStyleSheet;
-class QStyleSheetItemData;
 class QTextDocument;
 template<class Key, class T> class QMap;
 
@@ -123,6 +122,7 @@ public:
 	MarginRight,
 	MarginTop,
 	MarginBottom,
+	MarginFirstLine,
 	MarginAll,
 	MarginVertical,
 	MarginHorizontal
@@ -150,9 +150,13 @@ public:
     bool selfNesting() const;
     void setSelfNesting( bool );
 
+    void setLineSpacing( int ls );
+    int lineSpacing() const;
+
 private:
     void init();
-    QStyleSheetItemData* d;
+    class Data;
+    Data* d;
 };
 
 
