@@ -298,7 +298,10 @@ KarbonView::dropEvent( QDropEvent *e )
 		realcolor.set( r, g, b );
 
 		if( part() )
-			part()->addCommand( new VFillCmd( &part()->document(), realcolor ), true );
+			if( m_strokeFillPreview->strokeIsSelected() )
+				part()->addCommand( new VStrokeCmd( &part()->document(), &realcolor ), true );
+			else
+				part()->addCommand( new VFillCmd( &part()->document(), realcolor ), true );
 	}
 	else if( KarbonDrag::decode( e, selection, m_part->document() ) )
 	{
