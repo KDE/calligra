@@ -45,7 +45,7 @@
 #include "koeditpath.h"
 #include <koSconfig.h>
 
-#include <koVariable.h>
+#include <kovariable.h>
 #include <kformulaconfigpage.h>
 
 #include <float.h>

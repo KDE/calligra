@@ -78,7 +78,7 @@
 #include <koStore.h>
 #include <koStoreDrag.h>
 #include <koTemplateCreateDia.h>
-#include <koVariable.h>
+#include <kovariable.h>
 #include <koVariableDlgs.h>
 #include <kotextobject.h>
 

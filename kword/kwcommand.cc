@@ -27,7 +27,7 @@
 #include "kwtextparag.h"
 #include "kwanchor.h"
 #include "kwvariable.h"
-#include "koVariable.h"
+#include "kovariable.h"
 #include <kotextobject.h>
 #include <klocale.h>
 #include <kdebug.h>

@@ -21,7 +21,7 @@
 
 #include "kwtextframeset.h"
 #include "kwtextdocument.h"
-#include <koVariable.h>
+#include <kovariable.h>
 #include "mailmerge.h"
 #include "kwdoc.h"
 #include "kwcommand.h"

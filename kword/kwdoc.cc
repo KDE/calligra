@@ -40,7 +40,7 @@
 #include <koparagcounter.h>
 #include <kotextobject.h>
 #include <koAutoFormat.h>
-#include <koVariable.h>
+#include <kovariable.h>
 #include <kformuladocument.h>
 #include <unistd.h>
 #include <math.h>

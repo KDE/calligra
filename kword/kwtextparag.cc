@@ -22,7 +22,7 @@
 #include "kwanchor.h"
 #include "kwtextimage.h"
 #include "kwtextframeset.h"
-#include <koVariable.h>
+#include <kovariable.h>
 #include <koparagcounter.h>
 #include "kwvariable.h"
 #include <klocale.h>
