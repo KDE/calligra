@@ -24,7 +24,7 @@
 #include <qdatetime.h>
 #include <qasciidict.h>
 #include <defs.h>
-#include <koVariable.h>
+#include <kovariable.h>
 #include <koparagcounter.h>
 
 class KWDocument;
