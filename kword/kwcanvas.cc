@@ -419,7 +419,7 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
             // And apply aspect-ratio if set
             if ( m_keepRatio )
             {
-                double ratio = m_pixmapSize.width() / m_pixmapSize.height();
+                double ratio = ((double) m_pixmapSize.width()) / ((double) m_pixmapSize.height());
                 applyAspectRatio( ratio, m_insRect );
             }
 
