@@ -28,6 +28,13 @@ public:
   void draw3DGrids();
   void drawShelfGrids();
   void drawXTicks();
+  void drawVolumeGrids();
+  void draw3DAnnotation();
+
+  void drawData();
+  void drawBars();
+  void drawLines();
+  void draw3DLines();
 
   inline bool CELLEXISTS( int row, int col ) {
     return  data->cell(row,col).exists;
