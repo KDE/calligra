@@ -35,7 +35,7 @@ void KFloatingDialogOwner::removeDialog(KFloatingDialog *d)
   m_fdList.removeRef(d);
 }
 
-void KFloatingDialogOwner::alignRight(int width, int height)
+void KFloatingDialogOwner::alignRight(int width, int /*height*/)
 {
   int count = m_fdList.count();
 

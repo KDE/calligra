@@ -86,7 +86,7 @@ UndoRedoTab::UndoRedoTab( QWidget *_parent, const char *_name  )
   grid->setRowStretch( 2, 1 );
 }
 
-PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name, WFlags f )
+PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name, WFlags /*f*/ )
 	: QTabDialog( parent, name, true )
 {
   setCaption( i18n( "Preferences" ) );

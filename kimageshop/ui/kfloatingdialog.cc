@@ -459,7 +459,7 @@ void KFloatingDialog::mouseReleaseEvent(QMouseEvent *e)
     QFrame::mouseReleaseEvent(e);
 }
 
-void KFloatingDialog::resizeEvent(QResizeEvent *e)
+void KFloatingDialog::resizeEvent(QResizeEvent *)
 {
   m_pCloseButton->setGeometry(width()-FRAMEBORDER-13, FRAMEBORDER+1, 12, 12);
   m_pMinButton->setGeometry(width()-FRAMEBORDER-26, FRAMEBORDER+1, 12, 12);
