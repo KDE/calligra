@@ -70,9 +70,10 @@ public:
     // The do-it-all method :)
     // Draws in @p painter the 4 borders on the _outside_ of @p rect.
     // If a border is of size 0, minborder will be applied (no border if 0, defaultPen otherwise)
-    static void drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRect rect,
-                             KoBorder left, KoBorder right, KoBorder top, KoBorder bottom,
-                             int minborder, QPen defaultPen );
+    static void drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, const QRect& rect,
+                             const KoBorder& left, const KoBorder& right,
+                             const KoBorder& top, const KoBorder& bottom,
+                             int minborder, const QPen& defaultPen );
 private:
     double ptWidth;
     double ptPenWidth;

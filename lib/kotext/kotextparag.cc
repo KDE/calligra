@@ -17,7 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-//#include "kotextparag.h"
 #include "kotextdocument.h"
 #include "koparagcounter.h"
 #include "kozoomhandler.h"
@@ -28,6 +27,7 @@
 #include <kdebug.h>
 #include "kovariable.h"
 #include <kooasiscontext.h>
+#include <koxmlwriter.h>
 
 //#define DEBUG_PAINT
 
@@ -1793,6 +1793,22 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
     invalidate( 0 );
 }
 
+void KoTextParag::saveOasis( KoXmlWriter& writer, KoGenStyles& mainStyles ) const
+{
+    // TODO Write paraglayout to styles (with parent == the parag's style)
+
+    // TODO Write parag default format to styles
+
+    writer.startElement( "text:p" );
+
+    // TODO Write spans of similar format (see KWTextParag::save)
+    QString text = string()->toString(); // HACK
+    Q_ASSERT( text.right(1)[0] == ' ' ); // HACK
+    writer.addTextNode( text.mid( 0, text.length()-1 ) ); // HACK
+
+    writer.endElement();
+}
+
 void KoTextParag::applyListStyle( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level )
 {
     delete m_layout.counter;
@@ -1971,4 +1987,3 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
         painter.restore();
     }
 }
-

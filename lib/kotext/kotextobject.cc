@@ -1889,6 +1889,11 @@ void KoTextObject::loadOasisContent( const QDomElement &bodyElem, KoOasisContext
     setLastFormattedParag( textDocument()->firstParag() );
 }
 
+void KoTextObject::saveOasisContent( KoXmlWriter& writer, KoGenStyles& mainStyles ) const
+{
+    textDocument()->saveOasisContent( writer, mainStyles );
+}
+
 KCommand *KoTextObject::setParagLayoutFormatCommand( KoParagLayout *newLayout,int flags,int marginIndex)
 {
     if ( protectContent() )

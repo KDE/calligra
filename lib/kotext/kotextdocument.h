@@ -32,6 +32,8 @@ template class Q_EXPORT QPtrList<KoTextDocument>;
 // MOC_SKIP_END
 #endif
 
+class KoXmlWriter;
+class KoGenStyles;
 class KoZoomHandler;
 class KoTextFormatCollection;
 class KoParagVisitor;
@@ -202,6 +204,8 @@ public:
 
     KoTextParag* loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl );
     KoTextParag* loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl );
+
+    void saveOasisContent( KoXmlWriter& writer, KoGenStyles& mainStyles ) const;
 
     virtual KoTextParag *createParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = TRUE );
 

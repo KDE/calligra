@@ -83,6 +83,8 @@
 #include "qapplication.h"
 #endif // QT_H
 
+class KoXmlWriter;
+class KoGenStyles;
 class KoTextParag;
 class KoTextString;
 class KoTextCursor;

@@ -397,6 +397,7 @@ public:
     KCommand *changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,KoTextCursor *cursor, KoTextParag *parag);
 
     void loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context, KoStyleCollection * styleColl );
+    void saveOasisContent( KoXmlWriter& writer, KoGenStyles& mainStyles ) const;
 
 #ifndef NDEBUG
     void printRTDebug(int);

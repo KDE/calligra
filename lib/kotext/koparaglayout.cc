@@ -396,21 +396,15 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
     // It can have been initialized already, e.g. by copying from a style
 
     // code from OoWriterImport::writeLayout
-    /* This was only an intermediate OASIS decision. The final decision is:
-     *  fo:text-align can be "left", "right", "center", "justify", and
-     *  "start" will mean direction-dependent. However if we use this right now,
-     *  OOo won't understand it. So that's for later, we keep our own attribute
-     *  for now, so that export-import works.
-     */
-    if ( context.styleStack().attribute( "style:text-auto-align" ) == "true" )
-        layout.alignment = Qt::AlignAuto;
-    else if ( context.styleStack().hasAttribute( "fo:text-align" ) ) { // 3.11.4
-        QString align = context.styleStack().attribute( "fo:text-align" );
-        layout.alignment = align=="end" ? Qt::AlignRight : // ## WRONG, should be 'opposite of auto'
-                           align=="center" ? Qt::AlignHCenter :
-                           align=="justify" ? Qt::AlignJustify :
-                           align=="start" ? Qt::AlignLeft // WRONG too?
-                           : Qt::AlignAuto;
+    if ( context.styleStack().hasAttribute( "fo:text-align" ) ) {
+        QCString align = context.styleStack().attribute( "fo:text-align" ).latin1();
+        layout.alignment =
+            align == "left" ? Qt::AlignLeft :
+            align == "right" ? Qt::AlignRight :
+            align == "center" ? Qt::AlignHCenter :
+            align == "justify" ? Qt::AlignJustify :
+            align == "start" ? Qt::AlignAuto // i.e. direction-dependent
+            : Qt::AlignAuto; // default (can't happen unless spec is extended)
     }
 
     if ( context.styleStack().hasAttribute( "fo:writing-mode" ) ) { // http://web4.w3.org/TR/xsl/slice7.html#writing-mode
