@@ -44,3 +44,4 @@ KPresenter 1.2beta1 -> 1.2 beta 2
 - Added tab to properties-dialog according to selected object
 - Moved default-settings for rectangles, pies and polygons to
   'Settings' -> 'Configure KPresenter'
+- Now we can change grid color
