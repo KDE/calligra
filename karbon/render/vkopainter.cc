@@ -406,7 +406,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	if( m_stroke && m_stroke->type() != VStroke::none )
 	{
 		ArtPathStrokeCapType capStyle = ART_PATH_STROKE_CAP_BUTT;
-		ArtPathStrokeJoinType joinStyle = ART_PATH_STROKE_JOIN_ROUND;
+		ArtPathStrokeJoinType joinStyle = ART_PATH_STROKE_JOIN_MITER;
 		// TODO : non rgb support ?
 
 		m_stroke->color().pseudoValues( r, g, b );
@@ -440,7 +440,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 
 		// join translation karbon -> art
 		if( m_stroke->lineJoin() == VStroke::joinRound )
-			joinStyle = ART_PATH_STROKE_JOIN_MITER;
+			joinStyle = ART_PATH_STROKE_JOIN_ROUND;
 		else if( m_stroke->lineJoin() == VStroke::joinBevel )
 			joinStyle = ART_PATH_STROKE_JOIN_BEVEL;
 
