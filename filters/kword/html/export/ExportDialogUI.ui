@@ -117,9 +117,6 @@
                     <property name="text">
                         <string>&amp;XHTML 1.0</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+X</string>
-                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
@@ -158,9 +155,6 @@
                     </property>
                     <property name="text">
                         <string>L&amp;ight: Convert to strict (X)HTML</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+I</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Convert mainly the document structure (Recommended for exporting to browsers with limited capabilities)</string>
