@@ -594,12 +594,12 @@ public:
 
     void showGUI();
 
-    KWView *getView() { return view; }
-    KWCanvas *canvasWidget() { return canvas; }
-    KoRuler *getVertRuler() { return r_vert; }
-    KoRuler *getHorzRuler() { return r_horz; }
-    KoTabChooser *getTabChooser() { return tabChooser; }
-    KWDocStruct *getDocStruct() { return docStruct; }
+    KWView *getView()const { return view; }
+    KWCanvas *canvasWidget()const { return canvas; }
+    KoRuler *getVertRuler()const { return r_vert; }
+    KoRuler *getHorzRuler()const { return r_horz; }
+    KoTabChooser *getTabChooser()const { return tabChooser; }
+    KWDocStruct *getDocStruct()const { return docStruct; }
 
 public slots:
     void reorganize();
