@@ -47,6 +47,7 @@ private:
     void createDocumentStyles( QDomDocument & docstyles );
     void createDocumentContent( QDomDocument & doccontent );
     void createDocumentManifest( QDomDocument & docmanifest );
+    void createDocumentSettings( QDomDocument & docsetting );
     void appendTextbox( QDomDocument & doc, QDomElement & source, QDomElement & target );
     void appendParagraph( QDomDocument & doc, QDomElement & source, QDomElement & target );
     void appendText( QDomDocument & doc, QDomElement & source, QDomElement & target );
@@ -61,6 +62,7 @@ private:
 
     QString rotateValue( double val );
     QString pictureKey( QDomElement &element );
+    void createHelpLine( QDomNode &helpline );
 
     int m_currentPage;
     int m_objectIndex;
@@ -72,6 +74,7 @@ private:
     QDomDocument m_documentinfo;
     QMap<QString, QString> m_pictureLst;
 
+    QString m_helpLine;
     //load from kpresenter file format
     QMap<QString, QString> m_kpresenterPictureLst;
     int m_pictureIndex;

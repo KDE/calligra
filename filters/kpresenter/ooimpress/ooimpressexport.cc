@@ -115,6 +115,25 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
     m_storeout->write( contentString , contentString.length() );
     m_storeout->close();
 
+    QDomDocument settings( impl.createDocumentType( "office:document-content",
+                                                   "-//OpenOffice.org//DTD OfficeDocument 1.0//EN",
+                                                   "office.dtd" ) );
+
+    createDocumentSettings( settings );
+
+    // store document content
+    if ( !m_storeout->open( "settings.xml" ) )
+    {
+        kdWarning() << "Couldn't open the file 'settings.xml'." << endl;
+        return KoFilter::CreationError;
+    }
+
+    QCString settingsString = settings.toCString();
+    //kdDebug() << "content :" << settingsString << endl;
+    m_storeout->write( settingsString , settingsString.length() );
+    m_storeout->close();
+
+
     QDomDocument styles( impl.createDocumentType( "office:document-styles",
                                                   "-//OpenOffice.org//DTD OfficeDocument 1.0//EN",
                                                   "office.dtd" ) );
@@ -285,6 +304,47 @@ void OoImpressExport::createDocumentStyles( QDomDocument & docstyles )
     docstyles.appendChild( content );
 }
 
+void OoImpressExport::createDocumentSettings( QDomDocument & docsetting )
+{
+    docsetting.appendChild( docsetting.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
+
+    QDomElement setting = docsetting.createElement( "office:document-settings" );
+    setting.setAttribute( "xmlns:office", "http://openoffice.org/2000/office");
+    setting.setAttribute( "xmlns:config", "http://openoffice.org/2001/config" );
+    setting.setAttribute( "office:class", "presentation" );
+    setting.setAttribute( "office:version", "1.0" );
+
+    QDomElement begin = docsetting.createElement( "office:settings" );
+
+    QDomElement configItem = docsetting.createElement("config:config-item-set" );
+    configItem.setAttribute( "config:name", "view-settings" );
+
+    QDomElement mapIndexed = docsetting.createElement( "config:config-item-map-indexed" );
+    mapIndexed.setAttribute("config:name", "Views" );
+    configItem.appendChild( mapIndexed );
+
+    //<config:config-item-map-indexed config:name="Views">
+
+    QDomElement mapItem = docsetting.createElement("config:config-item-map-entry" );
+
+    QDomElement attribute =  docsetting.createElement("config:config-item" );
+    attribute.setAttribute( "config:name", "SnapLinesDrawing" );
+    attribute.setAttribute( "config:type", "string" );
+    attribute.appendChild( docsetting.createTextNode( m_helpLine ) );
+    mapItem.appendChild( attribute );
+    //<config:config-item config:name="SnapLinesDrawing" config:type="string">H5983V700V10777H4518V27601P50000,9000P8021,2890</config:config-item>
+
+    mapIndexed.appendChild( mapItem );
+
+    begin.appendChild( configItem );
+
+    setting.appendChild( begin );
+
+
+    docsetting.appendChild( setting );
+
+}
+
 void OoImpressExport::createDocumentContent( QDomDocument & doccontent )
 {
     doccontent.appendChild( doccontent.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
@@ -356,6 +416,11 @@ void OoImpressExport::createDocumentManifest( QDomDocument & docmanifest )
     entry.setAttribute( "manifest:full-path", "meta.xml" );
     manifest.appendChild( entry );
 
+    entry = docmanifest.createElement( "manifest:file-entry" );
+    entry.setAttribute( "manifest:media-type", "text/xml" );
+    entry.setAttribute( "manifest:full-path", "settings.xml" );
+    manifest.appendChild( entry );
+
     docmanifest.appendChild( manifest );
 }
 
@@ -406,6 +471,41 @@ void OoImpressExport::createPictureList( QDomNode &pictures )
     }
 }
 
+void OoImpressExport::createHelpLine( QDomNode &helpline )
+{
+    helpline = helpline.firstChild();
+    QDomElement helplines;
+    for( ; !helpline.isNull(); helpline = helpline.nextSibling() )
+    {
+        if ( helpline.isElement() )
+        {
+            helplines = helpline.toElement();
+            if ( helplines.tagName()=="Vertical" )
+            {
+                int tmpX = ( int ) ( KoUnit::toMM( helplines.attribute("value").toDouble() )*100 );
+                m_helpLine+="V"+QString::number( tmpX );
+                kdDebug()<<" verticval !!!!!!!!!!!!!!!!!!!!!\n";
+            }
+            else if ( helplines.tagName()=="Horizontal" )
+            {
+                int tmpY = ( int ) ( KoUnit::toMM( helplines.attribute("value").toDouble() )*100 );
+                m_helpLine+="H"+QString::number( tmpY );
+                kdDebug()<<" horizontal !!!!!!!!!!!!!!!!!\n";
+            }
+            else if ( helplines.tagName()=="HelpPoint" )
+            {
+                QString str( "P%1,%2" );
+                int tmpX = ( int ) ( KoUnit::toMM( helplines.attribute("posX").toDouble()  )*100 );
+                int tmpY = ( int ) ( KoUnit::toMM( helplines.attribute("posY").toDouble() )*100 );
+                m_helpLine+=str.arg( QString::number( tmpX ) ).arg( QString::number( tmpY ) );
+                kdDebug()<<" helppoint !!!!!!!!!!!!!!!!!!!\n";
+            }
+        }
+    }
+    kdDebug()<<"m_helpLine :"<<m_helpLine<<endl;
+}
+
+
 void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body )
 {
     QDomNode doc = m_maindoc.namedItem( "DOC" );
@@ -418,9 +518,12 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
     QDomNode objects = doc.namedItem( "OBJECTS" );
     QDomNode pictures = doc.namedItem( "PICTURES" );
     QDomNode sounds = doc.namedItem( "SOUNDS" );
+    QDomNode helpline = doc.namedItem( "HELPLINES" );
     QDomNode bgpage = background.firstChild();
 
     createPictureList( pictures );
+
+    createHelpLine( helpline );
 
     // store the paper settings
     QDomElement p = paper.toElement();

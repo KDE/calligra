@@ -391,7 +391,6 @@ bool OoImpressImport::appendHelpLine( QDomDocument &doc,const QDomElement &setti
 
 void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElement, const QString &text )
 {
-    //todo oo save its value in mm and kpresenter in double
     QString str;
     int newPos = text.length()-1; //start to element = 1
     for ( int pos = text.length()-1; pos >=0;--pos )
