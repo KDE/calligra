@@ -198,7 +198,7 @@ public:
    * @return true if the given file exists in the current directory,
    * i.e. if open(fileName) will work.
    */
-  bool hasFile( const QString& fileName );
+  bool hasFile( const QString& fileName ) const;
 
   /**
    * Imports a local file into a store
@@ -286,7 +286,7 @@ protected:
    * Check if a file exists inside the store.
    * @param absPath the absolute path inside the store, i.e. not relative to the current directory
    */
-  virtual bool fileExists( const QString& absPath ) = 0;
+  virtual bool fileExists( const QString& absPath ) const = 0;
 
 private:
   static Backend determineBackend( QIODevice* dev );
@@ -304,20 +304,20 @@ private:
    *
    * see specification (koffice/lib/store/SPEC) for details.
    */
-  QString toExternalNaming( const QString & _internalNaming );
+  QString toExternalNaming( const QString & _internalNaming ) const;
 
   /**
    *  Expands a full path name for a stream (directories+filename)
    */
-  QString expandEncodedPath( QString intern );
+  QString expandEncodedPath( QString intern ) const;
 
   /**
    * Expands only directory names(!)
    * Needed for the path handling code, as we only operate on internal names
    */
-  QString expandEncodedDirectory( QString intern );
+  QString expandEncodedDirectory( QString intern ) const;
 
-  enum
+  mutable enum
   {
       NAMING_VERSION_2_1,
       NAMING_VERSION_2_2,

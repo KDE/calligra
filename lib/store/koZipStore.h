@@ -47,7 +47,7 @@ protected:
     virtual bool closeRead() { return true; }
     virtual bool enterRelativeDirectory( const QString& dirName );
     virtual bool enterAbsoluteDirectory( const QString& path );
-    virtual bool fileExists( const QString& absPath );
+    virtual bool fileExists( const QString& absPath ) const;
 
     // The archive
     KZip * m_pZip;

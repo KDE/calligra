@@ -538,7 +538,7 @@ bool KoStore::atEnd() const
 }
 
 // See the specification for details of what this function does.
-QString KoStore::toExternalNaming( const QString & _internalNaming )
+QString KoStore::toExternalNaming( const QString & _internalNaming ) const
 {
   if ( _internalNaming == ROOTPART )
     return expandEncodedDirectory( currentPath() ) + MAINNAME;
@@ -552,7 +552,7 @@ QString KoStore::toExternalNaming( const QString & _internalNaming )
   return expandEncodedPath( intern );
 }
 
-QString KoStore::expandEncodedPath( QString intern )
+QString KoStore::expandEncodedPath( QString intern ) const
 {
   if ( m_namingVersion == NAMING_VERSION_RAW )
     return intern;
@@ -586,7 +586,7 @@ QString KoStore::expandEncodedPath( QString intern )
   return result;
 }
 
-QString KoStore::expandEncodedDirectory( QString intern )
+QString KoStore::expandEncodedDirectory( QString intern ) const
 {
   if ( m_namingVersion == NAMING_VERSION_RAW )
     return intern;
@@ -621,7 +621,7 @@ void KoStore::disallowNameExpansion( void )
     m_namingVersion = NAMING_VERSION_RAW;
 }
 
-bool KoStore::hasFile( const QString& fileName )
+bool KoStore::hasFile( const QString& fileName ) const
 {
   return fileExists( toExternalNaming( currentPath() + fileName ) );
 }

@@ -37,7 +37,7 @@ protected:
     virtual bool closeWrite() { return true; }
     virtual bool enterRelativeDirectory( const QString& dirName );
     virtual bool enterAbsoluteDirectory( const QString& path );
-    virtual bool fileExists( const QString& absPath );
+    virtual bool fileExists( const QString& absPath ) const;
 
     bool openReadOrWrite( const QString& name, int iomode );
 private:

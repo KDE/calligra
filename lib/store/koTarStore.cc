@@ -52,7 +52,7 @@ KoTarStore::KoTarStore( QIODevice *dev, Mode mode, const QCString & appIdentific
 
 KoTarStore::KoTarStore( QWidget* window, const KURL& _url, const QString & _filename, Mode _mode, const QCString & appIdentification )
 {
-    kdDebug(s_area) << "KoTarStore Constructor url= " << _url.prettyURL() 
+    kdDebug(s_area) << "KoTarStore Constructor url= " << _url.prettyURL()
                     << " filename = " << _filename
                     << " mode = " << int(_mode) << endl;
 
@@ -201,7 +201,7 @@ bool KoTarStore::enterAbsoluteDirectory( const QString& path )
         return true;
 }
 
-bool KoTarStore::fileExists( const QString& absPath )
+bool KoTarStore::fileExists( const QString& absPath ) const
 {
     return m_pTar->directory()->entry( absPath ) != 0;
 }

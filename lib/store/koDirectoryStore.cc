@@ -112,7 +112,7 @@ bool KoDirectoryStore::enterAbsoluteDirectory( const QString& path )
     return newDir.exists();
 }
 
-bool KoDirectoryStore::fileExists( const QString& absPath )
+bool KoDirectoryStore::fileExists( const QString& absPath ) const
 {
     kdDebug(s_area) << "KoDirectoryStore::fileExists " << m_basePath+absPath << endl;
     return QFile::exists( m_basePath + absPath );

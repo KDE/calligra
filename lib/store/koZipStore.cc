@@ -216,7 +216,7 @@ bool KoZipStore::enterAbsoluteDirectory( const QString& path )
     return m_currentDir != 0;
 }
 
-bool KoZipStore::fileExists( const QString& absPath )
+bool KoZipStore::fileExists( const QString& absPath ) const
 {
     const KArchiveEntry *entry = m_pZip->directory()->entry( absPath );
     return entry && entry->isFile();
