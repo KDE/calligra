@@ -327,6 +327,22 @@ void KprKword::convert()
             QDomElement nameElem = outdoc.createElement( "NAME" );
             layoutElem.appendChild( nameElem );
             nameElem.setAttribute( "value", isTitle ? titleStyleName : "Standard" );
+            QDomElement align=outdoc.createElement("FLOW");
+            if(p.hasAttribute("align"))
+            {
+                switch(p.attribute( "align" ).toInt())
+                {
+                case 1:
+                    align.setAttribute( "align","left");
+                    break;
+                case 2:
+                    align.setAttribute( "align","right");
+                    break;
+                case 4:
+                    align.setAttribute( "align","center");
+                    break;
+                }
+            }
             if(!counter.isNull() )
                 layoutElem.appendChild( counter );
             if(!indent.isNull())
@@ -343,6 +359,8 @@ void KprKword::convert()
                 layoutElem.appendChild(topBorder);
             if(!bottomBorder.isNull())
                 layoutElem.appendChild(bottomBorder);
+            if(!align.isNull())
+                layoutElem.appendChild(align);
             // Only the first parag of the top text object is set to the 'title' style
             isTitle = false;
         }
