@@ -145,8 +145,8 @@ public:
     KoSearchContext * replaceContext() {
         return m_replaceUI->context();
     }
-    bool optionSelected() const { return m_findUI->optionSelected();}
-
+    bool optionFindSelected() const { return m_findUI->optionSelected();}
+    bool optionSearchSelected() const { return m_replaceUI->optionSelected();}
 protected slots:
     void slotOk();
 

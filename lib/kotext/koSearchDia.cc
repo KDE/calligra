@@ -106,7 +106,8 @@ void KoSearchDia::slotOk()
     KoFindDialog::slotOk();
 
     // Save the current state back into the context required.
-    m_findUI->setCtxOptions( options() );
+    if ( optionSelected() )
+        m_findUI->setCtxOptions( options() );
     m_findUI->setCtxHistory( findHistory() );
 }
 
@@ -126,9 +127,12 @@ void KoReplaceDia::slotOk()
 
     // Save the current state back into the context required.
     m_findUI->setCtxOptions( KoReplaceDialog::options() );
-    m_findUI->setCtxHistory( findHistory() );
+    if ( optionFindSelected() )
+        m_findUI->setCtxHistory( findHistory() );
+
     m_replaceUI->setCtxHistory( replacementHistory() );
-    m_replaceUI->setCtxOptions( KoReplaceDialog::options() );
+    if ( optionSearchSelected() )
+        m_replaceUI->setCtxOptions( KoReplaceDialog::options() );
 }
 
 
@@ -728,7 +732,7 @@ void KoFormatDia::ctxOptions( )
 bool KoFindReplace::validateMatch( const QString & /*text*/, int index, int matchedlength )
 {
     KoSearchContext* searchContext = m_findDlg ? m_findDlg->searchContext() : m_replaceDlg->searchContext();
-    bool optionSelected = m_findDlg ? m_findDlg->optionSelected() : m_replaceDlg->optionSelected();
+    bool optionSelected = m_findDlg ? m_findDlg->optionSelected() : (m_replaceDlg->optionSearchSelected() || m_replaceDlg->optionFindSelected());
     if ( !searchContext || !searchContext->m_optionsMask || !optionSelected)
         return true;
     KoTextString * s = currentParag()->string();
