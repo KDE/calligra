@@ -48,7 +48,7 @@ AboutDialog::AboutDialog (QWidget* parent) :
     setFixedSize (size ());
 
     QLabel *label = new QLabel (this);
-    label->setPixmap (Icon("killustrator.xpm"));
+    label->setPixmap (BarIcon("killustrator.xpm"));
     label->setGeometry (50, 30, 33, 33);
 
     label = new QLabel ("KIllustrator", this);

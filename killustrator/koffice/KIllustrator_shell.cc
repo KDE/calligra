@@ -100,14 +100,14 @@ void KIllustratorShell::createFileMenu (OPMenuBar* mbar) {
   m_pFileMenu = new OPMenu;
 
   m_idMenuFile_New =
-    m_pFileMenu->insertItem (Icon ("filenew.xpm" ), i18n ("&New"),
+    m_pFileMenu->insertItem (BarIcon ("filenew.xpm" ), i18n ("&New"),
 			     this, SLOT (slotFileNew ()), stdAccel.openNew());
   m_idMenuFile_Open =
-    m_pFileMenu->insertItem (Icon ("fileopen.xpm"), i18n ("&Open..."),
+    m_pFileMenu->insertItem (BarIcon ("fileopen.xpm"), i18n ("&Open..."),
 			     this, SLOT (slotFileOpen ()), stdAccel.open());
   m_pFileMenu->insertSeparator (-1);
   m_idMenuFile_Save =
-    m_pFileMenu->insertItem (Icon ("filefloppy.xpm"), i18n ("&Save"),
+    m_pFileMenu->insertItem (BarIcon ("filefloppy.xpm"), i18n ("&Save"),
 			     this, SLOT (slotFileSave ()), stdAccel.save());
   m_pFileMenu->setItemEnabled (m_idMenuFile_Save, false);
 
@@ -127,7 +127,7 @@ void KIllustratorShell::createFileMenu (OPMenuBar* mbar) {
 
   m_pFileMenu->insertSeparator (-1);
   m_idMenuFile_Print =
-    m_pFileMenu->insertItem (Icon ("fileprint.xpm"), i18n ("&Print..."), this,
+    m_pFileMenu->insertItem (BarIcon ("fileprint.xpm"), i18n ("&Print..."), this,
 			     SLOT (slotFilePrint ()),  stdAccel.print());
   m_pFileMenu->setItemEnabled (m_idMenuFile_Print, false);
 
@@ -142,7 +142,7 @@ void KIllustratorShell::createFileMenu (OPMenuBar* mbar) {
   m_pFileMenu->setItemEnabled (m_idMenuFile_Close, false);
 
   m_idMenuFile_Quit =
-    m_pFileMenu->insertItem (Icon( "exit.xpm" ), i18n ("&Quit"), this,
+    m_pFileMenu->insertItem (BarIcon( "exit.xpm" ), i18n ("&Quit"), this,
 			     SLOT (slotFileQuit ()), stdAccel.quit());
 
   mbar->insertItem (i18n ("&File"), m_pFileMenu, -1, 0);
