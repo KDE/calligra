@@ -32,11 +32,14 @@
 #include "version.h"
 #include <math.h>
 
+// defined in GText.cc too
+#ifndef KDE_USE_FINAL
 static float seg_length (const Coord& p1, const Coord& p2) {
   float dx = p2.x () - p1.x ();
   float dy = p2.y () - p1.y ();
   return sqrt (dx * dx + dy * dy);
 }
+#endif
 
 static Coord computePoint (int idx, const GSegment& s1, const GSegment& s2) {
   // s1 == Line, s2 == Bezier 
