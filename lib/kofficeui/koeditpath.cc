@@ -79,14 +79,24 @@ KoChangePathDia::KoChangePathDia( const QString & _path, QWidget *parent, const 
     setCaption( i18n("Edit Path") );
     QVBox *page =makeVBoxMainWidget();
     m_urlReq = new KURLRequester(page);
+    m_urlReq->setMinimumWidth( m_urlReq->sizeHint().width() * 3 );
+
     m_urlReq->lineEdit()->setText( _path );
     m_urlReq->fileDialog()->setMode(KFile::Directory | KFile::LocalOnly);
     m_defaultPath = new QCheckBox( i18n("Default path"), page );
+    connect( m_defaultPath, SIGNAL(toggled ( bool )), this, SLOT( slotChangeDefaultValue( bool )));
+    slotChangeDefaultValue( _path.isEmpty() );
+    m_defaultPath->setChecked( _path.isEmpty() );
 }
 
 QString KoChangePathDia::newPath() const
 {
     return m_defaultPath->isChecked() ? QString::null : m_urlReq->lineEdit()->text();
+}
+
+void KoChangePathDia::slotChangeDefaultValue( bool _b)
+{
+    m_urlReq->setEnabled( !_b);
 }
 
 #include "koeditpath.moc"

@@ -199,8 +199,6 @@ void KoSpellConfigWidget::saveDictionary()
     if ( m_spellConfig->client() == KS_CLIENT_ISPELL )
     {
         QString directoryName = QDir::homeDirPath() + "/.ispell_"+m_spellConfig->dictionary();
-        kdDebug()<<" directoryName :"<<directoryName<<endl;
-        kdDebug()<<" lst :"<<lst<<endl;
         QFile f( directoryName );
         (void )KIO::NetAccess::del( KURL( f.name() ) );
         if ( f.open(IO_ReadWrite))

@@ -44,6 +44,8 @@ class KoChangePathDia : public KDialogBase
 public:
     KoChangePathDia( const QString & _path, QWidget *parent, const char *name );
     QString newPath()const;
+private slots:
+    void slotChangeDefaultValue( bool );
 private:
     KURLRequester *m_urlReq;
     QCheckBox *m_defaultPath;
