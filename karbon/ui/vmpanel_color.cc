@@ -14,6 +14,7 @@
 #include <koMainWindow.h>
 #include <koView.h>
 
+#include "vcolorslider.h"
 #include "vmpanel_color.h"
 
 VColorPanel::VColorPanel( KoView* parent, const char* /*name*/ )
@@ -23,7 +24,7 @@ VColorPanel::VColorPanel( KoView* parent, const char* /*name*/ )
 
 	mTabWidget = new QTabWidget( this );
 	mRGBWidget = new QWidget(mTabWidget);
-	QGridLayout *mainLayout = new QGridLayout(mRGBWidget, 2, 1);
+	QGridLayout *mainLayout = new QGridLayout(mRGBWidget, 4, 1);
 
 	//Reference
 	QGroupBox* groupbox = new QGroupBox(2, Horizontal, i18n("Reference"), mRGBWidget);
@@ -34,17 +35,12 @@ VColorPanel::VColorPanel( KoView* parent, const char* /*name*/ )
 	mainLayout->addWidget( groupbox, 0, 0);
 	
 	//RGB
-	QGroupBox* cgroupbox = new QGroupBox(3, Horizontal, i18n("Components"), mRGBWidget);
-	QLabel *mRedText = new QLabel(i18n("R:"), cgroupbox);
-	QLabel *mGreenText = new QLabel(i18n("G:"), cgroupbox);
-	QLabel *mBlueText = new QLabel(i18n("B:"), cgroupbox);
-	mRed = new QSpinBox( 0, 255, 1, cgroupbox);
-	mRed->setValue( color.red() );
-	mGreen = new QSpinBox( 0, 255, 1, cgroupbox);
-	mGreen->setValue( color.green() );
-	mBlue = new QSpinBox( 0, 255, 1, cgroupbox);
-	mBlue->setValue( color.blue() );
+	QGroupBox* cgroupbox = new QGroupBox(1, Horizontal, i18n("Components"), mRGBWidget);
+	mRedSlider = new VColorSlider( i18n("R:"), QColor( "red" ), QColor( "black" ), 0, 255, 0, cgroupbox );
+	mGreenSlider = new VColorSlider( i18n("G:"), QColor( "green" ), QColor( "black" ), 0, 255, 0, cgroupbox );
+	mBlueSlider = new VColorSlider( i18n("B:"), QColor( "blue" ), QColor( "black" ), 0, 255, 0, cgroupbox );
 	mainLayout->addWidget( cgroupbox, 1, 0);
+
 
 	//Buttons
 	mButtonBox = new KButtonBox ( mRGBWidget );
@@ -55,7 +51,6 @@ VColorPanel::VColorPanel( KoView* parent, const char* /*name*/ )
 	mButtonBox->addStretch(1);
 	mButtonBox->layout();
 	mainLayout->addWidget( mButtonBox, 2, 0);
-
 	mainLayout->activate();
 	mTabWidget->addTab(mRGBWidget, i18n("RGB"));
 	setWidget( mTabWidget );

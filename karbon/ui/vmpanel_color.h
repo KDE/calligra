@@ -8,13 +8,13 @@
 
 #include <qdockwindow.h>
 
-class QSpinBox;
 class QTabWidget;
 class QPushButton;
 class KButtonBox;
 class KColorPatch;
 class KoMainWindow;
 class KoView;
+class VColorSlider;
 
 class VColorPanel : public QDockWindow
 {
@@ -25,13 +25,13 @@ public:
 private:
 	QTabWidget* mTabWidget;
 	QWidget* mRGBWidget;
-	QSpinBox* mRed;
-	QSpinBox* mGreen;
-	QSpinBox* mBlue;
 	KColorPatch* mColorPreview;
 	QPushButton *mRGBOutlineButton;
 	QPushButton *mRGBFillButton;
 	KButtonBox *mButtonBox;
+	VColorSlider *mRedSlider;
+	VColorSlider *mGreenSlider;
+	VColorSlider *mBlueSlider;
 	enum ButtonChoice { Outline, Fill };
 };
 
