@@ -149,12 +149,17 @@ install: build
 	  fi; \
 	done
 
-	# Install lintian overrides.
+	# Install lintian and linda overrides.
 	for pkg in `dh_listpackages`; do \
 	  if test -e debian/$$pkg.override; then \
 	    $(INSTALL_DIR) debian/$$pkg/usr/share/lintian/overrides; \
 	    $(INSTALL_FILE) debian/$$pkg.override \
 	      debian/$$pkg/usr/share/lintian/overrides/$$pkg; \
+	  fi; \
+	  if test -e debian/$$pkg.linda; then \
+	    $(INSTALL_DIR) debian/$$pkg/usr/share/linda/overrides; \
+	    $(INSTALL_FILE) debian/$$pkg.linda \
+	      debian/$$pkg/usr/share/linda/overrides/$$pkg; \
 	  fi; \
 	done
 
