@@ -180,13 +180,13 @@ int Conversion::headerTypeToFrameInfo( unsigned char type )
 {
     switch (type) {
     case wvWare::HeaderData::HeaderEven:
-        return 3;
-    case wvWare::HeaderData::HeaderOdd:
         return 2;
+    case wvWare::HeaderData::HeaderOdd:
+        return 3;
     case wvWare::HeaderData::FooterEven:
-        return 6;
-    case wvWare::HeaderData::FooterOdd:
         return 5;
+    case wvWare::HeaderData::FooterOdd:
+        return 6;
     case wvWare::HeaderData::HeaderFirst:
         return 1;
     case wvWare::HeaderData::FooterFirst:
