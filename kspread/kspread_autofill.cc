@@ -938,9 +938,13 @@ void KSpreadTable::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
     cell = _destList.last();
   int incr = 1;
   unsigned int s = 0;
+  double factor = 1;
 
   if (!down)
     s = _srcList.count() - 1;
+
+  if ( _srcList.at( s )->isNumeric() );
+    factor = _srcList.at( s )->valueDouble();
 
   while ( cell )
   {
@@ -965,13 +969,12 @@ void KSpreadTable::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
       else if(_srcList.at( s )->isNumeric() && _srcList.count()==1)
       {
 	double val;
-        double factor=1;
         if ( _srcList.at( s )->formatType() == KSpreadLayout::Percentage )
             factor = 0.01;
         if (!down)
-          val = (_srcList.at( s )->valueDouble() - (incr*factor));
+          val = (_srcList.at( s )->valueDouble() - (incr * factor));
         else
-          val = (_srcList.at( s )->valueDouble() + (incr*factor));
+          val = (_srcList.at( s )->valueDouble() + (incr * factor));
 	QString tmp;
 	tmp = tmp.setNum(val);
 	cell->setCellText( tmp, true );
