@@ -159,7 +159,7 @@ VTransformCmd::visitVComposite( VComposite& composite )
 	if( composite.fill()->type() == VFill::grad )
 		composite.fill()->gradient().transform( m_mat );
 
-	composite.transform( m_mat );
+	//composite.transform( m_mat );
 
 	VVisitor::visitVComposite( composite );
 }
