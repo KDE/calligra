@@ -130,7 +130,7 @@ public:
     int findCustomItem( const KoTextCustomItem * custom ) const;
 
     /** Cache to find a tab by char index, QMap<char index, tab index> */
-    QMap<int, int> tabCache() { return m_tabCache; }
+    QMap<int, int>& tabCache() { return m_tabCache; }
 
     /** @return the parag rect, in pixels. This takes care of some rounding problems */
     QRect pixelRect( KoZoomHandler* zh ) const;
