@@ -4,6 +4,7 @@ INCLUDES= $(KOFFICEUI_INCLUDES) $(all_includes)
 
 lib_LTLIBRARIES = libkopainter.la
 libkopainter_la_SOURCES = koColor.cc \
+	koDash.cc \
 	koOutline.cc \
 	koFill.cc \
 	koVectorPath.cc \
