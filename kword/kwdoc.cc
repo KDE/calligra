@@ -3893,6 +3893,9 @@ void KWDocument::printStyleDebug()
     {
         kdDebug() << "Style " << p << "  " << p->name() <<endl;
         kdDebug() << "   format: " << p->format().key() <<endl;
+        static const char * const s_align[] = { "Auto", "Left", "Right", "ERROR", "HCenter", "ERR", "ERR", "ERR", "Justify", };
+        kdDebug() << "  align: " << s_align[p->paragLayout().alignment] << endl;
+
         kdDebug() << "   following style: " << p->followingStyle() << " "
                   << ( p->followingStyle() ? p->followingStyle()->name() : QString::null ) << endl;
     }

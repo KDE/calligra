@@ -2140,7 +2140,10 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
 #ifdef DEBUG_FORMAT_MORE
         kdDebug(32002) << "slotAfterFormatting too much space (bottom=" << bottom << ", availHeight=" << availHeight << ") , trying to remove last frame" << endl;
 #endif
-        if(frames.last()->frameBehavior() == KWFrame::AutoExtendFrame) {
+        // Remove the empty last frame, if it's an auto-created one (e.g. a
+        // continuation on the next page). Not when the user just created it!
+        if(frames.last()->frameBehavior() == KWFrame::AutoExtendFrame
+           && frames.last()->minFrameHeight() < 1E-10 ) { // i.e. equal to 0
             delFrame(frames.last(), true);
             m_doc->frameChanged( 0L );
         }
