@@ -130,8 +130,8 @@ install: build
 
 	# Generate HTML docs.
 	for i in `find debian/tmp -name "index.docbook"`; do \
-	  pushd . > /dev/null; cd `dirname $$i`; meinproc `basename $$i`; \
-	  popd > /dev/null; done
+	  ( cd `dirname $$i`; meinproc `basename $$i` ); \
+	done
 
 	# Split into separate binary packages.
 	dh_install --list-missing
