@@ -17,6 +17,7 @@
 #include "editWidget.h"
 #include <kglobal.h>
 #include "editWidget.moc"
+#include <kiconloader.h>
 
 /*================================================================*/
 /* Class: EditWidget                                              */
