@@ -47,12 +47,13 @@ class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public KexiViewBase
 		QString text();
 		void jump(int character);
 
+		virtual bool eventFilter(QObject *o, QEvent *ev);
+
 	public slots:
 		/*! Sets editor's text to \a text. 'Dirty' flag remains unchanged. */
 		void setText(const QString &text);
 
 	protected:
-//		virtual bool eventFilter(QObject *w, QEvent *ev);
 
 		virtual void updateActions(bool activated);
 

@@ -23,10 +23,10 @@
 #include <keximainwindow.h>
 #include <kexidialogbase.h>
 
-//uncomment this to enable Qt-only editor
-//#define QT_ONLY_SQL_EDITOR
+//uncomment this to enable KTextEdit-based editor
+//#define KTEXTEDIT_BASED_SQL_EDITOR
 
-//TODO: detect if KTextEditor returned something, if not- force QT_ONLY_SQL_EDITOR option
+//TODO: detect if KTextEditor returned something, if not- force KTEXTEDIT_BASED_SQL_EDITOR option
 
 #include <qlayout.h>
 #include <qpushbutton.h>
@@ -38,8 +38,25 @@
 #include <kdebug.h>
 #include <kxmlguifactory.h>
 
-#ifdef QT_ONLY_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
 # include <ktextedit.h>
+
+class KTextEdit_KexiSharedActionConnector : public KexiSharedActionConnector
+{
+public:
+	KTextEdit_KexiSharedActionConnector( KexiActionProxy* proxy, KTextEdit *obj )
+	 : KexiSharedActionConnector( proxy, obj )
+	{
+		plugSharedAction("edit_cut", SLOT(cut()));
+		plugSharedAction("edit_copy", SLOT(copy()));
+		plugSharedAction("edit_paste", SLOT(paste()));
+		plugSharedAction("edit_clear", SLOT(clear()));
+
+		plugSharedAction("edit_undo", SLOT(undo()));
+		plugSharedAction("edit_redo", SLOT(redo()));
+	}
+};
+
 #else
 # include <ktexteditor/document.h>
 # include <ktexteditor/view.h>
@@ -47,6 +64,20 @@
 # include <ktexteditor/highlightinginterface.h>
 # include <ktexteditor/editinterface.h>
 # include <ktexteditor/viewcursorinterface.h>
+
+class KTextEditor_View_KexiSharedActionConnector : public KexiSharedActionConnector
+{
+public:
+	KTextEditor_View_KexiSharedActionConnector( KexiActionProxy* proxy, KTextEditor::View *obj )
+	 : KexiSharedActionConnector( proxy, obj )
+	{
+		QValueList<QCString> actions;
+		actions << "edit_cut" << "edit_copy" << "edit_paste" << "edit_clear"
+			<< "edit_undo" << "edit_redo";
+		plugSharedActionsToExternalGUI(actions, d->view);
+	}
+};
+
 #endif
 
 class KexiQueryDesignerSQLEditorPrivate {
@@ -56,11 +87,11 @@ class KexiQueryDesignerSQLEditorPrivate {
 //		 , katepartGuiClientAdded(false)
 		 : keyEventFilter_enabled(true)
 		{}
-#ifdef QT_ONLY_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
 		KTextEdit *view;
 #else
-		KTextEditor::Document	*doc;
-		KTextEditor::View	*view;
+		KTextEditor::Document *doc;
+		KTextEditor::View *view;
 #endif
 //		bool firstActivation : 1;
 //		bool katepartGuiClientAdded : 1;
@@ -75,9 +106,19 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
  ,d(new KexiQueryDesignerSQLEditorPrivate())
 {
 	QVBoxLayout *lyr = new QVBoxLayout(this);
-#ifdef QT_ONLY_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
 	d->view = new KTextEdit( "", QString::null, this, "sqlDoc_editor" );
+	//adjust font
 	connect(d->view, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
+	QFont f("Courier");
+	f.setStyleStrategy(QFont::PreferAntialias);
+	f.setPointSize(d->view->font().pointSize());
+	d->view->setFont( f );
+	//other settings
+	d->view->setCheckSpellingEnabled(false);
+
+	KTextEdit_KexiSharedActionConnector c(this, d->view);
+
 #else
 	QFrame *fr = new QFrame(this);
 	fr->setFrameStyle(QFrame::Sunken|QFrame::WinPanel);
@@ -272,7 +313,7 @@ void
 KexiQueryDesignerSQLEditor::jump(int character)
 {
 	//find row and column for this character
-#ifdef QT_ONLY_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
 	const int numRows = d->view->paragraphs();
 #else
 	KTextEditor::EditInterface *ei = KTextEditor::editInterface(d->doc);
@@ -280,7 +321,7 @@ KexiQueryDesignerSQLEditor::jump(int character)
 #endif
 	int row = 0, col = 0;
 	for (int ch = 0; row < numRows; row++) {
-#ifdef QT_ONLY_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
 	const int rowLen = d->view->paragraphLength(row)+1;
 #else
 	const int rowLen = ei->lineLength(row)+1;
@@ -291,7 +332,7 @@ KexiQueryDesignerSQLEditor::jump(int character)
 		}
 		ch += rowLen;
 	}
-#ifdef QT_ONLY_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
 	d->view->setCursorPosition(row, col);
 #else
 	KTextEditor::ViewCursorInterface *ci = KTextEditor::viewCursorInterface(d->view);
@@ -299,7 +340,7 @@ KexiQueryDesignerSQLEditor::jump(int character)
 #endif
 }
 
-/*
+
 bool KexiQueryDesignerSQLEditor::eventFilter(QObject *o, QEvent *ev)
 {
 	if(ev->type() == QEvent::KeyPress && o==d->view) {
@@ -307,11 +348,11 @@ bool KexiQueryDesignerSQLEditor::eventFilter(QObject *o, QEvent *ev)
 		kdDebug() << ke->key() << endl;
 	}
 	return false;
-}*/
+}
 
-// === KexiQueryDesignerSQLEditor impelmentation using KTextEditor ===
+// === KexiQueryDesignerSQLEditor implementation using KTextEditor ===
 
-#ifdef QT_ONLY_SQL_EDITOR
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
 # include "kexiquerydesignersqleditor_qt.cpp"
 #else
 
@@ -332,7 +373,7 @@ KexiQueryDesignerSQLEditor::setText(const QString &text)
 	setDirty(was_dirty);
 }
 
-#endif //!QT_ONLY_SQL_EDITOR
+#endif //!KTEXTEDIT_BASED_SQL_EDITOR
 
 
 #include "kexiquerydesignersqleditor.moc"
