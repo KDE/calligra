@@ -2078,7 +2078,6 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	    int dr = 0;
 	    if ( r.style() != Qt::NoPen )
 		dr = r.width() / 2;
-		// dr = ( r.width() - 1 ) / 2 + 1 - ( ( r.width() - 1 ) % 2 );
 
 	    _painter.setPen( table()->doc()->defaultGridPen() );
 	    _painter.drawLine( _tx + dl, _ty, _tx + w - dr, _ty );
@@ -2145,7 +2144,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     KSpreadCell* cell_t = m_pTable->cellAt( _col, _row - 1 );
     KSpreadCell* cell_r = m_pTable->cellAt( _col + 1, _row );
     KSpreadCell* cell_l = m_pTable->cellAt( _col - 1, _row );
-    KSpreadCell* cell_b = m_pTable->cellAt( _col, _row + 1 );
+    // Not yet used .... KSpreadCell* cell_b = m_pTable->cellAt( _col, _row + 1 );
    
     // Fix the borders which meat at the top left corner
     QPen vert_pen = cell_t->leftBorderPen( _col, _row - 1 );
