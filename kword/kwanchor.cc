@@ -23,16 +23,17 @@
 #include "kwviewmode.h"
 #include <kdebug.h>
 
-KWAnchor::KWAnchor( KWTextDocument *textdoc, KWFrameSet * frameset, int frameNum )
-    : KoTextCustomItem( textdoc ),
+KWAnchor::KWAnchor( KWTextFrameSet *containingFrameset, KWFrameSet * frameset, int frameNum )
+    : KoTextCustomItem( containingFrameset->textDocument()),
       m_frameset( frameset ),
       m_frameNum( frameNum )
 {
+    m_containingFrameSet=containingFrameset;
 }
 
 KWAnchor::~KWAnchor()
 {
-    kdDebug() << "KWAnchor::~KWAnchor" << endl;
+    kdDebug(32001) << "KWAnchor::~KWAnchor" << endl;
 }
 
 void KWAnchor::move( int x, int y )
@@ -74,7 +75,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     KoZoomHandler* zh = fs->textDocument()->paintingZoomHandler();
     int paragy = /*zh->layoutUnitToPixelY*/( paragraph()->rect().y() );
 #ifdef DEBUG_DRAWING
-    kdDebug(32001) << "KWAnchor::draw " << x << "," << y << " paragy=" << paragy
+    kdDebug(32001) << "KWAnchor::draw x:" << x << ", y:" << y << " paragy=" << paragy
                    << "  cliprect(LU)" << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
 #endif
 
@@ -91,9 +92,9 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     if ( cx == -1 && cy+paragy == -1 && cw == -1 && ch == -1 )
         crect_lu = QRect( x, y+paragy, width, height );
     else
-        crect_lu = QRect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
+        crect_lu = QRect( cx > 0 ? cx : 0, cy-paragy, cw, ch );
 #ifdef DEBUG_DRAWING
-    kdDebug() << "KWAnchor::draw crect ( in internal coords, LU ) = " << DEBUGRECT( crect_lu ) << endl;
+    kdDebug() << "KWAnchor::draw crect ( in internal coords; LU ) = " << DEBUGRECT( crect_lu ) << endl;
 #endif
     // 2 - convert to view coords, first topleft then bottomright
     QPoint cnPoint = crect_lu.topLeft(); //fallback
@@ -147,24 +148,35 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     // (this is exactly the opposite of the code in KWFrameSet::drawContents)
     // (It does translate(view - internal), so we do translate(internal - view))
 
-    //QPoint nFrameTopLeft = zh->zoomPoint( frame->topLeft() );
-    //QPoint iPoint;
-    //if ( fs->internalToDocument( frameTopLeft, dPoint ) )
-    //{
-        //iPoint = zh->zoomPoint( dPoint );
-        //QPoint vPoint = fs->currentViewMode()->normalToView( frameTopLeft );
+    // The amount we have to move depends on the frame we are positioned in, as we don't know this
+    // lets find out via our containting frameset.
+    KoPoint topLeft = KoPoint(
+        zh->unzoomItX(m_frameset->frame(m_frameNum)->outerRect().x()) + 1, // we add one to x and y to 
+        zh->unzoomItY(m_frameset->frame(m_frameNum)->outerRect().y()) + 1);// compensate for rounding errors.
+    
+    QPtrListIterator<KWFrame> frameIt = m_containingFrameSet->frameIterator();
+    KWFrame *containingFrame=0L;
+    for ( ; frameIt.current(); ++frameIt ) {
+        if ( frameIt.current()->contains( topLeft ) ) {
+            containingFrame=frameIt.current();
+            break;
+        }
+    }
+    if(containingFrame==0L) {
+        kdDebug() << "KWAnchor::paint Hmm? it seems my frame is positioned outside all text areas!!, aboring draw\n";
+        return;
+    }
+    // left side from the containing frameset and we can get the top from the m_frameset frame.
+    topLeft=zh->zoomPoint(containingFrame->topLeft());
+
 #ifdef DEBUG_DRAWING
-        kdDebug() << "KWAnchor::draw translating by " << crect_lu.x() - crect.x() << "," << crect_lu.y() - crect.y() << endl;
+    kdDebug() << "KWAnchor::draw translating by " << 0-topLeft.x() << "," << -1-m_frameset->frame(m_frameNum)->outerRect().y() << endl;
 #endif
-        p->translate( crect_lu.x() - crect.x(), crect_lu.y() - crect.y() /*- paragy ??*/ );
-    //} else
-    //    kdWarning() << "normalToInternal returned 0L in KWAnchor::draw - shouldn't happen. "
-    //                << frameTopLeft.x() << "," << frameTopLeft.y() << endl;
-    // Draw the frame
+    p->translate( 0-topLeft.x(), -1 - m_frameset->frame(m_frameNum)->outerRect().y());
     QColorGroup cg2( cg );
     m_frameset->drawContents( p, crect, cg2, false, true, 0L, fs->currentViewMode(), fs->currentDrawnCanvas() );
 
-    if ( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer )
+    if( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer )
     {
         p->fillRect( crect, QBrush( cg.highlight(), QBrush::Dense4Pattern) );
     }

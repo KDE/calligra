@@ -154,10 +154,10 @@ KCommand * KWTableFrameSet::anchoredObjectDeleteCommand( int /*frameNum*/ )
     return new KWDeleteTableCommand( i18n("Delete table"), this );
 }
 
-KWAnchor * KWTableFrameSet::createAnchor( KWTextDocument * textdoc, int frameNum )
+KWAnchor * KWTableFrameSet::createAnchor( KWTextFrameSet *fs, int frameNum )
 {
     //kdDebug() << "KWTableFrameSet::createAnchor" << endl;
-    return new KWAnchor( textdoc, this, frameNum );
+    return new KWAnchor( fs, this, frameNum );
 }
 
 void KWTableFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/ )
@@ -167,7 +167,7 @@ void KWTableFrameSet::createAnchors( KWTextParag * parag, int index, bool placeH
     //if ( !m_anchor )
     {
         // Anchor this frame, after the previous one
-        KWAnchor * anchor = createAnchor( m_anchorTextFs->kwTextDocument(), 0 );
+        KWAnchor * anchor = createAnchor( m_anchorTextFs, 0 );
         if ( !placeHolderExists )
             parag->insert( index, KoTextObject::customItemChar() );
         parag->setCustomItem( index, anchor, 0 );

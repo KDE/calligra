@@ -2612,7 +2612,7 @@ void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString 
     int index = 0;
     bool ownline = false;
     { // the loop will start here :)
-        KWAnchor * anchor = fs->createAnchor( textFrameSet()->kwTextDocument(), frameNumber );
+        KWAnchor * anchor = fs->createAnchor( textFrameSet(), frameNumber );
         if ( frameNumber == 0 && anchor->ownLine() && cursor()->index() > 0 ) // enforce start of line - currently unused
         {
             kdDebug() << "ownline -> prepending \\n" << endl;

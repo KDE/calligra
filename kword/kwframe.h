@@ -41,6 +41,7 @@ class KWChild;
 class KWDocument;
 class KWFrame;
 class KWFrameSet;
+class KWTextFrameSet;
 class KWResizeHandle;
 class KWTableFrameSet;
 class KWTextDocument;
@@ -496,7 +497,7 @@ public:
     KWAnchor * findAnchor( int frameNum );
 
     /** Create an anchor for the floating frame identified by frameNum */
-    virtual KWAnchor * createAnchor( KWTextDocument * textdoc, int frameNum );
+    virtual KWAnchor * createAnchor( KWTextFrameSet *fs, int frameNum );
 
     /** Move the frame frameNum to the given position - this is called when
         the frame is anchored and the anchor moves (see KWAnchor). */
