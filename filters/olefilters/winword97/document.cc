@@ -79,7 +79,6 @@ void Document::createAttributes(
 
     runs = chpxs.size();
     attributes.baseStyle = baseStyle;
-    attributes.runs.setAutoDelete(true);
     for (unsigned i = 0; i < runs; i++)
     {
         Properties exceptionStyle = Properties(*this);
@@ -283,7 +282,7 @@ kdDebug(s_area) << "Document::createAttributes: hps 3: " <<exceptionStyle.getChp
             format->values = new Properties(exceptionStyle);
             run = format;
         }
-        attributes.runs.append(run);
+        attributes.runs.append( KSharedPtr<Run>( run ) );
     }
 }
 

@@ -269,15 +269,16 @@ QString WinWordDoc::generateFormats(
     Attributes &attributes)
 {
     QString formats;
-    Run *run;
+    KSharedPtr<Run> run;
+    QValueList<KSharedPtr<Run> >::Iterator it;
 
     formats.append("<FORMATS>\n");
-    run = attributes.runs.first();
-    while (run)
+    for ( it = attributes.runs.begin(); it != attributes.runs.end(); ++it)
     {
+        run = *it;
         if (typeid(Format) == typeid(*run))
         {
-            const MsWordGenerated::CHP *chp = static_cast<Format *>(run)->values->getChp();
+            const MsWordGenerated::CHP *chp = static_cast<Format *>(run.data())->values->getChp();
     
 kdDebug() << "WinWordDoc::generateFormats: hps 3: " <<chp->hps<< endl;
             if (run->end > run->start)
@@ -294,7 +295,7 @@ kdDebug() << "WinWordDoc::generateFormats: hps 3: " <<chp->hps<< endl;
         else
         if (typeid(Image) == typeid(*run))
         {
-            Image *image = static_cast<Image *>(run);
+            Image *image = static_cast<Image *>(run.data());
             QString ourKey;
             QString uid;
 
@@ -325,7 +326,7 @@ kdDebug() << "WinWordDoc::generateFormats: hps 3: " <<chp->hps<< endl;
         else
         if (typeid(VectorGraphic) == typeid(*run))
         {
-            VectorGraphic *vectorGraphic = static_cast<VectorGraphic *>(run);
+            VectorGraphic *vectorGraphic = static_cast<VectorGraphic *>(run.data());
             QString ourKey;
             QString uid;
             QString mimeType;
@@ -370,7 +371,7 @@ kdDebug() << "WinWordDoc::generateFormats: hps 3: " <<chp->hps<< endl;
         else
         if (typeid(Object) == typeid(*run))
         {
-            Object *object = static_cast<Object *>(run);
+            Object *object = static_cast<Object *>(run.data());
 
             // Send the OLE id to the outside world and get back the UID.
 
@@ -399,7 +400,6 @@ kdDebug() << "WinWordDoc::generateFormats: hps 3: " <<chp->hps<< endl;
             m_embedded.append(
                 "  </EMBEDDED>\n");
         }
-        run = attributes.runs.next();
     }
     formats.append("</FORMATS>\n");
     return formats;
@@ -723,11 +723,10 @@ void WinWordDoc::gotTableEnd(
             cell.append("<PARAGRAPH>\n<TEXT>");
             xml_friendly = m_table[y]->m_texts[x];
             encode(xml_friendly);
-            cell.append(xml_friendly);    
+            cell.append(xml_friendly);
             cell.append("</TEXT>\n");
-	    // CRASH!!!! (Niko)
-	    //cell.append(generateFormats(m_table[y]->m_styles[x]));
-	    cell.append("</PARAGRAPH>\n");
+            cell.append(generateFormats(m_table[y]->m_styles[x]));
+            cell.append("</PARAGRAPH>\n");
             cell.append("</FRAMESET>\n");
             m_tables.append(cell);
         }

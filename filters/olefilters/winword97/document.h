@@ -26,10 +26,10 @@ DESCRIPTION
 #define DOCUMENT_H
 
 #include <kdebug.h>
+#include <ksharedptr.h>
 #include <msword.h>
 #include <properties.h>
-#include <qlist.h>
-#include <qvector.h>
+#include <qvaluelist.h>
 
 class myFile;
 
@@ -63,8 +63,11 @@ protected:
     // formatting information or, in the case of embedded objects, data
     // associated with the object. Thus, we have a base class called Run
     // and a set of derivations for each specialisation...
+    //
+    // We derive from KSharedPtr since some overrides of our callback
+    // functions may choose to store the data for later processing.
 
-    class Run
+    class Run: public KShared
     {
     public:
         unsigned start;
@@ -108,11 +111,16 @@ protected:
         unsigned id;
     };
 
-    typedef struct
+    class Attributes
     {
+    public:
         PAP baseStyle;
-        QList<Run> runs;
-    } Attributes;
+        QValueList<KSharedPtr<Run> > runs;
+        ~Attributes()
+        {
+            runs.clear();
+        }
+    };
 
     virtual void gotError(
         const QString &text) = 0;
