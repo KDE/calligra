@@ -59,6 +59,7 @@ private:
     bool AddNoneTag(const QString& strName);
     bool AddBlockTag(const QString& strName,const QString& strStyle);
     bool AddInlineTag(const QString& strName,const QString& strStyle);
+    bool AddProvisoryInlineTag(const QString& strName);
     bool InitMapTag(void);
 };
 

@@ -57,11 +57,20 @@ bool MapTag::AddInlineTag(const QString& strName,const QString& strStyle)
     return AddTag(strName,new ParsingTag(modeDisplayInline,false,strStyle));
 }
 
+bool MapTag::AddProvisoryInlineTag(const QString& strName)
+{
+    // NOTE: tags added with this method are tags that are not treated correctly for now
+    // but where we do not want to lose the text that is in the tag's element.
+    // Therefore we treat them as a <span> tag
+    return AddTag(strName,new ParsingTag(modeDisplayInline,false,QString::null));
+}
+
 bool MapTag::InitMapTag(void)
 {
-
-    // Default element (must be first!)
-    AddTag("//UNKNOWN//",false);
+    // Default tag
+    // NOTE: as QMap is sorted and as the default tag must be first,
+    //  the name must start with a character lower than "a"!
+    AddTag("@@UNKNOWN@@",false);
 
     // Commonly used empty elements
     AddTag("br",true);      // TODO: how can we implement this one?
@@ -81,9 +90,9 @@ bool MapTag::InitMapTag(void)
     AddTag("param",true);
 
     // Other elements (in alphabetic order)
-    AddTag("a",false);
-    AddTag("abbr",false);
-    AddTag("acronym",false);
+    AddProvisoryInlineTag("a");
+    AddProvisoryInlineTag("abbr");
+    AddProvisoryInlineTag("acronym");
     AddInlineTag("address","font-style:italic;");
     AddNoneTag("applet"); // We do not support scripts!
     // <area>
@@ -91,7 +100,7 @@ bool MapTag::InitMapTag(void)
     // <base>
     // <basefont>
     AddTag("bdo",false);
-    AddTag("big",false);
+    AddProvisoryInlineTag("big");
     AddTag("blockquote",false);
     AddTag("body",false);
     // <br>
@@ -112,7 +121,7 @@ bool MapTag::InitMapTag(void)
     AddInlineTag("em","font-style:italic;");
 
     AddTag("fieldset",false);
-    AddTag("font",false);
+    AddProvisoryInlineTag("font");
     AddTag("form",false);  // Candidate for display none?
     // <frame>
     AddNoneTag("frameset"); // We do not support framesets
@@ -134,7 +143,7 @@ bool MapTag::InitMapTag(void)
     AddTag("kbd",false);
     AddTag("label",false);
     AddTag("legend",false);
-    AddTag("li",false);
+    AddBlockTag("li",QString::null); // PROVISORY
     // <link>
     AddTag("map",false);
     AddTag("menu",false);
@@ -142,7 +151,7 @@ bool MapTag::InitMapTag(void)
     AddTag("noframes",false);
     AddTag("noscript",false);
     AddTag("object",false);
-    AddTag("ol",false);
+    AddBlockTag("ol",QString::null); // PROVISORY
     AddTag("option",false);
     AddTag("optiongroup",false);
     AddBlockTag("p",QString::null);
@@ -153,7 +162,7 @@ bool MapTag::InitMapTag(void)
     AddTag("samp",false);
     AddNoneTag("script"); // We do not support scripts
     AddTag("select",false);
-    AddTag("small",false);
+    AddProvisoryInlineTag("small");
     AddInlineTag("span",QString::null);
     AddInlineTag("strike","text-decoration:line-through;");
     AddInlineTag("strong","font-weight:bold;");
@@ -168,10 +177,10 @@ bool MapTag::InitMapTag(void)
     AddTag("th",false);
     AddTag("thead",false);
     AddNoneTag("title");
-    AddTag("tr",false);
-    AddTag("tt",false);
+    AddBlockTag("tr",QString::null); // PROVISORY
+    AddBlockTag("tt",QString::null); // PROVISORY
     AddInlineTag("u","text-decoration:underline;");
-    AddTag("ul",false);
+    AddBlockTag("ul",QString::null); // PROVISORY
     AddInlineTag("var","font-style:italic;");
 
     // Non-HTML 4.01 Elements
