@@ -151,7 +151,7 @@ public:
     /**
      *  Returns the layout
      */
-    KoPageLayout getLayout() { return layout; } // BIC: make const
+    KoPageLayout getLayout() const { return layout; }
 
     /**
      *  Returns the header and footer information
@@ -203,10 +203,8 @@ protected:
     KDoubleNumInput *nHSpacing;
     KDoubleNumInput *nFSpacing;
     KDoubleNumInput *nFNSpacing;
-    QCheckBox *rhSame_unused; // BIC: remove
     QCheckBox *rhFirst;
     QCheckBox *rhEvenOdd;
-    QCheckBox *rfSame_unused; // BIC: remove
     QCheckBox *rfFirst;
     QCheckBox *rfEvenOdd;
 

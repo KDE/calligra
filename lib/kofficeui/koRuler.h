@@ -250,7 +250,7 @@ public:
     virtual QSize sizeHint() const;
 
 signals:
-    void newPageLayout( KoPageLayout ); // BIC: pass a const ref
+    void newPageLayout( const KoPageLayout & );
     void newLeftIndent( double );
     void newFirstIndent( double );
     void newRightIndent( double );
