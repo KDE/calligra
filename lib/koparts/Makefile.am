@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir)/../ $(all_includes)
+INCLUDES= -I$(srcdir)/../ -I$(top_srcdir)/libltdl $(all_includes)
 LDFLAGS	= $(all_libraries)  -version-info 1:0:0
 libkparts_la_LIBADD  = $(LIB_KDEUI)
 
