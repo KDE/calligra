@@ -34,11 +34,31 @@ KoXmlWriter::KoXmlWriter( QIODevice* dev )
 
 KoXmlWriter::~KoXmlWriter()
 {
-    // just to do exactly like QDom does (newline at end of file).
-    // This can be removed though.
-    writeChar( '\n' );
     delete[] m_indentBuffer;
     delete[] m_escapeBuffer;
+}
+
+void KoXmlWriter::startDocument( const char* rootElemName, const char* publicId, const char* systemId )
+{
+    Q_ASSERT( m_tags.isEmpty() );
+    writeCString( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
+    writeCString( "<!DOCTYPE " );
+    writeCString( rootElemName );
+    if ( publicId ) {
+        writeCString( " PUBLIC \"" );
+        writeCString( publicId );
+        writeCString( "\" \"" );
+        writeCString( systemId );
+        writeCString( "\"" );
+    }
+    writeCString( ">\n" );
+}
+
+void KoXmlWriter::endDocument()
+{
+    // just to do exactly like QDom does (newline at end of file).
+    writeChar( '\n' );
+    Q_ASSERT( m_tags.isEmpty() );
 }
 
 void KoXmlWriter::startElement( const char* tagName )
@@ -91,14 +111,6 @@ void KoXmlWriter::addTextNode( const char* cstr )
     writeCString( escaped );
     if(escaped != m_escapeBuffer)
         delete[] escaped;
-}
-
-void KoXmlWriter::writeDocType( const char* elemName )
-{
-    Q_ASSERT( m_tags.isEmpty() );
-    writeCString( "<!DOCTYPE " );
-    writeCString( elemName );
-    writeCString( ">\n" );
 }
 
 void KoXmlWriter::addAttribute( const char* attrName, const char* value )

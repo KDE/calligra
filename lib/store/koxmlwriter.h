@@ -24,11 +24,34 @@
 #include <qstring.h>
 #include <qvaluestack.h>
 
+/**
+ * A class for writing out XML (to any QIODevice), with a special attention on performance.
+ * The XML is being written out along the way, which avoids requiring the entire
+ * document in memory (like QDom does), and avoids using QTextStream at all
+ * (which in Qt3 has major performance issues when converting to utf8).
+ */
 class KoXmlWriter
 {
 public:
+    /**
+     * Create a KoXmlWriter instance to write out an XML document into
+     * the given QIODevice.
+     */
     KoXmlWriter( QIODevice* dev );
+    /// Destructor
     ~KoXmlWriter();
+
+    /**
+     * Start the XML document.
+     * This writes out the <?xml?> tag with utf8 encoding, and the DOCTYPE.
+     * @param rootElemName the name of the root element, used in the DOCTYPE tag.
+     * @param publicId the public identifier, e.g. "-//OpenOffice.org//DTD OfficeDocument 1.0//EN"
+     * @param systemId the system identifier, e.g. "office.dtd" or a full URL to it.
+     */
+    void startDocument( const char* rootElemName, const char* publicId = 0, const char* systemId = 0 );
+
+    /// Call this to terminate an XML document.
+    void endDocument();
 
     void startElement( const char* xmlName );
     inline void addAttribute( const char* attrName, const QString& value ) {
@@ -52,8 +75,7 @@ public:
         addTextNode( cstr.data() );
     }
     void addTextNode( const char* cstr );
-    // ## To be replaced with the full thing
-    void writeDocType( const char* elemName );
+
 
 private:
     struct Tag {

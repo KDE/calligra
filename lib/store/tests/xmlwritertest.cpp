@@ -18,7 +18,7 @@ void speedTest()
     out.open(IO_WriteOnly);
     {
         KoXmlWriter writer( &out );
-        writer.writeDocType( "rootelem" );
+        writer.startDocument( "rootelem" );
         writer.startElement( "rootelem" );
         for ( int i = 0 ; i < numParagraphs ; ++i )
         {
@@ -28,6 +28,7 @@ void speedTest()
             writer.endElement();
         }
         writer.endElement();
+        writer.endDocument();
     }
     out.close();
     qDebug( "writing %i XML elements using TagWriter: %i", numParagraphs, time.elapsed() );
@@ -36,26 +37,29 @@ void speedTest()
 int main( int argc, char** argv ) {
     QApplication app( argc, argv, QApplication::Tty );
 
-#define TEST_BEGIN \
+#define TEST_BEGIN(publicId,systemId) \
     { \
         QCString cstr; \
         QBuffer buffer( cstr ); \
         buffer.open( IO_WriteOnly ); \
         { \
             KoXmlWriter writer( &buffer ); \
-            writer.writeDocType( "r" ); \
+            writer.startDocument( "r", publicId, systemId ); \
             writer.startElement( "r" )
 
 #define TEST_END(testname, expected) \
             writer.endElement(); \
+            writer.endDocument(); \
         } \
         buffer.putch( '\0' ); /*null-terminate*/ \
-        if ( cstr == expected ) \
+        QCString expectedFull( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" ); \
+        expectedFull += expected; \
+        if ( cstr == expectedFull ) \
             qDebug( "%s OK", testname ); \
         else { \
             qDebug( "%s FAILED!", testname ); \
             QCString s1 = cstr; \
-            QCString s2 = expected; \
+            QCString s2 = expectedFull; \
             if ( s1.length() != s2.length() ) \
                 qDebug( "got length %d, expected %d", s1.length(), s2.length() ); \
             s1.replace( QRegExp( "[x]{1000}" ), "[x]*1000" ); \
@@ -66,15 +70,18 @@ int main( int argc, char** argv ) {
         } \
     }
 
-    TEST_BEGIN;
+    TEST_BEGIN( 0, 0 );
     TEST_END( "framework test", "<!DOCTYPE r>\n<r/>\n" );
 
-    TEST_BEGIN;
+    TEST_BEGIN( "-//KDE//DTD kword 1.3//EN", "http://www.koffice.org/DTD/kword-1.3.dtd" );
+    TEST_END( "doctype test", "<!DOCTYPE r PUBLIC \"-//KDE//DTD kword 1.3//EN\" \"http://www.koffice.org/DTD/kword-1.3.dtd\">\n<r/>\n" );
+
+    TEST_BEGIN( 0, 0 );
     writer.addAttribute( "a", "val" );
     writer.addAttribute( "b", "<\">" );
     TEST_END( "attributes test", "<!DOCTYPE r>\n<r a=\"val\" b=\"&lt;&quot;&gt;\"/>\n" );
 
-    TEST_BEGIN;
+    TEST_BEGIN( 0, 0 );
     writer.startElement( "a" );
     writer.startElement( "b" );
     writer.startElement( "c" );
@@ -83,7 +90,7 @@ int main( int argc, char** argv ) {
     writer.endElement();
     TEST_END( "indent test", "<!DOCTYPE r>\n<r>\n <a>\n  <b>\n   <c/>\n  </b>\n </a>\n</r>\n" );
 
-    TEST_BEGIN;
+    TEST_BEGIN( 0, 0 );
     writer.startElement( "a" );
     writer.startElement( "b" );
     writer.startElement( "c" );
@@ -100,7 +107,7 @@ int main( int argc, char** argv ) {
     x += '&';
     QCString expected = "<!DOCTYPE r>\n<r a=\"";
     expected += x + "amp;\"/>\n";
-    TEST_BEGIN;
+    TEST_BEGIN( 0, 0 );
     writer.addAttribute( "a", x );
     TEST_END( "escaping long string", expected.data() );
 
