@@ -324,7 +324,7 @@ void IndexElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle 
     if (content->isTextOnly()) {
         luPt mySize = style.getAdjustedSize( tstyle );
         QFont font = style.getDefaultFont();
-        font.setPointSizeFloat( style.layoutUnitToFontSize( mySize, false ) );
+        font.setPointSizeFloat( style.layoutUnitPtToPt( mySize ) );
 
         QFontMetrics fm(font);
         LuPixelRect bound = fm.boundingRect('x');
