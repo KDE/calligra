@@ -1509,7 +1509,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 
 		    kdDebug(30521) << exprID_dict[e.attribute("ExprID")] << endl;
 		    kdDebug(30521) << exprID_dict[QString("1")] << endl;
-		    kdDebug(30521) << e.attribute("ExprID").latin1() << endl;
+		    kdDebug(30521) << e.attribute("ExprID") << endl;
 
 		  }
 	      }
