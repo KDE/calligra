@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="21">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="22">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -200,6 +200,8 @@
  <Action name="text_default"/>
  <Action name="format_font"/>
  <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="border_backgroundcolor"/>
  <Separator/>
  <Action name="edit_cut"/>
  <Action name="edit_copy"/>
