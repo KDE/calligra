@@ -3389,14 +3389,24 @@ void KWView::textList()
     {
         c.setNumbering( KoParagCounter::NUM_NONE );
     }
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    Q_ASSERT(edit);
-    if ( edit )
+
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    bool createmacro=false;
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change list type") );
+    for ( ; it.current() ; ++it )
     {
-        KCommand *cmd=edit->setCounterCommand( c );
-        if(cmd)
-            m_doc->addCommand(cmd);
-    }
+        KCommand *cmd = it.current()->setCounterCommand( c );
+        if ( cmd )
+        {
+            createmacro=true;
+            macroCmd->addCommand( cmd );
+        }
+        }
+    if( createmacro)
+        m_doc->addCommand( macroCmd );
+    else
+        delete macroCmd;
 }
 
 void KWView::textSuperScript()
@@ -4095,7 +4105,7 @@ void KWView::slotFrameSetEditChanged()
 
     actionFormatDecreaseIndent->setEnabled(goodleftMargin && state);
 
-    actionFormatList->setEnabled(state);
+    actionFormatList->setEnabled(rw);
     actionFormatSuper->setEnabled(rw);
     actionFormatSub->setEnabled(rw);
     actionFormatParag->setEnabled(state);
