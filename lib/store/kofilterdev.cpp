@@ -103,8 +103,8 @@ QIODevice * KoFilterDev::device( QIODevice* inDevice, const QString & mimetype, 
    KFilterBase * base = KFilterBase::findFilterByMimeType(mimetype);
    if ( base )
    {
-      base->setDevice(inDevice, true /*auto-delete "base" */);
-      return new KoFilterDev(base, autoDeleteInDevice);
+      base->setDevice(inDevice, autoDeleteInDevice);
+      return new KoFilterDev(base, true /* auto-delete "base" */);
    }
    return 0;
 }
