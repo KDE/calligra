@@ -1090,7 +1090,7 @@ bool StructureParser::StartElementFoot(StackItem* stackItem, StackItem* /*stackC
     //frameElementOut.setAttribute("right",798);
     frameElementOut.setAttribute("runaround",1);
     // ### TODO: a few attributes are missing
-    mainFramesetElement.appendChild(frameElementOut);
+    framesetElement.appendChild(frameElementOut);
     
     stackItem->m_frameset=framesetElement;
 
@@ -1199,7 +1199,7 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
     //frameElementOut.setAttribute("right",798);
     frameElementOut.setAttribute("runaround",1);
     // ### TODO: a few attributes are missing
-    mainFramesetElement.appendChild(frameElementOut);
+    framesetElement.appendChild(frameElementOut);
     
     stackItem->m_frameset=framesetElement;
     QDomElement nullDummy;
@@ -1207,8 +1207,6 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
     stackItem->stackElementText=nullDummy; // <TEXT>
     stackItem->stackElementFormatsPlural=nullDummy; // <FORMATS>
 
-    kdDebug(30506) << mainDocument.toString() << endl;
-    
     return true;
 }
 
