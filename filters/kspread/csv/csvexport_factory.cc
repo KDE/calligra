@@ -17,16 +17,15 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "csvexport_factory.h"
-#include "csvexport_factory.moc"
-#include "csvexport.h"
+#include <csvexport_factory.h>
+#include <csvexport.h>
 
 #include <kinstance.h>
 #include <kdebug.h>
 
 extern "C"
 {
-    void* init_libcsvexport()
+    void* init_libcsvexport_test()
     {
         return new CSVExportFactory;
     }
@@ -37,7 +36,7 @@ KInstance* CSVExportFactory::s_global = 0;
 CSVExportFactory::CSVExportFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-    s_global = new KInstance( "csvexport" );
+    s_global = new KInstance( "csvexport_test" );
 }
 
 CSVExportFactory::~CSVExportFactory()
@@ -49,7 +48,7 @@ QObject* CSVExportFactory::create( QObject* parent, const char* name, const char
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
- 	    kdDebug(30501) << "CSVExportFactory: parent does not inherit KoFilter" << endl;
+	    kdDebug(31000) << "CSVExportFactory: parent does not inherit KoFilter" << endl;
 	    return 0L;
     }
     CSVExport *f = new CSVExport( (KoFilter*)parent, name );
@@ -61,3 +60,5 @@ KInstance* CSVExportFactory::global()
 {
     return s_global;
 }
+
+#include <csvexport_factory.moc>

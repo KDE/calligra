@@ -17,8 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <csvfilter.h>
-#include <csvfilter.moc>
+#include <csvimport.h>
 #include <qmessagebox.h>
 #include <kmessagebox.h>
 
@@ -297,3 +296,5 @@ const bool CSVFilter::I_filter(const QCString &file, KoDocument *document,
     in.close();
     return bSuccess;
 }
+
+#include <csvimport.moc>

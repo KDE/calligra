@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef CSVEXPORT_FACTORY_H
-#define CSVEXPORT_FACTORY_H
+#ifndef CSVEXPORT_FACTORY_TEST_H
+#define CSVEXPORT_FACTORY_TEST_H
 
 #include <klibloader.h>
 

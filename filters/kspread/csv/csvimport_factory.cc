@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2000 David Faure <faure@kde.org>
+   Copyright (C) 1999 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,47 +17,48 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "csvexport_factory_test.h"
-#include "csvexport_factory_test.moc"
-#include "csvexport_test.h"
+#include <csvimport_factory.h>
+#include <csvimport.h>
 
 #include <kinstance.h>
 #include <kdebug.h>
 
 extern "C"
 {
-    void* init_libcsvexport_test()
+    void* init_libcsvfilter()
     {
-        return new CSVExportFactory;
+        return new CSVFilterFactory;
     }
 };
 
-KInstance* CSVExportFactory::s_global = 0;
+KInstance* CSVFilterFactory::s_global = 0;
 
-CSVExportFactory::CSVExportFactory( QObject* parent, const char* name )
+CSVFilterFactory::CSVFilterFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-    s_global = new KInstance( "csvexport_test" );
+    s_global = new KInstance( "csvfilter" );
 }
 
-CSVExportFactory::~CSVExportFactory()
+CSVFilterFactory::~CSVFilterFactory()
 {
     delete s_global;
 }
 
-QObject* CSVExportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* CSVFilterFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
-	    kdDebug(31000) << "CSVExportFactory: parent does not inherit KoFilter" << endl;
+	    kdDebug(30501) << "CSVFilterFactory: parent does not inherit KoFilter" << endl;
 	    return 0L;
     }
-    CSVExport *f = new CSVExport( (KoFilter*)parent, name );
+    CSVFilter *f = new CSVFilter( (KoFilter*)parent, name );
     emit objectCreated(f);
     return f;
 }
 
-KInstance* CSVExportFactory::global()
+KInstance* CSVFilterFactory::global()
 {
     return s_global;
 }
+
+#include <csvimport_factory.moc>

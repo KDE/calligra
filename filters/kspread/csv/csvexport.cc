@@ -22,9 +22,15 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <qdom.h>
+#include <qstring.h>
+#include <qfile.h>
 #include <qapp.h>
 #include <qlist.h>
 #include <qsortedlist.h>
+
+#include <kspread_map.h>
+#include <kspread_table.h>
+#include <kspread_doc.h>
 
 class Cell {
  public:
@@ -45,6 +51,121 @@ CSVExport::CSVExport(KoFilter *parent, QString name) :
                      KoFilter(parent, name) {
 }
 
+
+// The reason why we use the KoDocument* approach and not the QDomDocument
+// approach is because we don't want to export formulas but values !
+const bool CSVExport::E_filter(const QCString &file, const KoDocument * const document,
+			       const QCString &from, const QCString &to,
+			       const QString &config) {
+
+    kdDebug(30501) << "here we go... " << document->className() << endl;
+
+    if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
+    {
+        kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
+    	return false;
+    }
+    if(to!="text/x-csv" || from!="application/x-kspread")
+    {
+        kdWarning(30501) << "Invalid mimetypes " << to << " " << from << endl;
+        return false;
+    }
+
+
+    kdDebug(30501) << "...still here..." << endl;
+
+    const KSpreadDoc * const ksdoc=(const KSpreadDoc* const)document;
+
+    if( ksdoc->mimeType() != "application/x-kspread" )
+    {
+        kdWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
+        return false;
+    }
+
+    QChar csv_delimiter;
+    if(config.isEmpty())
+	csv_delimiter = ',';
+    else
+	csv_delimiter = config[0];
+
+    // Now get hold of the table to export
+    // (Hey, this could be part of the dialog too, choosing which table to export....
+    //  It's great to have parametrable filters... IIRC even MSOffice doesn't have that)
+    // Ok, for now we'll use the first table - my document has only one table anyway ;-)))
+    KSpreadTable * table = ksdoc->map()->firstTable();
+
+    // Ah ah ah - the document is const, but the map and table aren't. Safety: 0.
+
+    QString str;
+
+    // Either we get hold of KSpreadTable::m_dctCells and apply the old method below (for sorting)
+    // or, cleaner and already sorted, we use KSpreadTable's API (slower probably, though)
+    int iMaxColumn = table->maxColumn();
+    int iMaxRow = table->maxRow();
+
+    QString emptyLines;
+    for ( int currentrow = 1 ; currentrow < iMaxRow ; currentrow++ )
+    {
+        QString separators;
+        QString line;
+        for ( int currentcolumn = 1 ; currentcolumn < iMaxColumn ; currentcolumn++ )
+        {
+            KSpreadCell * cell = table->cellAt( currentcolumn, currentrow, true );
+            QString text;
+            if ( !cell->isDefault() && !cell->isEmpty() )
+            {
+              switch( cell->content() ) {
+                case KSpreadCell::Text:
+                  text = cell->text();
+                  break;
+                case KSpreadCell::RichText:
+                case KSpreadCell::VisualFormula:
+                  text = cell->text(); // untested
+                  break;
+                case KSpreadCell::Formula:
+                  cell->calc( TRUE ); // Incredible, cells are not calculated if the document was just opened
+                  text = cell->valueString();
+                  break;
+              }
+            }
+            if ( !text.isEmpty() )
+            {
+                line += separators;
+                line += text;
+                separators = QString::null;
+            }
+            // Append a delimiter, but in a temp string -> if no other real cell in this line,
+            // then those will be dropped
+            separators += csv_delimiter;
+        }
+        if ( !line.isEmpty() )
+        {
+            str += emptyLines;
+            str += line;
+            emptyLines = QString::null;
+        }
+        // Append a CR, but in a temp string -> if no other real line,
+        // then those will be dropped
+        emptyLines += "\n";
+    }
+    str += "\n"; // Last CR
+
+    // Ok, now write to export file
+    QCString cstr(str.local8Bit()); // I assume people will prefer local8Bit over utf8... Another param ?
+
+    QFile out(file);
+    if(!out.open(IO_WriteOnly)) {
+        kdError(30501) << "Unable to open output file!" << endl;
+        out.close();
+        return false;
+    }
+    out.writeBlock(cstr.data(), cstr.length());
+
+    out.close();
+    return true;
+}
+
+/*
 const bool CSVExport::filter(const QCString &fileIn, const QCString &fileOut,
                                const QCString& from, const QCString& to,
                                const QString &config) {
@@ -56,7 +177,7 @@ const bool CSVExport::filter(const QCString &fileIn, const QCString &fileOut,
     }
 
     KoStore in=KoStore(QString(fileIn), KoStore::Read);
-    if(!in.open("root")) {
+    if(!in.open("root", "")) {
         QApplication::restoreOverrideCursor();
         KMessageBox::sorry( 0L, i18n("CSV filter can't open input file %1 - please report.").arg( fileIn ) );
         in.close();
@@ -129,7 +250,7 @@ const bool CSVExport::filter(const QCString &fileIn, const QCString &fileOut,
 
     QFile out(fileOut);
     if(!out.open(IO_WriteOnly)) {
-        kdError(30502) << "Unable to open output file!" << endl;
+        kdError(30501) << "Unable to open output file!" << endl;
         in.close();
         out.close();
         return false;
@@ -140,6 +261,5 @@ const bool CSVExport::filter(const QCString &fileIn, const QCString &fileOut,
     out.close();
     return true;
 }
-
+*/
 #include <csvexport.moc>
-

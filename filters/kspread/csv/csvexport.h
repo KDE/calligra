@@ -17,17 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef CSVEXPORT_H
-#define CSVEXPORT_H
-
-#include <qstring.h>
-#include <qcstring.h>
-#include <qfile.h>
-#include <qobject.h>
+#ifndef CSVEXPORT_TEST_H
+#define CSVEXPORT_TEST_H
 
 #include <koFilter.h>
-#include <koStore.h>
 
+class QCString;
+class QString;
+class KoDocument;
 
 class CSVExport : public KoFilter {
 
@@ -37,9 +34,9 @@ public:
     CSVExport(KoFilter *parent, QString name);
     virtual ~CSVExport() {}
     /** do the filtering :) */
-    virtual const bool filter(const QCString &fileIn, const QCString &fileOut,
-                              const QCString &from, const QCString &to,
-                              const QString &config=QString::null);
+    virtual const bool E_filter(const QCString &file, const KoDocument * const document,
+				const QCString &from, const QCString &to,
+				const QString &config=QString::null);
 };
 #endif
 
