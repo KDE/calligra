@@ -72,6 +72,7 @@ doc(adoc),selHandle(adoc)
 
 GPage::~GPage ()
 {
+  kdDebug(0) << "GPage deleted" << endl;
   layers.clear();
   selection.clear();
 }

@@ -1,21 +1,27 @@
-/*
- * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
+/* -*- C++ -*-
+
+  $Id$
+
+  This file is part of KIllustrator.
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Library General Public License as
+  published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+*/
+
 #ifndef __tabbar_h__
 #define __tabbar_h__
 
@@ -23,7 +29,6 @@
 #include <qpainter.h>
 #include <qstrlist.h>
 
-//class KivioPageName;
 class KIllustratorView;
 class GDocument;
 
@@ -45,71 +50,20 @@ public:
     TabBar( QWidget* parent, KIllustratorView *view );
 
     /**
-     * Adds a tab to the bar and paints it. The tab does not become active.
-     * call @ref #setActiveTab to do so.
-     */
-    void addTab( const QString& _text );
-    /**
-     * Adds a hidden tab.
-     *
-     * @see KivioView::setActivePage
-     */
-    void addHiddenTab( const QString & text );
-    /**
-     * Removes the tab from the bar. If the tab was the active one then the one
-     * left of it ( or if not available ) the one right of it will become active.
-     * It is recommended to call @ref #setActiveTab after a call to this function.
-     */
-    void removeTab( const QString& _text );
-
-    /**
-     * Renames a tab.
-     */
-    void renameTab( const QString& old_name, const QString& new_name );
-
-    /**
      * Moves the tab with number _from befor tab number _to if @param _before is
      * true _from is inserted before _to. If false it is inserted after.
      */
     void moveTab( int _from, int _to, bool _before = true );
 
     /**
-     * Removes all tabs from the bar and repaints the widget.
-     */
-    void removeAllTabs();
-
-    /**
      * Highlights this tab.
      */
-    void setActiveTab( int a );
+    void setActiveTab();
 
     /**
      * Open a context menu.
      */
     void openPopupMenu( const QPoint &_global );
-    /**
-    * Remove page name from tabList and
-    * put pagename in pagehide
-    * and highlights first name in tabList
-    */
-    void hidePage();
-
-    /**
-     * Shows the page. This makes only sense if
-     * the page was hiddem before.
-     *
-     * The page does not become automatically the active one.
-     */
-    void showPage(const QString& _text);
-
-    /**
-     * @return the name of all visible pages.
-     */
-    QStringList listshow(){return  tabsList;}
-    /**
-     * @return the name of all hidden pages.
-     */
-    QStringList listhide(){return  pagehide;}
 
 signals:
     /**
@@ -132,7 +86,6 @@ protected slots:
     void slotRename( );
     void slotRemove( );
     void slotAdd();
-    void slotAutoScroll( );
 
 protected:
     virtual void paintEvent ( QPaintEvent* _ev );
@@ -157,18 +110,9 @@ protected:
     QPopupMenu *m_pPopupMenu;
 
     /**
-     * List with the names of all tabs. The order in this list determines the
-     * order of appearance.
-     */
-    QStringList tabsList;
-     /*
-    * list which contain names of page hide
-    */
-    QStringList pagehide;
-    /**
      * Timer that causes the tabbar to scroll when the user drag a tab.
      */
-    QTimer* m_pAutoScrollTimer;
+//    QTimer* m_pAutoScrollTimer;
 
     /**
      * This is the first visible tab on the left of the bar.
@@ -207,7 +151,7 @@ protected:
     /**
      * Indicates the direction the tabs are scrolled to.
      */
-    int m_autoScroll;
+//    int m_autoScroll;
 };
 
 #endif

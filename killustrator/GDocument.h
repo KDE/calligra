@@ -75,6 +75,12 @@ public:
   // add a new page
   GPage *addPage ();
 
+  // convert index to page
+  GPage *pageForIndex (int i);
+  
+  // movq page
+  void movePage( int from, int to, bool before );
+
   // delete the given page
   void deletePage (GPage *page);
 

@@ -1,24 +1,28 @@
-/*
- * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000 theKompany.com
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
+/* -*- C++ -*-
+
+  $Id$
+
+  This file is part of KIllustrator.
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Library General Public License as
+  published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+*/
+
 #include <qapplication.h>
-#include <qmessagebox.h>
-#include <qpointarray.h>
 #include <qstring.h>
 #include <qpopupmenu.h>
 #include <qtimer.h>
@@ -34,6 +38,7 @@
 #include "TabBar.h"
 #include "Canvas.h"
 #include "KIllustrator_view.h"
+#include "KIllustrator_doc.h"
 #include "GDocument.h"
 #include "GPage.h"
 #include "PageNameDialog.h"
@@ -44,225 +49,105 @@ TabBar::TabBar( QWidget *parent, KIllustratorView *view )
   m_pPopupMenu = 0L;
   doc = view->activeDocument();
 
-  m_pAutoScrollTimer = new QTimer(this);
-  connect( m_pAutoScrollTimer, SIGNAL(timeout()), SLOT(slotAutoScroll()));
-
   leftTab = 1;
   m_rightTab = 0;
   activeTab = 1;
   m_moveTab = 0;
-  m_autoScroll = 0;
 
   setFixedHeight(16);
 }
 
-void TabBar::addTab( const QString& _text )
-{
-  //doc.append( _text );
-  update();
-}
-
-void TabBar::removeTab( const QString& _text )
-{
-    int i = tabsList.findIndex( _text );
-    if ( i == -1 )
-    {
-        return;
-    }
-
-    if ( activeTab == i + 1 )
-        activeTab = i;
-
-    if ( activeTab == 0 )
-        leftTab = 1;
-    else if ( leftTab > activeTab )
-        leftTab = activeTab;
-
-    tabsList.remove( _text );
-
-    update();
-}
-
-void TabBar::removeAllTabs()
-{
-    tabsList.clear();
-    pagehide.clear();
-    activeTab = 0;
-    leftTab = 1;
-
-    update();
-}
-
 void TabBar::moveTab( int _from, int _to, bool _before )
 {
-    QStringList::Iterator it;
-
-    it = tabsList.at( _from );
-    const QString tabname = *it;
-
-    if ( !_before )
-        ++_to;
-
-    if ( _to > (int)tabsList.count() )
-    {
-        tabsList.append( tabname );
-        tabsList.remove( it );
-    }
-    else if ( _from < _to )
-    {
-        tabsList.insert( tabsList.at( _to ), tabname );
-        tabsList.remove( it );
-    }
-    else
-    {
-        tabsList.remove( it );
-        tabsList.insert( tabsList.at( _to ), tabname );
-    }
-
-    repaint();
+  doc->movePage(_from, _to, _before);
+  if(_from < _to)
+    activeTab = _to - 1;
+  repaint();
 }
 
 
 void TabBar::scrollLeft()
 {
-    if ( tabsList.count() == 0 )
-        return;
+  if ( leftTab == 1 )
+    return;
 
-    if ( leftTab == 1 )
-        return;
-
-    leftTab--;
-    repaint( false );
+  leftTab--;
+  repaint( false );
 }
 
 void TabBar::scrollRight()
 {
-    if ( tabsList.count() == 0 )
-        return;
+  if ( m_rightTab == doc->getPages().count() )
+    return;
 
-        if ( m_rightTab == (int)tabsList.count() )
-        return;
+  if ( (unsigned int )leftTab == doc->getPages().count() )
+    return;
 
-    if ( (unsigned int )leftTab == tabsList.count() )
-        return;
-
-    leftTab++;
-    repaint( false );
+  leftTab++;
+  repaint( false );
 }
 
 void TabBar::scrollFirst()
 {
-    if ( tabsList.count() == 0 )
-        return;
-
-    if ( leftTab == 1 )
-        return;
-
-    leftTab = 1;
-    repaint( false );
+  activeTab = 1;
+  setActiveTab();
 }
 
 void TabBar::scrollLast()
 {
-    if ( tabsList.count() == 0 )
-        return;
-
-    QPainter painter;
-    painter.begin( this );
-
-    int i = tabsList.count();
-    int x = 0;
-
-        if ( m_rightTab == i )
-        return;
-
-    QStringList::Iterator it;
-        it = tabsList.end();
-        do
-        {
-                --it;
-                QFontMetrics fm = painter.fontMetrics();
-
-            x += 10 + fm.width( *it );
-                if ( x > width() )
-                {
-                        leftTab = i + 1;
-                        break;
-                }
-                --i;
-    } while ( it != tabsList.begin() );
-    painter.end();
-    repaint( false );
+  activeTab = doc->getPages().count();
+  setActiveTab();
 }
 
-void TabBar::setActiveTab( int a )
+void TabBar::setActiveTab()
 {
- doc->setActivePage(a-1);
- 
- update();
- /* int i = tabsList.findIndex( _text );
-  if ( i == -1 )
-    return;
-
-  if ( i + 1 == activeTab )
-    return;
-
-  activeTab = i + 1;
-  repaint( false );
-
-  emit tabChanged( _text );*/
+  doc->setActivePage(activeTab - 1);
+  update();
 }
 
 void TabBar::slotRemove( )
 {
-/*    if ( (m_pView->doc()->map()->count() <= 1 )||(tabsList.count()<=1) )
-    {
-        QApplication::beep();
-        KMessageBox::error( this,i18n("You cannot delete the only page of the map."), i18n("Remove page") ); // FIXME bad english? no english!
-        return;
-    }*/
-    QApplication::beep();/*
-    int ret = KMessageBox::warningYesNo( this, i18n("You are going to remove the active page.\nDo you want to continue?"), i18n("Remove page"));
-    if ( ret == 3 )
-    {
-        KivioPage *tbl = m_pView->activePage();
-        m_pView->doc()->map()->removePage( tbl );
-                m_pView->removePage(tbl);
-        delete tbl;
-    }*/
+  if(doc->getPages().count() <= 1)
+  {
+    QApplication::beep();
+    KMessageBox::error( this,i18n("You cannot delete the only page of the map."), i18n("Remove page") );
+    return;
+  }
+  int ret = KMessageBox::warningYesNo( this, i18n("You are going to remove the active page.\nDo you want to continue?"), i18n("Remove page"));
+  if( ret == 3 )
+  {
+    doc->deletePage(doc->pageForIndex(activeTab - 1));
+    if(activeTab >= 1)
+      activeTab--;
+    setActiveTab();
+  }
 }
 
 void TabBar::slotAdd()
 {
-  GPage *page = doc->addPage();
+  doc->addPage();
 }
 
 void TabBar::paintEvent( QPaintEvent* )
 {
-/*    if ( tabsList.count() == 0 )
-    {
-        erase();
-        return;
-    }*/
+  QPainter painter;
+  QPixmap pm(size());
+  pm.fill( backgroundColor() );
+  painter.begin( &pm, this );
 
-    QPainter painter;
-    QPixmap pm(size());
-    pm.fill( backgroundColor() );
-    painter.begin( &pm, this );
+  if ( leftTab > 1 )
+    paintTab( painter, -10, QString(""), 0, 0, FALSE );
 
-    if ( leftTab > 1 )
-        paintTab( painter, -10, QString(""), 0, 0, FALSE );
+  int i = 1;
+  int x = 0;
+  QString text;
+  QString active_text;
+  int active_x = -1;
+  int active_width = 0;
+  int active_y = 0;
 
-    int i = 1;
-    int x = 0;
-    QString text;
-    QString active_text;
-    int active_x = -1;
-    int active_width = 0;
-    int active_y = 0;
-
-    for(QListIterator<GPage> it(doc->getPages()); it.current(); ++it)
-    {
+  for(QListIterator<GPage> it(doc->getPages()); it.current(); ++it)
+  {
         text = ((GPage *)it)->name();
         QFontMetrics fm = painter.fontMetrics();
         int text_width = fm.width( text );
@@ -345,25 +230,17 @@ void TabBar::paintTab( QPainter & painter, int x, const QString& text, int text_
 
 void TabBar::openPopupMenu( const QPoint &_global )
 {
-//    if ( !m_pView->koDocument()->isReadWrite() )
-//      return;
+  if(!doc->document()->isReadWrite())
+    return;
+  
+  if ( m_pPopupMenu != 0L )
+    delete m_pPopupMenu;
+  m_pPopupMenu = new QPopupMenu();
 
-    if ( m_pPopupMenu != 0L )
-        delete m_pPopupMenu;
-    m_pPopupMenu = new QPopupMenu();
-
-    m_pPopupMenu->insertItem( BarIcon("item_rename"), i18n( "Rename page..." ), this, SLOT( slotRename() ) );
-    m_pPopupMenu->insertItem( BarIcon("item_add"), i18n( "Insert page" ), this, SLOT( slotAdd() ) );
-    m_pPopupMenu->insertItem( BarIcon("item_remove"),i18n( "Remove page" ), this, SLOT( slotRemove() ) );
-    m_pPopupMenu->popup( _global );
-}
-
-void TabBar::renameTab( const QString& old_name, const QString& new_name )
-{
-    QStringList::Iterator it = tabsList.find( old_name );
-    (*it) = new_name;
-
-    update();
+  m_pPopupMenu->insertItem( BarIcon("item_rename"), i18n( "Rename page..." ), this, SLOT( slotRename() ) );
+  m_pPopupMenu->insertItem( BarIcon("item_add"), i18n( "Insert page" ), this, SLOT( slotAdd() ) );
+  m_pPopupMenu->insertItem( BarIcon("item_remove"),i18n( "Remove page" ), this, SLOT( slotRemove() ) );
+  m_pPopupMenu->popup( _global );
 }
 
 void TabBar::slotRename()
@@ -397,230 +274,157 @@ void TabBar::slotRename()
 
 void TabBar::mousePressEvent( QMouseEvent* _ev )
 {
-    int old_active = activeTab;
+  int old_active = activeTab;
 
-/*    if ( tabsList.count() == 0 )
+  QPainter painter;
+  painter.begin( this );
+
+  int i = 1;
+  int x = 0;
+  QString text;
+  const char *active_text = 0L;
+
+  for(QListIterator<GPage> it(doc->getPages()); it.current(); ++it)
+  {
+    text = ((GPage *)it)->name();
+    QFontMetrics fm = painter.fontMetrics();
+    int text_width = fm.width( text );
+
+    if ( i >= leftTab )
     {
-        erase();
-        return;
-    }*/
+      if ( x <= _ev->pos().x() && _ev->pos().y() <= x + 20 + text_width )
+      {
+        activeTab = i;
+        active_text = text.ascii();
+      }
 
-    QPainter painter;
-    painter.begin( this );
-
-    int i = 1;
-    int x = 0;
-    QString text;
-    const char *active_text = 0L;
-
-    for(QListIterator<GPage> it(doc->getPages()); it.current(); ++it)
-    {
-        text = ((GPage *)it)->name();
-        QFontMetrics fm = painter.fontMetrics();
-        int text_width = fm.width( text );
-
-        if ( i >= leftTab )
-        {
-            if ( x <= _ev->pos().x() && _ev->pos().y() <= x + 20 + text_width )
-            {
-                activeTab = i;
-                active_text = text.ascii();
-            }
-
-            x += 10 + text_width;
-        }
-        i++;
+      x += 10 + text_width;
     }
+    i++;
+  }
 
-    painter.end();
+  painter.end();
 
-    if ( activeTab != old_active )
-    {
-    setActiveTab(activeTab);
-        repaint( false );
-        emit tabChanged( activeTab );
-    }
+  if ( activeTab != old_active )
+  {
+    setActiveTab();
+    repaint( false );
+    emit tabChanged( activeTab );
+  }
 
-    if ( _ev->button() == LeftButton )
+  if ( _ev->button() == LeftButton )
+  {
+    m_moveTabFlag = moveTabBefore;
+  }
+  else
+    if ( _ev->button() == RightButton )
     {
-        m_moveTabFlag = moveTabBefore;
-    }
-    else if ( _ev->button() == RightButton )
-    {
-        openPopupMenu( _ev->globalPos() );
+      openPopupMenu( _ev->globalPos() );
     }
 }
 
 
 void TabBar::mouseReleaseEvent( QMouseEvent* _ev )
 {
-//    if ( !m_pView->koDocument()->isReadWrite() )
-//        return;
+  if(!doc->document()->isReadWrite())
+    return;
 
-    if ( _ev->button() == LeftButton && m_moveTab != 0 )
-    {
-        if ( m_autoScroll != 0 )
-        {
-            m_pAutoScrollTimer->stop();
-            m_autoScroll = 0;
-        }
+  if ( _ev->button() == LeftButton && m_moveTab != 0 )
+  {
 /*        m_pView->doc()->map()->movePage( (*tabsList.at( activeTab - 1 )),
                                           (*tabsList.at( m_moveTab - 1 )),
                                           m_moveTabFlag == moveTabBefore );*/
-        moveTab( activeTab - 1, m_moveTab - 1, m_moveTabFlag == moveTabBefore );
+    moveTab( activeTab - 1, m_moveTab - 1, m_moveTabFlag == moveTabBefore );
 
-        m_moveTabFlag = moveTabNo;
-        if ( activeTab < m_moveTab && m_moveTabFlag == moveTabBefore )
-            m_moveTab--;
-        activeTab = m_moveTab;
+    m_moveTabFlag = moveTabNo;
+    if ( activeTab < m_moveTab && m_moveTabFlag == moveTabBefore )
+      m_moveTab--;
+    activeTab = m_moveTab;
 
-        m_moveTab = 0;
-        repaint( false );
-    }
+    m_moveTab = 0;
+    repaint( false );
+  }
 }
-
-void TabBar::slotAutoScroll( )
-{
-    if ( m_autoScroll == autoScrollLeft && leftTab > 1 )
-    {
-        m_moveTab = leftTab - 1;
-        scrollLeft();
-    }
-    else if ( m_autoScroll == autoScrollRight )
-    {
-        scrollRight();
-    }
-    if ( leftTab <= 1 )
-    {
-        m_pAutoScrollTimer->stop();
-        m_autoScroll = 0;
-    }
-}
-
 
 void TabBar::mouseMoveEvent( QMouseEvent* _ev )
 {
-//    if ( !m_pView->koDocument()->isReadWrite() )
-//         return;
-    if ( m_moveTabFlag == 0)
-        return;
+  if(!doc->document()->isReadWrite())
+    return;
 
-    QPainter painter;
-    painter.begin( this );
+  if ( m_moveTabFlag == 0)
+    return;
 
-    if ( _ev->pos().x() < 0 && leftTab > 1 && m_autoScroll == 0 )
+  QPainter painter;
+  painter.begin( this );
+
+    if ( _ev->pos().x() > size().width() )
     {
-        m_autoScroll = autoScrollLeft;
-        m_moveTab = leftTab - 1;
-        scrollLeft();
+/*      int i = tabsList.count();
+      if ( activeTab != i && m_moveTab != i && activeTab != i - 1 )
+      {
+        m_moveTabFlag = moveTabAfter;
+        m_moveTab = tabsList.count();
+        repaint( false );
+      }
+      if ( m_rightTab != (int)tabsList.count() && m_autoScroll == 0 )
+      {
+        kdDebug(0) << "3"<< endl;
+        m_autoScroll = autoScrollRight;
+        m_moveTab = leftTab;
+        scrollRight();
         m_pAutoScrollTimer->start( 400 );
-    }
-    else if ( _ev->pos().x() > size().width() )
-    {
-        int i = tabsList.count();
-        if ( activeTab != i && m_moveTab != i && activeTab != i - 1 )
-        {
-            m_moveTabFlag = moveTabAfter;
-            m_moveTab = tabsList.count();
-            repaint( false );
-        }
-        if ( m_rightTab != (int)tabsList.count() && m_autoScroll == 0 )
-        {
-            m_autoScroll = autoScrollRight;
-            m_moveTab = leftTab;
-            scrollRight();
-            m_pAutoScrollTimer->start( 400 );
-        }
+      }*/
     }
     else // ftf
     {
-        int i = 1;
-            int x = 0;
+      int i = 1;
+      int x = 0;
+      for(QListIterator<GPage> it(doc->getPages()); it.current(); ++it)
+      {
+        QFontMetrics fm = painter.fontMetrics();
+        int text_width = fm.width( ((GPage *)it)->name() );
 
-        QStringList::Iterator it;
-            for ( it = tabsList.begin(); it != tabsList.end(); ++it )
+        if ( i >= leftTab )
         {
-            QFontMetrics fm = painter.fontMetrics();
-            int text_width = fm.width( *it );
-
-            if ( i >= leftTab )
+          if ( x <= _ev->pos().x() && _ev->pos().x() <= x + 20 + text_width )
+          {
+            if ( ( activeTab != i && activeTab != i - 1 && m_moveTab != i ) || m_moveTabFlag == moveTabAfter )
             {
-                if ( x <= _ev->pos().x() && _ev->pos().x() <= x + 20 + text_width )
-                {
-                    if ( m_autoScroll != 0 )
-                    {
-                        m_pAutoScrollTimer->stop();
-                        m_autoScroll = 0;
-                    }
-
-                    if ( ( activeTab != i && activeTab != i - 1 && m_moveTab != i ) || m_moveTabFlag == moveTabAfter )
-                    {
-                        m_moveTabFlag = moveTabBefore;
-                        m_moveTab = i;
-                        repaint( false );
-                    }
-                    else if ( (m_moveTab != i && m_moveTab != 0) || (activeTab == i - 1 && m_moveTab != 0) )
-                    {
-                        m_moveTab = 0;
-                        repaint( false );
-                    }
-                }
-                x += 10 + text_width;
+              m_moveTabFlag = moveTabBefore;
+              m_moveTab = i;
+              repaint( false );
             }
-            i++;
-        }
-        --i;
-
-        if ( x + 10 <= _ev->pos().x() && _ev->pos().x() < size().width() )
-        {
-            if ( activeTab != i && m_moveTabFlag != moveTabAfter )
-            {
-                m_moveTabFlag = moveTabAfter;
-                m_moveTab = i;
+            else
+	      if ( (m_moveTab != i && m_moveTab != 0) || (activeTab == i - 1 && m_moveTab != 0) )
+              {
+                m_moveTab = 0;
                 repaint( false );
-            }
+              }
+          }
+          x += 10 + text_width;
         }
+        i++;
+      }
+      --i;
+
+      if ( x + 10 <= _ev->pos().x() && _ev->pos().x() < size().width() )
+      {
+        if ( activeTab != i && m_moveTabFlag != moveTabAfter )
+        {
+          m_moveTabFlag = moveTabAfter;
+          m_moveTab = i;
+          repaint( false );
+        }
+      }
     }
-    painter.end();
+  painter.end();
 }
 
 void TabBar::mouseDoubleClickEvent( QMouseEvent*  )
 {
-//    if ( !m_pView->koDocument()->isReadWrite() )
-//        return;
-    slotRename();
+  if(!doc->document()->isReadWrite())
+    return;
+  slotRename();
 }
 
-void TabBar::hidePage()
-{
-/*    if ( tabsList.count() ==  1)
-    {
-        KMessageBox::error( this, i18n("You cannot hide the last page visible.") );
-        return;
-    }
-    else
-    {
-        KivioPage* page = m_pView->activePage();
-        m_pView->activePage()->setHidden(true);
-        QString activeName = page->pageName();
-        removeTab( activeName );
-        pagehide.append( activeName );
-        // m_pView->setActivePage( m_pView->doc()->map()->findPage( tabsList.first()) );
-
-        emit tabChanged( tabsList.first() );
-    }*/
-}
-
-void TabBar::showPage(const QString& text)
-{
-    pagehide.remove( text );
-    addTab( text );
-
-//    m_pView->activePage()->setHidden( false );
-}
-
-void TabBar::addHiddenTab(const QString & text)
-{
-    pagehide.append( text );
-}
 #include "TabBar.moc"

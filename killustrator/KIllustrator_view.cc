@@ -315,20 +315,19 @@ void KIllustratorView::createMyGUI()
     m_splitLine = new KToggleAction( i18n("Split line"), "split", 0, actionCollection(), "splitLine" );
     m_splitLine->setExclusiveGroup( "Node" );
     connect( m_splitLine, SIGNAL( toggled( bool ) ), this, SLOT( slotSplitLine( bool ) ) );
-
+    
     m_normal->setChecked( true );
     m_showRuler->setChecked( true );
     m_showHelplines->setChecked(canvas->showHelplines());
     m_alignToHelplines->setChecked(canvas->alignToHelplines());
     m_showGrid->setChecked(canvas->showGrid());
     m_alignToGrid->setChecked(canvas->snapToGrid());
-
     m_selectTool->setChecked( true );
+    kdDebug(0) << "<bug>" << endl;
     tcontroller->toolSelected( Tool::ToolSelect);
-
+    kdDebug(0) << "</bug>" << endl;
     setUndoStatus (false, false);
     connect (&cmdHistory, SIGNAL(changed(bool, bool)),SLOT(setUndoStatus(bool, bool)));
-
     // Disable node actions
     toolActivated(Tool::ToolEditPoint,false);
     kdDebug()<<"inside createMyGUI(): c: "<<time.elapsed()<<" msecs elapsed"<<endl;
@@ -352,7 +351,7 @@ void KIllustratorView::setupCanvas()
     connect(vRuler,SIGNAL(rmbPressed()),this,SLOT(popupForRulers()));
 
     TabBar *tabBar = new TabBar(this, this);
-    tabBar->setActiveTab(1);
+//    tabBar->setActiveTab(1);
 
     QScrollBar* vBar = new QScrollBar(QScrollBar::Vertical, this);
     QScrollBar* hBar = new QScrollBar(QScrollBar::Horizontal, this);
@@ -362,19 +361,19 @@ void KIllustratorView::setupCanvas()
     canvas->setCursor(Qt::crossCursor);
 
     m_pTabBarFirst = newIconButton("arrow_first", false, this);
-//    connect( m_pTabBarFirst,SIGNAL(clicked()), m_pTabBar, SLOT(scrollFirst()));
+    connect( m_pTabBarFirst,SIGNAL(clicked()), tabBar, SLOT(scrollFirst()));
     m_pTabBarLeft = newIconButton("arrow_back", false, this);
-//    connect( m_pTabBarLeft, SIGNAL(clicked()), m_pTabBar, SLOT(scrollLeft()));
+    connect( m_pTabBarLeft, SIGNAL(clicked()), tabBar, SLOT(scrollLeft()));
     m_pTabBarRight = newIconButton("arrow_forward", false, this);
-//    connect( m_pTabBarRight, SIGNAL(clicked()), m_pTabBar, SLOT(scrollRight()));
+    connect( m_pTabBarRight, SIGNAL(clicked()), tabBar, SLOT(scrollRight()));
     m_pTabBarLast = newIconButton("arrow_last", false, this);
-//    connect( m_pTabBarLast, SIGNAL(clicked()), m_pTabBar, SLOT(scrollLast()));
+    connect( m_pTabBarLast, SIGNAL(clicked()), tabBar, SLOT(scrollLast()));
 
     QHBoxLayout* tabLayout = new QHBoxLayout();
-    tabLayout->addWidget(m_pTabBarLast);
+    tabLayout->addWidget(m_pTabBarFirst);
     tabLayout->addWidget(m_pTabBarLeft);
     tabLayout->addWidget(m_pTabBarRight);
-    tabLayout->addWidget(m_pTabBarFirst);
+    tabLayout->addWidget(m_pTabBarLast);
     tabLayout->addWidget(tabBar);
     tabLayout->addWidget(hBar);
 
@@ -1346,21 +1345,24 @@ void KIllustratorView::slotViewResize()
 
 QButton* KIllustratorView::newIconButton( const char* file, bool kbutton, QWidget* parent )
 {
+  kdDebug(0) << "BP0" << endl;
   if (!parent)
     parent = this;
-
+  kdDebug(0) << "BP1" << endl;
   QPixmap *pixmap = new QPixmap(BarIcon(file));
-
+  kdDebug(0) << "BP2" << endl;
   QButton *pb;
   if (!kbutton)
     pb = new QPushButton(parent);
+  kdDebug(0) << "BP3" << endl;
 //  else
 //    pb = new QToolButton(parent);
-
+  kdDebug(0) << "BP4" << endl;
   if (pixmap)
     pb->setPixmap(*pixmap);
-
+  kdDebug(0) << "BP5" << endl;
   pb->setFixedSize(16,16);
+  kdDebug(0) << "BP6" << endl;
   return pb;
 }
 

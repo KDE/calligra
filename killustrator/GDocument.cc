@@ -135,6 +135,11 @@ void GDocument::setActivePage (int i)
   emit pageChanged();
 }
 
+GPage *GDocument::pageForIndex (int i)
+{
+  return pages.at(i);
+}
+
 GPage *GDocument::addPage ()
 {
   GPage *aPage = new GPage (this);
@@ -142,6 +147,26 @@ GPage *GDocument::addPage ()
   aPage->setName(i18n("Page %1").arg(curPageNum));
   curPageNum++;
   return aPage;
+}
+
+void GDocument::movePage( int from, int to, bool before )
+{
+
+  if ( !before )
+    ++to;
+
+  if ( to > pages.count() )
+  {
+   kdDebug(0) << "?" <<endl;
+  }
+  else
+  {
+    GPage *p=pages.take(from);
+    if(from < to)
+      pages.insert( to-1, p );
+    else
+      pages.insert( to, p );
+  }
 }
 
 void GDocument::deletePage (GPage *pg)
