@@ -1357,8 +1357,8 @@ void Worker::rk_internal( int row, int column, Q_UINT16 xf, Q_UINT32 number )
 	e.setAttribute("row", row+1);
 	e.setAttribute("column", column+1);
 	QDomElement text = m_root->createElement("text");
-        text.setAttribute("outStr", s);
-        text.setAttribute("dataType","Num");
+	text.setAttribute("outStr", s);
+	text.setAttribute("dataType","Num");
 	text.appendChild(m_root->createTextNode(QString::number(value)));
 	e.appendChild(text);
 	if( m_table ) m_table->appendChild(e);
