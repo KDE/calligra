@@ -256,7 +256,8 @@ void KWEditPersonnalExpression::slotAddExpression() {
     m_ExpressionsList->blockSignals(false);
     m_ExpressionsList->setSelected(m_ExpressionsList->count() -1, true);
 
-    m_delExpression->setEnabled(true);
+    updateExpression();
+
     m_bChanged=true;
 }
 
@@ -303,9 +304,20 @@ void KWEditPersonnalExpression::updateWidget()
 {
     bool state = listExpression.count()> 0;
     m_delGroup->setEnabled( state );
-    m_expressionLineEdit->setEnabled( state );
     m_addExpression->setEnabled( state );
-    m_delExpression->setEnabled( state );
+    m_groupLineEdit->setEnabled( state );
+
+    state =state && m_ExpressionsList->count()>0;
+    m_expressionLineEdit->setEnabled( state );
+    m_delExpression->setEnabled( state);
+
+}
+
+void KWEditPersonnalExpression::updateExpression()
+{
+    bool state = m_ExpressionsList->count()>0;
+    m_expressionLineEdit->setEnabled( state );
+    m_delExpression->setEnabled( state);
 }
 
 void KWEditPersonnalExpression::saveFile()

@@ -39,7 +39,7 @@ protected:
     void initGroupList();
     void saveFile();
     void updateWidget();
-
+    void updateExpression();
 
 protected slots:
     void slotGroupSelected();
