@@ -517,7 +517,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 	QString cmd = KGlobal::dirs()->findExe("perl");
 	if (cmd.isEmpty())
 	{
-	    KMessageBox::error(0L, i18n("You don't appear to have PERL installed.\nIt is needed to convert this document.\nPlease install PERL and try again."));
+	    setErrorMessage( i18n("You don't appear to have PERL installed.\nIt is needed to convert this document.\nPlease install PERL and try again."));
 	    return false;
 	}
 	cmd += " ";
@@ -578,11 +578,13 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     // DOC
     if(document.tagName()!="DOC") {
         kdWarning() << "Missing DOC" << endl;
+        setErrorMessage( i18n("Invalid document, DOC tag missing") );
         return false;
     }
 
     if(!document.hasAttribute("mime") || document.attribute("mime")!="application/x-kpresenter") {
         kdError() << "Unknown mime type " << document.attribute("mime") << endl;
+        setErrorMessage( i18n("Invalid document, expected mimetype application/x-kpresenter, got %1").arg(document.attribute("mime")) );
         return false;
     }
     if(document.hasAttribute("url"))
