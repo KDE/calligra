@@ -704,7 +704,7 @@ don't put a </?xml...> at the end of the file!).
     value CDATA #REQUIRED>
 
 <!-- FONTATTRIBUTE
-        Value is either 0 none , 1 uppercase , 2 lowercase
+        Value is either ATT_NONE = none , ATT_UPPER =  uppercase , ATT_LOWER = lowercase
 -->
 <!ELEMENT FONTATTRIBUTE
     EMPTY>
