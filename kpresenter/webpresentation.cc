@@ -411,6 +411,7 @@ KPWebPresentationWizard::KPWebPresentationWizard( const QString &_config, KPrese
 
     connect( nextButton(), SIGNAL( clicked() ), this, SLOT( pageChanged() ) );
     connect( backButton(), SIGNAL( clicked() ), this, SLOT( pageChanged() ) );
+    connect( finishButton(), SIGNAL( clicked() ), this, SLOT( finish() ) );
 }
 
 /*================================================================*/
@@ -654,7 +655,7 @@ void KPWebPresentationWizard::pageChanged()
         {
             QMessageBox::critical( 0L, i18n( "Invalid Path" ), i18n( "The path you entered is not a valid directory!\n"
                                                                      "Please correct this." ),
-                                   i18n( "OK" ) );  
+                                   i18n( "OK" ) );
             showPage( page1 );
             path->setFocus();
         }

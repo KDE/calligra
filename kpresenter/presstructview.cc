@@ -40,6 +40,7 @@
 #include <qbrush.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
+#include <qvaluelist.h>
 
 #include <knewpanner.h>
 #include <ktreelist.h>
@@ -89,8 +90,7 @@ void PVTimeTable::setPageNum( int _num )
     objList.setAutoDelete( false );
     page = _num;
 
-    QList<int> intList;
-    intList.setAutoDelete( false );
+    QValueList<int> intList;
     intList = doc->reorderPage( page + 1, 0, 0, 1.0 );
 
     unsigned int objs = 0;

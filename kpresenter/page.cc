@@ -88,6 +88,7 @@ Page::Page( QWidget *parent=0, const char *name=0, KPresenterView *_view=0 )
         toolEditMode = TEM_MOUSE;
         tmpObjs.setAutoDelete( false );
         setAcceptDrops( true );
+        inEffect = false;
     }
     else
     {
@@ -183,13 +184,16 @@ void Page::drawObjects( QPainter *painter, KRect rect )
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ )
     {
         kpobject = objectList()->at( i );
-
+        
         if ( ( rect.intersects( kpobject->getBoundingRect( diffx( i ), diffy( i ) ) ) && editMode ) ||
              ( !editMode && getPageOfObj( i, _presFakt ) == static_cast<int>( currPresPage ) &&
-               kpobject->getPresNum() <= static_cast<int>( currPresStep )/* && 
+               kpobject->getPresNum() <= static_cast<int>( currPresStep ) && 
                ( !kpobject->getDisappear() || kpobject->getDisappear() && 
-               kpobject->getDisappearNum() > static_cast<int>( currPresStep ) )*/ ) )
+                 kpobject->getDisappearNum() > static_cast<int>( currPresStep ) ) ) )
         {
+            if ( inEffect && kpobject->getPresNum() >= static_cast<int>( currPresStep ) )
+                continue;
+            
             if ( !editMode && static_cast<int>( currPresStep ) == kpobject->getPresNum() && !goingBack )
             {
                 kpobject->setSubPresStep( subPresStep );
@@ -1701,7 +1705,7 @@ void Page::startScreenPresentation( bool zoom )
     editMode = false;
     drawMode = false;
     presStepList = view->kPresenterDoc()->reorderPage( 1, diffx(), diffy(), _presFakt );
-    currPresStep = ( int )( presStepList.first() );
+    currPresStep = *presStepList.begin();
     subPresStep = 0;
     repaint( true );
     //setFocusPolicy( QWidget::StrongFocus );
@@ -1757,7 +1761,7 @@ bool Page::pNext( bool )
     goingBack = false;
     KPObject *kpobject = 0;
 
-    if ( ( int* )( currPresStep ) < presStepList.last() )
+    if ( (int)currPresStep < *( --presStepList.end() ) )
     {
         for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ )
         {
@@ -1782,8 +1786,8 @@ bool Page::pNext( bool )
         else if ( clearSubPres )
             subPresStep = 0;
 
-        presStepList.find( ( int* )( currPresStep ) );
-        currPresStep = ( int )( presStepList.next() );
+        QValueList<int>::Iterator it = presStepList.find( currPresStep );
+        currPresStep = *( ++it );
 
         if ( currPresStep == 0 )
         {
@@ -1824,7 +1828,7 @@ bool Page::pNext( bool )
             emit stopPres();
 
             presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
-            currPresStep = ( int )( presStepList.last() );
+            currPresStep = *presStepList.begin();
             doObjEffects();
             return false;
         }
@@ -1865,7 +1869,7 @@ bool Page::pNext( bool )
         }
 
         presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
-        currPresStep = ( int )( presStepList.first() );
+        currPresStep = *presStepList.begin();
 
         QPixmap _pix2( QApplication::desktop()->width(), QApplication::desktop()->height() );
         drawPageInPix( _pix2, view->getDiffY() + view->kPresenterDoc()->getPageSize( 0, 0, 0, _presFakt, false ).height() );
@@ -1883,10 +1887,10 @@ bool Page::pPrev( bool manual )
     goingBack = true;
     subPresStep = 0;
 
-    if ( ( int* )( currPresStep ) > presStepList.first() )
+    if ( (int)currPresStep > *presStepList.begin() )
     {
-        presStepList.find( ( int* )( currPresStep ) );
-        currPresStep = ( int )( presStepList.prev() );
+        QValueList<int>::Iterator it = presStepList.find( currPresStep );
+        currPresStep = *( --it );
         repaint( false );
         return false;
     }
@@ -1895,7 +1899,7 @@ bool Page::pPrev( bool manual )
         if ( currPresPage-1 <= 0 )
         {
             presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
-            currPresStep = ( int )( presStepList.first() );
+            currPresStep = *presStepList.begin();
             repaint( false );
             return false;
         }
@@ -1909,7 +1913,7 @@ bool Page::pPrev( bool manual )
         }
 
         presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
-        currPresStep = ( int )( presStepList.last() );
+        currPresStep = *presStepList.begin();
         return true;
     }
 
@@ -2433,9 +2437,24 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 /*================================================================*/
 void Page::doObjEffects()
 {
-    QPixmap screen_orig( kapp->desktop()->width(), kapp->desktop()->height() );
-    QList<KPObject> _objList;
+    KPObject *kpobject = 0;
     int i;
+    QPixmap screen_orig( kapp->desktop()->width(), kapp->desktop()->height() );
+
+    // YABADABADOOOOOOO.... That's a hack :-)
+    if ( subPresStep == 0 && currPresPage > 0 )
+    {
+        inEffect = true;
+        QPainter p;
+        p.begin( &screen_orig );
+        drawBackground( &p, KRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ) );
+        drawObjects( &p, KRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ) );
+        p.end();
+        inEffect = false;
+        bitBlt( this, 0, 0, &screen_orig, 0, 0, screen_orig.width(), screen_orig.height() );
+    }
+
+    QList<KPObject> _objList;
     QTime _time;
     int _step = 0, _steps1 = 0, _steps2 = 0, x_pos1 = 0, y_pos1 = 0;
     int x_pos2 = kapp->desktop()->width(), y_pos2 = kapp->desktop()->height(), _step_width = 0, _step_height = 0;
@@ -2445,8 +2464,6 @@ void Page::doObjEffects()
 
     bitBlt( &screen_orig, 0, 0, this, 0, 0, kapp->desktop()->width(), kapp->desktop()->height() );
     QPixmap *screen = new QPixmap( screen_orig );
-
-    KPObject *kpobject = 0;
 
     for ( i = 0; i < static_cast<int>( objectList()->count() ); i++ )
     {
@@ -2465,48 +2482,48 @@ void Page::doObjEffects()
                 switch ( kpobject->getEffect() )
                 {
                 case EF_COME_LEFT:
-                    x_pos1 = max(x_pos1,x - diffx() + w);
+                    x_pos1 = max( x_pos1, x - diffx() + w );
                     break;
                 case EF_COME_TOP:
-                    y_pos1 = max(y_pos1,y - diffy() + h);
+                    y_pos1 = max( y_pos1, y - diffy() + h );
                     break;
                 case EF_COME_RIGHT:
-                    x_pos2 = min(x_pos2,x - diffx());
+                    x_pos2 = min( x_pos2, x - diffx() );
                     break;
                 case EF_COME_BOTTOM:
-                    y_pos2 = min(y_pos2,y - diffy());
+                    y_pos2 = min( y_pos2, y - diffy() );
                     break;
                 case EF_COME_LEFT_TOP:
                 {
-                    x_pos1 = max(x_pos1,x - diffx() + w);
-                    y_pos1 = max(y_pos1,y - diffy() + h);
+                    x_pos1 = max( x_pos1, x - diffx() + w );
+                    y_pos1 = max( y_pos1, y - diffy() + h );
                 } break;
                 case EF_COME_LEFT_BOTTOM:
                 {
-                    x_pos1 = max(x_pos1,x - diffx() + w);
-                    y_pos2 = min(y_pos2,y - diffy());
+                    x_pos1 = max( x_pos1, x - diffx() + w );
+                    y_pos2 = min( y_pos2, y - diffy() );
                 } break;
                 case EF_COME_RIGHT_TOP:
                 {
-                    x_pos2 = min(x_pos2,x - diffx());
-                    y_pos1 = max(y_pos1,y - diffy() + h);
+                    x_pos2 = min( x_pos2, x - diffx() );
+                    y_pos1 = max( y_pos1, y - diffy() + h );
                 } break;
                 case EF_COME_RIGHT_BOTTOM:
                 {
-                    x_pos2 = min(x_pos2,x - diffx());
-                    y_pos2 = min(y_pos2,y - diffy());
+                    x_pos2 = min( x_pos2, x - diffx() );
+                    y_pos2 = min( y_pos2, y - diffy() );
                 } break;
                 case EF_WIPE_LEFT:
-                    x_pos1 = max(x_pos1,w);
+                    x_pos1 = max( x_pos1, w );
                     break;
                 case EF_WIPE_RIGHT:
-                    x_pos1 = max(x_pos1,w);
+                    x_pos1 = max( x_pos1, w );
                     break;
                 case EF_WIPE_TOP:
-                    y_pos1 = max(y_pos1,h);
+                    y_pos1 = max( y_pos1, h );
                     break;
                 case EF_WIPE_BOTTOM:
-                    y_pos1 = max(y_pos1,h);
+                    y_pos1 = max( y_pos1, h );
                     break;
                 default: break;
                 }
@@ -2824,6 +2841,10 @@ void Page::doObjEffects()
 /*======================= draw object ============================*/
 void Page::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y, int _w, int _h, int _cx, int _cy )
 {
+    if ( kpobject->getDisappear() && 
+         kpobject->getDisappearNum() < static_cast<int>( currPresStep ) )
+        return;
+    
     int ox, oy, ow, oh;
     KRect br = kpobject->getBoundingRect( 0, 0 );
     ox = br.x(); oy = br.y(); ow = br.width(); oh = br.height();
@@ -3334,7 +3355,7 @@ void Page::slotGotoPage()
         editMode = false;
         drawMode = false;
         presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
-        currPresStep = ( int )( presStepList.first() );
+        currPresStep = *presStepList.begin();
         subPresStep = 0;
 
         int yo = view->kPresenterDoc()->getPageSize( 0, 0, 0, presFakt(), false ).height() * ( pg - 1 );

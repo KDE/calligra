@@ -254,3 +254,8 @@ Reggie, 26.5.1999:
 Reggie, 28.5.1999:
 ------------------
 - Some QStrList -> QStringList
+- Some QList -> QValueList
+  (no stuff like 'QList<int> lst; lst.append( new int( 3 ) );' needed anymore :-)
+- Objects disappearing in screenpresentations works (ony without effects at the moment,
+  but effects will come!)
+- Creating webpresentations works again (API of QWizard changed a bit...)

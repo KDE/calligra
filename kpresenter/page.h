@@ -23,6 +23,7 @@
 #include <qlist.h>
 #include <qpixmap.h>
 #include <qpicture.h>
+#include <qvaluelist.h>
 
 #include <krect.h>
 #include <ksize.h>
@@ -213,7 +214,7 @@ protected:
     unsigned int currPresPage, currPresStep, subPresStep;
     unsigned int oldPresPage, oldPresStep, oldSubPresStep;
     float _presFakt;
-    QList<int> presStepList;
+    QValueList<int> presStepList;
     int PM_DM, PM_SM;
     int firstX, firstY;
     bool drawRubber;
@@ -223,7 +224,8 @@ protected:
     KoDocumentEntry partEntry;
     QList <KPObject> tmpObjs;
     QString autoform;
-
+    bool inEffect;
+    
 public slots:
     void chPic();
     void chClip();

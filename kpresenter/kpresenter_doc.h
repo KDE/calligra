@@ -258,7 +258,7 @@ public:
     void repaint( KPObject* );
 
     // stuff for screen-presentations
-    QList<int> reorderPage( unsigned int, int, int, float fakt = 1.0 );
+    QValueList<int> reorderPage( unsigned int, int, int, float fakt = 1.0 );
     int getPageOfObj( int, int, int, float fakt = 1.0 );
 
     QPen presPen() {return _presPen; }

@@ -3035,12 +3035,11 @@ void KPresenterDoc::repaint( KPObject *kpobject )
 }
 
 /*==================== reorder page =============================*/
-QList<int> KPresenterDoc::reorderPage( unsigned int num, int diffx, int diffy, float fakt = 1.0 )
+QValueList<int> KPresenterDoc::reorderPage( unsigned int num, int diffx, int diffy, float fakt = 1.0 )
 {
-    QList<int> orderList;
-    bool inserted;
+    QValueList<int> orderList;
 
-    orderList.append( ( int* )( 0 ) );
+    orderList.append( 0 );
 
     KPObject *kpobject = 0;
 
@@ -3049,26 +3048,26 @@ QList<int> KPresenterDoc::reorderPage( unsigned int num, int diffx, int diffy, f
         kpobject = objectList()->at( i );
         if ( getPageOfObj( i, diffx, diffy, fakt ) == static_cast<int>( num ) )
         {
-            if ( orderList.find( ( int* )kpobject->getPresNum() ) == -1 )
+            if ( orderList.find( kpobject->getPresNum() ) == orderList.end() )
             {
                 if ( orderList.isEmpty() )
-                    orderList.append( ( int* )( kpobject->getPresNum() ) );
+                    orderList.append( kpobject->getPresNum() );
                 else
                 {
-                    inserted = false;
-                    if ( orderList.count() - 1 >= 0 )
-                    {
-                        for ( int j = orderList.count() - 1; j >= 0; j-- )
-                        {
-                            if ( ( int* )( kpobject->getPresNum() ) > orderList.at( j ) )
-                            {
-                                orderList.insert( j+1, ( int* )( kpobject->getPresNum() ) );
-                                j = -1;
-                                inserted = true;
-                            }
-                        }
-                    }
-                    if ( !inserted ) orderList.insert( 0, ( int* )( kpobject->getPresNum() ) );
+                    QValueList<int>::Iterator it = orderList.begin();
+                    for ( ; *it < kpobject->getPresNum() && it != orderList.end(); ++it );
+                    orderList.insert( it, kpobject->getPresNum() );
+                }
+            }
+            if ( kpobject->getDisappear() && orderList.find( kpobject->getDisappearNum() ) == orderList.end() )
+            {
+                if ( orderList.isEmpty() )
+                    orderList.append( kpobject->getDisappearNum() );
+                else
+                {
+                    QValueList<int>::Iterator it = orderList.begin();
+                    for ( ; *it < kpobject->getDisappearNum() && it != orderList.end(); ++it );
+                    orderList.insert( it, kpobject->getDisappearNum() );
                 }
             }
         }
