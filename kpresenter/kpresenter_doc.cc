@@ -495,7 +495,6 @@ bool KPresenterDoc::saveChildren( KoStore* _store )
 QDomDocument KPresenterDoc::saveXML()
 {
     if ( saveOnlyPage == -1 ) {
-        emit sigStartProgressForSaveFile();
         emit sigProgress( 0 );
     }
 
@@ -838,7 +837,6 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
         if ( saveOnlyPage == -1 ) {
             emit sigProgress( 100 );
             emit sigProgress( -1 );
-            emit sigStopProgressForSaveFile();
         }
         return true;
     }
@@ -853,7 +851,6 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
     if ( saveOnlyPage == -1 ) {
         emit sigProgress( 100 );
         emit sigProgress( -1 );
-        emit sigStopProgressForSaveFile();
     }
 
     return true;

@@ -305,8 +305,6 @@ public slots:
     void updateObjectStatusBarItem();
     void pageNumChanged();
     void updateSideBarMenu();
-    void slotStartProgressForSaveFile();
-    void slotStopProgressForSaveFile();
 
     void objectSelectedChanged();
 

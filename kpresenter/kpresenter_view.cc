@@ -317,8 +317,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     connect (m_pKPresenterDoc, SIGNAL(sig_updateRuler()),this, SLOT( slotUpdateRuler()));
     connect (m_pKPresenterDoc, SIGNAL(sig_updateRuler()),this, SLOT( slotUpdateScrollBarRanges()));
     connect (m_pKPresenterDoc, SIGNAL(sig_updateMenuBar()),this, SLOT(updateSideBarMenu()));
-    connect( m_pKPresenterDoc, SIGNAL( sigStartProgressForSaveFile() ), this, SLOT( slotStartProgressForSaveFile() ) );
-    connect( m_pKPresenterDoc, SIGNAL( sigStopProgressForSaveFile() ), this, SLOT( slotStopProgressForSaveFile() ) );
 
     KStatusBar * sb = statusBar();
     m_sbPageLabel = 0L;
@@ -4584,43 +4582,6 @@ void KPresenterView::updateObjectStatusBarItem()
 void KPresenterView::pageNumChanged()
 {
     updatePageInfo();
-}
-
-void KPresenterView::slotStartProgressForSaveFile()
-{
-    KStatusBar *sb = statusBar();
-
-    if ( m_pKPresenterDoc->showStatusBar() && sb  ) {
-        if ( m_sbPageLabel )
-            removeStatusBarItem( m_sbPageLabel );
-        if ( m_sbObjectLabel )
-            removeStatusBarItem( m_sbObjectLabel );
-
-        if ( !m_sbSavingLabel ) {
-            m_sbSavingLabel = new KStatusBarLabel( QString::null, 0, sb );
-            addStatusBarItem( m_sbSavingLabel, 0 );
-            m_sbSavingLabel->setText( i18n( "Saving to file..." ) );
-        }
-    }
-}
-
-void KPresenterView::slotStopProgressForSaveFile()
-{
-    KStatusBar *sb = statusBar();
-
-    if ( m_pKPresenterDoc->showStatusBar() && sb  ) {
-        if ( m_sbSavingLabel ) {
-            removeStatusBarItem( m_sbSavingLabel );
-            delete m_sbSavingLabel;
-            m_sbSavingLabel = 0L;
-        }
-
-        if ( m_sbPageLabel )
-            addStatusBarItem( m_sbPageLabel );
-
-        if ( m_sbObjectLabel )
-            addStatusBarItem( m_sbObjectLabel );
-    }
 }
 
 void KPresenterView::viewShowSideBar()
