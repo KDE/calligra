@@ -432,6 +432,9 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 //		d->pUpdateTimer->start(1,true);
 	updateRow(d->curRow);
 
+	//update navigator's data
+	setNavRowCount(rows());
+
 	return true;
 }
 
