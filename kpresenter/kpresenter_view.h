@@ -106,8 +106,8 @@ public:
     bool gotoPresPage( int pg );
     float getCurrentFaktor();
 
-    virtual void setupPrinter( QPrinter &printer );
-    virtual void print( QPrinter &printer );
+    virtual void setupPrinter( KPrinter &printer );
+    virtual void print( KPrinter &printer );
 
 signals:
     void currentPageChanged( int );

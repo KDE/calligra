@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qprinter.h>
+#include <kprinter.h>
 #include <qpainter.h>
 #include <qstring.h>
 #include <qkeycode.h>
@@ -241,45 +241,45 @@ KPresenterView::~KPresenterView()
 }
 
 /*=========================== file print =======================*/
-void KPresenterView::setupPrinter( QPrinter &prt )
+void KPresenterView::setupPrinter( KPrinter &prt )
 {
     prt.setMinMax( 1, m_pKPresenterDoc->getPageNums() );
     prt.setFromTo( 1, m_pKPresenterDoc->getPageNums() );
     bool makeLandscape = false;
 
     switch ( m_pKPresenterDoc->pageLayout().format ) {
-    case PG_DIN_A3: prt.setPageSize( QPrinter::A3 );
+    case PG_DIN_A3: prt.setPageSize( KPrinter::A3 );
 	break;
-    case PG_DIN_A4: prt.setPageSize( QPrinter::A4 );
+    case PG_DIN_A4: prt.setPageSize( KPrinter::A4 );
 	break;
-    case PG_DIN_A5: prt.setPageSize( QPrinter::A5 );
+    case PG_DIN_A5: prt.setPageSize( KPrinter::A5 );
 	break;
-    case PG_US_LETTER: prt.setPageSize( QPrinter::Letter );
+    case PG_US_LETTER: prt.setPageSize( KPrinter::Letter );
 	break;
-    case PG_US_LEGAL: prt.setPageSize( QPrinter::Legal );
+    case PG_US_LEGAL: prt.setPageSize( KPrinter::Legal );
 	break;
-    case PG_US_EXECUTIVE: prt.setPageSize( QPrinter::Executive );
+    case PG_US_EXECUTIVE: prt.setPageSize( KPrinter::Executive );
 	break;
-    case PG_DIN_B5: prt.setPageSize( QPrinter::B5 );
+    case PG_DIN_B5: prt.setPageSize( KPrinter::B5 );
 	break;
     case PG_SCREEN: {
 	kdWarning() << i18n( "You use the page layout SCREEN. I print it in DIN A4 LANDSCAPE!" ) << endl;
-	prt.setPageSize( QPrinter::A4 );
+	prt.setPageSize( KPrinter::A4 );
 	makeLandscape = true;
     }	break;
     default: {
-	kdWarning() << i18n( "The used page layout is not supported by QPrinter. I set it to DIN A4." ) << endl;
-	prt.setPageSize( QPrinter::A4 );
+	kdWarning() << i18n( "The used page layout is not supported by KPrinter. I set it to DIN A4." ) << endl;
+	prt.setPageSize( KPrinter::A4 );
     } break;
     }
 
     if ( m_pKPresenterDoc->pageLayout().orientation == PG_LANDSCAPE || makeLandscape )
-        prt.setOrientation( QPrinter::Landscape );
+        prt.setOrientation( KPrinter::Landscape );
     else
-        prt.setOrientation( QPrinter::Portrait );
+        prt.setOrientation( KPrinter::Portrait );
 }
 
-void KPresenterView::print( QPrinter &prt )
+void KPresenterView::print( KPrinter &prt )
 {
     float left_margin = 0.0;
     float top_margin = 0.0;

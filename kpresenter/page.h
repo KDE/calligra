@@ -57,6 +57,7 @@ class QFocusEvent;
 class QMouseEvent;
 class QKeyEvent;
 class QPainter;
+class KPrinter;
 class KPPixmapObject;
 
 /**********************************************************************/
@@ -109,7 +110,7 @@ public:
 
     void keyPressEvent( QKeyEvent *e );
 
-    void print( QPainter*, QPrinter*, float, float );
+    void print( QPainter*, KPrinter*, float, float );
 
     void editSelectedTextArea();
     void setPartEntry( KoDocumentEntry& _e )

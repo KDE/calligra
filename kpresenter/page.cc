@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qprinter.h>
+#include <kprinter.h>
 #include <qprogressdialog.h>
 #include <qprogressbar.h>
 #include <qdragobject.h>
@@ -3177,7 +3177,7 @@ void Page::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y, int 
 }
 
 /*======================== print =================================*/
-void Page::print( QPainter *painter, QPrinter *printer, float left_margin, float top_margin )
+void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float top_margin )
 {
     printer->setFullPage( true );
     int i = 0;
