@@ -38,7 +38,7 @@ public:
 k_dcop:
     bool keepAspectRatio() const;
     void setKeepAspectRatio( bool b );
-    void loadImage( QString );
+    void loadImage( const QString &image );
 
 private:
     KWPictureFrameSet *m_frame;

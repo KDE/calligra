@@ -73,7 +73,7 @@ bool KWMailMergeDataBase::isConfigDialogShown()
 	return rejectdcopcall;
 }
 
-bool KWMailMergeDataBase::loadPlugin(QString name,QString command)
+bool KWMailMergeDataBase::loadPlugin(const QString &name,const QString &command)
 {
         if (rejectdcopcall)return false;
 	QString constrain=QString("[X-KDE-InternalName] =='"+name+"'");

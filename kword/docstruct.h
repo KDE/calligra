@@ -36,8 +36,8 @@ class KWTextParag;
 class KWDocListViewItem : public QObject,public QListViewItem
 {
 public:
-    KWDocListViewItem(QListViewItem *_parent, QString _text);
-    KWDocListViewItem( QListViewItem *_parent, QListViewItem *_after, QString _text );
+    KWDocListViewItem(QListViewItem *_parent, const QString &_text);
+    KWDocListViewItem( QListViewItem *_parent, QListViewItem *_after, const QString &_text );
     virtual void selectFrameSet() {};
     virtual void editFrameSet() {};
     virtual void deleteFrameSet() {};
@@ -52,8 +52,8 @@ class KWDocStructParagItem : public KWDocListViewItem
 {
     Q_OBJECT
 public:
-    KWDocStructParagItem( QListViewItem *_parent, QString _text, KWTextParag *_parag, KWGUI *__parent );
-    KWDocStructParagItem( QListViewItem *_parent, QListViewItem *_after, QString _text, KWTextParag *_parag, KWGUI*__parent );
+    KWDocStructParagItem( QListViewItem *_parent, const QString &_text, KWTextParag *_parag, KWGUI *__parent );
+    KWDocStructParagItem( QListViewItem *_parent, QListViewItem *_after, const QString &_text, KWTextParag *_parag, KWGUI*__parent );
     virtual void selectFrameSet();
     virtual void editFrameSet();
     virtual void deleteFrameSet();
@@ -77,7 +77,7 @@ class KWDocStructFrameItem : public KWDocListViewItem
     Q_OBJECT
 
 public:
-    KWDocStructFrameItem( QListViewItem *_parent, QString _text, KWFrameSet *_frameset, KWFrame *_frame, KWGUI *__parent );
+    KWDocStructFrameItem( QListViewItem *_parent, const QString &_text, KWFrameSet *_frameset, KWFrame *_frame, KWGUI *__parent );
     virtual void selectFrameSet();
     virtual void editFrameSet();
     virtual void deleteFrameSet();
@@ -101,7 +101,7 @@ class KWDocStructTableItem : public KWDocListViewItem
     Q_OBJECT
 
 public:
-    KWDocStructTableItem( QListViewItem *_parent, QString _text, KWTableFrameSet *_table, KWGUI*__parent );
+    KWDocStructTableItem( QListViewItem *_parent, const QString &_text, KWTableFrameSet *_table, KWGUI*__parent );
     virtual void selectFrameSet();
     virtual void editFrameSet();
     virtual void deleteFrameSet();
@@ -125,7 +125,7 @@ class KWDocStructFormulaItem : public KWDocListViewItem
     Q_OBJECT
 
 public:
-    KWDocStructFormulaItem( QListViewItem *_parent, QString _text, KWFormulaFrameSet *_form, KWGUI*__parent );
+    KWDocStructFormulaItem( QListViewItem *_parent, const QString &_text, KWFormulaFrameSet *_form, KWGUI*__parent );
     virtual void selectFrameSet();
     virtual void editFrameSet();
     virtual void deleteFrameSet();
@@ -150,7 +150,7 @@ class KWDocStructPictureItem : public KWDocListViewItem
     Q_OBJECT
 
 public:
-    KWDocStructPictureItem( QListViewItem *_parent, QString _text, KWPictureFrameSet *_pic, KWGUI*__parent );
+    KWDocStructPictureItem( QListViewItem *_parent, const QString &_text, KWPictureFrameSet *_pic, KWGUI*__parent );
     virtual void selectFrameSet();
     virtual void deleteFrameSet();
     virtual void editProperties();
@@ -173,7 +173,7 @@ class KWDocStructPartItem : public KWDocListViewItem
     Q_OBJECT
 
 public:
-    KWDocStructPartItem( QListViewItem *_parent, QString _text, KWPartFrameSet *_part, KWGUI*__parent );
+    KWDocStructPartItem( QListViewItem *_parent, const QString &_text, KWPartFrameSet *_part, KWGUI*__parent );
     virtual void selectFrameSet();
     virtual void editFrameSet();
     virtual void deleteFrameSet();

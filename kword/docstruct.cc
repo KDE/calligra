@@ -33,12 +33,12 @@
 #include <kdebug.h>
 
 
-KWDocListViewItem::KWDocListViewItem(QListViewItem *_parent, QString _text)
+KWDocListViewItem::KWDocListViewItem(QListViewItem *_parent, const QString &_text)
     :QListViewItem( _parent, _text )
 {
 }
 
-KWDocListViewItem::KWDocListViewItem( QListViewItem *_parent, QListViewItem *_after, QString _text )
+KWDocListViewItem::KWDocListViewItem( QListViewItem *_parent, QListViewItem *_after, const QString &_text )
     :QListViewItem( _parent, _after, _text )
 {
 }
@@ -47,14 +47,14 @@ KWDocListViewItem::KWDocListViewItem( QListViewItem *_parent, QListViewItem *_af
 /* Class: KWDocStructParagItem                                    */
 /******************************************************************/
 
-KWDocStructParagItem::KWDocStructParagItem( QListViewItem *_parent, QString _text, KWTextParag *_parag, KWGUI*__parent )
+KWDocStructParagItem::KWDocStructParagItem( QListViewItem *_parent, const QString &_text, KWTextParag *_parag, KWGUI*__parent )
     : KWDocListViewItem(_parent,_text)
 {
     parag = _parag;
     gui = __parent;
 }
 
-KWDocStructParagItem::KWDocStructParagItem( QListViewItem *_parent, QListViewItem *_after, QString _text, KWTextParag *_parag, KWGUI*__parent )
+KWDocStructParagItem::KWDocStructParagItem( QListViewItem *_parent, QListViewItem *_after, const QString &_text, KWTextParag *_parag, KWGUI*__parent )
     : KWDocListViewItem( _parent, _after, _text )
 {
     parag = _parag;
@@ -101,7 +101,7 @@ void KWDocStructParagItem::deleteFrameSet()
 /* Class: KWDocStructFrameItem                                    */
 /******************************************************************/
 
-KWDocStructFrameItem::KWDocStructFrameItem( QListViewItem *_parent, QString _text, KWFrameSet *_frameset, KWFrame *_frame, KWGUI*__parent )
+KWDocStructFrameItem::KWDocStructFrameItem( QListViewItem *_parent, const QString &_text, KWFrameSet *_frameset, KWFrame *_frame, KWGUI*__parent )
     : KWDocListViewItem( _parent, _text )
 {
     frame = _frame;
@@ -145,7 +145,7 @@ void KWDocStructFrameItem::editProperties()
 /* Class: KWDocStructTableItem                                    */
 /******************************************************************/
 
-KWDocStructTableItem::KWDocStructTableItem( QListViewItem *_parent, QString _text, KWTableFrameSet *_table, KWGUI*__parent )
+KWDocStructTableItem::KWDocStructTableItem( QListViewItem *_parent, const QString &_text, KWTableFrameSet *_table, KWGUI*__parent )
     :KWDocListViewItem( _parent, _text )
 {
     table = _table;
@@ -191,7 +191,7 @@ void KWDocStructTableItem::editProperties()
 /* Class: KWDocStructPictureItem                                  */
 /******************************************************************/
 
-KWDocStructPictureItem::KWDocStructPictureItem( QListViewItem *_parent, QString _text, KWPictureFrameSet *_pic, KWGUI*__parent )
+KWDocStructPictureItem::KWDocStructPictureItem( QListViewItem *_parent, const QString &_text, KWPictureFrameSet *_pic, KWGUI*__parent )
     : KWDocListViewItem( _parent, _text )
 {
     pic = _pic;
@@ -232,7 +232,7 @@ void KWDocStructPictureItem::editProperties()
 /* Class: KWDocStructFormulaItem                                  */
 /******************************************************************/
 
-KWDocStructFormulaItem::KWDocStructFormulaItem( QListViewItem *_parent, QString _text, KWFormulaFrameSet *_form, KWGUI*__parent )
+KWDocStructFormulaItem::KWDocStructFormulaItem( QListViewItem *_parent, const QString &_text, KWFormulaFrameSet *_form, KWGUI*__parent )
     : KWDocListViewItem( _parent, _text )
 {
     form = _form;
@@ -277,7 +277,7 @@ void KWDocStructFormulaItem::editProperties()
 /* Class: KWDocStructPartItem                                     */
 /******************************************************************/
 
-KWDocStructPartItem::KWDocStructPartItem( QListViewItem *_parent, QString _text, KWPartFrameSet *_part, KWGUI*__parent )
+KWDocStructPartItem::KWDocStructPartItem( QListViewItem *_parent, const QString &_text, KWPartFrameSet *_part, KWGUI*__parent )
     : KWDocListViewItem( _parent, _text )
 {
     part = _part;

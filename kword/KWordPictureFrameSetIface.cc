@@ -40,7 +40,7 @@ void KWordPictureFrameSetIface::setKeepAspectRatio( bool b )
   m_frame->setKeepAspectRatio(b);
 }
 
-void KWordPictureFrameSetIface::loadImage( QString image )
+void KWordPictureFrameSetIface::loadImage( const QString &image )
 {
   m_frame->loadPicture( image );
   m_frame->kWordDocument()->slotRepaintChanged( m_frame );

@@ -45,7 +45,7 @@ k_dcop:
 	This call will return false, when the plugin couldn't be loaded,
 	the user rejected to change the datasource or the configuration dialog is open
     */
-    virtual bool loadPlugin(QString name,QString command)=0;
+    virtual bool loadPlugin(const QString &name,const QString &command)=0;
 };
 
 #endif

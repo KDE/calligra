@@ -75,7 +75,7 @@ public:
 
     virtual void refresh(bool force);
     virtual QStringList availablePlugins();
-    virtual bool loadPlugin(QString name,QString command);
+    virtual bool loadPlugin(const QString &name,const QString &command);
     virtual bool isConfigDialogShown();
     
     int version();
