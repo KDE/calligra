@@ -5839,10 +5839,18 @@ void KPresenterView::pddClosed()
 }
 
 // change from milliseconds to hh:mm:ss
+// in kdelibs 3.2.90, an additional method was added that basically
+// allows formatting of time as a duration. Before this, you can get
+// weirdness (such as a duration of 12:00:03 am) depending on how the
+// time format is set.
 QString KPresenterView::presentationDurationDataFormatChange( int _time )
 {
     QTime time( 0, 0, 0 );
-    return KGlobal::locale()->formatTime( time.addMSecs( _time ), true );
+#if KDE_IS_VERSION(3, 2, 90) 
+    return KGlobal::locale()->formatTime( time.addMSecs( _time ), true, true );
+#else
+    return KGlobal::locale()->formatTime( time.addMSecs( _time ), true);
+#endif
 }
 
 KPrPage * KPresenterView::stickyPage() const

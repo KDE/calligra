@@ -59,8 +59,8 @@ KPPresDurationDia::KPPresDurationDia( QWidget *parent, const char *name,
 void KPPresDurationDia::setupSlideList( QWidget *_page )
 {
     slides = new KListView( _page );
-    slides->addColumn( i18n( "Slide No." ) );
-    slides->addColumn( i18n( "Slide Time" ) );
+    slides->addColumn( i18n( "No." ) );
+    slides->addColumn( i18n( "Display Duration" ) );
     slides->addColumn( i18n( "Slide Title" ) );
     slides->header()->setMovingEnabled( false );
     slides->setAllColumnsShowFocus( true );
@@ -68,11 +68,13 @@ void KPPresDurationDia::setupSlideList( QWidget *_page )
     slides->setSorting( -1 );
 
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
-        KListViewItem *item = new KListViewItem( slides );
-        item->setPixmap( 0, KPBarIcon( "newslide" ) );
-        item->setText( 0, QString( "%1" ).arg( i + 1 ) );
-        item->setText( 1, *m_durationListString.at( i ) );
-        item->setText( 2, doc->pageList().at( i )->pageTitle( i18n( "Slide %1" ).arg( i + 1 ) ) );
+        if ( doc->pageList().at( i )->isSlideSelected() ) {
+            KListViewItem *item = new KListViewItem( slides );
+            item->setPixmap( 0, KPBarIcon( "newslide" ) );
+            item->setText( 0, QString( "%1" ).arg( i + 1 ) );
+            item->setText( 1, *m_durationListString.at( i ) );
+            item->setText( 2, doc->pageList().at( i )->pageTitle( i18n( "Slide %1" ).arg( i + 1 ) ) );
+        }
     }
 }
 
