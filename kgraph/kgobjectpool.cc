@@ -17,23 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kgcanvas.h>
+#include <kgobjectpool.h>
 
-
-KGCanvas::KGCanvas(QWidget *parent, const char *name) :
-                   QScrollView(parent, name, WNorthWestGravity) {
-
-    setFocusPolicy(QWidget::StrongFocus);
-    viewport()->setFocusProxy(this);
-    setMouseTracking(true);
-    viewport()->setMouseTracking(true);
-    setFocus();
-    setBackgroundMode(NoBackground);
-    //setBackgroundMode(PaletteBackground);
-    resizeContents(1000, 1000);
+KGObjectPool::KGObjectPool() {
 }
 
-KGCanvas::~KGCanvas() {
+KGObjectPool::~KGObjectPool() {
 }
-
-#include <kgcanvas.moc>
