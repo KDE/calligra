@@ -3104,3 +3104,77 @@ bool KPrPage::chClip(KPresenterView *_view)
     }
     return false;
 }
+// move object for releasemouseevent
+KCommand *KPrPage::moveObject(KPresenterView *_view,int diffx,int diffy)
+{
+    bool createCommand=false;
+    MoveByCmd *moveByCmd=0L;
+    QPtrList<KPObject> _objects;
+    _objects.setAutoDelete( false );
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->isSelected() )
+        {
+            _objects.append( it.current() );
+            QRect br = _view->zoomHandler()->zoomRect(it.current()->getBoundingRect(_view->zoomHandler()) );
+            br.moveBy( diffx, diffy );
+            m_doc->repaint( br ); // Previous position
+            //kdDebug() << "KPrCanvas::mouseReleaseEvent repainting " << DEBUGRECT(br) << endl;
+            m_doc->repaint( it.current() ); // New position
+            createCommand=true;
+        }
+    }
+    if(createCommand)
+        moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
+                                   KoPoint( _view->zoomHandler()->unzoomItX (diffx),_view->zoomHandler()->unzoomItY( diffy) ),
+                                   _objects, m_doc,this );
+    return moveByCmd;
+}
+
+KCommand *KPrPage::moveObject(KPresenterView *m_view,const KoPoint &_move,bool key)
+{
+    QPtrList<KPObject> _objects;
+    _objects.setAutoDelete( false );
+    MoveByCmd *moveByCmd=0L;
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->isSelected() ) {
+
+            KoRect oldKoBoundingRect = it.current()->getBoundingRect(m_view->zoomHandler());
+            double _dx = oldKoBoundingRect.x() - 5.0;
+            double _dy = oldKoBoundingRect.y() - 5.0;
+            double _dw = oldKoBoundingRect.width() + 10.0;
+            double _dh = oldKoBoundingRect.height() + 10.0;
+            oldKoBoundingRect.setRect( _dx, _dy, _dw, _dh );
+            QRect oldBoundingRect = m_view->zoomHandler()->zoomRect( oldKoBoundingRect );
+
+            it.current()->moveBy( _move );
+            _objects.append( it.current() );
+            m_doc->repaint( oldBoundingRect );
+            QRect br = m_view->zoomHandler()->zoomRect( it.current()->getBoundingRect(m_view->zoomHandler()) );
+            m_doc->repaint( br );
+            m_doc->repaint( it.current() );
+        }
+    }
+
+    if ( key ) {
+        moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
+                                   KoPoint( _move ),
+                                   _objects, m_doc,this );
+    }
+    return moveByCmd;
+
+}
+
+void KPrPage::repaintObj()
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->isSelected())
+            m_doc->repaint(it.current() );
+    }
+}
+

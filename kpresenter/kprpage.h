@@ -24,6 +24,7 @@
 #include <qptrlist.h>
 #include <global.h>
 #include "kpbackground.h"
+#include <koPoint.h>
 class KPTextView;
 class KPObject;
 class KPresenterDoc;
@@ -219,6 +220,12 @@ public:
 
     bool chPic( KPresenterView *_view);
     bool chClip(KPresenterView *_view);
+
+    //return command when we move object
+    KCommand *moveObject(KPresenterView *_view, int diffx,int diffy);
+    KCommand *moveObject(KPresenterView *m_view,const KoPoint &_move,bool key);
+
+    void repaintObj();
 
 protected:
 

@@ -828,31 +828,30 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         } break;
         case MT_MOVE: {
             if ( firstX != mx || firstY != my ) {
-                QPtrListIterator<KPObject> it( getObjectList() );
-                for ( ; it.current() ; ++it )
+                KMacroCommand *macro=new KMacroCommand(i18n("Move object(s)"));
+                bool cmdCreate=false;
+                int x=(mx - firstX);
+                int y=(my - firstY);
+                KCommand *cmd=m_activePage->moveObject(m_view,x,y);
+                if(cmd)
                 {
-                    if ( it.current()->isSelected() )
-                    {
-                        _objects.append( it.current() );
-                        QRect br = m_view->zoomHandler()->zoomRect(it.current()->getBoundingRect(m_view->zoomHandler()) );
-                        br.moveBy( firstX - mx, firstY - my );
-                        _repaint( br ); // Previous position
-                        //kdDebug() << "KPrCanvas::mouseReleaseEvent repainting " << DEBUGRECT(br) << endl;
-                        _repaint( it.current() ); // New position
-                    }
+                    macro->addCommand(cmd);
+                    cmdCreate=true;
                 }
-                MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
-                                                      KoPoint( m_view->zoomHandler()->unzoomItX (mx - firstX),m_view->zoomHandler()->unzoomItY( my - firstY) ),
-                                                      _objects, m_view->kPresenterDoc(),m_activePage );
-                m_view->kPresenterDoc()->addCommand( moveByCmd );
+                cmd=m_view->kPresenterDoc()->stickyPage()->moveObject(m_view,x,y);
+                if(cmd)
+                {
+                    macro->addCommand(cmd);
+                    cmdCreate=true;
+                }
+                if(cmdCreate)
+                    m_view->kPresenterDoc()->addCommand(macro );
+                else
+                    delete macro;
             } else
             {
-                QPtrListIterator<KPObject> it( getObjectList() );
-                for ( ; it.current() ; ++it )
-                {
-                    if(it.current()->isSelected())
-                        _repaint(it.current() );
-                }
+                m_view->kPresenterDoc()->stickyPage()->repaintObj();
+                m_activePage->repaintObj();
             }
         }
             break;
@@ -4542,9 +4541,6 @@ bool KPrCanvas::pagesHelper(const QString &chunk, QValueList<int> &list) {
 
 void KPrCanvas::moveObject( int x, int y, bool key )
 {
-    QPtrList<KPObject> _objects;
-    QPainter p;
-    _objects.setAutoDelete( false );
     double newPosX=m_view->zoomHandler()->unzoomItX(x);
     double newPosY=m_view->zoomHandler()->unzoomItY(y);
     KoRect boundingRect = m_boundingRect;
@@ -4582,36 +4578,24 @@ void KPrCanvas::moveObject( int x, int y, bool key )
     if( m_boundingRect.topLeft() == boundingRect.topLeft() )
         return; // nothing happende (probably due to the grid)
     KoPoint _move=m_boundingRect.topLeft()-boundingRect.topLeft();
-    QPtrListIterator<KPObject> it( getObjectList() );
-    for ( ; it.current() ; ++it )
+    KMacroCommand *macro=new KMacroCommand(i18n( "Move object(s)" ));
+    bool macroCreate=false;
+    KCommand *cmd=m_activePage->moveObject(m_view,_move,key);
+    if( cmd && key)
     {
-        if ( it.current()->isSelected() ) {
-            p.begin( this );
-
-            KoRect oldKoBoundingRect = it.current()->getBoundingRect(m_view->zoomHandler());
-            double _dx = oldKoBoundingRect.x() - 5.0;
-            double _dy = oldKoBoundingRect.y() - 5.0;
-            double _dw = oldKoBoundingRect.width() + 10.0;
-            double _dh = oldKoBoundingRect.height() + 10.0;
-            oldKoBoundingRect.setRect( _dx, _dy, _dw, _dh );
-            QRect oldBoundingRect = m_view->zoomHandler()->zoomRect( oldKoBoundingRect );
-
-            it.current()->moveBy( _move );
-            p.end();
-            _objects.append( it.current() );
-            _repaint( oldBoundingRect );
-            QRect br = m_view->zoomHandler()->zoomRect( it.current()->getBoundingRect(m_view->zoomHandler()) );
-            _repaint( br );
-            _repaint( it.current() );
-        }
+        macro->addCommand(cmd);
+        macroCreate=true;
     }
-
-    if ( key ) {
-        MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
-                                              KoPoint( _move ),
-                                              _objects, m_view->kPresenterDoc(),m_activePage );
-        m_view->kPresenterDoc()->addCommand( moveByCmd );
+    cmd=m_view->kPresenterDoc()->stickyPage()->moveObject(m_view,_move,key);
+    if( cmd && key)
+    {
+        macro->addCommand(cmd);
+        macroCreate=true;
     }
+    if(macroCreate)
+        m_view->kPresenterDoc()->addCommand(macro);
+    else
+        delete macro;
 }
 
 void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
