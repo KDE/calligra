@@ -90,29 +90,53 @@ void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int
 
 void KWTextImage::save( QDomElement & parentElem )
 {
+    // This code is similar to KWPictureFrameSet::save
     QDomElement imageElem = parentElem.ownerDocument().createElement( "IMAGE" );
     parentElem.appendChild( imageElem );
+#if 1
+    //imageElem.setAttribute( "keepAspectRatio", "true" );
+    QDomElement elem = parentElem.ownerDocument().createElement( "KEY" );
+    imageElem.appendChild( elem );
+    image().getKey().saveAttributes( elem );
+#else
     QDomElement elem = parentElem.ownerDocument().createElement( "FILENAME" );
     imageElem.appendChild( elem );
     elem.setAttribute( "value", image().getKey().filename() );
+#endif
+    // Now we must take care that a <KEY> element will be written as child of <PIXMAPS>
+    KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
+    doc->addImageRequest( image().getKey(), this );
 }
 
 void KWTextImage::load( QDomElement & parentElem )
 {
+    // This code is similar to KWPictureFrameSet::load
+    KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
     // <IMAGE>
     QDomElement image = parentElem.namedItem( "IMAGE" ).toElement();
     if ( image.isNull() )
-	image = parentElem;
-    // The FILENAME tag can be under IMAGE, or directly under parentElement in old koffice-1.0 docs.
-    // <FILENAME>
-    QDomElement filenameElement = image.namedItem( "FILENAME" ).toElement();
-    if ( !filenameElement.isNull() )
+        image = parentElem;
+    // <KEY>
+    QDomElement keyElement = image.namedItem( "KEY" ).toElement();
+    if ( !keyElement.isNull() )
     {
-        QString filename = filenameElement.attribute( "value" );
-        KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
-	// Important: we use a null QDateTime so that there's no date/time in the key.
-        doc->addImageRequest( KoPictureKey( filename, QDateTime() ), this );
+        KoPictureKey key;
+        key.loadAttributes( keyElement, QDate(), QTime() );
+        doc->addImageRequest( key , this );
     }
     else
-        kdError(32001) << "Missing FILENAME tag in IMAGE" << endl;
+    {
+        // <FILENAME> (old format, up to KWord-1.1-beta2)
+        QDomElement filenameElement = image.namedItem( "FILENAME" ).toElement();
+        if ( !filenameElement.isNull() )
+        {
+            QString filename = filenameElement.attribute( "value" );
+            doc->addImageRequest( KoPictureKey( filename ), this );
+        }
+        else
+        {
+            kdError(32001) << "Missing KEY or FILENAME tag in IMAGE (KWTextImage::load)" << endl;
+        }
+    }
 }
+
