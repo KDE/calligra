@@ -475,7 +475,7 @@ public:
 			return true;
 		}
 
-	#if 0	// "don't need, probably don't work"
+	#if 0
 		switch (m_headerType)
 		{
 		case 0:	// same on all pages
@@ -513,7 +513,7 @@ public:
 			return true;
 		}
 
-	#if 0	// "don't need, probably don't work"
+	#if 0
 		switch (m_footerType)
 		{
 		case 0:	// same on all pages
@@ -610,6 +610,7 @@ public:
 		// signal at least once
 		if (!m_generator->writePageNew ()) return false;
 
+#if 0
 		// dump remaining header paragraphs at the start of the body
 		for (QValueList <HeaderData>::Iterator it = m_headerData.begin ();
 				it != m_headerData.end ();
@@ -629,6 +630,7 @@ public:
 			if (!doFullParagraphList ((*it).para)) return false;
 			it = --m_footerData.erase (it);
 		}
+#endif
 
 		return true;
 	}
