@@ -287,6 +287,10 @@ namespace KFormEditor {
 
 	void WidgetContainer::activateWidget(QWidget *widget)
 	{
+			if (widget!=m_activeWidget)
+			{
+				emit activated(widget);
+			}
 			m_activeWidget=widget;
 			while (!(m_activeWidget->parentWidget(true)==this))
 				m_activeWidget=m_activeWidget->parentWidget();

@@ -38,7 +38,7 @@ PropertyEditor::setObject(QObject *object)
 
 	char *name;
 	QStrListIterator it(pList);
-	for(; (name = it.current()) != 0; it++)
+	for(; (name = it.current()) != 0; ++it)
 	{
 		KListViewItem *i = new KListViewItem(this, *it);
 	}
