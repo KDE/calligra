@@ -384,6 +384,10 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 
 
 CCMAIL: dkite@shaw.ca
+2004-12-21
+Core
+- KexiProperty - added 'fixed' flag for 'list' types
+ (the flag is used in Property Editor in most cases)
 
 2004-12-20
 SQLite Drivers (2 and 3)

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004   Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -135,7 +136,7 @@ PropertyEditorList::PropertyEditorList(QWidget *parent, KexiProperty *property, 
 
 	m_combo = new PropComboBox(box, false);
 	m_combo->setGeometry(frameGeometry());
-	m_combo->setEditable(true);
+	m_combo->setEditable(!property->isFixedList());
 	m_combo->setInsertionPolicy(QComboBox::NoInsertion);
 	m_combo->setAutoCompletion(true);
 	m_combo->setMinimumSize(10, 0); // to allow the combo to be resized to a small size
@@ -150,15 +151,15 @@ PropertyEditorList::PropertyEditorList(QWidget *parent, KexiProperty *property, 
 		connect(m_button, SIGNAL(clicked()), this, SLOT(itemExecuted()));
 	}
 
-	if(m_property->names() && m_property->keys())
+	if(m_property->listData())
 	{
-		m_combo->insertStringList(*(m_property->names()));
-		int idx = m_property->keys()->findIndex( property->value().asString() );
+		m_combo->insertStringList(m_property->listData()->names);
+		int idx = m_property->listData()->keys.findIndex( property->value().asString() );
 		if (idx>=0) {
 //			m_combo->setCurrentText(property->value().asString());
 			m_combo->setCurrentItem(idx);
 			KCompletion *comp = m_combo->completionObject();
-			comp->insertItems(*(m_property->names()));
+			comp->insertItems(m_property->listData()->names);
 		}
 	}
 
@@ -169,19 +170,19 @@ PropertyEditorList::PropertyEditorList(QWidget *parent, KexiProperty *property, 
 QVariant
 PropertyEditorList::value()
 {
-	if (!m_property->keys() || !m_property->names())
+	if (!m_property->listData())
 		return QVariant();
 	int idx = m_combo->currentItem();
 	if (idx<0)
 		return QVariant();
-	return QVariant( (*m_property->keys())[idx] );
+	return QVariant( m_property->listData()->keys[idx] );
 //	return QVariant(m_combo->currentText());
 }
 
 void
 PropertyEditorList::setValue(const QVariant &value)
 {
-	int idx = m_property->keys()->findIndex( value.toString() );
+	int idx = m_property->listData()->keys.findIndex( value.toString() );
 	if (idx>=0) {
 		m_combo->setCurrentItem(idx);
 	}
@@ -213,7 +214,8 @@ PropertyEditorList::itemExecuted()
 
 //Multiple selection editor (for OR'ed values)
 
-PropertyEditorMultiList::PropertyEditorMultiList(QWidget *parent, KexiProperty *property, const char *name)
+PropertyEditorMultiList::PropertyEditorMultiList(QWidget *parent, 
+	KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent, property, name)
 {
 	m_combo = new PropComboBox(this, true);
@@ -222,14 +224,14 @@ PropertyEditorMultiList::PropertyEditorMultiList(QWidget *parent, KexiProperty *
 	m_combo->setAutoCompletion(true);
 
 //	if(property->list())
-	if(m_property->names() && m_property->keys())
+	if(m_property->listData())
 	{
-		m_combo->insertStringList(*(m_property->names()));
-		int idx = m_property->keys()->findIndex( property->value().asString() );
+		m_combo->insertStringList(m_property->listData()->names);
+		int idx = m_property->listData()->keys.findIndex( property->value().asString() );
 		if (idx>=0) {
 			m_combo->setCurrentItem(idx);
 			KCompletion *comp = m_combo->completionObject();
-			comp->insertItems(*(m_property->names()));
+			comp->insertItems(m_property->listData()->names);
 //js TODO
 		}
 /*original code:

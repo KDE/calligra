@@ -35,6 +35,7 @@
 #include "kexipropertyeditoritem.h"
 #include "kexipropertyeditor.h"
 
+#if 0
 // Helper class for QSizePolicy Editor
 
 class spHelper
@@ -86,6 +87,7 @@ spHelper::keyToValue(const QString &key)
 
 	return QSizePolicy::Expanding;
 }
+#endif
 
 // ======== KexiPropertyEditorItem ============================
 
