@@ -86,6 +86,7 @@ public:
     virtual int rtti() const { return RttiKugarTemplate; }
     virtual void draw(QPainter &painter);
     void arrangeSections(bool destructive=TRUE);
+    void updatePaperProps();
 
     QString fileName() const { return reportFileName; }
     void setFileName(QString fName) { reportFileName = fName; }

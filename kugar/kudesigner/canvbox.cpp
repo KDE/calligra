@@ -21,6 +21,8 @@
 #include <qstringlist.h>
 #include <qstring.h>
 #include <qpainter.h>
+#include <qprinter.h>
+#include <qpaintdevicemetrics.h>
 #include "canvbox.h"
 #include "mycanvas.h"
 #include "creportitem.h"
@@ -156,6 +158,25 @@ void CanvasKugarTemplate::draw(QPainter &painter)
     CanvasSection::draw(painter);
 }
 
+void CanvasKugarTemplate::updatePaperProps()
+{
+    QPrinter* printer;
+
+    // Set the page size
+    printer = new QPrinter();
+    printer->setFullPage(true);
+    printer->setPageSize((QPrinter::PageSize)props["PageSize"].first.toInt());
+    printer->setOrientation((QPrinter::Orientation)props["PageOrientation"].first.toInt());
+
+    // Get the page metrics and set appropriate wigth and height
+    QPaintDeviceMetrics pdm(printer);
+    canvas()->resize(pdm.width(), pdm.height());
+    setSize(pdm.width(), pdm.height());
+
+    //this is not needed anymore
+    delete printer;
+}
+
 /*arrange sections on page automatically*/
 void CanvasKugarTemplate::arrangeSections(bool destructive)
 {
@@ -220,7 +241,8 @@ void CanvasKugarTemplate::arrangeSections(bool destructive)
 QString CanvasKugarTemplate::getXml()
 {
     QString result = "";
-    result += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    result += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n";
+    result += "<!DOCTYPE KugarTemplate SYSTEM \"kugartemplate.dtd\">\n\n";
     result += "<KugarTemplate";
     for (std::map<QString, std::pair<QString, QStringList> >::const_iterator it = props.begin();
         it != props.end(); it++ )
@@ -294,6 +316,7 @@ void CanvasKugarTemplate::removeSection(CanvasBand *section,
 
 void CanvasBand::draw(QPainter &painter)
 {
+    setX(((MyCanvas*)canvas())->templ->props["LeftMargin"].first.toInt());
     setSize(((MyCanvas*)canvas())->templ->width()
 	    - ((MyCanvas*)canvas())->templ->props["RightMargin"].first.toInt()
 	    - ((MyCanvas*)canvas())->templ->props["LeftMargin"].first.toInt(),
