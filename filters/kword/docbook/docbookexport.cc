@@ -33,7 +33,6 @@
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
 #include <KWEFKWordLeader.h>
-#include <TagProcessing.h>
 #include <ProcessDocument.h>
 #include <KWEFBaseWorker.h>
 
