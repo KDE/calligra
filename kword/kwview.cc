@@ -5247,11 +5247,8 @@ void KWView::savePicture()
             oldFile = url.fileName();
 
         KoPicture picture(frameset->picture());
-        QString fileName("/tmp/temp.");
-        // ### TODO/FIXME: handle *.qpic (no mime type) and *.wmf (could be a QPicture)
-        fileName+=picture.getExtension();
-        QString mimetype=KMimeType::findByURL(fileName,0,true,true)->name();
-        kdDebug() << "Image is mime type: " << mimetype << endl;
+        QString mimetype=picture.getMimeType();
+        kdDebug() << "Picture is mime type: " << mimetype << endl;
         QStringList mimetypes;
         mimetypes << mimetype;
         KFileDialog fd( oldFile, QString::null, 0, 0, TRUE );
