@@ -339,6 +339,7 @@ void KWView::initGui()
     //at the beginning actionBackgroundColor should be active
     actionBackgroundColor->setEnabled(true);
     actionAllowBgSpellCheck->setChecked( m_doc->backgroundSpellCheckEnabled() );
+    actionCreateFrameStyle->setEnabled(false);
 }
 
 
@@ -1092,7 +1093,13 @@ void KWView::setupActions()
     actionImportStyle= new KAction( i18n( "Import Style..." ), 0,
                                             this, SLOT( importStyle() ),
                                             actionCollection(), "import_style" );
-;
+    
+    actionCreateFrameStyle = new KAction( i18n( "&Create Framestyle from frame" ), 0,
+                                        this, SLOT( createFrameStyle()),
+                                        actionCollection(), "create_framestyle" );
+    actionCreateFrameStyle->setToolTip( i18n( "Create a new style based on the current selected frame." ) );
+    actionCreateFrameStyle->setWhatsThis( i18n( "Create a new farmestyle based on the current selected frame." ) );
+
 }
 
 void KWView::refreshMenuExpression()
@@ -3346,6 +3353,33 @@ void KWView::extraFrameStylist()
         edit->showCursor();
 }
 
+void KWView::createFrameStyle()
+{
+    KWFrame* frame = 0L;
+    
+    QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
+    if (selectedFrames.count()== 1)
+        frame = selectedFrames.first();
+    
+    if (frame)
+    {
+        QStringList list;
+        QPtrListIterator<KWFrameStyle> styleIt( m_doc->frameStyleCollection()->frameStyleList() );
+        for ( ; styleIt.current(); ++styleIt )
+        {
+            list.append( styleIt.current()->name() );
+        }
+        KoCreateStyleDia *dia = new KoCreateStyleDia( list , this, 0 );
+        if ( dia->exec() )
+        {
+            KWFrameStyle *style= new KWFrameStyle( dia->nameOfNewStyle(), frame );
+            m_doc->frameStyleCollection()->addFrameStyleTemplate( style );
+            m_doc->updateAllFrameStyleLists();
+        }
+        delete dia;
+    }
+}
+
 void KWView::extraStylist()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -5081,6 +5115,8 @@ void KWView::frameSelectedChanged()
         }
     }
 
+    actionCreateFrameStyle->setEnabled( nbFrame==1 );
+    
     actionEditCopy->setEnabled( nbFrame >= 1 );
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();

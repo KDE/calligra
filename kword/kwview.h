@@ -362,6 +362,8 @@ public slots:
     void addBookmark();
     void selectBookmark();
     void importStyle();
+    
+    void createFrameStyle();
 protected slots:
     void slotSetInitialPosition();
 
@@ -589,6 +591,8 @@ private:
 
     KAction *actionImportStyle;
 
+    KAction *actionCreateFrameStyle;
+    
     KoCharSelectDia *m_specialCharDlg;
     KoFontDia *m_fontDlg;
     KoParagDia *m_paragDlg;
