@@ -37,6 +37,7 @@ KWTextImage::KWTextImage( KWTextDocument *textdoc, const QString & filename )
 
 void KWTextImage::setImage( const KoPicture &image )
 {
+    kdDebug() << "KWTextImage::setImage" << endl;
     m_image = image;
     resize();
 }
@@ -73,7 +74,7 @@ void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int
     QRect rect( QPoint(x, y) , m_image.getSize() );
     if ( !rect.intersects( QRect( cx, cy, cw, ch ) ) )
         return;
-    
+
     QPixmap pixmap=m_image.generatePixmap(m_image.getSize());
     if ( placement() == PlaceInline )
         p->drawPixmap( x, y, pixmap );
@@ -98,17 +99,17 @@ void KWTextImage::load( QDomElement & parentElem )
 {
     // <IMAGE>
     QDomElement image = parentElem.namedItem( "IMAGE" ).toElement();
-    if ( !image.isNull() ) {
-        // <FILENAME>
-        QDomElement filenameElement = image.namedItem( "FILENAME" ).toElement();
-        if ( !filenameElement.isNull() )
-        {
-            QString filename = filenameElement.attribute( "value" );
-            KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
-            doc->addImageRequest( KoPictureKey( filename, QDateTime::currentDateTime() ), this );
-        }
-        else
-            kdError(32001) << "Missing FILENAME tag in IMAGE" << endl;
-    } else
-        kdError(32001) << "Missing IMAGE tag in FORMAT wth id=2" << endl;
+    if ( !image.isNull() )
+	parentElem = image;
+    // The FILENAME tag can be under IMAGE, or directly under parentElement in old koffice-1.0 docs.
+    // <FILENAME>
+    QDomElement filenameElement = parentElem.namedItem( "FILENAME" ).toElement();
+    if ( !filenameElement.isNull() )
+    {
+        QString filename = filenameElement.attribute( "value" );
+        KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
+        doc->addImageRequest( KoPictureKey( filename, QDateTime::currentDateTime() ), this );
+    }
+    else
+        kdError(32001) << "Missing FILENAME tag in IMAGE" << endl;
 }

@@ -573,7 +573,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                 }
                 case 2: // Picture
                 {
-                    Q_ASSERT( len == 1 );
+                    len = 1; // it was missing from old 1.0 files
                     KWTextImage * custom = new KWTextImage( kwTextDocument(), QString::null );
                     kdDebug() << "KWTextParag::loadFormatting insertCustomItem" << endl;
                     paragFormat()->addRef();
