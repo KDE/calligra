@@ -18,6 +18,7 @@
 */
 
 #include "kexiactionproxy.h"
+#include "kexiactionproxy_p.h"
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -28,12 +29,29 @@
 #include <qsignal.h>
 #include <qiconset.h>
 
+KAction_setEnabled_Helper::KAction_setEnabled_Helper(KexiActionProxy* proxy)
+ : QObject(0,"KAction_setEnabled_Helper")
+ , m_proxy( proxy )
+{
+}
+
+void KAction_setEnabled_Helper::slotSetEnabled(bool enabled)
+{
+	if (sender()->inherits("KAction")) {
+		const KAction *a = static_cast<const KAction*>(sender());
+		m_proxy->setAvailable(a->name(), enabled);
+	}
+}
+
+//=======================
+
 KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
  : m_host( host ? host : &KexiSharedActionHost::defaultHost() )
  , m_receiver(receiver)
  , m_signals(47)
  , m_actionProxyParent(0)
  , m_signal_parent( 0, "signal_parent" )
+ , m_KAction_setEnabled_helper( new KAction_setEnabled_Helper(this) )
  , m_focusedChild(0)
 {
 	m_signals.setAutoDelete(true);
@@ -54,6 +72,8 @@ KexiActionProxy::~KexiActionProxy()
 		m_actionProxyParent->takeActionProxyChild( this );
 
 	m_host->takeActionProxyFor(m_receiver);
+
+	delete m_KAction_setEnabled_helper;
 }
 
 void KexiActionProxy::plugSharedAction(const char *action_name, QObject* receiver, const char *slot)
@@ -108,7 +128,24 @@ KAction* KexiActionProxy::plugSharedAction(const char *action_name, const QStrin
 		0, 0, a->parent(), altName);
 	QObject::connect(alt_act, SIGNAL(activated()), a, SLOT(activate()));
 	alt_act->plug(w);
+
+//OK?
+	m_host->updateActionAvailable(action_name, true, m_receiver);
+
 	return alt_act;
+}
+
+void KexiActionProxy::plugSharedActionToExternalGUI(const char *action_name, KXMLGUIClient *client)
+{
+	KAction *a = client->action(action_name);
+	if (!a)
+		return;
+	plugSharedAction(a->name(), a, SLOT(activate()));
+
+	//update availability
+	setAvailable(a->name(), a->isEnabled());
+	//changes will be signaled
+	QObject::connect(a, SIGNAL(enabled(bool)), m_KAction_setEnabled_helper, SLOT(slotSetEnabled(bool)));
 }
 
 bool KexiActionProxy::activateSharedAction(const char *action_name, bool alsoCheckInChildren)
@@ -199,3 +236,6 @@ void KexiActionProxy::setActionProxyParent_internal( KexiActionProxy* parent )
 {
 	m_actionProxyParent = parent;
 }
+
+#include "kexiactionproxy_p.moc"
+

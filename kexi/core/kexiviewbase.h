@@ -198,9 +198,13 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 
 		void setViewWidget(QWidget* w);
 
-		/*! Updates actions (e.g. availability). Reimplement it, if needed.
-		 called by KexiDialogBase on dialog's activation. */
-		virtual void updateActions();
+		/*! Updates actions (e.g. availability). Reimplement it, if needed (you must 
+		 call superclass impelmentation at the end!).
+		 This implementation does nothing for this view but calls updateActions() 
+		 for every child-view of this view.
+		 called by KexiDialogBase on dialog's activation (\a activated is true) 
+		 or deactivation. */
+		virtual void updateActions(bool activated);
 
 		QString m_defaultIconName;
 
@@ -226,6 +230,8 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		/*! Mode for this view. Initialized by KexiDialogBase::switchToViewMode().
 		 Can be useful when single class is used for more than one view (e.g. KexiDBForm). */
 		int m_viewMode;
+
+		QPtrList<KexiViewBase> m_children;
 
 		bool m_dirty : 1;
 

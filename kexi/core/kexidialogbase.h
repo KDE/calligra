@@ -178,18 +178,28 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		/*! Used by KexiViewBase subclasses. Sets temporary data shared between views. */
 		void setTempData( KexiDialogTempData* data ) { m_tempData = data; }
 
+		/*! Called primarily by KexiMainWindowImpl to activate dialog. 
+		 Selected view (if present) is also informed about activation. */
 		void activate();
+
+		/*! Called primarily by KexiMainWindowImpl to deactivate dialog. 
+		 Selected view (if present) is also informed about deactivation. */
+		void deactivate();
+
 	public slots:
 		virtual void setFocus();
 
 		void updateCaption();
 
-		/*! Tells this dialog to save changes of the existin object
-		 to the backend. \sa storeNewData()
+		/*! Internal. Called by KexiMainWindowImpl::saveObject().
+		 Tells this dialog to save changes of the existing object
+		 to the backend.
+		 \sa storeNewData()
 		 \return true on success. */
 		bool storeData();
 
-		/*! Tells this dialog to create and store data of the new object
+		/*! Internal. Called by KexiMainWindowImpl::saveObject().
+		 Tells this dialog to create and store data of the new object
 		 to the backend.
 		 Object's schema data has been never stored, 
 		 so it is created automatically, using information obtained 

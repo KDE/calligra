@@ -233,6 +233,7 @@ void KexiViewBase::setViewWidget(QWidget* w)
 
 void KexiViewBase::addChildView( KexiViewBase* childView )
 {
+	m_children.append( childView );
 	addActionProxyChild( childView );
 	childView->m_parentView = this;
 //	if (m_parentView)
@@ -259,8 +260,13 @@ KAction* KexiViewBase::sharedAction( const char *name ) const
 	return part()->actionCollectionForMode( viewMode() )->action( name );
 }
 
-void KexiViewBase::updateActions()
+void KexiViewBase::updateActions(bool activated)
 {
+	//do nothing here
+	//do the same for children :)
+	for (QPtrListIterator<KexiViewBase> it(m_children); it.current(); ++it) {
+		it.current()->updateActions(activated);
+	}
 }
 
 #include "kexiviewbase.moc"

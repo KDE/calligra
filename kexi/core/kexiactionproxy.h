@@ -32,6 +32,8 @@
 
 class QSignal;
 class KAction;
+class KXMLGUIClient;
+class KAction_setEnabled_Helper;
 
 //! Acts as proxy for shared actions within the application.
 /*!
@@ -87,6 +89,8 @@ class KEXICORE_EXPORT KexiActionProxy
 		 \sa action(), KAction::plug(QWidget*, int) */
 		int plugSharedAction(const char *action_name, QWidget* w);
 
+		void plugSharedActionToExternalGUI(const char *action_name, KXMLGUIClient *client);
+
 		/*! Unplugs action named \a action_name from a widget \a w.
 		 \sa plugSharedAction(const char *action_name, QWidget* w) */
 		void unplugSharedAction(const char *action_name, QWidget* w);
@@ -128,6 +132,9 @@ class KEXICORE_EXPORT KexiActionProxy
 
 		QObject m_signal_parent; //!< it's just to have common parent for owned signals
 
+		//! For internal use by plugSharedActionToExternalGUI()
+		KAction_setEnabled_Helper *m_KAction_setEnabled_helper;
+
 	public:
 		//! For internal use by addActionProxyChild(). \a parent can be 0.
 		void setActionProxyParent_internal( KexiActionProxy* parent );
@@ -135,6 +142,7 @@ class KEXICORE_EXPORT KexiActionProxy
 		KexiActionProxy *m_focusedChild;
 
 	friend class KexiSharedActionHost;
+	friend class KAction_setEnabled_Helper;
 };
 
 #endif

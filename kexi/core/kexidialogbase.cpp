@@ -458,9 +458,15 @@ void KexiDialogBase::activate()
 {
 	KMdiChildView::activate();
 	KexiViewBase *v = selectedView();
-	if (v) {
-		v->updateActions();
-	}
+	if (v)
+		v->updateActions(true);
+}
+
+void KexiDialogBase::deactivate()
+{
+	KexiViewBase *v = selectedView();
+	if (v)
+		v->updateActions(false);
 }
 
 #include "kexidialogbase.moc"
