@@ -81,8 +81,6 @@ TODO: add kexi driver version info
 TODO: add server version info retrieval
 TODO: add schema to kexi__* tables on createTable()
 TODO: add support for creation temporary databases
-TODO: Connection::selectStatement( KexiDB::QuerySchema& querySchema ) :
-		--add WHERE and other sql parts
 
 
 TODO: use KShared and KSharedPtr for Transaction and DriverManger class instead
@@ -138,17 +136,10 @@ and projectWizard/ to wizards/ (there will be more wizards soon)
 TODO:
 - add kexi__parts (p_id integer, p_type) table and appropriate part objects in kexi__objects
 
-TODO:  CURSOR
-- m_readAhead: in Cursor::open():
-	if (!m_readAhead) // jowenn: to ensure before first state, without cluttering implementation code
-		m_readAhead = drv_getNextRecord(); //true if any record in this query
-  ---FIX THIS for other drivers than SQLITE
 
 TODO: add sorting projects information using KexiProjectData::lastOpened
 TODO: also add this info as "Database>Open Recent" menu subentry
 
-TODO: add permissions information to connection : and - for sqlite - check if file is RO
-   and then set RO flag
 
 MOST RECENT TODO:
 - port old ProjectWizard as ConnectionWizard and plug it to "Add connection" action
@@ -204,14 +195,6 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 - add gui for viewing full part information
 
 
-=== PropertyEditor TODO: ==========
--for each row (proerty) allow to define double-click-action dependent on property type,
- * e.g. bool editor: toggle true/false,
- * enum editor: select next value (circularly),
- * fire selection dialog for filename editor, color editor, pixmap editor, etc.
- * expand children for cells of type like "Rect"
- * other types- by default: just move cursor to editor
-
 === USABILITY TODO ===
 -string2Identifier(): convert national chars like 'ó³¿æ' to similar latin-1, instead of '_'
 -add "Simple/Advanced Usage" global option
@@ -248,7 +231,7 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
-  (2 methods: 1) in additional dock 2) in property editor
+  2 methods: 1) in additional dock 2) in property editor
 -add all missing properties (even when most are not working)
 -add "key" information icon @ the left hand of line with primary key(s)
 -add "index" information icon @ the left hand of line with key(s) that is/are indexed
@@ -266,6 +249,12 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
   e.g. width, height properties ca be displayed this way. See also property editor 
 	at http://freshmeat.net/screenshots/41728/
 -KexiProperty: make it really shared (using QShared?)
+-for each row (property) allow to define double-click-action dependent on property type,
+ * e.g. bool editor: toggle true/false,
+ * enum editor: select next value (circularly),
+ * fire selection dialog for filename editor, color editor, pixmap editor, etc.
+ * expand children for cells of type like "Rect"
+ * other types- by default: just move cursor to editor
 
 ==== Query GUI Designer TODO: ======
 - add tables dropping from the browser
@@ -273,13 +262,26 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 - fix connections drawing
 - make "1" and "inf" signs a bit larger (scalable)
 - 'criteria' and 'totals' are unused yet
+- update query after change in Connection cache
+- for queries like 'select * from a, b, c' allow to enter * in 'table' column
+--this should also work when we're recreating field rows on switching from SQL view to design view
 
 ==== SQL Editor TODO: =====
 - intergrate editor's (KPart) actions with KexiMainWindow's Actions
+- win32: katepart on win32: void KateSyntaxDocument::setupModeList (bool force)
+   Works slowly for the 1st time because there is no cache. 
+   Workaround: removed most of apps/katepart/syntax/*.xml files
+- win32: fix freeze on 1st char entering
+- win32: fix mmap for win9x (InterlockedCompareExchange() replacement is needed 
+  -> see kdelibs/win/mmap.c)
+- call qApp->processEvents() on highlighting schema loading, 
+  so 'wait' cursor can be visible on 1st loading.
+- allow saving invalid queries (KexiQueryDesignerSQLView::storeNewData())
+  (for invelid queries, after opening SQL view should be shown automatically)
 
 
 ==== Main window TODO ====
-- show error message if createView() returned 0
+...
 
 
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
@@ -287,29 +289,27 @@ TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where n
 HOT TODO:
 -combobox tv: fix row highlighting for 'related table data' model
 
-PROBLEMS
-1. katepart on win32: void KateSyntaxDocument::setupModeList (bool force)
-   Works slowly for the 1st time because there is no cache. 
-   Workaround: removed most of apps/katepart/syntax/*.xml files
-
-CC_MAIL: dkite@shaw.ca
-
 CCPASTEUR: 
 	-why pixmap's code is in kexiproperty/kexipropertybuffer?
 	-perhaps we'd reuse KDE Menu editor GUI?
- 
-TODO: Query designer: update query after change in Connection cache
-TODO: Kate Part: call qApp->processEvents() on highlighting schema loading, 
- so 'wait' cursor can be visible on 1st loading.
-TODO: SQL Query designer: allow saving invalid queries (KexiQueryDesignerSQLView::storeNewData())
-       (for invelid queries, after opening SQL view should be shown automatically)
-TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * in 'table' column
-      -this should also work when we're recreating field rows on switching from SQL view to design view
+
+=== KexiDB TODO ===
+- add FieldType and move things like typeGroupString() there
+- CRASH: removing tables when a query still uses it. 
+  HOW TO FIX: Add TableSchema::Ptr, QuerySchema::Ptr, etc.
+-- related to above: add a possibility to return all objects (and optionally all opened objects)
+  thad depend on a given table
+-- we could also add a GUI tree to show these dependencies
+- add permissions information to connection : and - for sqlite - check if file is RO
+   and then set RO flag
+- add kexi__toremove table, and use it to remove objects on begin connection
 
 === KexiDB Parser TODO ===
 - add clever query relatins parsing 
       (needed for switching back to GUI editor from text mode)
 - add flexible support for date/time constants
+- store text position information (line, column) for every token so it can be used 
+   in SQL editor to place cursor in case of errors
 
 === Startup TODO ===
 - reuse KexiNameWidget in KexiNewProjectWizard!
@@ -336,7 +336,6 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 --disable non-sqlite drivers (on compile-time)
 -simple docs
 
-TODO: add kexi__toremove table, and use it to remove objects on begin connection
 
 === Mimetypes/icons TODO ===
 - new mimetypes: 
@@ -354,6 +353,33 @@ TODO: add kexi__toremove table, and use it to remove objects on begin connection
 ** Ask SQLite devs for a possibility for adding a field to indicate kexi-sqlite 
    format without opening database
 
+CCMAIL: dkite@shaw.ca
+
+
+2004-10-18
+KexiDB Parser, KexiDB
+- Field::Type type() introduced for expression classes
+- type(): integer subtypes (Integer, BigInteger, ..) 
+   are detected for int constants; the same for strings
+- Field::type(): If there's expression assigned,
+  type of the expression is returned instead.
+- Field::Type::Null added
+Query View
+- Expressions are now displayed, with header names
+Core
+- KexiDialogBase::activate() -another focus-related fix
+Main
+- "delete_row" action shortcut is now CTRL+Delete, to avoid conflict with edit_cut (Shift Delete)
+- fixes for KexiBrowser
+TableView
+- KexiComboBoxTableEdit improved
+- KexiTableViewColumn: try harder to get a column name
+
+2004-10-16
+Core
+- KexiSharedActionConnector introduced
+SQL Editor
+- double clicking on a history item selects it for editing
 
 2004-10-15
 - small speedup for Kexi global objects on startup
@@ -370,7 +396,6 @@ KexiDB Parser, KexiDB
 -- former type renamed to token
 -- 'type' member added; typechecks added to validate()
 - more SQL statements are supported
-
 
 2004-10-14
 Kexi
