@@ -146,12 +146,11 @@ void KWVariable::resize()
     if ( m_deleted )
         return;
     QTextFormat *fmt = format();
-     KoZoomHandler * zh = textDocument()->zoomHandler();
     QString txt = text();
     width = 0;
     for ( int i = 0 ; i < (int)txt.length() ; ++i )
-        width += zh->layoutUnitToPixelX(fmt->width( txt, i ));
-    height = zh->layoutUnitToPixelY(fmt->height());
+        width += fmt->width( txt, i );
+    height = fmt->height();
     //kdDebug() << "Before KWVariable::resize text=" << txt << " width=" << width << endl;
 }
 
@@ -162,23 +161,22 @@ void KWVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy
     int bl, _y;
     KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
     //kdDebug() << "KWVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
-    int h = parag->lineHeightOfChar( index(), &bl, &_y );
+    int h = parag->lineHeightOfChar( index(), &bl, &_y /*unused*/);
 
-    h = zh->layoutUnitToPixelY( _y, h );
-    bl = zh->layoutUnitToPixelY( _y, bl );
-    // unused _y = zh->layoutUnitToPixelY( _y );
+    h = zh->layoutUnitToPixelY( y, h );
+    bl = zh->layoutUnitToPixelY( y, bl );
 
     p->save();
     p->setPen( QPen( f->color() ) );
     if ( selected )
     {
         p->setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
-        p->fillRect( x, y, width, h, cg.color( QColorGroup::Highlight ) );
+        p->fillRect( x, y,  zh->layoutUnitToPixelX( width ), h, cg.color( QColorGroup::Highlight ) );
     } else if ( parag->kwTextDocument()->textFrameSet() &&
                 parag->kwTextDocument()->textFrameSet()->kWordDocument()->viewFormattingChars() && p->device()->devType() != QInternal::Printer )
     {
         p->setPen( QPen( cg.color( QColorGroup::Highlight ), 0, Qt::DotLine ) );
-        p->drawRect( x, y, width, h );
+        p->drawRect( x, y, zh->layoutUnitToPixelX( width ), h );
     }
 
     p->setFont( customItemFont );
