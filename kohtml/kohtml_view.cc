@@ -716,7 +716,7 @@ void KoHTMLView::addBookmark()
   QString title = m_strCaptionText;
   K2URL u(url);
   
-  KMimeType::initStatic();
+  // KMimeType::initStatic();
   KMimeMagic::initStatic();  
 
   QFileInfo icon(KPixmapCache::pixmapFileForURL(url, 0, u.isLocalFile(), false));
