@@ -316,7 +316,7 @@ void HtmlBasicWorker::closeFormatData(const FormatData& formatOrigin,
 }
 
 void HtmlBasicWorker::openParagraph(const QString& strTag,
-    const LayoutData& layout)
+    const LayoutData& layout, QChar::Direction direction)
 {
     *m_streamOut << '<' << strTag;
 
@@ -324,7 +324,7 @@ void HtmlBasicWorker::openParagraph(const QString& strTag,
         || (layout.alignment=="center") || (layout.alignment=="justify"))
     {
         *m_streamOut << " align=\"" << layout.alignment << "\"";
-        if (layout.alignment == "right")
+        if ( (direction == QChar::DirRLE) || (direction == QChar::DirRLO) )
           *m_streamOut << " dir=\"rtl\"";
     }
     else if ( layout.alignment=="auto")

@@ -55,8 +55,10 @@ public:
     virtual bool doCloseBody(void); // HTML's </body>
 protected:
     virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)=0;
+    //QChar::Direction is needed because the text flow can only
+    //be detected from the actual string data
     virtual void openParagraph(const QString& strTag,
-        const LayoutData& layout)=0;
+        const LayoutData& layout, QChar::Direction direction=QChar::DirL)=0;
     virtual void closeParagraph(const QString& strTag,
         const LayoutData& layout)=0;
     virtual void openSpan(const FormatData& formatOrigin, const FormatData& format)=0;

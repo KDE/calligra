@@ -468,7 +468,7 @@ QString HtmlCssWorker::layoutToCss(const LayoutData& layoutOrigin,
 }
 
 void HtmlCssWorker::openParagraph(const QString& strTag,
-    const LayoutData& layout)
+    const LayoutData& layout, QChar::Direction direction)
 {
     const LayoutData& styleLayout=m_styleMap[layout.styleName];
 
@@ -481,11 +481,14 @@ void HtmlCssWorker::openParagraph(const QString& strTag,
     QString strStyle=layoutToCss(styleLayout,layout,false);
     if (!strStyle.isEmpty())
     {
-        *m_streamOut << " style=\"" << strStyle << "\"";
+        *m_streamOut << " style=\"" << strStyle;
+        if (direction == QChar::DirRLE) {
+            *m_streamOut << "direction: rtl; unicode-bidi: embed; ";
+        } else if (direction == QChar::DirRLO) {
+            *m_streamOut << "direction: rtl; unicode-bidi: override; ";
+        }
+        *m_streamOut<< "\"";
     }
-
-    if (layout.alignment == "right")
-        *m_streamOut << " dir=\"rtl\"";
 
     *m_streamOut << ">";
 

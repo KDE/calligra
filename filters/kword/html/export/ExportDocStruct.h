@@ -35,7 +35,7 @@ public:
 protected:
     virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
     virtual void openParagraph(const QString& strTag,
-        const LayoutData& layout);
+        const LayoutData& layout,QChar::Direction direction=QChar::DirL);
     virtual void closeParagraph(const QString& strTag,
         const LayoutData& layout);
     virtual void openSpan(const FormatData& formatOrigin, const FormatData& format);

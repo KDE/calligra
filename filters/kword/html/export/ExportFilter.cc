@@ -279,14 +279,14 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
         {
             if (1==(*paraFormatDataIt).id)
             {
+                //Retrieve text
+                partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
                 // For normal text, we need an opened paragraph
                 if (paragraphNotOpened)
                 {
-                    openParagraph(strTag,layout);
+                    openParagraph(strTag,layout,partialText.ref(0).direction());
                     paragraphNotOpened=false;
                 }
-                //Retrieve text
-                partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
                 formatTextParagraph(partialText,layout.formatData,*paraFormatDataIt);
             }
             else if (4==(*paraFormatDataIt).id)

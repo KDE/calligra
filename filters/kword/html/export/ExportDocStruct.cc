@@ -142,7 +142,7 @@ void HtmlDocStructWorker::closeFormatData(const FormatData& formatOrigin,
 }
 
 void HtmlDocStructWorker::openParagraph(const QString& strTag,
-    const LayoutData& layout)
+    const LayoutData& layout,QChar::Direction /*direction*/)
 {
     *m_streamOut << '<' << strTag << ">";
     openFormatData(layout.formatData,layout.formatData,true,(strTag[0]!='h'));

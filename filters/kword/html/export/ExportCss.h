@@ -50,7 +50,8 @@ public:
         const double bottom, const double right); // Like KWord's <PAPERBORDERS>
 protected:
     virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
-    virtual void openParagraph(const QString& strTag, const LayoutData& layout);
+    virtual void openParagraph(const QString& strTag, const LayoutData& layout,
+                               QChar::Direction direction=QChar::DirL);
     virtual void closeParagraph(const QString& strTag, const LayoutData& layout);
     virtual void openSpan(const FormatData& formatOrigin, const FormatData& format);
     virtual void closeSpan(const FormatData& formatOrigin, const FormatData& format);
