@@ -158,7 +158,6 @@ void Formula::generate(QTextStream &out)
 	KFormula::Document formulaDoc( kapp->sessionConfig() );
 
 	KFormula::Container* formula = new KFormula::Container( &formulaDoc );
-        formulaDoc.registerFormula( formula );
 	if ( !formula->load( doc ) ) {
 		kdError() << "Failed." << endl;
 	}

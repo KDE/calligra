@@ -93,7 +93,7 @@ public:
 
     /**
      * Registers a new formula to be part of this document. Each formula
-     * must be part of exactly one document. So you better register!
+     * must be part of exactly one document.
      *
      * The formula is not owned by the document so you are responsible
      * to delete in properly.

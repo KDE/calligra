@@ -32,6 +32,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
+#include <kformulacontainer.h>
 #include <kformuladocument.h>
 #include <kformulamimesource.h>
 
@@ -45,7 +46,7 @@ PNGExportDia::PNGExportDia( QDomDocument dom, QString outFile, QWidget *parent, 
     kapp->restoreOverrideCursor();
 
     doc = new KFormula::Document( kapp->sessionConfig() );
-    formula = doc->createFormula();
+    formula = new KFormula::Container( doc );
     if ( !formula->load( dom ) ) {
         kdError() << "Failed." << endl;
     }

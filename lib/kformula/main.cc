@@ -159,8 +159,6 @@ int main(int argc, char** argv)
     Document* document = new Document( kapp->config() );
     Container* container1 = new Container( document );
     Container* container2 = new Container( document );
-    document->registerFormula( container1 );
-    document->registerFormula( container2 );
 
     ScrollView* scrollview1a = new ScrollView;
     ScrollView* scrollview1b = new ScrollView;

@@ -113,6 +113,7 @@ Container::Container(Document* doc)
     impl->activeCursor = impl->internCursor = createCursor();
     connect(this, SIGNAL(commandExecuted()),
             document()->getHistory(), SIGNAL(commandExecuted()));
+    doc->registerFormula( this );
     recalc();
 }
 

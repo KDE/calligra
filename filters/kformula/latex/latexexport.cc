@@ -32,6 +32,7 @@
 #include <koStoreDevice.h>
 
 #include <kformuladocument.h>
+#include <kformulacontainer.h>
 #include <kformulamimesource.h>
 
 #include "latexexport.h"
@@ -75,7 +76,7 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
     }
 
     KFormula::Document* doc = new KFormula::Document( kapp->sessionConfig() );
-    KFormula::Container* formula = doc->createFormula();
+    KFormula::Container* formula = new KFormula::Container( doc );
     if ( !formula->load( dom ) ) {
         kdError() << "Failed." << endl;
     }
