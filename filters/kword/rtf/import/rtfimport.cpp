@@ -1044,7 +1044,7 @@ void RTFImport::insertTableRow( RTFProperty * )
 	// Number of cell definitions should equal the number of cells
 	while (row.cells.count() > row.frameSets.count())
 	{
-	    row.cells.remove( row.cells.end() );
+	    row.cells.pop_back();
 	}
 	while (row.cells.count() < row.frameSets.count())
 	{
