@@ -2599,13 +2599,12 @@ bool KWDocument::completeSaving( KoStore *_store )
     }
     if (specialOutputFlag()==SaveAsKOffice1dot1)
     {
-        m_pictureCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, savePictures );
+        return m_pictureCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, savePictures );
     }
     else
     {
-        m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, savePictures );
+        return m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, savePictures );
     }
-    return TRUE;
 }
 
 void KWDocument::addView( KoView *_view )
