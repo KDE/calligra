@@ -55,6 +55,10 @@ k_dcop:
     virtual uint lineWidth() const;
     virtual void setLineChartSubType( const QString & );
     virtual QString lineChartSubType() const;
+    virtual bool threeDLines() const;
+    virtual void setThreeDLines(bool b);
+    virtual void setThreeDLineDepth( int depth );
+    virtual int threeDLineDepth() const;
 
     //pie config
     virtual bool threeDPies();

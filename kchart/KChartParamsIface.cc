@@ -202,6 +202,26 @@ uint KChartParamsIface::lineWidth() const
     return params->lineWidth();
 }
 
+bool KChartParamsIface::threeDLines() const
+{
+    return params->threeDLines();
+}
+
+void KChartParamsIface::setThreeDLines(bool b)
+{
+    params->setThreeDLines(b);
+}
+
+int KChartParamsIface::threeDLineDepth() const
+{
+    return params->threeDLineDepth();
+}
+
+void KChartParamsIface::setThreeDLineDepth( int depth )
+{
+    params->setThreeDLineDepth( depth );
+}
+
 bool KChartParamsIface::showGrid()
 {
     return params->showGrid();
