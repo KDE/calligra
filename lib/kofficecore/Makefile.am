@@ -24,7 +24,8 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	koDocumentInfoDlg.cc koFactory.cc koChild.cc \
 	KoApplicationIface.cc KoApplicationIface.skel \
 	KoDocumentIface.cc KoDocumentIface.skel KoViewIface.cc KoViewIface.skel \
-	KoMainWindowIface.cc KoMainWindowIface.skel kofficeversion.cc
+	KoMainWindowIface.cc KoMainWindowIface.skel kofficeversion.cc koOasisStyles.cc
+
 libkofficecore_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 
 include_HEADERS = handler.h \
@@ -37,7 +38,7 @@ include_HEADERS = handler.h \
 	koView.h koFrame.h koDocumentChild.h \
 	koDocumentInfoDlg.h koFactory.h koChild.h \
 	KoApplicationIface.h KoDocumentIface.h KoViewIface.h KoMainWindowIface.h \
-	koPictureKey.h koPicture.h koPictureCollection.h kofficeversion.h
+	koPictureKey.h koPicture.h koPictureCollection.h kofficeversion.h koOasisStyles.h
 
 noinst_HEADERS = koDocument_p.h koFilterManager_p.h \
 	koPictureShared.h koPictureBase.h koPictureImage.h koPictureClipart.h \

@@ -42,7 +42,7 @@ class KoDocumentChild;
 class KoView;
 class KoDocumentInfo;
 class DCOPObject;
-
+class KoOasisStyles;
 
 /**
  *  The KOffice document class
@@ -410,13 +410,19 @@ public:
 
     /**
      *  Reimplement this method to load the contents of your KOffice document,
-     *  from the XML document.
+     *  from the XML document. This is for the pre-Oasis file format (maindoc.xml).
      *
      *  You are supposed to use the QDomDocument. The QIODevice is provided only
      *  for the cases where some pre-processing is needed, like kpresenter's kprconverter.
      *  Note that the QIODevice could be 0L, when called from an import filter.
      */
     virtual bool loadXML( QIODevice *, const QDomDocument & doc ) = 0;
+
+    /**
+     *  Reimplement this method to load the contents of your KOffice document,
+     *  from the XML document ("content.xml").
+     */
+    virtual bool loadOasis( const QDomDocument & doc, KoOasisStyles& oasisStyles ) = 0;
 
     /**
      *  Reimplement this to save the contents of the KOffice document into
@@ -832,6 +838,8 @@ private slots:
     void slotStarted( KIO::Job* );
 
 private:
+    bool loadAndParse( KoStore* store, const QString& filename, QDomDocument& doc );
+    bool loadNativeFormatFromStore( const QString& file );
     void savePreview( KoStore* store );
 
     class Private;

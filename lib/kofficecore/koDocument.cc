@@ -18,16 +18,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include <koDocument.h>
 
+#include <config.h>
 #include <assert.h>
 #include <unistd.h>
 
 #include <qbuffer.h>
 
-#include <koDocument.h>
 #include <koDocument_p.h>
 #include <KoDocumentIface.h>
 #include <koDocumentChild.h>
@@ -36,8 +34,9 @@
 #include <koStoreDevice.h>
 #include <koFilterManager.h>
 #include <koDocumentInfo.h>
-#include <kprinter.h>
+#include <koOasisStyles.h>
 
+#include <kprinter.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>
 #include <kparts/partmanager.h>
@@ -1388,6 +1387,35 @@ bool KoDocument::openFile()
     return ok;
 }
 
+bool KoDocument::loadAndParse(KoStore* store, const QString& filename, QDomDocument& doc)
+{
+    //kdDebug(30003) << "Trying to open " << filename << endl;
+
+    if (!store->open(filename))
+    {
+        kdWarning(30518) << "Entry " << filename << " not found!" << endl;
+        d->lastErrorMessage = i18n( "Could not find %1" ).arg( filename );
+        return false;
+    }
+
+    // Error variables for QDomDocument::setContent
+    QString errorMsg;
+    int errorLine, errorColumn;
+    if ( !doc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn ) )
+    {
+        kdError(30003) << "Parsing error in " << filename << "! Aborting!" << endl
+            << " In line: " << errorLine << ", column: " << errorColumn << endl
+            << " Error message: " << errorMsg << endl;
+        d->lastErrorMessage = i18n( "Parsing error in the main document at line %1, column %2\nError message: %3" )
+                              .arg( errorLine ).arg( errorColumn ).arg( i18n ( errorMsg.utf8() ) );
+        store->close();
+        return false;
+    }
+    store->close();
+    kdDebug(30003) << "File " << filename << " loaded and parsed!" << endl;
+    return true;
+}
+
 bool KoDocument::loadNativeFormat( const QString & file )
 {
     if ( !QFileInfo( file).isFile () )
@@ -1433,7 +1461,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
         int errorColumn;
         QDomDocument doc;
         bool res;
-        if ( doc.setContent( &in , &errorMsg, &errorLine, &errorColumn ) )
+        if ( doc.setContent( &in, &errorMsg, &errorLine, &errorColumn ) )
         {
             res = loadXML( &in, doc );
             if ( res )
@@ -1456,84 +1484,107 @@ bool KoDocument::loadNativeFormat( const QString & file )
     } else
     { // It's a koffice store (tar.gz, zip, directory, etc.)
         in.close();
-        KoStore::Backend backend = (d->m_specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
-        KoStore * store = KoStore::createStore( file, KoStore::Read, "", backend );
 
-        if ( store->bad() )
-        {
-            d->lastErrorMessage = i18n( "Not a valid KOffice file." );
-            delete store;
-            QApplication::restoreOverrideCursor();
-            return false;
-        }
-
-        if ( store->open( "root" ) )
-        {
-            QString errorMsg;
-            int errorLine;
-            int errorColumn;
-            QDomDocument doc;
-            if ( !doc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn ) )
-            {
-                kdError (30003) << "Parsing Error! Aborting! (in KoDocument::loadNativeFormat (KoStore))" << endl
-                                << "  Line: " << errorLine << " Column: " << errorColumn << endl
-                                << "  Message: " << errorMsg << endl;
-                d->lastErrorMessage = i18n( "parsing error in the main document at line %1, column %2\nError message: %3" )
-                                      .arg( errorLine ).arg( errorColumn ).arg( i18n ( errorMsg.utf8() ) );
-                delete store;
-                QApplication::restoreOverrideCursor();
-                return false;
-            }
-            if ( !loadXML( store->device(), doc ) )
-            {
-                delete store;
-                QApplication::restoreOverrideCursor();
-                return false;
-            }
-            store->close();
-        } else
-        {
-            kdError(30003) << "ERROR: No maindoc.xml" << endl;
-            d->lastErrorMessage = i18n( "Invalid document: no file 'maindoc.xml'." );
-            delete store;
-            QApplication::restoreOverrideCursor();
-            return false;
-        }
-
-        if ( !loadChildren( store ) )
-        {
-            kdError(30003) << "ERROR: Could not load children" << endl;
-// Proceed nonetheless
-#if 0
-            if ( d->lastErrorMessage.isEmpty() )
-                d->lastErrorMessage = i18n( "Couldn't load embedded objects." );
-            delete store;
-            QApplication::restoreOverrideCursor();
-            return false;
-#endif
-        }
-        if ( store->open( "documentinfo.xml" ) )
-        {
-            QDomDocument doc;
-            doc.setContent( store->device() );
-            d->m_docInfo->load( doc );
-            store->close();
-        }
-        else
-        {
-            //kdDebug( 30003 ) << "cannot open document info" << endl;
-            delete d->m_docInfo;
-            d->m_docInfo = new KoDocumentInfo( this, "document info" );
-        }
-
-        bool res = completeLoading( store );
-        delete store;
-        QApplication::restoreOverrideCursor();
-        m_bEmpty = false;
-        return res;
+        return loadNativeFormatFromStore( file );
     }
 }
 
+bool KoDocument::loadNativeFormatFromStore( const QString& file )
+{
+    KoStore::Backend backend = (d->m_specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
+    KoStore * store = KoStore::createStore( file, KoStore::Read, "", backend );
+
+    if ( store->bad() )
+    {
+        d->lastErrorMessage = i18n( "Not a valid KOffice file." );
+        delete store;
+        QApplication::restoreOverrideCursor();
+        return false;
+    }
+
+    bool oasis = true;
+    // OASIS/OOo file format?
+    if ( store->hasFile( "content.xml" ) )
+    {
+        store->disallowNameExpansion();
+
+        // TODO check mimetype file?
+        // TODO read manifest?
+        KoOasisStyles oasisStyles;
+        QDomDocument contentDoc;
+        bool ok = loadAndParse( store, "content.xml", contentDoc );
+        if ( ok ) {
+            QDomDocument stylesDoc;
+            loadAndParse( store, "styles.xml", stylesDoc );
+            // Load styles from style.xml
+            oasisStyles.createStyleMap( stylesDoc );
+            // Also load styles from content.xml
+            oasisStyles.createStyleMap( contentDoc );
+
+            ok = loadOasis( contentDoc, oasisStyles );
+        }
+        if ( !ok ) {
+            delete store;
+            QApplication::restoreOverrideCursor();
+            return false;
+        }
+
+    } else if ( store->hasFile( "root" ) ) // Fallback to "old" file format (maindoc.xml)
+    {
+        oasis = false;
+
+        QDomDocument doc;
+        bool ok = loadAndParse( store, "root", doc );
+        if ( ok )
+            ok = loadXML( store->device(), doc );
+        if ( !ok )
+        {
+            delete store;
+            QApplication::restoreOverrideCursor();
+            return false;
+        }
+        store->close();
+    } else
+    {
+        kdError(30003) << "ERROR: No maindoc.xml" << endl;
+        d->lastErrorMessage = i18n( "Invalid document: no file 'maindoc.xml'." );
+        delete store;
+        QApplication::restoreOverrideCursor();
+        return false;
+    }
+
+    if ( !loadChildren( store ) )
+    {
+        kdError(30003) << "ERROR: Could not load children" << endl;
+        // Don't abort, proceed nonetheless
+    }
+
+    if ( oasis && store->hasFile( "meta.xml" ) ) {
+        QDomDocument metaDoc;
+        loadAndParse( store, "meta.xml", metaDoc );
+        // ## TODO use it (implement loading of oasis metadata in KoDocumentInfo)
+    }
+    else if ( !oasis && store->hasFile( "documentinfo.xml" ) )
+    {
+        QDomDocument doc;
+        if ( loadAndParse( store, "documentinfo.xml", doc ) )
+            d->m_docInfo->load( doc );
+    }
+    else
+    {
+        //kdDebug( 30003 ) << "cannot open document info" << endl;
+        delete d->m_docInfo;
+        d->m_docInfo = new KoDocumentInfo( this, "document info" );
+    }
+
+    bool res = completeLoading( store );
+    delete store;
+    QApplication::restoreOverrideCursor();
+    m_bEmpty = false;
+    return res;
+}
+
+// For embedded documents
 bool KoDocument::loadFromStore( KoStore* _store, const QString& url )
 {
     if ( _store->open( url ) )
