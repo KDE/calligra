@@ -159,7 +159,7 @@ protected:
 
 // Identifies a frame
 struct FrameIndex {
-    unsigned int m_iFrameSetIndex;
+    KWFrameSet * m_pFrameSet;
     unsigned int m_iFrameIndex;
 };
 

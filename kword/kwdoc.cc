@@ -1212,7 +1212,7 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
     for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
         m_styleList.at(i++)->setFollowingStyle(findStyle(*it));
     }
-        
+
 }
 
 void KWDocument::addStyleTemplate( KWStyle * sty )
@@ -2212,12 +2212,14 @@ void KWDocument::frameChanged( KWFrame * frame, KWView * view )
 {
     updateAllFrames();
     // If frame with text flowing around it -> re-layout all frames
-    if ( !frame || frame->getRunAround() != RA_NO )
+    if ( !frame || !frame->getFrameSet()|| frame->getRunAround() != RA_NO )
+    {
         layout();
+    }
     else
-        // Otherwise only layout the frame that has changed
+    {
         frame->getFrameSet()->layout();
-
+    }
     repaintAllViewsExcept( view );
 }
 

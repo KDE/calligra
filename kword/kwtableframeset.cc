@@ -1511,9 +1511,11 @@ bool KWTableFrameSet::Cell::isAboveOrLeftOf( unsigned row, unsigned col )
 }
 
 void KWTableFrameSet::Cell::addFrame(KWFrame *_frame, bool recalc) {
-    getGroupManager()->addFrame(_frame, recalc);
+    if(getGroupManager())
+        getGroupManager()->addFrame(_frame, recalc);
     KWTextFrameSet::addFrame(_frame, recalc);
 }
+
 
 KWTableFrameSetEdit::~KWTableFrameSetEdit()
 {

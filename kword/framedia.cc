@@ -763,7 +763,7 @@ void KWFrameDia::slotFloatingToggled(bool b)
 {
     grp1->setEnabled( !b ); // Position doesn't make sense for a floating frame
     if(tab1) tab1->setEnabled( !b ); // frame setting are irrelevant for floating frames.
-    // grp2->setEnabled( !b ); do margins make sense for floating frames ?  (I think so; Thomas) 
+    // grp2->setEnabled( !b ); do margins make sense for floating frames ?  (I think so; Thomas)
 }
 
 /*================================================================*/
@@ -902,17 +902,8 @@ bool KWFrameDia::applyChanges()
             // TODO undo-redo support
 
             tmpResize.sizeOfEnd = frame->normalize();
-            KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
-            if(table)
-            {
-                index.m_iFrameSetIndex=doc->getFrameSetNum(table);
-                index.m_iFrameIndex=table->getFrameFromPtr(frame);
-            }
-            else
-            {
-                index.m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
-                index.m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-            }
+            index.m_pFrameSet=frame->getFrameSet();
+            index.m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
 
             KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), doc, index, tmpResize ) ;
             doc->addCommand(cmd);

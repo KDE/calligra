@@ -424,7 +424,7 @@ void KWFrameBorderCommand::execute()
     FrameIndex *tmp;
     for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
     {
-        KWFrameSet *frameSet =m_pDoc->getFrameSet(tmp->m_iFrameSetIndex);
+        KWFrameSet *frameSet =tmp->m_pFrameSet;
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
         FrameBorderTypeStruct *tmpFrameStruct=m_oldBorderFrameType.at(m_IndexFrame.find(tmp));
         switch( tmpFrameStruct->m_EFrameType)
@@ -454,7 +454,7 @@ void KWFrameBorderCommand::unexecute()
     FrameIndex *tmp;
     for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
     {
-        KWFrameSet *frameSet =m_pDoc->getFrameSet(tmp->m_iFrameSetIndex);
+        KWFrameSet *frameSet =tmp->m_pFrameSet;
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
         FrameBorderTypeStruct *tmpFrameStruct=m_oldBorderFrameType.at(m_IndexFrame.find(tmp));
         switch(tmpFrameStruct->m_EFrameType)
@@ -494,7 +494,7 @@ void KWFrameBackGroundColorCommand::execute()
     FrameIndex *tmp;
     for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
     {
-        KWFrameSet *frameSet =m_pDoc->getFrameSet(tmp->m_iFrameSetIndex);
+        KWFrameSet *frameSet =tmp->m_pFrameSet;
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
         frame->setBackgroundColor(m_newColor);
     }
@@ -507,7 +507,7 @@ void KWFrameBackGroundColorCommand::unexecute()
     FrameIndex *tmp;
     for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
     {
-        KWFrameSet *frameSet =m_pDoc->getFrameSet(tmp->m_iFrameSetIndex);
+        KWFrameSet *frameSet =tmp->m_pFrameSet;
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
         QBrush *tmpFrameStruct=m_oldBackGroundColor.at(m_IndexFrame.find(tmp));
         frame->setBackgroundColor(*tmpFrameStruct);
@@ -528,7 +528,7 @@ KWFrameResizeCommand::KWFrameResizeCommand( const QString &name, KWDocument *_do
 
 void KWFrameResizeCommand::execute()
 {
-    KWFrameSet *frameSet = m_pDoc->getFrameSet(m_IndexFrame.m_iFrameSetIndex);
+    KWFrameSet *frameSet = m_IndexFrame.m_pFrameSet;
     ASSERT( frameSet );
     KWFrame *frame = frameSet->getFrame(m_IndexFrame.m_iFrameIndex);
     ASSERT( frame );
@@ -550,7 +550,7 @@ void KWFrameResizeCommand::execute()
 
 void KWFrameResizeCommand::unexecute()
 {
-    KWFrameSet *frameSet =m_pDoc->getFrameSet(m_IndexFrame.m_iFrameSetIndex);
+    KWFrameSet *frameSet =m_IndexFrame.m_pFrameSet;
     KWFrame *frame=frameSet->getFrame(m_IndexFrame.m_iFrameIndex);
     frame->setCoords(m_FrameResize.sizeOfBegin.left(),m_FrameResize.sizeOfBegin.top(),m_FrameResize.sizeOfBegin.right(),m_FrameResize.sizeOfBegin.bottom());
     KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
@@ -582,7 +582,7 @@ void KWFrameMoveCommand::execute()
     FrameIndex *tmp;
     for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
     {
-        KWFrameSet *frameSet =m_pDoc->getFrameSet(tmp->m_iFrameSetIndex);
+        KWFrameSet *frameSet =tmp->m_pFrameSet;
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
         FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_IndexFrame.find(tmp));
         frame->setCoords(tmpFrameMove->sizeOfEnd.left(),tmpFrameMove->sizeOfEnd.top(),tmpFrameMove->sizeOfEnd.right(),tmpFrameMove->sizeOfEnd.bottom());
@@ -606,7 +606,7 @@ void KWFrameMoveCommand::unexecute()
     FrameIndex *tmp;
     for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
     {
-        KWFrameSet *frameSet =m_pDoc->getFrameSet(tmp->m_iFrameSetIndex);
+        KWFrameSet *frameSet =tmp->m_pFrameSet;
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
         FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_IndexFrame.find(tmp));
         frame->setCoords(tmpFrameMove->sizeOfBegin.left(),tmpFrameMove->sizeOfBegin.top(),tmpFrameMove->sizeOfBegin.right(),tmpFrameMove->sizeOfBegin.bottom());
@@ -653,27 +653,27 @@ KWDeleteFrameCommand::KWDeleteFrameCommand( const QString &name, KWDocument *_do
     KCommand(name),
     m_pDoc(_doc)
 {
-    KWFrameSet *frameSet = frame->getFrameSet();
+    KWFrameSet *frameSet =frame->getFrameSet();
     ASSERT( frameSet );
-    frameIndex.m_iFrameIndex = frameSet->getFrameFromPtr( frame );
-    frameIndex.m_iFrameSetIndex = _doc->getFrameSetNum( frameSet );
+    frameIndex.m_pFrameSet = frame->getFrameSet();
+    frameIndex.m_iFrameIndex=frameSet->getFrameFromPtr(frame);
     copyFrame = frame->getCopy();
 }
 
 void KWDeleteFrameCommand::execute()
 {
-    KWFrameSet *frameSet = m_pDoc->getFrameSet( frameIndex.m_iFrameSetIndex );
+    KWFrameSet *frameSet =frameIndex.m_pFrameSet;
     ASSERT( frameSet );
+
     KWFrame *frame = frameSet->getFrame( frameIndex.m_iFrameIndex );
     ASSERT( frame );
     frameSet->delFrame( frameIndex.m_iFrameIndex );
-
     m_pDoc->frameChanged( frame );
 }
 
 void KWDeleteFrameCommand::unexecute()
 {
-    KWFrameSet *frameSet = m_pDoc->getFrameSet( frameIndex.m_iFrameSetIndex );
+    KWFrameSet *frameSet = frameIndex.m_pFrameSet;
     KWFrame * frame = copyFrame->getCopy();
     frame->setFrameSet( frameSet );
     frameSet->addFrame( frame );
@@ -693,15 +693,15 @@ KWCreateFrameCommand::KWCreateFrameCommand( const QString &name, KWDocument *_do
 {
     KWFrameSet *frameSet = frame->getFrameSet();
     ASSERT( frameSet );
-    frameIndex.m_iFrameIndex = frameSet->getFrameFromPtr( frame );
-    frameIndex.m_iFrameSetIndex = _doc->getFrameSetNum( frameSet );
-    ASSERT( frameIndex.m_iFrameSetIndex != -1 );
+    frameIndex.m_pFrameSet = frameSet;
+    frameIndex.m_iFrameIndex=frameSet->getFrameFromPtr(frame);
+    //ASSERT( frameIndex.m_iFrameSetIndex != -1 );
     copyFrame = frame->getCopy();
 }
 
 void KWCreateFrameCommand::execute()
 {
-    KWFrameSet *frameSet = m_pDoc->getFrameSet( frameIndex.m_iFrameSetIndex );
+    KWFrameSet *frameSet = frameIndex.m_pFrameSet;
     KWFrame * frame = copyFrame->getCopy();
     frame->setFrameSet( frameSet );
     frameSet->addFrame( frame );
@@ -714,7 +714,7 @@ void KWCreateFrameCommand::execute()
 
 void KWCreateFrameCommand::unexecute()
 {
-    KWFrameSet *frameSet = m_pDoc->getFrameSet( frameIndex.m_iFrameSetIndex );
+    KWFrameSet *frameSet = frameIndex.m_pFrameSet;
     ASSERT( frameSet );
     KWFrame *frame = frameSet->getFrame( frameIndex.m_iFrameIndex );
     ASSERT( frame );
