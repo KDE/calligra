@@ -200,6 +200,10 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
             QColor bgcolor = cell->bgColor(currentcolumn,currentrow);
             // FIXME: some formatting seems to be missing with cell->text(), e.g.
             // "208.00" in KSpread will be "208" in HTML (not always?!)
+
+
+            text=cell->strOutText();
+#if 0
             switch( cell->content() ) {
                 case KSpreadCell::Text:
                   text = cell->text();
@@ -215,6 +219,7 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
             }
             text = cell->prefix(currentrow, currentcolumn) + " " + text + " "
                  + cell->postfix(currentrow, currentcolumn);
+#endif
             line += "  <" + html_cell_tag + html_cell_options;
             if (bgcolor.isValid() && bgcolor.name()!="#ffffff") // change color only for non-white cells
               line += " bgcolor=\"" + bgcolor.name() + "\"";
