@@ -138,13 +138,7 @@ public:
     { return frames.count(); }
     void addFrameSet( KWFrameSet *f )
     { frames.append(f); updateAllFrames(); setModified( true ); /*updateAllViews(0L);*/ }
-    void delFrameSet( KWFrameSet *f, bool deleteit = true ) {
-      if (deleteit)
-        frames.remove( f ); 
-      else
-        frames.take( frames.find(f) ); 
-      setModified( true ); 
-    }
+    void delFrameSet( KWFrameSet *f, bool deleteit = true );
 
     KWParag *getFirstParag( unsigned int _num ) {
         if ( frames.at( _num )->getFrameType() == FT_TEXT )
@@ -313,8 +307,7 @@ public:
     void addGroupManager( KWGroupManager *gm ) { grpMgrs.append( gm ); }
     unsigned int getNumGroupManagers() { return grpMgrs.count(); }
     KWGroupManager *getGroupManager( int i ) { return grpMgrs.at( i ); }
-    void delGroupManager( KWGroupManager *g )
-    { grpMgrs.remove( g ); }
+    void delGroupManager( KWGroupManager *g, bool deleteit = true );
 
     QPen setBorderPen( KWParagLayout::Border _brd );
     void enableEmbeddedParts( bool f );

@@ -4275,3 +4275,20 @@ void KWordDocument::updateFrameSizes( int oldZoom )
         }
     }
 }
+
+void KWordDocument::delGroupManager( KWGroupManager *g, bool deleteit )
+{ 
+  if (deleteit)
+    grpMgrs.remove( g ); 
+  else
+    grpMgrs.take(grpMgrs.find(g));
+}
+
+void KWordDocument::delFrameSet( KWFrameSet *f, bool deleteit) 
+{
+  if (deleteit)
+    frames.remove( f ); 
+  else
+    frames.take( frames.find(f) ); 
+  setModified( true ); 
+}

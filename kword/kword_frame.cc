@@ -2110,7 +2110,7 @@ KWGroupManager::KWGroupManager( const KWGroupManager &original ) :
 /*================================================================*/
 KWGroupManager::~KWGroupManager() {
 //kdDebug () << "KWGroupManager::~KWGroupManager " << this << endl;
-    if(doc) doc->delGroupManager(this);
+    if(doc) doc->delGroupManager(this, false);
     doc=0L;
 }
 
