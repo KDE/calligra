@@ -23,6 +23,8 @@
 #include <qcolor.h>
 #include <qpen.h>
 class QDomElement;
+class KWDocument;
+class QPainter;
 
 /**
  * This class represents a border - for anything, like paragraph, or frame
@@ -45,13 +47,25 @@ public:
     // Save to XML
     void save( QDomElement & elem );
 
-    // Get a ready-to-use QPen for this border.
-    // width is usually QMAX(doc->zoomIt[XY]( brd.ptWidth ), 1)
-    static QPen borderPen( const Border & brd, int width );
-
     // String to style enum, and vice versa, for UI.
     static BorderStyle getStyle( const QString &style );
     static QString getStyle( const BorderStyle &style );
+
+    // Zoom the border width. If ptWidth is 0, minborder is returned.
+    static int zoomWidthX( double ptWidth, KWDocument * doc, int minborder ); // For left/right borders
+    static int zoomWidthY( double ptWidth, KWDocument * doc, int minborder ); // For top/bottom borders
+
+    // Get a ready-to-use QPen for this border.
+    // width is usually QMAX(doc->zoomIt[XY]( brd.ptWidth ), 1)
+    // @internal
+    static QPen borderPen( const Border & brd, int width );
+
+    // The do-it-all method :)
+    // Draws in @p painter the 4 borders on the _outside_ of @p rect.
+    // If a border is of size 0, minborder will be applied (no border if 0, defaultPen otherwise)
+    static void drawBorders( QPainter& painter, KWDocument * doc, QRect rect,
+                             Border left, Border right, Border top, Border bottom,
+                             int minborder, QPen defaultPen );
 };
 
 #endif

@@ -258,43 +258,43 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
 
 int KWTextParag::topMargin() const
 {
-    return static_cast<int>( textDocument()->textFrameSet()->kWordDocument()->zoomItY(
-        m_layout.margins[ QStyleSheetItem::MarginTop ]
-        + m_layout.topBorder.ptWidth ) );
+    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
+    return doc->zoomItY( m_layout.margins[ QStyleSheetItem::MarginTop ] )
+        + Border::zoomWidthY( m_layout.topBorder.ptWidth, doc, 0 );
 }
 
 int KWTextParag::bottomMargin() const
 {
-    return static_cast<int>( textDocument()->textFrameSet()->kWordDocument()->zoomItY(
-        m_layout.margins[ QStyleSheetItem::MarginBottom ]
-        + m_layout.bottomBorder.ptWidth ) );
+    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
+    return doc->zoomItY( m_layout.margins[ QStyleSheetItem::MarginBottom ] )
+        + Border::zoomWidthY( m_layout.bottomBorder.ptWidth, doc, 0 );
 }
 
 int KWTextParag::leftMargin() const
 {
-    return static_cast<int>( textDocument()->textFrameSet()->kWordDocument()->zoomItX(
-        m_layout.margins[ QStyleSheetItem::MarginLeft ]
-        + m_layout.leftBorder.ptWidth )
-        + counterWidth() /* shouldn't be zoomed, it depends on the font sizes */);
+    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
+    return doc->zoomItX( m_layout.margins[ QStyleSheetItem::MarginLeft ] )
+        + Border::zoomWidthX( m_layout.leftBorder.ptWidth, doc, 0 )
+        + counterWidth() /* shouldn't be zoomed, it depends on the font sizes */;
 }
 
 int KWTextParag::rightMargin() const
 {
-    return static_cast<int>( textDocument()->textFrameSet()->kWordDocument()->zoomItX(
-        m_layout.margins[ QStyleSheetItem::MarginRight ]
-        + m_layout.rightBorder.ptWidth ) );
+    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
+    return doc->zoomItX( m_layout.margins[ QStyleSheetItem::MarginRight ] )
+        + Border::zoomWidthX( m_layout.rightBorder.ptWidth, doc, 0 );
 }
 
 int KWTextParag::firstLineMargin() const
 {
-    return static_cast<int>( textDocument()->textFrameSet()->kWordDocument()->zoomItX(
-        m_layout.margins[ QStyleSheetItem::MarginFirstLine ] ) );
+    return textDocument()->textFrameSet()->kWordDocument()->zoomItX(
+        m_layout.margins[ QStyleSheetItem::MarginFirstLine ] );
 }
 
 int KWTextParag::lineSpacing() const
 {
-    return static_cast<int>( textDocument()->textFrameSet()->kWordDocument()->zoomItY(
-        m_layout.lineSpacing ) );
+    return textDocument()->textFrameSet()->kWordDocument()->zoomItY(
+        m_layout.lineSpacing );
 }
 
 // Reimplemented from QTextParag
@@ -310,44 +310,14 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
          || m_layout.rightBorder.ptWidth > 0 )
     {
         KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
-        int leftX = leftMargin();
-        int rightX = rect().width() - rightMargin() /*documentWidth()-1*/;
-        int topY = lineY( 0 ); // Maybe lineY( 0 ) is always 0. Not sure.
-        int bottomY = static_cast<int>( lineY( lines() -1 ) + lineHeight( lines() -1 ) - m_layout.lineSpacing );
 
-        int topBorderWidth = ( m_layout.topBorder.ptWidth > 0 ) ? QMAX( 1, (int)(doc->zoomItY( m_layout.topBorder.ptWidth ) /* + 0.5*/) ) : 0;
-        // reason for 0.5 commented out: the rounding would need to be done in topMargin() etc. as well
-        int bottomBorderWidth = ( m_layout.bottomBorder.ptWidth > 0 ) ? QMAX( 1, (int)(doc->zoomItY( m_layout.bottomBorder.ptWidth ) /*+ 0.5*/) ) : 0;
-        int leftBorderWidth = ( m_layout.leftBorder.ptWidth > 0 ) ? QMAX( 1, (int)(doc->zoomItX( m_layout.leftBorder.ptWidth ) /*+ 0.5*/) ) : 0;
-        int rightBorderWidth = ( m_layout.rightBorder.ptWidth > 0 ) ?  QMAX( 1, (int)(doc->zoomItX( m_layout.rightBorder.ptWidth ) /*+ 0.5*/) ) : 0;
+        QRect r;
+        r.setLeft( leftMargin() );
+        r.setRight( rect().width() - rightMargin() ); /*documentWidth()-1 requires many fixes in QRT*/
+        r.setTop( lineY( 0 ) );
+        r.setBottom( static_cast<int>( lineY( lines() -1 ) + lineHeight( lines() -1 ) - m_layout.lineSpacing ) );
 
-        //kdDebug() << "KWTextParag::paint top=" << topBorderWidth << " bottom=" << bottomBorderWidth
-        //          << " left=" << leftBorderWidth << " right=" << rightBorderWidth << endl;
-        //kdDebug() << "KWTextParag::paint bottomY=" << bottomY << endl;
-        if ( topBorderWidth > 0 )
-        {
-            painter.setPen( Border::borderPen( m_layout.topBorder, topBorderWidth ) );
-            int y = topY - topBorderWidth + topBorderWidth/2;
-            painter.drawLine( leftX-leftBorderWidth, y, rightX+rightBorderWidth, y );
-        }
-        if ( bottomBorderWidth > 0 )
-        {
-            painter.setPen( Border::borderPen( m_layout.bottomBorder, bottomBorderWidth ) );
-            int y = bottomY + bottomBorderWidth/2;
-            painter.drawLine( leftX-leftBorderWidth, y, rightX+rightBorderWidth, y );
-        }
-        if ( leftBorderWidth > 0 )
-        {
-            painter.setPen( Border::borderPen( m_layout.leftBorder, leftBorderWidth ) );
-            int x = leftX - leftBorderWidth + leftBorderWidth/2;
-            painter.drawLine( x, topY-topBorderWidth, x, bottomY+bottomBorderWidth );
-        }
-        if ( rightBorderWidth > 0 )
-        {
-            painter.setPen( Border::borderPen( m_layout.rightBorder, rightBorderWidth ) );
-            int x = rightX + leftBorderWidth/2;
-            painter.drawLine( x, topY-topBorderWidth, x, bottomY+bottomBorderWidth );
-        }
+        Border::drawBorders( painter, doc, r, m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder, 0, QPen() );
     }
 }
 

@@ -20,6 +20,8 @@
 #include "border.h"
 #include <klocale.h>
 #include <qdom.h>
+#include <qpainter.h>
+#include <kwdoc.h>
 
 Border::Border()
     : color( Qt::black ), style( SOLID ), ptWidth( 1 ) { }
@@ -114,4 +116,66 @@ QString Border::getStyle( const BorderStyle &style )
 
     // Keep compiler happy.
     return "_________";
+}
+
+int Border::zoomWidthX( double ptWidth, KWDocument * doc, int minborder )
+{
+    // If a border was set, then zoom it and apply a minimum of 1, so that it's always visible.
+    // If no border was set, apply minborder ( 0 for paragraphs, 1 for frames )
+    return ptWidth > 0 ? QMAX( 1, doc->zoomItX( ptWidth ) /*applies qRound*/ ) : minborder;
+}
+
+int Border::zoomWidthY( double ptWidth, KWDocument * doc, int minborder )
+{
+    // If a border was set, then zoom it and apply a minimum of 1, so that it's always visible.
+    // If no border was set, apply minborder ( 0 for paragraphs, 1 for frames )
+    return ptWidth > 0 ? QMAX( 1, doc->zoomItY( ptWidth ) /*applies qRound*/ ) : minborder;
+}
+
+void Border::drawBorders( QPainter& painter, KWDocument * doc, QRect rect, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder, int minborder, QPen defaultPen )
+{
+    int topBorderWidth = zoomWidthY( topBorder.ptWidth, doc, minborder );
+    int bottomBorderWidth = zoomWidthY( bottomBorder.ptWidth, doc, minborder );
+    int leftBorderWidth = zoomWidthX( leftBorder.ptWidth, doc, minborder );
+    int rightBorderWidth = zoomWidthX( rightBorder.ptWidth, doc, minborder );
+
+    //kdDebug() << "Border::drawBorders top=" << topBorderWidth << " bottom=" << bottomBorderWidth
+    //          << " left=" << leftBorderWidth << " right=" << rightBorderWidth << endl;
+
+    if ( topBorderWidth > 0 )
+    {
+        if ( topBorder.ptWidth > 0 )
+            painter.setPen( Border::borderPen( topBorder, topBorderWidth ) );
+        else
+            painter.setPen( defaultPen );
+        int y = rect.top() - topBorderWidth + topBorderWidth/2;
+        painter.drawLine( rect.left()-leftBorderWidth, y, rect.right()+rightBorderWidth, y );
+    }
+    if ( bottomBorderWidth > 0 )
+    {
+        if ( bottomBorder.ptWidth > 0 )
+            painter.setPen( Border::borderPen( bottomBorder, bottomBorderWidth ) );
+        else
+            painter.setPen( defaultPen );
+        int y = rect.bottom() + bottomBorderWidth - bottomBorderWidth/2;
+        painter.drawLine( rect.left()-leftBorderWidth, y, rect.right()+rightBorderWidth, y );
+    }
+    if ( leftBorderWidth > 0 )
+    {
+        if ( leftBorder.ptWidth > 0 )
+            painter.setPen( Border::borderPen( leftBorder, leftBorderWidth ) );
+        else
+            painter.setPen( defaultPen );
+        int x = rect.left() - leftBorderWidth + leftBorderWidth/2;
+        painter.drawLine( x, rect.top()-topBorderWidth, x, rect.bottom()+bottomBorderWidth );
+    }
+    if ( rightBorderWidth > 0 )
+    {
+        if ( rightBorder.ptWidth > 0 )
+            painter.setPen( Border::borderPen( rightBorder, rightBorderWidth ) );
+        else
+            painter.setPen( defaultPen );
+        int x = rect.right() + rightBorderWidth - rightBorderWidth/2;
+        painter.drawLine( x, rect.top()-topBorderWidth, x, rect.bottom()+bottomBorderWidth );
+    }
 }

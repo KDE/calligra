@@ -295,10 +295,10 @@ QRect KWFrame::outerRect() const
 {
     KWDocument *doc = getFrameSet()->kWordDocument();
     QRect outerRect( doc->zoomRect( *this ) );
-    outerRect.rLeft() -= (int)QMAX( 1, doc->zoomItX( getLeftBorder().ptWidth ) + 0.5 );
-    outerRect.rTop() -= (int)QMAX( 1, doc->zoomItY( getTopBorder().ptWidth ) + 0.5 );
-    outerRect.rRight() += (int)QMAX( 1, doc->zoomItX( getRightBorder().ptWidth ) + 0.5 );
-    outerRect.rBottom() += (int)QMAX( 1, doc->zoomItY( getBottomBorder().ptWidth ) + 0.5 );
+    outerRect.rLeft() -= Border::zoomWidthX( brd_left.ptWidth, doc, 1 );
+    outerRect.rTop() -= Border::zoomWidthY( brd_top.ptWidth, doc, 1 );
+    outerRect.rRight() += Border::zoomWidthX( brd_right.ptWidth, doc, 1 );
+    outerRect.rBottom() += Border::zoomWidthY( brd_bottom.ptWidth, doc, 1 );
     return outerRect;
 }
 
@@ -412,77 +412,11 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
         // Draw borders either as the user defined them, or using the view settings.
         // Borders should be drawn _outside_ of the frame area
         // otherwise the frames will erase the border when painting themselves.
-        QPen pen;
-        double width;
-        int w;
 
-        // Right
-        width = frame->getRightBorder().ptWidth;
-        if ( width > 0 )
-        {
-            w = QMAX( 1, (int)(m_doc->zoomItX( width ) + 0.5) );
-            pen = Border::borderPen( frame->getRightBorder(), w );
-        }
-        else
-        {
-            w = 1;
-            pen = viewSetting;
-        }
-        painter->setPen( pen );
-        w = QMAX( w / 2, 1 );
-        painter->drawLine( frameRect.right() + w, frameRect.y(),
-                           frameRect.right() + w, frameRect.bottom() );
-
-        // Bottom
-        width = frame->getBottomBorder().ptWidth;
-        if ( width > 0 )
-        {
-            w = QMAX( 1, (int)(m_doc->zoomItY( width ) + 0.5) );
-            pen = Border::borderPen( frame->getBottomBorder(), w );
-        }
-        else
-        {
-            w = 1;
-            pen = viewSetting;
-        }
-        painter->setPen( pen );
-        w = QMAX( w / 2, 1 );
-        painter->drawLine( frameRect.x(),     frameRect.bottom() + w,
-                           frameRect.right(), frameRect.bottom() + w );
-
-        // Left
-        width = frame->getLeftBorder().ptWidth;
-        if ( width > 0 )
-        {
-            w = QMAX( 1, (int)(m_doc->zoomItX( width ) + 0.5) );
-            pen = Border::borderPen( frame->getLeftBorder(), w );
-        }
-        else
-        {
-            w = 1;
-            pen = viewSetting;
-        }
-        painter->setPen( pen );
-        w = QMAX( w / 2, 1 );
-        painter->drawLine( frameRect.x() - w, frameRect.y(),
-                        frameRect.x() - w, frameRect.bottom() );
-
-        // Top
-        width = frame->getTopBorder().ptWidth;
-        if ( width > 0 )
-        {
-            w = QMAX( 1, (int)(m_doc->zoomItY( width ) + 0.5) );
-            pen = Border::borderPen( frame->getTopBorder(), w );
-        }
-        else
-        {
-            w = 1;
-            pen = viewSetting;
-        }
-        painter->setPen( pen );
-        w = QMAX( w / 2, 1 );
-        painter->drawLine( frameRect.x(),     frameRect.y() - w,
-                        frameRect.right(), frameRect.y() - w );
+        Border::drawBorders( *painter, m_doc, frameRect,
+                             frame->getLeftBorder(), frame->getRightBorder(),
+                             frame->getTopBorder(), frame->getBottomBorder(),
+                             1, viewSetting );
     }
     painter->restore();
 }
