@@ -32,7 +32,7 @@ VGroupCmd::execute()
 	for ( ; itr.current() ; ++itr )
 	{
 		// TODO : remove from corresponding VLayer
-		m_doc->activeLayer()->take( itr.current() );
+		m_doc->activeLayer()->take( *itr.current() );
 		m_group->append( itr.current() );
 	}
 
@@ -56,7 +56,7 @@ VGroupCmd::unexecute()
 	if( ( parent = dynamic_cast<VGroup*>( m_group->parent() ) ) )
 	{
 		// unregister from parent:
-		parent->take( m_group );
+		parent->take( *m_group );
 
 		// inform all objects in this group about their new parent
 		VObjectListIterator itr = m_selection->objects();
