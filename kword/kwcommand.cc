@@ -120,6 +120,9 @@ QTextCursor * KWTextParagCommand::execute( QTextCursor *c )
 	        p->setBottomBorder(m_newParagLayout.bottomBorder);
 	        p->setTopBorder(m_newParagLayout.topBorder);
 	        break;
+            case Tabulator:
+                //todo
+                break;
             default:
                 kdDebug() << "Houston we have a problem" << endl;
                 break;
@@ -170,6 +173,9 @@ QTextCursor * KWTextParagCommand::unexecute( QTextCursor *c )
 	        p->setBottomBorder((*lit).bottomBorder);
 	        p->setTopBorder((*lit).topBorder);
 	        break;
+            case Tabulator:
+                //todo
+                break;
             default:
                 kdDebug() << "KWTextParagCommand::unexecute unhandled flag " << m_flags << endl;
         }

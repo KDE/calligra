@@ -179,7 +179,7 @@ public:
 
     void setAlign( int align );
 
-    //void setTabList( const QList<KoTabulator> *tabList );
+    void setTabList( const QList<KoTabulator> *tabList );
 
     KWUnit leftIndent() const;
     KWUnit rightIndent() const;

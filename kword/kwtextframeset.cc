@@ -896,6 +896,9 @@ void KWTextFrameSet::UndoRedoInfo::clear()
 	    case Borders:
 	         cmd = new KWTextParagCommand( textdoc, id, eid, oldParagLayouts, newParagLayout, KWTextParagCommand::Borders );
 	        break;
+            case Tabulator:
+                 cmd = new KWTextParagCommand( textdoc, id, eid, oldParagLayouts, newParagLayout, KWTextParagCommand::Tabulator );
+	        break;
             case Delete:
             case RemoveSelected:
                 cmd = new KWTextDeleteCommand( textdoc, id, index, text.rawData(), oldStyles, oldParagLayouts );
@@ -1319,24 +1322,16 @@ void KWTextFrameSet::setBorders( QTextCursor * cursor, Border leftBorder, Border
 void KWTextFrameSet::setTabList( QTextCursor * cursor,const QList<KoTabulator> *tabList )
 {
     QTextDocument * textdoc = textDocument();
-    //kdDebug() << "KWTextFrameSet::setMargin " << m << " to value " << margin.pt() << endl;
-    //kdDebug() << "Current margin is " << static_cast<KWTextParag *>(cursor->parag())->margin(m).pt() << endl;
     if ( !textdoc->hasSelection( QTextDocument::Standard ) /*&&*/
          /*static_cast<KWTextParag *>(cursor->parag())->margin(m).pt() == margin.pt()*/ /*hack*/ )
         return; // No change needed.
 
     emit hideCursor();
-/*
+
     storeParagUndoRedoInfo( cursor );
-    undoRedoInfo.type = UndoRedoInfo::Margin;
-    undoRedoInfo.margin = m;
-    if ( m == QStyleSheetItem::MarginFirstLine )
-        undoRedoInfo.name = i18n("Change First Line Indent");
-    else if ( m == QStyleSheetItem::MarginLeft || m == QStyleSheetItem::MarginRight )
-        undoRedoInfo.name = i18n("Change Indent");
-    else
-        undoRedoInfo.name = i18n("Change Paragraph Spacing");
-*/
+    undoRedoInfo.type = UndoRedoInfo::Tabulator;
+    undoRedoInfo.name = i18n("Change Tabulator");
+
     if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
         static_cast<KWTextParag *>(cursor->parag())->setTabList( tabList );
         emit repaintChanged();
@@ -1351,8 +1346,18 @@ void KWTextFrameSet::setTabList( QTextCursor * cursor,const QList<KoTabulator> *
 	emit repaintChanged();
 	formatMore();
     }
-/*    undoRedoInfo.newParagLayout.margins[m] = margin;
-      undoRedoInfo.clear();*/
+
+    undoRedoInfo.newParagLayout.m_tabList.clear();
+    QListIterator<KoTabulator> it( *tabList );
+    for ( it.toFirst(); it.current(); ++it ) {
+        KoTabulator *t = new KoTabulator;
+        t->type = it.current()->type;
+        t->mmPos = it.current()->mmPos;
+        t->inchPos = it.current()->inchPos;
+        t->ptPos = it.current()->ptPos;
+        undoRedoInfo.newParagLayout.m_tabList.append( t );
+    }
+    undoRedoInfo.clear();
     emit showCursor();
     emit updateUI();
 }

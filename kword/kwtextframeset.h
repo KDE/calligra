@@ -162,7 +162,7 @@ private:
      */
     struct UndoRedoInfo { // borrowed from QTextEdit
         enum Type { Invalid, Insert, Delete, Return, RemoveSelected, Format,
-                    Alignment, Counter, Margin, LineSpacing, Borders };
+                    Alignment, Counter, Margin, LineSpacing, Borders, Tabulator };
         UndoRedoInfo( KWTextFrameSet * fs );
         ~UndoRedoInfo();
         void clear();

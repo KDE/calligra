@@ -425,6 +425,7 @@ void KWTextParag::setBottomBorder( const Border & _brd )
 
 void  KWTextParag::setTabList( const QList<KoTabulator> *tabList )
 {
+    m_tabList.clear();
     QListIterator<KoTabulator> it( *tabList );
     for ( it.toFirst(); it.current(); ++it ) {
         KoTabulator *t = new KoTabulator;

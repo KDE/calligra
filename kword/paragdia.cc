@@ -1454,13 +1454,31 @@ void KWParagDia::setCounter( Counter _counter )
 }
 
 /*================================================================*/
-/*void KWParagDia::setTabList( const QList<KoTabulator> *tabList )
+void KWParagDia::setTabList( const QList<KoTabulator> *tabList )
 {
-    lTabs->clear();
-    QListIterator<KoTabulator> it(*tabList);
-    for ( ; it.current(); ++it )
-        lTabs->insertItem(QString::number((*it)->ptPos));
-}*/
+    _tabList.clear();
+    QListIterator<KoTabulator> it( *tabList );
+    for ( it.toFirst(); it.current(); ++it ) {
+        KoTabulator *t = new KoTabulator;
+        t->type = it.current()->type;
+        t->mmPos = it.current()->mmPos;
+        t->inchPos = it.current()->inchPos;
+        t->ptPos = it.current()->ptPos;
+        _tabList.append( t );
+        switch ( unit )
+        {
+            case U_MM:
+                lTabs->insertItem(QString::number(t->mmPos));
+                break;
+            case U_INCH:
+                lTabs->insertItem(QString::number(t->inchPos));
+                break;
+            case U_PT:
+                lTabs->insertItem(QString::number(t->ptPos));
+                break;
+        }
+    }
+}
 
 /*================================================================*/
 KWUnit KWParagDia::leftIndent() const
@@ -1512,6 +1530,7 @@ void KWParagDia::setParagLayout( const KWParagLayout & lay )
     setRightBorder( lay.rightBorder );
     setTopBorder( lay.topBorder );
     setBottomBorder( lay.bottomBorder );
+    setTabList( &lay.m_tabList);
     oldLayout=lay;
     //setTabList( lay.ParagLayout->getTabList );
     //border init it's necessary to allow left border works
