@@ -1,0 +1,7 @@
+KOffice 1.3post
+===============
+
+- add support for some old KWord syntax features (only useful with koconverter.)
+- improved handling of footnotes and endnotes (which are now differenciated.)
+- add support for notes
+- support language as character property
