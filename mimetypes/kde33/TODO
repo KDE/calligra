@@ -8,5 +8,5 @@ DONE: application/x-vnd.oasis.openoffice.presentation / oop
 TODO: application/x-vnd.oasis.openoffice.presentation-template / otp
 TODO: application/x-vnd.oasis.openoffice.chart / ooc
 TODO: application/x-vnd.oasis.openoffice.chart-template / otc
-TODO: application/x-vnd.oasis.openoffice.formula / oof
+DONE: application/x-vnd.oasis.openoffice.formula / oof
 TODO: application/x-vnd.oasis.openoffice.formula-template / otf

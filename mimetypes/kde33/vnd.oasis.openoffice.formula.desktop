@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/vnd.oasis.openoffice.formula
+Patterns=*.oof;*.OOF
+Icon=formula
+Comment=OASIS Open Office Formula
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.oof
