@@ -57,9 +57,12 @@ public:
       return 0xffffffff;
   }
 
-  Q_LONG readBlock( char *data, Q_ULONG maxlen ) { return m_store->read(data, maxlen); }
-  Q_LONG writeBlock( const char *data, Q_ULONG len ) { return m_store->write( data, len ); }
-  Q_LONG readLine( char *, Q_ULONG  ) { return -1; } // unsupported
+  virtual Q_LONG readBlock( char *data, Q_ULONG maxlen ) { return m_store->read(data, maxlen); }
+  virtual Q_LONG writeBlock( const char *data, Q_ULONG len ) { return m_store->write( data, len ); }
+  // ### TODO: KDE4 remove KoStoreDevice::readLine (cannot be done now due to BIC)
+  virtual Q_LONG readLine( char *data, Q_ULONG maxlen ) { return QIODevice::readLine( data, maxlen ); }
+  // Not virtual, only to uncover shadow
+  Q_LONG writeBlock( const QByteArray& data ) { return QIODevice::writeBlock( data ); }
 
   int getch() {
     char c[2];
