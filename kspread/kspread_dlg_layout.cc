@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+                                   /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -143,25 +143,25 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     goUpDiagonalStyle = obj->goUpDiagonalStyle( _left, _top );
     goUpDiagonalWidth = obj->goUpDiagonalWidth( _left, _top );
     goUpDiagonalColor = obj->goUpDiagonalColor( _left, _top );
-    
+
     // Look at the upper right one for the right border.
     obj = table->cellAt( _right, _top );
     rightBorderStyle = obj->rightBorderStyle( _right, _top );
     rightBorderWidth = obj->rightBorderWidth( _right, _top );
     rightBorderColor = obj->rightBorderColor( _right, _top );
-    
+
     // Look at the bottom left cell for the bottom border.
     obj = table->cellAt( _left, _bottom );
     bottomBorderStyle = obj->bottomBorderStyle( _left, _bottom );
     bottomBorderWidth = obj->bottomBorderWidth( _left, _bottom );
     bottomBorderColor = obj->bottomBorderColor( _left, _bottom );
-    
+
     // Just an assumption
     obj = table->cellAt( _right, _top );
     verticalBorderStyle = obj->leftBorderStyle( _right, _top );
     verticalBorderWidth = obj->leftBorderWidth( _right, _top );
     verticalBorderColor = obj->leftBorderColor( _right, _top );
-    
+
     // Just an assumption
     obj = table->cellAt( _right, _bottom );
     horizontalBorderStyle = obj->topBorderStyle( _right, _bottom );
@@ -306,10 +306,10 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 		eStyle = KSpreadCell::ST_Undef;
 	}
     }
-    
+
     if( !bTextRotation )
         textRotation = 0;
-    
+
     for ( int y = _top; y <= _bottom; y++ )
     {
         KSpreadCell *obj = table->cellAt( _left, y );
@@ -548,7 +548,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 	postfix->setText( dlg->postfix.data() );
 
     tmpQLabel = new QLabel( box, "Label_2" );
-    grid->addWidget(tmpQLabel,1,0);
+    grid->addWidget(tmpQLabel,2,0);
     tmpQLabel->setText( i18n("Postfix") );
 
     char buffer[ 100 ];
@@ -565,7 +565,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 	precision->setText( "########" );
 
     tmpQLabel = new QLabel( box, "Label_3" );
-    grid->addWidget(tmpQLabel,2,0);
+    grid->addWidget(tmpQLabel,1,0);
     tmpQLabel->setText( i18n("Precision") );
 
     if ( dlg->prefix.isNull() )

@@ -201,7 +201,7 @@ void KSpreadCell::copyAll( KSpreadCell *cell )
 void KSpreadCell::copyContent( KSpreadCell* cell )
 {
     ASSERT( !isDefault() ); // trouble ahead...
-	
+
     setCellText( cell->text() );
     setAction(cell->action() );
 
@@ -1096,10 +1096,15 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
                 {
 		    if(o.at(pos1)==' ')
 			pos1 = pos1 + 1;
-		    m_strOutText += "\n" + o.mid( pos1, ( pos - pos1 ) );
-		    start = pos1;
+                    if(pos1!=0 && pos!=-1)
+                        {
+                        m_strOutText += "\n" + o.mid( pos1, ( pos - pos1 ) );
+                        lines++;
+                        }
+                    else
+                        m_strOutText += o.mid( pos1, ( pos - pos1 ) );
+                    start = pos1;
 		    pos1 = pos;
-		    lines++;
 		}
 		pos++;
 	    }
@@ -1474,7 +1479,12 @@ void KSpreadCell::offsetAlign( int _col,int _row )
 			m_iTextY = ( h - m_iOutTextHeight*m_nbLines ) / 2 +m_fmAscent;
 		    else
 			m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-	else
+         else if( m_bMultiRow )
+	    if(( h - m_iOutTextHeight*m_nbLines )>0)
+		m_iTextY = ( h - m_iOutTextHeight*m_nbLines ) / 2 +m_fmAscent;
+	    else
+		m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+        else
 	    if(( h - m_iOutTextHeight )>0)
 		m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
 	    else
@@ -1912,7 +1922,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     QPen right_pen = rightBorderPen( _col, _row );
     QPen top_pen = topBorderPen( _col, _row );
     QPen bottom_pen = bottomBorderPen( _col, _row );
-			
+
     //
     // First draw the default borders so that they dont
     // overwrite any other border.
@@ -1930,9 +1940,9 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	    int db = 0;
 	    if ( b.style() != Qt::NoPen )
 		db = 1;
-	
+
 	    _painter.setPen( table()->doc()->defaultGridPen() );
-	    _painter.drawLine( _tx, _ty + dt, _tx, _ty + h - db );	
+	    _painter.drawLine( _tx, _ty + dt, _tx, _ty + h - db );
 	}
     }
     if ( top_pen.style() == Qt::NoPen )
@@ -1971,7 +1981,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	int bottom = ( QMAX( 0, -1 + (int)bottom_pen.width() ) ) / 2 + 1;
 	// printf("r top=%i b=%i\n", top, bottom );
 	_painter.setPen( right_pen );
-	_painter.drawLine( w + _tx, _ty - top, w + _tx, _ty + h + bottom );	
+	_painter.drawLine( w + _tx, _ty - top, w + _tx, _ty + h + bottom );
     }
     if ( top_pen.style() != Qt::NoPen )
     {
@@ -2006,7 +2016,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	int top = top_pen.width() + BORDER_SPACE;
 	int right = right_pen.width() + BORDER_SPACE;
 	int bottom = bottom_pen.width() + BORDER_SPACE;
-	
+
 	_painter.setPen( Qt::NoPen );
 	_painter.setBrush( m_backGroundBrush );
 	_painter.drawRect( _tx + left, _ty + top, w - left - right, h - top - bottom );
@@ -2117,10 +2127,10 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	    else
                 m_textPen.setColor( textColor( _col, _row) );
 	}
-	
+
 	//_painter.setFont( m_textFont );
 	conditionAlign( _painter, _col, _row );
-	
+
 	if ( !m_bMultiRow && !m_bVerticalText && !m_rotateAngle)
 	    _painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText );
 	else if( m_rotateAngle!=0)
@@ -2406,7 +2416,7 @@ void KSpreadCell::setLeftBorderPen( const QPen& p )
     KSpreadCell* cell = m_pTable->cellAt( column() - 1, row() );
     if ( cell && cell->hasProperty( PRightBorder ) )
 	cell->clearProperty( PRightBorder );
-    
+
     KSpreadLayout::setLeftBorderPen( p );
 }
 
@@ -2415,7 +2425,7 @@ void KSpreadCell::setTopBorderPen( const QPen& p )
     KSpreadCell* cell = m_pTable->cellAt( column(), row() - 1 );
     if ( cell && cell->hasProperty( PBottomBorder ) )
 	cell->clearProperty( PBottomBorder );
-    
+
     KSpreadLayout::setTopBorderPen( p );
 }
 
@@ -2424,7 +2434,7 @@ void KSpreadCell::setRightBorderPen( const QPen& p )
     KSpreadCell* cell = m_pTable->cellAt( column() + 1, row() );
     if ( cell && cell->hasProperty( PLeftBorder ) )
 	cell->clearProperty( PLeftBorder );
-    
+
     KSpreadLayout::setRightBorderPen( p );
 }
 
@@ -2433,7 +2443,7 @@ void KSpreadCell::setBottomBorderPen( const QPen& p )
     KSpreadCell* cell = m_pTable->cellAt( column(), row() + 1 );
     if ( cell && cell->hasProperty( PTopBorder ) )
 	cell->clearProperty( PTopBorder );
-    
+
     KSpreadLayout::setBottomBorderPen( p );
 }
 
@@ -2445,7 +2455,7 @@ const QPen& KSpreadCell::rightBorderPen( int _col, int _row ) const
 	if ( cell->hasProperty( PLeftBorder ) )
 	    return cell->leftBorderPen( _col + 1, _row );
     }
-    
+
     return KSpreadLayout::rightBorderPen( _col, _row );
 }
 
@@ -2457,7 +2467,7 @@ const QPen& KSpreadCell::leftBorderPen( int _col, int _row ) const
 	if ( cell->hasProperty( PRightBorder ) )
 	    return cell->rightBorderPen( _col - 1, _row );
     }
-    
+
     return KSpreadLayout::leftBorderPen( _col, _row );
 }
 
@@ -2469,7 +2479,7 @@ const QPen& KSpreadCell::bottomBorderPen( int _col, int _row ) const
 	if ( cell->hasProperty( PTopBorder ) )
 	    return cell->topBorderPen( _col, _row + 1 );
     }
-    
+
     return KSpreadLayout::bottomBorderPen( _col, _row );
 }
 
@@ -2481,7 +2491,7 @@ const QPen& KSpreadCell::topBorderPen( int _col, int _row ) const
 	if ( cell->hasProperty( PBottomBorder ) )
 	    return cell->bottomBorderPen( _col, _row - 1 );
     }
-    
+
     return KSpreadLayout::topBorderPen( _col, _row );
 }
 
@@ -3049,7 +3059,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
 
     if( m_rotateAngle != 0 )
 	format.setAttribute( "angle", m_rotateAngle );
-    
+
     // if ( m_textFont != m_pTable->defaultCell()->textFont() )
     format.appendChild( createElement( "font", m_textFont, doc ) );
 

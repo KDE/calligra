@@ -234,9 +234,12 @@ void KSpreadDlgFormula::slotOk()
     if( m_pView->canvasWidget()->editor()!=0)
         {
         ASSERT( m_pView->canvasWidget()->editor() );
-
-        int pos=m_pView->canvasWidget()->editor()->cursorPosition()+ result->text().length();
-        m_pView->canvasWidget()->editor()->setText( result->text() );
+        QString tmp;
+        tmp=result->text();
+        if(tmp.at(0)!='=')
+                tmp="="+tmp;
+        int pos=m_pView->canvasWidget()->editor()->cursorPosition()+ tmp.length();
+        m_pView->canvasWidget()->editor()->setText( tmp );
         m_pView->canvasWidget()->editor()->setFocus();
         m_pView->canvasWidget()->editor()->setCursorPosition( pos );
         }
@@ -1359,7 +1362,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp.firstElementLabel=i18n("Double");
         tmp.secondElementLabel=i18n("Double");
 
-       
+
         tmp.help=m_funcName+"("+"Double,Double"+")";
         tmp.firstElementType=type_double;
         tmp.secondElementType=type_double;
@@ -1377,7 +1380,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+="sign(5) equals 5.\nsign(-5) equals -1.\nsign(0) equals 0.\n";
         tmp.help=tmp1;
         tmp.firstElementType=type_double;
-    }    
+    }
     else if (m_funcName=="INV")
     {
         tmp.nb_param=1;

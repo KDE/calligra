@@ -598,7 +598,7 @@ void KSpreadView::formulaLeftSuper()
 void KSpreadView::formulaLeftSub()
 {
     activateFormulaEditor();
-	
+
     canvasWidget()->insertFormulaChar(Box::LSUB );
 }
 
@@ -655,7 +655,7 @@ void KSpreadView::autoSum()
 	    cell = activeTable()->cellAt( m_pCanvas->markerColumn(), --r );
 	}
 	while ( cell && cell->isValue() );
-	
+
 	if ( r + 1 < m_pCanvas->markerRow() )
         {
 	    m_pTable->setChooseRect( QRect( m_pCanvas->markerColumn(), r + 1, 1, m_pCanvas->markerRow() - r - 1 ) );
@@ -889,7 +889,7 @@ void KSpreadView::formulaSelection( const QString &_math )
 
     if( _math == i18n("Others...") )
     {
-        insertFormula();
+        insertMathExpr();
 	return;
     }
 
@@ -1597,7 +1597,7 @@ void KSpreadView::resizeEvent( QResizeEvent * )
     // m_pCancelButton->setGeometry( 60, 2, 26, 26 );
     // m_pOkButton->setGeometry( 90, 2, 26, 26 );
     // m_pEditWidget->setGeometry( 125, 2, 200, 26 );
-	
+
     m_pTabBarFirst->setGeometry( 0, height() - 16, 16, 16 );
     m_pTabBarFirst->show();
     m_pTabBarLeft->setGeometry( 16, height() - 16, 16, 16 );
@@ -1914,7 +1914,7 @@ void KSpreadView::resizeRow()
     if(selection.bottom()==0x7FFF)
     	KMessageBox::error( this, i18n("Area too large!"));
     else
-    	{	
+    	{
     	KSpreadresize2* dlg = new KSpreadresize2( this, "Resize row", KSpreadresize2::resize_row );
     	dlg->show();
     	}
@@ -1938,8 +1938,8 @@ void KSpreadView::equalizeRow()
     if(selection.bottom()==0x7FFF)
     	KMessageBox::error( this, i18n("Area too large!"));
     else
-    	{	
-	canvasWidget()->equalizeRow();    	
+    	{
+	canvasWidget()->equalizeRow();
     	}
 }
 
@@ -2250,7 +2250,7 @@ void KSpreadView::slotChangeChooseSelection( KSpreadTable *_table, const QRect &
 	return;
 
     m_pCanvas->updateChooseMarker( _old, _new );
-	
+
     // Emit a signal for internal use
     emit sig_chooseSelectionChanged( _table, _new );
 }
@@ -2297,7 +2297,7 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
 	QRegion r2( _old );
 	QRegion diff = r1 & r2;
 	QRegion uni = ( r1 + r2 ) - diff;
-	
+
 	QArray<QRect> rects = uni.rects();
 	for( int i = 0; i < (int)rects.size(); ++i )
 	    m_pCanvas->updateCellRect( rects[i] );
@@ -2319,7 +2319,7 @@ void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )
     // Unselect the action which only works on a selection
     // with mutiple cells.
     m_tableFormat->setEnabled( FALSE );
-	
+
     QRect r( _old.x(), _old.y(), _old.width() + 1, _old.height() + 1 );
     m_pCanvas->updateCellRect( r );
     // ### Use smart update here
