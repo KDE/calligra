@@ -76,7 +76,8 @@ private:
     KLineEdit* m_pEdit;
     bool m_blockCheck;
     bool m_sizeUpdate;
-    int  m_length;
+    uint m_length;
+    int  m_fontLength;
 };
 
 

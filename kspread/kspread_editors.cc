@@ -36,7 +36,8 @@ KSpreadCellEditor::~KSpreadCellEditor()
 KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent, const char* _name )
   : KSpreadCellEditor( _cell, _parent, _name ),
     m_sizeUpdate(false),
-    m_length(0)
+    m_length(0),
+    m_fontLength(0)
 {
   m_pEdit = new KLineEdit( this );
   m_pEdit->installEventFilter( this );
@@ -53,6 +54,12 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
   canvas()->setChooseMarkerColumn( canvas()->markerColumn() );
 
   m_blockCheck = FALSE;
+
+  if (m_fontLength == 0)
+  {
+    QFontMetrics fm( m_pEdit->font() );
+    m_fontLength = fm.width('m');
+  }
 }
 
 KSpreadTextEditor::~KSpreadTextEditor()
@@ -88,9 +95,12 @@ void KSpreadTextEditor::setEditorFont(QFont const & font, bool updateSize)
   if (updateSize)
   {
     QFontMetrics fm( m_pEdit->font() );
-    int mw = fm.width( m_pEdit->text() ) + fm.width('x');
+    m_fontLength = fm.width('m');
+
+    int mw = fm.width( m_pEdit->text() ) + m_fontLength;
     if (mw < width())
       mw = width();
+
     int mh = fm.height();
     if (mh < height())
       mh = height();
@@ -110,38 +120,37 @@ void KSpreadTextEditor::slotTextChanged( const QString& t )
   // if ( canvas->chooseCursorPosition() >= 0 )
   // m_pEdit->setCursorPosition( canvas->chooseCursorPosition() );
   checkChoose();
-  
-  if((cell()->formatType())==KSpreadCell::Percentage)
-  {
-    if((t.length()==1) && t[0].isDigit())
-    {
-      QString tmp=t;
-      tmp=t+"%";
-      m_pEdit->setText(tmp);
-      m_pEdit->setCursorPosition(1);
-    }
-  }
 
+  kdDebug() << t.length() << " m_L: " << m_length << " m_fontL: " << m_fontLength << endl;
   if (t.length() > m_length)
   {
     m_length = t.length() + 10;
-    QFontMetrics fm( m_pEdit->font() );
+    kdDebug() << "m_length " << m_length << endl;
+   
     // Too slow for long texts
+    // QFontMetrics fm( m_pEdit->font() );
     //  int mw = fm.width( t ) + fm.width('x');
-    int mw = fm.width('x') * m_length;
-    int mh = fm.height();
-
-    if (mh < height())
-      mh = height();
+    int mw = m_fontLength * m_length;
     
     if (mw < width())
       mw = width();
     
-    setGeometry(x(), y(), mw, mh);
+    setGeometry(x(), y(), mw, height());
+    m_length -= 2;
+  }
+
+  if ( (cell()->formatType()) == KSpreadCell::Percentage )
+  {
+    if ( (t.length() == 1) && t[0].isDigit() )
+    {
+      QString tmp = t + " %";
+      m_pEdit->setText(tmp);
+      m_pEdit->setCursorPosition(1);
+      return;
+    }
   }
 
   canvas()->view()->editWidget()->setText( t );
-  
   // canvas()->view()->editWidget()->setCursorPosition( m_pEdit->cursorPosition() );
 }
 
@@ -231,8 +240,14 @@ QString KSpreadTextEditor::text() const
 
 void KSpreadTextEditor::setText(QString text)
 {
-    if(m_pEdit !=0)
+    if (m_pEdit != 0)
         m_pEdit->setText(text);
+
+    if (m_fontLength == 0)
+    {
+      QFontMetrics fm( m_pEdit->font() );
+      m_fontLength = fm.width('x');
+    }
 }
 
 int KSpreadTextEditor::cursorPosition() const
