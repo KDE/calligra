@@ -1173,7 +1173,7 @@ bool KoDocument::openFile()
         // So don't resetURL() or else the caption won't be set when
         // foreign files are opened (an annoying bug).
         // - Clarence
-        // 
+        //
 #if 0
         if ( isReadWrite() )
             resetURL();
@@ -1532,7 +1532,10 @@ void KoDocument::setTitleModified( const QString caption, bool mod )
     // we must be root doc so update caption in all related windows
     QPtrListIterator<KoMainWindow> it( d->m_shells );
     for (; it.current(); ++it )
+    {
         it.current()->updateCaption( caption, mod );
+        it.current()->updateReloadFileAction(this);
+    }
 }
 
 void KoDocument::setTitleModified()

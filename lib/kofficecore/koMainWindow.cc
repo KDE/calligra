@@ -359,7 +359,6 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   d->m_paDocInfo->setEnabled( enable );
   d->m_paSave->setEnabled( enable );
   d->m_paSaveAs->setEnabled( enable );
-  d->m_reloadfile->setEnabled( enable );
   d->m_paPrint->setEnabled( enable );
   d->m_paPrintPreview->setEnabled( enable );
   d->m_sendfile->setEnabled( enable);
@@ -378,6 +377,11 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   }
 }
 
+void KoMainWindow::updateReloadFileAction(KoDocument *doc)
+{
+    d->m_reloadfile->setEnabled( doc && !doc->url().isEmpty()&&doc->isModified());
+}
+
 void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const QPtrList<KoView> & views )
 {
   d->m_rootDoc = doc;
@@ -385,7 +389,6 @@ void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const QPtrList<KoView
   bool enable = d->m_rootDoc != 0 ? true : false;
   d->m_paDocInfo->setEnabled( enable );
   d->m_paSave->setEnabled( enable );
-  d->m_reloadfile->setEnabled( enable );
   d->m_paSaveAs->setEnabled( enable );
   d->m_paPrint->setEnabled( enable );
   d->m_paPrintPreview->setEnabled( enable );
@@ -522,6 +525,7 @@ bool KoMainWindow::openDocumentInternal( const KURL & url, KoDocument *newdoc )
         delete newdoc;
         return false;
     }
+    updateReloadFileAction(newdoc);
     return true;
 }
 

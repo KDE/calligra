@@ -128,6 +128,7 @@ public:
     void reloadRecentFileList();
 
     void updateCaption( const QString caption, bool mod ); // BCI: make virtual
+    void updateReloadFileAction(KoDocument *doc);
 
 signals:
     /**
