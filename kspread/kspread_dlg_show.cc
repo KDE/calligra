@@ -25,6 +25,7 @@
 #include "kspread_doc.h"
 #include "kspread_map.h"
 #include "kspread_tabbar.h"
+#include "kspread_undo.h"
 #include <qlayout.h>
 #include <klocale.h>
 #include <qlistbox.h>
@@ -81,7 +82,25 @@ void KSpreadshow::slotOk()
             listTable.append( list->text(i));
         }
     }
-    m_pView->tabBar()->showTable(listTable);
+
+    //m_pView->tabBar()->showTable(listTable);
+
+    if ( listTable.count()==0 )
+        return;
+
+    KSpreadSheet *table;
+    KSpreadMacroUndoAction *macroUndo=new KSpreadMacroUndoAction( m_pView->doc(),i18n("Show Table"));
+    for ( QStringList::Iterator it = listTable.begin(); it != listTable.end(); ++it )
+    {
+        table=m_pView->doc()->map()->findTable( *it );
+        if ( !m_pView->doc()->undoBuffer()->isLocked() )
+        {
+            KSpreadUndoShowTable* undo = new KSpreadUndoShowTable( m_pView->doc(), table );
+            macroUndo->addCommand( undo );
+        }
+        table->hideTable(false);
+    }
+    m_pView->doc()->undoBuffer()->appendUndo( macroUndo );
 
     m_pView->slotUpdateView( m_pView->activeTable() );
     accept();

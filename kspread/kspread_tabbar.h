@@ -64,74 +64,11 @@ public:
     virtual ~TabBar();
 
     /**
-     * Adds a tab to the bar and paints it. The tab does not become active.
-     * call @ref #setActiveTab to do so.
-     */
-    void addTab( const QString& _text );
-
-    /**
-     * Adds a hidden tab.
+     * Sets the tab bar to be read only.
      *
-     * @see KSpreadView::setActiveTable
-     */
-    void addHiddenTab( const QString & text );
-
-    /**
-     * Removes a hidden tab.
-     *
-     * @see KSpreadView::setActiveTable
-     */
-    void removeHiddenTab(const QString & text);
-
-    /**
-     * Removes the tab from the bar. If the tab was the active one then the one
-     * left of it ( or if not available ) the one right of it will become active.
-     * It is recommended to call @ref #setActiveTab after a call to this function.
-     */
-    void removeTab( const QString& _text );
-
-    /**
-     * Renames a tab.
-     */
-    void renameTab( const QString& old_name, const QString& new_name );
-
-    /**
-     * Removes all tabs from the bar and repaints the widget.
-     */
-    void removeAllTabs();
-
-    bool canScrollLeft() const;
-
-    bool canScrollRight() const;
-
-    /**
-     * Highlights this tab.
-     */
-    void setActiveTab( const QString& _text );
-
-    /**
-    * Remove table name from tabList and
-    * put tablename in tablehide
-    * and highlights first name in tabList
-    */
-    void hideTable();
-    void hideTable(const QString& tableName );
-
-
-    /**
-     * Shows the table. This makes only sense if
-     * the table was hiddem before.
-     *
-     * The table does not become automatically the active one.
-     */
-    void showTable(const QString& _text);
-    void showTable(QStringList list);
-    void displayTable(const QString& _text);
-
-    /**
-     * Sets the tab bar to be read only. This means, no dragging
-     * for reordering the tabs is possible.
-     * Signal contextMenu and doubleClicked would not be emitted.
+     * If the tab bar is read only, tab reordering is not allowed.
+     * This means that signal tabMoved, contextMenu and doubleClicked
+     * would not be emitted.
      */
     void setReadOnly( bool ro );
 
@@ -139,6 +76,43 @@ public:
      * Returns true if the tab bar is read only.
      */
     bool readOnly() const;
+
+    /**
+     * Adds a tab to the tab bar.
+     */
+    void addTab( const QString& text );
+
+    /**
+     * Removes a tab from the bar. If the tab was the active one then
+     * no tab will be active.
+     * It is recommended to call setActiveTab after a call to this function.
+     */
+    void removeTab( const QString& text );
+
+    /**
+     * Replaces all tabs with the list of strings.
+     */
+    void setTabs( const QStringList& list );
+
+    /*
+     * Returns all the tab as list of strings.
+     */
+    QStringList tabs() const;
+
+    /**
+     * Renames a tab.
+     */
+    void renameTab( const QString& old_name, const QString& new_name );
+
+    /**
+     * Returns true if it is possible to scroll one tab left.
+     */
+    bool canScrollLeft() const;
+
+    /**
+     * Returns true if it is possible to scroll one tab right.
+     */
+    bool canScrollRight() const;
 
     /**
      * Moves a tab to another position and reorder other tabs.
@@ -153,10 +127,21 @@ public:
     void moveTab( unsigned tab, unsigned target );
 
 public slots:
+
     void scrollLeft();
     void scrollRight();
     void scrollFirst();
     void scrollLast();
+
+    /**
+     * Sets active tab.
+     */
+    void setActiveTab( const QString& text );
+
+    /**
+     * Removes all tabs.
+     */
+    void clear();
 
 signals:
 
