@@ -27,7 +27,7 @@ VERSION 1
 	- break lines
 
 VERSION 2
-	- unicode
+	- unicode					DONE
 	- table						DONE AT 80 %
 	- picture					DONE AT 50 %
 	- variable

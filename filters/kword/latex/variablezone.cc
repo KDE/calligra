@@ -26,15 +26,15 @@
 #include <kdebug.h>		/* for kdDebug() stream */
 #include <qregexp.h>		/* for QRegExp() --> escapeLatin1 */
 
-#include "textzone.h"
+#include "variablezone.h"
 #include "para.h"
 
 #define CSTART 0x00C0
 
 /*******************************************/
-/* TextZone                                */
+/* VariableZone                                */
 /*******************************************/
-TextZone::TextZone(Para *para)
+VariableZone::VariableZone(Para *para)
 {
 	setPara(para);
 	setSize(para->getSize());
@@ -45,9 +45,9 @@ TextZone::TextZone(Para *para)
 }
 
 /*******************************************/
-/* TextZone                                */
+/* VariableZone                                */
 /*******************************************/
-TextZone::TextZone(QString texte, Para *para): _texte(texte)
+VariableZone::VariableZone(QString texte, Para *para): _texte(texte)
 {
 	setPara(para);
 	setSize(para->getSize());
@@ -58,9 +58,9 @@ TextZone::TextZone(QString texte, Para *para): _texte(texte)
 }
 
 /*******************************************/
-/* ~TextZone                               */
+/* ~VariableZone                               */
 /*******************************************/
-TextZone::~TextZone()
+VariableZone::~VariableZone()
 {
 	kdDebug() << "Destruction of a area" << endl;
 }
@@ -71,7 +71,7 @@ TextZone::~TextZone()
 /* Use the format only if teh user wants   */
 /* that and it's not a title.              */
 /*******************************************/
-bool TextZone::useFormat() const
+bool VariableZone::useFormat() const
 {
 	return !getPara()->isChapter();
 }
@@ -82,7 +82,7 @@ bool TextZone::useFormat() const
 /* Convert special caracters (unicode) in  */
 /* latex usable caracters.                 */
 /*******************************************/
-QString TextZone::escapeLatin1(QString text)
+QString VariableZone::escapeLatin1(QString text)
 {
 	static const char *escapes[64] =
 	{
@@ -253,7 +253,7 @@ QString TextZone::escapeLatin1(QString text)
 /* Convert all the instance of one         */
 /* character in latex usable caracter.     */
 /*******************************************/
-void TextZone::convert(QString& texte, int unicode, const char* escape)
+void VariableZone::convert(QString& texte, int unicode, const char* escape)
 {
 	QString expression;
 	QString texte_temp;
@@ -274,14 +274,14 @@ void TextZone::convert(QString& texte, int unicode, const char* escape)
 /* Analyse a text format, get the text used*/
 /* by this format.                         */
 /*******************************************/
-void TextZone::analyse(const QDomNode balise)
+void VariableZone::analyse(const QDomNode balise)
 {
 	kdDebug() << "FORMAT" << endl;
 	/* Get header information (size, position)
 	 * Get infos. to format the text
 	 */
 	//if(balise != 0)
-		analyseTextFormat(balise);
+		analyseVariableFormat(balise);
 	
 	/* Format the text */
 	_texte = _texte.mid(getPos(), getLength());
@@ -297,7 +297,7 @@ void TextZone::analyse(const QDomNode balise)
 /* Analyse a text format, get the text used*/
 /* by this format.                         */
 /*******************************************/
-void TextZone::analyse()
+void VariableZone::analyse()
 {
 	kdDebug() << "ZONE" << endl;
 	
@@ -314,20 +314,26 @@ void TextZone::analyse()
 /*******************************************/
 /* Generate the text formated (if needed). */
 /*******************************************/
-void TextZone::generate(QTextStream &out, int tab)
+void VariableZone::generate(QTextStream &out, int tab)
 {
 
 	if(useFormat())
 		generate_format_begin(out);
 
 	/* Display the text */
-	if(mustUseLatin1())
-		display(escapeLatin1(_texte), out, tab);
-	else if(mustUseUnicode())
-		display(_texte, out, tab);
-
+	kdDebug() << "type : " << getType() << endl;
+	if((getType() == VAR_DATE) && !isFix())
+		out << "\\today" << endl;
+	else
+	{
+		if(mustUseLatin1())
+			display(escapeLatin1(getText()), out, tab);
+		else if(mustUseUnicode())
+			display(getText(), out, tab);
+	}
 	if(useFormat())
 		generate_format_end(out);
+	
 }
 
 /*******************************************/
@@ -336,7 +342,7 @@ void TextZone::generate(QTextStream &out, int tab)
 /* Trunc the text in about 80 caracters of */
 /* width except if there are not spaces.   */
 /*******************************************/
-void TextZone::display(QString texte, QTextStream& out, int tab)
+void VariableZone::display(QString texte, QTextStream& out, int tab)
 {
 	QString line;
 	int index = 0, end = 0;
@@ -368,7 +374,7 @@ void TextZone::display(QString texte, QTextStream& out, int tab)
 /*******************************************/
 /* Write the begining format markup.       */
 /*******************************************/
-void TextZone::generate_format_begin(QTextStream & out)
+void VariableZone::generate_format_begin(QTextStream & out)
 {
 	kdDebug() << "GENERATE FORMAT BEGIN" << endl;
 
@@ -420,7 +426,7 @@ void TextZone::generate_format_begin(QTextStream & out)
 /*******************************************/
 /* Write the format end markup.            */
 /*******************************************/
-void TextZone::generate_format_end(QTextStream & out)
+void VariableZone::generate_format_end(QTextStream & out)
 {
 	kdDebug() << "GENERATE FORMAT END" << endl;
 	/* Alignement */
@@ -451,7 +457,7 @@ void TextZone::generate_format_end(QTextStream & out)
 		out << "}";
 }
 
-QString convertSpecialChar(int c)
+/*QString convertSpecialChar(int c)
 {
 	QString output;
 
@@ -461,4 +467,4 @@ QString convertSpecialChar(int c)
 			break;
 		default: return output.setNum(c);
 	}
-}
+}*/

@@ -40,6 +40,7 @@ FileHeader::FileHeader()
 	_standardPage = 0;
 	_processing   = TP_NORMAL;
 	setFileHeader(this);		/* for xmlParser class. */
+	_tabulationSize = 4;
 }
 
 /*******************************************/

@@ -25,7 +25,9 @@
 #include "texte.h"		/* father class.        */
 #include "format.h"		/* children classes.    */
 //#include "picturezone.h"
+#include "fileheader.h"
 #include "textzone.h"
+#include "variablezone.h"
 #include "footnote.h"
 #include "anchor.h"
 
@@ -37,12 +39,13 @@ QPtrStack<EType> Para::_historicList;
 /*******************************************/
 Para::Para(Texte* texte)
 {
-	_element   = texte;
-	_lines     = 0;
-	_name      = 0;
-	_info      = EP_NONE;	/* the parag is not a footnote */
+	_element    = texte;
+	_lines      = 0;
+	_name       = 0;
+	_info       = EP_NONE;	/* the parag is not a footnote */
 	//_hardbrk   = EP_FLOW;	/* and it's not a new page */
-	_currentPos= 0;		/* At the beginning of the paragraph */
+	_currentPos = 0;		/* At the beginning of the paragraph */
+	_tabulation = 0;
 }
 
 /*******************************************/
@@ -127,11 +130,11 @@ void Para::analyse(const QDomNode balise)
 	kdDebug() << "ANALYSE A PARAGRAPH" << endl;
 
 	/* Analyse of the children markups */
-	for(int index= 0; index < getNbChild(balise); index++)
+	for(int index = 0; index < getNbChild(balise); index++)
 	{
 		if(getChildName(balise, index).compare("TEXT")== 0)
 		{
-			_texte =  getChild(getChild(getChild(balise, index), "#text"), 0).nodeValue();
+			_texte =  getChild(getChild(balise, index), 0).nodeValue();
 			kdDebug() << "TEXT : " << _texte << endl;
 
 		}
@@ -172,7 +175,7 @@ void Para::analyse(const QDomNode balise)
 /*******************************************/
 void Para::analyseName(const QDomNode balise)
 {
-	//<NAME name="Footnote/Endnote_1">
+	/* <NAME name="Footnote/Endnote_1"> */
 
 	_name = new QString(getAttr(balise, "NAME"));
 }
@@ -185,7 +188,7 @@ void Para::analyseName(const QDomNode balise)
 /*******************************************/
 void Para::analyseInfo(const QDomNode balise)
 {
-	//<INFO info="1">
+	/* <INFO info="1"> */
 
 	_info = (EP_INFO) getAttr(balise, "INFO").toInt();
 }
@@ -305,8 +308,8 @@ void Para::analyseFormat(const QDomNode balise)
 				zone->analyse(balise);*/
 			break;
 		case EF_VARIABLE: /* It's a variable (4) */
-		//		zone = new VariableZone(this);
-		//		zone->analyse(balise);
+				zone = new VariableZone(this);
+				zone->analyse(balise);
 			break;
 		case EF_FOOTNOTE: /* It's a footnote (5) */
 				zone = new Footnote(this);
@@ -369,7 +372,6 @@ void Para::generate(QTextStream &out)
 		generateDebut(out);
 	}
 
-	/* If a parag. have text :))) */
 	if(_lines != 0)
 	{
 		Format* zone = 0;
@@ -377,7 +379,7 @@ void Para::generate(QTextStream &out)
 
 		for(zone = _lines->first(); zone != 0; zone = _lines->next())
 		{
-			zone->generate(out);
+			zone->generate(out, _tabulation);
 		}
 		/* To separate the text zones. */
 	}
@@ -460,6 +462,8 @@ void Para::generateBeginEnv(QTextStream &out)
 void Para::openList(QTextStream &out)
 {
 	EType *type_temp = 0;
+
+	_tabulation = _tabulation + getFileHeader()->getTabulationSize();
 
 	switch(getCounterType())
 	{
@@ -604,6 +608,8 @@ void Para::closeList(EType type, QTextStream &out)
 		default:
 				out << "no suported" << endl;
 	}
+
+	_tabulation = _tabulation - getFileHeader()->getTabulationSize();
 
 	/* Pop the list which has been closed */
 	_historicList.remove();

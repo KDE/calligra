@@ -50,11 +50,9 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
         return KoFilter::FileNotFound;
     }
     /* input file Reading */
-    //QByteArray array=in.read(in.size());
     in.close();
 
     LATEXExportDia* dialog = new LATEXExportDia(in);
-    //dialog->setInputData(array);
     dialog->setOutputFile(m_chain->outputFile());
 
     dialog->exec();

@@ -73,6 +73,7 @@ class Para: public Layout
 	unsigned int          _currentPos;	/* Begining of the text to use the good format */
 	static QPtrStack<EType>  _historicList;	/* opened lists but not closed */
 	int                   _nbLines;		/* Nb of lines in a cell (table) */
+	int _tabulation;	/* Size of the para tabulation (for lists). */
 
 	public:
 		/**

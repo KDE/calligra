@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef LATEXEXPORT_H
-#define LATEXEXPORT_H
+#ifndef __LATEXEXPORT_H__
+#define __LATEXEXPORT_H__
 
 #include <qstring.h>
 #include <qtextstream.h>
@@ -28,14 +28,16 @@
 #include <koFilter.h>
 #include <koStore.h>
 
-class LATEXExport : public KoFilter {
+class LATEXExport : public KoFilter
+{
 
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    LATEXExport(KoFilter *parent, const char *name, const QStringList&);
-    virtual ~LATEXExport() {}
+	public:
+		LATEXExport(KoFilter *parent, const char *name, const QStringList&);
+		virtual ~LATEXExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+		virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 };
-#endif // LATEXExport_H
+
+#endif /* __LATEXExport_H__ */

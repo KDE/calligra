@@ -23,21 +23,21 @@
 **
 */
 
-#ifndef __KWORD_TEXTZONE_H__
-#define __KWORD_TEXTZONE_H__
+#ifndef __KWORD_VARIABLEZONE_H__
+#define __KWORD_VARIABLEZONE_H__
 
 #include <qtextstream.h>
 #include <qstring.h>
-#include "textformat.h"
+#include "variableformat.h"
 
 /***********************************************************************/
-/* Class: TextZone                                                     */
+/* Class: VariableZone                                                     */
 /***********************************************************************/
 
 /**
  * This class hold a zone of text with only one formating.
  */
-class TextZone: public TextFormat
+class VariableZone: public VariableFormat
 {
 	/* TEXT MARKUP */
 	QString _texte;
@@ -49,11 +49,11 @@ class TextZone: public TextFormat
 		 */
 
 		/**
-		 *  Creates a new instance of TextZone.
+		 *  Creates a new instance of VariableZone.
 		 *
 		 * @param Para which is the parent class.
 		 */
-		TextZone(Para *para = 0);
+		VariableZone(Para *para = 0);
 		/**
 		 *
 		 * Creates a new instance of TextZOne.
@@ -61,13 +61,13 @@ class TextZone: public TextFormat
 		 * @param QStrign the text in this zone.
 		 * @param Para which is the parent class.
 		 */
-		TextZone(QString, Para *para = 0);
+		VariableZone(QString, Para *para = 0);
 
 		/* 
 		 * Destructor
 		 *
 		 */
-		virtual ~TextZone();
+		virtual ~VariableZone();
 
 		/**
 		 * Accessors
@@ -111,6 +111,6 @@ class TextZone: public TextFormat
 };
 
 
-QString convertSpecialChar(int);
+//QString convertSpecialChar(int);
 
-#endif /* __KWORD_TEXTZONE_H__ */
+#endif /* __KWORD_VARIABLEZONE_H__ */

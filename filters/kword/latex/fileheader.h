@@ -120,6 +120,7 @@ class FileHeader: public XmlParser
 	bool     _hasEnumerate;
 	bool     _hasGraphics;
 	bool     _hasTable;
+	int      _tabulationSize;
 
 	public:
 		/**
@@ -135,21 +136,23 @@ class FileHeader: public XmlParser
 		/**
 		 * Accessors
 		 */
-		TFormat   getFormat     () const { return _format;       }
-		TOrient   getOrientation() const { return _orientation;  }
-		TColonne  getColumns    () const { return _colonne;      }
-		THeadfoot getHeadType   () const { return _headType;     }
-		THeadfoot getFootType   () const { return _footType;     }
-		TUnit     getUnit       () const { return _unite;        }
-		TProcType getProcessing () const { return _processing;   }
-		int       getStandardPge() const { return _standardPage; }
-		bool      hasHeader     () const { return _hasHeader;    }
-		bool      hasFooter     () const { return _hasFooter;    }
-		bool      hasColor      () const { return _hasColor;     }
-		bool      hasUnderline  () const { return _hasUnderline; }
-		bool      hasEnumerate  () const { return _hasEnumerate; }
-		bool      hasGraphics   () const { return _hasGraphics;  }
-		bool      hasTable      () const { return _hasTable;     }
+		TFormat   getFormat        () const { return _format;         }
+		TOrient   getOrientation   () const { return _orientation;    }
+		TColonne  getColumns       () const { return _colonne;        }
+		THeadfoot getHeadType      () const { return _headType;       }
+		THeadfoot getFootType      () const { return _footType;       }
+		TUnit     getUnit          () const { return _unite;          }
+		TProcType getProcessing    () const { return _processing;     }
+		int       getStandardPge   () const { return _standardPage;   }
+		bool      hasHeader        () const { return _hasHeader;      }
+		bool      hasFooter        () const { return _hasFooter;      }
+		bool      hasColor         () const { return _hasColor;       }
+		bool      hasUnderline     () const { return _hasUnderline;   }
+		bool      hasEnumerate     () const { return _hasEnumerate;   }
+		bool      hasGraphics      () const { return _hasGraphics;    }
+		bool      hasTable         () const { return _hasTable;       }
+		int       getTabulationSize() const { return _tabulationSize; }
+
 		/**
 		 * Modifiors
 		 */
@@ -169,6 +172,7 @@ class FileHeader: public XmlParser
 		void useEnumerate  ()           { _hasEnumerate = true;           }
 		void useGraphics   ()           { _hasGraphics  = true;           }
 		void useTable      ()           { _hasTable     = true;           }
+		void setTabulationSize (int ts) { _tabulationSize = ts;           }
 
 		void analysePaper     (const QDomNode);
 		void analyseAttributs (const QDomNode);
