@@ -130,7 +130,6 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
 
     KSpreadCell * c = table->nonDefaultCell( 1, 1 );
     QFontMetrics fm( c->textFont( 1, 1 ) );
-    double width = fm.width('x');
 
     KSpreadStyle * s = ksdoc->styleManager()->defaultStyle();
 
@@ -140,13 +139,12 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
         {
             value += step;
             emit sigProgress(value);
-            QString text( dialog->getText( row, col ) );
+            const QString text( dialog->getText( row, col ) );
 
-            double len = (double) text.length() * width;
+            // ### FIXME: how to calculate the width of numbers (as they might not be in the right format)
+            const double len = fm.width( text );
             if ( len > widths[col] )
               widths[col] = len;
-            double d;
-            bool ok = false;
 
             switch (dialog->getHeader(col))
             {
@@ -155,23 +153,26 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
               cell->setCellText( text, false, true );
               break;
              case CSVDialog::NUMBER:
-              d = ksdoc->locale()->readNumber( text, &ok );
-              // If not, try with the '.' as decimal separator
-              if ( !ok )
-                d = text.toDouble( &ok );
-              if ( !ok )
-              {
-                cell = table->nonDefaultCell( col + 1, row + 1, false, s );
-                cell->setCellText( text, false, true );
-                cell->setFormatType( KSpreadCell::Number );
-              }
-              else
-              {
-                cell = table->nonDefaultCell( col + 1, row + 1, false, s );
-                cell->setNumber( d );
-              }
-              cell->setPrecision( 2 );
-              break;
+                {
+                    bool ok = false;
+                    double d = ksdoc->locale()->readNumber( text, &ok );
+                    // If not, try with the '.' as decimal separator
+                    if ( !ok )
+                        d = text.toDouble( &ok );
+                    if ( !ok )
+                    {
+                        cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell->setCellText( text, false, true );
+                        cell->setFormatType( KSpreadCell::Number );
+                    }
+                    else
+                    {
+                        cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell->setNumber( d );
+                    }
+                    cell->setPrecision( 2 );
+                    break;
+                }
              case CSVDialog::DATE:
               cell = table->nonDefaultCell( col + 1, row + 1, false, s );
               cell->setDate( text );
