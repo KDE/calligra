@@ -1,0 +1,7 @@
+Parser - Interactive test of KEXISQL parser
+
+Usage: 
+<program_name> <driver_name>
+
+<driver_name> can be just any existing - no database is changed, but only opened 
+because of parser requirements.

@@ -44,11 +44,21 @@ KApplication *app;
 
 void usage()
 {
-	kdDebug() << "usage: " << prgname << " <driver_name> cursors" << endl;
+	kdDebug() << "usage: " << endl;
+	kdDebug() << prgname << " <driver_name> cursors" << endl;
+	kdDebug() << "  - test for cursors behaviour" << endl;
 	kdDebug() << prgname << " <driver_name> schema" << endl;
+	kdDebug() << "  - test for db schema retrieving" << endl;
 	kdDebug() << prgname << " <driver_name> dbcreation <new_db_name>" << endl;
-	kdDebug() << prgname << " <driver_name> tables <empty_db_name>" << endl;
-	kdDebug() << " (before using 'tables' test, create empty db with 'dbcreation' test)" << endl;
+	kdDebug() << "  - test for new db creation" << endl;
+	kdDebug() << prgname << " <driver_name> tables <new_db_name>" << endl;
+	kdDebug() << "  - test for tables creation and data inserting" << endl;
+	kdDebug() << prgname << " <driver_name> tableview <db_name>" << endl;
+	kdDebug() << "  - test for KexiDataTableView data-aware widget" << endl;
+	kdDebug() << " Notes:\n 'tables' test, automatically runs 'dbcreation' test.\n" 
+		<<" <new_db_name> is removed if already exists.\n"
+		<<" <db_name> must be a valid kexi database e.g. created with 'tables' test." 
+		<< endl;
 }
 
 #include "dbcreation_test.h"
