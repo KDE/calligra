@@ -22,9 +22,14 @@
 #include <koMainWindow.h>
 #include <koQueryTypes.h>
 
+#include <dcopclient.h>
+
 int main( int argc, char **argv )
 {
     KoApplication app( argc, argv );
+
+    app.dcopClient()->attach();
+    app.dcopClient()->registerAs( "kimageshop" );
 
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kimageshop" );
     ASSERT( !entry.isEmpty() );

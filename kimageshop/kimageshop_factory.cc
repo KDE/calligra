@@ -38,6 +38,7 @@ KImageShopFactory::KImageShopFactory( QObject* parent, const char* name )
 
 KImageShopFactory::~KImageShopFactory()
 {
+  delete s_global;
 }
 
 QObject* KImageShopFactory::create( QObject* parent, const char* name, const char* classname )
@@ -47,8 +48,10 @@ QObject* KImageShopFactory::create( QObject* parent, const char* name, const cha
 	qDebug("KImageShopFactory: parent does not inherit KoDocument");
 	return 0;
     }
-
-    return new KImageShopDoc( 510, 510, (KoDocument*)parent, name );
+    
+    KImageShopDoc *doc = new KImageShopDoc( 510, 510, (KoDocument*)parent, name );
+    emit objectCreated(doc);
+    return doc;
 }
 
 KInstance* KImageShopFactory::global()
