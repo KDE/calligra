@@ -271,7 +271,7 @@ public slots:
     void spellCheckerReady();
     void spellCheckerMisspelling( QString, QStringList*, unsigned );
     void spellCheckerCorrected( QString, QString, unsigned );
-    void spellCheckerDone( const char* );
+    void spellCheckerDone( const QString & );
     void spellCheckerFinished( );
     void searchDiaClosed();
 

@@ -1545,7 +1545,7 @@ void KWordView::extraSpelling()
 		      this, SLOT( spellCheckerMisspelling( QString, QStringList*, unsigned ) ) );
     QObject::connect( kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
 		      this, SLOT( spellCheckerCorrected( QString, QString, unsigned ) ) );
-    QObject::connect( kspell, SIGNAL( done( const char* ) ), this, SLOT( spellCheckerDone( const char* ) ) );
+    QObject::connect( kspell, SIGNAL( done( const QString & ) ), this, SLOT( spellCheckerDone( const QString & ) ) );
 }
 
 /*===============================================================*/
@@ -2603,7 +2603,7 @@ void KWordView::spellCheckerCorrected( QString old, QString corr, unsigned )
 }
 
 /*================================================================*/
-void KWordView::spellCheckerDone( const char* )
+void KWordView::spellCheckerDone( const QString & )
 {
     gui->getPaperWidget()->recalcWholeText();
     gui->getPaperWidget()->recalcCursor( TRUE );
