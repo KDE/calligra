@@ -28,6 +28,10 @@
 # include <sys/types.h>
 #endif
 
+#ifdef _WIN32
+# include <io.h>
+#endif
+
 #ifdef __MACOS__
 # include <console.h>
 # include <signal.h>

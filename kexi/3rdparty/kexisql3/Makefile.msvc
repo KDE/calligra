@@ -12,7 +12,8 @@ CFLAGS	=	-nologo -Zm200 -W3 -MDd -Z7 -GX -GR -DTHREADSAFE=1 -D_OFF_T_DEFINED=1 -
 CXXFLAGS	=	-nologo -Zm200 /GR /GX /GZ /TP -W3 -MDd -Z7 -GX -GR  -DUNICODE 
 LEXFLAGS	=
 YACCFLAGS	=-d
-INCPATH	=	 -Isrc -I$(QTDIR)\include -I$(KDELIBS)\win
+INCPATH	=	 -Isrc -I$(QTDIR)\include 
+#-I$(KDELIBS)\win
 LINK	=	link
 LFLAGS	=	/NOLOGO /FORCE:MULTIPLE /DEBUG /SUBSYSTEM:console /DEF:sqlite3.def /DLL
 VERSION=3.0.7
