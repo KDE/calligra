@@ -276,6 +276,16 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->vAlign()) );
     }
+    if( !refFormat || curFormat->textBackgroundColor() != refFormat->textBackgroundColor())
+        if ( curFormat->textBackgroundColor().isValid() )
+        {
+            elem = doc.createElement( "TEXTBACKGROUNDCOLOR" );
+            formatElem.appendChild( elem );
+            elem.setAttribute( "red", curFormat->textBackgroundColor().red() );
+            elem.setAttribute( "green", curFormat->textBackgroundColor().green() );
+            elem.setAttribute( "blue", curFormat->textBackgroundColor().blue() );
+        }
+
     return formatElem;
 }
 
@@ -433,6 +443,15 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
                     elem.attribute("blue").toInt() );
         format.setColor( col );
     }
+    elem = formatElem.namedItem( "TEXTBACKGROUNDCOLOR" ).toElement();
+    if ( !elem.isNull() )
+    {
+        QColor col( elem.attribute("red").toInt(),
+                    elem.attribute("green").toInt(),
+                    elem.attribute("blue").toInt() );
+        format.setTextBackgroundColor( col );
+    }
+
     //kdDebug() << "KWTextParag::loadFormat format=" << format.key() << endl;
     return format;
 }
