@@ -1,3 +1,4 @@
+#include <qfileinfo.h>
 
 #include <kdebug.h>
 #include <kinstance.h>
@@ -7,9 +8,20 @@
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 
-int main(int /*argc*/, char * /*argv[]*/)
+void usage(char *a)
 {
-	KInstance instance("newapi");
+	kdDebug() << "usage: " << a << " <driver_name>" << endl;
+}
+
+int main(int argc, char* argv[])
+{
+	KInstance instance( QFileInfo(argv[0]).baseName().latin1() );
+	if (argc<=1) {
+		usage(argv[0]);
+		return 0;
+	}
+	QCString drv_name(argv[1]);
+
 	KexiDB::DriverManager manager; // = KexiDB::DriverManager::self();
 	QStringList names = manager.driverNames();
 	kdDebug() << "DRIVERS: " << endl;
@@ -21,7 +33,7 @@ int main(int /*argc*/, char * /*argv[]*/)
 	}
 
 	//get driver
-	KexiDB::Driver *driver = manager.driver("SQLite");
+	KexiDB::Driver *driver = manager.driver(drv_name);
 	if (manager.error()) {
 		kdDebug() << manager.errorMsg() << endl;
 		return 1;
