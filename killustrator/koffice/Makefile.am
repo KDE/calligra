@@ -50,7 +50,7 @@ kdelnkdir = $(kde_datadir)/koffice/partlnk
 install-exec-local:
 	$(INSTALL_SCRIPT) $(srcdir)/killustrator $(bindir)/killustrator
 
-KIllustrator.h: KIllustrator.idl
+KIllustrator.h: KIllustrator.idl $(micodir)/include/CORBA.h
 	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/KIllustrator.idl
 
 
