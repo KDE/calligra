@@ -27,7 +27,6 @@ include $(top_srcdir)/kexi/Makefile.global
 
 rcdir = $(kde_datadir)/kexi
 rc_DATA = kexiui.rc \
-	kexiformeditorui.rc \
 	kexiquerypartui.rc kexiquerypartinstui.rc \
 	kexirelationpartui.rc kexirelationhandlerui.rc \
 	kexitablepartui.rc kexitablepartinstui.rc \
