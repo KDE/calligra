@@ -397,7 +397,7 @@ void Outline::renamePageTitle()
 
     int pageNumber = item->text( 1 ).toInt() - 1;
     bool ok;
-    QString activeTitle = item->text( 0 );
+    QString activeTitle = doc->pageList().at( pageNumber )->pageTitle( i18n( "Slide %1" ).arg( pageNumber + 1 ) );
     QString newTitle = KLineEditDlg::getText( i18n("Rename Page"),i18n("Page Title"), activeTitle, &ok, this );
 
     // Have a different name ?
