@@ -33,6 +33,10 @@
 #include <qcheckbox.h>
 #include <knuminput.h>
 #include <koGlobal.h>
+#include <qvgroupbox.h>
+#include <qvbox.h>
+#include <qhgroupbox.h>
+#include <qhbuttongroup.h>
 
 
 class KoFontChooser::KoFontChooserPrivate
@@ -45,7 +49,11 @@ public:
     QLabel *m_lRelativeSize;
     KIntNumInput *m_offsetBaseLine;
     QCheckBox *m_wordByWord;
+#ifdef ATTRCOMBO
     QComboBox *m_fontAttribute;
+#else
+    QButtonGroup* m_fontAttribute;
+#endif
     QComboBox *m_language;
     QCheckBox *m_hyphenation;
 };
@@ -79,30 +87,35 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
     m_chooseFont = new KFontChooser(page, "FontList", false, list);
     lay1->addWidget(m_chooseFont);
 
-    QGroupBox *grp = new QGroupBox(i18n("Position"), page);
+    QVGroupBox *grp = new QVGroupBox(i18n("Position"), page);
     lay1->addWidget(grp);
-    QGridLayout *grid = new QGridLayout( grp, 2, 3, KDialog::marginHint(), KDialog::spacingHint() );
+    QWidget* grpBox = new QWidget( grp ); // container for the grid - laid out inside the QVGroupBox
+    QGridLayout *grid = new QGridLayout( grpBox, 2, 3, 0, KDialog::spacingHint() );
+    grid->setColStretch( 1, 1 ); // better stretch labels than spinboxes.
 
-    m_superScript = new QRadioButton(i18n("Su&perscript"),grp);
+    m_superScript = new QRadioButton(i18n("Su&perscript"),grpBox);
     grid->addWidget(m_superScript,0,0);
 
-    m_subScript = new QRadioButton(i18n("Su&bscript"),grp);
+    m_subScript = new QRadioButton(i18n("Su&bscript"),grpBox);
     grid->addWidget(m_subScript,1,0);
 
-    d->m_lRelativeSize = new QLabel ( i18n("Relative &size:"), grp);
+    d->m_lRelativeSize = new QLabel ( i18n("Relative &size:"), grpBox);
+    d->m_lRelativeSize->setAlignment( Qt::AlignRight );
     grid->addWidget(d->m_lRelativeSize,0,1);
 
-    d->m_relativeSize = new KIntNumInput( grp );
+    // ## How to make this widget smaller? Sounds like the [minimum]sizeHint for KIntNumInput is big...
+    d->m_relativeSize = new KIntNumInput( grpBox );
     d->m_lRelativeSize->setBuddy( d->m_relativeSize );
     grid->addWidget(d->m_relativeSize,0,2);
 
     d->m_relativeSize-> setRange(1, 100, 1,false);
     d->m_relativeSize->setSuffix("%");
 
-    QLabel *lab = new QLabel ( i18n("Offse&t from baseline:"), grp);
+    QLabel *lab = new QLabel ( i18n("Offse&t from baseline:"), grpBox);
+    lab->setAlignment( Qt::AlignRight );
     grid->addWidget(lab,1,1);
 
-    d->m_offsetBaseLine= new KIntNumInput( grp );
+    d->m_offsetBaseLine= new KIntNumInput( grpBox );
     lab->setBuddy( d->m_offsetBaseLine );
     grid->addWidget(d->m_offsetBaseLine,1,2);
 
@@ -117,14 +130,14 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
         d->m_lRelativeSize->setEnabled( false );
     }
 
-    grp = new QGroupBox(i18n("Colors"), page);
-    lay1->addWidget(grp);
-    grid = new QGridLayout( grp, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
-    m_colorButton = new QPushButton( i18n( "Change Co&lor..." ), grp );
-    grid->addWidget(m_colorButton,0,0);
+    QHGroupBox* colorsGrp = new QHGroupBox(i18n("Colors"), page);
+    lay1->addWidget(colorsGrp);
+    //grid = new QGridLayout( colorsGrp, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    m_colorButton = new QPushButton( i18n( "Change Co&lor..." ), colorsGrp );
+    //grid->addWidget(m_colorButton,0,0);
 
-    m_backGroundColorButton = new QPushButton( i18n( "Change Bac&kground Color..." ), grp );
-    grid->addWidget(m_backGroundColorButton,0,1);
+    m_backGroundColorButton = new QPushButton( i18n( "Change Bac&kground Color..." ), colorsGrp );
+    //grid->addWidget(m_backGroundColorButton,0,1);
 
     connect( m_subScript, SIGNAL(clicked()), this, SLOT( slotSubScriptClicked() ) );
     connect( m_superScript, SIGNAL(clicked()), this, SLOT( slotSuperScriptClicked() ) );
@@ -147,9 +160,12 @@ void KoFontChooser::setupTab2()
     QWidget *page = new QWidget( this );
     addTab( page, i18n( "Font &Effects" ) );
 
-    QVBoxLayout *lay1 = new QVBoxLayout( page, KDialog::marginHint(), KDialog::spacingHint() );
-    QGroupBox *grp = new QGroupBox(page);
-    lay1->addWidget(grp);
+    //QVBoxLayout *lay1 = new QVBoxLayout( page, KDialog::marginHint(), KDialog::spacingHint() );
+    // A single groupbox, without title, looks stupid.
+    //QGroupBox *grp = new QGroupBox(page);
+    //lay1->addWidget(grp);
+    QWidget* grp = page; // just to be able to go back to a groupbox
+
     QGridLayout *grid = new QGridLayout( grp, 10, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel * lab = new QLabel( i18n("&Underlining:"), grp);
@@ -188,6 +204,7 @@ void KoFontChooser::setupTab2()
     d->m_wordByWord = new QCheckBox( i18n("&Word by word"), grp);
     grid->addWidget( d->m_wordByWord, 5, 0);
 
+#ifdef ATTRCOMBO
     QLabel * lab3 = new QLabel( i18n("A&ttribute:"), grp);
     grid->addWidget( lab3, 6, 0);
 
@@ -196,6 +213,16 @@ void KoFontChooser::setupTab2()
     grid->addWidget( d->m_fontAttribute, 7, 0);
 
     d->m_fontAttribute->insertStringList( KoTextFormat::fontAttributeList() );
+    connect( d->m_fontAttribute, SIGNAL( activated( int ) ), this, SLOT( slotChangeAttributeFont( int )));
+#else
+    d->m_fontAttribute = new QHButtonGroup( i18n("Capitalization"), grp );
+    grid->addMultiCellWidget( d->m_fontAttribute, 6, 6, 0, grid->numCols()-1 );
+    QStringList fontAttributes = KoTextFormat::fontAttributeList();
+    for( QStringList::Iterator it = fontAttributes.begin(); it != fontAttributes.end(); ++it ) {
+        (void) new QRadioButton( *it, d->m_fontAttribute );
+    }
+    connect( d->m_fontAttribute,  SIGNAL( clicked( int ) ), this, SLOT( slotChangeAttributeFont( int )));
+#endif
 
     QLabel * lab4 = new QLabel( i18n("La&nguage:"), grp);
     grid->addWidget( lab4, 8, 0);
@@ -206,7 +233,11 @@ void KoFontChooser::setupTab2()
     grid->addWidget( d->m_language, 9, 0 );
 
     d->m_hyphenation = new QCheckBox( i18n("Auto H&yphenation"), grp );
-    grid->addWidget( d->m_hyphenation, 10,0);
+    grid->addWidget( d->m_hyphenation, 10, 0 );
+
+    // Add one row that can stretch
+    grid->expand( grid->numRows() + 1, grid->numCols() );
+    grid->setRowStretch( grid->numRows(), 1 );
 
     connect( d->m_strikeOut, SIGNAL(activated ( int )), this, SLOT( slotStrikeOutTypeChanged( int ) ) );
     connect( m_underlineColorButton, SIGNAL(clicked()), this, SLOT( slotUnderlineColor() ) );
@@ -215,7 +246,6 @@ void KoFontChooser::setupTab2()
     connect( m_underlineType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlineType( int )));
     connect( d->m_shadow, SIGNAL(clicked()), this, SLOT( slotShadowClicked() ) );
     connect( d->m_wordByWord, SIGNAL(clicked()), this, SLOT( slotWordByWordClicked() ) );
-    connect( d->m_fontAttribute,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeAttributeFont( int )));
     connect( d->m_language,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeLanguage( int )));
     connect( d->m_hyphenation, SIGNAL( clicked()), this, SLOT( slotHyphenationClicked()));
 }
@@ -249,7 +279,20 @@ QString KoFontChooser::getLanguage() const
 
 KoTextFormat::AttributeStyle KoFontChooser::getFontAttribute()const
 {
-    switch (d->m_fontAttribute->currentItem () )
+#ifdef ATTRCOMBO
+    int currentItem = d->m_fontAttribute->currentItem ();
+#else
+    int currentItem = 0;
+    for ( int i = 0; i < d->m_fontAttribute->count(); ++i )
+    {
+        if ( d->m_fontAttribute->find( i )->isOn() )
+        {
+            currentItem = i;
+            break;
+        }
+    }
+#endif
+    switch ( currentItem )
     {
     case 0:
         return KoTextFormat::ATT_NONE;
@@ -270,15 +313,20 @@ KoTextFormat::AttributeStyle KoFontChooser::getFontAttribute()const
 
 void KoFontChooser::setFontAttribute( KoTextFormat::AttributeStyle _att)
 {
-    if ( _att ==KoTextFormat::ATT_NONE)
-        d->m_fontAttribute->setCurrentItem( 0);
-    else if ( _att ==KoTextFormat::ATT_UPPER)
-        d->m_fontAttribute->setCurrentItem( 1 );
-    else if ( _att ==KoTextFormat::ATT_LOWER )
-        d->m_fontAttribute->setCurrentItem( 2 );
-    else if ( _att ==KoTextFormat::ATT_SMALL_CAPS )
-        d->m_fontAttribute->setCurrentItem( 3 );
-
+    int currentItem = 0;
+    if ( _att == KoTextFormat::ATT_NONE)
+        currentItem = 0;
+    else if ( _att == KoTextFormat::ATT_UPPER)
+        currentItem = 1;
+    else if ( _att == KoTextFormat::ATT_LOWER )
+        currentItem = 2;
+    else if ( _att == KoTextFormat::ATT_SMALL_CAPS )
+        currentItem = 3;
+#ifdef ATTRCOMBO
+    d->m_fontAttribute->setCurrentItem( currentItem );
+#else
+    d->m_fontAttribute->setButton( currentItem );
+#endif
 }
 
 bool KoFontChooser::getWordByWord()const

@@ -547,7 +547,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_strikeOutItem->setCurrentItem( (int)m_ctx->m_strikeOut );
 
 
-    m_checkFontAttribute = new QCheckBox( i18n( "Attribute:" ), page);
+    m_checkFontAttribute = new QCheckBox( i18n( "Capitalization:" ), page);
     m_fontAttributeItem = new QComboBox( page );
     m_fontAttributeItem->insertStringList( KoTextFormat::fontAttributeList());
     m_fontAttributeItem->setCurrentItem( (int)m_ctx->m_attribute );
