@@ -28,7 +28,8 @@
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
 
-#include <kolestorage.h>
+#include <polestorage.h>
+#include <polestream.h>
 
 typedef KGenericFactory<StarWriterImport, KoFilter> StarWriterImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libstarwriterimport, StarWriterImportFactory("starwriterimport"));
@@ -66,20 +67,22 @@ KoFilter::ConversionStatus StarWriterImport::convert(const QCString& from, const
         return KoFilter::NotImplemented;
 
     // Read streams
-    KOLE::Storage storage;
-    storage.open(m_chain->inputFile());
+    POLE::Storage storage;
+    storage.open( m_chain->inputFile().latin1() );
 
-    QDataStream* stream;
+    POLE::Stream* stream;
 
     stream = storage.stream("StarWriterDocument");
     if (!stream) return KoFilter::WrongFormat;
-    StarWriterDocument.resize(stream->device()->size());
-    stream->readRawBytes(StarWriterDocument.data(), StarWriterDocument.size());
+    StarWriterDocument.resize(stream->size());
+    stream->read((unsigned char*)StarWriterDocument.data(), StarWriterDocument.size());
+    delete stream;
 
     stream = storage.stream("SwPageStyleSheets");
     if (!stream) return KoFilter::WrongFormat;
-    SwPageStyleSheets.resize(stream->device()->size());
-    stream->readRawBytes(SwPageStyleSheets.data(), SwPageStyleSheets.size());
+    SwPageStyleSheets.resize(stream->size());
+    stream->read((unsigned char*)SwPageStyleSheets.data(), SwPageStyleSheets.size());
+    delete stream;
 
     // Check document version
     if (!checkDocumentVersion()) return KoFilter::WrongFormat;

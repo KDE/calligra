@@ -15,7 +15,7 @@ version is not supported at the moment and might or might not be in
 the future. StarWriter 6 document uses XML format which should be
 handled by OpenOffice Writer filter.
 
-KOLE stuff (to read OLE storage) is written by Ariya Hidayat
+POLE stuff (to read OLE storage) is written by Ariya Hidayat
 <ariya@kde.org> and should be considered as experimental, not even in
 alpha or beta quality.
 
