@@ -42,11 +42,14 @@ public:
         virtual bool drv_getPrevRecord();
 	virtual QVariant value(int);
 
+	/*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
+	virtual const char ** recordData() { return 0; }
+
 private:
 	MYSQL_RES *m_res;	
 	MYSQL_ROW m_row;
 	unsigned long *m_lengths;
-	unsigned int m_numFields;
+//js: int m_numFields;
 	unsigned long m_numRows;
 };
 

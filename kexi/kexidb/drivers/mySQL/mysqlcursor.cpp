@@ -26,7 +26,7 @@ using namespace KexiDB;
 
 MySqlCursor::MySqlCursor(KexiDB::Connection* conn, const QString& statement, uint cursor_options)
 	: Cursor(conn,statement,cursor_options), m_res(0),m_row(0),
-	m_lengths(0),m_numFields(0),m_numRows(0)
+	m_lengths(0),m_numRows(0)
 {
 }
 
@@ -46,7 +46,7 @@ bool MySqlCursor::drv_open() {
         {
                 if(mysql_errno(conn->m_mysql) == 0) {
 			m_res= mysql_store_result(conn->m_mysql);
-			m_numFields=mysql_num_fields(m_res);
+			m_fieldCount=mysql_num_fields(m_res);
 			m_readAhead=m_numRows=mysql_num_rows(m_res);
 			m_at=0;
 /*
@@ -71,7 +71,7 @@ bool MySqlCursor::drv_close() {
 	mysql_free_result(m_res);
 	m_res=0;
 	m_row=0;
-	m_numFields=0;
+//js: done in superclass:	m_numFields=0;
 	m_lengths=0;
 	m_opened=false;
 	m_numRows=0;
@@ -123,7 +123,7 @@ bool MySqlCursor::drv_getPrevRecord() {
 
 QVariant MySqlCursor::value(int pos) {
 	if (!m_row) return QVariant();
-	if (pos>=m_numFields) return QVariant();
+	if (pos>=m_fieldCount) return QVariant();
 	if (m_row[pos]==0) return QVariant();
 	return QVariant(QString::fromUtf8((const char*)m_row[pos]));
 }
