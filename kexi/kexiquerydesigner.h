@@ -44,7 +44,7 @@ class KexiQueryDesigner : public KexiDialogBase
 	};
 	
 	
-		KexiQueryDesigner(QWidget *parent, QString indentifire, const char *name=0);
+		KexiQueryDesigner(QWidget *parent, QString indentifier, const char *name=0);
 		~KexiQueryDesigner();
 		
 		virtual KXMLGUIClient	*guiClient();
@@ -65,7 +65,7 @@ class KexiQueryDesigner : public KexiDialogBase
 
 		QString			m_query;
 
-		QString			m_identifire;
+		QString			m_identifier;
 		
 		ActivePart		m_currentPart;
 

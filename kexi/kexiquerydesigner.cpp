@@ -71,10 +71,10 @@ class KexiQueryDesigner::EditGUIClient: public KXMLGUIClient
 
 KexiQueryDesigner::EditGUIClient *KexiQueryDesigner::m_editGUIClient=0;
 
-KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, QString identifire, const char *name)
+KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, QString identifier, const char *name)
  : KexiDialogBase(parent, name)
 {
-	m_identifire = identifire;
+	m_identifier = identifier;
 
 	setCaption(i18n("Query"));
 	registerAs(DocumentWindow);
