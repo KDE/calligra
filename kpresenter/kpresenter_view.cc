@@ -1033,8 +1033,8 @@ void KPresenterView::screenStart()
                          kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() ) / 2;
 
         if ( fullScreen ) {
-            page->reparent( ( QWidget* )0L, WStyle_Customize | WStyle_NoBorder | WType_Popup,
-                            QPoint( 0, 0 ), true );
+            page->reparent( ( QWidget* )0L, 0, QPoint( 0, 0 ), true );
+	    page->showFullScreen();
             page->topLevelWidget()->move( 0, 0 );
             page->topLevelWidget()->resize( QApplication::desktop()->width(),
                                             QApplication::desktop()->height() );
@@ -1065,9 +1065,10 @@ void KPresenterView::screenStop()
         continuePres = false;
         exitPres = true;
         if ( true ) { //m_rToolBarScreen->isButtonOn( m_idButtonScreen_Full ) )
-            page->close( false );
-            page->reparent( ( QWidget* )this, 0, QPoint( 0, 0 ), true );
-            page->lower();
+	    page->showNormal();
+	    page->hide();
+	    page->reparent( ( QWidget* )this, 0, QPoint( 0, 0 ), true );
+	    page->lower();
         }
         xOffset = _xOffset;
         yOffset = _yOffset;
@@ -1079,8 +1080,6 @@ void KPresenterView::screenStop()
         page->setMouseTracking( true );
         page->setBackgroundColor( white );
         this->resize( oldSize );
-        // #### Torben thinks this line is not needed, since the resize above does it already.
-        resizeEvent( 0L );
 
         // start screensaver again
         QString pidFile;
