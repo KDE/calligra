@@ -5,7 +5,7 @@ include( $(KEXI)/common.pro )
 # needed to export library classes:
 DEFINES += MAKE_KEXI_DB_LIB
 
-TARGET		= kexi_db$$KDEBUG
+TARGET		= kexidb$$KDEBUG
 
 system( moc connection.h -o moc/connection.moc )
 
