@@ -41,8 +41,12 @@ private:
     void createPageDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
     QDomElement parseList( QDomDocument& doc, const QDomElement& list );
     QDomElement parseParagraph( QDomDocument& doc, const QDomElement& paragraph );
+    // Reads from m_styleStack, writes the text properties to parentElement
+    void writeFormat( QDomDocument& doc, QDomElement& parentElement, int id, int pos, int length );
+    // Reads from m_styleStack, writes the paragraph properties to layoutElement
     void writeLayout( QDomDocument& doc, QDomElement& layoutElement );
     void createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool headerFooter );
+    void createStyles( QDomDocument &doc );
     void createDocumentInfo( QDomDocument &docinfo );
     void createDocumentContent( QDomDocument &doccontent, QDomElement& mainFramesetElement );
     KoFilter::ConversionStatus openFile();
@@ -56,6 +60,7 @@ private:
     QDomDocument    m_content;
     QDomDocument    m_meta;
     QDomDocument    m_settings;
+    QDomDocument    m_stylesDoc;
     QDomElement     m_masterPage;
 
     QDict<QDomElement>   m_styles;

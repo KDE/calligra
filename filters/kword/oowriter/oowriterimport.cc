@@ -78,7 +78,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
     framesetsElem.appendChild(mainFramesetElement);
 
     createInitialFrame( mainFramesetElement, 42, 566, false );
-
+    createStyles( mainDocument );
     createDocumentContent( mainDocument, mainFramesetElement );
 
     KoStoreDevice* out = m_chain->storageFile( "maindoc.xml", KoStore::Write );
@@ -112,32 +112,72 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
     return KoFilter::OK;
 }
 
+void OoWriterImport::createStyles( QDomDocument& doc )
+{
+    QDomElement stylesElem = doc.createElement( "STYLES" );
+    doc.documentElement().appendChild( stylesElem );
+
+    QDomNode fixedStyles = m_stylesDoc.documentElement().namedItem( "office:styles" );
+    Q_ASSERT( !fixedStyles.isNull() );
+    kdDebug() << "Generating " << fixedStyles.childNodes().count() << " kword styles." << endl;
+    for ( QDomNode n = fixedStyles.firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement e = n.toElement();
+        if ( !e.hasAttribute( "style:name" ) )
+            continue;
+
+        // We use the style stack, to flatten out parent styles
+        // Once KWord supports style inheritance, replace this with a single m_styleStack.push.
+        // (We still need to use StyleStack, since that's what writeLayout/writeFormat read from)
+        addStyles( &e );
+
+        QDomElement styleElem = doc.createElement("STYLE");
+        stylesElem.appendChild( styleElem );
+
+        QDomElement element = doc.createElement("NAME");
+        element.setAttribute( "value", e.attribute( "style:name" ) );
+        styleElem.appendChild( element );
+
+        QString followingStyle = m_styleStack.attribute( "style:next-style-name" );
+        if ( !followingStyle.isEmpty() )
+        {
+            QDomElement element = doc.createElement( "FOLLOWING" );
+            element.setAttribute( "name", followingStyle );
+            styleElem.appendChild( element );
+        }
+
+        writeFormat( doc, styleElem, 1, 0, 0 );
+        writeLayout( doc, styleElem );
+
+        m_styleStack.clear();
+    }
+}
+
 void OoWriterImport::createDocumentContent( QDomDocument &doc, QDomElement& mainFramesetElement )
 {
     QDomElement content = m_content.documentElement();
-
-    // content.xml contains some automatic-styles that we need to store
-    QDomNode automaticStyles = content.namedItem( "office:automatic-styles" );
-    if ( !automaticStyles.isNull() )
-        insertStyles( automaticStyles.toElement() );
 
     QDomNode body = content.namedItem( "office:body" );
     if ( body.isNull() )
         return;
 
-    // TODO handle sequence-decls
-
     for ( QDomNode text = body.firstChild(); !text.isNull(); text = text.nextSibling() )
     {
-        m_styleStack.setObjectMark();
+        m_styleStack.setMark( StyleStack::ObjectMark );
         QDomElement t = text.toElement();
         QString name = t.tagName();
 
         QDomElement e;
         if ( name == "text:p" ) // text paragraph
             e = parseParagraph( doc, t );
+        else if ( name == "text:h" ) // heading
+        {
+            e = parseParagraph( doc, t );
+            // TODO parse text:level, the level of the heading
+        }
         else if ( name == "text:unordered-list" || name == "text:ordered-list" ) // listitem
             e = parseList( doc, t );
+        // TODO text:sequence-decls
         else
         {
             kdDebug(30518) << "Unsupported texttype '" << name << "'" << endl;
@@ -145,7 +185,7 @@ void OoWriterImport::createDocumentContent( QDomDocument &doc, QDomElement& main
         }
 
         mainFramesetElement.appendChild( e );
-        m_styleStack.clearObjectMark(); // remove the styles added by the child-objects
+        m_styleStack.popToMark( StyleStack::ObjectMark ); // remove the styles added by the child-objects
     }
 }
 
@@ -234,19 +274,24 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
         return KoFilter::WrongFormat;
     }
 
-    QDomDocument styles;
     m_content.setContent( store->device() );
     store->close();
 
     //kdDebug(30518)<<" m_content.toCString() :"<<m_content.toCString()<<endl;
     kdDebug(30518) << "file content.xml loaded " << endl;
 
+    // We need to keep the QDomDocument for styles too, unfortunately.
+    // Otherwise styleElement.parentNode() returns a null node
+    // (see StyleStack::isUserStyle). Most of styles.xml is in m_styles
+    // anyway, so this doesn't make a big difference.
+    // We now also rely on this in createStyles.
+    //QDomDocument styles;
     if ( store->open( "styles.xml" ) )
     {
-        styles.setContent( store->device() );
+        m_stylesDoc.setContent( store->device() );
         store->close();
 
-        //kdDebug(30518)<<" styles.toCString() :"<<styles.toCString()<<endl;
+        //kdDebug(30518)<<" styles.toCString() :"<<m_stylesDoc.toCString()<<endl;
         kdDebug(30518) << "file containing styles loaded" << endl;
     }
     else
@@ -276,7 +321,11 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
 
     emit sigProgress( 10 );
 
-    if ( !createStyleMap( styles ) )
+    // Load styles from style.xml
+    if ( !createStyleMap( m_stylesDoc ) )
+        return KoFilter::UserCancelled;
+    // Also load styles from content.xml
+    if ( !createStyleMap( m_content ) )
         return KoFilter::UserCancelled;
 
     return KoFilter::OK;
@@ -328,13 +377,13 @@ void OoWriterImport::createDocumentInfo( QDomDocument &docinfo )
 
 bool OoWriterImport::createStyleMap( const QDomDocument & styles )
 {
-  QDomElement content  = styles.documentElement();
-  QDomNode docStyles   = content.namedItem( "office:document-styles" );
+  QDomElement docElement  = styles.documentElement();
+  QDomNode docStyles   = docElement.namedItem( "office:document-styles" );
 
-  if ( content.hasAttribute( "office:version" ) )
+  if ( docElement.hasAttribute( "office:version" ) )
   {
     bool ok = true;
-    double d = content.attribute( "office:version" ).toDouble( &ok );
+    double d = docElement.attribute( "office:version" ).toDouble( &ok );
 
     if ( ok )
     {
@@ -342,14 +391,14 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
       if ( d > 1.0 )
       {
         QString message( i18n("This document was created with the OpenOffice.org version '%1'. This filter was written for version for 1.0. Reading this file could cause strange behavior, crashes or incorrect display of the data. Do you want to continue converting the document?") );
-        message.arg( content.attribute( "office:version" ) );
+        message.arg( docElement.attribute( "office:version" ) );
         if ( KMessageBox::warningYesNo( 0, message, i18n( "Unsupported document version" ) ) == KMessageBox::No )
           return false;
       }
     }
   }
 
-  QDomNode fontStyles = content.namedItem( "office:font-decls" );
+  QDomNode fontStyles = docElement.namedItem( "office:font-decls" );
 
   if ( !fontStyles.isNull() )
   {
@@ -362,7 +411,7 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
 
   kdDebug(30518) << "Starting reading in auto:styles" << endl;
 
-  QDomNode autoStyles = content.namedItem( "office:automatic-styles" );
+  QDomNode autoStyles = docElement.namedItem( "office:automatic-styles" );
   if ( !autoStyles.isNull() )
   {
       insertStyles( autoStyles.toElement() );
@@ -373,14 +422,14 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
 
   kdDebug(30518) << "Reading in master styles" << endl;
 
-  QDomNode masterStyles = content.namedItem( "office:master-styles" );
+  QDomNode masterStyles = docElement.namedItem( "office:master-styles" );
 
   if ( masterStyles.isNull() )
   {
     kdDebug(30518) << "Nothing found " << endl;
   }
 
-  QDomElement master = masterStyles.namedItem( "style:master-page").toElement();
+  QDomElement master = masterStyles.namedItem( "style:master-page" ).toElement();
   if ( !master.isNull() )
   {
     kdDebug(30518) << master.attribute( "style:name" ) << endl;
@@ -399,7 +448,7 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
 
   kdDebug(30518) << "Starting reading in office:styles" << endl;
 
-  QDomNode fixedStyles = content.namedItem( "office:styles" );
+  QDomNode fixedStyles = docElement.namedItem( "office:styles" );
 
   kdDebug(30518) << "Reading in default styles" << endl;
 
@@ -445,24 +494,6 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
   if ( !fixedStyles.isNull() )
     insertStyles( fixedStyles.toElement() );
 
-  kdDebug(30518) << "Starting reading in automatic styles" << endl;
-
-  content = m_content.documentElement();
-  autoStyles = content.namedItem( "office:automatic-styles" );
-
-  if ( !autoStyles.isNull() )
-  {
-      insertStyles( autoStyles.toElement() );
-  }
-
-  fontStyles = content.namedItem( "office:font-decls" );
-
-  if ( !fontStyles.isNull() )
-  {
-    kdDebug(30518) << "Starting reading in special font decl" << endl;
-    insertStyles( fontStyles.toElement() );
-  }
-
   kdDebug(30518) << "Styles read in." << endl;
 
   return true;
@@ -471,6 +502,7 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
 // Perfect copy of OoImpressImport::insertStyles
 void OoWriterImport::insertStyles( const QDomElement& styles )
 {
+    kdDebug(30518) << "Inserting styles from " << styles.tagName() << endl;
     for ( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement e = n.toElement();
@@ -479,8 +511,10 @@ void OoWriterImport::insertStyles( const QDomElement& styles )
             continue;
 
         QString name = e.attribute( "style:name" );
-        m_styles.insert( name, new QDomElement( e ) );
-        //kdDebug(30518) << "Style: '" << name << "' loaded " << endl;
+        QDomElement* ep = new QDomElement( e );
+        m_styles.insert( name, ep );
+
+        kdDebug(30518) << "Style: '" << name << "' loaded " << endl;
     }
 }
 
@@ -559,6 +593,7 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
 
     // parse the paragraph-properties
     fillStyleStack( paragraph );
+    m_styleStack.setMark( StyleStack::ParagraphMark );
 
     QDomElement formats = doc.createElement( "FORMATS" );
 
@@ -582,24 +617,33 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
                  || tagName == "text:author-name"
                  || tagName == "text:author-initials")
         {
-            textData = "#";     // field placeholder
+            textData = '#';     // field placeholder
             appendField(doc, p, ts, pos);
+        }
+        else if ( tagName == "text:tab-stop" )
+        {
+            // KWord currently uses \t.
+            // Known bug: a line with only \t\t\t\t isn't loaded - XML (QDom) strips out whitespace.
+            // One more good reason to switch to <text:tab-stop> instead...
+            textData = '\t';
         }
         else if ( t.isNull() ) // no textnode, so maybe it's a text:span
         {
-            if ( ts.tagName() != "text:span" )
+            if ( tagName != "text:span" )
             {
                 // TODO: are there any other possible
                 // elements or even nested test:spans?
-                // DF: yes. There is <tab>, and footnotes, for instance, and many fields.
+                // DF: yes. Footnotes, for instance, and many fields.
                 kdWarning() << "Ignoring " << ts.tagName() << endl;
                 continue;
             }
-            fillStyleStack( ts.toElement() );
+            fillStyleStack( ts );
 
             // We do a look ahead to eventually find a text:span that contains
             // only a line-break. If found, we'll add it to the current string
             // and move on to the next sibling.
+            // DF: What proves that the line-break will be at the _beginning_ of the next item?
+            // (What if it's a footnote?). Why not treat line-break _when_ it occurs?
             QDomNode next = n.nextSibling();
             if ( !next.isNull() )
             {
@@ -621,150 +665,17 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
         paragraphText += textData;
         uint length = textData.length();
 
-        // Prepare a FORMAT element for this run of text
-        QDomElement format( doc.createElement( "FORMAT" ) );
-        format.setAttribute( "id", 1 /* normal text */ );
-        format.setAttribute( "pos", pos );
-        format.setAttribute( "len", length );
-
-        // parse the text-properties
-        // TODO compare with the paragraph style, and only write out if != from style.
-        // (This is very important, it's not only an optimization. If no attribute is
-        // specified in the .kwd file, the style's property will be used, which might
-        // not always be correct).
-        if ( m_styleStack.hasAttribute( "fo:color" ) ) {
-            QColor color( m_styleStack.attribute( "fo:color" ) ); // #rrggbb format
-            QDomElement colorElem( doc.createElement( "COLOR" ) );
-            colorElem.setAttribute( "red", color.red() );
-            colorElem.setAttribute( "blue", color.blue() );
-            colorElem.setAttribute( "green", color.green() );
-            format.appendChild( colorElem );
-        }
-        if ( m_styleStack.hasAttribute( "fo:font-family" ) )
-        {
-            // Hmm, the remove "'" could break it's in the middle of the fontname...
-            QString fontName = m_styleStack.attribute( "fo:font-family" ).remove( "'" );
-            // 'Thorndale' is not known outside OpenOffice so we substitute it
-            // with 'Times New Roman' that looks nearly the same.
-            if ( fontName == "Thorndale" )
-                fontName = "Times New Roman";
-
-            QDomElement fontElem( doc.createElement( "FONT" ) );
-            fontElem.setAttribute( "name", fontName );
-            format.appendChild( fontElem );
-        }
-        if ( m_styleStack.hasAttribute( "fo:font-size" ) ) {
-            double pointSize = KoUnit::parseValue( m_styleStack.attribute( "fo:font-size" ) );
-            QDomElement fontSize( doc.createElement( "SIZE" ) );
-            fontSize.setAttribute( "value", pointSize );
-            format.appendChild( fontSize );
-        }
-        if ( m_styleStack.hasAttribute( "fo:font-weight" ) ) {
-            // TODO: Check fo:font-weight spec. Can it be 50, 75, etc.?
-            QDomElement weight( doc.createElement( "WEIGHT" ) );
-            weight.setAttribute( "value", m_styleStack.attribute( "fo:font-weight" ) == "bold" ? 75 : 50 );
-            format.appendChild( weight );
-        }
-
-        if ( m_styleStack.hasAttribute( "fo:font-style" ) )
-            if ( m_styleStack.attribute( "fo:font-style" ) == "italic" ||
-                 m_styleStack.attribute( "fo:font-style" ) == "oblique" ) // no difference in kotext
-            {
-                QDomElement italic = doc.createElement( "ITALIC" );
-                italic.setAttribute( "value", 1 );
-                format.appendChild( italic );
-            }
-
-        if (m_styleStack.hasAttribute("fo:language")) // 3.10.17
-        {
-            QDomElement lang = doc.createElement("LANGUAGE");
-            QString tmp = m_styleStack.attribute("fo:language");
-            if (tmp=="en")
-                lang.setAttribute("value", "en_US");
-            else
-                lang.setAttribute("value", tmp);
-            format.appendChild(lang);
-        }
-
-        if( m_styleStack.hasAttribute("style:text-crossing-out" )) // 3.10.6
-        {
-            QString strikeOutType = m_styleStack.attribute( "style:text-crossing-out" );
-            QDomElement strikeOut = doc.createElement( "STRIKEOUT" );
-            if( strikeOutType =="double-line")
-            {
-                strikeOut.setAttribute("value", "double");
-                strikeOut.setAttribute("styleline","solid");
-            }
-            else if( strikeOutType =="single-line")
-            {
-                strikeOut.setAttribute("value", "single");
-                strikeOut.setAttribute("styleline","solid");
-            }
-            else if( strikeOutType =="thick-line")
-            {
-                strikeOut.setAttribute("value", "single-bold");
-                strikeOut.setAttribute("styleline","solid");
-            }
-            // not supported by KWord: "slash" and "X"
-            // not supported by OO: stylelines (solid, dash, dot, dashdot, dashdotdot)
-            format.appendChild( strikeOut );
-        }
-        if( m_styleStack.hasAttribute("style:text-position"))
-        {
-            QDomElement vertAlign = doc.createElement( "VERTALIGN" );
-            QString textPos =m_styleStack.attribute("style:text-position");
-            //relativetextsize="0.58"
-            //"super 58%"
-            if( textPos.contains("super"))
-            {
-                textPos=textPos.remove("super");
-                textPos=textPos.remove("%");
-                double value = textPos.stripWhiteSpace().toDouble();
-                vertAlign.setAttribute( "value", 2 );
-                vertAlign.setAttribute( "relativetextsize", value/100 );
-            }
-            else if(textPos.contains("sub"))
-            {
-                textPos=textPos.remove("sub");
-                textPos=textPos.remove("%");
-                double value = textPos.stripWhiteSpace().toDouble();
-                vertAlign.setAttribute( "value", 1 );
-                vertAlign.setAttribute( "relativetextsize", value/100 );
-            }
-            format.appendChild( vertAlign );
-        }
-        if ( m_styleStack.hasAttribute( "style:text-underline" ) ) // 3.10.22
-        {
-            QString underline;
-            QString styleline;
-            OoUtils::importUnderline( m_styleStack.attribute( "style:text-underline" ),
-                                      underline, styleline );
-            QDomElement underLineElem = doc.createElement( "UNDERLINE" );
-            underLineElem.setAttribute( "value", underline );
-            underLineElem.setAttribute( "styleline", styleline );
-
-            QString underLineColor = m_styleStack.attribute( "style:text-underline-color" ); // 3.10.23
-            if ( underLineColor != "font-color" )
-                underLineElem.setAttribute("underlinecolor", underLineColor);
-            // TODO wordbyword?
-            // LT: doesn't work in kotext: it underlines/strikes only the first word
-            //bool wordByWord = (m_styleStack.hasAttribute("fo:score-spaces"))    //3.10.25
-            //                  && (m_styleStack.attribute("fo:score-spaces") == "false");
-            format.appendChild( underLineElem );
-        }
+        writeFormat( doc, formats, 1 /* id for normal text */, pos, length );
 
         //appendShadow( doc, p ); // this is necessary to take care of shadowed paragraphs
         pos += length;
 
-        formats.appendChild(format);
-
-        //m_styleStack.clearObjectMark(); // remove possible text:span styles from the stack
-        // DF: this looks wrong to me. We're losing the text:p styles too!
-        // LT: works perfectly without AFAICS
+        m_styleStack.popToMark( StyleStack::ParagraphMark  ); // remove possible text:span styles from the stack
     }
 
     QDomElement text = doc.createElement( "TEXT" );
     text.appendChild( doc.createTextNode( paragraphText ) );
+    text.setAttribute( "xml:space", "preserve" );
     p.appendChild( text );
     //kdDebug(30518) << k_funcinfo << "Para text is: " << paragraphText << endl;
 
@@ -773,21 +684,217 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
     p.appendChild( layoutElement );
 
     // TODO style name (when specified by user)
-    //QDomElement nameElement = doc.createElement("NAME");
-    //nameElement.setAttribute("value", styleName);
-    //layoutElement.appendChild(nameElement);
+    // Style name
+    QString styleName = m_styleStack.userStyleName();
+    if ( !styleName.isEmpty() )
+    {
+        QDomElement nameElement = doc.createElement("NAME");
+        nameElement.setAttribute("value", styleName);
+        layoutElement.appendChild(nameElement);
+    }
 
     writeLayout( doc, layoutElement );
 
     return p;
 }
 
+void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int id, int pos, int length )
+{
+    // Prepare a FORMAT element for this run of text
+    QDomElement format( doc.createElement( "FORMAT" ) );
+    format.setAttribute( "id", id );
+    format.setAttribute( "pos", pos );
+    format.setAttribute( "len", length );
+
+    // parse the text-properties
+    // TODO compare with the paragraph style, and only write out if != from style.
+    // (This is very important, it's not only an optimization. If no attribute is
+    // specified in the .kwd file, the style's property will be used, which might
+    // not always be correct).
+    if ( m_styleStack.hasAttribute( "fo:color" ) ) { // 3.10.3
+        QColor color( m_styleStack.attribute( "fo:color" ) ); // #rrggbb format
+        QDomElement colorElem( doc.createElement( "COLOR" ) );
+        colorElem.setAttribute( "red", color.red() );
+        colorElem.setAttribute( "blue", color.blue() );
+        colorElem.setAttribute( "green", color.green() );
+        format.appendChild( colorElem );
+    }
+    if ( m_styleStack.hasAttribute( "fo:font-family" ) ) // 3.10.9
+    {
+        // Hmm, the remove "'" could break it's in the middle of the fontname...
+        QString fontName = m_styleStack.attribute( "fo:font-family" ).remove( "'" );
+        // 'Thorndale' is not known outside OpenOffice so we substitute it
+        // with 'Times New Roman' that looks nearly the same.
+        if ( fontName == "Thorndale" )
+            fontName = "Times New Roman";
+
+        QDomElement fontElem( doc.createElement( "FONT" ) );
+        fontElem.setAttribute( "name", fontName );
+        format.appendChild( fontElem );
+    }
+    if ( m_styleStack.hasAttribute( "fo:font-size" ) ) { // 3.10.14
+        double pointSize = m_styleStack.fontSize();
+
+        QDomElement fontSize( doc.createElement( "SIZE" ) );
+        fontSize.setAttribute( "value", qRound(pointSize) ); // KWord uses toInt()!
+        format.appendChild( fontSize );
+    }
+    if ( m_styleStack.hasAttribute( "fo:font-weight" ) ) { // 3.10.24
+        QDomElement weightElem( doc.createElement( "WEIGHT" ) );
+        QString fontWeight = m_styleStack.attribute( "fo:font-weight" );
+        int boldness = fontWeight.toInt();
+        if ( fontWeight == "bold" )
+            boldness = 75;
+        else if ( boldness == 0 )
+            boldness = 50;
+        weightElem.setAttribute( "value", boldness );
+        format.appendChild( weightElem );
+    }
+
+    if ( m_styleStack.hasAttribute( "fo:font-style" ) ) // 3.10.19
+        if ( m_styleStack.attribute( "fo:font-style" ) == "italic" ||
+             m_styleStack.attribute( "fo:font-style" ) == "oblique" ) // no difference in kotext
+        {
+            QDomElement italic = doc.createElement( "ITALIC" );
+            italic.setAttribute( "value", 1 );
+            format.appendChild( italic );
+        }
+
+    bool wordByWord = (m_styleStack.hasAttribute("fo:score-spaces")) // 3.10.25
+                      && (m_styleStack.attribute("fo:score-spaces") == "false");
+    if( m_styleStack.hasAttribute("style:text-crossing-out" )) // 3.10.6
+    {
+        QString strikeOutType = m_styleStack.attribute( "style:text-crossing-out" );
+        QDomElement strikeOut = doc.createElement( "STRIKEOUT" );
+        if( strikeOutType =="double-line")
+        {
+            strikeOut.setAttribute("value", "double");
+            strikeOut.setAttribute("styleline","solid");
+        }
+        else if( strikeOutType =="single-line")
+        {
+            strikeOut.setAttribute("value", "single");
+            strikeOut.setAttribute("styleline","solid");
+        }
+        else if( strikeOutType =="thick-line")
+        {
+            strikeOut.setAttribute("value", "single-bold");
+            strikeOut.setAttribute("styleline","solid");
+        }
+        if ( wordByWord )
+            strikeOut.setAttribute("wordbyword", 1);
+        // not supported by KWord: "slash" and "X"
+        // not supported by OO: stylelines (solid, dash, dot, dashdot, dashdotdot)
+        format.appendChild( strikeOut );
+    }
+    if( m_styleStack.hasAttribute("style:text-position")) // 3.10.7
+    {
+        QDomElement vertAlign = doc.createElement( "VERTALIGN" );
+        QString textPos =m_styleStack.attribute("style:text-position");
+        //relativetextsize="0.58"
+        //"super 58%"
+        if( textPos.contains("super"))
+        {
+            textPos=textPos.remove("super");
+            textPos=textPos.remove("%");
+            double value = textPos.stripWhiteSpace().toDouble();
+            vertAlign.setAttribute( "value", 2 );
+            vertAlign.setAttribute( "relativetextsize", value/100 );
+        }
+        else if(textPos.contains("sub"))
+        {
+            textPos=textPos.remove("sub");
+            textPos=textPos.remove("%");
+            double value = textPos.stripWhiteSpace().toDouble();
+            vertAlign.setAttribute( "value", 1 );
+            vertAlign.setAttribute( "relativetextsize", value/100 );
+        }
+        format.appendChild( vertAlign );
+    }
+    if ( m_styleStack.hasAttribute( "style:text-underline" ) ) // 3.10.22
+    {
+        QString underline;
+        QString styleline;
+        OoUtils::importUnderline( m_styleStack.attribute( "style:text-underline" ),
+                                  underline, styleline );
+        QDomElement underLineElem = doc.createElement( "UNDERLINE" );
+        underLineElem.setAttribute( "value", underline );
+        underLineElem.setAttribute( "styleline", styleline );
+
+        QString underLineColor = m_styleStack.attribute( "style:text-underline-color" ); // 3.10.23
+        if ( underLineColor != "font-color" )
+            underLineElem.setAttribute("underlinecolor", underLineColor);
+        if ( wordByWord )
+            underLineElem.setAttribute("wordbyword", 1);
+        format.appendChild( underLineElem );
+    }
+    // Small caps, lowercase, uppercase
+    if ( m_styleStack.hasAttribute( "fo:font-variant" ) // 3.10.1
+         || m_styleStack.hasAttribute( "fo:text-transform" ) ) // 3.10.2
+    {
+        QDomElement fontAttrib( doc.createElement( "FONTATTRIBUTE" ) );
+        bool smallCaps = m_styleStack.attribute( "fo:font-variant" ) == "small-caps";
+        if ( smallCaps )
+        {
+            fontAttrib.setAttribute( "value", "smallcaps" );
+        } else
+        {
+            // Both KWord and OO use "uppercase" and "lowercase".
+            // TODO in KWord: "capitalize".
+            fontAttrib.setAttribute( "value", m_styleStack.attribute( "fo:text-transform" ) );
+        }
+        format.appendChild( fontAttrib );
+    }
+     if (m_styleStack.hasAttribute("fo:language")) // 3.10.17
+     {
+         QDomElement lang = doc.createElement("LANGUAGE");
+         QString tmp = m_styleStack.attribute("fo:language");
+         if (tmp=="en")
+             lang.setAttribute("value", "en_US");
+         else
+             lang.setAttribute("value", tmp);
+         format.appendChild(lang);
+     }
+
+    /*
+      Missing properties:
+      style:use-window-font-color, 3.10.4 - what is it?
+      style:text-outline, 3.10.5 - not implemented in kotext
+      style:font-name, 3.10.8 - what difference with fo:font-family?
+      style:font-family-generic, 3.10.10 - roman, swiss, modern -> map to a font?
+      style:font-style-name, 3.10.11 - ?
+      style:font-pitch, 3.10.12 - fixed or variable -> map to a font?
+      style:font-charset, 3.10.14 - not necessary with Qt
+      style:font-size-rel, 3.10.15 - TODO in StyleStack::fontSize()
+      fo:letter-spacing, 3.10.16 - not implemented in kotext
+      fo:text-language, 3.10.17 - TODO
+      style:text-relief, 3.10.20 - not implemented in kotext
+      style:text-shadow, 3.10.21 - TODO
+      style:letter-kerning, 3.10.20 - not implemented in kotext
+      style:text-blinking, 3.10.27 - not implemented in kotext IIRC
+      style:text-background-color, 3.10.28 - TODO
+      style:text-combine, 3.10.29/30 - what is it?
+      style:text-emphasis, 3.10.31 - not implemented in kotext
+      style:text-autospace, 3.10.32 - not implemented in kotext
+      style:text-scale, 3.10.33 - not implemented in kotext
+      style:text-rotation-angle, 3.10.34 - not implemented in kotext (kpr rotates whole objects)
+      style:text-rotation-scale, 3.10.35 - not implemented in kotext (kpr rotates whole objects)
+      style:puncuation-wrap, 3.10.36 - not implemented in kotext
+      style:line-break, 3.10.37 - what's strict linebreaking?
+    */
+
+    if ( format.hasChildNodes() )
+        formats.appendChild( format );
+}
+
 void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement )
 {
+    Q_ASSERT( layoutElement.ownerDocument() == doc );
+
     // Always write out the alignment, it's required
     QDomElement flowElement = doc.createElement("FLOW");
 
-    if ( m_styleStack.hasAttribute( "fo:text-align" ) )
+    if ( m_styleStack.hasAttribute( "fo:text-align" ) ) // 3.11.4
         flowElement.setAttribute( "align", Conversion::importAlignment( m_styleStack.attribute( "fo:text-align" ) ) );
     else
         flowElement.setAttribute( "align", "auto" );
@@ -812,27 +919,31 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
     if( m_styleStack.hasAttribute("fo:break-before") ||
         m_styleStack.hasAttribute("fo:break-after") ||
         m_styleStack.hasAttribute("style:break-inside") ||
-        m_styleStack.hasAttribute("style:keep-with-next") )
+        m_styleStack.hasAttribute("style:keep-with-next") ||
+        m_styleStack.hasAttribute("fo:keep-with-next") )
     {
         QDomElement pageBreak = doc.createElement( "PAGEBREAKING" );
-        if ( m_styleStack.hasAttribute("fo:break-before") ) {
+        if ( m_styleStack.hasAttribute("fo:break-before") ) { // 3.11.24
             bool breakBefore = m_styleStack.attribute( "fo:break-before" ) != "auto";
             // TODO in KWord: implement difference between "column" and "page"
             pageBreak.setAttribute("hardFrameBreak", breakBefore ? "true" : "false");
         }
-        else if ( m_styleStack.hasAttribute("fo:break-after") ) {
+        else if ( m_styleStack.hasAttribute("fo:break-after") ) { // 3.11.24
             bool breakAfter = m_styleStack.attribute( "fo:break-after" ) != "auto";
             // TODO in KWord: implement difference between "column" and "page"
             pageBreak.setAttribute("hardFrameBreakAfter", breakAfter ? "true" : "false");
         }
 
-        if ( m_styleStack.hasAttribute( "style:break-inside" ) ) {
+        if ( m_styleStack.hasAttribute( "style:break-inside" ) ) { // 3.11.7
             bool breakInside = m_styleStack.attribute( "style:break-inside" ) == "true";
             pageBreak.setAttribute("linesTogether", breakInside ? "false" : "true"); // opposite meaning
         }
-        if ( m_styleStack.hasAttribute( "style:keep-with-next" ) )
+        if ( m_styleStack.hasAttribute( "style:keep-with-next" ) ) // 3.11.31
             // Copy the boolean value
             pageBreak.setAttribute("keepWithNext", m_styleStack.attribute( "style:keep-with-next" ));
+        else if ( m_styleStack.hasAttribute( "fo:keep-with-next" ) ) // 3.11.31 (they say StarOffice, but OOo 1.0.1 uses that too)
+            // Copy the boolean value
+            pageBreak.setAttribute("keepWithNext", m_styleStack.attribute( "fo:keep-with-next" ));
         layoutElement.appendChild( pageBreak );
     }
 
