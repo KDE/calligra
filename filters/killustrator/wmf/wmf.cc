@@ -300,7 +300,7 @@ void Wmf::invokeHandler(
 
         // Skip data we cannot use.
 
-        for (i = 0; wordOperands; i++)
+        for (i = 0; i < wordOperands; i++)
         {
             S16 discard;
 
