@@ -260,12 +260,11 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         formatElem.appendChild( elem );
         elem.setAttribute( "name", curFormat->font().family() );
     }
-    if( !refFormat || curFormat->font().pointSize() != refFormat->font().pointSize() )
+    if( !refFormat || curFormat->pointSize() != refFormat->pointSize() )
     {
         elem = doc.createElement( "SIZE" );
         formatElem.appendChild( elem );
-        int size = static_cast<int>( KoTextZoomHandler::layoutUnitPtToPt( curFormat->font().pointSize() ) );
-        elem.setAttribute( "value", size );
+        elem.setAttribute( "value", curFormat->pointSize() );
     }
     if( !refFormat || curFormat->font().italic() != refFormat->font().italic() )
     {
@@ -492,10 +491,7 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
         font.setWeight( elem.attribute( "value" ).toInt() );
     elem = formatElem.namedItem( "SIZE" ).toElement();
     if ( !elem.isNull() )
-    {
-        double size = elem.attribute("value").toDouble();
-        font.setPointSizeFloat( KoTextZoomHandler::ptToLayoutUnitPt( size ) );
-    }
+        font.setPointSize( elem.attribute("value").toInt() );
     elem = formatElem.namedItem( "ITALIC" ).toElement();
     if ( !elem.isNull() )
         font.setItalic( elem.attribute("value").toInt() == 1 );

@@ -1368,11 +1368,10 @@ void KWTextFrameSet::fixParagWidth( KWTextParag* parag )
         if ( parag->hardFrameBreakAfter() )
         {
             KoTextFormat * lastFormat = parag->at( parag->length() - 1 )->format();
+            const QFontMetrics& refFontMetrics = lastFormat->refFontMetrics();
             // keep in sync with KWTextFrameSet::formatVertically
             QString str = i18n( "--- Frame Break ---" );
-            int width = 0;
-            for ( int i = 0 ; i < (int)str.length() ; ++i )
-                width += lastFormat->width( str, i );
+            int width = refFontMetrics.width( str );
             parag->setWidth( parag->rect().width() + width ); // TODO QMIN( textDocument()->width(), ... ) ?
         }
         else if ( parag->lineStartList().count() == 1 ) // don't use lines() here, parag not formatted yet
