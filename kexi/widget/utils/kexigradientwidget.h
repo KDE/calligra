@@ -33,7 +33,7 @@ A simple QWidget that can use different types of gradients as the background.
 
 @author Christian Nitschkowski
 */
-class KexiGradientWidget : public QWidget {
+class KEXIGUIUTILS_EXPORT KexiGradientWidget : public QWidget {
 	typedef QPtrList<QWidget> WidgetList;
 
 	Q_OBJECT
