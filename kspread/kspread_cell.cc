@@ -2979,6 +2979,8 @@ void KSpreadCell::paintPageBorders( QPainter& painter,
 
   KSpreadSheetPrint* print = m_pTable->print();
 
+  KSpreadSheet::LayoutDirection sheetDir =  m_pTable->layoutDirection();
+
   // Draw page borders
   if( m_pTable->isShowPageBorders() )
   {
@@ -2992,8 +2994,15 @@ void KSpreadCell::paintPageBorders( QPainter& painter,
            ( cellRef.y() <= print->printRange().bottom() ) )
       {
         painter.setPen( table()->doc()->pageBorderColor() );
-        painter.drawLine( doc->zoomItX( cellRect.x() ), doc->zoomItY( cellRect.y() ),
-                          doc->zoomItX( cellRect.x() ), doc->zoomItY( cellRect.bottom() ) );
+
+        if ( sheetDir == KSpreadSheet::RightToLeft )
+          painter.drawLine( doc->zoomItX( cellRect.right() ),
+                            doc->zoomItY( cellRect.y() ),
+                            doc->zoomItX( cellRect.right() ),
+                            doc->zoomItY( cellRect.bottom() ) );
+        else
+          painter.drawLine( doc->zoomItX( cellRect.x() ), doc->zoomItY( cellRect.y() ),
+                            doc->zoomItX( cellRect.x() ), doc->zoomItY( cellRect.bottom() ) );
       }
 
       if ( print->isOnNewPageY( cellRef.y() ) &&
@@ -3010,8 +3019,15 @@ void KSpreadCell::paintPageBorders( QPainter& painter,
              ( cellRef.y() <= print->printRange().bottom() ) )
         {
           painter.setPen( table()->doc()->pageBorderColor() );
-          painter.drawLine( doc->zoomItX( cellRect.right() ), doc->zoomItY( cellRect.y() ),
-                            doc->zoomItX( cellRect.right() ), doc->zoomItY( cellRect.bottom() ) );
+
+          if ( sheetDir == KSpreadSheet::RightToLeft )
+            painter.drawLine( doc->zoomItX( cellRect.x() ),
+                              doc->zoomItY( cellRect.y() ),
+                              doc->zoomItX( cellRect.x() ),
+                              doc->zoomItY( cellRect.bottom() ) );
+          else
+            painter.drawLine( doc->zoomItX( cellRect.right() ), doc->zoomItY( cellRect.y() ),
+                              doc->zoomItX( cellRect.right() ), doc->zoomItY( cellRect.bottom() ) );
         }
       }
 
