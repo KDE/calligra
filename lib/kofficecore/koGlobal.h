@@ -191,12 +191,12 @@ struct KoPageLayout
        return ( ptWidth == l.ptWidth &&
                 ptHeight == l.ptHeight &&
                 ptLeft == l.ptLeft &&
-                ptRight == l.ptHeight &&
+                ptRight == l.ptRight &&
                 ptTop == l.ptTop &&
                 ptBottom == l.ptBottom );
     }
     bool operator!=( const KoPageLayout& l ) const {
-        return !( *this == l );
+        return !( (*this) == l );
     }
 };
 
