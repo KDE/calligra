@@ -24,12 +24,60 @@
 #include "kivio_stencil_spawner_info.h"
 #include "kivio_spawner_drag.h"
 #include "kivio_icon_view.h"
+#include "kivio_common.h"
 
 #include <qbrush.h>
 #include <qpalette.h>
 #include <kdebug.h>
 
 KivioStencilSpawner* KivioIconView::m_pCurDrag = 0L;
+QList<KivioIconView> KivioIconView::objList;
+KivioIconViewVisual  KivioIconView::visual;
+
+
+KivioIconViewVisual::KivioIconViewVisual()
+{
+  pixmap = 0;
+  setDefault();
+}
+
+KivioIconViewVisual::~KivioIconViewVisual()
+{
+}
+
+void KivioIconViewVisual::init()
+{
+  if (!pixmap)
+    pixmap = new QPixmap();
+
+  pixmap->load(pixmapFileName);
+}
+
+void KivioIconViewVisual::setDefault()
+{
+  usePixmap = false;
+  color = QColor(0x4BD2FF);
+  pixmapFileName = QString::null;
+}
+
+void KivioIconViewVisual::save(QDomElement& e)
+{
+  XmlWriteInt(e, "usePixmap", (int)usePixmap);
+  XmlWriteColor(e, "color", color);
+  XmlWriteString(e, "pixmapPath", pixmapFileName);
+}
+
+void KivioIconViewVisual::load(QDomElement& e)
+{
+  QColor defColor(0x4BD2FF);
+  QString defPath = QString::null;
+
+  usePixmap = XmlReadInt(e, "usePixmap", (int)false);
+  color = XmlReadColor(e, "color", defColor);
+  pixmapFileName = XmlReadString(e, "pixmapPath", defPath);
+
+  init();
+}
 /**********************************************************************
  *
  * KivioIconViewItem
@@ -78,14 +126,12 @@ bool KivioIconViewItem::acceptDrop( const QMimeSource * ) const
  *
  **********************************************************************/
 KivioIconView::KivioIconView( QWidget *parent, const char *name )
-    : QIconView( parent, name )
+: QIconView( parent, name )
 {
     m_pSpawnerSet = NULL;
     m_pCurDrag = NULL;
 
-    m_bgType = KivioConfig::config()->stencilBGType();
-    m_bgColor = KivioConfig::config()->stencilBGColor();
-    m_pBackground = KivioConfig::config()->stencilBGPixmap();
+    objList.append(this);
 
     setGridX( 64 );
     setGridY( 64 );
@@ -108,8 +154,6 @@ KivioIconView::KivioIconView( QWidget *parent, const char *name )
 KivioIconView::~KivioIconView()
 {
     m_pCurDrag = NULL;
-
-    m_pBackground = NULL;
 }
 
 void KivioIconView::setStencilSpawnerSet( KivioStencilSpawnerSet *pSet )
@@ -132,21 +176,29 @@ void KivioIconView::setStencilSpawnerSet( KivioStencilSpawnerSet *pSet )
     }
 }
 
+void KivioIconView::setVisualData(KivioIconViewVisual v)
+{
+  visual = v;
+  for (KivioIconView* i = objList.first(); i; i = objList.next()) {
+    i->viewport()->repaint();
+  }
+}
+
 void KivioIconView::drawBackground( QPainter *p, const QRect &r )
 {
     QBrush b;
     p->setBrushOrigin(-contentsX(),-contentsY());
 
-    if( m_bgType == KivioConfig::sbgtColor )
+    if(visual.usePixmap)
     {
-        b.setColor( m_bgColor );
-        b.setStyle( QBrush::SolidPattern );
+        b.setPixmap(*visual.pixmap);
     }
-    else if( m_bgType == KivioConfig::sbgtPixmap )
+    else
     {
-        b.setPixmap(*m_pBackground);
+        b.setColor(visual.color);
+        b.setStyle(QBrush::SolidPattern);
     }
-    p->fillRect( r, b );
+    p->fillRect(r, b);
 }
 
 QDragObject *KivioIconView::dragObject()

@@ -17,9 +17,127 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include "kivio_config.h"
+#include "kivio_view.h"
+#include "kiviooptionsdialog.h"
+
+#include "tkunits.h"
+
+#include <qfile.h>
+#include <qtextstream.h>
+
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kstddirs.h>
 
+KivioOptions::KivioOptions()
+{
+  initGlobalConfig();
+  initDefaultConfig();
+}
+
+KivioOptions::~KivioOptions()
+{
+  saveGlobalConfig();
+}
+
+void KivioOptions::initGlobalConfig()
+{
+  QDomDocument* doc = new QDomDocument("GlobalConfig");
+  QDomElement root;
+
+  QString path = locateLocal("appdata", "globalconfig");
+  QFile f(path);
+  if ( !f.open(IO_ReadOnly) ) {
+    globalDefPageLayout.setDefault();
+    globalDefStencilBarVisual.setDefault();
+  } else {
+    doc->setContent(&f);
+    root = doc->documentElement();
+
+    QDomElement ple = root.namedItem("PaperLayout").toElement();
+    globalDefPageLayout.load(ple);
+
+    QDomElement sbe = root.namedItem("StencilsBar").toElement();
+    globalDefStencilBarVisual.load(sbe);
+    setGlobalStencilsBarVisual(globalDefStencilBarVisual);
+  }
+
+  delete doc;
+}
+
+void KivioOptions::initDefaultConfig()
+{
+  defPageLayout = globalDefPageLayout;
+}
+
+void KivioOptions::paperLayoutSetup(KivioView* view)
+{
+  KivioOptionsDialog dlg(view, KivioOptionsDialog::PageSize);
+  dlg.exec();
+}
+
+void KivioOptions::setup(KivioView* view)
+{
+  KivioOptionsDialog dlg(view);
+  dlg.exec();
+}
+
+void KivioOptions::saveGlobalConfig()
+{
+  QDomDocument* doc = new QDomDocument("GlobalConfig");
+  QDomElement root = doc->createElement("GlobalConfig");
+  doc->appendChild(root);
+
+  QDomElement ple = doc->createElement("PaperLayout");
+  root.appendChild(ple);
+  globalDefPageLayout.save(ple);
+
+  QDomElement sbe = doc->createElement("StencilsBar");
+  root.appendChild(sbe);
+  globalDefStencilBarVisual.save(sbe);
+
+  QString path = locateLocal("appdata", "globalconfig");
+  QFile f(path);
+  QTextStream ts(&f);
+  if (f.open(IO_WriteOnly)) {
+    ts << *doc;
+    f.close();
+  }
+  delete doc;
+}
+
+void KivioOptions::setGlobalStencilsBarVisual(KivioIconViewVisual v)
+{
+  globalDefStencilBarVisual = v;
+  globalDefStencilBarVisual.init();
+  KivioIconView::setVisualData(globalDefStencilBarVisual);
+  saveGlobalConfig();
+}
+
+void KivioOptions::setDefaultPageLayout(TKPageLayout pl)
+{
+  defPageLayout = pl;
+}
+
+void KivioOptions::setGlobalDefaultPageLayout(TKPageLayout pl)
+{
+  globalDefPageLayout = pl;
+  saveGlobalConfig();
+}
+
+void KivioOptions::save(QDomElement& element)
+{
+  QDomElement e = element.ownerDocument().createElement("DefPaperLayout");
+  element.appendChild(e);
+  defPageLayout.save(e);
+}
+
+void KivioOptions::load(const QDomElement& element)
+{
+  QDomElement ple = element.namedItem("DefPaperLayout").toElement();
+  defPageLayout.load(ple);
+}
+/**********************************************************************************/
 static const char * connectorTarget_xpm[] = {
 "7 7 3 1",
 "       c None",

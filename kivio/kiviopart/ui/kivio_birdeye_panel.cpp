@@ -18,8 +18,6 @@
 #include <qframe.h>
 #include <qcursor.h>
 
-#include <koPageLayoutDia.h>
-
 #define TOGGLE_ACTION(X) ((KToggleAction*)child(X))
 
 KivioBirdEyePanel::KivioBirdEyePanel(KivioView* view, QWidget* parent, const char* name)
@@ -161,9 +159,9 @@ void KivioBirdEyePanel::updateView()
   QSize s1 = canvas->size();
   QSize s2;
   if (m_bPageOnly) {
-    KoPageLayout pl = m_pView->activePage()->paperLayout();
-    int pw = (int)(cvtMmToPt(pl.mmWidth)*zc);
-    int ph = (int)(cvtMmToPt(pl.mmHeight)*zc);
+    TKPageLayout pl = m_pView->activePage()->paperLayout();
+    int pw = (int)(pl.ptWidth()*zc);
+    int ph = (int)(pl.ptHeight()*zc);
     s2 = QSize(pw,ph);
   } else {
     s2 = m_pCanvas->actualSize();
@@ -175,9 +173,9 @@ void KivioBirdEyePanel::updateView()
 
   zoom = zc*zxy;
 
-  KoPageLayout pl = m_pView->activePage()->paperLayout();
-  int pw = (int)(cvtMmToPt(pl.mmWidth)*zoom);
-  int ph = (int)(cvtMmToPt(pl.mmHeight)*zoom);
+  TKPageLayout pl = m_pView->activePage()->paperLayout();
+  int pw = (int)(pl.ptWidth()*zoom);
+  int ph = (int)(pl.ptHeight()*zoom);
   int px0 = (s1.width()-pw)/2;
   int py0 = (s1.height()-ph)/2;
 
@@ -249,9 +247,9 @@ void KivioBirdEyePanel::updateVisibleArea()
 
   KivioRect vr = m_pCanvas->visibleArea();
   QSize s1 = canvas->size();
-  KoPageLayout pl = m_pView->activePage()->paperLayout();
-  int pw = (int)(cvtMmToPt(pl.mmWidth)*zoom);
-  int ph = (int)(cvtMmToPt(pl.mmHeight)*zoom);
+  TKPageLayout pl = m_pView->activePage()->paperLayout();
+  int pw = (int)(pl.ptWidth()*zoom);
+  int ph = (int)(pl.ptHeight()*zoom);
   int px0 = (s1.width()-pw)/2;
   int py0 = (s1.height()-ph)/2;
 
@@ -368,9 +366,9 @@ void KivioBirdEyePanel::handleMousePress(QPoint p)
     return;
 
   QSize s1 = canvas->size();
-  KoPageLayout pl = m_pView->activePage()->paperLayout();
-  int pw = (int)(cvtMmToPt(pl.mmWidth)*zoom);
-  int ph = (int)(cvtMmToPt(pl.mmHeight)*zoom);
+  TKPageLayout pl = m_pView->activePage()->paperLayout();
+  int pw = (int)(pl.ptWidth()*zoom);
+  int ph = (int)(pl.ptHeight()*zoom);
   int px0 = (s1.width()-pw)/2;
   int py0 = (s1.height()-ph)/2;
 

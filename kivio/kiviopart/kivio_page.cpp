@@ -41,7 +41,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <koPageLayoutDia.h>
 #include <kglobal.h>
 
 #include "kivio_page.h"
@@ -49,6 +48,7 @@
 #include "kivio_doc.h"
 #include "kivio_canvas.h"
 #include "kivio_guidelines.h"
+#include "kivio_config.h"
 
 #include "kivio_common.h"
 #include "kivio_group_stencil.h"
@@ -95,9 +95,8 @@ KivioPage::KivioPage( KivioMap *_map, const char *_name )
     s.sprintf("Page%i", s_id );
     setName( s.data() );
   }
-  m_pPageLayout = KoPageLayoutDia::standardLayout();
 
-
+  m_pPageLayout = m_pDoc->config()->defaultPageLayout();
   gLines = new KivioGuideLines(this);
 }
 
@@ -177,56 +176,28 @@ QDomElement KivioPage::saveLayout( QDomDocument &doc )
 {
     QDomElement e = doc.createElement("PageLayout");
 
-    XmlWriteInt( e, "format", m_pPageLayout.format );
-    XmlWriteInt( e, "orientation", m_pPageLayout.orientation );
     XmlWriteInt( e, "unit", m_pPageLayout.unit );
+    XmlWriteFloat( e, "width", m_pPageLayout.width );
+    XmlWriteFloat( e, "height", m_pPageLayout.height );
 
-    XmlWriteDouble( e, "ptWidth", m_pPageLayout.ptWidth );
-    XmlWriteDouble( e, "ptHeight", m_pPageLayout.ptHeight );
-    XmlWriteDouble( e, "ptLeft", m_pPageLayout.ptLeft );
-    XmlWriteDouble( e, "ptRight", m_pPageLayout.ptRight );
-    XmlWriteDouble( e, "ptTop", m_pPageLayout.ptTop );
-    XmlWriteDouble( e, "ptBottom", m_pPageLayout.ptBottom );
-    XmlWriteDouble( e, "mmWidth", m_pPageLayout.mmWidth );
-    XmlWriteDouble( e, "mmHeight", m_pPageLayout.mmHeight );
-    XmlWriteDouble( e, "mmLeft", m_pPageLayout.mmLeft );
-    XmlWriteDouble( e, "mmTop", m_pPageLayout.mmTop );
-    XmlWriteDouble( e, "mmRight", m_pPageLayout.mmRight );
-    XmlWriteDouble( e, "mmBottom", m_pPageLayout.mmBottom );
-    XmlWriteDouble( e, "inchWidth", m_pPageLayout.inchWidth );
-    XmlWriteDouble( e, "inchHeight", m_pPageLayout.inchHeight );
-    XmlWriteDouble( e, "inchLeft", m_pPageLayout.inchLeft );
-    XmlWriteDouble( e, "inchTop", m_pPageLayout.inchTop );
-    XmlWriteDouble( e, "inchRight", m_pPageLayout.inchRight );
-    XmlWriteDouble( e, "inchBottom", m_pPageLayout.inchBottom );
+    XmlWriteFloat( e, "left", m_pPageLayout.marginLeft );
+    XmlWriteFloat( e, "right", m_pPageLayout.marginRight );
+    XmlWriteFloat( e, "top", m_pPageLayout.marginTop );
+    XmlWriteFloat( e, "bottom", m_pPageLayout.marginBottom );
 
     return e;
 }
 
 bool KivioPage::loadLayout( const QDomElement &e )
 {
-    m_pPageLayout.format = (KoFormat)XmlReadInt( e, "format", PG_US_LETTER );
-    m_pPageLayout.orientation = (KoOrientation)XmlReadInt( e, "orientation", PG_PORTRAIT );
-    m_pPageLayout.unit = (KoUnit)XmlReadInt( e, "unit", PG_INCH );
+    m_pPageLayout.unit = XmlReadInt( e, "unit", 0 );
+    m_pPageLayout.width = XmlReadFloat( e, "width", 0.0 );
+    m_pPageLayout.height = XmlReadFloat( e, "height", 0.0 );
 
-    m_pPageLayout.ptWidth = XmlReadDouble( e, "ptWidth", 8.5 * 72.0 );
-    m_pPageLayout.ptHeight = XmlReadDouble( e, "ptHeight", 11.0 * 72.0 );
-    m_pPageLayout.ptLeft = XmlReadDouble( e, "ptLeft", 1.0 );
-    m_pPageLayout.ptRight = XmlReadDouble( e, "ptRight", 1.0 );
-    m_pPageLayout.ptTop = XmlReadDouble( e, "ptTop", 1.0 );
-    m_pPageLayout.ptBottom = XmlReadDouble( e, "ptBottom", 1.0 );
-    m_pPageLayout.mmWidth = XmlReadDouble( e, "mmWidth", 1.0 );
-    m_pPageLayout.mmHeight = XmlReadDouble( e, "mmHeight", 1.0 );
-    m_pPageLayout.mmLeft = XmlReadDouble( e, "mmLeft", 1.0 );
-    m_pPageLayout.mmTop = XmlReadDouble( e, "mmTop", 1.0 );
-    m_pPageLayout.mmRight = XmlReadDouble( e, "mmRight", 1.0 );
-    m_pPageLayout.mmBottom = XmlReadDouble( e, "mmBottom", 1.0 );
-    m_pPageLayout.inchWidth = XmlReadDouble( e, "inchWidth", 1.0 );
-    m_pPageLayout.inchHeight = XmlReadDouble( e, "inchHeight", 1.0 );
-    m_pPageLayout.inchLeft = XmlReadDouble( e, "inchLeft", 1.0 );
-    m_pPageLayout.inchTop = XmlReadDouble( e, "inchTop", 1.0 );
-    m_pPageLayout.inchRight = XmlReadDouble( e, "inchRight", 1.0 );
-    m_pPageLayout.inchBottom = XmlReadDouble( e, "inchBottom", 1.0 );
+    m_pPageLayout.marginLeft = XmlReadFloat( e, "left", 0.0 );
+    m_pPageLayout.marginRight = XmlReadFloat( e, "right", 0.0 );
+    m_pPageLayout.marginTop = XmlReadFloat( e, "top", 0.0 );
+    m_pPageLayout.marginBottom = XmlReadFloat( e, "bottom", 0.0 );
 
     return true;
 }
@@ -335,13 +306,6 @@ bool KivioPage::setPageName( const QString& name, bool init )
   emit m_pDoc->sig_pageNameChanged(this, old_name);
 
   return true;
-}
-
-void KivioPage::paperLayoutDlg()
-{
-  if ( KoPageLayoutDia::pageLayout(m_pPageLayout,m_pHeadFoot,FORMAT_AND_BORDERS|HEADER_AND_FOOTER) ) {
-    m_pDoc->updateView(this);
-  }
 }
 
 /**
@@ -828,11 +792,6 @@ void KivioPage::ungroupSelectedStencils()
     delete pSelectThese;
 }
 
-bool KivioPage::pagePropertiesDlg()
-{
-    return KoPageLayoutDia::pageLayout( m_pPageLayout, m_pHeadFoot, 1 );
-}
-
 void KivioPage::bringToFront()
 {
     KivioStencil *pStencil, *pMove;
@@ -1131,8 +1090,8 @@ void KivioPage::alignStencils(AlignData d)
 {
     if (d.centerOfPage) {
       KivioStencil* pStencil = m_lstSelection.first();
-      float w = cvtMmToPt(m_pPageLayout.mmWidth);
-      float h = cvtMmToPt(m_pPageLayout.mmHeight);
+      float w = m_pPageLayout.ptWidth();
+      float h = m_pPageLayout.ptHeight();
       while( pStencil )
       {
           pStencil->setPosition((w-pStencil->w())/2,(h-pStencil->h())/2);
@@ -1233,10 +1192,10 @@ void KivioPage::distributeStencils(DistributeData d)
 
   switch (d.extent) {
     case DistributeData::Page:
-      x = cvtMmToPt(m_pPageLayout.mmLeft);
-      y = cvtMmToPt(m_pPageLayout.mmTop);
-      x1 = cvtMmToPt(m_pPageLayout.mmWidth - m_pPageLayout.mmRight);
-      y1 = cvtMmToPt(m_pPageLayout.mmHeight - m_pPageLayout.mmBottom);
+      x = m_pPageLayout.ptLeft();
+      y = m_pPageLayout.ptTop();
+      x1 = m_pPageLayout.ptWidth() - m_pPageLayout.ptRight();
+      y1 = m_pPageLayout.ptHeight() - m_pPageLayout.ptBottom();
       break;
     case DistributeData::Selection:
       pStencil = m_lstSelection.first();
@@ -1476,4 +1435,11 @@ KivioRect KivioPage::getRectForAllStencils()
 
     return rTotal;
 }
+
+void KivioPage::setPaperLayout(TKPageLayout l)
+{
+  m_pPageLayout = l;
+  doc()->updateView(this);
+}
+
 #include "kivio_page.moc"

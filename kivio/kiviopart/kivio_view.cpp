@@ -68,6 +68,8 @@
 #include "kivio_ruler.h"
 #include "kivio_zoomaction.h"
 #include "kivio_grid_data.h"
+#include "kivio_config.h"
+
 #include "toolbarseparator.h"
 #include "tkcoloractions.h"
 #include "kivio_lineendsaction.h"
@@ -527,15 +529,12 @@ void KivioView::changePage( const QString& name )
   if (!t)
   	return;
 
-  setActivePage( t );
+  setActivePage(t);
 }
 
 void KivioView::insertPage()
 {
-  KivioPage *t = m_pDoc->createPage(false);
-
-  if( t )
-      m_pDoc->addPage( t );
+  m_pDoc->addPage(m_pDoc->createPage());
 }
 
 void KivioView::hidePage()
@@ -574,7 +573,7 @@ int KivioView::bottomBorder() const
 
 void KivioView::paperLayoutDlg()
 {
-    m_pActivePage->pagePropertiesDlg();
+  doc()->config()->paperLayoutSetup(this);
 }
 
 void KivioView::removePage()
@@ -1320,12 +1319,7 @@ void KivioView::alignStencilsDlg()
 
 void KivioView::optionsDialog()
 {
-  KivioOptionsDialog* dlg = new KivioOptionsDialog(this);
-
-  if( dlg->exec() == QDialog::Accepted )
-  {
-  }
-  delete dlg;
+  doc()->config()->setup(this);
 }
 
 void KivioView::toggleStencilGeometry(bool b)
@@ -1350,12 +1344,8 @@ void KivioView::toggleBirdEyePanel(bool b)
 
 void KivioView::setupPrinter(QPrinter &p)
 {
-    if (m_pActivePage->paperLayout().orientation == PG_PORTRAIT)
-        p.setOrientation(QPrinter::Portrait);
-    else
-        p.setOrientation(QPrinter::Landscape);
-
     p.setMinMax(1, m_pDoc->map()->pageList().count());
     p.setFromTo(1, m_pDoc->map()->pageList().count());
 }
+
 #include "kivio_view.moc"

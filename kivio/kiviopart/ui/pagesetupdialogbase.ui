@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>507</width>
+            <width>499</width>
             <height>449</height>
         </rect>
     </property>
@@ -22,6 +22,9 @@
     <property>
         <name>layoutMargin</name>
     </property>
+    <property>
+        <name>layoutSpacing</name>
+    </property>
     <grid>
         <property stdset="1">
             <name>margin</name>
@@ -29,29 +32,8 @@
         </property>
         <property stdset="1">
             <name>spacing</name>
-            <number>6</number>
+            <number>3</number>
         </property>
-        <spacer row="1"  column="0" >
-            <property>
-                <name>name</name>
-                <cstring>Spacer2</cstring>
-            </property>
-            <property stdset="1">
-                <name>orientation</name>
-                <enum>Vertical</enum>
-            </property>
-            <property stdset="1">
-                <name>sizeType</name>
-                <enum>Expanding</enum>
-            </property>
-            <property>
-                <name>sizeHint</name>
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
         <widget row="0"  column="0" >
             <class>QLayoutWidget</class>
             <property stdset="1">
@@ -407,6 +389,71 @@
                     </property>
                 </widget>
             </hbox>
+        </widget>
+        <widget row="3"  column="0" >
+            <class>QCheckBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>resizeAll</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Resize all pages in this document</string>
+            </property>
+        </widget>
+        <widget row="4"  column="0"  rowspan="1"  colspan="2" >
+            <class>QCheckBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>docDefault</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Make this options default for this document</string>
+            </property>
+        </widget>
+        <widget row="5"  column="0" >
+            <class>QCheckBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>globalDefault</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Make this options default global</string>
+            </property>
+        </widget>
+        <spacer row="1"  column="0" >
+            <property>
+                <name>name</name>
+                <cstring>Spacer2</cstring>
+            </property>
+            <property stdset="1">
+                <name>orientation</name>
+                <enum>Vertical</enum>
+            </property>
+            <property stdset="1">
+                <name>sizeType</name>
+                <enum>Expanding</enum>
+            </property>
+            <property>
+                <name>sizeHint</name>
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget row="2"  column="0"  rowspan="1"  colspan="2" >
+            <class>Line</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Line3</cstring>
+            </property>
+            <property stdset="1">
+                <name>orientation</name>
+                <enum>Horizontal</enum>
+            </property>
         </widget>
     </grid>
 </widget>

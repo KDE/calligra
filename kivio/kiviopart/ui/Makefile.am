@@ -5,12 +5,16 @@
 
 noinst_LTLIBRARIES =libui.la
 
-INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
-	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
-	-I$(top_srcdir)/kivio/kiviopart/tklib\
-	$(KOFFICE_INCLUDES) $(all_includes)
 
-METASOURCES = AUTO
+
+INCLUDES = $(all_includes)\
+		-I$(top_srcdir)/kivio/kiviopart\
+		-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
+		-I$(top_srcdir)/kivio/kiviopart/tklib
+
+CXXFLAGS = -O2 -Wall
+DEFS = -I. -I$(srcdir) -I$(top_srcdir)
+libui_la_METASOURCES = AUTO
 libui_la_SOURCES = \
 		guidessetupdialogbase.ui\
 		guidessetupdialog.cpp\
@@ -19,8 +23,6 @@ libui_la_SOURCES = \
 		guides1page.cpp\
 		guides2page.cpp\
 		aligndialog.ui\
-		gridsetupdialogbase.ui\
-		gridsetupdialog.cpp\
 		kiviooptionsdialogbase.ui\
 		kiviooptionsdialog.cpp\
 		enternamedialogbase.ui\
@@ -29,9 +31,49 @@ libui_la_SOURCES = \
 		kivio_birdeye_panel_base.ui\
 		kivio_layer_panel_base.ui\
 		kivio_layer_panel.cpp\
-		kivio_layer_panel.h\
+		gridsetupdialogbase.ui\
+		gridsetupdialog.cpp\
 		pagesetupdialogbase.ui\
-		pagesetupdialog.cpp
+		pagesetupdialog.cpp\
+		pageoptionsdialogbase.ui\
+		pageoptionsdialog.cpp\
+		stencilsbaroptionsdialogbase.ui\
+		stencilsbaroptionsdialog.cpp
+EXTRA_DIST = \
+		guidessetupdialogbase.ui\
+		guidessetupdialog.cpp\
+		guidessetupdialog.h\
+		guides1pagebase.ui\
+		guides2pagebase.ui\
+		guides1page.cpp\
+		guides1page.h\
+		guides2page.cpp\
+		guides2page.h\
+		aligndialog.ui\
+		kiviooptionsdialogbase.ui\
+		kiviooptionsdialog.cpp\
+		kiviooptionsdialog.h\
+		enternamedialogbase.ui\
+		viewitemrenamedialog.cpp\
+		viewitemrenamedialog.h\
+		kivio_birdeye_panel.cpp\
+		kivio_birdeye_panel.h\
+		kivio_birdeye_panel_base.ui\
+		kivio_layer_panel_base.ui\
+		kivio_layer_panel.cpp\
+		kivio_layer_panel.h\
+		gridsetupdialogbase.ui\
+		gridsetupdialog.cpp\
+		gridsetupdialog.h\
+		pagesetupdialogbase.ui\
+		pagesetupdialog.cpp\
+		pagesetupdialog.h\
+		pageoptionsdialogbase.ui\
+		pageoptionsdialog.cpp\
+		pageoptionsdialog.h\
+		stencilsbaroptionsdialogbase.ui\
+		stencilsbaroptionsdialog.cpp\
+		stencilsbaroptionsdialog.h
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$

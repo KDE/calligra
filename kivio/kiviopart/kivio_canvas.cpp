@@ -351,11 +351,11 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
 
   if (m_pView->isShowPageMargins()) {
     float zf = m_pZoom;
-    KoPageLayout pl = page->paperLayout();
-    int ml = (int)(cvtMmToPt(pl.mmLeft)*zf);
-    int mt = (int)(cvtMmToPt(pl.mmTop)*zf);
-    int mr = (int)(cvtMmToPt(pl.mmRight)*zf);
-    int mb = (int)(cvtMmToPt(pl.mmBottom)*zf);
+    TKPageLayout pl = page->paperLayout();
+    int ml = (int)(pl.ptLeft()*zf);
+    int mt = (int)(pl.ptTop()*zf);
+    int mr = (int)(pl.ptRight()*zf);
+    int mb = (int)(pl.ptBottom()*zf);
 
     painter.save();
     painter.setPen(QPen(blue,1,DotLine));
@@ -467,10 +467,10 @@ TKSize KivioCanvas::actualGridFrequency()
 TKSize KivioCanvas::actualPaperSizePt()
 {
   TKSize ps;
-  KoPageLayout pl = activePage()->paperLayout();
+  TKPageLayout pl = activePage()->paperLayout();
 
-  float w = cvtMmToPt(pl.mmWidth)*(m_pZoom);
-  float h = cvtMmToPt(pl.mmHeight)*(m_pZoom);
+  float w = pl.ptWidth()*m_pZoom;
+  float h = pl.ptHeight()*m_pZoom;
   ps.set(w,h,UnitPoint);
 
   return ps;
@@ -1400,9 +1400,9 @@ void KivioCanvas::setViewCenterPoint(KivioPoint p)
 {
   setUpdatesEnabled(false);
 
-  KoPageLayout pl = activePage()->paperLayout();
-  float w = cvtMmToPt(pl.mmWidth)/2.0;
-  float h = cvtMmToPt(pl.mmHeight)/2.0;
+  TKPageLayout pl = activePage()->paperLayout();
+  float w = pl.ptWidth()/2.0;
+  float h = pl.ptHeight()/2.0;
 
   w = w - p.x();
   h = h - p.y();

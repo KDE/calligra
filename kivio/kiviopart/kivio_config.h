@@ -24,6 +24,43 @@
 #include <qstring.h>
 #include <qpixmap.h>
 
+#include "tkpagelayout.h"
+#include "kivio_icon_view.h"
+
+class KivioView;
+
+class KivioOptions
+{
+public:
+  KivioOptions();
+  ~KivioOptions();
+
+  void initGlobalConfig();
+  void saveGlobalConfig();
+
+  void initDefaultConfig();
+
+  void save(QDomElement&);
+  void load(const QDomElement&);
+
+  TKPageLayout defaultPageLayout() { return defPageLayout; }
+  TKPageLayout globalDefaultPageLayout() { return globalDefPageLayout; }
+
+  void setDefaultPageLayout(TKPageLayout);
+  void setGlobalDefaultPageLayout(TKPageLayout);
+
+  void setup(KivioView*);
+  void paperLayoutSetup(KivioView*);
+
+  void setGlobalStencilsBarVisual(KivioIconViewVisual);
+  KivioIconViewVisual stencilsBarVisual() { return globalDefStencilBarVisual; }
+
+private:
+  TKPageLayout defPageLayout;
+  TKPageLayout globalDefPageLayout;
+  KivioIconViewVisual globalDefStencilBarVisual;
+};
+
 class KivioConfig : public KSimpleConfig
 {
     Q_OBJECT

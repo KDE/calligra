@@ -1,5 +1,5 @@
 [BookmarkGlobal]
-Data=<!DOCTYPE Bookmarks ><Bookmarks type="root" >\n <Item projectName="kiviopart" line="241" type="item" id="1" name="setupActions" fileName="kivio_view.cpp" />\n <Item projectName="kiviopart" line="1020" type="item" id="2" name="updateToolBar" fileName="kivio_view.cpp" />\n <Item projectName="kiviopart" line="1053" type="item" id="3" name="updateToolBar" fileName="kivio_view.cpp" />\n <Item projectName="kiviopart" line="437" type="item" id="4" name="kiviopart:kivio_doc.cpp:374" fileName="kivio_doc.cpp" />\n <Item projectName="kiviosdk" line="85" type="item" id="5" name="kiviosdk:kivio_layer.cpp:63" fileName="kivio_layer.cpp" />\n</Bookmarks>\n
+Data=<!DOCTYPE Bookmarks ><Bookmarks type="root" >\n <Item line="243" projectName="kiviopart" type="item" id="1" name="setupActions" fileName="kivio_view.cpp" />\n <Item line="1019" projectName="kiviopart" type="item" id="2" name="updateToolBar" fileName="kivio_view.cpp" />\n <Item line="1052" projectName="kiviopart" type="item" id="3" name="updateToolBar" fileName="kivio_view.cpp" />\n <Item projectName="kiviopart" line="432" type="item" id="4" name="kiviopart:kivio_doc.cpp:374" fileName="kivio_doc.cpp" />\n <Item projectName="kiviosdk" line="85" type="item" id="5" name="kiviosdk:kivio_layer.cpp:63" fileName="kivio_layer.cpp" />\n</Bookmarks>\n
 [Editor Options]
 ConfigFlags=1051
 TabWidth=4
@@ -126,13 +126,13 @@ isDataInstallProcess=true
 AddCompileOptions=
 AddToIncludePath=
 ConvenienceList=
-DebugInfo=true
-File=tkaction.cpp,tkaction.h,tkcombobox.cpp,tkcombobox.h,tktoolbarbutton.cpp,tktoolbarbutton.h,tk2floatspinboxaction.h,tk2floatspinboxaction.cpp,tkfloatspinboxaction.h,tkfloatspinboxaction.cpp,tkfloatspinbox.cpp,tkfloatspinbox.h,tkunits.h,tkunits.cpp,tkunitsaction.cpp,tkunitsaction.h,tkbuttongroupcontroller.cpp,tkbuttongroupcontroller.h,tkcoloractions.h,tkcoloractions.cpp,tkvisualpage.cpp,tkvisualpage.h
+DebugInfo=false
+File=tkaction.cpp,tkaction.h,tkcombobox.cpp,tkcombobox.h,tktoolbarbutton.cpp,tktoolbarbutton.h,tk2floatspinboxaction.h,tk2floatspinboxaction.cpp,tkfloatspinboxaction.h,tkfloatspinboxaction.cpp,tkfloatspinbox.cpp,tkfloatspinbox.h,tkunits.h,tkunits.cpp,tkunitsaction.cpp,tkunitsaction.h,tkbuttongroupcontroller.cpp,tkbuttongroupcontroller.h,tkcoloractions.h,tkcoloractions.cpp,tkvisualpage.cpp,tkvisualpage.h,tkpagelayout.cpp,tkpagelayout.h,tkcommon.cpp,tkcommon.h
 Group=
 InstallHeaderPath=
 InstallLibPath=
 Memo=
-NotInIncludePath=kivio,po,kiviopart,ui,kiviosdk,tklib,tools,pics,tiles,stencils,Flowcharting,BasicFlowcharting,plugins,kivioconnectortool,straight_connector,kiviotexttool,kiviozoomtool,zoom_pics,kivioselecttool,select_pics
+NotInIncludePath=kivio,po,kiviopart,ui,kiviosdk,tklib,tools,pics,tiles,stencils,TestStencil1,Flowcharting,BasicFlowcharting,plugins,kivioconnectortool,straight_connector,kiviotexttool,kiviozoomtool,zoom_pics,kivioselecttool,select_pics
 Optimize=true
 RemoveSymbolTable=false
 ShowWarnings=true
@@ -165,12 +165,12 @@ AddCompileOptions=
 AddToIncludePath=
 ConvenienceList=
 DebugInfo=false
-File=guidessetupdialogbase.ui,guidessetupdialog.cpp,guidessetupdialog.h,guides1pagebase.ui,guides2pagebase.ui,guides1page.cpp,guides1page.h,guides2page.cpp,guides2page.h,aligndialog.ui,kiviooptionsdialogbase.ui,kiviooptionsdialog.cpp,kiviooptionsdialog.h,enternamedialogbase.ui,viewitemrenamedialog.cpp,viewitemrenamedialog.h,kivio_birdeye_panel.cpp,kivio_birdeye_panel.h,kivio_birdeye_panel_base.ui,kivio_layer_panel_base.ui,kivio_layer_panel.cpp,kivio_layer_panel.h,gridsetupdialogbase.ui,gridsetupdialog.cpp,gridsetupdialog.h,pagesetupdialogbase.ui,pagesetupdialog.cpp,pagesetupdialog.h
+File=guidessetupdialogbase.ui,guidessetupdialog.cpp,guidessetupdialog.h,guides1pagebase.ui,guides2pagebase.ui,guides1page.cpp,guides1page.h,guides2page.cpp,guides2page.h,aligndialog.ui,kiviooptionsdialogbase.ui,kiviooptionsdialog.cpp,kiviooptionsdialog.h,enternamedialogbase.ui,viewitemrenamedialog.cpp,viewitemrenamedialog.h,kivio_birdeye_panel.cpp,kivio_birdeye_panel.h,kivio_birdeye_panel_base.ui,kivio_layer_panel_base.ui,kivio_layer_panel.cpp,kivio_layer_panel.h,gridsetupdialogbase.ui,gridsetupdialog.cpp,gridsetupdialog.h,pagesetupdialogbase.ui,pagesetupdialog.cpp,pagesetupdialog.h,pageoptionsdialogbase.ui,pageoptionsdialog.cpp,pageoptionsdialog.h,stencilsbaroptionsdialogbase.ui,stencilsbaroptionsdialog.cpp,stencilsbaroptionsdialog.h
 Group=
 InstallHeaderPath=
 InstallLibPath=
 Memo=
-NotInIncludePath=kivio,po,ui,tools,pics,tiles,stencils,Flowcharting,BasicFlowcharting,plugins,kivioconnectortool,straight_connector,kiviotexttool,kiviozoomtool,zoom_pics,kivioselecttool,select_pics
+NotInIncludePath=kivio,po,ui,tools,pics,tiles,stencils,TestStencil1,Flowcharting,BasicFlowcharting,plugins,kivioconnectortool,straight_connector,kiviotexttool,kiviozoomtool,zoom_pics,kivioselecttool,select_pics
 Optimize=true
 RemoveSymbolTable=false
 ShowWarnings=true

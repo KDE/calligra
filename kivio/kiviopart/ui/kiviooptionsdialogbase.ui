@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>596</width>
+            <width>592</width>
             <height>480</height>
         </rect>
     </property>
@@ -139,7 +139,7 @@
             <column>
                 <property>
                     <name>text</name>
-                    <string>Page Name</string>
+                    <string>PageID</string>
                 </property>
                 <property>
                     <name>clickable</name>
@@ -171,7 +171,7 @@
             </property>
             <property>
                 <name>text</name>
-                <string>_page_</string>
+                <string>0</string>
             </property>
             <property>
                 <name>text</name>
@@ -196,7 +196,7 @@
                 </property>
                 <property>
                     <name>text</name>
-                    <string>_pagesize_</string>
+                    <string>1</string>
                 </property>
                 <property>
                     <name>text</name>
@@ -222,7 +222,7 @@
                 </property>
                 <property>
                     <name>text</name>
-                    <string>_pagegrid_</string>
+                    <string>2</string>
                 </property>
                 <property>
                     <name>text</name>
@@ -248,7 +248,7 @@
                 </property>
                 <property>
                     <name>text</name>
-                    <string>_guides_</string>
+                    <string>3</string>
                 </property>
                 <property>
                     <name>text</name>
@@ -273,7 +273,7 @@
                     </property>
                     <property>
                         <name>text</name>
-                        <string>_guidehorizontal_</string>
+                        <string>4</string>
                     </property>
                     <property>
                         <name>text</name>
@@ -299,7 +299,7 @@
                     </property>
                     <property>
                         <name>text</name>
-                        <string>_guidevertical_</string>
+                        <string>5</string>
                     </property>
                     <property>
                         <name>text</name>
@@ -325,7 +325,7 @@
                     </property>
                     <property>
                         <name>text</name>
-                        <string>_allguides_</string>
+                        <string>6</string>
                     </property>
                     <property>
                         <name>text</name>
@@ -353,7 +353,7 @@
             </property>
             <property>
                 <name>text</name>
-                <string>_stencilsbar_</string>
+                <string>7</string>
             </property>
             <property>
                 <name>text</name>

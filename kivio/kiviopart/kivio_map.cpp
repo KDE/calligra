@@ -110,7 +110,7 @@ bool KivioMap::loadXML( const QDomElement& mymap )
   while( !n.isNull() ) {
     QDomElement e = n.toElement();
     if ( !e.isNull() && e.tagName() == "page" ) {
-      KivioPage *t = m_pDoc->createPage(true);
+      KivioPage *t = m_pDoc->createPage();
       m_pDoc->addPage( t );
       if ( !t->loadXML( e ) )
         return false;

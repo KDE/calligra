@@ -35,7 +35,6 @@ class KivioPoint;
 class KivioGuideLines;
 
 #include <koDocument.h>
-#include <koPageLayoutDia.h>
 
 #include <qpen.h>
 #include <qlist.h>
@@ -53,6 +52,7 @@ class KivioPainter;
 #define BORDER_SPACE 1
 
 #include "tkunits.h"
+#include "tkpagelayout.h"
 
 
 struct AlignData
@@ -103,7 +103,8 @@ public:
   int id() { return m_id; }
   static KivioPage* find( int _id );
 
-  KoPageLayout paperLayout() { return m_pPageLayout; }
+  TKPageLayout paperLayout() { return m_pPageLayout; }
+  void setPaperLayout(TKPageLayout);
 
   void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, float, bool );
   void printContent( KivioPainter& painter );
@@ -139,8 +140,6 @@ public:
   void insertLayer( int, KivioLayer * );
   KivioLayer *layerAt( int );
 
-  bool pagePropertiesDlg();
-
   KivioGuideLines* guideLines(){ return gLines; }
 
   /*
@@ -151,7 +150,6 @@ public:
   void distributeStencils( DistributeData );
 
 public slots:
-  void paperLayoutDlg();
   void deleteSelectedStencils();
   void groupSelectedStencils();
   void ungroupSelectedStencils();
@@ -189,8 +187,7 @@ protected:
   static int s_id;
   static QIntDict<KivioPage>* s_mapPages;
 
-  KoPageLayout m_pPageLayout;
-  KoHeadFoot m_pHeadFoot;
+  TKPageLayout m_pPageLayout;
 
   KivioGuideLines* gLines;
 };

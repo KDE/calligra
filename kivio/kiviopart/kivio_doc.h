@@ -23,6 +23,7 @@ class KivioDoc;
 class KivioView;
 class KivioMap;
 class KivioPage;
+class KivioOptions;
 
 class KivioGroupStencil;
 class KivioStencilSpawner;
@@ -66,12 +67,14 @@ public:
 
   virtual bool initDoc();
 
+  KivioOptions* config() { return m_options; }
+
   virtual QCString mimeType() const { return MIME_TYPE; }
 
   /**
    * @return a pointer to a new KivioPage. The KivioPage is not added to the map nor added to the GUI.
    */
-  KivioPage* createPage( bool useDefaults);
+  KivioPage* createPage();
 
   /**
    * Adds a KivioPage to the GUI and makes it active. In addition the KivioPage is
@@ -94,7 +97,7 @@ public:
 
   KivioStencilSpawner *findStencilSpawner( const QString& setName, const QString& title );
   KivioStencilSpawner *findInternalStencilSpawner( const QString& title );
-  
+
   KivioMap* map() const { return m_pMap; }
 
   /**
@@ -198,6 +201,8 @@ protected:
   KivioGridData gridData;
 
   ViewItemList* viewItemList;
+
+  KivioOptions* m_options;
 };
 
 #endif

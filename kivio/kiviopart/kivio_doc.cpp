@@ -27,6 +27,7 @@
 #include "kivio_view.h"
 #include "kivio_factory.h"
 
+#include "kivio_config.h"
 #include "kivio_common.h"
 #include "kivio_group_stencil.h"
 #include "kivio_icon_view.h"
@@ -82,6 +83,8 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
 
   s_docs->append(this);
 
+  m_options = new KivioOptions();
+
   m_pLstSpawnerSets = new QList<KivioStencilSpawnerSet>;
   m_pLstSpawnerSets->setAutoDelete(true);
 
@@ -109,7 +112,7 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
   for (; pIt != pEnd; ++pIt )
   {
     m_pInternalSet->loadFile(*pIt);
-  }  
+  }
 
   m_units = (int)UnitPoint;
 
@@ -138,7 +141,7 @@ bool KivioDoc::initDoc()
     return openURL( url );
   }
   else if ( ret == KoTemplateChooseDia::Empty ) {
-      KivioPage *t = createPage(true);
+      KivioPage *t = createPage();
       m_pMap->addPage( t );
       resetURL();
       return true;
@@ -164,12 +167,15 @@ QDomDocument KivioDoc::saveXML()
   kivio.setAttribute( "mime", "application/x-kivio" );
 
   kivio.setAttribute( "units", m_units );
-
   gridData.save(kivio,"grid");
 
   QDomElement viewItemsElement = doc.createElement("ViewItems");
   kivio.appendChild(viewItemsElement);
   viewItemList->save(viewItemsElement);
+
+  QDomElement optionsElement = doc.createElement("Options");
+  kivio.appendChild(optionsElement);
+  m_options->save(optionsElement);
 
   doc.appendChild(kivio);
 
@@ -252,6 +258,10 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
     {
         viewItemList->load(node.toElement());
     }
+    else if( name == "Options" )
+    {
+        m_options->load(node.toElement());
+    }
     else
     {
        kdDebug() << "KivioDoc::loadXML() - Unknown node " <<  name << endl;
@@ -271,7 +281,6 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
   setUnits(kivio.attribute("units","0").toInt());
 
   gridData.load(kivio,"grid");
-
   return true;
 }
 
@@ -331,7 +340,7 @@ bool KivioDoc::loadStencilSpawnerSet( const QString &desc )
                             }
                             else
                             {
-			       kdDebug() << "KivioDoc::loadStencilSpawnerSet() - FAILED TO LOAD STENCIL SPAWNER SET " 
+			       kdDebug() << "KivioDoc::loadStencilSpawnerSet() - FAILED TO LOAD STENCIL SPAWNER SET "
 					 << innerFI->absFilePath() << endl;
                             }
                             return true;
@@ -355,27 +364,13 @@ bool KivioDoc::completeLoading( KoStore* )
   return true;
 }
 
-KivioPage* KivioDoc::createPage( bool useDefaults )
+KivioPage* KivioDoc::createPage()
 {
   QString s( i18n("Page%1") );
   s = s.arg( m_iPageId++ );
 
   KivioPage* t = new KivioPage(m_pMap,s.ascii());
   t->setPageName(s,true);
-
-  // Launch the page properties dialog.  If the user cancels,
-  // remove it from the page map, and delete the page.  It has
-  // not yet been added as a tab so we don't need to worry
-  // about it.
-  if( useDefaults == false )
-  {
-      if( t->pagePropertiesDlg() == false )
-      {
-        m_pMap->removePage(t);
-        delete t;
-        return NULL;
-      }
-  }
 
   return t;
 }
@@ -512,6 +507,8 @@ KivioDoc::~KivioDoc()
     }
 
     s_docs->removeRef(this);
+
+    delete m_options;
 }
 
 bool KivioDoc::removeSpawnerSet( KivioStencilSpawnerSet *pSet )

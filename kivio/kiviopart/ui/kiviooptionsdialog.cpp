@@ -8,18 +8,29 @@
 #include "gridsetupdialog.h"
 #include "gridsetupdialog.h"
 #include "pagesetupdialog.h"
+#include "pageoptionsdialog.h"
+#include "stencilsbaroptionsdialog.h"
 
 #include <qheader.h>
 #include <qlabel.h>
 #include <qlistview.h>
 #include <qwidgetstack.h>
 
-KivioOptionsDialog::KivioOptionsDialog(KivioView* view, QWidget* parent, const char* name)
+KivioOptionsDialog::KivioOptionsDialog(KivioView* view, Pages startPage, QWidget* parent, const char* name)
 : KivioOptionsDialogBase(parent, name, true), m_pView(view)
 {
   list->header()->hide();
   list->header()->removeLabel(1);
   list->header()->removeLabel(1);
+  list->setSorting(-1);
+  QListViewItemIterator it(list);
+  // iterate through all items of the listview
+  for ( ; it.current(); ++it ) {
+    if ( it.current()->text(1).toInt() == startPage) {
+      list->setCurrentItem(it.current());
+      break;
+    }
+  }
 }
 
 KivioOptionsDialog::~KivioOptionsDialog()
@@ -37,38 +48,40 @@ void KivioOptionsDialog::slotCurrentChanged(QListViewItem* i)
   QWidget* page = 0;
 
   page = (QWidget*)stack->child(pname.ascii());
+  int id = pname.toInt();
+
   if (!page) {
 
-    if (pname == "_page_") {
-      page = new GuidesSetupDialog(m_pView, page, pname.ascii());
+    if (id == PageOption) {
+      page = new PageOptionsDialog(m_pView, page, pname.ascii());
     }
 
-    if (pname == "_pagesize_") {
+    if (id == PageSize) {
       page = new PageSetupDialog(m_pView, page, pname.ascii());
     }
 
-    if (pname == "_pagegrid_") {
+    if (id == PageGrid) {
       page = new GridSetupDialog(m_pView, page, pname.ascii());
     }
 
-    if (pname == "_guides_") {
+    if (id == Guides) {
       page = new GuidesSetupDialog(m_pView, page, pname.ascii());
     }
 
-    if (pname == "_allguides_") {
+    if (id == GuidesAll) {
       page = new GuidesTwoPositionPage(m_pView, page, pname.ascii());
     }
 
-    if (pname == "_guidehorizontal_") {
+    if (id == GuidesHorizontal) {
       page = new GuidesOnePositionPage(Horizontal, m_pView, page, pname.ascii());
     }
 
-    if (pname == "_guidevertical_") {
+    if (id == GuidesVertical) {
       page = new GuidesOnePositionPage(Vertical, m_pView, page, pname.ascii());
     }
 
-    if (pname == "_stencilsbar_") {
-//      page = new GuidesOnePositionPage(Vertical, m_pView, page, pname.ascii());
+    if (id == StencilsBar) {
+      page = new StencilsBarOptionsDialog(m_pView, page, pname.ascii());
     }
 
     if (page) {

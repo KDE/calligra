@@ -28,7 +28,6 @@
 #include <qstring.h>
 
 #include <koQueryTrader.h>
-#include <koPageLayoutDia.h>
 
 #include "kivio_point.h"
 #include "kivio_rect.h"

@@ -19,7 +19,9 @@
 #ifndef KIVIO_ICON_VIEW_H
 #define KIVIO_ICON_VIEW_H
 
+#include <qdom.h>
 #include <qiconview.h>
+#include <qlist.h>
 #include <qpainter.h>
 #include <qpalette.h>
 #include <qpixmap.h>
@@ -29,16 +31,31 @@ class KivioStencilSpawnerSet;
 class KivioStencilSpawner;
 
 
-class KivioIconView : public QIconView
+class KivioIconViewVisual
 {
-    Q_OBJECT
+public:
+  KivioIconViewVisual();
+  ~KivioIconViewVisual();
+
+  QPixmap* pixmap;
+  QColor color;
+  bool usePixmap;
+
+  void init();
+  void setDefault();
+  void save(QDomElement&);
+  void load(QDomElement&);
+
+  // only for save/load config data
+  QString pixmapFileName;
+};
+
+class KivioIconView : public QIconView
+{ Q_OBJECT
 
 protected:
     KivioStencilSpawnerSet *m_pSpawnerSet;
     static KivioStencilSpawner *m_pCurDrag;
-    QPixmap *m_pBackground;
-    QColor m_bgColor;
-    int m_bgType;
 
     void drawBackground( QPainter *, const QRect & );
     QDragObject *dragObject();
@@ -58,6 +75,13 @@ public:
 
     void setStencilSpawnerSet( KivioStencilSpawnerSet * );
     KivioStencilSpawnerSet *spawnerSet() { return m_pSpawnerSet; }
+
+public:
+  static void setVisualData(KivioIconViewVisual);
+
+private:
+  static QList<KivioIconView> objList;
+  static KivioIconViewVisual visual;
 };
 
 class KivioIconViewItem : public QIconViewItem
