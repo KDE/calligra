@@ -1002,6 +1002,41 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
         if ( fill == "solid" )
         {
             QDomElement brush = doc.createElement( "BRUSH" );
+            if ( m_styleStack.hasAttribute( "draw:transparency" ) )
+            {
+                QString transparency = m_styleStack.attribute( "draw:transparency" );
+                transparency = transparency.remove( '%' );
+                int value = transparency.toInt();
+                if ( value >= 94 && value <= 99 )
+                {
+                    brush.setAttribute( "style", 2 );
+                }
+                else if ( value>=64 && value <= 93 )
+                {
+                    brush.setAttribute( "style", 3 );
+                }
+                else if ( value>=51 && value <= 63 )
+                {
+                    brush.setAttribute( "style", 4 );
+                }
+                else if ( value>=38 && value <= 50 )
+                {
+                    brush.setAttribute( "style", 5 );
+                }
+                else if ( value>=13 && value <= 37 )
+                {
+                    brush.setAttribute( "style", 6 );
+                }
+                else if ( value>=7 && value <= 12 )
+                {
+                    brush.setAttribute( "style", 7 );
+                }
+                else if ( value>=1 && value <= 6 )
+                {
+                    brush.setAttribute( "style", 8 );
+                }
+            }
+            else
             brush.setAttribute( "style", 1 );
             if ( m_styleStack.hasAttribute( "draw:fill-color" ) )
                 brush.setAttribute( "color", m_styleStack.attribute( "draw:fill-color" ) );
