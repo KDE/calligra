@@ -861,9 +861,9 @@ static void ProcessLinespacingTag (QDomNode myNode, void *tagData, KWEFKWordLead
             layout->lineSpacingType = LayoutData::LS_DOUBLE;
         else
         {
-            const double size = oldValue.toDouble ();
-            // ### TODO: is this check right? The user might have wanted lines "glued" together
-            if ( size >= 1.0 )
+            bool ok = false;
+            const double size = oldValue.toDouble( &ok );
+            if ( ok && ( size >= 0.0 ) ) // 0 is allowed but negative values are not
             {
                 // We have a valid size
                 layout->lineSpacingType = LayoutData::LS_CUSTOM; // set to custom
@@ -950,75 +950,67 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     else
     {
         // ### TODO: <FLOW> can have a dir attribute
-        tagProcessingList << TagProcessing ( "FLOW", ProcessStringAlignTag, &layout->alignment );
-    }
+        tagProcessingList << TagProcessing ( "FLOW", ProcessStringAlignTagocessing ( ag,   layout
 
-    ProcessSubtags (myNode, tagProcessingList, leader);
 
-    if ( leader->m_oldSyntax )
+    if ( leader->m_oIata, KWDatftout-          Len != -1 )
     {
-        if ( layout->alignment.isEmpty() )
-        {
-            layout->alignment = "left"; // KWord 0.8 did not support right-to-left
-        }
-        else
-        {
-            const char* flows[]={"left", "right", "center", "justify" };
-
-            int align = layout->alignment.toInt();
-            if ( ( align < 0 ) || ( align > 3) )
-                align = 0; // Unknown, so assume left
-
-            kdDebug(30520) << "KWord 0.8 flow: " << layout->alignment << " corrected: " << QString( flows[ align ] ) << endl;
-
-            layout->alignment = flows[ align ];
-        }
-    }
+  cessStringatftout-         ( ag,   layout
 
 
-
-    if ( formatDataList.isEmpty () )
+    if ( leader->m_oIata, KWD(Variout-         Len != -1 )
     {
-        kdWarning (30508) << "No FORMAT tag within LAYOUT/STYLE!" << endl;
-    }
-    else
+  cessString(Variout-        ( ag,   layout
+
+
+    if ( leader->m_oIata, KWDdLayouid P        Len != -1 )
     {
-        layout->formatData = formatDataList.first ();
+  cessString    <<Fd P       ( ag,   layout
 
-        if ( formatDataList.count () > 1 )
-        {
-            kdWarning (30508) << "More than one FORMAT tag within LAYOUT/STYLE!" << endl;
-        }
-    }
 
-    if ( layout->styleName.isEmpty () )
+    if ( leader->m_oIata, KWD    <<r           L          
     {
-        layout->styleName = "Standard";
-        kdWarning (30508) << "Empty layout name!" << endl;
-    }
+  PLE;
+        else iiiiiiii ( ag,   layout
 
+
+    if ( leader->m_oIata, KWDout-              Len != -1 )
+    {
+  cessString, "double", (voi ( ag,   layout
+
+
+    if ( leader->m_oIata, KWDtrProce-eTag,e;
+} L                   PLE;
+        else iiiiiiii ( ag,   layout
+
+
+    if ( leader->m_oIata, KWD                  L                   PLE;
+        else iiiiiiii ( ag, ->m_oIaaderayoutData *layout = (LayoutData *) tagDataomBorder        );
+    tagProcess    {
+        //(LayoutgList,Tessing (ot?
+        tagProcessingList
+            << TagProcessing ( "FLOW",  Tessing (a *), (vssing (a *)ag, Tessing (a *),lignment )
+     Tessing (out->(vssing ()
+            << TagProcessing ( "OHEAD",  ProcessOldL ag,   layout
+
+
+    if  ag,      leader->m_oIata, KWDptlue;
+}}}}}", int ;
+}&(vssing (.m_ptlue}}}pLinesTogetheader->m_oIata, KWD    << TagPressing ( "&(vssing (.m_-----}}}pLinesTogetheader->m_oIata, KWDfill= -1 )Pressing ( "&(vssing (.m_fill= -}pLinesTogetheader->m_oIata, KWDwid"ILEFT", ", int ;
+}&(vssing (.m_wid"I }}pLinesTogetheader->m_oIata, KWD     cTag;
+}L         0}pLinesTogetagData;
+
+  ing ( adowDistance );
+    OW",      ata:ngListoo mfootwocessiW",        layout
+
+
+    if  ag,         theader->m_oIata, KWDmmlue;
 }
-
-static void ProcessImageKeyTag ( QDomNode myNode,
-    void *tagData, KWEFKWordLeader *)
-{
-    KoPictureKey *key = (KoPictureKey*) tagData;
-
-    // Let KoPicture do the loading
-    key->loadAttributes(myNode.toElement());
+;
+}0}pLinesToge    theader->m_oIata, KWD(305lue;
 }
-
-
-void ProcessImageTag ( QDomNode myNode,
-    void *tagData, KWEFKWordLeader *leader )
-{ // <PICTURE>
-    QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "keepAspectRatio", NULL, NULL );
-    ProcessAttributes (myNode, attrProcessingList);
-
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList << TagProcessing ( "KEY", ProcessImageKeyTag, tagData );
-    ProcessSubtags (myNode, tagProcessingList, leader);
-}
-
-
+;
+}0}pLinesToge    ( ag,   tagPr->m_oIaaderayoutData *layout = (LayoutData *) taagPr(vssing (a *)->       (vssing ( tagDataomBorder        );
+    tagProcess    {
+        //(LayoutIndenCOUNTER      tagProcessingList
+  

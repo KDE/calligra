@@ -803,7 +803,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
             }
             else
             {
-                kdWarning(30520) << "Not standard language: " << lang << endl;
+                kdDebug(30520) << "Not language without country: " << lang << endl;
                 strElement += "fo:language=\"";
                 strElement += lang;
                 strElement += "\" ";

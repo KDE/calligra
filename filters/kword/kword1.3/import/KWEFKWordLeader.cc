@@ -669,7 +669,13 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
 static void ProcessVariableSettingsTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
 {
     VariableSettingsData vs;
-    QString print, creation, modification; // Dates
+    QString print, creation, modification; // (ISO) Dates
+    int creationYear = -1;
+    int creationMonth = -1;
+    int creationDay = -1;
+    int modificationYear = -1;
+    int modificationMonth = -1;
+    int modificationDay = -1;
 
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "startingPageNumber",
@@ -687,21 +693,49 @@ static void ProcessVariableSettingsTag (QDomNode myNode, void *, KWEFKWordLeader
                        << AttrProcessing ( "displayfieldcode",
                                            "bool",
                                            (void *) &vs.displayfieldcode )
-                       << AttrProcessing ( "lastPrintingDate",
-                                           "QString",
-                                           &print )
-                       << AttrProcessing ( "creationDate",
-                                           "QString",
-                                           &creation )
-                       << AttrProcessing ( "modificationDate",
-                                           "QString",
-                                           &modification );
+        ;
+
+
+    // The following 3 attributes are from syntax 3 but at least the RTF import filter generate them with syntax 2.
+    attrProcessingList
+        << AttrProcessing ( "lastPrintingDate", print )
+        << AttrProcessing ( "creationDate", creation )
+        << AttrProcessing ( "modificationDate", modification );
+    ;
+
+    // Some files have the creation and modification date not in one attribute but in an attribute for each the year, the month, the day
+    // ( e.g. syntax 2 file kofficetests/documents/export/kword/text/all.kwd )
+    attrProcessingList
+        << AttrProcessing( "modifyFileYear", modificationYear )
+        << AttrProcessing( "modifyFileMonth", modificationMonth )
+        << AttrProcessing( "modifyFileDay", modificationDay )
+        << AttrProcessing( "createFileYear", creationYear )
+        << AttrProcessing( "createFileMonth", creationMonth )
+        << AttrProcessing( "createFileDay", creationDay )
+    ;
+
     ProcessAttributes (myNode, attrProcessingList);
 
-    if (!creation.isEmpty())
+    if ( creation.isEmpty() )
+    {
+        if ( ( creationYear > 1970 ) && QDate::isValid( creationYear, creationMonth, creationDay ) )
+        {
+            vs.creationTime = QDateTime( QDate( creationYear, creationMonth, creationDay ) );
+        }
+    }
+    else
         vs.creationTime=QDateTime::fromString(creation, Qt::ISODate);
-    if (!modification.isEmpty())
+
+    if ( modification.isEmpty() )
+    {
+        if ( ( modificationYear > 1970 ) && QDate::isValid( modificationYear, modificationMonth, modificationDay ) )
+        {
+            vs.modificationTime = QDateTime( QDate( modificationYear, modificationMonth, modificationDay ) );
+        }
+    }
+    else
         vs.modificationTime=QDateTime::fromString(modification, Qt::ISODate);
+
     if (!print.isEmpty())
         vs.printTime=QDateTime::fromString(print, Qt::ISODate);
 
