@@ -655,3 +655,8 @@ QString KoTextViewIface::fontAttibute()const
 {
     return KoTextFormat::attributeFontToString( m_textView->fontAttribute() );
 }
+
+void KoTextViewIface::insertNonbreakingSpace()
+{
+    m_textView->insertNonbreakingSpace();
+}

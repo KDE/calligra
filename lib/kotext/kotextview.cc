@@ -355,6 +355,9 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
                 case Key_Insert:
                     copy();
                     break;
+                case Key_Space:
+                    insertNonbreakingSpace();
+                    break;
                 }
                 break;
             }
@@ -657,7 +660,6 @@ void KoTextView::handleMouseMoveEvent( QMouseEvent*, const QPoint& iPoint )
             *m_cursor = cl;
         else
             *m_cursor = oldCursor;
-
     }
 
     bool redraw = FALSE;
@@ -720,7 +722,6 @@ void KoTextView::handleMouseDoubleClickEvent( QMouseEvent*ev, const QPoint& i )
     possibleTripleClick=true;
 
     QTimer::singleShot(QApplication::doubleClickInterval(),this,SLOT(tripleClickTimeout()));
-
 }
 
 void KoTextView::tripleClickTimeout()
@@ -739,14 +740,12 @@ void KoTextView::handleMouseTripleClickEvent( QMouseEvent*ev, const QPoint& /* C
     inDoubleClick = FALSE;
     *m_cursor = selectParagUnderCursor( *m_cursor );
     QTimer::singleShot(QApplication::doubleClickInterval(),this,SLOT(afterTripleClickTimeout()));
-
 }
 
 void KoTextView::afterTripleClickTimeout()
 {
     afterTripleClick=false;
 }
-
 
 bool KoTextView::maybeStartDrag( QMouseEvent* e )
 {
