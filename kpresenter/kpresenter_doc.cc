@@ -1518,7 +1518,8 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling() )
     {
         dp = drawPage.toElement();
-        if ( dp.tagName()== "draw:page"  ) // don't try to parse "</draw:page>" as page
+        kdDebug()<<"dp.tagName() :"<<dp.tagName()<<endl;
+        if ( dp.tagName()== "page" && dp.namespaceURI() == KoXmlNS::draw ) // don't try to parse "</draw:page>" as page
         {
             context.styleStack().clear(); // remove all styles
             fillStyleStack( dp, context );
@@ -1612,8 +1613,9 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         QString name = o.tagName();
         kdDebug()<<" name :"<<name<<endl;
         context.styleStack().save();
+        const bool isDrawNS = o.namespaceURI() == KoXmlNS::draw;
         //"draw:text-box"
-        if ( name == "draw:frame" ) // textbox
+        if ( name == "frame" && isDrawNS) // textbox
         {
             fillStyleStack( o, context );
 
@@ -1624,7 +1626,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             else
                 newpage->appendObject(kptextobject);
         }
-        else if ( name == "draw:rect" ) // rectangle
+        else if ( name == "rect" && isDrawNS) // rectangle
         {
             fillStyleStack( o, context );
             KPRectObject *kprectobject = new KPRectObject();
@@ -1634,7 +1636,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             else
                 newpage->appendObject(kprectobject);
         }
-        else if ( name == "draw:circle" || name == "draw:ellipse" )
+        else if ( ( name == "circle" || name == "ellipse" )&& isDrawNS)
         {
             fillStyleStack( o, context );
             if ( o.hasAttributeNS( KoXmlNS::draw, "kind" ) ) // pie, chord or arc
@@ -1656,14 +1658,14 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
                     newpage->appendObject(kpellipseobject);
             }
         }
-        else if ( name == "draw:line" ) // line
+        else if ( name == "line" && isDrawNS) // line
         {
             fillStyleStack( o, context );
             KPLineObject *kplineobject = new KPLineObject();
             kplineobject->loadOasis(o, context, m_loadingInfo);
             newpage->appendObject(kplineobject);
         }
-        else if (name=="draw:polyline") { // polyline
+        else if (name=="polyline" && isDrawNS) { // polyline
             fillStyleStack( o, context );
             KPPolylineObject *kppolylineobject = new KPPolylineObject();
             kppolylineobject->loadOasis(o, context, m_loadingInfo);
@@ -1672,7 +1674,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             else
                 newpage->appendObject(kppolylineobject);
         }
-        else if (name=="draw:polygon") { // plcloseobject
+        else if (name=="polygon" && isDrawNS) { // plcloseobject
             fillStyleStack( o, context );
             KPClosedLineObject *kpClosedObject = new KPClosedLineObject();
             kpClosedObject->loadOasis( o, context, m_loadingInfo);
@@ -1682,7 +1684,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
                 newpage->appendObject(kpClosedObject);
         }
         //FIXME wait that it will ok'ed by oo spec
-        else if (name=="draw:regular-polygon") { // kppolygone object
+        else if (name=="regular-polygon"&& isDrawNS) { // kppolygone object
             fillStyleStack( o, context );
             KPPolygonObject *kpPolygoneObject = new KPPolygonObject();
             kpPolygoneObject->loadOasis( o, context, m_loadingInfo);
@@ -1691,7 +1693,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             else
                 newpage->appendObject(kpPolygoneObject);
         }
-        else if ( name == "draw:image" ) // image
+        else if ( name == "image" && isDrawNS) // image
         {
             fillStyleStack( o, context );
             KPPixmapObject *kppixmapobject = new KPPixmapObject( pictureCollection() );
@@ -1701,7 +1703,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             else
                 newpage->appendObject(kppixmapobject);
         }
-        else if ( name == "draw:path" )
+        else if ( name == "path" && isDrawNS)
         {
             //we have 4 elements to use here.
             //Cubicbeziercurve/Quadricbeziercurve/closeline/KPFreehandObject
@@ -1748,7 +1750,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
                     newpage->appendObject( kpFreeHandObject );
             }
         }
-        else if ( name == "draw:g" )
+        else if ( name == "g" && isDrawNS)
         {
             fillStyleStack( o, context );
             KPGroupObject *kpgroupobject = new KPGroupObject();
@@ -1760,7 +1762,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             else
                 newpage->appendObject(kpgroupobject);
         }
-        else if ( name == "draw:object" )
+        else if ( name == "object" && isDrawNS)
         {
             fillStyleStack( o, context );
             KPresenterChild *ch = new KPresenterChild( this );
@@ -1776,7 +1778,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             kppartobject->setOrig( r.x(), r.y() );
             kppartobject->setSize( r.width(), r.height() );
         }
-        else if ( name == "presentation:notes" ) // notes
+        else if ( name == "notes" && o.namespaceURI() == KoXmlNS::presentation ) // notes
         {
             //we must extend note attribute
             //kdDebug()<<"presentation:notes----------------------------------\n";
@@ -1798,7 +1800,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
                 m_pageList.at(pos)->setNoteText(note );
             }
         }
-        else if ( name == "style:header" || name == "style:footer" )
+        else if ( ( name == "header" || name == "footer" ) && o.namespaceURI() == KoXmlNS::style )
         {
             //nothing
         }
@@ -1821,8 +1823,9 @@ int KPresenterDoc::createPresentationAnimation(const QDomElement& element, int o
     {
         QDomElement e = n.toElement();
 	QCString tagName = e.tagName().latin1();
+        const bool isPresentationNS = e.namespaceURI() == KoXmlNS::presentation;
 	kdDebug()<<"(createPresentationAnimation) tagName found :"<<tagName<<endl;
-        if ( tagName == "presentation:show-shape")
+        if ( tagName == "show-shape" && isPresentationNS )
         {
             Q_ASSERT( e.hasAttributeNS( KoXmlNS::draw, "shape-id" ) );
             QString name = e.attributeNS( KoXmlNS::draw, "shape-id", QString::null );
@@ -1836,7 +1839,7 @@ int KPresenterDoc::createPresentationAnimation(const QDomElement& element, int o
                 ++orderAnimation;
 
         }
-        else if ( tagName == "presentation:hide-shape")
+        else if ( tagName == "hide-shape" && isPresentationNS)
         {
             Q_ASSERT( e.hasAttributeNS( KoXmlNS::draw, "shape-id" ) );
             QString name = e.attributeNS( KoXmlNS::draw, "shape-id", QString::null );
@@ -1850,7 +1853,7 @@ int KPresenterDoc::createPresentationAnimation(const QDomElement& element, int o
                 ++orderAnimation;
 
         }
-        else if ( tagName == "presentation:animation-group" )
+        else if ( tagName == "animation-group" && isPresentationNS)
         {
             kdDebug()<<" presentation:animation-group exist \n";
             orderAnimation = createPresentationAnimation( e, orderAnimation, false );
