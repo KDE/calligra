@@ -18,6 +18,8 @@ class KWParagLayout;
  * parag. This means: Font, TextFlow, Counter ....
  * Every KWParag owns a KWParagLayout instance.
  */
+const QString CounterPlaceHolder[] = {"","99","w","W","iiix","IIIX","W "};
+
 class KWParagLayout
 {
 public:

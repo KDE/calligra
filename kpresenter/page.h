@@ -191,6 +191,9 @@ protected:
   void insertPie(KRect);
   void insertObject(KRect);
 
+  void selectNext();
+  void selectPrev();
+
   // variables
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu,*presMenu;
   QPopupMenu *alignMenu1,*alignMenu2,*alignMenu3,*alignMenu4,*alignMenu5;

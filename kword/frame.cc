@@ -595,6 +595,7 @@ void KWTextFrameSet::updateCounters()
       counterData[i] = -2;
       listData[i] = -2;
     }
+  KWParagLayout::CounterType ct = KWParagLayout::CT_NONE;
 
   while (p)
     {
@@ -609,7 +610,7 @@ void KWTextFrameSet::updateCounters()
 		    {
 		      switch (p->getParagLayout()->getCounterType())
 			{
-			case KWParagLayout::CT_NUM:
+			case KWParagLayout::CT_NUM: case KWParagLayout::CT_ROM_NUM_L: case KWParagLayout::CT_ROM_NUM_U:
 			  counterData[i] = atoi(p->getParagLayout()->getStartCounter());
 			  break;
 			case KWParagLayout::CT_ALPHAB_L:
@@ -634,6 +635,12 @@ void KWTextFrameSet::updateCounters()
 	    }
 	  else
 	    {
+	      if (ct != p->getParagLayout()->getCounterType())
+		{
+		  for (i = 0;i < 16;i++)
+		    listData[i] = -2;
+		}
+	      ct = p->getParagLayout()->getCounterType();
 	      if (p->getParagLayout()->getCounterType() != KWParagLayout::CT_BULLET)
 		listData[p->getParagLayout()->getCounterDepth()]++;
 	      else if (listData[0] != -2)
@@ -647,7 +654,7 @@ void KWTextFrameSet::updateCounters()
 		    {
 		      switch (p->getParagLayout()->getCounterType())
 			{
-			case KWParagLayout::CT_NUM:
+			case KWParagLayout::CT_NUM: case KWParagLayout::CT_ROM_NUM_L: case KWParagLayout::CT_ROM_NUM_U:
 			  listData[i] = atoi(p->getParagLayout()->getStartCounter());
 			  break;
 			case KWParagLayout::CT_ALPHAB_L:

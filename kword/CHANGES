@@ -435,3 +435,10 @@ Reggie, 1.12.1998:
 - Selecting text is faster too now (There are still problems when selecting text with the mouse 
   and scrolling - selcting text with keyboard + scrolling works quite fine)
 - Small fixes again
+
+Reggie, 2.12.1998:
+------------------
+- Fixes with style templates
+- Fixes and improvements with numbering/lists (now even roman numbers can be used for numbering/lists :-)
+- New Icons
+- Keyboard shurtcuts in the menus

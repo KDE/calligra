@@ -930,16 +930,49 @@ void Page::keyPressEvent(QKeyEvent *e)
     {
       switch (e->key())
 	{
-	case Key_Space: case Key_Right: case Key_Down:
+	case Key_Space: case Key_Right: case Key_Down: case Key_Next:
 	  view->screenNext(); break;
-	case Key_Backspace: case Key_Left: case Key_Up:
+	case Key_Backspace: case Key_Left: case Key_Up: case Key_Prior:
 	  view->screenPrev(); break;
 	case Key_Escape: case Key_Q: case Key_X:
 	  view->screenStop(); break;
+	default: break;
 	}
     }
   else if (editNum != -1)
     QApplication::sendEvent(dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject(),e);
+  else
+    {
+      switch (e->key())
+	{
+	case Key_Next:
+	  view->screenNext(); break;
+	case Key_Prior:
+	  view->screenPrev(); break;
+	case Key_Down:
+	  view->getVScrollBar()->addLine(); break;
+	case Key_Up:
+	  view->getVScrollBar()->subtractLine(); break;
+	case Key_Right:
+	  view->getHScrollBar()->addLine(); break;
+	case Key_Left:
+	  view->getHScrollBar()->subtractLine(); break;
+	case Key_Tab:
+	  {
+	    if ((e->state() & ShiftButton))
+	      selectPrev();
+	    else
+	      selectNext();
+	  } break;
+	case Key_Home:
+	  view->getVScrollBar()->setValue(0); break;
+	case Key_End:
+	  view->getVScrollBar()->setValue( view->getVScrollBar()->maxValue()); break;
+	case Key_Delete:
+	  view->editDelete(); break;
+	default: break;
+	}
+    }
 }
 
 /*========================= resize Event =========================*/
@@ -2765,4 +2798,46 @@ void Page::setToolEditMode(ToolEditMode _m)
     setCursor(crossCursor);
 
   view->setTool(toolEditMode);
+}
+
+/*================================================================*/
+void Page::selectNext()
+{
+  if (objectList()->count() == 0) return;
+
+  if (view->kPresenterDoc()->numSelected() == 0)
+    objectList()->at(0)->setSelected(true);
+  else
+    {
+      int i = objectList()->findRef(view->kPresenterDoc()->getSelectedObj());
+      if (i < objectList()->count() - 1)
+	{
+	  view->kPresenterDoc()->deSelectAllObj();
+	  objectList()->at(++i)->setSelected(false);
+	  objectList()->at(i)->setSelected(true);
+	}
+    }
+  view->makeRectVisible(view->kPresenterDoc()->getSelectedObj()->getBoundingRect(0,0));
+  _repaint(false);
+}
+
+/*================================================================*/
+void Page::selectPrev()
+{
+  if (objectList()->count() == 0) return;
+
+  if (view->kPresenterDoc()->numSelected() == 0)
+    objectList()->at(objectList()->count() - 1)->setSelected(true);
+  else
+    {
+      int i = objectList()->findRef(view->kPresenterDoc()->getSelectedObj());
+      if (i > 0)
+	{
+	  view->kPresenterDoc()->deSelectAllObj();
+	  objectList()->at(--i)->setSelected(false);
+	  objectList()->at(i)->setSelected(true);
+	}
+    }
+  view->makeRectVisible(view->kPresenterDoc()->getSelectedObj()->getBoundingRect(0,0));
+  _repaint(false);
 }

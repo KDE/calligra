@@ -10,6 +10,7 @@ class KWordDocument;
 #include "char.h"
 #include "formatcollection.h"
 #include "frame.h"
+#include "kword_utils.h"
 
 #include <assert.h>
 #include <iostream>
@@ -105,7 +106,9 @@ public:
      * @return a reference to '_str'
      */
     void makeCounterText();
+    void makeCounterWidth();
     QString getCounterText() { return counterText; }
+    QString getCounterWidth() { return counterWidth; }
 
     /**
      * Set the paragraph following this one.
@@ -200,6 +203,7 @@ protected:
     KWTextFrameSet *frameSet;
     int counterData[16];
     QString counterText;
+    QString counterWidth;
 };
 
 #endif

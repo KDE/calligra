@@ -50,7 +50,7 @@ void KWParag::makeCounterText()
     case KWParagLayout::CT_BULLET:
       {
 	for (int i = 0;i < paragLayout->getCounterDepth();i++)
-	  buffer += "  ";
+	  buffer += "WW";
 
 	buffer += paragLayout->getCounterBullet();
       } break;
@@ -61,6 +61,32 @@ void KWParag::makeCounterText()
 	for (int i = 0;i <= paragLayout->getCounterDepth();i++)
 	  {
 	    tmp.sprintf("%d",counterData[i]);
+	    buffer += tmp;
+	    if (i < paragLayout->getCounterDepth())
+	      buffer += ".";
+	  }
+	buffer += paragLayout->getCounterRightText().copy();
+      } break;
+    case KWParagLayout::CT_ROM_NUM_L:
+      {
+	buffer = paragLayout->getCounterLeftText().copy();
+	QString tmp;
+	for (int i = 0;i <= paragLayout->getCounterDepth();i++)
+	  {
+	    tmp.sprintf("%s",makeRomanNumber(counterData[i]).lower().data());
+	    buffer += tmp;
+	    if (i < paragLayout->getCounterDepth())
+	      buffer += ".";
+	  }
+	buffer += paragLayout->getCounterRightText().copy();
+      } break;
+    case KWParagLayout::CT_ROM_NUM_U:
+      {
+	buffer = paragLayout->getCounterLeftText().copy();
+	QString tmp;
+	for (int i = 0;i <= paragLayout->getCounterDepth();i++)
+	  {
+	    tmp.sprintf("%s",makeRomanNumber(counterData[i]).upper().data());
 	    buffer += tmp;
 	    if (i < paragLayout->getCounterDepth())
 	      buffer += ".";
@@ -98,13 +124,27 @@ void KWParag::makeCounterText()
     default: break;
     }
   
-  buffer += " ";
+  //buffer += " ";
   counterText = buffer.copy();
+
+  makeCounterWidth();
+}
+
+void KWParag::makeCounterWidth()
+{
+  QString placeholder = CounterPlaceHolder[static_cast<int>(paragLayout->getCounterType())];
+  QString str = paragLayout->getCounterLeftText().copy();
+  str += paragLayout->getCounterRightText().copy();
+
+  for (int i = 0;i <= paragLayout->getCounterDepth();i++)
+    str += placeholder;
+
+  counterWidth = str.copy();
 }
 
 void KWParag::insertText( unsigned int _pos,QString _text)
 {
-  text.insert( _pos, _text);
+  text.insert(_pos,_text);
 }
 
 void KWParag::insertPictureAsChar(unsigned int _pos,QString _filename)

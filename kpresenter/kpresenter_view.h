@@ -289,6 +289,8 @@ public:
 
   KoRuler *getHRuler() { return h_ruler; }
   KoRuler *getVRuler() { return v_ruler; }
+  QScrollBar *getHScrollBar() { return horz; }
+  QScrollBar *getVScrollBar() { return vert; }
 
   void skipToPage(int _num);
   void makeRectVisible(KRect _rect);

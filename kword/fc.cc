@@ -994,7 +994,7 @@ void KWFormatContext::makeCounterLayout(QPainter &_painter)
   
   counterText = parag->getCounterText();
 
-  ptCounterWidth = font->getPTWidth(counterText.data());
+  ptCounterWidth = max(font->getPTWidth(parag->getCounterWidth().data()),font->getPTWidth(parag->getCounterText().data()));
   ptCounterAscender = font->getPTAscender();
   ptCounterDescender = font->getPTDescender();
 }

@@ -491,6 +491,7 @@ void KWordView::updateStyleList()
   m_vToolBarText->clearCombo(ID_STYLE_LIST);
 
   OpenPartsUI::StrList stylelist;
+  styleList.clear();
   stylelist.length(m_pKWordDoc->paragLayoutList.count());
   for (unsigned int i = 0;i < m_pKWordDoc->paragLayoutList.count();i++)
     {
@@ -1072,7 +1073,7 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   QString tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/undo.xpm";
   OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp );
-  m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, i18n("No Undo possible"), this, "editUndo", 0, -1, -1 );
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, i18n("No Undo possible"), this, "editUndo", CTRL + Key_Z, -1, -1 );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
 
   tmp = kapp->kde_datadir().copy();
@@ -1085,21 +1086,21 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   tmp = kapp->kde_toolbardir().copy();
   tmp += "/editcut.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuEdit_Cut = m_vMenuEdit->insertItem6( pix, i18n("&Cut"), this, "editCut", 0, -1, -1 );
+  m_idMenuEdit_Cut = m_vMenuEdit->insertItem6( pix, i18n("&Cut"), this, "editCut", CTRL + Key_X, -1, -1 );
 
   tmp = kapp->kde_toolbardir().copy();
   tmp += "/editcopy.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6( pix, i18n("&Copy"), this, "editCopy", 0, -1, -1 );
+  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6( pix, i18n("&Copy"), this, "editCopy", CTRL + Key_C, -1, -1 );
 
   tmp = kapp->kde_toolbardir().copy();
   tmp += "/editpaste.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, i18n("&Paste"), this, "editPaste", 0, -1, -1 );
+  m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, i18n("&Paste"), this, "editPaste", CTRL + Key_V, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
-  m_idMenuEdit_Find = m_vMenuEdit->insertItem4( i18n("&Find..."), this, "editFind", 0, -1, -1 );
-  m_idMenuEdit_FindReplace = m_vMenuEdit->insertItem4( i18n("&Replace..."), this, "editFindReplace", 0, -1, -1 );
+  m_idMenuEdit_Find = m_vMenuEdit->insertItem4( i18n("&Find..."), this, "editFind", CTRL + Key_F, -1, -1 );
+  m_idMenuEdit_FindReplace = m_vMenuEdit->insertItem4( i18n("&Replace..."), this, "editFindReplace", CTRL + Key_R, -1, -1 );
   
   // View
   _menubar->insertMenu( i18n( "&View" ), m_vMenuView, -1, -1 );
@@ -1112,22 +1113,22 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/picture.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuInsert_Picture = m_vMenuInsert->insertItem6( pix, i18n("&Picture..."), this, "insertPicture", 0, -1, -1 );
+  m_idMenuInsert_Picture = m_vMenuInsert->insertItem6( pix, i18n("&Picture..."), this, "insertPicture", Key_F2, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/clipart.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuInsert_Clipart = m_vMenuInsert->insertItem6( pix, i18n("&Clipart..."), this, "insertClipart", 0, -1, -1 );
+  m_idMenuInsert_Clipart = m_vMenuInsert->insertItem6( pix, i18n("&Clipart..."), this, "insertClipart", Key_F3, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/table.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuInsert_Table = m_vMenuInsert->insertItem6( pix, i18n("&Table..."), this, "insertTable", 0, -1, -1 );
+  m_idMenuInsert_Table = m_vMenuInsert->insertItem6( pix, i18n("&Table..."), this, "insertTable", Key_F4, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/parts.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuInsert_Table = m_vMenuInsert->insertItem6( pix, i18n("&Objects..."), this, "insertPart", 0, -1, -1 );
+  m_idMenuInsert_Table = m_vMenuInsert->insertItem6( pix, i18n("&Objects..."), this, "insertPart", Key_F5, -1, -1 );
 
   // tools menu
   _menubar->insertMenu( i18n( "&Tools" ), m_vMenuTools, -1, -1 );
@@ -1135,22 +1136,22 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/edittool.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuTools_Edit = m_vMenuTools->insertItem6(pix, i18n("&Edit Text"), this, "toolsEdit", 0, -1, -1 );
+  m_idMenuTools_Edit = m_vMenuTools->insertItem6(pix, i18n("&Edit Text"), this, "toolsEdit", Key_F6, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/editframetool.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuTools_EditFrame = m_vMenuTools->insertItem6(pix, i18n("&Edit Frames"), this, "toolsEditFrame", 0, -1, -1 );
+  m_idMenuTools_EditFrame = m_vMenuTools->insertItem6(pix, i18n("&Edit Frames"), this, "toolsEditFrame", Key_F7, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/textframetool.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuTools_CreateText = m_vMenuTools->insertItem6(pix, i18n("&Create Text Frame"), this, "toolsCreateText", 0, -1, -1 );
+  m_idMenuTools_CreateText = m_vMenuTools->insertItem6(pix, i18n("&Create Text Frame"), this, "toolsCreateText", Key_F8, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/picframetool.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idMenuTools_CreatePix = m_vMenuTools->insertItem6(pix, i18n("&Create Picture Frame"), this, "toolsCreatePix", 0, -1, -1 );
+  m_idMenuTools_CreatePix = m_vMenuTools->insertItem6(pix, i18n("&Create Picture Frame"), this, "toolsCreatePix", Key_F9, -1, -1 );
 
   m_vMenuTools->setCheckable(true);
   m_vMenuTools->setItemChecked(m_idMenuTools_Edit,true);
@@ -1158,25 +1159,25 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   // format menu
   _menubar->insertMenu( i18n( "&Format" ), m_vMenuFormat, -1, -1 );
 
-  m_idMenuFormat_Font = m_vMenuFormat->insertItem4( i18n("&Font..."), this, "formatFont", 0, -1, -1 );
-  m_idMenuFormat_Color = m_vMenuFormat->insertItem4( i18n("&Color..."), this, "formatColor", 0, -1, -1 );
-  m_idMenuFormat_Paragraph = m_vMenuFormat->insertItem4( i18n("Paragraph..."), this, "formatParagraph", 0, -1, -1 );
-  m_idMenuFormat_Page = m_vMenuFormat->insertItem4( i18n("Page..."), this, "formatPage", 0, -1, -1 );
+  m_idMenuFormat_Font = m_vMenuFormat->insertItem4( i18n("&Font..."), this, "formatFont", ALT + Key_F, -1, -1 );
+  m_idMenuFormat_Color = m_vMenuFormat->insertItem4( i18n("&Color..."), this, "formatColor", ALT + Key_C, -1, -1 );
+  m_idMenuFormat_Paragraph = m_vMenuFormat->insertItem4( i18n("Paragraph..."), this, "formatParagraph", ALT + Key_Q, -1, -1 );
+  m_idMenuFormat_Page = m_vMenuFormat->insertItem4( i18n("Page..."), this, "formatPage", ALT + Key_P, -1, -1 );
 
   m_vMenuFormat->insertSeparator( -1 );
 
   //m_idMenuFormat_Numbering = m_vMenuFormat->insertItem4( i18n("Numbering..."), this, "formatNumbering", 0, -1, -1 );
-  m_idMenuFormat_Style = m_vMenuFormat->insertItem4( i18n("&Style..."), this, "formatStyle", 0, -1, -1 );
+  m_idMenuFormat_Style = m_vMenuFormat->insertItem4( i18n("&Style..."), this, "formatStyle", ALT + Key_A, -1, -1 );
 
   // extra menu
   _menubar->insertMenu( i18n( "&Extra" ), m_vMenuExtra, -1, -1 );
 
-  m_idMenuExtra_Spelling = m_vMenuExtra->insertItem4( i18n("&Spelling..."), this, "extraSpelling", 0, -1, -1 );
-  m_idMenuExtra_Stylist = m_vMenuExtra->insertItem4( i18n("&Stylist..."), this, "extraStylist", 0, -1, -1 );
+  m_idMenuExtra_Spelling = m_vMenuExtra->insertItem4( i18n("&Spelling..."), this, "extraSpelling", ALT + Key_C, -1, -1 );
+  m_idMenuExtra_Stylist = m_vMenuExtra->insertItem4( i18n("&Stylist..."), this, "extraStylist", ALT + Key_S, -1, -1 );
 
   m_vMenuExtra->insertSeparator( -1 );
 
-  m_idMenuExtra_Options = m_vMenuExtra->insertItem4( i18n("&Options..."), this, "extraOptions", 0, -1, -1 );
+  m_idMenuExtra_Options = m_vMenuExtra->insertItem4( i18n("&Options..."), this, "extraOptions", ALT + Key_O, -1, -1 );
 
   // help menu
   m_vMenuHelp = _menubar->helpMenu();
