@@ -189,7 +189,7 @@ public:
     void gotoLocation( const KSpreadPoint& _cell );
     enum type_editor{type_cell,type_formula};
     void create_editor(type_editor=type_cell);
-
+    void ajustarea();
 
 public slots:  
     void slotScrollVert( int _value );
@@ -342,7 +342,7 @@ public:
     KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view  );
     int markerColumn(){return  m_iSelectionAnchor;}
     void resizeColumn(int resize,int nb=-1);
-    void ajustColumn();
+    void ajustColumn(int _col=-1);
 protected:
     virtual void paintEvent ( QPaintEvent* _ev ); 
     virtual void mousePressEvent( QMouseEvent* _ev );
@@ -394,7 +394,7 @@ public:
     KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view );
     int markerRow(){return  m_iSelectionAnchor;}
     void resizeRow(int resize,int nb=-1);
-    void ajustRow();
+    void ajustRow(int _row=-1);
 protected:
     virtual void paintEvent ( QPaintEvent* _ev ); 
     virtual void mousePressEvent( QMouseEvent* _ev );

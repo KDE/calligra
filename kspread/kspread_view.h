@@ -253,6 +253,7 @@ public:
     /**
      * Menu Data
      */
+
       void sort();
     /**
      * Menu Data
@@ -445,6 +446,8 @@ protected slots:
      * Popup menu
      */
     void slotDelete();
+    void slotAjust();
+    void slotClear();
     /**
      * Popup menu
      */

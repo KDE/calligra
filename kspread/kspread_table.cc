@@ -706,6 +706,7 @@ void KSpreadTable::setSelection( const QRect &_sel, KSpreadCanvas *_canvas )
   emit sig_changeSelection( this, old, m_rctSelection );
 }
 
+
 void KSpreadTable::changetab(QString old_name,QString new_name)
 {
  QIntDictIterator<KSpreadCell> it( m_dctCells );
@@ -1156,10 +1157,13 @@ else
 return tmp;
 }
 
-int KSpreadTable::ajustColumn()
+
+
+int KSpreadTable::ajustColumn(int _col)
 {
 int long_max=0;
-
+if(_col==-1)
+{
 if ( m_rctSelection.left() != 0 && m_rctSelection.bottom() == 0x7FFF )
     {
       QIntDictIterator<KSpreadCell> it( m_dctCells );
@@ -1178,28 +1182,57 @@ if ( m_rctSelection.left() != 0 && m_rctSelection.bottom() == 0x7FFF )
 	  			}
 	  		else
 	  			{*/
-	  			//cout <<"text :"<< it.current()->textWidth()<<endl;
+	  			
 	  			if(!it.current()->isEmpty()&&it.current()->textWidth()<400 )
 	  			{
 	  			if(it.current()->textWidth()>long_max)
-	  				long_max=it.current()->textWidth();
+	  				long_max=it.current()->textWidth()+
+	  				it.current()->leftBorderWidth(it.current()->column(),it.current()->row())+
+	  				it.current()->rightBorderWidth(it.current()->column(),it.current()->row());
 	  			 }
 	  			//}
 		}
       	}
     }
+
+}
+else
+{
+QRect r( m_rctSelection );
+if(r.left()==0||r.right()==0||r.top()==0||r.bottom()==0)
+	{
+	//TODO
+	}
+else
+	{
+	int x=_col;	
+	for ( int y = r.top(); y <= r.bottom(); y++ )
+		{		
+		KSpreadCell *cell = cellAt( x, y );
+		if(cell != m_pDefaultCell && !cell->isEmpty()&&cell->textWidth()<400 )
+			{
+	 		if(cell->textWidth()>long_max)
+	  			long_max=cell->textWidth()+
+	  			cell->leftBorderWidth(cell->column(),cell->row())+
+	  			cell->rightBorderWidth(cell->column(),cell->row());
+	  		}
+		}
+
+	}
+}
 //add 4 because long_max is the long of the text
 //but column has borders
 if(long_max==0)
 	return -1;
 else
-	return (long_max+5);
+	return (long_max+4);
 }
 
-int KSpreadTable::ajustRow()
+int KSpreadTable::ajustRow(int _row)
 {
 int long_max=0;
-
+if(_row==-1)
+{
 if ( m_rctSelection.left() != 0 && m_rctSelection.right() == 0x7FFF )
     {
       QIntDictIterator<KSpreadCell> it( m_dctCells );
@@ -1223,12 +1256,33 @@ if ( m_rctSelection.left() != 0 && m_rctSelection.right() == 0x7FFF )
 	  			if(!it.current()->isEmpty()&&it.current()->textHeight()<400 )
 	  			{
 	  			if(it.current()->textHeight()>long_max)
-	  				long_max=it.current()->textHeight();
+	  				long_max=it.current()->textHeight()+
+	  				it.current()->topBorderWidth(it.current()->column(),it.current()->row())+
+	  				it.current()->bottomBorderWidth(it.current()->column(),it.current()->row());
 	  			}
 	  			//}
 		}
       	}
     }
+}
+else
+{
+QRect r( m_rctSelection );
+int y=_row;	
+for ( int x = r.left(); x <= r.right(); x++ )
+	{		
+	KSpreadCell *cell = cellAt( x, y );
+	if(cell != m_pDefaultCell && !cell->isEmpty()&&cell->textHeight()<400 )
+		{
+	 	if(cell->textHeight()>long_max)
+	  		long_max=cell->textHeight()+
+	  		cell->topBorderWidth(cell->column(),cell->row())+
+	  		cell->bottomBorderWidth(cell->column(),cell->row());
+	
+	  	}
+	}
+
+}
 //add 4 because long_max is the long of the text
 //but column has borders
 if(long_max==0)
@@ -2174,6 +2228,70 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
     }
 }
 
+void KSpreadTable::clearSelection( const QPoint &_marker )
+{
+   m_pDoc->setModified( true );
+    bool selected = ( m_rctSelection.left() != 0 );
+
+    // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
+    {
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int row = l & 0xFFFF;
+	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+	{
+	  it.current()->setText("");
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
+    }
+    // Complete columns selected ?
+    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int col = l >> 16;
+	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+	{
+	  it.current()->setText("");
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
+    }
+    else
+    {
+	QRect r( m_rctSelection );
+	if ( !selected )
+	    r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+
+	
+	for ( int x = r.left(); x <= r.right(); x++ )
+	    for ( int y = r.top(); y <= r.bottom(); y++ )
+	    {		
+		KSpreadCell *cell = cellAt( x, y );
+
+		if ( cell == m_pDefaultCell )
+		{
+		    cell = new KSpreadCell( this, x, y );
+		    int key = y + ( x * 0x10000 );
+		    m_dctCells.insert( key, cell );
+		}
+
+		cell->setText("");
+	    	}
+
+	emit sig_updateView( this, r );
+    }
+}
 
 void KSpreadTable::insertRow( unsigned long int _row )
 {

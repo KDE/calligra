@@ -126,4 +126,9 @@ reference.
 -Now Insert and remove column ( or row) works
 	=>change specific reference according to name table
 	and change in differents tables.
-	
+
+1999-10-03  -Montel laurent<montell@club-internet.fr>
+-----------------------------------------------------	
+-Now you can clear area
+-You can ajust area
+-bugfix

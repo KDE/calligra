@@ -1591,6 +1591,36 @@ void KSpreadCanvas::drawCell( QPainter &painter, KSpreadCell *_cell, int _col, i
     showMarker( painter );
 }
 
+void KSpreadCanvas::ajustarea()
+{
+QRect selection( activeTable()->selectionRect() );
+if(selection.left() != 0 && selection.bottom() == 0x7FFF )
+	{
+	hBorderWidget()->ajustColumn();
+	}
+else if(selection.left() != 0 && selection.right() == 0x7FFF )
+	{
+	vBorderWidget()->ajustRow();
+	}
+else if(selection.left() == 0 || selection.top() == 0||
+	selection.bottom() == 0 || selection.right() == 0)
+	{
+	vBorderWidget()->ajustRow(markerRow());
+	hBorderWidget()->ajustColumn(markerColumn());
+	}
+else
+	{
+	for (int x=selection.left(); x <= selection.right(); x++ )
+		{
+		hBorderWidget()->ajustColumn(x);
+		}
+	for(int y = selection.top(); y <= selection.bottom(); y++ )
+		{
+		vBorderWidget()->ajustRow(y);
+		}
+	}
+}
+
 /****************************************************************
  *
  * KSpreadVBorder
@@ -1695,22 +1725,34 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
   m_bResize = FALSE;
 }
 
-void KSpreadVBorder::ajustRow()
+void KSpreadVBorder::ajustRow(int _row)
 {
-int ajust=m_pCanvas->activeTable()->ajustRow();
+int ajust;
+int select;
+if(_row==-1)
+	{
+	ajust=m_pCanvas->activeTable()->ajustRow();
+	select=m_iSelectionAnchor;
+	}
+else
+	{
+	ajust=m_pCanvas->activeTable()->ajustRow(_row);
+	select=_row;
+	}
 if(ajust!=-1)
 	{
 	KSpreadTable *table = m_pCanvas->activeTable();
 	assert( table );
-	RowLayout *rl = table->nonDefaultRowLayout( m_iSelectionAnchor );
+	RowLayout *rl = table->nonDefaultRowLayout( select );
 	//number of column
-	int x = table->rowPos( m_iSelectionAnchor, m_pCanvas );
+	int x = table->rowPos( select, m_pCanvas );
 	if ( ( m_pCanvas->zoom() * (float)(ajust) ) < 20.0 )
 		rl->setHeight( 20, m_pCanvas );	
 	else
 		rl->setHeight( ajust, m_pCanvas );	
 	}
 }
+
 
 void KSpreadVBorder::resizeRow(int resize,int nb )
 {
@@ -1990,16 +2032,28 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
   m_bResize = FALSE;
 }
 
-void KSpreadHBorder::ajustColumn()
+void KSpreadHBorder::ajustColumn(int _col)
 {
-int ajust=m_pCanvas->activeTable()->ajustColumn();
+int ajust;
+int select;
+if(_col==-1)
+	{
+	ajust=m_pCanvas->activeTable()->ajustColumn();
+	select=m_iSelectionAnchor;
+	}
+else
+	{
+	ajust=m_pCanvas->activeTable()->ajustColumn(_col);
+	select=_col;
+	}
+
 if(ajust!=-1)
 	{
 	KSpreadTable *table = m_pCanvas->activeTable();
 	assert( table );
-	ColumnLayout *cl = table->nonDefaultColumnLayout( m_iSelectionAnchor );
+	ColumnLayout *cl = table->nonDefaultColumnLayout( select );
 	//number of column
-	int x = table->columnPos( m_iSelectionAnchor, m_pCanvas );
+	int x = table->columnPos( select, m_pCanvas );
 	if ( ( m_pCanvas->zoom() * (float)(ajust) ) < 20.0 )
 		cl->setWidth( 20, m_pCanvas );	
 	else

@@ -15,7 +15,7 @@ kspread_SOURCES = kspread.idl kspread_canvas.cc kspread_main.cc \
 	chart.idl kspread_calc.cc y.tab.c lex.yy.c dep.tab.c lex.dep.c \
 	kspread_dlg_cons.cc datatools.idl kspread_util.cc \
 	kspread_corba_util.cc kspread_editors.cc kspread_dlg_tabname.cc \
-	kspread_dlg_formula.cc kspread_dlg_assistant.cc \
+	kspread_dlg_formula.cc \
 	kspread_dlg_special.cc kspread_dlg_goto.cc  kspread_dlg_replace.cc \
 	kspread_dlg_sort.cc   kspread_dlg_create.cc   kspread_dlg_anchor.cc kspread_dlg_assistant2.cc \
 	kspread_dlg_resize.cc kspread_dlg_show.cc
@@ -29,7 +29,7 @@ noinst_HEADERS = kspread_main.h \
 	chart.h y.tab.h dep.tab.h kspread_calc.h kspread_dlg_cons.h \
 	datatools.h kspread_util.h kspread_corba_util.h kspread_canvas.h \
 	kspread_editors.h kspread_dlg_tabname.h kspread_dlg_formula.h \
-	kspread_dlg_assistant.h kspread_dlg_special.h kspread_dlg_goto.h kspread_dlg_replace.h \
+	kspread_dlg_special.h kspread_dlg_goto.h kspread_dlg_replace.h \
 	kspread_dlg_sort.h kspread_dlg_create.h kspread_dlg_anchor.h kspread_dlg_assistant2.h \
 	kspread_dlg_resize.h  kspread_dlg_show.h
 
@@ -38,7 +38,7 @@ METASOURCES = kspread_main.moc kspread_shell.moc kspread_doc.moc \
 	kspread_table.moc kspread_dlg_layout.moc kspread_cell.moc \
 	kspread_dlg_scripts.moc kspread_part.moc kspread_dlg_cons.moc \
 	kspread_editors.moc kspread_dlg_tabname.moc kspread_dlg_formula.moc \
-	kspread_dlg_assistant.moc kspread_dlg_special.moc kspread_dlg_goto.moc kspread_dlg_replace.moc \
+	kspread_dlg_special.moc kspread_dlg_goto.moc kspread_dlg_replace.moc \
 	kspread_dlg_sort.moc  kspread_dlg_create.moc kspread_dlg_anchor.moc kspread_dlg_assistant2.moc \
 	kspread_dlg_resize.moc kspread_dlg_show.moc
 

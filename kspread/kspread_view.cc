@@ -945,6 +945,7 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuData->insertSeparator( -1 );
   m_idMenuData_replace = m_vMenuData->insertItem( i18n( "Replace" ), this, "replace", 0 );
 
+
   m_vMenuData->insertSeparator( -1 );
   m_idMenuData_sort = m_vMenuData->insertItem( i18n( "Sort" ), this, "sort", 0 );
 
@@ -1665,6 +1666,7 @@ void KSpreadView::replace()
   dlg->show();
 }
 
+
 void KSpreadView::sort()
 {
   KSpreadsort* dlg = new KSpreadsort( this, "Sort" );
@@ -2296,13 +2298,15 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
 
     m_pPopupMenu = new QPopupMenu();
 
-    m_pPopupMenu->insertItem( "Copy", this, SLOT( slotCopy() ) );
-    m_pPopupMenu->insertItem( "Cut", this, SLOT( slotCut() ) );
-    m_pPopupMenu->insertItem( "Paste", this, SLOT( slotPaste() ) );
-    m_pPopupMenu->insertItem( "Special Paste", this, SLOT( slotSpecialPaste() ) );
-    m_pPopupMenu->insertItem( "Delete", this, SLOT( slotDelete() ) );
+    m_pPopupMenu->insertItem( i18n("Copy"), this, SLOT( slotCopy() ) );
+    m_pPopupMenu->insertItem( i18n("Cut"), this, SLOT( slotCut() ) );
+    m_pPopupMenu->insertItem( i18n("Paste"), this, SLOT( slotPaste() ) );
+    m_pPopupMenu->insertItem( i18n("Special Paste"), this, SLOT( slotSpecialPaste() ) );
+    m_pPopupMenu->insertItem( i18n("Delete"), this, SLOT( slotDelete() ) );
+    m_pPopupMenu->insertItem( i18n("Ajust"),this,SLOT(slotAjust()));
+    m_pPopupMenu->insertItem( i18n("Clear"),this,SLOT(slotClear()));
     m_pPopupMenu->insertSeparator();
-    m_pPopupMenu->insertItem( "Layout", this, SLOT( slotLayoutDlg() ) );
+    m_pPopupMenu->insertItem( i18n("Layout"), this, SLOT( slotLayoutDlg() ) );
 
     m_lstTools.clear();
     m_lstTools.setAutoDelete( true );
@@ -2414,6 +2418,18 @@ void KSpreadView::slotDelete()
 
   m_pTable->deleteSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
   editWidget()->setText( "" );
+}
+
+void KSpreadView::slotAjust()
+{
+canvasWidget()->ajustarea();
+}
+
+void KSpreadView::slotClear()
+{
+ assert( m_pTable );
+ m_pTable->clearSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+ editWidget()->setText( "" );
 }
 
 void KSpreadView::slotLayoutDlg()

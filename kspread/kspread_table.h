@@ -387,9 +387,9 @@ public:
     void setSort(bool sort) { _sort=sort;}
     bool isHide(){return table_hide;}
     void setHide(bool _table_hide){table_hide=_table_hide;}
-
-    int ajustColumn();
-    int ajustRow();
+    void clearSelection(const QPoint &_marker );
+    int ajustColumn(int _col=-1);
+    int ajustRow(int _row=-1);
     /**
      * Unselects all selected columns/rows/cells and redraws these cells.
      */
