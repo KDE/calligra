@@ -232,6 +232,10 @@ DCOPObject* KPresenterView::dcopObject()
 /*======================= destructor ============================*/
 KPresenterView::~KPresenterView()
 {
+    //close header/footer dialogbox when kpresenter is embedded
+    //into other programm, and it's desactivated
+    if(m_pKPresenterDoc->getHeaderFooterEdit())
+        m_pKPresenterDoc->getHeaderFooterEdit()->slotCloseDia();
     if(sidebar) {
         KConfig *config=KGlobal::config();
         config->setGroup("Global");

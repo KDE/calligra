@@ -82,11 +82,13 @@ protected:
     int h_bold, h_italic, h_underline, h_color, h_aleft, h_acenter, h_aright, h_font, h_size, h_pgnum;
     int f_bold, f_italic, f_underline, f_color, f_aleft, f_acenter, f_aright, f_font, f_size, f_pgnum;
 
+public slots:
+    void slotCloseDia();
+
 protected slots:
     void slotShowHeader();
     void slotShowFooter();
     void slotUpdatePage();
-    void slotCloseDia();
     void slotHeaderPenBrush();
     void slotFooterPenBrush();
 
