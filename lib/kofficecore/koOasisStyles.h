@@ -24,6 +24,8 @@
 #include <qvaluevector.h>
 #include <qmap.h>
 
+class KoGenStyles;
+
 /**
  * Repository of styles used during loading of OASIS/OOo file
  */
@@ -65,6 +67,7 @@ public:
     /// Key: format name. Value:
     const DataFormatsMap& dataFormats() const { return m_dataFormats; }
 
+    static QString saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format );
 protected:
     /// Add styles to styles map
     void insertStyles( const QDomElement& styles );

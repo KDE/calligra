@@ -1079,7 +1079,7 @@ void KoDateVariable::load( QDomElement& elem )
     }
 }
 
-void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
+void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
     //TODO use "style:data-style-name" for date style
     switch( m_subtype )
@@ -1092,7 +1092,6 @@ void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*
             writer.addAttribute( "text:date-value", m_varValue.toDate().toString( Qt::ISODate) );
             writer.addAttribute( "text:fixed", "true" );
         }
-        writer.addAttribute( "text:date-adjust", m_correctDate );
         break;
     case VST_DATE_LAST_PRINTING:
         writer.startElement( "text:print" );
@@ -1104,6 +1103,7 @@ void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*
         writer.startElement( "text:modification" );
         break;
     }
+    writer.addAttribute( "style:data-style-name", KoOasisStyles::saveOasisDateStyle(context.mainStyles(), m_varFormat->formatProperties() ) );
     writer.addAttribute( "text:date-adjust", m_correctDate );
     writer.endElement();
 }

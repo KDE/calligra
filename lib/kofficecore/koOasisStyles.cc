@@ -17,10 +17,13 @@
 */
 
 #include "koOasisStyles.h"
+#include <koxmlwriter.h>
 #include <kdebug.h>
 #include <qdom.h>
 #include "kodom.h"
 #include "koxmlns.h"
+#include "koGenStyles.h"
+#include <qbuffer.h>
 
 KoOasisStyles::KoOasisStyles()
 {
@@ -352,4 +355,123 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
     const QString styleName = parent.attributeNS( KoXmlNS::style, "name", QString::null );
     kdDebug(30518) << "datetime style: " << styleName << " qt format=" << format << endl;
     m_dataFormats.insert( styleName, format );
+}
+
+QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format )
+{
+    kdDebug()<<"QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    QString format( _format );
+
+    KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_DATE );
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+    elementWriter.startElement( "number:date-style" );
+    QString text;
+    do
+    {
+        //TODO "MM"
+        if ( format.startsWith( "dddd" ) )
+        {
+            if ( !text.isEmpty() )
+            {
+                elementWriter.startElement( "number:text" );
+                elementWriter.addTextNode( text );
+                elementWriter.endElement();
+                text="";
+            }
+            elementWriter.startElement( "number:day-of-week" );
+            elementWriter.addAttribute( "number:style", "long" );
+            elementWriter.endElement();
+            format = format.remove( 0, 4 );
+        }
+        else if ( format.startsWith( "ddd" ) )
+        {
+            if ( !text.isEmpty() )
+            {
+                elementWriter.startElement( "number:text" );
+                elementWriter.addTextNode( text );
+                elementWriter.endElement();
+                text="";
+            }
+            elementWriter.startElement( "number:day-of-week" );
+            elementWriter.addAttribute( "number:style", "short" );
+            elementWriter.endElement();
+            format = format.remove( 0, 3 );
+        }
+        else if ( format.startsWith( "dd" ) )
+        {
+            if ( !text.isEmpty() )
+            {
+                elementWriter.startElement( "number:text" );
+                elementWriter.addTextNode( text );
+                elementWriter.endElement();
+                text="";
+            }
+            elementWriter.startElement( "number:day" );
+            elementWriter.addAttribute( "number:style", "long" );
+            elementWriter.endElement();
+            format = format.remove( 0, 2 );
+        }
+        else if ( format.startsWith( "d" ) )
+        {
+            if ( !text.isEmpty() )
+            {
+                elementWriter.startElement( "number:text" );
+                elementWriter.addTextNode( text );
+                elementWriter.endElement();
+                text="";
+            }
+            elementWriter.startElement( "number:day" );
+            elementWriter.addAttribute( "number:style", "short" );
+            elementWriter.endElement();
+            format = format.remove( 0, 1 );
+        }
+        else if ( format.startsWith( "yyyy" ) )
+        {
+            if ( !text.isEmpty() )
+            {
+                elementWriter.startElement( "number:text" );
+                elementWriter.addTextNode( text );
+                elementWriter.endElement();
+                text="";
+            }
+            elementWriter.startElement( "number:year" );
+            elementWriter.addAttribute( "number:style", "long" );
+            elementWriter.endElement();
+            format = format.remove( 0, 4 );
+        }
+        else if ( format.startsWith( "yy" ) )
+        {
+            if ( !text.isEmpty() )
+            {
+                elementWriter.startElement( "number:text" );
+                elementWriter.addTextNode( text );
+                elementWriter.endElement();
+                text="";
+            }
+            elementWriter.startElement( "number:year" );
+            elementWriter.addAttribute( "number:style", "short" );
+            elementWriter.endElement();
+            format = format.remove( 0, 2 );
+        }
+        else
+        {
+            text += format[0];
+            format = format.remove( 0, 1 );
+        }
+    }
+    while ( format.length() > 0 );
+    if ( !text.isEmpty() )
+    {
+        elementWriter.startElement( "number:text" );
+        elementWriter.addTextNode( text );
+        elementWriter.endElement();
+        text="";
+    }
+
+    elementWriter.endElement();
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    currentStyle.addChildElement( "number", elementContents );
+    return mainStyles.lookup( currentStyle, "N" );
 }
