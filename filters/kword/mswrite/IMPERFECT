@@ -1,20 +1,17 @@
 
-MSWrite Import Filter for KWord
-   How to PERFECT the Filter
-Latest Version: 0.3-2 Last Updated: Fri 2002-05-04
-
+MS Write Import Filter for KWord - How to PERFECT the Filter
+$Date
 Clarence Dang <dang@kde.org>
----------------------------------------
+
 
 No import filter, let alone software or hardware, is perfect.  And this
-includes the MSWrite filter...
+includes the MS Write Import Filter...
 
-/*The MSWrite filter is complete (I have double-checked to make sure that
-it implements _every_ single feature but I could be wrong) except for
-OLE and what is mentioned in this file (and status.html).*/
+This filter appears to be feature-complete, except for OLE and what is
+mentioned here.
 
-This is a technical document that discusses where and why the filter
-is not perfect and whether or not these problems should or can be fixed.
+This document discusses where and why the filter is not perfect (! :)) and
+whether or not these problems should or can be fixed.
 
 
 Problems that could be fixed in the future
@@ -22,21 +19,23 @@ Problems that could be fixed in the future
 
 1. Linespacing
 
-MSWrite renders text with an irregular form of linespacing (where the
+MS Write renders text with an uncommon form of linespacing (where the
 text is aligned to the bottom).
 
 This has been discussed on koffice-devel and has resulted in a
 work-around: use of the OFFSETS tag to "fake" space before each line.
 Unfortunately, this is not perfect esp. the trailing linespacing at the
-end of the paragraph.
+end of the paragraph and where paragraphs span more than one line.
+This feature is now disabled by default and cannot be turned on because of
+stability problems with the dialog!
 
 Word97 can import this linespacing, despite the fact that it doesn't
-do linespacing like MSWrite either so perhaps this may be fixed in
+do linespacing like MS Write either so perhaps this may be fixed in
 the future?
 
 2. Positioning of Headers, Footers & Main Text Frame
 
-The following things are known in an MSWrite document (by MSWriteLib):
+The following things are known in an MS Write document (by LibMSWrite):
 
 ##########    <-- top of header
 # Header #
@@ -61,12 +60,13 @@ support expanding frames upwards for the footer (since we only know the bottom
 of the footer but not the top).
 
 In other words, AFAIK, the current filter system does not allow the
-specification of the exact position of each frame, like MSWrite can.
+specification of the exact position of each frame, like MS Write can.
+I will be rectifying this myself...
 
 See my post "Specifying exact frame positions" to the koffice-devel mailinglist
 on 2002-01-27 and the number of responses I got to it.
 
-Also, the concept of Margins are different in MSWrite.  In MSWrite,
+Also, the concept of Margins are different in MS Write.  In MS Write,
 the top and bottom margins of the document refer to the position of the
 body frame on the paper.  While in KWord, it refers to the position of
 the topmost text frame (which could be the header) and the bottom-most
@@ -75,7 +75,7 @@ the margins of the page, based on the positions of the header and footer.
 
 3. Image Positions
 
-In MSWrite, the user can position an image a certain number of points
+In MS Write, the user can position an image a certain number of points
 from the left margin.
 
 In KWord, it is impossible to do this (for anchored images, which are
@@ -83,87 +83,38 @@ required to maintain the relative positions of surrounding text and the
 image), at the moment (see my post "Images and Stores" to koffice-devel on
 2002-01-26).  So at the moment, paragraph indenting is used to emulate it.
 
-Note that the First Line indent for paragraphs containing images in
-MSWrite is ignored and the distance of the image from the left margin
-is equal to either Left Indent OR the stored position of the image,
-whichever is greater (they are _not_ added together).
-
 
 Problems that will probably never be fixed
 ------------------------------------------
 
-1. Rendering Differences Between KWord and MSWrite
+1. Rendering Differences Between KWord and MS Write
 
-KWord renders with slightly more/less space than MSWrite for images,
+KWord renders with slightly more/less space than MS Write for images,
 text etc.  This is what I would call a fundamental difference between
 word-processors and so cannot be avoided (realistically) and the exact
 amount of spacing is not specified by MS anyway.
 
 Obviously, this would mean that KWord will read a document and produce
-more/less pages than MSWrite would with the same document, leading on
+more/less pages than MS Write would with the same document, leading on
 to point (2):
 
 2. Page Table is Ignored
 
-Some MSWrite documents contain a "Page Table" (created when the user
+Some MS Write documents contain a "Page Table" (created when the user
 clicks "Repaginate"), which specifies where pages start and end esp. for
 printing purposes.  However due to the previous point (1) and the fact
 that the pageTable can get so out of sync with the document anyway esp. if
 the user doesn't "Repaginate" the document everytime s/he changes it,
 the pageTable is completely ignored in this import filter (i.e. signal
-MSWRITE_IMPORT_LIB::pageNewWrite).
-
-3. Image Code is Experimental
-
-Specifications for the MSWrite format on the Internet do not
-specify precisely the manner in which images are stored.
-So experimentation has been used to understand the format but this means
-that I can never be sure that the code will work in 100% of cases.
-
-There seems to be 3 ways to store the bitmap: BMP, WMF or OLE:
-
-The BMP code converts the internal representation of a bitmap (scanlines
-are padded with 2 bytes) to the format of an ordinary on-disk BMP
-(scanlines padded with 4 bytes), adds a BMP header and flips it upside
-down.  Unfortunately, the code only supports monochrome bitmaps because I
-have not managed to create or find a single file that contains a colour
-bitmap (if I paste a colour bitmap into MSWrite, Windows either changes it
-to a WMF or OLE object or makes it black and white).  So does MSWrite
-support non-monochrome bitmaps directly?
-
-The WMF code simply checks if the WMF is a "Standard Windows Metafile"
-and if it is, it passes it on to KWord, which uses KWMF.  If it's not, the code
-panics :(
-
-The OLE code has not yet been written so even if Wordpad claims that it's a
-"Device Independent Bitmap" or a "Picture" or anything else, it could actually
-be stored within an OLE object so will not display at all (yet).
-
-4. Section Property may be Wrong
-
-In general, specifications for the MSWrite format are vague and have
-big holes in them.  And one of those "holes" is the documentation about
-"Section Properties" (general document properties in MSWrite):
-
-a) sectionProperty->numDataBytes is never >=1 and <=16 as documented --
-it is always 102 (from experimentation).
-
-b) starting page number and the distance a header of footer is from the
-top and bottom of a page, respectively, are stored in undocumented bytes
-
-c) I have no idea what the other undocumented bytes are or what they do
-
-Since much of the sectionProperty code has been written based on
-experimental observations, the filter might be incomplete or worse yet,
-incorrect.
+MSWrite::Generator::writePageNew).
 
 
 What you can do to help
 --------------------------------------------------------
 
-1. Find documentation for MSWrite that is more helpful/complete
+1. Contribute to LibMSWrite (http://sourceforge.net/projects/libmswrite/)
 
-2. Fix something in the filter
+2. Fix something in the KOffice end of the filter (mswriteimport.*)
 
 3. Send me an email telling me what I've done wrong
 

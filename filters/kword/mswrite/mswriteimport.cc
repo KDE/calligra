@@ -1,7 +1,7 @@
-/* $Id$ */
+/* $Id */
 
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002 Clarence Dang <dang@kde.org>
+   Copyright (C) 2001-2003 Clarence Dang <dang@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -10,41 +10,45 @@
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+   Library General Public License Version 2 for more details.
 
    You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Version 2 along with this library; see the file COPYING.LIB.  If not,
+   write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
 
-#include <config.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
+#ifndef NDEBUG
+	//#define DEBUG_XML_OUTPUT
 #endif
 
-#include <qfile.h>
-#include <qregexp.h>
-#include <qtextstream.h>
-
-#include <kgenericfactory.h>
-#include <kdebug.h>
-
-#include <koFilterChain.h>
-
-#include <assert.h>
-#include <stdio.h>		// much better than iostream :)
+#include <stdio.h>
+#include <string.h>
 #include <stdarg.h>
 
-#include <mswriteimport.h>
+#include <qfile.h>
+#include <qobject.h>
+#include <qstring.h>
+#include <qtextcodec.h>
+#include <qtextstream.h>
+
+#include <kdebug.h>
+#include <kgenericfactory.h>
+
+#include <koFilterChain.h>
+#include <koStore.h>
+
+#include "list.h"
+#include "libmswrite.h"
+
 #include "ImportDialog.h"
+#include "mswriteimport.h"
 
 
-class MSWRITEImportFactory : KGenericFactory <MSWRITEImport, KoFilter>
+class MSWriteImportFactory : KGenericFactory <MSWriteImport, KoFilter>
 {
 public:
-	MSWRITEImportFactory (void) : KGenericFactory <MSWRITEImport, KoFilter> ("kwordmswriteimport")
+	MSWriteImportFactory () : KGenericFactory <MSWriteImport, KoFilter> ("kwordmswriteimport")
 	{
 	}
 	
@@ -55,1100 +59,1297 @@ protected:
 	}
 };
 
-K_EXPORT_COMPONENT_FACTORY (libmswriteimport, MSWRITEImportFactory ());
+K_EXPORT_COMPONENT_FACTORY (libmswriteimport, MSWriteImportFactory ());
 
 
-// kdDebug type functions
+//
+// Device that reads from .WRI file
 //
 
-void MSWRITEImport::debug (const char *format, ...)
+class WRIDevice : public MSWrite::Device
 {
-	va_list list;
+private:
+	FILE *m_infp;
+	
+public:
+	WRIDevice () : m_infp (NULL)
+	{
+	}
+	
+	~WRIDevice ()
+	{
+		closeFile ();
+	}
+	
+	bool openFile (const char *fileName)
+	{
+		m_infp = fopen (fileName, "rb");
+		if (!m_infp)
+		{
+			error (MSWrite::Error::FileError, "could not open file for reading\n");
+			return false;
+		}
 
-	va_start (list, format);
-	vsnprintf (m_debugStr, MSWRITE_BUFFER_SIZE, format, list);
-	kdDebug (MSWRITE_DEBUG_AREA) << m_debugStr;
-	va_end (list);
-}
+		return true;
+	}
+	
+	bool closeFile (void)
+	{
+		if (m_infp)
+		{
+			if (fclose (m_infp))
+			{
+				error (MSWrite::Error::FileError, "could not close input file\n");
+				return false;
+			}
+			
+			m_infp = NULL;
+		}
+		
+		return true;
+	}
+	
+	bool read (MSWrite::Byte *buf, const MSWrite::DWord numBytes)
+	{
+		if (fread (buf, 1, (size_t) numBytes, m_infp) != (size_t) numBytes)
+		{
+			error (MSWrite::Error::FileError, "could not read from input file\n");
+			return false;
+		}
+			
+		return true;
+	}
+	
+	bool write (const MSWrite::Byte *, const MSWrite::DWord)
+	{
+		error (MSWrite::Error::InternalError, "writing to an input file?\n");
+		return false;
+	}
+	
+	bool seek (const long offset, const int whence)
+	{
+		if (fseek (m_infp, offset, whence))
+		{
+			error (MSWrite::Error::InternalError, "could not seek input file\n");
+			return false;
+		}
+			
+		return true;
+	}
+	
+	long tell (void)
+	{
+		return ftell (m_infp);
+	}
+	
+	void debug (const char *s)
+	{
+		kdDebug (30509) << s;
+	}
+	
+	void debug (const int i)
+	{
+		kdDebug (30509) << i;
+	}
+	
+	void error (const int errorCode, const char *message,
+					const char * /*file*/ = "", const int /*lineno*/ = 0,
+					MSWrite::DWord /*tokenValue*/ = NoToken)
+	{
+		if (errorCode == MSWrite::Error::Warn)
+			kdWarning (30509) << message;
+		else
+		{
+			m_error = errorCode;
+			kdError (30509) << message;
+		}
+	}
+};
 
-void MSWRITEImport::warning (const char *format, ...)
-{
-	va_list list;
 
-	va_start (list, format);
-	vsnprintf (m_debugStr, MSWRITE_BUFFER_SIZE, format, list);
-	kdWarning (MSWRITE_DEBUG_AREA) << m_debugStr;
-	va_end (list);
-}
-
-void MSWRITEImport::error (const char *format, ...)
-{
-	va_list list;
-
-	va_start (list, format);
-	vsnprintf (m_debugStr, MSWRITE_BUFFER_SIZE, format, list);
-	kdError (MSWRITE_DEBUG_AREA) << m_debugStr;
-	va_end (list);
-}
-
-// file operations
+//
+// Generator that creates the KWord file
 //
 
-int MSWRITEImport::openFiles (const char *infilename)
+class KWordGenerator : public MSWrite::Generator, public MSWrite::NeedsDevice
 {
-	// open input file
-	m_infile = fopen (infilename, "rb");
-	if (!m_infile)
+private:
+	// KoStore can only have 1 file open at a time
+	// so we store objects in this structure temporarily
+	class WRIObject
 	{
-		error ("input file open error\n");
-		return 1;
-	}
+	private:
+		WRIObject (const WRIObject &rhs);
 
-	return 0;
-}
+	public:
+		MSWrite::Byte *m_data;
+		MSWrite::DWord m_dataLength;
+		MSWrite::DWord m_dataUpto;
+		QString m_nameInStore;
 
-void MSWRITEImport::closeFiles (void)
-{
-	if (m_outfile)
-	{
-		m_outfile->close ();
-		m_outfile = (KoStoreDevice *) NULL;
-	}
-	
-	if (m_infile)
-	{
-		fclose (m_infile);
-		m_infile = (FILE *) NULL;
-	}
-}
-
-int MSWRITEImport::infileRead (void *ptr, size_t size, size_t memb)
-{
-	int cread;
-	if ((cread = fread (ptr, size, memb, m_infile)) != (int) memb)
-	{
-		error ("could not read (%u < %u)\n", cread, memb);
-		return 1;
-	}
-	return 0;
-}
-
-int MSWRITEImport::infileSeek (long offset, int whence)
-{
-	return (fseek (m_infile, offset, whence) == -1) ? 1 : 0;
-}
-
-long MSWRITEImport::infileTell (void) const
-{
-	return ftell (m_infile);
-}
-
-// get some document stats
-int MSWRITEImport::documentGetStats (void)
-{
-	// page width & height
-	m_pageWidth = sectionProperty->getPageWidth ();
-	m_pageHeight = sectionProperty->getPageHeight ();
-
-	// offset of margins
-	m_left = sectionProperty->getLeftMargin ();
-	m_right = m_left + sectionProperty->getTextWidth () - 1;
-	m_top = sectionProperty->getTopMargin ();
-	m_bottom = m_top + sectionProperty->getTextHeight () - 1;
-
-	// size of margins
-	m_leftMargin = m_left;
-	m_rightMargin = sectionProperty->getRightMargin ();
-	m_topMargin = m_top;
-	m_bottomMargin = sectionProperty->getBottomMargin ();
-
-	debug ("leftMargin: %i  rightMargin: %i  topMargin: %i  bottomMargin: %i\n",
-				m_leftMargin, m_rightMargin, m_topMargin, m_bottomMargin);
-
-	// offset of header & footer
-	m_headerFromTop = sectionProperty->getHeaderFromTop ();
-	m_footerFromTop = sectionProperty->getFooterFromTop ();
-
-	debug ("headerFromTop: %i   footerFromTop: %i\n", m_headerFromTop, m_footerFromTop);
-	
-	// adjust margins/PAPERBORDERS to ensure that the header & footer are within them
-	// TODO: stop header & footer from changing body's location
-	// TODO: recompute offset of margins after recomputing margins
-	if (hasHeader ())
-		if (m_headerFromTop < m_topMargin) m_topMargin = m_headerFromTop;
-	if (hasFooter ())
-		if (m_pageHeight - m_footerFromTop < m_bottomMargin) m_bottomMargin = m_pageHeight - m_footerFromTop;
-
-	debug ("adjusted::: leftMargin: %i  rightMargin: %i  topMargin: %i  bottomMargin: %i\n",
-				m_leftMargin, m_rightMargin, m_topMargin, m_bottomMargin);
-
-	return 0;
-}
-
-int MSWRITEImport::documentStartWrite (const int firstPageNumber)
-{
-	// get dimensions of paper, borders, margins...
-	if (documentGetStats ())
-	{
-		error ("can't documentGetStats()\n");
-		return 1;
-	}
-
-	// allocate memory for array of object data
-	m_objectData = new MSWRITE_OBJECT_DATA [getNumObjects ()];
-	if (!m_objectData)
-	{
-		error ("cannot allocate memory for m_objectData [%i]\n", getNumObjects ());
-		return 1;
-	}
-
-	// open maindoc.xml
-	m_outfile = m_chain->storageFile ("root", KoStore::Write);
-	if (!m_outfile)
-	{
-		error ("Cannot open root in store\n");
-		return 1;
-	}
-
-	// start document
-	// TODO: error checking
-	tagWrite ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-	tagWrite ("<!DOCTYPE DOC PUBLIC \"-//KDE//DTD kword 1.2//EN\" \"http://www.koffice.org/DTD/kword-1.2.dtd\">");
-	tagWrite ("<DOC xmlns=\"http://www.koffice.org/DTD/kword\" mime=\"application/x-kword\" syntaxVersion=\"2\" editor=\"KWord\">");
-
-	tagWrite ("<PAPER format=\"1\" width=\"%i\" height=\"%i\" orientation=\"0\" columns=\"1\" "
-					"hType=\"%i\" fType=\"%i\">",
-					m_pageWidth, m_pageHeight,
-					isHeaderOnFirstPage () ? 0 : 2,
-					isFooterOnFirstPage () ? 0 : 2);
-
-	tagWrite ("<PAPERBORDERS left=\"%i\" right=\"%i\" top=\"%i\" bottom=\"%i\"/>",
-					m_leftMargin, m_rightMargin, m_topMargin, m_bottomMargin);
-
-	tagWrite ("</PAPER>");
-
-	tagWrite ("<ATTRIBUTES processing=\"0\" standardpage=\"1\" hasHeader=\"%i\" hasFooter=\"%i\"/>",
-					hasHeader () ? 1 : 0, hasFooter () ? 1 : 0);
-
-	// handle page numbering not starting from 1
-	if (firstPageNumber != 1)
-		tagWrite ("<VARIABLESETTINGS startingPageNumber=\"%i\"/>", firstPageNumber);
-
-	tagWrite ("<FRAMESETS>");
-
-	return 0;
-}
-
-int MSWRITEImport::documentEndWrite (void)
-{
-	// write framesets for the objects
-	tagWrite (m_objectFrameset);
-
-	tagWrite ("</FRAMESETS>");
-	tagWrite ("<STYLES>");
-	tagWrite ("<STYLE>");
-		tagWrite ("<NAME value=\"Standard\"/>");
-		tagWrite ("<FLOW align=\"left\"/>");
-		tagWrite ("<INDENTS first=\"0\" left=\"0\" right=\"0\"/>");
-		tagWrite ("<OFFSETS before=\"0\" after=\"0\"/>");
-		tagWrite ("<LINESPACING value=\"0\"/>");
-
-		tagWrite ("<FORMAT id=\"1\">");
-			tagWrite ("<COLOR blue=\"0\" red=\"0\" green=\"0\"/>");
-			tagWrite ("<FONT name=\"helvetica\"/>");
-			tagWrite ("<SIZE value=\"12\"/>");
-			tagWrite ("<WEIGHT value=\"50\"/>");
-			tagWrite ("<ITALIC value=\"0\"/>");
-			tagWrite ("<UNDERLINE value=\"0\"/>");
-			tagWrite ("<STRIKEOUT value=\"0\"/>");
-			// CHARSET?
-			tagWrite ("<VERTALIGN value=\"0\"/>");
-		tagWrite ("</FORMAT>");
-
-		tagWrite ("<FOLLOWING name=\"Standard\"/>");
-	tagWrite ("</STYLE>");
-	tagWrite ("</STYLES>");
-
-	// write out image keys
-	tagWrite ("<PICTURES>"); tagWrite (m_pictures); tagWrite ("</PICTURES>");
-
-	// end document
-	tagWrite ("</DOC>");
-
-	// close maindoc.xml
-	m_outfile->close ();
-	m_outfile = (KoStoreDevice *) NULL;
-
-	//
-	// output object data
-
-	if (m_objectUpto != getNumObjects ())
-		warning ("m_objectUpto (%i) != getNumObjects() (%i) -- this is probably because OLE is unimplemented\n",
-					m_objectUpto, getNumObjects ());
-
-	for (int i = 0; i < m_objectUpto; i++)
-	{
-		debug ("outputting: m_objectData [%i] (\"%s\")   (length: %i)\n",
-					i,
-					(const char *) m_objectData [i].m_nameInStore.utf8 (),
-					m_objectData [i].m_dataLength);
-
-		// open file for object in store
-		m_outfile = m_chain->storageFile (m_objectData [i].m_nameInStore, KoStore::Write);
-		if (!m_outfile)
+		WRIObject () : m_data (NULL), m_dataLength (0), m_dataUpto (0)
 		{
-			error ("can't open image in store (%s)\n", (const char *) m_objectData [i].m_nameInStore.utf8 ());
-			return 1;
 		}
 
-		if (m_outfile->writeBlock (m_objectData [i].m_data, m_objectData [i].m_dataLength)
-				!= (Q_LONG) m_objectData [i].m_dataLength)
+		~WRIObject ()
 		{
-			error ("cannot write m_objectData [%i].data to store (len: %i)\n",
-						i, m_objectData [i].m_dataLength);
-			return 1;
+			delete [] m_data;
 		}
 
-		// close object in store
-		m_outfile->close ();
-		m_outfile = (KoStoreDevice *) NULL;
-	}
-
-	delete [] m_objectData;
-	m_objectData = (MSWRITE_OBJECT_DATA *) NULL;
-
-	return 0;
-}
-
-// pageNewWrite() is called due to entries in the pageTable
-// -- however, pageTable can be very inaccurate, so we ignore it
-int MSWRITEImport::pageNewWrite (const int)
-{
-	return 0;
-}
-
-// handles explicit page breaks
-int MSWRITEImport::pageBreakWrite (void)
-{
-	// later used in paraEndWrite
-	m_pageBreak = true;
-	m_pageBreakOffset = m_charInfoCountStart + m_charInfoCountLen;
-	
-#if 0
-	debug ("pageBreak with %i\n", m_pageBreakOffset);
-#endif
-	return 0;
-}
-
-// handle "(page)" number
-int MSWRITEImport::pageNumberWrite (void)
-{
-	m_charInfoCountLen++;	// not incremented by tagWrite()
-	return tagWrite ("#");
-}
-
-// write newline unless end-of-paragraph
-// (this is the support for paragraphs with multiple newlines)
-int MSWRITEImport::newLineWrite (const bool endOfParagraph)
-{
-	if (!endOfParagraph)
-	{
-		m_charInfoCountLen++;	// not incremented by tagWrite()
-		return tagWrite ("\n");
-	}
-	else
-		return 0;
-}
-
-// aka "soft hyphen"
-int MSWRITEImport::optionalHyphenWrite (void)
-{
-	m_charInfoCountLen++;	// not incremented by tagWrite()
-	return tagWrite ("\xC2\xAD");
-}
-
-int MSWRITEImport::bodyStartWrite (void)
-{
-	tagWrite ("<FRAMESET frameType=\"1\" frameInfo=\"0\" name=\"Text Frameset 1\" visible=\"1\">");
-	// TODO: runaround?
-	tagWrite ("<FRAME runaround=\"1\" autoCreateNewFrame=\"1\" newFrameBehavior=\"0\" copy=\"0\""
-					" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
-					m_top, m_bottom, m_left, m_right);
-
-	return 0;
-}
-
-int MSWRITEImport::bodyEndWrite (void)
-{
-	// <PAGEBREAKING hardFrameBreakAfter=\"true\"/>" may have been in the last paragraph
-	// and for "hardFrameBreakAfter" to do its work, we need one more final paragraph!
-	if (m_needAnotherParagraph)
-	{
-		debug ("needAnotherParagraph==true in bodyEndWrite()\n");
-		tagWrite ("<PARAGRAPH><TEXT></TEXT><LAYOUT></LAYOUT></PARAGRAPH>");
-		m_needAnotherParagraph = false;
-	}
-
-	tagWrite ("</FRAMESET>");
-
-	// since "Text Frameset 1" has ended, we can output the header & footer, now
-	delayOutputFlush ();
-
-	return 0;
-}
-
-int MSWRITEImport::headerStartWrite (void)
-{
-	// headers must go after body in KWord
-	delayOutput (true);
-
-	// dummy header frames
-	//
-
-	// except, if the header is NOT on the first page, then make an empty "First Page Header"
-	// by setting "visible=1"
-	tagWrite ("<FRAMESET frameType=\"1\" frameInfo=\"1\" name=\"First Page Header\" visible=\"%i\">",
-					(!isHeaderOnFirstPage ()) ? 1 : 0);
-	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
-					" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
-					m_headerFromTop, m_headerFromTop, m_left, m_right);
-	tagWrite ("</FRAMESET>");
-
-	tagWrite ("<FRAMESET frameType=\"1\" frameInfo=\"2\" name=\"Odd Pages Header\" visible=\"0\">");
-	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
-					" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
-						m_headerFromTop, m_headerFromTop, m_left, m_right);
-	tagWrite ("</FRAMESET>");
-
-	// real header frame
-	tagWrite ("<FRAMESET frameType=\"1\" frameInfo=\"3\" name=\"Even Pages Header\" visible=\"1\">");
-	tagWrite ("<FRAME runaround=\"1\" copy=\"1\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
-					" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
-						m_headerFromTop, m_headerFromTop, m_left, m_right);
-	return 0;
-}
-
-int MSWRITEImport::headerEndWrite (void)
-{
-	tagWrite ("</FRAMESET>");
-	delayOutput (false);
-
-	return 0;
-}
-
-int MSWRITEImport::footerStartWrite (void)
-{
-	// footers must go after body in KWord
-	delayOutput (true);
-
-	// dummy footer frames
-	//
-
-	// except, if the footer is NOT on the first page, then make an empty "First Page Footer"
-	// by setting "visible=1"
-	tagWrite ("<FRAMESET frameType=\"1\" frameInfo=\"4\" name=\"First Page Footer\" visible=\"%i\">",
-					(!isFooterOnFirstPage ()) ? 1 : 0);
-	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
-					" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
-					m_footerFromTop, m_footerFromTop, m_left, m_right);
-	tagWrite ("</FRAMESET>");
-
-	tagWrite ("<FRAMESET frameType=\"1\" frameInfo=\"5\" name=\"Odd Pages Footer\" visible=\"0\">");
-	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
-					" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
-					m_footerFromTop, m_footerFromTop, m_left, m_right);
-	tagWrite ("</FRAMESET>");
-
-	// real footer frame
-	tagWrite ("<FRAMESET frameType=\"1\" frameInfo=\"6\" name=\"Even Pages Footer\" visible=\"1\">");
-	tagWrite ("<FRAME runaround=\"1\" copy=\"1\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
-					" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
-					m_footerFromTop, m_footerFromTop, m_left, m_right);
-					
-	return 0;
-}
-
-int MSWRITEImport::footerEndWrite (void)
-{
-	tagWrite ("</FRAMESET>");
-	delayOutput (false);
-
-	return 0;
-}
-
-int MSWRITEImport::paraInfoStartWrite (const MSWRITE_FPROP_PAP & /*pap*/)
-{
-	if (tagWrite ("<PARAGRAPH><TEXT>"))
-	{
-		error ("tagWrite (\"<p\") error\n");
-		return 1;
-	}
-
-	// reset charInfo counters
-	m_charInfoCountStart = 0;
-	m_charInfoCountLen = 0;
-	
-	m_paraIsImage = false;
-	
-	return 0;
-}
-
-int MSWRITEImport::paraInfoEndWrite (const MSWRITE_FPROP_PAP &pap)
-{
-	QString output;
-	output += "</TEXT>";
-
-	output += "<LAYOUT>";
-		output += "<NAME value=\"Standard\"/>";
-
-		int justify = pap.getJustification ();
-
-		if (justify != MSWRITE_JUSTIFY_LEFT)
+		WRIObject operator= (const WRIObject &rhs)
 		{
-			output += "<FLOW align=\"";
-			switch (justify)
+			delete [] m_data;
+
+			m_dataLength = rhs.m_dataLength;
+			m_dataUpto = rhs.m_dataUpto;
+			m_nameInStore = rhs.m_nameInStore;
+
+			if (rhs.m_data)
 			{
-				/*case MSWRITE_JUSTIFY_LEFT:
-					output += "left";
-					break;*/
-				case MSWRITE_JUSTIFY_CENTRE:
-					output += "center";
-					break;
-				case MSWRITE_JUSTIFY_RIGHT:
-					output += "right";
-					break;
-				case MSWRITE_JUSTIFY_BOTH:
-					output += "justify";
-					break;
+				m_data = new MSWrite::Byte [m_dataLength];
+				if (m_data)
+					memcpy (m_data, rhs.m_data, m_dataLength);
+				// remember to check m_data before use
 			}
-			output += "\"/>";
-		}
-
-		int indentFirst = pap.getLeftIndentFirstLine ();
-		int indentLeft = pap.getLeftIndent ();
-		int indentRight = pap.getRightIndent ();
-
-#if 0
-		debug ("raw indent:  first: %i  left: %i  right: %i\n",
-					indentFirst, indentLeft, indentRight);
-#endif
-
-		// Correct indentation in Header and Footer:
-		//
-		// For unknown reasons, Write adds the leftMargin to the leftIndent
-		// and rightMargin to rightIndent in the Header and Footer only but
-		// does not touch the leftIndentFirstLine
-		//
-		// TODO: move to MSWriteLib
-		// TODO: what if it's an image in the header/footer?
-		if (pap.isHeader () || pap.isFooter ())
-		{
-			WORD leftMargin = sectionProperty->getLeftMargin ();
-			WORD rightMargin = sectionProperty->getRightMargin ();
-
-#if 0
-			debug ("\thead|foot adjust: left: %i-%i=%i  right: %i-%i=%i\n",
-						indentLeft, leftMargin, indentLeft - leftMargin,
-						indentRight, rightMargin, indentRight - rightMargin);
-#endif
-
-			// adjust
-			indentLeft -= leftMargin;
-			indentRight -= rightMargin;
-
-			// prevent negative indents
-			if (indentLeft < 0) indentLeft = 0;
-			if (indentRight < 0) indentRight = 0; 
-		}
-
-		if (m_paraIsImage /*pap.isObject ()*/)
-		{
-			// MSWrite _always_ ignores "First Line Indent" if it's an object
-			if (indentFirst)
-				debug ("user specified indentFirst (%i) with an image/object\n", indentFirst);
-			indentFirst = 0;
-
-			// MSWrite does not add the horizontal offset of the image from the left margin to the Left Indent
-			// -- instead, it selects the bigger one
-			// TODO: proper image positioning (see doc IMPERFECT)
-			if (m_simulateImageOffset && m_objectHorizOffset > indentLeft)
-			{
-				debug ("image is further away from left margin by itself, rather than using indentLeft (%i > %i)\n",
-							m_objectHorizOffset, indentLeft);
-				indentLeft = m_objectHorizOffset;
-			}
-		}
-
-		// hopefully these test operations will be cheaper than the XML ones :)
-		if (indentFirst || indentLeft || indentRight)
-		{
-			output += "<INDENTS";
-			if (indentFirst) output += " first=\"" + QString::number (indentFirst) + "\"";
-			if (indentLeft) output += " left=\"" + QString::number (indentLeft) + "\"";
-			if (indentRight) output += " right=\"" + QString::number (indentRight) + "\"";
-			output += "/>";
-		}
-
-		int lineSpacing = pap.getLineSpacing ();
-
-		if (lineSpacing != 10)
-		{
-			output += "<LINESPACING value=\"";
-			switch (lineSpacing)
-			{
-				//case 10:
-				//	output += "0";
-				//	break;
-				case 15:
-					output += "oneandhalf";
-					break;
-				case 20:
-					output += "double";
-					break;
-				default:
-					warning ("unknown linespacing value: %i\n", lineSpacing);
-					output += "0";
-					break;
-			}
-			output += "\"/>";
-		}
-
-		// Do we want the linespacing to _look_ like it does in Write?
-		// (this adds extra space before each paragraph)
-		if (m_simulateLinespacing)
-		{
-			// emulate Write's linespacing (aligned to bottom)
-			// by using varying amounts of space before the paragraph
-			// TODO: test if it works nicely enough (what if you have several different sized fonts in paragraph?)
-			if (lineSpacing != 10)		// if not normal linespacing...
-			{
-				output += "<OFFSETS before=\"";
-
-				int amount = 0;
-				switch (lineSpacing)
-				{
-				/*case 10:
-					break;*/
-				case 15:
-					amount = 7;
-					break;
-				case 20:
-					amount = 14;
-					break;
-				default:
-					// already warned above
-					//warning ("unknown linespacing value: %i\n", lineSpacing);
-					break;
-				}
-
-				// subtract the amount of trailing linespace from last paragraph
-				amount -= m_lineSpacingFromAbove;
-				if (amount <= 0) amount = 0;		// no emulation can be perfect...
-
-				output += QString::number (amount);
-				output += "\" />";
-			}
-
-			// GUESS (TODO: fix) the amount of trailing linespace
-			switch (lineSpacing)
-			{
-			case 10:
-				m_lineSpacingFromAbove = 0;
-				break;
-			case 15:
-				m_lineSpacingFromAbove = 7;
-				break;
-			case 20:
-				m_lineSpacingFromAbove = 14;
-				break;
-			default:		// unknown
-				m_lineSpacingFromAbove = 0;
-				break;
-			}
-		}	// if (m_simulateLinespacing)	{
-
-		if (m_pageBreak)
-		{
-#if 0
-			debug ("\tpagebrk: output: offset: %i chars in paragraph: %i\n",
-				m_pageBreakOffset, m_charInfoCountStart + m_charInfoCountLen);
-#endif
-
-			// page break before all the text
-			if (m_pageBreakOffset == 0 && m_charInfoCountStart + m_charInfoCountLen > 0)
-			{
-				output += "<PAGEBREAKING hardFrameBreak=\"true\"/>";
-				m_needAnotherParagraph = false;	// this paragraph is on first page so we don't need another one
-			}
-			// we assume that the pageBreak was after all the text (TODO: don't assume this)
 			else
-			{
-				output += "<PAGEBREAKING hardFrameBreakAfter=\"true\"/>";
-				m_needAnotherParagraph = true;	// need another paragraph for hardFrameBreakAfter to work
-			}
+				m_data = NULL;
 
-			m_pageBreak = false;		// reset flag
+			return *this;
+		}
+	};
+
+	// page/margin dimensions
+	int m_pageWidth, m_pageHeight;
+	int m_left, m_right, m_top, m_bottom;		// describing border of Text Frameset (position, not magnitude)
+	int m_leftMargin, m_rightMargin, m_topMargin, m_bottomMargin;
+	int m_headerFromTop, m_footerFromTop;
+	bool m_hasHeader, m_isHeaderOnFirstPage;
+	bool m_hasFooter, m_isFooterOnFirstPage;
+	bool m_writeHeaderFirstTime, m_writeFooterFirstTime;
+	
+	int inWhat;
+	
+	enum inWhatPossiblities
+	{
+		Nothing,
+		Header,
+		Footer,
+		Body
+	};
+	
+	int m_startingPageNumber;
+
+	KoFilterChain *m_chain;
+	KoStoreDevice *m_outfile;
+
+	// for charset conversion
+	QTextCodec *m_codec;
+	QTextDecoder *m_decoder;
+
+	// import options (compensate for differences between KWord and MS Write)
+	bool m_simulateLineSpacing;
+	bool m_simulateImageOffset;
+
+	// formatting
+	QString m_formatOutput;
+	int m_charInfoCountStart, m_charInfoCountLen;
+	bool m_pageBreak, m_needAnotherParagraph;
+	int m_pageBreakOffset;
+	int m_lineSpacingFromAbove;
+
+	// picture counters
+	int m_numPictures;
+	QString m_pictures;
+	
+	QString m_objectFrameset;
+
+	MSWrite::List <WRIObject> m_objectList;
+
+	double m_objectHorizOffset;
+	bool m_paraIsImage;
+
+	MSWriteImport *m_koLink;
+	
+	// XML output that is held back until after "Text Frameset 1" is output
+	// (i.e. header & footer must come after the Body in KWord)
+	bool m_delayOutput;
+	QString m_heldOutput;
+	
+	void delayOutput (const bool yes)
+	{
+		m_delayOutput = yes;
+	}
+
+	bool delayOutputFlush (void)
+	{
+		QCString strUtf8 = m_heldOutput.utf8 ();
+		int strLength = strUtf8.length ();
+
+		if (m_outfile->writeBlock (strUtf8, strLength) != strLength)
+			ErrorAndQuit (MSWrite::Error::FileError, "could not write delayed output\n");
+		
+		m_heldOutput = "";
+		return true;
+	}
+
+public:
+	KWordGenerator () : m_hasHeader (false), m_isHeaderOnFirstPage (false),
+								m_hasFooter (false), m_isFooterOnFirstPage (false),
+								m_writeHeaderFirstTime (true), m_writeFooterFirstTime (true),
+								inWhat (Nothing),
+								m_decoder (NULL),
+								m_simulateLineSpacing (false),
+								m_simulateImageOffset (true),
+								m_pageBreak (false), m_needAnotherParagraph (false),
+								m_lineSpacingFromAbove (0),
+								m_numPictures (0)
+	{
+		delayOutput (false);
+
+		// just select windows-1252 until the "Select Encoding" dialog works
+		m_codec = QTextCodec::codecForName ("CP 1252");
+
+		if (m_codec)
+			m_decoder = m_codec->makeDecoder();
+		else
+			kdWarning (30509) << "Cannot convert from Win Charset!" << endl;
+	}
+
+	virtual ~KWordGenerator ()
+	{
+		delete m_decoder;
+	}
+
+	void setFilterChain (KoFilterChain *chain)
+	{
+		m_chain = chain;
+	}
+	
+	bool writeDocumentBegin (const MSWrite::Word,
+						 				const MSWrite::PageLayout *pageLayout)
+	{
+		kdDebug (30509) << "writeDocumentBegin()" << endl;
+
+		// open maindoc.xml
+		m_outfile = m_chain->storageFile ("root", KoStore::Write);
+		if (!m_outfile)
+			ErrorAndQuit (MSWrite::Error::FileError, "could not open root in store\n");
+
+
+		//
+		// store page dimensions for now
+		//
+		
+		// page width & height
+		m_pageWidth = Twip2Point (pageLayout->getPageWidth ());
+		m_pageHeight = Twip2Point (pageLayout->getPageHeight ());
+
+		// offset of margins
+		m_left = Twip2Point (pageLayout->getLeftMargin ());
+		m_right = m_left + Twip2Point (pageLayout->getTextWidth ()) - 1;
+		m_top = Twip2Point (pageLayout->getTopMargin ());
+		m_bottom = m_top + Twip2Point (pageLayout->getTextHeight ()) - 1;
+
+		// size of margins
+		m_leftMargin = m_left;
+		m_rightMargin = Twip2Point (pageLayout->getRightMargin ());
+		m_topMargin = m_top;
+		m_bottomMargin = Twip2Point (pageLayout->getBottomMargin ());
+
+		kdDebug (30509) << "leftMargin: " << m_leftMargin << endl;
+		kdDebug (30509) << "rightMargin: " << m_rightMargin << endl;
+		kdDebug (30509) << "topMargin: " << m_topMargin << endl;
+		kdDebug (30509) << "bottomMargin: " << m_bottomMargin << endl;
+
+		// offset of header & footer
+		m_headerFromTop = Twip2Point (pageLayout->getHeaderFromTop ());
+		m_footerFromTop = Twip2Point (pageLayout->getFooterFromTop ());
+
+		kdDebug (30509) << "headerFromTop: " << m_headerFromTop
+				  				<< " footerFromTop: " << m_footerFromTop << endl;
+
+		m_startingPageNumber = pageLayout->getPageNumberStart ();
+		
+		return true;
+	}
+
+	bool writeDocumentBeginForReal (void)
+	{
+		kdDebug (30509) << "writeDocumentBeginForReal()" << endl;
+
+		// adjust margins/PAPERBORDERS to ensure that the header & footer are
+		// within them
+		// TODO: stop header & footer from changing body's location
+		// TODO: recompute offset of margins after recomputing margins
+		if (m_hasHeader)
+			if (m_headerFromTop < m_topMargin)
+				m_topMargin = m_headerFromTop;
+		
+		if (m_hasFooter)
+			if (m_pageHeight - m_footerFromTop < m_bottomMargin)
+				m_bottomMargin = m_pageHeight - m_footerFromTop;
+
+		kdDebug (30509) << "adjusted::: leftMargin: " << m_leftMargin
+								<< "  rightMargin: " << m_rightMargin
+								<< "  topMargin: " << m_topMargin
+								<< "  bottomMargin: %i" << m_bottomMargin
+								<< endl;
+		
+		// start document
+		// TODO: error checking
+		writeTextInternal ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		writeTextInternal ("<!DOCTYPE DOC PUBLIC \"-//KDE//DTD kword 1.2//EN\" "
+									"\"http://www.koffice.org/DTD/kword-1.2.dtd\">");
+		writeTextInternal ("<DOC xmlns=\"http://www.koffice.org/DTD/kword\" "
+									"mime=\"application/x-kword\" "
+									"syntaxVersion=\"2\" editor=\"KWord\">");
+
+		writeTextInternal ("<PAPER format=\"1\" "
+									"width=\"%i\" height=\"%i\" "
+									"orientation=\"0\" columns=\"1\" "
+									"hType=\"%i\" fType=\"%i\">",
+									m_pageWidth, m_pageHeight,
+									m_isHeaderOnFirstPage ? 0 : 2,
+									m_isFooterOnFirstPage ? 0 : 2);
+
+		writeTextInternal ("<PAPERBORDERS left=\"%i\" right=\"%i\" "
+									"top=\"%i\" bottom=\"%i\"/>",
+									m_leftMargin, m_rightMargin,
+									m_topMargin, m_bottomMargin);
+
+		writeTextInternal ("</PAPER>");
+
+		writeTextInternal ("<ATTRIBUTES processing=\"0\" "
+									"tabStopValue=\"%lf\" "
+									"hasHeader=\"%i\" hasFooter=\"%i\"/>",
+									Inch2Point (0.5),
+									m_hasHeader ? 1 : 0, m_hasFooter ? 1 : 0);
+
+		// handle page numbering not starting from 1
+		if (m_startingPageNumber != 1)
+			writeTextInternal ("<VARIABLESETTINGS startingPageNumber=\"%i\"/>",
+								 		m_startingPageNumber);
+
+		writeTextInternal ("<FRAMESETS>");
+
+		return true;
+	}
+	
+	bool writeDocumentEnd (const MSWrite::Word, const MSWrite::PageLayout *)
+	{
+		kdDebug (30509) << "writeDocumentEnd()" << endl;
+
+		// write framesets for the objects
+		writeTextInternal (m_objectFrameset);
+
+		writeTextInternal ("</FRAMESETS>");
+		writeTextInternal ("<STYLES>");
+		writeTextInternal ("<STYLE>");
+			writeTextInternal ("<NAME value=\"Standard\"/>");
+			writeTextInternal ("<FLOW align=\"left\"/>");
+			writeTextInternal ("<INDENTS first=\"0\" left=\"0\" right=\"0\"/>");
+			writeTextInternal ("<OFFSETS before=\"0\" after=\"0\"/>");
+
+			writeTextInternal ("<FORMAT id=\"1\">");
+				writeTextInternal ("<COLOR blue=\"0\" red=\"0\" green=\"0\"/>");
+				writeTextInternal ("<FONT name=\"helvetica\"/>");
+				writeTextInternal ("<SIZE value=\"12\"/>");
+				writeTextInternal ("<WEIGHT value=\"50\"/>");
+				writeTextInternal ("<ITALIC value=\"0\"/>");
+				writeTextInternal ("<UNDERLINE value=\"0\"/>");
+				writeTextInternal ("<STRIKEOUT value=\"0\"/>");
+				writeTextInternal ("<VERTALIGN value=\"0\"/>");
+			writeTextInternal ("</FORMAT>");
+
+			writeTextInternal ("<FOLLOWING name=\"Standard\"/>");
+		writeTextInternal ("</STYLE>");
+		writeTextInternal ("</STYLES>");
+
+		// write out image keys
+		writeTextInternal ("<PICTURES>");
+			writeTextInternal (m_pictures);
+		writeTextInternal ("</PICTURES>");
+
+		// end document
+		writeTextInternal ("</DOC>");
+
+		// close maindoc.xml
+		m_outfile->close ();
+		m_outfile = (KoStoreDevice *) NULL;
+
+		//
+		// output object data
+
+		/*if (m_objectUpto != getNumObjects ())
+			warning ("m_objectUpto (%i) != getNumObjects() (%i) -- this is probably because OLE is unimplemented\n",
+						m_objectUpto, getNumObjects ());*/
+		
+		MSWrite::List <WRIObject>::Iterator it;
+		for (it = m_objectList.begin (); it != m_objectList.end (); it++)
+		{
+			kdDebug (30509) << "outputting object \'" << (*it).m_nameInStore
+					  				<< "\'   (length: " << (*it).m_dataLength << ")"
+									<< endl;
+			
+			if (!(*it).m_data)
+				ErrorAndQuit (MSWrite::Error::InternalError, "image data not initialised\n");
+				
+			// open file for object in store
+			m_outfile = m_chain->storageFile ((*it).m_nameInStore, KoStore::Write);
+			if (!m_outfile)
+				ErrorAndQuit (MSWrite::Error::FileError, "could not open image in store\n");
+			
+			if (m_outfile->writeBlock ((const char *) (*it).m_data, (*it).m_dataLength)
+				!= (Q_LONG) (*it).m_dataLength)
+				ErrorAndQuit (MSWrite::Error::FileError, "could not write image to store\n");
+
+			// close object in store
+			m_outfile->close ();
+			m_outfile = NULL;
+		}
+		
+		return true;
+	}
+
+	
+	bool writeFooterBegin (void)
+	{
+		kdDebug (30509) << "writeFooterBegin()" << endl;
+
+		inWhat = Footer;
+		m_hasFooter = true;
+		
+		// footers must go after body in KWord
+		delayOutput (true);
+
+		// footer frameset will be written in writeParaInfoBegin()
+		
+		return true;
+	}
+
+	bool writeFooterEnd (void)
+	{
+		kdDebug (30509) << "writeFooterEnd()" << endl;
+
+		inWhat = Nothing;
+		
+		if (!m_writeFooterFirstTime)
+			writeTextInternal ("</FRAMESET>");
+		delayOutput (false);
+
+		return true;
+	}
+
+	bool writeHeaderBegin (void)
+	{
+		kdDebug (30509) << "writeHeaderBegin()" << endl;
+
+		inWhat = Header;
+		m_hasHeader = true;
+		
+		// headers must go after body in KWord
+		delayOutput (true);
+
+		// header frameset will be written in writeParaInfoBegin()
+		
+		return true;
+	}
+
+	bool writeHeaderEnd (void)
+	{
+		kdDebug (30509) << "writeHeaderEnd()" << endl;
+
+		inWhat = Nothing;
+		
+		if (!m_writeHeaderFirstTime)
+			writeTextInternal ("</FRAMESET>");
+		delayOutput (false);
+
+		return true;
+	}
+	
+	bool writeBodyBegin (void)
+	{
+		kdDebug (30509) << "writeBodyBegin()" << endl;
+
+		inWhat = Body;
+		
+		// writeFooterBegin() and writeHeaderBegin() have been called by now
+		// so we have enough information to actually write about them
+		writeDocumentBeginForReal ();
+		
+		writeTextInternal ("<FRAMESET frameType=\"1\" frameInfo=\"0\" name=\"Text Frameset 1\" visible=\"1\">");
+		// TODO: runaround?
+		writeTextInternal ("<FRAME runaround=\"1\" autoCreateNewFrame=\"1\" newFrameBehavior=\"0\" copy=\"0\""
+									" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
+									m_top, m_bottom, m_left, m_right);
+
+		return true;
+	}
+
+	bool writeBodyEnd (void)
+	{
+		kdDebug (30509) << "writeBodyEnd()" << endl;
+
+		inWhat = Nothing;
+		
+		// <PAGEBREAKING hardFrameBreakAfter=\"true\"/>" may have been in the last paragraph
+		// and for "hardFrameBreakAfter" to do its work, we need one more final paragraph!
+		if (m_needAnotherParagraph)
+		{
+			kdDebug (30509) << "needAnotherParagraph in bodyEndWrite()" << endl;
+			writeTextInternal ("<PARAGRAPH><TEXT></TEXT><LAYOUT></LAYOUT></PARAGRAPH>");
+			m_needAnotherParagraph = false;
+		}
+
+		writeTextInternal ("</FRAMESET>");
+
+		// since "Text Frameset 1" has ended, we can output the header & footer, now
+		delayOutputFlush ();
+
+		return true;
+	}
+
+	bool writeParaInfoBegin (const MSWrite::FormatParaProperty *paraProperty,
+										const MSWrite::OLE *ole,
+										const MSWrite::Image *image)
+	{
+		kdDebug (30509) << "writeParaInfoBegin()" << endl;
+
+		// reset charInfo counters
+		m_charInfoCountStart = 0;
+		m_charInfoCountLen = 0;
+
+		if (inWhat == Header)
+		{
+			m_isHeaderOnFirstPage = paraProperty->getIsOnFirstPage ();
+	
+			if (m_writeHeaderFirstTime)
+			{
+				// dummy header frames
+				//
+
+				// except, if the header is NOT on the first page, then make an empty "First Page Header"
+				// by setting "visible=1"
+				writeTextInternal ("<FRAMESET frameType=\"1\" frameInfo=\"1\" name=\"First Page Header\" visible=\"%i\">",
+											m_isHeaderOnFirstPage ? 1 : 0);
+				writeTextInternal ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
+											" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
+											m_headerFromTop, m_headerFromTop, m_left, m_right);
+				writeTextInternal ("</FRAMESET>");
+
+				writeTextInternal ("<FRAMESET frameType=\"1\" frameInfo=\"2\" name=\"Even Pages Header\" visible=\"0\">");
+				writeTextInternal ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
+											" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
+											m_headerFromTop, m_headerFromTop, m_left, m_right);
+				writeTextInternal ("</FRAMESET>");
+
+				// real header frame
+				writeTextInternal ("<FRAMESET frameType=\"1\" frameInfo=\"3\" name=\"Odd Pages Header\" visible=\"1\">");
+				writeTextInternal ("<FRAME runaround=\"1\" copy=\"1\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
+											" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
+											m_headerFromTop, m_headerFromTop, m_left, m_right);
+									
+				m_writeHeaderFirstTime = false;
+			}
+		}
+		else if (inWhat == Footer)
+		{
+			m_isFooterOnFirstPage = paraProperty->getIsOnFirstPage ();
+				
+			if (m_writeFooterFirstTime)
+			{
+				// dummy footer frames
+				//
+
+				// except, if the footer is NOT on the first page, then make an empty "First Page Footer"
+				// by setting "visible=1"
+				writeTextInternal ("<FRAMESET frameType=\"1\" frameInfo=\"4\" name=\"First Page Footer\" visible=\"%i\">",
+											m_isFooterOnFirstPage ? 1 : 0);
+				writeTextInternal ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
+											" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
+											m_footerFromTop, m_footerFromTop, m_left, m_right);
+				writeTextInternal ("</FRAMESET>");
+
+				writeTextInternal ("<FRAMESET frameType=\"1\" frameInfo=\"5\" name=\"Even Pages Footer\" visible=\"0\">");
+				writeTextInternal ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
+											" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
+											m_footerFromTop, m_footerFromTop, m_left, m_right);
+				writeTextInternal ("</FRAMESET>");
+
+				// real footer frame
+				writeTextInternal ("<FRAMESET frameType=\"1\" frameInfo=\"6\" name=\"Odd Pages Footer\" visible=\"1\">");
+				writeTextInternal ("<FRAME runaround=\"1\" copy=\"1\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
+											" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
+											m_footerFromTop, m_footerFromTop, m_left, m_right);
+				
+				m_writeFooterFirstTime = false;
+			}
+		}
+
+		if (!writeTextInternal ("<PARAGRAPH><TEXT>")) return false;
+
+		if (image)
+		{
+			kdDebug (30509) << "Paragraph is an image!" << endl;
+
+			QString imageName;
+			QString fileInStore;
+
+
+			// give picture a name
+			//
+
+			imageName = "Picture ";
+			imageName += QString::number (m_numPictures + 1);	// image numbers start at 1...
+
+
+			// give picture a filename
+			//
+
+			fileInStore = "pictures/picture" + QString::number (m_numPictures + 1);
+
+			kdDebug (30509) << "\tGetting type..." << endl;
+
+			// append extension
+			if (image->getIsBMP ())
+				fileInStore += ".bmp";
+			else if (image->getIsWMF () )
+				fileInStore += ".wmf";
+			else
+				ErrorAndQuit (MSWrite::Error::InternalError, "unsupported picture type\n");
+			
+
+			// indicate anchored image in formatting
+			//
+			kdDebug (30509) << "\tIndicating anchored image in formatting" << endl;
+			writeTextInternal ("#");
+
+			m_formatOutput += "<FORMAT id=\"6\" pos=\"0\" len=\"1\">";
+				m_formatOutput += "<ANCHOR type=\"frameset\" instance=\"";
+					m_formatOutput += imageName;
+				m_formatOutput += "\"/>";
+			m_formatOutput += "</FORMAT>";
+
+
+			// write framesets (truly written in documentEndWrite())
+			//
+			kdDebug (30509) << "\tWriting framesets!" << endl;
+
+			m_objectFrameset += "<FRAMESET frameType=\"2\" frameInfo=\"0\" name=\"";
+			m_objectFrameset += imageName;
+			m_objectFrameset += "\" visible=\"1\">";
+				m_objectFrameset += "<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"1\"";
+				m_objectFrameset += " left=\"";
+					m_objectFrameset += QString::number (m_left + Twip2Point (image->getIndent ()));
+					m_objectFrameset += "\"";
+				m_objectFrameset += " right=\"";
+					m_objectFrameset += QString::number (double (m_left)
+											+ Twip2Point (double (image->getIndent ()) + image->getDisplayedWidth ()));
+					m_objectFrameset += "\"";
+				m_objectFrameset += " top=\"";
+					m_objectFrameset += QString::number (m_top);
+					m_objectFrameset += "\"";
+				m_objectFrameset += " bottom=\"";
+					m_objectFrameset += QString::number (double (m_top) + Twip2Point (image->getDisplayedHeight ()));
+					m_objectFrameset += "\"/>";
+
+				m_objectFrameset += "<PICTURE keepAspectRatio=\"false\">";
+				m_objectFrameset += "<KEY msec=\"0\" hour=\"0\" second=\"0\" minute=\"0\" day=\"1\" month=\"1\" year=\"1970\"";
+				m_objectFrameset += " filename=\"";
+				m_objectFrameset += fileInStore;
+				m_objectFrameset += "\"/>";
+				m_objectFrameset += "</PICTURE>";
+			m_objectFrameset += "</FRAMESET>";
+		#ifdef DEBUG_XML_OUTPUT
+			m_objectFrameset += "\n";
+		#endif
+
+			m_pictures += "<KEY msec=\"0\" hour=\"0\" second=\"0\" minute=\"0\" day=\"1\" month=\"1\" year=\"1970\"";
+			m_pictures += " name=\"";
+			m_pictures += fileInStore;
+			m_pictures += "\"";
+			m_pictures += " filename=\"";
+			m_pictures += fileInStore;
+			m_pictures += "\"/>";
+
+			m_numPictures++;
+
+
+			// store object properties
+			//
+			kdDebug (30509) << "\tStoring object" << endl;
+
+			if (!m_objectList.addToBack ())
+				ErrorAndQuit (MSWrite::Error::OutOfMemory, "could not allocate memory for object\n");
+			
+			WRIObject &obj = *m_objectList.begin (false);
+			obj.m_nameInStore = fileInStore;
+			obj.m_dataLength = image->getExternalImageSize ();
+			obj.m_data = new MSWrite::Byte [obj.m_dataLength];
+			if (!obj.m_data)
+				ErrorAndQuit (MSWrite::Error::OutOfMemory, "could not allocate memory for object data\n");
+			
+			// if anchored images could be positioned properly, this wouldn't be needed
+			m_objectHorizOffset = double (Twip2Point (image->getIndent ()));
+			m_paraIsImage = true;
 		}
 		else
-			m_needAnotherParagraph = false;
-		
-		// Tabulators
-		for (int i = 0; i < 14; i++)
 		{
-			if (!pap.tbd [i].isTabEntry ()) break;
-
-			output += "<TABULATOR";
-
-			output += " type=\"";
-			if (pap.tbd [i].isTabDecimal ())
-				output += "3";
-			else
-				output += "0";
-			output += "\"";
-
-			output += " ptpos=\"" + QString::number (pap.tbd [i].getTabNumPoints ()) + "\"/>";
-
-			//debug ("Tab: isNormal: %i  ptPos: %i\n",
-			//			pap.tbd [i].isTabNormal (), pap.tbd [i].getTabNumPoints ());
+			if (ole)
+			{
+				if (!writeTextInternal ("[OLE unsupported]")) return false;
+			}
+			
+			m_paraIsImage = false;
 		}
 
-	output += "</LAYOUT>";
-
-	output += "<FORMATS>";
-		output += m_formatOutput; m_formatOutput = "";		// output all the charInfo for this paragraph
-	output += "</FORMATS>";
-
-	output += "</PARAGRAPH>";
-
-	if (tagWrite (output)) return 1;
-
-	return 0;
-}
-
-int MSWRITEImport::charInfoStartWrite (const MSWRITE_FPROP_CHP & /*chp*/)
-{
-	return 0;
-}
-
-// outputs character formatting tags
-int MSWRITEImport::charInfoEndWrite (const MSWRITE_FPROP_CHP &chp)
-{
-	// output type of format information (page number or normal text)
-	m_formatOutput += "<FORMAT id=\"";
-	if (chp.isPageNumber ())
-		m_formatOutput += "4";
-	else
-		m_formatOutput += "1";
-	m_formatOutput += "\" ";
-
-	m_formatOutput += "pos=\""; m_formatOutput += QString::number (m_charInfoCountStart); m_formatOutput += "\" ";
-	m_formatOutput += "len=\""; m_formatOutput += QString::number (m_charInfoCountLen); m_formatOutput += "\">";
-
-	m_charInfoCountStart += m_charInfoCountLen;
-	m_charInfoCountLen = 0;
-
-	if (chp.isPageNumber ())
-	{
-		m_formatOutput += "<VARIABLE>";
-			m_formatOutput += "<TYPE key=\"NUMBER\" type=\"4\"/>";
-			m_formatOutput += "<PGNUM subtype=\"0\" value=\"1\"/>";
-		m_formatOutput += "</VARIABLE>";
+		
+		return true;
 	}
 
-	int fontCode = chp.getFontCode ();
-	if (fontCode >= 0)
+	bool writeParaInfoEnd (const MSWrite::FormatParaProperty *paraProperty,
+									const MSWrite::OLE * /*ole*/,
+									const MSWrite::Image *image)
+
 	{
+		kdDebug (30509) << "writeParaInfoEnd()" << endl;
+
+		if (image)
+		{
+			WRIObject &obj = *m_objectList.begin (false);
+			
+			// consistency check: wrote exactly the right amount of data?
+			if (obj.m_dataUpto != obj.m_dataLength)
+				kdWarning (30509) << "obj.dataUpto (" << obj.m_dataUpto
+						  				<< ") != obj.dataLength (" << obj.m_dataLength
+										<< ")" << endl;
+		}
+
+		QString output;
+		output += "</TEXT>";
+
+		output += "<LAYOUT>";
+			output += "<NAME value=\"Standard\"/>";
+
+			int align = paraProperty->getAlignment ();
+
+			if (align != MSWrite::Alignment::Left)
+			{
+				output += "<FLOW align=\"";
+				switch (align)
+				{
+					/*case MSWrite::Alignment::Left:
+						output += "left";
+						break;*/
+					case MSWrite::Alignment::Centre:
+						output += "center";
+						break;
+					case MSWrite::Alignment::Right:
+						output += "right";
+						break;
+					case MSWrite::Alignment::Justify:
+						output += "justify";
+						break;
+				}
+				output += "\"/>";
+			}
+
+			double indentFirst = Twip2Point (double (paraProperty->getLeftIndentFirstLine ()));
+			double indentLeft = Twip2Point (double (paraProperty->getLeftIndent ()));
+			double indentRight = Twip2Point (double (paraProperty->getRightIndent ()));
+
+	#if 0
+			debug ("raw indent:  first: %i  left: %i  right: %i\n",
+						indentFirst, indentLeft, indentRight);
+	#endif
+
+			if (m_paraIsImage /*paraProperty->isObject ()*/ && m_objectHorizOffset)
+			{
+				if (align == MSWrite::Align::Center)
+				{
+					// TODO: I don't know what m_objectHorizOffset is relative to!
+					kdDebug (30509) <<  "ignoring image offset with centred image" << endl;
+					m_objectHorizOffset = 0;
+				}
+				else
+				{
+					// MSWrite does not add the horizontal offset of the image from the left margin to the Left Indent
+					// -- instead, it selects the bigger one
+					// TODO: proper image positioning (see doc IMPERFECT)
+					if (m_simulateImageOffset && m_objectHorizOffset > indentLeft)
+					{
+						kdDebug (30509) << "image is further away from left margin by itself, rather than using indentLeft ("
+												<< m_objectHorizOffset << " > " << indentLeft << ")" << endl;
+						indentLeft = m_objectHorizOffset;
+					}
+				}
+			}
+
+			// hopefully these test operations will be cheaper than the XML ones :)
+			if (indentFirst || indentLeft || indentRight)
+			{
+				output += "<INDENTS";
+				if (indentFirst) output += " first=\"" + QString::number (indentFirst) + "\"";
+				if (indentLeft) output += " left=\"" + QString::number (indentLeft) + "\"";
+				if (indentRight) output += " right=\"" + QString::number (indentRight) + "\"";
+				output += "/>";
+			}
+
+			MSWrite::Word lineSpacing = paraProperty->getLineSpacing ();
+
+			if (lineSpacing != MSWrite::LineSpacing::Single)
+			{
+			#if 1
+				output += "<LINESPACING type=\"atleast\" spacingvalue=\"" + QString::number (Twip2Point (lineSpacing)) + "\"/>";
+			#else	// old way
+				output += "<LINESPACING type=\"";
+				switch (lineSpacing)
+				{
+					//case MSWrite:;LineSpacing::Single:
+					//	break;
+					case MSWrite::LineSpacing::OneAndAHalf:
+						output += "oneandhalf";
+						break;
+					case MSWrite::LineSpacing::Double:
+						output += "double";
+						break;
+					default:
+						kdWarning (30509) << "non-\"standard\" linespacing value: " <<  lineSpacing << endl;
+						output += "atleast\" ";
+						output += "spacingvalue=\"";
+							output += QString::number (Twip2Point (lineSpacing));
+						break;
+				}
+				output += "\"/>";
+			#endif
+			}
+
+			// Do we want the linespacing to _look_ like it does in Write?
+			// (this adds extra space before each paragraph)
+			if (m_simulateLineSpacing)
+			{
+				// emulate Write's linespacing (aligned to bottom)
+				// by using varying amounts of space before the paragraph
+				// TODO: test if it works nicely enough (what if you have several different sized fonts in paragraph?)
+				if (lineSpacing != MSWrite::LineSpacing::Single)		// if not normal linespacing...
+				{
+					output += "<OFFSETS before=\"";
+
+					int amount = 0;
+					switch (lineSpacing)
+					{
+					/*case MSWrite::LineSpacing::Single:
+						break;*/
+					case MSWrite::LineSpacing::OneAndAHalf:
+						amount = 7;
+						break;
+					case MSWrite::LineSpacing::Double:
+						amount = 14;
+						break;
+					default:
+						kdWarning (30509) << "unknown linespacing value: " << lineSpacing << endl;
+						break;
+					}
+
+					// subtract the amount of trailing linespace from last paragraph
+					amount -= m_lineSpacingFromAbove;
+					if (amount <= 0) amount = 0;		// no emulation can be perfect...
+
+					output += QString::number (amount);
+					output += "\" />";
+				}
+
+				// GUESS (TODO: fix) the amount of trailing linespace
+				switch (lineSpacing)
+				{
+				case MSWrite::LineSpacing::Single:
+					m_lineSpacingFromAbove = 0;
+					break;
+				case MSWrite::LineSpacing::OneAndAHalf:
+					m_lineSpacingFromAbove = 7;
+					break;
+				case MSWrite::LineSpacing::Double:
+					m_lineSpacingFromAbove = 14;
+					break;
+				default:		// unknown
+					m_lineSpacingFromAbove = 0;
+					break;
+				}
+			}	// if (m_simulateLineSpacing)	{
+
+			if (m_pageBreak)
+			{
+	#if 0
+				debug ("\tpagebrk: output: offset: %i chars in paragraph: %i\n",
+					m_pageBreakOffset, m_charInfoCountStart + m_charInfoCountLen);
+	#endif
+
+				// page break before all the text
+				if (m_pageBreakOffset == 0 && m_charInfoCountStart + m_charInfoCountLen > 0)
+				{
+					output += "<PAGEBREAKING hardFrameBreak=\"true\"/>";
+					m_needAnotherParagraph = false;	// this paragraph is on first page so we don't need another one
+				}
+				// we assume that the pageBreak was after all the text (TODO: don't assume this)
+				else
+				{
+					output += "<PAGEBREAKING hardFrameBreakAfter=\"true\"/>";
+					m_needAnotherParagraph = true;	// need another paragraph for hardFrameBreakAfter to work
+				}
+
+				m_pageBreak = false;		// reset flag
+			}
+			else
+				m_needAnotherParagraph = false;
+
+			// Tabulators
+			for (int i = 0; i < paraProperty->getNumTabulator (); i++)
+			{
+				const MSWrite::FormatParaPropertyTabulator *tab = paraProperty->getTabulator (i);
+				if (tab->getIsDummy ()) break;
+
+				output += "<TABULATOR";
+
+				output += " type=\"";
+				if (tab->getIsDecimal ())
+					output += "3";
+				else
+					output += "0";
+				output += "\"";
+
+				output += " ptpos=\"" + QString::number (Twip2Point (double (tab->getIndent ()))) + "\"/>";
+
+				//debug ("Tab: isNormal: %i  ptPos: %i\n",
+				//			paraProperty->tbd [i].isTabNormal (), paraProperty->tbd [i].getTabNumPoints ());
+			}
+
+		output += "</LAYOUT>";
+	#ifdef DEBUG_XML_OUTPUT
+		output += "\n";
+	#endif
+
+		output += "<FORMATS>";
+	#ifdef DEBUG_XML_OUTPUT
+		output += "\n";
+	#endif
+			// output all the charInfo for this paragraph
+			output += m_formatOutput; m_formatOutput = "";
+		output += "</FORMATS>";
+	#ifdef DEBUG_XML_OUTPUT
+		output += "\n";
+	#endif
+
+		output += "</PARAGRAPH>";
+	#ifdef DEBUG_XML_OUTPUT
+		output += "\n";
+	#endif
+
+		if (!writeTextInternal (output)) return false;
+
+		return true;
+	}
+
+	bool writeCharInfoBegin (const MSWrite::FormatCharProperty * /*charProperty*/)
+	{
+		kdDebug (30509) << "writeCharInfoBegin()" << endl;
+
+		return true;
+	}
+
+	// outputs character formatting tags
+	bool writeCharInfoEnd (const MSWrite::FormatCharProperty *charProperty,
+						 			const bool = false)
+	{
+		kdDebug (30509) << "writeCharInfoEnd()" << endl;
+
+		// output type of format information (page number or normal text)
+		m_formatOutput += "<FORMAT id=\"";
+		if (charProperty->getIsPageNumber ())
+			m_formatOutput += "4";
+		else
+			m_formatOutput += "1";
+		m_formatOutput += "\" ";
+
+		m_formatOutput += "pos=\""; m_formatOutput += QString::number (m_charInfoCountStart); m_formatOutput += "\" ";
+		m_formatOutput += "len=\""; m_formatOutput += QString::number (m_charInfoCountLen); m_formatOutput += "\">";
+
+		m_charInfoCountStart += m_charInfoCountLen;
+		m_charInfoCountLen = 0;
+
+		if (charProperty->getIsPageNumber ())
+		{
+			m_formatOutput += "<VARIABLE>";
+				m_formatOutput += "<TYPE key=\"NUMBER\" type=\"4\"/>";
+				m_formatOutput += "<PGNUM subtype=\"0\" value=\"1\"/>";
+			m_formatOutput += "</VARIABLE>";
+		}
+
 		m_formatOutput += "<FONT name=\"";
-			m_formatOutput += getFontName (fontCode);
+			m_formatOutput += (const char *) (charProperty->getFont ()->getName ());
 			m_formatOutput += "\"/>";;
 			m_formatOutput += "<SIZE value=\"";
-			m_formatOutput += QString::number (chp.getFontPointSize ());
+			m_formatOutput += QString::number (charProperty->getFontSize ());
 			m_formatOutput += "\"/>";
+
+		if (charProperty->getIsBold ())
+			m_formatOutput += "<WEIGHT value=\"75\"/>";
+	//else
+	//  		m_formatOutput += "<WEIGHT value=\"50\" />";
+
+		if (charProperty->getIsItalic ())
+			m_formatOutput += "<ITALIC value=\"1\"/>";
+	//	else
+	//		m_formatOutput += "<ITALIC value=\"0\" />";
+
+		if (charProperty->getIsUnderlined ())
+			m_formatOutput += "<UNDERLINE value=\"1\"/>";
+	//	else
+	//		m_formatOutput += "<UNDERLINE value=\"0\" />";
+
+		/*if (charProperty->isNormalPosition ())
+			m_formatOutput += "<VERTALIGN value=\"0\" />";
+		else*/ if (charProperty->getIsSubscript ())
+			m_formatOutput += "<VERTALIGN value=\"1\"/>";
+		else if (charProperty->getIsSuperscript ())
+			m_formatOutput += "<VERTALIGN value=\"2\"/>";
+		/*else
+			error ("unknown valign\n");*/
+
+		m_formatOutput += "</FORMAT>";
+
+		return true;
 	}
-	else
+
+	bool writeBinary (const MSWrite::Byte *buffer, const MSWrite::DWord length)
 	{
-		debug ("no font\n");
+		kdDebug (30509) << "writeBinary()" << endl;
 
-		// we can depend on the style so no need for this
-		//m_formatOutput += "<FONT name=\"helvetica\"/>";
-		//m_formatOutput += "<SIZE value=\"12\"/>";
-	}
+		// must be OLE, TODO: implement OLE properly
+		if (!m_paraIsImage)
+			return true;
+			
+		WRIObject &obj = *m_objectList.begin (false);
 
-	if (chp.isBold ())
-	  	m_formatOutput += "<WEIGHT value=\"75\"/>";
-//else
-//  		m_formatOutput += "<WEIGHT value=\"50\" />";
-
-	if (chp.isItalic ())
-		m_formatOutput += "<ITALIC value=\"1\"/>";
-//	else
-//		m_formatOutput += "<ITALIC value=\"0\" />";
-
-	if (chp.isUnderlined ())
-		m_formatOutput += "<UNDERLINE value=\"1\"/>";
-//	else
-//		m_formatOutput += "<UNDERLINE value=\"0\" />";
-
-	/*if (chp.isNormalPosition ())
-		m_formatOutput += "<VERTALIGN value=\"0\" />";
-	else*/ if (chp.isSubscript ())
-		m_formatOutput += "<VERTALIGN value=\"1\"/>";
-	else if (chp.isSuperscript ())
-		m_formatOutput += "<VERTALIGN value=\"2\"/>";
-	/*else
-		error ("unknown valign\n");*/
-
-	m_formatOutput += "</FORMAT>";
-
-	return 0;
-}
-
-// delayed output functions
-// (for Headers and Footers which must come after the Body in KWord)
-
-void MSWRITEImport::delayOutput (const bool yes)
-{
-	m_delayOutput = yes;
-}
-
-int MSWRITEImport::delayOutputFlush (void)
-{
-	QCString strUtf8 = m_heldOutput.utf8 ();
-	int strLength = strUtf8.length ();
-
-	return (m_outfile->writeBlock (strUtf8, strLength) != strLength);
-}
-
-// text output functions
-//
-
-int MSWRITEImport::textWrite_lowLevel (const char *str)
-{
-#if 0
-	return textWrite_lowLevel (QString (str));
-#else	// while this is code duplication (of below func), this ensures that no
-		// characters are mysteriously converted (this makes optionalHyphenWrite () work)
-	if (m_delayOutput)
-	{
-		// header/footer must be written after main body
-		m_heldOutput += str;
-		return 0;
-	}
-	else
-	{
-		int strLength = strlen (str);
-		return (m_outfile->writeBlock (str, strLength) != strLength);
-	}
-#endif
-}
-
-int MSWRITEImport::textWrite_lowLevel (const QString &str)
-{
-	if (m_delayOutput)
-	{
-		// header/footer must be written after main body
-		m_heldOutput += str;
-		return 0;
-	}
-	else
-	{
-		QCString strUtf8 = str.utf8 ();
-		int strLength = strUtf8.length ();
-		
-		return (m_outfile->writeBlock (strUtf8, strLength) != strLength);
-	}
-}
-
-int MSWRITEImport::textWrite (const char *inStr)
-{
-#if 0
-	// update character information counter (should be done after charset conversion)
-	m_charInfoCountLen += strlen (inStr);
-#endif
-
-// old, messy way (and should be done after charset conversion anyway)
-#if 0
-	char outStr [(MSWRITE_BUFFER_SIZE + 3) * 6];
-
-	// convert from ASCII to XML strings
-	int outUpto = 0;
-	int inUpto = 0;
-	for (; inUpto < (int) strlen (inStr); inUpto++)
-	{
-		switch (inStr [inUpto])
+		if (!obj.m_data)
+			ErrorAndQuit (MSWrite::Error::InternalError, "object data not initialised\n");
+				
+		// consistency check: aren't going to write past end of array?
+		if (obj.m_dataUpto + length > obj.m_dataLength)
 		{
-			// handle unfriendly XML entities
-			case '<':
-				strcpy (outStr + outUpto, "&lt;");
-				outUpto += 4;
-				break;
-			case '>':
-				strcpy (outStr + outUpto, "&gt;");
-				outUpto += 4;
-				break;
-			case '&':
-				strcpy (outStr + outUpto, "&amp;");
-				outUpto += 5;
-				break;
-			case '\'':
-				strcpy (outStr + outUpto, "&apos;");
-				outUpto += 6;
-				break;
-			case '\"':
-				strcpy (outStr + outUpto, "&quot;");
-				outUpto += 6;
-				break;
+			kdDebug (30509) << "object image overrun: "
+									<< obj.m_dataUpto << " + " << length
+									<< " > " << obj.m_dataLength  << endl;
+			ErrorAndQuit (MSWrite::Error::InternalError, "object image overrun\n");
+		}
 
-			// print character
-			default:
-				outStr [outUpto++] = inStr [inUpto];
-				break;
+		memcpy (obj.m_data + obj.m_dataUpto, buffer, length);
+		obj.m_dataUpto += length;
+
+		return true;
+	}
+
+
+
+	//
+	// text output functions
+	//
+
+	bool writeText (const MSWrite::Byte *string)
+	{
+		// from Win Character Set...
+		QString strUnicode;
+
+		// there is a codec, therefore there is a decoder...
+		if (m_codec)
+		{
+			// output Unicode (UTF8)
+			strUnicode = m_decoder->toUnicode ((const char *) string, strlen ((const char *) string));
+		}
+		else
+		{
+			// output a plain string still in wrong Character Set
+			// (hopefully the user won't notice)
+			strUnicode = (const char *) string;	
+		}
+
+		// update character information counter (after charset conversion)
+		m_charInfoCountLen += strUnicode.length ();
+
+		// make string XML-friendly (TODO: speed up)
+		strUnicode.replace ('&', "&amp;");
+		strUnicode.replace ('<', "&lt;");
+		strUnicode.replace ('>', "&gt;");
+		strUnicode.replace ('\"', "&quot;");
+		strUnicode.replace ('\'', "&apos;");
+
+		return writeTextInternal (strUnicode);
+	}
+
+	bool writeTextInternal (const MSWrite::Byte *str)
+	{
+	#if 0
+		return textWrite_lowLevel (QString (str));
+	#else	// while this is code duplication (of below func), this ensures that no
+			// characters are mysteriously converted (this makes writeOptionalHyphen () work)
+		if (m_delayOutput)
+		{
+			// header/footer must be written after main body
+			m_heldOutput += (const char *) str;
+			return true;
+		}
+		else
+		{
+			int strLength = strlen ((const char *) str);
+			
+			if (m_outfile->writeBlock ((const char *) str, strLength) != strLength)
+			{
+				ErrorAndQuit (MSWrite::Error::FileError, "could not write to maindoc.xml\n");
+			}
+			else
+				return true;
+		}
+	#endif
+	}
+
+	bool writeTextInternal (const QString &str)
+	{
+		if (m_delayOutput)
+		{
+			// header/footer must be written after main body
+			m_heldOutput += str;
+			return true;
+		}
+		else
+		{
+			QCString strUtf8 = str.utf8 ();
+			int strLength = strUtf8.length ();
+
+			if (m_outfile->writeBlock (strUtf8, strLength) != strLength)
+			{
+				ErrorAndQuit (MSWrite::Error::FileError, "could not write to maindoc.xml (2)\n");
+			}
+			else
+				return true;
 		}
 	}
 
-	outStr [outUpto++] = '\0';
-#endif
-
-	// from Win Character Set...
-	QString strUnicode;
-
-	// there is a codec, therefore there is a decoder...
-	if (m_codec)
+	bool writeTextInternal (const int num)
 	{
-		// output Unicode (UTF8)
-		strUnicode = m_decoder->toUnicode (inStr, strlen (inStr));
-	}
-	else
-	{
-		// output a plain string still in wrong Character Set (hopefully the user won't notice)
-		strUnicode = inStr;
-	}
-
-	// update character information counter (after charset conversion)
-	m_charInfoCountLen += strUnicode.length ();
-
-#if 0
-	int k = strUnicode.length ();
-	int l = strlen (inStr);
-	if (k != l)
-	{
-		warning ("k(%i) != l(%i) for s(\"%s\")\n", k, l, inStr);
-	}
-#endif
-
-	// make string XML-friendly
-	strUnicode.replace (QRegExp ("&"), "&amp;");
-	strUnicode.replace (QRegExp ("<"), "&lt;");
-	strUnicode.replace (QRegExp (">"), "&gt;");
-	strUnicode.replace (QRegExp ("\""), "&quot;");
-	strUnicode.replace (QRegExp ("'"), "&apos;");
-
-	return textWrite_lowLevel (strUnicode);
-}
-
-// same as textWrite (+va_arg) but without XML translation
-int MSWRITEImport::tagWrite (const char *format, ...)
-{
-	int ret;
-
-	char string [(MSWRITE_BUFFER_SIZE + 3)];
-
-	va_list list;
-	va_start (list, format);
-
-	vsnprintf (string, sizeof(string)-1, format, list);
-	string[sizeof(string)-1] = '\0';
-
-	ret = textWrite_lowLevel (string);
-
-	va_end (list);
-	return ret;
-}
-
-int MSWRITEImport::tagWrite (const int num)
-{
-	return tagWrite ("%i", num);
-}
-
-int MSWRITEImport::tagWrite (const QString &str)
-{
-	return (textWrite_lowLevel ((const char *) str.utf8 ()));
-}
-
-int MSWRITEImport::imageStartWrite (const int imageType, const int outputLength,
-												const int widthTwips, const int heightTwips,
-												const int widthScaledRel1000, const int heightScaledRel1000,
-												const int horizOffsetTwips)
-{
-	QString imageName;
-	QString fileInStore;
-
-
-	// give picture a name
-	//
-	
-	imageName = "Picture ";
-	imageName += QString::number (m_numPictures + 1);	// image numbers start at 1...
-
-	
-	// give picture a filename
-	//
-	
-	fileInStore = "pictures/picture" + QString::number (m_numPictures + 1);
-	
-	// append extension
-	if (imageType == MSWRITE_OBJECT_BMP)
-		fileInStore += ".bmp";
-	else if (imageType == MSWRITE_OBJECT_WMF)
-		fileInStore += ".wmf";
-	else
-	{
-		error ("unsupported picture type %i\n", imageType);
-		return 1;
+		return writeTextInternal (QString::number (num));
 	}
 	
-	
-	// indicate anchored image in formatting
-	//
-
-	tagWrite ("#");
-
-	m_formatOutput += "<FORMAT id=\"6\" pos=\"0\" len=\"1\">";
-		m_formatOutput += "<ANCHOR type=\"frameset\" instance=\"";
-			m_formatOutput += imageName;
-		m_formatOutput += "\"/>";
-	m_formatOutput += "</FORMAT>";
-
-
-	// write framesets (truly written in documentEndWrite())
-	//
-
-	m_objectFrameset += "<FRAMESET frameType=\"2\" frameInfo=\"0\" name=\"";
-	m_objectFrameset += imageName;
-	m_objectFrameset += "\" visible=\"1\">";
-		m_objectFrameset += "<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"1\"";
-		m_objectFrameset += " left=\"";
-			m_objectFrameset += QString::number (m_left + horizOffsetTwips / 20);
-			m_objectFrameset += "\"";
-		m_objectFrameset += " right=\"";
-			m_objectFrameset += QString::number (m_left + (horizOffsetTwips + widthTwips * widthScaledRel1000 / 1000) / 20);
-			m_objectFrameset += "\"";
-		m_objectFrameset += " top=\"";
-			m_objectFrameset += QString::number (m_top);
-			m_objectFrameset += "\"";
-		m_objectFrameset += " bottom=\"";
-			m_objectFrameset += QString::number (m_top + (heightTwips * heightScaledRel1000 / 1000) / 20);
-			m_objectFrameset += "\"/>";
-
-		m_objectFrameset += "<PICTURE keepAspectRatio=\"false\">";
-		m_objectFrameset += "<KEY msec=\"0\" hour=\"0\" second=\"0\" minute=\"0\" day=\"1\" month=\"1\" year=\"1970\"";
-		m_objectFrameset += " filename=\"";
-		m_objectFrameset += fileInStore;
-		m_objectFrameset += "\"/>";
-		m_objectFrameset += "</PICTURE>";
-	m_objectFrameset += "</FRAMESET>";
-
-	m_pictures += "<KEY msec=\"0\" hour=\"0\" second=\"0\" minute=\"0\" day=\"1\" month=\"1\" year=\"1970\"";
-	m_pictures += " name=\"";
-	m_pictures += fileInStore;
-	m_pictures += "\"";
-	m_pictures += " filename=\"";
-	m_pictures += fileInStore;
-	m_pictures += "\"/>";
-
-	m_numPictures++;
-
-	
-	// store object properties
-	//
-
-	m_objectData [m_objectUpto].m_nameInStore = fileInStore;
-	m_objectData [m_objectUpto].m_dataLength = outputLength;
-	m_objectData [m_objectUpto].m_data = new char [outputLength];
-	if (!m_objectData [m_objectUpto].m_data)
+	bool writeTextInternal (const char *format, ...)
 	{
-		error ("cannot allocate memory for m_objectData [%i].data (len: %i)\n",
-					m_objectUpto, outputLength);
-		return 1;
+		va_list list;
+		va_start (list, format);
+
+		bool ret;
+		// This function is mainly for outputting tags (where XML characters are
+		// already escaped and the text is in the right character set...ASCII
+		// = UTF-8 for alphanumeric chars I hope).  So _don't_ pass user text
+		// to this function (that's what writeText() is for); otherwise you might
+		// exceed this 1024 limit.
+		char string [1024];
+
+		vsnprintf (string, sizeof (string) - 1, format, list);
+		string [sizeof (string) - 1] = '\0';
+
+		ret = writeTextInternal ((const MSWrite::Byte *) string);
+
+		va_end (list);
+		return ret;
 	}
 
-	// if anchored images could be positioned properly, this wouldn't be needed
-	m_objectHorizOffset = horizOffsetTwips / 20;;
-	m_paraIsImage = true;
 
-	return 0;
-}
-
-int MSWRITEImport::imageWrite (const char *buffer, const unsigned length)
-{
-	// consistency check: aren't going to write too much data, past end of array?
-	if (m_objectData [m_objectUpto].m_dataUpto + (int) length > m_objectData [m_objectUpto].m_dataLength)
+	// writePageNew() is called for the pageTable
+	// -- however, pageTable can be very inaccurate, so we ignore it
+	bool writePageNew (const int)
 	{
-		error ("m_objectData [%i].dataUpto (%i) + length (%i) > m_objectData [%i].dataLength (%i)\n",
-					m_objectUpto, m_objectData [m_objectUpto].m_dataUpto, length,
-					m_objectUpto, m_objectData [m_objectUpto].m_dataLength);
-		return 1;
+		return true;
 	}
 
-	memcpy (m_objectData  [m_objectUpto].m_data + m_objectData [m_objectUpto].m_dataUpto, buffer, length);
-	m_objectData [m_objectUpto].m_dataUpto += length;
+	// handles explicit page breaks
+	bool writePageBreak (void)
+	{
+		// later used in paraEndWrite
+		m_pageBreak = true;
+		m_pageBreakOffset = m_charInfoCountStart + m_charInfoCountLen;
 
-	return 0;
+		return true;
+	}
+
+	// handle "(page)" number
+	bool writePageNumber (void)
+	{
+		m_charInfoCountLen++;	// not incremented by writeTextInternal()
+		return writeTextInternal ("#");
+	}
+
+	bool writeCarriageReturn (void)
+	{
+		return true;	// ignore CR
+	}
+	
+	// write newline unless end-of-paragraph
+	// (this is the support for paragraphs with multiple newlines)
+	bool writeNewLine (const bool endOfParagraph)
+	{
+		if (!endOfParagraph)
+		{
+			m_charInfoCountLen++;	// not incremented by writeTextInternal()
+			return writeTextInternal ("\n");
+		}
+		else
+			return true;
+	}
+	
+	// aka "soft hyphen"
+	bool writeOptionalHyphen (void)
+	{
+		m_charInfoCountLen++;	// not incremented by writeTextInternal()
+		return writeTextInternal ("\xC2\xAD");
+	}
+
+	void setKOfficeLink (MSWriteImport *kofficeLink)
+	{
+		m_koLink = kofficeLink;
+	}
+		
+	void sigProgress (const int value)
+	{
+		m_koLink->sigProgress (value);
+	}
+};
+
+
+
+//
+// KoFilter
+//
+
+MSWriteImport::MSWriteImport (KoFilter *, const char *, const QStringList &)
+					: m_device (NULL), m_parser (NULL), m_generator (NULL)
+{
 }
 
-int MSWRITEImport::imageEndWrite (void)
+MSWriteImport::~MSWriteImport ()
 {
-	// consistency check: wrote exactly the right amount of data?
-	if (m_objectData [m_objectUpto].m_dataUpto != m_objectData [m_objectUpto].m_dataLength)
-		warning ("m_objectData [%i].dataUpto (%i) != m_objectData [%i].dataLength (%i)\n",
-					m_objectUpto, m_objectData [m_objectUpto].m_dataUpto,
-					m_objectUpto, m_objectData [m_objectUpto].m_dataLength);
-
-	m_objectUpto++;
-
-	return 0;
+	delete m_generator;
+	delete m_parser;
+	delete m_device;
 }
 
-// constructor
-MSWRITEImport::MSWRITEImport (KoFilter *, const char *, const QStringList &)
-					: KoFilter()
+KoFilter::ConversionStatus MSWriteImport::convert (const QCString &from, const QCString &to)
 {
-	m_simulateLinespacing = false;
-	m_simulateImageOffset = true;
+	kdDebug (30509) << "MSWriteImport $Date using LibMSWrite "
+			  				<< MSWrite::Version << endl;
 
-	m_pageBreak = 0;
-	m_needAnotherParagraph = false;
-
-	m_lineSpacingFromAbove = 0;
-
-	delayOutput (false);
-
-	m_numPictures = 0;
-	m_objectUpto = 0;
-
-	m_infile = (FILE *) NULL;
-	m_outfile = (KoStoreDevice *) NULL;
-
-	m_objectData = (MSWRITE_OBJECT_DATA *) NULL;
-
-	m_codec = NULL;
-	m_decoder = NULL;
-}
-
-// destructor
-MSWRITEImport::~MSWRITEImport ()
-{
-	if (m_decoder) delete m_decoder;
-	if (m_objectData) delete [] m_objectData;
-
-	closeFiles ();
-}
-
-// front-end filter
-KoFilter::ConversionStatus MSWRITEImport::convert (const QCString &from, const QCString &to)
-{
 	if (to != "application/x-kword" || from != "application/x-mswrite")
+	{
+		kdError (30509) << "Internal error!  Filter not implemented?" << endl;
 		return KoFilter::NotImplemented;
+	}
 
 #if 0
 	//MSWriteImportDialog *dialog = new MSWriteImportDialog ();
@@ -1180,32 +1381,98 @@ KoFilter::ConversionStatus MSWRITEImport::convert (const QCString &from, const Q
 	debug ("DIALOG DELETE\n");
 	//delete dialog;
 #endif
-	if (openFiles (m_chain->inputFile().utf8 ()))
+	
+	// create the Device that will read from the .WRI file
+	m_device = new WRIDevice;
+	if (!m_device)
 	{
-		error ("Could not open files\n");
+		kdError (30509) << "Could not allocate memory for device" << endl;
+		return KoFilter::OutOfMemory;
+	}
+	
+	// open the .WRI file
+	if (!m_device->openFile (m_chain->inputFile ().latin1 ()))
+	{
+		kdError (30509) << "Could not open \'" << m_chain->inputFile () << "\'" << endl;
 		return KoFilter::FileNotFound;
 	}
-
-#if 1
-	// just select windows-1252 until a "Select Encoding" dialog is added
-	m_codec = QTextCodec::codecForName ("CP 1252");
-#endif
-
-	if (m_codec)
-		m_decoder = m_codec->makeDecoder();
-	else
-		warning ("Cannot convert from Win Charset!\n");
-
-	// output version info of core lib
-	// (so when bug reports come in, we know what lib it was using)
-	debug (MSWRITE_IMPORT_LIB::getVersion ());
-
-	if (MSWRITE_IMPORT_LIB::filter ())
+	
+	
+	// create Parser that will interpret the .WRI file and call the Generator
+	m_parser = new MSWrite::InternalParser;
+	if (!m_parser)
 	{
-		error ("Could not filter document\n");
+		kdError (30509) << "Could not allocate memory for parser" << endl;
+		return KoFilter::OutOfMemory;
+	}
+	
+	// tell the Parser to use the Device to read from the .WRI file
+	m_parser->setDevice (m_device);
+
+	
+	// create Generator that will produce the .KWD file
+	m_generator = new KWordGenerator;
+	if (!m_generator)
+	{
+		kdError (30509) << "Could not allocate memory for generator" << endl;
+		return KoFilter::OutOfMemory;
+	}
+	
+	// give the Generator the Device for error-handling purposes
+	m_generator->setDevice (m_device);
+	
+	// give the Generator the chain
+	m_generator->setFilterChain (m_chain);
+	
+	// hand over sigProgess to give some feedback to the user
+	m_generator->setKOfficeLink (this);
+	
+	
+	// hook up Generator to Parser
+	m_parser->setGenerator (m_generator);
+
+	
+	// filter!
+	if (!m_parser->parse ())
+	{
+		// try to return somewhat more meaningful errors than StupidError
+		// for the day that KOffice actually reports them to the user properly
+		int errorCode = m_device->bad ();
+		switch (errorCode)
+		{
+		case MSWrite::Error::Ok:
+			kdDebug (30509) << "Error::Ok but aborted???" << endl;
+			return KoFilter::InternalError;
+
+		case MSWrite::Error::Warn:
+			kdDebug (30509) << "Error::Warn" << endl;
+			return KoFilter::InternalError;	// warnings should _never_ set m_error
+
+		case MSWrite::Error::InvalidFormat:
+			kdDebug (30509) << "Error::InvalidFormat" << endl;
+			return KoFilter::WrongFormat;
+
+		case MSWrite::Error::OutOfMemory:
+			kdDebug (30509) << "Error::OutOfMemory" << endl;
+			return KoFilter::OutOfMemory;
+
+		case MSWrite::Error::InternalError:
+			kdDebug (30509) << "Error::InternalError" << endl;
+			return KoFilter::InternalError;
+
+		case MSWrite::Error::Unsupported:
+			kdDebug (30509) << "Error::Unsupported" << endl;
+			return KoFilter::InternalError;
+
+		case MSWrite::Error::FileError:
+			kdDebug (30509) << "Error::FileError" << endl;
+			return KoFilter::StupidError;	// got a better return value?
+		}
+
+		kdWarning (30509) << "Unknown error: " << errorCode << endl;
 		return KoFilter::StupidError;
 	}
-
+		
 	return KoFilter::OK;
 }
 

@@ -1,19 +1,35 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) -I$(srcdir)/../libexport $(all_includes)
 
 ####### Files
 
-kde_module_LTLIBRARIES = libmswriteimport.la
+kde_module_LTLIBRARIES = libmswriteimport.la libmswriteexport.la
 
-libmswriteimport_la_SOURCES = mswriteimport.cc mswritelib.cc ImportDialogUI.ui ImportDialog.cc
+libmswriteimport_la_SOURCES = mswriteimport.cc \
+								libmswrite_defs.cpp structures_generated.cpp structures_private.cpp structures.cpp libmswrite.cpp ImportDialogUI.ui ImportDialog.cc
+
 libmswriteimport_la_LDFLAGS = -module $(KDE_PLUGIN)
 libmswriteimport_la_LIBADD = $(KOFFICE_LIBS)
 
-noinst_HEADERS = mswriteimport.h mswritelib.h ImportDialog.h
+libmswriteexport_la_SOURCES = mswriteexport.cc	\
+								libmswrite_defs.cpp structures_generated.cpp structures_private.cpp structures.cpp libmswrite.cpp
+libmswriteexport_la_LDFLAGS = -module $(KDE_PLUGIN)
+libmswriteexport_la_LIBADD = $(KOFFICE_LIBS) ../libexport/libkwordexportfilters.la
+
+noinst_HEADERS = mswriteimport.h mswriteexport.h \
+					  config.libmswrite.h \
+					  ImportDialog.h \
+					  ImportDialogUI.h \
+					  libmswrite_defs.h \
+					  libmswrite.h \
+					  list.h \
+					  structures_generated.h \
+					  structures.h \
+					  structures_private.h
 METASOURCES = AUTO
 
-service_DATA = kword_mswrite_import.desktop
+service_DATA = kword_mswrite_import.desktop kword_mswrite_export.desktop
 servicedir = $(kde_servicesdir)
 
 messages: rc.cpp

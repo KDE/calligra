@@ -1,7 +1,5 @@
-/* $Id */
-
-/* This file is part of the KDE project
-   Copyright (C) 2001-2003 Clarence Dang <dang@kde.org>
+/* This file is part of the LibMSWrite Library
+   Copyright (C) 2001-2003 Clarence Dang <clarencedang@users.sourceforge.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,34 +16,11 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef MSWRITEIMPORT_H
-#define MSWRITEIMPORT_H
+#include "libmswrite_defs.h"
 
-#include <koFilter.h>
-
-class WRIDevice;
-class MSWrite::InternalParser;
-class KWordGenerator;
-
-class MSWriteImport : public KoFilter
+namespace MSWrite
 {
-	Q_OBJECT
+	const char *Version = "0.5";
+}
 
-private:
-	WRIDevice *m_device;
-	MSWrite::InternalParser *m_parser;
-	KWordGenerator *m_generator;
-
-public:
-	MSWriteImport (KoFilter *parent, const char *name, const QStringList &);
-	virtual ~MSWriteImport ();
-
-	KoFilter::ConversionStatus convert (const QCString &from, const QCString &to);
-	
-	void sigProgress (const int value)
-	{
-		KoFilter::sigProgress (value);
-	}
-};
-
-#endif // MSWRITEIMPORT_H
+// end of libmswrite_defs.cpp
