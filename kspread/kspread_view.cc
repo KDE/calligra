@@ -1283,7 +1283,7 @@ void KSpreadView::autoSum()
         return;
 
     m_pCanvas->createEditor( KSpreadCanvas::CellEditor );
-    m_pCanvas->editor()->setText( "=sum()" );
+    m_pCanvas->editor()->setText( "=SUM()" );
     m_pCanvas->editor()->setCursorPosition( 5 );
 
     // Try to find numbers above
