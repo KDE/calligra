@@ -34,13 +34,19 @@ KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QCString & 
                     << " mimetype = " << appIdentification << endl;
 
     m_pZip = new KZip( _filename );
-    m_bGood = init( _mode, appIdentification ); // open the zip file and init some vars
+    if (!m_pZip)
+      m_bGood = false;
+    else
+      m_bGood = init( _mode, appIdentification ); // open the zip file and init some vars
 }
 
 KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentification )
 {
     m_pZip = new KZip( dev );
-    m_bGood = init( mode, appIdentification );
+    if (!m_pZip)
+      m_bGood = false;
+    else
+      m_bGood = init( mode, appIdentification );
 }
 
 KoZipStore::KoZipStore( QWidget* window, const KURL & _url, const QString & _filename, Mode _mode, const QCString & appIdentification )
@@ -66,14 +72,22 @@ KoZipStore::KoZipStore( QWidget* window, const KURL & _url, const QString & _fil
     }
 
     m_pZip = new KZip( m_localFileName );
-    m_bGood = init( _mode, appIdentification ); // open the zip file and init some vars
+    if (!m_pZip)
+      m_bGood = false;
+    else
+      m_bGood = init( _mode, appIdentification ); // open the zip file and init some vars
 }
 
 KoZipStore::~KoZipStore()
 {
     kdDebug(s_area) << "KoZipStore::~KoZipStore" << endl;
     m_pZip->close();
-    delete m_pZip;
+    
+    Q_CHECK_PTR(m_pZip);
+
+    //TODO THIS is very likely a memory leak, but it causes a crash inside kdelibs (KIO)
+//     if (m_pZip)
+//       delete m_pZip;
 
     // Now we have still some job to do for remote files.
     if ( m_fileMode == KoStoreBase::RemoteRead )
