@@ -20,6 +20,7 @@
 #include "kotextformat.h"
 #include "kozoomhandler.h"
 #include <kdebug.h>
+#include <assert.h>
 
 KoTextFormatCollection::KoTextFormatCollection( const QFont & defaultFont )
     : QTextFormatCollection(), m_cachedFormat( 0L )
