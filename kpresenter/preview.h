@@ -26,6 +26,8 @@
 #include <qstring.h>
 #include <qurl.h>
 
+class KFileInfo;
+
 // WMF preview
 bool wmfPreviewHandler ( const KFileInfo*, const QString fileName, QString&, QPixmap& pixmap );
 

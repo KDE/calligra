@@ -23,6 +23,7 @@
 #include "qwmf.h"
 #include <qscrollview.h>
 
+#ifndef USE_QFD
 /**
  * A preview handler for the KFilePreviewDialag that shows
  * a WMF object.
@@ -72,6 +73,7 @@ bool pixmapPreviewHandler( const KFileInfo* fInfo, const QString fileName, QStri
     }
     return false;
 }
+#endif
 
 class PixmapView : public QScrollView
 {

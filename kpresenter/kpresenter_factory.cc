@@ -37,6 +37,7 @@ extern "C"
 	 * Initialize KPresenter stuff
 	 */
 		
+#ifndef USE_QFD
 	// Image IO handler
 	KFilePreviewDialog::registerPreviewModule( "wmf", wmfPreviewHandler, PreviewPixmap );
 	KFilePreviewDialog::registerPreviewModule( "WMF", wmfPreviewHandler, PreviewPixmap );
@@ -45,6 +46,7 @@ extern "C"
 	QStringList::ConstIterator it;
 	for (it = list.begin(); it != list.end(); it++)
 	    KFilePreviewDialog::registerPreviewModule( *it, pixmapPreviewHandler, PreviewPixmap );
+#endif
 
 	return new KPresenterFactory;
     }
