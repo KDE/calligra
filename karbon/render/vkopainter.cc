@@ -22,6 +22,7 @@
 #include <art_svp_ops.h>
 #include <art_affine.h>
 #include <art_rgb_svp.h>
+#include <art_rect_svp.h>
 #include <art_svp_intersect.h>
 #include <art_pathcode.h>
 #include <art_vpath_dash.h>
@@ -422,13 +423,49 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	// render the svp to the buffer
 	if( strokeSvp )
 	{
-		art_rgb_svp_alpha( strokeSvp, 0, 0, m_width, m_height, strokeColor, a, m_buffer, m_width * 4, 0 );
+		// get SVP bbox
+		ArtDRect bbox;
+		art_drect_svp( &bbox, strokeSvp );
+
+		// clamp to viewport
+		int x0 = bbox.x0;
+		x0 = QMAX( x0, 0 );
+		x0 = QMIN( x0, m_width );
+		int y0 = bbox.y0;
+		y0 = QMAX( y0, 0 );
+		y0 = QMIN( y0, m_height );
+		int x1 = bbox.x1 + 1;
+		x1 = QMAX( x1, 0 );
+		x1 = QMIN( x1, m_width );
+		int y1 = bbox.y1 + 1;
+		y1 = QMAX( y1, 0 );
+		y1 = QMIN( y1, m_height );
+
+		art_rgb_svp_alpha( strokeSvp, x0, y0, x1, y1, strokeColor, a, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
 		art_svp_free( strokeSvp );
 	}
 
 	if( fillSvp )
 	{
-		art_rgb_svp_alpha( fillSvp, 0, 0, m_width, m_height, fillColor, a, m_buffer, m_width * 4, 0 );
+		// get SVP bbox
+		ArtDRect bbox;
+		art_drect_svp( &bbox, fillSvp );
+
+		// clamp to viewport
+		int x0 = bbox.x0;
+		x0 = QMAX( x0, 0 );
+		x0 = QMIN( x0, m_width );
+		int y0 = bbox.y0;
+		y0 = QMAX( y0, 0 );
+		y0 = QMIN( y0, m_height );
+		int x1 = bbox.x1 + 1;
+		x1 = QMAX( x1, 0 );
+		x1 = QMIN( x1, m_width );
+		int y1 = bbox.y1 + 1;
+		y1 = QMAX( y1, 0 );
+		y1 = QMIN( y1, m_height );
+
+		art_rgb_svp_alpha( fillSvp, x0, y0, x1, y1, fillColor, a, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
 		art_svp_free( fillSvp );
 	}
 
