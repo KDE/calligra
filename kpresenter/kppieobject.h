@@ -80,9 +80,16 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
     virtual void flip(bool horizontal );
+
+    virtual KoSize getRealSize() const;
+    virtual KoPoint getRealOrig() const;
+
 protected:
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
                         bool drawingShadow, bool drawContour );
+
+    void setMinMax( double &min_x, double &min_y, double &max_x, double &max_y, KoPoint point ) const;
+    void getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const;
 
     PieType pieType;
     int p_angle, p_len;
