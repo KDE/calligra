@@ -117,10 +117,12 @@ EpsExport::visitVDocument( VDocument& document )
 	*m_stream <<
 		"%!PS-Adobe-2.0 EPSF-1.2\n"
 		"%%BoundingBox: "
-			<< qRound( rect.left()   ) << " "	// The standard says: integer values.
-			<< qRound( rect.top()    ) << " "
-			<< qRound( rect.right()  ) << " "
-			<< qRound( rect.bottom() ) << "\n"
+		// Round down:
+			<< qRound( rect.left()   - 0.5 ) << " "
+			<< qRound( rect.top()    - 0.5 ) << " "
+		// Round up:
+			<< qRound( rect.right()  + 0.5 ) << " "
+			<< qRound( rect.bottom() + 0.5 ) << "\n"
 		"%%HiResBoundingBox: "
 			<< rect.left()   << " "
 			<< rect.top()    << " "
