@@ -1270,12 +1270,19 @@ bool StructureParser::endDocument(void)
 
 void StructureParser :: createDocument(void)
 {
+    QDomImplementation implementation;
+    QDomDocument doc(implementation.createDocumentType("DOC",
+        "-//KDE//DTD kword 1.1//EN", "http://www.koffice.org/DTD/kword-1.1.dtd"));
+
+    mainDocument=doc;
+
     mainDocument.appendChild(
         mainDocument.createProcessingInstruction(
         "xml","version=\"1.0\" encoding=\"UTF-8\""));
 
     QDomElement elementDoc;
     elementDoc=mainDocument.createElement("DOC");
+    elementDoc.setAttribute("xmlns","http://www.koffice.org/DTD/kword");
     elementDoc.setAttribute("editor","KWord's AbiWord Import Filter");
     elementDoc.setAttribute("mime","application/x-kword");
     elementDoc.setAttribute("syntaxVersion",2);
