@@ -981,14 +981,14 @@ VSegment::transform( const QWMatrix& m )
 				//if( pointIsSelected( i ) )
 					setPoint( i, point( i ).transform( m ) );
 		}
-		/*else if( pointIsSelected( 0 ) )
+		else if( pointIsSelected( 0 ) )
 		{
 			if( prev() && prev()->type() == curve && prev()->knotIsSelected() )
 			{
 				QWMatrix m2( m.m11(), m.m12(), m.m21(), m.m22(), -m.dx(), -m.dy() );
-				setPoint( 0, point( 0 ).transform( m2 ) );
+				setPoint( 0, point( 0 ).transform( m ) );
 			}
-		}*/
+		}
 		/*else if( pointIsSelected( 0 ) )
 		{
 			setPoint( 0, point( 0 ).transform( m ) );
