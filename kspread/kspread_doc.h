@@ -42,8 +42,6 @@ class KSpellConfig;
 #include <kozoomhandler.h>
 #include <koPageLayoutDia.h>
 
-#include <iostream.h>
-
 #include <qobject.h>
 #include <qrect.h>
 #include <qstring.h>
