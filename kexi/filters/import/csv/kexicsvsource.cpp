@@ -136,3 +136,5 @@ bool KexiCSVSource::nextTableRow() {
 QVariant KexiCSVSource::tableValue(int field) {
 	return QVariant(preview->text(m_dataPos,field));
 }
+
+#include "kexicsvsource.moc"
