@@ -568,8 +568,8 @@ KoSize KPObject::getRealSize() const {
 
     if ( angle != 0.0 ) {
       float angInRad = angle * M_PI / 180;
-      size.setWidth( ext.width() * cos( angInRad ) + ext.height() * sin( angInRad ) );
-      size.setHeight( ext.width() * sin( angInRad ) + ext.height() * cos( angInRad ) );
+      size.setWidth( ext.width() * fabs( cos( angInRad ) ) + ext.height() * fabs( sin( angInRad ) ) );
+      size.setHeight( ext.width() * fabs( sin( angInRad ) ) + ext.height() * fabs( cos( angInRad ) ) );
     }
 
     return size;
