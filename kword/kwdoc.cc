@@ -957,7 +957,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     emit sigProgress(85);
 
-    QDateTime defaultDateTime = QDateTime::currentDateTime();
+    QDateTime defaultDateTime = QDateTime(); // use null default, for old files
     // <PIXMAPS>
     QDomElement pixmapsElem = word.namedItem( "PIXMAPS" ).toElement();
     if ( !pixmapsElem.isNull() )

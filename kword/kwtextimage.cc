@@ -38,7 +38,9 @@ KWTextImage::KWTextImage( KWTextDocument *textdoc, const QString & filename )
 void KWTextImage::setImage( const KoPicture &image )
 {
     kdDebug() << "KWTextImage::setImage" << endl;
+    Q_ASSERT( !image.isNull() );
     m_image = image;
+    kdDebug() << "size: " << m_image.getOriginalSize().width() << "x" << m_image.getOriginalSize().height() << endl;
     resize();
 }
 
@@ -47,39 +49,39 @@ void KWTextImage::resize()
     if ( m_deleted )
         return;
     if ( !m_image.isNull() ) {
-        KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
+        //KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
         width = m_image.getOriginalSize().width();
-        width = (int)( doc->zoomItX( (double)width ) / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
+	// width is a 100%-zoom pixel size. We want a LU pixel size -> we simply need 'to LU', i.e. ptToLayoutPt
+        width = KoTextZoomHandler::ptToLayoutUnitPt( width );
         height = m_image.getOriginalSize().height();
-        height = (int)( doc->zoomItY( (double)height ) / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
-        // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
-        //kdDebug() << "KWTextImage::resize scaling to " << width << ", " << height << endl;
-        m_image.setSize( QSize( width, height ) );
+        height = KoTextZoomHandler::ptToLayoutUnitPt( height );
+        kdDebug() << "KWTextImage::resize: " << width << ", " << height << endl;
+        // no! m_image.setSize( QSize( width, height ) );
     }
 }
 
 void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected , const int /*offset*/)
 {
-    if ( placement() != PlaceInline ) {
-        x = xpos;
-        y = ypos;
-    }
-
+    // (x,y) is the position of the inline item (in pixels)
+    // (cx,cy,cw,ch) is the rectangle to be painted, in pixels too
     if ( m_image.isNull() ) {
         kdDebug() << "KWTextImage::draw null image!" << endl;
         p->fillRect( x, y, 50, 50, cg.dark() );
         return;
     }
 
-    QRect rect( QPoint(x, y) , m_image.getSize() );
+    KoZoomHandler *zh = textDocument()->paintingZoomHandler();
+    QSize imgSize( zh->layoutUnitToPixelX( width ), zh->layoutUnitToPixelY( height ) );
+
+    QRect rect( QPoint(x, y), imgSize );
     if ( !rect.intersects( QRect( cx, cy, cw, ch ) ) )
         return;
 
-    QPixmap pixmap=m_image.generatePixmap(m_image.getSize());
-    if ( placement() == PlaceInline )
+    QPixmap pixmap=m_image.generatePixmap( imgSize );
+    //if ( placement() == PlaceInline )
         p->drawPixmap( x, y, pixmap );
-    else
-        p->drawPixmap( cx, cy, pixmap, cx - x, cy - y, cw, ch );
+    //else
+    //    p->drawPixmap( cx, cy, pixmap, cx - x, cy - y, cw, ch );
 
     if ( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer ) {
         p->fillRect( rect , QBrush( cg.highlight(), QBrush::Dense4Pattern) );
@@ -108,7 +110,8 @@ void KWTextImage::load( QDomElement & parentElem )
     {
         QString filename = filenameElement.attribute( "value" );
         KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
-        doc->addImageRequest( KoPictureKey( filename, QDateTime::currentDateTime() ), this );
+	// Important: we use a null QDateTime so that there's no date/time in the key.
+        doc->addImageRequest( KoPictureKey( filename, QDateTime() ), this );
     }
     else
         kdError(32001) << "Missing FILENAME tag in IMAGE" << endl;
