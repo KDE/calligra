@@ -53,6 +53,13 @@ HTMLExport::HTMLExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
 }
 
+// HTML enitities, AFAIK we don't need to escape " to &quot; (dnaber):
+const QString strAmp ("&amp;");
+const QString strLt  ("&lt;");
+const QString strGt  ("&gt;");
+const QRegExp regExpAmp ("&");
+const QRegExp regExpLt  ("<");
+const QRegExp regExpGt  (">");
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
@@ -93,20 +100,21 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
     QString title;
     KoDocumentInfo *info = document->documentInfo();
     KoDocumentInfoAbout *aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
-    if ( !aboutPage )
-      title = file;
-    else
+    if ( aboutPage && !aboutPage->title().isEmpty() )
       title = aboutPage->title();
+    else
+      title = file;
     
     // header
     str = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" ";
     str += " \"http://www.w3.org/TR/html4/loose.dtd\"> \n";
     str += "<html>\n";
     str += "<head>\n";
+    // TODO: possibility of choosing other encodings
     str += "<meta http-equiv=\"Content-Type\" ";
     str += "content=\"text/html; charset=UTF-8\">\n";
     str += "<meta name=\"Generator\" ";
-    str += "content=\"KSpread HTML Export Filter Version = 0.1 \">\n";
+    str += "content=\"KSpread HTML Export Filter Version = 0.1\">\n";
     // I have no idea where to get the document name from :-(  table->tableName()
     str += "<title>" + title + "</title>\n";
     str += "</head>\n";
@@ -163,6 +171,8 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
 
       str += "<" + html_table_tag + html_table_options + ">\n";
     
+      unsigned int nonempty_cells_prev=0;
+
       for ( currentrow = 1 ; currentrow < iMaxUsedRow ; ++currentrow, ++i )
       {
         if(i>step) {
@@ -184,6 +194,8 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
               nonempty_cells++;
             QString text;
             QColor bgcolor = cell->bgColor(currentcolumn,currentrow);
+            // FIXME: some formatting seems to be missing with cell->text(), e.g.
+            // "208.00" in KSpread will be "208" in HTML (not always?!)
             switch( cell->content() ) {
                 case KSpreadCell::Text:
                   text = cell->text();
@@ -197,6 +209,8 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
                   text = cell->valueString();
                   break;
             }
+            text = cell->prefix(currentrow, currentcolumn) + " " + text + " " 
+                 + cell->postfix(currentrow, currentcolumn);
             line += "  <" + html_cell_tag + html_cell_options;
             if (bgcolor.name()!="#ffffff") // change color only for non-white cells
               line += " bgcolor=\"" + bgcolor.name() + "\"";
@@ -207,14 +221,28 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
               line += " colspan=\"" + tmp.setNum(extra_cells+1) + "\"";
               currentcolumn += extra_cells;
             }
-            QString tmp;
+            text = text.stripWhiteSpace();
+            if( text.at(0) == '!' ) {
+              // this is supposed to be markup, just remove the '!':
+              text = text.right(text.length()-1);
+            } else {
+              // Escape HTML characters. No need to be very efficient IMHO,
+              // so use a RegExp:
+              text.replace (regExpAmp , strAmp)
+                  .replace (regExpLt  , strLt)
+                  .replace (regExpGt  , strGt);
+            }
             line += ">\n";
             line += "  " + text;
             line += "\n  </" + html_cell_tag + ">\n";
         }
 
-        if (nonempty_cells>0)
-        {
+        if (nonempty_cells == 0 && nonempty_cells_prev == 0) {
+          nonempty_cells_prev = nonempty_cells;
+	  // skip line if there's more than one empty line
+	  continue;
+        } else {
+          nonempty_cells_prev = nonempty_cells;
           str += emptyLines;
           str += "<" + html_row_tag + html_row_options + ">\n";
           str += line;
@@ -236,17 +264,17 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
     emit sigProgress(100);
 
     // Ok, now write to export file
-    QCString cstr(str.local8Bit()); // I assume people will prefer local8Bit over utf8... Another param ?
-
     QFile out(file);
     if(!out.open(IO_WriteOnly)) {
         kdError(30501) << "Unable to open output file!" << endl;
         out.close();
         return false;
     }
-    out.writeBlock(cstr.data(), cstr.length());
-
+    QTextStream streamOut(&out);
+    streamOut.setEncoding( QTextStream::UnicodeUTF8 ); // TODO: possibility of choosing other encodings
+    streamOut << str << endl;
     out.close();
+
     return true;
 }
 
