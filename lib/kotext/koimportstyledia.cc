@@ -41,6 +41,7 @@ KoImportStyleDia::KoImportStyleDia( const QStringList &_list, QWidget *parent, c
     setButtonText( KDialogBase::User1, i18n("Load") );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotLoadFile()));
     resize (300, 400);
+    setFocus();
 }
 
 KoImportStyleDia::~KoImportStyleDia()

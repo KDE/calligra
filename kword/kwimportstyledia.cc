@@ -170,6 +170,7 @@ KWImportFrameTableStyleDia::KWImportFrameTableStyleDia( KWDocument *_doc, const 
     loadFile();
     enableButtonOK( (m_listStyleName->count()!=0) );
     resize (300, 400);
+    setFocus();
 }
 
 KWImportFrameTableStyleDia::~KWImportFrameTableStyleDia()
