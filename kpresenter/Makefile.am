@@ -52,6 +52,7 @@ install-exec-local:
 	$(INSTALL_SCRIPT) kpresenter $(bindir)/kpresenter
 
 kpresenter.h: kpresenter.idl
+	-rm -f kpresenter.h
 	$(IDL) --query-server-for-narrow -I$(idldir) kpresenter.idl
 
 kpresenter.cc: kpresenter.h
