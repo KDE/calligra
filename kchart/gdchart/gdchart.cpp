@@ -1,5 +1,5 @@
 /* GDCHART 0.94b  GDCHART.C  18 APR 1999 */
-/* vi:set tabstop=4 */
+/* vi:set tabstop=4: */
 
 /**
  * Hacked for use of QPainter instead of libgd by Kalle Dalheimer

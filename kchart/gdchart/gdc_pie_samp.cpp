@@ -1,7 +1,7 @@
 /* GDCHART 0.94b  PIE CHART SAMPLE  12 Nov 1998 */
 
 /* creates a file "pie.gif".  Can be stdout for CGI use. */
-/*  vi: :set tabstop=4 */
+/*  vi: set tabstop=4: */
 
 #include <stdio.h>
 #include <values.h>
