@@ -35,6 +35,7 @@
 #include <kmessagebox.h>
 #include <koFilterChain.h>
 #include <koGlobal.h>
+#include "conversion.h"
 
 typedef KGenericFactory<OoWriterImport, KoFilter> OoWriterImportFactory;
 K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory( "oowriterimport" ) );
@@ -165,8 +166,8 @@ void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& f
     bool landscape = properties.attribute("style:print-orientation") != "portrait";
     elementPaper.setAttribute("orientation", landscape ? PG_LANDSCAPE : PG_PORTRAIT );
 
-    double width = OoUtils::toPoint(properties.attribute("fo:page-width"));
-    double height = OoUtils::toPoint(properties.attribute("fo:page-height"));
+    double width = KoUnit::parseValue(properties.attribute("fo:page-width"));
+    double height = KoUnit::parseValue(properties.attribute("fo:page-height"));
     elementPaper.setAttribute("width", width);
     elementPaper.setAttribute("height", height);
 
@@ -188,10 +189,10 @@ void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& f
 
     // Page margins
     QDomElement element = mainDocument.createElement("PAPERBORDERS");
-    element.setAttribute("left", OoUtils::toPoint(properties.attribute("fo:margin-left")));
-    element.setAttribute("top", OoUtils::toPoint(properties.attribute("fo:margin-top")));
-    element.setAttribute("right", OoUtils::toPoint(properties.attribute("fo:margin-right")));
-    element.setAttribute("bottom", OoUtils::toPoint(properties.attribute("fo:margin-bottom")));
+    element.setAttribute("left", KoUnit::parseValue(properties.attribute("fo:margin-left")));
+    element.setAttribute("top", KoUnit::parseValue(properties.attribute("fo:margin-top")));
+    element.setAttribute("right", KoUnit::parseValue(properties.attribute("fo:margin-right")));
+    element.setAttribute("bottom", KoUnit::parseValue(properties.attribute("fo:margin-bottom")));
     elementPaper.appendChild(element);
 
     framesetsElem=mainDocument.createElement("FRAMESETS");
@@ -559,31 +560,41 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
     // parse the paragraph-properties
     fillStyleStack( paragraph );
 
-    if ( m_styleStack.hasAttribute( "fo:text-align" ) )
-    {
-        if ( m_styleStack.attribute( "fo:text-align" ) == "center" )
-            p.setAttribute( "align", "center" );
-        else if ( m_styleStack.attribute( "fo:text-align" ) == "justify" )
-            p.setAttribute( "align", "justify" );
-        else if ( m_styleStack.attribute( "fo:text-align" ) == "start" )
-            p.setAttribute( "align", "left" );
-        else if ( m_styleStack.attribute( "fo:text-align" ) == "end" )
-            p.setAttribute( "align", "right" );
-    }
-    else
-        p.setAttribute( "align","auto"); // use left aligned as default
+    QDomElement formats = doc.createElement( "FORMATS" );
+
+    QString paragraphText;
+    uint pos = 0;
 
     // parse every childnode of the paragraph
     for( QDomNode n = paragraph.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QString textData;
+        QDomElement ts = n.toElement();
+        QString tagName = ts.tagName();
         QDomText t = n.toText();
-        if ( t.isNull() ) // no textnode, so maybe it's a text:span
-        {
-            QDomElement ts = n.toElement();
-            if ( ts.tagName() != "text:span" ) // TODO: are there any other possible
-                continue;                      // elements or even nested test:spans?
 
+        if (tagName == "text:s")
+            textData = OoUtils::expandWhitespace(n.toElement());
+        else if (tagName == "text:date" // fields
+                 || tagName == "text:time"
+                 || tagName == "text:page-number"
+                 || tagName == "text:file-name"
+                 || tagName == "text:author-name"
+                 || tagName == "text:author-initials")
+        {
+            textData = "#";     // field placeholder
+            appendField(doc, p, ts, pos);
+        }
+        else if ( t.isNull() ) // no textnode, so maybe it's a text:span
+        {
+            if ( ts.tagName() != "text:span" )
+            {
+                // TODO: are there any other possible
+                // elements or even nested test:spans?
+                // DF: yes. There is <tab>, and footnotes, for instance, and many fields.
+                kdWarning() << "Ignoring " << ts.tagName() << endl;
+                continue;
+            }
             fillStyleStack( ts.toElement() );
 
             // We do a look ahead to eventually find a text:span that contains
@@ -606,108 +617,90 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
         }
         else
             textData = t.data();
-        if( m_styleStack.hasAttribute("fo:margin-top") ||
-            m_styleStack.hasAttribute("fo:margin-bottom"))
-        {
-            double mtop = OoUtils::toPoint( m_styleStack.attribute( "fo:margin-top"));
-            double mbottom = OoUtils::toPoint( m_styleStack.attribute("fo:margin-bottom"));
-            if( mtop != 0 || mbottom!=0 )
-            {
-                QDomElement offset = doc.createElement( "OFFSETS" );
-                if( mtop!= 0)
-                    offset.setAttribute("before", mtop);
-                if( mbottom!=0)
-                    offset.setAttribute("after",mbottom);
-                p.appendChild( offset );
-            }
-        }
-        // take care of indentation
-        if ( m_styleStack.hasAttribute( "fo:margin-left" ) ||
-            m_styleStack.hasAttribute( "fo:margin-right" ) ||
-            m_styleStack.hasAttribute( "fo:text-indent"))
-        {
-            double marginLeft = OoUtils::toPoint( m_styleStack.attribute( "fo:margin-left" ) );
-            double marginRight = OoUtils::toPoint( m_styleStack.attribute( "fo:margin-right" ) );
-            double first = OoUtils::toPoint( m_styleStack.attribute("fo:text-indent"));
-            if ( (marginLeft!= 0) || marginRight!=0 || first!=0)
-            {
-                QDomElement indent = doc.createElement( "INDENTS" );
-                if( marginLeft != 0)
-                    indent.setAttribute( "left", marginLeft );
-                if( marginRight != 0 )
-                    indent.setAttribute( "right", marginLeft );
-                if( first != 0)
-                    indent.setAttribute( "first", first);
-                p.appendChild( indent );
-            }
-        }
-        if( m_styleStack.hasAttribute("fo:line-height"))
-        {
-            QString value = m_styleStack.attribute( "fo:line-height" );
-            QDomElement lineSpacing = doc.createElement( "LINESPACING" );
-            if( value=="150%")
-            {
-                lineSpacing.setAttribute("type","oneandhalf");
-            }
-            else if( value=="200%")
-            {
-                lineSpacing.setAttribute("type","double");
-            }
-            p.appendChild(lineSpacing );
-        }
-        QDomElement text = doc.createElement( "TEXT" );
-        text.appendChild( doc.createTextNode( textData ) );
 
-        //kdDebug(30518) << k_funcinfo << "Para text is: " << paragraph.text() << endl;
+        paragraphText += textData;
+        uint length = textData.length();
+
+        // Prepare a FORMAT element for this run of text
+        QDomElement format( doc.createElement( "FORMAT" ) );
+        format.setAttribute( "id", 1 /* normal text */ );
+        format.setAttribute( "pos", pos );
+        format.setAttribute( "len", length );
 
         // parse the text-properties
-        if ( m_styleStack.hasAttribute( "fo:color" ) )
-            text.setAttribute( "color", m_styleStack.attribute( "fo:color" ) );
+        // TODO compare with the paragraph style, and only write out if != from style.
+        // (This is very important, it's not only an optimization. If no attribute is
+        // specified in the .kwd file, the style's property will be used, which might
+        // not always be correct).
+        if ( m_styleStack.hasAttribute( "fo:color" ) ) {
+            QColor color( m_styleStack.attribute( "fo:color" ) ); // #rrggbb format
+            QDomElement colorElem( doc.createElement( "COLOR" ) );
+            colorElem.setAttribute( "red", color.red() );
+            colorElem.setAttribute( "blue", color.blue() );
+            colorElem.setAttribute( "green", color.green() );
+            format.appendChild( colorElem );
+        }
         if ( m_styleStack.hasAttribute( "fo:font-family" ) )
         {
+            // Hmm, the remove "'" could break it's in the middle of the fontname...
+            QString fontName = m_styleStack.attribute( "fo:font-family" ).remove( "'" );
             // 'Thorndale' is not known outside OpenOffice so we substitute it
             // with 'Times New Roman' that looks nearly the same.
-            if ( m_styleStack.attribute( "fo:font-family" ) == "Thorndale" )
-                text.setAttribute( "family", "Times New Roman" );
-            else
-                text.setAttribute( "family", m_styleStack.attribute( "fo:font-family" ).remove( "'" ) );
+            if ( fontName == "Thorndale" )
+                fontName = "Times New Roman";
+
+            QDomElement fontElem( doc.createElement( "FONT" ) );
+            fontElem.setAttribute( "name", fontName );
+            format.appendChild( fontElem );
         }
-        if ( m_styleStack.hasAttribute( "fo:font-size" ) )
-            text.setAttribute( "pointSize", OoUtils::toPoint( m_styleStack.attribute( "fo:font-size" ) ) );
-        if ( m_styleStack.hasAttribute( "fo:font-weight" ) )
-            if ( m_styleStack.attribute( "fo:font-weight" ) == "bold" )
-                text.setAttribute( "bold", 1 );
+        if ( m_styleStack.hasAttribute( "fo:font-size" ) ) {
+            double pointSize = KoUnit::parseValue( m_styleStack.attribute( "fo:font-size" ) );
+            QDomElement fontSize( doc.createElement( "SIZE" ) );
+            fontSize.setAttribute( "value", pointSize );
+            format.appendChild( fontSize );
+        }
+        if ( m_styleStack.hasAttribute( "fo:font-weight" ) ) {
+            // TODO: Check fo:font-weight spec. Can it be 50, 75, etc.?
+            QDomElement weight( doc.createElement( "WEIGHT" ) );
+            weight.setAttribute( "value", m_styleStack.attribute( "fo:font-weight" ) == "bold" ? 75 : 50 );
+            format.appendChild( weight );
+        }
 
         if ( m_styleStack.hasAttribute( "fo:font-style" ) )
-            if ( m_styleStack.attribute( "fo:font-style" ) == "italic" )
+            if ( m_styleStack.attribute( "fo:font-style" ) == "italic" ||
+                 m_styleStack.attribute( "fo:font-style" ) == "oblique" ) // no difference in kotext
             {
                 QDomElement italic = doc.createElement( "ITALIC" );
                 italic.setAttribute( "value", 1 );
-
+                format.appendChild( italic );
             }
-        if( m_styleStack.hasAttribute("style:text-crossing-out" ))
+
+        if( m_styleStack.hasAttribute("style:text-crossing-out" )) // 3.10.6
         {
             QString strikeOutType = m_styleStack.attribute( "style:text-crossing-out" );
             QDomElement strikeOut = doc.createElement( "STRIKEOUT" );
             if( strikeOutType =="double-line")
             {
-                //text.setAttribute("strikeOut", "double");
-                //text.setAttribute("strikeoutstyleline","solid");
+                strikeOut.setAttribute("value", "double");
+                strikeOut.setAttribute("styleline","solid");
             }
             else if( strikeOutType =="single-line")
             {
-                //text.setAttribute("strikeOut", "single");
-                //text.setAttribute("strikeoutstyleline","solid");
+                strikeOut.setAttribute("value", "single");
+                strikeOut.setAttribute("styleline","solid");
             }
             else if( strikeOutType =="thick-line")
             {
-                //text.setAttribute("strikeOut", "single-bold");
-                //text.setAttribute("strikeoutstyleline","solid");
+                strikeOut.setAttribute("value", "single-bold");
+                strikeOut.setAttribute("styleline","solid");
             }
-
+            // not supported by KWord: "slash" and "X"
+            // not supported by OO: stylelines (solid, dash, dot, dashdot, dashdotdot)
+            format.appendChild( strikeOut );
         }
         if( m_styleStack.hasAttribute("style:text-position"))
         {
+            QDomElement vertAlign = doc.createElement( "VERTALIGN" );
             QString textPos =m_styleStack.attribute("style:text-position");
             //relativetextsize="0.58"
             //"super 58%"
@@ -716,56 +709,146 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
                 textPos=textPos.remove("super");
                 textPos=textPos.remove("%");
                 double value = textPos.stripWhiteSpace().toDouble();
-                //text.setAttribute("VERTALIGN",2);
-                //text.setAttribute("relativetextsize", value/100 );
+                vertAlign.setAttribute( "value", 2 );
+                vertAlign.setAttribute( "relativetextsize", value/100 );
             }
             else if(textPos.contains("sub"))
             {
                 textPos=textPos.remove("sub");
                 textPos=textPos.remove("%");
                 double value = textPos.stripWhiteSpace().toDouble();
-                //text.setAttribute("VERTALIGN",1);
-                //text.setAttribute("relativetextsize", value/100 );
+                vertAlign.setAttribute( "value", 1 );
+                vertAlign.setAttribute( "relativetextsize", value/100 );
             }
+            format.appendChild( vertAlign );
         }
-        if ( m_styleStack.hasAttribute( "style:text-underline" ) )
+        if ( m_styleStack.hasAttribute( "style:text-underline" ) ) // 3.10.22
         {
-            QString underType = m_styleStack.attribute( "style:text-underline" );
-            QString underLineColor = m_styleStack.attribute( "style:text-underline-color" );
-            QDomElement strikeOut = doc.createElement( "UNDERLINE" );
-            if ( underType == "single" )
-            {
-                //text.setAttribute( "underline", 1 );
-                ///text.setAttribute( "underlinestyleline", "solid" );  //lukas: TODO support more underline styles
-                //text.setAttribute("underlinecolor", underLineColor);
-            }
-            else if(underType =="double")
-            {
-                //text.setAttribute( "underline", "double" );
-                //text.setAttribute( "underlinestyleline", "solid" );  //lukas: TODO support more underline styles
-                //text.setAttribute("underlinecolor", underLineColor);
-            }
-            else if( underType == "bold" )
-            {
-                //text.setAttribute("underline","single-bold");
-                //text.setAttribute("underlinestyleline","solid");
-                //text.setAttribute("underlinecolor", underLineColor);
-            }
-            else if( underType =="wave")
-            {
-                //not implemented into kpresenter
-                //text.setAttribute("underline","wave");
-                //text.setAttribute("underlinestyleline","solid");
-                //text.setAttribute("underlinecolor", underLineColor);
-            }
+            QString underline;
+            QString styleline;
+            OoUtils::importUnderline( m_styleStack.attribute( "style:text-underline" ),
+                                      underline, styleline );
+            QDomElement underLineElem = doc.createElement( "UNDERLINE" );
+            underLineElem.setAttribute( "value", underline );
+            underLineElem.setAttribute( "styleline", styleline );
+
+            QString underLineColor = m_styleStack.attribute( "style:text-underline-color" ); // 3.10.23
+            if ( underLineColor != "font-color" )
+                underLineElem.setAttribute("underlinecolor", underLineColor);
+            // TODO wordbyword?
+            format.appendChild( underLineElem );
         }
 
         //appendShadow( doc, p ); // this is necessary to take care of shadowed paragraphs
-        m_styleStack.clearObjectMark(); // remove possible test:span styles from the stack
-        p.appendChild( text );
+        pos += length;
+
+        m_styleStack.clearObjectMark(); // remove possible text:span styles from the stack
+        // DF: this looks wrong to me. We're losing the text:p styles too!
     }
 
+    QDomElement text = doc.createElement( "TEXT" );
+    text.appendChild( doc.createTextNode( paragraphText ) );
+    p.appendChild( text );
+    //kdDebug(30518) << k_funcinfo << "Para text is: " << paragraphText << endl;
+
+    p.appendChild( formats );
+    QDomElement layoutElement = doc.createElement( "LAYOUT" );
+    p.appendChild( layoutElement );
+
+    // TODO style name (when specified by user)
+    //QDomElement nameElement = doc.createElement("NAME");
+    //nameElement.setAttribute("value", styleName);
+    //layoutElement.appendChild(nameElement);
+
+    writeLayout( doc, layoutElement );
+
     return p;
+}
+
+void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement )
+{
+    // Always write out the alignment, it's required
+    QDomElement flowElement = doc.createElement("FLOW");
+
+    if ( m_styleStack.hasAttribute( "fo:text-align" ) )
+        flowElement.setAttribute( "align", Conversion::importAlignment( m_styleStack.attribute( "fo:text-align" ) ) );
+    else
+        flowElement.setAttribute( "align", "auto" );
+    layoutElement.appendChild( flowElement );
+
+    // Indentation (margins)
+    OoUtils::importIndents( layoutElement, m_styleStack );
+
+    // Offset before and after paragraph
+    OoUtils::importTopBottomMargin( layoutElement, m_styleStack );
+
+    // Line spacing
+    OoUtils::importLineSpacing( layoutElement, m_styleStack );
+
+    // Tabulators
+    OoUtils::importTabulators( layoutElement, m_styleStack );
+
+    // Borders
+    OoUtils::importBorders( layoutElement, m_styleStack );
+
+    // Page breaking. This isn't in OoUtils since it doesn't apply to KPresenter
+    if( m_styleStack.hasAttribute("fo:break-before") ||
+        m_styleStack.hasAttribute("fo:break-after") ||
+        m_styleStack.hasAttribute("style:break-inside") ||
+        m_styleStack.hasAttribute("style:keep-with-next") )
+    {
+        QDomElement pageBreak = doc.createElement( "PAGEBREAKING" );
+        if ( m_styleStack.hasAttribute("fo:break-before") ) {
+            bool breakBefore = m_styleStack.attribute( "fo:break-before" ) != "auto";
+            // TODO in KWord: implement difference between "column" and "page"
+            pageBreak.setAttribute("hardFrameBreak", breakBefore ? "true" : "false");
+        }
+        else if ( m_styleStack.hasAttribute("fo:break-after") ) {
+            bool breakAfter = m_styleStack.attribute( "fo:break-after" ) != "auto";
+            // TODO in KWord: implement difference between "column" and "page"
+            pageBreak.setAttribute("hardFrameBreakAfter", breakAfter ? "true" : "false");
+        }
+
+        if ( m_styleStack.hasAttribute( "style:break-inside" ) ) {
+            bool breakInside = m_styleStack.attribute( "style:break-inside" ) == "true";
+            pageBreak.setAttribute("linesTogether", breakInside ? "false" : "true"); // opposite meaning
+        }
+        if ( m_styleStack.hasAttribute( "style:keep-with-next" ) )
+            // Copy the boolean value
+            pageBreak.setAttribute("keepWithNext", m_styleStack.attribute( "style:keep-with-next" ));
+        layoutElement.appendChild( pageBreak );
+    }
+
+    // TODO fo:background-color - not here; text property in kword/kpresenter.
+    // TODO padding??? (space around the paragraph) => how is that different from margins
+    // TODO shadow
+
+/*
+  Paragraph properties not implemented in KWord:
+    style:text-align-last
+    style:justify-single-word
+    fo:widows
+    fo:orphans
+    fo:hyphenate
+    fo:hyphenation-keep
+    fo:hyphenation-remain-char-count
+    fo:hyphenation-push-char-count
+    fo:hyphenation-ladder-count
+    style:drop-cap
+    style:register-true
+    style:auto-text-indent
+    "page sequence entry point"
+    style:background-image
+    line numbering
+    text autospace, punctuation wrap
+    vertical alignment - a bit like offsetfrombaseline...
+*/
+
+}
+
+void OoWriterImport::appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object, uint pos)
+{
+    // TODO
 }
 
 #include "oowriterimport.moc"

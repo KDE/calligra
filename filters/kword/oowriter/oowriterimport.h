@@ -41,6 +41,7 @@ private:
     void createPageDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
     QDomElement parseList( QDomDocument& doc, const QDomElement& list );
     QDomElement parseParagraph( QDomDocument& doc, const QDomElement& paragraph );
+    void writeLayout( QDomDocument& doc, QDomElement& layoutElement );
     void createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool headerFooter );
     void createDocumentInfo( QDomDocument &docinfo );
     void createDocumentContent( QDomDocument &doccontent, QDomElement& mainFramesetElement );
@@ -49,6 +50,7 @@ private:
     void insertStyles( const QDomElement& element );
     void fillStyleStack( const QDomElement& object );
     void addStyles( const QDomElement* style );
+    void appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object, uint pos);
 
 
     QDomDocument    m_content;
@@ -58,7 +60,6 @@ private:
 
     QDict<QDomElement>   m_styles;
     StyleStack m_styleStack;
-
 };
 
 #endif
