@@ -812,7 +812,7 @@ public:
      * Returns the left indent.
      */
     int getLeftIndent() { return _leftIndent; }
-    
+
     /**
      * Set the left indent of this paragraph
      */
@@ -1881,11 +1881,11 @@ public:
     QSize neededSize();
 
     void setGap( int g );
-    
+
     int getGap() const {
 	return gap;
     }
-    
+
 signals:
 
     /**
@@ -2005,7 +2005,10 @@ protected slots:
     void clipCut() {cutRegion(); }
     void clipCopy() {copyRegion( true ); }
     void clipPaste() {paste(); }
-
+    void formatBold();
+    void formatItalic();
+    void formatUnderline();
+    
 protected:
     //*********** variables ***********
 

@@ -21,11 +21,57 @@
 #include "kpresenter_doc.h"
 
 #include <klocale.h>
+#include <kiconloader.h>
 
-#include <qlistview.h>
 #include <qsplitter.h>
 #include <qevent.h>
 #include <qheader.h>
+
+/******************************************************************
+ *
+ * Class: KPPresStructObjectItem
+ *
+ ******************************************************************/
+
+/*================================================================*/
+KPPresStructObjectItem::KPPresStructObjectItem( QListView *parent )
+    : QListViewItem( parent ), page( 0 ), object( 0 )
+{
+}
+    
+/*================================================================*/
+KPPresStructObjectItem::KPPresStructObjectItem( QListViewItem *parent )
+    : QListViewItem( parent ), page( 0 ), object( 0 )
+{
+}
+
+/*================================================================*/
+void KPPresStructObjectItem::setPage( KPBackGround *p )
+{
+    page = p;
+    if ( page && !parent() )
+	setPixmap( 0, BarIcon( "dot" ) );
+}
+
+/*================================================================*/
+void KPPresStructObjectItem::setObject( KPObject *o )
+{
+    object = o;
+    if ( object && parent() )
+	;
+}
+
+/*================================================================*/
+KPBackGround *KPPresStructObjectItem::getPage()
+{
+    return page;
+}
+
+/*================================================================*/
+KPObject *KPPresStructObjectItem::getObject()
+{
+    return object;
+}
 
 /******************************************************************
  *
@@ -53,14 +99,18 @@ void KPPresStructView::setupSlideList()
     slides->header()->setMovingEnabled( FALSE );
     slides->setAllColumnsShowFocus( TRUE );
     slides->setRootIsDecorated( TRUE );
+    slides->setSorting( -1 );
     
-    for ( unsigned int i = 0; i < doc->getPageNums(); ++i ) {
-        QListViewItem *item = new QListViewItem( slides );
+    for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
+        KPPresStructObjectItem *item = new KPPresStructObjectItem( slides );
+	item->setPage( doc->backgroundList()->at( i ) );
         item->setText( 0, QString( "%1" ).arg( i + 1 ) );
-        item->setText( 1, doc->getPageTitle( i, i18n( "Slide %1" ).arg( i +1 ) ) );
-	for ( unsigned int j = 0; j < doc->objNums(); ++j ) {
+        item->setText( 1, doc->getPageTitle( i, i18n( "Slide %1" ).arg( i + 1 ) ) );
+	for ( int j = doc->objNums() - 1; j >= 0; --j ) {
 	    if ( doc->getPageOfObj( j, 0, 0 ) == (int)i + 1 ) {
-		( new QListViewItem( item ) )->setText( 0, "Object" );
+		KPPresStructObjectItem *item_ = new KPPresStructObjectItem( item );
+		item_->setPage( doc->backgroundList()->at( i ) );
+		item_->setObject( doc->objectList()->at( j ) );
 	    }
 	}
     }

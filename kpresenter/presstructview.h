@@ -17,12 +17,37 @@
 #define presstructview_h
 
 #include <qdialog.h>
+#include <qlistview.h>
 
 class KPresenterDoc;
 class KPresenterView;
-class QListView;
 class QSplitter;
 class QResizeEvent;
+class KPBackGround;
+class KPObject;
+
+/******************************************************************
+ *
+ * Class: KPPresStructObjectItem
+ *
+ ******************************************************************/
+
+class KPPresStructObjectItem : public QListViewItem
+{
+public:
+    KPPresStructObjectItem( QListView *parent );
+    KPPresStructObjectItem( QListViewItem *parent );
+    
+    void setPage( KPBackGround *p );
+    void setObject( KPObject *o );
+    KPBackGround *getPage();
+    KPObject *getObject();
+    
+protected:
+    KPBackGround *page;
+    KPObject *object;
+    
+};
 
 /******************************************************************
  *

@@ -392,3 +392,7 @@ Reggie, 21.8.1999:
 - Fixed a bug in the pixmap handling
 - reverted and fixed some stuff, which I broke yesterday
 - Fixed some memleaks
+- Added accelerators (CTRL+B, CTRL+I, CTRL+U) to switch 
+  bold, italic and underlined on and off in the textobj
+  when editing it
+- A bit more work on the presentation structure viewer/editor

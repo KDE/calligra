@@ -26,6 +26,7 @@
 #include <qpixmap.h>
 #include <qclipbrd.h>
 #include <qpopmenu.h>
+#include <qaccel.h>
 
 #include <kapp.h>
 #include <klocale.h>
@@ -1594,7 +1595,7 @@ KTextObject::KTextObject( QWidget *parent, const char *name, ObjType ot,
 
     createRBMenu();
 
-  // this is required for correct init of headers/footers
+    // this is required for correct init of headers/footers
     _modified = true;
 
     regexpMode = false;
@@ -1606,6 +1607,20 @@ KTextObject::KTextObject( QWidget *parent, const char *name, ObjType ot,
     autoFocus = false;
 
     setKeyCompression( true );
+
+    QAccel *a = new QAccel( this );
+    a->connectItem( a->insertItem( CTRL + Key_B ),
+		    this, SLOT( formatBold() ) );
+    a->connectItem( a->insertItem( CTRL + Key_I ),
+		    this, SLOT( formatItalic() ) );
+    a->connectItem( a->insertItem( CTRL + Key_U ),
+		    this, SLOT( formatUnderline() ) );
+    a->connectItem( a->insertItem( CTRL + Key_X ),
+		    this, SLOT( clipCut() ) );
+    a->connectItem( a->insertItem( CTRL + Key_V ),
+		    this, SLOT( clipPaste() ) );
+    a->connectItem( a->insertItem( CTRL + Key_C ),
+		    this, SLOT( clipCopy() ) );
 }
 
 /*======================== destructor ============================*/
@@ -6404,4 +6419,28 @@ QSize KTextObject::neededSize()
 	w = QMAX( w, paragraphList.at( i )->width() );
 
     return QSize( w, y + cellHeight( numRows() - 1 ) );
+}
+
+/*================================================================*/
+void KTextObject::formatBold()
+{
+    currFont.setBold( !currFont.bold() );
+    setFont( currFont );
+    emit fontChanged( &currFont );
+}
+
+/*================================================================*/
+void KTextObject::formatItalic()
+{
+    currFont.setItalic( !currFont.italic() );
+    setFont( currFont );
+    emit fontChanged( &currFont );
+}
+
+/*================================================================*/
+void KTextObject::formatUnderline()
+{
+    currFont.setUnderline( !currFont.underline() );
+    setFont( currFont );
+    emit fontChanged( &currFont );
 }
