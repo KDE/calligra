@@ -27,7 +27,11 @@
 #include <koparaglayout.h>
 #include <koparagcounter.h>
 #include "kwvariable.h"
+#include "kwframestyle.h"
+
+
 class KWFrameSet;
+class KWTableStyle;
 class KWTableFrameSet;
 class KWDocument;
 class KoCustomVariable;
@@ -113,6 +117,43 @@ struct FrameResizeStruct {
     KoRect sizeOfEnd;
 };
 
+/**
+ * Command created when applying a framestyle
+ */
+class KWFrameStyleCommand : public KNamedCommand
+{
+public:
+    KWFrameStyleCommand( const QString &name, KWFrame *_frame, KWFrameStyle *_fs );
+    ~ KWFrameStyleCommand() { if (m_oldValues) delete m_oldValues; }
+
+    void execute();
+    void unexecute();
+
+protected:
+    KWFrame *m_frame ;
+    KWFrameStyle * m_fs;
+    KWFrameStyle * m_oldValues;
+};
+
+
+/**
+ * Command created when applying a tablestyle
+ */
+class KWTableStyleCommand : public KNamedCommand
+{
+public:
+    KWTableStyleCommand( const QString &name, KWFrame *_frame, KWTableStyle *_ts );
+    ~ KWTableStyleCommand();
+
+    void execute();
+    void unexecute();
+
+protected:
+    KWFrame *m_frame ;
+    KWTableStyle * m_ts;
+    KWFrameStyleCommand * m_fsc;
+    KCommand * m_sc;
+};
 /**
  * Command created when a frame is resized
  */

@@ -83,6 +83,8 @@
   <Action name="bring_tofront_frame"/>
   <Action name="send_toback_frame"/>
   <Separator/>
+  <Action name="frame_stylist"/>
+  <Action name="frame_stylemenu"/>
   <!--<Action name="border_color"/> Can't do that while we're sharing the action with paragraphs-->
   <Action name="border_backgroundcolor"/>
   <Menu name="FrameBorders"><text>Configure Frame Borders</text>
@@ -114,6 +116,9 @@
   <Action name="table_ungroup"/>
   <Separator/>
   <Action name="table_delete"/>
+  <Separator/>
+  <Action name="table_stylist"/>
+  <Action name="table_stylemenu"/>
  </Menu>
  <Menu name="tools"><text>&amp;Tools</text>
   <Menu name="SpellCheck"><text>SpellCheck</text>
@@ -153,6 +158,8 @@
   <Action name="view_zoom"/>
 </ToolBar>
 <ToolBar hidden="true" name="table_toolbar" position="top"><Text>Table</Text>
+  <Action name="table_style"/>
+  <Separator/>
   <Action name="table_insrow"/>
   <Action name="table_inscol"/>
   <Action name="table_delrow"/>
@@ -199,6 +206,7 @@
   <Action name="format_color"/>
 </ToolBar>
 <ToolBar hidden="true" name="border_toolbar" position="top"><Text>Borders</Text>
+  <Action name="frame_style"/>
   <Action name="border_outline"/>
   <Action name="border_left"/>
   <Action name="border_right"/>

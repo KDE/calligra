@@ -21,6 +21,7 @@
 #include "kwtextframeset.h"
 #include "kwview.h"
 #include "kwcommand.h"
+#include "kwtablestyle.h"
 #include "kwtableframeset.h"
 #include "kwanchor.h"
 #include "kwvariable.h"
@@ -384,6 +385,79 @@ void KWFrameBackGroundColorCommand::unexecute()
         doc->repaintAllViews();
 }
 
+KWFrameStyleCommand::KWFrameStyleCommand( const QString &name, KWFrame *_frame, KWFrameStyle *_fs ) :
+    KNamedCommand( name )
+{
+    m_frame = _frame;
+    m_fs = _fs;
+    
+    m_oldValues = new KWFrameStyle( "Old", m_frame );
+}
+
+void KWFrameStyleCommand::execute()
+{
+    m_frame->setBackgroundColor( m_fs->backgroundColor() );
+    m_frame->setLeftBorder( m_fs->leftBorder() );
+    m_frame->setRightBorder( m_fs->rightBorder() );
+    m_frame->setTopBorder( m_fs->topBorder() );
+    m_frame->setBottomBorder( m_fs->bottomBorder() );
+
+    m_frame->frameSet()->kWordDocument()->repaintAllViews();
+}
+
+void KWFrameStyleCommand::unexecute()
+{
+    m_frame->setBackgroundColor( m_oldValues->backgroundColor() );
+    m_frame->setLeftBorder( m_oldValues->leftBorder() );
+    m_frame->setRightBorder( m_oldValues->rightBorder() );
+    m_frame->setTopBorder( m_oldValues->topBorder() );
+    m_frame->setBottomBorder( m_oldValues->bottomBorder() );
+    
+    m_frame->frameSet()->kWordDocument()->repaintAllViews();
+}
+
+KWTableStyleCommand::KWTableStyleCommand( const QString &name, KWFrame *_frame, KWTableStyle *_ts ) :
+    KNamedCommand( name )
+{
+    m_frame = _frame;
+    m_ts = _ts;
+    
+    // No need for i18n because it will never be displayed.
+    m_fsc = new KWFrameStyleCommand( "Apply framestyle to frame", m_frame, m_ts->pFrameStyle() );
+    m_sc = 0L;
+}
+
+KWTableStyleCommand::~KWTableStyleCommand()
+{
+    if (m_fsc) delete m_fsc;
+    if (m_sc) delete m_sc;
+}
+
+void KWTableStyleCommand::execute()
+{
+    if (m_fsc)
+        m_fsc->execute();
+    
+    if ( (m_ts) && ( m_frame->frameSet()->type() == FT_TEXT ) && ( m_ts->pStyle() ) )
+    {
+        KoTextObject *textObject = ((KWTextFrameSet*)m_frame->frameSet())->textObject();
+        textObject->textDocument()->selectAll( KoTextDocument::Temp );
+        m_sc = textObject->applyStyle( 0L, m_ts->pStyle(), KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format, true, false );
+        textObject->textDocument()->removeSelection( KoTextDocument::Temp );
+    }
+    
+    m_frame->frameSet()->kWordDocument()->repaintAllViews();
+}
+
+void KWTableStyleCommand::unexecute()
+{
+    if (m_fsc)
+        m_fsc->unexecute();
+    if (m_sc)
+        m_sc->unexecute();
+    
+    m_frame->frameSet()->kWordDocument()->repaintAllViews();
+}
 
 KWFrameResizeCommand::KWFrameResizeCommand( const QString &name, FrameIndex _frameIndex, FrameResizeStruct _frameResize ) :
     KNamedCommand(name),

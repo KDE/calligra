@@ -1,0 +1,29 @@
+<!--
+        A tablestyle holds properties for borders, background and (text)style. A tablestyle is
+        identified via its name. The properties are reach via the names corresponding to the
+        framestyle and style.
+-->
+<!ELEMENT TABLESTYLES
+    (TABLESTYLE*)>
+
+<!ELEMENT TABLESTYLE
+    (NAME|PFRAMESTYLE|PSTYLE)>
+
+<!ELEMENT PFRAMESTYLE
+    EMPTY>
+<!ATTLIST PFRAMESTYLE
+    name CDATA #REQUIRED>
+
+<!ELEMENT PSTYLE
+    EMPTY>
+<!ATTLIST PSTYLE
+    name CDATA #REQUIRED>
+
+<!--
+        Copied from kword.dtd (01-06-2002)
+-->
+
+<!ELEMENT NAME
+    EMPTY>
+<!ATTLIST NAME
+    value CDATA #REQUIRED>

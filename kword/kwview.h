@@ -110,6 +110,8 @@ public:
     KWDocument *kWordDocument()const { return m_doc; }
     KWGUI *getGUI()const { return m_gui; }
     void updateStyleList();
+    void updateFrameStyleList();
+    void updateTableStyleList();
 
     void initGui();
 
@@ -209,6 +211,7 @@ public slots:
 
     void extraSpelling();
     void extraAutoFormat();
+    void extraFrameStylist();
     void extraStylist();
     void extraCreateTemplate();
 
@@ -226,9 +229,14 @@ public slots:
     void tableProtectCells();
     void tableUngroupTable();
     void tableDelete();
+    void tableStylist();
 
     void slotStyleSelected();
+    void slotFrameStyleSelected();
+    void slotTableStyleSelected();
     void textStyleSelected( int );
+    void frameStyleSelected( int );
+    void tableStyleSelected( int );
     void textSizeSelected( int );
     void increaseFontSize();
     void decreaseFontSize();
@@ -336,7 +344,6 @@ public slots:
     void createStyleFromSelection();
     // end of public slots
     void configureFootEndNote();
-
     void editFootEndNote();
     void changeFootNoteType();
     void savePicture();
@@ -462,6 +469,7 @@ private:
 
     KAction *actionFormatFont;
     KAction *actionFormatDefault;
+    KAction *actionFormatFrameStylist;
     KAction *actionFormatStylist;
     KAction *actionFormatPage;
 
@@ -492,6 +500,10 @@ private:
     KAction* actionInsertSpecialChar;
 
     // Text and Frame borders.
+    KSelectAction *actionFrameStyle;
+    KActionMenu *actionFrameStyleMenu;
+    KSelectAction *actionTableStyle;
+    KActionMenu *actionTableStyleMenu;
     KToggleAction *actionBorderLeft;
     KToggleAction *actionBorderRight;
     KToggleAction *actionBorderTop;
@@ -521,6 +533,8 @@ private:
 
     KAction *actionTableUngroup;
     KAction *actionTableDelete;
+
+    KAction *actionTableStylist;
 
     KAction *actionExtraSpellCheck;
     KAction *actionExtraCreateTemplate;

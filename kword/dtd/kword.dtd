@@ -524,6 +524,41 @@ don't put a </?xml...> at the end of the file!).
 
 
 <!--
+        A framestyle holds properties for borders, background and can be identified with a name.
+-->
+<!ELEMENT FRAMESTYLES
+    (FRAMESTYLE*)>
+<!ELEMENT FRAMESTYLE
+    (NAME|TOPBORDER|BOTTOMBORDER|RIGHTBORDER|LEFTBORDER)>
+<!ATTLIST FRAMESTYLE
+    bkRed CDATA #REQUIRED
+    bkGreen CDATA #REQUIRED
+    bkBlue CDATA #REQUIRED>
+
+
+<!--
+        A tablestyle holds properties for borders, background and (text)style. A tablestyle is
+        identified via its name. The properties are reach via the names corresponding to the
+        framestyle and style.
+-->
+<!ELEMENT TABLESTYLES
+    (TABLESTYLE*)>
+
+<!ELEMENT TABLESTYLE
+    (NAME|PFRAMESTYLE|PSTYLE)>
+
+<!ELEMENT PFRAMESTYLE
+    EMPTY>
+<!ATTLIST PFRAMESTYLE
+    name CDATA #REQUIRED>
+
+<!ELEMENT PSTYLE
+    EMPTY>
+<!ATTLIST PSTYLE
+    name CDATA #REQUIRED>
+            
+    
+<!--
         name is the family name. Don't include fontsizes or bold, that is put in another tag.
 -->
 <!ELEMENT FONT

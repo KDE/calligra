@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TABLESTYLES>
+  <TABLESTYLE>
+      <NAME value="Plain"/>
+      <PFRAMESTYLE name="Plain"/>
+      <PSTYLE name="Standard"/>
+  </TABLESTYLE>
+</TABLESTYLES>

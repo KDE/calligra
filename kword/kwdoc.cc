@@ -55,6 +55,7 @@
 #include "KWordDocIface.h"
 #include "kwvariable.h"
 #include "kwframelayout.h"
+#include "kwtablestyle.h"
 
 //#define DEBUG_PAGES
 
@@ -162,7 +163,9 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_textImageRequests.setAutoDelete(false);
 
     m_styleColl=new KoStyleCollection();
-
+    m_frameStyleColl = new KWFrameStyleCollection();
+    m_tableStyleColl = new KWTableStyleCollection();
+    
     setInstance( KWFactory::global(), false );
 
     m_gridX = m_gridY = 10.0;
@@ -262,6 +265,18 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     standardStyle->format().setFont( m_defaultFont );
     m_styleColl->addStyleTemplate( standardStyle );
 
+    // And let's do the same for framestyles
+    KWFrameStyle * standardFrameStyle = new KWFrameStyle( "Plain" );
+    standardFrameStyle->setBackgroundColor(QColor("white"));
+    standardFrameStyle->setTopBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
+    standardFrameStyle->setRightBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
+    standardFrameStyle->setLeftBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
+    standardFrameStyle->setBottomBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
+    m_frameStyleColl->addFrameStyleTemplate( standardFrameStyle );
+
+    // And let's do the same for tablestyles
+    m_tableStyleColl->addTableStyleTemplate( new KWTableStyle( "Plain", standardStyle, standardFrameStyle ) );
+    
     if ( name )
         dcopObject();
     connect(m_varColl,SIGNAL(repaintVariable()),this,SLOT(slotRepaintVariable()));
@@ -296,6 +311,8 @@ KWDocument::~KWDocument()
     delete dcop;
     delete m_bgSpellCheck;
     delete m_styleColl;
+    delete m_frameStyleColl;
+    delete m_tableStyleColl;
     delete m_pKSpellConfig;
 }
 
@@ -1034,6 +1051,22 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     if ( !stylesElem.isNull() )
         loadStyleTemplates( stylesElem );
 
+    emit sigProgress(17);
+
+    QDomElement frameStylesElem = word.namedItem( "FRAMESTYLES" ).toElement();
+    if ( !frameStylesElem.isNull() )
+        loadFrameStyleTemplates( frameStylesElem );
+    else // load default styles
+        loadDefaultFrameStyleTemplates();
+
+    emit sigProgress(19);
+
+    QDomElement tableStylesElem = word.namedItem( "TABLESTYLES" ).toElement();
+    if ( !tableStylesElem.isNull() )
+        loadTableStyleTemplates( tableStylesElem );
+    else // load default styles
+        loadDefaultTableStyleTemplates();
+        
     emit sigProgress(20);
 
     QDomElement spellCheckIgnore = word.namedItem( "SPELLCHECKIGNORELIST" ).toElement();
@@ -1319,6 +1352,150 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
         m_styleColl->styleAt(i++)->setFollowingStyle( style );
     }
 
+}
+
+void KWDocument::loadFrameStyleTemplates( QDomElement stylesElem )
+{
+    QDomNodeList listStyles = stylesElem.elementsByTagName( "FRAMESTYLE" );
+    if( listStyles.count() > 0) { // we are going to import at least one style.
+        KWFrameStyle *s = m_frameStyleColl->findFrameStyle("Plain");
+        if(s) // delete the standard style.
+            m_frameStyleColl->removeFrameStyleTemplate(s);
+    }
+    for (unsigned int item = 0; item < listStyles.count(); item++) {
+        QDomElement styleElem = listStyles.item( item ).toElement();
+
+        KWFrameStyle *sty = new KWFrameStyle( styleElem );
+        m_frameStyleColl->addFrameStyleTemplate( sty );
+    }
+}
+
+void KWDocument::loadDefaultFrameStyleTemplates()
+{
+    KURL fsfile;
+
+    if ( ! QFile::exists(locate("appdata", "framestyles.xml")) )
+    {
+        if (!m_frameStyleColl->findFrameStyle("Plain")) {
+            KWFrameStyle * standardFrameStyle = new KWFrameStyle( "Plain" );
+            standardFrameStyle->setBackgroundColor(QColor("white"));
+            standardFrameStyle->setTopBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
+            standardFrameStyle->setRightBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
+            standardFrameStyle->setLeftBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
+            standardFrameStyle->setBottomBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
+            m_frameStyleColl->addFrameStyleTemplate( standardFrameStyle );
+        }
+        return;
+    }
+
+    fsfile.setPath( locate("appdata", "framestyles.xml") );
+
+    // Open file and parse it
+    QFile in( fsfile.path() );
+    if ( !in.open( IO_ReadOnly ) )
+    {
+        //i18n( "Couldn't open the file for reading (check read permissions)" );
+        return;
+    }
+    in.at(0);
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+    QDomDocument doc;
+    if ( doc.setContent( &in , &errorMsg, &errorLine, &errorColumn ) ) {
+    }
+    else
+    {
+        kdError (30003) << "Parsing Error! Aborting! (in KWDocument::loadDefaultFrameStyleTemplates())" << endl
+                        << "  Line: " << errorLine << " Column: " << errorColumn << endl
+                        << "  Message: " << errorMsg << endl;
+    }
+    in.close();
+
+    // Start adding framestyles
+    QDomElement stylesElem = doc.documentElement();
+
+    QDomNodeList listStyles = stylesElem.elementsByTagName( "FRAMESTYLE" );
+    if( listStyles.count() > 0) { // we are going to import at least one style.
+        KWFrameStyle *s = m_frameStyleColl->findFrameStyle("Plain");
+        if(s) // delete the standard style.
+            m_frameStyleColl->removeFrameStyleTemplate(s);
+    }
+    for (unsigned int item = 0; item < listStyles.count(); item++) {
+        QDomElement styleElem = listStyles.item( item ).toElement();
+
+        KWFrameStyle *sty = new KWFrameStyle( styleElem );
+        m_frameStyleColl->addFrameStyleTemplate( sty );
+    }
+}
+
+void KWDocument::loadTableStyleTemplates( QDomElement stylesElem )
+{
+    QDomNodeList listStyles = stylesElem.elementsByTagName( "TABLESTYLE" );
+    if( listStyles.count() > 0) { // we are going to import at least one style.
+        KWTableStyle *s = m_tableStyleColl->findTableStyle("Plain");
+        if(s) // delete the standard style.
+            m_tableStyleColl->removeTableStyleTemplate(s);
+    }
+    for (unsigned int item = 0; item < listStyles.count(); item++) {
+        QDomElement styleElem = listStyles.item( item ).toElement();
+
+        KWTableStyle *sty = new KWTableStyle( styleElem, this );
+        m_tableStyleColl->addTableStyleTemplate( sty );
+    }
+}
+
+void KWDocument::loadDefaultTableStyleTemplates()
+{
+    KURL fsfile;
+
+    if ( ! QFile::exists(locate("appdata", "tablestyles.xml")) )
+    {
+        if (!m_tableStyleColl->findTableStyle("Plain")) {
+            m_tableStyleColl->addTableStyleTemplate( new KWTableStyle( "Plain", m_styleColl->styleAt(0), m_frameStyleColl->frameStyleAt(0) ) );
+        }
+        return;
+    }
+
+    fsfile.setPath( locate("appdata", "tablestyles.xml") );
+
+    // Open file and parse it
+    QFile in( fsfile.path() );
+    if ( !in.open( IO_ReadOnly ) )
+    {
+        //i18n( "Couldn't open the file for reading (check read permissions)" );
+        return;
+    }
+    in.at(0);
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+    QDomDocument doc;
+    if ( doc.setContent( &in , &errorMsg, &errorLine, &errorColumn ) ) {
+    }
+    else
+    {
+        kdError (30003) << "Parsing Error! Aborting! (in KWDocument::loadDefaultTableStyleTemplates())" << endl
+                        << "  Line: " << errorLine << " Column: " << errorColumn << endl
+                        << "  Message: " << errorMsg << endl;
+    }
+    in.close();
+
+    // Start adding tablestyles
+    QDomElement stylesElem = doc.documentElement();
+
+    QDomNodeList listStyles = stylesElem.elementsByTagName( "TABLESTYLE" );
+    if( listStyles.count() > 0) { // we are going to import at least one style.
+        KWTableStyle *s = m_tableStyleColl->findTableStyle("Plain");
+        if(s) // delete the standard style.
+            m_tableStyleColl->removeTableStyleTemplate(s);
+    }
+    for (unsigned int item = 0; item < listStyles.count(); item++) {
+        QDomElement styleElem = listStyles.item( item ).toElement();
+
+        KWTableStyle *sty = new KWTableStyle( styleElem, this );
+        m_tableStyleColl->addTableStyleTemplate( sty );
+    }
 }
 
 void KWDocument::progressItemLoaded()
@@ -1821,6 +1998,18 @@ QDomDocument KWDocument::saveXML()
     for ( KWStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
         saveStyle( p, styles );
 
+    QDomElement frameStyles = doc.createElement( "FRAMESTYLES" );
+    kwdoc.appendChild( frameStyles );
+    QPtrList<KWFrameStyle> m_frameStyleList(m_frameStyleColl->frameStyleList());
+    for ( KWFrameStyle * p = m_frameStyleList.first(); p != 0L; p = m_frameStyleList.next() )
+        saveFrameStyle( p, frameStyles );
+
+    QDomElement tableStyles = doc.createElement( "TABLESTYLES" );
+    kwdoc.appendChild( tableStyles );
+    QPtrList<KWTableStyle> m_tableStyleList(m_tableStyleColl->tableStyleList());
+    for ( KWTableStyle * p = m_tableStyleList.first(); p != 0L; p = m_tableStyleList.next() )
+        saveTableStyle( p, tableStyles );
+        
     // Save the PIXMAPS list
     QDomElement pixmaps = m_imageCollection.saveXML( KoPictureCollection::CollectionImage, doc, saveImages );
     kwdoc.appendChild( pixmaps );
@@ -1895,6 +2084,24 @@ void KWDocument::saveStyle( KWStyle *sty, QDomElement parentElem )
 
     QDomElement formatElem = KWTextParag::saveFormat( doc, &sty->format(), 0L, 0, 0 );
     styleElem.appendChild( formatElem );
+}
+
+void KWDocument::saveFrameStyle( KWFrameStyle *sty, QDomElement parentElem )
+{
+    QDomDocument doc = parentElem.ownerDocument();
+    QDomElement frameStyleElem = doc.createElement( "FRAMESTYLE" );
+    parentElem.appendChild( frameStyleElem );
+
+    sty->saveFrameStyle( frameStyleElem );
+}
+
+void KWDocument::saveTableStyle( KWTableStyle *sty, QDomElement parentElem )
+{
+    QDomDocument doc = parentElem.ownerDocument();
+    QDomElement tableStyleElem = doc.createElement( "TABLESTYLE" );
+    parentElem.appendChild( tableStyleElem );
+
+    sty->saveTableStyle( tableStyleElem );
 }
 
 bool KWDocument::completeSaving( KoStore *_store )
@@ -2151,6 +2358,18 @@ void KWDocument::applyStyleChange( KWStyle * changedStyle, int paragLayoutChange
     for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
         frm->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
     }
+}
+
+void KWDocument::updateAllFrameStyleLists()
+{
+    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+        viewPtr->updateFrameStyleList();
+}
+
+void KWDocument::updateAllTableStyleLists()
+{
+    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+        viewPtr->updateTableStyleList();
 }
 
 void KWDocument::repaintAllViews( bool erase )

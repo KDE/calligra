@@ -31,6 +31,8 @@ class KWFrameSet;
 class KWTableFrameSet;
 class KWPartFrameSet;
 class KoStyle;
+class KWFrameStyle;
+class KWTableStyle;
 #define KWStyle KoStyle
 class KWFrame;
 class KWView;
@@ -49,7 +51,10 @@ class KWVariableCollection;
 class KoTextObject;
 class KWBgSpellCheck;
 class KoStyleCollection;
+class KWFrameStyleCollection;
+class KWTableStyleCollection;
 class KWFootNoteVariable;
+class KWTableStyleCollection;
 
 class DCOPObject;
 
@@ -273,6 +278,8 @@ public:
 
 
     KoStyleCollection * styleCollection()const  { return m_styleColl;}
+    KWFrameStyleCollection * frameStyleCollection()const  { return m_frameStyleColl;}
+    KWTableStyleCollection * tableStyleCollection()const  { return m_tableStyleColl;}
 
     QFont defaultFont() const { return m_defaultFont; }
 
@@ -330,6 +337,8 @@ public:
     // If both are -1, it means the style has been deleted.
     void applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged );
     void updateAllStyleLists();
+    void updateAllFrameStyleLists();
+    void updateAllTableStyleLists();
 
     bool isHeaderVisible() const { return m_headerVisible; }
     bool isFooterVisible() const { return m_footerVisible; }
@@ -659,6 +668,13 @@ protected:
     void loadFrameSets( QDomElement framesets );
     void loadStyleTemplates( QDomElement styles );
     void saveStyle( KWStyle *sty, QDomElement parentElem );
+    void saveFrameStyle( KWFrameStyle *sty, QDomElement parentElem );
+    void saveTableStyle( KWTableStyle *sty, QDomElement parentElem );
+
+    void loadFrameStyleTemplates( QDomElement styles );
+    void loadDefaultFrameStyleTemplates();
+    void loadTableStyleTemplates( QDomElement styles );
+    void loadDefaultTableStyleTemplates();
 
 private:
     //private helper functions for frameUnderMouse
@@ -763,6 +779,9 @@ private:
     KWBgSpellCheck *m_bgSpellCheck;
     KSpellConfig *m_pKSpellConfig;
     KoStyleCollection *m_styleColl;
+    KWFrameStyleCollection *m_frameStyleColl;
+    KWTableStyleCollection *m_tableStyleColl;
+
 
     SeparatorLinePos m_footNoteSeparatorLinePos;
     //it's a percentage of page.

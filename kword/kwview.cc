@@ -65,8 +65,12 @@
 #include "mailmerge.h"
 #include "mailmerge_actions.h"
 #include "splitcellsdia.h"
-#include "kwstylemanager.h"
 #include "tabledia.h"
+#include "kwstylemanager.h"
+#include "kwframestylemanager.h"
+#include "kwframestyle.h"
+#include "kwtablestylemanager.h"
+#include "kwtablestyle.h"
 #include "kwvariable.h"
 #include "KWordViewIface.h"
 #include "configfootnotedia.h"
@@ -613,6 +617,14 @@ void KWView::setupActions()
     actionFormatPage->setToolTip( i18n( "Change properties of entire page." ) );
     actionFormatPage->setWhatsThis( i18n( "Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings." ) );
 
+
+    actionFormatFrameStylist = new KAction( i18n( "&Framestylist..." ), ALT + CTRL + Key_R,
+                                this, SLOT( extraFrameStylist() ),
+                                actionCollection(), "frame_stylist" );
+    actionFormatFrameStylist->setToolTip( i18n( "Change attributes of framestyles." ) );
+    actionFormatFrameStylist->setWhatsThis( i18n( "Change background and borders of framestyles.<p>Multiple framestyles can be changed using the dialog box." ) );
+
+
     actionFormatStylist = new KAction( i18n( "&Stylist..." ), ALT + CTRL + Key_S,
                         this, SLOT( extraStylist() ),
                         actionCollection(), "format_stylist" );
@@ -737,6 +749,13 @@ void KWView::setupActions()
 
     // ---------------------------- frame toolbar actions
 
+    actionFrameStyleMenu = new KActionMenu( i18n( "Fra&mestyle" ), 0,
+                                           actionCollection(), "frame_stylemenu" );
+    actionFrameStyle = new KSelectAction( i18n( "Framest&yle" ), 0,
+                                           actionCollection(), "frame_style" );
+    connect( actionFrameStyle, SIGNAL( activated( int ) ),
+             this, SLOT( frameStyleSelected( int ) ) );
+    updateFrameStyleList();
     actionBorderOutline = new KToggleAction( i18n( "Border Outline" ), "borderoutline",
                             0, this, SLOT( borderOutline() ), actionCollection(), "border_outline" );
     actionBorderLeft = new KToggleAction( i18n( "Border Left" ), "borderleft",
@@ -845,6 +864,20 @@ void KWView::setupActions()
     actionTableDelete->setWhatsThis( i18n( "Deletes all cells and the content within the cells of the currently selected table." ) );
 
 
+    actionTableStylist = new KAction( i18n( "T&ablestylist..." ), 0,
+                        this, SLOT( tableStylist() ),
+                        actionCollection(), "table_stylist" );
+    actionTableStylist->setToolTip( i18n( "Change attributes of tablestyles." ) );
+    actionTableStylist->setWhatsThis( i18n( "Change textstyle and framestyle of the tablestyles.<p>Multiple tablestyles can be changed using the dialog box." ) );
+
+    actionTableStyleMenu = new KActionMenu( i18n( "Table&style" ), 0,
+                                           actionCollection(), "table_stylemenu" );
+    actionTableStyle = new KSelectAction( i18n( "Table&style" ), 0,
+                                           actionCollection(), "table_style" );
+    connect( actionTableStyle, SIGNAL( activated( int ) ),
+             this, SLOT( tableStyleSelected( int ) ) );
+    updateTableStyleList();
+    
     // ---------------------- Tools menu
 
 
@@ -1754,6 +1787,100 @@ void KWView::updateStyleList()
                                                 actionCollection(), QString("style_%1").arg(i).latin1() );
         act->setExclusiveGroup( "styleList" );
         actionFormatStyleMenu->insert( act );
+    }
+}
+
+void KWView::updateFrameStyleList()
+{
+    QString currentStyle = actionFrameStyle->currentText();
+    // Generate list of styles
+    QStringList lst;
+    QPtrListIterator<KWFrameStyle> styleIt( m_doc->frameStyleCollection()->frameStyleList() );
+    int pos = -1;
+    for ( int i = 0; styleIt.current(); ++styleIt, ++i ) {
+        QString name = styleIt.current()->translatedName();
+        lst << name;
+        if ( pos == -1 && name == currentStyle )
+            pos = i;
+    }
+    // Fill the combo - using a KSelectAction
+    actionFrameStyle->setItems( lst );
+    if ( pos > -1 )
+        actionFrameStyle->setCurrentItem( pos );
+
+    // Fill the menu - using a KActionMenu, so that it's possible to bind keys
+    // to individual actions
+    QStringList lstWithAccels;
+    // Generate unique accelerators for the menu items
+#if KDE_VERSION >= 305  // but only if the '&' will be removed from the combobox
+    KAccelGen::generate( lst, lstWithAccels );
+#else
+    lstWithAccels = lst;
+#endif
+    // Delete previous style actions
+    for ( uint i = 0; ; ++i )
+    {
+        KAction* act = actionCollection()->action( QString("framestyle_%1").arg(i).latin1() );
+        if ( act )
+            actionFrameStyleMenu->remove( act );
+        else
+            break; // no gaps. As soon as style_N doesn't exist, we're done
+    }
+    uint i = 0;
+    for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
+    {
+        KToggleAction* act = new KToggleAction( (*it),
+                                                0, this, SLOT( slotFrameStyleSelected() ),
+                                                actionCollection(), QString("framestyle_%1").arg(i).latin1() );
+        act->setExclusiveGroup( "frameStyleList" );
+        actionFrameStyleMenu->insert( act );
+    }
+}
+
+void KWView::updateTableStyleList()
+{
+    QString currentStyle = actionTableStyle->currentText();
+    // Generate list of styles
+    QStringList lst;
+    QPtrListIterator<KWTableStyle> styleIt( m_doc->tableStyleCollection()->tableStyleList() );
+    int pos = -1;
+    for ( int i = 0; styleIt.current(); ++styleIt, ++i ) {
+        QString name = styleIt.current()->translatedName();
+        lst << name;
+        if ( pos == -1 && name == currentStyle )
+            pos = i;
+    }
+    // Fill the combo - using a KSelectAction
+    actionTableStyle->setItems( lst );
+    if ( pos > -1 )
+        actionTableStyle->setCurrentItem( pos );
+
+    // Fill the menu - using a KActionMenu, so that it's possible to bind keys
+    // to individual actions
+    QStringList lstWithAccels;
+    // Generate unique accelerators for the menu items
+#if KDE_VERSION >= 305  // but only if the '&' will be removed from the combobox
+    KAccelGen::generate( lst, lstWithAccels );
+#else
+    lstWithAccels = lst;
+#endif
+    // Delete previous style actions
+    for ( uint i = 0; ; ++i )
+    {
+        KAction* act = actionCollection()->action( QString("tablestyle_%1").arg(i).latin1() );
+        if ( act )
+            actionTableStyleMenu->remove( act );
+        else
+            break; // no gaps. As soon as style_N doesn't exist, we're done
+    }
+    uint i = 0;
+    for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
+    {
+        KToggleAction* act = new KToggleAction( (*it),
+                                                0, this, SLOT( slotTableStyleSelected() ),
+                                                actionCollection(), QString("tablestyle_%1").arg(i).latin1() );
+        act->setExclusiveGroup( "tableStyleList" );
+        actionTableStyleMenu->insert( act );
     }
 }
 
@@ -3153,6 +3280,18 @@ void KWView::extraAutoFormat()
     m_doc->startBackgroundSpellCheck(); // will do so if enabled
 }
 
+void KWView::extraFrameStylist()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->hideCursor();
+    KWFrameStyleManager * frameStyleManager = new KWFrameStyleManager( this, m_doc, m_doc->frameStyleCollection()->frameStyleList() );
+    frameStyleManager->exec();
+    delete frameStyleManager;
+    if ( edit )
+        edit->showCursor();
+}
+
 void KWView::extraStylist()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -3461,6 +3600,18 @@ void KWView::tableDelete()
     m_gui->canvasWidget()->emitFrameSelectedChanged();
 }
 
+void KWView::tableStylist()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->hideCursor();
+    KWTableStyleManager * tableStyleManager = new KWTableStyleManager( this, m_doc, m_doc->tableStyleCollection()->tableStyleList() );
+    tableStyleManager->exec();
+    delete tableStyleManager;
+    if ( edit )
+        edit->showCursor();
+}
+
 void KWView::tableProtectCells()
 {
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
@@ -3518,6 +3669,137 @@ void KWView::textStyleSelected( int index )
         m_doc->addCommand( globalCmd );
     }
     m_gui->canvasWidget()->setFocus(); // the combo keeps focus...*/
+}
+
+// Slot is called when selecting a framestyle in the Frames / Framestyle menu
+void KWView::slotFrameStyleSelected()
+{
+    QString actionName = QString::fromLatin1(sender()->name());
+    if ( actionName.startsWith( "framestyle_" ) )
+    {
+        QString styleStr = actionName.mid(11);
+        kdDebug() << "KWView::slotFrameStyleSelected " << styleStr << endl;
+        frameStyleSelected( styleStr.toInt() );
+    }
+}
+
+// Called by the above, and when selecting a style in the framestyle combobox
+void KWView::frameStyleSelected( int index )
+{
+    if ( m_gui->canvasWidget()->currentFrameSetEdit() )
+    {
+        KWFrame * single = m_gui->canvasWidget()->currentFrameSetEdit()->currentFrame();
+        if ( single ) {
+            
+            KCommand *cmd = new KWFrameStyleCommand( i18n("Apply framestyle to frame"), single, m_doc->frameStyleCollection()->frameStyleAt( index ) );
+            if (cmd) {
+                m_doc->addCommand( cmd );
+                cmd->execute();
+            }
+        }
+    }
+    else
+    { // it might be that a frame (or several frames) are selected
+        QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
+        if (selectedFrames.count() <= 0)
+            return; // nope, no frames are selected.
+        // yes, indeed frames are selected.
+        QPtrListIterator<KWFrame> it( selectedFrames );
+        
+        KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply framestyle to frame") : i18n("Apply framestyle to frames"));
+        
+        for ( ; it.current() ; ++it )
+        {
+            KWFrame *curFrame = it.current();
+            KCommand *cmd = new KWFrameStyleCommand( i18n("Apply framestyle"), curFrame, m_doc->frameStyleCollection()->frameStyleAt( index ) );
+            if (cmd)
+                globalCmd->addCommand( cmd );
+        }
+        m_doc->addCommand( globalCmd );
+        globalCmd->execute();
+    }
+
+    m_gui->canvasWidget()->repaintAll();
+    m_gui->canvasWidget()->setFocus(); // the combo keeps focus...*/
+
+    // Adjust GUI
+    QPtrListIterator<KWFrameStyle> styleIt( m_doc->frameStyleCollection()->frameStyleList() );
+    for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
+    {
+        if ( styleIt.current()->name() == m_doc->frameStyleCollection()->frameStyleAt( index )->name() ) {
+            actionFrameStyle->setCurrentItem( pos );
+            KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( QString("framestyle_%1").arg(pos).latin1() ));
+            if ( act )
+                act->setChecked( true );
+            return;
+        }
+    }
+}
+
+
+// Called when selecting a tablestyle in the Table / Tablestyle menu
+void KWView::slotTableStyleSelected()
+{
+    QString actionName = QString::fromLatin1(sender()->name());
+    if ( actionName.startsWith( "tablestyle_" ) )
+    {
+        QString styleStr = actionName.mid(11);
+        kdDebug() << "KWView::slotTableStyleSelected " << styleStr << endl;
+        tableStyleSelected( styleStr.toInt() );
+    }
+}
+
+// Called by the above, and when selecting a style in the framestyle combobox
+void KWView::tableStyleSelected( int index )
+{
+    if ( m_gui->canvasWidget()->currentFrameSetEdit() )
+    {
+        KWFrame * single = m_gui->canvasWidget()->currentFrameSetEdit()->currentFrame();
+        if ( (single) && ( single->frameSet()->type() == FT_TEXT ) )
+        {
+            KCommand *cmd =  new KWTableStyleCommand( i18n("Apply tablestyle to frame"), single, m_doc->tableStyleCollection()->tableStyleAt( index ) );
+            if (cmd) {
+                m_doc->addCommand( cmd );
+                cmd->execute();
+            }
+        }
+    }
+    else
+    {
+        QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
+        if (selectedFrames.count() <= 0)
+            return; // nope, no frames are selected.
+        
+        QPtrListIterator<KWFrame> it( selectedFrames );
+        
+        KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply tablestyle to frame") : i18n("Apply tablestyle to frames"));
+        
+        for ( ; ( ( it.current() ) && ( it.current()->frameSet()->type() == FT_TEXT ) ); ++it )
+        {
+            KWFrame *curFrame = it.current();
+            KCommand *cmd = new KWTableStyleCommand( i18n("Apply tablestyle to frame"), curFrame, m_doc->tableStyleCollection()->tableStyleAt( index ) );
+            if (cmd)
+                globalCmd->addCommand( cmd );
+        }
+        m_doc->addCommand( globalCmd );
+        globalCmd->execute();
+    }
+
+    m_gui->canvasWidget()->repaintAll();
+    m_gui->canvasWidget()->setFocus(); // the combo keeps focus...*/
+
+    // Adjust GUI
+    QPtrListIterator<KWTableStyle> styleIt( m_doc->tableStyleCollection()->tableStyleList() );
+    for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
+    {
+        if ( styleIt.current()->name() == m_doc->tableStyleCollection()->tableStyleAt( index )->name() ) {
+            actionTableStyle->setCurrentItem( pos );
+            KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( QString("tablestyle_%1").arg(pos).latin1() ));
+            if ( act )
+                act->setChecked( true );
+            return;
+        }
+    }
 }
 
 void KWView::increaseFontSize()
