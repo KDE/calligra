@@ -31,6 +31,8 @@ public:
 	{
 		stroke.setType( VStroke::none ); // default is no stroke
 		stroke.setLineWidth( 1.0 );
+		stroke.setLineCap( VStroke::capButt );
+		stroke.setLineJoin( VStroke::joinMiter );
 		fill.setColor( VColor( Qt::black ) );
 		fillRule = winding;
 	}

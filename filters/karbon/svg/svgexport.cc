@@ -176,7 +176,7 @@ SvgExport::visitVComposite( VComposite& composite )
 
 	QString d;
 	composite.saveSvgPath( d );
-	*m_body << " d=\"" << d << "\" " << endl;
+	*m_body << " d=\"" << d << "\" ";
 
 	if( composite.fillRule() != m_gc.current()->fillRule )
 	{
@@ -300,12 +300,15 @@ SvgExport::getStroke( const VStroke& stroke )
 	if( stroke.lineWidth() != m_gc.current()->stroke.lineWidth() )
 		*m_body << " stroke-width=\"" << stroke.lineWidth() << "\"";
 
-	if( stroke.lineCap() == VStroke::capButt )
-		*m_body << " stroke-linecap=\"butt\"";
-	else if( stroke.lineCap() == VStroke::capRound )
-		*m_body << " stroke-linecap=\"round\"";
-	else if( stroke.lineCap() == VStroke::capSquare )
+	if( stroke.lineCap() != m_gc.current()->stroke.lineCap() )
+	{
+		if( stroke.lineCap() == VStroke::capButt )
+			*m_body << " stroke-linecap=\"butt\"";
+		else if( stroke.lineCap() == VStroke::capRound )
+			*m_body << " stroke-linecap=\"round\"";
+		else if( stroke.lineCap() == VStroke::capSquare )
 			*m_body << " stroke-linecap=\"square\"";
+	}
 
 	if( stroke.lineJoin() != m_gc.current()->stroke.lineJoin() )
 	{
