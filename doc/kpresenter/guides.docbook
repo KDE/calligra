@@ -1,0 +1,22 @@
+<chapter id="guides">
+<title>Detailed Guides</title>
+
+<para>
+
+This chapter should describe how to perform the most common tasks in
+&kpresenter;.
+</para>
+
+<sect1 id="html-wizard">
+<title>Using the HTML Wizard</title>
+<para></para>
+
+</sect1>
+
+<sect1 id="creating-templates">
+<title>Creating templates</title>
+
+<para></para>
+</sect1>
+
+</chapter>

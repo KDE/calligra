@@ -2,14 +2,18 @@
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
   <!ENTITY kappname "&kpresenter;">
   <!ENTITY % addindex "IGNORE">
+  <!ENTITY tutorial SYSTEM "tutorial.docbook">
+  <!ENTITY screen SYSTEM "screen.docbook">
+  <!ENTITY guides SYSTEM "guides.docbook">
+  <!ENTITY menus SYSTEM "menus.docbook">
+  <!ENTITY options SYSTEM "options.docbook">
+  <!ENTITY faq SYSTEM "faq.docbook">
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
-  
-  
 ]>
-
+        
 <book lang="&language;">
 <bookinfo>
-<title>The KPresenter User's Manual</title>
+<title>The &kpresenter; User's Manual</title>
 <authorgroup>
 <author>
 <firstname>Krishna</firstname>
@@ -18,16 +22,18 @@
 <address><email>tateneni@pluto.njcc.com</email></address>
 </affiliation>
 </author>
+
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
+     
 </authorgroup>
 
 <date>2000-01-31</date>
-<releaseinfo>0.00.01</releaseinfo>
+<releaseinfo>1.10.00</releaseinfo>
 
 <abstract>
 <para>
-&kpresenter; is the presentations program in the KOffice
-suite of productivity applications.
+&kpresenter; is the presentations program in the &koffice; suite of
+productivity applications.
 </para>
 </abstract>
 
@@ -41,1535 +47,225 @@ suite of productivity applications.
 
 </bookinfo>
 
-<!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
-
 <chapter id="todo">
 <title>To Be Done In This Manual</title>
-<para>
-There is a <emphasis>lot</emphasis> to be done in the
-<application>KPresenter</application> manual. The below
-list is not necessarily complete, and does not follow any
-particular order.
-</para>
-<itemizedlist>
-<listitem><para>
-Flesh out the introduction by describing presentations software
-and the features of KPresenter in particular.
-</para></listitem>
-<listitem><para>
-Add a "What should I read?" section to the introduction.
-</para></listitem>
-<listitem><para>
-Expand the tutorial. Introduce more features to the new user.
-</para></listitem>
-<listitem><para>
-Write the "KPresenter Screen" chapter.
-</para></listitem>
-<listitem><para>
-Create an outline for the "Detailed Guides" chapter(s).
-</para></listitem>
-<listitem><para>
-Come up with a set of questions for the "Q and A" chapter.
-</para></listitem>
-<listitem><para>
-Write the "KPresenter Options" chapter.
-</para></listitem>
-<listitem><para>
-Write the tool bars/menu items chapter.
-</para></listitem>
-</itemizedlist>
-</chapter>
 
-<!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+<para>
+There is a <emphasis>lot</emphasis> to be done in the &kpresenter;
+manual. The below list is not necessarily complete, and does not follow
+any particular order.
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+Flesh out the introduction by describing presentations software
+and the features of &kpresenter; in particular.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Add a <quote>What should I read?</quote> section to the introduction.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Expand the tutorial. Introduce more features to the new user.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Write the <link linkend="screen-description">&kpresenter; Screen</link> chapter.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Create an outline for the <link linkend="guides">Detailed Guides</link>
+chapter(s).
+</para>
+</listitem>
+
+<listitem>
+<para>
+Come up with a set of questions for the <link linkend="q-and-a">Q and
+A</link> chapter. 
+</para>
+</listitem>
+
+<listitem>
+<para>
+Write the <link linkend="options">&kpresenter; Options</link> chapter.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Write the tool bars/menu items chapter.
+</para>
+</listitem>
+</itemizedlist>
+
+</chapter>
 
 <chapter id="introduction">
 <title>Introduction</title>
+
 <para>
-<application>KPresenter</application> is the presentations
-program in the KOffice productivity suite. Using
-<application>KPresenter</application>, you can prepare a set of
-slides for use in an on-screen slideshow or for printing. Your
-slides can include text and graphics in a variety of formats, and
-of course, you can embed all sorts of objects using KParts.
+&kpresenter; is the presentations program in the &koffice; productivity
+suite. Using &kpresenter;, you can prepare a set of slides for use in an
+on-screen slideshow or for printing. Your slides can include text and
+graphics in a variety of formats, and of course, you can embed all sorts
+of objects using KParts.
 </para>
+
 <para>
-The KOffice productivity suite consists of a number of
-applications which are designed to work together. Overview
-documentation for KOffice is available, as well as manuals for
-each component of the suite. The components of KOffice are:
+The &koffice; productivity suite consists of a number of applications
+which are designed to work together. Overview documentation for
+&koffice; is available, as well as manuals for each component of the
+suite. The components of &koffice; are:
 </para>
+
 <itemizedlist>
+<listitem>
+<para>
+&kword; - a frames based wordprocessor.
+</para>
+</listitem>
+
 <listitem><para>
-KWord - a frames based wordprocessor.
-</para></listitem>
-<listitem><para>
-KSpread - a spreadsheet application.
-</para></listitem>
-<listitem><para>
-KPresenter - a presentations application.
-</para></listitem>
-<listitem><para>
-KIllustrator - a vector drawing application.
-</para></listitem>
-<listitem><para>
-KImageShop - a bitmap drawing application.
-</para></listitem>
+&kspread; - a spreadsheet application.
+</para>
+</listitem>
+
+<listitem>
+<para>
+&kpresenter; - a presentations application.
+</para>
+</listitem>
+
+<listitem>
+<para>
+&killustrator; - a vector drawing application.
+</para>
+</listitem>
+
+<listitem>
+<para>
+&krayon; - a bitmap drawing application.
+</para>
+</listitem>
+<!-- 
 <listitem><para>
 Katabase - a database application.
 </para></listitem>
-<listitem><para>
-KFormula - an editor for mathematical formulae.
-</para></listitem>
-<listitem><para>
-KChart - an application to draw charts and diagrams.
-</para></listitem>
+-->
+<listitem>
+<para>
+&kformula; - an editor for mathematical formulae.
+</para>
+</listitem>
+
+<listitem>
+<para>
+&kchart; - an application to draw charts and diagrams.
+</para>
+</listitem>
+
+<!-- 
 <listitem><para>
 KImage - a simple image viewing application.
 </para></listitem>
+-->
 </itemizedlist>
-<para>
-In addition to the above components, KLyX will become part of
-KOffice in the future. KLyX is a wordprocessor for scientific and
-mathematical documents based on TeX.
-</para>
-<para>
-KOffice is a free (or open-source) software project which is
-released under the terms of the GNU General Public License.
-</para>
-</chapter>
-
-<!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
-
-<chapter id="tutorial">
-<title>A Step-By-Step Tutorial</title>
 
 <para>
-In this chapter, <application>KPresenter</application> is
-introduced using a simple tutorial. We shall walk through the
-most basic steps that are involved in creating a presentation,
-and adding some basic effects.
+In addition to the above components, <application>KLyX</application>
+will become part of &koffice; in the
+future. <application>KLyX</application> is a wordprocessor for
+scientific and mathematical documents based on TeX.
 </para>
 
-<sect1 id="startnew">
-<title>Start a new document</title>
 <para>
-When you start <application>KPresenter</application>, the Choose
-Template dialog appears.
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut01.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-The default option is "Start with an empty document". Select the
-template labeled "Title" (highlighted in red) by clicking on it.
-This also selects "Create new document from a template".
-</para>
-<para>
-Now click OK. This brings up the slide editor window, where you
-can view and edit the slides (and objects contained in them) in
-your document. At the moment, we just have one slide, with one
-object on it, which is a text box.
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut02.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-Double-click the text box. The cursor changes to a vertical bar
-to show that you can now type some text.
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut03.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-Go ahead, type some text!
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut04.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-Click away from the text to de-select the text box when you are
-done typing.
-</para>
-</sect1>
-
-<sect1 id="insertpage">
-<title>Add a new page</title>
-<para>
-Let's now add a new slide to our document. To do so, click the
-"Insert" menu item, and then click on "Page".
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut05.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-This brings up the Insert Page dialog.
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut06.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-Click OK to accept the defaults, which will add a new page after
-page 1.
-</para>
-<para>
-The Choose Template dialog comes up so that we can decide what
-the new slide should look like. This time, click on the "One"
-template (highlighted in red.)
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut07.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-The new slide now appears at the bottom of the editing window. To
-view the slide, you can either click the right arrow button on
-the toolbar on top, or drag the vertical scrollbar down (these
-are highlighted in red.)
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut08.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-The newly inserted page has two text boxes. There is one for a title,
-and another to contain a bulleted list of items.
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut09.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-Double-click and type a title. Then double-click on the second
-text box. Note that a bullet automatically appears when you start
-typing. Type some text and end the paragraph by pressing the enter
-or return key. As you type new paragraphs, bullets automatically
-appear in front of them.
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut10.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-You can de-select the text box by clicking away from it.
-</para>
-</sect1>
-
-<sect1 id="insertpic">
-<title>Insert a picture</title>
-<para>
-Let's go back to the first page now. You can use the vertical
-scrollbar, or the left arrow button on the top toolbar.
-</para>
-<para>
-In this section, we'll liven our presentation up a bit by adding
-a nice logo to the title page. To do so, the first step is to
-click on the "Insert" menu item, and then on "Picture".
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut11.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-This brings up a file selection dialog. To learn about this or
-other standard KDE dialog boxes in detail, please consult the KDE
-documentation. You can browse by clicking on folder icons or by
-using the browser-style buttons on the toolbar (highlighted in
-red.) Clicking the up-arrow takes you up one directory level.
-</para>
-<para>
-Find the file named <filename>koffice-logo.png</filename>, which
-may be in a different directory than the one shown in the
-screenshot below. You can also choose any other graphic file
-if you like! Select the file, and click "Open".
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut12.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-The logo graphic is now visible in the top left corner of the
-editing window. There are selection handles (little black squares)
-visible around the border of the graphic.
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut13.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-Place the mouse cursor anywhere in the middle of the logo, and
-drag it to the middle of the title page.
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut14.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-That's it. Now you have a picture on the title page!
-</para>
-</sect1>
-
-<sect1 id="addshadow">
-<title>Add a shadow to the title text</title>
-<para>
-Let's continue enhancing our title page by adding a shadow
-behind the title. Right-click anywhere on the title text. This
-achieves two things: the text box containing the title is
-selected, and a menu pops-up.
-</para>
-<para>
-Select the "Shadow" option in the pop-up menu.
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut15.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-The Shadow dialog pops up. The distance between the shadow and
-the text is currently 0 so the shadow cannot be seen (this part
-of the dialog box is highlighted in red.)
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut16.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-Increase the distance value to 3. The effect of changing the
-distance can be seen in the preview window. Now click OK.
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut17.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-Now the title has a shadow!
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut18.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-</sect1>
-
-<sect1 id="textcolor">
-<title>Change the color of the title text</title>
-<para>
-Let's finish by changing the color of the title text from black
-to blue. To do so, select the title text by double-clicking the
-text box.
-</para>
-<para>
-Change the color to blue by clicking on the dark blue
-icon in the color palette on the right side of the editing
-window (this icon is highlighted in red.)
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut19.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-Changing the color of the selected text to blue changes its
-appearance. Since the complementary color for blue is yellow, the
-highlighted text appears in yellow.
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut20.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-Now click away from the text to de-select it.
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut21.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-Now that there are two slides, why not try a slide show! To start
-the slide show, press the play button (the green arrow) on the top
-toolbar. The first slide should appear on your screen.
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut22.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-To advance from the first slide to the next, just click anywhere
-on the screen, or use the PageDown key.
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut23.png" format="PNG" align="center"/></imageobject></mediaobject>
-</screenshot>
-<para>
-To exit the slide show, right click, and then select the
-"Exit presentation" option from the pop-up menu.
-</para>
-</sect1>
-
-</chapter>
-
-<!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
-
-<chapter id="screendesc">
-<title>The KPresenter Screen</title>
-<para>
-This chapter should describe the main KPresenter screen in
-detail. Keep in mind that the users who choose to skip the
-tutorial are likely to jump right in here.
+&koffice; is a free (or open-source) software project which is released
+under the terms of the <acronym>GNU</acronym> General Public License.
 </para>
 </chapter>
 
-<!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+&tutorial;
 
-<chapter id="guides">
-<title>Detailed Guides</title>
-<para>
-This chapter should describe how to perform the most common tasks
-in KPresenter.
-</para>
-</chapter>
+&screen;
 
-<!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+&guides;
 
-<chapter id="menuitems">
-<title>The Menu and Toolbar Items</title>
+&menus;
 
-<para>
-KPresenter presents different types of interfaces for you to
-interact with the program. Perhaps the most familiar type of
-interface is the menu which appears on the top of the KPresenter
-window.
-</para>
-<mediaobject><imageobject><imagedata fileref="pics/barmenus.png" format="PNG" align="center"/></imageobject></mediaobject>
-<para>
-Clicking on the menu items gives you a list of commands from
-which you can choose the one you want. Many of the commands can
-also be accessed directly by holding down <keycap>Ctrl</keycap>
-or <keycap>Alt</keycap> and pressing another key on your keyboard.
-In the next section, each of the menu commands is described in
-brief.
-</para>
-<para>
-In addition to the menus, KPresenter also has a set of toolbars.
-Each toolbar consists of a collection of mini-icons. A toolbar icon
-often presents a convenient shortcut to a command that is found in
-one of the menus.
-</para>
-<para>
-Each toolbar has a thin stippled area, which acts as a handle for
-that toolbar. The stippled area is shown highlighted in red
-in the screenshot below:
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/barstyle1.png" format="PNG" align="left"/></imageobject></mediaobject>
-</screenshot>
-<para>
-Clicking on the toolbar handle results in that toolbar being
-"flattened" so that you have some extra space for viewing the
-main editing window:
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/barstyle2.png" format="PNG" align="left"/></imageobject></mediaobject>
-</screenshot>
-<para>
-Clicking on the toolbar handle a second time brings the toolbar
-back. You can also move the toolbar around by dragging the
-handle. Toolbars can be "docked" or attached to any side of the
-KPresenter window. If you like, you can also have the toolbar
-"float" in its own window, separated from the main KPresenter
-window as shown in the screenshot below:
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/barstyle3.png" format="PNG" align="left"/></imageobject></mediaobject>
-</screenshot>
-<para>
-If you don't like dragging toolbars around, right-click on the
-handle and a menu pops up as shown in the screenshot below:
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/barstyle4.png" format="PNG" align="left"/></imageobject></mediaobject>
-</screenshot>
-<para>
-The first few items in the pop-up menu have to do with the placement
-of the toolbar. You can choose any of the four sides of the KPresenter
-window, or have the toolbar "float" in a separate window. Choosing
-"Flat" hides the toolbar. (If you right-click on the handle of a
-hidden toolbar, this item appears as "Unflat" instead.)
-</para>
-<para>
-Choosing the last item in the menu, "Mode", leads to an additional
-menu which lets you control the appearance of the items in toolbar.
-This additional cascading menu is shown in the screenshot below:
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/barstyle5.png" format="PNG" align="left"/></imageobject></mediaobject>
-</screenshot>
-<para>
-The default view of the toolbar is icons only. In this view, if
-you don't know what a particular icon means, you can hold the
-mouse over the icon, and after a second or so, a little hint pops
-up in a highlighted text box as shown in the screenshot below:
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/barstyle6.png" format="PNG" align="left"/></imageobject></mediaobject>
-</screenshot>
-<para>
-You can choose to display the toolbar items as text instead of
-icons, or even to combine both icons and text. If you want both
-text and icons, the cascading menu allows you to select whether
-the text appears beside the icons or below them. All four styles
-of displaying toolbar items are shown in the screenshot below:
-</para>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/barstyle7.png" format="PNG" align="left"/></imageobject></mediaobject>
-</screenshot>
+&options;
 
-
-<sect1 id="menus">
-<title>The KPresenter Menus</title>
-
-<sect2 id="filemenu">
-<title>File Menu</title>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menufile.png" format="PNG" align="left"/></imageobject></mediaobject>
-</screenshot>
-<variablelist>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>N</keycap>
-</keycombo></shortcut>
-<guimenu>File</guimenu>
-<guimenuitem>New</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>O</keycap>
-</keycombo></shortcut>
-<guimenu>File</guimenu>
-<guimenuitem>Open</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>S</keycap>
-</keycombo></shortcut>
-<guimenu>File</guimenu>
-<guimenuitem>Save</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>File</guimenu>
-<guimenuitem>Save As...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>P</keycap>
-</keycombo></shortcut>
-<guimenu>File</guimenu>
-<guimenuitem>Print...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>W</keycap>
-</keycombo></shortcut>
-<guimenu>File</guimenu>
-<guimenuitem>Close</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>Q</keycap>
-</keycombo></shortcut>
-<guimenu>File</guimenu>
-<guimenuitem>Quit</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-</variablelist>
-</sect2>
-
-<sect2 id="editmenu">
-<title>Edit Menu</title>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menuedit.png" format="PNG" align="left"/></imageobject></mediaobject>
-</screenshot>
-<variablelist>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Alt</keycap><keycap>Z</keycap>
-</keycombo></shortcut>
-<guimenu>Edit</guimenu>
-<guimenuitem>Undo</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Edit</guimenu>
-<guimenuitem>Redo</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>X</keycap>
-</keycombo></shortcut>
-<guimenu>Edit</guimenu>
-<guimenuitem>Cut</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>C</keycap>
-</keycombo></shortcut>
-<guimenu>Edit</guimenu>
-<guimenuitem>Copy</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>V</keycap>
-</keycombo></shortcut>
-<guimenu>Edit</guimenu>
-<guimenuitem>Paste</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>Del</keycap>
-</keycombo></shortcut>
-<guimenu>Edit</guimenu>
-<guimenuitem>Delete</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Alt</keycap><keycap>A</keycap>
-</keycombo></shortcut>
-<guimenu>Edit</guimenu>
-<guimenuitem>Select All</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Edit</guimenu>
-<guimenuitem>Copy Page To Clipboard</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Edit</guimenu>
-<guimenuitem>Delete Page...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>F</keycap>
-</keycombo></shortcut>
-<guimenu>Edit</guimenu>
-<guimenuitem>Find...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>R</keycap>
-</keycombo></shortcut>
-<guimenu>Edit</guimenu>
-<guimenuitem>Replace...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Edit</guimenu>
-<guimenuitem>Header/Footer...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-</variablelist>
-</sect2>
-
-<sect2 id="viewmenu">
-<title>View Menu</title>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menuview.png" format="PNG" align="left"/></imageobject></mediaobject>
-</screenshot>
-<variablelist>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>View</guimenu>
-<guimenuitem>New View...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-</variablelist>
-</sect2>
-
-<sect2 id="insertmenu">
-<title>Insert Menu</title>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menuinsert.png" format="PNG" align="left"/></imageobject></mediaobject>
-</screenshot>
-<variablelist>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>F2</keycap>
-</keycombo></shortcut>
-<guimenu>Insert</guimenu>
-<guimenuitem>Page...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>F3</keycap>
-</keycombo></shortcut>
-<guimenu>Insert</guimenu>
-<guimenuitem>Picture...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>F4</keycap>
-</keycombo></shortcut>
-<guimenu>Insert</guimenu>
-<guimenuitem>Clipart...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-</variablelist>
-</sect2>
-
-<sect2 id="toolsmenu">
-<title>Tools Menu</title>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menutools.png" format="PNG" align="left"/></imageobject></mediaobject>
-</screenshot>
-<variablelist>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>F5</keycap>
-</keycombo></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Mouse</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>F6</keycap>
-</keycombo></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Line</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>F7</keycap>
-</keycombo></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Rectangle</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>F8</keycap>
-</keycombo></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Circle/Ellipse</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>F9</keycap>
-</keycombo></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Pie/Arc/Chord</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>F10</keycap>
-</keycombo></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Text</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>F11</keycap>
-</keycombo></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Autoform</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>F12</keycap>
-</keycombo></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Diagram</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>F1</keycap>
-</keycombo></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Table</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>F2</keycap>
-</keycombo></shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Object</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-</variablelist>
-</sect2>
-
-<sect2 id="textmenu">
-<title>Text Menu</title>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menutext.png" format="PNG" align="left"/></imageobject></mediaobject>
-</screenshot>
-<variablelist>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Text</guimenu>
-<guimenuitem>Font...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Text</guimenu>
-<guimenuitem>Color...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Alt</keycap><keycap>L</keycap>
-</keycombo></shortcut>
-<guimenu>Text</guimenu>
-<guimenu>Align</guimenu>
-<guimenuitem>Align Left</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Alt</keycap><keycap>C</keycap>
-</keycombo></shortcut>
-<guimenu>Text</guimenu>
-<guimenu>Align</guimenu>
-<guimenuitem>Align Center</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Alt</keycap><keycap>R</keycap>
-</keycombo></shortcut>
-<guimenu>Text</guimenu>
-<guimenu>Align</guimenu>
-<guimenuitem>Align Right</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Text</guimenu>
-<guimenu>Type</guimenu>
-<guimenuitem>Enumerated List</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Text</guimenu>
-<guimenu>Type</guimenu>
-<guimenuitem>Unsorted List</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Text</guimenu>
-<guimenu>Type</guimenu>
-<guimenuitem>Normal Text</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>+</keycap>
-</keycombo></shortcut>
-<guimenu>Text</guimenu>
-<guimenuitem>Increase Depth</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>-</keycap>
-</keycombo></shortcut>
-<guimenu>Text</guimenu>
-<guimenuitem>Decrease Depth</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Text</guimenu>
-<guimenuitem>Spacing...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Text</guimenu>
-<guimenuitem>Extend Contents To Object Height</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Text</guimenu>
-<guimenuitem>Extend Object To Fit Contents</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Text</guimenu>
-<guimenuitem>Insert Page #</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-</variablelist>
-</sect2>
-
-<sect2 id="extramenu">
-<title>Extra Menu</title>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menuextra.png" format="PNG" align="left"/></imageobject></mediaobject>
-</screenshot>
-<variablelist>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenuitem>Pen And Brush...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenuitem>Configure Pie/Arc/Chord...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenuitem>Configure Rectangle...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>L</keycap>
-</keycombo></shortcut>
-<guimenu>Extra</guimenu>
-<guimenuitem>Lower Objects</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Ctrl</keycap><keycap>R</keycap>
-</keycombo></shortcut>
-<guimenu>Extra</guimenu>
-<guimenuitem>Raise Objects</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenuitem>Rotate Objects</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenuitem>Shadow Objects</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenuitem>Group Objects</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenuitem>Ungroup Objects</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenu>Align Objects</guimenu>
-<guimenuitem>Align Left</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenu>Align Objects</guimenu>
-<guimenuitem>Align Center (Horizontally)</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenu>Align Objects</guimenu>
-<guimenuitem>Align Right</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenu>Align Objects</guimenu>
-<guimenuitem>Align Top</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenu>Align Objects</guimenu>
-<guimenuitem>Align Center (Vertically)</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenu>Align Objects</guimenu>
-<guimenuitem>Align Bottom</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenuitem>Page Background...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenuitem>Page Layout...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenuitem>Create Web-Presentation (HTML Slideshow)...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenuitem>Create Template From Current Slide...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Extra</guimenu>
-<guimenuitem>Options...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-</variablelist>
-</sect2>
-
-<sect2 id="screenpresmenu">
-<title>Screen Presentations Menu</title>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menuscreen.png" format="PNG" align="left"/></imageobject></mediaobject>
-</screenshot>
-<variablelist>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Screen Presentations</guimenu>
-<guimenuitem>Configure Pages...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Screen Presentations</guimenu>
-<guimenuitem>Assign Effect...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Screen Presentations</guimenu>
-<guimenuitem>Start</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>Home</keycap>
-</keycombo></shortcut>
-<guimenu>Screen Presentations</guimenu>
-<guimenuitem>Go To Start</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>PgUp</keycap>
-</keycombo></shortcut>
-<guimenu>Screen Presentations</guimenu>
-<guimenuitem>Previous Step</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>PgDn</keycap>
-</keycombo></shortcut>
-<guimenu>Screen Presentations</guimenu>
-<guimenuitem>Next Step</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycombo>
-<keycap>End</keycap>
-</keycombo></shortcut>
-<guimenu>Screen Presentations</guimenu>
-<guimenuitem>Go To End</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Screen Presentations</guimenu>
-<guimenuitem>Pen Color...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Screen Presentations</guimenu>
-<guimenu>Pen Width</guimenu>
-<guimenuitem>#</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Screen Presentations</guimenu>
-<guimenuitem>Open Presentationstructure Editor</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-</variablelist>
-</sect2>
-
-<sect2 id="helpmenu">
-<title>Help Menu</title>
-<screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menuhelp.png" format="PNG" align="left"/></imageobject></mediaobject>
-</screenshot>
-<variablelist>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Help</guimenu>
-<guimenuitem>About...</guimenuitem>
-</menuchoice></term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-</variablelist>
-</sect2>
-
-</sect1>
-
-</chapter>
-
-<!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
-
-<chapter id="options">
-<title>KPresenter Options</title>
-<para>
-This chapter should describe the options that are available
-for customizing KPresenter.
-</para>
-</chapter>
-
-<!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
-
-<chapter id="qanda">
-<title>Questions and Answers</title>
-<para>
-Some commonly (and maybe not so commonly) asked questions and
-their answers should be in this chapter.
-</para>
-</chapter>
-
-<!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
-
-<chapter id="appendix">
-<title>Appendix</title>
-<para>
-All the sort of stuff that belongs in an appendix.
-</para>
-</chapter>
-
-<!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+&faq;
 
 <chapter id="credits">
 <title>Credits and License</title>
+
 <para>
-<application>KPresenter</application>
+&kpresenter;
 </para>
+
 <para>
 Program copyright 1998-2000 by Reginald Stadlbauer
 <email>reggie@kde.org</email>
 </para>
+
 <para>
-Contributors:
+Current maintainer is Werner Trobin <email>trobin@kde.org</email>.
 </para>
+
+
+<itemizedlist>
+<title>Contributors</title>
+
+<listitem>
 <para>
-Documentation copyright 1999-2000 by Krishna Tateneni
+David Faure <email>dfaure@kde.org</email>
+</para>
+</listitem>
+
+<listitem>
+<para>
+Toshitaka Fujioka <email>fujioka@kde.org</email>
+</para>
+</listitem>
+
+<listitem>
+<para>
+Luk&aacute;&scaron; Tinkl <email>lukas@kde.org</email>
+</para>
+</listitem>
+</itemizedlist>
+
+<para>
+Documentation copyright 1999-2000 by Krishna Tateneni 
 <!-- add email address -->
 </para>
-<para>
-Translations:
-</para>
-<para>
-This program is free software; you can redistribute it
-and/or modify it under the terms of the
-<ulink url="common/gpl-license.html">GNU General Public License</ulink>
-as published by the Free Software Foundation.
-</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;
+&underGPL;
+
 </chapter>
 
-<!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
+<appendix id="installation">
+<title>Installation</title>
+
+<para></para>
+
+</appendix>
 
 &documentation.index; 
+
 </book>
 

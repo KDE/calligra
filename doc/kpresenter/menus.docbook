@@ -1,0 +1,1704 @@
+c<!-- <?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+           
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+
+<chapter id="menuitems">
+<title>The Menu and Toolbar Items</title>
+
+<para>
+&kpresenter; presents different types of interfaces for you to interact
+with the program. Perhaps the most familiar type of interface is the
+menu which appears on the top of the &kpresenter; window.
+</para>
+
+<screenshot>
+<screeninfo>The menus</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="barmenus.png" format="PNG"/></imageobject>
+<textobject><phrase>The menus</phrase></textobject>
+</mediaobject>
+</screenshot>
+  
+<para>
+Clicking on the menu items gives you a list of commands from which you
+can choose the one you want. Many of the commands can also be accessed
+directly by holding down &Ctrl; or &Alt; and pressing another key on
+your keyboard.  In the next section, each of the menu commands is
+described in brief.
+</para>
+
+<para>
+In addition to the menus, &kpresenter; also has a set of toolbars.  Each
+toolbar consists of a collection of icons. A toolbar icon often presents
+a convenient shortcut to a command that is found in one of the menus.
+</para>
+
+<para>
+Each toolbar has a thin stippled area, which acts as a handle for that
+toolbar. The stippled area is shown highlighted in red in the screenshot
+below:
+</para>
+
+<screenshot>
+<screeninfo>The toolbars</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="barstyle1.png" format="PNG"/></imageobject>
+<textobject><phrase>The toolbars</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Clicking on the toolbar handle results in that toolbar being
+<quote>flattened</quote> so that you have some extra space for viewing
+the main editing window:
+</para>
+
+<screenshot>
+<screeninfo>Flattened toolbar</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="barstyle2.png" format="PNG"/></imageobject>
+<textobject><phrase>Flattened toolbar</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Clicking on the toolbar handle a second time brings the toolbar
+back. You can also move the toolbar around by dragging the
+handle. Toolbars can be <quote>docked</quote> or attached to any side of
+the &kpresenter; window. If you like, you can also have the toolbar
+<quote>float</quote> in its own window, separated from the main
+&kpresenter; window as shown in the screenshot below:
+</para>
+
+<screenshot>
+<screeninfo>Floating toolbar</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="barstyle3.png" format="PNG"/></imageobject>
+<textobject><phrase>Floating toolbar</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+If you don't like dragging toolbars around,
+<mousebutton>right</mousebutton> click on the handle and a menu pops up
+as shown in the screenshot below:
+</para>
+
+<screenshot>
+<screeninfo>Toolbar context menu</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="barstyle4.png" format="PNG"/></imageobject>
+<textobject><phrase>Toolbar context menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The first few items in the pop-up menu have to do with the placement of
+the toolbar. You can choose any of the four sides of the &kpresenter;
+window, or have the toolbar <quote>float</quote> in a separate
+window. Choosing <guimenuitem>Flat</guimenuitem> hides the toolbar. (If
+you <mousebutton>right</mousebutton> click on the handle of a hidden
+toolbar, this item appears as <guimenuitem>Unflat</guimenuitem>
+instead.)
+</para>
+
+<para>
+Choosing the last item in the menu, <guisubmenu>Mode</guisubmenu>, leads
+to an additional menu which lets you control the appearance of the items
+in toolbar.  This additional cascading menu is shown in the screenshot
+below:
+</para>
+
+<screenshot>
+<screeninfo>The toolbar modes menu</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="barstyle5.png" format="PNG"/></imageobject>
+<textobject><phrase>The toolbar modes menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The default view of the toolbar is icons only. In this view, if you
+don't know what a particular icon means, you can hold the mouse over the
+icon, and after a second or so, a little hint pops up in a highlighted
+text box as shown in the screenshot below:
+</para>
+
+<screenshot>
+<screeninfo>Tooltips</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="pics/barstyle6.png" format="PNG"/></imageobject>
+<textobject><phrase>Tooltips</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+You can choose to display the toolbar items as text instead of icons, or
+even to combine both icons and text. If you want both text and icons,
+the cascading menu allows you to select whether the text appears beside
+the icons or below them. All four styles of displaying toolbar items are
+shown in the screenshot below:
+</para>
+
+<screenshot>
+<screeninfo>The toolbar styles</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="barstyle7.png" format="PNG"/></imageobject>
+<textobject><phrase>The toolbar styles</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The &kpresenter; menus are discussed in the following sections.
+</para>
+
+<sect1 id="file-menu">
+<title><guimenu>File</guimenu> Menu</title>
+
+<screenshot>
+<screeninfo>The <guimenu>File</guimenu> Menu</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="pics/menufile.png" format="PNG"/></imageobject>
+<textobject><phrase>The <guimenu>File</guimenu>
+Menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
+</shortcut>
+<guimenu><accel>F</accel>ile</guimenu>
+<guimenuitem><accel>N</accel>ew</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Begins a new presentation.</action>  The
+<guilabel>Choose</guilabel> dialog will open, allowing you to choose a
+template for your presentation. 
+</para>
+</listitem>
+</varlistentry>
+        
+<varlistentry>
+<term>
+<menuchoice> 
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
+</shortcut>
+<guimenu><accel>F</accel>ile</guimenu>
+<guimenuitem><accel>O</accel>pen</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Opens an existing presentation.</action>  A standard &kde; file
+open dialog will appear, allowing you to choose a file to open.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>F</accel>ile</guimenu>
+<guisubmenu>Open <accel>R</accel>ecent</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Displays a list of recently opened files for you to choose
+from.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>S</keycap>
+</keycombo></shortcut>
+<guimenu><accel>F</accel>ile</guimenu>
+<guimenuitem><accel>S</accel>ave</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Saves the currently open presentation.</action>  If you have not
+previously saved it, you will be asked to name the file.  If you have
+previously saved the presentation, it will be resaved with the same name.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>F</accel>ile</guimenu>
+<guimenuitem>Save <accel>A</accel>s...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Saves the currently open presentation with a new name.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>F</accel>ile</guimenu>
+<guimenuitem>Create <accel>H</accel>TML Slideshow...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Starts the HTML wizard</action>, which is described in the
+section <xref linkend="html-wizard"/>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>F</accel>ile</guimenu>
+<guimenuitem>Create Template From Current Slide...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Allows you to save the current slide as a template.</action>
+In future the template will be available for you to use to build slides
+with.  Creating a template is further discussed in section <xref
+linkend="creating-templates"/>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>F</accel>ile</guimenu>
+<guimenuitem>Use Current Slide As Default Template</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Sets the current slide as your default template</action>.
+Especially useful if you have created a template of your own to fit into
+corporate style guidelines, or if you just use a particular layout very
+often.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice> 
+<shortcut><keycombo action="simul">
+<keycap>Ctrl</keycap><keycap>P</keycap>
+</keycombo></shortcut>
+<guimenu><accel>F</accel>ile</guimenu>
+<guimenuitem><accel>P</accel>rint...</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Prints the presentation</action>.  More precisely, it opens the
+print settings dialog, where you can adjust the settings before printing
+your presentation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>F</accel>ile</guimenu>
+<guimenuitem>Print Previe<accel>w</accel>...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Displays the presentation</action> with a &PostScript; viewer,
+exactly as it would look if printed.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>F</accel>ile</guimenu>
+<guimenuitem><accel>D</accel>ocument Information...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Allows you to enter <quote>meta</quote> information about the
+document.</action>  This includes information about the author, and an
+abstract on the documents contents.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>W</keycap>
+</keycombo></shortcut> 
+<guimenu><accel>F</accel>ile</guimenu>
+<guimenuitem><accel>C</accel>lose</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Close the current presentation.</action> You will be given an
+opportunity to save any changes first.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>Q</keycap>
+</keycombo></shortcut>
+<guimenu><accel>F</accel>ile</guimenu>
+<guimenuitem><accel>Q</accel>uit</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Close</action> &kpresenter;.  You will be given an opportunity
+to save all changes in all open presentations first.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect1>
+
+<sect1 id="edit-menu">
+<title><guimenu>Edit</guimenu> Menu</title>
+
+<screenshot>
+<screeninfo>The <guimenu>Edit</guimenu> Menu</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="menuedit.png" format="PNG"/></imageobject>
+<textobject><phrase>The <guimenu>Edit</guimenu>
+Menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>Z</keycap>
+</keycombo></shortcut>
+<guimenu><accel>E</accel>dit</guimenu>
+<guimenuitem>Undo: <replaceable>Last task</replaceable></guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Undo the last action you performed.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>Z</keycap></keycombo>
+</shortcut>
+<guimenu><accel>E</accel>dit</guimenu>
+<guimenuitem>Redo: <replaceable>Last undone
+task</replaceable></guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Redo the last action you undid.</action>  If you have not undone
+any actions, or the last undo action is not reversible, this menu item
+will instead read <guimenuitem>No Redo Possible</guimenuitem> and is
+disabled.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>X</keycap>
+</keycombo></shortcut>
+<guimenu><accel>E</accel>dit</guimenu>
+<guimenuitem>C<accel>u</accel>t</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Copy the selected item to the clipboard, and remove it from the
+document.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>C</keycap>
+</keycombo></shortcut>
+<guimenu><accel>E</accel>dit</guimenu>
+<guimenuitem><accel>C</accel>opy</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Copy the selected item to the clipboard, while leaving it intact
+in your presentation.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>V</keycap>
+</keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Paste</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Insert the contents of the clipboard into your
+presentation.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>Del</keycap>
+</keycombo></shortcut>
+<guimenu><accel>E</accel>dit</guimenu>
+<guimenuitem><accel>D</accel>elete</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Remove the currently selected item from your
+presentation.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>A</keycap>
+</keycombo></shortcut>
+<guimenu><accel>E</accel>dit</guimenu>
+<guimenuitem>Select <accel>A</accel>ll</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Select all the objects and text on the current slide.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>E</accel>dit</guimenu>
+<guimenuitem>Copy Page</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Copy the current slide to the clipboard.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>E</accel>dit</guimenu>
+<guimenuitem>Duplicate Page</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Insert an exact copy of the current slide.</action>  
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>E</accel>dit</guimenu>
+<guimenuitem>Delete <accel>P</accel>age...</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Delete the current page from the presentation.</action>  You
+will be asked to confirm this action.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>F</keycap>
+</keycombo></shortcut>
+<guimenu><accel>E</accel>dit</guimenu>
+<guimenuitem><accel>F</accel>ind...</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Search for text within the presentation.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>E</accel>dit</guimenu>
+<guimenuitem><accel>H</accel>eader/Footer...</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Insert a header and/or footer into the presentation.</action>
+This will display on every <!-- printed? --> page.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="view-menu">
+<title><guimenu>View</guimenu> Menu</title>
+
+<screenshot>
+<screeninfo>The <guimenu>View</guimenu> Menu</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="menuview.png" format="PNG"/></imageobject>
+<textobject><phrase>The <guimenu>View</guimenu>
+Menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>V</accel>iew</guimenu>
+<guimenuitem><accel>N</accel>ew View...</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Opens another window with the same presentation loaded</action>
+so you can work on more than one slide at a time.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>V</accel>iew</guimenu>
+<guimenuitem><accel>C</accel>lose All Views</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Close all views on the presentation.</action>  You will be given
+a chance to save any changes, or to cancel closing.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>V</accel>iew</guimenu>
+<guimenuitem><accel>S</accel>plit View</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Splits the window into two (or more) views on the same
+presentation.</action> The default split is horizontal.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>V</accel>iew</guimenu>
+<guimenuitem><accel>R</accel>emove View</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Close only the currently active view</action>.  The
+presentation, and any other views you have open, remain open, and any
+changes you have made remain unsaved.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>V</accel>iew</guimenu>
+<guisubmenu>Splitter <accel>O</accel>rientation</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Toggle the split view</action> between
+<guimenuitem>Horizontal</guimenuitem> (the default) and
+<guimenuitem>Vertical</guimenuitem>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>V</accel>iew</guimenu>
+<guimenuitem>Show Sidebar</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Toggle the display of the sidebar</action> where you can see an
+overview of all the slides in your presentation.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="insert-menu">
+<title><guimenu>Insert</guimenu> Menu</title>
+
+<screenshot>
+<screeninfo>The <guimenu>Insert</guimenu> Menu</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="menuinsert.png" format="PNG"/></imageobject>
+<textobject><phrase>The <guimenu>Insert</guimenu>
+Menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F2</keycap></shortcut>
+<guimenu><accel>I</accel>nsert</guimenu>
+<guimenuitem><accel>P</accel>age...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Add a new page to your presentation.</action> A dialog will open
+allowing you to choose a template, and whether to insert the new page
+before or after the currently selected page.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F3</keycap></shortcut>
+<guimenu><accel>I</accel>nsert</guimenu>
+<guimenuitem>P<accel>i</accel>cture...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Insert a raster image.</action> These are not as easily
+scaleable as vector images or <quote>clipart</quote>.  &kpresenter;
+currently understands many formats, including <literal
+role="extension">.tiff</literal>, <literal
+role="extension">.jpg</literal>, <literal
+role="extension">.png</literal> and many more.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F4</keycap></shortcut>
+<guimenu><accel>I</accel>nsert</guimenu>
+<guimenuitem><accel>C</accel>lipart...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Insert scaleable clipart in vector format.</action>
+&kpresenter; can currently import clipart in the <literal
+role="extension">.wmf</literal> or <quote>Windows Meta File</quote>
+format, which is common on &Windows;.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>I</accel>nsert</guimenu>
+<guimenuitem>Scan Image...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Scan an image with a scanner.</action> This requires you have a
+scanner installed.  TODO: Document how to set up a scanner that
+&kpresenter; can use.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="format-menu">
+<title><guimenu>Format</guimenu> Menu</title>
+
+<screenshot>
+<screeninfo>The <guimenu>Format</guimenu> Menu</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="menuextra.png" format="PNG"/></imageobject>
+<textobject><phrase>The <guimenu>Format</guimenu>
+Menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guimenuitem><accel>P</accel>en And Brush...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guimenuitem>Configure Pie/<accel>A</accel>rc/Chord...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guimenuitem>Configure <accel>R</accel>ectangle...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>L</keycap></keycombo>
+</shortcut>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guimenuitem><accel>L</accel>ower Objects</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo>
+</shortcut>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guimenuitem>Ra<accel>i</accel>se Objects</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guimenuitem>R<accel>o</accel>tate Objects</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guimenuitem><accel>S</accel>hadow Objects</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guimenuitem><accel>G</accel>roup Objects</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guimenuitem><accel>U</accel>ngroup Objects</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guisubmenu><accel>A</accel>lign Objects</guisubmenu>
+<guimenuitem>Align <accel>L</accel>eft</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guisubmenu><accel>A</accel>lign Objects</guisubmenu>
+<guimenuitem>Align Center (<accel>H</accel>orizontally)</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guisubmenu><accel>A</accel>lign Objects</guisubmenu>
+<guimenuitem>Align <accel>R</accel>ight</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guisubmenu><accel>A</accel>lign Objects</guisubmenu>
+<guimenuitem>Align <accel>T</accel>op</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guisubmenu><accel>A</accel>lign Objects</guisubmenu>
+<guimenuitem>Align Center (<accel>V</accel>ertically)</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guisubmenu><accel>A</accel>lign Objects</guisubmenu>
+<guimenuitem>Align <accel>B</accel>ottom</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guimenuitem>Page La<accel>y</accel>out...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>F<accel>o</accel>rmat</guimenu>
+<guimenuitem>Page Bac<accel>k</accel>ground...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="text-menu">
+<title><guimenu>Text</guimenu> Menu</title>
+
+<screenshot>
+<screeninfo>The <guimenu>Text</guimenu> Menu</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="menutext.png" format="PNG"/></imageobject>
+<textobject><phrase>The <guimenu>Text</guimenu>
+Menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Te<accel>x</accel>t</guimenu>
+<guimenuitem><accel>F</accel>ont...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Te<accel>x</accel>t</guimenu>
+<guimenuitem><accel>C</accel>olor...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Te<accel>x</accel>t</guimenu>
+<guimenuitem><accel>S</accel>ettings</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;<keycap>L</keycap></keycombo>
+</shortcut>
+<guimenu>Te<accel>x</accel>t</guimenu>
+<guisubmenu><accel>A</accel>lign</guisubmenu>
+<guimenuitem>Align <accel>L</accel>eft</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;<keycap>C</keycap></keycombo>
+</shortcut>
+<guimenu>Te<accel>x</accel>t</guimenu>
+<guisubmenu><accel>A</accel>lign</guisubmenu>
+<guimenuitem>Align <accel>C</accel>enter</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;<keycap>R</keycap></keycombo>
+</shortcut>
+<guimenu>Te<accel>x</accel>t</guimenu>
+<guisubmenu><accel>A</accel>lign</guisubmenu>
+<guimenuitem>Align <accel>R</accel>ight</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Te<accel>x</accel>t</guimenu>
+<guisubmenu>T<accel>y</accel>pe</guisubmenu>
+<guimenuitem><accel>U</accel>nsorted List</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Te<accel>x</accel>t</guimenu>
+<guisubmenu>T<accel>y</accel>pe</guisubmenu>
+<guimenuitem><accel>N</accel>ormal Text</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>+</keycap></keycombo>
+</shortcut>
+<guimenu>Te<accel>x</accel>t</guimenu>
+<guimenuitem><accel>I</accel>ncrease Depth</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>-</keycap></keycombo>
+</shortcut>
+<guimenu>Te<accel>x</accel>t</guimenu>
+<guimenuitem><accel>D</accel>ecrease Depth</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Te<accel>x</accel>t</guimenu>
+<guimenuitem>Extend Contents To Object <accel>H</accel>eight</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Te<accel>x</accel>t</guimenu>
+<guimenuitem><accel>E</accel>xtend Object To Fit The Contents</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="screenpresmenu">
+<title><guimenu>Screen Presentations</guimenu> Menu</title>
+
+<screenshot>
+<screeninfo>The <guimenu>Screen Presentations</guimenu>
+Menu</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="menuscreen.png" format="PNG"/></imageobject>
+<textobject><phrase>The <guimenu>Screen Presentations</guimenu>
+Menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Screen <accel>P</accel>resentations</guimenu>
+<guimenuitem><accel>C</accel>onfigure Pages...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Screen <accel>P</accel>resentations</guimenu>
+<guimenuitem><accel>A</accel>ssign Effect...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Screen <accel>P</accel>resentations</guimenu>
+<guimenuitem><accel>S</accel>tart</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Screen <accel>P</accel>resentations</guimenu>
+<guimenuitem><accel>V</accel>iew Current Page</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>Home</keycap></shortcut>
+<guimenu>Screen <accel>P</accel>resentations</guimenu>
+<guimenuitem><accel>G</accel>o To Start</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>Page Up</keycap></shortcut>
+<guimenu>Screen <accel>P</accel>resentations</guimenu>
+<guimenuitem><accel>P</accel>revious Step</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>Page Down</keycap></shortcut>
+<guimenu>Screen <accel>P</accel>resentations</guimenu>
+<guimenuitem><accel>N</accel>ext Step</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>End</keycap></shortcut>
+<guimenu>Screen <accel>P</accel>resentations</guimenu>
+<guimenuitem>Go To <accel>E</accel>nd</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Screen <accel>P</accel>resentations</guimenu>
+<guimenuitem>Pen Colo<accel>r</accel>...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Screen <accel>P</accel>resentations</guimenu>
+<guimenu>Pen <accel>W</accel>idth</guimenu>
+<guimenuitem>#</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Screen <accel>P</accel>resentations</guimenu>
+<guimenuitem><accel>O</accel>pen Presentation Structure
+Editor</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect1>
+
+<sect1 id="tools-menu">
+<title><guimenu>Tools</guimenu> Menu</title>
+
+<screenshot>
+<screeninfo>The <guimenu>Tools</guimenu> Menu</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="menutools.png" format="PNG"/></imageobject>
+<textobject><phrase>The <guimenu>Tools</guimenu>
+Menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F5</keycap></shortcut>
+<guimenu><accel>T</accel>ools</guimenu>
+<guimenuitem><accel>M</accel>ouse</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F6</keycap></shortcut>
+<guimenu><accel>T</accel>ools</guimenu>
+<guimenuitem><accel>L</accel>ine</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F7</keycap></shortcut>
+<guimenu><accel>T</accel>ools</guimenu>
+<guimenuitem><accel>R</accel>ectangle</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F8</keycap></shortcut>
+<guimenu><accel>T</accel>ools</guimenu>
+<guimenuitem><accel>C</accel>ircle/Ellipse</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F9</keycap></shortcut>
+<guimenu><accel>T</accel>ools</guimenu>
+<guimenuitem><accel>P</accel>ie/Arc/Chord</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F10</keycap></shortcut>
+<guimenu><accel>T</accel>ools</guimenu>
+<guimenuitem><accel>T</accel>ext</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F11</keycap></shortcut>
+<guimenu><accel>T</accel>ools</guimenu>
+<guimenuitem><accel>A</accel>utoform</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F12</keycap></shortcut>
+<guimenu><accel>T</accel>ools</guimenu>
+<guimenuitem><accel>D</accel>iagram</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>F1</keycap></keycombo>
+</shortcut>
+<guimenu><accel>T</accel>ools</guimenu>
+<guimenuitem>Ta<accel>b</accel>le</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>F2</keycap></keycombo>
+</shortcut>
+<guimenu><accel>T</accel>ools</guimenu>
+<guimenuitem><accel>O</accel>bject</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="helpmenu">
+<title><guimenu>Help</guimenu> Menu</title>
+
+<screenshot>
+<screeninfo>The <guimenu>Help</guimenu> Menu</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="menuhelp.png" format="PNG"/></imageobject>
+<textobject><phrase>The <guimenu>Help</guimenu> Menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F1</keycap></shortcut>
+<guimenu><accel>H</accel>elp</guimenu>
+<guimenuitem><accel>C</accel>ontents</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Shift;<keycap>F1</keycap></keycombo>
+</shortcut>
+<guimenu><accel>H</accel>elp</guimenu>
+<guimenuitem>What's <accel>T</accel>his</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>H</accel>elp</guimenu>
+<guimenuitem><accel>R</accel>eport Bug...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>H</accel>elp</guimenu>
+<guimenuitem><accel>A</accel>bout KPresenter...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu><accel>H</accel>elp</guimenu>
+<guimenuitem>About <accel>K</accel>DE...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+
+</chapter>
