@@ -36,9 +36,6 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 	m_view = new QLineEdit(this, "tableLineEdit");
 	m_view->installEventFilter(this);
 	static_cast<QLineEdit*>(m_view)->setFrame(false);
-	QPalette p(m_view->palette());
-	p.setColor(QColorGroup::Base, KGlobalSettings::alternateBackgroundColor()); //QColor(200,200,255));
-	m_view->setPalette(p);
 	
 	if(ov != QString::null)
 	{

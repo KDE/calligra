@@ -21,7 +21,7 @@
 #ifndef KEXIDATETABLEEDIT_H
 #define KEXIDATETABLEEDIT_H
 
-#include <kexiinputtableedit.h>
+#include <kexitableedit.h>
 
 #include <kdatepicker.h>
 
@@ -36,36 +36,28 @@
 //class KDatePicker;
 
 class KexiDatePicker;
+class QLineEdit;
+class QDate;
 
-class KexiDateTableEdit : public KexiInputTableEdit
+class KexiDateTableEdit : public KexiTableEdit
 {
 
 	Q_OBJECT
 
 	public:
 		KexiDateTableEdit(QVariant v=0, QWidget *parent=0, const char *name=0);
-		~KexiDateTableEdit();
 
-		void setDecorated(bool decore);
 		QVariant value();
 
 	protected:
-		void paintEvent(QPaintEvent *ev);
-		void mousePressEvent(QMouseEvent *ev);
-		void mouseReleaseEvent(QMouseEvent *ev);
-		void mouseMoveEvent(QMouseEvent *ev);
-		/* gruml, we have to overwrite the cursor */
-
 		KexiDatePicker	*m_datePicker;
-
-		QVariant	m_data;
-		QString		m_text;
-
-		bool		m_mouseDown;
-		bool		m_3dDecore;
+		QLineEdit* m_edit;
+		
+		QDate m_oldVal;
 
 	protected slots:
 		void		slotDateChanged(QDate);
+		void		slotShowDatePicker();
 };
 
 class KexiDatePicker : public KDatePicker

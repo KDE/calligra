@@ -903,7 +903,7 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 {
 //	QString val;
 	QVariant val;
-	switch(columnType(col))
+/*	switch(columnType(col))
 	{
 		case QVariant::Date:
 			#ifdef USE_KDE
@@ -919,8 +919,9 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 			val = m_pCurrentItem->getValue(m_curCol);
 
 			break;
-	}
+	}*/
 
+	val = m_pCurrentItem->getValue(m_curCol);
 
 	//it's getting ugly :)
 
