@@ -3,7 +3,7 @@ Build-Depends: autoconf, automake, libtool, debhelper, gettext, kdelibs3-dev (>=
 Section: x11
 Priority: optional
 Maintainer: Ivan E. Moore II <rkrusty@debian.org>
-Standards-Version: 3.2.1
+Standards-Version: 3.5.0
 
 Package: koffice-dev
 Architecture: any

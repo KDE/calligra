@@ -1,6 +1,8 @@
 koffice (2.1-final-1) unstable; urgency=low
  
   * New upstream version
+  * Upping standards version
+  * Applying debconf i18n patch (Closes: #84263)
  
  -- Ivan E. Moore II <rkrusty@debian.org>  Fri, 09 Feb 2001 02:31:00 -0700
 

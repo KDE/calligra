@@ -11,3 +11,9 @@ Description-sv: KOffice har inte ens nått Beta stadiet!!!
  orsaka krascher. Den huvudsakliga anledningen till att jag inkluderar
  denna version av KOffice i detta skede är för att reda ut problem med
  packeteringen  och icke-filter relaterade buggar.
+Description-de: Für SSL Unterstützung muß kdebase-crypto installiert sein
+ Für die Benutzung von SSL und https muß das kdebase-crypto Paket installiert
+ sein. kdebase-crypto enthält die Verschlüsselungs Konfigurations Module und
+ ist abhängig von kdelibs3-crypto, welches die eigentlichen SSL Module für
+ https und kssl enthält.
+	 
