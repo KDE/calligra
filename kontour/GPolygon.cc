@@ -234,35 +234,6 @@ void GPolygon::removePoint(int idx, bool update)
 
 bool GPolygon::contains(const KoPoint &p)
 {
-/*  double x1, y1, x2, y2;
-
-  if(box.contains(p))
-  {
-    QPoint pp = iMatrix.map(QPoint(static_cast<int>(p.x()), static_cast<int>(p.y())));
-    if(sPoint.x() >= ePoint.x())
-    {
-      x1 = ePoint.x();
-      x2 = sPoint.x();
-    }
-    else
-    {
-      x1 = sPoint.x();
-      x2 = ePoint.x();
-    }
-    if(sPoint.y() >= ePoint.y())
-    {
-      y1 = ePoint.y();
-      y2 = sPoint.y();
-    }
-    else
-    {
-      y1 = sPoint.y();
-      y2 = ePoint.y();
-    }
-
-    if(pp.x() <= x2 && pp.x() >= x1 && pp.y() <= y2 && pp.y() >= y1)
-      return true;
-  }*/
   return false;
 }
 

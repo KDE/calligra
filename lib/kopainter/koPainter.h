@@ -29,6 +29,7 @@ class QWidget;
 class KoVectorPath;
 class KoOutline;
 class KoFill;
+class QColor;
 
 class KoPainter
 {
@@ -46,8 +47,8 @@ public:
 
   void fillAreaRGB(const QRect &r, const KoColor &c);
   void drawRectRGB(const QRect &r, const KoColor &c);
-  void drawHorizLineRGB(const int x1, const int x2, const int y, const KoColor &c);
-  void drawVertLineRGB(const int x, const int y1, const int y2, const KoColor &c);
+  void drawHorizLineRGB(const int x1, const int x2, const int y, const QColor &c);
+  void drawVertLineRGB(const int x, const int y1, const int y2, const QColor &c);
 
   void drawLine(double x1, double y1, double x2, double y2);
   void drawVectorPath(KoVectorPath *vp);

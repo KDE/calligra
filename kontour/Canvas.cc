@@ -204,6 +204,9 @@ void Canvas::updateBuf(const QRect &rect)
   p.lineTo(1, h+1);
   p.setPen(Qt::black);*/
 
+  if(mGDoc->showGrid())
+    drawGrid(rect);
+
   QWMatrix m;
   m.translate(mXOffset, mYOffset);
 
@@ -211,11 +214,9 @@ void Canvas::updateBuf(const QRect &rect)
 
   if(!document()->activePage()->selectionIsEmpty())
     document()->activePage()->handle().draw(painter, mXOffset, mYOffset, zoomFactor());
-/*
-  if(mGDoc->showHelplines())
-    drawHelplines(p, rect);
 
-  p.end();*/
+  if(mGDoc->showHelplines())
+    drawHelplines(rect);
 }
 
 void Canvas::setXimPosition(int x, int y, int w, int h)
@@ -565,54 +566,45 @@ void Canvas::drawGrid(const QRect &rect)
 {
   if(!mGDoc->document()->isReadWrite())
     return;
-
-/*  p.save();
-  QPen pen(mGDoc->gridColor());
-  p.setPen(pen);
-
   double hd = mGDoc->xGridZ();
   double h = mXOffset + hd * static_cast<int>((rect.x() - mXOffset) / hd);
+  if(h < 0.0)
+    h += hd;
   for(; h <= rect.right(); h += hd)
   {
     int hi = qRound(h);
-    p.drawLine(hi, rect.top(), hi, rect.bottom());
+    painter->drawVertLineRGB(hi, rect.top(), rect.bottom(), mGDoc->gridColor());
   }
 
   double vd = mGDoc->yGridZ();
   double v = mYOffset + vd * static_cast<int>((rect.y() - mYOffset) / vd);
+  if(v < 0.0)
+    v += vd;
   for(; v <= rect.bottom(); v += vd)
   {
     int vi = qRound(v);
-    p.drawLine(rect.left(), vi, rect.right(), vi);
+    painter->drawHorizLineRGB(rect.left(), rect.right(), vi, mGDoc->gridColor());
   }
-
-  p.restore();*/
 }
 
 void Canvas::drawHelplines(const QRect &rect)
 {
   if(!mGDoc->document()->isReadWrite())
     return;
-
-/*  p.save();
-  QPen pen(blue);
-  p.setPen(pen);
-
   QValueList<double>::Iterator i;
-
   for(i = mGDoc->horizHelplines().begin(); i != mGDoc->horizHelplines().end(); ++i)
   {
-    int hi = qRound(*i * zoomFactor()) + mYOffset;
-    p.drawLine(rect.left(), hi, rect.right(), hi);
+    int vi = qRound(*i * zoomFactor()) + mYOffset;
+    if(vi >= rect.top() && vi <= rect.bottom())
+      painter->drawHorizLineRGB(rect.left(), rect.right(), vi, Qt::blue);
   }
 
   for(i = mGDoc->vertHelplines().begin(); i != mGDoc->vertHelplines().end(); ++i)
   {
-    int vi = qRound(*i * zoomFactor()) + mXOffset;
-    p.drawLine(vi, rect.top(), vi, rect.bottom());
+    int hi = qRound(*i * zoomFactor()) + mXOffset;
+    if(hi >= rect.left() && hi <= rect.right())
+      painter->drawVertLineRGB(hi, rect.top(), rect.bottom(), Qt::blue);
   }
-
-  p.restore ();*/
 }
 
 double Canvas::snapXPositionToGrid(double pos)

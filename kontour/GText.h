@@ -56,6 +56,9 @@ public:
   void calcBoundingBox();
   GPath *convertToPath() const;
   bool isConvertible() const;
+
+private:
+  QStringList text;
 };
 
 /*  void setOrigin (const Coord& p);

@@ -46,18 +46,31 @@ Tool(aId, tc)
   ToolSelectAction *zoom = new ToolSelectAction(actionCollection(), "ToolAction");
   KRadioAction *mT1 = new KRadioAction(i18n("Polygon"), "polygontool", 0, actionCollection());
   mT1->setExclusiveGroup("PolygonTool");
+  connect(mT1, SIGNAL(activated()), SLOT(enableFill()));
+  connect(mT1, SIGNAL(activated()), SLOT(setPolygon()));
   KRadioAction *mT2 = new KRadioAction(i18n("Polygon"),"polygontool", 0, actionCollection());
   mT2->setExclusiveGroup("PolygonTool");
+  connect(mT2, SIGNAL(activated()), SLOT(disableFill()));
+  connect(mT2, SIGNAL(activated()), SLOT(setPolygon()));
+  KRadioAction *mT3 = new KRadioAction(i18n("Star"), "polygontool", 0, actionCollection());
+  mT3->setExclusiveGroup("PolygonTool");
+  connect(mT3, SIGNAL(activated()), SLOT(enableFill()));
+  connect(mT3, SIGNAL(activated()), SLOT(setStar()));
+  KRadioAction *mT4 = new KRadioAction(i18n("Star"),"polygontool", 0, actionCollection());
+  mT4->setExclusiveGroup("PolygonTool");
+  connect(mT4, SIGNAL(activated()), SLOT(disableFill()));
+  connect(mT4, SIGNAL(activated()), SLOT(setStar()));
   zoom->insert(mT1);
   zoom->insert(mT2);
+  zoom->insert(mT3);
+  zoom->insert(mT4);
   n = 5;
 }
 
 void PolygonTool::activate()
 {
   state = S_Init;
-//  toolController()->view()->canvas()->setCursor(Qt::crossCursor);
-//  toolController()->view()->setStatus(i18n("Rectangle Mode"));
+  toolController()->view()->canvas()->setCursor(Qt::crossCursor);
 }
 
 void PolygonTool::deactivate()
@@ -84,15 +97,17 @@ void PolygonTool::processEvent(QEvent *e)
   {
     if(state == S_Resize)
     {
-      QRect rect = QRect(static_cast<int>(mCenter.x() - radius + canvas->xOffset()), static_cast<int>(mCenter.y() - radius + canvas->yOffset()), 2 * static_cast<int>(radius), 2 * static_cast<int>(radius));
+      QRect rect = QRect(static_cast<int>(mCenter.x() - radius + canvas->xOffset()) - 1, static_cast<int>(mCenter.y() - radius + canvas->yOffset()) - 1, 2 * static_cast<int>(radius) + 2, 2 * static_cast<int>(radius) + 2);
       canvas->repaint(rect);  
       radius = sqrt((x - mCenter.x()) * (x - mCenter.x()) + (y - mCenter.y()) * (y - mCenter.y()));
       double a = (x - mCenter.x()) / radius;
       a = acos(a);
       if(y < mCenter.y())
         a = 2.0 * Kontour::pi - a;
-      drawStar(radius, 0.5 * radius, a);
-      //drawPolygon(radius, a);
+      if(type == Polygon)
+        drawPolygon(radius, a);
+      else if(type == Star)
+        drawStar(radius, 0.5 * radius, a);
     }
   }
   else if(e->type() == QEvent::MouseButtonRelease)
@@ -104,12 +119,16 @@ void PolygonTool::processEvent(QEvent *e)
       a = acos(a);
       if(y < mCenter.y())
         a = 2.0 * Kontour::pi - a;
-      GPolygon *polygon = new GPolygon(mCenter, n, radius, a);
+      GPolygon *polygon;
+      if(type == Polygon)
+        polygon = new GPolygon(mCenter, n, radius, a);
+      else if(type == Star)
+        polygon = new GPolygon(mCenter, n, radius, 0.5 * radius, a);
       CreatePolygonCmd *cmd = new CreatePolygonCmd(toolController()->view()->activeDocument(), polygon);
       KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
       polygon->style(doc->document()->styles()->style());
-//    if(!mFill)
-//    rect->style()->filled(GStyle::NoFill);
+      if(!mFill)
+        polygon->style()->filled(GStyle::NoFill);
       doc->history()->addCommand(cmd);
       state = S_Init;
     }
@@ -164,6 +183,26 @@ void PolygonTool::drawStar(double r1, double r2, double a)
     cy = static_cast<int>(y + canvas->yOffset());
     p.lineTo(cx, cy);
   }
+}
+
+void PolygonTool::enableFill()
+{
+  mFill = true;
+}
+
+void PolygonTool::disableFill()
+{
+  mFill = false;
+}
+
+void PolygonTool::setPolygon()
+{
+  type = Polygon;
+}
+
+void PolygonTool::setStar()
+{
+  type = Star;
 }
 
 #include "PolygonTool.moc"

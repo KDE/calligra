@@ -380,10 +380,28 @@ void GPath::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outl
     KoPoint c;
     for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
     {
-      c = (*seg)->point(0).transform(tmpMatrix * m);
-      x = static_cast<int>(c.x());
-      y = static_cast<int>(c.y());
-      drawNode(p, x, y, false);
+      if((*seg)->type() == 'm' || (*seg)->type() == 'l')
+      {
+        c = (*seg)->point(0).transform(tmpMatrix * m);
+        x = static_cast<int>(c.x());
+        y = static_cast<int>(c.y());
+        drawNode(p, x, y, false);
+      }
+      else if((*seg)->type() == 'c')
+      {
+        c = (*seg)->point(0).transform(tmpMatrix * m);
+        x = static_cast<int>(c.x());
+        y = static_cast<int>(c.y());
+        drawNode(p, x, y, false);
+	c = (*seg)->point(1).transform(tmpMatrix * m);
+        x = static_cast<int>(c.x());
+        y = static_cast<int>(c.y());
+        drawNode(p, x, y, false);
+	c = (*seg)->point(2).transform(tmpMatrix * m);
+        x = static_cast<int>(c.x());
+        y = static_cast<int>(c.y());
+        drawNode(p, x, y, false);
+      }
     }
   }
 }

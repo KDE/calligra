@@ -89,6 +89,11 @@ void GPage::setPaperSize(int width, int height)
   mPaperHeight = height;
 }
 
+KoPageLayout GPage::pageLayout()
+{
+  return mPageLayout;
+}
+
 void GPage::pageLayout(const KoPageLayout &layout)
 {
   mPageLayout = layout;

@@ -33,6 +33,7 @@ class QColor;
 class KColorButton;
 class QCheckBox;
 class UnitBox;
+class KoPageLayoutDia;
 class KontourView;
 class GDocument;
 
@@ -45,6 +46,7 @@ protected:
   void createGeneralWidget(QWidget *parent);
   void createEditWidget(QWidget *parent);
   void createBGWidget(QWidget *parent);
+  void createPageLayoutWidget(QWidget *parent);
   void createGridWidget(QWidget *parent);
   void createHorizLineWidget(QWidget *parent);
   void createVertLineWidget(QWidget *parent);
@@ -74,17 +76,19 @@ private:
   bool mDocModified;
   bool mViewUpdate;
 
-  /*General*/
+  // General
   KComboBox *unit;
   KColorButton *mWSColorButton;
 
   UnitBox *horiz, *vert;
   UnitBox *smallStep, *bigStep;
 
-  /*Background*/
+  // Background
   KColorButton *bgbutton;
 
-  /*Helplines*/
+  KoPageLayoutDia *mPageLayout;
+
+  // Helplines
   UnitBox *horizValue;
   UnitBox *vertValue;
   QListBox *horizList;
@@ -94,7 +98,7 @@ private:
   QPushButton *addHorizHelpLine,*updateHorizHelpLine,*delHorizHelpLine;
   QPushButton *delVertHelpLine, *updateVertHelpLine,*addVertHelpLine;
 
-  /*Grid*/
+  // Grid
   QCheckBox *gbutton, *sbutton;
   UnitBox *hspinbox, *vspinbox;
   KColorButton *cbutton;

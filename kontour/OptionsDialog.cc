@@ -3,8 +3,8 @@
   $Id$
 
   This file is part of Kontour.
-  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)  
+  Copyright (C) 1998-1999 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001-2002 Igor Janssen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -58,6 +58,9 @@ KDialogBase(KDialogBase::TreeList, i18n("Option"), Ok|Apply|Cancel, Ok, parent, 
   list.clear();
   list << i18n("Document") << i18n("Background");
   createBGWidget(addPage(list));
+  list.clear();
+  list << i18n("Document") << i18n("Page Layout");
+  createPageLayoutWidget(addPage(list));
   list.clear();
   list << i18n("Document") << i18n("Helplines") << i18n("Vertical");
   createVertLineWidget(addPage(list));
@@ -155,21 +158,26 @@ void OptionsDialog::createEditWidget (QWidget* parent)
     bigStep->setValue (psm->bigStepSize ());*/
 }
 
-/*Background*/
-void OptionsDialog::createBGWidget(QWidget* parent)
+// Background
+void OptionsDialog::createBGWidget(QWidget *parent)
 {
-  QBoxLayout *layout=new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
+  QBoxLayout *layout = new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
   QLabel* clabel = new QLabel(i18n("Background Color"), parent);
   bgbutton = new KColorButton(parent);
-  connect(bgbutton, SIGNAL(changed(const QColor&)), this, SLOT(slotSetDocModified()));
-  connect(bgbutton, SIGNAL(changed(const QColor&)), this, SLOT(slotSetViewUpdate()));
+  connect(bgbutton, SIGNAL(changed(const QColor &)), this, SLOT(slotSetDocModified()));
+  connect(bgbutton, SIGNAL(changed(const QColor &)), this, SLOT(slotSetViewUpdate()));
   bgbutton->setColor(mGDoc->activePage()->bgColor());
   layout->addWidget(clabel);
   layout->addWidget(bgbutton);
 }
 
-/* Grid */
+void OptionsDialog::createPageLayoutWidget(QWidget *parent)
+{
+  KoHeadFoot headFoot;
+  mPageLayout = new KoPageLayoutDia(parent, 0L, mGDoc->activePage()->pageLayout(), headFoot, FORMAT_AND_BORDERS, KoUnit::U_PT);
+}
 
+// Grid
 void OptionsDialog::createGridWidget(QWidget *parent)
 {
   QGridLayout *layout = new QGridLayout(parent, 3, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());

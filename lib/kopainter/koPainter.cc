@@ -133,17 +133,17 @@ void KoPainter::drawRectRGB(const QRect &r, const KoColor &c)
   }
 }
 
-void KoPainter::drawHorizLineRGB(const int x1, const int x2, const int y, const KoColor &c)
+void KoPainter::drawHorizLineRGB(const int x1, const int x2, const int y, const QColor &c)
 {
-  QRgb a = c.color().rgb();
+  QRgb a = c.rgb();
   QRgb *ptr = reinterpret_cast<QRgb *>(mBuffer->scanLine(y));
   for(int x = x1; x <= x2; x++)
     *(ptr + x) = a;
 }
 
-void KoPainter::drawVertLineRGB(const int x, const int y1, const int y2, const KoColor &c)
+void KoPainter::drawVertLineRGB(const int x, const int y1, const int y2, const QColor &c)
 {
-  QRgb a = c.color().rgb();
+  QRgb a = c.rgb();
   QRgb *ptr;
   for(int y = y1; y <= y2; y++)
   {

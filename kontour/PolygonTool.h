@@ -45,6 +45,12 @@ private:
   void drawPolygon(double r, double a);
   void drawStar(double r1, double r2, double a);
 
+private slots:
+  void enableFill();
+  void disableFill();
+  void setPolygon();
+  void setStar();
+
 private:
   enum State{S_Init, S_Resize};
   State state;
