@@ -115,12 +115,26 @@ void
 SvgImport::convert()
 {
 	QDomElement docElem = inpdoc.documentElement();
-	m_document.setWidth( !docElem.attribute( "width" ).isEmpty() ? docElem.attribute( "width" ).toFloat() : 550.0);
-	m_document.setHeight(!docElem.attribute( "height" ).isEmpty() ? docElem.attribute( "height" ).toFloat() : 841.0 );
+	double width	= !docElem.attribute( "width" ).isEmpty() ? parseUnit( docElem.attribute( "width" ) ) : 550.0;
+	double height	= !docElem.attribute( "height" ).isEmpty() ? parseUnit( docElem.attribute( "height" ) ) : 841.0;
+	m_document.setWidth( width );
+	m_document.setHeight( height );
+
 	// undo y-mirroring
 	GraphicsContext *gc = new GraphicsContext;
 	gc->matrix.scale( 1, -1 );
 	gc->matrix.translate( 0, -m_document.height() );
+	if( !docElem.attribute( "viewBox" ).isEmpty() )
+	{
+		// allow for viewbox def with ',' or whitespace
+		QString viewbox( docElem.attribute( "viewBox" ) );
+		QStringList points = QStringList::split( ' ', viewbox.replace( QRegExp(","), " ").simplifyWhiteSpace() );
+
+		points[2].toFloat();
+		points[3].toFloat();
+		gc->matrix.scale( width / points[2].toFloat() , height / points[3].toFloat() );
+	}
+
 	m_gc.push( gc );
 	parseGroup( 0L, docElem );
 
