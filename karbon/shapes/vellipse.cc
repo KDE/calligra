@@ -54,8 +54,12 @@ VEllipse::init()
 	    nsegs = floor( ( m_endAngle - m_startAngle ) / 90.0 );
 	else
 	    nsegs = 4 - ceil( ( m_startAngle - m_endAngle ) / 90.0 );
-	double startAngle = VGlobal::pi_2 * ( m_startAngle / 90.0 );
-	double endAngle   = VGlobal::pi_2 * ( m_endAngle / 90.0 );
+	double startAngle = m_startAngle - 90.0;
+	if( startAngle < 0 ) startAngle += 360.0;
+	startAngle = VGlobal::pi_2 * ( startAngle / 90.0 );
+	double endAngle   = m_endAngle - 90.0;
+	endAngle   = VGlobal::pi_2 * ( endAngle / 90.0 );
+	if( endAngle < 0 ) endAngle += 360.0;
 	// Create (half-)unity circle with topLeft at (0|0):
 	double currentAngle = -startAngle - VGlobal::pi_2;
 	KoPoint start( 0.5 * sin( -startAngle ), 0.5 * cos( -startAngle ) );
@@ -86,8 +90,6 @@ VEllipse::init()
 
 	// Translate and scale:
 	QWMatrix m;
-	//m.translate( -0.5, -0.5 );
-	//m.translate( m_center.x() - m_rx, m_center.y() - m_ry );
 	m.translate( m_center.x(), m_center.y() );
 	m.scale( 2.0 * m_rx, 2.0 * m_ry );
 
