@@ -8,6 +8,8 @@ dnl =====================
 dnl Beware, I'm not an m4-wizard, I just looked at existing macros and built 
 dnl something suiting my needs. pfeiffer@kde.org
 
+if false; then
+
 AC_MSG_CHECKING([for MMX])
 
 AC_CACHE_VAL(kde_cv_have_mmx,
@@ -58,3 +60,5 @@ fi
 ])
 
 AC_MSG_RESULT($kde_cv_have_mmx)
+
+fi
