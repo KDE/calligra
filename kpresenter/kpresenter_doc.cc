@@ -72,6 +72,7 @@
 #include <koView.h>
 #include <koTemplateChooseDia.h>
 #include <koRuler.h>
+#include <koFilterManager.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -1457,7 +1458,13 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 {
     QString _template;
     KoTemplateChooseDia::ReturnType ret;
-    ret = KoTemplateChooseDia::chooseTemplate( "kpresenter_template", _template, true, false );
+    
+    QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
+                                                                "application/x-kpresenter",
+								"*.kpt", "KPresenter",
+								false );
+    
+    ret = KoTemplateChooseDia::chooseTemplate( "kpresenter_template", _template, true, false, filter, "application/x-kpresenter" );
 
     if ( ret == KoTemplateChooseDia::Template )
     {
