@@ -1,5 +1,6 @@
 
-SUBDIRS = newapi parser tableview
+SUBDIRS = newapi 
 
+# unused: parser tableview
 # startup
 

@@ -128,7 +128,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 	m_conn_sel->m_fileDlg->setMode( KexiStartupFileDialog::SavingFileBasedDB );
 //	m_conn_sel->m_fileDlg->setMode( KFile::LocalOnly | KFile::File );
 //	m_conn_sel->m_fileDlg->setOperationMode( KFileDialog::Saving );
-////js	connect(m_conn_sel->m_fileDlg,SIGNAL(cancelClicked()),this,SLOT(reject()));
+////js	connect(m_conn_sel->m_fileDlg,SIGNAL(rejected()),this,SLOT(reject()));
 //	connect(m_conn_sel->m_fileDlg,SIGNAL(fileHighlighted(const QString&)),this,SLOT(slotFileHighlighted(const QString&)));
 	connect(m_conn_sel->m_fileDlg,SIGNAL(accepted()),this,SLOT(accept()));
 	m_conn_sel->showAdvancedConn();

@@ -56,6 +56,11 @@ namespace Kexi
 	//! shared part manager
 	KEXICORE_EXPORT KexiPart::Manager& partManager();
 
+	//! can be called to delete global objects like driverManager and partManager
+	//! (and thus, all loaded factories/plugins)
+	//! before KLibrary::~KLibrary() do this for us
+	KEXICORE_EXPORT void deleteGlobalObjects();
+
 	//some temporary flags
 
 	//! false by default, flag loaded on main window startup

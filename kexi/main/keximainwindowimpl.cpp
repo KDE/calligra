@@ -655,8 +655,8 @@ void KexiMainWindowImpl::invalidateViewModeActions()
 tristate KexiMainWindowImpl::startup()
 {
 	switch (Kexi::startupHandler().action()) {
-//	case KexiStartupHandler::CreateBlankProject:
-//		return createBlankProject();
+	case KexiStartupHandler::CreateBlankProject:
+		return createBlankProject();
 	case KexiStartupHandler::UseTemplate:
 		return cancelled;
 		//TODO

@@ -545,6 +545,7 @@ void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 			}
 		}
 		else {
+//TODO: this can be also an expression --> CRASH!
 			tableName = field->table()->name();
 			fieldName = field->name();
 		}

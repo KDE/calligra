@@ -32,18 +32,55 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kiconeffect.h>
+#include <ksharedptr.h>
 
 using namespace Kexi;
 
-KexiDBConnectionSet _connset;
-KexiProjectSet _recentProjects;
-KexiDB::DriverManager _driverManager;
-KexiPart::Manager _partManager;
+//used for speedup
+class KexiInternal : public KShared
+{
+	public:
+		KexiInternal() : KShared()
+		{}
+		~KexiInternal()
+		{}
+		KexiDBConnectionSet connset;
+		KexiProjectSet recentProjects;
+		KexiDB::DriverManager driverManager;
+		KexiPart::Manager partManager;
+};
 
-KexiDBConnectionSet& Kexi::connset() { return _connset; }
-KexiProjectSet& Kexi::recentProjects() { return _recentProjects; }
-KexiDB::DriverManager& Kexi::driverManager() { return _driverManager; }
-KexiPart::Manager& Kexi::partManager() { return _partManager; }
+KSharedPtr<KexiInternal> _int;
+
+#define _INIT_SHARED if (!_int) _int = new KexiInternal()
+
+KexiDBConnectionSet& Kexi::connset()
+{
+	_INIT_SHARED;
+	return _int->connset;
+}
+
+KexiProjectSet& Kexi::recentProjects() { 
+	_INIT_SHARED;
+	return _int->recentProjects;
+}
+
+KexiDB::DriverManager& Kexi::driverManager()
+{
+	_INIT_SHARED;
+	return _int->driverManager;
+}
+
+KexiPart::Manager& Kexi::partManager()
+{
+	_INIT_SHARED;
+	return _int->partManager;
+}
+
+void Kexi::deleteGlobalObjects()
+{
+	delete _int;
+}
 
 //temp
 bool _tempShowForms = 0;

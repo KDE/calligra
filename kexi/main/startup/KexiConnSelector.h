@@ -29,6 +29,7 @@
 #include <klistview.h>
 
 #include <qwidgetstack.h>
+#include <qguardedptr.h>
 
 
 //! helper class

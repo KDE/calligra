@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,14 +22,19 @@
 
 #include <kfiledialog.h>
 
-class KURLComboBox;
+#ifdef Q_WS_WIN
+# include "KexiStartupFileDialogBase_win.h"
+#else
+  typedef KFileDialog KexiStartupFileDialogBase;
+#endif
+
 
 //! Widget for Kexi files opening/saving
-class KexiStartupFileDialog : public KFileDialog
+class KexiStartupFileDialog : public KexiStartupFileDialogBase
 {
 	Q_OBJECT
 	
-public :
+public:
 
 	/*! Dialog mode:
 	 - Opening opens existing database (or shortcut)
@@ -47,9 +52,9 @@ public :
 //	KURL currentURL();
 	QString currentFileName();
 
-#ifndef Q_WS_WIN
-	KURLComboBox *locationWidget() const;
-#endif
+//#ifndef Q_WS_WIN
+//	KURLComboBox *locationWidget() const;
+//#endif
 	//! just sets locationWidget()->setCurrentText(fn)
 	//! (and something similar on win32)
 	void setLocationText(const QString& fn);
@@ -65,6 +70,7 @@ public slots:
 signals:
 	//entered file name is accepted
 	void accepted();
+	void rejected();
 	
 protected:
 	// Typing a file that doesn't exist closes the file dialog, we have to

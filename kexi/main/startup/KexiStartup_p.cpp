@@ -89,28 +89,11 @@ tristate SQLite2ToSQLite3Migration::run()
 	return result;
 }
 
+extern void updateProgressBar(KProgressDialog *pd, char *buffer, int buflen);
+
 void SQLite2ToSQLite3Migration::receivedStderr(KProcess *, char *buffer, int buflen)
 {
-	char *p = buffer;
-	QCString line(80);
-	for (int i=0; i<buflen; i++, p++) {
-		if ((i==0 || buffer[i-1]=='\n') && buffer[i]=='%') {
-			bool ok;
-			int j=0;
-			char *q=++p;
-			++i;
-			line="";
-			for (;i<buflen && *p>='0' && *p<='9'; j++, i++, p++)
-				line+=QChar(*p);
-			--i; --p;
-			int percent = line.toInt(&ok);
-			if (ok && percent>=0 && percent<=100 && m_dlg->progressBar()->progress()<percent) {
-//				kdDebug() << percent << endl;
-				m_dlg->progressBar()->setProgress(percent);
-				qApp->processEvents(100);
-			}
-		}
-	}
+	updateProgressBar(m_dlg, buffer, buflen);
 }
 
 void SQLite2ToSQLite3Migration::processExited(KProcess* process)

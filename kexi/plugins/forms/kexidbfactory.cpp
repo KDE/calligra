@@ -111,7 +111,7 @@ KexiDBFactory::name()
 	return("kexidbwidgets");
 }
 
-KFormDesigner::WidgetInfoList
+KFormDesigner::WidgetInfo::List
 KexiDBFactory::classes()
 {
 	return m_classes;

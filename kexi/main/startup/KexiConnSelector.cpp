@@ -170,7 +170,7 @@ void KexiConnSelectorWidget::showSimpleConn()
 		for (QWidget *w = parentWidget(true);w;w=w->parentWidget(true)) {
 			if (w->isDialog()) {
 //#ifndef Q_WS_WIN
-				connect(m_fileDlg,SIGNAL(cancelClicked()),static_cast<QDialog*>(w),SLOT(reject()));
+				connect(m_fileDlg,SIGNAL(rejected()),static_cast<QDialog*>(w),SLOT(reject()));
 //#endif
 //				connect(m_fileDlg,SIGNAL(cancelled()),static_cast<QDialog*>(w),SLOT(reject()));
 				break;

@@ -59,27 +59,27 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
 		KexiDBFactory(QObject *parent, const char *name, const QStringList &args);
 		~KexiDBFactory();
 
-		virtual QString				name();
-		virtual KFormDesigner::WidgetInfoList	classes();
-		virtual QWidget				*create(const QString &, QWidget *, const char *, KFormDesigner::Container *);
+		virtual QString	name();
+		virtual KFormDesigner::WidgetInfo::List classes();
+		virtual QWidget *create(const QString &, QWidget *, const char *, KFormDesigner::Container *);
 
-		virtual bool				createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu,
+		virtual bool createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu,
 		   KFormDesigner::Container *container, QValueVector<int> *menuIds);
-		virtual void		startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container);
-		virtual void		previewWidget(const QString &, QWidget *, KFormDesigner::Container *) {}
+		virtual void startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container);
+		virtual void previewWidget(const QString &, QWidget *, KFormDesigner::Container *) {}
 
 		//virtual void		saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
 		         //QDomElement &parentNode, QDomDocument &parent) {}
 		//virtual void            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item) {}
 		virtual bool		showProperty(const QString &, QWidget *, const QString &, bool multiple) { return !multiple;}
-		virtual QStringList     autoSaveProperties(const QString &classname);
+		virtual QStringList autoSaveProperties(const QString &classname);
 
 	/*protected:
 		virtual void  changeText(const QString &newText);
 		virtual void   resizeEditor(QWidget *widget, const QString &classname);*/
 
 	private:
-		KFormDesigner::WidgetInfoList		m_classes;
+		KFormDesigner::WidgetInfo::List m_classes;
 		QWidget *m_widget;
 		KFormDesigner::Container *m_container;
 };

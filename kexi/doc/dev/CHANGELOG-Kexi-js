@@ -335,6 +335,17 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 
 TODO: add kexi__toremove table, and use it to remove objects on begin connection
 
+2004-10-14
+Kexi
+- more debug areas added
+- KexiStartupFileDialog wrapped for win32 again
+TODO: move some things to kdeui/win32
+KexiDB Parser, KexiDB
+- WHERE expression is supported
+- operators like "IS SIMILAR TO" and "IS NOT NULL" better supported
+- brackets better supported
+- both <> and != supported
+
 2004-10-11
 Parser:
 - ER004 supported

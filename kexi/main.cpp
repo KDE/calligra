@@ -29,6 +29,8 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
+#include <kiconloader.h>
+#include <kstandarddirs.h>
 
 #include "core/kexiproject.h"
 #include "core/kexidialogbase.h"
@@ -130,9 +132,17 @@ extern "C" int kdemain(int argc, char *argv[])
 	KCmdLineArgs::init( argc, argv, newKexiAboutData() );
 	KCmdLineArgs::addCmdLineOptions( options );
 
-	KApplication app(true, true);
+	bool GUIenabled = true;
+	QWidget *dummyWidget = 0; //needed to have icon for dialogs before KexiMainWindowImpl is created
 //TODO: switch GUIenabled off when needed
-	
+	KApplication app(true, GUIenabled);
+
+	if (GUIenabled) {
+		dummyWidget = new QWidget();
+		dummyWidget->setIcon( DesktopIcon( "kexi" ) );
+		app.setMainWidget(dummyWidget);
+	}
+
 	if (!Kexi::startupHandler().init(argc, argv))
 		return 1;
 	
@@ -148,6 +158,7 @@ extern "C" int kdemain(int argc, char *argv[])
 		return 1;
 
 	app.setMainWidget(win);
+	delete dummyWidget;
 	win->show();
 	app.processEvents();//allow refresh our app
 
