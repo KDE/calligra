@@ -101,7 +101,7 @@ void KWord13Document::xmldump( QIODevice* io )
     iostream << " </footendnoteframesets>\n";
     
     iostream << " <otherframesets>\n";
-    for ( KWordFrameset* item4 = m_otherFramesetList.first();
+    for ( KWord13Frameset* item4 = m_otherFramesetList.first();
         item4;
         item4 = m_otherFramesetList.next() )
     {

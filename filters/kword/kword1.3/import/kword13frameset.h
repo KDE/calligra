@@ -29,11 +29,11 @@ class QTextStream;
 
 #include "kword13paragraph.h"
 
-class KWordFrameset
+class KWord13Frameset
 {
 public:
-    KWordFrameset( int frameType, int frameInfo, const QString& name );
-    virtual ~KWordFrameset( void );
+    KWord13Frameset( int frameType, int frameInfo, const QString& name );
+    virtual ~KWord13Frameset( void );
 public:
     virtual bool addParagraph(const KWord13Paragraph& para);
     virtual void xmldump( QTextStream& iostream );
@@ -46,7 +46,7 @@ protected:
     QString m_name; ///< Name of frameset
 };
 
-class KWordTextFrameset : public KWordFrameset
+class KWordTextFrameset : public KWord13Frameset
 {
 public:
     KWordTextFrameset( int frameType, int frameInfo, const QString& name );

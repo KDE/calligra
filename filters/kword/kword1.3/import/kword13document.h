@@ -67,7 +67,7 @@ public:
     QPtrList<KWordTextFrameset> m_tableFramesetList; ///< List of \<FRAMESET\> being part of tables
     QPtrList<KWordTextFrameset> m_headerFooterFramesetList; ///< List of \<FRAMESET\> having footer/header
     QPtrList<KWordTextFrameset> m_footEndNoteFramesetList; ///< List of \<FRAMESET\> having footnotes or endnotes
-    QPtrList<KWordFrameset> m_otherFramesetList; ///< List of \<FRAMESET\> of other types
+    QPtrList<KWord13Frameset> m_otherFramesetList; ///< List of \<FRAMESET\> of other types
 };
 
 #endif // KWORD_1_3_DOCUMENT_H

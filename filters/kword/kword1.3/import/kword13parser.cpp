@@ -313,7 +313,7 @@ bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttribu
         // Frame of unknown/unsupported type
         kdWarning(30520) << "Unknown/unsupported <FRAMESET> type! Type: " << frameTypeStr << " Info: " << frameInfoStr << endl;
         stackItem->elementType = ElementTypeUnknownFrameset;
-        KWordFrameset* frameset = new KWordFrameset( frameType, frameInfo, attributes.value( "name" ) );
+        KWord13Frameset* frameset = new KWord13Frameset( frameType, frameInfo, attributes.value( "name" ) );
         m_kwordDocument->m_otherFramesetList.append( frameset );
         stackItem->m_currentFrameset = m_kwordDocument->m_otherFramesetList.current();
     }

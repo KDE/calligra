@@ -27,7 +27,7 @@
 
 class KWord13Paragraph;
 class KWord13Document;
-class KWordFrameset;
+class KWord13Frameset;
 class KWord13Layout;
 class KWord13FormatOne;
 
@@ -63,7 +63,7 @@ public:
 public:
     QString itemName;   ///< Name of the tag (only for error purposes)
     StackItemElementType elementType;
-    KWordFrameset* m_currentFrameset;
+    KWord13Frameset* m_currentFrameset;
 };
 
 class StackItemStack : public QPtrStack<StackItem>

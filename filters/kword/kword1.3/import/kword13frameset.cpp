@@ -25,22 +25,22 @@
 #include "kword13frameset.h"
 
 
-KWordFrameset::KWordFrameset( int frameType, int frameInfo, const QString& name )
+KWord13Frameset::KWord13Frameset( int frameType, int frameInfo, const QString& name )
     : m_numFrames(0), m_frameType( frameType ), m_frameInfo( frameInfo ), m_name( name )
 {    
 }
 
-KWordFrameset::~KWordFrameset( void )
+KWord13Frameset::~KWord13Frameset( void )
 {
 }
 
-bool KWordFrameset::addParagraph(const KWord13Paragraph&)
+bool KWord13Frameset::addParagraph(const KWord13Paragraph&)
 {
     kdDebug(30520) << "Cannot add paragraph! Not a text frameset!" << endl;
     return false;
 }
 
-void KWordFrameset::xmldump( QTextStream& iostream )
+void KWord13Frameset::xmldump( QTextStream& iostream )
 {
     iostream << "  <frameset variant=\"None\" type=\"" << m_frameType
          << "\" info=\"" << m_frameInfo
@@ -49,7 +49,7 @@ void KWordFrameset::xmldump( QTextStream& iostream )
 
 
 KWordTextFrameset::KWordTextFrameset( int frameType, int frameInfo, const QString& name )
-    : KWordFrameset( frameType, frameInfo, name )
+    : KWord13Frameset( frameType, frameInfo, name )
 {    
 }
 
