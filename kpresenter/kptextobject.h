@@ -253,7 +253,7 @@ public slots:
 protected slots:
     virtual void startDrag();
 
-    KPrTextDrag * newDrag( QWidget * parent ) const ;
+    KPrTextDrag * newDrag( QWidget * parent );
 
 protected:
     // Reimplemented from KoTextView
