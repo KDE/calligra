@@ -555,6 +555,17 @@ void KPresenterView::editSelectAll()
         edit->selectAll();
 }
 
+void KPresenterView::editDeSelectAll()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( !edit ) {
+	m_canvas->setToolEditMode( TEM_MOUSE );
+	m_canvas->deSelectAllObj();
+    }
+    else
+        edit->selectAll(false);
+}
+
 /*===============================================================*/
 void KPresenterView::editCopyPage()
 {
@@ -2384,7 +2395,8 @@ void KPresenterView::setupActions()
     actionEditDelete = new KAction( i18n( "&Delete" ), "editdelete", CTRL + Key_Delete,
 				    this, SLOT( editDelete() ),
 				    actionCollection(), "edit_delete" );
-    actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
+     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
+    actionEditDeSelectAll= KStdAction::deselect( this, SLOT( editDeSelectAll()), actionCollection(), "edit_deselectall");
     /*actionEditCopyPage = */new KAction( i18n( "Copy Page" ), "editcopy",
                                           0, this, SLOT( editCopyPage() ),
                                           actionCollection(), "edit_copypage" );
@@ -6381,11 +6393,11 @@ void KPresenterView::applyAutoFormat()
         list.append(it.current());
     }
 
-    KCommand * cmd = applyAutoFormatToCurrentPage( list );
-    if ( cmd )
+    KCommand * cmd2 = applyAutoFormatToCurrentPage( list );
+    if ( cmd2 )
     {
         createmacro = true;
-        macro->addCommand( cmd );
+        macro->addCommand( cmd2 );
     }
 
     while(switchInOtherPage(i18n( "Do you want to Apply Autoformat in new page?")) )
@@ -6398,7 +6410,9 @@ void KPresenterView::applyAutoFormat()
         }
     }
     if ( createmacro )
+    {
         m_pKPresenterDoc->addCommand(macro);
+    }
     else
         delete macro;
     m_switchPage=-1;

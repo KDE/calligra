@@ -1380,9 +1380,9 @@ void KPTextView::clearSelection()
     }
 }
 
-void KPTextView::selectAll()
+void KPTextView::selectAll(bool select)
 {
-    textObject()->selectAll( true );
+    textObject()->selectAll( select );
 }
 
 void KPTextView::drawCursor( bool b )

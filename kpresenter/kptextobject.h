@@ -187,7 +187,7 @@ public:
     void dropEvent( QDropEvent * );
 
     void clearSelection();
-    void selectAll();
+    void selectAll(bool select = true);
     virtual void drawCursor( bool b );
 
     const KoParagLayout & currentParagLayout() const { return m_paragLayout; }

@@ -144,6 +144,7 @@ public slots:
     void editPaste();
     void editDelete();
     void editSelectAll();
+    void editDeSelectAll();
     void editCopyPage();
     void editDuplicatePage();
     void editDelPage();
@@ -749,6 +750,7 @@ private:
     KAction *actionEditPaste;
     KAction *actionEditDelete;
     KAction *actionEditSelectAll;
+    KAction *actionEditDeSelectAll;
     KAction *actionEditDuplicatePage;
     KAction *actionEditDelPage;
 
