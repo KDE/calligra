@@ -26,6 +26,7 @@
 #include <qtabwidget.h>
 #include <qtooltip.h>
 
+#include <kwordwrap.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <klineeditdlg.h>
@@ -83,11 +84,11 @@ public:
     OutlineSlideItem( KListView * parent, KPrPage* page );
 
     KPrPage* page(){ return m_page; }
-    
+
     void setPage( KPrPage* p );
-    
+
     void update();
-    
+
 private:
     KPrPage* m_page;
 };
@@ -95,14 +96,14 @@ private:
 class OutlineObjectItem: public KListViewItem
 {
 public:
-   
-    OutlineObjectItem( OutlineSlideItem * parent, KPObject* object, 
+
+    OutlineObjectItem( OutlineSlideItem * parent, KPObject* object,
        int num, bool sticky, const QString& name = QString::null );
-       
+
     KPObject* object(){ return m_object; }
-    
+
     void setObject( KPObject* o );
-    
+
 private:
     KPObject* m_object;
 };
@@ -298,7 +299,7 @@ void ThumbBar::rebuildItems()
         item->setUptodate( false );
         item->setDragEnabled(false);  //no dragging for now
     }
-    
+
     QTimer::singleShot( 10, this, SLOT( slotRefreshItems() ) );
 
     uptodate = true;
@@ -537,7 +538,7 @@ OutlineSlideItem::OutlineSlideItem( KListView* parent, KPrPage* _page )
 
 void OutlineSlideItem::setPage( KPrPage* p )
 {
-    if( !p ) return;   
+    if( !p ) return;
     m_page = p;
     update();
 }
@@ -547,8 +548,6 @@ void OutlineSlideItem::update()
     if( !m_page ) return;
     int index = m_page->kPresenterDoc()->pageList().find( m_page );
     QString title = m_page->pageTitle( i18n( "Slide %1" ).arg( index + 1 ) );
-    if (title.length() > 12) // restrict to a maximum of 12 characters
-        title = title.left(5) + "..." + title.right(4);
     setText( 0, title );
 }
 
@@ -558,10 +557,10 @@ OutlineObjectItem::OutlineObjectItem( OutlineSlideItem* parent, KPObject* _objec
     : KListViewItem( parent ), m_object( _object )
 {
     setObject( m_object );
-    
+
     QString objectName = name.isEmpty() ? m_object->getTypeString() : name;
     if( num > 0 ) objectName += QString(" (%1)").arg( num );
-    if( sticky ) objectName += i18n(" (Sticky)" );    
+    if( sticky ) objectName += i18n(" (Sticky)" );
     setText( 0, objectName );
 }
 
@@ -569,7 +568,7 @@ void OutlineObjectItem::setObject( KPObject* object )
 {
     if( !object ) return;
     m_object = object;
-    
+
     switch ( m_object->getType() ) {
     case OT_PICTURE:
       setPixmap( 0, KPBarIcon( "frame_image" ) );
@@ -629,7 +628,7 @@ void OutlineObjectItem::setObject( KPObject* object )
       break;
     default:
       break;
-    }  
+    }
 }
 
 Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
@@ -681,7 +680,7 @@ void Outline::rebuildItems()
             KPObject* object = list.at( j );
             new OutlineObjectItem( item, object, j+1, false );
         }
-        
+
         KPObject* header = 0;
         KPObject* footer = 0;
 
@@ -691,18 +690,18 @@ void Outline::rebuildItems()
         {
             KPObject* object = it.current();
 
-            if( doc->hasHeader() && doc->isHeader( object ) ) 
+            if( doc->hasHeader() && doc->isHeader( object ) )
                 header = object;
-            else if( doc->hasFooter() && doc->isFooter( object ) ) 
+            else if( doc->hasFooter() && doc->isFooter( object ) )
                 footer = object;
             else
                 new OutlineObjectItem( item, object, 0, true );
         }
-        
+
         // add header and footer (if any)
-        if( footer ) 
+        if( footer )
             new OutlineObjectItem( item, footer, 0, true, i18n("Footer") );
-        if( header ) 
+        if( header )
             new OutlineObjectItem( item, header, 0, true, i18n("Header") );
 
     }
@@ -741,10 +740,10 @@ void Outline::addItem( int /*pos*/ )
 void Outline::moveItem( int oldPos, int newPos )
 {
     kdDebug(33001)<< "Outline::moveItem " << oldPos << " to " << newPos << endl;
-    
+
     int lowPage = oldPos > newPos ? newPos : oldPos;
     int highPage = oldPos < newPos ? newPos : oldPos;
-    
+
     // update, for all between lowPage & highPage
     int page = lowPage;
     OutlineSlideItem* item = slideItem( page );
@@ -759,13 +758,13 @@ void Outline::moveItem( int oldPos, int newPos )
 void Outline::removeItem( int pos )
 {
     kdDebug(33001)<< "Outline::removeItem" << endl;
- 
+
     OutlineSlideItem* item = slideItem( pos );
     if( !item ) return;
     OutlineSlideItem* temp = dynamic_cast<OutlineSlideItem*>(item->nextSibling());
-    
+
     delete item;
-    
+
     for( item = temp; item; ++pos ) {
         KPrPage* newPage = doc->pageList().at( pos );
         item->setPage( newPage );
@@ -791,22 +790,22 @@ void Outline::itemClicked( QListViewItem *item )
 {
     if( !item ) return;
 
-    // check if we need to show chosen slide    
+    // check if we need to show chosen slide
     OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(item);
     if( slideItem )
     {
         KPrPage* page = slideItem->page();
         if( !page ) return;
         emit showPage( page->kPresenterDoc()->pageList().find( page ) );
-    }    
-    
-    // check if we need to show chosen object    
+    }
+
+    // check if we need to show chosen object
     OutlineObjectItem* objectItem = dynamic_cast<OutlineObjectItem*>(item);
     if( objectItem )
     {
         KPObject *object = objectItem->object();
         if( !object ) return;
-        
+
         // ensure the owner slide is shown first
         OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(objectItem->parent());
         if( slideItem ) if( slideItem != currentItem() )
@@ -815,7 +814,7 @@ void Outline::itemClicked( QListViewItem *item )
             if( !page ) return;
             emit showPage( page->kPresenterDoc()->pageList().find( page ) );
         }
-        
+
         // select the object, make sure it's visible
         QRect rect( doc->zoomHandler()->zoomRect( object->getBoundingRect() ) );
         object->setSelected( true );
@@ -825,7 +824,7 @@ void Outline::itemClicked( QListViewItem *item )
         rect.setRight( rect.right() + 20 );
         rect.setBottom( rect.bottom() + 20 );
         view->makeRectVisible( rect );
-    }    
+    }
 }
 
 void Outline::setCurrentPage( int pg )
@@ -854,7 +853,7 @@ void Outline::movableDropEvent( QListViewItem* parent, QListViewItem* target )
 {
     // slide doesn't have parent (always 0)
     if( parent ) return;
-    
+
     KListView::movableDropEvent( parent, target );
 }
 
@@ -869,15 +868,15 @@ void Outline::doMoveItems()
 {
     OutlineSlideItem* srcItem = dynamic_cast<OutlineSlideItem*>(movedItem);
     if( !srcItem ) return;
-    
+
     int num = doc->pageList().find( srcItem->page() );
-    
+
     OutlineSlideItem* dstItem = dynamic_cast<OutlineSlideItem*>(movedAfter);
     if( movedAfter && !dstItem ) return;
 
     int numNow = movedAfter ? doc->pageList().find( dstItem->page() ) : -1;
     if ( numNow < num ) numNow++;
-    
+
     if(num!=numNow) {
         emit movePage( num, numNow );
         // this has to be done because moving a page is take + insert the page
@@ -891,10 +890,10 @@ void Outline::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
 
     QListViewItem *item = QListView::selectedItem();
     if( !item ) return;
-    
+
     OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(item);
     if( !slideItem ) return;
-    
+
     view->openPopupMenuSideBar(pnt);
 }
 
@@ -902,13 +901,13 @@ void Outline::renamePageTitle()
 {
     QListViewItem *item = QListView::selectedItem();
     if( !item ) return;
-    
+
     OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(item);
     if( !slideItem ) return;
-    
+
     KPrPage* page = slideItem->page();
     if( !page ) return;
-    
+
     bool ok = false;
     QString activeTitle = item->text( 0 );
     QString newTitle = KLineEditDlg::getText( i18n("Rename Slide"),
