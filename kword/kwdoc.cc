@@ -23,6 +23,7 @@
 
 #include <kapplication.h> // for KDE_VERSION
 #include <kdebug.h>
+#include <kdebugclasses.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
@@ -60,6 +61,7 @@
 #include <kglobalsettings.h>
 
 //#define DEBUG_PAGES
+#define DEBUG_SPEED
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 static const char * CURRENT_DTD_VERSION = "1.2";
@@ -262,6 +264,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_cursorInProtectectedArea=true;
 
     m_lastViewMode="ModeNormal";
+    m_viewMode = 0;
 
     m_commandHistory = new KWCommandHistory( this );
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
@@ -451,7 +454,7 @@ void KWDocument::initConfig()
   }
 
   setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
-  newZoomAndResolution( false, false );
+
   //text mode view is not a good default for a readonly document...
   if ( !isReadWrite() && m_lastViewMode =="ModeText" )
       m_lastViewMode= "ModeNormal";
@@ -515,10 +518,11 @@ void KWDocument::newZoomAndResolution( bool updateViews, bool forPrint )
 {
     if ( m_formulaDocument )
         m_formulaDocument->newZoomAndResolution( updateViews,forPrint );
-    // Update all fonts
+#if 0
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
         fit.current()->zoom( forPrint );
+#endif
 
     layout();
     updateAllFrames();
@@ -2858,7 +2862,13 @@ void KWDocument::removePage( int num )
 void KWDocument::afterRemovePages()
 {
     recalcFrames();
-    updateAllFrames(); // Do this before recalcVariables (which repaints). The removed frames must be removed from the frame caches.
+    // Do this before recalcVariables (which repaints). The removed frames must be removed from the frame caches.
+    // We don't call updateAllFrames() directly, because it still calls
+    // updateFramesOnTopOrBelow, which is useless (and slow) here.
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+        fit.current()->updateFrames();
+
     //### IMHO recalcFrames should take care of updateAllFrames (it already does it partially).
     recalcVariables( VT_PGNUM );
     emit newContentsSize();
@@ -3136,7 +3146,7 @@ void KWDocument::fixZOrders() {
 
     }
     if ( fixed_something )
-        updateAllFrames();
+        updateFramesOnTopOrBelow();
 }
 
 
@@ -3178,18 +3188,170 @@ KWFrame *KWDocument::getFirstSelectedFrame() const
 
 void KWDocument::updateAllFrames()
 {
-    //kdDebug(32002) << "KWDocument::updateAllFrames " << m_lstFrameSet.count() << " framesets." << endl;
+#ifdef DEBUG_SPEED
+    QTime dt;
+    dt.start();
+#endif
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
         fit.current()->updateFrames();
+
+#ifdef DEBUG_SPEED
+    kdDebug(32001) << "updateAllFrames took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
+#endif
+
+    // TODO: check all calls to updateAllFrames, and fix them.
+    // E.g., if one frame moved, updateAllFrames isn't necessary,
+    // only fs->updateFrames() and doc->updateFramesOnTopOrBelow() are necessary.
+
+    // Update frames ontop and below _afterwards_,
+    // it needs the 'frames in page' array (in other framesets)
+    updateFramesOnTopOrBelow();
+}
+
+void KWDocument::updateFramesOnTopOrBelow( int pageNum /* -1 == all */ )
+{
+    if ( viewMode() && !viewMode()->hasFrames() )
+        return;
+
+    kdDebug() << "KWDocument::updateFramesOnTopOrBelow" << endl;
+#ifdef DEBUG_SPEED
+    QTime dt;
+    dt.start();
+    int numberAdded = 0;
+#endif
+
+    // Look at all pages if pageNum == -1, otherwise look at pageNum only.
+    int fromPage = pageNum == -1 ? 0 : pageNum;
+    int toPage = pageNum == -1 ? m_pages - 1 : pageNum;
+    for ( int pageNum = fromPage ; pageNum <= toPage ; ++pageNum )
+    {
+        // For all frames in that page: clear ontop/below lists.
+        // TODO we need to fix the case of multipage frames... somehow.
+        QPtrList<KWFrame> framesInThisPage = framesInPage( pageNum );
+        QPtrListIterator<KWFrame> frameIt( framesInThisPage );
+        for ( ; frameIt.current(); ++frameIt )
+        {
+            frameIt.current()->clearFramesOnTop();
+            frameIt.current()->clearFramesBelow();
+        }
+
+        frameIt.toFirst();
+        for ( ; frameIt.current(); ++frameIt )
+        {
+            // currentFrame is the frame we're taking care of now
+            // (the one whose ontop/below caches we're modifying)
+            KWFrame* currentFrame = frameIt.current();
+            KWFrameSet* currentFrameSet = currentFrame->frameSet();
+            KWTableFrameSet* table = currentFrameSet->getGroupManager();
+            bool isInline = currentFrameSet->isFloating();
+
+            // Frank's code for going up to the right frame/frameset, if currentFrame is
+            // floating, in order to use the right z order.
+            // ### Maybe this logic could be in KWFrame::zOrder() ?
+            // ### or at least we could have a 'first non-floating parent frame' method
+            KWFrame *parentFrame = currentFrame;
+            KWFrameSet *parentFrameset = currentFrameSet;
+            while (parentFrameset->isFloating()) {
+                parentFrameset=parentFrameset->anchorFrameset();
+                KWFrame *oldParentFrame = parentFrame;
+                parentFrame=parentFrameset->frameAtPos(parentFrame->x(), parentFrame->y());
+                if(!parentFrame)
+                    parentFrame = oldParentFrame;
+            }
+
+            // We now look at all other frames (in the same page)
+            // to check for intersections. This is o(n^2), but with n small.
+            QPtrListIterator<KWFrame> it( framesInThisPage );
+            for ( ; it.current() ; ++it )
+            {
+                KWFrame* frameMaybeOnTop = it.current();
+                if ( currentFrame == frameMaybeOnTop ) // Skip identity case ;)
+                    continue;
+                KWFrameSet* frameSet = frameMaybeOnTop->frameSet();
+
+                // Skip all cells from 'currentFrameSet' if 'currentFrameSet' is a table.
+                // We trust that KWTableFrameSet will not make cells overlap ;)
+                if ( table && frameSet->getGroupManager() == table )
+                    continue;
+                // Skip all frames from the parent frameset, if 'currentFrameSet' is inline
+                // ## might need a for loop for the case of inline-inside-inline,
+                // or maybe calling isPaintedBy instead [depending on what should happen for tables]
+                if ( isInline && frameSet == parentFrameset )
+                    continue;
+
+                //kdDebug(32001) << "        comparing our frame " << parentFrame << " (z:" << parentFrame->zOrder() << ") with frame " << frameMaybeOnTop << " (z:" << frameMaybeOnTop->zOrder() << ") from frameset " << frameSet << endl;
+                KoRect intersect = currentFrame->intersect( frameMaybeOnTop->outerKoRect() );
+                if( !intersect.isEmpty() )
+                {
+                    bool added = false;
+                    if ( parentFrame->zOrder() < frameMaybeOnTop->zOrder() )
+                    {
+                        // Floating frames are not "on top", they are "inside".
+                        if ( !frameSet->isPaintedBy( currentFrameSet ) ) {
+                            added = true;
+                            currentFrame->addFrameOnTop( frameMaybeOnTop );
+                        }
+                    } else
+                    {
+                        // Don't treat a frameset as 'below' its inline framesets.
+                        // Same problem with table cells. In general we want to forbid that, if
+                        // painting A leads to painting B, A is stored as 'below B'.
+                        // This is where the infinite loop comes from, if B is transparent.
+                        // (Note: we only forbid this for 'below', not for 'on top', to get
+                        // proper clipping).
+                        if ( !currentFrameSet->isPaintedBy( frameSet ) && parentFrame->zOrder() > frameMaybeOnTop->zOrder() )
+                        {
+                            added = true;
+                            currentFrame->addFrameBelow( frameMaybeOnTop );
+                        }
+                    }
+#ifdef DEBUG_SPEED
+                    if ( added )
+                        numberAdded++;
+#endif
+
+#if 0
+                    if ( added )
+                    {
+                        kdDebug(32002)
+                            << "          adding frame "
+                            << frameMaybeOnTop << "("<<frameSet->getName()<<")"
+                            << " (zorder: " << frameMaybeOnTop->zOrder() << ")"
+                            << (  parentFrame->zOrder() < frameMaybeOnTop->zOrder() ? " on top of" : " below" )
+                            << " frame " << currentFrame << "("<<currentFrameSet->getName()<<")"
+                            << " parentFrame " << parentFrame << " (zorder: " << parentFrame->zOrder() << ")" << endl;
+                            //kdDebug(32002) << "   intersect: " << intersect
+                            //<< " (zoomed: " << zoomRect( intersect ) << ")" << endl;
+                    }
+#endif
+                }
+            } // 'it' for loop
+        } // 'frameIt' for loop
+
+        frameIt.toFirst();
+        for ( ; frameIt.current(); ++frameIt )
+            frameIt.current()->sortFramesBelow();
+
+    } // for (pages)
+
+#ifdef DEBUG_SPEED
+    kdDebug(32001) << "updateFramesOnTopOrBelow("<<pageNum<<") took " << (float)(dt.elapsed()) / 1000 << " seconds, added " << numberAdded << " frames" << endl;
+#endif
 }
 
 // Tell this method when a frame is moved / resized / created / deleted
 // and everything will be update / repainted accordingly
 void KWDocument::frameChanged( KWFrame * frame, KWView * view )
 {
+    if ( !frame ) // TODO call another method for 'deleted frame', which passes the frameset
+        updateAllFrames(); // ... in order to get rid of that call, and use the 'else' case instead
+    else {
+        frame->frameSet()->updateFrames();
+        updateFramesOnTopOrBelow();
+    }
+
     //kdDebug(32002) << "KWDocument::frameChanged" << endl;
-    updateAllFrames();
     // If frame with text flowing around it -> re-layout all frames
     if ( !frame || frame->runAround() != KWFrame::RA_NO )
     {
@@ -3208,6 +3370,8 @@ void KWDocument::frameChanged( KWFrame * frame, KWView * view )
 void KWDocument::framesChanged( const QPtrList<KWFrame> & frames, KWView * view )
 {
     //kdDebug(32002) << "KWDocument::framesChanged" << endl;
+    // TODO replace with 'make unique list of framesets', call updateFrames on those,
+    // then call updateFramesOnTopOrBelow.
     updateAllFrames();
     // Is there at least one frame with a text runaround set ?
     QPtrListIterator<KWFrame> it( frames );
@@ -3921,6 +4085,16 @@ void KWDocument::reactivateBgSpellChecking()
 
 KWTextFrameSet* KWDocument::nextTextFrameSet(KWTextFrameSet *obj)
 {
+#if 0 // TODO (rewrite)
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        // Look for the [toplevel] frameset currently being checked
+        if ( fit.current() == bgFrameSpellChecked )
+        {
+        }
+    }
+#endif
     int pos = -1;
     if ( bgFrameSpellChecked )
         pos=m_lstFrameSet.findNextRef(bgFrameSpellChecked);
@@ -3931,6 +4105,7 @@ KWTextFrameSet* KWDocument::nextTextFrameSet(KWTextFrameSet *obj)
             KWTextFrameSet *newFrm = frm->nextTextObject( obj );
             if(newFrm && !newFrm->isDeleted()  && newFrm->textObject()->needSpellCheck())
             {
+                //kdDebug() << "KWDocument::nextTextFrameSet checking " << bgFrameSpellChecked << endl;
                 bgFrameSpellChecked = frm;
                 return newFrm;
             }
@@ -3943,11 +4118,13 @@ KWTextFrameSet* KWDocument::nextTextFrameSet(KWTextFrameSet *obj)
             KWTextFrameSet *newFrm = frm->nextTextObject( obj );
             if(newFrm && !newFrm->isDeleted() && newFrm->textObject()->needSpellCheck())
             {
+                //kdDebug() << "KWDocument::nextTextFrameSet checking " << bgFrameSpellChecked << endl;
                 bgFrameSpellChecked = frm;
                 return newFrm;
             }
         }
     }
+    //kdDebug() << "KWDocument::nextTextFrameSet returning 0L" << endl;
     bgFrameSpellChecked = 0L;
     return 0L;
 }

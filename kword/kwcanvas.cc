@@ -957,9 +957,11 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
         if ( topPart > m_boundingRect.height() / 2 )
             // Most of the rect is in the top page
             p.setY( bottomPage * m_doc->ptPaperHeight() - m_boundingRect.height() - 1 );
-        else
+        else {
             // Most of the rect is in the bottom page
             p.setY( bottomPage * m_doc->ptPaperHeight() + 5 /* grmbl, resize handles.... */ );
+            topPage = bottomPage;
+        }
         //kdDebug() << "KWCanvas::mmEditFrameMove y set to " << p.y() << endl;
 
         m_boundingRect.moveTopLeft( p );
@@ -1039,6 +1041,8 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
     // Frames have moved -> update the "frames on top" lists
     //m_doc->updateAllFrames();
     // Not yet in fact. If we relayout the text everytime it's too slow.
+    // But we can fix the clipping easily
+    m_doc->updateFramesOnTopOrBelow( topPage );
 
     repaintContents( repaintRegion.boundingRect(), FALSE );
 

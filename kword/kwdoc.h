@@ -385,10 +385,11 @@ public:
     /**
      * Max z-order among all frames on the given page
      */
-    int maxZOrder( int pageNum) const;
+    int maxZOrder( int pageNum ) const;
     // No minZOrder() method, because of the main frameset, see kwview::lowerFrame
 
     void updateAllFrames();
+    void updateFramesOnTopOrBelow( int pageNum = -1 /* all */ );
 
     // The grid is in _pt_ now
     double gridX()const { return m_gridX; }

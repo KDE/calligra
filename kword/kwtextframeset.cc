@@ -172,7 +172,7 @@ KWTextDocument * KWTextFrameSet::kwTextDocument() const
 void KWTextFrameSet::slotAvailableHeightNeeded()
 {
     kdDebug() << "KWTextFrameSet::slotAvailableHeightNeeded " << getName() << endl;
-    updateFrames( /* TODO try passing 0 for speedup */ );
+    updateFrames( 0 ); // only do the available-height determination
 }
 
 KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPoint ) const
@@ -1010,7 +1010,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
 #ifdef DEBUG_MARGINS
                 kdDebugBody(32002) << "      in internal coords: " << QRect(iTop,iBottom) << endl;
 #endif
-                // Look for intersection between p.y() -- p.y()+h  and iTop -- iBottom
+                // Look for intersection between yp -- yp+h  and iTop -- iBottom
                 if ( QMAX( yp, iTop.y() ) <= QMIN( yp+h, iBottom.y() ) )
                 {
 #ifdef DEBUG_MARGINS
@@ -1982,7 +1982,8 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
             if (wantedPosition > 0)
                 frames.last()->setBottom( wantedPosition );
 
-            m_doc->updateAllFrames();
+            updateFrames();
+            m_doc->updateFramesOnTopOrBelow( frames.last()->pageNum() );
             /// We don't want to start from the beginning every time !
             ////m_doc->invalidate();
 
@@ -2158,7 +2159,8 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
 {
     kdDebug(32002) << "KWTextFrameSet::frameResized " << theFrame << " " << *theFrame << " invalidateLayout=" << invalidateLayout << endl;
 
-    m_doc->updateAllFrames();
+    theFrame->frameSet()->updateFrames(); // update e.g. available height
+    m_doc->updateFramesOnTopOrBelow( theFrame->pageNum() );
 
     if ( theFrame->frameSet()->frameSetInfo() != KWFrameSet::FI_BODY )
         m_doc->recalcFrames();

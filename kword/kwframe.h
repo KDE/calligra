@@ -612,8 +612,8 @@ public:
 
     enum UpdateFramesFlags {
         UpdateFramesInPage = 1,
-        UpdateFramesOnTopBelow = 2, // needs UpdateFramesInPage
-        SortFrames = 8 // kwtextframeset only
+        SortFrames = 2 // kwtextframeset only
+        // next one is 4, not 3 ;)
     };
     /**
      * Called when our frames change, or when another frameset's frames change.

@@ -79,13 +79,8 @@ void KWTableFrameSet::updateFrames( int flags )
 {
     if(m_cells.count()==0)
         return;
-    for (unsigned int i =0; i < m_cells.count(); i++)
-    {
-        m_cells.at(i)->updateFrames( flags );
-        //This is wrong (reason for famous infinite loop bug)
-        //Do this in KWTableFrameSet::invalidate
-        //m_cells.at(i)->invalidate();
-    }
+    for(QPtrListIterator<Cell> c(m_cells); c.current(); ++c)
+        c.current()->updateFrames( flags );
     KWFrameSet::updateFrames( flags );
 }
 
@@ -94,10 +89,18 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
     double dx = position.x() - m_colPositions[0];
     double dy = position.y() - m_rowPositions[0];
 
-    moveBy( dx, dy);
+    int oldPageNumber = getCell(0,0)->frame(0)->pageNum();
+    // TODO multi-page case
 
-    if ( dx || dy )
-        m_doc->updateAllFrames();
+    moveBy( dx, dy );
+
+    if ( dx || dy ) {
+        updateFrames();
+        int newPageNumber = getCell(0,0)->frame(0)->pageNum();
+        m_doc->updateFramesOnTopOrBelow( newPageNumber );
+        if ( oldPageNumber != newPageNumber )
+            m_doc->updateFramesOnTopOrBelow( oldPageNumber );
+    }
 }
 
 KoSize KWTableFrameSet::floatingFrameSize( int /*frameNum*/ )
@@ -192,6 +195,9 @@ double KWTableFrameSet::leftWithoutBorder()
 /* returns the cell that occupies row, col. */
 KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int col )
 {
+    /// Sllloooowwww
+    // Suggested solution: implement comparison operators in Cell,
+    // and use a binary search.
     for ( unsigned int i = 0; i < m_cells.count(); i++ )
     {
         Cell *cell = m_cells.at( i );
@@ -395,8 +401,8 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
         while(j != m_rowPositions.end()) {
             lineNumber++;
             if(pageBound!=m_pageBoundaries.end()) {
-                if(*pageBound == lineNumber) { // next page
-                    if(lineNumber >= row) { // then delete line j
+                if((int)*pageBound == lineNumber) { // next page
+                    if(lineNumber >= (int)row) { // then delete line j
                         // TODO remove headers and  m_hasTmpHeaders = false;
                         QValueList<double>::iterator nextJ = j;
                         ++nextJ;
@@ -414,7 +420,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
                     lineNumber--;
                 }
             }
-            if(lineNumber >= row)  { // below changed row
+            if(lineNumber >= (int)row)  { // below changed row
                 if(*(j)-last < minFrameHeight) // Never make it smaller then allowed!
                     difference += minFrameHeight - *(j) + last;
                 last=*(j);
@@ -521,7 +527,7 @@ kdDebug() << "j--";
             pageNumber++;
             pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
             //kdDebug(32004) << "pageBottom; " << pageBottom << endl;
-            if(pageNumber > m_doc->getPages()) m_doc->appendPage();
+            if((int)pageNumber > m_doc->getPages()) m_doc->appendPage();
         }
         //if(diff > 0)  kdDebug(32004) << "   adding " << diff << ", line " << lineNumber << " " << *(j) <<" -> " << *(j)+diff << endl;
         if(diff > 0)
@@ -1277,7 +1283,7 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
     position(firstCell);
     firstCell->frame(0)->updateResizeHandles();
 
-    m_doc->updateAllFrames();
+    m_doc->updateAllFrames(); // TODO: only fs->updateFrames() & m_doc->updateFramesOnTopOrBelow(pageNum)
     m_doc->repaintAllViews();
     return new KWJoinCellCommand( i18n("Join Cells"), this,colBegin,rowBegin, colEnd,rowEnd,listFrameSet,listCopyFrame);
 }
@@ -1575,6 +1581,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
         const KoBorder *border=0;
         double startPos =0;
         for(unsigned int col=0; col <= getCols();) {
+            //// SLOW
             Cell *cell = getCell(bottom?row-1:row, col);
             //if(cell) kdDebug(32004) << "cell (" << cell->m_row << "," << cell->m_col << ")" << endl;
             //else kdDebug(32004) << "cell: " << cell << endl;
@@ -1649,16 +1656,32 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
         bool right=false; // draw right border of cell.
         if(col == m_colPositions.count()-1)
             right=true;
+        int cellColumn = right?col-1:col; // the column we'll be looking for in the loop below
+        Q_ASSERT( cellColumn >= 0 );
 
         const KoBorder *border=0;
         int startRow =-1;
-        for(unsigned int row=0; row <= getRows();) {
+        int row = -1;
+        // Faster than the previous "for each row, call getCell(row,cellColumn)"
+        // iterate over all cells, and only process
+        // the current cell if the row number is the right one.
+        // Yes, this is faster than calling getCell() - which iterates over all cells itself!
+        for(QPtrListIterator<Cell> cellIter(m_cells); cellIter.current(); ++cellIter) {
+
+            Cell *cell = cellIter.current();
+            // we're looking for the cell (row+1, cellColumn)
+            if ( ! ( cell->m_row <= (uint)(row+1) &&
+                 cell->m_col <= (uint)cellColumn &&
+                 cell->m_row + cell->m_rows > (uint)(row+1) &&
+                 cell->m_col + cell->m_cols > (uint)cellColumn ) )
+                continue;
+            row++; // found the cell -> 'row' is now the current row
+
             //kdDebug(32004) << "row: " << row << endl;
-            Cell *cell = getCell(row, right?col-1:col);
-            if(cell && cell->m_col != (right?col-1:col))
+            if(cell && cell->m_col != (uint)cellColumn)
                 cell=0;
 
-            if(startRow!=-1 && (!cell || cell->frame(0)->leftBorder()!=*border || row == getRows())) {
+            if(startRow!=-1 && (!cell || cell->frame(0)->leftBorder()!=*border || row == (int)getRows())) {
                 if(border->width() > 0 || drawPreviewLines) {
                     double x = m_colPositions[col];
                     if(col==0) {
@@ -1689,7 +1712,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                         }
                         double top=m_rowPositions[topRow]-offset;
 
-                        unsigned int toRow=QMIN(row,bottomRow);
+                        unsigned int toRow=QMIN((uint)row,bottomRow);
                         offset=0.0;
                         if(border->width() > 0 && toRow!=bottomRow) {
                             if(cell) offset=cell->topBorder();
@@ -1714,7 +1737,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                         }
 
                         topRow=bottomRow+1;
-                    } while(topRow < row && topRow != m_rowPositions.count());
+                    } while(topRow < (uint)row && topRow != m_rowPositions.count());
                 }
                 // reset startRow
                 startRow = -1;
@@ -2392,7 +2415,7 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                             row= (int)tableFrame->getRows() -1;
                         }
                         fs=tableFrame->getCell(row,col);
-                        if(fs && fs->m_row != row) {
+                        if(fs && (int)fs->m_row != row) {
                             col+=fs->m_cols;
                             fs=0;
                         }
@@ -2406,8 +2429,8 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                 if(!cur->parag()->next()&&cur->index()==cur->parag()->string()->length()-1)
                 {
                     KWTableFrameSet* tableFrame=tableFrameSet();
-                    int row=cell->m_row;
-                    int col=cell->m_col+cell->m_cols;
+                    uint row=cell->m_row;
+                    uint col=cell->m_col+cell->m_cols;
                     do {
                         if(col >= tableFrame->getCols()) {
                             col= 0;
