@@ -29,7 +29,6 @@
 #include <qapplication.h>
 #include <qclipboard.h>
 #include <qpicture.h>
-#include <qdragobject.h>
 #include <qregexp.h>
 
 #include <qlayout.h>
