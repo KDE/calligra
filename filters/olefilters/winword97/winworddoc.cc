@@ -285,13 +285,11 @@ void WinWordDoc::gotTableRow(const QString texts[], const PAP styles[], TAP &row
             cellEdge = row.rgdxaCenter[i] - row.rgdxaCenter[0];
             cellEdge = (unsigned)((double)cellEdge * (s_width - s_hMargin - s_hMargin) / rowWidth);
             cellEdge = cellEdge + s_hMargin;
-        kdDebug(1000) <<   "left "<<cellEdge << endl;
             m_body.append(QString::number(cellEdge));
             m_body.append("\" right=\"");
             cellEdge = row.rgdxaCenter[i + 1] - row.rgdxaCenter[0];
             cellEdge = (unsigned)((double)cellEdge * (s_width - s_hMargin - s_hMargin) / rowWidth);
             cellEdge = cellEdge + s_hMargin;
-        kdDebug(1000) <<   "right "<<cellEdge << endl;
             m_body.append(QString::number(cellEdge));
             m_body.append("\" top=\"");
             m_body.append(QString::number(400 + m_tableRow * 30));
