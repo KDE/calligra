@@ -348,7 +348,7 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
     runGrid->addWidget( rRunBounding, 2, 1 );
     connect( rRunBounding, SIGNAL( clicked() ), this, SLOT( runBoundingClicked() ) );
 
-    rRunContur = new QRadioButton( i18n( "&Not run around this frame" ), runGroup );
+    rRunContur = new QRadioButton( i18n( "Do&n't run around this frame" ), runGroup );
     runGrid->addWidget( rRunContur, 3, 1 );
     connect( rRunContur, SIGNAL( clicked() ), this, SLOT( runConturClicked() ) );
 
