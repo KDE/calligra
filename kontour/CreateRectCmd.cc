@@ -23,26 +23,33 @@
 
 */
 
-#ifndef __CreateOvalCmd_h__
-#define __CreateOvalCmd_h__
+#include "CreateRectCmd.h"
 
-#include "Command.h"
+#include <klocale.h>
 
-#include <koPoint.h>
+#include "GDocument.h"
+#include "GPage.h"
+#include "GRect.h"
 
-class GOval;
-
-class CreateOvalCmd : public Command
+CreateRectCmd::CreateRectCmd(GDocument *aGDoc, GRect *obj):
+Command(aGDoc, i18n("Create Rectangle"))
 {
-public:
-  CreateOvalCmd(GDocument *aGDoc, GOval *oval);
-  ~CreateOvalCmd();
+  object = obj;
+//  object->ref();
+}
 
-  void execute();
-  void unexecute();
+CreateRectCmd::~CreateRectCmd()
+{
+//  if(object)
+//    object->unref();
+}
 
-private:
-  GOval *object;
-};
+void CreateRectCmd::execute()
+{
+  document()->activePage()->insertObject(object);
+}
 
-#endif
+void CreateRectCmd::unexecute()
+{
+  document()->activePage()->deleteObject(object);
+}

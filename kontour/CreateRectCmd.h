@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,30 +23,24 @@
 
 */
 
-#ifndef CreateRectangleCmd_h_
-#define CreateRectangleCmd_h_
+#ifndef __CreateRectangleCmd_h__
+#define __CreateRectangleCmd_h__
 
-#include <Command.h>
+#include "Command.h"
 
-class GDocument;
-class GPolygon;
+class GRect;
 
-class CreateRectangleCmd : public Command {
+class CreateRectCmd : public Command
+{
 public:
-  CreateRectangleCmd (GDocument* doc, GPolygon* obj);
-  CreateRectangleCmd (GDocument* doc, const Coord& p0, const Coord& p1,
-                 bool flag = false);
+  CreateRectCmd(GDocument *aGDoc, GRect *obj);
+  ~CreateRectCmd();
 
-  ~CreateRectangleCmd ();
-
-  void execute ();
-  void unexecute ();
+  void execute();
+  void unexecute();
 
 private:
-  GDocument* document;
-  GPolygon* object;
-  Coord spos, epos;
-  bool sflag;
+  GRect *object;
 };
 
 #endif

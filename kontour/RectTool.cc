@@ -30,8 +30,13 @@
 #include <kdebug.h>
 
 #include "kontour_view.h"
+#include "kontour_doc.h"
+#include "GDocument.h"
+#include "GPage.h"
 #include "Canvas.h"
 #include "ToolController.h"
+#include "GRect.h"
+#include "CreateRectCmd.h"
 
 RectTool::RectTool(QString aId, ToolController *tc):
 Tool(aId, tc)
@@ -163,6 +168,13 @@ void RectTool::processEvent(QEvent *e)
   {
     if(state == S_Resize)
     {
+      GRect *rect = new GRect();
+      rect->startPoint(KoPoint(r.left() - canvas->xOffset(), r.top() - canvas->yOffset()));
+      rect->endPoint(KoPoint(r.right() - canvas->xOffset(), r.bottom() - canvas->yOffset()));
+      CreateRectCmd *cmd = new CreateRectCmd(toolController()->view()->activeDocument(), rect);
+      KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
+      doc->history()->addCommand(cmd);
+      canvas->repaint(r);
       state = S_Init;
     }
 /*      if (rect == 0L)

@@ -44,6 +44,7 @@ libkontourpart_la_SOURCES = \
 	GLayer.cc \
 	GObject.cc \
 	GOval.cc \
+	GRect.cc \
 	GStyle.cc \
 	GStyleList.cc \
 	LayerPanel.cc \
@@ -55,6 +56,7 @@ libkontourpart_la_SOURCES = \
 	ZoomTool.cc \
 	Command.cc \
 	CreateOvalCmd.cc \
+	CreateRectCmd.cc \
 	OptionsDialog.cc \
 	UnitBox.cc \
 	units.cc \
