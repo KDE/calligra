@@ -3691,9 +3691,14 @@ void KWView::createFrameStyle()
 void KWView::extraStylist()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
+    QString activeStyleName  = QString::null;
     if ( edit )
+    {
         edit->hideCursor();
-    KWStyleManager * styleManager = new KWStyleManager( this, m_doc->getUnit(),m_doc, m_doc->styleCollection()->styleList());
+        if (edit->cursor() && edit->cursor()->parag() && edit->cursor()->parag()->style())
+            activeStyleName = edit->cursor()->parag()->style()->translatedName();
+    }
+    KWStyleManager * styleManager = new KWStyleManager( this, m_doc->getUnit(),m_doc, m_doc->styleCollection()->styleList(), activeStyleName );
     styleManager->exec();
     delete styleManager;
     if ( edit )

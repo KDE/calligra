@@ -50,7 +50,7 @@ class KoStyleManager : public KDialogBase
     Q_OBJECT
 
 public:
-    KoStyleManager( QWidget *_parent,KoUnit::Unit unit,const QPtrList<KoStyle> & style );
+    KoStyleManager( QWidget *_parent,KoUnit::Unit unit,const QPtrList<KoStyle> & style, const QString & activeStyleName );
 
     virtual KoStyle* addStyleTemplate(KoStyle *style)=0;
     //virtual void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )=0;

@@ -33,7 +33,7 @@ class KWStyleManager : public KoStyleManager
     Q_OBJECT
 
 public:
-    KWStyleManager( QWidget *_parent, KoUnit::Unit unit, KWDocument *_doc, const QPtrList<KoStyle> & style );
+    KWStyleManager( QWidget *_parent, KoUnit::Unit unit, KWDocument *_doc, const QPtrList<KoStyle> & style, const QString & activeStyleName = QString::null );
 
     virtual KoStyle* addStyleTemplate(KoStyle *style);
     virtual void applyStyleChange( StyleChangeDefMap changed  );

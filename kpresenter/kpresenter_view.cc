@@ -6409,10 +6409,15 @@ void KPresenterView::updateStyleList()
 void KPresenterView::extraStylist()
 {
     KPTextView *edit=m_canvas->currentTextObjectView();
+    QString activeStyleName  = QString::null;
     if ( edit )
+    {
         edit->hideCursor();
+        if (edit->cursor() && edit->cursor()->parag() && edit->cursor()->parag()->style())
+            activeStyleName = edit->cursor()->parag()->style()->translatedName();
+    }
     KPrStyleManager * styleManager = new KPrStyleManager( this, m_pKPresenterDoc->getUnit(), m_pKPresenterDoc,
-                                                          m_pKPresenterDoc->styleCollection()->styleList());
+                                                          m_pKPresenterDoc->styleCollection()->styleList(), activeStyleName);
     styleManager->exec();
     delete styleManager;
     if ( edit )

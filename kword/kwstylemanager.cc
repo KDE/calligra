@@ -28,8 +28,8 @@
 /* Class: KWStyleManager                                          */
 /******************************************************************/
 
-KWStyleManager::KWStyleManager( QWidget *_parent, KoUnit::Unit unit,KWDocument *_doc, const QPtrList<KoStyle> & style)
-    : KoStyleManager(_parent,unit,style)
+KWStyleManager::KWStyleManager( QWidget *_parent, KoUnit::Unit unit,KWDocument *_doc, const QPtrList<KoStyle> & style, const QString & activeStyleName)
+    : KoStyleManager(_parent,unit,style, activeStyleName)
 {
     m_doc = _doc;
 }

@@ -51,7 +51,7 @@
    Well; just keep that for those loonly uninspiring days :) (Thomas Z)
 */
 
-KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrList<KoStyle> & style)
+KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrList<KoStyle> & style, const QString & activeStyleName)
     : KDialogBase( _parent, "Stylist", true,
                    i18n("Style Manager"),
                    KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply )
@@ -90,7 +90,12 @@ KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrLi
     newTab->setWidget( new KoParagShadowWidget( newTab ) );
     addTab( newTab );
 
-    m_stylesList->setCurrentItem( 0 );
+    QListBoxItem * item = m_stylesList->findItem (activeStyleName);
+    if ( item )
+        m_stylesList->setCurrentItem( m_stylesList->index(item) );
+    else
+        m_stylesList->setCurrentItem( 0 );
+
     noSignals=false;
     switchStyle();
     setInitialSize( QSize( 600, 570 ) );
