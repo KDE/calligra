@@ -1081,19 +1081,14 @@ int KoTextParag::nextTab( int chnum, int x )
                 }
                 case T_DEC_PNT:
                 {
-                    // Look for the next tab (or EOL), and for <digit><dot>
+                    // Look for the next tab (or EOL), and for alignChar
                     // Default to right-aligned if no decimal point found (behavior from msword)
                     int c = chnum + 1;
                     int w = 0;
-                    int decimalPoint = KGlobal::locale()->decimalSymbol()[0].unicode();
-                    bool digitFound = false;
                     while ( c < string()->length()-1 && string()->at( c ).c != '\t' && string()->at( c ).c != '\n' )
                     {
                         KoTextStringChar & ch = string()->at( c );
-
-                        if ( ch.c.isDigit() )
-                            digitFound = true;
-                        else if ( digitFound && ( ch.c == '.' || ch.c.unicode() == decimalPoint ) )
+                        if ( ch.c == m_layout.tabList()[i].alignChar )
                         {
                             if ( string()->isRightToLeft() )
                             {
@@ -1107,8 +1102,6 @@ int KoTextParag::nextTab( int chnum, int x )
                                 break;
                             }
                         }
-                        else
-                            digitFound = false; // The digit has to be right before the dot
 
                         // Determine char width
                         if ( ch.isCustom() )

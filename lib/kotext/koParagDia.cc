@@ -1685,7 +1685,7 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
 
     sAlignChar = new QLineEdit( bgAlign);
     sAlignChar->setMaximumSize( QSize( 60, 32767 ) );
-    sAlignChar->setText("."); // for now we only use this char, no need to i18n it, we have to fix it anyway.
+    sAlignChar->setText(QString(KGlobal::locale()->decimalSymbol()[0]));
     Layout8->addWidget( sAlignChar );
     QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
     Layout8->addItem( spacer_2 );
@@ -1783,7 +1783,8 @@ void KoParagTabulatorsWidget::slotTabValueChanged( double val ) {
 void KoParagTabulatorsWidget::slotAlignCharChanged( const QString &/*_text*/ ) {
     // select align 3 and update data structures.
     bgAlign->setButton(3);
-    sAlignChar->setText(".");// for now we only use this char, no need to i18n it, we have to fix it anyway.
+    m_tabList[lstTabs->currentItem()].alignChar=sAlignChar->text()[0];
+    m_tabList[lstTabs->currentItem()].type=T_DEC_PNT;
 }
 
 void KoParagTabulatorsWidget::newClicked() {
@@ -1862,7 +1863,9 @@ void KoParagTabulatorsWidget::setActiveItem(int selected) {
         case  T_RIGHT:
             bgAlign->setButton(2); break;
         case T_DEC_PNT:
-            bgAlign->setButton(3); break;
+            bgAlign->setButton(3);
+	    sAlignChar->setText(QString(selectedTab->alignChar));
+	    break;
         case T_LEFT:
         default:
             bgAlign->setButton(0);
@@ -1916,7 +1919,9 @@ void KoParagTabulatorsWidget::updateAlign(int selected) {
         case  2:
             selectedTab->type=T_RIGHT; break;
         case 3:
-            selectedTab->type=T_DEC_PNT; break;
+            selectedTab->type=T_DEC_PNT;
+	    selectedTab->alignChar=sAlignChar->text()[0];
+	    break;
         case 0:
         default:
             selectedTab->type=T_LEFT;

@@ -58,6 +58,10 @@ struct KoTabulator {
      * Width of the tab filling line.
      */
     double ptWidth;
+    /**
+     * Alignment character.
+     */
+    QChar alignChar;
 
     bool operator==( const KoTabulator & t ) const {
         return QABS( ptPos - t.ptPos ) < 1E-4 && type == t.type &&
