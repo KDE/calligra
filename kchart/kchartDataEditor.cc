@@ -3,6 +3,9 @@
 #include "klocale.h"
 #include <kdebug.h>
 
+#include "kdchart/KDChartAxisParams.h"
+#include "kdchart/KDChartParams.h"
+
 kchartDataEditor::kchartDataEditor() :
     KDialog(0,"KChart Data Editor",true)
 {
@@ -89,17 +92,13 @@ void kchartDataEditor::setLegend( QStringList legend )
 
 void kchartDataEditor::getLegend( KDChartParams* params )
 {
-    // PENDING(kalle) Put back in
-    //     params->legend.clear();
-    //     for (int row = 0;row < _widget->rows();row++)
-    //         {
-    //             if(! (row >= _widget->usedRows()) )
-    //                 {
-    //                     params->legend+=_widget->getY(row);
-    //                 }
-
-    //         }
+    for( int row = 0; row < _widget->rows(); row++ ) {
+        if(! (row >= _widget->usedRows()) ) {
+            params->setLegendText( row, _widget->getY( row ) );
+        }
+    }
 }
+
 
 void kchartDataEditor::setXLabel( QStringList xlbl )
 {
@@ -113,15 +112,16 @@ void kchartDataEditor::setXLabel( QStringList xlbl )
 
 void kchartDataEditor::getXLabel( KDChartParams* params )
 {
-    // PENDING(kalle) Put back in
-    //     params->xlbl.clear();
-    //     for (int col = 0;col < _widget->cols();col++)
-    //         {
-    //             if(! (col >= _widget->usedCols()) )
-    //                 {
-    //                     params->xlbl+=_widget->getX(col);
-    //                 }
-
-    //         }
+    KDChartAxisParams bottomparms = params->axisParams( KDChartAxisParams::AxisPosBottom );
+    static QStringList longlabels, shortlabels;
+    longlabels.clear(); shortlabels.clear();
+    for( int col = 0; col < _widget->cols(); col++ ) {
+        if( ! (col >= _widget->usedCols()) ) {
+            longlabels << _widget->getX( col );
+            shortlabels << _widget->getX( col ).left( 3 );
+        }
+    }
+    bottomparms.setAxisLabelStringLists( &longlabels, &shortlabels );
+    params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
 }
 

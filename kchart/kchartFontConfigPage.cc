@@ -137,12 +137,17 @@ void KChartFontConfigPage::changeLabelFont()
 
 void KChartFontConfigPage::init()
 {
+    KDChartAxisParams leftparms = _params->axisParams( KDChartAxisParams::AxisPosLeft );
+    KDChartAxisParams rightparms = _params->axisParams( KDChartAxisParams::AxisPosRight );
+    KDChartAxisParams bottomparms = _params->axisParams( KDChartAxisParams::AxisPosBottom );
+    xaxis = bottomparms.axisLabelsFont();
+    yaxis = leftparms.axisLabelsFont();
+    
+    
     // PENDING(kalle) Adapt
     //   title = _params->titleFont();
 //   xtitle = _params->xTitleFont();
 //   ytitle = _params->yTitleFont();
-//   xaxis = _params->xAxisFont();
-//   yaxis = _params->yAxisFont();
 //   label = _params->labelFont();
 
     // PENDING(kalle) Adapt
@@ -158,14 +163,18 @@ void KChartFontConfigPage::apply()
     // PENDING(kalle) Adapt
     //   _params->setLabelFont(label);
 
-  if( _params->chartType() != KDChartParams::Pie &&
-      _params->chartType() != KDChartParams::Ring ) {
       // PENDING(kalle) Adapt
-      //     _params->setXAxisFont(xaxis);
-//     _params->setYAxisFont(yaxis);
+    KDChartAxisParams leftparms = _params->axisParams( KDChartAxisParams::AxisPosLeft );
+    KDChartAxisParams rightparms = _params->axisParams( KDChartAxisParams::AxisPosRight );
+    KDChartAxisParams bottomparms = _params->axisParams( KDChartAxisParams::AxisPosBottom );
+    bottomparms.setAxisLabelsFont( xaxis, true );
+    leftparms.setAxisLabelsFont( yaxis, true );
+    _params->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparms );
+    _params->setAxisParams( KDChartAxisParams::AxisPosRight, rightparms );
+    _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
+    
 //     _params->setXTitleFont(xtitle);
 //     _params->setYTitleFont(ytitle);
-  }
 
   // PENDING(kalle) Adapt
   //   _params->setTitleFont(title);

@@ -43,7 +43,6 @@ KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KDChartParams* params,
     toplevel->addWidget( exampleGB, 2 );
     exampleLA = new QLabel( exampleGB );
     exampleLA->setAlignment( AlignCenter | AlignVCenter );
-    // PENDING(kalle) Make image scale with available space once Qt 2.2 is out.
 }
 
 void KChartBarSubTypeChartPage::init()

@@ -22,9 +22,6 @@
 KChartBarConfigPage::KChartBarConfigPage( QWidget* parent ) :
     QWidget( parent, "Bar diagramm config page" )
 {
-    // PENDING(kalle) Use layout management to layout group boxes in dialog
-
-
     QGridLayout *grid1 = new QGridLayout(this,2,2,15,7);
 
     QButtonGroup* gb = new QButtonGroup( i18n( "Overwrite Mode" ), this );
