@@ -66,7 +66,7 @@ void KexiAlterTable::initTable()
 		KexiTableItem *it = new KexiTableItem(m_view);
 		it->setValue(0, record->fieldInfo(i)->name());
 		m_fieldnames.append(record->fieldInfo(i)->name());
-		it->setValue(1, record->fieldInfo(i)->type());
+		it->setValue(1, record->fieldInfo(i)->sqlType());
 		it->setValue(2, record->fieldInfo(i)->length());
 		it->setValue(3, record->fieldInfo(i)->not_null());
 		it->setValue(4, record->fieldInfo(i)->defaultValue());
