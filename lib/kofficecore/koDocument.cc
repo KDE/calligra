@@ -88,6 +88,11 @@ void KoDocumentChild::setGeometry( const QRect& _rect )
 KOffice::View_ptr KoDocumentChild::createView( KOffice::MainWindow_ptr _main )
 {
   KOffice::View_var v;
+  if ( CORBA::is_nil( m_rDoc ) )
+  {
+      cerr << "KoDocumentChild::createView failed since m_rDoc is nil !" << endl;
+      return 0L;
+  }
 
   try
   {

@@ -20,12 +20,13 @@
 #include <koApplication.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 KoApplication::KoApplication(int &argc, char **argv, 
 			     const QString& rAppName)
     : OPApplication(argc, argv, rAppName)
 {
-    getLocale()->insertCatalogue("koffice");
+    KGlobal::locale()->insertCatalogue("koffice");
     getIconLoader()->insertDirectory(0, kde_datadir() + 
 				     "/koffice/toolbar");
     getIconLoader()->insertDirectory(3, kde_localedir() + 
