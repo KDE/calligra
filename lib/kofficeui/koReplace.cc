@@ -230,7 +230,8 @@ void KoReplace::slotUser1()
 // Skip.
 void KoReplace::slotUser2()
 {
-    m_index++;
+    if (m_options & KoReplaceDialog::FindBackwards) m_index--;
+       else m_index++;
     kapp->exit_loop();
 }
 
