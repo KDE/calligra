@@ -922,6 +922,8 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 	for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() ) {
 	    if ( kpobject->getType() == OT_PICTURE )
 		dynamic_cast<KPPixmapObject*>( kpobject )->reload();
+	    else if ( kpobject->getType() == OT_TEXT )
+		dynamic_cast<KPTextObject*>( kpobject )->recalcPageNum( this );
 	}
     }
 
@@ -1170,21 +1172,28 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	_pixmapCollection.setAllowChangeRef( true );
 	_pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
 
+	if ( _clean )
+	    setPageLayout( __pgLayout, 0, 0 );
+	else
+	    setPageLayout( _pageLayout, 0, 0 );
+	
 	KPObject *kpobject = 0L;
 	for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() ) {
 	    if ( kpobject->getType() == OT_PICTURE )
 		dynamic_cast<KPPixmapObject*>( kpobject )->reload();
 	    else if ( kpobject->getType() == OT_CLIPART )
 		dynamic_cast<KPClipartObject*>( kpobject )->reload();
+	    else if ( kpobject->getType() == OT_TEXT )
+		dynamic_cast<KPTextObject*>( kpobject )->recalcPageNum( this );
 	}
 
+    } else {
+	if ( _clean )
+	    setPageLayout( __pgLayout, 0, 0 );
+	else
+	    setPageLayout( _pageLayout, 0, 0 );
     }
-
-    if ( _clean )
-	setPageLayout( __pgLayout, 0, 0 );
-    else
-	setPageLayout( _pageLayout, 0, 0 );
-	
+    
     _pixmapCollection.setAllowChangeRef( true );
     _pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
 
@@ -1307,7 +1316,7 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
 }
 
 /*==================== insert a new page =========================*/
-unsigned int KPresenterDoc::insertNewPage( int diffx, int diffy, bool _restore	)
+unsigned int KPresenterDoc::insertNewPage( int diffx, int diffy, bool _restore )
 {
 
     KPBackGround *kpbackground = new KPBackGround( &_pixmapCollection, &_gradientCollection,
