@@ -25,7 +25,7 @@
 
 static const char* KWORD_DESCRIPTION=I18N_NOOP("KOffice Word Processor");
 // First official public release Oct 2000 version 0.8
-static const char* KWORD_VERSION="0.9-devel";
+static const char* KWORD_VERSION="0.9 (beta1)";
 
 KAboutData * newKWordAboutData()
 {
