@@ -126,7 +126,7 @@
 
 #define DEBUG
 
-static const char *pageup_xpm[] = {
+static const char * const pageup_xpm[] = {
 "    14    14        2            1",
 ". c #000000",
 "# c none",
@@ -146,7 +146,7 @@ static const char *pageup_xpm[] = {
 "##############"
 };
 
-static const char *pagedown_xpm[] = {
+static const char * const pagedown_xpm[] = {
 "    14    14        2            1",
 ". c #000000",
 "# c none",

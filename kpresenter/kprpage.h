@@ -170,7 +170,7 @@ public:
     void enableEmbeddedParts( bool f );
     void deletePage( );
 
-    KPBackGround *background(){return kpbackground;}
+    KPBackGround *background() const { return kpbackground;}
 
     void makeUsedPixmapList();
 

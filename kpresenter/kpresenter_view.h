@@ -353,35 +353,35 @@ public:
     // set scrollbar ranges
     void setRanges();
 
-    KoRuler *getHRuler() { return h_ruler; }
-    KoRuler *getVRuler() { return v_ruler; }
-    KoTabChooser *getTabChooser() { return tabChooser; }
-    QScrollBar *getHScrollBar() { return horz; }
-    QScrollBar *getVScrollBar() { return vert; }
+    KoRuler *getHRuler() const { return h_ruler; }
+    KoRuler *getVRuler() const { return v_ruler; }
+    KoTabChooser *getTabChooser() const { return tabChooser; }
+    QScrollBar *getHScrollBar() const { return horz; }
+    QScrollBar *getVScrollBar() const { return vert; }
 
     void makeRectVisible( QRect _rect );
 
     void restartPresStructView();
 
-    PieType getPieType() { return pieType; }
-    int getPieAngle() { return pieAngle; }
-    int getPieLength() { return pieLength; }
-    QPen getPen() { return pen; }
-    QBrush getBrush() { return brush; }
-    LineEnd getLineBegin() {return lineBegin; }
-    LineEnd getLineEnd() {return lineEnd; }
-    QColor getGColor1() {return gColor1; }
-    QColor getGColor2() {return gColor2; }
-    BCType getGType() {return gType; }
-    FillType getFillType() {return fillType; }
-    bool getGUnbalanced() { return gUnbalanced; }
-    int getGXFactor() { return gXFactor; }
-    int getGYFactor() { return gYFactor; }
+    PieType getPieType() const { return pieType; }
+    int getPieAngle() const { return pieAngle; }
+    int getPieLength() const { return pieLength; }
+    QPen getPen() const { return pen; }
+    QBrush getBrush() const { return brush; }
+    LineEnd getLineBegin() const { return lineBegin; }
+    LineEnd getLineEnd() const{ return lineEnd; }
+    QColor getGColor1() const { return gColor1; }
+    QColor getGColor2() const { return gColor2; }
+    BCType getGType() const { return gType; }
+    FillType getFillType() const { return fillType; }
+    bool getGUnbalanced() const { return gUnbalanced; }
+    int getGXFactor() const { return gXFactor; }
+    int getGYFactor() const { return gYFactor; }
 
     void setTool( ToolEditMode toolEditMode );
 
-    int getRndX() { return rndX; }
-    int getRndY() { return rndY; }
+    int getRndX() const { return rndX; }
+    int getRndY() const { return rndY; }
 
     QFont &currFont() { return tbFont; }
     QColor &currColor() { return tbColor; }
