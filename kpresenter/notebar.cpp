@@ -78,6 +78,7 @@ void NoteBar::setCurrentNoteText( const QString &_text )
 {
     initialize = true;
     textEdit->setText( _text );
+    initialize = false;
 }
 
 void NoteBar::slotTextChanged()
@@ -87,8 +88,6 @@ void NoteBar::slotTextChanged()
         view->kPresenterDoc()->refreshAllNoteBar(currentPageNum -1,textEdit->text() , view);
         textEdit->setModified( true );
     }
-
-    initialize = false;
 }
 
 void NoteBar::slotSelectionChanged()
