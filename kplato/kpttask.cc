@@ -55,38 +55,12 @@ int KPTTask::type() {
 	}
 }
 
+
+
 KPTDuration *KPTTask::getExpectedDuration() {
     //kdDebug()<<k_funcinfo<<endl;
-    // I have no idea if this is correct...
-    KPTDuration *ed= new KPTDuration();
-    if(numChildren() == 0) {
-        ed->set(m_effort->expected());
-        // TODO: handle resources/risc
-    } else {
-        // Summary task
-        QPtrListIterator<KPTNode> it(m_nodes);
-        for ( ; it.current(); ++it ) {
-            KPTNode *node = it.current();
-            KPTDuration *time = node->getStartTime();
-            KPTDuration *dur = node->getExpectedDuration();
-            kdDebug()<<k_funcinfo<<" Child node="<<node->name()<<":"<<endl;
-            kdDebug()<<k_funcinfo<<"   Nodes start: "<<time->dateTime().toString()<<":"<<endl;
-            kdDebug()<<k_funcinfo<<"   Nodes duration: "<<dur->dateTime().toString()<<":"<<endl;
-            kdDebug()<<k_funcinfo<<"   Current finish: "<<ed->dateTime().toString()<<":"<<endl;
-            time->add(*dur);
-            if ( *ed < *time ) {
-                ed->set(*time);
-                kdDebug()<<k_funcinfo<<"   New finish: "<<ed->dateTime().toString()<<":"<<endl;
-            }
-            delete time;
-            delete dur;
-        }
-        KPTDuration *start = getStartTime();
-        ed->subtract(*start);
-        kdDebug()<<k_funcinfo<<"   My start: "<<start->dateTime().toString()<<":"<<endl;
-        kdDebug()<<k_funcinfo<<"   Duration: "<<ed->dateTime().toString()<<":"<<endl;
-        delete start;
-    }
+    // Duration should already be calculated
+    KPTDuration *ed= new KPTDuration(m_duration.dateTime());
     return ed;
 }
 
@@ -94,43 +68,111 @@ KPTDuration *KPTTask::getRandomDuration() {
     return 0L;
 }
 
-KPTDuration *KPTTask::getStartTime() {
-    KPTDuration *time = new KPTDuration();
+void KPTTask::setStartTime() {
+    kdDebug()<<k_funcinfo<<endl;
     if(numChildren() == 0) {
         switch (m_constraint)
         {
         case KPTNode::ASAP:
-            time->set(earliestStart);
+            m_startTime.set(earliestStart);
             break;
         case KPTNode::ALAP:
         {
-            time->set(latestFinish);
-            KPTDuration *d = getExpectedDuration();
-            time->subtract(*d);
-            delete d;
+            m_startTime.set(latestFinish);
+            m_startTime.subtract(m_duration);
             break;
         }
         case KPTNode::StartNotEarlier:
-            sneTime > earliestStart ? time->set(sneTime) : time->set(earliestStart);
+            sneTime > earliestStart ? m_startTime.set(sneTime) : m_startTime.set(earliestStart);
             break;
         case KPTNode::FinishNotLater:
-            time->set(fnlTime); // FIXME
+            m_startTime.set(fnlTime); // FIXME
             break;
         case KPTNode::MustStartOn:
-            time->set(msoTime);
+        {
+            KPTDuration t(msoTime.dateTime());
+            t.add(m_duration);
+            if (msoTime >= earliestStart && t <= latestFinish)
+                m_startTime.set(msoTime);
+            else {
+                // TODO: conflict
+                m_startTime.set(earliestStart);
+            }
             break;
+        }
         default:
             break;
         }
     } else {
         // summary task
-        KPTDuration *start;
+        m_startTime.set(KPTDuration::zeroDuration);
+        KPTDuration *time = 0;
+        QPtrListIterator<KPTNode> it(m_nodes);
+        for ( ; it.current(); ++it ) {
+            it.current()->setStartTime();
+            time = it.current()->getStartTime();
+            if (m_startTime < *time || *time == KPTDuration::zeroDuration)
+                m_startTime.set(*time);
+        }
+        delete time;
+    }
+}
+
+void KPTTask::setEndTime() {
+    kdDebug()<<k_funcinfo<<endl;
+    if(numChildren() == 0) {
+        m_endTime.set(m_startTime);
+        m_endTime.add(m_duration);
+    } else {
+        // summary task
+        m_endTime.set(KPTDuration::zeroDuration);
+        KPTDuration *time = 0;
+        QPtrListIterator<KPTNode> it(m_nodes);
+        for ( ; it.current(); ++it ) {
+            it.current()->setEndTime();
+            time = it.current()->getEndTime();
+            if (*time > m_endTime)
+                m_endTime.set(*time);
+
+        }
+        delete time;
+    }
+}
+
+KPTDuration *KPTTask::getStartTime() {
+    kdDebug()<<k_funcinfo<<endl;
+    KPTDuration *time = new KPTDuration();
+    if(numChildren() == 0) {
+        time->set(m_startTime.dateTime());
+    } else {
+        // summary task
+        KPTDuration *start = 0;
         QPtrListIterator<KPTNode> it(m_nodes);
         for ( ; it.current(); ++it ) {
             start = it.current()->getStartTime();
-            if (*start < *time || *time == KPTDuration::zeroDuration)
+            if (*start < *time || *time == KPTDuration::zeroDuration) {
                 time->set(*start);
+            }
             delete start;
+        }
+    }
+    return time;
+}
+
+KPTDuration *KPTTask::getEndTime() {
+    kdDebug()<<k_funcinfo<<endl;
+    KPTDuration *time = new KPTDuration();
+    if(numChildren() == 0) {
+        time->set(m_startTime.dateTime());
+    } else {
+        // summary task
+        KPTDuration *end;
+        QPtrListIterator<KPTNode> it(m_nodes);
+        for ( ; it.current(); ++it ) {
+            end = it.current()->getEndTime();
+            if (*end < *time || *time == KPTDuration::zeroDuration)
+                time->set(*end);
+            delete end;
         }
     }
     return time;
@@ -140,8 +182,98 @@ KPTDuration *KPTTask::getFloat() {
     return new KPTDuration;
 }
 
+const KPTDuration& KPTTask::expectedDuration(const KPTDuration &start) {
+    kdDebug()<<k_funcinfo<<endl;
+    calculateDuration(start);
+    return m_duration;
+ }
 
-void KPTTask::addResource(KPTResourceGroup * /* resource */) {
+void KPTTask::calculateDuration(const KPTDuration &start) {
+    kdDebug()<<k_funcinfo<<endl;
+
+    // Here we assume that all requested resources are present
+    // which means that the plan will be an ideal one.
+    // The ideal plan must later be matched against available resources (elswhere)
+    // and conflicts reported to user which must take action to solve them.
+    int num = numWorkResources(); // We assume duration is only dependent on resources that do work
+    if (num == 0) {
+        // This must be reported as a conflict to user, but we assign a resource to get a decent plan
+        m_resourceConflict = "No resources requested";
+        num = 1;
+    } else {
+        m_resourceConflict="";
+    }
+
+    int sec = m_effort->expected().duration()/num; //TODO: handle workdays/holidays
+    KPTDuration d = KPTDuration(sec);
+    m_duration.set(d);
+
+    // TODO: handle risc
+
+}
+
+KPTResourceRequest *KPTTask::resourceRequest(KPTResourceGroup *group) const {
+    QPtrListIterator<KPTResourceRequest> it(m_requests);
+    for (; it.current(); ++it) {
+        if (it.current()->group() == group)
+            return it.current(); // we assume only one request to the same group
+    }
+    return 0;
+}
+
+void KPTTask::clearResourceRequests() {
+    m_requests.clear();
+}
+
+void KPTTask::addResourceRequest(KPTResourceGroup *group, int numResources) {
+    m_requests.append(new KPTResourceRequest(group, numResources));
+}
+
+void KPTTask::addResourceRequest(KPTResourceRequest *request) {
+    m_requests.append(request);
+}
+
+int KPTTask::numResources() {
+    QPtrListIterator<KPTResourceRequest> it(m_requests);
+    int num = 0;
+    for (; it.current(); ++it) {
+        //if (it.current()->isWork())
+            num += it.current()->numResources();
+    }
+    kdDebug()<<k_funcinfo<<" num="<<num<<endl;
+    return num;
+}
+
+int KPTTask::numWorkResources() {
+    QPtrListIterator<KPTResourceRequest> it(m_requests);
+    int num = 0;
+    for (; it.current(); ++it) {
+        //if (it.current()->isWork())
+            num += it.current()->numResources();
+    }
+    kdDebug()<<k_funcinfo<<" num="<<num<<endl;
+    return num;
+}
+
+void KPTTask::requestResources() const {
+    kdDebug()<<k_funcinfo<<endl;
+    if (m_nodes.count() == 0) {
+        QPtrListIterator<KPTResourceRequest> it(m_requests);
+        for (; it.current(); ++it) {
+            // Tell the resource group I want resource(s)
+            it.current()->group()->addNode(this);
+        }
+    } else {
+        // summary task, so take care of my children
+        QPtrListIterator<KPTNode> nit(m_nodes);
+        for ( ; nit.current(); ++nit ) {
+            nit.current()->requestResources();
+        }
+    }
+}
+
+
+void KPTTask::addResource(KPTResourceGroup * resource) {
 }
 
 
@@ -159,19 +291,50 @@ void KPTTask::insertResource( unsigned int /* index */,
 			      KPTResourceGroup * /* resource */) {
 }
 
+// A new constraint means start/end times must be recalculated
+void KPTTask::setConstraint(KPTNode::ConstraintType type) {
+    if (m_constraint == type)
+        return;
+    m_constraint = type;
+    calculateStartEndTime();
+}
+
+void KPTTask::calculateStartEndTime() {
+    kdDebug()<<k_funcinfo<<endl;
+    setStartEndTime();
+    QPtrListIterator<KPTRelation> it(m_dependChildNodes);
+    for (; it.current(); ++it) {
+        it.current()->child()->calculateStartEndTime(m_endTime); // adjust for all dependant children
+    }
+}
+
+void KPTTask::calculateStartEndTime(const KPTDuration &start) {
+    kdDebug()<<k_funcinfo<<endl;
+    if (start > m_startTime) { //TODO: handle different constraints
+        m_startTime.set(start);
+        setEndTime();
+    }
+
+    QPtrListIterator<KPTRelation> it(m_dependChildNodes);
+    for (; it.current(); ++it) {
+        it.current()->child()->calculateStartEndTime(m_endTime); // adjust for all dependant children
+    }
+}
 
 bool KPTTask::load(QDomElement &element) {
-    // Maybe TODO: Delete old stuff here
-
-    // Load attributes (TODO: Finish with the rest of them)
+    // Load attributes (TODO: Handle different types of tasks, milestone, summary...)
+    bool ok = false;
+    m_id = mapNode(QString(element.attribute("id","-1")).toInt(&ok), this);
     m_name = element.attribute("name");
     m_leader = element.attribute("leader");
     m_description = element.attribute("description");
 
     earliestStart = KPTDuration(QDateTime::fromString(element.attribute("earlieststart")));
     latestFinish = KPTDuration(QDateTime::fromString(element.attribute("latestfinish")));
+    m_startTime = KPTDuration(QDateTime::fromString(element.attribute("start")));
+    m_endTime = KPTDuration(QDateTime::fromString(element.attribute("end")));
+    m_duration = KPTDuration(QDateTime::fromString(element.attribute("duration")));
 
-    bool ok;
     m_constraint = (KPTNode::ConstraintType)QString(element.attribute("scheduling","0")).toInt(&ok);
 
     // Load the project children
@@ -196,32 +359,26 @@ bool KPTTask::load(QDomElement &element) {
 		else
 		    // TODO: Complain about this
 		    delete child;
-//	    } else if (e.tagName() == "milestone") {
-//		    // Load the milestone
-//		    KPTMilestone *child = new KPTMilestone(this);
-//		    if (child->load(e))
-//		        addChildNode(child);
-//		    else
-//		        // TODO: Complain about this
-//		        delete child;
-	    } else if (e.tagName() == "terminalnode") {
-		// TODO: Load the terminalnode
-	    } else if (e.tagName() == "predesessor") {
-		    // Load the relation
-		    KPTRelation *rel = new KPTRelation(0, this);
-    		if (rel->load(e)) {
-                addPredesessorNode(rel);
-            } else {
-                kdDebug()<<k_funcinfo<<"Failed to load relation"<<endl;
-		        // TODO: Complain about this
-		        delete rel;
-            }
 	    } else if (e.tagName() == "resource") {
 		// TODO: Load the resource
 	    } else if (e.tagName() == "effort") {
     		//  Load the effort
             m_effort->load(e);
-	    }
+	    } else if (e.tagName() == "resource-request") {
+		    // Load the resource request
+            KPTProject *p = dynamic_cast<KPTProject *>(projectNode());
+            if (p == 0) {
+                kdDebug()<<k_funcinfo<<"Project does not exist"<<endl;
+            } else {
+                KPTResourceRequest *r = new KPTResourceRequest();
+                if (r->load(e, p))
+                    addResourceRequest(r);
+                else {
+                    kdError()<<k_funcinfo<<"Failed to load resource request"<<endl;
+                    delete r;
+                }
+            }
+        }
 	}
     }
 
@@ -229,24 +386,30 @@ bool KPTTask::load(QDomElement &element) {
 }
 
 
-void KPTTask::save(QDomElement &element) const {
+void KPTTask::save(QDomElement &element)  {
     QDomElement me = element.ownerDocument().createElement("task");
     element.appendChild(me);
 
-    // TODO: Save the rest of the information
+    //TODO: Handle different types of tasks, milestone, summary...
+    if (m_id < 0)
+        m_id = m_parent->mapNode(this);
+    me.setAttribute("id", m_id);
     me.setAttribute("name", m_name);
     me.setAttribute("leader", m_leader);
     me.setAttribute("description", m_description);
 
-    me.setAttribute("earlieststart",earliestStart.dateTime().toString());
-    me.setAttribute("latestfinish",latestFinish.dateTime().toString());
+    me.setAttribute("earlieststart",earliestStart.toString());
+    me.setAttribute("latestfinish",latestFinish.toString());
 
+    me.setAttribute("start",m_startTime.toString());
+    me.setAttribute("end",m_endTime.toString());
+    me.setAttribute("duration",m_duration.toString());
     me.setAttribute("scheduling",m_constraint);
 
     m_effort->save(me);
 
-    // Only save parent relations
-    QPtrListIterator<KPTRelation> it(m_dependParentNodes);
+
+    QPtrListIterator<KPTResourceRequest> it(m_requests);
     for ( ; it.current(); ++it ) {
         it.current()->save(me);
     }
@@ -256,13 +419,14 @@ void KPTTask::save(QDomElement &element) const {
 	    getChildNode(i)->save(me);
 }
 
-bool KPTTask::openDialog() {
+bool KPTTask::openDialog(QPtrList<KPTResourceGroup> &resourceGroups) {
     kdDebug()<<k_funcinfo<<endl;
-    KPTTaskDialog *dialog = new KPTTaskDialog(*this);
+    KPTTaskDialog *dialog = new KPTTaskDialog(*this, resourceGroups);
     bool ret = dialog->exec();
     delete dialog;
     return ret;
 }
+
 
 /*void KPTTask::drawPert(KPTPertCanvas *view, KPTNode *parent) {
 	if (!m_drawn) {
@@ -295,13 +459,14 @@ bool KPTTask::openDialog() {
 */
 #ifndef NDEBUG
 void KPTTask::printDebug(bool children, QCString indent) {
-    kdDebug()<<indent<<"+ Task node: "<<name()<<endl;
+    kdDebug()<<indent<<"+ Task node: "<<name()<<" type="<<type()<<endl;
     indent += "!  ";
-    KPTDuration *time = getStartTime();
-    kdDebug()<<indent<<"Calculated start: "<<time->dateTime().toString()<<endl;
-    delete time;
-    time = getExpectedDuration();
-    kdDebug()<<indent<<"Calculated duration: "<<time->dateTime().toString()<<endl;
+    kdDebug()<<indent<<"Requested work resources: "<<numWorkResources()<<endl;
+    for (int i=0; i < m_requests.count(); ++i) {
+        kdDebug()<<indent<<"   Name: "<< m_requests.at(i)->group()->name()<<endl;
+    }
+    kdDebug()<<indent<<"Resource overbooked="<<resourceOverbooked()<<endl;
+    kdDebug()<<indent<<m_resourceConflict<<endl;
     kdDebug()<<indent<<endl;
     KPTNode::printDebug(children, indent);
 

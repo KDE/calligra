@@ -37,6 +37,7 @@ class KPTNode;
 class KPTProject;
 
 class KDGanttView;
+class KPTResourceView;
 
 class KPTView : public KoView {
     Q_OBJECT
@@ -97,7 +98,7 @@ private:
     KPTPertView *m_pertview;
     QHBoxLayout *m_pertlayout;
 	QWidgetStack *m_tab;
-	KDGanttView *m_resourceview;
+	KPTResourceView *m_resourceview;
 
     int m_viewGrp;
     int m_defaultFontSize;

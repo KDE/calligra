@@ -146,7 +146,7 @@ void KPTPertCanvas::drawSubproject( KPTNode *node)
 
 void KPTPertCanvas::drawMilestone( KPTNode *node)
 {
-	kdDebug()<< "draw task " << node->name();
+	kdDebug()<< "draw task " << node->name()<<endl;
 	if ( !node->isDrawn()) {
 		if ( node->numChildren() > 0 ) {
 			int col = summaryColumn();
@@ -172,7 +172,7 @@ void KPTPertCanvas::drawMilestone( KPTNode *node)
 
 void KPTPertCanvas::drawTask( KPTNode *node)
 {
-	kdDebug()<< "draw task " << node->name();
+	kdDebug()<< "draw task " << node->name()<<endl;
 	if ( !node->isDrawn()) {
 		if ( node->numChildren() > 0  &&
 	         node->numDependChildNodes() == 0 &&

@@ -84,7 +84,7 @@ public:
         return true;
     }
 
-    virtual void save(QDomElement &e) const {
+    virtual void save(QDomElement &e)  {
         e.setAttribute("earlieststart", earliestStart.dateTime().toString());
         e.setAttribute("latestfinish", latestFinish.dateTime().toString());
     }

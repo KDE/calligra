@@ -25,7 +25,8 @@
 #include "kptresource.h"
 #include "defs.h"
 
-class KPTResource;
+#include <qptrlist.h>
+
 class KPTPertCanvas;
 class QCanvas;
 
@@ -60,15 +61,30 @@ public:
     KPTDuration *getRandomDuration();
 
     /**
+      * setStartTime() calculates and sets @see m_startTime
+      * based on @see m_earliestStart and constraints.
+      * Set also for all children.
+      */
+    void setStartTime();
+    /**
+      * setEndTime() calculates and sets @see m_endTime
+      * based on @see m_startTime and @see m_duration.
+      * Set also for all children.
+      */
+    void setEndTime();
+
+    /**
      * Retrive the time this node starts. This is either implied from the set
      * time, or calculated by asking the parents.
      */
     KPTDuration *getStartTime();
-
+    KPTDuration *getEndTime();
     /**
      * Retrieve the calculated float of this node
      */
     KPTDuration *getFloat();
+
+    const KPTDuration& expectedDuration(const KPTDuration &start);
 
     // resources management
     /**
@@ -83,18 +99,43 @@ public:
     void removeResource(KPTResourceGroup *resource);
     void removeResource(int number);
 
+    const QPtrList<KPTResourceRequest> &resourceRequests() const { return m_requests; }
+    /**
+     * Return the resource request made to @group
+     * (There should be only one)
+     */
+    KPTResourceRequest *resourceRequest(KPTResourceGroup *group) const;
+    void clearResourceRequests();
+    void addResourceRequest(KPTResourceGroup *group, int numResources);
+    void addResourceRequest(KPTResourceRequest *request);
+    int numResources();
+    int numWorkResources();
+    void requestResources() const;
+
+
+    void setConstraint(KPTNode::ConstraintType type);
+
     /**
      * TODO: Load and save
      */
     virtual bool load(QDomElement &element);
-    virtual void save(QDomElement &element) const;
+    virtual void save(QDomElement &element);
 
-    virtual bool openDialog();
+    virtual bool openDialog(QPtrList<KPTResourceGroup> &resourceGroups);
 
 //    virtual void drawPert(KPTPertCanvas *view, KPTNode *parent = 0);
 
+    void calculateStartEndTime();
+    void calculateStartEndTime(const KPTDuration &start);
+
 private:
+
+    void calculateDuration(const KPTDuration &start); // stores duration to m_duration
+
     QPtrList<KPTResourceGroup> m_resource;
+
+    QPtrList<KPTResourceRequest> m_requests;
+
 
 #ifndef NDEBUG
 public:

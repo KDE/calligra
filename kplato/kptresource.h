@@ -32,6 +32,7 @@ class KPTAppointment;
 class KPTTask;
 class KPTNode;
 class KPTResource;
+class KPTProject;
 
 /**
   * This class represents a group of similar resources to be assigned to a task
@@ -46,9 +47,10 @@ class KPTResource;
  */
 class KPTResourceGroup {
     public:
-	      KPTResourceGroup();
+	      KPTResourceGroup(KPTProject *project);
 	      ~KPTResourceGroup();
-	
+
+          int id() { return m_id; }
 	      void setName(QString n) {m_name=n;}
 	      const QString &name() const {return m_name;}
 	
@@ -66,7 +68,11 @@ class KPTResourceGroup {
 
 	      KPTResource* getResource(int);
 	      KPTRisk* getRisk(int);
- 	
+
+	      /** Get the @num resources which is available in the time frame
+            * defined by @start and @duration.
+            */
+          QPtrList<KPTResource> availableResources(const KPTDuration start, const KPTDuration duration, int num);
 	      /** Manage the dependent resources.  This is a list of the resource
 	        * groups that must have available resources for this resource to
 	        * perform the work
@@ -89,17 +95,28 @@ class KPTResourceGroup {
           QPtrList<KPTResource> &resources() { return m_resources; }
 
           bool load(QDomElement &element);
-          void save(QDomElement &element) const;
+          void save(QDomElement &element);
 
+          void clearAppointments();
+          void makeAppointments();
+          void saveAppointments(QDomElement &element) const;
+
+
+          void addNode(const KPTNode *node) { m_nodes.append(node); }
+          void clearNodes() { m_nodes.clear(); }
 #ifndef NDEBUG
         void printDebug(QString ident);
 #endif
 
     private:
+        KPTProject  *m_project;
+        int m_id;   // unique id
         QString m_name;
         QPtrList<KPTResource> m_resources;
         QPtrList<KPTRisk> m_risks;
         QPtrList<KPTResourceGroup> m_requires;
+
+        QPtrList<KPTNode> m_nodes; //The nodes that want resources from us
 };
 
 /**
@@ -114,9 +131,10 @@ class KPTResourceGroup {
 class KPTResource {
     public:
 
-        KPTResource();
+        KPTResource(KPTProject *project);
         ~KPTResource();
 
+        int id() { return m_id; }
 
 	   void setName(QString n) {m_name=n;}
 	   const QString &name() const {return m_name;}
@@ -130,19 +148,35 @@ class KPTResource {
 
         KPTDuration *getFirstAvailableTime(KPTDuration after = KPTDuration());
         KPTDuration *getBestAvailableTime(KPTDuration duration);
+        KPTDuration *getBestAvailableTime(const KPTDuration after, const KPTDuration duration);
 
         bool load(QDomElement &element);
-        void save(QDomElement &element) const;
+        void save(QDomElement &element);
+
+        QPtrList<KPTAppointment> &appointments() { return m_appointments; }
+
+        bool isAvailable(KPTTask *task);
+        void addAppointment(KPTAppointment *a);
+        void clearAppointments();
+        void makeAppointment(KPTTask *task);
+        void saveAppointments(QDomElement &element) const;
+
+        void setOverbooked(bool on) { m_overbooked = on; }
+        bool isOverbooked() { return m_overbooked; }
 
 #ifndef NDEBUG
         void printDebug(QString ident);
 #endif
     private:
+        KPTProject *m_project;
         QPtrList<KPTAppointment> m_appointments;
+        int m_id; // unique id
         QString m_name;
         KPTDuration m_availableFrom;
         KPTDuration m_availableUntil;
         QPtrList<KPTDuration> m_workingHours;
+
+        bool m_overbooked;
 };
 
 /**
@@ -151,6 +185,7 @@ class KPTResource {
   */
 class KPTAppointment {
     public:
+        KPTAppointment() {}
         KPTAppointment(KPTDuration startTime, KPTDuration duration, KPTResource *resource, KPTTask *taskNode=0);
         ~KPTAppointment();
 
@@ -173,6 +208,11 @@ class KPTAppointment {
         void deleteAppointmentFromRepeatList(KPTDuration time);
         void addAppointmentToRepeatList(KPTDuration time);
 
+        bool isBusy(const KPTDuration &start, const KPTDuration &end);
+
+        bool load(QDomElement &element, KPTProject &project);
+        void save(QDomElement &element);
+
     private:
         KPTDuration m_startTime;
         KPTDuration m_duration;
@@ -182,12 +222,17 @@ class KPTAppointment {
         int m_repeatCount;
         QPtrList<KPTDuration> m_extraRepeats;
         QPtrList<KPTDuration> m_skipRepeats;
+
+#ifndef NDEBUG
+public:
+        void printDebug(QString ident);
+#endif
 };
 
 
-/** 
- * Risk is associated with a resource/task pairing to indicate the planner's confidence in the 
- * estimated effort. Risk can be one of none, low, or high. Some factors that may be taken into 
+/**
+ * Risk is associated with a resource/task pairing to indicate the planner's confidence in the
+ * estimated effort. Risk can be one of none, low, or high. Some factors that may be taken into
  * account for risk are the experience of the person and the reliability of equipment.
  */
 class KPTRisk {
@@ -211,6 +256,23 @@ class KPTRisk {
         KPTNode *m_node;
         KPTResource *m_resource;
         RiskType m_riskType;
+};
+
+class KPTResourceRequest {
+    public:
+        KPTResourceRequest(KPTResourceGroup *group=0, int numResources=0)
+        : m_group(group),
+          m_numResources(numResources) {}
+
+        KPTResourceGroup *group() { return m_group; }
+        int numResources() { return m_numResources; }
+
+        virtual bool load(QDomElement &element, KPTProject *project);
+        virtual void save(QDomElement &element);
+
+    private:
+        KPTResourceGroup *m_group;
+        int m_numResources;
 };
 
 #endif

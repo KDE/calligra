@@ -27,46 +27,74 @@
 	leader		Person or group in charge of the project
 	description	Text describing the project briefly
 -->
-<!ELEMENT project (project|task|milestone|terminalnode|relation|resource)*>
+<!ELEMENT project (project|task|endnode|startnode|relation|resource-group|appointment)*>
 <!ATTLIST project	id CDATA #REQUIRED
 			name CDATA #IMPLIED
 			leader CDATA #IMPLIED
-			description CDATA #IMPLIED>
+			description CDATA #IMPLIED
+            project-start CDATA #IMPLIED
+            project-end CDATA #IMPLIED>
 
-<!--	Task are for now exactly like projects.
+<!--	Terminalnodes
 -->
-<!ELEMENT task (project|task|milestone|terminalnode|relation|resource)*>
+<!ELEMENT startnode EMPTY>
+<!ATTLIST startnode
+            earlieststart CDATA #IMPLIED
+            latestfinish CDATA #IMPLIED>
+
+<!ELEMENT endnode EMPTY>
+<!ATTLIST endnode
+            earlieststart CDATA #IMPLIED
+            latestfinish CDATA #IMPLIED>
+
+<!-- Resource group
+-->
+<!ELEMENT resource-group (resource)*>
+<!ATTLIST resource-group id CDATA #REQUIRED
+            type (work|material)
+			name CDATA #IMPLIED>
+
+<!-- Resource
+-->
+<!ELEMENT resource EMPTY
+<!ATTLIST resource id CDATA #REQUIRED
+			name CDATA #IMPLIED>
+
+<!--	Tasks can also be milestones (zero duration) or summary tasks (have children)
+-->
+<!ELEMENT task (project|task|terminalnode|resource-request)*>
 <!ATTLIST task		id CDATA #REQUIRED
 			name CDATA #IMPLIED
 			leader CDATA #IMPLIED
-			description CDATA #IMPLIED>
+			description CDATA #IMPLIED
+            earlieststart CDATA #IMPLIED
+            latestfinish CDATA #IMPLIED
+            scheduling="0"
+            start CDATA #IMPLIED
+            end CDATA #IMPLIED
+            duration CDATA #IMPLIED>
 
-<!--	Milestone
+<!--	Resource requests are made by tasks and referes to
+        the number of resources needed from a resource group
 -->
-<!ELEMENT milestone EMPTY>
-<!ATTLIST milestone	id CDATA #REQUIRED
-			deadline CDATA #REQUIRED
-			name CDATA #IMPLIED
-			leader CDATA #IMPLIED
-			description CDATA #IMPLIED>
+<!ELEMENT resource-request EMPTY>
+<!ATTLIST resource-request	group-id CDATA #REQUIRED
+			limit CDATA #IMPLIED>
 
-<!--	Terminalnode
--->
-<!ELEMENT terminalnode (project|relation|resource)*>
-<!ATTLIST terminalnode	id CDATA #REQUIRED
-			name CDATA #IMPLIED
-			leader CDATA #IMPLIED
-			description CDATA #IMPLIED>
 
 <!--	Relations are described by the two IDs and the type of constraint
+        The ids are references to tasks, so all tasks must have been loaded
 -->
 <!ELEMENT relation EMPTY>
-<!ATTLIST relation	id1 CDATA #REQUIRED
-			id2 CDATA #REQUIRED
+<!ATTLIST relation	parent-id CDATA #REQUIRED
+			child-id CDATA #REQUIRED
 			type ("Finish-Start" | "Finish-Finish" | "Start-Start")
 				"Start-Start">
 
-<!-- TBD
+<!--	Appointments between resources and tasks
 -->
-<!ELEMENT resource EMPTY
-<!ATTLIST resource id CDATA #REQUIRED>
+<!ELEMENT appointment EMPTY>
+<!ATTLIST appointment	resource-id CDATA #REQUIRED
+			task-id CDATA #REQUIRED
+            start CDATA #IMPLIED
+            duration CDATA #IMPLIED>

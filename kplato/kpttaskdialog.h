@@ -22,18 +22,31 @@
 
 #include <kdialogbase.h>
 
+#include <kptresource.h>
+
+#include <qtable.h>
+
 class KPTTask;
 class KLineEdit;
 class QTextEdit;
 class QDateTimeEdit;
 class QSpinBox;
 class QButtonGroup;
+class QListBox;
+class QTable;
 
+class KPTResourceItem : public QTableItem {
+public:
+    KPTResourceItem(KPTResourceGroup *group, QTable * table, EditType et)
+    : QTableItem (table, et, group->name()), m_resourceGroup(group) {}
+
+    KPTResourceGroup *m_resourceGroup;
+};
 
 class KPTTaskDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTTaskDialog(KPTTask &task, QWidget *parent=0, const char *name=0);
+    KPTTaskDialog(KPTTask &task, QPtrList<KPTResourceGroup> &resourceGroups, QWidget *parent=0, const char *name=0);
 
 protected slots:
     void slotOk();
@@ -48,7 +61,10 @@ private:
     QSpinBox *effort;
 
     QButtonGroup *constraints;
-    
+
+    QTable *table;
+    QPtrList<KPTResourceGroup> &m_resourceGroups;
+
     // TODO: Duration and risk fields
 };
 

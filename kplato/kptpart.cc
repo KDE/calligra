@@ -139,7 +139,6 @@ bool KPTPart::loadXML(QIODevice *, const QDomDocument &document) {
 	    if(e.tagName() == "project") {
 		KPTProject *newProject = new KPTProject();
 		if (newProject->load(e)) {
-            newProject->completeLoad(newProject); // Now fix relations etc.
 		    // The load went fine. Throw out the old project
 		    delete m_project;
 		    delete m_projectDialog;

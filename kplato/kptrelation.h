@@ -42,7 +42,7 @@ class KPTRelation {
 public:
 
     KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, KPTDuration lag);
-    KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt=START_ON_DATE, TimingRelation tr=FINISH_START);
+    KPTRelation(KPTNode *parent=0, KPTNode *child=0, TimingType tt=START_ON_DATE, TimingRelation tr=FINISH_START);
     ~KPTRelation();
 
     void setTimingType(TimingType );
@@ -71,10 +71,8 @@ public:
         NOTIMPL = 2l
     };
 
-    bool load(QDomElement &element);
+    bool load(QDomElement &element, KPTProject &project);
     void save(QDomElement &element) const;
-    
-    bool completeLoad(KPTNode *top);
     
     void draw(KPTPertCanvas* view);
     

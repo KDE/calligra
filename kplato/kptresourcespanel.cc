@@ -100,7 +100,7 @@ KPTResourcesPanel::KPTResourcesPanel(QWidget *parent, KPTProject *p) : Resources
 void KPTResourcesPanel::slotAddGroup() {
     if(groupName->text().isEmpty()) return;
 
-    KPTResourceGroup *r = new KPTResourceGroup();
+    KPTResourceGroup *r = new KPTResourceGroup(project);
     r->setName(groupName->text());
     KPTGroupItem *gitem = new KPTGroupItem(r, KPTGroupItem::NEW);
     m_groupItems.append(gitem);
@@ -136,8 +136,9 @@ void KPTResourcesPanel::slotAddResource() {
         return;
     }
 
-    KPTResource *res = new KPTResource();
+    KPTResource *res = new KPTResource(project);
     res->setName(resourceName->text());
+   
     //res->addWorkingHour(); // TODO
     //m_groupItem->m_group->addResource(res, 0); //TODO only add to project when OK is pressed
     KPTResourceItem *resourceItem = new KPTResourceItem(res, KPTResourceItem::NEW);

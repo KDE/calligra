@@ -32,11 +32,13 @@
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
+#include <qlistbox.h>
+#include <qtable.h>
+#include <kdebug.h>
 
-
-KPTTaskDialog::KPTTaskDialog(KPTTask &t, QWidget *p, const char *n)
+KPTTaskDialog::KPTTaskDialog(KPTTask &t, QPtrList<KPTResourceGroup> &resourceGroups, QWidget *p, const char *n)
     : KDialogBase(Tabbed, i18n("Task Settings"), Ok|Cancel, Ok, p,
-		  n, true, true), task(t)
+		  n, true, true), task(t), m_resourceGroups(resourceGroups)
 {
     // For now the setup is pretty trivial. It's planned to be able to control
     // the children here too.
@@ -56,7 +58,7 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &t, QWidget *p, const char *n)
     effort=new QSpinBox(1,365*24,1,settings);
     effort->setValue(task.effort()->expected().duration()/3600);
     layout->addWidget(effort, 2, 1);
-    
+
 
     layout->addMultiCellWidget(constraints = new QButtonGroup(0, Qt::Vertical, i18n("Scheduling"), settings), 3, 7, 0, 1);
     constraints->layout()->setSpacing(KDialog::spacingHint());
@@ -73,7 +75,7 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &t, QWidget *p, const char *n)
     constraintsLayout->addWidget(b, 4, 0);
     b = new QRadioButton(i18n("Must start on"), constraints);
     constraintsLayout->addWidget(b, 5, 0);
-    
+
     constraints->setButton(task.constraint());
 
     constraintsLayout->addWidget(sneTime=new QDateTimeEdit(task.startNotEarlier().dateTime(), constraints), 3, 1);
@@ -84,7 +86,33 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &t, QWidget *p, const char *n)
     // Resources
     QWidget *res = addPage(i18n("Resources"));
     QGridLayout *resLayout = new QGridLayout(res, 6, 2, marginHint(), spacingHint());
-    
+
+    uint noRes = m_resourceGroups.count();
+    table = new QTable(noRes,3,res);
+    resLayout->addWidget(table, 0, 0);
+    //table->verticalHeader()->hide();
+    table->horizontalHeader()->setLabel(0,"Resource");
+    table->horizontalHeader()->setLabel(1,"Use");
+    table->horizontalHeader()->setLabel(2,"Limit");
+
+    for (uint i=0; i<noRes; ++i) {
+        KPTResourceItem *item = new KPTResourceItem(m_resourceGroups.at(i), table, QTableItem::Never);
+        table->setItem(i, 0, item);
+
+        QCheckTableItem *c = new QCheckTableItem(table,"");
+        QTableItem *ti = new QTableItem(table,QTableItem::OnTyping,"1");
+        QPtrListIterator<KPTResourceRequest> it(task.resourceRequests());
+        for (; it.current(); ++it) {
+            kdDebug()<<k_funcinfo<<" group="<<item->m_resourceGroup<<"  request group="<<it.current()->group()<<endl;
+            if (it.current()->group() == item->m_resourceGroup) {
+                c->setChecked(true);
+                kdDebug()<<k_funcinfo<<"numResources: "<<it.current()->numResources()<<" -> "<<QString("%1").arg(it.current()->numResources())<<endl;
+                ti->setText(QString("%1").arg(it.current()->numResources()));
+            }
+        }
+        table->setItem(i, 1, c);
+        table->setItem(i, 2, ti);
+    }
 
     // Description
     QWidget *notes = addPage(i18n("Notes"));
@@ -118,12 +146,27 @@ void KPTTaskDialog::slotOk() {
     task.setFinishNotLater(dt);
     dt.set(msoTime->dateTime());
     task.setMustStartOn(dt);
-    
+
     task.setName(namefield->text());
     task.setLeader(leaderfield->text());
     task.setDescription(descriptionfield->text());
 
     task.effort()->set( (effort->value()*3600) );
+
+    //resources
+    task.clearResourceRequests();
+    for (int i = 0; i < table->numRows(); ++i) {
+        QCheckTableItem *cti = dynamic_cast<QCheckTableItem *>(table->item(i, 1));
+        if (cti->isChecked()) {
+            KPTResourceItem *item = dynamic_cast<KPTResourceItem *>(table->item(i, 0));
+            bool ok = false;
+            int num = table->item(i,2)->text().toInt(&ok);
+            if (!ok)
+                num = 0;
+            task.addResourceRequest(item->m_resourceGroup, num);
+            kdDebug()<<k_funcinfo<<"Checked: '"<<item->m_resourceGroup->name()<<"' numResources="<<num<<endl;
+        }
+    }
                             
     accept();
 }

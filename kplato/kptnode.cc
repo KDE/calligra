@@ -27,6 +27,14 @@
 
 KPTNode::KPTNode(KPTNode *parent) : m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
     m_parent = parent;
+    init();
+    m_id = -1; // Not mapped
+}
+
+KPTNode::~KPTNode() {
+}
+
+void KPTNode::init() {
     m_name="";
     m_startTime.set(KPTDuration());
     m_endTime.set(KPTDuration());
@@ -37,10 +45,35 @@ KPTNode::KPTNode(KPTNode *parent) : m_nodes(), m_dependChildNodes(), m_dependPar
     m_pertItem = 0;
 	m_drawn = false;
     m_effort = 0;
+    m_resourceOverbooked = false;
 }
 
-KPTNode::~KPTNode() {
+KPTNode *KPTNode::projectNode() {
+    if ((type() == Type_Project) || (type() == Type_Subproject)) {
+        return this;
+    }
+    if (m_parent)
+        return m_parent->projectNode();
+
+    kdError()<<k_funcinfo<<"Ooops, no parent and no project found"<<endl;
+    return 0;
 }
+
+int KPTNode::mapNode(KPTNode *node) {
+    int id = -1;
+    if (m_parent != 0) {
+        id = m_parent->mapNode(node);
+    }
+    return id;
+}
+
+int KPTNode::mapNode(int id, KPTNode *node) {
+    if (m_parent != 0) {
+        return m_parent->mapNode(id, node);
+    }
+    return -1;
+}
+
 
 void KPTNode::delChildNode( KPTNode *node, bool remove) {
     if ( m_nodes.findRef(node) != -1 ) {
@@ -91,21 +124,25 @@ void KPTNode::addDependChildNode( KPTNode *node, TimingType t, TimingRelation p)
 
 void KPTNode::addDependChildNode( KPTNode *node, TimingType t, TimingRelation p, KPTDuration lag) {
     KPTRelation *relation = new KPTRelation(this, node, t, p, lag);
-    m_dependChildNodes.append(relation);
-    node->addDependParentNode(relation);
+    if (node->addDependParentNode(relation))
+        m_dependChildNodes.append(relation);
+    else
+        delete relation;
 }
 
 void KPTNode::insertDependChildNode( unsigned int index, KPTNode *node, TimingType t, TimingRelation p) {
     KPTRelation *relation = new KPTRelation(this, node, t, p, KPTDuration());
-    m_dependChildNodes.insert(index, relation);
-    node->addDependParentNode(relation);
-
+    if (node->addDependParentNode(relation))
+        m_dependChildNodes.insert(index, relation);
+    else
+        delete relation;
 }
 
-void KPTNode::addDependChildNode( KPTRelation *relation) {
+bool KPTNode::addDependChildNode( KPTRelation *relation) {
     if(m_dependChildNodes.findRef(relation) != -1)
-        return;
+        return false;
     m_dependChildNodes.append(relation);
+    return true;
 }
 
 void KPTNode::delDependChildNode( KPTNode *node, bool remove) {
@@ -140,20 +177,25 @@ void KPTNode::addDependParentNode( KPTNode *node, TimingType t, TimingRelation p
 
 void KPTNode::addDependParentNode( KPTNode *node, TimingType t, TimingRelation p, KPTDuration lag) {
     KPTRelation *relation = new KPTRelation(node, this, t, p, lag);
-    m_dependParentNodes.append(relation);
-    node->addDependChildNode(relation);
+    if (node->addDependChildNode(relation))
+        m_dependParentNodes.append(relation);
+    else
+        delete relation;
 }
 
 void KPTNode::insertDependParentNode( unsigned int index, KPTNode *node, TimingType t, TimingRelation p) {
     KPTRelation *relation = new KPTRelation(this, node, t, p, KPTDuration());
-    m_dependParentNodes.insert(index,relation);
-    node->addDependChildNode(relation);
+    if (node->addDependChildNode(relation))
+        m_dependParentNodes.insert(index,relation);
+    else
+        delete relation;
 }
 
-void KPTNode::addDependParentNode( KPTRelation *relation) {
+bool KPTNode::addDependParentNode( KPTRelation *relation) {
     if(m_dependParentNodes.findRef(relation) != -1)
-        return;
+        return false;
     m_dependParentNodes.append(relation);
+    return true;
 }
 
 void KPTNode::delDependParentNode( KPTNode *node, bool remove) {
@@ -363,6 +405,7 @@ const KPTDuration& KPTNode::pessimisticDuration(const KPTDuration &start)
  }
  const KPTDuration& KPTNode::expectedDuration(const KPTDuration &start)
  {
+    kdDebug()<<k_funcinfo<<endl;
     m_duration.set(KPTDuration::zeroDuration);
     if (m_effort)
         calcDuration(start, m_effort->expected());
@@ -373,24 +416,6 @@ void KPTNode::calcDuration( const KPTDuration &start, const KPTDuration &effort 
 {
     //kdDebug()<<k_funcinfo<<endl;
     m_duration.add(effort);
-}
-
-void KPTNode::completeLoad(KPTNode *node) {
-    kdDebug()<<k_funcinfo<<endl;
-    // Complete relations for this node
-    QPtrListIterator<KPTRelation> it(m_predesessorNodes);
-    for ( ; it.current(); ++it ) {
-        if (it.current()->completeLoad(node)) {
-            addDependParentNode(it.current()->parent(), it.current()->timingType(), it.current()->timingRelation(), it.current()->lag());
-            delPredesessorNode();
-        }
-    }
-    // Now my children
-    QPtrListIterator<KPTNode> nit(m_nodes);
-    for ( ; nit.current(); ++nit ) {
-        nit.current()->completeLoad(node);
-    }
-
 }
 
 void KPTNode::showPopup() {
@@ -435,6 +460,14 @@ bool KPTNode::allParentsDrawn() {
 	}
 }
 */
+
+void KPTNode::saveRelations(QDomElement &element) {
+    QPtrListIterator<KPTRelation> it(m_dependChildNodes);
+    for (; it.current(); ++it) {
+        it.current()->save(element);
+    }
+}
+
 ////////////////////////////////////   KPTEffort   ////////////////////////////////////////////
 
 KPTEffort::KPTEffort( KPTDuration e, KPTDuration p, KPTDuration o) {
@@ -487,6 +520,7 @@ void KPTEffort::save(QDomElement &element) const {
 // Debugging
 #ifndef NDEBUG
 void KPTNode::printDebug(bool children, QCString indent) {
+    kdDebug()<<indent<<"  Unique node identity="<<m_id<<endl;
     QCString c[] = {"ASAP","ALAP","StartNotEarlier","FinishNotLater","MustStartOn"};
     if (m_effort) m_effort->printDebug(indent);
     QString s = "  Constraint: " + c[m_constraint];
@@ -504,7 +538,7 @@ void KPTNode::printDebug(bool children, QCString indent) {
     }
     kdDebug()<<indent<<s<<endl;
     //kdDebug()<<indent<<"  Duration: "<<m_duration.dateTime().toString()<<endl;
-    kdDebug()<<indent<<"  Duration: "<<m_duration.duration()<<QCString(" mansecs")<<endl;
+    kdDebug()<<indent<<"  Duration: "<<m_duration.duration()<<QCString(" secs")<<" ("<<m_duration.dateTime().toString()<<")"<<endl;
     kdDebug()<<indent<<"  Start time: "<<m_startTime.dateTime().toString()<<endl;
     kdDebug()<<indent<<"  End time: " <<m_endTime.dateTime().toString()<<endl;
     kdDebug()<<indent<<"  Earliest start: "<<earliestStart.dateTime().toString()<<endl;

@@ -26,6 +26,8 @@
 #include "kptganttview.h"
 #include "kptpertview.h"
 
+#include "kptresourceview.h"
+
 #include "kptcanvasitem.h"
 
 #include "KDGanttView.h"
@@ -70,7 +72,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     m_pertview(0),
     m_pertlayout(0)
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     setInstance(KPTFactory::global());
     setXMLFile("kplato.rc");
 
@@ -83,6 +85,9 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
 	m_pertview = new KPTPertView( this, m_tab, layout );
     m_tab->addWidget(m_pertview);
+
+    m_resourceview = new KPTResourceView( this, m_tab );
+    m_tab->addWidget(m_resourceview);
 
     connect(m_tab, SIGNAL(aboutToShow(QWidget *)), this, SLOT(slotChanged(QWidget *)));
 
@@ -172,31 +177,33 @@ void KPTView::setZoom(double zoom) {
 
 
 void KPTView::slotEditCut() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 }
 
 void KPTView::slotEditCopy() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 }
 
 void KPTView::slotEditPaste() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 }
 
 void KPTView::slotViewGantt() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 	m_ganttview->clear();
     m_tab->raiseWidget(m_ganttview);
 	m_ganttview->draw(getPart()->getProject());
 }
 
 void KPTView::slotViewPert() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     m_tab->raiseWidget(m_pertview);
 }
 
 void KPTView::slotViewResources() {
-
+    //kdDebug()<<k_funcinfo<<endl;
+    m_tab->raiseWidget(m_resourceview);
+	m_resourceview->draw(getPart()->getProject());
 }
 
 void KPTView::slotProjectEdit() {
@@ -216,7 +223,7 @@ void KPTView::slotAddSubTask() {
 	// do is to add a first project. We will silently accept the challenge
 	// and will not complain.
     KPTTask* node = new KPTTask(currentTask());
-    if (node->openDialog()) {
+    if (node->openDialog(getProject().resourceGroups())) {
 		KPTNode *currNode = currentTask();
 		if (currNode)
         {
@@ -234,7 +241,7 @@ void KPTView::slotAddSubTask() {
 
 void KPTView::slotAddTask() {
     KPTTask *node = new KPTTask(currentTask());
-    if (node->openDialog()) {
+    if (node->openDialog(getProject().resourceGroups())) {
 		KPTNode* currNode = currentTask();
 		if (currNode)
         {
@@ -257,7 +264,7 @@ void KPTView::slotAddMilestone() {
     //KPTMilestone *node = new KPTMilestone(currentTask());
     node->setName(i18n("Milestone"));
 
-    if (node->openDialog()) {
+    if (node->openDialog(getProject().resourceGroups())) {
 		KPTNode *currNode = currentTask();
 		if (currNode)
         {
@@ -291,12 +298,12 @@ KPTNode *KPTView::currentTask()
 }
 
 void KPTView::slotOpenNode() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 	if (m_tab->visibleWidget() == m_ganttview)
 	{
         KPTNode *node = m_ganttview->currentNode();
         if (node) {
-		    if ( node->openDialog() ) {
+		    if ( node->openDialog(getProject().resourceGroups()) ) {
 				slotUpdate(true);
 			}
 		}
@@ -304,7 +311,7 @@ void KPTView::slotOpenNode() {
 	}
 	if (m_tab->visibleWidget() == m_pertview)
 	{
-	    if ( m_pertview->currentNode()->openDialog() ) {
+	    if ( m_pertview->currentNode()->openDialog(getProject().resourceGroups()) ) {
 			slotUpdate(true);
 		}
 		return;
@@ -313,7 +320,7 @@ void KPTView::slotOpenNode() {
 
 void KPTView::slotDeleteTask()
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 
 	KPTNode* task = currentTask();
 
@@ -326,7 +333,7 @@ void KPTView::slotDeleteTask()
 
 void KPTView::slotIndentTask()
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 
 	KPTNode* task = currentTask();
 
@@ -339,7 +346,7 @@ void KPTView::slotIndentTask()
 
 void KPTView::slotUnindentTask()
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 
 	KPTNode* task = currentTask();
 
@@ -352,7 +359,7 @@ void KPTView::slotUnindentTask()
 
 void KPTView::slotMoveTaskUp()
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 
 	KPTNode* task = currentTask();
 	if ( 0 == task ) {
@@ -374,7 +381,7 @@ void KPTView::slotMoveTaskUp()
 
 void KPTView::slotMoveTaskDown()
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 
 	KPTNode* task = currentTask();
 	if ( 0 == task ) {
@@ -404,7 +411,7 @@ KPTPart *KPTView::getPart()const {
 }
 
 void KPTView::slotConnectNode() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 /*    KPTNodeItem *curr = m_ganttview->currentItem();
     if (curr) {
         kdDebug()<<k_funcinfo<<"node="<<curr->getNode().name()<<endl;
@@ -413,7 +420,7 @@ void KPTView::slotConnectNode() {
 
 QPopupMenu * KPTView::popupMenu( const QString& name )
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     Q_ASSERT(factory());
     if ( factory() )
         return ((QPopupMenu*)factory()->container( name, this ));
@@ -422,21 +429,22 @@ QPopupMenu * KPTView::popupMenu( const QString& name )
 
 void KPTView::slotChanged(QWidget *)
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     slotUpdate(false);
 }
 
 void KPTView::slotChanged()
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     slotUpdate(false);
 }
 
 void KPTView::slotUpdate(bool calculate)
 {
-    kdDebug()<<k_funcinfo<<"calculate="<<calculate<<endl;
+    //kdDebug()<<k_funcinfo<<"calculate="<<calculate<<endl;
     if (calculate)
 	    slotProjectCalculate();
+
 	if (m_tab->visibleWidget() == m_ganttview)
 	{
 	    //m_ganttview->hide();
@@ -448,15 +456,20 @@ void KPTView::slotUpdate(bool calculate)
     	m_pertview->draw();
 	    m_pertview->show();
 	}
+	else if (m_tab->visibleWidget() == m_resourceview)
+	{
+    	m_resourceview->draw(getPart()->getProject());
+	    m_resourceview->show();
+	}
 }
 
 #ifndef NDEBUG
 void KPTView::slotPrintDebug() {
     kdDebug()<<"-------- Debug printout: Node list" <<endl;
-    KPTNode *curr = m_ganttview->currentNode();
+/*    KPTNode *curr = m_ganttview->currentNode();
     if (curr) {
         curr->printDebug(true,"");
-    } else
+    } else*/
         getPart()->getProject().printDebug(true, "");
 }
 #endif

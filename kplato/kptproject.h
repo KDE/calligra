@@ -20,19 +20,20 @@
 #ifndef kptproject_h
 #define kptproject_h
 
-#include "kptduration.h"
 #include "kptnode.h"
+
+#include "kptduration.h"
 #include "kptterminalnode.h"
 #include "kptresource.h"
 #include "defs.h"
 
+#include <qmap.h>
+
 #include <list>
 #include <algorithm>
 
-class KPTResource;
 class KPTPertCanvas;
 class QCanvas;
-
 
 #define DEBUGPERT
 /**
@@ -93,7 +94,7 @@ public:
      * TODO: Finish the load and save methods
      */
     virtual bool load(QDomElement &element);
-    virtual void save(QDomElement &element) const;
+    virtual void save(QDomElement &element) ;
 
     virtual bool openDialog();
 
@@ -115,6 +116,16 @@ public:
 	void unindentTask( KPTNode* task );
 	void moveTaskUp( KPTNode* task );
 	void moveTaskDown( KPTNode* task );
+
+    KPTNode *node(int id);
+    int mapNode(KPTNode *node);
+    int mapNode(int id, KPTNode *node);
+
+    KPTResourceGroup *group(int id);
+    int groupId() { return ++m_maxGroupId; }
+
+    KPTResource *resource(int id);
+    int resourceId() { return ++m_maxResourceId; }
 
 protected:
     /**
@@ -160,6 +171,15 @@ protected:
     KPTTerminalNode endNode;
 
     QPtrList<KPTResourceGroup> m_resourceGroups;
+
+private:
+    // we need unique id's for referencing objects when saving/loading
+    QMap<int, KPTNode *>m_nodeMap;
+    int m_maxNodeId; // the highest id in map
+
+    int m_maxGroupId; // the highest id in use
+
+    int m_maxResourceId; // the highest id in map
 
 #ifndef NDEBUG
 public:

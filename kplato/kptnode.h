@@ -23,6 +23,7 @@
 #include "defs.h"
 #include "kptrelation.h"
 #include "kptduration.h"
+#include "kptresource.h"
 
 #include <qrect.h>
 #include <qptrlist.h>
@@ -65,8 +66,11 @@ public:
 
     KPTNode(KPTNode *parent = 0);
 
+
     // Declare the class abstract
     virtual ~KPTNode() = 0;
+
+    int id() { return m_id; } // unique identity
 
     enum NodeTypes {
 	  Type_Node = 0,
@@ -80,12 +84,14 @@ public:
 
     virtual int type() = 0;
 
+    virtual KPTNode *projectNode();
+
     // The load and save methods
     virtual bool load(QDomElement &element) = 0;
-    virtual void save(QDomElement &element) const = 0;
-    virtual void completeLoad(KPTNode *node); // clean up relations etc.
+    virtual void save(QDomElement &element)  = 0;
+    virtual void saveRelations(QDomElement &element);
 
-    virtual bool openDialog() {return false;}
+    virtual bool openDialog(QPtrList<KPTResourceGroup> &) {return false;}
 
     // simple child node management
     // Child nodes are things like subtasks, basically a task can exists of
@@ -114,7 +120,7 @@ public:
 				     TimingRelation p=FINISH_START);
     virtual void addDependChildNode( KPTNode *node, TimingType t,
 				     TimingRelation p, KPTDuration lag);
-    virtual void addDependChildNode( KPTRelation *relation);
+    virtual bool addDependChildNode( KPTRelation *relation);
     virtual void insertDependChildNode( unsigned int index, KPTNode *node,
 					TimingType t=START_ON_DATE,
 					TimingRelation p=FINISH_START);
@@ -130,7 +136,7 @@ public:
 				     TimingRelation p=FINISH_START);
     virtual void addDependParentNode( KPTNode *node, TimingType t,
 				      TimingRelation p, KPTDuration lag);
-    virtual void addDependParentNode( KPTRelation *relation);
+    virtual bool addDependParentNode( KPTRelation *relation);
     virtual void insertDependParentNode( unsigned int index, KPTNode *node,
 					 TimingType t=START_ON_DATE,
 					 TimingRelation p=FINISH_START);
@@ -153,6 +159,13 @@ public:
     const KPTDuration &startTime() const { return m_startTime; }
     void setEndTime(KPTDuration endTime) { m_endTime=endTime; }
     const KPTDuration &endTime() const { return m_endTime; }
+
+    virtual void setStartTime() {}
+    virtual void setEndTime() {}
+    virtual void setStartEndTime() { setStartTime(); setEndTime(); }
+
+    const KPTDuration &getDuration() const { return m_duration; }
+    virtual KPTDuration *getEndTime() { return 0L; }
 
     // These are entered by the project man. during the project
     void setActualStartTime(KPTDuration startTime) { m_actualStartTime=startTime; }
@@ -203,7 +216,15 @@ public:
      */
     KPTDuration *getDelay();
 
+    /**
+      * getEarliestStart() returns earliest time this node can start
+      * @see earliestStart
+      */
     KPTDuration getEarliestStart() const { return earliestStart; }
+    /**
+      * getLatestFinish() returns latest time this node can finish
+      * @see latestFinish
+      */
     KPTDuration getLatestFinish() const { return latestFinish; }
 
     QString &name() { return m_name; }
@@ -216,12 +237,12 @@ public:
     void setLeader(const QString &l) { m_leader = l; }
     void setDescription(const QString &d) { m_description = d; }
 
-    void setConstraint(KPTNode::ConstraintType type) { m_constraint = type; }
+    virtual void setConstraint(KPTNode::ConstraintType type) { m_constraint = type; }
     int constraint() { return m_constraint; }
 
     const KPTDuration& optimisticDuration(const KPTDuration &start);
     const KPTDuration& pessimisticDuration(const KPTDuration &start);
-    const KPTDuration& expectedDuration(const KPTDuration &start);
+    virtual const KPTDuration& expectedDuration(const KPTDuration &start);
 
 //    virtual void drawPert(KPTPertCanvas * /*view */, KPTNode * /*parent*/ = 0) {;}
 //    virtual void drawPertRelations(KPTPertCanvas* view);
@@ -232,6 +253,13 @@ public:
     virtual KPTDuration &finishNotLater() { return fnlTime; }
     virtual void setMustStartOn(KPTDuration time) { msoTime = time; }
     virtual KPTDuration &mustStartOn() { return msoTime; }
+
+    virtual void calculateStartEndTime() {}
+    virtual void calculateStartEndTime(const KPTDuration &start) {}
+
+    virtual KPTResourceRequest *resourceRequest(KPTResourceGroup *group) const { return 0; }
+    virtual void makeAppointments() {}
+    virtual void requestResources() const {}
 
     virtual void showPopup();
 
@@ -247,6 +275,15 @@ public:
     int x();
     int width();
 	bool allParentsDrawn();
+
+    QString &resourceConflict() { return m_resourceConflict; }
+
+    virtual void setResourceOverbooked(bool on) { m_resourceOverbooked = on; }
+    virtual bool resourceOverbooked() { return m_resourceOverbooked; }
+
+    void setId(int id) { m_id = id; }
+    virtual int mapNode(KPTNode *node);
+    virtual int mapNode(int id, KPTNode *node);
 
 protected:
     /**
@@ -319,9 +356,6 @@ protected:
     QString m_leader;      // Person or group responsible for this node
     QString m_description; // Description of this node
 
-    // Calculated start time, or set if MustStartOn
-    KPTDuration m_startTime, m_endTime;
-
     // Both of these are entered during the project, not at the initial
     // calculation.
     KPTDuration m_actualStartTime, m_actualEndTime;
@@ -347,25 +381,68 @@ protected:
 	unsigned int unvisited;
     } predecessors, successors;
 
+    /** earliestStart is calculated by PERT/CPM.
+      * A task may be scheduled to start later because other tasks
+      * scehduled in parallell takes more time to complete
+      */
     KPTDuration earliestStart;
+    /** latestFinish is calculated by PERT/CPM.
+      * A task may be scheduled to finish earlier because other tasks
+      * scehduled in parallell takes more time to complete
+      */
     KPTDuration latestFinish;
 
     ConstraintType m_constraint;
 
     void calcDuration(const KPTDuration &start, const KPTDuration &effort);
 
+    /**
+      * sneTime is entered by user if constraint StartNotEarlier is selected
+      */
     KPTDuration sneTime;
+    /**
+      * fnTime is entered by user if constraint FinishNotLater is selected
+      */
     KPTDuration fnlTime;
+    /**
+      * msoTime is entered by user if constraint MustStartOn is selected
+      */
     KPTDuration msoTime;
 
+    /**  m_startTime is the calculated start time.
+      *  It depends on constraints (i.e. ASAP/ALAP)
+      *  It will always be later or equal to @ref earliestStart
+      */
+    KPTDuration m_startTime;
+
+    /**  m_endTime is the calculated finish time.
+      *  It depends on constraints (i.e. ASAP/ALAP)
+      *  It will always be earlier or equal to @ref latestFinish
+      */
+    KPTDuration m_endTime;
+    /**  m_duration is the calculated duration which depends on
+      *  e.g. estimated effort, allocated resources and risk
+      */
+    KPTDuration m_duration;
+
+
+    // If possible I would like to get rid of these gantt/pert things
 	// For Gantt
 	KDGanttViewItem *m_ganttItem;
 	// For Pert
 	bool m_drawn;
 	KPTPertNodeItem *m_pertItem;
 
+    QString m_resourceConflict;
+
+
+    int m_id; // unique id
+
+
  private:
-    KPTDuration m_duration;
+    void init();
+
+    bool m_resourceOverbooked;
 
 #ifndef NDEBUG
 public:

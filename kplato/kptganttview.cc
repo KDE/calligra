@@ -187,6 +187,11 @@ void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTNode &node)
 	time->add(dur);
 	item->setEndTime(time->dateTime());
 	item->setOpen(true);
+    if (node.resourceOverbooked() || !node.resourceConflict().isEmpty()) {
+        QColor c(yellow);
+        item->setColors(c,c,c);
+        kdDebug()<<k_funcinfo<<"Task: "<<node.name()<<" has resource conflict: "<<node.resourceConflict()<<endl;
+    }
 	node.setGanttItem(item);
 
 	delete time;
@@ -220,7 +225,7 @@ void KPTGanttView::drawRelations(KPTNode &node)
 		if (node.ganttItem() && rel->child()->ganttItem())
 		{
 			kdDebug()<<k_funcinfo<<"Relations for node="<<node.name()<<" to "<<rel->child()->name()<<endl;
-			KDGanttViewTaskLink *link = new KDGanttViewTaskLink(rel->child()->ganttItem(), node.ganttItem());
+			//KDGanttViewTaskLink *link = new KDGanttViewTaskLink(rel->child()->ganttItem(), node.ganttItem());
 		}
 	}
     // Then my children

@@ -20,6 +20,7 @@
 #include "defs.h"
 
 #include "kptnode.h"
+#include "kptproject.h"
 #include "kptcanvasitem.h"
 
 #include <qcanvas.h>
@@ -54,63 +55,65 @@ void KPTRelation::setTimingRelation(TimingRelation tr) {
 }
 
 
-bool KPTRelation::load(QDomElement &element) {
-    m_parentId = element.attribute("parent");
+bool KPTRelation::load(QDomElement &element, KPTProject &project) {
+    bool ok = false;
+    int id;
+    id = element.attribute("parent-id","-1").toInt(&ok);
+    if (id == -1 || !(m_parent = project.node(id)))
+        return false;
+    id = element.attribute("child-id","-1").toInt(&ok);
+    if (id == -1 || !(m_child = project.node(id)))
+        return false;
+
     //m_timingType = element.attribute("timingtype");
     QString tr = element.attribute("timingrelation");
-    if ( tr == "FS" )
+    if ( tr == "Finish-Start" )
         m_timingRelation = FINISH_START;
-    else if ( tr == "FF" )
+    else if ( tr == "Finish-Finish" )
         m_timingRelation = FINISH_FINISH;
-    else if ( tr == "SS" )
+    else if ( tr == "Start-Start" )
         m_timingRelation = START_START;
     else
         m_timingRelation = FINISH_START;
 
     m_lag = KPTDuration(); //m_lag.set( KPTDuration(QDateTime::fromString(element.attribute("lag"))) );
 
-    kdDebug()<<k_funcinfo<<"Child="<<m_child->name()<<" parent id="<<m_parentId<<endl;
+    if (!m_parent->addDependChildNode(this)) {
+        kdError()<<k_funcinfo<<"Failed to add relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
+        return false;
+    }
+    if (!m_child->addDependParentNode(this)) {
+        m_parent->delDependChildNode(this, false/*do not delete*/);
+        kdError()<<k_funcinfo<<"Failed to add relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
+        return false;
+    }
+
+    kdDebug()<<k_funcinfo<<"Added relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
     return true;
 }
 
 
 void KPTRelation::save(QDomElement &element) const {
-    QDomElement me = element.ownerDocument().createElement("predesessor");
+    QDomElement me = element.ownerDocument().createElement("relation");
     element.appendChild(me);
 
-    me.setAttribute("parent", m_parent->name());
+    me.setAttribute("parent-id", m_parent->id());
+    me.setAttribute("child-id", m_child->id());
     //me.setAttribute("timingtype", m_timingType);
-    QString tr = "FS";
+    QString tr = "Finish-Start";
     switch (m_timingRelation) {
         case FINISH_START:
-            tr = "FS";
+            tr = "Finish-Start";
             break;
         case FINISH_FINISH:
-            tr = "FF";
+            tr = "Finish-Finish";
             break;
         case START_START:
-            tr = "SS";
+            tr = "Start-Start";
             break;
     }
     me.setAttribute("timingrelation", tr);
     //me.setAttribute("lag", m_lag.dateTime().toString());
-}
-
-bool KPTRelation::completeLoad(KPTNode *top) {
-    kdDebug()<<k_funcinfo<<endl;
-    if ( !m_parent ) {
-        QPtrListIterator<KPTNode> nit(top->childNodeIterator());
-        for ( ; nit.current(); ++nit ) {
-            //kdDebug()<<k_funcinfo<<"Check node="<<nit.current()->name()<<" parentId="<<m_parentId<<endl;
-            if (nit.current()->name() == m_parentId) {
-                m_parent = nit.current();
-                break;
-            }
-        }
-        if (!m_parent)
-            return false;
-    }
-    return true;
 }
 
 void KPTRelation::draw(KPTPertCanvas* view) {

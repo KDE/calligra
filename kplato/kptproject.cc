@@ -50,6 +50,12 @@ KPTProject::KPTProject(KPTNode *parent)
 #endif
 
     m_constraint = KPTNode::MustStartOn;
+
+    m_id = 0;
+
+    m_maxNodeId = 0;
+    m_maxGroupId = 0;
+    m_maxResourceId = 0;
 }
 
 
@@ -62,19 +68,34 @@ int KPTProject::type() { return KPTNode::Type_Project; }
 
 void KPTProject::calculate() {
     kdDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_startTime.dateTime().toString()<<endl;
+    // clear all resource appointments
+    QPtrListIterator<KPTResourceGroup> git(m_resourceGroups);
+    for ( ; git.current(); ++git ) {
+        git.current()->clearAppointments();
+    }
+
     initialize_arcs();
     set_up_arcs();
     set_unvisited_values();
 
     pert_cpm();
-    if (m_constraint != KPTNode::MustStartOn)
+    if (m_constraint != KPTNode::MustStartOn) //hmmm. projects should maybe only have MustStartOn or MustFinishOn
         setStartTime(startNode.getEarliestStart());
     setEndTime(endNode.getLatestFinish());
 
     QPtrListIterator<KPTNode> nit(m_nodes);
     for ( ; nit.current(); ++nit ) {
-        nit.current()->setStartTime(start_node()->getEarliestStart());
-        nit.current()->setEndTime(end_node()->getLatestFinish());
+        nit.current()->setStartEndTime();
+    }
+
+    QPtrListIterator<KPTNode> it(m_nodes);
+    for ( ; it.current(); ++it ) {
+        it.current()->requestResources();
+    }
+
+    QPtrListIterator<KPTResourceGroup> rit(m_resourceGroups);
+    for ( ; rit.current(); ++rit ) {
+        rit.current()->makeAppointments();
     }
 }
 
@@ -160,8 +181,8 @@ void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
             /* act if duration is later than start of arc node */
             if( duration > (*i)->earliestStart ){
                 (*i)->earliestStart = duration;
-                //kdDebug()<<k_funcinfo<<"Node="<<(*i)->name()<<" Earliest start="<<duration.dateTime().toString()<<endl;
             }
+            //kdDebug()<<"Node="<<currentNode.name()<<" Successor Node="<<(*i)->name()<<" Earliest start="<<(*i)->earliestStart.dateTime().toString()<<endl;
         }
         /* Only act if node is an end node here - KPTRelations
          * should not be followed for a start node */
@@ -181,8 +202,8 @@ void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
                 //kdDebug()<<k_funcinfo<<"Calc time="<<u.dateTime().toString()<<" childs time="<<i.current()->child()->start_node()->getEarliestStart().dateTime().toString()<<endl;
                 if( u > i.current()->child()->start_node()->earliestStart ) {
                     i.current()->child()->start_node()->earliestStart = u;
-                    //kdDebug()<<k_funcinfo<<"Node="<<i.current()->child()->start_node()->name()<<" Move earliest start="<<u.dateTime().toString()<<endl;
                 }
+                //kdDebug()<<"Node="<<currentNode.owner_node()->name()<<" Child node="<<i.current()->child()->start_node()->name()<<" Move earliest start="<<u.dateTime().toString()<<endl;
             }
         /* Remove currentNode from list so that we don't use it again */
         nodelist.erase( curNode );
@@ -249,8 +270,8 @@ void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
                 /* act if u is earlier than end of next node */
                 if( u < i.current()->parent()->end_node()->latestFinish ) {
                     i.current()->parent()->end_node()->latestFinish = u;
-                    //kdDebug() << "Node: " <<i.current()->parent()->end_node()->name()<< " reduce latestFinish="<< u.dateTime().toString().latin1() << endl;
                 }
+                //kdDebug() << "Node: " <<i.current()->parent()->end_node()->name()<< " reduce latestFinish="<< u.dateTime().toString().latin1() << endl;
         }
         /* Remove currentNode from list so that we don't use it again */
         nodelist.erase( curNode );
@@ -292,7 +313,7 @@ bool KPTProject::load(QDomElement &element) {
 		    // TODO: Complain about this
 		    delete child;
 	    } else if (e.tagName() == "task") {
-		// Load the task
+		// Load the task. Depends on resources already loaded
 		KPTTask *child = new KPTTask(this);
 		if (child->load(e))
 		    addChildNode(child);
@@ -311,20 +332,28 @@ bool KPTProject::load(QDomElement &element) {
             start_node()->load(e);
 	    } else if (e.tagName() == "endnode") {
             end_node()->load(e);
-	    } else if (e.tagName() == "predesessor") {
+	    } else if (e.tagName() == "relation") {
 		    // Load the relation
-		    KPTRelation *child = new KPTRelation(0, this);
-    		if (!child->load(e)) {
+		    KPTRelation *child = new KPTRelation();
+    		if (!child->load(e, *this)) {
 		        // TODO: Complain about this
 		        delete child;
             }
-	    } else if (e.tagName() == "resourceGroup") {
+	    } else if (e.tagName() == "resource-group") {
 		    // Load the resources
-		    KPTResourceGroup *child = new KPTResourceGroup();
+		    KPTResourceGroup *child = new KPTResourceGroup(this);
     		if (child->load(e)) {
                 addResourceGroup(child);
             } else {
 		        // TODO: Complain about this
+		        delete child;
+            }
+	    } else if (e.tagName() == "appointment") {
+		    // Load the appointments. Resources and tasks must allready loaded
+		    KPTAppointment *child = new KPTAppointment();
+    		if (! child->load(e, *this)) {
+		        // TODO: Complain about this
+                kdError()<<k_funcinfo<<"Failed to load appointment"<<endl;
 		        delete child;
             }
 	    }
@@ -335,7 +364,7 @@ bool KPTProject::load(QDomElement &element) {
 }
 
 
-void KPTProject::save(QDomElement &element) const {
+void KPTProject::save(QDomElement &element)  {
     QDomElement me = element.ownerDocument().createElement("project");
     element.appendChild(me);
 
@@ -353,6 +382,14 @@ void KPTProject::save(QDomElement &element) const {
     e = me.ownerDocument().createElement("endnode");
     me.appendChild(e);
     endNode.save(e);
+
+    // save project resources
+    m_maxGroupId = 0; m_maxResourceId = 0;  // we'll generate fresh ones
+    QPtrListIterator<KPTResourceGroup> git(m_resourceGroups);
+    for ( ; git.current(); ++git ) {
+        git.current()->save(me);
+    }
+
     // Only save parent relations
     QPtrListIterator<KPTRelation> it(m_dependParentNodes);
     for ( ; it.current(); ++it ) {
@@ -363,10 +400,18 @@ void KPTProject::save(QDomElement &element) const {
 	// Save all children
 	getChildNode(i)->save(me);
 
-    QPtrListIterator<KPTResourceGroup> git(m_resourceGroups);
-    for ( ; git.current(); ++git ) {
-        git.current()->save(me);
+    // Now we can save relations assuming no tasks have relations outside the project
+    QPtrListIterator<KPTNode> nodes(m_nodes);
+    for ( ; nodes.current(); ++nodes ) {
+	    nodes.current()->saveRelations(me);
     }
+
+    // save appointments
+    QPtrListIterator<KPTResourceGroup> rgit(m_resourceGroups);
+    for ( ; rgit.current(); ++rgit ) {
+        rgit.current()->saveAppointments(me);
+    }
+
 }
 
 
@@ -497,6 +542,7 @@ void KPTProject::addSubTask( KPTNode* task, KPTNode* position )
 	}
 	position->addChildNode(task);
 	task->setParent( position ); // tell the node about it
+    task->setId(mapNode(task));
 }
 
 void KPTProject::deleteTask( KPTNode* task )
@@ -637,7 +683,56 @@ void KPTProject::moveTaskDown( KPTNode* task )
 	}
 }
 
+// TODO: find a more elegant/efficient solution to this id stuff
+KPTNode *KPTProject::node(int id) {
+    if (m_nodeMap.contains(id)) {
+        return m_nodeMap[id];
+    }
+    return 0;
+}
 
+int KPTProject::mapNode(KPTNode *node) {
+    m_nodeMap[++m_maxNodeId] = node;
+    return m_maxNodeId;
+}
+
+int KPTProject::mapNode(int id, KPTNode *node) {
+    if (id < 0) {
+        return -1;
+    }
+    if (id > m_maxNodeId) {
+        m_maxNodeId = id;
+        m_nodeMap[id] = node;
+        return id;
+    }
+    if (m_nodeMap.contains(id)) {
+        m_nodeMap[id] = node;
+        return id;
+    }
+    // problem
+    return -1; // not mapped
+}
+
+KPTResourceGroup *KPTProject::group(int id) {
+    QPtrListIterator<KPTResourceGroup> it(m_resourceGroups);
+    for (; it.current(); ++it) {
+        if (it.current()->id() == id)
+            return it.current();
+    }
+    return 0;
+}
+
+KPTResource *KPTProject::resource(int id) {
+    QPtrListIterator<KPTResourceGroup> it(m_resourceGroups);
+    for (; it.current(); ++it) {
+        QPtrListIterator<KPTResource> rit(it.current()->resources());
+        for (; rit.current(); ++rit) {
+            if (rit.current()->id() == id)
+                return rit.current();
+        }
+    }
+    return 0;
+}
 
 #ifndef NDEBUG
 void KPTProject::printDebug(bool children, QCString indent) {
