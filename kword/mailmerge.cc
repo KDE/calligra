@@ -477,44 +477,38 @@ KWMailMergeConfigDialog::~KWMailMergeConfigDialog()
  ******************************************************************/
 
 KWMailMergeVariableInsertDia::KWMailMergeVariableInsertDia( QWidget *parent, KWMailMergeDataBase *db )
-    : KDialogBase(Plain, i18n( "Mail Merge - Variable Name" ), Ok | Cancel, Ok, parent, "", true )
+  : KDialogBase( Plain, i18n( "Mail Merge - Variable Name" ),
+                 Ok | Cancel, Ok, parent, "", true )
 {
-    QWidget *page = plainPage();
+  QWidget *page = plainPage();
 
-    back = new QVBox( page );
-    back->setSpacing( KDialog::spacingHint() );
-    back->setMargin( KDialog::marginHint() );
+  QVBoxLayout *layout = new QVBoxLayout( page, marginHint(), spacingHint() );
+  layout->setAutoAdd( true );
 
-    QVBox *row1 = new QVBox( back );
-    row1->setSpacing( KDialog::spacingHint() );
+  QLabel *l = new QLabel( i18n( "Name:" ), page );
+  l->setMaximumHeight( l->sizeHint().height() );
+  names = new QListBox( page );
 
-    QLabel *l = new QLabel( i18n( "Name:" ), row1 );
-    l->setMaximumHeight( l->sizeHint().height() );
-    names = new QListBox( row1 );
+  QMap< QString, QString >::ConstIterator it = db->getRecordEntries().begin();
+  for ( ; it != db->getRecordEntries().end(); ++it )
+    names->insertItem( it.key(), -1 );
 
-    QMap< QString, QString >::ConstIterator it = db->getRecordEntries().begin();
-    for ( ; it != db->getRecordEntries().end(); ++it )
-        names->insertItem( it.key(), -1 );
+  setInitialSize( QSize( 350, 400 ) );
+  connect( names, SIGNAL( selectionChanged() ),
+           this, SLOT( slotSelectionChanged() ) );
+  connect( names, SIGNAL( doubleClicked( QListBoxItem* ) ),
+           this, SLOT( slotOk() ) );
 
-    setInitialSize( QSize( 350, 400 ) );
-    connect(names,SIGNAL(selectionChanged () ),this,SLOT(slotSelectionChanged()));
-    connect(names,SIGNAL(doubleClicked ( QListBoxItem * )),this,SLOT(slotOk()));
-    setFocus();
-    enableButtonOK(names->currentItem ()!=-1);
+  setFocus();
+  enableButtonOK( names->currentItem() != -1 );
 }
 
 void KWMailMergeVariableInsertDia::slotSelectionChanged()
 {
-    enableButtonOK(names->currentItem ()!=-1);
+  enableButtonOK( names->currentItem() != -1 );
 }
 
 QString KWMailMergeVariableInsertDia::getName() const
 {
-    return names->text( names->currentItem() );
-}
-
-void KWMailMergeVariableInsertDia::resizeEvent( QResizeEvent *e )
-{
-    QDialog::resizeEvent( e );
-    back->resize( size() );
+  return names->text( names->currentItem() );
 }

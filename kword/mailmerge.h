@@ -139,21 +139,17 @@ protected slots:
 
 class KWMailMergeVariableInsertDia : public KDialogBase
 {
-    Q_OBJECT
+  Q_OBJECT
 
-public:
+  public:
     KWMailMergeVariableInsertDia( QWidget *parent, KWMailMergeDataBase *db );
     QString getName() const;
 
-protected:
-    void resizeEvent( QResizeEvent *e );
+  protected slots:
+    void slotSelectionChanged();
 
-protected slots:
-	void slotSelectionChanged();
-protected:
+  protected:
     QListBox *names;
-    QVBox *back;
-
 };
 
 #endif
