@@ -1206,7 +1206,6 @@ void KWPage::vmrCreateTable()
     }
     mmEdit();
     useAnchor = false;
-    kdDebug() << "KWPage::vmrCreateTable exit" << endl;
 }
 
 /*================================================================*/

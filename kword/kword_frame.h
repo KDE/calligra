@@ -58,7 +58,7 @@ enum NewFrameBehaviour { Reconnect=0, NoFollowup=1, Copy=2 };
 enum SheetSide { AnySide=0, OddSide=1, EvenSide=2};
 
 const int minFrameWidth=18;
-const int minFrameHeight=30;
+const int minFrameHeight=20;
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -509,6 +509,7 @@ public:
     QString anchorType();
     QString anchorInstance();
     void viewFormatting( QPainter &painter, int zoom );
+    void validate();
 
 protected:
     QList<Cell> cells;

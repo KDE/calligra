@@ -2124,16 +2124,13 @@ KWGroupManager::~KWGroupManager() {
 /*================================================================*/
 void KWGroupManager::addFrameSet( KWFrameSet *fs, unsigned int row, unsigned int col )
 {
-    unsigned int sum = row * 10 + col;
-    unsigned int i = 0;
+    unsigned int i;
 
     rows = QMAX( row + 1, rows );
     cols = QMAX( col + 1, cols );
 
-    for ( i = 0; i < cells.count(); i++ ) {
-        if ( cells.at( i )->row * 10 + cells.at( i )->col > sum )
-            break;
-    }
+    for (i = 0; i < cells.count() && (cells.at(i)->row < row || 
+        cells.at(i)->row == row  && cells.at(i)->col < col) ; i++ ); 
     if(fs->getName().isEmpty())
         fs->setName(QString ("Cell %1,%2").arg(col+1).arg(row+1));
 
@@ -2206,8 +2203,8 @@ void KWGroupManager::init( unsigned int x, unsigned int y, unsigned int width, u
     unsigned int hei = height / rows - 2;
 
     if ( heim == TblAuto ||
-         static_cast<int>( hei ) < doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 5 )
-        hei = doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 5;
+         static_cast<int>( hei ) < doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 11 )
+        hei = doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 11;
 
     if ( widm == TblAuto ) {
         x = doc->getPTLeftBorder();
@@ -2255,10 +2252,8 @@ void KWGroupManager::init()
 /*================================================================*/
 void KWGroupManager::recalcCols()
 {
-kdDebug() << "recalcCols" << endl;
     unsigned int row=0,col=0;
     if(! cells.isEmpty() && isOneSelected(row,col)) {
-kdDebug() << "selected cell: " << row << ", " << col<< endl;
         // check/set sizes of frames
         // check if leftCoordinate is same as rest of tableRow
         Cell *activeCell = getCell(row,col);
@@ -2368,7 +2363,6 @@ kdDebug() << "selected cell: " << row << ", " << col<< endl;
 /*================================================================*/
 void KWGroupManager::recalcRows()
 {
-kdDebug() << "recalcrows" << endl;
     const int minFrameHeight=30;
     // remove automatically added headers
     for ( unsigned int j = 0; j < rows; j++ ) {
@@ -2381,7 +2375,6 @@ kdDebug() << "recalcrows" << endl;
     // check/set sizes of frames
     unsigned int row=0,col=0;
     if(! cells.isEmpty() && isOneSelected(row,col)) {
-kdDebug() << "selected cell: " << row << ", " << col<< endl;
         // check if topCoordinate is same as rest of tableRow
         Cell *activeCell = getCell(row,col);
         Cell *cell;
@@ -2641,11 +2634,9 @@ void KWGroupManager::selectUntil( KWFrameSet *fs, KWPage *page )
    stay unchanged (and false is returned).
 */
 bool KWGroupManager::isOneSelected(unsigned int &row, unsigned int &col) {
-kdDebug() << "KWGroupManager::isOneSelected" << endl;
     int selectedCell=-1;
     for ( unsigned int i = 0; i < cells.count(); i++ ) {
         if(cells.at(i)->frameSet->getFrame(0)->isSelected())  {
-kdDebug () << "selected: " << i <<" ("<< cells.at(i)->row << "," << cells.at(i)->col << ")" << endl;
             if(selectedCell==-1)
                 selectedCell=i;
             else
@@ -2733,6 +2724,7 @@ void KWGroupManager::insertRow( unsigned int _idx, bool _recalc, bool _removeabl
         frame->setBBottom( u );
     }
 
+
     if ( _recalc )
         recalcRows();
 }
@@ -2760,6 +2752,10 @@ void KWGroupManager::insertCol( unsigned int _idx )
         KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
         _frameSet->setGroupManager( this );
 
+        KWFrame *frame = new KWFrame(_frameSet, r.x(), r.y() + hh, 60, *h.at( i ) );
+        frame->setFrameBehaviour(AutoExtendFrame);
+        _frameSet->addFrame( frame );
+
         // If the group is anchored, we must avoid double-application of
         // the anchor offset.
         if ( anchored ) {
@@ -2770,9 +2766,6 @@ void KWGroupManager::insertCol( unsigned int _idx )
         }
         addFrameSet( _frameSet, i, _idx );
 
-        KWFrame *frame = new KWFrame(_frameSet, r.x(), r.y() + hh, 60, *h.at( i ) );
-        frame->setFrameBehaviour(AutoExtendFrame);
-        _frameSet->addFrame( frame );
         nCells.append( _frameSet );
         hh += *h.at( i ) + 2;
     }
@@ -2808,7 +2801,6 @@ void KWGroupManager::deleteRow( unsigned int _idx, bool _recalc )
     }
 
     rows--;
-
     if ( _recalc )
         recalcRows();
 }
@@ -2994,6 +2986,88 @@ void KWGroupManager::viewFormatting( QPainter &painter, int )
         topLeftFrame = cells.at( 0 )->frameSet->getFrame( 0 );
         painter.drawLine( origin.x(), origin.y(), topLeftFrame->x(), topLeftFrame->y());
     }
+}
+
+/*================================================================*/
+/* checks the cells for missing cells or duplicates, will correct
+   mistakes. 
+*/
+void KWGroupManager::validate()
+{
+    for (unsigned int j=0; j < getNumCells() ; j++) {
+        KWFrame *frame = getCell(j)->frameSet->getFrame(0);
+        if(frame->getFrameBehaviour()==AutoCreateNewFrame) {
+            frame->setFrameBehaviour(AutoExtendFrame);
+            kdDebug() << "Table cell property frameBehaviour was incorrect; fixed" << endl;
+        }
+        if(frame->getNewFrameBehaviour()!=NoFollowup) {
+            kdDebug() << "Table cell property newFrameBehaviour was incorrect; fixed" << endl;
+            frame->setNewFrameBehaviour(NoFollowup);
+        }
+    }
+
+    for(unsigned int row=0; row < getRows(); row++) {
+        for(unsigned int col=0; col <getCols(); col++) {
+            bool found=false;
+            for ( unsigned int i = 0; i < cells.count(); i++ ) {
+                if ( cells.at( i )->row <= row &&
+                        cells.at( i )->col <= col &&
+                        cells.at( i )->row+cells.at( i )->rows > row &&
+                        cells.at( i )->col+cells.at( i )->cols > col ) {
+                    if(found==true) {
+                        kdDebug() << "Found duplicate cell, moving one out of the way" << endl;
+                    }
+                    found=true;
+                }
+            }
+            if(! found) { 
+                kdDebug() << "Missing cell, creating a new one; ("<< row << "," << col<<")" << endl;
+                Cell *cell = new Cell;
+                KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
+                _frameSet->setName(QString("Auto added cell"));
+                _frameSet->setGroupManager( this );
+                int x=-1, y=-1, width=-1, height=-1;
+                for (unsigned int i=0; i < cells.count(); i++) {
+                    if(cells.at(i)->row==row)
+                        y=cells.at(i)->frameSet->getFrame(0)->y();
+                    if(cells.at(i)->col==col)
+                        x=cells.at(i)->frameSet->getFrame(0)->x();
+                    if(cells.at(i)->col==col && cells.at(i)->cols==1)
+                        width=cells.at(i)->frameSet->getFrame(0)->width();
+                    if(cells.at(i)->row==row && cells.at(i)->rows==1)
+                        height=cells.at(i)->frameSet->getFrame(0)->height();
+                    if(x!=-1 && y!=-1 && width!=-1 && height != -1) 
+                        break;
+                }
+                if(x== -1) x=0;
+                if(y== -1) y=0;
+                if(width== -1) width=minFrameWidth;
+                if(height== -1) height=minFrameHeight;
+                kdDebug() << " x: " << x << ", y:" << y << ", width: " << width << ", height: " << height << endl;
+                KWFrame *frame = new KWFrame(_frameSet, x, y, width, height );
+                frame->setFrameBehaviour(AutoExtendFrame);
+                _frameSet->addFrame( frame );
+                if ( anchored ) {
+                    KWFrame *topLeftFrame = _frameSet->getFrame( 0 );
+         
+                    if (topLeftFrame)
+                        topLeftFrame->moveBy( -origin.x(), -origin.y() );
+                }
+                doc->addFrameSet(_frameSet);
+
+                cell->frameSet = _frameSet;
+                cell->row = row;
+                cell->col = col;
+                cell->rows = 1;
+                cell->cols = 1;
+
+                unsigned int i;
+                for (i = 0; i < cells.count() && (cells.at(i)->row < row || 
+                    cells.at(i)->row == row  && cells.at(i)->col < col) ; i++ ); 
+                cells.insert(i, cell );
+            }
+        }
+    } 
 }
 
 /*================================================================*/

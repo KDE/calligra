@@ -4,10 +4,6 @@ TODO-List:
 
 Bugs; in order or importance:
 
-- Type 1 line. Press enter after first character, 
-  press backspace, press enter again. Press backspace again. 
-  Rest of text is gone until you press enter gain.
-
 - Refuse to delete anchor.
 - When deleting table delete anchor
 - Revert resizing policy. Implement minimum size of frames.
@@ -23,6 +19,10 @@ Bugs; in order or importance:
 - When deleting text, empty pages are not removed
 - When removing text in a table cell shrink table cells
 - Anchor is not redrawn if page scrolls
+- Type 1 line. Press enter after first character, 
+  press backspace, press enter again. Press backspace again. 
+  Rest of text is gone until you press enter gain.
+
 
 Missing or incomplete stuff:
 ----------------------------------------

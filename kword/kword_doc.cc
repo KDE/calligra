@@ -1358,28 +1358,27 @@ bool KWordDocument::loadXML( QIODevice *, const QDomDocument & doc )
         } else if(! getFrameSet(i)->getFrame(0)) {
             kdDebug () << "frameset " << i << " has no frames" << endl;
             delFrameSet(getFrameSet(i));
+        } else if (getFrameSet(i)->getFrameType() == FT_TEXT) {
+            for (int f=getFrameSet(i)->getNumFrames()-1; f>=0; f--) {
+                if(getFrameSet(i)->getFrame(f)->height() < minFrameHeight) {
+                    kdDebug() << "frame height is so small no text will fit, adjusting (was: "
+                      << getFrameSet(i)->getFrame(f)->height() << " is: " << minFrameHeight << ")" << endl;
+                    getFrameSet(i)->getFrame(f)->setHeight(minFrameHeight);
+                }
+                if(getFrameSet(i)->getFrame(f)->width() < minFrameWidth) {
+                    kdDebug() << "frame width is so small no text will fit, adjusting (was: "  
+                     << getFrameSet(i)->getFrame(f)->width() << " is: " << minFrameWidth  << ")" << endl;
+                    getFrameSet(i)->getFrame(f)->setWidth(minFrameWidth);
+                }
+            }
         }
     }
     for (int i = getNumGroupManagers()-1; i>-1; i--) {
         if(! getGroupManager(i)) {
             kdDebug () << "GroupManager " << i << " is NULL!!" << endl;
             grpMgrs.remove(i);
-        } else if(! getGroupManager(i)->getFrameSet(0,0)) {
-            kdDebug () << "GroupManager " << i << " has no frames" << endl;
-            delGroupManager(getGroupManager(i));
         } else {
-            KWGroupManager *gm = getGroupManager(i);
-            for (unsigned int j=0; j < gm->getNumCells() ; j++) {
-                KWFrame *frame = gm->getCell(j)->frameSet->getFrame(0);
-                if(frame->getFrameBehaviour()==AutoCreateNewFrame) {
-                    frame->setFrameBehaviour(AutoExtendFrame);
-                    kdDebug() << "Table cell property frameBehaviour was incorrect; fixed" << endl;
-                }
-                if(frame->getNewFrameBehaviour()!=NoFollowup) {
-                    kdDebug() << "Table cell property newFrameBehaviour was incorrect; fixed" << endl;
-                    frame->setNewFrameBehaviour(NoFollowup);
-                }
-            }
+            getGroupManager(i)->validate();
         }
     }
 
