@@ -33,6 +33,7 @@
 #include <kapp.h>
 #include <kdebug.h>
 
+#include <stdlib.h>
 #include <fstream.h>
 #include <math.h>
 

@@ -39,6 +39,8 @@
 
 #include <kapp.h>
 
+// for getenv ()
+#include <stdlib.h>
 #include <fstream.h>
 
 /******************************************************************/
