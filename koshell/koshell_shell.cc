@@ -173,6 +173,7 @@ bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
   connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
   connect(newdoc, SIGNAL(completed()), this, SLOT(slotKSLoadCompleted()));
   connect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotKSLoadCanceled( const QString & )));
+  newdoc->addShell( this ); // used by openURL
   bool openRet = (!isImporting ()) ? newdoc->openURL(tmpUrl) : newdoc->import(tmpUrl);
   if ( !newdoc || !openRet )
   {
@@ -230,7 +231,8 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
 
   if ( doc )
   {
-    doc->addShell( this );
+    if ( !doc->shells().contains( this ) )
+        doc->addShell( this );
     KoView *v = doc->createView( m_pFrame );
     QPtrList<KoView> views;
     views.append(v);
