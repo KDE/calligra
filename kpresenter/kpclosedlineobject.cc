@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Toshitaka Fujioka <fujioka@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,7 +37,6 @@ using namespace std;
 KPClosedLineObject::KPClosedLineObject()
     : KP2DObject()
 {
-    redrawPix = false;
 }
 
 KPClosedLineObject::KPClosedLineObject( const KoPointArray &_points, const KoSize &_size, const QPen &_pen, const QBrush &_brush,
@@ -47,16 +47,6 @@ KPClosedLineObject::KPClosedLineObject( const KoPointArray &_points, const KoSiz
     points = KoPointArray( _points );
     ext = _size;
     typeString = _typeString;
-
-    redrawPix = false;
-
-    //tz TODO fix memeory leak
-    if ( getFillType() == FT_GRADIENT ) {
-        gradient = new KPGradient( getGColor1(), getGColor2(), getGType(), getGUnbalanced(), getGXFactor(), getGYFactor() );
-        redrawPix = true;
-    }
-    else
-        gradient = 0;
 }
 
 KPClosedLineObject &KPClosedLineObject::operator=( const KPClosedLineObject & )
@@ -189,21 +179,6 @@ void KPClosedLineObject::updatePoints( double _fx, double _fy )
     points = tmpPoints;
 }
 
-void KPClosedLineObject::setFillType( FillType _fillType )
-{
-    setFillType( _fillType );
-
-    if ( _fillType == FT_BRUSH && gradient ) {
-        delete gradient;
-        gradient = 0;
-    }
-
-    if ( _fillType == FT_GRADIENT && !gradient ) {
-        gradient = new KPGradient( getGColor1(), getGColor2(), getGType(), getGUnbalanced(), getGXFactor(), getGYFactor() );
-        redrawPix = true;
-    }
-}
-
 void KPClosedLineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
                                 int /* pageNum */, bool drawingShadow, bool drawContour )
 {
@@ -229,25 +204,25 @@ void KPClosedLineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
     }
     else {
         QSize size( _zoomHandler->zoomSize( ext ) );
-        if ( redrawPix || gradient->size() != size )
+        if ( m_redrawGradientPix || gradient->size() != size )
         {
-            redrawPix = false;
+            m_redrawGradientPix = false;
             gradient->setSize( size );
             QRegion clipregion( pointArray );
-            pix.resize( size );
-            pix.fill( Qt::white );
+            m_gradientPix.resize( size );
+            m_gradientPix.fill( Qt::white );
 
             QPainter p;
-            p.begin( &pix );
+            p.begin( &m_gradientPix );
             p.setClipRegion( clipregion );
             p.drawPixmap( 0, 0, gradient->pixmap() );
             p.end();
 
-            pix.setMask( pix.createHeuristicMask() );
+            m_gradientPix.setMask( m_gradientPix.createHeuristicMask() );
         }
 
         QRect _rect = pointArray.boundingRect();
-        _painter->drawPixmap( 0, 0, pix, 0, 0, _rect.width(), _rect.height() );
+        _painter->drawPixmap( 0, 0, m_gradientPix, 0, 0, _rect.width(), _rect.height() );
 
         _painter->setPen( pen2 );
         _painter->setBrush( Qt::NoBrush );
@@ -288,10 +263,6 @@ void KPClosedLineObject::flip( bool horizontal )
         }
     }
     points = tmpPoints;
-
-    if ( getFillType() == FT_GRADIENT ) {
-        redrawPix = true;
-    }
 }
 
 void KPClosedLineObject::loadOasis( const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info )

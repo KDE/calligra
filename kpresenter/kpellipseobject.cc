@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,7 +36,6 @@ using namespace std;
 KPEllipseObject::KPEllipseObject()
     : KP2DObject()
 {
-    redrawPix = false;
 }
 
 KPEllipseObject::KPEllipseObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
@@ -43,17 +43,6 @@ KPEllipseObject::KPEllipseObject( const QPen &_pen, const QBrush &_brush, FillTy
                                   bool _unbalanced, int _xfactor, int _yfactor)
     : KP2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
 {
-    redrawPix = false;
-
-    //tz TODO is this really neccessary
-    if ( getFillType() == FT_GRADIENT )
-    {
-        gradient = new KPGradient( getGColor1(), getGColor2(), getGType(), getGUnbalanced(), getGXFactor(), getGYFactor() );
-        redrawPix = true;
-        pix.resize( getSize().toQSize() );
-    }
-    else
-        gradient = 0;
 }
 
 KPEllipseObject &KPEllipseObject::operator=( const KPEllipseObject & )
@@ -66,23 +55,6 @@ DCOPObject* KPEllipseObject::dcopObject()
     if ( !dcop )
         dcop = new KPresenterObject2DIface( this );
     return dcop;
-}
-
-void KPEllipseObject::setFillType( FillType _fillType )
-{
-    //tz TODO simplify
-    m_brush.setFillType( _fillType );
-
-    if ( _fillType == FT_BRUSH && gradient )
-    {
-        delete gradient;
-        gradient = 0;
-    }
-    if ( _fillType == FT_GRADIENT && !gradient )
-    {
-        gradient = new KPGradient( getGColor1(), getGColor2(), getGType(), getGUnbalanced(), getGXFactor(), getGYFactor() );
-        redrawPix = true;
-    }
 }
 
 void KPEllipseObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
@@ -108,22 +80,22 @@ void KPEllipseObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
     if ( drawingShadow || getFillType() == FT_BRUSH || !gradient )
         _painter->setBrush( getBrush() );
     else {
-        if ( redrawPix || gradient->size() != size ) {
-            redrawPix = false;
+        if ( m_redrawGradientPix || gradient->size() != size ) {
+            m_redrawGradientPix = false;
             gradient->setSize( size );
             QRegion clipregion( 0, 0, ow - pw + 1, oh - pw + 1, QRegion::Ellipse );
-            pix.resize ( ow, oh );
-            pix.fill( Qt::white );
+            m_gradientPix.resize ( ow, oh );
+            m_gradientPix.fill( Qt::white );
             QPainter p;
-            p.begin( &pix );
+            p.begin( &m_gradientPix );
             p.setClipRegion( clipregion );
             p.drawPixmap( 0, 0, gradient->pixmap() );
             p.end();
 
-            pix.setMask( pix.createHeuristicMask() );
+            m_gradientPix.setMask( m_gradientPix.createHeuristicMask() );
         }
 
-        _painter->drawPixmap( pw / 2, pw / 2, pix, 0, 0, ow - pw + 1, oh - pw + 1 );
+        _painter->drawPixmap( pw / 2, pw / 2, m_gradientPix, 0, 0, ow - pw + 1, oh - pw + 1 );
 
         _painter->setBrush( Qt::NoBrush );
     }

@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -48,13 +49,6 @@ public:
         { lineBegin = _lineBegin; }
     virtual void setLineEnd( LineEnd _lineEnd )
         { lineEnd = _lineEnd; }
-    virtual void setFillType( FillType _fillType );
-    virtual void setGColor1( const QColor &_gColor1 )
-        { KP2DObject::setGColor1(_gColor1); redrawPix = true; }
-    virtual void setGColor2( const QColor &_gColor2 )
-        { KP2DObject::setGColor2(_gColor2); redrawPix = true; }
-    virtual void setGType( BCType _gType )
-        { KP2DObject::setGType(_gType); redrawPix = true; }
 
     virtual ObjType getType() const
         { return OT_AUTOFORM; }
@@ -80,9 +74,6 @@ protected:
     LineEnd lineBegin, lineEnd;
 
     ATFInterpreter atfInterp;
-    QPixmap pix;
-    bool redrawPix;
-
 };
 
 #endif

@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1758,8 +1759,9 @@ QPen KPShadowObject::defaultPen() const
 
 KP2DObject::KP2DObject()
     : KPShadowObject()
+    , gradient( 0 )
+    , m_redrawGradientPix( false )
 {
-    gradient = 0;
 }
 
 KP2DObject::KP2DObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
@@ -1767,15 +1769,16 @@ KP2DObject::KP2DObject( const QPen &_pen, const QBrush &_brush, FillType _fillTy
                         bool _unbalanced, int _xfactor, int _yfactor )
     : KPShadowObject( _pen )
     , m_brush( _brush, _gColor1, _gColor2, _gType, _fillType, _unbalanced, _xfactor, _yfactor )
+    , gradient( 0 )
+    , m_redrawGradientPix( false )
 {
     if ( getFillType() == FT_GRADIENT )
     {
         gradient = new KPGradient( getGColor1(), getGColor2(),
                                    getGType(), getGUnbalanced(),
                                    getGXFactor(), getGYFactor() );
+        m_redrawGradientPix = true;
     }
-    else
-        gradient = 0;
 }
 
 void KP2DObject::setFillType( FillType _fillType )
@@ -1792,6 +1795,7 @@ void KP2DObject::setFillType( FillType _fillType )
         gradient = new KPGradient( getGColor1(), getGColor2(),
                                    getGType(), getGUnbalanced(),
                                    getGXFactor(), getGYFactor() );
+        m_redrawGradientPix = true;
     }
 }
 

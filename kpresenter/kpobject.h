@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -412,17 +413,17 @@ public:
     virtual void setBrush( const QBrush &brush )
         { m_brush.setBrush( brush ); }
     virtual void setGColor1( const QColor &gColor1 )
-        { if ( gradient ) gradient->setColor1( gColor1 ); m_brush.setGColor1( gColor1 ); }
+        { if ( gradient ) gradient->setColor1( gColor1 ); m_brush.setGColor1( gColor1 ); m_redrawGradientPix = true; }
     virtual void setGColor2( const QColor &gColor2 )
-        { if ( gradient ) gradient->setColor2( gColor2 ); m_brush.setGColor2( gColor2 ); }
+        { if ( gradient ) gradient->setColor2( gColor2 ); m_brush.setGColor2( gColor2 ); m_redrawGradientPix = true; }
     virtual void setGType( BCType gType )
-        { if ( gradient ) gradient->setBackColorType( gType ); m_brush.setGType( gType ); }
+        { if ( gradient ) gradient->setBackColorType( gType ); m_brush.setGType( gType ); m_redrawGradientPix = true; }
     virtual void setGUnbalanced( bool b )
-        { if ( gradient ) gradient->setUnbalanced( b ); m_brush.setGUnbalanced( b ); }
+        { if ( gradient ) gradient->setUnbalanced( b ); m_brush.setGUnbalanced( b ); m_redrawGradientPix = true; }
     virtual void setGXFactor( int xfactor )
-        { if ( gradient ) gradient->setXFactor( xfactor ); m_brush.setGXFactor( xfactor ); }
+        { if ( gradient ) gradient->setXFactor( xfactor ); m_brush.setGXFactor( xfactor ); m_redrawGradientPix = true; }
     virtual void setGYFactor( int yfactor )
-        { if ( gradient ) gradient->setYFactor( yfactor ); m_brush.setGYFactor( yfactor ); }
+        { if ( gradient ) gradient->setYFactor( yfactor ); m_brush.setGYFactor( yfactor ); m_redrawGradientPix = true; }
 
     virtual FillType getFillType() const
         { return m_brush.getFillType(); }
@@ -456,6 +457,9 @@ protected:
 
     KPrBrush m_brush;
     KPGradient *gradient;
+    /// holds the painted gradient
+    QPixmap m_gradientPix;
+    bool m_redrawGradientPix;
 };
 
 class KPStartEndLine

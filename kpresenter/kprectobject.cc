@@ -174,25 +174,22 @@ void KPRectObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
     }
     else { //gradient
         QSize size( _zoomHandler->zoomSize( ext ) );
-        gradient->setSize( size );
+        if ( m_redrawGradientPix || gradient->size() != size ) {
+            m_redrawGradientPix = false;
+            gradient->setSize( size );
+            QPointArray arr = boundingRegion( 0, 0, ow - pw + 1, oh - pw + 1, xRnd, yRnd );
+            QRegion clipregion(arr);
+            m_gradientPix.resize ( ow, oh );
+            m_gradientPix.fill( Qt::white );
+            QPainter p;
+            p.begin( &m_gradientPix );
+            p.setClipRegion( clipregion );
+            p.drawPixmap( 0, 0, gradient->pixmap() );
+            p.end();
 
-        QPixmap pix( ow - pw + 1, oh - pw + 1);
-
-        QPointArray arr = boundingRegion( 0, 0, ow - pw + 1, oh - pw + 1, xRnd, yRnd );
-
-        QRegion clipregion(arr);
-
-        pix.resize ( ow, oh );
-        pix.fill( Qt::white );
-
-        QPainter p;
-        p.begin( &pix );
-        p.setClipRegion( clipregion );
-        p.drawPixmap( 0, 0, gradient->pixmap() );
-        p.end();
-
-        pix.setMask( pix.createHeuristicMask() );
-        _painter->drawPixmap( pw / 2, pw / 2, pix, 0, 0, ow - pw + 1, oh - pw + 1 );
+            m_gradientPix.setMask( m_gradientPix.createHeuristicMask() );
+        }
+        _painter->drawPixmap( pw / 2, pw / 2, m_gradientPix, 0, 0, ow - pw + 1, oh - pw + 1 );
 
         _painter->setBrush( Qt::NoBrush );
     }

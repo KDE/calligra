@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,7 +42,6 @@ KPAutoformObject::KPAutoformObject()
 {
     lineBegin = L_NORMAL;
     lineEnd = L_NORMAL;
-    redrawPix = false;
 }
 
 KPAutoformObject::KPAutoformObject( const QPen & _pen, const QBrush &_brush, const QString & _filename,
@@ -55,17 +55,6 @@ KPAutoformObject::KPAutoformObject( const QPen & _pen, const QBrush &_brush, con
     atfInterp.load( filename );
     lineBegin = _lineBegin;
     lineEnd = _lineEnd;
-    redrawPix = true;
-
-    //tz TODO memory leak as the gradient is allready created in the base class
-    if ( getFillType() == FT_GRADIENT )
-    {
-        gradient = new KPGradient( getGColor1(), getGColor2(), getGType(), getGUnbalanced(), getGXFactor(), getGYFactor() );
-        redrawPix = true;
-        pix.resize( getSize().toQSize() );
-    }
-    else
-        gradient = 0;
 }
 
 KPAutoformObject &KPAutoformObject::operator=( const KPAutoformObject & )
@@ -86,21 +75,6 @@ void KPAutoformObject::setFileName( const QString & _filename )
     atfInterp.load( filename );
 }
 
-void KPAutoformObject::setFillType( FillType _fillType )
-{
-    m_brush.setFillType( _fillType );
-
-    if ( _fillType == FT_BRUSH && gradient )
-    {
-        delete gradient;
-        gradient = 0;
-    }
-    if ( _fillType == FT_GRADIENT && !gradient )
-    {
-        gradient = new KPGradient( getGColor1(), getGColor2(), getGType(), getGUnbalanced(), getGXFactor(), getGYFactor() );
-        redrawPix = true;
-    }
-}
 
 bool KPAutoformObject::saveOasis( KoXmlWriter & xmlWriter, KoSavingContext& context, int indexObj ) const
 {
@@ -247,25 +221,26 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
                 }
                 else
                 {
-                    if ( redrawPix || gradient->size() != size )
+                    if ( m_redrawGradientPix || gradient->size() != size )
                     {
+                        kdDebug(33001) << "KPAutoformObject::draw redrawPix" << endl;
                         gradient->setSize( size );
-                        redrawPix = false;
+                        m_redrawGradientPix = false;
                         QRegion clipregion( pntArray2 );
-                        pix.resize ( _zoomHandler->zoomItX(ext.width()),_zoomHandler->zoomItY(ext.height()) );
-                        pix.fill( Qt::white );
+                        m_gradientPix.resize ( _zoomHandler->zoomItX(ext.width()),_zoomHandler->zoomItY(ext.height()) );
+                        m_gradientPix.fill( Qt::white );
 
 
                         QPainter p;
-                        p.begin( &pix );
+                        p.begin( &m_gradientPix );
                         p.setClipRegion( clipregion , QPainter::CoordPainter);
                         p.drawPixmap( 0, 0, gradient->pixmap() );
                         p.end();
 
-                        pix.setMask( pix.createHeuristicMask() );
+                        m_gradientPix.setMask( m_gradientPix.createHeuristicMask() );
                     }
 
-                    _painter->drawPixmap( 0, 0, pix );
+                    _painter->drawPixmap( 0, 0, m_gradientPix );
                 }
 
                 _painter->setPen( pen2 );
