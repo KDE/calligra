@@ -972,6 +972,12 @@ private:
     void paintObscuredCells(const QRect& rect, QPainter& painter, QPoint corner,
                             QPoint cellRef);
 
+
+  /* helper functions to the load/save routines */
+  bool loadCellData(QDomElement text, Operation op);
+  bool saveCellResult( QDomDocument& doc, QDomElement& result,
+                       QString defaultStr );
+
 };
 
 #endif

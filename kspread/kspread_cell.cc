@@ -3827,9 +3827,17 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         // are position independent.
         if ( isFormula() )
         {
+            calc();
             QDomElement text = doc.createElement( "text" );
             text.appendChild( doc.createTextNode( encodeFormula() ) );
             cell.appendChild( text );
+
+            /* we still want to save the results of the formula */
+            QDomElement formulaResult = doc.createElement( "result" );
+            QString str( m_strOutText );
+            saveCellResult( doc, formulaResult, str );
+            cell.appendChild( formulaResult );
+
         }
         // Have to be saved in some CDATA section because of too many
         // special charatcers.
@@ -3841,32 +3849,10 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         }
         else
         {
-            // Save the datatype
-            cell.setAttribute( "dataType", dataTypeToString( m_dataType ) );
-
             // Save the cell contents (in a locale-independent way)
             QString str( m_strText );
             QDomElement text = doc.createElement( "text" );
-            if( m_dataType == DateData )
-            {
-                str = "%1/%2/%3";
-                str = str.arg(valueDate().year()).arg(valueDate().month()).arg(valueDate().day());
-            }
-            else if( m_dataType == TimeData )
-            {
-                str = valueTime().toString();
-            }
-            else if ( m_dataType == BoolData )
-            {
-                // See comment in KSpreadCell::load
-                //str = m_dValue == 1.0 ? "true" : "false";
-                str = m_strText;
-            }
-            else if ( m_dataType == NumericData )
-            {
-                str = QString::number(valueDouble(), 'g', DBL_DIG);
-            }
-            text.appendChild( doc.createTextNode( str ) );
+            saveCellResult( doc, text, str );
             cell.appendChild( text );
         }
     }
@@ -3875,6 +3861,36 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         return cell;
     else
         return QDomElement();
+}
+
+bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
+                                  QString defaultStr )
+{
+  QString str = defaultStr;
+  result.setAttribute( "dataType", dataTypeToString( m_dataType ) );
+  if( m_dataType == DateData )
+  {
+    str = "%1/%2/%3";
+    str = str.arg(valueDate().year()).arg(valueDate().month()).
+          arg(valueDate().day());
+  }
+  else if( m_dataType == TimeData )
+  {
+    str = valueTime().toString();
+  }
+  else if ( m_dataType == BoolData )
+  {
+    // See comment in KSpreadCell::loadCellData
+    //str = m_dValue == 1.0 ? "true" : "false";
+    str = m_strText;
+  }
+  else if ( m_dataType == NumericData )
+  {
+    str = QString::number(valueDouble(), 'g', DBL_DIG);
+  }
+  result.appendChild( doc.createTextNode( str ) );
+
+  return true; /* really isn't much of a way for this function to fail */
 }
 
 bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm, Operation op )
@@ -4052,139 +4068,18 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     // the "text" tag, which contains either a text or a CDATA section.
     //
     QDomElement text = cell.namedItem( "text" ).toElement();
-    if ( !text.isNull() && ( pm == ::Normal || pm == ::Text || pm == ::NoBorder ) )
+
+    if (!text.isNull() && (pm == ::Normal || pm == ::Text || pm == ::NoBorder ))
     {
-        QString t = text.text();
-        t = t.stripWhiteSpace();
-        // A formula like =A1+A2 ?
-        if( t[0] == '=' )
-        {
-	    clearFormula();
-            t = decodeFormula( t, m_iColumn, m_iRow );
-            setFlag(Flag_LayoutDirty);
-            clearFlag(Flag_Error);
-            m_content = Formula;
-            m_strText = pasteOperation( t, m_strText, op );
-	    if ( !m_pTable->isLoading() ) // i.e. when pasting
-                if ( !makeFormula() )
-                    kdError(36002) << "ERROR: Syntax ERROR" << endl;
-        }
-        else
-        {
-            bool newStyleLoading = true;
-            if ( cell.hasAttribute( "dataType" ) ) // new docs
-            {
-                m_dataType = stringToDataType( cell.attribute( "dataType" ) );
-            }
-            else // old docs: do the ugly solution of calling checkTextInput to parse the text
-            {
-                // ...except for date/time
-                FormatType cellFormatType = formatType();
-                if ((cellFormatType==KSpreadCell::TextDate ||
-                     cellFormatType==KSpreadCell::ShortDate
-                     ||((int)(cellFormatType)>=200 && (int)(cellFormatType)<=217))
-                    && ( t.contains('/') == 2 ))
-                    m_dataType = DateData;
-                else if ( (cellFormatType==KSpreadCell::Time
-                         || cellFormatType==KSpreadCell::SecondeTime
-                         ||cellFormatType==KSpreadCell::Time_format1
-                         ||cellFormatType==KSpreadCell::Time_format2
-                         ||cellFormatType==KSpreadCell::Time_format3)
-                          && ( t.contains(':') == 2 ) )
-                    m_dataType = TimeData;
-                else
-                {
-                    m_strText = pasteOperation( t, m_strText, op );
-                    checkTextInput();
-                    //kdDebug(36001) << "KSpreadCell::load called checkTextInput, got m_dataType=" << dataTypeToString( m_dataType ) << "  t=" << t << endl;
-                    newStyleLoading = false;
-                }
-            }
+      /* older versions mistakenly put the datatype attribute on the cell
+         instead of the text.  Just move it over in case we're parsing
+         an old document */
+      if ( cell.hasAttribute( "dataType" ) ) // new docs
+      {
+        text.setAttribute( "dataType", cell.attribute( "dataType" ) );
+      }
 
-            if ( newStyleLoading )
-            {
-                m_dValue = 0.0;
-                clearFlag(Flag_Error);
-                switch ( m_dataType ) {
-                case BoolData:
-                {
-#if 0
-// Problem: saving simply 'true' and 'false' means we don't know
-// if we should restore it as true/false, True/False or i18n("True")/i18n("False") ....
-// OTOH saving the original text means an environment, in another language, will not parse it.
-// We should save both, the bool value and the text...
-                    if ( t == "false" )
-                        m_dValue = 0.0;
-                    else if ( t == "true" )
-                        m_dValue = 1.0;
-                    else
-                        kdWarning() << "Cell with BoolData, should be true or false: " << t << endl;
-#endif
-                    m_strText = pasteOperation( t, m_strText, op );
-                    bool ok = tryParseBool( m_strText );
-                    if ( !ok )
-                        kdWarning(36001) << "Couldn't parse " << t << " as bool." << endl;
-                    break;
-                }
-                case NumericData:
-                {
-                    bool ok = false;
-                    m_dValue = t.toDouble(&ok); // We save in non-localized format
-                    m_strText = pasteOperation( t, m_strText, op );
-                    if ( !ok )
-                        kdWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
-                    if ( formatType() == Percentage )
-                    {
-                        setFactor(100.0); // should have been already done by loadLayout
-                        m_strText += '%';
-                    }
-
-                    break;
-                }
-                case DateData:
-                {
-                    int pos = t.find('/');
-                    int year = t.mid(0,pos).toInt();
-                    int pos1 = t.find('/',pos+1);
-                    int month = t.mid(pos+1,((pos1-1)-pos)).toInt();
-                    int day = t.right(t.length()-pos1-1).toInt();
-                    m_Date = QDate(year,month,day);
-                    if(valueDate().isValid() ) // Should always be the case for new docs
-                        m_strText = locale()->formatDate( valueDate(), true );
-                    else { // This happens with old docs, when format is set wrongly to date
-                        m_strText = pasteOperation( t, m_strText, op );
-                        checkTextInput();
-                    }
-                    break;
-                }
-                case TimeData:
-                {
-                    int hours = -1;
-                    int minutes = -1;
-                    int second = -1;
-                    int pos, pos1;
-                    pos = t.find(':');
-                    hours = t.mid(0,pos).toInt();
-                    pos1 = t.find(':',pos+1);
-                    minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
-                    second = t.right(t.length()-pos1-1).toInt();
-                    m_Time = QTime(hours,minutes,second);
-                    if(valueTime().isValid() ) // Should always be the case for new docs
-                        m_strText = locale()->formatTime( valueTime(), true );
-                    else { // This happens with old docs, when format is set wrongly to time
-                        m_strText = pasteOperation( t, m_strText, op );
-                        checkTextInput();
-                    }
-                    break;
-                }
-                // A StringData, QML or a visual formula
-                default:
-                    // Set the cell's text
-                    m_strText = pasteOperation( t, m_strText, op );
-                }
-                setFlag(Flag_LayoutDirty);
-            }
-        }
+      loadCellData(text, op);
     }
 
     if ( !f.isNull() && f.hasAttribute( "style" ) )
@@ -4192,6 +4087,144 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 
     return true;
 }
+
+bool KSpreadCell::loadCellData(QDomElement text, Operation op )
+{
+  QString t = text.text();
+  t = t.stripWhiteSpace();
+
+  // A formula like =A1+A2 ?
+  if( t[0] == '=' )
+  {
+    clearFormula();
+    t = decodeFormula( t, m_iColumn, m_iRow );
+    setFlag(Flag_LayoutDirty);
+    clearFlag(Flag_Error);
+    m_content = Formula;
+    m_strText = pasteOperation( t, m_strText, op );
+    if ( !m_pTable->isLoading() ) // i.e. when pasting
+      if ( !makeFormula() )
+        kdError(36002) << "ERROR: Syntax ERROR" << endl;
+  }
+  else
+  {
+    bool newStyleLoading = true;
+    if ( text.hasAttribute( "dataType" ) ) // new docs
+    {
+      m_dataType = stringToDataType( text.attribute( "dataType" ) );
+    }
+    else // old docs: do the ugly solution of calling checkTextInput to parse the text
+    {
+      // ...except for date/time
+      FormatType cellFormatType = formatType();
+      if ((cellFormatType==KSpreadCell::TextDate ||
+           cellFormatType==KSpreadCell::ShortDate
+           ||((int)(cellFormatType)>=200 && (int)(cellFormatType)<=217))
+          && ( t.contains('/') == 2 ))
+        m_dataType = DateData;
+      else if ( (cellFormatType==KSpreadCell::Time
+                 || cellFormatType==KSpreadCell::SecondeTime
+                 ||cellFormatType==KSpreadCell::Time_format1
+                 ||cellFormatType==KSpreadCell::Time_format2
+                 ||cellFormatType==KSpreadCell::Time_format3)
+                && ( t.contains(':') == 2 ) )
+        m_dataType = TimeData;
+      else
+      {
+        m_strText = pasteOperation( t, m_strText, op );
+        checkTextInput();
+        //kdDebug(36001) << "KSpreadCell::load called checkTextInput, got m_dataType=" << dataTypeToString( m_dataType ) << "  t=" << t << endl;
+        newStyleLoading = false;
+      }
+    }
+
+    if ( newStyleLoading )
+    {
+      m_dValue = 0.0;
+      clearFlag(Flag_Error);
+      switch ( m_dataType ) {
+      case BoolData:
+      {
+#if 0
+// Problem: saving simply 'true' and 'false' means we don't know
+// if we should restore it as true/false, True/False or i18n("True")/i18n("False") ....
+// OTOH saving the original text means an environment, in another language, will not parse it.
+// We should save both, the bool value and the text...
+        if ( t == "false" )
+          m_dValue = 0.0;
+        else if ( t == "true" )
+          m_dValue = 1.0;
+        else
+          kdWarning() << "Cell with BoolData, should be true or false: " << t << endl;
+#endif
+        m_strText = pasteOperation( t, m_strText, op );
+        bool ok = tryParseBool( m_strText );
+        if ( !ok )
+          kdWarning(36001) << "Couldn't parse " << t << " as bool." << endl;
+        break;
+      }
+      case NumericData:
+      {
+        bool ok = false;
+        m_dValue = t.toDouble(&ok); // We save in non-localized format
+                    m_strText = pasteOperation( t, m_strText, op );
+                    if ( !ok )
+                      kdWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
+                    if ( formatType() == Percentage )
+                    {
+                      setFactor(100.0); // should have been already done by loadLayout
+                      m_strText += '%';
+                    }
+
+                    break;
+      }
+      case DateData:
+      {
+        int pos = t.find('/');
+        int year = t.mid(0,pos).toInt();
+        int pos1 = t.find('/',pos+1);
+        int month = t.mid(pos+1,((pos1-1)-pos)).toInt();
+        int day = t.right(t.length()-pos1-1).toInt();
+        m_Date = QDate(year,month,day);
+        if(valueDate().isValid() ) // Should always be the case for new docs
+          m_strText = locale()->formatDate( valueDate(), true );
+        else { // This happens with old docs, when format is set wrongly to date
+          m_strText = pasteOperation( t, m_strText, op );
+          checkTextInput();
+        }
+        break;
+                }
+      case TimeData:
+      {
+        int hours = -1;
+        int minutes = -1;
+        int second = -1;
+        int pos, pos1;
+        pos = t.find(':');
+        hours = t.mid(0,pos).toInt();
+        pos1 = t.find(':',pos+1);
+        minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
+        second = t.right(t.length()-pos1-1).toInt();
+        m_Time = QTime(hours,minutes,second);
+        if(valueTime().isValid() ) // Should always be the case for new docs
+          m_strText = locale()->formatTime( valueTime(), true );
+        else { // This happens with old docs, when format is set wrongly to time
+          m_strText = pasteOperation( t, m_strText, op );
+                        checkTextInput();
+        }
+        break;
+      }
+      // A StringData, QML or a visual formula
+      default:
+        // Set the cell's text
+        m_strText = pasteOperation( t, m_strText, op );
+      }
+      setFlag(Flag_LayoutDirty);
+    }
+  }
+  return true;
+}
+
 
 QTime KSpreadCell::toTime(QDomElement &element)
 {

@@ -208,16 +208,30 @@
 		row	the row number of the cell (starts at 1)
 		column	the column number of the cell (starts at 1)
 -->
-<!ELEMENT cell (text|format|validity|condition)*>
+<!ELEMENT cell (text|result|format|validity|condition)*>
 <!ATTLIST cell  row      CDATA #REQUIRED
                 column   CDATA #REQUIRED>
 
 <!--    Describes the contents of the cell.
         For instance, <text>My string</text> or
 	<text>=A4+B5</text>
+        Date data is stored in a locale independant way -- 
+          <text>yyyy/mm/dd</text>
+
+        The dataType attribute may be any of "Str", "Bool" "Num", "Date",
+        "Time", or "Other".
 -->
 <!ELEMENT text #PCDATA>
+<!ATTLIST text dataType CDATA #IMPLIED>
 
+
+<!--    result - describes the result of a formula
+        only found in cells with formulas, and the format is identical
+        to a 'text' attribute of a cell with just data.
+-->
+<!ELEMENT result #PCDATA>
+<!ATTLIST result dataType CDATA #IMPLIED>
+ 
 <!--	Describes the format of one cell.
 
         TODO: describe attributes
