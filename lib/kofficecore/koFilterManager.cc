@@ -518,7 +518,6 @@ QString KoFilterManager::prepareExport( const QString & file,
 }
 
 bool KoFilterManager::export_() {
-
     d->prepare=false;
 
     unsigned int i=0;
@@ -538,7 +537,7 @@ bool KoFilterManager::export_() {
     }
     // Done, remove temporary file
     unlink( d->tmpFile.local8Bit() );
-    return true;
+    return ok;
 }
 
 void KoFilterManager::incRef()
