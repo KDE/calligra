@@ -748,6 +748,7 @@ private:
   void loadPaper( QDomElement const & paper );
 
     void saveOasisSettings( KoXmlWriter &settingsWriter );
+    void loadOasisSettings( const QDomElement& setting );
 
     KSPLoadingInfo *m_loadingInfo;
 };

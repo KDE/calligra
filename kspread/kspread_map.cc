@@ -86,6 +86,16 @@ void KSpreadMap::moveTable( const QString & _from, const QString & _to, bool _be
   }
 }
 
+void KSpreadMap::loadOasisSettings( const QDomElement& setting )
+{
+
+}
+
+void KSpreadMap::saveOasisSettings( KoXmlWriter &settingsWriter )
+{
+
+}
+
 
 bool KSpreadMap::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles )
 {

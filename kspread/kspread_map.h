@@ -59,6 +59,10 @@ public:
   virtual ~KSpreadMap();
 
   QDomElement save( QDomDocument& doc );
+
+    void saveOasisSettings( KoXmlWriter &settingsWriter );
+    void loadOasisSettings( const QDomElement& setting );
+
     bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles );
 
     bool loadOasis( const QDomElement& mymap, KoOasisStyles& oasisStyles );

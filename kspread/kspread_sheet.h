@@ -286,6 +286,9 @@ public:
     virtual bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, KSpreadGenValidationStyles &valStyle );
     void saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const;
 
+    void loadOasisSettings( const QDomElement& setting );
+    void saveOasisSettings( KoXmlWriter &settingsWriter );
+
     /**
      * Saves a children
      */

@@ -7194,6 +7194,16 @@ void KSpreadSheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) 
 }
 
 
+void KSpreadSheet::loadOasisSettings( const QDomElement& setting )
+{
+
+}
+
+void KSpreadSheet::saveOasisSettings( KoXmlWriter &settingsWriter )
+{
+
+}
+
 
 bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, KSpreadGenValidationStyles &valStyle )
 {

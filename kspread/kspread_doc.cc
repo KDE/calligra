@@ -693,6 +693,11 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     return true;
 }
 
+void KSpreadDoc::loadOasisSettings( const QDomElement& setting )
+{
+
+}
+
 void KSpreadDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 {
     //todo
