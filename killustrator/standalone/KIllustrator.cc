@@ -44,6 +44,7 @@
 #include "AlignmentDialog.h"
 #include "GridDialog.h"
 #include "TransformationDialog.h"
+#include "OptionDialog.h"
 #include "ColorField.h"
 #include "PStateManager.h"
 #include "ExportFilter.h"
@@ -155,8 +156,8 @@ void KIllustrator::setupMainView () {
   QWidget *w = new QWidget (this);
   gridLayout = new QGridLayout (w, 2, 2);
   
-  hRuler = new Ruler (Ruler::Horizontal, Ruler::Point, w);
-  vRuler = new Ruler (Ruler::Vertical, Ruler::Point, w);
+  hRuler = new Ruler (Ruler::Horizontal, UnitPoint, w);
+  vRuler = new Ruler (Ruler::Vertical, UnitPoint, w);
   gridLayout->addWidget (hRuler, 0, 1);
   gridLayout->addWidget (vRuler, 1, 0);
 
@@ -653,6 +654,9 @@ void KIllustrator::menuCallback (int item) {
   case ID_TRANSFORM_ROTATION:
   case ID_TRANSFORM_MIRROR:
     showTransformationDialog (item - ID_TRANSFORM_POSITION);
+    break;
+  case ID_EXTRAS_OPTIONS:
+    OptionDialog::setup ();
     break;
   case ID_EXTRAS_CLIPART:
     {
