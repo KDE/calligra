@@ -105,11 +105,11 @@ Fixed consecutive tab problems
 Workaround for slow clipboard format checking in Qt2 
 Hack around Tru64-compiler bug (KWTextFormat::~KWTextFormat())
 
-Changes after KWord-1.1
-=======================
+Changes between KWord-1.1.1 and KWord-1.2-beta1
+===============================================
 
-WYSIWYG branch merged in. All text layout is done at 1440 DPI now, and
-doesn't depend on the zoom, nor on the screen or printer resolution anymore.
+Text layout and painting redesigned around WYSIWYG concept.
+KWord is also BiDi-enabled.
 
 Soft hyphens (inserted with Ctrl+'-')
 Non-breakable-spaces (inserted with Ctrl+' ' or menuitem)
@@ -119,25 +119,25 @@ Auto-hide mouse cursor while typing.
 
 "Change picture" feature.
 SVG support (for cliparts).
-Module for SVG and WMF previews in Konqueror.
-
-Add triple click (select a paragraph)
+Module for SVG previews in Konqueror.
 
 Rewrite of tables where positioning is much more fool-proof and table-borders actually work.
 More intelligent table-cell-scaling for cells with mixed text lengths
 
-Add text shadow
-Set inline frame where you want. // Hmm? what is meant with this change??
+Text shadow feature.
+Double-underline feature.
+Ability to choose where to inline a frame.
 Setting tabs via the rulers is more intuitive.
 Add link (internet link/ address mail / file link)
 Add dcop interface : now we can insert text, change text format, etc...
 Frame z-order ("Raise frame", "Lower frame")
-Add support for background spell checking
-Add support for manual completion (use CTL+E)
-Add support for note
-Can associate key shortcuts to styles
+Preliminary support for background spell checking
+Support for manual completion (use CTRL+E)
+Support for note
+Ability to associate key shortcuts to styles
 "Section Title" variable
 
+Triple click selects a paragraph.
 New "PageUp/PageDown moves the caret" option, which defaults to false.
  The new behaviour for PageUp/PageDown is to move the scrollbars, not the caret.
 
