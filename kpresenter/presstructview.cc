@@ -21,6 +21,7 @@
 
 #include <kpbackground.h>
 #include <kpobject.h>
+#include "kptextobject.h"
 #include <kpresenter_view.h>
 #include "kprcanvas.h"
 
@@ -226,12 +227,31 @@ void KPPresStructView::setupSlideList()
         item->setText( 0, QString( "%1" ).arg( i + 1 ) );
         item->setText( 1, doc->pageList().at( i )->pageTitle( i18n( "Slide %1" ).arg( i + 1 ) ) );
         KPrPage *page=doc->pageList().at( i );
+        QPtrList<KPObject> list(page->objectList());
         for ( int j = page->objNums() - 1; j >= 0; --j ) {
             KPPresStructObjectItem *item_ = new KPPresStructObjectItem( item );
             item_->setPage( page->background(), i );
-            QPtrList<KPObject> list(page->objectList());
             item_->setObject( list.at( j ), j );
             item_->setNum(j);
+        }
+        //add sticky obj
+        list=doc->stickyPage()->objectList();
+        int offset=page->objNums() - 1;
+        QPtrListIterator<KPObject> it( doc->stickyPage()->objectList() );
+        for ( ; it.current() ; ++it )
+        {
+            if(doc->isHeaderFooter(it.current()))
+            {
+                if(it.current()==doc->header()&&!doc->hasHeader())
+                    continue;
+                if(it.current()==doc->footer()&&!doc->hasFooter())
+                    continue;
+            }
+                KPPresStructObjectItem *item_ = new KPPresStructObjectItem( item );
+                item_->setPage( page->background(), i );
+                item_->setObject( it.current(), offset );
+                item_->setNum(offset);
+                offset++;
         }
     }
 }
