@@ -3,8 +3,7 @@
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+   License version 2, as published by the Free Software Foundation.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -65,7 +64,7 @@ public:
     void setTop(const double &top) { m_tl.setY(top); }
     void setRight(const double &right) { m_br.setX(right); }
     void setBottom(const double &bottom) { m_br.setY(bottom); }
-    
+
     void setX(const double &x) { m_tl.setX(x); } //same as setLeft()
     void setY(const double &y) { m_tl.setY(y); } //same as setTop()
 
@@ -83,7 +82,7 @@ public:
     void moveBy(const double &dx, const double &dy);
 
     void setRect(const double &x, const double &y, const double &width, const double &height);
-    //void setRect(const QRect &rect);
+    void setRect(const KoRect &rect);
     void setCoords(const double &x1, const double &y1, const double &x2, const double &y2);
 
     KoSize size() const;
@@ -101,7 +100,7 @@ public:
     KoRect unite(const KoRect &r) const;
     KoRect intersect(const KoRect &r) const;
     bool intersects(const KoRect &r) const;
-    
+
     KoRect transform(const QWMatrix &m) const;
     KoRect translate(double dx, double dy) const;
 
