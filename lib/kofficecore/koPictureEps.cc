@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2002 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2002 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -76,7 +76,7 @@ void KoPictureEps::scaleWithGhostScript(const QSize& size)
     KTempFile tmpFile;
     tmpFile.setAutoDelete(true);
 
-    if( tmpFile.status() != 0 )
+    if( ! tmpFile.status() )
     {
         kdError(30003) << "No KTempFile! (in KoPictureEps::scaleWithGhostScript)" << endl;
         return;
@@ -163,14 +163,9 @@ void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode)
     if ( fastMode && !m_cachedSize.isEmpty())
     {
         kdDebug(30003) << "Fast scaling!" << endl;
-#if 1
         // Slower than caching a QImage, but faster than re-sampling!
         QImage image( m_cachedPixmap.convertToImage() );
         m_cachedPixmap=image.scale( size );
-#else
-        // Very fast, but truncates or adds white!
-        m_cachedPixmap.resize( size ); // Only resize, do not scale!
-#endif
         m_cacheIsInFastMode=true;
         m_cachedSize=size;
     }
@@ -178,38 +173,12 @@ void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode)
     {
         QTime time;
         time.start();
-#if 1
+        
         kdDebug(30003) << "Sampling with GhostScript!" << endl;
         QApplication::setOverrideCursor( Qt::waitCursor );
         scaleWithGhostScript(size);
         QApplication::restoreOverrideCursor();
-#else
-        kdDebug(30003) << "Sampling!" << endl;
-        QApplication::setOverrideCursor( Qt::waitCursor );
-        QBuffer buffer( m_rawData );
-        buffer.open( IO_ReadOnly );
-        QImageIO io( &buffer, 0 );
-        QCString params;
-        params.setNum( size.width() );
-        params += ':';
-        QCString height;
-        height.setNum( size.height() );
-        params += height;
-        io.setParameters( params );
-        io.read();
-        QImage image ( io.image() );
-        if ( image.size() != size ) // this can happen due to rounding problems
-        {
-            //kdDebug() << "fixing size to " << size.width() << "x" << size.height()
-            //          << " (was " << image.width() << "x" << image.height() << ")" << endl;
-            image = image.scale( size ); // hmm, smoothScale instead?
-        }
-        kdDebug(30003) << "Image parameters: " << image.width() << "x" << image.height() << "x" << image.depth() << endl;
-        m_cachedPixmap = image;
-        QApplication::restoreOverrideCursor();
-        m_cacheIsInFastMode=false;
-        m_cachedSize=size;
-#endif
+        
         kdDebug(30003) << "Time: " << (time.elapsed()/1000.0) << " s" << endl;
     }
     kdDebug(30003) << "New size: " << size << endl;
