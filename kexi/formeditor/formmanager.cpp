@@ -67,9 +67,9 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 
 	m_popup = new KPopupMenu();
 	m_popup->insertItem(i18n("Copy"), this, SLOT(copyWidget()));
-	m_popup->insertItem(i18n("Cut"), this, SLOT(cutWidget()));
+	m_cutid = m_popup->insertItem(i18n("Cut"), this, SLOT(cutWidget()));
 	m_popup->insertItem(i18n("Paste"), this, SLOT(pasteWidget()));
-	m_popup->insertItem(i18n("Remove Item"), this, SLOT(deleteWidget()));
+	m_deleteid = m_popup->insertItem(i18n("Remove Item"), this, SLOT(deleteWidget()));
 	m_treeview = 0;
 	m_editor = 0;
 
@@ -317,7 +317,7 @@ FormManager::isTopLevel(QWidget *w)
 	if(!activeForm()->objectTree())
 		return false;
 
-	kdDebug() << "FormManager::isTopLevel(): for: " << w->name() << " = " 
+	kdDebug() << "FormManager::isTopLevel(): for: " << w->name() << " = "
 		<< activeForm()->objectTree()->lookup(w->name())<< endl;
 
 	ObjectTreeItem *item = activeForm()->objectTree()->lookup(w->name());
@@ -402,7 +402,7 @@ FormManager::setInsertPoint(const QPoint &p)
 }*/
 
 void
-FormManager::createContextMenu(QWidget *w, Container *container)
+FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemove)
 {
 	QString n = m_lib->displayName(w->className());
 	KPopupMenu *p = new KPopupMenu();
@@ -416,6 +416,9 @@ FormManager::createContextMenu(QWidget *w, Container *container)
 	}
 	else
 		id = m_popup->insertItem(n, p);
+
+	m_popup->setItemEnabled(m_deleteid, enableRemove);
+	m_popup->setItemEnabled(m_cutid, enableRemove);
 
 	m_insertPoint = container->widget()->mapFromGlobal(QCursor::pos());
 	m_popup->exec(QCursor::pos());

@@ -114,7 +114,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		/*! Shows a propertybuffer in PropertyBuffer */
 		virtual void showPropertyBuffer(ObjectPropertyBuffer *buff);
-		void  createContextMenu(QWidget *w, Container *container);
+		void  createContextMenu(QWidget *w, Container *container, bool enableRemove);
 
 	public slots:
 		/*! Creates a new blank Form with default class top widget (ie QWidget). The new Form is shown and becomes
@@ -190,6 +190,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		QDomDocument		m_domDoc;
 		KPopupMenu		*m_popup;
+		int			m_deleteid, m_cutid;
 		QPoint			m_insertPoint;
 
 		bool			m_inserting;

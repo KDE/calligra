@@ -205,7 +205,10 @@ Container::eventFilter(QObject *s, QEvent *e)
 				m_form->manager()->setInsertPoint(QPoint());
 
 				parent->removeItem(id);*/
-				m_form->manager()->createContextMenu((QWidget*)s, this);
+				bool enable = true;
+				if(((QWidget*)s)->isA("QWidget") || ((!m_toplevel) && (s == m_container)))
+					enable = false;
+				m_form->manager()->createContextMenu((QWidget*)s, this, enable);
 			}
 			else if(m_move)
 			{
