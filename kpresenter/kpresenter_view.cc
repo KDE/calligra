@@ -2001,8 +2001,8 @@ void KPresenterView::updateRuler()
 {
     //update koruler
     QRect r=m_canvas->activePage()->getZoomPageRect();
-    getHRuler()->setFrameStartEnd( r.left() , r.right()+m_canvas->diffx() );
-    getVRuler()->setFrameStartEnd( r.top() , r.bottom()+m_canvas->diffy() );
+    getHRuler()->setFrameStartEnd( r.left() , r.right()/*+m_canvas->diffx()*/ );
+    getVRuler()->setFrameStartEnd( r.top() , r.bottom()/*+m_canvas->diffy()*/ );
 }
 
 /*======================== create GUI ==========================*/
@@ -4608,8 +4608,8 @@ void KPresenterView::slotUpdateRuler()
         if ( txtobj )
         {
             QRect r= zoomHandler()->zoomRect(txtobj->getBoundingRect( ));
-            getHRuler()->setFrameStartEnd( r.left() + m_canvas->diffx()/*- pc.x()*/, r.right()+m_canvas->diffx() /*- pc.x()*/ );
-            getVRuler()->setFrameStartEnd( r.top()+ m_canvas->diffy()/*- pc.y()*/, r.bottom()+m_canvas->diffy()/*- pc.y()*/ );
+            getHRuler()->setFrameStartEnd( r.left() /*+ m_canvas->diffx()*//*- pc.x()*/, r.right()/*+m_canvas->diffx()*/ /*- pc.x()*/ );
+            getVRuler()->setFrameStartEnd( r.top()/*+ m_canvas->diffy()*//*- pc.y()*/, r.bottom()/*+m_canvas->diffy()*//*- pc.y()*/ );
             if( getHRuler())
             {
                 getHRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
