@@ -33,8 +33,10 @@ K_EXPORT_COMPONENT_FACTORY( libooimpressimport, OoImpressImportFactory( "ooimpre
 
 
 OoImpressImport::OoImpressImport( KoFilter *, const char *, const QStringList & )
-  : KoFilter()
+    : KoFilter(),
+      m_styles( 23, true )
 {
+    m_styles.setAutoDelete( true );
 }
 
 OoImpressImport::~OoImpressImport()
@@ -89,22 +91,18 @@ KoFilter::ConversionStatus OoImpressImport::openFile()
 {
   KoStore * store = KoStore::createStore( m_chain->inputFile(), KoStore::Read);
 
-  kdDebug() << "Store created" << endl;
-
   if ( !store )
   {
     kdWarning() << "Couldn't open the requested file." << endl;
     return KoFilter::FileNotFound;
   }
 
-  kdDebug() << "Trying to open content.xml" << endl;
   if ( !store->open( "content.xml" ) )
   {
     kdWarning() << "This file doesn't seem to be a valid OoImpress file" << endl;
     delete store;
     return KoFilter::WrongFormat;
   }
-  kdDebug() << "Opened" << endl;
 
   QDomDocument styles;
   QCString totalString;
@@ -123,7 +121,7 @@ KoFilter::ConversionStatus OoImpressImport::openFile()
   totalString = "";
   store->close();
   //kdDebug() << "m_content.toCString() :" << m_content.toCString() << endl;
-  kdDebug() << "File content.xml loaded " << endl;
+  kdDebug() << "File containing content loaded " << endl;
 
   if ( store->open( "styles.xml" ) )
   {
@@ -186,6 +184,7 @@ KoFilter::ConversionStatus OoImpressImport::openFile()
   delete store;
 
   emit sigProgress( 10 );
+  createStyleMap( styles );
 
   return KoFilter::OK;
 }
@@ -242,35 +241,71 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     docElement.setAttribute( "syntaxVersion", "2" );
 
     QDomElement content = m_content.documentElement();
-    QDomNode body = content.namedItem( "office:body" );
 
+    // content.xml contains some automatic-styles that we need to store
+    QDomNode automaticStyles = content.namedItem( "office:automatic-styles" );
+    if ( !automaticStyles.isNull() )
+        insertStyles( automaticStyles.toElement() );
+
+    QDomNode body = content.namedItem( "office:body" );
     if ( body.isNull() )
         return;
 
-    // at the moment use some default settings for paper
-    QDomElement paperElement = doc.createElement( "PAPER" );
-    paperElement.setAttribute( "ptWidth", CM_TO_POINT(28)/*680*/ );
-    paperElement.setAttribute( "ptHeight", CM_TO_POINT(21)/*510*/ );
-    paperElement.setAttribute( "unit", 0 );
-    paperElement.setAttribute( "format", 5 );
-    paperElement.setAttribute( "tabStopValue", 42.5198 );
-    paperElement.setAttribute( "orientation", 0 );
-    double pageHeight = 21;
+    // it seems that ooimpress has different paper-settings for every slide.
+    // we take the settings of the first slide for the whole document.
+    QDomNode drawPage = body.namedItem( "draw:page" );
+    if ( drawPage.isNull() ) // no slides? give up.
+        return;
 
-    QDomElement paperBorderElement = doc.createElement( "PAPERBORDERS" );
-    paperBorderElement.setAttribute( "ptRight", 0 );
-    paperBorderElement.setAttribute( "ptBottom", 0 );
-    paperBorderElement.setAttribute( "ptLeft", 0 );
-    paperBorderElement.setAttribute( "ptTop", 0 );
-    paperElement.appendChild( paperBorderElement );
+    QDomElement dp = drawPage.toElement();
+    QDomElement *master = m_styles[dp.attribute( "draw:master-page-name" )];
+    QDomElement *style = m_styles[master->attribute( "style:page-master-name" )];
+    QDomElement properties = style->namedItem( "style:properties" ).toElement();
+
+    double pageHeight;
+    QDomElement paperElement = doc.createElement( "PAPER" );
+    if ( properties.isNull() )
+    {
+        paperElement.setAttribute( "ptWidth", CM_TO_POINT(28) );
+        paperElement.setAttribute( "ptHeight", CM_TO_POINT(21) );
+        paperElement.setAttribute( "unit", 0 );
+        paperElement.setAttribute( "format", 5 );
+        paperElement.setAttribute( "tabStopValue", 42.5198 );
+        paperElement.setAttribute( "orientation", 0 );
+        pageHeight = 21;
+
+        QDomElement paperBorderElement = doc.createElement( "PAPERBORDERS" );
+        paperBorderElement.setAttribute( "ptRight", 0 );
+        paperBorderElement.setAttribute( "ptBottom", 0 );
+        paperBorderElement.setAttribute( "ptLeft", 0 );
+        paperBorderElement.setAttribute( "ptTop", 0 );
+        paperElement.appendChild( paperBorderElement );
+    }
+    else
+    {
+        paperElement.setAttribute( "ptWidth", CM_TO_POINT(properties.attribute( "fo:page-width" ).toDouble() ) );
+        paperElement.setAttribute( "ptHeight", CM_TO_POINT(properties.attribute( "fo:page-height" ).toDouble() ) );
+//         paperElement.setAttribute( "unit", 0 );
+//         paperElement.setAttribute( "format", 5 );
+//         paperElement.setAttribute( "tabStopValue", 42.5198 );
+//         paperElement.setAttribute( "orientation", 0 );
+        pageHeight = properties.attribute( "fo:page-height" ).toDouble();
+
+        QDomElement paperBorderElement = doc.createElement( "PAPERBORDERS" );
+        paperBorderElement.setAttribute( "ptRight", properties.attribute( "fo:margin-right" ).toDouble() );
+        paperBorderElement.setAttribute( "ptBottom", properties.attribute( "fo:margin-bottom" ).toDouble() );
+        paperBorderElement.setAttribute( "ptLeft", properties.attribute( "fo:page-left" ).toDouble() );
+        paperBorderElement.setAttribute( "ptTop", properties.attribute( "fo:page-top" ).toDouble() );
+        paperElement.appendChild( paperBorderElement );
+    }
 
     QDomElement objectElement = doc.createElement( "OBJECTS" );
     QDomElement pageTitleElement = doc.createElement( "PAGETITLES" );
 
     // parse all pages
-    for ( QDomNode drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling() )
+    for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling() )
     {
-        QDomElement dp = drawPage.toElement();
+        dp = drawPage.toElement();
 
         // set the pagetitle
         QDomElement titleElement = doc.createElement( "Title" );
@@ -349,6 +384,8 @@ QDomElement OoImpressImport::parseObject( QDomDocument& doc, const QDomElement& 
 
 QDomElement OoImpressImport::parseLineObject( QDomDocument& doc, const QDomElement& object, int offset )
 {
+    // lineobjects need special handling because the coordinates are stored in
+    // a different way than for the other objects
     double x1 = object.attribute("svg:x1").toDouble();
     double y1 = object.attribute("svg:y1").toDouble();
     double x2 = object.attribute("svg:x2").toDouble();
@@ -446,5 +483,38 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
     return p;
 }
 
-#include <ooimpressimport.moc>
+void OoImpressImport::createStyleMap( QDomDocument &docstyles )
+{
+  QDomElement styles = docstyles.documentElement();
+  if ( styles.isNull() )
+      return;
 
+  QDomNode fixedStyles = styles.namedItem( "office:styles" );
+  if ( !fixedStyles.isNull() )
+      insertStyles( fixedStyles.toElement() );
+
+  QDomNode automaticStyles = styles.namedItem( "office:automatic-styles" );
+  if ( !automaticStyles.isNull() )
+      insertStyles( automaticStyles.toElement() );
+
+  QDomNode masterStyles = styles.namedItem( "office:master-styles" );
+  if ( !masterStyles.isNull() )
+      insertStyles( masterStyles.toElement() );
+}
+
+void OoImpressImport::insertStyles( const QDomElement& styles )
+{
+    for ( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement e = n.toElement();
+
+        if ( !e.hasAttribute( "style:name" ) )
+            continue;
+
+        QString name = e.attribute( "style:name" );
+        m_styles.insert( name, new QDomElement( e ) );
+        //kdDebug() << "Style: '" << name << "' loaded " << endl;
+    }
+}
+
+#include <ooimpressimport.moc>

@@ -37,6 +37,8 @@ public:
 private:
     void createDocumentInfo( QDomDocument &docinfo );
     void createDocumentContent( QDomDocument &doccontent );
+    void createStyleMap( QDomDocument &docstyles );
+    void insertStyles( const QDomElement& styles );
     QDomElement parseObject( QDomDocument& doc, const QDomElement& object, int offset );
     QDomElement parseLineObject( QDomDocument& doc, const QDomElement& object, int offset );
     QDomElement parseTextBox( QDomDocument& doc, const QDomElement& textBox );
@@ -47,6 +49,7 @@ private:
     QDomDocument    m_content;
     QDomDocument    m_meta;
     QDomDocument    m_settings;
+    QDict<QDomElement> m_styles;
 };
 
 #endif
