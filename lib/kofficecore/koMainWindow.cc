@@ -604,12 +604,14 @@ void KoMainWindow::slotFileOpenRecent( const KURL & url )
 
 void KoMainWindow::slotFileSave()
 {
-    saveDocument();
+    if ( saveDocument() )
+        emit documentSaved();
 }
 
 void KoMainWindow::slotFileSaveAs()
 {
-    saveDocument( true );
+    if ( saveDocument( true ) )
+        emit documentSaved();
 }
 
 void KoMainWindow::slotDocumentInfo()

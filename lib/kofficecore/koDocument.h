@@ -381,12 +381,12 @@ public:
    * This method is automatically called from @ref KoMainWindow::setRootDocument,
    * so you dont need to call it.
    */
-  void addShell( KoMainWindow *shell );
+  virtual void addShell( KoMainWindow *shell );
   /**
    * Removes the shell from the list. That happens automatically if the shell changes its
    * root document. Usually you dont need to call this method.
    */
-  void removeShell( KoMainWindow *shell );
+  virtual void removeShell( KoMainWindow *shell );
 
   // Doesn't really have any reason to be virtual anymore
   virtual KoMainWindow *firstShell();

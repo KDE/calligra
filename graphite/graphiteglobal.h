@@ -20,7 +20,6 @@
 #ifndef GRAPHITE_GLOBAL_H
 #define GRAPHITE_GLOBAL_H
 
-#include <qobject.h>
 #include <qprinter.h>
 #include <kimageeffect.h>
 #include <float.h>

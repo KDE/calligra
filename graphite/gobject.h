@@ -42,7 +42,6 @@ class QMouseEvent;
 class QKeyEvent;
 class QResizeEvent;
 class QLineEdit;
-class QSpinBox;
 class QComboBox;
 class QVButtonGroup;
 class QWidgetStack;
@@ -52,6 +51,7 @@ class QSizePolicy;
 
 class KDialogBase;
 class KColorButton;
+class KIntSpinBox;
 
 class GObject;
 class GraphiteView;
@@ -180,7 +180,7 @@ private:
     G1DObjectM9r(const G1DObjectM9r &rhs);
     G1DObjectM9r &operator=(const G1DObjectM9r &rhs);
 
-    QSpinBox *m_width;
+    KIntSpinBox *m_width;
     KColorButton *m_color;
     QComboBox *m_style;
 };

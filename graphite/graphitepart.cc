@@ -17,19 +17,16 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qpainter.h>
-#include <qevent.h>
-
 //#include <kglobal.h>
 //#include <kconfig.h>
 #include <kaction.h>
 #include <kstdaction.h>
-#include <kcommand.h>
 #include <kdebug.h>
+#include <koMainWindow.h>
 
+#include <graphitepart.h>
 #include <graphiteview.h>
 #include <graphitefactory.h>
-#include <graphitepart.h>
 
 #include <pagelayoutdia_impl.h>
 
@@ -38,11 +35,11 @@
 
 
 GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode)
-    : KoDocument(parentWidget, widgetName, parent, name, singleViewMode) {
+    : KoDocument(parentWidget, widgetName, parent, name, singleViewMode), m_history(actionCollection()) {
 
     setInstance(GraphiteFactory::global());
-    m_history=new KCommandHistory(actionCollection());
 
+    connect(&m_history, SIGNAL(documentRestored()), this, SLOT(documentRestored()));
     KStdAction::cut(this, SLOT(edit_cut()), actionCollection(), "edit_cut");
 
     // Settings -> Configure... (nice dialog to configure e.g. units)
@@ -50,7 +47,6 @@ GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObjec
 }
 
 GraphitePart::~GraphitePart() {
-    delete m_history;
 }
 
 bool GraphitePart::initDoc() {
@@ -58,6 +54,11 @@ bool GraphitePart::initDoc() {
     // Show the "template" dia?
     m_pageLayout.loadDefaults();
     return true;
+}
+
+void GraphitePart::addShell(KoMainWindow *shell) {
+    connect(shell, SIGNAL(documentSaved()), &m_history, SLOT(documentSaved()));
+    KoDocument::addShell(shell);
 }
 
 QPrinter::PageSize GraphitePart::pageSize() const {
@@ -184,16 +185,20 @@ void GraphitePart::setUnit(Graphite::Unit unit) {
 
 void GraphitePart::edit_undo() {
     kdDebug(37001) << "GraphitePart: edit_undo called" << endl;
-    m_history->undo();
+    m_history.undo();
 }
 
 void GraphitePart::edit_redo() {
     kdDebug(37001) << "GraphitePart: edit_redo called" << endl;
-    m_history->redo();
+    m_history.redo();
 }
 
 void GraphitePart::edit_cut() {
     kdDebug(37001) << "GraphitePart: edit_cut called" << endl;
+}
+
+void GraphitePart::documentRestored() {
+    setModified(false);
 }
 
 void GraphitePart::setGlobalZoom(const double &zoom) {

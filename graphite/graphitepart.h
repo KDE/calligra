@@ -20,6 +20,7 @@
 #ifndef GRAPHITE_PART_H
 #define GRAPHITE_PART_H
 
+#include <kcommand.h>
 #include <koDocument.h>
 #include <graphiteglobal.h>
 
@@ -27,7 +28,7 @@ class QPainter;
 class QMouseEvent;
 class QKeyEvent;
 class KAction;
-class KCommandHistory;
+class KoMainWindow;
 
 class GraphiteView;
 class GObjectM9r;
@@ -46,7 +47,7 @@ public:
 
     virtual bool loadXML(QIODevice *, const QDomDocument &) { return false; }
 
-    KCommandHistory *history() { return m_history; }
+    virtual void addShell(KoMainWindow *shell);
 
     // will return NPageSize if "Custom"!
     QPrinter::PageSize pageSize() const;
@@ -91,6 +92,8 @@ protected slots:
     void edit_redo();
     void edit_cut();
 
+    void documentRestored();
+
 protected:
     virtual KoView *createViewInstance(QWidget *parent, const char *name);
 
@@ -98,7 +101,7 @@ private:
     GraphitePart &operator=(const GraphitePart &rhs);
     void setGlobalZoom(const double &zoom=1.0); // set the global zoom factor (for this view)
 
-    KCommandHistory *m_history;
+    KCommandHistory m_history;
     QMap<GraphiteView*, GObjectM9r*> m_m9rMap; // map views to m9rs
     // TODO: If an object is selected, store a pointer
     //       to its M9r here and draw the handles after

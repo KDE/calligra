@@ -24,7 +24,6 @@
 
 #include <graphitepart.h>
 #include <graphitefactory.h>
-#include <kdebug.h>
 
 extern "C" {
     void* init_libgraphitepart() {

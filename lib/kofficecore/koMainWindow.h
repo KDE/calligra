@@ -97,6 +97,12 @@ public:
      */
     QLabel * statusBarLabel() const;
 
+signals:
+    /**
+     * This signal is emitted if the document has been saved successfully.
+     */
+    void documentSaved();
+
 public slots:
 
     /**

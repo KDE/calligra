@@ -18,7 +18,6 @@
 */
 
 #include <qdom.h>
-#include <qapp.h>
 #include <qpainter.h>
 #include <klocale.h>
 #include <kglobal.h>

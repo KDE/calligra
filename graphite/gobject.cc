@@ -25,7 +25,6 @@
 #include <qwidgetstack.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <qspinbox.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qslider.h>
@@ -41,8 +40,7 @@
 #include <kcolorbtn.h>
 #include <kimageeffect.h>
 #include <kmessagebox.h>
-#include <kwin.h>
-#include <kapp.h>
+#include <knuminput.h>
 
 #include <gobject.h>
 #include <graphitefactory.h>
@@ -125,8 +123,6 @@ void GObjectM9r::createPropertyDialog() {
         return;
 
     // This should set the app icon for the dialog, too... broken?
-    KWin kwin;
-    kwin.setIcons(this->winId(), kapp->icon(), kapp->miniIcon());
     m_created=true;
     enableButtonOK(true);
     enableButtonApply(false);
@@ -211,8 +207,7 @@ void G1DObjectM9r::createPropertyDialog() {
     QLabel *label=new QLabel(i18n("Width:"), frame);
     grid->addWidget(label, 0, 0);
 
-    m_width=new QSpinBox(1, 100, 1, frame);
-    m_width->setValue(gobject()->pen().width());
+    m_width=new KIntSpinBox(1, 100, 1, gobject()->pen().width(), 10, frame);
     connect(m_width, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
     grid->addWidget(m_width, 0, 2);
 
@@ -360,13 +355,13 @@ void G2DObjectM9r::createPropertyDialog() {
     // Note: index+1 => fill style (NoBrush is missing!)
     // xgettext:no-c-format
     content << i18n("100% filled (solid)") // xgettext:no-c-format
-            << i18n("94% filled") // xgettext:no-c-format 
-            << i18n("88% filled") // xgettext:no-c-format 
-            << i18n("63% filled") // xgettext:no-c-format 
-            << i18n("50% filled") // xgettext:no-c-format 
-            << i18n("37% filled") // xgettext:no-c-format 
-            << i18n("12% filled") // xgettext:no-c-format 
-            << i18n("6% filled") // xgettext:no-c-format 
+            << i18n("94% filled") // xgettext:no-c-format
+            << i18n("88% filled") // xgettext:no-c-format
+            << i18n("63% filled") // xgettext:no-c-format
+            << i18n("50% filled") // xgettext:no-c-format
+            << i18n("37% filled") // xgettext:no-c-format
+            << i18n("12% filled") // xgettext:no-c-format
+            << i18n("6% filled") // xgettext:no-c-format
             << i18n("Horizontal Lines")
             << i18n("Vertical Lines")
             << i18n("Crossing Lines")
