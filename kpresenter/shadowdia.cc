@@ -214,18 +214,15 @@ ShadowDia::ShadowDia( QWidget* parent, const char* name )
     sPreview = new ShadowPreview( preview, "" );
     sPreview->setGeometry( 10, 20, preview->width() - 20, preview->height() - 30 );
 
-    cancelBut = new QPushButton( this, "BCancel" );
-    cancelBut->setText( i18n( "Cancel" ) );
-
-    applyBut = new QPushButton( this, "BApply" );
-    applyBut->setText( i18n( "Apply" ) );
-
-    okBut = new QPushButton( this, "BOK" );
-    okBut->setText( i18n( "OK" ) );
+    okBut = new QPushButton( i18n( "OK" ), this, "BOK" );
     okBut->setAutoRepeat( false );
-    okBut->setAutoResize( false );
+    okBut->setAutoResize( false );	//lukas: obsolete
     okBut->setAutoDefault( true );
     okBut->setDefault( true );
+    
+    applyBut = new QPushButton( i18n( "Apply" ), this, "BApply" );
+    
+    cancelBut = new QPushButton( i18n( "Cancel" ), this, "BCancel" );
 
     int butW = QMAX(cancelBut->sizeHint().width(),
                    QMAX(applyBut->sizeHint().width(),okBut->sizeHint().width()));
