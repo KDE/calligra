@@ -41,7 +41,7 @@ InsertImageTool::InsertImageTool(QString aId, ToolController *tc):
 Tool(aId, tc)
 {
   ToolSelectAction *insertimage = new ToolSelectAction(actionCollection(), "ToolAction");
-  KAction *mT1 = new KAction(i18n("Insert image"), "frame_image", 0, actionCollection());
+  KAction *mT1 = new KAction(i18n("Insert Image"), "frame_image", 0, actionCollection());
   insertimage->insert(mT1);
 }
 

@@ -275,7 +275,7 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
     box->setSpacing( 10 );
 
     QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
-    tmpQGroupBox->setTitle( i18n("Objects in editing mode") );
+    tmpQGroupBox->setTitle( i18n("Objects in Editing Mode") );
     QGridLayout *grid1 = new QGridLayout( tmpQGroupBox, 5, 1, 15, 7);
     QLabel *lab = new QLabel( tmpQGroupBox, "label20" );
     lab->setText( i18n( "Background color:" ) );

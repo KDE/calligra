@@ -41,7 +41,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     QButtonGroup* tmpQButtonGroup;
     tmpQButtonGroup = new QButtonGroup( page1, "ButtonGroup_1" );
     tmpQButtonGroup->setFrameStyle( 49 );
-    tmpQButtonGroup->setTitle( i18n("Validity criteria :") );
+    tmpQButtonGroup->setTitle( i18n("Validity Criteria:") );
     QGridLayout *grid1 = new QGridLayout(tmpQButtonGroup,2,4,KDialogBase::marginHint(),KDialogBase::spacingHint());
 
     QLabel *tmpQLabel = new QLabel( tmpQButtonGroup, "Label_1" );
@@ -82,7 +82,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     choose->setCurrentItem(0);
 
     edit1 = new QLabel( tmpQButtonGroup, "Label_3" );
-    edit1->setText(i18n("Minimum : " ));
+    edit1->setText(i18n("Minimum: " ));
     grid1->addWidget(edit1,2,0);
 
 
@@ -92,7 +92,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     val_min->setValidator( new KFloatValidator( val_min ) );
 
     edit2 = new QLabel( tmpQButtonGroup, "Label_4" );
-    edit2->setText(i18n("Maximum : " ));
+    edit2->setText(i18n("Maximum: " ));
     grid1->addWidget(edit2,3,0);
 
     val_max=new QLineEdit(tmpQButtonGroup);
@@ -109,7 +109,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
 
     tmpQButtonGroup = new QButtonGroup( page2, "ButtonGroup_2" );
     tmpQButtonGroup->setFrameStyle( 49 );
-    tmpQButtonGroup->setTitle( i18n("Contents :") );
+    tmpQButtonGroup->setTitle( i18n("Contents:") );
     grid1 = new QGridLayout(tmpQButtonGroup,2,4,15,7);
 
     tmpQLabel = new QLabel( tmpQButtonGroup, "Label_5" );
@@ -174,15 +174,15 @@ switch(_index)
                 val_max->setValidator( new KFloatValidator( val_max ) );
                 if( choose->currentItem()<=4)
                         {
-                        edit1->setText(i18n("Number : "));
+                        edit1->setText(i18n("Number: "));
                         edit2->setText("");
                         edit2->setEnabled(false);
                         val_max->setEnabled(false);
                         }
                 else
                         {
-                        edit1->setText(i18n("Minimum : " ));
-                        edit2->setText(i18n("Maximum : " ));
+                        edit1->setText(i18n("Minimum: " ));
+                        edit2->setText(i18n("Maximum: " ));
                         edit2->setEnabled(true);
                         val_max->setEnabled(true);
                         }
@@ -199,15 +199,15 @@ switch(_index)
                 val_max->setValidator( new KIntValidator( val_max ) );
                 if( choose->currentItem()<=4)
                         {
-                        edit1->setText(i18n("Number : "));
+                        edit1->setText(i18n("Number: "));
                         edit2->setText("");
                         edit2->setEnabled(false);
                         val_max->setEnabled(false);
                         }
                 else
                         {
-                        edit1->setText(i18n("Minimum : " ));
-                        edit2->setText(i18n("Maximum : " ));
+                        edit1->setText(i18n("Minimum: " ));
+                        edit2->setText(i18n("Maximum: " ));
                         edit2->setEnabled(true);
                         val_max->setEnabled(true);
                         }
@@ -223,7 +223,7 @@ switch(_index)
                 edit2->setEnabled(false);
                 break;
         case 4:
-                edit1->setText(i18n("Date : "));
+                edit1->setText(i18n("Date: "));
                 edit2->setText("");
                 val_min->setEnabled(true);
                 edit1->setEnabled(true);
@@ -235,7 +235,7 @@ switch(_index)
                 val_max->clearValidator();
                 if( choose->currentItem()<=4)
                         {
-                        edit1->setText(i18n("Date : "));
+                        edit1->setText(i18n("Date: "));
                         edit2->setText("");
                         edit2->setEnabled(false);
                         val_max->setEnabled(false);
@@ -259,7 +259,7 @@ switch(_index)
                 val_max->clearValidator();
                 if( choose->currentItem()<=4)
                         {
-                        edit1->setText(i18n("Time : "));
+                        edit1->setText(i18n("Time: "));
                         edit2->setText("");
                         edit2->setEnabled(false);
                         val_max->setEnabled(false);
@@ -287,13 +287,13 @@ switch(_index)
                 val_max->setEnabled(false);
                 if(chooseType->currentItem()==1 ||chooseType->currentItem()==2
                 ||chooseType->currentItem()==6)
-                        edit1->setText(i18n("Number :"));
+                        edit1->setText(i18n("Number:"));
                 else if( chooseType->currentItem()==3)
                         edit1->setText("");
                 else if( chooseType->currentItem()==4)
-                        edit1->setText(i18n("Date :"));
+                        edit1->setText(i18n("Date:"));
                 else if( chooseType->currentItem()==5)
-                        edit1->setText(i18n("Time :"));
+                        edit1->setText(i18n("Time:"));
                 edit2->setText("");
                 edit2->setEnabled(false);
                 break;
@@ -305,8 +305,8 @@ switch(_index)
                 if(chooseType->currentItem()==1 || chooseType->currentItem()==2
                 || chooseType->currentItem()==6)
                         {
-                        edit1->setText(i18n("Minimum : " ));
-                        edit2->setText(i18n("Maximum : " ));
+                        edit1->setText(i18n("Minimum: " ));
+                        edit2->setText(i18n("Maximum: " ));
                         }
                 else if(chooseType->currentItem()==3)
                         {

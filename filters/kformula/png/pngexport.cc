@@ -56,7 +56,7 @@ KoFilter::ConversionStatus PNGExport::convert( const QCString& from, const QCStr
     KoStore* in = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
     if(!in || !in->open("root")) {
         kapp->restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Failed to read data." ), i18n( "PNG export error" ) );
+        KMessageBox::error( 0, i18n( "Failed to read data." ), i18n( "PNG Export Error" ) );
         delete in;
         return KoFilter::FileNotFound;
     }
@@ -65,7 +65,7 @@ KoFilter::ConversionStatus PNGExport::convert( const QCString& from, const QCStr
     QDomDocument dom( "KFORMULA" );
     if ( !dom.setContent( &device, false ) ) {
         kapp->restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "PNG export error" ) );
+        KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "PNG Export Error" ) );
         delete in;
         return KoFilter::WrongFormat;
     }

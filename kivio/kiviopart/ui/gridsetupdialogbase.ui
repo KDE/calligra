@@ -150,7 +150,7 @@
                     </property>
                     <property stdset="1">
                         <name>title</name>
-                        <string>Snap distance</string>
+                        <string>Snap Distance</string>
                     </property>
                     <grid>
                         <property stdset="1">

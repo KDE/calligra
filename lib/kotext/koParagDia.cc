@@ -407,7 +407,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     if(frameWidth==-1) {
         frameWidth=9999;
     } else {
-        length=i18n("Frame width : %1").arg(KoUnit::userValue(frameWidth,m_unit));
+        length=i18n("Frame width: %1").arg(KoUnit::userValue(frameWidth,m_unit));
         frameWidth=KoUnit::ptToUnit(frameWidth,m_unit);
     }
 
@@ -473,9 +473,9 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
 
     cKeepLinesTogether = new QCheckBox( i18n("Keep lines together"),endFramePage);
     endFramePageGrid->addWidget( cKeepLinesTogether, 1, 0 );
-    cHardBreakBefore = new QCheckBox( i18n("Insert Break Before Paragraph"),endFramePage);
+    cHardBreakBefore = new QCheckBox( i18n("Insert break before paragraph"),endFramePage);
     endFramePageGrid->addWidget( cHardBreakBefore, 2, 0 );
-    cHardBreakAfter = new QCheckBox( i18n("Insert Break After Paragraph"),endFramePage);
+    cHardBreakAfter = new QCheckBox( i18n("Insert break after paragraph"),endFramePage);
     endFramePageGrid->addWidget( cHardBreakAfter, 3, 0 );
 
     endFramePageGrid->addRowSpacing( 0, 12 ); // groupbox title
@@ -1412,7 +1412,7 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
         m_toplimit=9999;
     } else {
         m_toplimit=frameWidth;
-        length=i18n("\nFrame width : %1").arg(KoUnit::userValue(frameWidth,m_unit));
+        length=i18n("\nFrame width: %1").arg(KoUnit::userValue(frameWidth,m_unit));
         frameWidth=KoUnit::ptToUnit(frameWidth,m_unit);
     }
     QVBoxLayout* Form1Layout = new QVBoxLayout( this );
@@ -1501,7 +1501,7 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     editLayout->addWidget( bgAlign );
 
     gTabLeader = new QGroupBox( this);
-    gTabLeader->setTitle( i18n( "Tab leader" ) );
+    gTabLeader->setTitle( i18n( "Tab Leader" ) );
     gTabLeader->setColumnLayout(0, Qt::Vertical );
     gTabLeader->layout()->setSpacing( 0 );
     gTabLeader->layout()->setMargin( 0 );

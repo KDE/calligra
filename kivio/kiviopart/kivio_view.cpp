@@ -404,7 +404,7 @@ void KivioView::setupActions()
   m_insertPage = new KAction( i18n("Insert Page"),"item_add", 0, this, SLOT(insertPage()), actionCollection(), "insertPage" );
   m_removePage = new KAction( i18n("Remove Page"), "item_remove",0,this, SLOT(removePage()), actionCollection(), "removePage" );
 
-  m_renamePage = new KAction( i18n("Rename page..."), "item_rename",0,this, SLOT(renamePage()), actionCollection(), "renamePage" );
+  m_renamePage = new KAction( i18n("Rename Page..."), "item_rename",0,this, SLOT(renamePage()), actionCollection(), "renamePage" );
 
   m_showPage = new KAction( i18n("Show Page..."),0 ,this,SLOT(showPage()), actionCollection(), "showPage" );
   m_hidePage = new KAction( i18n("Hide Page"),0 ,this,SLOT(hidePage()), actionCollection(), "hidePage" );

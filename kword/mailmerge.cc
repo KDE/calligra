@@ -228,7 +228,7 @@ bool KWMailMergeDataBase::askUserForConfirmationAndConfig(KWMailMergeDataSource 
 			if (plugin)
 			{
 				if (KMessageBox::warningContinueCancel(par,
-					i18n("Do you really want to replace the current datasource ?"),
+					i18n("Do you really want to replace the current datasource?"),
 					QString::null,QString::null,QString::null,true)== KMessageBox::Cancel)
 				{
 					delete tmpPlugin;

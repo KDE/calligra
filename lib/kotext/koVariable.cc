@@ -962,7 +962,7 @@ QString KoMailMergeVariable::text()
 
 QStringList KoMailMergeVariable::actionTexts()
 {
-    return QStringList( i18n( "&Mail Merge ..." ) );
+    return QStringList( i18n( "&Mail Merge..." ) );
 }
 
 /******************************************************************/

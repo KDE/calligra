@@ -56,7 +56,7 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
     KoStore* in = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
     if(!in || !in->open("root")) {
         QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Failed to read data." ), i18n( "LaTeX export error" ) );
+        KMessageBox::error( 0, i18n( "Failed to read data." ), i18n( "LaTeX Export Error" ) );
         delete in;
         return KoFilter::FileNotFound;
     }
@@ -65,7 +65,7 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
     QDomDocument dom( "KFORMULA" );
     if ( !dom.setContent( &device, false ) ) {
         QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "LaTeX export error" ) );
+        KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "LaTeX Export Error" ) );
         delete in;
         return KoFilter::WrongFormat;
     }
@@ -73,7 +73,7 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
     QFile f( m_chain->outputFile() );
     if( !f.open( IO_Truncate | IO_ReadWrite ) ) {
         QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Failed to write file." ), i18n( "LaTeX export error" ) );
+        KMessageBox::error( 0, i18n( "Failed to write file." ), i18n( "LaTeX Export Error" ) );
         delete in;
         return KoFilter::FileNotFound;
     }

@@ -3112,7 +3112,7 @@ void KPresenterView::setupActions()
                                           actionCollection(), "enable_autocorrection" );
 
 
-    KAction* actComplete = new KAction( i18n( "completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion),
+    KAction* actComplete = new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion),
                                             this, SLOT( slotCompletion() ), actionCollection(), "completion" );
 
     // Necessary for the actions that are not plugged anywhere

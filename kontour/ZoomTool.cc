@@ -38,8 +38,8 @@ ZoomTool::ZoomTool(QString aId, ToolController *tc):
 Tool(aId, tc)
 {
   ToolSelectAction* zoom = new ToolSelectAction(actionCollection(), "ToolAction");
-  KRadioAction *mT1 = new KRadioAction(i18n("Zoom in"), "viewmag+", 0, actionCollection());
-  KRadioAction *mT2 = new KRadioAction(i18n("Zoom out"), "viewmag-", 0, actionCollection());
+  KRadioAction *mT1 = new KRadioAction(i18n("Zoom In"), "viewmag+", 0, actionCollection());
+  KRadioAction *mT2 = new KRadioAction(i18n("Zoom Out"), "viewmag-", 0, actionCollection());
   mT1->setExclusiveGroup("ZoomTool");
   mT2->setExclusiveGroup("ZoomTool");
   zoom->insert(mT1);

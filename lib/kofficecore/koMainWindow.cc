@@ -578,7 +578,7 @@ bool KoMainWindow::saveDocument( bool saveas )
             if ( KIO::NetAccess::exists( newURL ) ) { // this file exists => ask for confirmation
                 bOk = KMessageBox::questionYesNo( this,
                                                   i18n("A document with this name already exists.\n"\
-                                                       "Do you want to overwrite it ?"),
+                                                       "Do you want to overwrite it?"),
                                                   i18n("Warning") ) == KMessageBox::Yes;
             }
         } while ( !bOk );

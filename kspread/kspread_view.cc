@@ -736,11 +736,11 @@ void KSpreadView::initializeTextFormatActions()
            SLOT( moneyFormat( bool ) ) );
 
   /*******************************/
-  m_upper = new KAction( i18n("Upper case"), "upper", 0, this,
+  m_upper = new KAction( i18n("Upper Case"), "upper", 0, this,
                          SLOT( upper() ), actionCollection(), "upper" );
 
   /*******************************/
-  m_lower = new KAction( i18n("Lower case"), "lower", 0, this,
+  m_lower = new KAction( i18n("Lower Case"), "lower", 0, this,
                          SLOT( lower() ), actionCollection(), "lower" );
 
   /*******************************/
@@ -753,49 +753,49 @@ void KSpreadView::initializeTextFormatActions()
 void KSpreadView::initializeTextLayoutActions()
 {
   /*******************************/
-  m_alignLeft = new KToggleAction( i18n("Align left"), "text_left", 0,
+  m_alignLeft = new KToggleAction( i18n("Align Left"), "text_left", 0,
                                    actionCollection(), "left");
   connect( m_alignLeft, SIGNAL( toggled( bool ) ), this,
            SLOT( alignLeft( bool ) ) );
   m_alignLeft->setExclusiveGroup( "Align" );
 
   /*******************************/
-  m_alignCenter = new KToggleAction( i18n("Align center"), "text_center", 0,
+  m_alignCenter = new KToggleAction( i18n("Align Center"), "text_center", 0,
                                      actionCollection(), "center");
   connect( m_alignCenter, SIGNAL( toggled( bool ) ), this,
            SLOT( alignCenter( bool ) ) );
   m_alignCenter->setExclusiveGroup( "Align" );
 
   /*******************************/
-  m_alignRight = new KToggleAction( i18n("Align right"), "text_right", 0,
+  m_alignRight = new KToggleAction( i18n("Align Right"), "text_right", 0,
                                     actionCollection(), "right");
   connect( m_alignRight, SIGNAL( toggled( bool ) ), this,
            SLOT( alignRight( bool ) ) );
   m_alignRight->setExclusiveGroup( "Align" );
 
   /*******************************/
-  m_alignTop = new KToggleAction( i18n("Align top"), "text_top", 0,
+  m_alignTop = new KToggleAction( i18n("Align Top"), "text_top", 0,
                                   actionCollection(), "top");
   connect( m_alignTop, SIGNAL( toggled( bool ) ), this,
            SLOT( alignTop( bool ) ) );
   m_alignTop->setExclusiveGroup( "Pos" );
 
   /*******************************/
-  m_alignMiddle = new KToggleAction( i18n("Align middle"), "middle", 0,
+  m_alignMiddle = new KToggleAction( i18n("Align Middle"), "middle", 0,
                                      actionCollection(), "middle");
   connect( m_alignMiddle, SIGNAL( toggled( bool ) ), this,
            SLOT( alignMiddle( bool ) ) );
   m_alignMiddle->setExclusiveGroup( "Pos" );
 
   /*******************************/
-  m_alignBottom = new KToggleAction( i18n("Align bottom"), "text_bottom", 0,
+  m_alignBottom = new KToggleAction( i18n("Align Bottom"), "text_bottom", 0,
                                      actionCollection(), "bottom");
   connect( m_alignBottom, SIGNAL( toggled( bool ) ), this,
            SLOT( alignBottom( bool ) ) );
   m_alignBottom->setExclusiveGroup( "Pos" );
 
   /*******************************/
-  m_verticalText = new KToggleAction( i18n("Vertical text"),"vertical_text" ,
+  m_verticalText = new KToggleAction( i18n("Vertical Text"),"vertical_text" ,
                                       0 ,actionCollection(), "verticaltext" );
   connect( m_verticalText, SIGNAL( toggled( bool ) ), this,
            SLOT( verticalText( bool ) ) );
@@ -826,7 +826,7 @@ void KSpreadView::initializeTextPropertyActions()
            SLOT( underline( bool ) ) );
 
   /*******************************/
-  m_strikeOut = new KToggleAction( i18n("Strike out"), "text_strike", 0,
+  m_strikeOut = new KToggleAction( i18n("Strike Out"), "text_strike", 0,
                                    actionCollection(), "strikeout");
   connect( m_strikeOut, SIGNAL( toggled( bool ) ), this,
            SLOT( strikeOut( bool ) ) );
@@ -844,17 +844,17 @@ void KSpreadView::initializeTextPropertyActions()
            SLOT( fontSizeSelected( int ) ) );
 
   /*******************************/
-  m_fontSizeUp = new KAction( i18n("Increase font size"), "fontsizeup", 0, this,
+  m_fontSizeUp = new KAction( i18n("Increase Font Size"), "fontsizeup", 0, this,
                               SLOT( increaseFontSize() ), actionCollection(),
                               "increaseFontSize" );
 
   /*******************************/
-  m_fontSizeDown = new KAction( i18n("Decrease font size"), "fontsizedown", 0,
+  m_fontSizeDown = new KAction( i18n("Decrease Font Size"), "fontsizedown", 0,
                                 this, SLOT( decreaseFontSize() ),
                                 actionCollection(), "decreaseFontSize" );
 
   /*******************************/
-  m_textColor = new TKSelectColorAction( i18n("Text color"),
+  m_textColor = new TKSelectColorAction( i18n("Text Color"),
                                          TKSelectColorAction::TextColor,
                                          actionCollection(), "textColor",true );
   connect( m_textColor, SIGNAL(activated()), SLOT(changeTextColor()) );
@@ -873,23 +873,23 @@ void KSpreadView::initializeTableActions()
                                SLOT( removeTable() ), actionCollection(),
                                "removeTable" );
 
-  m_renameTable=new KAction( i18n("Rename table..."),0,this,
+  m_renameTable=new KAction( i18n("Rename Rable..."),0,this,
                              SLOT( slotRename() ), actionCollection(),
                              "renameTable" );
 
-  m_nextTable = new KAction( i18n("Next table"), CTRL + Key_PageDown, this,
+  m_nextTable = new KAction( i18n("Next Table"), CTRL + Key_PageDown, this,
                              SLOT( nextTable() ), actionCollection(),
                              "nextTable");
 
-  m_prevTable = new KAction( i18n("Previous table"), CTRL + Key_PageUp, this,
+  m_prevTable = new KAction( i18n("Previous Table"), CTRL + Key_PageUp, this,
                              SLOT( previousTable() ), actionCollection(),
                              "previousTable");
 
-  m_firstTable = new KAction( i18n("First table"), 0, this,
+  m_firstTable = new KAction( i18n("First Table"), 0, this,
                               SLOT( firstTable() ), actionCollection(),
                               "firstTable");
 
-  m_lastTable = new KAction( i18n("Last table"), 0, this,
+  m_lastTable = new KAction( i18n("Last Table"), 0, this,
                              SLOT( lastTable() ), actionCollection(),
                              "lastTable");
 
@@ -3170,7 +3170,7 @@ void KSpreadView::popupChildMenu( KoChild* child, const QPoint& global_pos )
 
     m_popupChild = new QPopupMenu( this );
 
-    m_popupChild->insertItem( i18n("Delete embedded document"), this, SLOT( slotPopupDeleteChild() ) );
+    m_popupChild->insertItem( i18n("Delete Embedded Document"), this, SLOT( slotPopupDeleteChild() ) );
 
     m_popupChild->popup( global_pos );
 }
@@ -3179,7 +3179,7 @@ void KSpreadView::slotPopupDeleteChild()
 {
     if ( !m_popupChildObject || !m_popupChildObject->table() )
 	return;
-    int ret = KMessageBox::warningYesNo(this,i18n("You are going to remove this embedded document.\nDo you want to continue?"),i18n("Delete embedded document"));
+    int ret = KMessageBox::warningYesNo(this,i18n("You are going to remove this embedded document.\nDo you want to continue?"),i18n("Delete Embedded Document"));
     if ( ret == KMessageBox::Yes )
         {
             m_popupChildObject->table()->deleteChild( m_popupChildObject );
@@ -3458,7 +3458,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     if(activeTable()->testListChoose(QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow())))
       {
 	m_pPopupMenu->insertSeparator();
-	m_pPopupMenu->insertItem( i18n("Selection list..."), this, SLOT( slotListChoosePopupMenu() ) );
+	m_pPopupMenu->insertItem( i18n("Selection List..."), this, SLOT( slotListChoosePopupMenu() ) );
       }
 
     // Remove informations about the last tools we offered
@@ -3880,11 +3880,11 @@ void KSpreadView::removeTable()
    if ( doc()->map()->count() <= 1||(m_pTabBar->listshow().count()<=1) )
     {
         KNotifyClient::beep();
-        KMessageBox::sorry( this, i18n("You cannot delete the only table of the map."), i18n("Remove table") ); // FIXME bad english? no english!
+        KMessageBox::sorry( this, i18n("You cannot delete the only table of the map."), i18n("Remove Table") ); // FIXME bad english? no english!
         return;
     }
     KNotifyClient::beep();
-    int ret = KMessageBox::warningYesNo(this,i18n("You are going to remove the active table.\nDo you want to continue?"),i18n("Remove table"));
+    int ret = KMessageBox::warningYesNo(this,i18n("You are going to remove the active table.\nDo you want to continue?"),i18n("Remove Table"));
 
     if ( ret == KMessageBox::Yes )
     {

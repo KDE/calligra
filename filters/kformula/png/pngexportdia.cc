@@ -259,7 +259,7 @@ void PNGExportDia::slotOk()
     }
     QImage image = formula->drawImage( width, height );
     if ( !image.save( _fileOut, "PNG" ) ) {
-        KMessageBox::error( 0, i18n( "Failed to write file." ), i18n( "PNG export error" ) );
+        KMessageBox::error( 0, i18n( "Failed to write file." ), i18n( "PNG Export Error" ) );
     }
     reject();
 }

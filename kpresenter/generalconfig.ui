@@ -45,7 +45,7 @@
             </rect>
         </property>
         <property name="text">
-            <string>&amp;Sticky Object</string>
+            <string>&amp;Sticky object</string>
         </property>
     </widget>
 </widget>

@@ -166,7 +166,7 @@
                 <cstring>GroupBox6</cstring>
             </property>
             <property name="title">
-                <string>Query result:</string>
+                <string>Query Result:</string>
             </property>
             <hbox>
                 <property name="name">

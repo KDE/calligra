@@ -142,7 +142,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QCString
     if ( !m_graph.isValid() ) {
         kdError(s_area) << "Couldn't create a valid graph for this source mimetype." << endl;
         QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0L, i18n("Could not export file"), i18n("Missing export filter") );
+        KMessageBox::error( 0L, i18n("Could not export file"), i18n("Missing Export Filter") );
         return KoFilter::BadConversionGraph;
     }
 
@@ -151,7 +151,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QCString
     if ( !chain ) {
         kdError(s_area) << "Couldn't create a valid filter chain!" << endl;
         QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0L, i18n("Could not export file"), i18n("Missing export filter") );
+        KMessageBox::error( 0L, i18n("Could not export file"), i18n("Missing Export Filter") );
         return KoFilter::BadConversionGraph;
     }
 
@@ -373,7 +373,7 @@ void KoFilterManager::importErrorHelper( const QString& mimeType )
     QString tmp = i18n("Could not import file of type\n%1").arg( mimeType );
     QApplication::restoreOverrideCursor();
     // ###### FIXME: use KLibLoader::lastErrorMessage() here
-    KMessageBox::error( 0L, tmp, i18n("Missing import filter") );
+    KMessageBox::error( 0L, tmp, i18n("Missing Import Filter") );
 }
 
 #include <koFilterManager.moc>

@@ -315,7 +315,7 @@ void KoAutoFormatDia::setupTab2()
     grid->setAutoAdd( true );
 
     cbTypographicDoubleQuotes = new QCheckBox( tab2 );
-    cbTypographicDoubleQuotes->setText( i18n( "Replace Double &Quotes with Typographical Quotes:" ) );
+    cbTypographicDoubleQuotes->setText( i18n( "Replace double &quotes with typographical quotes:" ) );
     cbTypographicDoubleQuotes->resize( cbTypographicDoubleQuotes->sizeHint() );
 
 
@@ -352,7 +352,7 @@ void KoAutoFormatDia::setupTab2()
 
 
     cbTypographicSimpleQuotes = new QCheckBox( tab2 );
-    cbTypographicSimpleQuotes->setText( i18n( "Replace Simple &Quotes with Typographical Quotes:" ) );
+    cbTypographicSimpleQuotes->setText( i18n( "Replace simple &quotes with typographical quotes:" ) );
     cbTypographicSimpleQuotes->resize( cbTypographicSimpleQuotes->sizeHint() );
 
 
@@ -827,7 +827,7 @@ void KoCompletionDia::setup()
     m_maxNbWordCompletion->resize( m_maxNbWordCompletion->sizeHint() );
 
     cbAppendSpace = new QCheckBox( page );
-    cbAppendSpace->setText( i18n( "Append Space" ) );
+    cbAppendSpace->setText( i18n( "Append space" ) );
     cbAppendSpace->resize( cbAppendSpace->sizeHint() );
 
     m_listCompletion = m_docAutoFormat->listCompletion();

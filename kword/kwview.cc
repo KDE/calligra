@@ -352,7 +352,7 @@ void KWView::setupActions()
     actionExtraSpellCheck = KStdAction::spelling( this, SLOT( extraSpelling() ), actionCollection(), "extra_spellcheck" );
 
 
-    (void) new KAction( i18n( "Configure Mai&l Merge ..." ), "configure",0,
+    (void) new KAction( i18n( "Configure Mai&l Merge..." ), "configure",0,
                         this, SLOT( editMailMergeDataBase() ),
                         actionCollection(), "edit_sldatabase" );
 
@@ -360,7 +360,7 @@ void KWView::setupActions()
     (void) new  KWMailMergeLabelAction::KWMailMergeLabelAction( i18n("Drag Mail Merge Variable"), 0,
                     this, SLOT(editMailMergeDataBase()), actionCollection(), "mailmerge_draglabel" );
 
-//    (void) new KWMailMergeComboAction::KWMailMergeComboAction(i18n("Insert mailmerge var"),0,this,SLOT(JWJWJW()),actionCollection(),"mailmerge_varchooser");
+//    (void) new KWMailMergeComboAction::KWMailMergeComboAction(i18n("Insert Mailmerge Var"),0,this,SLOT(JWJWJW()),actionCollection(),"mailmerge_varchooser");
 
     // -------------- Frame menu
     actionEditDelFrame = new KAction( i18n( "&Delete Frame" ), 0,
@@ -793,7 +793,7 @@ void KWView::setupActions()
                                          this, SLOT( tableSplitCells() ),
                                          actionCollection(), "table_splitcells" );
     actionTableSplitCells->setToolTip( i18n( "Split one cell into two or more cells." ) );
-    actionTableSplitCells->setWhatsThis( i18n( "Split one cell into two or more cells.<p>Cells can be split horizontally, vertically or both directions at once. ." ) );
+    actionTableSplitCells->setWhatsThis( i18n( "Split one cell into two or more cells.<p>Cells can be split horizontally, vertically or both directions at once." ) );
 
     actionTableUngroup = new KAction( i18n( "&Ungroup Table" ), 0,
                                       this, SLOT( tableUngroupTable() ),
@@ -837,21 +837,21 @@ void KWView::setupActions()
     actionConfigure = KStdAction::preferences(this, SLOT(configure()), actionCollection(), "configure" );
 
     //------------------------ Menu frameSet
-    actionChangePicture=new KAction( i18n( "Change picture..." ),"frame_image",0,
+    actionChangePicture=new KAction( i18n( "Change Picture..." ),"frame_image",0,
                                      this, SLOT( changePicture() ),
                                      actionCollection(), "change_picture" );
 
-    actionChangeClipart=new KAction( i18n( "Change clipart..." ), "frame_image",0,
+    actionChangeClipart=new KAction( i18n( "Change Clipart..." ), "frame_image",0,
                                      this, SLOT( changeClipart() ),
                                      actionCollection(), "change_clipart" );
-    actionConfigureHeaderFooter=new KAction( i18n( "Configure header/footer..." ), 0,
+    actionConfigureHeaderFooter=new KAction( i18n( "Configure Header/Footer..." ), 0,
                                      this, SLOT( configureHeaderFooter() ),
                                      actionCollection(), "configure_headerfooter" );
 
     actionInlineFrame = new KToggleAction( i18n( "Inline Frame" ), 0,
                                             this, SLOT( inlineFrame() ),
                                             actionCollection(), "inline_frame" );
-    actionOpenLink = new KAction( i18n( "Open link" ), 0,
+    actionOpenLink = new KAction( i18n( "Open Link" ), 0,
                                      this, SLOT( openLink() ),
                                      actionCollection(), "open_link" );
     actionChangeLink=new KAction( i18n("Change Link"), 0,
@@ -871,11 +871,11 @@ void KWView::setupActions()
 
 
     // ------------------- Actions with a key binding and no GUI item
-    KAction* actNbsp = new KAction( i18n( "Insert non-breaking space" ), CTRL+Key_Space,
+    KAction* actNbsp = new KAction( i18n( "Insert non-breaking Space" ), CTRL+Key_Space,
                         this, SLOT( slotNonbreakingSpace() ), actionCollection(), "nonbreaking_space" );
-    KAction* actSoftHyphen = new KAction( i18n( "Insert soft hyphen" ), CTRL+Key_Minus,
+    KAction* actSoftHyphen = new KAction( i18n( "Insert Soft Hyphen" ), CTRL+Key_Minus,
                         this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
-    KAction* actLineBreak = new KAction( i18n( "Line break" ), SHIFT+Key_Return,
+    KAction* actLineBreak = new KAction( i18n( "Line Break" ), SHIFT+Key_Return,
                         this, SLOT( slotLineBreak() ), actionCollection(), "line_break" );
 
     KAction* actComplete = new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion),this, SLOT( slotCompletion() ), actionCollection(), "completition" );
@@ -1774,7 +1774,7 @@ void KWView::doFindReplace()
     while(!aborted )
     {
         int ret=KMessageBox::questionYesNo(this,
-                                           i18n("Do you want to restart search at the beginning ?"));
+                                           i18n("Do you want to restart search at the beginning?"));
         if( ret != KMessageBox::Yes )
             break;
         m_findReplace->changeListObject( m_gui->canvasWidget()->kWordDocument()->frameTextObject() );

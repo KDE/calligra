@@ -93,25 +93,25 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     m_chartpolar->setExclusiveGroup( "charttypes" );
 
 
-    m_colorConfig = new KAction( i18n( "&Configure colors" ), 0,
+    m_colorConfig = new KAction( i18n( "&Configure Colors" ), 0,
                             this, SLOT( slotConfigColor() ),
                             actionCollection(), "color_config" );
 
-    m_fontConfig = new KAction( i18n( "&Configure font" ), 0,
+    m_fontConfig = new KAction( i18n( "&Configure Font" ), 0,
                             this, SLOT( slotConfigFont() ),
                             actionCollection(), "font_config" );
 
-    m_backConfig = new KAction( i18n( "&Configure background" ), 0,
+    m_backConfig = new KAction( i18n( "&Configure Background" ), 0,
                             this, SLOT( slotConfigBack() ),
                             actionCollection(), "back_config" );
 
-    m_legendConfig = new KAction( i18n( "&Configure legend" ), 0,
+    m_legendConfig = new KAction( i18n( "&Configure Legend" ), 0,
                             this, SLOT( slotConfigLegend() ),
                             actionCollection(), "legend_config" );
-    m_subTypeChartConfig= new KAction( i18n( "&Configure sub type chart" ), 0,
+    m_subTypeChartConfig= new KAction( i18n( "&Configure Sub Type Chart" ), 0,
                             this, SLOT( slotConfigSubTypeChart() ),
                             actionCollection(), "legend_subtype" );
-    m_headerFooterConfig= new KAction( i18n( "&Configure header footer" ), 0,
+    m_headerFooterConfig= new KAction( i18n( "&Configure Header Footer" ), 0,
                             this, SLOT( slotConfigHeaderFooterChart() ),
                             actionCollection(), "headerfooter_subtype" );
 

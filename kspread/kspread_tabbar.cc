@@ -361,7 +361,7 @@ void KSpreadTabBar::slotRename()
         if ( (newName.stripWhiteSpace()).isEmpty() ) // Table name is empty.
         {
             KNotifyClient::beep();
-            KMessageBox::information( this, i18n("Table name cannot be empty."), i18n("Change table name") );
+            KMessageBox::information( this, i18n("Table name cannot be empty."), i18n("Change Table Name") );
             // Recursion
             slotRename();
         }
@@ -371,7 +371,7 @@ void KSpreadTabBar::slotRename()
             if ( !table->setTableName( newName ) )
             {
                 KNotifyClient::beep();
-                KMessageBox::information( this, i18n("This name is already used."), i18n("Change table name") );
+                KMessageBox::information( this, i18n("This name is already used."), i18n("Change Table Name") );
                 // Recursion
                 slotRename();
              }

@@ -36,7 +36,7 @@ KoCommentDia::KoCommentDia( QWidget *parent, const QString &_note, const QString
     m_multiLine = new QMultiLineEdit( page );
     m_multiLine->setText( _note );
     m_multiLine->setFocus();
-    pbAddAuthorName = new QPushButton(i18n("Add author name"),page);
+    pbAddAuthorName = new QPushButton(i18n("Add Author Name"),page);
     connect (pbAddAuthorName, SIGNAL(clicked ()), this , SLOT(slotAddAuthorName()));
     resize( 300,100 );
 }

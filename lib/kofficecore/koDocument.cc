@@ -825,7 +825,7 @@ bool KoDocument::openURL( const KURL & _url )
             kdDebug() << "KoDocument::openURL asf=" << asf << endl;
             // ## TODO compare timestamps ?
             int res = KMessageBox::warningYesNoCancel( 0,
-                                                       i18n( "An autosaved file exists for this document.\nDo you want to open it instead ?" ));
+                                                       i18n( "An autosaved file exists for this document.\nDo you want to open it instead?" ));
             switch(res) {
                 case KMessageBox::Yes :
                     url.setPath( asf );

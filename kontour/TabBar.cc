@@ -115,10 +115,10 @@ void TabBar::slotRemove( )
 /*  if(doc->getPages().count() <= 1)
   {
     QApplication::beep();
-    KMessageBox::error( this,i18n("You cannot delete the only page of the map."), i18n("Remove page") );
+    KMessageBox::error( this,i18n("You cannot delete the only page of the map."), i18n("Remove Page") );
     return;
   }
-  int ret = KMessageBox::warningYesNo( this, i18n("You are going to remove the active page.\nDo you want to continue?"), i18n("Remove page"));
+  int ret = KMessageBox::warningYesNo( this, i18n("You are going to remove the active page.\nDo you want to continue?"), i18n("Remove Page"));
   if( ret == 3 )
   {
     doc->deletePage(doc->pageForIndex(activeTab - 1));
@@ -264,7 +264,7 @@ void TabBar::slotRename()
         if ( (newName.stripWhiteSpace()).isEmpty() ) // Page name is empty.
         {
             KNotifyClient::beep();
-            KMessageBox::information( this, i18n("Page name cannot be empty."), i18n("Change page name") );
+            KMessageBox::information( this, i18n("Page name cannot be empty."), i18n("Change Page Name") );
             // Recursion
             slotRename();
         }
@@ -274,7 +274,7 @@ void TabBar::slotRename()
              if ( !page->setTableName( newName ) )
              {
                 KNotifyClient::beep();
-                KMessageBox::information( this, i18n("This name is already used."), i18n("Change page name") );
+                KMessageBox::information( this, i18n("This name is already used."), i18n("Change Page Name") );
                  // Recursion
                  slotRename();
              }*/

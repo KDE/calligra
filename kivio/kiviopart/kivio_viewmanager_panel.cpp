@@ -138,11 +138,11 @@ KivioViewManagerPanel::KivioViewManagerPanel(KivioView* view, QWidget* parent, c
   KToolBar* bar = new KToolBar(this);
   bar->setFullSize(true);
 
-  actNew = new KAction( i18n("Add current view"), BarIcon("item_add",KivioFactory::global()), 0, this, SLOT(addItem()), this);
-  actDel = new KAction( i18n("Remove item"), BarIcon("item_remove",KivioFactory::global()), 0, this, SLOT(removeItem()), this);
-  actRename = new KAction( i18n("Rename item"),BarIcon("item_rename",KivioFactory::global()), 0, this, SLOT(renameItem()), this);
-  actUp = new KAction( i18n("Move item Up"), "up", 0, this, SLOT(upItem()), this);
-  actDown = new KAction( i18n("Move item Down"), "down", 0, this, SLOT(downItem()), this);
+  actNew = new KAction( i18n("Add Current View"), BarIcon("item_add",KivioFactory::global()), 0, this, SLOT(addItem()), this);
+  actDel = new KAction( i18n("Remove Item"), BarIcon("item_remove",KivioFactory::global()), 0, this, SLOT(removeItem()), this);
+  actRename = new KAction( i18n("Rename Item"),BarIcon("item_rename",KivioFactory::global()), 0, this, SLOT(renameItem()), this);
+  actUp = new KAction( i18n("Move Item Up"), "up", 0, this, SLOT(upItem()), this);
+  actDown = new KAction( i18n("Move Item Down"), "down", 0, this, SLOT(downItem()), this);
 
   actNew->plug(bar);
   actDel->plug(bar);

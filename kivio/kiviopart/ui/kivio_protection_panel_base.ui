@@ -50,7 +50,7 @@
         </property>
         <property stdset="1">
             <name>text</name>
-            <string>&amp;Aspect Ratio</string>
+            <string>&amp;Aspect ratio</string>
         </property>
         <property>
             <name>toolTip</name>
@@ -74,7 +74,7 @@
         </property>
         <property stdset="1">
             <name>text</name>
-            <string>&amp;X Position</string>
+            <string>&amp;X position</string>
         </property>
         <property>
             <name>toolTip</name>
@@ -98,7 +98,7 @@
         </property>
         <property stdset="1">
             <name>text</name>
-            <string>&amp;Y Position</string>
+            <string>&amp;Y position</string>
         </property>
         <property>
             <name>toolTip</name>
@@ -122,7 +122,7 @@
         </property>
         <property stdset="1">
             <name>text</name>
-            <string>From &amp;Deletion</string>
+            <string>From &amp;deletion</string>
         </property>
         <property>
             <name>toolTip</name>
