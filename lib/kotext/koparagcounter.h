@@ -60,13 +60,13 @@ public:
         NUM_LIST = 0,       // Numbered as a list item.
         NUM_CHAPTER = 1     // Numbered as a heading.
     };
-    enum Style
+    enum Style // always add to the end, the numeric values are part of the DTD
     {
         STYLE_NONE = 0,
         STYLE_NUM = 1, STYLE_ALPHAB_L = 2, STYLE_ALPHAB_U = 3,
         STYLE_ROM_NUM_L = 4, STYLE_ROM_NUM_U = 5, STYLE_CUSTOMBULLET = 6,
         STYLE_CUSTOM = 7, STYLE_CIRCLEBULLET = 8, STYLE_SQUAREBULLET = 9,
-        STYLE_DISCBULLET = 10
+        STYLE_DISCBULLET = 10, STYLE_BOXBULLET = 11
     };
 
     /** Numbering type and style. */

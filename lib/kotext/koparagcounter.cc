@@ -88,6 +88,7 @@ bool KoParagCounter::isBullet() const
     {
     case STYLE_DISCBULLET:
     case STYLE_SQUAREBULLET:
+    case STYLE_BOXBULLET:
     case STYLE_CIRCLEBULLET:
     case STYLE_CUSTOMBULLET:
         return true;
@@ -358,10 +359,13 @@ int KoParagCounter::startNumber() const
 
 KoParagCounter::Style KoParagCounter::style() const
 {
+    // Note: we can't use isBullet() here since it uses style() and not m_style
+    // (to benefit from this adjustment). This would lead to an infinite loop.
     switch ( m_style )
     {
     case STYLE_DISCBULLET:
     case STYLE_SQUAREBULLET:
+    case STYLE_BOXBULLET:
     case STYLE_CIRCLEBULLET:
     case STYLE_CUSTOMBULLET:
         if ( m_numbering == NUM_CHAPTER )
@@ -430,6 +434,7 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
         break;
     case KoParagCounter::STYLE_DISCBULLET:
     case KoParagCounter::STYLE_SQUAREBULLET:
+    case KoParagCounter::STYLE_BOXBULLET:
     case KoParagCounter::STYLE_CIRCLEBULLET:
     case KoParagCounter::STYLE_CUSTOMBULLET:
         // Allow space for bullet!

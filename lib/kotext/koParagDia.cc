@@ -1120,6 +1120,8 @@ KoParagCounterWidget::KoParagCounterWidget( QWidget * parent, const char * name 
             ,  KoParagCounter::STYLE_DISCBULLET , true));
     stylesList.append( new StyleRepresenter(i18n( "Square Bullet" )
             ,  KoParagCounter::STYLE_SQUAREBULLET , true));
+    stylesList.append( new StyleRepresenter(i18n( "Box Bullet" )
+            ,  KoParagCounter::STYLE_BOXBULLET , true));
     stylesList.append( new StyleRepresenter(i18n( "Circle Bullet" )
             ,  KoParagCounter::STYLE_CIRCLEBULLET , true));
     stylesList.append( new StyleRepresenter(i18n( "Custom Bullet" )
