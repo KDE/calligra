@@ -52,6 +52,23 @@ class StyleClusterTester;
  * may have a style that need to be applied first.  Any settings in
  * those styles override the settings here.
  * 
+ * See the StyleClusterQuad class for more implementation details.
+ *
+ * Testing
+ * =======
+ *   If you make any changes to the code, make sure to run the test suite.
+ * To do this, run kspread and make a new empty document.  Then press ctrl+shift+T
+ * and chose "cell style test".  Run that, and check that all the tests pass.
+ *
+ * If you add functionality, make sure to add new tests to the StyleclusterTest class
+ * 
+ * Manager
+ * =======
+ *   To be done - write a manager for this class for easier mass insertion.
+ * 
+ * @see StyleClusterQuad
+ * @see StyleClusterTester
+ * 
  * @author John Tapsell
  * @author Raphael Langerhorst
  */
@@ -85,6 +102,11 @@ class KSPREAD_EXPORT StyleCluster : public QObject
      * should be checked against existing styles (use existing
      * one and delete your created one).
      * Now use your style to insert it into x,y.
+     *
+     * @param x zero-indexed column of the cell to set the style for
+     * @param y zero-indexed row of the cell to set the style for
+     * @param style The style to set it to.  Must be non-null.  To 'remove'
+     *              a style, set the style to the sheet default style or something.
      */
     void setStyle( int x, int y, KSpreadStyle * style);
 
@@ -97,6 +119,12 @@ class KSPREAD_EXPORT StyleCluster : public QObject
     /**
      * If you intend to modify this returned style, create
      * a new one based on the returned style.
+     *
+     * @param x zero-indexed column of the cell to set the style for
+     * @param y zero-indexed row of the cell to set the style for
+     * @return The style that this cell is using.  Note that this may
+     *         not be the ultimate style that the cell is using because
+     *         you have any column style and row style overrides this.
      * @see insert
      */
     const KSpreadStyle& lookup(int x, int y);

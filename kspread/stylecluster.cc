@@ -30,6 +30,32 @@
 
 namespace KSpread {
 
+/**
+ * This class represents one quad in a quad tree.
+ * There will always be at least one instance of this for each StyleCluster
+ * class, referenced in StyleCluster::m_topQuad
+ * 
+ * A quad will either be simple, in which case case all cells that it encloses
+ * are of m_style, or it will be a Quad.
+ * 
+ * If the quad is of type Quad, then each of the 4 StyleClusterQuad pointers
+ * m_topLeft, m_topRight, m_bottomLeft, m_bottomRight will either point to a
+ * new StyleClusterQuad, or it will be null.
+ * 
+ * If one or more of the pointers is null, then that is equivalent to it pointing
+ * to a StyleClusterQuad of type Simple, with the same style.
+ * 
+ * Note that if any of the pointers point to a StyleClusterQuad of type Simple, then
+ * that implies:
+ *   * There is at least one pointer in the parent that is null, since otherwise
+ *     the Simple child StyleClusterQuad could itself be optimised away to null.
+ *   * The style of the Simple child differs from the parent for the same reason.
+ * 
+ * The code should (and does at time of writting) always maintain this, and uses this
+ * useful fact to have an efficent self minimilization algorithm.  Upon insertion, the
+ * quad tree will automatically simplify itself to the minimal structure.
+ * 
+ */
 class StyleClusterQuad
 {
   private:
