@@ -1257,8 +1257,8 @@ void KIllustratorView::slotViewZoom (const QString& s)
     QString zoomStr = QString::number( zoom ) + '%';
     m_viewZoom->setCurrentItem( lst.findIndex(zoomStr)  );
 
-    //if (zoom != canvas->getZoomFactor ())
-    canvas->setZoomFactor (zoom);
+    if (zoom != canvas->getZoomFactor ())
+        canvas->setZoomFactor (zoom);
 }
 
 void KIllustratorView::slotZoomIn()
@@ -1291,8 +1291,11 @@ void KIllustratorView::slotZoomFactorChanged(float factor)
    }
    //current zoom value not found in list
    f+='%';
-   m_viewZoom->changeItem(8,f);
-   m_viewZoom->setCurrentItem(8);
+   list<<f;
+   m_viewZoom->setItems(f);
+   slotViewZoom (f);
+   //m_viewZoom->changeItem(8,f);
+   //m_viewZoom->setCurrentItem(8);
 }
 
 void KIllustratorView::slotAddHelpline(int x, int y, bool d) {
