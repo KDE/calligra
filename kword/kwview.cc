@@ -27,7 +27,7 @@
 #include <qprogressdialog.h>
 
 
-#include "autoformatdia.h"
+#include <koAutoFormatDia.h>
 #include "defs.h"
 #include "deldia.h"
 #include "docstruct.h"
@@ -2339,7 +2339,7 @@ void KWView::extraSpelling()
 void KWView::extraAutoFormat()
 {
     m_doc->getAutoFormat()->readConfig();
-    KWAutoFormatDia dia( this, 0, m_doc->getAutoFormat() );
+    KoAutoFormatDia dia( this, 0, m_doc->getAutoFormat() );
     dia.exec();
 }
 

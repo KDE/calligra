@@ -38,7 +38,7 @@
 #include "kwcanvas.h"
 #include "defs.h"
 #include "kwutils.h"
-#include "autoformat.h"
+#include <koAutoFormat.h>
 #include "variable.h"
 #include "serialletter.h"
 #include "kwview.h"
@@ -159,7 +159,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_lastModeView="ModeNormal";
 
-    m_autoFormat = new KWAutoFormat(this);
+    m_autoFormat = new KoAutoFormat(this);
 
     m_commandHistory = new KWCommandHistory( this );
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );

@@ -17,7 +17,6 @@ libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
                 tabledia.cc insdia.cc deldia.cc docstruct.cc \
                 contents.cc stylist.cc \
                 resizehandles.cc kwcommand.cc \
-		autoformat.cc autoformatdia.cc \
 		variable.cc variabledlgs.cc serialletter.cc \
 		kwchangecasedia.cc kweditpersonnalexpressiondia.cc \
 		splitcellsdia.cc kwinsertpicdia.cc kwunit.cc \

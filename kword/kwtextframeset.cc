@@ -34,7 +34,7 @@
 #include "variable.h"
 #include "variabledlgs.h"
 #include "serialletter.h"
-#include "autoformat.h"
+#include <koAutoFormat.h>
 #include <qclipboard.h>
 #include <qprogressdialog.h>
 #include <qpopupmenu.h>
@@ -606,7 +606,7 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
         // Clean up for better result, destroys the original text but we only want to count
         s = s.stripWhiteSpace();
         QChar lastchar = s.at(s.length());
-        if( ! s.isEmpty() && ! KWAutoFormat::isMark( lastchar ) ) {  // e.g. for headlines
+        if( ! s.isEmpty() && ! KoAutoFormat::isMark( lastchar ) ) {  // e.g. for headlines
             s = s + ".";
         }
         re.setPattern("[.?!]+");         // count "..." as only one "."
@@ -618,7 +618,7 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
         for ( uint i = 0 ; i < s.length() ; ++i )
         {
             QChar ch = s[i];
-            if ( KWAutoFormat::isMark( ch ) )
+            if ( KoAutoFormat::isMark( ch ) )
                 ++sentences;
         }
     }
@@ -2395,9 +2395,9 @@ void KWTextFrameSetEdit::copy()
 
 void KWTextFrameSetEdit::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch )
 {
-    KWAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
+    KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
     if ( autoFormat )
-        autoFormat->doAutoFormat( cursor, parag, index, ch );
+        autoFormat->doAutoFormat( cursor, parag, index, ch, textObject());
 }
 
 void KWTextFrameSetEdit::startDrag()
