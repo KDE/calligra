@@ -176,86 +176,128 @@ void PicturePreview::drawContents( QPainter *painter )
 
 void PicturePreview::slotNormalPicture()
 {
-    mirrorType = PM_NORMAL;
-    repaint();
+    if ( mirrorType != PM_NORMAL )
+    {
+        mirrorType = PM_NORMAL;
+        repaint();
+    }
 }
 
 void PicturePreview::slotHorizontalMirrorPicture()
 {
-    mirrorType = PM_HORIZONTAL;
-    repaint();
+    if ( mirrorType != PM_HORIZONTAL )
+    {
+        mirrorType = PM_HORIZONTAL;
+        repaint();
+    }
 }
 
 void PicturePreview::slotVerticalMirrorPicture()
 {
-    mirrorType = PM_VERTICAL;
-    repaint();
+    if ( mirrorType != PM_VERTICAL )
+    {
+        mirrorType = PM_VERTICAL;
+        repaint();
+    }
 }
 
 void PicturePreview::slotHorizontalAndVerticalMirrorPicture()
 {
-    mirrorType = PM_HORIZONTALANDVERTICAL;
-    repaint();
+    if ( mirrorType != PM_HORIZONTALANDVERTICAL )
+    {
+        mirrorType = PM_HORIZONTALANDVERTICAL;
+        repaint();
+    }
 }
 
 void PicturePreview::slotPictureDepth0()
 {
-    depth = 0;
-    repaint();
+    if ( depth !=0 )
+    {
+        depth = 0;
+        repaint();
+    }
 }
 
 void PicturePreview::slotPictureDepth1()
 {
-    depth = 1;
-    repaint();
+    if ( depth != 1 )
+    {
+        depth = 1;
+        repaint();
+    }
 }
 
 void PicturePreview::slotPictureDepth8()
 {
-    depth = 8;
-    repaint();
+    if ( depth != 8)
+    {
+        depth = 8;
+        repaint();
+    }
 }
 
 void PicturePreview::slotPictureDepth16()
 {
-    depth = 16;
-    repaint();
+    if ( depth != 16 )
+    {
+        depth = 16;
+        repaint();
+    }
 }
 
 void PicturePreview::slotPictureDepth32()
 {
-    depth = 32;
-    repaint();
+    if ( depth !=32 )
+    {
+        depth = 32;
+        repaint();
+    }
 }
 
 void PicturePreview::slotSwapRGBPicture( bool _on )
 {
-    swapRGB = _on;
-    repaint();
+    if ( swapRGB != _on )
+    {
+        swapRGB = _on;
+        repaint();
+    }
 }
 
 void PicturePreview::slotGrayscalPicture( bool _on )
 {
-    grayscal = _on;
-    repaint();
+    if ( grayscal != _on )
+    {
+        grayscal = _on;
+        repaint();
+    }
 }
 
 void PicturePreview::slotBrightValue( int _value )
 {
-    bright = _value;
-    repaint();
+    if ( bright != _value )
+    {
+        bright = _value;
+        repaint();
+    }
 }
 
 void PicturePreview::setDepth( int _depth)
 {
-    depth = _depth;
-    repaint();
+    if ( _depth != depth )
+    {
+        depth = _depth;
+        repaint();
+    }
 }
 
 void PicturePreview::setMirrorType (PictureMirrorType _t)
 {
-    mirrorType = _t;
-    repaint();
+    if ( mirrorType != _t )
+    {
+        mirrorType = _t;
+        repaint();
+    }
 }
 
 /******************************************************************/
