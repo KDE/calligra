@@ -1163,19 +1163,20 @@ void KWView::clipboardDataChanged()
         return;
     }
     QMimeSource *data = QApplication::clipboard()->data();
-    bool providesImage, providesKWord, providesFormula;
-    checkClipboard( data, providesImage, providesKWord, providesFormula );
-    // Is there an image in the clipboard ?
-    if ( providesImage )
+    bool providesImage, providesKWordText, providesKWord, providesFormula;
+    checkClipboard( data, providesImage, providesKWordText, providesKWord, providesFormula );
+    if ( providesImage || providesKWord || providesFormula )
         actionEditPaste->setEnabled( true );
     else
     {
-        // Is there kword XML in the clipboard ?
-        actionEditPaste->setEnabled( edit && ( providesKWord || providesFormula ) );
+        // KWord text requires a framesetedit
+        actionEditPaste->setEnabled( edit && providesKWordText );
     }
 }
 
-void KWView::checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWord, bool &providesFormula )
+// TODO use a bitfield (defined with an enum) instead of all those bools?
+// Just to avoid errors when mixing the order up...
+void KWView::checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWordText, bool &providesKWord, bool &providesFormula )
 {
     // QImageDrag::canDecode( data ) is very very slow in Qt 2 (n*m roundtrips)
     // Workaround....
@@ -1193,8 +1194,9 @@ void KWView::checkClipboard( QMimeSource *data, bool &providesImage, bool &provi
         providesImage = ( formats.findIndex( type ) != -1 );
     }
     providesFormula = formats.findIndex( KFormula::MimeSource::selectionMimeType() ) != -1;
-    providesKWord = formats.findIndex( KWTextDrag::selectionMimeType() ) != -1
-                 || formats.findIndex( KWDrag::selectionMimeType() ) != -1;
+    providesKWordText = formats.findIndex( KWTextDrag::selectionMimeType() ) != -1;
+    providesKWord = formats.findIndex( KWDrag::selectionMimeType() ) != -1;
+    kdDebug() << "KWView::checkClipboard providesFormula=" << providesFormula << " providesKWordText=" << providesKWordText << " providesKWord=" << providesKWord << endl;
 }
 
 /*=========================== file print =======================*/
@@ -1653,6 +1655,7 @@ void KWView::editCut()
 void KWView::editCopy()
 {
     KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
+    kdDebug() << "KWView::editCopy edit=" << edit << endl;
     if ( edit )
         edit->copy();
     else
@@ -1664,33 +1667,33 @@ void KWView::editCopy()
 void KWView::editPaste()
 {
     QMimeSource *data = QApplication::clipboard()->data();
-    if ( data->provides( KWDrag::selectionMimeType() ) )
-        m_gui->canvasWidget()->pasteFrames();
-    else {
-        bool providesImage, providesKWord, providesFormula;
-        checkClipboard( data, providesImage, providesKWord, providesFormula );
-        // formula must be the first as a formula is also available as image
-        if ( providesFormula ) {
-            KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
-            if ( edit && edit->frameSet()->type() == FT_FORMULA ) {
-                edit->paste();
-            }
-            else {
-                insertFormula( data );
-            }
-        }
-        else if ( providesImage )
-        {
+    bool providesImage, providesKWordText, providesKWord, providesFormula;
+    checkClipboard( data, providesImage, providesKWordText, providesKWord, providesFormula );
+    Q_ASSERT( providesImage || providesKWordText || providesKWord || providesFormula );
 
-            KoPoint docPoint( m_doc->ptLeftBorder(), m_doc->ptPageTop( m_currentPage ) + m_doc->ptTopBorder() );
-            m_gui->canvasWidget()->pasteImage( data, docPoint );
+    // formula must be the first as a formula is also available as image
+    if ( providesFormula ) {
+        KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
+        if ( edit && edit->frameSet()->type() == FT_FORMULA ) {
+            edit->paste();
         }
-        else
-        {
-            KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
-            if ( edit )
-                edit->paste();
+        else {
+            insertFormula( data );
         }
+    }
+    else if ( providesImage )
+    {
+
+        KoPoint docPoint( m_doc->ptLeftBorder(), m_doc->ptPageTop( m_currentPage ) + m_doc->ptTopBorder() );
+        m_gui->canvasWidget()->pasteImage( data, docPoint );
+    }
+    else if ( providesKWordText )
+    {
+        KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
+        if ( edit )
+            edit->paste();
+    } else { // providesKWord (e.g. frames)
+        m_gui->canvasWidget()->pasteFrames();
     }
 }
 

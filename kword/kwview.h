@@ -159,7 +159,7 @@ public:
     QPtrList<KAction> &dataToolActionList() { return m_actionList; }
     QPtrList<KAction> &variableActionList() { return m_variableActionList; }
 
-    static void checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWord, bool &providesFormula );
+    static void checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWordText, bool &providesKWord, bool &providesFormula );
 
     void insertInlinePicture();
 

@@ -1894,8 +1894,8 @@ void KWCanvas::insertPart( const KoDocumentEntry &entry )
 
 void KWCanvas::contentsDragEnterEvent( QDragEnterEvent *e )
 {
-    bool providesImage, providesKWord, providesFormula;
-    KWView::checkClipboard( e, providesImage, providesKWord, providesFormula );
+    bool providesImage, providesKWordText, providesKWord, providesFormula;
+    KWView::checkClipboard( e, providesImage, providesKWordText, providesKWord, providesFormula );
     if ( providesImage )
     {
         m_imageDrag = true;
