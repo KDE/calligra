@@ -178,46 +178,39 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         || curFormat->underlineStyle() !=refFormat->underlineStyle()
         || curFormat->wordByWord() != refFormat->wordByWord())
     {
-        if ( curFormat->underlineType()!= KoTextFormat::U_NONE )
-        {
-            elem = doc.createElement( "UNDERLINE" );
-            formatElem.appendChild( elem );
-            if ( curFormat->doubleUnderline() )
-                elem.setAttribute( "value", "double" );
-            else if ( curFormat->underlineType() == KoTextFormat::U_SIMPLE_BOLD)
-                elem.setAttribute( "value", "single-bold" );
-            else if( curFormat->underlineType()==KoTextFormat::U_WAVE)
-                elem.setAttribute( "value", "wave" );
-            else
-                elem.setAttribute( "value", static_cast<int>(curFormat->underline()) );
-            QString strLineType=KoTextFormat::underlineStyleToString( curFormat->underlineStyle() );
-            elem.setAttribute( "styleline", strLineType );
-            if ( curFormat->textUnderlineColor().isValid() )
-                elem.setAttribute( "underlinecolor", curFormat->textUnderlineColor().name() );
+        elem = doc.createElement( "UNDERLINE" );
+        formatElem.appendChild( elem );
+        if ( curFormat->doubleUnderline() )
+            elem.setAttribute( "value", "double" );
+        else if ( curFormat->underlineType() == KoTextFormat::U_SIMPLE_BOLD)
+            elem.setAttribute( "value", "single-bold" );
+        else if( curFormat->underlineType()==KoTextFormat::U_WAVE)
+            elem.setAttribute( "value", "wave" );
+        else
+            elem.setAttribute( "value", static_cast<int>(curFormat->underline()) );
+        QString strLineType=KoTextFormat::underlineStyleToString( curFormat->underlineStyle() );
+        elem.setAttribute( "styleline", strLineType );
+        if ( curFormat->textUnderlineColor().isValid() )
+            elem.setAttribute( "underlinecolor", curFormat->textUnderlineColor().name() );
 
-            elem.setAttribute( "wordbyword" , static_cast<int>(curFormat->wordByWord()));
-        }
+        elem.setAttribute( "wordbyword" , static_cast<int>(curFormat->wordByWord()));
     }
     if( !refFormat
         || curFormat->strikeOutType() != refFormat->strikeOutType()
         || curFormat->strikeOutStyle()!= refFormat->strikeOutStyle()
         || curFormat->wordByWord() != refFormat->wordByWord())
     {
-        if ( curFormat->strikeOutType()!= KoTextFormat::S_NONE )
-        {
-            elem = doc.createElement( "STRIKEOUT" );
-            formatElem.appendChild( elem );
-            if ( curFormat->doubleStrikeOut() )
-                elem.setAttribute( "value", "double" );
-            else if ( curFormat->strikeOutType() == KoTextFormat::S_SIMPLE_BOLD)
-                elem.setAttribute( "value", "single-bold" );
-            else
-                elem.setAttribute( "value", static_cast<int>(curFormat->strikeOut()) );
-            QString strLineType=KoTextFormat::strikeOutStyleToString( curFormat->strikeOutStyle() );
-            elem.setAttribute( "styleline", strLineType );
-            elem.setAttribute( "wordbyword" , static_cast<int>(curFormat->wordByWord()));
-
-        }
+        elem = doc.createElement( "STRIKEOUT" );
+        formatElem.appendChild( elem );
+        if ( curFormat->doubleStrikeOut() )
+            elem.setAttribute( "value", "double" );
+        else if ( curFormat->strikeOutType() == KoTextFormat::S_SIMPLE_BOLD)
+            elem.setAttribute( "value", "single-bold" );
+        else
+            elem.setAttribute( "value", static_cast<int>(curFormat->strikeOut()) );
+        QString strLineType=KoTextFormat::strikeOutStyleToString( curFormat->strikeOutStyle() );
+        elem.setAttribute( "styleline", strLineType );
+        elem.setAttribute( "wordbyword" , static_cast<int>(curFormat->wordByWord()));
     }
     if( !refFormat || (curFormat->vAlign() != refFormat->vAlign())
         || (curFormat->relativeTextSize() != refFormat->relativeTextSize()))
@@ -261,12 +254,9 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
     }
     if( !refFormat || curFormat->offsetFromBaseLine() != refFormat->offsetFromBaseLine())
     {
-        if ( curFormat->offsetFromBaseLine() != 0)
-        {
-            elem = doc.createElement( "OFFSETFROMBASELINE" );
-            formatElem.appendChild( elem );
-            elem.setAttribute( "value", curFormat->offsetFromBaseLine() );
-        }
+        elem = doc.createElement( "OFFSETFROMBASELINE" );
+        formatElem.appendChild( elem );
+        elem.setAttribute( "value", curFormat->offsetFromBaseLine() );
     }
     if( !refFormat || curFormat->attributeFont() != refFormat->attributeFont())
     {
