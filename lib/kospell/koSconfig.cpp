@@ -333,7 +333,7 @@ void KOSpellConfig::sChangeClient (int i)
 
 void KOSpellConfig::sChangeEncoding(int i)
 {
-    kdDebug(750) << "KOSpellConfig::sChangeEncoding(" << i << ")" << endl;
+    kdDebug(30006) << "KOSpellConfig::sChangeEncoding(" << i << ")" << endl;
   setEncoding (i);
   emit configChanged();
 }
@@ -342,7 +342,7 @@ bool KOSpellConfig::interpret (QString &fname, QString &lname,
 			      QString &hname)
 {
 
-  kdDebug(750) << "KOSpellConfig::interpret [" << fname << "]" << endl;
+  kdDebug(30006) << "KOSpellConfig::interpret [" << fname << "]" << endl;
 
   QString dname(fname);
 
@@ -462,7 +462,7 @@ void KOSpellConfig::fillInDialog ()
     if (nodialog)
         return;
 
-    kdDebug(750) << "KOSpellConfig::fillinDialog" << endl;
+    kdDebug(30006) << "KOSpellConfig::fillinDialog" << endl;
 
     cb1->setChecked (noRootAffix());
     cb2->setChecked (runTogether());
@@ -559,13 +559,13 @@ void KOSpellConfig::getAvailDictsIspell () {
   */
   if (!dir.exists() || !dir.isDir()) return;
 
-  kdDebug(750) << "KSpellConfig::getAvailDictsIspell "
+  kdDebug(30006) << "KSpellConfig::getAvailDictsIspell "
 	       << dir.filePath() << " " << dir.dirPath() << endl;
 
   QDir thedir (dir.filePath(),"*.hash");
 
-  kdDebug(750) << "KSpellConfig" << thedir.path() << "\n" << endl;
-  kdDebug(750) << "entryList().count()="
+  kdDebug(30006) << "KSpellConfig" << thedir.path() << "\n" << endl;
+  kdDebug(30006) << "entryList().count()="
 	       << thedir.entryList().count() << endl;
 
   for (unsigned int i=0;i<thedir.entryList().count();i++)
@@ -601,7 +601,7 @@ void KOSpellConfig::getAvailDictsIspell () {
 void KOSpellConfig::setClient (int c)
 {
   iclient = c;
-  //kdDebug()<<" c :"<<c<<endl;
+  //kdDebug(30006)<<" c :"<<c<<endl;
   if (clientcombo)
       clientcombo->setCurrentItem(c);
 }
@@ -757,6 +757,8 @@ QString KOSpellConfig::getLanguage( int i )
         dictcombo->insertItem(i18n("Hebrew"));
     }
 #endif
+    else
+        return QString::null;
 }
 
 void KOSpellConfig::sSetDictionary (int i)
@@ -959,13 +961,13 @@ void KOSpellConfig::createListOfLanguages()
         dir.setFile ("/usr/local/share/aspell");
     if (!dir.exists() || !dir.isDir()) return;
 
-    kdDebug(750) << "KOSpellConfig::getAvailDictsAspell "
+    kdDebug(30006) << "KOSpellConfig::getAvailDictsAspell "
                  << dir.filePath() << " " << dir.dirPath() << endl;
 
     QDir thedir (dir.filePath(),"*");
 
-    kdDebug(750) << "KOSpellConfig" << thedir.path() << "\n" << endl;
-    kdDebug(750) << "entryList().count()="
+    kdDebug(30006) << "KOSpellConfig" << thedir.path() << "\n" << endl;
+    kdDebug(30006) << "entryList().count()="
                  << thedir.entryList().count() << endl;
 
     for (unsigned int i=0; i<thedir.entryList().count(); i++)

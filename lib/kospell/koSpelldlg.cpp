@@ -190,7 +190,7 @@ void KOSpellDlg::init(const QString & _word, QStringList * _sugg)
     listbox->clear();
     listbox->insertStringList(*sugg);
 
-    kdDebug(750) << "KOSpellDlg::init [" << word << "]" << endl;
+    kdDebug(30006) << "KOSpellDlg::init [" << word << "]" << endl;
 
     emit(ready(true));
 

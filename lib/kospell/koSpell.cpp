@@ -42,17 +42,17 @@ KOSpell *KOSpell::createKoSpell( QWidget *parent, const QString &caption, QObjec
         ksc = new KOSpellConfig;
 
     int clt = ksc->client();
-    kdDebug()<<" client :"<<clt<<endl;
+    kdDebug(30006)<<" client :"<<clt<<endl;
     if( clt == KOS_CLIENT_ISPELL || clt == KOS_CLIENT_HSPELL)
     {
-        kdDebug()<<" KOS_CLIENT_ISPELL :*************\n";
+        kdDebug(30006)<<" KOS_CLIENT_ISPELL :*************\n";
         return new KOISpell(parent, caption,
                             receiver, slot, ksc/*config all other parameter*/ );
     }
 #ifdef HAVE_LIBASPELL
     else if (clt == KOS_CLIENT_ASPELL)
     {
-        kdDebug()<<" KOS_CLIENT_ASPELL :**************\n";
+        kdDebug(30006)<<" KOS_CLIENT_ASPELL :**************\n";
         return new KOASpell(parent,caption,ksc,modal,_autocorrect);
     }
 #endif
@@ -61,7 +61,7 @@ KOSpell *KOSpell::createKoSpell( QWidget *parent, const QString &caption, QObjec
     else if( clt == KOS_CLIENT_MYSPELL)
         getAvailDictsMyspell();
 #endif
-    kdDebug()<<" default !!!!!!!!!!!!!!!!!!!!!!!!!\n";
+    kdDebug(30006)<<" default !!!!!!!!!!!!!!!!!!!!!!!!!\n";
      return new KOISpell(parent, caption,
                             receiver, slot, ksc/*config all other parameter*/ );
 
@@ -75,7 +75,7 @@ int KOSpell::modalCheck( QString& text, KOSpellConfig * _ksc )
     else
         ksc = new KOSpellConfig;
     int clt = ksc->client();
-    kdDebug()<<" client :"<<clt<<endl;
+    kdDebug(30006)<<" client :"<<clt<<endl;
     if( clt == KOS_CLIENT_ISPELL)
         return KOISpell::modalCheck( text, ksc );
 #ifdef HAVE_LIBASPELL
@@ -184,7 +184,7 @@ void KOSpell::initSpell( KOSpellConfig *_ksc )
         break;
     }
 
-    kdDebug(750) << __FILE__ << ":" << __LINE__ << " Codec = " << (codec ? codec->name() : "<default>") << endl;
+    kdDebug(30006) << __FILE__ << ":" << __LINE__ << " Codec = " << (codec ? codec->name() : "<default>") << endl;
 
     // copy ignore list from ksconfig
     ignorelist += ksconfig->ignoreList();

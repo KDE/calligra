@@ -114,16 +114,16 @@ void KOASpell::slotEmitCheckerReady()
 bool KOASpell::initConfig(const QString & language)
 {
     config = new_aspell_config();
-    kdDebug()<<" ksconfig->dictionary() :"<<ksconfig->dictionary()<<endl;
+    kdDebug(30006)<<" ksconfig->dictionary() :"<<ksconfig->dictionary()<<endl;
 
     aspell_config_replace(config, "lang", language.isEmpty() ? (ksconfig->dictionary().isEmpty() ? "fr": ksconfig->dictionary().latin1()) : language.latin1() );
 
-    kdDebug()<<" ksconfig->dictionary() :"<<ksconfig->dictionary()<<endl;
+    kdDebug(30006)<<" ksconfig->dictionary() :"<<ksconfig->dictionary()<<endl;
 
     AspellCanHaveError * ret;
     ret = new_aspell_speller(config);
     if (aspell_error(ret) != 0) {
-        kdDebug()<<"Error :"<<aspell_error_message(ret)<<endl;
+        kdDebug(30006)<<"Error :"<<aspell_error_message(ret)<<endl;
         delete_aspell_can_have_error(ret);
         return false;
     }
@@ -209,7 +209,7 @@ bool KOASpell::writePersonalDictionary ()
     if( !speller)
         return false;
     aspell_speller_save_all_word_lists(speller);
-    kdDebug()<<"aspell_speller_error_message(speller) :"<<aspell_speller_error_message(speller)<<endl;
+    kdDebug(30006)<<"aspell_speller_error_message(speller) :"<<aspell_speller_error_message(speller)<<endl;
     return true;
 }
 
@@ -224,17 +224,17 @@ QStringList KOASpell::resultCheckWord( const QString &_word )
 {
     if (_word.isEmpty() || !speller)
         return QStringList();
-    kdDebug()<<" aspell_config_retrieve(config, lang) :"<<aspell_config_retrieve(config, "lang")<<endl;
+    kdDebug(30006)<<" aspell_config_retrieve(config, lang) :"<<aspell_config_retrieve(config, "lang")<<endl;
     QStringList result;
     const AspellWordList *wl = aspell_speller_suggest(speller, _word.latin1(), -1);
     if (wl == 0) {
-        kdDebug()<<"Error: "<< aspell_speller_error_message(speller)<<endl;
+        kdDebug(30006)<<"Error: "<< aspell_speller_error_message(speller)<<endl;
     } else {
         AspellStringEnumeration * els = aspell_word_list_elements(wl);
         const char * word2;
         while ( (word2 = aspell_string_enumeration_next(els)) != 0) {
             result.append( word2 );
-            kdDebug()<<" word2 :"<<word2<<endl;
+            kdDebug(30006)<<" word2 :"<<word2<<endl;
         }
     }
     return result;
@@ -513,7 +513,7 @@ void KOASpell::dialog2 (int result)
         break;
     case KOS_CANCEL:
         testNextWord = false;
-        //      kdDebug(750) << "cancelled\n" << endl;
+        //      kdDebug(30006) << "cancelled\n" << endl;
         ksdlg->hide();
         emit done (origbuffer);
         emit death();
@@ -566,9 +566,9 @@ void KOASpell::changeSpellLanguage( int index )
     deleteSpellChecker();
     initConfig( KOSpellConfig::listOfLanguageFileName()[index].latin1());
 #if 0
-    kdDebug()<<"Before KOSpellConfig::listOfLanguageFileName()[index].latin1() :"<<KOSpellConfig::listOfLanguageFileName()[index].latin1()<<endl;
+    kdDebug(30006)<<"Before KOSpellConfig::listOfLanguageFileName()[index].latin1() :"<<KOSpellConfig::listOfLanguageFileName()[index].latin1()<<endl;
     aspell_config_replace(config, "lang",KOSpellConfig::listOfLanguageFileName()[index].latin1());
-    kdDebug()<<" After aspell_config_retrieve(config, lang) :"<<aspell_config_retrieve(config, "lang")<<endl;
+    kdDebug(30006)<<" After aspell_config_retrieve(config, lang) :"<<aspell_config_retrieve(config, "lang")<<endl;
 #endif
 }
 

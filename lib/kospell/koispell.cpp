@@ -129,7 +129,7 @@ void KOISpell::startIspell()
   //trystart = {0,1,2}
 {
 
-    kdDebug(750) << "Try #" << trystart << endl;
+    kdDebug(30006) << "Try #" << trystart << endl;
     if (trystart>0)
         proc->resetAll();
 
@@ -137,22 +137,22 @@ void KOISpell::startIspell()
     {
     case KOS_CLIENT_ISPELL:
         *proc << "ispell";
-        kdDebug(750) << "Using ispell" << endl;
+        kdDebug(30006) << "Using ispell" << endl;
         break;
 #if 0
     case KOS_CLIENT_ASPELL:
         *proc << "aspell";
-        kdDebug(750) << "Using aspell" << endl;
+        kdDebug(30006) << "Using aspell" << endl;
         break;
 #endif
     case KOS_CLIENT_HSPELL:
         *proc << "hspell";
-        kdDebug(750) << "Using hspell" << endl;
+        kdDebug(30006) << "Using hspell" << endl;
         break;
     }
 
     *proc << "ispell";
-    kdDebug(750) << "Using ispell" << endl;
+    kdDebug(30006) << "Using ispell" << endl;
 
     // TODO: add option -h to ignore HTML (XML) code
     if (ksconfig->client() == KOS_CLIENT_ISPELL /*|| ksconfig->client() == KOS_CLIENT_ASPELL*/)
@@ -175,7 +175,7 @@ void KOISpell::startIspell()
         {
             if (! ksconfig->dictionary().isEmpty())
             {
-                kdDebug(750) << "using dictionary [" << ksconfig->dictionary() << "]" << endl;
+                kdDebug(30006) << "using dictionary [" << ksconfig->dictionary() << "]" << endl;
                 *proc << "-d";
                 *proc << ksconfig->dictionary();
             }
@@ -224,7 +224,7 @@ void KOISpell::startIspell()
         /*
           if (ksconfig->personalDict()[0]!='\0')
           {
-          kdDebug(750) << "personal dictionary [" << ksconfig->personalDict() << "]" << endl;
+          kdDebug(30006) << "personal dictionary [" << ksconfig->personalDict() << "]" << endl;
           *proc << "-p";
           *proc << ksconfig->personalDict();
           }
@@ -264,13 +264,13 @@ QStringList KOISpell::resultCheckWord( const QString &/*_word*/ )
 void KOISpell::ispellErrors (KProcess *, char *buffer, int buflen)
 {
   buffer [buflen-1] = '\0';
-  //  kdDebug(750) << "ispellErrors [" << buffer << "]\n" << endl;
+  //  kdDebug(30006) << "ispellErrors [" << buffer << "]\n" << endl;
 }
 
 void KOISpell::KSpell2 (KProcIO *)
 
 {
-  kdDebug(750) << "KSpell::KSpell2" << endl;
+  kdDebug(30006) << "KSpell::KSpell2" << endl;
   trystart=maxtrystart;  //We've officially started ispell and don't want
        //to try again if it dies.
   QString line;
@@ -291,7 +291,7 @@ void KOISpell::KSpell2 (KProcIO *)
   //We want to recognize KDE in any text!
   if (ignore ("kde")==FALSE)
   {
-     kdDebug(750) << "@KDE was FALSE" << endl;
+     kdDebug(30006) << "@KDE was FALSE" << endl;
      QTimer::singleShot( 0, this, SLOT(emitDeath()));
      return;
   }
@@ -299,7 +299,7 @@ void KOISpell::KSpell2 (KProcIO *)
   //We want to recognize linux in any text!
   if (ignore ("linux")==FALSE)
   {
-     kdDebug(750) << "@Linux was FALSE" << endl;
+     kdDebug(30006) << "@Linux was FALSE" << endl;
      QTimer::singleShot( 0, this, SLOT(emitDeath()));
      return;
   }
@@ -650,7 +650,7 @@ void KOISpell::checkList2 ()
   // send next word
   if (wlIt != wordlist->end())
     {
-      kdDebug(750) << "KS::cklist2 " << lastpos << ": " << *wlIt << endl;
+      kdDebug(30006) << "KS::cklist2 " << lastpos << ": " << *wlIt << endl;
 
       endOfResponse = FALSE;
       bool put;
@@ -677,12 +677,12 @@ void KOISpell::checkList2 ()
 void KOISpell::checkList3a (KProcIO *)
   // invoked by KProcIO, when data from ispell are read
 {
-  //kdDebug(750) << "start of checkList3a" << endl;
+  //kdDebug(30006) << "start of checkList3a" << endl;
 
   // don't read more data, when dialog is waiting
   // for user interaction
   if (dlgon) {
-    //kdDebug(750) << "dlgon: don't read more data" << endl;
+    //kdDebug(30006) << "dlgon: don't read more data" << endl;
     return;
   }
 
@@ -695,12 +695,12 @@ void KOISpell::checkList3a (KProcIO *)
       {
 	tempe=proc->fgets (line, TRUE); //get ispell's response
 
-	//kdDebug(750) << "checkList3a: read bytes [" << tempe << "]" << endl;
+	//kdDebug(30006) << "checkList3a: read bytes [" << tempe << "]" << endl;
 
 
 	if (tempe == 0) {
 	  endOfResponse = TRUE;
-	  //kdDebug(750) << "checkList3a: end of resp" << endl;
+	  //kdDebug(30006) << "checkList3a: end of resp" << endl;
 	} else if (tempe>0) {
 	  if ((e=parseOneResponse (line, word, sugg))==MISTAKE ||
 	      e==REPLACE)
@@ -735,12 +735,12 @@ void KOISpell::checkList3a (KProcIO *)
 	// stop when empty line or no more data
       } while (tempe > 0);
 
-    //kdDebug(750) << "checkList3a: exit loop with [" << tempe << "]" << endl;
+    //kdDebug(30006) << "checkList3a: exit loop with [" << tempe << "]" << endl;
 
     // if we got an empty line, t.e. end of ispell/aspell response
     // and the dialog isn't waiting for user interaction, send next word
     if (endOfResponse && !dlgon) {
-      //kdDebug(750) << "checkList3a: send next word" << endl;
+      //kdDebug(30006) << "checkList3a: send next word" << endl;
       checkList2();
     }
 }
@@ -772,7 +772,7 @@ void KOISpell::checkList4 ()
     {
     case KOS_REPLACE:
     case KOS_REPLACEALL:
-      kdDebug(750) << "KS: cklist4: lastpos: " << lastpos << endl;
+      kdDebug(30006) << "KS: cklist4: lastpos: " << lastpos << endl;
       old = *(--wlIt); ++wlIt;
       // replace word
       checkListReplaceCurrent();
@@ -790,14 +790,14 @@ void KOISpell::checkList4 ()
 
   // read more if there is more, otherwise send next word
   if (!endOfResponse) {
-    //kdDebug(750) << "checkList4: read more from response" << endl;
+    //kdDebug(30006) << "checkList4: read more from response" << endl;
       checkList3a(NULL);
   }
 }
 
 bool KOISpell::check( const QString &_buffer, bool _usedialog )
 {
-    kdDebug()<<" bool KOISpell::check( const QString &_buffer, bool _usedialog )************************************\n";
+    kdDebug(30006)<<" bool KOISpell::check( const QString &_buffer, bool _usedialog )************************************\n";
   QString qs;
 
   usedialog=_usedialog;
@@ -805,7 +805,7 @@ bool KOISpell::check( const QString &_buffer, bool _usedialog )
   //set the dialog signal handler
   dialog3slot = SLOT (check3 ());
 
-  kdDebug(750) << "KS: check" << endl;
+  kdDebug(30006) << "KS: check" << endl;
   origbuffer = _buffer;
   if ( ( totalpos = origbuffer.length() ) == 0 )
     {
@@ -866,7 +866,7 @@ void KOISpell::check2 (KProcIO *)
   do
     {
       tempe=proc->fgets (line); //get ispell's response
-      kdDebug(750) << "KSpell::check2 (" << tempe << "b)" << endl;
+      kdDebug(30006) << "KSpell::check2 (" << tempe << "b)" << endl;
 
       if (tempe>0)
 	{
@@ -877,16 +877,16 @@ void KOISpell::check2 (KProcIO *)
 
 	      // for multibyte encoding posinline needs correction
 	      if (ksconfig->encoding() == KOS_E_UTF8) {
-		// kdDebug(750) << "line: " << origbuffer.mid(lastlastline,
+		// kdDebug(30006) << "line: " << origbuffer.mid(lastlastline,
 		// lastline-lastlastline) << endl;
-		// kdDebug(750) << "posinline uncorr: " << posinline << endl;
+		// kdDebug(30006) << "posinline uncorr: " << posinline << endl;
 
 		// convert line to UTF-8, cut at pos, convert back to UCS-2
 		// and get string length
 		posinline = (QString::fromUtf8(
 		   origbuffer.mid(lastlastline,lastline-lastlastline).utf8(),
 		   posinline)).length();
-		// kdDebug(750) << "posinline corr: " << posinline << endl;
+		// kdDebug(30006) << "posinline corr: " << posinline << endl;
 	      }
 
 	      lastpos=posinline+lastlastline+offset;
@@ -903,7 +903,7 @@ void KOISpell::check2 (KProcIO *)
 	      else  //MISTAKE
 		{
 		  cwword=word;
-		  //kdDebug(750) << "(Before dialog) word=[" << word << "] cwword =[" << cwword << "]\n" << endl;
+		  //kdDebug(30006) << "(Before dialog) word=[" << word << "] cwword =[" << cwword << "]\n" << endl;
                   if ( usedialog ) {
                       // show the word in the dialog
                       dialog (word, sugg, SLOT (check3()));
@@ -935,7 +935,7 @@ void KOISpell::check2 (KProcIO *)
       int i;
       QString qs;
 
-      //kdDebug(750) << "[EOL](" << tempe << ")[" << temp << "]" << endl;
+      //kdDebug(30006) << "[EOL](" << tempe << ")[" << temp << "]" << endl;
 
       lastpos=(lastlastline=lastline)+offset; //do we really want this?
       i=origbuffer.find('\n', lastline)+1;
@@ -948,7 +948,7 @@ void KOISpell::check2 (KProcIO *)
   //This is the end of it all
     {
       ksdlg->hide();
-      //      kdDebug(750) << "check2() done" << endl;
+      //      kdDebug(30006) << "check2() done" << endl;
       newbuffer.truncate (newbuffer.length()-2);
       emitProgress();
       emit done (newbuffer);
@@ -960,7 +960,7 @@ void KOISpell::check3 ()
 {
   disconnect (this, SIGNAL (dialog3()), this, SLOT (check3()));
 
-  kdDebug(750) << "check3 [" << cwword << "] [" << replacement() << "] " << dlgresult << endl;
+  kdDebug(30006) << "check3 [" << cwword << "] [" << replacement() << "] " << dlgresult << endl;
 
   //others should have been processed by dialog() already
   switch (dlgresult)
@@ -973,7 +973,7 @@ void KOISpell::check3 ()
       emit corrected (dlgorigword, replacement(), lastpos);
       break;
     case KOS_CANCEL:
-    //      kdDebug(750) << "cancelled\n" << endl;
+    //      kdDebug(30006) << "cancelled\n" << endl;
       ksdlg->hide();
       emit done (origbuffer);
       return;
@@ -994,7 +994,7 @@ KOISpell::slotStopCancel (int result)
   if (dialogwillprocess)
     return;
 
-  kdDebug(750) << "KSpell::slotStopCancel [" << result << "]" << endl;
+  kdDebug(30006) << "KSpell::slotStopCancel [" << result << "]" << endl;
 
   if (result==KOS_STOP || result==KOS_CANCEL)
     if (!dialog3slot.isEmpty())
@@ -1092,7 +1092,7 @@ void KOISpell::cleanUp ()
 
 void KOISpell::ispellExit (KProcess *)
 {
-  kdDebug() << "KSpell::ispellExit() " << m_status << endl;
+  kdDebug(30006) << "KSpell::ispellExit() " << m_status << endl;
 
   if ((m_status == Starting) && (trystart<maxtrystart))
   {
@@ -1110,7 +1110,7 @@ void KOISpell::ispellExit (KProcess *)
   else // Error, Finished, Crashed
      return; // Dead already
 
-  kdDebug(750) << "Death" << endl;
+  kdDebug(30006) << "Death" << endl;
   QTimer::singleShot( 0, this, SLOT(emitDeath()));
 }
 
@@ -1159,7 +1159,7 @@ KOISpell::modalCheck( QString& text, KOSpellConfig* _kcs )
     modalWidgetHack->setGeometry(-10,-10,2,2);
     */
 
-    // kdDebug() << "KOISpell1" << endl;
+    // kdDebug(30006) << "KOISpell1" << endl;
     KOISpell* spell = new KOISpell( 0L, i18n("Spell Checker"), 0 ,
 				0, _kcs, true, true );
     //modalWidgetHack->show();
@@ -1185,8 +1185,8 @@ void KOISpell::slotSpellCheckerCorrected( const QString & oldText, const QString
 
 void KOISpell::slotModalReady()
 {
-    //kdDebug() << qApp->loopLevel() << endl;
-    //kdDebug(750) << "MODAL READY------------------" << endl;
+    //kdDebug(30006) << qApp->loopLevel() << endl;
+    //kdDebug(30006) << "MODAL READY------------------" << endl;
 
     Q_ASSERT( m_status == Running );
     connect( this, SIGNAL( done( const QString & ) ),
@@ -1200,11 +1200,11 @@ void KOISpell::slotModalReady()
 
 void KOISpell::slotModalDone( const QString &/*_buffer*/ )
 {
-    //kdDebug(750) << "MODAL DONE " << _buffer << endl;
+    //kdDebug(30006) << "MODAL DONE " << _buffer << endl;
     //modaltext = _buffer;
     cleanUp();
 
-    //kdDebug() << "ABOUT TO EXIT LOOP" << endl;
+    //kdDebug(30006) << "ABOUT TO EXIT LOOP" << endl;
     //qApp->exit_loop();
 
     //modalWidgetHack->close(true);

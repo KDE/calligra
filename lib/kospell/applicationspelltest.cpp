@@ -61,9 +61,9 @@ void ApplicationWindowSpell::slotModalSpellText()
     QString text = multi->selectedText();
     if ( !text.isEmpty() )
     {
-        kdDebug()<<" text :"<<text<<endl;
+        kdDebug(30006)<<" text :"<<text<<endl;
         KOSpell::modalCheck( text, 0L );
-        kdDebug()<<" after : text :"<<text<<endl;
+        kdDebug(30006)<<" after : text :"<<text<<endl;
     }
 }
 
@@ -105,16 +105,16 @@ void ApplicationWindowSpell::slotConfigSpellText()
 
 void ApplicationWindowSpell::spellCheckerFinished()
 {
-    kdDebug()<<" void ApplicationWindowSpell::spellCheckerFinished() \n";
+    kdDebug(30006)<<" void ApplicationWindowSpell::spellCheckerFinished() \n";
     delete m_spell;
     m_spell= 0L;
 }
 
 void ApplicationWindowSpell::spellCheckerMisspelling( const QString &text, const QStringList &, unsigned int pos)
 {
-    kdDebug()<<" void ApplicationWindowSpell::spellCheckerMisspelling( const QString &text, const QStringList &, unsigned int ) :"<<text<<" pos :"<<pos<<endl;
+    kdDebug(30006)<<" void ApplicationWindowSpell::spellCheckerMisspelling( const QString &text, const QStringList &, unsigned int ) :"<<text<<" pos :"<<pos<<endl;
 //todo fix me parag id !!!!
-    kdDebug()<<" pos :"<<pos<<" text :"<<text<<" text.length() :"<<text.length()<<endl;
+    kdDebug(30006)<<" pos :"<<pos<<" text :"<<text<<" text.length() :"<<text.length()<<endl;
     unsigned int l = 0;
     unsigned int cnt = 0;
     posToRowCol (pos, l, cnt);
@@ -127,7 +127,7 @@ void ApplicationWindowSpell::spellCheckerCorrected( const QString &orig , const 
     {
         unsigned int l = 0;
         unsigned int cnt = 0;
-        kdDebug()<<"void ApplicationWindowSpell::spellCheckerCorrected( const QString &, const QString &, unsigned int ) :"<<orig<<" new :"<<newWord<<" pos :"<<pos <<endl;
+        kdDebug(30006)<<"void ApplicationWindowSpell::spellCheckerCorrected( const QString &, const QString &, unsigned int ) :"<<orig<<" new :"<<newWord<<" pos :"<<pos <<endl;
         posToRowCol (pos, l, cnt);
         multi->setSelection(l, cnt, l, cnt+orig.length());
         multi->removeSelectedText();
@@ -148,17 +148,17 @@ void  ApplicationWindowSpell::posToRowCol(unsigned int pos, unsigned int &line, 
 
 void ApplicationWindowSpell::spellCheckerDone( const QString & text)
 {
-    kdDebug()<<"void ApplicationWindowSpell::spellCheckerDone( const QString & ) :"<<text<<endl;
+    kdDebug(30006)<<"void ApplicationWindowSpell::spellCheckerDone( const QString & ) :"<<text<<endl;
 }
 
 void ApplicationWindowSpell::spellCheckerIgnoreAll( const QString &text )
 {
-    kdDebug()<<"void ApplicationWindowSpell::spellCheckerIgnoreAll( const QString & ) :"<<text<<endl;
+    kdDebug(30006)<<"void ApplicationWindowSpell::spellCheckerIgnoreAll( const QString & ) :"<<text<<endl;
 }
 
 void ApplicationWindowSpell::spellCheckerReplaceAll( const QString &  text,  const QString & replace)
 {
-    kdDebug()<<" void ApplicationWindowSpell::spellCheckerReplaceAll( const QString &  ,  const QString & ) :"<<text<<" replace:"<<replace<< endl;
+    kdDebug(30006)<<" void ApplicationWindowSpell::spellCheckerReplaceAll( const QString &  ,  const QString & ) :"<<text<<" replace:"<<replace<< endl;
 }
 
 void ApplicationWindowSpell::closeEvent( QCloseEvent* ce )
