@@ -1563,7 +1563,7 @@ void KSpreadCell::applyZoomedFont( QPainter &painter, int _col, int _row )
         tmpFont = textFont( _col, _row );
     }
 
-    tmpFont.setPointSizeFloat( m_pTable->doc()->zoomedResolutionY() * tmpFont.pointSizeFloat() );
+    tmpFont.setPointSizeFloat( 0.01 * m_pTable->doc()->zoom() * tmpFont.pointSizeFloat() );
     painter.setFont( tmpFont );
 }
 

@@ -2651,7 +2651,9 @@ bool KSpreadCanvas::createEditor( EditorType ed, bool addFocus )
     g.setColor( QColorGroup::Background, color );
 
     m_pEditor->setPalette( QPalette( g, p.disabled(), g ) );
-    m_pEditor->setFont( cell->textFont( markerColumn(), markerRow() ) );
+    QFont tmpFont = cell->textFont( markerColumn(), markerRow() );
+    tmpFont.setPointSizeFloat( 0.01 * table->doc()->zoom() * tmpFont.pointSizeFloat() );
+    m_pEditor->setFont( tmpFont );
 
     KoRect rect( xpos, ypos, w, h ); //needed to circumvent rounding issue with height/width
     m_pEditor->setGeometry( doc()->zoomRect( rect ) );
@@ -3915,8 +3917,8 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   QFont normalFont = painter.font();
   if ( m_pCanvas->doc()->zoom() < 100 )
   {
-    normalFont.setPointSize( int( (double)m_pCanvas->doc()->zoom() / 100 *
-                                   normalFont.pointSize() ) );
+    normalFont.setPointSizeFloat( 0.01 * m_pCanvas->doc()->zoom() *
+                                  normalFont.pointSizeFloat() );
   }
   QFont boldFont = normalFont;
   boldFont.setBold( TRUE );
@@ -4542,18 +4544,9 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   QFont normalFont = painter.font();
   if ( m_pCanvas->doc()->zoom() < 100 )
   {
-    normalFont.setPointSize( int( (double)m_pCanvas->doc()->zoom() / 100 *
-                                   normalFont.pointSize() ) );
+    normalFont.setPointSizeFloat( 0.01 * m_pCanvas->doc()->zoom() *
+                                  normalFont.pointSizeFloat() );
   }
-//   if ( m_pCanvas->doc()->zoom() < 100 )
-//   {
-//     normalFont.setPointSize( m_pCanvas->doc()->zoomItY( normalFont.pointSize() ) );
-//   }
-//   else
-//   {
-//     normalFont.setPointSize( m_pCanvas->doc()->ptToPixelY( normalFont.pointSize() ) );
-//   }
-
   QFont boldFont = normalFont;
   boldFont.setBold( TRUE );
 
