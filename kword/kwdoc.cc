@@ -222,7 +222,9 @@ DCOPObject* KWDocument::dcopObject()
 
 KWDocument::~KWDocument()
 {
-    saveConfig();
+    //don't save config when kword is embedded into konqueror
+    if(isReadWrite())
+        saveConfig();
     delete m_autoFormat;
     delete m_formulaDocument;
     delete m_commandHistory;
@@ -272,7 +274,6 @@ void KWDocument::initConfig()
   }
   else
       m_zoom = 100;
-
   setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
 }
 

@@ -188,6 +188,13 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 
     QString mode=m_doc->ChangeLastModeView();
     m_gui->canvasWidget()->switchViewMode( KWViewMode::create( mode, m_doc ));
+    //when kword is embedded into konqueror apply a zoom=100
+    //in konqueror we can't change zoom
+    if(!m_doc->isReadWrite())
+    {
+        setZoom( 100, true );
+        slotUpdateRuler();
+    }
 }
 
 KWView::~KWView()
