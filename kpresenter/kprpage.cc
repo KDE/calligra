@@ -131,7 +131,11 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
             ++partIndexObj;
         }
         else
-                it.current()->saveOasis( xmlWriter, context, indexObj );
+        {
+            if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+                continue;
+            it.current()->saveOasis( xmlWriter, context, indexObj );
+        }
         if ( !stickyObj && it.current()->haveAnimation() )
         {
             kdDebug()<<" it.current()->haveAnimation() \n";
