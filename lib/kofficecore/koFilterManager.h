@@ -161,7 +161,7 @@ private:
     static KoFilterManager* s_pSelf;
     QString tmpFile;
     QString exportFile;
-    QString native_format;
+    QCString native_format;
     bool prepare;
 #ifndef USE_QFD
     PreviewStack *ps;

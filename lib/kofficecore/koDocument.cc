@@ -114,6 +114,7 @@ bool KoDocument::singleViewMode() const
 
 bool KoDocument::saveFile()
 {
+  kdDebug(30003) << "KoDocument::saveFile()" << endl;
   if ( !kapp->inherits( "KoApplication" ) )
     return false;
 
@@ -137,9 +138,15 @@ bool KoDocument::saveFile()
   QCString _native_format = nativeFormatMimeType();
   bool ret;
   if ( outputMimeType != _native_format ) {
+    kdDebug(30003) << "Saving to format " << outputMimeType << " in " << m_file << endl;
     // Not native format : save using export filter
     QString nativeFile=KoFilterManager::self()->prepareExport( m_file, _native_format);
-    ret = saveNativeFormat( nativeFile ) && KoFilterManager::self()->export_();
+    kdDebug(30003) << "Temp native file " << nativeFile << endl;
+    ret = saveNativeFormat( nativeFile );
+    if ( !ret )
+        kdError(30003) << "Couldn't save in native format!" << endl;
+    else
+        ret = KoFilterManager::self()->export_();
   } else {
     // Native format => normal save
     ret = saveNativeFormat( m_file );
@@ -378,9 +385,15 @@ bool KoDocument::saveChildren( KoStore* /*_store*/, const char * /*_path*/ )
 
 bool KoDocument::saveNativeFormat( const QString & file )
 {
-  if ( hasToWriteMultipart() )
+// If KOffice documents are going to be in two different formats
+// (a tar.gz store if they contain children and a simple XML file if
+//   they don't), then writing filters (both the builtin ones and 
+//   one day in other office apps) is going to be awful...
+//
+//  if ( hasToWriteMultipart() )
+  if ( true )
   {
-    kDebugInfo( 30003, "Saving to store" );
+    kdDebug(30003) << "Saving to store" << endl;
 
     //Use this to save to a binary store (deprecated)
     //KoStore * store = new KoBinaryStore ( url.path(), KOStore::Write );
@@ -394,7 +407,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
       return false;
     }
 
-    kDebugInfo( 30003, "Saving root" );
+    kdDebug(30003) << "Saving root" << endl;
     if ( store->open( "root" ) )
     {
       ostorestream out( store );
@@ -416,14 +429,16 @@ bool KoDocument::saveNativeFormat( const QString & file )
   }
   else
   {
+    kdDebug(30003) << "Saving to XML file (no store) " << file << endl;
     ofstream out( file );
-    if ( !out )
-    {
+    bool ok = ( out != 0L );
+    if ( ok ) ok = save( out, 0L /* to remove */ );
+    if ( !ok )
       KMessageBox::error( 0L, i18n("Could not write to\n%1" ).arg( file ) );
-      return false;
-    }
 
-    return save( out, 0L /* to remove */ );
+    kdDebug(30003) << "Saving went " << ( ok ? "ok" : "BAD" ) << endl;
+    out.flush();
+    return ok;
   }
 }
 
@@ -624,7 +639,7 @@ bool KoDocument::isStoredExtern()
 
 void KoDocument::setModified( bool _mod )
 {
-    kdDebug() << "KoDocument::setModified( " << (_mod ? "true" : "false") << ")" << endl;
+    kdDebug(30003) << "KoDocument::setModified( " << (_mod ? "true" : "false") << ")" << endl;
     KParts::ReadWritePart::setModified( _mod );
 
     if ( _mod )

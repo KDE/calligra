@@ -286,11 +286,11 @@ const QString KoFilterManager::import( const QString & file, const char *_native
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
     QCString mimeType;
     if ( t && t->mimeType()!="application/octet-stream" ) {
-        kDebugInfo( 30003, "######### FOUND MimeType %s", t->mimeType().data() );
+        kdDebug(30003) << "Found MimeType " << t->mimeType() << endl;
         mimeType = t->mimeType();
     }
     else {
-        kDebugInfo( 30003, "####### No MimeType found. Setting text/plain" );
+        kdDebug(30003) << "No MimeType found. Setting text/plain" << endl;
         mimeType = "text/plain";
     }
 
@@ -356,19 +356,18 @@ const bool KoFilterManager::export_() {
 
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, url.isLocalFile() );
     QCString mimeType;
-    if (t) {
-        kDebugInfo( 30003, "######### FOUND MimeType %c", t->mimeType().ascii() );
+    if (t && t->mimeType() != "application/octet-stream") {
+        kdDebug(30003) << "Found MimeType " << t->mimeType() << endl;
         mimeType = t->mimeType();
     }
     else {
-        kDebugInfo( 30003, "####### No MimeType found. findByURL returned 0. Setting text/plain" );
+        kdDebug(30003) << "No MimeType found. Setting text/plain" << endl;
         mimeType = "text/plain";
     }
 
-    if ( (strcmp( mimeType, native_format ) == 0) )
+    if ( mimeType == native_format )
     {
-        kDebugInfo( 30003, "strcmp( mimeType, _native_format ) == 0 !! Returning without conversion. " );
-        assert( url.isLocalFile() );
+        kDebugInfo( 30003, "Native format, returning without conversion. " );
         return false;
     }
 
