@@ -580,7 +580,7 @@ void KWordView::setupActions()
     actionTableInsertCol = new KAction( i18n( "&Insert Column..." ), "insert_table_col", 0,
 			       this, SLOT( tableInsertCol() ),
 			       actionCollection(), "table_inscol" );
-    actionTableDelRow = new KAction( i18n( "&Delete Row..." ), "delete_table_rot", 0,
+    actionTableDelRow = new KAction( i18n( "&Delete Row..." ), "delete_table_row", 0,
 				     this, SLOT( tableDeleteRow() ),
 				     actionCollection(), "table_delrow" );
     actionTableDelCol = new KAction( i18n( "&Delete Column..." ), "delete_table_col", 0,

@@ -118,6 +118,7 @@ KInstance* KWordFactory::global()
 				         KStandardDirs::kde_default("data") + "koffice/toolbar/");
       s_global->dirs()->addResourceType( "toolbar",
 				         KStandardDirs::kde_default("data") + "kformula/pics/");
+      s_global->iconLoader()->addAppDir("koffice");
     }
     return s_global;
 }
