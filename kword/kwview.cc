@@ -3292,7 +3292,7 @@ void KWView::formatFont()
                                textIface->relativeTextSize(),
                                textIface->offsetFromBaseLine());
 
-    connect( m_fontDlg, SIGNAL( apply() ),
+    connect( m_fontDlg, SIGNAL( applyFont() ),
                  this, SLOT( slotApplyFont() ) );
 
     m_fontDlg->exec();
@@ -3366,7 +3366,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
             if ( initialPage == KoParagDia::PD_TABS )
                 m_paragDlg->tabulatorsWidget()->setCurrentTab( initialTabPos );
         }
-        connect( m_paragDlg, SIGNAL( apply() ), this, SLOT( slotApplyParag()));
+        connect( m_paragDlg, SIGNAL( applyParagStyle() ), this, SLOT( slotApplyParag()));
 
         m_paragDlg->exec();
         delete m_paragDlg;
