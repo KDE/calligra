@@ -1537,6 +1537,8 @@ void KWParagTabulatorsWidget::slotDoubleClicked( QListBoxItem * )
 
 void KWParagTabulatorsWidget::display( const KWParagLayout & lay )
 {
+    m_tabList.clear();
+    lTabs->clear();
     m_tabList = lay.tabList();
     KoTabulatorList::ConstIterator it = m_tabList.begin();
     for ( ; it != m_tabList.end(); ++it )
