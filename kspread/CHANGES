@@ -247,3 +247,8 @@ in a QPushButton (use color of theme).
 1999-12-27 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
 -Improved choose border (look at in "Cell Layout")
+
+1999-12-28 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Now you can put a pattern in a cell
+-bug fix in choose border

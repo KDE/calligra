@@ -227,12 +227,15 @@ public:
     void setRightBorderStyle( Qt::PenStyle _s );
     void setBottomBorderStyle( Qt::PenStyle _s );
 
+    void setBackGroundBrushStyle( Qt::BrushStyle s) {m_backGroundBrush.setStyle( s );m_bLayoutDirtyFlag = TRUE; }
+
     void setLeftBorderColor( const QColor & _c ) { m_leftBorderPen.setColor( _c ); m_bLayoutDirtyFlag = TRUE; }
     void setTopBorderColor( const QColor & _c ) { m_topBorderPen.setColor( _c ); m_bLayoutDirtyFlag = TRUE; }
     void setFallDiagonalColor( const QColor & _c ) { m_fallDiagonalPen.setColor( _c ); m_bLayoutDirtyFlag = TRUE; }
     void setGoUpDiagonalColor( const QColor & _c ) { m_goUpDiagonalPen.setColor( _c ); m_bLayoutDirtyFlag = TRUE; }
     void setRightBorderColor( const QColor & _c );
     void setBottomBorderColor( const QColor & _c );
+    void setBackGroundBrushColor( const QColor & _c) {m_backGroundBrush.setColor( _c);m_bLayoutDirtyFlag = TRUE; }
 
     void setLeftBorderWidth( int _w ) { m_iLeftBorderWidth = _w; m_bLayoutDirtyFlag = TRUE; }
     void setTopBorderWidth( int _w ) { m_iTopBorderWidth = _w; m_bLayoutDirtyFlag = TRUE; }
@@ -288,6 +291,7 @@ public:
     Qt::PenStyle bottomBorderStyle( int _col, int _row );
     Qt::PenStyle fallDiagonalStyle( int _col, int _row );
     Qt::PenStyle goUpDiagonalStyle( int _col, int _row );
+    Qt::BrushStyle backGroundBrushStyle(int _col,int _row);
 
     /**
      * @param _col the column this cell is assumed to be in
@@ -314,6 +318,7 @@ public:
     const QColor& bottomBorderColor( int _col, int _row );
     const QColor& fallDiagonalColor( int _col, int _row );
     const QColor& goUpDiagonalColor( int _col, int _row );
+    const QColor& backGroundBrushColor(int _col, int _row);
 
     bool isValue() const { return m_bValue; }
     bool isBool() const {  return m_bBool; }

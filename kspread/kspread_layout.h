@@ -57,11 +57,14 @@ public:
     virtual void setFallDiagonalStyle( Qt::PenStyle s ) { m_fallDiagonalPen.setStyle( s ); }
     virtual void setGoUpDiagonalStyle( Qt::PenStyle s ) { m_goUpDiagonalPen.setStyle( s ); }
 
+    virtual void setBackGroundBrushStyle( Qt::BrushStyle s) {m_backGroundBrush.setStyle( s );}
+
     virtual void setLeftBorderColor( const QColor & _c ) { m_leftBorderPen.setColor( _c ); }
     virtual void setTopBorderColor( const QColor & _c ) { m_topBorderPen.setColor( _c ); }
     virtual void setFallDiagonalColor( const QColor & _c ) { m_fallDiagonalPen.setColor( _c ); }
     virtual void setGoUpDiagonalColor( const QColor & _c ) { m_goUpDiagonalPen.setColor( _c ); }
 
+    virtual void setBackGroundBrushColor( const QColor & _c) {m_backGroundBrush.setColor( _c);}
 
     virtual void setLeftBorderWidth( int _w ) { m_iLeftBorderWidth = _w; }
     virtual void setTopBorderWidth( int _w ) { m_iTopBorderWidth = _w; }
@@ -102,6 +105,8 @@ public:
     virtual Qt::PenStyle fallDiagonalStyle() { return m_fallDiagonalPen.style(); }
     virtual Qt::PenStyle goUpDiagonalStyle() { return m_goUpDiagonalPen.style(); }
 
+    virtual Qt::BrushStyle backGroundBrushStyle() { return m_backGroundBrush.style();}
+
     /**
      * @return the precision of the floating point representation.
      */
@@ -139,6 +144,8 @@ public:
     virtual const QColor& fallDiagonalColor() { return m_fallDiagonalPen.color(); }
     virtual const QColor& goUpDiagonalColor() { return m_goUpDiagonalPen.color(); }
 
+    virtual const QColor& backGroundBrushColor() { return m_backGroundBrush.color();}
+
     virtual const QFont& textFont() { return m_textFont; }
     virtual int textFontSize() { return m_textFont.pointSize(); }
     virtual const char* textFontFamily() { return m_textFont.family(); }
@@ -157,7 +164,8 @@ public:
     virtual const QPen& topBorderPen() { return m_topBorderPen; }
     virtual const QPen& fallDiagonalPen() { return m_fallDiagonalPen; }
     virtual const QPen& goUpDiagonalPen() { return m_goUpDiagonalPen; }
-   
+    virtual const QBrush& backGroundBrush() { return m_backGroundBrush;}
+
     virtual const QPen& textPen() { return m_textPen; }
 
     virtual void setTextPen( const QPen& _p ) { m_textPen = _p; m_textColor = _p.color(); }
@@ -165,6 +173,7 @@ public:
     virtual void setFallDiagonalPen( const QPen& _p ) { m_fallDiagonalPen = _p; m_iFallDiagonalWidth = _p.width(); }
     virtual void setGoUpDiagonalPen( const QPen& _p ) { m_goUpDiagonalPen = _p; m_iGoUpDiagonalWidth = _p.width(); }
     virtual void setTopBorderPen( const QPen& _p ) { m_topBorderPen = _p; m_iTopBorderWidth = _p.width(); }
+    virtual void setBackGroundBrush( const QBrush& _p) {m_backGroundBrush= _p;}
 
     KSpreadTable* table() { return m_pTable; }
 
@@ -233,6 +242,10 @@ protected:
      * The pen used to draw the the diagonal which go up
      */
     QPen m_goUpDiagonalPen;
+
+    QBrush m_backGroundBrush;
+
+
     /**
      * The precision of the floatinf point representation
      * If precision is -1, this means that no precision is specified.

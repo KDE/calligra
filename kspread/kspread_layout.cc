@@ -57,6 +57,8 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_goUpDiagonalPen.setColor( Qt::black );
     m_goUpDiagonalPen.setWidth( goUpDiagonalWidth() );
     m_goUpDiagonalPen.setStyle( Qt::NoPen );
+    m_backGroundBrush.setStyle( Qt::NoBrush);
+    m_backGroundBrush.setColor( Qt::red );
     m_dFaktor = 1.0;
     m_bMultiRow = FALSE;
 
@@ -92,6 +94,9 @@ void KSpreadLayout::copy( KSpreadLayout &_l )
   m_goUpDiagonalPen.setColor( _l.goUpDiagonalColor() );
   m_goUpDiagonalPen.setStyle( _l.goUpDiagonalStyle() );
   m_goUpDiagonalPen.setWidth( _l.goUpDiagonalWidth() );
+  m_backGroundBrush.setStyle( _l.backGroundBrushStyle());
+  m_backGroundBrush.setColor( _l.backGroundBrushColor());
+
 
   m_dFaktor = _l.faktor();
   m_bMultiRow = _l.multiRow();

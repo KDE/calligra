@@ -236,7 +236,7 @@ signals:
     void redraw();
 protected:
     virtual void paintEvent( QPaintEvent *_ev );
-    virtual void mousePressEvent( QMouseEvent* _ev ); 
+    virtual void mousePressEvent( QMouseEvent* _ev );
 };
 
 class KSpreadBorderButton : public QPushButton
@@ -309,6 +309,71 @@ protected:
     KSpreadBord *area;
     CellLayoutDlg *dlg;
 };
+
+class KSpreadBrushSelect : public QFrame
+{
+    Q_OBJECT
+public:
+    KSpreadBrushSelect( QWidget *parent, const char *_name );
+
+    void setBrushStyle( BrushStyle _pat ) { brushStyle = _pat; repaint(); }
+    BrushStyle getBrushStyle() { return brushStyle; }
+    QColor getBrushColor() { return brushColor; }
+    void setBrushColor(QColor _c) { brushColor=_c;}
+    void setPattern( const QColor &_color, BrushStyle _style );
+
+signals:
+    void clicked( KSpreadBrushSelect *_this );
+
+public slots:
+    void slotUnselect();
+    void slotSelect();
+
+protected:
+    virtual void paintEvent( QPaintEvent *_ev );
+    virtual void mousePressEvent( QMouseEvent *_ev );
+
+    BrushStyle brushStyle;
+    QColor brushColor;
+    bool selected;
+};
+
+
+class CellLayoutPagePattern : public QWidget
+{
+    Q_OBJECT
+public:
+    CellLayoutPagePattern( QWidget *parent, CellLayoutDlg *_dlg );
+
+    void apply( KSpreadCell *_cell );
+public slots:
+    void slotUnselect2( KSpreadBrushSelect *_select );
+    void slotSetColorButton( const QColor &_color );
+protected:
+    KSpreadBrushSelect *selectedBrush;
+    KSpreadBrushSelect *brush1;
+    KSpreadBrushSelect *brush2;
+    KSpreadBrushSelect *brush3;
+    KSpreadBrushSelect *brush4;
+    KSpreadBrushSelect *brush5;
+    KSpreadBrushSelect *brush6;
+    KSpreadBrushSelect *brush7;
+    KSpreadBrushSelect *brush8;
+    KSpreadBrushSelect *brush9;
+    KSpreadBrushSelect *brush10;
+    KSpreadBrushSelect *brush11;
+    KSpreadBrushSelect *brush12;
+    KSpreadBrushSelect *brush13;
+    KSpreadBrushSelect *brush14;
+    KSpreadBrushSelect *brush15;
+    KSpreadBrushSelect *current;
+    KColorButton* color;
+
+    QColor currentColor;
+
+    CellLayoutDlg *dlg;
+};
+
 /**
  */
 class CellLayoutDlg : public QObject
@@ -375,6 +440,9 @@ public:
     bool bGoUpDiagonalStyle;
     QColor goUpDiagonalColor;
     bool bGoUpDiagonalColor;
+    BrushStyle brushStyle;
+    QColor brushColor;
+
 
     bool oneCol;
     bool oneRow;
@@ -436,6 +504,7 @@ protected:
     CellLayoutPageMisc *miscPage;
     CellLayoutPageFont *fontPage;
     CellLayoutPagePosition *positionPage;
+    CellLayoutPagePattern *patternPage;
     QTabDialog *tab;
 
     /**

@@ -125,6 +125,8 @@ void KSpreadCell::copyLayout( int _column, int _row )
   setGoUpDiagonalWidth( o->goUpDiagonalWidth( _column, _row ) );
   setGoUpDiagonalStyle( o->goUpDiagonalStyle( _column, _row ) );
   setGoUpDiagonalColor( o->goUpDiagonalColor( _column, _row ) );
+  setBackGroundBrushColor(o->backGroundBrushColor( _column, _row) );
+  setBackGroundBrushStyle(o->backGroundBrushStyle( _column, _row) );
   setPrecision( o->precision() );
   setPrefix( o->prefix() );
   setPostfix( o->postfix() );
@@ -189,6 +191,8 @@ void KSpreadCell::defaultStyle()
   setGoUpDiagonalWidth( 1 );
   setAlign( KSpreadCell::Undefined );
   setAlignY( KSpreadCell::Middle );
+  setBackGroundBrushColor(Qt::red);
+  setBackGroundBrushStyle(Qt::NoBrush);
   QFont font( "Times", 12 );
   m_textFont = font;
   setTextColor( Qt::black );
@@ -1550,6 +1554,14 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
       _painter.setPen( m_goUpDiagonalPen );
       _painter.drawLine( _tx, _ty +h , _tx + w, _ty + dy  );
     }
+  if( m_backGroundBrush.style()!= Qt::NoBrush)
+    {
+    int left=leftBorderWidth( _col, _row) + BORDER_SPACE;
+    int top=topBorderWidth(_col,_row) + BORDER_SPACE;
+    _painter.setPen(Qt::NoPen);
+    _painter.setBrush(m_backGroundBrush);
+    _painter.drawRect( _tx + left, _ty + top, w-left-BORDER_SPACE, h - top - BORDER_SPACE);
+    }
 
   static QColorGroup g( Qt::black, Qt::white, Qt::white, Qt::darkGray, Qt::lightGray, Qt::black, Qt::black );
   static QBrush fill( Qt::lightGray );
@@ -1639,7 +1651,7 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
 	  t = m_strOutText.mid( pos, i - pos );
 	  pos = i + 1;
 	}
-	
+
 	int a = m_eAlign;
 	if ( a == KSpreadCell::Undefined )
 	{
@@ -1648,7 +1660,7 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
 	  else
 	    a = KSpreadCell::Left;
 	}
-	
+
 	switch( a )
 	{
 	case KSpreadCell::Left:
@@ -1749,6 +1761,16 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
 	  _painter.setPen( m_goUpDiagonalPen );
 	  _painter.drawLine( _tx , _ty +rl->height() , _tx + cl->width(), _ty  );
 	}
+      if( m_backGroundBrush.style()!= Qt::NoBrush)
+        {
+        int left=leftBorderWidth( _col, _row) + BORDER_SPACE;
+        int top=topBorderWidth(_col,_row) + BORDER_SPACE;
+        _painter.setPen(Qt::NoPen);
+        _painter.setBrush(m_backGroundBrush);
+        _painter.drawRect( _tx + left, _ty + top,
+                cl->width()-left-BORDER_SPACE, rl->height() - top - BORDER_SPACE);
+        }
+
     }
   if ( !_only_top && !_only_left )
     if ( !m_strOutText.isEmpty() )
@@ -1859,7 +1881,7 @@ int KSpreadCell::leftBorderWidth( int _col, int _row, KSpreadCanvas *_canvas )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row );
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->leftBorderWidth( _canvas );
 	else
@@ -1878,7 +1900,7 @@ int KSpreadCell::topBorderWidth( int _col, int _row, KSpreadCanvas *_canvas )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row );
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->topBorderWidth( _canvas );
 	else
@@ -1897,7 +1919,7 @@ int KSpreadCell::rightBorderWidth( int _col, int _row, KSpreadCanvas *_canvas )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row );
 	ColumnLayout *cl = m_pTable->columnLayout( _col + 1 );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->leftBorderWidth( _canvas );
 	else
@@ -1914,7 +1936,7 @@ int KSpreadCell::bottomBorderWidth( int _col, int _row, KSpreadCanvas *_canvas )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row + 1 );
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->topBorderWidth( _canvas );
 	else
@@ -1931,7 +1953,7 @@ int KSpreadCell::fallDiagonalWidth( int _col, int _row, KSpreadCanvas *_canvas )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row );
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->fallDiagonalWidth( _canvas );
 	else
@@ -1950,7 +1972,7 @@ int KSpreadCell::goUpDiagonalWidth( int _col, int _row, KSpreadCanvas *_canvas )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row );
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->goUpDiagonalWidth( _canvas );
 	else
@@ -1969,7 +1991,7 @@ Qt::PenStyle KSpreadCell::leftBorderStyle( int _col, int _row )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row );
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->leftBorderStyle();
 	else
@@ -1985,7 +2007,7 @@ Qt::PenStyle KSpreadCell::topBorderStyle( int _col, int _row )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row );
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->topBorderStyle();
 	else
@@ -2052,7 +2074,7 @@ Qt::PenStyle KSpreadCell::goUpDiagonalStyle( int _col, int _row )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row );
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->goUpDiagonalStyle();
 	else
@@ -2062,13 +2084,29 @@ Qt::PenStyle KSpreadCell::goUpDiagonalStyle( int _col, int _row )
     return m_goUpDiagonalPen.style();
 }
 
+Qt::BrushStyle KSpreadCell::backGroundBrushStyle( int _col, int _row )
+{
+    if ( isDefault() )
+    {
+	RowLayout *rl = m_pTable->rowLayout( _row );
+	ColumnLayout *cl = m_pTable->columnLayout( _col );
+
+	if ( rl->time() > cl->time() )
+	    return rl->backGroundBrushStyle();
+	else
+	    return cl->backGroundBrushStyle();
+    }
+
+    return m_backGroundBrush.style();
+}
+
 const QColor& KSpreadCell::leftBorderColor( int _col, int _row )
 {
     if ( isDefault() )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row );
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->leftBorderColor();
 	else
@@ -2150,7 +2188,7 @@ const QColor& KSpreadCell::goUpDiagonalColor( int _col, int _row )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row );
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->goUpDiagonalColor();
 	else
@@ -2160,6 +2198,21 @@ const QColor& KSpreadCell::goUpDiagonalColor( int _col, int _row )
     return m_goUpDiagonalPen.color();
 }
 
+const QColor& KSpreadCell::backGroundBrushColor( int _col, int _row )
+{
+    if ( isDefault() )
+    {
+	RowLayout *rl = m_pTable->rowLayout( _row );
+	ColumnLayout *cl = m_pTable->columnLayout( _col );
+
+	if ( rl->time() > cl->time() )
+	    return rl->backGroundBrushColor();
+	else
+	    return cl->backGroundBrushColor();
+    }
+
+    return m_backGroundBrush.color();
+}
 
 void KSpreadCell::incPrecision()
 {
@@ -2631,6 +2684,9 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   if ( m_textPen != m_pTable->defaultCell()->textPen() )
     format.appendChild( doc.createElement( "pen", m_textPen ) );
 
+  format.setAttribute( "brushcolor",m_backGroundBrush.color().name() );
+  format.setAttribute( "brushstyle",(int)m_backGroundBrush.style());
+
   QDomElement left = doc.createElement( "left-border" );
   left.appendChild( doc.createElement( "pen", m_leftBorderPen ) );
   format.appendChild( left );
@@ -2646,6 +2702,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
   goUpDiagonal.appendChild( doc.createElement( "pen", m_goUpDiagonalPen ) );
   format.appendChild( goUpDiagonal );
+
 
   if ( !m_strText.isEmpty() )
   {
@@ -2742,7 +2799,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    }
 	    m_iExtraXCells = i;
 	    if ( i > 0 )
-		m_bForceExtraCells = true;	
+		m_bForceExtraCells = true;
 	}
 	if ( f.hasAttribute( "rowspan" ) )
         {
@@ -2756,7 +2813,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    }
 	    m_iExtraYCells = i;
 	    if ( i > 0 )
-		m_bForceExtraCells = true;	
+		m_bForceExtraCells = true;
 	}
 	if ( f.hasAttribute( "precision" ) )
         {
@@ -2797,6 +2854,14 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    m_dFaktor = f.attribute("faktor").toDouble( &ok );
 	    if ( !ok ) return false;
 	}
+        if ( f.hasAttribute( "brushcolor" ) )
+	    setBackGroundBrushColor( QColor( f.attribute( "brushcolor" ) ) );
+
+        if ( f.hasAttribute( "brushstyle" ) )
+                {
+	        setBackGroundBrushStyle((Qt::BrushStyle) f.attribute( "brushstyle" ).toInt(&ok)  );
+                if(!ok) return false;
+                }
 
 	QDomElement pen = f.namedItem( "pen" ).toElement();
 	if ( !pen.isNull() )
@@ -2837,6 +2902,8 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    if ( !pen.isNull() )
 		setGoUpDiagonalPen( pen.toPen() );
 	}
+
+
 
 	m_strPrefix = f.attribute( "prefix" );
 	m_strPostfix = f.attribute( "postfix" );
