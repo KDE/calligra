@@ -8,6 +8,9 @@
 #ifndef _TREEBUILD_EXTERNAL_H
 #define _TREEBUILD_EXTERNAL_H
 
+#include <string>
+#include <list>
+
 class ExternalData;
 class ImportObFile;
 class BitmapDPI;

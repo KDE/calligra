@@ -8,6 +8,10 @@
 #ifndef _TREEBUILD_GRAPHICS_H
 #define _TREEBUILD_GRAPHICS_H
 
+#include <string>
+#include <list>
+
+class Pen;
 class Fill;
 class PenWidth;
 class Separation;
@@ -17,6 +21,10 @@ class FrameID;
 class Point;
 class NumPoints;	
 class Smoothed;
+class Unique;
+class ShapeRect;
+class BRect;
+class PenWidth;
 
 class Fill
 {
@@ -114,12 +122,12 @@ public:
 	GroupElement( Unique* element );
 	GroupElement( GroupID* element );
 
-	GroupElementType* type() const { return _type; }
+	GroupElementType type() const { return _type; }
 
 private:
-	GroupElementType* _type;
+	GroupElementType _type;
 	union {
-		FrameID* _id;
+		FrameID* _frameid;
 		RunAroundGap* _runaroundgap;
 		RunAroundType* _runaroundtype;
 		Unique* _unique;
@@ -173,7 +181,7 @@ public:
 	DashSegment( double value, const char* unit );
 
 private:
-	double value;
+	double _value;
 };
 
 
@@ -188,10 +196,10 @@ public:
 	DashedPatternElement( NumSegments* element );
 	DashedPatternElement( DashSegment* element );
 
-	DashedPatternElementType* type() const { return _type; }
+	DashedPatternElementType type() const { return _type; }
 
 private:
-	DashedPatternElementType* _type;
+	DashedPatternElementType _type;
 	union {
 		DashedStyle* _dashedstyle;
 		NumSegments* _numsegments;
@@ -407,10 +415,10 @@ public:
 	PolygonElement( RunAroundType* element );
 	PolygonElement( GroupID* element );
 
-	PolygonElementType* type() const { return _type; }
+	PolygonElementType type() const { return _type; }
 
 private:
-	PolygonElementType* _type;
+	PolygonElementType _type;
 	union {
 		Smoothed* _smoothed;
 		NumPoints* _numpoints;
@@ -541,7 +549,7 @@ private:
 		ArrowStyle* _arrowstyle;
 		Smoothed* _smoothed;
 		NumPoints* _numpoints;
-		Point* _points;
+		Point* _point;
 		Unique* _unique;
 		Pen* _pen;
 		PenWidth* _penwidth;

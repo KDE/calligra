@@ -15,6 +15,15 @@ class ShapeRect;
 class BRect;
 class Angle;
 class DashedPattern;
+class FrameID;
+class Unique;
+class Pen;
+class PenWidth;
+class Fill;
+class Separation;
+class ObColor;
+class RunAroundType;
+class RunAroundGap;
 
 class TRNumColumns
 {
@@ -74,7 +83,7 @@ public:
 	TRSideheadPlacement( const char* value );
 
 private:
-	double _value;
+	string _value;
 };
 
 
@@ -132,7 +141,7 @@ private:
 		ShapeRect* _shaperect;
 		BRect* _brect;
 		TRNext* _trnext;
-		TRNumColumns* _trnumcolumn;
+		TRNumColumns* _trnumcolumns;
 		TRColumnGap* _trcolumngap;
 		TRColumnBalance* _trcolumnbalance;
 		TRSideheadWidth* _trsideheadwidth;

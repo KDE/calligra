@@ -6,6 +6,7 @@
  */
 
 #include "treebuild_general.h"
+#include "unitconv.h"
 
 Unique::Unique(int value)
 {
@@ -172,6 +173,122 @@ MCurrPage::MCurrPage(char const * value)
 {
 	_value = value;
 }
+
+
+
+ShapeRect::ShapeRect(double x, char const * unitx, 
+					 double y, char const * unity, 
+					 double w, char const * unitw, 
+					 double h, char const * unith)
+{
+	_x = unitconversion( x, unitx );
+	_y = unitconversion( y, unity );
+	_w = unitconversion( w, unitw );
+	_h = unitconversion( h, unith );
+}
+
+
+BRect::BRect(double x, char const * unitx, 
+			 double y, char const * unity, 
+			 double w, char const * unitw, 
+			 double h, char const * unith)
+{
+	_x = unitconversion( x, unitx );
+	_y = unitconversion( y, unity );
+	_w = unitconversion( w, unitw );
+	_h = unitconversion( h, unith );
+}
+
+
+Rectangle::Rectangle( RectangleElementList * elements )
+{
+	_elements = elements;
+}
+
+
+RectangleElement::RectangleElement(Unique * element)
+{
+	_type = T_Unique;
+	_unique = element;
+}
+
+
+RectangleElement::RectangleElement(Fill * element)
+{
+	_type = T_Fill;
+	_fill = element;
+}
+
+
+RectangleElement::RectangleElement(Pen * element)
+{
+	_type = T_Pen;
+	_pen = element;
+}
+
+
+RectangleElement::RectangleElement(PenWidth * element)
+{
+	_type = T_PenWidth;
+	_penwidth = element;
+}
+
+
+RectangleElement::RectangleElement(Separation * element)
+{
+	_type = T_Separation;
+	_separation = element;
+}
+
+
+RectangleElement::RectangleElement(ObColor * element)
+{
+	_type = T_ObColor;
+	_obcolor = element;
+}
+
+
+RectangleElement::RectangleElement(DashedPattern * element)
+{
+	_type = T_DashedPattern;
+	_dashedpattern = element;
+}
+
+
+RectangleElement::RectangleElement(RunAroundGap * element)
+{
+	_type = T_RunAroundGap;
+	_runaroundgap = element;
+}
+
+
+RectangleElement::RectangleElement(RunAroundType * element)
+{
+	_type = T_RunAroundType;
+	_runaroundtype = element;
+}
+
+
+RectangleElement::RectangleElement(ShapeRect * element)
+{
+	_type = T_ShapeRect;
+	_shaperect = element;
+}
+
+
+RectangleElement::RectangleElement(BRect * element)
+{
+	_type = T_BRect;
+	_brect = element;
+}
+
+
+RectangleElement::RectangleElement(GroupID * element)
+{
+	_type = T_GroupID;
+	_groupid = element;
+}
+
 
 
 

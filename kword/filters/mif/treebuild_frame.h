@@ -11,6 +11,8 @@
 #include <list>
 #include <string>
 
+class FrameID;
+class ImportObject;
 class ShapeRect;
 class FrameType;
 class Tag;
@@ -62,7 +64,7 @@ public:
 	NSOffset( double value, const char* value );
 
 private:
-	double value;
+	double _value;
 };
 
 
@@ -72,7 +74,7 @@ public:
 	BLOffset( double value, const char* value );
 
 private:
-	double value;
+	double _value;
 };
 
 

@@ -11,6 +11,7 @@
 #include <list>
 #include <string>
 
+class Polygon;
 class Unique;
 class TextRect;
 class TextLine;
@@ -26,7 +27,7 @@ class Ellipse;
 class PageType
 {
 public:
-	PageType( string );
+	PageType( const char* );
 
 private:
 	string _value;
@@ -36,7 +37,7 @@ private:
 class PageTag
 {
 public:
-	PageTag( string );
+	PageTag( const char* );
 
 private:
 	string _value;
@@ -58,7 +59,7 @@ private:
 class PageOrientation
 {
 public:
-	PageOrientation( string );
+	PageOrientation( const char* );
 
 private:
 	string _value;

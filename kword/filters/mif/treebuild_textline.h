@@ -8,6 +8,10 @@
 #ifndef _TREEBUILD_TEXTLINE_H
 #define _TREEBUILD_TEXTLINE_H
 
+#include <string>
+#include <list>
+
+class String;
 class Unique;
 class Separation;
 class ObColor;

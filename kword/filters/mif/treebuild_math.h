@@ -11,6 +11,8 @@
 #include <list>
 #include <string>
 
+class Unique;
+class BRect;
 
 class MathFullForm
 {
