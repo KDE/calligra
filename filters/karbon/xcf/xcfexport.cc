@@ -97,7 +97,7 @@ XcfExport::convert( const QCString& from, const QCString& to )
 void
 XcfExport::visitVDocument( VDocument& document )
 {
-	// Remember width and height for layer saving.
+	// Save width and height for layer saving.
 	m_width  = static_cast<unsigned>( document.width()  * m_zoomX );
 	m_height = static_cast<unsigned>( document.height() * m_zoomY );
 
@@ -127,7 +127,7 @@ XcfExport::visitVDocument( VDocument& document )
 	QIODevice::Offset start = 0;
 	QIODevice::Offset end = 0;
 
-	// Remember current offset.
+	// Save current offset.
 	current = m_stream->device()->at();
 
 	// Leave space for layer and channel offsets.
@@ -141,7 +141,7 @@ XcfExport::visitVDocument( VDocument& document )
 
 	for( ; itr.current(); ++itr )
 	{
-		// Remember start offset.
+		// Save start offset.
 		start = m_stream->device()->at();
 
 
@@ -149,7 +149,7 @@ XcfExport::visitVDocument( VDocument& document )
 		itr.current()->accept( *this );
 
 
-		// Remember end offset.
+		// Save end offset.
 		end = m_stream->device()->at();
 
 		// Return to current offset.
@@ -169,17 +169,17 @@ XcfExport::visitVDocument( VDocument& document )
 	// Return to current offset.
 	m_stream->device()->at( current );
 
-	// Append a zero offset to indicate end of layer offset list.
+	// Append a zero offset to indicate end of layer offsets.
 	*m_stream << static_cast<Q_UINT32>( 0 );
 
-	// Remember current offset.
+	// Save current offset.
 	current = m_stream->device()->at();
 
 	// Return to end offset.
 	m_stream->device()->at( end );
 
 
-	// Append a zero offset to indicate end of channel offset list.
+	// Append a zero offset to indicate end of channel offsets.
 	*m_stream << static_cast<Q_UINT32>( 0 );
 }
 
@@ -247,7 +247,7 @@ XcfExport::visitVLayer( VLayer& layer )
 	// False.
 	*m_stream << static_cast<Q_UINT32>( 0 );
 
-	// Offsets.
+	// Layer offsets.
 	*m_stream << static_cast<Q_UINT32>( 15 );
 	// Property size in bytes.
 	*m_stream << static_cast<Q_UINT32>( 8 );
@@ -281,38 +281,21 @@ XcfExport::visitVLayer( VLayer& layer )
 	QIODevice::Offset start = 0;
 	QIODevice::Offset end = 0;
 
-	// Remember position.
+	// Save current offset.
 	current = m_stream->device()->at();
 
-	// Leave space for hierarchy offset.
+	// Leave space for hierarchy offsets.
 	m_stream->device()->at( current + 8 );
 
-	// Remember start offset.
+	// Save start offset.
 	start = m_stream->device()->at();
 
 
-	// Save hierarchy.
-
-	// Width (again?)
-	*m_stream << m_width;
-
-	// Height (again?)
-	*m_stream << m_height;
-
-	// Layer color depth.
-	*m_stream << static_cast<Q_UINT32>( 3 );
+	// Write hierarchy.
+	writeHierarchy();
 
 
-// TODO
-	// Calculate tile-rows and -columns.
-//	Q_UINT32 rows    = ( m_height + m_tileHeight - 1 ) / m_tileHeight;
-//	Q_UINT32 columns = ( m_width  + m_tileWidth  - 1 ) / m_tileWidth;
-
-	// Append a zero offset to indicate end of layer hierarchy offset list.
-	*m_stream << static_cast<Q_UINT32>( 0 );
-
-
-	// Remember end offset.
+	// Save end offset.
 	end = m_stream->device()->at();
 
 	// Return to current offset.
@@ -321,12 +304,147 @@ XcfExport::visitVLayer( VLayer& layer )
 	// Save hierarchy offset.
 	*m_stream << start;
 
-	// Return to end offset.
-	m_stream->device()->at( end );
 
-
-	// Append a zero offset to indicate end of layer mask offset list.
+	// Append a zero offset to indicate end of layer mask offsets.
 	*m_stream << static_cast<Q_UINT32>( 0 );
+}
+
+void
+XcfExport::writeHierarchy()
+{
+	// Offsets.
+	QIODevice::Offset current = 0;
+	QIODevice::Offset start = 0;
+	QIODevice::Offset end = 0;
+
+	// Width (again?).
+	*m_stream << m_width;
+
+	// Height (again?).
+	*m_stream << m_height;
+
+	// Color depth.
+	*m_stream << static_cast<Q_UINT32>( 3 );
+
+	
+	// Calculate level number.
+	int levX = levels( m_width, m_tileWidth );
+	int levY = levels( m_height, m_tileHeight );
+	int levels = QMAX( levX, levY );
+
+	int width = m_width;
+	int height = m_height;
+
+	// Save current offset.
+	current = m_stream->device()->at();
+
+	// Leave space for level offsets.
+	m_stream->device()->at( current + ( levels + 1 ) * 4 );
+
+	for( int i = 0; i < levels; ++i ) 
+	{
+		// Save start offset.
+		start = m_stream->device()->at();
+
+		if( i == 0 ) 
+		{
+			// Write level.
+			writeLevel();
+		} 
+		else 
+		{
+			// Fake an empty level.
+			width  /= 2;
+			height /= 2;
+
+			*m_stream << static_cast<Q_UINT32>( width );
+			*m_stream << static_cast<Q_UINT32>( height );
+			*m_stream << static_cast<Q_UINT32>( 0 );
+		}
+
+		// Save end offset.
+		end = m_stream->device()->at();
+
+		// Return to current offset.
+		m_stream->device()->at( current );
+
+		// Save level offset.
+		*m_stream << start;
+
+		// Increment offset.
+		current = m_stream->device()->at();
+
+		// Return to end offset.
+		m_stream->device()->at( end );
+	}
+
+	// Return to current offset.
+	m_stream->device()->at( current );
+
+	// Append a zero offset to indicate end of level offsets.
+	*m_stream << static_cast<Q_UINT32>( 0 );
+}
+
+void
+XcfExport::writeLevel()
+{
+	// Offsets.
+	QIODevice::Offset current = 0;
+	QIODevice::Offset start = 0;
+	QIODevice::Offset end = 0;
+
+	*m_stream << static_cast<Q_UINT32>( m_width );
+	*m_stream << static_cast<Q_UINT32>( m_height );
+
+	int rows = ( m_height + m_tileHeight - 1 ) / m_tileHeight;
+	int cols = ( m_width  + m_tileWidth  - 1 ) / m_tileWidth;
+	int tiles = rows * cols;	
+
+	// Save current offset.
+	current = m_stream->device()->at();
+
+	// Leave space for tile offsets.
+	m_stream->device()->at( current + ( tiles + 1 ) * 4 );
+
+	for( int i = 0; i < tiles; ++i )
+	{
+		// Save start offset.
+		start = m_stream->device()->at();
+
+
+		// TODO: Save tile.
+		*m_stream << static_cast<Q_UINT8>( 0 );
+
+
+		// Save end offset.
+		end = m_stream->device()->at();
+
+		// Return to current offset.
+		m_stream->device()->at( current );
+
+		// Save tile offset.
+		*m_stream << start;
+
+		// Increment offset.
+		current = m_stream->device()->at();
+
+		// Return to end offset.
+		m_stream->device()->at( end );
+	}
+}
+
+int
+XcfExport::levels( int layerSize, int tileSize )
+{
+	int l = 1;
+
+	while( layerSize > tileSize )
+	{
+		layerSize /= 2;
+		l += 1;
+	}
+
+	return l;
 }
 
 #include "xcfexport.moc"

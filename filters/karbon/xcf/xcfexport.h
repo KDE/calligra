@@ -46,6 +46,22 @@ public:
 
 private:
 	/**
+	 * Writes a hierarchy.
+	 */
+	 void writeHierarchy();
+
+	/**
+	 * Writes a level.
+	 */
+	 void writeLevel();
+
+	/**
+	 * Calculates levels from layer and tile size.
+	 */
+	static int levels( int layerSize, int tileSize );
+
+
+	/**
 	 * Tile size constants.
 	 */
 	static const unsigned m_tileWidth;
