@@ -3507,13 +3507,17 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
 
 bool KWFootNoteFrameSet::isFootNote() const
 {
-    Q_ASSERT( m_footNoteVar );
+    if ( !m_footNoteVar )
+        return false;
+    //Q_ASSERT( m_footNoteVar );
     return (m_footNoteVar->noteType()==FootNote );
 }
 
 bool KWFootNoteFrameSet::isEndNote() const
 {
-    Q_ASSERT( m_footNoteVar );
+    if ( !m_footNoteVar )
+        return false;
+    //Q_ASSERT( m_footNoteVar );
     return (m_footNoteVar->noteType()==EndNote );
 }
 
