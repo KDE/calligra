@@ -40,7 +40,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParame
   toplevel->addLayout( left, 2 );
   
   wallCB = new QComboBox( false, this, "wallCombo" );
-  QWhatsThis::add( wallCB, i18n( "You can select a a background image from "
+  QWhatsThis::add( wallCB, i18n( "You can select a background image from "
 								 "this list. Initially, the installed KDE "
 								 "wallpapers will be offered. If you do not "
 								 "find what you are looking for here, you can "
