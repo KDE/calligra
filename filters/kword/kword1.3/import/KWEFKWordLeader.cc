@@ -753,15 +753,19 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
 {
     //kdDebug (30508) << "Entering ProcessDocTag" << endl;
 
+    QString editor;
+
     QValueList<AttrProcessing> attrProcessingList;
 
     attrProcessingList << AttrProcessing ( "xmlns",         "QString", 0  )
-                       << AttrProcessing ( "editor",        "QString", 0  )
+                       << AttrProcessing ( "editor",        "QString", &editor  )
                        << AttrProcessing ( "mime",          "QString", 0  )
-                       << AttrProcessing ( "syntaxVersion", "int",     0  );
+                       << AttrProcessing ( "syntaxVersion", "int",     &leader->m_syntaxVersion  );
 
     ProcessAttributes( myNode, attrProcessingList );
-    // TODO: verify syntax version and perhaps mime
+
+    kdDebug(30508) << "Document written by " << editor << endl;
+    kdDebug(30508) << "Document of syntax version " << leader->m_syntaxVersion << endl;
 
     leader->doOpenHead();
 
@@ -793,7 +797,7 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
     else
         ProcessStylesPluralTag (nodeStyles, NULL, leader);
 
-    // Process framesets, but only to find and extract footnotes
+    // Process framesets, but only to find and extract footnotes (### TODO: also endnotes)
     QValueList<FootnoteData> footnotes;
     QDomNode nodeFramesets=myNode.namedItem("FRAMESETS");
     if ( !nodeFramesets.isNull() )

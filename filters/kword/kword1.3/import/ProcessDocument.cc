@@ -563,6 +563,11 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
     attrProcessingList << AttrProcessing ( "len", "int", (void *) &formatLen );
     ProcessAttributes (myNode, attrProcessingList);
 
+    if ( ( formatId == -1 ) && ( leader->m_syntaxVersion == 1 ) )
+    {
+        formatId = 1; // KWord 0.8 did not define it in <LAYOUT>
+    }
+
     switch ( formatId )
     {
     case 1: // regular texts
@@ -652,6 +657,16 @@ static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, KWEFKWor
         << AttrProcessing ( "filling", "int",    &tabulator.m_filling )
         << AttrProcessing ( "width",   "double", &tabulator.m_width   )
         ;
+
+    if ( leader->m_syntaxVersion == 1 )
+    {
+        // Avoid too many warning
+        attrProcessingList
+            << AttrProcessing ( "mmpos", "", 0 )
+            << AttrProcessing ( "inchpos", "", 0 )
+            ;
+    }
+
     ProcessAttributes (myNode, attrProcessingList);
     tabulatorList->append(tabulator);
 
@@ -816,7 +831,6 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "NAME",         ProcessStringValueTag,       &layout->styleName           );
     tagProcessingList << TagProcessing ( "FOLLOWING",    ProcessFollowingTag,         &layout->styleFollowing      );
-    tagProcessingList << TagProcessing ( "FLOW",         ProcessStringAlignTag,       &layout->alignment           );
     tagProcessingList << TagProcessing ( "INDENTS",      ProcessIndentsTag,           (void *) layout              );
     tagProcessingList << TagProcessing ( "OFFSETS",      ProcessLayoutOffsetTag,      (void *) layout              );
     tagProcessingList << TagProcessing ( "LINESPACING",  ProcessLinespacingTag,       (void *) layout              );
@@ -829,7 +843,40 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     tagProcessingList << TagProcessing ( "FORMAT",       ProcessFormatTag,            (void *) &formatDataList     );
     tagProcessingList << TagProcessing ( "TABULATOR",    ProcessLayoutTabulatorTag,   &layout->tabulatorList       );
     tagProcessingList << TagProcessing ( "SHADOW",       ProcessShadowTag,            layout                       );
+
+    if ( leader->m_syntaxVersion == 1)
+    {
+        tagProcessingList << TagProcessing ( "FLOW", ProcessStringValueTag, &layout->alignment );
+    }
+    else
+    {
+        tagProcessingList << TagProcessing ( "FLOW", ProcessStringAlignTag, &layout->alignment );
+    }
+
     ProcessSubtags (myNode, tagProcessingList, leader);
+
+    if ( leader->m_syntaxVersion == 1 )
+    {
+        if ( layout->alignment.isEmpty() )
+        {
+            layout->alignment = "left"; // KWord 0.8 did not support right-to-left
+        }
+        else
+        {
+            const char* flows[]={"left", "right", "center", "justify" };
+
+            kdDebug(30508) << "Syntax 1 flow: " << layout->alignment << endl;
+
+            int align = layout->alignment.toInt();
+            if ( ( align < 0 ) || ( align > 3) )
+                align = 0; // Unknown, so assume left
+
+            layout->alignment = flows[ align ];
+
+            kdDebug(30508) << "Corrected flow: " << layout->alignment << endl;
+        }
+    }
+
 
 
     if ( formatDataList.isEmpty () )
