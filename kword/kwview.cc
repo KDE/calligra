@@ -3658,6 +3658,8 @@ void KWView::slotSpellCheck()
     m_spell.replaceAll.clear();
     QValueList<KoTextObject *> objects;
     KWTextFrameSetEdit * edit = currentTextEdit();
+    if (!edit)
+        return;
     int options = 0;
     if ( edit && edit->textFrameSet()->hasSelection() )
     {
