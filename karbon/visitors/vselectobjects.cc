@@ -59,7 +59,6 @@ VSelectObjects::visitVComposite( VComposite& composite )
 
 					if( found )
 					{
-						composite.setState( VObject::selected );
 						m_selection.append( &composite );
 						setSuccess();
 						return;
@@ -94,7 +93,7 @@ VSelectObjects::visitVObject( VObject& object )
 		{
 			if( m_rect.intersects( object.boundingBox() ) )
 			{
-				object.setState( VObject::selected );
+				//object.setState( VObject::selected );
 				m_selection.append( &object );
 				setSuccess();
 			}
