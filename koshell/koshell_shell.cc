@@ -17,6 +17,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+#include <kactivator.h>
 #include <qprinter.h>
 #include <qmsgbox.h>
 #include <qhbox.h>
@@ -27,7 +28,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kded_instance.h>
-#include <kactivator.h>
 
 #include <opMainWindowIf.h>
 #include <opMenuBarManager.h>
