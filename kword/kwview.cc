@@ -613,6 +613,8 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
 
     QString group = "";
 
+    parentMenu->popupMenu()->insertSeparator();
+
     QDomNode n = doc.documentElement().firstChild();
     for( ; !n.isNull(); n = n.nextSibling() )
         {
