@@ -665,8 +665,6 @@ void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles ) co
         double yInPage = top() - pgNum * frameSet()->kWordDocument()->ptPaperHeight();
         writer.addAttributePt( "svg:x", left() );
         writer.addAttributePt( "svg:y", yInPage );
-        writer.addAttribute( "text:anchor-type", "page" );
-        writer.addAttribute( "text:anchor-page-number", pgNum + 1 ); // OASIS starts at 1
         writer.addAttribute( "draw:z-index", zOrder() );
     }
     writer.addAttributePt( "svg:width", width() );
@@ -688,14 +686,14 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
     }
     if ( !protect.isEmpty() )
         frameStyle.addProperty("style:protect", protect );
-#if 0
+
     if ( !frameSet()->isFloating() )
     { // non-inline frame: anchor to page
         frameStyle.addProperty( "text:anchor-type", "page" );
         int pgNum = pageNum();
         frameStyle.addProperty( "text:anchor-page-number", pgNum + 1 ); // OASIS starts at 1
     }
-#endif
+
     if (  ( m_borderLeft == m_borderRight )
           && ( m_borderLeft == m_borderTop )
           && ( m_borderLeft == m_borderBottom ) )
