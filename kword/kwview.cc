@@ -1925,6 +1925,7 @@ void KWView::showMouseMode( int _mouseMode )
     actionTableDelRow->setEnabled( false );
     actionTableDelCol->setEnabled( false );
     actionTablePropertiesMenu->setEnabled( false );
+    actionConvertTableToText->setEnabled( false );
 }
 
 void KWView::showStyle( const QString & styleName )
@@ -5580,7 +5581,7 @@ void KWView::frameSelectedChanged()
     actionTableJoinCells->setEnabled( table && (nbFrame>1));
     actionTableDelRow->setEnabled( table && table->isRowsSelected());
     actionTableDelCol->setEnabled( table && table->isColsSelected());
-
+    actionConvertTableToText->setEnabled( table );
     bool state=(table && nbFrame==1);
 
     actionTableSplitCells->setEnabled( state );
@@ -6738,7 +6739,7 @@ void KWView::convertTableToText()
                 }
             }
             m_doc->addCommand(macro);
-
+            QApplication::clipboard()->clear();
         }
     }
 }
