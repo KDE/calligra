@@ -1416,6 +1416,77 @@ private:
 };
 
 
+/**
+  Class MergedCellsRecord represents MergedCells record, which contains
+  a list of all merged cells in the current sheets. Each entry in this list
+  define the range of cells that should be merged, namely firstRow, lastRow, 
+  firstColumn and lastColumn.
+ */
+ 
+class MergedCellsRecord : public Record
+{
+public:
+
+  static const unsigned int id;
+
+  /**
+   * Creates a new MergedCells record.
+   */
+  MergedCellsRecord();
+
+  /**
+   * Destroys the record.
+   */
+  virtual ~MergedCellsRecord();
+  
+  /**
+   * Returns the total number of merged cells in the list.
+   */
+  unsigned count() const;
+  
+  /**
+   * Returns the index to first row in the i-th position in the list.
+   */
+  unsigned firstRow( unsigned i ) const;
+  
+  /**
+   * Returns the index to last row in the i-th position in the list.
+   */
+  unsigned lastRow( unsigned i ) const;
+  
+  /**
+   * Returns the index to first column in the i-th position in the list.
+   */
+  unsigned firstColumn( unsigned i ) const;
+  
+  /**
+   * Returns the index to last column in the i-th position in the list.
+   */
+  unsigned lastColumn( unsigned i ) const;
+
+  /**
+   \reimpl
+   */
+  virtual void setData( unsigned size, const unsigned char* data );
+  
+  /**
+   \reimpl
+   */
+  virtual const char* name(){ return "MERGEDCELLS"; }
+
+  /**
+   \reimpl
+   */
+  virtual void dump( std::ostream& out ) const;
+
+private:
+   // no copy or assign
+   MergedCellsRecord( const MergedCellsRecord& );
+   MergedCellsRecord& operator=( const MergedCellsRecord& );
+
+   class Private;
+   Private *d;
+};
 
 /**
   Class MulBlankRecord represents a cell range containing blank cells. 
@@ -2601,6 +2672,7 @@ private:
   void handleFont( FontRecord* record );
   void handleLabel( LabelRecord* record );
   void handleLabelSST( LabelSSTRecord* record );
+  void handleMergedCells( MergedCellsRecord* record );
   void handleMulBlank( MulBlankRecord* record );
   void handleMulRK( MulRKRecord* record );
   void handleNumber( NumberRecord* record );

@@ -368,6 +368,9 @@ Record* RecordFactory::create( unsigned type )
   if( type == LeftMarginRecord::id )
     record = new LeftMarginRecord();
     
+  else if( type == MergedCellsRecord::id )
+    record = new MergedCellsRecord();
+    
   else if( type == MulBlankRecord::id )
     record = new MulBlankRecord();
     
@@ -1639,6 +1642,93 @@ void LeftMarginRecord::dump( std::ostream& out ) const
 {
   out << "LEFTMARGIN" << std::endl;
   out << "   Margin : " << leftMargin() << std::endl;
+}
+
+// ========== MERGEDCELLS ==========
+
+const unsigned int MergedCellsRecord::id = 0x00e5;
+
+class MergedInfo
+{
+public:
+  unsigned firstRow, lastRow, firstColumn, lastColumn;
+};
+
+class MergedCellsRecord::Private
+{
+public:
+  std::vector<MergedInfo> mergedCells;
+};
+
+MergedCellsRecord::MergedCellsRecord():
+  Record()
+{
+  d = new MergedCellsRecord::Private();
+}
+
+MergedCellsRecord::~MergedCellsRecord()
+{
+  delete d;
+}
+
+unsigned MergedCellsRecord::count() const
+{
+  return d->mergedCells.size();
+}
+
+unsigned MergedCellsRecord::firstRow( unsigned i ) const
+{
+  if( i >= d->mergedCells.size() ) return 0;
+  MergedInfo info = d->mergedCells[ i ];
+  return info.firstRow;
+}
+
+unsigned MergedCellsRecord::lastRow( unsigned i ) const
+{
+  if( i >= d->mergedCells.size() ) return 0;
+  MergedInfo info = d->mergedCells[ i ];
+  return info.lastRow;
+}
+
+unsigned MergedCellsRecord::firstColumn( unsigned i ) const
+{
+  if( i >= d->mergedCells.size() ) return 0;
+  MergedInfo info = d->mergedCells[ i ];
+  return info.firstColumn;
+}
+
+unsigned MergedCellsRecord::lastColumn( unsigned i ) const
+{
+  if( i >= d->mergedCells.size() ) return 0;
+  MergedInfo info = d->mergedCells[ i ];
+  return info.lastColumn;
+}
+
+void MergedCellsRecord::setData( unsigned size, const unsigned char* data )
+{
+  if( size < 2 ) return;
+  
+  unsigned num = readU16( data );
+  
+  // sanity check
+  if( size < 2 + num*4 ) return;
+  
+  unsigned p = 2;
+  for( unsigned i = 0; i < num; i++ )
+  {
+    MergedInfo info;
+    info.firstRow = readU16( data + p );
+    info.lastRow = readU16( data + p + 2 );
+    info.firstColumn = readU16( data + p + 4 );
+    info.lastColumn = readU16( data + p + 6 );
+    p += 8;
+    d->mergedCells.push_back( info );
+  }
+}
+
+void MergedCellsRecord::dump( std::ostream& out ) const
+{
+  out << "MERGEDCELLS" << std::endl;
 }
 
 // ========== MULBLANK ==========
@@ -3053,6 +3143,14 @@ void ExcelReader::handleLabelSST( LabelSSTRecord* record )
     cell->setFormat( convertFormat( xfIndex) );
   }
 }
+
+void ExcelReader::handleMergedCells( MergedCellsRecord* record )
+{
+  if( !record ) return;
+  
+  // TODO merged cells ?
+}
+
 
 void ExcelReader::handleMulBlank( MulBlankRecord* record )
 {
