@@ -551,7 +551,7 @@ ColumnLayout* KSpreadTable::nonDefaultColumnLayout( int _column, bool force_crea
 
     p = new ColumnLayout( this, _column );
     p->setWidth( m_pDefaultColumnLayout->width() );
-    
+
     //p->setWidth( static_cast<int>(colWidth) );
     m_columns.insertElement( p, _column );
 
@@ -734,36 +734,6 @@ void KSpreadTable::setSelection( const QRect &_sel, const QPoint& m, KSpreadCanv
     if ( m_rctSelection.left() + cell->extraXCells() == m_rctSelection.right() &&
          m_rctSelection.top() + cell->extraYCells() == m_rctSelection.bottom() )
       cell->clicked( _canvas );
-
-/***************************temporary code for testing.  REMOVE ME!!*/
-    int c = m_rctSelection.left();
-    int r = m_rctSelection.top();
-    if (c > 0 && r > 0)
-    {
-      kdDebug(36001) << "testing cell " <<
-        util_cellName(c,r) << endl;
-
-      KSpreadCell* up = getNextCellUp(c,r);
-      KSpreadCell* down = getNextCellDown(c,r);
-      KSpreadCell* left = getNextCellLeft(c,r);
-      KSpreadCell* right = getNextCellRight(c,r);
-
-      QString str;
-
-      str = (up == NULL) ? "NULL" : util_cellName(up->column(), up->row());
-      kdDebug(36001) << "next used cell up is " << str << endl;
-
-      str = (down == NULL) ? "NULL" : util_cellName(down->column(), down->row());
-      kdDebug(36001) << "next used cell down is " << str << endl;
-
-      str = (left == NULL) ? "NULL" : util_cellName(left->column(), left->row());
-      kdDebug(36001) << "next used cell left is " << str << endl;
-
-      str = (right == NULL) ? "NULL" :
-            util_cellName(right->column(), right->row());
-      kdDebug(36001) << "next used cell right is " << str << endl;
-    }
-/***********end of temporary code */
   }
 
   QRect old_marker = m_marker;
@@ -1473,24 +1443,24 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
     numberOfCells = (int)( (log((double)end) / log((double)start)) +
 			     DBL_EPSILON) + 1;
   }
-  
+
   KSpreadCell *cell = NULL;
-  
+
   /* markers for the top-left corner of the undo region.  It'll probably
    * be the top left corner of where the series is, but if something in front
    * is obscuring the cell, then it needs to be part of the undo region */
   QRect undoRegion;
-  
+
   undoRegion.setLeft(_marker.x());
   undoRegion.setTop(_marker.y());
-  
+
   /* this whole block is used to find the correct size for the undo region.
      We're checking for two different things (in these examples,
        mode==column):
-       
+
        1.  cells are vertically merged.  This means that one value in the
        series will span multiple cells.
-       
+
        2.  a cell in the column is merged to a cell to its left.  In this case
        the cell value will be stored in the left most cell so we need to
        extend the undo range to include that column.
@@ -1500,7 +1470,7 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
     for ( y = _marker.y(); y <= (_marker.y() + numberOfCells - 1); y++ )
     {
       cell = cellAt( _marker.x(), y );
-      
+
       if ( cell->isObscuringForced() )
       {
         /* case 2. */
@@ -1527,7 +1497,7 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
       /* see the code above for a column series for a description of
          what is going on here. */
       cell = cellAt( x,_marker.y() );
-      
+
       if ( cell->isObscuringForced() )
       {
         undoRegion.setTop(QMIN(undoRegion.top(),
@@ -1541,18 +1511,18 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
     undoRegion.setBottom( _marker.y() );
     undoRegion.setRight( x - 1 );
   }
-  
+
   if ( !m_pDoc->undoBuffer()->isLocked() )
   {
     KSpreadUndoChangeAreaTextCell *undo = new
       KSpreadUndoChangeAreaTextCell( m_pDoc, this, undoRegion );
     m_pDoc->undoBuffer()->appendUndo( undo );
   }
-  
-  
+
+
   x = _marker.x();
   y = _marker.y();
-  
+
   /* now we're going to actually loop through and set the values */
   double incr;
 
@@ -1561,13 +1531,13 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
     for ( incr = start; incr <= end; )
     {
       cell = nonDefaultCell( x, y );
-      
+
       if (cell->isObscuringForced())
       {
         cell = cellAt( cell->obscuringCellsColumn(),
                        cell->obscuringCellsRow());
       }
-    
+
       cell->setCellText(cellText.setNum( incr ));
       if (mode == Column)
       {
@@ -1590,7 +1560,7 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
         kdDebug(36001) << "Error in Series::mode" << endl;
         return;
       }
-    
+
       if (type == Linear)
         incr = incr + step;
       else if (type == Geometric)
@@ -1607,13 +1577,13 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
     for ( incr = start; incr >= end; )
     {
       cell = nonDefaultCell( x, y );
-    
+
       if (cell->isObscuringForced())
       {
         cell = cellAt( cell->obscuringCellsColumn(),
                        cell->obscuringCellsRow());
       }
-    
+
       cell->setCellText(cellText.setNum( incr ));
       if (mode == Column)
       {
@@ -1636,7 +1606,7 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
         kdDebug(36001) << "Error in Series::mode" << endl;
         return;
       }
-    
+
       if (type == Linear)
         incr = incr + step;
       else if (type == Geometric)
@@ -2044,7 +2014,7 @@ void KSpreadTable::showRow( int _row, int nbRow, QValueList<int>_list )
 	undo = new KSpreadUndoShowRow( m_pDoc, this, _row,nbRow, _list );
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
-    
+
     RowLayout *rl;
     if( nbRow!=-1 )
       {
@@ -2071,7 +2041,7 @@ void KSpreadTable::showRow( int _row, int nbRow, QValueList<int>_list )
 void KSpreadTable::hideColumn( int _col, int nbCol, QValueList<int>_list )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() )
-    { 
+    {
         KSpreadUndoHideColumn *undo;
 	if( nbCol!=-1 )
 	  undo= new KSpreadUndoHideColumn( m_pDoc, this, _col, nbCol );
@@ -2698,7 +2668,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
     ColumnLayout *cl=nonDefaultColumnLayout(m_rctSelection.left());
     cl->setLeftBorderPen(pen);
 
-    KSpreadCell* cell;    
+    KSpreadCell* cell;
     rw =m_rows.first();
     for( ; rw; rw = rw->next() )
     {
@@ -2723,7 +2693,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
                                                                r,title );
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
-    
+
     KSpreadCell* cell;
     int x;
     for ( int y = r.top(); y <= r.bottom(); y++ )
@@ -3046,12 +3016,12 @@ void KSpreadTable::sortByColumn( int ref_column, SortingOrder mode )
 void KSpreadTable::checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, int & ret)
 {
   if ( cell1->isEmpty() )
-  { 
+  {
     ret = 1;
     return;
   }
   else if ( cell1->isObscured() && cell1->isObscuringForced() )
-  { 
+  {
     ret = 1;
     return;
   }
@@ -3071,7 +3041,7 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
   QRect r( selectionRect() );
 
   Q_ASSERT( order1 == Increase || order1 == Decrease );
-  
+
   // It may not happen that entire columns are selected.
   Q_ASSERT( isColumnSelected() == FALSE );
 
@@ -3080,7 +3050,7 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
   {
     r.setLeft( KS_colMax );
     r.setRight( 0 );
-    
+
     // Determine a correct left and right.
     // Iterate over all cells to find out which cells are
     // located in the selected rows.
@@ -3089,7 +3059,7 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
     {
       int row = c->row();
       int col = c->column();
-      
+
       // Is the cell in the selected columns ?
       if ( !c->isEmpty() && row >= r.top() && row <= r.bottom())
       {
@@ -3099,12 +3069,12 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
           r.rLeft() = col;
       }
     }
-    
+
     // Any cells to sort here ?
     if ( r.right() < r.left() )
       return;
   }
-  
+
   QRect target( outputPoint.pos.x(), outputPoint.pos.y(), r.width(), r.height() );
 
   if ( !m_pDoc->undoBuffer()->isLocked() )
@@ -3134,14 +3104,14 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
       cell1 = cellAt( moveX + cell->extraXCells() + 1, moveX );
       d = moveX + cell->extraXCells() + 1;
     }
-    
+
     // Look for which column we want to swap with the one number d
     bestCell = cell1;
     int bestX = d;
     for ( int x = d + 1 ; x <= r.right(); x++ )
     {
       cell2 = cellAt( x, key1 );
-      
+
       checkCellContent(cell2, bestCell, status);
       if (status == 1)
         continue;
@@ -3150,37 +3120,37 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
         // empty cells are always shifted to the end
         bestCell = cell2;
         bestX = x;
-        continue;     
+        continue;
       }
-      
+
       if ( firstKey )
       {
         int i1 = firstKey->findIndex( cell2->text() );
         int i2 = firstKey->findIndex( bestCell->text() );
-        
+
         if ( i1 != -1 && i2 != -1 )
         {
-          if ( (order1 == Increase && i1 < i2 ) 
+          if ( (order1 == Increase && i1 < i2 )
                || (order1 == Decrease && i1 > i2) )
           {
             bestCell = cell2;
             bestX = x;
             continue;
           }
-          
+
           if ( i1 == i2 )
           {
             // check 2nd key
             KSpreadCell * cell22 = cellAt( d, key2 );
             KSpreadCell * bestCell2 = cellAt( x, key2 );
-            
+
             if ( cell22->isEmpty() )
-            { 
-              /* No need to swap */ 
+            {
+              /* No need to swap */
               continue;
             }
             else if ( cell22->isObscured() && cell22->isObscuringForced() )
-            { 
+            {
               /* No need to swap */
               continue;
             }
@@ -3189,7 +3159,7 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
               // empty cells are always shifted to the end
               bestCell = cell2;
               bestX = x;
-              continue;     
+              continue;
             }
 
             if ( (order2 == Increase && *cell22 < *bestCell2)
@@ -3212,12 +3182,12 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
               KSpreadCell * bestCell3 = cellAt( x, key3 );
 
               if ( cell23->isEmpty() )
-              { 
-                /* No need to swap */ 
+              {
+                /* No need to swap */
                 continue;
               }
               else if ( cell23->isObscured() && cell23->isObscuringForced() )
-              { 
+              {
                 /* No need to swap */
                 continue;
               }
@@ -3226,9 +3196,9 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
                 // empty cells are always shifted to the end
                 bestCell = cell2;
                 bestX = x;
-                continue;     
+                continue;
               }
-              
+
               if ( (order3 == Increase && *cell23 < *bestCell3)
                    || (order3 == Decrease && *cell23 > *bestCell3) )
               {
@@ -3248,7 +3218,7 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
         else if ( i1 != -1 && i2 == -1 )
         {
           // only text of cell2 is in the list so it is smaller than bestCell
-          /* No need to swap */ 
+          /* No need to swap */
           continue;
         }
         else if ( i2 != -1 && i1 == -1 )
@@ -3263,14 +3233,14 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
       } // end if (firstKey)
 
       // Here we use the operators < and > for cells, which do it all.
-      if ( (order1 == Increase && *cell2 < *bestCell) 
+      if ( (order1 == Increase && *cell2 < *bestCell)
            || (order1 == Decrease && *cell2 > *bestCell) )
       {
         bestCell = cell2;
         bestX = x;
         continue;
       }
-      else if ( (order1 == Increase && *cell2 > *bestCell) 
+      else if ( (order1 == Increase && *cell2 > *bestCell)
                 || (order1 == Decrease && *cell2 < *bestCell) )
       {
         // no change necessary
@@ -3295,7 +3265,7 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
           // empty cells are always shifted to the end
           bestCell = cell2;
           bestX = x;
-          continue;     
+          continue;
         }
 
         //        kdDebug() << "Not empty: " << cell22->text() << " <=> " << bestCell2->text() << " O: " << order2 << endl;
@@ -3331,7 +3301,7 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
             // empty cells are always shifted to the end
             bestCell = cell2;
             bestX = x;
-            continue;     
+            continue;
           }
           if ( (order3 == Increase && *cell23 > *bestCell3)
                || (order3 == Decrease && *cell23 < *bestCell3) )
@@ -3349,7 +3319,7 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
         }
       }
     }
-    
+
     if (target.topLeft() == r.topLeft())
     {
       // Swap columns cell1 and bestCell (i.e. d and bestX)
@@ -3371,12 +3341,12 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
     {
       int right = target.right();
       int top   = target.top() + d - r.left() + 1;
-      
+
       for( int y = target.bottom(); y >= top; --y )
       {
         copyCells( bestX, y, right, y, copyLayout );
-      }        
-    }    
+      }
+    }
   } // for (d = ...; ...; ++d)
 
   doc()->emitEndOperation();
@@ -3390,16 +3360,16 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
   QRect r( m_rctSelection );
 
   Q_ASSERT( order1 == Increase || order1 == Decrease );
-  
+
   // It may not happen that entire rows are selected.
   Q_ASSERT( isRowSelected() == FALSE );
-  
+
   // Are entire columns selected ?
   if ( isColumnSelected() )
   {
     r.setTop( KS_rowMax );
     r.setBottom( 0 );
-    
+
     // Determine a correct top and bottom.
     // Iterate over all cells to find out which cells are
     // located in the selected columns.
@@ -3408,7 +3378,7 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
     {
       int row = c->row();
       int col = c->column();
-      
+
       // Is the cell in the selected columns ?
       if ( !c->isEmpty() && col >= r.left() && col <= r.right())
       {
@@ -3418,7 +3388,7 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
           r.rTop() = row;
       }
     }
-    
+
     // Any cells to sort here ?
     if ( r.bottom() < r.top() )
       return;
@@ -3440,14 +3410,14 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
   // For each row, we look for all rows under it and we find the one to swap with it.
   // Much faster than the awful bubbleSort...
   // Torben: Asymptotically it is alltogether O(n^2) :-)
-  
+
   KSpreadCell * cell;
   KSpreadCell * cell1;
   KSpreadCell * cell2;
   KSpreadCell * bestCell;
   int status = 0;
 
-  //  kdDebug() << "Key1: " << key1 << ", Key2 " << key2 << ", Key3 " << key3 
+  //  kdDebug() << "Key1: " << key1 << ", Key2 " << key2 << ", Key3 " << key3
   //            << ", Rect TL: " << r.top() << ", " << r.left() << endl;
 
   for ( int d = r.top(); d <= r.bottom(); ++d )
@@ -3461,23 +3431,23 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
       cell1 = cellAt( key1, moveY+cell->extraYCells() + 1 );
       d     = moveY + cell->extraYCells() + 1;
     }
-    
+
     bestCell  = cell1;
     int bestY = d;
     //    kdDebug() << "Testing cell in row: " << d << ", Text: " << cell1->text() << endl;
-    
+
     for ( int y = d + 1 ; y <= r.bottom(); ++y )
     {
       cell2 = cellAt( key1, y );
       //      kdDebug() << "Testing cell (key1, y) " << key1 << ", " << y << ", Text: " << cell2->text() << endl;
-      
+
       if ( cell2->isEmpty() )
-      { 
-        /* No need to swap */ 
+      {
+        /* No need to swap */
         continue;
       }
       else if ( cell2->isObscured() && cell2->isObscuringForced() )
-      { 
+      {
         /* No need to swap */
         continue;
       }
@@ -3488,22 +3458,22 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
         bestY = y;
         continue;
       }
-      
+
       if ( firstKey )
       {
         int i1 = firstKey->findIndex( cell2->text() );
         int i2 = firstKey->findIndex( bestCell->text() );
-        
+
         if ( i1 != -1 && i2 != -1 )
         {
-          if ( (order1 == Increase && i1 < i2 ) 
+          if ( (order1 == Increase && i1 < i2 )
                || (order1 == Decrease && i1 > i2) )
           {
             bestCell = cell2;
             bestY = y;
             continue;
           }
-          
+
           if ( i1 == i2 )
           {
             // check 2nd key
@@ -3513,12 +3483,12 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
             KSpreadCell * bestCell2 = cellAt( key2, y );
 
             if ( cell22->isEmpty() )
-            { 
-              /* No need to swap */ 
+            {
+              /* No need to swap */
               continue;
             }
             else if ( cell22->isObscured() && cell22->isObscuringForced() )
-            { 
+            {
               /* No need to swap */
               continue;
             }
@@ -3527,7 +3497,7 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
               // empty cells are always shifted to the end
               bestCell = cell2;
               bestY = y;
-              continue;     
+              continue;
             }
 
             if ( (order2 == Increase && *cell22 < *bestCell2)
@@ -3559,7 +3529,7 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
                 // empty cells are always shifted to the end
                 bestCell = cell2;
                 bestY = y;
-                continue;     
+                continue;
               }
 
               if ( (order3 == Increase && *cell23 < *bestCell3)
@@ -3581,7 +3551,7 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
         else if ( i1 != -1 && i2 == -1 )
         {
           // only text of cell2 is in the list so it is smaller than bestCell
-          /* No need to swap */ 
+          /* No need to swap */
           continue;
         }
         else if ( i2 != -1 && i1 == -1 )
@@ -3591,21 +3561,21 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
           bestY = y;
           continue;
         }
-        
+
         // if i1 and i2 are equals -1 go on:
       } // if (firstKey)
-      
-      
+
+
       // Here we use the operators < and > for cells, which do it all.
-      if ( (order1 == Increase && *cell2 < *bestCell) 
+      if ( (order1 == Increase && *cell2 < *bestCell)
            || (order1 == Decrease && *cell2 > *bestCell) )
       {
-        //        kdDebug() << "Second cell smaller if increase, greater if decrease " << cell2->text() << ", " << bestCell->text() 
+        //        kdDebug() << "Second cell smaller if increase, greater if decrease " << cell2->text() << ", " << bestCell->text()
         //                  << ", bestY " << bestY << " => ... " << endl;
         bestCell = cell2;
         bestY = y;
       }
-      else if ( (order1 == Increase && *cell2 > *bestCell) 
+      else if ( (order1 == Increase && *cell2 > *bestCell)
                 || (order1 == Decrease && *cell2 < *bestCell) )
       {
         // no change necessary
@@ -3622,14 +3592,14 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
         KSpreadCell * cell22 = cellAt( key2, d );
         KSpreadCell * bestCell2 = cellAt( key2, y );
 
-        //        kdDebug() << "Text: " << cell22->row() << ": " << cell22->text() << " <=> " 
+        //        kdDebug() << "Text: " << cell22->row() << ": " << cell22->text() << " <=> "
         //                  << bestCell2->row() << ": " << bestCell2->text() << endl;
 
         // TODO: check if empty...
         if ( (order2 == Increase && *cell22 > *bestCell2)
              || (order2 == Decrease && *cell22 < *bestCell2) )
         {
-          //          kdDebug() << "Cell22 greater if increase, lesser if decrease " << cell22->text() << ", " << bestCell2->text() 
+          //          kdDebug() << "Cell22 greater if increase, lesser if decrease " << cell22->text() << ", " << bestCell2->text()
           //                    << ", bestY: " << bestY << endl;
 
           bestCell = cell2;
@@ -3654,7 +3624,7 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
           if ( (order3 == Increase && *cell23 > *bestCell3)
                || (order3 == Decrease && *cell23 < *bestCell3) )
           {
-            //            kdDebug() << "First cell greater if increase, lesser if decrease " << cell23->text() << ", " << bestCell3->text() 
+            //            kdDebug() << "First cell greater if increase, lesser if decrease " << cell23->text() << ", " << bestCell3->text()
             //                      << ", bestY: " << bestY << endl;
             bestCell = cell2;
             bestY = y;
@@ -3700,10 +3670,10 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
         // from - to
         //    kdDebug() << "Copy cell (" << x << ", " << bestY << ") to (" << x << ", " << top << ")" << endl;
         copyCells( x, bestY, x, top, copyLayout );
-      }        
+      }
     }
   } // for (d = ...; ...; ++d)
-  doc()->emitEndOperation();  
+  doc()->emitEndOperation();
 }
 
 // from - to - copyLayout
@@ -3735,7 +3705,7 @@ void KSpreadTable::copyCells( int x1, int y1, int x2, int y2, bool cpLayout )
     insertCell( targetCell );
   }
 
-  
+
   // TODO: check if this enough
   targetCell->copyContent( sourceCell );
 //    kdDebug() << "Target: (" << x2 << ", " << y2 << ") " << sourceCell->text() << endl;
@@ -3785,14 +3755,14 @@ void KSpreadTable::copyCells( int x1, int y1, int x2, int y2, bool cpLayout )
     targetCell->setAngle( sourceCell->getAngle( x1, y1 ) );
     targetCell->setFormatType( sourceCell->getFormatType( x1, y1 ) );
     */
-  }  
-}        
+  }
+}
 
 void KSpreadTable::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
 {
   KSpreadCell * ref1 = cellAt( x1, y1 );
   KSpreadCell * ref2 = cellAt( x2, y2 );
-  
+
   if ( ref1->isDefault() )
   {
     if ( !ref2->isDefault() )
@@ -3818,7 +3788,7 @@ void KSpreadTable::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
   if (!ref1->isFormula() && !ref2->isFormula())
   {
     KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
-  
+
     tmp->copyContent( ref1 );
     ref1->copyContent( ref2 );
     ref2->copyContent( tmp );
@@ -3941,7 +3911,7 @@ void KSpreadTable::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
 
     KSpreadCell::Style style = ref1->style();
     ref1->setStyle( ref2->style() );
-    ref2->setStyle(style); 
+    ref2->setStyle(style);
 
     bool print = ref1->getDontprintText( ref1->column(), ref1->row() );
     ref1->setDontPrintText( ref2->getDontprintText( ref2->column(), ref2->row() ) );
@@ -4706,7 +4676,7 @@ struct SetConditionalWorker : public KSpreadTable::CellWorker
   }
 };
 
-void KSpreadTable::setConditional( const QRect & _marker, 
+void KSpreadTable::setConditional( const QRect & _marker,
                                    QValueList<KSpreadConditional> const & newConditions)
 {
   if ( !m_pDoc->undoBuffer()->isLocked() )
@@ -4880,7 +4850,7 @@ QString KSpreadTable::copyAsText( const QPoint &_marker )
     }
 
     ++max;
-    
+
     for (y = m_rctSelection.top(); y <= m_rctSelection.bottom(); ++y)
     {
       for (x = m_rctSelection.left(); x <= m_rctSelection.right(); ++x)
@@ -4889,20 +4859,20 @@ QString KSpreadTable::copyAsText( const QPoint &_marker )
         if( !cell->isDefault() )
         {
             int l = max - cell->strOutText().length();
-            if (cell->align(x, y) == KSpreadLayout::Right 
+            if (cell->align(x, y) == KSpreadLayout::Right
                 || cell->defineAlignX() == KSpreadLayout::Right )
             {
               for ( int i = 0; i < l; ++i )
                 result += " ";
               result += cell->strOutText();
             }
-            else if (cell->align(x, y) == KSpreadLayout::Left 
+            else if (cell->align(x, y) == KSpreadLayout::Left
                      || cell->defineAlignX() == KSpreadLayout::Left )
             {
               result += " ";
               result += cell->strOutText();
               // start with "1" because we already set one space
-              for ( int i = 1; i < l; ++i ) 
+              for ( int i = 1; i < l; ++i )
                 result += " ";
             }
             else // centered
@@ -5000,7 +4970,7 @@ void KSpreadTable::pasteTextPlain( QString &_text, const QPoint &_marker)
   int my   = _marker.y();
   int rows = 1;
   int len  = tmp.length();
-  
+
   //count the numbers of lines in text
   for ( i = 0; i < len; ++i )
   {
@@ -5102,14 +5072,14 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
     int columnsInClpbrd =  e.attribute( "columns" ).toInt();
 
     // find size of rectangle that we want to paste to (either clipboard size or current selection)
-    const int pasteWidth = ( selectionRect().left() != 0 
-                             && selectionRect().width() >= columnsInClpbrd 
-                             && isRowSelected() == FALSE 
+    const int pasteWidth = ( selectionRect().left() != 0
+                             && selectionRect().width() >= columnsInClpbrd
+                             && isRowSelected() == FALSE
                              && e.namedItem( "rows" ).toElement().isNull() )
       ? selectionRect().width() : columnsInClpbrd;
-    const int pasteHeight = ( selectionRect().left() != 0 
-                              && selectionRect().height() >= rowsInClpbrd 
-                              && isColumnSelected() == FALSE 
+    const int pasteHeight = ( selectionRect().left() != 0
+                              && selectionRect().height() >= rowsInClpbrd
+                              && isColumnSelected() == FALSE
                               && e.namedItem( "columns" ).toElement().isNull() )
       ? selectionRect().height() : rowsInClpbrd;
 
@@ -5205,7 +5175,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
                         // to replace the existing one.
 
                         cellLoad = new KSpreadCell( this, col + coff, row + roff );
-                    
+
                         if ( !cellLoad->load( c, _xshift + coff, _yshift + roff, sp, op ) )
                         {
                             delete cell; //is this correct? Do we really delete the existing cell on failure?
@@ -6284,8 +6254,8 @@ void KSpreadTable::insertCell( KSpreadCell *_cell, bool _updateDepend )
   {
     //Then set the existing dependency list to a new empty on, so the link to the list doesn't get deleted
 //    _cell->setCellsDependOnMe( QPtrList<KSpreadDependency>() );
-  }    
-  
+  }
+
   m_cells.insert( _cell, _cell->column(), _cell->row() );
 
   /* immediately check for cells that are depending on this one.  This can happen if a dependancy range
@@ -6298,8 +6268,8 @@ void KSpreadTable::insertCell( KSpreadCell *_cell, bool _updateDepend )
   if ( _updateDepend )
   {
 //    cellAt( _cell->column(), _cell->row() )->setCellsDependOnMe( _cellsDependOnMe );
-    
-    
+
+
     QPtrListIterator<KSpreadTable> it( map()->tableList() );
     KSpreadCell* c;
     for( ; it.current(); ++it )
@@ -6316,7 +6286,7 @@ void KSpreadTable::insertCell( KSpreadCell *_cell, bool _updateDepend )
 
   }
   if ( m_bScrollbarUpdates )
-  {                         
+  {
     checkRangeHBorder ( _cell->column() );
     checkRangeVBorder ( _cell->row() );
   }
@@ -6449,7 +6419,7 @@ void KSpreadTable::insertChild( const QRect& _rect, KoDocumentEntry& _e )
         kdDebug() << "Error inserting child!" << endl;
         return;
     }
-    
+
     doc->initDoc();
 
     KSpreadChild* ch = new KSpreadChild( m_pDoc, this, doc, _rect );

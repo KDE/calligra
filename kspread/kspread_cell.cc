@@ -47,7 +47,7 @@ QChar KSpreadCell::decimal_point = '\0';
  *****************************************************************************/
 
 KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
-  : KSpreadLayout( _table ), 
+  : KSpreadLayout( _table ),
     conditions(this),
     m_bShrinkToSize(false)
 {
@@ -604,21 +604,9 @@ void KSpreadCell::freeAllObscuredCells()
 // ##### Are _col and _row really needed ?
 void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 {
-    // Let's see ;-)
-    /*if ( _col != m_iColumn || _row != m_iRow )
-    {
-        kdWarning() << "KSpreadCell::makeLayout _col=" << _col << " _row=" << _row
-                    << "  but m_iColumn=" << m_iColumn << " m_iRow=" << m_iRow << endl;
-                    }*/
     // Yes they are: they are useful if this is the default layout,
     // in which case m_iRow and m_iColumn are 0 and 0, but col and row
     // are the real coordinates of the cell.
-
-    /*m_leftBorderPen.setWidth(leftBorderWidth( _col, _row ));
-    m_topBorderPen.setWidth(topBorderWidth( _col, _row ));
-    setTopBorderWidth( topBorderWidth( _col, _row ));
-    m_fallDiagonalPen.setWidth(fallDiagonalWidth( _col, _row) );
-    m_goUpDiagonalPen.setWidth( goUpDiagonalWidth( _col, _row) );*/
 
     m_nbLines = 0;
     clearFlag(Flag_CellTooShort);
@@ -1032,7 +1020,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             while ( !end )
             {
                 ColumnLayout *cl2 = m_pTable->columnLayout( c + 1 );
-                KSpreadCell *cell = m_pTable->cellAt( c + 1, m_iRow );
+                KSpreadCell *cell = m_pTable->visibleCellAt( c + 1, m_iRow );
                 if ( cell->isEmpty() )
                 {
                     w += cl2->width() - 1;
@@ -4208,7 +4196,7 @@ bool KSpreadCell::loadCellData(QDomElement text, Operation op )
           setFactor(100.0); // should have been already done by loadLayout
           m_strText += '%';
         }
-        
+
         break;
       }
       case DateData:
@@ -4256,7 +4244,7 @@ bool KSpreadCell::loadCellData(QDomElement text, Operation op )
     }
   }
 
-  if ( !m_pTable->isLoading() ) 
+  if ( !m_pTable->isLoading() )
     setCellText(m_strText);
 
   return true;
@@ -4335,7 +4323,7 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
         tmp = new_text;
     }
 
-    if ( old_text.isEmpty() && ( op == Add || op == Mul 
+    if ( old_text.isEmpty() && ( op == Add || op == Mul
                                  || op == Sub || op == Div ) )
     {
       old_text = "=0";

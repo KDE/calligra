@@ -462,6 +462,15 @@ private:
      * @see #lastEditorWithFocus
      */
     EditorType m_focusEditorType;
+
+private:
+  /**
+   * Small helper function to take a rect representing a selection onscreen and
+   * extend it one cell in every direction (taking into account hidden columns
+   * and rows)
+   */
+  void ExtendRectBorder(QRect& area);
+  void PaintRegion(QRect paintRegion, QRect viewRegion, QPainter &painter);
 };
 
 /**
@@ -527,6 +536,7 @@ protected:
      * The label used for showing the current size, when resizing
      */
     QLabel *m_lSize;
+
 };
 
 /**
