@@ -19,7 +19,7 @@
 
 #include <kptextobject.h>
 #include <kpgradient.h>
-#include <resizecmd.h>
+#include <kprcommand.h>
 
 #include <qwidget.h>
 #include <qpicture.h>

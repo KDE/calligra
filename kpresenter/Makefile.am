@@ -8,7 +8,7 @@ kde_module_LTLIBRARIES = libkpresenterpart.la
 libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \
 	kpresenter_doc.cc \
 	page.cc  styledia.cc \
-	pgconfdia.cc effectdia.cc \
+	pgconfdia.cc effectdia.cc kprcommand.cc \
 	kpresenter_utils.cc rotatedia.cc searchdia.ui \
 	shadowdia.cc presstructview.cc \
 	confpiedia.cc confrectdia.cc \
@@ -17,11 +17,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	kppixmapobject.cc kppieobject.cc kppartobject.cc kpgroupobject.cc \
 	kpbackground.cc kpclipartcollection.cc kpgradient.cc \
 	kpgradientcollection.cc \
-	movecmd.cc resizecmd.cc insertcmd.cc deletecmd.cc \
-	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
-	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc shadowcmd.cc textcmd.cc \
-	rotatecmd.cc lowraicmd.cc pievaluecmd.cc rectvaluecmd.cc penbrushcmd.cc \
-	grpobjcmd.cc gotopage.cc footer_header.cc \
+	gotopage.cc footer_header.cc \
 	kpresenter_factory.cc \
 	KPresenterDocIface.skel KPresenterDocIface.cc \
 	KPresenterViewIface.skel KPresenterViewIface.cc \
@@ -52,7 +48,7 @@ dummy.cc:
 
 noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		backdia.h page.h styledia.h \
-		global.h \
+		global.h kprcommand.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \
 		rotatedia.h shadowdia.h presstructview.h \
 		confpiedia.h confrectdia.h \
@@ -61,14 +57,10 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		kppixmapobject.h kppieobject.h kppartobject.h kpgroupobject.h \
 		kpbackground.h kpclipartcollection.h kpgradient.h \
 		kpimage.h kpgradientcollection.h \
-		movecmd.h resizecmd.h insertcmd.h deletecmd.h \
-		setoptionscmd.h chgclipcmd.h chgpixcmd.h setbackcmd.h \
-		effectcmd.h pgconfcmd.h pglayoutcmd.h shadowcmd.h \
-		rotatecmd.h lowraicmd.h pievaluecmd.h rectvaluecmd.h penbrushcmd.cc \
-		grpobjcmd.h gotopage.h webpresentation.h \
+		gotopage.h webpresentation.h \
 		footer_header.h kpresenter_factory.h kpresenter_aboutdata.h \
 		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h \
-		KPresenterBackgroundIface.h sidebar.h textcmd.h kpresenter_dlg_config.h
+		KPresenterBackgroundIface.h sidebar.h  kpresenter_dlg_config.h
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office

@@ -31,17 +31,7 @@
 #include <kppieobject.h>
 #include <kppartobject.h>
 #include <kpgroupobject.h>
-#include <movecmd.h>
-#include <insertcmd.h>
-#include <deletecmd.h>
-#include <setoptionscmd.h>
-#include <chgclipcmd.h>
-#include <chgpixcmd.h>
-#include <lowraicmd.h>
-#include <pievaluecmd.h>
-#include <rectvaluecmd.h>
-#include <penbrushcmd.h>
-#include <grpobjcmd.h>
+#include <kprcommand.h>
 #include <styledia.h>
 #include <insertpagedia.h>
 

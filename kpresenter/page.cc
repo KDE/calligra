@@ -41,8 +41,6 @@
 #include <kpbackground.h>
 #include <kpclipartobject.h>
 #include <kppixmapobject.h>
-#include <movecmd.h>
-#include <resizecmd.h>
 #include <gotopage.h>
 #include <kptextobject.h>
 
@@ -54,6 +52,7 @@
 #include <kglobal.h>
 #include <ktempfile.h>
 #include <kdebug.h>
+#include <kprcommand.h>
 
 #include <stdlib.h>
 

@@ -19,7 +19,7 @@
 
 #include <kpresenter_view.h>
 #include <effectdia.h>
-#include <effectcmd.h>
+#include <kprcommand.h>
 
 #include <qpushbutton.h>
 #include <qcombobox.h>

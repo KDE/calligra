@@ -40,13 +40,10 @@
 #include <rotatedia.h>
 #include <shadowdia.h>
 #include <presstructview.h>
-#include <setbackcmd.h>
-#include <pgconfcmd.h>
+
+
 #include <confpiedia.h>
 #include <confrectdia.h>
-#include <pglayoutcmd.h>
-#include <shadowcmd.h>
-#include <rotatecmd.h>
 #include <kppartobject.h>
 #include <textdialog.h>
 #include <sidebar.h>
@@ -98,6 +95,8 @@
 
 #include <qrichtext_p.h>
 #include <kotextobject.h>
+#include <kprcommand.h>
+
 
 #define DEBUG
 
