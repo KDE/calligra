@@ -188,12 +188,6 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     {
         m_sbPageLabel = new KStatusBarLabel( QString::null, 0, sb );
         addStatusBarItem( m_sbPageLabel, 0 );
-
-        actionCollection()->setHighlightingEnabled( true );
-        connect( actionCollection(), SIGNAL( actionStatusText( const QString & ) ),
-                 this, SLOT( slotActionStatusText( const QString & ) ) );
-        connect( actionCollection(), SIGNAL( clearStatusText() ),
-                 this, SLOT( slotClearStatusText() ) );
     }
     m_sbFramesLabel = 0L; // Only added when frames are selected
 
@@ -931,20 +925,6 @@ void KWView::updateFrameStatusBarItem()
         delete m_sbFramesLabel;
         m_sbFramesLabel = 0L;
     }
-}
-
-void KWView::slotActionStatusText( const QString &text )
-{
-  KStatusBar *sb = statusBar();
-  if ( sb )
-      sb->message( text );
-}
-
-void KWView::slotClearStatusText()
-{
-  KStatusBar *sb = statusBar();
-  if ( sb )
-      sb->clear();
 }
 
 void KWView::clipboardDataChanged()
