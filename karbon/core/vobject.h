@@ -9,10 +9,8 @@ public:
 
     virtual void draw( QPainter& p ) = 0;
 
-    bool isDirty() { return m_isDirty; }
-
 private:
-    bool m_isDirty;	// has this object to be redrawn ?
+
 };
 
 #endif

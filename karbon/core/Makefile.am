@@ -13,7 +13,8 @@ noinst_HEADERS = \
 libkarboncore_la_SOURCES = \
     vcanvas.cc \
     vobject.cc \
-    vpath.cc
+    vpath.cc \
+    vpoint.cc
 
 libkarboncore_la_METASOURCES = \
     AUTO

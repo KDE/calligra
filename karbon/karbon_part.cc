@@ -3,6 +3,7 @@
 
 #include "karbon_part.h"
 #include "karbon_view.h"
+#include "vpoint.h"
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
     QObject* parent, const char* name, bool singleViewMode )
@@ -39,10 +40,21 @@ KarbonPart::saveXML()
 
 
 void
-KarbonPart::paintContent( QPainter& /* painter*/, const QRect& /*rect*/,
+KarbonPart::paintContent( QPainter& painter, const QRect& /*rect*/,
     bool /*transparent*/ )
 {
-    kdDebug(310000) << "**** warning: part.paintContent" << endl;
+//    painter.scale(VPoint::s_fractInvScale,VPoint::s_fractInvScale);
+    painter.scale(2.0,2.0);
+    painter.setPen( Qt::black );
+//    painter.drawLine(0,0,100*VPoint::s_fractScale,100*VPoint::s_fractScale);
+    painter.drawLine(100,100,200,200);
+
+    // paint all objects:
+    VObject* obj;
+    for ( obj=m_objects.first(); obj!=0L; obj=m_objects.next() ) 
+    {
+	obj->draw( painter );
+    }
 }
 
 #include "karbon_part.moc"

@@ -19,8 +19,6 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
     initActions();
     
     m_canvas = new VCanvas( this, part );
-    m_canvas->setGeometry( 20, 20, m_canvas->viewport()->width()-20,
-                          m_canvas->viewport()->height()-20 );
 }
 
 KarbonView::~KarbonView()
@@ -37,15 +35,9 @@ KarbonView::updateReadWrite( bool /*rw*/ )
 }
 
 void
-KarbonView::paintEvent( QPaintEvent* /*event*/ )
-{
-kdDebug(31000) << "****view.paintevent" << endl;
-}
-
-void
-KarbonView::resizeEvent( QResizeEvent* event ) {
-    m_canvas->resize( event->size().width()-20, event->size().height()-20 );
+KarbonView::resizeEvent( QResizeEvent* /*event*/ ) {
 kdDebug(31000) << "****view.resizeevent" << endl;    
+
 }
 
 void

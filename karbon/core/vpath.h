@@ -9,12 +9,17 @@
 class QPainter;
 class VPoint;
 
+/**
+ * VPaths are the most common high-level objects. They consist of VLines and
+ * VBeziers.
+ */
+
 class VPath : public VObject {
 public:
     VPath();
-    ~VPath();
+    virtual ~VPath();
     
-    void draw( QPainter& p );
+    virtual void draw( QPainter& p );
     
     // postscript-like commands:
     void moveTo();

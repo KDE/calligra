@@ -1,6 +1,6 @@
 INCLUDES  = $(all_includes) -I./core/
 
-SUBDIRS = core . data
+SUBDIRS = core . data pics
 
 bin_PROGRAMS = karbon
 lib_LTLIBRARIES = karbon.la libkarbonpart.la

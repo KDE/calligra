@@ -21,18 +21,18 @@ VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
 void
 VCanvas::paintEvent( QPaintEvent* event )
 {
-// let document paint
 kdDebug(31000) << "****vcanvas.paint" << endl;
-
     QPainter painter;
     painter.begin( this );
-    painter.drawLine( event->rect().left(), event->rect().top(),
-	event->rect().right(), event->rect().bottom() );
+
+    // Let the document do the drawing
+    m_part->paintEverything( painter, event->rect(), false, m_view );
+
     painter.end();
 }
 
 void
-VCanvas::resizeEvent( QResizeEvent* event )
+VCanvas::resizeEvent( QResizeEvent* /*event*/ )
 {
 // let document paint
 kdDebug(31000) << "****vcanvas.resizeEvent" << endl;

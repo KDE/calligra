@@ -1,7 +1,10 @@
 #ifndef __KARBON_PART_H__
 #define __KARBON_PART_H__
 
+#include <qlist.h>
 #include <koDocument.h>
+
+#include "vobject.h"
 
 class KarbonPart : public KoDocument
 {
@@ -20,6 +23,9 @@ public:
 
 protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
+
+private:
+    QList<VObject> m_objects; // all objects
 };
 
 #endif

@@ -1,7 +1,7 @@
 #include "vpath.h"
 
 VPath::VPath()
-    : VObject(), m_currentPoint = 0L
+    : VObject(), m_currentPoint(0L)
 {
 }
 

@@ -24,7 +24,6 @@ protected slots:
 
 protected:
     virtual void updateReadWrite( bool rw );
-    virtual void paintEvent( QPaintEvent* event );
     virtual void resizeEvent( QResizeEvent* event );    
 
 private:
