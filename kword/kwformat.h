@@ -38,6 +38,8 @@ public:
     KWTextFormat( const KWTextFormat &fm ) : QTextFormat( fm ) {}
     //KWTextFormat& operator=( const KWTextFormat &fm );
 
+    virtual void copyFormat( const QTextFormat & nf, int flags );
+
     void setPointSizeFloat( float );
     float pointSizeFloat() const { return fn.pointSizeFloat(); }
     void setStrikeOut(bool );
@@ -55,6 +57,8 @@ public:
     virtual ~KWTextFormatCollection() {}
 
     virtual QTextFormat *format( const QFont &f, const QColor &c );
+    virtual void remove( QTextFormat *f );
+
     virtual QTextFormat *createFormat( const QTextFormat &fm ) { return new KWTextFormat( static_cast<const KWTextFormat &>(fm) ); }
     virtual QTextFormat *createFormat( const QFont &f, const QColor &c ) { return new KWTextFormat( f, c, this ); }
 

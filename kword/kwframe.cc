@@ -1076,7 +1076,7 @@ void KWPartFrameSet::drawContents( QPainter * painter, const QRect & crect,
                                                 kWordDocument()->zoomedResolutionX(), kWordDocument()->zoomedResolutionY() );
             painter->setViewport( r );
             painter->restore();
-        } else kdDebug() << "KWPartFrameSet::drawContents " << this << " no intersection" << endl;
+        }// else kdDebug() << "KWPartFrameSet::drawContents " << this << " no intersection" << endl;
     }
 }
 

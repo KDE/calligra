@@ -115,6 +115,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_lstChildren.setAutoDelete( true );
     m_styleList.setAutoDelete( true );
 //    varFormats.setAutoDelete(true);
+    frames.setAutoDelete( true );
 
     setInstance( KWFactory::global(), false );
 
@@ -146,7 +147,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_footerVisible = false;
 
     m_lastStyle = 0L;
-    frames.setAutoDelete( TRUE );
 
     slDataBase = new KWSerialLetterDataBase( this );
     slRecordNum = -1;

@@ -87,17 +87,10 @@
 #include <kparts/event.h>
 #include <kformuladocument.h>
 
-
-
 #include <stdlib.h>
 
 #include "preview.h"
 
-/******************************************************************/
-/* Class: KWView                                               */
-/******************************************************************/
-
-/*================================================================*/
 KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
 {
@@ -142,7 +135,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
              this, SLOT(updateButtons()) );
 
     connect( gui->canvasWidget(), SIGNAL(currentMouseModeChanged(MouseMode)),
-             this, SLOT(updateMouseMode(MouseMode)));
+             this, SLOT(setTool(MouseMode)));
 
     // Cut and copy are directly connected to the selectionChanged signal
     connect( gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
@@ -155,14 +148,12 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     setFocusProxy( gui->canvasWidget() );
 }
 
-/*================================================================*/
 KWView::~KWView()
 {
     if(statusBar())
         statusBar()->removeItem(statusPage);
 }
 
-/*=============================================================*/
 void KWView::initConfig()
 {
   KConfig *config = KWFactory::global()->config();
@@ -198,8 +189,6 @@ void KWView::changeNbOfRecentFiles(int _nb)
     shell()->setMaxRecentItems( _nb );
 }
 
-
-/*=============================================================*/
 void KWView::initGui()
 {
     clipboardDataChanged();
@@ -248,7 +237,6 @@ void KWView::initGui()
     updatePageInfo();
 }
 
-/*================================================================*/
 void KWView::setupActions()
 {
     // The actions here are grouped by menu, because this helps noticing
@@ -529,48 +517,6 @@ void KWView::setupActions()
 
     actionBackgroundColor = new TKSelectColorAction( i18n( "Background Color" ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor");
     connect(actionBackgroundColor,SIGNAL(activated()),SLOT(backgroundColor() ));
-
-    // ---------------------- formula toolbar actions
-
-    actionFormulaPower = new KAction( i18n( "Power" ), "rsup", 0,
-                                      this, SLOT( formulaPower() ),
-                                      actionCollection(), "formula_power" );
-    actionFormulaSubscript = new KAction( i18n( "Subscript" ), "rsub" , 0,
-                                      this, SLOT( formulaSubscript() ),
-                                      actionCollection(), "formula_subscript" );
-    actionFormulaParentheses = new KAction( i18n( "Parentheses" ), "paren" , 0,
-                                      this, SLOT( formulaParentheses() ),
-                                      actionCollection(), "formula_parentheses" );
-    actionFormulaAbs = new KAction( i18n( "Absolute Value" ), "abs", 0,
-                                    this, SLOT( formulaAbsValue() ),
-                                      actionCollection(), "formula_abs" );
-    actionFormulaBrackets = new KAction( i18n( "Brackets" ), "brackets", 0,
-                                      this, SLOT( formulaBrackets() ),
-                                      actionCollection(), "formula_brackets" );
-    actionFormulaFraction = new KAction( i18n( "Fraction" ), "frac", 0,
-                                         this, SLOT( formulaFraction() ),
-                                      actionCollection(), "formula_fraction" );
-    actionFormulaRoot = new KAction( i18n( "Root" ), "sqrt", 0,
-                                         this, SLOT( formulaRoot() ),
-                                     actionCollection(), "formula_root" );
-    actionFormulaIntegral = new KAction( i18n( "Integral" ), "int", 0,
-                                         this, SLOT( formulaIntegral() ),
-                                      actionCollection(), "formula_integral" );
-    actionFormulaMatrix = new KAction( i18n( "Matrix" ), "matrix", 0,
-                                         this, SLOT( formulaMatrix() ),
-                                      actionCollection(), "formula_matrix" );
-    actionFormulaLeftSuper = new KAction( i18n( "Left Superscript" ), "lsup" , 0,
-                                         this, SLOT( formulaLeftSuper() ),
-                                      actionCollection(), "formula_leftsup" );
-    actionFormulaLeftSub = new KAction( i18n( "Left Subscript" ), "lsub" , 0,
-                                         this, SLOT( formulaLeftSub() ),
-                                      actionCollection(), "formula_leftsub" );
-    actionFormulaProduct = new KAction( i18n( "Formula Product" ), "prod", 0,
-                                         this, SLOT( formulaProduct() ),
-                                      actionCollection(), "formula_product" );
-    actionFormulaSum = new KAction( i18n( "Formula Sum" ), "sum", 0,
-                                         this, SLOT( formulaSum() ),
-                                      actionCollection(), "formula_sum" );
 
     // ---------------------- Table menu
 
@@ -2431,111 +2377,6 @@ void KWView::borderSet()
     }
 }
 
-/*================================================================*/
-void KWView::formulaPower()
-{
-#if 0
-    gui->canvasWidget()->insertFormulaChar( Box::POWER );
-#endif
-}
-
-/*================================================================*/
-void KWView::formulaSubscript()
-{
-#if 0
-    gui->canvasWidget()->insertFormulaChar( Box::SUB );
-#endif
-}
-
-/*================================================================*/
-void KWView::formulaParentheses()
-{
-#if 0
-    gui->canvasWidget()->insertFormulaChar( Box::PAREN );
-#endif
-}
-
-/*================================================================*/
-void KWView::formulaAbsValue()
-{
-#if 0
-    gui->canvasWidget()->insertFormulaChar( Box::ABS );
-#endif
-}
-
-/*================================================================*/
-void KWView::formulaBrackets()
-{
-#if 0
-    gui->canvasWidget()->insertFormulaChar( Box::BRACKET );
-#endif
-}
-
-/*================================================================*/
-void KWView::formulaFraction()
-{
-#if 0
-    gui->canvasWidget()->insertFormulaChar( Box::DIVIDE );
-#endif
-}
-
-/*================================================================*/
-void KWView::formulaRoot()
-{
-#if 0
-    gui->canvasWidget()->insertFormulaChar( Box::SQRT );
-#endif
-}
-
-/*================================================================*/
-void KWView::formulaIntegral()
-{
-#if 0
-    gui->canvasWidget()->insertFormulaChar( Box::INTEGRAL );
-#endif
-}
-
-/*================================================================*/
-void KWView::formulaMatrix()
-{
-#if 0
-    gui->canvasWidget()->insertFormulaChar( Box::MATRIX );
-#endif
-}
-
-/*================================================================*/
-void KWView::formulaLeftSuper()
-{
-#if 0
-    gui->canvasWidget()->insertFormulaChar( Box::LSUP );
-#endif
-}
-
-/*================================================================*/
-void KWView::formulaLeftSub()
-{
-#if 0
-    gui->canvasWidget()->insertFormulaChar( Box::LSUB );
-#endif
-}
-
-/*================================================================*/
-void KWView::formulaProduct()
-{
-#if 0
-    gui->canvasWidget()->insertFormulaChar( Box::PRODUCT );
-#endif
-}
-
-/*================================================================*/
-void KWView::formulaSum()
-{
-#if 0
-    gui->canvasWidget()->insertFormulaChar( Box::SUM );
-#endif
-}
-
-/*================================================================*/
 void KWView::resizeEvent( QResizeEvent *e )
 {
     QWidget::resizeEvent( e );
@@ -2559,14 +2400,12 @@ void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
     KoView::guiActivateEvent( ev );
 }
 
-/*================================================================*/
 void KWView::borderShowValues()
 {
     actionBorderWidth->setCurrentItem( (int)m_border.common.ptWidth - 1 );
     actionBorderStyle->setCurrentItem( (int)m_border.common.style );
 }
 
-/*================================================================*/
 void KWView::tabListChanged( const KoTabulatorList & tabList )
 {
     if(!doc->isReadWrite())
@@ -2577,8 +2416,6 @@ void KWView::tabListChanged( const KoTabulatorList & tabList )
     edit->setTabList( tabList );
 }
 
-
-/*================================================================*/
 void KWView::newPageLayout( KoPageLayout _layout )
 {
     KoPageLayout pgLayout;
@@ -2609,15 +2446,8 @@ void KWView::newPageLayout( KoPageLayout _layout )
     {
         frame->updateResizeHandles();
     }
-
-#if 0
-    gui->canvasWidget()->frameSizeChanged( _layout );
-    gui->canvasWidget()->forceFullUpdate();
-#endif
-
 }
 
-/*================================================================*/
 void KWView::newFirstIndent( double _firstIndent )
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -2626,7 +2456,6 @@ void KWView::newFirstIndent( double _firstIndent )
     edit->setMargin( QStyleSheetItem::MarginFirstLine, val );
 }
 
-/*================================================================*/
 void KWView::newLeftIndent( double _leftIndent)
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -2634,11 +2463,11 @@ void KWView::newLeftIndent( double _leftIndent)
         edit->setMargin( QStyleSheetItem::MarginLeft, _leftIndent );
 }
 
-/*================================================================*/
 void KWView::openPopupMenuEditText( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() )
         return;
+    // #### HACK. Make a virtual method in KWFrameSetEdit !
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)
         ((QPopupMenu*)factory()->container("text_popup",this))->popup(_point);
@@ -2650,7 +2479,6 @@ void KWView::openPopupMenuEditText( const QPoint & _point )
     }
 }
 
-/*================================================================*/
 void KWView::openPopupMenuChangeAction( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() )
@@ -2658,7 +2486,6 @@ void KWView::openPopupMenuChangeAction( const QPoint & _point )
     ((QPopupMenu*)factory()->container("action_popup",this))->popup(_point);
 }
 
-/*================================================================*/
 void KWView::updatePopupMenuChangeAction()
 {
     KWFrame *frame=doc->getFirstSelectedFrame();
@@ -2690,7 +2517,6 @@ void KWView::updatePopupMenuChangeAction()
         actionEditReconnectFrame->setEnabled(false);
 }
 
-/*================================================================*/
 void KWView::openPopupMenuEditFrame( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() )
@@ -2699,7 +2525,6 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
     ((QPopupMenu*)factory()->container("frame_popup",this))->popup(_point);
 }
 
-/*================================================================*/
 void KWView::spellCheckerReady()
 {
     for ( unsigned int i = m_spellCurrFrameSetNum + 1; i < doc->getNumFrameSets(); i++ ) {
@@ -2729,7 +2554,6 @@ void KWView::spellCheckerReady()
     kspell = 0;
 }
 
-/*================================================================*/
 void KWView::spellCheckerMisspelling( QString old, QStringList* , unsigned pos )
 {
     kdDebug() << "KWView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
@@ -2748,7 +2572,6 @@ void KWView::spellCheckerMisspelling( QString old, QStringList* , unsigned pos )
     fs->highlightPortion( p, pos, old.length(), gui->canvasWidget() );
 }
 
-/*================================================================*/
 void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
 {
     kdDebug() << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
@@ -2779,7 +2602,6 @@ void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
                 i18n("Insert Replacement") );
 }
 
-/*================================================================*/
 void KWView::spellCheckerDone( const QString & )
 {
     KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( doc->getFrameSet( m_spellCurrFrameSetNum ) );
@@ -2800,7 +2622,6 @@ void KWView::spellCheckerDone( const QString & )
     }
 }
 
-/*================================================================*/
 void KWView::spellCheckerFinished()
 {
     KSpell::spellStatus status = kspell->status();
@@ -2825,8 +2646,7 @@ void KWView::spellCheckerFinished()
         edit->drawCursor( TRUE );
 }
 
-/*================================================================*/
-void KWView::configure( )
+void KWView::configure()
 {
     KWConfig configDia( this );
     configDia.show();
@@ -2842,13 +2662,6 @@ KWTextFrameSetEdit *KWView::currentTextEdit()
     return 0L;
 }
 
-/*================================================================*/
-void KWView::updateMouseMode(MouseMode newMouseMode)
-{
-    setTool( newMouseMode );
-}
-
-/*================================================================*/
 void KWView::updateButtons()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();

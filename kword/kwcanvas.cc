@@ -1534,7 +1534,7 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
             m_currentFrameSetEdit = 0L;
             emit currentFrameSetEditChanged();
             repaintAll();
-        } else
+        } else if ( doc->isReadWrite() )
         {
             ASSERT( !m_currentFrameSetEdit );
             // When switching to edit mode, start edition of main frameset

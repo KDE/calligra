@@ -96,7 +96,6 @@ public:
 //    virtual void setNoteType(KWFootNoteManager::NoteType nt, bool change=true);
 
     KWGUI *getGUI() { return gui; }
-    void setTool( MouseMode _mouseMode );
     void updateStyleList();
 
     void initGui();
@@ -227,20 +226,6 @@ public slots:
     void borderStyle( const QString &style );
     void backgroundColor();
 
-    void formulaPower();
-    void formulaSubscript();
-    void formulaParentheses();
-    void formulaAbsValue();
-    void formulaBrackets();
-    void formulaFraction();
-    void formulaRoot();
-    void formulaIntegral();
-    void formulaMatrix();
-    void formulaLeftSuper();
-    void formulaLeftSub();
-    void formulaProduct();
-    void formulaSum();
-
     void showFormulaToolbar( bool show );
 
     void configure();
@@ -262,7 +247,7 @@ public slots:
 
     void slotSpecialChar(QChar , const QString &);
     void updateButtons();
-    void updateMouseMode(MouseMode newMouseMode);
+    void setTool( MouseMode _mouseMode );
 protected:
 
     KWTextFrameSetEdit *currentTextEdit();
@@ -356,20 +341,6 @@ protected:
         Border bottom;  // bottom.
         Border common;  // Value common to left, right top and bottom borders.
     } m_border;
-
-    KAction *actionFormulaPower;
-    KAction *actionFormulaSubscript;
-    KAction *actionFormulaParentheses;
-    KAction *actionFormulaAbs;
-    KAction *actionFormulaBrackets;
-    KAction *actionFormulaFraction;
-    KAction *actionFormulaRoot;
-    KAction *actionFormulaIntegral;
-    KAction *actionFormulaMatrix;
-    KAction *actionFormulaLeftSuper;
-    KAction *actionFormulaLeftSub;
-    KAction *actionFormulaProduct;
-    KAction *actionFormulaSum;
 
     KAction *actionTableDelRow;
     KAction *actionTableDelCol;
