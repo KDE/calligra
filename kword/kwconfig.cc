@@ -104,14 +104,6 @@ KWConfig::KWConfig( KWView* parent )
   m_doc = parent->kWordDocument();
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 
-
-  QStringList alllang = KoGlobal::listOfLanguage();
-  kdDebug()<<" alllang :"<<alllang.count()<<endl;
-  for ( QStringList::ConstIterator it = alllang.begin();
-	it != alllang.end(); ++it )
-    {
-      kdDebug()<<" name :"<<(*it) <<" tag :"<<KoGlobal::tagOfLanguage(*it)<<endl;
-    }
 }
 
 void KWConfig::openPage(int flags)

@@ -216,7 +216,7 @@ void KoFontChooser::setupTab2()
     grid->addWidget( lab, 8, 0);
 
     d->m_language = new QComboBox( grp );
-    d->m_language->insertStringList( KoGlobal::listOfLanguage() );
+    d->m_language->insertStringList( KoGlobal::listOfLanguages() );
     grid->addWidget( d->m_language, 9, 0 );
 
     connect( d->m_strikeOut, SIGNAL(activated ( int )), this, SLOT( slotStrikeOutTypeChanged( int ) ) );

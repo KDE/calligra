@@ -586,7 +586,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
 
     m_checkLanguage = new QCheckBox( i18n( "Language:" ), page);
     m_languageItem = new QComboBox( page );
-    m_languageItem->insertStringList( KoGlobal::listOfLanguage());
+    m_languageItem->insertStringList( KoGlobal::listOfLanguages());
     m_languageItem->setCurrentItem( (int)KoGlobal::languageIndexFromTag(m_ctx->m_language));
 
 
@@ -828,7 +828,7 @@ void KoFormatDia::ctxOptions( )
     m_ctx->m_underline = (KoTextFormat::UnderlineLineType)m_underlineItem->currentItem();
     m_ctx->m_strikeOut = (KoTextFormat::StrikeOutLineType)m_strikeOutItem->currentItem();
     m_ctx->m_attribute = ( KoTextFormat::AttributeStyle)m_fontAttributeItem->currentItem();
-    m_ctx->m_language = KoGlobal::listTagOfLanguage()[m_languageItem->currentItem()];
+    m_ctx->m_language = KoGlobal::listTagOfLanguages()[m_languageItem->currentItem()];
 
     m_ctx->m_options = options;
 }

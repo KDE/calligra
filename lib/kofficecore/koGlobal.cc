@@ -376,14 +376,14 @@ QFont KoGlobal::defaultFont()
     return font;
 }
 
-QStringList KoGlobal::listTagOfLanguage()
+QStringList KoGlobal::listTagOfLanguages()
 {
     if ( s_languageTag.count()==0 )
-        createListOfLanguage();
+        createListOfLanguages();
     return s_languageTag;
 }
 
-void KoGlobal::createListOfLanguage()
+void KoGlobal::createListOfLanguages()
 {
     QStringList alllang = KGlobal::dirs()->findAllResources("locale",
                                                             QString::fromLatin1("*/entry.desktop"));
@@ -407,10 +407,10 @@ void KoGlobal::createListOfLanguage()
 
 }
 
-QStringList KoGlobal::listOfLanguage()
+QStringList KoGlobal::listOfLanguages()
 {
     if ( s_languageList.count()==0 )
-        createListOfLanguage();
+        createListOfLanguages();
     return s_languageList;
 }
 
