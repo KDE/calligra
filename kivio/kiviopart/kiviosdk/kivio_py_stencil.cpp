@@ -2,6 +2,7 @@
 #include "kivio_py_stencil.h"
 
 KivioPage *page;
+KivioView *view;
 #ifdef HAVE_PYTHON
 
 #include "kivio_common.h"
@@ -519,7 +520,7 @@ void KivioPyStencil::paint( KivioIntraStencilData *d, bool outlined )
 int KivioPyStencil::runPython(QString code)
 {
 
-    KivioView * view = dynamic_cast<KivioView*>(KoDocument::documentList()->first()->views().getFirst());
+    view = dynamic_cast<KivioView*>(KoDocument::documentList()->first()->views().getFirst());
     if ( view ) {
         page = view->activePage();
     }

@@ -164,7 +164,7 @@ class KivioPage : public QObject
 
     void copy();
     void cut();
-    void paste();
+    void paste(KoZoomHandler* zoom);
 
   signals:
     void sig_updateView( KivioPage *_page );

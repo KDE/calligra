@@ -220,6 +220,7 @@ public:
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, int );
 
     virtual void searchForConnections( KivioPage * );
+    virtual void searchForConnections( KivioPage *pPage, double threshhold );
 
     virtual int generateIds( int );
 

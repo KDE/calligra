@@ -1463,11 +1463,11 @@ KivioConnectorTarget *KivioSMLStencil::connectToTarget( KivioConnectorPoint *p, 
     double tx, ty;
 
     KivioConnectorTarget *pTarget = m_pConnectorTargets->first();
+
     while( pTarget )
     {
         tx = pTarget->x();
         ty = pTarget->y();
-
 
         if( px >= tx - threshHold &&
             px <= tx + threshHold &&

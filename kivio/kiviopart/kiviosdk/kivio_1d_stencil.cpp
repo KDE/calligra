@@ -651,6 +651,77 @@ void Kivio1DStencil::searchForConnections( KivioPage *pPage )
   delete [] done;
 }
 
+void Kivio1DStencil::searchForConnections( KivioPage *pPage, double threshhold )
+{
+  bool *done = new bool[ m_pConnectorPoints->count()];
+  int i;
+
+  for( i=0; i<(int)m_pConnectorPoints->count(); i++ ) {
+    done[i] = false;
+  }
+
+  KivioConnectorPoint *p;
+  i = 0;
+  p = m_pConnectorPoints->first();
+
+  while( p )
+  {
+    if(p->target() != 0L) {
+      done[i] = true;
+    }
+
+    i++;
+    p = m_pConnectorPoints->next();
+  }
+
+  // No connections? BaiL!
+  if( boolAllTrue( done, m_pConnectorPoints->count() ) )
+  {
+    delete [] done;
+    return;
+  }
+
+  KivioLayer *pLayer = pPage->firstLayer();
+
+  while( pLayer && ( boolContainsFalse(done, m_pConnectorPoints->count()) ) )
+  {
+    KivioStencil *pStencil = pLayer->firstStencil();
+
+    while( pStencil && ( boolContainsFalse(done, m_pConnectorPoints->count()) ) )
+    {
+      // No connecting to ourself!
+      if( pStencil != this )
+      {
+
+        // Iterate through all connectors attempting to connect it to the stencil.
+        // If it connects, mark it as done
+        i = 0;
+        p = m_pConnectorPoints->first();
+
+        while( p )
+        {
+          if( !done[i] && p->target() == 0 )
+          {
+            if( pStencil->connectToTarget( p, threshhold ) )
+            {
+                done[i] = true;
+            }
+          }
+
+          i++;
+          p = m_pConnectorPoints->next();
+        }
+
+      }
+
+      pStencil = pLayer->nextStencil();
+    }
+
+    pLayer = pPage->nextLayer();
+  }
+
+  delete [] done;
+}
 
 //////////////////////
 // resize handles

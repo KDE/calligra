@@ -1123,7 +1123,7 @@ KoPoint KivioCanvas::snapToGridAndGuides(KoPoint point)
   */
   if (m_pView->isSnapGuides())
   {
-    float four = m_pView->zoomHandler()->unzoomItX(4);
+    float four = m_pView->zoomHandler()->unzoomItY(4);
     KivioGuideLines *pGuides = activePage()->guideLines();
     KivioGuideLineData *pData = pGuides->findHorizontal( point.y(), four );
 
@@ -1186,7 +1186,7 @@ KoPoint KivioCanvas::snapToGuides(KoPoint point, bool &snappedX, bool &snappedY)
 
   if (m_pView->isSnapGuides())
   {
-    float four = m_pView->zoomHandler()->unzoomItX(4);
+    float four = m_pView->zoomHandler()->unzoomItY(4);
     KivioGuideLines *pGuides = activePage()->guideLines();
     KivioGuideLineData *pData = pGuides->findHorizontal( point.y(), four );
 

@@ -37,7 +37,7 @@
 class KivioPyStencilSpawner;
 class KivioPainter;
 class KivioFillStyle;
-
+class KivioView;
 
 class KivioPyStencil : public KivioStencil
 {

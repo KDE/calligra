@@ -3,11 +3,13 @@
 
 #include "kivio_page.h"
 #include "kivio_view.h"
+#include <kozoomhandler.h>
 
   extern KivioPage *page;
-  
+  extern KivioView* view;
+
   void update() { page->update(); }
-  
+
   bool isStencilSelected( KivioStencil *s ) { return page->isStencilSelected(s); }
   void selectAllStencils() { page->selectAllStencils(); }
   void unselectAllStencils() { page->unselectAllStencils(); }
@@ -23,7 +25,7 @@
   KivioLayer *nextLayer() { return page->nextLayer(); }
   KivioLayer *lastLayer() { return page->lastLayer(); }
   KivioLayer *prevLayer() { return page->prevLayer(); }
-  
+
   bool removeCurrentLayer() { return page->removeCurrentLayer(); }
   void addLayer( KivioLayer *l ) { page->addLayer(l); }
   void insertLayer( int i, KivioLayer *l ) { page->insertLayer(i,l); }
@@ -40,6 +42,6 @@
 
   void copy() { page->copy(); }
   void cut() { page->cut(); }
-  void paste() { page->paste(); }
-  
+  void paste() { page->paste(view->zoomHandler()); }
+
 #endif

@@ -71,7 +71,7 @@ void KivioConnectorPoint::setTarget( KivioConnectorTarget *pTarget  )
          m_pTarget->removeConnectorPointFromList( this );
     }
 
-    
+
     m_pTarget = pTarget;
 
     m_x = pTarget->x();
@@ -157,7 +157,7 @@ void KivioConnectorPoint::disconnect( bool removeFromTargetList )
     {
         if( removeFromTargetList == true )
             m_pTarget->removeConnectorPointFromList(this);
-            
+
         m_pTarget = NULL;
     }
 

@@ -68,7 +68,7 @@ void KIvioPageIface::cut()
 
 void KIvioPageIface::paste()
 {
-    m_page->paste();
+//    m_page->paste();
 }
 
 void KIvioPageIface::selectAllStencils()

@@ -517,7 +517,7 @@ void KivioOptionsDialog::fillGuideList()
   m_guideList->clear();
 
   for(KivioGuideLineData* d = list.first(); d; d = list.next()) {
-    (void*) new GuidesListViewItem(m_guideList, d, unit);
+    (void) new GuidesListViewItem(m_guideList, d, unit);
   }
 }
 
@@ -578,7 +578,7 @@ void KivioOptionsDialog::guideHoriz(bool h)
 void KivioOptionsDialog::addGuide()
 {
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  (void*) new GuidesListViewItem(m_guideList, new KivioGuideLineData(Qt::Horizontal), unit);
+  (void) new GuidesListViewItem(m_guideList, new KivioGuideLineData(Qt::Horizontal), unit);
 }
 
 void KivioOptionsDialog::delGuide()

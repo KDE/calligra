@@ -988,57 +988,59 @@ void KivioPage::cut()
     m_pDoc->setClipboard( pGroup );
 }
 
-void KivioPage::paste()
+void KivioPage::paste(KoZoomHandler* zoom)
 {
-    KivioStencil *pGroup;
-    KivioStencil *pStencil, *pDup;
-    QPtrList<KivioStencil> *pList;
-    QPtrList<KivioStencil> *pSelectThese = new QPtrList<KivioStencil>;
+  KivioStencil *pGroup;
+  KivioStencil *pStencil, *pDup;
+  QPtrList<KivioStencil> *pList;
+  QPtrList<KivioStencil> *pSelectThese = new QPtrList<KivioStencil>;
 
-    pSelectThese->setAutoDelete(false);
+  pSelectThese->setAutoDelete(false);
 
-    pGroup = m_pDoc->clipboard();
-    if( !pGroup )
-    {
-        delete pSelectThese;
-        return;
-    }
+  pGroup = m_pDoc->clipboard();
 
-    // If there is a list, it is a group stencil
-    pList = pGroup->groupList();
-    if( pList )
-    {
-        pStencil = pList->first();
-        while( pStencil )
-        {
-            pDup = pStencil->duplicate();
+  if( !pGroup )
+  {
+    delete pSelectThese;
+    return;
+  }
 
-            // FIXME: Make this offset configurable
-            pDup->setPosition( pDup->x() + 10.0f, pDup->y() + 10.0f );
+  // If there is a list, it is a group stencil
+  pList = pGroup->groupList();
 
+  if( pList )
+  {
+    pStencil = pList->first();
 
-            addStencil( pDup );
-
-            pSelectThese->append( pDup );
-
-            pStencil = pList->next();
-        }
-    }
-
-    unselectAllStencils();
-
-    // Now iterate through the selectThese list and select
-    // those stencils
-    pStencil = pSelectThese->first();
     while( pStencil )
     {
-        selectStencil( pStencil );
+      pDup = pStencil->duplicate();
+      // FIXME: Make this offset configurable
+      pDup->setPosition( pDup->x() + 10.0f, pDup->y() + 10.0f );
+      addStencil( pDup );
+      pSelectThese->append( pDup );
+      pStencil = pList->next();
+    }
+  }
 
-        pStencil = pSelectThese->next();
+  unselectAllStencils();
+
+  // Now iterate through the selectThese list and select
+  // those stencils
+  pStencil = pSelectThese->first();
+
+  while( pStencil )
+  {
+    if(pStencil->type() == kstConnector) {
+      pStencil->searchForConnections(this, zoom->unzoomItY(4));
     }
 
+    selectStencil( pStencil );
+    pStencil = pSelectThese->next();
+  }
 
-    delete pSelectThese;
+
+  delete pSelectThese;
 }
 
 int KivioPage::generateStencilIds(int next)

@@ -133,6 +133,7 @@ public:
 
     // connection search routines
     virtual void searchForConnections( KivioPage * );
+    virtual void searchForConnections( KivioPage *pPage, double threshhold );
 
 
     // returns which resize handles are valid

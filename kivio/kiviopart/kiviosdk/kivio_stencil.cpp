@@ -201,6 +201,10 @@ void KivioStencil::searchForConnections( KivioPage * )
 {
 }
 
+void KivioStencil::searchForConnections( KivioPage *, double )
+{
+}
+
 void KivioStencil::updateConnectorPoints(KivioConnectorPoint *, double, double)
 {
    // Default to just calling updateGeometry
