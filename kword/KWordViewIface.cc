@@ -458,3 +458,19 @@ void KWordViewIface::createLinkedFrame()
 {
     view->createLinkedFrame();
 }
+
+
+void KWordViewIface::lineBreak()
+{
+    view->slotLineBreak();
+}
+
+void KWordViewIface::increaseOutlineLevel()
+{
+    view->slotIncreaseOutlineLevel();
+}
+
+void KWordViewIface::decreaseOutlineLevel()
+{
+    view->slotDecreaseOutlineLevel();
+}

@@ -138,6 +138,12 @@ k_dcop:
     void sortText();
     void insertPage();
     void createLinkedFrame();
+
+    void lineBreak();
+
+    void increaseOutlineLevel();
+    void decreaseOutlineLevel();
+
 private:
     KWView *view;
 
