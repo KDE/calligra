@@ -85,6 +85,18 @@ public:
   long read( char *_buffer, unsigned long _len );
 
   /**
+   * Embed a part contained in one store inside the current one, as the part
+   * indicated. The store to be embedded must not be open.
+   *
+   * @param dest the destination part, internal representation ("tar:0"). May
+   *        not be "root".
+   * @param store the source store.
+   * @param src the source part, internal representation ("root", "tar:0"...).
+   * @return the success of the operation.
+   */
+  bool embed( const QString &dest, KoStore &store, const QString &src = "root" );
+
+  /**
    * @return the size of the currently opened file, -1 on error.
    * Can be used as an argument for the read methods, for instance
    */
@@ -109,14 +121,22 @@ protected:
   /**
    * Conversion routine
    * @param _internalNaming name used internally : "root", "tar:/0", ...
-   * @return the name used in the file, more user-friendly ("maindoc.xml", "part0.xml", ...)
+   * @return the name used in the file, more user-friendly ("maindoc.xml",
+   *         "part0/maindoc.xml", ...)
    * Examples:
    *
-   * tar:/0 is saved as part0.xml
-   * tar:/0/1 is saved as part0/part1.xml
+   * tar:/0 is saved as part0/maindoc.xml
+   * tar:/0/1 is saved as part0/part1/maindoc.xml
    * tar:/0/1/pictures/picture0.png is saved as part0/part1/pictures/picture0.png
+   *
+   * see specification for details.
    */
-  static QString toExternalNaming( const QString & _internalNaming );
+  QString toExternalNaming( const QString & _internalNaming );
+  enum
+  {
+      NAMING_VERSION_2_1,
+      NAMING_VERSION_2_2
+  } m_namingVersion;
 
   Mode m_mode;
 
@@ -137,6 +157,9 @@ protected:
 
   class KoStorePrivate;
   KoStorePrivate * d;
+
+private:
+  static const int s_area = 30002;
 };
 
 #endif
