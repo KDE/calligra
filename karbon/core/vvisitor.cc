@@ -77,7 +77,8 @@ VVisitor::visitVPath( VPath& composite )
 
 	for( ; itr.current(); ++itr )
 	{
-		itr.current()->accept( *this );
+		if( !itr.current()->isEmpty() )
+			itr.current()->accept( *this );
 	}
 }
 
