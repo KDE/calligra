@@ -26,13 +26,13 @@ Boston, MA 02111-1307, USA.
 
 namespace KexiDB {
 
-class KEXI_MYSQL_IFACE_EXPORT MySqlDB : public Driver
+class KEXI_MYSQL_IFACE_EXPORT MySqlDriver : public Driver
 {
 	Q_OBJECT
 
 	public:
-		MySqlDB(QObject *parent=0, const char *name="mysq", const QStringList &args=QStringList());
-		~MySqlDB();
+		MySqlDriver(QObject *parent=0, const char *name="mysq", const QStringList &args=QStringList());
+		~MySqlDriver();
 
 	protected:
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );

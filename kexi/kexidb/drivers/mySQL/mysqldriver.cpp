@@ -32,17 +32,17 @@ Boston, MA 02111-1307, USA.
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
-#include "mysqldb.h"
-#include "mysqldb.moc"
+#include "mysqldriver.h"
+#include "mysqldriver.moc"
 #include "mysqlconnection.h"
 #include <kexidb/field.h>
 
 
-K_EXPORT_COMPONENT_FACTORY(kexidb_mysqldriver, KGenericFactory<KexiDB::MySqlDB>( "keximysqldriver" ))
+K_EXPORT_COMPONENT_FACTORY(kexidb_mysqldriver, KGenericFactory<KexiDB::MySqlDriver>( "keximysqldriver" ))
 
 using namespace KexiDB;
 
-MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &list) : Driver(parent, name,list)
+MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &list) : Driver(parent, name,list)
 {
 	kdDebug() << "MySqlDB::MySqlDB()" << endl;
 
@@ -69,11 +69,11 @@ MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &list) : D
 }
 
 KexiDB::Connection*
-MySqlDB::drv_createConnection( ConnectionData &conn_data )
+MySqlDriver::drv_createConnection( ConnectionData &conn_data )
 {
         return new MySqlConnection( this, conn_data );
 }
 
 
-MySqlDB::~MySqlDB() {
+MySqlDriver::~MySqlDriver() {
 }

@@ -55,7 +55,7 @@ class KEXI_MYSQL_IFACE_EXPORT MySqlConnection : public Connection
                 virtual QCString escapeString( const QCString& str) const;
 
         protected:
-		friend class MySqlDB;
+		friend class MySqlDriver;
                 /*! Used by driver */
                 MySqlConnection( Driver *driver, const ConnectionData &conn_data );
 
