@@ -26,6 +26,8 @@
 #include <qptrstack.h>
 #include <core/vdocument.h>
 #include <core/vgradient.h>
+#include <core/vfill.h>
+#include <core/vstroke.h>
 
 class VGroup;
 class VComposite;
@@ -73,6 +75,7 @@ private:
 	VDocument					m_document;
 	QPtrStack<GraphicsContext>	m_gc;
 	QMap<QString, VGradient>	m_gradients;
+	QMap<QString, QWMatrix>		m_gradientTransforms;
 };
 
 #endif

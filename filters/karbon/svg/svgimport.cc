@@ -124,8 +124,8 @@ SvgImport::convert()
 	m_document.setHeight( height );
 
 	// undo y-mirroring
-	gc->matrix.scale( 1, -1 );
-	gc->matrix.translate( 0, -m_document.height() );
+	//gc->matrix.scale( 1, -1 );
+	//gc->matrix.translate( 0, -m_document.height() );
 	if( !docElem.attribute( "viewBox" ).isEmpty() )
 	{
 		// allow for viewbox def with ',' or whitespace
@@ -283,8 +283,8 @@ SvgImport::parseGradient( const QDomElement &e )
 			gradient.setRepeatMethod( VGradient::repeat );
 	}
 	parseColorStops( &gradient, e );
-	QWMatrix mat = parseTransform( "gradientTransform" );
-	gradient.transform( mat );
+	//gradient.setGradientTransform( parseTransform( e.attribute( "gradientTransform" ) ) );
+	m_gradientTransforms.insert( e.attribute( "id" ), parseTransform( e.attribute( "gradientTransform" ) ) );
 	m_gradients.insert( e.attribute( "id" ), gradient );
 }
 
@@ -305,6 +305,7 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 			QString key = params.mid( start, end - start );
 			gc->fill.gradient() = m_gradients[ key ];
 			gc->fill.gradient().transform( gc->matrix );
+			gc->fill.gradient().transform( m_gradientTransforms[ key ] );
 			gc->fill.setType( VFill::grad );
 		}
 		else
