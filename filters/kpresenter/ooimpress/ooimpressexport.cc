@@ -242,22 +242,10 @@ void OoImpressExport::createDocumentMeta( QDomDocument & docmeta )
             creator.appendChild( docmeta.createTextNode( fullName.text() ) );
             meta.appendChild( creator );
         }
-
-        n = i.namedItem( "about" ).namedItem( "title" );
-        if ( !n.isNull() )
-        {
-            QDomElement title = n.toElement();
-            QDomElement user = docmeta.createElement( "meta:user-defined" );
-            user.setAttribute( "meta:name", "Info 1" );
-            user.appendChild( docmeta.createTextNode( title.text() ) );
-            meta.appendChild( user );
-        }
-
         n = i.namedItem( "about" ).namedItem( "abstract" );
         if ( !n.isNull() )
         {
-            QDomElement user = docmeta.createElement( "meta:user-defined" );
-            user.setAttribute( "meta:name", "Info 2" );
+            QDomElement user = docmeta.createElement( "dc:description" );
             user.appendChild( n.firstChild() );
             meta.appendChild( user );
         }
