@@ -4008,7 +4008,6 @@ int QTextParag::topMargin() const
     }
 
     if ( is_printer( painter() ) ) {
-qDebug("------------------ printer found -------- ");
 	QPaintDeviceMetrics metrics( painter()->device() );
 	double yscale = scale_factor( metrics.logicalDpiY() );
 	m = (int)( (double)m * yscale );
@@ -4044,7 +4043,6 @@ int QTextParag::bottomMargin() const
     }
 
     if ( is_printer( painter() ) ) {
-qDebug("------------------ printer found -------- ");
 	QPaintDeviceMetrics metrics( painter()->device() );
 	double yscale = scale_factor( metrics.logicalDpiY() );
 	m = (int)( (double)m * yscale );
@@ -4077,7 +4075,6 @@ int QTextParag::leftMargin() const
     }
 
     if ( is_printer( painter() ) ) {
-qDebug("------------------ printer found -------- ");
 	QPaintDeviceMetrics metrics( painter()->device() );
 	double yscale = scale_factor( metrics.logicalDpiY() );
 	m = (int)( (double)m * yscale );
@@ -4104,7 +4101,6 @@ int QTextParag::firstLineMargin() const
     }
 
     if ( is_printer( painter() ) ) {
-qDebug("------------------ printer found -------- ");
 	QPaintDeviceMetrics metrics( painter()->device() );
 	double yscale = scale_factor( metrics.logicalDpiY() );
 	m = (int)( (double)m * yscale );
@@ -4131,7 +4127,6 @@ int QTextParag::rightMargin() const
     }
 
     if ( is_printer( painter() ) ) {
-qDebug("------------------ printer found -------- ");
 	QPaintDeviceMetrics metrics( painter()->device() );
 	double yscale = scale_factor( metrics.logicalDpiY() );
 	m = (int)( (double)m * yscale );
@@ -4151,7 +4146,6 @@ int QTextParag::lineSpacing() const
     if ( ls == QStyleSheetItem::Undefined )
 	return 0;
     if ( is_printer( painter() ) ) {
-qDebug("------------------ printer found -------- ");
 	QPaintDeviceMetrics metrics( painter()->device() );
 	double yscale = scale_factor( metrics.logicalDpiY() );
 	ls = (int)( (double)ls * yscale );
@@ -4535,7 +4529,6 @@ int QTextFormatterBreakInWords::format( QTextDocument *doc,QTextParag *parag,
 	m = QMAX( m, parag->next()->topMargin() );
     parag->setFullWidth( fullWidth );
     if ( is_printer( parag->painter() ) ) {
-qDebug("------------------ printer found -------- ");
 	QPaintDeviceMetrics metrics( parag->painter()->device() );
 	double yscale = scale_factor( metrics.logicalDpiY() );
 	m = (int)( (double)m * yscale );
@@ -4775,7 +4768,6 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     }
     parag->setFullWidth( fullWidth );
     if ( is_printer( parag->painter() ) ) {
-qDebug("------------------ printer found -------- ");
 	QPaintDeviceMetrics metrics( parag->painter()->device() );
 	double yscale = scale_factor( metrics.logicalDpiY() );
 	m = (int)( (double)m * yscale );
@@ -5449,7 +5441,6 @@ void QTextImage::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch
     }
 
     if ( is_printer( p ) ) {
-qDebug("------------------ printer found -------- ");
 #ifndef QT_NO_TRANSFORMATIONS
 	p->saveWorldMatrix();
 	QPaintDeviceMetrics metrics( p->device() );
