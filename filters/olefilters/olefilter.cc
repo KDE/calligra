@@ -34,6 +34,7 @@ DESCRIPTION
 #include <powerpointfilter.h>
 #include <unistd.h>
 #include <wordfilter.h>
+#include <qfile.h>
 
 OLEFilter::OLEFilter(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
