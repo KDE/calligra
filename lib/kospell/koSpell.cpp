@@ -347,14 +347,14 @@ void KOSpell::nextWord()
         {
             QChar ch = origbuffer[i];
             if ( ch.isSpace() || ch.isPunct() )
-            {
-                lastpos++;
                 break;
-            }
             word.append(ch);
         }
         lastpos = i;
-        testIgnoreWord( word );
+        if ( !word.isEmpty() )
+            testIgnoreWord( word );
+        else
+            lastpos++;
     }
     while ( word.isEmpty() && (lastpos < (int)origbuffer.length()-1));
     if ( m_status != Finished && !spellWord( word ))
@@ -401,7 +401,10 @@ void KOSpell::previousWord()
             word.prepend(ch);
         }
         lastpos = i;
-        testIgnoreWord( word );
+        if ( !word.isEmpty() )
+            testIgnoreWord( word );
+        else
+            lastpos--;
     }
     while ( word.isEmpty() && (lastpos >= 0));
 
