@@ -1,4 +1,5 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
+
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -18,6 +19,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+// ### TODO: fix copyright date/authors
+
 #ifndef kppixmapobject_h
 #define kppixmapobject_h
 
@@ -30,7 +33,7 @@
 
 class QPixmap;
 
-// ### TODO in KOffice 1,3: rename the class to a better name (for example KPPictureObject)
+// ### TODO rename the class (and the related files/classes) to a better name (for example KPPictureObject)
 
 class KPPixmapObject : public KP2DObject
 {
@@ -44,8 +47,10 @@ public:
 
     virtual DCOPObject* dcopObject();
 
-    // Only used as a default value in the filedialog, in changePicture
-    // Don't use for anything else
+    /**
+     * Only used as a default value in the filedialog, in changePicture
+     * \warning Do not use for anything else
+     */
     QString getFileName() const
         { return image.getKey().filename(); }
 
