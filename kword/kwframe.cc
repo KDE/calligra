@@ -937,6 +937,9 @@ void KWPartFrameSet::deactivate()
 /*================================================================*/
 void KWPartFrameSet::updateFrames()
 {
+    if(frames.isEmpty() ) // Deleted frameset -> don't refresh
+        return;
+
     child->setGeometry( QRect( frames.at( 0 )->x(), frames.at( 0 )->y(),
                                frames.at( 0 )->width(), frames.at( 0 )->height() ) );
     KWFrameSet::updateFrames();
