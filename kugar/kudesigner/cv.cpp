@@ -103,6 +103,7 @@ void ReportCanvas::deleteItem(QCanvasItemList &l)
 {
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
     {
+        unselectItem((CanvasBox*)*it);
         if ( ((MyCanvas*)(canvas()))->templ->removeSection((CanvasBand *)(*it)) )
             break;
     }
