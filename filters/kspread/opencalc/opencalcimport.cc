@@ -1236,18 +1236,6 @@ bool OpenCalcImport::parseBody( int numOfTables )
   if ( body.isNull() )
     return false;
 
-  if ( body.toElement().hasAttribute( "table:structure-protected" ) )
-  {
-        QCString passwd( "" );
-        if ( body.toElement().hasAttribute( "table:protection-key" ) )
-        {
-            QString p = body.toElement().attribute( "table:protection-key" );
-            QCString str( p.latin1() );
-            passwd = KCodecs::base64Decode( str );
-        }
-        m_doc->workbook()->setProtected( passwd );
-  }
-
   QDomNode namedAreas = body.namedItem( "table:named-expressions" );
   if ( !namedAreas.isNull() )
   {
@@ -2627,7 +2615,7 @@ KoFilter::ConversionStatus OpenCalcImport::convert( QCString const & from, QCStr
     kdWarning(30518) << "document isn't a KSpreadDoc but a " << document->className() << endl;
     return KoFilter::NotImplemented;
   }
-
+  
   if ( ( from != "application/vnd.sun.xml.calc" && from != "application/vnd.sun.xml.calc.template") || to != "application/x-kspread" )
   {
     kdWarning(30518) << "Invalid mimetypes " << from << " " << to << endl;
