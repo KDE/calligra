@@ -1175,6 +1175,14 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     if(  a==KSpreadCell::Left && !isEmpty())
         indent=getIndent(column(),row());
 
+    if( verticalText( column(), row() ))
+    {
+       RowLayout *rl = m_pTable->rowLayout( row() );
+ 
+       if(m_iOutTextHeight>=rl->height())
+	 m_bCellTooShort=true;
+    }
+
     // Do we have to occupy additional cells right hand ?
     if ( m_iOutTextWidth+indent > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
          rightBorderWidth( _col, _row ) )
@@ -2803,7 +2811,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
             }
             while ( i != -1 );
         }
-        else if(verticalText(_col,_row))
+        else if(verticalText(_col,_row)&&!m_strOutText.isEmpty())
         {
             QString t;
             int i=0;
@@ -2944,30 +2952,56 @@ QString KSpreadCell::textDisplaying( QPainter &_painter)
 {
 QFontMetrics fm = _painter.fontMetrics();
 int a=align(column(),row());
-if (( a == KSpreadCell::Left || a == KSpreadCell::Undefined) && !isValue())
-        {
-        //not enough space but align to left
-        int len=0;
-        for (int i=column();i<=column()+m_iExtraXCells;i++)
-                {
-                ColumnLayout *cl2 = m_pTable->columnLayout( i );
-                len+=cl2->width() - 1;
-                }
-        QString tmp;
-        int tmpIndent=0;
-        if(!isEmpty())
-                tmpIndent=getIndent(column(),row());
-        for (int i=m_strOutText.length();i!=0;i--)
-                {
-                tmp=m_strOutText.left(i);
+if (( a == KSpreadCell::Left || a == KSpreadCell::Undefined) && !isValue()
+&& !verticalText( column(),row() ))
+  {
+    //not enough space but align to left
+    int len=0;
+    for (int i=column();i<=column()+m_iExtraXCells;i++)
+      {
+	ColumnLayout *cl2 = m_pTable->columnLayout( i );
+	len+=cl2->width() - 1;
+      }
+    QString tmp;
+    int tmpIndent=0;
+    if(!isEmpty())
+      tmpIndent=getIndent(column(),row());
+    for (int i=m_strOutText.length();i!=0;i--)
+      {
+	tmp=m_strOutText.left(i);
+	
+	if((fm.width(tmp)+tmpIndent)<(len-4-1)) //4 equal lenght of red triangle +1 pixel
+	  {
+	    return tmp;
+	  }
+      }
+    return QString("");
+  }
+ else if(verticalText( column(),row() ))
+   {
+     RowLayout *rl = m_pTable->rowLayout( row() );
+     int tmpIndent=0;
+     //not enough space but align to left
+     int len=0;
+     for (int i=column();i<=column()+m_iExtraXCells;i++)
+       {
+	 ColumnLayout *cl2 = m_pTable->columnLayout( i );
+	 len+=cl2->width() - 1;
+       }
+     if(!isEmpty())
+       tmpIndent=getIndent(column(),row());
+     if( ((m_iOutTextWidth+tmpIndent)>len)||m_iOutTextWidth==0)
+       return QString("");
 
-                if((fm.width(tmp)+tmpIndent)<(len-4-1)) //4 equal lenght of red triangle +1 pixel
-                        {
-                        return tmp;
-                        }
-                }
-        return QString("");
-        }
+     for (int i=m_strOutText.length();i!=0;i--)
+       {
+	if(((fm.ascent() + fm.descent())*i)<(rl->height()-1)) 
+	  {
+	    return m_strOutText.left(i);
+	  }
+      }
+    return QString("");
+   }
 
 ColumnLayout *cl = m_pTable->columnLayout( column() );
 int w;
