@@ -14,12 +14,14 @@ class KAction;
 class KToggleAction;
 class QPaintEvent;
 
+
 class DCOPObject;
 
 namespace KChart
 {
 
 class KChartPart;
+class kchartDataEditor;
 
 class KChartView : public KoView
 {
@@ -35,6 +37,7 @@ public:
 
 public slots:
     void  edit();
+     void applyEdit(kchartDataEditor *ed);
     void  slotConfig();
     void  wizard();
     void  saveConfig();

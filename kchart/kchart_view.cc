@@ -206,6 +206,9 @@ void KChartView::edit()
     ed.setRowLabels(((KChartPart*)koDocument())->rowLabelTexts());
     ed.setColLabels(((KChartPart*)koDocument())->colLabelTexts());
 
+    connect(&ed,  SIGNAL(applyClicked(kchartDataEditor *)), 
+	    this, SLOT(applyEdit(kchartDataEditor *)));
+
     // TODO: Replace following with passing document pointer to the
     //       constructor of the dialog.
 #if 0
@@ -248,6 +251,16 @@ void KChartView::edit()
 		   << " , rows = "     << dat->rows()
 		   << " , usedCols = " << dat->usedCols()
 		   << "  usedRows = "  << dat->usedRows() << endl;
+    repaint();
+}
+
+
+void KChartView::applyEdit(kchartDataEditor *ed)
+{
+    ed->getData(( (KChartPart*)koDocument())->data());
+    ed->getRowLabels(((KChartPart*)koDocument())->rowLabelTexts());
+    ed->getColLabels(((KChartPart*)koDocument())->colLabelTexts());
+
     repaint();
 }
 

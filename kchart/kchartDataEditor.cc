@@ -375,9 +375,9 @@ void kchartDataEditor::getXLabel( KChartParams* params )
 // ================================================================
 
 
-void kchartDataEditor::apply()
+void kchartDataEditor::slotApply()
 {
-    kdDebug(35001) << "Apply called" << endl;
+    emit applyClicked(this);
 }
 
 

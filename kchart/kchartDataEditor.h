@@ -36,8 +36,12 @@ public:
     void setAxisLabelTextShort( QStringList *_shortLabels ){ shortLabels = _shortLabels; }
 #endif
 
-public slots:
-    void apply();
+signals:
+    void applyClicked(kchartDataEditor *ed);
+
+protected slots:
+    void slotApply();
+
 
 private:
     // Data Editor, Old version

@@ -1,5 +1,14 @@
 2005-03-09  Inge Wallin  <inge@lysator.liu.se>
 
+	Make apply button in the data editor work.
+	* kchartDataEditor.{h,cc} (applyClicked): new signal
+	(slotApply): emit applyClicked with a parameter.
+	* kchart_view.{h,cc} (applyEdit): new slot
+	(edit): connect signal in data editor with slot in view.
+	(applyEdit): new slot.
+	
+	----------------------------------------------------------------
+
 	Cleaning
 	* kchart_part.cc (paintContent): break out common code out of an
 	if/else construction.
@@ -29,6 +38,8 @@
 	and enhanced to generate row and column headers as well.
 	* kchart_view.{h,cc}: (createTempData): removed
 	
+	----------------------------------------------------------------
+	
 	Store labels for rows and columns separately in the document.
 	This fixes bug 14971.
 	* kchart_part.h (m_rowLabels, m_colLabels): new members
@@ -49,7 +60,6 @@
 	(auxdata): new method in KChartPart.
 	(loadAuxiliary): new method in KChartPart.
 	(m_auxiliary): new member in KChartPart.
-
 	(paintContent): Paint data in rows or columns (labels not yet done).
 	(saveXML): Save auxiliary data (data direction) as well.
 	(loadXML): Call loadAuxiliary().
