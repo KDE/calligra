@@ -800,7 +800,7 @@ void KWordView::setFormat( const KWFormat &_format, bool _check, bool _update_pa
     if ( !_format.getUserFont()->getFontName().isEmpty() ) {
         ( (KFontAction*)actionFormatFontFamily )->blockSignals( TRUE );
         ( (KFontAction*)actionFormatFontFamily )->
-            setCurrentItem( fontList.findIndex( _format.getUserFont()->getFontName() ) );
+            setFont( _format.getUserFont()->getFontName() );
         ( (KFontAction*)actionFormatFontFamily )->blockSignals( FALSE );
     }
 
