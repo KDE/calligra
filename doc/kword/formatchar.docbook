@@ -234,14 +234,14 @@ converts all uppercase letters to lowercase.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Sentance Case</guilabel></term>
+<term><guilabel>Sentence Case</guilabel></term>
 <listitem><para>Capitalizes the first character after a period.</para>
 </listitem>
 </varlistentry>
 
 </variablelist>
 
-<para>When you have selected the option you like.  Click <guibutton>OK</guibutton> and &kword; will make the changes.</para>
+<para>When you have selected the desired options click <guibutton>OK</guibutton> and &kword; will make the changes.</para>
 
 
 
