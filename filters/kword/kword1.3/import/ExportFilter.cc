@@ -1019,7 +1019,7 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
     for ( QValueList<TableCell>::ConstIterator itCell ( table.cellList.begin() );
         itCell != table.cellList.end(); ++itCell)
     {
-        // ### TODO: rowspan, colspan
+        // ### TODO: it seems that the OO specification cannot do cells over more than one row!
         if ( rowCurrent != (*itCell).row )
         {
             rowCurrent = (*itCell).row;
@@ -1053,7 +1053,16 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
         }
 
         *m_streamOut << "<table:table-cell table:value-type=\"string\" table:style-name=\""
-            << escapeOOText( automaticCellStyle) << "\">\n";
+            << escapeOOText( automaticCellStyle)
+            << "\"";
+
+        // More than one column width?
+        if ( (*itCell).m_cols > 1 )
+        {
+            *m_streamOut << " table:number-columns-spanned=\"" << (*itCell).m_cols << "\"";
+        }
+
+        *m_streamOut << ">\n";
 
         if (!doFullAllParagraphs(*(*itCell).paraList))
         {
@@ -1097,7 +1106,12 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         if ( (*itCell).row )
             break; // We have finished the first row
 
-        const double width = (*itCell).frame.right - (*itCell).frame.left;
+        int cols = (*itCell).m_cols;
+        if ( cols < 1)
+            cols = 1;
+
+        // ### FIXME: the columns behind a larger cell do not need to be symmetrical
+        const double width = ( (*itCell).frame.right - (*itCell).frame.left ) / cols;
         tableWidth += width; // ###TODO any modifier needed?
 
         const QString automaticColumnStyle ( makeAutomaticStyleName( tableName + ".Column", columnNumber ) );
@@ -1114,10 +1128,10 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         delayedAutomaticStyles += "/>\n";
         delayedAutomaticStyles += "  </style:style>\n";
 
-        // ### TODO: find a way how to use table:number-columns-repeated > 1
+        // ### TODO: find a way how to use table:number-columns-repeated for more that one cell's column(s)
         *m_streamOut << "<table:table-column table:style-name=\""
             << escapeOOText( automaticColumnStyle )
-            << "\" table:number-columns-repeated=\"1\"/>\n";
+            << "\" table:number-columns-repeated=\"" << cols << "\"/>\n";
     }
 
     // Now that we have processed the columns, we can write out the automatic style for the table
