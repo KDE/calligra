@@ -55,7 +55,7 @@ VSelectObjects::visitVComposite( VComposite& composite )
 
 					if( found )
 					{
-						composite.setState( VObject::edit );
+						composite.setState( VObject::selected );
 						m_selection.append( &composite );
 						setSuccess();
 						return;
