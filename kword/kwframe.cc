@@ -797,7 +797,7 @@ void KWFrameSet::deleteAnchor( KWAnchor * anchor )
 
 void KWFrameSet::deleteAnchors()
 {
-    kdDebug() << "KWFrameSet::deleteAnchors" << endl;
+    kdDebug(32002) << "KWFrameSet::deleteAnchors" << endl;
     KWTextFrameSet * textfs = m_anchorTextFs;
     Q_ASSERT( textfs );
     if ( !textfs )
@@ -830,12 +830,13 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
     pos.ry() += frame->topBorder().width();
     if ( frame->topLeft() != pos )
     {
-        kdDebug() << "KWFrameSet::moveFloatingFrame " << pos.x() << "," << pos.y() << endl;
+        kdDebug(32002) << "KWFrameSet::moveFloatingFrame " << pos.x() << "," << pos.y() << endl;
         frame->moveTopLeft( pos );
         kWordDocument()->updateAllFrames();
         if ( frame->isSelected() )
             frame->updateResizeHandles();
     }
+    invalidate();
 }
 
 QRect KWFrameSet::floatingFrameRect( int frameNum )
