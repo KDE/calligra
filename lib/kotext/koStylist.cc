@@ -227,7 +227,7 @@ void KoStyleManager::addGeneralTab( int flags ) {
         d->cbIncludeInTOC = 0;
     }
 
-    d->preview = new KoStylePreview( i18n( "Preview" ), i18n( "The quick brown fox jumps over the lazy dog" ), tab, "stylepreview" );
+    d->preview = new KoStylePreview( i18n( "Preview" ), i18n( "The quick brown fox jumps over the lazy dog. And, what about the cat, one may ask? Well, the cat is playing cards with the mouse, the bird and the fish. It is, to say the least a hell of a party!" ), tab, "stylepreview" );
 
     tabLayout->addMultiCellWidget( d->preview, row, row, 0, 1 );
 
