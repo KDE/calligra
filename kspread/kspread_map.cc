@@ -92,7 +92,7 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
   if ( view ) // no view if embedded document
   {
     KSpreadCanvas * canvas = view->canvasWidget();
-    mymap.setAttribute( "activeTable", canvas->activeTable()->name() );
+    mymap.setAttribute( "activeTable", canvas->activeTable()->tableName() );
     mymap.setAttribute( "markerColumn", canvas->markerColumn() );
     mymap.setAttribute( "markerRow", canvas->markerRow() );
   }
