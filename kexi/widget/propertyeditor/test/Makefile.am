@@ -18,5 +18,5 @@ test_LDADD = $(LIB_KDEUI) ../libkexipropertyeditor.la
 shellrcdir   = $(kde_datadir)/test
 shellrc_DATA = testui.rc
 
-INCLUDES= -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core/properties -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi/widget/propertyeditor $(all_includes)
+test_INCLUDES= -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core/properties -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi/widget/propertyeditor $(all_includes)
 
