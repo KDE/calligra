@@ -1,4 +1,4 @@
-INCLUDES = -I$(srcdir)/../lib $(all_includes)
+INCLUDES = -I$(srcdir)/../lib $(KOFFICE_INCLUDES) $(all_includes)
 
 bin_PROGRAMS = kugar
 kugar_SOURCES = main.cpp report.cpp
