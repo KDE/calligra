@@ -298,25 +298,25 @@ void KWFrameBorderCommand::execute()
         switch( tmpFrameStruct->m_EFrameType)
         {
             case  FBLeft:
-                if(cell!=0L) // is a table cell
+                if(cell) // is a table cell
                     cell->setLeftBorder(m_newBorder);
                 else
                     frame->setLeftBorder(m_newBorder);
                 break;
             case FBRight:
-                if(cell!=0L) // is a table cell
+                if(cell) // is a table cell
                     cell->setRightBorder(m_newBorder);
                 else
                      frame->setRightBorder(m_newBorder);
                 break;
             case FBTop:
-                if(cell!=0L) // is a table cell
+                if(cell) // is a table cell
                     cell->setTopBorder(m_newBorder);
                 else
                       frame->setTopBorder(m_newBorder);
                 break;
             case FBBottom:
-                if(cell!=0L) // is a table cell
+                if(cell) // is a table cell
                     cell->setBottomBorder(m_newBorder);
                 else
                     frame->setBottomBorder(m_newBorder);
@@ -325,7 +325,7 @@ void KWFrameBorderCommand::execute()
                 break;
         }
 
-	if (cell==0L) {
+	if (!cell) {
 		frame->frameBordersChanged();
 		if (frame->isSelected())
 			frame->updateResizeHandles();
@@ -356,25 +356,25 @@ void KWFrameBorderCommand::unexecute()
         switch(tmpFrameStruct->m_EFrameType)
         {
             case  FBLeft:
-                if(cell!=0L) // is a table cell
+                if(cell) // is a table cell
                     cell->setLeftBorder(tmpFrameStruct->m_OldBorder);
                 else
                     frame->setLeftBorder(tmpFrameStruct->m_OldBorder);
                 break;
             case FBRight:
-                if(cell!=0L) // is a table cell
+                if(cell) // is a table cell
                     cell->setRightBorder(tmpFrameStruct->m_OldBorder);
                 else
                     frame->setRightBorder(tmpFrameStruct->m_OldBorder);
                 break;
             case FBTop:
-                if(cell!=0L) // is a table cell
+                if(cell) // is a table cell
                     cell->setTopBorder(tmpFrameStruct->m_OldBorder);
                 else
                     frame->setTopBorder(tmpFrameStruct->m_OldBorder);
                 break;
             case FBBottom:
-                if(cell!=0L) // is a table cell
+                if(cell) // is a table cell
                     cell->setBottomBorder(tmpFrameStruct->m_OldBorder);
                 else
                     frame->setBottomBorder(tmpFrameStruct->m_OldBorder);
@@ -382,7 +382,7 @@ void KWFrameBorderCommand::unexecute()
             default:
                 break;
         }
-	if (cell==0L) {
+	if (!cell) {
 		frame->frameBordersChanged();
 		if (frame->isSelected())
 			frame->updateResizeHandles();
@@ -1614,7 +1614,7 @@ void KWChangeDateVariableSubType::unexecute()
 }
 
 KWChangeDateVariableFormat::KWChangeDateVariableFormat( const QString &name, KWDocument *_doc,
-                        const QString _oldValue, const QString _newValue,
+                        const QString &_oldValue, const QString &_newValue,
                         KWDateVariable *var):
     KNamedCommand(name),
     m_doc(_doc),
@@ -1672,7 +1672,7 @@ void KWChangeTimeVariableSubType::unexecute()
 }
 
 KWChangeTimeVariableFormat::KWChangeTimeVariableFormat( const QString &name, KWDocument *_doc,
-                        const QString _oldValue, const QString _newValue,
+                        const QString &_oldValue, const QString &_newValue,
                         KWTimeVariable *var):
     KNamedCommand(name),
     m_doc(_doc),

@@ -3493,6 +3493,7 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
     else
     {
         kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
+        kdDebug()<<"refLink() :"<<refLink()<<endl;
         if(refLink().isNull())
         {
             QPopupMenu * popup;

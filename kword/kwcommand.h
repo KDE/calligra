@@ -631,7 +631,7 @@ class KWChangeTimeVariableSubType : public KNamedCommand
 class KWChangeTimeVariableFormat : public KNamedCommand
 {
  public:
-    KWChangeTimeVariableFormat( const QString &name, KWDocument *_doc, const QString _oldValue, const QString _newValue, KWTimeVariable *var);
+    KWChangeTimeVariableFormat( const QString &name, KWDocument *_doc, const QString &_oldValue, const QString &_newValue, KWTimeVariable *var);
     ~KWChangeTimeVariableFormat();
     void execute();
     void unexecute();
@@ -659,7 +659,7 @@ class KWChangeDateVariableSubType : public KNamedCommand
 class KWChangeDateVariableFormat : public KNamedCommand
 {
  public:
-    KWChangeDateVariableFormat( const QString &name, KWDocument *_doc, const QString _oldValue, const QString _newValue, KWDateVariable *var);
+    KWChangeDateVariableFormat( const QString &name, KWDocument *_doc, const QString &_oldValue, const QString &_newValue, KWDateVariable *var);
     ~KWChangeDateVariableFormat();
     void execute();
     void unexecute();
