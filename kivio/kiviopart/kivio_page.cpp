@@ -878,6 +878,10 @@ void KivioPage::ungroupSelectedStencils()
   {
     selectStencil( pStencil );
 
+    if(pStencil->type() == kstConnector) {
+      pStencil->searchForConnections(this, 4.0);
+    }
+    
     pStencil = pSelectThese->next();
   }
 
