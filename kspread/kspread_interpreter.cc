@@ -2814,6 +2814,297 @@ static bool kspreadfunc_imabs( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_imcos( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,1, "IMCOS",true ) )
+    return false;
+  QString tmp;
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+        {
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+                return false;
+        tmp= tmp.setNum(args[0]->doubleValue());
+        }
+  else
+        {
+        tmp=args[0]->stringValue();
+        }
+  bool ok;
+  double real=real_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+  double imag=imag_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+  double imag_res=sin(real)*sinh(imag);
+  double real_res=cos(real)*cosh(imag);
+
+
+  tmp=kspreadfunc_create_complex(real_res,-imag_res);
+
+  double result=tmp.toDouble(&ok);
+  if(ok)
+        {
+        context.setValue( new KSValue(result));
+        return true;
+        }
+  context.setValue( new KSValue(tmp));
+
+  return true;
+}
+
+static bool kspreadfunc_imsin( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,1, "IMSIN",true ) )
+    return false;
+  QString tmp;
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+        {
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+                return false;
+        tmp= tmp.setNum(args[0]->doubleValue());
+        }
+  else
+        {
+        tmp=args[0]->stringValue();
+        }
+  bool ok;
+  double real=real_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+  double imag=imag_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+  double imag_res=cos(real)*sinh(imag);
+  double real_res=sin(real)*cosh(imag);
+
+
+  tmp=kspreadfunc_create_complex(real_res,imag_res);
+
+  double result=tmp.toDouble(&ok);
+  if(ok)
+        {
+        context.setValue( new KSValue(result));
+        return true;
+        }
+  context.setValue( new KSValue(tmp));
+
+  return true;
+}
+
+static bool kspreadfunc_imln( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,1, "IMLN",true ) )
+    return false;
+  QString tmp;
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+        {
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+                return false;
+        tmp= tmp.setNum(args[0]->doubleValue());
+        }
+  else
+        {
+        tmp=args[0]->stringValue();
+        }
+  bool ok;
+  double real=real_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+  double imag=imag_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+
+
+  double arg=sqrt(pow(imag,2)+pow(real,2));
+  double real_res=log(arg);
+  double imag_res=atan(imag/real);
+  tmp=kspreadfunc_create_complex(real_res,imag_res);
+
+  double result=tmp.toDouble(&ok);
+  if(ok)
+        {
+        context.setValue( new KSValue(result));
+        return true;
+        }
+  context.setValue( new KSValue(tmp));
+  return true;
+}
+
+static bool kspreadfunc_imexp( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,1, "IMEXP",true ) )
+    return false;
+  QString tmp;
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+        {
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+                return false;
+        tmp= tmp.setNum(args[0]->doubleValue());
+        }
+  else
+        {
+        tmp=args[0]->stringValue();
+        }
+  bool ok;
+  double real=real_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+  double imag=imag_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+  double imag_res=exp(real)*sin(imag);
+  double real_res=exp(real)*cos(imag);
+
+
+  tmp=kspreadfunc_create_complex(real_res,imag_res);
+
+  double result=tmp.toDouble(&ok);
+  if(ok)
+        {
+        context.setValue( new KSValue(result));
+        return true;
+        }
+  context.setValue( new KSValue(tmp));
+
+  return true;
+}
+
+static bool kspreadfunc_imsqrt( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,1, "IMSQRT",true ) )
+    return false;
+  QString tmp;
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+        {
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+                return false;
+        tmp= tmp.setNum(args[0]->doubleValue());
+        }
+  else
+        {
+        tmp=args[0]->stringValue();
+        }
+  bool ok;
+  double real=real_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+  double imag=imag_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+  double arg=sqrt(sqrt(pow(imag,2)+pow(real,2)));
+  double angle=atan(imag/real);
+
+  double real_res=arg*cos((angle/2));
+  double imag_res=arg*sin((angle/2));
+
+  tmp=kspreadfunc_create_complex(real_res,imag_res);
+
+  double result=tmp.toDouble(&ok);
+  if(ok)
+        {
+        context.setValue( new KSValue(result));
+        return true;
+        }
+  context.setValue( new KSValue(tmp));
+
+  return true;
+}
+
+static bool kspreadfunc_impower( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,2, "IMPOWER",true ) )
+    return false;
+  QString tmp;
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+        {
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+                return false;
+        tmp= tmp.setNum(args[0]->doubleValue());
+        }
+  else
+        {
+        tmp=args[0]->stringValue();
+        }
+  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+        return false;
+
+  bool ok;
+  double real=real_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+  double imag=imag_complexe(tmp,ok);
+  if(!ok)
+        {
+        context.setValue( new KSValue(i18n("Err")));
+        return false;
+        }
+
+  double arg=pow(sqrt(pow(imag,2)+pow(real,2)),args[1]->intValue());
+  double angle=atan(imag/real);
+
+  double real_res=arg*cos(angle*args[1]->intValue());
+  double imag_res=arg*sin(angle*args[1]->intValue());
+
+  tmp=kspreadfunc_create_complex(real_res,imag_res);
+
+  double result=tmp.toDouble(&ok);
+  if(ok)
+        {
+        context.setValue( new KSValue(result));
+        return true;
+        }
+  context.setValue( new KSValue(tmp));
+
+  return true;
+}
+
+
 static bool kspreadfunc_imdiv_helper( KSContext& context, QValueList<KSValue::Ptr>& args, QString& result )
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
@@ -3373,6 +3664,13 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "SUMX2MY2", new KSValue( new KSBuiltinFunction( module, "SUMX2MY2", kspreadfunc_sumx2my2 ) ) );
   module->addObject( "SUM2XMY", new KSValue( new KSBuiltinFunction( module, "SUM2XMY", kspreadfunc_sumxmy2 ) ) );
   module->addObject( "IMDIV", new KSValue( new KSBuiltinFunction( module, "IMDIV", kspreadfunc_imdiv ) ) );
+  module->addObject( "IMCOS", new KSValue( new KSBuiltinFunction( module, "IMCOS", kspreadfunc_imcos ) ) );
+  module->addObject( "IMSIN", new KSValue( new KSBuiltinFunction( module, "IMSIN", kspreadfunc_imsin ) ) );
+  module->addObject( "IMEXP", new KSValue( new KSBuiltinFunction( module, "IMEXP", kspreadfunc_imexp ) ) );
+  module->addObject( "IMLN", new KSValue( new KSBuiltinFunction( module, "IMLN", kspreadfunc_imln ) ) );
+  module->addObject( "IMSQRT", new KSValue( new KSBuiltinFunction( module, "IMSQRT", kspreadfunc_imsqrt ) ) );
+  module->addObject( "IMPOWER", new KSValue( new KSBuiltinFunction( module, "IMPOWER", kspreadfunc_impower ) ) );
+
   return module;
 }
 

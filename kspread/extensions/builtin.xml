@@ -1291,6 +1291,101 @@ parameters. You can multiply values given by a range multiply(A1:B5) or list of 
     </Function>
 
     <Function>
+      <Name>IMCOS</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMCOS(string) returns the cosine of a complex number.</Text>
+	<Syntax>IMCOS(string )</Syntax>
+	<Example>IMCOS("1+i") returns "0.83373-0.988898i"</Example>
+	<Example>IMCOS("12i") returns 81 377.4 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMSIN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMSIN(string) the sine of a complex number.</Text>
+	<Syntax>IMSIN(string )</Syntax>
+	<Example>IMSIN("1+i") returns "1.29846+0.634964i"</Example>
+	<Example>IMSIN("1.2") returns -0.536573 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMEXP</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMEXP(string) returns the exponential of a complex number.</Text>
+	<Syntax>IMEXP(string )</Syntax>
+	<Example>IMEXP("2-i") returns "3.99232-6.21768i"</Example>
+	<Example>IMEXP("12i") returns "0.843854-0.536573i" </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMLN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMLN(string) returns the natural logarithm of a complex number</Text>
+	<Syntax>IMLN(string )</Syntax>
+	<Example>IMLN("3-i") returns "1.15129-0.321751i"</Example>
+	<Example>IMLN("12") returns 2.48491 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMSQRT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMSQRT(string) returns the square root of a complex number.</Text>
+	<Syntax>IMSQRT(string )</Syntax>
+	<Example>IMSQRT("1+i") returns "1.09868+0.45509i"</Example>
+	<Example>IMSQRT("1.2i") returns "0.774597+0.774597i" </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMPOWER</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Power</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMPOWER(string) returns a complex number raised to a power.</Text>
+	<Syntax>IMPOWER(string )</Syntax>
+	<Example>IMPOWER("4-i";2) returns "15-8i"</Example>
+	<Example>IMPOWER("1.2";2) returns 1.44 </Example>
+      </Help>
+    </Function>
+
+
+    <Function>
       <Name>IMSUM</Name>
       <Type>String</Type>
       <Parameter optional="true">
