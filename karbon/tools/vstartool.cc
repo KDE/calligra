@@ -67,7 +67,7 @@ VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const
 	m_innerAngle->setMaxValue( 360 );
 
 	new QLabel( i18n( "Roundness:" ), group );
-	m_roundness = new KDoubleNumInput( 0.0, group );
+	m_roundness = new KDoubleNumInput( group );
 	m_roundness->setRange( 0.0, 1.0, 0.05 );
 
 	typeChanged( VStar::star_outline );

@@ -48,7 +48,7 @@ VSpiralTool::VSpiralOptionsWidget::VSpiralOptionsWidget( KarbonPart *part, QWidg
 	m_segments = new KIntSpinBox( group );
 	m_segments->setMinValue( 1 );
 	new QLabel( i18n( "Fade:" ), group );
-	m_fade = new KDoubleNumInput( 0.0, group );
+	m_fade = new KDoubleNumInput( group );
 	m_fade->setRange( 0.0, 1.0, 0.05 );
 
 	new QLabel( i18n( "Orientation:" ), group );
