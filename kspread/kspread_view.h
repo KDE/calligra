@@ -192,6 +192,9 @@ public:
      */
     void paintUpdates();
 
+    /**
+     * Resets the internal handle pointer, called from KSpreadInsertHandler destructor
+     */
     void resetInsertHandle() { m_pInsertHandle = 0L; }
 
 public slots:
