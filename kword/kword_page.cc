@@ -58,7 +58,8 @@
 /*================================================================*/
 KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
     : QScrollView( parent, "", WNorthWestGravity ), format( _doc ),
-      blinkTimer( this ), scrollTimer( this ), cachedParag( 0L ),
+      blinkTimer( this ), scrollTimer( this ), formatTimer( this ), 
+      inputTimer( this ), cachedParag( 0L ),
       cachedContentsPos( QPoint( -1, -1 ) ), _setErase( TRUE ),
       _resizing( FALSE ), redrawOnlyCurrFrameset( FALSE ), currFrameSet( -1 )
 {
@@ -144,6 +145,12 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
     repaintScreen( TRUE );
     setFrameStyle( QFrame::NoFrame );
     setLineWidth( 0 );
+
+    connect( &formatTimer, SIGNAL( timeout() ),
+	     this, SLOT( formatMore() ) );
+    connect( &inputTimer, SIGNAL( timeout() ),
+	     this, SLOT( noInput() ) );
+    formatFC = new KWFormatContext( doc, 1 );
 }
 
 /*================================================================*/
@@ -1609,28 +1616,20 @@ void KWPage::recalcPage( KWParag *_p )
 
     calcVisiblePages();
     KWFormatContext *paintfc = new KWFormatContext( doc, 1 );
-    for ( unsigned i = 0; i < doc->getNumFrameSets(); i++ )
-    {
-	switch ( doc->getFrameSet( i )->getFrameType() )
-	{
-	case FT_TEXT:
-	{
+    for ( unsigned i = 0; i < doc->getNumFrameSets(); i++ ) {
+	switch ( doc->getFrameSet( i )->getFrameType() ) {
+	case FT_TEXT: {
 	    KWParag *p = doc->findFirstParagOfRect( contentsY(), firstVisiblePage, i );
-	    if ( p )
-	    {
+	    if ( p ) {
 		paintfc->setFrameSet( i + 1 );
 		paintfc->init( p, recalcAll );
 
-		if ( i == fc->getFrameSet() - 1 && _p )
-		{
+		if ( i == fc->getFrameSet() - 1 && _p ) {
 		    while ( paintfc->getParag() != _p->getNext() )
 			paintfc->makeNextLineLayout();
-		}
-		else
-		{
+		} else {
 		    bool bend = FALSE;
-		    while ( !bend )
-		    {
+		    while ( !bend ) {
 			if ( allowBreak1( paintfc, i ) )
 			    break;
 			bend = !paintfc->makeNextLineLayout();
@@ -1644,6 +1643,10 @@ void KWPage::recalcPage( KWParag *_p )
 	}
     }
 
+    *formatFC = *paintfc;
+    formatTimer.stop();
+    formatTimer.start( 0, TRUE );
+    
     delete paintfc;
 
     if ( blinking )
@@ -1712,30 +1715,25 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
 	 isAWrongFooter( doc->getFrameSet( i )->getFrameInfo(), doc->getFooterType() ) )
 	return;
 
-    if ( doc->getFrameSet( i )->getFrameInfo() == FI_BODY )
-    {
+    if ( doc->getFrameSet( i )->getFrameInfo() == FI_BODY ) {
 	KWParag *p = 0L;
 	p = doc->findFirstParagOfRect( e->rect().y() + contentsY(), firstVisiblePage, i );
 
-	if ( p )
-	{
+	if ( p ) {
 	    paintfc->setFrameSet( i + 1 );
 	    paintfc->init( p, recalcAll );
 
 	    KWFrame *frame = 0L;
 	    int _y = -1, _hei = -1;
 	    bool bend = FALSE;
-	    while ( !bend )
-	    {
+	    while ( !bend ) {
 		if ( allowBreak1( paintfc, i ) )
 		    break;
-		if ( !_resizing )
-		{
+		if ( !_resizing ) {
 		    KWFrame *oldFrame = frame;
 		    frame = doc->getFrameSet( i )->getFrame( paintfc->getFrame() - 1 );
 
-		    if ( oldFrame && frame && oldFrame != frame && _y >= 0 && _hei > 0 )
-		    {
+		    if ( oldFrame && frame && oldFrame != frame && _y >= 0 && _hei > 0 ) {
 			int li = oldFrame->getLeftIndent( _y, _hei );
 			painter.fillRect( oldFrame->x() - contentsX() + li,
 					  _y, oldFrame->width() - li - oldFrame->getRightIndent( _y, _hei ),
@@ -1757,10 +1755,13 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
 		if ( paintfc->getPage() > lastVisiblePage )
 		    bend = TRUE;
 	    }
+
+	    *formatFC = *paintfc;
+	    formatTimer.stop();
+	    formatTimer.start( 0, TRUE );
+
 	}
-    }
-    else
-    {
+    } else {
 	KWParag *p = 0L;
 
 	KWFrameSet *fs = doc->getFrameSet( i );
@@ -1769,8 +1770,7 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
 	QRect v = QRect( e->rect().x() + contentsX(), e->rect().y() + contentsY(),
 			 e->rect().width(), e->rect().height() );
 
-	while ( TRUE )
-	{
+	while ( TRUE ) {
 	    int frm = fs->getNext( r );
 	    if ( !v.intersects( r ) ) break;
 	    if ( frm == -1 ) break;
@@ -1782,13 +1782,11 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
 	    paintfc->init( p, TRUE, frm + 1, fs->getFrame( frm )->getPageNum() + 1 );
 
 	    bool bend = FALSE;
-	    while ( !bend )
-	    {
+	    while ( !bend ) {
 		if ( allowBreak1( paintfc, i ) )
 		    break;
 
-		if ( !_resizing )
-		{
+		if ( !_resizing ) {
 		    KWFrame *frame = fs->getFrame( paintfc->getFrame() - 1 );
 		    unsigned int _x = frame->x() - contentsX();
 		    unsigned int _wid = frame->width();
@@ -1803,6 +1801,11 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
 		if ( paintfc->getPage() > lastVisiblePage )
 		    bend = TRUE;
 	    }
+
+	    *formatFC = *paintfc;
+	    formatTimer.stop();
+	    formatTimer.start( 0, TRUE );
+
 	}
     }
 }
@@ -1918,8 +1921,7 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASA
     QStringList tmpCachedLines;
     QStringList::Iterator it = cachedLines.begin();
 
-    while ( !bend )
-    {
+    while ( !bend ) {
 	bool forceDraw = FALSE;
 	KWFrame *frame = frameSet->getFrame( paintfc.getFrame() - 1 );
 	if ( paintfc.getParag() != fc->getParag() )
@@ -1942,8 +1944,7 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASA
 								   paintfc.getLineEndPos() - paintfc.getLineStartPos() + 1 );
 
 	bool drawIt = TRUE;
-	if ( !forceDraw && lookInCache )
-	{
+	if ( !forceDraw && lookInCache ) {
 	    if ( it == cachedLines.end() )
 		it = cachedLines.begin();
 	    it = cachedLines.find( it, str );
@@ -1951,8 +1952,7 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASA
 		drawIt = FALSE;
 	}
 
-	if ( drawIt || forceDraw )
-	{
+	if ( drawIt || forceDraw ) {
 	    unsigned int li = frame->getLeftIndent( paintfc.getPTY(), paintfc.getLineHeight() );
 	    painter.fillRect( _x + li, paintfc.getPTY() - contentsY(),
 			      _wid - li - frame->getRightIndent( paintfc.getPTY(), paintfc.getLineHeight() ),
@@ -1971,8 +1971,7 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASA
     }
 
     if ( full && ( int )paintfc.getPTY() + ( int )paintfc.getLineHeight() < frameSet->getFrame( paintfc.getFrame() - 1 )->bottom() &&
-	 !paintfc.getParag()->getNext() )
-    {
+	 !paintfc.getParag()->getNext() ) {
 	painter.save();
 	QRegion rg = frameSet->getFrame( paintfc.getFrame() - 1 )->getEmptyRegion();
 	rg.translate( -contentsX(), -contentsY() );
@@ -1991,6 +1990,9 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASA
     cachedLines = tmpCachedLines;
     if ( cachedLines.count() > 0 )
 	cachedLines.remove( cachedLines.last() );
+
+    *formatFC = paintfc;
+    formatTimer.stop();
 }
 
 /*================================================================*/
@@ -2022,6 +2024,7 @@ void KWPage::stopProcessKeyEvent()
     doc->getAutoFormat().setEnabled( FALSE );
 
     startBlinkCursor();
+    inputTimer.start( 500, TRUE );
 }
 
 /*================================================================*/
@@ -2529,6 +2532,9 @@ void KWPage::keyPressEvent( QKeyEvent *e )
     if ( mouseMode != MM_EDIT || e->key() == Key_Control )
 	return;
 
+    inputTimer.stop();
+    formatTimer.stop();
+    
     startProcessKeyEvent();
 
     editModeChanged( e );
@@ -4031,22 +4037,19 @@ void KWPage::repaintTableHeaders( KWGroupManager *grpMgr )
     KWTextFrameSet *fs;
 
     KWFormatContext *paintfc = new KWFormatContext( doc, doc->getFrameSetNum( grpMgr->getCell( 0 )->frameSet ) + 1 );
-    for ( unsigned i = 0; i < grpMgr->getNumCells(); i++ )
-    {
+    for ( unsigned i = 0; i < grpMgr->getNumCells(); i++ ) {
 	fs = dynamic_cast<KWTextFrameSet*>( grpMgr->getCell( i )->frameSet );
 	if ( !fs->isRemoveableHeader() ) continue;
 
 	KWParag *p = 0L;
 	p = fs->getFirstParag();
 
-	if ( p )
-	{
+	if ( p ) {
 	    paintfc->setFrameSet( doc->getFrameSetNum( grpMgr->getCell( i )->frameSet ) + 1 );
 	    paintfc->init( p, TRUE );
 
 	    bool bend = FALSE;
-	    while ( !bend )
-	    {
+	    while ( !bend ) {
 		doc->printLine( *paintfc, painter, contentsX(), contentsY(), width(), height(), gui->getView()->getViewFormattingChars() );
 		bend = !paintfc->makeNextLineLayout();
 		if ( paintfc->getPage() > lastVisiblePage )
@@ -4054,6 +4057,10 @@ void KWPage::repaintTableHeaders( KWGroupManager *grpMgr )
 	    }
 	}
     }
+
+    *formatFC = *paintfc;
+    formatTimer.stop();
+    formatTimer.start( 0, TRUE );
 
     delete paintfc;
 
@@ -4063,44 +4070,37 @@ void KWPage::repaintTableHeaders( KWGroupManager *grpMgr )
 /*================================================================*/
 void KWPage::insertVariable( VariableType type )
 {
-    if ( !doc->getVarFormats().find( static_cast<int>( type ) ) )
-    {
+    if ( !doc->getVarFormats().find( static_cast<int>( type ) ) ) {
 	warning( "HUHU... No variable format for type %d available!", static_cast<int>( type ) );
 	return;
     }
 
-    switch ( type )
-    {
-    case VT_DATE_FIX:
-    {
+    switch ( type ) {
+    case VT_DATE_FIX: {
 	KWDateVariable *var = new KWDateVariable( doc, TRUE, QDate::currentDate() );
 	var->setVariableFormat( doc->getVarFormats().find( static_cast<int>( type ) ) );
 	fc->getParag()->insertVariable( fc->getTextPos(), var );
 	fc->getParag()->setFormat( fc->getTextPos(), 1, format );
     } break;
-    case VT_DATE_VAR:
-    {
+    case VT_DATE_VAR: {
 	KWDateVariable *var = new KWDateVariable( doc, FALSE, QDate::currentDate() );
 	var->setVariableFormat( doc->getVarFormats().find( static_cast<int>( type ) ) );
 	fc->getParag()->insertVariable( fc->getTextPos(), var );
 	fc->getParag()->setFormat( fc->getTextPos(), 1, format );
     } break;
-    case VT_TIME_FIX:
-    {
+    case VT_TIME_FIX: {
 	KWTimeVariable *var = new KWTimeVariable( doc, TRUE, QTime::currentTime() );
 	var->setVariableFormat( doc->getVarFormats().find( static_cast<int>( type ) ) );
 	fc->getParag()->insertVariable( fc->getTextPos(), var );
 	fc->getParag()->setFormat( fc->getTextPos(), 1, format );
     } break;
-    case VT_TIME_VAR:
-    {
+    case VT_TIME_VAR: {
 	KWTimeVariable *var = new KWTimeVariable( doc, FALSE, QTime::currentTime() );
 	var->setVariableFormat( doc->getVarFormats().find( static_cast<int>( type ) ) );
 	fc->getParag()->insertVariable( fc->getTextPos(), var );
 	fc->getParag()->setFormat( fc->getTextPos(), 1, format );
     } break;
-    case VT_PGNUM:
-    {
+    case VT_PGNUM: {
 	KWPgNumVariable *var = new KWPgNumVariable( doc );
 	var->setVariableFormat( doc->getVarFormats().find( static_cast<int>( type ) ) );
 	fc->getParag()->insertVariable( fc->getTextPos(), var );
@@ -4504,8 +4504,7 @@ void KWPage::continueKeySelection()
     bool flickerAndSlow = FALSE;
 
     int cy = isCursorYVisible( *fc );
-    if ( cy != 0 )
-    {
+    if ( cy != 0 ) {
 	if ( cy < 0 )
 	    if ( *doc->getSelStart() < *fc )
 		flickerAndSlow = TRUE;
@@ -4514,8 +4513,7 @@ void KWPage::continueKeySelection()
 		flickerAndSlow = TRUE;
     }
 
-    if ( !continueSelection || flickerAndSlow )
-    {
+    if ( !continueSelection || flickerAndSlow ) {
 	QPainter painter;
 	painter.begin( viewport() );
 	doc->drawSelection( painter, contentsX(), contentsY() );
@@ -4530,9 +4528,7 @@ void KWPage::continueKeySelection()
 	doc->drawMarker( *fc, &painter, contentsX(), contentsY() );
 	doc->drawSelection( painter, contentsX(), contentsY() );
 	painter.end();
-    }
-    else
-    {
+    } else {
 	doc->setSelEnd( *fc );
 	doc->setSelection( FALSE );
 
@@ -4563,8 +4559,7 @@ void KWPage::doAutoScroll()
     int frameset = doc->getFrameSet( mx, my );
 
     if ( frameset != -1 && frameset == static_cast<int>( fc->getFrameSet() ) - 1 &&
-	 doc->getFrameSet( frameset )->getFrameType() == FT_TEXT )
-    {
+	 doc->getFrameSet( frameset )->getFrameType() == FT_TEXT ) {
 	*oldFc = *fc;
 	QPainter _painter;
 	_painter.begin( viewport() );
@@ -4585,8 +4580,7 @@ void KWPage::doAutoScroll()
 
 	gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
 
-	if ( fc->getParag() )
-	{
+	if ( fc->getParag() ) {
 	    setRulerFirstIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getFirstLineLeftIndent() );
 	    setRulerLeftIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getLeftIndent() );
 	}
@@ -4607,18 +4601,15 @@ void KWPage::selectAllFrames( bool select )
     QPainter p;
     p.begin( viewport() );
 
-    for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i )
-    {
+    for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i ) {
 	bool careAboutDirty = FALSE;
 	fs = doc->getFrameSet( i );
 	if ( fs->getGroupManager() )
 	    careAboutDirty = TRUE;
 
-	for ( unsigned int j = 0; j < fs->getNumFrames(); ++j )
-	{
+	for ( unsigned int j = 0; j < fs->getNumFrames(); ++j ) {
 	    frame = fs->getFrame( j );
-	    if ( frame->isSelected() != select )
-	    {
+	    if ( frame->isSelected() != select ) {
 		frame->setSelected( select );
 		if ( frame->intersects( v_rect ) )
 		    drawFrameSelection( p, frame );
@@ -4638,15 +4629,12 @@ void KWPage::selectAllFrames( bool select )
 void KWPage::selectFrame( int mx, int my, bool select )
 {
     int fs = doc->getFrameSet( mx, my );
-    if ( fs != -1 )
-    {
+    if ( fs != -1 ) {
 	KWFrameSet *frameset = doc->getFrameSet( fs );
 	int frm = frameset->getFrame( mx, my );
-	if ( frm != -1 )
-	{
+	if ( frm != -1 ) {
 	    KWFrame *frame = frameset->getFrame( frm );
-	    if ( frame->isSelected() != select )
-	    {
+	    if ( frame->isSelected() != select ) {
 		frame->setSelected( select );
 		QPainter p;
 		p.begin( viewport() );
@@ -4684,3 +4672,27 @@ bool KWPage::focusNextPrevChild( bool )
     return FALSE;
 }
 
+/*================================================================*/
+void KWPage::formatMore()
+{
+    if ( inKeyEvent )
+	return;
+    
+    //qDebug( "formatMore" );
+    bool bend = FALSE;
+
+    int i = 0;
+    while ( !bend && i < 15 ) {
+	bend = !formatFC->makeNextLineLayout( FALSE );
+	++i;
+    }
+	
+    if ( !bend )
+	formatTimer.start( 0, TRUE );
+}
+
+/*================================================================*/
+void KWPage::noInput()
+{
+    formatTimer.start( 0, TRUE );
+}

@@ -259,9 +259,13 @@ bool KWParag::deleteText( unsigned int _pos, unsigned int _len )
 /*================================================================*/
 void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_format )
 {
-    if ( text.size() == 0 ) return;
+    if ( text.size() == 0 ) 
+	return;
 
-    assert( _pos < text.size() );
+    if ( _pos >= text.size() ) {
+	qWarning( "warning: in KWParag::setFormat() pos >= text.size()!" );
+	return;
+    }
 
     for ( unsigned int i = 0; i < _len; i++ )
     {
@@ -607,7 +611,7 @@ void KWParag::correctFormat( KWParag *newParag, KWParag *oldParag )
     KWFormat &pfOld = oldParag->getParagLayout()->getFormat();
     KWFormat &pfNew = newParag->getParagLayout()->getFormat();
     KWFormat nf;
-    
+
     for ( unsigned int i = 0; i < oldParag->getTextLen(); ++i ) {
 	KWChar c = oldParag->getKWString()->data()[ i ];
 	KWFormat *f = 0;
@@ -619,7 +623,7 @@ void KWParag::correctFormat( KWParag *newParag, KWParag *oldParag )
 	    case ID_KWCharFootNote:
 		f = dynamic_cast<KWCharFootNote*>( c.attrib )->getFormat();
 		break;
-	    default: 
+	    default:
 		break;
 	    }
 	    continue;

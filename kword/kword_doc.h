@@ -171,7 +171,7 @@ public:
     { return defaultUserFont;  }	
     KWParagLayout *getDefaultParagLayout()
     { return defaultParagLayout; }
-    
+
     QList<KWUserFont> userFontList;
 
     QList<KWDisplayFont> displayFontList;
@@ -224,19 +224,19 @@ public:
     { pages = _pages;  }
     KWFormatCollection *getFormatCollection()
     { return &formatCollection; }
-    
-    KWImageCollection *getImageCollection()  
+
+    KWImageCollection *getImageCollection()
     { return &imageCollection; }
-    
+
     void insertPicture( QString _filename, KWPage *_paperWidget );
 
     void setSelStart( KWFormatContext &_fc )
     { selStart = _fc; }
-    
+
     KWFormatContext *getSelStart()
     { return &selStart;  }
     void setSelEnd( KWFormatContext &_fc )
-    { selEnd = _fc; } 
+    { selEnd = _fc; }
 
     KWFormatContext *getSelEnd()
     { return &selEnd; }
@@ -245,7 +245,7 @@ public:
 			KWFormatContext *_selStart = 0L, KWFormatContext *_selEnd = 0L );
     void setSelection( bool _has )
     { hasSelection = _has; }
-    
+
     bool has_selection()
     { return hasSelection; }
 
@@ -255,7 +255,7 @@ public:
 
     void paste( KWFormatContext *_fc, QString _string, KWPage *_page, KWFormat *_format = 0L, const QString &_mime = "text/plain" );
 
-    void appendPage( unsigned int _page );
+    void appendPage( unsigned int _page, bool redrawBackgroundWhenAppendPage = TRUE );
 
     ProcessingType getProcessingType()
     { return processingType;  }

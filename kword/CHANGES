@@ -1402,3 +1402,19 @@ Reggie, 10.8.1999:
 ------------------
 - Got rid of some useless redraws
 - Found the bug which has eaten Key_Enter/Key_Return sometimes and fixed it
+
+Reggie, 11.8.1999:
+------------------
+- Got rid of some more useless redraws
+- Fixed most of the formatting errors. The problem was that the stuff
+  below contentsY() + visibleHeight() + somePixels never got formatted if something
+  changed (e.g. input of text). When scrolling the new stuff was reformatted on the fly,
+  BUTTT when the scrollingValue was larger than visibleHeight() this didn't work anymore
+  and the formatting was fucked up. Now using a null-timer KWord formats this stuff below
+  in the background in steps of 15 lines. The result is really good! There are still some
+  small problems (the timer is not always started when it should and so on). Also this formatting stuff
+  is only done for the frameset, in which the user is working at the moment - it should be done for all 
+  framests. I'll work on these things tomorrow.
+- Some other small fixes
+
+

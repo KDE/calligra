@@ -913,15 +913,13 @@ int KWFormatContext::cursorGotoNextChar()
 
 
 /*================================================================*/
-bool KWFormatContext::makeNextLineLayout()
+bool KWFormatContext::makeNextLineLayout( bool redrawBackgroundWhenAppendPage )
 {
     if ( !document->getFrameSet( frameSet - 1 )->isVisible() )
 	return FALSE;
 
-    if ( lineEndPos == parag->getTextLen() )
-    {
-	if ( parag->getNext() == 0L || outOfFrame )
-	{
+    if ( lineEndPos == parag->getTextLen() ) {
+	if ( parag->getNext() == 0L || outOfFrame ) {
 	    ptY += getLineHeight();
 	    parag->setPTYEnd( ptY );
 	    outOfFrame = FALSE;
@@ -930,19 +928,17 @@ bool KWFormatContext::makeNextLineLayout()
 
 	ptY += getLineHeight();
 	enterNextParag();
-    }
-    else
-    {
+    } else {
 	lineStartPos = lineEndPos;
 	ptY += getLineHeight();
-	makeLineLayout();
+	makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
     }
 
     return TRUE;
 }
 
 /*================================================================*/
-bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
+bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs, bool redrawBackgroundWhenAppendPage )
 {
     if ( !document->getFrameSet( frameSet - 1 )->isVisible() )
 	return FALSE;
@@ -951,16 +947,14 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
 
     // Reggie: DAMN SLOW HACK !!!!!!!
     if ( parag->getParagLayout()->hasSpecialTabs() && _checkTabs && _checkIntersects )
-	makeLineLayout( TRUE, FALSE );
+	makeLineLayout( TRUE, FALSE, redrawBackgroundWhenAppendPage );
 
-    if ( _checkIntersects )
-    {
+    if ( _checkIntersects ) {
 	if ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->hasIntersections() )
-	    makeLineLayout( FALSE );
+	    makeLineLayout( FALSE, TRUE, redrawBackgroundWhenAppendPage );
     }
 
-    if ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->hasIntersections() )
-    {
+    if ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->hasIntersections() ) {
 	_left = document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getLeftIndent( ptY, getLineHeight() );
 	_right = document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getRightIndent( ptY, getLineHeight() );
     }
@@ -995,16 +989,14 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
     // The indentation of the line. This is only the indentation
     // the user selected.
     unsigned int indent;
-    if ( lineStartPos == 0 )
-    {
+    if ( lineStartPos == 0 ) {
 	// Reset font size, color etc. to the documents default
 	setDefaults( document );
 	// Change fonts & stuff to match the paragraphs layout
 	apply( parag->getParagLayout()->getFormat() );
 
 	indent = parag->getParagLayout()->getFirstLineLeftIndent().pt();
-    }
-    else
+    } else
 	indent = parag->getParagLayout()->getLeftIndent().pt();
 
     indent += _left;
@@ -1019,8 +1011,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
 	      document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBRight().pt() - indent - _right;
 
     // First line ? Draw the couter ?
-    if ( lineStartPos == 0 && parag->getParagLayout()->getCounterType() != KWParagLayout::CT_NONE )
-    {
+    if ( lineStartPos == 0 && parag->getParagLayout()->getCounterType() != KWParagLayout::CT_NONE ) {
 	KWFormat counterfm( doc, *this );
 	counterfm.apply( parag->getParagLayout()->getFormat() );
 //	   if ( parag->getParagLayout()->getCounterType() == KWParagLayout::CT_BULLET )
@@ -1051,10 +1042,9 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
 
     lineStartFormat = *this;
 
-    if ( static_cast<int>( ptWidth ) < document->getRastX() )
-    {
+    if ( static_cast<int>( ptWidth ) < document->getRastX() ) {
 	ptY = document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getNextFreeYPos( ptY, getLineHeight() ) + 2;
-	return makeLineLayout();
+	return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
     }
 
     bool _broken = FALSE;
@@ -1067,12 +1057,10 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
 					    document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBLeft().pt() -
 					    document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBRight().pt() ) - indent - _right ||
 			 !_broken ) &&
-	    textPos < parag->getTextLen() )
-    {
+	    textPos < parag->getTextLen() ) {
 	QChar c = text[ textPos ].c;
 
-	if ( c != KWSpecialChar && text[ textPos ].attrib )
-	{
+	if ( c != KWSpecialChar && text[ textPos ].attrib ) {
 	    // Handle font formats here.
 	    assert( text[ textPos ].attrib->getClassId() == ID_KWCharFormat );
 	    KWCharFormat *f = ( KWCharFormat* )text[ textPos ].attrib;
@@ -1082,40 +1070,32 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
 	}
 
 	// do the autoformat stuff
-	if ( c != KWSpecialChar )
-	{
+	if ( c != KWSpecialChar ) {
 	    document->getAutoFormat().doTypographicQuotes( parag, this );
 	    document->getAutoFormat().doAutoFormat( parag, this );
 	    document->getAutoFormat().doUpperCase( parag, this );
 	}
 
 	// if we will not fit into the line anymore, let us leave the loop
-	if ( c != KWSpecialChar )
-	{
+	if ( c != KWSpecialChar ) {
 	    if ( ptPos + displayFont->getPTWidth( c ) >=
 		 xShift + ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->width() -
 			    document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBLeft().pt() -
 			    document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBRight().pt() ) - indent - _right && _broken )
 		break;
-	}
-	else if ( c == KWSpecialChar && text[ textPos ].attrib->getClassId() == ID_KWCharImage )
-	{
+	} else if ( c == KWSpecialChar && text[ textPos ].attrib->getClassId() == ID_KWCharImage ) {
 	    if ( ( ( KWCharImage* )text[ textPos ].attrib )->getImage()->width() + ptPos >=
 		 xShift + ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->width() -
 			    document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBLeft().pt() -
 			    document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBRight().pt() ) - indent - _right && _broken )
 		break;
-	}
-	else if ( c == KWSpecialChar && text[ textPos ].attrib->getClassId() == ID_KWCharVariable )
-	{
+	} else if ( c == KWSpecialChar && text[ textPos ].attrib->getClassId() == ID_KWCharVariable ) {
 	    if ( displayFont->getPTWidth( dynamic_cast<KWCharVariable*>( text[ textPos ].attrib )->getText() ) + ptPos >=
 		 xShift + ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->width() -
 			    document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBLeft().pt() -
 			    document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBRight().pt() ) - indent - _right && _broken )
 		break;
-	}
-	else if ( c == KWSpecialChar && text[ textPos ].attrib->getClassId() == ID_KWCharFootNote )
-	{
+	} else if ( c == KWSpecialChar && text[ textPos ].attrib->getClassId() == ID_KWCharFootNote ) {
 	    if ( displayFont->getPTWidth( dynamic_cast<KWCharFootNote*>( text[ textPos ].attrib )->getText() ) + ptPos >=
 		 xShift + ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->width() -
 			    document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBLeft().pt() -
@@ -1124,8 +1104,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
 	}
 
 	// Is it a space character
-	if ( c == ' ' )
-	{
+	if ( c == ' ' ) {
 	    // This is the correct point to make a line break
 	    lineEndPos = textPos + 1;
 	    // If we break here, then the line has the following width ...
@@ -1137,20 +1116,16 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
 	}
 
 	// Do we have some format definition here ?
-	if ( c == KWSpecialChar )
-	{
-	    switch ( text[ textPos ].attrib->getClassId() )
-	    {
-	    case ID_KWCharImage:
-	    {
+	if ( c == KWSpecialChar ) {
+	    switch ( text[ textPos ].attrib->getClassId() ) {
+	    case ID_KWCharImage: {
 		int w = ( ( KWCharImage* )text[ textPos ].attrib )->getImage()->width();
 		ptPos += w;
 		tmpPTWidth += w;
 		specialHeight = max(specialHeight,(unsigned int)((KWCharImage*)text[textPos].attrib)->getImage()->height());
 		textPos++;
 	    } break;
-	    case ID_KWCharVariable:
-	    {
+	    case ID_KWCharVariable: {
 		KWCharVariable *v = dynamic_cast<KWCharVariable*>( text[ textPos ].attrib );
 		v->getVar()->setInfo( frameSet, frame, doc->getPageNum( ptY + document->getPTPaperHeight() ), parag );
 		v->getVar()->recalc();
@@ -1160,8 +1135,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
 		tmpPTWidth += w;
 		textPos++;
 	    } break;
-	    case ID_KWCharFootNote:
-	    {
+	    case ID_KWCharFootNote: {
 		KWCharFootNote *fn = dynamic_cast<KWCharFootNote*>( text[ textPos ].attrib );
 		apply( *fn->getFormat() );
 		int w = displayFont->getPTWidth( fn->getText() );
@@ -1169,42 +1143,33 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
 		tmpPTWidth += w;
 		textPos++;
 	    } break;
-	    case ID_KWCharTab:
-	    {
+	    case ID_KWCharTab: {
 		unsigned int tabPos = 0;
 		KoTabulators tabType;
 		if ( parag->getParagLayout()->getNextTab( ptPos, document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->left() +
 							  document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBLeft().pt(),
 							  document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->right() -
 							  document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBRight().pt(),
-							  tabPos, tabType ) )
-		{
+							  tabPos, tabType ) ) {
 		    // next tab is in this line
-		    if ( tabPos > ptPos )
-		    {
-			switch ( tabType )
-			{
+		    if ( tabPos > ptPos ) {
+			switch ( tabType ) {
 			case T_LEFT:
 			    ptPos = tabPos;
 			    break;
-			case T_RIGHT:
-			{
+			case T_RIGHT: {
 			    if ( !_checkTabs ) break;
 			    if ( ptPos + ( _ptTextLen - ( ptPos - ptStartPos ) ) < tabPos )
 				ptPos = tabPos - ( _ptTextLen - ( ptPos - ptStartPos ) );
 			} break;
-			case T_CENTER:
-			{
+			case T_CENTER: {
 			    if ( !_checkTabs ) break;
 			    if ( ptPos + ( _ptTextLen - ( ptPos - ptStartPos ) ) / 2 < tabPos )
 				ptPos = tabPos - ( _ptTextLen - ( ptPos - ptStartPos ) ) / 2;
 			} break;
 			default: break;
 			}
-		    }
-		    // next tab is in the next line
-		    else
-		    {
+		    } else { // next tab is in the next line
 			lineEndPos = textPos;
 			textPos--;
 			ptTextLen = tmpPTWidth;
@@ -1217,9 +1182,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
 		textPos++;
 	    } break;
 	    }
-	}
-	else // A usual character ...
-	{
+	} else { // A usual character ...
 	    // Go right ...
 	    ptPos += displayFont->getPTWidth( c );
 	    // Increase the lines width
@@ -1232,8 +1195,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
     doc->getAutoFormat().endAutoFormat( parag, this );
 
     // Are we at the paragraphs end ?
-    if ( textPos == parag->getTextLen() )
-    {
+    if ( textPos == parag->getTextLen() ) {
 	// We have to take the last possible linebreak
 	lineEndPos = textPos;
 	ptTextLen = tmpPTWidth;
@@ -1246,19 +1208,17 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
 	spaces = tmpSpaces;
     }
 
-    if ( parag->getParagLayout()->getFlow() == KWParagLayout::CENTER )
-    {
+    if ( parag->getParagLayout()->getFlow() == KWParagLayout::CENTER ) {
 	ptPos = xShift + ( ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->width() -
 			     document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBLeft().pt() -
 			     document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBRight().pt() ) -
 			   indent - left - right - ptTextLen - _right ) / 2;
 	ptStartPos = ptPos;
-    }
-    else if ( parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT )
-    {
+    } else if ( parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT ) {
 	ptPos = xShift + ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->width() -
 			   document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBLeft().pt() -
-			   document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBRight().pt() ) - right - ptTextLen - indent - _right;
+			   document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBRight().pt() ) - 
+		right - ptTextLen - indent - _right;
 	ptStartPos = ptPos;
     }
 
@@ -1278,22 +1238,20 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
 
     // Does this line still fit in this frame or do we have to make a hard break?
     if ( !document->isPTYInFrame( frameSet - 1, frame - 1, ptY + getLineHeight() ) ||
-	 ( parag->hasHardBreak() && isCursorInFirstLine() ) && parag->getPrev() && parag->getPrev()->getEndPage() == page )
-    {
+	 ( parag->hasHardBreak() && isCursorInFirstLine() ) && parag->getPrev() && parag->getPrev()->getEndPage() == page ) {
 	// Are we a header or footer?
-	if ( isAHeader( document->getFrameSet( frameSet - 1 )->getFrameInfo() ) || isAFooter( document->getFrameSet( frameSet - 1 )->getFrameInfo() ) )
-	{
+	if ( isAHeader( document->getFrameSet( frameSet - 1 )->getFrameInfo() ) || 
+	     isAFooter( document->getFrameSet( frameSet - 1 )->getFrameInfo() ) ) {
 	    int diff = ( ptY + getLineHeight() ) - ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->bottom() -
 						     document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBBottom().pt() );
 
-	    if ( document->canResize( document->getFrameSet( frameSet - 1 ), document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 ),
-				      document->getFrameSet( frameSet - 1 )->getPageOfFrame( frame - 1 ), diff + 1 ) )
-	    {
+	    if ( document->canResize( document->getFrameSet( frameSet - 1 ), 
+				      document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 ),
+				      document->getFrameSet( frameSet - 1 )->getPageOfFrame( frame - 1 ), diff + 1 ) ) {
 		document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->
 		    setHeight( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->height() + diff + 1 );
 
-		if ( document->getFrameSet( frameSet - 1 )->getGroupManager() )
-		{
+		if ( document->getFrameSet( frameSet - 1 )->getGroupManager() ) {
 		    document->getFrameSet( frameSet - 1 )->getGroupManager()->deselectAll();
 		    document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->setSelected( TRUE );
 		    document->getFrameSet( frameSet - 1 )->getGroupManager()->recalcRows();
@@ -1302,16 +1260,11 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
 		document->recalcFrames( FALSE, TRUE );
 		document->updateAllFrames();
 		document->setNeedRedraw( TRUE );
-	    }
-	    else
-	    {
+	    } else {
 		outOfFrame = TRUE;
 		return FALSE;
 	    }
-	}
-	// Can we jump to the next frame ?
-	else if ( frame < document->getFrameSet( frameSet - 1 )->getNumFrames() )
-	{
+	} else if ( frame < document->getFrameSet( frameSet - 1 )->getNumFrames() ) { // Can we jump to the next frame ?
 	    frame++;
 	    if ( static_cast<int>( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->top() +
 				   document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBTop().pt() ) >
@@ -1321,23 +1274,19 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
 	    parag->setEndFrame( frame );
 	    ptY = document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->top() +
 		  document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBTop().pt();
-	    return makeLineLayout();
-	}
-	else // append a page or resize frame
-	{
-	    if ( !dynamic_cast<KWTextFrameSet*>( document->getFrameSet( frameSet - 1 ) )->getAutoCreateNewFrame() )
-	    {
+	    return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
+	} else { // append a page or resize frame
+	    if ( !dynamic_cast<KWTextFrameSet*>( document->getFrameSet( frameSet - 1 ) )->getAutoCreateNewFrame() ) {
 		int diff = ( ptY + getLineHeight() ) - ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->bottom() -
 							 document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBBottom().pt() );
 
-		if ( document->canResize( document->getFrameSet( frameSet - 1 ), document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 ),
-					  document->getFrameSet( frameSet - 1 )->getPageOfFrame( frame - 1 ), diff + 1 ) )
-		{
+		if ( document->canResize( document->getFrameSet( frameSet - 1 ), 
+					  document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 ),
+					  document->getFrameSet( frameSet - 1 )->getPageOfFrame( frame - 1 ), diff + 1 ) ) {
 		    document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->
 			setHeight( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->height() + diff + 1 );
 
-		    if ( document->getFrameSet( frameSet - 1 )->getGroupManager() )
-		    {
+		    if ( document->getFrameSet( frameSet - 1 )->getGroupManager() ) {
 			document->getFrameSet( frameSet - 1 )->getGroupManager()->deselectAll();
 			document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->setSelected( TRUE );
 			document->getFrameSet( frameSet - 1 )->getGroupManager()->recalcRows();
@@ -1347,23 +1296,19 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
 		    document->updateAllFrames();
 		    document->setNeedRedraw( TRUE );
 		    document->drawAllBorders( );
-		}
-		else
-		{
+		} else {
 		    outOfFrame = TRUE;
 		    return FALSE;
 		}
-	    }
-	    else
-	    {
-		document->appendPage( page - 1 );
+	    } else {
+		document->appendPage( page - 1, redrawBackgroundWhenAppendPage );
 		page++;
 		frame++;
 		parag->setEndPage( page );
 		parag->setEndFrame( frame );
 		ptY = document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->top() +
 		      document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBTop().pt();
-		return makeLineLayout();
+		return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
 	    }
 	}
     }

@@ -215,7 +215,9 @@ protected slots:
     void stopBlinkCursor();
     void contentsWillMove( int, int );
     void doAutoScroll();
-
+    void formatMore();
+    void noInput();
+    
 protected:
     unsigned int ptLeftBorder();
     unsigned int ptRightBorder();
@@ -312,7 +314,7 @@ protected:
     unsigned int firstVisiblePage;
     unsigned int lastVisiblePage;
 
-    KWFormatContext *fc;
+    KWFormatContext *fc, *formatFC;
 
     KWordGUI *gui;
     KWFormat format;
@@ -354,7 +356,7 @@ protected:
 
     KWGroupManager *curTable;
 
-    QTimer blinkTimer, scrollTimer;
+    QTimer blinkTimer, scrollTimer, formatTimer, inputTimer;
     bool cursorIsVisible;
 
     XKeyboardControl kbdc;

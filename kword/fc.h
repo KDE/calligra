@@ -35,7 +35,7 @@ public:
     bool operator<( const KWFormatContext &fc ) const;
     bool operator==( const KWFormatContext &fc ) const;
     
-    void init( KWParag *_parag, bool _fromStart = true,
+    void init( KWParag *_parag, bool _fromStart = TRUE,
                int _frame = -1, int _page = -1 );
     void enterNextParag();
     void skipCurrentParag();
@@ -78,8 +78,8 @@ public:
     void cursorGotoLineEnd();
     void cursorGotoNextLine();
     void cursorGotoPrevLine();
-    bool makeNextLineLayout();
-    bool makeLineLayout( bool _checkIntersects = true, bool _checkTabs = true );
+    bool makeNextLineLayout( bool redrawBackgroundWhenAppendPage = TRUE );
+    bool makeLineLayout( bool _checkIntersects = TRUE, bool _checkTabs = TRUE, bool redrawBackgroundWhenAppendPage = TRUE );
     void makeCounterLayout();
 
     bool isCursorAtParagStart();
@@ -88,7 +88,7 @@ public:
     bool isCursorAtParagEnd();
     bool isCursorAtLineEnd();
     /**
-     * @return true if the cursor is currently positioned at the last character of
+     * @return TRUE if the cursor is currently positioned at the last character of
      *         a line. This is one character before the linedEndPos.
      */
     bool isCursorAtLastChar();
