@@ -159,10 +159,13 @@ bool KoDocumentChild::loadDocument( KoStore* _store )
 
   kdDebug(30003) << "Trying to load " << m_tmpURL << endl;
 
+  if ( m_tmpMimeType == "application/x-killustrator" )
+      m_tmpMimeType = "application/x-kontour";
+
   KoDocumentEntry e = KoDocumentEntry::queryByMimeType( m_tmpMimeType );
   if ( e.isEmpty() )
   {
-    kdDebug(30003) << "ERROR: Could not create child document" << endl;
+    kdWarning(30003) << "ERROR: Could not create child document with type " << m_tmpMimeType << endl;
     return false;
   }
 
