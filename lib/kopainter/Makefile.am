@@ -1,7 +1,5 @@
 SUBDIRS = support . tests
 
-CXXFLAGS = -frtti
-
 INCLUDES= $(KOFFICEUI_INCLUDES) $(all_includes)
 
 lib_LTLIBRARIES = libkopainter.la
