@@ -1,7 +1,12 @@
 [Desktop Entry]
 Name=Kivio
-Exec=kiviopart
+Exec=kivio
 Comment=The Open Language of Business
+Comment[da]=Det åbne sprog til forretningsbrug
+Comment[eo]=La libera lingvo de entreprenado
+Comment[he]=החותפה םיקסעה תפש
+Comment[nl]=de open taal van de zakenwereld
+Comment[ro]=Limbajul deschis al afacerilor
 X-KDE-Library=libkiviopart
 X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
