@@ -56,7 +56,7 @@ Cursor::Cursor(Connection* conn, const QString& statement, uint options)
 
 Cursor::~Cursor()
 {
-	qDebug("Cursor::~Cursor() '%s'",m_statement.latin1());
+	KexiDBDbg << "Cursor::~Cursor() '" << m_statement.latin1() << "'" << endl;
 	m_conn->m_cursors.take(this);
 //	close();
 }
