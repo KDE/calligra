@@ -1741,7 +1741,7 @@ bool KWFrameDia::applyChanges()
             {
                 if(!macroCmd)
                     macroCmd = new KMacroCommand( i18n("Protect Size") );
-                KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null, parentFs, KWFrameSetPropertyCommand::FSP_PROTECTSIZE, protectSize->isChecked()? "true" : "false" );
+                KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null, fs, KWFrameSetPropertyCommand::FSP_PROTECTSIZE, protectSize->isChecked()? "true" : "false" );
                 macroCmd->addCommand(cmd);
                 cmd->execute();
 
