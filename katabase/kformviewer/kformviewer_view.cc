@@ -203,7 +203,7 @@ bool KformViewerView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
 void KformViewerView::helpUsing()
 {
-  kapp->invokeHTMLHelp( "kformviewer/kimage.html", QString::null );
+  kapp->invokeHelp( );
 }
 
 bool KformViewerView::printDlg()

@@ -197,7 +197,7 @@ KtablesView::paste()
 void
 KtablesView::helpUsing()
 {
-  kapp->invokeHTMLHelp( "kspread/ktables.html", QString::null );
+  kapp->invokeHelp( );
 }
 
 void

@@ -458,7 +458,7 @@ bool KformEditorView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
 void KformEditorView::helpUsing()
 {
-  kapp->invokeHTMLHelp( "kformeditor/kimage.html", QString::null );
+  kapp->invokeHelp( );
 }
 
 bool KformEditorView::printDlg()

@@ -106,8 +106,6 @@ FontDlg::FontDlg(QWidget *parent, const char *name, DefStruct *defstruct)
 
 void FontDlg::help(){
 
-    // ->invokeHTMLHelp("","");
-
 }
 
 void FontDlg::okButton(){

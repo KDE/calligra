@@ -1138,7 +1138,7 @@ void KIllustrator::menuCallback (int item) {
     scriptDialog->loadScripts ();
     break;
   case ID_HELP_HELP:
-    kapp->invokeHTMLHelp ("", "");
+    kapp->invokeHelp ();
     break;
   case ID_HELP_ABOUT_APP:
   case ID_HELP_ABOUT_KDE:

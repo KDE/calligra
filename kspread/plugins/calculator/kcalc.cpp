@@ -763,9 +763,6 @@ void QtCalculator::Gra_Selected()
 
 
 void QtCalculator::helpclicked(){
-
-    // kapp->invokeHTMLHelp("","");
-
 }
 
 void QtCalculator::keyPressEvent( QKeyEvent *e ){

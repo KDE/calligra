@@ -164,7 +164,6 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
 
 void ConfigDlg::help()
 {
-    // mykapp->invokeHTMLHelp("","");
 }
 
 void ConfigDlg::okButton()

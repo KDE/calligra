@@ -988,7 +988,7 @@ void KSpreadView::changeBorderColor()
 
 void KSpreadView::helpUsing()
 {
-  kapp->invokeHTMLHelp( "kspread/kspread.html", QString::null );
+  kapp->invokeHelp( );
 }
 
 QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget *_parent )
