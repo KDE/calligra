@@ -23,6 +23,7 @@
 
 #include <kdebug.h>
 #include <koGlobal.h>
+#include <klocale.h>
 
 #include <qdom.h>
 
@@ -155,7 +156,7 @@ void KSpreadStyle::saveXML( QDomDocument & doc, QDomElement & format ) const
   if ( featureSet( SCustomFormat ) && !strFormat().isEmpty() )
     format.setAttribute( "custom", m_strFormat );
 
-  if ( featureSet( SFormatType ) && formatType() == KSpreadFormat::Money ) 
+  if ( featureSet( SFormatType ) && formatType() == KSpreadFormat::Money )
   {
     format.setAttribute( "type", (int) m_currency.type );
     format.setAttribute( "symbol", m_currency.symbol );
@@ -250,7 +251,7 @@ bool KSpreadStyle::loadXML( QDomElement & format )
     if ( !ok )
       return false;
   }
-  
+
   if ( format.hasAttribute( "alignX" ) )
   {
     KSpreadFormat::Align a = (KSpreadFormat::Align) format.attribute( "alignX" ).toInt( &ok );
@@ -307,7 +308,7 @@ bool KSpreadStyle::loadXML( QDomElement & format )
   if ( format.hasAttribute( "float" ) )
   {
     KSpreadFormat::FloatFormat a = (KSpreadFormat::FloatFormat)format.attribute( "float" ).toInt( &ok );
-    if ( !ok ) 
+    if ( !ok )
       return false;
     if ( (unsigned int) a >= 1 || (unsigned int) a <= 3 )
     {
@@ -330,7 +331,7 @@ bool KSpreadStyle::loadXML( QDomElement & format )
   if ( format.hasAttribute( "factor" ) )
   {
     m_factor = format.attribute( "factor" ).toDouble( &ok );
-    if ( !ok ) 
+    if ( !ok )
       return false;
     m_featuresSet |= SFactor;
   }
@@ -454,7 +455,7 @@ bool KSpreadStyle::loadXML( QDomElement & format )
   if ( format.hasAttribute( "brushstyle" ) )
   {
     m_backGroundBrush.setStyle( (Qt::BrushStyle) format.attribute( "brushstyle" ).toInt( &ok )  );
-    if ( !ok ) 
+    if ( !ok )
       return false;
     m_featuresSet |= SBackgroundBrush;
   }
@@ -558,7 +559,7 @@ KSpreadCustomStyle * KSpreadStyle::parent() const
   return m_parent;
 }
 
-bool KSpreadStyle::release() 
+bool KSpreadStyle::release()
 {
   --m_usageCount;
 
@@ -576,11 +577,11 @@ void KSpreadStyle::addRef()
   ++m_usageCount;
 }
 
-bool KSpreadStyle::hasProperty( Properties p ) const 
+bool KSpreadStyle::hasProperty( Properties p ) const
 {
   FlagsSet f;
   switch( p )
-  {      
+  {
    case PDontPrintText:
     f = SDontPrintText;
     break;
@@ -604,7 +605,7 @@ bool KSpreadStyle::hasProperty( Properties p ) const
     break;
    default:
     kdWarning() << "Unhandled property" << endl;
-    return ( m_properties  & (uint) p ); 
+    return ( m_properties  & (uint) p );
   }
 
   return ( !m_parent || featureSet( f ) ? ( m_properties & (uint) p ) : m_parent->hasProperty( p ) );
@@ -613,7 +614,7 @@ bool KSpreadStyle::hasProperty( Properties p ) const
 bool KSpreadStyle::hasFeature( FlagsSet f, bool withoutParent ) const
 {
   bool b = ( m_featuresSet & (uint) f );
-  
+
   // check if feature is defined here or at parent level
   if ( m_parent && !withoutParent )
     b = ( m_parent->hasFeature( f, withoutParent ) ? true : b );
@@ -621,7 +622,7 @@ bool KSpreadStyle::hasFeature( FlagsSet f, bool withoutParent ) const
   return b;
 }
 
-QFont KSpreadStyle::font() const 
+QFont KSpreadStyle::font() const
 {
   QString family = fontFamily();
   int  size      = fontSize();
@@ -642,127 +643,127 @@ QFont KSpreadStyle::font() const
 
 QString const & KSpreadStyle::fontFamily() const
 {
-  return ( !m_parent || featureSet( SFontFamily ) ? m_fontFamily : m_parent->fontFamily() ); 
+  return ( !m_parent || featureSet( SFontFamily ) ? m_fontFamily : m_parent->fontFamily() );
 }
 
 uint KSpreadStyle::fontFlags() const
 {
-  return ( !m_parent || featureSet( SFontFlag ) ? m_fontFlags : m_parent->fontFlags() ); 
+  return ( !m_parent || featureSet( SFontFlag ) ? m_fontFlags : m_parent->fontFlags() );
 }
 
 int KSpreadStyle::fontSize() const
 {
-  return ( !m_parent || featureSet( SFontSize ) ? m_fontSize : m_parent->fontSize() ); 
+  return ( !m_parent || featureSet( SFontSize ) ? m_fontSize : m_parent->fontSize() );
 }
 
-QPen const & KSpreadStyle::pen() const 
+QPen const & KSpreadStyle::pen() const
 {
-  return ( !m_parent || featureSet( STextPen ) ? m_textPen : m_parent->pen() ); 
+  return ( !m_parent || featureSet( STextPen ) ? m_textPen : m_parent->pen() );
 }
 
-QColor const & KSpreadStyle::bgColor() const 
+QColor const & KSpreadStyle::bgColor() const
 {
-  return ( !m_parent || featureSet( SBackgroundColor ) ? m_bgColor : m_parent->bgColor() ); 
+  return ( !m_parent || featureSet( SBackgroundColor ) ? m_bgColor : m_parent->bgColor() );
 }
 
-QPen const & KSpreadStyle::rightBorderPen() const 
+QPen const & KSpreadStyle::rightBorderPen() const
 {
-  return ( !m_parent || featureSet( SRightBorder ) ? m_rightBorderPen : m_parent->rightBorderPen() );  
+  return ( !m_parent || featureSet( SRightBorder ) ? m_rightBorderPen : m_parent->rightBorderPen() );
 }
 
-QPen const & KSpreadStyle::bottomBorderPen() const 
+QPen const & KSpreadStyle::bottomBorderPen() const
 {
-  return ( !m_parent || featureSet( SBottomBorder ) ? m_bottomBorderPen : m_parent->bottomBorderPen() ); 
+  return ( !m_parent || featureSet( SBottomBorder ) ? m_bottomBorderPen : m_parent->bottomBorderPen() );
 }
 
-QPen const & KSpreadStyle::leftBorderPen() const 
+QPen const & KSpreadStyle::leftBorderPen() const
 {
   return ( !m_parent || featureSet( SLeftBorder ) ? m_leftBorderPen : m_parent->leftBorderPen() );
 }
 
-QPen const & KSpreadStyle::topBorderPen() const 
+QPen const & KSpreadStyle::topBorderPen() const
 {
   return ( !m_parent || featureSet( STopBorder ) ? m_topBorderPen : m_parent->topBorderPen() );
 }
 
-QPen const & KSpreadStyle::fallDiagonalPen() const 
+QPen const & KSpreadStyle::fallDiagonalPen() const
 {
   return ( !m_parent || featureSet( SFallDiagonal ) ? m_fallDiagonalPen : m_parent->fallDiagonalPen() );
 }
 
-QPen const & KSpreadStyle::goUpDiagonalPen() const 
+QPen const & KSpreadStyle::goUpDiagonalPen() const
 {
   return ( !m_parent || featureSet( SGoUpDiagonal ) ? m_goUpDiagonalPen : m_parent->goUpDiagonalPen() );
 }
 
-int KSpreadStyle::precision() const 
+int KSpreadStyle::precision() const
 {
   return ( !m_parent || featureSet( SPrecision ) ? m_precision : m_parent->precision() );
 }
 
-int KSpreadStyle::rotateAngle() const 
+int KSpreadStyle::rotateAngle() const
 {
   return ( !m_parent || featureSet( SAngle ) ? m_rotateAngle : m_parent->rotateAngle() );
 }
 
-double KSpreadStyle::indent() const 
+double KSpreadStyle::indent() const
 {
-  return ( !m_parent || featureSet( SIndent ) ? m_indent : m_parent->indent() );          
+  return ( !m_parent || featureSet( SIndent ) ? m_indent : m_parent->indent() );
 }
 
-double KSpreadStyle::factor() const 
+double KSpreadStyle::factor() const
 {
-  return ( !m_parent || featureSet( SFactor ) ? m_factor : m_parent->factor() );          
+  return ( !m_parent || featureSet( SFactor ) ? m_factor : m_parent->factor() );
 }
 
-QBrush const & KSpreadStyle::backGroundBrush() const 
+QBrush const & KSpreadStyle::backGroundBrush() const
 {
-  return ( !m_parent || featureSet( SBackgroundBrush ) ? m_backGroundBrush : m_parent->backGroundBrush() ); 
+  return ( !m_parent || featureSet( SBackgroundBrush ) ? m_backGroundBrush : m_parent->backGroundBrush() );
 }
 
-KSpreadFormat::Align KSpreadStyle::alignX() const 
+KSpreadFormat::Align KSpreadStyle::alignX() const
 {
-  return ( !m_parent || featureSet( SAlignX ) ? m_alignX : m_parent->alignX() );      
+  return ( !m_parent || featureSet( SAlignX ) ? m_alignX : m_parent->alignX() );
 }
 
-KSpreadFormat::AlignY KSpreadStyle::alignY() const 
+KSpreadFormat::AlignY KSpreadStyle::alignY() const
 {
-  return ( !m_parent || featureSet( SAlignY ) ? m_alignY : m_parent->alignY() );      
+  return ( !m_parent || featureSet( SAlignY ) ? m_alignY : m_parent->alignY() );
 }
 
-KSpreadFormat::FloatFormat KSpreadStyle::floatFormat() const 
+KSpreadFormat::FloatFormat KSpreadStyle::floatFormat() const
 {
-  return ( !m_parent || featureSet( SFloatFormat ) ? m_floatFormat : m_parent->floatFormat() ); 
+  return ( !m_parent || featureSet( SFloatFormat ) ? m_floatFormat : m_parent->floatFormat() );
 }
 
-KSpreadFormat::FloatColor KSpreadStyle::floatColor() const 
+KSpreadFormat::FloatColor KSpreadStyle::floatColor() const
 {
-  return ( !m_parent || featureSet( SFloatColor ) ? m_floatColor : m_parent->floatColor() );  
+  return ( !m_parent || featureSet( SFloatColor ) ? m_floatColor : m_parent->floatColor() );
 }
 
-KSpreadFormat::FormatType KSpreadStyle::formatType() const 
+KSpreadFormat::FormatType KSpreadStyle::formatType() const
 {
-  return ( !m_parent || featureSet( SFormatType ) ? m_formatType : m_parent->formatType() );  
+  return ( !m_parent || featureSet( SFormatType ) ? m_formatType : m_parent->formatType() );
 }
 
-KSpreadFormat::Currency const & KSpreadStyle::currency() const 
+KSpreadFormat::Currency const & KSpreadStyle::currency() const
 {
   return ( !m_parent ? m_currency : m_parent->currency() );
 }
 
-QString const & KSpreadStyle::strFormat() const 
+QString const & KSpreadStyle::strFormat() const
 {
-  return ( !m_parent || featureSet( SCustomFormat ) ? m_strFormat : m_parent->strFormat() ); 
+  return ( !m_parent || featureSet( SCustomFormat ) ? m_strFormat : m_parent->strFormat() );
 }
 
-QString const & KSpreadStyle::prefix() const 
+QString const & KSpreadStyle::prefix() const
 {
-  return ( !m_parent || featureSet( SPrefix ) ? m_prefix : m_parent->prefix() );    
+  return ( !m_parent || featureSet( SPrefix ) ? m_prefix : m_parent->prefix() );
 }
 
-QString const & KSpreadStyle::postfix() const 
+QString const & KSpreadStyle::postfix() const
 {
-  return ( !m_parent || featureSet( SPostfix ) ? m_postfix : m_parent->postfix() );   
+  return ( !m_parent || featureSet( SPostfix ) ? m_postfix : m_parent->postfix() );
 }
 
 
@@ -1096,7 +1097,7 @@ KSpreadStyle * KSpreadStyle::setGoUpDiagonalPen( QPen const & pen )
   m_featuresSet |= SGoUpDiagonal;
   return this;
 }
-  
+
 KSpreadStyle * KSpreadStyle::setRotateAngle( int angle )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
@@ -1267,7 +1268,7 @@ KSpreadStyle * KSpreadStyle::setProperty( Properties p )
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_properties |= (uint) p;
     switch( p )
-    {      
+    {
      case PDontPrintText:
       style->m_featuresSet |= SDontPrintText;
       break;
@@ -1297,7 +1298,7 @@ KSpreadStyle * KSpreadStyle::setProperty( Properties p )
 
   m_properties |= (uint) p;
   switch( p )
-  {      
+  {
    case PDontPrintText:
     m_featuresSet |= SDontPrintText;
     break;
@@ -1332,7 +1333,7 @@ KSpreadStyle * KSpreadStyle::clearProperty( Properties p )
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_properties &= ~(uint) p;
     switch( p )
-    {      
+    {
      case PDontPrintText:
       style->m_featuresSet |= SDontPrintText;
       break;
@@ -1362,7 +1363,7 @@ KSpreadStyle * KSpreadStyle::clearProperty( Properties p )
 
   m_properties &= ~(uint) p;
   switch( p )
-  {      
+  {
    case PDontPrintText:
     m_featuresSet |= SDontPrintText;
     break;
@@ -1405,9 +1406,9 @@ KSpreadStyle * KSpreadStyle::setFormatType( KSpreadFormat::FormatType format )
   m_featuresSet |= SFormatType;
   return this;
 }
- 
 
-/** 
+
+/**
  * ************************************************************
  * KSpreadCustomStyle
  * ************************************************************
@@ -1415,7 +1416,7 @@ KSpreadStyle * KSpreadStyle::setFormatType( KSpreadFormat::FormatType format )
 
 KSpreadCustomStyle::KSpreadCustomStyle()
   : KSpreadStyle(),
-    m_name( "Default" )
+    m_name( i18n("Default") )
 {
   m_parent = 0;
 }
@@ -1426,7 +1427,7 @@ KSpreadCustomStyle::KSpreadCustomStyle( KSpreadStyle * parent, QString const & n
 {
   m_type   = CUSTOM;
   m_parent = 0;
-  
+
   // one to one copy
   if ( parent->hasProperty( PDontPrintText ) )
     addProperty( PDontPrintText );
@@ -1487,7 +1488,7 @@ void KSpreadCustomStyle::save( QDomDocument & doc, QDomElement & styles )
 {
   if ( m_name.isEmpty() )
     return;
-  
+
   QDomElement style( doc.createElement( "style" ) );
   style.setAttribute( "type", (int) m_type );
   if ( m_parent )
@@ -1597,7 +1598,7 @@ bool KSpreadCustomStyle::definesAll() const
     return false;
   if ( !( m_featuresSet & (uint) SHideFormula ) )
     return false;
-  
+
   return true;
 }
 
@@ -1720,7 +1721,7 @@ void KSpreadCustomStyle::changeRightBorderPen( QPen const & pen )
   m_rightPenValue  = calculateValue( pen );
   m_featuresSet   |= SRightBorder;
 }
- 
+
 void KSpreadCustomStyle::changeBottomBorderPen( QPen const & pen )
 {
   m_bottomBorderPen = pen;
@@ -1734,26 +1735,26 @@ void KSpreadCustomStyle::changeLeftBorderPen( QPen const & pen )
   m_leftPenValue  = calculateValue( pen );
   m_featuresSet  |= SLeftBorder;
 }
-  
+
 void KSpreadCustomStyle::changeTopBorderPen( QPen const & pen )
 {
   m_topBorderPen = pen;
   m_topPenValue  = calculateValue( pen );
   m_featuresSet |= STopBorder;
 }
-   
+
 void KSpreadCustomStyle::changeFallBorderPen( QPen const & pen )
 {
   m_fallDiagonalPen = pen;
   m_featuresSet |= SFallDiagonal;
 }
-  
+
 void KSpreadCustomStyle::changeGoUpBorderPen( QPen const & pen )
 {
   m_goUpDiagonalPen = pen;
   m_featuresSet |= SGoUpDiagonal;
 }
-  
+
 void KSpreadCustomStyle::changeRotateAngle( int angle )
 {
   m_rotateAngle = angle;
@@ -1783,7 +1784,7 @@ void KSpreadCustomStyle::changeFloatColor( KSpreadFormat::FloatColor color )
   m_floatColor = color;
   m_featuresSet |= SFloatColor;
 }
- 
+
 void KSpreadCustomStyle::changeFormatType( KSpreadFormat::FormatType format )
 {
   m_formatType = format;
@@ -1829,7 +1830,7 @@ void KSpreadCustomStyle::addProperty( Properties p )
 {
   m_properties |= (uint) p;
   switch( p )
-  {      
+  {
    case PDontPrintText:
     m_featuresSet |= SDontPrintText;
     break;
@@ -1860,7 +1861,7 @@ void KSpreadCustomStyle::removeProperty( Properties p )
 {
   m_properties &= ~(uint) p;
   switch( p )
-  {      
+  {
    case PDontPrintText:
     m_featuresSet &= SDontPrintText;
     break;
