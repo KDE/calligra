@@ -178,75 +178,90 @@ double KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
             if(current.tagName()=="OBJECT") {
                 if(current.hasAttribute("type"))
                     t=static_cast<ObjType>(current.attribute("type").toInt());
+                double objOffset;
                 switch ( t ) {
                     case OT_LINE: {
                         KPLineObject *kplineobject = new KPLineObject();
-                        kplineobject->load(current);
+                        objOffset = kplineobject->load(current);
+                        kplineobject->setOrig(kplineobject->getOrig().x(),objOffset);
                         objects.append( kplineobject );
                     } break;
                     case OT_RECT: {
                         KPRectObject *kprectobject = new KPRectObject();
-                        kprectobject->load(current);
+                        objOffset = kprectobject->load(current);
+                        kprectobject->setOrig(kprectobject->getOrig().x(),objOffset);
                         objects.append( kprectobject );
                     } break;
                     case OT_ELLIPSE: {
                         KPEllipseObject *kpellipseobject = new KPEllipseObject();
-                        kpellipseobject->load(current);
+                        objOffset = kpellipseobject->load(current);
+                        kpellipseobject->setOrig(kpellipseobject->getOrig().x(),objOffset);
                         objects.append( kpellipseobject );
                     } break;
                     case OT_PIE: {
                         KPPieObject *kppieobject = new KPPieObject();
-                        kppieobject->load(current);
+                        objOffset = kppieobject->load(current);
+                        kppieobject->setOrig(kppieobject->getOrig().x(),objOffset);
                         objects.append( kppieobject );
                     } break;
                     case OT_AUTOFORM: {
                         KPAutoformObject *kpautoformobject = new KPAutoformObject();
-                        kpautoformobject->load(current);
+                        objOffset = kpautoformobject->load(current);
+                        kpautoformobject->setOrig(kpautoformobject->getOrig().x(),objOffset);
                         objects.append( kpautoformobject );
                     } break;
                     case OT_CLIPART: {
                         KPClipartObject *kpclipartobject = new KPClipartObject( doc->getClipartCollection() );
-                        kpclipartobject->load(current);
+                        objOffset = kpclipartobject->load(current);
+                        kpclipartobject->setOrig(kpclipartobject->getOrig().x(),objOffset);
                         objects.append( kpclipartobject );
                     } break;
                     case OT_TEXT: {
                         KPTextObject *kptextobject = new KPTextObject( doc );
-                        kptextobject->load(current);
+                        objOffset = kptextobject->load(current);
+                        kptextobject->setOrig(kptextobject->getOrig().x(),objOffset);
                         objects.append( kptextobject );
                     } break;
                     case OT_PICTURE: {
                         KPPixmapObject *kppixmapobject = new KPPixmapObject( doc->getImageCollection() );
-                        kppixmapobject->load(current);
+                        objOffset = kppixmapobject->load(current);
+                        kppixmapobject->setOrig(kppixmapobject->getOrig().x(),objOffset);
                         objects.append( kppixmapobject );
                     } break;
                     case OT_FREEHAND: {
                         KPFreehandObject *kpfreehandobject = new KPFreehandObject();
-                        kpfreehandobject->load( current );
+                        objOffset = kpfreehandobject->load( current );
+                        kpfreehandobject->setOrig(kpfreehandobject->getOrig().x(),objOffset);
                         objects.append( kpfreehandobject );
                     } break;
                     case OT_POLYLINE: {
                         KPPolylineObject *kppolylineobject = new KPPolylineObject();
-                        kppolylineobject->load( current );
+                        objOffset = kppolylineobject->load( current );
+                        kppolylineobject->setOrig(kppolylineobject->getOrig().x(),objOffset);
                         objects.append( kppolylineobject );
                     } break;
                     case OT_QUADRICBEZIERCURVE: {
                         KPQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPQuadricBezierCurveObject();
-                        kpQuadricBezierCurveObject->load( current );
+                        objOffset = kpQuadricBezierCurveObject->load( current );
+                        kpQuadricBezierCurveObject->setOrig(kpQuadricBezierCurveObject->getOrig().x(),objOffset);
                         objects.append( kpQuadricBezierCurveObject );
                     } break;
                     case OT_CUBICBEZIERCURVE: {
                         KPCubicBezierCurveObject *kpCubicBezierCurveObject = new KPCubicBezierCurveObject();
-                        kpCubicBezierCurveObject->load( current );
+                        objOffset = kpCubicBezierCurveObject->load( current );
+                        kpCubicBezierCurveObject->setOrig(kpCubicBezierCurveObject->getOrig().x(),objOffset);
                         objects.append( kpCubicBezierCurveObject );
                     } break;
                     case OT_POLYGON: {
                         KPPolygonObject *kpPolygonObject = new KPPolygonObject();
-                        kpPolygonObject->load( current );
+                        objOffset = kpPolygonObject->load( current );
+                        kpPolygonObject->setOrig(kpPolygonObject->getOrig().x(),objOffset);
                         objects.append( kpPolygonObject );
                     } break;
                     case OT_GROUP: {
                         KPGroupObject *kpgroupobject = new KPGroupObject();
-                        kpgroupobject->load(current, doc);
+                        objOffset = kpgroupobject->load(current, doc);
+                        kpgroupobject->setOrig(kpgroupobject->getOrig().x(),objOffset);
                         objects.append( kpgroupobject );
                     } break;
                     default: break;
