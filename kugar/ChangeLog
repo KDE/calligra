@@ -1,3 +1,22 @@
+2003-05-28 Alexander Dymo <cloudtemple@mksat.net>
+	* kudesigner:
+	Kudesigner rework:
+	most functionality is moved to kudesigner_lib and made platform-independant (qt only or necessary #ifdefs)
+	only document-view-application arch implementation remains.
+	Main goal: to create qt version of kugar designer with minimal effort (common/shared code will be in kudesigner_lib).
+	
+	* kudesigner_lib:
+	Common kugar designer library created. Compiles with qt only (qt only compile should utilize PURE_QT define).
+	
+	* kudesigner_qt2:
+	Alternate Qt only Kugar Designer created (uses kudesigner_lib).
+	
+	* shell_qt2:
+	Alternate Qt only Kugar shell created.
+	
+	* kudesigner:
+	Undo/Redo for report items works now without crashes if their parent section was undone.
+
 2003-05-01 Joris Marcillac <Joris@marcillac.com>
 	* lib:
 	Direct database support. Databases and queries can be specified withing template
