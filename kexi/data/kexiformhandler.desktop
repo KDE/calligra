@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+ServiceTypes=Kexi/Handler
+
+Name=Kexi Form Handler
+
+X-KDE-Library=kexihandler_form
