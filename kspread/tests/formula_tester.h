@@ -24,6 +24,8 @@
 
 #include "tester.h"
 
+#include <kspread_value.h>
+
 namespace KSpread
 {
 
@@ -35,6 +37,16 @@ public:
   virtual void run();
 private:
   void checkParse( const char *file, int line, const char* msg, const QString&, const QString& );
+};
+
+class FormulaEvalTester: public Tester
+{
+public:
+  FormulaEvalTester();
+  virtual QString name();
+  virtual void run();
+private:
+  void checkEval( const char *file, int line, const char* msg, const QString&, const KSpreadValue& );
 };
 
 }; // namespace KSpread

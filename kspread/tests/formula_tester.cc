@@ -21,8 +21,10 @@
 #include "formula_tester.h"
 
 #include <formula.h>
+#include <kspread_value.h>
 
 #define CHECK_PARSE(x,y)  checkParse(__FILE__,__LINE__,#x,x,y)
+#define CHECK_EVAL(x,y)  checkEval(__FILE__,__LINE__,#x,x,y)
 
 using namespace KSpread;
 
@@ -160,4 +162,54 @@ void FormulaParserTester::run()
   
   // invalid formulas, can't be parsed correctly  
   CHECK_PARSE( "+1.23E", QString::null );  
+}
+
+FormulaEvalTester::FormulaEvalTester(): Tester()
+{
+}
+
+QString FormulaEvalTester::name()
+{
+  return QString("Formula (Eval)");
+}
+
+void FormulaEvalTester::checkEval( const char *file, int line, const char* msg, 
+  const QString& formula, const KSpreadValue& expected )
+{
+  testCount++;
+  
+  Formula f;
+  QString expr = formula;
+  expr.prepend( '=' );
+  f.setExpression( expr );
+  KSpreadValue result = f.eval();
+
+  if( !result.equal( expected ) )
+  {
+    QString message;
+    QTextStream ts( &message, IO_WriteOnly );
+    ts << msg;
+    ts << " Result: " << result;
+    ts << " Expected: " << expected;
+    fail( file, line, message );
+  }
+}
+
+
+void FormulaEvalTester::run()
+{
+  testCount = 0;
+  errorList.clear();
+  
+  // simple constants
+  CHECK_EVAL( "0", KSpreadValue(0) );
+  CHECK_EVAL( "1", KSpreadValue(1) );
+  CHECK_EVAL( "-1", KSpreadValue(-1) );
+  CHECK_EVAL( "3.14e7", KSpreadValue(3.14e7) );
+  CHECK_EVAL( "3.14-e7", KSpreadValue(3.14e-7) );
+  
+  
+  // simple binary operation  
+  CHECK_EVAL( "0+0", KSpreadValue(0) );
+  CHECK_EVAL( "1+1", KSpreadValue(2) );
 }
