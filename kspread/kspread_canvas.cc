@@ -1384,15 +1384,15 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
   // Are we making a selection right now ? Go thru this only if no selection is made
   // or if we neither selected complete rows nor columns.
-  bool make_select = m_pView->koDocument()->isReadWrite() &&
-      ((  _ev->state() & ( Qt::ControlButton ) &&_ev->state() & ( Qt::ShiftButton ) ) )
-       && ( bChangingCells || _ev->key() == Key_Home || _ev->key() == Key_End );
-
+ bool make_select = m_pView->koDocument()->isReadWrite() && 
+     ((( _ev->state() & ShiftButton ) == ShiftButton ||(( _ev->state() & ShiftButton ) == ShiftButton)&&( _ev->state() & ControlButton ) == ControlButton)  && ( bChangingCells || _ev->key() == Key_Home || _ev->key() == Key_End ));
     ColumnLayout *cl;
     RowLayout *rl;
     int moveHide=0;
-
-  if(_ev->state() != Qt::ControlButton){
+    
+    if( !((( _ev->state() & ShiftButton ) == ShiftButton)&&( _ev->state() & ControlButton ) == ControlButton) && (_ev->state() != Qt::ControlButton) )
+{
+//if( _ev->state() != Qt::ControlButton ){
       switch( _ev->key() )
       {
       case Key_Return:
