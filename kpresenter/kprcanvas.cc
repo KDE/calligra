@@ -5488,16 +5488,22 @@ void KPrCanvas::switchingMode()
 }
 
 /*================================================================*/
-bool KPrCanvas::calcRatio( double &dx, double &dy, KPObject *kpobject, double ratio ) const
+void KPrCanvas::calcRatio( double &dx, double &dy, ModifyType _modType, double ratio ) const
 {
     if ( fabs( dy ) > fabs( dx ) )
-        dx = ( dy ) * ratio ;
+    {
+        if ( _modType == MT_RESIZE_LD || _modType == MT_RESIZE_RU )
+          dx = ( dy ) * -ratio ;
+        else
+          dx = ( dy ) * ratio ;
+    }
     else
-        dy =  dx  / ratio;
-    if ( kpobject->getSize().width() + dx < 20 ||
-         kpobject->getSize().height() + dy < 20 )
-        return false;
-    return true;
+    {
+        if ( _modType == MT_RESIZE_LD || _modType == MT_RESIZE_RU )
+          dy =  -dx  / ratio;
+        else
+          dy =  dx  / ratio;
+    }
 }
 
 /*================================================================*/
@@ -5748,6 +5754,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     KoRect page=m_activePage->getPageRect();
     KPObject *kpobject=resizeObjNum;
 
+    KoSize objSize = kpobject->getSize(); 
     KoRect objRect=kpobject->getBoundingRect(m_view->zoomHandler());
     KoRect pageRect=m_activePage->getPageRect();
     KoPoint point=objRect.topLeft();
@@ -5762,23 +5769,23 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
             dx=0;
         if( (point.y()+dy) <(pageRect.top()-1))
             dy=0;
-        if ( keepRatio && ratio != 0.0 ) {
-            if ( !calcRatio( dx, dy, kpobject, ratio ) )
-                break;
-        }
-        kpobject->moveBy( KoPoint( dx, dy ) );
+        if ( keepRatio && ratio != 0.0 )
+            calcRatio( dx, dy, _modType, ratio );
         kpobject->resizeBy( -dx, -dy );
+        if ( objSize.width() != (kpobject->getSize()).width() )
+          kpobject->moveBy( KoPoint( dx, 0 ) );
+        if ( objSize.height() != (kpobject->getSize()).height() )
+          kpobject->moveBy( KoPoint( 0, dy ) );
     } break;
     case MT_RESIZE_LF: {
         dy = 0;
         if( (point.x()+dx) <(pageRect.left()-1))
             dx=0;
-        if ( keepRatio && ratio != 0.0 ) {
-            if ( !calcRatio( dx, dy, kpobject, ratio ) )
-                break;
-        }
-        kpobject->moveBy( KoPoint( dx, 0 ) );
+        if ( keepRatio && ratio != 0.0 )
+            calcRatio( dx, dy, _modType, ratio );
         kpobject->resizeBy( -dx, -dy );
+        if ( objSize != kpobject->getSize() )
+          kpobject->moveBy( KoPoint( dx, 0 ) );
     } break;
     case MT_RESIZE_LD: {
         if( (point.y()+objRect.height()+dy) > pageRect.height())
@@ -5786,9 +5793,10 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         if( (point.x()+dx) <(pageRect.left()-1))
             dx=0;
         if ( keepRatio && ratio != 0.0 )
-            break;
-        kpobject->moveBy( KoPoint( dx, 0 ) );
+            calcRatio( dx, dy, _modType, ratio );
         kpobject->resizeBy( -dx, dy );
+        if ( objSize.width() != (kpobject->getSize()).width() )
+          kpobject->moveBy( KoPoint( dx, 0 ) );
     } break;
     case MT_RESIZE_RU: {
         if( (point.x()+objRect.width()+dx) > pageRect.width())
@@ -5796,18 +5804,17 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         if( (point.y()+dy) <(pageRect.top()-1))
             dy=0;
         if ( keepRatio && ratio != 0.0 )
-            break;
-        kpobject->moveBy( KoPoint( 0, dy ) );
+            calcRatio( dx, dy, _modType, ratio );
         kpobject->resizeBy( dx, -dy );
+        if ( objSize.height() != (kpobject->getSize()).height() )
+          kpobject->moveBy( KoPoint( 0, dy ) );
     } break;
     case MT_RESIZE_RT: {
         dy = 0;
         if( (point.x()+objRect.width()+dx) > pageRect.width())
             dx=0;
-        if ( keepRatio && ratio != 0.0 ) {
-            if ( !calcRatio( dx, dy, kpobject, ratio ) )
-                break;
-        }
+        if ( keepRatio && ratio != 0.0 )
+            calcRatio( dx, dy, _modType, ratio );
         kpobject->resizeBy( dx, dy );
     } break;
     case MT_RESIZE_RD: {
@@ -5815,31 +5822,26 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
             dy=0;
         if( (point.x()+objRect.width()+dx) > pageRect.width())
             dx=0;
-        if ( keepRatio && ratio != 0.0 ) {
-            if ( !calcRatio( dx, dy, kpobject, ratio ) )
-                break;
-        }
+        if ( keepRatio && ratio != 0.0 )
+            calcRatio( dx, dy, _modType, ratio );
         kpobject->resizeBy( KoSize( dx, dy ) );
     } break;
     case MT_RESIZE_UP: {
         dx = 0;
         if( (point.y()+dy) <(pageRect.top()-1))
             dy=0;
-        if ( keepRatio && ratio != 0.0 ) {
-            if ( !calcRatio( dx, dy, kpobject, ratio ) )
-                break;
-        }
-        kpobject->moveBy( KoPoint( 0, dy ) );
+        if ( keepRatio && ratio != 0.0 )
+            calcRatio( dx, dy, _modType, ratio );
         kpobject->resizeBy( -dx, -dy );
+        if ( objSize != kpobject->getSize() )
+          kpobject->moveBy( KoPoint( 0, dy ) );
     } break;
     case MT_RESIZE_DN: {
         dx = 0;
         if( (point.y()+objRect.height()+dy) > pageRect.height())
             dy=0;
-        if ( keepRatio && ratio != 0.0 ) {
-            if ( !calcRatio( dx, dy, kpobject, ratio ) )
-                break;
-        }
+        if ( keepRatio && ratio != 0.0 )
+            calcRatio( dx, dy, _modType, ratio );
         kpobject->resizeBy( dx, dy );
     } break;
     default: break;

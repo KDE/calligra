@@ -317,7 +317,7 @@ protected:
     unsigned int pageNums();
     float objSpeedFakt();
     float pageSpeedFakt();
-    bool calcRatio( double &dx, double &dy, KPObject *kpobject, double ratio ) const;
+    void calcRatio( double &dx, double &dy, ModifyType _modType, double ratio ) const;
 
     void _repaint( bool erase=true );
     void _repaint( const QRect &r );
