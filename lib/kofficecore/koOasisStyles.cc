@@ -885,6 +885,7 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
     int integer = 0;
     int numerator = 0;
     int denominator = 0;
+    int denominatorValue = 0;
     bool beforeSlash = true;
     do
     {
@@ -899,6 +900,16 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
             else
                 denominator++;
         }
+        else
+        {
+            bool ok;
+            int value = format.toInt( &ok );
+            if ( ok )
+            {
+                denominatorValue=value;
+                break;
+            }
+        }
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
@@ -906,12 +917,12 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
     elementWriter.addAttribute( "number:min-integer-digits", integer );
     elementWriter.addAttribute( "number:min-numerator-digits",numerator );
     elementWriter.addAttribute( "number:min-denominator-digits",denominator );
+    if ( denominatorValue != 0 )
+        elementWriter.addAttribute( "number:denominator-value",denominatorValue );
     text= _prefix;
     addTextNumber(text, elementWriter );
     addKofficeNumericStyleExtension( elementWriter, _suffix, _prefix );
 
-    //TODO add for future
-    //elementWriter.addAttribute( "number:denominator-value", denominatorValue );
     text=_suffix;
     addTextNumber(text, elementWriter );
     elementWriter.endElement();
