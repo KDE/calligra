@@ -420,9 +420,7 @@ void PropertyEditor::createFontWidget (QWidget* parent)
 
 void PropertyEditor::textColorChanged(const QColor &_color )
 {
-#ifdef KFONTCHOOSER_HAS_SETCOLOR
     fontChooser->setColor( _color );
-#endif
 }
 
 void PropertyEditor::applyPressed ()
@@ -628,9 +626,7 @@ void PropertyEditor::readProperties ()
       if (haveTextObjects)
       {
          penColorBttn->setColor (oInfo.color);
-#ifdef KFONTCHOOSER_HAS_SETCOLOR
          fontChooser->setColor( oInfo.color );
-#endif
          GText* tobj = (GText *) object;
          GText::TextInfo tInfo = tobj->getTextInfo ();
          fontChooser->setFont (tInfo.font);
