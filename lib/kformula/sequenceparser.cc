@@ -159,7 +159,8 @@ void SequenceParser::readText()
 {
     BasicElement* element = list.at( tokenStart );
     TextElement* beginText = static_cast<TextElement*>( element );
-    if ( beginText->isSymbol() ) {
+    if ( beginText->isSymbol() ||
+        ( beginText->getCharacter() == '/' ) ) {
         return;
     }
     char format = beginText->format();

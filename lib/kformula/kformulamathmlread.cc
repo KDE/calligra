@@ -84,6 +84,23 @@ protected:
     bool isEmbellishedOperator( QDomNode node, QDomElement* mo );
     bool isSpaceLike( QDomNode node );
 
+    enum MathVariant {
+        normal,
+        bold,
+        italic,
+        bold_italic,
+        double_struck,
+        bold_fraktur,
+        script,
+        bold_script,
+        fraktur,
+        sans_serif,
+        bold_sans_serif,
+        sans_serif_italic,
+        sans_serif_bold_italic,
+        monospace
+    };
+
     struct MathStyle {
         MathStyle()
             : scriptsizemultiplier( 0.71 ),
@@ -94,7 +111,9 @@ protected:
               mediummathspace( 4.0/18.0 ),
               thickmathspace( 5.0/18.0 ),
               verythickmathspace( 6.0/18.0 ),
-              veryverythickmathspace( 7.0/18.0 )
+              veryverythickmathspace( 7.0/18.0 ),
+
+              useVariant( false )
             {
             }
 
@@ -107,6 +126,98 @@ protected:
                                    << scriptsizemultiplier
                                    << "\n scriptminsize = " << scriptminsize
                                    << endl;
+            }
+
+        void setStyles( QDomElement element )
+            {
+                if ( !useVariant )
+                    return;
+
+                switch ( mathvariant )
+                {
+                case normal:
+                    element.setAttribute( "STYLE", "normal" );
+                    break;
+                case bold:
+                    element.setAttribute( "STYLE", "bold" );
+                    break;
+
+                case bold_italic:
+                    element.setAttribute( "STYLE", "bolditalic" );
+                    break;
+                case italic:
+                    element.setAttribute( "STYLE", "italic" );
+                    break;
+
+                case double_struck:
+                    element.setAttribute( "FAMILY", "doublestruck" );
+                    break;
+
+                case bold_fraktur:
+                    element.setAttribute( "STYLE", "bold" );
+                case fraktur:
+                    element.setAttribute( "FAMILY", "fraktur" );
+                    break;
+
+                case bold_script:
+                    element.setAttribute( "STYLE", "bold" );
+                case script:
+                    element.setAttribute( "FAMILY", "script" );
+                    break;
+
+                case bold_sans_serif:
+                    element.setAttribute( "STYLE", "bold" );
+                case sans_serif:
+                    element.setAttribute( "FAMILY", "normal" );
+                    break;
+                case sans_serif_bold_italic:
+                    element.setAttribute( "STYLE", "bolditalic" );
+                    element.setAttribute( "FAMILY", "normal" );
+                    break;
+                case sans_serif_italic:
+                    element.setAttribute( "STYLE", "italic" );
+                    element.setAttribute( "FAMILY", "normal" );
+                    break;
+
+                //case monospace:
+                }
+            }
+
+        void readStyles( QDomElement mmlElement )
+            {
+                if ( mmlElement.hasAttribute( "mathvariant" ) )
+                {
+                    useVariant = true;
+
+                    if ( mmlElement.attribute( "mathvariant" ) == "normal" )
+                        mathvariant = normal;
+                    else if ( mmlElement.attribute( "mathvariant" ) == "bold" )
+                        mathvariant = bold;
+                    else if ( mmlElement.attribute( "mathvariant" ) == "italic" )
+                        mathvariant = italic;
+                    else if ( mmlElement.attribute( "mathvariant" ) == "bold-italic" )
+                        mathvariant = bold_italic;
+                    else if ( mmlElement.attribute( "mathvariant" ) == "double-struck" )
+                        mathvariant = double_struck;
+                    else if ( mmlElement.attribute( "mathvariant" ) == "bold-fraktur" )
+                        mathvariant = bold_fraktur;
+                    else if ( mmlElement.attribute( "mathvariant" ) == "script" )
+                        mathvariant = script;
+                    else if ( mmlElement.attribute( "mathvariant" ) == "bold-script" )
+                        mathvariant = bold_script;
+                    else if ( mmlElement.attribute( "mathvariant" ) == "fraktur" )
+                        mathvariant = fraktur;
+                    else if ( mmlElement.attribute( "mathvariant" ) == "sans-serif" )
+                        mathvariant = sans_serif;
+                    else if ( mmlElement.attribute( "mathvariant" ) == "bold-sans-serif" )
+                        mathvariant = bold_sans_serif;
+                    else if ( mmlElement.attribute( "mathvariant" ) == "sans-serif-italic" )
+                        mathvariant = sans_serif_italic;
+                    else if ( mmlElement.attribute( "mathvariant" ) == "sans-serif-bold-italic" )
+                        mathvariant = sans_serif_bold_italic;
+                    else if ( mmlElement.attribute( "mathvariant" ) == "monospace" )
+                        mathvariant = monospace;
+                }
             }
 
         // Styles, set by <mstyle>     // default
@@ -124,6 +235,12 @@ protected:
         double thickmathspace;         // 5/18em = 0.277778em
         double verythickmathspace;     // 6/18em = 0.333333em
         double veryverythickmathspace; // 7/18em = 0.388889em
+
+        // 'Local' styles
+
+        MathVariant mathvariant;
+        bool useVariant;
+        //int mathsize;
     };
 
     MathStyle style;
@@ -160,9 +277,9 @@ void MathML2KFormulaPrivate::math( QDomElement element )
 
     style.scriptlevel = 0;
 
-    kdDebug( DEBUGID ) << "<math> element:\n displaystyle = "
+    /*kdDebug( DEBUGID ) << "<math> element:\n displaystyle = "
                        << style.displaystyle << "\n scriptlevel = "
-                       << style.scriptlevel << endl;
+                       << style.scriptlevel << endl;*/
 
     while ( !n.isNull() ) {
         filter->processElement( n, doc, formula );
@@ -174,39 +291,49 @@ void MathML2KFormulaPrivate::math( QDomElement element )
 
 void MathML2KFormulaPrivate::mi( QDomElement element, QDomNode docnode )
 {
+    MathStyle previousStyle( style );
+    //style.mathvariant = italic;
+    style.readStyles( element );
+
     QString text = element.text().stripWhiteSpace();
-    if ( text.length() == 1 ) {
-        createTextElements( text, docnode );
-    }
-    else {
-        QDomElement namesequence = doc.createElement( "NAMESEQUENCE" );
-        createTextElements( text, namesequence );
-        docnode.appendChild( namesequence );
-    }
+    createTextElements( text, docnode );
+
+    style = previousStyle;
 }
 
 void MathML2KFormulaPrivate::mo( QDomElement element, QDomNode docnode )
 {
+    MathStyle previousStyle( style );
+    style.readStyles( element );
+
     QString text = element.text().stripWhiteSpace();
     createTextElements( text, docnode );
+
+    style = previousStyle;
 }
 
 void MathML2KFormulaPrivate::mn( QDomElement element, QDomNode docnode )
 {
+    MathStyle previousStyle( style );
+    style.readStyles( element );
+
     QString text = element.text().stripWhiteSpace();
     createTextElements( text, docnode );
+
+    style = previousStyle;
 }
 
 void MathML2KFormulaPrivate::mtext( QDomElement element, QDomNode docnode )
 {
+    MathStyle previousStyle( style );
+    style.readStyles( element );
+
     QDomNode n = element.firstChild();
 
     while ( !n.isNull() ) {
         if ( n.isText() ) {
-            QDomElement namesequence = doc.createElement( "NAMESEQUENCE" );
             QString text = n.toText().data().stripWhiteSpace();
-            createTextElements( text, namesequence );
-            docnode.appendChild( namesequence );
+            createTextElements( text, docnode );
         }
         else if ( n.isElement() ) {
             filter->processElement( n, doc, docnode );
@@ -217,23 +344,21 @@ void MathML2KFormulaPrivate::mtext( QDomElement element, QDomNode docnode )
 
         n = n.nextSibling();
     }
+
+    style = previousStyle;
 }
 
 void MathML2KFormulaPrivate::ms( QDomElement element, QDomNode docnode )
 {
     QString lquote = element.attribute( "lquote", "\"" );
     QString rquote = element.attribute( "rquote", "\"" );
+    QString text;
 
-    QDomElement namesequence = doc.createElement( "NAMESEQUENCE" );
+    text = lquote;
+    text += element.text().stripWhiteSpace();
+    text += rquote;
 
-    createTextElements( lquote, namesequence );
-
-    QString text = element.text().stripWhiteSpace();
-    createTextElements( text, namesequence );
-
-    createTextElements( rquote, namesequence );
-
-    docnode.appendChild( namesequence );
+    createTextElements( text, docnode );
 }
 
 void MathML2KFormulaPrivate::mspace( QDomElement element, QDomNode docnode )
@@ -456,6 +581,7 @@ void MathML2KFormulaPrivate::mstyle( QDomElement element, QDomNode docnode )
     bool ok;
 
     MathStyle previousStyle( style );
+    style.readStyles( element );
 
     if ( element.hasAttribute( "scriptlevel" ) ) {
         QString scriptlevel = element.attribute( "scriptlevel" );
@@ -564,6 +690,7 @@ void MathML2KFormulaPrivate::mfenced( QDomElement element, QDomNode docnode )
                 if ( i > separators.length() )
                     i = separators.length();
                 textelement.setAttribute( "CHAR", QString( separators.at( i - 1 ) ) );
+                //style.setStyles( textelement );
                 sequence.appendChild( textelement );
             }
             ++i;
@@ -1061,6 +1188,7 @@ void MathML2KFormulaPrivate::createTextElements( QString text,
     for ( uint i = 0; i < text.length(); ++i ) {
         QDomElement textelement = doc.createElement( "TEXT" );
         textelement.setAttribute( "CHAR", QString( text.at( i ) ) );
+        style.setStyles( textelement );
         if ( context.symbolTable().inTable( text.at( i ) ) ) {
             // The element is a symbol.
             textelement.setAttribute( "SYMBOL", "3" );
@@ -1532,7 +1660,7 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument doc,
         }
     }
 
-    if ( type == UNKNOWN ) {
+    if ( type == UNKNOWN && node.nodeType() != QDomNode::AttributeNode ) {
         cerr << "Not an element: " << node.nodeType() << endl;
 	QDomNode n = node.firstChild();
 	while ( !n.isNull() ) {

@@ -53,7 +53,7 @@ void save( QString filename, QDomDocument doc )
 
     QTextStream stream(&f);
     stream.setEncoding(QTextStream::UnicodeUTF8);
-    doc.save(stream,4);
+    doc.save(stream, 2);
     f.close();
 }
 
@@ -71,7 +71,7 @@ void load( KFormula::Document* document, QString filename )
     f.close();
     //kdDebug( DEBUGID ) << content << endl;
     QDomDocument doc;
-    if (!doc.setContent(content)) {
+    if ( !doc.setContent( content ) ) {
         return;
     }
     if ( !document->loadXML( doc ) ) {
@@ -260,6 +260,15 @@ int main(int argc, char** argv)
     scrollview1a->addChild(mw1a);
     scrollview1a->setCaption("Test1a of the formula engine");
     scrollview1a->show();
+
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    for ( int i = 0; i < args->count(); ++i ) {
+        QFileInfo fi( args->url( i ).path() );
+        if ( fi.extension() == "mml" )
+            loadMathML( container1, args->url( i ).path() );
+        else if ( fi.extension() == "xml" )
+            load( container1->document(), args->url( i ).path() );
+    }
 
     int result = app.exec();
 

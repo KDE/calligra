@@ -522,7 +522,7 @@ void Container::saveMathML( QTextStream& stream )
                           "http://www.w3.org/TR/MathML2/dtd/mathml2.dtd");
     QDomDocument doc( dt );
     rootElement()->writeMathML( doc, doc );
-    doc.save( stream, 4 );
+    doc.save( stream, 2 );
 }
 
 bool Container::loadMathML( QDomDocument doc )

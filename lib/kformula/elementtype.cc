@@ -36,6 +36,46 @@ KFORMULA_NAMESPACE_BEGIN
 
 int ElementType::evilDestructionCount = 0;
 
+/*
+ * Converts CharStyle and CharFamily to the MathML 'mathvariant'
+ * attribute (see MathML spec 3.2.2).
+ */
+QString format2variant( CharStyle style, CharFamily family )
+{
+    QString result;
+
+    switch( family ) {
+    case normalFamily:
+    case anyFamily:
+        switch( style ) {
+        case normalChar:
+            result = "normal"; break;
+        case boldChar:
+            result = "bold"; break;
+        case italicChar:
+            result = "italic"; break;
+        case boldItalicChar:
+            result = "bold-italic"; break;
+        case anyChar:
+            break;
+        }
+        break;
+    case scriptFamily:
+        result = "script";
+        if ( style == boldChar || style == boldItalicChar )
+            result = "bold-" + result;
+        break;
+    case frakturFamily:
+        result = "fraktur";
+        if ( style == boldChar || style == boldItalicChar )
+            result = "bold-" + result;
+        break;
+    case doubleStruckFamily:
+        result = "double-struck"; break;
+    }
+
+    return result;
+}
 
 ElementType::ElementType( SequenceParser* parser )
     : from( parser->getStart() ), to( parser->getEnd() ), prev( 0 )
@@ -254,6 +294,10 @@ void TextType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de
     for ( uint i = start(); i < end(); ++i ) {
         QDomElement text = doc.createElement( "mi" );
         BasicElement* be = se->getChild( i );
+        TextElement* te = static_cast<TextElement*>( be );
+        QString mathvariant = format2variant( te->getCharStyle(), te->getCharFamily());
+        if ( !mathvariant.isNull() )
+            text.setAttribute( "mathvariant", mathvariant );
         if ( be->getCharacter().latin1() != 0 ) {
             // A latin-1 character, we can save it as it is.
             text.appendChild( doc.createTextNode( be->getCharacter() ) );
@@ -322,9 +366,13 @@ void NumberType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement 
     QString value;
     for ( uint i = start(); i < end(); ++i ) {
         BasicElement* be = se->getChild( i );
-        //TextElement* te = static_cast<TextElement*>( be );
         value += be->getCharacter();
     }
+    TextElement* te = static_cast<TextElement*>( se->getChild( start() ) );
+    QString mathvariant = format2variant( te->getCharStyle(), te->getCharFamily() );
+    if ( !mathvariant.isNull() )
+        name.setAttribute( "mathvariant", mathvariant );
+
     name.appendChild( doc.createTextNode( value ) );
     de.appendChild( name );
 }
@@ -354,6 +402,11 @@ void AbstractOperatorType::saveMathML( SequenceElement* se, QDomDocument doc, QD
         QString s;
         op.appendChild( doc.createEntityReference( s.sprintf( "#x%05X", be->getCharacter().unicode() ) ) );
     }
+    TextElement* te = static_cast<TextElement*>( be );
+    QString mathvariant = format2variant( te->getCharStyle(), te->getCharFamily() );
+    if ( !mathvariant.isNull() )
+        op.setAttribute( "mathvariant", mathvariant );
+
     de.appendChild( op );
 }
 
