@@ -14,3 +14,10 @@
 #undef HAVE_QIMGIO
 
 #undef HAVE_LIBJPEG
+
+#undef HAVE_LIBGIF
+
+#undef HAVE_LIBTIFF
+
+#undef HAVE_LIBPNG
+
