@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,39 +21,50 @@
 
 #include "vroundrect.h"
 #include "vglobal.h"
+#include <qdom.h>
+
+VRoundRect::VRoundRect( VObject* parent, VState state )
+	: VComposite( parent, state )
+{
+}
 
 VRoundRect::VRoundRect( VObject* parent,
 		const KoPoint& topLeft, double width, double height, double edgeRadius )
-	: VComposite( parent )
+	: VComposite( parent ), m_topLeft( topLeft ), m_width( width), m_height( height ), m_edgeRadius( edgeRadius )
 {
 	setDrawCenterNode();
 
-	if( edgeRadius < 0.0 )
-		edgeRadius = 0.0;
+	if( m_edgeRadius < 0.0 )
+		m_edgeRadius = 0.0;
 
 	// Catch case, when radius is larger than width or height:
 	double minimum;
 
-	if( edgeRadius > ( minimum = kMin( width * 0.5, height * 0.5 ) ) )
+	if( m_edgeRadius > ( minimum = kMin( m_width * 0.5, m_height * 0.5 ) ) )
 	{
- 		edgeRadius = minimum;
+ 		m_edgeRadius = minimum;
 	}
 
+	init();
+}
 
+void
+VRoundRect::init()
+{
 	moveTo(
-		KoPoint( topLeft.x(), topLeft.y() - height + edgeRadius ) );
+		KoPoint( m_topLeft.x(), m_topLeft.y() - m_height + m_edgeRadius ) );
 	arcTo(
-		KoPoint( topLeft.x(), topLeft.y() - height ),
-		KoPoint( topLeft.x() + edgeRadius, topLeft.y() - height ), edgeRadius );
+		KoPoint( m_topLeft.x(), m_topLeft.y() - m_height ),
+		KoPoint( m_topLeft.x() + m_edgeRadius, m_topLeft.y() - m_height ), m_edgeRadius );
 	arcTo(
-		KoPoint( topLeft.x() + width, topLeft.y() - height ),
-		KoPoint( topLeft.x() + width, topLeft.y() - height + edgeRadius ), edgeRadius );
+		KoPoint( m_topLeft.x() + m_width, m_topLeft.y() - m_height ),
+		KoPoint( m_topLeft.x() + m_width, m_topLeft.y() - m_height + m_edgeRadius ), m_edgeRadius );
 	arcTo(
-		KoPoint( topLeft.x() + width, topLeft.y() ),
-		KoPoint( topLeft.x() + width - edgeRadius, topLeft.y() ), edgeRadius );
+		KoPoint( m_topLeft.x() + m_width, m_topLeft.y() ),
+		KoPoint( m_topLeft.x() + m_width - m_edgeRadius, m_topLeft.y() ), m_edgeRadius );
 	arcTo(
-		KoPoint( topLeft.x(), topLeft.y() ),
-		KoPoint( topLeft.x(), topLeft.y() - edgeRadius ), edgeRadius );
+		KoPoint( m_topLeft.x(), m_topLeft.y() ),
+		KoPoint( m_topLeft.x(), m_topLeft.y() - m_edgeRadius ), m_edgeRadius );
 	close();
 }
 
@@ -63,5 +73,43 @@ VRoundRect::name() const
 {
 	QString result = VObject::name();
 	return !result.isEmpty() ? result : i18n( "Rounded Rectangle" );
+}
+
+void
+VRoundRect::save( QDomElement& element ) const
+{
+	if( state() != deleted )
+	{
+		QDomElement me = element.ownerDocument().createElement( "ROUNDRECT" );
+		element.appendChild( me );
+
+		VObject::save( me );
+
+		me.setAttribute( "x", m_topLeft.x() );
+		me.setAttribute( "y", m_topLeft.y() );
+
+		me.setAttribute( "width", m_width );
+		me.setAttribute( "height", m_height );
+
+		me.setAttribute( "corner-radius", m_edgeRadius );
+	}
+}
+
+void
+VRoundRect::load( const QDomElement& element )
+{
+	setState( normal );
+
+	VObject::load( element );
+
+	m_width  = element.attribute( "width" ).toDouble(),
+	m_height = element.attribute( "height" ).toDouble(),
+
+	m_topLeft.setX( element.attribute( "x" ).toDouble() );
+	m_topLeft.setY( element.attribute( "y" ).toDouble() );
+
+	m_edgeRadius  = element.attribute( "corner-radius" ).toDouble(),
+
+	init();
 }
 

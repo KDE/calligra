@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +28,7 @@
 #include "vcomposite.h"
 #include "shapes/vellipse.h"
 #include "shapes/vrectangle.h"
+#include "shapes/vroundrect.h"
 #include "vfill.h"
 #include "vgroup.h"
 #include "vlayer.h"
@@ -194,6 +194,12 @@ VGroup::load( const QDomElement& element )
 			else if( e.tagName() == "RECT" )
 			{
 				VRectangle* rectangle = new VRectangle( this );
+				rectangle->load( e );
+				append( rectangle );
+			}
+			else if( e.tagName() == "ROUNDRECT" )
+			{
+				VRoundRect* rectangle = new VRoundRect( this );
 				rectangle->load( e );
 				append( rectangle );
 			}
