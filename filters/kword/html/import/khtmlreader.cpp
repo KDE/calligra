@@ -130,7 +130,7 @@ void KHTMLReader::startNewLayout(bool startNewFormat, QDomElement layout) {
 void KHTMLReader::completed() {
 	kdDebug() << "KHTMLReader::completed" << endl;
         qApp->exit_loop();
-
+	_html->view()->resize(700,530);
 	DOM::Document doc=_html->document(); // FIXME parse <HEAD> too
 	DOM::NodeList list=doc.getElementsByTagName("body");
 	DOM::Node docbody=list.item(0);
@@ -180,11 +180,13 @@ void KHTMLReader::parseNode(DOM::Node node) {
 	        // get the tag information
 	        go_recursive=parseTag(e);
 	}
-	if (go_recursive)
+	if (go_recursive) {
 		for (DOM::Node q=node.firstChild(); !q.isNull(); q=q.nextSibling()) {
 			parseNode(q);
 		}
+	} 
 	popState();
+
 
 }
 
@@ -254,7 +256,7 @@ bool KHTMLReader::parseTag(DOM::Element e) {
 	_PL(h4,NAME,value,h4);
 	_PL(h5,NAME,value,h5);
 	_PL(h6,NAME,value,h6);
-	return false;
+	return true;
 }
 
 
