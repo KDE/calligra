@@ -35,7 +35,7 @@ SUFFIXES = .h .moc
 bin_SCRIPTS = kimage
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kimage.pot
+	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kimage.pot
 
 img.h: img.idl
 	$(IDL) --relative-paths --query-server-for-narrow -I$(idldir) img.idl

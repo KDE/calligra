@@ -54,7 +54,7 @@ kformula.h: kformula.idl
 	$(IDL) --relative-paths --query-server-for-narrow $(IDL_INCLUDES) kformula.idl
 
 messages:
-	$(XGETTEXT) -C -ki18n -kklocale -x $(includedir)/kde.pot -x $(includedir)/corba.pot *.cc && mv messages.po ../po/kformula.pot
+	$(XGETTEXT) -C -ki18n -kklocale -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kformula.pot
 
 kformula.cc: kformula.h
 kformula_view.h: kformula.h

@@ -85,7 +85,7 @@ install-exec-local:
 	$(INSTALL_SCRIPT) kpresenter $(bindir)/kpresenter
 
 messages:
-	$(XGETTEXT) -C -ki18n -ktranslate -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc */*.cc  && mv messages.po ../po/kpresenter.pot
+	$(XGETTEXT) -C -ki18n -ktranslate -x $(includedir)/kde.pot */*.cc *.cc *.h && mv messages.po ../po/kpresenter.pot
 
 kpresenter.h: kpresenter.idl
 	rm -f kpresenter.h

@@ -46,7 +46,7 @@ install-exec-local:
 	$(INSTALL_SCRIPT) kword $(bindir)/kword
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kword.pot
+	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../po/kword.pot
 
 kword.h: kword.idl
 	rm -f kword.h
@@ -65,9 +65,11 @@ font.cc: font.h
 format.cc: format.h
 kword_page.cc: kword_page.h
 parag.cc: parag.h
-paraglayout.cc: paraglayout.h
+paraglayout.cc: paraglayout.h kword.h kword_view.h
 formatcollection.cc: formatcollection.h
 paragdia.cc: paragdia.moc
 kword_page.cc: kword_page.moc
 imagecollection.cc: imagecollection.h
 image.cc: image.h
+kword_view.h: kword.h
+
