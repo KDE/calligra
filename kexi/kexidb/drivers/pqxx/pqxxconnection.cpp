@@ -265,6 +265,7 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
         setError(ERR_DB_SPECIFIC,e.what());
         kdDebug() << "pqxxSqlConnection::drv_executeSQL:exception - " << e.what() << endl;
     }
+    kdDebug() << "EXECUTE SQL OK: OID was " <<m_res->inserted_oid() << endl;
     return ok;
 }
 

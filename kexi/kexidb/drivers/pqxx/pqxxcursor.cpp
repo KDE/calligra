@@ -24,6 +24,7 @@ pqxxSqlCursor::pqxxSqlCursor(KexiDB::Connection* conn, const QString& statement,
 {
 my_conn = static_cast<pqxxSqlConnection*>(conn)->m_pqxxsql;
 m_fieldCount = 0;
+m_at = 0;
 }
 
 //==================================================================================
@@ -37,7 +38,7 @@ pqxxSqlCursor::~pqxxSqlCursor()
 //
 bool pqxxSqlCursor::drv_open(const QString& statement)
 {
-	kdDebug() << "pqxxSqlCursor::drv_open" << endl;
+	kdDebug() << "pqxxSqlCursor::drv_open:" << statement << endl;
 
 	if (!my_conn->is_open())
 	{
@@ -56,6 +57,7 @@ bool pqxxSqlCursor::drv_open(const QString& statement)
 		m_tran->commit();
 
 		//We should now be placed before the first row, if any
+		m_fieldCount = m_res->columns();
 		m_opened=true;
 		m_afterLast=false;
 		return true;
@@ -74,94 +76,58 @@ bool pqxxSqlCursor::drv_close()
 {
 	m_fieldCount=0;
 	m_opened=false;
+	if(m_res != 0)
+		delete m_res;
+	if(m_tran != 0)
+		delete m_tran;
 
-	delete m_res;
-	delete m_tran;
 	m_res = 0;
 	m_tran = 0;
-	return true;
-}
 
-//==================================================================================
-//
-bool pqxxSqlCursor::drv_moveFirst()
-{
-m_pos = 0;
-#if 0
-try
-{
-	m_cur->BACKWARD_ALL();
-}
-catch (const std::exception &e)
-{
-	setError(ERR_DB_SPECIFIC,e.what());
-	kdDebug() << "EXCEPTION: pqxxSqlCursor::drv_getNextRecord - " << e.what() << endl;
-	m_validRecord = false;
-	return false;
-}
-#endif
-return true;
+	return true;
 }
 
 //==================================================================================
 //
 bool pqxxSqlCursor::drv_getNextRecord()
 {
-kdDebug() << "pqxxSqlCursor::drv_getNextRecord" << endl;
-if (m_pos < m_res->size() - 1)
+kdDebug() << "pqxxSqlCursor::drv_getNextRecord, size is " <<m_res->size() << " Current Position is " << (long)m_at << endl;
+m_at++;
+if (m_at <= m_res->size())
 {
-	m_pos++;
+	m_beforeFirst=false;
+	m_validRecord=true;
+	m_afterLast=false;
+	kdDebug() << "NEW POSITION IS " << (long)m_at << endl;
 	return true;
 }
-
-return false;
-
-#if 0
-	try
-	{
-		if (*m_cur>>m_res)
-		{
-			//kdDebug() << "pqxxSqlCursor::drv_getNextRecord - Fetch" << endl;
-			//m_res = m_cur->Fetch(1)
-			m_fieldCount = m_res.columns(); //Only know this when moved to first record
-			m_beforeFirst=false;
-			m_validRecord=true;
-			m_afterLast=false;
-
-			kdDebug() << "pqxxSqlCursor::drv_getNextRecord - Done" << endl;
-			return true;
-		}
-		else
-		{
-			m_validRecord = false;
-			m_afterLast = true;
-			return false;
-		}
-	}
-	catch (const std::exception &e)
-    	{
-		setError(ERR_DB_SPECIFIC,e.what());
-		kdDebug() << "EXCEPTION: pqxxSqlCursor::drv_getNextRecord - " << e.what() << endl;
-		m_validRecord = false;
-        	return false;
-    	}
-#endif
+else
+{
+	m_at=-1;
+	m_validRecord = false;
+	m_afterLast = true;
+	return false;
+}
 }
 
 
 //==================================================================================
-//
+//Move pointer to the previous record
 bool pqxxSqlCursor::drv_getPrevRecord()
 {
 kdDebug() << "pqxxSqlCursor::drv_getPrevRecord" << endl;
 
-if (m_pos > 0)
+if (m_at > 0)
 {
-	m_pos--;
+	m_beforeFirst=false;
+	m_validRecord=true;
+	m_afterLast=false;
 	return true;
 }
-return false;
-
+else
+{
+	return false;
+}
 #if 0
 	try
 	{
@@ -194,6 +160,7 @@ return false;
 //
 QVariant pqxxSqlCursor::value(int pos) const
 {
+	kdDebug() << "VALUE AT " << pos << endl;
 	if (!m_res->size() > 0)
 	{
 		kdDebug() << "pqxxSqlCursor::value - ERROR: result size not greater than 0" << endl;
@@ -206,13 +173,13 @@ QVariant pqxxSqlCursor::value(int pos) const
 		return QVariant();
 	}
 
-	kdDebug() << "pqxxSqlCursor::value at pos:" << pos << "is: " << (*m_res)[m_pos][pos].c_str() << endl;
+	kdDebug() << "IS: " << (*m_res)[at()][pos].c_str() << endl;
 
-	return QVariant(QString::fromUtf8((*m_res)[m_pos][pos].c_str()));
+	return QVariant(QString::fromUtf8((*m_res)[m_at-1][pos].c_str()));
 }
 
 //==================================================================================
-//
+//I giess we return a char** full of the record data
 const char** pqxxSqlCursor::recordData() const
 {
 kdDebug() << "pqxxSqlCursor::recordData" << endl;
@@ -222,7 +189,7 @@ kdDebug() << "pqxxSqlCursor::recordData" << endl;
 //Store the current record in [data]
 void pqxxSqlCursor::storeCurrentRecord(RecordData &data) const
 {
-kdDebug() << "pqxxSqlCursor::storeCurrentRecord" << endl;
+kdDebug() << "pqxxSqlCursor::storeCurrentRecord: POSITION IS " << (long)m_at<< endl;
 
 if (!m_res->size()>0)
 	return;

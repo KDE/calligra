@@ -25,7 +25,6 @@ public:
 	~pqxxSqlCursor();
         virtual bool drv_open(const QString& statement);
         virtual bool drv_close();
-        virtual bool drv_moveFirst();
         virtual bool drv_getNextRecord();
         virtual bool drv_getPrevRecord();
 	virtual QVariant value(int) const;
@@ -36,7 +35,6 @@ private:
 	pqxx::result* m_res;
 	pqxx::nontransaction* m_tran;
 	pqxx::connection* my_conn;
-	unsigned int m_pos;
 };
 
 }
