@@ -11,7 +11,7 @@ the original version were made.
 About the version
 =================
 
-This is the DTD version 2, for KWord-1.0.
+This is the DTD version 2, for KWord 1.1 or 1.2
 It has changed a bit since the DTD version 1, for KWord-0.8 (the one included in KDE-2.0)
 KWord will read the previous versions of its own file format but this is considered
 the most complete format, we highly encourage you to use this format.
@@ -76,7 +76,7 @@ don't put a </?xml...> at the end of the file!).
                             this file:
 
                                 1...as for KWord 0.8 (KOffice-1.0)
-                                2...as for KWord 1.1
+                                2...as for KWord 1.1 or 1.2
                             KWord can read all previous versions, but always saves in the latest.
 -->
 <!ELEMENT DOC
@@ -629,7 +629,7 @@ don't put a </?xml...> at the end of the file!).
     bulletfont CDATA #IMPLIED
     customdef CDATA #IMPLIED>
 
-<!-- 
+<!--
         The space to be added between two consecutive lines in a given paragraph.
         value in points. Can also be "oneandhalf" for 1.5 lines and "double".
 -->
@@ -651,9 +651,9 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT PAGEBREAKING
     EMPTY>
 <!ATTLIST PAGEBREAKING
-    linesTogether CDATA #REQUIRED
-    hardFrameBreak CDATA #REQUIRED
-    hardFrameBreakAfter CDATA #REQUIRED>
+    linesTogether       (true|false) #IMPLIED
+    hardFrameBreak      (true|false) #IMPLIED
+    hardFrameBreakAfter (true|false) #IMPLIED>
 
 <!--
         The borders can be used on a frame and on a paragraph.
@@ -774,7 +774,7 @@ don't put a </?xml...> at the end of the file!).
 <!--    Variable
 -->
 <!ELEMENT VARIABLE
-    ("TYPE|PGNUM|DATE|TIME|CUSTOM|SERIALLETTER|FIELD|LINK")>
+    (TYPE|PGNUM|DATE|TIME|CUSTOM|SERIALLETTER|FIELD|LINK)>
 
 <!--    Variable type
         Attributes:
@@ -819,8 +819,24 @@ don't put a </?xml...> at the end of the file!).
     year  CDATA #REQUIRED
     fix   CDATA #REQUIRED>
 
-<!-- TODO PGNUM,TIME,CUSTOM,SERIALLETTER -->
-<!-- TODO modifiers in DATE and TIME - see #24242 -->
+<!ELEMENT TIME
+    EMPTY>
+<!-- TODO: document ( #REQUIRED or #IMPLIED ?)-->
+<!ATTLIST TIME
+    hour   CDATA #REQUIRED
+    minute CDATA #REQUIRED
+    second CDATA #REQUIRED
+    fix    CDATA #REQUIRED>
+
+<!ELEMENT PGNUM
+    EMPTY>
+<!-- TODO: document ( #REQUIRED or #IMPLIED ?)-->
+<!ATTLIST PGNUM
+    subtype CDATA #REQUIRED
+    value   CDATA #REQUIRED>
+
+<!-- TODO CUSTOM,SERIALLETTER -->
+<!-- TODO modifiers in DATE and TIME - see #24242 (close KDE bug?)-->
 
 <!--    A "field" variable (property of the document)
         subtype... Field subtype:
