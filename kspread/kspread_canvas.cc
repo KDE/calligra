@@ -1252,7 +1252,7 @@ void KSpreadCanvas::moveDirection(KSpread::MoveTo direction, bool extendSelectio
       destination = QPoint(QMAX(cursor.x() + offset, 1), cursor.y());
       break;
     case KSpread::Right:
-      offset = cell->extraXCells() - (cursor.x() - cellCorner.x()) + 1;
+      offset = cell->mergedXCells() - (cursor.x() - cellCorner.x()) + 1;
       cl = activeTable()->columnLayout( cursor.x() + offset );
       while ( ((cursor.x() + offset) <= KS_colMax) && cl->isHide())
       {

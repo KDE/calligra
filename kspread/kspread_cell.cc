@@ -1816,10 +1816,6 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
   if ( !r2.intersects( rect ) )
     return;
 
-  // Erase the background of the cell.
-  if ( !painter.device()->isExtDev() )
-    painter.eraseRect( r2 );
-
   if (!isObscuringForced())
   {
     paintBackground(painter, corner, cellRef, selected);
@@ -2005,6 +2001,10 @@ void KSpreadCell::paintBackground(QPainter& painter, QPoint corner,
       painter.fillRect( corner.x(), corner.y(), width, height, bb );
     }
   }
+
+  // Erase the background of the cell.
+  if ( !painter.device()->isExtDev() )
+    painter.eraseRect( corner.x(), corner.y(), width, height );
 
   // Draw a background brush
   QBrush bb = backGroundBrush( cellRef.x(), cellRef.y() );
