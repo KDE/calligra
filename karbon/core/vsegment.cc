@@ -59,8 +59,12 @@ height(
 }
 
 
-VSegment::VSegment( VSegmentType type )
+VSegment::VSegment( unsigned degree )
 {
+	m_degree = degree;
+	m_type = begin;
+	m_state = normal;
+
 	m_prev = 0L;
 	m_next = 0L;
 
@@ -72,14 +76,16 @@ VSegment::VSegment( VSegmentType type )
 	m_nodeEdited[1] = false;
 	m_nodeEdited[2] = false;
 
-	m_state = normal;
 
-	m_type = type;
 	m_ctrlPointFixing = none;
 }
 
 VSegment::VSegment( const VSegment& segment )
 {
+	m_degree = segment.m_degree;
+	m_type = segment.m_type;
+	m_state = segment.m_state;
+
 	// Copying the pointers m_prev/m_next has some advantages (see VSegment::length()).
 	// Inserting a segment into a path overwrites these anyway.
 	m_prev = segment.m_prev;
@@ -97,10 +103,16 @@ VSegment::VSegment( const VSegment& segment )
 	m_nodeEdited[1] = segment.m_nodeEdited[1];
 	m_nodeEdited[2] = segment.m_nodeEdited[2];
 
-	m_state = segment.m_state;
-	m_type = segment.m_type;
-
 	m_ctrlPointFixing = segment.m_ctrlPointFixing;
+}
+
+VSegment::~VSegment()
+{
+}
+
+void
+VSegment::setDegree()
+{
 }
 
 void
@@ -538,7 +550,7 @@ VSegment::splitAt( double t )
 	}
 
 
-	VSegment* segment = new VSegment();
+	VSegment* segment = new VSegment( m_degree );
 
 	// Lines are easy: no need to modify the current segment.
 	if( m_type == line )
@@ -548,6 +560,8 @@ VSegment::splitAt( double t )
 			( m_node[2] - m_prev->m_node[2] ) * t;
 
 		segment->m_type = line;
+		segment->m_state = m_state;
+
 		return segment;
 	}
 
@@ -650,9 +664,11 @@ VSegment::revert() const
 		return 0L;
 	}
 
-	VSegment* segment = new VSegment();
-	segment->m_state = m_state;
+	VSegment* segment = new VSegment( m_degree );
+
 	segment->m_type = m_type;
+	segment->m_state = m_state;
+
 
 	// Swap points.
 	segment->m_node[0] = m_node[1];

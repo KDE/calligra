@@ -72,23 +72,63 @@ public:
 		deleted
 	};
 
-	VSegment( VSegmentType type = begin );
+
+	VSegment( unsigned degree = 3 );
+
 	VSegment( const VSegment& segment );
 
-	void setState( VState state ) { m_state = state; }
-	VState state() const { return m_state; }
+	~VSegment();
 
-	void draw( VPainter* painter ) const;
+	/**
+	 * Returns the segment's degree. For beziers "three" most likely,
+	 * "one" for lines.
+	 */
+	unsigned degree() const
+	{
+		return m_degree;
+	}
 
+	/**
+	 * Sets the degree.
+	 */
+	void setDegree();
+
+
+	/**
+	 * Returns the segment type ("begin", "line" or "curve").
+	 */
 	VSegmentType type() const
 	{
 		return m_type;
 	}
 
+	/**
+	 * Sets the segment type.
+	 */
 	void setType( VSegmentType type )
 	{
 		m_type = type;
 	}
+
+
+	/**
+	 * Returns the segment state.
+	 */
+	VState state() const
+	{
+		return m_state;
+	}
+
+	/**
+	 * Sets the segment state.
+	 */
+	void setState( VState state )
+	{
+		m_state = state;
+	}
+
+
+	void draw( VPainter* painter ) const;
 
 	VCtrlPointFixing ctrlPointFixing() const
 		{ return m_ctrlPointFixing; }
@@ -292,6 +332,11 @@ public:
 	VSegment* clone() const;
 
 private:
+	/**
+	 * Degree. For beziers "three" most likely, "one" for lines.
+	 */
+	unsigned m_degree;
+
 	// TODO : struct?
 	KoPoint m_node[3];
 	bool m_nodeSelected[3];
