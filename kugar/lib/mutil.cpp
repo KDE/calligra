@@ -31,34 +31,34 @@ QString MUtil::formatDate(const QDate& value, int format){
 	// Create the formatted date string
 	switch(format){
     case MUtil::MDY_SLASH:
-      string = QObject::tr("%1/%2/%3").arg(value.month()).arg(value.day()).arg(year);
+      string = QString("%1/%2/%3").arg(value.month()).arg(value.day()).arg(year);
       break;
     case MUtil::MDY_DASH:
-      string = QObject::tr("%1-%2-%3").arg(value.month()).arg(value.day()).arg(year);
+      string = QString("%1-%2-%3").arg(value.month()).arg(value.day()).arg(year);
       break;
     case MUtil::MMDDY_SLASH:
-	    string = QObject::tr("%1/%2/%3").arg(month).arg(day).arg(year);
+	    string = QString("%1/%2/%3").arg(month).arg(day).arg(year);
 			break;
 		case MUtil::MMDDY_DASH:
-	    string = QObject::tr("%1-%2-%3").arg(month).arg(day).arg(year);
+	    string = QString("%1-%2-%3").arg(month).arg(day).arg(year);
 			break;
 		case MUtil::MDYYYY_SLASH:
-	    string = QObject::tr("%1/%2/%3").arg(value.month()).arg(value.day()).arg(value.year());
+	    string = QString("%1/%2/%3").arg(value.month()).arg(value.day()).arg(value.year());
 			break;
 		case MUtil::MDYYYY_DASH:
-	    string = QObject::tr("%1-%2-%3").arg(value.month()).arg(value.day()).arg(value.year());
+	    string = QString("%1-%2-%3").arg(value.month()).arg(value.day()).arg(value.year());
 			break;
 		case MUtil::MMDDYYYY_SLASH:
-	    string = QObject::tr("%1/%2/%3").arg(month).arg(day).arg(value.year());
+	    string = QString("%1/%2/%3").arg(month).arg(day).arg(value.year());
 			break;
 		case MUtil::MMDDYYYY_DASH:
-	    string = QObject::tr("%1-%2-%3").arg(month).arg(day).arg(value.year());
+	    string = QString("%1-%2-%3").arg(month).arg(day).arg(value.year());
 			break;
 		case MUtil::YYYYMD_SLASH:
-	    string = QObject::tr("%1/%2/%3").arg(value.year()).arg(value.month()).arg(value.day());
+	    string = QString("%1/%2/%3").arg(value.year()).arg(value.month()).arg(value.day());
 			break;
 		case MUtil::YYYYMD_DASH:
-	    string = QObject::tr("%1-%2-%3").arg(value.year()).arg(value.month()).arg(value.day());
+	    string = QString("%1-%2-%3").arg(value.year()).arg(value.month()).arg(value.day());
 			break;
 		default:
 			string = value.toString();

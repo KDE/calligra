@@ -181,9 +181,9 @@ void MReportViewer::printReport(){
 		printer->setNumCopies(1);
 
 		// Setup the progress dialog
-		QProgressDialog progress( QObject::tr("Printing report..."),
-															QObject::tr("Cancel"),
-		          								totalSteps, this, "progress", true );
+		QProgressDialog progress( i18n("Printing report..."),
+					i18n("Cancel"),
+		          		totalSteps, this, "progress", true );
 		progress.setMinimumDuration(M_PROGRESS_DELAY);
 		QObject::connect(&progress, SIGNAL(cancelled()), this, SLOT(slotCancelPrinting()));
 		progress.setProgress(0);	
@@ -296,7 +296,7 @@ void MReportViewer::slotRenderProgress(int p){
 	// Check if the dialog was created
 	if (progress == 0){
 		totalSteps = rptEngine->getRenderSteps();
-		progress = new QProgressDialog( QObject::tr("Creating report..."), QObject::tr("Cancel"),
+		progress = new QProgressDialog( i18n("Creating report..."), i18n("Cancel"),
                                     totalSteps, this, "progress", true );
 		progress->setMinimumDuration(M_PROGRESS_DELAY);	
 	}

@@ -6,6 +6,7 @@
     email     : info@mutinybaysoftware.com
  ***************************************************************************/
 
+#include <kglobalsettings.h>
 
 #include "mlabelobject.h"
 
@@ -15,7 +16,7 @@ MLabelObject::MLabelObject() : MReportObject(), xMargin(0), yMargin(0){
   text = "";
 
   // Set the default font
-  fontFamily = "times";
+  fontFamily = KGlobalSettings::generalFont().family();
   fontSize = 10;
   fontWeight = MLabelObject::Normal;
   fontItalic = false;

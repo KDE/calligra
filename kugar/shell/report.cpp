@@ -75,12 +75,12 @@ void Report::setReportData(const QString &data)
 	if (f.open(IO_ReadOnly))
 	{
 		if (!rptviewer -> setReportData(&f))
-			KMessageBox::sorry(this,i18n("Invalid data file: ") + data);
+			KMessageBox::sorry(this,i18n("Invalid data file: %1").arg(data));
 
 		f.close();
 	}
 	else
-		KMessageBox::sorry(this,i18n("Unable to open data file: ") + data);
+		KMessageBox::sorry(this,i18n("Unable to open data file: %1").arg(data));
 }
 
 
@@ -104,7 +104,7 @@ void Report::setReportTemplate(const QString &tpl)
 		if (KIO::NetAccess::download(url,localtpl))
 			isTemp = true;
 		else
-			KMessageBox::sorry(this,i18n("Unable to download template file: ") + url.url());
+			KMessageBox::sorry(this,i18n("Unable to download template file: %1").arg(url.prettyURL()));
 	}
 
 	if (!localtpl.isNull())
@@ -114,12 +114,12 @@ void Report::setReportTemplate(const QString &tpl)
 		if (f.open(IO_ReadOnly))
 		{
 			if (!rptviewer -> setReportTemplate(&f))
-				KMessageBox::sorry(this,i18n("Invalid template file: ") + localtpl);
+				KMessageBox::sorry(this,i18n("Invalid template file: %1").arg(localtpl));
 
 			f.close();
 		}
 		else
-			KMessageBox::sorry(this,i18n("Unable to open template file: ") + localtpl);
+			KMessageBox::sorry(this,i18n("Unable to open template file: %1").arg(localtpl));
 
 		if (isTemp)
 			KIO::NetAccess::removeTempFile(localtpl);

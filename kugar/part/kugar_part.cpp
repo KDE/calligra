@@ -14,6 +14,7 @@
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <qfile.h>
+#include <kglobal.h>
 
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
@@ -31,7 +32,8 @@ KInstance *KugarFactory::s_instance = 0L;
 
 extern "C" void *init_libkugarpart()
 {
-	return new KugarFactory;
+    KGlobal::locale()->insertCatalogue("kugar");
+    return new KugarFactory;
 }
 
 
@@ -140,12 +142,12 @@ bool KugarPart::openFile()
 				ok = true;
 		}
 		else
-			KMessageBox::sorry(widget(),i18n("Invalid data file: ") + m_file);
+			KMessageBox::sorry(widget(),i18n("Invalid data file: %1").arg(m_file));
 
 		f.close();
 	}
 	else
-		KMessageBox::sorry(widget(),i18n("Unable to open data file: ") + m_file);
+		KMessageBox::sorry(widget(),i18n("Unable to open data file: %1").arg(m_file));
 
 	return ok;
 }
@@ -190,7 +192,7 @@ void KugarPart::slotPreferedTemplate(const QString &tpl)
 		if (KIO::NetAccess::download(url,localtpl))
 			isTemp = true;
 		else
-			KMessageBox::sorry(widget(),i18n("Unable to download template file: ") + url.url());
+			KMessageBox::sorry(widget(),i18n("Unable to download template file: %1").arg(url.prettyURL()));
 	}
  
 	if (!localtpl.isNull())
@@ -200,12 +202,12 @@ void KugarPart::slotPreferedTemplate(const QString &tpl)
 		if (f.open(IO_ReadOnly))
 		{
 			if (!view -> setReportTemplate(&f))
-				KMessageBox::sorry(widget(),i18n("Invalid template file: ") + localtpl);
+				KMessageBox::sorry(widget(),i18n("Invalid template file: %1").arg(localtpl));
  
 			f.close();
 		}
 		else
-			KMessageBox::sorry(widget(),i18n("Unable to open template file: ") + localtpl);
+			KMessageBox::sorry(widget(),i18n("Unable to open template file: %1").arg(localtpl));
  
 		if (isTemp)
 			KIO::NetAccess::removeTempFile(localtpl);
