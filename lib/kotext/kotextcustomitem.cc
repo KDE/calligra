@@ -42,15 +42,21 @@ void KoTextCustomItem::draw(QPainter* p, int x, int _y, int cx, int cy, int cw, 
     KoZoomHandler *zh=textDocument()->paintingZoomHandler();
     //kdDebug()<<" x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
 
-    x=zh->layoutUnitToPixelX(x) + paragraph()->at( index() )->pixelxadj;
-    int y=zh->layoutUnitToPixelY(_y);
-    cx=zh->layoutUnitToPixelX(cx);
-    cy=zh->layoutUnitToPixelY(_y,cy);
-    ch=zh->layoutUnitToPixelY(_y,ch);
-    cw=zh->layoutUnitToPixelX(cw);
+    // Calculate index only once
+    // Hmm, should pass it to drawCustomItem...
+    int charIndex = index();
+    KoTextStringChar* stringChar = paragraph()->at( charIndex );
+
+    // Convert x, y, cx, cy, cw and ch from Layout Units to pixels.
+    x = zh->layoutUnitToPixelX(x) + stringChar->pixelxadj;
+    int y = zh->layoutUnitToPixelY(_y);
+    cx = zh->layoutUnitToPixelX(cx);
+    cy = zh->layoutUnitToPixelY(_y,cy);
+    ch = zh->layoutUnitToPixelY(_y,ch);
+    cw = zh->layoutUnitToPixelX(cw);
     //kdDebug()<<"After  x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
 
-    KoTextFormat * fmt = format();
+    KoTextFormat * fmt = stringChar->format();
 
     //bool forPrint = ( p->device()->devType() == QInternal::Printer );
     p->setFont( fmt->screenFont( zh ) );

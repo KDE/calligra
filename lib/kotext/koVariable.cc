@@ -434,10 +434,17 @@ void KoVariable::resize()
 
 void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
 {
-    KoTextFormat * f = format();
+    KoTextFormat * fmt = format();
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
+    QFont font( fmt->screenFont( zh ) );
+    drawCustomItemHelper( p, x, y, cg, selected, offset, fmt, font, fmt->color() );
+}
+
+void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, const QColorGroup& cg, bool selected, const int offset, KoTextFormat* fmt, const QFont& font, QColor textColor )
+{
     int bl, _y;
     KoTextParag * parag = paragraph();
+    KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     //kdDebug() << "KoVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
     int h = parag->lineHeightOfChar( index(), &bl, &_y /*unused*/);
 
@@ -446,13 +453,8 @@ void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy
 
     p->save();
 
-    QFont font( f->screenFont( zh ) );
-    QColor textColor( f->color() );
-    if ( !textColor.isValid() ) // Resolve the color at this point
-        textColor = KoTextFormat::defaultTextColor( p );
-
-    if ( f->textBackgroundColor().isValid() )
-        p->fillRect( x, y, zh->layoutUnitToPixelX( width ), h, f->textBackgroundColor() );
+    if ( fmt->textBackgroundColor().isValid() )
+        p->fillRect( x, y, zh->layoutUnitToPixelX( width ), h, fmt->textBackgroundColor() );
 
     if ( textDocument()->drawingShadow() ) // Use shadow color if drawing a shadow
     {
@@ -464,7 +466,6 @@ void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy
         textColor = cg.color( QColorGroup::HighlightedText );
         p->setPen( QPen( textColor ) );
         p->fillRect( x, y,  zh->layoutUnitToPixelX( width ), h, cg.color( QColorGroup::Highlight ) );
-
     }
     else if ( textDocument() && textDocument()->drawFormattingChars()
               && p->device()->devType() != QInternal::Printer )
@@ -474,13 +475,16 @@ void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy
         p->drawRect( x, y, zh->layoutUnitToPixelX( width ), h );
     }
     else {
+        if ( !textColor.isValid() ) // Resolve the color at this point
+            textColor = KoTextFormat::defaultTextColor( p );
         p->setPen( QPen( textColor ) );
     }
 
+    KoTextParag::drawUnderlineDoubleUnderline( p, fmt, zh, font, textColor, x, bl, zh->layoutUnitToPixelX( width ), y, h );
 
-    KoTextParag::drawUnderlineDoubleUnderline( p , f , zh, font, textColor, x , bl, zh->layoutUnitToPixelX( width ), y, h);
+    p->setFont( font ); // already done by KoTextCustomItem::draw but someone might
+                        // change the font passed to drawCustomItemHelper (e.g. KoLinkVariable)
 
-    //p->setFont( customItemFont ); // already done by the caller
     //kdDebug() << "KoVariable::draw bl=" << bl << << endl;
     p->drawText( x, y + bl + offset, text() );
     p->restore();
@@ -1221,42 +1225,16 @@ QStringList KoLinkVariable::actionTexts()
 
 void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
 {
-    KoTextFormat * f = format();
+    KoTextFormat * fmt = format();
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
-    int bl, _y;
-    KoTextParag * parag = paragraph();
-    //kdDebug() << "KoVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
-    int h = parag->lineHeightOfChar( index(), &bl, &_y /*unused*/);
 
-    h = zh->layoutUnitToPixelY( y, h );
-    bl = zh->layoutUnitToPixelY( y, bl );
+    bool displayLink = m_varColl->variableSetting()->displayLink();
+    QFont font( fmt->screenFont( zh ) );
+    if ( m_varColl->variableSetting()->underlineLink() )
+        font.setUnderline( true );
+    QColor textColor = displayLink ? cg.color( QColorGroup::Link ) : fmt->color();
 
-    bool linkColor=m_varColl->variableSetting()->displayLink();
-    QFont font( f->screenFont( zh ) );
-    if ( m_varColl->variableSetting()->underlineLink())
-        font.setUnderline(true);
-    p->save();
-    QColor textColor=linkColor ? Qt::blue :  f->color();
-    if ( textDocument()->drawingShadow() ) // Use shadow color if drawing a shadow
-        textColor = parag->shadowColor();
-
-    p->setPen( QPen( textColor ) );
-    if ( f->textBackgroundColor().isValid() )
-        p->fillRect( x, y, zh->layoutUnitToPixelX( width ), h, f->textBackgroundColor() );
-    if ( selected )
-    {
-        p->setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
-        p->fillRect( x, y,  zh->layoutUnitToPixelX( width ), h, cg.color( QColorGroup::Highlight ) );
-
-    }
-
-    KoTextParag::drawUnderlineDoubleUnderline( p , f , zh, font, textColor, x , bl, zh->layoutUnitToPixelX( width ), y, h);
-
-
-    //p->setFont( customItemFont ); // already done by the caller
-    //kdDebug() << "KoVariable::draw bl=" << bl << << endl;
-    p->drawText( x, y + bl + offset, text() );
-    p->restore();
+    drawCustomItemHelper( p, x, y, cg, selected, offset, fmt, font, textColor );
 }
 
 
@@ -1303,30 +1281,30 @@ QString KoNoteVariable::text()
 
 }
 
+// This is a "variable" that doesn't really have text inline...
+// so we can't call drawCustomItemHelper
 void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int /*offset*/ )
 {
     if ( !m_varColl->variableSetting()->displayComment())
         return;
 
-    KoTextFormat * f = format();
+    KoTextFormat * fmt = format();
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
-    int bl, _y;
+    int _bl, _y;
     KoTextParag * parag = paragraph();
     //kdDebug() << "KoVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
-    int h = parag->lineHeightOfChar( index(), &bl, &_y /*unused*/);
+    int h = parag->lineHeightOfChar( index(), &_bl /*unused*/, &_y /*unused*/);
 
     h = zh->layoutUnitToPixelY( y, h );
-    bl = zh->layoutUnitToPixelY( y, bl );
 
     p->save();
-    p->setPen( QPen( f->color() ) );
-    if ( f->textBackgroundColor().isValid() )
-        p->fillRect( x, y, zh->layoutUnitToPixelX( width ), h, f->textBackgroundColor() );
+    p->setPen( QPen( fmt->color() ) );
+    if ( fmt->textBackgroundColor().isValid() )
+        p->fillRect( x, y, zh->layoutUnitToPixelX( width ), h, fmt->textBackgroundColor() );
     if ( selected )
     {
         p->setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
         p->fillRect( x, y,  zh->layoutUnitToPixelX( width ), h, cg.color( QColorGroup::Highlight ) );
-
     }
     else if ( textDocument() && p->device()->devType() != QInternal::Printer )
     {
@@ -1335,8 +1313,5 @@ void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int 
         p->drawRect( x, y, zh->layoutUnitToPixelX( width ), h );
     }
 
-
     p->restore();
 }
-
-

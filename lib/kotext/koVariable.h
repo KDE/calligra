@@ -267,6 +267,11 @@ public:
     virtual int widthHint() const { return width; }
     virtual int minimumWidth() const { return width; }
     virtual void drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, const int offset);
+    /**
+     * Called by drawCustomItem. Some special variables can reimplement drawCustomItem
+     * to change the parameters passed to drawCustomItemHelper
+     */
+    void drawCustomItemHelper( QPainter* p, int x, int y, const QColorGroup& cg, bool selected, const int offset, KoTextFormat* fmt, const QFont& font, QColor textColor );
 
     void setVariableFormat( KoVariableFormat *_varFormat );
 
@@ -534,6 +539,7 @@ protected:
     QString m_url;
 };
 
+// A custom item that display a small yellow rect. Right-clicking on it shows the comment.
 class KoNoteVariable : public KoVariable
 {
 public:

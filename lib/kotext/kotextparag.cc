@@ -1050,17 +1050,7 @@ void KoTextParag::printRTDebug( int info )
 
 void KoTextParag::drawUnderlineDoubleUnderline( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int h )
 {
-    if ( font.underline() )
-    {
-        int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
-        p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
-        p->drawLine( startX, y, startX + bw, y );
-        font.setUnderline( FALSE );
-	p->setFont( font );
-    }
-
-    bool doubleUnderline = format->doubleUnderline();
-    if ( doubleUnderline )
+    if ( format->doubleUnderline() )
     {
         // For double-underlining, both lines are of width 0.5 (*zoom), in the hopes
 	// to have room for both.
@@ -1076,6 +1066,19 @@ void KoTextParag::drawUnderlineDoubleUnderline( QPainter * p, KoTextFormat *form
 	y = lastY + baseLine + zh->layoutUnitToPixelY( format->descent() ) /*- KoBorder::zoomWidthY( 1, zh, 0 )*/;
         //kdDebug() << "KoTextParag::drawParagStringInternal drawing second line at " << y << endl;
 	p->drawLine( startX, y, startX + bw, y );
+
+        if ( font.underline() ) { // can this happen?
+            font.setUnderline( FALSE );
+            p->setFont( font );
+        }
+    }
+    else if ( font.underline() )
+    {
+        int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
+        p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+        p->drawLine( startX, y, startX + bw, y );
+        font.setUnderline( FALSE );
+        p->setFont( font );
     }
 
     if ( font.strikeOut() )
@@ -1084,7 +1087,6 @@ void KoTextParag::drawUnderlineDoubleUnderline( QPainter * p, KoTextFormat *form
         p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
         p->drawLine( startX, y - h/2 + 2 , startX + bw, y- h/2 +2 );
         font.setStrikeOut( FALSE );
-	p->setFont( font );
+        p->setFont( font );
     }
-
 }
