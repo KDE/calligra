@@ -48,7 +48,8 @@
 #include "widget/relations/kexirelationwidget.h"
 #include "widget/relations/kexirelationviewtable.h"
 
-KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name)
+KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
+	KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name)
  : KexiViewBase(mainWin, parent, name)
 {
 	m_conn = mainWin->project()->dbConnection();
@@ -292,7 +293,7 @@ KexiQueryDesignerGuiEditor::schema()
 	return m_doc->schema();
 }
 
-void
+/*void
 KexiQueryDesignerGuiEditor::restore()
 {
 	if(!m_doc || !m_doc->schema())
@@ -304,7 +305,7 @@ KexiQueryDesignerGuiEditor::restore()
 	{
 //		m_dataTable->tableView()->addRow(flist.at(i)->table()->name(), flist.at(i)->name());
 	}
-}
+}*/
 
 bool
 KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled)
@@ -401,11 +402,13 @@ void KexiQueryDesignerGuiEditor::slotRowInserted(KexiTableItem* item, uint row)
 void KexiQueryDesignerGuiEditor::slotTableAdded(KexiDB::TableSchema &t)
 {
 	updateColumsData();
+	setDirty();
 }
 
 void KexiQueryDesignerGuiEditor::slotTableHidden(KexiDB::TableSchema &t)
 {
 	updateColumsData();
+	setDirty();
 }
 
 void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int colnum, 
@@ -448,6 +451,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		if (!propertyBuffer()) {
 			createPropertyBuffer( m_dataTable->tableView()->currentRow(), 
 				item->at(1).toString(), item->at(0).toString(), true );
+			m_data->updateRowEditBuffer(item, 3, QVariant(0));//totals
 			propertyBufferSwitched();
 		}
 	}

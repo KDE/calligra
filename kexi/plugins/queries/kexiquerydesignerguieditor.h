@@ -67,7 +67,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 	protected:
 		void			initTable();
 		void			addRow(const QString &tbl, const QString &field);
-		void			restore();
+//		void			restore();
 		virtual bool beforeSwitchTo(int mode, bool &cancelled);
 		virtual bool afterSwitchFrom(int mode, bool &cancelled);
 
@@ -108,6 +108,8 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		KexiSectionHeader *m_head;
 		QSplitter *m_spl;
 
+		//! used to remember in slotDroppedAtRow() what data was dropped, 
+		//! so we can create appropriate prop. buffer in slotRowInserted()
 		KexiTableViewData *m_fieldColumnData, *m_tablesColumnData;
 		KexiTableViewPropertyBuffer* m_buffers;
 		KexiTableItem *m_droppedNewItem;
