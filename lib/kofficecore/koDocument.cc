@@ -297,7 +297,7 @@ bool KoDocument::saveFile()
 
     if ( ret )
         removeAutoSaveFiles();
-    
+
     QApplication::restoreOverrideCursor();
     if ( !ret )
     {
@@ -384,7 +384,7 @@ void KoDocument::setReadWrite( bool readwrite )
 void KoDocument::setAutoSave( int delay )
 {
     d->m_autoSaveDelay = delay;
-    if ( isReadWrite() && d->m_autoSaveDelay > 0 )
+    if ( isReadWrite() && !isEmbedded() && d->m_autoSaveDelay > 0 )
         d->m_autoSaveTimer.start( d->m_autoSaveDelay * 1000 );
     else
         d->m_autoSaveTimer.stop();
