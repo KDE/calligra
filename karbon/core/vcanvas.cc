@@ -186,22 +186,16 @@ VCanvas::setViewport( double centerX, double centerY )
 }
 
 void
-VCanvas::setContentsRect( const KoRect &r )
+VCanvas::setViewportRect( const KoRect &r )
 {
 	viewport()->setUpdatesEnabled( false );
-	kdDebug() << r.width() << endl;
-	kdDebug() << r.height() << endl;
 	double zoomX = m_view->zoom() * ( ( visibleWidth() / m_view->zoom() ) / r.width() );
 	double zoomY = m_view->zoom() * ( ( visibleHeight() / m_view->zoom() ) / r.height() );
-	kdDebug() << "Zoom : " << zoomX << ", " << zoomY << endl;
 	double centerX = double( r.center().x() * m_view->zoom() ) / double( contentsWidth() );
 	double centerY = double( r.center().y() * m_view->zoom() ) / double( contentsHeight() );
 	double zoom = zoomX < zoomY ? zoomX : zoomY;
-	kdDebug() << "cw " << contentsWidth() << endl;
 	resizeContents( ( zoom / m_view->zoom() ) * contentsWidth(),
 					( zoom / m_view->zoom() ) * contentsHeight() );
-	kdDebug() << "cw2 : " << contentsWidth() << endl;
-	kdDebug() << "cx : " << centerX << endl;
 	setViewport( centerX, 1.0 - centerY );
 	m_view->setZoom( zoom );
 	viewport()->setUpdatesEnabled( true );

@@ -105,7 +105,7 @@ VZoomTool::mouseButtonRelease()
 	double viewportY = view()->canvasWidget()->visibleHeight() * 0.75 / view()->zoom();
 	KoRect rect( last().x() - viewportX / 2.0, last().y() - viewportY / 2.0, viewportX, viewportY );
 	rect = rect.normalize();
-	view()->canvasWidget()->setContentsRect( rect );
+	view()->canvasWidget()->setViewportRect( rect );
 }
 
 void
@@ -123,7 +123,7 @@ VZoomTool::mouseDragRelease()
 {
 	KoRect rect( first().x(), first().y(), last().x() - first().x(), last().y() - first().y() );
 	rect = rect.normalize();
-	view()->canvasWidget()->setContentsRect( rect );
+	view()->canvasWidget()->setViewportRect( rect );
 }
 
 void

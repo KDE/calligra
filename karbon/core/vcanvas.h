@@ -51,8 +51,19 @@ public:
 	KoPoint toContents( const KoPoint & ) const;
 	KoRect boundingBox() const;
 
+	/**
+	 * Adjusts the viewport top-left position. This doesnt change the zoom level.
+	 * Note that centerX and centerY is a value between 0.0 and 1.0, indicating a
+	 * percentage of the total width/height. Thus centerX/centerY indicates the
+	 * center of the viewport.
+	 */
 	void setViewport( double centerX, double centerY );
-	void setContentsRect( const KoRect & );
+
+	/**
+	 * Sets the canvas viewport rectangle to rect. The zoom level is adjusted for this, if
+	 * needed.
+	 */
+	void setViewportRect( const KoRect &rect );
 
 protected:
 	virtual void focusInEvent( QFocusEvent * );
