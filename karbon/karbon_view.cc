@@ -297,7 +297,7 @@ KarbonView::zoomChanged()
 void
 KarbonView::solidFillClicked()
 {
-	VMDlgSolidFill* m_solidFillDialog = new VMDlgSolidFill();
+	VMDlgSolidFill* m_solidFillDialog = new VMDlgSolidFill( m_part );
 	m_solidFillDialog->show();
 }
 

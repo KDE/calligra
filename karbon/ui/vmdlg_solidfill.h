@@ -12,12 +12,13 @@ class QSpinBox;
 class KHSSelector;
 class KGradientSelector;
 class KColorPatch;
+class KarbonPart;
 
 class VMDlgSolidFill : public QTabDialog
 {
 	Q_OBJECT
 public:
-	VMDlgSolidFill();
+	VMDlgSolidFill( KarbonPart *part );
 
 private:
 	QWidget* mRGBWidget;
@@ -31,10 +32,12 @@ private:
 	KGradientSelector* mSelector;
 	KColorPatch* mOldColor;
 	KColorPatch* mColorPreview;
+	KarbonPart *m_part;
 
 private slots:
 	void slotUpdateFromRGBSpinBoxes();
 	void slotUpdateFromHSVSpinBoxes();
+	void slotApplyButtonPressed();
 };
 
 #endif

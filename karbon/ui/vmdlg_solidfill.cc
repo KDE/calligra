@@ -2,6 +2,9 @@
    Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 */
+#include "karbon_part.h"
+#include "vmcmd_fill.h"
+#include "vcolor.h"
 
 #include <klocale.h>
 
@@ -14,7 +17,9 @@
 
 #include "vmdlg_solidfill.h"
 
-VMDlgSolidFill::VMDlgSolidFill() : QTabDialog ( 0L, 0, true )
+#include <kdebug.h>
+
+VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : QTabDialog ( 0L, 0, true ), m_part( part )
 {
 	setCaption(i18n( "Solid Fill" ));
 	setCancelButton();
@@ -69,6 +74,8 @@ VMDlgSolidFill::VMDlgSolidFill() : QTabDialog ( 0L, 0, true )
 	connect( mSaturation, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 	connect( mValue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 
+	connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( slotApplyButtonPressed() ) );
+
 	mainLayout->addWidget( cgroupbox, 1, 2);
 	mainLayout->setSpacing(2);
 	mainLayout->setMargin(5);
@@ -79,14 +86,24 @@ VMDlgSolidFill::VMDlgSolidFill() : QTabDialog ( 0L, 0, true )
 
 void VMDlgSolidFill::slotUpdateFromRGBSpinBoxes()
 {
-	mColorPreview->setColor( QColor( mRed->value(), mGreen->value(), mBlue->value(), QColor::Rgb) );
+	mColorPreview->setColor( QColor( mRed->value(), mGreen->value(), mBlue->value(), QColor::Rgb ) );
 	mColorPreview->update();
 }
 
 void VMDlgSolidFill::slotUpdateFromHSVSpinBoxes()
 {
-	mColorPreview->setColor( QColor( mHue->value(), mSaturation->value(), mValue->value(), QColor::Hsv) );
+	mColorPreview->setColor( QColor( mHue->value(), mSaturation->value(), mValue->value(), QColor::Hsv ) );
 	mColorPreview->update();
+}
+
+void VMDlgSolidFill::slotApplyButtonPressed()
+{
+	VColor color;
+	float r = mRed->value() / 255.0, g = mGreen->value() / 255.0, b = mBlue->value() / 255.0;
+	color.setValues( &r, &g, &b, 0L );
+
+	if( m_part )
+		m_part->addCommand( new VMCmdFill( m_part, color ), true );
 }
 
 #include "vmdlg_solidfill.moc"

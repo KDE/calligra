@@ -1,4 +1,7 @@
 INCLUDES = \
+	-I$(srcdir)/.. \
+	-I$(srcdir)/../core \
+	-I$(srcdir)/../tools \
 	$(all_includes)
 
 noinst_LTLIBRARIES = \
