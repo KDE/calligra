@@ -47,7 +47,8 @@ class MatrixElement : public BasicElement
     * Change font size
     */
    virtual void setNumericFont(int newValue); 
-      
+    
+   virtual void setChildrenNumber(int n);  
    /*
     * usually call by keyPressEvent()
     * if input is delete,backspace,arrows,home,end....
@@ -72,13 +73,13 @@ protected:
         
   /*
    * Note for "content" meaning:
-   * 0..2:cols
-   * 3..5:rows
-   * 6..8:mid row
-   * 9..11:space
-   * 12: M=midline-midline,U=midline-up,D=midline-down,C=midline-HalfMatrix
-   * 13: C,L,R Horiz align
-   * 14,15,16,17,18,19=Horiz,Vert,top,bottom,left,right border: L=Single Line
+   * 3..5:cols
+   * 6..8:rows
+   * 9..11:mid row
+   * 12..14:space
+   * 1: M=midline-midline,U=midline-up,D=midline-down,C=midline-HalfMatrix
+   * 2: C,L,R Horiz align
+   * 15,16,17,18,19,20=Horiz,Vert,top,bottom,left,right border: L=Single Line
    */
   QArray<QPoint> childPoint;
   

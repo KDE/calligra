@@ -6,7 +6,7 @@
   License:GPL
 */
 
-#define RECT
+//#define RECT
 #include <qrect.h> 
 #include <stdlib.h>
 #include "BasicElement.h" 
@@ -19,14 +19,22 @@ MatrixElement::MatrixElement(FormulaClass *Formula,BasicElement *Prev=0L,int Rel
   /*
     Central alligned noborder 3x3 Matrix
   */
-  content="003003001006MCNNNNNN";
-  childrenNumber=9;
+/*  content="MMC003003001006NNNNNN";
+  childrenNumber=12;
   child.resize(childrenNumber);
   childPoint.resize(childrenNumber);
-}
+*/}
 
 MatrixElement::~MatrixElement()
 {
+}
+
+void MatrixElement::setChildrenNumber(int n)
+{
+  childrenNumber=n;
+  child.resize(childrenNumber);
+  childPoint.resize(childrenNumber);
+
 }
 
 void MatrixElement::draw(QPoint drawPoint,int resolution=72)
@@ -38,11 +46,8 @@ void MatrixElement::draw(QPoint drawPoint,int resolution=72)
   int x,y; 
   x=drawPoint.x();
   y=drawPoint.y();
-  int rows=atoi(content.mid(0,3));
-  int cols=atoi(content.mid(3,3));
- /* warning("Sapce %i",space);
-  space+=numericFont/32;
-  */
+  int rows=atoi(content.mid(3,3));
+  int cols=atoi(content.mid(6,3));
   if( beActive )
     pen->setPen(red);
  /*
@@ -50,7 +55,7 @@ void MatrixElement::draw(QPoint drawPoint,int resolution=72)
  */
  
   int ofs=(numericFont/32); 
-  warning("Array");
+  
   /*
 if (content[0]=='F') {
   QPointArray points(5);  
@@ -66,10 +71,10 @@ if (content[0]=='F') {
     pen->setPen(blue);
   int r,c;
   for(r=0;r<rows;r++)
-   for(c=0;c<cols;c++) {
-     warning("R:%i C:%i N:%i",r,c,c+r*cols);
-     child[c+r*cols]->draw(QPoint(x,y)+childPoint[c+r*cols],resolution);
-}
+   for(c=0;c<cols;c++) 
+    {
+     child[c+r*cols]->draw(QPoint(x+3,y)+childPoint[c+r*cols],resolution);
+    }
   myArea=globalSize;
   myArea.moveBy(x,y);
 
@@ -90,33 +95,34 @@ void MatrixElement::checkSize()
 {
 //warning("M %p",this);
 QRect nextDimension; 
-  int rows=atoi(content.mid(0,3)); //Number of rows
-  int cols=atoi(content.mid(3,3)); //Number of columns
-  int midr=atoi(content.mid(6,3)); //Mid row
-  int space=atoi(content.mid(9,3)); //Space between elments
-  warning("Rows:%i Cols:%i MidR:%i Space:%i",rows,cols,midr,space);
+  int rows=atoi(content.mid(3,3)); //Number of rows
+  int cols=atoi(content.mid(6,3)); //Number of columns
+  int midr=atoi(content.mid(9,3)); //Mid row
+  int space=atoi(content.mid(12,3)); //Space between elments
+ warning("Rows:%i Cols:%i MidR:%i Space:%i",rows,cols,midr,space);
 
-if (next!=0L)
-{
-  next->checkSize();
-  nextDimension=next->getSize();
-}
+ if (next!=0L)
+  {
+    next->checkSize();
+    nextDimension=next->getSize();
+  }
 
-for(int chi=0;chi<rows*cols;chi++)
- child[chi]->checkSize();           //check size of every child
+ for(int chi=0;chi<rows*cols;chi++)
+  child[chi]->checkSize();           //check size of every child
  
  int vspace=space,hspace=space;               //real spaces (change if there are borders)
  int ofs=numericFont/32;
- if(content[12]=='M') midr=0;
- if(content[14]=='L') hspace+=ofs;
- if(content[15]=='L') vspace+=ofs; 
-
+ if(content[1]=='C') midr=0;
+ if(content[15]=='L') hspace+=ofs;
+ if(content[16]=='L') vspace+=ofs; 
+ int correction=0;
  QRect sizeC;
  QRect sizeR;
  QRect sizeE;
  int r,c,e;
  int downy=0;  
  sizeC.setRect(0,0,1,1);
+ 
  for(r=0;r<rows;r++)
   {
    sizeR.setRect(0,0,1,1);
@@ -125,13 +131,12 @@ for(int chi=0;chi<rows*cols;chi++)
      e=r*cols+c;
      sizeE=child[e]->getSize();
      sizeR=sizeR.unite(sizeE);
-     warning("ROW-R:%i C:%i N:%i",r,c,c+r*cols);
     }
    
    if(r<=midr) 
     {
-     warning("r%i<=midr%i",r,midr);
      downy=-sizeC.bottom()+sizeR.top()-vspace;
+     if (r==0) downy=sizeR.top();
      sizeC.moveBy(0,downy);              
      for(c=0;c<cols;c++)
       {
@@ -144,29 +149,47 @@ for(int chi=0;chi<rows*cols;chi++)
 	childPoint[c]+=QPoint(0,downy);
       }                  
     } 
-/*  
-   if(r=mdir)
+  
+   if(r==midr)
     {
-     downy=sizeR.bottom();
+
+    warning("MIDROW");
+     if(content[1]=='U')
+       correction=-sizeR.top();
+     if(content[1]=='C')
+       correction=-sizeR.top();
+     if(content[1]=='D')
+       correction=-sizeR.bottom();
+
     }
-  */
+  
    if(r>midr) 
     {
-     warning("r%i>midr%i",r,midr);
      downy=sizeC.bottom()-sizeR.top()+vspace;
      sizeR.moveBy(0,downy);              
      for(c=0;c<cols;c++)
       {
         e=r*cols+c;
-	warning("%i,%i:%i 0,%i",r,c,e,downy);
 	childPoint[e]=QPoint(0,downy);
       }               
     } 
-    sizeC=sizeC.unite(sizeR);
-        
+   sizeC=sizeC.unite(sizeR);
   }
-  familySize=sizeC;
-   sizeC.setRect(0,0,1,1);
+
+ familySize=sizeC;
+// familySize.setBottom(familySize.bottom()+vspace);
+ familySize.moveBy(0,correction); 
+
+ for(c=0;c<cols*rows;c++)
+  childPoint[c]+=QPoint(0,correction);
+
+ if(content[1]=='C')
+  correction=-familySize.height()/2; 
+ familySize.moveBy(0,correction);
+ 
+ for(c=0;c<cols*rows;c++)
+  childPoint[c]+=QPoint(0,correction);
+
 /*
 And now columns!!
 */ 
@@ -189,9 +212,9 @@ And now columns!!
     {
      e=c+r*cols;
      x=sizeC.width()-child[e]->getSize().width();
-     if (content[13]=='C')
+     if (content[2]=='C')
       x/=2;
-     if (content[13]=='L')
+     if (content[2]=='L')
       x=0;
      childPoint[e]=QPoint(x+right,childPoint[e].y());
     }

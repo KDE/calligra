@@ -68,8 +68,8 @@ if (content[0]=='F') {
   if(offsetX>0) x0=offsetX;
   if(offsetX<0) x1=-offsetX; 
 
-  child[0]->draw(QPoint(x+x0+2,y+y0),resolution);
-  child[1]->draw(QPoint(x+x1+2,y+y1),resolution);
+  child[0]->draw(QPoint(x+x0+3,y+y0),resolution);
+  child[1]->draw(QPoint(x+x1+3,y+y1),resolution);
   myArea=globalSize;
   myArea.moveBy(x,y);
 

@@ -625,17 +625,19 @@ void KFormulaView::addBracket()
 void KFormulaView::addMatrix()
 {
     debug("adding Matrix");
-    m_pDoc->addMatrixElement("003003001006CCNNNNNN");
+    m_pDoc->addMatrixElement("MCC004003001006NNNNNN");
 }
 
 void KFormulaView::addIntegral()
 {
     debug("##adding Integral");
+    m_pDoc->addMatrixElement("MCL004003001006NNNNNN");
 }
 
 void KFormulaView::addSymbol()
 {
     debug("##adding Symbol");
+m_pDoc->addMatrixElement("MCR004003001006NNNNNN");
 }
 
 void KFormulaView::reduce()

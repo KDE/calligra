@@ -74,9 +74,8 @@ protected:
    * Note for "content" meaning:
    * content[0]  'F'=with line 'V'= no-line
    * content[1](vertAlign) 'U'=up 'M'=mid 'L'=low
-   * content[2](numerator HorizAlign) 'L'=left 'C'=center 'R'=right
-   * content[3](denominator ")
-   * content+4 space between num & den
+   * content[2]( HorizAlign) 'L'=left 'C'=center 'R'=right
+   * content+3 space between num & den
    */
   int offsetY;
   int offsetX;   

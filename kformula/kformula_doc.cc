@@ -180,6 +180,9 @@ void KFormulaDocument::addFractionElement(QString cont)
 
 void KFormulaDocument::addMatrixElement(QString cont)
 {   
+  int rows=atoi(cont.mid(3,3));
+  int cols=atoi(cont.mid(6,3));
+
   BasicElement *nextElement;
   BasicElement *newElement;
    if(theActiveElement==0L)
@@ -203,16 +206,9 @@ void KFormulaDocument::addMatrixElement(QString cont)
     newElement->setContent(cont);	 
     setActiveElement(newElement);  
     //RootElement need a child[0] i.e. numer
-    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,13),9);	 
-    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,12),8);	 
-    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,11),7);	 
-    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,10),6);	 
-    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,9),5);	 
-    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,8),4);	 
-    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,7),3);	 
-    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,6),2);	 
-    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,5),1);	 
-    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,4),0);	 
+    ((MatrixElement *)(theActiveElement))->setChildrenNumber(rows*cols);
+    for (int i=rows*cols-1;i>=0;i--)
+     theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,i+4),i);	 
     setActiveElement(newElement); //I prefere to AutoActivate numerator 
     emitModified();
     

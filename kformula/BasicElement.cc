@@ -74,7 +74,7 @@ BasicElement *BasicElement::isInside(QPoint point)
 
 void BasicElement::draw(QPoint drawPoint,int resolution=72)
 {
-warning("Basic Drawing");
+
   QPainter *pen;
   pen=formula->painter();
   //  QRect globalArea;
