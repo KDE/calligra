@@ -123,7 +123,7 @@ KoTextParagCommand::KoTextParagCommand( QTextDocument *d, int fParag, int lParag
 
 QTextCursor * KoTextParagCommand::execute( QTextCursor *c )
 {
-    //kdDebug() << "KoTextParagCommand::execute" << endl;
+    kdDebug() << "KoTextParagCommand::execute" << endl;
     KoTextParag *p = static_cast<KoTextParag *>(doc->paragAt( firstParag ));
     if ( !p )
     {
@@ -141,7 +141,7 @@ QTextCursor * KoTextParagCommand::execute( QTextCursor *c )
             break;
         p = static_cast<KoTextParag *>(p->next());
     }
-    //kdDebug() << "KoTextParagCommand::execute done" << endl;
+    kdDebug() << "KoTextParagCommand::execute done" << endl;
     // Set cursor to end of selection. Like in QTextFormatCommand::[un]execute...
     c->setParag( p );
     c->setIndex( p->length()-1 );
@@ -150,6 +150,7 @@ QTextCursor * KoTextParagCommand::execute( QTextCursor *c )
 
 QTextCursor * KoTextParagCommand::unexecute( QTextCursor *c )
 {
+    kdDebug()<<"unexecute( QTextCursor *c )*********************\n";
     KoTextParag *p = static_cast<KoTextParag *>(doc->paragAt( firstParag ));
     if ( !p )
     {
@@ -177,6 +178,7 @@ QTextCursor * KoTextParagCommand::unexecute( QTextCursor *c )
     // Set cursor to end of selection. Like in QTextFormatCommand::[un]execute...
     c->setParag( p );
     c->setIndex( p->length()-1 );
+    kdDebug()<<"Fin*****************************************\n";
     return c;
 }
 
@@ -318,14 +320,19 @@ void KoTextFormatCommand::resizeCustomItems()
 
 QTextCursor *KoTextFormatCommand::execute( QTextCursor *c )
 {
+    kdDebug()<<"KoTextFormatCommand::execute( QTextCursor *c )*********\n";
     c = QTextFormatCommand::execute( c );
     resizeCustomItems();
+    kdDebug()<<"soritz*************************\n";
     return c;
 }
 
 QTextCursor *KoTextFormatCommand::unexecute( QTextCursor *c )
 {
+    kdDebug()<<"KoTextFormatCommand::unexecute( QTextCursor *c )************\n";
     c = QTextFormatCommand::unexecute( c );
+    kdDebug()<<"avant resizeCustomItems****************\n";
     resizeCustomItems();
+    kdDebug()<<"Sortiz vxvwxvwxv *************************\n";
     return c;
 }

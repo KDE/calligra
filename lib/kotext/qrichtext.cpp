@@ -313,7 +313,10 @@ QTextCursor *QTextFormatCommand::unexecute( QTextCursor *c )
 
     int idx = startIndex;
     int fIndex = 0;
+    if( !oldFormats.isEmpty())
+    {
     for ( ;; ) {
+
 	if ( oldFormats.at( fIndex ).c == '\n' ) {
 	    if ( idx > 0 ) {
 		if ( idx < sp->length() && fIndex > 0 )
@@ -326,7 +329,9 @@ QTextCursor *QTextFormatCommand::unexecute( QTextCursor *c )
 	    fIndex++;
 	}
 	if ( oldFormats.at( fIndex ).format() )
+        {
 	    sp->setFormat( idx, 1, oldFormats.at( fIndex ).format() );
+        }
 	idx++;
 	fIndex++;
 	if ( fIndex >= (int)oldFormats.size() )
@@ -337,8 +342,9 @@ QTextCursor *QTextFormatCommand::unexecute( QTextCursor *c )
 	    sp = sp->next();
 	    idx = 0;
 	}
-    }
 
+    }
+    }
     QTextCursor end( doc );
     end.setParag( ep );
     end.setIndex( endIndex );
