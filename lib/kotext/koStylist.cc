@@ -255,9 +255,10 @@ void KoStyleManager::updateGUI() {
 
     m_nameString->setText(m_currentStyle->translatedName());
 
-    kdDebug() << "KoStyleManager::updateGUI updating combo to " << m_currentStyle->followingStyle()->name() << endl;
+    QString followingName = m_currentStyle->followingStyle() ? m_currentStyle->followingStyle()->translatedName() : QString::null;
+    kdDebug() << "KoStyleManager::updateGUI updating combo to " << followingName << endl;
     for ( int i = 0; i < m_styleCombo->count(); i++ ) {
-        if ( m_styleCombo->text( i ) == m_currentStyle->followingStyle()->translatedName() ) {
+        if ( m_styleCombo->text( i ) == followingName ) {
             m_styleCombo->setCurrentItem( i );
             kdDebug() << "found at " << i << endl;
             break;
