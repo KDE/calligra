@@ -206,6 +206,7 @@ public:
     KPObject *getSelectedObj();
 
     int getPenBrushFlags();
+    bool getEditMode() { return editMode; }
 
 public slots:
     void exitEditMode();

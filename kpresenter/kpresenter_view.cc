@@ -1113,10 +1113,8 @@ void KPresenterView::extraCreateTemplate()
     int i = getCurrPgNum() - 1;
     //todo fix me
     m_canvas->drawPageInPix( pix, i );
-
-    QWMatrix m;
-    m.scale( 60.0 / (float)pix.width(), 45.0 / (float)pix.height() );
-    pix = pix.xForm( m );
+    QImage _img( pix.convertToImage().smoothScale( 60, 45, QImage::ScaleFree ) );
+    pix.convertFromImage( _img );
 
     KTempFile tempFile( QString::null, ".kpt" );
     tempFile.setAutoDelete( true );

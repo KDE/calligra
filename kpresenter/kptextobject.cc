@@ -271,21 +271,27 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     pen2.setWidth(_zoomHandler->zoomItX(pen.width()));
     _painter->setPen( pen2 );
 
-    _painter->setPen( pen );
-    _painter->setBrush( brush );
-
-    // Handle the rotation, draw the background/border, then call drawText()
-
-    if ( fillType == FT_BRUSH || !gradient ) {
+    if ( !drawingShadow ) {
+        // Handle the rotation, draw the background/border, then call drawText()
+        int penw = pen.width() / 2;
+        if ( fillType == FT_BRUSH || !gradient ) {
+            _painter->setBrush( brush );
+        }
+        else {
+            QSize size( _zoomHandler->zoomSize( ext ) );
+            gradient->setSize( size );
+            _painter->drawPixmap( penw, penw, gradient->pixmap(), 0, 0,
+                                  _zoomHandler->zoomItX( ext.width() - 2 * penw ),
+                                  _zoomHandler->zoomItY( ext.height() - 2 * penw ) );
+        }
         /// #### Port this to KoBorder, see e.g. kword/kwframe.cc:590
         // (so that the border gets drawn OUTSIDE of the object area)
-        _painter->drawRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX( ow - 2 * pw), _zoomHandler->zoomItY( oh - 2 * pw) );
+        _painter->drawRect( penw, penw, _zoomHandler->zoomItX( ext.width() - 2 * penw),
+                            _zoomHandler->zoomItY( ext.height() - 2 * penw) );
     }
-    else if ( !drawingShadow ) {
-        QSize size( _zoomHandler->zoomSize( ext ) );
-        gradient->setSize( size );
-        _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), gradient->pixmap(), 0, 0, _zoomHandler->zoomItX( ow - 2 * pw ), _zoomHandler->zoomItY( oh - 2 * pw ) );
-    }
+    else
+        _painter->setBrush( Qt::NoBrush );
+
     drawText( _painter, _zoomHandler, onlyChanged, cursor, resetChanged );
     _painter->restore();
 
@@ -293,7 +299,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     // And now draw the border for text objects.
     // When they are drawn outside of the object, this can be moved to the standard paint() method,
     // so that we don't have to do it while editing the object, maybe.
-    if ( getDrawEditRect() && getPen().style() == Qt::NoPen )
+    if ( m_doc->getKPresenterView()->getCanvas()->getEditMode() && !drawingShadow && getDrawEditRect() && getPen().style() == Qt::NoPen )
     {
         _painter->save();
 

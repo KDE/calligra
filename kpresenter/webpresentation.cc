@@ -42,6 +42,7 @@
 #include <qheader.h>
 #include <qwmatrix.h>
 #include <qtextcodec.h>
+#include <qregexp.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -200,8 +201,8 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
 {
     if ( slideInfos.isEmpty() )
         return;
-    QRect rect=doc->pageList().at(slideInfos[0].pageNumber)->getZoomPageRect();
-    QPixmap pix( QSize( rect.width(), rect.height() ) );
+    QRect rect = doc->pageList().at(slideInfos[0].pageNumber)->getZoomPageRect();
+    QPixmap pix( rect.size() );
     QString filename;
     QString format = imageFormat( imgFormat );
     int p,dpiX,dpiY;
@@ -209,13 +210,15 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
     view->unZoomDocument(dpiX,dpiY);
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
         int pgNum = slideInfos[i].pageNumber;
-        pix.resize( doc->pageList().at(pgNum)->getZoomPageRect().size() );
+        QRect zoomPgRect = doc->pageList().at(pgNum)->getZoomPageRect();
+        pix.resize( zoomPgRect.size() );
         pix.fill( Qt::white );
         view->getCanvas()->drawPageInPix( pix, pgNum );
         filename = QString( "%1/pics/slide_%2.%3" ).arg( path ).arg( i + 1 ).arg( format );
         if ( zoom != 100 ) {
-            int _w = (int)( (double)rect.width() * ( (double)zoom / 100.0 ) );
-            int _h = (int)( (double)rect.height() * ( (double)zoom / 100.0 ) );
+            KoRect pgRect = doc->pageList().at(pgNum)->getPageRect();
+            int _w = (int)( pgRect.width() * ( (double)zoom / 100.0 ) );
+            int _h = (int)( pgRect.height() * ( (double)zoom / 100.0 ) );
             QImage _img( pix.convertToImage().smoothScale( _w, _h, QImage::ScaleFree ) );
             pix.convertFromImage( _img );
         }
@@ -313,9 +316,14 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         QString note = _tmpList.at(i)->noteText();
         if ( !note.isEmpty() ) {
             html += QString( "  <B>%1</B>\n" ).arg( i18n( "Note" ) );
-            html += "  <PRE>\n";
+            html += "  <BLOCKQUOTE>\n";
+            html += "  <P>\n";
+
+            note.replace( QRegExp( "\n" ), QString::fromLatin1( "<BR>\n" ) );
             html += note;
-            html += "  </PRE>\n";
+
+            html += "  </P>\n";
+            html += "  </BLOCKQUOTE>\n";
         }
 
         html += "  <CENTER>\n";
