@@ -1,0 +1,10 @@
+<!DOCTYPE QConfig ><QConfig name="KGraph">
+<MenuBar>
+ <Menu name="Edit"><text>Edit</text>
+  <Action name="editcut"/>
+ </Menu>
+</MenuBar>
+<ToolBar>
+  <Action name="editcut"/>
+</ToolBar>
+</QConfig>

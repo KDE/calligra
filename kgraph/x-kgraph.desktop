@@ -1,0 +1,8 @@
+# KDE Config File
+[Desktop Entry]
+MimeType=application/x-kgraph
+Comment=KGraph - Graphs for Engineers
+Comment[de]=KGraph - Diagramme für Ingenieure
+DefaultApp=KGraph
+Type=MimeType
+Patterns=*.kgr;
