@@ -149,6 +149,9 @@ class KexiMainWindowImpl::Private
 		//data menu
 		KAction *action_data_save_row;
 
+		//settings menu
+		KAction *action_configure;
+
 		//for dock windows
 		KMdiToolViewAccessor* navToolWindow;
 		KMdiToolViewAccessor* propEditorToolWindow;
@@ -439,7 +442,7 @@ KexiMainWindowImpl::initActions()
 	 actionCollection(), "options_show_contexthelp");
 #endif
 
-	action =  KStdAction::preferences(this, SLOT(slotShowSettings()), actionCollection());
+	d->action_configure = KStdAction::preferences(this, SLOT(slotShowSettings()), actionCollection());
 	action->setWhatsThis(i18n("Lets you configure Kexi."));
 
 	//HELP MENU
@@ -1257,6 +1260,7 @@ KexiMainWindowImpl::childClosed(KMdiChildView *v)
 void
 KexiMainWindowImpl::slotShowSettings()
 {
+	KEXI_UNFINISHED(d->action_configure->text());
 //TODO	KexiSettings s(this);
 //	s.exec();
 }
