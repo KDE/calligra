@@ -455,7 +455,7 @@ QString Counter::text( const KWTextParag *paragraph )
     {
         missingParents = m_depth;
     }
-    while ( missingParents )
+    while ( missingParents > 0 )
     {
         // Each missing level adds a "0." prefix.
         tmp.prepend( "0." );
