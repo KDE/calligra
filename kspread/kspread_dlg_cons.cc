@@ -24,6 +24,9 @@
 #include "kspread_util.h"
 #include "kspread_table.h"
 #include "kspread_global.h"
+#include "kspread_interpreter.h"
+
+#include <koscript.h>
 
 #include <kmessagebox.h>
 #include <qlayout.h>
@@ -51,11 +54,14 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
   m_pFunction = new QComboBox( this );
   grid1->addWidget(m_pFunction,1,0);
 
-  m_idSumme = 0;
-  m_pFunction->insertItem( i18n("sum"), m_idSumme );
-
-  m_idAverage = 1;
-  m_pFunction->insertItem( i18n("average"), m_idAverage );
+  m_pFunction->insertItem( i18n("Sum"), Sum );
+  m_pFunction->insertItem( i18n("Average"), Average );
+  m_pFunction->insertItem( i18n("Count"), Count );
+  m_pFunction->insertItem( i18n("Max"), Max );
+  m_pFunction->insertItem( i18n("Min"), Min );
+  m_pFunction->insertItem( i18n("Product"), Product );
+  m_pFunction->insertItem( i18n("Standard Deviation"), StdDev );
+  m_pFunction->insertItem( i18n("Variance"), Var );
 
   tmpQLabel = new QLabel( this, "Label_1" );
   tmpQLabel->setText( i18n("Reference") );
@@ -105,7 +111,6 @@ KSpreadConsolidate::~KSpreadConsolidate()
     kdDebug(36001)<<"KSpreadConsolidate::~KSpreadConsolidate()\n";
 }
 
-enum Function { F_SUM, F_AVERAGE };
 enum Description { D_ROW, D_COL, D_NONE, D_BOTH };
 
 struct st_cell
@@ -126,9 +131,20 @@ void KSpreadConsolidate::slotOk()
   int dx = m_pView->canvasWidget()->markerColumn();
   int dy = m_pView->canvasWidget()->markerRow();
 
-  Function f = F_SUM;
-  if ( m_pFunction->currentItem() == m_idAverage )
-    f = F_AVERAGE;
+  QString function;
+
+  switch( m_pFunction->currentItem() )
+  {
+    case Sum:      function = "SUM"; break;
+    case Average:  function = "AVERAGE"; break;
+    case Count:    function = "COUNT"; break;
+    case Max:      function = "MAX"; break;
+    case Min:      function = "MIN"; break;
+    case Product:  function = "PRODUCT"; break;
+    case StdDev:   function = "STDDEV"; break;
+    case Var:      function = "VARIANCE"; break;
+    default: break; // bad bad !
+  }
 
   QStringList r = refs();
   QValueList<KSpreadRange> ranges;
@@ -221,56 +237,25 @@ void KSpreadConsolidate::slotOk()
     {
       for( int y = 0; y < h; y++ )
       {
-	double dbl = 0.0;
         bool novalue=true;
-        QString formel;
-	if ( f == F_AVERAGE )
-	  formel = "=AVERAGE(";
-	else if ( f == F_SUM )
-	  formel = "=SUM(";
-	else
-	  Q_ASSERT( 0 );
-
+        QString formula = "=" + function + "(";
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
         {
-	  // Calculate value directly
 	  KSpreadTable *t = (*it).table;
 	  assert( t );
 	  KSpreadCell *c = t->cellAt( x + (*it).range.left(), y + (*it).range.top() );
           if(!c->isDefault())
                 novalue=false;
-          if ( c && c->isNumeric() )
-	  {
-	    if ( f == F_SUM || f == F_AVERAGE )
-	      dbl += c->valueDouble();
-	    else
-	      Q_ASSERT( 0 );
-	  }
-
-	  // Built formula
-	  if ( f == F_SUM || f == F_AVERAGE )
-	  {
-	    if ( it != ranges.begin() )
-	      formel += ";";
-	    formel += (*it).tableName;
-	    formel += "!";
-	    formel += util_cellName( x + (*it).range.left(), y + (*it).range.top() );
-	  }
-	  else
-	    Q_ASSERT( 0 );
+	  if ( it != ranges.begin() ) formula += ";";
+	  formula += (*it).tableName + "!";
+	  formula += util_cellName( x + (*it).range.left(), y + (*it).range.top() );
 	}
+	formula += ")";
 
-	formel += ")";
-	if ( f == F_AVERAGE )
-	{
-	  dbl /= (double)h;
-	}
-
-	if ( m_pCopy->isChecked() )
-	  formel.sprintf( "%f", dbl );
         if(!novalue)
-	  table->setText( dy + y, dx + x, formel );
+	  table->setText( dy + y, dx + x, 
+            m_pCopy->isChecked() ? evaluate( formula, table ) : formula );
       }
     }
   }
@@ -325,15 +310,7 @@ void KSpreadConsolidate::slotOk()
       for( int y = 1; y < h; ++y )
       {
 	int count = 0;
-	double dbl = 0.0;
-	QString formel;
-	if ( f == F_AVERAGE )
-	  formel = "=AVERAGE(";
-	else if ( f == F_SUM )
-	  formel = "=SUM(";
-	else
-	  Q_ASSERT( 0 );
-
+        QString formula = "=" + function + "(";
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
         {
@@ -348,39 +325,17 @@ void KSpreadConsolidate::slotOk()
 	      {
 		KSpreadCell *c2 = t->cellAt( i, y + (*it).range.top() );
 		count++;
-		// Calculate value
-		if ( c2 && c2->isNumeric() )
-		{
-		  if ( f == F_SUM || f == F_AVERAGE )
-		    dbl += c2->valueDouble();
-		  else
-		    Q_ASSERT( 0 );
-		}
-		// Create formula
-		if ( f == F_SUM || f == F_AVERAGE )
-		{
-		  if ( it != ranges.begin() )
-		    formel += ";";
-		  formel += (*it).tableName;
-		  formel += "!";
-		  formel += util_cellName( i, y + (*it).range.top() );
-		}
-		else
-		  Q_ASSERT( 0 );
+		if ( it != ranges.begin() ) formula += ";";
+		formula += (*it).tableName + "!";
+		formula += util_cellName( i, y + (*it).range.top() );
 	      }
 	    }
 	  }
 	}
+	formula += ")";
 
-	formel += ")";
-	if ( f == F_AVERAGE )
-	{
-	  dbl /= (double)count;
-	}
-
-	if ( m_pCopy->isChecked() )
-	  formel.sprintf( "%f", dbl );
-	table->setText( dy + y, dx + x, formel );
+	table->setText( dy + y, dx + x, 
+          m_pCopy->isChecked() ? evaluate( formula, table ) : formula );
       }
     }
   }
@@ -434,15 +389,7 @@ void KSpreadConsolidate::slotOk()
       for( int x = 1; x < w; ++x )
       {
 	int count = 0;
-	double dbl = 0.0;
-	QString formel;
-	if ( f == F_AVERAGE )
-	  formel = "=AVERAGE(";
-	else if ( f == F_SUM )
-	  formel = "=SUM(";
-	else
-	  Q_ASSERT( 0 );
-
+        QString formula = "=" + function + "(";
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
         {
@@ -458,39 +405,18 @@ void KSpreadConsolidate::slotOk()
 	      {
 		KSpreadCell *c2 = t->cellAt( x + (*it).range.left(), i );
 		count++;
-		// Calculate value
-		if ( c2 && c2->isNumeric() )
-		{
-		  if ( f == F_SUM || f == F_AVERAGE )
-		    dbl += c2->valueDouble();
-		  else
-		    Q_ASSERT( 0 );
-		}
-		// Create formula
-		if ( f == F_SUM || f == F_AVERAGE )
-		{
-		  if ( it != ranges.begin() )
-		    formel += ";";
-		  formel += (*it).tableName;
-		  formel += "!";
-		  formel += util_cellName( x + (*it).range.left(), i );
-		}
-		else
-		  Q_ASSERT( 0 );
+		if ( it != ranges.begin() ) formula += ";";
+		formula += (*it).tableName + "!";
+		formula += util_cellName( i, y + (*it).range.top() );
 	      }
 	    }
 	  }
 	}
 
-	formel += ")";
-	if ( f == F_AVERAGE )
-	{
-	  dbl /= (double)count;
-	}
+	formula += ")";
 
-	if ( m_pCopy->isChecked() )
-	  formel.sprintf( "%f", dbl );
-	table->setText( dy + y, dx + x, formel );
+	table->setText( dy + y, dx + x, 
+          m_pCopy->isChecked() ? evaluate( formula, table ) : formula );
       }
     }
   }
@@ -613,49 +539,22 @@ void KSpreadConsolidate::slotOk()
       for( ; xdesc != cols.end(); ++xdesc, y++ )
       {
 	int count = 0;
-	double dbl = 0.0;
-	QString formel;
-	if ( f == F_AVERAGE )
-	  formel = "=AVERAGE(";
-	else if ( f == F_SUM )
-	  formel = "=SUM(";
-	else
-	  Q_ASSERT( 0 );
-
+        QString formula = "=" + function + "(";
 	QValueList<st_cell>::Iterator lit = lst.begin();
 	for( ; lit != lst.end(); ++lit )
 	{
 	  if ( (*lit).xdesc == *xdesc && (*lit).ydesc == *ydesc )
 	  {
 	    count++;
-	    // Calculate value
-	    if ( f == F_SUM || f == F_AVERAGE )
-	      dbl += (*lit).cell->valueDouble();
-	    else
-	      Q_ASSERT( 0 );
-	    // Create formula
-	    if ( f == F_SUM || f == F_AVERAGE )
-	    {
-	      if ( it != ranges.begin() )
-                formel += ";";
-	      formel += (*lit).table;
-	      formel += "!";
-	      formel += util_cellName( (*lit).x, (*lit).y );
-	    }
-	    else
-	      Q_ASSERT( 0 );
+  	    if ( it != ranges.begin() ) formula += ";";
+	    formula += (*it).tableName + "!";
+	    formula += util_cellName( i, y + (*it).range.top() );
 	  }
 	}
+	formula += ")";
 
-	formel += ")";
-	if ( f == F_AVERAGE )
-	{
-	  dbl /= (double)count;
-	}
-
-	if ( m_pCopy->isChecked() )
-	  formel.sprintf( "%f", dbl );
-	table->setText( dy + y, dx + x, formel );
+	table->setText( dy + y, dx + x, 
+          m_pCopy->isChecked() ? evaluate( formula, table ) : formula );
       }
     }
   }
@@ -733,6 +632,33 @@ void KSpreadConsolidate::slotReturnPressed()
 void KSpreadConsolidate::closeEvent ( QCloseEvent * )
 {
     delete this;
+}
+
+QString KSpreadConsolidate::evaluate( const QString& formula, KSpreadTable* table )
+{
+  QString result = "###";
+
+  kdDebug(36001)<<"KSpreadConsolidate::evaluate " << formula << endl;
+ 
+  KSContext context;
+  QPtrList<KSpreadDependency> lst;
+
+  // parse and evaluate formula
+  KSParseNode* code = table->doc()->interpreter()->parse( context, 
+    table, formula, lst );
+  if( !code ) return result;
+
+  context = table->doc()->context();
+  if ( !table->doc()->interpreter()->evaluate( context, code, table ) )
+    return result;
+
+  if ( context.value()->type() == KSValue::DoubleType )
+     return QString::number( context.value()->doubleValue() );
+
+  if ( context.value()->type() == KSValue::IntType )
+     return QString::number( context.value()->intValue() );
+
+  return result;
 }
 
 #include "kspread_dlg_cons.moc"

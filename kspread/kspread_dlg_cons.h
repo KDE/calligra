@@ -62,9 +62,10 @@ protected:
   QCheckBox* m_pRow;
   QCheckBox* m_pCol;
   QCheckBox* m_pCopy;
-  
-  int m_idSumme;
-  int m_idAverage;
+
+  QString evaluate( const QString& formula, KSpreadTable* table );
+
+  enum { Sum = 0, Average, Count, Max, Min, Product, StdDev, Var };
 };
 
 #endif
