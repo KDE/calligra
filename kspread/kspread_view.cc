@@ -4596,7 +4596,11 @@ void KSpreadView::setZoom( int zoom, bool /*updateViews*/ )
   m_pDoc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
   KoView::setZoom( m_pDoc->zoomedResolutionY() /* KoView only supports one zoom */ );
 
-  m_pTable->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
+  Q_ASSERT(m_pTable);
+
+  if (m_pTable)
+    m_pTable->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
+
   m_pDoc->refreshInterface();
 
   m_pDoc->emitEndOperation();
