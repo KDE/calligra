@@ -1329,27 +1329,35 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
     {
         variableList = view->kPresenterDoc()->getVariableCollection()->variableActionList();
     }
-
-
-    actionList = dataToolActionList(view->kPresenterDoc()->instance());
-    //kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
-    if(refLink().isNull())
+    if( variableList.count()>0)
     {
-        view->plugActionList( "datatools", actionList );
         view->plugActionList( "variable_action", variableList );
-        QPopupMenu * popup = view->popupMenu("text_popup");
+        QPopupMenu * popup = view->popupMenu("variable_popup");
         Q_ASSERT(popup);
         if (popup)
             popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
+
     }
     else
     {
-        view->plugActionList( "datatools_link", actionList );
-        view->plugActionList( "variable_action", variableList );
-        QPopupMenu * popup = view->popupMenu("text_popup_link");
-        Q_ASSERT(popup);
-        if (popup)
-            popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
+        actionList = dataToolActionList(view->kPresenterDoc()->instance());
+        //kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
+        if(refLink().isNull())
+        {
+            view->plugActionList( "datatools", actionList );
+            QPopupMenu * popup = view->popupMenu("text_popup");
+            Q_ASSERT(popup);
+            if (popup)
+                popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
+        }
+        else
+        {
+            view->plugActionList( "datatools_link", actionList );
+            QPopupMenu * popup = view->popupMenu("text_popup_link");
+            Q_ASSERT(popup);
+            if (popup)
+                popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
+        }
     }
 }
 
