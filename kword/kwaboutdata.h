@@ -32,7 +32,7 @@ static const char* KWORD_VERSION="1.2 RC1";
 KAboutData * newKWordAboutData()
 {
     KAboutData * aboutData=new KAboutData( "kword", I18N_NOOP("KWord"),
-                                           KWORD_VERSION, KWORD_DESCRIPTION, KAboutData::License_GPL,
+                                           KWORD_VERSION, KWORD_DESCRIPTION, KAboutData::License_LGPL,
                                            I18N_NOOP("(c) 1998-2002, The KWord Team"), 0,
 					   "http://www.koffice.org/kword/" );
     aboutData->addAuthor("Reginald Stadlbauer", 0, "reggie@kde.org");
