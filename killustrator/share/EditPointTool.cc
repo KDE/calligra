@@ -210,9 +210,12 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
     else if (mode == RemovePoint) {
       bool removable = true;
       if (pointIdx != -1 /*&& obj->inherits ("GPolyline")*/) {
-        if (obj->isA ("GBezier"))
-          // we cannot remove control points of bezier curves
-          removable = ((GBezier *) obj)->isEndPoint (pointIdx);
+         //removing the only point of a oval is not good, Alex
+         if (obj->isA("GOval"))
+            removable=false;
+         else if (obj->isA ("GBezier"))
+            // we cannot remove control points of bezier curves
+            removable = ((GBezier *) obj)->isEndPoint (pointIdx);
 
         if (removable) {
           GPolyline *pline = (GPolyline *) obj;

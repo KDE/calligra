@@ -22,10 +22,12 @@
 */
 
 #include <GPolyline.h>
+#include <GPolygon.h>
 
 #include <qdom.h>
 #include <qpainter.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <GCurve.h>
 #include <Arrow.h>
@@ -186,12 +188,20 @@ void GPolyline::setPoint (int idx, const Coord& p) {
   updateRegion ();
 }
 
-void GPolyline::removePoint (int idx, bool update) {
-  if (points.count () > 2) {
-    points.remove (idx);
-    if (update)
-      updateRegion ();
-  }
+void GPolyline::removePoint (int idx, bool update)
+{
+   if (this->isA("GPolygon"))
+   {
+      GPolygon *poly = (GPolygon *) this;
+      poly->setKind (GPolygon::PK_Polygon);
+   };
+
+   if (points.count () > 2)
+   {
+      points.remove (idx);
+      if (update)
+         updateRegion ();
+   }
 }
 
 void GPolyline::insertPoint (int idx, const Coord& p, bool update) {
@@ -211,8 +221,9 @@ void GPolyline::_addPoint (int idx, const Coord& p) {
   updateRegion ();
 }
 
-const Coord& GPolyline::getPoint (int idx) {
-  return *(points.at (idx));
+const Coord& GPolyline::getPoint (int idx)
+{
+   return *(points.at (idx));
 }
 
 QList<Coord>& GPolyline::getPoints () {
