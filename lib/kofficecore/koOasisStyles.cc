@@ -39,7 +39,7 @@ KoOasisStyles::~KoOasisStyles()
 
 void KoOasisStyles::createStyleMap( const QDomDocument& doc )
 {
-    const QDomElement docElement  = doc.documentElement();
+   const QDomElement docElement  = doc.documentElement();
     // We used to have the office:version check here, but better let the apps do that
     QDomElement fontStyles = KoDom::namedItemNS( docElement, KoXmlNS::office, "font-decls" );
 
@@ -714,7 +714,7 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
                 text+=format[0];
                 format = format.remove( 0, 1 );
             }
-            //TODO implement loading !
+            //TODO implement loading ! What is it ?
             else if ( format.startsWith( "MMMMM" ) )
             {
                 addTextNumber( text, elementWriter );
@@ -900,6 +900,8 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
     elementWriter.addAttribute( "number:min-integer-digits", integer );
     elementWriter.addAttribute( "number:min-numerator-digits",numerator );
     elementWriter.addAttribute( "number:min-denominator-digits",denominator );
+    addKofficeNumericStyleExtension( elementWriter, _suffix, _prefix );
+
     //TODO add for future
     //elementWriter.addAttribute( "number:denominator-value", denominatorValue );
     text=_suffix;
@@ -912,7 +914,6 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
 }
 
 
-//TODO
 QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix, const QString &_suffix )
 {
     //<number:percentage-style style:name="N11">
@@ -952,6 +953,8 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
     addTextNumber(QString( "%" ), elementWriter );
     text =_suffix ;
     addTextNumber(text, elementWriter );
+    addKofficeNumericStyleExtension( elementWriter, _suffix,_prefix );
+
     elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
@@ -960,7 +963,6 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
 
 }
 
-//TODO
 QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix, const QString &_suffix )
 {
     //<number:number-style style:name="N60">
@@ -1025,6 +1027,7 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
     elementWriter.addAttribute( "number:min-exponent-digits",exponentdigits );
     text = _suffix;
     addTextNumber(text, elementWriter );
+    addKofficeNumericStyleExtension( elementWriter, _suffix,_prefix );
 
     elementWriter.endElement();
 
@@ -1033,7 +1036,6 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
     return mainStyles.lookup( currentStyle, "N" );
 }
 
-//TODO
 QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix, const QString &_suffix )
 {
 
@@ -1063,6 +1065,7 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QS
 
     text =  _suffix ;
     addTextNumber(text, elementWriter );
+    addKofficeNumericStyleExtension( elementWriter, _suffix,_prefix );
     elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
@@ -1070,7 +1073,6 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QS
     return mainStyles.lookup( currentStyle, "N" );
 }
 
-//TODO
 QString KoOasisStyles::saveOasisTextStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix, const QString &_suffix )
 {
 
@@ -1098,6 +1100,7 @@ QString KoOasisStyles::saveOasisTextStyle( KoGenStyles &mainStyles, const QStrin
 
     text =  _suffix ;
     addTextNumber(text, elementWriter );
+    addKofficeNumericStyleExtension( elementWriter, _suffix,_prefix );
     elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
@@ -1105,3 +1108,11 @@ QString KoOasisStyles::saveOasisTextStyle( KoGenStyles &mainStyles, const QStrin
     return mainStyles.lookup( currentStyle, "N" );
 }
 
+//This is an extension of numeric style. For the moment we used namespace of oasis format for specific koffice extention. change it for the futur.
+void KoOasisStyles::addKofficeNumericStyleExtension( KoXmlWriter & elementWriter, const QString &_suffix, const QString &_prefix )
+{
+    if ( !_suffix.isEmpty() )
+        elementWriter.addAttribute( "number:suffix", _suffix );
+    if ( !_prefix.isEmpty() )
+        elementWriter.addAttribute( "number:prefix", _prefix );
+}
