@@ -102,9 +102,12 @@ public:
 
 protected:
     void connectTextObjects();
+    void nextTextObject();
 
 protected slots:
     void slotParagraphDeleted( KoTextParag* parag );
+    //void slotTextObjectDeleted();
+    //void slotTextDocumentDeleted();
 
 private:
     // The reason we use a QValueList of pointers instead of QPtrList
