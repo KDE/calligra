@@ -391,6 +391,11 @@ public:
 
     void emitSelectioOnOff()
     { emit selectionOnOff(); }
+
+    void setPageLayoutChanged( bool c )
+    { pglChanged = c; }
+    bool getPageLayoutChanged()
+    { return pglChanged; }
     
 signals:
     void sig_imageModified();
@@ -497,7 +502,8 @@ protected:
     KWAutoFormat autoFormat;
 
     QString urlIntern;
-
+    bool pglChanged;
+    
 };
 
 #endif

@@ -85,7 +85,7 @@ KWordChild::~KWordChild()
 KWordDocument::KWordDocument()
     : formatCollection( this ), imageCollection( this ), selStart( this, 1 ), selEnd( this, 1 ),
       ret_pix( ICON( "return.xpm" ) ), unit( "mm" ), numParags( 0 ), footNoteManager( this ),
-      autoFormat( this ), urlIntern()
+      autoFormat( this ), urlIntern(), pglChanged( true )
 {
     ADD_INTERFACE( "IDL:KOffice/Print:1.0" );
 
@@ -213,6 +213,7 @@ bool KWordDocument::loadTemplate( const char *_url )
 /*================================================================*/
 void KWordDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf )
 {
+    pglChanged = true;
     if ( processingType == WP )
     {
         pageLayout = _layout;
@@ -2204,7 +2205,7 @@ void KWordDocument::updateAllViews( KWordView *_view, bool _clear )
                 if ( viewPtr != _view )
                 {
                     if ( _clear ) viewPtr->getGUI()->getPaperWidget()->clear();
-                    viewPtr->getGUI()->getPaperWidget()->viewport()->repaint( false );
+                    viewPtr->getGUI()->getPaperWidget()->repaintScreen( false );
                 }
             }
         }

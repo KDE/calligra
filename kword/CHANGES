@@ -1286,3 +1286,8 @@ Reggie, 10.6.1999:
   text when setting/moving the cursor with the mouse
   (but doesn't work at all at the moment :-P )
 
+Reggie, 11.6.1999:
+------------------
+- Some more flicker-freeness (there are some redraw errors now, I'll keep working on that)
+- Initial position of vert. scrollbar is correct now
+- Made some broken stuff working again

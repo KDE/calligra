@@ -56,7 +56,8 @@
 /*================================================================*/
 KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
     : QScrollView( parent, "" ), format( _doc ),
-      blinkTimer( this ), scrollTimer( this ), cachedParag( 0L )
+      blinkTimer( this ), scrollTimer( this ), cachedParag( 0L ),
+      cachedContentsPos( QPoint( -1, -1 ) ), _setErase( true )
 {
     setKeyCompression( true );
     setFocusPolicy( QWidget::StrongFocus );
@@ -667,7 +668,7 @@ void KWPage::viewportMouseMoveEvent( QMouseEvent *e )
             mx = ( mx / doc->getRastX() ) * doc->getRastX();
             my = ( my / doc->getRastY() ) * doc->getRastY();
 
-            switch ( cursor().shape() )
+            switch ( viewport()->cursor().shape() )
             {
             case SizeAllCursor:
                 vmmEditFrameSizeAll( mx, my );
@@ -827,7 +828,7 @@ void KWPage::vmpEditFrame( QMouseEvent *e, unsigned int mx, unsigned int my )
                 doc->deSelectFrame( mx, my );
                 curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
             }
-            else if ( cursor().shape() != SizeAllCursor )
+            else if ( viewport()->cursor().shape() != SizeAllCursor )
             {
                 doc->deSelectAllFrames();
                 doc->selectFrame( mx, my );
@@ -1160,7 +1161,7 @@ void KWPage::vmrCreateTable()
             grpMgr->init( insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(), insRect.height() );
             grpMgr->recalcRows();
         }
-        repaintScreen( false );
+        recalcWholeText( true );
     }
     mmEdit();
 }
@@ -1322,7 +1323,7 @@ void KWPage::recalcCursor( bool _repaint, int _pos, KWFormatContext *_fc )
     _fc->cursorGotoRight( pos );
 
     if ( _repaint )
-        repaintScreen( false );
+        repaintScreen( true );
 
     if ( blinking )
         startBlinkCursor();
@@ -1747,10 +1748,17 @@ void KWPage::viewportPaintEvent( QPaintEvent *e )
     painter.begin( viewport() );
     painter.setClipRect( e->rect() );
 
-    painter.eraseRect( e->rect().x() /*+ contentsX()*/, e->rect().y() /*+ contentsY()*/,
-                       e->rect().width(), e->rect().height() );
+    if ( !_setErase )
+        _erase = e->erased();
+    _setErase = false;
+    
+    if ( ( doc->getPageLayoutChanged() ||
+           QPoint( contentsX(), contentsY() ) != cachedContentsPos )
+         && _erase )
+        painter.eraseRect( e->rect().x(), e->rect().y(),
+                           e->rect().width(), e->rect().height() );
 
-    drawBorders( painter, e->rect() );
+    drawBorders( painter, e->rect(), _erase );
 
     KWFormatContext *paintfc = new KWFormatContext( doc, 1 );
     for ( unsigned i = 0; i < doc->getNumFrameSets(); i++ )
@@ -1775,6 +1783,9 @@ void KWPage::viewportPaintEvent( QPaintEvent *e )
 
     painter.end();
 
+    cachedContentsPos = QPoint( contentsX(), contentsY() );
+    doc->setPageLayoutChanged( false );
+    
     startBlinkCursor();
 }
 
@@ -2154,7 +2165,7 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
         }
     }
 
-    recalcCursor( false, 0 );
+    recalcCursor( true, 0 );
 
     redrawAllWhileScrolling = true;
     scrollToCursor( *fc );
@@ -2193,7 +2204,6 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
     else
         fc->apply( _format );
     gui->getView()->setFormat( *( ( KWFormat* )fc ) );
-
 
     return false;
 }
@@ -2674,7 +2684,7 @@ void KWPage::calcVisiblePages()
 }
 
 /*================================================================*/
-void KWPage::drawBorders( QPainter &_painter, QRect v_area )
+void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack )
 {
     _painter.save();
     _painter.setBrush( NoBrush );
@@ -2713,7 +2723,7 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area )
             else if ( !gui->getView()->getViewFrameBorders() ) should_draw = false;
             frame = QRect( tmp->x() - contentsX() - 1, tmp->y() - contentsY() - 1, tmp->width() + 2, tmp->height() + 2 );
 
-            if ( v_area.intersects( frame ) && should_draw && !frameset->getGroupManager() )
+            if ( v_area.intersects( frame ) && should_draw && !frameset->getGroupManager() && drawBack )
                 _painter.drawRect( frame );
             _painter.setBrush( NoBrush );
             if ( v_area.intersects( frame ) && frameset->getGroupManager() )
@@ -2732,25 +2742,25 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area )
             if ( mouseMode == MM_EDIT_FRAME && tmp->isSelected() )
             {
                 _painter.save();
-                _painter.setRasterOp( NotROP );
+                //_painter.setRasterOp( NotROP );
                 if ( !frameset->getGroupManager() )
                 {
-                    _painter.fillRect( frame.x(), frame.y(), 6, 6, black );
-                    _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y(), 6, 6, black );
-                    _painter.fillRect( frame.x(), frame.y() + frame.height() / 2 - 3, 6, 6, black );
-                    _painter.fillRect( frame.x() + frame.width() - 6, frame.y(), 6, 6, black );
-                    _painter.fillRect( frame.x(), frame.y() + frame.height() - 6, 6, 6, black );
-                    _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y() + frame.height() - 6, 6, 6, black );
-                    _painter.fillRect( frame.x() + frame.width() - 6, frame.y() + frame.height() / 2 - 3, 6, 6, black );
-                    _painter.fillRect( frame.x() + frame.width() - 6, frame.y() + frame.height() - 6, 6, 6, black );
+                    _painter.fillRect( frame.x(), frame.y(), 6, 6, colorGroup().highlight() );
+                    _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y(), 6, 6, colorGroup().highlight() );
+                    _painter.fillRect( frame.x(), frame.y() + frame.height() / 2 - 3, 6, 6, colorGroup().highlight() );
+                    _painter.fillRect( frame.x() + frame.width() - 6, frame.y(), 6, 6, colorGroup().highlight() );
+                    _painter.fillRect( frame.x(), frame.y() + frame.height() - 6, 6, 6, colorGroup().highlight() );
+                    _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y() + frame.height() - 6, 6, 6, colorGroup().highlight() );
+                    _painter.fillRect( frame.x() + frame.width() - 6, frame.y() + frame.height() / 2 - 3, 6, 6, colorGroup().highlight() );
+                    _painter.fillRect( frame.x() + frame.width() - 6, frame.y() + frame.height() - 6, 6, 6, colorGroup().highlight() );
                     _painter.restore();
                 }
                 else
                 {
                     _painter.restore();
                     _painter.fillRect( frame.x(), frame.y(), frame.width() - 1, frame.height() - 1, colorGroup().highlight() );
-                    _painter.fillRect( frame.x() + frame.width() - 6, frame.y() + frame.height() / 2 - 3, 6, 6, black );
-                    _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y() + frame.height() - 6, 6, 6, black );
+                    _painter.fillRect( frame.x() + frame.width() - 6, frame.y() + frame.height() / 2 - 3, 6, 6, colorGroup().highlight() );
+                    _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y() + frame.height() - 6, 6, 6, colorGroup().highlight() );
                 }
             }
 
@@ -2813,16 +2823,16 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area )
 void KWPage::drawFrameSelection( QPainter &_painter, KWFrame *_frame )
 {
     _painter.save();
-    _painter.setRasterOp( NotROP );
-
-    _painter.fillRect( _frame->x() - contentsX(), _frame->y() - contentsY(), 6, 6, black );
-    _painter.fillRect( _frame->x() - contentsX() + _frame->width() / 2 - 3, _frame->y() - contentsY(), 6, 6, black );
-    _painter.fillRect( _frame->x() - contentsX(), _frame->y() - contentsY() + _frame->height() / 2 - 3, 6, 6, black );
-    _painter.fillRect( _frame->x() - contentsX() + _frame->width() - 6, _frame->y() - contentsY(), 6, 6, black );
-    _painter.fillRect( _frame->x() - contentsX(), _frame->y() - contentsY() + _frame->height() - 6, 6, 6, black );
-    _painter.fillRect( _frame->x() - contentsX() + _frame->width() / 2 - 3, _frame->y() - contentsY() + _frame->height() - 6, 6, 6, black );
-    _painter.fillRect( _frame->x() - contentsX() + _frame->width() - 6, _frame->y() - contentsY() + _frame->height() / 2 - 3, 6, 6, black );
-    _painter.fillRect( _frame->x() - contentsX() + _frame->width() - 6, _frame->y() - contentsY() + _frame->height() - 6, 6, 6, black );
+    //_painter.setRasterOp( NotROP );
+        
+    _painter.fillRect( _frame->x() - contentsX(), _frame->y() - contentsY(), 6, 6, colorGroup().highlight() );
+    _painter.fillRect( _frame->x() - contentsX() + _frame->width() / 2 - 3, _frame->y() - contentsY(), 6, 6, colorGroup().highlight() );
+    _painter.fillRect( _frame->x() - contentsX(), _frame->y() - contentsY() + _frame->height() / 2 - 3, 6, 6, colorGroup().highlight() );
+    _painter.fillRect( _frame->x() - contentsX() + _frame->width() - 6, _frame->y() - contentsY(), 6, 6, colorGroup().highlight() );
+    _painter.fillRect( _frame->x() - contentsX(), _frame->y() - contentsY() + _frame->height() - 6, 6, 6, colorGroup().highlight() );
+    _painter.fillRect( _frame->x() - contentsX() + _frame->width() / 2 - 3, _frame->y() - contentsY() + _frame->height() - 6, 6, 6, colorGroup().highlight() );
+    _painter.fillRect( _frame->x() - contentsX() + _frame->width() - 6, _frame->y() - contentsY() + _frame->height() / 2 - 3, 6, 6, colorGroup().highlight() );
+    _painter.fillRect( _frame->x() - contentsX() + _frame->width() - 6, _frame->y() - contentsY() + _frame->height() - 6, 6, 6, colorGroup().highlight() );
 
     _painter.restore();
 }
@@ -4370,7 +4380,17 @@ void KWPage::setContentsPos( int x, int y )
 /*================================================================*/
 void KWPage::repaintScreen( bool erase )
 {
-    viewport()->repaint( erase );
+    _erase = erase; 
+    _setErase = true;
+    viewport()->repaint( false );
+}
+
+/*================================================================*/
+void KWPage::repaintScreen( const QRect &r, bool erase )
+{
+    _erase = erase;
+    _setErase = true;
+    viewport()->repaint( r, false );
 }
 
 /*================================================================*/

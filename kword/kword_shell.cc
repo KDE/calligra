@@ -382,7 +382,7 @@ void KWordShell::slotFileNew()
     if ( m_pDoc )
         m_pDoc->enableEmbeddedParts( true );
     if ( m_pView )
-        m_pView->getGUI()->getPaperWidget()->viewport()->repaint( false );
+        m_pView->getGUI()->getPaperWidget()->repaintScreen( false );
 }
 
 /*================================================================*/
@@ -418,7 +418,7 @@ void KWordShell::slotFileOpen()
     if ( m_pDoc )
         m_pDoc->enableEmbeddedParts( true );
     if ( m_pView )
-        m_pView->getGUI()->getPaperWidget()->viewport()->repaint( false );
+        m_pView->getGUI()->getPaperWidget()->repaintScreen( false );
 }
 
 /*================================================================*/
@@ -443,7 +443,7 @@ void KWordShell::slotFileSave()
     }
 
     m_pDoc->enableEmbeddedParts( true );
-    m_pView->getGUI()->getPaperWidget()->viewport()->repaint( false );
+    m_pView->getGUI()->getPaperWidget()->repaintScreen( false );
 }
 
 /*================================================================*/
@@ -467,7 +467,7 @@ void KWordShell::slotFileSaveAs()
     }
 
     m_pDoc->enableEmbeddedParts( true );
-    m_pView->getGUI()->getPaperWidget()->viewport()->repaint( false );
+    m_pView->getGUI()->getPaperWidget()->repaintScreen( false );
 }
 
 /*================================================================*/

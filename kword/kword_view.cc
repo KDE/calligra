@@ -353,7 +353,7 @@ CORBA::Boolean KWordView::printDlg()
     if ( prt.setup( this ) )
     {
         setCursor( waitCursor );
-        gui->getPaperWidget()->setCursor( waitCursor );
+        gui->getPaperWidget()->viewport()->setCursor( waitCursor );
 
         QPainter painter;
         painter.begin( &prt );
@@ -361,7 +361,7 @@ CORBA::Boolean KWordView::printDlg()
         painter.end();
 
         setCursor( arrowCursor );
-        gui->getPaperWidget()->setCursor( ibeamCursor );
+        gui->getPaperWidget()->viewport()->setCursor( ibeamCursor );
     }
     return true;
 }
@@ -844,7 +844,7 @@ void KWordView::viewFormattingChars()
 {
     m_vMenuView->setItemChecked( m_idMenuView_FormattingChars, !m_vMenuView->isItemChecked( m_idMenuView_FormattingChars ) );
     _viewFormattingChars = m_vMenuView->isItemChecked( m_idMenuView_FormattingChars );
-    gui->getPaperWidget()->viewport()->repaint( false );
+    gui->getPaperWidget()->repaintScreen( !_viewFormattingChars );
 
     sendFocusEvent();
 }
@@ -854,7 +854,7 @@ void KWordView::viewFrameBorders()
 {
     m_vMenuView->setItemChecked( m_idMenuView_FrameBorders, !m_vMenuView->isItemChecked( m_idMenuView_FrameBorders ) );
     _viewFrameBorders = m_vMenuView->isItemChecked( m_idMenuView_FrameBorders );
-    gui->getPaperWidget()->viewport()->repaint( false );
+    gui->getPaperWidget()->repaintScreen( false );
 
     sendFocusEvent();
 }
@@ -864,7 +864,7 @@ void KWordView::viewTableGrid()
 {
     m_vMenuView->setItemChecked( m_idMenuView_TableGrid, !m_vMenuView->isItemChecked( m_idMenuView_TableGrid ) );
     _viewTableGrid = m_vMenuView->isItemChecked( m_idMenuView_TableGrid );
-    gui->getPaperWidget()->viewport()->repaint( false );
+    gui->getPaperWidget()->repaintScreen( !_viewTableGrid );
 
     sendFocusEvent();
 }
@@ -1402,7 +1402,11 @@ void KWordView::tableJoinCells()
             QMessageBox::critical( 0L, i18n( "Error" ), i18n( "You have to select some cells which are next to each other\n"
                                                               "and are not already joined." ), i18n( "OK" ) );
         painter.end();
-        gui->getPaperWidget()->viewport()->repaint( false );
+        QRect r = grpMgr->getBoundingRect();
+        r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
+                   r.y() - gui->getPaperWidget()->contentsY(),
+                   r.width(), r.height() );
+        gui->getPaperWidget()->repaintScreen( r, true );
     }
 
     sendFocusEvent();
@@ -1424,7 +1428,11 @@ void KWordView::tableSplitCells()
             QMessageBox::critical( 0L, i18n( "Error" ), i18n( "Currently it's only possible to split a joined cell.\n"
                                                               "So, you have to selecte a joined cell." ), i18n( "OK" ) );
         painter.end();
-        gui->getPaperWidget()->viewport()->repaint( false );
+        QRect r = grpMgr->getBoundingRect();
+        r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
+                   r.y() - gui->getPaperWidget()->contentsY(),
+                   r.width(), r.height() );
+        gui->getPaperWidget()->repaintScreen( r, true );
     }
 
     sendFocusEvent();
@@ -1444,7 +1452,11 @@ void KWordView::tableUngroupTable()
                                                                 "Do you really want to do that?" ), i18n( "Yes" ), i18n( "No" ) ) == 0 )
         {
             grpMgr->ungroup();
-            gui->getPaperWidget()->viewport()->repaint( false );
+            QRect r = grpMgr->getBoundingRect();
+            r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
+                       r.y() - gui->getPaperWidget()->contentsY(),
+                       r.width(), r.height() );
+            gui->getPaperWidget()->repaintScreen( r, true );
         }
     }
 
@@ -3321,6 +3333,8 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
     setKeyCompression( true );
     setAcceptDrops( true );
     setFocusPolicy( QWidget::StrongFocus );
+
+    scrollTo( 0, 0 );
 }
 
 /*================================================================*/

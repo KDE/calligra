@@ -869,7 +869,7 @@ void KWSearchDia::replaceAll()
             case 3:
             {
                 if ( addlen ) page->addLen();
-                page->viewport()->repaint( false );
+                page->repaintScreen( false );
                 continue;
             } break;
             }
@@ -882,7 +882,7 @@ void KWSearchDia::replaceAll()
             break;
     }
 
-    page->viewport()->repaint( false );
+    page->repaintScreen( false );
 }
 
 /*================================================================*/

@@ -130,7 +130,7 @@ public:
     void recalcWholeText( bool _cursor = false, bool _fast = false );
     void recalcWholeText( KWParag *start, unsigned int fs );
     void footerHeaderDisappeared();
-    void drawBorders( QPainter &_painter, QRect v_area );
+    void drawBorders( QPainter &_painter, QRect v_area, bool drawBack = true );
     void drawFrameSelection( QPainter &_painter, KWFrame *_frame );
     void setRuler2Frame( unsigned int _frameset, unsigned int _frame );
     void setMouseMode( MouseMode _mm );
@@ -173,7 +173,9 @@ public:
 
     virtual void resizeContents( int w, int h );
     virtual void setContentsPos( int x, int y );
-
+    void repaintScreen( bool erase );
+    void repaintScreen( const QRect &r, bool erase );
+    
 public slots:
     void newLeftIndent( int _left );
     void newFirstIndent( int _first );
@@ -287,7 +289,6 @@ protected:
     void paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPaintEvent *e );
     void finishPainting( QPaintEvent *e, QPainter &painter );
 
-    void repaintScreen( bool erase );
     bool allowBreak1( KWFormatContext *paintfc, unsigned int i );
     void repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASAP = true );
 
@@ -352,6 +353,9 @@ protected:
     KWParag *cachedParag;
     QStringList cachedLines;
     KWFormatContext *oldFc;
+    QPoint cachedContentsPos;
+    bool _erase;
+    bool _setErase;
     
 };
 

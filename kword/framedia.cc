@@ -637,10 +637,11 @@ void KWFrameDia::applyChanges()
             _frameSet->addFrame( frame );
             _frameSet->setAutoCreateNewFrame( false );
             doc->addFrameSet( _frameSet );
-            page->viewport()->repaint( false );
+            page->repaintScreen( true );
             _frameSet->setAutoCreateNewFrame( true );
             return;
         }
+        doc->updateAllFrames();
     }
 
     if ( flags & FD_GEOMETRY && doc )
@@ -708,7 +709,7 @@ void KWFrameDia::applyChanges()
         doc->setFrameMargins( u1, u2, u3, u4 );
     }
 
-    page->viewport()->repaint( false );
+    page->repaintScreen( true );
 }
 
 /*================================================================*/
