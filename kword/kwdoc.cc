@@ -2684,4 +2684,11 @@ void KWDocument::renameButtonTOC(const QString & _name)
         it.current()->renameButtonTOC(_name);
 }
 
+void KWDocument::refreshMenuExpression()
+{
+    QListIterator<KWView> it( m_lstViews );
+    for ( ; it.current() ; ++it )
+        it.current()->refreshMenuExpression();
+}
+
 #include "kwdoc.moc"

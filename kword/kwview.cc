@@ -588,8 +588,14 @@ void KWView::setupActions()
 }
 
 
+void KWView::refreshMenuExpression()
+{
+    loadexpressionActions( actionInsertExpression);
+}
+
 void KWView::loadexpressionActions( KActionMenu * parentMenu)
 {
+    parentMenu->popupMenu()->clear();
     QStringList files = KWFactory::global()->dirs()->findAllResources( "expression", "*.xml", TRUE );
     for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
     {
@@ -2247,6 +2253,7 @@ void KWView::editPersonalExpr()
    KWEditPersonnalExpression *personalDia=new KWEditPersonnalExpression( this,"personnal" );
    personalDia->exec();
    delete personalDia;
+   doc->refreshMenuExpression();
 }
 
 

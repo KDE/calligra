@@ -132,6 +132,8 @@ public:
 
     void changeZoomMenu( int zoom=-1);
 
+    void refreshMenuExpression();
+
 public slots:
     void fileStatistics();
     void editCut();
