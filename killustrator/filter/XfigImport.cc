@@ -38,6 +38,7 @@
 #include <qtl.h>
 #include <kdebug.h>
 
+namespace std { };
 using namespace std;
 
 #define RAD_FACTOR 180.0 / M_PI
