@@ -25,7 +25,7 @@ class KoTextFormatPrivate
 {
 public:
     KoTextFormatPrivate() : m_screenFont( 0L ), m_screenFontMetrics( 0L ),
-                            m_screenFontNoZoom( 0L ), m_screenFontMetricsNoZoom( 0L )
+                            m_refFont( 0L ), m_refFontMetrics( 0L )
     {}
     ~KoTextFormatPrivate()
     {
@@ -35,14 +35,14 @@ public:
     {
         delete m_screenFontMetrics; m_screenFontMetrics = 0L;
         delete m_screenFont; m_screenFont = 0L;
-        delete m_screenFontMetricsNoZoom; m_screenFontMetricsNoZoom = 0L;
-        delete m_screenFontNoZoom; m_screenFontNoZoom = 0L;
+        delete m_refFontMetrics; m_refFontMetrics = 0L;
+        delete m_refFont; m_refFont = 0L;
     }
     // caching for speedup when formatting
     QFont* m_screenFont; // font to be used when painting (zoom-dependent)
     QFontMetrics* m_screenFontMetrics; // font metrics on screen (zoom-dependent)
-    QFont* m_screenFontNoZoom; // font to be used when formatting text for layout units
-    QFontMetrics* m_screenFontMetricsNoZoom; // font metrics for m_screenFontMetricsNoZoom
+    QFont* m_refFont; // font to be used when formatting text for layout units
+    QFontMetrics* m_refFontMetrics; // font metrics for m_refFontMetrics
 };
 
 
@@ -100,27 +100,42 @@ public:
     bool strikeOut() const { return (m_strikeOutLine==S_SIMPLE ); }
     bool doubleStrikeOut() const { return (m_strikeOutLine==S_DOUBLE ); }
     /**
+     * @return the reference point size, i.e. the one in layout units used during formatting.
+     * This method takes care of superscript and subscript (smaller font).
+     */
+    float refPointSize() const;
+
+    /**
      * @return the point size to use on screen, given @p zh
      * This method takes care of superscript and subscript (smaller font).
-     * @param applyZoom if false, retrieve fontsize for 100%-zoom (for kotextformatter)
      */
-    float screenPointSize( const KoZoomHandler* zh, bool applyZoom ) const;
+    float screenPointSize( const KoZoomHandler* zh ) const;
+
+    /**
+     * Get metrics for the reference font (in layout units).
+     * This method takes care of superscript and subscript (smaller font).
+     */
+    QFontMetrics refFontMetrics() const;
 
     /**
      * Returns the font metrics for the font used at the zoom & resolution
      * given by 'zh'. Despite the name, this is probably valid for printing too.
      * This method takes care of superscript and subscript (smaller font).
-     * @param applyZoom if false, retrieve fontsize for 100%-zoom (for kotextformatter)
      */
-    QFontMetrics screenFontMetrics( const KoZoomHandler* zh, bool applyZoom = true ) const;
+    QFontMetrics screenFontMetrics( const KoZoomHandler* zh ) const;
+
+    /**
+     * Returns the reference font, i.e. the one in layout units.
+     * This is used at text layout time (e.g. kotextformatter)
+     */
+    QFont refFont() const;
 
     /**
      * Returns the font to be used at the zoom & resolution given by 'zh'.
      * Despite the name, this is probably valid for printing too.
      * This method takes care of superscript and subscript (smaller font).
-     * @param applyZoom if false, retrieve fontsize for 100%-zoom (for kotextformatter)
      */
-    QFont screenFont( const KoZoomHandler* zh, bool applyZoom = true ) const;
+    QFont screenFont( const KoZoomHandler* zh ) const;
 
     /**
      * Return the width of one char in one paragraph.

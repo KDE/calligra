@@ -490,7 +490,7 @@ int KoParagCounter::width( const KoTextParag *paragraph )
     }
     else if ( !text.isEmpty() )
         text.append( ' ' ); // append a trailing space, see KoTextParag::drawLabel
-    QFontMetrics fm = m_cache.counterFormat->screenFontMetrics( 0L, false );
+    QFontMetrics fm = m_cache.counterFormat->refFontMetrics();
     for ( unsigned int i = 0; i < text.length(); i++ )
         //m_cache.width += m_cache.counterFormat->width( text, i );
         m_cache.width += fm.width( text[i] );
@@ -507,7 +507,7 @@ int KoParagCounter::bulletX()
     Q_ASSERT( m_cache.width != -1 );
     Q_ASSERT( m_cache.counterFormat );
     int x = 0;
-    QFontMetrics fm = m_cache.counterFormat->screenFontMetrics( 0L, false );
+    QFontMetrics fm = m_cache.counterFormat->refFontMetrics();
     QString text = prefix();
     for (  unsigned int i = 0; i < text.length(); i++ )
         x += fm.width( text[i] );

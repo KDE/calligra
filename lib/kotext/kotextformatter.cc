@@ -261,7 +261,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                 if ( c->c.unicode() == 0xad ) // soft hyphen
                 {
                     // Recalculate its width, the hyphen will appear finally (important for the parag rect)
-                    c->width = KoTextZoomHandler::ptToLayoutUnitPt( c->format()->screenFontMetrics( zh, false ).width( c->c ) );
+                    c->width = KoTextZoomHandler::ptToLayoutUnitPt( c->format()->refFontMetrics().width( c->c ) );
                     lineWidth += c->width;
                 }
 		KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align, lineWidth );
