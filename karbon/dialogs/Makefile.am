@@ -10,7 +10,6 @@ noinst_LTLIBRARIES = \
 	libkarbondialogs.la
 
 noinst_HEADERS = \
-	vcolordlg.h \
 	vconfiguredlg.h \
 	vellipsedlg.h \
 	vfilldlg.h \
@@ -32,7 +31,6 @@ noinst_HEADERS = \
 
 libkarbondialogs_la_SOURCES = \
 	dummy.cc \
-	vcolordlg.cc \
 	vconfiguredlg.cc \
 	vellipsedlg.cc \
 	vfilldlg.cc \

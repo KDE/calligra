@@ -26,14 +26,14 @@
 /* This is the base class for all Karbon14 dockers. Smaller font is used to save screen space
 and allow more dockers on screen at the same time */
 
-class KoView;
+class QWidget;
 
 class VDocker : public QDockWindow
 {
 	Q_OBJECT
 
 public:
-	 VDocker ( KoView* parent = 0L, const char* name = 0L );
+	 VDocker ( QWidget* parent = 0L, const char* name = 0L );
 };
 
 #endif

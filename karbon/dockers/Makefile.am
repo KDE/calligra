@@ -10,14 +10,15 @@ noinst_LTLIBRARIES = \
 	libkarbondockers.la
 
 noinst_HEADERS = \
-	vdocker.h
+	vdocker.h \
+	vcolordocker.h
 
 libkarbondockers_la_SOURCES = \
 	dummy.cc \
-	vdocker.cc
+	vdocker.cc \
+	vcolordocker.cc
 
-libkarbondialogs_la_METASOURCES = \
-	AUTO
+libkarbondockers_la_METASOURCES = AUTO
 
 DISTCLEANFILES = \
 	dummy.cc

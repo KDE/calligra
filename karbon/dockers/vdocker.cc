@@ -19,14 +19,12 @@
 */
 
 #include <qfont.h>
-
-#include <koMainWindow.h>
-#include <koView.h>
+#include <qwidget.h>
 
 #include "vdocker.h"
 
-VDocker::VDocker( KoView* parent, const char* /*name*/ )
-	: QDockWindow( QDockWindow::OutsideDock, parent->shell() )
+VDocker::VDocker( QWidget* parent, const char* /*name*/ )
+	: QDockWindow( QDockWindow::OutsideDock, parent )
 {
 	setCloseMode( QDockWindow::Always );
 	setFont( QFont( "helvetica" , 8 ) );

@@ -40,7 +40,7 @@ class KSelectColorAction;
 class KToggleAction;
 
 class TKUFloatSpinBoxAction;
-class VColorDlg;
+class VColorDocker;
 class VEllipseTool;
 class VFill;
 class VFlattenDlg;
@@ -237,7 +237,6 @@ private:
 	KAction* m_configureAction;
 
 	// dialogs:
-	VColorDlg* m_ColorManager;
 	VInsertKnotsDlg* m_insertKnotsDlg;
 	VFlattenDlg* m_flattenDlg;
 	VObjectDlg* m_objectDlg;
@@ -245,6 +244,9 @@ private:
 	VWhirlPinchDlg* m_whirlPinchDlg;
 	VTransformDlg* m_TransformDlg;
 
+	//dockers
+	VColorDocker* m_ColorManager;
+	
 	//toolbox
 	DCOPObject* m_dcop;
 

@@ -62,7 +62,6 @@
 #include "vwhirlpinchcmd.h"
 
 // dialogs:
-#include "vcolordlg.h"
 #include "vconfiguredlg.h"
 #include "vfilldlg.h"
 #include "vflattendlg.h"
@@ -72,6 +71,9 @@
 #include "vstrokedlg.h"
 #include "vtransformdlg.h"
 #include "vwhirlpinchdlg.h"
+
+//dockers
+#include "vcolordocker.h"
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
@@ -139,7 +141,6 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_spiralTool = new VSpiralTool( this );
 	m_starTool = new VStarTool( this );
 
-
 	// set up status bar message
 	m_status = new KStatusBarLabel( QString::null, 0, statusBar() );
 	m_status->setAlignment( AlignLeft | AlignVCenter );
@@ -147,7 +148,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	addStatusBarItem( m_status, 0 );
 
 	//Create Dockers
-	m_ColorManager = new VColorDlg( m_part, this );
+	m_ColorManager = new VColorDocker( m_part, this );
 	m_objectDlg = new VObjectDlg( m_part, this );
 	m_objectDlg->disable(); //disabled @ startup because none of the objects are selected
 	m_TransformDlg = new VTransformDlg( m_part, this );
