@@ -34,7 +34,7 @@ class KoApplicationPrivate;
 /**
  *  Base class for all KOffice apps
  *
- *  This class handles given arguments giving on the command line and
+ *  This class handles arguments given on the command line and
  *  shows a generic about dialog for all KOffice apps.
  *
  *  In addition it adds the standard directories where KOffice applications
