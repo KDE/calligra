@@ -61,7 +61,7 @@ void SpaceElement::calcSizes( const ContextStyle& style,
     //setMidline( getBaseline() - fm.strikeOutPos() );
 }
 
-void SpaceElement::draw( QPainter& painter, const LuPixelRect& r,
+void SpaceElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                          const ContextStyle& style,
                          ContextStyle::TextStyle /*tstyle*/,
                          ContextStyle::IndexStyle /*istyle*/,

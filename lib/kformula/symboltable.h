@@ -37,7 +37,7 @@ class ContextStyle;
 
 /**
  * What we know about a unicode char. The char value itself
- * is a key inside the symbol table. Here we have the name,
+ * is a key inside the symbol table. Here we have
  * the char class and which font to use.
  */
 class CharTableEntry {
@@ -46,19 +46,18 @@ public:
     /**
      * Defaults for all arguments are provided so it can be used in a QMap.
      */
-    CharTableEntry( QString name = "", CharClass cl = ORDINARY );
+    CharTableEntry( CharClass cl=ORDINARY, char font=0, uchar ch=0 )
+        : m_charClass( static_cast<char>( cl ) ), m_font( font ), m_character( ch ) {}
 
-    char font() const { return static_cast<char>( value >> 16 ); }
-    uchar character() const { return static_cast<unsigned char>( value ); }
-    CharClass charClass() const { return static_cast<CharClass>( value >> 24 ); }
-    QString texName() const { return name; }
-
-    void setFontChar( char f, unsigned char c );
+    char font() const { return m_font; }
+    uchar character() const { return m_character; }
+    CharClass charClass() const { return static_cast<CharClass>( m_charClass ); }
 
 private:
 
-    int value;
-    QString name;
+    char m_charClass;
+    char m_font;
+    uchar m_character;
 };
 
 
@@ -94,6 +93,8 @@ private:
 };
 
 
+struct InternFontTable;
+
 /**
  * The symbol table.
  *
@@ -116,12 +117,11 @@ public:
      * the given name.
      */
     QChar unicode( QString name ) const;
-
     QString name( QChar symbol ) const;
 
-    QFont font( QChar symbol ) const;
-    uchar character( QChar symbol ) const;
-    CharClass charClass( QChar symbol ) const;
+    QFont font( QChar symbol, CharStyle style=normalChar ) const;
+    uchar character( QChar symbol, CharStyle style=normalChar ) const;
+    CharClass charClass( QChar symbol, CharStyle style=normalChar ) const;
 
     /**
      * @returns the unicode value of the symbol font char.
@@ -138,27 +138,35 @@ public:
      */
     QStringList allNames() const;
 
-    /**
-     * Fills the map with (font name, file name) pairs one for
-     * each font available.
-     */
-    void findAvailableFonts( QMap<QString, QString>* fontMap ) const;
-
     typedef QMap<QChar, CharTableEntry> UnicodeTable;
+    typedef QMap<QChar, QString> NameTable;
     typedef QMap<QString, QChar> EntryTable;
     typedef QValueVector<QFont> FontTable;
 
-    bool inTable( QChar ch ) const { return unicodeTable.contains( ch ); }
+    bool inTable( QChar ch, CharStyle style=anyChar ) const;
 
 private:
 
-    void defaultInitUnicode();
-    void defaultInitFont();
+    UnicodeTable& unicodeTable( CharStyle style );
+    const UnicodeTable& unicodeTable( CharStyle style ) const;
+
+    void initFont( const InternFontTable* table,
+                   const char* fontname,
+                   const NameTable& tempNames,
+                   CharStyle style );
 
     /**
      * The chars from unicode.
      */
-    UnicodeTable unicodeTable;
+    UnicodeTable normalChars;
+    UnicodeTable boldChars;
+    UnicodeTable italicChars;
+    UnicodeTable boldItalicChars;
+
+    /**
+     * unicode -> name mapping.
+     */
+    NameTable names;
 
     /**
      * Name -> unicode mapping.

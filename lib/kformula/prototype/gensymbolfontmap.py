@@ -37,7 +37,18 @@ def fontkey(font, number):
         k, n = mapping
         if n == number:
             return k
-        
+
+
+def writeFontTable(fontname, f):
+    f.write('\n\nstatic InternFontTable ' + fontname + 'Map[] = {\n')
+    for key in unicodetable:
+        latexName, charClass = unicodetable[key]
+        pos = fontkey(fontname, key)
+        if pos:
+            f.write('    { ' + key + ', ' + hex(pos) + ', ' + charClass + ' },\n')
+    f.write('    { 0, 0, ORDINARY }\n};\n\n')
+
+    
 def main():
     f = open('../symbolfontmapping.cc', 'w')
     f.write('''//
@@ -47,29 +58,44 @@ def main():
 //
 // WARNING! All changes made in this file will be lost!
 
+struct InternFontTable { short unicode; uchar pos; CharClass cl; };
 ''')
-    for key in unicodetable:
-        latexName, charClass = unicodetable[key]
-        pos = fontkey('symbol', key)
-        if pos:
-            if len(latexName) > 0:
-                f.write('char symbolFontMap_' + latexName.replace('\\', '') + '[] = "' +
-                        latexName.replace('\\', '\\\\') + '";\n' )
-    f.write('\nstruct { int unicode; uchar pos; CharClass cl; char* latexName; } symbolFontMap[] = {\n')
-    for key in unicodetable:
-        latexName, charClass = unicodetable[key]
-        pos = fontkey('symbol', key)
-        if pos:
-            if len(latexName) > 0:
-                latexName = 'symbolFontMap_' + latexName.replace('\\', '')
-            else:
-                latexName = '0'
-            f.write('    { ' + key + ', ' + `pos` + ', ' + charClass + ', ' +
-                    latexName + ' },\n')
-    f.write('    { 0, 0, ORDINARY, 0 }\n};\n\n')
+    fontnames = [ "symbol",
+                  "esstixnine", 
+                  "esstixthirteen", 
+                  "esstixeleven", 
+                  "esstixfourteen", 
+                  "esstixfive", 
+                  "esstixfifteen", 
+                  "esstixeight", 
+                  "esstixthree", 
+                  "esstixten", 
+                  "esstixsixteen", 
+                  "esstixone", 
+                  "esstixtwo", 
+                  "esstixsix", 
+                  "esstixseven", 
+                  "esstixtwelve", 
+                  "esstixseventeen", 
+                  "esstixfour" ]
+    for fn in fontnames:
+        writeFontTable(fn, f)
 
+    print >>f, 'struct UnicodeNameTable { short unicode; const char* name; };'
+    print >>f, 'static UnicodeNameTable nameTable[] = {'
+    nameDir = {}
+    for key in unicodetable:
+        latexName, charClass = unicodetable[key]
+        if len(latexName) > 0:
+            for fn in fontnames:
+                if fontkey(fn, key):
+                    print >>f, '    { ' + key + ', "' + latexName + '" },'
+                    break
+    print >>f, '    { 0, 0 }\n};'
     f.close()
+    
 
+   
 def make_unicode_table():
     header = []
     codes = {}
@@ -132,5 +158,5 @@ if __name__ == '__main__':
     parser.parse("symbol.xml")
 
     main()
-    make_unicode_table()
-    make_all_font_tables()
+    #make_unicode_table()
+    #make_all_font_tables()

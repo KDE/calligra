@@ -979,9 +979,9 @@ TabMarker::TabMarker( BasicElement* parent )
 }
 
 
-void TabMarker::calcSizes( const ContextStyle& context,
-                           ContextStyle::TextStyle tstyle,
-                           ContextStyle::IndexStyle istyle )
+void TabMarker::calcSizes( const ContextStyle& /*context*/,
+                           ContextStyle::TextStyle /*tstyle*/,
+                           ContextStyle::IndexStyle /*istyle*/ )
 {
     setWidth( 0 );
     setHeight( 0 );
@@ -989,11 +989,11 @@ void TabMarker::calcSizes( const ContextStyle& context,
 }
 
 
-void TabMarker::draw( QPainter& painter, const LuPixelRect& r,
-                      const ContextStyle& context,
-                      ContextStyle::TextStyle tstyle,
-                      ContextStyle::IndexStyle istyle,
-                      const LuPixelPoint& parentOrigin )
+void TabMarker::draw( QPainter& /*painter*/, const LuPixelRect& /*r*/,
+                      const ContextStyle& /*context*/,
+                      ContextStyle::TextStyle /*tstyle*/,
+                      ContextStyle::IndexStyle /*istyle*/,
+                      const LuPixelPoint& /*parentOrigin*/ )
 {
 }
 

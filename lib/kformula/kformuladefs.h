@@ -130,6 +130,15 @@ enum CharClass {
 typedef CharClass TokenType;
 
 
+enum CharStyle {
+    anyChar,
+    normalChar,
+    boldChar,
+    italicChar,
+    boldItalicChar
+};
+
+
 /**
  * Wether we want to insert to the left of the cursor
  * or right of it.

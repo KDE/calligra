@@ -383,7 +383,7 @@ MathFontsConfigurePage::MathFontsConfigurePage( Document* document, QWidget* vie
     const QStringList& usedFonts = contextStyle.requestedFonts();
 
     QMap<QString, QString> fontMap;
-    symbolTable.findAvailableFonts( &fontMap );
+//    symbolTable.findAvailableFonts( &fontMap );
 
     setupLists( usedFonts );
 }
@@ -440,7 +440,7 @@ void MathFontsConfigurePage::setupLists( const QStringList& usedFonts )
     const SymbolTable& symbolTable = contextStyle.symbolTable();
 
     QMap<QString, QString> fontMap;
-    symbolTable.findAvailableFonts( &fontMap );
+//    symbolTable.findAvailableFonts( &fontMap );
 
     for ( QStringList::const_iterator it = usedFonts.begin(); it != usedFonts.end(); ++it ) {
         QMap<QString, QString>::iterator font = fontMap.find( *it );
