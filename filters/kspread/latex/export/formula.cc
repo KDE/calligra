@@ -56,7 +56,7 @@ void Formula::analyse(const QDomNode balise)
 	/* Parameters Analyse */
 	Element::analyse(balise);
 
-	kdDebug() << "FRAME ANALYSE (Formula)" << endl;
+	kdDebug(30522) << "FRAME ANALYSE (Formula)" << endl;
 
 	/* Chlidren markups Analyse */
 	for(int index= 0; index < getNbChild(balise); index++)
@@ -68,11 +68,11 @@ void Formula::analyse(const QDomNode balise)
 		else if(getChildName(balise, index).compare("FORMULA")== 0)
 		{
 			getFormula(getChild(getChild(balise, "FORMULA"), "FORMULA"), 0);
-			kdDebug() << _formula << endl;
+			kdDebug(30522) << _formula << endl;
 		}
 
 	}
-	kdDebug() << "END OF A FRAME" << endl;
+	kdDebug(30522) << "END OF A FRAME" << endl;
 }
 
 /*******************************************/
@@ -119,7 +119,7 @@ void Formula::getFormula(QDomNode p, int indent)
 				}
 				break;
 			/*default:
-				kdError() << "Can't happen" << endl;
+				kdError(30522) << "Can't happen" << endl;
 				break;*/
 		}
 	/*	p = p.nextSibling();
@@ -149,7 +149,7 @@ void Formula::analyseParamFrame(const QDomNode balise)
 /*******************************************/
 void Formula::generate(QTextStream &out)
 {
-	kdDebug() << "FORMULA GENERATION" << endl;
+	kdDebug(30522) << "FORMULA GENERATION" << endl;
 	QDomDocument doc;
 	doc.setContent(_formula);
 
@@ -159,7 +159,7 @@ void Formula::generate(QTextStream &out)
 
 	KFormula::Container* formula = new KFormula::Container( &formulaDoc );
 	if ( !formula->load( doc ) ) {
-		kdError() << "Failed." << endl;
+		kdError(30522) << "Failed." << endl;
 	}
 
  	out << "$" << formula->texString() << "$";

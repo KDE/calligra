@@ -28,8 +28,8 @@
 Document::Document(const KoStore* in, QString fileOut):
 		XmlParser(in), _file(fileOut), _in( in )
 {
-	//kdDebug() << fileIn.latin1() << endl;
-	kdDebug() << fileOut.latin1() << endl;
+	//kdDebug(30522) << fileIn.latin1() << endl;
+	kdDebug(30522) << fileOut.latin1() << endl;
 	_filename = fileOut;
 	//setFileHeader(_fileHeader);
 	//setRoot(&_document);
@@ -46,21 +46,21 @@ void Document::analyse()
 {
 	QDomNode balise;
 	balise = init();
-	kdDebug() << "ANALYSE A DOC" << endl;
+	kdDebug(30522) << "ANALYSE A DOC" << endl;
 	_document.analyse(balise);
-	kdDebug() << "END ANALYSE" << endl;
+	kdDebug(30522) << "END ANALYSE" << endl;
 }
 
 void Document::generate()
 {
 	if(_file.open(IO_WriteOnly))
 	{
-		kdDebug() << "GENERATION" << endl;
+		kdDebug(30522) << "GENERATION" << endl;
 		_out.setDevice(&_file);
 		_document.generate(_out, !isEmbeded());
 		//_out << getDocument();
 		_file.close();
 	}
 	else
-		kdDebug() << "Can't use the file ..." << endl;
+		kdDebug(30522) << "Can't use the file ..." << endl;
 }

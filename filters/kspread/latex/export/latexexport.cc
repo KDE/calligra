@@ -48,7 +48,7 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
         delete in;
         return KoFilter::FileNotFound;
     }
-		kdDebug() << "In the kspread latex export filter..." << endl;
+		kdDebug(30522) << "In the kspread latex export filter..." << endl;
     /* input file Reading */
     in->close();
 

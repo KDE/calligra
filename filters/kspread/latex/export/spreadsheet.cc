@@ -39,7 +39,7 @@ Spreadsheet::Spreadsheet()
 /*******************************************/
 Spreadsheet::~Spreadsheet()
 {
-	kdDebug() << "Corps Destructor" << endl;
+	kdDebug(30522) << "Corps Destructor" << endl;
 }
 
 /*******************************************/
@@ -47,14 +47,14 @@ Spreadsheet::~Spreadsheet()
 /*******************************************/
 void Spreadsheet::analyse(const QDomNode balise)
 {
-	kdDebug() << getChildName(balise, 0) << endl;
+	kdDebug(30522) << getChildName(balise, 0) << endl;
 	analyse_attr(balise);
 	//_paper.analyse(getChild(balise, "paper"));
 	_map.analyse(getChild(balise, "map"));
 	//_locale.analyse(getChild(balise, "locale"));
 	//_areaname.analyse(getChild(balise, "areaname"));
 
-	kdDebug() << "SPREADSHEET END" << endl;
+	kdDebug(30522) << "SPREADSHEET END" << endl;
 }
 
 /*******************************************/
@@ -70,11 +70,11 @@ void Spreadsheet::analyse_attr(const QDomNode balise)
 /*******************************************/
 void Spreadsheet::generate(QTextStream &out, bool hasPreambule)
 {
-	kdDebug() << "DOC. GENERATION." << endl;
+	kdDebug(30522) << "DOC. GENERATION." << endl;
 
 	if(!Config::instance()->isEmbeded())
 		generatePreambule(out);
-	kdDebug() << "preambule : " << hasPreambule << endl;
+	kdDebug(30522) << "preambule : " << hasPreambule << endl;
 
 	/* Body */
 	if(hasPreambule)
@@ -89,7 +89,7 @@ void Spreadsheet::generate(QTextStream &out, bool hasPreambule)
 		out << "\\end{document}" << endl;
 	desindent();
 	if(getIndentation() != 0)
-			kdError() << "Error : indent != 0 at the end ! " << endl;
+			kdError(30522) << "Error : indent != 0 at the end ! " << endl;
 }
 
 /*******************************************/
@@ -101,7 +101,7 @@ void Spreadsheet::generatePreambule(QTextStream &out)
 	/* For each header */
 	//if(getFileHeader()->hasHeader())
 	//{
-	//	kdDebug() << "header : " << _headers.count() << endl;
+	//	kdDebug(30522) << "header : " << _headers.count() << endl;
 
 		/* default : no rule */
 	//	out << "\\renewcommand{\\headrulewidth}{0pt}" << endl;
@@ -114,7 +114,7 @@ void Spreadsheet::generatePreambule(QTextStream &out)
 	/* For each footer */
 	/*if(getFileHeader()->hasFooter())
 	{
-		kdDebug() << "footer : " << _footers.count() << endl;
+		kdDebug(30522) << "footer : " << _footers.count() << endl;
 */
 		/* default : no rule */
 	/*	out << "\\renewcommand{\\footrulewidth}{0pt}" << endl;
@@ -137,7 +137,7 @@ void Spreadsheet::generatePreambule(QTextStream &out)
 /*******************************************/
 void Spreadsheet::generateTypeHeader(QTextStream &out)
 {
-	/*kdDebug() << "generate header" << endl;
+	/*kdDebug(30522) << "generate header" << endl;
 	if((_fileHeader->getHeadType() == TH_ALL ||
 		_fileHeader->getHeadType() == TH_FIRST) && header->getInfo() == SI_EVEN)
 	{

@@ -65,7 +65,7 @@ class Formula: public Element
 		 * Nothing to do.
 		 */
 		virtual ~Formula() {
-			kdDebug() << "Destruction of a formula" << endl; }
+			kdDebug(30522) << "Destruction of a formula" << endl; }
 
 		/**
 		 * Accessors

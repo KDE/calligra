@@ -48,7 +48,7 @@ void Cell::analyse(const QDomNode balise)
 {
 	_row = getAttr(balise, "row").toLong();
 	_col = getAttr(balise, "column").toLong();
-	kdDebug() << getRow() << "-" << getCol() << endl;
+	kdDebug(30522) << getRow() << "-" << getCol() << endl;
 	Format::analyse(getChild(balise, "format"));
 	analyseText(balise);
 }
@@ -57,7 +57,7 @@ void Cell::analyseText(const QDomNode balise)
 {
 	setTextDataType( getAttr(getChild(balise, "text"), "dataType"));	
 	setText(getData(balise, "text"));
-	kdDebug() << "text(" << getTextDataType() << "): " << getText() << endl;
+	kdDebug(30522) << "text(" << getTextDataType() << "): " << getText() << endl;
 }
 
 /*******************************************/
@@ -69,7 +69,7 @@ void Cell::generate(QTextStream& out, Table* table)
 		out << "\\multicol{" << getMulticol() << "}{";
 	else*/ if (getMultirow() > 0)
 		out << "\\multirow{" << getMultirow() << "}{";
-	kdDebug() << "Generate cell..." << endl;
+	kdDebug(30522) << "Generate cell..." << endl;
 
 	out << "\\multicolumn{1}{";
 	Format::generate(out, table->searchColumn(_col));
@@ -89,7 +89,7 @@ void Cell::generate(QTextStream& out, Table* table)
 		out << "}" << endl;
 	
 		/*Element* elt = 0;
-	kdDebug() << "GENERATION OF A TABLE " << count() << endl;
+	kdDebug(30522) << "GENERATION OF A TABLE " << count() << endl;
 	out << endl << "\\begin{tabular}";
 	generateCellHeader(out);
 	out << endl;
@@ -127,6 +127,6 @@ void Cell::generate(QTextStream& out, Table* table)
 	generateBottomLineBorder(out, row - 1);
 	out << "\\end{tabular}" << endl << endl;
 	desindent();*/
-	kdDebug() << "END OF GENERATINO OF A CELL" << endl;
+	kdDebug(30522) << "END OF GENERATINO OF A CELL" << endl;
 }
 

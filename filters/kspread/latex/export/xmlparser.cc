@@ -54,7 +54,7 @@ XmlParser::XmlParser(const KoStore* in)
   _in = const_cast<KoStore*>(in);
 	if(!_in->open("root"))
 	{
-		kdError() << "Unable to open input file!" << endl;
+		kdError(30522) << "Unable to open input file!" << endl;
 		return;
 	}
 	/* input file Reading */
@@ -75,7 +75,7 @@ XmlParser::~XmlParser()
 QDomNode XmlParser::getChild(QDomNode balise, QString name)
 {
 	QDomNode node = getChild(balise, name, 0);
-	kdDebug() << node.nodeName() << endl;
+	kdDebug(30522) << node.nodeName() << endl;
 	return node;
 }
 
