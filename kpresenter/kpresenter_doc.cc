@@ -94,6 +94,7 @@
 #include <kocommandhistory.h>
 #include "koApplication.h"
 #include <koOasisStyles.h>
+#include <kooasiscontext.h>
 #include <koSconfig.h>
 
 using namespace std;
@@ -893,7 +894,7 @@ bool KPresenterDoc::loadChildren( KoStore* _store )
     return true;
 }
 
-bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles, KoStore* )
+bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles, KoStore*store )
 {
     QTime dt;
     dt.start();
@@ -974,6 +975,22 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         /// ### this has already been done, no?
         setPageLayout( __pgLayout );
     }
+
+    //code from kword
+    // TODO variable settings
+    // By default display real variable value
+    if ( !isReadWrite())
+        getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
+
+    // TODO MAILMERGE
+
+    KoOasisContext context( this, *m_varColl, oasisStyles, store );
+    Q_ASSERT( !oasisStyles.officeStyle().isNull() );
+
+    // Load all styles before the corresponding paragraphs try to use them!
+    loadOasisStyleTemplates( context );
+
+
     int pos = 0;
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling(), pos++ )
     {
@@ -1098,6 +1115,57 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
     return true;
 }
+
+
+void KPresenterDoc::loadOasisStyleTemplates( KoOasisContext& context )
+{
+    QValueList<QString> followingStyles;
+    uint nStyles = context.oasisStyles().userStyles().count();
+    if( nStyles ) { // we are going to import at least one style.
+        KoStyle *s = m_styleColl->findStyle("Standard");
+        //kdDebug() << "KPresenterDoc::loadOasisStyleTemplates looking for Standard, to delete it. Found " << s << endl;
+        if(s) // delete the standard style.
+            m_styleColl->removeStyleTemplate(s);
+    }
+    for (unsigned int item = 0; item < nStyles; item++) {
+        QDomElement styleElem = context.oasisStyles().userStyles()[item];
+        // TODO check style:family/style:class (for other styles than paragraph styles)
+
+        KoStyle *sty = new KoStyle( QString::null );
+        // Load the style
+        sty->loadStyle( styleElem, context );
+        // the real value of followingStyle is set below after loading all styles
+        sty->setFollowingStyle( sty );
+        // Style created, now let's try to add it
+        sty = m_styleColl->addStyleTemplate( sty );
+
+        kdDebug() << "KPresenterDoc: Loaded style " << sty->name() << endl;
+
+        if(m_styleColl->styleList().count() > followingStyles.count() )
+        {
+            QString following = styleElem.attribute( "style:next-style-name" );
+            followingStyles.append( following );
+        }
+        else
+            kdWarning() << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
+    }
+
+    if( followingStyles.count() != m_styleColl->styleList().count() ) {
+        kdDebug() << "Ouch, " << followingStyles.count() << " following-styles, but "
+                       << m_styleColl->styleList().count() << " styles in styleList" << endl;
+    }
+
+    unsigned int i=0;
+    for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
+        KoStyle * style = m_styleColl->findStyle(*it);
+        m_styleColl->styleAt(i++)->setFollowingStyle( style );
+    }
+
+    // TODO the same thing for style inheritance (style:parent-style-name) and setParentStyle()
+
+    Q_ASSERT( m_styleColl->findStyle( "Standard" ) );
+}
+
 
 void KPresenterDoc::fillStyleStack( const QDomElement& object, KoOasisStyles&oasisStyles )
 {

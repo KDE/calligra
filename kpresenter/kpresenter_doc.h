@@ -44,6 +44,7 @@ class KoTextParag;
 class KoTextObject;
 
 class KOSpellConfig;
+class KoOasisContext;
 
 #include <koDocument.h>
 #include <koDocumentChild.h>
@@ -498,6 +499,7 @@ protected slots:
     void slotDocumentInfoModifed();
 
 protected:
+    void loadOasisStyleTemplates( KoOasisContext& context );
     KoView* createViewInstance( QWidget* parent, const char* name );
     void testAndCloseAllTextObjectProtectedContent();
     // ************ functions ************
