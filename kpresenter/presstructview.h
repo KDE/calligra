@@ -20,7 +20,7 @@
 #ifndef presstructview_h
 #define presstructview_h
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include <qlistview.h>
 #include <qlabel.h>
 
@@ -88,7 +88,7 @@ protected:
  *
  ******************************************************************/
 
-class KPPresStructView : public QDialog
+class KPPresStructView : public KDialogBase
 {
     Q_OBJECT
 
@@ -110,6 +110,7 @@ protected:
 
 protected slots:
     void makeStuffVisible( QListViewItem *item );
+ void slotCloseDialog() { emit  presStructViewClosed();}
     
 signals:
     void presStructViewClosed();

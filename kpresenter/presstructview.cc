@@ -33,6 +33,7 @@
 #include <qvbox.h>
 #include <qcheckbox.h>
 #include <kdebug.h>
+#include <qlayout.h>
 
 /******************************************************************
  *
@@ -192,14 +193,17 @@ int KPPresStructObjectItem::getPageNum()
 /*================================================================*/
 KPPresStructView::KPPresStructView( QWidget *parent, const char *name,
                                     KPresenterDoc *_doc, KPresenterView *_view )
-    : QDialog( parent, name, false ), doc( _doc ), view( _view )
+    : KDialogBase( parent, name, false, "", KDialogBase::Close ), doc( _doc ), view( _view )
 {
-    hsplit = new QSplitter( this );
+    QVBox *page = makeVBoxMainWidget();
+    hsplit = new QSplitter( page );
     setupSlideList();
     setupPagePreview();
 
     setMinimumSize( 600, 400 );
+    connect(this,SIGNAL(closeClicked()),this,SLOT(slotCloseDialog()));
 }
+
 
 /*================================================================*/
 void KPPresStructView::setupSlideList()
