@@ -20,6 +20,9 @@ ifeq ($(ARCH),alpha)
 else
   COMPILER_FLAGS=CXX=g++ CC=gcc
 endif
+ifeq ($(ARCH),i386)
+  OBJPRELINK=--enable-objprelink
+endif
 
 build: build-stamp
 
@@ -33,9 +36,8 @@ build-stamp:
 	if test ! -f configure; then \
 	  $(MAKE) -f admin/Makefile.common ;\
 	fi 
-	$(COMPILER_FLAGS) \
-	./configure $(configkde) \
-	  --libdir=$(kde_libdir) --includedir=$(kde_includedir)
+	$(COMPILER_FLAGS) ./configure $(configkde) \
+	  --libdir=$(kde_libdir) --includedir=$(kde_includedir) $(OBJPRELINK)
 	$(MAKE) KDE_PLUGIN_DEBIAN="-module -no-undefined"
 	touch build-stamp
 
