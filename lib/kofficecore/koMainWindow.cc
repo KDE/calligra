@@ -90,6 +90,9 @@ public:
   KoView *m_activeView;
 
   QList<KAction> m_splitViewActionList;
+  // This additional list is needed, because we don't plug
+  // the first list, when an embedded view gets activated (Werner)
+  QList<KAction> m_veryHackyActionList;
   QSplitter *m_splitter;
   KSelectAction *m_orientation;
   KAction *m_removeView;
@@ -139,10 +142,10 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KStdAction::aboutKDE( m_helpMenu, SLOT( aboutKDE() ), actionCollection(), "about_kde" );
     KStdAction::reportBug( m_helpMenu, SLOT( reportBug() ), actionCollection(), "report_bug" );
 
+    // set up the action "list" for "Close all Views" (hacky :) (Werner)
+    d->m_veryHackyActionList.append(new KAction(i18n("Close All Views"), 0, this,
+	SLOT(slotCloseAllViews()), actionCollection(), "view_closeallviews"));
     // set up the action list for the splitter stuff
-    d->m_splitViewActionList.append(new KAction(i18n("Close All Views"), 0,
-        this, SLOT(slotCloseAllViews()),
-        actionCollection(), "view_closeallviews"));
     d->m_splitViewActionList.append(new KAction(i18n("Split View"), 0,
         this, SLOT(slotSplitView()),
         actionCollection(), "view_split"));
@@ -680,8 +683,6 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
   // to reimplement it because it works with an active part, whereas we work
   // with an active view _and_ an active part, depending for what.
   // Both are KXMLGUIClients, but e.g. the plugin query needs a QObject.
-
-
   kdDebug(30003) <<  "KoMainWindow::slotActivePartChanged( Part * newPart) newPart = " <<
     newPart << endl;
   kdDebug(30003) <<  "current active part is " << d->m_activePart << endl;
@@ -741,6 +742,10 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     for (; pIt != pEnd; ++pIt )
       factory->addClient( *pIt );
 
+    // This gets plugged in even for embedded views!
+    factory->plugActionList(d->m_activeView, "view_closeallviews",
+			    d->m_veryHackyActionList);
+    // This one only for root views
     if(d->m_rootViews->findRef(d->m_activeView)!=-1)
 	factory->plugActionList(d->m_activeView, "view_split", d->m_splitViewActionList );
 
