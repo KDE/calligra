@@ -988,29 +988,44 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     } else {
         // multi frame. Fill inline and protect checkbox, leave away the position strings.
         KWFrame *f=allFrames.first();
-        bool inlineframe=f->frameSet()->isFloating();
-        bool ps=f->frameSet()->isProtectSize();
-        floating->setChecked( inlineframe );
+        KWFrameSet *fs=f->frameSet();
+        bool ps=fs->isProtectSize();
         protectSize->setChecked( ps );
-        if ( f->frameSet()->isMainFrameset() ) {
+
+        if ( fs->isMainFrameset() ) {
             isMainFrame = true;
         }
 
+        bool table=fs->getGroupManager();
+        if(table)
+            fs=fs->getGroupManager();
+        bool inlineframe =fs->isFloating();
+        floating->setChecked( inlineframe );
+
         f=allFrames.next();
         while(f) {
-            if(inlineframe != f->frameSet()->isFloating()) {
-                floating->setTristate();
-                floating->setNoChange();
-            }
-            if(ps != f->frameSet()->isProtectSize()) {
+            KWFrameSet *fs=f->frameSet();
+            if(ps != fs->isProtectSize()) {
                 protectSize->setTristate();
                 protectSize->setNoChange();
             }
-            if ( f->frameSet()->isMainFrameset() ) {
+            if ( fs->isMainFrameset() ) {
                 isMainFrame = true;
             }
+            if(fs->getGroupManager()) //table
+                fs=fs->getGroupManager();
+            else
+                table=false;
+
+            if(inlineframe != fs->isFloating()) {
+                floating->setTristate();
+                floating->setNoChange();
+            }
+
             f=allFrames.next();
         }
+        if(table)
+            floating->setText( i18n( "Table is inline" ) );
     }
 
     if ( !frame || frame->frameSet() && ( frame->frameSet()->isHeaderOrFooter() ||
