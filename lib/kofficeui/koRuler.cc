@@ -207,7 +207,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     int totalw = qRound( zoomIt(layout.ptWidth) );
     QString str;
     QFont font; // Use the global KDE font. Let's hope it's appropriate.
-    font.setPixelSize( 8 );
+    font.setPointSize( 8 );
     QFontMetrics fm( font );
 
     p.setBrush( colorGroup().brush( QColorGroup::Base ) );
@@ -362,7 +362,7 @@ void KoRuler::drawVertical( QPainter *_painter )
     if ( paintRect.intersects( rulerRect ) )  {
         QString str;
         QFont font; // Use the global KDE font. Let's hope it's appropriate.
-        font.setPixelSize( 8 ); // Hardcode the size? (Werner)
+        font.setPointSize( 8 ); // Hardcode the size? (Werner)
         QFontMetrics fm( font );
 
         p.setBrush( colorGroup().brush( QColorGroup::Base ) );
@@ -385,16 +385,20 @@ void KoRuler::drawVertical( QPainter *_painter )
 
         // Draw the numbers
         double dist = lineDistance();
-        int maxheight = 0;
+        int maxheight = 0;        
         for ( double i = 0.0;i <= (double)totalh;i += dist ) {
             str = QString::number( KoUnit::ptToUnit( i / m_zoom, m_unit ) );
             int textheight = fm.height();
-            maxheight = QMAX( maxheight, textheight );
-            p.drawText( qRound(( width() - fm.width( str ) ) * 0.5),
-                        qRound(i) - diffy - qRound(textheight * 0.5),
-                        width(), textheight, AlignLeft | AlignTop, str );
+            int textwidth = fm.width( str );
+            maxheight = QMAX( maxheight, textwidth );
+            p.save();
+            p.translate( qRound(( width() - textheight ) * 0.5),
+                         qRound(i) - diffy + qRound(textwidth * 0.5) );
+            p.rotate( -90 );
+            p.drawText( 0, 0, textwidth, textheight, AlignLeft | AlignTop, str );
+            p.restore();
         }
-
+        
         // Draw the medium-sized lines
         if ( dist > maxheight + 1 )
         {
@@ -1122,6 +1126,24 @@ void KoRuler::slotMenuActivated( int i )
         setUnit( unit );
         emit unitChanged( KoUnit::unitName( unit ) );
     }
+}
+
+QSize KoRuler::minimumSizeHint() const
+{
+    QSize size;
+    QFont font; // Use the global KDE font. Let's hope it's appropriate.
+    font.setPointSize( 8 );
+    QFontMetrics fm( font );
+    
+    size.setWidth( fm.height() + 4 );
+    size.setHeight( fm.height() + 4 );
+    
+    return size;
+}
+
+QSize KoRuler::sizeHint() const
+{
+    return minimumSizeHint();
 }
 
 #include "koRuler.moc"

@@ -238,6 +238,16 @@ public:
      * Enable or disable the "Page Layout" menu item.
      */
     void setPageLayoutMenuItemEnabled(bool b);
+    
+    /**
+     * Reimplemented from QWidget
+     */
+    virtual QSize minimumSizeHint() const;
+    
+    /**
+     * Reimplemented from QWidget
+     */
+    virtual QSize sizeHint() const;
 
 signals:
     void newPageLayout( KoPageLayout ); // BIC: pass a const ref
