@@ -242,7 +242,7 @@ void ProcessPaperTag ( QDomNode    myNode,
 // ProcessValueTag is the processing function for both the ITALIC tag
 // and the LAYOUT NAME tag.
 
-void ProcessValueTag ( QDomNode   myNode,
+void ProcessValueTagAsString ( QDomNode   myNode,
                        void      *tagData,
                        QString   &         )
 {
@@ -251,6 +251,19 @@ void ProcessValueTag ( QDomNode   myNode,
     *value = "";
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "value", "QString", (void *) value );
+    ProcessAttributes (myNode, attrProcessingList);
+
+}
+
+void ProcessValueTagAsInt ( QDomNode   myNode,
+                       void      *tagData,
+                       QString   &         )
+{
+    int *value = (int *) tagData;
+
+    *value = -1;
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "value", "int", (void *) value );
     ProcessAttributes (myNode, attrProcessingList);
 
 }
@@ -352,7 +365,7 @@ void ProcessLayoutTag ( QDomNode   myNode,
     TabularData tabulator;  // tabulator data
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList << TagProcessing ( "NAME",         ProcessValueTag,        (void *) &name                 )
+    tagProcessingList << TagProcessing ( "NAME",         ProcessValueTagAsString,(void *) &name                 )
                       << TagProcessing ( "COUNTER",      ProcessCounterTag,      (void *) layout               )
                       << TagProcessing ( "TABULATOR",    ProcessTabulatorTag,    (void *) &tabulator           )
                       << TagProcessing ( "FLOW",         ProcessFlowTag,         (void *) layout               )
@@ -567,6 +580,7 @@ void ProcessFormatTag ( QDomNode   myNode,
                         void      *tagData,
                         QString   &outputText )
 {
+    kdDebug (KDEBUG_KWFILTER) << "Entering FORMAT Tag " <<  endl;
     QValueList<FormatData> *formatDataList = (QValueList<FormatData> *) tagData;
 
     int formatId  = -1;
@@ -590,12 +604,12 @@ void ProcessFormatTag ( QDomNode   myNode,
              bool    italic = false;
              bool    underline = false;
              QValueList<TagProcessing> tagProcessingList;
-             tagProcessingList << TagProcessing ( "SIZE",      ProcessValueTag,  (void *) &fontSize   )
-                               << TagProcessing ( "WEIGHT",    ProcessValueTag,  (void *) &fontWeight )
-                               << TagProcessing ( "UNDERLINE", ProcessItalicTag, (void *) &underline  )
-                               << TagProcessing ( "FONT",      ProcessFontTag,   (void *) &fontName   )
-                               << TagProcessing ( "VERTALIGN", ProcessValueTag,  (void *) &vertalign  )
-                               << TagProcessing ( "ITALIC",    ProcessItalicTag, (void *) &italic     );
+             tagProcessingList << TagProcessing ( "SIZE",      ProcessValueTagAsInt,(void *) &fontSize   )
+                               << TagProcessing ( "WEIGHT",    ProcessValueTagAsInt,(void *) &fontWeight )
+                               << TagProcessing ( "UNDERLINE", ProcessItalicTag,    (void *) &underline  )
+                               << TagProcessing ( "FONT",      ProcessFontTag,      (void *) &fontName   )
+                               << TagProcessing ( "VERTALIGN", ProcessValueTagAsInt,(void *) &vertalign  )
+                               << TagProcessing ( "ITALIC",    ProcessItalicTag,    (void *) &italic     );
              ProcessSubtags (myNode, tagProcessingList, outputText);
 
              (*formatDataList) << FormatData ( TextFormatting (formatPos,
@@ -614,7 +628,7 @@ void ProcessFormatTag ( QDomNode   myNode,
           {
              QString pictureName;
              QValueList<TagProcessing> tagProcessingList;
-             tagProcessingList << TagProcessing ( "FILENAME", ProcessValueTag, &pictureName );
+             tagProcessingList << TagProcessing ( "FILENAME", ProcessValueTagAsString, &pictureName );
              ProcessSubtags (myNode, tagProcessingList, outputText);
 
              (*formatDataList) << FormatData ( PictureAnchor (formatPos, pictureName ) );
@@ -657,6 +671,7 @@ void ProcessFormatTag ( QDomNode   myNode,
           (*formatDataList) << FormatData (formatId);
 #endif
     }
+    kdDebug (KDEBUG_KWFILTER) << "Processed FORMAT Tag " <<  endl;
 }  // end ProcessFormatTag
 
 /***************************************************************************/
@@ -773,6 +788,8 @@ void ProcessFramesetsTag ( QDomNode   myNode,
                            QString   &outputText  )
 // FRAMESETS is a container tag for one or more framesets
 {
+    kdDebug (KDEBUG_KWFILTER) << "Entering FRAMESETS Tag " <<  endl;
+
     AllowNoAttributes (myNode);
 
     QValueList<TagProcessing> tagProcessingList;
@@ -842,6 +859,7 @@ void ProcessParagraphTag ( QDomNode   myNode,
                            void      *tagData,
                            QString   &outputText )
 {
+    kdDebug (KDEBUG_KWFILTER) << "Entered PARAGRAPH Tag " << endl;
     DocData  *docData = (DocData *) tagData;
 
     AllowNoAttributes (myNode);
@@ -855,8 +873,10 @@ void ProcessParagraphTag ( QDomNode   myNode,
                       << TagProcessing ( "LAYOUT",  ProcessLayoutTag,  (void *) &layout             );
     ProcessSubtags (myNode, tagProcessingList, outputText);
 
-ProcessParagraph ( paraText, paraFormatDataList, outputText,
+    kdDebug (KDEBUG_KWFILTER) << "Processing:" << paraText << endl;
+    ProcessParagraph ( paraText, paraFormatDataList, outputText,
                    layout, docData );
+    kdDebug (KDEBUG_KWFILTER) << "Processed PARAGRAPH Tag " << endl;
 
 }   // end ProcessParagraphTag()
 

@@ -367,7 +367,11 @@ void ProcessPaperTag ( QDomNode    myNode,
                         void       *tagData,
                         QString    &         );
 
-void ProcessValueTag ( QDomNode   myNode,
+void ProcessValueTagAsString ( QDomNode   myNode,
+                       void      *tagData,
+                       QString   &         );
+
+void ProcessValueTagAsInt ( QDomNode   myNode,
                        void      *tagData,
                        QString   &         );
 
