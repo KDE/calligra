@@ -1925,9 +1925,13 @@ void KSpreadUndoAutofill::undo()
     createListCell( m_dataRedo, table );
 
     doc()->undoBuffer()->lock();
+    doc()->emitBeginOperation();
+
     table->deleteCells( m_selection );
     table->paste( m_data, m_selection );
     if(table->getAutoCalc()) table->recalc();
+
+    doc()->emitEndOperation();
 
     doc()->undoBuffer()->unlock();
 }
@@ -1940,11 +1944,13 @@ void KSpreadUndoAutofill::redo()
     if ( !table )
 	return;
 
+    doc()->emitBeginOperation();
+
     table->deleteCells( m_selection );
     doc()->undoBuffer()->lock();
     table->paste( m_dataRedo, m_selection );
     if(table->getAutoCalc()) table->recalc();
-
+    doc()->emitEndOperation();
     doc()->undoBuffer()->unlock();
 }
 
