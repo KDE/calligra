@@ -594,10 +594,10 @@ void Thesaurus::findTermWordnet(const QString &term)
     m_combobox->insertItem(i18n("Synonyms/Hypernyms - Ordered by Frequency"));
     m_combobox->insertItem(i18n("Synonyms - Ordered by Similarity of Meaning (verbs only)"));
     m_combobox->insertItem(i18n("Antonyms - Words with Opposite Meanings"));
-    m_combobox->insertItem(i18n("Hyponyms - ...is a (kind of) %1").arg(m_edit->currentText()));
-    m_combobox->insertItem(i18n("Meronyms - %1 has a...").arg(m_edit->currentText()));
+    m_combobox->insertItem(i18n("Hyponyms - ... is a (kind of) %1").arg(m_edit->currentText()));
+    m_combobox->insertItem(i18n("Meronyms - %1 has a ...").arg(m_edit->currentText()));
     // 5:
-    m_combobox->insertItem(i18n("Holonyms - ...has a %1").arg(m_edit->currentText()));
+    m_combobox->insertItem(i18n("Holonyms - ... has a %1").arg(m_edit->currentText()));
     m_combobox->insertItem(i18n("Attributes"));
     m_combobox->insertItem(i18n("Cause To (for some verbs only)"));
     m_combobox->insertItem(i18n("Verb Entailment (for some verbs only)"));

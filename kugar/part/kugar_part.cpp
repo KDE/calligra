@@ -92,7 +92,7 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & doc)
 		else
 		{
 			ok=false;
-			KMessageBox::sorry(0,i18n("The zero sized data file %1  can't be rendered").arg(m_file));
+			KMessageBox::sorry(0,i18n("The zero sized data file %1 can't be rendered").arg(m_file));
 		}
 
         }

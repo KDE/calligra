@@ -94,7 +94,7 @@ bool KWDeleteDia::doDelete()
 
     if (m_toRemove.count() == ( (type == ROW) ? table->getRows() : table->getCols() ) )
     {   // we have to delete the whole table
-        //globalCommand = new KWDeleteTableCommand(i18n("Remove table"), table);
+        //globalCommand = new KWDeleteTableCommand(i18n("Remove Table"), table);
         doc->deleteTable(table);
     }
     else

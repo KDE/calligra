@@ -559,7 +559,7 @@ void KSpreadView::initializeInsertActions()
   m_insertLink = new KAction( i18n("&Link..."), 0, this,
                               SLOT( insertHyperlink() ), actionCollection(),
                               "insertHyperlink" );
-  m_insertLink->setToolTip(i18n("Insert an internet hyperlink."));
+  m_insertLink->setToolTip(i18n("Insert an Internet hyperlink."));
 
   m_insertSpecialChar = new KAction( i18n( "S&pecial Character..." ), "char", this,
                                      SLOT( insertSpecialChar() ), actionCollection(),
@@ -882,7 +882,8 @@ void KSpreadView::initializeCellOperationActions()
   m_editCell->setToolTip(i18n("Edit the highlighted cell."));
 
   m_delete = new KAction( i18n("Delete"),"deletecell", 0, this,
-                          SLOT( deleteSelection() ), actionCollection(),
+
+			  SLOT( deleteSelection() ), actionCollection(),
                           "delete" );
   m_delete->setToolTip(i18n("Delete all contents and formatting of the current cell."));
 

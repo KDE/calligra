@@ -305,8 +305,8 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 
     indent->setSuffix( suffix );
     indent->setLabel(i18n("&Paragraph indent by toolbar buttons:"));
-    QWhatsThis::add( indent, i18n("Configure the indent width used when using the Increase "
-                    "or Decrease indentation buttons on a paragraph.<p>The lower the value "
+    QWhatsThis::add( indent, i18n("Configure the indent width used when using the 'Increase' "
+                    "or 'Decrease' indentation buttons on a paragraph.<p>The lower the value "
                     "the more often the buttons will have to be pressed to gain the same "
                     "indentation") );
 
@@ -702,8 +702,8 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     columnSpacing->setRange(KoUnit::ptToUnit( 0.1, unit ), KoUnit::ptToUnit( 50, unit ), KoUnit::ptToUnit( 0.1, unit ));
     columnSpacing->setSuffix( suffix );
     columnSpacing->setLabel(i18n("Default column spacing:"));
-    QWhatsThis::add( columnSpacing, i18n("When setting a document to use more then one column "
-                "This distance will be used to seperate the columns. This value is merely a default "
+    QWhatsThis::add( columnSpacing, i18n("When setting a document to use more than one column "
+                "this distance will be used to seperate the columns. This value is merely a default "
                 "setting as the column spacing can be changed per document") );
 
     QWidget *fontContainer = new QWidget(gbDocumentDefaults);

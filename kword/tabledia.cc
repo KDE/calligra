@@ -269,7 +269,7 @@ void KWTableDia::slotOk()
                     // non inline table: max offset of the page
                     maxRightOffset = doc->ptPaperWidth() - doc->ptRightBorder();
                 if ( !macroCmd )
-                    macroCmd = new KMacroCommand( (colsDiff>0 ) ? i18n("Add new columns to table") : i18n("Remove columns from table") );
+                    macroCmd = new KMacroCommand( (colsDiff>0 ) ? i18n("Add New Columns to Table") : i18n("Remove Columns From Table") );
                 cmd = 0L;
                 for ( int i = 0 ; i < abs( colsDiff ) ; i++ )
                 {

@@ -206,18 +206,18 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 
     cDisappear = new QComboBox( false, grp2, "cDisappear" );
     cDisappear->insertItem( i18n( "No Effect" ) );
-    cDisappear->insertItem( i18n( "Disappear to the Right" ) );
-    cDisappear->insertItem( i18n( "Disappear to the Left" ) );
-    cDisappear->insertItem( i18n( "Disappear to the Top" ) );
-    cDisappear->insertItem( i18n( "Disappear to the Bottom" ) );
-    cDisappear->insertItem( i18n( "Disappear to the Right/Top" ) );
-    cDisappear->insertItem( i18n( "Disappear to the Right/Bottom" ) );
-    cDisappear->insertItem( i18n( "Disappear to the Left/Top" ) );
-    cDisappear->insertItem( i18n( "Disappear to the Left/Bottom" ) );
-    cDisappear->insertItem( i18n( "Wipe to the Left" ) );
-    cDisappear->insertItem( i18n( "Wipe to the Right" ) );
-    cDisappear->insertItem( i18n( "Wipe to the Top" ) );
-    cDisappear->insertItem( i18n( "Wipe to the Bottom" ) );
+    cDisappear->insertItem( i18n( "Disappear to Right" ) );
+    cDisappear->insertItem( i18n( "Disappear to Left" ) );
+    cDisappear->insertItem( i18n( "Disappear to Top" ) );
+    cDisappear->insertItem( i18n( "Disappear to Bottom" ) );
+    cDisappear->insertItem( i18n( "Disappear to Right/Top" ) );
+    cDisappear->insertItem( i18n( "Disappear to Right/Bottom" ) );
+    cDisappear->insertItem( i18n( "Disappear to Left/Top" ) );
+    cDisappear->insertItem( i18n( "Disappear to Left/Bottom" ) );
+    cDisappear->insertItem( i18n( "Wipe to Left" ) );
+    cDisappear->insertItem( i18n( "Wipe to Right" ) );
+    cDisappear->insertItem( i18n( "Wipe to Top" ) );
+    cDisappear->insertItem( i18n( "Wipe to Bottom" ) );
     cDisappear->setCurrentItem( static_cast<int>( obj->getEffect3() ) );
     lowerRow->addWidget(cDisappear, 1, 1);
 

@@ -182,7 +182,7 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
     cbIgnoreCase = new QCheckBox(i18n("Ignore case when checking words"), this );
     connect( cbIgnoreCase , SIGNAL(toggled(bool)), this, SLOT(slotIgnoreCase(bool)) );
 
-    cbIgnoreAccent = new QCheckBox(i18n("ignore accents when checking words"), this );
+    cbIgnoreAccent = new QCheckBox(i18n("Ignore accents when checking words"), this );
     connect( cbIgnoreAccent , SIGNAL(toggled(bool)), this, SLOT(slotIgnoreAccent(bool)) );
 
     cbSpellWordWithNumber = new QCheckBox(i18n("Check words with numbers"), this );

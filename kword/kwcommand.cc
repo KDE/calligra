@@ -504,7 +504,7 @@ KWTableStyleCommand::KWTableStyleCommand( const QString &name, KWFrame *_frame, 
     repaintViews = _repaintViews;
 
     // No need for i18n because it will never be displayed.
-    m_fsc = new KWFrameStyleCommand( "Apply framestyle to frame", m_frame, m_ts->pFrameStyle(), repaintViews );
+    m_fsc = new KWFrameStyleCommand( "Apply Framestyle to Frame", m_frame, m_ts->pFrameStyle(), repaintViews );
     m_sc = 0L;
 }
 
@@ -560,7 +560,7 @@ KWTableTemplateCommand::KWTableTemplateCommand( const QString &name, KWTableFram
     m_tt = _tt;
 
     // No need for i18n because it will never be displayed.
-    m_tableCommands = new KMacroCommand( "Apply tablestyles to table" );
+    m_tableCommands = new KMacroCommand( "Apply Tablestyles to Table" );
 
 
     KWTableStyle *cell = 0L;

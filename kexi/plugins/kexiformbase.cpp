@@ -332,7 +332,7 @@ void KexiFormBase::slotWidgetLineEdit()
 
 void KexiFormBase::slotWidgetPushButton()
 {
-	QPushButton *w = new QPushButton(i18n("Push button"), topLevelEditor);
+	QPushButton *w = new QPushButton(i18n("Push Button"), topLevelEditor);
 	w->setName(m_item->widgetWatcher()->genName("button").latin1());
 	topLevelEditor->addInteractive(w);
 }

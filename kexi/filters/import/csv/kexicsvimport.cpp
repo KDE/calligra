@@ -102,7 +102,7 @@ KexiCSVImport::parseFile(const QString &file, ImportDlg *p)
 	QFile f(file);
 	if(!f.exists() || !f.open(IO_ReadOnly))
 	{
-		KMessageBox::sorry(0, i18n("Coudn't open file"), i18n("CSV import"));
+		KMessageBox::sorry(0, i18n("Couldn't open file."), i18n("CSV Import"));
 		return false;
 	}
 
@@ -200,7 +200,7 @@ KexiCSVImport::import()
 {
 	if(m_dlg->table->text().isEmpty())
 	{
-		KMessageBox::sorry(0, i18n("Please enter a tablename"), i18n("CSV import"));
+		KMessageBox::sorry(0, i18n("Please enter a table name."), i18n("CSV Import"));
 		return;
 	}
 

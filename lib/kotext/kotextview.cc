@@ -1364,7 +1364,7 @@ void KoTextView::removeLink()
         textDocument()->setSelectionStart( KoTextDocument::Temp, &c1 );
         textDocument()->setSelectionEnd( KoTextDocument::Temp, &c2 );
         KCommand *cmd=textObject()->replaceSelectionCommand( &c1, var->value(),
-                                        KoTextDocument::Temp, i18n("Remove link") );
+                                        KoTextDocument::Temp, i18n("Remove Link") );
         if ( cmd )
             textObject()->emitNewCommand( cmd );
     }

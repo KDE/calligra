@@ -489,7 +489,7 @@ void KWView::setupActions()
     actionViewPageMode = new KToggleAction( i18n( "&Page Mode" ), 0,
                                             this, SLOT( viewPageMode() ),
                                             actionCollection(), "view_pagemode" );
-    actionViewPageMode->setWhatsThis( i18n( "Switch to page mode.<br><br> Page mode is designed to make editing your text easy.<br><br>This function is most frequently used to return to text editing after switching to Preview mode." ) );
+    actionViewPageMode->setWhatsThis( i18n( "Switch to page mode.<br><br> Page mode is designed to make editing your text easy.<br><br>This function is most frequently used to return to text editing after switching to preview mode." ) );
     actionViewPageMode->setToolTip( i18n( "Switch to page editing mode." ) );
 
     actionViewPageMode->setExclusiveGroup( "viewmodes" );
@@ -562,8 +562,8 @@ void KWView::setupActions()
     actionInsertLink = new KAction( i18n( "Link..." ), 0,
                                     this, SLOT( insertLink() ),
                                     actionCollection(), "insert_link" );
-    actionInsertLink->setToolTip( i18n( "Insert a web address, email address or hyperlink to a file." ) );
-    actionInsertLink->setWhatsThis( i18n( "Insert a web address, email address or hyperlink to a file." ) );
+    actionInsertLink->setToolTip( i18n( "Insert a Web address, email address or hyperlink to a file." ) );
+    actionInsertLink->setWhatsThis( i18n( "Insert a Web address, email address or hyperlink to a file." ) );
 
     actionInsertComment = new KAction( i18n( "Comment..." ), 0,
                                     this, SLOT( insertComment() ),
@@ -1052,7 +1052,7 @@ void KWView::setupActions()
                                      this, SLOT( copyLink() ),
                                      actionCollection(), "copy_link" );
 
-    actionAddLinkToBookmak = new KAction( i18n( "Add to bookmark" ), 0,
+    actionAddLinkToBookmak = new KAction( i18n( "Add to Bookmark" ), 0,
                                      this, SLOT( addToBookmark() ),
                                      actionCollection(), "add_to_bookmark" );
 

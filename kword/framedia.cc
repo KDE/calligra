@@ -134,7 +134,7 @@ KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDial
         return;
     }
     if ( listOfFrames.count() == 1 )
-        setCaption( i18n( "Frame Settings For %1" ).arg( f->frameSet()->getName() ) );
+        setCaption( i18n( "Frame Settings for %1" ).arg( f->frameSet()->getName() ) );
 
     KWFrameSet *fs = f->frameSet()->getGroupManager();
     if(fs==0L) fs=f->frameSet();
@@ -329,7 +329,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     if(frameType==FT_TEXT)
     {
         // AutoCreateNewFrame policy.
-        endOfFrame = new QGroupBox(i18n("If Text is too long for Frame"), tab1 );
+        endOfFrame = new QGroupBox(i18n("If Text is Too Long for Frame"), tab1 );
         grid1->addWidget( endOfFrame, row, 0 );
 
         eofGrid= new QGridLayout (endOfFrame, 4, 1, KDialog::marginHint(), KDialog::spacingHint());

@@ -226,7 +226,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
 
     checkSoundEffect = new QCheckBox( i18n( "Sound effect" ), leftpart );
     checkSoundEffect->setChecked( soundEffect );
-    QWhatsThis::add( checkSoundEffect, i18n("If you use a sound effect, please do not select No Effect.") );
+    QWhatsThis::add( checkSoundEffect, i18n("If you use a sound effect, please do not select 'No Effect'.") );
     connect( checkSoundEffect, SIGNAL( clicked() ), this, SLOT( soundEffectChanged() ) );
 
     QWidget* soundgrp = new QWidget( leftpart );

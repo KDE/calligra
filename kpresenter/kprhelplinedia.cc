@@ -41,7 +41,7 @@ KPrMoveHelpLineDia::KPrMoveHelpLineDia( QWidget *parent, double value, double li
     m_bRemoveLine = false;
 
     setButtonText( KDialogBase::User1, i18n("Remove") );
-    setCaption( i18n("Change Help Line position") );
+    setCaption( i18n("Change Help Line Position") );
     QVBox *page = makeVBoxMainWidget();
     new QLabel(i18n("Position (%1):").arg(m_doc->getUnitName()), page);
     position= new KDoubleNumInput( page );

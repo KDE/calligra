@@ -248,14 +248,14 @@ void KoAutoFormatDia::setupTab1()
             "All words are checked for the common mistake of holding the "
             "shift key down a bit too long. If some words must have two "
             "uppercase characters, then those exceptions should be added in "
-            "the Exceptions tab."));
+            "the 'Exceptions' tab."));
 
     vbox->addWidget(cbUpperUpper);
 
     cbDetectUrl=new QCheckBox( tab1 );
     cbDetectUrl->setText( i18n( "Autoformat &URLs" ) );
     QWhatsThis::add( cbDetectUrl, i18n(
-            "Detect when a URL (Universal Remote Location) is typed and "
+            "Detect when a URL (Uniform Resource Locator) is typed and "
             "provide formatting that matches the way an Internet browser "
             "would show a URL."));
 

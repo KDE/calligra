@@ -230,7 +230,7 @@ void ScrollView::cursorChanged(bool visible, bool /*selecting*/)
 
 
 static const KCmdLineOptions options[]= {
-    { "+file", "File to Open", 0 },
+    { "+file", "File to open", 0 },
     KCmdLineLastOption
 };
 

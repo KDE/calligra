@@ -43,7 +43,7 @@ void KivioTextFormatDlg::initFontTab()
 {
   QFrame* tab = addPage(i18n("Font"));
   m_fontChooser = new KFontChooser(tab);
-  QLabel* textColorLbl = new QLabel(i18n("Text Color:"), tab);
+  QLabel* textColorLbl = new QLabel(i18n("Text color:"), tab);
   m_textCBtn = new KColorButton(tab);
   QGridLayout* gl = new QGridLayout(tab);
   gl->setSpacing(KDialog::spacingHint());

@@ -887,10 +887,10 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
 
     cSpacing = new QComboBox( false, spacingFrame, "" );
     cSpacing->insertItem( i18n( "Line spacing value", "Single" ) );
-    cSpacing->insertItem( i18n( "Line spacing value", "1.5 lines" ) );
+    cSpacing->insertItem( i18n( "Line spacing value", "1.5 Lines" ) );
     cSpacing->insertItem( i18n( "Line spacing value", "Double" ) );
     cSpacing->insertItem( i18n( "Exactly (%1)" ).arg(unitName) );
-    cSpacing->insertItem( i18n( "At least (%1)" ).arg(unitName) );
+    cSpacing->insertItem( i18n( "At Least (%1)" ).arg(unitName) );
     cSpacing->insertItem( i18n( "Multiply") );
 
     connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );

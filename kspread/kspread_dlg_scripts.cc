@@ -106,7 +106,7 @@ void KSpreadScripts::slotDelete()
 
     QString t = i18n("Do you really want to delete the script\n%1?").arg(list->text( list->currentItem() ) );
 
-    if ( KMessageBox::questionYesNo(this, t,i18n("KSpread Question"))==4 )
+    if ( KMessageBox::questionYesNo(this, t,i18n("Delete Script"))==4 )
         return;
 
     QString t2( list->text( list->currentItem() ) );

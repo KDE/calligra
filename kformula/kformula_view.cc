@@ -107,7 +107,7 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
     KStdAction::preferences( this, SLOT(configure()), actionCollection(), "configure" );
 
     // font stuff
-//     KFontAction* actionElement_Text_Font = new KFontAction(i18n( "Font family" ),0,
+//     KFontAction* actionElement_Text_Font = new KFontAction(i18n( "Font Family" ),0,
 //                                               actionCollection(),"textfont");
 //     connect( actionElement_Text_Font, SIGNAL( activated( const QString& ) ), this, SLOT( fontSelected( const QString& ) ) );
 
