@@ -78,48 +78,34 @@ KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, QString caption, co
 	}
 }
 
-bool
-KexiDataTable::executeQuery(const QString &queryStatement)
+void KexiDataTable::setDataSet(KexiDBRecord *rec)
 {
-
 	if(!m_first)
 		m_tableView->clearAll();
 
-	kdDebug() << "KexiDataTable::executeQuery(): executing query..." << endl;
-//	m_record = kexiProject()->db()->queryRecord(queryStatement, false);
-
-	try
-	{
-		m_record = kexiProject()->db()->queryRecord(queryStatement, false);
-	}
-	catch(KexiDBError *err)
-	{
-		kdDebug() << "KexiDataTable::executeQuery(): db-error" << endl; 
-		err->toUser(this);
-		return false;
-	}
+	m_record=rec;
 
 	if(!m_record)
-		kdDebug() << "KexiDataTable::executeQuery(): record doesn't exist" << endl;
+		kdDebug() << "KexiDataTable::setDataSet(): record doesn't exist" << endl;
 
 	for(uint i = 0; i < m_record->fieldCount(); i++)
 	{
 		if(!m_record->fieldInfo(i)->auto_increment())
 		{
 			m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly());
-			kdDebug() << "KexiDataTable::executeQuery(): adding usual column" << endl;
+			kdDebug() << "KexiDataTable::setDataSet(): adding usual column" << endl;
 		}
 		else
 		{
 			m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly(), QVariant(""), 100, true);
-			kdDebug() << "KexiDataTable::executeQuery(): adding auto-inc columns" << endl;
+			kdDebug() << "KexiDataTable::setDataSet(): adding auto-inc columns" << endl;
 		}
 	}
 
 	int record = 0;
 	while(m_record->next())
 	{
-		kdDebug() << "KexiDataTable::executeQuery(): next()" << endl;
+		kdDebug() << "KexiDataTable::setDataSet(): next()" << endl;
 		KexiTableItem *it = new KexiTableItem(m_tableView);
 		for(uint i = 0; i < m_record->fieldCount(); i++)
 		{
@@ -139,6 +125,29 @@ KexiDataTable::executeQuery(const QString &queryStatement)
 	}
 
 	m_first = false;
+		
+}
+
+bool
+KexiDataTable::executeQuery(const QString &queryStatement)
+{
+
+
+	kdDebug() << "KexiDataTable::executeQuery(): executing query..." << endl;
+//	m_record = kexiProject()->db()->queryRecord(queryStatement, false);
+
+	try
+	{
+		m_record = kexiProject()->db()->queryRecord(queryStatement, false);
+	}
+	catch(KexiDBError *err)
+	{
+		kdDebug() << "KexiDataTable::executeQuery(): db-error" << endl; 
+		err->toUser(this);
+		return false;
+	}
+
+	setDataSet(m_record);
 	return true;
 }
 
@@ -185,6 +194,8 @@ KexiDataTable::slotSearchChanged(const QString &findQuery)
 
 KexiDataTable::~KexiDataTable()
 {
+	kdDebug()<<"KexiDataTable::~KexiDataTable()"<<endl;
+	if (!m_record) kdDebug()<<"m_record == 0"<<endl;
 	delete m_record;
 }
 

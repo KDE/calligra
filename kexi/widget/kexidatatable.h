@@ -41,6 +41,7 @@ class KexiDataTable : public KexiDialogBase
 		~KexiDataTable();
 
 		bool executeQuery(const QString &query);
+		void setDataSet(KexiDBRecord *rec);
 
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 

@@ -41,7 +41,7 @@
 
 KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject* parent,
          const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),m_handlersLoaded(false)
 {
 	dcop = 0;
 	setInstance( KexiFactory::global(), false );
@@ -479,6 +479,8 @@ KexiProject::fileReferences(const QString &group)
 
 void KexiProject::loadHandlers()
 {
+	if (m_handlersLoaded) return;
+	m_handlersLoaded=true;
 	kdDebug()<<"***********************Trying to load handlers"<<endl;
 	KTrader::OfferList ol=KTrader::self()->query("Kexi/Handler");
 	for (KTrader::OfferList::ConstIterator it=ol.begin(); it!=ol.end(); ++it)

@@ -52,7 +52,8 @@ class KexiTablePart : public KexiProjectHandler, public KexiDataProvider
 
         	virtual QStringList datasets(){}
 	        virtual QStringList fields(const QString& identifier){}
-        	virtual KexiDBRecord *records(const QString& identifier);
+	        virtual KexiDBRecord *records(const QString& identifier,Parameters params);
+        	virtual ParameterList parameters(const QString &identifier){};
 
 };
 

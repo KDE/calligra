@@ -60,9 +60,13 @@ public:
 
     virtual void updateReadWrite( bool readwrite );
 
+    void addQDockWindow(QDockWindow *w);
+    void removeQDockWindow(QDockWindow * w);
 //public slots:
 //    void slotShowRelations();
 protected:
+        virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
+
 	//various init-functions
 	void			initActions();
 	void			initMainDock();
@@ -99,7 +103,8 @@ protected slots:
 
 private:
 	KexiProject *m_project;
-    DCOPObject *dcop;
+	DCOPObject *dcop;
+	QPtrList<QDockWindow> m_dockWins;
 };
 
 #endif

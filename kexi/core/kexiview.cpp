@@ -38,7 +38,7 @@
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
 #include <kcmdlineargs.h>
-
+#include <kparts/event.h>
 #include <kocontexthelp.h>
 
 #include "kexiview.h"
@@ -226,6 +226,8 @@ KexiView::slotShowProjectProps()
 }
 
 KexiView::~KexiView(){
+	m_dockWins.setAutoDelete(true);
+	m_dockWins.clear();
 	delete m_formActionList;
 	delete dcop;
 }
@@ -243,5 +245,30 @@ KexiView::slotShowRelations()
 	r->show();
 }
 */
+
+void KexiView::addQDockWindow(QDockWindow *w) {
+	m_dockWins.append(w);
+}
+
+void KexiView::removeQDockWindow(QDockWindow * w) {
+	m_dockWins.remove(w);
+}
+
+void KexiView::guiActivateEvent( KParts::GUIActivateEvent *ev )
+{
+	if ( ev->activated() ) {
+		for (QDockWindow *w=m_dockWins.first();w;w=m_dockWins.next()) {
+			w->show();
+		}
+	}
+	else
+	{
+		for (QDockWindow *w=m_dockWins.first();w;w=m_dockWins.next()) {
+			w->hide();
+		}
+		
+	}
+    KoView::guiActivateEvent( ev );
+}
 
 #include "kexiview.moc"

@@ -37,6 +37,7 @@ QPtrList<KexiDialogBase> *KexiDialogBase::s_ToolWindows=0;
 KexiDialogBase::KexiDialogBase(KexiView* view,QWidget *parent, const char *name) : QWidget(parent, name, WDestructiveClose)
 {
 	m_registered=false;
+	m_registering=false;
 	m_view=view;
 	m_project=view->project();
 #if 0
@@ -68,17 +69,20 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 	m_registered=true;
 	if (wt==ToolWindow)
 	{
-		QDockWindow *w=new QDockWindow(m_view->mainWindow());
+		w=new QDockWindow(m_view->mainWindow());
 		w->setResizeEnabled(true);
 		w->setCloseMode(QDockWindow::Always);
 		 reparent(w,QPoint(0,0),true);
 		w->setWidget(this);
 	      	m_view->mainWindow()->moveDockWindow(w, DockLeft);
 		w->setCaption(this->caption());
+		kexiView()->addQDockWindow(w);
 		return;
 	}
+	m_registering=true;
 	reparent(m_view->workspaceWidget(),QPoint(0,0),true);
-
+	m_registering=false;
+	m_view->workspace()->activateView(this);
 //	showMaximized();
 	return;
 #if 0
@@ -144,6 +148,8 @@ void KexiDialogBase::closeEvent(QCloseEvent *ev)
 
 KexiDialogBase::~KexiDialogBase()
 {
+	if (m_registered && (m_wt==ToolWindow))
+		m_view->removeQDockWindow(w);
 }
 
 void KexiDialogBase::activateActions(){;}

@@ -97,17 +97,18 @@ KexiTablePart::getTables()
 	emit itemListChanged(this);
 }
 
-KexiDBRecord *KexiTablePart::records(const QString& identifier)
+KexiDBRecord *KexiTablePart::records(const QString& identifier,Parameters params)
 {
+	kdDebug()<<"KexiDBRecord *KexiTablePart::records(const QString& identifier,Parameters params)"<<endl;
 	KexiDBRecord *m_record=0;
         try
         {
                 m_record = kexiProject()->db()->queryRecord("select * from "+identifier, false);
         }
-        catch(KexiDBError *err)
+        catch(KexiDBError &err)
         {
-                kdDebug() << "KexiDataTable::executeQuery(): db-error" << endl;
-                err->toUser(0);
+                kdDebug() << "KexiTablePart::executeQuery(): db-error" << endl;
+                err.toUser(0);
                 return 0;
         }
 	return m_record;

@@ -45,6 +45,7 @@ class KexiDialogBase : public QWidget
 		static KexiDialogBase *activeDocumentView() { return s_activeDocumentWindow;};
 		KexiProject *kexiProject()const;
 		KexiView *kexiView()const;
+		bool isRegistering(){return m_registering;}
 	signals:
 		void closing(KexiDialogBase *);
 	
@@ -64,8 +65,10 @@ class KexiDialogBase : public QWidget
 		class KexiView *m_mainWindow;
 		class KexiProject *m_project;
 		class KexiView *m_view;
+		class QDockWindow *w;
 		bool m_registered;
 		enum WindowType m_wt;
+		bool m_registering;
 };
 
 #endif

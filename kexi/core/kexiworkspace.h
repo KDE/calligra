@@ -18,6 +18,7 @@ class KexiWorkspace
 		virtual unsigned int count()=0;
 
 		virtual KexiDialogBase * activeDocumentView()=0;
+		virtual void activateView(KexiDialogBase *kdb)=0;
 		
 	protected:
 		friend class KexiDialogBase;

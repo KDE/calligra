@@ -30,6 +30,8 @@ void KexiWorkspaceMDI::takeItem(KexiDialogBase *delItem)
 
 void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
 {
+	KexiDialogBase *tmp=static_cast<KexiDialogBase*>(w);
+	if (tmp->isRegistering()) return;
 	if (!m_mainwindow->project()->isReadWrite()) return;
 	kdDebug() << "KexiWorkspace::slotWindowActivated()" << endl;
 	if (!m_mainwindow) return;

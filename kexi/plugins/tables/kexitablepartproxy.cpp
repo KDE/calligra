@@ -98,17 +98,25 @@ KexiTablePartProxy::slotOpen(const QString& identifier)
 	kdDebug() << "KexiTablePartProxy::slotOpen(): indentifier = " << identifier << endl;
 	kdDebug() << "KexiTablePartProxy::slotOpen(): kexiView = " << kexiView() << endl;
 
+	//trying to get data
+	KexiDBRecord *data=m_tablePart->records(identifier,KexiDataProvider::Parameters());
+	if (!data) {
+		 kdDebug() <<"KexitablePartProxy::slotOpen(): error while retrieving data, aborting"<<endl;
+		 return;
+	}
+
 	KexiDataTable *kt = new KexiDataTable(kexiView(), 0, identifier, "table");
 	kdDebug() << "KexiTablePart::slotOpen(): indentifier = " << identifier << endl;
-
-	if(kt->executeQuery("select * from " + identifier))
-	{
-		kt->show();
-	}
-	else
-	{
-		delete kt;
-	}
+	kt->setDataSet(data);
+//	kt->setRecord
+//	if(kt->executeQuery("select * from " + identifier))
+//	{
+//		kt->show();
+//	}
+//	else
+//	{
+//		delete kt;
+//	}
 }
 
 void

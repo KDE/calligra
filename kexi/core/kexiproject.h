@@ -122,6 +122,7 @@ private:
 	KexiRelation	*m_relationManager;
 	PartList	*m_parts;
 	DCOPObject *dcop;
+	bool		m_handlersLoaded;
 };
 
 #endif
