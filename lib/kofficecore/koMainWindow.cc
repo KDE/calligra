@@ -235,7 +235,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   updateCaption();
 
   d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews.current() );
-  d->m_orientation->setCurrentItem(static_cast<int>(d->m_splitter->orientation()));
+  //d->m_orientation->setCurrentItem(static_cast<int>(d->m_splitter->orientation()));
 
   oldRootViews.setAutoDelete( true );
   oldRootViews.clear();
@@ -243,7 +243,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   if ( oldRootDoc && oldRootDoc->viewCount() == 0 )
   {
     kdDebug(30003) << "No more views, deleting old doc " << oldRootDoc << endl;
-    delete oldRootDoc;
+    oldRootDoc->delayedDestruction();
   }
 }
 
@@ -285,6 +285,8 @@ KoDocument *KoMainWindow::rootDocument() const
 
 KoView *KoMainWindow::rootView() const
 {
+  if(d->m_rootViews.find(d->m_activeView)!=-1)
+    return d->m_activeView;
   return d->m_rootViews.first();
 }
 
@@ -394,7 +396,7 @@ bool KoMainWindow::queryClose(bool forQuit)
     return true;
   kdDebug(30003) << "KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount() << endl;
   if ( !forQuit && rootDocument()->viewCount() > 1 )
-        // there are more open, and we are closing just one, so no problem for closing
+    // there are more open, and we are closing just one, so no problem for closing
     return true;
 
   // see DTOR for a descr. for the 2nd test
@@ -415,20 +417,6 @@ bool KoMainWindow::queryClose(bool forQuit)
       }
   }
   return true;
-}
-
-
-bool KoMainWindow::closeAllDocuments()
-{
-    //KoMainWindow* win = firstMainWindow();
-    //for( ; win; win = nextMainWindow() )
-    //{
-    //    if ( !win->queryClose() )
-    //        return false;
-    //    else
-    //        win->setRootDocument( 0L );
-    //}
-    return true;
 }
 
 void KoMainWindow::slotFileNew()
@@ -587,7 +575,7 @@ void KoMainWindow::slotCloseAllViews() {
 
     if(queryClose(true)){
     kdDebug(30003) << "KoMainWindow::slotCloseAllViews doing a delete on the doc" << endl;
-       delete d->m_rootDoc;
+       d->m_rootDoc->delayedDestruction();
     }
 }
 

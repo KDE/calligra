@@ -45,6 +45,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
+#include <qtimer.h>
 #include <qpainter.h>
 #include <qcolor.h>
 #include <qpicture.h>
@@ -116,20 +117,20 @@ public:
 KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KParts::ReadWritePart( parent, name )
 {
-    d = new KoDocumentPrivate;
-    m_bEmpty = TRUE;
-    d->m_changed=false;
+  d = new KoDocumentPrivate;
+  m_bEmpty = TRUE;
+  d->m_changed=false;
 
-    d->m_bSingleViewMode = singleViewMode;
+  d->m_bSingleViewMode = singleViewMode;
 
-    // the parent setting *always* overrides! (Simon)
-    if ( parent )
-    {
-      if ( parent->inherits( "KoDocument" ) )
-        d->m_bSingleViewMode = ((KoDocument *)parent)->isSingleViewMode();
-      else if ( parent->inherits( "KParts::Part" ) )
-        d->m_bSingleViewMode = true;
-    }
+  // the parent setting *always* overrides! (Simon)
+  if ( parent )
+  {
+    if ( parent->inherits( "KoDocument" ) )
+      d->m_bSingleViewMode = ((KoDocument *)parent)->isSingleViewMode();
+    else if ( parent->inherits( "KParts::Part" ) )
+      d->m_bSingleViewMode = true;
+  }
 
   if ( singleViewMode )
   {
@@ -144,21 +145,19 @@ KoDocument::~KoDocument()
 {
   kdDebug(30003) << "KoDocument::~KoDocument() " << this << endl;
 
-  while(! d->m_views.isEmpty()) {
-    disconnect( d->m_views.current(), SIGNAL(destroyed()),
-		this, SLOT(slotViewDestroyed()) );
-    d->m_views.remove();
-  }
-
   kdDebug(30003) << "KoDocument::~KoDocument() shells:" << d->m_shells.count() << endl;
   d->m_shells.setAutoDelete( true );
   d->m_shells.clear();
+
+  while(! d->m_views.isEmpty())
+    d->m_views.remove();
 
   delete d;
 }
 
 void KoDocument::delayedDestruction()
 {
+  QTimer::singleShot(0, this, SLOT(slotDestruct()));
 }
 
 bool KoDocument::isSingleViewMode() const
@@ -305,7 +304,7 @@ void KoDocument::slotChildChanged( KoChild *c )
 
 void KoDocument::slotDestruct()
 {
-    delete this;
+  delete this;
 }
 
 QList<KoDocumentChild> &KoDocument::children() const

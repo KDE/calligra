@@ -185,11 +185,6 @@ protected:
     void setRootDocumentDirect( KoDocument *doc );
 
     /**
-     *  Closes all documents (unused).
-     */
-    virtual bool closeAllDocuments();
-
-    /**
      * Create a new empty document.
      */
     virtual KoDocument* createDoc() = 0;

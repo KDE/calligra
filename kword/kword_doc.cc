@@ -1725,7 +1725,7 @@ KoMainWindow* KWordDocument::createShell()
 /*================================================================*/
 KoView* KWordDocument::createView( QWidget* parent, const char* name )
 {
-    return = new KWordView( parent, name, this );
+    return new KWordView( parent, name, this );
 }
 
 /*================================================================*/

@@ -89,7 +89,6 @@ KoView::~KoView()
     d->m_manager->removePart( koDocument() );
 
   d->m_doc->removeView(this);
-
   delete d;
 }
 
