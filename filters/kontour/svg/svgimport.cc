@@ -33,13 +33,13 @@ DESCRIPTION
 #include "basicshapes.h"
 #include "text.h"
 
-QList<GObject>          objList;  // contains the killu GObjects
-QList<SVGComposite>  composites;  // keep track of composite objects
+QPtrList<GObject>          objList;  // contains the killu GObjects
+QPtrList<SVGComposite>  composites;  // keep track of composite objects
 QDict<SVGElement> referencedSVG;  // keep track of SVGElements with ID
 KoPageLayout            *pageLayout;
 
 SVGImport::SVGImport( KoFilter *parent, const char *name ) : KoFilter(parent, name)
-{   
+{
     //referencedSVG.setAutoDelete( true );
 }
 
@@ -70,21 +70,21 @@ bool SVGImport::filterImport( const QString &file, KoDocument *doc,
     {
         return false;
     }
-    
+
     KIllustratorDocument *kidoc = (KIllustratorDocument *) doc;
     GDocument *gdoc             = kidoc->gdoc();
     GPage *activePage           = gdoc->activePage();
 
     //gdoc->setAutoUpdate(false);
 
-    QListIterator<GObject> it( objList );
+    QPtrListIterator<GObject> it( objList );
     double index = 0;
     for( ;it.current() ; ++it ) {
         kdDebug() << "progress:" << ( (index * 100.0) / (double)objList.count() ) << endl;
         activePage->insertObject( it.current() );
 	emit sigProgress( (index++ * 100.0) / (double)objList.count() );
     }
-    
+
     //gdoc->setAutoUpdate(true);
     if( pageLayout ) activePage->setPageLayout( *pageLayout );
     doc->setModified( false ); // not modified yet
@@ -96,8 +96,8 @@ SVGHandler::SVGHandler()
 {
     state = Normal;
 }
- 
- 
+
+
 SVGHandler::~SVGHandler()
 {
 }
@@ -107,8 +107,8 @@ QString SVGHandler::errorProtocol()
 {
     return "";
 }
- 
- 
+
+
 bool SVGHandler::startDocument()
 {
     return TRUE;
@@ -192,7 +192,7 @@ bool SVGHandler::characters( const QString &ch )
     return TRUE;
 }
 
- 
+
 bool SVGHandler::endElement( const QString &, const QString &, const QString &qName )
 {
     kdDebug() << "endElement:qName: " << qName.local8Bit() << endl;
@@ -227,7 +227,7 @@ bool SVGHandler::endElement( const QString &, const QString &, const QString &qN
 
 bool SVGHandler::fatalError( const QXmlParseException & /*exception*/ )
 {
-    return false; 
+    return false;
 }
 
 /********************* Use mechanism *******************************/
