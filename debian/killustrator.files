@@ -1,9 +1,11 @@
 usr/bin/killustrator
 usr/lib/killustrator.*
 usr/lib/kde2/libkillustratorpart.*
+usr/lib/kde2/libxfigimport.*
 usr/share/applnk/Office/killustrator.desktop
 usr/share/apps/killustrator/*
 usr/share/mimelnk/application/x-killustrator.desktop
+usr/share/services/killustrator_xfig_import.desktop
 usr/share/icons/hicolor/16x16/apps/killustrator.png
 usr/share/icons/hicolor/32x32/apps/killustrator.png
 usr/share/icons/hicolor/48x48/apps/killustrator.png

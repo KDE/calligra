@@ -107,25 +107,24 @@ install-stamp: build
 	touch install-stamp
 	
 binary-indep: build install
-	dh_testdir
-	dh_testroot
-	dh_movefiles -i
-	dh_installdocs -i
-	dh_installmenu -i
-	dh_installmime -i
-	dh_installman -i
-	dh_undocumented -i
-	dh_installchangelogs -pkoffice
-	dh_link -i
-	dh_strip -i
-	dh_compress -i
-	dh_fixperms -i
-	dh_installdeb -i
-	dh_perl -i
-	dh_shlibdeps -i
-	dh_gencontrol -i
-	dh_md5sums -i
-	dh_builddeb -i
+	#dh_testdir
+	#dh_testroot
+	#dh_movefiles -i
+	#dh_installdocs -i
+	#dh_installmenu -i
+	#dh_installmime -i
+	#dh_installman -i
+	#dh_undocumented -i
+	#dh_link -i
+	#dh_strip -i
+	#dh_compress -i
+	#dh_fixperms -i
+	#dh_installdeb -i
+	#dh_perl -i
+	#dh_shlibdeps -i
+	#dh_gencontrol -i
+	#dh_md5sums -i
+	#dh_builddeb -i
 
 binary-arch: build install
 	dh_testdir
@@ -147,6 +146,7 @@ binary-arch: build install
 		debian/kpresenter/usr/share/man/man1
 	-rm -rf debian/kpresenter/usr/share/man/pl
 	dh_undocumented -a
+	dh_installchangelogs -pkoffice
 	dh_installchangelogs -pkoffice-libs
 	dh_installchangelogs -pkoffice-dev
 	dh_installchangelogs -pkchart kchart/CHANGES

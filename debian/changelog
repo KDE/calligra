@@ -1,3 +1,18 @@
+koffice (1:1.1-beta2-3) unstable; urgency=low
+
+  * Added arm/m68k to the libtool linux arch list in the hope of closing
+    #99475 (we'll see if it works).
+  * Moved libqproimport and libxfigimport and associated files to
+    packages kspread and killustrator respectively.
+
+ -- Ben Burton <benb@acm.org>  Fri,  1 Jun 2001 18:29:27 -0500
+
+koffice (1:1.1-beta2-2) unstable; urgency=low
+
+  * Changed package koffice to Architecture: any to satisfy autobuilders.
+
+ -- Ben Burton <benb@acm.org>  Fri,  1 Jun 2001 01:10:12 -0500
+
 koffice (1:1.1-beta2-1) unstable; urgency=low
 
   * New upstream release (closes: Bug#95931, Bug#95317).
