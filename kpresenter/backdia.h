@@ -34,6 +34,7 @@ class QSlider;
 class KPBackGround;
 class KPresenterDoc;
 class QCheckBox;
+class QTabWidget;
 
 /*******************************************************************
  *
@@ -108,6 +109,8 @@ private:
     bool picChanged, clipChanged, lockUpdate;
     QDateTime picLastModified, clipLastModified;
 
+    QTabWidget *tabWidget;
+
 private slots:
     void selectPic();
     void selectClip();
@@ -116,6 +119,8 @@ private slots:
     void Ok() { emit backOk( false ); }
     void Apply() { emit backOk( false ); }
     void ApplyGlobal() { emit backOk( true ); }
+
+    void changeComboText(int _p);
 
 signals:
     void backOk( bool );

@@ -111,11 +111,11 @@ BackDia::BackDia( QWidget* parent, const char* name,
     backCombo->insertItem( i18n( "Clipart" ) );
     backCombo->setCurrentItem( (int)backType );
     connect( backCombo, SIGNAL( activated( int ) ),
-             this, SLOT( updateConfiguration() ) );
+             this, SLOT( changeComboText(int) ) );
 
     vbox->addWidget( backCombo );
 
-    QTabWidget *tabWidget = new QTabWidget( this );
+    tabWidget = new QTabWidget( this );
     vbox->addWidget( tabWidget );
 
     // color/gradient tab ---------------
@@ -262,6 +262,13 @@ BackDia::BackDia( QWidget* parent, const char* name,
 
     picChanged = clipChanged = true;
     lockUpdate = false;
+    updateConfiguration();
+}
+
+void BackDia::changeComboText(int _p)
+{
+    if(_p!=tabWidget->currentPageIndex ())
+        tabWidget->setCurrentPage(_p);
     updateConfiguration();
 }
 

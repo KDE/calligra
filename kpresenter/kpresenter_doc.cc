@@ -3023,6 +3023,7 @@ void KPresenterDoc::deleteObjs( bool _add )
 	if ( kpobject->isSelected() )
 	    _objects.append( kpobject );
     }
+    deSelectAllObj();
 
     DeleteCmd *deleteCmd = new DeleteCmd( i18n( "Delete object( s )" ), _objects, this );
     deleteCmd->execute();
