@@ -270,6 +270,7 @@ void kchartEngine::drawVYAxisTitle() {
       p->drawText( imagewidth-(1+params->yTitleFontHeight()),
 		   params->ytitle2.length()*params->yTitleFontWidth()/2 +
 		   grapheight/2, params->ytitle2 );
+
       p->rotate( -90 );
     }
 }

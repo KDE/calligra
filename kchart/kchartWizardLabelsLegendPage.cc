@@ -67,11 +67,23 @@ kchartWizardLabelsLegendPage::kchartWizardLabelsLegendPage( QWidget* parent, KCh
   y_color=_chart->params()->YTitleColor;
   ytitlecolor->setColor( y_color );
 
+  //ytitle2 doesn't work
+  /*QLabel* ylabelLA2 = new QLabel( i18n( "Y-Title2:" ), this );
+  ylabelLA2->setGeometry( 270, 240, 100, 30 );
+
+  _ylabel2ED = new QLineEdit( this );
+  _ylabel2ED->setGeometry( 270, 280, 100, 30 );
+  _ylabel2ED->setText(_chart->params()->ytitle2);
+
+  ytitle2color=new KColorButton(this);
+  ytitle2color->setGeometry( 380,280,80,30 );
+  y_color2=_chart->params()->YTitle2Color;
+  ytitle2color->setColor( y_color2 );
 
   xlabel=_chart->params()->xTitleFont();
   ylabel=_chart->params()->yTitleFont();
   title=_chart->params()->titleFont();
-
+  */
 
   /*
   QButtonGroup* placementBG = new QButtonGroup( i18n( "Legend placement" ),
@@ -132,6 +144,9 @@ kchartWizardLabelsLegendPage::kchartWizardLabelsLegendPage( QWidget* parent, KCh
                 this,SLOT(changeYLabelColor(const QColor &)));
   connect(titlecolor,SIGNAL(changed( const QColor & )),
                 this,SLOT(changeTitleColor(const QColor &)));
+  /*connect(ytitle2color,SIGNAL(changed( const QColor & )),
+                this,SLOT(changeYTitle2Color(const QColor &)));
+  */
   resize( 600, 300 );
 }
 
@@ -175,6 +190,11 @@ void kchartWizardLabelsLegendPage::changeTitleColor(const QColor &_color)
 title_color=_color;
 }
 
+void kchartWizardLabelsLegendPage::changeYTitle2Color(const QColor &_color)
+{
+y_color2=_color;
+}
+
 void kchartWizardLabelsLegendPage::apply(  )
 {
    _chart->params()->setXTitleFont(xlabel);
@@ -186,7 +206,8 @@ void kchartWizardLabelsLegendPage::apply(  )
    _chart->params()->XTitleColor=x_color;
    _chart->params()->YTitleColor=y_color;
    _chart->params()->TitleColor=title_color;
-
+   //_chart->params()->YTitle2Color=y_color2;
+   //_chart->params()->ytitle2=_ylabel2ED->text();
 
 }
 #include "kchartWizardLabelsLegendPage.moc"

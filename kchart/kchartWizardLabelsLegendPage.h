@@ -27,29 +27,34 @@ public slots:
   void changeXLabelColor(const QColor &);
   void changeYLabelColor(const QColor &);
   void changeTitleColor(const QColor &);
+  void changeYTitle2Color(const QColor &);
 private:
   KChartPart* _chart;
   kchartWidget* preview;
   QLineEdit* _xlabelED;
   QLineEdit* _ylabelED;
   QLineEdit* _titleED;
-  QRadioButton* _righttopRB;
+  QLineEdit* _ylabel2ED;
+  /*QRadioButton* _righttopRB;
   QRadioButton* _rightcenterRB;
   QRadioButton* _rightbottomRB;
   QRadioButton* _bottomleftRB;
   QRadioButton* _bottomcenterRB;
-  QRadioButton* _bottomrightRB;
+  QRadioButton* _bottomrightRB;*/
   QPushButton *xtitlefont;
   QPushButton *ytitlefont;
   QPushButton *titlefont;
+  QPushButton *ytitle2font;
   KColorButton *xtitlecolor;
   KColorButton *ytitlecolor;
   KColorButton *titlecolor;
+  KColorButton *ytitle2color;
   QFont xlabel;
   QFont ylabel;
   QFont title;
   QColor x_color;
   QColor y_color;
+  QColor y_color2;
   QColor title_color;
 
 };

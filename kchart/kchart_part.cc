@@ -115,7 +115,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
   }
   // if params is 0, initDoc() has not been called
   ASSERT( _params != 0 );
-  
+
   // ####### handle transparency
   if( !transparent )
     painter.eraseRect( rect );
@@ -222,6 +222,12 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
         QDomElement ytitlefont = doc.createElement("ytitlefont");
         ytitlefont.appendChild( doc.createElement( "font",_params->yTitleFont() ) );
         params.appendChild(ytitlefont);
+        }
+  if(!_params->ytitle2.isEmpty())
+        {
+        QDomElement ytitle2 = doc.createElement( "ytitle2" );
+        ytitle2.appendChild( doc.createTextNode( _params->ytitle2 ) );
+        params.appendChild( ytitle2 );
         }
    if((!_params->ylabel_fmt.isEmpty())||(!_params->ylabel2_fmt.isEmpty()))
         {
@@ -396,6 +402,12 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
         {
          QString t = ytitle.text();
          _params->ytitle=t;
+        }
+  QDomElement ytitle2 = params.namedItem( "ytitle2" ).toElement();
+    if ( !ytitle2.isNull())
+        {
+         QString t = ytitle2.text();
+         _params->ytitle2=t;
         }
   QDomElement ytitlefont = params.namedItem( "ytitlefont" ).toElement();
     if ( !ytitlefont.isNull())
@@ -613,6 +625,10 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.17  2000/01/06 20:32:46  mlaurent
+ * Bug fix
+ * Now you can choose font and color in kchartWizard
+ *
  * Revision 1.16  2000/01/05 20:09:51  mlaurent
  * Improved save parameters
  *
