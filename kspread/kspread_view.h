@@ -97,6 +97,8 @@ public:
      */
     void setAction( Actions _act, const char* arg );
   
+    void updateCellRect( const QRect &_rect );
+
 protected:
     virtual void keyPressEvent ( QKeyEvent* _ev );    
     virtual void paintEvent ( QPaintEvent* _ev );    
@@ -278,12 +280,16 @@ public:
     void openPopupMenu( const QPoint &_global );
   
     void marker( int &row, int &column);
-    bool isMarkerVisible() { return m_bMarkerVisible; }
+    bool isMarkerVisible() { return ( m_iMarkerVisible == 1 ); }
     int markerColumn() { return m_iMarkerColumn; }
     int markerRow() { return m_iMarkerRow; }
     void setMarkerColumn( int _c ) { m_iMarkerColumn = _c; }
     void setMarkerRow( int _r ) { m_iMarkerRow = _r; }
-
+    void hideMarker() { if ( m_iMarkerVisible == 1 ) drawMarker(); m_iMarkerVisible--; }
+    void showMarker() { if ( m_iMarkerVisible == 1 ) return; m_iMarkerVisible++; if ( m_iMarkerVisible == 1 ) drawMarker(); }
+    void hideMarker( QPainter& );
+    void showMarker( QPainter& );
+  
     const QPen& defaultGridPen() { return m_defaultGridPen; }
 
     /**
@@ -590,7 +596,14 @@ protected:
 
     int m_iMarkerColumn;
     int m_iMarkerRow;
-    bool m_bMarkerVisible;
+    /**
+     * A value of 1 means that it is visible, every lower value means it is
+     * made invisible multiple times.
+     *
+     * @see #hideMarker
+     * @see #showMarker
+     */
+    int m_iMarkerVisible;
 
     // GUI stuff
     QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );

@@ -383,6 +383,9 @@ void KSpreadTable::unselect()
 
 void KSpreadTable::setSelection( const QRect &_sel )
 {
+  if ( _sel == m_rctSelection )
+    return;
+  
   QRect old( m_rctSelection );
   m_rctSelection = _sel;
   
