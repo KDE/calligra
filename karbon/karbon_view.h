@@ -87,7 +87,7 @@ public:
 	KarbonPart* part() const { return (KarbonPart *)m_part; }
 
 	// printing support, override from KoView
-	virtual void setupPrinter( KPrinter &printer ) {}
+	virtual void setupPrinter( KPrinter &/*printer*/ ) {}
 	virtual void print( KPrinter& printer );
 
 	KoContextHelpAction* contextHelpAction() const { return m_contextHelpAction; }
@@ -180,7 +180,7 @@ signals:
 	void selectionChange();
 
 protected:
-	virtual void updateReadWrite( bool rw ) {}
+	virtual void updateReadWrite( bool ) {}
 	virtual void resizeEvent( QResizeEvent* event );
 	void dragEnterEvent( QDragEnterEvent *e );
 	void dropEvent( QDropEvent *e );
