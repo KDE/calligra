@@ -169,6 +169,9 @@ void TKSelectColorAction::updatePixmap(TKToolBarButton* b)
 {
   if (!b)
     return;
+  // Not much point in painting with an invalid color
+  if (!m_pCurrentColor.isValid())
+    return;
   QPixmap pix =b->getActivePixmap();
   QPainter p(&pix);
   switch (m_type) {
