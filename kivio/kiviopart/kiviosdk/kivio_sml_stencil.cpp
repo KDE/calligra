@@ -114,7 +114,10 @@ bool KivioSMLStencil::loadXML( const QDomElement &e )
         {
             // Locate the shape we are supposed to load into
             KivioShape *pShape = locateShape( XmlReadString( ele, "name", "" ) );
-            pShape->loadXML( ele );
+
+            if(pShape) {
+              pShape->loadXML( ele );
+            }
         }
         else if( nodeName == "KivioConnectorTargetList" )
         {

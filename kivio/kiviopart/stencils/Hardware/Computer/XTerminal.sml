@@ -21,7 +21,7 @@
         <KivioLineStyle width="0.000" capStyle="32" pattern="1" joinStyle="128" color="#000000" />
         <KivioFillStyle colorStyle="1" color="#e0e0e0" />
 </KivioShape>
-<KivioShape type="Rectangle" name="Rectangle1" x="28.5" y="15.75" w="120" h="95">
+<KivioShape type="Rectangle" name="Rectangle4" x="28.5" y="15.75" w="120" h="95">
         <KivioLineStyle width="0.000" capStyle="32" pattern="1" joinStyle="128" color="#000000" />
         <KivioFillStyle colorStyle="1" color="#404040" />
 </KivioShape>
