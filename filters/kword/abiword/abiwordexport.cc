@@ -503,7 +503,8 @@ static bool writeOutputFileGZipped(const QString& filename, const QCString& strO
         return false;
     }
 
-    int num=gzwrite(fileOut,(const char *) strOut, strOut.length() ); //Write the file
+    const char *out=(const char *)strOut;
+    int num=gzwrite(fileOut,(void *) out, strOut.length() ); //Write the file
     
     if (num != int(strOut.length()))
     { //We have a problem
