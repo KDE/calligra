@@ -73,7 +73,7 @@ KoFilter::ConversionStatus OLEFilter::convert( const QCString& from, const QCStr
        from!="application/mspowerpoint")
         return KoFilter::NotImplemented;
 
-    QString prefixOut = ""; // ###### FIXME: Disabled till we find a nice solution (Werner)
+    QString prefixOut = "tar:"; // ###### FIXME: Disabled till we find a nice solution (Werner)
     m_prefixOut = prefixOut;
     QFile in(m_chain->inputFile());
     if(!in.open(IO_ReadOnly)) {
