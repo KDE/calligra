@@ -74,16 +74,26 @@ AC_SUBST(KOFFICE_LIBS)
 KOFFICE_INCLUDES='-I$(top_srcdir)/lib $(KOFFICEUI_INCLUDES) $(KOFFICECORE_INCLUDES) $(KOML_INCLUDES) $(KSTORE_INCLUDES)'
 AC_SUBST(KOFFICE_INCLUDES)
 
+dnl Check for PostgreSQL-headers
+dnl if present compile Katabase
+AC_CHECK_HEADERS(pgsql/libpq++.h)
+
 dnl add here all your Makefiles. These are created by configure
 AC_OUTPUT( \
 	Makefile \
 	katabase/Makefile \
+	katabase/kdb/Makefile \
         katabase/kformviewer/Makefile \
         katabase/kformeditor/Makefile \
 	katabase/kformeditor/pics/Makefile \
         katabase/kformeditor/toolbar/Makefile \
         katabase/kformeditor/cursors/Makefile \
         katabase/kformeditor/formassistent/Makefile \
+	katabase/ktables/Makefile \
+	katabase/ktables/pics/Makefile \
+	katabase/doc/Makefile \
+	katabase/doc/ktables/Makefile \
+	katabase/doc/ktables/en/Makefile \
 	kchart/Makefile	\
 	kchart/core/Makefile \
 	kchart/pics/Makefile \
