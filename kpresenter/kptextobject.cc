@@ -1920,9 +1920,11 @@ void KPTextView::insertVariable( int type, int subtype )
     }
     else
         var = doc->getVariableCollection()->createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textObject()->textDocument(),doc);
-
-    insertVariable( var , 0L, true,refreshCustomMenu);
-    doc->recalcPageNum();
+    if ( var )
+    {
+        insertVariable( var , 0L, true,refreshCustomMenu);
+        doc->recalcPageNum();
+    }
 }
 
 void KPTextView::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, bool removeSelectedText,bool refreshCustomMenu )
