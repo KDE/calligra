@@ -79,6 +79,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		void slotDragOverTableRow(KexiTableItem *item, int row, QDragMoveEvent* e);
 		void slotDroppedAtRow(KexiTableItem *item, int row, QDropEvent *ev);
 		void slotTableAdded(KexiDB::TableSchema &t);
+		void slotTableHidden(KexiDB::TableSchema &t);
 
 	private:
 		KexiTableViewData *m_data;

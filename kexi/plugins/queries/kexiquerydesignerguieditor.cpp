@@ -62,6 +62,8 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, 
 	m_relations = new KexiRelationWidget(mainWin, m_spl, "relations");
 	connect(m_relations, SIGNAL(tableAdded(KexiDB::TableSchema&)),
 		this, SLOT(slotTableAdded(KexiDB::TableSchema&)));
+	connect(m_relations, SIGNAL(tableHidden(KexiDB::TableSchema&)),
+		this, SLOT(slotTableHidden(KexiDB::TableSchema&)));
 
 //	addActionProxyChild( m_view->relationView() );
 /*	KexiRelationPart *p = win->relationPart();
@@ -78,9 +80,16 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, 
 	m_data = new KexiTableViewData();
 	initTable();
 	m_dataTable->tableView()->setData(m_data);
-	//last column occupies the rest of the area
-	m_dataTable->tableView()->setColumnStretchEnabled( true, m_data->columnsCount()-1 ); 
-	m_dataTable->tableView()->adjustColumnWidthToContents(-1);
+//	//last column occupies the rest of the area
+//	m_dataTable->tableView()->setColumnStretchEnabled( true, m_data->columnsCount()-1 ); 
+//	m_dataTable->tableView()->setColumnStretchEnabled(true, 0);
+//	m_dataTable->tableView()->setColumnStretchEnabled(true, 1);
+//	m_dataTable->tableView()->adjustHorizontalHeaderSize();
+	QValueList<int> c;
+	c << 0 << 1 << 4;
+	m_dataTable->tableView()->maximizeColumnsWidth( c ); 
+//	m_dataTable->tableView()->adjustColumnWidthToContents(-1);
+	m_dataTable->tableView()->adjustColumnWidthToContents(2);//'visible'
 	m_dataTable->tableView()->setDropsAtRowEnabled(true);
 	connect(m_dataTable->tableView(), SIGNAL(dragOverRow(KexiTableItem*,int,QDragMoveEvent*)),
 		this, SLOT(slotDragOverTableRow(KexiTableItem*,int,QDragMoveEvent*)));
@@ -143,14 +152,15 @@ KexiQueryDesignerGuiEditor::initTable()
 	KexiTableViewColumn *col4 = new KexiTableViewColumn(*f);
 	m_data->addColumn(col4);
 
-	f= new KexiDB::Field(i18n("Sort"), KexiDB::Field::Enum);
+/*TODO
+f= new KexiDB::Field(i18n("Sort"), KexiDB::Field::Enum);
 	QValueVector<QString> sortTypes;
 	sortTypes.append( i18n("Ascending") );
 	sortTypes.append( i18n("Descending") );
 	sortTypes.append( i18n("No sorting") );
 	f->setEnumHints(sortTypes);
 	KexiTableViewColumn *col5 = new KexiTableViewColumn(*f);
-	m_data->addColumn(col5);
+	m_data->addColumn(col5);*/
 
 	KexiTableViewColumn *col6 = new KexiTableViewColumn(i18n("Criteria"), KexiDB::Field::Text);
 	m_data->addColumn(col6);
@@ -173,6 +183,8 @@ KexiQueryDesignerGuiEditor::initTable()
 void KexiQueryDesignerGuiEditor::updateColumsData()
 {
 //	m_fieldColumnData
+	m_dataTable->tableView()->acceptRowEdit();
+
 	//update 'table' and 'field' columns
 	m_tablesColumnData->clear();
 	m_fieldColumnData->clear();
@@ -354,6 +366,11 @@ KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem *item, int row, QDrop
 }
 
 void KexiQueryDesignerGuiEditor::slotTableAdded(KexiDB::TableSchema &t)
+{
+	updateColumsData();
+}
+
+void KexiQueryDesignerGuiEditor::slotTableHidden(KexiDB::TableSchema &t)
 {
 	updateColumsData();
 }
