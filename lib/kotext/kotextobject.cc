@@ -1071,7 +1071,7 @@ KCommand * KoTextObject::setAlignCommand( KoTextCursor * cursor, int align, int 
         return 0L;
     KoTextDocument * textdoc = textDocument();
     if ( !textdoc->hasSelection( selectionId, true ) && cursor &&
-         cursor->parag()->alignment() == align )
+         (int)cursor->parag()->alignment() == align )
         return 0L; // No change needed.
 
     emit hideCursor();
