@@ -359,20 +359,6 @@ bool KoPictureShared::load(QIODevice* io, const QString& extension)
     return flag;
 }
 
-bool KoPictureShared::download(const KURL& url)
-{
-    bool result=false;
-
-    QString tmpFileName;
-    if ( KIO::NetAccess::download(url, tmpFileName))
-    {
-        result=loadFromFile(tmpFileName);
-        KIO::NetAccess::removeTempFile(tmpFileName);
-    }
-
-    return result;
-}
-
 bool KoPictureShared::loadFromFile(const QString& fileName)
 {
     kdDebug(30003) << "KoPictureShared::loadFromFile " << fileName << endl;

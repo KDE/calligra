@@ -191,13 +191,6 @@ bool KoPicture::load(QIODevice* io, const QString& extension)
     return m_sharedData->load(io,extension);
 }
 
-bool KoPicture::download(const KURL& url)
-{
-    kdDebug(30003) << "KoPicture::download " << url.prettyURL() << endl;
-    createSharedData();
-    return m_sharedData->download(url);
-}
-
 bool KoPicture::loadFromFile(const QString& fileName)
 {
     kdDebug(30003) << "KoPicture::loadFromFile " << fileName << endl;

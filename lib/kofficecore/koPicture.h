@@ -133,11 +133,6 @@ public:
     void clear(void);
 
     /**
-     * Download a possibily remote file
-     */
-    bool download(const KURL& url);
-
-    /**
      * Load the picture from a file named @p fileName
      */
     bool loadFromFile(const QString& fileName);
