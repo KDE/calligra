@@ -1056,6 +1056,20 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             }
             else if ( name == "presentation:notes" ) // notes
             {
+                //we must extend note attribute
+                QDomNode textBox = o.namedItem( "draw:text-box" );
+                if ( !textBox.isNull() )
+                {
+                    QString note;
+                    for ( QDomNode text = textBox.firstChild(); !text.isNull(); text = text.nextSibling() )
+                    {
+                        // We don't care about styles as they are not supported in kpresenter.
+                        // Only add a linebreak for every child.
+                        QDomElement t = text.toElement();
+                        note += t.text() + "\n";
+                    }
+                    m_pageList.at(pos)->setNoteText(note );
+                }
             }
             else
             {
