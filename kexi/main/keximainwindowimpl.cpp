@@ -667,6 +667,12 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 			not_found_msg );
 
 	updateAppCaption();
+
+	//make docks visible again
+	if (!d->navToolWindow->wrapperWidget()->isVisible())
+		static_cast<KDockWidget*>(d->navToolWindow->wrapperWidget())->makeDockVisible();
+	if (!d->propEditorToolWindow->wrapperWidget()->isVisible())
+		static_cast<KDockWidget*>(d->propEditorToolWindow->wrapperWidget())->makeDockVisible();
 	return true;
 }
 

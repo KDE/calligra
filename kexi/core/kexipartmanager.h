@@ -121,6 +121,8 @@ class KEXICORE_EXPORT Manager : public QObject
 		PartInfoList	m_partlist;
 		PartInfoDict	m_partsByMime;
 		MissingList	m_missing;
+
+		bool m_lookupDone : 1;
 };
 
 }

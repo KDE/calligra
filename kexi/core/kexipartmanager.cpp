@@ -37,6 +37,7 @@ using namespace KexiPart;
 Manager::Manager(QObject *parent)
  : QObject(parent)
 {
+	m_lookupDone = false;
 	m_partlist.setAutoDelete(true);
 	m_partsByMime.setAutoDelete(false);
 	m_parts.setAutoDelete(false);//KApp will remove parts
@@ -45,8 +46,13 @@ Manager::Manager(QObject *parent)
 void
 Manager::lookup()
 {
+//js: TODO: allow refreshing!!!! (will need calling removeClient() by Part objects)
+	if (m_lookupDone)
+		return;
+	m_lookupDone = true;
 	m_partlist.clear();
 	m_partsByMime.clear();
+	m_parts.clear();
 	KTrader::OfferList tlist = KTrader::self()->query("Kexi/Handler", "[X-Kexi-PartVersion] == " + QString::number(KEXI_PART_VERSION));
 	
 	KConfig conf("kexirc", true);
