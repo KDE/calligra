@@ -1022,25 +1022,20 @@ void KPresenterView::extraRotate()
 /*===============================================================*/
 void KPresenterView::extraShadow()
 {
-    if ( !shadowDia ) {
-	delete shadowDia;
-	shadowDia = 0;
-    }
-
     if ( m_canvas->activePage()->numSelected() > 0 ) {
-	shadowDia = new ShadowDialogImpl( this );
-	QObject::connect( shadowDia, SIGNAL( apply() ), this, SLOT( shadowOk() ) );
-        KPObject *object=m_canvas->activePage()->getSelectedObj();
+
+	if ( !shadowDia ) {
+	    shadowDia = new ShadowDialogImpl( this );
+	    QObject::connect( shadowDia, SIGNAL( apply() ), this, SLOT( shadowOk() ) );
+	}
+
+	KPObject *object=m_canvas->activePage()->getSelectedObj();
 	shadowDia->setShadowDirection( object->getShadowDirection() );
 	shadowDia->setShadowDistance( object->getShadowDistance() );
 	shadowDia->resize( shadowDia->minimumSize() );
 	shadowDia->setShadowColor( object->getShadowColor() );
 	m_canvas->setToolEditMode( TEM_MOUSE );
 	shadowDia->exec();
-
-        QObject::disconnect( shadowDia, SIGNAL( apply() ), this, SLOT( shadowOk() ) );
-        delete shadowDia;
-	shadowDia = 0;
     }
 }
 
