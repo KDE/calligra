@@ -80,6 +80,12 @@ public:
 	KexiOpenExistingFile *m_file;
 	KexiStartupFileDialog *m_fileDlg;
 
+	/*! If true, user will be asked to accept overwriting existing project. 
+	 This is true by default. */
+	void setConfirmOverwrites(bool set);
+
+	bool confirmOverwrites() const;
+
 signals:
 	void connectionItemExecuted( ConnectionDataLVItem *item );
 

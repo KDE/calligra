@@ -36,6 +36,7 @@ KexiStartupFileDialog::KexiStartupFileDialog(
 		const QString& startDir, Mode mode,
 		QWidget *parent, const char *name)
 	:  KexiStartupFileDialogBase(startDir, "", parent, name, 0)
+	, m_confirmOverwrites(true)
 {
 	setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
 	setMode( mode );
@@ -178,9 +179,9 @@ bool KexiStartupFileDialog::checkFileName()
 				return false;
 			}
 		}
-		else if (fi.exists()) {
-			if (KMessageBox::warningYesNo( this, i18n( "The file \"%1\" already exists.\n"
-			"Do you want to overwrite it?").arg( path ) ) != KMessageBox::Yes) {
+		else if (m_confirmOverwrites && fi.exists()) {
+			if (KMessageBox::Yes!=KMessageBox::warningYesNo( this, i18n( "The file \"%1\" already exists.\n"
+			"Do you want to overwrite it?").arg( path ) )) {
 				return false;
 			}
 		}

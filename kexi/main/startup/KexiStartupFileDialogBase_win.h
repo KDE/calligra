@@ -46,6 +46,8 @@ public:
 	QString currentFilter() const;
 	void setMimeFilter( const QStringList& mimeTypes, const QString& defaultType = QString::null );
 
+	KFile::Mode mode() const;
+
 protected:
 	void init(const QString& startDir, const QString& filter, QWidget* widget);
 	void updateAutoSelectExtension() {};

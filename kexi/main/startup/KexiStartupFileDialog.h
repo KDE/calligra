@@ -64,6 +64,10 @@ public:
 	bool checkFileName();
 //	bool checkURL();
 
+	/*! If true, user will be asked to accept overwriting existing file. 
+	 This is true by default. */
+	void setConfirmOverwrites(bool set) { m_confirmOverwrites = set; }
+
 public slots:
 	virtual void show();
 
@@ -82,6 +86,7 @@ private:
 //	KURL m_lastUrl;
 	QString m_lastFileName;
 	Mode m_mode;
+	bool m_confirmOverwrites : 1;
 };
 
 #endif

@@ -186,7 +186,7 @@ bool KexiStartupHandler::init(int argc, char **argv)
 	cdata.hostName = args->getOption("host");
 	cdata.localSocketFileName = args->getOption("local-socket");
 	cdata.userName = args->getOption("user");
-	cdata.password = args->getOption("password");
+//	cdata.password = args->getOption("password");
 	bool fileDriverSelected;
 	if (cdata.driverName.isEmpty())
 		fileDriverSelected = true;
@@ -198,7 +198,8 @@ bool KexiStartupHandler::init(int argc, char **argv)
 	bool projectFileExists = false;
 
 	//obfuscate the password, if present
-//TODO: remove --password
+//removed
+/*
 	for (int i=1; i<(argc-1); i++) {
 		if (qstrcmp("--password",argv[i])==0
 			|| qstrcmp("-password",argv[i])==0)
@@ -212,6 +213,7 @@ bool KexiStartupHandler::init(int argc, char **argv)
 			break;
 		}
 	}
+	*/
 	
 	const QString portStr = args->getOption("port");
 	if (!portStr.isEmpty()) {
@@ -229,6 +231,9 @@ bool KexiStartupHandler::init(int argc, char **argv)
 	m_forcedFinalMode = args->isSet("final-mode");
 	m_forcedDesignMode = args->isSet("design-mode");
 	m_createDB = args->isSet("createdb");
+	m_alsoOpenDB = args->isSet("create-opendb");
+	if (m_alsoOpenDB)
+		m_createDB = true;
 	m_dropDB = args->isSet("dropdb");
 	const bool openExisting = !m_createDB && !m_dropDB;
 	const QString couldnotMsg = QString::fromLatin1("\n")
@@ -292,8 +297,8 @@ bool KexiStartupHandler::init(int argc, char **argv)
 	if (args->count()>=1) {
 		QString prjName = args->arg(0);
 		if (fileDriverSelected) {
-			cdata.setFileName( prjName );
-			QFileInfo finfo(cdata.dbFileName());
+			QFileInfo finfo(prjName);
+			cdata.setFileName( finfo.absFilePath() );
 			projectFileExists = finfo.exists();
 
 			if (m_dropDB && !projectFileExists) {
@@ -311,7 +316,7 @@ bool KexiStartupHandler::init(int argc, char **argv)
 		else {
 			if (fileDriverSelected) {
 				cdata.driverName = KexiStartupHandler::detectDriverForFile( cdata.driverName,
-					cdata.dbFileName() );
+					cdata.fileName() );
 				if (cdata.driverName.isEmpty())
 					return false;
 			}
@@ -343,12 +348,16 @@ bool KexiStartupHandler::init(int argc, char **argv)
 		KexiGUIMessageHandler gui;
 		KexiProject *prj = KexiProject::createBlankProject(cancelled, projectData(), &gui);
 		bool ok = prj!=0;
-		if (ok) {
-			KMessageBox::information( 0, i18n("Project \"%1\" created successfully.")
-				.arg( projectData()->databaseName() ));
-		}
 		delete prj;
-		return ok;
+		if (cancelled)
+			return true;
+		if (!m_alsoOpenDB) {
+			if (ok) {
+				KMessageBox::information( 0, i18n("Project \"%1\" created successfully.")
+					.arg( projectData()->databaseName() ));
+			}
+			return ok;
+		}
 	}
 	else if (m_dropDB) {
 		KexiGUIMessageHandler gui;
@@ -451,7 +460,7 @@ bool KexiStartupHandler::init(int argc, char **argv)
 			return true;
 	}
 	
-	if (m_projectData && openExisting) {
+	if (m_projectData && (openExisting || (m_createDB && m_alsoOpenDB))) {
 		m_action = OpenProject;
 	}
 	//show if wasn't show yet

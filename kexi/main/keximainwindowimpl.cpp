@@ -24,6 +24,7 @@
 #include <qfile.h>
 #include <qtimer.h>
 #include <qobjectlist.h>
+#include <qprocess.h>
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -127,6 +128,10 @@ class KexiMainWindowImpl::Private
 		QString origAppCaption; //<! original application's caption (without project name)
 		QString appCaptionPrefix; //<! application's caption prefix - prj name (if opened), else: null
 
+#ifndef KEXI_SHOW_UNIMPLEMENTED
+		KActionMenu *dummy_action;
+#endif
+
 		//! project menu
 		KAction *action_save, *action_save_as, *action_close,
 		 *action_project_properties;
@@ -186,8 +191,9 @@ class KexiMainWindowImpl::Private
 		//! Indicates if project is started in --final mode
 		bool final : 1;
 
-	Private()
-		: dialogs(401)
+	Private(KexiMainWindowImpl* w)
+		: wnd(w)
+		, dialogs(401)
 	{
 		propEditorToolWindow=0;
 		final = false;
@@ -213,9 +219,14 @@ class KexiMainWindowImpl::Private
 //		disableErrorMessages=false;
 //		last_checked_mode=0;
 		propEditorDockSeparatorPos=-1;
+#ifndef KEXI_SHOW_UNIMPLEMENTED
+		dummy_action = new KActionMenu("", wnd);
+#endif
 	}
 	~Private() {
 	}
+
+	KexiMainWindowImpl *wnd;
 
 	/*! Toggles last checked view mode radio action, if available. */
 	void toggleLastCheckedMode()
@@ -243,6 +254,30 @@ class KexiMainWindowImpl::Private
 		}
 	}
 
+	void showStartProcessMsg(const QStringList& args)
+	{
+		wnd->showErrorMessage(i18n("Could not start %1 application.").arg(KEXI_APP_NAME), 
+			i18n("Command \"%1\" failed.").arg(args.join(" ")));
+	}
+
+	void hideMenuItem(const QString& menuName, const QString& itemText, bool alsoSeparator)
+	{
+		QPopupMenu *pm = popups[menuName];
+		if (!pm)
+			return;
+		uint i=0;
+		const uint c = pm->count();
+		for (;i<c;i++) {
+			kdDebug() << pm->text( pm->idAt(i) ) <<endl;
+			if (pm->text( pm->idAt(i) ).lower().stripWhiteSpace()==itemText.lower().stripWhiteSpace())
+				break;
+		}
+		if (i<c) {
+			pm->setItemVisible( pm->idAt(i), false );
+			if (alsoSeparator)
+				pm->setItemVisible( pm->idAt(i+1), false ); //also separator
+		}
+	}
 };
 
 //-------------------------------------------------
@@ -250,7 +285,7 @@ class KexiMainWindowImpl::Private
 KexiMainWindowImpl::KexiMainWindowImpl()
  : KexiMainWindow()
  , KexiGUIMessageHandler(this)
- , d(new KexiMainWindowImpl::Private() )
+ , d(new KexiMainWindowImpl::Private(this) )
 {
 	KexiProjectData *pdata = Kexi::startupHandler().projectData();
 	d->final = Kexi::startupHandler().forcedFinalMode() /* <-- simply forced final mode */
@@ -319,6 +354,12 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		delete l;
 		d->createMenu = d->popups["create"];
 	}
+
+	//fix menus a bit more:
+#ifndef KEXI_SHOW_UNIMPLEMENTED
+	d->hideMenuItem("file", i18n("&Import"), true);
+	d->hideMenuItem("help", i18n( "&Report Bug..." ), true);
+#endif
 
 	if (!isFakingSDIApplication() && !d->final) {
 //		QPopupMenu *menu = (QPopupMenu*) child( "window", "KPopupMenu" );
@@ -393,6 +434,7 @@ KexiMainWindowImpl::initActions()
 	action->setToolTip(i18n("Open an existing project"));
 	action->setWhatsThis(i18n("Opens an existing project. Currently opened project is not affected."));
 
+#ifdef KEXI_SHOW_UNIMPLEMENTED
 	d->action_open_recent = new KActionMenu(i18n("Open Recent"),
 		actionCollection(), "project_open_recent");
 	connect(d->action_open_recent->popupMenu(),SIGNAL(activated(int)),this,SLOT(slotProjectOpenRecent(int)));
@@ -400,6 +442,9 @@ KexiMainWindowImpl::initActions()
 	d->action_open_recent->popupMenu()->insertSeparator();
 	d->action_open_recent_more_id = d->action_open_recent->popupMenu()
 		->insertItem(i18n("&More Projects..."), this, SLOT(slotProjectOpenRecentMore()), 0, 1000);
+#else
+	d->action_open_recent = d->dummy_action;
+#endif
 
 	d->action_save = KStdAction::save( this, SLOT( slotProjectSave() ), actionCollection(), "project_save" );
 //	d->action_save = new KAction(i18n("&Save"), "filesave", KStdAccel::shortcut(KStdAccel::Save),
@@ -407,6 +452,7 @@ KexiMainWindowImpl::initActions()
 	d->action_save->setToolTip(i18n("Save object changes"));
 	d->action_save->setWhatsThis(i18n("Saves object changes from currently selected window."));
 
+#ifdef KEXI_SHOW_UNIMPLEMENTED
 	d->action_save_as = new KAction(i18n("Save &As..."), "filesaveas", 0,
 		this, SLOT(slotProjectSaveAs()), actionCollection(), "project_saveas");
 	d->action_save_as->setToolTip(i18n("Save object as"));
@@ -414,6 +460,10 @@ KexiMainWindowImpl::initActions()
 
 	d->action_project_properties = new KAction(i18n("Project Properties"), "info", 0,
 		this, SLOT(slotProjectProperties()), actionCollection(), "project_properties");
+#else
+	d->action_save_as = d->dummy_action;
+	d->action_project_properties = d->dummy_action;
+#endif
 
 	d->action_close = new KAction(i18n("&Close Project"), "fileclose", KStdAccel::shortcut(KStdAccel::Close),
 		this, SLOT(slotProjectClose()), actionCollection(), "project_close" );
@@ -422,10 +472,19 @@ KexiMainWindowImpl::initActions()
 
 	KStdAction::quit( this, SLOT(slotQuit()), actionCollection(), "quit");
 
+#ifdef KEXI_SHOW_UNIMPLEMENTED
 	d->action_project_relations = new KAction(i18n("&Relationships..."), "relation", CTRL + Key_R,
 		this, SLOT(slotProjectRelations()), actionCollection(), "project_relations");
 	d->action_project_relations->setToolTip(i18n("Project relationships"));
 	d->action_project_relations->setWhatsThis(i18n("Shows project relationships."));
+
+	new KAction(i18n("From File..."), "fileopen", 0,
+		this, SLOT(slotImportFile()), actionCollection(), "import_file");
+	new KAction(i18n("From Server..."), "server", 0,
+		this, SLOT(slotImportServer()), actionCollection(), "import_server");
+#else
+	d->action_project_relations = d->dummy_action;
+#endif
 
 	//EDIT MENU
 	d->action_edit_cut = createSharedAction( KStdAction::Cut, "edit_cut");
@@ -487,11 +546,6 @@ KexiMainWindowImpl::initActions()
 	d->action_view_propeditor->setToolTip(i18n("Go to Property editor panel"));
 	d->action_view_propeditor->setWhatsThis(i18n("Goes to Property editor panel."));
 #endif
-
-	new KAction(i18n("From File..."), "fileopen", 0,
-		this, SLOT(slotImportFile()), actionCollection(), "import_file");
-	new KAction(i18n("From Server..."), "server", 0,
-		this, SLOT(slotImportServer()), actionCollection(), "import_server");
 
 	//DATA MENU
 	d->action_data_save_row = createSharedAction(i18n("&Save Row"), "button_ok", SHIFT | Key_Return, "data_save_row");
@@ -912,8 +966,12 @@ void KexiMainWindowImpl::initPropertyEditor()
 		//this gives:
 		// -2/3 of base font size (6 point minimum)
 		// if the current screen width is > 1100, +1 point is added to every 100 points greater than 1300
+		// for resolutions below 1100 in width, 7 is the minimum
 		// maximum size is the base size
-		size = QMAX( 6 + QMAX(0, KGlobalSettings::desktopGeometry(this).width() - 1100) / 100 , f.pointSize()*2/3 );
+		const int wdth = KGlobalSettings::desktopGeometry(this).width();
+		size = QMAX( 6 + QMAX(0, wdth - 1100) / 100 , f.pointSize()*2/3 );
+		if (wdth<1100)
+			size = QMAX( size, 7 );
 		size = QMIN( size, f.pointSize() );
 	}
 	f.setPointSize( size );
@@ -1475,10 +1533,41 @@ void
 KexiMainWindowImpl::slotProjectNew()
 {
 	if (d->prj) {
-		//js: TODO: start new instance!
-		KEXI_UNFINISHED(i18n("Create another project"));
+//TODO use KexiStartupDialog(KexiStartupDialog::Templates...)
+
+		bool cancel;
+		KexiProjectData *new_data = createBlankProjectData(
+			cancel, 
+			false /* do not confirm prj overwrites: user will be asked on process startup */
+		);
+		if (!new_data)
+			return;
+		//start new instance
+
+//TODO use KProcess?
+    QStringList args;
+		QProcess *proc = 0;
+		if (!new_data->connectionData()->fileName().isEmpty()) {
+			//file based
+			args << qApp->applicationFilePath() << "-create-opendb" 
+				<< new_data->connectionData()->fileName();
+			proc = new QProcess(args, this, "process");
+			proc->setWorkingDirectory( QFileInfo(new_data->connectionData()->fileName()).dir(true) );
+		}
+		else {
+			//server based
+			//TODO
+			return;
+		}
+		if (!proc->start()) {
+				d->showStartProcessMsg(args);
+		}
+		delete proc;
+		delete new_data;
+//		KEXI_UNFINISHED(i18n("Create another project"));
 		return;
 	}
+	//create within this instance
 	createBlankProject();
 }
 
@@ -1495,12 +1584,16 @@ KexiMainWindowImpl::createKexiProject(KexiProjectData* new_data)
 		connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
 }
 
-tristate
-KexiMainWindowImpl::createBlankProject()
+KexiProjectData*
+KexiMainWindowImpl::createBlankProjectData(bool &cancelled, bool confirmOverwrites)
 {
+	cancelled = false;
 	KexiNewProjectWizard wiz(Kexi::connset(), 0, "KexiNewProjectWizard", true);
-	if (wiz.exec() != QDialog::Accepted)
-		return cancelled;
+	wiz.setConfirmOverwrites(confirmOverwrites);
+	if (wiz.exec() != QDialog::Accepted) {
+		cancelled=true;
+		return 0;
+	}
 
 	KexiProjectData *new_data;
 
@@ -1518,8 +1611,22 @@ KexiMainWindowImpl::createBlankProject()
 		cdata.setFileName( wiz.projectDBName() );
 		new_data = new KexiProjectData( cdata, wiz.projectDBName(), wiz.projectCaption() );
 	}
-	else
+	else {
+		cancelled = true;
+		return 0;
+	}
+	return new_data;
+}
+
+tristate
+KexiMainWindowImpl::createBlankProject()
+{
+	bool cancel;
+	KexiProjectData *new_data = createBlankProjectData(cancel);
+	if (cancel)
 		return cancelled;
+	if (!new_data)
+		return false;
 
 	createKexiProject( new_data );
 
@@ -1614,8 +1721,22 @@ KexiMainWindowImpl::slotProjectOpen()
 	if (dlg.exec()!=QDialog::Accepted)
 		return;
 
-	if (d->prj)//js: TODO: start new instance!
+	if (d->prj) {//js: TODO: start new instance!
+		QProcess *proc;
+    QStringList args;
+		if (!dlg.selectedExistingFile().isEmpty()) {
+//TODO use KRun
+			args << qApp->applicationFilePath() << dlg.selectedExistingFile();
+			proc = new QProcess(args, this, "process");
+			proc->setWorkingDirectory( QFileInfo(dlg.selectedExistingFile()).dir(true) );
+		}
+		//TODO: server-based
+		if (!proc->start()) {
+			d->showStartProcessMsg(args);
+		}
+		delete proc;
 		return;
+	}
 
 	KexiProjectData* projectData = 0;
 	KexiDB::ConnectionData *cdata = dlg.selectedExistingConnection();
@@ -2476,7 +2597,7 @@ int KexiMainWindowImpl::generatePrivateID()
 	return --d->privateIDCounter;
 }
 
-void KexiMainWindowImpl::propertyBufferSwitched(KexiDialogBase *dlg, bool force)
+void KexiMainWindowImpl::propertyBufferSwitched(KexiDialogBase *dlg, bool force, bool preservePrevSelection)
 {
 	kdDebug() << "KexiMainWindowImpl::propertyBufferSwitched()" << endl;
 	if ((KexiDialogBase*)d->curDialog!=dlg)
@@ -2485,7 +2606,7 @@ void KexiMainWindowImpl::propertyBufferSwitched(KexiDialogBase *dlg, bool force)
 		KexiPropertyBuffer *newBuf = d->curDialog ? d->curDialog->propertyBuffer() : 0;
 		if (!newBuf || (force || static_cast<KexiPropertyBuffer*>(d->propBuffer) != newBuf)) {
 			d->propBuffer = newBuf;
-			d->propEditor->editor()->setBuffer( d->propBuffer );
+			d->propEditor->editor()->setBuffer( d->propBuffer, preservePrevSelection );
 		}
 	}
 }

@@ -306,12 +306,12 @@ void KexiNewProjectWizard::accept()
 			return;
 		}
 		//check for duplicated dbname
-		if (m_project_selector->projectSet() && m_project_selector->projectSet()
+		if (m_conn_sel->confirmOverwrites() && m_project_selector->projectSet() && m_project_selector->projectSet()
 			->findProject( m_server_db_name->le_dbname->text() )) {
-			if (KMessageBox::warningYesNo( this, "<qt>"
+			if (KMessageBox::Yes!=KMessageBox::warningYesNo( this, "<qt>"
 				+i18n("<b>A project with database name \"%1\" already exists</b>"
 				"<p>Do you want to delete it and create a new one?")
-				.arg( m_server_db_name->le_dbname->text() ) ) != KMessageBox::Yes)
+				.arg( m_server_db_name->le_dbname->text() ) ))
 			{
 				m_server_db_name->le_dbname->setFocus();
 				return;
@@ -379,6 +379,14 @@ void KexiNewProjectWizard::slotServerDBNameTxtChanged(const QString &)
 		return;
 	d->le_dbname_autofill = false;
 }
+
+/*! If true, user will be asked to accept overwriting existing file. 
+ This is true by default. */
+void KexiNewProjectWizard::setConfirmOverwrites(bool set)
+{
+	m_conn_sel->setConfirmOverwrites(set);
+}
+
 
 #include "KexiNewProjectWizard.moc"
 

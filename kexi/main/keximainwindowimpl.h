@@ -182,12 +182,17 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		tristate closeProject();
 
 		/*! Shows dialog for creating new blank project,
-		 ans creates one. Dialog is not shown if option for automatic creation 
+		 and creates one. Dialog is not shown if option for automatic creation 
 		 is checked or Kexi::startupHandler().projectData() was provided from command line.
 		 \a cancelled is set to true if creation has been cancelled (e.g. user answered 
 		 no when asked for database overwriting, etc.
 		 \return true if database was created, false on error or when cancel was pressed */
 		tristate createBlankProject();
+
+		/*! Shows dialog for creating new blank project,
+		 and return a data describing it. It the dialog was cancelled,
+		 \a cancelled will be set to true (false otherwise). */
+		KexiProjectData* createBlankProjectData(bool &cancelled, bool confirmOverwrites = true);
 
 		void setWindowMenu(QPopupMenu *menu);
 
@@ -299,7 +304,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		//! There are performed all actions that need to be done immediately after  ctro (using timer)
 		void slotLastActions();
 
-		virtual void propertyBufferSwitched(KexiDialogBase *dlg, bool force=false);
+		virtual void propertyBufferSwitched(KexiDialogBase *dlg, bool force=false, bool preservePrevSelection = false);
 
 		/*! Handles changes in 'dirty' flag for dialogs. */
 		void slotDirtyFlagChanged(KexiDialogBase*);

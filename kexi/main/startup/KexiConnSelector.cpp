@@ -70,11 +70,13 @@ public:
 	KexiConnSelectorWidgetPrivate()
 	: conn_sel_shown(false)
 	, file_sel_shown(false)
+	, confirmOverwrites(true)
 	{
 	}
 	
 	bool conn_sel_shown;//! helper
 	bool file_sel_shown;
+	bool confirmOverwrites;
 };
 
 /*================================================================*/
@@ -165,6 +167,7 @@ void KexiConnSelectorWidget::showSimpleConn()
 		d->file_sel_shown=true;
 		m_fileDlg = new KexiStartupFileDialog( "", KexiStartupFileDialog::Opening,
 			m_file, "openExistingFileDlg");
+		m_fileDlg->setConfirmOverwrites( d->confirmOverwrites );
 		static_cast<QVBoxLayout*>(m_file->layout())->insertWidget( 2, m_fileDlg );
 
 		for (QWidget *w = parentWidget(true);w;w=w->parentWidget(true)) {
@@ -220,6 +223,18 @@ void KexiConnSelectorWidget::hideHelpers()
 	m_remote->label_back->hide();
 	m_remote->btn_back->hide();
 	m_remote->icon->hide();
+}
+
+void KexiConnSelectorWidget::setConfirmOverwrites(bool set)
+{
+	d->confirmOverwrites = set;
+	if (m_fileDlg)
+		m_fileDlg->setConfirmOverwrites( d->confirmOverwrites );
+}
+
+bool KexiConnSelectorWidget::confirmOverwrites() const
+{
+	return d->confirmOverwrites;
 }
 
 #include "KexiConnSelector.moc"

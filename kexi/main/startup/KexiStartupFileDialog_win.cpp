@@ -33,6 +33,7 @@ class KexiStartupFileDialogBasePrivate
 	public:
 		KexiStartupFileDialogBasePrivate()
 		{}
+		KFile::Mode mode;
 		QString kde_filters;
 		QStringList mimetypes;
 };
@@ -330,10 +331,15 @@ void KexiStartupFileDialogBase::clearFilter()
 	updateAutoSelectExtension ();
 }
 
+KFile::Mode KexiStartupFileDialogBase::mode() const
+{
+	return d->mode;
+}
+
 void KexiStartupFileDialogBase::setMode( KFile::Mode m )
 {
     //(js) translate mode for QFileDialog
-//TODO    d->mode = m;
+    d->mode = m;
     QFileDialog::Mode qm = (QFileDialog::Mode)0;
     if (m & KFile::File) qm = Mode(qm | QFileDialog::AnyFile);
     else if (m & KFile::Directory) qm = Mode(qm | QFileDialog::DirectoryOnly);

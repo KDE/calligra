@@ -55,7 +55,11 @@ class KEXIMAIN_EXPORT KexiNewProjectWizard : public KWizard
 		
 		/*! Reimplemented for internal reasons */	
 		virtual void show();
-	
+
+		/*! If true, user will be asked to accept overwriting existing project. 
+		 This is true by default. */
+		void setConfirmOverwrites(bool set);
+
 	protected slots:
 		void slotLvTypesSelected(QIconViewItem *);
 		void slotLvTypesExecuted(QIconViewItem *);
