@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C)  2001 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C)  2001, 2002 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -337,6 +337,7 @@ void KoFontChooser::setStrikeOutlineType(KoTextFormat::StrikeOutLineType nb)
          d->m_strikeOut->setCurrentItem(3);
         break;
     }
+    m_strikeOutType->setEnabled( d->m_strikeOut->currentItem()!= 0);
 
     m_changedFlags = 0;
 }
@@ -413,9 +414,6 @@ void KoFontChooser::setStrikeOutLineStyle(KoTextFormat::StrikeOutLineStyle _t)
         m_strikeOutType->setCurrentItem( 0 );
         break;
     }
-
-    m_strikeOutType->setEnabled( d->m_strikeOut->currentItem()!= 0);
-
     m_changedFlags = 0;
 }
 
@@ -529,8 +527,10 @@ void KoFontDia::slotReset()
     m_chooser->setColor( m_color );
     m_chooser->setBackGroundColor(m_backGroundColor);
     m_chooser->setUnderlineColor( m_underlineColor );
+
     m_chooser->setUnderlineLineType(m_underlineType);
     m_chooser->setUnderlineLineStyle(m_underlineLineStyle);
+
     m_chooser->setStrikeOutlineType( m_strikeOutType);
     m_chooser->setStrikeOutLineStyle(m_strikeOutLineStyle);
 }
