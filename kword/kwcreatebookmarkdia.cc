@@ -94,6 +94,7 @@ KWSelectBookmarkDia::KWSelectBookmarkDia( const QStringList & _list, KWDocument 
 
     connect(m_bookmarkList,  SIGNAL( selectionChanged ()), this, SLOT(slotSelectionChanged()));
     connect(m_bookmarkList,  SIGNAL(doubleClicked ( QListBoxItem * )), this, SLOT(slotOk()));
+    connect(m_bookmarkList,  SIGNAL(returnPressed ( QListBoxItem * )), this, SLOT(slotOk()));
 
     m_pbRename = new QPushButton( i18n("Rename Bookmark"), page );
     grid->addWidget( m_pbRename, 0, 1);
@@ -104,9 +105,8 @@ KWSelectBookmarkDia::KWSelectBookmarkDia( const QStringList & _list, KWDocument 
 
     connect( m_pbDelete, SIGNAL(clicked()), this, SLOT(slotDeleteBookmark()));
 
-    setFocus();
+    m_bookmarkList->setFocus();
     slotSelectionChanged();
-    resize( 300, 200);
 }
 
 void KWSelectBookmarkDia::slotRenameBookmark()
