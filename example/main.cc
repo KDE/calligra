@@ -23,6 +23,7 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kaboutdata.h>
+#include <dcopclient.h>
 #include "example_factory.h"
 
 
@@ -39,7 +40,10 @@ int main( int argc, char **argv )
     KCmdLineArgs::addCmdLineOptions( options );
     KoApplication app;
 
-    if (!app.start()); // parses command line args, create initial docs and shells
+    app.dcopClient()->attach();
+    app.dcopClient()->registerAs( "example" );
+
+    if (!app.start()) // parses command line args, create initial docs and shells
 	return 1;
     return app.exec();
 }
