@@ -222,22 +222,8 @@ VComposite::combinePath( const VPath& path )
 	VPath* p = path.clone();
 	p->setParent( this );
 
-// TODO: do complex inside tests instead:
+	// TODO: do complex inside tests instead:
 	// Make new segments clock wise oriented:
-	/*if( m_paths.count() > 0 )
-	{
-		if( p->counterClockwise() )
-		{
-			p->revert();
-		}
-	}
-	else
-	{
-		if( !( p->counterClockwise() ) )
-		{
-			p->revert();
-		}
-	}*/
 
 	m_paths.append( p );
 	m_fill->setFillRule( fillMode() );
@@ -305,7 +291,7 @@ VComposite::load( const QDomElement& element )
 {
 	setState( normal );
 
-	QString data = element.attribute ("d");
+	QString data = element.attribute( "d" );
 	if( data.length() > 0 )
 	{
 		loadSvgPath( data );
