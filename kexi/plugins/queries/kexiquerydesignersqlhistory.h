@@ -74,12 +74,16 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLHistory : public QScrollView
 		void		addEvent(QString q, bool s, const QString &error);
 
 		void		slotToClipboard();
+		void		slotEdit();
 
 //		HistoryItem	itemAt(int y);
 
 	protected:
-		void	drawContents(QPainter *p, int cx, int cy, int cw, int ch);
-		void	contentsMousePressEvent(QMouseEvent * e);
+		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
+		void		contentsMousePressEvent(QMouseEvent * e);
+
+	signals:
+		void		editRequested(const QString &text);
 
 	private:
 		History		*m_history;

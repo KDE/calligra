@@ -48,6 +48,7 @@ KexiQueryDesignerSQL::KexiQueryDesignerSQL(KexiMainWindow *mainWin, QWidget *par
 	b->addWidget(l);
 
 	connect(parent, SIGNAL(queryExecuted(QString, bool, const QString &)), m_history, SLOT(addEvent(QString, bool, const QString &)));
+	connect(m_history, SIGNAL(editRequested(const QString &)), m_editor, SLOT(setText(const QString &)));
 	m_history->setHistory(doc->history());
 
 //	connect(m_editor, SIGNAL(execQ()), parent, SLOT(fastQuery()));

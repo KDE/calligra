@@ -120,7 +120,7 @@ KexiQueryDesignerSQLHistory::contextMenu(const QPoint &pos, HistoryEntry *)
 	p.insertItem(SmallIcon("editcopy"), i18n("Copy to Clipboard"), this, SLOT(slotToClipboard()));
 #ifndef KEXI_NO_UNFINISHED
 	p.insertSeparator();
-	p.insertItem(SmallIcon("edit"), i18n("Edit"));
+	p.insertItem(SmallIcon("edit"), i18n("Edit"), this, SLOT(slotEdit()));
 	p.insertItem(SmallIcon("reload"), i18n("Requery"));
 #endif
 
@@ -134,6 +134,12 @@ KexiQueryDesignerSQLHistory::slotToClipboard()
 		return;
 
 	QApplication::clipboard()->setText(m_selected->statement(), QClipboard::Clipboard);
+}
+
+void
+KexiQueryDesignerSQLHistory::slotEdit()
+{
+	emit editRequested(m_selected->statement());
 }
 
 void
