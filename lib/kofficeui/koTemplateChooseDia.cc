@@ -612,6 +612,11 @@ bool KoTemplateChooseDia::collectInfo()
 		if (! item)
 			return false;
 		KURL url = item->url();
+		if(url.isLocalFile() && !QFile::exists(url.path()))
+		{
+			KMessageBox::error( this, i18n( "The file %1 doesn't exist." ).arg( url.path() ) );
+			return false;
+		}
 		d->m_fullTemplateName = url.isLocalFile() ? url.path() : url.url();
 		d->m_returnType = File;
 	}
