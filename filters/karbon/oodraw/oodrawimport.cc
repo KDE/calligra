@@ -174,6 +174,8 @@ OoDrawImport::openFile()
 void
 OoDrawImport::convert()
 {
+	m_document.saveAsPath( false );
+
 	QDomElement content = m_content.documentElement();
 
 	// content.xml contains some automatic-styles that we need to store
@@ -268,6 +270,10 @@ OoDrawImport::convert()
 					else if( kind == "arc" )
 						type = VEllipse::arc;
 				}
+				kdDebug() << "x : " << x << endl;
+				kdDebug() << "y : " << y << endl;
+				kdDebug() << "w: " << w<< endl;
+				kdDebug() << "h: " << h<< endl;
 				VEllipse *ellipse = new VEllipse( &m_document, KoPoint( x, y ), w, h, type, start, end );
 				appendPen( *ellipse );
 				// arc has no brush
