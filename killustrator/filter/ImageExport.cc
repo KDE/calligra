@@ -27,7 +27,6 @@
 #endif
 #include <qpixmap.h>
 #include <qimage.h>
-#include <qimageio.h>
 #include <qglobal.h>
 #include <kimgio.h>
 #include "Painter.h"
