@@ -6,4 +6,4 @@ KDE_ICON = kugar kugardata
 
 messages: 
 	$(EXTRACTRC) lib/*.ui part/*.ui kudesigner/*.ui shell/*.ui */*.rc > rc.cpp
-	$(XGETTEXT) lib/*.cpp part/*.cpp kudesigner/*.cpp kudesigner_lib/*.cpp kudesigner_lib/*.h shell/*.cpp rc.cpp -o $(podir)/kugar.pot
+	$(XGETTEXT) -ktranslate lib/*.cpp part/*.cpp kudesigner/*.cpp kudesigner_lib/*.cpp kudesigner_lib/*.h shell/*.cpp rc.cpp -o $(podir)/kugar.pot
