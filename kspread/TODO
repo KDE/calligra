@@ -9,6 +9,7 @@ Status field
 --	No work has been done on this subtask yet.
 DONE    Task is all done
 done    This subtask is done
+****	This (sub)task cannot be fixed with the current technology.
 
 INGE	Inge is working on this task
 inge	Inge is working on this subtask
@@ -55,16 +56,19 @@ General bugs
     does not "take".
 
 * Printing
-  + 68190: Empty document generates 2 printed pages (testcase)	      1 INGE
+  + 68190: Empty document generates 2 printed pages (testcase)	      1 ----
+	See analysis below
   + 70073: printing with kspread gives big black areas		      1 ----
   + 72798: selective print comes up with "nothing to print"	      1 ----
   + 77962: print range doesn't work into kspread		      1 DONE
   + 85155: RIGHT ALIGN TEXT CUT WHEN PRINTING			      1 ----
   + 87367: Ugly postscript rendering of cell borders.		      1 ----
   + 88252: content larger than column are not print as PDF	      1 DONE
-  + 95159: Many blank pages when printing spreadsheet to PDF file.    1 INGE
-  + 100643: KSpread prints a completely empty page at the end of      1 INGE
+  + 95159: Many blank pages when printing spreadsheet to PDF file.    1 DONE
+	Duplicate bug.  See analysis below
+  + 100643: KSpread prints a completely empty page at the end of      1 DONE
 	    the document.
+	Duplicate bug.  See analysis below
   + 101074: Charts are really small when printed from KSpread	      1 ----
 
 * Cut/Copy & Paste
@@ -86,7 +90,9 @@ General bugs
 	   format.
   + 70708: undo of series broken when range contains merged cells     2 ----
   + 77603: isdate() returns error for field references		      1 ----
-  + 78642: Function AVERAGEA does not work as documented	      1 ----
+  + 78642: Function AVERAGEA does not work as documented	      1 ****
+	This bug is very difficult to fix, since it depends on the
+	new formula engine.
   + 84738: Inserting a new line does not copy right settings to       1 ----
 	   new line.
   + 86875: KSpread: does not convert automatically between text	      2 ----
@@ -100,11 +106,10 @@ General bugs
 	This one is split up into wishes 102025 and 102026.
   + 52575: Insert data from text file error and other remarks	      1 DONE
 	This bug should be split up into a number of wishes.
-  + 59757: Insert rows does not work				      1 ----
-	This sounds important.  Investigate.
+  + 59757: Insert rows does not work				      1 DONE
   + 60458: Inserting a row always creates cell with default number    1 ----
 	   format.
-  + 61652: Wrong Parse when call a value over many cells	      1 ----
+  + 61652: Wrong Parse when call a value over many cells	      1 DONE
   + 69285: Pasting directly into the cell edit box is not 	      1 ----
 	   subsequently saved when changing cells.
 
@@ -139,6 +144,38 @@ Things not in bugzilla
 * Plugins
   + Replace the calendar templates with 2005 and 2006 (and 2007?)
     NOTE: there is a insert calendar plugin that might be useful.
+
+
+
+Analysis of various bugs
+
+  + 68190: Empty document generates 2 printed pages (testcase)
+  + 95159: Many blank pages when printing spreadsheet to PDF file.
+  + 100643: KSpread prints a completely empty page at the end of
+	    the document.
+
+    I thought these bugs would be pretty simple to fix.
+    KSpreadCell::needsPrinting() tests for hasProperty(prop) where
+    prop is one PTopBorder, PLeftBorder, and so on.  The problem is
+    that if an empty cell is saved, it often has style=Default, and
+    even though this style has empty borders, it has these bits set in
+    the properties field.
+
+    I enhanced the cell inspector (press Ctrl-Shift-I) with a feature
+    to see all properties as a hex number, and they were many, even in
+    empty cells.  I suspect that the problem comes from saving to a
+    file and then loading on the next run.  I can see two ways of
+    fixing this, neither of them easy:
+
+    1. Check for empty pen, style, whatever that distinguishes the
+       default style at loading time.  I have found no easy way of
+       distinguishing the empty border from a non-empty border, but
+       those who know KSpread better than I can probably fix it.
+
+    2. In KSpreadCell::needsPrinting(), change the tests for
+       hasProperty(...) into something like hasNonemptyProperty(...).
+       Again, I don't know how this function should be written.
+
 
 
 
