@@ -62,6 +62,7 @@ private slots:
     void duplicateCopy();
     void pageDelete();
     void pageInsert();
+    void renamePageTitle();
 
 private:
     int delPageId;

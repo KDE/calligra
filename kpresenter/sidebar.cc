@@ -19,6 +19,9 @@
 
 #include <sidebar.h>
 #include <kpresenter_view.h>
+#include <kmessagebox.h>
+#include <klineeditdlg.h>
+#include <knotifyclient.h>
 #include <qheader.h>
 #include <qtimer.h>
 #include <qpopupmenu.h>
@@ -61,6 +64,7 @@ SideBar::SideBar( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     pageMenu->insertItem( i18n( "&Use current slide as default template" ), this, SLOT( pageDefaultTemplate() ) );
     pageMenu->insertItem( KPBarIcon( "newslide" ), i18n( "&Duplicate Page" ), this, SLOT( duplicateCopy() ) );
     delPageId = pageMenu->insertItem( KPBarIcon( "delslide" ), i18n( "D&elete Page..." ), this, SLOT( pageDelete() ) );
+    pageMenu->insertItem( i18n( "&Rename Page" ), this, SLOT( renamePageTitle() ) );
     pageMenu->setMouseTracking( true );
 }
 
@@ -191,5 +195,29 @@ void SideBar::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
     pageMenu->setItemEnabled( delPageId, doc->getPageNums() > 1 );
     pageMenu->popup( pnt );
 }
+
+void SideBar::renamePageTitle()
+{
+    int pageNumber = QListView::selectedItem()->text( 1 ).toInt() - 1;
+    bool ok;
+    QString activeTitle = QListView::selectedItem()->text( 0 );
+    QString newTitle = KLineEditDlg::getText( i18n("Page Title"), activeTitle, &ok, this );
+
+    // Have a different name ?
+    if ( ok ) { // User pushed an OK button.
+        if ( (newTitle.stripWhiteSpace()).isEmpty() ) { // Title is empty.
+            KNotifyClient::beep();
+            KMessageBox::information( this, i18n("Page title cannot be empty."), i18n("Change page title") );
+            // Recursion
+            renamePageTitle();
+        }
+        else if ( newTitle != activeTitle ) { // Title changed.
+            (*doc->manualTitleList.at(pageNumber)) = newTitle;
+            updateItem(pageNumber);
+            view->kPresenterDoc()->setModified( true );
+        }
+    }
+}
+
 
 #include <sidebar.moc>

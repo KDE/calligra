@@ -293,6 +293,8 @@ public:
 
     KTextEditFormatCollection *formatCollection() const { return fCollection; }
 
+    QStringList manualTitleList;
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -326,8 +328,10 @@ protected:
 
     QDomDocumentFragment saveBackground( QDomDocument& );
     QDomElement saveObjects( QDomDocument &doc );
+    QDomElement saveTitle( QDomDocument &doc );
     void loadBackground( const QDomElement &element );
     void loadObjects( const QDomElement &element, bool _paste = false );
+    void loadTitle( const QDomElement &element );
     virtual bool completeLoading( KoStore* /* _store */ );
     void makeUsedPixmapList();
 
@@ -394,6 +398,10 @@ protected:
     KTextEditFormatCollection *fCollection;
     QValueList<bool> m_selectedSlides;
     bool ignoreSticky;
+
+private:
+    void pageTitleInsert( unsigned int pageNumber);
+    void pageTitleDelete( unsigned int pageNumber );
 
 };
 
