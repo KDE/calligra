@@ -50,6 +50,8 @@
 #include <koRect.h>
 #include <koSize.h>
 #include <koPoint.h>
+#include <kodom.h>
+#include <koxmlns.h>
 
 #include <qxml.h>
 #include <qbuffer.h>
@@ -1611,16 +1613,16 @@ KoTextCursor * KPrOasisPasteTextCommand::execute( KoTextCursor *c )
 
     QDomElement content = domDoc.documentElement();
 
-    QDomElement body ( content.namedItem( "office:body" ).toElement() );
+    QDomElement body ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( body.isNull() ) {
         kdError(30518) << "No office:body found!" << endl;
         return 0;
     }
-    QDomElement tmpbody = body.namedItem( "office:presentation" ).toElement();
+    QDomElement tmpbody = KoDom::namedItemNS( body, KoXmlNS::office, "presentation" );
     if ( tmpbody.isNull() )
     {
         //find a better method to search body element
-        tmpbody = body.namedItem( "office:text" ).toElement();
+        tmpbody = KoDom::namedItemNS( body, KoXmlNS::office, "text" );
         if ( tmpbody.isNull() ) {
             kdError(30518) << "No office:text found!" << endl;
             return 0;

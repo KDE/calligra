@@ -67,8 +67,10 @@
 #include "kprdrag.h"
 #include <qclipboard.h>
 #include <koSize.h>
-#include <float.h>
 #include <koxmlns.h>
+#include <kodom.h>
+
+#include <float.h>
 using namespace std;
 
 #undef S_NONE // Solaris defines it in sys/signal.h
@@ -287,7 +289,7 @@ void KPTextObject::loadOasis(const QDomElement &element, KoOasisContext& context
     }
     kdDebug()<<" vertical Alignment :"<< ( ( m_textVertAlign== KP_TOP ) ? "top" : ( m_textVertAlign==  KP_CENTER ) ? "center": "bottom" )<<endl;
     resizeTextDocument(); // this will to formatMore()
-    QDomElement tmp = element.namedItem("draw:text-box").toElement();
+    QDomElement tmp = KoDom::namedItemNS( element, KoXmlNS::draw, "text-box");
     m_textobj->loadOasisContent( tmp, context, m_doc->styleCollection() );
 }
 

@@ -26,6 +26,7 @@
 #include "kprvariable.h"
 
 #include <kooasiscontext.h>
+#include <kodom.h>
 #include <koxmlns.h>
 
 KPrTextDocument::KPrTextDocument( KPTextObject * textobj, KoTextFormatCollection *fc, KoTextFormatter *formatter )
@@ -66,7 +67,7 @@ bool KPrTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& conte
                 // we could have multiple spans there, but OO ensures that there is always only one,
                 // splitting the hyperlink if necessary (at format changes).
                 // Note that we ignore the formatting of the span.
-                QDomElement spanElem = tag.namedItem( "text:span" ).toElement();
+                QDomElement spanElem = KoDom::namedItemNS( tag, KoXmlNS::text, "span" );
                 QString text;
                 if( spanElem.isNull() )
                     text = tag.text();

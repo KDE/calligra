@@ -1152,13 +1152,13 @@ void KPresenterDoc::saveOasisHeaderFooter( KoXmlWriter & stickyTmpWriter , KoSav
 
 void KPresenterDoc::loadOasisHeaderFooter(QDomNode & drawPage, KoOasisContext & context)
 {
-    QDomNode tmp = drawPage.namedItem( "style:header" );
+    QDomNode tmp = KoDom::namedItemNS( drawPage, KoXmlNS::style, "header" );
     if ( !tmp.isNull() )
     {
         //kdDebug()<<" there is a header \n";
         _header->textObject()->loadOasisContent( tmp.toElement(), context, styleCollection() );
     }
-    tmp = drawPage.namedItem( "style:footer" );
+    tmp = KoDom::namedItemNS( drawPage, KoXmlNS::style, "footer" );
     if ( !tmp.isNull() )
     {
         //kdDebug()<<" there is a footer \n";
@@ -1584,7 +1584,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             }
 
             //All animation object for current page is store into this element
-            createPresentationAnimation(drawPage.namedItem("presentation:animations").toElement());
+            createPresentationAnimation(KoDom::namedItemNS( drawPage, KoXmlNS::presentation, "animations"));
             // parse all objects
             loadOasisObject(pos, newpage, drawPage, context);
 
@@ -1799,9 +1799,9 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         {
             //we must extend note attribute
             //kdDebug()<<"presentation:notes----------------------------------\n";
-            QDomNode frameBox = o.namedItem( "draw:frame" );
+            QDomNode frameBox = KoDom::namedItemNS( o, KoXmlNS::draw, "frame" );
             //todo load layout for note.
-            QDomNode textBox = frameBox.namedItem( "draw:text-box" );
+            QDomNode textBox = KoDom::namedItemNS( frameBox, KoXmlNS::draw, "text-box" );
 
             if ( !textBox.isNull() )
             {

@@ -44,6 +44,7 @@
 #include <koSize.h>
 #include <koPoint.h>
 #include <koxmlns.h>
+#include <kodom.h>
 #include <kdebug.h>
 
 const QString &KPObject::tagORIG=KGlobal::staticQString("ORIG");
@@ -654,7 +655,7 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         }
         else
             kdDebug()<<" not supported :"<<effectStr<<endl;
-        QDomElement sound = animation->namedItem( "presentation:sound" ).toElement();
+        QDomElement sound = KoDom::namedItemNS( *animation, KoXmlNS::presentation, "sound" );
         if ( !sound.isNull() )
         {
             kdDebug()<<" object has sound effect \n";
@@ -741,7 +742,7 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         //FIXME allow to save/load this attribute
         if ( effect3 != EF3_NONE )
             disappear = true;
-        QDomElement sound = animation->namedItem( "presentation:sound" ).toElement();
+        QDomElement sound = KoDom::namedItemNS( *animation, KoXmlNS::presentation, "sound" );
         if ( !sound.isNull() )
         {
             kdDebug()<<" object has sound effect \n";
