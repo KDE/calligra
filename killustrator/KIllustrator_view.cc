@@ -866,8 +866,8 @@ void KIllustratorView::slotProperties()
     {
         result = KMessageBox::warningYesNo(this,
                                            i18n ("This action will set the default\n"
-                                                 "properties for new objects !\n"
-                                                 "Would you like to do it ?"),
+                                                 "properties for new objects!\n"
+                                                 "Would you like to do it?"),
                                             i18n("Warning"));
     }
     if (result == KMessageBox::Yes)
@@ -1050,8 +1050,8 @@ void KIllustratorView::slotBrushChosen( const QColor & c )
     {
         int result = KMessageBox::warningYesNo(this,
                                                i18n ("This action will set the default\n"
-                                                     "properties for new objects !\n"
-                                                     "Would you like to do it ?"),
+                                                     "properties for new objects!\n"
+                                                     "Would you like to do it?"),
                                                i18n("Warning"));
         if (result == KMessageBox::Yes)
             GObject::setDefaultFillInfo (fInfo);
@@ -1080,8 +1080,8 @@ void KIllustratorView::slotPenChosen( const QColor & c  )
     {
         int result = KMessageBox::warningYesNo(this,
                                                i18n ("This action will set the default\n"
-                                                     "properties for new objects !\n"
-                                                     "Would you like to do it ?"),
+                                                     "properties for new objects!\n"
+                                                     "Would you like to do it?"),
                                                 i18n("Warning"));
         if (result == KMessageBox::Yes)
             GObject::setDefaultOutlineInfo (oInfo);

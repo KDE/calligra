@@ -183,7 +183,7 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
 void TextTool::activate (GDocument* /*doc*/, Canvas* canvas)
 {
    canvas->setCursor(Qt::ibeamCursor);
-   m_toolController->emitModeSelected (m_id,i18n("Write some prosa..."));
+   m_toolController->emitModeSelected (m_id,i18n("Write some prose..."));
 }
 
 void TextTool::deactivate (GDocument *doc, Canvas*) {
