@@ -372,7 +372,7 @@ void KPWebPresentation::init()
 	email = QString( pw->pw_name ) + "@" + str;
     }
 
-    title = "Slideshow";
+    title = i18n("Slideshow");
 
     for ( unsigned int i = 0; i < doc->getPageNums(); i++ )
 	slideTitles.append( doc->getPageTitle( i, QString( "Slide %1" ).arg( i ) ) );
@@ -454,13 +454,13 @@ void KPWebPresentationWizard::setupPage1()
     QHBox *row3 = new QHBox( canvas );
     QHBox *row4 = new QHBox( canvas );
 
-    QLabel *label1 = new QLabel( " Author: ", row1 );
+    QLabel *label1 = new QLabel( i18n(" Author: "), row1 );
     label1->setAlignment( Qt::AlignVCenter );
-    QLabel *label2 = new QLabel( " Title: ", row2 );
+    QLabel *label2 = new QLabel( i18n(" Title: "), row2 );
     label2->setAlignment( Qt::AlignVCenter );
-    QLabel *label3 = new QLabel( " Email-Address: ", row3 );
+    QLabel *label3 = new QLabel( i18n(" Email-Address: "), row3 );
     label3->setAlignment( Qt::AlignVCenter );
-    QLabel *label4 = new QLabel( " Path: ", row4 );
+    QLabel *label4 = new QLabel( i18n(" Path: "), row4 );
     label4->setAlignment( Qt::AlignVCenter );
 
     label1->setMinimumWidth( label3->sizeHint().width() );
@@ -478,7 +478,7 @@ void KPWebPresentationWizard::setupPage1()
 
     QHBox *hbox = new QHBox( row4 );
     path = new QLineEdit( webPres.getPath(), hbox );
-    choosePath = new QPushButton( "Choose...", hbox );
+    choosePath = new QPushButton( i18n("Choose..."), hbox );
     choosePath->setMaximumSize( choosePath->sizeHint() );
 
     addPage( page1, i18n( "General Information" ) );
@@ -526,15 +526,15 @@ void KPWebPresentationWizard::setupPage2()
     QHBox *row4 = new QHBox( canvas );
     QHBox *row5 = new QHBox( canvas );
 
-    QLabel *label1 = new QLabel( " Text Color: ", row1 );
+    QLabel *label1 = new QLabel( i18n(" Text Color: "), row1 );
     label1->setAlignment( Qt::AlignVCenter );
-    QLabel *label2 = new QLabel( " Title Color: ", row2 );
+    QLabel *label2 = new QLabel( i18n(" Title Color: "), row2 );
     label2->setAlignment( Qt::AlignVCenter );
-    QLabel *label3 = new QLabel( " Background Color: ", row3 );
+    QLabel *label3 = new QLabel( i18n(" Background Color: "), row3 );
     label3->setAlignment( Qt::AlignVCenter );
-    QLabel *label4 = new QLabel( " Picture Format: ", row4 );
+    QLabel *label4 = new QLabel( i18n(" Picture Format: "), row4 );
     label4->setAlignment( Qt::AlignVCenter );
-    QLabel *label5 = new QLabel( " Zoom: ", row5 );
+    QLabel *label5 = new QLabel( i18n(" Zoom: "), row5 );
     label5->setAlignment( Qt::AlignVCenter );
 
     label1->setMinimumWidth( label3->sizeHint().width() );
@@ -875,9 +875,9 @@ void KPWebPresentationCreateDialog::saveConfig()
 	filename = QString::null;
 
 #ifdef USE_QFD
-    filename = QFileDialog::getOpenFileName( filename, "KPresenter Web-Presentation (*.kpweb)" );
+    filename = QFileDialog::getOpenFileName( filename, i18n("KPresenter Web-Presentation (*.kpweb)") );
 #else
-    KURL url = KFileDialog::getOpenURL( filename, "*.kpweb|KPresenter Web-Presentation" );
+    KURL url = KFileDialog::getOpenURL( filename, i18n("*.kpweb|KPresenter Web-Presentation") );
 
     if( url.isEmpty() )
       return;
