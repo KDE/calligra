@@ -66,7 +66,7 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 
 	mOldColor->setColor( color );
 	mColorPreview->setColor( color );
-	connect( mColorPreview, SIGNAL( colorChanged( QColor* ) ), this, SLOT( slotUpdate( QColor* ) ) );
+	connect( mColorPreview, SIGNAL( colorChanged( const QColor & ) ), this, SLOT( slotUpdate( const QColor & ) ) );
 	mainLayout->addWidget( groupbox, 0, 2 );
 
 	//Components
@@ -181,7 +181,7 @@ VColor VColorTab::getColor()
 	return color;
 }
 
-void VColorTab::slotUpdate( QColor * )
+void VColorTab::slotUpdate( const QColor & )
 {
 	/*mRed->setValue( color->red() );
 	mGreen->setValue( color->green() );

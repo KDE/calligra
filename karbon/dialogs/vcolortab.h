@@ -57,7 +57,7 @@ private:
 private slots:
 	void slotUpdateFromRGBSpinBoxes();
 	void slotUpdateFromHSVSpinBoxes();
-	void slotUpdate( QColor *color = 0L );
+	void slotUpdate( const QColor &color );
 	void slotVChanged( int );
 	void slotHSChanged( int, int );
 };
