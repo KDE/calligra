@@ -822,7 +822,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
         // Calculate new rectangle for this frame
         QRect newRect( m_viewMode->normalToView( frame->outerRect() ) );
         // Repaint only the changed rects (oldRect U newRect)
-        repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
+        repaintContents( QRegion(oldRect).unite(newRect).boundingRect(), FALSE );
         m_frameResized = true;
 
         m_gui->getView()->updateFrameStatusBarItem();
@@ -921,7 +921,7 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
             // Most of the rect is in the top page
             p.setY( bottomPage * m_doc->ptPaperHeight() - m_boundingRect.height() - 1 );
         else
-            // Moost of the rect is in the bottom page
+            // Most of the rect is in the bottom page
             p.setY( bottomPage * m_doc->ptPaperHeight() + 5 /* grmbl, resize handles.... */ );
         //kdDebug() << "KWCanvas::mmEditFrameMove y set to " << p.y() << endl;
 
@@ -929,7 +929,7 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
     }
 
     if( m_boundingRect.topLeft() == oldBoundingRect.topLeft() )
-        return; // nothing happende (probably due to the grid)
+        return; // nothing happened (probably due to the grid)
 
     /*kdDebug() << "boundingRect moved by " << m_boundingRect.left() - oldBoundingRect.left() << ","
       << m_boundingRect.top() - oldBoundingRect.top() << endl;
@@ -1002,7 +1002,7 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
     //m_doc->updateAllFrames();
     // Not yet in fact. If we relayout the text everytime it's too slow.
 
-    repaintContents( repaintRegion.boundingRect() );
+    repaintContents( repaintRegion.boundingRect(), FALSE );
 
     m_gui->getView()->updateFrameStatusBarItem();
 }
