@@ -21,6 +21,8 @@
 #ifndef __kis_vec_h__
 #define __kis_vec_h__
 
+#include <math.h>
+
 /*
  * 2D/3D vector class
  */
