@@ -52,21 +52,21 @@ TopLevel::TopLevel( QWidget* parent, const char* name) : QMainWindow( parent, na
     QPopupMenu* file = new QPopupMenu( this );
     menuBar()->insertItem( "&File", file );
 
-    QPopupMenu* sub = new QPopupMenu( this );
-    KoColorPanel* p = new KoColorPanel( sub );
-    p->insertDefaultColors();
-    sub->insertItem( p );
-    sub->insertSeparator();
-    sub->insertItem( new KoColorPanel( sub ) );
-    sub->insertSeparator();
-    sub->insertItem( "Default Colors", this, SLOT( defaultColors() ), CTRL+Key_D );
-    sub->insertItem( "Insert Random Color", this, SLOT( insertRandomColor() ), CTRL+Key_R );
-    sub->insertSeparator();
-    sub->insertItem( "Clear", this, SLOT( clearColors() ), CTRL+Key_C );
-
-    file->insertItem( "&Foo", sub );
+    file->insertItem( "Custom + Default", KoColorPanel::createColorPopup( KoColorPanel::CustomColors, Qt::red, this,
+                                                                          SLOT( slotColorSelected( const QColor& ) ), file, "blah" ) );
+    file->insertItem( "Custom", KoColorPanel::createColorPopup( KoColorPanel::CustomColors, QColor(), this,
+                                                                SLOT( slotColorSelected( const QColor& ) ), file, "blah" ) );
+    file->insertItem( "Plain + Default", KoColorPanel::createColorPopup( KoColorPanel::Plain, Qt::green, this,
+                                                                         SLOT( slotColorSelected( const QColor& ) ), file, "blah" ) );
+    file->insertItem( "Plain", KoColorPanel::createColorPopup( KoColorPanel::Plain, QColor(), this,
+                                                               SLOT( slotColorSelected( const QColor& ) ), file, "blah" ) );
+    file->insertSeparator();
+    file->insertItem( "Default Colors", this, SLOT( defaultColors() ), CTRL+Key_D );
+    file->insertItem( "Insert Random Color", this, SLOT( insertRandomColor() ), CTRL+Key_R );
+    file->insertSeparator();
+    file->insertItem( "Clear", this, SLOT( clearColors() ), CTRL+Key_C );
+    file->insertSeparator();
     file->insertItem( "&Quit", qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
-
 }
 
 void TopLevel::insertRandomColor()
@@ -82,6 +82,11 @@ void TopLevel::defaultColors()
 void TopLevel::clearColors()
 {
     panel->clear();
+}
+
+void TopLevel::slotColorSelected( const QColor& color )
+{
+    kdDebug() << "#### selected: " << color.name() << endl;
 }
 
 

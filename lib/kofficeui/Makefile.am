@@ -5,7 +5,7 @@ INCLUDES = $(KSTORE_INCLUDES) $(KOFFICECORE_INCLUDES) $(all_includes)
 
 ####### Files
 
-SUBDIRS = . pics
+SUBDIRS = . tests pics
 
 lib_LTLIBRARIES = libkofficeui.la
 

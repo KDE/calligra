@@ -35,6 +35,7 @@ public slots:
     void insertRandomColor();
     void defaultColors();
     void clearColors();
+    void slotColorSelected( const QColor& color );
 
 private:
     KoColorPanel* panel;

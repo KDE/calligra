@@ -20,11 +20,14 @@
 #include <qapplication.h>
 #include <qtooltip.h>
 #include <qpainter.h>
+#include <qpixmap.h>
 #include <qstyle.h>
+#include <qpopupmenu.h>
 
 #include <kotoolbutton.h>
 #include <kcolordrag.h>
 #include <klocale.h>
+#include <kcolordialog.h>
 #include <kdebug.h>
 
 namespace {
@@ -52,6 +55,47 @@ QSize KoColorPanel::sizeHint() const
 QSize KoColorPanel::minimumSizeHint() const
 {
     return QSize( COLS << 4, lines() << 4 );
+}
+
+QPopupMenu* KoColorPanel::createColorPopup( KoColorPanel::MenuStyle style, const QColor& defaultColor,
+                                            const QObject* receiver, const char* slot,
+                                            QWidget* parent, const char* name )
+{
+    QPopupMenu* menu = new QPopupMenu( parent, name );
+    KoColorPopupProxy* proxy = 0;
+
+    if ( defaultColor.isValid() ) {
+        QPixmap pixmap( 12, 12 );
+        QPainter p( &pixmap );
+        p.fillRect( 0, 0, 12, 12, defaultColor );
+        p.end();
+        proxy = new KoColorPopupProxy( defaultColor, 0, menu, "color proxy" );
+        connect( proxy, SIGNAL( colorSelected( const QColor& ) ), receiver, slot );
+        menu->insertItem( QIconSet( pixmap ), i18n( "Default Color" ), proxy, SLOT( slotDefaultColor() ) );
+        menu->insertSeparator();
+    }
+
+    KoColorPanel* panel = new KoColorPanel( menu, "default colors" );
+    panel->insertDefaultColors();
+    connect( panel, SIGNAL( colorSelected( const QColor& ) ), receiver, slot );
+    menu->insertItem( panel );
+
+    if ( style == CustomColors ) {
+        menu->insertSeparator();
+        panel = new KoColorPanel( menu, "custom panel" );
+        connect( panel, SIGNAL( colorSelected( const QColor& ) ), receiver, slot );
+        menu->insertItem( panel );
+        if ( !proxy ) {
+            proxy = new KoColorPopupProxy( QColor(), panel, menu, "color proxy" );
+            connect( proxy, SIGNAL( colorSelected( const QColor& ) ), receiver, slot );
+        }
+        else
+            proxy->setRecentColorPanel( panel );
+        menu->insertSeparator();
+        menu->insertItem( i18n( "More Colors..." ), proxy, SLOT( slotMoreColors() ) );
+    }
+
+    return menu;
 }
 
 void KoColorPanel::clear()
@@ -257,6 +301,14 @@ void KoColorPanel::mousePressEvent( QMouseEvent* e )
         m_pressedPos = e->pos();
 }
 
+void KoColorPanel::mouseReleaseEvent( QMouseEvent* )
+{
+    if ( isVisible() && parentWidget() && parentWidget()->inherits( "QPopupMenu" ) ) {
+        parentWidget()->close();
+        emit colorSelected( mapToColor( m_pressedPos ) );
+    }
+}
+
 void KoColorPanel::mouseMoveEvent( QMouseEvent* e )
 {
     if ( e->state() & Qt::LeftButton ) {
@@ -368,7 +420,10 @@ void KoColorPanel::keyPressEvent( QKeyEvent* e )
             e->ignore();
     }
     else if ( e->key() == Qt::Key_Return )
-        kdDebug() << "KoColorPanel::keyPressEvent -- return pressed" << endl;
+        if ( isVisible() && parentWidget() && parentWidget()->inherits( "QPopupMenu" ) ) {
+            parentWidget()->close();
+            emit colorSelected( mapToColor( m_focusPosition ) );
+        }
     updateFocusPosition( newPos );
 }
 
@@ -451,7 +506,12 @@ KoColorPanel::Position KoColorPanel::mapToPosition( const QPoint& point ) const
 
 QColor KoColorPanel::mapToColor( const QPoint& point ) const
 {
-    QMap<Position, QColor>::ConstIterator it = m_colorMap.find( mapToPosition( point ) );
+    return mapToColor( mapToPosition( point ) );
+}
+
+QColor KoColorPanel::mapToColor( const KoColorPanel::Position& position ) const
+{
+    QMap<Position, QColor>::ConstIterator it = m_colorMap.find( position );
     if ( it != m_colorMap.end() )
         return it.data();
     return QColor();
@@ -545,6 +605,38 @@ void KoColorPanel::init()
 bool operator<( const KoColorPanel::Position& lhs, const KoColorPanel::Position& rhs )
 {
     return ( lhs.y * COLS + lhs.x ) < ( rhs.y * COLS + rhs.x );
+}
+
+
+KoColorPopupProxy::KoColorPopupProxy( const QColor& defaultColor, KoColorPanel* recentColors, QObject* parent, const char* name ) :
+    QObject( parent, name ), m_defaultColor( defaultColor ), m_recentColors( recentColors )
+{
+}
+
+void KoColorPopupProxy::setRecentColorPanel( KoColorPanel* recentColors )
+{
+    m_recentColors = recentColors;
+}
+
+void KoColorPopupProxy::slotDefaultColor()
+{
+    emit colorSelected( m_defaultColor );
+}
+
+void KoColorPopupProxy::slotMoreColors()
+{
+    if ( !m_recentColors )
+        return;
+
+    QColor newColor;
+    QWidget* p = 0;
+    if ( parent() && parent()->inherits( "QWidget" ) )
+        p = static_cast<QWidget*>( parent() );
+
+    if ( KColorDialog::getColor( newColor, p ) == QDialog::Accepted ) {
+        m_recentColors->insertColor( newColor );
+        emit colorSelected( newColor );
+    }
 }
 
 

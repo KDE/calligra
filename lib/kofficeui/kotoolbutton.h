@@ -24,24 +24,22 @@
 #include <qmap.h>
 #include <qpoint.h>
 
+class QPopupMenu;
+
 class KoColorPanel : public QWidget
 {
     Q_OBJECT
 public:
-    // The position of the 16x16 tiles in "tile steps"
-    struct Position {
-        Position() : x( -1 ), y( -1 ) {}
-        Position( short x_, short y_ ) : x( x_ ), y( y_ ) {}
-
-        short x;
-        short y;
-    };
-
     KoColorPanel( QWidget* parent = 0, const char* name = 0 );
     virtual ~KoColorPanel();
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
+
+    enum MenuStyle { Plain, CustomColors };
+    static QPopupMenu* createColorPopup( MenuStyle style, const QColor& defaultColor,
+                                         const QObject* receiver, const char* slot,
+                                         QWidget* parent, const char* name );
 
 public slots:
     void clear();
@@ -54,6 +52,7 @@ signals:
 
 protected:
     virtual void mousePressEvent( QMouseEvent* e );
+    virtual void mouseReleaseEvent( QMouseEvent* e );
     virtual void mouseMoveEvent( QMouseEvent* e );
     virtual void paintEvent( QPaintEvent* e );
     virtual void keyPressEvent( QKeyEvent* e );
@@ -62,6 +61,16 @@ protected:
     virtual void dropEvent( QDropEvent* e );
 
 private:
+    // The position of the 16x16 tiles in "tile steps"
+    struct Position {
+        Position() : x( -1 ), y( -1 ) {}
+        Position( short x_, short y_ ) : x( x_ ), y( y_ ) {}
+
+        short x;
+        short y;
+    };
+    friend bool operator<( const KoColorPanel::Position& lhs, const KoColorPanel::Position& rhs );
+
     void finalizeInsertion( const Position& pos );
     bool insertColor( const QColor& color, bool checking );
     bool insertColor( const QColor& color, const QString& toolTip, bool checking );
@@ -69,6 +78,7 @@ private:
 
     Position mapToPosition( const QPoint& point ) const;
     QColor mapToColor( const QPoint& point ) const;
+    QColor mapToColor( const Position& position ) const;
     QRect mapFromPosition( const Position& position ) const;
     Position validPosition( const Position& position );
 
@@ -86,6 +96,32 @@ private:
 
 // Needed for the use of KoColorPanel::Position in QMap
 bool operator<( const KoColorPanel::Position& lhs, const KoColorPanel::Position& rhs );
+
+
+// A tiny class needed to emit the correct signal when the default
+// color item in the color-panel popup is activated. Additionally
+// it's used to provide the color select dialog and manages the recent
+// colors... hacky
+class KoColorPopupProxy : public QObject
+{
+    Q_OBJECT
+public:
+    KoColorPopupProxy( const QColor& defaultColor, KoColorPanel* recentColors, QObject* parent, const char* name );
+    virtual ~KoColorPopupProxy() {}
+
+    void setRecentColorPanel( KoColorPanel* recentColors );
+
+public slots:
+    void slotDefaultColor();
+    void slotMoreColors();
+
+signals:
+    void colorSelected( const QColor& color );
+
+private:
+    QColor m_defaultColor;
+    KoColorPanel* m_recentColors;
+};
 
 
 class KoToolButton : public KToolBarButton
