@@ -2,7 +2,6 @@ REAL BUGS:
 -	mirror coordinate-system so origin is bottom-left
 -	dont always fill shapes especially when no fillShape() is called
 -	select first/last segment's knot if one of each other's knot is selected
--	scale tool should only scale in one direction while dragging a slection node
 -	if selecting many shapes, the fill/stroke state should be "unknown",
 	preview widgets needs to paint questionmarks or something in this case
 -	revert() in vpath::combine() doesnt work

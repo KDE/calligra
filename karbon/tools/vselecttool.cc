@@ -110,7 +110,7 @@ VSelectTool::drawTemporaryObject()
 			else if( m_activeNode == node_mt )
 			{
 				m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.bottom() );
-				m_s1 = ( rect.right() - lp.x() ) / double( rect.width() / 2 );
+				m_s1 = 1;
 				m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
 			}
 			else if( m_activeNode == node_rt )
@@ -123,7 +123,7 @@ VSelectTool::drawTemporaryObject()
 			{
 				m_sp = KoPoint( rect.x(), ( rect.bottom() + rect.top() )  / 2 );
 				m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
-				m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() / 2 );
+				m_s2 = 1;
 			}
 			else if( m_activeNode == node_rb )
 			{
@@ -134,7 +134,7 @@ VSelectTool::drawTemporaryObject()
 			else if( m_activeNode == node_mb )
 			{
 				m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.y() );
-				m_s1 = ( rect.right() - lp.x() ) / double( rect.width() / 2 );
+				m_s1 = 1;
 				m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
 			}
 			else if( m_activeNode == node_lb )
@@ -147,7 +147,7 @@ VSelectTool::drawTemporaryObject()
 			{
 				m_sp = KoPoint( rect.right(), ( rect.bottom() + rect.top() )  / 2 );
 				m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
-				m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() / 2 );
+				m_s2 = 1;
 			}
 			KoPoint sp = KoPoint( m_sp.x() - view()->canvasWidget()->contentsX(), m_sp.y() - view()->canvasWidget()->contentsY() );
 			mat.translate( sp.x(), sp.y() );
