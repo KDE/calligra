@@ -1514,7 +1514,13 @@ void KSpreadView::decreaseIndent()
 {
   if ( !m_pTable )
         return;
-  m_pTable->decreaseIndent( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+  int column=m_pCanvas->markerColumn();
+  int row=m_pCanvas->markerRow();
+
+  m_pTable->decreaseIndent( QPoint( column,row ) );
+  KSpreadCell* cell = m_pTable->cellAt( column,row );
+  if(cell)
+      m_decreaseIndent->setEnabled(cell->getIndent(column,row)>0);
 }
 
 void KSpreadView::consolidate()
