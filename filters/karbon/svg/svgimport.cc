@@ -179,7 +179,7 @@ SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, KoRect bbox )
 		else if( unit.right( 1 ) == "%" )
 		{
 			if( horiz && vert )
-				value = ( value / 100.0 ) * (sqrt( pow( bbox.width(), 2 ) + pow( bbox.height(), 2 ) ) / sqrt( 2 ) );
+				value = ( value / 100.0 ) * (sqrt( pow( bbox.width(), 2 ) + pow( bbox.height(), 2 ) ) / sqrt( 2.0 ) );
 			else if( horiz )
 				value = ( value / 100.0 ) * bbox.width();
 			else if( vert )
@@ -190,7 +190,7 @@ SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, KoRect bbox )
 	{
 		kdDebug() << "before ; " << value << endl;
 		if( m_gc.current() )
-			value *= sqrt( pow( m_gc.current()->matrix.m11(), 2 ) + pow( m_gc.current()->matrix.m22(), 2 ) ) / sqrt( 2 );
+			value *= sqrt( pow( m_gc.current()->matrix.m11(), 2 ) + pow( m_gc.current()->matrix.m22(), 2 ) ) / sqrt( 2.0 );
 		kdDebug() << "after ; " << value << endl;
 	}
 	return value;
