@@ -77,7 +77,7 @@ public:
 	VStroke( const VStroke& stroke );
 
 	void setParent( VObject* parent ) { m_parent = parent; }
-	VObject* parent() { return m_parent; }
+	VObject* parent()const { return m_parent; }
 
 	VStrokeType type() const { return m_type; }
 	void setType( VStrokeType type ) { m_type = type; }
