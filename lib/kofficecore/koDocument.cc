@@ -80,9 +80,9 @@ class KoDocument::Private
 {
 public:
     Private() :
-        m_specialOutputFlag( 0 ),
         m_dcopObject( 0L ),
         filterManager( 0L ),
+        m_specialOutputFlag( 0 ),
         modifiedAfterAutosave( false ),
         m_numOperations( 0 ),
         m_autosaving( false )
