@@ -117,18 +117,6 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 	friend class KexiTableViewData;
 };
 
-#if 0 //merged with KexiTableViewColumn
-/*! KexiDBTableViewColumn reimplements KexiTableViewColumn for db-aware data. */
-class KEXIDATATABLE_EXPORT KexiDBTableViewColumn : public KexiTableViewColumn {
-	public:
-		KexiDBTableViewColumn();
-		KexiDBTableViewColumn(const KexiDB::QuerySchema &query, KexiDB::Field& f);
-		virtual bool acceptsFirstChar(const QChar& ch) const;
-	
-		KexiDB::Field* field;
-	protected:
-};
-#endif
 
 /*! List of column definitions. */
 //typedef QValueVector<KexiTableViewColumn> KexiTableViewColumnList;
@@ -208,11 +196,13 @@ public:
 
 	inline KexiDB::RowEditBuffer* rowEditBuffer() const { return m_pRowEditBuffer; }
 
-	bool saveRowChanges(KexiTableItem& item);
+	bool saveRowChanges(KexiTableItem& item, QString *msg = 0, QString *desc = 0, 
+		int *faultyColumn = 0);
 
-	bool saveNewRow(KexiTableItem& item);
+	bool saveNewRow(KexiTableItem& item, QString *msg = 0, QString *desc = 0, 
+		int *faultyColumn = 0);
 
-	bool deleteRow(KexiTableItem& item);
+	bool deleteRow(KexiTableItem& item, QString *msg = 0, QString *desc = 0);
 
 protected:
 	virtual int compareItems(Item item1, Item item2);
@@ -220,7 +210,8 @@ protected:
 	int cmpInt(Item item1, Item item2);
 
 	//! internal: for saveRowChanges() and saveNewRow()
-	bool saveRow(KexiTableItem& item, bool insert);
+	bool saveRow(KexiTableItem& item, bool insert, QString *msg = 0, QString *desc = 0,
+		int *faultyColumn = 0);
 
 	int			m_key;
 	short		m_order;

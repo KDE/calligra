@@ -475,8 +475,13 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 		return false;
 //	if (m_data->removeRef(item))
 
-	if (!m_data->deleteRow(*d->pCurrentItem)) {
+	QString msg, desc;
+	if (!m_data->deleteRow(*d->pCurrentItem, &msg, &desc)) {
 		//error
+		if (desc.isEmpty())
+			KMessageBox::sorry(this, msg);
+		else
+			KMessageBox::detailedSorry(this, msg, desc);
 		return false;
 	}
 	else {
@@ -528,7 +533,6 @@ void KexiTableView::deleteCurrentRow()
 	}
 
 	if (!deleteItem(d->pCurrentItem)) {
-		//show error
 	}
 }
 
@@ -2223,7 +2227,7 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 	int newrow = row;
 	int newcol = col;
 
-	if(rows() <= 0)
+		if(rows() <= 0)
 	{
 		d->pVerticalHeader->setCurrentRow(-1);
 		if (isInsertingEnabled()) {
@@ -2369,14 +2373,13 @@ bool KexiTableView::acceptEditor()
 	QString msg, desc;
 	bool setNull = false;
 //	bool allow = true;
-	static const QString msg_NOT_NULL = i18n("\"%1\" column requires a value to be entered.")
-				.arg(d->pEditor->field()->captionOrName());
+	static const QString msg_NOT_NULL = i18n("\"%1\" column requires a value to be entered.");
 
 	if (d->pEditor->valueIsNull()) {//null value entered
 		if (d->pEditor->field()->isNotNull()) {
 			kdDebug() << "KexiTableView::acceptEditor(): NULL NOT ALLOWED!" << endl;
 			res = KexiValidator::Error;
-			msg = msg_NOT_NULL;
+			msg = msg_NOT_NULL.arg(d->pEditor->field()->captionOrName());
 			desc = i18n("The column's constraint is declared as NOT NULL.");
 //			allow = false;
 //			removeEditor();
@@ -2393,7 +2396,7 @@ bool KexiTableView::acceptEditor()
 			if (d->pEditor->field()->isNotEmpty()) {
 				kdDebug() << "KexiTableView::acceptEditor(): EMPTY NOT ALLOWED!" << endl;
 				res = KexiValidator::Error;
-				msg = msg_NOT_NULL;
+				msg = msg_NOT_NULL.arg(d->pEditor->field()->captionOrName());
 				desc = i18n("The column's constraint is declared as NOT EMPTY.");
 //				allow = false;
 //				removeEditor();
@@ -2407,7 +2410,7 @@ bool KexiTableView::acceptEditor()
 			if (d->pEditor->field()->isNotNull()) {
 				kdDebug() << "KexiTableView::acceptEditor(): NEITHER NULL NOR EMPTY VALUE CAN BE SET!" << endl;
 				res = KexiValidator::Error;
-				msg = msg_NOT_NULL;
+				msg = msg_NOT_NULL.arg(d->pEditor->field()->captionOrName());
 				desc = i18n("The column's constraint is declared as NOT EMPTY and NOT NULL.");
 //				allow = false;
 //				removeEditor();
@@ -2504,8 +2507,9 @@ bool KexiTableView::acceptRowEdit()
 		return false;
 	kdDebug() << "EDIT ROW ACCEPTING..." << endl;
 
-	bool success = false;
-	bool allow = true;
+	bool success = true;
+//	bool allow = true;
+	int faultyColumn = -1; // will be !=-1 if cursor has to be moved to that column
 	const bool inserting = d->newRowEditing;
 	QString msg, desc;
 //	bool inserting = d->pInsertItem && d->pInsertItem==d->pCurrentItem;
@@ -2517,52 +2521,35 @@ bool KexiTableView::acceptRowEdit()
 			return true;
 		}
 		else {
-			success = true;
+//			success = true;
 			kdDebug() << "-- NOTHING TO ACCEPT!!!" << endl;
 		}
 	}
 	else {//not empty edit buffer:
 		if (d->newRowEditing) {
-			emit aboutToInsertRow(d->pCurrentItem, m_data->rowEditBuffer(), allow);
-			if (allow) {
+			emit aboutToInsertRow(d->pCurrentItem, m_data->rowEditBuffer(), success, &faultyColumn);
+			if (success) {
 				kdDebug() << "-- INSERTING: " << endl;
 				m_data->rowEditBuffer()->debug();
-				success = m_data->saveNewRow(*d->pCurrentItem);
-				if (!success) {
-					msg = i18n("Row insering failed.");
-					//todo: add desc...
-				}
+				success = m_data->saveNewRow(*d->pCurrentItem, &msg, &desc, &faultyColumn);
+//				if (!success) {
+//				}
 			}
 		}
 		else {
-			emit aboutToUpdateRow(d->pCurrentItem, m_data->rowEditBuffer(), allow);
-			if (allow) {
+			emit aboutToUpdateRow(d->pCurrentItem, m_data->rowEditBuffer(), success, &faultyColumn);
+			if (success) {
 				//accept changes for this row:
 				kdDebug() << "-- UPDATING: " << endl;
 				m_data->rowEditBuffer()->debug();
-				success = m_data->saveRowChanges(*d->pCurrentItem);
-				if (!success) {
-					msg = i18n("Row changing failed.");
-					//todo: add desc...
-				}
+				success = m_data->saveRowChanges(*d->pCurrentItem, &msg, &desc, &faultyColumn);
+//				if (!success) {
+//				}
 			}
 		}
 	}
 
-	if (!success) {
-		if (!allow) {
-			kdDebug() << "INSERT/EDIT ROW - DISALLOWED by signal!" << endl;
-		}
-		else {
-			kdDebug() << "EDIT ROW - ERROR!" << endl;
-		}
-		if (desc.isEmpty())
-			KMessageBox::sorry(this, msg);
-		else
-			KMessageBox::detailedSorry(this, msg, desc);
-	}
-	
-	if (allow) {
+	if (success) {
 		//editing is finished:
 		d->rowEditing = false;
 		d->newRowEditing = false;
@@ -2570,9 +2557,7 @@ bool KexiTableView::acceptRowEdit()
 		d->pVerticalHeader->setEditRow(-1);
 		//redraw
 		updateRow(d->curRow);
-	}
 
-	if (success) {
 		kdDebug() << "EDIT ROW ACCEPTED:" << endl;
 		/*debug*/itemAt(d->curRow);
 
@@ -2584,12 +2569,27 @@ bool KexiTableView::acceptRowEdit()
 		else {
 			emit rowUpdated(d->pCurrentItem);
 		}
-	}
 
-	if (allow) {
 		emit rowEditTerminated(d->curRow);
 	}
-	return allow;
+	else {
+//		if (!allow) {
+//			kdDebug() << "INSERT/EDIT ROW - DISALLOWED by signal!" << endl;
+//		}
+//		else {
+//			kdDebug() << "EDIT ROW - ERROR!" << endl;
+//		}
+		if (faultyColumn>=0 && faultyColumn<columns()) {
+			//move to faulty column
+			setCursor(d->curRow, faultyColumn);
+		}
+		if (desc.isEmpty())
+			KMessageBox::sorry(this, msg);
+		else
+			KMessageBox::detailedSorry(this, msg, desc);
+	}
+
+	return success;
 }
 
 void KexiTableView::cancelRowEdit()

@@ -160,6 +160,11 @@ QVariant KexiComboBoxTableEdit::value(bool &ok)
 		else
 			return QVariant();
 	}
+	else if (!m_lineedit->text().isEmpty()) {
+/*js: TODO dont return just 1st row, but use autocompletion feature
+      and: show message box if entered text does not match! */
+		return 0; //1st row
+	}
 	return m_origValue; //unchanged
 }
 

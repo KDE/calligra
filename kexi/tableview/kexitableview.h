@@ -388,12 +388,14 @@ signals:
 	/*! Emited before inserting of a new, current row.
 	 Connect this signal to your slot and set \a allow value to false 
 	 to disallow the inserting. */
-	void aboutToInsertRow(KexiTableItem *, KexiDB::RowEditBuffer* buffer, bool& allow);
+	void aboutToInsertRow(KexiTableItem *, KexiDB::RowEditBuffer* buffer, bool& allow, 
+		int *faultyColumn);
 
 	/*! Emited before changing of an edited, current row.
 	 Connect this signal to your slot and set \a allow value to false 
 	 to disallow the change. */
-	void aboutToUpdateRow(KexiTableItem *, KexiDB::RowEditBuffer* buffer, bool& allow);
+	void aboutToUpdateRow(KexiTableItem *, KexiDB::RowEditBuffer* buffer, bool& allow, 
+		int *faultyColumn);
 
 	void itemChanged(KexiTableItem *, int row, int col);
 	void itemChanged(KexiTableItem *, int row, int col, QVariant oldValue);

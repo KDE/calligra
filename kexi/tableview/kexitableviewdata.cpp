@@ -30,8 +30,10 @@
 #include <kexidb/queryschema.h>
 #include <kexidb/roweditbuffer.h>
 #include <kexidb/cursor.h>
+#include <kexidb/utils.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 unsigned short KexiTableViewData::charTable[]=
 {
@@ -348,18 +350,70 @@ void KexiTableViewData::updateRowEditBuffer(int colnum, QVariant newval)
 }
 
 //js TODO: if there can be multiple views for this data, we need multiple buffers!
-bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert)
+bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, QString *msg, QString *desc, int *faultyColumn)
 {
 	if (!m_pRowEditBuffer)
-		return false;
-	if (isDBAware()) {
+		return true; //nothing to do
+
+	const bool dbaware = isDBAware();
+
+	//check constraints:
+	//-check if every NOT NULL and NOT EMPTY field is filled
+	KexiTableViewColumn::ListIterator it_f(columns);
+	KexiDB::RowData::iterator it_r = item.begin();
+	int col = 0;
+	for (;it_f.current() && it_r!=item.end();++it_f,++it_r,col++) {
+		KexiDB::Field *f = it_f.current()->field;
+		//get new value (of present in the buffer), or the old one, otherwise
+		QVariant *val = rowEditBuffer()->at( *f );
+		if (!val)
+			val = &(*it_r); //get old value
+		//check it
+		if (val->isNull() && f->isNotNull()) {
+			//NOT NULL violated
+			if (msg)
+				*msg = i18n("\"%1\" column requires a value to be entered.").arg(f->captionOrName());
+			if (desc)
+				*desc = i18n("The column's constraint is declared as NOT NULL.");
+			if (faultyColumn)
+				*faultyColumn = col;
+			return false;
+		}
+		else if (f->isNotEmpty() && (val->isNull() || KexiDB::isEmptyValue( f, *val )) ) {
+			//NOT EMPTY violated
+			if (msg)
+				*msg = i18n("\"%1\" column requires a value to be entered.").arg(f->captionOrName());
+			if (desc)
+				*desc = i18n("The column's constraint is declared as NOT EMPTY.");
+			if (faultyColumn)
+				*faultyColumn = col;
+			return false;
+		}
+	}
+
+	if (dbaware) {
 		if (insert) {
-			if (!m_cursor->insertRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() ))
+			if (!m_cursor->insertRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() )) {
+				if (msg)
+					*msg = i18n("Row inserting failed.");
+
+/*			if (desc)
+			*desc = 
+js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB::Object *obj)
+	after it will be moved somewhere to kexidb (this will require moving other 
+	  showErrorMessage() methods from KexiMainWindowImpl to libkexiutils....)
+	then: just call: *desc = KexiDB::errorMessage(m_cursor);
+*/
 				return false;
+			}
 		}
 		else {
-			if (!m_cursor->updateRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() ))
+			if (!m_cursor->updateRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() )) {
+				if (msg)
+					*msg = i18n("Row changing failed.");
+/*! js: TODO: the same as for inserting ^^^^^ */
 				return false;
+			}
 		}
 	}
 	else {//js UNTESTED!!! - not db-aware version
@@ -377,23 +431,27 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert)
 	return true;
 }
 
-bool KexiTableViewData::saveRowChanges(KexiTableItem& item)
+bool KexiTableViewData::saveRowChanges(KexiTableItem& item, QString *msg, QString *desc, int *faultyColumn)
 {
 	kdDebug() << "KexiTableViewData::saveRowChanges()..." << endl;
-	return saveRow(item, false /*update*/);
+	return saveRow(item, false /*update*/, msg, desc, faultyColumn);
 }
 
-bool KexiTableViewData::saveNewRow(KexiTableItem& item)
+bool KexiTableViewData::saveNewRow(KexiTableItem& item, QString *msg, QString *desc, int *faultyColumn)
 {
 	kdDebug() << "KexiTableViewData::saveNewRow()..." << endl;
-	return saveRow(item, true /*insert*/);
+	return saveRow(item, true /*insert*/, msg, desc, faultyColumn);
 }
 
-bool KexiTableViewData::deleteRow(KexiTableItem& item)
+bool KexiTableViewData::deleteRow(KexiTableItem& item, QString *msg, QString *desc)
 {
 	if (isDBAware()) {
-		if (!m_cursor->deleteRow( static_cast<KexiDB::RowData&>(item) ))
+		if (!m_cursor->deleteRow( static_cast<KexiDB::RowData&>(item) )) {
+			if (msg)
+				*msg = i18n("Row deleting failed.");
+/*js: TODO: use KexiDB::errorMessage() for description (desc) as in KexiTableViewData::saveRow() */
 			return false;
+		}
 	}
 
 	if (!removeRef(&item)) {
