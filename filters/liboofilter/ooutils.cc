@@ -334,7 +334,6 @@ void OoUtils::importBorders( QDomElement& parentElement, const KoStyleStack& sty
     }
 }
 
-// TODO use this in OoImpressImport!
 void OoUtils::importUnderline( const QString& in, QString& underline, QString& styleline )
 {
     underline = "single";
