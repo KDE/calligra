@@ -3550,3 +3550,5 @@ KTextEditFormatCollection *KTextEditDocument::formatCollection() const
 {
     return kpr_doc->formatCollection();
 }
+
+#include <ktextedit.moc>
