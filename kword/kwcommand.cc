@@ -750,6 +750,7 @@ void KWUngroupTableCommand::execute()
     // create items in text item in docstruct
     m_pDoc->refreshDocStructure(FT_TEXT);
     m_pDoc->refreshDocStructure(FT_TABLE);
+    m_pDoc->deleteFrameSetEditTable( m_pTable );
 }
 
 void KWUngroupTableCommand::unexecute()
@@ -768,5 +769,6 @@ void KWUngroupTableCommand::unexecute()
     m_pDoc->addFrameSet(m_pTable);
     m_pDoc->refreshDocStructure(FT_TEXT);
     m_pDoc->refreshDocStructure(FT_TABLE);
+    m_pDoc->deleteFrameSetEditTable( m_pTable );
 }
 

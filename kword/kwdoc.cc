@@ -2602,4 +2602,20 @@ QColor KWDocument::defaultBgColor( QPainter * painter )
     return QApplication::palette().color( QPalette::Active, QColorGroup::Base );
 }
 
+
+void KWDocument::frameSetEditChanged()
+{
+    emit currentFrameSetEditChanged();
+}
+
+
+void KWDocument::deleteFrameSetEditTable( KWTableFrameSet *_table )
+{
+   QListIterator<KWView> it( m_lstViews );
+   for ( ; it.current() ; ++it )
+       it.current()->getGUI()->canvasWidget()->deleteFrameSetEditTable(_table );
+   emit currentFrameSetEditChanged();
+}
+
+
 #include "kwdoc.moc"
