@@ -28,7 +28,7 @@
 #include "vshapetool.h"
 
 
-class VUnitDoubleSpinBox;
+class KoUnitDoubleSpinBox;
 class KIntSpinBox;
 class KarbonPart;
 
@@ -54,8 +54,8 @@ private:
 
 		void refreshUnit();
 
-		VUnitDoubleSpinBox	*m_innerR;
-		VUnitDoubleSpinBox	*m_outerR;
+		KoUnitDoubleSpinBox	*m_innerR;
+		KoUnitDoubleSpinBox	*m_outerR;
 		KIntSpinBox			*m_edges;
 		KarbonPart			*m_part;
 		QLabel				*m_innerRLabel;

@@ -30,7 +30,7 @@
 
 class KarbonPart;
 class QLabel;
-class VUnitDoubleSpinBox;
+class KoUnitDoubleSpinBox;
 
 
 class VRoundRectTool : public VShapeTool
@@ -75,9 +75,9 @@ private:
 	private:
 		KarbonPart* m_part;
 
-		VUnitDoubleSpinBox* m_width;
-		VUnitDoubleSpinBox* m_height;
-		VUnitDoubleSpinBox* m_round;
+		KoUnitDoubleSpinBox* m_width;
+		KoUnitDoubleSpinBox* m_height;
+		KoUnitDoubleSpinBox* m_round;
 		QLabel* m_heightLabel;
 		QLabel* m_widthLabel;
 	};

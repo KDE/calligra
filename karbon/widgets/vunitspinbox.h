@@ -26,24 +26,24 @@
 #include <qcombobox.h>
 #include <koUnit.h>
 
-class VUnitDoubleBase;
+class KoUnitDoubleBase;
 
 class KoUnitDoubleValidator : public KDoubleValidator
 {
 public:
-	KoUnitDoubleValidator( VUnitDoubleBase *base, QObject *parent, const char *name = 0 );
+	KoUnitDoubleValidator( KoUnitDoubleBase *base, QObject *parent, const char *name = 0 );
 
 	virtual	QValidator::State validate( QString &, int & ) const;
 
 private:
-	VUnitDoubleBase	*m_base;
+	KoUnitDoubleBase	*m_base;
 };
 
-class VUnitDoubleBase
+class KoUnitDoubleBase
 {
 public:
-	VUnitDoubleBase( unsigned int precision ) : m_precision( precision ) {}
-	virtual ~VUnitDoubleBase() {}
+	KoUnitDoubleBase( unsigned int precision ) : m_precision( precision ) {}
+	virtual ~KoUnitDoubleBase() {}
 
 	virtual void changeValue( double ) = 0;
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT ) = 0;
@@ -58,10 +58,10 @@ protected:
 	KoUnit::Unit m_unit;
 };
 
-class VUnitDoubleSpinBox : public KDoubleSpinBox, public VUnitDoubleBase
+class KoUnitDoubleSpinBox : public KDoubleSpinBox, public KoUnitDoubleBase
 {
 public:
-	VUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
+	KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
 					 unsigned int precision = 2, const char *name = 0 );
 
 	virtual void setValidator( const QValidator * );
@@ -73,10 +73,10 @@ private:
 	KoUnitDoubleValidator *m_validator;
 };
 
-class VUnitDoubleLineEdit : public QLineEdit, public VUnitDoubleBase
+class KoUnitDoubleLineEdit : public QLineEdit, public KoUnitDoubleBase
 {
 public:
-	VUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value = 0.0, unsigned int precision = 2, const char *name = 0 );
+	KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value = 0.0, unsigned int precision = 2, const char *name = 0 );
 
 	virtual void changeValue( double );
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
@@ -94,10 +94,10 @@ private:
 	double m_upper;
 };
 
-class VUnitDoubleComboBox : public QComboBox, public VUnitDoubleBase
+class KoUnitDoubleComboBox : public QComboBox, public KoUnitDoubleBase
 {
 public:
-	VUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value = 0.0, unsigned int precision = 2, const char *name = 0 );
+	KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value = 0.0, unsigned int precision = 2, const char *name = 0 );
 
 	virtual void changeValue( double );
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );

@@ -30,7 +30,7 @@
 
 class KarbonPart;
 class QLabel;
-class VUnitDoubleSpinBox;
+class KoUnitDoubleSpinBox;
 
 
 class VRectangleTool : public VShapeTool
@@ -60,8 +60,8 @@ private:
 		void refreshUnit();
 
 	private:
-		VUnitDoubleSpinBox	*m_width;
-		VUnitDoubleSpinBox	*m_height;
+		KoUnitDoubleSpinBox	*m_width;
+		KoUnitDoubleSpinBox	*m_height;
 		KarbonPart			*m_part;
 		QLabel				*m_heightLabel;
 		QLabel				*m_widthLabel;

@@ -37,9 +37,11 @@ VEllipseTool::VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart *part, QW
 {
 	// add width/height-input:
 	m_widthLabel = new QLabel( i18n( "Width:" ), this );
-	m_width = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	m_width = new KoUnitDoubleComboBox( this, 0.0, 1000.0 );
+	m_width->setValueInUnit( 100.0, KoUnit::U_PT );
 	m_heightLabel = new QLabel( i18n( "Height:" ), this );
-	m_height = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	m_height = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	m_height->setValueInUnit( 100.0, KoUnit::U_MM );
 	refreshUnit();
 	setInsideMargin( 4 );
 	setInsideSpacing( 2 );
@@ -48,25 +50,25 @@ VEllipseTool::VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart *part, QW
 double
 VEllipseTool::VEllipseOptionsWidget::width() const
 {
-	return KoUnit::ptFromUnit( m_width->value(), m_part->unit() );
+	return m_width->value();
 }
 
 double
 VEllipseTool::VEllipseOptionsWidget::height() const
 {
-	return KoUnit::ptFromUnit( m_height->value(), m_part->unit() );
+	return m_height->value();
 }
 
 void
 VEllipseTool::VEllipseOptionsWidget::setWidth( double value )
 {
-	m_width->setValue( KoUnit::ptToUnit( value, m_part->unit() ) );
+	m_width->setValue( value );
 }
 
 void
 VEllipseTool::VEllipseOptionsWidget::setHeight( double value )
 {
-	m_height->setValue( KoUnit::ptToUnit( value, m_part->unit() ) );
+	m_height->setValue( value );
 }
 
 void

@@ -35,7 +35,7 @@ VSpiralTool::VSpiralOptionsWidget::VSpiralOptionsWidget( KarbonPart *part, QWidg
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
 {
 	new QLabel( i18n( "Radius:" ), this );
-	m_radius = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	m_radius = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	refreshUnit();
 	new QLabel( i18n( "Segments:" ), this );
 	m_segments = new KIntSpinBox( this );

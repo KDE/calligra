@@ -34,13 +34,13 @@ VRoundRectTool::VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart* pa
 		: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
 {
 	m_widthLabel = new QLabel( i18n( "Width:" ), this );
-	m_width = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	m_width = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 
 	m_heightLabel = new QLabel( i18n( "Height:" ), this );
-	m_height = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	m_height = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 
 	new QLabel( i18n( "Edge radius:" ), this );
-	m_round = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	m_round = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 
 	setInsideMargin( 4 );
 	setInsideSpacing( 2 );

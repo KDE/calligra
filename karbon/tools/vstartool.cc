@@ -35,10 +35,10 @@ VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* pa
 {
 	// add width/height-input:
 	m_outerRLabel = new QLabel( i18n( "Outer radius:" ), this );
-	m_outerR = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 0.0, 2 );
+	m_outerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 0.0, 2 );
 
 	m_innerRLabel = new QLabel( i18n( "Inner radius:" ), this );
-	m_innerR = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 0.0, 2 );
+	m_innerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 0.0, 2 );
 
 	refreshUnit();
 

@@ -21,7 +21,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-KoUnitDoubleValidator::KoUnitDoubleValidator( VUnitDoubleBase *base, QObject *parent, const char *name )
+KoUnitDoubleValidator::KoUnitDoubleValidator( KoUnitDoubleBase *base, QObject *parent, const char *name )
 : KDoubleValidator( parent, name ), m_base( base )
 {
 }
@@ -68,8 +68,8 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 	return result;
 }
 
-VUnitDoubleSpinBox::VUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value, unsigned int precision, const char *name )
-	: KDoubleSpinBox( lower, upper, step, value, precision, parent, name ), VUnitDoubleBase( precision )
+KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value, unsigned int precision, const char *name )
+	: KDoubleSpinBox( lower, upper, step, value, precision, parent, name ), KoUnitDoubleBase( precision )
 {
 	m_validator = new KoUnitDoubleValidator( this, this );
 	setValidator( m_validator );
@@ -77,19 +77,19 @@ VUnitDoubleSpinBox::VUnitDoubleSpinBox( QWidget *parent, double lower, double up
 }
 
 void
-VUnitDoubleSpinBox::setValidator( const QValidator *v )
+KoUnitDoubleSpinBox::setValidator( const QValidator *v )
 {
 	QSpinBox::setValidator( v );
 }
 
 void
-VUnitDoubleSpinBox::changeValue( double val )
+KoUnitDoubleSpinBox::changeValue( double val )
 {
 	KDoubleSpinBox::setValue( val );
 }
 
 void
-VUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
+KoUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
 {
 	KDoubleSpinBox::setValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( value(), m_unit ), unit ) );
 	setMinValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( minValue(), m_unit ), unit ) );
@@ -99,8 +99,8 @@ VUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
 }
 
 
-VUnitDoubleLineEdit::VUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value, unsigned int precision, const char *name )
-	: QLineEdit( parent, name ), VUnitDoubleBase( precision ), m_value( value ), m_lower( lower ), m_upper( upper )
+KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value, unsigned int precision, const char *name )
+	: QLineEdit( parent, name ), KoUnitDoubleBase( precision ), m_value( value ), m_lower( lower ), m_upper( upper )
 {
 	setAlignment( Qt::AlignRight );
 	m_validator = new KoUnitDoubleValidator( this, this );
@@ -109,14 +109,14 @@ VUnitDoubleLineEdit::VUnitDoubleLineEdit( QWidget *parent, double lower, double 
 }
 
 void
-VUnitDoubleLineEdit::changeValue( double value )
+KoUnitDoubleLineEdit::changeValue( double value )
 {
 	setValue( value );
 	setText( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ) );
 }
 
 void
-VUnitDoubleLineEdit::setUnit( KoUnit::Unit unit )
+KoUnitDoubleLineEdit::setUnit( KoUnit::Unit unit )
 {
 	KoUnit::Unit old = m_unit;
 	m_unit = unit;
@@ -126,7 +126,7 @@ VUnitDoubleLineEdit::setUnit( KoUnit::Unit unit )
 }
 
 bool
-VUnitDoubleLineEdit::eventFilter( QObject* o, QEvent* ev )
+KoUnitDoubleLineEdit::eventFilter( QObject* o, QEvent* ev )
 {
 	if( ev->type() == QEvent::FocusOut || ev->type() == QEvent::Leave || ev->type() == QEvent::Hide )
 	{
@@ -141,8 +141,8 @@ VUnitDoubleLineEdit::eventFilter( QObject* o, QEvent* ev )
 
 
 
-VUnitDoubleComboBox::VUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value, unsigned int precision, const char *name )
-	: QComboBox( true, parent, name ), VUnitDoubleBase( precision ), m_value( value ), m_lower( lower ), m_upper( upper )
+KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value, unsigned int precision, const char *name )
+	: QComboBox( true, parent, name ), KoUnitDoubleBase( precision ), m_value( value ), m_lower( lower ), m_upper( upper )
 {
 	lineEdit()->setAlignment( Qt::AlignRight );
 	m_validator = new KoUnitDoubleValidator( this, this );
@@ -151,14 +151,14 @@ VUnitDoubleComboBox::VUnitDoubleComboBox( QWidget *parent, double lower, double 
 }
 
 void
-VUnitDoubleComboBox::changeValue( double value )
+KoUnitDoubleComboBox::changeValue( double value )
 {
 	setValue( value );
 	lineEdit()->setText( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ) );
 }
 
 void
-VUnitDoubleComboBox::setUnit( KoUnit::Unit unit )
+KoUnitDoubleComboBox::setUnit( KoUnit::Unit unit )
 {
 	KoUnit::Unit old = m_unit;
 	m_unit = unit;
@@ -168,7 +168,7 @@ VUnitDoubleComboBox::setUnit( KoUnit::Unit unit )
 }
 
 bool
-VUnitDoubleComboBox::eventFilter( QObject* o, QEvent* ev )
+KoUnitDoubleComboBox::eventFilter( QObject* o, QEvent* ev )
 {
 	if( ev->type() == QEvent::FocusOut || ev->type() == QEvent::Leave || ev->type() == QEvent::Hide )
 	{

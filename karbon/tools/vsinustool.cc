@@ -38,9 +38,9 @@ VSinusTool::VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part,QWidget* 
 {
 	// add width/height-input:
 	m_widthLabel = new QLabel( i18n( "Width:" ), this );
-	m_width = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	m_width = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	m_heightLabel = new QLabel( i18n( "Height:" ), this );
-	m_height = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	m_height = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 
 	refreshUnit();
 
