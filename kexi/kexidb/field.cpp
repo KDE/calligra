@@ -202,6 +202,11 @@ bool Field::isNumericType( int type )
 	return false;
 }
 
+bool Field::isFPNumericType( int type )
+{
+	return type==Field::Float || type==Field::Double;
+}
+
 bool Field::isTextType( int type )
 {
 	switch (type) {
