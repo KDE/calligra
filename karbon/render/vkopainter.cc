@@ -79,7 +79,7 @@ VKoPainter::resize( int w, int h )
 		delete m_buffer;
 		m_width = w;
 		m_height = h;
-		m_buffer = art_new( art_u8, m_width * m_height * 3 );
+		m_buffer = art_new( art_u8, m_width * m_height * 4 );
 		clear();
 	}
 }
@@ -95,10 +95,13 @@ VKoPainter::end()
 {
 	QPixmap pix( m_width, m_height );
 	//xlib_draw_rgb_image( m_target->handle(), gc, 0, 0, m_width, m_height,
-	//					 XLIB_RGB_DITHER_NONE, m_buffer, m_width * 3 );
-	xlib_draw_rgb_image( pix.handle(), gc, 0, 0, m_width, m_height,
-						 XLIB_RGB_DITHER_NONE, m_buffer, m_width * 3 );
+	//					 XLIB_RGB_DITHER_NONE, m_buffer, m_width * 4 );
+	xlib_draw_rgb_32_image( pix.handle(), gc, 0, 0, m_width, m_height,
+						 XLIB_RGB_DITHER_NONE, m_buffer, m_width * 4 );
 	bitBlt( m_target, 0, 0, &pix, 0, 0, m_width, m_height );
+	/*xlib_draw_rgb_image( pix.handle(), gc, 0, 0, m_width, m_height,
+						 XLIB_RGB_DITHER_NONE, m_buffer, m_width * 3 );
+	bitBlt( m_target, 0, 0, &pix, 0, 0, m_width, m_height );*/
 }
 
 void
@@ -282,14 +285,14 @@ VKoPainter::setRasterOp( Qt::RasterOp r )
 void
 VKoPainter::clear()
 {
-	memset( m_buffer, qRgba( 255, 255, 255, 255 ), m_width * m_height * 3 );
+	memset( m_buffer, qRgba( 255, 255, 255, 255 ), m_width * m_height * 4 );
 }
 
 void
 VKoPainter::clear( unsigned int color )
 {
 	memset( m_buffer, qRgba( qRed( color ), qGreen( color ), qBlue( color ), 255 ),
-			m_width * m_height * 3 );
+			m_width * m_height * 4 );
 }
 
 void
@@ -320,7 +323,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	{
 		m_fill->color().pseudoValues( r, g, b );
 		a = qRound( 255 * m_fill->opacity() );
-		fillColor = ( r << 24 ) | ( g << 16 ) | ( b << 8 ) | a;
+		fillColor = ( 0 << 24 ) | ( b << 16 ) | ( g << 8 ) | r;
 
 		ArtSvpWriter *swr;
 		ArtSVP *temp;
@@ -347,7 +350,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 
 		m_stroke->color().pseudoValues( r, g, b );
 		a = qRound( 255 * m_stroke->opacity() );
-		strokeColor = ( r << 24 ) | ( g << 16 ) | ( b << 8 ) | a;
+		strokeColor = ( 0 << 24 ) | ( b << 16 ) | ( g << 8 ) | r;
 
 		// caps translation karbon -> art
 		if( m_stroke->lineCap() == cap_butt )
@@ -373,13 +376,13 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	// render the svp to the buffer
 	if( strokeSvp )
 	{
-		art_rgb_svp_alpha( strokeSvp, 0, 0, m_width, m_height, strokeColor, m_buffer, m_width * 3, 0 );
+		art_rgb_svp_alpha( strokeSvp, 0, 0, m_width, m_height, strokeColor, a, m_buffer, m_width * 4, 0 );
 		art_svp_free( strokeSvp );
 	}
 
 	if( fillSvp )
 	{
-		art_rgb_svp_alpha( fillSvp, 0, 0, m_width, m_height, fillColor, m_buffer, m_width * 3, 0 );
+		art_rgb_svp_alpha( fillSvp, 0, 0, m_width, m_height, fillColor, a, m_buffer, m_width * 4, 0 );
 		art_svp_free( fillSvp );
 	}
 
