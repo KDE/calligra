@@ -24,6 +24,7 @@ namespace std { }
 using namespace std;
 #include <kapplication.h>
 
+// ### TODO: remove completely
 // Be VERY careful with this. There is no KoApplication when embedded into e.g. konqueror
 // Ah well, don't even use it at all, that would be better.
 // Next version: remove completely
