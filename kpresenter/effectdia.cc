@@ -32,6 +32,7 @@
 #include <krestrictedline.h>
 #include <kapp.h>
 #include <klocale.h>
+#include <kbuttonbox.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -142,22 +143,20 @@ EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objN
     
     ( void )new QWidget( back );
     
-    QHBox *buttons = new QHBox( back );
-    buttons->setSpacing( 10 );
+    KButtonBox *bb = new KButtonBox( back );
+    bb->addStretch();
     
-    ( void )new QWidget( buttons );
-    
-    cancelBut = new QPushButton( buttons, "BCancel" );
-    cancelBut->setText( i18n( "Cancel" ) );
-
-    okBut = new QPushButton( buttons, "BOK" );
-    okBut->setText( i18n( "OK" ) );
+    okBut = bb->addButton( i18n( "OK" ) );
     okBut->setAutoRepeat( false );
     okBut->setAutoResize( false );
     okBut->setAutoDefault( true );
     okBut->setDefault( true );
 
-    buttons->setMaximumHeight( okBut->height() );
+    cancelBut = bb->addButton( i18n( "Cancel" ) );
+
+    bb->layout();
+    
+    bb->setMaximumHeight( bb->sizeHint().height() );
     
     connect( okBut, SIGNAL( clicked() ), this, SLOT( slotEffectDiaOk() ) );
     connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
