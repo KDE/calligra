@@ -114,6 +114,7 @@ public:
   virtual void newView();
   virtual void viewFormattingChars();
   virtual void viewFrameBorders();
+  virtual void viewTableGrid();
   virtual void viewHeader();
   virtual void viewFooter();
 
@@ -169,6 +170,13 @@ public:
   virtual void textBorderColor();
   virtual void textBorderWidth(const char *width);
   virtual void textBorderStyle(const char *style);
+  virtual void frameBorderLeft();
+  virtual void frameBorderRight();
+  virtual void frameBorderTop();
+  virtual void frameBorderBottom();
+  virtual void frameBorderColor();
+  virtual void frameBorderWidth(const char *width);
+  virtual void frameBorderStyle(const char *style);
 
   virtual void setMode( KOffice::View::Mode _mode);
   virtual void setFocus(CORBA::Boolean mode);
@@ -189,6 +197,7 @@ public:
 
   bool getViewFormattingChars() { return _viewFormattingChars; }
   bool getViewFrameBorders() { return _viewFrameBorders; }
+  bool getViewTableGrid() { return _viewTableGrid; }
 
   void setFramesToParts();
   void hideAllFrames();
@@ -229,7 +238,7 @@ protected:
   void mouseReleaseEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
 
-  char* colorToPixString(QColor);
+  QString colorToPixString(QColor);
   void getFonts();
   void setParagBorderValues();
 
@@ -252,6 +261,7 @@ protected:
   CORBA::Long m_idMenuView_NewView;
   CORBA::Long m_idMenuView_FormattingChars;
   CORBA::Long m_idMenuView_FrameBorders;
+  CORBA::Long m_idMenuView_TableGrid;
   CORBA::Long m_idMenuView_Header;
   CORBA::Long m_idMenuView_Footer;
  
@@ -345,6 +355,16 @@ protected:
   CORBA::Long m_idButtonTools_Formula;
   CORBA::Long m_idButtonTools_Part;
 
+  // frame toolbar
+  OpenPartsUI::ToolBar_var m_vToolBarFrame;
+  CORBA::Long m_idButtonFrame_BorderLeft;
+  CORBA::Long m_idButtonFrame_BorderRight;
+  CORBA::Long m_idButtonFrame_BorderTop;
+  CORBA::Long m_idButtonFrame_BorderBottom;
+  CORBA::Long m_idButtonFrame_BorderColor;
+  CORBA::Long m_idComboFrame_BorderWidth;
+  CORBA::Long m_idComboFrame_BorderStyle;
+
   QList<KWordFrame> m_lstFrames;
 
   // text toolbar values
@@ -354,12 +374,12 @@ protected:
 
   KWordGUI *gui;
   bool m_bShowGUI;
-  bool _viewFormattingChars,_viewFrameBorders;
+  bool _viewFormattingChars,_viewFrameBorders,_viewTableGrid;
 
   KWFormat format;
   KWParagLayout::Flow flow;
   KWFormat::VertAlign vertAlign;
-  KWParagLayout::Border left,right,top,bottom,tmpBrd;
+  KWParagLayout::Border left,right,top,bottom,tmpBrd,frmBrd;
   KWSearchDia::KWSearchEntry *searchEntry,*replaceEntry;
 
   KWParagDia *paragDia;
@@ -370,6 +390,7 @@ protected:
 
   KWParag *currParag;
   int currFrameSetNum;
+  OpenPartsUI::BarPosition oldFramePos,oldTextPos;
 
   static const int ID_TOOL_EDIT = 2;
   static const int ID_TOOL_EDIT_FRAME = 3;
@@ -404,6 +425,13 @@ protected:
   static const int ID_TOOL_CREATE_PART = 32;
   static const int ID_TOOL_CREATE_CLIPART = 33;
   static const int ID_TOOL_CREATE_KSPREAD_TABLE = 34;
+  static const int ID_FBRD_STYLE = 35;
+  static const int ID_FBRD_WIDTH = 36;
+  static const int ID_FBORDER_COLOR = 37;
+  static const int ID_FBRD_LEFT = 38;
+  static const int ID_FBRD_RIGHT = 39;
+  static const int ID_FBRD_TOP = 40;
+  static const int ID_FBRD_BOTTOM = 31;
 
 };
 

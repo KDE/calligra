@@ -671,3 +671,13 @@ Reggie, 15.1.1999:
 - Some fixes with moving/resizing frames
 - Added dialog for initial table settings and configurating tables (currently only used for initial settings)
 - replacing KNumericSpinBoxes with QSpinBoxes, because QSpinBoxes look much nicer
+
+Reggie, 17.1.1999:
+------------------
+- Fix of a strange bug in KWordView::colorToPixString
+- Some other small fixes
+- Added menu switch for enabling/disabling showing of table grid
+- Selecting multiple frames (esp. table cells) is more comfortable now 
+- It's possible to configure borders (color, width and style) for frames now => table cells can have these borders too
+- Implemented loading/saving frame borders
+- Implemented printing frame borders

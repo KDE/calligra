@@ -186,6 +186,11 @@ public:
   void setTableConfig(unsigned int rows,unsigned int cols)
     { trows = rows; tcols = cols; }
 
+  void setLeftFrameBorder(KWParagLayout::Border _brd,bool _enable);
+  void setRightFrameBorder(KWParagLayout::Border _brd,bool _enable);
+  void setTopFrameBorder(KWParagLayout::Border _brd,bool _enable);
+  void setBottomFrameBorder(KWParagLayout::Border _brd,bool _enable);
+
 public slots:
   void newLeftIndent(int _left); 
   void newFirstIndent(int _first);

@@ -258,7 +258,8 @@ public:
   bool isPTYInFrame(unsigned int _frameSet,unsigned int _frame,unsigned int _ypos);
   
   bool printLine(KWFormatContext &_fc,QPainter &_painter,int xOffset,int yOffset,int _w,int _h,bool _viewFormattingChars = false);
-  
+  void printBorders(QPainter &_painter,int xOffset,int yOffset,int _w,int _h);
+
   void drawMarker(KWFormatContext &_fc,QPainter *_painter,int xOffset,int yOffset);
 
   void updateAllViews(KWordView *_view,bool _clear = false);
@@ -355,6 +356,8 @@ public:
   unsigned int getNumGroupManagers() { return grpMgrs.count(); }
   KWGroupManager *getGroupManager(int i) { return grpMgrs.at(i); }
 
+  QPen setBorderPen(KWParagLayout::Border _brd);
+
 signals:
   void sig_imageModified();
   void sig_insertObject(KWordChild *_child,KWPartFrameSet*);
@@ -367,8 +370,6 @@ protected:
   
   virtual void draw(QPaintDevice*,CORBA::Long _width,CORBA::Long _height,
 		    CORBA::Float _scale );
-
-  QPen setBorderPen(KWParagLayout::Border _brd);
 
   void loadFrameSets(KOMLParser&,vector<KOMLAttrib>&);
   void loadStyleTemplates(KOMLParser&,vector<KOMLAttrib>&);

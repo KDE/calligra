@@ -1759,6 +1759,60 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 }
 
 /*================================================================*/
+void KWordDocument::printBorders(QPainter &_painter,int xOffset,int yOffset,int _w,int _h)
+{
+  KWFrameSet *frameset = 0;
+  KWFrame *tmp;
+  KRect frame;
+
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      frameset = getFrameSet(i);
+      if (isAHeader(getFrameSet(i)->getFrameInfo()) && !hasHeader() ||
+	  isAFooter(getFrameSet(i)->getFrameInfo()) && !hasFooter() ||
+	  isAWrongHeader(getFrameSet(i)->getFrameInfo(),getHeaderType()) ||
+	  isAWrongFooter(getFrameSet(i)->getFrameInfo(),getFooterType()))
+	continue;
+      for (unsigned int j = 0;j < frameset->getNumFrames();j++)
+	{
+	  tmp = frameset->getFrame(j);
+	  frame = KRect(tmp->x() - xOffset - 1,tmp->y() - yOffset - 1,tmp->width() + 2,tmp->height() + 2);
+	  if (!frame.intersects(KRect(xOffset,yOffset,_w,_h))) continue;
+
+	  tmp = frameset->getFrame(j);
+	  if (tmp->getLeftBorder().ptWidth > 0 && tmp->getLeftBorder().color != tmp->getBackgroundColor())
+	    {
+ 	      QPen p(setBorderPen(tmp->getLeftBorder()));
+ 	      _painter.setPen(p);
+ 	      _painter.drawLine(frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.y(),
+ 				frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.bottom() + 1); 
+	    }
+	  if (tmp->getRightBorder().ptWidth > 0 && tmp->getRightBorder().color != tmp->getBackgroundColor())
+	    {
+ 	      QPen p(setBorderPen(tmp->getRightBorder()));
+ 	      _painter.setPen(p);
+	      _painter.drawLine(frame.right() - tmp->getRightBorder().ptWidth / 2,frame.y(),
+				frame.right() - tmp->getRightBorder().ptWidth / 2,frame.bottom() + 1); 
+	    }
+	  if (tmp->getTopBorder().ptWidth > 0 && tmp->getTopBorder().color != tmp->getBackgroundColor())
+	    {
+ 	      QPen p(setBorderPen(tmp->getTopBorder()));
+ 	      _painter.setPen(p);
+	      _painter.drawLine(frame.x(),frame.y() + tmp->getTopBorder().ptWidth / 2,
+				frame.right() + 1,frame.y() + tmp->getTopBorder().ptWidth / 2);
+	    }
+	  if (tmp->getBottomBorder().ptWidth > 0 && tmp->getBottomBorder().color != tmp->getBackgroundColor())
+	    {
+ 	      QPen p(setBorderPen(tmp->getBottomBorder()));
+ 	      _painter.setPen(p);
+	      _painter.drawLine(frame.x(),frame.bottom() - tmp->getBottomBorder().ptWidth / 2,
+				frame.right() + 1,frame.bottom() - tmp->getBottomBorder().ptWidth / 2);
+	    }
+	}
+    }
+}
+
+/*================================================================*/
 void KWordDocument::drawMarker(KWFormatContext &_fc,QPainter *_painter,int xOffset,int yOffset)
 {
   RasterOp rop = _painter->rasterOp();
@@ -2525,8 +2579,9 @@ void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,
   for (i = 0;i < static_cast<unsigned int>(pages);i++)
     {
       KRect pageRect(0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
+      printBorders(*painter,0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
       unsigned int minus = 0;
-      if (i + 1> static_cast<unsigned int>(printer->fromPage())) printer->newPage();
+      if (i + 1 > static_cast<unsigned int>(printer->fromPage())) printer->newPage();
       for (j = 0;j < frames.count();j++)
 	{
 	  if (isAHeader(getFrameSet(j)->getFrameInfo()) && !hasHeader() ||

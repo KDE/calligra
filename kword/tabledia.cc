@@ -31,12 +31,12 @@ void KWTablePreview::paintEvent(QPaintEvent *e)
   QPainter p;
   p.begin(this);
 
-  p.setPen(QPen(lightGray));
+  p.setPen(QPen(black));
 
   for (int i = 0;i < rows;i++)
     {
       for (int j = 0;j < cols;j++)
-	p.drawRect(j * wid + 5,i * hei + 5,wid,hei);
+	p.drawRect(j * wid + 5,i * hei + 5,wid + 1,hei + 1);
     }
 	
   p.end();

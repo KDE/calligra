@@ -105,6 +105,13 @@ public:
 
   QRegion getEmptyRegion();
 
+  QColor getBackgroundColor() { return white; }
+
+  QString leftBrd2String();
+  QString rightBrd2String();
+  QString topBrd2String();
+  QString bottomBrd2String();
+
 protected:
   RunAround runAround;
   bool selected;
@@ -365,6 +372,8 @@ public:
 
   void setName(QString _name) { name = _name; }
   QString getName() { return name; }
+
+  void selectUntil(KWFrameSet *fs);
 
 protected:
   QList<Cell> cells;

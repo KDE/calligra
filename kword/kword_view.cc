@@ -86,14 +86,21 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
   tmpBrd.color = white;
   tmpBrd.style = KWParagLayout::SOLID;
   tmpBrd.ptWidth = 0;
+  frmBrd.color = black;
+  frmBrd.style = KWParagLayout::SOLID;
+  frmBrd.ptWidth = 1;
   _viewFormattingChars = false;
   _viewFrameBorders = true;
+  _viewTableGrid = true;
   searchEntry = 0L;
   replaceEntry = 0L;
   searchDia = 0L;
   tableDia = 0L;
-
+  m_vToolBarText = 0L;
+  m_vToolBarFrame = 0L;
   m_pKWordDoc = _doc;
+  oldFramePos = OpenPartsUI::Top;
+  oldTextPos = OpenPartsUI::Top;
 
   QObject::connect(m_pKWordDoc,SIGNAL(sig_insertObject(KWordChild*,KWPartFrameSet*)),
 		   this,SLOT(slotInsertObject(KWordChild*,KWPartFrameSet*)));
@@ -364,7 +371,7 @@ void KWordView::setFormat(KWFormat &_format,bool _check = true,bool _update_page
 /*================================================================*/
 void KWordView::setFlow(KWParagLayout::Flow _flow)
 {
-  if (_flow != flow)
+  if (_flow != flow && m_vToolBarText)
     {
       flow = _flow;
       m_vToolBarText->setButton(ID_ALEFT,false);  
@@ -545,6 +552,32 @@ void KWordView::setTool(MouseMode _mouseMode)
 	  break;
 	}
     }
+  
+  if (m_vToolBarText && m_vToolBarFrame)
+    {
+      if (_mouseMode == MM_EDIT_FRAME)
+	{
+	  m_vToolBarFrame->setButton(ID_FBRD_LEFT,false);
+	  m_vToolBarFrame->setButton(ID_FBRD_RIGHT,false);
+	  m_vToolBarFrame->setButton(ID_FBRD_TOP,false);
+	  m_vToolBarFrame->setButton(ID_FBRD_BOTTOM,false);
+
+	  m_vToolBarFrame->setBarPos(oldFramePos);
+	  m_vToolBarText->enable(OpenPartsUI::Hide);
+	  m_vToolBarFrame->enable(OpenPartsUI::Show);
+	  oldTextPos = m_vToolBarText->barPos();
+	  m_vToolBarText->setBarPos(OpenPartsUI::Floating);
+	}
+      else
+	{
+	  m_vToolBarText->setBarPos(oldTextPos);
+	  m_vToolBarText->enable(OpenPartsUI::Show);
+	  m_vToolBarFrame->enable(OpenPartsUI::Hide);
+	  if (m_vToolBarFrame->barPos() != OpenPartsUI::Floating)
+	    oldFramePos = m_vToolBarFrame->barPos();
+	  m_vToolBarFrame->setBarPos(OpenPartsUI::Floating);
+	}
+  }
 }
 
 /*===============================================================*/
@@ -657,6 +690,14 @@ void KWordView::viewFrameBorders()
 {
   m_vMenuView->setItemChecked(m_idMenuView_FrameBorders,!m_vMenuView->isItemChecked(m_idMenuView_FrameBorders));
   _viewFrameBorders = m_vMenuView->isItemChecked(m_idMenuView_FrameBorders);
+  gui->getPaperWidget()->repaint(false);
+}
+
+/*===============================================================*/
+void KWordView::viewTableGrid()
+{
+  m_vMenuView->setItemChecked(m_idMenuView_TableGrid,!m_vMenuView->isItemChecked(m_idMenuView_TableGrid));
+  _viewTableGrid = m_vMenuView->isItemChecked(m_idMenuView_TableGrid);
   gui->getPaperWidget()->repaint(false);
 }
 
@@ -1135,11 +1176,11 @@ void KWordView::textBorderBottom()
 void KWordView::textBorderColor()
 {
   if (KColorDialog::getColor(tmpBrd.color))
-  {
-    OpenPartsUI::Pixmap pix;
-    pix.data = CORBA::string_dup( colorToPixString( tmpBrd.color ) );
-    m_vToolBarText->setButtonPixmap( ID_BORDER_COLOR , pix );
-  }
+    {
+      OpenPartsUI::Pixmap pix;
+      pix.data = CORBA::string_dup( colorToPixString( tmpBrd.color ) );
+      m_vToolBarText->setButtonPixmap( ID_BORDER_COLOR , pix );
+    }
 }
 
 /*================================================================*/
@@ -1163,6 +1204,64 @@ void KWordView::textBorderStyle(const char *style)
     tmpBrd.style = KWParagLayout::DASH_DOT;
   else if (stl == i18n("dash dot dot line (-**-)"))
     tmpBrd.style = KWParagLayout::DASH_DOT_DOT;
+}
+
+/*================================================================*/
+void KWordView::frameBorderLeft()
+{
+  gui->getPaperWidget()->setLeftFrameBorder(frmBrd,m_vToolBarFrame->isButtonOn(ID_FBRD_LEFT));
+}
+
+/*================================================================*/
+void KWordView::frameBorderRight()
+{
+  gui->getPaperWidget()->setRightFrameBorder(frmBrd,m_vToolBarFrame->isButtonOn(ID_FBRD_RIGHT));
+}
+
+/*================================================================*/
+void KWordView::frameBorderTop()
+{
+  gui->getPaperWidget()->setTopFrameBorder(frmBrd,m_vToolBarFrame->isButtonOn(ID_FBRD_TOP));
+}
+
+/*================================================================*/
+void KWordView::frameBorderBottom()
+{
+  gui->getPaperWidget()->setBottomFrameBorder(frmBrd,m_vToolBarFrame->isButtonOn(ID_FBRD_BOTTOM));
+}
+
+/*================================================================*/
+void KWordView::frameBorderColor()
+{
+  if (KColorDialog::getColor(frmBrd.color))
+    {
+      OpenPartsUI::Pixmap pix;
+      pix.data = CORBA::string_dup(colorToPixString(frmBrd.color));
+      m_vToolBarFrame->setButtonPixmap(ID_FBORDER_COLOR,pix);
+    }
+}
+
+/*================================================================*/
+void KWordView::frameBorderWidth(const char *width)
+{
+  frmBrd.ptWidth = atoi(width);
+}
+
+/*================================================================*/
+void KWordView::frameBorderStyle(const char *style)
+{
+  QString stl(style);
+
+  if (stl == i18n("solid line"))
+    frmBrd.style = KWParagLayout::SOLID;
+  else if (stl == i18n("dash line (----)"))
+    frmBrd.style = KWParagLayout::DASH;
+  else if (stl == i18n("dot line (****)"))
+    frmBrd.style = KWParagLayout::DOT;
+  else if (stl == i18n("dash dot line (-*-*)"))
+    frmBrd.style = KWParagLayout::DASH_DOT;
+  else if (stl == i18n("dash dot dot line (-**-)"))
+    frmBrd.style = KWParagLayout::DASH_DOT_DOT;
 }
 
 /*================================================================*/
@@ -1239,12 +1338,14 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuView->insertSeparator(-1);
   m_idMenuView_FormattingChars = m_vMenuView->insertItem4( i18n("&Formatting Chars"), this, "viewFormattingChars", 0, -1, -1 );
   m_idMenuView_FrameBorders = m_vMenuView->insertItem4( i18n("Frame &Borders"), this, "viewFrameBorders", 0, -1, -1 );
+  m_idMenuView_TableGrid = m_vMenuView->insertItem4( i18n("Table &Grid"), this, "viewTableGrid", 0, -1, -1 );
   m_vMenuView->insertSeparator(-1);
   m_idMenuView_Header = m_vMenuView->insertItem4( i18n("&Header"), this, "viewHeader", 0, -1, -1 );
   m_idMenuView_Footer = m_vMenuView->insertItem4( i18n("F&ooter"), this, "viewFooter", 0, -1, -1 );
 
   m_vMenuView->setCheckable(true);
   m_vMenuView->setItemChecked(m_idMenuView_FrameBorders,true);
+  m_vMenuView->setItemChecked(m_idMenuView_TableGrid,true);
   m_vMenuView->setItemChecked(m_idMenuView_Header,m_pKWordDoc->hasHeader());
   m_vMenuView->setItemChecked(m_idMenuView_Footer,m_pKWordDoc->hasFooter());
 
@@ -1621,28 +1722,28 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   // border left
   pix = OPUIUtils::convertPixmap(ICON("borderleft.xpm"));
   m_idButtonText_BorderLeft = m_vToolBarText->insertButton2( pix, ID_BRD_LEFT, SIGNAL( clicked() ), this, "textBorderLeft", 
-							     true, i18n("Border Left"), -1);
+							     true, i18n("Paragraph Border Left"), -1);
   m_vToolBarText->setToggle(ID_BRD_LEFT,true);
   m_vToolBarText->setButton(ID_BRD_LEFT,false);
   
   // border right
   pix = OPUIUtils::convertPixmap(ICON("borderright.xpm"));
   m_idButtonText_BorderRight = m_vToolBarText->insertButton2( pix, ID_BRD_RIGHT, SIGNAL( clicked() ), this, "textBorderRight", 
-							      true, i18n("Border Right"), -1);
+							      true, i18n("Paragraph Border Right"), -1);
   m_vToolBarText->setToggle(ID_BRD_RIGHT,true);
   m_vToolBarText->setButton(ID_BRD_RIGHT,false);
   
   // border top
   pix = OPUIUtils::convertPixmap(ICON("bordertop.xpm"));
   m_idButtonText_BorderTop = m_vToolBarText->insertButton2( pix, ID_BRD_TOP, SIGNAL( clicked() ), this, "textBorderTop", 
-							    true, i18n("Border Top"), -1);
+							    true, i18n("Paragraph Border Top"), -1);
   m_vToolBarText->setToggle(ID_BRD_TOP,true);
   m_vToolBarText->setButton(ID_BRD_TOP,false);
   
   // border bottom
   pix = OPUIUtils::convertPixmap(ICON("borderbottom.xpm"));
   m_idButtonText_BorderBottom = m_vToolBarText->insertButton2( pix, ID_BRD_BOTTOM, SIGNAL( clicked() ), this, "textBorderBottom", 
-							       true, i18n("Border Bottom"), -1);
+							       true, i18n("Paragraph Border Bottom"), -1);
   m_vToolBarText->setToggle(ID_BRD_BOTTOM,true);
   m_vToolBarText->setButton(ID_BRD_BOTTOM,false);
   
@@ -1650,7 +1751,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   tmpBrd.color = black;
   colpix.data = CORBA::string_dup( colorToPixString( tmpBrd.color ) );
   m_idButtonText_BorderColor = m_vToolBarText->insertButton2( colpix, ID_BORDER_COLOR, SIGNAL( clicked() ), this, "textBorderColor", 
-							      true, i18n("Border Color"), -1);
+							      true, i18n("Paragraph Border Color"), -1);
 
   // border width combobox
   OpenPartsUI::StrList widthlist;
@@ -1663,7 +1764,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   }
   tmpBrd.ptWidth = 1;
   m_idComboText_BorderWidth = m_vToolBarText->insertCombo( widthlist, ID_BRD_WIDTH, true, SIGNAL( activated( const char* ) ),
-							   this, "textBorderWidth", true, i18n("Border Width"),
+							   this, "textBorderWidth", true, i18n("Paragraph Border Width"),
 							   60, -1, OpenPartsUI::AtBottom );
 
   // border style combobox
@@ -1674,11 +1775,59 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   stylelist[3] = CORBA::string_dup( i18n("dash dot line (-*-*)") );
   stylelist[4] = CORBA::string_dup( i18n("dash dot dot line (-**-)") );
   m_idComboText_BorderStyle = m_vToolBarText->insertCombo( stylelist,ID_BRD_STYLE, false, SIGNAL( activated( const char* ) ),
-							   this, "textBorderStyle", true, i18n("Border Style"),
+							   this, "textBorderStyle", true, i18n("Paragraph Border Style"),
 							   150, -1, OpenPartsUI::AtBottom );
   tmpBrd.style = KWParagLayout::SOLID;
 
   m_vToolBarText->enable( OpenPartsUI::Show );
+
+  // TOOLBAR Frame
+  m_vToolBarFrame = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+  m_vToolBarFrame->setFullWidth( false );
+
+  // border left
+  pix = OPUIUtils::convertPixmap(ICON("borderleft.xpm"));
+  m_idButtonFrame_BorderLeft = m_vToolBarFrame->insertButton2( pix, ID_FBRD_LEFT, SIGNAL( clicked() ), this, "frameBorderLeft", 
+							     true, i18n("Frame Border Left"), -1);
+  m_vToolBarFrame->setToggle(ID_FBRD_LEFT,true);
+  m_vToolBarFrame->setButton(ID_FBRD_LEFT,false);
+
+  // border right
+  pix = OPUIUtils::convertPixmap(ICON("borderright.xpm"));
+  m_idButtonFrame_BorderRight = m_vToolBarFrame->insertButton2( pix, ID_FBRD_RIGHT, SIGNAL( clicked() ), this, "frameBorderRight", 
+							      true, i18n("Frame Border Right"), -1);
+  m_vToolBarFrame->setToggle(ID_FBRD_RIGHT,true);
+  m_vToolBarFrame->setButton(ID_FBRD_RIGHT,false);
+
+  // border top
+  pix = OPUIUtils::convertPixmap(ICON("bordertop.xpm"));
+  m_idButtonFrame_BorderTop = m_vToolBarFrame->insertButton2( pix, ID_FBRD_TOP, SIGNAL( clicked() ), this, "frameBorderTop", 
+							    true, i18n("Frame Border Top"), -1);
+  m_vToolBarFrame->setToggle(ID_FBRD_TOP,true);
+  m_vToolBarFrame->setButton(ID_FBRD_TOP,false);
+
+  // border bottom
+  pix = OPUIUtils::convertPixmap(ICON("borderbottom.xpm"));
+  m_idButtonFrame_BorderBottom = m_vToolBarFrame->insertButton2( pix, ID_FBRD_BOTTOM, SIGNAL( clicked() ), this, "frameBorderBottom", 
+							       true, i18n("Frame Border Bottom"), -1);
+  m_vToolBarFrame->setToggle(ID_FBRD_BOTTOM,true);
+  m_vToolBarFrame->setButton(ID_FBRD_BOTTOM,false);
+
+  // border color
+  tmpBrd.color = black;
+  colpix.data = CORBA::string_dup(colorToPixString(frmBrd.color));
+  m_idButtonFrame_BorderColor = m_vToolBarFrame->insertButton2( colpix, ID_FBORDER_COLOR, SIGNAL( clicked() ), this, "frameBorderColor", 
+							      true, i18n("Frame Border Color"), -1);
+
+  m_idComboFrame_BorderWidth = m_vToolBarFrame->insertCombo( widthlist, ID_FBRD_WIDTH, true, SIGNAL( activated( const char* ) ),
+							   this, "frameBorderWidth", true, i18n("Frame Border Width"),
+							   60, -1, OpenPartsUI::AtBottom );
+
+  m_idComboFrame_BorderStyle = m_vToolBarFrame->insertCombo( stylelist,ID_FBRD_STYLE, false, SIGNAL( activated( const char* ) ),
+							   this, "frameBorderStyle", true, i18n("Frame Border Style"),
+							   150, -1, OpenPartsUI::AtBottom );
+
+  m_vToolBarFrame->enable(OpenPartsUI::Hide);
 
   updateStyle("Standard");
   setFormat(format,false);
@@ -1689,32 +1838,32 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 }      
 
 /*============== create a pixmapstring from a color ============*/
-char* KWordView::colorToPixString(QColor c)
+QString KWordView::colorToPixString(QColor c)
 {
   int r,g,b;
-  char pix[1500];
-  char line[40];
+  QString pix;
+  QString line;
 
   c.rgb(&r,&g,&b);
 
-  qstrcpy(pix,"/* XPM */\n");
+  pix = "/* XPM */\n";
   
-  strcat(pix,"static char * text_xpm[] = {\n");
+  pix += "static char * text_xpm[] = {\n";
 
-  sprintf(line,"%c 20 20 1 1 %c,\n",34,34);
-  strcat(pix,qstrdup(line));
+  line.sprintf("%c 20 20 1 1 %c,\n",34,34);
+  pix += line.copy();
 
-  sprintf(line,"%c c #%02X%02X%02X %c,\n",34,r,g,b,34);
-  strcat(pix,qstrdup(line));
+  line.sprintf("%c c #%02X%02X%02X %c,\n",34,r,g,b,34);
+  pix += line.copy();
 
-  sprintf(line,"%c                    %c,\n",34,34);
+  line.sprintf("%c                    %c,\n",34,34);
   for (unsigned int i = 1;i <= 20;i++)
-    strcat(pix,qstrdup(line));
+    pix += line.copy();
     
-  sprintf(line,"%c                    %c};\n",34,34);
-  strcat(pix,qstrdup(line));
-  
-  return (char*)&pix;
+  line.sprintf("%c                    %c};\n",34,34);
+  pix += line.copy();
+
+  return QString(pix);
 }
 
 /*===================== load not KDE installed fonts =============*/

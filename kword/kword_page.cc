@@ -669,23 +669,34 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	  case MM_EDIT_FRAME:
 	    {
 	      int r = doc->selectFrame(mx,my);
+	      bool goon = true;
 
 	      if (r == 0)
 		doc->deSelectAllFrames();
-	      else if (r == 1)
+	      
+	      if (r != 0 && (e->state() & ShiftButton) && doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager())
 		{
-		  if (!(e->state() & ControlButton || e->state() & ShiftButton))
-		    doc->deSelectAllFrames();
-		  doc->selectFrame(mx,my);
+		  doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager()->selectUntil(doc->getFrameSet(doc->getFrameSet(mx,my)));
+		  goon = false;
 		}
-	      else if (r == 2)
+
+	      if (goon)
 		{
-		  if (e->state() & ControlButton || e->state() & ShiftButton)
-		    doc->deSelectFrame(mx,my);
-		  else if (cursor().shape() != SizeAllCursor)
+		  if (r == 1)
 		    {
-		      doc->deSelectAllFrames();
+		      if (!(e->state() & ControlButton || e->state() & ShiftButton))
+			doc->deSelectAllFrames();
 		      doc->selectFrame(mx,my);
+		    }
+		  else if (r == 2)
+		    {
+		      if (e->state() & ControlButton || e->state() & ShiftButton)
+			doc->deSelectFrame(mx,my);
+		      else if (cursor().shape() != SizeAllCursor)
+			{
+			  doc->deSelectAllFrames();
+			  doc->selectFrame(mx,my);
+			}
 		    }
 		}
 
@@ -2183,6 +2194,9 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    QPaintDevice *dev = painter.device();
 	    painter.end();
 
+	    if (doc->needRedraw())
+	      buffer.fill(white);
+	    
 	    doc->updateAllViews(doc->needRedraw() ? 0L : gui->getView());
 	    doc->setNeedRedraw(false);
 
@@ -2464,13 +2478,20 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
 
   for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
     {
+      frameset = doc->getFrameSet(i);
       _painter.setPen(lightGray);
       should_draw = true;
+      if (frameset->getGroupManager())
+	{
+	  if (gui->getView()->getViewTableGrid())
+	    _painter.setPen(QPen(black,1,DotLine));
+	  else
+	    _painter.setPen(NoPen);
+	}
       if (static_cast<int>(i) == hiliteFrameSet)
 	_painter.setPen(blue);
       else if (!gui->getView()->getViewFrameBorders()) should_draw = false;
       
-      frameset = doc->getFrameSet(i);
       if (isAHeader(doc->getFrameSet(i)->getFrameInfo()) && !doc->hasHeader() ||
 	  isAFooter(doc->getFrameSet(i)->getFrameInfo()) && !doc->hasFooter() ||
 	  isAWrongHeader(doc->getFrameSet(i)->getFrameInfo(),doc->getHeaderType()) ||
@@ -2481,8 +2502,21 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
 	  tmp = frameset->getFrame(j);
 	  frame = KRect(tmp->x() - xOffset - 1,tmp->y() - yOffset - 1,tmp->width() + 2,tmp->height() + 2);
 	  
-	  if (v_area.intersects(frame) && should_draw)
+	  if (v_area.intersects(frame) && should_draw && !frameset->getGroupManager())
 	    _painter.drawRect(frame);
+	  if (v_area.intersects(frame) && frameset->getGroupManager())
+	    {
+	      _painter.fillRect(frame,white);
+	      _painter.drawLine(tmp->right() - xOffset + 1,tmp->y() - yOffset - 1,tmp->right() - xOffset + 1,tmp->bottom() - yOffset + 1);
+	      _painter.drawLine(tmp->x() - xOffset - 1,tmp->bottom() - yOffset + 1,tmp->right() - xOffset + 1,tmp->bottom() - yOffset + 1);
+	      unsigned int row = 0,col = 0;
+	      frameset->getGroupManager()->getFrameSet(frameset,row,col);
+	      if (row == 0)
+		_painter.drawLine(tmp->x() - xOffset - 1,tmp->y() - yOffset - 1,tmp->right() - xOffset + 1,tmp->y() - yOffset - 1);
+	      if (col == 0)
+		_painter.drawLine(tmp->x() - xOffset - 1,tmp->y() - yOffset - 1,tmp->x() - xOffset - 1,tmp->bottom() - yOffset + 1);
+	    }
+
 	  if (mouseMode == MM_EDIT_FRAME && tmp->isSelected())
 	    {
 	      _painter.save();
@@ -2502,10 +2536,40 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
 	      else
 		{
 		  _painter.restore();
-		  _painter.fillRect(frame.x(),frame.y(),frame.width(),frame.height(),kapp->selectColor);
+		  _painter.fillRect(frame.x(),frame.y(),frame.width() - 1,frame.height() - 1,kapp->selectColor);
 		  _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() / 2 - 3,6,6,black);
 		  _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y() + frame.height() - 6,6,6,black);
 		}	    
+	    }
+	  
+	  tmp = frameset->getFrame(j);
+	  if (tmp->getLeftBorder().ptWidth > 0 && tmp->getLeftBorder().color != tmp->getBackgroundColor())
+	    {
+ 	      QPen p(doc->setBorderPen(tmp->getLeftBorder()));
+ 	      _painter.setPen(p);
+ 	      _painter.drawLine(frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.y(),
+ 				frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.bottom() + 1); 
+	    }
+	  if (tmp->getRightBorder().ptWidth > 0 && tmp->getRightBorder().color != tmp->getBackgroundColor())
+	    {
+ 	      QPen p(doc->setBorderPen(tmp->getRightBorder()));
+ 	      _painter.setPen(p);
+	      _painter.drawLine(frame.right() - tmp->getRightBorder().ptWidth / 2,frame.y(),
+				frame.right() - tmp->getRightBorder().ptWidth / 2,frame.bottom() + 1); 
+	    }
+	  if (tmp->getTopBorder().ptWidth > 0 && tmp->getTopBorder().color != tmp->getBackgroundColor())
+	    {
+ 	      QPen p(doc->setBorderPen(tmp->getTopBorder()));
+ 	      _painter.setPen(p);
+	      _painter.drawLine(frame.x(),frame.y() + tmp->getTopBorder().ptWidth / 2,
+				frame.right() + 1,frame.y() + tmp->getTopBorder().ptWidth / 2);
+	    }
+	  if (tmp->getBottomBorder().ptWidth > 0 && tmp->getBottomBorder().color != tmp->getBackgroundColor())
+	    {
+ 	      QPen p(doc->setBorderPen(tmp->getBottomBorder()));
+ 	      _painter.setPen(p);
+	      _painter.drawLine(frame.x(),frame.bottom() - tmp->getBottomBorder().ptWidth / 2,
+				frame.right() + 1,frame.bottom() - tmp->getBottomBorder().ptWidth / 2);
 	    }
 	}
     }
@@ -3349,3 +3413,108 @@ void KWPage::removeSelection()
 
   p.end();
 }
+
+/*================================================================*/
+void KWPage::setLeftFrameBorder(KWParagLayout::Border _brd,bool _enable)
+{
+  KWFrameSet *frameset = 0L;
+  KWFrame *frame = 0L;
+
+  for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
+    {
+      frameset = doc->getFrameSet(i);
+      for (unsigned int j = 0;j < frameset->getNumFrames();j++)
+	{
+	  frame = frameset->getFrame(j);
+	  if (frame->isSelected()) 
+	    {
+	      if (!_enable) 
+		{
+		  _brd.ptWidth = 1;
+		  _brd.color = frame->getBackgroundColor();
+		}
+	      frame->setLeftBorder(_brd);
+	    }
+	}
+    }
+  doc->updateAllViews(0L);
+}
+
+/*================================================================*/
+void KWPage::setRightFrameBorder(KWParagLayout::Border _brd,bool _enable)
+{
+  KWFrameSet *frameset = 0L;
+  KWFrame *frame = 0L;
+
+  for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
+    {
+      frameset = doc->getFrameSet(i);
+      for (unsigned int j = 0;j < frameset->getNumFrames();j++)
+	{
+	  frame = frameset->getFrame(j);
+	  if (frame->isSelected()) 
+	    {
+	      if (!_enable) 
+		{
+		  _brd.ptWidth = 1;
+		  _brd.color = frame->getBackgroundColor();
+		}
+	      frame->setRightBorder(_brd);
+	    }
+	}
+    }
+  doc->updateAllViews(0L);
+}
+
+/*================================================================*/
+void KWPage::setTopFrameBorder(KWParagLayout::Border _brd,bool _enable)
+{
+  KWFrameSet *frameset = 0L;
+  KWFrame *frame = 0L;
+
+  for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
+    {
+      frameset = doc->getFrameSet(i);
+      for (unsigned int j = 0;j < frameset->getNumFrames();j++)
+	{
+	  frame = frameset->getFrame(j);
+	  if (frame->isSelected()) 
+	    {
+	      if (!_enable) 
+		{
+		  _brd.ptWidth = 1;
+		  _brd.color = frame->getBackgroundColor();
+		}
+	      frame->setTopBorder(_brd);
+	    }
+	}
+    }
+  doc->updateAllViews(0L);
+}
+
+/*================================================================*/
+void KWPage::setBottomFrameBorder(KWParagLayout::Border _brd,bool _enable)
+{
+  KWFrameSet *frameset = 0L;
+  KWFrame *frame = 0L;
+
+  for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
+    {
+      frameset = doc->getFrameSet(i);
+      for (unsigned int j = 0;j < frameset->getNumFrames();j++)
+	{
+	  frame = frameset->getFrame(j);
+	  if (frame->isSelected()) 
+	    {
+	      if (!_enable) 
+		{
+		  _brd.ptWidth = 1;
+		  _brd.color = frame->getBackgroundColor();
+		}
+	      frame->setBottomBorder(_brd);
+	    }
+	}
+    }
+  doc->updateAllViews(0L);
+}
+

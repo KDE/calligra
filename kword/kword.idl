@@ -20,6 +20,7 @@ module KWord
       slot void newView();
       slot void viewFormattingChars();
       slot void viewFrameBorders();
+      slot void viewTableGrid();
       slot void viewHeader();
       slot void viewFooter();
       
@@ -75,6 +76,13 @@ module KWord
       slot void textBorderColor();
       slot void textBorderWidth(in string width);
       slot void textBorderStyle(in string style);
+      slot void frameBorderLeft();
+      slot void frameBorderRight();
+      slot void frameBorderTop();
+      slot void frameBorderBottom();
+      slot void frameBorderColor();
+      slot void frameBorderWidth(in string width);
+      slot void frameBorderStyle(in string style);
     };
 
   interface KWordDocument : KOffice::Document, KOffice::Print

@@ -46,18 +46,18 @@ KWFrame::KWFrame()
   runAroundGap = 1;
   mostRight = false;
 
-  brd_left.color = white;
+  brd_left.color = getBackgroundColor();
   brd_left.style = KWParagLayout::SOLID;
-  brd_left.ptWidth = 0;
-  brd_right.color = white;
+  brd_left.ptWidth = 1;
+  brd_right.color = getBackgroundColor();
   brd_right.style = KWParagLayout::SOLID;
-  brd_right.ptWidth = 0;
-  brd_top.color = white;
+  brd_right.ptWidth = 1;
+  brd_top.color = getBackgroundColor();
   brd_top.style = KWParagLayout::SOLID;
-  brd_top.ptWidth = 0;
-  brd_bottom.color = white;
+  brd_top.ptWidth = 1;
+  brd_bottom.color = getBackgroundColor();
   brd_bottom.style = KWParagLayout::SOLID;
-  brd_bottom.ptWidth = 0;
+  brd_bottom.ptWidth = 1;
 }
 
 /*================================================================*/
@@ -71,18 +71,18 @@ KWFrame::KWFrame(const KPoint &topleft,const QPoint &bottomright)
   runAroundGap = 1;
   mostRight = false;
 
-  brd_left.color = white;
+  brd_left.color = getBackgroundColor();
   brd_left.style = KWParagLayout::SOLID;
-  brd_left.ptWidth = 0;
-  brd_right.color = white;
+  brd_left.ptWidth = 1;
+  brd_right.color = getBackgroundColor();
   brd_right.style = KWParagLayout::SOLID;
-  brd_right.ptWidth = 0;
-  brd_top.color = white;
+  brd_right.ptWidth = 1;
+  brd_top.color = getBackgroundColor();
   brd_top.style = KWParagLayout::SOLID;
-  brd_top.ptWidth = 0;
-  brd_bottom.color = white;
+  brd_top.ptWidth = 1;
+  brd_bottom.color = getBackgroundColor();
   brd_bottom.style = KWParagLayout::SOLID;
-  brd_bottom.ptWidth = 0;
+  brd_bottom.ptWidth = 1;
 } 
 
 /*================================================================*/
@@ -96,18 +96,18 @@ KWFrame::KWFrame(const KPoint &topleft,const KSize &size)
   runAroundGap = 1;
   mostRight = false;
 
-  brd_left.color = white;
+  brd_left.color = getBackgroundColor();
   brd_left.style = KWParagLayout::SOLID;
-  brd_left.ptWidth = 0;
-  brd_right.color = white;
+  brd_left.ptWidth = 1;
+  brd_right.color = getBackgroundColor();
   brd_right.style = KWParagLayout::SOLID;
-  brd_right.ptWidth = 0;
-  brd_top.color = white;
+  brd_right.ptWidth = 1;
+  brd_top.color = getBackgroundColor();
   brd_top.style = KWParagLayout::SOLID;
-  brd_top.ptWidth = 0;
-  brd_bottom.color = white;
+  brd_top.ptWidth = 1;
+  brd_bottom.color = getBackgroundColor();
   brd_bottom.style = KWParagLayout::SOLID;
-  brd_bottom.ptWidth = 0;
+  brd_bottom.ptWidth = 1;
 }    
 
 /*================================================================*/
@@ -121,18 +121,18 @@ KWFrame::KWFrame(int left,int top,int width,int height)
   runAroundGap = 1;
   mostRight = false;
 
-  brd_left.color = white;
+  brd_left.color = getBackgroundColor();
   brd_left.style = KWParagLayout::SOLID;
-  brd_left.ptWidth = 0;
-  brd_right.color = white;
+  brd_left.ptWidth = 1;
+  brd_right.color = getBackgroundColor();
   brd_right.style = KWParagLayout::SOLID;
-  brd_right.ptWidth = 0;
-  brd_top.color = white;
+  brd_right.ptWidth = 1;
+  brd_top.color = getBackgroundColor();
   brd_top.style = KWParagLayout::SOLID;
-  brd_top.ptWidth = 0;
-  brd_bottom.color = white;
+  brd_top.ptWidth = 1;
+  brd_bottom.color = getBackgroundColor();
   brd_bottom.style = KWParagLayout::SOLID;
-  brd_bottom.ptWidth = 0;
+  brd_bottom.ptWidth = 1;
 }
 
 /*================================================================*/
@@ -146,18 +146,18 @@ KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,int _gap)
   runAroundGap = _gap;
   mostRight = false;
 
-  brd_left.color = white;
+  brd_left.color = getBackgroundColor();
   brd_left.style = KWParagLayout::SOLID;
-  brd_left.ptWidth = 0;
-  brd_right.color = white;
+  brd_left.ptWidth = 1;
+  brd_right.color = getBackgroundColor();
   brd_right.style = KWParagLayout::SOLID;
-  brd_right.ptWidth = 0;
-  brd_top.color = white;
+  brd_right.ptWidth = 1;
+  brd_top.color = getBackgroundColor();
   brd_top.style = KWParagLayout::SOLID;
-  brd_top.ptWidth = 0;
-  brd_bottom.color = white;
+  brd_top.ptWidth = 1;
+  brd_bottom.color = getBackgroundColor();
   brd_bottom.style = KWParagLayout::SOLID;
-  brd_bottom.ptWidth = 0;
+  brd_bottom.ptWidth = 1;
 }
 
 /*================================================================*/
@@ -171,18 +171,18 @@ KWFrame::KWFrame(const QRect &_rect)
   runAroundGap = 1;
   mostRight = false;
 
-  brd_left.color = white;
+  brd_left.color = getBackgroundColor();
   brd_left.style = KWParagLayout::SOLID;
-  brd_left.ptWidth = 0;
-  brd_right.color = white;
+  brd_left.ptWidth = 1;
+  brd_right.color = getBackgroundColor();
   brd_right.style = KWParagLayout::SOLID;
-  brd_right.ptWidth = 0;
-  brd_top.color = white;
+  brd_right.ptWidth = 1;
+  brd_top.color = getBackgroundColor();
   brd_top.style = KWParagLayout::SOLID;
-  brd_top.ptWidth = 0;
-  brd_bottom.color = white;
+  brd_top.ptWidth = 1;
+  brd_bottom.color = getBackgroundColor();
   brd_bottom.style = KWParagLayout::SOLID;
-  brd_bottom.ptWidth = 0;
+  brd_bottom.ptWidth = 1;
 }
 
 /*================================================================*/
@@ -304,6 +304,46 @@ QCursor KWFrame::getMouseCursor(int mx,int my,bool table)
   return arrowCursor;
 }
 
+/*================================================================*/
+QString KWFrame::leftBrd2String()
+{
+  QString str;
+  str.sprintf(" lWidth=\"%d\" lRed=\"%d\" lGreen=\"%d\" lBlue=\"%d\" lStyle=\"%d\" ",
+	      brd_left.ptWidth,brd_left.color.red(),brd_left.color.green(),brd_left.color.blue(),
+	      static_cast<int>(brd_left.style));
+  return str;
+}
+
+/*================================================================*/
+QString KWFrame::rightBrd2String()
+{
+  QString str;
+  str.sprintf(" rWidth=\"%d\" rRed=\"%d\" rGreen=\"%d\" rBlue=\"%d\" rStyle=\"%d\" ",
+	      brd_right.ptWidth,brd_right.color.red(),brd_right.color.green(),brd_right.color.blue(),
+	      static_cast<int>(brd_right.style));
+  return str;
+}
+
+/*================================================================*/
+QString KWFrame::topBrd2String()
+{
+  QString str;
+  str.sprintf(" tWidth=\"%d\" tRed=\"%d\" tGreen=\"%d\" tBlue=\"%d\" tStyle=\"%d\" ",
+	      brd_top.ptWidth,brd_top.color.red(),brd_top.color.green(),brd_top.color.blue(),
+	      static_cast<int>(brd_top.style));
+  return str;
+}
+
+/*================================================================*/
+QString KWFrame::bottomBrd2String()
+{
+  QString str;
+  str.sprintf(" bWidth=\"%d\" bRed=\"%d\" bGreen=\"%d\" bBlue=\"%d\" bStyle=\"%d\" ",
+	      brd_bottom.ptWidth,brd_bottom.color.red(),brd_bottom.color.green(),brd_bottom.color.blue(),
+	      static_cast<int>(brd_bottom.style));
+  return str;
+}
+
 /******************************************************************/
 /* Class: KWFrameSet                                              */
 /******************************************************************/
@@ -419,7 +459,9 @@ void KWFrameSet::save(ostream &out)
       out << indent << "<FRAME left=\"" << frame->left() << "\" top=\"" << frame->top()
 	  << "\" right=\"" << frame->right() << "\" bottom=\"" << frame->bottom() 
 	  << "\" runaround=\"" << static_cast<int>(frame->getRunAround()) 
-	  << "\" runaroundGap=\"" << frame->getRunAroundGap() << "\"/>" << endl;
+	  << "\" runaroundGap=\"" << frame->getRunAroundGap() << "\""
+	  << frame->leftBrd2String() << frame->rightBrd2String() << frame->topBrd2String() 
+	  << frame->bottomBrd2String() << "/>" << endl;
     }
 }
 
@@ -447,20 +489,8 @@ void KWTextFrameSet::init()
   autoCreateNewFrame = true;
 
   parags = new KWParag(this,doc,0L,0L,doc->getDefaultParagLayout());
-  //parags->insertText(0," ");
   KWFormat *format = new KWFormat(doc);
   format->setDefaults(doc);
-  //parags->setFormat(0,1,*format);
-
-//   KWParag *p = parags;
-//   for (int i = 0;i < 500;i++)
-//     {
-//       p = new KWParag( this,doc, p, 0L, doc->getDefaultParagLayout());
-//       p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen.");
-//       KWFormat *format = new KWFormat(doc);
-//       format->setDefaults(doc);
-//       p->setFormat(0,strlen("Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen."),*format);
-//     }
 
   updateCounters();
 }
@@ -476,8 +506,6 @@ void KWTextFrameSet::update()
   for (unsigned int i = 0;i < static_cast<unsigned int>(doc->getPages() + 1);i++)
     {
       pageRect = KRect(0,i * doc->getPTPaperHeight(),doc->getPTPaperWidth(),doc->getPTPaperHeight());
-
-      //debug("%d %d %d %d",pageRect.x(),pageRect.y(),pageRect.width(),pageRect.height());
 
       FrameList *l = new FrameList();
       l->setAutoDelete(false);
@@ -638,7 +666,6 @@ void KWTextFrameSet::insertParag(KWParag *_parag,InsertPos _pos)
 	_new = new KWParag(this,doc,_parag,_next,doc->findParagLayout(_parag->getParagLayout()->getFollowingParagLayout()));
 	if (_new->getParagLayout()->getName() == _parag->getParagLayout()->getName())
 	  _new->setParagLayout(_parag->getParagLayout());
-	  //_new->getParagLayout()->setTabList(_parag->getParagLayout()->getTabList());
 	if (_next) _next->setPrev(_new);
       } break;
     case I_BEFORE:
@@ -686,7 +713,7 @@ void KWTextFrameSet::save(ostream &out)
     }
 
   out << otag << "<FRAMESET frameType=\"" << static_cast<int>(getFrameType()) 
-      << "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\" frameInfo=\"" << frameInfo << grp << "\">" << endl;
+      << "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\" frameInfo=\"" << static_cast<int>(frameInfo) << grp << "\">" << endl;
 
   KWFrameSet::save(out);
 
@@ -749,7 +776,21 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
       else if (name == "FRAME")
 	{
 	  KWFrame rect;
-
+	  KWParagLayout::Border l,r,t,b;
+	  
+	  l.color = rect.getBackgroundColor();
+	  l.style = KWParagLayout::SOLID;
+	  l.ptWidth = 1;
+	  r.color = rect.getBackgroundColor();
+	  r.style = KWParagLayout::SOLID;
+	  r.ptWidth = 1;
+	  t.color = rect.getBackgroundColor();
+	  t.style = KWParagLayout::SOLID;
+	  t.ptWidth = 1;
+	  b.color = rect.getBackgroundColor();
+	  b.style = KWParagLayout::SOLID;
+	  b.ptWidth = 1;
+	  
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
@@ -766,8 +807,53 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		rect.setRunAround(static_cast<RunAround>(atoi((*it).m_strValue.c_str())));
 	      else if ((*it).m_strName == "runaroundGap")
 		rect.setRunAroundGap(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "lWidth")
+		l.ptWidth = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "rWidth")
+		r.ptWidth = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "tWidth")
+		t.ptWidth = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "bWidth")
+		b.ptWidth = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "lRed")
+		l.color.setRgb(atoi((*it).m_strValue.c_str()),l.color.green(),l.color.blue());
+	      else if ((*it).m_strName == "rRed")
+		r.color.setRgb(atoi((*it).m_strValue.c_str()),r.color.green(),r.color.blue());
+	      else if ((*it).m_strName == "tRed")
+		t.color.setRgb(atoi((*it).m_strValue.c_str()),t.color.green(),t.color.blue());
+	      else if ((*it).m_strName == "bRed")
+		b.color.setRgb(atoi((*it).m_strValue.c_str()),b.color.green(),b.color.blue());
+	      else if ((*it).m_strName == "lGreen")
+		l.color.setRgb(l.color.red(),atoi((*it).m_strValue.c_str()),l.color.blue());
+	      else if ((*it).m_strName == "rGreen")
+		r.color.setRgb(r.color.red(),atoi((*it).m_strValue.c_str()),r.color.blue());
+	      else if ((*it).m_strName == "tGreen")
+		t.color.setRgb(t.color.red(),atoi((*it).m_strValue.c_str()),t.color.blue());
+	      else if ((*it).m_strName == "bGreen")
+		b.color.setRgb(b.color.red(),atoi((*it).m_strValue.c_str()),b.color.blue());
+	      else if ((*it).m_strName == "lBlue")
+		l.color.setRgb(l.color.red(),l.color.green(),atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "rBlue")
+		r.color.setRgb(r.color.red(),r.color.green(),atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "tBlue")
+		t.color.setRgb(t.color.red(),t.color.green(),atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "bBlue")
+		b.color.setRgb(b.color.red(),b.color.green(),atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "lStyle")
+		l.style = static_cast<KWParagLayout::BorderStyle>(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "rStyle")
+		r.style = static_cast<KWParagLayout::BorderStyle>(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "tStyle")
+		t.style = static_cast<KWParagLayout::BorderStyle>(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "bStyle")
+		b.style = static_cast<KWParagLayout::BorderStyle>(atoi((*it).m_strValue.c_str()));
 	    }
-	  frames.append(new KWFrame(rect.x(),rect.y(),rect.width(),rect.height(),rect.getRunAround(),rect.getRunAroundGap()));
+	  KWFrame *_frame = new KWFrame(rect.x(),rect.y(),rect.width(),rect.height(),rect.getRunAround(),rect.getRunAroundGap());
+	  _frame->setLeftBorder(l);
+	  _frame->setRightBorder(r);
+	  _frame->setTopBorder(t);
+	  _frame->setBottomBorder(b);
+	  frames.append(_frame);
 	}
 
       else
@@ -961,7 +1047,8 @@ void KWPictureFrameSet::setSize(KSize _imgSize)
 /*================================================================*/
 void KWPictureFrameSet::save(ostream &out)
 {
-  out << otag << "<FRAMESET frameType=\"" << static_cast<int>(getFrameType()) << "\" frameInfo=\"" << frameInfo << "\">" << endl;
+  out << otag << "<FRAMESET frameType=\"" << static_cast<int>(getFrameType()) << "\" frameInfo=\"" 
+      << static_cast<int>(frameInfo) << "\">" << endl;
 
   KWFrameSet::save(out);
 
@@ -1120,6 +1207,11 @@ void KWGroupManager::init(unsigned int x,unsigned int y,unsigned int width,unsig
 {
   unsigned int wid = width / cols - 2;
   unsigned int hei = height / rows - 2;
+
+  // some error checking to avoid infinite loops
+  if (static_cast<int>(hei) < doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 10)
+    hei = doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 10;
+  if (wid < 60) wid = 60;
 
   KWFrame *frame;
 
@@ -1289,6 +1381,21 @@ void KWGroupManager::deselectAll()
     {
       frame = cells.at(i)->frameSet->getFrame(0);
       frame->setSelected(false);
+    }
+}
+
+/*================================================================*/
+void KWGroupManager::selectUntil(KWFrameSet *fs)
+{
+  unsigned int row = 0,col = 0;
+  getFrameSet(fs,row,col);
+
+  for (unsigned int i = 0;i < cells.count();i++)
+    {
+      if (cells.at(i)->row <= row && cells.at(i)->col <= col)
+	cells.at(i)->frameSet->getFrame(0)->setSelected(true);
+      else
+	cells.at(i)->frameSet->getFrame(0)->setSelected(false);
     }
 }
 
