@@ -321,21 +321,6 @@
     </Function>
 
     <Function>
-      <Name>CharToAscii</Name>
-      <Type>Int</Type>
-      <Parameter>
-        <Comment>A one character string to convert</Comment>
-        <Type>String</Type>
-      </Parameter>
-      <Help>
-        <Text>The CharToAscii() function returns the ASCII code for the given character.</Text>
-        <Syntax>CharToAscii(value)</Syntax>
-        <Example>CharToAscii("v") returns 118</Example>
-        <Example>CharToAscii(r) is an error. The character must be in quotes.</Example>
-      </Help>
-    </Function>
-
-    <Function>
       <Name>AsciiToChar</Name>
       <Type>String</Type>
       <Parameter>
