@@ -373,15 +373,4 @@
         </application>
 -->
 
-        <application id="kontour" released="no">
-            <title xml:lang="en_us">Kontour</title>
-            <filter id="kontour_rtf">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kontour/rtf"/>
-                <title xml:lang="en_us">RTF</title>
-                <note xml:lang="en_us">Rich Text Format</note>
-                <stat import="none" export="abandoned"/>
-            </filter>
-        </application>
-    </version>
-
 </filters>
