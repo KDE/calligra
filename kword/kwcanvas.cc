@@ -360,7 +360,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in e
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
         KWFrameSet * fs = frame->getFrameSet();
-         KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
+        KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
         // If one cell belongs to a table, we are in fact moving the whole table
         // We'll have to do better in the long run
          if ( /*fs->getGroupManager()*/ table)
@@ -371,11 +371,18 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in e
             reg += *frame;
         FrameIndex *index=new FrameIndex;
         FrameResizeStruct *move=new FrameResizeStruct;
-        index->m_iFrameIndex=fs->getFrameFromPtr(frame);
+
         if(table)
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+            index->m_iFrameIndex=table->getFrameFromPtr(frame);
+        }
         else
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(fs);
+            index->m_iFrameIndex=fs->getFrameFromPtr(frame);
+        }
+
         move->sizeOfBegin=frame->normalize();
         move->sizeOfEnd=QRect();
         frameindexList.append(index);
@@ -1085,13 +1092,17 @@ void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
         tmp->m_OldBorder=frame->getLeftBorder();
         tmp->m_EFrameType= FBLeft;
 
-        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-
         KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
         if(table)
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+            index->m_iFrameIndex=table->getFrameFromPtr(frame);
+        }
         else
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+            index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+        }
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
@@ -1139,12 +1150,18 @@ void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getRightBorder();
         tmp->m_EFrameType= FBRight;
-        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-        KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
+
+         KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
         if(table)
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+            index->m_iFrameIndex=table->getFrameFromPtr(frame);
+        }
         else
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+            index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+        }
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
@@ -1194,12 +1211,18 @@ void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getTopBorder();
         tmp->m_EFrameType= FBTop;
-        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+
         KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
         if(table)
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+            index->m_iFrameIndex=table->getFrameFromPtr(frame);
+        }
         else
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+            index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+        }
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
@@ -1247,12 +1270,18 @@ void KWCanvas::setBottomFrameBorder( Border _frmBrd, bool _b )
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getBottomBorder();
         tmp->m_EFrameType= FBBottom;
-        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+
         KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
         if(table)
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+            index->m_iFrameIndex=table->getFrameFromPtr(frame);
+        }
         else
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+            index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+        }
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
@@ -1306,12 +1335,19 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getBottomBorder();
         tmp->m_EFrameType= FBBottom;
-        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+
         KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
         if(table)
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+            index->m_iFrameIndex=table->getFrameFromPtr(frame);
+        }
         else
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+            index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+        }
+
         tmpBorderListBottom.append(tmp);
         frameindexListBottom.append(index);
 
@@ -1319,11 +1355,19 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
         tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getTopBorder();
         tmp->m_EFrameType= FBTop;
-        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+
         if(table)
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+            index->m_iFrameIndex=table->getFrameFromPtr(frame);
+        }
         else
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+            index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+        }
+
+
         tmpBorderListTop.append(tmp);
         frameindexListTop.append(index);
 
@@ -1331,12 +1375,19 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
         tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getRightBorder();
         tmp->m_EFrameType= FBRight;
-        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
 
         if(table)
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+            index->m_iFrameIndex=table->getFrameFromPtr(frame);
+        }
         else
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+            index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+        }
+
+
         tmpBorderListRight.append(tmp);
         frameindexListRight.append(index);
 
@@ -1344,12 +1395,17 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
         tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getLeftBorder();
         tmp->m_EFrameType= FBLeft;
-        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
 
         if(table)
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+            index->m_iFrameIndex=table->getFrameFromPtr(frame);
+        }
         else
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+            index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+        }
 
         tmpBorderListLeft.append(tmp);
         frameindexListLeft.append(index);
@@ -1404,13 +1460,18 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
         FrameIndex *index=new FrameIndex;
-        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
 
         KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
         if(table)
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+            index->m_iFrameIndex=table->getFrameFromPtr(frame);
+        }
         else
+        {
             index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+            index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+        }
 
         QBrush *_color=new QBrush(frame->getBackgroundColor());
         frameindexList.append(index);
