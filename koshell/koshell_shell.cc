@@ -102,6 +102,11 @@ KoShellWindow::~KoShellWindow()
 {
   //kdDebug() << "KoShellWindow::~KoShellWindow()" << endl;
 
+  // Set the active part to 0 (as we do in ~KoMainWindow, but this is too
+  // late for KoShell, it gets activePartChanged signals delivered to a dead
+  // KoShellWindow object).
+  partManager()->setActivePart(0);
+
   // Destroy all documents - queryClose has made sure we saved them first
   QValueList<Page>::ConstIterator it = m_lstPages.begin();
   for (; it != m_lstPages.end(); ++it )
