@@ -47,6 +47,10 @@ k_dcop:
 	void initConfig();
 	void clearHistory();
 	QString unitName() const;
+	QString widthInUnits();
+	QString heightInUnits();
+	double width();
+	double height();
 
 	int nbLayer() const;
 	DCOPRef activeLayer();

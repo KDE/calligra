@@ -77,6 +77,32 @@ QString KarbonPartIface::unitName() const
 	return m_part->unitName();
 }
 
+QString
+KarbonPartIface::widthInUnits()
+{
+	QString val = KoUnit::userValue( m_part->document().width(), m_part->unit() );
+	return QString( "%1%2" ).arg( val ).arg( m_part->unitName() );
+}
+
+QString
+KarbonPartIface::heightInUnits()
+{
+	QString val = KoUnit::userValue( m_part->document().height(), m_part->unit() );
+	return QString( "%1%2" ).arg( val ).arg( m_part->unitName() );
+}
+
+double
+KarbonPartIface::width()
+{
+	return m_part->document().width();
+}
+
+double
+KarbonPartIface::height()
+{
+	return m_part->document().height();
+}
+
 int KarbonPartIface::nbLayer() const
 {
 	return m_part->document().layers().count();
