@@ -131,8 +131,12 @@ void KexiView::initDocBrowser()
 
 void KexiView::initHelper()
 {
-	KoContextHelpDocker *help = new KoContextHelpDocker(this);
-	help->show();
+	KoContextHelpDocker *help = new KoContextHelpDocker(mainWindow());
+        help->setResizeEnabled(true);
+        help->setCloseMode(QDockWindow::Always);
+//	mainWindow()->moveDockWindow(help,DockLeft);
+	mainWindow()->moveDockWindow(help, DockRight);
+
 }
 
 void KexiView::initActions()
