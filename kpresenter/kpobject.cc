@@ -39,6 +39,7 @@
 #include <stdlib.h>
 #include <fstream>
 #include <math.h>
+#include <float.h>
 
 #include <kozoomhandler.h>
 #include <koRect.h>
@@ -261,7 +262,7 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
     QDomDocumentFragment fragment=doc.createDocumentFragment();
     QDomElement elem=doc.createElement(tagORIG);
     elem.setAttribute(attrX, orig.x());
-    elem.setAttribute(attrY, orig.y()+offset);
+    elem.setAttribute(attrY, QString::number( orig.y() + offset, 'g', DBL_DIG ) );
     fragment.appendChild(elem);
     elem=doc.createElement(tagSIZE);
     elem.setAttribute(attrWidth, ext.width());
