@@ -4,6 +4,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 COMPILE_FIRST = lib interfaces
 COMPILE_BEFORE_kexi = kword kugar
+COMPILE_BEFORE_kplato = kdgantt kugar
 COMPILE_LAST = filters
 DISTCLEANFILES = inst-apps
 
