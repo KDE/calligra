@@ -46,8 +46,7 @@ KoApplication::KoApplication()
 
     // Quit when last window closed
     // This shouldn't be needed anymore, KTMW does it (David)
-    // It seems that we still need this one (Werner)
-    connect( this, SIGNAL( lastWindowClosed() ), this, SLOT( quit() ) );
+    //connect( this, SIGNAL( lastWindowClosed() ), this, SLOT( quit() ) );
 
     // Prepare a DCOP interface
     m_appIface=new KoApplicationIface();  // avoid the leak

@@ -225,11 +225,7 @@ protected:
 protected slots:
     virtual void slotActivePartChanged( KParts::Part *newPart );
 
-private slots:
-    void slotDelayedDestruction();
-
 private:
-
     KoMainWindowPrivate *d;
 
 };

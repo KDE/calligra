@@ -722,6 +722,7 @@ void KoMainWindow::slotSplitView() {
 
 void KoMainWindow::slotCloseAllViews() {
 
+    // Attention: Very touchy code... you know what you're doing? Goooood :)
     d->m_forQuit=true;
     if(queryClose()) {
         hide();
@@ -734,10 +735,10 @@ void KoMainWindow::slotCloseAllViews() {
             }
         }
         // not embedded -> destroy the document and all shells/views ;)
-        else {
+        else
             delete d->m_rootDoc;
-            QTimer::singleShot(0, this, SLOT(slotDelayedDestruction()));
-        }
+        d->m_rootDoc=0;
+        close();  // close this window (and quit the app if necessary)
     }
     d->m_forQuit=false;
 }
@@ -962,11 +963,6 @@ bool KoMainWindow::eventFilter(QObject *obj, QEvent *ev)
     }
 
     return KParts::MainWindow::eventFilter( obj, ev );
-}
-
-void KoMainWindow::slotDelayedDestruction() {
-    d->m_rootDoc=0;  // has already been deleted
-    delete this;
 }
 
 #include <koMainWindow.moc>
