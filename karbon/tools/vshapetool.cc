@@ -52,8 +52,10 @@ VShapeTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
 	view()->canvasWidget()->setYMirroring( true );
+	painter->setRasterOp( Qt::NotROP );
 
 	VPath* path = shape();
+	path->setState( VPath::edit );
 	path->draw( painter, path->boundingBox() );
 	delete( path );
 }
