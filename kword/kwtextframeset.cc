@@ -886,9 +886,7 @@ void KWTextFrameSet::zoom()
     textDocument()->setTabStops( textDocument()->formatCollection()->defaultFormat()->width( 'x' ) * 8 );
 
     // Zoom all custom items
-    QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
-    for ( ; cit.current() ; ++cit )
-        static_cast<KWTextCustomItem *>( cit.current() )->resize();
+    resizeTextCustomItem();
 
     // Mark all paragraphs as changed !
     for ( KWTextParag * s = static_cast<KWTextParag *>( textdoc->firstParag() ) ; s ; s = static_cast<KWTextParag *>( s->next() ) )
@@ -903,6 +901,13 @@ void KWTextFrameSet::zoom()
     m_availableHeight = -1; // to be recalculated
     //emit ensureCursorVisible(); // not here. We don't want this when saving.
     KWFrameSet::zoom();
+}
+
+void KWTextFrameSet::resizeTextCustomItem()
+{
+    QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
+    for ( ; cit.current() ; ++cit )
+        static_cast<KWTextCustomItem *>( cit.current() )->resize();
 }
 
 void KWTextFrameSet::unzoom()
@@ -1301,7 +1306,7 @@ void KWTextFrameSet::formatMore()
             kdWarning(32002) << "KWTextFrameSet::formatMore no more space, but no frame !" << endl;
         }
     }
-    else 
+    else
         if ( frames.count() > 1 && !lastFormatted && !isAHeader() && !isAFooter()
              && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) )
         {

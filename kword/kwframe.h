@@ -361,6 +361,7 @@ public:
     /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
     virtual void zoom();
 
+    virtual void resizeTextCustomItem(){}
     /** Called once the frameset has been completely loaded or constructed.
      * The default implementation calls updateFrames() and zoom(). Call the parent :) */
     virtual void finalize();

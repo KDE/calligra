@@ -1220,8 +1220,7 @@ void KWView::editCustomVars()
 {
     KWCustomVariablesDia dia( this, doc->getVariables() );
     dia.exec();
-    doc->layout();
-    doc->repaintAllViews();
+    doc->updateTextCustomItem();
 }
 
 /*===============================================================*/

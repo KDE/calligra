@@ -218,6 +218,15 @@ void KWDocument::newZoomAndResolution( bool updateViews )
     }
 }
 
+void KWDocument::updateTextCustomItem()
+{
+    QListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+        fit.current()->resizeTextCustomItem();
+    layout();
+    repaintAllViews();
+}
+
 bool KWDocument::initDoc()
 {
     m_pageLayout.unit = PG_MM;
