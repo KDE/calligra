@@ -123,6 +123,9 @@ public slots:
     void hideCursor() { drawCursor( false ); }
     void showCursor() { drawCursor( true ); }
 
+    /** This is a slot so that it's accessible from DCOP */
+    void insertText( const QString &text );
+
 protected slots:
     /** Start a drag */
     virtual void startDrag() = 0;

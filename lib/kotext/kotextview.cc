@@ -229,13 +229,15 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
                 }*/
                 QString text = e->text();
 
-                textObject()->insert( m_cursor, m_currentFormat, text, false, true, i18n("Insert Text") );
+                insertText( text );
 
                 doAutoFormat( m_cursor, static_cast<KoTextParag*>(m_cursor->parag()),
                               m_cursor->index() - 1, text[ text.length() - 1 ] );
                 break;
             }
             // We should use KAccel instead, to make this configurable !
+            // Well, those are all alternate keys, for keys already configurable (KDE-wide)
+            // and a kaccel makes it hard to
             if ( e->state() & ControlButton ) {
                 switch ( e->key() ) {
                 case Key_F16: // Copy key on Sun keyboards
@@ -263,6 +265,11 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
         textObject()->clearUndoRedoInfo();
     }
     textObject()->typingDone();
+}
+
+void KoTextView::insertText( const QString &text )
+{
+    textObject()->insert( m_cursor, m_currentFormat, text, false, true, i18n("Insert Text") );
 }
 
 void KoTextView::moveCursor( CursorAction action, bool select )
