@@ -666,7 +666,9 @@ QFont KoTextFormat::refFont() const
         delete d->m_refFont;
         d->m_refFont = new QFont( font() );
         d->m_refFont->setPointSizeFloat( pointSize );
-        //kdDebug(32500) << "KoTextFormat::screenFont created new font with size " << pointSize << endl;
+        delete d->m_refFontMetrics;
+        d->m_refFontMetrics = 0;
+        //kdDebug(32500) << "KoTextFormat::refFont created new font with size " << pointSize << endl;
     }
     return *d->m_refFont;
 }
@@ -674,17 +676,19 @@ QFont KoTextFormat::refFont() const
 QFont KoTextFormat::screenFont( const KoZoomHandler* zh ) const
 {
     float pointSize = screenPointSize( zh );
-    //kdDebug(32500) << "KoTextFormat::screenFont applyZoom=" << applyZoom << " pointSize=" << pointSize << endl;
+    //kdDebug(32500) << "KoTextFormat::screenFont pointSize=" << pointSize << endl;
     // Compare if this is the size for which we cached the font metrics.
     // We have to do this very dynamically, because 2 views could be painting the same
     // stuff, with different zoom levels. So no absolute caching possible.
     /*if ( d->m_screenFont )
       kdDebug(32500) << " d->m_screenFont->pointSizeFloat()=" << d->m_screenFont->pointSizeFloat() << endl;*/
-    if ( !d->m_screenFont || pointSize != d->m_screenFont->pointSizeFloat() )
+    if ( !d->m_screenFont || kAbs( pointSize - d->m_screenFont->pointSizeFloat() ) > 1E-4 )
     {
         delete d->m_screenFont;
         d->m_screenFont = new QFont( font() );
         d->m_screenFont->setPointSizeFloat( pointSize );
+        delete d->m_screenFontMetrics;
+        d->m_screenFontMetrics = 0;
         //kdDebug(32500) << "KoTextFormat::screenFont created new font with size " << pointSize << endl;
     }
     return *d->m_screenFont;
@@ -692,19 +696,11 @@ QFont KoTextFormat::screenFont( const KoZoomHandler* zh ) const
 
 const QFontMetrics& KoTextFormat::screenFontMetrics( const KoZoomHandler* zh ) const
 {
-    float pointSize = screenPointSize( zh );
-    if ( !d->m_screenFont )
-        (void)screenFont( zh ); // we need it below, and this way it'll be ready for painting
+    QFont f = screenFont(zh); // don't move inside the if!
 
-    // Compare if this is the size for which we cached the font metrics.
-    // We have to do this very dynamically, because 2 views could be painting the same
-    // stuff, with different zoom levels. So no absolute caching possible.
-    if ( !d->m_screenFontMetrics || pointSize != d->m_screenFont->pointSizeFloat() )
+    if ( !d->m_screenFontMetrics ) // not calculated, or invalidated by screenFont above
     {
         //kdDebug(32500) << this << " KoTextFormat::screenFontMetrics pointSize=" << pointSize << " d->m_screenFont->pointSizeFloat()=" << d->m_screenFont->pointSizeFloat() << endl;
-        QFont f( font() );
-        f.setPointSizeFloat( pointSize );
-        delete d->m_screenFontMetrics;
         d->m_screenFontMetrics = new QFontMetrics( f );
         //kdDebug(32500) << "KoTextFormat::screenFontMetrics created new metrics with size " << pointSize << "   height:" << d->m_screenFontMetrics->height() << endl;
     }
@@ -713,16 +709,11 @@ const QFontMetrics& KoTextFormat::screenFontMetrics( const KoZoomHandler* zh ) c
 
 const QFontMetrics& KoTextFormat::refFontMetrics() const
 {
-    float pointSize = refPointSize();
-    if ( !d->m_refFont )
-        (void)refFont(); // we need it below, and this way it'll be ready for painting (errrr....)
+    QFont f = refFont();
 
-    if ( !d->m_refFontMetrics || pointSize != d->m_refFont->pointSizeFloat() )
+    if ( !d->m_refFontMetrics )
     {
         //kdDebug(32500) << this << " KoTextFormat::refFontMetrics pointSize=" << pointSize << " d->m_refFont->pointSizeFloat()=" << d->m_refFont->pointSizeFloat() << endl;
-        QFont f( font() );
-        f.setPointSizeFloat( pointSize );
-        delete d->m_refFontMetrics;
         d->m_refFontMetrics = new QFontMetrics( f );
         //kdDebug(32500) << "KoTextFormat::refFontMetrics created new metrics with size " << pointSize << "   height:" << d->m_refFontMetrics->height() << endl;
     }
