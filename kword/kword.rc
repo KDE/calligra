@@ -74,6 +74,7 @@
  <Menu name="frames"><text>Fra&amp;mes</text>
   <Action name="format_frameset"/>
   <Action name="edit_delframe"/>
+  <!-- <Action name="border_backgroundcolor"/> needs a fix in TKSelectColorAction first -->
  </Menu>
  <Menu name="table"><text>Ta&amp;ble</text>
   <Action name="table_insrow"/>

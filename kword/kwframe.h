@@ -278,6 +278,8 @@ public:
 
     bool isAHeader() const;
     bool isAFooter() const;
+    bool isHeaderOrFooter() const { return isAHeader() || isAFooter(); }
+
     bool isAWrongHeader( KoHFType t ) const;
     bool isAWrongFooter( KoHFType t ) const;
 

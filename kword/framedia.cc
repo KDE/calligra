@@ -178,18 +178,23 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 
     cbCopy->setChecked( frame->isCopy() );
     cbCopy->setEnabled( frame->getFrameSet() && frame->getFrameSet()->getFrame( 0 ) != frame ); // First one can't be a copy
+    // Well, for images, formulas etc. it doesn't make sense to deactivate 'is copy'. What else would it show ?
+    if(frameType!=FT_TEXT)
+        cbCopy->setEnabled( false );
 
     int row = 2;
+    int column = 0;
 
     // Picture frame
-    if(frameType==FT_PICTURE) {
+    if(frameType==FT_PICTURE)
+    {
         aspectRatio = new QCheckBox (i18n("Retain original aspect ratio"),tab1);
         aspectRatio->setEnabled(false);
         grid1->addWidget(aspectRatio, row, 0);
-
-        // Text frame
-    } else if(frameType==FT_TEXT) {
-
+    }
+    // Text frame
+    if(frameType==FT_TEXT)
+    {
         // AutoCreateNewFrame policy.
         endOfFrame = new QGroupBox(i18n("If text is too long for frame:"), tab1 );
         grid1->addWidget( endOfFrame, row, 0 );
@@ -219,43 +224,59 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         } else {
             rNoShow->setChecked(true);
         }
+        column++;
+    } else
+    {
+        rResizeFrame = 0L;
+        rAppendFrame = 0L;
+        rNoShow = 0L;
+    }
 
-        // NewFrameBehaviour
-        onNewPage = new QGroupBox(i18n("On new page creation:"),tab1);
-        grid1->addWidget( onNewPage, row, 1 );
+    // NewFrameBehaviour - now for all type of frames
+    onNewPage = new QGroupBox(i18n("On new page creation:"),tab1);
+    grid1->addWidget( onNewPage, row, column );
 
-        onpGrid = new QGridLayout( onNewPage, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
-        reconnect = new QRadioButton (i18n ("Reconnect frame to current flow"), onNewPage);
+    onpGrid = new QGridLayout( onNewPage, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
+    reconnect = new QRadioButton (i18n ("Reconnect frame to current flow"), onNewPage);
+    if ( rResizeFrame )
         connect( reconnect, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOn() ) );
-        onpGrid ->addWidget( reconnect, 1, 0 );
+    onpGrid->addRowSpacing( 0, KDialog::marginHint() + 5 );
+    onpGrid->addWidget( reconnect, 1, 0 );
 
-        noFollowup = new QRadioButton (i18n ("Don't create a followup frame"), onNewPage);
+    noFollowup = new QRadioButton (i18n ("Don't create a followup frame"), onNewPage);
+    if ( rResizeFrame )
         connect( noFollowup, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOn() ) );
-        onpGrid ->addWidget( noFollowup, 2, 0 );
+    onpGrid->addWidget( noFollowup, 2, 0 );
 
-        copyRadio= new QRadioButton (i18n ("Place a copy of this frame"), onNewPage);
+    copyRadio= new QRadioButton (i18n ("Place a copy of this frame"), onNewPage);
+    if ( rResizeFrame )
         connect( copyRadio, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOff() ) );
-        onpGrid ->addWidget( copyRadio, 3, 0);
+    onpGrid->addWidget( copyRadio, 3, 0);
 
-        QButtonGroup *grp2 = new QButtonGroup( onNewPage );
-        grp2->hide();
-        grp2->setExclusive( true );
-        grp2->insert( reconnect );
-        grp2->insert( noFollowup );
-        grp2->insert( copyRadio );
-        grid1->addRowSpacing( row, onNewPage->height());
-        if(frame->getNewFrameBehaviour() == Reconnect) {
-            reconnect->setChecked(true);
-        } else if(frame->getNewFrameBehaviour() == NoFollowup) {
-            noFollowup->setChecked(true);
-        } else {
-            copyRadio->setChecked(true);
-            setFrameBehaviourInputOff();
-        }
+    if( frameType != FT_TEXT )
+        reconnect->setEnabled( false );
 
+    QButtonGroup *grp2 = new QButtonGroup( onNewPage );
+    grp2->hide();
+    grp2->setExclusive( true );
+    grp2->insert( reconnect );
+    grp2->insert( noFollowup );
+    grp2->insert( copyRadio );
+    grid1->addRowSpacing( row, onNewPage->height());
+    if(frame->getNewFrameBehaviour() == Reconnect) {
+        reconnect->setChecked(true);
+    } else if(frame->getNewFrameBehaviour() == NoFollowup) {
+        noFollowup->setChecked(true);
+    } else {
+        copyRadio->setChecked(true);
+        setFrameBehaviourInputOff();
+    }
+
+
+    // SideHeads definition - is that for text frames only ?
+    if( frameType == FT_TEXT )
+    {
         row++;
-
-        // SideHeads definition
         sideHeads = new QGroupBox(i18n("SideHead definition"),tab1);
         sideHeads->setEnabled(false);
         grid1->addWidget(sideHeads, row, 0);
@@ -292,9 +313,9 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         // add rest of sidehead init..
     }
 
-    for(int i=0;i < grid1->numRows() - 1;i++)
+    for(int i=0;i < row;i++)
         grid1->setRowStretch( i, 0 );
-    grid1->setRowStretch( grid1->numRows() - 1, 1 );
+    grid1->setRowStretch( row + 1, 1 );
 }
 
 
@@ -723,7 +744,7 @@ void KWFrameDia::runConturClicked()
 }
 
 void KWFrameDia::setFrameBehaviourInputOn() {
-    if(!rResizeFrame->isEnabled()) {
+    if(rResizeFrame && !rResizeFrame->isEnabled()) {
         if(frameBehaviour== AutoExtendFrame) {
             rResizeFrame->setChecked(true);
         } else if (frameBehaviour== AutoCreateNewFrame) {
@@ -738,7 +759,7 @@ void KWFrameDia::setFrameBehaviourInputOn() {
 }
 
 void KWFrameDia::setFrameBehaviourInputOff() {
-    if(rResizeFrame->isEnabled()) {
+    if(rResizeFrame && rResizeFrame->isEnabled()) {
         if(rResizeFrame->isChecked()) {
             frameBehaviour=AutoExtendFrame;
         } else if ( rAppendFrame->isChecked()) {
@@ -777,17 +798,20 @@ bool KWFrameDia::applyChanges()
         frame->setCopy( cbCopy->isChecked() );
 
         // FrameBehaviour
-        if(rResizeFrame->isChecked())
-            frame->setFrameBehaviour(AutoExtendFrame);
-        else if ( rAppendFrame->isChecked())
-            frame->setFrameBehaviour(AutoCreateNewFrame);
-        else
-            frame->setFrameBehaviour(Ignore);
+        if ( frameType == FT_TEXT )
+        {
+            if(rResizeFrame->isChecked())
+                frame->setFrameBehaviour(AutoExtendFrame);
+            else if ( rAppendFrame->isChecked())
+                frame->setFrameBehaviour(AutoCreateNewFrame);
+            else
+                frame->setFrameBehaviour(Ignore);
+        }
 
         // NewFrameBehaviour
-        if(reconnect->isChecked())
+        if( reconnect && reconnect->isChecked() )
             frame->setNewFrameBehaviour(Reconnect);
-        else if ( noFollowup->isChecked())
+        else if ( noFollowup->isChecked() )
             frame->setNewFrameBehaviour(NoFollowup);
         else
             frame->setNewFrameBehaviour(Copy);

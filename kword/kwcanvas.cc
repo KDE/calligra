@@ -334,7 +334,9 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
     if( m_doc->getFirstSelectedFrame() )
     {
         KWFrame * frame = m_doc->getFirstSelectedFrame();
-        frame=KWFrameSet::settingsFrame(frame);
+        // If header/footer, resize the first frame
+        if ( frame->getFrameSet()->isHeaderOrFooter() )
+            frame = frame->getFrameSet()->getFrame( 0 );
         m_resizedFrameInitialSize = frame->normalize();
     }
 
@@ -347,7 +349,6 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
     m_boundingRect = KoRect();
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
-        frame=KWFrameSet::settingsFrame(frame);
         KWFrameSet * fs = frame->getFrameSet();
         if ( !(m_doc->processingType() == KWDocument::WP && m_doc->getFrameSetNum( fs ) == 0 )&& !fs->isAHeader() && !fs->isAFooter()  )
         {
@@ -553,8 +554,6 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
 
     // Can't resize the main frame of a WP document
     KWFrame *frame = m_doc->getFirstSelectedFrame();
-    //necesary to have other frame otherwise resize doesn't work
-    KWFrame *frame2=KWFrameSet::settingsFrame(frame);
 
     KWFrameSet *fs = frame->getFrameSet();
     if ( m_doc->processingType() == KWDocument::WP && fs == m_doc->getFrameSet(0))
@@ -626,13 +625,14 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     frame->setRight(newRight);
     frame->setBottom(newBottom);
 
-    //necessary when a frame is a copy
-    if(frame!=frame2)
+    // If header/footer, resize the first frame
+    if ( frame->getFrameSet()->isHeaderOrFooter() )
     {
-        frame2->setLeft(newLeft);
-        frame2->setTop(newTop);
-        frame2->setRight(newRight);
-        frame2->setBottom(newBottom);
+        KWFrame * origFrame = frame->getFrameSet()->getFrame( 0 );
+        origFrame->setLeft(newLeft);
+        origFrame->setTop(newTop);
+        origFrame->setRight(newRight);
+        origFrame->setBottom(newBottom);
     }
 
     //kdDebug() << "KWCanvas::mmEditFrameResize new rect " << DEBUGRECT( *frame ) << endl;
@@ -764,7 +764,6 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
         {
             KWFrame *frame = frameIt.current();
             if ( frame->isSelected() ) {
-                frame=KWFrameSet::settingsFrame(frame);
                 if ( frameset->getFrameType() == FT_TABLE ) {
                     if ( tablesMoved.findRef( static_cast<KWTableFrameSet *> (frameset) ) == -1 )
                         tablesMoved.append( static_cast<KWTableFrameSet *> (frameset));
@@ -930,7 +929,9 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
         if ( frameResized )
         {
             KWFrame *frame = m_doc->getFirstSelectedFrame();
-            frame=KWFrameSet::settingsFrame(frame);
+            // If header/footer, resize the first frame
+            if ( frame->getFrameSet()->isHeaderOrFooter() )
+                frame = frame->getFrameSet()->getFrame( 0 );
             ASSERT( frame );
             if ( frame )
             {

@@ -45,7 +45,7 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       sheetSide( AnySide ),
       runAround( _ra ),
       frameBehaviour( AutoCreateNewFrame ),
-      newFrameBehaviour( Reconnect ),
+      newFrameBehaviour( ( fs && fs->getFrameType() == FT_TEXT ) ? Reconnect : NoFollowup ),
       runAroundGap( _gap ),
       m_bCopy( false ),
       selected( false ),
