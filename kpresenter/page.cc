@@ -3475,9 +3475,9 @@ void Page::dropEvent( QDropEvent *e )
 
 	QString filename = "/tmp/kpresenter";
 	filename += uid;
-	filename += ".xpm";
+	filename += ".png";
 
-	pix.save( filename, "XPM" );
+	pix.save( filename, "PNG" );
 	QCursor c = cursor();
 	setCursor( waitCursor );
 	view->kPresenterDoc()->insertPicture( filename, e->pos().x(), e->pos().y() );
