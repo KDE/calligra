@@ -538,12 +538,14 @@ void XfigImport::parseText (istream& fin, GDocument* doc) {
   obj->setText (text);
 
   if (sub_type == 1) {
-    // x, y is the lower center
-    x -= qRound (length / 2);
+    GText::TextInfo ti = obj->getTextInfo ();
+    ti.align = GText::TextInfo::AlignCenter;
+    obj->setTextInfo (ti);
   }
   else if (sub_type == 2) {
-    // x, y is the lower right corner
-    x -= qRound (length);
+    GText::TextInfo ti = obj->getTextInfo ();
+    ti.align = GText::TextInfo::AlignRight;
+    obj->setTextInfo (ti);             
   }
   Coord origin (x / fig_resolution, y / fig_resolution - qfont.pointSize ());
   obj->setOrigin (origin);
