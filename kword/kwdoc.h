@@ -477,6 +477,8 @@ public:
     void terminateEditing( KWFrameSet * frameSet )
     { emit sig_terminateEditing( frameSet ); }
 
+    void clearUndoRedoInfos();
+
     void refreshDocStructure(FrameType);
 
     void renameButtonTOC(const QString & _name);

@@ -100,7 +100,44 @@ KoDocument *KWChild::hitTest( const QPoint &, const QWMatrix & )
 }
 
 /******************************************************************/
-/* Class: KWDocument                                      */
+/* Class: KWCommandHistory                                        */
+/******************************************************************/
+class KWCommandHistory : public KCommandHistory
+{
+public:
+    KWCommandHistory( KWDocument * doc ) : KCommandHistory( doc->actionCollection(),  false ), m_pDoc( doc ) {}
+public /*slots*/: // They are already slots in the parent. Running moc on the inherited class shouldn't be necessary AFAICS.
+    virtual void undo();
+    virtual void redo();
+private:
+    KWDocument * m_pDoc;
+};
+
+void KWCommandHistory::undo()
+{
+    m_pDoc->clearUndoRedoInfos();
+    KCommandHistory::undo();
+}
+
+void KWCommandHistory::redo()
+{
+    m_pDoc->clearUndoRedoInfos();
+    KCommandHistory::redo();
+}
+
+void KWDocument::clearUndoRedoInfos()
+{
+    QListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet *>( fit.current() );
+        if ( fs )
+            fs->clearUndoRedoInfo();
+    }
+}
+
+/******************************************************************/
+/* Class: KWDocument                                              */
 /******************************************************************/
 
 KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
@@ -130,7 +167,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_autoFormat = new KWAutoFormat(this);
 
-    m_commandHistory = new KCommandHistory( actionCollection(), false );
+    m_commandHistory = new KWCommandHistory( this );
 #if KDE_VERSION >= 220 // kdelibs >= 2.2 only
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
 #endif
