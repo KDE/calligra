@@ -32,7 +32,7 @@
 #include <kspread_doc.h>
 
 typedef KGenericFactory<HTMLExport, KoFilter> HTMLExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkspreadhtmlexport, HTMLExportFactory( "htmlexport" ) )
+K_EXPORT_COMPONENT_FACTORY( libkspreadhtmlexport, HTMLExportFactory( "kofficefilters" ) )
 
 class Cell {
  public:

@@ -38,7 +38,7 @@
 #include <zlib.h>
 
 typedef KGenericFactory<GNUMERICExport, KoFilter> GNUMERICExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libgnumericexport, GNUMERICExportFactory( "gnumericexport" ) )
+K_EXPORT_COMPONENT_FACTORY( libgnumericexport, GNUMERICExportFactory( "kofficefilters" ) )
 
 class Cell {
  public:
@@ -277,7 +277,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 // approach is because we don't want to export formulas but values !
 KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const QCString& to )
 {
-    qDebug("Exporting GNUmeric");
+    kdDebug(30501) << "Exporting GNUmeric" << endl;
 
     QDomDocument gnumeric_doc=QDomDocument("gmr:Workbook");
 

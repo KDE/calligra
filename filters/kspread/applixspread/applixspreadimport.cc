@@ -35,7 +35,7 @@
 #include <kgenericfactory.h>
 
 typedef KGenericFactory<APPLIXSPREADImport, KoFilter> APPLIXSPREADImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libapplixspreadimport, APPLIXSPREADImportFactory( "applixspreadimport" ) )
+K_EXPORT_COMPONENT_FACTORY( libapplixspreadimport, APPLIXSPREADImportFactory( "kofficefilters" ) )
 
 
 APPLIXSPREADImport::APPLIXSPREADImport ( QObject */*parent*/, const char* /*name*/, const QStringList& )
