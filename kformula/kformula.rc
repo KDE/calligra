@@ -73,6 +73,9 @@
   <Action name="configure" group="settings_configure"/>
  </Menu>
 
+  <Menu name="help">
+   <Action name="help_show_tip"/>
+  </Menu>
 </MenuBar>
 
  <ToolBar fullWidth="false" name="edit_toolbar" position="top"><Text>Edit</Text>

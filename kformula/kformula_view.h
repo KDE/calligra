@@ -76,6 +76,9 @@ protected slots:
 
     void sizeSelected( int );
 
+    void slotShowTipOnStart();
+    void slotShowTip();
+
 private:
 
     /**
@@ -107,6 +110,8 @@ private:
     KAction* removeEnclosingAction;
 
     KAction* formulaStringAction;
+
+    static int window_counter;
 
     DCOPObject *m_dcop;
 };

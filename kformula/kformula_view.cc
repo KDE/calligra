@@ -23,12 +23,14 @@ class KPrinter;
 #include <qpainter.h>
 #include <qpopupmenu.h>
 #include <qtextedit.h>
+#include <qtimer.h>
 
 #include <kaction.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstdaction.h>
+#include <ktip.h>
 //#include <kglobal.h>
 
 #include <kformulacontainer.h>
@@ -43,6 +45,8 @@ class KPrinter;
 #include "kformula_view_iface.h"
 #include "kformulawidget.h"
 
+
+int KFormulaPartView::window_counter = 0;
 
 KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const char* _name)
         : KoView( _doc, _parent, _name ), m_pDoc(_doc)
@@ -77,6 +81,9 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
     pasteAction = KStdAction::paste(document, SLOT(paste()), actionCollection());
     cutAction->setEnabled(false);
     copyAction->setEnabled(false);
+
+    // tip of the day
+    KStdAction::tipOfDay( this, SLOT( slotShowTip() ), actionCollection() );
 
     // elements
     addBracketAction      = document->getAddBracketAction();
@@ -140,6 +147,11 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
 
     connect( formula, SIGNAL( statusMsg( const QString& ) ),
              this, SLOT( slotActionStatusText( const QString& ) ) );
+
+    if ( window_counter == 0 ) {
+        QTimer::singleShot( 200, this, SLOT(slotShowTipOnStart()) );
+    }
+    window_counter++;
 }
 
 
@@ -166,6 +178,14 @@ void KFormulaPartView::updateReadWrite(bool readwrite)
 {
     formulaWidget->setReadOnly(!readwrite);
     setEnabled(readwrite);
+}
+
+void KFormulaPartView::slotShowTipOnStart() {
+    KTipDialog::showTip( this );
+}
+
+void KFormulaPartView::slotShowTip() {
+    KTipDialog::showTip( this, QString::null, true );
 }
 
 

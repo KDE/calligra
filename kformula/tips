@@ -1,0 +1,21 @@
+<tip category="KFormula|Keyboard">
+<html>
+<p>...that you can use Ctrl-U/Ctrl-L to create an index above or below
+the currently selected elements?</p>
+</html>
+</tip>
+
+<tip category="KFormula|Filters">
+<html>
+<p>...that you can import an export <em>MathML</em> files?</p>
+</html>
+</tip>
+
+<tip category="KFormula|General">
+<html>
+<p>...to get the most out of KFormula you need to install 
+elsevier's Esstix fonts. You can find them at
+<a href="ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip">ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip</a>.
+</p>
+</html>
+</tip>

@@ -38,5 +38,8 @@ rcdir = $(kde_datadir)/kformula
 
 SUBDIRS =  pics
 
+tipdir = $(kde_datadir)/kformula
+tip_DATA = tips
+
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc kformula_aboutdata.h -o $(podir)/kformula.pot
