@@ -74,9 +74,8 @@ bool KexiProject::initDoc()
 	if (ret==KoTemplateChooseDia::Empty) {
 		clear();
 		KexiCreateProject *newDlg = new KexiCreateProject(this,0);
-		newDlg->exec();
+		ok=(newDlg->exec()==QDialog::Accepted);
 		delete newDlg;
-		ok=true;
 	} else if (ret==KoTemplateChooseDia::File) {
 		KURL url(filename);
 		kdDebug()<<"kexi: opening file: "<<url.prettyURL()<<endl;
