@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,13 +30,26 @@ public:
 		round,
 		rectangular
 	};
+	VSpiral( VObject* parent, VState state = edit );
 	VSpiral( VObject* parent,
 		const KoPoint& center, double radius, uint segments,
 		double fade, bool clockwise, double angle = 0.0, VSpiralType type = round );
 
 	virtual QString name() const;
 
+	virtual void save( QDomElement& element ) const;
+	virtual void load( const QDomElement& element );
+
 protected:
+	void init();
+
+private:
+	KoPoint m_center;
+	double m_radius;
+	double m_fade;
+	uint m_segments;
+	bool m_clockwise;
+	double m_angle;
 	VSpiralType m_type;
 };
 

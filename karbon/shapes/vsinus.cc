@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,22 +24,32 @@
 #include "vsinus.h"
 #include "vtransformcmd.h"
 #include <klocale.h>
+#include <qdom.h>
 
+VSinus::VSinus( VObject* parent, VState state )
+	: VComposite( parent, state )
+{
+}
 
 VSinus::VSinus( VObject* parent,
 		const KoPoint& topLeft, double width, double height, uint periods )
-	: VComposite( parent )
+	: VComposite( parent ), m_topLeft( topLeft ), m_width( width), m_height( height ), m_periods( periods )
 {
 	// We want at least 1 period:
-	if( periods < 1 )
-		periods = 1;
+	if( m_periods < 1 )
+		m_periods = 1;
+	init();
+}
 
+void
+VSinus::init()
+{
 	KoPoint p1;
 	KoPoint p2;
 	KoPoint p3( 0.0, 0.0 );
 	moveTo( p3 );
 
-	for ( uint i = 0; i < periods; ++i )
+	for ( uint i = 0; i < m_periods; ++i )
 	{
 		p1.setX( i + 1.0/24.0 );
 		p1.setY( ( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7 );
@@ -109,8 +118,8 @@ VSinus::VSinus( VObject* parent,
 
 	// Translate and scale:
 	QWMatrix m;
-	m.translate( topLeft.x(), topLeft.y() - height * 0.5 );
-	m.scale( width / periods, height * 0.5 );
+	m.translate( m_topLeft.x(), m_topLeft.y() - m_height * 0.5 );
+	m.scale( m_width / m_periods, m_height * 0.5 );
 
 	VTransformCmd cmd( 0L, m );
 	cmd.visit( *this );
@@ -121,6 +130,44 @@ VSinus::name() const
 {
 	QString result = VObject::name();
 	return !result.isEmpty() ? result : i18n( "Sinus" );
+}
+
+void
+VSinus::save( QDomElement& element ) const
+{
+	if( state() != deleted )
+	{
+		QDomElement me = element.ownerDocument().createElement( "SINUS" );
+		element.appendChild( me );
+
+		VObject::save( me );
+
+		me.setAttribute( "x", m_topLeft.x() );
+		me.setAttribute( "y", m_topLeft.y() );
+
+		me.setAttribute( "width", m_width );
+		me.setAttribute( "height", m_height );
+
+		me.setAttribute( "periods", m_periods );
+	}
+}
+
+void
+VSinus::load( const QDomElement& element )
+{
+	setState( normal );
+
+	VObject::load( element );
+
+	m_width  = element.attribute( "width" ).toDouble(),
+	m_height = element.attribute( "height" ).toDouble(),
+
+	m_topLeft.setX( element.attribute( "x" ).toDouble() );
+	m_topLeft.setY( element.attribute( "y" ).toDouble() );
+
+	m_periods  = element.attribute( "periods" ).toUInt(),
+
+	init();
 }
 
 

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,42 +21,54 @@
 #include <math.h>
 
 #include <qwmatrix.h>
+#include <qdom.h>
 
 #include "vglobal.h"
 #include "vspiral.h"
 #include "vtransformcmd.h"
 #include <klocale.h>
 
+VSpiral::VSpiral( VObject* parent, VState state )
+	: VComposite( parent, state )
+{
+}
+
 VSpiral::VSpiral( VObject* parent,
 		const KoPoint& center, double radius, uint segments, double fade,
 		bool clockwise, double angle, VSpiralType type )
-	: VComposite( parent ), m_type( type )
+	: VComposite( parent ), m_center( center), m_radius( radius ), m_fade( fade ), m_segments( segments ), m_clockwise( clockwise ), m_angle( angle ), m_type( type )
+{
+	init();
+}
+
+void
+VSpiral::init()
 {
 	// It makes sense to have at least one segment:
-	if( segments < 1 )
-		segments = 1;
+	if( m_segments < 1 )
+		m_segments = 1;
 
 	// Make sure the radius is positive:
-	if( radius < 0.0 )
-		radius = -radius;
+	if( m_radius < 0.0 )
+		m_radius = -m_radius;
 
 	// Fall back, when fade is out of range:
-	if( fade <= 0.0 || fade >= 1.0 )
-		fade = 0.5;
+	if( m_fade <= 0.0 || m_fade >= 1.0 )
+		m_fade = 0.5;
 
 	setFillRule( winding );
 
 	// advance by pi/2 clockwise or cclockwise?
-	double adv_ang = ( clockwise ? -1.0 : 1.0 ) * VGlobal::pi_2;
+	double adv_ang = ( m_clockwise ? -1.0 : 1.0 ) * VGlobal::pi_2;
 	// radius of first segment is non-faded radius:
-	double r = radius;
+	double r = m_radius;
 
-	KoPoint oldP( 0.0, ( clockwise ? -1.0 : 1.0 ) * radius );
+	KoPoint oldP( 0.0, ( m_clockwise ? -1.0 : 1.0 ) * m_radius );
 	KoPoint newP;
 	KoPoint newCenter( 0.0, 0.0 );
 	moveTo( oldP );
 
-	for ( uint i = 0; i < segments; ++i )
+	for ( uint i = 0; i < m_segments; ++i )
 	{
 		newP.setX( r * cos( adv_ang * ( i + 2 ) ) + newCenter.x() );
 		newP.setY( r * sin( adv_ang * ( i + 2 ) ) + newCenter.y() );
@@ -67,18 +78,18 @@ VSpiral::VSpiral( VObject* parent,
 		else
 			lineTo( newP );
 
-		newCenter += ( newP - newCenter ) * ( 1.0 - fade );
+		newCenter += ( newP - newCenter ) * ( 1.0 - m_fade );
 		oldP = newP;
-		r *= fade;
+		r *= m_fade;
 	}
 
 	// translate path to center:
 	QWMatrix m;
-	m.translate( center.x(), center.y() );
+	m.translate( m_center.x(), m_center.y() );
 
 	// sadly it's not feasible to simply add angle while creation.
 	m.rotate(
-		( angle + ( clockwise ? VGlobal::pi : 0.0 ) ) * // make cw-spiral start at mouse-pointer
+		( m_angle + ( m_clockwise ? VGlobal::pi : 0.0 ) ) * // make cw-spiral start at mouse-pointer
 			VGlobal::one_pi_180 );	// one_pi_180 = 1/(pi/180) = 180/pi.
 
 	VTransformCmd cmd( 0L, m );
@@ -91,4 +102,53 @@ VSpiral::name() const
 	QString result = VObject::name();
 	return !result.isEmpty() ? result : i18n( "Spiral" );
 }
+
+void
+VSpiral::save( QDomElement& element ) const
+{
+	if( state() != deleted )
+	{
+		QDomElement me = element.ownerDocument().createElement( "SPIRAL" );
+		element.appendChild( me );
+
+		VObject::save( me );
+
+		me.setAttribute( "cx", m_center.x() );
+		me.setAttribute( "cy", m_center.y() );
+
+		me.setAttribute( "radius", m_radius );
+		me.setAttribute( "angle", m_angle );
+		me.setAttribute( "fade", m_fade );
+
+		me.setAttribute( "segments", m_segments );
+
+		me.setAttribute( "clockwise", m_clockwise );
+
+		me.setAttribute( "type", m_type );
+	}
+}
+
+void
+VSpiral::load( const QDomElement& element )
+{
+	setState( normal );
+
+	VObject::load( element );
+
+	m_radius  = element.attribute( "radius" ).toDouble(),
+	m_angle = element.attribute( "angle" ).toDouble(),
+	m_fade = element.attribute( "fade" ).toDouble(),
+
+	m_center.setX( element.attribute( "cx" ).toDouble() );
+	m_center.setY( element.attribute( "cy" ).toDouble() );
+
+	m_segments  = element.attribute( "segments" ).toUInt(),
+
+	m_clockwise = element.attribute( "clockwise" ).toInt();
+
+	m_type = element.attribute( "type" ).toInt();
+
+	init();
+}
+
 

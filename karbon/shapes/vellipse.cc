@@ -73,13 +73,15 @@ VEllipse::init()
 	kdDebug() << "midAngle : " << midAngle << endl;*/
 	}
 	//currentAngle += VGlobal::pi_2;
-	double rest = (int)origEndAngle % 90 + 90;
-	midAngle = currentAngle + ( rest / 360.0 ) * VGlobal::pi;
+	double rest = (int)origEndAngle % 90;
+	midAngle = currentAngle - ( rest / 360.0 ) * VGlobal::pi;
+	rest = rest / 2.0;
+	rest = ( rest / 90.0 ) * VGlobal::pi_2;
 	KoPoint end( 0.5 * sin( -endAngle ), 0.5 * cos( -endAngle ) );
-	//arcTo( KoPoint( cos( -midAngle ) * ( 0.5 / cos( rest ) ), -sin( -midAngle ) * ( 0.5 / cos( rest ) ) ), end, 0.5 );
-	lineTo( end );
-	//arcTo( KoPoint( cos( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ),
-	//				-sin( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ) ), end, 0.5 );
+	//arcTo( KoPoint( cos( midAngle ) * ( 0.5 / cos( rest ) ), -sin( midAngle ) * ( 0.5 / cos( rest ) ) ), end, 0.5 );
+	//lineTo( end );
+	arcTo( KoPoint( cos( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ),
+					-sin( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ) ), end, 0.5 );
 	kdDebug() << "ctrl x : " << cos( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ) << endl;
 	kdDebug() << "ctrl y : " << -sin( midAngle ) * ( 0.5 / cos( currentAngle - midAngle ) ) << endl;
 	kdDebug() << "rest : " << rest << endl;

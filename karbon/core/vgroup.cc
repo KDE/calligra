@@ -29,6 +29,8 @@
 #include "shapes/vellipse.h"
 #include "shapes/vrectangle.h"
 #include "shapes/vroundrect.h"
+#include "shapes/vsinus.h"
+#include "shapes/vspiral.h"
 #include "vfill.h"
 #include "vgroup.h"
 #include "vlayer.h"
@@ -202,6 +204,18 @@ VGroup::load( const QDomElement& element )
 				VRoundRect* rectangle = new VRoundRect( this );
 				rectangle->load( e );
 				append( rectangle );
+			}
+			else if( e.tagName() == "SINUS" )
+			{
+				VSinus* sinus = new VSinus( this );
+				sinus->load( e );
+				append( sinus );
+			}
+			else if( e.tagName() == "SPIRAL" )
+			{
+				VSpiral* spiral = new VSpiral( this );
+				spiral->load( e );
+				append( spiral );
 			}
 			else if( e.tagName() == "GROUP" )
 			{
