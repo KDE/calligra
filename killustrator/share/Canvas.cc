@@ -50,7 +50,7 @@
 
 Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidget *parent, const char *name)
    : QWidget (parent, name)
- {
+{
   document = doc;
   resolution = res;
   zoomFactor = 1.0;
@@ -100,7 +100,7 @@ Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidge
   ensureVisibilityFlag = false;
   outlineMode = false;
   pendingRedraws = 0;
- }
+}
 
 Canvas::~Canvas()
  {
@@ -171,6 +171,7 @@ void Canvas::centerPage()
 
 void Canvas::paintEvent (QPaintEvent* e)
  {
+   //kdDebug()<<"Canvas::paintEvent(): width: "<<width()<<" height: "<<height()<<endl;
   pendingRedraws = 0;
 
   QPainter p;
@@ -228,11 +229,12 @@ void Canvas::ensureVisibility (bool flag) {
 }
 
 void Canvas::calculateSize ()
- {
-  buffer->resize(size());
-  repaint();
-  emit sizeChanged ();
- }
+{
+   //kdDebug()<<"Canvas::calcSize(): width: "<<width()<<" height: "<<height()<<endl;
+   buffer->resize(size());
+   repaint();
+   emit sizeChanged ();
+}
 
 void Canvas::setZoomFactor (float factor)
  {
@@ -322,30 +324,28 @@ void Canvas::propagateMouseEvent (QMouseEvent *e)
 }
 
 void Canvas::keyPressEvent (QKeyEvent* e)
- {
-  if (toolController)
-   {
-    toolController->delegateEvent (e, document, this);
-   }
- }
+{
+   if (toolController)
+      toolController->delegateEvent (e, document, this);
+}
 
 bool Canvas::eventFilter (QObject *o, QEvent *e)
- {
-  if(e->type () == QEvent::KeyPress)
+{
+   if(e->type () == QEvent::KeyPress)
    {
-    QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == Key_Tab) {
-      if (toolController->getActiveTool ()->isA ("SelectionTool"))
-        ((SelectionTool *)
-         toolController->getActiveTool ())->processTabKeyEvent (document,
-                                                                this);
-    }
-    else
-      keyPressEvent (ke);
-    return true;
-  }
-  return QWidget::eventFilter(o, e);
- }
+      QKeyEvent *ke = (QKeyEvent *) e;
+      if (ke->key () == Key_Tab)
+      {
+         if (toolController->getActiveTool ()->id()==Tool::ToolSelect)
+            ((SelectionTool *)
+             toolController->getActiveTool ())->processTabKeyEvent (document,this);
+      }
+      else
+         keyPressEvent (ke);
+      return true;
+   }
+   return QWidget::eventFilter(o, e);
+}
 
 void Canvas::moveEvent(QMoveEvent *e) {
     emit visibleAreaChanged (e->pos ().x (), e->pos ().y ());
