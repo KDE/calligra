@@ -158,7 +158,9 @@ bool KoTextFormatterCore::format()
     if ( doc && rtl )
         currentRightMargin += parag->firstLineMargin();
     int initialRMargin = currentRightMargin;
-
+    // Those two things must be done before calling determineCharWidth
+    i = start;
+    parag->tabCache().clear();
 
     // We need the width of the first char for adjustMargins
     QPair<int, int> widths = determineCharWidth();
@@ -204,7 +206,6 @@ bool KoTextFormatterCore::format()
     bool wrapEnabled = settings->isWrapEnabled( parag );
     QValueList<TemporaryWordData> tempWordData;
 
-    i = start;
 #ifdef DEBUG_FORMATTER
     kdDebug(32500) << "Initial KoTextParagLineStart at y=" << y << endl;
 #endif
@@ -230,8 +231,6 @@ bool KoTextFormatterCore::format()
     KoZoomHandler *zh = doc->formattingZoomHandler();
     int pixelx = zh->layoutUnitToPixelX( x );
     int lastPixelx = 0;
-
-    parag->tabCache().clear();
 
     KoTextStringChar* lastChr = 0;
     for ( ; i < len; ++i, ++col ) {
