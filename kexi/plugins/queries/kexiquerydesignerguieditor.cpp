@@ -32,6 +32,7 @@
 #include <kexidb/queryschema.h>
 #include <kexidb/connection.h>
 #include <kexidb/parser/parser.h>
+#include <kexidb/parser/sqlparser.h>
 
 #include <kexiproject.h>
 #include <keximainwindow.h>
@@ -348,13 +349,31 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	}
 
 	//add fields
+	KexiDB::BaseExpr *whereExpr = 0;
+	KexiTableViewData::Iterator it(d->data->iterator());
 	bool fieldsFound = false;
-	for (int i=0; i<(int)d->buffers->size(); i++) {
+	for (int i=0; i<(int)d->buffers->size(); ++it, i++) {
 		KexiPropertyBuffer *buf = d->buffers->at(i);
 		if (buf) {
 			QString tableName = (*buf)["table"].value().toString().stripWhiteSpace();
 			QString fieldName = (*buf)["field"].value().toString();
 			bool fieldVisible = (*buf)["visible"].value().toBool();
+			QString criteriaStr = (*buf)["criteria"].value().toString();
+			KexiDB::BaseExpr *criteriaExpr = 0;
+			if (!criteriaStr.isEmpty()) {
+				criteriaExpr = parseCriteriaString(fieldName, criteriaStr);
+				if (!criteriaExpr) {//for sanity
+					if (errMsg)
+						*errMsg = i18n("Invalid criteria \"%1\"").arg(criteriaStr);
+					delete whereExpr;
+					return false;
+				}
+				//critera ok: add it to WHERE section
+				if (whereExpr)
+					whereExpr = new KexiDB::BinaryExpr(KexiDBExpr_Logical, whereExpr, AND, criteriaExpr);
+				else //first expr.
+					whereExpr =	criteriaExpr;
+			}
 			if (tableName.isEmpty()) {
 				//expresion?
 				//TODO
@@ -368,9 +387,12 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 			}
 			else {
 				KexiDB::TableSchema *t = d->conn->tableSchema(tableName);
-				if (fieldName.find(".*")!=-1) {
+//				if (fieldName.find(".*")!=-1) {
+				if (fieldName=="*") {
 					//single-table asterisk: <tablename> + ".*" + number
 					temp->query->addAsterisk( new KexiDB::QueryAsterisk( temp->query, t ), fieldVisible );
+					if (fieldVisible)
+						fieldsFound = true;
 				} else {
 					if (!t) {
 						kexipluginswarn << "query designer: NO TABLE '" << (*buf)["table"].value().toString() << "'" << endl;
@@ -387,13 +409,27 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 				}
 			}
 		}
+		else {//!buf
+			kexipluginsdbg << it.current()->at(1).toString() << endl;
+			if (!it.current()->at(1).isNull() && it.current()->at(0).isNull()) {
+				kexipluginsdbg << "no field provided!" << endl;
+//TODO: show message about missing field name, and set focus to that cell
+			}
+		}
 	}
 	if (!fieldsFound) {
 		if (errMsg)
 			*errMsg = msgCannotSwitch_EmptyDesign();
 		return false;
 	}
-	//TODO
+	if (whereExpr)
+		kexipluginsdbg << "KexiQueryDesignerGuiEditor::buildSchema(): setting CRITERIA: " << whereExpr->debugString() << endl;
+
+	//set always, because if whereExpr==NULL, 
+	//this will clear prev. expr
+	temp->query->setWhereExpression( whereExpr );
+
+	//TODO?
 	return true;
 }
 
@@ -406,6 +442,9 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &dontStore)
 		return true;
 	}
 	else if (mode==Kexi::DataViewMode) {
+		if (!d->dataTable->tableView()->acceptRowEdit())
+			return cancelled;
+
 		if (!dirty() && parentDialog()->neverSaved()) {
 			KMessageBox::information(this, msgCannotSwitch_EmptyDesign());
 			return cancelled;
@@ -769,8 +808,90 @@ void KexiQueryDesignerGuiEditor::slotTableHidden(KexiDB::TableSchema & /*t*/)
 	setDirty();
 }
 
+//! @todo this is primitive, temporary: reuse SQL parser
+KexiDB::BaseExpr* KexiQueryDesignerGuiEditor::parseCriteriaString(
+	const QString& columnName, const QString& fullString)
+{
+	QString str = fullString.stripWhiteSpace();
+	int len = 0;
+	KexiDB::BaseExpr *expr = 0;
+	int token = 0;
+	if (str.startsWith(">="))
+		token = GREATER_OR_EQUAL;
+	else if (str.startsWith("<="))
+		token = LESS_OR_EQUAL;
+	else if (str.startsWith("<>"))
+		token = NOT_EQUAL;
+	else if (str.startsWith("!="))
+		token = NOT_EQUAL2;
+	else if (str.startsWith("=="))
+		token = '=';
+
+	if (token!=0)
+		len = 2;
+	else if (str.startsWith("=")
+		|| str.startsWith("<")
+		|| str.startsWith(">"))
+	{
+		token = str[0].latin1();
+		len = 1;
+	}
+	else {
+		token = '=';
+	}
+
+	if (token==0)
+		return 0;
+	if (len>0)
+		str = str.mid(len).stripWhiteSpace();
+	if (str.isEmpty())
+		return 0;
+
+	KexiDB::BaseExpr *valueExpr = 0;
+	if (str.left(1)=="\"") {
+		if (str.right(1)!="\"")
+			return 0;
+		valueExpr = new KexiDB::ConstExpr(CHARACTER_STRING_LITERAL, str.mid(1,str.length()-2));
+	}
+	else if (QRegExp("\\d\\d\\d\\d-\\d\\d-\\d\\d").exactMatch( str )) {
+			valueExpr = new KexiDB::ConstExpr(DATE_CONST, QDate::fromString(str, Qt::ISODate));
+	}
+	else if (str[0]>='0' && str[0]<='9' || str[0]=='-' || str[0]=='+') {
+		//number
+		QString decimalSym = KGlobal::locale()->decimalSymbol();
+		const int pos = str.find(decimalSym);
+		bool ok;
+		if (pos>=0) {//real const number
+			const int left = str.left(pos).toInt(&ok);
+			if (!ok)
+				return 0;
+			const int right = str.mid(pos+1).toInt(&ok);
+			if (!ok)
+				return 0;
+			valueExpr = new KexiDB::ConstExpr(REAL_CONST, QPoint(left,right)); //decoded to QPoint
+		}
+		else {
+			//integer const
+			const Q_LLONG val = str.toLongLong(&ok);
+			if (!ok)
+				return 0;
+			valueExpr = new KexiDB::ConstExpr(INTEGER_CONST, val);
+		}
+	}
+	else if (str.lower()=="null") {
+		valueExpr = new KexiDB::ConstExpr(SQL_NULL, QVariant());
+	}
+	else {//identfier
+		if (!Kexi::isIdentifier(str))
+			return 0;
+		valueExpr = new KexiDB::VariableExpr(str);
+	}
+	KexiDB::VariableExpr *varExpr = new KexiDB::VariableExpr(columnName);
+	return new KexiDB::BinaryExpr(KexiDBExpr_Relational, varExpr, token, valueExpr);
+}
+
 void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int colnum, 
-	QVariant newValue, KexiDB::ResultInfo* /*result*/)
+	QVariant newValue, KexiDB::ResultInfo* result)
 {
 	if (colnum==0) {//'field'
 		if (newValue.isNull()) {
@@ -783,7 +904,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 			//auto fill 'table' column
 			QString fieldName = newValue.toString();
 			QString tableName = fieldName;
-			int id = tableName.find('.');
+			const int id = tableName.find('.');
 			if (id>=0)
 				tableName = tableName.left(id);
 			d->data->updateRowEditBuffer(item, 1, tableName, false/*!allowSignals*/);
@@ -831,13 +952,45 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 			buf["visible"] = newValue;
 		}
 	}
-	else if (colnum==3) {//'criteria'
+	else if (colnum==3) {//'totals'
 		//TODO:
 		//unused yet
+		setDirty(true);
 	}
-	else if (colnum==4) {//'totals'
-		//TODO:
-		//unused yet
+	else if (colnum==4) {//'criteria'
+//TODO: this is primitive, temporary: reuse SQL parser
+		QString operatorStr, argStr;
+		KexiDB::BaseExpr* e = 0;
+		const QString str = newValue.toString().stripWhiteSpace();
+//		KexiPropertyBuffer &buf = *propertyBuffer();
+		QString field, table;
+		if (propertyBuffer()) {
+			field = (*propertyBuffer())["field"].value().toString();
+			table = (*propertyBuffer())["table"].value().toString();
+		}
+		if (!str.isEmpty() && (!propertyBuffer() || table=="*" || field.find("*")!=-1)) {
+			//asterisk found! criteria not allowed
+			result->success = false;
+			result->column = 4;
+			if (propertyBuffer())
+				result->msg = i18n("Could not set criteria for \"%1\"")
+					.arg(table=="*" ? table : field);
+			else
+				result->msg = i18n("Could not set criteria for empty row");
+			d->dataTable->tableView()->cancelEditor(); //prevents further editing of this cell
+		}
+		else if (str.isEmpty() || (e = parseCriteriaString("whatevernotempty", str)))
+		{
+			//this is just checking: destroy expr. object
+			delete e;
+      setDirty(true);
+			(*propertyBuffer())["criteria"] = str;
+		} 
+		else {
+			result->success = false;
+			result->column = 4;
+			result->msg = i18n("Invalid criteria \"%1\"").arg(newValue.toString());
+		}
 	}
 }
 
@@ -879,7 +1032,7 @@ KexiPropertyBuffer *
 KexiQueryDesignerGuiEditor::createPropertyBuffer( int row, 
 	const QString& tableName, const QString& fieldName, bool newOne )
 {
-	const bool asterisk = (tableName=="*");
+	const bool asterisk = (tableName=="*" || fieldName.find("*")!=-1);
 	QString typeName = "KexiQueryDesignerGuiEditor::Column";
 	KexiPropertyBuffer *buff = new KexiPropertyBuffer(this, typeName);
 
@@ -910,6 +1063,11 @@ KexiQueryDesignerGuiEditor::createPropertyBuffer( int row,
 	slist << "nosorting" << "ascending" << "descending";
 	nlist << i18n("None") << i18n("Ascending") << i18n("Descending");
 	buff->add(prop = new KexiProperty("sorting", slist[0], slist, nlist, i18n("Sorting")));
+	if (asterisk)
+		prop->setVisible(false);
+
+	buff->add(prop = new KexiProperty("criteria", QVariant(QString::null)) );
+	prop->setVisible(false);
 
 	d->buffers->insert(row, buff, newOne);
 	return buff;

@@ -103,6 +103,9 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		/*! Helper: allocates and initializes new GUI table's row. Doesn't insert it, just returns. */
 		KexiTableItem* createNewRow(const QString& tableName, const QString& fieldName) const;
 
+		KexiDB::BaseExpr* parseCriteriaString(
+			const QString& columnName, const QString& fullString);
+
 	protected slots:
 		void slotDragOverTableRow(KexiTableItem *item, int row, QDragMoveEvent* e);
 		void slotDroppedAtRow(KexiTableItem *item, int row, 
