@@ -314,6 +314,17 @@ TableView, Alter Table
 - Table Cell Editor's Focus is cleared on slotRefreshRequested()
 - fixed columns recreating on data resetting for a table
 
+TableView
+- fixed inserting row (empty or dropped)
+- dropping indicator line is now painted with XOR mode
+- more intuitive dragging and dropping rows: dropping on bottom 1/3 row's area means 
+  dropping below this row
+- dropping after the last row is now possible
+- KexiTableViewData and KexiTableViewPropertyBuffer now supports multiple 
+  rows deletion with cost O(n). KexiTableView is updated properly for this action.
+Alter Table
+- afted hiding table, rows (and prop. buffers) that are connected with it are deleted
+
 2004-06-14
 Core/Parts
 - For all parts: Instance GUI Clients are now splitted for per-view 

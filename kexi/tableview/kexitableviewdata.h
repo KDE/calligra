@@ -264,6 +264,10 @@ public:
 
 	bool deleteRow(KexiTableItem& item);
 
+	/*! Deletes rows (by number) passed with \a rowsToDelete. 
+	 Currently, this method is only for non data-aware tables */
+	void deleteRows( const QValueList<int> &rowsToDelete );
+
 	/*! Inserts new \a item at index \a index. 
 	 \a item will be owned by this data object.
 	 Note: Reasonable only for not not-db-aware version. */
@@ -310,6 +314,9 @@ signals:
 
 	//! Current row has been deleted
 	void rowDeleted(); 
+
+	//! Rows have been deleted
+	void rowsDeleted( const QValueList<int> &rowsToDelete );
 
 	//! Data needs to be refreshed in all presenters.
 	void refreshRequested();

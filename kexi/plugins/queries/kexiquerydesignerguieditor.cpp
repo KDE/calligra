@@ -198,13 +198,30 @@ void KexiQueryDesignerGuiEditor::updateColumsData()
 //	m_fieldColumnData
 	m_dataTable->tableView()->acceptRowEdit();
 
-	//update 'table' and 'field' columns
-	m_tablesColumnData->clear();
-	m_fieldColumnData->clear();
 	QStringList sortedTableNames;
 	for (TablesDictIterator it(*m_relations->tables());it.current();++it)
 		sortedTableNames += it.current()->table()->name();
 	qHeapSort( sortedTableNames );
+
+	//several tables can be hidden now, so remove rows for these tables
+	QValueList<int> rowsToDelete;
+	for (int r = 0; r<(int)m_buffers->size(); r++) {
+		KexiPropertyBuffer *buf = m_buffers->at(r);
+		if (buf) {
+			QString tableName = (*buf)["table"]->value().toString();
+			if (sortedTableNames.end() == qFind( sortedTableNames.begin(), sortedTableNames.end(), tableName )) {
+				//table not found: mark this line for later remove
+				rowsToDelete += r;
+//				buf->add(new KexiProperty("_rm", 0) );
+			}
+		}
+	}
+	m_data->deleteRows( rowsToDelete );
+
+	//update 'table' and 'field' columns
+	m_tablesColumnData->clear();
+	m_fieldColumnData->clear();
+
 	for (QStringList::Iterator it = sortedTableNames.begin(); it!=sortedTableNames.end(); ++it) {
 		//table
 		KexiDB::TableSchema *table = m_relations->tables()->find(*it)->table();

@@ -422,6 +422,8 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 	if (!theSameData) {
 		connect(m_data, SIGNAL(refreshRequested()), this, SLOT(slotRefreshRequested()));
 		connect(m_data, SIGNAL(destroying()), this, SLOT(slotDataDestroying()));
+		connect(m_data, SIGNAL(rowsDeleted( const QValueList<int> & )), 
+			this, SLOT(slotRowsDeleted( const QValueList<int> & )));
 	}
 
 	if (!data) {
@@ -485,6 +487,15 @@ void KexiTableView::slotDataDestroying()
 {
 	m_data = 0;
 }
+
+void KexiTableView::slotRowsDeleted( const QValueList<int> &rows )
+{
+	viewport()->repaint();
+	QSize s(tableSize());
+	resizeContents(s.width(),s.height());
+	setCursor(QMAX(0, d->curRow - rows.count()), -1, true);
+}
+
 
 /*void KexiTableView::addDropFilter(const QString &filter)
 {
@@ -1018,10 +1029,21 @@ inline void KexiTableView::paintRow(KexiTableItem *item,
 		pb->restoreWorldMatrix();
 	}
 
-	if (d->dragIndicatorLine>=0 && d->dragIndicatorLine==r) {
-		pb->setPen( QPen(d->textColor, 3) );
-//		pb->setRasterOp
-		pb->drawLine(0, transly+1, maxwc, transly+1);
+	if (d->dragIndicatorLine>=0) {
+		int y_line = -1;
+		if (r==(rows()-1) && d->dragIndicatorLine==rows()) {
+			y_line = transly+d->rowHeight-3; //draw at last line
+		}
+		if (d->dragIndicatorLine==r) {
+			y_line = transly+1;
+		}
+		if (y_line>=0) {
+			RasterOp op = pb->rasterOp();
+			pb->setRasterOp(XorROP);
+			pb->setPen( QPen(white, 3) );
+			pb->drawLine(0, y_line, maxwc, y_line);
+			pb->setRasterOp(op);
+		}
 	}
 }
 
@@ -2213,7 +2235,12 @@ void KexiTableView::contentsDragMoveEvent(QDragMoveEvent *e)
 	if (d->dropsAtRowEnabled) {
 		QPoint p = e->pos();
 		int row = rowAt(p.y());
-		KexiTableItem *item = m_data->at(row);
+		KexiTableItem *item = 0;
+//		if (row==(rows()-1) && (p.y() % d->rowHeight) > (d->rowHeight*2/3) ) {
+		if ((p.y() % d->rowHeight) > (d->rowHeight*2/3) ) {
+			row++;
+		}
+		item = m_data->at(row);
 		emit dragOverRow(item, row, e);
 		if (e->isAccepted()) {
 			if (d->dragIndicatorLine>=0 && d->dragIndicatorLine != row) {
@@ -2258,6 +2285,9 @@ void KexiTableView::contentsDropEvent(QDropEvent *ev)
 		}
 		QPoint p = ev->pos();
 		int row = rowAt(p.y());
+		if ((p.y() % d->rowHeight) > (d->rowHeight*2/3) ) {
+			row++;
+		}
 		KexiTableItem *item = m_data->at(row);
 		KexiTableItem *newItem = 0;
 		emit droppedAtRow(item, row, ev, newItem);

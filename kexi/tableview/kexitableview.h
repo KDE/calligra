@@ -525,6 +525,7 @@ signals:
 
 protected slots:
 	void slotDataDestroying();
+	void slotRowsDeleted( const QValueList<int> & ); //!< updates display after many rows deletion
 	void columnWidthChanged( int col, int os, int ns );
 	void cancelEditor();
 	virtual bool acceptEditor();

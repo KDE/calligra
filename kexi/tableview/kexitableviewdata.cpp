@@ -569,6 +569,20 @@ bool KexiTableViewData::deleteRow(KexiTableItem& item)
 	return true;
 }
 
+void KexiTableViewData::deleteRows( const QValueList<int> &rowsToDelete )
+{
+	int last_r=0;
+	first();
+	for (QValueList<int>::const_iterator r_it = rowsToDelete.begin(); r_it!=rowsToDelete.end(); ++r_it) {
+		for (; last_r<(*r_it); last_r++) {
+			next();
+		}
+		remove();
+		last_r++;
+	}
+	emit rowsDeleted( rowsToDelete );
+}
+
 void KexiTableViewData::insertRow(KexiTableItem& item, uint index)
 {
 	if (!insert( index = QMIN(index, count()), &item ))

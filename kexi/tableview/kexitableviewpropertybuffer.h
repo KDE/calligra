@@ -81,8 +81,11 @@ class KEXIDATATABLE_EXPORT KexiTableViewPropertyBuffer : public QObject
 		//! Called on row delete in a tableview.
 		void slotRowDeleted();
 
-		//! Called on row empty row insertion in a tableview.
-		void slotEmptyRowInserted(KexiTableItem*, uint /*index*/);
+		//! Called on multiple rows delete in a tableview.
+		void slotRowsDeleted( const QValueList<int> &rows );
+
+		//! Called on \a row insertion in a tableview.
+		void slotRowInserted(KexiTableItem* item, uint row);
 
 		//! Called on selecting another cell in a tableview.
 		void slotCellSelected(int, int row);
