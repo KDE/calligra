@@ -189,6 +189,7 @@ void Page::mousePressEvent(QMouseEvent *e)
       else if (kpobject->getType() == OT_PART)
 	{
 	  kpobject->deactivate();
+	  _repaint(kpobject);
 	  setFocusProxy(0);
 	  setFocusPolicy(QWidget::NoFocus);
 	  return;
@@ -1577,6 +1578,7 @@ void Page::startScreenPresentation(bool zoom)
       else if (kpobject->getType() == OT_PART)
 	{
 	  kpobject->deactivate();
+	  _repaint(kpobject);
 	  setFocusProxy(0);
 	  setFocusPolicy(QWidget::NoFocus);
 	}
@@ -2773,6 +2775,7 @@ void Page::setToolEditMode(ToolEditMode _m)
       else if (kpobject->getType() == OT_PART)
 	{
 	  kpobject->deactivate();
+	  _repaint(kpobject);
 	  setFocusProxy(0);
 	  setFocusPolicy(QWidget::NoFocus);
 	}

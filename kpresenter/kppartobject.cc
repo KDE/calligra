@@ -37,6 +37,7 @@ KPPartObject::KPPartObject(KPresenterChild *_child)
   gColor1 = red;
   gColor2 = green;
   _enableDrawing = true;
+  getNewPic = false;
 }
 
 /*======================== draw ==================================*/
@@ -94,7 +95,8 @@ void KPPartObject::paint(QPainter *_painter)
   if (!_enableDrawing) return;
 
   QPicture* pic;
-  pic = child->draw((zoomed ? presFakt : 1.0),true);
+  pic = child->draw((zoomed ? presFakt : 1.0),(zoomed ? true : getNewPic));
+  getNewPic = false;
 
   _painter->setPen(pen);
   _painter->setBrush(brush);
@@ -147,6 +149,7 @@ void KPPartObject::deactivate()
 {
   view->hide();
   view->view()->mainWindow()->setActivePart(parentID);
+  getNewPic = true;
 }
 
 /*================================================================*/
@@ -165,6 +168,8 @@ void KPPartObject::setSize(int _width,int _height)
       redrawPix = true;
       pix.resize(getSize());
     }
+
+  getNewPic = true;
 }
 
 /*================================================================*/
@@ -183,6 +188,8 @@ void KPPartObject::resizeBy(int _dx,int _dy)
       redrawPix = true;
       pix.resize(getSize());
     }
+
+  getNewPic = true;
 }
 
 /*================================================================*/

@@ -33,3 +33,8 @@ Reggie, 31.1.1999:
 Reggie, 3.2.1999:
 -----------------
 - Some fixes and cleanups in the dialogs
+
+Reggie, 7.2.1999:
+-----------------
+- Fixed strange problems when inserting pages in a presentation with embedded objects
+- Added a small demo presentation with an embedded part (KSpread table)

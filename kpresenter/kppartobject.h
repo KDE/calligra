@@ -90,6 +90,9 @@ public:
 
   void enableDrawing(bool f) { _enableDrawing = f; }
 
+  void setGetNewPic(bool _new)
+    { getNewPic = _new; }
+
 protected:
   void paint(QPainter *_painter);
 
@@ -108,6 +111,8 @@ protected:
   KPresenterChild *child;
   KOffice::MainWindow_var mainWindow;
   OpenParts::Id parentID;
+
+  bool getNewPic;
 
 };
 
