@@ -52,6 +52,7 @@
 #include <qdom.h>
 
 #include <kurl.h>
+#include <kdebug.h>
 #include <kapp.h>
 #include <kurldrag.h>
 #include <ktempfile.h>

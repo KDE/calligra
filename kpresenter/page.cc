@@ -1109,7 +1109,7 @@ void Page::keyPressEvent( QKeyEvent *e )
         {
             kdDebug()<<"m_currentTextObjectView :"<<m_currentTextObjectView<<endl;
             //m_currentTextObjectView->keyPressEvent( e );
-            dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->keyPressEvent( e );
+            dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->handleKeyPressEvent( e );
                 //QApplication::sendEvent( dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView(), e );
         }
     } else if ( mouseSelectedObject ) {

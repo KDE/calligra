@@ -90,7 +90,6 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
 
     m_textobj= new KoTextObject( textdoc, doc->standardStyle());
 
-    //ktextobject.hide();
     m_textobjview=new KPTextView( this );
 
     brush = Qt::NoBrush;
@@ -103,22 +102,9 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
 /*======================= set size ===============================*/
 void KPTextObject::setSize( int _width, int _height )
 {
-//     if ( QSize( _width, _height ) == ext )
-//      return;
-
     KPObject::setSize( _width, _height );
     if ( move )
         return;
-    //ktextobject.resize( ext );
-    // hack, somehow se should rather get rid of the delayed resize in KTextEdit
-
-
-    QApplication::sendPostedEvents( textObjectView() , QEvent::Resize );
-
-
-
-// WTH ? This creates the ficlker when going fullscreen ! (DF)
-    // qApp->processEvents();
 
     if ( fillType == FT_GRADIENT && gradient )
         gradient->setSize( getSize() );
@@ -130,11 +116,6 @@ void KPTextObject::resizeBy( int _dx, int _dy )
     KPObject::resizeBy( _dx, _dy );
     if ( move )
         return;
-
-//ktextobject.resize( ext );
-    QApplication::sendPostedEvents( textObjectView() , QEvent::Resize );
-
-    //qApp->processEvents(); // hack, somehow se should rather get rid of the delayed resize in KTextEdit
 
     if ( fillType == FT_GRADIENT && gradient )
         gradient->setSize( getSize() );
@@ -659,44 +640,4 @@ void KPTextView::pgDownKeyPressed()
 {
     kdDebug()<<"KPTextView::pgDownKeyPressed()\n";
     //todo
-}
-
-void KPTextView::keyPressEvent( QKeyEvent *e )
-{
-    kdDebug()<<"KPTextView::keyPressEvent( QKeyEvent *e )\n";
-    handleKeyPressEvent( e );
-}
-
-void KPTextView::mousePressEvent( QMouseEvent *e)
-{
-    kdDebug()<<"KPTextView::mousePressEvent( QMouseEvent *e)\n";
-}
-
-void KPTextView::mouseMoveEvent( QMouseEvent *, const QPoint & )
-{
-    kdDebug()<<"KPTextView::mouseMoveEvent( QMouseEvent *, const QPoint & )\n";
-}
-
-void KPTextView::mouseReleaseEvent( QMouseEvent *, const QPoint & )
-{
-    kdDebug()<<"KPTextView::mouseReleaseEvent \n";
-}
-
-void KPTextView::mouseDoubleClickEvent( QMouseEvent *, const QPoint &)
-{
-    kdDebug()<<" KPTextView::mouseDoubleClickEvent\n";
-}
-
-void KPTextView::dragEnterEvent( QDragEnterEvent * )
-{
-    kdDebug()<<"KPTextView::dragEnterEvent( QDragEnterEvent * )\n";
-}
-void KPTextView::dragMoveEvent( QDragMoveEvent *, const QPoint & )
-{
-    kdDebug()<<"KPTextView::dragMoveEvent\n";
-}
-
-void KPTextView::dragLeaveEvent( QDragLeaveEvent * )
-{
-    kdDebug()<<"KPTextView::dragLeaveEvent\n";
 }
