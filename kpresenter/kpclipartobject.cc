@@ -131,8 +131,11 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 	pen2 = QPen( Qt::black, 1, Qt::DotLine );
         _painter->setRasterOp( Qt::NotXorROP );
     }
-    else
+    else {
 	pen2 = pen;
+        pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
+    }
+
     _painter->setPen( pen2 );
     int penw = pen.width() / 2;
 

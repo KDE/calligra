@@ -1148,8 +1148,18 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     case INS_DIAGRAMM:
     case INS_TABLE:
     case INS_FORMULA: {
-        if ( !insRect.isNull() ) insertObject( insRect );
-        setToolEditMode( TEM_MOUSE );
+        if ( !insRect.isNull() ) {
+            KPPartObject *kpPartObject = insertObject( insRect );
+            setToolEditMode( TEM_MOUSE );
+
+            activePage()->deSelectAllObj();
+            stickyPage()->deSelectAllObj();
+
+            if ( kpPartObject ) {
+                kpPartObject->activate( m_view );
+                editNum = kpPartObject;
+            }
+        }
     } break;
     case INS_AUTOFORM: {
         bool reverse = insRect.left() > insRect.right() || insRect.top() > insRect.bottom();
@@ -1510,7 +1520,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
                 }
                 m_currentTextObjectView=kptextobject->createKPTextView(this);
 
-                setTextBackground( kptextobject );
+                //setTextBackground( kptextobject );
                 setCursor( arrowCursor );
                 editNum = kpobject;
             }
@@ -4700,12 +4710,13 @@ void KPrCanvas::insertAutoform( const QRect &_r, bool rev )
 }
 
 /*================================================================*/
-void KPrCanvas::insertObject( const QRect &_r )
+KPPartObject* KPrCanvas::insertObject( const QRect &_r )
 {
     QRect r(_r);
     r.moveBy(diffx(),diffy());
     KoRect rect=m_view->zoomHandler()->unzoomRect(r);
-    m_activePage->insertObject( rect, partEntry );
+    KPPartObject *kpPartObject = m_activePage->insertObject( rect, partEntry );
+    return kpPartObject;
 }
 
 /*================================================================*/

@@ -76,6 +76,13 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
     QSize size( _zoomhandler->zoomSize( ext ) );
     int penw = pen.width() / 2;
 
+    QPen pen2;
+    if ( drawContour )
+        pen2 = QPen( Qt::black, 1, Qt::NoPen );
+    else {
+        pen2 = pen;
+        pen2.setWidth( _zoomhandler->zoomItX( pen.width() ) );
+    }
     _painter->save();
 
     if ( angle == 0 ) {
@@ -92,7 +99,7 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
                                   _zoomhandler->zoomItX( ow - 2 * penw ),
                                   _zoomhandler->zoomItY( oh - 2 * penw ) );
         }
-        _painter->setPen( pen );
+        _painter->setPen( pen2 );
         _painter->setBrush( Qt::NoBrush );
         _painter->drawRect( _zoomhandler->zoomItX( penw ), _zoomhandler->zoomItY( penw ),
                             _zoomhandler->zoomItX( ow - 2 * penw ), _zoomhandler->zoomItY( oh - 2 * penw ) );
@@ -114,7 +121,7 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
                                   _zoomhandler->zoomItX( ow - 2 * penw ),
                                   _zoomhandler->zoomItY( oh - 2 * penw ) );
         }
-        _painter->setPen( pen );
+        _painter->setPen( pen2 );
         _painter->setBrush( Qt::NoBrush );
         _painter->drawRect( _zoomhandler->zoomItX( penw ), _zoomhandler->zoomItY( penw ),
                             _zoomhandler->zoomItX( ow - 2 * penw ), _zoomhandler->zoomItY( oh - 2 * penw ) );
@@ -154,12 +161,12 @@ void KPPartObject::paint( QPainter *_painter, KoZoomHandler *_zoomHandler,
         return;
 
     child->document()->paintEverything( *_painter,
-					_zoomHandler->zoomRect( KoRect( KoPoint( 0.0, 0.0 ),
-									getSize() ) ),
+                                        _zoomHandler->zoomRect( KoRect( KoPoint( 0.0, 0.0 ),
+                                                                        getSize() ) ),
                                         true, // flicker?
                                         0 /* View isn't known from here - is that a problem? */,
                                         _zoomHandler->zoomedResolutionX(),
-					_zoomHandler->zoomedResolutionY() );
+                                        _zoomHandler->zoomedResolutionY() );
 }
 
 /*================================================================*/

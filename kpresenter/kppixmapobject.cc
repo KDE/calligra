@@ -160,13 +160,13 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
     QPen pen2;
     if ( drawContour ) {
-	pen2 = QPen( Qt::black, 1, Qt::DotLine );
+        pen2 = QPen( Qt::black, 1, Qt::DotLine );
         _painter->setRasterOp( Qt::NotXorROP );
     }
     else {
-	pen2 = pen;
-	pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
-   }
+        pen2 = pen;
+        pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
+    }
 
     _painter->setPen( pen2 );
     if ( !drawContour )

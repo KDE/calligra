@@ -63,6 +63,7 @@ class KoParagCounter;
 class KPrPage;
 class KPrinter;
 class KPTextView;
+class KPPartObject;
 
 /**
  * Class KPCanvas - There is a single instance of this class for a given view.
@@ -323,7 +324,7 @@ protected:
     void doObjEffects();
     void drawObject( KPObject*, QPixmap*, int, int, int, int, int, int );
 
-    void insertObject( const QRect& );
+    KPPartObject *insertObject( const QRect& );
     void insertAutoform( const QRect&, bool );
     void insertFreehand( const KoPointArray &_pointArray );
     void insertPolyline( const KoPointArray &_pointArray );

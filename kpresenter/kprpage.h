@@ -41,6 +41,7 @@ class KPTextObject;
 class KoTextObject;
 class KPPixmapObject;
 class KoStyle;
+class KPPartObject;
 
 class KPrPage
 {
@@ -126,7 +127,7 @@ public:
     QPen getPen( const QPen & pen );
 
     // insert an object
-    virtual void insertObject( const KoRect&, KoDocumentEntry& );
+    virtual KPPartObject* insertObject( const KoRect&, KoDocumentEntry& );
 
     void insertRectangle( const KoRect &r, const QPen & pen, const QBrush &brush, FillType ft, const QColor &g1, const QColor & g2,BCType gt, int rndX, int rndY, bool unbalanced, int xfactor, int yfactor );
 

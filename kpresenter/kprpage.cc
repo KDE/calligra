@@ -1357,11 +1357,11 @@ void KPrPage::insertClipart( const QString &filename )
     m_doc->addCommand( insertCmd );
 }
 
-void KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
+KPPartObject* KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
 {
     KoDocument* doc = _e.createDoc( m_doc );
     if ( !doc || !doc->initDoc() ) {
-	return;
+	return NULL;
     }
 
     QRect r = QRect( (int)_rect.left(), (int)_rect.top(),
@@ -1382,6 +1382,8 @@ void KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
 
     //emit sig_insertObject( ch, kppartobject );
     m_doc->repaint( false );
+
+    return kppartobject;
 }
 
 bool KPrPage::setLineEnd( LineEnd le )
