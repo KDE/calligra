@@ -38,10 +38,15 @@ class KoStore;
 class KoPictureCollection : public QMap<KoPictureKey, KoPicture>
 {
 public:
+    /**
+     * CollectionPicture: collection with mixed pictures (not completely supported)
+     * CollectionImage: collection with images only
+     * CollectionClipart: collection with cliparts only
+     */
     enum Type {
-        CollectionPicture=0, // Mixed (not completely supported)
-        CollectionImage,     // Images
-        CollectionClipart    // Cliparts
+        CollectionPicture=0,
+        CollectionImage,
+        CollectionClipart
     };
 
     /**
@@ -69,17 +74,21 @@ public:
     KoPicture loadPicture( const QString &fileName );
 
     /**
-     * Save the used cliparts from the collection into the store
+     * Save the used picturess from the collection into the store
      * Usually called from completeSaving().
      *
-     * @param store the store in which to save the cliparts
-     * @param keys the list of keys corresponding to the cliparts to save
+     * @param store the store in which to save the pictures
+     * @param keys the list of keys corresponding to the pictures to save
      */
     void saveToStore(const Type pictureType, KoStore * store, QValueList<KoPictureKey> keys );
 
     /**
      * Generate the <PIXMAPS> or <CLIPARTS> tag, that saves the key and the related
      * relative path in the store (e.g. pictures/picture1.png) for each picture.
+     *
+     * @param pictureType the type of the collection
+     * @param doc the DOM document in which the tags are to be generated
+     * @param keys the list of keys
      */
     QDomElement saveXML(const Type pictureType, QDomDocument &doc,
         QValueList<KoPictureKey> keys );
@@ -89,6 +98,8 @@ public:
      * Read the <PIXMAPS> or <CLIPARTS> tag, and save the result (key<->store-filename associations)
      * into the QMap. You may want to 'new' a QMap in loadXML, and to use and then delete
      * it in completeLoading (to save memory).
+     *
+     * @param pixmapsElem the <PIXMAPS> or <CLIPARTS> element
      */
     StoreMap readXML( QDomElement &pixmapsElem );
     /**
@@ -100,9 +111,13 @@ public:
 
     /**
      * @deprecated
-     * KPresenter uses dateTime.isValid() for images in the collection and
-     * !isValid() for images to be loaded from disk.
-     * This method handles both cases.
+     * KPresenter needs to use the same code for loading images from a collection and
+     * for loading images from disk.
+     *
+     * @param fileName the name of the file to read from disk if needed
+     * @param the date and time
+     *
+     * Formerly, an invalid date/time meant to read the file from disk. This is not the case anymore.
      */
     KoPicture findOrLoad(const QString& fileName, const QDateTime& dateTime);
 

@@ -60,12 +60,12 @@ public:
     KoPictureType::Type getType(void) const;
 
     /**
-     * Retrieve the key structure describing the image in a unique way.
+     * Retrieve the key structure describing the picture in a unique way.
      */
     KoPictureKey getKey(void) const;
 
     /**
-     * Set the key structure describing the image in a unique way
+     * Set the key structure describing the picture in a unique way
      */
     void setKey(const KoPictureKey& key);
 
@@ -79,14 +79,12 @@ public:
      *
      * The parameter @p fastMode allows the picture to be re-sized and drawn quicker if possible
      *
-     * The parameters @p width, @p height define the desired size for the image
-     * Note that the image is being scaled to that size using scale() - except when printing.
-     * This avoids scaling the image at each paint event.
+     * The parameters @p width, @p height define the desired size for the picture
      *
      * The other parameters are very similar to QPainter::drawPixmap :
      * (@p x, @p y) define the position in the painter,
-     * (@p sx, @p sy) specify the top-left point in pixmap that is to be drawn. The default is (0, 0).
-     * (@p sw, @p sh) specify the size of the pixmap that is to be drawn. The default, (-1, -1), means all the way to the bottom
+     * (@p sx, @p sy) specify the top-left point in picture that is to be drawn. The default is (0, 0).
+     * (@p sw, @p sh) specify the size of the picture that is to be drawn. The default, (-1, -1), means all the way to the bottom
      * right of the pixmap.
      *
      */
@@ -103,7 +101,7 @@ public:
     /**
      * Clear and set the mode of this KoPicture
      *
-     * @p newMode is a file extension (like "png") giing the wanted mode
+     * @param newMode a file extension (like "png") giving the wanted mode
      */
     void clearAndSetMode(const QString& newMode);
 
@@ -112,10 +110,13 @@ public:
      */
     void clear(void);
 
+    /**
+     * Load the picture from a file named @p fileName
+     */
     bool loadFromFile(const QString& fileName);
 
     /**
-     * Load a potentially broken XPM file (for KPresenter)
+     * Load a potentially broken XPM file (for old files of KPresenter)
      */
     bool loadXpm(QIODevice* io);
 
@@ -123,6 +124,8 @@ public:
      * @deprecated
      * Returns a QPixmap from an image
      * Returns an empty QPixmap if the KoPicture is not an image.
+     *
+     * To be replaced by @ref KoPicture::draw
      */
     QPixmap generatePixmap(const QSize& size);
 
@@ -144,7 +147,15 @@ protected:
     void createSharedData(void);
 
 protected:
+    /*
+     * @internal
+     * The key
+     */
     KoPictureKey m_key;
+    /**
+     * @internal
+     * The shared data
+     */
     KoPictureShared* m_sharedData;
 };
 
