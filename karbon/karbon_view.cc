@@ -67,6 +67,7 @@
 #include "vstrokefillpreview.h"
 #include "vstatebutton.h"
 #include <kaction.h>
+#include <kdeversion.h>
 
 #include <tkfloatspinboxaction.h>
 
@@ -982,7 +983,9 @@ KarbonView::initActions()
     m_joinStyle->addState( new QPixmap( "pics/hi22-action-14_star.png" ) );
     m_joinStyle->addState( new QPixmap( "pics/hi22-action-14_rotate.png" ) );
     m_joinStyle->setState( 0 );
-	KWidgetAction *join = new KWidgetAction( m_joinStyle, i18n("Set Join Style"), 0, this, SLOT( slotJoinStyleClicked() ), actionCollection(), "setJoinStyle" );
+#if KDE_VERSION >= 305
+	new KWidgetAction( m_joinStyle, i18n("Set Join Style"), 0, this, SLOT( slotJoinStyleClicked() ), actionCollection(), "setJoinStyle" );
+#endif
 	connect( m_joinStyle, SIGNAL(clicked()), this, SLOT(slotJoinStyleClicked()) );
 
 	// toolbox ---->
