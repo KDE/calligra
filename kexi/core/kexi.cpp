@@ -96,8 +96,9 @@ QValidator::State IdentifierValidator::validate( QString& input, int& pos ) cons
 	return input.isEmpty() ? Valid : Acceptable;
 }
 
-KexiValidator::Result IdentifierValidator::internalCheck(const QString &valueName, QVariant v, 
-	QString &message, QString &)
+KexiValidator::Result IdentifierValidator::internalCheck(
+	const QString &valueName, const QVariant& v, 
+	QString &message, QString &details)
 {
 	if (Kexi::isIdentifier(v.toString()))
 		return KexiValidator::Ok;

@@ -66,11 +66,11 @@ namespace Kexi
 	{
 		public:
 			IdentifierValidator(QObject * parent = 0, const char * name = 0);
-			~IdentifierValidator();
+			virtual ~IdentifierValidator();
 			virtual State validate( QString & input, int & pos) const;
 
 		protected:
-			virtual Result internalCheck(const QString &valueName, QVariant v, 
+			virtual Result internalCheck(const QString &valueName, const QVariant& v, 
 				QString &message, QString &details);
 	};
 
