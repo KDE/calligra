@@ -41,8 +41,8 @@
 #include <GPixmap.h>
 #include <GCurve.h>
 #include "GDocument.h"
-#include "../koffice/GPart.h"
-#include "../koffice/KIllustrator_doc.h"
+#include "GPart.h"
+#include "KIllustrator_doc.h"
 
 #include <iostream.h>
 
