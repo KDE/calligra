@@ -718,8 +718,8 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 
 		double cx = gradient.origin().x() * m_zoomFactor;
 		double cy = gradient.origin().y() * m_zoomFactor;
-		double fx = cx; // TODO : fx, fy should be able to be different
-		double fy = cy;
+		double fx = gradient.focalPoint().x() * m_zoomFactor;
+		double fy = gradient.focalPoint().y() * m_zoomFactor;
 		double r = sqrt( pow( gradient.vector().x() - gradient.origin().x(), 2 ) +
 						 pow( gradient.vector().y() - gradient.origin().y(), 2 ) );
 		r *= m_zoomFactor;

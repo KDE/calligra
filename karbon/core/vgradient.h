@@ -94,6 +94,9 @@ public:
 	KoPoint origin() const { return m_origin; }
 	void setOrigin( const KoPoint &origin ) { m_origin = origin; }
 
+	KoPoint focalPoint() const { return m_focalPoint; }
+	void setFocalPoint( const KoPoint &focalPoint ) { m_focalPoint = focalPoint; }
+
 	KoPoint vector() const { return m_vector; }
 	void setVector( const KoPoint &vector ) { m_vector = vector; }
 
@@ -111,6 +114,7 @@ private:
 
 	// coordinates:
 	KoPoint m_origin;
+	KoPoint m_focalPoint;
 	KoPoint m_vector;
 }; // VGradient
 

@@ -57,10 +57,11 @@ VGradient::VGradient( const VGradient& gradient )
 {
 	m_colorStops.setAutoDelete( true );
 
-	m_origin       = gradient.m_origin;
-	m_vector       = gradient.m_vector;
-	m_type         = gradient.m_type;
-	m_repeatMethod = gradient.m_repeatMethod;
+	m_origin		= gradient.m_origin;
+	m_focalPoint	= gradient.m_focalPoint;
+	m_vector		= gradient.m_vector;
+	m_type			= gradient.m_type;
+	m_repeatMethod	= gradient.m_repeatMethod;
 
 	m_colorStops.clear();
 	QPtrVector<VColorStop> cs = gradient.colorStops();
@@ -76,10 +77,11 @@ VGradient& VGradient::operator=( const VGradient& gradient )
 	if ( this == &gradient )
 		return *this;
 
-	m_origin       = gradient.m_origin;
-	m_vector       = gradient.m_vector;
-	m_type         = gradient.m_type;
-	m_repeatMethod = gradient.m_repeatMethod;
+	m_origin		= gradient.m_origin;
+	m_focalPoint	= gradient.m_focalPoint;
+	m_vector		= gradient.m_vector;
+	m_type			= gradient.m_type;
+	m_repeatMethod	= gradient.m_repeatMethod;
 
 	m_colorStops.clear();
 	QPtrVector<VColorStop> cs = gradient.colorStops();
@@ -135,6 +137,8 @@ VGradient::save( QDomElement& element ) const
 
 	me.setAttribute( "originX", m_origin.x() );
 	me.setAttribute( "originY", m_origin.y() );
+	me.setAttribute( "focalX", m_focalPoint.x() );
+	me.setAttribute( "focalY", m_focalPoint.y() );
 	me.setAttribute( "vectorX", m_vector.x() );
 	me.setAttribute( "vectorY", m_vector.y() );
 	me.setAttribute( "type", m_type );
@@ -160,6 +164,8 @@ VGradient::load( const QDomElement& element )
 {
 	m_origin.setX( element.attribute( "originX", "0.0" ).toDouble() );
 	m_origin.setY( element.attribute( "originY", "0.0" ).toDouble() );
+	m_focalPoint.setX( element.attribute( "focalX", "0.0" ).toDouble() );
+	m_focalPoint.setY( element.attribute( "focalY", "0.0" ).toDouble() );
 	m_vector.setX( element.attribute( "vectorX", "0.0" ).toDouble() );
 	m_vector.setY( element.attribute( "vectorY", "0.0" ).toDouble() );
 	m_type = (VGradientType)element.attribute( "type", 0 ).toInt();
@@ -189,7 +195,8 @@ VGradient::load( const QDomElement& element )
 void
 VGradient::transform( const QWMatrix &m )
 {
-	m_origin = m_origin.transform( m );	
-	m_vector = m_vector.transform( m );	
+	m_origin		= m_origin.transform( m );	
+	m_focalPoint	= m_focalPoint.transform( m );	
+	m_vector		= m_vector.transform( m );	
 }
 
