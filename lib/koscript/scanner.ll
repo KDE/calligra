@@ -174,6 +174,7 @@ Esc_Sequence            ({Esc_Sequence1}|{Esc_Sequence2}|{Esc_Sequence3})
 Char                    ([^\n\t\"\'\\]|{Esc_Sequence})
 Char_Literal            "'"({Char}|\")"'"
 String_Literal          \"({Char}|"'")*\"
+Table_Name              [A-Z a-z0-9\x80-\xff]+
 
 Plain_Float_Literal1    {Digits}"."{Digits}(e|E)("+"|"-")?{Digits}
 Plain_Float_Literal2    {Digits}(e|E)("+"|"-")?{Digits}
@@ -237,13 +238,14 @@ KScript_Identifier      [_a-zA-Z][a-zA-Z0-9_]*
                           return T_CELL;
                        };
 
-[A-Z a-z0-9]+"!""$"?[A-Za-z]+"$"?{Digits} {
+{Table_Name}"!""$"?[A-Za-z]+"$"?{Digits} {
                           if ( !s_kspread )
                           {
                                 yylval.ident = new QString( yytext );
                                 return T_IDENTIFIER;
                           }
-                          yylval._str = new QString( yytext );
+                          QString s = QString::fromUtf8( yytext );
+                          yylval._str = new QString( s );
                           return T_CELL;
                        };
 
@@ -257,23 +259,25 @@ KScript_Identifier      [_a-zA-Z][a-zA-Z0-9_]*
                           return T_RANGE;
                        };
 
-[A-Z a-z0-9]+"!""$"?[A-Za-z]+"$"?{Digits}":""$"?[A-Za-z]+"$"?{Digits} {
+{Table_Name}"!""$"?[A-Za-z]+"$"?{Digits}":""$"?[A-Za-z]+"$"?{Digits} {
                           if ( !s_kspread )
                           {
                                 yylval.ident = new QString( yytext );
                                 return T_IDENTIFIER;
                           }
-                          yylval._str = new QString( yytext );
+                          QString s = QString::fromUtf8( yytext );
+                          yylval._str = new QString( s );
                           return T_RANGE;
                        };
 
-<KSPREAD>"'"[A-Za-z]+"'" {
+<KSPREAD>"'"[A-Za-z\x80-\xff]+"'" {
                           if ( !s_kspread )
                           {
                                 yylval.ident = new QString( yytext );
                                 return T_IDENTIFIER;
                           }
-                          yylval._str = new QString( yytext );
+                          QString s = QString::fromUtf8( yytext );
+                          yylval._str = new QString( s );
                           return T_RANGE;
                        };
 
