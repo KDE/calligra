@@ -3284,9 +3284,6 @@ formatAgain:
 	r.setWidth( QMIN( usedw, r.width() ) );
     }
 
-    if ( !prev() && topMargin() > 0 )
-	r.setY( topMargin() );
-
     if ( y != r.height() )
 	r.setHeight( y );
 
@@ -4510,8 +4507,8 @@ int QTextFormatterBreakInWords::format( QTextDocument *doc,QTextParag *parag,
     int left = doc ? parag->leftMargin() + 4 : 4;
     int x = left + ( doc ? parag->firstLineMargin() : 0 );
     int dw = parag->documentVisibleWidth() - ( doc ? 8 : 0 );
-    int y = 0;
-    int h = 0;
+    int y = doc->addMargins() ? parag->topMargin() : 0;
+    int h = y;
     int len = parag->length();
     if ( doc )
 	x = doc->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), x, 4 );
@@ -4525,7 +4522,7 @@ int QTextFormatterBreakInWords::format( QTextDocument *doc,QTextParag *parag,
 	c = &parag->string()->at( 0 );
 
     int i = start;
-    QTextParagLineStart *lineStart = new QTextParagLineStart( 0, 0, 0 );
+    QTextParagLineStart *lineStart = new QTextParagLineStart( y, y, 0 );
     insertLineStart( parag, 0, lineStart );
 
     int col = 0;
@@ -4602,7 +4599,7 @@ int QTextFormatterBreakInWords::format( QTextDocument *doc,QTextParag *parag,
     }
 
     int m = parag->bottomMargin();
-    if ( parag->next() )
+    if ( parag->next() && !doc->addMargins() )
 	m = QMAX( m, parag->next()->topMargin() );
     parag->setFullWidth( fullWidth );
     if ( is_printer( parag->painter() ) ) {
@@ -4633,8 +4630,8 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     int left = doc ? parag->leftMargin() + 4 : 0;
     int x = left + ( doc ? parag->firstLineMargin() : 0 );
     int curLeft = left;
-    int y = 0;
-    int h = 0;
+    int y = doc->addMargins() ? parag->topMargin() : 0;
+    int h = y;
     int len = parag->length();
     if ( doc )
 	x = doc->flow()->adjustLMargin( y + parag->rect().y(), parag->rect().height(), x, 4 );
@@ -4655,7 +4652,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	c = &parag->string()->at( 0 );
 
     int i = start;
-    QTextParagLineStart *lineStart = new QTextParagLineStart( 0, 0, 0 );
+    QTextParagLineStart *lineStart = new QTextParagLineStart( y, y, 0 );
     insertLineStart( parag, 0, lineStart );
     int lastBreak = -1;
     int tmpBaseLine = 0, tmph = 0;
@@ -4837,12 +4834,8 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     minw = QMAX( minw, tminw );
 
     int m = parag->bottomMargin();
-    if ( parag->next() ) {
-	if ( !doc->addMargins() )
-	    m = QMAX( m, parag->next()->topMargin() );
-	else
-	    m += parag->next()->topMargin();
-    }
+    if ( parag->next() && !doc->addMargins() )
+	m = QMAX( m, parag->next()->topMargin() );
     parag->setFullWidth( fullWidth );
     if ( is_printer( parag->painter() ) ) {
 	QPaintDeviceMetrics metrics( parag->painter()->device() );
