@@ -662,7 +662,7 @@ void KSpreadView::initializeGlobalOperationActions()
   lst1 << "500%";
 
   m_viewZoom->setItems( lst1 );
-  m_viewZoom->setCurrentItem( 2 );
+  m_viewZoom->setCurrentItem( 4 );
 
   m_formulaSelection = new KSelectAction(i18n("Formula Selection"), 0,
                                          actionCollection(), "formulaSelection");
@@ -3226,12 +3226,12 @@ void KSpreadView::viewZoom( const QString & s )
 
   if( newZoom != oldZoom )
   {
-    double d = (double) newZoom / 100 ;
+//    double d = (double) newZoom / 100 ;
     setZoom( newZoom, true );
   }
 }
 
-void KSpreadView::setZoom( int zoom, bool updateViews )
+void KSpreadView::setZoom( int zoom, bool /*updateViews*/ )
 {
   // Set the zoom in KoView (for embedded views)
   KoView::setZoom( (double) zoom / 100 );
