@@ -106,6 +106,13 @@
 //#define TEST_PIXMAP
 //#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
 
+/*
+    KisView - constructor.  What is a KoView?  A widget, but it 
+    also seems to be a hybrid or composite of several koffice objects 
+    designed to contain the document and display it. Every koffice app 
+    does it differently but krayon's is the exemplary view which sets 
+    the standard.   A document can have more than one view. 
+*/
 KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     : KoView( doc, parent, name )
     , m_pDoc( doc )
@@ -148,6 +155,10 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     setupTools();
 }
 
+/*
+    KisView destructor.  Delete objects created apart from the
+    widget and its children.
+*/
 KisView::~KisView()
 {
     if(m_pPixmap) delete m_pPixmap;
@@ -168,8 +179,9 @@ void KisView::setupPainter()
     pass signals (messages) on to the tools and to create an area on
     which to show the content of the document (the image).  Note that
     while the depth of the image is not limited, the depth of the 
-    pixmap displayed on the widget is limited to the hardware depth, 
-    which is often 16 bit even though the KisImage is 32 bit.
+    pixmap displayed on the widget is limited to the hardware display 
+    depth, which is often 16 bit even though the KisImage is 32 bit and
+    can eventually be extended to 64 bit.
 */
 void KisView::setupCanvas()
 {
@@ -191,8 +203,10 @@ void KisView::setupCanvas()
 
 /*
     Canvas pixmap for offscreen paint device - experimental way
-    tried to speed up rendering of zoomed views.  Not used and
-    not needed anymore because a better method was discovered!
+    to speed up rendering of zoomed views.  Not used and not needed 
+    anymore because a better method was discovered! But, ther may
+    be a use for it with guidelines and grids, so keep it.  It uses
+    very little memory until the pixmap is given a size.
 */
 void KisView::setupPixmap()
 {
@@ -202,8 +216,8 @@ void KisView::setupPixmap()
 
 /*
     SideBar - has tabs for brushes, layers, channels, etc.
-    Nonstandard, but you can't unrelieved uniformity is the
-    mark of small minds.
+    Nonstandard, but you who sets the standards?  Unrelieved 
+    uniformity is the mark of small minds.
 */
 void KisView::setupSideBar()
 {
@@ -292,7 +306,10 @@ void KisView::setupSideBar()
     m_side_bar->setChecked( true );
 }
 
-
+/*
+    setupScrollBars - setting them up is easy.  Now why don't the
+    darned scroll bars always show up when they should?
+*/
 void KisView::setupScrollBars()
 {
     m_pVert = new QScrollBar( QScrollBar::Vertical, this );
@@ -310,8 +327,9 @@ void KisView::setupScrollBars()
 }
 
 /*
-    Where's the numbers on the ruler?  What about a grid aligned
-    to the rulers.  Coming....
+    Where are the numbers on the ruler?  What about a grid aligned
+    to the rulers. We also need to change the tick marks as zoom
+    levels change. Coming....
 */
 void KisView::setupRulers()
 {
@@ -330,12 +348,13 @@ void KisView::setupRulers()
     m_pVRuler->setLineWidth(1);
 }
 
-/*
-    TabBar for the image(s) - Nonstandard sidebar with custom tabbed
-    widgets violates korifice style guidelines, but hey, my users want
-    a guit that works!
-*/
 
+/*
+    TabBar for the image(s) - one tab per image. This Nonstandard(tm) 
+    sidebar with custom tabbed widgets violates koffice style guidelines, 
+    but krayon's users want a gui that works!  They have no patience with
+    kde's toolbar/sdi religion and its ayatollahs.
+*/
 void KisView::setupTabBar()
 {
     // tabbar
@@ -367,15 +386,16 @@ void KisView::setupTabBar()
 }
 
 /*
-    set up and create tools - possibly no need to create all these objects
-    until we first click on them - only create default tool to  start.
-    however, these don't take long to set up, the entire kis_view takes less
-    than 3 seconds start to finish, so why not.
+    setupToos - create tools. Possibly there is no need to create all 
+    these objects until we first click on them - only create default tool 
+    to start. However, these don't take long to set up.  The entire 
+    kis_view takes less than 2 seconds to initiate from start to finish, 
+    so why not.
 */
 void KisView::setupTools()
 {
     m_pZoomTool = new ZoomTool(this);
-    m_pMoveTool = new MoveTool(m_pDoc);
+    m_pMoveTool = new MoveTool(m_pDoc, this);
 
     m_pRectangularSelectTool = new RectangularSelectTool( m_pDoc, this, m_pCanvas );
     m_pPolygonalSelectTool = new PolygonalSelectTool( m_pDoc, this, m_pCanvas );
@@ -404,8 +424,8 @@ void KisView::setupTools()
 }
 
 /*
-    -jwc- todo: gradient dialog should be a tool options dialog 
-    setupDialogs should be used for docking and undocking
+    setupDialogs -jwc- todo: gradient dialog should be a tool 
+    options dialog setupDialogs should be used for docking and undocking
     tabbed widgets in the sidebar, which can also be dialogs
 */
 void KisView::setupDialogs()
@@ -432,12 +452,13 @@ void KisView::setupDialogs()
 
 /*
     Actions - these seem to be menu actions, toolbar actions
-    and keyboard actions.  Any action can have any of these forms,
-    at least.  However, using Kde's brain-dead xmlGui because it
-    is the "right(tm)" thing to do, slots cannot take any paramaters
-    and each handler must have its own method, greatly increasing
-    code size and precluding consolidation or related actions. For
-    every action there is an equal and opposite reaction.  
+    and keyboard actions.  Any action can take on any of these forms,
+    at least.  However, using Kde's brain-damaged xmlGui because it
+    is the "right(tm)" thing to do, slots cannot take any paramaters 
+    and each handler must have its own method, greatly increasing 
+    code size and precluding consolidation or related actions, not to
+    mention slower startup required by interpretation of rc files.
+    For every action there is an equal and opposite reaction.  
 */
 
 void KisView::setupActions()
@@ -830,13 +851,12 @@ void KisView::setupActions()
 }
 
 /*
-    slotHalt - try to restore reasonabe defaults for a user
-    who may have pushed this app beyond its limits or the
-    limits of his hardware and system memory - didn't
-    know krayon had any limits, though!  This usually happens
+    slotHalt - try to restore reasonable defaults for a user
+    who may have pushed krayon beyond its limits or the
+    limits of his/her hardware and system memory!  This can happen
     when someone sets a ridiculously high zoom factor which
     requires a supercomputer for all the floating point 
-    calculatons.
+    calculatons.  Krayon is not idiot proof!
 */
 void KisView::slotHalt()
 {
@@ -859,7 +879,7 @@ void KisView::slotGimp()
 }
 
 /*
-
+    slotTabSelected - these refer to the tabs for images
 */
 void KisView::slotTabSelected(const QString& name)
 {
@@ -885,9 +905,11 @@ void KisView::showScrollBars()
 
 
 /*
-    resizeEvent - only via a QResizeEvent are things shown
+    resizeEvent - only via a resize event are things shown
     in the view.  To start, nothing is shown.  The first
     resize comes when the objects to be shown are created.
+    This methold handles much which is not obvious, reducing
+    the need for so many methods to explicitly resize things.
 */
 void KisView::resizeEvent(QResizeEvent*)
 {
@@ -986,8 +1008,6 @@ void KisView::resizeEvent(QResizeEvent*)
     m_pPixmap->resize(drawW, drawH);
 #endif
 
-    // scrollbar geometry
-    
      // we need no scrollbars
     if (docH <= drawH && docW <= drawW)
     {
@@ -1009,7 +1029,8 @@ void KisView::resizeEvent(QResizeEvent*)
         m_pVert->hide();
         m_pVert->setValue(0);
 
-        m_pHorz->setRange(0, docW - drawW);
+        //m_pHorz->setRange(0, docW - drawW);
+        m_pHorz->setRange(0, (int)((docW - drawW)/zoomFactor()));
         m_pHorz->setGeometry(tbarOffset + lsideW + (width() - rsideW -lsideW - tbarOffset)/2, 
             height() - tbarBtnH, (width() - rsideW -lsideW - tbarOffset)/2, tbarBtnH);
         m_pHorz->show();
@@ -1027,7 +1048,8 @@ void KisView::resizeEvent(QResizeEvent*)
         m_pHorz->hide();
         m_pHorz->setValue(0);
 
-        m_pVert->setRange(0, docH - drawH);
+        //m_pVert->setRange(0, docH - drawH);
+        m_pVert->setRange(0, (int)((docH - drawH)/zoomFactor()));                
         m_pVert->setGeometry(width() - tbarBtnW - rsideW, ruler, 
             tbarBtnW, height() - (ruler + tbarBtnH));
         m_pVert->show();
@@ -1042,12 +1064,14 @@ void KisView::resizeEvent(QResizeEvent*)
     // we need both scrollbars
     else 
     {
-        m_pVert->setRange(0, docH - drawH);
+        //m_pVert->setRange(0, docH - drawH);
+        m_pVert->setRange(0, (int)((docH - drawH)/zoomFactor()));        
         m_pVert->setGeometry(width() - tbarBtnW - rsideW, ruler, 
             tbarBtnW, height() - (ruler + tbarBtnH));    
         m_pVert->show();
       
-        m_pHorz->setRange(0, docW - drawW);
+        //m_pHorz->setRange(0, docW - drawW);
+        m_pHorz->setRange(0, (int)((docW - drawW)/zoomFactor()));        
         m_pHorz->setGeometry(tbarOffset + lsideW + (width() - rsideW -lsideW - tbarOffset)/2, 
            height() - tbarBtnH, (width() - rsideW -lsideW - tbarOffset)/2, tbarBtnH);
         m_pHorz->show();
@@ -1060,6 +1084,8 @@ void KisView::resizeEvent(QResizeEvent*)
         m_pTabBar->show();
     }
 
+    // ruler geometry - need to adjust for zoom factor -jwc-
+    
     // ruler ranges
     m_pVRuler->setRange(0, docH);
     m_pHRuler->setRange(0, docW);
@@ -1082,53 +1108,58 @@ void KisView::resizeEvent(QResizeEvent*)
     //   << " Canvas Height: " << m_pCanvas->height() << endl;
 }
 
-
+/*
+    updateReadWrite - for the functionally illiterate
+*/
 void KisView::updateReadWrite( bool /*readwrite*/ )
 {
 }
 
 
 /* 
-    scrollH - This sends a paint event to canvas,
-    and it is handled in canvasGotPaintEvent().
+    scrollH - This sends a paint event to canvas
+    when you scroll horizontally, handled in canvasGotPaintEvent().  
+    The ruler offset is adjusted to the scrollbar value.  Its scale
+    needs to adjusted for zoom factor here.
 */
 void KisView::scrollH(int)
 {
+    
     m_pHRuler->setOffset(m_pHorz->value());
-        m_pCanvas->repaint();
+    m_pCanvas->repaint();
 }
 
 /* 
-    scrollV - This sends a paint event to canvas,
-    and it is handled in canvasGotPaintEvent()
+    scrollH - This sends a paint event to canvas
+    when you scroll vertically, handled in canvasGotPaintEvent().  
+    The ruler offset is adjusted to the scrollbar value.  Its scale
+    needs to adjusted for zoom factor here.
 */
 void KisView::scrollV(int)
 {
     m_pVRuler->setOffset(m_pVert->value());
-        m_pCanvas->repaint();
+    m_pCanvas->repaint();
 }
 
 /*
-    slotUpdateImage - a cheap hack to mark the
-    entire image dirty to force a repaint AND to
-    send a fake resize event to force the view to
-    show the scrollbars
+    slotUpdateImage - a cheap hack to mark the entire image 
+    dirty to force a repaint AND to send a fake resize event 
+    to force the view to show the scrollbars
 */
 void KisView::slotUpdateImage()
 {
-  KisImage* img = m_pDoc->current();
-  if(img)
-  {
-     QRect updateRect(0, 0, img->width(), img->height());
-     img->markDirty(updateRect);
-     showScrollBars();
-  }   
+    KisImage* img = m_pDoc->current();
+    if(img)
+    {
+         QRect updateRect(0, 0, img->width(), img->height());
+        img->markDirty(updateRect);
+        showScrollBars();
+    }   
 }
-
 
 /*
     slotDocUpdated - response to a signal from 
-    the document that something has changed and that we
+    the document that content has changed and that we
     need to update the canvas -  no size of update area given, 
     so show entire image (that portion which should be shown 
     in canvas viewport).
@@ -1141,14 +1172,13 @@ void KisView::slotDocUpdated()
 
 /*
     slotDocUpdated - response to a signal from 
-    the document that something has changed and that we
+    the document that content has changed and that we
     need to update the canvas -  a definite update area 
-    is given, so only update that update rectangle.
+    is given, so only update that rectangle's contents.
 */
 void KisView::slotDocUpdated(const QRect& rect)
 {
     //kdDebug() << "slotDocUpdated(const QRect& rect)" << endl;
-
     KisImage* img = m_pDoc->current();
     if (!img) return;
 
@@ -1166,7 +1196,9 @@ void KisView::slotDocUpdated(const QRect& rect)
     p.scale( zoomFactor(), zoomFactor() ); 
     p.translate(xt, yt);
 
-    // let the document draw the image 
+    // This is the place where image is drawn on the canvas  
+    // p is the paint device, ur is the update rectangle,
+    // bool transparency, ptr to the particular view to update
    
     koDocument()->paintEverything( p, ur, FALSE, this );
     p.end();
@@ -1174,14 +1206,13 @@ void KisView::slotDocUpdated(const QRect& rect)
 
 /*
     updateCanvas - update canvas regardless of paint event
-    for transferring offscreen imagePixmap updates
-    that do not generate paint events to view screen 
-    or viewport.
+    for transferring offscreen updates that do not generate 
+    paint events for the canvas widget which is the viewport 
+    for the view.
 */
 void KisView::updateCanvas( QRect & ur )
 {
     //kdDebug() << "updateCanvas(QRect & ur)" << endl;
-
     KisImage* img = m_pDoc->current();
     if (!img)
     {
@@ -1196,22 +1227,27 @@ void KisView::updateCanvas( QRect & ur )
 
     QPainter p;
     p.begin( m_pCanvas);
-
     p.scale( zoomFactor(), zoomFactor() );
 
-    // draw background
-    p.eraseRect( 0, 0, xPaintOffset(), height() );
-    p.eraseRect( xPaintOffset(), 0, width(), yPaintOffset() );
+    // erase strip along left side 
+    p.eraseRect(0, 0, xPaintOffset(), height());
+ 
+    // erase strip along top
+    p.eraseRect(xPaintOffset(), 0, width(), yPaintOffset());
+
+    // erase area to the right of canvas - account for zoomed width of doc
     p.eraseRect( xPaintOffset(), yPaintOffset() + docHeight(), 
         width(), height() );
-    p.eraseRect( xPaintOffset() + docWidth(), yPaintOffset(), 
+
+    // erase area below the canvas - account for zoomed height of doc
+    p.eraseRect( xPaintOffset() + docWidth(),  yPaintOffset(),  
         width(), height() );
 
     // reduce size of update rectangle by inverse of zoom factor
     // only do this at higher zooms because otherwise the overhead
     // of this scaling isn't worth it. 
         
-    if(zoomFactor() > 1.0)
+    if(zoomFactor() > 1.0 || zoomFactor() < 1.0)
     {
         int urW = ur.width();
         int urH = ur.height();
@@ -1242,16 +1278,20 @@ void KisView::updateCanvas( QRect & ur )
 
     p.translate(xt, yt);
   
-    // ### This is the place where image is drawn to view ###
+    // This is the place where image is drawn on the canvas  
+    // p is the paint device, ur is the update rectangle,
+    // bool transparency, ptr to the particular view to update
+
     m_pDoc->paintContent(p, ur); 
     p.end();
 }
 
-
+/*
+    canvasGotPaintEvent - handles repaint of canvas (image) area
+*/
 void KisView::canvasGotPaintEvent( QPaintEvent*e )
 {
     //kdDebug() << "canvasGotPaintEvent()" << endl;
-    
     KisImage* img = m_pDoc->current();
     if (!img)
     {
@@ -1268,25 +1308,27 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
     QPainter p;
     p.begin( m_pCanvas );
     p.scale( zoomFactor(), zoomFactor() );
- 
-    // this has no effect so long as paint offsets are zero    
+
+    // erase strip along left side 
     p.eraseRect( 0, 0, xPaintOffset(), height() );
+ 
+    // erase strip along top
     p.eraseRect( xPaintOffset(), 0, width(), yPaintOffset() );
 
-    // erase area to the right of canvas
+    // erase area to the right of canvas - account for zoomed width of doc
     p.eraseRect( xPaintOffset(), yPaintOffset() + docHeight(), 
         width(), height() );
 
-    // erase area below the canvas
-    p.eraseRect( xPaintOffset() + docWidth(), yPaintOffset(), 
+    // erase area below the canvas - account for zoomed height of doc
+    p.eraseRect( xPaintOffset() + docWidth(),  yPaintOffset(),  
         width(), height() );
 
     // reduce size of update rectangle by inverse of zoom factor
     // also reduce offset into image by same factor (1/zoomFactor())
-    // only do this at higher zooms because otherwise the overhead
-    // of this scaling isn't worth it. 
+    // only do this at higher/lower zooms because the overhead
+    // of this scaling isn't worth it at normal zoom. 
         
-    if(zoomFactor() > 1.0)
+    if(zoomFactor() > 1.0 || zoomFactor() < 1.00)
     {
         int urL = ur.left();
         int urT = ur.top();    
@@ -1323,7 +1365,9 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
 
     p.translate(xt, yt);
 
-    // This is the place where image is drawn to view 
+    // This is the place where image is drawn on the canvas  
+    // p is the paint device, ur is the update rectangle,
+    // bool transparency, ptr to the particular view to update
 
     koDocument()->paintEverything( p, ur, FALSE, this );
     p.end();
@@ -1378,8 +1422,10 @@ void KisView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
     emit canvasMouseReleaseEvent( &ev );
 }
 
-
-
+/*
+    activateTool - make the selected tool the active tool and
+    establish connections via the base kis_tool class
+*/
 void KisView::activateTool(KisTool* t)
 {
     if (!t) return;
@@ -1405,112 +1451,211 @@ void KisView::activateTool(KisTool* t)
 }
 
 
-/*
- * tool action slots
- */
+/*-------------------------------------------------------------
+    tool action slots - these are just slots to set the active 
+    tool to the one selected from the menu or toolbar - due to 
+    the limitations of kde's xmlgui, threre must be a slot for
+    each menu item/toolbar item.  A brief description of each 
+    tool follows...
+--------------------------------------------------------------*/
 
+/*
+    tool_properties invokes the optionsDialog() method for the
+    current active tool.  There should be an options dialog for 
+    each tool, but these can also be consolidated into a master 
+    options dialog by reparenting the widgets for each tool to a 
+    tabbed properties dialog, each tool getting a tab  - later
+*/
 void KisView::tool_properties()
 {
     m_pTool->optionsDialog();
 }
 
+/*
+    tool_select_rectangular - select a rectangular
+    area with the mouse or by entering coordinates
+    and size of the rectangle       
+*/
 void KisView::tool_select_rectangular()
 {
     activateTool(m_pRectangularSelectTool);
 }
 
+/*
+    tool_select_polygonal - select a polygonal area
+    a variation of the polyline tool, applied
+    to select rather than to draw
+*/
 void KisView::tool_select_polygonal()
 {
     activateTool(m_pPolygonalSelectTool);
 }
 
+/*
+    tool_select_elliptical - select an elliptical
+    areas with the mouse - or with a dialog for
+    entering center, and the two radii or a rectangle
+    bounding the ellipse
+*/
 void KisView::tool_select_elliptical()
 {
     activateTool(m_pEllipticalSelectTool);
 }
 
+/*
+    tool_select_contiguous - select a contiguous area based
+    on color, hue, value or saturation.  Tolerances (a range)
+    of values for all these paramaters are allowed.
+*/
 void KisView::tool_select_contiguous()
 {
     activateTool(m_pContiguousSelectTool);
 }
 
+/*
+    tool_move - move a layer with the mouse or by 
+    entering coordinates to move the layer to within
+    the image 
+*/
 void KisView::tool_move()
 {
     activateTool(m_pMoveTool);
 }
 
+/*
+    tool_zoom - click on the image to multiply the zoom factor by
+    2 with left button or by 1/2 with right button.  The view
+    should also center on the point clicked on. (todo)
+*/
 void KisView::tool_zoom()
 {
   activateTool(m_pZoomTool);
 }
 
+/*
+    tool_brush - the basic painting tool for krayon. The color
+    value of the brush image is applied to the current foreground
+    color and blended with the current layer pixels.  Various
+    predefined blending methods can be selected with the options
+    dialog (todo).
+*/
 void KisView::tool_brush()
 {
   activateTool(m_pBrushTool);
 }
 
+/*
+    tool_airbrush - randomly paints pixels of the brush image as
+    the button is held down over time. Compound blending is 
+    disallowed with the airbrush tool as this tends to increase
+    contrast with the background over time too much.
+*/
 void KisView::tool_airbrush()
 {
   activateTool(m_pAirBrushTool);
 }
 
+/*
+    tool_eraser - use the current brush as an eraser to decrease
+    the alpha value of the pixels painted over or set those pixels
+    to the background color is there is no alpha channel for the
+    image.
+*/
 void KisView::tool_eraser()
 {
   activateTool(m_pEraserTool);
 }
 
+/*
+    tool_pen - like brush, except there is no blending with the 
+    background.  The current fgColor is painted or not painted
+    depending on the value of the pixel in the brush and the
+    threshold, which can be set with he options dialog. The alpha
+    value of the layer pixel can also be changed, if desired,
+    depending on the saturation of the color in the brush pixel.
+*/
 void KisView::tool_pen()
 {
   activateTool(m_pPenTool);
 }
 
+/*
+    tool_colorpicker - change the fgColor to the color of the
+    pixel clicked on with left click or the bgColor with right
+    click. 
+*/
 void KisView::tool_colorpicker()
 {
   activateTool(m_pColorPicker);
 }
 
+/*
+    tool_colorchanger
+*/
 void KisView::tool_colorchanger()
 {
   activateTool(m_pColorChangerTool);
 }
 
+/*
+    tool_gradient
+*/
 void KisView::tool_gradient()
 {
   activateTool( m_pGradientTool );
 }
 
+/*
+    tool_line
+*/
 void KisView::tool_line()
 {
   activateTool( m_pLineTool );
 }
 
+/*
+    tool_polyline
+*/
 void KisView::tool_polyline()
 {
   activateTool( m_pPolyLineTool );
 }
+
+/*
+    tool_rectangle
+*/
 
 void KisView::tool_rectangle()
 {
   activateTool( m_pRectangleTool );
 }
 
+/*
+    tool_ellipse
+*/
 void KisView::tool_ellipse()
 {
   activateTool( m_pEllipseTool );
 }
 
+/*
+    tool_fill
+*/
 void KisView::tool_fill()
 {
   activateTool( m_pFillTool );
 }
 
+/*
+    tool_stamp
+*/
 void KisView::tool_stamp()
 {
   activateTool( m_pStampTool );
 }
 
 /*  
-    Paste tool is same as paste action from selection group
+    tool_paste is same as paste action from selection group
     but paste still needes to be a tool because you can paint with it
 */
 void KisView::tool_paste()
@@ -1527,9 +1672,9 @@ void KisView::tool_paste()
     }
 }
 
-/*
- * edit action slots
- */
+/*---------------------------
+    history action slots
+----------------------------*/
 
 void KisView::undo()
 {
@@ -1543,6 +1688,13 @@ void KisView::redo()
     //m_pDoc->commandHistory()->redo();
 }
 
+/*---------------------------------
+    edit selection action slots
+----------------------------------*/
+
+/*
+    copy - copy selection contents to global kapp->clipboard()
+*/
 void KisView::copy()
 {
     if(!m_pDoc->setClipImage())
@@ -1562,6 +1714,9 @@ void KisView::copy()
     }    
 }
 
+/*
+    cut - move selection contents to global kapp->clipboard()
+*/
 void KisView::cut()
 {
     if(!m_pDoc->setClipImage())
@@ -1581,7 +1736,7 @@ void KisView::cut()
 }
 
 /*
-    same as cut but don't paste to clipboard
+    same as cut but don't move selection contents to clipboard
 */
 void KisView::removeSelection()
 {
@@ -1596,6 +1751,12 @@ void KisView::removeSelection()
 }
 
 
+/*
+    paste - always from the global kapp->clipboard(). The image
+    in the clipboard (if any) is copied to the past tool clip
+    image so it can be used like a brush or stamp tool to paint
+    with.
+*/
 void KisView::paste()
 {
     if(m_pDoc->getClipImage())
@@ -1610,7 +1771,11 @@ void KisView::paste()
     }
 }
 
-
+/*
+    create a new layer from the selection, same size as the
+    selection (in the case of a non-rectangular selection, find
+    and use the bounding rectangle for selected pixels)
+*/
 void KisView::crop()
 {
     if(!m_pDoc->hasSelection())
@@ -1618,7 +1783,7 @@ void KisView::crop()
         KMessageBox::sorry(NULL, i18n("No selection to crop!"), "", FALSE); 
         return;
     }
-    // copy contents of the current selection ot a QImage
+    // copy contents of the current selection to a QImage
     if(!m_pDoc->setClipImage())
     {
         kdDebug() << "m_pDoc->setClipImage() failed" << endl;
@@ -1662,14 +1827,16 @@ void KisView::crop()
     slotUpdateImage();
     
     // remove the current clip image which now belongs to the 
-    // previous layer - selection also needs to be removed.
-    // To crop again, make a selection in current layer first
+    // previous layer - selection also is removed. To crop again, 
+    // you must first make another selection in the current layer.
     
     m_pDoc->removeClipImage();
     m_pDoc->clearSelection();    
 }
 
-
+/*
+    selectAll - use the bounding rectangle of the layer itself
+*/
 void KisView::selectAll()
 {
     KisImage *img = m_pDoc->current();
@@ -1679,20 +1846,43 @@ void KisView::selectAll()
     m_pDoc->setSelection(imageR);
 }
 
+/*
+    unSelectAll - clear the selection, if any
+*/
 void KisView::unSelectAll()
 {
     m_pDoc->clearSelection();
 }
 
 
-/*
- *      Zooming
- */
+/*--------------------------
+       Zooming
+---------------------------*/
 
 void KisView::zoom( int _x, int _y, float zf )
 {
+    /* Avoid divide by zero errors by disallowing a zoom
+    factor of zero, which is impossible anyway, as it would
+    make the image infinitely small in size. */
     if (zf == 0) zf = 1;
-    setZoomFactor( zf );
+
+    /* Set a reasonable lower limit for a zoom factor of 1/16.
+    At this level a 1600x1600 image would be 100 x 100 in size.
+    Extremely low zooms, like extremely high ones, can be very
+    expensive in terms of processor cycles and degrade performace, 
+    although not nearly as much as extrmely high zooms.*/
+    else if (zf < (float)(1/16)) zf = (float)(1/16);
+ 
+    /* Set a reasonable upper limit for a zoom factor of 16. At this 
+    level each pixel in the layer is shown as a 16x16 rectangle.  
+    Zoom levels higher than this serve no useful purpose and are 
+    *VERY* expensive in terms of processor cycles and slow down 
+    everything unnecessarily.  It's possible to accidentally set a
+    very high zoom by continuing to click on the image with the zoom 
+    tool, without this limit. */
+    else if(zf > 16.0) zf = 16.0;
+    
+    setZoomFactor( zf );    
 
     int x = static_cast<int> (_x * zf - docWidth() / 2);
     int y = static_cast<int> (_y * zf - docHeight() / 2);
@@ -1706,9 +1896,24 @@ void KisView::zoom( int _x, int _y, float zf )
     p.eraseRect( 0, 0, width(), height() );
     p.end();
 
+    // scroll to the point clicked on and update the
+    // canvas.  Currently scrollTo() doesn't do anything
+    // but the zoomed view does have the same offset
+    // as the prior view so it approximately works
     scrollTo( QPoint( x, y ) );
     m_pCanvas->update();
-    slotUpdateImage();
+    
+    // at low zoom levels mark everything dirty and
+    // redraw the entire image to insure that the 
+    // previous image is erased completely from border 
+    // areas.  Otherwise screen artificats can be seen.
+    if(zf < 1.0) slotUpdateImage();
+        
+    // at high and normal zoom levels just send a fake
+    // resize event to make sure that scroll bars show up.
+    // It can take a *very* long time to recalculate a large
+    // image a a high zoom level, so don't mark it dirty.
+    else showScrollBars();       
 }
 
 
@@ -1831,7 +2036,7 @@ void KisView::insert_layer()
     QRect layerRect(0, 0, pNewLayerDialog->width(), pNewLayerDialog->height());       
     QString name; name.sprintf("layer %d", img->layerList().count());
     
-    // new layers are currently appended - they should
+    // new layers are currently appended - perhaps they should
     // be prepended so more recent ones are on top in the
     // list and the background layer is at the bottom
     
@@ -2062,7 +2267,10 @@ void KisView::insert_layer_image(bool newImage)
     }
 }
 
-
+/*
+    save_layer_image - export the current image after merging
+    layers or just export the current layer
+*/
 void KisView::save_layer_image(bool mergeLayers)
 {
     KURL url = KFileDialog::getSaveURL( QString::null,
@@ -2281,7 +2489,7 @@ void KisView::saveOptions()
 
 /*
     preferences - the main Krayon preferences dialog - modeled
-    after the konqeror prefs dialog - quite nice compound dialog
+    after the konqueror prefs dialog - quite nice compound dialog
 */
 void KisView::preferences()
 {

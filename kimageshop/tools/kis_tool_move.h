@@ -49,7 +49,7 @@ class MoveTool : public KisTool
 {
 public:
 
-  MoveTool( KisDoc *doc );
+  MoveTool( KisDoc *doc, KisView *view);
   ~MoveTool();
 
   virtual QString toolName() { return QString( "MoveTool" ); }
