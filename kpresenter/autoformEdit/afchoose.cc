@@ -23,7 +23,7 @@
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-AFChoose::AFChoose(QWidget *parent=0,const char *name=0)
+AFChoose::AFChoose(QWidget *parent,const char *name)
   :QTabDialog(parent,name,true)
 {
   setCancelButton(i18n("Cancel"));

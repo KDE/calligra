@@ -22,7 +22,7 @@
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-SaveAsDia::SaveAsDia(QWidget* parent=0,const char* name=0)
+SaveAsDia::SaveAsDia(QWidget* parent,const char* name)
   :QDialog(parent,name,true)
 {
   groupList.setAutoDelete(true);

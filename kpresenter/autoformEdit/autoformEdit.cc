@@ -22,7 +22,7 @@
 /*================================================================*/
 
 /*====================== constructor =============================*/
-AEditWin::AEditWin(const char *name=0)
+AEditWin::AEditWin(const char *name)
   : KTopLevelWidget(name)
 {
   groupName = "";
