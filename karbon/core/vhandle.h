@@ -17,7 +17,7 @@ public:
 	VHandle();
 	~VHandle();
 
-	void draw( QPainter& painter );
+	void draw( QPainter& painter, const double zoomFactor );
 
 	void addObject( const VObject* object );
 	void removeObject( const VObject* object );

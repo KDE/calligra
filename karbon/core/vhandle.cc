@@ -17,7 +17,7 @@ VHandle::~VHandle()
 }
 
 void
-VHandle::draw( QPainter& painter )
+VHandle::draw( QPainter& painter, const double zoomFactor )
 {
 	// calculate bbox
 	QPtrListIterator<VObject> itr = m_objects;
@@ -32,10 +32,14 @@ VHandle::draw( QPainter& painter )
 		m_bbox = m_bbox.unite( itr.current()->boundingBox() );
 	}
 
-	// Draw selection handle
-	// TODO : selection -> handle, editing -> nodes/boxes ?
 	painter.setBrush( Qt::NoBrush );
 	painter.setPen( Qt::blue.light() );
+
+	// for now I think this is enough, maybe we need something else when
+	// handle is rotated ? Then again, this is just a simple tect.
+	painter.scale( zoomFactor, zoomFactor );
+
+	// Draw selection handle
 	painter.drawRect( m_bbox );
 
 	// draw boxes

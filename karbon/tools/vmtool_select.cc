@@ -62,8 +62,8 @@ VMToolSelect::drawTemporaryObject(
 		QPtrList<VObject> objects = part()->handle()->objects();
 		QPtrListIterator<VObject> itr( objects );
 		for ( ; itr.current() ; ++itr )
-			itr.current()->draw( painter, rect, 1.0 );
-		part()->drawHandle( painter );
+			itr.current()->draw( painter, rect, view->zoomFactor() );
+		part()->drawHandle( painter, view->zoomFactor() );
 	}
 	else
 	{

@@ -39,13 +39,18 @@ VTool::eventFilter( KarbonView* view, QEvent* event )
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
+		//m_lp = view->canvasWidget()->viewportToContents( mouse_event->pos() );
 
 		recalcCoords();
 
-		VCommand* cmd = createCmd(
-			m_p.x() / view->zoomFactor(), m_p.y() / view->zoomFactor(),
-			m_d1 / view->zoomFactor(),
-			m_calcPolar ? m_d2 : m_d2 / view->zoomFactor() );
+		VCommand* cmd = 0L;
+		{
+			// adjust to real viewport contents instead of raw mouse coords
+			QPoint p = view->canvasWidget()->viewportToContents( m_p );
+			cmd = createCmd(
+				p.x() / view->zoomFactor(), p.y() / view->zoomFactor(),
+				m_d1 / view->zoomFactor(), m_calcPolar ? m_d2 : m_d2 / view->zoomFactor() );
+		}
 
 		if( cmd )
 			m_part->addCommand( cmd );

@@ -223,9 +223,9 @@ KarbonPart::paintContent( QPainter& /*p*/, const QRect& /*rect*/,
 }
 
 void
-KarbonPart::drawHandle( QPainter &p ) const
+KarbonPart::drawHandle( QPainter &p, const double zoomFactor ) const
 {
-	m_handle->draw( p );
+	m_handle->draw( p, zoomFactor );
 }
 
 #include "karbon_part.moc"

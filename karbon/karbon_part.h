@@ -57,7 +57,7 @@ public:
 	// sacrifying privateness: TODO: still needed?
 	VLayer* activeLayer() const { return m_activeLayer; }
 	// draw handle
-	void drawHandle( QPainter &p ) const;
+	void drawHandle( QPainter &p, const double zoomFactor ) const;
 	// access handle
 	const VHandle *handle() const { return m_handle; } 
 
