@@ -59,9 +59,17 @@ void KWConfig::slotApply()
 
 void KWConfig::slotDefault()
 {
-
-    _spellPage->slotDefault();
-    _interfacePage->slotDefault();
+    switch(activePageIndex())
+    {
+        case 0:
+            _spellPage->slotDefault();
+            break;
+        case 1:
+            _interfacePage->slotDefault();
+            break;
+        default:
+            break;
+    }
 }
 
 configureSpellPage::configureSpellPage( KWView *_view, QWidget *parent , char *name )
