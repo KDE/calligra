@@ -159,11 +159,13 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 				gc->fill.setType( VFill::solid );
 			}
 		}
-		if( command == "fill-rule" )
+		else if( command == "fill-rule" )
+		{
 			if( params == "fill-rule" )
 				gc->fill.setFillRule( VFill::winding );
 			else if( params == "fill-rule" )
 				gc->fill.setFillRule( VFill::evenOdd );
+		}
 		else if( command == "stroke" )
 		{
 			if( params == "none" )
@@ -177,6 +179,16 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		}
 		else if( command == "stroke-width" )
 			gc->stroke.setLineWidth( params.toDouble() );
+		// handle opacity
+		else if( command == "stroke-opacity" )
+			strokecolor.setOpacity( params.toFloat() );
+		else if( command == "fill-opacity" )
+			fillcolor.setOpacity( params.toFloat() );
+		else if( command == "opacity" )
+		{
+			fillcolor.setOpacity( params.toFloat() );
+			strokecolor.setOpacity( params.toFloat() );
+		}
 	}
 
 	gc->fill.setColor( fillcolor );
