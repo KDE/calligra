@@ -20,7 +20,7 @@
 #ifndef __VGROUP_IFACE_H__
 #define __VGROUP_IFACE_H__
 
-#include <qptrlist.h>
+#include <qvaluelist.h>
 
 #include "vobject_iface.h"
 
@@ -39,13 +39,12 @@ public:
 k_dcop:
 	//void take( const VObject& object );
 
-	//void append( VObject* object );
+	//void append( DCOPRef object );
 
 	//virtual void insertInfrontOf( VObject* newObject, VObject* oldObject );
 
 	void clear();
-
-	//const VObjectList& objects() const { return m_objects; }
+	QValueList<DCOPRef> objects();
 
 private:
 	VGroup *m_group;

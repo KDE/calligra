@@ -17,6 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <kapplication.h>
+#include <dcopclient.h>
+
 #include "vgroup_iface.h"
 #include "vgroup.h"
 
@@ -29,5 +32,15 @@ void
 VGroupIface::clear()
 {
 	m_group->clear();
+}
+
+QValueList<DCOPRef>
+VGroupIface::objects()
+{
+	QValueList<DCOPRef> lst;
+	VObjectListIterator itr = m_group->objects();
+	for( ; itr.current(); ++itr )
+		lst.append( DCOPRef( kapp->dcopClient()->appId(), itr.current()->dcopObject()->objId() ) );
+	return lst;
 }
 
