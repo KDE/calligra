@@ -33,17 +33,18 @@ namespace Kivio {
     public:
       StencilSetInstaller(QWidget *parent = 0, const char *name = 0);
       ~StencilSetInstaller();
-      
+
     public slots:
       void install(const QString& urlString);
-    
+
     protected slots:
       virtual void slotOk();
-    
+      void slotUrlChanged( const QString & );
+
     protected:
       QStringList checkDirs(const KArchiveDirectory* rootDir);
       bool installStencilSets(const KArchiveDirectory* rootDir, const QStringList& dirs);
-    
+
     private:
       KURLRequester* m_url;
   };
