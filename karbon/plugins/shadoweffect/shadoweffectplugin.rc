@@ -4,8 +4,8 @@
 	<Menu name="object">
 		<Action name="object_shadow"/>
 	</Menu>
-	<ToolBar name="PenProp">
-		<Action name="object_shadow"/>
-	</ToolBar>
 </MenuBar>
+<ToolBar name="PenProp">
+	<Action name="object_shadow"/>
+</ToolBar>
 </kpartplugin>
