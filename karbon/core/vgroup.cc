@@ -4,12 +4,17 @@
 */
 
 #include "vgroup.h"
+#include "vpath.h"
 
 #include <qdom.h>
 
 #include <koRect.h>
 
 #include <kdebug.h>
+
+VGroup::VGroup() : VObject()
+{
+}
 
 VGroup::VGroup( const VObjectList &objects ) : VObject(), m_objects( objects )
 {
@@ -111,9 +116,41 @@ VGroup::setStroke( const VStroke &s )
 void
 VGroup::save( QDomElement& element ) const
 {
+	QDomElement me = element.ownerDocument().createElement( "GROUP" );
+	element.appendChild( me );
+
+	// save objects:
+	VObjectListIterator itr = m_objects;
+	for ( ; itr.current(); ++itr )
+		itr.current()->save( me );
 }
 
 void
 VGroup::load( const QDomElement& element )
 {
+	m_objects.setAutoDelete( true );
+	m_objects.clear();
+	m_objects.setAutoDelete( false );
+
+	QDomNodeList list = element.childNodes();
+	for( uint i = 0; i < list.count(); ++i )
+	{
+		if( list.item( i ).isElement() )
+		{
+			QDomElement e = list.item( i ).toElement();
+
+			if( e.tagName() == "PATH" )
+			{
+				VPath* path = new VPath();
+				path->load( e );
+				m_objects.append( path );
+			}
+			else if( e.tagName() == "TEXT" )
+			{
+				/*VText* text = new VText();
+				text->load( e );
+				insertObject( text );*/
+			}
+		}
+	}
 }

@@ -11,6 +11,7 @@
 #include "vlayer.h"
 #include "vobject.h"
 #include "vpath.h"
+#include "vgroup.h"
 #include "vtext.h"
 
 #include <kdebug.h>
@@ -156,6 +157,12 @@ VLayer::load( const QDomElement& element )
 				VPath* path = new VPath();
 				path->load( e );
 				insertObject( path );
+			}
+			else if( e.tagName() == "GROUP" )
+			{
+				VGroup* grp = new VGroup();
+				grp->load( e );
+				insertObject( grp );
 			}
 			else if( e.tagName() == "TEXT" )
 			{

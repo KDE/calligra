@@ -16,6 +16,7 @@ class QDomElement;
 class VGroup : public VObject
 {
 public:
+	VGroup();
 	VGroup( const VObjectList & );
 	VGroup( const VGroup & );
 	~VGroup();
