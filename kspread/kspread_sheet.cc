@@ -6486,16 +6486,19 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
                 kdDebug()<<"style->attribute( style:master-page-name ) :"<<masterPageStyleName <<endl;
                 QDomElement *masterStyle = oasisStyles.masterPages()[masterPageStyleName];
                 kdDebug()<<"oasisStyles.styles()[masterPageStyleName] :"<<masterStyle<<endl;
-                loadTableStyleFormat( masterStyle );
-                if ( masterStyle->hasAttribute( "style:page-master-name" ) )
+                if ( masterStyle )
                 {
-                    QString masterPageLayoutStyleName=masterStyle->attribute( "style:page-master-name" );
-                    kdDebug()<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
-                    QDomElement *masterLayoutStyle = oasisStyles.styles()[masterPageLayoutStyleName];
-                    kdDebug()<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
-                    KoStyleStack styleStack;
-                    styleStack.push( *masterLayoutStyle );
-                    loadOasisMasterLayoutPage( styleStack );
+                    loadTableStyleFormat( masterStyle );
+                    if ( masterStyle->hasAttribute( "style:page-master-name" ) )
+                    {
+                        QString masterPageLayoutStyleName=masterStyle->attribute( "style:page-master-name" );
+                        kdDebug()<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
+                        QDomElement *masterLayoutStyle = oasisStyles.styles()[masterPageLayoutStyleName];
+                        kdDebug()<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
+                        KoStyleStack styleStack;
+                        styleStack.push( *masterLayoutStyle );
+                        loadOasisMasterLayoutPage( styleStack );
+                    }
                 }
             }
         }
@@ -6528,26 +6531,26 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
 
     if ( tableElement.hasAttribute( "table:print-ranges" ) )
     {
-      // e.g.: Sheet4.A1:Sheet4.E28
-      QString range = tableElement.attribute( "table:print-ranges" );
-      KSpreadRange p( translateOpenCalcPoint( range ) );
-      if ( tableName() == p.tableName )
-        m_pPrint->setPrintRange( p.range );
+        // e.g.: Sheet4.A1:Sheet4.E28
+        QString range = tableElement.attribute( "table:print-ranges" );
+        KSpreadRange p( translateOpenCalcPoint( range ) );
+        if ( tableName() == p.tableName )
+            m_pPrint->setPrintRange( p.range );
     }
 
 
     if ( tableElement.hasAttribute( "table:protected" ) )
     {
-      QCString passwd( "" );
-      if ( tableElement.hasAttribute( "table:protection-key" ) )
-      {
-        QString p = tableElement.attribute( "table:protection-key" );
-        QCString str( p.latin1() );
-        kdDebug(30518) << "Decoding password: " << str << endl;
-        passwd = KCodecs::base64Decode( str );
-      }
-      kdDebug(30518) << "Password hash: '" << passwd << "'" << endl;
-      m_strPassword = passwd;
+        QCString passwd( "" );
+        if ( tableElement.hasAttribute( "table:protection-key" ) )
+        {
+            QString p = tableElement.attribute( "table:protection-key" );
+            QCString str( p.latin1() );
+            kdDebug(30518) << "Decoding password: " << str << endl;
+            passwd = KCodecs::base64Decode( str );
+        }
+        kdDebug(30518) << "Password hash: '" << passwd << "'" << endl;
+        m_strPassword = passwd;
     }
     return true;
 }
@@ -6932,7 +6935,13 @@ bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles )
     xmlWriter.startElement( "table:table" );
     xmlWriter.addAttribute( "table:name", m_strName );
     xmlWriter.addAttribute( "table:style-name", saveOasisTableStyleName(mainStyles )  );
+    if ( !m_strPassword.isEmpty() )
+    {
+        xmlWriter.addAttribute("table:protected", "true" );
+        QCString str = KCodecs::base64Encode( m_strPassword );
+        xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );/* FIXME !!!!*/
 
+    }
     xmlWriter.endElement();
     return true;
 }
