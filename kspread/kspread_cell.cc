@@ -5088,7 +5088,21 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
 	  setValue( text );
 	}
     }
-
+    
+    // boolean value
+    if( element.hasAttribute( "table:value-type" ) )
+        if( element.attribute( "table:value-type" ) == "boolean" )
+        {
+            QString val = element.attribute( "table:boolean-value" );
+            if( ( val == "true" ) || ( val == "false" ) )
+            {
+                bool value = val == "true";
+                setValue( value );
+                setCellText( value ? i18n("True") : i18n("False" ) );
+            }            
+        }
+    
+    // cell comment/annotation
     QDomElement annotationElement = element.namedItem( "office:annotation" ).toElement();
     if ( !annotationElement.isNull() )
     {
