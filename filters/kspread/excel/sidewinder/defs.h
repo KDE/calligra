@@ -22,17 +22,34 @@
 
 namespace Sidewinder
 {
+
+/**
+ * @short Provides color based on RGB values.
+ *
+ * Class Color provides color based on  terms of RGB (red, green and blue) 
+ * components.
+ * 
+ */
 class Color
 {
 public:
 
   unsigned red, green, blue;
   
+  /**
+   * Constructs a default color with the RGB value (0, 0, 0), i.e black.
+   */   
   Color(){ red = green = blue = 0; };
   
+  /**
+   * Creates a copy of another color.
+   */   
   Color( const Color& c )
     { red = c.red; green = c.green; blue = c.blue; }   
   
+  /**
+   * Creates a color based on given red, green and blue values.
+   */   
   Color( unsigned r, unsigned g, unsigned b )
     { red = r; green = g; blue = b; }
 };
