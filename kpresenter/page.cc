@@ -53,6 +53,7 @@
 #include <ktempfile.h>
 #include <kdebug.h>
 #include <kprcommand.h>
+#include <kcursor.h>
 
 #include <stdlib.h>
 
@@ -103,6 +104,8 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
     setFocus();
     setKeyCompression( true );
     installEventFilter( this );
+    KCursor::setAutoHideCursor( this, true, true );
+
 }
 
 /*======================== destructor ============================*/
@@ -120,6 +123,8 @@ bool Page::eventFilter( QObject *o, QEvent *e )
 
     if ( !o || !e )
         return TRUE;
+
+    KCursor::autoHideEventFilter( o, e );
     switch ( e->type() )
     {
     case QEvent::AccelOverride:
