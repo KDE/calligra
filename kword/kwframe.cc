@@ -2593,5 +2593,29 @@ KWordFrameSetIface* KWHorzLineFrameSet::dcopObject()
     return m_dcop;
 }
 
+#include "qdrawutil.h"
+
+void KWHorzLineFrameSet::drawFrameContents( KWFrame *frame, QPainter *painter, const QRect &crect,
+                                           const QColorGroup &cg, bool onlyChanged, bool resetChanged, KWFrameSetEdit *edit, KWViewMode * viewmode)
+{
+    if ( !m_picture.isNull())
+        KWPictureFrameSet::drawFrameContents( frame, painter, crect,
+                                              cg, onlyChanged, resetChanged, edit, viewmode);
+    else
+    {
+        if ( painter->device()->devType() == QInternal::Printer ) {
+            QPen oldPen = painter->pen();
+                painter->setPen( QPen( cg.text(), crect.height()/8 ) );
+            painter->drawLine( crect.left()-1, crect.y() + crect.height() / 2, crect.right() + 1, crect.y() + crect.height() / 2 );
+            painter->setPen( oldPen );
+        } else {
+            QColorGroup g( cg );
+            g.setColor( QColorGroup::Dark, Qt::red );
+            qDrawShadeLine( painter, crect.left() - 1, crect.y() + crect.height() / 2, crect.right() + 1, crect.y() + crect.height() / 2, g, TRUE, crect.height() / 8 );
+        }
+
+    }
+}
+
 
 #include "kwframe.moc"

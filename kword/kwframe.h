@@ -1103,6 +1103,9 @@ public:
      */
     virtual FrameSetType type( void );
     virtual bool ownLine() const;
+    void drawFrameContents( KWFrame *frame, QPainter *painter, const QRect &crect,
+                            const QColorGroup &, bool, bool, KWFrameSetEdit *, KWViewMode * );
+
 };
 
 #endif
