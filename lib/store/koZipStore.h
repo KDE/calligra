@@ -33,6 +33,7 @@ public:
     KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentification );
     /**
      * KURL-constructor
+     * @todo saving not completely implemented (fixed temporary file)
      * @since 1.4
      */
     KoZipStore( QWidget* window, const KURL& _url, const QString & _filename, Mode _mode, const QCString & appIdentification );
@@ -49,11 +50,11 @@ protected:
     virtual bool enterAbsoluteDirectory( const QString& path );
     virtual bool fileExists( const QString& absPath ) const;
 
-    // The archive
+    /// The archive
     KZip * m_pZip;
 
-    // In "Read" mode this pointer is pointing to the
-    // current directory in the archive to speed up the verification process
+    /** In "Read" mode this pointer is pointing to the
+    current directory in the archive to speed up the verification process */
     const KArchiveDirectory* m_currentDir;
 };
 

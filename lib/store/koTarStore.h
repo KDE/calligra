@@ -33,6 +33,7 @@ public:
     KoTarStore( QIODevice *dev, Mode mode, const QCString & appIdentification );
     /**
      * KURL-constructor
+     * @todo saving not completely implemented (fixed temporary file)
      * @since 1.4
      */
     KoTarStore( QWidget* window, const KURL& url, const QString & _filename, Mode _mode, const QCString & appIdentification );
@@ -49,14 +50,14 @@ protected:
 
     static QCString completeMagic( const QCString& appMimetype );
 
-    // The tar archive
+    /// The tar archive
     KTar * m_pTar;
 
-    // In "Read" mode this pointer is pointing to the
-    // current directory in the archive to speed up the verification process
+    /** In "Read" mode this pointer is pointing to the
+    current directory in the archive to speed up the verification process */
     const KArchiveDirectory* m_currentDir;
 
-    // Buffer used when writing
+    /// Buffer used when writing
     QByteArray m_byteArray;
 
 };
