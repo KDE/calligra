@@ -957,13 +957,14 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentTmpWriter.startElement( "office:body" );
 
     int indexObj = 1;
+    int partIndexObj = 1;
 //save page
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
     {
-        m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ), savingContext, indexObj );
+        m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ), savingContext, indexObj, partIndexObj );
     }
 
-    m_stickyPage->saveOasisStickyPage( store, stickyTmpWriter , savingContext, indexObj );
+    m_stickyPage->saveOasisStickyPage( store, stickyTmpWriter , savingContext, indexObj,partIndexObj );
 
 
     saveOasisPresentationSettings( contentTmpWriter );

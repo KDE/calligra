@@ -25,6 +25,8 @@
 #include "kpobject.h"
 
 class KPresenterChild;
+class KoXmlWriter;
+class KoStore;
 
 class KPPartObject : public QObject, public KP2DObject
 {
@@ -47,8 +49,9 @@ public:
 
     KPresenterChild *getChild() const { return child; }
     void enableDrawing( bool f ) { _enableDrawing = f; }
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj );
+    virtual bool saveOasisPart( KoXmlWriter &xmlWriter, KoStore *store, KoSavingContext& context, int indexObj, int partIndexObj );
     virtual void loadOasis(const QDomElement &element, KoOasisContext &context, KPRLoadingInfo *info);
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext &context, int indexObj ) { return true;/* use saveOasisPart*/};
 
 public slots:
     void slot_changed( KoChild *_koChild );

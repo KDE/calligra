@@ -419,6 +419,15 @@ public:
     virtual bool saveToStore( KoStore* store, const QString& path );
 
     /**
+     *  Saves a document to a store.
+     *  Return name of store object
+     *  You should not have to reimplement this - but call it in @ref #saveChildren.
+     */
+
+    virtual QString saveOasisToStore( KoStore * _store, const QString & index );
+
+
+    /**
      *  Reimplement this method to load the contents of your KOffice document,
      *  from the XML document. This is for the pre-Oasis file format (maindoc.xml).
      *

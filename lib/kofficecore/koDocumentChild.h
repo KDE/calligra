@@ -99,7 +99,7 @@ public:
      * Write default parameter for embedded object
      *
      */
-    virtual void KoDocumentChild::saveOasis(  KoXmlWriter &xmlWriter );
+    virtual void saveOasis(  KoXmlWriter &xmlWriter, KoStore *store, int index );
 
 
   /**

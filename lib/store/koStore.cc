@@ -402,6 +402,11 @@ bool KoStore::leaveDirectory()
   return enterAbsoluteDirectory( expandEncodedDirectory( currentPath() ) );
 }
 
+QString KoStore::currentDirectory() const
+{
+  return expandEncodedDirectory( currentPath() );
+}
+
 QString KoStore::currentPath() const
 {
   QString path;

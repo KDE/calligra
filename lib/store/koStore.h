@@ -184,6 +184,13 @@ public:
   QString currentPath() const;
 
   /**
+   * Returns the current directory.
+   * Note: Returns a path in "internal name" style
+   */
+  QString currentDirectory() const;
+
+
+  /**
    * Stacks the current directory. Restore the current path using
    * @ref popDirectory .
    */

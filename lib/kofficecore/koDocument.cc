@@ -940,7 +940,7 @@ bool KoDocument::saveNativeFormat( const QString & _file )
     }
 
     // Save internal children first since they might get a new url
-    if ( !saveChildren( store ) )
+    if ( !saveChildren( store ) && d->m_specialOutputFlag != SaveAsOASIS)
     {
         if ( d->lastErrorMessage.isEmpty() )
             d->lastErrorMessage = i18n( "Error while saving embedded documents" ); // more details needed
@@ -1075,6 +1075,50 @@ bool KoDocument::saveToStream( QIODevice * dev )
     if ( nwritten != (int)s.size()-1 )
         kdWarning(30003) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " << s.size()-1 << endl;
     return nwritten == (int)s.size()-1;
+}
+
+QString KoDocument::saveOasisToStore( KoStore * _store, const QString & _path )
+{
+    kdDebug(30003) << "Saving document to store " << _path << endl;
+
+    // Use the path as the internal url
+    if ( _path.startsWith( STORE_PROTOCOL ) )
+        m_url = KURL( _path );
+    else // ugly hack to pass a relative URI
+        m_url = KURL( INTERNAL_PREFIX +  _path );
+
+    // To make the children happy cd to the correct directory
+    _store->pushDirectory();
+    _store->enterDirectory( _path );
+
+    QString name = _store->currentDirectory();
+    // Save childen first since they might get a new url
+    if ( !saveChildren( _store ) && d->m_specialOutputFlag != SaveAsOASIS)
+        return QString::null;
+
+    // In the current directory we're the king :-)
+    if ( _store->open( "root" ) )
+    {
+        KoStoreDevice dev( _store );
+        if ( !saveToStream( &dev ) )
+        {
+            _store->close();
+            return QString::null;
+        }
+        if ( !_store->close() )
+            return QString::null;
+    }
+
+    if ( !completeSaving( _store ) )
+        return QString::null;
+
+    // Now that we're done leave the directory again
+    _store->popDirectory();
+
+    kdDebug(30003) << "Saved oasis document to store" << endl;
+
+
+    return name;
 }
 
 bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
@@ -1662,7 +1706,7 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
             oasisStyles.createStyleMap( stylesDoc );
             // Also load styles from content.xml
             oasisStyles.createStyleMap( contentDoc );
-                        
+
             if ( loadAndParse( store, "settings.xml", settingsDoc, true ) )
                 store->close();
 
