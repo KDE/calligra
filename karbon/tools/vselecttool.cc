@@ -262,6 +262,7 @@ VSelectTool::eventFilter( QEvent* event )
 				KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
 
 			view()->selectionChanged();
+			view()->part()->repaintAllViews();
 		}
 
 		m_isDragging = false;
