@@ -1306,8 +1306,8 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         else if ( name == "draw:path" )
         {
             fillStyleStack( o, context );
-            //we have 3 elements to use here.
-            //Cubicbeziercurve/Quadricbeziercurve/closeline
+            //we have 4 elements to use here.
+            //Cubicbeziercurve/Quadricbeziercurve/closeline/KPFreehandObject
             //we must parse svd:d argument
             // "z" close element
             // "c" cubic element
@@ -1315,6 +1315,41 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             // parse line we use relative position
             // see http://www.w3.org/TR/SVG/paths.html#PathData
             // see svgpathparser.cc (ksvg)
+            QString pathDefinition = o.attribute("svg:d");
+            kdDebug()<<"pathDefinition :"<<pathDefinition<<endl;
+            fillStyleStack( o, context );
+
+            if ( pathDefinition.contains( "c" ) )
+            {
+                kdDebug()<<"Cubicbeziercurve \n";
+                KPCubicBezierCurveObject *kpCurveObject = new KPCubicBezierCurveObject();
+                kpCurveObject->loadOasis( o, context, animationShow);
+                if ( groupObject )
+                    groupObject->addObjects( kpCurveObject );
+                else
+                    newpage->appendObject( kpCurveObject );
+
+            }
+            else if ( pathDefinition.contains( "q" ) )
+            {
+                kdDebug()<<"Quadricbeziercurve \n";
+                KPQuadricBezierCurveObject *kpQuadricObject = new KPQuadricBezierCurveObject();
+                kpQuadricObject->loadOasis( o, context, animationShow);
+                if ( groupObject )
+                    groupObject->addObjects( kpQuadricObject );
+                else
+                    newpage->appendObject( kpQuadricObject );
+            }
+            else
+            {
+                kdDebug()<<"KPFreehandObject \n";
+                KPFreehandObject *kpFreeHandObject = new KPFreehandObject();
+                kpFreeHandObject->loadOasis( o, context, animationShow);
+                if ( groupObject )
+                    groupObject->addObjects( kpFreeHandObject );
+                else
+                    newpage->appendObject( kpFreeHandObject );
+            }
         }
         else if ( name == "draw:g" )
         {
