@@ -17,10 +17,12 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qprinter.h>
-#include "kspread_undo.h"
+// #include <qprinter.h>
 
+#include "kspread_undo.h"
 #include "kspread_table.h"
+#include "kspread_view.h"
+#include "kspread_doc.h"
 
 #include <qbuffer.h>
 
@@ -138,23 +140,15 @@ void KSpreadUndoDeleteColumn::undo()
 
     KSpreadCell *o;
     for ( o = m_lstCells.first(); o != 0L; o = m_lstCells.next() )
-	m_pTable->insertCell( o );
+    {
+	KSpreadCell* cell = new KSpreadCell( m_pTable, m_iColumn, o->row() );
+	cell->copyAll( o );
+	m_pTable->insertCell( cell );
+    }
+    
     if ( m_pColumnLayout )
 	m_pTable->insertColumnLayout( m_pColumnLayout );
 
-    // HACK
-    m_lstCells.setAutoDelete( FALSE );
-    m_lstCells.clear();
-    m_lstCells.setAutoDelete( TRUE );
-    // TODO
-    /*
-    if ( m_pTable->gui() )
-    {
-	m_pTable->drawVisibleObjects( TRUE );
-	m_pTable->gui()->hBorderWidget()->repaint();
-	m_pTable->gui()->vBorderWidget()->repaint();
-    }
-    */
     m_pDoc->undoBuffer()->unlock();
 }
 
@@ -230,20 +224,15 @@ void KSpreadUndoDeleteRow::undo()
 
     KSpreadCell *o;
     for ( o = m_lstCells.first(); o != 0L; o = m_lstCells.next() )
-	m_pTable->insertCell( o );
+    {
+	KSpreadCell* cell = new KSpreadCell( m_pTable, cell->column(), m_iRow );
+	cell->copyAll( o );
+	m_pTable->insertCell( cell );
+    }
 
     if ( m_pRowLayout )
 	m_pTable->insertRowLayout( m_pRowLayout );
 
-    // TODO
-    /*
-    if ( m_pTable->gui() )
-    {
-	m_pTable->drawVisibleObjects( TRUE );
-	m_pTable->gui()->hBorderWidget()->repaint();
-	m_pTable->gui()->vBorderWidget()->repaint();
-    }
-    */
     m_pDoc->undoBuffer()->unlock();
 }
 
@@ -296,7 +285,7 @@ void KSpreadUndoInsertRow::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoSetText::KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadTable *_table, const char *_text, int _column, int _row ) :
+KSpreadUndoSetText::KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadTable *_table, const QString& _text, int _column, int _row ) :
     KSpreadUndoAction( _doc )
 {
     m_strText = _text;
@@ -318,13 +307,7 @@ void KSpreadUndoSetText::undo()
     if ( m_strText.isNull() )
 	cell->setText( "" );
     else
-	cell->setText( m_strText.data() );
-
-    // TODO
-    /*
-    if ( m_pTable->gui() )
-	m_pTable->drawObject( obj, column, row, TRUE );
-	*/
+	cell->setText( m_strText );
 
     m_pDoc->undoBuffer()->unlock();
 }
@@ -338,13 +321,44 @@ void KSpreadUndoSetText::redo()
     if ( m_strRedoText.isNull() )
 	cell->setText( "" );
     else
-	cell->setText( m_strRedoText.data() );
+	cell->setText( m_strRedoText );
 
-    // TODO
-    /*
-    if ( m_pTable->gui() )
-	m_pTable->drawObject( obj, column, row, TRUE );
-	*/
+    m_pDoc->undoBuffer()->unlock();
+}
+
+/****************************************************************************
+ *
+ * KSpreadUndoSetTableName
+ *
+ ***************************************************************************/
+
+KSpreadUndoSetTableName::KSpreadUndoSetTableName( KSpreadDoc *doc, KSpreadTable *table, const QString& name ) :
+    KSpreadUndoAction( doc )
+{
+    m_name = name;
+    m_pTable = table;
+}
+
+KSpreadUndoSetTableName::~KSpreadUndoSetTableName()
+{
+}
+
+void KSpreadUndoSetTableName::undo()
+{
+    m_pDoc->undoBuffer()->lock();
+
+    m_redoName = m_pTable->tableName();
+    
+    m_pTable->setTableName( m_name );
+
+    m_pDoc->undoBuffer()->unlock();
+}
+
+void KSpreadUndoSetTableName::redo()
+{
+    m_pDoc->undoBuffer()->lock();
+
+    m_pTable->setTableName( m_redoName );
 
     m_pDoc->undoBuffer()->unlock();
 }

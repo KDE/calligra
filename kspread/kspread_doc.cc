@@ -372,7 +372,7 @@ KSpreadTable* KSpreadDoc::createTable()
   s = s.arg( m_iTableId++ );
 
   KSpreadTable *t = new KSpreadTable( m_pMap, s );
-  t->setTableName( s );
+  t->setTableName( s, TRUE );
   return t;
 }
 

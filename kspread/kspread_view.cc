@@ -791,20 +791,20 @@ void KSpreadView::formulaProduct()
 
 void KSpreadView::tableFormat()
 {
-QRect r( activeTable()-> selectionRect() );
-if( r.right() ==0x7FFF)
-	{
-	 KMessageBox::error( 0L, i18n("Area too large!"));
-	}
-else if(r.bottom()==0x7FFF)
-	{
-	 KMessageBox::error( 0L, i18n("Area too large!"));
-	}
-else
-	{
-        KSpreadFormatDlg dlg( this );
-        dlg.exec();
-        }
+    QRect r( activeTable()-> selectionRect() );
+    if( r.right() ==0x7FFF)
+    {
+	KMessageBox::error( this, i18n("Area too large!"));
+    }
+    else if(r.bottom()==0x7FFF)
+    {
+	KMessageBox::error( this, i18n("Area too large!"));
+    }
+    else
+    {
+	KSpreadFormatDlg dlg( this );
+	dlg.exec();
+    }
 }
 
 void KSpreadView::autoSum()
@@ -1309,14 +1309,14 @@ void KSpreadView::addTable( KSpreadTable *_t )
     if( !_t->isHide() )
     {
   	m_pTabBar->addTab( _t->tableName() );
+	setActiveTable( _t );
     }
     else
     {
-  	m_pTabBar->init(_t->tableName());
+  	m_pTabBar->addHiddenTab(_t->tableName());
     }
 
-    setActiveTable( _t );
-
+    // Connect some signals
     QObject::connect( _t, SIGNAL( sig_updateView( KSpreadTable* ) ), SLOT( slotUpdateView( KSpreadTable* ) ) );
     QObject::connect( _t, SIGNAL( sig_updateView( KSpreadTable *, const QRect& ) ),
 		      SLOT( slotUpdateView( KSpreadTable*, const QRect& ) ) );
@@ -1332,6 +1332,10 @@ void KSpreadView::addTable( KSpreadTable *_t )
 		      SLOT( slotChangeSelection( KSpreadTable *, const QRect &, const QRect & ) ) );
     QObject::connect( _t, SIGNAL( sig_changeChooseSelection( KSpreadTable *, const QRect &, const QRect & ) ),
 		      SLOT( slotChangeChooseSelection( KSpreadTable *, const QRect &, const QRect & ) ) );
+    QObject::connect( _t, SIGNAL( sig_nameChanged( KSpreadTable*, const QString& ) ),
+		      this, SLOT( slotTableRenamed( KSpreadTable*, const QString& ) ) );
+    // ########### Why do these signals not send a pointer to the table?
+    // This will lead to bugs.
     QObject::connect( _t, SIGNAL( sig_insertChild( KSpreadChild* ) ), SLOT( slotInsertChild( KSpreadChild* ) ) );
     QObject::connect( _t, SIGNAL( sig_updateChildGeometry( KSpreadChild* ) ),
 		      SLOT( slotUpdateChildGeometry( KSpreadChild* ) ) );
@@ -1376,6 +1380,11 @@ void KSpreadView::setActiveTable( KSpreadTable *_t )
 
   m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
   m_pCanvas->slotMaxRow( m_pTable->maxRow() );
+}
+
+void KSpreadView::slotTableRenamed( KSpreadTable* table, const QString& old_name )
+{
+    m_pTabBar->renameTab( old_name, table->tableName() );
 }
 
 void KSpreadView::changeTable( const QString& _name )
@@ -2139,7 +2148,8 @@ void KSpreadView::precisionMinus()
     m_pTable->setSelectionPrecision( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), -1 );
 }
 
-void KSpreadView::percent( bool b )
+// Parameter is skipped since KSpreadTable::setSelectionPercent toggles
+void KSpreadView::percent( bool )
 {
    if ( m_toolbarLock )
 	return;

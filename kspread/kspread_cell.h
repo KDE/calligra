@@ -157,7 +157,9 @@ public:
     void copyLayout( KSpreadCell *_cell ) { copyLayout( _cell->column(), _cell->row() ); }
 
     /**
-     * Copies the layout and the content.
+     * Copies the layout and the content. It does not copy the @ref #m_row and @ref #m_column attributes.
+     * Besides that all persistent attributes are copied. @ref #setText is called to set the real
+     * content.
      *
      * @see #copyLayout
      */
@@ -241,12 +243,14 @@ public:
 
     /**
      * Set the column this cell is now in. This function is usually used after the 'paste'
-     * command.
+     * command. It does not trigger any updates or make shure that no other cell
+     * already exists at this place.
      */
     void setColumn( int _c ) { m_iColumn = _c; }
     /**
      * Set the row this cell is now in. This function is usually used after the 'paste'
-     * command.
+     * command. It does not trigger any updates or make shure that no other cell
+     * already exists at this place.
      */
     void setRow( int _r ) { m_iRow = _r; }
 

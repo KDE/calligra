@@ -211,9 +211,31 @@ public:
 
     /**
      * @return the name of this table.
+     *
+     * @see #setTableName
      */
     QString tableName() { return m_strName; }
-    void setTableName( QString _name ) { m_strName = _name; }
+    /**
+     * Renames a table. This will automatically adapt all formulars
+     * in all tables and all cells to reflect the new name.
+     *
+     * If the name really changed then @ref #sig_nameChanged is emitted
+     * and the GUI will reflect the change. In addition a @ref KSpreadUndoSetTableName
+     * object will be created to implement undo.
+     *
+     * @param init If set to TRUE then no formula will be changed and no signal
+     *             will be emitted and no undo action created. Usually you dont
+     *             want to do that.
+     *
+     *
+     * @return FALSE if the table could not be renamed. Usually the reason is
+     *         that this name is already used.
+     *
+     * @see #changeCellTabName
+     * @see KSpreadTabBar::renameTab
+     * @see #tableName
+     */
+    bool setTableName( const QString& name, bool init = FALSE );
 
     // C++
     virtual QDomElement save( QDomDocument& );
@@ -375,8 +397,8 @@ public:
     void setSort( bool sort ) { m_sort=sort; }
     void setSeries( const QPoint &_marker,int start,int end,int step,Series mode );
     /**
-    * Insert or remove =>move cells
-    */
+     * Insert or remove =>move cells
+     */
     void insertRightCell(const QPoint &_marker );
     void insertBottomCell(const QPoint &_marker);
     void removeLeftCell(const QPoint &_marker);
@@ -385,8 +407,8 @@ public:
     int adjustRow(const QPoint &_marker,int _row=-1);
 
     /**
-    * Install borders
-    */
+     * Install borders
+     */
     void borderLeft( const QPoint &_marker,QColor _color );
     void borderTop( const QPoint &_marker,QColor _color );
     void borderOutline( const QPoint &_marker,QColor _color );
@@ -396,37 +418,33 @@ public:
     void borderRight( const QPoint &_marker,QColor _color );
 
     void setConditional( const QPoint &_marker,KSpreadConditional tmp[3] );
-    
+
     bool getShowGrid() {return showGrid;}
+
+    void setShowGrid(bool _showGrid) {showGrid=_showGrid;}
     
-    void setShowGrid(bool _showGrid) {showGrid=_showGrid;} 
-
+    // ########### Nameing error
     QString Currency(){return currency;}
-    /**
-    * Change Name table in a formula
-    * When you change name table Table1 -> Price
-    * for all cell which refere to Table1, this function change name
-    */
-    void changeCellTabName(QString old_name,QString new_name);
 
     /**
-    * Change name of reference when you insert or remove column or row
-    * For example =Table1!A1 when you insert Column in A1 so
-    * so reference change =Table1!B1
-    */
+     * Change name of reference when you insert or remove column or row
+     * For example =Table1!A1 when you insert Column in A1 so
+     * so reference change =Table1!B1
+     */
     void changeNameCellRef(int pos,ChangeRef ref,QString tabname);
     /**
-    * Change name of reference when you insert or remove column or row
-    * For example =Table1!A1 when you insert Cell in A1 so
-    * so reference change =Table1!B1 it's specific for insert and remove cell
-    */
+     * Change name of reference when you insert or remove column or row
+     * For example =Table1!A1 when you insert Cell in A1 so
+     * so reference change =Table1!B1 it's specific for insert and remove cell
+     */
     void changeNameCellRef2(const QPoint & pos,ChangeRef ref,QString tabname);
 
+    // ############ Naming error
     bool isHide(){return m_tableHide;}
 
     /**
-    * change m_tableHide
-    */
+     * change m_tableHide
+     */
     void setHide(bool _m_tableHide){m_tableHide=_m_tableHide;}
     /**
      * Unselects all selected columns/rows/cells and redraws these cells.
@@ -606,12 +624,23 @@ signals:
     void sig_maxColumn( int _max_column );
     void sig_maxRow( int _max_row );
     /**
+     * @see #setTableName
+     */
+    void sig_nameChanged( KSpreadTable* table, const QString& old_name );
+    /**
      * Emitted if a certain area of some table has to be redrawn.
      * That is for example the case when a new child is inserted.
      */
     void sig_polygonInvalidated( const QPointArray& );
 
 protected:
+    /**
+     * Change the name of a table in all formulas.
+     * When you change name table Table1 -> Price
+     * for all cell which refere to Table1, this function changes the name.
+     */
+    void changeCellTabName(QString old_name,QString new_name);
+    
     void insertChild( KSpreadChild *_child );
 
     /**
@@ -723,7 +752,7 @@ protected:
     static QIntDict<KSpreadTable>* s_mapTables;
 
     static QString currency;
-    
+
     bool showGrid;
 };
 

@@ -291,7 +291,8 @@ public slots:
     void slotInsertChild( KSpreadChild *_child );
     void slotRemoveChild( KSpreadChild *_child );
     void slotUpdateChildGeometry( KSpreadChild *_child );
-
+    void slotTableRenamed( KSpreadTable* table, const QString& old_name );
+    
     virtual int leftBorder() const;
     virtual int rightBorder() const;
     virtual int topBorder() const;

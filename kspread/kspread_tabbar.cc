@@ -26,6 +26,7 @@
 #include <stdlib.h>
 
 #include <klocale.h>
+#include <kmessagebox.h>
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_view.h"
@@ -54,7 +55,7 @@ void KSpreadTabBar::addTab( const QString& _text )
 {
     tabsList.append( _text );
 
-    repaint();
+    update();
 }
 
 void KSpreadTabBar::removeTab( const QString& _text )
@@ -76,7 +77,7 @@ void KSpreadTabBar::removeTab( const QString& _text )
 
     tabsList.remove( _text );
 
-    repaint();
+    update();
 }
 
 void KSpreadTabBar::removeAllTabs()
@@ -86,12 +87,11 @@ void KSpreadTabBar::removeAllTabs()
     activeTab = 0;
     leftTab = 1;
 
-    repaint();
+    update();
 }
 
 void KSpreadTabBar::moveTab( int _from, int _to, bool _before )
 {
-
     QStringList::Iterator it;
 
     it = tabsList.at( _from );
@@ -228,12 +228,6 @@ void KSpreadTabBar::slotRemove( )
     }
 }
 
-
-void KSpreadTabBar::slotRename( )
-{
-    renameTab();
-}
-
 void KSpreadTabBar::slotAdd()
 {
     m_pView->insertTable();
@@ -364,36 +358,43 @@ void KSpreadTabBar::openPopupMenu( const QPoint &_global )
     m_pPopupMenu->popup( _global );
 }
 
+void KSpreadTabBar::renameTab( const QString& old_name, const QString& new_name )
+{
+    QStringList::Iterator it = tabsList.find( old_name );
+    (*it) = new_name;
+	    
+    update();
+}
 
-void KSpreadTabBar::renameTab()
+void KSpreadTabBar::slotRename()
 {
     QString activeName;
     QString newName;
 
+    // Store the current name of the active table
     KSpreadTable* table = m_pView->activeTable();
     activeName = table->tableName();
 
-    KSpreadTableName tndlg( (KSpreadView *)this->parentWidget(), "TableName" , activeName );
+    KSpreadTableName tndlg( m_pView, "TableName" , activeName );
     if ( tndlg.exec() )
     {
+	// Have a different name ?
         if ( ( newName = tndlg.tableName() ) != activeName )
         {
-            table->setTableName( newName );
-            QStringList::Iterator it = tabsList.find( activeName );
-            (*it) = newName;
-	    repaint();
-	    QListIterator<KSpreadTable> it2( table->map()->tableList() );
-            for( ; it2.current(); ++it2 )
-		it2.current()->changeCellTabName(activeName,newName);
-
+	    // Is the name already used
+	    if ( !table->setTableName( newName ) )
+	    {
+		KMessageBox::error( this, i18n("This name is already used."));
+		// Recursion
+		slotRename();
+		return;
+	    }
         }
     }
 }
 
 void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 {
-
-
     int old_active = activeTab;
 
     if ( tabsList.count() == 0 )
@@ -585,14 +586,14 @@ void KSpreadTabBar::mouseDoubleClickEvent( QMouseEvent*  )
 {
     if ( !m_pView->koDocument()->isReadWrite() )
         return;
-    renameTab();
+    slotRename();
 }
 
 void KSpreadTabBar::hideTable()
 {
     if ( tabsList.count() ==  1)
     {
-        QMessageBox::warning( this, i18n("Hide table"), i18n("You cannot hide the last table visible."), i18n("OK") );
+        KMessageBox::error( this, i18n("You cannot hide the last table visible.") );
         return;
     }
     else
@@ -602,7 +603,7 @@ void KSpreadTabBar::hideTable()
 	QString activeName = table->tableName();
 	removeTab( activeName );
 	tablehide.append( activeName );
-	m_pView->setActiveTable( m_pView->doc()->map()->findTable( tabsList.first()) );
+	// m_pView->setActiveTable( m_pView->doc()->map()->findTable( tabsList.first()) );
 
 	emit tabChanged( tabsList.first() );
     }
@@ -610,14 +611,13 @@ void KSpreadTabBar::hideTable()
 
 void KSpreadTabBar::showTable(const QString& text)
 {
-    addTab( text );
     tablehide.remove( text );
+    addTab( text );
 
-    emit tabChanged( text);
     m_pView->activeTable()->setHide( false );
 }
 
-void KSpreadTabBar::init(const QString & text)
+void KSpreadTabBar::addHiddenTab(const QString & text)
 {
     tablehide.append( text );
 }

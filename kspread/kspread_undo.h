@@ -119,7 +119,7 @@ protected:
 class KSpreadUndoSetText : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadTable *_table, const char *_data, int _column, int _row );
+    KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadTable *_table, const QString& _text, int _column, int _row );
     virtual ~KSpreadUndoSetText();
 
     virtual void undo();
@@ -164,6 +164,21 @@ protected:
     QRect m_rctRect;
     QByteArray m_array;
     KSpreadTable *m_pTable;
+};
+
+class KSpreadUndoSetTableName : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoSetTableName( KSpreadDoc *doc, KSpreadTable *table, const QString& name );
+    virtual ~KSpreadUndoSetTableName();
+
+    virtual void undo();
+    virtual void redo();
+
+protected:
+    KSpreadTable *m_pTable;
+    QString m_name;
+    QString m_redoName;
 };
 
 class KSpreadUndo

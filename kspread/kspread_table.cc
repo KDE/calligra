@@ -492,7 +492,7 @@ void KSpreadTable::setText( int _row, int _column, const QString& _text )
 	undo = new KSpreadUndoSetText( m_pDoc, this, cell->text(), _column, _row );
 	m_pDoc->undoBuffer()->appendUndo( undo );
     }
-
+    
     // The cell will force a display refresh itself, so we dont have to care here.
     cell->setText( _text );
 }
@@ -2691,12 +2691,18 @@ void KSpreadTable::insertRow( unsigned long int _row )
 	m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
+    // We want to remove cells without deleting them
     m_dctCells.setAutoDelete( FALSE );
     m_dctRows.setAutoDelete( FALSE );
 
+    /**
+     * Shift the cells to the right
+     */
+    
+    // Find the last row and create a list
+    // of all cells
     kauto_array<KSpreadCell*> list(m_dctCells.count());
     unsigned long int count = 0;
-    // Find the last row
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     unsigned long int max_row = 1;
     for ( ; it.current(); ++it )
@@ -2706,8 +2712,11 @@ void KSpreadTable::insertRow( unsigned long int _row )
 	max_row = it.current()->row();
     }
 
+    // Go from the right most row in left direction ....
     for ( unsigned long int i = max_row; i >= _row; i-- )
     {
+      // Iterate over all cells and move cells which are in row i
+      // one row to the right
       for( unsigned long int k = 0; k < count; k++ )
       {
 	if ( list[ k ]->row() == (int)i && !list[ k ]->isDefault() )
@@ -2723,6 +2732,9 @@ void KSpreadTable::insertRow( unsigned long int _row )
       }
     }
 
+    /**
+     * Shift the row layouts to the right
+     */
     kauto_array<RowLayout*> list2(m_dctRows.count());
     count = 0;
     QIntDictIterator<RowLayout> it2( m_dctRows );
@@ -2751,9 +2763,11 @@ void KSpreadTable::insertRow( unsigned long int _row )
       }
     }
 
+    // Reset to normal behaviour
     m_dctCells.setAutoDelete( TRUE );
     m_dctRows.setAutoDelete( TRUE );
 
+    // Update the view and borders
     emit sig_updateView( this );
     emit sig_updateHBorder( this );
     emit sig_updateVBorder( this );
@@ -4251,6 +4265,36 @@ DCOPObject* KSpreadTable::dcopObject()
 	m_dcop = new KSpreadTableIface( this );
 
     return m_dcop;
+}
+
+
+bool KSpreadTable::setTableName( const QString& name, bool init )
+{
+    if ( map()->findTable( name ) )
+	return FALSE;
+	
+    if ( m_strName == name )
+	return TRUE;
+    
+    QString old_name = m_strName;
+    m_strName = name;
+
+    if ( init )
+	return TRUE;
+    
+    QListIterator<KSpreadTable> it( map()->tableList() );
+    for( ; it.current(); ++it )
+	it.current()->changeCellTabName( old_name, name );
+    
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+	KSpreadUndoAction* undo = new KSpreadUndoSetTableName( doc(), this, old_name );
+	m_pDoc->undoBuffer()->appendUndo( undo );
+    }
+
+    emit sig_nameChanged( this, old_name );
+    
+    return TRUE;
 }
 
 /**********************************************************
