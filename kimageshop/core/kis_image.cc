@@ -56,6 +56,8 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
     m_author = "unknown";
     m_email = "unknown";
 
+    // jwc - need to update tile extents when a new layer is
+    // added larger than the first (or largest) layer
     QRect tileExtents = KisUtil::findTileExtents( QRect(0, 0, m_width, m_height) );
   
     m_xTiles = tileExtents.width() / TILE_SIZE;	
@@ -147,13 +149,18 @@ void KisImage::markDirty( QRect r )
 }
 
 
+/*
+    
+*/
 void KisImage::slotUpdateTimeOut()
 {
+    // if tile is dirty, 
     for(int y = 0; y < m_yTiles; y++)
 	  for(int x = 0; x < m_xTiles; x++)
 	    if (m_dirty[y * m_xTiles + x])
 	        compositeImage(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE));
 
+    // tiles updated, mark all tiles clean
     for(int y = 0; y < m_yTiles; y++)
       for(int x = 0; x < m_xTiles; x++)
 	    if (m_dirty[y * m_xTiles + x])
@@ -170,7 +177,13 @@ void KisImage::paintContent( QPainter& painter,
     paintPixmap( &painter, rect);
 }
 
-
+/*
+    Paint the pixmap of each tile which falls within the given
+    rectangle onto the QPainter passed in - normally this is the
+    kisCanvas - the main widget in the client area of the view
+    but it can be another painter as well, such as another pixmap
+    for the entire image or the area to be updated.
+*/
 void KisImage::paintPixmap(QPainter *p, QRect area)
 {
     if (!p) return;
@@ -193,6 +206,7 @@ void KisImage::paintPixmap(QPainter *p, QRect area)
 
 	        int xt = x*TILE_SIZE;
 	        int yt = y*TILE_SIZE;
+
 	        //qDebug("tile: %d", y*m_xTiles+x);
 
 	        if (tileRect.intersects(QRect(0, 0, m_width, m_height)) 
@@ -252,6 +266,11 @@ void KisImage::setUpVisual()
     Visual *vis     =   (Visual*)p.x11Visual();
     bool trueColour =   (vis->c_class == TrueColor);
 
+    if(trueColour)
+        kdDebug()<<"setUpVisual() trueColour is true"<<endl;
+    else
+        kdDebug()<<"setUpVisual() trueColour is false"<<endl;
+             
     // change the false to true to test the faster image converters
     visual = unknown;
     
@@ -263,6 +282,7 @@ void KisImage::setUpVisual()
 
         if ((red_mask==0xf800) && (green_mask==0x7e0) && (blue_mask==0x1f))
             visual=rgb565;
+
         if ((red_mask==0xff0000) && (green_mask==0xff00) && (blue_mask==0xff))
             visual=rgb888x;
 
@@ -289,17 +309,23 @@ void KisImage::setUpVisual()
 void KisImage::addLayer(const QRect& rect, const KisColor& c, 
     bool tr, const QString& name)
 {
-kdDebug(0) << "KisImage::addLayer() : entering" << endl; 
+kdDebug(0) << "KisImage::addLayer(): entering" << endl; 
+
     KisLayer *lay = new KisLayer(name, m_cMode, m_bitDepth);
-kdDebug(0) << "KisImage::addLayer() : new allocated" << endl; 
+    kdDebug(0) << "KisImage::addLayer(): new allocated" << endl; 
+    
     lay->allocateRect(rect);
-kdDebug(0) << "KisImage::addLayer() : returned from lay->allocateRect()" << endl;         
+    kdDebug(0) << "KisImage::addLayer(): returned from lay->allocateRect()" << endl;         
+
     lay->clear(c, tr);
-kdDebug(0) << "KisImage::addLayer() : returned from lay->clear()" << endl;         
+    kdDebug(0) << "KisImage::addLayer(): returned from lay->clear()" << endl;         
+    
     m_layers.append(lay);
-kdDebug(0) << "KisImage::addLayer() : returned from m_layers->append()" << endl;             
+    kdDebug(0) << "KisImage::addLayer(): returned from m_layers->append()" << endl;             
+    
     m_pCurrentLay=lay;
-kdDebug(0) << "KisImage::addLayer() : leaving" << endl;     
+    
+kdDebug(0) << "KisImage::addLayer(): leaving" << endl;     
 }
 
 
@@ -318,7 +344,7 @@ void KisImage::removeLayer( unsigned int _layer )
             m_pCurrentLay = NULL;
     }
 
-  delete lay;
+    delete lay;
 }
 
 
@@ -355,11 +381,11 @@ void KisImage::compositeTile(int x, int y, KisLayer *dstLay, int dstTile)
         // Go through each layer and find its contribution to this tile
         l++;
         //printf("layer: %s opacity=%d\n",lay->name().data(), lay->opacity());
-        if ((lay->visible()) &&
-	    (tileBoundary.intersects(lay->imageExtents()))) 
+        if ((lay->visible()) && (tileBoundary.intersects(lay->imageExtents()))) 
         {
-            // The layer is part of the tile. Find out the 1-4 tiles of the channel
-            // which are in it and render the appropriate proportions of each
+            /* The layer is part of the tile. Find out the 1-4 tiles of 
+            the channel which are in it and render the appropriate 
+            proportions of each */
             //TIME_START;
             //printf("*** compositeTile %d,%d\n",x,y);
             renderLayerIntoTile(tileBoundary, lay, dstLay, dstTile);
@@ -379,7 +405,8 @@ void KisImage::compositeImage(QRect r)
         for(int x = 0; x < m_xTiles; x++)
             if (r.isNull() || r.intersects(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE)))
 	        {
-		        if (m_cMode == cm_RGBA) // set the alpha channel to opaque
+                // set the alpha channel to opaque            
+		        if (m_cMode == cm_RGBA) 
 			        memset(m_pComposeLay->channelMem(3, 0, 0, 0),255, TILE_SIZE*TILE_SIZE);
 		        compositeTile(x,y, m_pComposeLay, 0);
 		        convertTileToPixmap(m_pComposeLay, 0, m_ptiles[y*m_xTiles+x]);
@@ -576,6 +603,7 @@ void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
     int leadIn=(TILE_SIZE-w);
 
     // FIXME:: Make it work for non-RGB modes
+    /* this may need to be adjusted for big-endian systems */
   
     uchar *dptr0 = dstLay->channelMem(0, dstTile, dstX, dstY);
     uchar *dptr1 = dstLay->channelMem(1, dstTile, dstX, dstY);
@@ -598,38 +626,38 @@ void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
 	    {
 	    // for prepultiply => invOpac=255-(*alpha*opacity)/255;
 		  
+	        if (m_cMode == cm_RGBA)
+	        {
+		        opac = (*sptr3*opacity)/255;
+		        invOpac=255-opac;
+
+		        *dptr0++ = (((*dptr0 * *dptr3)/255) * invOpac + *sptr0++ * opac)/255;
+		        *dptr1++ = (((*dptr1 * *dptr3)/255) * invOpac + *sptr1++ * opac)/255;
+		        *dptr2++ = (((*dptr2 * *dptr3)/255) * invOpac + *sptr2++ * opac)/255;
+		        *dptr3++ = *sptr3 + *dptr3 - (*sptr3 * *dptr3)/255;
+		        sptr3++;
+	        }
+            else
+	        {
+		        invOpac = 255-opacity;
+		        *dptr0++ = (*dptr0  * invOpac + *sptr0++ * opacity)/255;
+		        *dptr1++ = (*dptr1  * invOpac + *sptr1++ * opacity)/255;
+		        *dptr2++ = (*dptr2  * invOpac + *sptr2++ * opacity)/255;
+	        }		  
+	    }
+        
+	    dptr0 += leadIn;
+	    dptr1 += leadIn;
+	    dptr2 += leadIn;
+	    sptr0 += leadIn;
+	    sptr1 += leadIn;
+	    sptr2 += leadIn;
+
 	    if (m_cMode == cm_RGBA)
 	    {
-		  opac = (*sptr3*opacity)/255;
-		  invOpac=255-opac;
-
-		  *dptr0++ = (((*dptr0 * *dptr3)/255) * invOpac + *sptr0++ * opac)/255;
-		  *dptr1++ = (((*dptr1 * *dptr3)/255) * invOpac + *sptr1++ * opac)/255;
-		  *dptr2++ = (((*dptr2 * *dptr3)/255) * invOpac + *sptr2++ * opac)/255;
-		  *dptr3++ = *sptr3 + *dptr3 - (*sptr3 * *dptr3)/255;
-		  sptr3++;
+	        dptr3 += leadIn;
+	        sptr3 += leadIn;
 	    }
-        else
-	    {
-		  invOpac = 255-opacity;
-		  *dptr0++ = (*dptr0  * invOpac + *sptr0++ * opacity)/255;
-		  *dptr1++ = (*dptr1  * invOpac + *sptr1++ * opacity)/255;
-		  *dptr2++ = (*dptr2  * invOpac + *sptr2++ * opacity)/255;
-	    }		  
-	}
-        
-	dptr0 += leadIn;
-	dptr1 += leadIn;
-	dptr2 += leadIn;
-	sptr0 += leadIn;
-	sptr1 += leadIn;
-	sptr2 += leadIn;
-
-	if (m_cMode == cm_RGBA)
-	{
-	    dptr3 += leadIn;
-	    sptr3 += leadIn;
-	}
     }
 }
 
@@ -680,6 +708,7 @@ void KisImage::convertImageToPixmap(QImage *image, QPixmap *pix)
             }
                 break;
 
+            /* true color */
             case rgb888x:
                 m_pxi->data=(char*)image->bits();
                 break;
@@ -702,7 +731,7 @@ void KisImage::convertTileToPixmap(KisLayer *lay, int tileNo, QPixmap *pix)
     Copy the composite image into a QImage so it can be converted to a
     QPixmap.  Note: surprisingly it is not quicker to render directly 
     into a QImage probably due to the CPU cache, it's also useless wrt 
-    to other colour  spaces
+    (writing?) to other colour  spaces
     */
     
     // FIXME: Make it work for non-RGB images

@@ -49,6 +49,7 @@
 #include "kis_doc.h"
 #include "kis_util.h"
 #include "kis_canvas.h"
+#include "kis_framebuffer.h"
 #include "kis_painter.h"
 #include "kis_sidebar.h"
 #include "kis_tabbar.h"
@@ -137,6 +138,8 @@ void KisView::setupPainter()
 {
     m_pPainter = new KisPainter(m_pDoc, this);
 }
+
+
 
 /*
     Canvas for document (image) area
@@ -572,11 +575,11 @@ void KisView::setupActions()
         actionCollection(), "hide_layer" );
 
     (void) new KAction( i18n("&Next layer..."),
-        0, this, SLOT( next_layer() ),
+        "forward", 0, this, SLOT( next_layer() ),
         actionCollection(), "next_layer" );
 
     (void) new KAction( i18n("&Previous layer..."),
-        0, this, SLOT( previous_layer() ),
+        "back", 0, this, SLOT( previous_layer() ),
         actionCollection(), "previous_layer" );
 
     (void) new KAction( i18n("Layer Properties..."),
@@ -593,6 +596,14 @@ void KisView::setupActions()
 
     // layer transformations - should be generic, for selection too
     
+    (void) new KAction( i18n("Scale layer - smoothly"),
+        0, this, SLOT( layer_scale_smooth() ),
+        actionCollection(), "layer_scale_smooth");
+
+    (void) new KAction( i18n("Scale layer - keep palette"),
+        0, this, SLOT( layer_scale_rough() ),
+        actionCollection(), "layer_scale_rough");
+
     m_layer_rotate180 = new KAction( i18n("Rotate &180"),
         0, this, SLOT( layer_rotate180() ),
         actionCollection(), "layer_rotate180");
@@ -1507,9 +1518,8 @@ void KisView::updateToolbarButtons()
 
 
 /*
- *   layer action slots
+    layer action slots
  */
-
 
 /* 
     Properties dialog for the current layer. 
@@ -1575,7 +1585,14 @@ void KisView::remove_layer()
 
 void KisView::hide_layer()
 {
-    KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
+    KisImage * img = m_pDoc->current();
+    if (!img)  return;    
+
+    int indx = img->getCurrentLayerIndex();
+
+    m_pLayerView->layerTable()->slotInverseVisibility(indx);    
+    m_pLayerView->layerTable()->updateTable();    
+    m_pLayerView->layerTable()->updateAllCells();    
 }
 
 /*
@@ -1584,7 +1601,14 @@ void KisView::hide_layer()
 */
 void KisView::link_layer()
 {
-    KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
+    KisImage * img = m_pDoc->current();
+    if (!img)  return;    
+
+    int indx = img->getCurrentLayerIndex();
+
+    m_pLayerView->layerTable()->slotInverseLinking(indx);    
+    m_pLayerView->layerTable()->updateTable();    
+    m_pLayerView->layerTable()->updateAllCells();    
 }
 
 /*
@@ -1593,7 +1617,16 @@ void KisView::link_layer()
 */
 void KisView::next_layer()
 {
-    KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
+    KisImage * img = m_pDoc->current();
+    if (!img)  return;    
+
+    int indx = img->getCurrentLayerIndex();
+
+    if(indx < img->layerList().count() - 1) 
+        img->setCurrentLayer( indx + 1 );    
+
+    m_pLayerView->layerTable()->updateTable();    
+    m_pLayerView->layerTable()->updateAllCells();    
 }
 
 /*
@@ -1602,7 +1635,16 @@ void KisView::next_layer()
 */
 void KisView::previous_layer()
 {
-    KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
+    KisImage * img = m_pDoc->current();
+    if (!img)  return;    
+
+    int indx = img->getCurrentLayerIndex();
+    
+    if(indx > 0) 
+        img->setCurrentLayer( indx - 1 );
+    
+    m_pLayerView->layerTable()->updateTable();    
+    m_pLayerView->layerTable()->updateAllCells();    
 }
 
 void KisView::import_image()
@@ -1692,7 +1734,7 @@ void KisView::insert_layer_image(bool newImage)
 	            newimg->addLayer(QRect(0, 0, w, h), 
                     KisColor::white(), false, "background");
 
-            kdDebug() << "KisView ret. from addLayer() for new image" << endl;
+            //kdDebug() << "KisView ret. from addLayer() for new image" << endl;
 
             newimg->markDirty(QRect(0, 0, w, h));
             m_pDoc->setCurrentImage(newimg);
@@ -1733,6 +1775,70 @@ void KisView::save_layer_image(bool mergeLayers)
         //  save as standard image file (jpg, png, xpm, bmp, NO gif)
         if(!m_pDoc->saveAsQtImage(url.path()))
             kdDebug(0) << "Can't save doc as standard qt image" << endl;
+    }
+}
+
+
+void KisView::layer_scale_smooth()
+{
+    KisImage * img = m_pDoc->current();
+    if (!img)  return;    
+
+    KisLayer *lay = img->getCurrentLayer();
+    if (!lay)  return;    
+    
+    KisFrameBuffer *fb = m_pDoc->frameBuffer();
+    if (!fb)  return;    
+
+    NewLayerDialog *pNewLayerDialog = new NewLayerDialog();
+    pNewLayerDialog->exec();
+    if(!pNewLayerDialog->result() == QDialog::Accepted)
+        return;
+
+    int newWidth = pNewLayerDialog->width();
+    int newHeight = pNewLayerDialog->height();
+    QRect srcR(lay->imageExtents());        
+    
+    if(!fb->scaleSmooth(srcR, newWidth, newHeight))
+    {
+        kdDebug() << "scaleSmooth() failed" << endl; 
+    }
+    else
+    {
+        m_pLayerView->layerTable()->updateTable();    
+        m_pLayerView->layerTable()->updateAllCells();    
+    }
+}
+
+
+void KisView::layer_scale_rough()
+{
+    KisImage * img = m_pDoc->current();
+    if (!img)  return;    
+
+    KisLayer *lay = img->getCurrentLayer();
+    if (!lay)  return;    
+
+    KisFrameBuffer *fb = m_pDoc->frameBuffer();    
+    if (!fb)  return;
+    
+    NewLayerDialog *pNewLayerDialog = new NewLayerDialog();
+    pNewLayerDialog->exec();
+    if(!pNewLayerDialog->result() == QDialog::Accepted)
+        return;
+
+    int newWidth = pNewLayerDialog->width();
+    int newHeight = pNewLayerDialog->height();
+    QRect srcR(lay->imageExtents());
+        
+    if(!fb->scaleRough(srcR, newWidth, newHeight))
+    {
+        kdDebug() << "scaleRough() failed" << endl; 
+    }
+    else
+    {
+        m_pLayerView->layerTable()->updateTable();    
+        m_pLayerView->layerTable()->updateAllCells();    
     }
 }
 

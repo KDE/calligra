@@ -38,6 +38,7 @@ KisPattern::KisPattern(QString file)
     loadViaQImage(file);
 }
 
+
 KisPattern::KisPattern(int formula)
   : KisKrayon()
 {
@@ -47,11 +48,13 @@ KisPattern::KisPattern(int formula)
     loadViaFormula(formula);
 }
 
+
 KisPattern::~KisPattern()
 {
     delete m_pImage;
     delete m_pPixmap;
 }
+
 
 void KisPattern::loadViaQImage(QString file)
 {
@@ -123,9 +126,7 @@ void KisPattern::loadViaQImage(QString file)
 /*
     load pattern from a formula or algorithm - these will
     algorithms and/or predefined Qt patterns 
-*/
 
-/*
     Formulas for patterns should come from plugins which
     could be written in almost any language to generate
     patterns in a given area or region
@@ -133,15 +134,13 @@ void KisPattern::loadViaQImage(QString file)
 void KisPattern::loadViaFormula(int formula)
 {
     // load via QImage
-    m_pImage = new QImage(64, 64, 32);
+    m_pImage = new QImage(THUMB_SIZE, THUMB_SIZE, 32);
 
     if (m_pImage->isNull())
     {
         m_valid = false;
         qDebug("Failed to load pattern: %d", formula);
     }
-
-    *m_pImage = m_pImage->convertDepth(32);
 
     // create pixmap for preview dialog
     m_pPixmap = new QPixmap;

@@ -160,9 +160,15 @@ class KisView : public KoView
     void hide_layer();
     void next_layer();
     void previous_layer();
-    void layer_properties();
+
+    void layer_properties(); 
+
     void insert_image_as_layer();
     void save_layer_as_image();
+
+    void layer_scale_smooth();
+    void layer_scale_rough();
+
     void layer_rotate180();
     void layer_rotateleft90();
     void layer_rotateright90();

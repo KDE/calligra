@@ -62,6 +62,7 @@
 #include "kis_layer.h"
 #include "kis_channel.h"
 #include "kis_selection.h"
+#include "kis_framebuffer.h"
 #include "koUndo.h"
 
 #define KIS_DEBUG(AREA, CMD)
@@ -81,7 +82,8 @@ kdDebug(0) << "KisDoc::KisDoc() entering" << endl;
     m_pCurrent = 0L;
     m_pNewDialog = 0L;
     m_pClipImage = 0L;
-    m_pSelection = new KisSelection(this);    
+    m_pSelection = new KisSelection(this);
+    m_pFrameBuffer = new KisFrameBuffer(this);
     m_Images.setAutoDelete(false);
     
 kdDebug(0) << "QPixmap::defaultDepth(): " << QPixmap::defaultDepth() << endl; 
@@ -315,16 +317,16 @@ kdDebug(0) << "KisDoc::loadXML() entering" << endl;
 
     if ( doc.doctype().name() != "image" )
     {
-      kdDebug(0) << "KisDoc::loadXML() no doctype name error" << endl;    
-	  return false;
+        kdDebug(0) << "KisDoc::loadXML() no doctype name error" << endl;    
+	    return false;
     }
 
     QDomElement image = doc.documentElement();
 
     if (image.attribute( "mime" ) != "application/x-krayon") 
     {
-      kdDebug(0) << "KisDoc::loadXML() no mime name error" << endl;        
-      return false;
+        kdDebug(0) << "KisDoc::loadXML() no mime name error" << endl;        
+        return false;
     }
     
     // this assumes that we are loading an existing image
@@ -648,6 +650,12 @@ KisDoc::~KisDoc()
     {
         delete m_pSelection;
         m_pSelection = 0L;
+    }    
+
+    if(m_pFrameBuffer != 0L)
+    {
+        delete m_pFrameBuffer;
+        m_pFrameBuffer = 0L;
     }    
 }
 
@@ -1156,10 +1164,10 @@ bool KisDoc::slotNewImage()
 
     kdDebug() << "KisDoc::slotNewImage:NewDialog()->exec()" << endl; 
 
-    /* This causes bad drawable or invalid window paramater.
+    /* This dialog causes bad drawable or invalid window paramater.
     It seems harmless, though, just a message about an Xerror. 
-    Error only occurs when document is first created, not when 
-    adding new image tab */
+    Error only occurs when document is first created and has no
+    content, not when adding new image to an existing document */
     m_pNewDialog->exec();
     
     if(!m_pNewDialog->result() == QDialog::Accepted)

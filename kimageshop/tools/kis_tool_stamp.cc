@@ -161,7 +161,6 @@ bool StampTool::stampToCanvas(QPoint pos)
         return false;
     }
 
-
     int startX = 0;
     int startY = 0;
 
@@ -186,19 +185,6 @@ bool StampTool::stampToCanvas(QPoint pos)
                   
     p.end();
 
-    /* Alternate bitBlt method, needs resarching.  This may be better
-    than QPainter because it allows raster operations for neat effects.
-    but only with one QPixmap to another, not with a QPixmap to a
-    Krayon region.  We need our own raster ops for that. */
-        
-    /*
-    bitBlt (m_pCanvas, 
-        pos.x() + m_pView->xPaintOffset() - m_pView->xScrollOffset(), 
-        pos.y() + m_pView->yPaintOffset() - m_pView->yScrollOffset(), 
-        m_pPattern->pixmap(), 0, 0, 
-        m_pPattern->width(), m_pPattern->height());    
-    */
-    
     return true;
 }
 

@@ -1,5 +1,5 @@
 /*
- *  kis_selection.h - part of Krayon
+ *  kis_framebuffer.h - part of Krayon
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *
@@ -18,8 +18,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __kis_selection_h__
-#define __kis_selection_h__
+#ifndef __kis_framebuffer_h__
+#define __kis_framebuffer_h__
 
 #include <qobject.h>
 #include <qimage.h>
@@ -30,37 +30,50 @@
 
 class KisDoc;
 
-class KisSelection : public QObject 
+class KisFrameBuffer : public QObject 
 {
     Q_OBJECT
 
 public:
 
-    KisSelection(KisDoc *doc);
-    ~KisSelection();
+    KisFrameBuffer(KisDoc *doc);
+    ~KisFrameBuffer();
 
     void setNull();
-    bool erase();
+    bool eraseCurrentLayer();
     
-    QImage & getImage() { return selectImage; }
+    QImage & getImage() { return srcImage; }
     void setImage(QImage & img);
     
-    QRect  & getRect() { return selectRect; } 
+    QRect  & getRect() { return destRect; } 
     void setRect(QRect & rect);
+
+    bool scaleSmooth(QRect & srcR, int newWidth, int newHeight);
+    bool scaleRough(QRect & srcR, int newWidth, int newHeight);    
+
+    bool mirror(QRect & r);
+    bool flip(QRect & r);
+    bool rotate90(QRect & r);
+    bool rotate180(QRect & r);
+    bool rotate270(QRect & r);
     
+    bool QImageToLayer(QImage *qimg, QRect & src, QRect & dest);
+    bool layerToQImage(QImage *qimg, QRect & src, QRect & dest);
+         
+
 protected:
 
-    QImage selectImage;
-    QRect selectRect;
+    QImage srcImage;
+    QRect  destRect;
+    QRect  srcRect;
+    
+    void addScratchLayer(int width, int height);
+    void removeScratchLayer();
           
 private:
 
-    // the document, image and layer for the selection
-
     KisDoc *pDoc;
-    KisImage *pImage;
-    KisLayer *pLayer;
-
+    KisLayer *pScratchLayer;
 };
 
 #endif

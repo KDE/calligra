@@ -113,13 +113,11 @@ bool KisPainter::toLayer(QRect paintRect)
     if(qimg->depth() < 16)
     {
         kdDebug() << "Warning: kisPainter image depth < 16" << endl;
-        QImage ci = qimg->smoothScale(qimg->width(), qimg->height());
-        qimg = &ci;
     }
     
-    bool grayscale = false;    
-    bool blending = false;
+    bool colorBlending = true;
     bool alpha = (img->colorMode() == cm_RGBA); 
+    bool averageAlpha = false;
     
     QRect clipRect(paintRect);
 
@@ -133,9 +131,11 @@ bool KisPainter::toLayer(QRect paintRect)
     int ex = clipRect.right();
     int ey = clipRect.bottom();
 
-    uchar r, g, b, a;
+    uchar r, g, b; 
+    int a = 255;
     int bv = 0;
-    int opacity = 255;
+    int opacity = lineOpacity;
+    int invopacity = 255 - opacity;
     
     int fgRed     = pView->fgColor().R();
     int fgGreen   = pView->fgColor().G();
@@ -146,17 +146,16 @@ bool KisPainter::toLayer(QRect paintRect)
         for (int x = sx; x <= ex; x++)
 	    {
             // destination binary values by channel
-            // these are ignored unless we are blending
-            if(blending)
+            r = lay->pixel(0, x, y);
+            g = lay->pixel(1, x, y);
+            b = lay->pixel(2, x, y);
+ 
+            if(alpha)
             {
-	            r = lay->pixel(0, x, y);
-	            g = lay->pixel(1, x, y);
-	            b = lay->pixel(2, x, y);
-            }
-            
+                a = lay->pixel(3, x, y);
+            }    
             // pixel value in scanline at x offset to right
-            // in terms of the total image which is the
-            // same size as the layer
+            // in terms of the layer
             uint *p = (uint *)qimg->scanLine(y) + x;
 
             // ignore the white background filler, 
@@ -164,31 +163,33 @@ bool KisPainter::toLayer(QRect paintRect)
             if(QColor(*p) != Qt::black) continue;
                          
             // set layer pixel to be same as image
-	        lay->setPixel(0, x,  y, fgRed);
-	        lay->setPixel(1, x,  y, fgGreen);
-	        lay->setPixel(2, x,  y, fgBlue);
-                       	  
-            if (alpha)
+            if(!colorBlending)
+            {
+	            lay->setPixel(0, x,  y, fgRed);
+	            lay->setPixel(1, x,  y, fgGreen);
+	            lay->setPixel(2, x,  y, fgBlue);
+            }
+            /* blend source and destination values 
+            for each color based on opacity of source */
+            else
 	        {
-	            a = lay->pixel(3, x, y);
-                
-                if(grayscale)
-                {
-                    int v = a + bv;
-		            if (v < 0 ) v = 0;
-		            if (v > 255 ) v = 255;
-		            a = (uchar) v; 
-			    }
-                else
-                {
-                    int v = a + opacity;
-		            if (v < 0 ) v = 0;
-		            if (v > 255 ) v = 255;
-		            a = (uchar) v; 
-			    }
-                                
-		        lay->setPixel(3, x, y, a);
-	        }
+                lay->setPixel(0, x, y, 
+                    (fgRed*opacity + r*invopacity)/255);
+                lay->setPixel(1, x, y, 
+                    (fgGreen*opacity + g*invopacity)/255);                        
+                lay->setPixel(2, x, y, 
+                    (fgBlue*opacity + b*invopacity)/255);                        
+            }            
+            /* average source and destination alpha values 
+            for semi-transparent effect with other layers */                    
+            if(alpha && averageAlpha)
+            {
+                int v = (a + opacity)/2;
+                if (v < 0 ) v = 0;
+                if (v > 255 ) v = 255;
+                a = (uchar) v; 
+	            lay->setPixel(3, x,  y, a);                
+            }    
 	    } 
     }
 

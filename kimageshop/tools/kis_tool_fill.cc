@@ -1,5 +1,5 @@
 /*
- *  kis_tool_fill.cc - part of KImageShop
+ *  kis_tool_fill.cc - part of Krayon
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *
@@ -24,6 +24,7 @@
 #include "kis_view.h"
 #include "kis_cursor.h"
 #include "opts_fill_dlg.h"
+
 
 FillTool::FillTool(KisDoc *doc, KisView *view)
   : KisTool(doc, view)
@@ -172,15 +173,14 @@ bool FillTool::flood(int startX, int startY)
     
     KisImage *img = m_pDoc->current();
     if (!img) return false;    
+
     KisLayer *lay = img->getCurrentLayer();
     if (!lay) return false;
 
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
 	    return false;
-
-    if(img->colorMode() == cm_RGBA)
-        layerAlpha = true;
-        
+    
+    layerAlpha = (img->colorMode() == cm_RGBA);
     fLayer = lay;
     
     // source color values of selected pixed

@@ -33,6 +33,7 @@
 #include "kis_global.h"
 #include "kis_view.h"
 #include "kis_selection.h"
+#include "kis_framebuffer.h"
 
 class KisBrush;
 class KisSelection;
@@ -183,6 +184,11 @@ public:
 	 */    
     bool hasSelection();
     
+	/*
+	 *  get FrameBuffer
+	 */    
+    KisFrameBuffer *frameBuffer() { return m_pFrameBuffer; }
+    
 public slots:
     void slotImageUpdated();
     void slotImageUpdated( const QRect& rect);
@@ -218,11 +224,8 @@ protected:
     NewDialog * m_pNewDialog;
     QImage    * m_pClipImage;
     
-    /* selection for the document - there can only be one
-    no matter how many views or images - possible list of selections 
-    may be useful as they can be linked if in same layer */
-   
     KisSelection *m_pSelection;
+    KisFrameBuffer *m_pFrameBuffer;
 };
 
 #endif // __kis_doc_h__

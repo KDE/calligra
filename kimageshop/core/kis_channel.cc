@@ -77,7 +77,8 @@ uchar KisChannel::pixel(uint x, uint y)
 
     // does the tile exist?
     if (m_tiles[tileNo] == 0)
-        return(0); // FIXME: fix this return some sort of undef (or bg) via KisColor
+        return(0); 
+    // FIXME: fix this return some sort of undef (or bg) via KisColor
   
     // get a pointer to the points tile data
     uchar *ptr = m_tiles[tileNo] + ((y % TILE_SIZE) * TILE_SIZE + x % TILE_SIZE);

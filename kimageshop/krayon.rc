@@ -78,7 +78,8 @@
   <Action name="previous_layer"/>  
   <Action name="next_layer"/>
   <Separator/>
-  <Action name="scale_image"/>  
+  <Action name="layer_scale_smooth"/>  
+  <Action name="layer_scale_rough"/>  
   <Separator/>  
   <Action name="insert_image_as_layer"/>
   <Action name="save_layer_as_image"/>
@@ -191,7 +192,9 @@
   <Action name="tool_move"/>
   <Action name="tool_zoom"/>
   <Action name="tool_colorpicker"/>
+  <Action name="previous_layer"/>  
   <Action name="refresh_canvas"/>
+  <Action name="next_layer"/>  
   <Action name="panic_button"/>
 </ToolBar>
 
