@@ -558,7 +558,7 @@ void QTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<QText
 	int lastIndex = 0;
 	for ( ; it != lst.end(); ++it ) {
 	    if ( it != lst.begin() ) {
-		splitAndInsertEmptyParag( FALSE, FALSE );
+		splitAndInsertEmptyParag( FALSE, TRUE );
 		string->setEndState( -1 );
 		string->prev()->format( -1, FALSE );
 	    }
@@ -4684,8 +4684,8 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     int left = doc ? parag->leftMargin() + 4 : 0;
     int x = left + ( doc ? parag->firstLineMargin() : 0 );
     int curLeft = left;
-    int y = doc->addMargins() ? parag->topMargin() : 0;
-    int h = y;
+    int y = doc && doc->addMargins() ? parag->topMargin() : 0;
+    int h = 0;
     int len = parag->length();
 
     int initialHeight = h + c->height(); // remember what adjustLMargin was called with
@@ -4705,7 +4705,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     int ls = doc ? parag->lineSpacing() : 0;
 
     int i = start;
-    QTextParagLineStart *lineStart = new QTextParagLineStart( y, y, 0 );
+    QTextParagLineStart *lineStart = new QTextParagLineStart( y, 0, 0 );
     insertLineStart( parag, 0, lineStart );
     int lastBreak = -1;
     int tmpBaseLine = 0, tmph = 0;
@@ -4793,8 +4793,10 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
             // No breakable char found -> break at current char
 	    if ( lastBreak < 0 ) {
 		if ( lineStart ) {
-		    lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
-		    h = QMAX( h, tmph );
+                    // (combine lineStart and tmpBaseLine/tmph)
+                    int belowBaseLine = QMAX( h - lineStart->baseLine, tmph - tmpBaseLine );
+                    lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
+                    h = lineStart->baseLine + belowBaseLine;
 		    lineStart->h = h;
 		}
 		lineStart = formatLine( parag, string, lineStart, firstChar, c-1, align, w - x );
@@ -4862,6 +4864,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	} else if ( lineStart && ( isBreakable( string, i ) || parag->isNewLinesAllowed() && c->c == '\n' ) ) {
             // Breakable character
 	    if ( len <= 2 || i < len - 1 ) {
+                // (combine tmpBaseLine/tmph and this character)
                 int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height()+ls - c->ascent() );
                 tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
                 tmph = tmpBaseLine + belowBaseLine;
@@ -4870,14 +4873,17 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	    }
 	    minw = QMAX( minw, tminw );
 	    tminw = marg + ww;
-	    lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
-	    h = QMAX( h, tmph );
-	    lineStart->h = h;
+            // (combine lineStart and tmpBaseLine/tmph)
+            int belowBaseLine = QMAX( h - lineStart->baseLine, tmph - tmpBaseLine );
+            lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
+	    h = lineStart->baseLine + belowBaseLine;
+            lineStart->h = h;
 	    if ( i < len - 2 || c->c != ' ' )
 		lastBreak = i;
 	} else {
             // Non-breakable character
 	    tminw += ww;
+            // (combine tmpBaseLine/tmph and this character)
             int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height()+ls - c->ascent() );
             tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
 	    tmph = tmpBaseLine + belowBaseLine;
@@ -4891,8 +4897,10 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 
     // Finish formatting the last line
     if ( lineStart ) {
-	lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
-	h = QMAX( h, tmph );
+        // (combine lineStart and tmpBaseLine/tmph)
+        int belowBaseLine = QMAX( h - lineStart->baseLine, tmph - tmpBaseLine );
+        lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
+        h = lineStart->baseLine + belowBaseLine;
 	lineStart->h = h;
 	// last line in a paragraph is not justified
 	if ( align == Qt3::AlignJustify )
