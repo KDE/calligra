@@ -589,14 +589,16 @@ don't put a </?xml...> at the end of the file!).
 
         linesTogether: if "true", all the lines of a given paragraph remain together.
         hardFrameBreak: if "true", this paragraph is always at the beginning of a frame.
+        hardFrameBreakAfter: if "true", this paragraph is always the last in the frame.
 
-        Possible future extension: paragraphsTogether.
+        Future extensions: keepWithPrevious, keepWithNext
 -->
 <!ELEMENT PAGEBREAKING
     EMPTY>
 <!ATTLIST PAGEBREAKING
     linesTogether CDATA #REQUIRED
-    hardFrameBreak CDATA #REQUIRED>
+    hardFrameBreak CDATA #REQUIRED
+    hardFrameBreakAfter CDATA #REQUIRED>
 
 <!--
         The borders can be used on a frame and on a paragraph.

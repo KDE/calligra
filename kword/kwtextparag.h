@@ -73,8 +73,11 @@ public:
     enum {
         BreakBetweenLines = 0, // default
         KeepLinesTogether = 1,
-        HardFrameBreak = 2
-    }; // Page breaking flags - actually a bitfield
+        HardFrameBreakBefore = 2,      // incompatible with KeepWithPrevious
+        HardFrameBreakAfter = 4,       // incompatible with KeepWithNext
+        KeepWithPrevious = 8,          // incompatible with HardFrameBreakBefore
+        KeepWithNext = 16              // incompatible with HardFrameBreakAfter
+    }; // Page breaking flags
 
     // This class is used as a struct, which explains the public vars :)
     int alignment;
@@ -159,11 +162,12 @@ public:
     KWStyle *style() const { return m_layout.style; }
     void setStyle( KWStyle * style ) { m_layout.style = style; } // doesn't _apply_ the style
 
-    // The type of page-breaking-behaviour( BreakBetweenLines[default], KeepLinesTogether and/or HardFrameBreak )
-    void setPageBreaking( int pb );
+    // The type of page-breaking behaviour
+    void setPageBreaking( int pb ); // warning this sets all the flags!
     int pageBreaking() const { return m_layout.pageBreaking; }
     bool linesTogether() const { return m_layout.pageBreaking & KWParagLayout::KeepLinesTogether; }
-    bool hardFrameBreak() const { return m_layout.pageBreaking & KWParagLayout::HardFrameBreak; }
+    bool hardFrameBreakBefore() const { return m_layout.pageBreaking & KWParagLayout::HardFrameBreakBefore; }
+    bool hardFrameBreakAfter() const { return m_layout.pageBreaking & KWParagLayout::HardFrameBreakAfter; }
 
     // Get and set tabulator positions
     KoTabulatorList tabList() const { return m_layout.tabList(); }

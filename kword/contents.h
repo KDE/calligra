@@ -43,9 +43,6 @@ public:
 protected:
     // Find or create a toc style
     static KWStyle * findOrCreateTOCStyle( KWTextFrameSet *fs, int depth );
-
-private:
-    bool m_bPageBreakInserted;
 };
 
 

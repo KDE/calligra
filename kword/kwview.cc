@@ -1516,11 +1516,10 @@ void KWView::insertFrameBreak()
     KWTextFrameSetEdit *edit=currentTextEdit();
     if ( !edit )
         return;
-
-    // insert a paragraph first
+    // We use "new paragraph" and "frame break before", because this allows using 'Backspace'
+    // to get rid of it. With "frame break after" we'd need to open the paragraph dialog.
     edit->insertParagraph();
-
-    edit->setPageBreaking( KWParagLayout::HardFrameBreak ); // ## TODO bit-OR with current setting, or add an enum !
+    edit->setPageBreaking( edit->currentParagLayout().pageBreaking & KWParagLayout::HardFrameBreakBefore );
 }
 
 void KWView::insertVariable()

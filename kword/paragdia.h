@@ -122,7 +122,7 @@ private slots:
 private:
     QLineEdit *eLeft, *eRight, *eFirstLine, *eBefore, *eAfter, *eSpacing;
     QComboBox *cSpacing;
-    QCheckBox *cKeepLinesTogether, *cHardBreak;
+    QCheckBox *cKeepLinesTogether, *cHardBreakBefore, *cHardBreakAfter;
     KWPagePreview *prev1;
     KWUnit::Unit m_unit;
 };

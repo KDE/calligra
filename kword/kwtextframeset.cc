@@ -587,7 +587,10 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
 
     int breaked = false;
     bool linesTogether = parag ? static_cast<KWTextParag *>(parag)->linesTogether() : false;
-    bool hardFrameBreak = parag ? static_cast<KWTextParag *>(parag)->hardFrameBreak() : false;
+    bool hardFrameBreak = parag ? static_cast<KWTextParag *>(parag)->hardFrameBreakBefore() : false;
+    if ( !hardFrameBreak && parag && parag->prev() )
+        hardFrameBreak = static_cast<KWTextParag *>(parag->prev())->hardFrameBreakAfter();
+
 #ifdef DEBUG_FLOW
     kdDebugBody(32002) << "KWTextFrameSet::adjustFlow parag=" << parag
                        << " linesTogether=" << linesTogether << " yp=" << yp

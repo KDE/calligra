@@ -114,6 +114,8 @@ void KWTextParag::setPageBreaking( int pb )
 {
     m_layout.pageBreaking = pb;
     invalidate(0);
+    if ( next() && ( pb & KWParagLayout::HardFrameBreakAfter ) )
+        next()->invalidate(0);
 }
 
 void KWTextParag::setTopBorder( const Border & _brd )
@@ -381,7 +383,8 @@ void KWTextParag::copyParagData( QTextParag *_parag )
     {
         setParagLayout( parag->paragLayout() );
         // Don't copy the hard-frame-break setting though
-        m_layout.pageBreaking &= ~KWParagLayout::HardFrameBreak;
+        m_layout.pageBreaking &= ~KWParagLayout::HardFrameBreakBefore;
+        m_layout.pageBreaking &= ~KWParagLayout::HardFrameBreakAfter;
         setFormat( parag->paragFormat() );
         // QTextCursor::splitAndInsertEmptyParag takes care of setting the format
         // for the chars in the new parag
@@ -1153,11 +1156,13 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
         if ( element.attribute( "linesTogether" ) == "true" )
             pageBreaking |= KeepLinesTogether;
         if ( element.attribute( "hardFrameBreak" ) == "true" )
-            pageBreaking |= HardFrameBreak;
+            pageBreaking |= HardFrameBreakBefore;
+        if ( element.attribute( "hardFrameBreakAfter" ) == "true" )
+            pageBreaking |= HardFrameBreakAfter;
     }
     element = parentElem.namedItem( "HARDBRK" ).toElement(); // KWord-0.8
     if ( !element.isNull() )
-        pageBreaking |= HardFrameBreak;
+        pageBreaking |= HardFrameBreakBefore;
 
 
     element = parentElem.namedItem( "LEFTBORDER" ).toElement();
@@ -1265,8 +1270,10 @@ void KWParagLayout::save( QDomElement & parentElem )
         parentElem.appendChild( element );
         if ( pageBreaking & KeepLinesTogether )
             element.setAttribute( "linesTogether",  "true" );
-        if ( pageBreaking & HardFrameBreak )
+        if ( pageBreaking & HardFrameBreakBefore )
             element.setAttribute( "hardFrameBreak", "true" );
+        if ( pageBreaking & HardFrameBreakAfter )
+            element.setAttribute( "hardFrameBreakAfter", "true" );
     }
 
     if ( leftBorder.ptWidth > 0 )

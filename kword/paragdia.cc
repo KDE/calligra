@@ -403,17 +403,20 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
 
     // --------------- End of page /frame ---------------
     QGroupBox * endFramePage = new QGroupBox( i18n( "Behavior at end of frame/page" ), this );
-    QGridLayout * endFramePageGrid = new QGridLayout( endFramePage, 3, 1,
+    QGridLayout * endFramePageGrid = new QGridLayout( endFramePage, 4, 1,
                                                       KDialog::marginHint(), KDialog::spacingHint() );
 
     cKeepLinesTogether = new QCheckBox( i18n("Keep lines together"),endFramePage);
     endFramePageGrid->addWidget( cKeepLinesTogether, 1, 0 );
-    cHardBreak = new QCheckBox( i18n("Insert Break Before Paragraph"),endFramePage);
-    endFramePageGrid->addWidget( cHardBreak, 2, 0 );
+    cHardBreakBefore = new QCheckBox( i18n("Insert Break Before Paragraph"),endFramePage);
+    endFramePageGrid->addWidget( cHardBreakBefore, 2, 0 );
+    cHardBreakAfter = new QCheckBox( i18n("Insert Break After Paragraph"),endFramePage);
+    endFramePageGrid->addWidget( cHardBreakAfter, 3, 0 );
+
     endFramePageGrid->addRowSpacing( 0, 12 ); // groupbox title
-    endFramePageGrid->setRowStretch( 0, 0 );
-    endFramePageGrid->setRowStretch( 1, 0 );
-    endFramePageGrid->setRowStretch( 2, 1 );
+    for ( int i = 0 ; i < endFramePageGrid->numRows()-1 ; ++i )
+        endFramePageGrid->setRowStretch( 0, 0 );
+    endFramePageGrid->setRowStretch( endFramePageGrid->numRows()-1, 1 );
     mainGrid->addWidget( endFramePage, 2, 0 );
 
 
@@ -530,8 +533,10 @@ int KWIndentSpacingWidget::pageBreaking() const
     int pb = 0;
     if ( cKeepLinesTogether->isChecked() )
         pb |= KWParagLayout::KeepLinesTogether;
-    if ( cHardBreak->isChecked() )
-        pb |= KWParagLayout::HardFrameBreak;
+    if ( cHardBreakBefore->isChecked() )
+        pb |= KWParagLayout::HardFrameBreakBefore;
+    if ( cHardBreakAfter->isChecked() )
+        pb |= KWParagLayout::HardFrameBreakAfter;
     return pb;
 }
 
@@ -568,7 +573,8 @@ void KWIndentSpacingWidget::display( const KWParagLayout & lay )
     prev1->setSpacing( _spacing );
 
     cKeepLinesTogether->setChecked( lay.pageBreaking & KWParagLayout::KeepLinesTogether );
-    cHardBreak->setChecked( lay.pageBreaking & KWParagLayout::HardFrameBreak );
+    cHardBreakBefore->setChecked( lay.pageBreaking & KWParagLayout::HardFrameBreakBefore );
+    cHardBreakAfter->setChecked( lay.pageBreaking & KWParagLayout::HardFrameBreakAfter );
     // ## preview support for end-of-frame ?
 }
 

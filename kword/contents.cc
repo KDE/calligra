@@ -34,8 +34,7 @@
 #include <kdebug.h>
 
 KWInsertTOCCommand::KWInsertTOCCommand( KWTextFrameSet * fs )
-    : QTextCommand( fs->textDocument() ),
-      m_bPageBreakInserted( false )
+    : QTextCommand( fs->textDocument() )
 {
 }
 
@@ -104,13 +103,8 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
         parag->setFormat( 0, parag->string()->length(), newFormat );
     }
 
-    kdDebug() << "KWInsertTOCCommand::execute body parag=" << body << " " << body->paragId() << endl;
-    if ( !body->hardFrameBreak() )
-    {
-        kdDebug() << "KWInsertTOCCommand::execute inserting page break" << endl;
-        m_bPageBreakInserted = true;
-        body->setPageBreaking( body->pageBreaking() | KWParagLayout::HardFrameBreak );
-    }
+    // Set a hard frame break after the last TOC parag
+    prevTOCParag->setPageBreaking( prevTOCParag->pageBreaking() | KWParagLayout::HardFrameBreakAfter );
     return c;
 }
 
@@ -120,12 +114,6 @@ QTextCursor *KWInsertTOCCommand::unexecute( QTextCursor *c )
     KWTextFrameSet * fs = textdoc->textFrameSet();
     removeTOC( fs, c, 0L );
     fs->kWordDocument()->renameButtonTOC(i18n("Table of &Contents"));
-    if ( m_bPageBreakInserted )
-    {
-        KWTextParag *body = static_cast<KWTextParag *>( textdoc->firstParag() );
-        // Remove frame break
-        body->setPageBreaking( body->pageBreaking() & ~KWParagLayout::HardFrameBreak );
-    }
     return c;
 }
 
