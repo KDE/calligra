@@ -571,6 +571,9 @@ void GDocument::layerChanged () {
 }
 
 void GDocument::objectChanged () {
+  if (!autoUpdate)
+    return;
+
   if (! selectionIsEmpty ()) {
     selBoxIsValid = false;
     updateHandle ();
