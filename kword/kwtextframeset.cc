@@ -2192,17 +2192,13 @@ void KWTextFrameSet::UndoRedoInfo::clear()
                 QTextCommand * cmd = new KWTextDeleteCommand( textdoc, id, index, text.rawData(), customItemsMap, oldParagLayouts );
                 textdoc->addCommand( cmd );
                 ASSERT( placeHolderCmd );
-                // Deleting any custom items -> macro command, to let custom items add their command
+                placeHolderCmd->addCommand( new KWTextCommand( textfs, /*cmd, */QString::null ) );
+                // Deleting any custom items -> let them add their command
                 if ( !customItemsMap.isEmpty() )
                 {
-                    placeHolderCmd->addCommand( new KWTextCommand( textfs, /*cmd, */QString::null ) );
                     customItemsMap.deleteAll( placeHolderCmd );
                 }
-                else
-                {
-                    placeHolderCmd->addCommand( new KWTextCommand( textfs, /*cmd, */QString::null ) );
-                }
-            } break;
+           } break;
             case Invalid:
                 break;
         }
@@ -3227,12 +3223,8 @@ KCommand * KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & da
     //kdDebug(32001) << "KWTextFrameSet::pasteKWord" << endl;
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Paste Text") );
     QTextDocument *textdoc = textDocument();
-    KCommand *cmd2 =0L;
     if ( removeSelected && textdoc->hasSelection( QTextDocument::Standard ) )
-        cmd2 = removeSelectedTextCommand( cursor, QTextDocument::Standard );
-    if(cmd2)
-        macroCmd->addCommand(cmd2);
-    //removeSelectedText( cursor );
+        macroCmd->addCommand( removeSelectedTextCommand( cursor, QTextDocument::Standard ) );
     emit hideCursor();
     // correct but useless due to unzoom/zoom
     // (which invalidates everything and sets lastformatted to firstparag)
@@ -3243,15 +3235,13 @@ KCommand * KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & da
     // Using insert() wouldn't help storing the parag stuff for redo
     KWPasteTextCommand * cmd = new KWPasteTextCommand( textDocument(), cursor->parag()->paragId(), cursor->index(), data );
     textDocument()->addCommand( cmd );
-    //m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Paste Text") ) ); // the wrapper KCommand
 
-    macroCmd->addCommand( new KWTextCommand( this, /*cmd, */i18n("Paste Text") ) ); // the wrapper KCommand
+    macroCmd->addCommand( new KWTextCommand( this, /*cmd, */QString::null ) );
 
     *cursor = *( cmd->execute( cursor ) );
 
     (void) availableHeight(); // calculate it again (set to -1 due to unzoom/zoom)
 
-    //m_doc->addCommand(macroCmd);
     formatMore();
     emit repaintChanged( this );
     emit ensureCursorVisible();
@@ -3487,9 +3477,6 @@ KCommand * KWTextFrameSet::deleteAnchoredFrame( KWAnchor * anchor )
     QTextCursor c( textdoc );
     c.setParag( anchor->paragraph() );
     c.setIndex( anchor->index() );
-
-    //KWTextFormat * currentFormat = 0L;//unused
-    //doKeyboardAction( &c, currentFormat, ActionDelete );
 
     textdoc->setSelectionStart( HighlightSelection, &c );
     c.setIndex( anchor->index() + 1 );

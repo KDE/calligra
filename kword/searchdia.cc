@@ -306,7 +306,7 @@ void KWFindReplace::proceed()
     if ( edit && ( m_options & KoFindDialog::SelectedText ) )
     {
         firstFrameSet = static_cast<KWTextFrameSet *>(edit->frameSet());
-        if ( !firstParag ) // no set by 'from cursor'
+        if ( !firstParag ) // not set by 'from cursor'
         {
             QTextCursor c1 = firstFrameSet->textDocument()->selectionStartCursor( QTextDocument::Standard );
             firstParag = c1.parag();
@@ -353,6 +353,7 @@ bool KWFindReplace::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag
     // TODO formatting options are not implemented !
     // We need to reimplement what KoFind::find does, and add that.
     m_currentFrameSet = fs;
+    // TODO port to KWParagVisitor
     m_currentParag = firstParag;
     m_offset = 0;
     if ( firstParag == lastParag )
