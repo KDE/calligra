@@ -25,6 +25,7 @@
 #include "kis_vec.h"
 #include "kis_cursor.h"
 #include "kis_util.h"
+#include "kapp.h"
 
 BrushTool::BrushTool(KisDoc *doc, KisView *view, const KisBrush *_brush)
   : KisTool(doc, view)

@@ -512,21 +512,21 @@ void KisView::canvasGotMouseMoveEvent ( QMouseEvent *e )
 		  , QPoint(x, y)
 		  , e->globalPos(), e->button(), e->state() );
 
-  emit canvasMouseMoveEvent( &ev );
-
   if (x > docWidth() || x < 0 || y > docHeight() || y < 0)
     {
       x = -1;
       y = -1;
       m_pSideBar->slotSetPosition( QPoint( x,y ) );
       m_pSideBar->slotSetColor( KisColor::white() );
-      return;
     }
-
-  m_pSideBar->slotSetPosition( QPoint( x,y ) );
-
-  KisColor c = m_pColorPicker->pick( x, y );
-  m_pSideBar->slotSetColor( c );
+  else
+    {
+      m_pSideBar->slotSetPosition( QPoint( x,y ) );
+      
+      KisColor c = m_pColorPicker->pick( x, y );
+      m_pSideBar->slotSetColor( c );
+    }
+  emit canvasMouseMoveEvent( &ev );
 }
 
 void KisView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
