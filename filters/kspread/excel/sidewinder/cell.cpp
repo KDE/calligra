@@ -36,6 +36,8 @@ public:
   unsigned column;  
   Value value;
   Format format;
+  unsigned columnSpan;
+  unsigned rowSpan;
 };
 
 };
@@ -45,10 +47,12 @@ using namespace Sidewinder;
 Cell::Cell( Sheet* sheet, unsigned column, unsigned row )
 {
   d = new Cell::Private();
-  d->sheet   = sheet;
-  d->column  = column;
-  d->row     = row;
-  d->value = Value::empty();
+  d->sheet      = sheet;
+  d->column     = column;
+  d->row        = row;
+  d->value      = Value::empty();
+  d->columnSpan = 1;
+  d->rowSpan    = 1;
 };
 
 Cell::~Cell()
@@ -122,4 +126,26 @@ void Cell::setFormat( const Format& format )
 {
   d->format = format;
   // TODO mark the cell as dirty
+}
+
+unsigned Cell::columnSpan() const
+{
+  return d->columnSpan;
+}
+
+void Cell::setColumnSpan( unsigned span )
+{
+  if( span < 1 ) return;
+  d->columnSpan = span;
+}
+
+unsigned Cell::rowSpan() const
+{
+  return d->rowSpan;
+}
+
+void Cell::setRowSpan( unsigned span )
+{
+  if( span < 1 ) return;
+  d->rowSpan = span;
 }

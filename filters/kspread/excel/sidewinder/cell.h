@@ -60,6 +60,14 @@ public:
   
   void setFormat( const Format& format );
   
+  unsigned columnSpan() const;
+  
+  void setColumnSpan( unsigned span );
+  
+  unsigned rowSpan() const;
+  
+  void setRowSpan( unsigned span );  
+  
 private:
   // no copy or assign
   Cell( const Cell& );
