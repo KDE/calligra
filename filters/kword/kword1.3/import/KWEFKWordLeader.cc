@@ -835,8 +835,6 @@ bool KWEFKWordLeader::doAbortFile(void)
     }
 
 
-DO_VOID_DEFINITION (doOpenStyles)
-DO_VOID_DEFINITION (doCloseStyles)
 DO_VOID_DEFINITION (doOpenHead)
 DO_VOID_DEFINITION (doCloseHead)
 DO_VOID_DEFINITION (doOpenBody)
@@ -846,33 +844,7 @@ DO_VOID_DEFINITION (doCloseSpellCheckIgnoreList)
 DO_VOID_DEFINITION (doOpenTextFrameSet)
 DO_VOID_DEFINITION (doCloseTextFrameSet)
 
-bool KWEFKWordLeader::doFullDocumentInfo (const KWEFDocumentInfo &docInfo)
-{
-    return false;
-}
-
-
-bool KWEFKWordLeader::doVariableSettings (const VariableSettingsData &varSettings)
-{
-    return false;
-}
-
 bool KWEFKWordLeader::doPageInfo ( const int headerType, const int footerType )
-{
-    return false;
-}
-
-bool KWEFKWordLeader::doFullPaperFormat ( const int format, const double width, const double height, const int orientation )
-{
-    return false;
-}
-
-bool KWEFKWordLeader::doFullPaperBorders (const double top, const double left, const double bottom, const double right)
-{
-    return false;
-}
-
-bool KWEFKWordLeader::doFullDefineStyle ( LayoutData &layout )
 {
     return false;
 }

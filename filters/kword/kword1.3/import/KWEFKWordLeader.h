@@ -44,19 +44,19 @@ class KWEFKWordLeader
         QImage loadAndConvertToImage(const QString& strName, const QString& inExtension) const;
         bool loadAndConvertToImage(const QString& strName, const QString& inExtension, const QString& outExtension, QByteArray& image) const;
 
-    public: // public leader/worker functions (DO NOT use in your own code!)
-        virtual bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
-        virtual bool doVariableSettings (const VariableSettingsData &varSettings);
+    public: // public leader/worker functions (DO NOT use in the worker!)
+        virtual bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo)=0;
+        virtual bool doVariableSettings (const VariableSettingsData &varSettings)=0;
         virtual bool doPageInfo (const int headerType, const int footerType);
-        virtual bool doFullPaperFormat (const int format, const double width, const double height, const int orientation);
-        virtual bool doFullPaperBorders (const double top, const double left, const double bottom, const double right);
+        virtual bool doFullPaperFormat (const int format, const double width, const double height, const int orientation)=0;
+        virtual bool doFullPaperBorders (const double top, const double left, const double bottom, const double right)=0;
         virtual bool doOpenHead (void);
         virtual bool doCloseHead (void);
         virtual bool doOpenBody (void);
         virtual bool doCloseBody (void);
-        virtual bool doOpenStyles (void);
-        virtual bool doCloseStyles (void);
-        virtual bool doFullDefineStyle (LayoutData& layout);
+        virtual bool doOpenStyles (void)=0;
+        virtual bool doCloseStyles (void)=0;
+        virtual bool doFullDefineStyle (LayoutData& layout)=0;
         virtual bool doOpenSpellCheckIgnoreList (void);
         virtual bool doCloseSpellCheckIgnoreList (void);
         virtual bool doFullSpellCheckIgnoreWord (const QString& ignoreword);
