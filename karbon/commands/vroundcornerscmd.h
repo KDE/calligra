@@ -39,7 +39,8 @@ public:
 	virtual void visitVPath( VPath& path );
 
 protected:
-	VSelection* m_selection;
+	VSelection* m_oldObjects;
+	VSelection* m_newObjects;
 
 	double m_radius;
 };

@@ -75,10 +75,10 @@ public:
 	void append( VObject* object );
 
 	/**
-	 * This function is important for undo/redo. It insert newObject in front
-	 * of oldObject and hide oldObject.
+	 * This function is important for undo/redo. It inserts newObject in front
+	 * of oldObject.
 	 */
-	void insertNewDeleteOld( VObject* newObject, VObject* oldObject );
+	virtual void insertInfrontOf( VObject* newObject, VObject* oldObject );
 
 	/**
 	 * Clears the group, without destroying the grouped objects.

@@ -214,11 +214,9 @@ VGroup::append( VObject* object )
 }
 
 void
-VGroup::insertNewDeleteOld( VObject* newObject, VObject* oldObject )
+VGroup::insertInfrontOf( VObject* newObject, VObject* oldObject )
 {
 	m_objects.insert( m_objects.find( oldObject ), newObject );
-
-	oldObject->setState( VObject::deleted );
 }
 
 void

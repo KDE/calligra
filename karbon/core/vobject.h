@@ -150,6 +150,12 @@ public:
 	/// Accept a VVisitor.
 	virtual void accept( VVisitor& /*visitor*/ ) {}
 
+	/**
+	 * This function is important for undo/redo. It inserts newObject in front
+	 * of oldObject.
+	 */
+	virtual void insertInfrontOf( VObject* /*newObject*/, VObject* /*oldObject*/ ) { }
+
 protected:
 	/// Bounding box.
 	mutable KoRect m_boundingBox;

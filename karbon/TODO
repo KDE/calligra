@@ -8,6 +8,7 @@ GUI:
 	try to reuse them.
 
 REAL BUGS:
+-	patterns dont zoom
 -	VSelectionTool has an offset error relative to the handle nodes in the VSelection.
 -	VSelection shouldnt have "QRect* m_qrect;" but KoRect. QRect/QPoints are a lowlevel detail.
 	All tools and other classes should use KoPoint and KoRect.
@@ -29,8 +30,6 @@ TODO:
 	this way you'll get node undo/redo automatically.
 -	add undo/redo to shape commands like VFlattenCmd etc
 -	select first/last segment's knot if one of each other's knot is selected
--	port path commands to vgroup::insertNewDeleteOld(), maybe add a vpathcommand
-	similar to vshapecommand. move this into a visitor instead.
 -	allow for multiple strokes and fills in VPath which get rendered in the order they occur.
 -	use inside/intersection tests in vpath::combine() for changing winding.
 -	use vflatten in vselectool for more precise selection (lenny)

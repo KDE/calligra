@@ -27,30 +27,88 @@
 
 
 VRoundCornersCmd::VRoundCornersCmd( VDocument* doc, double radius )
-	: VCommand( doc, i18n( "Round Corners" ) )
+	: VCommand( doc, i18n( "Round Corners" ) ),
+	  m_oldObjects( 0L ), m_newObjects( 0L )
 {
-	m_selection = document()->selection()->clone();
+	m_oldObjects = document()->selection()->clone();
 
 	m_radius = radius > 0.0 ? radius : 1.0;
 }
 
 VRoundCornersCmd::~VRoundCornersCmd()
 {
-	delete( m_selection );
+	delete( m_oldObjects );
+	delete( m_newObjects );
 }
 
 void
 VRoundCornersCmd::execute()
 {
-	VObjectListIterator itr( m_selection->objects() );
+	if( !m_newObjects )
+		m_newObjects = new VSelection();
 
-	for ( ; itr.current() ; ++itr )
-		visit( *itr.current() );
+	// Create new shapes if we didn't creat them yet.
+	if( m_newObjects->objects().count() <= 0 )
+	{
+		VObject* newObject;
+
+		VObjectListIterator itr( m_oldObjects->objects() );
+
+		for ( ; itr.current(); ++itr )
+		{
+			// Clone object:
+			newObject = itr.current()->clone();
+
+			// Success:
+			if( visit( *newObject ) )
+			{
+				itr.current()->parent()->insertInfrontOf(
+					newObject, itr.current() );
+
+				newObject->setState( VObject::normal );
+				itr.current()->setState( VObject::deleted );
+			}
+			// No success:
+			else
+			{
+				delete( newObject );
+			}
+		}
+	}
+	else
+	{
+		VObjectListIterator itr( m_oldObjects->objects() );
+
+		// Hide old objects.
+		for ( ; itr.current() ; ++itr )
+		{
+			itr.current()->setState( VObject::deleted );
+		}
+
+		// Show new objects.
+		for ( itr = m_newObjects->objects(); itr.current() ; ++itr )
+		{
+			itr.current()->setState( VObject::normal );
+		}
+	}
 }
 
 void
 VRoundCornersCmd::unexecute()
 {
+	VObjectListIterator itr( m_oldObjects->objects() );
+
+	// Show old objects.
+	for ( ; itr.current() ; ++itr )
+	{
+		itr.current()->setState( VObject::normal );
+	}
+
+	// Hide new objects.
+	for ( itr = m_newObjects->objects(); itr.current() ; ++itr )
+	{
+		itr.current()->setState( VObject::deleted );
+	}
 }
 
 void
