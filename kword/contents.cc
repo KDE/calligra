@@ -176,12 +176,21 @@ void KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMa
             if ( prev )
             {
                 prev->setNext( p );
-                p->setParagId( prev->paragId() + 1 );
+                if ( p )
+                    p->setParagId( prev->paragId() + 1 );
             }
             else
             {
                 textdoc->setFirstParag( p );
-                p->setParagId( 0 );
+                if ( p )
+                {
+                    p->setParagId( 0 );
+                } else // completely empty document !
+                {
+                    textdoc->clear( true ); // recreate empty parag.
+                    cursor->setParag( textdoc->firstParag() );
+                    break;
+                }
             }
             p->setPrev( prev );
         }
