@@ -1593,6 +1593,7 @@ void ResizeCmd::execute()
     {
         if(object->isSelected())
             doc->updateRuler();
+        doc->layout( object );
     }
     if ( object->isSelected())
     {
@@ -1620,6 +1621,7 @@ void ResizeCmd::unexecute( bool _repaint )
     {
         if(object->isSelected())
             doc->updateRuler();
+        doc->layout( object );
     }
     if ( object->isSelected())
     {

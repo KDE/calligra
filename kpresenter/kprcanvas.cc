@@ -1263,6 +1263,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
             _repaint( oldBoundingRect );
+            m_view->kPresenterDoc()->layout(kpobject);
             _repaint( kpobject );
         } break;
         case MT_RESIZE_DN: {
@@ -1289,6 +1290,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
             _repaint( oldBoundingRect );
+            m_view->kPresenterDoc()->layout(kpobject);
             _repaint( kpobject );
         } break;
         case MT_RESIZE_RT: {
@@ -1303,6 +1305,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
             _repaint( oldBoundingRect );
+            m_view->kPresenterDoc()->layout(kpobject);
             _repaint( kpobject );
         } break;
         case MT_RESIZE_LU: {
@@ -1316,6 +1319,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
             _repaint( oldBoundingRect );
+            m_view->kPresenterDoc()->layout(kpobject);
             _repaint( kpobject );
         } break;
         case MT_RESIZE_LD: {
@@ -1329,6 +1333,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
             _repaint( oldBoundingRect );
+            m_view->kPresenterDoc()->layout(kpobject);
             _repaint( kpobject );
         } break;
         case MT_RESIZE_RU: {
@@ -1342,6 +1347,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
             _repaint( oldBoundingRect );
+            m_view->kPresenterDoc()->layout(kpobject);
             _repaint( kpobject );
         } break;
 	case MT_RESIZE_RD: {
@@ -1355,6 +1361,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
             _repaint( oldBoundingRect );
+            m_view->kPresenterDoc()->layout(kpobject);
             _repaint( kpobject );
         } break;
         }

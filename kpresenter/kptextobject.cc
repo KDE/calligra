@@ -977,6 +977,20 @@ void KPTextObject::recalcPageNum( KPresenterDoc *doc, KPrPage *page )
     }
 }
 
+void KPTextObject::layout()
+{
+    invalidate();
+    // Get the thing going though, repainting doesn't call formatMore
+    m_textobj->formatMore();
+}
+
+void KPTextObject::invalidate()
+{
+    //kdDebug() << "KWTextFrameSet::invalidate " << getName() << endl;
+    m_textobj->setLastFormattedParag( textDocument()->firstParag() );
+    textDocument()->invalidate(); // lazy layout, real update follows upon next repaint
+}
+
 void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, const QColorGroup& cg, int from, int to )
 {
     // The fast and difficult way would be to call drawParagWYSIWYG

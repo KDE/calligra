@@ -401,6 +401,7 @@ public:
     KCommandHistory * commandHistory()const { return m_commandHistory; }
     void updateObjectStatusBarItem();
     void updateObjectSelected();
+    void layout(KPObject *kpobject);
 
 public slots:
     void movePage( int from, int to );

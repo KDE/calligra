@@ -1929,6 +1929,14 @@ void KPresenterDoc::repaint( const QRect& rect )
     }
 }
 
+void KPresenterDoc::layout(KPObject *kpobject)
+{
+    KPTextObject * obj = dynamic_cast<KPTextObject *>( kpobject );
+    if (obj)
+        obj->layout();
+}
+
+
 /*===================== repaint =================================*/
 void KPresenterDoc::repaint( KPObject *kpobject )
 {

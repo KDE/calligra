@@ -125,6 +125,9 @@ public:
     void setProtectContent ( bool _protect ) { textObject()->setProtectContent(_protect);}
     bool isProtectContent() const { return textObject()->protectContent();}
     void loadVariable( QValueList<QDomElement> & listVariable,KoTextParag *lastParag, int offset=0 );
+
+    void layout();
+
 signals:
     void repaintChanged( KPTextObject* );
 
@@ -140,7 +143,7 @@ protected:
     void drawText( QPainter* _painter, KoZoomHandler* zoomHandler, bool onlyChanged, KoTextCursor* cursor, bool resetChanged );
     void drawParags( QPainter *p, KoZoomHandler* zoomHandler, const QColorGroup& cg, int from, int to );
     void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
-
+    void invalidate();
 protected slots:
     void slotNewCommand( KCommand *cmd );
     void slotAvailableHeightNeeded();
