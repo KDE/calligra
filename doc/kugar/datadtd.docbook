@@ -1,0 +1,26 @@
+<!-- To validate this document separately, uncomment this prolog
+<?xml version="1.0" ?>
+<!DOCTYPE appendix PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+-->
+
+<appendix id="kugardata-dtd">
+<title><sgmltag class="element">KugarData</sgmltag> Document Type
+Definition</title>
+
+<synopsis>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;!DOCTYPE KugarData [
+     &lt;!ELEMENT KugarData (Row* )&gt;
+     &lt;!ATTLIST KugarData
+         Template  CDATA  #REQUIRED&gt;
+
+     &lt;!ELEMENT Row EMPTY&gt;
+     &lt;!ATTLIST Row
+         col1  CDATA  #REQUIRED
+         col2  CDATA  #REQUIRED
+         ...   CDATA  #REQUIRED
+         coln  CDATA  #REQUIRED&gt;
+ ]&gt;
+</synopsis>
+</appendix>

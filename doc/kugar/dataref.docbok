@@ -1,0 +1,89 @@
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+
+<chapter id="kugardata-element">
+<title><sgmltag class="element">KugarData</sgmltag></title>
+
+<para>
+The <sgmltag class="element">KugarData</sgmltag> element defines a
+report's data source.  The basic structure is a collection of rows and
+columns. This document does not define data types and their attributes
+at this time. The report template defines column data type information.
+</para>
+
+<para>
+The document creator can apply an &XSL; style sheet to an existing
+document to convert it to this format.  If &XSL; is used, the creator
+can apply custom macros using &XSL; for column calculations, sorting,
+&etc;.
+</para>
+
+<synopsis>
+&lt;!ELEMENT KugarData (Row* )&gt;
+&lt;!ATTLIST KugarData
+     Template CDATA  #REQUIRED&gt;
+ 
+&lt;!ELEMENT Row EMPTY&gt;
+&lt;!ATTLIST Row
+     col1   CDATA  #REQUIRED
+     col2   CDATA  #REQUIRED
+     ...    CDATA  #REQUIRED
+     coln   CDATA  #REQUIRED&gt;
+</synopsis>
+
+<variablelist>
+<varlistentry>
+<term>Elements</term>
+<listitem>
+
+<variablelist>
+<varlistentry>
+<term><sgmltag class="element">Row</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">KugarData</sgmltag> element contains zero
+or more <sgmltag class="element">Row</sgmltag> elements.  A <sgmltag
+class="element">Row</sgmltag> must contain one or more attributes
+representing data columns.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Attributes</term>
+<listitem>
+
+<variablelist>
+<varlistentry>
+<term><sgmltag class="attribute">Template</sgmltag></term>
+<listitem>
+<para>
+This is an attribute of the <sgmltag class="element">KugarData</sgmltag>
+element.  The value of the attribute is the &URL; of the <link
+linkend="report-template">report template</link> used to format the
+data.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Column</sgmltag></term>
+<listitem>
+<para>
+This is an attribute of the <sgmltag class="element">Row</sgmltag>.  The
+name of the attribute is the column name, and uses the format as given
+in the <sgmltag class="element">KugarData</sgmltag> definition.  The
+attribute name is used in the <link linkend="report-template">report
+template</link> to bind the data to the report fields.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</chapter>

@@ -1,3 +1,3 @@
-SUBDIRS = kugar dataref templateref
 
-EXTRA_DIST = index.html
+KDE_LANG = en
+KDE_DOCS = AUTO

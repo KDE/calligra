@@ -1,0 +1,2532 @@
+<!-- If you want to edit or validate this document separately, uncomment -->
+<!-- this prolog
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+-->
+<chapter id="template-elements">
+<title><sgmltag class="element">KugarData</sgmltag> template
+elements</title>
+
+<sect1 id="report-header-and-footer">
+<title><sgmltag class="element">ReportHeader</sgmltag> and <sgmltag
+class="element">ReportFooter</sgmltag> Sections</title>
+
+<para>
+The <sgmltag class="element">ReportHeader</sgmltag> and <sgmltag
+class="element">ReportFooter</sgmltag> elements define report sections
+that are usually printed at the beginning and end of the report.
+</para>
+
+<synopsis>
+&lt;!ELEMENT ReportHeader (Line*, Label*, Special*)&gt;
+&lt;!ATTLIST ReportHeader
+     Height          CDATA #REQUIRED
+     PrintFrequency  CDATA #REQUIRED&gt;
+</synopsis>
+
+<synopsis>
+&lt;!ELEMENT ReportFooter (Line*, Label*, Special*, CalculatedField*)&gt;
+&lt;!ATTLIST ReportFooter
+     Height         CDATA #REQUIRED
+     PrintFrequency CDATA #REQUIRED&gt;
+</synopsis>
+
+<variablelist>
+<varlistentry>
+<term>Elements</term>
+<listitem>
+<para>
+The <sgmltag class="element">ReportHeader</sgmltag> element can contain
+the following elements
+</para>
+
+<variablelist>
+<varlistentry>
+<term><sgmltag class="element">Line</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">Line</sgmltag> element defines a report
+object used to draw lines on a report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">Label</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">Label</sgmltag> element defines a report
+object used to draw fixed text on a report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">Special</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">Special</sgmltag> element defines a report
+object used to draw page numbers and the current date on a report.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>
+The <sgmltag class="element">ReportFooter</sgmltag> element can contain
+the following elements:
+</para>
+<variablelist>
+<varlistentry>
+<term><sgmltag class="element">Line</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">Line</sgmltag> element defines a report
+object used to draw lines on a report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">Label</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">Label</sgmltag> element defines a report
+object used to draw fixed text on a report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">Special</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">Special</sgmltag> element defines a report
+object used to draw page numbers and the current date on a report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">CalculatedField</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">CalculatedField</sgmltag> element defines a
+report object used to draw calculated values on a report.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Attributes</term>
+<listitem>
+
+<variablelist>
+<varlistentry>
+<term><sgmltag class="attribute">Height</sgmltag></term>
+<listitem>
+<para>Sets the height of the report section.  If you don't want
+this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">PrintFrequency</sgmltag></term>
+<listitem>
+<para>
+Set the print frequency of the section.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Print Frequency</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>First Page</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Every Page</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Last Page</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+
+<sect1 id="page-header-and-footer">
+<title><sgmltag class="element">PageHeader</sgmltag> and <sgmltag
+class="element">PageFooter</sgmltag> sections</title>
+
+<para>
+The <sgmltag class="element">PageHeader</sgmltag> and <sgmltag
+class="element">PageFooter</sgmltag> elements define report sections
+that are usually printed on every page of the report.
+</para>
+
+<synopsis>
+&lt;!ELEMENT PageHeader (Line*, Label*, Special*)&gt;
+&lt;!ATTLIST PageHeader
+     Height          CDATA #REQUIRED
+     PrintFrequency  CDATA #REQUIRED&gt;
+</synopsis>
+
+<synopsis>
+&lt;!ELEMENT PageFooter (Line*, Label*, Special*)&gt;
+&lt;!ATTLIST PageFooter
+     Height          CDATA #REQUIRED
+     PrintFrequency  CDATA #REQUIRED&gt;
+</synopsis>
+
+<variablelist>
+<varlistentry>
+<term>Elements</term>
+<listitem>
+<para>
+The <sgmltag class="element">PageHeader</sgmltag> element can contain
+the following elements:
+</para>
+
+<variablelist>
+<varlistentry>
+<term><sgmltag class="element">Line</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">Line</sgmltag> element defines a report
+object used to draw lines on a report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">Label</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">Label</sgmltag> element defines a report
+object used to draw fixed text on a report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">Special</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">Special</sgmltag> element defines a report
+object used to draw page numbers and the current date on a report.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>
+The <sgmltag class="element">PageFooter</sgmltag> element can contain
+the following elements:
+</para>
+
+<variablelist>
+<varlistentry>
+<term><sgmltag class="element">Line</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">Line</sgmltag> element defines a report
+object used to draw lines on a report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">Label</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">Label</sgmltag> element defines a report
+object used to draw fixed text on a report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">Special</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">Special</sgmltag> element defines a report
+object used to draw page numbers and the current date on a report.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Attributes</term>
+<listitem>
+
+<variablelist>
+<varlistentry>
+<term><sgmltag class="attribute">Height</sgmltag></term>
+<listitem>
+<para>Sets the height of the report section.  If you don't want
+this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">PrintFrequency</sgmltag></term>
+<listitem>
+<para>
+Set the print frequency of the section.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Print Frequency</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>First Page</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Every Page</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Last Page</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="detail">
+<title><sgmltag class="element">Detail</sgmltag> section</title>
+
+<para>
+The <sgmltag class="element">Detail</sgmltag> element defines the report
+section that contains the report data.
+</para>
+
+<synopsis>
+&lt;!ELEMENT Detail (Line*, Label*, Special*, Field*)&gt;
+&lt;!ATTLIST Detail
+     Height  CDATA   #REQUIRED&gt;
+</synopsis>
+
+<variablelist>
+<varlistentry>
+<term>Elements</term>
+<listitem>
+<para>
+The <sgmltag class="element">Detail</sgmltag> element can contain the
+following elements
+</para>
+
+<variablelist>
+<varlistentry>
+<term><sgmltag class="element">Line</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">Line</sgmltag> element defines a report
+object used to draw lines on a report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">Label</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">Label</sgmltag> element defines a report
+object used to draw fixed text on a report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">Special</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">Special</sgmltag> element defines a report
+object used to draw page numbers and the current date on a report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">Field</sgmltag></term>
+<listitem>
+<para>
+The <sgmltag class="element">Field</sgmltag> element defines a report
+object used to draw data on a report.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Attributes</term>
+<listitem>
+
+<variablelist>
+<varlistentry>
+<term><sgmltag class="attribute">Height</sgmltag></term>
+<listitem>
+<para>Sets the height of the report section.  If you don't want
+this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+
+<sect1 id="line-element">
+<title><sgmltag class="element">Line</sgmltag></title>
+
+<para>
+The <sgmltag class="element">Line</sgmltag> element defines a report
+object used to draw lines on a report.
+</para>
+
+<synopsis>
+&lt;!ELEMENT Line EMPTY&gt;
+&lt;!ATTLIST Line
+     X1     CDATA #REQUIRED
+     Y1     CDATA #REQUIRED
+     X2     CDATA #REQUIRED
+     Y2     CDATA #REQUIRED
+     Width  CDATA #REQUIRED
+     Color  CDATA #REQUIRED
+     Style  CDATA #REQUIRED&gt;
+</synopsis>
+
+<variablelist>
+<varlistentry>
+<term>Attributes</term>
+<listitem>
+<variablelist>
+
+<varlistentry>
+<term><sgmltag class="attribute">X1</sgmltag></term>
+<listitem>
+<para>
+Sets the starting x coordinate for the line.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Y1</sgmltag></term>
+<listitem>
+<para>
+Sets the starting y coordinate for the line.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">X2</sgmltag></term>
+<listitem>
+<para>
+Sets the ending x coordinate for the line.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Y2</sgmltag></term>
+<listitem>
+<para>
+Sets the width of the line
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Color</sgmltag></term>
+<listitem>
+<para>
+Sets the color of the line.  The color is defined as an RGB value
+(r,g,b). r, g and b must be in the range 0..255.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Style</sgmltag></term>
+<listitem>
+<para>
+Sets the drawing style for the line.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Line Style</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Solid</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Dash</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">3</sgmltag></entry>
+<entry>Dot</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">4</sgmltag></entry>
+<entry>Dash Dot</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">5</sgmltag></entry>
+<entry>Dash Dot Dot</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+
+<sect1 id="label-element">
+<title><sgmltag class="element">Label</sgmltag></title>
+
+<para>
+The <sgmltag class="element">Label</sgmltag> element defines a report
+object used to draw fixed text on a report.
+</para>
+
+<synopsis>
+ &lt;!ELEMENT Label EMPTY&gt;
+ &lt;!ATTLIST Label
+     Text            CDATA #REQUIRED
+     X               CDATA #REQUIRED
+     Y               CDATA #REQUIRED
+     Width           CDATA #REQUIRED
+     Height          CDATA #REQUIRED
+     BackgroundColor CDATA #REQUIRED
+     ForegroundColor CDATA #REQUIRED
+     BorderColor     CDATA #REQUIRED
+     BorderWidth     CDATA #REQUIRED
+     BorderStyle     CDATA #REQUIRED
+     FontFamily      CDATA #REQUIRED
+     FontSize        CDATA #REQUIRED
+     FontWeight      CDATA #REQUIRED
+     FontItalic      CDATA #REQUIRED
+     HAlignment      CDATA #REQUIRED
+     VAlignment      CDATA #REQUIRED
+     WordWrap        CDATA #REQUIRED&gt;
+</synopsis>
+
+<variablelist>
+<varlistentry>
+<term>Attributes</term>
+<listitem>
+
+<variablelist>
+<varlistentry>
+<term><sgmltag class="attribute">Text</sgmltag></term>
+<listitem>
+<para>
+Sets the label's text.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">X</sgmltag></term>
+<listitem>
+<para>
+Sets the x coordinate for positioning the label.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Y</sgmltag></term>
+<listitem>
+<para>
+Sets the y coordinate for positioning the label.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Width</sgmltag></term>
+<listitem>
+<para>
+Sets the width of the label.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Height</sgmltag></term>
+<listitem>
+<para>
+Sets the height of the label.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">BackgroundColor</sgmltag></term>
+<listitem>
+<para>
+Sets the background color of the label.  The The color is defined as an
+RGB value (r,g,b). r, g and b must be in the range 0..255.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">ForegroundColor</sgmltag></term>
+<listitem>
+<para>
+Sets the foreground color of the label.   The color is defined as an RGB
+value (r,g,b). r, g and b must be in the range 0..255.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">BorderColor</sgmltag></term>
+<listitem>
+<para>
+Sets the border color of the label.  The color is defined as an RGB
+value (r,g,b).  r, g and b must be in the range 0..255.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">BorderWidth</sgmltag></term>
+<listitem>
+<para>
+Sets the border width for the label.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">BorderStyle</sgmltag></term>
+<listitem>
+<para>
+Sets the border style for the label.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Border Style</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>None</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Solid</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Dash</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">3</sgmltag></entry>
+<entry>Dot</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">4</sgmltag></entry>
+<entry>Dash Dot</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">5</sgmltag></entry>
+<entry>Dash Dot Dot</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">FontFamily</sgmltag></term>
+<listitem>
+<para>
+Sets the font family for the label's text.  
+</para>
+<informalexample>
+<para><userinput><sgmltag
+class="attribute">FontFamily</sgmltag>="<sgmltag
+class="attvalue">Helvetica</sgmltag>"</userinput></para>
+</informalexample>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">FontSize</sgmltag></term>
+<listitem>
+<para>
+Sets the font size for the label's text.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">FontWeight</sgmltag></term>
+<listitem>
+<para>
+Sets the font weight for the label's text.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Font Weight</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">25</sgmltag></entry>
+<entry>Light</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">50</sgmltag></entry>
+<entry>Normal</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">63</sgmltag></entry>
+<entry>Demi Bold</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">75</sgmltag></entry>
+<entry>Bold</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">87</sgmltag></entry>
+<entry>Black</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">FontItalic</sgmltag></term>
+<listitem>
+<para>
+Sets the font italic flag for the label's text.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Italic</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>False</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>True</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">HAlignment</sgmltag></term>
+<listitem>
+<para>
+Sets the label's horizontal text alignment.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Horizontal Alignment</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>Left</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Center</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Right</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">VAlignment</sgmltag></term>
+<listitem>
+<para>
+Sets the label's vertical text alignment
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Vertical Alignment</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>Top</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Middle</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Bottom</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">WordWrap</sgmltag></term>
+<listitem>
+<para>
+Sets the word wrap flag for the label's text.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Word Wrap</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>False</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>True</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="field-element">
+<title><sgmltag class="element">Field</sgmltag></title>
+
+<para>
+The <sgmltag class="element">Field</sgmltag> element defines a report
+object used to draw data on a report.
+</para>
+
+<synopsis>
+&lt;!ELEMENT Field EMPTY&gt;
+&lt;!ATTLIST Field
+     Field           CDATA #REQUIRED
+     Text            CDATA #REQUIRED
+     X               CDATA #REQUIRED
+     Y               CDATA #REQUIRED
+     Width           CDATA #REQUIRED
+     Height          CDATA #REQUIRED
+     BackgroundColor CDATA #REQUIRED
+     ForegroundColor CDATA #REQUIRED
+     BorderColor     CDATA #REQUIRED
+     BorderWidth     CDATA #REQUIRED
+     BorderStyle     CDATA #REQUIRED
+     FontFamily      CDATA #REQUIRED
+     FontSize        CDATA #REQUIRED
+     FontWeight      CDATA #REQUIRED
+     FontItalic      CDATA #REQUIRED
+     HAlignment      CDATA #REQUIRED
+     VAlignment      CDATA #REQUIRED
+     WordWrap        CDATA #REQUIRED
+     DataType        CDATA #REQUIRED
+     DateFormat      CDATA #REQUIRED
+     Precision       CDATA #REQUIRED
+     Currency        CDATA #REQUIRED
+     NegValueColor   CDATA #REQUIRED
+     CommaSeparator  CDATA #REQUIRED&gt;
+</synopsis>
+
+<variablelist>
+<varlistentry>
+<term>Attributes</term>
+<listitem>
+
+<variablelist>
+<varlistentry>
+<term><sgmltag class="attribute">Field</sgmltag></term>
+<listitem>
+<para>
+Sets the data field for the object.  This is a <sgmltag
+class="attribute">row</sgmltag> attribute from a
+<quote>MetaphrastRowset</quote> data document.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Text</sgmltag></term>
+<listitem>
+<para>
+Not used.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">X</sgmltag></term>
+<listitem>
+<para>
+Sets the x coordinate for positioning the field.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Y</sgmltag></term>
+<listitem>
+<para>
+Sets the y coordinate for positioning the field.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Width</sgmltag></term>
+<listitem>
+<para>
+Sets the width of the field.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Height</sgmltag></term>
+<listitem>
+<para>
+Sets the height of the field.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">BackgroundColor</sgmltag></term>
+<listitem>
+<para>
+Sets the background color of the field.  he color is defined as an RGB
+value (r,g,b). r, g and b must be in the range 0..255.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>><sgmltag class="attribute">ForegroundColor</sgmltag></term>
+<listitem>
+<para>
+Sets the foreground color of the field.   The color is defined as an RGB
+value (r,g,b). r, g and b must be in the range 0..255.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">BorderColor</sgmltag></term>
+<listitem>
+<para>
+Sets the border color of the field.   The color is defined as an RGB
+value (r,g,b). r, g and b must be in the range 0..255.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">BorderWidth</sgmltag></term>
+<listitem>
+<para>
+Sets the border width for the field.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">BorderStyle</sgmltag></term>
+<listitem>
+<para>
+Sets the border style for the field.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Border Style</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>None</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Solid</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Dash</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">3</sgmltag></entry>
+<entry>Dot</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">4</sgmltag></entry>
+<entry>Dash Dot</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">5</sgmltag></entry>
+<entry>Dash Dot Dot</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">FontFamily</sgmltag></term>
+<listitem>
+<para>
+Sets the font family for the field's text.  
+</para>
+<informalexample>
+<para><userinput><sgmltag
+class="attribute">FontFamily</sgmltag>="<sgmltag
+class="attvalue">Helvetica</sgmltag>"</userinput></para>
+</informalexample>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">FontSize</sgmltag></term>
+<listitem>
+<para>
+Sets the font size for the field's text.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">FontWeight</sgmltag></term>
+<listitem>
+<para>
+Sets the font weight for the field's text.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Font Weight</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">25</sgmltag></entry>
+<entry>Light</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">50</sgmltag></entry>
+<entry>Normal</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">63</sgmltag></entry>
+<entry>Demi Bold</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">75</sgmltag></entry>
+<entry>Bold</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">87</sgmltag></entry>
+<entry>Black</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">FontItalic</sgmltag></term>
+<listitem>
+<para>
+Sets the font italic flag for the field's text.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Italic</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>False</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>True</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">HAlignment</sgmltag></term>
+<listitem>
+<para>
+Sets the field's horizontal text alignment.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Horizontal Alignment</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>Left</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Center</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Right</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">VAlignment</sgmltag></term>
+<listitem>
+<para>
+Sets the field's vertical text alignment
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Vertical Alignment</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>Top</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Middle</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Bottom</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">WordWrap</sgmltag></term>
+<listitem>
+<para>
+Sets the word wrap flag for the field's text.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Word Wrap</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>False</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>True</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">DataType</sgmltag></term>
+<listitem>
+<para>
+Sets the field's data type.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Data Type</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>String</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Integer</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Float</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">3</sgmltag></entry>
+<entry>Date</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">4</sgmltag></entry>
+<entry>Currency</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">DateFormat</sgmltag></term>
+<listitem>
+<para>
+Sets the field's date format. For this to work, the format of the date
+from the data document must be in the format mm/dd/yyyy or mm-dd-yyyy,
+otherwise the original date format is used.  If data type other than
+date, set to <sgmltag class="attvalue">0</sgmltag>.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Date Format</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>m/d/yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>m-d-yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>mm/dd/yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">3</sgmltag></entry>
+<entry>mm-dd-yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">4</sgmltag></entry>
+<entry>m/d/yyy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">5</sgmltag></entry>
+<entry>m-d-yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">6</sgmltag></entry>
+<entry>mm/dd/yyyy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">7</sgmltag></entry>
+<entry>mm-dd-yyyy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">8</sgmltag></entry>
+<entry>yyyy/m/d</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">9</sgmltag></entry>
+<entry>yyyy-m-d</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Precision</sgmltag></term>
+<listitem>
+<para>
+Sets the field's numeric precision.  If data type other than a numeric
+type, set to 0.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Currency</sgmltag></term>
+<listitem>
+<para>
+Sets the field's currency symbol  If data type other than currency, set
+to <sgmltag class="attvalue">36</sgmltag> ($).  The value is a number
+representing a Unicode character.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">NegValueColor</sgmltag></term>
+<listitem>
+<para>
+Sets the color for negative numeric values.   The color is defined as an
+RGB value (r,g,b). r, g and b must be in the range 0..255.  If data is
+other than a numeric type, set to 255,0,0.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">CommaSeparator</sgmltag></term>
+<listitem>
+<para>
+Sets whether commas are used in numeric fields. If data type other than
+a numeric type, set to <sgmltag class="attvalue">0</sgmltag>.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Comma Separator</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>False</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>True</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="calclated-field-element">
+<title><sgmltag class="element">CalculatedField</sgmltag></title>
+
+<para>
+The <sgmltag class="element">Field</sgmltag> element defines a report
+object used to draw calculated values on a report.
+</para>
+
+<synopsis>
+&lt;!ELEMENT CalculatedField EMPTY&gt;
+&lt;!ATTLIST CalculatedField
+     CalculationType CDATA #REQUIRED
+     Text            CDATA #REQUIRED
+     X               CDATA #REQUIRED
+     Y               CDATA #REQUIRED
+     Width           CDATA #REQUIRED
+     Height          CDATA #REQUIRED
+     BackgroundColor CDATA #REQUIRED
+     ForegroundColor CDATA #REQUIRED
+     BorderColor     CDATA #REQUIRED
+     BorderWidth     CDATA #REQUIRED
+     BorderStyle     CDATA #REQUIRED
+     FontFamily      CDATA #REQUIRED
+     FontSize        CDATA #REQUIRED
+     FontWeight      CDATA #REQUIRED
+     FontItalic      CDATA #REQUIRED
+     HAlignment      CDATA #REQUIRED
+     VAlignment      CDATA #REQUIRED
+     WordWrap        CDATA #REQUIRED
+     DataType        CDATA #REQUIRED
+     DateFormat      CDATA #REQUIRED
+     Precision       CDATA #REQUIRED
+     Currency        CDATA #REQUIRED
+     NegValueColor   CDATA #REQUIRED
+     CommaSeparator  CDATA #REQUIRED&gt;
+</synopsis>
+
+<variablelist>
+<varlistentry>
+<term>Attributes</term>
+<listitem>
+
+<variablelist>
+<varlistentry>
+<term><sgmltag class="attribute">CalculationType</sgmltag></term>
+<listitem>
+<para>
+Sets the calculation type for the field.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Calculation</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>Count</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Sum</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Average</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">3</sgmltag></entry>
+<entry>Variance</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">4</sgmltag></entry>
+<entry>Std Deviation</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Text</sgmltag></term>
+<listitem>
+<para>
+Not used.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">X</sgmltag></term>
+<listitem>
+<para>
+Sets the x coordinate for positioning the field.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Y</sgmltag></term>
+<listitem>
+<para>
+Sets the y coordinate for positioning the field.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Width</sgmltag></term>
+<listitem>
+<para>
+Sets the width of the field.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Height</sgmltag></term>
+<listitem>
+<para>
+Sets the height of the field.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">BackgroundColor</sgmltag></term>
+<listitem>
+<para>
+Sets the background color of the field.  he color is defined as an RGB
+value (r,g,b). r, g and b must be in the range 0..255.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>><sgmltag class="attribute">ForegroundColor</sgmltag></term>
+<listitem>
+<para>
+Sets the foreground color of the field.   The color is defined as an RGB
+value (r,g,b). r, g and b must be in the range 0..255.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">BorderColor</sgmltag></term>
+<listitem>
+<para>
+Sets the border color of the field.   The color is defined as an RGB
+value (r,g,b). r, g and b must be in the range 0..255.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">BorderWidth</sgmltag></term>
+<listitem>
+<para>
+Sets the border width for the field.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">BorderStyle</sgmltag></term>
+<listitem>
+<para>
+Sets the border style for the field.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Border Style</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>None</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Solid</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Dash</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">3</sgmltag></entry>
+<entry>Dot</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">4</sgmltag></entry>
+<entry>Dash Dot</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">5</sgmltag></entry>
+<entry>Dash Dot Dot</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">FontFamily</sgmltag></term>
+<listitem>
+<para>
+Sets the font family for the field's text.  
+</para>
+<informalexample>
+<para><userinput><sgmltag
+class="attribute">FontFamily</sgmltag>="<sgmltag
+class="attvalue">Helvetica</sgmltag>"</userinput></para>
+</informalexample>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">FontSize</sgmltag></term>
+<listitem>
+<para>
+Sets the font size for the field's text.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">FontWeight</sgmltag></term>
+<listitem>
+<para>
+Sets the font weight for the field's text.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Font Weight</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">25</sgmltag></entry>
+<entry>Light</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">50</sgmltag></entry>
+<entry>Normal</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">63</sgmltag></entry>
+<entry>Demi Bold</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">75</sgmltag></entry>
+<entry>Bold</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">87</sgmltag></entry>
+<entry>Black</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">FontItalic</sgmltag></term>
+<listitem>
+<para>
+Sets the font italic flag for the field's text.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Italic</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>False</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>True</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">HAlignment</sgmltag></term>
+<listitem>
+<para>
+Sets the field's horizontal text alignment.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Horizontal Alignment</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>Left</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Center</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Right</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">VAlignment</sgmltag></term>
+<listitem>
+<para>
+Sets the field's vertical text alignment
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Vertical Alignment</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>Top</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Middle</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Bottom</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">WordWrap</sgmltag></term>
+<listitem>
+<para>
+Sets the word wrap flag for the field's text.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Word Wrap</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>False</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>True</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">DataType</sgmltag></term>
+<listitem>
+<para>
+Sets the field's data type.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Data Type</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>String</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Integer</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Float</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">3</sgmltag></entry>
+<entry>Date</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">4</sgmltag></entry>
+<entry>Currency</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">DateFormat</sgmltag></term>
+<listitem>
+<para>
+Sets the field's date format. For this to work, the format of the date
+from the data document must be in the format mm/dd/yyyy or mm-dd-yyyy,
+otherwise the original date format is used.  If data type other than
+date, set to <sgmltag class="attvalue">0</sgmltag>.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Date Format</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>m/d/yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>m-d-yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>mm/dd/yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">3</sgmltag></entry>
+<entry>mm-dd-yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">4</sgmltag></entry>
+<entry>m/d/yyy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">5</sgmltag></entry>
+<entry>m-d-yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">6</sgmltag></entry>
+<entry>mm/dd/yyyy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">7</sgmltag></entry>
+<entry>mm-dd-yyyy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">8</sgmltag></entry>
+<entry>yyyy/m/d</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">9</sgmltag></entry>
+<entry>yyyy-m-d</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Precision</sgmltag></term>
+<listitem>
+<para>
+Sets the field's numeric precision.  If data type other than a numeric
+type, set to 0.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Currency</sgmltag></term>
+<listitem>
+<para>
+Sets the field's currency symbol  If data type other than currency, set
+to <sgmltag class="attvalue">36</sgmltag> ($).  The value is a number
+representing a Unicode character.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">NegValueColor</sgmltag></term>
+<listitem>
+<para>
+Sets the color for negative numeric values.   The color is defined as an
+RGB value (r,g,b). r, g and b must be in the range 0..255.  If data is
+other than a numeric type, set to 255,0,0.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">CommaSeparator</sgmltag></term>
+<listitem>
+<para>
+Sets whether commas are used in numeric fields. If data type other than
+a numeric type, set to <sgmltag class="attvalue">0</sgmltag>.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Comma Separator</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>False</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>True</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="special-element">
+<title><sgmltag class="element">Special</sgmltag></title>
+
+<para>
+The <sgmltag class="element">Special</sgmltag> element defines a report
+object used to draw page numbers and the current date on a report.
+</para>
+
+<synopsis>
+&lt;!ELEMENT Special EMPTY&gt;
+&lt;!ATTLIST Special
+     Type            CDATA #REQUIRED
+     Text            CDATA #REQUIRED
+     X               CDATA #REQUIRED
+     Y               CDATA #REQUIRED
+     Width           CDATA #REQUIRED
+     Height          CDATA #REQUIRED
+     BackgroundColor CDATA #REQUIRED
+     ForegroundColor CDATA #REQUIRED
+     BorderColor     CDATA #REQUIRED
+     BorderWidth     CDATA #REQUIRED
+     BorderStyle     CDATA #REQUIRED
+     FontFamily      CDATA #REQUIRED
+     FontSize        CDATA #REQUIRED
+     FontWeight      CDATA #REQUIRED
+     FontItalic      CDATA #REQUIRED
+     HAlignment      CDATA #REQUIRED
+     VAlignment      CDATA #REQUIRED
+     WordWrap        CDATA #REQUIRED
+     DateFormat      CDATA #REQUIRED&gt;
+</synopsis>
+
+<variablelist>
+<varlistentry>
+<term>Attributes</term>
+<listitem>
+
+<variablelist>
+<varlistentry>
+<term><sgmltag class="attribute">Type</sgmltag></term>
+<listitem>
+<para>
+Sets the type of special object.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Type</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>Current Date</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Page Number</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Text</sgmltag></term>
+<listitem>
+<para>
+Not used.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">X</sgmltag></term>
+<listitem>
+<para>
+Sets the x coordinate for positioning the field.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Y</sgmltag></term>
+<listitem>
+<para>
+Sets the y coordinate for positioning the field.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Width</sgmltag></term>
+<listitem>
+<para>
+Sets the width of the field.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Height</sgmltag></term>
+<listitem>
+<para>
+Sets the height of the field.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">BackgroundColor</sgmltag></term>
+<listitem>
+<para>
+Sets the background color of the field.  he color is defined as an RGB
+value (r,g,b). r, g and b must be in the range 0..255.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>><sgmltag class="attribute">ForegroundColor</sgmltag></term>
+<listitem>
+<para>
+Sets the foreground color of the field.   The color is defined as an RGB
+value (r,g,b). r, g and b must be in the range 0..255.
+</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><sgmltag class="attribute">BorderColor</sgmltag></term>
+<listitem>
+<para>
+Sets the border color of the field.   The color is defined as an RGB
+value (r,g,b). r, g and b must be in the range 0..255.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">BorderWidth</sgmltag></term>
+<listitem>
+<para>
+Sets the border width for the field.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="element">BorderStyle</sgmltag></term>
+<listitem>
+<para>
+Sets the border style for the field.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Border Style</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>None</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Solid</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Dash</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">3</sgmltag></entry>
+<entry>Dot</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">4</sgmltag></entry>
+<entry>Dash Dot</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">5</sgmltag></entry>
+<entry>Dash Dot Dot</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">FontFamily</sgmltag></term>
+<listitem>
+<para>
+Sets the font family for the field's text.  
+</para>
+<informalexample>
+<para><userinput><sgmltag
+class="attribute">FontFamily</sgmltag>="<sgmltag
+class="attvalue">Helvetica</sgmltag>"</userinput></para>
+</informalexample>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">FontSize</sgmltag></term>
+<listitem>
+<para>
+Sets the font size for the field's text.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">FontWeight</sgmltag></term>
+<listitem>
+<para>
+Sets the font weight for the field's text.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Font Weight</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">25</sgmltag></entry>
+<entry>Light</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">50</sgmltag></entry>
+<entry>Normal</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">63</sgmltag></entry>
+<entry>Demi Bold</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">75</sgmltag></entry>
+<entry>Bold</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">87</sgmltag></entry>
+<entry>Black</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">FontItalic</sgmltag></term>
+<listitem>
+<para>
+Sets the font italic flag for the field's text.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Italic</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>False</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>True</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">HAlignment</sgmltag></term>
+<listitem>
+<para>
+Sets the field's horizontal text alignment.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Horizontal Alignment</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>Left</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Center</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Right</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">VAlignment</sgmltag></term>
+<listitem>
+<para>
+Sets the field's vertical text alignment
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Vertical Alignment</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>Top</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>Middle</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>Bottom</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">WordWrap</sgmltag></term>
+<listitem>
+<para>
+Sets the word wrap flag for the field's text.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Word Wrap</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>False</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>True</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">DateFormat</sgmltag></term>
+<listitem>
+<para>
+Sets the field's date format. For this to work, the format of the date
+from the data document must be in the format mm/dd/yyyy or mm-dd-yyyy,
+otherwise the original date format is used.  If data type other than
+date, set to <sgmltag class="attvalue">0</sgmltag>.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Date Format</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>m/d/yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">1</sgmltag></entry>
+<entry>m-d-yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">2</sgmltag></entry>
+<entry>mm/dd/yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">3</sgmltag></entry>
+<entry>mm-dd-yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">4</sgmltag></entry>
+<entry>m/d/yyy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">5</sgmltag></entry>
+<entry>m-d-yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">6</sgmltag></entry>
+<entry>mm/dd/yyyy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">7</sgmltag></entry>
+<entry>mm-dd-yyyy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">8</sgmltag></entry>
+<entry>yyyy/m/d</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">9</sgmltag></entry>
+<entry>yyyy-m-d</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><sgmltag class="attribute">Precision</sgmltag></term>
+<listitem>
+<para>
+Sets the field's numeric precision.  If data type other than a numeric
+type, set to 0.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+</chapter>
+
+ 
+

@@ -1,0 +1,145 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
+<!ENTITY kappname "&kugar;">
+<!ENTITY % English "INCLUDE" > <!-- change language only here -->  
+<!ENTITY dataref SYSTEM "dataref.docbook">
+<!ENTITY template SYSTEM "template.docbook">
+<!ENTITY templateelements SYSTEM "template-elements.docbook">
+<!ENTITY templatedtd SYSTEM "templatedtd.docbook">
+<!ENTITY datadtd SYSTEM "datadtd.docbook">
+]>
+
+<book lang="&language;">
+<bookinfo>
+
+<authorgroup>
+<author>
+<firstname>Phil</firstname>
+<surname>Thompson</surname>
+<affiliation>
+<address><email>phil@river-bank.demon.co.uk</email></address>
+</affiliation>
+</author>
+</authorgroup>
+
+<date>2001-06-04</date>
+<releaseinfo>1.10.00</releaseinfo>
+
+<copyright>
+<year>2000</year>
+<year>2001</year>
+<holder>Phil Thompson</holder>
+</copyright>
+
+<legalnotice>&FDLNotice;</legalnotice>
+
+<abstract>
+<para>
+The &kugar; utility is an application that can preview and print any
+&kugar; report. <!-- recursive description?  FIXME -->
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>koffice</keyword>
+<keyword>kugar</keyword>
+<keyword>report</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title>Introduction</title>
+
+<para>
+The &kugar; utility is an application that can preview and print any
+&kugar; report. &kugar; reports can also be viewed from &konqueror;.
+</para>
+
+<screenshot>
+<screeninfo>&kugar; in action; A screenshot of a &kugar; generated
+report.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="kugar.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>&kugar; in action; A screenshot of a &kugar; generated
+report. </phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+</chapter>
+
+<chapter id="starting-kugar">
+<title>Starting &kugar;</title>
+
+<para>
+The &kugar; program takes two commandline arguments:
+</para>
+
+<cmdsynopsis>
+<command>kugar</command>
+<group>
+<option>-d <replaceable>Kugar data file</replaceable></option>
+</group>
+<group>
+<option>-r <replaceable>Kugar template file</replaceable></option>
+</group>
+</cmdsynopsis>
+
+<para>
+For example, <userinput><command>kugar</command> <option>-d</option>
+<parameter>sample1.kud</parameter> <option>-r</option>
+<parameter>sample1.kut</parameter></userinput>
+</para>
+
+</chapter>
+
+&dataref;
+&template;
+&templateelements;
+
+
+<chapter>
+<title>Credits and License</title>
+
+<para>
+&kugar;
+</para>
+
+<para>
+Copyright 2000 Mutiny Bay Software
+</para>
+<para>
+Copyright 2000, 2001, Phil Thompson
+</para>
+
+&underGPL;
+&underFDL;
+
+</chapter>
+
+<appendix>
+<title>Installation</title>
+
+<para><!-- c/p the usual installation stuff here --></para>
+
+</appendix>
+
+&datadtd;
+&templatedtd;
+
+</book>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: sgml
+sgml-omittag:t
+sgml-shorttag:t
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

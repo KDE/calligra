@@ -1,0 +1,158 @@
+<!-- If you want to validate or edit this document separately, uncomment
+this prolog
+
+<?xml version="1.0" ?>
+<!DOCTYPE appendix PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+
+-->
+
+<appendix title="template-dtd">
+<title>The KugarTemplate Document Type Definition</title>
+
+<synopsis>
+
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;!DOCTYPE KugarTemplate [
+     &lt;!ELEMENT KugarTemplate (ReportHeader, PageHeader, Detail, PageFooter, ReportFooter)&gt;
+     &lt;!ATTLIST KugarTemplate
+         PageSize           CDATA #REQUIRED
+         PageOrientation    CDATA #REQUIRED
+         TopMargin          CDATA #REQUIRED
+         BottomMargin       CDATA #REQUIRED
+         LeftMargin         CDATA #REQUIRED
+         RightMargin        CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT ReportHeader (Line*, Label*, Special*)&gt;
+     &lt;!ATTLIST ReportHeader
+         Height          CDATA #REQUIRED
+         PrintFrequency  CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT PageHeader (Line*, Label*, Special*)&gt;
+     &lt;!ATTLIST PageHeader
+         Height         CDATA #REQUIRED
+         PrintFrequency CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT Detail (Line*, Label*, Special*, Field*)&gt;
+     &lt;!ATTLIST Detail
+         Height  CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT PageFooter (Line*, Label*, Special*)&gt;
+     &lt;!ATTLIST PageFooter
+         Height         CDATA #REQUIRED
+         PrintFrequency CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT ReportFooter (Line*, Label*, Special*, CalculatedField*)&gt;
+     &lt;!ATTLIST ReportFooter
+         Height         CDATA #REQUIRED
+         PrintFrequency CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT Line EMPTY&gt;
+     &lt;!ATTLIST Line
+         X1      CDATA #REQUIRED
+         Y1      CDATA #REQUIRED
+         X2      CDATA #REQUIRED
+         Y2      CDATA #REQUIRED
+         Width   CDATA #REQUIRED
+         Color   CDATA #REQUIRED
+         Style   CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT Label EMPTY&gt;
+     &lt;!ATTLIST Label
+         Text            CDATA #REQUIRED
+         X               CDATA #REQUIRED
+         Y               CDATA #REQUIRED
+         Width           CDATA #REQUIRED
+         Height          CDATA #REQUIRED
+         BackgroundColor CDATA #REQUIRED
+         ForegroundColor CDATA #REQUIRED
+         BorderColor     CDATA #REQUIRED
+         BorderWidth     CDATA #REQUIRED
+         BorderStyle     CDATA #REQUIRED
+         FontFamily      CDATA #REQUIRED
+         FontSize        CDATA #REQUIRED
+         FontWeight      CDATA #REQUIRED
+         FontItalic      CDATA #REQUIRED
+         HAlignment      CDATA #REQUIRED
+         VAlignment      CDATA #REQUIRED
+         WordWrap        CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT Field EMPTY&gt;
+     &lt;!ATTLIST Field
+         Field           CDATA #REQUIRED
+         Text            CDATA #REQUIRED
+         X               CDATA #REQUIRED
+         Y               CDATA #REQUIRED
+         Width           CDATA #REQUIRED
+         Height          CDATA #REQUIRED
+         BackgroundColor CDATA #REQUIRED
+         ForegroundColor CDATA #REQUIRED
+         BorderColor     CDATA #REQUIRED
+         BorderWidth     CDATA #REQUIRED
+         BorderStyle     CDATA #REQUIRED
+         FontFamily      CDATA #REQUIRED
+         FontSize        CDATA #REQUIRED
+         FontWeight      CDATA #REQUIRED
+         FontItalic      CDATA #REQUIRED
+         HAlignment      CDATA #REQUIRED
+         VAlignment      CDATA #REQUIRED
+         WordWrap        CDATA #REQUIRED
+         DataType        CDATA #REQUIRED
+         DateFormat      CDATA #REQUIRED
+         Precision       CDATA #REQUIRED
+         Currency        CDATA #REQUIRED
+         NegValueColor   CDATA #REQUIRED
+         CommaSeparator  CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT CalculatedField EMPTY&gt;
+     &lt;!ATTLIST CalculatedField
+         CalculationType CDATA #REQUIRED
+         Field           CDATA #REQUIRED
+         Text            CDATA #REQUIRED
+         X               CDATA #REQUIRED
+         Y               CDATA #REQUIRED
+         Width           CDATA #REQUIRED
+         Height          CDATA #REQUIRED
+         BackgroundColor CDATA #REQUIRED
+         ForegroundColor CDATA #REQUIRED
+         BorderColor     CDATA #REQUIRED
+         BorderWidth     CDATA #REQUIRED
+         BorderStyle     CDATA #REQUIRED
+         FontFamily      CDATA #REQUIRED
+         FontSize        CDATA #REQUIRED
+         FontWeight      CDATA #REQUIRED
+         FontItalic      CDATA #REQUIRED
+         HAlignment      CDATA #REQUIRED
+         VAlignment      CDATA #REQUIRED
+         WordWrap        CDATA #REQUIRED
+         DataType        CDATA #REQUIRED
+         DateFormat      CDATA #REQUIRED
+         Precision       CDATA #REQUIRED
+         Currency        CDATA #REQUIRED
+         NegValueColor   CDATA #REQUIRED
+         CommaSeparator  CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT Special EMPTY&gt;
+     &lt;!ATTLIST Special
+         Type            CDATA #REQUIRED
+         Text            CDATA #REQUIRED
+         X               CDATA #REQUIRED
+         Y               CDATA #REQUIRED
+         Width           CDATA #REQUIRED
+         Height          CDATA #REQUIRED
+         BackgroundColor CDATA #REQUIRED
+         ForegroundColor CDATA #REQUIRED
+         BorderColor     CDATA #REQUIRED
+         BorderWidth     CDATA #REQUIRED
+         BorderStyle     CDATA #REQUIRED
+         FontFamily      CDATA #REQUIRED
+         FontSize        CDATA #REQUIRED
+         FontWeight      CDATA #REQUIRED
+         FontItalic      CDATA #REQUIRED
+         HAlignment      CDATA #REQUIRED
+         VAlignment      CDATA #REQUIRED
+         WordWrap        CDATA #REQUIRED
+         DateFormat      CDATA #REQUIRED&gt;
+ ]&gt;
+</synopsis>
+</appendix>
