@@ -51,4 +51,5 @@ else
   AC_MSG_RESULT([not found -- QPrinter will be used instead)])
 fi
 AC_SUBST(LIB_KDEPRINT)
+AC_DEFINE(HAVE_KDEPRINT_TESTED, 1, [Define if kdeprint was tested])
 
