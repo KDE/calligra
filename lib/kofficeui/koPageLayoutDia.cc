@@ -338,9 +338,9 @@ void KoPageLayoutDia::setupTab1()
         // combo unit
         cpgUnit = new QComboBox( false, tab1, "cpgUnit" );
         cpgUnit->setAutoResize( false );
-        cpgUnit->insertItem( i18n( "Millimeters ( mm )" ) );
-        cpgUnit->insertItem( i18n( "Points ( pt )" ) );
-        cpgUnit->insertItem( i18n( "Inches ( in )" ) );
+        cpgUnit->insertItem( i18n( "Millimeters (mm)" ) );
+        cpgUnit->insertItem( i18n( "Points (pt)" ) );
+        cpgUnit->insertItem( i18n( "Inches (in)" ) );
         grid1->addWidget( cpgUnit, 1, 0 );
         connect( cpgUnit, SIGNAL( activated( int ) ), this, SLOT( unitChanged( int ) ) );
     } else {
@@ -351,7 +351,7 @@ void KoPageLayoutDia::setupTab1()
         case PG_INCH: str = i18n("inches"); break;
         }
 
-        lpgUnit = new QLabel( i18n("All values are given in %1").arg(str), tab1 );
+        lpgUnit = new QLabel( i18n("All values are given in %1.").arg(str), tab1 );
         grid1->addWidget( lpgUnit, 0, 0 );
     }
 
@@ -705,7 +705,7 @@ void KoPageLayoutDia::setupTab3()
     case PG_INCH: str = i18n("inches"); break;
     }
 
-    QLabel *lCSpacing = new QLabel( i18n("Columns Spacing ( %1 ):").arg(str), tab3 );
+    QLabel *lCSpacing = new QLabel( i18n("Column Spacing (%1):").arg(str), tab3 );
     grid3->addWidget( lCSpacing, 2, 0 );
 
     nCSpacing = new QLineEdit( tab3, "" );
@@ -786,7 +786,7 @@ void KoPageLayoutDia::setupTab4()
     headerGrid->addMultiCellWidget( rhEvenOdd, 3, 3, 0, 1 );
     if ( kwhf.header == HF_EO_DIFF ) rhEvenOdd->setChecked( true );
 
-    QLabel *lHSpacing = new QLabel( i18n("Spacing between header and body ( %1 ):").arg(str), gHeader );
+    QLabel *lHSpacing = new QLabel( i18n("Spacing between header and body (%1):").arg(str), gHeader );
     lHSpacing->setAlignment( AlignRight | AlignVCenter );
     headerGrid->addWidget( lHSpacing, 4, 0 );
 
@@ -850,7 +850,7 @@ void KoPageLayoutDia::setupTab4()
     footerGrid->addMultiCellWidget( rfEvenOdd, 3, 3, 0, 1 );
     if ( kwhf.footer == HF_EO_DIFF ) rfEvenOdd->setChecked( true );
 
-    QLabel *lFSpacing = new QLabel( i18n("Spacing between footer and body ( %1 ):").arg(str), gFooter );
+    QLabel *lFSpacing = new QLabel( i18n("Spacing between footer and body (%1):").arg(str), gFooter );
     lFSpacing->setAlignment( AlignRight | AlignVCenter );
     footerGrid->addWidget( lFSpacing, 4, 0 );
 

@@ -47,7 +47,7 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
 	gridLA->setBuddy( _gridCB );
     grid->addWidget( _gridCB, 0, 3 );
 	wtstr = i18n( "Here you can configure the color that is used for the "
-				  "grid of the chart. Of course, this setting will only "
+				  "chart grid. Of course, this setting will only "
 				  "take effect if grid drawing is turned on." );
 	QWhatsThis::add( gridLA, wtstr );
 	QWhatsThis::add( _gridCB, wtstr );
@@ -89,8 +89,8 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
     _titleCB = new KColorButton( gb );
 	titleLA->setBuddy( _titleCB );
     grid->addWidget( _titleCB, 2, 3 );
-	wtstr = i18n( "This color is used for displaying titles for the axes. " 
-				  "This setting can be overwritten by the settings for the "
+	wtstr = i18n( "This color is used for displaying titles for the axes. "
+				  "This setting can be overridden by the settings for the "
 				  "individual axes." );
 	QWhatsThis::add( titleLA, wtstr );
 	QWhatsThis::add( _titleCB, wtstr );

@@ -58,14 +58,14 @@ KChartBarConfigPage::KChartBarConfigPage( QWidget* parent ) :
     grid2->addColSpacing(0,_ontopRB->width());
     grid2->addColSpacing(0,_infrontRB->width());
     grid2->setColStretch(0,1);
-	
+
     grid2->activate();
     grid1->addWidget(gb,0,0);
 
     QGroupBox* gb2 = new QGroupBox( i18n( "X Axis Layout" ), this );
     QGridLayout *grid3 = new QGridLayout(gb2,3,2,15,7);
 
-    QLabel* label = new QLabel( i18n( "&Distance between bars in percent of bar width" ), gb2 );
+    QLabel* label = new QLabel( i18n( "&Distance between bars as a percentage of bar width" ), gb2 );
     label->resize( label->sizeHint() );
     grid3->addWidget( label,1,0 );
 

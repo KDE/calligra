@@ -125,7 +125,7 @@ bool ksUnpack( KSContext& context, KSValue* _arg, CORBA::Any& _any, CORBA::TypeC
 
       if ( !x->_is_a( _tc->id() ) )
       {
-	QString tmp( i18n("While unpacking a CORBA datatype, an object of type %1 was expected but %2 found") );
+	QString tmp( i18n("While unpacking a CORBA datatype, an object of type %1 was expected, but %2 was found") );
 	context.setException( new KSException( "UnpackingError", tmp.arg( _tc->id() ).arg( x->_repoid() ) ) );
 	return false;
       }
@@ -392,7 +392,7 @@ bool ksPack( KSContext& context, CORBA::Any& _any, KSValue* _arg, CORBA::TypeCod
 	}
       }
 
-      QString tmp( i18n("The value %1 is no known enumerator\nPossible values are:\n") );
+      QString tmp( i18n("The value %1 is not a known enumerator\nPossible values are:\n") );
       for ( CORBA::ULong i = 0; i < _tc->member_count(); i++ )
       {
 	tmp += _tc->member_name(i);

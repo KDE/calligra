@@ -57,7 +57,7 @@ static bool ksfunc_time( KSContext& context )
     QTime t = s_koscript_locale->readTime( args[0]->stringValue() );
     if ( !t.isValid() )
     {
-        QString tmp( i18n("Non valid time format: %1") );
+        QString tmp( i18n("Invalid time format: %1") );
         context.setException( new KSException( "ParsingError", tmp.arg( args[0]->stringValue() ), -1 ) );
         return false;
     }
@@ -76,7 +76,7 @@ static bool ksfunc_date( KSContext& context )
     QDate t = s_koscript_locale->readDate( args[0]->stringValue() );
     if ( !t.isValid() )
     {
-        QString tmp( i18n("Non valid date format: %1") );
+        QString tmp( i18n("Invalid date format: %1") );
         context.setException( new KSException( "ParsingError", tmp.arg( args[0]->stringValue() ), -1 ) );
         return false;
     }
@@ -111,7 +111,7 @@ static bool ksfunc_length( KSContext& context )
   }
   else
   {
-    QString tmp( i18n("Can not calculate length of a %1 value") );
+    QString tmp( i18n("Cannot calculate length of a %1 value") );
     context.setException( new KSException( "CastingError", tmp.arg( args[0]->typeName() ), -1 ) );
     return false;
   }
@@ -164,7 +164,7 @@ static bool ksfunc_isEmpty( KSContext& context )
     }
     else
     {
-        QString tmp( i18n("Can not determine emptiness of a %1 value") );
+        QString tmp( i18n("Cannot determine emptiness of a %1 value") );
         context.setException( new KSException( "CastingError", tmp.arg( args[0]->typeName() ), -1 ) );
         return false;
     }
@@ -198,7 +198,7 @@ static bool ksfunc_toInt( KSContext& context )
     }
   }
 
-  QString tmp( i18n("Can not calculate a numerical value from a %1 value") );
+  QString tmp( i18n("Cannot calculate a numerical value from a %1 value") );
   context.setException( new KSException( "CastingError", tmp.arg( args[0]->typeName() ), -1 ) );
   return false;
 }
@@ -229,7 +229,7 @@ static bool ksfunc_toFloat( KSContext& context )
     }
   }
 
-  QString tmp( i18n("Can not calculate a floating point value from a %1 value") );
+  QString tmp( i18n("Cannot calculate a floating point value from a %1 value") );
   context.setException( new KSException( "CastingError", tmp.arg( args[0]->typeName() ), -1 ) );
   return false;
 }

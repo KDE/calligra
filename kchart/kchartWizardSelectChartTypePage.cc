@@ -63,7 +63,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   addButton(i18n("Area"),  "chart_area", KCHARTTYPE_AREA);
   addButton(i18n("Bar"), "chart_bar", KCHARTTYPE_BAR);
 
-  addButton(i18n("Hi-lo-close"), "chart_hiloclose", KCHARTTYPE_HILOCLOSE);
+  addButton(i18n("Hi-Lo-Close"), "chart_hiloclose", KCHARTTYPE_HILOCLOSE);
   addButton(i18n("Combo line bar"), "chart_combo_line_bar",
             KCHARTTYPE_COMBO_LINE_BAR);
   addButton(i18n("Combo HLC bar"), "chart_combo_hlc_bar",
@@ -71,7 +71,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
 
   addButton(i18n("Combo line area"),"chart_combo_line_area",
             KCHARTTYPE_COMBO_LINE_AREA);
-  addButton(i18n("Combo hlc area"),"chart_combo_hlc_area",
+  addButton(i18n("Combo HLC area"),"chart_combo_hlc_area",
             KCHARTTYPE_COMBO_HLC_AREA);
   addButton(i18n("3D Combo HiLo Close"), "chart_3dhiloclose",
             KCHARTTYPE_3DHILOCLOSE);
