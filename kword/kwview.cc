@@ -2459,7 +2459,8 @@ void KWView::formatFont()
                                                  fontDia->getSubScript(), fontDia->getSuperScript(),
                                                  fontDia->color(),fontDia->backGroundColor(),
                                                  flags);
-            m_doc->addCommand( cmd );
+            if( cmd)
+                m_doc->addCommand( cmd );
         }
 
         delete fontDia;
@@ -3337,14 +3338,23 @@ void KWView::textSuperScript()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
-        m_doc->addCommand( edit->setTextSuperScriptCommand(actionFormatSuper->isChecked()) );
+    {
+        KCommand *cmd=edit->setTextSuperScriptCommand(actionFormatSuper->isChecked());
+        if(cmd)
+            m_doc->addCommand(cmd );
+    }
+
 }
 
 void KWView::textSubScript()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
-        m_doc->addCommand( edit->setTextSubScriptCommand(actionFormatSub->isChecked()) );
+    {
+        KCommand *cmd=edit->setTextSubScriptCommand(actionFormatSub->isChecked());
+        if(cmd)
+            m_doc->addCommand(cmd );
+    }
 }
 
 void KWView::changeCaseOfText()
@@ -3410,7 +3420,11 @@ void KWView::textDefaultFormat()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
-        m_doc->addCommand( edit->setDefaultFormatCommand() );
+    {
+        KCommand *cmd=edit->setDefaultFormatCommand();
+        if(cmd)
+            m_doc->addCommand( cmd );
+    }
 }
 
 
@@ -3510,7 +3524,11 @@ void KWView::backgroundColor()
     if ( m_gui)
     {
         if(edit)
-            m_doc->addCommand( edit->setTextBackgroundColorCommand(backColor) );
+        {
+            KCommand *cmd=edit->setTextBackgroundColorCommand(backColor);
+            if( cmd)
+                m_doc->addCommand( cmd );
+        }
         else
             m_gui->canvasWidget()->setFrameBackgroundColor( backColor );
     }
