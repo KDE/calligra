@@ -466,7 +466,8 @@ void KPresenterView::insertPicture()
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
 #else
-    KFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
+    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, TRUE );
+    fd.setCaption(i18n("Insert Picture"));
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
@@ -507,6 +508,7 @@ void KPresenterView::insertClipart()
 	file = fd.selectedFile();
 #else
     KFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
+    fd.setCaption(i18n("Insert Clipart"));
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
@@ -2586,7 +2588,8 @@ void KPresenterView::changePicture( unsigned int, const QString & filename )
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
 #else
-     KFileDialog fd( filename, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
+    KFileDialog fd( filename, KImageIO::pattern(KImageIO::Reading), 0, 0, TRUE );
+    fd.setCaption(i18n("Select new Picture"));
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
@@ -2623,7 +2626,8 @@ void KPresenterView::changeClipart( unsigned int, QString filename )
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
 #else
-     KFileDialog fd( filename, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
+    KFileDialog fd( filename, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
+    fd.setCaption(i18n("Select new Clipart"));
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
