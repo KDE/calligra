@@ -50,6 +50,7 @@
 #include "kwview.h"
 #include "kwviewmode.h"
 #include <koParagDia.h>
+#include <koSearchDia.h>
 #include "searchdia.h"
 #include "serialletter.h"
 #include "splitcellsdia.h"
@@ -1397,11 +1398,25 @@ void KWView::editFind()
     }
 
     if (!m_searchEntry)
-        m_searchEntry = new KWSearchContext();
-    KWSearchDia dialog( m_gui->canvasWidget(), "find", m_searchEntry );
+        m_searchEntry = new KoSearchContext();
+    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_gui->canvasWidget()->currentFrameSetEdit());
+    bool hasSelection=edit && static_cast<KWTextFrameSet *>(edit->frameSet())->hasSelection();
+    KoSearchDia dialog( m_gui->canvasWidget(), "find", m_searchEntry,hasSelection );
+
+    QPtrList<KoTextObject>lst;
+    QPtrListIterator<KWFrameSet> fit = m_gui->canvasWidget()->kWordDocument()->framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *> (fit.current());
+        if ( fs && fs->isVisible() )
+        {
+            lst.append(fs->textObject());
+        }
+    }
+
     if ( dialog.exec() == QDialog::Accepted )
     {
-        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog );
+        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog,edit ,lst);
         doFindReplace();
     }
 }
@@ -1416,13 +1431,28 @@ void KWView::editReplace()
     }
 
     if (!m_searchEntry)
-        m_searchEntry = new KWSearchContext();
+        m_searchEntry = new KoSearchContext();
     if (!m_replaceEntry)
-        m_replaceEntry = new KWSearchContext();
-    KWReplaceDia dialog( m_gui->canvasWidget(), "replace", m_searchEntry, m_replaceEntry );
+        m_replaceEntry = new KoSearchContext();
+
+    QPtrList<KoTextObject>lst;
+    QPtrListIterator<KWFrameSet> fit = m_gui->canvasWidget()->kWordDocument()->framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *> (fit.current());
+        if ( fs && fs->isVisible() )
+        {
+            lst.append(fs->textObject());
+        }
+    }
+
+    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_gui->canvasWidget()->currentFrameSetEdit());
+    bool hasSelection=edit && static_cast<KWTextFrameSet *>(edit->frameSet())->hasSelection();
+
+    KoReplaceDia dialog( m_gui->canvasWidget(), "replace", m_searchEntry, m_replaceEntry,hasSelection );
     if ( dialog.exec() == QDialog::Accepted )
     {
-        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog );
+        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog,edit ,lst);
         doFindReplace();
     }
 }

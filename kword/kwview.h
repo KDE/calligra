@@ -40,9 +40,8 @@ class KWDocument;
 class KWGUI;
 class KWFrame;
 class KWPartFrameSet;
-class KWSearchContext;
+class KoSearchContext;
 class KWStyleManager;
-class KWFindReplace;
 class KWTableDia;
 class KWView;
 class QResizeEvent;
@@ -62,7 +61,8 @@ class KoCharSelectDia;
 class KWTextFrameset;
 class KMacroCommand;
 class KWFrameSet;
-
+class KoFindReplace;
+class KWFindReplace;
 namespace Qt3 {
 class QTextFormat;
 class QTextParag;
@@ -463,7 +463,7 @@ private:
 
     DCOPObject *dcop;
 
-    KWSearchContext *m_searchEntry, *m_replaceEntry;
+    KoSearchContext *m_searchEntry, *m_replaceEntry;
     KWFindReplace *m_findReplace;
 
     QPtrList<KAction> m_actionList; // for the kodatatools
