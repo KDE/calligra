@@ -21,6 +21,8 @@
 #define KEXI_UTILS_H
 
 #include <qstring.h>
+#include <qobjectlist.h>
+
 #include "kexi_global.h"
 
 //! displays information that feature "feature_name" is not availabe in the current application version
@@ -63,12 +65,16 @@ namespace Kexi
 			;
 		return static_cast<type*>(o);
 	}
-/*	inline QObject* findParent(QObject* o, const char* className)
+
+	//! \return first found child of \a o, that inherit \a className.
+	//! Returned pointer type is casted.
+	template<class type>
+	type* findFirstChild(QObject *o, const char* className)
 	{
-		while ( ((o=o->parent())) && !o->inherits(className) )
-			;
-		return o;
-	}*/
+		QObjectList *l = o->queryList( className );
+		QObjectListIt it( *l );
+		return static_cast<type*>(it.current());
+	}
 
 } //namespace
 
