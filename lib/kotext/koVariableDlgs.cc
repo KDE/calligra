@@ -284,6 +284,9 @@ KoCustomVarDialog::KoCustomVarDialog( QWidget *parent, KoCustomVariable *var )
     connect( this, SIGNAL( cancelClicked() ),
              this, SLOT( reject() ) );
 
+    connect( m_value, SIGNAL( textChanged(const QString&) ),
+             this, SLOT( slotTextChanged(const QString&) ) );
+
     enableButtonOK( true );
     resize( 350, 100 );
 }
@@ -314,9 +317,9 @@ void KoCustomVarDialog::slotEditOk()
     accept();
 }
 
-void KoCustomVarDialog::slotTextChanged(const QString&)
+void KoCustomVarDialog::slotTextChanged(const QString&text)
 {
-    enableButtonOK( !m_name->text().isEmpty() );
+    enableButtonOK( !text.isEmpty() );
 }
 QString KoCustomVarDialog::name()
 {
