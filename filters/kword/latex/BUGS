@@ -1,0 +1,18 @@
+send bugs to rjacolin@ifrance.com
+
+	- first header doesn't work
+	- enumeration with two lists interlinked and closed one behind the other,
+	the first is not closed, e.g. :
+		\begin{enum}
+		- 1
+		- 2
+		- 3
+			\begin{list}
+			o 1
+			o 2
+			o 3
+			\end{list}
+		the bugs is here
+
+		[...]
+	- no end of flow if the next textzone is empty (the textzone is ignored).
