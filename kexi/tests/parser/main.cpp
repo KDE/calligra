@@ -46,19 +46,19 @@ int main(int argc, char **argv)
 
 	//connection data that can be later reused
 	KexiDB::ConnectionData conn_data;
-	conn_data.setFileName("db");
+	conn_data.setFileName("../newapi/db");
 
 	KexiDB::Connection *conn = driver->createConnection(conn_data);
 	if (driver->error()) {
-		kdDebug() << driver->errorMsg() << endl;
+		kdDebug() << "error: " << driver->errorMsg() << endl;
 		return 1;
 	}
 	if (!conn->connect()) {
-		kdDebug() << conn->errorMsg() << endl;
+		kdDebug() << "error: " << conn->errorMsg() << endl;
 		return 1;
 	}
-	if (!conn->useDatabase( "db" )) {
-		kdDebug() << conn->errorMsg() << endl;
+	if (!conn->useDatabase( "../newapi/db" )) {
+		kdDebug() << "error: " << conn->errorMsg() << endl;
 		return 1;
 	}
 
