@@ -44,6 +44,7 @@ KWImportStyleDia::KWImportStyleDia( KWDocument *_doc, const QStringList &_list, 
     m_listStyleName = new QListBox( page );
     m_listStyleName->setSelectionMode( QListBox::Multi );
     loadFile();
+    enableButtonOK( (m_listStyleName->count()!=0) );
     resize (300, 400);
 }
 
@@ -85,45 +86,49 @@ void KWImportStyleDia::loadFile()
     }
     // ### TODO network transparency
     KoStore* store=KoStore::createStore( url.path(), KoStore::Read );
-    if ( store->open("maindoc.xml") )
+    if (store )
     {
-        QDomDocument doc;
-        doc.setContent( store->device() );
-        QDomElement word = doc.documentElement();
-        if ( m_typeStyle ==frameStyle )
+        if (store->open("maindoc.xml") )
         {
-            QDomNodeList listStyles = word.elementsByTagName( "FRAMESTYLE" );
-            for (unsigned int item = 0; item < listStyles.count(); item++) {
-                QDomElement styleElem = listStyles.item( item ).toElement();
+            QDomDocument doc;
+            doc.setContent( store->device() );
+            QDomElement word = doc.documentElement();
+            if ( m_typeStyle ==frameStyle )
+            {
+                QDomNodeList listStyles = word.elementsByTagName( "FRAMESTYLE" );
+                for (unsigned int item = 0; item < listStyles.count(); item++) {
+                    QDomElement styleElem = listStyles.item( item ).toElement();
 
-                KWFrameStyle *sty = new KWFrameStyle( styleElem );
-                QString name =sty->name();
-                if ( m_list.findIndex( name )!=-1 )
-                    sty->setName(generateStyleName( sty->translatedName() + QString( "- %1")));
-                m_frameStyleList.append( sty);
+                    KWFrameStyle *sty = new KWFrameStyle( styleElem );
+                    QString name =sty->name();
+                    if ( m_list.findIndex( name )!=-1 )
+                        sty->setName(generateStyleName( sty->translatedName() + QString( "- %1")));
+                    m_frameStyleList.append( sty);
+                }
             }
+            else
+            {
+                QDomNodeList listStyles = word.elementsByTagName( "TABLESTYLE" );
+                for (unsigned int item = 0; item < listStyles.count(); item++) {
+                    QDomElement styleElem = listStyles.item( item ).toElement();
+                    KWTableStyle *sty = new KWTableStyle( styleElem,m_doc,2 );
+                    QString name =sty->name();
+                    if ( m_list.findIndex( name )!=-1 )
+                        sty->setName(generateStyleName( sty->translatedName() + QString( "- %1")));
+                    m_tableStyleList.append( sty);
+                }
+            }
+            initList();
         }
         else
         {
-            QDomNodeList listStyles = word.elementsByTagName( "TABLESTYLE" );
-            for (unsigned int item = 0; item < listStyles.count(); item++) {
-                QDomElement styleElem = listStyles.item( item ).toElement();
-                KWTableStyle *sty = new KWTableStyle( styleElem,m_doc,2 );
-                QString name =sty->name();
-                if ( m_list.findIndex( name )!=-1 )
-                    sty->setName(generateStyleName( sty->translatedName() + QString( "- %1")));
-                m_tableStyleList.append( sty);
-            }
+            KMessageBox::error( this,
+                                i18n("File is not a kword file!"),
+                                i18n("Import Style"));
         }
-        initList();
+        store->close();
     }
-    else
-    {
-        KMessageBox::error( this,
-                            i18n("File is not a kword file"),
-                            i18n("Import Style"));
-    }
-    store->close();
+
     delete store;
 }
 
@@ -144,6 +149,7 @@ void KWImportStyleDia::initList()
             lst<<p->translatedName();
         }
     }
+
     m_listStyleName->insertStringList(lst);
 }
 
