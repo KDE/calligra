@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999, 2000, 2001, 2002  Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,12 +22,11 @@
 #define __kspread_dlg_special__
 
 #include <kdialogbase.h>
-#include <qradiobutton.h>
 
 class KSpreadView;
 class KSpreadSheet;
 class KSpreadCell;
-
+class QRadioButton;
 class KSpreadspecial : public KDialogBase
 {
     Q_OBJECT
@@ -38,18 +37,11 @@ public slots:
     void slotOk();
     void slotToggled( bool );
 
-protected:
+private:
     KSpreadView* m_pView;
-    QRadioButton *rb1;
-    QRadioButton *rb2;
-    QRadioButton *rb3;
-    QRadioButton *rb4;
-    QRadioButton *rb5;
-    QRadioButton *rb6;
-    QRadioButton *rb7;
-    QRadioButton *rb8;
-    QRadioButton *rb9;
-    QRadioButton *rb10;
+    QRadioButton *rb1, *rb2, *rb3, *rb4, *rb5;
+    QRadioButton *rb6, *rb7, *rb8;
+    QRadioButton *rb9, *rb10, *rb11;
 };
 
 #endif

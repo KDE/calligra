@@ -25,6 +25,7 @@
 #include <qlayout.h>
 #include <klocale.h>
 #include <qbuttongroup.h>
+#include <qradiobutton.h>
 
 KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name )
 	: KDialogBase( parent, name, TRUE,i18n("Special Paste"),Ok|Cancel  )
@@ -42,6 +43,8 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name )
     rb2 = new QRadioButton( i18n("Text"), grp );
     rb3 = new QRadioButton( i18n("Format"), grp );
     rb10 = new QRadioButton( i18n("Comment"), grp );
+    rb11 = new QRadioButton( i18n("Result"), grp );
+
     rb4 = new QRadioButton( i18n("Everything without border"), grp );
     rb1->setChecked(true);
 
@@ -91,6 +94,8 @@ void KSpreadspecial::slotOk()
 	sp = NoBorder;
     else if( rb10->isChecked() )
 	sp = Comment;
+    else if( rb11->isChecked() )
+	sp = Result;
 
     if( rb5->isChecked() )
 	op = OverWrite;

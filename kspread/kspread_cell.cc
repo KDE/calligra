@@ -1125,7 +1125,7 @@ void KSpreadCell::setOutputText()
       int start=0;
       if(localizedNumber.find('%')!=-1)
         start=2;
-      else if (localizedNumber.find( locale()->currencySymbol()) == ((int)(localizedNumber.length() - 
+      else if (localizedNumber.find( locale()->currencySymbol()) == ((int)(localizedNumber.length() -
                                                                            locale()->currencySymbol().length())))
         start=locale()->currencySymbol().length() + 1;
       else if((start=localizedNumber.find('E'))!=-1)
@@ -3451,7 +3451,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
     QString ctext = _text;
     if( ctext.length() > 5000 )
       ctext = ctext.left( 5000 );
-	
+
     QString oldText=m_strText;
     setDisplayText( ctext, updateDepends );
     if(!m_pTable->isLoading() && !testValidity() )
@@ -4620,7 +4620,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     //
     QDomElement text = cell.namedItem( "text" ).toElement();
 
-    if (!text.isNull() && (pm == ::Normal || pm == ::Text || pm == ::NoBorder ))
+    if (!text.isNull() && (pm == ::Normal || pm == ::Text || pm == ::NoBorder ) || pm == ::Result)
     {
       /* older versions mistakenly put the datatype attribute on the cell
          instead of the text.  Just move it over in case we're parsing
@@ -4629,8 +4629,14 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
       {
         text.setAttribute( "dataType", cell.attribute( "dataType" ) );
       }
-
-      loadCellData(text, op);
+      if ( pm ==::Result )
+      {
+          QDomElement result = cell.namedItem( "result" ).toElement();
+          if ( !result.isNull() )
+              loadCellData(result, op);
+      }
+      else
+          loadCellData(text, op);
     }
 
     if ( !f.isNull() && f.hasAttribute( "style" ) )

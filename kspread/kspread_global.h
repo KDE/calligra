@@ -17,7 +17,7 @@
 /* Definition of maximal supported columns/rows, which can be merged */
 #define KS_spanMax 0xFFF
 
-enum PasteMode { Normal, Text, Format, NoBorder, Comment, NormalAndTranspose, TextAndTranspoase,
+enum PasteMode { Normal, Text, Format, NoBorder, Comment, Result, NormalAndTranspose, TextAndTranspoase,
 		 FormatAndTranspose, NoBorderAndTranspose };
 enum Operation { OverWrite, Add, Mul, Sub, Div };
 enum Conditional { None, Equal,Superior,Inferior,SuperiorEqual,InferiorEqual,Between,Different};
