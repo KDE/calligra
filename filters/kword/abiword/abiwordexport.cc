@@ -73,7 +73,7 @@ class AbiWordWorker : public KWEFBaseWorker
 {
 public:
     AbiWordWorker(void);
-    virtual ~AbiWordWorker(void) { }
+    virtual ~AbiWordWorker(void) { delete m_streamOut; }
 public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
     virtual bool doCloseFile(void); // Close file in normal conditions
@@ -301,7 +301,7 @@ bool AbiWordWorker::convertUnknownImage(const QString& strName, QByteArray& imag
 void AbiWordWorker::writeImageData(const QString& koStoreName, const QString& keyName)
 {
     kdDebug(30506) << "Picture is Image " << endl;
-    
+
     QByteArray image;
 
     QString strExtension(koStoreName);
