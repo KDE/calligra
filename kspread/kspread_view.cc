@@ -377,6 +377,11 @@ void KSpreadView::initialPosition()
     m_hideGrid->setChecked( !m_pTable->getShowGrid() );
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
     m_showFormular->setChecked(m_pTable->getShowFormular());
+
+    /*recalc all dependent after loading*/
+    KSpreadTable *tbl;
+    for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
+	tbl->recalc(true);
 }
 
 /*
@@ -1085,9 +1090,7 @@ void KSpreadView::formulaSelection( const QString &_math )
 
     KSpreadDlgFormula* dlg = new KSpreadDlgFormula( this, "Formula Editor",_math );
     dlg->show();
-    /*KSpreadcreate* dlg = new KSpreadcreate( this, _math );
-    dlg->show();*/
-
+  
     /* if ( !m_pCanvas->editor() )
     {
 	m_pCanvas->createEditor( KSpreadCanvas::CellEditor );
