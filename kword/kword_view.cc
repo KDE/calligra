@@ -1509,7 +1509,7 @@ void KWordView::extraCreateTemplate()
     pix.fill( Qt::white );
 
     QString file = "/tmp/kpt";
-    m_pKWordDoc->saveToURL( file, "" );
+    m_pKWordDoc->saveNativeFormat( file );
 
     KoTemplateCreateDia::createTemplate( this, file, pix,
 					 KWordFactory::global()->

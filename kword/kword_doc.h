@@ -106,19 +106,14 @@ protected:
     virtual bool hasToWriteMultipart();
 
 public:
-    // IDL
     virtual bool initDoc();
     void initEmpty();
 
-    // C++
     virtual bool loadXML( KOMLParser& parser, KoStore *_store );
     virtual bool loadChildren( KoStore *_store );
     virtual bool save( ostream& out, const char* _format );
     virtual bool completeSaving( KoStore *_store );
 
-    virtual bool loadTemplate( const QString &_url );
-
-    // IDL
     KoMainWindow* createShell();
     KoView* createView( QWidget* parent, const char* name );
 
@@ -292,8 +287,6 @@ public:
 
     void setStyleChanged( QString _name );
     bool isStyleChanged( QString _name );
-
-    bool loaded() { return _loaded; }
 
     bool hasHeader() { return _header; }
     bool hasFooter() { return _footer; }

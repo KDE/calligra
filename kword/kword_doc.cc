@@ -118,7 +118,6 @@ KWordDocument::KWordDocument(QObject* parent, const char* name, bool singleViewM
     applyStyleTemplate = 0;
     applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT |
 			 U_NUMBERING | U_ALIGN | U_TABS | U_SMART;
-    _loaded = FALSE;
     _header = FALSE;
     _footer = FALSE;
     _needRedraw = FALSE;
@@ -180,27 +179,23 @@ bool KWordDocument::initDoc()
     if ( ret == KoTemplateChooseDia::Template ) {
 	QFileInfo fileInfo( _template );
 	QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kwt" );
-	bool ok = loadTemplate( fileName );
-	setURL( KURL() );
-	return ok;
+	resetURL();
+	return loadNativeFormat( fileName );
     } else if ( ret == KoTemplateChooseDia::File ||
                 ret == KoTemplateChooseDia::TempFile ) {
 	QString fileName( _template );
-	bool ok = loadTemplate( fileName );
+        KURL::encode( fileName );
+	bool ok = openURL( KURL( fileName ) );
 	if ( ret == KoTemplateChooseDia::TempFile )
 	{
-	    setURL(KURL());
+	    resetURL();
 	    unlink( fileName.ascii() );
 	}
-	else
-	    setURL( fileName );
-	_loaded = TRUE;
 	return ok;
     } else if ( ret == KoTemplateChooseDia::Empty ) {
 	QString fileName( locate( "kword_template", "Wordprocessing/PlainText.kwt" , KWordFactory::global() ) );
-	bool ok = loadTemplate( fileName );
-	setURL( QString::null );
-	return ok;
+	resetURL();
+	return loadNativeFormat( fileName );
     }
     else
 	return FALSE;
@@ -228,47 +223,11 @@ void KWordDocument::initEmpty()
     pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_MM( 10 );
     pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM( 10 );
 
-	QString fileName( locate( "kword_template", "Wordprocessing/PlainText.kwt" , KWordFactory::global() ) );
-	bool ok = loadTemplate( fileName );
-	setURL( QString::null );
+    QString fileName( locate( "kword_template", "Wordprocessing/PlainText.kwt" , KWordFactory::global() ) );
+    /*bool ok = */loadNativeFormat( fileName );
+    resetURL();
 }
 
-
-/*================================================================*/
-bool KWordDocument::loadTemplate( const QString &fileName )
-{
-//     KURL u( _url );
-
-//     if ( u.isMalformed() )
-//	   return FALSE;
-
-//     if ( !u.isLocalFile() )
-//     {
-//	   cerr << "Can not open remote URL" << endl;
-//	   return FALSE;
-//     }
-
-//     ifstream in( u.path().ascii() );
-//     if ( !in )
-//     {
-//	   cerr << "Could not open" << u.path().ascii() << endl;
-//	   return FALSE;
-//     }
-
-//     KOMLStreamFeed feed( in );
-//     KOMLParser parser( &feed );
-
-//     if ( !loadXML( parser, 0L ) )
-//	   return FALSE;
-
-//     setModified( TRUE );
-
-//     _loaded = FALSE;
-//     return TRUE;
-    bool ok = loadFromURL( KURL( fileName ) );
-    _loaded = FALSE;
-    return ok;
-}
 
 /*================================================================*/
 void KWordDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf )
@@ -724,7 +683,6 @@ bool KWordDocument::loadChildren( KoStore *_store )
 /*================================================================*/
 bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 {
-    _loaded = TRUE;
     pixmapKeys.clear();
     pixmapNames.clear();
     imageRequests.clear();
@@ -2412,7 +2370,7 @@ void KWordDocument::drawMarker( KWFormatContext &_fc, QPainter *_painter, int xO
 {
     if ( !isReadWrite() )
       return;
- 
+
     RasterOp rop = _painter->rasterOp();
 
     _painter->setRasterOp( NotROP );
