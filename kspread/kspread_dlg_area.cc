@@ -42,10 +42,16 @@ KSpreadarea::KSpreadarea( KSpreadView* parent, const char* name,const QPoint &_m
   areaName=new QLineEdit(page);
   lay1->addWidget( areaName );
   areaName->setFocus();
+  connect ( areaName, SIGNAL(textChanged ( const QString & )), this, SLOT(slotAreaNamechanged( const QString &)));
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
+  enableButtonOK(!areaName->text().isEmpty());
+
 }
 
-
+void KSpreadarea::slotAreaNamechanged( const QString & text)
+{
+    enableButtonOK(!text.isEmpty());
+}
 
 void KSpreadarea::slotOk()
 {
