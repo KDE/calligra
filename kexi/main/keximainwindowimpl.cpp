@@ -354,8 +354,8 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 	connect(&Kexi::partManager(),SIGNAL(partLoaded(KexiPart::Part*)),this,SLOT(slotPartLoaded(KexiPart::Part*)));
 	connect( m_pMdi, SIGNAL(nowMaximized(bool)), this, SLOT(slotCaptionForCurrentMDIChild(bool)) );
 	connect( m_pMdi, SIGNAL(noMaximizedChildFrmLeft(KMdiChildFrm*)), this, SLOT(slotNoMaximizedChildFrmLeft(KMdiChildFrm*)));
-	connect( this, SIGNAL(lastChildFrmClosed()), this, SLOT(slotLastChildFrmClosed()));
-//no such signal	connect( m_pMdi, SIGNAL(lastChildViewClosed()), this, SLOT(slotLastChildViewClosed()));
+//	connect( this, SIGNAL(lastChildFrmClosed()), this, SLOT(slotLastChildFrmClosed()));
+	connect( this, SIGNAL(lastChildViewClosed()), this, SLOT(slotLastChildViewClosed()));
 
 	connect( this, SIGNAL(childViewIsDetachedNow(QWidget*)), this, SLOT(slotChildViewIsDetachedNow(QWidget*)));
 	connect( this, SIGNAL(mdiModeHasBeenChangedTo(KMdi::MdiMode)),
@@ -1233,7 +1233,7 @@ void KexiMainWindowImpl::slotNoMaximizedChildFrmLeft(KMdiChildFrm*)
 	slotCaptionForCurrentMDIChild(false);
 }
 
-void KexiMainWindowImpl::slotLastChildFrmClosed()
+void KexiMainWindowImpl::slotLastChildViewClosed() //slotLastChildFrmClosed()
 {
 	if (m_pDocumentViews->count()>0) //a fix for KMDI bug (will be fixed in KDE 3.4)
 		return;

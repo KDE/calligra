@@ -242,7 +242,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 
 		void slotCaptionForCurrentMDIChild(bool childrenMaximized);
 		void slotNoMaximizedChildFrmLeft(KMdiChildFrm*);
-		void slotLastChildFrmClosed();
+		void slotLastChildViewClosed();
 		void slotChildViewIsDetachedNow(QWidget*);
 
 		//! internal - creates and initializes kexi project
