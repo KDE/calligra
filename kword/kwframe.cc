@@ -1278,7 +1278,7 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
     connect(formula, SIGNAL(formulaChanged(int, int)),
             this, SLOT(slotFormulaChanged(int, int)));
     if ( name.isEmpty() )
-        m_name = _doc->generateFramesetName( i18n( "Part Frameset %1" ) );
+        m_name = _doc->generateFramesetName( i18n( "Formula Frameset %1" ) );
     else
         m_name = name;
 }
