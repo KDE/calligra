@@ -1279,13 +1279,6 @@ void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, 
 void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle, int selectionId )
 {
     QTextDocument * textdoc = textDocument();
-    if ( cursor )
-    {
-        QString curStyleName = static_cast<KWTextParag*>(cursor->parag())->styleName();
-        if ( !textdoc->hasSelection( selectionId ) &&
-             newStyle->name() == curStyleName )
-            return;
-    }
     emit hideCursor();
 
     /// Applying a style is three distinct operations :
