@@ -1,7 +1,7 @@
 
 INCLUDES  = $(KOFFICECORE_INCLUDES) $(MICO_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD     = $(LIB_KOFFICECORE) $(LIB_KOML) $(LIB_KSTORE) \
+LDADD     = $(LIB_KOFFICECORE) $(LIB_KOML) $(LIB_KSTORE) $(LIB_KDEUTIL) \
 	    $(LIB_KFILE) -lkparts -lkpartsui -lkom $(LIB_KIO) $(LIBMICO)
 
 ####### Files
