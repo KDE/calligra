@@ -102,7 +102,10 @@ bool KoFrame::attachLocalView( KoViewIf* _view )
 void KoFrame::detach()
 {
   if ( CORBA::is_nil( m_vView ) )
+  {
+    OPFrame::detach();
     return;
+  }    
 
   // We do not want to receive further signals or events from this object
   m_vView->disconnectObject( this );
