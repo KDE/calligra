@@ -1340,6 +1340,7 @@ void Page::setupMenus()
   picMenu->insertItem(ICON("shadow.xpm"),i18n("&Shadow..."),this,SLOT(shadowObjs()));
   picMenu->insertSeparator();
   picMenu->insertItem(ICON("picture.xpm"),i18n("&Change Picture..."),this,SLOT(chPic()));
+  picMenu->insertItem(ICON("style.xpm"),i18n("&Properties..."),this,SLOT(objProperties()));
   picMenu->insertSeparator();
   picMenu->insertItem(ICON("effect.xpm"),i18n("&Assign effect..."),this,SLOT(assignEffect()));
   picMenu->insertSeparator();
@@ -1357,6 +1358,7 @@ void Page::setupMenus()
   clipMenu->insertItem(ICON("shadow.xpm"),i18n("&Shadow..."),this,SLOT(shadowObjs()));
   clipMenu->insertSeparator();
   clipMenu->insertItem(ICON("clipart.xpm"),i18n("&Change Clipart..."),this,SLOT(chClip()));
+  clipMenu->insertItem(ICON("style.xpm"),i18n("&Properties..."),this,SLOT(objProperties()));
   clipMenu->insertSeparator();
   clipMenu->insertItem(ICON("effect.xpm"),i18n("&Assign effect..."),this,SLOT(assignEffect()));
   clipMenu->insertSeparator();
@@ -1372,6 +1374,8 @@ void Page::setupMenus()
   txtMenu->insertSeparator();
   txtMenu->insertItem(ICON("rotate.xpm"),i18n("&Rotate..."),this,SLOT(rotateObjs()));
   txtMenu->insertItem(ICON("shadow.xpm"),i18n("&Shadow..."),this,SLOT(shadowObjs()));
+  txtMenu->insertSeparator();
+  txtMenu->insertItem(ICON("style.xpm"),i18n("&Properties..."),this,SLOT(objProperties()));
   txtMenu->insertSeparator();
   txtMenu->insertItem(ICON("effect.xpm"),i18n("&Assign effect..."),this,SLOT(assignEffect()));
   txtMenu->insertSeparator();

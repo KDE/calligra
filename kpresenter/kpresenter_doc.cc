@@ -1051,6 +1051,39 @@ bool KPresenterDoc::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,Fill
 		ret = true;
 		repaint(kpobject);
 	      } break;
+	    case OT_TEXT:
+	      {
+		dynamic_cast<KPTextObject*>(kpobject)->setPen(pen);
+		dynamic_cast<KPTextObject*>(kpobject)->setBrush(brush);
+		dynamic_cast<KPTextObject*>(kpobject)->setFillType(ft);
+		dynamic_cast<KPTextObject*>(kpobject)->setGColor1(g1);
+		dynamic_cast<KPTextObject*>(kpobject)->setGColor2(g2);
+		dynamic_cast<KPTextObject*>(kpobject)->setGType(gt);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_PICTURE:
+	      {
+		dynamic_cast<KPPixmapObject*>(kpobject)->setPen(pen);
+		dynamic_cast<KPPixmapObject*>(kpobject)->setBrush(brush);
+		dynamic_cast<KPPixmapObject*>(kpobject)->setFillType(ft);
+		dynamic_cast<KPPixmapObject*>(kpobject)->setGColor1(g1);
+		dynamic_cast<KPPixmapObject*>(kpobject)->setGColor2(g2);
+		dynamic_cast<KPPixmapObject*>(kpobject)->setGType(gt);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_CLIPART:
+	      {
+		dynamic_cast<KPClipartObject*>(kpobject)->setPen(pen);
+		dynamic_cast<KPClipartObject*>(kpobject)->setBrush(brush);
+		dynamic_cast<KPClipartObject*>(kpobject)->setFillType(ft);
+		dynamic_cast<KPClipartObject*>(kpobject)->setGColor1(g1);
+		dynamic_cast<KPClipartObject*>(kpobject)->setGColor2(g2);
+		dynamic_cast<KPClipartObject*>(kpobject)->setGType(gt);
+		ret = true;
+		repaint(kpobject);
+	      } break;
 	    default: break;
 	    }
 	}
@@ -1308,6 +1341,26 @@ bool KPresenterDoc::setPenColor(QColor c,bool fill)
 		ret = true;
 		repaint(kpobject);
 	      } break;
+	    case OT_PICTURE:
+	      {
+		QPen pen = dynamic_cast<KPPixmapObject*>(kpobject)->getPen();
+		if (pen.style() == NoPen) pen.setStyle(SolidLine);
+		pen.setColor(c);
+		if (!fill) pen = NoPen;
+		dynamic_cast<KPPixmapObject*>(kpobject)->setPen(pen);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_CLIPART:
+	      {
+		QPen pen = dynamic_cast<KPClipartObject*>(kpobject)->getPen();
+		if (pen.style() == NoPen) pen.setStyle(SolidLine);
+		pen.setColor(c);
+		if (!fill) pen = NoPen;
+		dynamic_cast<KPClipartObject*>(kpobject)->setPen(pen);
+		ret = true;
+		repaint(kpobject);
+	      } break;
 	    case OT_TEXT:
 	      {
 		if (fill)
@@ -1389,6 +1442,28 @@ bool KPresenterDoc::setBrushColor(QColor c,bool fill)
 		if (!fill) brush = NoBrush;
 		dynamic_cast<KPPartObject*>(kpobject)->setFillType(FT_BRUSH);
 		dynamic_cast<KPPartObject*>(kpobject)->setBrush(brush);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_PICTURE:
+	      {
+		QBrush brush = dynamic_cast<KPPixmapObject*>(kpobject)->getBrush();
+		if (brush.style() == NoBrush) brush.setStyle(SolidPattern);
+		brush.setColor(c);
+		if (!fill) brush = NoBrush;
+		dynamic_cast<KPPixmapObject*>(kpobject)->setFillType(FT_BRUSH);
+		dynamic_cast<KPPixmapObject*>(kpobject)->setBrush(brush);
+		ret = true;
+		repaint(kpobject);
+	      } break;
+	    case OT_CLIPART:
+	      {
+		QBrush brush = dynamic_cast<KPClipartObject*>(kpobject)->getBrush();
+		if (brush.style() == NoBrush) brush.setStyle(SolidPattern);
+		brush.setColor(c);
+		if (!fill) brush = NoBrush;
+		dynamic_cast<KPClipartObject*>(kpobject)->setFillType(FT_BRUSH);
+		dynamic_cast<KPClipartObject*>(kpobject)->setBrush(brush);
 		ret = true;
 		repaint(kpobject);
 	      } break;
@@ -1510,6 +1585,15 @@ QPen KPresenterDoc::getPen(QPen pen)
 	    case OT_PART:
 	      return dynamic_cast<KPPartObject*>(kpobject)->getPen();
 	      break;
+	    case OT_PICTURE:
+	      return dynamic_cast<KPPixmapObject*>(kpobject)->getPen();
+	      break;
+	    case OT_CLIPART:
+	      return dynamic_cast<KPClipartObject*>(kpobject)->getPen();
+	      break;
+	    case OT_TEXT:
+	      return dynamic_cast<KPTextObject*>(kpobject)->getPen();
+	      break;
 	    default: break;
 	    }
 	}      
@@ -1603,6 +1687,15 @@ QBrush KPresenterDoc::getBrush(QBrush brush)
 	    case OT_PART:
 	      return dynamic_cast<KPPartObject*>(kpobject)->getBrush();
 	      break;
+	    case OT_PICTURE:
+	      return dynamic_cast<KPPixmapObject*>(kpobject)->getBrush();
+	      break;
+	    case OT_CLIPART:
+	      return dynamic_cast<KPClipartObject*>(kpobject)->getBrush();
+	      break;
+	    case OT_TEXT:
+	      return dynamic_cast<KPTextObject*>(kpobject)->getBrush();
+	      break;
 	    default: break;
 	    }
 	}      
@@ -1637,6 +1730,15 @@ FillType KPresenterDoc::getFillType(FillType ft)
 	      break;
 	    case OT_PART:
 	      return dynamic_cast<KPPartObject*>(kpobject)->getFillType();
+	      break;
+	    case OT_PICTURE:
+	      return dynamic_cast<KPPixmapObject*>(kpobject)->getFillType();
+	      break;
+	    case OT_CLIPART:
+	      return dynamic_cast<KPClipartObject*>(kpobject)->getFillType();
+	      break;
+	    case OT_TEXT:
+	      return dynamic_cast<KPTextObject*>(kpobject)->getFillType();
 	      break;
 	    default: break;
 	    }
@@ -1673,6 +1775,15 @@ QColor KPresenterDoc::getGColor1(QColor g1)
 	    case OT_PART:
 	      return dynamic_cast<KPPartObject*>(kpobject)->getGColor1();
 	      break;
+	    case OT_PICTURE:
+	      return dynamic_cast<KPPixmapObject*>(kpobject)->getGColor1();
+	      break;
+	    case OT_CLIPART:
+	      return dynamic_cast<KPClipartObject*>(kpobject)->getGColor1();
+	      break;
+	    case OT_TEXT:
+	      return dynamic_cast<KPTextObject*>(kpobject)->getGColor1();
+	      break;
 	    default: break;
 	    }
 	}      
@@ -1708,6 +1819,15 @@ QColor KPresenterDoc::getGColor2(QColor g2)
 	    case OT_PART:
 	      return dynamic_cast<KPPartObject*>(kpobject)->getGColor2();
 	      break;
+	    case OT_PICTURE:
+	      return dynamic_cast<KPPixmapObject*>(kpobject)->getGColor2();
+	      break;
+	    case OT_CLIPART:
+	      return dynamic_cast<KPClipartObject*>(kpobject)->getGColor2();
+	      break;
+	    case OT_TEXT:
+	      return dynamic_cast<KPTextObject*>(kpobject)->getGColor2();
+	      break;
 	    default: break;
 	    }
 	}      
@@ -1742,6 +1862,15 @@ BCType KPresenterDoc::getGType(BCType gt)
 	      break;
 	    case OT_PART:
 	      return dynamic_cast<KPPartObject*>(kpobject)->getGType();
+	      break;
+	    case OT_PICTURE:
+	      return dynamic_cast<KPPixmapObject*>(kpobject)->getGType();
+	      break;
+	    case OT_CLIPART:
+	      return dynamic_cast<KPClipartObject*>(kpobject)->getGType();
+	      break;
+	    case OT_TEXT:
+	      return dynamic_cast<KPTextObject*>(kpobject)->getGType();
 	      break;
 	    default: break;
 	    }
@@ -2710,7 +2839,7 @@ int KPresenterDoc::getPenBrushFlags()
 	    case OT_LINE: 
 	      flags = flags | SD_PEN;
 	      break;
-	    case OT_AUTOFORM: case OT_RECT: case OT_ELLIPSE: case OT_PIE: case OT_PART:
+	    case OT_AUTOFORM: case OT_RECT: case OT_ELLIPSE: case OT_PIE: case OT_PART: case OT_TEXT: case OT_PICTURE: case OT_CLIPART:
 	      {
 		flags = flags | SD_PEN;
 		flags = flags | SD_BRUSH;

@@ -26,6 +26,14 @@ KPTextObject::KPTextObject()
 {
   ktextobject.hide();
   ktextobject.setAutoFocus(true);
+  brush = NoBrush;
+  gradient = 0;
+  fillType = FT_BRUSH;
+  gType = BCT_GHORZ;
+  redrawPix = false;
+  pen = QPen(black,1,NoPen);
+  gColor1 = red;
+  gColor2 = green;
 }
 
 /*======================= set size ===============================*/
@@ -34,6 +42,13 @@ void KPTextObject::setSize(int _width,int _height)
   KPObject::setSize(_width,_height);
   if (move) return;
   ktextobject.resize(ext);
+
+  if (fillType == FT_GRADIENT && gradient)
+    {
+      gradient->setSize(getSize());
+      redrawPix = true;
+      pix.resize(getSize());
+    }
 }
 
 /*======================= set size ===============================*/
@@ -42,6 +57,31 @@ void KPTextObject::resizeBy(int _dx,int _dy)
   KPObject::resizeBy(_dx,_dy);
   if (move) return;
   ktextobject.resize(ext);
+
+  if (fillType == FT_GRADIENT && gradient)
+    {
+      gradient->setSize(getSize());
+      redrawPix = true;
+      pix.resize(getSize());
+    }
+}
+
+/*================================================================*/
+void KPTextObject::setFillType(FillType _fillType)
+{ 
+  fillType = _fillType; 
+
+  if (fillType == FT_BRUSH && gradient) 
+    {
+      delete gradient;
+      gradient = 0;
+    }
+  if (fillType == FT_GRADIENT && !gradient) 
+    {
+      gradient = new KPGradient(gColor1,gColor2,gType,getSize());
+      redrawPix = true;
+      pix.resize(getSize());
+    }
 }
 
 /*========================= save =================================*/
@@ -56,6 +96,16 @@ void KPTextObject::save(ostream& out)
       << static_cast<int>(effect2) << "\"/>" << endl;
   out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
   out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
+  out << indent << "<FILLTYPE value=\"" << static_cast<int>(fillType) << "\"/>" << endl;
+  out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
+      << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\"" 
+      << gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
+      << static_cast<int>(gType) << "\"/>" << endl;
+  out << indent << "<PEN red=\"" << pen.color().red() << "\" green=\"" << pen.color().green()
+      << "\" blue=\"" << pen.color().blue() << "\" width=\"" << pen.width()
+      << "\" style=\"" << static_cast<int>(pen.style()) << "\"/>" << endl;
+  out << indent << "<BRUSH red=\"" << brush.color().red() << "\" green=\"" << brush.color().green()
+      << "\" blue=\"" << brush.color().blue() << "\" style=\"" << static_cast<int>(brush.style()) << "\"/>" << endl;
   saveKTextObject(out);
 }
 
@@ -174,6 +224,86 @@ void KPTextObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  loadKTextObject(parser,lst);
 	}
 
+      // pen
+      else if (name == "PEN")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "red")
+		pen.setColor(QColor(atoi((*it).m_strValue.c_str()),pen.color().green(),pen.color().blue()));
+	      if ((*it).m_strName == "green")
+		pen.setColor(QColor(pen.color().red(),atoi((*it).m_strValue.c_str()),pen.color().blue()));
+	      if ((*it).m_strName == "blue")
+		pen.setColor(QColor(pen.color().red(),pen.color().green(),atoi((*it).m_strValue.c_str())));
+	      if ((*it).m_strName == "width")
+		pen.setWidth(atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "style")
+		pen.setStyle((PenStyle)atoi((*it).m_strValue.c_str()));
+	    }
+	  setPen(pen);
+	}
+      
+      // brush
+      else if (name == "BRUSH")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "red")
+		brush.setColor(QColor(atoi((*it).m_strValue.c_str()),brush.color().green(),brush.color().blue()));
+	      if ((*it).m_strName == "green")
+		brush.setColor(QColor(brush.color().red(),atoi((*it).m_strValue.c_str()),brush.color().blue()));
+	      if ((*it).m_strName == "blue")
+		brush.setColor(QColor(brush.color().red(),brush.color().green(),atoi((*it).m_strValue.c_str())));
+	      if ((*it).m_strName == "style")
+		brush.setStyle((BrushStyle)atoi((*it).m_strValue.c_str()));
+	    }
+	  setBrush(brush);
+	}
+
+      // fillType
+      else if (name == "FILLTYPE")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		fillType = static_cast<FillType>(atoi((*it).m_strValue.c_str()));
+	    }
+	  setFillType(fillType);
+	}
+
+      // gradient
+      else if (name == "GRADIENT")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "red1")
+		gColor1 = QColor(atoi((*it).m_strValue.c_str()),gColor1.green(),gColor1.blue());
+	      if ((*it).m_strName == "green1")
+		gColor1 = QColor(gColor1.red(),atoi((*it).m_strValue.c_str()),gColor1.blue());
+	      if ((*it).m_strName == "blue1")
+		gColor1 = QColor(gColor1.red(),gColor1.green(),atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "red2")
+		gColor2 = QColor(atoi((*it).m_strValue.c_str()),gColor2.green(),gColor2.blue());
+	      if ((*it).m_strName == "green2")
+		gColor2 = QColor(gColor2.red(),atoi((*it).m_strValue.c_str()),gColor2.blue());
+	      if ((*it).m_strName == "blue2")
+		gColor2 = QColor(gColor2.red(),gColor2.green(),atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "type")
+		gType = static_cast<BCType>(atoi((*it).m_strValue.c_str()));
+	    }
+	  setGColor1(gColor1);
+	  setGColor2(gColor2);
+	  setGType(gType);
+	}
+
       else
 	cerr << "Unknown tag '" << tag << "' in TEXT_OBJECT" << endl;    
       
@@ -214,6 +344,39 @@ void KPTextObject::draw(QPainter *_painter,int _diffx,int _diffy)
 
   _painter->save();
   r = _painter->viewport();
+
+  _painter->setPen(pen);
+  _painter->setBrush(brush);
+
+  int pw = pen.width();
+
+  _painter->save();
+  _painter->setViewport(ox,oy,r.width(),r.height());
+  if (ownClipping)
+    _painter->setClipRect(_x,_y,_w,_h);
+  if (fillType == FT_BRUSH || !gradient)
+    _painter->drawRect(pw,pw,ext.width() - 2 * pw,ext.height() - 2 * pw);
+  else
+    {
+      if (angle == 0)
+	_painter->drawPixmap(pw,pw,*gradient->getGradient(),0,0,ow - 2 * pw,oh - 2 * pw);
+      else
+	{
+	  QPixmap pix(ow - 2 * pw,oh - 2 * pw);
+	  QPainter p;
+	  p.begin(&pix);
+	  p.drawPixmap(0,0,*gradient->getGradient());
+	  p.end();
+	  
+	  _painter->drawPixmap(pw,pw,pix);
+	}
+      
+      _painter->setPen(pen);
+      _painter->setBrush(NoBrush);
+      _painter->drawRect(pw,pw,ow - 2 * pw,oh - 2 * pw);
+    }
+  _painter->setViewport(r);
+  _painter->restore();
 
   if (shadowDistance > 0)
     {
