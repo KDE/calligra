@@ -26,6 +26,24 @@ DESCRIPTION
 
 #include <properties.h>
 
+#define CHP_FLAG(flag) \
+case sprmCF##flag: \
+    MsWordGenerated::read(in + bytes, &tmp); \
+    m_chp.f##flag = tmp == 1; \
+    break
+
+#define PAP_FLAG(flag) \
+case sprmPF##flag: \
+    MsWordGenerated::read(in + bytes, &tmp); \
+    m_pap.f##flag = tmp == 1; \
+    break
+
+#define TAP_FLAG(flag) \
+case sprmTF##flag: \
+    MsWordGenerated::read(in + bytes, &tmp); \
+    m_tap.f##flag = tmp == 1; \
+    break
+
 // Create a paragraph with default properties.
 Properties::Properties(MsWord &document) :
     m_document(document)
@@ -627,18 +645,11 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
         {
         case sprmNoop: // 0x0000
             break;
-        case sprmCFRMarkDel: // 0x0800
-            MsWordGenerated::read(in + bytes, &tmp);
-            m_chp.fRMarkDel = tmp == 1;
-            break;
-        case sprmCFRMark: // 0x0801
-            MsWordGenerated::read(in + bytes, &tmp);
-            m_chp.fRMark = tmp == 1;
-            break;
-        case sprmCFFldVanish: // 0x0802
-            MsWordGenerated::read(in + bytes, &tmp);
-            m_chp.fFldVanish = tmp == 1;
-            break;
+        CHP_FLAG(RMarkDel); // 0x0800
+        CHP_FLAG(RMark); // 0x0801
+        CHP_FLAG(FldVanish); // 0x0802
+        CHP_FLAG(Data); // 0x0806
+        CHP_FLAG(Ole2); // 0x080A
         case sprmCFBold: // 0x0835
             MsWordGenerated::read(in + bytes, &tmp);
             // TBD: implement access to base chp for >= 128 case!!!
@@ -703,57 +714,28 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
             else
                 m_chp.fVanish = tmp == 128 ? m_chp.fVanish : !m_chp.fVanish;
             break;
-        case sprmCFImprint: // 0x0854
-            MsWordGenerated::read(in + bytes, &tmp);
-            m_chp.fImprint = tmp == 1;
-            break;
-        case sprmCFSpec: // 0x0855
-            MsWordGenerated::read(in + bytes, &tmp);
-            m_chp.fSpec = tmp == 1;
-            break;
-        case sprmCFObj: // 0x0856
-            MsWordGenerated::read(in + bytes, &tmp);
-            m_chp.fObj = tmp == 1;
-            break;
-        case sprmCFUsePgsuSettings: // 0x0868
-            MsWordGenerated::read(in + bytes, &tmp);
-            m_chp.fUsePgsuSettings = tmp == 1;
-            break;
+        CHP_FLAG(Imprint); // 0x0854
+        CHP_FLAG(Spec); // 0x0855
+        CHP_FLAG(Obj); // 0x0856
+        CHP_FLAG(UsePgsuSettings); // 0x0868
         case sprmPJc: // 0x2403
             MsWordGenerated::read(in + bytes, &m_pap.jc);
             break;
-        case sprmPFSideBySide: // 0x2404
-            MsWordGenerated::read(in + bytes, &tmp);
-            m_pap.fSideBySide = tmp == 1;
-            break;
-        case sprmPFKeep:
-            MsWordGenerated::read(in + bytes, &tmp);
-            m_pap.fKeep = tmp == 1;
-            break;
-        case sprmPFKeepFollow:
-            MsWordGenerated::read(in + bytes, &tmp);
-            m_pap.fKeepFollow = tmp == 1;
-            break;
-        case sprmPFPageBreakBefore: // 0x2407
-            MsWordGenerated::read(in + bytes, &tmp);
-            m_pap.fPageBreakBefore = tmp == 1;
-            break;
-        case sprmPFInTable: // 0x2416
-            MsWordGenerated::read(in + bytes, &tmp);
-            m_pap.fInTable = tmp == 1;
-            break;
-        case sprmPFTtp: // 0x2417
-            MsWordGenerated::read(in + bytes, &tmp);
-            m_pap.fTtp = tmp == 1;
-            break;
-        case sprmPFLocked: // 0x2430
-            MsWordGenerated::read(in + bytes, &tmp);
-            m_pap.fLocked = tmp == 1;
-            break;
-        case sprmPFWidowControl: // 0x2431
-            MsWordGenerated::read(in + bytes, &tmp);
-            m_pap.fWidowControl = tmp == 1;
-            break;
+        PAP_FLAG(SideBySide); // 0x2404
+        PAP_FLAG(Keep);
+        PAP_FLAG(KeepFollow);
+        PAP_FLAG(PageBreakBefore); // 0x2407
+        PAP_FLAG(InTable); // 0x2416
+        PAP_FLAG(Ttp); // 0x2417
+        PAP_FLAG(NoAutoHyph); // 0x242A
+        PAP_FLAG(Locked); // 0x2430
+        PAP_FLAG(WidowControl); // 0x2431
+        PAP_FLAG(Kinsoku); // 0x2433
+        PAP_FLAG(WordWrap); // 0x2434
+        PAP_FLAG(OverflowPunct); // 0x2435
+        PAP_FLAG(TopLinePunct); // 0x2436
+        PAP_FLAG(AutoSpaceDE); // 0x2437
+        PAP_FLAG(AutoSpaceDN); // 0x2438
         case sprmPIlvl: // 0x260a
             MsWordGenerated::read(in + bytes, &m_pap.ilvl);
             break;
@@ -775,13 +757,14 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
             MsWordGenerated::read(in + bytes, &tmp);
             m_chp.iss = tmp;
             break;
-        case sprmTFCantSplit: // 0x3403
-            MsWordGenerated::read(in + bytes, &tmp);
-            m_tap.fCantSplit = tmp == 1;
-            break;
+        TAP_FLAG(CantSplit); // 0x3403
         case sprmTTableHeader: // 0x3404
             MsWordGenerated::read(in + bytes, &tmp);
             m_tap.fTableHeader = tmp == 1;
+            break;
+        case sprmCLid: // 0x4A41
+            // TBD: "only used internally never stored".
+            MsWordGenerated::read(in + bytes, &m_chp.lid);
             break;
         case sprmCHps: // 0x4A43
             MsWordGenerated::read(in + bytes, &m_chp.hps);
@@ -833,6 +816,9 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
             break;
         case sprmPBrcBar: // 0x6629
             MsWordGenerated::read(in + bytes, &m_pap.brcBar);
+            break;
+        case sprmCObjLocation: // 0x680E
+            MsWordGenerated::read(in + bytes, &m_chp.fcPic_fcObj_lTagObj);
             break;
         case sprmCPicLocation: // 0x6A03
             MsWordGenerated::read(in + bytes, &m_chp.fcPic_fcObj_lTagObj);
