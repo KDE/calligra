@@ -459,6 +459,10 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
         {
             //todo add group object
         }
+        else if ( name == "draw:path" )
+        {
+            //todo add path object (freehand/cubic/quadricbeziercurve
+        }
         else if ( name == "presentation:notes" ) // notes
         {
             QDomNode textBox = o.namedItem( "draw:text-box" );
