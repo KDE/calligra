@@ -1,0 +1,11 @@
+   AC_LANG_SAVE
+   AC_LANG_C
+   dnl Check for aspell library
+   AC_CHECK_LIB(aspell, new_aspell_config, [LIBASPELL="-laspell"])
+   AC_CHECK_HEADER(aspell.h)
+   if test -z "$ac_cv_header_aspell_h"; then
+      LIBASPELL=""
+   fi
+   AC_SUBST(LIBASPELL)
+   AC_LANG_RESTORE
+
