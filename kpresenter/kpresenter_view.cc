@@ -1033,28 +1033,24 @@ void KPresenterView::screenStart()
                          kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() ) / 2;
 
         if ( fullScreen ) {
-            page->reparent( ( QWidget* )0L, 0, QPoint( 0, 0 ), true );
+	    page->reparent( ( QWidget* )0L, 0, QPoint( 0, 0 ), FALSE );
 	    page->showFullScreen();
-            page->topLevelWidget()->move( 0, 0 );
-            page->topLevelWidget()->resize( QApplication::desktop()->width(),
-                                            QApplication::desktop()->height() );
-            page->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
-            page->topLevelWidget()->setBackgroundColor( black );
-            page->setFocusPolicy( QWidget::StrongFocus );
-            page->setFocus();
-        } else {
-            page->setBackgroundColor( black );
-            page->setFocusPolicy( QWidget::StrongFocus );
-            page->setFocus();
-        }
+	    page->topLevelWidget()->setBackgroundColor( black );
+	    page->setFocusPolicy( QWidget::StrongFocus );
+	    page->setFocus();
+	} else {
+	    page->setBackgroundColor( black );
+	    page->setFocusPolicy( QWidget::StrongFocus );
+	    page->setFocus();
+	}
 
-        actionScreenStart->setEnabled( false );
+	actionScreenStart->setEnabled( false );
 
-        if ( !kPresenterDoc()->spManualSwitch() ) {
-            continuePres = true;
-            exitPres = false;
-            doAutomaticScreenPres();
-        }
+	if ( !kPresenterDoc()->spManualSwitch() ) {
+	    continuePres = true;
+	    exitPres = false;
+	    doAutomaticScreenPres();
+	}
     }
 }
 
