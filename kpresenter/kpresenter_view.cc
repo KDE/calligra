@@ -5812,7 +5812,10 @@ void KPresenterView::insertVariable()
             kdWarning() << "Action not found in m_variableDefMap." << endl;
         else
         {
-            edit->insertVariable( (*it).type, (*it).subtype );
+            if ( (*it).type == VT_FIELD )
+                edit->insertVariable( (*it).type, KoFieldVariable::fieldSubType( (*it).subtype ) );
+            else
+                edit->insertVariable( (*it).type, (*it).subtype );
         }
     }
 }
