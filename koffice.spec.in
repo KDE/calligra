@@ -1,6 +1,6 @@
 # You might want to change the next 2 lines, the rest should be ok
-%define qtdir /usr/lib/qt-2.1.0
-Prefix: /opt/kde2
+%define qtdir /usr/lib/qt-3.0.0
+Prefix: /opt/kde3
 
 Name: koffice
 Icon: kde-icon.xpm
