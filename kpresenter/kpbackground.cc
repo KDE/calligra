@@ -251,14 +251,18 @@ QString KPBackGround::saveOasisPageEffect() const
     case PEF_CHECKBOARD_DOWN:
         break;
     case PEF_COVER_DOWN:
+        transition="fade-from-top";
         break;
     case PEF_COVER_UP:
+        transition="fade-from-bottom";
         break;
     case PEF_UNCOVER_UP:
+        transition="roll-from-bottom";
         break;
     case PEF_COVER_LEFT:
         break;
     case PEF_UNCOVER_LEFT:
+        transition="roll-from-right";
         break;
     case PEF_COVER_RIGHT:
         break;
@@ -294,6 +298,10 @@ QString KPBackGround::saveOasisPageEffect() const
         break;
     case PEF_STRIPS_RIGHT_DOWN:
         transition="fade-from-upperleft";
+        break;
+    case PEF_MELTING:
+        break;
+    case PEF_UNCOVER_DOWN:
         break;
     case PEF_LAST_MARKER://don't use it !!!
         break;
