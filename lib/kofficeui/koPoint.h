@@ -77,6 +77,11 @@ public:
 	return ( ( - ( a * 360 ) / ( 2 * M_PI ) - 90 ) - 180 );
     }
 
+    double manhattanLength() const
+    {
+      return QABS( m_x ) + QABS( m_y );
+    }
+
 private:
     double m_x, m_y;
 };
