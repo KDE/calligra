@@ -282,7 +282,8 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
     if( !refFormat
         || curFormat->underlineLineType() != refFormat->underlineLineType()
         || curFormat->textUnderlineColor() !=refFormat->textUnderlineColor()
-        || curFormat->underlineLineStyle() !=refFormat->underlineLineStyle())
+        || curFormat->underlineLineStyle() !=refFormat->underlineLineStyle()
+        || curFormat->wordByWord() != refFormat->wordByWord())
     {
         if ( curFormat->underlineLineType()!= KoTextFormat::U_NONE )
         {
@@ -298,11 +299,14 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
             elem.setAttribute( "styleline", strLineType );
             if ( curFormat->textUnderlineColor().isValid() )
                 elem.setAttribute( "underlinecolor", curFormat->textUnderlineColor().name() );
+
+            elem.setAttribute( "wordbyword" , static_cast<int>(curFormat->wordByWord()));
         }
     }
     if( !refFormat
         || curFormat->strikeOutLineType() != refFormat->strikeOutLineType()
-        || curFormat->strikeOutLineStyle()!= refFormat->strikeOutLineStyle())
+        || curFormat->strikeOutLineStyle()!= refFormat->strikeOutLineStyle()
+        || curFormat->wordByWord() != refFormat->wordByWord())
     {
         if ( curFormat->strikeOutLineType()!= KoTextFormat::S_NONE )
         {
@@ -316,6 +320,8 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
                 elem.setAttribute( "value", static_cast<int>(curFormat->strikeOut()) );
             QString strLineType=KoTextFormat::strikeOutStyleToString( curFormat->strikeOutLineStyle() );
             elem.setAttribute( "styleline", strLineType );
+            elem.setAttribute( "wordbyword" , static_cast<int>(curFormat->wordByWord()));
+
         }
     }
     // ######## Not needed in 3.0?
@@ -376,13 +382,6 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
             elem.setAttribute( "value", curFormat->offsetFromBaseLine() );
         }
     }
-    if( !refFormat || curFormat->wordByWord() != refFormat->wordByWord())
-    {
-        elem = doc.createElement( "WORDBYWORD" );
-        formatElem.appendChild( elem );
-        elem.setAttribute( "value", static_cast<int>(curFormat->wordByWord()));
-    }
-
     if( !refFormat || curFormat->attributeFont() != refFormat->attributeFont())
     {
         elem = doc.createElement( "FONTATTRIBUTE" );
@@ -565,6 +564,8 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
             QColor col( QColor(elem.attribute("underlinecolor")));
             format.setTextUnderlineColor( col );
         }
+        if ( elem.hasAttribute( "wordbyword" ))
+            format.setWordByWord( elem.attribute("wordbyword").toInt()==1);
     }
     elem = formatElem.namedItem( "STRIKEOUT" ).toElement();
     if ( !elem.isNull() )
@@ -584,7 +585,8 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
             QString strLineType = elem.attribute("styleline");
             format.setStrikeOutLineStyle( KoTextFormat::stringToStrikeOutStyle( strLineType ));
         }
-
+        if ( elem.hasAttribute( "wordbyword" ))
+            format.setWordByWord( elem.attribute("wordbyword").toInt()==1);
     }
     // ######## Not needed in 3.0?
     /*
@@ -630,10 +632,6 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     elem = formatElem.namedItem( "OFFSETFROMBASELINE" ).toElement();
     if ( !elem.isNull() )
         format.setOffsetFromBaseLine( elem.attribute("value").toInt());
-
-    elem = formatElem.namedItem( "WORDBYWORD" ).toElement();
-    if ( !elem.isNull() )
-        format.setWordByWord( elem.attribute("value").toInt() == 1);
 
     elem = formatElem.namedItem( "FONTATTRIBUTE" ).toElement();
     if ( !elem.isNull() )

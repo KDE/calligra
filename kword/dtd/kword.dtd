@@ -505,7 +505,7 @@ don't put a </?xml...> at the end of the file!).
         When FORMAT is used to specify the format of a style, pos and len are omitted.
 -->
 <!ELEMENT FORMAT
-    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|VERTALIGN|SHADOWTEXT|WORDBYWORD|FONTATTRIBUTE|ANCHOR|IMAGE|PICTURE|VARIABLE|TEXTBACKGROUNDCOLOR|OFFSETFROMBASELINE)*>
+    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|VERTALIGN|SHADOWTEXT|FONTATTRIBUTE|ANCHOR|IMAGE|PICTURE|VARIABLE|TEXTBACKGROUNDCOLOR|OFFSETFROMBASELINE)*>
 
 
 <!ATTLIST FORMAT
@@ -652,7 +652,8 @@ don't put a </?xml...> at the end of the file!).
 <!ATTLIST UNDERLINE
     value CDATA #REQUIRED
     styleline CDATA #REQUIRED
-    underlinecolor CDATA #REQUIRED>
+    underlinecolor CDATA #REQUIRED
+    wordbyword CDATA #REQUIRED>
 
 <!-- STRIKEOUT
         value: 0, 1 (or single), double, single-bold (see UNDERLINE)
@@ -662,7 +663,8 @@ don't put a </?xml...> at the end of the file!).
     EMPTY>
 <!ATTLIST STRIKEOUT
     value CDATA #REQUIRED
-    styleline CDATA #REQUIRED>
+    styleline CDATA #REQUIRED
+    wordbyword CDATA #REQUIRED>
 
 <!-- VERTALIGN
             Super/sub script.
@@ -695,16 +697,8 @@ don't put a </?xml...> at the end of the file!).
 <!ATTLIST OFFSETFROMBASELINE
     value CDATA #REQUIRED>
 
-<!-- WORDBYWORD
-        Value is either 0 or 1 with 1=true and 0=false
--->
-<!ELEMENT WORDBYWORD
-    EMPTY>
-<!ATTLIST WORDBYWORD
-    value CDATA #REQUIRED>
-
 <!-- FONTATTRIBUTE
-        Value is either "none", "upper", or "lower"
+        Value is either "none", "uppercase", or "lowercase"
         (Future extension: smallcaps)
 -->
 <!ELEMENT FONTATTRIBUTE
