@@ -14,6 +14,6 @@ noinst_HEADERS = rtfexport.h rtfexport_factory.h kwExport.h docinfoExport.h tagp
 
 METASOURCES = AUTO
 
-service_DATA = kword_rtf_export.desktop ki_rtf_export.desktop
+service_DATA = kword_rtf_export.desktop
 servicedir = $(kde_servicesdir)
 

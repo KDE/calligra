@@ -1,6 +1,5 @@
 [Desktop Entry]
 Type=Service
-Patterns=*.csv;*.CSV;
 Name=KWord RTF Export Filter
 Name[af]=kword rtf voer uit filter
 Name[ara]=تصدير من KWord الى RTF
@@ -13,6 +12,7 @@ Name[el]=Φίλτρο Εξαγωγής RTF του KWord
 Name[eo]=RTF-eksportfiltrilo por Verkilo
 Name[es]=Filtro de exportación RTF de KWord
 Name[et]=KWordi RTF eksportfilter
+Name[eu]=KWord RTF Exportatzeko Iragazkia
 Name[fi]=KWord RTF-vientisuodin
 Name[fr]=Filtre d'exportation RTF de kWord
 Name[he]=מסנן ייצוא RTF ל-KWord
@@ -39,10 +39,8 @@ Name[xxx]=xx
 Name[zh_CN.GB2312]=KWord RTF 导出过滤程序
 Name[zh_TW.Big5]=KWord RTF 匯出過濾程式
 X-KDE-Export=text/rtf
-ExportDescription=RTF
-X-KDE-Import=application/x-kword
+X-KDE-Import=application/x-kword,application/x-kontour
 X-KDE-Weight=1
-ImportDescription=KWord
 Implemented=file
 X-KDE-Library=librtfexport
 ServiceTypes=KOfficeFilter
