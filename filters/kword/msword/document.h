@@ -69,6 +69,8 @@ private:
     void writeFormat( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, int pos, int len );
     // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given parag props
     void writeLayout( QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties );
+    void writeCounter( QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties );
+
 
     QString m_paragraph;
     QDomDocument& m_mainDocument;

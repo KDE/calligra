@@ -584,95 +584,7 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::ParagraphP
 
     if ( pap.ilfo > 0 )
     {
-        const wvWare::ListInfo* listInfo = paragraphProperties.listInfo();
-        Q_ASSERT( listInfo );
-        if ( listInfo )
-        {
-            QDomElement counterElement = m_mainDocument.createElement( "COUNTER" );
-            counterElement.setAttribute( "numberingtype", listInfo->prev() ? "1" : "0" );
-            counterElement.setAttribute( "start", listInfo->startAt() );
-            int depth = pap.ilvl; /*both are 0 based*/
-            // Heading styles don't set the ilvl, but must have a depth coming
-            // from their heading level (the style's STI)
-            if ( depth == 0 && m_paragStyle && m_paragStyle->sti() >= 1 && m_paragStyle->sti() <= 9 )
-                depth = m_paragStyle->sti() - 1;
-            counterElement.setAttribute( "depth", depth );
-
-            // Now we need to parse the text, to try and convert msword's powerful list template
-            // stuff, into what KWord can do right now.
-            wvWare::UString text = listInfo->text().text;
-#ifndef NDEBUG
-            kdDebug() << "  ilvl=" << pap.ilvl << " depth=" << depth << endl;
-            listInfo->dump();
-#endif
-            QString prefix, suffix;
-            bool depthFound = false;
-            // We parse <0>.<2>.<1>. as "level 2 with suffix='.'" (no prefix)
-            // But "Section <0>)" has both prefix and suffix.
-            for ( int i = 0 ; i < text.length() ; ++i )
-            {
-                short ch = text[i].unicode();
-                //kdDebug() << i << ":" << ch << endl;
-                if ( ch < 10 ) { // List level place holder
-                    if ( ch == pap.ilvl ) {
-                        if ( depthFound )
-                            kdWarning() << "ilvl " << pap.ilvl << " found twice in listInfo text..." << endl;
-                        else
-                            depthFound = true;
-                        suffix = QString::null;
-                    } else {
-                        prefix = QString::null; // get rid of previous prefixes
-                    }
-                } else { // Normal character
-                    if ( depthFound )
-                        suffix += QChar(ch);
-                    else
-                        prefix += QChar(ch);
-                }
-            }
-            if ( depthFound )
-            {
-                kdDebug() << " prefix=" << prefix << " suffix=" << suffix << endl;
-                counterElement.setAttribute( "type", Conversion::numberFormatCode( listInfo->numberFormat() ) );
-                counterElement.setAttribute( "lefttext", prefix );
-                counterElement.setAttribute( "righttext", suffix );
-            }
-            else
-            {
-                // The number isn't in the string -> this isn't a numbered list, more like a bullet
-                // MSWord doesn't use special list types for bullets (like KWord does);
-                // instead it uses a char from the current font.
-                // So we map all bullets to a "custom bullet" in kword.
-                if ( text.length() == 1 )
-                {
-                    unsigned int code = text[0].unicode();
-                    if ( (code & 0xFF00) == 0xF000 ) // see wv2
-                        code &= 0x00FF;
-                    // Some well-known bullet codes. Better turn them into real
-                    // KWord bullets, it looks much nicer (than crappy fonts).
-                    if ( code == 0xB7 ) // Round black bullet
-                    {
-                        counterElement.setAttribute( "type", 10 ); // disc bullet
-                    } else if ( code == 0xD8 ) // Triangle
-                    {
-                        counterElement.setAttribute( "type", 11 ); // Box. We have no triangle.
-                    } else {
-                        kdDebug() << "custom bullet, code=" << QString::number(code,16) << endl;
-                        counterElement.setAttribute( "type", 6 ); // custom
-                        counterElement.setAttribute( "bullet", code );
-                        QString paragFont = getFont( m_paragStyle->chp().ftcAscii );
-                        counterElement.setAttribute( "bulletfont", paragFont );
-                    }
-                }
-                else
-                    kdWarning() << "Not supported: counter text without the depth in it, and longer than 1 char" << endl;
-            }
-            // listInfo->alignment() is not supported in KWord
-            // listInfo->isLegal() hmm
-            // listInfo->notRestarted() [by higher level of lists] not supported
-            // listInfo->followingchar() ignored, it's always a space in KWord currently
-            parentElement.appendChild( counterElement );
-        }
+        writeCounter( parentElement, paragraphProperties );
     }
 
     if ( m_shadowTextFound )
@@ -687,4 +599,111 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::ParagraphP
         shadowElement.setAttribute( "green", 190 );
         parentElement.appendChild( shadowElement );
     }
+}
+
+void Document::writeCounter( QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties )
+{
+    const wvWare::ListInfo* listInfo = paragraphProperties.listInfo();
+    Q_ASSERT( listInfo );
+    if ( !listInfo )
+        return;
+
+#ifndef NDEBUG
+    listInfo->dump();
+#endif
+
+    QDomElement counterElement = m_mainDocument.createElement( "COUNTER" );
+    counterElement.setAttribute( "numberingtype", listInfo->prev() ? "1" : "0" );
+    counterElement.setAttribute( "start", listInfo->startAt() );
+    wvWare::UString text = listInfo->text().text;
+    int nfc = listInfo->numberFormat();
+    if ( nfc == 23 ) // bullet
+    {
+        if ( text.length() == 1 )
+        {
+            unsigned int code = text[0].unicode();
+            if ( (code & 0xFF00) == 0xF000 ) // see wv2
+                code &= 0x00FF;
+            // Some well-known bullet codes. Better turn them into real
+            // KWord bullets, it looks much nicer (than crappy fonts).
+            if ( code == 0xB7 ) // Round black bullet
+            {
+                counterElement.setAttribute( "type", 10 ); // disc bullet
+            } else if ( code == 0xD8 ) // Triangle
+            {
+                counterElement.setAttribute( "type", 11 ); // Box. We have no triangle.
+            } else {
+                // Map all other bullets to a "custom bullet" in kword.
+                kdDebug() << "custom bullet, code=" << QString::number(code,16) << endl;
+                counterElement.setAttribute( "type", 6 ); // custom
+                counterElement.setAttribute( "bullet", code );
+                QString paragFont = getFont( m_paragStyle->chp().ftcAscii );
+                counterElement.setAttribute( "bulletfont", paragFont );
+            }
+        } else
+            kdWarning() << "Bullet with more than one character, not supported" << endl;
+    }
+    else
+    {
+        const wvWare::Word97::PAP& pap = paragraphProperties.pap();
+        int depth = pap.ilvl; /*both are 0 based*/
+        // Heading styles don't set the ilvl, but must have a depth coming
+        // from their heading level (the style's STI)
+        if ( depth == 0 && m_paragStyle && m_paragStyle->sti() >= 1 && m_paragStyle->sti() <= 9 )
+            depth = m_paragStyle->sti() - 1;
+        counterElement.setAttribute( "depth", depth );
+
+        // Now we need to parse the text, to try and convert msword's powerful list template
+        // stuff, into what KWord can do right now.
+        kdDebug() << "  ilvl=" << pap.ilvl << " depth=" << depth << endl;
+        QString prefix, suffix;
+        bool depthFound = false;
+        bool otherDepthFound = false;
+        // We parse <0>.<2>.<1>. as "level 2 with suffix='.'" (no prefix)
+        // But "Section <0>)" has both prefix and suffix.
+        for ( int i = 0 ; i < text.length() ; ++i )
+        {
+            short ch = text[i].unicode();
+            //kdDebug() << i << ":" << ch << endl;
+            if ( ch < 10 ) { // List level place holder
+                if ( ch == pap.ilvl ) {
+                    if ( depthFound )
+                        kdWarning() << "ilvl " << pap.ilvl << " found twice in listInfo text..." << endl;
+                    else
+                        depthFound = true;
+                    suffix = QString::null;
+                } else {
+                    otherDepthFound = true;
+                    prefix = QString::null; // get rid of previous prefixes
+                }
+            } else { // Normal character
+                if ( depthFound )
+                    suffix += QChar(ch);
+                else
+                    prefix += QChar(ch);
+            }
+        }
+        if ( otherDepthFound )
+        {
+            // That's the case we can't support yet, e.g. <1>.<0>.
+            // Instead of importing this as ".<0>", we just drop the prefix
+            prefix = QString::null;
+        }
+        if ( depthFound )
+        {
+            kdDebug() << " prefix=" << prefix << " suffix=" << suffix << endl;
+            counterElement.setAttribute( "type", Conversion::numberFormatCode( nfc ) );
+            counterElement.setAttribute( "lefttext", prefix );
+            counterElement.setAttribute( "righttext", suffix );
+        }
+        else
+        {
+            kdWarning() << "Not supported: counter text without the depth in it" << endl;
+        }
+        // listInfo->alignment() is not supported in KWord
+        // listInfo->isLegal() hmm
+        // listInfo->notRestarted() [by higher level of lists] not supported
+        // listInfo->followingchar() ignored, it's always a space in KWord currently
+    }
+    parentElement.appendChild( counterElement );
 }
