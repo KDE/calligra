@@ -99,6 +99,7 @@ QWinMetaFile::QWinMetaFile(): mPainter(), mPoints()
     mFirstCmd    = NULL;
     mSingleStep  = false;
     mObjHandleTab = NULL;
+    mDpi         = 1000;
 }
 
 
@@ -188,7 +189,7 @@ bool QWinMetaFile::load( QBuffer &buffer )
             kdDebug() << "  checksum=" << pheader.checksum << "( "
                       << (pheader.checksum==checksum?"ok":"wrong") << " )" << endl;
         }
-
+        mDpi = pheader.inch;
         mBBox.setLeft( MIN( pheader.bbox.left, pheader.bbox.right ) );
         mBBox.setTop( MIN( pheader.bbox.top, pheader.bbox.bottom ) );
         mBBox.setWidth( ABS( pheader.bbox.right - pheader.bbox.left ) );

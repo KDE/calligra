@@ -100,6 +100,9 @@ public: // should be protected but cannot
     // do nothing
     void noop( short /*num*/, short* /*parms*/ ) { }
 
+    // Resolution of the image in dots per inch
+    int dpi( void ) const { return mDpi; }
+
 protected:
     /** Calculate header checksum */
     unsigned short calcCheckSum( WmfPlaceableHeader* );
@@ -134,6 +137,7 @@ protected:
     QRect mBBox;
     bool mSingleStep;
     WinObjHandle** mObjHandleTab;
+    int mDpi;
 };
 
 #endif /*qwmf_h*/
