@@ -24,3 +24,15 @@ void KWord13FormatOne::xmldump( QTextStream& iostream )
     
     iostream << "    </formatone>\n";
 }
+
+QString KWord13FormatOne::key( void ) const
+{
+    QString strKey;
+    
+    // At first, use the number of properties as it is an easy sorting value
+    strKey += QString::number( m_properties.count(), 16 );
+    strKey += ':';
+  
+    // ### TODO
+      
+}

@@ -19,6 +19,13 @@ public:
     
 public:
     void xmldump( QTextStream& iostream );
+    
+    /**
+     * @brief Get a key representating the properties
+     *
+     * This key helps to categorize the automatic styles
+     */
+    QString key( void ) const;
 
 public:
     QMap<QString,QString> m_properties;

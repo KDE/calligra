@@ -27,3 +27,27 @@ void KWord13Layout::xmldump( QTextStream& iostream )
     
     iostream << "    </layout>\n";
 }
+
+QString KWord13Layout::key( void ) const
+{
+    QString strKey;
+    
+    strKey += m_name;
+    strKey += '@';
+    
+    // Use the number of properties as it is an easy sorting value
+    strKey += QString::number( m_layoutProperties.count(), 16 );
+    strKey += ':';
+    
+    
+    if ( m_outline )
+        strKey += "O1,";
+    else
+        strKey += "O0,";
+    
+    // ### TODO
+    
+    strKey += '@';
+    // At the end, the key from the <FORMAT id="1">
+    strKey += m_format.key();
+}

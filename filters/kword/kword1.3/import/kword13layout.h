@@ -20,6 +20,13 @@ public:
     
 public:
     void xmldump( QTextStream& iostream );
+    
+    /**
+     * @brief Get a key representating the properties
+     *
+     * This key helps to categorize the automatic styles
+     */
+    QString key( void ) const;
 
 public:
     KWord13FormatOne m_format; ///< Character format properties
