@@ -16,11 +16,11 @@ bool KRTFHeaderParser::parse()
     KRTFToken* token2;
     if( token->_type != ControlWord &&
 	token->_text != "rtf" ) {
-	warning( "File does not start with \rtf" );
+	qWarning( "File does not start with \rtf" );
 	return false;
     }
     if( token->_param.left( 1 ) != "1" ) {
-	warning( "Wrong version of RTF file, this reader can only read RTF 1.x files" );
+	qWarning( "Wrong version of RTF file, this reader can only read RTF 1.x files" );
 	return false;
     }
     

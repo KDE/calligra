@@ -31,7 +31,7 @@ int main( int argc, char* argv[] )
 
     KRTFFileParser parser( &tokenizer );
     if( !parser.parse() ) {
-	warning( "Error in RTF file" );
+	qWarning( "Error in RTF file" );
 	exit( -124 );
     }
 

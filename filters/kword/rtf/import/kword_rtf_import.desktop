@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+Patterns=*.csv;*.CSV;
+Name=KWord RTF Import Filter
+Import=text/rtf
+ImportDescription=RTF
+Export=application/x-kword
+ExportDescription=KWord
+Implemented=file
+X-KDE-Library=librtfimport
+ServiceTypes=KOfficeFilter
