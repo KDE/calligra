@@ -225,14 +225,9 @@ void KoVariableCollection::recalcVariables(int type)
             Qt3::QTextParag * parag = it.current()->paragraph();
             if ( parag )
             {
-                kdDebug() << "KoDoc::recalcVariables -> invalidating parag " << parag->paragId() << endl;
+                //kdDebug() << "KoDoc::recalcVariables -> invalidating parag " << parag->paragId() << endl;
                 parag->invalidate( 0 );
                 parag->setChanged( true );
-#if 0
-                KWTextFrameSet * textfs = static_cast<KWTextDocument *>(it.current()->textDocument())->textFrameSet();
-                if ( toRepaint.findRef( textfs ) == -1 )
-                    toRepaint.append( textfs );
-#endif
             }
         }
     }
@@ -282,7 +277,6 @@ void KoVariableCollection::recalcVariables(KoVariable *var)
         Qt3::QTextParag * parag = var->paragraph();
         if ( parag )
         {
-            kdDebug() << "KoDoc::recalcVariables -> invalidating parag " << parag->paragId() << endl;
             parag->invalidate( 0 );
             parag->setChanged( true );
         }
@@ -290,20 +284,29 @@ void KoVariableCollection::recalcVariables(KoVariable *var)
     }
 }
 
-
 void KoVariableCollection::changeFormatOfVariable()
 {
-    //todo
-#if 0
     KAction * act = (KAction *)(sender());
-    VariableDefMap::Iterator it = m_variableDefMap.find( act );
-    if ( it == m_variableDefMap.end() )
-        kdWarning() << "Action not found in m_variableDefMap." << endl;
+    VariableSubFormatMap::Iterator it = m_variableSubFormatMap.find( act );
+    if ( it == m_variableSubFormatMap.end() )
+        kdWarning() << "Action not found in m_variableSubTextMap." << endl;
     else
     {
-        edit->insertVariable( (*it).type, (*it).subtype );
+        if( m_varSelected )
+        {
+            KoDateVariable *date=dynamic_cast<KoDateVariable*>(m_varSelected);
+            if(date)
+            {
+                static_cast<KoVariableDateFormat*>(date->variableFormat())->m_strFormat=(*it).format;
+            }
+            KoTimeVariable *time=dynamic_cast<KoTimeVariable*>(m_varSelected);
+            if(time)
+            {
+                static_cast<KoVariableTimeFormat*>(time->variableFormat())->m_strFormat=(*it).format;
+            }
+            recalcVariables(m_varSelected);
+        }
     }
-#endif
  }
 
 void KoVariableCollection::setVariableSelected(KoVariable * var)
@@ -334,6 +337,48 @@ QPtrList<KAction> KoVariableCollection::variableActionList()
                 listAction.append( act );
             }
         }
+        if(m_varSelected->type() == VT_DATE || m_varSelected->type() == VT_TIME )
+        {
+            list=m_varSelected->subTypeFormat();
+            it = list.begin();
+            for ( int i = 0; it != list.end() ; ++it, ++i )
+            {
+                if( i == 0)
+                    listAction.append( new KActionSeparator() );
+
+                if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
+                {
+                    VariableSubFormatDef v;
+                    switch(m_varSelected->type())
+                    {
+                    case VT_DATE:
+                    {
+                        QDate ct=QDate::currentDate();
+                        if((*it)==i18n("Locale").lower())
+                            v.translatedString=KGlobal::locale()->formatDate( ct );
+                        else
+                            v.translatedString=ct.toString(*it);
+                        v.format=*it;
+                        break;
+                    }
+                    case  VT_TIME:
+                    {
+                        QTime ct=QTime::currentTime();
+                        if((*it)==i18n("Locale").lower())
+                            v.translatedString=KGlobal::locale()->formatTime( ct );
+                        else
+                            v.translatedString=ct.toString(*it);
+                        v.format=*it;
+                        break;
+                    }
+                    }
+                    KAction * act = new KAction(v.translatedString);
+                    connect( act, SIGNAL(activated()),this, SLOT(changeFormatOfVariable()) );
+                    m_variableSubFormatMap.insert( act, v );
+                    listAction.append( act );
+                }
+            }
+        }
     }
 
     return listAction;
@@ -359,6 +404,11 @@ KoVariable::~KoVariable()
 }
 
 QStringList KoVariable::subTypeText()
+{
+    return QStringList();
+}
+
+QStringList KoVariable::subTypeFormat()
 {
     return QStringList();
 }
@@ -707,6 +757,25 @@ QStringList KoDateVariable::subTypeText()
     return KoDateVariable::actionTexts();
 }
 
+QStringList KoDateVariable::subTypeFormat()
+{
+    QStringList listDateFormat;
+    listDateFormat<<i18n("locale");
+    listDateFormat<<i18n("dd/MM/yy");
+    listDateFormat<<i18n("dd/MM/yyyy");
+    listDateFormat<<i18n("MMM dd,yy");
+    listDateFormat<<i18n("MMM dd,yyyy");
+    listDateFormat<<i18n("dd.MMM.yyyy");
+    listDateFormat<<i18n("MMMM dd, yyyy");
+    listDateFormat<<i18n("ddd, MMM dd,yy");
+    listDateFormat<<i18n("dddd, MMM dd,yy");
+    listDateFormat<<i18n("MM-dd");
+    listDateFormat<<i18n("yyyy-MM-dd");
+    listDateFormat<<i18n("dd/yy");
+    listDateFormat<<i18n("MMMM");
+    return listDateFormat;
+}
+
 
 /******************************************************************/
 /* Class: KoTimeVariable                                          */
@@ -782,6 +851,17 @@ QStringList KoTimeVariable::subTypeText()
     return KoTimeVariable::actionTexts();
 }
 
+QStringList KoTimeVariable::subTypeFormat()
+{
+    QStringList listTimeFormat;
+    listTimeFormat<<i18n("locale");
+    listTimeFormat<<i18n("hh:mm");
+    listTimeFormat<<i18n("hh:mm:ss");
+    listTimeFormat<<i18n("hh:mm AP");
+    listTimeFormat<<i18n("hh:mm:ss AP");
+    listTimeFormat<<i18n("mm:ss.zzz");
+    return listTimeFormat;
+}
 
 /******************************************************************/
 /* Class: KoCustomVariable                                        */

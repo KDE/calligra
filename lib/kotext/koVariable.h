@@ -217,6 +217,13 @@ public:
     typedef QMap<KAction *, int> VariableSubTextMap;
     VariableSubTextMap m_variableSubTextMap;
 
+    struct VariableSubFormatDef {
+        QString translatedString;
+        QString format;
+    };
+    typedef QMap<KAction *, VariableSubFormatDef> VariableSubFormatMap;
+    VariableSubFormatMap m_variableSubFormatMap;
+
     QPtrList<KoVariable> variables;
     QMap< QString, QString > varValues;
     KoVariableSettings *m_variableSettings;
@@ -281,6 +288,7 @@ public:
     virtual int typeId() const { return 4; }
 
     virtual QStringList subTypeText();
+    virtual QStringList subTypeFormat();
     virtual void setVariableSubType( short int /*type*/){;}
 
 
@@ -314,7 +322,7 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
     virtual QStringList subTypeText();
-
+    virtual QStringList subTypeFormat();
     virtual void setVariableSubType( short int type){m_subtype=type;}
 
 protected:
@@ -346,6 +354,7 @@ public:
     virtual void load( QDomElement &elem );
 
     virtual QStringList subTypeText();
+    virtual QStringList subTypeFormat();
     virtual void setVariableSubType( short int type){m_subtype=type;}
 
 protected:
