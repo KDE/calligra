@@ -462,8 +462,7 @@ void KPresenterView::editPaste()
         }
         else if ( data->provides( "application/x-kpresenter-selection" ) )
         {
-            m_canvas->activePage()->pasteObjs( data->encodedData("application/x-kpresenter-selection"),
-                                               currPg );
+            m_canvas->activePage()->pasteObjs( data->encodedData("application/x-kpresenter-selection"));
 
             m_canvas->setMouseSelectedObject(true);
             emit objectSelectedChanged();

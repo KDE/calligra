@@ -182,7 +182,7 @@ public:
     void setPresPen( QPen p ) {_presPen = p; }
 
     void restoreBackground( KPrPage * );
-    void loadPastedObjs( const QString &in, int currPage, KPrPage* _page );
+    void loadPastedObjs( const QString &in, KPrPage* _page );
 
     void deSelectAllObj();
 

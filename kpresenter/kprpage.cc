@@ -163,7 +163,7 @@ void KPrPage::copyObjs()
     QApplication::clipboard()->setData( drag );
 }
 
-void KPrPage::pasteObjs( const QByteArray & data, int currPage )
+void KPrPage::pasteObjs( const QByteArray & data )
 {
     m_doc->deSelectAllObj();
     m_doc->pasting = true;
@@ -171,7 +171,7 @@ void KPrPage::pasteObjs( const QByteArray & data, int currPage )
     m_doc->pasteYOffset = 20;
     QString clip_str = QString::fromUtf8( data );
     if ( clip_str.isEmpty() ) return;
-    m_doc->loadPastedObjs( clip_str, currPage,this );
+    m_doc->loadPastedObjs( clip_str,this );
 
     m_doc->pasting = false;
     m_doc->setModified(true);
@@ -2500,8 +2500,8 @@ KCommand * KPrPage::replaceObjs( bool createUndoRedo, unsigned int _orastX,unsig
 	kpobject = m_objectList.at( i );
 	ox = kpobject->getOrig().x();
 	oy = kpobject->getOrig().y();
-	ox = ( ox / m_doc->rastX() ) * m_doc->rastX();
-	oy = ( oy / m_doc->rastY() ) * m_doc->rastY();
+	ox = ( ox / m_doc->zoomHandler()->unzoomItX(m_doc->rastX()) ) * m_doc->zoomHandler()->unzoomItX(m_doc->rastX());
+	oy = ( oy / m_doc->zoomHandler()->unzoomItY(m_doc->rastY()) ) * m_doc->zoomHandler()->unzoomItY(m_doc->rastY());
 
 	_diffs.append( KoPoint( ox - kpobject->getOrig().x(), oy - kpobject->getOrig().y() ) );
 	_objects.append( kpobject );
@@ -2576,11 +2576,10 @@ QString KPrPage::pageTitle( const QString &_title ) const
 void KPrPage::setNoteText(  const QString &_text )
 {
     noteText=_text;
-    if(!_text.isEmpty())
-        m_doc->setModified(true);
+    m_doc->setModified(true);
 }
 
-QString KPrPage::getNoteText(  )
+QString KPrPage::getNoteText(  )const
 {
     return noteText;
 }

@@ -51,7 +51,7 @@ public:
     QString pageTitle( const QString &_title ) const;
 
     void setNoteText( const QString &_text );
-    QString getNoteText( );
+    QString getNoteText( )const;
 
     const QPtrList<KPObject> & objectList() const { return m_objectList;}
     void appendObject(KPObject *);
@@ -75,7 +75,7 @@ public:
 
     void deleteObjs( bool _add=true );
     int numSelected() const;
-    void pasteObjs( const QByteArray & data, int currPage );
+    void pasteObjs( const QByteArray & data );
     KCommand * replaceObjs( bool createUndoRedo, unsigned int _orastX,unsigned int _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol);
 
     void copyObjs();

@@ -196,17 +196,17 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
 /*================================================================*/
 void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
 {
-    QPixmap pix( QSize( doc->getPageRect( 0, 0, 0, 1.0, false ).width(),
-                        doc->getPageRect( 0, 0, 0, 1.0, false ).height() ) );
+    QRect rect=doc->pageList().at(slideInfos[0].pageNumber)->getZoomPageRect();
+    QPixmap pix( QSize( rect.width(), rect.height() ) );
     QString filename;
     QString format = imageFormat( imgFormat );
     int p,dpiX,dpiY;
     int oldZoom = view->kPresenterDoc()->zoomHandler()->zoom();
     view->unZoomDocument(dpiX,dpiY);
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
-        pix.resize( doc->getPageRect( 0, 0, 0, 1.0, false ).size() );
-        pix.fill( Qt::white );
         int pgNum = slideInfos[i].pageNumber;
+        pix.resize( doc->pageList().at(pgNum)->getZoomPageRect().size() );
+        pix.fill( Qt::white );
         view->getCanvas()->drawPageInPix2( pix, pgNum );
         filename = QString( "%1/pics/slide_%2.%3" ).arg( path ).arg( i + 1 ).arg( format );
         if ( zoom != 100 ) {

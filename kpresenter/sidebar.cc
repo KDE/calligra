@@ -126,16 +126,16 @@ void ThumbBar::rebuildItems()
 QPixmap ThumbBar::getSlideThumb(int slideNr)
 {
   //kdDebug(33001) << "ThumbBar::getSlideThumb: " << slideNr << endl;
-
-  QPixmap pix( doc->getPageRect( 0, 0, 0 ).size() );
+    QRect rect=doc->pageList().at(slideNr)->getZoomPageRect();
+  QPixmap pix( rect.size() );
   pix.fill( Qt::white );
 
   view->getCanvas()->drawPageInPix2( pix, slideNr);
 
   int extent = 120;
 
-  int w = doc->getPageRect( 0, 0, 0 ).width();
-  int h = doc->getPageRect( 0, 0, 0 ).height();
+  int w = rect.width();
+  int h = rect.height();
 
   if(w > extent || h > extent) {
     if(w > h) {
