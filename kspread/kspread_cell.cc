@@ -4127,7 +4127,15 @@ void KSpreadCell::checkValue()
         formatNumber tmpFormat=getFormatNumber(column(),row());
         if(tmpFormat!=TextDate &&
         !(tmpFormat>=200&&tmpFormat<=215))
-                setFormatNumber(ShortDate);
+                {
+                //test if it's a short date or text date.
+                if( (locale()->formatDate(tmpDate,true)==m_strText))
+                        setFormatNumber(ShortDate);
+                else if((locale()->formatDate(tmpDate,false)==m_strText))
+                        setFormatNumber(TextDate);
+                else
+                        setFormatNumber(ShortDate);
+                }
         m_Date=tmpDate;
         m_strText=locale()->formatDate(m_Date,true); //short format date
         return;

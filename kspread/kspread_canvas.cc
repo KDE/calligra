@@ -166,6 +166,7 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
       // to the canvas.
       //QApplication::sendEvent( m_pCanvas, _ev );
       slotDoneEdit();
+      m_pCanvas->view()->updateEditWidget();
       _ev->accept();
       break;
     case Key_F2:
