@@ -499,6 +499,8 @@ void KWFrameSet::setFloating()
         frameSet->findPosition( cPoint, parag, index );
         setAnchored( frameSet, static_cast<KWTextParag *>( parag ), index );
         frameSet->layout();
+        frames.first()->updateResizeHandles();
+        m_doc->frameChanged(  frames.first() );
         return;
     }
 }
