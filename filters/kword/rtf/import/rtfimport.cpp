@@ -16,11 +16,10 @@
 #include <kdebug.h>
 #include <qfontinfo.h>
 #include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
+
 #include <qcstring.h>
 #include <qstringlist.h>
 #include <qdir.h>
@@ -29,6 +28,7 @@
 #include <qvaluelist.h>
 
 #include <kurl.h>
+
 #include <koPicture.h>
 
 #include "rtfimport.h"
