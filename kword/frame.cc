@@ -1293,7 +1293,7 @@ bool KWPictureFrameSet::load( QDomElement& element )
 
     QDomElement img = element.namedItem( "IMAGE" ).toElement();
     if ( !img.isNull() ) {
- 	doc->addImageRequest( img.attribute( "filename", this ) );
+ 	doc->addImageRequest( img.attribute( "filename"), this );
     }
 
     // 	    KWImage *_image = new KWImage();
