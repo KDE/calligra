@@ -31,32 +31,43 @@ VRoundCornersCmd::VRoundCornersCmd( VDocument* doc, double radius )
 {
 	// Set members.
 	m_oldObjects = document()->selection()->clone();
+	m_newObjects = new VSelection();
 	m_radius = radius > 0.0 ? radius : 1.0;
 
 
 	// Create new shapes.
-	m_newObjects = new VSelection();
 
+	// Pointer to temporary object.
 	VObject* newObject;
 
 	VObjectListIterator itr( m_oldObjects->objects() );
 
 	for( ; itr.current(); ++itr )
 	{
-		// Clone object:
-		newObject = itr.current()->clone();
+		// Reset success.
+		setSuccess( false );
 
-		// Success:
-		if( visit( *newObject ) )
+		// Clone object and visit the clone.
+		newObject = itr.current()->clone();
+		visit( *newObject );
+
+		// Success.
+		if( success() )
 		{
+			// Insert new shape right before old shape.
 			itr.current()->parent()->insertInfrontOf(
 				newObject, itr.current() );
+
+			// Add new shape to list of new objects.
+			m_newObjects->append( newObject );
 		}
-		// No success:
+		// No success.
 		else
 		{
 			// Don't consider this object in the future anymore.
 			m_oldObjects->take( *itr.current() );
+
+			// Delete temporary object.
 			delete( newObject );
 		}
 	}
@@ -72,7 +83,7 @@ void
 VRoundCornersCmd::execute()
 {
 	// Nothing to do.
-	if( m_newObjects->objects().count() <= 0 )
+	if( m_newObjects->objects().count() == 0 )
 		return;
 
 	VObjectListIterator itr( m_oldObjects->objects() );
@@ -80,8 +91,8 @@ VRoundCornersCmd::execute()
 	// Hide old objects.
 	for( ; itr.current(); ++itr )
 	{
-		itr.current()->setState( VObject::deleted );
 		document()->selection()->take( *itr.current() );
+		itr.current()->setState( VObject::deleted );
 	}
 
 	// Show new objects.
@@ -96,10 +107,8 @@ void
 VRoundCornersCmd::unexecute()
 {
 	// Nothing to do.
-	if( m_newObjects->objects().count() <= 0 )
+	if( m_newObjects->objects().count() == 0 )
 		return;
-
-	document()->selection()->clear();
 
 	VObjectListIterator itr( m_oldObjects->objects() );
 
@@ -113,17 +122,14 @@ VRoundCornersCmd::unexecute()
 	// Hide new objects.
 	for( itr = m_newObjects->objects(); itr.current(); ++itr )
 	{
-		itr.current()->setState( VObject::deleted );
 		document()->selection()->take( *itr.current() );
+		itr.current()->setState( VObject::deleted );
 	}
 }
 
 void
 VRoundCornersCmd::visitVPath( VPath& path )
 {
-	// Reset success.
-	setSuccess( false );
-
 	// Note: we change segments from path. that doesnt hurt, since we
 	// replace path with newPath afterwards.
 
@@ -242,6 +248,10 @@ VRoundCornersCmd::visitVPath( VPath& path )
 			path.current()->knot() );
 
 		path.next();
+
+
+		if( !success() )
+			setSuccess();
 	}
 	else
 	{
@@ -291,14 +301,13 @@ VRoundCornersCmd::visitVPath( VPath& path )
 				path.current()->prev()->point( 0.5 ),
 				path.current()->point( 0.5 ),
 				path.current()->knot() );
+
+
+			if( !success() )
+				setSuccess();
 		}
 		else
 			newPath.append( path.current()->clone() );
-
-
-		if( !success() )
-			setSuccess();
-
 
 		path.next();
 	}
@@ -333,6 +342,10 @@ VRoundCornersCmd::visitVPath( VPath& path )
 				path.getLast()->point( 0.5 ),
 				path.current()->point( 0.5 ),
 				path.current()->knot() );
+
+
+			if( !success() )
+				setSuccess();
 		}
 		else
 			newPath.append( path.current()->clone() );
