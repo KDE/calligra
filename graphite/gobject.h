@@ -257,7 +257,9 @@ inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoi
 }
 
 inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center) {
-    rotatePoint(static_cast<int>(x), static_cast<int>(y), angle, center);
+    int _x = static_cast<int>( x );
+    int _y = static_cast<int>( y );
+    rotatePoint(_x, _y, angle, center);
 }
 
 inline void GObject::rotatePoint(double &x, double &y, const double &angle, const QPoint &center) {
@@ -281,7 +283,9 @@ inline void GObject::scalePoint(int &x, int &y, const double &xfactor, const dou
 
 inline void GObject::scalePoint(unsigned int &x, unsigned int &y, const double &xfactor,
 			 const double &yfactor, const QPoint &center) {
-    scalePoint(static_cast<int>(x), static_cast<int>(y), xfactor, yfactor, center);
+    int _x = static_cast<int>( x );
+    int _y = static_cast<int>( y );
+    scalePoint(_x, _y, xfactor, yfactor, center);
 }
 
 inline void GObject::scalePoint(double &x, double &y, const double &xfactor, const double &yfactor,
