@@ -220,6 +220,9 @@ void KSpreadDlgValidity::changeIndexType(int _index)
     edit2->setEnabled(false);
     choose->setEnabled(false);
     chooseAction->setEnabled(false);
+    displayHelp->setEnabled(false);
+    messageHelp->setEnabled(false);
+    titleHelp->setEnabled(false);
     break;
    case 1:
     val_min->setEnabled(true);
@@ -228,6 +231,9 @@ void KSpreadDlgValidity::changeIndexType(int _index)
     message->setEnabled(true);
     title->setEnabled(true);
     chooseAction->setEnabled(true);
+    displayHelp->setEnabled(true);
+    messageHelp->setEnabled( true);
+    titleHelp->setEnabled(true);
     val_min->setValidator( new KFloatValidator( val_min ) );
     val_max->setValidator( new KFloatValidator( val_max ) );
     if( choose->currentItem()<=4)
@@ -253,6 +259,9 @@ void KSpreadDlgValidity::changeIndexType(int _index)
     message->setEnabled(true);
     title->setEnabled(true);
     chooseAction->setEnabled(true);
+    displayHelp->setEnabled(true);
+    messageHelp->setEnabled( true);
+    titleHelp->setEnabled(true);
     val_min->setValidator( new KIntValidator( val_min ) );
     val_max->setValidator( new KIntValidator( val_max ) );
     if( choose->currentItem()<=4)
@@ -279,6 +288,9 @@ void KSpreadDlgValidity::changeIndexType(int _index)
     choose->setEnabled(false);
     edit1->setEnabled(false);
     edit2->setEnabled(false);
+    displayHelp->setEnabled(true);
+    messageHelp->setEnabled( true);
+    titleHelp->setEnabled(true);
     break;
    case 4:
     edit1->setText(i18n("Date:"));
@@ -289,6 +301,10 @@ void KSpreadDlgValidity::changeIndexType(int _index)
     message->setEnabled(true);
     title->setEnabled(true);
     chooseAction->setEnabled(true);
+    displayHelp->setEnabled(true);
+    messageHelp->setEnabled( true);
+    titleHelp->setEnabled(true);
+
     val_min->clearValidator();
     val_max->clearValidator();
     if( choose->currentItem()<=4)
@@ -315,6 +331,10 @@ void KSpreadDlgValidity::changeIndexType(int _index)
     chooseAction->setEnabled(true);
     val_min->clearValidator();
     val_max->clearValidator();
+    displayHelp->setEnabled(true);
+    messageHelp->setEnabled( true);
+    titleHelp->setEnabled(true);
+
     if( choose->currentItem()<=4)
     {
       edit1->setText(i18n("Time:"));

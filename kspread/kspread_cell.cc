@@ -5604,17 +5604,25 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
         //todo what is it ?
     }
 
-    //help is not implemented into kspread
     QDomElement help = element.namedItem( "table:help-message" ).toElement();
     if ( !help.isNull() )
     {
         if ( help.hasAttribute( "table:title" ) )
+        {
             kdDebug()<<"help.attribute( table:title ) :"<<help.attribute( "table:title" )<<endl;
+            d->extra()->validity->titleInfo = help.attribute( "table:title" );
+        }
         if ( help.hasAttribute( "table:display" ) )
+        {
             kdDebug()<<"help.attribute( table:display ) :"<<help.attribute( "table:display" )<<endl;
+            d->extra()->validity->displayValidationInformation = ( ( help.attribute( "table:display" )=="true" ) ? true : false );
+        }
         QDomElement attrText = help.namedItem( "text:p" ).toElement();
         if ( !attrText.isNull() )
+        {
             kdDebug()<<"help text :"<<attrText.text()<<endl;
+            d->extra()->validity->messageInfo = attrText.text();
+        }
     }
 
     QDomElement error = element.namedItem( "table:error-message" ).toElement();
