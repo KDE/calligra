@@ -144,13 +144,25 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		QString params	= substyle[1].stripWhiteSpace();
 		if( command == "fill" )
 		{
-			c.setNamedColor( params );
-			fillcolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
+			if( params == "none" )
+				gc->fill.setType( VFill::none );
+			else
+			{
+				c.setNamedColor( params );
+				fillcolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
+				gc->fill.setType( VFill::solid );
+			}
 		}
 		else if( command == "stroke" )
 		{
-			c.setNamedColor( params );
-			strokecolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
+			if( params == "none" )
+				gc->stroke.setType( VStroke::none );
+			else
+			{
+				c.setNamedColor( params );
+				strokecolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
+				gc->stroke.setType( VStroke::solid );
+			}
 		}
 		else if( command == "stroke-width" )
 			gc->stroke.setLineWidth( params.toDouble() );
