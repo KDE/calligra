@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999, 2000, 2001  Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C) 1999, 2000, 2001,2002 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -149,7 +149,7 @@ void KSpreadreference::slotRemove()
   {
     QString textRemove = m_list->text(m_list->currentItem());
     m_pView->doc()->removeArea(textRemove );
-
+    m_pView->doc()->setModified(true);
     /*
       m_list->clear();
       QString text;
@@ -183,20 +183,15 @@ void KSpreadreference::slotRemove()
 void KSpreadreference::slotEdit()
 {
   QString name(m_list->text(m_list->currentItem()));
-  if ( name.length() == 0 )
+  if ( name.isEmpty() )
     return;
   KSpreadEditAreaName editDlg( m_pView, "EditArea", name );
   editDlg.exec();
 
   m_rangeName->setText(i18n("Area: %1").arg(""));
   QString tmp = m_list->text(m_list->currentItem());
-  if (tmp.length() > 0)
-  {
+  if (!tmp.isEmpty())
     displayAreaValues( tmp );
-  }
-  else
-  {
-  }
 }
 
 void KSpreadreference::slotOk()
