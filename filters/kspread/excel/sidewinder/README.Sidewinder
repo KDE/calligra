@@ -40,3 +40,16 @@ uninstall.desktop in koffice/filters/olefilters/excel97 to disable the it.
 Encoding=UTF-8
 Hidden=true
 
+
+References and Links
+===============
+Excel file format documentation from OpenOffice.org
+http://sc.openoffice.org/excelfileformat.pdf
+
+Excel import filter for KSpread (koffice/filters/olefilters/excel97)
+
+Jakarta POI Project
+http://jakarta.apache.org/poi/
+
+Excel plug-in for Gnumeric (gnumeric/plugins/excel)
+
