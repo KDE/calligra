@@ -112,7 +112,7 @@ void KWImportStyleDia::loadFile()
 
                     QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
                     if ( !formatElem.isNull() )
-                        sty->format() = KWTextParag::loadFormat( formatElem, 0L, m_doc->defaultFont() );
+                        sty->format() = KWTextParag::loadFormat( formatElem, 0L, m_doc->defaultFont(), m_doc->globalLanguage() );
                     else
                         kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 

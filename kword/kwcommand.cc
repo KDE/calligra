@@ -28,7 +28,7 @@
 #include "kwvariable.h"
 #include "koVariable.h"
 #include <kotextobject.h>
-
+#include <klocale.h>
 #include <kdebug.h>
 
 
@@ -112,7 +112,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
                 QDomElement formatElem = layout.namedItem( "FORMAT" ).toElement();
                 if ( !formatElem.isNull() )
                 {
-                    KoTextFormat f = parag->loadFormat( formatElem, 0L, QFont() );
+                    KoTextFormat f = parag->loadFormat( formatElem, 0L, QFont(), KGlobal::locale()->language() );
                     KoTextFormat * defaultFormat = doc->formatCollection()->format( &f );
                     // Last paragraph (i.e. only one in all) : some of the text might be from before the paste
                     int endIndex = (item == count-1) ? c->index() : parag->string()->length() - 1;

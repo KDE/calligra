@@ -1540,7 +1540,7 @@ void KWDocument::loadStyleTemplates( const QDomElement &stylesElem )
 
         QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
-            sty->format() = KWTextParag::loadFormat( formatElem, 0L, defaultFont() );
+            sty->format() = KWTextParag::loadFormat( formatElem, 0L, defaultFont(), globalLanguage() );
         else
             kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 

@@ -512,7 +512,7 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
 }
 
 //static
-KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * refFormat, const QFont & defaultFont )
+KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * refFormat, const QFont & defaultFont, const QString & defaultLanguage )
 {
     KoTextFormat format;
     QFont font;
@@ -646,6 +646,8 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     elem = formatElem.namedItem( "LANGUAGE" ).toElement();
     if ( !elem.isNull() )
         format.setLanguage( elem.attribute("value") );
+    else if ( !refFormat )// No reference format and no LANGUAGE tag -> use default font
+        format.setLanguage( defaultLanguage );
 
     //kdDebug() << "KWTextParag::loadFormat format=" << format.key() << endl;
     return format;
@@ -666,7 +668,7 @@ void KWTextParag::loadLayout( QDomElement & attributes )
         if ( !formatElem.isNull() )
         {
             // Load paragraph format
-            KoTextFormat f = loadFormat( formatElem, defaultFormat, doc->defaultFont() );
+            KoTextFormat f = loadFormat( formatElem, defaultFormat, doc->defaultFont(), doc->globalLanguage() );
             setFormat( document()->formatCollection()->format( &f ) );
         }
         else // No paragraph format
@@ -724,7 +726,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
                 switch( id ) {
                 case 1: // Normal text
                 {
-                    KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont() );
+                    KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont(),doc->globalLanguage() );
                     //kdDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
                     setFormat( index, len, document()->formatCollection()->format( &f ) );
                     break;
@@ -780,7 +782,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
                         if ( var )
                         {
                             var->load( varElem );
-                            KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont() );
+                            KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont(),doc->globalLanguage() );
                             setCustomItem( index, var, document()->formatCollection()->format( &f ) );
 
                             var->recalc();
