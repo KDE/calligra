@@ -102,7 +102,16 @@ public:
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
     /// @return the current value, converted in points
     double value( void ) const;
-
+    
+    /// Set minimum value in points.
+    void setMinValue(double min);
+    
+    /// Set maximum value in points.
+    void setMaxValue(double max);
+    
+    /// Set step size in points.
+    void setLineStep(double step);
+    
 private:
     double m_lowerInPoints; ///< lowest value in points
     double m_upperInPoints; ///< highest value in points

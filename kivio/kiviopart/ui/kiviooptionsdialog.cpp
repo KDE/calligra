@@ -162,12 +162,12 @@ void KivioOptionsDialog::initGrid()
 
   KoUnit::Unit unit = static_cast<KivioView*>(parent())->doc()->units();
   KivioGridData d = static_cast<KivioView*>(parent())->doc()->grid();
-  double pgw = KoUnit::toUserValue(m_layout.ptWidth, unit);
-  double pgh = KoUnit::toUserValue(m_layout.ptHeight, unit);
-  double fw = KoUnit::toUserValue(Kivio::Config::gridXSpacing(), unit);
-  double fh = KoUnit::toUserValue(Kivio::Config::gridYSpacing(), unit);
-  double sw = KoUnit::toUserValue(Kivio::Config::gridXSnap(), unit);
-  double sh = KoUnit::toUserValue(Kivio::Config::gridYSnap(), unit);
+  double pgw = m_layout.ptWidth;
+  double pgh = m_layout.ptHeight;
+  double fw = Kivio::Config::gridXSpacing();
+  double fh = Kivio::Config::gridYSpacing();
+  double sw = Kivio::Config::gridXSnap();
+  double sh = Kivio::Config::gridYSnap();
 
   m_gridChBox = new QCheckBox(i18n("Show &grid"), page);
   m_gridChBox->setChecked(Kivio::Config::showGrid());
@@ -319,11 +319,10 @@ void KivioOptionsDialog::applyPage()
 void KivioOptionsDialog::applyGrid()
 {
   KivioGridData d;
-  KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  Kivio::Config::setGridXSpacing(KoUnit::fromUserValue(m_spaceHorizUSpin->value(), unit));
-  Kivio::Config::setGridYSpacing(KoUnit::fromUserValue(m_spaceVertUSpin->value(), unit));
-  Kivio::Config::setGridXSnap(KoUnit::fromUserValue(m_snapHorizUSpin->value(), unit));
-  Kivio::Config::setGridYSnap(KoUnit::fromUserValue(m_snapVertUSpin->value(), unit));
+  Kivio::Config::setGridXSpacing(m_spaceHorizUSpin->value());
+  Kivio::Config::setGridYSpacing(m_spaceVertUSpin->value());
+  Kivio::Config::setGridXSnap(m_snapHorizUSpin->value());
+  Kivio::Config::setGridYSnap(m_snapVertUSpin->value());
   Kivio::Config::setShowGrid(m_gridChBox->isChecked());
   Kivio::Config::setSnapGrid(m_snapChBox->isChecked());
   Kivio::Config::setGridColor(m_gridColorBtn->color());
@@ -367,10 +366,10 @@ void KivioOptionsDialog::defaultPage()
 void KivioOptionsDialog::defaultGrid()
 {
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  m_spaceHorizUSpin->setValue(KoUnit::toUserValue(Kivio::Config::gridXSpacing(), unit));
-  m_spaceVertUSpin->setValue(KoUnit::toUserValue(Kivio::Config::gridYSpacing(), unit));
-  m_snapHorizUSpin->setValue(KoUnit::toUserValue(Kivio::Config::gridXSnap(), unit));
-  m_snapVertUSpin->setValue(KoUnit::toUserValue(Kivio::Config::gridYSnap(), unit));
+  m_spaceHorizUSpin->changeValue(KoUnit::toUserValue(Kivio::Config::gridXSpacing(), unit));
+  m_spaceVertUSpin->changeValue(KoUnit::toUserValue(Kivio::Config::gridYSpacing(), unit));
+  m_snapHorizUSpin->changeValue(KoUnit::toUserValue(Kivio::Config::gridXSnap(), unit));
+  m_snapVertUSpin->changeValue(KoUnit::toUserValue(Kivio::Config::gridYSnap(), unit));
   m_gridChBox->setChecked(Kivio::Config::showGrid());
   m_snapChBox->setChecked(Kivio::Config::snapGrid());
   m_gridColorBtn->setColor(Kivio::Config::gridColor());
@@ -447,12 +446,14 @@ void KivioOptionsDialog::slotDefault()
 
 void KivioOptionsDialog::setMaxHorizSnap(double v)
 {
-  m_snapHorizUSpin->setMaxValue(v);
+  KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
+  m_snapHorizUSpin->setMaxValue(KoUnit::fromUserValue(v, unit));
 }
 
 void KivioOptionsDialog::setMaxVertSnap(double v)
 {
-  m_snapVertUSpin->setMaxValue(v);
+  KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
+  m_snapVertUSpin->setMaxValue(KoUnit::fromUserValue(v, unit));
 }
 
 void KivioOptionsDialog::fillGuideList()
@@ -492,7 +493,7 @@ void KivioOptionsDialog::guideSelectionChanged(QListViewItem* li)
   }
 
   m_posUSpin->setMaxValue(max);
-  m_posUSpin->setValue(KoUnit::toUserValue(data->position(), unit));
+  m_posUSpin->changeValue(KoUnit::toUserValue(data->position(), unit));
 }
 
 void KivioOptionsDialog::changePos(double p)

@@ -303,10 +303,10 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, QVBox* page, char* name )
 	KarbonGridData &gd = view->part()->document().grid();
 	double pgw = view->part()->document().width();
 	double pgh = view->part()->document().height();
-	double fw = KoUnit::toUserValue( gd.freq.width(), unit );
-	double fh = KoUnit::toUserValue( gd.freq.height(), unit );
-	double sw = KoUnit::toUserValue( gd.snap.width(), unit );
-	double sh = KoUnit::toUserValue( gd.snap.height(), unit );
+	double fw = gd.freq.width();
+	double fh = gd.freq.height();
+	double sw = gd.snap.width();
+	double sh = gd.snap.height();
 
 	m_gridChBox = new QCheckBox( i18n( "Show &grid" ), page );
 	m_gridChBox->setChecked( gd.isShow );
@@ -347,12 +347,14 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, QVBox* page, char* name )
 
 void VConfigGridPage::setMaxHorizSnap( double v )
 {
-	m_snapHorizUSpin->setMaxValue( v );
+	KoUnit::Unit unit = m_view->part()->document().unit();
+	m_snapHorizUSpin->setMaxValue( KoUnit::fromUserValue( v, unit ) );
 }
 
 void VConfigGridPage::setMaxVertSnap( double v )
 {
-	m_snapVertUSpin->setMaxValue( v );
+	KoUnit::Unit unit = m_view->part()->document().unit();
+	m_snapVertUSpin->setMaxValue( KoUnit::fromUserValue( v, unit ) );
 }
 
 void VConfigGridPage::slotUnitChanged( int u )
@@ -366,12 +368,11 @@ void VConfigGridPage::slotUnitChanged( int u )
 
 void VConfigGridPage::apply()
 {
-	KoUnit::Unit unit = m_view->part()->document().unit();
 	KarbonGridData &gd = m_view->part()->document().grid();
-	gd.freq.setWidth( KoUnit::fromUserValue( m_spaceHorizUSpin->value(), unit ) );
-	gd.freq.setHeight( KoUnit::fromUserValue( m_spaceVertUSpin->value(), unit ) );
-	gd.snap.setWidth( KoUnit::fromUserValue( m_snapHorizUSpin->value(), unit ) );
-	gd.snap.setHeight( KoUnit::fromUserValue( m_snapVertUSpin->value(), unit ) );
+	gd.freq.setWidth( m_spaceHorizUSpin->value() );
+	gd.freq.setHeight( m_spaceVertUSpin->value() );
+	gd.snap.setWidth( m_snapHorizUSpin->value() );
+	gd.snap.setHeight( m_snapVertUSpin->value() );
 	gd.isShow = m_gridChBox->isChecked();
 	gd.isSnap = m_snapChBox->isChecked();
 	gd.color = m_gridColorBtn->color();
