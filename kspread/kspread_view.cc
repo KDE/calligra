@@ -2643,14 +2643,15 @@ void KSpreadView::setActiveTable( KSpreadTable *_t,bool updateTable )
 
   if ( m_pTable == 0L )
     return;
+
   if(updateTable)
   {
-  m_pTabBar->setActiveTab( _t->tableName() );
-  m_pVBorderWidget->repaint();
-  m_pHBorderWidget->repaint();
-  m_pCanvas->repaint();
-  m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
-  m_pCanvas->slotMaxRow( m_pTable->maxRow() );
+    m_pTabBar->setActiveTab( _t->tableName() );
+    m_pVBorderWidget->repaint();
+    m_pHBorderWidget->repaint();
+    m_pCanvas->repaint();
+    m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
+    m_pCanvas->slotMaxRow( m_pTable->maxRow() );
   }
 
   /* see if there was a previous selection on this other table */
@@ -2696,11 +2697,18 @@ void KSpreadView::changeTable( const QString& _name )
         return;
     }
     m_pCanvas->closeEditor();
-    setActiveTable( t,false );
+    setActiveTable( t, false /* False: Endless loop because of setActiveTab() => do the visual area update manually*/);
 
     updateEditWidget();
     //refresh toggle button
     updateBorderButton();
+
+    //update visible area    
+    m_pVBorderWidget->repaint();
+    m_pHBorderWidget->repaint();
+    m_pCanvas->repaint();
+    m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
+    m_pCanvas->slotMaxRow( m_pTable->maxRow() );
 }
 
 void KSpreadView::slotScrollToFirstTable()
