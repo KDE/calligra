@@ -25,7 +25,7 @@
 #include <kstddirs.h>
 
 KIllustratorShell::KIllustratorShell( const char* name )
-    : KoMainWindow( name )
+    : KoMainWindow( KIllustratorFactory::global(), name )
 {
 }
 

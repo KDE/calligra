@@ -73,7 +73,7 @@ KSpreadDoc::KSpreadDoc( QObject* parent, const char* name, bool singleViewMode )
   s_docs->append( this );
 
   setInstance( KSpreadFactory::global(), false );
-  
+
   // Set a name if there is no name specified
   if ( !name )
   {

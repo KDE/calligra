@@ -25,8 +25,9 @@
 #include <kstddirs.h>
 
 KSpreadShell::KSpreadShell( const char* name )
-    : KoMainWindow( name )
+    : KoMainWindow( 0L, name )
 {
+  setInstance( KSpreadFactory::global(), false ); 
 }
 
 KSpreadShell::~KSpreadShell()

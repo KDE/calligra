@@ -45,7 +45,7 @@ public:
 
   KoDocument *m_doc;
 
-  KParts::PartManager *m_manager;
+  QGuardedPtr<KParts::PartManager> m_manager;
 
   double m_scaleX;
   double m_scaleY;

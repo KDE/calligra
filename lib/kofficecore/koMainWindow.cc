@@ -87,7 +87,7 @@ public:
   bool bMainWindowGUIBuilt;
 };
 
-KoMainWindow::KoMainWindow( const char* name )
+KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     : KParts::MainWindow( name )
 {
     if ( !s_lstMainWindows )
@@ -105,11 +105,11 @@ KoMainWindow::KoMainWindow( const char* name )
 
     setXMLFile( locate( "data", "koffice/koffice_shell.rc" ) );
 
-    KAction* fnew = new KAction( i18n("New"), KofficeBarIcon( "filenew" ), KStdAccel::key(KStdAccel::New), this, SLOT( slotFileNew() ),
+    /*KAction* fnew =*/ new KAction( i18n("New"), KofficeBarIcon( "filenew" ), KStdAccel::key(KStdAccel::New), this, SLOT( slotFileNew() ),
 			  actionCollection(), "filenew" );
-    KAction* open = new KAction( i18n("Open ..."), KofficeBarIcon( "fileopen" ), KStdAccel::key(KStdAccel::Open), this, SLOT( slotFileOpen() ),
+    /*KAction* open =*/ new KAction( i18n("Open ..."), KofficeBarIcon( "fileopen" ), KStdAccel::key(KStdAccel::Open), this, SLOT( slotFileOpen() ),
 			  actionCollection(), "fileopen" );
-    KAction* save = new KAction( i18n("Save"), KofficeBarIcon( "filefloppy" ), KStdAccel::key(KStdAccel::Save), this, SLOT( slotFileSave() ),
+    /*KAction* save =*/ new KAction( i18n("Save"), KofficeBarIcon( "filefloppy" ), KStdAccel::key(KStdAccel::Save), this, SLOT( slotFileSave() ),
 			  actionCollection(), "filesave" );
     /*KAction* saveAs =*/ new KAction( i18n("Save as..."), 0, this, SLOT( slotFileSaveAs() ),
 			    actionCollection(), "filesaveas" );
@@ -122,6 +122,8 @@ KoMainWindow::KoMainWindow( const char* name )
     /*KAction* helpAbout =*/ new KAction( i18n("About..."), 0, this, SLOT( slotHelpAbout() ),
 			  actionCollection(), "about" );
 
+    if ( instance )
+      setInstance( instance );
 }
 
 KoMainWindow::~KoMainWindow()
@@ -129,6 +131,8 @@ KoMainWindow::~KoMainWindow()
     if ( s_lstMainWindows )
 	s_lstMainWindows->removeRef( this );
 
+    delete d->m_manager;
+    
     delete d;
 }
 
@@ -136,6 +140,9 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
 {
   KoView *oldRootView = d->m_rootView;
 
+  if ( d->m_rootDoc )
+    d->m_rootDoc->removeShell( this );
+  
   d->m_rootDoc = doc;
 
   if ( doc )
@@ -146,11 +153,11 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
 
     setView( d->m_rootView );
     d->m_rootView->show();
+    d->m_rootDoc->addShell( this );
   }
   else
     d->m_rootView = 0L;
 
-  show();
   d->m_manager->setActivePart( d->m_rootDoc, d->m_rootView );
 
   if ( oldRootView )

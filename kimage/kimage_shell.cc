@@ -33,7 +33,7 @@
 #include "kimage_view.h"
 
 KImageShell::KImageShell( const char* name )
-  : KoMainWindow( name )
+  : KoMainWindow( KImageFactory::global(), name )
 {
   resize( 640, 480 );
 }

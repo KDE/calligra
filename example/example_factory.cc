@@ -16,37 +16,39 @@ KInstance* ExampleFactory::s_global = 0;
 ExampleFactory::ExampleFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-    s_global = new KInstance( "example" );
 }
 
 ExampleFactory::~ExampleFactory()
 {
-    delete s_global;
+    if ( s_global ) 
+      delete s_global;
 }
 
 QObject* ExampleFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
 {
-/* 
+/*
     if ( parent && !parent->inherits("KoDocument") )
     {
 	qDebug("ExampleFactory: parent does not inherit KoDocument");
 	return 0;
     }
-*/  
+*/
 
     bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
- 
+
     ExamplePart *part = new ExamplePart( parent, name, !bWantKoDocument );
-    
+
     if ( !bWantKoDocument )
       part->setReadWrite( false );
-    
+
     emit objectCreated(part);
     return part;
 }
 
 KInstance* ExampleFactory::global()
 {
+    if ( !s_global )
+      s_global = new KInstance( "example" );
     return s_global;
 }
 

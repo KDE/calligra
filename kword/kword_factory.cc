@@ -58,19 +58,12 @@ KInstance* KWordFactory::s_global = 0;
 KWordFactory::KWordFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-    s_global = new KInstance( "kword" );
-
-    s_global->dirs()->addResourceType( "kword_template",
-				       KStandardDirs::kde_default("data") + "kword/templates/");
-    s_global->dirs()->addResourceType( "toolbar",
-				       KStandardDirs::kde_default("data") + "koffice/toolbar/");
-    s_global->dirs()->addResourceType( "toolbar",
-				       KStandardDirs::kde_default("data") + "kformula/pics/");
 }
 
 KWordFactory::~KWordFactory()
 {
-    delete s_global;
+    if ( s_global ) 
+      delete s_global;
 }
 
 QObject* KWordFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
@@ -83,21 +76,32 @@ QObject* KWordFactory::create( QObject* parent, const char* name, const char* cl
     }
 */
     bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
- 
+
     KWordDocument *doc = new KWordDocument( parent, name, !bWantKoDocument );
-    
+
     if ( !bWantKoDocument )
     {
       doc->initEmpty();
       doc->setReadWrite( false );
     }
-    
+
     emit objectCreated(doc);
     return doc;
 }
 
 KInstance* KWordFactory::global()
 {
+    if ( !s_global )
+    {
+      s_global = new KInstance( "kword" );
+
+      s_global->dirs()->addResourceType( "kword_template",
+				         KStandardDirs::kde_default("data") + "kword/templates/");
+      s_global->dirs()->addResourceType( "toolbar",
+				         KStandardDirs::kde_default("data") + "koffice/toolbar/");
+      s_global->dirs()->addResourceType( "toolbar",
+				         KStandardDirs::kde_default("data") + "kformula/pics/");
+    }
     return s_global;
 }
 

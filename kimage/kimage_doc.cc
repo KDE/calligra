@@ -47,7 +47,7 @@
 KImageDocument::KImageDocument( QObject* parent, const char* name, bool singleViewMode )
   : KoDocument( parent, name, singleViewMode )
 {
-  setInstance( KImageFactory::global() ); 
+  setInstance( KImageFactory::global() );
 }
 
 KImageDocument::~KImageDocument()

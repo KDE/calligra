@@ -25,7 +25,7 @@
 #include <kaboutdialog.h>
 
 KWordShell::KWordShell( const char* name )
-    : KoMainWindow( name )
+    : KoMainWindow( KWordFactory::global(), name )
 {
 //    partManager()->setAllowDoubleClickActivation( false );
     resize( 800, 600 );

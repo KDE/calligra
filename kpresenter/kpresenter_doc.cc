@@ -112,8 +112,8 @@ KPresenterChild::~KPresenterChild()
 
 KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
 {
-  return 0L; 
-} 
+  return 0L;
+}
 
 /******************************************************************/
 /* class KPresenterDoc						  */
@@ -130,8 +130,8 @@ KPresenterDoc::KPresenterDoc( QObject* parent, const char* name, bool singleView
   // are set correctly
   //setModified(true);
 
-    setInstance( KPresenterFactory::global() ); 
- 
+    setInstance( KPresenterFactory::global() );
+
     dcop = 0;
     docAlreadyOpen = FALSE;
     _clean = true;
@@ -1426,7 +1426,7 @@ void KPresenterDoc::initEmpty()
   setModified(true);
   load_template( fileName );
   setURL( QString::null );
-} 
+}
 
 /*==================== set background color ======================*/
 void KPresenterDoc::setBackColor( unsigned int pageNum, QColor backColor1, QColor backColor2, BCType bcType,
@@ -3713,7 +3713,7 @@ void KPresenterDoc::slotUndoRedoChanged( QString _undo, QString _redo )
 /*==============================================================*/
 void KPresenterDoc::slotDocumentLoaded()
 {
-} 
+}
 
 /*==============================================================*/
 int KPresenterDoc::getPenBrushFlags()

@@ -19,20 +19,14 @@ KInstance* KSpreadFactory::s_global = 0;
 KSpreadFactory::KSpreadFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-    s_global = new KInstance( "kspread" );
-    s_global->dirs()->addResourceType( "toolbar",
-				       KStandardDirs::kde_default("data") + "koffice/toolbar/");
-    s_global->dirs()->addResourceType( "extensions", KStandardDirs::kde_default("data") + "koffice/extensions/");
-    s_global->dirs()->addResourceType( "extensions", KStandardDirs::kde_default("data") + "kspread/extensions/");
-    s_global->dirs()->addResourceType( "table-styles", KStandardDirs::kde_default("data") + "kspread/tablestyles/");
-    s_global->dirs()->addResourceType( "scripts", KStandardDirs::kde_default("data") + "koffice/scripts/");
-    s_global->dirs()->addResourceType( "scripts", KStandardDirs::kde_default("data") + "kspread/scripts/");
-
+    (void)global(); 
     (void)new KSpreadAppIface;
 }
 
 KSpreadFactory::~KSpreadFactory()
 {
+  if ( s_global )
+    delete s_global;
 }
 
 QObject* KSpreadFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
@@ -45,20 +39,31 @@ QObject* KSpreadFactory::create( QObject* parent, const char* name, const char* 
 */
 //    return new KSpreadDoc( (KoDocument*)parent, name );
 
-  bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 ); 
- 
+  bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
+
   KSpreadDoc *doc = new KSpreadDoc( parent, name, !bWantKoDocument );
-  
+
   if ( !bWantKoDocument )
     doc->setReadWrite( false );
 
   emit objectCreated( doc );
-  
+
   return doc;
 }
 
 KInstance* KSpreadFactory::global()
 {
+    if ( !s_global )
+    {
+      s_global = new KInstance( "kspread" );
+      s_global->dirs()->addResourceType( "toolbar",
+				         KStandardDirs::kde_default("data") + "koffice/toolbar/");
+      s_global->dirs()->addResourceType( "extensions", KStandardDirs::kde_default("data") + "koffice/extensions/");
+      s_global->dirs()->addResourceType( "extensions", KStandardDirs::kde_default("data") + "kspread/extensions/");
+      s_global->dirs()->addResourceType( "table-styles", KStandardDirs::kde_default("data") + "kspread/tablestyles/");
+      s_global->dirs()->addResourceType( "scripts", KStandardDirs::kde_default("data") + "koffice/scripts/");
+      s_global->dirs()->addResourceType( "scripts", KStandardDirs::kde_default("data") + "kspread/scripts/");
+    }
     return s_global;
 }
 

@@ -23,9 +23,9 @@
 #include <kstddirs.h>
 
 KChartShell::KChartShell( const char* name )
-    : KoMainWindow( name )
+    : KoMainWindow( KChartFactory::global(), name )
 {
-  resize( 600, 400 ); 
+  resize( 600, 400 );
 }
 
 KChartShell::~KChartShell()

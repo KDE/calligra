@@ -23,6 +23,7 @@
 #include "koDocumentChild.h"
 #include "koView.h"
 #include "koApplication.h"
+#include "koMainWindow.h"
 #include "koStream.h"
 #include "koQueryTypes.h"
 #include "koFilterManager.h"
@@ -74,6 +75,7 @@ public:
 
   QList<KoView> m_views;
   QList<KoDocumentChild> m_children;
+  QList<KoMainWindow> m_shells;
 
   bool m_bSingleViewMode;
 };
@@ -98,6 +100,9 @@ KoDocument::KoDocument( QObject* parent, const char* name, bool singleViewMode )
 
 KoDocument::~KoDocument()
 {
+  d->m_shells.setAutoDelete( true );
+  d->m_shells.clear();
+
   delete d;
 }
 
@@ -691,15 +696,25 @@ QCString KoDocument::nativeFormatMimeType( KInstance *instance )
   QString instname = kapp->instanceName();
   if ( instance )
     instname = instance->instanceName();
-  
+
   KService::Ptr service = KService::service( instname );
-  
+
   if ( !service )
     return QCString();
-  
+
   KDesktopFile deFile( service->desktopEntryPath(), true );
-  
+
   return deFile.readEntry( "MimeType" ).utf8(); // ??????????
-} 
+}
+
+void KoDocument::addShell( KoMainWindow *shell )
+{
+  d->m_shells.append( shell );
+}
+
+void KoDocument::removeShell( KoMainWindow *shell )
+{
+  d->m_shells.removeRef( shell );
+}
 
 #include "koDocument.moc"

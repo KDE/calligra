@@ -50,6 +50,7 @@ using std::ostream;
  */
 class KoDocument : public KParts::ReadWritePart
 {
+  friend class KoMainWindow;
   Q_OBJECT
 
 public:
@@ -409,6 +410,9 @@ protected:
    * an internal url in the store, like "tar:/..."
    */
   virtual bool isStoredExtern();
+
+  void addShell( KoMainWindow *shell );
+  void removeShell( KoMainWindow *shell );
 
 private:
 

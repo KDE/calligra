@@ -102,7 +102,7 @@ KoView* KChartPart::createView( QWidget* parent, const char* name )
 
 KoMainWindow* KChartPart::createShell()
 {
-    KoMainWindow* shell = new KChartShell;
+    KoMainWindow* shell = new KChartShell();
     shell->setRootDocument( this );
     shell->show();
 
@@ -803,6 +803,9 @@ bool KChartPart::load( istream& in, KoStore* store )
 
 /**
  * $Log$
+ * Revision 1.25  2000/02/08 13:12:30  coolo
+ * some fixes for ANSI C++ (I gave up on kchart ;(
+ *
  * Revision 1.24  2000/02/05 18:12:33  shausman
  * the port of KOffice to use kparts instead of koparts. What I basically did
  * was:

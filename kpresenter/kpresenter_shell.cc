@@ -25,7 +25,7 @@
 #include <kaboutdialog.h>
 
 KPresenterShell::KPresenterShell( const char* name )
-    : KoMainWindow( name )
+    : KoMainWindow( KPresenterFactory::global(), name )
 {
 // partManager()->setAllowDoubleClickActivation( false );
     resize( 800, 630 );

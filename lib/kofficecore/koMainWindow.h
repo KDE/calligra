@@ -51,7 +51,7 @@ public:
      *
      *  Initializes a window with a file toolbar.
      */
-    KoMainWindow( const char *_name = 0 );
+    KoMainWindow( KInstance *instance = 0, const char *_name = 0 );
 
     /**
      *  Destructor.

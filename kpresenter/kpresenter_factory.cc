@@ -58,21 +58,12 @@ KInstance* KPresenterFactory::s_global = 0;
 KPresenterFactory::KPresenterFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-    s_global = new KInstance( "kpresenter" );
-
-    s_global->dirs()->addResourceType("kpresenter_template",
-				      KStandardDirs::kde_default("data") + "kpresenter/templates/");
-    s_global->dirs()->addResourceType("autoforms",
-				      KStandardDirs::kde_default("data") + "kpresenter/autoforms/");
-    s_global->dirs()->addResourceType("toolbar",
-				      KStandardDirs::kde_default("data") + "koffice/toolbar/");
-    s_global->dirs()->addResourceType("toolbar",
-				      KStandardDirs::kde_default("data") + "kpresenter/toolbar/");
 }
 
 KPresenterFactory::~KPresenterFactory()
 {
-    delete s_global;
+    if ( s_global ) 
+      delete s_global;
 }
 
 QObject* KPresenterFactory::create( QObject* parent, const char* name,
@@ -87,19 +78,32 @@ QObject* KPresenterFactory::create( QObject* parent, const char* name,
     bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
 
     KPresenterDoc *doc = new KPresenterDoc( (KoDocument*)parent, name, !bWantKoDocument );
-    
+
     if ( !bWantKoDocument )
     {
       doc->initEmpty();
       doc->setReadWrite( false );
     }
-    
+
     emit objectCreated(doc);
     return doc;
 }
 
 KInstance* KPresenterFactory::global()
 {
+    if ( !s_global )
+    {
+      s_global = new KInstance( "kpresenter" );
+
+      s_global->dirs()->addResourceType("kpresenter_template",
+				        KStandardDirs::kde_default("data") + "kpresenter/templates/");
+      s_global->dirs()->addResourceType("autoforms",
+				        KStandardDirs::kde_default("data") + "kpresenter/autoforms/");
+      s_global->dirs()->addResourceType("toolbar",
+				        KStandardDirs::kde_default("data") + "koffice/toolbar/");
+      s_global->dirs()->addResourceType("toolbar",
+ 				        KStandardDirs::kde_default("data") + "kpresenter/toolbar/");
+    }
     return s_global;
 }
 

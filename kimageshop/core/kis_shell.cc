@@ -34,7 +34,7 @@
 #include "kis_pluginserver.h"
 
 KisShell::KisShell( const char* name )
-    : KoMainWindow( name )
+    : KoMainWindow( KisFactory::global(), name )
 {
   resize(800, 600);
 }

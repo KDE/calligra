@@ -55,7 +55,7 @@ KIllustratorChild::~KIllustratorChild ()
 KIllustratorDocument::KIllustratorDocument( QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parent, name, singleViewMode )
 {
-    setInstance( KIllustratorFactory::global() ); 
+    setInstance( KIllustratorFactory::global() );
     m_gdocument = new GDocument();
     GObject::registerPrototype ("object", new GPart ());
 }

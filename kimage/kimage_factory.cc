@@ -18,12 +18,12 @@ KInstance* KImageFactory::s_global = 0;
 KImageFactory::KImageFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-  s_global = new KInstance( "kimage" );
 }
 
 KImageFactory::~KImageFactory()
 {
-  delete s_global;
+  if ( s_global ) 
+    delete s_global;
 }
 
 QObject* KImageFactory::create( QObject* parent, const char* name, const char*classname, const QStringList & )
@@ -37,19 +37,21 @@ QObject* KImageFactory::create( QObject* parent, const char* name, const char*cl
 */
 
     bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
- 
+
     KImageDocument *doc = new KImageDocument( parent, name, !bWantKoDocument );
-    
+
     if ( !bWantKoDocument )
       doc->setReadWrite( false );
-    
+
     emit objectCreated(doc);
     return doc;
 }
 
 KInstance* KImageFactory::global()
 {
-    return s_global;
+   if ( !s_global )
+     s_global = new KInstance( "kimage" );
+   return s_global;
 }
 
 #include "kimage_factory.moc"
