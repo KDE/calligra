@@ -244,21 +244,12 @@ protected:
   
 };
 
-/*class GOState
+class GOState
 {
-  friend class GObject;
-  friend class GGroup;
-protected:
-  GOState (){}
-
-public:
-    // should be protected, but ...
-    virtual ~GOState () {}
-
 private:
   QWMatrix matrix;
   GStyle st;
   unsigned int rcount;
-};*/
+};
 
 #endif

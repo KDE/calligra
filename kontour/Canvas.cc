@@ -101,7 +101,7 @@ void Canvas::outlineMode(bool flag)
 
 void Canvas::updateBuf()
 {
-  updateBuf(geometry());
+  updateBuf(rect());
 }
 
 void Canvas::updateBuf(const QRect &rect)
@@ -163,7 +163,7 @@ void Canvas::center(int x, int y)
   vBar->setValue(y);
 }
 
-void Canvas::zoomToPoint(double scale, int x, int y)
+void Canvas::zoomToPoint(double /*scale*/, int /*x*/, int /*y*/)
 {
 
 }
@@ -365,7 +365,6 @@ void Canvas::resizeEvent(QResizeEvent *)
 void Canvas::paintEvent(QPaintEvent *e)
 {
   const QRect &rect = e->rect();
-  updateBuf(rect);
   bitBlt(this, rect.x(), rect.y(), buffer, rect.x(), rect.y(), rect.width(), rect.height());
 }
 
@@ -439,7 +438,7 @@ void Canvas::scrollX(int v)
 {
   mXOffset = mXCenter - v;
   emit offsetXChanged(mXOffset);
-//  bitBlt(buffer, 0, rect.y(), buffer, 0, rect.y(), buffer.width(), rect.height());
+  //TODO BitBlt
   updateBuf();
   repaint();
 }
@@ -448,6 +447,7 @@ void Canvas::scrollY(int v)
 {
   mYOffset = mYCenter - v;
   emit offsetYChanged(mYOffset);
+  //TODO BitBlt
   updateBuf();
   repaint();
 }

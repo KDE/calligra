@@ -57,7 +57,7 @@
 #include "OvalTool.h"
 #include "ZoomTool.h"
 #include "LayerPanel.h"
-#include "koColorChooser.h"
+#include <koColorChooser.h>
 #include "DeleteCmd.h"
 
 KontourView::KontourView(QWidget *parent, const char *name, KontourDocument *doc)

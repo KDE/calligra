@@ -43,7 +43,7 @@ private:
 /*class ObjectManipCmd : public Command
 {
 protected:
-  ObjectManipCmd(GDocument *doc, const QString &name);
+  ObjectManipCmd(GDocument *aGDoc, const QString &name);
   ObjectManipCmd(GObject *obj, const QString &name);
 
 public:
@@ -55,6 +55,6 @@ public:
 protected:
   QPtrVector<GObject> objects;
   QPtrVector<GOState> states;
-};
-*/
+};*/
+
 #endif

@@ -175,6 +175,7 @@ void RectTool::processEvent(QEvent *e)
       CreateRectCmd *cmd = new CreateRectCmd(toolController()->view()->activeDocument(), rect);
       KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
       doc->history()->addCommand(cmd);
+      canvas->updateBuf(r);
       canvas->repaint(r);
       state = S_Init;
     }
