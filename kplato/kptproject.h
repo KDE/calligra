@@ -97,7 +97,7 @@ public:
     virtual bool openDialog();
     
     virtual void drawGanttBar(QCanvas* canvas, KPTTimeScale* ts, int y, int h);
-    virtual void drawPert(KPTPertCanvas *view, QCanvas* canvas, int col);
+    virtual void drawPert(KPTPertCanvas *view, QCanvas* canvas);
     virtual void drawPertRelations(QCanvas* canvas);
 
     KPTDuration getEarliestStart() const { return startNode.earliestStart; }

@@ -66,7 +66,7 @@ void KPTPertCanvas::draw(KPTProject& project)
     clear();
     updateContents();
 	m_rows.resize(0);
-	project.drawPert(this, m_canvas, 0);
+	project.drawPert(this, m_canvas);
 	project.drawPertRelations(m_canvas);
 	QSize s = canvasSize();
 	m_canvas->resize(s.width(), s.height());

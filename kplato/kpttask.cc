@@ -292,48 +292,30 @@ void KPTTask::drawGanttBar(QCanvas* canvas,KPTTimeScale* ts, int y, int h) {
     delete dur;
 }
 
-void KPTTask::drawPert(KPTPertCanvas *view, QCanvas* canvas, int col) {
+void KPTTask::drawPert(KPTPertCanvas *view, QCanvas* canvas) {
 	if ( numChildren() > 0 ) {
 	    QPtrListIterator<KPTNode> nit(m_nodes); 
 		for ( ; nit.current(); ++nit ) {
-		    nit.current()->drawPert(view, canvas, col);
+		    nit.current()->drawPert(view, canvas);
 		}
     } else {
-		if (m_drawn) {
-		    if (m_pertItem->column() <= col) {
-			    delete m_pertItem;
-				int row = view->row(col);
-				m_pertItem = new KPTPertCanvasItem(canvas, *this, row, col);
-				m_pertItem->show();
-				m_drawn = true;
-				view->setRow(row+1, col);
-			}
-		} else {
+		if (!m_drawn) {
 		    if (!allParentsDrawn()) {
 			    return;
 			}
-            col = parentColumn() + 1;
+            int col = getColumn();
 			int row = view->row(col);
 			m_pertItem = new KPTPertCanvasItem(canvas, *this, row, col);
 			m_pertItem->show();
 			m_drawn = true;
 			view->setRow(row+1, col);
-        	kdDebug()<<k_funcinfo<<" draw ("<<row<<","<<col<<"): "<<m_name<<endl;
+        	//kdDebug()<<k_funcinfo<<" draw ("<<row<<","<<col<<"): "<<m_name<<endl;
 	    }
         QPtrListIterator<KPTRelation> cit(m_dependChildNodes);
 		for ( ; cit.current(); ++cit ) {
-		    cit.current()->child()->drawPert(view, canvas, col+1);
+		    cit.current()->child()->drawPert(view, canvas);
 		}
 	}
-}
-
-bool KPTTask::allParentsDrawn() {
-    QPtrListIterator<KPTRelation> it(m_dependParentNodes);
-	for ( ; it.current(); ++it ) {
-		if (!it.current()->parent()->isDrawn())
-		    return false;
-	}
-	return true;
 }
 
 void KPTTask::drawPertRelations(QCanvas* canvas) {

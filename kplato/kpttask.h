@@ -91,9 +91,8 @@ public:
     virtual bool openDialog();
  
     virtual void drawGanttBar(QCanvas* canvas,KPTTimeScale* ts, int y, int h);
-    virtual void drawPert(KPTPertCanvas *view, QCanvas* canvas, int col);
+    virtual void drawPert(KPTPertCanvas *view, QCanvas* canvas);
     virtual void drawPertRelations(QCanvas* canvas);
-   bool allParentsDrawn();
    
 private:
     QPtrList<KPTResourceGroup> m_resource;

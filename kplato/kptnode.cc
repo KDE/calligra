@@ -212,14 +212,18 @@ bool KPTNode::isChildOf(KPTNode *node) {
 	return false;
 }
 
-int KPTNode::parentColumn() {
+int KPTNode::getColumn() {
     //kdDebug()<<k_funcinfo<<endl;
-	int col = -1;
+	int col = 0;
     for (int i=0; i<numDependParentNodes(); i++) {
         KPTRelation *rel = getDependParentNode(i);
-        KPTPertCanvasItem *item = rel->parent()->pertItem();
-        if (item)
-		    col = QMAX(col,item->column());
+        KPTPertCanvasItem *parent = rel->parent()->pertItem();
+        if (parent) {
+		    if (rel->timingRelation() == FINISH_START)
+		        col = QMAX(col,parent->column()+1);
+			else
+			    col = QMAX(col, parent->column());
+	    }
 	}
 	return col;
 }
@@ -359,6 +363,16 @@ void KPTNode::showPopup() {
 int KPTNode::width() {
     return m_pertItem->rect().width(); 
 }
+
+bool KPTNode::allParentsDrawn() {
+    QPtrListIterator<KPTRelation> it(m_dependParentNodes);
+	for ( ; it.current(); ++it ) {
+		if (!it.current()->parent()->isDrawn())
+		    return false;
+	}
+	return true;
+}
+
 
 ////////////////////////////////////   KPTEffort   ////////////////////////////////////////////
 

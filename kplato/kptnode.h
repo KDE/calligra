@@ -126,7 +126,7 @@ public:
     
     KPTRelation *findRelation(KPTNode *node);
     bool isChildOf(KPTNode *node);
-	int parentColumn();
+	int getColumn();
 	
     // These are calculated, or set manually if node is MustStartOn
     void setStartTime(KPTDuration startTime) { m_startTime=startTime; }
@@ -204,7 +204,7 @@ public:
     const KPTDuration& expectedDuration(const KPTDuration &start);
 
     virtual void drawGanttBar(QCanvas*, KPTTimeScale*, int , int) {;}
-    virtual void drawPert(KPTPertCanvas * /*view */, QCanvas*, int) {;}
+    virtual void drawPert(KPTPertCanvas * /*view */, QCanvas*) {;}
     virtual void drawPertRelations(QCanvas*) {;}
     
     virtual void setStartNotEarlier(KPTDuration time) { sneTime = time; }
@@ -228,6 +228,7 @@ public:
 	void setPertItem(KPTPertCanvasItem *item) { m_pertItem = item; }
     int x();
     int width();
+	bool allParentsDrawn();
 	
 protected:
     /**

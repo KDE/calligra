@@ -25,6 +25,7 @@
 #include <qcanvas.h>
 #include <qrect.h>
 
+class KPTRelation;
 class QPainter;
 
 class KPTPertCanvasItem : public QCanvasRectangle
@@ -75,6 +76,9 @@ public:
     virtual int rtti() const;
     static int RTTI;
 	
+	void setFinishStartPoints();
+	void setFinishFinishPoints();
+	void setStartStartPoints();
 	QPointArray areaPoints() const;
 	
 protected:
@@ -83,6 +87,19 @@ protected:
 private:
     KPTRelation *m_rel;
 	int left, top, right, bottom;
+
+	int parentTop;
+	int parentBottom;
+	int childTop;
+	
+	int childRow;
+	int childCol;
+	int parentRow;
+	int parentCol;
+
+	int wgap;
+	int hgap;
+
 	
 #ifndef NDEBUG
     void printDebug( int );

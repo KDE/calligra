@@ -110,24 +110,27 @@ void KPTMilestone::drawGanttBar(QCanvas* canvas,KPTTimeScale* ts, int y, int h) 
     p->show();
     delete start;
 }
-void KPTMilestone::drawPert(KPTPertCanvas *view, QCanvas* canvas, int col) {
+void KPTMilestone::drawPert(KPTPertCanvas *view, QCanvas* canvas) {
 	if ( numChildren() > 0 ) {
 	    QPtrListIterator<KPTNode> nit(m_nodes); 
 		for ( ; nit.current(); ++nit ) {
-		    nit.current()->drawPert(view, canvas, col);
+		    nit.current()->drawPert(view, canvas);
 		}
     } else {
 		if (!m_drawn) {
-            col = parentColumn() +1;
+		    if (!allParentsDrawn()) {
+			    return;
+			}
+            int col = getColumn();
 		    int row = view->row(col);
             m_pertItem = new KPTPertCanvasItem(canvas, *this, row, col);
 			m_pertItem->show();
 			m_drawn = true;
-			view->setRow(++row, col);
+			view->setRow(row+1, col);
 	    }
         QPtrListIterator<KPTRelation> cit(m_dependChildNodes);
 		for ( ; cit.current(); ++cit ) {
-		    cit.current()->child()->drawPert(view, canvas, col+1);
+		    cit.current()->child()->drawPert(view, canvas);
 		}
 	}
 }
