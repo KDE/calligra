@@ -39,7 +39,7 @@ class KMacroCommand;
 class KoDocumentEntry;
 class QPainter;
 class KSpellConfig;
-class KWAutoFormat;
+class KoAutoFormat;
 class KCommand;
 class KCommandHistory;
 class KoVariable;
@@ -323,7 +323,7 @@ public:
 //    void setNoteType( KWFootNoteManager::NoteType nt ) { footNoteManager.setNoteType( nt ); }
 //    KWFootNoteManager::NoteType getNoteType() const { return footNoteManager.getNoteType(); }
 
-    KWAutoFormat * getAutoFormat() { return m_autoFormat; }
+    KoAutoFormat * getAutoFormat() { return m_autoFormat; }
 
     // This is used upon loading, to delay certain things until completeLoading.
     // For KWTextImage
@@ -578,7 +578,7 @@ private:
 
     KCommandHistory * m_commandHistory;
 //    KWFootNoteManager footNoteManager;
-    KWAutoFormat * m_autoFormat;
+    KoAutoFormat * m_autoFormat;
 
     // Shared between loadXML and loadComplete
     QString m_urlIntern;

@@ -52,7 +52,6 @@
 #include <kspell.h>
 
 #include <KWordDocIface.h>
-#include "kwautoformat.h"
 //#define DEBUG_PAGES
 
 /******************************************************************/
@@ -152,8 +151,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_lastViewMode="ModeNormal";
 
-    m_autoFormat = new KWAutoFormat(this);
-
     m_commandHistory = new KWCommandHistory( this );
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
     connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
@@ -174,6 +171,9 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_pasteFramesetsMap = 0L;
     m_varFormatCollection = new KoVariableFormatCollection;
     m_varColl=new KWVariableCollection;
+
+    m_autoFormat = new KoAutoFormat(this,m_varColl,m_varFormatCollection );
+
     m_formulaDocument = 0L; // created on demand
 
     m_slDataBase = new KWMailMergeDataBase( this );

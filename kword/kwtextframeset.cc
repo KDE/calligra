@@ -51,7 +51,6 @@
 #include "KWordTextFrameSetIface.h"
 #include "KWordTextFrameSetEditIface.h"
 #include "KWordFrameSetIface.h"
-#include "kwautoformat.h"
 #include <kdebug.h>
 #include <assert.h>
 
@@ -2148,7 +2147,7 @@ void KWTextFrameSetEdit::copy()
 
 void KWTextFrameSetEdit::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch )
 {
-    KWAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
+    KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
     if ( autoFormat )
         autoFormat->doAutoFormat( cursor, parag, index, ch, textObject());
 }

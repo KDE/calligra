@@ -59,7 +59,7 @@
 #include <koVariable.h>
 #include <koVariableDlgs.h>
 #include "koInsertLink.h"
-#include "kwautoformat.h"
+#include <koAutoFormat.h>
 
 #include <koMainWindow.h>
 #include <koTemplateCreateDia.h>
