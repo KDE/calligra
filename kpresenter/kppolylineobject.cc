@@ -209,8 +209,8 @@ void KPPolylineObject::updatePoints( double _fx, double _fy )
     KoPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = (int)( (double)point.x() * _fx );
-        double tmpY = (int)( (double)point.y() * _fy );
+        double tmpX = point.x() * _fx;
+        double tmpY = point.y() * _fy;
 
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
