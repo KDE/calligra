@@ -65,8 +65,8 @@ class AmiProLayout
     bool word_underline, double_underline;
     bool subscript, superscript, strikethrough;
     Qt::AlignmentFlags align;
-    const static float Single = -1, OneAndHalf = -1.5, Double = -2;
     float linespace;
+    float spaceBefore, spaceAfter;
     AmiProLayout();
     AmiProLayout( const AmiProLayout& );
     AmiProLayout& operator=( const AmiProLayout& );
@@ -86,6 +86,7 @@ class AmiProStyle
     bool subscript, superscript, strikethrough;
     Qt::AlignmentFlags align;
     float linespace;
+    float spaceBefore, spaceAfter;
     AmiProStyle();
     AmiProStyle( const AmiProStyle& );
     AmiProStyle& operator=( const AmiProStyle& );

@@ -193,7 +193,7 @@ along with an example:
       516
       [rght]
           16833     paper height, 16833/20 = 841.65 pt
-	  11906     paper width, 11906/20 =595.3 pt
+	  11906     paper width, 11906/20 = 595.3 pt
 	  4
 	  1440
 	  1440

@@ -134,6 +134,10 @@ static QString AmiProLayoutAsXML( const AmiProLayout& layout )
           layout.align==Qt::AlignJustify ? "justify" :
           "left";
 
+  QString offsets;
+  offsets = "before=\"" + QString::number(layout.spaceBefore) +
+            "\" after=\"" + QString::number(layout.spaceAfter) + "\"";
+
   QString linespacing;
   linespacing = layout.linespace==AmiPro::LS_Single ? "0" :
                 layout.linespace==AmiPro::LS_OneAndHalf ? "oneandhalf" :
@@ -144,6 +148,7 @@ static QString AmiProLayoutAsXML( const AmiProLayout& layout )
   result.append( "  <NAME value=\"" + referredStyle + "\" />\n" );
   result.append( "  <FLOW align=\"" + align + "\" />\n" );
   result.append( "  <LINESPACING value=\"" + linespacing + "\" />\n" );
+  result.append( "  <OFFSETS " + offsets + " />\n" );
   result.append( "  <LEFTBORDER width=\"0\" style=\"0\" />\n" );
   result.append( "  <RIGHTBORDER width=\"0\" style=\"0\" />\n" );
   result.append( "  <TOPBORDER width=\"0\" style=\"0\" />\n" );
@@ -188,11 +193,22 @@ static QString AmiProStyleAsXML( const AmiProStyle& style )
           style.align==Qt::AlignJustify ? "justify" :
           "left";
 
+  QString linespacing;
+  linespacing = style.linespace==AmiPro::LS_Single ? "0" :
+                style.linespace==AmiPro::LS_OneAndHalf ? "oneandhalf" :
+                style.linespace==AmiPro::LS_Double ? "double" :
+                  QString::number( style.linespace );
+
+  QString offsets;
+  offsets = "before=\"" + QString::number(style.spaceBefore) +
+            "\" after=\"" + QString::number(style.spaceAfter) + "\"";
+
   result.append( "<STYLE>\n" );
   result.append( "  <NAME value=\"" + style.name + "\" />\n" );
-  //result.append( "  <FOLLOWING name=\"Standard\" />\n" );
+  result.append( "  <FOLLOWING name=\"Body Text\" />\n" );
   result.append( "  <FLOW align=\"" + align + "\" />\n" );
-  result.append( "  <LINESPACING value=\"0\" />\n" );
+  result.append( "  <LINESPACING value=\"" + linespacing + "\" />\n" );
+  result.append( "  <OFFSETS " + offsets + " />\n" );
   result.append( "  <LEFTBORDER width=\"0\" style=\"0\" />\n" );
   result.append( "  <RIGHTBORDER width=\"0\" style=\"0\" />\n" );
   result.append( "  <TOPBORDER width=\"0\" style=\"0\" />\n" );

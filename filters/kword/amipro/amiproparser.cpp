@@ -293,6 +293,8 @@ bool AmiProParser::parseStyle( const QStringList& lines )
   if( ls_flag & 4 ) style.linespace = AmiPro::LS_Double;
   if( ls_flag & 8 ) 
     style.linespace = lines[15].stripWhiteSpace().toFloat() / 20.0;
+  style.spaceBefore = lines[17].stripWhiteSpace().toFloat() / 20.0;
+  style.spaceAfter = lines[18].stripWhiteSpace().toFloat() / 20.0;
 
   m_styleList.append( style );
   if( m_listener )
@@ -567,6 +569,7 @@ AmiProLayout::AmiProLayout()
   subscript = superscript = strikethrough = FALSE;
   align = Qt::AlignLeft;
   linespace = AmiPro::LS_Single;
+  spaceBefore = spaceAfter = 0;
 }
 
 void AmiProLayout::assign( const AmiProLayout &l )
@@ -585,6 +588,8 @@ void AmiProLayout::assign( const AmiProLayout &l )
   strikethrough = l.strikethrough;
   align = l.align;
   linespace = l.linespace;
+  spaceBefore = l.spaceBefore;
+  spaceAfter = l.spaceAfter;
 }
 
 AmiProLayout::AmiProLayout( const AmiProLayout& l )
@@ -613,6 +618,8 @@ void AmiProLayout::applyStyle( const AmiProStyle& style )
   strikethrough = style.strikethrough;
   align = style.align;
   linespace = style.linespace;
+  spaceBefore = style.spaceBefore;
+  spaceAfter = style.spaceAfter;
 }
 
 // style definition
@@ -626,6 +633,7 @@ AmiProStyle::AmiProStyle()
   word_underline = double_underline = 
   subscript = superscript = strikethrough = FALSE;
   linespace = AmiPro::LS_Single;
+  spaceBefore = spaceAfter = 0;
 }
 
 void AmiProStyle::assign( const AmiProStyle& s )
@@ -644,6 +652,8 @@ void AmiProStyle::assign( const AmiProStyle& s )
   strikethrough = s.strikethrough;
   align = s.align;
   linespace = s.linespace;
+  spaceBefore = s.spaceBefore;
+  spaceAfter = s.spaceAfter;
 }
 
 AmiProStyle::AmiProStyle( const AmiProStyle& s )
