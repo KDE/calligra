@@ -21,23 +21,11 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 
 // <test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	VPath* path = new VPath();
-	double x1, y1, x2, y2;
-
-	x1 = 200.0; y1 = 100.0;
-	path->moveTo(x1,y1);
-
-	x1 = 300.0; y1 = 100.0;
-	x2 = 300.0; y2 = 200.0;
-	path->arcTo(x1,y1,x2,y2,100.0);
-	x1 = 300.0; y1 = 300.0;
-	x2 = 200.0; y2 = 300.0;
-	path->arcTo(x1,y1,x2,y2,100.0);
-	x1 = 100.0; y1 = 300.0;
-	x2 = 100.0; y2 = 200.0;
-	path->arcTo(x1,y1,x2,y2,100.0);
-	x1 = 100.0; y1 = 100.0;
-	x2 = 200.0; y2 = 100.0;
-	path->arcTo(x1,y1,x2,y2,100.0);
+	path->moveTo( 200.0, 100.0 );
+	path->arcTo( 300.0, 100.0, 300.0, 200.0,100.0 );
+	path->arcTo( 300.0, 300.0, 200.0, 300.0, 100.0 );
+	path->arcTo( 100.0, 300.0, 100.0, 200.0, 100.0 );
+	path->arcTo( 100.0, 100.0, 200.0, 100.0 ,100.0);
 	path->close();
 	path->scale( 2.0, 1.0 );
 	m_layers.last()->objects().append( path );

@@ -29,7 +29,9 @@ public:
 	virtual const QPointArray& getQPointArray( const VSegment& prevSeg,
 		const double& zoomFactor ) const = 0;
 
-	const VPoint& lastPoint() const { return m_lastPoint; }
+	virtual const VPoint* firstCtrlPoint( const VSegment& prevSeg ) { return 0L; }
+	virtual const VPoint* lastCtrlPoint( const VSegment& prevSeg ) { return 0L; }
+	const VPoint* lastPoint() const { return &m_lastPoint; }
 
 protected:
 	// m_firstPoint is a waste, that's why we skip it
@@ -53,18 +55,26 @@ public:
 class VCurve : public VSegment
 {
 public:
+	// describes how control-points are handled (see VPath::curve*To() for this)
+	enum CtrlPointsConstraint { no = 0, firstFixed = 1, lastFixed = 2 };
+
 	VCurve(
 		const double fcp_x = 0.0, const double fcp_y = 0.0,
 		const double lcp_x = 0.0, const double lcp_y = 0.0,
-		const double lp_x = 0.0, const double lp_y = 0.0 );
+		const double lp_x = 0.0, const double lp_y = 0.0,
+		const CtrlPointsConstraint cpc = no );
 	virtual ~VCurve();
 
-	const QPointArray& getQPointArray(  const VSegment& prevSeg,
+	const QPointArray& getQPointArray( const VSegment& prevSeg,
 		const double& zoomFactor ) const {};
+
+	virtual const VPoint* firstCtrlPoint( const VSegment& prevSeg );
+	virtual const VPoint* lastCtrlPoint( const VSegment& prevSeg );
 
 private:
 	VPoint m_firstCtrlPoint;
 	VPoint m_lastCtrlPoint;
+	CtrlPointsConstraint m_ctrlPointConstraint;
 
 	// a bezier lies completely inside the "minmax box" (this information is
 	// usefull for speeding up intersection-calculations):
@@ -84,7 +94,7 @@ public:
 	virtual void draw( QPainter& painter, const QRect& rect,
 		const double zoomFactor = 1.0 );
 
-	const VPoint& currentPoint() const;
+	const VPoint* currentPoint() const;
 	const VSegment* lastSegment() const { return m_segments.getLast(); };
 
 	// postscript-like commands:

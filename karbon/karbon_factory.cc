@@ -73,19 +73,21 @@ KarbonFactory::aboutData()
 	if ( !s_aboutData )
 	{
 		s_aboutData = new KAboutData(
-			"karbon",I18N_NOOP( "Karbon" ),
-			"0.0.1", I18N_NOOP( "Yet Another Vector Graphics Program" ),
+			"karbon",
+			I18N_NOOP( "Karbon" ),
+			"0.0.1",
+			I18N_NOOP( "Yet Another Vector Graphics Program" ),
 			KAboutData::License_GPL,
 			I18N_NOOP( "(c) 2001, The Karbon Developers" ) );
 		s_aboutData->addAuthor(
 			"Lennart Kudling",
 			I18N_NOOP( "Idea, current maintainer" ),
 			"kudling@kde.org",
-			"http://www.kudling.de" );
+			"http://www.kudling.de/kde/" );
 
-		s_aboutData->addCredit( "Simon Hausmann" );
-		s_aboutData->addCredit( "Frerich Raabe" );
-		s_aboutData->addCredit( "Nikolas Zimmermann" );
+		s_aboutData->addCredit( "Simon Hausmann, Frerich Raabe, Werner Trobin, "
+			"Nikolas Zimmermann",
+			"interesting discussions" );
 	}
 	return s_aboutData;
 }

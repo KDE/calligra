@@ -38,15 +38,35 @@ VLine::~VLine()
 VCurve::VCurve(
 		const double fcp_x, const double fcp_y,
 		const double lcp_x, const double lcp_y,
-		const double lp_x, const double lp_y )
+		const double lp_x, const double lp_y,
+		const CtrlPointsConstraint cpc )
 	: VSegment( lp_x, lp_y ),
 	  m_firstCtrlPoint( fcp_x, fcp_y ),
-	  m_lastCtrlPoint( lcp_x, lcp_y )
+	  m_lastCtrlPoint( lcp_x, lcp_y ),
+	  m_ctrlPointConstraint( cpc )
 {
 }
 
 VCurve::~VCurve()
 {
+}
+
+const VPoint*
+VCurve::firstCtrlPoint( const VSegment& prevSeg )
+{
+	if ( m_ctrlPointConstraint == firstFixed )
+		return prevSeg.lastPoint();
+	else
+		return &m_firstCtrlPoint;
+}
+
+const VPoint*
+VCurve::lastCtrlPoint( const VSegment& prevSeg )
+{
+	if ( m_ctrlPointConstraint == lastFixed )
+		return &m_lastPoint;
+	else
+		return &m_lastCtrlPoint;
 }
 
 // -----------------------------------
@@ -171,7 +191,7 @@ VPath::draw( QPainter& painter, const QRect& rect, const double zoomFactor )
 */
 }
 
-const VPoint&
+const VPoint*
 VPath::currentPoint() const
 {
 	return( m_segments.getLast()->lastPoint() );
