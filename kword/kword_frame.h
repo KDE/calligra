@@ -443,10 +443,12 @@ public:
         KWFrameSet *frameSet;
         unsigned int row, col;
         unsigned int rows, cols;
+        ~Cell() {if(frameSet) delete frameSet; }
     };
 
     KWGroupManager( KWordDocument *_doc );
     KWGroupManager( const KWGroupManager &original );
+    virtual ~KWGroupManager();
 
     void addFrameSet( KWFrameSet *fs, unsigned int row, unsigned int col );
     KWFrameSet *getFrameSet( unsigned int row, unsigned int col );

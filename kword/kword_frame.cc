@@ -444,7 +444,7 @@ KWFrame *KWFrame::getCopy() {
     //frm->setBRight( getBRight() );
     //frm->setBTop( getBTop() );
     //frm->setBBottom( getBBottom() );
-    frm->setBackgroundColor(getBackgroundColor());
+    //frm->setBackgroundColor(getBackgroundColor());
     frm->setFrameBehaviour(getFrameBehaviour());
     frm->setNewFrameBehaviour(getNewFrameBehaviour());
     frm->setSheetSide(getSheetSide());
@@ -698,7 +698,6 @@ void KWTextFrameSet::assign( KWTextFrameSet *fs )
     }
 
     p2->setNext( 0L );
-//kdDebug() << "assign: frames "  << getFrame(0) << ", " << fs->getFrame(0) << endl;
     getFrame( 0 )->setBackgroundColor( fs->getFrame( 0 )->getBackgroundColor() );
     getFrame( 0 )->setLeftBorder( fs->getFrame( 0 )->getLeftBorder2() );
     getFrame( 0 )->setRightBorder( fs->getFrame( 0 )->getRightBorder2() );
@@ -713,6 +712,8 @@ void KWTextFrameSet::assign( KWTextFrameSet *fs )
 /*================================================================*/
 KWTextFrameSet::~KWTextFrameSet()
 {
+    if(doc) doc->delFrameSet(this);
+
     KWParag *p = getLastParag();
 
     while ( p != parags )
@@ -805,6 +806,7 @@ KWFrame *tmpFrame=frames.at(0);
             }
         }
     }
+    // sanity check. Keep this as long as things go wrong with frames.. TZ
 if(amount != frames.count())  {
     kdDebug() << "ERROR: Found a problem with a frameset. One or more frames have been removed!" << endl;
     kdDebug() << "       frame size: " << tmpFrame->x() << ","<< tmpFrame->y() << "," << tmpFrame->width() << "," << tmpFrame->height() << endl;
@@ -1244,8 +1246,7 @@ KWTextFrameSet *KWTextFrameSet::getCopy() {
         KWFrame *thisFrame=getFrame(i)->getCopy();
         newFS->addFrame(thisFrame);
     }
-kdDebug() << "orig has " << getNumFrames() << ", new has " << newFS->getNumFrames() << endl;
-    if(newFS->getNumFrames() >0)
+    if(newFS->getNumFrames() >0) 
         newFS->assign(this);
     return newFS;
 }
@@ -1544,7 +1545,7 @@ void KWPartFrameSet::activate( QWidget *_widget )
     KoDocument* part = child->document();
     if ( !part )
         return;
-    kdDebug() << "Child activated. part="<<part<<" child="<<child<<endl;
+    //kdDebug() << "Child activated. part="<<part<<" child="<<child<<endl;
     view->partManager()->addPart( part, false );
     view->partManager()->setActivePart(  part, view );
 }
@@ -2078,6 +2079,7 @@ KWGroupManager::KWGroupManager( const KWGroupManager &original ) :
             cell->rows = lCells.at(i)->rows;
             cell->cols = lCells.at(i)->cols;
             cell->frameSet= dynamic_cast<KWTextFrameSet*>(lCells.at(i)->frameSet)->getCopy();
+            cell->frameSet->setGroupManager(this);
             if ( anchored ) {
                 KWFrame *topLeftFrame = cell->frameSet->getFrame( 0 );
 
@@ -2087,7 +2089,14 @@ KWGroupManager::KWGroupManager( const KWGroupManager &original ) :
             cells.append( cell );
         }
     }
+
+    doc->addGroupManager(this);
     init();
+}
+
+/*================================================================*/
+KWGroupManager::~KWGroupManager() {
+    if(doc) doc->delGroupManager(this); 
 }
 
 /*================================================================*/
@@ -2455,7 +2464,7 @@ void KWGroupManager::recalcRows()
     for ( unsigned int f = 0; f < cells.count(); f++ ) {
         c = cells.at( f );
         if ( c->frameSet->getNumFrames() > 1 ) {
-kdDebug () << "ERROR: found more than one frameset on a tablecel !! " << endl;
+            kdDebug () << "ERROR: found more than one frameset on a tablecel !! " << endl;
             while ( true ) {
                 if ( c->frameSet->getNumFrames() > 1 )
                     c->frameSet->delFrame( 1 );
@@ -2494,7 +2503,7 @@ bool KWGroupManager::hasSelectedFrame()
 /*================================================================*/
 void KWGroupManager::moveBy( int dx, int dy )
 {
-    kdDebug(32001) << "KWGroupManager::moveBy(" << dx << ", " << dy << ");" << endl;
+    //kdDebug(32001) << "KWGroupManager::moveBy(" << dx << ", " << dy << ");" << endl;
     // Ignore the x-offset.
     dx = 0;
     for ( unsigned int i = 0; i < cells.count(); i++ )
@@ -2831,7 +2840,6 @@ bool KWGroupManager::joinCells() {
         } else
             break;
     }
-kdDebug() << "joining ("<< rowBegin << ","<< colBegin << ") up until (" << rowEnd << "," << colEnd << ")" << endl;
     // if just one cell selected for joining; exit.
     if(rowBegin == rowEnd && colBegin == colEnd ||
             getCell(rowBegin,colBegin) == getCell(rowEnd,colEnd))
@@ -2873,6 +2881,7 @@ bool KWGroupManager::splitCell()
 
     kdDebug () << "Not implemented yet!" << endl;
     return false;
+/*
     Cell *cell = getCell( row, col );
     if ( cell->rows > 1 ) {
         unsigned int rows = cell->rows;
@@ -2894,7 +2903,7 @@ bool KWGroupManager::splitCell()
         return true;
     }
 
-    return false;
+    return false; */
 }
 
 /*================================================================*/

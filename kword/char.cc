@@ -53,6 +53,7 @@ KWCharAnchor::KWCharAnchor() :
 KWCharAnchor::KWCharAnchor(const KWCharAnchor &original) :
     KWCharAttribute()
 {
+kdDebug() << "KWCharAnchor::KWCharAnchor(orig)" << endl;
     classId = ID_KWCharAnchor;
     anchored = original.anchored;
     origin = original.origin;
@@ -1043,33 +1044,30 @@ QCString KWString::utf8( bool _decoded )
 void freeChar( KWChar& _char, KWordDocument *_doc, bool allowRemoveFn )
 {
     if ( _char.attrib ) {
-        switch( _char.attrib->getClassId() ) {
-        case ID_KWCharFormat:
-        case ID_KWCharImage:
-        case ID_KWCharTab:
-        case ID_KWCharVariable:
-            delete _char.attrib;
-            break;
-        case ID_KWCharFootNote: {
-            if ( allowRemoveFn ) {
-                _doc->getFootNoteManager().
-                    removeFootNote( dynamic_cast<KWCharFootNote*>( _char.attrib )->getFootNote() );
-            }
-            delete _char.attrib;
-        } break;
-        case ID_KWCharAnchor: {
-                KWCharFootNote *anchor = (KWCharFootNote *)_char.attrib;
-            if ( allowRemoveFn ) {
-                kdError(32001) << "TBD: implement delete table" << endl;
-            }
-            delete _char.attrib;
-        } break;
-        default: ; //assert( 0 );
-        }
-        _char.attrib = 0L;
-        if ( _char.autoformat )
-            delete _char.autoformat;
-        _char.autoformat = 0L;
+	switch( _char.attrib->getClassId() ) {
+	case ID_KWCharFormat:
+	case ID_KWCharImage:
+	case ID_KWCharTab:
+	case ID_KWCharVariable:
+	    delete _char.attrib;
+	    break;
+	case ID_KWCharFootNote: {
+	    if ( allowRemoveFn ) {
+		_doc->getFootNoteManager().
+		    removeFootNote( dynamic_cast<KWCharFootNote*>( _char.attrib )->getFootNote() );
+	    }
+	    delete _char.attrib;
+	} break;
+	case ID_KWCharAnchor: {
+            KWGroupManager *gm = (KWGroupManager *)_char.attrib;
+	    delete _char.attrib;
+	} break;
+	default: ; //assert( 0 );
+	}
+	_char.attrib = 0L;
+	if ( _char.autoformat )
+	    delete _char.autoformat;
+	_char.autoformat = 0L;
     }
 }
 
