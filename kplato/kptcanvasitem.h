@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2003 - 2004 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+   version 2 of the License.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -206,9 +206,16 @@ private:
 
 };
 
+class KPTItemBase
+{
+protected:
+    int kdLinkType(int relationType);
+};
+
+
 /////////////////   KPTGanttViewSummaryItem   ////////////////////
 
-class KPTGanttViewSummaryItem : public KDGanttViewSummaryItem
+class KPTGanttViewSummaryItem : public KDGanttViewSummaryItem, public KPTItemBase
 {
 public:
     KPTGanttViewSummaryItem(KDGanttView *parent, KPTNode *node);
@@ -230,7 +237,7 @@ protected:
 
 /////////////////   KPTGanttViewTaskItem   ////////////////////
 
-class KPTGanttViewTaskItem : public KDGanttViewTaskItem
+class KPTGanttViewTaskItem : public KDGanttViewTaskItem, public KPTItemBase
 {
 public:
     KPTGanttViewTaskItem(KDGanttView *parent, KPTTask *task);
@@ -252,7 +259,7 @@ protected:
 
 /////////////////   KPTGanttViewEventItem   ////////////////////
 
-class KPTGanttViewEventItem : public KDGanttViewEventItem
+class KPTGanttViewEventItem : public KDGanttViewEventItem, public KPTItemBase
 {
 public:
     KPTGanttViewEventItem(KDGanttView *parent, KPTTask *task);

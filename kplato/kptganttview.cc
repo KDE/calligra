@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2002 - 2004 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+   version 2 of the License.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -75,6 +75,7 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     m_selectColor = QColor(255, 221, 118);
     
     m_gantt = new KDGanttView(this, "Gantt view");
+    m_gantt->setLinkItemsEnabled(true);
     // For test, we need "slack functinallity" in KDGantt...
     m_gantt->addColumn("Earliest start");
     m_gantt->addColumn("Start");
@@ -100,6 +101,10 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
 
     connect(m_gantt, SIGNAL(gvItemLeftClicked(KDGanttViewItem*)), SLOT(slotGvItemClicked(KDGanttViewItem*)));
 
+    connect(m_gantt, SIGNAL(linkItems(KDGanttViewItem*, KDGanttViewItem*, int)), SLOT(slotLinkItems(KDGanttViewItem*, KDGanttViewItem*, int)));
+    
+    connect(m_gantt, SIGNAL(taskLinkDoubleClicked(KDGanttViewTaskLink*)), SLOT(slotModifyLink(KDGanttViewTaskLink*)));
+    
     m_taskLinks.setAutoDelete(true);
 }
 
@@ -412,6 +417,7 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
         item->setListViewText(3,  "  " + task->endTime().toString(Qt::ISODate));
         item->setListViewText(4, "  " +  task->getLatestFinish().toString(Qt::ISODate));
     }
+    item->setText(task->name());
     setDrawn(item, true);
 }
 
@@ -427,6 +433,7 @@ void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
         item->setListViewText(3,  "  " + task->endTime().toString(Qt::ISODate));
         item->setListViewText(4, "  " +  task->getLatestFinish().toString(Qt::ISODate));
     }
+    item->setText(task->name());
     setDrawn(item, true);
 }
 
@@ -702,50 +709,56 @@ void KPTGanttView::setLinkMode(bool state) {
         m_gantt->unsetCursor();
 }
 
-void KPTGanttView::slotGvItemClicked(KDGanttViewItem *item) {
-    kdDebug()<<k_funcinfo<<(item ? item->listViewText() : "null")<<endl;
-    if (!m_linkMode)
-        return;
-    if (!item) {
-        if (m_linkParentItem) {
-            m_linkParentItem->setColors(m_parentColorStart, m_parentColorMiddle, m_parentColorEnd);
-            m_linkParentItem = 0;
-        }
-        return;
-    }
-    KPTNode *node = getNode(item);
-    if (!node) {
-        if (m_linkParentItem) {
-            m_linkParentItem->setColors(m_parentColorStart, m_parentColorMiddle, m_parentColorEnd);
-            m_linkParentItem = 0;
-        }
-        return;
-    }
-    if (!m_linkParentItem) {
-        m_linkParentItem = item;
-        m_linkParentItem->colors(m_parentColorStart, m_parentColorMiddle, m_parentColorEnd);
-        m_linkParentItem->setColors(m_selectColor, m_selectColor, m_selectColor);
-        return;
-    }
-    if (node == getNode(m_linkParentItem)) {
-        m_linkParentItem->setColors(m_parentColorStart, m_parentColorMiddle, m_parentColorEnd);
-        m_linkParentItem = 0;
-        return;
-    }
-    item->colors(m_itemColorStart, m_itemColorMiddle, m_itemColorEnd);
-    item->setColors(m_selectColor, m_selectColor, m_selectColor);
-    if (!getNode(m_linkParentItem)->legalToLink(node)) {
-        KMessageBox::sorry(this, i18n("Cannot link these nodes"));
-    } else {
-        KPTRelation *rel = node->findRelation(getNode(m_linkParentItem));
-        if (rel)
-            emit modifyRelation(rel);
-        else
-            emit addRelation(getNode(m_linkParentItem), node);
-    }
-    item->setColors(m_itemColorStart, m_itemColorMiddle, m_itemColorEnd);
-    m_linkParentItem->setColors(m_parentColorStart, m_parentColorMiddle, m_parentColorEnd);
-    m_linkParentItem = 0;
+ void KPTGanttView::slotGvItemClicked(KDGanttViewItem *) {
 }
 
+// testing
+bool KPTGanttView::exportGantt(QIODevice* device) {
+    kdDebug()<<k_funcinfo<<endl;
+    return m_gantt->saveProject(device);
+}
+
+void KPTGanttView::slotLinkItems(KDGanttViewItem* from, KDGanttViewItem* to, int linkType) {
+    kdDebug()<<k_funcinfo<<(from?from->listViewText():"null")<<" to "<<(to?to->listViewText():"null")<<" linkType="<<linkType<<endl;
+    KPTNode *par = getNode(from);
+    KPTNode *child = getNode(to);
+    if (!par || !child || !(par->legalToLink(child))) {
+        KMessageBox::sorry(this, i18n("Cannot link these nodes"));
+        return;
+    }
+    KPTRelation *rel = child->findRelation(par);
+    if (rel)
+        emit modifyRelation(rel, linkTypeToRelation(linkType));
+    else
+        emit addRelation(par, child, linkTypeToRelation(linkType));
+    
+    return;
+}
+
+int KPTGanttView::linkTypeToRelation(int linkType) {
+    switch (linkType) {
+        case KDGanttViewTaskLink::FinishStart: 
+            return FINISH_START;
+            break;
+        case KDGanttViewTaskLink::StartStart: 
+            return START_START;
+            break;
+        case KDGanttViewTaskLink::FinishFinish: 
+            return FINISH_FINISH;
+            break;
+        case KDGanttViewTaskLink::StartFinish:
+        default: 
+            return -1;
+            break;
+    }
+}
+
+void KPTGanttView::slotModifyLink(KDGanttViewTaskLink* link) {
+    //kdDebug()<<k_funcinfo<<link<<endl;
+    // we support only one from/to item in each link
+    KPTNode *par = getNode(link->from().first());
+    KPTRelation *rel = par->findRelation(getNode(link->to().first()));
+    if (rel)
+        emit modifyRelation(rel);
+}
 #include "kptganttview.moc"

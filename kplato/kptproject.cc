@@ -713,7 +713,8 @@ void KPTProject::addStandardWorktime(KPTStandardWorktime * worktime) {
 
 bool KPTProject::legalToLink(KPTNode *par, KPTNode *child) {
     //kdDebug()<<k_funcinfo<<par.name()<<" ("<<par.numDependParentNodes()<<" parents) "<<child.name()<<" ("<<child.numDependChildNodes()<<" children)"<<endl;
-    if (par->isDependChildOf(child)) {
+    
+    if (!child || par->isDependChildOf(child)) {
         return false;
     }
     bool legal = true;

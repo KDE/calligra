@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
+   Copyright (C) 2002 - 2004 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -64,6 +65,7 @@
 #include <qtabwidget.h>
 #include <qwidgetstack.h>
 #include <qtimer.h>
+#include <qfiledialog.h>
 
 #include <kiconloader.h>
 #include <kaction.h>
@@ -171,6 +173,9 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     //new KAction(i18n("Resource Editor..."), "edit_resource", 0, this,
 	//	SLOT(slotEditResource()), actionCollection(), "edit_resource");
 
+    // ------ Export (testing)
+    //actionExportGantt = new KAction(i18n("Export ganttview"), "export_gantt", 0, this,
+    //    SLOT(slotExportGantt()), actionCollection(), "export_gantt");
     // ------ Settings
     actionConfigure = new KAction(i18n("Configure..."), "configure", 0, this,
         SLOT(slotConfigure()), actionCollection(), "configure");
@@ -195,7 +200,9 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     connect(m_pertview, SIGNAL(addRelation(KPTNode*, KPTNode*)), SLOT(slotAddRelation(KPTNode*, KPTNode*)));
     connect(m_pertview, SIGNAL(modifyRelation(KPTRelation*)), SLOT(slotModifyRelation(KPTRelation*)));
 
-    connect(m_ganttview, SIGNAL(addRelation(KPTNode*, KPTNode*)), SLOT(slotAddRelation(KPTNode*, KPTNode*)));
+    connect(m_ganttview, SIGNAL(addRelation(KPTNode*, KPTNode*, int)), SLOT(slotAddRelation(KPTNode*, KPTNode*, int)));
+    connect(m_ganttview, SIGNAL(modifyRelation(KPTRelation*, int)), SLOT(slotModifyRelation(KPTRelation*, int)));
+
     connect(m_ganttview, SIGNAL(modifyRelation(KPTRelation*)), SLOT(slotModifyRelation(KPTRelation*)));
 
 #endif
@@ -597,6 +604,19 @@ void KPTView::slotAddRelation(KPTNode *par, KPTNode *child) {
     delete dia;
 }
 
+void KPTView::slotAddRelation(KPTNode *par, KPTNode *child, int linkType) {
+    kdDebug()<<k_funcinfo<<endl;
+    if (linkType == FINISH_START ||
+        linkType == START_START ||
+        linkType == FINISH_FINISH) 
+    {
+        KPTRelation *rel = new KPTRelation(par, child, START_ON_DATE, static_cast<TimingRelation>(linkType));
+        getPart()->addCommand(new KPTAddRelationCmd(getPart(), rel, i18n("Add Relation")));
+    } else {
+        slotAddRelation(par, child);
+    }
+}
+
 void KPTView::slotModifyRelation(KPTRelation *rel) {
     kdDebug()<<k_funcinfo<<endl;
     KPTRelation *relation = new KPTRelation(rel);
@@ -613,6 +633,31 @@ void KPTView::slotModifyRelation(KPTRelation *rel) {
     }
     delete dia;
     delete relation;
+}
+
+void KPTView::slotModifyRelation(KPTRelation *rel, int linkType) {
+    kdDebug()<<k_funcinfo<<endl;
+    if (linkType == FINISH_START ||
+        linkType == START_START ||
+        linkType == FINISH_FINISH) 
+    {
+        getPart()->addCommand(new KPTModifyTimingRelationCmd(getPart(), rel, static_cast<TimingRelation>(linkType)));
+    } else {
+        slotModifyRelation(rel);
+    }
+}
+
+// testing
+void KPTView::slotExportGantt() {
+    kdDebug()<<k_funcinfo<<endl;
+    if (!m_ganttview) {
+        return;
+    }
+    QString fn = QFileDialog::getSaveFileName( QString::null, QString::null, this );
+    if (!fn.isEmpty()) {
+        QFile f(fn);
+        m_ganttview->exportGantt(&f);
+    }
 }
 
 void KPTView::slotEditResource() {

@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2002 - 2004 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+   version 2 of the License.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -69,9 +69,14 @@ class KPTGanttView : public QSplitter
     void addTaskLink(KDGanttViewTaskLink *link);
     void setLinkMode(bool mode);
     bool linkMode() const { return m_linkMode; }
+    
+    bool exportGantt(QIODevice* device); // testing
+    
 signals:
     void modifyRelation(KPTRelation *rel) ;
     void addRelation(KPTNode *par, KPTNode *child);
+    void modifyRelation(KPTRelation *rel, int linkType) ;
+    void addRelation(KPTNode *par, KPTNode *child, int linkType);
     
 public slots:
     void popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, int);
@@ -81,8 +86,14 @@ private slots:
     void slotItemDoubleClicked(KDGanttViewItem*);
     void slotItemRenamed(KDGanttViewItem*, int, const QString&);
     
+    void slotLinkItems(KDGanttViewItem* from, KDGanttViewItem* to, int linkType);
+    
     void slotGvItemClicked(KDGanttViewItem*);
     
+    void slotModifyLink(KDGanttViewTaskLink* link);
+
+protected:
+    int linkTypeToRelation(int linkType);
 private:
     KDGanttViewItem *findItem(KPTNode *node);
     KDGanttViewItem *findItem(KPTNode *node, KDGanttViewItem *item);

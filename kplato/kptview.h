@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
+   Copyright (C) 2002 - 2004 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -88,7 +89,11 @@ public slots:
     void slotConfigure();
     void slotAddRelation(KPTNode *par, KPTNode *child);
     void slotModifyRelation(KPTRelation *rel);
+    void slotAddRelation(KPTNode *par, KPTNode *child, int linkType);
+    void slotModifyRelation(KPTRelation *rel, int linkType);
   
+    void slotExportGantt(); // testing
+    
 protected slots:
     void slotProjectCalendar();
     void slotProjectWorktime();
@@ -171,6 +176,9 @@ private:
     KAction *actionPriorpage;
     KAction *actionNextpage;
     KAction *actionLastpage;
+    
+    // ------ Export (testing)
+    KAction *actionExportGantt;
     
     // ------ Settings
     KAction *actionConfigure;
