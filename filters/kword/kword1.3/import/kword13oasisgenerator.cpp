@@ -55,16 +55,8 @@ void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
         it != frameset->m_paragraphGroup.end(); ++it)
     {
         declareLayout( (*it).m_layout );
-        // DEBUG START
-        if ( ! (*it).m_formats.isEmpty() )
-        {
-            kdDebug(30520) << "FORMATS: " << (*it).m_formats.count() << endl;
-        }
-        // DEBUG END
         for ( KWord13Format* format = (*it).m_formats.first(); format; format = (*it).m_formats.next() )
         {
-            kdDebug(30520) << "FORMAT:" << ((void*) format) << endl;
-#if 1
             KWord13FormatOneData* data = format->getFormatOneData();
             if ( data )
             {
@@ -74,7 +66,6 @@ void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
                 data->m_autoStyleName = m_oasisGenStyles.lookup( gs, "T" );
                 kdDebug(30520) << "Format: Parent " << (*it).m_layout.m_autoStyleName << " => " << data->m_autoStyleName << endl;
             }
-#endif
         }
     }
 }
