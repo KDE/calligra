@@ -3189,6 +3189,7 @@ void QTextParag::format( int start, bool doMove )
     //qDebug("QTextParag::format id=%d invalid, formatting (moving after previous parag)",paragId());
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
     r.setWidth( documentWidth() );
+formatAgain:
     if ( doc ) {
 	for ( QTextCustomItem *i = floatingItems.first(); i; i = floatingItems.next() ) {
 	    i->ypos = r.y();
@@ -3240,6 +3241,7 @@ void QTextParag::format( int start, bool doMove )
 	    int oh = r.height();
 	    r.setY( y );
 	    r.setHeight( oh );
+	    goto formatAgain;
 	}
 
     }
