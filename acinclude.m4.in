@@ -1668,8 +1668,7 @@ AC_DEFUN(AC_PATH_PAM,
 
 ]) 
 
-
-AC_DEFUN(KDE_CHECK_DLOPEN,
+AC_DEFUN(KDE_CHECK_LIBDL,
 [
 AC_CHECK_LIB(dl, dlopen, [
 LIBDL="-ldl"
@@ -1682,6 +1681,11 @@ ac_cv_have_shload=yes
 ])
 
 AC_SUBST(LIBDL)
+])
+
+AC_DEFUN(KDE_CHECK_DLOPEN,
+[
+KDE_CHECK_LIBDL
 AC_CHECK_HEADERS(dlfcn.h dl.h)
 if test "$ac_cv_header_dlfcn_h" = "no"; then
   ac_cv_have_dlfcn=no
@@ -1780,6 +1784,7 @@ fi
 
 AC_DEFUN(KDE_CHECK_MICO,
 [
+AC_REQUIRE([KDE_CHECK_LIBDL])
 AC_MSG_CHECKING(for MICO)
 AC_ARG_WITH(micodir,
   [  --with-micodir=micodir  where mico is installed ],
@@ -1888,6 +1893,7 @@ fi
 
 AC_DEFUN(KDE_CHECK_PYTHON,
 [
+AC_REQUIRE([KDE_CHECK_LIBDL])
 if test -z "$1"; then 
   version="1.5"
 else
@@ -1926,16 +1932,16 @@ dnl Note: this test is very weak
 AC_MSG_CHECKING(if Python needs thread lib to compile)
 AC_CACHE_VAL(kde_cv_python_pthread,
 [
+kde_save_cxxflags=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $PYTHONINC"
 	AC_TRY_COMPILE([#include <Python.h>],
 [
-int main(int argc, char **argv) {
-	PySys_SetArgv(argc, argv);
-	return 0;
-}
+	PySys_SetArgv(1, 0);
 ],
 	kde_cv_python_pthread=no,
 	[kde_cv_python_pthread=yes]
 )
+CXXFLAGS=$kde_save_cxxflags
 ])
 
 AC_MSG_RESULT($kde_cv_python_pthread)
