@@ -21,10 +21,10 @@
 		mime:		The MIME type (must always have the value application/x-kspread
 -->
 <!ELEMENT DOC (PAPER, MAP)>
-<!ATTLIST DOC	author CDATA #IMPLIED
-				email CDATA #IMPLIED
-				editor CDATA #IMPLIED
-				mime CDATA "application/x-kword">
+<!ATTLIST DOC   author CDATA #IMPLIED
+                email  CDATA #IMPLIED
+                editor CDATA #IMPLIED
+                mime   CDATA "application/x-kspread">
 
 <!--	Describes the page format. Can have no or one PAPERBORDERS child that 
 		describes the margins.
@@ -39,8 +39,8 @@
 		columnspacing:	the gap between the columns (only in wordprocessing mode)
 -->
 <!ELEMENT PAPER (PAPERBORDERS|HEAD|FOOT)*>
-<!ATTLIST PAPER	format CDATA #REQUIRED
-				orientation CDATA #REQUIRED>
+<!ATTLIST PAPER format CDATA #REQUIRED
+                orientation CDATA #REQUIRED>
 
 
 
@@ -54,10 +54,10 @@
 		bottom:			bottom margin in pixels
 -->
 <!ELEMENT PAPERBORDERS EMPTY>
-<!ATTLIST PAPERBORDERS	left CDATA #REQUIRED
-						right CDATA #REQUIRED
-						top	CDATA #REQUIRED
-						bottom CDATA #REQUIRED>
+<!ATTLIST PAPERBORDERS  left   CDATA #REQUIRED
+                        right  CDATA #REQUIRED
+                        top    CDATA #REQUIRED
+                        bottom CDATA #REQUIRED>
 
 
 <!--	Describes the page header.
@@ -69,9 +69,9 @@
 		right:			the text to appear in the upper right
 -->
 <!ELEMENT HEAD EMPTY>
-<!ATTLIST HEAD	left	CDATA #IMPLIED
-				center	CDATA #IMPLIED
-				right	CDATA #IMPLIED>
+<!ATTLIST HEAD  left     CDATA #IMPLIED
+                center   CDATA #IMPLIED
+                right    CDATA #IMPLIED>
 
 
 <!--	Describes the page footer.
@@ -84,8 +84,8 @@
 -->
 <!ELEMENT FOOT EMPTY>
 <!ATTLIST FOOT	left	CDATA #IMPLIED
-				center	CDATA #IMPLIED
-				right	CDATA #IMPLIED>
+                center  CDATA #IMPLIED
+                right   CDATA #IMPLIED>
 
 
 
@@ -102,19 +102,19 @@
 		name	the name of the table
 -->
 <!ELEMENT TABLE (CELL|CHART)*>
-<!ATTLIST TABLE	name	CDATA #REQUIRED>
+<!ATTLIST TABLE  name    CDATA #REQUIRED>
 
 
 <!--	Describes one cell including contents.
 
 		Attributes:
 
-		row		the row number of the cell
-		column	the column number of thecell
+		row	the row number of the cell (starts at 1)
+		column	the column number of the cell (starts at 1)
 -->
 <!ELEMENT CELL (#PCDATA|FORMAT)*>
-<!ATTLIST CELL	row		CDATA #REQUIRED
-				column	CDATA #REQUIRED>
+<!ATTLIST CELL  row      CDATA #REQUIRED
+                column   CDATA #REQUIRED>
 
 
 <!--	Describes the format of one cell.
@@ -128,11 +128,11 @@
 		faktor:			???
 -->
 <!ELEMENT FORMAT EMPTY>
-<!ATTLIST FORMAT		align			CDATA #REQUIRED
-						precision		CDATA #REQUIRED
-						float			CDATA #REQUIRED
-						floatcolor		CDATA #REQUIRED
-						faktor			CDATA #REQUIRED>
+<!ATTLIST FORMAT        align            CDATA #REQUIRED
+                        precision        CDATA #REQUIRED
+                        float            CDATA #REQUIRED
+                        floatcolor       CDATA #REQUIRED
+                        faktor           CDATA #REQUIRED>
 
 
 <!--	Describes an embedded chart.
@@ -145,12 +145,14 @@
 				the chart
 -->
 <!ELEMENT CHART (RECT|BINDING)*>
-<!ATTLIST CHART			url		CDATA #REQUIRED
-						mime	CDATA #REQUIRED>
+<!ATTLIST CHART         url     CDATA #REQUIRED
+                        mime    CDATA #REQUIRED>
 
 <!ELEMENT RECT EMPTY>
-<!ATTLIST RECT	x		CDATA #REQUIRED
-				y		CDATA #REQUIRED
-				w		CDATA #REQUIRED
-				h		CDATA #REQUIRED>
+<!ATTLIST RECT  x        CDATA #REQUIRED
+                y        CDATA #REQUIRED
+                w        CDATA #REQUIRED
+                h        CDATA #REQUIRED>
+
 <!ELEMENT BINDING (RECT)>
+
