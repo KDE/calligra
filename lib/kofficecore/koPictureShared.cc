@@ -134,11 +134,19 @@ bool KoPictureShared::loadTmp(QIODevice* io)
     // The extension .wmf was used (KOffice 1.1.x) for QPicture files
     // For an extern file or in the storage, .wmf can mean a real Windows Meta File.
 
-    QByteArray array=io->readAll();
+    QByteArray array ( io->readAll() );
+
+    if ( array.size() < 5 )
+    {
+        kdError(30003) << "Picture is less than 5 bytes long!" << endl;
+        return false;
+    }
+
     QString strExtension;
     bool flag=false;
 
     // Try to find the file type by comparing magic on the first few bytes!
+    // ### TODO: could not QImageIO::imageFormat do it too? (At least most of them?)
     if ((array[0]==char(0x89)) && (array[1]=='P') &&(array[2]=='N') && (array[3]=='G'))
     {
         strExtension="png";
@@ -172,12 +180,18 @@ bool KoPictureShared::loadTmp(QIODevice* io)
         // So called "MS-DOS EPS file"
         strExtension="eps";
     }
+    else if ((array[0]=='G') && (array[1]=='I') && (array[2]=='F') && (array[3]=='8'))
+    {
+        // GIF (87a or 89a)
+        strExtension="gif";
+    }
     else
     {
         kdDebug(30003) << "Cannot identify the type of temp file!"
             << " Trying to convert to PNG! (in KoPictureShared::loadTmp" << endl;
 
-        QBuffer buf(array);
+        // Do not trust QBuffer and do not work directly on the QByteArray array
+        QBuffer buf( array.copy() );
         if (!buf.open(IO_ReadOnly))
         {
             kdError(30003) << "Could not open read buffer!" << endl;
@@ -194,7 +208,7 @@ bool KoPictureShared::loadTmp(QIODevice* io)
 
         buf.close();
 
-        if (!buf.open(IO_WriteOnly))
+        if ( !buf.open( IO_WriteOnly | IO_Truncate ) )
         {
             kdError(30003) << "Could not open write buffer!" << endl;
             return false;
@@ -209,6 +223,8 @@ bool KoPictureShared::loadTmp(QIODevice* io)
             return false;
         }
         buf.close();
+
+        array = buf.buffer();
 
         strExtension="png";
     }
