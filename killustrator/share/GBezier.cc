@@ -531,29 +531,29 @@ void GBezier::writeToXml (XmlWriter& xml) {
 }
 
 bool GBezier::findNearestPoint (const Coord& p, float max_dist, 
-				float& dist, int& pidx) {
-  float dx, dy, d1, d2;
+				float& dist, int& pidx, bool all) {
+  float dx, dy, min_dist = max_dist + 1, d;
   pidx = -1;
 
   Coord np = p.transform (iMatrix);
 
-  dx = points.at (1)->x () - np.x ();
-  dy = points.at (1)->y () - np.y ();
-  d1 = sqrt (dx * dx + dy * dy);
+  unsigned int i = 1;
+  while (i <= points.count () - 2) {
+    dx = points.at (i)->x () - np.x ();
+    dy = points.at (i)->y () - np.y ();
+    d = sqrt (dx * dx + dy * dy);
 
-  dx = points.at (points.count () - 2)->x () - np.x ();
-  dy = points.at (points.count () - 2)->y () - np.y ();
-  d2 = sqrt (dx * dx + dy * dy);
-
-  if (d1 < d2) {
-    if (d1 < max_dist) {
-      dist = d1;
-      pidx = 1;
+    if (d < max_dist && d < min_dist) {
+      dist = min_dist = d;
+      pidx = i;
     }
-  }
-  else if (d2 < max_dist) {
-    dist = d2;
-    pidx = points.count () - 2;
+
+    if (! all && i == 1) {
+      // test only first and last point
+      i = points.count () - 2;
+    }
+    else
+      i += 3;
   }
   return pidx >= 0;
 }

@@ -121,7 +121,8 @@ public:
   GObject* findContainingObject (int x, int y);
 
   bool findNearestObject (const char* otype, int x, int y,
-			  float max_dist, GObject*& obj, int& pidx);
+			  float max_dist, GObject*& obj, int& pidx, 
+			  bool all = false);
 
   bool findContainingObjects (int x, int y, QList<GObject>& olist);
   bool findObjectsContainedIn (const Rect& r, QList<GObject>& olist);

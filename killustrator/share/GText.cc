@@ -487,7 +487,7 @@ void GText::writeToXml (XmlWriter& xml) {
        it++, i++) {
     xml.writeText ((const char *) *it);
     if (i < lines () - 1)
-      xml.writeTag ("br");
+      xml.writeTag ("br/");
   }
 
   xml.endTag ();

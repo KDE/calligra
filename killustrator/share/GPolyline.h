@@ -77,7 +77,7 @@ public:
   virtual void writeToXml (XmlWriter&);
 
   virtual bool findNearestPoint (const Coord& p, float max_dist, 
-				 float& dist, int& pidx);
+				 float& dist, int& pidx, bool all = false);
 
   virtual void getPath (vector<Coord>& path);
 

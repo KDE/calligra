@@ -105,17 +105,32 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
 
     obj = 0L;
     pointIdx = -1;
+    // for performance reasons check if an object from the selection
+    // has to be edited
     for (list<GObject*>::iterator it = doc->getSelection ().begin ();
 	 it != doc->getSelection ().end (); it++) {
       GObject* o = *it;
-      obj = o;
       int idx = o->getNeighbourPoint (Coord (xpos, ypos));
       if (idx != -1) {
+	obj = o;
 	pointIdx = idx;
 	startPos = Coord (xpos, ypos);
 	lastPos = startPos;
 	canvas->setCursor (*cursor);
 	break;
+      }
+    }
+    // if no currently selected object was found at the mouse position ...
+    if (obj == 0L) {
+      int idx;
+      if (doc->findNearestObject (0L, xpos, ypos, 15.0, obj, idx, true)) {
+	// select and edit this object
+	doc->unselectAllObjects ();
+	doc->selectObject (obj);
+	pointIdx = idx;
+	startPos = Coord (xpos, ypos);
+	lastPos = startPos;
+	canvas->setCursor (*cursor);
       }
     }
   }

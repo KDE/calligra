@@ -1,6 +1,6 @@
 <!-- Document Type Definition for the KIllustrator Markup Language 
-     (KIML), the file format for KIllustrator.
-     version = 0.1  status = draft  date = 19/May/1998
+     (KIL), the file format for KIllustrator.
+     version = 0.2  status = draft  date = 18/Feb/1999
      syntax = XML author = kus@iti.cs.uni-magdeburg.de -->
 <!-- ============================================================= -->
 
@@ -24,14 +24,17 @@
 
 <!-- ============================================================= -->
 <!--
-     The base_content_model, kiml and head elements
+     The base_content_model, doc and head elements
 -->
 <!ENTITY % base_content_model
          '(rectangle | ellipse | text | polyline | polygon | 
            bezier | group)*'
 >
 
-<!ELEMENT kiml (head, %base_content_model;) >
+<!ELEMENT doc (head, %base_content_model;) >
+<!ATTLIST doc editor "KIllustrator"
+              mime   "application/x-killustrator"
+>
 
 <!ELEMENT head (layout, info?) >
 
@@ -43,7 +46,7 @@
 <!--
      The document layout.
 -->
-<!ELEMENT layout EMPTY >
+<!ELEMENT layout (grid, helplines) >
 <!ATTLIST layout format      (a3 | a4 | a5 | usletter | uslegal | custom) "a4"
                  orientation (portrait | landscape) "portrait"
                  width       CDATA #IMPLIED
@@ -62,6 +65,36 @@
 <!ATTLIST info author        CDATA #IMPLIED
                creation_date CDATA #IMPLIED
                last_modified CDATA #IMPLIED
+>
+
+<!--
+     The document layout.
+-->
+<!ELEMENT grid EMPTY >
+<!ATTLIST grid dx    CDATA #IMPLIED
+               dy    CDATA #IMPLIED
+               align CDATA ( 0 | 1 ) "0"
+>
+
+<!--
+     The help lines.
+-->
+<!ELEMENT helplines (hl | vl)* >
+<!ATTLIST helplines align CDATA ( 0 | 1 ) "0"
+>
+
+<!--
+     Horizontal lines.
+-->
+<!ELEMENT hl EMPTY>
+<!ATTLIST hl pos CDATA #IMPLIED
+>
+
+<!--
+     Vertical lines.
+-->
+<!ELEMENT vl EMPTY>
+<!ATTLIST vl pos CDATA #IMPLIED
 >
 
 <!-- ============================================================= -->
@@ -158,5 +191,5 @@
 
 <!-- ============================================================= -->
 <!--
-     End of DTD for KIML
+     End of DTD for KIL
 -->

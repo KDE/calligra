@@ -63,7 +63,7 @@ public:
   virtual void writeToXml (XmlWriter&);
 
   virtual bool findNearestPoint (const Coord& p, float max_dist, 
-				 float& dist, int& pidx);
+				 float& dist, int& pidx, bool all = false);
   virtual int containingSegment (float xpos, float ypos);
 
   bool isEndPoint (int idx) { return (idx % 3) == 1; }

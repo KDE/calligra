@@ -363,7 +363,8 @@ void GDocument::deleteObject (GObject* obj) {
  * <tt>pidx</tt>.
  */
 bool GDocument::findNearestObject (const char* otype, int x, int y,
-				   float max_dist, GObject*& obj, int& pidx) {
+				   float max_dist, GObject*& obj, 
+				   int& pidx, bool all) {
   float d, distance = MAXFLOAT;
   obj = 0L;
   Coord p (x, y);
@@ -376,7 +377,7 @@ bool GDocument::findNearestObject (const char* otype, int x, int y,
       for (list<GObject*>::iterator oi = contents.begin ();
 	   oi != contents.end (); oi++) {
 	if (otype == 0L || (*oi)->isA (otype)) {
-	  if ((*oi)->findNearestPoint (p, max_dist, d, pidx) &&
+	  if ((*oi)->findNearestPoint (p, max_dist, d, pidx, all) &&
 	      d < distance) {
 	    obj = *oi;
 	    distance = d;
