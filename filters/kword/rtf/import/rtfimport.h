@@ -524,6 +524,11 @@ public:
     int fnnum; ///< number of last footnote
     RTFTextState firstPageHeader, oddPagesHeader, evenPagesHeader;
     RTFTextState firstPageFooter, oddPagesFooter, evenPagesFooter;
+    /**
+     * Dummy text state for destinations without own RTFTextState
+     * @note this is mainly to avoid dangling or NULL pointers
+     */
+    RTFTextState m_dummyTextState;
     QMap<int,QString> fontTable;
     QValueList<RTFStyle> styleSheet;
     QValueList<QColor> colorTable;

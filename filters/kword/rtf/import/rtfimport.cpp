@@ -351,7 +351,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
         if ( !m_batch )
         {
             KMessageBox::error( 0L,
-                i18n("The file cannot be loaded, as it does not seem to a RTF document!"),
+                i18n("The file cannot be loaded, as it seems not to be a RTF document!"),
                 i18n("KWord's RTF Import Filter "), 0 );
         }
 	return KoFilter::WrongFormat;
@@ -368,7 +368,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
         if ( !m_batch )
         {
             KMessageBox::error( 0L,
-                i18n("The document cannot be loaded, as it does not seem to follow the RTF syntax!"),
+                i18n("The document cannot be loaded, as it seems not to follow the RTF syntax!"),
                 i18n("KWord's RTF Import Filter "), 0 );
         }
 	return KoFilter::WrongFormat;
@@ -1961,6 +1961,7 @@ void RTFImport::parseGroup( RTFProperty * )
 
 void RTFImport::skipGroup( RTFProperty * )
 {
+    kdDebug(30515) << "Skip Group: " << token.type << endl;
     state.ignoreGroup = true;
 }
 
@@ -1978,7 +1979,10 @@ void RTFImport::changeDestination( RTFProperty *property )
     destinationStack.push( destination );
     destination.name	 = property->name;
     destination.destproc = property->cwproc;
-    destination.target	 = (RTFTextState*) ( (char *)this + property->offset );
+    if ( property->offset )
+        destination.target = (RTFTextState*) ( (char *)this + property->offset );
+    else
+        destination.target = &m_dummyTextState;
 
     state.brace0 = true;
 
