@@ -24,7 +24,6 @@
 #include <qdialog.h>
 #include <qwidget.h>
 #include <qlabel.h>
-#include <qstring.h>
 #include <qpushbutton.h>
 #include <qlist.h>
 #include <qfileinfo.h>
