@@ -238,7 +238,7 @@ KexiPropertyEditor::showDefaultsButton( bool show )
 }
 
 void
-KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
+KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor * /*editor*/)
 {
 	if (!slotValueChanged_enabled)
 		return;
@@ -270,7 +270,7 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 		{
 			if(m_editItem->depth()==2)
 			{
-				KexiPropertyEditorItem *parent = static_cast<KexiPropertyEditorItem*>(m_editItem->parent());
+//				KexiPropertyEditorItem *parent = static_cast<KexiPropertyEditorItem*>(m_editItem->parent());
 //js: TODO				parent->getComposedValue();
 			}
 		}
@@ -281,7 +281,7 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 }
 
 void
-KexiPropertyEditor::slotEditorAccept(KexiPropertySubEditor *editor)
+KexiPropertyEditor::slotEditorAccept(KexiPropertySubEditor * /*editor*/)
 {
 //	kdDebug() << "KexiPropertyEditor::slotEditorAccept" << endl;
 
@@ -317,7 +317,7 @@ KexiPropertyEditor::slotEditorAccept(KexiPropertySubEditor *editor)
 }
 
 void
-KexiPropertyEditor::slotEditorReject(KexiPropertySubEditor *editor)
+KexiPropertyEditor::slotEditorReject(KexiPropertySubEditor * /*editor*/)
 {
 	if(m_currentEditor)
 	{
@@ -418,7 +418,7 @@ KexiPropertyEditor::setBuffer(KexiPropertyBuffer *b)
 	fill();
 }
 
-void KexiPropertyEditor::slotPropertyReset(KexiPropertyBuffer &buf,KexiProperty &prop)
+void KexiPropertyEditor::slotPropertyReset(KexiPropertyBuffer & /*buf*/,KexiProperty & /*prop*/)
 {
 	if (m_currentEditor) {
 		slotValueChanged_enabled = false;

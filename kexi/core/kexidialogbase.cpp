@@ -515,7 +515,7 @@ bool KexiDialogBase::storeDataBlock( const QString &dataString, const QString& d
 	return storeDataBlock_internal(dataString, id(), dataID);
 }
 
-bool KexiDialogBase::removeDataBlock( QString &dataString, const QString& dataID)
+bool KexiDialogBase::removeDataBlock( QString & /*dataString*/, const QString& dataID)
 {
 	KexiDB::Connection *conn = m_parentWindow->project()->dbConnection();
 	bool ok;

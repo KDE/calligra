@@ -50,7 +50,7 @@ PropertyEditorDate::setValue(const QVariant &value)
 }
 
 void
-PropertyEditorDate::valueChanged(const QDate &date)
+PropertyEditorDate::valueChanged(const QDate & /*date*/)
 {
 	emit changed(this);
 }
@@ -82,7 +82,7 @@ PropertyEditorTime::setValue(const QVariant &value)
 }
 
 void
-PropertyEditorTime::valueChanged(const QTime &time)
+PropertyEditorTime::valueChanged(const QTime & /*time*/)
 {
 	emit changed(this);
 }
@@ -115,7 +115,7 @@ PropertyEditorDateTime::setValue(const QVariant &value)
 }
 
 void
-PropertyEditorDateTime::valueChanged(const QDateTime &dateTime)
+PropertyEditorDateTime::valueChanged(const QDateTime & /*dateTime*/)
 {
 	emit changed(this);
 }

@@ -51,6 +51,8 @@ namespace KexiDB
 	class ResultInfo;
 };
 
+class KexiQueryDesignerGuiEditorPrivate;
+
 class KexiQueryDesignerGuiEditor : public KexiViewBase
 {
 	Q_OBJECT
@@ -125,21 +127,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		void showFieldsForQuery(KexiDB::QuerySchema *query);
 
 	private:
-		KexiTableViewData *m_data;
-		KexiDataTable *m_dataTable;
-		QGuardedPtr<KexiDB::Connection> m_conn;
-
-		KexiRelationWidget *m_relations;
-		KexiSectionHeader *m_head;
-		QSplitter *m_spl;
-
-		//! used to remember in slotDroppedAtRow() what data was dropped, 
-		//! so we can create appropriate prop. buffer in slotRowInserted()
-		KexiTableViewData *m_fieldColumnData, *m_tablesColumnData;
-		KexiTableViewPropertyBuffer* m_buffers;
-		KexiTableItem *m_droppedNewItem;
-
-		QString m_droppedNewTable, m_droppedNewField;
+		KexiQueryDesignerGuiEditorPrivate *d;
 };
 
 #endif

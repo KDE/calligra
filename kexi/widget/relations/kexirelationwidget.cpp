@@ -64,7 +64,7 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	hlyr->addStretch(1);
 	connect(m_btnAdd, SIGNAL(clicked()), this, SLOT(slotAddTable()));
 
-	m_relationView = new KexiRelationView(this, m_conn);
+	m_relationView = new KexiRelationView(this, "relation_view");
 	setViewWidget(m_relationView);
 	g->addWidget(m_relationView, 1, 0);
 	m_relationView->setFocus();

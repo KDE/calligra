@@ -305,6 +305,44 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
       (needed for switching back to GUI editor from texdt mode)
 - remove single-char token names with chars (more readable + more effective)
 
+
+2004-07-28..2004-08-03
+KexiDB
+- ProjectDB FORMAT CHANGED (remains backward compatible):
+- kexi__query* tables removed (to complicated, not needed since we 
+  are primarily using kexi__objectdata and xml)
+- Driver::IgnoreTransactions flag added: transactions are silently bypassed,
+  (temporary, useful for current mysql driver implemntation)
+- Query Schema: QueryFieldInfo introduced:
+  "select a as one, a as two from table" is now possible
+  (two different aliases for the same field); 
+  this also maintains field visibility.
+- Most needed expression classes added (BaseExpr-derived)
+- most debugs removed
+- more debugString() methods added for few classes
+- FieldList: removeField(), insertField() (at position) implemented
+	addField() now uses insertField()
+KexiDB/parser
+- 'bison -dv' used instead of yacc
+- single-char tokens are now used as chars: symbols are dropped for better 
+	code readability
+- more safe and readable code: $$ is now used instead of changing global variables
+- realType added
+NEWAPI Test
+- now KCmdLineOptions are used, see README
+- "parser" test added
+KexiTableView
+- KexiTableViewPropertyBuffer: a fix for maintaining `dirty' flag
+- updates for QueryFieldInfo
+- compiler warnings removed
+Core, Widget, Plugins
+- updates for QueryFieldInfo
+- compiler warnings removed
+
+2004-07-24
+Form Designer
+- added icons for ajust/align icons
+
 2004-07-23
 Core
 - KexiViewBase::removeDataBlock() and KexiDialogBase::removeDataBlock() added.

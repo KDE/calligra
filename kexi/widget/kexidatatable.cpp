@@ -172,7 +172,7 @@ QSize KexiDataTable::sizeHint() const
 
 // update actions --------------
 
-void KexiDataTable::slotCellSelected(int col, int row)
+void KexiDataTable::slotCellSelected(int /*col*/, int row)
 {
 	slotUpdateRowActions(row);
 }

@@ -70,7 +70,7 @@ class KEXICORE_EXPORT Part : public QObject
 		 You shouldn't use by hand transactions here.
 		 
 		 Default implementation does nothing and returns true. */
-		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item)
+		virtual bool remove(KexiMainWindow * /*win*/, KexiPart::Item & /*item*/)
 			{ return true; }
 
 		/*! Renames stored data pointed by \a item to \a newName 
@@ -84,7 +84,8 @@ class KEXICORE_EXPORT Part : public QObject
 		 You shouldn't use by hand transactions here.
 
 		 Default implementation does nothing and returns true. */
-		virtual bool rename(KexiMainWindow *win, KexiPart::Item &item, const QString& newName) 
+		virtual bool rename(KexiMainWindow * /*win*/, KexiPart::Item & /*item*/, 
+			const QString& /*newName*/)
 			{ return true; }
 
 		/*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be 

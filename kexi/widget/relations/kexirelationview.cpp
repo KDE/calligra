@@ -38,7 +38,6 @@
 #include <kmessagebox.h>
 
 #include <kexidb/tableschema.h>
-#include <kexidb/connection.h>
 #include <kexidb/indexschema.h>
 
 #include "kexirelationview.h"
@@ -46,7 +45,7 @@
 #include "kexirelationviewconnection.h"
 #include "kexi_utils.h"
 
-KexiRelationView::KexiRelationView(QWidget *parent, KexiDB::Connection *conn, const char *name)
+KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
  : QScrollView(parent, name, WStaticContents)
 {
 //	m_relation=relation;

@@ -102,8 +102,8 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 		return false;
 	}
 
-	uint i = 0;
-	KexiDB::Field::Vector vector = m_cursor->query()->fieldsExpanded();
+//	uint i = 0;
+//	KexiDB::QueryFieldInfo::Vector vector = m_cursor->query()->fieldsExpanded();
 	KexiTableViewData *tv_data = new KexiTableViewData(m_cursor);
 /* moved to KexiTableViewData ctor
 	KexiTableViewColumn* col;

@@ -32,7 +32,8 @@
 
 #include "kexirecordnavigator.h"
 
-KexiRecordNavigator::KexiRecordNavigator(KexiDB::Cursor *cursor, QWidget *parent, const char *name)
+KexiRecordNavigator::KexiRecordNavigator(KexiDB::Cursor * /*cursor?? TODO */, 
+	QWidget *parent, const char *name)
  : QFrame(parent, name)
 {
 	setFrameStyle(QFrame::Panel|QFrame::Raised);

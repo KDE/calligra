@@ -46,7 +46,6 @@ This note is also useful for other types of properties that can be inherited by 
 
 TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
 
-
 Object
 	DriverManager
 	Driver
@@ -64,8 +63,15 @@ Cursor
 FieldList
 	TableSchema
 	QuerySchema
-	Index
+	IndexSchema
 Transaction
+TransactionGuard
+BaseExpr
+	NArgExpr
+		UnaryExpr
+		BinaryExpr
+	ConstExpr
+	VariableExpr
 
 -----------------------------------------------------------------
 
@@ -90,29 +96,7 @@ kexi__objectdata
 	                      //-these can be identified by o_sub_id
                         //if not needed, leave it as NULL
 
-//This table contains additional information for query schemas
-kexi__querydata
-	q_id integer REFERENCES kexi__objects(o_id),
-	q_sql varchar, //raw sql text - stored in the unchanged form entered by a user (or generated)
-	q_valid boolean, //query schema may be invalid (syntactically or logically, 
-	                //but still can be stored)
-	q_parent_tab integer REFERENCES kexi__objects(o_id) //parent table of this query
 
-//This table contains information about fields defined in select queries
-kexi__queryfields
-	q_id integer REFERENCES kexi__objects(o_id),
-	f_order integer, //order of this field in query schema
-	f_id integer REFERENCES kexi__objects(f_order), //may be NULL if a field is asterisk
-	f_tab_asterisk integer REFERENCES kexi__objects(o_id), //if this is "single-table" asterisk
-	                   //this member references to valid tables id, otherwise is NULL
-	f_alltab_asterisk boolean //true if this is "all-tables" asterisk, otherwise false
-
-//This table contains information about tables used by select queries
-kexi__querytables
-	q_id integer REFERENCES kexi__objects(o_id),
-	t_id integer REFERENCES kexi__objects(o_id), //references to table used by given q_id
-	t_order integer //order of t_id table in query schema's tables list
-	
 //This table contains fields that are members of given kexi object.
 //Not all object types should be allowed, now allowed are tables and queries
 kexi__fields
@@ -157,4 +141,30 @@ property="project_desc", value=<string>
 TODO: put more props. todo - creator, created date, etc. (also to KexiProjectData)
 		
 -----------------------------------------------------------------
+
+4. DEPRECATED TABLES
+
+//This table contains additional information for query schemas
+kexi__querydata
+	q_id integer REFERENCES kexi__objects(o_id),
+	q_sql varchar, //raw sql text - stored in the unchanged form entered by a user (or generated)
+	q_valid boolean, //query schema may be invalid (syntactically or logically, 
+	                //but still can be stored)
+	q_parent_tab integer REFERENCES kexi__objects(o_id) //parent table of this query
+
+//This table contains information about fields defined in select queries
+kexi__queryfields
+	q_id integer REFERENCES kexi__objects(o_id),
+	f_order integer, //order of this field in query schema
+	f_id integer REFERENCES kexi__objects(f_order), //may be NULL if a field is asterisk
+	f_tab_asterisk integer REFERENCES kexi__objects(o_id), //if this is "single-table" asterisk
+	                   //this member references to valid tables id, otherwise is NULL
+	f_alltab_asterisk boolean //true if this is "all-tables" asterisk, otherwise false
+
+//This table contains information about tables used by select queries
+kexi__querytables
+	q_id integer REFERENCES kexi__objects(o_id),
+	t_id integer REFERENCES kexi__objects(o_id), //references to table used by given q_id
+	t_order integer //order of t_id table in query schema's tables list
+
 
