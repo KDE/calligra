@@ -290,6 +290,11 @@ VDocument::loadDocumentContent( const QDomElement& doc )
 	}
 }
 
+bool
+VDocument::loadOasis( const QDomElement &, KoOasisStyles & )
+{
+}
+
 void
 VDocument::accept( VVisitor& visitor )
 {

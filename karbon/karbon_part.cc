@@ -186,6 +186,41 @@ KarbonPart::saveXML()
 }
 
 bool
+KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, KoStore * )
+{
+	kdDebug(38000) << "Start loading OASIS document..." << endl;
+
+	QDomElement contents = doc.documentElement();
+	QDomElement body( contents.namedItem( "office:body" ).toElement() );
+	if( body.isNull() )
+	{
+		kdDebug(38000) << "No office:body found!" << endl;
+		setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
+		return false;
+	}
+
+	body = body.namedItem("office:drawing").toElement();
+	if(body.isNull())
+	{
+		kdDebug(38000) << "No office:drawing found!" << endl;
+		setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
+		return false;
+	}
+
+	QDomElement page( body.namedItem( "draw:page" ).toElement() );
+	if(page.isNull())
+	{
+		kdDebug(38000) << "No office:drawing found!" << endl;
+		setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
+		return false;
+	}
+
+	m_doc.loadOasis(page, styles );
+
+	return true;
+}
+
+bool
 KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
 {
 	KoStoreDevice storeDev( store );

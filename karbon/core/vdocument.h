@@ -159,6 +159,7 @@ public:
 	QDomDocument saveXML() const;
 	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter );
 	bool loadXML( const QDomElement& doc );
+	virtual bool loadOasis( const QDomElement& page, KoOasisStyles& oasisStyles );
 	virtual void save( QDomElement& me ) const;
 	virtual void load( const QDomElement& me );
 	void loadDocumentContent( const QDomElement& doc );

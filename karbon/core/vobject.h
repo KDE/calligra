@@ -34,6 +34,7 @@ class VVisitor;
 class DCOPObject;
 class KoStore;
 class KoXmlWriter;
+class KoOasisStyles;
 
 /**
  * The base class for all karbon objects. Every object should
@@ -140,6 +141,8 @@ public:
 	 * this object accordingly.
 	 */
 	virtual void load( const QDomElement& element );
+
+	virtual bool loadOasis( const QDomElement &page, KoOasisStyles &oasisStyles );
 
 	/**
 	 * Create an exact copy of this object.

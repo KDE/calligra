@@ -132,6 +132,11 @@ VObject::load( const QDomElement& element )
 		document()->setObjectName( this, element.attribute( "ID" ) );
 }
 
+bool
+VObject::loadOasis( const QDomElement &, KoOasisStyles & )
+{
+}
+
 VDocument *
 VObject::document() const
 {
