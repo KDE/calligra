@@ -73,8 +73,8 @@ class KoTCDIconViewItem : public KIconViewItem
             m_full = fullname;
 	    }
 
-	QString getDescr() { return m_descr; }
-	QString getFName() { return m_full; }
+	QString getDescr() const { return m_descr; }
+	QString getFName() const { return m_full; }
 
     private :
 	QString m_descr;
@@ -163,19 +163,19 @@ public:
 	/**
 	 * Method to get the current template
 	 */
-	QString getTemplate();
+	QString getTemplate() const;
 	/**
 	 * Method to get the "full" template (path+template)
 	 */
-	QString getFullTemplate();
+	QString getFullTemplate() const;
 	/**
 	 * The ReturnType (call this one after exec())
 	 */
-	ReturnType getReturnType();
+	ReturnType getReturnType() const;
 	/**
 	 * The dialogType - normally you won't need this one
 	 */
-	DialogType getDialogType();
+	DialogType getDialogType() const;
 
 protected slots:
     /**
@@ -193,7 +193,7 @@ private:
 	void setupFileDialog(QWidget * widgetbase, QGridLayout * layout);
 	void setupRecentDialog(QWidget * widgetbase, QGridLayout * layout);
 	bool collectInfo();
-	bool noStartupDlg();
+	bool noStartupDlg() const;
 
     private slots:
 

@@ -227,24 +227,24 @@ KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* global, Q
     return rt;
 }
 
-bool KoTemplateChooseDia::noStartupDlg() {
+bool KoTemplateChooseDia::noStartupDlg() const {
     return d->m_nostartupdlg;
 }
 
 
-QString KoTemplateChooseDia::getTemplate() {
+QString KoTemplateChooseDia::getTemplate() const{
     return d->m_templateName;
 }
 
-QString KoTemplateChooseDia::getFullTemplate() {
+QString KoTemplateChooseDia::getFullTemplate() const{
     return d->m_fullTemplateName;
 }
 
-KoTemplateChooseDia::ReturnType KoTemplateChooseDia::getReturnType() {
+KoTemplateChooseDia::ReturnType KoTemplateChooseDia::getReturnType() const {
     return d->m_returnType;
 }
 
-KoTemplateChooseDia::DialogType KoTemplateChooseDia::getDialogType() {
+KoTemplateChooseDia::DialogType KoTemplateChooseDia::getDialogType() const {
     return d->m_dialogType;
 }
 
