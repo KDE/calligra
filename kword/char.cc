@@ -632,11 +632,7 @@ KWChar* KWString::copy(KWChar *_data,unsigned int _len)
 	    }
 	}
       else __data[i].attrib = 0L;
-      if (_data[i].autoformat)
-	{
-	  __data[i].autoformat = new KWAutoFormat::AutoformatInfo;
-	  *__data[i].autoformat = *_data[i].autoformat;
-	}
+      __data[i].autoformat = 0L;
     }
   return __data;
 }
@@ -689,11 +685,7 @@ KWChar& KWString::copy(KWChar _c)
 	}
     }
   else c->attrib = 0L;
-  if (_c.autoformat)
-    {
-      c->autoformat = new KWAutoFormat::AutoformatInfo;
-      *c->autoformat = *_c.autoformat;
-    }
+  c->autoformat = 0L;
 
   return *c;
 }
@@ -904,7 +896,7 @@ void freeChar(KWChar& _char,KWordDocument *_doc)
 	    _doc->getFootNoteManager().removeFootNote(dynamic_cast<KWCharFootNote*>(_char.attrib)->getFootNote());
 	    delete _char.attrib;
 	  } break;
-	default: assert(0);
+	default: ;//assert(0);
 	}
       _char.attrib = 0L;
       if (_char.autoformat)
