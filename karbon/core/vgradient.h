@@ -17,6 +17,12 @@ enum VGradientType
 	gradient_conic  = 2
 };
 
+enum VGradientSpreadMethod
+{
+	gradient_spread_pad = 0,
+	gradient_spread_reflect = 1,
+	gradient_spread_repeat = 2
+};
 
 class QDomElement;
 
@@ -40,6 +46,9 @@ public:
 	VGradientType type() const { return m_type; }
 	void setType( VGradientType type ) { m_type = type; }
 
+	VGradientSpreadMethod spreadMethod() const { return m_spreadMethod; }
+	void setSpreadMethod( VGradientSpreadMethod spreadMethod ) { m_spreadMethod = spreadMethod; }
+
 	QValueList<VColorStop>& colorStops() { return m_colorStops; }
 
 	void save( QDomElement& element ) const;
@@ -47,6 +56,7 @@ public:
 
 private:
 	VGradientType m_type;
+	VGradientSpreadMethod m_spreadMethod;
 
 	QValueList<VColorStop> m_colorStops;
 
