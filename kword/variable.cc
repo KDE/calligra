@@ -171,7 +171,7 @@ KWVariable::KWVariable( KWTextFrameSet *fs, KWVariableFormat *_varFormat )
 
 KWVariable::~KWVariable()
 {
-    kdDebug() << "KWVariable::~KWVariable " << this << endl;
+    //kdDebug() << "KWVariable::~KWVariable " << this << endl;
     doc->unregisterVariable( this );
 }
 
@@ -180,7 +180,7 @@ QTextFormat * KWVariable::format() const
     ASSERT( paragraph() );
     KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
     int index = parag->findCustomItem( this );
-    kdDebug() << "KWVariable::format index=" << index << endl;
+    //kdDebug() << "KWVariable::format index=" << index << " format=" << parag->at( index )->format() << endl;
     return parag->at( index )->format();
 }
 
@@ -188,12 +188,13 @@ void KWVariable::resize()
 {
     if ( m_deleted )
         return;
+    QTextFormat fmt = *format(); // make an out-of-collection copy
     QTextString text;
-    text.insert( 0, getText(), format() );
+    text.insert( 0, getText(), &fmt );
     width = 0;
     for ( uint i = 0 ; i < text.length() ; ++i )
         width += text.width( i );
-    kdDebug() << "KWVariable::resize width=" << width << endl;
+    //kdDebug() << "KWVariable::resize width=" << width << endl;
 }
 
 void KWVariable::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
@@ -435,7 +436,7 @@ KWFileNameVariable::KWFileNameVariable( KWTextFrameSet *fs,const QString &_fileN
 
 void KWFileNameVariable::save( QDomElement& parentElem )
 {
-    kdDebug() << "KWFileNameVariable::save" << endl;
+    //kdDebug() << "KWFileNameVariable::save" << endl;
     KWVariable::save( parentElem );
     QDomElement elem = parentElem.ownerDocument().createElement( "FILENAME" );
     parentElem.appendChild( elem );
