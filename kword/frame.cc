@@ -1631,13 +1631,13 @@ void KWGroupManager::recalcRows(QPainter &_painter)
       else
 	{
 	  if (j > 0 && static_cast<int>(y + getFrameSet(j,i)->getFrame(0)->height()) >
-	      static_cast<int>((doc->getFrameSet(0)->getFrame(getFrameSet(j - 1,i)->getPageOfFrame(0))->bottom())))
+	      static_cast<int>((doc->getFrameSet(0)->getFrame(getFrameSet(j - 1,i)->getPageOfFrame(0) * doc->getColumns())->bottom())))
 	    {
 	      if (doc->getPages() < getFrameSet(j - 1,i)->getPageOfFrame(0) + 2)
 		doc->appendPage(doc->getPages() - 1,_painter);
 	      {
 		_addRow = true;
-		y = doc->getFrameSet(0)->getFrame(getFrameSet(j - 1,i)->getPageOfFrame(0) + 1)->y();
+		y = doc->getFrameSet(0)->getFrame((getFrameSet(j - 1,i)->getPageOfFrame(0) + 1) * doc->getColumns())->y();
 	      }
 	    }
 	}
