@@ -933,6 +933,7 @@ bool XMLTree::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
 	{ "CALCMODE",	    0x000d, 0 /* &XMLTree::_calcmode */ },
         { "CF",             0x01b1, &XMLTree::_cf },
         { "CONDFMT",        0x01b0, &XMLTree::_condfmt },
+        { "CODENAME",       0x00ba, 0 /* &XMLTree::_codename */ },
         { "CODEPAGE",       0x0042, &XMLTree::_codepage },
         { "COLINFO",        0x007d, &XMLTree::_colinfo },
 	{ "CONTINUE",       0x003c, 0 /* &XMLTree::_continue */ },
