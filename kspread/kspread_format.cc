@@ -364,7 +364,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     }
     if ( hasProperty( PFormatType, true ) || hasNoFallBackProperties( PFormatType )/*|| force*/ )
     {
-        styleFormatName =  KSpreadStyle::saveOasisStyleNumeric( mainStyle, m_pStyle->formatType(), m_pStyle->prefix( ),  m_pStyle->postfix( ) );
+        styleFormatName =  KSpreadStyle::saveOasisStyleNumeric( mainStyle, m_pStyle->formatType(), m_pStyle->prefix( ),  m_pStyle->postfix( ),m_pStyle->precision() );
     }
     return styleFormatName;
 
@@ -548,7 +548,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
 
     if ( hasProperty( PFormatType, true ) || hasNoFallBackProperties( PFormatType )/*|| force*/ )
     {
-        styleFormatName =  KSpreadStyle::saveOasisStyleNumeric( mainStyle, getFormatType( _col, _row ), prefix(_col,_row ),  postfix(_col, _row  ) );
+        styleFormatName =  KSpreadStyle::saveOasisStyleNumeric( mainStyle, getFormatType( _col, _row ), prefix(_col,_row ),  postfix(_col, _row  ),precision( _col,_row ) );
     }
     return styleFormatName;
 }

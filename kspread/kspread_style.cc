@@ -573,25 +573,25 @@ FormatType KSpreadStyle::formatType( const QString &_format )
         return Number_format;
 }
 
-QString KSpreadStyle::saveOasisStyleNumeric( KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString &_postfix )
+QString KSpreadStyle::saveOasisStyleNumeric( KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString &_postfix,int _precision )
 {
     QString styleName;
     switch( _style )
     {
     case Number_format:
-        styleName = saveOasisStyleNumericNumber( mainStyles,_style );
+        styleName = saveOasisStyleNumericNumber( mainStyles,_style, _precision );
         break;
     case Text_format:
-        styleName = saveOasisStyleNumericText( mainStyles,_style );
+        styleName = saveOasisStyleNumericText( mainStyles,_style,_precision );
         break;
     case Money_format:
-        styleName = saveOasisStyleNumericMoney( mainStyles,_style );
+        styleName = saveOasisStyleNumericMoney( mainStyles,_style,_precision);
         break;
     case Percentage_format:
-        styleName = saveOasisStyleNumericPercentage( mainStyles,_style );
+        styleName = saveOasisStyleNumericPercentage( mainStyles,_style,_precision );
         break;
     case Scientific_format:
-        styleName = saveOasisStyleNumericScientific( mainStyles,_style, _prefix, _postfix );
+        styleName = saveOasisStyleNumericScientific( mainStyles,_style, _prefix, _postfix,_precision );
         break;
     case ShortDate_format:
     case TextDate_format:
@@ -655,23 +655,23 @@ QString KSpreadStyle::saveOasisStyleNumeric( KoGenStyles &mainStyles, FormatType
     return styleName;
 }
 
-QString KSpreadStyle::saveOasisStyleNumericNumber( KoGenStyles&mainStyles, FormatType _style )
+QString KSpreadStyle::saveOasisStyleNumericNumber( KoGenStyles&mainStyles, FormatType _style, int _precision )
 {
     return "";
 }
 
-QString KSpreadStyle::saveOasisStyleNumericText( KoGenStyles&mainStyles, FormatType _style )
+QString KSpreadStyle::saveOasisStyleNumericText( KoGenStyles&mainStyles, FormatType _style, int _precision )
 {
     return "";
 }
 
-QString KSpreadStyle::saveOasisStyleNumericMoney( KoGenStyles&mainStyles, FormatType _style )
+QString KSpreadStyle::saveOasisStyleNumericMoney( KoGenStyles&mainStyles, FormatType _style, int _precision )
 {
     QString format;
     return KoOasisStyles::saveOasisCurrencyStyle( mainStyles, format );
 }
 
-QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, FormatType _style )
+QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, FormatType _style, int _precision )
 {
     //<number:percentage-style style:name="N106" style:family="data-style">
     //<number:number number:decimal-places="6" number:min-integer-digits="1"/>
@@ -684,7 +684,7 @@ QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, F
 }
 
 
-QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, FormatType _style, const QString &_prefix, const QString _suffix )
+QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, FormatType _style, const QString &_prefix, const QString _suffix, int _precision )
 {
     //<number:number-style style:name="N60" style:family="data-style">
     //  <number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
@@ -1070,7 +1070,7 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
         format.setAttribute( "brushstyle", (int) m_backGroundBrush.style() );
     }
 #endif
-    return saveOasisStyleNumeric( mainStyles, m_formatType, prefix(), postfix() );
+    return saveOasisStyleNumeric( mainStyles, m_formatType, prefix(), postfix(),precision() );
 }
 
 
