@@ -570,3 +570,7 @@ Simon, 28.11.1999:
 ------------------
 - Added wheel mouse support
 
+Reggie 5.12.1999:
+------------------
+- extend contents to txtobj height and resize txtobj to fit contents
+  works now also if the txtobj is in edit mode

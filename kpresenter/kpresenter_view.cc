@@ -1394,6 +1394,8 @@ void KPresenterView::textContentsToHeight()
 
     if ( page->haveASelectedTextObj() )
 	m_pKPresenterDoc->repaint( false );
+    else if ( txtObj )
+	txtObj->repaint( TRUE );
 }
 
 /*===============================================================*/
@@ -1411,6 +1413,8 @@ void KPresenterView::textObjectToContents()
 
     if ( page->haveASelectedKPTextObj() )
 	m_pKPresenterDoc->repaint( false );
+    else if ( txtObj )
+	txtObj->getKTextObject()->repaint( TRUE );
 }
 
 /*===============================================================*/
