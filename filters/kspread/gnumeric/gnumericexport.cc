@@ -283,7 +283,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, KSpreadCell 
         break;
     case SuperiorEqual:
         val.setAttribute("Operator", "6" );
-       break;
+        break;
     case InferiorEqual:
         val.setAttribute("Operator", "7" );
         break;
@@ -303,27 +303,166 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, KSpreadCell 
         val.setAttribute("Type", "0" );
         break;
     case Allow_Number:
+    {
         val.setAttribute("Type", "2" );
+        switch( kspread_validity->m_cond )
+        {
+        case None:
+            //Nothing
+            break;
+        case Equal:
+        case Superior:
+        case Inferior:
+        case SuperiorEqual:
+        case InferiorEqual:
+        case Different:
+        {
+            QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number( kspread_validity->valMin ) ) );
+            val.appendChild( tmp );
+        }
         break;
+        case Between:
+        case DifferentTo:
+        {
+            QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMin ) ) );
+            val.appendChild( tmp );
+            tmp = gnumeric_doc.createElement( "gmr:Expression1" );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMax ) ) );
+            val.appendChild( tmp );
+        }
+        break;
+        }
+
+        break;
+    }
     case Allow_Text:
         //Not supported into gnumeric
         //val.setAttribute("Type", "1" );
         break;
     case Allow_Time:
         val.setAttribute("Type", "5" );
+        switch( kspread_validity->m_cond )
+        {
+        case None:
+            //Nothing
+            break;
+        case Equal:
+        case Superior:
+        case Inferior:
+        case SuperiorEqual:
+        case InferiorEqual:
+        case Different:
+            break;
+        case Between:
+        case DifferentTo:
+            break;
+        }
+
         break;
     case Allow_Date:
         val.setAttribute("Type", "4" );
+        switch( kspread_validity->m_cond )
+        {
+        case None:
+            //Nothing
+            break;
+        case Equal:
+        case Superior:
+        case Inferior:
+        case SuperiorEqual:
+        case InferiorEqual:
+        case Different:
+            break;
+        case Between:
+        case DifferentTo:
+            break;
+        }
+
         break;
     case Allow_Integer:
         val.setAttribute("Type", "1" );
+        switch( kspread_validity->m_cond )
+        {
+        case None:
+            //Nothing
+            break;
+        case Equal:
+        case Superior:
+        case Inferior:
+        case SuperiorEqual:
+        case InferiorEqual:
+        case Different:
+        {
+            QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMin ) ) );
+            val.appendChild( tmp );
+        }
+        break;
+        case Between:
+        case DifferentTo:
+        {
+            QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMin ) ) );
+            val.appendChild( tmp );
+            tmp = gnumeric_doc.createElement( "gmr:Expression1" );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMax ) ) );
+            val.appendChild( tmp );
+        }
+        break;
+        }
         break;
     case Allow_TextLength:
         val.setAttribute("Type", "6" );
+        switch( kspread_validity->m_cond )
+        {
+        case None:
+            //Nothing
+            break;
+        case Equal:
+        case Superior:
+        case Inferior:
+        case SuperiorEqual:
+        case InferiorEqual:
+        case Different:
+        {
+            QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMin ) ) );
+            val.appendChild( tmp );
+        }
+        break;
+        case Between:
+        case DifferentTo:
+        {
+            QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMin ) ) );
+            val.appendChild( tmp );
+            tmp = gnumeric_doc.createElement( "gmr:Expression1" );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMax ) ) );
+            val.appendChild( tmp );
+        }
+        break;
+        }
         break;
     case Allow_List:
         val.setAttribute("Type", "3" );
-        //TODO
+        switch( kspread_validity->m_cond )
+        {
+        case None:
+            //Nothing
+            break;
+        case Equal:
+        case Superior:
+        case Inferior:
+        case SuperiorEqual:
+        case InferiorEqual:
+        case Different:
+            break;
+        case Between:
+        case DifferentTo:
+            break;
+        }
         break;
     }
 
