@@ -42,7 +42,7 @@ QString KPresenterShell::configFile() const
 
 KoDocument* KPresenterShell::createDoc()
 {
-    return new KPresenterDoc;
+    return new KPresenterDoc( 0, "Document" );
 }
 
 void KPresenterShell::setRootPart( Part *part )
