@@ -1294,7 +1294,7 @@ void KPresenterView::extraBackground()
                            page->getBackXFactor(),
                            page->getBackYFactor( ),
                            page );
-    backDia->setCaption( i18n( "Page Background" ) );
+    backDia->setCaption( i18n( "Slide Background" ) );
     QObject::connect( backDia, SIGNAL( backOk( BackDia*, bool ) ), this, SLOT( backOk( BackDia*, bool ) ) ) ;
     backDia->exec();
 
@@ -2608,13 +2608,13 @@ void KPresenterView::setupActions()
                                     actionCollection(), "edit_delete" );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
     actionEditDeSelectAll= KStdAction::deselect( this, SLOT( editDeSelectAll()), actionCollection(), "edit_deselectall");
-    /*actionEditCopyPage = */new KAction( i18n( "Copy Page" ), "editcopy",
+    /*actionEditCopyPage = */new KAction( i18n( "Copy Slide" ), "editcopy",
                                           0, this, SLOT( editCopyPage() ),
                                           actionCollection(), "edit_copypage" );
-    /*actionEditDuplicatePage =*/ new KAction( i18n( "Duplicate Page" ), "newslide",
+    /*actionEditDuplicatePage =*/ new KAction( i18n( "Duplicate Slide" ), "newslide",
                                            0, this, SLOT( editDuplicatePage() ),
                                            actionCollection(), "edit_duplicatepage" );
-    actionEditDelPage = new KAction( i18n( "Delete Page" ), "delslide", 0,
+    actionEditDelPage = new KAction( i18n( "Delete Slide" ), "delslide", 0,
                                      this, SLOT( editDelPage() ),
                                      actionCollection(), "edit_delpage" );
 
@@ -2667,7 +2667,7 @@ void KPresenterView::setupActions()
 
     // ---------------- insert actions
 
-    actionInsertPage = new KAction( i18n( "&Page..." ), "newslide", Key_F2,
+    actionInsertPage = new KAction( i18n( "&Slide..." ), "newslide", Key_F2,
                                     this, SLOT( insertPage() ),
                                     actionCollection(), "insert_page" );
 
@@ -2965,7 +2965,7 @@ void KPresenterView::setupActions()
                                              actionCollection(), "extra_alignbottom" );
 
 
-    actionExtraBackground = new KAction( i18n( "Page Bac&kground..." ), "background", 0,
+    actionExtraBackground = new KAction( i18n( "Slide Bac&kground..." ), "background", 0,
                                          this, SLOT( extraBackground() ),
                                          actionCollection(), "extra_background" );
 
@@ -3065,7 +3065,7 @@ void KPresenterView::setupActions()
                                     this, SLOT( screenLast() ),
                                     actionCollection(), "screen_last" );
 
-    actionScreenSkip = new KAction( i18n( "Goto &Page..." ),
+    actionScreenSkip = new KAction( i18n( "Goto &Slide..." ),
                                     "goto", 0,
                                     this, SLOT( screenSkip() ),
                                     actionCollection(), "screen_skip" );
@@ -3090,7 +3090,7 @@ void KPresenterView::setupActions()
 //     actionObjectProperties = new KAction( i18n( "&Properties..." ), "penbrush", 0,
 // 				       this, SLOT( extraPenBrush() ),
 // 				       actionCollection(), "object_properties" );
-    actionRenamePage=new KAction(i18n( "&Rename Page..." ),0,this,
+    actionRenamePage=new KAction(i18n( "&Rename Slide..." ),0,this,
                                  SLOT( renamePageTitle() ),
                                  actionCollection(), "rename_page" );
 
@@ -3321,17 +3321,17 @@ void KPresenterView::setupActions()
     actionZoomPlus = new KAction( i18n( "Zoom In" ), "viewmag+",0,
                                    this, SLOT( zoomPlus() ),
                                    actionCollection(), "zoom_plus" );
-    actionZoomEntirePage = new KAction( i18n( "Zoom Entire Page" ), 0,
+    actionZoomEntirePage = new KAction( i18n( "Zoom Entire Slide" ), 0,
                                    this, SLOT( zoomEntirePage() ),
                                    actionCollection(), "zoom_entire_page" );
 
-    actionZoomMinus = new KAction( i18n( "Zoom Page Width" ), 0,
+    actionZoomMinus = new KAction( i18n( "Zoom Slide Width" ), 0,
                                    this, SLOT( zoomPageWidth() ),
                                    actionCollection(), "zoom_page_width" );
     actionZoomSelectedObject= new KAction( i18n( "Zoom Selected Object" ), "viewmagfit",0,
                                    this, SLOT( zoomSelectedObject() ),
                                    actionCollection(), "zoom_selected_object" );
-    actionZoomPageHeight= new KAction( i18n( "Zoom Page Height" ), 0,
+    actionZoomPageHeight= new KAction( i18n( "Zoom Slide Height" ), 0,
                                    this, SLOT( zoomPageHeight() ),
                                    actionCollection(), "zoom_page_height" );
 
@@ -4380,12 +4380,12 @@ void KPresenterView::setupScrollbars()
     pgNext = new QToolButton( pageBase );
     pgNext->setPixmap( QPixmap( pagedown_xpm ) );
     pgNext->setAutoRepeat( TRUE );
-    QToolTip::add( pgNext, i18n( "Next Page" ) );
+    QToolTip::add( pgNext, i18n( "Next Slide" ) );
     connect( pgNext, SIGNAL( clicked() ), this, SLOT( nextPage() ) );
     pgPrev = new QToolButton( pageBase );
     pgPrev->setPixmap( QPixmap( pageup_xpm ) );
     pgPrev->setAutoRepeat( TRUE );
-    QToolTip::add( pgPrev, i18n( "Previous Page" ) );
+    QToolTip::add( pgPrev, i18n( "Previous Slide" ) );
     connect( pgPrev, SIGNAL( clicked() ), this, SLOT( prevPage() ) );
 }
 
@@ -6106,8 +6106,8 @@ void KPresenterView::changeZoomMenu( int zoom )
     {
         if( lst.contains( i18n( "Zoom to Width" ) ) == 0 )
             lst << i18n( "Zoom to Width" );
-        if( lst.contains( i18n( "Zoom to Whole Page" ) )==0)
-            lst << i18n( "Zoom to Whole Page" );
+        if( lst.contains( i18n( "Zoom to Whole Slide" ) )==0)
+            lst << i18n( "Zoom to Whole Slide" );
         QValueList<int> list;
         QString z;
         int val;
@@ -6135,7 +6135,7 @@ void KPresenterView::changeZoomMenu( int zoom )
     else
     {
         lst << i18n( "Zoom to Width" );
-        lst << i18n( "Zoom to Whole Page" );
+        lst << i18n( "Zoom to Whole Slide" );
         lst << "33%";
         lst << "50%";
         lst << "75%";
@@ -6176,7 +6176,7 @@ void KPresenterView::viewZoom( const QString &s )
                        (zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth ) );
         ok = true;
     }
-    else if ( z == i18n("Zoom to Whole Page") )
+    else if ( z == i18n("Zoom to Whole Slide") )
     {
         zoom = getZoomEntirePage();
         ok = true;
