@@ -581,7 +581,8 @@ void KWView::setupActions()
 
     actionBackgroundColor = new TKSelectColorAction( i18n( "Background Color" ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor",true);
     connect(actionBackgroundColor,SIGNAL(activated()),SLOT(backgroundColor() ));
-    connect(actionBackgroundColor,SIGNAL(sig_defaultColor()),SLOT(defaultBackGroundColor()));
+    actionBackgroundColor->setDefaultColor(QColor());
+
     // ---------------------- Table menu
 
     actionTableInsertRow = new KAction( i18n( "&Insert Row..." ), "insert_table_row", 0,
@@ -2891,18 +2892,6 @@ void KWView::backgroundColor()
     }
 }
 
-void KWView::defaultBackGroundColor()
-{
-    QColor backColor = QColor();
-    KWTextFrameSetEdit *edit = currentTextEdit();
-    if ( m_gui)
-    {
-        if(edit)
-            edit->setTextBackgroundColor(backColor);
-        else
-            m_gui->canvasWidget()->setFrameBackgroundColor( backColor );
-    }
-}
 
 void KWView::borderSet()
 {
