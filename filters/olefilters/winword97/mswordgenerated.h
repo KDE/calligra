@@ -4264,6 +4264,6 @@ public:
 };
 
 #ifndef __GNUC__
-#pragma pack
+#pragma pack()
 #endif
 #endif
