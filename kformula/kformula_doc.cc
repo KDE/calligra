@@ -284,7 +284,7 @@ void KFormulaDocument::addBracketElement(QString cont)
  * If activeElement is a BasicElement it "substitute"
  *  this basicElement with a TextElement
  */
-void KFormulaDocument::addIndex(int index)
+BasicElement * KFormulaDocument::addIndex(int index)
 {
     BasicElement *oldIndexElement;
     BasicElement *newElement;
@@ -301,8 +301,27 @@ void KFormulaDocument::addIndex(int index)
 	}
     setActiveElement(newElement);
     emitModified();
+    return(newElement);
 } 
-
+BasicElement * KFormulaDocument::addChild(int child)
+{
+    BasicElement *oldChildElement;
+    BasicElement *newElement;
+    if(theActiveElement==0L)
+	setActiveElement(theFirstElement);
+  
+    oldChildElement=theActiveElement->getChild(child);
+    if(oldChildElement==0L)        
+	theActiveElement->setChild(newElement = 
+				   new BasicElement(this,theActiveElement,child+4),child);
+    else
+	{
+	    oldChildElement->insertElement(newElement = new BasicElement(this));
+	}
+    setActiveElement(newElement);
+    emitModified();
+    return(newElement);
+} 
 void KFormulaDocument::addTextElement()
 {   
     BasicElement *nextElement;
@@ -397,7 +416,7 @@ void KFormulaDocument::keyPressEvent( QKeyEvent *k )
     */
     warning("Key pressed %i, ascii:%i",k->key(),k->ascii());
     int elReturn=0;
-    if((k->ascii()>32)&&(k->ascii()<127))
+    if((k->ascii()>=32)&&(k->ascii()<127)) 
 	{ 
 	    if (theActiveElement!=0L) 
 		elReturn=theActiveElement->takeAsciiFromKeyb(k->ascii());

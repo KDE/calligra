@@ -90,7 +90,8 @@ class KFormulaDocument : public QObject,
     
     void addTextElement();
     void addRootElement();
-    void addIndex(int index);
+    BasicElement * addIndex(int index);
+    BasicElement * addChild(int child);
     void addFractionElement(QString cont);    
     void addMatrixElement(QString cont);
     void addPrefixedElement(QString cont);

@@ -607,9 +607,11 @@ void KFormulaView::slotTypeChanged( const BasicElement *elm)
     m_rToolBarType->setItemEnabled(m_idButtonType_DAl,isFraction); 
     m_rToolBarType->setItemEnabled(m_idButtonType_MAl,isFraction);  
     m_rToolBarType->setItemEnabled(m_idButtonType_Mid,isFraction); 
-    m_rToolBarType->setItemEnabled(m_idButtonType_CAl,isFraction); 
-    m_rToolBarType->setItemEnabled(m_idButtonType_LAl,isFraction); 
-    m_rToolBarType->setItemEnabled(m_idButtonType_RAl,isFraction);  
+    
+    m_rToolBarType->setItemEnabled(m_idButtonType_CAl,isFraction||isMatrix); 
+    m_rToolBarType->setItemEnabled(m_idButtonType_LAl,isFraction||isMatrix); 
+    m_rToolBarType->setItemEnabled(m_idButtonType_RAl,isFraction||isMatrix);  
+    
     m_rToolBarType->setItemEnabled(m_idButtonType_Les,isFraction); 
     m_rToolBarType->setItemEnabled(m_idButtonType_Mor,isFraction); 
     m_rToolBarType->setItemEnabled(m_idButtonType_AddH,isPrefixed); 
@@ -632,6 +634,14 @@ void KFormulaView::slotTypeChanged( const BasicElement *elm)
 	m_rToolBarType->setButton(m_idButtonType_LAl,content[2]=='L'); 
 	m_rToolBarType->setButton(m_idButtonType_RAl,content[2]=='R'); 
 	m_rToolBarType->setButton(m_idButtonType_Mid,content[0]=='F'); 
+    }
+    if(isMatrix)
+    {
+    	QString content=elm->getContent();
+    	m_rToolBarType->setButton(m_idButtonType_CAl,content[2]=='C'); 
+	m_rToolBarType->setButton(m_idButtonType_LAl,content[2]=='L'); 
+	m_rToolBarType->setButton(m_idButtonType_RAl,content[2]=='R'); 
+
     }
   if (isPrefixed) { 
 	QString content=elm->getContent();
@@ -764,6 +774,7 @@ void KFormulaView::reduce()
     if(m_rToolBarFont->isButtonOn(m_idButtonFont_5)) level=level | FN_NEXT;
 
     m_pDoc->activeElement()->scaleNumericFont(level);
+
     update();
 }
 
@@ -968,10 +979,12 @@ void KFormulaView::togglePixmap()
 void KFormulaView::integralLower()
 {
     warning("Slot integralLower");
+    m_pDoc->addChild(2);
 }
 void KFormulaView::integralHigher()
 { 
     warning("Slot integralHigher");
+    m_pDoc->addChild(1);
 }
 void KFormulaView::bracketType()
 { 

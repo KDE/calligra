@@ -209,6 +209,11 @@ for (int k=0;k<6;k++)
   if(co[k]->currentItem()==2) bch='D';
   ret[15+k]=bch;
  }
+  if(co[6]->currentItem()==0) ret[2]='C';
+  if(co[6]->currentItem()==1) ret[2]='L';
+  if(co[6]->currentItem()==2) ret[2]='R';
+
+
 warning(ret);
 emit returnString(ret);
 close();
@@ -247,6 +252,10 @@ for (int k=0;k<6;k++)
   if(bch=='L')co[k]->setCurrentItem(1);
   if(bch=='D')co[k]->setCurrentItem(2);
  }
+
+  if(str[2]=='C')co[6]->setCurrentItem(0);
+  if(str[2]=='L')co[6]->setCurrentItem(1);
+  if(str[2]=='R')co[6]->setCurrentItem(2);
 
 if(!cb[0]->isChecked())
     cb[2]->setChecked(TRUE);

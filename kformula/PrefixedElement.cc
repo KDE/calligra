@@ -24,8 +24,10 @@ PrefixedElement::PrefixedElement(KFormulaDocument *Formula,
       Stuff to load pixmap (if need)
     */
     usePixmap=FALSE;
-    childrenNumber=1;
+    childrenNumber=3;
     child.resize(childrenNumber);
+    child[1]=0L;
+    child[2]=0L;
 }
 
 PrefixedElement::~PrefixedElement()
@@ -107,7 +109,31 @@ void PrefixedElement::draw(QPoint drawPoint,int resolution)
     if( beActive )
 	pen->setPen(blue);
    //I must add MaxLimitWidth
-    child[0]->draw(QPoint(x+familySize.x()+unit*2+ofs+1,y),resolution);
+//    child[0]->draw(QPoint(x+familySize.x()+unit*2+ofs+1,y),resolution);
+    child[0]->draw(QPoint(x+familySize.right()-child[0]->getSize().width(),y),resolution);
+    
+    int y1=0,y2=0;
+    if( content[1]=='S')
+     {
+      if(child[1]!=0)
+       y1=y-child[1]->getSize().top()+familySize.top();
+      if(child[2]!=0)
+       y2=y-child[2]->getSize().bottom()+familySize.bottom();
+     }
+    if( content[1]=='F')
+     {
+      if(child[1]!=0)
+       y1=y-child[1]->getSize().bottom()-unit*2;
+      if(child[2]!=0)
+       y2=y-child[2]->getSize().top()+unit*2;      
+     }
+         
+    if(child[1]!=0)
+      child[1]->draw(QPoint(x+familySize.x()+unit*2+ofs+1,y1),resolution);
+
+    if(child[2]!=0)
+      child[2]->draw(QPoint(x+familySize.x()+unit*2+ofs+1,y2),resolution);
+    
     myArea=globalSize;;
     myArea.moveBy(x,y);
     // globalArea=
@@ -128,7 +154,7 @@ void PrefixedElement::checkSize()
 {
     //warning("R %p",this);
     QRect nextDimension; 
-  
+    QRect child1Size,child2Size;  
     if (next!=0L)
 	{
 	    next->checkSize();
@@ -137,6 +163,31 @@ void PrefixedElement::checkSize()
   
     child[0]->checkSize();
     familySize=child[0]->getSize();
+
+    if (child[1]!=0)
+	{
+		warning("There is a CHild1:lowerLimit");
+	    child[1]->checkSize();
+	    child1Size=child[1]->getSize();
+	} else child1Size.setRect(0,0,1,1);
+
+    if (child[2]!=0)
+	{	warning("There is a CHild2:lowerLimit");
+	    child[2]->checkSize();
+	    child2Size=child[2]->getSize();
+	} else child2Size.setRect(0,0,1,1);   
+	
+    int MaxX=0;
+    if (child1Size.width()>child2Size.width())
+	MaxX=child1Size.width();
+      else
+	MaxX=child2Size.width();
+    familySize.moveBy(MaxX,0);
+    child1Size.moveBy(0,familySize.top()-child1Size.bottom());
+    child2Size.moveBy(0,familySize.bottom()-child2Size.top());
+    familySize=familySize.unite(child1Size);
+    familySize=familySize.unite(child2Size);
+
     int unit=0;
     if( content[1]=='S')
      unit = (familySize.height())/8 ;

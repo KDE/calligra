@@ -59,10 +59,9 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
       Here draw borders
     */  
     int ofs=numericFont/32;
-    if( beActive )
-	pen->setPen(blue);
     int r,c;
     int minX;
+    
     for(c=0;c<cols;c++)     
       { 
 	minX=32000;
@@ -72,7 +71,7 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
 		child[c+r*cols]->draw(QPoint(x+3,y)+childPoint[c+r*cols],resolution);
 		if(childPoint[c+r*cols].x()<minX) minX=childPoint[c+r*cols].x();
 	     if(c==0) 
-              if(r<rows-1)
+              if(r<rows-1) {
       	       if(content[15]=='L')   
                 {
 	         int vspace=atoi(content.mid(12,3))+ofs;
@@ -87,14 +86,36 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
 		pen->drawPolygon(points,FALSE,0,4);
 		 
 		}
-	      
+	       if(content[15]=='D')   
+                {
+	         int vspace=atoi(content.mid(12,3));
+		QPointArray points(4);
+	        points.setPoint(0,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2-1);
+		points.setPoint(1,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2+ofs-1);
+		points.setPoint(2,x+familySize.width(),
+				  y+hby[r]+childPoint[c+r*cols].y()+vspace/2-1);
+	        points.setPoint(3,x+familySize.width(),
+				  y+hby[r]+childPoint[c+r*cols].y()+vspace/2+ofs-1);
+		pen->setBrush(pen->pen().color());
+		pen->drawPolygon(points,FALSE,0,4);
+		 
+	        points.setPoint(0,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2+1+2*ofs);
+		points.setPoint(1,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2+3*ofs+1);
+		points.setPoint(2,x+familySize.width(),
+				  y+hby[r]+childPoint[c+r*cols].y()+vspace/2+1+2*ofs);
+	        points.setPoint(3,x+familySize.width(),
+				  y+hby[r]+childPoint[c+r*cols].y()+vspace/2+3*ofs+1);
+		pen->setBrush(pen->pen().color());
+		pen->drawPolygon(points,FALSE,0,4);
+		}
+	       
+	       }
 	    }
 
-	 if(c>0)
+	 if(c>0) {
           if(content[16]=='L')
  	   {
 	    int hspace=atoi(content.mid(12,3))+ofs;
-
 	    QPointArray points(4);
 	    points.setPoint(0,minX+x+3-hspace/2-ofs+ofs/2,y+familySize.y());
 	    points.setPoint(1,minX+x+3-hspace/2-ofs+ofs/2,y+familySize.bottom());	
@@ -103,7 +124,28 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
 	    pen->setBrush(pen->pen().color());
 	    pen->drawPolygon(points,FALSE,0,4);
 	  }
+	  if(content[16]=='D')
+ 	   {
+	    int hspace=atoi(content.mid(12,3));
+	    QPointArray points(4);
+	    points.setPoint(0,minX+x+3-hspace/2-ofs+1,y+familySize.y());
+	    points.setPoint(1,minX+x+3-hspace/2-ofs+1,y+familySize.bottom());	
+	    points.setPoint(2,minX+x+3-hspace/2+1,y+familySize.bottom());
+	    points.setPoint(3,minX+x+3-hspace/2+1,y+familySize.y());
+	    pen->setBrush(pen->pen().color());
+	    pen->drawPolygon(points,FALSE,0,4);
+	    points.setPoint(0,minX+x+3-hspace/2-3*ofs-1,y+familySize.y());
+	    points.setPoint(1,minX+x+3-hspace/2-3*ofs-1,y+familySize.bottom());	
+	    points.setPoint(2,minX+x+3-hspace/2-2*ofs-1,y+familySize.bottom());
+	    points.setPoint(3,minX+x+3-hspace/2-2*ofs-1,y+familySize.y());
+	    pen->setBrush(pen->pen().color());
+	    pen->drawPolygon(points,FALSE,0,4);
+
+	   }
+	  }
       }
+    if( beActive )
+	pen->setPen(blue);
       
     x=drawPoint.x();
 
@@ -144,6 +186,7 @@ void MatrixElement::checkSize()
  
     int vspace = space, hspace=space;               //real spaces (change if there are borders)
     int ofs=numericFont/32;
+    if (ofs<1) ofs=1;
     if(content[1]=='C') midr=0;
     if(content[16]=='L') hspace+=ofs;
     if(content[15]=='L') vspace+=ofs; 
@@ -214,7 +257,14 @@ void MatrixElement::checkSize()
     familySize=sizeC;
     // familySize.setBottom(familySize.bottom()+vspace);
     familySize.moveBy(0,correction); 
-
+    int topBorderCorr=0;
+    if(content[17]=='L')
+       topBorderCorr=ofs+1+space;
+    if(content[17]=='D')
+       topBorderCorr=3*ofs+2+space;           
+    //correction+=topBorderCorr;
+    familySize.setTop(familySize.top()-topBorderCorr);
+    
     for(c=0;c<cols*rows;c++)
 	childPoint[c]+=QPoint(0,correction);
 
@@ -230,6 +280,12 @@ And now columns!!
 */ 
     int right,x;
     sizeR.setRect(0,0,1,1);
+    if(content[19]=='L')
+     sizeR.setRect(0,0,ofs+space+1,1);
+    if(content[19]=='D')
+     sizeR.setRect(0,0,3*ofs+space+2,1);
+
+
     for(c=0;c<cols;c++) {
 	sizeC.setRect(0,0,0,0);
 	for(r=0;r<rows;r++) {
