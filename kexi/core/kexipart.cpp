@@ -214,7 +214,7 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 //	dlg->setCaption( capt );
 //	dlg->setTabCaption( item.name() );
 	dlg->setId(item.identifier()); //not needed, but we did it
-	dlg->registerDialog();
+//moved down	dlg->registerDialog();
 	dlg->setIcon( SmallIcon( dlg->itemIcon() ) );
 	if (dlg->mdiParent())
 		dlg->mdiParent()->setIcon( *dlg->icon() );
@@ -251,7 +251,8 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 		if (!dlg->m_schemaData) {
 			m_status = Kexi::ObjectStatus( dlg->mainWin()->project()->dbConnection(), 
 				i18n("Failed loading object's definition."), i18n("Data may be corrupted."));
-			dlg->close(); //this will destroy dlg
+			dlg->close();
+			delete dlg;
 			return 0;
 		}
 	}
@@ -268,9 +269,11 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 
 	if (switchingFailed) {
 		m_status = dlg->status();
-		dlg->close(); //this will destroy dlg
+		dlg->close();
+		delete dlg;
 		return 0;
 	}
+	dlg->registerDialog(); //ok?
 	dlg->show();
 
 	if (dlg->mdiParent() && dlg->mdiParent()->state()==KMdiChildFrm::Normal) //only resize dialog if it is in normal state

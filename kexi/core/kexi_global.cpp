@@ -20,9 +20,9 @@
     Boston, MA 02111-1307, USA.
 */
 
-#include "kexi_global.h"
+#include "kexi_version.h"
 
-namespace Kexi {
+using namespace Kexi;
 
 KEXICORE_EXPORT unsigned int version()
 {
@@ -49,4 +49,3 @@ KEXICORE_EXPORT const char *versionString()
     return KEXI_VERSION_STRING;
 }
 
-}

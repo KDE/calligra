@@ -27,7 +27,7 @@
 #include "kexipartmanager.h"
 #include "kexipart.h"
 #include "kexipartinfo.h"
-#include "kexi_global.h"
+#include "kexi_version.h"
 
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>

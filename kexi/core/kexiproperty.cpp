@@ -20,7 +20,7 @@
 */
 
 #include "kexiproperty.h"
-#include "kexi_global.h"
+#include "kexi_version.h"
 #include "kexipropertybuffer.h"
 
 #include <qstringlist.h>

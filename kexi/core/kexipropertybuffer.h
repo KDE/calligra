@@ -28,7 +28,6 @@
 #include <kdebug.h>
 
 #include "kexiproperty.h"
-#include "kexi_global.h"
 
 class PixmapCollection;
 
