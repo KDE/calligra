@@ -93,3 +93,4 @@ namespace Kivio {
     }
   }
 };
+#include "kiviotargettool.moc"
