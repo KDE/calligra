@@ -342,6 +342,7 @@ void OOWriterWorker::writeStylesXml(void)
     zipWriteData("  <style:page-master style:name=\"pm1\">\n"); // ### TODO: verify if style name is unique
 
     zipWriteData( "   <style:properties" );
+    zipWriteData( " style:page-usage=\"all\"" ); // ### TODO: check
 
     zipWriteData(" fo:page-width=\"");
     zipWriteData(QString::number(m_paperWidth));
@@ -382,8 +383,7 @@ void OOWriterWorker::writeStylesXml(void)
 
         for (int i=0; i < m_columns; ++i)
         {
-            // ### TODO: style:rel-width attribute
-            zipWriteData( "     <style:column fo:margin-left=\"0cm\" fo:margin-right=\"0cm\"/>" );
+            zipWriteData( "     <style:column style:rel-width=\"1\" fo:margin-left=\"0cm\" fo:margin-right=\"0cm\"/>" );
         }
 
         zipWriteData( "    </style:columns>" );

@@ -6,6 +6,7 @@ Generate Manifest file
 <style:text-underline> (verify that all modes are generated.)
 <style:wrap> with "none" for pictures?
 converting from raw XML KWord document (in KoStore?)
+Main frame/frameset (fo:border, style:border-line-width, fo:padding?, style:footnote-max-height?)
 ...
 
 === Old OOWriter To-Do List ===
