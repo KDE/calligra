@@ -996,3 +996,14 @@ Montel laurent <montell@club-internet.fr>
 * Fixed changing page orientation
 * Fixed default precision for percentages when autodetected
 
+Summary 2000-09-19 -> 2000-09-23
+*David : bug fix
+non latin1 bug
+Improved automatic check format (When number is >1E+10 format is changed in
+scientific format)
+Update DTD file
+
+thanks
+
+*Laurent:
+some bugs fixes

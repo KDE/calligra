@@ -279,7 +279,7 @@ void KSpreadFormatDlg::slotOk()
     }
 
     m_view->activeTable()->setSelection( QRect(), r.topLeft() );
-
+    m_view->doc()->setModified( true ); 
     accept();
 }
 
