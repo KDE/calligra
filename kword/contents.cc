@@ -25,57 +25,30 @@
 #include "kwdoc.h"
 #include "kwframe.h"
 #include "kwstyle.h"
+#include "kwcommand.h"
 #include "counter.h"
 #include "kwtextframeset.h"
 
+#include <kcommand.h>
 #include <klocale.h>
 #include <kdebug.h>
 
-/******************************************************************
- *
- * Class: KWContents
- *
- ******************************************************************/
-
-KWContents::KWContents( KWDocument *doc )
-    : m_doc( doc )
+KWInsertTOCCommand::KWInsertTOCCommand( KWTextFrameSet * fs )
+    : QTextCommand( fs->textDocument() ),
+      m_bPageBreakInserted( false )
 {
 }
 
-void KWContents::createContents()
+QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
 {
-    KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet *>(m_doc->getFrameSet( 0 ));
-    ASSERT(fs); if (!fs) return;
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
+    KWTextFrameSet * fs = textdoc->textFrameSet();
 
-    QTextDocument * textdoc = fs->textDocument();
-
-    // Remove existing table of contents, based on the style
-
-    QTextCursor start( textdoc );
-    QTextCursor end( textdoc );
-    for ( QTextParag *p = textdoc->firstParag(); p ; p = p->next() )
-    {
-        KWTextParag * parag = static_cast<KWTextParag *>(p);
-        if ( parag->style() && ( parag->style()->name().startsWith( "Contents Head" ) ||
-            parag->style()->name() == "Contents Title" ) )
-        {
-            kdDebug() << "KWContents::createContents Deleting paragraph " << p << endl;
-            // This paragraph is part of the TOC -> remove
-            start.setParag( p );
-            start.setIndex( 0 );
-            textdoc->setSelectionStart( QTextDocument::Temp, &start );
-            ASSERT( p->next() );
-            end.setParag( p->next() );
-            end.setIndex( 0 );
-            textdoc->setSelectionEnd( QTextDocument::Temp, &end );
-            textdoc->removeSelectedText( QTextDocument::Temp, &end );
-        }
-    }
-
+    KWTextParag *body = static_cast<KWTextParag *>( textdoc->firstParag() );
     // Create new very first paragraph
     KWTextParag *parag = static_cast<KWTextParag *>( textdoc->createParag( textdoc, 0, textdoc->firstParag(), true ) );
     parag->append( i18n( "Table of Contents" ) );
-    KWStyle * style = findOrCreateTOCStyle( -1 ); // "Contents Title"
+    KWStyle * style = findOrCreateTOCStyle( fs, -1 ); // "Contents Title"
     parag->setParagLayout( style->paragLayout() );
     parag->setFormat( 0, parag->string()->length(), textdoc->formatCollection()->format( &style->format() ) );
 
@@ -83,8 +56,8 @@ void KWContents::createContents()
     // Otherwise the page numbers are incorrect
 
     KWTextParag *p = static_cast<KWTextParag *>(parag->next());
+    ASSERT( p == body );
     KWTextParag *prevTOCParag = parag;
-    KWTextParag *body = p;
     QMap<KWTextParag *, KWTextParag *> paragMap;     // Associate a paragraph form the TOC with the real one from the body
     while ( p ) {
         // We recognize headers by the "numbering" property of the paragraph
@@ -94,7 +67,6 @@ void KWContents::createContents()
         if ( p->counter() && p->counter()->numbering() == Counter::NUM_CHAPTER )
         {
             parag = static_cast<KWTextParag *>(textdoc->createParag( textdoc, prevTOCParag /*prev*/, body /*next*/, true ));
-            //parag->setInfo( KWParag::PI_CONTENTS );
             QString txt = p->string()->toString();
             txt.prepend( p->counter()->text(p) );
             parag->append( txt );
@@ -123,17 +95,68 @@ void KWContents::createContents()
 
         // Apply style
         int depth = p->counter()->depth();    // we checked for p->counter() before putting in the map
-        KWStyle * tocStyle = findOrCreateTOCStyle( depth );
+        KWStyle * tocStyle = findOrCreateTOCStyle( fs, depth );
         parag->setParagLayout( tocStyle->paragLayout() );
-        parag->setFormat( 0, parag->string()->length(), textdoc->formatCollection()->format( &tocStyle->format() ) );
+        KWTextFormat * newFormat = fs->zoomFormatFont( & tocStyle->format() );
+        parag->setFormat( 0, parag->string()->length(), newFormat );
     }
 
-    //TODO
-    //if ( parag->getNext() )
-    //    parag->getNext()->setHardBreak( TRUE );
+    kdDebug() << "KWInsertTOCCommand::execute body parag=" << body << " " << body->paragId() << endl;
+    if ( !body->hardFrameBreak() )
+    {
+        kdDebug() << "KWInsertTOCCommand::execute inserting page break" << endl;
+        m_bPageBreakInserted = true;
+        body->setPageBreaking( body->pageBreaking() | KWParagLayout::HardFrameBreak );
+    }
+    return c;
 }
 
-KWStyle * KWContents::findOrCreateTOCStyle( int depth )
+QTextCursor *KWInsertTOCCommand::unexecute( QTextCursor *c )
+{
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
+    KWTextFrameSet * fs = textdoc->textFrameSet();
+    removeTOC( fs, c, 0L );
+    if ( m_bPageBreakInserted )
+    {
+        KWTextParag *body = static_cast<KWTextParag *>( textdoc->firstParag() );
+        // Remove frame break
+        body->setPageBreaking( body->pageBreaking() & ~KWParagLayout::HardFrameBreak );
+    }
+    return c;
+}
+
+void KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMacroCommand *macroCmd )
+{
+    KWTextDocument * textdoc = fs->textDocument();
+    // Remove existing table of contents, based on the style
+    QTextCursor start( textdoc );
+    QTextCursor end( textdoc );
+    // We start from the end, to avoid the parag shifting problem
+    QTextParag *p = textdoc->lastParag();
+    while ( p )
+    {
+        KWTextParag * parag = static_cast<KWTextParag *>(p);
+        if ( parag->style() && ( parag->style()->name().startsWith( "Contents Head" ) ||
+            parag->style()->name() == "Contents Title" ) )
+        {
+            kdDebug() << "KWContents::createContents Deleting paragraph " << p->paragId() << endl;
+            // This paragraph is part of the TOC -> remove
+            start.setParag( p );
+            start.setIndex( 0 );
+            textdoc->setSelectionStart( QTextDocument::Temp, &start );
+            ASSERT( p->next() );
+            end.setParag( p->next() );
+            end.setIndex( 0 );
+            textdoc->setSelectionEnd( QTextDocument::Temp, &end );
+            KCommand * cmd = fs->removeSelectedTextCommand( cursor, QTextDocument::Temp );
+            if ( macroCmd )
+                macroCmd->addCommand( cmd );
+        }
+        p = p->prev();
+    }
+}
+
+KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int depth )
 {
     // Determine style name.
     // NOTE: don't add i18n here ! This is translated using
@@ -143,7 +166,7 @@ KWStyle * KWContents::findOrCreateTOCStyle( int depth )
         name = QString( "Contents Head %1" ).arg( depth+1 );
     else
         name = "Contents Title";
-    KWStyle * style = m_doc->findStyle( name );
+    KWStyle * style = fs->kWordDocument()->findStyle( name );
     if ( !style )
     {
         style = new KWStyle( name );
@@ -157,7 +180,6 @@ KWStyle * KWContents::findOrCreateTOCStyle( int depth )
         }
         else
         {
-            KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet *>(m_doc->getFrameSet( 0 ));
             KoTabulatorList tabList;
             KoTabulator tab;
             tab.ptPos = fs->getFrame( 0 )->width() - 10; // not sure why that much is necessary....
@@ -165,8 +187,8 @@ KWStyle * KWContents::findOrCreateTOCStyle( int depth )
             tabList.append( tab );
             style->paragLayout().setTabList( tabList );
         }
-        m_doc->addStyleTemplate( style );             // register the new style
-        m_doc->updateAllStyleLists();                 // show it in the UI
+        fs->kWordDocument()->addStyleTemplate( style );             // register the new style
+        fs->kWordDocument()->updateAllStyleLists();                 // show it in the UI
     }
     return style;
 }

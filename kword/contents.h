@@ -20,43 +20,34 @@
 #ifndef contents_h
 #define contents_h
 
-#include <qvaluelist.h>
-
-class KWDocument;
+class KWTextFrameSet;
+class KMacroCommand;
 class KWStyle;
+#include <qrichtext_p.h>
+using namespace Qt3;
 
-/**
- * This class holds information about the table of contents of a given
- * document.
- * In particular, the list of paragraphs that form the TOC is kept here
- * (to remove them before regenerating).
- */
-class KWContents
+// This command inserts a TOC at the beginning of a frameset, and is able to undo that.
+// The reason we don't use KWTextFrameSet's insert, applyStyle etc. is that it would
+// generate many many subcommands (resulting in much memory use).
+class KWInsertTOCCommand : public QTextCommand
 {
 public:
-    KWContents( KWDocument *doc );
+    KWInsertTOCCommand( KWTextFrameSet * fs );
+    QTextCursor *execute( QTextCursor *c );
+    QTextCursor *unexecute( QTextCursor *c );
 
-    /**
-     * Regenerate table of contents
-     */
-    void createContents();
-
-    // Well, actually we don't need that. Too dangerous.
-    // Better remove parags that have the style "Contents Head X",
-    // than remove parags based on their id (in case of deleting a parag etc.!)
-    // Load/save support
-    //void restoreParagList( QValueList<int> paragIds );
-    //QValueList<int> saveParagList() const;
-
-    /* bool hasContents() const {
-	return !m_paragIds.isEmpty();
-    }*/
+    // Helper method, public for KWTextFrameSet::insertTOC().
+    // Remove a toc based on the parag styles
+    static void removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMacroCommand *macroCmd );
 
 protected:
+    // Find or create a toc style
+    static KWStyle * findOrCreateTOCStyle( KWTextFrameSet *fs, int depth );
 
-    KWStyle * findOrCreateTOCStyle( int depth );
-
-    KWDocument *m_doc;
+private:
+    bool m_bPageBreakInserted;
 };
+
+
 
 #endif

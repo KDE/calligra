@@ -25,7 +25,6 @@ class KPrinter;
 class KWTextImage;
 class KWPictureFrameSet;
 class KWSerialLetterDataBase;
-class KWContents;
 class KWFrameSet;
 class KWTableFrameSet;
 class KWPartFrameSet;
@@ -418,11 +417,6 @@ public:
       }
 
     /**
-     * Insert/update TOC at beginning of document
-     */
-    void createContents();
-
-    /**
      * get custom kspell config
      */
     void setKSpellConfig(KSpellConfig _kspell);
@@ -567,9 +561,6 @@ private:
     int slRecordNum;
 
     bool spellCheck;
-
-    // Holds information about the table of contents
-    KWContents *contents;
 
     int m_zoom;
     double m_resolutionX;

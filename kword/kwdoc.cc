@@ -58,7 +58,6 @@
 #include "autoformat.h"
 #include "variable.h"
 #include "serialletter.h"
-#include "contents.h"
 #include "kwview.h"
 #include "kwviewmode.h"
 #include "kwfactory.h"
@@ -156,7 +155,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     slRecordNum = -1;
 
     spellCheck = FALSE;
-    contents = new KWContents( this );
 
     // Get default font from KDE
     m_defaultFont = KGlobalSettings::generalFont();
@@ -818,7 +816,6 @@ void KWDocument::recalcFrames()
 
 KWDocument::~KWDocument()
 {
-    delete contents;
     delete m_autoFormat;
     delete m_formulaDocument;
     delete m_commandHistory;
@@ -2355,12 +2352,6 @@ int KWDocument::getSerialLetterRecord() const
 void KWDocument::setSerialLetterRecord( int r )
 {
     slRecordNum = r;
-}
-
-void KWDocument::createContents()
-{
-    contents->createContents();
-    repaintAllViews( /*true*/ );
 }
 
 void KWDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf )

@@ -1567,8 +1567,11 @@ void KWView::insertFootNoteEndNote()
 
 void KWView::insertContents()
 {
-    doc->createContents();
-    gui->canvasWidget()->repaintAll();
+    KWTextFrameSetEdit *edit = currentTextEdit();
+    if (edit)
+    {
+        edit->insertTOC();
+    }
 }
 
 void KWView::formatFont()

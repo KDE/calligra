@@ -33,6 +33,7 @@
 #include "kwstyle.h"
 #include "kwformat.h"
 #include "counter.h"
+#include "contents.h"
 #include "variable.h"
 #include "variabledlgs.h"
 #include "serialletter.h"
@@ -2080,8 +2081,6 @@ void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, int pageBreaking )
 void KWTextFrameSet::removeSelectedText( QTextCursor * cursor, int selectionId, const QString & cmdName )
 {
     QTextDocument * textdoc = textDocument();
-    //for ( int i = 1; i < (int)QTextDocument::Temp; ++i )
-    //   textdoc->removeSelection( i );
     emit hideCursor();
     checkUndoRedoInfo( cursor, UndoRedoInfo::RemoveSelected );
     if ( !undoRedoInfo.valid() ) {
@@ -2106,17 +2105,9 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor, int selectionId, 
     undoRedoInfo.clear();
 }
 
-void KWTextFrameSet::replaceSelection( QTextCursor * cursor, const QString & replacement,
-                                       int selectionId, const QString & cmdName )
+KCommand * KWTextFrameSet::removeSelectedTextCommand( QTextCursor * cursor, int selectionId )
 {
     undoRedoInfo.clear();
-    QTextDocument * textdoc = textDocument();
-    emit hideCursor();
-
-    KMacroCommand * macroCmd = new KMacroCommand( cmdName );
-    macroCmd->addCommand( new KWTextCommand( this, /*cmd, */QString::null ) );
-
-    // 'Remove Selected Text' stuff
     textdoc->selectionStart( selectionId, undoRedoInfo.id, undoRedoInfo.index );
     undoRedoInfo.text = QString::null;
 
@@ -2126,9 +2117,6 @@ void KWTextFrameSet::replaceSelection( QTextCursor * cursor, const QString & rep
     QTextCursor c2 = textdoc->selectionEndCursor( selectionId );
     readFormats( c1, c2, oldLen, true, true );
 
-    QTextFormat * format = c1.parag()->at( c1.index() )->format(); // Remember formatting
-    format->addRef();
-
     textdoc->removeSelectedText( selectionId, cursor );
 
     QTextCommand * cmd = new KWTextDeleteCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
@@ -2137,14 +2125,30 @@ void KWTextFrameSet::replaceSelection( QTextCursor * cursor, const QString & rep
     textdoc->addCommand( cmd );
     undoRedoInfo.type = UndoRedoInfo::Invalid; // we don't want clear() to create a command
     undoRedoInfo.clear();
+    return new KWTextCommand( this, /*cmd, */QString::null );
+}
+
+void KWTextFrameSet::replaceSelection( QTextCursor * cursor, const QString & replacement,
+                                       int selectionId, const QString & cmdName )
+{
+    emit hideCursor();
+    KMacroCommand * macroCmd = new KMacroCommand( cmdName );
+
+    // Remember formatting
+    QTextCursor c1 = textdoc->selectionStartCursor( selectionId );
+    QTextFormat * format = c1.parag()->at( c1.index() )->format();
+    format->addRef();
+
+    // Remove selected text
+    macroCmd->addCommand( removeSelectedTextCommand( cursor, selectionId ) );
 
     // Insert replacement
     insert( cursor, static_cast<KWTextFormat *>(format),
             replacement, true, false, QString::null );
 
-    cmd = new KWTextInsertCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
-                                   undoRedoInfo.text.rawData(),
-                                   CustomItemsMap(), undoRedoInfo.oldParagLayouts );
+    QTextCommand * cmd = new KWTextInsertCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
+                                                  undoRedoInfo.text.rawData(),
+                                                  CustomItemsMap(), undoRedoInfo.oldParagLayouts );
     textdoc->addCommand( cmd );
     macroCmd->addCommand( new KWTextCommand( this, /*cmd, */QString::null ) );
 
@@ -2307,11 +2311,37 @@ void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bo
 
     (void) availableHeight(); // calculate it again (set to -1 due to unzoom/zoom)
 
+    setLastFormattedParag( textdoc->firstParag() );
     formatMore();
     emit repaintChanged( this );
     emit ensureCursorVisible();
     emit updateUI();
     emit showCursor();
+}
+
+void KWTextFrameSet::insertTOC( QTextCursor * cursor )
+{
+    emit hideCursor();
+    KMacroCommand * macroCmd = new KMacroCommand( i18n("Insert Table Of Contents") );
+
+    // Remove old TOC
+
+    KWInsertTOCCommand::removeTOC( this, cursor, macroCmd );
+
+    // Insert new TOC
+
+    QTextCommand * cmd = new KWInsertTOCCommand( this );
+    textdoc->addCommand( cmd );
+    macroCmd->addCommand( new KWTextCommand( this, QString::null ) );
+    *cursor = *( cmd->execute( cursor ) );
+
+    formatMore();
+    emit repaintChanged( this );
+    emit ensureCursorVisible();
+    emit updateUI();
+    emit showCursor();
+
+    m_doc->addCommand( macroCmd );
 }
 
 void KWTextFrameSet::setLastFormattedParag( QTextParag *parag )

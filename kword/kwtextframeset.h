@@ -128,15 +128,18 @@ public:
     void insert( QTextCursor * cursor, KWTextFormat * currentFormat, const QString &text,
                  bool checkNewLine, bool removeSelected, const QString & commandName,
                  CustomItemsMap customItemsMap = CustomItemsMap() );
-    void removeSelectedText( QTextCursor * cursor, int selectionId = QTextDocument::Standard, const QString & cmdName = QString::null );
+    void removeSelectedText( QTextCursor * cursor, int selectionId = QTextDocument::Standard,
+                             const QString & cmdName = QString::null );
     void replaceSelection( QTextCursor * cursor, const QString & replacement,
                            int selectionId, const QString & cmdName );
+    KCommand * removeSelectedTextCommand( QTextCursor * cursor, int selectionId );
 
     void undo();
     void redo();
     void clearUndoRedoInfo();
     void pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected );
     void pasteText( QTextCursor * cursor, const QString & text, KWTextFormat * currentFormat, bool removeSelected );
+    void insertTOC( QTextCursor * cursor );
     void selectAll( bool select );
     void selectionChangedNotify( bool enableActions = true );
     QRect paragRect( QTextParag * parag ) const;
@@ -342,6 +345,7 @@ public:
     void insertSpecialChar(QChar _c);
     void insertExpression(const QString &_c);
     void insertFloatingFrameSet( KWFrameSet * fs, const QString & commandName );
+    void insertTOC() { textFrameSet()->insertTOC( cursor ); }
 
     void setBold(bool on);
     void setItalic(bool on);
