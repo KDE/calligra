@@ -867,9 +867,9 @@ void Outline::itemClicked( QListViewItem *item )
         }
 
         // select the object, make sure it's visible
-        QRect rect( doc->zoomHandler()->zoomRect( object->getBoundingRect() ) );
         doc->deSelectAllObj();
-        object->setSelected( true );
+        view->getCanvas()->selectObj( object );
+        QRect rect( doc->zoomHandler()->zoomRect( object->getBoundingRect() ) );
         rect.setLeft( rect.left() - 20 );
         rect.setTop( rect.top() - 20 );
         rect.setRight( rect.right() + 20 );
