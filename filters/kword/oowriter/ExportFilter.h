@@ -62,13 +62,13 @@ public:
     virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
         const ValueListFormatData& paraFormatDataList);
     virtual bool doFullPaperFormat(const int format,
-        const double width, const double height, const int orientation); // Calc AbiWord's <papersize>
+        const double width, const double height, const int orientation);
     virtual bool doFullPaperBorders (const double top, const double left,
-        const double bottom, const double right); // Like KWord's <PAPERBORDERS>
-    virtual bool doOpenStyles(void); // AbiWord's <office:styles>
-    virtual bool doCloseStyles(void); // AbiWord's </office:styles>
-    virtual bool doFullDefineStyle(LayoutData& layout); // AbiWord's <style:style/>
-    virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo); // <office:meta/>
+        const double bottom, const double right);
+    virtual bool doOpenStyles(void);
+    virtual bool doCloseStyles(void);
+    virtual bool doFullDefineStyle(LayoutData& layout);
+    virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
 private:
     void processParagraphData (const QString& paraText,
         const TextFormatting& formatLayout,
@@ -82,15 +82,14 @@ private:
     void processAnchor ( const QString& paraText,
         const TextFormatting& formatLayout,
         const FormatData& formatData);
-    QString textFormatToAbiProps(const TextFormatting& formatOrigin,
-        const TextFormatting& formatData, const bool force);
+    QString textFormatToStyle(const TextFormatting& formatOrigin,
+        const TextFormatting& formatData, const bool force, QString& key);
     QString layoutToParagraphStyle(const LayoutData& layoutOrigin,
-        const LayoutData& layout, const bool force);
+        const LayoutData& layout, const bool force, QString& styleKey);
     QString escapeOOText(const QString& strText) const;
     bool makeTable(const FrameAnchor& anchor);
     bool makePicture(const FrameAnchor& anchor);
     bool convertUnknownPicture(const QString& name, const QString& extension, QByteArray& image);
-    void writeAbiProps(const TextFormatting& formatLayout, const TextFormatting& format);
     void declareFont(const QString& fontName);
     void writeContentXml(void);
     void writeStylesXml(void);
@@ -111,12 +110,24 @@ private:
     QByteArray m_contentBody; // office:body element of content.xml
     KZip* m_zip;
     QStringList m_fontNames; // List of used font names
+
     ulong m_pictureNumber; // Number of picture (increment *before* use)
-    QString m_styles;
+    ulong m_automaticParagraphStyleNumber; // Number of paragraph-based automatic styles (increment *before* use)
+    ulong m_automaticTextStyleNumber; // Number of text-based automatic styles (increment *before* use)
+
+    QString m_styles; // Normal paragraph styles
+    QString m_contentAutomaticStyles; // Automatic styles for content.xml
+
     uint m_size; // Size of ZIP entry
     int m_paperFormat;
     double m_paperWidth;
     double m_paperHeight;
     int m_paperOrientation;
+
+    QMap<QString,QString> m_mapTextStyleKeys; // Map of keys to automatic text styles
+    QMap<QString,QString> m_mapTextStyles; // Map of automatic text styles
+
+    QMap<QString,QString> m_mapParaStyleKeys; // Map of keys to automatic paragraph styles
+    QMap<QString,QString> m_mapParaStyles; // Map of automatic paragraph styles
 };
 #endif // _EXPORTFILTER_H

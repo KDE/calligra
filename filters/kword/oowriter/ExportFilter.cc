@@ -52,7 +52,8 @@
 
 OOWriterWorker::OOWriterWorker(void) : m_streamOut(NULL),
     m_paperBorderTop(0.0),m_paperBorderLeft(0.0),
-    m_paperBorderBottom(0.0),m_paperBorderRight(0.0), m_zip(NULL), m_pictureNumber(0)
+    m_paperBorderBottom(0.0),m_paperBorderRight(0.0), m_zip(NULL), m_pictureNumber(0),
+    m_automaticParagraphStyleNumber(0), m_automaticTextStyleNumber(0)
 {
 }
 
@@ -153,6 +154,7 @@ void OOWriterWorker::writeStartOfFile(const QString& type)
         zipWriteData("-");
         zipWriteData(type);
     }
+
     // The name spaces used by OOWriter (those not used by this filter are commented out)
     zipWriteData(" xmlns:office=\"http://openoffice.org/2000/office\"");
     zipWriteData(" xmlns:style=\"http://openoffice.org/2000/style\"");
@@ -261,6 +263,10 @@ void OOWriterWorker::writeContentXml(void)
     }
     zipWriteData(" </office:font-decls>\n");
 
+    zipWriteData(" <office:automatic-styles>\n");
+    zipWriteData(m_contentAutomaticStyles);
+    zipWriteData(" </office:automatic-styles>\n");
+
     zipWriteData(m_contentBody);
 
     zipWriteData( "</office:document-content>\n" );
@@ -298,8 +304,8 @@ bool OOWriterWorker::doCloseDocument(void)
     return true;
 }
 
-QString OOWriterWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
-    const TextFormatting& formatData, const bool force)
+QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
+    const TextFormatting& formatData, const bool force, QString& key)
 {
     // TODO: rename variable formatData
     QString strElement; // TODO: rename this variable
@@ -310,11 +316,13 @@ QString OOWriterWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
     if ( !fontName.isEmpty()
         && (force || (formatOrigin.fontName!=formatData.fontName)))
     {
-        //strElement+="fo:font-family=\"";
         strElement+="style:font-name=\"";
         strElement+= escapeOOText(fontName);
         strElement+="\" ";
+        key += fontName;
     }
+
+    key += ",";
 
     if (force || (formatOrigin.italic!=formatData.italic))
     {
@@ -323,13 +331,17 @@ QString OOWriterWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
         if ( formatData.italic )
         {
             strElement+="italic";
+            key+='I';
         }
         else
         {
             strElement+="normal";
+            key+='N';
         }
         strElement+="\" ";
     }
+
+    key += ",";
 
     if (force || ((formatOrigin.weight>=75)!=(formatData.weight>=75)))
     {
@@ -337,13 +349,17 @@ QString OOWriterWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
         if ( formatData.weight >= 75 )
         {
             strElement+="bold";
+            key+='B';
         }
         else
         {
             strElement+="normal";
+            key+='N';
         }
         strElement+="\" ";
     }
+
+    key += ",";
 
     if (force || (formatOrigin.fontSize!=formatData.fontSize))
     {
@@ -353,8 +369,11 @@ QString OOWriterWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
             strElement+="fo:font-size=\"";
             strElement+=QString::number(size,10);
             strElement+="pt\" ";
+            key+=QString::number(size,10);
         }
     }
+
+    key += ",";
 
     if (force || (formatOrigin.fgColor!=formatData.fgColor))
     {
@@ -363,8 +382,11 @@ QString OOWriterWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
             strElement+="fo:color=\"";
             strElement+=formatData.fgColor.name();
             strElement+="\" ";
+            key+=formatData.fgColor.name();
         }
     }
+
+    key += ",";
 
     if (force || (formatOrigin.bgColor!=formatData.bgColor))
     {
@@ -373,8 +395,11 @@ QString OOWriterWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
             strElement+="fo:background-color=\"";
             strElement+=formatData.bgColor.name();
             strElement+="\" ";
+            key+=formatData.bgColor.name();
         }
     }
+
+    key += ",";
 
     if (force || (formatOrigin.underline!=formatData.underline)
         || (formatOrigin.strikeout!=formatData.strikeout))
@@ -383,14 +408,17 @@ QString OOWriterWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
         if ( formatData.underline )
         {
             strElement+="underline";
+            key+='U';
         }
         else if ( formatData.strikeout )
         {
             strElement+="line-through";
+            key+='T';
         }
         else
         {
             strElement+="none";
+            key+='N';
         }
         strElement+="\" ";
     }
@@ -402,11 +430,11 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor)
 {
 #if 0
     *m_streamOut << "</abiword:p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
-    *m_streamOut << "<abiword:table>\n";
+    *m_streamOut << "<table:table>\n";
+    // ### TODO: table:column
+    // ### TODO: automatic styles
 
     QValueList<TableCell>::ConstIterator itCell;
-
-
 
     for (itCell=anchor.table.cellList.begin();
         itCell!=anchor.table.cellList.end(); itCell++)
@@ -414,28 +442,20 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor)
         // ### TODO: rowspan, colspan
 
         // AbiWord seems to work by attaching to the cell borders
-        *m_streamOut << "<abiword:cell props=\"";
-        *m_streamOut << "left-attach:" << (*itCell).col << "; ";
-        *m_streamOut << "right-attach:" << (*itCell).col + 1 << "; ";
-        *m_streamOut << "top-attach:" << (*itCell).row << "; ";
-        *m_streamOut << "bot-attach:" << (*itCell).row + 1;
-        *m_streamOut << "\">\n";
+        *m_streamOut << "<table:table-cell Table:value-type=\"string\">\n";
 
         if (!doFullAllParagraphs(*(*itCell).paraList))
         {
             return false;
         }
 
-        *m_streamOut << "</abiword:cell>\n";
+        *m_streamOut << "</table:table-cell>\n";
     }
 
-    *m_streamOut << "</abiword:table>\n";
+    *m_streamOut << "</table:table>\n";
     *m_streamOut << "<abiword:p>\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
-
-    return true;
-#else
-    return true;
 #endif
+    return true;
 }
 
 bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
@@ -527,11 +547,6 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
     return true;
 }
 
-void OOWriterWorker::writeAbiProps (const TextFormatting& formatLayout, const TextFormatting& format)
-{
-    *m_streamOut << textFormatToAbiProps(formatLayout,format,false);
-}
-
 void OOWriterWorker::processNormalText ( const QString &paraText,
     const TextFormatting& formatLayout,
     const FormatData& formatData)
@@ -554,7 +569,41 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
     else
     { // Text with properties, so use a <text:span> element!
         *m_streamOut << "<text:span";
-        // writeAbiProps(formatLayout,formatData.text); // ### TODO
+
+        QString styleKey;
+        QString props ( textFormatToStyle(formatLayout,formatData.text,false,styleKey) );
+
+        QMap<QString,QString>::ConstIterator it ( m_mapTextStyleKeys.find(styleKey) );
+        kdDebug(30518) << "Searching text key: " << styleKey << endl;
+
+        QString automaticStyle;
+        if (it==m_mapTextStyleKeys.end())
+        {
+            // We have not any match, so we need an automatic style for the text
+            automaticStyle="T";
+            automaticStyle += QString::number(++m_automaticTextStyleNumber,10); // ### TODO: verify that it is not a normal style
+            kdDebug(30518) << "Creating automatic text style: " << automaticStyle << " key: " << styleKey << endl;
+            m_mapTextStyleKeys[styleKey]=automaticStyle;
+            m_mapTextStyles[automaticStyle]=props;
+
+            m_contentAutomaticStyles += "  <style:style";
+            m_contentAutomaticStyles += " style:name=\"" + escapeOOText(automaticStyle) + "\"";
+            m_contentAutomaticStyles += " style:family=\"text\"";
+            m_contentAutomaticStyles += ">\n";
+            m_contentAutomaticStyles += "   <style:properties ";
+            m_contentAutomaticStyles += props;
+            m_contentAutomaticStyles += "/>\n";
+            m_contentAutomaticStyles += "  </style:style>\n";
+        }
+        else
+        {
+            // We have a match, so use the already defined automatic text style
+            automaticStyle=it.data();
+            kdDebug(30518) << "Using automatic text style: " << automaticStyle << " key: " << styleKey << endl;
+        }
+
+        *m_streamOut << " text:style-name=\"" << escapeOOText(automaticStyle) << "\" ";
+
         *m_streamOut << ">" << partialText << "</text:span>";
     }
 }
@@ -593,9 +642,7 @@ void OOWriterWorker::processVariable ( const QString&,
         // A link (### TODO is the <text:span> really needed?)
         *m_streamOut << "<text:a xlink:href=\""
             << escapeOOText(formatData.variable.getHrefName())
-            << " xlink:type=\"simple\" xlink:actuate=\"onRequest\"><text:span";
-        writeAbiProps(formatLayout,formatData.text);
-        *m_streamOut << ">"
+            << " xlink:type=\"simple\" xlink:actuate=\"onRequest\"><text:span>" // ### TODO: does the span needs an extra style?
             << escapeOOText(formatData.variable.getLinkName())
             << "</text:span></text:a>";
     }
@@ -681,9 +728,12 @@ void OOWriterWorker::processParagraphData ( const QString &paraText,
 }
 
 QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
-    const LayoutData& layout, const bool force)
+    const LayoutData& layout, const bool force, QString& styleKey)
 {
-    QString props ("   <style:properties ");
+    QString props; // Props has to remian empty, if there is no differences.
+
+    styleKey += layout.styleName;
+    styleKey += ',';
 
     if (force || (layoutOrigin.alignment!=layout.alignment))
     {
@@ -694,11 +744,13 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
             props += "fo:text-align=\"";
             props += layout.alignment;
             props += "\" ";
+            styleKey += layout.alignment[0].upper();
         }
         else if (layout.alignment == "auto")
         {
             // ### TODO: bidi!
             props += "fo:text-align=\"left\" ";
+            styleKey += "A";
         }
         else
         {
@@ -706,36 +758,53 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
         }
     }
 
+    styleKey += ',';
+
     if ((layout.indentLeft>=0.0)
         && (force || (layoutOrigin.indentLeft!=layout.indentLeft)))
     {
         props += QString("fo:margin-left=\"%1pt\" ").arg(layout.indentLeft);
+        styleKey += QString::number(layout.indentLeft);
     }
+
+    styleKey += ',';
 
     if ((layout.indentRight>=0.0)
         && (force || (layoutOrigin.indentRight!=layout.indentRight)))
     {
         props += QString("fo:margin-right=\"%1pt\" ").arg(layout.indentRight);
+        styleKey += QString::number(layout.indentRight);
     }
+
+    styleKey += ',';
 
     if (force || (layoutOrigin.indentLeft!=layout.indentLeft))
     {
         props += "fo:text-indent=\"";
         props += QString::number(layout.indentFirst);
         props += "\" ";
+        styleKey += QString::number(layout.indentFirst);
     }
+
+    styleKey += ',';
 
     if ((layout.marginBottom>=0.0)
         && (force || (layoutOrigin.indentRight!=layout.indentRight)))
     {
        props += QString("fo:margin-bottom=\"%1pt\" ").arg(layout.marginBottom);
+       styleKey += QString::number(layout.marginBottom);
     }
+
+    styleKey += ',';
 
     if ((layout.marginTop>=0.0)
         && (force || (layoutOrigin.indentRight!=layout.indentRight)))
     {
        props += QString("fo:margin-top=\"%1pt\" ").arg(layout.marginTop);
+       styleKey += QString::number(layout.marginTop);
     }
+
+    styleKey += ',';
 
     // ### TODO: add support of at least
     if (!force
@@ -743,27 +812,50 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
         && (layoutOrigin.lineSpacing==layoutOrigin.lineSpacing))
     {
         // Do nothing!
+        styleKey += "100%";
     }
     else if (!layout.lineSpacingType)
     {
         // We have a custom line spacing (in points)
         props += QString("fo:line-height=\"%1pt\" ").arg(layout.lineSpacing);
+        styleKey += QString::number(layout.lineSpacing);
     }
     else if ( 15==layout.lineSpacingType  )
     {
         props += "fo:line-height=\"150%\" "; // One-and-half
+        styleKey += "150%";
     }
     else if ( 20==layout.lineSpacingType  )
     {
         props += "fo:line-height=\"200%\" "; // Two
+        styleKey += "200%";
     }
     else if ( layout.lineSpacingType!=10  )
     {
         kdWarning(30518) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
     }
 
-    // Add all AbiWord properties collected in the <FORMAT> element
-    props += textFormatToAbiProps(layoutOrigin.formatData.text,layout.formatData.text,force);
+    styleKey += ',';
+
+    if ( layout.pageBreakBefore )
+    {
+        // We have a page break before the paragraph
+        props += "fo:page-break-before=\"page\" ";
+        styleKey += 'B';
+    }
+
+    styleKey += ',';
+
+    if ( layout.pageBreakAfter )
+    {
+        // We have a page break after the paragraph
+        props += "fo:page-break-after=\"page\" ";
+        styleKey += 'A';
+    }
+
+    styleKey += '@'; // A more visible seperator
+
+    props += textFormatToStyle(layoutOrigin.formatData.text,layout.formatData.text,force,styleKey);
 
     props += ">";
 
@@ -792,7 +884,6 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
         props += "    </style:tab-stops>\n   ";
     }
 
-    props += "</style:properties>\n";
     return props;
 }
 
@@ -811,33 +902,58 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
     else
         *m_streamOut << "  <text:p ";
 
-    const QString style(layout.styleName);
-    if (!style.isEmpty())
+    const LayoutData& styleLayout=m_styleMap[layout.styleName];
+
+    QString styleKey;
+    const QString props(layoutToParagraphStyle(styleLayout,layout,false,styleKey));
+
+    QString actualStyle(layout.styleName);
+    if (!props.isEmpty())
     {
-        *m_streamOut << "text:style-name=\"" << escapeOOText(style) << "\" ";
+        QMap<QString,QString>::ConstIterator it ( m_mapParaStyleKeys.find(styleKey) );
+        kdDebug(30518) << "Searching paragraph key: " << styleKey << endl;
+
+        QString automaticStyle;
+
+        if (it==m_mapParaStyleKeys.end())
+        {
+            // We have additional properties, so we need an autmatic style for the paragraph
+            automaticStyle += "P";
+            automaticStyle += QString::number(++m_automaticParagraphStyleNumber,10); // ### TODO: verify that it is not a normal style
+            kdDebug(30518) << "Creating automatic paragraph style: " << automaticStyle << endl;
+            m_mapParaStyleKeys[styleKey]=automaticStyle;
+            m_mapParaStyles[automaticStyle]=props;
+
+            m_contentAutomaticStyles += "  <style:style";
+            m_contentAutomaticStyles += " style:name=\"" + escapeOOText(automaticStyle) + "\"";
+            m_contentAutomaticStyles += " style:parent-style-name=\"" + escapeOOText(layout.styleName) + "\"";
+            m_contentAutomaticStyles += " style:family=\"paragraph\" style:class=\"text\"";
+            m_contentAutomaticStyles += ">\n";
+            m_contentAutomaticStyles += "   <style:properties ";
+            m_contentAutomaticStyles += props;
+            m_contentAutomaticStyles += "</style:properties>\n";
+            m_contentAutomaticStyles += "  </style:style>\n";
+        }
+        else
+        {
+            // We have a match, so use the already defined automatic paragraph style
+            automaticStyle=it.data();
+            kdDebug(30518) << "Using automatic paragraph style: " << automaticStyle << " key: " << styleKey << endl;
+        }
+
+        actualStyle=automaticStyle;
     }
 
-#if 0
-    // ### TODO: OOWriter works with automatic styles, not with extra style: or fo: attributes (unlike AbiWord)
-    const LayoutData& styleLayout=m_styleMap[style];
-
-    QString props=layoutToCss(styleLayout,layout,false);
-    *m_streamOut << props;
-
-    if (layout.pageBreakBefore)
+    if (!actualStyle.isEmpty())
     {
-        // We have a page break before the paragraph
-        *m_streamOut << "fo:page-break-before=\"page\" ";
+        *m_streamOut << "text:style-name=\"" << escapeOOText(actualStyle) << "\" ";
     }
-    if (layout.pageBreakAfter)
-    {
-        // We have a page break after the paragraph
-        *m_streamOut << "fo:page-break-after=\"page\" ";
+    else
+    {   // SHould not happen
+        kdWarning(30518) << "No style for a paragraph!" << endl;
     }
-#endif
 
     *m_streamOut << ">";
-
 
     processParagraphData(paraText, layout.formatData.text, paraFormatDataList);
 
@@ -868,8 +984,12 @@ bool OOWriterWorker::doFullDefineStyle(LayoutData& layout)
     m_styles += " style:next-style-name=\"" + EscapeXmlText(layout.styleFollowing,true,true) + "\"";
     m_styles += " style:family=\"paragraph\" style:class=\"text\"";
     m_styles += ">\n";
-    m_styles += layoutToParagraphStyle(layout,layout,true);
+    m_styles += "   <style:properties ";
 
+    QString dummyKey; // Not needed
+    m_styles += layoutToParagraphStyle(layout,layout,true,dummyKey);
+
+    m_styles += "</style:properties>\n";
     m_styles += "  </style:style>\n";
 
     return true;
