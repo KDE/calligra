@@ -51,7 +51,7 @@ bool KoPictureBase::isNull(void) const
     return true;    // A KoPictureBase is always null.
 }
 
-void KoPictureBase::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh)
+void KoPictureBase::draw(QPainter& painter, int x, int y, int width, int height, int, int, int, int)
 {
     // Draw a light red box (easier DEBUG)
     kdWarning(30003) << "Drawing light red rectangle! (KoPictureBase::draw)" << endl;
