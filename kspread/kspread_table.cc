@@ -2717,6 +2717,25 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
 
       ColumnLayout *cl=nonDefaultColumnLayout(m_rctSelection.right());
       cl->setRightBorderPen(pen);
+
+      RowLayout* rw =m_rows.first();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PRightBorder)))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        cell->setRightBorderPen(pen);
+                        }
+                }
+        }
+
       emit sig_updateView( this );
       return;
     }
@@ -2790,6 +2809,25 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
       }
       ColumnLayout *cl=nonDefaultColumnLayout(m_rctSelection.left());
       cl->setLeftBorderPen(pen);
+
+      RowLayout* rw =m_rows.first();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PLeftBorder)))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        cell->setLeftBorderPen(pen);
+                        }
+                }
+        }
+
       emit sig_updateView( this );
       return;
     }
@@ -3091,17 +3129,38 @@ void KSpreadTable::borderAll( const QPoint &_marker,const QColor &_color )
           c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
         }
       }
-
+      QPen pen( _color,2,SolidLine);
       for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
         {
         ColumnLayout *cl=nonDefaultColumnLayout(i);
-        QPen pen( _color,2,SolidLine);
         cl->setTopBorderPen(pen);
         cl->setRightBorderPen(pen);
         cl->setLeftBorderPen(pen);
         cl->setBottomBorderPen(pen);
         }
 
+        RowLayout* rw =m_rows.first();
+        for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PRightBorder)
+        ||rw->hasProperty(KSpreadCell::PLeftBorder)|| rw->hasProperty(KSpreadCell::PTopBorder)
+        || rw->hasProperty(KSpreadCell::PBottomBorder)))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        cell->setTopBorderPen(pen);
+                        cell->setRightBorderPen(pen);
+                        cell->setLeftBorderPen(pen);
+                        cell->setBottomBorderPen(pen);
+                        }
+                }
+        }
       emit sig_updateView( this );
       return;
       }
