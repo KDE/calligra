@@ -21,5 +21,5 @@ MimeTypes=application/x-kword,
 RepoID=IDL:KWord/DocumentFactory:1.0,
 ActivationMode=shared
 Type=OpenPart
-Icon=kword.xpm
-MiniIcon=kword.xpm
+Icon=unknown.xpm
+MiniIcon=unknown.xpm

@@ -37,6 +37,9 @@ idl_HEADERS =  kohtml.h
 kdelnk_DATA = kohtml_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
+pics_DATA = kohtml.xpm
+picsdir = $(kde_icondir)/kohtml.xpm
+
 ####### Implicit rules
 
 SUFFIXES = .h .moc

@@ -14,4 +14,4 @@ RepoID=IDL:KoHTML/DocumentFactory:1.0,
 ActivationMode=shared
 Type=OpenPart
 Icon=kohtml.xpm
-MiniIcon=kohtml.xpm
+MiniIcon=unknown.xpm
