@@ -650,8 +650,30 @@ void KWTextFrameSet::unzoom()
     m_origFontSizes.clear();
 }
 
+int KWTextFrameSet::docFontSize( QTextFormat * format ) const
+{
+    assert( format );
+    int * oldSize = m_origFontSizes.find( format );
+    if ( !oldSize )
+    {
+        kdDebug() << "Can't find format in m_origFontSizes: " << format->key() << endl;
+        return 0;
+    }
+    else
+        return *oldSize;
+}
 
-/*================================================================*/
+// For existing text, use the previous method instead (prevents rounding errors)
+int KWTextFrameSet::docFontSize( int zoomedFontSize ) const
+{
+    return static_cast<int>( static_cast<float>( zoomedFontSize ) / kWordDocument()->zoomedResolutionY() );
+}
+
+int KWTextFrameSet::zoomedFontSize( int docFontSize ) const
+{
+    return static_cast<int>( static_cast<float>( docFontSize ) * kWordDocument()->zoomedResolutionY() );
+}
+
 void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
 {
     kdDebug(32001) << "KWTextFrameSet::applyStyleChange " << changedStyle << endl;
@@ -1615,7 +1637,30 @@ void KWTextFrameSet::checkUndoRedoInfo( QTextCursor * cursor, UndoRedoInfo::Type
     undoRedoInfo.cursor = cursor;
 }
 
-void KWTextFrameSet::setFormat( QTextCursor * cursor, QTextFormat * & currentFormat, QTextFormat *format, int flags ) {
+void KWTextFrameSet::setFormat( QTextCursor * cursor, QTextFormat * & currentFormat, QTextFormat *format, int flags )
+{
+    bool newFormat = ( currentFormat && currentFormat->key() != format->key() );
+    int origFontSize = 0;
+    if ( newFormat )
+    {
+        if ( currentFormat->font().pointSize() == format->font().pointSize() )
+        {
+            // Font size not changed -> make it follow
+            int * pDocFontSize = m_origFontSizes.find( format );
+            if ( !pDocFontSize )
+                kdWarning() << format->key() << " not in m_origFontSizes " << endl;
+            else
+                origFontSize = *pDocFontSize;
+        }
+        else
+        {
+            // New font size -> zoom it
+            origFontSize = format->font().pointSize();
+            format->setPointSize( zoomedFontSize( origFontSize ) );
+            kdDebug() << "KWTextFrameSet::setFormat format " << format->key() << " zoomed to " << format->font().pointSize() << endl;
+        }
+    }
+
     QTextDocument * textdoc = textDocument();
     if ( textdoc->hasSelection( QTextDocument::Standard ) ) {
         emit hideCursor();
@@ -1641,13 +1686,20 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, QTextFormat * & currentFor
         emit showCursor();
     }
     //kdDebug(32001) << "KWTextFrameSet::setFormat currentFormat:" << currentFormat->key() << " new format:" << format->key() << endl;
-    if ( currentFormat && currentFormat->key() != format->key() ) {
+    if ( newFormat ) {
         currentFormat->removeRef();
         currentFormat = textdoc->formatCollection()->format( format );
         if ( currentFormat->isMisspelled() ) {
             currentFormat->removeRef();
             currentFormat = textdoc->formatCollection()->format( currentFormat->font(), currentFormat->color() );
         }
+
+        if ( ! m_origFontSizes.find( currentFormat ) )
+        {
+            kdDebug() << "KWTextFrameSet::setFormat inserting entry for " << currentFormat->key() << "  origFontSize=" << origFontSize << endl;
+            m_origFontSizes.insert( currentFormat, new int( origFontSize ) );
+        }
+
         emit showCurrentFormat();
         //kdDebug(32001) << "KWTextFrameSet::setFormat index=" << cursor->index() << " length-1=" << cursor->parag()->length() - 1 << endl;
         if ( cursor->index() == cursor->parag()->length() - 1 ) {
@@ -2264,7 +2316,7 @@ void KWTextFrameSetEdit::placeCursor( const QPoint &pos )
     cursor->restoreState();
     QTextParag *s = textDocument()->firstParag();
     cursor->place( pos,  s );
-    emit updateUI();
+    updateUI();
 }
 
 void KWTextFrameSetEdit::blinkCursor()
@@ -2481,7 +2533,9 @@ void KWTextFrameSetEdit::updateUI()
 
 void KWTextFrameSetEdit::showCurrentFormat()
 {
-    m_canvas->gui()->getView()->showFormat(*currentFormat);
+    QTextFormat format = *currentFormat;
+    format.setPointSize( textFrameSet()->docFontSize( currentFormat ) ); // "unzoom" the font size
+    m_canvas->gui()->getView()->showFormat( format );
 }
 
 void KWTextFrameSetEdit::repaintChanged()

@@ -706,7 +706,7 @@ void KWView::print( QPrinter &prt )
 
     int oldZoom = doc->zoom();
     QPaintDeviceMetrics metrics( &prt );
-    int hackFactor = 1.0; // 2.0 for the hack (improving print-preview's quality)
+    double hackFactor = 1.0; // 2.0 for the hack (improving print-preview's quality)
     // The real solution is Qt-3.0's QPrinter::setResolution.
     doc->setZoomAndResolution( 100, metrics.logicalDpiX()*hackFactor, metrics.logicalDpiY()*hackFactor, false );
 

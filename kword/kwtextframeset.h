@@ -63,7 +63,7 @@ public:
     // Also returns the frame in which this point is.
     KWFrame * internalToContents( QPoint iPoint, QPoint & cPoint ) const;
 
-    // Return the available height (sum of all frames' height)
+    // Return the available height in pixels (sum of all frames' height, with zoom applied)
     // Used to know if we need to create more pages.
     int availableHeight() const;
 
@@ -78,6 +78,14 @@ public:
 
     virtual void zoom();
     void unzoom();
+
+    // Return the user-visible (document) font size for this format
+    // (since fonts are zoomed in the formats)
+    // The @p format must be part of the format collection.
+    int docFontSize( QTextFormat * format ) const;
+
+    int docFontSize( int zoomedFontSize ) const; // zoomed -> doc [warning, rounding problems]
+    int zoomedFontSize( int docFontSize ) const; // doc -> zoomed
 
     // stupid updating of all styles.
     //void updateAllStyles();
@@ -208,7 +216,7 @@ private:
     int m_width;                               // Copy of private QTextFlow::width
     int m_availableHeight;                     // Sum of the height of all our frames
     QMap<QWidget *, int> m_mapViewAreas;       // Store the "needs" of each view
-    QPtrDict<int> m_origFontSizes;
+    QPtrDict<int> m_origFontSizes; // Format -> doc font size.    Maybe a key->fontsize dict would be better.
 };
 
 /**
