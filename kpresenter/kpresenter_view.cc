@@ -1970,7 +1970,7 @@ void KPresenterView::setupActions()
 					   actionCollection(), "tools_diagramm" );
     ( (KToggleAction*)actionToolsDiagramm )->setExclusiveGroup( "tools" );
 
-    actionToolsTable = new KToggleAction( i18n( "Ta&ble"), "frame_spreadsheet", CTRL + Key_F1,
+    actionToolsTable = new KToggleAction( i18n( "Ta&ble"), "frame_spreadsheet", 0,
 					   this, SLOT( toolsTable() ),
 					   actionCollection(), "tools_table" );
     ( (KToggleAction*)actionToolsTable )->setExclusiveGroup( "tools" );
