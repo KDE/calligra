@@ -84,7 +84,7 @@ void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
     }
     // [Mainly KWord] Tell MS Office users that they can save in RTF!
     int i = 0;
-    for (mimeFilterIt = mimeFilter.begin (); mimeFilterIt != mimeFilter.end (); mimeFilterIt++, i++)
+    for (mimeFilterIt = mimeFilter.begin (); mimeFilterIt != mimeFilter.end (); ++mimeFilterIt, i++)
     {
         KMimeType::Ptr mime = KMimeType::mimeType (*mimeFilterIt);
         QString compatString = mime->property ("X-KDE-CompatibleApplication").toString ();
