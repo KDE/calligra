@@ -386,7 +386,9 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 		KexiPropertyBuffer *newbuff = createPropertyBuffer( m_view->currentRow(), field );
 		//add a special property indicating that this is brand new buffer, 
 		//not just old-changed
-		newbuff->add( new KexiProperty("newrow", QVariant()) );
+		KexiProperty* prop = new KexiProperty("newrow", QVariant());
+		prop->setVisible(false);
+		newbuff->add( prop );
 
 //js TODO:
 		//add this field to the list of new fields
