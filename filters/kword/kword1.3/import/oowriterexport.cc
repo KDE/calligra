@@ -48,7 +48,7 @@ public: // ### TODO: load correct .po file
     {}
 };
 
-K_EXPORT_COMPONENT_FACTORY( liboowriterexport, OOWRITERExportFactory() )
+K_EXPORT_COMPONENT_FACTORY( libkwordkword1dot3import, OOWRITERExportFactory() )
 
 OOWRITERExport::OOWRITERExport(KoFilter */*parent*/, const char */*name*/, const QStringList &) :
                      KoFilter() {
