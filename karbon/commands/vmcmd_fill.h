@@ -9,6 +9,8 @@
 #include "vcommand.h"
 #include "vcolor.h"
 
+#include <qvaluevector.h>
+
 // Fill object(s)
 
 class VPath;
@@ -25,6 +27,7 @@ public:
 private:
 	VObjectList m_objects;
 	VColor m_color;
+	QValueVector<VColor> m_oldcolors;
 	float m_opacity;
 };
 

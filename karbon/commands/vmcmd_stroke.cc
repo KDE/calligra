@@ -27,6 +27,7 @@ VMCmdStroke::execute()
 		if( m_opacity == -1 )
 			m_color.setOpacity( itr.current()->stroke().color().opacity() );
 
+		m_oldcolors.push_back( itr.current()->stroke().color() );
 		itr.current()->stroke().setColor( m_color );
 	}
 }
@@ -35,9 +36,10 @@ void
 VMCmdStroke::unexecute()
 {
 	VObjectListIterator itr( m_objects );
+	int i = 0;
 	for ( ; itr.current() ; ++itr )
 	{
-		itr.current()->stroke().setColor( m_color );
+		itr.current()->stroke().setColor( m_oldcolors[ i++ ] );
 	}
 }
 

@@ -27,6 +27,7 @@ VMCmdFill::execute()
 		//if( m_opacity == -1 )
 		//	m_color.setOpacity( itr.current()->fill().color().opacity() );
 
+		m_oldcolors.push_back( itr.current()->fill().color() );
 		itr.current()->fill().setColor( m_color );
 	}
 }
@@ -35,9 +36,10 @@ void
 VMCmdFill::unexecute()
 {
 	VObjectListIterator itr( m_objects );
+	int i = 0;
 	for ( ; itr.current() ; ++itr )
 	{
-		itr.current()->fill().setColor( m_color );
+		itr.current()->fill().setColor( m_oldcolors[ i++ ] );
 	}
 }
 
