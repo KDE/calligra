@@ -388,7 +388,7 @@ DeleteCmd::~DeleteCmd()
 void DeleteCmd::execute()
 {
     QRect oldRect;
-
+    bool textObj=false;
     QPtrList<KPObject> list (m_page->objectList());
     for ( unsigned int i = 0; i < objects.count(); i++ )
     {
@@ -397,10 +397,14 @@ void DeleteCmd::execute()
 	{
             m_page->takeObject(objects.at(i));
 	    objects.at( i )->removeFromObjList();
+            if(objects.at(i)->getType()==OT_TEXT)
+                textObj=true;
 	}
 	doc->repaint( oldRect );
 	doc->repaint( objects.at( i ) );
     }
+    if(textObj)
+        doc->updateRuler();
 }
 
 /*====================== unexecute ===============================*/
@@ -570,8 +574,9 @@ UnGroupObjCmd::UnGroupObjCmd( const QString &_name,
     objects.setAutoDelete( false );
     doc = _doc;
     m_page=_page;
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->incCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
     grpObj = grpObj_;
     grpObj->incCmdRef();
 }
@@ -579,8 +584,9 @@ UnGroupObjCmd::UnGroupObjCmd( const QString &_name,
 /*==============================================================*/
 UnGroupObjCmd::~UnGroupObjCmd()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->decCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
     grpObj->decCmdRef();
 }
 
@@ -689,15 +695,17 @@ LowerRaiseCmd::LowerRaiseCmd( const QString &_name, QPtrList<KPObject> _oldList,
     newList.setAutoDelete( false );
     doc = _doc;
 
-    for ( unsigned int i = 0; i < oldList.count(); i++ )
-        oldList.at( i )->incCmdRef();
+    QPtrListIterator<KPObject> it( oldList );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 LowerRaiseCmd::~LowerRaiseCmd()
 {
-    for ( unsigned int i = 0; i < oldList.count(); i++ )
-        oldList.at( i )->decCmdRef();
+    QPtrListIterator<KPObject> it( oldList );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
 }
 
 /*====================== execute =================================*/
@@ -796,7 +804,6 @@ MoveByCmd2::MoveByCmd2( const QString &_name, QPtrList<KoPoint> &_diffs,
     doc = _doc;
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
 	if ( objects.at( i )->getType() == OT_TEXT ) {
-	    //( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
             if(objects.at(i)->isSelected())
                 doc->updateRuler();
 	    doc->repaint( objects.at( i ) );
@@ -824,7 +831,6 @@ void MoveByCmd2::execute()
 	objects.at( i )->moveBy( *diffs.at( i ) );
 	if ( objects.at( i )->getType() == OT_TEXT )
         {
-	    //( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
             if(objects.at(i)->isSelected())
                 doc->updateRuler();
         }
@@ -844,7 +850,6 @@ void MoveByCmd2::unexecute()
 	objects.at( i )->moveBy( -diffs.at( i )->x(), -diffs.at( i )->y() );
 	if ( objects.at( i )->getType() == OT_TEXT )
         {
-	    //( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
             if(objects.at(i)->isSelected())
                 doc->updateRuler();
         }
@@ -871,15 +876,18 @@ PenBrushCmd::PenBrushCmd( const QString &_name, QPtrList<Pen> &_oldPen, QPtrList
     newBrush = _newBrush;
     flags = _flags;
 
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->incCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 PenBrushCmd::~PenBrushCmd()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->decCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
+
     oldPen.setAutoDelete( true );
     oldPen.clear();
     oldBrush.setAutoDelete( true );
@@ -1350,15 +1358,17 @@ PolygonSettingCmd::PolygonSettingCmd( const QString &_name, QPtrList<PolygonSett
     doc = _doc;
     newSettings = _newSettings;
 
-    for ( unsigned int i = 0; i < objects.count(); ++i )
-        objects.at( i )->incCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 PolygonSettingCmd::~PolygonSettingCmd()
 {
-    for ( unsigned int i = 0; i < objects.count(); ++i )
-        objects.at( i )->decCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
     oldSettings.setAutoDelete( true );
     oldSettings.clear();
 }
@@ -1407,15 +1417,19 @@ RectValueCmd::RectValueCmd( const QString &_name, QPtrList<RectValues> &_oldValu
     doc = _doc;
     newValues = _newValues;
 
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->incCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
+
 }
 
 /*======================== destructor ============================*/
 RectValueCmd::~RectValueCmd()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->decCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
+
     oldValues.setAutoDelete( true );
     oldValues.clear();
 }
