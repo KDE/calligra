@@ -357,7 +357,8 @@ void KivioOptionsDialog::defaultPage()
   KivioView* view = static_cast<KivioView*>(parent());
   m_layout = Kivio::Config::defaultPageLayout();
   m_font = Kivio::Config::font();
-  m_unitCombo->setCurrentItem(view->doc()->units());
+  m_unitCombo->setCurrentItem(KoUnit::unit(Kivio::Config::unit()));
+  unitChanged(m_unitCombo->currentItem());
   setLayoutText(m_layout);
   m_marginsChBox->setChecked(true);
   m_rulersChBox->setChecked(true);
