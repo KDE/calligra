@@ -29,6 +29,7 @@
 #include <qobjectlist.h>
 #include <qpushbutton.h>
 #include <kapplication.h>
+#include <kglobalsettings.h>
 #include <qstyle.h>
 #include <kdialog.h>
 
@@ -63,7 +64,7 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
 
     readSettings();
 
-    QFont buttonfont( "Helvetica", 12, QFont::Normal );
+    QFont buttonfont( KGlobalSettings::generalFont() );
     buttonfont.setStyleStrategy( QFont::PreferAntialias );
 
     // Set the window caption/title

@@ -22,6 +22,7 @@
 #include "kwdoc.h"
 #include "kwtextframeset.h"
 #include <kdebug.h>
+#include <kglobalsettings.h>
 #include "kwcommand.h"
 #include <klocale.h>
 
@@ -32,7 +33,7 @@ KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, KoTextFormatCollection 
 }
 
 KWTextDocument::KWTextDocument( KoZoomHandler * zoomHandler )
-    : KoTextDocument( zoomHandler, new KoTextFormatCollection( QFont("helvetica") /*unused*/, QColor(), KGlobal::locale()->language() , false, 1.0), 0L, false ),
+    : KoTextDocument( zoomHandler, new KoTextFormatCollection( KGlobalSettings::generalFont() /*unused*/, QColor(), KGlobal::locale()->language() , false, 1.0), 0L, false ),
       m_textfs( 0 )
 {
     init();

@@ -34,6 +34,7 @@
 #include <kfontcombo.h>
 #include <kiconloader.h>
 #include <knuminput.h>
+#include <kglobalsettings.h>
 
 #include <karbon_view.h>
 #include <karbon_part.h>
@@ -322,7 +323,7 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 
 	mainLayout->add( m_tabWidget = new QTabWidget( base ) );
 
-	m_tabWidget->setFont( QFont( "helvetica" , 8 ) );
+	m_tabWidget->setFont( QFont( KGlobalSettings::generalFont().family() , 8 ) );
 
 	QWidget* textWidget = new QWidget( m_tabWidget );
 
@@ -360,7 +361,7 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 
 	m_tabWidget->addTab( fxWidget, i18n( "Effects" ) );
 
-	m_fontCombo->setCurrentText( "Helvetica" );
+	m_fontCombo->setCurrentText( KGlobalSettings::generalFont().family() );
 
 	m_fontSize->setValue( 12 );
 	m_fontSize->setSuffix( " pt" );
