@@ -836,6 +836,8 @@ void KSpreadView::undo()
     m_pDoc->undo();
 
     updateEditWidget();
+    
+    resultOfCalc();
 }
 
 void KSpreadView::redo()
@@ -843,6 +845,7 @@ void KSpreadView::redo()
     m_pDoc->redo();
 
     updateEditWidget();
+    resultOfCalc();
 }
 
 void KSpreadView::deleteColumn()
