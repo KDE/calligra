@@ -1958,11 +1958,11 @@ void KWFormulaFrameSetEdit::selectAll()
 
 void KWFormulaFrameSetEdit::moveHome()
 {
-    formulaView->slotMoveHome( KFormula::WordMovement );
+    //formulaView->slotMoveHome( KFormula::WordMovement );
 }
 void KWFormulaFrameSetEdit::moveEnd()
 {
-    formulaView->slotMoveEnd( KFormula::WordMovement );
+    //formulaView->slotMoveEnd( KFormula::WordMovement );
 }
 
 void KWFormulaFrameSetEdit::cursorChanged( bool visible, bool /*selecting*/ )
