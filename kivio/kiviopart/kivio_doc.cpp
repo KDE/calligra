@@ -393,7 +393,7 @@ void KivioDoc::addPage( KivioPage* page )
   emit sig_addPage(page);
 }
 
-void KivioDoc::paintContent( QPainter&, const QRect&, bool transparent, double zoomX, double zoomY )
+void KivioDoc::paintContent( QPainter&, const QRect&, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
 {
     // ## TODO - otherwise kivio isn't embeddable
 //  KivioPage* page = m_pMap->activePage();
