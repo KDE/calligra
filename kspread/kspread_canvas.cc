@@ -492,9 +492,9 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
   KSpreadCell* cell = table->cellAt( x, y );
   if ( cell->isObscured() && cell->isObscuringForced() )
   {
-    int moveX=cell->obscuringCellsColumn();
-    int moveY=cell->obscuringCellsRow();
-    cell = table->cellAt( moveX, moveY );
+    cell = cell->obscuringCells().getFirst();
+    int moveX=cell->column();
+    int moveY=cell->row();
     QRect extraCell;
     extraCell.setCoords( moveX, moveY, moveX+cell->extraXCells(),
                          moveY+cell->extraYCells() );
@@ -580,8 +580,8 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
   cell= table->cellAt( x, y, true /* update scrollbar when necessary */ );
   if( cell->isObscured() && cell->isObscuringForced() )
   {
-    x=cell->obscuringCellsColumn();
-    y=cell->obscuringCellsRow();
+    x = cell->obscuringCells().getFirst()->column();
+    y = cell->obscuringCells().getFirst()->row();
   }
 
   int xpos = table->columnPos( x, this );
@@ -678,8 +678,9 @@ void KSpreadCanvas::chooseGotoLocation( int x, int y, KSpreadTable* table, bool 
   KSpreadCell* cell = table->cellAt( x, y, true /* update scrollbar when necessary */ );
   if ( cell->isObscured() && cell->isObscuringForced() )
   {
-    int moveX=cell->obscuringCellsColumn();
-    int moveY=cell->obscuringCellsRow();
+    cell = cell->obscuringCells().getFirst();
+    int moveX=cell->column();
+    int moveY=cell->row();
     cell = table->cellAt( moveX, moveY, true /* update scrollbar when necessary */ );
     QRect extraCell;
     extraCell.setCoords( moveX, moveY, moveX+cell->extraXCells(), moveY+cell->extraYCells() );
@@ -1245,10 +1246,9 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     // Go to the upper left corner of the obscuring object if cells are merged
     if (cell->isObscuringForced())
     {
-        col = cell->obscuringCellsColumn();
-        row = cell->obscuringCellsRow();
-        cell = table->cellAt( col, row );
-        //        activeTable()->setSelection( QRect(col, row, col, row) );
+      cell = cell->obscuringCells().getFirst();
+      col = cell->column();
+      row = cell->row();
     }
 
     // Start a marking action ?
@@ -1441,9 +1441,9 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
   // Go to the upper left corner of the obscuring object if it is a merged cell
   if ( cell->isObscuringForced() )
   {
-    setChooseMarkerRow( cell->obscuringCellsRow() );
-    setChooseMarkerColumn( cell->obscuringCellsColumn() );
-    cell = table->cellAt( chooseMarkerColumn(), chooseMarkerRow() );
+    cell = cell->obscuringCells().getFirst();
+    setChooseMarkerRow( cell->row() );
+    setChooseMarkerColumn( cell->column() );
   }
 
   if ( cell->isForceExtraCells() )
@@ -4067,15 +4067,14 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     // Special treatment for obscured cells.
     if ( cell->isObscured() && cell->isObscuringForced() )
     {
-        // Find the obscuring cell
-        int moveX = cell->obscuringCellsColumn();
-        int moveY = cell->obscuringCellsRow();
-        cell = table->cellAt( moveX, moveY );
+      cell = cell->obscuringCells().getFirst();
+      int moveX = cell->column();
+      int moveY = cell->row();
 
-        // Use the obscuring cells dimensions
-        u = cell->width( moveX, m_canvas );
-        xpos = table->columnPos( moveX, m_canvas );
-        ypos = table->rowPos( moveY, m_canvas );
+      // Use the obscuring cells dimensions
+      u = cell->width( moveX, m_canvas );
+      xpos = table->columnPos( moveX, m_canvas );
+      ypos = table->rowPos( moveY, m_canvas );
     }
 
     // Is the cursor over the comment marker (if there is any) then

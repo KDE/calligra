@@ -489,10 +489,9 @@ void KSpreadTable::adjustSizeMaxY ( int _y )
 KSpreadCell* KSpreadTable::visibleCellAt( int _column, int _row, bool _scrollbar_update )
 {
   KSpreadCell* cell = cellAt( _column, _row, _scrollbar_update );
-  if ( cell->isObscured() )
-    return cellAt( cell->obscuringCellsColumn(), cell->obscuringCellsRow(), _scrollbar_update );
+  KSpreadCell* obscuring = cell->obscuringCells().getLast();
 
-  return cell;
+  return obscuring == NULL ? cell : obscuring;
 }
 
 KSpreadCell* KSpreadTable::firstCell()
@@ -628,7 +627,7 @@ void KSpreadTable::setCalcDirtyFlag()
     KSpreadCell* c = m_cells.firstCell();
     for( ; c; c = c->nextCell() )
         {
-        if(!(c->isObscured() &&c->isObscuringForced()))
+        if(!(c->isObscured() && c->isObscuringForced()))
                 c->setCalcDirtyFlag();
         }
 }
@@ -745,13 +744,13 @@ void KSpreadTable::setSelection( const QRect &_sel, const QPoint& m, KSpreadCanv
       m_marker.setCoords( m.x(), m.y(), m.x() + cell->extraXCells(), m.y() + cell->extraYCells() );
   else if(cell->isObscuringForced())
         {
-        KSpreadCell* cell2 = cellAt( cell->obscuringCellsColumn(),
-                                     cell->obscuringCellsRow() );
+          KSpreadCell* cell2 = cell->obscuringCells().getFirst();
+
         QRect extraArea;
-        extraArea.setCoords( cell->obscuringCellsColumn(),
-                             cell->obscuringCellsRow(),
-                             cell->obscuringCellsColumn() + cell2->extraXCells(),
-                             cell->obscuringCellsRow() + cell2->extraYCells() );
+        extraArea.setCoords( cell2->column(),
+                             cell2->row(),
+                             cell2->column() + cell2->extraXCells(),
+                             cell2->row() + cell2->extraYCells() );
         if(extraArea.contains(m.x(),m.y()))
                 {
                 m_marker=extraArea;
@@ -1474,10 +1473,8 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
       if ( cell->isObscuringForced() )
       {
         /* case 2. */
-        undoRegion.setLeft(QMIN(undoRegion.left(),
-                                cell->obscuringCellsColumn()));
-        cell = cellAt( cell->obscuringCellsColumn(),
-                       cell->obscuringCellsRow() );
+        cell = cell->obscuringCells().getFirst();
+        undoRegion.setLeft(QMIN(undoRegion.left(), cell->column()));
       }
       /* case 1.  Add the extra space to numberOfCells and then skip
 	     over the region.  Note that because of the above if block 'cell'
@@ -1500,10 +1497,8 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
 
       if ( cell->isObscuringForced() )
       {
-        undoRegion.setTop(QMIN(undoRegion.top(),
-                               cell->obscuringCellsRow()));
-        cell = cellAt( cell->obscuringCellsColumn(),
-                       cell->obscuringCellsRow() );
+        cell = cell->obscuringCells().getFirst();
+        undoRegion.setTop(QMIN(undoRegion.top(), cell->row()));
       }
       numberOfCells += cell->extraXCells();
       x += cell->extraXCells();
@@ -1534,8 +1529,7 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
 
       if (cell->isObscuringForced())
       {
-        cell = cellAt( cell->obscuringCellsColumn(),
-                       cell->obscuringCellsRow());
+        cell = cell->obscuringCells().getFirst();
       }
 
       cell->setCellText(cellText.setNum( incr ));
@@ -1580,8 +1574,7 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
 
       if (cell->isObscuringForced())
       {
-        cell = cellAt( cell->obscuringCellsColumn(),
-                       cell->obscuringCellsRow());
+        cell = cell->obscuringCells().getFirst();
       }
 
       cell->setCellText(cellText.setNum( incr ));
@@ -2193,13 +2186,11 @@ else
                 }
                 else if ( cell->isObscured() && cell->isObscuringForced() )
                 {
-                        int moveX=cell->obscuringCellsColumn();
-                        int moveY=cell->obscuringCellsRow();
-                        cell = cellAt( moveX, moveY );
-                        left=QMIN(left,moveX);
-                        top=QMIN(top,moveY);
-                        bottom=QMAX(bottom,moveY+cell->extraYCells());
-                        right=QMAX(right,moveX+cell->extraXCells());
+                  cell = cell->obscuringCells().getFirst();
+                  left=QMIN(left,cell->column());
+                  top=QMIN(top,cell->row());
+                  bottom=QMAX(bottom,cell->row() + cell->extraYCells());
+                  right=QMAX(right,cell->column() + cell->extraXCells());
                 }
         }
 
@@ -3080,7 +3071,7 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
     if ( r.right() < r.left() )
       return;
   }
-  
+
   QRect target( outputPoint.pos.x(), outputPoint.pos.y(), r.width(), r.height() );
 
   doc()->emitBeginOperation();
@@ -3097,7 +3088,7 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
     int targetTop  = target.top();
     int sourceTop  = r.top();
     int sourceLeft = r.left();
-    
+
     key1 = key1 - sourceTop + targetTop;
     key2 = key2 - sourceTop + targetTop;
     key3 = key3 - sourceTop + targetTop;
@@ -3107,10 +3098,10 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
       for ( int y = 0; y < r.height(); ++y )
       {
         // from - to
-        copyCells( sourceLeft + x, sourceTop + y, 
+        copyCells( sourceLeft + x, sourceTop + y,
                    targetLeft + x, targetTop + y, copyLayout );
-      }      
-    }  
+      }
+    }
   }
 
   // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
@@ -3127,10 +3118,11 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
     cell1 = cellAt( d, key1 );
     if ( cell1->isObscured() && cell1->isObscuringForced() )
     {
-      int moveX = cell1->obscuringCellsColumn();
-      cell = cellAt( moveX, key1 );
-      cell1 = cellAt( moveX + cell->extraXCells() + 1, moveX );
-      d = moveX + cell->extraXCells() + 1;
+      KSpreadCell* obscuring = cell1->obscuringCells().getFirst();
+      cell = cellAt( obscuring->column(), key1 );
+      cell1 = cellAt( obscuring->column() + cell->extraXCells() + 1,
+                      obscuring->column());
+      d = obscuring->column() + cell->extraXCells() + 1;
     }
 
     // Look for which column we want to swap with the one number d
@@ -3259,7 +3251,7 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
         else if ( i2 != -1 && i1 == -1 )
         {
           // only text of cell2 is in the list so it is smaller than bestCell
-          /* No need to swap */ 
+          /* No need to swap */
           continue;
         }
 
@@ -3348,7 +3340,7 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
         }
       }
     }
-    
+
     // Swap columns cell1 and bestCell (i.e. d and bestX)
     if ( d != bestX )
     {
@@ -3374,7 +3366,7 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
 
 void KSpreadTable::sortByColumn( int key1, int key2, int key3,
                                  SortingOrder order1, SortingOrder order2, SortingOrder order3,
-                                 QStringList const * firstKey, bool copyLayout, bool headerRow, 
+                                 QStringList const * firstKey, bool copyLayout, bool headerRow,
                                  KSpreadPoint const & outputPoint )
 {
   QRect r( m_rctSelection );
@@ -3439,10 +3431,10 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
       for ( int y = 0; y < r.height(); ++y )
       {
         // from - to
-        copyCells( sourceLeft + x, sourceTop + y, 
+        copyCells( sourceLeft + x, sourceTop + y,
                    targetLeft + x, targetTop + y, copyLayout );
-      }      
-    }  
+      }
+    }
   }
 
   // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
@@ -3467,15 +3459,15 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
     cell1 = cellAt( key1, d );
     if ( cell1->isObscured() && cell1->isObscuringForced() )
     {
-      int moveY = cell1->obscuringCellsRow();
-      cell  = cellAt( key1, moveY );
-      cell1 = cellAt( key1, moveY+cell->extraYCells() + 1 );
-      d     = moveY + cell->extraYCells() + 1;
+      KSpreadCell* obscuring = cell1->obscuringCells().getFirst();
+      cell  = cellAt( key1, obscuring->row() );
+      cell1 = cellAt( key1, obscuring->row() + cell->extraYCells() + 1 );
+      d     = obscuring->row() + cell->extraYCells() + 1;
     }
 
     bestCell  = cell1;
     int bestY = d;
-    
+
     for ( int y = d + 1 ; y <= target.bottom(); ++y )
     {
       cell2 = cellAt( key1, y );
@@ -3505,7 +3497,7 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
 
         if ( i1 != -1 && i2 != -1 )
         {
-          if ( (order1 == Increase && i1 < i2 ) 
+          if ( (order1 == Increase && i1 < i2 )
                || (order1 == Decrease && i1 > i2) )
           {
             bestCell = cell2;
@@ -3598,7 +3590,7 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
         else if ( i2 != -1 && i1 == -1 )
         {
           // only text of cell2 is in the list so it is smaller than bestCell
-          /* No need to swap */ 
+          /* No need to swap */
           continue;
         }
 
@@ -3629,12 +3621,12 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
         KSpreadCell * bestCell2 = cellAt( key2, y );
 
         if ( cell22->isEmpty() )
-        { 
-          /* No need to swap */ 
+        {
+          /* No need to swap */
           continue;
         }
         else if ( cell22->isObscured() && cell22->isObscuringForced() )
-        { 
+        {
           /* No need to swap */
           continue;
         }
@@ -3643,7 +3635,7 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
           // empty cells are always shifted to the end
           bestCell = cell2;
           bestY = y;
-          continue;     
+          continue;
         }
 
         if ( (order2 == Increase && *cell22 > *bestCell2)
@@ -3667,12 +3659,12 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
           KSpreadCell * bestCell3 = cellAt( key3, y );
 
           if ( cell23->isEmpty() )
-          { 
-            /* No need to swap */ 
+          {
+            /* No need to swap */
             continue;
           }
           else if ( cell23->isObscured() && cell23->isObscuringForced() )
-          { 
+          {
             /* No need to swap */
             continue;
           }
@@ -3681,7 +3673,7 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
             // empty cells are always shifted to the end
             bestCell = cell2;
             bestY = y;
-            continue;     
+            continue;
           }
 
           if ( (order3 == Increase && *cell23 > *bestCell3)
@@ -5206,7 +5198,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
                   //kdDebug() << "loadSelection: cell at " << (col+coff) << "," << (row+roff) << " with roff,coff= "
                   //          << roff << "," << coff << ", _xshift: " << _xshift << ", _yshift: " << _yshift << endl;
 
-                    bool needInsert = FALSE;
+//                    bool needInsert = FALSE;
                     cell = cellAt( col + coff, row + roff );
 
                     if ( ( cell->isDefault() ) || ( op == OverWrite && sp == Normal ) ) //we will generate a new or replace the existing cell
@@ -6673,13 +6665,15 @@ KSpreadCell* KSpreadTable::getNextCellRight(int col, int row)
 
 bool KSpreadTable::isCellSelected(int column, int row)
 {
-  bool selected;
+  bool selected = false;
   KSpreadCell* cell = cellAt( column, row );
   selected = selectionRect().contains( QPoint( column, row ) );
-  if ( cell->isObscured() )
+  QPtrList<KSpreadCell> obscuredList = cell->obscuringCells();
+
+  for (cell = obscuredList.first(); cell != NULL && !selected;
+       cell = obscuredList.next())
   {
-    selected = selectionRect().contains(
-      QPoint( cell->obscuringCellsColumn(), cell->obscuringCellsRow() ) );
+    selected = selectionRect().contains(QPoint( cell->column(), cell->row() ) );
   }
   return selected;
 }

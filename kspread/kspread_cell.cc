@@ -72,9 +72,10 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_style = ST_Normal;
   m_iExtraXCells = 0;
   m_iExtraYCells = 0;
+  m_iMergedXCells = 0;
+  m_iMergedYCells = 0;
   m_iExtraWidth = 0;
   m_iExtraHeight = 0;
-  m_pObscuringCell = 0;
   m_iPrecision = -1;
   m_iOutTextWidth = 0;
   m_iOutTextHeight = 0;
@@ -190,7 +191,7 @@ void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
       if ( x != _col || y != _row )
       {
         KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
-        cell->unobscure();
+        cell->unobscure(this);
       }
 
   // disable forcing ?
@@ -201,12 +202,16 @@ void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
       m_iExtraYCells = 0;
       m_iExtraWidth = 0;
       m_iExtraHeight = 0;
+      m_iMergedXCells = 0;
+      m_iMergedYCells = 0;
       return;
   }
 
     setFlag(Flag_ForceExtra);
     m_iExtraXCells = _x;
     m_iExtraYCells = _y;
+    m_iMergedXCells = _x;
+    m_iMergedYCells = _y;
 
     // Obscure the cells
     for( int x = _col; x <= _col + _x; x++ )
@@ -214,7 +219,7 @@ void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
             if ( x != _col || y != _row )
             {
                 KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
-                cell->obscure( this );
+                cell->obscure( this, true );
             }
 
     // Refresh the layout
@@ -222,7 +227,6 @@ void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
     // painter.begin( m_pTable->gui()->canvasWidget() );
 
     setFlag(Flag_LayoutDirty);
-    makeLayout( m_pTable->painter(), _col, _row );
 }
 
 void KSpreadCell::move( int col, int row )
@@ -234,8 +238,7 @@ void KSpreadCell::move( int col, int row )
     //int ex = extraXCells();
     //int ey = extraYCells();
 
-    if ( m_pObscuringCell )
-        m_pObscuringCell = 0;
+    m_ObscuringCells.clear();
 
     // Unobscure the objects we obscure right now
     for( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; x++ )
@@ -243,11 +246,16 @@ void KSpreadCell::move( int col, int row )
             if ( x != m_iColumn || y != m_iRow )
             {
                 KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
-                cell->unobscure();
+                cell->unobscure(this);
             }
 
     m_iColumn = col;
     m_iRow = row;
+
+    m_iExtraXCells = 0;
+    m_iExtraYCells = 0;
+    m_iMergedXCells = 0;
+    m_iMergedYCells = 0;
 
     // Reobscure cells if we are forced to do so.
     //if ( m_bForceExtraCells )
@@ -258,8 +266,12 @@ void KSpreadCell::setLayoutDirtyFlag()
 {
     setFlag(Flag_LayoutDirty);
 
-    if ( m_pObscuringCell )
-        m_pObscuringCell->setLayoutDirtyFlag();
+    KSpreadCell* cell = NULL;
+    for (cell = m_ObscuringCells.first(); cell != NULL;
+         cell = m_ObscuringCells.next() )
+    {
+      cell->setLayoutDirtyFlag();
+    }
 }
 
 bool KSpreadCell::needsPrinting() const
@@ -286,25 +298,79 @@ bool KSpreadCell::isEmpty() const
 
 bool KSpreadCell::isObscuringForced()
 {
-    if ( !m_pObscuringCell )
-        return FALSE;
+  KSpreadCell *cell = NULL;
 
-    return m_pObscuringCell->isForceExtraCells();
+  for (cell = m_ObscuringCells.first(); cell != NULL;
+       cell = m_ObscuringCells.next())
+  {
+    if (cell->isForceExtraCells())
+    {
+      /* the cell might force extra cells, and then overlap even beyond that
+         so just knowing that the obscuring cell forces extra isn't enough.
+         We have to know that this cell is one of the ones it is forcing over.
+      */
+      if (column() <= cell->column() + cell->mergedXCells() &&
+          row() <= cell->row() + cell->mergedYCells())
+      {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
-void KSpreadCell::obscure( KSpreadCell *_cell )
+void KSpreadCell::obscure( KSpreadCell *cell, bool isForcing )
 {
-  m_pObscuringCell = _cell;
+  while (m_ObscuringCells.removeRef(cell));
+
+  if (isForcing)
+  {
+    m_ObscuringCells.prepend(cell);
+  }
+  else
+  {
+    m_ObscuringCells.append(cell);
+  }
 }
 
-void KSpreadCell::unobscure()
+void KSpreadCell::unobscure( KSpreadCell *cell )
 {
-  m_pObscuringCell = 0L;
+  m_ObscuringCells.remove(cell);
   setFlag(Flag_LayoutDirty);
 }
 
 void KSpreadCell::clicked( KSpreadCanvas *_canvas )
 {
+  /************************/
+
+  /* This needs removed eventually, but I'll leave it for a couple weeks so
+     I can monitor it.
+
+     Basically, click on a cell to see the value of a few variables.
+  */
+  KSpreadCell* c = NULL;
+  for (int a = 0; a <= extraXCells() && !isDefault(); a++)
+  {
+    for (int b = 0; b <= extraYCells(); b++)
+    {
+      c = m_pTable->cellAt(m_iColumn + a, m_iRow + b);
+      QString msg = "I (" + util_cellName(c->column(), c->row()) + ") am obscured by: ";
+      KSpreadCell*d = NULL;
+      QPtrList<KSpreadCell> lst = c->obscuringCells();
+      for (d = lst.first(); d != NULL; d = lst.next())
+      {
+        msg += util_cellName(d->column(), d->row());
+        msg += " ";
+      }
+      kdDebug(36001) << msg << endl;
+      kdDebug(36001) << "extra x,y = " << c->extraXCells() << ", " << c->extraYCells() << endl;
+      kdDebug(36001) << "merge x,y = " << c->mergedXCells() << ", " << c->mergedYCells() << endl;
+      kdDebug(36001) << endl;
+    }
+  }
+  /************************/
+
+
   if ( m_style == KSpreadCell::ST_Normal )
     return;
   else if ( m_style == KSpreadCell::ST_Select )
@@ -585,19 +651,18 @@ void KSpreadCell::freeAllObscuredCells()
     // Free all obscured cells.
     //
 
-    if ( !testFlag(Flag_ForceExtra) )
-    {
-        for ( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; ++x )
-            for ( int y = m_iRow; y <= m_iRow + m_iExtraYCells; ++y )
-                if ( x != m_iColumn || y != m_iRow )
-                {
-                    KSpreadCell *cell = m_pTable->cellAt( x, y );
-                    cell->unobscure();
-                }
+  for ( int x = m_iColumn + m_iMergedXCells;
+        x <= m_iColumn + m_iExtraXCells; ++x )
+    for ( int y = m_iRow + m_iMergedYCells;
+          y <= m_iRow + m_iExtraYCells; ++y )
+      if ( x != m_iColumn || y != m_iRow )
+      {
+        KSpreadCell *cell = m_pTable->cellAt( x, y );
+        cell->unobscure(this);
+      }
 
-        m_iExtraXCells = 0;
-        m_iExtraYCells = 0;
-    }
+  m_iExtraXCells = m_iMergedXCells;
+  m_iExtraYCells = m_iMergedYCells;
 
 }
 
@@ -612,6 +677,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     clearFlag(Flag_CellTooShort);
 
     freeAllObscuredCells();
+    /* but reobscure the ones that are forced obscuring */
+    forceExtraCells(m_iColumn, m_iRow, m_iMergedXCells, m_iMergedYCells);
+
     ColumnLayout *cl1 = m_pTable->columnLayout( column() );
     RowLayout *rl1 = m_pTable->rowLayout( row() );
     if( cl1->isHide() || (rl1->height()<=2))
@@ -671,8 +739,18 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
                 ende = true;
         }
         m_iExtraXCells = c - _col - 1;
-        m_iExtraWidth = ( m_iExtraXCells == 0 ? 0 : max_width );
 
+        /* we may have used extra cells, but only cells that we were already
+           merged to.
+        */
+        if (m_iExtraXCells < m_iMergedXCells)
+        {
+          m_iExtraXCells = m_iMergedXCells;
+        }
+        else
+        {
+          m_iExtraWidth = max_width;
+        }
         // Occupy the needed extra cells in vertical direction
         int max_height = height( 0 );
         int r = _row;
@@ -703,7 +781,17 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             }
         }
         m_iExtraYCells = r - _row - 1;
-        m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
+        /* we may have used extra cells, but only cells that we were already
+           merged to.
+        */
+        if (m_iExtraYCells < m_iMergedYCells)
+        {
+          m_iExtraYCells = m_iMergedYCells;
+        }
+        else
+        {
+          m_iExtraHeight = max_height;
+        }
         clearFlag(Flag_LayoutDirty);
         return;
     }
@@ -820,18 +908,6 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
 	// This method only calculates the text, and its width.
 	// No need to bother about the color (David)
-#if 0
-        // Find the correct color which depends on the conditions
-        // and the sign of the value.
-	KSpreadCondition condition;
-
-        if ( floatColor( _col, _row ) == KSpreadCell::NegRed && v < 0.0 )
-            tmpPen.setColor( Qt::red );
-        else if( conditions.GetCurrentCondition(condition) )
-        {
-            tmpPen.setColor(condition.colorcond);
-        }
-#endif
     }
     else if ( isFormula() )
     {
@@ -887,6 +963,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     int h = rl->height();
 
     // Calculate the extraWidth and extraHeight if we are forced to.
+    /* TODO - use m_iExtraWidth/height here? Isn't it already calculated?*/
     if ( testFlag(Flag_ForceExtra) )
     {
         for ( int x = _col + 1; x <= _col + m_iExtraXCells; x++ )
@@ -1002,62 +1079,67 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
 
     // Do we have to occupy additional cells right hand ?
-    if ( m_iOutTextWidth+indent > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
-         rightBorderWidth( _col, _row ) )
+    if ( m_iOutTextWidth+indent > w - 2 * BORDER_SPACE -
+         leftBorderWidth( _col, _row) - rightBorderWidth( _col, _row ) )
     {
-        // No chance. We can not obscure more/less cells.
-        if ( testFlag(Flag_ForceExtra) )
+      int c = m_iColumn;
+      int end = 0;
+      // Find free cells right hand to this one
+      while ( !end )
+      {
+        ColumnLayout *cl2 = m_pTable->columnLayout( c + 1 );
+        KSpreadCell *cell = m_pTable->visibleCellAt( c + 1, m_iRow );
+        if ( cell->isEmpty() )
         {
-          // The text does not fit in the cell
-          //m_strOutText = "**";
-          setFlag(Flag_CellTooShort);
+          w += cl2->width() - 1;
+          c++;
+
+          // Enough space ?
+          if ( m_iOutTextWidth+indent <= w - 2 * BORDER_SPACE -
+               leftBorderWidth( _col, _row) - rightBorderWidth( _col, _row ) )
+            end = 1;
+        }
+        // Not enough space, but the next cell is not empty
+        else
+          end = -1;
+      }
+
+      /* Dont occupy additional space for right aligned or centered text or
+         values.  Nor for numeric or boolean, apparently.  Also check to make
+         sure we haven't already force-merged enough cells
+      */
+      /* ##### Why not right/center aligned text?  No one knows.  Perhaps it
+         has something to do with calculating how much room the text needs in
+         those cases?
+      */
+      if (( align(_col,_row) == KSpreadCell::Left ||
+            align(_col,_row) == KSpreadCell::Undefined) &&
+          !isNumeric() && !isBool())
+      {
+        if (c - m_iColumn > m_iMergedXCells)
+        {
+          m_iExtraXCells = c - m_iColumn;
+          m_iExtraWidth = w;
+          for( int i = m_iColumn + 1; i <= c; ++i )
+          {
+            KSpreadCell *cell = m_pTable->nonDefaultCell( i, m_iRow );
+            cell->obscure( this );
+          }
+          //Not enough space
+          if(end==-1)
+          {
+            setFlag(Flag_CellTooShort);
+          }
         }
         else
         {
-            int c = m_iColumn;
-            int end = 0;
-            // Find free cells right hand to this one
-            while ( !end )
-            {
-                ColumnLayout *cl2 = m_pTable->columnLayout( c + 1 );
-                KSpreadCell *cell = m_pTable->visibleCellAt( c + 1, m_iRow );
-                if ( cell->isEmpty() )
-                {
-                    w += cl2->width() - 1;
-                    c++;
-
-                    // Enough space ?
-                    if ( m_iOutTextWidth+indent <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
-                         rightBorderWidth( _col, _row ) )
-                        end = 1;
-                }
-                // Not enough space, but the next cell is not empty
-                else
-                    end = -1;
-            }
-
-            // Dont occupy additional space for right aligned or centered text or values.
-            // ##### Why ?
-            if (( align(_col,_row) == KSpreadCell::Left || align(_col,_row) == KSpreadCell::Undefined) && !isNumeric() && !isBool())
-            {
-                m_iExtraWidth = w;
-                for( int i = m_iColumn + 1; i <= c; ++i )
-                {
-                    KSpreadCell *cell = m_pTable->nonDefaultCell( i, m_iRow );
-                    cell->obscure( this );
-                }
-                m_iExtraXCells = c - m_iColumn;
-                //Not enough space
-                if(end==-1)
-                {
-                  setFlag(Flag_CellTooShort);
-                }
-            }
-            else
-            {
-              setFlag(Flag_CellTooShort);
-            }
+          setFlag(Flag_CellTooShort);
         }
+      }
+      else
+      {
+        setFlag(Flag_CellTooShort);
+      }
     }
     clearFlag(Flag_LayoutDirty);
 }
@@ -1707,7 +1789,7 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
 
   /* if we're working on drawing an obscured cell, that means this cell
      should have a cell that obscured it. */
-  Q_ASSERT(!(paintingObscured > 0 && m_pObscuringCell == NULL));
+  Q_ASSERT(!(paintingObscured > 0 && m_ObscuringCells.isEmpty()));
 
   /* the cellref passed in should be this cell -- except if this is the default
      cell */
@@ -1791,21 +1873,26 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
 
   if (isObscured() && paintingObscured == 0 && !isObscuringForced())
   {
-    /* print the cell obscuring this one */
+    /* print the cells obscuring this one */
 
     /* if paintingObscured is > 0, that means drawing this cell was triggered
        while already drawing the obscuring cell -- don't want to cause an
        infinite loop
     */
     // Determine the dimension of the cell.
-    QPoint obscuringCellRef(obscuringCellsColumn(), obscuringCellsRow());
-    QPoint obscuringCellLoc( m_pTable->columnPos(obscuringCellsColumn()),
-                             m_pTable->rowPos(obscuringCellsRow()));
+    KSpreadCell* obscuringCell = NULL;
+    for (obscuringCell = m_ObscuringCells.first(); obscuringCell != NULL;
+         obscuringCell = m_ObscuringCells.next())
+    {
+      QPoint obscuringCellRef(obscuringCell->column(), obscuringCell->row());
+      QPoint obscuringCellLoc( m_pTable->columnPos(obscuringCell->column()),
+                               m_pTable->rowPos(obscuringCell->row()));
+      painter.save();
 
-    painter.save();
-    m_pObscuringCell->paintCell( rect, painter, obscuringCellLoc,
-                                 obscuringCellRef);
-    painter.restore();
+      obscuringCell->paintCell( rect, painter, obscuringCellLoc,
+                                obscuringCellRef);
+      painter.restore();
+    }
   }
 
 }
@@ -1936,54 +2023,64 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
   QPen top_pen = topBorderPen( cellRef.x(), cellRef.y() );
   ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
-  int height = (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
-  int width =  (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
+  int height = rowLayout->height();
+  int width =  colLayout->width();
   /* Each cell is responsible for drawing it's top and left portions of the
      "default" grid. --Or not drawing it if it shouldn't be there.*/
+  bool paintTop;
+  bool paintLeft;
+  KSpreadCell *cell = NULL;
+  paintTop = (top_pen.style() == Qt::NoPen && table()->getShowGrid());
+  paintLeft = (left_pen.style() == Qt::NoPen && table()->getShowGrid());
 
-  /* should we do the left border? */
-  if ( left_pen.style() == Qt::NoPen &&
-       ( !m_pObscuringCell || m_pObscuringCell->column() == cellRef.x()))
+  for (cell = m_ObscuringCells.first(); cell != NULL;
+       cell = m_ObscuringCells.next())
   {
-    if( table()->getShowGrid() )
+    paintLeft = paintLeft && (cell->column() == cellRef.x());
+    paintTop = paintTop && (cell->row() == cellRef.y());
+
+  }
+  /* should we do the left border? */
+  if (paintLeft)
+  {
+    int dt = 0;
+    int db = 0;
+
+    if (cellRef.x() > 1)
     {
-      int dt = 0;
-      QPen t = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->leftBorderPen( cellRef.x(), cellRef.y() - 1 );
+      QPen t = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->topBorderPen( cellRef.x() - 1, cellRef.y() );
+      QPen b = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->bottomBorderPen( cellRef.x() - 1, cellRef.y() );
+
       if ( t.style() != Qt::NoPen )
-        dt = 1;
+        dt = (t.width() + 1 )/2;
 
-      int db = 0;
-      if ( cellRef.y() < KS_rowMax ) {
-        QPen b = m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->leftBorderPen( cellRef.x(), cellRef.y() + 1 );
-        if ( b.style() != Qt::NoPen )
-          db = 1;
-      }
-
-      painter.setPen( table()->doc()->defaultGridPen() );
-      painter.drawLine( corner.x(), corner.y() + dt, corner.x(),
-                        corner.y() + height - db );
+    int db = 0;
+    if ( b.style() != Qt::NoPen )
+      db = (t.width() / 2);
     }
+
+    painter.setPen( table()->doc()->defaultGridPen() );
+    painter.drawLine( corner.x(), corner.y() + dt, corner.x(),
+                      corner.y() + height - db - dt);
   }
 
-  if ( top_pen.style() == Qt::NoPen &&
-       ( !m_pObscuringCell || m_pObscuringCell->row() == cellRef.y() ))
+  if (paintTop)
   {
-    if( table()->getShowGrid() )
+    int dl = 0;
+    int dr = 0;
+    if (cellRef.y() > 1)
     {
       QPen l = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->leftBorderPen( cellRef.x(), cellRef.y() - 1 );
       QPen r = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->rightBorderPen( cellRef.x(), cellRef.y() - 1 );
 
-      int dl = 0;
       if ( l.style() != Qt::NoPen )
         dl = ( l.width() - 1 ) / 2 + 1;
-      int dr = 0;
       if ( r.style() != Qt::NoPen )
         dr = r.width() / 2;
-
-      painter.setPen( table()->doc()->defaultGridPen() );
-      painter.drawLine( corner.x() + dl, corner.y(), corner.x() + width - dr,
-                        corner.y() );
     }
+    painter.setPen( table()->doc()->defaultGridPen() );
+    painter.drawLine( corner.x() + dl, corner.y(), corner.x() + width - dr - dl,
+                      corner.y() );
   }
 }
 
@@ -2113,8 +2210,9 @@ void KSpreadCell::paintText(QPainter& painter, QPoint corner, QPoint cellRef,
 
   if( colLayout->isHide()|| (rowLayout->height()<=2))
   {
-    //clear extracell if column or row is hidden
-    freeAllObscuredCells();
+    //clear extra cell if column or row is hidden
+    freeAllObscuredCells();  /* TODO: This looks dangerous...must check when I
+                                have time */
     m_strOutText="";
   }
 
@@ -2396,15 +2494,17 @@ void KSpreadCell::paintCellBorders(QPainter& painter, QPoint corner,
   bool paintTop = true;
   bool paintBottom = true;
 
-  if (isObscured())
+  KSpreadCell* cell = NULL;
+  for (cell = m_ObscuringCells.first(); cell != NULL;
+       cell = m_ObscuringCells.next())
   {
-    int xDiff = cellRef.x() - obscuringCellsColumn();
-    int yDiff = cellRef.y() - obscuringCellsRow();
-    paintLeft = xDiff == 0;
-    paintTop = yDiff == 0;
+    int xDiff = cellRef.x() - cell->column();
+    int yDiff = cellRef.y() - cell->row();
+    paintLeft = paintLeft && xDiff == 0;
+    paintTop = paintTop && yDiff == 0;
 
-    paintRight = m_pObscuringCell->extraXCells() == xDiff;
-    paintBottom = m_pObscuringCell->extraYCells() == yDiff;
+    paintRight = paintRight && cell->extraXCells() == xDiff;
+    paintBottom = paintBottom && cell->extraYCells() == yDiff;
   }
 
   paintRight = paintRight && (extraXCells() == 0);
@@ -2876,33 +2976,24 @@ int KSpreadCell::height( int _row, KSpreadCanvas *_canvas )
 
 const QBrush& KSpreadCell::backGroundBrush( int _col, int _row ) const
 {
-    if ( m_pObscuringCell )
-    {
-        // Ask the obscuring cell for a right border
-      //if ( m_pObscuringCell->hasProperty( PBackgroundBrush ) )
-            return m_pObscuringCell->backGroundBrush( m_pObscuringCell->column(), m_pObscuringCell->row() );
+  KSpreadCell* cell = m_ObscuringCells.getFirst();
+  if ( cell != NULL )
+  {
+    return cell->backGroundBrush( cell->column(), cell->row() );
+  }
 
-	    //return m_pTable->emptyBrush();
-    }
-
-    return KSpreadLayout::backGroundBrush( _col, _row );
+  return KSpreadLayout::backGroundBrush( _col, _row );
 }
 
 const QColor& KSpreadCell::bgColor( int _col, int _row ) const
 {
-    if ( m_pObscuringCell )
-      {
-        // Ask the obscuring cell for a right border
-	//        if ( m_pObscuringCell->hasProperty( PBackgroundColor ) )
-	  {
-            return m_pObscuringCell->bgColor( m_pObscuringCell->column(), m_pObscuringCell->row() );
-	  }
+  KSpreadCell* cell = m_ObscuringCells.getFirst();
+  if ( cell != NULL )
+  {
+    return cell->bgColor( cell->column(), cell->row() );
+  }
 
-
-	  //return m_pTable->emptyColor();
-      }
-
-    return KSpreadLayout::bgColor( _col, _row );
+  return KSpreadLayout::bgColor( _col, _row );
 }
 
 ///////////////////////////////////////////
@@ -3163,6 +3254,24 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
   }
   setCalcDirtyFlag();
 
+  /* those obscuring us need to redo their layout cause they can't obscure us
+     now that we've got text.
+     This includes cells obscuring cells that we are obscuring
+  */
+  for (int x = m_iColumn; x <= m_iColumn + extraXCells(); x++)
+  {
+    for (int y = m_iRow; y <= m_iRow + extraYCells(); y++)
+    {
+      KSpreadCell* cell = m_pTable->cellAt(x,y);
+      QPtrList<KSpreadCell> lst = cell->obscuringCells();
+
+      for (cell = lst.first(); cell != NULL; cell = lst.next())
+      {
+        cell->setFlag(Flag_LayoutDirty);
+      }
+    }
+  }
+
   if ( updateDepends )
       update();
 
@@ -3369,20 +3478,22 @@ void KSpreadCell::setValue( double _d )
 
 void KSpreadCell::update()
 {
-    kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " update" << endl;
-    if ( m_pObscuringCell )
-    {
-        m_pObscuringCell->setLayoutDirtyFlag();
-        m_pObscuringCell->setDisplayDirtyFlag();
-        m_pTable->updateCell( m_pObscuringCell, m_pObscuringCell->column(), m_pObscuringCell->row() );
-    }
+  kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " update" << endl;
+  KSpreadCell* cell = NULL;
+  for ( cell = m_ObscuringCells.first(); cell != NULL;
+        cell = m_ObscuringCells.next())
+  {
+    cell->setLayoutDirtyFlag();
+    cell->setDisplayDirtyFlag();
+    m_pTable->updateCell( cell, cell->column(), cell->row() );
+  }
 
-    setFlag(Flag_DisplayDirty);
+  setFlag(Flag_DisplayDirty);
 
-    updateDepending();
+  updateDepending();
 
-    if ( testFlag(Flag_DisplayDirty) )
-        m_pTable->updateCell( this, m_iColumn, m_iRow );
+  if ( testFlag(Flag_DisplayDirty) )
+    m_pTable->updateCell( this, m_iColumn, m_iRow );
 }
 
 void KSpreadCell::updateDepending()
@@ -4454,6 +4565,8 @@ void KSpreadCell::tableDies()
     // Avoid unobscuring the cells in the destructor.
     m_iExtraXCells = 0;
     m_iExtraYCells = 0;
+    m_iMergedXCells = 0;
+    m_iMergedYCells = 0;
     m_nextCell = 0;
     m_previousCell = 0;
 }
@@ -4480,7 +4593,7 @@ KSpreadCell::~KSpreadCell()
     {
         KSpreadCell* cell = m_pTable->cellAt( m_iColumn + x, m_iRow + y );
         if ( cell )
-            cell->unobscure();
+            cell->unobscure(this);
     }
 
 }
@@ -4603,16 +4716,6 @@ void KSpreadCell::NotifyDependancyList(QPtrList<KSpreadDependency> lst, bool isD
       }
     }
   }
-}
-
-int KSpreadCell::obscuringCellsColumn()
-{
-  return (m_pObscuringCell != NULL) ? m_pObscuringCell->column() : 0;
-}
-
-int KSpreadCell::obscuringCellsRow()
-{
-  return (m_pObscuringCell != NULL) ? m_pObscuringCell->row() : 0;
 }
 
 QValueList<KSpreadConditional> KSpreadCell::GetConditionList()

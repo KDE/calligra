@@ -500,60 +500,36 @@ public:
     void setDisplayDirtyFlag();
 
     /**
-     * Print the cell.
-     *
-     * @param _tx is the left offset.
-     * @param _ty is the top offset.
-     * @param _col the column this cell is assumed to be in
-     * @param _row the row this cell is assumed to be in
-     * @param _cl the @ref ColunmKSpreadLayout for this cell
-     * @param _rl the @ref RowLayout for this cell
-     * @param _only_left_border' set to draw only the left border. Since every cell paints its
-     *                           left and top border only, you need to paint the right cells
-     *                           left border to get the final right border.
-     * @param _only_top_border' set to draw only the top border.
-     */
-    // virtual void print( QPainter &_painter, int _tx, int _ty, int _col, int _row,
-    // ColumnLayout *_cl, RowLayout *_rl, bool _only_left,
-    // bool _only_top, const QPen& _grid_pen );
-
-    /**
-     * Tells this cell that the @ref KSpreadCell '_cell' obscures this one.
+     * Tells this cell that the @ref KSpreadCell 'cell' obscures this one.
      * If this cell has to be redrawn, then the obscuring cell is redrawn instead.
      *
-     * @param _cell the obscuring cell
-     * @param _col is the column of the obscuring cell.
-     * @param _row is the row of the obscuring cell.
+     * @param cell the obscuring cell
+     * @param isForcing whether this is a forced obscuring (merged cells) or
+     *                  just a temporary obscure (text overlap).
      */
-    void obscure( KSpreadCell *_cell );
+    void obscure( KSpreadCell *cell, bool isForcing = false);
     /**
      * Tells this cell that it is no longer obscured.
+     *
+     * @param cell the cell that is no longer obscuring this one.
      */
-    void unobscure();
+    void unobscure(KSpreadCell* cell);
     /**
      * @return TRUE if this cell is obscured by another.
      */
-    bool isObscured() const { return ( m_pObscuringCell != 0L ); }
+    bool isObscured() const { return !( m_ObscuringCells.isEmpty() ); }
     /**
      * If obscuring is forced then the marker may never reside on this cell.
      *
-     * @return TRUE if the obscuring cell is forced to obscure this one.
+     * @return TRUE if an obscuring cell is forced to obscure this one.
      */
     bool isObscuringForced();
 
     /**
-     * @return the column of the obscuring cell.
+     * @return the obscuring cell list (might be empty)
      */
-    int obscuringCellsColumn();
-    /**
-     * @return the row of the obscuring cell.
-     */
-    int obscuringCellsRow();
-
-    /**
-     * @return the obscuring cell (might be 0L)
-     */
-    KSpreadCell const * obscuringCell() const { return m_pObscuringCell; }
+    QPtrList<KSpreadCell> const obscuringCells() const
+      { return m_ObscuringCells; }
 
     /**
      * Force the cell to occupy other cells space.
@@ -571,6 +547,18 @@ public:
      * @return TRUE if the cell is forced to obscure other cells.
      */
     bool isForceExtraCells() const;
+
+  /**
+   * @return the number of obscured cells in the horizontal direction as a
+   *         result of cell merging (forced obscuring)
+   */
+  int mergedXCells() {return m_iMergedXCells; }
+
+  /**
+   * @return the number of obscured cells in the vertical direction as a
+   *         result of cell merging (forced obscuring)
+   */
+  int mergedYCells() {return m_iMergedYCells; }
 
     /**
      * @return the amount of obscured cells in the horizontal direction
@@ -848,7 +836,10 @@ private:
      */
     int m_fmAscent;
 
-  /**
+  int m_iMergedXCells;
+  int m_iMergedYCells;
+
+    /**
      * The amount of additional cells horizontal
      *
      * @persistent
@@ -873,12 +864,12 @@ private:
     int m_iExtraHeight;
 
     /**
-     * The @ref KSpreadCell that obscures this one.
-     * If this pointer is not NULL, then this cell is obscured by another
+     * A list of @ref KSpreadCell type pointers that obscure this one.
+     * If this list is not empty, then this cell is obscured by another
      * enlarged object. This means that we have to call this object in order
      * of painting it for example instead of painting 'this'.
      */
-    KSpreadCell *m_pObscuringCell;
+    QPtrList<KSpreadCell> m_ObscuringCells;
 
     /**
      * Tells wether the cell is a button, combobox etc.

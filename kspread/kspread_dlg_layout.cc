@@ -208,11 +208,11 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table,
     obj = table->cellAt( _right, _top );
     if(obj->isObscuringForced())
     {
-      int moveX=obj->obscuringCellsColumn();
+      obj = obj->obscuringCells().getFirst();
+      int moveX=obj->column();
       int moveY=_top;
       int moveX2 = _right;
-      int moveY2 = obj->obscuringCellsRow();
-      obj = table->cellAt( moveX,  moveY );
+      int moveY2 = obj->row();
       borders[BorderType_Vertical].style = obj->leftBorderStyle( moveX, moveY );
       borders[BorderType_Vertical].width = obj->leftBorderWidth( moveX, moveY );
       borders[BorderType_Vertical].color = obj->leftBorderColor( moveX, moveY );
