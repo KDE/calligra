@@ -591,10 +591,10 @@ QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles )
     buffer.open( IO_WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
     elementWriter.startElement( "number:number" );
-    elementWriter.endElement();
 
     if ( featureSet( SPrecision ) )
         elementWriter.addAttribute( "number:decimal-places", m_precision );
+    elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     currentCellStyle.addChildElement( "number", elementContents );
@@ -614,12 +614,12 @@ QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles )
     buffer.open( IO_WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
     elementWriter.startElement( "number:scientific-number" );
-    elementWriter.endElement();
     if ( featureSet( SPrecision ) )
         elementWriter.addAttribute( "number:decimal-places", m_precision );
     //todo add "number:min-integer-digits" ????????
 
     elementWriter.addAttribute("number:min-exponent-digits", "2" );
+    elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     currentCellStyle.addChildElement( "number", elementContents );
@@ -706,6 +706,9 @@ QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles )
     //</number:time-style>
 
     KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_TIME );
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
     switch( m_formatType )
     {
     case KSpreadFormat::Time:
@@ -723,29 +726,51 @@ QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles )
         kdDebug()<<"time format not defined :"<<m_formatType<<endl;
         break;
     }
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    currentCellStyle.addChildElement( "number", elementContents );
     return mainStyles.lookup( currentCellStyle, "N" );
 }
 
 
 QString KSpreadStyle::saveOasisStyleNumericFraction( KoGenStyles &mainStyles )
 {
+    //<number:number-style style:name="N71" style:family="data-style">
+    //<number:fraction number:min-integer-digits="0" number:min-numerator-digits="2" number:min-denominator-digits="2"/>
+    //</number:number-style>
     KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_FRACTION );
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+    elementWriter.startElement( "number:fraction" );
     switch( m_formatType )
     {
     case KSpreadFormat::fraction_half:
+        break;
     case KSpreadFormat::fraction_quarter:
+        break;
     case KSpreadFormat::fraction_eighth:
+        break;
     case KSpreadFormat::fraction_sixteenth:
+        break;
     case KSpreadFormat::fraction_tenth:
+        break;
     case KSpreadFormat::fraction_hundredth:
+        break;
     case KSpreadFormat::fraction_one_digit:
+        break;
     case KSpreadFormat::fraction_two_digits:
+        break;
     case KSpreadFormat::fraction_three_digits:
         break;
     default:
         kdDebug()<<" fraction format not defined :"<<m_formatType<<endl;
         break;
     }
+
+    elementWriter.endElement();
+
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    currentCellStyle.addChildElement( "number", elementContents );
     return mainStyles.lookup( currentCellStyle, "N" );
 }
 
