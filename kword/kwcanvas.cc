@@ -1112,6 +1112,7 @@ void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
     KWFrame *frame=0L;
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
+        frame=settingsFrame(frame);
         FrameIndex *index=new FrameIndex;
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getLeftBorder();
@@ -1162,6 +1163,7 @@ void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
 
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
+        frame=settingsFrame(frame);
         FrameIndex *index=new FrameIndex;
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getRightBorder();
@@ -1213,6 +1215,7 @@ void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
         _frmBrd.ptWidth=0;
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
+        frame=settingsFrame(frame);
         FrameIndex *index=new FrameIndex;
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getTopBorder();
@@ -1262,6 +1265,7 @@ void KWCanvas::setBottomFrameBorder( Border _frmBrd, bool _b )
 
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
+        frame=settingsFrame(frame);
         FrameIndex *index=new FrameIndex;
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getBottomBorder();
@@ -1320,6 +1324,7 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
     //int m_IindexFrameSet;
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
+        frame=settingsFrame(frame);
         FrameIndex *index=new FrameIndex;
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getBottomBorder();
@@ -1404,6 +1409,28 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
     doc->repaintAllViews();
 }
 
+KWFrame * KWCanvas::settingsFrame(KWFrame* frame)
+{
+    QListIterator<KWFrame> frameIt( frame->getFrameSet()->frameIterator() );
+    KWFrame* copyFrame=0L;
+    for ( ; frameIt.current(); ++frameIt  )
+    {
+        KWFrame *frame2 = frameIt.current();
+        if(frame==frame2)
+            break;
+        if ( frame->getNewFrameBehaviour() != Copy )
+            copyFrame = 0L;
+        else if ( !copyFrame )
+        {
+            copyFrame = frame2;
+        }
+    }
+    if(copyFrame)
+        frame=copyFrame;
+
+    return frame;
+}
+
 void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
 {
     QList <KWFrame> selectedFrames = doc->getSelectedFrames();
@@ -1411,11 +1438,12 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
         return;
     bool colorChanged=false;
     KWFrame *frame=0L;
-
     QList<FrameIndex> frameindexList;
     QList<QBrush> oldColor;
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
+        frame=settingsFrame(frame);
+
         FrameIndex *index=new FrameIndex;
 
         index->m_pFrameSet=frame->getFrameSet();
@@ -1425,6 +1453,7 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
         QBrush *_color=new QBrush(frame->getBackgroundColor());
         frameindexList.append(index);
         oldColor.append(_color);
+
         if (_backColor!=frame->getBackgroundColor())
         {
             colorChanged=true;

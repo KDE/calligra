@@ -91,6 +91,8 @@ public:
 
     void setFrameBackgroundColor( const QBrush &backColor );
 
+    KWFrame * settingsFrame(KWFrame* frame);
+
     void editFrameProperties();
 
     // Mouse press
