@@ -24,12 +24,12 @@ public:
                                  // usefull for debugging of your layout:
                                  bool showAnchor   = false );
 
-    static QRegion KDDrawText::measureRotatedText( QPainter* painter,
-                                                   float  degrees,
-                                                   QPoint anchor,
-                                                   const QString& text,
-                                                   const QFont* font,
-                                                   int align );
+    static QRegion measureRotatedText( QPainter* painter,
+                                       float  degrees,
+                                       QPoint anchor,
+                                       const QString& text,
+                                       const QFont* font,
+                                       int align );
 
 private:
     static void drawRotatedTxt( QPainter* painter,
