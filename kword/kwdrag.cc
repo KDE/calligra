@@ -67,7 +67,7 @@ const char* KWTextDrag::format( int i ) const
 
 const char * KWTextDrag::selectionMimeType()
 {
-    return "application/x-kword-textselection";
+    return "application/vnd.oasis.openoffice.text";
 }
 
 void KWTextDrag::setFrameSetNumber( int number )
