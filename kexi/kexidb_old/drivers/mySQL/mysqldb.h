@@ -131,7 +131,9 @@ class MySqlDB : public KexiDB
 		QString createDefinition(const QString& field, KexiDBField::ColumnType dtype, int length, int precision,
 			KexiDBField::ColumnConstraints constraints, bool binary, bool unsignedType, const QString& defaultVal);
 		QString createDefinition(const KexiDBField& field,
-			unsigned int index, KexiDBTableStruct fields);
+			int index, KexiDBTableStruct fields);
+		bool changeKeys(const KexiDBField& field,
+			int index, KexiDBTableStruct fields);
 };
 
 #endif

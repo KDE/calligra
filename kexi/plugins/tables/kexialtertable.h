@@ -59,6 +59,7 @@ class KexiAlterTable : public KexiDialogBase
 		PropertyEditorItem* m_unsignedItem;
 		PropertyEditorItem* m_precisionItem;
 		PropertyEditorItem* m_autoIncItem;
+		PropertyEditorItem* m_primaryItem;
 };
 
 #endif

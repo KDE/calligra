@@ -548,9 +548,11 @@ MySqlDB::alterField(const KexiDBField& changedField, unsigned int index,
 	QString qstr = "ALTER TABLE " + changedField.table() + " CHANGE " +
 		fields.at(index)->name() + " " + changedField.name();
 	qstr += " " + createDefinition(changedField, index, fields);
-
 	kdDebug() << "MySqlDB::alterField: Query: " << qstr << endl;
-	return query(qstr);
+	bool ok = query(qstr);
+	ok = changeKeys(changedField, index, fields);
+
+	return ok;
 }
 
 bool
@@ -562,14 +564,16 @@ MySqlDB::createField(const KexiDBField& newField, KexiDBTableStruct fields,
 		newField.sqlType()) << "ColumnType: " << newField.sqlType() << endl;
 	QString qstr = "ALTER TABLE " + newField.table() + " ADD " + newField.name();
 	qstr += " " + createDefinition(newField, -1, fields);
-
 	kdDebug() << "MySqlDB::createField: Query: " << qstr << endl;
-	return query(qstr);
+	bool ok = query(qstr);
+	ok = changeKeys(newField, -1, fields);
+
+	return ok;
 }
 
 QString
-MySqlDB::createDefinition(const KexiDBField& field,
-	unsigned int index, KexiDBTableStruct fields)
+MySqlDB::createDefinition(const KexiDBField& field, int index,
+	KexiDBTableStruct fields)
 {
 	QString qstr = getNativeDataType(field.sqlType());
 	bool allowUnsigned = false;
@@ -635,6 +639,71 @@ MySqlDB::createDefinition(const KexiDBField& field,
 	}
 
 	return qstr;
+}
+
+bool
+MySqlDB::changeKeys(const KexiDBField& field, int index,
+	KexiDBTableStruct fields)
+{
+	bool noPrimary = false;
+	QString qstr = "ALTER TABLE " + field.table();
+
+	if(index >= 0)
+	{
+		if(field.primary_key() == fields.at(index)->primary_key())
+		{
+			noPrimary = true;
+		}
+	}
+
+	if(!noPrimary)
+	{
+		qstr += " DROP PRIMARY KEY";
+		QString fstr;
+		int i = 0, j = 0;
+
+		for(KexiDBField* f = fields.first(); f; f = fields.next())
+		{
+			if((index != i) && (f->primary_key()))
+			{
+				if(j > 0)
+				{
+					fstr += ",";
+				}
+				else
+				{
+					j++;
+				}
+
+				fstr += f->name();
+			}
+
+			i++;
+		}
+
+		if(field.primary_key())
+		{
+			if(j > 0)
+			{
+				fstr += ",";
+			}
+
+			fstr += field.name();
+		}
+
+		if(!fstr.isEmpty())
+		{
+			qstr += ", ADD PRIMARY KEY(" + fstr + ")";
+		}
+	}
+
+	if(!noPrimary)
+	{
+		kdDebug() << "MySqlDB::changeKeys: Query: " << qstr << endl;
+		return query(qstr);
+	}
+
+	return true;
 }
 
 MySqlDB::~MySqlDB()

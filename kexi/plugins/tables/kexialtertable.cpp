@@ -52,6 +52,7 @@ KexiAlterTable::initView()
 	lineFrm->setFrameStyle(QFrame::HLine | QFrame::Sunken);
 
 	m_fieldTable = new KexiTableView(this);
+	m_fieldTable->m_editOnDubleClick = true;
 	m_fieldTable->setRecordIndicator(true);
 	m_fieldTable->addColumn(i18n("Field Name"), QVariant::String, true);
 	QStringList strings;
@@ -62,6 +63,7 @@ KexiAlterTable::initView()
 	}
 
 	m_fieldTable->addColumn(i18n("Datatype"), QVariant::StringList, true, QVariant(strings));
+	m_fieldTable->addColumn(i18n("Primary Key"), QVariant::Bool, true);
 
 	m_propList = new PropertyEditor(this, true);
 	m_propList->setFullWidth(true);
@@ -73,6 +75,7 @@ KexiAlterTable::initView()
 	m_unsignedItem = new PropertyEditorItem(m_propList, i18n("Unsigned Value"), QVariant::Bool, QVariant(false, 1));
 	m_precisionItem = new PropertyEditorItem(m_propList, i18n("Precision"), QVariant::Int, 0);
 	m_autoIncItem = new PropertyEditorItem(m_propList, i18n("Auto Increment"), QVariant::Bool, QVariant(false, 1));
+	m_primaryItem = new PropertyEditorItem(m_propList, i18n("Primary Key"), QVariant::Bool, QVariant(false, 1));
 
 	QGridLayout* l = new QGridLayout(this);
 	l->setSpacing(KDialog::spacingHint());
@@ -99,6 +102,7 @@ KexiAlterTable::getFields()
 		KexiTableItem *it = new KexiTableItem(m_fieldTable);
 		it->setValue(0, field->name());
 		it->setValue(1, field->sqlType() - 1);
+		it->setValue(2, field->primary_key());
 		it->setHint(QVariant(fc++));
 	}
 
@@ -146,6 +150,7 @@ KexiAlterTable::changeShownField(KexiTableItem* i)
 		m_unsignedItem->setValue(QVariant(field->unsignedType(), 1));
 		m_precisionItem->setValue(field->precision());
 		m_autoIncItem->setValue(QVariant(field->auto_increment(), 1));
+		m_primaryItem->setValue(QVariant(field->primary_key(), 1));
 	}
 	else
 	{
@@ -157,6 +162,7 @@ KexiAlterTable::changeShownField(KexiTableItem* i)
 		m_unsignedItem->setValue(QVariant(false, 1));
 		m_precisionItem->setValue(0);
 		m_autoIncItem->setValue(QVariant(false, 1));
+		m_primaryItem->setValue(QVariant(false, 1));
 	}
 }
 
@@ -165,11 +171,15 @@ KexiAlterTable::tableItemChanged(KexiTableItem *i, int col)
 {
 	if(col == 0)
 	{
-		m_nameItem->setValue(i->getValue(col).toString());
+		m_nameItem->setValue(i->getValue(col));
 	}
 	else if(col == 1)
 	{
-		m_datatypeItem->setValue(i->getValue(col).toInt());
+		m_datatypeItem->setValue(i->getValue(col));
+	}
+	else if(col == 2)
+	{
+		m_primaryItem->setValue(QVariant(i->getValue(col).toBool(), 1));
 	}
 
 	changeTable();
@@ -187,6 +197,7 @@ KexiAlterTable::changeTable()
 	field->setUnsigned(m_unsignedItem->value().toBool());
 	field->setPrecision(m_precisionItem->value().toInt());
 	field->setAutoIncrement(m_autoIncItem->value().toBool());
+	field->setPrimaryKey(m_primaryItem->value().toBool());
 	KexiTableItem* i = m_fieldTable->selectedItem();
 	bool ok = false;
 
@@ -226,6 +237,7 @@ KexiAlterTable::changeTable()
 		{
 			i->setValue(0, field->name());
 			i->setValue(1, field->sqlType() - 1);
+			i->setValue(2, QVariant(field->primary_key(), 1));
 			changeShownField(i);
 		}
 	}
@@ -241,6 +253,7 @@ KexiAlterTable::propertyChanged()
 {
 	m_fieldTable->selectedItem()->setValue(0, m_nameItem->value());
 	m_fieldTable->selectedItem()->setValue(1, m_datatypeItem->value());
+	m_fieldTable->selectedItem()->setValue(2, m_primaryItem->value());
 	m_fieldTable->triggerUpdate();
 
 	changeTable();
