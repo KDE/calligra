@@ -3731,6 +3731,7 @@ void KexiTableView::navRowNumber_lostFocus()
 void KexiTableView::updateRowCountInfo()
 {
 	d->navRowNumberValidator->setRange(1,rows()+(isInsertingEnabled()?1:0));
+	kdDebug() << QString("updateRowCountInfo(): d->navRowNumberValidator: bottom=%1 top=%2").arg(d->navRowNumberValidator->bottom()).arg(d->navRowNumberValidator->top()) << endl;
 	setNavRowCount(rows());
 //	d->navRowCount->setText(QString::number(rows()));
 }
@@ -3771,9 +3772,6 @@ void KexiTableView::navBtnNewClicked()
 bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 {
 	//don't allow to stole key my events by others:
-	if (e->type()==QEvent::Show) {
-		kdDebug() << "SHOW" << endl;
-	}
 	kdDebug() << "spontaneous " << e->spontaneous() << " type=" << e->type() << endl;
 	
 	if (e->spontaneous() && (e->type()==QEvent::KeyPress /*|| e->type()==QEvent::AccelOverride*/)) {

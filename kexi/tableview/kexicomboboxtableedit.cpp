@@ -259,7 +259,8 @@ void KexiComboBoxTableEdit::clear()
 
 bool KexiComboBoxTableEdit::valueChanged()
 {
-/*	KexiTableViewData *relData = column()->relatedData();
+	//avoid comparing values:
+	KexiTableViewData *relData = column()->relatedData();
 	if (relData) {
 		//use 'related table data' model
 		KexiTableItem *it = m_popup->tableView()->selectedItem();
@@ -271,7 +272,7 @@ bool KexiComboBoxTableEdit::valueChanged()
 		const int row = m_popup->tableView()->currentRow();
 		if (row<0)
 			return false;
-	}*/
+	}
 
 	//just compare values
 	return KexiTableEdit::valueChanged();
