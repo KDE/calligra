@@ -24,6 +24,7 @@
 #include <klibloader.h>
 #include <qwidget.h>
 #include <klocale.h>
+#include <kdebug.h>
 #include <kparts/mainwindow.h>
 #include <qstringlist.h>
 #include <qlayout.h>
@@ -37,6 +38,8 @@
 
 void KoPrintPreview::preview(QWidget* parent, const char* /*name*/, const QString & tmpFile )
 {
+    // ### While kghostview is busted, let's not use it
+#if 0
     KTrader::OfferList offers = KTrader::self()->query("application/postscript", "'KParts/ReadOnlyPart' in ServiceTypes");
 
     // Try to find a postscript component first
@@ -66,5 +69,27 @@ void KoPrintPreview::preview(QWidget* parent, const char* /*name*/, const QStrin
     // No component worked, or the query returned none -> run separate application
     KRun::runURL(tmpFile,"application/postscript");
     // Note: the temp file won't be deleted :(
-}
 
+#else
+
+    // Find an installed application
+    KTrader::OfferList offers = KTrader::self()->query("application/postscript");
+    KTrader::OfferList::ConstIterator it(offers.begin());
+    for( ; it != offers.end(); ++it)
+    {
+        KService::Ptr ptr = (*it);
+        kdDebug() << "KoPrintPreview::preview " << ptr->desktopEntryName() << endl;
+        if ( ptr->desktopEntryName() != "kghostview" )
+        {
+            KURL url;
+            url.setPath( tmpFile );
+            KURL::List lst;
+            lst.append( url );
+            KRun::run( *ptr, lst );
+            return;
+        }
+    }
+    // Didn't work -> kghostview :(
+    KRun::runURL(tmpFile,"application/postscript");
+#endif
+}
