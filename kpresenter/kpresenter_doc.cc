@@ -1329,7 +1329,7 @@ void KPresenterDoc::setPageSoundEffect( unsigned int pageNum, bool soundEffect )
 }
 
 /*=================== set page sound effect file ==================*/
-void KPresenterDoc::setPageSoundFileName( unsigned int pageNum, QString fileName )
+void KPresenterDoc::setPageSoundFileName( unsigned int pageNum, const QString &fileName )
 {
     if ( pageNum < _backgroundList.count() )
         backgroundList()->at( pageNum )->setPageSoundFileName( fileName );
@@ -2682,7 +2682,7 @@ void KPresenterDoc::raiseObjs( int /*diffx*/, int /*diffy*/ )
 }
 
 /*=================== insert a picture ==========================*/
-void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _x , int _y )
+void KPresenterDoc::insertPicture( const QString &filename, int diffx, int diffy, int _x , int _y )
 {
     KPImageKey key = _imageCollection.loadImage( filename ).key();
     KPPixmapObject *kppixmapobject = new KPPixmapObject( &_imageCollection, key );
@@ -2711,7 +2711,7 @@ void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _
 }
 
 /*=================== insert a clipart ==========================*/
-void KPresenterDoc::insertClipart( QString filename, int diffx, int diffy )
+void KPresenterDoc::insertClipart( const QString &filename, int diffx, int diffy )
 {
     KPClipartKey key = _clipartCollection.loadClipart( filename ).key();
     kdDebug(33001) << "KPresenterDoc::insertClipart key=" << key.toString() << endl;
@@ -2858,7 +2858,7 @@ void KPresenterDoc::insertText( QRect r, int diffx, int diffy, QString text, KPr
 
 /*======================= insert an autoform ====================*/
 void KPresenterDoc::insertAutoform( QRect r, QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft,
-				    QColor g1, QColor g2, BCType gt, QString fileName, bool unbalanced,
+				    QColor g1, QColor g2, BCType gt, const QString &fileName, bool unbalanced,
 				    int xfactor, int yfactor, int diffx, int diffy )
 {
     KPAutoformObject *kpautoformobject = new KPAutoformObject( pen, brush, fileName, lb, le, ft,

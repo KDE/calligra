@@ -177,8 +177,8 @@ public:
     void lowerObjs( int, int );
 
     // insert/change objects
-    void insertPicture( QString, int, int, int _x = 10, int _y = 10 );
-    void insertClipart( QString, int, int );
+    void insertPicture( const QString &, int, int, int _x = 10, int _y = 10 );
+    void insertClipart( const QString &, int, int );
     void changePicture( const QString & );
     void changeClipart( const QString & );
     void insertLine( QRect, QPen, LineEnd, LineEnd, LineType, int, int );
@@ -188,7 +188,7 @@ public:
                     BCType gt, PieType pt, int _angle, int _len, LineEnd lb, LineEnd le, bool ,int, int, int diffx, int diffy );
     void insertText( QRect, int, int, QString text = QString::null, KPresenterView *_view = 0L );
     void insertAutoform( QRect, QPen, QBrush, LineEnd, LineEnd, FillType, QColor,
-                         QColor, BCType, QString, bool ,int, int, int, int );
+                         QColor, BCType, const QString &, bool ,int, int, int, int );
 
     // get list of pages and objects
     QPtrList<KPBackGround> *backgroundList() { return &_backgroundList; }
@@ -272,7 +272,7 @@ public:
     int getPageTimer( unsigned int );
 
     void setPageSoundEffect( unsigned int, bool );
-    void setPageSoundFileName( unsigned int, QString );
+    void setPageSoundFileName( unsigned int, const QString& );
 
     bool getPageSoundEffect( unsigned int );
     QString getPageSoundFileName( unsigned int );
