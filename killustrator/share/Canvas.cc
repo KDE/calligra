@@ -350,15 +350,17 @@ void Canvas::printPSDocument () {
                         KMsgBox::STOP, i18n ("Abort"));
       return;
     }
-    psStream << "/PaperWidth " << document->getPaperWidth () << " def\n"
+    psStream << "%%BeginSetup\n"
+	     << "/PaperWidth " << document->getPaperWidth () << " def\n"
              << "/PaperHeight " << document->getPaperHeight () << " def\n"
-             << "InitTMatrix\n";
+             << "InitTMatrix\n"
+	     << "%%EndSetup\n";
 
     // write objects
     QListIterator<GObject> it = document->getObjects ();
     for (; it.current (); ++it) 
       it.current ()->writeToPS (psStream);
-    psStream << "showpage" << endl;
+    psStream << "showpage\n%%EOF" << endl;
   }
 }
 

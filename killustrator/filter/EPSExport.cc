@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <qprinter.h>
 #include <qdatetime.h>
+#include <qglobal.h>
 #include "version.h"
 #include "Painter.h"
 #include "EPSExport.h"
@@ -48,43 +49,11 @@ bool EPSExport::setup (GDocument *doc, const char* fmt) {
 }
 
 bool EPSExport::exportToFile (GDocument* doc) {
-#ifdef NOT_MORE
-  const char* tmpname = tempnam (NULL, "killu");
-  /*
-   * Step 1: print the document to PostScript
-   */
-
-  // setup the printer
-  QPrinter printer;
-  printer.setOutputToFile (true);
-  printer.setDocName ((const char *) doc->fileName ());
-  printer.setCreator ("KIllustrator");
-  printer.setOutputFileName (tmpname);
-
-  // draw the objects
-  Painter paint;
-  paint.begin (&printer);
-  QListIterator<GObject> it = doc->getObjects ();
-  for (; it.current (); ++it) 
-    it.current ()->draw (paint);
-  paint.end ();
-
-  /*
-   * Step 2: convert the PostScript file to EPS using Ghostscript
-   */
-
-  QString cmd;
-  cmd.sprintf ("%s %s %s", PS2EPS_CMD, tmpname, outputFileName ());
-  int result = system (cmd);
-  unlink (tmpname);
-  return (result == 0);
-#endif
-
   ofstream epsStream (outputFileName ());
   if (!epsStream)
     return false;
 
-  // bounding box
+  // compute bounding box
   Rect box = doc->boundingBoxForAllObjects ();
 
   // write header
@@ -94,13 +63,17 @@ bool EPSExport::exportToFile (GDocument* doc) {
 	     << "%%CreationDate: " << QDateTime::currentDateTime ().toString ()
 	     << '\n'
 	     << "%%BoundingBox: " 
-	     << box.left () << ' '
-	     << doc->getPaperHeight () - box.bottom () << ' '
-	     << box.right () << ' '
-	     << doc->getPaperHeight () - box.top () << '\n'
+	     << qRound (box.left ()) << ' '
+	     << qRound (doc->getPaperHeight () - box.bottom ()) << ' '
+	     << qRound (box.right ()) << ' '
+	     << qRound (doc->getPaperHeight () - box.top ()) << '\n'
 	     << "%%EndComments"
 	     << endl;
-  Canvas::writePSProlog (epsStream);
+
+  // write prolog
+  if (! Canvas::writePSProlog (epsStream))
+    return false;
+
   epsStream << "/PaperWidth " << doc->getPaperWidth () << " def\n"
             << "/PaperHeight " << doc->getPaperHeight () << " def\n"
             << "InitTMatrix\n";
@@ -110,5 +83,6 @@ bool EPSExport::exportToFile (GDocument* doc) {
   for (; it.current (); ++it) 
     it.current ()->writeToPS (epsStream);
 
+  epsStream << "%%EOF" << endl;
   return true;
 }
