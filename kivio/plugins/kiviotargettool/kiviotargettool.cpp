@@ -20,7 +20,6 @@
 
 #include <qcursor.h>
 
-#include <kactionclasses.h>
 #include <klocale.h>
 
 #include "kivio_stencil.h"
@@ -28,12 +27,18 @@
 #include "kivio_canvas.h"
 #include "kivio_page.h"
 #include "kivio_doc.h"
+#include "mousetoolaction.h"
+#include "kivio_pluginmanager.h"
 
 namespace Kivio {
   TargetTool::TargetTool(KivioView* parent) : MouseTool(parent, "Add Target Mouse Tool")
   {
-    m_targetAction = new KRadioAction(i18n("Add Connector Target"), "add_target", actionCollection(), "addTargetTool");
+    m_targetAction = new Kivio::MouseToolAction(i18n("Add Connector Target"),
+        "add_target", actionCollection(), "addTargetTool");
     connect(m_targetAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
+    connect(m_targetAction, SIGNAL(doubleClicked()), this, SLOT(makePermanent()));
+
+    m_permanent = false;
   }
   
   TargetTool::~TargetTool()
@@ -60,6 +65,7 @@ namespace Kivio {
       emit activated(this);
     } else if(m_targetAction->isChecked()) {
       m_targetAction->setChecked(false);
+      m_permanent = false;
     }
   }
   
@@ -78,6 +84,10 @@ namespace Kivio {
     
     if(stencil) {
       applyToolAction(stencil, p);
+      
+      if(!m_permanent) {
+        view()->pluginManager()->activateDefaultTool();
+      }
     }
   }
 
@@ -92,5 +102,11 @@ namespace Kivio {
       view()->canvasWidget()->setCursor(Qt::ArrowCursor);
     }
   }
-};
+
+  void TargetTool::makePermanent()
+  {
+    m_permanent = true;
+  }
+}
+
 #include "kiviotargettool.moc"

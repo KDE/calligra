@@ -24,7 +24,11 @@
 #include "kivio_mousetool.h"
 
 class QMouseEvent;
-class KAction;
+
+namespace Kivio {
+  class MouseToolAction;
+}
+
 class KivioStencil;
 class KivioView;
 
@@ -42,12 +46,16 @@ namespace Kivio {
       virtual void setActivated(bool);
       virtual void applyToolAction(KivioStencil* stencil, const KoPoint& pos);
     
+    protected slots:
+      void makePermanent();
+    
     protected:
       void mousePress(QMouseEvent* e);
       void mouseMove(QMouseEvent* e);
     
     private:
-      KRadioAction* m_targetAction;
+      Kivio::MouseToolAction* m_targetAction;
+      bool m_permanent;
   };
 };
 
