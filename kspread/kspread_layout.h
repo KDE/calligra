@@ -26,9 +26,9 @@ class KSpreadCanvas;
 #include <qpen.h>
 #include <qcolor.h>
 #include <qfont.h>
-#include <qdom.h>
 
 #include <iostream.h>
+#include <komlParser.h>
 
 /**
  */
@@ -95,11 +95,11 @@ public:
     /**
      * @return the prefix of a numeric value ( for example "$" )
      */
-    virtual QString prefix();
+    virtual const char* prefix();
     /**
      * @return the postfix of a numeric value ( for example "DM" )
      */
-    virtual QString postfix();
+    virtual const char* postfix();
     /**
      * @return the way of formatting a floating point value
      */
@@ -231,8 +231,8 @@ class RowLayout : public KSpreadLayout
 public:
     RowLayout( KSpreadTable *_table, int _row );
 
-    virtual QDomElement save( QDomDocument& );
-    virtual bool load( const QDomElement& );
+    virtual bool save( ostream& );
+    virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
 
     /**
      * @param _canvas is needed to get information about the zooming factor.
@@ -321,8 +321,8 @@ class ColumnLayout : public KSpreadLayout
 public:
     ColumnLayout( KSpreadTable *_table, int _column );
 
-    virtual QDomElement save( QDomDocument& );
-    virtual bool load( const QDomElement& );
+    virtual bool save( ostream& );
+    virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
 
     /**
      * @param _canvas is needed to get information about the zooming factor.

@@ -168,7 +168,7 @@ void KWFormatContext::enterNextParag()
     setDefaults( document );
     // Change fonts & stuff to match the paragraphs layout
     compare_formats = false;
-    apply( *parag->getParagLayout()->getFormat() );
+    apply( parag->getParagLayout()->getFormat() );
     compare_formats = true;
 
     // Calculate everything about the line we are in.
@@ -1005,7 +1005,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
         // Reset font size, color etc. to the documents default
         setDefaults( document );
         // Change fonts & stuff to match the paragraphs layout
-        apply( *parag->getParagLayout()->getFormat() );
+        apply( parag->getParagLayout()->getFormat() );
 
         indent = parag->getParagLayout()->getFirstLineLeftIndent().pt();
     }
@@ -1027,7 +1027,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
     if ( lineStartPos == 0 && parag->getParagLayout()->getCounterType() != KWParagLayout::CT_NONE )
     {
         KWFormat counterfm( doc, *this );
-        counterfm.apply( *parag->getParagLayout()->getFormat() );
+        counterfm.apply( parag->getParagLayout()->getFormat() );
 //         if ( parag->getParagLayout()->getCounterType() == KWParagLayout::CT_BULLET )
 //             counterfm.setUserFont( document->findUserFont( parag->getParagLayout()->getBulletFont() ) );
 //         _painter.setFont( *( counterfm.loadFont( document ) ) );
@@ -1396,8 +1396,8 @@ void KWFormatContext::makeCounterLayout()
 {
     if ( parag->getParagLayout()->getCounterType() == KWParagLayout::CT_NONE ) return;
 
-    KWFormat format( doc, *parag->getParagLayout()->getFormat() );
-    format.apply( *parag->getParagLayout()->getFormat() );
+    KWFormat format( doc, parag->getParagLayout()->getFormat() );
+    format.apply( parag->getParagLayout()->getFormat() );
     if ( parag->getParagLayout()->getCounterType() == KWParagLayout::CT_BULLET )
         format.setUserFont( document->findUserFont( parag->getParagLayout()->getBulletFont() ) );
     KWDisplayFont *font = format.loadFont( document );

@@ -21,7 +21,6 @@
 #include <qclipboard.h>
 #include <qmessagebox.h>
 #include <qdict.h>
-#include <qtextstream.h>
 
 #include "kword_doc.h"
 #include "kword_page.h"
@@ -34,10 +33,18 @@
 #include "char.h"
 #include "kword_utils.h"
 
+#include <komlMime.h>
+#include <koStream.h>
+#include <komlParser.h>
+#include <komlStreamFeed.h>
+#include <komlWriter.h>
+
 #include <kurl.h>
 #include <klocale.h>
 #include <kglobal.h>
 
+#include <strstream>
+#include <fstream>
 #include <unistd.h>
 #include <math.h>
 
@@ -61,7 +68,6 @@ KWordChild::KWordChild( KWordDocument *_wdoc, const QRect& _rect, KOffice::Docum
 KWordChild::KWordChild( KWordDocument *_wdoc )
     : KoDocumentChild()
 {
-
     m_pKWordDoc = _wdoc;
 }
 
@@ -117,7 +123,6 @@ KWordDocument::KWordDocument()
 /*================================================================*/
 CORBA::Boolean KWordDocument::initDoc()
 {
-    pageLayout = KoPageLayoutDia::standardLayout();
     pageLayout.unit = PG_MM;
     pages = 1;
 
@@ -135,8 +140,6 @@ CORBA::Boolean KWordDocument::initDoc()
     pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_MM( 10 );
     pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM( 10 );
 
-
-#if 0
     QString _template;
 
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate( "kword_template", _template, true, false );
@@ -162,270 +165,39 @@ CORBA::Boolean KWordDocument::initDoc()
 	return false;
 
     return false;
-#endif
-
-
-    // ----------------------------- remove from here
-    _loaded = true;
-    pixmapKeys.clear();
-    imageRequests.clear();
-    imageRequests2.clear();
-
-    pageLayout.unit = PG_MM;
-    pageColumns.columns = 1; //STANDARD_COLUMNS;
-    pageColumns.ptColumnSpacing = STANDARD_COLUMN_SPACING;
-    pageColumns.mmColumnSpacing = POINT_TO_MM( STANDARD_COLUMN_SPACING );
-    pageColumns.inchColumnSpacing = POINT_TO_INCH( STANDARD_COLUMN_SPACING );
-
-    pageHeaderFooter.header = HF_SAME;
-    pageHeaderFooter.footer = HF_SAME;
-    pageHeaderFooter.ptHeaderBodySpacing = 10;
-    pageHeaderFooter.ptFooterBodySpacing = 10;
-    pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
-    pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH( 10 );
-    pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_MM( 10 );
-    pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM( 10 );
-
-    defaultUserFont = findUserFont( "times" );
-    defaultParagLayout = new KWParagLayout( this );
-    defaultParagLayout->setName( "Standard" );
-    defaultParagLayout->setCounterType( KWParagLayout::CT_NONE );
-    defaultParagLayout->setCounterDepth( 0 );
-
-    KWFormat f( this );
-    f.setUserFont( findUserFont( "helvetica" ) );
-    f.setWeight( 75 );
-    f.setPTFontSize( 24 );
-    KWParagLayout *lay = new KWParagLayout( this );
-    lay->setName( "Head 1" );
-    lay->setFollowingParagLayout( "Standard" );
-    lay->setCounterType( KWParagLayout::CT_NUM );
-    lay->setCounterDepth( 0 );
-    lay->setStartCounter( "1" );
-    lay->setCounterRightText( "." );
-    lay->setNumberingType( KWParagLayout::NT_CHAPTER );
-    lay->setFormat( f );
-
-    f.setPTFontSize( 16 );
-    lay = new KWParagLayout( this );
-    lay->setName( "Head 2" );
-    lay->setFollowingParagLayout( "Standard" );
-    lay->setCounterType( KWParagLayout::CT_NUM );
-    lay->setCounterDepth( 1 );
-    lay->setStartCounter( "1" );
-    lay->setCounterRightText( "." );
-    lay->setNumberingType( KWParagLayout::NT_CHAPTER );
-    lay->setFormat( f );
-
-    f.setPTFontSize( 12 );
-    lay = new KWParagLayout( this );
-    lay->setName( "Head 3" );
-    lay->setFollowingParagLayout( "Standard" );
-    lay->setCounterType( KWParagLayout::CT_NUM );
-    lay->setCounterDepth( 2 );
-    lay->setStartCounter( "1" );
-    lay->setCounterRightText( "." );
-    lay->setNumberingType( KWParagLayout::NT_CHAPTER );
-    lay->setFormat( f );
-
-    lay = new KWParagLayout( this );
-    lay->setName( "Enumerated List" );
-    lay->setFollowingParagLayout( "Enumerated List" );
-    lay->setCounterType( KWParagLayout::CT_NUM );
-    lay->setCounterDepth( 0 );
-    lay->setStartCounter( "1" );
-    lay->setCounterRightText( "." );
-    lay->setNumberingType( KWParagLayout::NT_LIST );
-
-    lay = new KWParagLayout( this );
-    lay->setName( "Alphabetical List" );
-    lay->setFollowingParagLayout( "Alphabetical List" );
-    lay->setCounterType( KWParagLayout::CT_ALPHAB_L );
-    lay->setCounterDepth( 0 );
-    lay->setStartCounter( "a" );
-    lay->setCounterRightText( " )" );
-    lay->setNumberingType( KWParagLayout::NT_LIST );
-
-    lay = new KWParagLayout( this );
-    lay->setName( "Bullet List" );
-    lay->setFollowingParagLayout( "Bullet List" );
-    lay->setCounterType( KWParagLayout::CT_BULLET );
-    lay->setCounterDepth( 0 );
-    lay->setStartCounter( "1" );
-    lay->setCounterRightText( "" );
-    lay->setNumberingType( KWParagLayout::NT_LIST );
-
-    if (true /*no variable formats were loaded*/)
-    {
-	varFormats.insert( VT_DATE_FIX, new KWVariableDateFormat() );
-	varFormats.insert( VT_DATE_VAR, new KWVariableDateFormat() );
-	varFormats.insert( VT_TIME_FIX, new KWVariableTimeFormat() );
-	varFormats.insert( VT_TIME_VAR, new KWVariableTimeFormat() );
-	varFormats.insert( VT_PGNUM, new KWVariablePgNumFormat() );
-	// ... and so on ...
-    }
-
-    pages = 1;
-
-    KoPageLayout __pgLayout;
-    __pgLayout.unit = PG_MM;
-    KoColumns __columns;
-    KoKWHeaderFooter __hf;
-    __hf.header = HF_SAME;
-    __hf.footer = HF_SAME;
-    __hf.ptHeaderBodySpacing = 10;
-    __hf.ptFooterBodySpacing = 10;
-    __hf.mmHeaderBodySpacing = POINT_TO_MM( 10 );
-    __hf.mmFooterBodySpacing = POINT_TO_MM( 10 );
-    __hf.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
-    __hf.inchFooterBodySpacing = POINT_TO_INCH( 10 );
-
-    frames.clear();
-
-    KWTextFrameSet *t = new KWTextFrameSet( this );
-    KWFrame *frm = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
-				getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),
-				getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder() );
-    t->addFrame( frm );
-    KWParag *pa = new KWParag( t, this, 0, 0, defaultParagLayout );
-    pa->insertText( 0, " " );
-    pa->setFormat( 0, 1, *defaultParagLayout->getFormat() );
-    frames.append( t );
-
-    switch ( KWUnit::unitType( unit ) ) {
-    case U_MM: __pgLayout.unit = PG_MM;
-	break;
-    case U_PT: __pgLayout.unit = PG_PT;
-	break;
-    case U_INCH: __pgLayout.unit = PG_INCH;
-	break;
-    }
-    //setPageLayout( __pgLayout, __columns, __hf );
-
-    bool _first_footer = false, _even_footer = false, _odd_footer = false;
-    bool _first_header = false, _even_header = false, _odd_header = false;
-    bool _footnotes = false;
-
-    for ( unsigned int k = 0; k < getNumFrameSets(); k++ ) {
-	if ( getFrameSet( k )->getFrameInfo() == FI_FIRST_HEADER ) _first_header = true;
-	if ( getFrameSet( k )->getFrameInfo() == FI_EVEN_HEADER ) _odd_header = true;
-	if ( getFrameSet( k )->getFrameInfo() == FI_ODD_HEADER ) _even_header = true;
-	if ( getFrameSet( k )->getFrameInfo() == FI_FIRST_FOOTER ) _first_footer = true;
-	if ( getFrameSet( k )->getFrameInfo() == FI_EVEN_FOOTER ) _odd_footer = true;
-	if ( getFrameSet( k )->getFrameInfo() == FI_ODD_FOOTER ) _even_footer = true;
-	if ( getFrameSet( k )->getFrameInfo() == FI_FOOTNOTE ) _footnotes = true;
-    }
-
-    if ( !_first_header ) {
-	KWTextFrameSet *fs = new KWTextFrameSet( this );
-	fs->setFrameInfo( FI_FIRST_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
-				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
-	fs->addFrame( frame );
-	frames.append( fs );
-	fs->setAutoCreateNewFrame( false );
-    }
-
-    if ( !_even_header ) {
-	KWTextFrameSet *fs = new KWTextFrameSet( this );
-	fs->setFrameInfo( FI_EVEN_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
-				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
-	fs->addFrame( frame );
-	frames.append( fs );
-	fs->setAutoCreateNewFrame( false );
-    }
-
-    if ( !_odd_header ) {
-	KWTextFrameSet *fs = new KWTextFrameSet( this );
-	fs->setFrameInfo( FI_ODD_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
-				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
-	fs->addFrame( frame );
-	frames.append( fs );
-	fs->setAutoCreateNewFrame( false );
-    }
-
-    if ( !_first_footer ) {
-	KWTextFrameSet *fs = new KWTextFrameSet( this );
-	fs->setFrameInfo( FI_FIRST_FOOTER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
-				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
-	fs->addFrame( frame );
-	frames.append( fs );
-	fs->setAutoCreateNewFrame( false );
-    }
-
-    if ( !_even_footer ) {
-	KWTextFrameSet *fs = new KWTextFrameSet( this );
-	fs->setFrameInfo( FI_EVEN_FOOTER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
-				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
-	fs->addFrame( frame );
-	frames.append( fs );
-	fs->setAutoCreateNewFrame( false );
-    }
-
-    if ( !_odd_footer ) {
-	KWTextFrameSet *fs = new KWTextFrameSet( this );
-	fs->setFrameInfo( FI_ODD_FOOTER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
-				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
-	fs->addFrame( frame );
-	frames.append( fs );
-	fs->setAutoCreateNewFrame( false );
-    }
-
-    if ( !_footnotes ) {
-	KWTextFrameSet *fs = new KWTextFrameSet( this );
-	fs->setFrameInfo( FI_FOOTNOTE );
-	fs->setName( "Footnotes" );
-
-	for ( int i = 0; i < pages; i++ ) {
-	    KWFrame *frame = new KWFrame( getPTLeftBorder(), i * getPTPaperHeight() + getPTPaperHeight() - getPTTopBorder() - 20,
-					  getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
-	    fs->addFrame( frame );
-	}
-	frames.append( fs );
-	fs->setAutoCreateNewFrame( true );
-	fs->setVisible( false );
-    }
-
-    // ------------------------------------- remove until here
-
-    return TRUE;
 }
 
 /*================================================================*/
 bool KWordDocument::loadTemplate( const char *_url )
 {
-    /*     KURL u( _url );
+//     KURL u( _url );
 
-     if ( u.isMalformed() )
-	   return false;
+//     if ( u.isMalformed() )
+//	   return false;
 
-     if ( !u.isLocalFile() )
-     {
-	   qDebug( "Can not open remote URL" );
-	   return false;
-     }
+//     if ( !u.isLocalFile() )
+//     {
+//	   cerr << "Can not open remote URL" << endl;
+//	   return false;
+//     }
 
-     QFile f( u.path() );
-     if ( !f.open( IO_ReadOnly ) ) {
-	 qDebug( "Could not open %s", u.path().ascii() );
-	 return false;
-     }
+//     ifstream in( u.path().ascii() );
+//     if ( !in )
+//     {
+//	   cerr << "Could not open" << u.path().ascii() << endl;
+//	   return false;
+//     }
 
-     QDomDocument doc( &f );
-     f.close();
+//     KOMLStreamFeed feed( in );
+//     KOMLParser parser( &feed );
 
-    if ( !loadXML( doc, 0L ) )
-	return false;
+//     if ( !loadXML( parser, 0L ) )
+//	   return false;
 
-    setModified( true );
+//     setModified( true );
 
-    _loaded = false;
-     return true; */
+//     _loaded = false;
+//     return true;
     bool ok = loadFromURL( _url, "application/x-kword" );
     _loaded = false;
     return ok;
@@ -472,7 +244,7 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
     if ( processingType != DTP )
 	pages = 1;
 
-    KWTextFrameSet *frameset = (KWTextFrameSet*)( frames.at( 0 ) );
+    KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet*>( frames.at( 0 ) );
 
     unsigned int frms = frameset->getNumFrames();
 
@@ -846,7 +618,7 @@ bool KWordDocument::loadChildren( KOStore::Store_ptr _store )
 }
 
 /*================================================================*/
-bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
+bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 {
     _loaded = true;
     pixmapKeys.clear();
@@ -950,6 +722,10 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
 
     pages = 1;
 
+    string tag;
+    vector<KOMLAttrib> lst;
+    string name;
+
     KoPageLayout __pgLayout;
     __pgLayout.unit = PG_MM;
     KoColumns __columns;
@@ -963,83 +739,243 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     __hf.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
     __hf.inchFooterBodySpacing = POINT_TO_INCH( 10 );
 
-    // <DOC>
-    if ( doc.doctype().name() != "DOC" )
+
+    // DOC
+    if ( !parser.open( "DOC", tag ) ) {
+	cerr << "Missing DOC" << endl;
 	return false;
+    }
 
-    QDomElement word = doc.documentElement();
+    KOMLParser::parseTag( tag.c_str(), name, lst );
+    vector<KOMLAttrib>::const_iterator it = lst.begin();
+    for( ; it != lst.end(); it++ ) {
+	if ( ( *it ).m_strName == "mime" ) {
+	    if ( ( *it ).m_strValue != "application/x-kword" ) {
+		cerr << "Unknown mime type " << ( *it ).m_strValue << endl;
+		return false;
+	    }
+	} else if ( ( *it ).m_strName == "url" )
+	    urlIntern = ( *it ).m_strValue.c_str();
+    }
 
-    if ( word.attribute( "mime" ) != "application/x-kword" )
-	return false;
+    // PAPER
+    while ( parser.open( 0L, tag ) ) {
+	KOMLParser::parseTag( tag.c_str(), name, lst );
 
-    QDomElement paper = word.namedItem("PAPER").toElement();
-    if ( paper.isNull() )
-	return false;
-    __pgLayout.format = (KoFormat)paper.attribute( "format" ).toInt();
-    __pgLayout.orientation = (KoOrientation)paper.attribute( "orientation" ).toInt();
-    __pgLayout.mmWidth = paper.attribute( "mmWidth" ).toInt();
-    __pgLayout.inchWidth = paper.attribute( "inchWidth" ).toInt();
-    __pgLayout.ptWidth = paper.attribute( "ptWidth" ).toInt();
-    __pgLayout.mmHeight = paper.attribute( "mmHeight" ).toInt();
-    __pgLayout.inchHeight = paper.attribute( "inchHeight" ).toInt();
-    __pgLayout.ptHeight = paper.attribute( "ptHeight" ).toInt();
-    __columns.columns = paper.attribute( "columns" ).toInt();
-    __columns.ptColumnSpacing = paper.attribute( "ptColumnspc" ).toInt();
-    __columns.mmColumnSpacing = paper.attribute( "mmColumnspc" ).toInt();
-    __columns.inchColumnSpacing = paper.attribute( "inchColumnspc" ).toInt();
-    __hf.header = (KoHFType)paper.attribute( "hType" ).toInt();
-    __hf.footer = (KoHFType)paper.attribute( "fType" ).toInt();
-    __hf.ptHeaderBodySpacing = paper.attribute( "ptHeadBody" ).toInt();
-    __hf.mmHeaderBodySpacing = paper.attribute( "mmHeadBody" ).toInt();
-    __hf.inchHeaderBodySpacing = paper.attribute( "inchHeadBody" ).toInt();
-    __hf.ptFooterBodySpacing = paper.attribute( "ptFootBody" ).toInt();
-    __hf.mmFooterBodySpacing = paper.attribute( "mmFootBody" ).toInt();
-    __hf.inchFooterBodySpacing = paper.attribute( "inchFootBody" ).toInt();
+	if ( name == "OBJECT" ) {
+	    KWordChild *ch = new KWordChild( this );
+	    ch->load( parser, lst );
+	    insertChild( ch );
+	} else if ( name == "PAPER" ) {
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ ) {
+		if ( ( *it ).m_strName == "format" )
+		    __pgLayout.format = ( KoFormat )atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "orientation" )
+		    __pgLayout.orientation = ( KoOrientation )atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "width" ) {
+		    __pgLayout.width = __pgLayout.mmWidth = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
+		    __pgLayout.ptWidth = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
+		    __pgLayout.inchWidth = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
+		} else if ( ( *it ).m_strName == "height" ) {
+		    __pgLayout.height = __pgLayout.mmHeight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
+		    __pgLayout.ptHeight = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
+		    __pgLayout.inchHeight = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
+		} else if ( ( *it ).m_strName == "columns" )
+		    __columns.columns = atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "columnspacing" ) {
+		    __columns.ptColumnSpacing = atoi( ( *it ).m_strValue.c_str() );
+		    __columns.mmColumnSpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
+		    __columns.inchColumnSpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
+		} else if ( ( *it ).m_strName == "hType" )
+		    __hf.header = static_cast<KoHFType>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "fType" )
+		    __hf.footer = static_cast<KoHFType>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "spHeadBody" ) {
+		    __hf.ptHeaderBodySpacing = atoi( ( *it ).m_strValue.c_str() );
+		    __hf.mmHeaderBodySpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
+		    __hf.inchHeaderBodySpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
+		} else if ( ( *it ).m_strName == "spFootBody" ) {
+		    __hf.ptFooterBodySpacing = atoi( ( *it ).m_strValue.c_str() );
+		    __hf.mmFooterBodySpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
+		    __hf.inchFooterBodySpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
+		} else if ( ( *it ).m_strName == "ptWidth" )
+		    __pgLayout.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "inchWidth" )
+		    __pgLayout.inchWidth = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "mmWidth" )
+		    __pgLayout.mmWidth = __pgLayout.width = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "ptHeight" )
+		    __pgLayout.ptHeight = atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "inchHeight" )
+		    __pgLayout.inchHeight = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "mmHeight" )
+		    __pgLayout.mmHeight = __pgLayout.height = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "ptHeadBody" )
+		    __hf.ptHeaderBodySpacing = atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "inchHeadBody" )
+		    __hf.inchHeaderBodySpacing = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "mmHeadBody" )
+		    __hf.mmHeaderBodySpacing = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "ptFootBody" )
+		    __hf.ptFooterBodySpacing = atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "inchFootBody" )
+		    __hf.inchFooterBodySpacing = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "mmFootBody" )
+		    __hf.mmFooterBodySpacing = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "mmColumnspc" )
+		    __columns.mmColumnSpacing = atof( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "ptColumnspc" )
+		    __columns.ptColumnSpacing = atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "inchColumnspc" )
+		    __columns.inchColumnSpacing = atof( ( *it ).m_strValue.c_str() );
+		else
+		    cerr << "Unknown attrib PAPER:'" << ( *it ).m_strName << "'" << endl;
+	    }
 
-    QDomElement border = paper.namedItem( "PAPERBORDERS" ).toElement();
-    if ( border.isNull() )
-	return false;
-    __pgLayout.ptLeft = border.attribute( "ptLeft" ).toInt();
-    __pgLayout.ptRight = border.attribute( "ptRight" ).toInt();
-    __pgLayout.ptTop = border.attribute( "ptTop" ).toInt();
-    __pgLayout.ptBottom = border.attribute( "ptBottom" ).toInt();
-    __pgLayout.mmLeft = border.attribute( "mmLeft" ).toInt();
-    __pgLayout.mmRight = border.attribute( "mmRight" ).toInt();
-    __pgLayout.mmTop = border.attribute( "mmTop" ).toInt();
-    __pgLayout.mmBottom = border.attribute( "mmBottom" ).toInt();
-    __pgLayout.inchLeft = border.attribute( "inchLeft" ).toInt();
-    __pgLayout.inchRight = border.attribute( "inchRight" ).toInt();
-    __pgLayout.inchTop = border.attribute( "inchTop" ).toInt();
-    __pgLayout.inchBottom = border.attribute( "inchBottom" ).toInt();
-    
-    QDomElement attribs = word.namedItem( "ATTRIBUTES" ).toElement();
-    if ( attribs.isNull() )
-	return false;
-    processingType = (ProcessingType)attribs.attribute( "processing" ).toInt();
-    _header = (bool)attribs.attribute( "hasHeader" ).toInt();
-    _footer = (bool)attribs.attribute( "hasFooter" ).toInt();
-    unit = attribs.attribute( "unit" );
+	    // PAPERBORDERS, HEAD, FOOT
+	    while ( parser.open( 0L, tag ) ) {
+		KOMLParser::parseTag( tag.c_str(), name, lst );
+		if ( name == "PAPERBORDERS" ) {
+		    KOMLParser::parseTag( tag.c_str(), name, lst );
+		    vector<KOMLAttrib>::const_iterator it = lst.begin();
+		    for( ; it != lst.end(); it++ ) {
+			if ( ( *it ).m_strName == "left" ) {
+			    __pgLayout.left = __pgLayout.mmLeft = ( double )atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.ptLeft = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
+			    __pgLayout.inchLeft = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
+			} else if ( ( *it ).m_strName == "top" ) {
+			    __pgLayout.top = __pgLayout.mmTop = ( double )atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.ptTop = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
+			    __pgLayout.inchTop = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
+			} else if ( ( *it ).m_strName == "right" ) {
+			    __pgLayout.right = __pgLayout.mmRight = ( double )atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.ptRight = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
+			    __pgLayout.inchRight = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
+			} else if ( ( *it ).m_strName == "bottom" ) {
+			    __pgLayout.bottom = __pgLayout.mmBottom = ( double )atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.ptBottom = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
+			    __pgLayout.inchBottom = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
+			} else if ( ( *it ).m_strName == "ptLeft" )
+			    __pgLayout.ptLeft = atoi( ( *it ).m_strValue.c_str() );
+			else if ( ( *it ).m_strName == "inchLeft" )
+			    __pgLayout.inchLeft = atof( ( *it ).m_strValue.c_str() );
+			else if ( ( *it ).m_strName == "mmLeft" )
+			    __pgLayout.mmLeft = __pgLayout.left = atof( ( *it ).m_strValue.c_str() );
+			else if ( ( *it ).m_strName == "ptRight" )
+			    __pgLayout.ptRight = atoi( ( *it ).m_strValue.c_str() );
+			else if ( ( *it ).m_strName == "inchRight" )
+			    __pgLayout.inchRight = atof( ( *it ).m_strValue.c_str() );
+			else if ( ( *it ).m_strName == "mmRight" )
+			    __pgLayout.mmRight = __pgLayout.right = atof( ( *it ).m_strValue.c_str() );
+			else if ( ( *it ).m_strName == "ptTop" )
+			    __pgLayout.ptTop = atoi( ( *it ).m_strValue.c_str() );
+			else if ( ( *it ).m_strName == "inchTop" )
+			    __pgLayout.inchTop = atof( ( *it ).m_strValue.c_str() );
+			else if ( ( *it ).m_strName == "mmTop" )
+			    __pgLayout.mmTop = __pgLayout.top = atof( ( *it ).m_strValue.c_str() );
+			else if ( ( *it ).m_strName == "ptBottom" )
+			    __pgLayout.ptBottom = atoi( ( *it ).m_strValue.c_str() );
+			else if ( ( *it ).m_strName == "inchBottom" )
+			    __pgLayout.inchBottom = atof( ( *it ).m_strValue.c_str() );
+			else if ( ( *it ).m_strName == "mmBottom" )
+			    __pgLayout.mmBottom = __pgLayout.bottom = atof( ( *it ).m_strValue.c_str() );
+			else
+			    cerr << "Unknown attrib 'PAPERBORDERS:" << ( *it ).m_strName << "'" << endl;
+		    }
+		}
+		else
+		    cerr << "Unknown tag '" << tag << "' in PAPER" << endl;
 
-    QDomElement fcoll = word.namedItem( "FORMATS" ).toElement();
-    if ( fcoll.isNull() )
-	return FALSE;
-    if ( !formatCollection.load( fcoll ) )
-	return FALSE;
-    
-    if ( !loadStyleTemplates( word.namedItem( "PARAGLAYOUTS" ).toElement() ) )
-	return FALSE;
+		if ( !parser.close( tag ) ) {
+		    cerr << "ERR: Closing Child" << endl;
+		    return false;
+		}
+	    }
 
-    if ( !footNoteManager.load( word.namedItem( "FOOTNOTE-GLOBAL" ).toElement() ) )
-	return FALSE;
+	}
 
-    if ( !loadFrameSets( word.namedItem( "FRAMESETS" ).toElement() ) )
-	return FALSE;
+	else if ( name == "ATTRIBUTES" ) {
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ ) {
+		if ( ( *it ).m_strName == "processing" )
+		    processingType = static_cast<ProcessingType>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "standardpage" )
+				     ;
+		else if ( ( *it ).m_strName == "hasHeader" )
+		    _header = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "hasFooter" )
+		    _footer = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "unit" )
+		    unit = correctQString( ( *it ).m_strValue.c_str() );
+	    }
+	}
 
-    QDomElement pix = word.namedItem( "PIXMAPS" ).toElement();
-    QDomElement key = pix.firstChild().toElement();
-    for ( ; !key.isNull(); key = key.nextSibling().toElement() )
-	pixmapKeys.append( key.attribute( "key" ) );
+	else if ( name == "FOOTNOTEMGR" ) {
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ ) {
+	    }
+	    footNoteManager.load( parser, lst );
+	}
 
+	else if ( name == "FRAMESETS" ) {
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ ) {
+	    }
+	    loadFrameSets( parser, lst );
+	}
+
+	else if ( name == "STYLES" ) {
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ ) {
+	    }
+	    loadStyleTemplates( parser, lst );
+	}
+
+	else if ( name == "PIXMAPS" ) {
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ ) {
+	    }
+
+	    while ( parser.open( 0L, tag ) ) {
+		QString key;
+
+		KOMLParser::parseTag( tag.c_str(), name, lst );
+		if ( name == "KEY" ) {
+		    KOMLParser::parseTag( tag.c_str(), name, lst );
+		    vector<KOMLAttrib>::const_iterator it = lst.begin();
+		    for( ; it != lst.end(); it++ ) {
+			if ( ( *it ).m_strName == "key" )
+			    key = ( *it ).m_strValue.c_str();
+			else
+			    cerr << "Unknown attrib 'KEY: " << ( *it ).m_strName << "'" << endl;
+		    }
+		    pixmapKeys.append( key );
+		} else
+		    cerr << "Unknown tag '" << tag << "' in PIXMAPS" << endl;
+
+		if ( !parser.close( tag ) ) {
+		    cerr << "ERR: Closing Child" << endl;
+		    QApplication::restoreOverrideCursor();
+		    return false;
+		}
+	    }
+	}
+
+	else
+	    cerr << "Unknown tag '" << tag << "' in the DOCUMENT" << endl;
+
+	if ( !parser.close( tag ) ) {
+	    cerr << "ERR: Closing Child" << endl;
+	    return false;
+	}
+    }
 
     switch ( KWUnit::unitType( unit ) ) {
     case U_MM: __pgLayout.unit = PG_MM;
@@ -1068,8 +1004,7 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     if ( !_first_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_FIRST_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
-				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
 	fs->setAutoCreateNewFrame( false );
@@ -1078,8 +1013,7 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     if ( !_even_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_EVEN_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
-				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
 	fs->setAutoCreateNewFrame( false );
@@ -1088,8 +1022,7 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     if ( !_odd_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_ODD_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
-				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
 	fs->setAutoCreateNewFrame( false );
@@ -1178,113 +1111,158 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     entry->setReplace( "®" );
     autoFormat.addAutoFormatEntry( entry );
 
-    // Save some memory
-    formatCollection.clearIndexMaps();
-    
     return true;
 }
 
 /*================================================================*/
-bool KWordDocument::loadStyleTemplates( const QDomElement& element )
+void KWordDocument::loadStyleTemplates( KOMLParser& parser, vector<KOMLAttrib>& lst )
 {
-    QDomElement style = element.firstChild().toElement();
-    for ( ; !style.isNull(); style = style.nextSibling().toElement() ) {
-	KWParagLayout *pl = new KWParagLayout( this, FALSE );
-	if ( !pl->load( style ) )
-	    return FALSE;
-	addStyleTemplate( pl );
-    }
+    string tag;
+    string name;
 
-    return TRUE;
+    while ( parser.open( 0L, tag ) ) {
+	KOMLParser::parseTag( tag.c_str(), name, lst );
+
+	if ( name == "STYLE" ) {
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ ) {
+	    }
+	    KWParagLayout *pl = new KWParagLayout( this, false );
+	    pl->load( parser, lst );
+	    addStyleTemplate( pl );
+	} else
+	    cerr << "Unknown tag '" << tag << "' in STYLES" << endl;
+
+	if ( !parser.close( tag ) ) {
+	    cerr << "ERR: Closing Child" << endl;
+	    return;
+	}
+    }
 }
 
 /*================================================================*/
-bool KWordDocument::loadFrameSets( const QDomElement &framesets )
+void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
 {
+    string tag;
+    string name;
+
     bool autoCreateNewFrame = true;
     FrameInfo frameInfo = FI_BODY;
     QString _name = "";
     int _row = 0, _col = 0, _rows = 1, _cols = 1;
     bool _visible = true;
 
-    QDomElement frameset = framesets.firstChild().toElement();
-    for ( ; !frameset.isNull(); frameset = frameset.nextSibling().toElement() ) {
-	FrameType frameType = FT_BASE;
-	_name = "";
-	_row = _col = 0, _rows = 1, _cols = 1;
-	_visible = true;
-	bool removeable = false;
-	QString fsname;
-	
-	frameType = (FrameType)frameset.attribute( "frame-type" ).toInt();
-	autoCreateNewFrame = frameset.attribute( "auto-create-new-frame" ).toInt();
-	frameInfo = (FrameInfo)frameset.attribute( "frame-info" ).toInt();
-	_name = frameset.attribute( "grpMgr" );
-	_row = frameset.attribute( "row" ).toInt();
-	_col = frameset.attribute( "col" ).toInt();
-	removeable = (bool)frameset.attribute( "removeable" ).toInt();
-	_rows = frameset.attribute( "rows" ).toInt();
-	_cols = frameset.attribute( "cols" ).toInt();
-	_visible = (bool)frameset.attribute( "visible" ).toInt();
-	fsname = frameset.attribute( "name" );
-	
-	if ( fsname.isEmpty() )
-	    fsname = i18n( "Frameset %1" ).arg( frames.count() + 1 );
+    while ( parser.open( 0L, tag ) )
+    {
+	KOMLParser::parseTag( tag.c_str(), name, lst );
 
-	switch ( frameType ) {
-	case FT_TEXT: {
-	    KWTextFrameSet *frame = new KWTextFrameSet( this );
-	    frame->setVisible( _visible );
-	    frame->setName( fsname );
-	    
-	    if ( ! frame->load( frameset ) )
-		return FALSE;
-	    
-	    frame->setAutoCreateNewFrame( autoCreateNewFrame );
-	    frame->setFrameInfo( frameInfo );
-	    frame->setIsRemoveableHeader( removeable );
+	// paragraph
+	if ( name == "FRAMESET" )
+	{
+	    FrameType frameType = FT_BASE;
+	    _name = "";
+	    _row = _col = 0, _rows = 1, _cols = 1;
+	    _visible = true;
+	    bool removeable = false;
+	    QString fsname;
 
-	    if ( !_name.isEmpty() ) {
-		KWGroupManager *grpMgr = 0L;
-		if ( getNumGroupManagers() > 0 ) {
-		    for ( unsigned int i = 0; i < getNumGroupManagers(); i++ ) {
-			if ( getGroupManager( getNumGroupManagers() - 1 - i )->isActive() &&
-			     getGroupManager( getNumGroupManagers() - 1 - i )->getName() == _name ) {
-			    grpMgr = getGroupManager( getNumGroupManagers() - 1 - i );
-			    break;
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "frameType" )
+		    frameType = static_cast<FrameType>( atoi( ( *it ).m_strValue.c_str() ) );
+		if ( ( *it ).m_strName == "autoCreateNewFrame" )
+		    autoCreateNewFrame = atoi( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "frameInfo" )
+		    frameInfo = static_cast<FrameInfo>( atoi( ( *it ).m_strValue.c_str() ) );
+		if ( ( *it ).m_strName == "grpMgr" )
+		    _name = correctQString( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "row" )
+		    _row = atoi( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "col" )
+		    _col = atoi( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "removeable" )
+		    removeable = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+		if ( ( *it ).m_strName == "rows" )
+		    _rows = atoi( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "cols" )
+		    _cols = atoi( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "visible" )
+		    _visible = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+		if ( ( *it ).m_strName == "name" )
+		    fsname = ( *it ).m_strValue.c_str();
+	    }
+
+	    if ( fsname.isEmpty() )
+		fsname = i18n( "Frameset %1" ).arg( frames.count() + 1 );
+
+	    switch ( frameType )
+	    {
+	    case FT_TEXT:
+	    {
+		KWTextFrameSet *frame = new KWTextFrameSet( this );
+		frame->setVisible( _visible );
+		frame->setName( fsname );
+		frame->load( parser, lst );
+		frame->setAutoCreateNewFrame( autoCreateNewFrame );
+		frame->setFrameInfo( frameInfo );
+		frame->setIsRemoveableHeader( removeable );
+
+		if ( !_name.isEmpty() )
+		{
+		    KWGroupManager *grpMgr = 0L;
+		    if ( getNumGroupManagers() > 0 )
+		    {
+			for ( unsigned int i = 0; i < getNumGroupManagers(); i++ )
+			{
+			    if ( getGroupManager( getNumGroupManagers() - 1 - i )->isActive() &&
+				 getGroupManager( getNumGroupManagers() - 1 - i )->getName() == _name )
+			    {
+				grpMgr = getGroupManager( getNumGroupManagers() - 1 - i );
+				break;
+			    }
 			}
 		    }
+		    if ( !grpMgr )
+		    {
+			grpMgr = new KWGroupManager( this );
+			grpMgr->setName( _name );
+			addGroupManager( grpMgr );
+		    }
+		    frame->setGroupManager( grpMgr );
+		    grpMgr->addFrameSet( frame, _row, _col );
+		    KWGroupManager::Cell *cell = grpMgr->getCell( _row, _col );
+		    if ( cell )
+		    {
+			cell->rows = _rows;
+			cell->cols = _cols;
+		    }
 		}
-		
-		if ( !grpMgr ) {
-		    grpMgr = new KWGroupManager( this );
-		    grpMgr->setName( _name );
-		    addGroupManager( grpMgr );
-		}
-		frame->setGroupManager( grpMgr );
-		grpMgr->addFrameSet( frame, _row, _col );
-		KWGroupManager::Cell *cell = grpMgr->getCell( _row, _col );
-		if ( cell ) {
-		    cell->rows = _rows;
-		    cell->cols = _cols;
-		}
-	    } else
+		else
+		    frames.append( frame );
+	    } break;
+	    case FT_PICTURE:
+	    {
+		KWPictureFrameSet *frame = new KWPictureFrameSet( this );
+		frame->setName( fsname );
+		frame->load( parser, lst );
+		frame->setFrameInfo( frameInfo );
 		frames.append( frame );
-	} break;
-	case FT_PICTURE: {
-	    KWPictureFrameSet *frame = new KWPictureFrameSet( this );
-	    frame->setName( fsname );
+	    } break;
+	    default: break;
+	    }
+	}
+	else
+	    cerr << "Unknown tag '" << tag << "' in FRAMESETS" << endl;
 
-	    if ( !frame->load( frameset ) )
-		return FALSE;
-	    frame->setFrameInfo( frameInfo );
-	    frames.append( frame );
-	} break;
-	default: break;
+	if ( !parser.close( tag ) )
+	{
+	    cerr << "ERR: Closing Child" << endl;
+	    return;
 	}
     }
-    
-    return true;
 }
 
 /*===================================================================*/
@@ -1302,29 +1280,15 @@ bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
 	    u += "/";
 	    u += *it;
 
+	    QImage img;
+
 	    _store->open( u, 0L );
-	    CORBA::Long size = _store->size();
-	    QByteArray buffer( size );
-
-	    // A special scope to get rid of "data"
 	    {
-		KOStore::Data_var data = _store->read( size );
-		CORBA::ULong len = data->length();
-
-		char* p = buffer.data();
-		for( CORBA::ULong i = 0; i < len; ++i )
-		    *p++ = data[ i ];
+		istorestream in( _store );
+		in >> img;
 	    }
 	    _store->close();
 
-	    // Load the image
-	    QImage img;
-	    QBuffer b( buffer );
-	    b.open( IO_ReadOnly );
-	    QImageIO iio( &b, 0 );
-	    iio.setImage( img );
-	    iio.read();
-	    
 	    QString filename = *it;
 	    int dashdash = filename.findRev( "--" );
 	    if ( dashdash != -1 )
@@ -1348,131 +1312,81 @@ bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
 }
 
 /*================================================================*/
-bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* )
+bool KWordDocument::save(ostream &out,const char* /* _format */)
 {
-    QDomDocument doc( "DOC" );
-    doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-    QDomElement word = doc.createElement( "DOC" );
-    
-    word.setAttribute( "author", "Reginald Stadlbauer and Torben Weis" );
-    word.setAttribute( "email", "reggie@kde.org and weis@kde.org" );
-    word.setAttribute( "editor", "KWord" );
-    word.setAttribute( "mime", "application/x-kword" );
-    doc.appendChild( word );
+    out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
+    //out << "<!DOCTYPE DOC SYSTEM \"" << kapp->kde_datadir() << "/kword/dtd/kword.dtd\"/>" << endl;
+    out << otag << "<DOC author=\"" << "Reginald Stadlbauer and Torben Weis" << "\" email=\"" << "reggie@kde.org and weis@kde.org"
+	<< "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword" << "\" url=\"" << url() << "\">" << endl;
+    out << otag << "<PAPER format=\"" << static_cast<int>( pageLayout.format ) << "\" ptWidth=\"" << pageLayout.ptWidth
+	<< "\" ptHeight=\"" << pageLayout.ptHeight
+	<< "\" mmWidth =\"" << pageLayout.mmWidth << "\" mmHeight=\"" << pageLayout.mmHeight
+	<< "\" inchWidth =\"" << pageLayout.inchWidth << "\" inchHeight=\"" << pageLayout.inchHeight
+	<< "\" orientation=\"" << static_cast<int>( pageLayout.orientation )
+	<< "\" columns=\"" << pageColumns.columns << "\" ptColumnspc=\"" << pageColumns.ptColumnSpacing
+	<< "\" mmColumnspc=\"" << pageColumns.mmColumnSpacing << "\" inchColumnspc=\"" << pageColumns.inchColumnSpacing
+	<< "\" hType=\"" << static_cast<int>( pageHeaderFooter.header ) << "\" fType=\"" << static_cast<int>( pageHeaderFooter.footer )
+	<< "\" ptHeadBody=\"" << pageHeaderFooter.ptHeaderBodySpacing << "\" ptFootBody=\"" << pageHeaderFooter.ptFooterBodySpacing
+	<< "\" mmHeadBody=\"" << pageHeaderFooter.mmHeaderBodySpacing << "\" mmFootBody=\"" << pageHeaderFooter.mmFooterBodySpacing
+	<< "\" inchHeadBody=\"" << pageHeaderFooter.inchHeaderBodySpacing << "\" inchFootBody=\"" << pageHeaderFooter.inchFooterBodySpacing
+	<< "\">" << endl;
+    out << indent << "<PAPERBORDERS mmLeft=\"" << pageLayout.mmLeft << "\" mmTop=\"" << pageLayout.mmTop << "\" mmRight=\""
+	<< pageLayout.mmRight << "\" mmBottom=\"" << pageLayout.mmBottom
+	<< "\" ptLeft=\"" << pageLayout.ptLeft << "\" ptTop=\"" << pageLayout.ptTop << "\" ptRight=\""
+	<< pageLayout.ptRight << "\" ptBottom=\"" << pageLayout.ptBottom
+	<< "\" inchLeft=\"" << pageLayout.inchLeft << "\" inchTop=\"" << pageLayout.inchTop << "\" inchRight=\""
+	<< pageLayout.inchRight << "\" inchBottom=\"" << pageLayout.inchBottom << "\"/>" << endl;
+    out << etag << "</PAPER>" << endl;
+    out << indent << "<ATTRIBUTES processing=\"" << static_cast<int>( processingType ) << "\" standardpage=\"" << 1
+	<< "\" hasHeader=\"" << hasHeader() << "\" hasFooter=\"" << hasFooter()
+	<< "\" unit=\"" << correctQString( getUnit() ).latin1() << "\"/>" << endl;
 
-    QDomElement paper = doc.createElement( "PAPER" );
-    word.appendChild( paper );
-    paper.setAttribute( "format", (int)pageLayout.format );
-    paper.setAttribute( "ptWidth", (int)pageLayout.ptWidth );
-    paper.setAttribute( "ptHeight", (int)pageLayout.ptHeight );
-    paper.setAttribute( "mmWidth", (int)pageLayout.mmWidth );
-    paper.setAttribute( "mmHeight", (int)pageLayout.mmHeight );
-    paper.setAttribute( "inchWidth", (int)pageLayout.inchWidth );
-    paper.setAttribute( "inchHeight", (int)pageLayout.inchHeight );
-    paper.setAttribute( "inchHeight", (int)pageLayout.inchHeight );
-    paper.setAttribute( "columns", (int)pageColumns.columns );
-    paper.setAttribute( "ptColumnspc", (int)pageColumns.ptColumnSpacing );
-    paper.setAttribute( "mmColumnspc", (int)pageColumns.mmColumnSpacing );
-    paper.setAttribute( "inchColumnspc", (int)pageColumns.inchColumnSpacing );
-    paper.setAttribute( "hType", (int)pageHeaderFooter.header );
-    paper.setAttribute( "fType", (int)pageHeaderFooter.footer );
-    paper.setAttribute( "ptHeadBody", (int)pageHeaderFooter.ptHeaderBodySpacing );
-    paper.setAttribute( "mmHeadBody", (int)pageHeaderFooter.mmHeaderBodySpacing );
-    paper.setAttribute( "inchHeadBody", (int)pageHeaderFooter.inchHeaderBodySpacing );
-    paper.setAttribute( "ptFootBody", (int)pageHeaderFooter.ptFooterBodySpacing );
-    paper.setAttribute( "mmFootBody", (int)pageHeaderFooter.mmFooterBodySpacing );
-    paper.setAttribute( "inchFootBody", (int)pageHeaderFooter.inchFooterBodySpacing );
+    out << otag << "<FOOTNOTEMGR>" << endl;
+    footNoteManager.save( out );
+    out << etag << "</FOOTNOTEMGR>" << endl;
 
-    QDomElement border = doc.createElement( "PAPERBORDERS" );
-    paper.appendChild( border );
-    border.setAttribute( "mmLeft", (int)pageLayout.mmLeft );
-    border.setAttribute( "mmTop", (int)pageLayout.mmTop );
-    border.setAttribute( "mmRight", (int)pageLayout.mmRight );
-    border.setAttribute( "mmBottom", (int)pageLayout.mmBottom );
-    border.setAttribute( "ptLeft", (int)pageLayout.ptLeft );
-    border.setAttribute( "ptTop", (int)pageLayout.ptTop );
-    border.setAttribute( "ptRight", (int)pageLayout.ptRight );
-    border.setAttribute( "ptBottom", (int)pageLayout.ptBottom );
-    border.setAttribute( "inchLeft", (int)pageLayout.inchLeft );
-    border.setAttribute( "inchTop", (int)pageLayout.inchTop );
-    border.setAttribute( "inchRight", (int)pageLayout.inchRight );
-    border.setAttribute( "inchBottom", (int)pageLayout.inchBottom );
-
-    QDomElement attr = doc.createElement( "ATTRIBUTES" );
-    word.appendChild( attr );
-    attr.setAttribute( "processing", (int)processingType );
-    attr.setAttribute( "hasHeader", hasHeader() );
-    attr.setAttribute( "hasFooter", hasFooter() );
-    attr.setAttribute( "unit", getUnit() );
-
-    QDomElement e = formatCollection.save( doc );
-    if ( e.isNull() )
-	return FALSE;
-    word.appendChild( e );
-
-    QDomElement styles = doc.createElement( "PARAGLAYOUTS" );
-    word.appendChild( styles );
-
-    QDomElement fn = footNoteManager.save( doc );
-    if ( fn.isNull() )
-	return false;
-    word.appendChild( fn );
-
-    QDomElement fs = doc.createElement( "FRAMESETS" );
-    word.appendChild( fs );
+    out << otag << "<FRAMESETS>" << endl;
 
     KWFrameSet *frameSet = 0L;
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ )
     {
 	frameSet = getFrameSet( i );
 	if ( frameSet->getFrameType() != FT_PART )
-	{
-	    QDomElement e = frameSet->save( doc );
-	    if ( e.isNull() )
-		return false;
-	    fs.appendChild( e );
-	}
+	    frameSet->save( out );
     }
 
+    out << etag << "</FRAMESETS>" << endl;
+
+    out << otag << "<STYLES>" << endl;
     for ( unsigned int j = 0; j < paragLayoutList.count(); j++ )
     {
-	QDomElement e = paragLayoutList.at( j )->save( doc );
-	if ( e.isNull() )
-	    return false;
-	styles.appendChild( e );
+	out << otag << "<STYLE>" << endl;
+	paragLayoutList.at( j )->save( out );
+	out << etag << "</STYLE>" << endl;
     }
+    out << etag << "</STYLES>" << endl;
 
-    QDomElement pix = doc.createElement( "PIXMAPS" );
-    word.appendChild( pix );
+    out << otag << "<PIXMAPS>" << endl;
 
     QDictIterator<KWImage> it = imageCollection.iterator();
     QStringList keys, images;
-    for ( ; it.current(); ++it ) {
+    for ( ; it.current(); ++it )
+    {
 	if ( keys.contains( it.currentKey() ) || images.contains( it.current()->getFilename() ) )
 	    continue;
-	QDomElement e = doc.createElement( "KEY" );
-	e.setAttribute( "key", it.current()->getFilename() );
-	pix.appendChild( e );
-	    keys.append( it.currentKey() );
+	out << indent << "<KEY key=\"" << it.current()->getFilename().latin1() << "\"/>" << endl;
+	keys.append( it.currentKey() );
 	images.append( it.current()->getFilename() );
     }
+    out << etag << "</PIXMAPS>" << endl;
 
     // Write "OBJECT" tag for every child
     QListIterator<KWordChild> chl( m_lstChildren );
     for( ; chl.current(); ++chl )
-    {
-	QDomElement e = chl.current()->save( doc );
-	if ( e.isNull() )
-	    return false;
-	word.appendChild( e );
-    }
+	chl.current()->save( out );
 
-    QTextStream str( dev );
-    str << doc;
+    out << etag << "</DOC>" << endl;
 
-    // Save some memory
-    formatCollection.clearIndexMaps();
-    
     return true;
 }
 
@@ -1502,31 +1416,14 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
 	if ( QImage::outputFormats().find( format ) == -1 )
 	    format = "BMP";
 
- 	QString mime = "image/" + format.lower();
- 	_store->open( u2, mime.lower() );
-	
-	QBuffer buffer;
-	buffer.open( IO_WriteOnly );
-	{
-	    // QDataStream str( &buffer );
-	    // str << *it.current();
-	    QImageIO iio( &buffer, format );
-	    iio.setImage( *it.current() );
-	    // iio.setFormat( format );
-	    iio.write();
-	}
-	buffer.close();
-	
-	KOStore::Data data;
-	int len = buffer.buffer().size();
-	data.length( len );
-	const char* p = buffer.buffer().data();
-	for( int i = 0; i < len; ++i )
-	    data[i] = *p++;
-	_store->write( data );
+	QString mime = "image/" + format.lower();
+	_store->open( u2, mime.lower() );
+	ostorestream out( _store );
+	writeImageToStream( out, *it.current(), format );
+	out.flush();
 	_store->close();
- 	keys.append( it.currentKey() );
- 	images.append( it.current()->getFilename() );
+	keys.append( it.currentKey() );
+	images.append( it.current()->getFilename() );
     }
 
     return true;
@@ -1918,7 +1815,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
     {
 	//_painter.fillRect( _fc.getPTCounterPos() - xOffset, _fc.getPTY(), _fc.getPTCounterWidth(), _fc.getLineHeight(), lightGray );
 	KWFormat counterfm( this, _fc );
-	counterfm.apply( *lay->getFormat() );
+	counterfm.apply( lay->getFormat() );
 	if ( _fc.getParag()->getParagLayout()->getCounterType() == KWParagLayout::CT_BULLET )
 	    counterfm.setUserFont( findUserFont( _fc.getParag()->getParagLayout()->getBulletFont() ) );
 	_painter.setFont( *( counterfm.loadFont( this ) ) );
@@ -2665,27 +2562,25 @@ void KWordDocument::copySelectedText()
 
     QClipboard *cb = QApplication::clipboard();
 
-    QString clip_string;
-    parag2 = firstParag;
+    string clip_string;
+    tostrstream out( clip_string );
 
-    QDomDocument d( "PARAGRAPHS" );
-    QDomElement e = d.createElement( "PARAGRAPHS" );
-    while( parag2 ) {
-	QDomElement p = parag2->save( d );
-	e.appendChild( p );
+    parag2 = firstParag;
+    out << otag << "<PARAGRAPHS>" << endl;
+    while ( parag2 )
+    {
+	out << otag << "<PARAGRAPH>" << endl;
+	parag2->save( out );
+	out << etag << "</PARAGRAPH>" << endl;
 	parag2 = parag2->getNext();
     }
+    out << etag << "</PARAGRAPHS>" << endl;
 
-    {
-	QTextStream str( clip_string, IO_WriteOnly );
-	str << d;
-    }
+    KWordDrag *d = new KWordDrag;
+    d->setPlain( clipString );
+    d->setKWord( clip_string.c_str() );
 
-     KWordDrag *dr = new KWordDrag;
-     dr->setPlain( clipString );
-     dr->setKWord( clip_string );
-
-     cb->setData( dr );
+    cb->setData( d );
 }
 
 /*================================================================*/
@@ -2744,223 +2639,222 @@ void KWordDocument::setFormat( KWFormat &_format )
 /*================================================================*/
 void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page, KWFormat *_format, const QString &_mime )
 {
-// #### todo
-//     QStrList strList;
-//     KWParag *firstParag = 0L, *parag = 0L, *parag2 = 0L, *calcParag = 0L;
-//     int index;
+    QStrList strList;
+    KWParag *firstParag = 0L, *parag = 0L, *parag2 = 0L, *calcParag = 0L;
+    int index;
 
-//     if ( _string.isEmpty() ) return;
+    if ( _string.isEmpty() ) return;
 
-//     if ( _mime == "text/plain" ) {     // ----------------- MIME type text/plain
-// 	while ( true ) {
-// 	    index = _string.find( '\n', 0 );
-// 	    if ( index == -1 ) break;
+    if ( _mime == "text/plain" ) {     // ----------------- MIME type text/plain
+	while ( true ) {
+	    index = _string.find( '\n', 0 );
+	    if ( index == -1 ) break;
 
-// 	    if ( index > 0 && !_string.left( index ).simplifyWhiteSpace().isEmpty() )
-// 		strList.append( QString( _string.left( index ) ) );
-// 	    _string.remove( 0, index + 1 );
-// 	}
+	    if ( index > 0 && !_string.left( index ).simplifyWhiteSpace().isEmpty() )
+		strList.append( QString( _string.left( index ) ) );
+	    _string.remove( 0, index + 1 );
+	}
 
-// 	if ( !_string.isEmpty() && !_string.simplifyWhiteSpace().isEmpty() )
-// 	    strList.append( QString( _string ) );
-//     } else if ( _mime == MIME_TYPE ) {     // -------------- MIME type application/x-kword
-// 	istrstream in( _string.ascii() );
-// 	if ( !in )
-// 	    return;
+	if ( !_string.isEmpty() && !_string.simplifyWhiteSpace().isEmpty() )
+	    strList.append( QString( _string ) );
+    } else if ( _mime == MIME_TYPE ) {     // -------------- MIME type application/x-kword
+	istrstream in( _string.ascii() );
+	if ( !in )
+	    return;
 
-// 	KOMLStreamFeed feed( in );
-// 	KOMLParser parser( &feed );
+	KOMLStreamFeed feed( in );
+	KOMLParser parser( &feed );
 
-// 	string tag;
-// 	vector<KOMLAttrib> lst;
-// 	string name;
+	string tag;
+	vector<KOMLAttrib> lst;
+	string name;
 
-// 	if ( !parser.open( "PARAGRAPHS", tag ) ) {
-// 	    cerr << "Missing PARAGRAPHS" << endl;
-// 	    return;
-// 	}
+	if ( !parser.open( "PARAGRAPHS", tag ) ) {
+	    cerr << "Missing PARAGRAPHS" << endl;
+	    return;
+	}
 
-// 	while ( parser.open( 0L, tag ) ) {
-// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	while ( parser.open( 0L, tag ) ) {
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
 
-// 	    if ( name == "PARAGRAPH" ) {
-// 		KOMLParser::parseTag( tag.c_str(), name, lst );
-// 		vector<KOMLAttrib>::const_iterator it = lst.begin();
-// 		for( ; it != lst.end(); it++ ) {
-// 		}
+	    if ( name == "PARAGRAPH" ) {
+		KOMLParser::parseTag( tag.c_str(), name, lst );
+		vector<KOMLAttrib>::const_iterator it = lst.begin();
+		for( ; it != lst.end(); it++ ) {
+		}
 
-// 		parag2 = new KWParag( dynamic_cast<KWTextFrameSet*>( getFrameSet( _fc->getFrameSet() - 1 ) ),
-// 				      this, 0L, 0L, defaultParagLayout, false );
-// 		parag2->load( parser, lst );
+		parag2 = new KWParag( dynamic_cast<KWTextFrameSet*>( getFrameSet( _fc->getFrameSet() - 1 ) ),
+				      this, 0L, 0L, defaultParagLayout, false );
+		parag2->load( parser, lst );
 		
-// 		KWParag::correctFormat( _fc->getParag(), parag2 );
+		KWParag::correctFormat( _fc->getParag(), parag2 );
 		
-// 		if ( !firstParag )
-// 		    firstParag = parag2;
-// 		parag2->setPrev( parag );
-// 		if ( parag ) parag->setNext( parag2 );
-// 		parag = parag2;
-// 	    } else ;
+		if ( !firstParag )
+		    firstParag = parag2;
+		parag2->setPrev( parag );
+		if ( parag ) parag->setNext( parag2 );
+		parag = parag2;
+	    } else ;
 
-// 	    if ( !parser.close( tag ) )
-// 		return;
+	    if ( !parser.close( tag ) )
+		return;
 
-// 	}
-//     }
+	}
+    }
 
-//     if ( ( _mime == "text/plain" && !strList.isEmpty() ) || ( _mime == MIME_TYPE && firstParag ) ) {
-// 	if ( ( _mime == "text/plain" && strList.count() == 1 ) || ( _mime == MIME_TYPE && !firstParag->getNext() ) ) {
-// 	    // --------------- MIME: text/plain
-// 	    if ( _mime == "text/plain" ) {
-// 		QString str;
-// 		unsigned int len;
-// 		KWFormat *format = _format;
-// 		if ( !format ) {
-// 		    format = new KWFormat( this );
-// 		    *format = *( (KWFormat*)_fc );
-// 		}
-// 		str = QString( strList.at( 0 ) );
-// 		len = str.length();
-// 		_fc->getParag()->insertText( _fc->getTextPos(), str );
-// 		_fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
+    if ( ( _mime == "text/plain" && !strList.isEmpty() ) || ( _mime == MIME_TYPE && firstParag ) ) {
+	if ( ( _mime == "text/plain" && strList.count() == 1 ) || ( _mime == MIME_TYPE && !firstParag->getNext() ) ) {
+	    // --------------- MIME: text/plain
+	    if ( _mime == "text/plain" ) {
+		QString str;
+		unsigned int len;
+		KWFormat *format = _format;
+		if ( !format ) {
+		    format = new KWFormat( this );
+		    *format = *( (KWFormat*)_fc );
+		}
+		str = QString( strList.at( 0 ) );
+		len = str.length();
+		_fc->getParag()->insertText( _fc->getTextPos(), str );
+		_fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
 
-// 		for ( unsigned int j = 0; j < len; j++ )
-// 		    _fc->cursorGotoRight();
-// 		delete format;
-// 	    } else  { // ---------------- MIME: application/x-kword
-// 		KWString *str = new KWString( this );
-// 		*str = *firstParag->getKWString();
-// 		_fc->getParag()->insertText( _fc->getTextPos(), str );
+		for ( unsigned int j = 0; j < len; j++ )
+		    _fc->cursorGotoRight();
+		delete format;
+	    } else  { // ---------------- MIME: application/x-kword
+		KWString *str = new KWString( this );
+		*str = *firstParag->getKWString();
+		_fc->getParag()->insertText( _fc->getTextPos(), str );
 
-// 		for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
-// 		    _fc->cursorGotoRight();
+		for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
+		    _fc->cursorGotoRight();
 
-// 		delete firstParag;
-// 	    }
-// 	} else if ( ( _mime == "text/plain" && strList.count() == 2 ) ||
-// 		    ( _mime == "application/x-kword" && !firstParag->getNext()->getNext() ) ) {
-// 	    if ( _mime == "text/plain" ) {
-// 		QString str;
-// 		unsigned int len;
-// 		KWFormat *format = _format;
-// 		if ( !format ) {
-// 		    format = new KWFormat( this );
-// 		    *format = *( (KWFormat*)_fc );
-// 		}
-// 		str = QString( strList.at( 0 ) );
-// 		len = str.length();
-// 		_fc->getParag()->insertText( _fc->getTextPos(), str );
-// 		_fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
+		delete firstParag;
+	    }
+	} else if ( ( _mime == "text/plain" && strList.count() == 2 ) ||
+		    ( _mime == "application/x-kword" && !firstParag->getNext()->getNext() ) ) {
+	    if ( _mime == "text/plain" ) {
+		QString str;
+		unsigned int len;
+		KWFormat *format = _format;
+		if ( !format ) {
+		    format = new KWFormat( this );
+		    *format = *( (KWFormat*)_fc );
+		}
+		str = QString( strList.at( 0 ) );
+		len = str.length();
+		_fc->getParag()->insertText( _fc->getTextPos(), str );
+		_fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
 
-// 		for ( unsigned int j = 0; j <= len; j++ )
-// 		    _fc->cursorGotoRight();
+		for ( unsigned int j = 0; j <= len; j++ )
+		    _fc->cursorGotoRight();
 
-// 		QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
-// 		_page->keyPressEvent( &ev );
+		QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
+		_page->keyPressEvent( &ev );
 
-// 		str = QString( strList.at( 1 ) );
-// 		len = str.length();
-// 		_fc->getParag()->insertText( _fc->getTextPos(), str );
-// 		_fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
+		str = QString( strList.at( 1 ) );
+		len = str.length();
+		_fc->getParag()->insertText( _fc->getTextPos(), str );
+		_fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
 
-// 		for ( unsigned int j = 0; j < len; j++ )
-// 		    _fc->cursorGotoRight();
-// 		delete format;
-// 	    } else {
-// 		KWString *str = new KWString( this );
-// 		*str = *firstParag->getKWString();
-// 		_fc->getParag()->insertText( _fc->getTextPos(), str );
+		for ( unsigned int j = 0; j < len; j++ )
+		    _fc->cursorGotoRight();
+		delete format;
+	    } else {
+		KWString *str = new KWString( this );
+		*str = *firstParag->getKWString();
+		_fc->getParag()->insertText( _fc->getTextPos(), str );
 
-// 		for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
-// 		    _fc->cursorGotoRight();
+		for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
+		    _fc->cursorGotoRight();
 
-// 		QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
-// 		_page->keyPressEvent( &ev );
+		QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
+		_page->keyPressEvent( &ev );
 
-// 		KWString *str2 = new KWString( this );
-// 		*str2 = *firstParag->getNext()->getKWString();
-// 		_fc->getParag()->insertText( _fc->getTextPos(), str2 );
+		KWString *str2 = new KWString( this );
+		*str2 = *firstParag->getNext()->getKWString();
+		_fc->getParag()->insertText( _fc->getTextPos(), str2 );
 
-// 		for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
-// 		    _fc->cursorGotoRight();
+		for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
+		    _fc->cursorGotoRight();
 
-// 		delete firstParag->getNext();
-// 		delete firstParag;
-// 	    }
-// 	} else {
-// 	    if ( _mime == "text/plain" ) {
-// 		QString str;
-// 		unsigned int len;
-// 		KWFormat *format = _format;
-// 		if ( !format ) {
-// 		    format = new KWFormat( this );
-// 		    *format = *( (KWFormat*)_fc );
-// 		}
-// 		str = QString( strList.at( 0 ) );
-// 		len = str.length();
-// 		_fc->getParag()->insertText( _fc->getTextPos(), str );
-// 		_fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
+		delete firstParag->getNext();
+		delete firstParag;
+	    }
+	} else {
+	    if ( _mime == "text/plain" ) {
+		QString str;
+		unsigned int len;
+		KWFormat *format = _format;
+		if ( !format ) {
+		    format = new KWFormat( this );
+		    *format = *( (KWFormat*)_fc );
+		}
+		str = QString( strList.at( 0 ) );
+		len = str.length();
+		_fc->getParag()->insertText( _fc->getTextPos(), str );
+		_fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
 
-// 		for ( unsigned int j = 0; j < len; j++ )
-// 		    _fc->cursorGotoRight();
+		for ( unsigned int j = 0; j < len; j++ )
+		    _fc->cursorGotoRight();
 
-// 		QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Key_Return,13,0);
-// 		_page->keyPressEvent( &ev );
+		QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Key_Return,13,0);
+		_page->keyPressEvent( &ev );
 
-// 		_fc->cursorGotoLeft();
-// 		_fc->cursorGotoLeft();
-// 		KWParag *p = _fc->getParag(), *next = _fc->getParag()->getNext();
+		_fc->cursorGotoLeft();
+		_fc->cursorGotoLeft();
+		KWParag *p = _fc->getParag(), *next = _fc->getParag()->getNext();
 
-// 		for ( unsigned int i = 1; i < strList.count(); i++ ) {
-// 		    str = QString( strList.at( i ) );
-// 		    len = str.length();
-// 		    p = new KWParag( dynamic_cast<KWTextFrameSet*>( getFrameSet( _fc->getFrameSet() - 1 ) ), this,
-// 				     p, 0L, defaultParagLayout );
-// 		    if ( !calcParag )
-// 			calcParag = p;
-// 		    p->insertText( 0, str );
-// 		    p->setFormat( 0, len, *format );
-// 		}
-// 		p->setNext( next );
-// 		if ( next ) next->setPrev( p );
-// 		delete format;
-// 	    } else {
-// 		KWString *str = new KWString( this );
-// 		*str = *firstParag->getKWString();
-// 		_fc->getParag()->insertText( _fc->getTextPos(), str );
+		for ( unsigned int i = 1; i < strList.count(); i++ ) {
+		    str = QString( strList.at( i ) );
+		    len = str.length();
+		    p = new KWParag( dynamic_cast<KWTextFrameSet*>( getFrameSet( _fc->getFrameSet() - 1 ) ), this,
+				     p, 0L, defaultParagLayout );
+		    if ( !calcParag )
+			calcParag = p;
+		    p->insertText( 0, str );
+		    p->setFormat( 0, len, *format );
+		}
+		p->setNext( next );
+		if ( next ) next->setPrev( p );
+		delete format;
+	    } else {
+		KWString *str = new KWString( this );
+		*str = *firstParag->getKWString();
+		_fc->getParag()->insertText( _fc->getTextPos(), str );
 
-// 		for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
-// 		    _fc->cursorGotoRight();
-// 		QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
-// 		_page->keyPressEvent( &ev );
+		for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
+		    _fc->cursorGotoRight();
+		QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
+		_page->keyPressEvent( &ev );
 
-// 		_fc->cursorGotoLeft();
-// 		_fc->cursorGotoLeft();
+		_fc->cursorGotoLeft();
+		_fc->cursorGotoLeft();
 
-// 		KWParag *p = 0L, *prev = _fc->getParag(), *parag = firstParag->getNext(), *next = _fc->getParag()->getNext();
+		KWParag *p = 0L, *prev = _fc->getParag(), *parag = firstParag->getNext(), *next = _fc->getParag()->getNext();
 
-// 		while ( parag ) {
-// 		    p = new KWParag( *parag );
-// 		    if ( !calcParag )
-// 			calcParag = p;
-// 		    p->setPrev( prev );
-// 		    prev->setNext( p );
-// 		    p->setNext( 0L );
-// 		    prev = p;
-// 		    parag = parag->getNext();
-// 		}
-// 		p->setNext( next );
-// 		if ( next ) next->setPrev( p );
-// 	    }
-// 	}
-//     }
+		while ( parag ) {
+		    p = new KWParag( *parag );
+		    if ( !calcParag )
+			calcParag = p;
+		    p->setPrev( prev );
+		    prev->setNext( p );
+		    p->setNext( 0L );
+		    prev = p;
+		    parag = parag->getNext();
+		}
+		p->setNext( next );
+		if ( next ) next->setPrev( p );
+	    }
+	}
+    }
 
-//     if ( !calcParag )
-// 	calcParag = _fc->getParag();
-//     if ( calcParag->getPrev() )
-// 	calcParag = calcParag->getPrev();
+    if ( !calcParag )
+	calcParag = _fc->getParag();
+    if ( calcParag->getPrev() )
+	calcParag = calcParag->getPrev();
 
-//     recalcWholeText( calcParag, _fc->getFrameSet() - 1 );
+    recalcWholeText( calcParag, _fc->getFrameSet() - 1 );
 }
 
 /*================================================================*/

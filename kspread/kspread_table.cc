@@ -35,7 +35,6 @@
 #include <qmsgbox.h>
 #include <qclipbrd.h>
 #include <qpicture.h>
-#include <qtextstream.h>
 #include <klocale.h>
 
 #include "kspread_table.h"
@@ -46,6 +45,14 @@
 #include "kspread_corba_util.h"
 #include "kspread_canvas.h"
 
+#include <koStream.h>
+
+#include <komlWriter.h>
+#include <komlParser.h>
+#include <komlStreamFeed.h>
+#include <torben.h>
+
+#include <strstream.h>
 #include <kautoarray.h>
 
 /*****************************************************************************
@@ -1612,17 +1619,19 @@ void KSpreadTable::copySelection( const QPoint &_marker )
   else
     rct = selectionRect();
 
-  QBuffer buffer;
-  buffer.open( IO_WriteOnly );
-  if ( !saveCellRect( &buffer, rct ) )
+  string data;
+
   {
-    cerr << "INTERNAL ERROR while copying" << endl;
-    return;
+    tostrstream out( data );
+    if ( !saveCellRect( out, rct ) )
+    {
+      cerr << "INTERNAL ERROR while copying" << endl;
+      return;
+    }
   }
-  buffer.close();
 
   QClipboard *clip = QApplication::clipboard();
-  clip->setText( QString( buffer.buffer() ) );
+  clip->setText( data.c_str() );
 }
 
 void KSpreadTable::cutSelection( const QPoint &_marker )
@@ -1635,44 +1644,75 @@ void KSpreadTable::cutSelection( const QPoint &_marker )
 
 void KSpreadTable::paste( const QPoint &_marker )
 {
-  QString data = QApplication::clipboard()->text();
-  if ( data.isEmpty() )
+  string data = QApplication::clipboard()->text().ascii();
+  if ( data.empty() )
   {
     QMessageBox::critical( (QWidget*)0L, i18n( "KSpread Error" ), i18n( "Clipboard is empty" ), i18n( "Ok" ) );
     return;
   }
 
-  QDomDocument doc;
-  doc.setContent( data );
-  // TODO: Error checking needed here ....
-  loadSelection( doc, _marker.x() - 1, _marker.y() - 1 );
+  istrstream in( data.c_str() );
+  loadSelection( in, _marker.x() - 1, _marker.y() - 1 );
 
   m_pDoc->setModified( true );
   emit sig_updateView( this );
 }
 
-bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _yshift )
+bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift )
 {
-  // <spreadsheet>
-  if ( doc.doctype().name() != "spreadsheet-selection" )
-    return false;
+  KOMLStreamFeed feed( _in );
+  KOMLParser parser( &feed );
 
-  QDomElement sel = doc.documentElement();
+  string tag;
+  vector<KOMLAttrib> lst;
+  string name;
 
-  if ( sel.attribute( "mime" ) != "application/x-kspread-selection" )
-    return false;
-
-  QDomNode n = sel.firstChild();
-  while( !n.isNull() )
+  // DOC
+  if ( !parser.open( "DOC", tag ) )
   {
-    QDomElement e = n.toElement();
-    if ( !e.isNull() && e.tagName() == "cell" )
+    cerr << "Missing DOC" << endl;
+    return false;
+  }
+
+  KOMLParser::parseTag( tag.c_str(), name, lst );
+  vector<KOMLAttrib>::const_iterator it = lst.begin();
+  for( ; it != lst.end(); it++ )
+  {
+    if ( (*it).m_strName == "mime" )
+    {
+      if ( (*it).m_strValue != "application/x-kspread-selection" )
+      {
+	cerr << "Unknown mime type " << (*it).m_strValue << endl;
+	return false;
+      }
+    }
+  }
+
+  // OBJECT
+  while( parser.open( 0L, tag ) )
+  {
+    KOMLParser::parseTag( tag.c_str(), name, lst );
+
+    if ( name == "CELL" )
     {
       KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
-      cell->load( e, _xshift, _yshift );
+      cell->load( parser, lst, _xshift, _yshift );
       insertCell( cell );
     }
-    n = n.nextSibling();
+    else
+      cerr << "Unknown tag '" << tag << "' in TABLE" << endl;
+
+    if ( !parser.close( tag ) )
+    {
+      cerr << "ERR: Closing CELL" << endl;
+      return false;
+    }
+  }
+
+  if ( !parser.close( tag ) )
+  {
+    cerr << "ERR: Closing DOC" << endl;
+    return false;
   }
 
   m_pDoc->setModified( true );
@@ -2001,16 +2041,11 @@ void KSpreadTable::printPage( QPainter &_painter, QRect *page_range, const QPen&
   }
 }
 
-bool KSpreadTable::saveCellRect( QIODevice* dev, const QRect &_rect )
+bool KSpreadTable::saveCellRect( ostream &out, const QRect &_rect )
 {
-  QDomDocument doc( "spreadsheet-selection" );
-  doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\"" ) );
-  QDomElement spread = doc.createElement( "spreadsheet-selection" );
-  spread.setAttribute( "author", "Torben Weis" );
-  spread.setAttribute( "email", "weis@kde.org" );
-  spread.setAttribute( "editor", "KSpread" );
-  spread.setAttribute( "mime", "application/x-kspread-selection" );
-  doc.appendChild( spread );
+  out << "<?xml version=\"1.0\"?>" << endl;
+  out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org" << "\" editor=\"" << "KSpread"
+      << "\" mime=\"" << "application/x-kspread-selection" << "\" >" << endl;
 
   // Save all cells.
   QIntDictIterator<KSpreadCell> it( m_dctCells );
@@ -2020,37 +2055,25 @@ bool KSpreadTable::saveCellRect( QIODevice* dev, const QRect &_rect )
     {
       QPoint p( it.current()->column(), it.current()->row() );
       if ( _rect.contains( p ) )
-      {
-	QDomElement e = it.current()->save( doc, _rect.left() - 1, _rect.top() - 1 );
-	if ( e.isNull() )
-	  return false;
-	spread.appendChild( e );
-      }
+	it.current()->save( out, _rect.left() - 1, _rect.top() - 1 );
     }
   }
 
-  QTextStream str( dev );
-  str << doc;
+  out << "</DOC>" << endl;
 
   return true;
 }
 
-QDomElement KSpreadTable::save( QDomDocument& doc )
+bool KSpreadTable::save( ostream &out )
 {
-  QDomElement table = doc.createElement( "table" );
-  table.setAttribute( "name", m_strName );
+  out << otag << "<TABLE name=\"" << m_strName.ascii() << "\">" << endl;
 
   // Save all cells.
   QIntDictIterator<KSpreadCell> it( m_dctCells );
   for ( ; it.current(); ++it )
   {
     if ( !it.current()->isDefault() )
-    {
-      QDomElement e = it.current()->save( doc );
-      if ( e.isNull() )
-	return QDomElement();
-      table.appendChild( e );
-    }
+      it.current()->save( out );
   }
 
   // Save all RowLayout objects.
@@ -2058,12 +2081,7 @@ QDomElement KSpreadTable::save( QDomDocument& doc )
   for ( ; rl.current(); ++rl )
   {
     if ( !rl.current()->isDefault() )
-    {
-      QDomElement e = rl.current()->save( doc );
-      if ( e.isNull() )
-	return QDomElement();
-      table.appendChild( e );
-    }
+      rl.current()->save( out );
   }
 
   // Save all ColumnLayout objects.
@@ -2071,24 +2089,18 @@ QDomElement KSpreadTable::save( QDomDocument& doc )
   for ( ; cl.current(); ++cl )
   {
     if ( !cl.current()->isDefault() )
-    {
-      QDomElement e = cl.current()->save( doc );
-      if ( e.isNull() )
-	return QDomElement();
-      table.appendChild( e );
-    }
+      cl.current()->save( out );
   }
 
   QListIterator<KSpreadChild> chl( m_lstChildren );
   for( ; chl.current(); ++chl )
   {
-    QDomElement e = chl.current()->save( doc );
-    if ( e.isNull() )
-      return QDomElement();
-    table.appendChild( e );
+    chl.current()->save( out );
   }
 
-  return table;
+  out << etag << "</TABLE>" << endl;
+
+  return true;
 }
 
 bool KSpreadTable::isLoading()
@@ -2096,53 +2108,71 @@ bool KSpreadTable::isLoading()
   return m_pDoc->isLoading();
 }
 
-bool KSpreadTable::loadXML( const QDomElement& table )
+bool KSpreadTable::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
 {
-  m_strName = table.attribute( "name" );
-  if ( m_strName.isEmpty() )
-    return false;
+  // enableScrollBarUpdates( false );
 
-  QDomNode n = table.firstChild();
-  while( !n.isNull() )
+  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
+  for( ; it != _attribs.end(); it++ )
   {
-    QDomElement e = n.toElement();
-    if ( !e.isNull() && e.tagName() == "cell" )
+    if ( (*it).m_strName == "name" )
+    {
+      m_strName = (*it).m_strValue.c_str();
+    }
+    else
+      cerr << "Unknown attrib 'TABLE:" << (*it).m_strName << "'" << endl;
+  }
+
+  string tag;
+  vector<KOMLAttrib> lst;
+  string name;
+
+  // CELL, ROW, COLUMN, OBJECT
+  while( parser.open( 0L, tag ) )
+  {
+    KOMLParser::parseTag( tag.c_str(), name, lst );
+
+    if ( name == "CELL" )
     {
       KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
-      if ( !cell->load( e ) )
-	return false;
+      cell->load( parser, lst );
       insertCell( cell );
     }
-    else if ( !e.isNull() && e.tagName() == "row" )
+    else if ( name == "ROW" )
     {
       RowLayout *rl = new RowLayout( this, 0 );
-      if ( !rl->load( e ) )
-	return false;
+      rl->load( parser, lst );
       insertRowLayout( rl );
     }
-    else if ( !e.isNull() && e.tagName() == "column" )
+    else if ( name == "COLUMN" )
     {
       ColumnLayout *cl = new ColumnLayout( this, 0 );
-      if ( !cl->load( e ) )
-	return false;
+      cl->load( parser, lst );
       insertColumnLayout( cl );
     }
-    else if ( !e.isNull() && e.tagName() == "object" )
+    else if ( name == "OBJECT" )
     {
       KSpreadChild *ch = new KSpreadChild( m_pDoc, this );
-      if ( !ch->load( e ) )
-	return false;
+      ch->load( parser, lst );
       insertChild( ch );
     }
-    else if ( !e.isNull() && e.tagName() == "chart" )
+    else if ( name == "CHART" )
     {
       ChartChild *ch = new ChartChild( m_pDoc, this );
-      if ( !ch->load( e ) )
-	return false;
+      ch->load( parser, lst );
       insertChild( ch );
     }
-    n = n.nextSibling();
+    else
+      cerr << "Unknown tag '" << tag << "' in TABLE" << endl;
+
+    if ( !parser.close( tag ) )
+    {
+      cerr << "ERR: Closing Child" << endl;
+      return false;
+    }
   }
+
+  // enableScrollBarUpdates( false );
 
   return true;
 }
@@ -2509,26 +2539,38 @@ void ChartChild::update()
     m_pBinding->cellChanged( 0L );
 }
 
-QDomElement ChartChild::save( QDomDocument& doc )
+bool ChartChild::save( ostream& out )
 {
   CORBA::String_var u = m_rDoc->url();
   CORBA::String_var mime = m_rDoc->mimeType();
 
-  QDomElement e = doc.createElement( "chart" );
-  e.setAttribute( "mime", mime.in() );
-  e.setAttribute( "url", u.in() );
-  e.appendChild( doc.createElement( "geometry", m_geometry ) );
-
+  out << indent << "<CHART url=\"" << u << "\" mime=\"" << mime << "\">"
+      << m_geometry;
   if ( m_pBinding )
-    e.appendChild( doc.createElement( "data-area", m_pBinding->dataArea() ) );
+    out << "<BINDING>" << m_pBinding->dataArea() << "</BINDING>";
+  out << "</CHART>" << endl;
 
-  return e;
+  return true;
 }
 
-bool ChartChild::load( const QDomElement& chart )
+bool ChartChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
 {
-  m_strURL = chart.attribute( "url" );
-  m_strMimeType = chart.attribute( "mime" );
+  cerr << "######################### CC:load ################" << endl;
+
+  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
+  for( ; it != _attribs.end(); it++ )
+  {
+    if ( (*it).m_strName == "url" )
+    {
+      m_strURL = (*it).m_strValue.c_str();
+    }
+    else if ( (*it).m_strName == "mime" )
+    {
+      m_strMimeType = (*it).m_strValue.c_str();
+    }
+    else
+      cerr << "Unknown attrib 'CHART:" << (*it).m_strName << "'" << endl;
+  }
 
   if ( m_strURL.isEmpty() )
   {
@@ -2541,12 +2583,71 @@ bool ChartChild::load( const QDomElement& chart )
     return false;
   }
 
-  m_geometry = chart.namedItem( "geometry" ).toElement().toRect();
+  string tag;
+  vector<KOMLAttrib> lst;
+  string name;
 
-  QDomElement data = chart.namedItem( "data-area" ).toElement();
-  if ( data.isNull() )
+  bool brect = false;
+  bool bbind = false;
+  QRect bind;
+
+  // RECT, BINDING
+  while( parser.open( 0L, tag ) )
+  {
+    KOMLParser::parseTag( tag.c_str(), name, lst );
+
+    if ( name == "RECT" )
+    {
+      brect = true;
+      m_geometry = tagToRect( lst );
+    }
+    else if ( name == "BINDING" )
+    {
+      string tag2;
+      vector<KOMLAttrib> lst2;
+      string name2;
+      // RECT
+      while( parser.open( 0L, tag2 ) )
+      {
+	KOMLParser::parseTag( tag2.c_str(), name2, lst2 );
+
+	if ( name2 == "RECT" )
+	{
+	  bbind = true;
+	  bind = tagToRect( lst2 );
+	}
+	else
+	  cerr << "Unknown tag '" << tag2 << "' in BINDING" << endl;
+
+      }
+      if ( !parser.close( tag ) )
+      {
+	cerr << "ERR: Closing BINDING" << endl;
+	return false;
+      }
+    }
+    else
+      cerr << "Unknown tag '" << tag << "' in CHART" << endl;
+
+    if ( !parser.close( tag ) )
+    {
+      cerr << "ERR: Closing Child in CHART" << endl;
+      return false;
+    }
+  }
+
+  if ( !brect )
+  {
+    cerr << "Missing RECT in CHART" << endl;
     return false;
-  setDataArea( data.toRect() );
+  }
+  if ( !bbind )
+  {
+    cerr << "Missing BINDING in CHART" << endl;
+    return false;
+  }
+
+  setDataArea( bind );
 
   return true;
 }

@@ -16,6 +16,7 @@
 #include "main.h"
 #include "main.moc"
 
+#include <iostream>
 #include <stdio.h>
 #include <assert.h>
 
@@ -24,6 +25,15 @@
 
 #include <qmsgbox.h>
 #include <qstring.h>
+
+#include <komlMime.h>
+#include <koStream.h>
+#include <komlParser.h>
+#include <komlStreamFeed.h>
+#include <komlWriter.h>
+
+#include <strstream.h>
+#include <string.h>
 
 typedef KOMAutoLoader<Factory> MyAutoLoader;
 
@@ -80,7 +90,7 @@ Filter::Filter()
 void Filter::filter(KOffice::Filter::Data& data,const char *_from,const char *_to)
 {
     if ( QString( _to ) == "application/x-kword" &&
-         QString( _from ) == "text/plain" )
+         QString( _from ) == "text/plain" ) 
     {
         CORBA::ULong len = data.length();
         if (len == 0)
@@ -142,7 +152,7 @@ void Filter::filter(KOffice::Filter::Data& data,const char *_from,const char *_t
         delete[] buffer;
     }
     else if ( QString( _from ) == "application/x-kword" &&
-              QString( _to ) == "text/plain")
+              QString( _to ) == "text/plain") 
     {
         CORBA::ULong len = data.length();
         if (len == 0)
@@ -167,7 +177,7 @@ void Filter::filter(KOffice::Filter::Data& data,const char *_from,const char *_t
             }
             i = buf.find( "<TEXT>", j );
         }
-
+        
         len = strlen(str);
 
         data.length(len);

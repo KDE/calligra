@@ -26,13 +26,6 @@ module KOStore
 	enum Mode { Read, Write, Append };
 	interface Store
 	{
-		/**
-		 * Creates a filename which is unique for
-		 * the complete store. The returned filename
-		 * has for example the form "entryXYZ" where
-		 * XYZ is some number. The returned string does not contain
-		 * the "/" character.
-		 */
 		string createFileName();
 
 		boolean open( in string name, in string mimetype );
@@ -40,13 +33,6 @@ module KOStore
 
 		Data read( in unsigned long max );
 		boolean write( in Data data );
-
-		/**
-		 * @return the size of the currently opened file in the store.
-		 *         If there is no file opened or if the file is not opened
-		 *         in read mode, then -1 is returned.
-		 */
-		long size();
 	};
 };
 

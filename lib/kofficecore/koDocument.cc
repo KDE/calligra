@@ -17,10 +17,16 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <fstream>
+#include <strstream>
+
 #include "koDocument.h"
+#include "koStream.h"
 #include "koQueryTypes.h"
 
-#include <koStore.h>
+#include <komlWriter.h>
+#include <komlMime.h>
+#include <komlStreamFeed.h>
 
 #include <kurl.h>
 #include <klocale.h>
@@ -30,8 +36,6 @@
 #include <qpainter.h>
 #include <qcolor.h>
 #include <qpicture.h>
-#include <qbuffer.h>
-#include <qfile.h>
 
 /**********************************************************
  *
@@ -61,7 +65,6 @@ KoDocumentChild::KoDocumentChild( const QRect& _rect, KOffice::Document_ptr _doc
   m_strMimeType = m.in();
   m_geometry = _rect;
   m_pPicture = 0L;
-  // We assume for now that we dont have a printing extension
   m_bHasPrintingExtension = false;
 }
 
@@ -69,7 +72,6 @@ KoDocumentChild::KoDocumentChild()
 {
   m_rDoc = 0L;
   m_pPicture = 0L;
-  // We assume for now that we dont have a printing extension
   m_bHasPrintingExtension = false;
 }
 
@@ -126,10 +128,22 @@ KOffice::View_ptr KoDocumentChild::createView( KOffice::MainWindow_ptr _main )
   return KOffice::View::_duplicate( v );
 }
 
-bool KoDocumentChild::load( const QDomElement& element )
+bool KoDocumentChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
 {
-  m_strURL = element.attribute( "url" );
-  m_strMimeType = element.attribute( "mime" );
+  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
+  for( ; it != _attribs.end(); it++ )
+  {
+    if ( (*it).m_strName == "url" )
+    {
+      m_strURL = (*it).m_strValue.c_str();
+    }
+    else if ( (*it).m_strName == "mime" )
+    {
+      m_strMimeType = (*it).m_strValue.c_str();
+    }
+    else
+      kdebug( KDEBUG_INFO, 30003, "Unknown attrib 'OBJECT:%s'", (*it).m_strName.c_str() );
+  }
 
   if ( m_strURL.isEmpty() )
   {	
@@ -142,13 +156,37 @@ bool KoDocumentChild::load( const QDomElement& element )
     return false;
   }
 
-  QDomElement e = element.namedItem( "geometry" ).toElement();
-  if ( e.isNull() )
+  string tag;
+  vector<KOMLAttrib> lst;
+  string name;
+
+  bool brect = false;
+
+  // RECT
+  while( parser.open( 0L, tag ) )
+  {
+    KOMLParser::parseTag( tag.c_str(), name, lst );
+
+    if ( name == "RECT" )
+    {
+      brect = true;
+      m_geometry = tagToRect( lst );
+    }
+    else
+      kdebug( KDEBUG_INFO, 30003, "Unknown tag '%s' in OBJECT", tag.c_str() );
+
+    if ( !parser.close( tag ) )
+    {
+      kdebug( KDEBUG_INFO, 30003, "ERR: Closing Child in OBJECT" );
+      return false;
+    }
+  }
+
+  if ( !brect )
   {
     kdebug( KDEBUG_INFO, 30003, "Missing RECT in OBJECT" );
     return false;
   }
-  m_geometry = e.toRect();
 
   return true;
 }
@@ -157,7 +195,7 @@ bool KoDocumentChild::loadDocument( KOStore::Store_ptr _store, const char *_form
 {
   assert( !m_strURL.isEmpty() );
 
-  kdebug( KDEBUG_INFO, 30003, "Trying to load %c", m_strURL.ascii() );
+  kdebug( KDEBUG_INFO, 30003, "Trying to load %s", m_strURL.ascii() );
   KURL u( m_strURL );
 
   KoDocumentEntry e = KoDocumentEntry::queryByMimeType( m_strMimeType );
@@ -180,27 +218,28 @@ bool KoDocumentChild::loadDocument( KOStore::Store_ptr _store, const char *_form
   return m_rDoc->loadFromURL( m_strURL, _format );
 }
 
-QDomElement KoDocumentChild::save( QDomDocument& doc )
+bool KoDocumentChild::save( ostream& out )
 {
   CORBA::String_var u = m_rDoc->url();
   CORBA::String_var mime = m_rDoc->mimeType();
 
-  QDomElement e = doc.createElement( "object" );
-  e.setAttribute( "url", u.in() );
-  e.setAttribute( "mime", mime.in() );
-  e.appendChild( doc.createElement( "geometry", m_geometry ) );
+  out << indent << "<OBJECT url=\"" << u << "\" mime=\"" << mime << "\">"
+      << m_geometry << "</OBJECT>" << endl;
 
-  return e;
+  return true;
 }
 
 bool KoDocumentChild::isStoredExtern()
 {
   CORBA::String_var url = m_rDoc->url();
-  QString s = url.in();
-  if ( s.isEmpty() )
+  string s = url.in();
+  if ( s.empty() )
     return false;
-  KURL u( s );
-  return ( u.protocol() != "store" );
+  KURL u( s.c_str() );
+  if ( strcmp( u.protocol(), "store" ) == 0 )
+    return false;
+
+  return true;
 }
 
 QPicture* KoDocumentChild::draw( float _scale, bool _force_update )
@@ -211,25 +250,19 @@ QPicture* KoDocumentChild::draw( float _scale, bool _force_update )
   if ( m_pPicture != 0L && !m_bHasPrintingExtension )
     return m_pPicture;
 
-  // Do we have it in the cache ?
   if ( m_pPicture != 0L && m_pictureScale == _scale && !_force_update )
     return m_pPicture;
 
   kdebug( KDEBUG_INFO, 30003, "Trying to fetch the QPicture stuff" );
 
-  // Try to get the printing extension
-  KOffice::Print_var print;
   CORBA::Object_var obj = m_rDoc->getInterface( "IDL:KOffice/Print:1.0" );
-  if ( !CORBA::is_nil( obj ) )
-    print = KOffice::Print::_narrow( m_rDoc );
-
-  // Draw a white area if there is no printing extension
-  if ( CORBA::is_nil( print ) || CORBA::is_nil( obj ) )
+  if ( CORBA::is_nil( obj ) )
   {
     if ( m_pPicture == 0L )
       m_pPicture = new QPicture;
     m_pictureScale = _scale;
 
+    // Draw a white area instead
     kdebug( KDEBUG_INFO, 30003, "KOffice::Print not supported" );
     QPainter painter;
     painter.begin( m_pPicture );
@@ -239,20 +272,61 @@ QPicture* KoDocumentChild::draw( float _scale, bool _force_update )
     return m_pPicture;
   }
 
+  KOffice::Print_var print = KOffice::Print::_narrow( m_rDoc );
+  if ( CORBA::is_nil( print ) )
+  {
+    if ( m_pPicture == 0L )
+      m_pPicture = new QPicture;
+    m_pictureScale = _scale;
+
+    // Draw a white area instead
+    kdebug( KDEBUG_INFO, 30003, "ERROR: Could not narrow to OPParts::Print" );
+    QPainter painter;
+    painter.begin( m_pPicture );
+
+    painter.fillRect( 0, 0, m_geometry.width(), m_geometry.height(), Qt::white );
+    painter.end();
+    return m_pPicture;
+  }
+
   kdebug( KDEBUG_INFO, 30003, "Fetching data" );
+  CORBA::String_var str( print->encodedMetaFile( m_geometry.width(), m_geometry.height(),
+						 _scale ) );
+  kdebug( KDEBUG_INFO, 30003, "Fetched data" );
 
-  // retrieve the QPicture
-  KOffice::Print::Picture_var pic = print->picture( m_geometry.width(), m_geometry.height(), _scale );
+  int inlen = strlen( str );
 
-  CORBA::ULong len = pic->length();
-  kdebug( KDEBUG_INFO, 30003, "GOT %i bytes", len );
-  QByteArray buffer( len );
-  char *p = buffer.data();
-  for( CORBA::ULong i = 0; i < len; ++i )
-    *p++ = pic[ i ];
+  if ( inlen % 4 != 0 )
+  {
+    kdebug( KDEBUG_INFO, 30003, "ERROR: len of BASE64 not devideable by 4" );
 
-  // Free memory
-  pic->length( 0 );
+    if ( m_pPicture == 0L )
+      m_pPicture = new QPicture;
+    m_pictureScale = _scale;
+
+    QPainter painter;
+    painter.begin( m_pPicture );
+
+    painter.fillRect( 0, 0, m_geometry.width(), m_geometry.height(), Qt::white );
+    painter.end();
+
+    return m_pPicture;
+  }
+
+  kdebug( KDEBUG_INFO, 30003, "Base64 bytes are %i", inlen );
+
+  Base64 b;
+  char *p = new char[ inlen * 3 / 4 + 10 ];
+  const char *src = static_cast<const char*>(str);
+  int anz = inlen / 4;
+  int got = 0;
+  for( int i = 0; i < anz; i++ )
+  {
+    got += b.decode( p + got, src[ 0 ], src[ 1 ], src[ 2 ], src[ 3 ] );
+    src += 4;
+  }
+
+  kdebug( KDEBUG_INFO, 30003, "GOT %i bytes", got );
 
   m_bHasPrintingExtension = true;
 
@@ -260,7 +334,8 @@ QPicture* KoDocumentChild::draw( float _scale, bool _force_update )
     m_pPicture = new QPicture;
   m_pictureScale = _scale;
 
-  m_pPicture->setData( p, len );
+  m_pPicture->setData( p, got );
+  delete p;
 
   return m_pPicture;
 }
@@ -330,27 +405,27 @@ void KoDocument::makeChildListIntern()
 
 void KoDocument::addToChildList( KOffice::Document_ptr _child, const char *_url )
 {
-  m_lstAllChildren.append( KoDocument::SimpleDocumentChild( _child, _url ) );
+  m_lstAllChildren.push_back( KoDocument::SimpleDocumentChild( _child, _url ) );
 }
 
 bool KoDocument::saveChildren( KOStore::Store_ptr _store )
 {
-  QValueList<KoDocument::SimpleDocumentChild>::Iterator it;
+  list<KoDocument::SimpleDocumentChild>::iterator it;
   for( it = m_lstAllChildren.begin(); it != m_lstAllChildren.end(); ++it )
   {
-    kdebug( KDEBUG_INFO, 30003, "Saving child %c", (*it).url().ascii() );
+    kdebug( KDEBUG_INFO, 30003, "Saving child %s", it->url() );
 
-    KURL u( (*it).url() );
+    KURL u( it->url() );
     // Do we have to save this child embedded ?
-    if ( u.protocol() != "store" )
+    if ( strcmp( u.protocol(), "store" ) != 0 )
       continue;
 
     // Save it as child in the document store
-    KOffice::Document_var doc = (*it).document();
-    if ( !doc->saveToStore( _store, 0 ) )
+    KOffice::Document_var doc = it->document();
+    if ( !doc->saveToStore( _store, 0L ) )
       return false;
 
-    kdebug( KDEBUG_INFO, 30003, "Saved child %c", (*it).url().ascii() );
+    kdebug( KDEBUG_INFO, 30003, "Saved child %s", it->url() );
   }
 
   m_lstAllChildren.clear();
@@ -377,25 +452,24 @@ CORBA::Boolean KoDocument::saveToURL( const char *_url, const char* _format )
   {
     kdebug( KDEBUG_INFO, 30003, "Saving to store" );
 
+    CORBA::String_var mime = mimeType();
     KoStore store( u.path(), KOStore::Write );
     // TODO: Check for error
 
     makeChildListIntern();
 
-    CORBA::String_var mime = mimeType();
     store.open( "root", mime.in() );
-
-    QBuffer buffer;
-    buffer.open( IO_WriteOnly );
-    if ( !save( &buffer, &store, _format ) )
     {
-      store.close();
-      return false;
+      ostorestream out( &store );
+      if ( !save( out, _format ) )
+      {
+	store.close();
+	return false;
+      }
+      out.flush();
     }
-    buffer.close();
-    store.write( buffer.buffer().data(), buffer.size() );
     store.close();
-    
+
     kdebug( KDEBUG_INFO, 30003, "Saving children" );
 
     // Lets write all direct and indirect children
@@ -409,16 +483,20 @@ CORBA::Boolean KoDocument::saveToURL( const char *_url, const char* _format )
   }
   else
   {
-    QFile file( _url );
-    if ( !file.open( IO_WriteOnly ) )
+    ofstream out( u.path() );
+    if ( !out )
+    {
+      QString tmp = i18n("Could not write to\n" );
+      tmp += u.path();
+      kdebug( KDEBUG_INFO, 30003, tmp );
+      QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp, i18n( "OK" ) );
       return false;
+    }
 
-    if ( !save( &file, 0, _format ) )
+    if ( !save( out, _format ) )
+
       return false;
-
     // Lets write all direct and indirect children
-    // We have no store so they have to be written
-    // to external files.
     if ( !saveChildren( 0L ) )
       return false;
 
@@ -436,16 +514,23 @@ CORBA::Boolean KoDocument::saveToStore( KOStore::Store_ptr _store, const char *_
   CORBA::String_var mime = mimeType();
   CORBA::String_var u = url();
 
-  _store->open( u, mime );
-
-  QBuffer buffer;
-  buffer.open( IO_WriteOnly );
-  if ( !save( &buffer, _store, _format ) )
+  // TODO: Check for error
+  /* if ( !out )
   {
-    _store->close();
+    QString tmp;
+    tmp.sprintf( i18n("Could not write to\n%s" ), u.path() );
+    kdebug( KDEBUG_INFO, 30003, tmp );
+    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp, i18n( "OK" ) );
     return false;
-  }
+  } */
 
+  _store->open( u, mime );
+  {
+    ostorestream out( _store );
+    if ( !save( out, _format ) )
+      return false;
+    out.flush();
+  }
   _store->close();
 
   // Lets write all direct and indirect children
@@ -462,50 +547,51 @@ CORBA::Boolean KoDocument::saveToStore( KOStore::Store_ptr _store, const char *_
 
 CORBA::Boolean KoDocument::loadFromURL( const char *_url, const char * )
 {
+  kdebug( KDEBUG_INFO, 30003, "KoDocument::loadFromURL( %s, <> )", _url );
   KURL u( _url );
   if ( u.isMalformed() )
   {
-    kdebug( KDEBUG_INFO, 30003, "Malformed URL %c", _url );
+    kdebug( KDEBUG_INFO, 30003, "Malformed URL %s", _url );
     return false;
   }
 
   if ( !u.isLocalFile() )
   {
-    kdebug( KDEBUG_INFO, 30003, "Can not load from remote URL currently" );
+    kdebug( KDEBUG_INFO, 30003, "Can not save to remote URL" );
     return false;
   }
+
+  ifstream in( u.path() );
+  if ( !in )
+  {
+    kdebug( KDEBUG_INFO, 30003, "Could not open %s", u.path().ascii() );
+    return false;
+  }
+
+  // Try to find out wether it is a mime multi part file
+  char buf[5];
+  in.get( buf[0] ); in.get( buf[1] ); in.get( buf[2] ); in.get( buf[3] ); buf[4] = 0;
+  in.unget(); in.unget(); in.unget(); in.unget();
+
+  kdebug( KDEBUG_INFO, 30003, "PATTERN=%s", buf );
 
   setURL( _url );
-
-  // Try to find out wether it is a pure XML file or a KoStore
-  QFile file( u.path() );
-  if ( !file.open( IO_ReadOnly ) )
-  {
-    kdebug( KDEBUG_INFO, 30003, "Could not open %c", u.path().ascii() );
-    return false;
-  }
-  char buf[5];
-  file.readBlock( buf, 4 );
-  file.close();
-
-  kdebug( KDEBUG_INFO, 30003, "PATTERN=%c", buf );
 
   // Is it a koffice store ?
   if ( strncasecmp( buf, "KS01", 4 ) == 0 )
   {
+    in.close();
+
     KoStore store( u.path(), KOStore::Read );
     // TODO: Check for errors
     store.open( "root", 0L );
-    int size = store.size();
-    QByteArray buffer( size );
-    store.read( buffer.data(), size );
-
-    if ( !load( buffer, &store ) )
-      return false;
-
+    {
+      istorestream in( &store );
+      if ( !load( in, &store ) )
+	return false;
+    }
     store.close();
 
-    // Load the children from the store
     if ( !loadChildren( &store ) )
     {	
       kdebug( KDEBUG_INFO, 30003, "ERROR: Could not load children" );
@@ -517,42 +603,25 @@ CORBA::Boolean KoDocument::loadFromURL( const char *_url, const char * )
   // Standalone XML or some binary data
   else
   {
-    QFile file( u.path() );
-    if ( !file.open( IO_ReadOnly ) )
-      return false;
-    uint size = file.size();
-    QByteArray buffer( size );
-    file.readBlock( buffer.data(), size );
-    file.close();
-
-    if ( !load( buffer, 0 ) )
+    bool res = load( in, 0L );
+    in.close();
+    if ( !res )
       return false;
 
-    return completeLoading( 0 );
+    return completeLoading( 0L );
   }
 }
 
 CORBA::Boolean KoDocument::loadFromStore( KOStore::Store_ptr _store, const char *_url )
 {
-  setURL( _url );
-
+  // TODO: Check for error
   _store->open( _url, 0L );
-  CORBA::Long size = _store->size();
-  QByteArray buffer( size );
-
-  // A special scope to get rid of "data"
   {
-    KOStore::Data_var data = _store->read( size );
-    CORBA::ULong len = data->length();
-
-    char* p = buffer.data();
-    for( CORBA::ULong i = 0; i < len; ++i )
-      *p++ = data[ i ];
+    istorestream in( _store );
+    load( in, _store );
   }
   _store->close();
-
-  if ( !load( buffer, _store ) )
-    return false;
+  setURL( _url );
 
   if ( !loadChildren( _store ) )
   {	
@@ -563,22 +632,29 @@ CORBA::Boolean KoDocument::loadFromStore( KOStore::Store_ptr _store, const char 
   return completeLoading( _store );
 }
 
-bool KoDocument::load( QByteArray& buffer, KOStore::Store_ptr _store )
+bool KoDocument::load( istream& in, KOStore::Store_ptr _store )
 {
-  // Load XML ?
-  if (buffer.size() > 5 && strncasecmp( buffer.data(), "<?xml", 5 ) == 0 )
-  {
-    QDomDocument doc;
-    if ( !doc.setContent( QString::fromUtf8( buffer.data(), buffer.size() ) ) )
-      return false;
+  kdebug( KDEBUG_INFO, 30003, "KoDocument::load( istream& in, KOStore::Store_ptr _store )");
+  // Try to find out wether it is a mime multi part file
+  char buf[5];
+  in.get( buf[0] ); in.get( buf[1] ); in.get( buf[2] ); in.get( buf[3] ); buf[4] = 0;
+  in.unget(); in.unget(); in.unget(); in.unget();
 
-    if ( !loadXML( doc, _store ) )
+  kdebug( KDEBUG_INFO, 30003, "PATTERN2=%s", buf );
+
+  // Load XML ?
+  if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
+  {
+    KOMLStreamFeed feed( in );
+    KOMLParser parser( &feed );
+
+    if ( !loadXML( parser, _store ) )
       return false;
   }
   // Load binary data
   else
   {
-    if ( !loadBinary( buffer, _store ) )
+    if ( !loadBinary( in, false, _store ) )
       return false;
   }
 

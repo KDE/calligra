@@ -3,7 +3,11 @@
 #include "defs.h"
 #include "font.h"
 #include "kword_utils.h"
-#include <koApplication.h>
+
+#include <komlMime.h>
+#include <strstream>
+#include <fstream>
+#include <unistd.h>
 
 /******************************************************************/
 /* Class: KWFormat						  */
@@ -168,40 +172,135 @@ void KWFormat::incRef()
 }
 
 /*================================================================*/
-QDomElement KWFormat::save( QDomDocument &doc, int id )
+void KWFormat::save( ostream &out )
 {
-    QDomElement format = doc.createElement( "FORMAT" );
-    if ( id != -1 )
-	format.setAttribute( "id", id );
-    format.setAttribute( "color", colorToName( color ) );
-    format.setAttribute( "font", userFont->getFontName() );
-    format.setAttribute( "size", ptFontSize );
-    format.setAttribute( "weight", weight );
-    format.setAttribute( "italic", italic );
-    format.setAttribute( "underline", underline );
-    format.setAttribute( "vertalign", vertAlign );
-
-    return format;
+    out << indent << "<COLOR red=\"" << color.red() << "\" green=\"" << color.green() << "\" blue=\"" << color.blue() << "\"/>" << endl;
+    out << indent << "<FONT name=\"" << correctQString( userFont->getFontName() ).latin1() << "\"/>" << endl;
+    out << indent << "<SIZE value=\"" << ptFontSize << "\"/>" << endl;
+    out << indent << "<WEIGHT value=\"" << weight << "\"/>" << endl;
+    out << indent << "<ITALIC value=\"" << static_cast<int>( italic ) << "\"/>" << endl;
+    out << indent << "<UNDERLINE value=\"" << static_cast<int>( underline ) << "\"/>" << endl;
+    out << indent << "<VERTALIGN value=\"" << static_cast<int>( vertAlign ) << "\"/>" << endl;
 }
 
 /*================================================================*/
-bool KWFormat::load( const QDomElement& element, KWordDocument* _doc )
+void KWFormat::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *_doc )
 {
     doc = _doc;
+    ref = 0;
 
-    color = QColor( element.attribute( "color" ) );
-    userFont = _doc->findUserFont( element.attribute( "font" ) );
-    ptFontSize = element.attribute( "size" ).toInt();
-    weight = element.attribute( "weight" ).toInt();
-    italic = (char)element.attribute( "italic" ).toInt();
-    vertAlign = (VertAlign)element.attribute( "vertalign" ).toInt();
-    underline = (char)element.attribute( "underline" ).toInt();
-	
-    return TRUE;
-}
+    string tag;
+    string name;
 
-/*================================================================*/
-int KWFormat::getId()
-{
-    return doc->getFormatCollection()->getId( *this );
+    while ( parser.open( 0L, tag ) )
+    {
+	KOMLParser::parseTag( tag.c_str(), name, lst );
+
+	// color
+	if ( name == "COLOR" )
+	{
+	    unsigned int r = 0, g = 0, b = 0;
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "red" )
+		{
+		    r = atoi( ( *it ).m_strValue.c_str() );
+		    color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "green" )
+		{
+		    g = atoi( ( *it ).m_strValue.c_str() );
+		    color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "blue" )
+		{
+		    b = atoi( ( *it ).m_strValue.c_str() );
+		    color.setRgb( r, g, b );
+		}
+	    }
+	}
+
+	// font
+	else if ( name == "FONT" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "name" )
+		    userFont = _doc->findUserFont( correctQString( ( *it ).m_strValue.c_str() ) );
+	    }
+	}
+
+	// font size
+	else if ( name == "SIZE" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "value" )
+		    ptFontSize = atoi( ( *it ).m_strValue.c_str() );
+	    }
+	}
+
+	// weight
+	else if ( name == "WEIGHT" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "value" )
+		    weight = atoi( ( *it ).m_strValue.c_str() );
+	    }
+	}
+
+	// italic
+	else if ( name == "ITALIC" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "value" )
+		    italic = atoi( ( *it ).m_strValue.c_str() );
+	    }
+	}
+
+	// underline
+	else if ( name == "UNDERLINE" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "value" )
+		    underline = atoi( ( *it ).m_strValue.c_str() );
+	    }
+	}
+
+	// vertical alignment
+	else if ( name == "VERTALIGN" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "value" )
+		    vertAlign = static_cast<VertAlign>( atoi( ( *it ).m_strValue.c_str() ) );
+	    }
+	}
+
+	else
+	    cerr << "Unknown tag '" << tag << "' in FORMAT" << endl;
+
+	if ( !parser.close( tag ) )
+	{
+	    cerr << "ERR: Closing Child" << endl;
+	    return;
+	}
+    }
 }

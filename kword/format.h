@@ -3,7 +3,9 @@
 
 #include <qstring.h>
 #include <qcolor.h>
-#include <qdom.h>
+
+#include <iostream>
+#include <koStream.h>
 
 class KWFormat;
 class KWordDocument;
@@ -166,15 +168,9 @@ public:
 
     KWordDocument *getDocument() { return doc; }
 
-    QDomElement save( QDomDocument &doc, int id = -1 );
-    bool load( const QDomElement&, KWordDocument* );
+    void save( ostream &out );
+    void load( KOMLParser&, vector<KOMLAttrib>&, KWordDocument* );
 
-    /**
-      * Used during saving. Instead of saving the same formats again and 
-      * again we just save its index which is known by the @ref KWFormatCollection.
-      */
-    int getId();
-    
 protected:
     /**
      * Pointer to the font we have to use. If this value is 0L we are told

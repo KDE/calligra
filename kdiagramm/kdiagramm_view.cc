@@ -13,7 +13,6 @@
 #include <opMainWindowIf.h>
 
 #include <koPartSelectDia.h>
-#include <koPrintDia.h>
 #include <koAboutDia.h>
 
 #include "kdiagramm_doc.h"
@@ -27,7 +26,7 @@
  *
  *****************************************************************************/
 
-KDiagrammView::KDiagrammView( QWidget *_parent, 
+KDiagrammView::KDiagrammView( QWidget *_parent,
 			      const char */*_name*/, KDiagrammDoc* _doc ) :
   KoDiagrammView( _parent ), KoViewIf( _doc ), OPViewIf( _doc ), KDiagramm::View_skel()
 {
@@ -124,7 +123,7 @@ bool KDiagrammView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _facto
   }
 
   CORBA::WString_var toolTip;
-  
+
   m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 
   QString tmp = kapp->kde_datadir().copy();
@@ -157,7 +156,7 @@ bool KDiagrammView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _facto
   m_vToolBarEdit->setBarPos(OpenPartsUI::Floating);
   m_vToolBarEdit->setBarPos(OpenPartsUI::Top);
   m_vToolBarEdit->enable(OpenPartsUI::Show);
-  
+
   return true;
 }
 

@@ -217,18 +217,15 @@ bool KSpreadShell::saveDocument( const char *_url, const char *_format )
   {
     file = KFileDialog::getSaveFileName( getenv( "HOME" ) );
 
-    if ( file.isEmpty() )
+    if ( file.isNull() )
       return false;
+    _url = file.data();
   }
-  else
-    file = _url;
-
-  cerr << "!!!!!!!!!!!!!!" << file.latin1() << "!!!!!!!!!!!!!!!!!" << endl;
 
   if ( _format == 0L || *_format == 0 )
     _format = "application/x-kspread";
 
-  return m_pDoc->saveToURL( file, _format );
+  return m_pDoc->saveToURL( _url, _format );
 }
 
 bool KSpreadShell::printDlg()
@@ -325,11 +322,11 @@ void KSpreadShell::slotFileOpen()
 							      true );
 
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
-  if ( file.isEmpty() )
+  if ( file.isNull() )
     return;
 
   file = KoFilterManager::self()->import( file, "application/x-kspread" );
-  if ( file.isEmpty() )
+  if ( file.isNull() )
     return;
 
   if ( !openDocument( file, "" ) )

@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <komlWriter.h>
 #include <userpaths.h>
 
 KSpreadMap::KSpreadMap( KSpreadDoc *_doc )
@@ -53,37 +54,44 @@ void KSpreadMap::removeTable( KSpreadTable *_table )
   m_lstTables.setAutoDelete( true );
 }
 
-QDomElement KSpreadMap::save( QDomDocument& doc )
+bool KSpreadMap::save( ostream& out )
 {
-  QDomElement mymap = doc.createElement( "map" );
-
+  out << otag << "<MAP>" << endl;
+  
   QListIterator<KSpreadTable> it( m_lstTables );
   for( ; it.current(); ++it )
-  {
-    QDomElement e = it.current()->save( doc );
-    if ( e.isNull() )
-      return e;
-    mymap.appendChild( e );
-  }
+    it.current()->save( out );
+  
+  out << etag << "</MAP>" << endl;
 
-  return mymap;
+  return true;
 }
 
-bool KSpreadMap::loadXML( const QDomElement& mymap )
+bool KSpreadMap::load( KOMLParser& parser, vector<KOMLAttrib>& )
 {
-  QDomNode n = mymap.firstChild();
-  while( !n.isNull() )
+  string tag, name;
+  vector<KOMLAttrib> lst;
+  
+  // TABLE
+  while( parser.open( 0L, tag ) )
   {
-    QDomElement e = n.toElement();
-    if ( !e.isNull() && e.tagName() == "table" )
+    KOMLParser::parseTag( tag.c_str(), name, lst );
+ 
+    if ( name == "TABLE" )
     {
-      printf("----------------- ADDING TABLE ------------------\n");
       KSpreadTable *t = m_pDoc->createTable();
       addTable( t );
-      if ( !t->loadXML( e ) )
+      if ( !t->load( parser, lst ) )
 	return false;
     }
-    n = n.nextSibling();
+    else
+      cerr << "Unknown tag '" << tag << "'" << endl;
+
+    if ( !parser.close( tag ) )
+    {
+      cerr << "ERR: Closing Child" << endl;
+      return false;
+    }
   }
 
   return true;

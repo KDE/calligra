@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998	  */
-/* Version: 0.0.1						  */
-/* Author: Reginald Stadlbauer, Torben Weis			  */
-/* E-Mail: reggie@kde.org, weis@kde.org				  */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
-/* needs c++ library Qt (http://www.troll.no)			  */
-/* written for KDE (http://www.kde.org)				  */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
-/* needs OpenParts and Kom (weis@kde.org)			  */
-/* License: GNU GPL						  */
+/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
+/* Version: 0.0.1                                                 */
+/* Author: Reginald Stadlbauer, Torben Weis                       */
+/* E-Mail: reggie@kde.org, weis@kde.org                           */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
+/* needs c++ library Qt (http://www.troll.no)                     */
+/* written for KDE (http://www.kde.org)                           */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
+/* needs OpenParts and Kom (weis@kde.org)                         */
+/* License: GNU GPL                                               */
 /******************************************************************/
-/* Module: Footnotes / Endnotes					  */
+/* Module: Footnotes / Endnotes                                   */
 /******************************************************************/
 
 #include "footnote.h"
@@ -23,10 +23,14 @@
 #include "kword_utils.h"
 
 #include <klocale.h>
+
+#include <komlMime.h>
+#include <strstream>
+#include <fstream>
 #include <unistd.h>
 
 /******************************************************************/
-/* Class: KWFootNoteManager					  */
+/* Class: KWFootNoteManager                                       */
 /******************************************************************/
 
 /*================================================================*/
@@ -45,23 +49,23 @@ void KWFootNoteManager::recalc()
 
     for ( fn = footNotes.first(); fn; fn = footNotes.next() )
     {
-	fn->updateDescription( curr );
-	curr = fn->setStart( curr ) + 1;
+        fn->updateDescription( curr );
+        curr = fn->setStart( curr ) + 1;
     }
     for ( fn = footNotes.first(); fn; fn = footNotes.next() )
-	fn->makeTempNames();
+        fn->makeTempNames();
     for ( fn = footNotes.first(); fn; fn = footNotes.next() )
-	fn->updateNames();
+        fn->updateNames();
 }
 
 /*================================================================*/
 int KWFootNoteManager::findStart( KWFormatContext *_fc )
 {
     if ( _fc->getFrameSet() > 1 )
-	return -1;
+        return -1;
 
     if ( footNotes.isEmpty() )
-	return start;
+        return start;
 
     KWFormatContext fc( doc, _fc->getFrameSet() );
     fc.init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( _fc->getFrameSet() - 1 ) )->getFirstParag() );
@@ -71,37 +75,37 @@ int KWFootNoteManager::findStart( KWFormatContext *_fc )
 
     while ( parag != _fc->getParag() )
     {
-	KWString *str = parag->getKWString();
-	for ( unsigned int i = 0; i < str->size(); i++ )
-	{
-	    if ( found == footNotes.count() )
-		return curr;
-	    if ( str->data()[ i ].attrib->getClassId() == ID_KWCharFootNote )
-	    {
-		curr = dynamic_cast<KWCharFootNote*>( str->data()[ i ].attrib )->getFootNote()->getEnd() + 1;
-		found++;
-	    }
-	}
+        KWString *str = parag->getKWString();
+        for ( unsigned int i = 0; i < str->size(); i++ )
+        {
+            if ( found == footNotes.count() )
+                return curr;
+            if ( str->data()[ i ].attrib->getClassId() == ID_KWCharFootNote )
+            {
+                curr = dynamic_cast<KWCharFootNote*>( str->data()[ i ].attrib )->getFootNote()->getEnd() + 1;
+                found++;
+            }
+        }
 
-	parag = parag->getNext();
+        parag = parag->getNext();
     }
 
     if ( found == footNotes.count() )
-	return curr;
+        return curr;
 
     if ( parag )
     {
-	KWString *str = parag->getKWString();
-	for ( unsigned int i = 0; i < str->size() && i <= _fc->getTextPos(); i++ )
-	{
-	    if ( found == footNotes.count() )
-		return curr;
-	    if ( str->data()[ i ].attrib->getClassId() == ID_KWCharFootNote )
-	    {
-		curr = dynamic_cast<KWCharFootNote*>( str->data()[ i ].attrib )->getFootNote()->getEnd() + 1;
-		found++;
-	    }
-	}
+        KWString *str = parag->getKWString();
+        for ( unsigned int i = 0; i < str->size() && i <= _fc->getTextPos(); i++ )
+        {
+            if ( found == footNotes.count() )
+                return curr;
+            if ( str->data()[ i ].attrib->getClassId() == ID_KWCharFootNote )
+            {
+                curr = dynamic_cast<KWCharFootNote*>( str->data()[ i ].attrib )->getFootNote()->getEnd() + 1;
+                found++;
+            }
+        }
     }
 
     return curr;
@@ -112,21 +116,21 @@ void KWFootNoteManager::insertFootNote( KWFootNote *fn )
 {
     if ( fn->getStart() == 1 )
     {
-	footNotes.insert( 0, fn );
-	recalc();
-	addFootNoteText( fn );
-	return;
+        footNotes.insert( 0, fn );
+        recalc();
+        addFootNoteText( fn );
+        return;
     }
 
     int i = 1;
     KWFootNote *_fn = 0L;
     for ( _fn = footNotes.first(); _fn; _fn = footNotes.next(), i++ )
     {
-	if ( _fn->getEnd() != -1 && _fn->getEnd() == fn->getStart() - 1 || _fn->getStart() == fn->getStart() - 1 )
-	{
-	    footNotes.insert( i, fn );
-	    break;
-	}
+        if ( _fn->getEnd() != -1 && _fn->getEnd() == fn->getStart() - 1 || _fn->getStart() == fn->getStart() - 1 )
+        {
+            footNotes.insert( i, fn );
+            break;
+        }
     }
 
     recalc();
@@ -139,25 +143,25 @@ void KWFootNoteManager::removeFootNote( KWFootNote *fn )
     int n = footNotes.findRef( fn );
     if ( n != -1 )
     {
-	if ( n == 0 )
-	{
-	    if ( footNotes.count() > 1 )
-	    {
-		firstParag = footNotes.at( 1 )->getParag();
-		KWParag *p = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getLastParag();
+        if ( n == 0 )
+        {
+            if ( footNotes.count() > 1 )
+            {
+                firstParag = footNotes.at( 1 )->getParag();
+                KWParag *p = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getLastParag();
 
-		while ( p && p->getParagName() != firstParag )
-		    p = p->getPrev();
+                while ( p && p->getParagName() != firstParag )
+                    p = p->getPrev();
 
-		if ( p )
-		    p->setHardBreak( true );
-	    }
-	    else
-		firstParag = QString::null;
-	}
+                if ( p )
+                    p->setHardBreak( true );
+            }
+            else
+                firstParag = QString::null;
+        }
 
-	fn->destroy();
-	footNotes.take( n );
+        fn->destroy();
+        footNotes.take( n );
     }
     recalc();
 }
@@ -168,7 +172,7 @@ void KWFootNoteManager::addFootNoteText( KWFootNote *fn )
     bool hardBreak = false;
 
     if ( firstParag.isEmpty() )
-	hardBreak = true;
+        hardBreak = true;
 
     KWTextFrameSet *frameSet = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) );
     KWParag *parag = frameSet->getLastParag();
@@ -176,17 +180,17 @@ void KWFootNoteManager::addFootNoteText( KWFootNote *fn )
 
     if ( !firstParag.isEmpty() )
     {
-	while ( parag && parag->getParagName() != firstParag )
-	    parag = parag->getPrev();
+        while ( parag && parag->getParagName() != firstParag )
+            parag = parag->getPrev();
 
-	int i = start;
-	while ( parag && i < fn->getStart() - 1 )
-	{
-	    parag = parag->getNext();
-	    i++;
-	}
+        int i = start;
+        while ( parag && i < fn->getStart() - 1 )
+        {
+            parag = parag->getNext();
+            i++;
+        }
 
-	next = parag->getNext();
+        next = parag->getNext();
     }
 
     KWParag *parag2 = new KWParag( frameSet, doc, parag, next, doc->findParagLayout( "Standard" ) );
@@ -205,58 +209,75 @@ void KWFootNoteManager::addFootNoteText( KWFootNote *fn )
     fn->setParag( parag2 );
 
     if ( firstParag.isEmpty() )
-	firstParag = parag2->getParagName();
+        firstParag = parag2->getParagName();
 
 }
 
 /*================================================================*/
-QDomElement KWFootNoteManager::save( QDomDocument& doc )
+void KWFootNoteManager::save( ostream &out )
 {
-    QDomElement e = doc.createElement( "FOOTNOTE-GLOBAL" );
-
-    QDomElement s = doc.createElement( "START" );
-    e.appendChild( s );
-    s.setAttribute( "value", start );
-
-    QDomElement format = doc.createElement( "FORMAT" );
-    e.appendChild( format );
-    format.setAttribute( "superscript", superscript );
-    format.setAttribute( "type", (int)noteType );
-
-    QDomElement fp = doc.createElement( "FIRSTPARAG" );
-    e.appendChild( fp );
-    fp.setAttribute( "ref", firstParag );
-
-    return e;
+    out << indent << "<START value=\"" << start << "\"/>" << endl;
+    out << indent << "<FORMAT superscript=\"" << superscript
+        << "\" type=\"" << static_cast<int>( noteType ) << "\"/>" << endl;
+    out << indent << "<FIRSTPARAG ref=\"" << correctQString( firstParag ).latin1() << "\"/>" << endl;
 }
 
 /*================================================================*/
-bool KWFootNoteManager::load( const QDomElement &e )
+void KWFootNoteManager::load( KOMLParser &parser, vector<KOMLAttrib> &lst )
 {
-    bool ok;
+    string tag;
+    string name;
 
-    QDomElement s = e.namedItem( "START" ).toElement();
-    if ( s.isNull() )
-	return false;
-    start = s.attribute( "value" ).toInt( &ok );
-    if ( !ok ) return false;
+    while ( parser.open( 0L, tag ) )
+    {
+        KOMLParser::parseTag( tag.c_str(), name, lst );
 
-    s = e.namedItem( "FORMAT" ).toElement();
-    if ( s.isNull() )
-	return false;
-    superscript = (bool)s.attribute( "superscript" ).toInt();
-    noteType = (NoteType)s.attribute( "type" ).toInt();
+        if ( name == "START" )
+        {
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "value" )
+                    start = atoi( ( *it ).m_strValue.c_str() );
+            }
+        }
+        else if ( name == "FORMAT" )
+        {
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "superscript" )
+                    superscript = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "type" )
+                    noteType = static_cast<NoteType>( atoi( ( *it ).m_strValue.c_str() ) );
+            }
+        }
+        else if ( name == "FIRSTPARAG" )
+        {
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "ref" )
+                    firstParag = correctQString( ( *it ).m_strValue.c_str() );
+            }
+        }
 
-    s = e.namedItem( "FIRSTPARAG" ).toElement();
-    if ( s.isNull() )
-	return false;
-    firstParag = s.attribute( "ref" );
+        else
+            cerr << "Unknown tag '" << tag << "' in FOOTNOTEMGR" << endl;
 
-    return true;
+        if ( !parser.close( tag ) )
+        {
+            cerr << "ERR: Closing Child" << endl;
+            return;
+        }
+    }
 }
 
 /******************************************************************/
-/* Class: KWFootNote						  */
+/* Class: KWFootNote                                              */
 /******************************************************************/
 
 /*================================================================*/
@@ -269,11 +290,11 @@ KWFootNote::KWFootNote( KWordDocument *_doc, QList<KWFootNoteInternal> *_parts )
 
 
     if ( parts.isEmpty() )
-	warning( i18n( "WARNING: Empty footnote/endnote inserted!" ) );
+        warning( i18n( "WARNING: Empty footnote/endnote inserted!" ) );
     else
     {
-	start = parts.first()->from;
-	end = parts.last()->to == -1 ? parts.last()->from : parts.last()->to;
+        start = parts.first()->from;
+        end = parts.last()->to == -1 ? parts.last()->from : parts.last()->to;
     }
 }
 
@@ -287,8 +308,8 @@ int KWFootNote::setStart( int _start )
     KWFootNoteInternal *fn = 0L;
     for ( fn = parts.first(); fn; fn = parts.next() )
     {
-	fn->from += diff;
-	if ( fn->to != -1 ) fn->to += diff;
+        fn->from += diff;
+        if ( fn->to != -1 ) fn->to += diff;
     }
 
     makeText();
@@ -307,14 +328,14 @@ void KWFootNote::makeText()
     KWFootNoteInternal *fn = 0L;
     for ( fn = parts.first(); fn; fn = parts.next() )
     {
-	text += QString().setNum( fn->from );
-	if ( fn->to != -1 )
-	{
-	    text += fn->space;
-	    text += QString().setNum( fn->to );
-	}
-	if ( fn != parts.last() )
-	    text += ", ";
+        text += QString().setNum( fn->from );
+        if ( fn->to != -1 )
+        {
+            text += fn->space;
+            text += QString().setNum( fn->to );
+        }
+        if ( fn != parts.last() )
+            text += ", ";
     }
 
     text += after;
@@ -330,45 +351,45 @@ void KWFootNote::setParag( KWParag *_parag )
 void KWFootNote::updateDescription( int _start )
 {
     if ( parag.isEmpty() )
-	return;
+        return;
 
     KWParag *p = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getLastParag();
 
     while ( p && p->getParagName() != parag )
-	p = p->getPrev();
+        p = p->getPrev();
 
     if ( p )
     {
-	p->deleteText( 0, text.length() );
-	setStart( _start );
+        p->deleteText( 0, text.length() );
+        setStart( _start );
 
-	p->insertText( 0, text );
-	KWFormat format( doc );
-	format.setDefaults( doc );
-	p->setFormat( 0, text.length(), format );
+        p->insertText( 0, text );
+        KWFormat format( doc );
+        format.setDefaults( doc );
+        p->setFormat( 0, text.length(), format );
     }
     else
-	warning( i18n( "Footnote couldn't find the parag with the footnote description" ) );
+        warning( i18n( "Footnote couldn't find the parag with the footnote description" ) );
 }
 
 /*================================================================*/
 void KWFootNote::makeTempNames()
 {
     if ( parag.isEmpty() )
-	return;
+        return;
 
     KWParag *p = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getLastParag();
 
     while ( p && p->getParagName() != parag )
-	p = p->getPrev();
+        p = p->getPrev();
 
     if ( p )
     {
-	parag.prepend( "_" );
-	p->setParagName( parag );
+        parag.prepend( "_" );
+        p->setParagName( parag );
     }
     else
-	warning( i18n( "Footnote couldn't find the parag with the footnote description" ) );
+        warning( i18n( "Footnote couldn't find the parag with the footnote description" ) );
 
 }
 
@@ -376,20 +397,20 @@ void KWFootNote::makeTempNames()
 void KWFootNote::updateNames()
 {
     if ( parag.isEmpty() )
-	return;
+        return;
 
     KWParag *p = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getLastParag();
 
     while ( p && p->getParagName() != parag )
-	p = p->getPrev();
+        p = p->getPrev();
 
     if ( p )
     {
-	parag.sprintf( "Footnote/Endnote_%d", start );
-	p->setParagName( parag );
+        parag.sprintf( "Footnote/Endnote_%d", start );
+        p->setParagName( parag );
     }
     else
-	warning( i18n( "Footnote couldn't find the parag with the footnote description" ) );
+        warning( i18n( "Footnote couldn't find the parag with the footnote description" ) );
 
 }
 
@@ -397,143 +418,119 @@ void KWFootNote::updateNames()
 void KWFootNote::destroy()
 {
     if ( parag.isEmpty() )
-	return;
+        return;
 
     KWParag *p = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getLastParag();
 
     while ( p && p->getParagName() != parag )
-	p = p->getPrev();
+        p = p->getPrev();
 
     if ( p )
     {
-	KWParag *prev = p->getPrev();
-	KWParag *next = p->getNext();
+        KWParag *prev = p->getPrev();
+        KWParag *next = p->getNext();
 
-	if ( prev )
-	    prev->setNext( next );
-	if ( next )
-	    next->setPrev( prev );
+        if ( prev )
+            prev->setNext( next );
+        if ( next )
+            next->setPrev( prev );
 
-	delete p;
+        delete p;
     }
     else
-	warning( i18n( "Footnote couldn't find the parag with the footnote description" ) );
+        warning( i18n( "Footnote couldn't find the parag with the footnote description" ) );
 }
 
 /*================================================================*/
-QDomElement KWFootNote::save( QDomDocument& doc )
+void KWFootNote::save( ostream &out )
 {
-    QDomElement fn = doc.createElement( "FOOTNOTE" );
-    fn.setAttribute( "start", start );
-    fn.setAttribute( "end", end );
-    fn.setAttribute( "before", before );
-    fn.setAttribute( "after", after );
-    fn.setAttribute( "ref", parag );
-
-    QDomElement in = doc.createElement( "INTERNAL" );
-    fn.appendChild( in );
+    out << otag << "<INTERNAL>" << endl;
     KWFootNoteInternal *fi = 0L;
-    for ( fi = parts.first(); fi; fi = parts.next() ) {
-	QDomElement part = doc.createElement( "PART" );
-	in.appendChild( part );
-	part.setAttribute( "from", fi->from );
-	part.setAttribute( "to", fi->to );
-	part.setAttribute( "space", fi->space );
+    for ( fi = parts.first(); fi; fi = parts.next() )
+        out << indent << "<PART from=\"" << fi->from << "\" to=\"" << fi->to
+            << "\" space=\"" << correctQString( fi->space ).latin1() << "\"/>" << endl;
+    out << etag << "</INTERNAL>" << endl;
+    out << indent << "<RANGE start=\"" << start << "\" end=\"" << end << "\"/>" << endl;
+    out << indent << "<TEXT before=\"" << correctQString( before ).latin1() << "\" after=\"" << correctQString( after ).latin1() << "\"/>" << endl;
+    out << indent << "<DESCRIPT ref=\"" << correctQString( parag ).latin1() << "\"/>" << endl;
+}
+
+/*================================================================*/
+void KWFootNote::load( string name, string tag, KOMLParser &parser, vector<KOMLAttrib>& lst )
+{
+    if ( name == "INTERNAL" )
+    {
+        KOMLParser::parseTag( tag.c_str(), name, lst );
+        vector<KOMLAttrib>::const_iterator it = lst.begin();
+        for( ; it != lst.end(); it++ )
+        {
+        }
+
+        while ( parser.open( 0L, tag ) )
+        {
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            if ( name == "PART" )
+            {
+                KOMLParser::parseTag( tag.c_str(), name, lst );
+                vector<KOMLAttrib>::const_iterator it = lst.begin();
+
+                KWFootNoteInternal *part = new KWFootNoteInternal;
+
+                for( ; it != lst.end(); it++ )
+                {
+                    if ( ( *it ).m_strName == "from" )
+                        part->from = atoi( ( *it ).m_strValue.c_str() );
+                    else if ( ( *it ).m_strName == "to" )
+                        part->to = atoi( ( *it ).m_strValue.c_str() );
+                    else if ( ( *it ).m_strName == "space" )
+                        part->space = correctQString( ( *it ).m_strValue.c_str() );
+                }
+                parts.append( part );
+            }
+            else
+                cerr << "Unknown tag '" << tag << "' in INTERNAL" << endl;
+
+            if ( !parser.close( tag ) )
+            {
+                cerr << "ERR: Closing Child" << endl;
+                return;
+            }
+        }
+    }
+    else if ( name == "RANGE" )
+    {
+        KOMLParser::parseTag( tag.c_str(), name, lst );
+        vector<KOMLAttrib>::const_iterator it = lst.begin();
+        for( ; it != lst.end(); it++ )
+        {
+            if ( ( *it ).m_strName == "start" )
+                start = atoi( ( *it ).m_strValue.c_str() );
+            else if ( ( *it ).m_strName == "end" )
+                end = atoi( ( *it ).m_strValue.c_str() );
+        }
+    }
+    else if ( name == "TEXT" )
+    {
+        KOMLParser::parseTag( tag.c_str(), name, lst );
+        vector<KOMLAttrib>::const_iterator it = lst.begin();
+        for( ; it != lst.end(); it++ )
+        {
+            if ( ( *it ).m_strName == "before" )
+                before = correctQString( ( *it ).m_strValue.c_str() );
+            else if ( ( *it ).m_strName == "after" )
+                after = correctQString( ( *it ).m_strValue.c_str() );
+        }
+    }
+    else if ( name == "DESCRIPT" )
+    {
+        KOMLParser::parseTag( tag.c_str(), name, lst );
+        vector<KOMLAttrib>::const_iterator it = lst.begin();
+        for( ; it != lst.end(); it++ )
+        {
+            if ( ( *it ).m_strName == "ref" )
+                parag = correctQString( ( *it ).m_strValue.c_str() );
+        }
     }
 
-    return fn;
+    makeText();
 }
-
-/*================================================================*/
-bool KWFootNote::load( const QDomElement& element )
-{
-    start = element.attribute( "start" ).toInt();
-    end = element.attribute( "end" ).toInt();
-    before = element.attribute( "before" );
-    after = element.attribute( "after" );
-    parag = element.attribute( "ref" );
-
-    // #### todo INTERNAL
-    
-    return TRUE;
-}
-
-// #### todo
-// void KWFootNote::load( string name, string tag, KOMLParser &parser, vector<KOMLAttrib>& lst )
-// {
-//     if ( name == "INTERNAL" )
-//     {
-// 	KOMLParser::parseTag( tag.c_str(), name, lst );
-// 	vector<KOMLAttrib>::const_iterator it = lst.begin();
-// 	for( ; it != lst.end(); it++ )
-// 	{
-// 	}
-
-// 	while ( parser.open( 0L, tag ) )
-// 	{
-// 	    KOMLParser::parseTag( tag.c_str(), name, lst );
-// 	    if ( name == "PART" )
-// 	    {
-// 		KOMLParser::parseTag( tag.c_str(), name, lst );
-// 		vector<KOMLAttrib>::const_iterator it = lst.begin();
-
-// 		KWFootNoteInternal *part = new KWFootNoteInternal;
-
-// 		for( ; it != lst.end(); it++ )
-// 		{
-// 		    if ( ( *it ).m_strName == "from" )
-// 			part->from = atoi( ( *it ).m_strValue.c_str() );
-// 		    else if ( ( *it ).m_strName == "to" )
-// 			part->to = atoi( ( *it ).m_strValue.c_str() );
-// 		    else if ( ( *it ).m_strName == "space" )
-// 			part->space = correctQString( ( *it ).m_strValue.c_str() );
-// 		}
-// 		parts.append( part );
-// 	    }
-// 	    else
-// 		cerr << "Unknown tag '" << tag << "' in INTERNAL" << endl;
-
-// 	    if ( !parser.close( tag ) )
-// 	    {
-// 		cerr << "ERR: Closing Child" << endl;
-// 		return;
-// 	    }
-// 	}
-//     }
-//     else if ( name == "RANGE" )
-//     {
-// 	KOMLParser::parseTag( tag.c_str(), name, lst );
-// 	vector<KOMLAttrib>::const_iterator it = lst.begin();
-// 	for( ; it != lst.end(); it++ )
-// 	{
-// 	    if ( ( *it ).m_strName == "start" )
-// 		start = atoi( ( *it ).m_strValue.c_str() );
-// 	    else if ( ( *it ).m_strName == "end" )
-// 		end = atoi( ( *it ).m_strValue.c_str() );
-// 	}
-//     }
-//     else if ( name == "TEXT" )
-//     {
-// 	KOMLParser::parseTag( tag.c_str(), name, lst );
-// 	vector<KOMLAttrib>::const_iterator it = lst.begin();
-// 	for( ; it != lst.end(); it++ )
-// 	{
-// 	    if ( ( *it ).m_strName == "before" )
-// 		before = correctQString( ( *it ).m_strValue.c_str() );
-// 	    else if ( ( *it ).m_strName == "after" )
-// 		after = correctQString( ( *it ).m_strValue.c_str() );
-// 	}
-//     }
-//     else if ( name == "DESCRIPT" )
-//     {
-// 	KOMLParser::parseTag( tag.c_str(), name, lst );
-// 	vector<KOMLAttrib>::const_iterator it = lst.begin();
-// 	for( ; it != lst.end(); it++ )
-// 	{
-// 	    if ( ( *it ).m_strName == "ref" )
-// 		parag = correctQString( ( *it ).m_strValue.c_str() );
-// 	}
-//     }
-
-//     makeText();
-// }

@@ -9,7 +9,13 @@
 #include "footnote.h"
 #include "font.h"
 
+#include <komlMime.h>
+
+#include <strstream>
+#include <fstream>
+
 #include <unistd.h>
+#include <string.h>
 #include <stdio.h>
 #include <assert.h>
 
@@ -291,45 +297,131 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 }
 
 /*================================================================*/
-QDomElement KWParag::save( QDomDocument& doc )
+void KWParag::save( ostream &out )
 {
-    QDomElement e = doc.createElement( "P" );
-    e.setAttribute( "info", (int)info );
-    if ( hardBreak )
-	e.setAttribute( "hard-break", "1" );
-
-    QDomElement l = paragLayout->save( doc );
-    if ( l.isNull() )
-	return l;
-    e.appendChild( l );
-
-    QDomElement t = text.save( doc );
-    if ( t.isNull() )
-	return t;
-    e.appendChild( t );
-    
-    return e;
+    out << indent << "<TEXT>" << ( const char* )text.utf8() << "</TEXT>" << endl;
+    if ( info == PI_FOOTNOTE )
+	out << indent << "<NAME name=\"" << correctQString( paragName ).latin1() << "\"/>" << endl;
+    out << indent << "<INFO info=\"" << static_cast<int>( info ) << "\"/>" << endl;
+    out << indent << "<HARDBRK frame=\"" << static_cast<int>( hardBreak ) << "\"/>" << endl;
+    out << otag << "<FORMATS>" << endl;
+    text.saveFormat( out );
+    out << etag << "</FORMATS>" << endl;
+    out << otag << "<LAYOUT>" << endl;
+    paragLayout->save( out );
+    out << etag << "</LAYOUT>" << endl;
 }
 
 /*================================================================*/
-bool KWParag::load( const QDomElement& element )
+void KWParag::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 {
-    if ( element.hasAttribute( "hard-break" ) )
-	hardBreak = (bool)element.attribute( "hard-break" ).toInt();
-    info = (Info)element.attribute( "info" ).toInt();
+    string tag;
+    string name;
+    string tmp;
 
-    if ( !paragLayout->load( element.namedItem( "PARAGLAYOUT" ).toElement() ) )
-	return FALSE;
+    QString tmp2;
 
-    if ( !text.load( element.namedItem( "TEXT" ).toElement(), document ) )
-	return FALSE;
+    while ( parser.open( 0L, tag ) )
+    {
+	KOMLParser::parseTag( tag.c_str(), name, lst );
 
-    // #### replace with something better later
-    for ( unsigned int i = 0; i < text.size(); ++i )
+	// text
+	if ( name == "TEXT" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "value" )
+		    tmp2 = ( *it ).m_strValue.c_str();
+	    }
+
+	    if ( parser.readText( tmp ) )
+	    {
+		QString s = tmp.c_str();
+		if ( s.simplifyWhiteSpace().length() > 0 )
+		    tmp2 = tmp.c_str();
+	    }
+
+	    tmp2 = QString::fromUtf8( tmp2.latin1() );
+
+	    if ( text.size() == 1 && tmp2.length() > 0 ) text.remove( 0 );
+	    text.insert( text.size(), tmp2 );
+	}
+
+	// hard break
+	else if ( name == "HARDBRK" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "frame" )
+		    hardBreak = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+	    }
+	}
+
+	// info
+	else if ( name == "INFO" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "info" )
+		    info = static_cast<Info>( atoi( ( *it ).m_strValue.c_str() ) );
+	    }
+	}
+
+	// name
+	else if ( name == "NAME" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "name" )
+		    paragName = correctQString( ( *it ).m_strValue.c_str() );
+	    }
+	}
+
+	// format
+	else if ( name == "FORMATS" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+	    }
+	    text.loadFormat( parser, lst, document, frameSet );
+	}
+
+	// layout
+	else if ( name == "LAYOUT" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+	    }
+	    paragLayout->load( parser, lst );
+	}
+
+	else
+	    cerr << "Unknown tag '" << tag << "' in PARAGRAPH" << endl;
+
+	if ( !parser.close( tag ) )
+	{
+	    cerr << "ERR: Closing Child" << endl;
+	    return;
+	}
+    }
+
+    for ( unsigned int i = 0; i < text.size(); i++ )
+    {
 	if ( !text.data()[ i ].attrib )
-	    setFormat( i, 1, *paragLayout->getFormat() );
-    
-    return TRUE;
+	    setFormat( i, 1, paragLayout->getFormat() );
+    }
 }
 
 /*================================================================*/
@@ -373,11 +465,11 @@ void KWParag::applyStyle( QString _style )
 	    for ( unsigned int i = 0; i < getTextLen(); i++ )
 	    {
 		f2 = ( ( KWCharFormat* )text.data()[ i ].attrib )->getFormat();
-		if ( f2->getPTFontSize() == paragLayout->getFormat()->getPTFontSize() &&
-		     f2->getUserFont()->getFontName() == paragLayout->getFormat()->getUserFont()->getFontName() )
+		if ( f2->getPTFontSize() == paragLayout->getFormat().getPTFontSize() &&
+		     f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName() )
 		{
 		    f = *f2;
-		    f.setUserFont( pl->getFormat()->getUserFont() );
+		    f.setUserFont( pl->getFormat().getUserFont() );
 		    freeChar( text.data()[ i ], document );
 		    KWFormat *format = document->getFormatCollection()->getFormat( f );
 		    KWCharFormat *fm = new KWCharFormat( format );
@@ -394,10 +486,10 @@ void KWParag::applyStyle( QString _style )
 	    for ( unsigned int i = 0; i < getTextLen(); i++ )
 	    {
 		f2 = ( ( KWCharFormat* )text.data()[ i ].attrib )->getFormat();
-		if ( f2->getUserFont()->getFontName() == paragLayout->getFormat()->getUserFont()->getFontName() )
+		if ( f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName() )
 		{
 		    f = *f2;
-		    f.setUserFont( pl->getFormat()->getUserFont() );
+		    f.setUserFont( pl->getFormat().getUserFont() );
 		    freeChar( text.data()[ i ], document );
 		    KWFormat *format = document->getFormatCollection()->getFormat( f );
 		    KWCharFormat *fm = new KWCharFormat( format );
@@ -414,11 +506,11 @@ void KWParag::applyStyle( QString _style )
 	    for ( unsigned int i = 0; i < getTextLen(); i++ )
 	    {
 		f2 = ( ( KWCharFormat* )text.data()[ i ].attrib )->getFormat();
-		if ( f2->getPTFontSize() == paragLayout->getFormat()->getPTFontSize() &&
-		     f2->getUserFont()->getFontName() == paragLayout->getFormat()->getUserFont()->getFontName() )
+		if ( f2->getPTFontSize() == paragLayout->getFormat().getPTFontSize() &&
+		     f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName() )
 		{
-		    QColor c = paragLayout->getFormat()->getColor();
-		    f = *pl->getFormat();
+		    QColor c = paragLayout->getFormat().getColor();
+		    f = pl->getFormat();
 		    f.setColor( c );
 		    freeChar( text.data()[ i ], document );
 		    KWFormat *format = document->getFormatCollection()->getFormat( f );
@@ -436,10 +528,10 @@ void KWParag::applyStyle( QString _style )
 	    for ( unsigned int i = 0; i < getTextLen(); i++ )
 	    {
 		f2 = ( ( KWCharFormat* )text.data()[ i ].attrib )->getFormat();
-		if ( f2->getUserFont()->getFontName() == paragLayout->getFormat()->getUserFont()->getFontName() )
+		if ( f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName() )
 		{
-		    QColor c = paragLayout->getFormat()->getColor();
-		    f = *pl->getFormat();
+		    QColor c = paragLayout->getFormat().getColor();
+		    f = pl->getFormat();
 		    f.setColor( c );
 		    freeChar( text.data()[ i ], document );
 		    KWFormat *format = document->getFormatCollection()->getFormat( f );
@@ -449,18 +541,15 @@ void KWParag::applyStyle( QString _style )
 	    }
 	}
 
-	if ( !document->getApplyStyleTemplate() & KWordDocument::U_COLOR ) {
-	    const QColor c = paragLayout->getFormat()->getColor();
-	    KWFormat f( document );
-	    f = *pl->getFormat();
-	    f.setColor( c );
-	    pl->setFormat( f );
-	} else {
-	    const QColor c = tmp->getFormat()->getColor();
-	    KWFormat f( document );
-	    f = *pl->getFormat();
-	    f.setColor( c );
-	    pl->setFormat( f );
+	if ( !document->getApplyStyleTemplate() & KWordDocument::U_COLOR )
+	{
+	    QColor c = paragLayout->getFormat().getColor();
+	    pl->getFormat().setColor( c );
+	}
+	else
+	{
+	    QColor c = tmp->getFormat().getColor();
+	    pl->getFormat().setColor( c );
 	}
 
 	if ( !document->getApplyStyleTemplate() & KWordDocument::U_TABS )
@@ -515,10 +604,10 @@ void KWParag::replace( int _pos, int _len, QString _text, KWFormat &_format )
 /*================================================================*/
 void KWParag::correctFormat( KWParag *newParag, KWParag *oldParag )
 {
-    const KWFormat &pfOld = *oldParag->getParagLayout()->getFormat();
-    const KWFormat &pfNew = *newParag->getParagLayout()->getFormat();
+    KWFormat &pfOld = oldParag->getParagLayout()->getFormat();
+    KWFormat &pfNew = newParag->getParagLayout()->getFormat();
     KWFormat nf;
-
+    
     for ( unsigned int i = 0; i < oldParag->getTextLen(); ++i ) {
 	KWChar c = oldParag->getKWString()->data()[ i ];
 	KWFormat *f = 0;
@@ -530,7 +619,7 @@ void KWParag::correctFormat( KWParag *newParag, KWParag *oldParag )
 	    case ID_KWCharFootNote:
 		f = dynamic_cast<KWCharFootNote*>( c.attrib )->getFormat();
 		break;
-	    default:
+	    default: 
 		break;
 	    }
 	    continue;

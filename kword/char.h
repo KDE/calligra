@@ -11,11 +11,11 @@
 #include <qstring.h>
 #include <qregexp.h>
 #include <qcstring.h>
-#include <qdom.h>
+
+#include <iostream>
 
 class KWordDocument;
 class KWTextFrameSet;
-class KWString;
 
 enum ClassIDs {ID_KWCharNone = 0, ID_KWCharFormat = 1, ID_KWCharImage = 2, ID_KWCharTab = 3, ID_KWCharVariable = 4,
                ID_KWCharFootNote = 5};
@@ -35,14 +35,8 @@ public:
     virtual bool operator==( const KWCharAttribute &_attrib )
     { return classId == static_cast<KWCharAttribute>( _attrib ).classId; }
 
-    virtual QDomElement save( QDomDocument& ) { return QDomElement(); }
-    // virtual bool load( const QDomElement&, KWordDocument* ) { return FALSE; }
+    virtual void save( ostream & ) {}
 
-    /**
-      * Poor mans RTTI.
-      */
-    virtual isCharFormat() { return FALSE; }
-    
 protected:
     int classId;
 
@@ -67,17 +61,10 @@ public:
         return ( classId == _attrib.classId &&
                  ( format ) && *format == *_attrib.format );
     }
-    virtual bool operator!=( const KWCharFormat &_attrib ) {
-        return ( format && *format != *_attrib.format );
-    }
 
-    virtual QDomElement save( QDomDocument& );
-    // virtual bool load( const QDomElement&, KWordDocument* );
+    virtual void save( ostream &out )
+    { format->save( out ); }
 
-    virtual isCharFormat() { return TRUE; }
-    
-    static bool load( const QDomElement&, KWordDocument*, KWString* );
-    
 protected:
     KWFormat *format;
 
@@ -98,9 +85,8 @@ public:
     { return image; }
     virtual void setImage( KWImage *_image )
     { image = _image; }
-
-    virtual QDomElement save( QDomDocument& );
-    virtual bool load( const QDomElement&, KWordDocument* );
+    virtual void save( ostream &out )
+    { image->save( out ); }
 
 protected:
     KWImage *image;
@@ -116,8 +102,6 @@ class KWCharTab : public KWCharAttribute
 public:
     KWCharTab() { classId = ID_KWCharTab; }
 
-    virtual QDomElement save( QDomDocument& );
-    virtual bool load( const QDomElement&, KWordDocument* );
 };
 
 /******************************************************************/
@@ -127,7 +111,6 @@ public:
 class KWCharVariable : public KWCharFormat
 {
 public:
-    KWCharVariable() : KWCharFormat() { classId = ID_KWCharVariable; var = 0; }
     KWCharVariable( KWVariable *_var ) : KWCharFormat() { classId = ID_KWCharVariable; var = _var; }
     ~KWCharVariable() { if ( var ) delete var; if ( format ) format->decRef(); format = 0L; }
 
@@ -135,8 +118,12 @@ public:
 
     KWVariable *getVar() { return var; }
 
-    virtual QDomElement save( QDomDocument& );
-    virtual bool load( const QDomElement&, KWordDocument* );
+    virtual void save( ostream &out ) {
+        var->save( out );
+        out << otag << "<FRMAT>" << endl;
+        KWCharFormat::save( out );
+        out << etag << "</FRMAT>" << endl;
+    }
 
 protected:
     KWVariable *var;
@@ -150,7 +137,6 @@ protected:
 class KWCharFootNote : public KWCharFormat
 {
 public:
-    KWCharFootNote() : KWCharFormat() { fn = 0; classId = ID_KWCharFootNote; }
     KWCharFootNote( KWFootNote *_fn ) : KWCharFormat() { fn = _fn; classId = ID_KWCharFootNote; }
     ~KWCharFootNote() { if ( fn ) delete fn; if ( format ) format->decRef(); format = 0L; }
 
@@ -158,17 +144,17 @@ public:
 
     KWFootNote *getFootNote() { return fn; }
 
-    virtual QDomElement save( QDomDocument& );
-    virtual bool load( const QDomElement&, KWordDocument* );
+    virtual void save( ostream &out ) {
+        fn->save( out );
+        out << otag << "<FRMAT>" << endl;
+        KWCharFormat::save( out );
+        out << etag << "</FRMAT>" << endl;
+    }
 
 protected:
     KWFootNote *fn;
 
 };
-
-/******************************************************************/
-/* Struct: KWChar                                                 */
-/******************************************************************/
 
 // Torben: Be prepared for unicode
 // Reggie: Now we support unicode :- ) )
@@ -222,9 +208,8 @@ public:
 
     QString toString();
     QString toString( unsigned int _pos, unsigned int _len );
-
-    QDomElement save( QDomDocument& doc );
-    bool load( const QDomElement& element, KWordDocument* );
+    void saveFormat( ostream &out );
+    void loadFormat( KOMLParser &parser, vector<KOMLAttrib> &lst, KWordDocument *_doc, KWTextFrameSet *_frameset );
 
     int find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole );
     int find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs, bool _wildcard = false );
@@ -233,8 +218,8 @@ public:
 
     KWordDocument *getDocument() { return doc; }
 
-    // QString decoded();
-    // QCString utf8( bool _decoded = true );
+    QString decoded();
+    QCString utf8( bool _decoded = true );
 
     void clear();
 
@@ -243,15 +228,15 @@ protected:
     void free( KWChar* _data, unsigned int _len );
     KWChar* copy( KWChar *_data, unsigned int _len );
     KWChar& copy( KWChar _c );
-    bool formatChanged( KWCharAttribute *a1, KWCharAttribute *a2 );
 
     unsigned int _len_;
     unsigned int _max_;
     KWChar* _data_;
     KWordDocument *doc;
+
 };
 
 void freeChar( KWChar& _char, KWordDocument *_doc );
-//ostream& operator<<( ostream &out, KWString &_string );
+ostream& operator<<( ostream &out, KWString &_string );
 
 #endif

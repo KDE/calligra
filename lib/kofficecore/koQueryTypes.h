@@ -39,19 +39,22 @@ namespace CORBA
 };
 
 /**
- * Represents an available component.
+ *  Represents an available component.
  */
 class KoComponentEntry
 {
+
 public:
+
   KoComponentEntry() { reference = 0; }
-  KoComponentEntry( const KoComponentEntry& );
+  KoComponentEntry( const KoComponentEntry& _entry );
+
   /**
    * Releases the @ref #reference.
    */
   virtual ~KoComponentEntry();
 
-  const KoComponentEntry& operator=( const KoComponentEntry& );
+  const KoComponentEntry& operator=( const KoComponentEntry& _entry );
 
   QString comment;
   QString name;
@@ -60,6 +63,7 @@ public:
   QStringList repoID;
   QPixmap miniIcon;
   QPixmap icon;
+
   /**
    * Reference to the components factory. It is a virtual reference.
    * That means that the component is started when the
@@ -71,100 +75,111 @@ public:
 };
 
 /**
- * Represents an available koffice component
- * that supports the document interface.
+ *  Represents an available koffice component
+ *  that supports the document interface.
  */
 class KoDocumentEntry : public KoComponentEntry
 {
+
 public:
+
   KoDocumentEntry() { }
-  KoDocumentEntry( const KoComponentEntry& _e );
-  KoDocumentEntry( const KoDocumentEntry& _e );
+  KoDocumentEntry( const KoComponentEntry& _entry );
+  KoDocumentEntry( const KoDocumentEntry& _entry );
   ~KoDocumentEntry() { }
 
-  const KoDocumentEntry& operator=( const KoDocumentEntry& );
+  const KoDocumentEntry& operator=( const KoDocumentEntry& _entry );
 
   /**
-   * Mimetypes which this document can handle.
+   *  Mimetypes which this document can handle.
    */
   QStringList mimeTypes;
 
   /**
-   * @return TRUE if the document can handle the
-   *         requested mimetype.
+   *  @return TRUE if the document can handle the requested mimetype.
    */
-  bool supportsMimeType( const char *_m ) const { return ( mimeTypes.find( _m ) != mimeTypes.end() ); }
+  bool supportsMimeType( const char* _mimetype ) const
+  { return ( mimeTypes.find( _mimetype ) != mimeTypes.end() ); }
 
   /**
-   * Uses the factory of the component (@ref #reference) to create
-   * a document. If that is not possible, the user gets an error dialog
-   * and 0 is returned.
+   *  Uses the factory of the component (@ref #reference) to create
+   *  a document. If that is not possible, the user gets an error dialog
+   *  and 0 is returned.
    */
   KOffice::Document_ptr createDoc();
 
   /**
-   * This function will query KDED to find all available components.
+   *  This function will query KDED to find all available components.
    *
-   * @param _constr is a constraint expression as used by KDEDs trader interface.
-   *                You can use it to set additional restrictions on the available
-   *                components.
-   * @param _count is the amount of query results we are interested in.
+   *  @param _constr is a constraint expression as used by KDEDs trader interface.
+   *                 You can use it to set additional restrictions on the available
+   *                 components.
+   *  @param _count  is the amount of query results we are interested in.
    */
-  static QValueList<KoDocumentEntry> query( const char *_constr = "", int _count = 1 );
+  static QValueList<KoDocumentEntry> query( const char* _constr = "", int _count = 1 );
+
   /**
-   * This is only a convenience function.
+   *  This is only a convenience function.
    *
-   * @return a document entry for the KOffice component that supports
-   *         the requested mimetype and fits the user best.
+   *  @return a document entry for the KOffice component that supports
+   *          the requested mimetype and fits the user best.
    */
   static KoDocumentEntry queryByMimeType( const char *mimetype );
 };
 
 /**
- * Represents an available filter.
+ *  Represents an available filter.
  */
 class KoFilterEntry : public KoComponentEntry
 {
+
 public:
+
   KoFilterEntry() { }
-  KoFilterEntry( const KoComponentEntry& _e );
-  KoFilterEntry( const KoFilterEntry& _e );
+  KoFilterEntry( const KoComponentEntry& _entry );
+  KoFilterEntry( const KoFilterEntry& _entry );
   ~KoFilterEntry() { }
 
   /**
-   * The imported mimetype.
+   *  The imported mimetype.
    */
   QString import;
+
   /**
-   * Comment regarding the imported data format.
+   *  Comment regarding the imported data format.
    */
   QString importDescription;
+
   /**
-   * The exported mimetype.
+   *    The exported mimetype.
    */
   QString export;
+
   /**
-   * Comment regarding the exported data format.
+   *  Comment regarding the exported data format.
    */
   QString exportDescription;
 
   /**
-   * @return TRUE if the filter can imports the requested mimetype.
+   *  @return TRUE if the filter can imports the requested mimetype.
    */
-  bool imports( const char *_m ) const { return ( import.find( _m ) != -1 ); }
+  bool imports( const char* _mimetype ) const
+  { return ( import.find( _mimetype ) != -1 ); }
+  
   /**
-   * @return TRUE if the filter can exports the requested mimetype.
+   *  @return TRUE if the filter can exports the requested mimetype.
    */
-  bool exports( const char *_m ) const { return ( export.find( _m ) != -1 ); }
+  bool exports( const char *_m ) const
+  { return ( export.find( _m ) != -1 ); }
 
   /**
-   * This function will query KDED to find all available filters.
+   *  This function will query KDED to find all available filters.
    *
-   * @param _constr is a constraint expression as used by KDEDs trader interface.
-   *                You can use it to set additional restrictions on the available
-   *                components.
+   *  @param _constr is a constraint expression as used by KDEDs trader interface.
+   *                 You can use it to set additional restrictions on the available
+   *                 components.
    */
-  static QValueList<KoFilterEntry> query( const char *_constr = "", int _count = 100 );
+  static QValueList<KoFilterEntry> query( const char* _constr = "", int _count = 100 );
 };
 
 #endif

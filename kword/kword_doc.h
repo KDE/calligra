@@ -27,6 +27,8 @@ class KWPictureFrameSet;
 #include <koPageLayoutDia.h>
 #include <koQueryTypes.h>
 
+#include <iostream>
+
 #include "kword_view.h"
 #include "fc.h"
 #include "parag.h"
@@ -47,7 +49,6 @@ class KWPictureFrameSet;
 #include <qstringlist.h>
 #include <qrect.h>
 #include <qdict.h>
-#include <qdom.h>
 
 /******************************************************************/
 /* Class: KWordChild						  */
@@ -105,9 +106,9 @@ public:
     virtual CORBA::Boolean initDoc();
 
     // C++
-    virtual bool loadXML( const QDomDocument&, KOStore::Store_ptr _store );
+    virtual bool loadXML( KOMLParser& parser, KOStore::Store_ptr _store );
     virtual bool loadChildren( KOStore::Store_ptr _store );
-    virtual bool save( QIODevice* dev, KOStore::Store_ptr, const char* format );
+    virtual bool save( ostream& out, const char *_format );
     virtual bool completeSaving( KOStore::Store_ptr _store );
 
     virtual bool loadTemplate( const char *_url );
@@ -170,7 +171,7 @@ public:
     { return defaultUserFont;  }	
     KWParagLayout *getDefaultParagLayout()
     { return defaultParagLayout; }
-
+    
     QList<KWUserFont> userFontList;
 
     QList<KWDisplayFont> displayFontList;
@@ -223,19 +224,19 @@ public:
     { pages = _pages;  }
     KWFormatCollection *getFormatCollection()
     { return &formatCollection; }
-
-    KWImageCollection *getImageCollection()
+    
+    KWImageCollection *getImageCollection()  
     { return &imageCollection; }
-
+    
     void insertPicture( QString _filename, KWPage *_paperWidget );
 
     void setSelStart( KWFormatContext &_fc )
     { selStart = _fc; }
-
+    
     KWFormatContext *getSelStart()
     { return &selStart;  }
     void setSelEnd( KWFormatContext &_fc )
-    { selEnd = _fc; }
+    { selEnd = _fc; } 
 
     KWFormatContext *getSelEnd()
     { return &selEnd; }
@@ -244,7 +245,7 @@ public:
 			KWFormatContext *_selStart = 0L, KWFormatContext *_selEnd = 0L );
     void setSelection( bool _has )
     { hasSelection = _has; }
-
+    
     bool has_selection()
     { return hasSelection; }
 
@@ -373,8 +374,8 @@ protected:
     virtual void draw( QPaintDevice*, CORBA::Long _width, CORBA::Long _height,
 		       CORBA::Float _scale );
 
-    bool loadFrameSets( const QDomElement &frameset );
-    bool loadStyleTemplates( const QDomElement &style );
+    void loadFrameSets( KOMLParser&, vector<KOMLAttrib>& );
+    void loadStyleTemplates( KOMLParser&, vector<KOMLAttrib>& );
 
     void addStyleTemplate( KWParagLayout *pl );
 

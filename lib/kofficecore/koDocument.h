@@ -26,21 +26,16 @@ class KoDocumentChildPicture;
 #include "koffice.h"
 
 #include <opDocument.h>
+#include <komlParser.h>
+#include <koStore.h>
+
+#include <vector>
+#include <string>
 
 #include <qrect.h>
+#include <qpicture.h>
 #include <qstring.h>
-#include <qcstring.h>
-#include <qvaluelist.h>
-#include <qdom.h>
 
-class QIODevice;
-class QPicture;
-
-namespace KOStore
-{
-  class Store;
-  typedef Store *Store_ptr;
-};
 
 class KoDocument : virtual public OPDocumentIf,
 		           virtual public KOffice::Document_skel
@@ -100,17 +95,20 @@ protected:
    *
    *  @param _store may be 0L.
    */
-  virtual bool load( QByteArray& buffer, KOStore::Store_ptr _store );
+  virtual bool load( istream& in, KOStore::Store_ptr _store );
   /**
    *  @param _stream       The stream, from which the binary should be read.
+   *  @param _randomaccess Tells wether input stream is a serial stream
+   *                       or a random access stream, usually a @ref ifstream
+   *                       or a @ref istringstream.
    *  @param _store        Pointer to a Store object. May be 0L.
    */
-  virtual bool loadBinary( QByteArray&, KOStore::Store_ptr /*_store*/ )
+  virtual bool loadBinary( istream& , bool /*_randomaccess*/, KOStore::Store_ptr /*_store*/ )
   { kdebug( KDEBUG_ERROR, 30003, "KoDocument::loadBinary not implemented" ); return false; };
   /**
    *  This function loads a XML document. It is called by @ref KoDocument#load.
    */
-  virtual bool loadXML( const QDomDocument&, KOStore::Store_ptr  )
+  virtual bool loadXML( KOMLParser&, KOStore::Store_ptr  )
   { kdebug( KDEBUG_ERROR, 30003, "KoDocument::loadXML not implemented" ); return false; };
   /**
    *  You need to overload this function if your document may contain
@@ -146,10 +144,9 @@ protected:
   
   // C++
   /**
-   *  Save the entire document with all of its children. You have to
-   *  overload this function to implement saving.
+   *  Saves only an OBJECT tag for this document.
    */
-  virtual bool save( QIODevice*, KOStore::Store_ptr, const char* /* format */ )
+  virtual bool save( ostream& , const char * )
   { kdebug( KDEBUG_ERROR, 30003, "KoDocument::save not implemented" ); return false; };
   /**
    *  Usually you dont want to overload this function. It saves all
@@ -212,26 +209,24 @@ protected:
   class SimpleDocumentChild
   {
   public:
-    SimpleDocumentChild()
-    { }
-    SimpleDocumentChild( const SimpleDocumentChild& d )
-    {
-      m_vDoc = d.m_vDoc;
-      m_strURL = d.m_strURL;
-    }
     SimpleDocumentChild( KOffice::Document_ptr _doc, const char *_url )
     {
       m_vDoc = KOffice::Document::_duplicate( _doc );
       m_strURL = _url;
     }
-    QString url()
-    { return m_strURL; }
+    SimpleDocumentChild( const SimpleDocumentChild& _arg )
+    {
+      m_vDoc = const_cast<SimpleDocumentChild&>(_arg).document();
+      m_strURL = const_cast<SimpleDocumentChild&>(_arg).url();
+    }
+    const char* url()
+    { return m_strURL.c_str(); }
     KOffice::Document_ptr document()
     { return KOffice::Document::_duplicate( m_vDoc ); }
     
   protected:
     KOffice::Document_var m_vDoc;
-    QString m_strURL;
+    string m_strURL;
   };
   
   /**
@@ -239,7 +234,7 @@ protected:
    *  to fill this list. By default this list is empty and it is not
    *  automatically filled if new children are inserted.
    */
-  QValueList<SimpleDocumentChild> m_lstAllChildren;
+  list<SimpleDocumentChild> m_lstAllChildren;
 
   QString m_strURL;
   bool m_bModified;
@@ -248,9 +243,7 @@ protected:
 typedef KOMVar<KOffice::Document> KoDocument_ref;
 
 /**
- *  Holds an embedded object. If you want to handle embedded documents
- *  you should derived from this class. This class helps you to load/save
- *  the embedded document and to display it.
+ *  Holds an embedded object.
  */
 class KoDocumentChild
 {
@@ -270,30 +263,24 @@ public:
   virtual void setGeometry( const QRect& _rect );
 
   /**
-   *  Writes the <object> tag, but does NOT write the content of the
+   *  Writes the OBJECT tag, but does NOT write the content of the
    *  embedded documents. Saving the embedded documents themselves
    *  is done in @ref Document_impl. This function just stores information
    *  about the position and id of the embedded document.
    */
-  virtual QDomElement save( QDomDocument& );
+  virtual bool save( ostream& out );
   /**
-   *  Parses the <object> tag. This does NOT mean creating the child documents.
+   *  Parses the OBJECT tag. This does NOT mean creating the child documents.
    *  AFTER the 'parser' finished parsing, you must use @ref #loadDocument
    *  or @ref #loadDocumentMimePart to actually load the embedded documents.
    */
-  virtual bool load( const QDomElement& );
+  virtual bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
   /**
-   *  Actually loads the embedded document from the disk/net or from the store,
-   *  depending in @ref #m_strURL. This function is called for all children
-   *  once @ref KoDocument finished loading its own data.
+   *  Actually loads the document from the disk/net or from the store,
+   *  depending in @ref #m_strURL
    */
   virtual bool loadDocument( KOStore::Store_ptr, const char *_format );
 
-  /**
-   *  @return TRUE if the child is stored in some external file.
-   *          That means it needs no @ref #KoStore to be saved together
-   *          with its parent document.
-   */
   virtual bool isStoredExtern();
   
   /**
@@ -303,20 +290,12 @@ public:
    */
   virtual QPicture* draw( float _scale = 1.0, bool _force_update = false );
 
-  /**
-   * Creates a new view of the child document. One can create multiple
-   * views for one child document.
-   */
   virtual KOffice::View_ptr createView( KOffice::MainWindow_ptr _main );
   
 protected:
-  /**
-   * CORBA reference to the embedded document.
-   */
   KoDocument_ref m_rDoc;
   /**
-   *  The geometry is assumed to be always unzoomed. Its coordinates
-   *  are absolute with regard to the upper left corner of the parent document.
+   *  The geometry is assumed to be always unzoomed.
    */
   QRect m_geometry;
   /**
@@ -326,29 +305,14 @@ protected:
    *  Those documents are usually stored in a compound document later.
    */
   QString m_strURL;
-  /**
-   *  Mimetype of the embedded document.
-   */
   QString m_strMimeType;
 
-  /**
-   * A cache for the picture.
-   */
   QPicture* m_pPicture;
-  /**
-   * Scaling of the cached QPicture.
-   */
   float m_pictureScale;
   
-  /**
-   * Tells wether the child is able to print itself.
-   */
   bool m_bHasPrintingExtension;
 };
 
-/**
- * @deprecated.
- */
 class KoDocumentChildPicture
 {
 public:

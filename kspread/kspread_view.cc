@@ -192,12 +192,9 @@ void KSpreadView::init()
    * Create views for child documents
    ******************************************************/
 
-  if ( m_pTable )
-  {
-    QListIterator<KSpreadChild> it = m_pTable->childIterator();
-    for( ; it.current(); ++it )
-      slotInsertChild( it.current() );
-  }
+  QListIterator<KSpreadChild> it = m_pTable->childIterator();
+  for( ; it.current(); ++it )
+    slotInsertChild( it.current() );
 }
 
 KSpreadView::~KSpreadView()
@@ -1020,6 +1017,8 @@ void KSpreadView::slotChangeTable( const QString& _name )
       return;
     }
   }
+
+  warning("Unknown table '%s'\n",_name);
 }
 
 void KSpreadView::slotScrollToFirstTable()
@@ -1915,6 +1914,7 @@ void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )
 
   m_pCanvas->showMarker();
 }
+
 
 /**********************************************************
  *

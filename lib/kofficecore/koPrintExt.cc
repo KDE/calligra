@@ -19,34 +19,60 @@
 
 #include "koPrintExt.h"
 
+#include <strstream>
+
 #include <kdebug.h>
 
-#include <qpicture.h>
-#include <qpainter.h>
+#include <komlMime.h>
 
 KoPrintExt::KoPrintExt()
 {
+  m_pPicture = 0L;
 }
 
-KOffice::Print::Picture* KoPrintExt::picture( CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale )
+QPicture* KoPrintExt::picture()
+{
+  if ( m_pPicture == 0L )
+    m_pPicture = new QPicture;
+  
+  return m_pPicture;
+}
+
+char* KoPrintExt::encodedMetaFile( CORBA::Long _width, CORBA::Long _height,
+				   CORBA::Float _scale )
+{
+  if ( m_pPicture == 0L )
+    draw( _width, _height, _scale );
+  
+  int size = m_pPicture->size() * 4 / 3 + 10;
+  char *p = CORBA::string_alloc( size );
+
+  {
+    // Create a 7bit ASCII string of the image
+    ostrstream str( p, size );
+    {      
+      Base64OStream out( str );
+      out.write( m_pPicture->data(), m_pPicture->size() );
+    }
+    str.put( 0 );
+  }
+
+  // Save some memory
+  delete m_pPicture;
+  m_pPicture = 0L;
+
+  return p;
+}
+
+void KoPrintExt::draw( CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale )
 {
   // Create picture
-  QPicture *p = new QPicture;
+  QPicture *p = picture();
   // Paint to it
   draw( p, _width, _height, _scale );
-
-  uint size = p->size();
-  KOffice::Print::Picture* data = new KOffice::Print::Picture;
-  data->length( size );
-  
-  const char* d = p->data();
-  for( CORBA::ULong i = 0; i < size; ++i )
-    data[i] = *d++;
-
-  delete p;
-
-  return data;
+  kdebug( KDEBUG_INFO, 30003, "QPicture has %i bytes", p->size() );
 }
+
 
 
 

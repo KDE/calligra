@@ -23,6 +23,7 @@
 #include <qpicture.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
+#include <kstddirs.h>
 
 #include <kapp.h>
 
@@ -147,7 +148,7 @@ void KPAutoformObject::save( ostream& out )
     out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
     out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
 
-    QString afDir = qstrdup( KApplication::kde_datadir() );
+    QString afDir = locate( "data", "." );
     afDir += "/kpresenter/autoforms/";
     int len = afDir.length();
     QString str = qstrdup( filename );
@@ -351,7 +352,7 @@ void KPAutoformObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                 if ( ( *it ).m_strName == "value" )
                 {
                     filename = ( *it ).m_strValue.c_str();
-                    QString afDir = qstrdup( KApplication::kde_datadir() );
+                    QString afDir = locate( "data", "." );
                     afDir += "/kpresenter/autoforms/";
                     filename.insert( 0, qstrdup( afDir ) );
                     atfInterp.load( filename );

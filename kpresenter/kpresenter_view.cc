@@ -1668,7 +1668,7 @@ void KPresenterView::backOk( bool takeGlobal )
 /*================== autoform chosen =============================*/
 void KPresenterView::afChooseOk( const QString & c )
 {
-    QString afDir = kapp->kde_datadir();
+    QString afDir = locate( "data", "." );
     QFileInfo fileInfo( c );
     QString fileName( afDir + "/kpresenter/autoforms/" + fileInfo.dirPath( false ) + "/" + fileInfo.baseName() + ".atf" );
 

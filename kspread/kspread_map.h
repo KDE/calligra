@@ -23,10 +23,12 @@
 class KSpreadMap;
 class KSpreadDoc;
 
+#include <iostream.h>
+#include <komlParser.h>
+
 #include <qlist.h>
 #include <qstring.h>
 #include <qintdict.h>
-#include <qdom.h>
 
 #include "kspread.h"
 #include "kspread_table.h"
@@ -52,8 +54,8 @@ public:
   virtual KSpread::Table_ptr table( const char* name );
   
   // C++
-  virtual QDomElement save( QDomDocument& doc );
-  virtual bool loadXML( const QDomElement& mymap );
+  virtual bool save( ostream& );
+  virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
   virtual bool loadChildren( KOStore::Store_ptr _store );
   
   void makeChildList( KOffice::Document_ptr _doc, const char *_path );

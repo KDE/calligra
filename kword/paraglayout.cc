@@ -2,7 +2,11 @@
 #include "kword_doc.h"
 #include "defs.h"
 #include "kword_utils.h"
-#include <koApplication.h>
+
+#include <komlMime.h>
+
+#include <strstream>
+#include <fstream>
 
 #include <unistd.h>
 
@@ -15,8 +19,7 @@
 
 /*================================================================*/
 KWParagLayout::KWParagLayout( KWordDocument *_doc, bool _add, QString _name )
-    : format( 0 ), paragFootOffset(), paragHeadOffset(),
-      firstLineLeftIndent(), leftIndent(), lineSpacing()
+    : format( _doc ), paragFootOffset(), paragHeadOffset(), firstLineLeftIndent(), leftIndent(), lineSpacing()
 {
     flow = LEFT;
     counter.counterType = CT_NONE;
@@ -43,16 +46,14 @@ KWParagLayout::KWParagLayout( KWordDocument *_doc, bool _add, QString _name )
     bottom.style = SOLID;
     bottom.ptWidth = 0;
 
+    format.setDefaults( _doc );
+
     document = _doc;
     if ( _add )
 	document->paragLayoutList.append( this );
 
     tabList.setAutoDelete( false );
     specialTabs = false;
-
-    KWFormat f( _doc );
-    f.setDefaults( document );
-    format = _doc->getFormatCollection()->getFormat( f );
 }
 
 /*================================================================*/
@@ -89,7 +90,7 @@ KWParagLayout& KWParagLayout::operator=( const KWParagLayout &_layout )
     top = _layout.top;
     bottom = _layout.bottom;
 
-    setFormat( *_layout.format );
+    format = _layout.format;
 
     tabList.setAutoDelete( true );
     tabList.clear();
@@ -110,176 +111,415 @@ void KWParagLayout::setFollowingParagLayout( const QString& _name )
 /*================================================================*/
 void KWParagLayout::setFormat( const KWFormat &_f )
 {
-    if ( format )
-	format->decRef();
-    format = 0;
-    format = document->getFormatCollection()->getFormat( _f );
+    format = _f;
 }
 
 /*================================================================*/
-QDomElement KWParagLayout::save( QDomDocument& doc )
+void KWParagLayout::save( ostream &out )
 {
-    QDomElement layout = doc.createElement( "PARAGLAYOUT" );
-    layout.setAttribute( "name", name );
-    layout.setAttribute( "following-parag-layout", followingParagLayout );
-    layout.setAttribute( "flow", (int)flow );
-    layout.setAttribute( "head-offset-mm", (int)paragHeadOffset.mm() );
-    layout.setAttribute( "foot-offset-mm", (int)paragFootOffset.mm() );
-    layout.setAttribute( "head-offset-pt", (int)paragHeadOffset.pt() );
-    layout.setAttribute( "foot-offset-pt", (int)paragFootOffset.pt() );
-    layout.setAttribute( "head-offset-inch", (int)paragHeadOffset.inch() );
-    layout.setAttribute( "foot-offset-inch", (int)paragFootOffset.inch() );
-    layout.setAttribute( "first-line-left-indent-mm", (int)firstLineLeftIndent.mm() );
-    layout.setAttribute( "first-line-left-indent-inch", (int)firstLineLeftIndent.inch() );
-    layout.setAttribute( "first-line-left-indent-pt", (int)firstLineLeftIndent.pt() );
-    layout.setAttribute( "left-indent-mm", (int)leftIndent.mm() );
-    layout.setAttribute( "left-indent-inch", (int)leftIndent.inch() );
-    layout.setAttribute( "left-indent-pt", (int)leftIndent.pt() );
-    layout.setAttribute( "line-spacing-mm", (int)lineSpacing.mm() );
-    layout.setAttribute( "line-spacing-inch", (int)lineSpacing.inch() );
-    layout.setAttribute( "line-spacing-pt", (int)lineSpacing.pt() );
+    out << indent << "<NAME value=\"" << correctQString( name ).latin1() << "\"/>" << endl;
+    out << indent << "<FOLLOWING name=\"" << correctQString( followingParagLayout ).latin1() << "\"/>" << endl;
+    out << indent << "<FLOW value=\"" << static_cast<int>( flow ) << "\"/>" << endl;
+    out << indent << "<OHEAD " << paragHeadOffset << "/>" << endl;
+    out << indent << "<OFOOT " << paragFootOffset << "/>" << endl;
+    out << indent << "<IFIRST " << firstLineLeftIndent << "/>" << endl;
+    out << indent << "<ILEFT " << leftIndent << "/>" << endl;
+    out << indent << "<LINESPACE " << lineSpacing << "/>" << endl;
+    out << indent << "<COUNTER type=\"" << static_cast<int>( counter.counterType ) << "\" depth=\"" << counter.counterDepth
+	<< "\" bullet=\"" << static_cast<unsigned short>( counter.counterBullet.unicode() ) << "\" start=\""
+	<< correctQString( counter.startCounter ).latin1() << "\" numberingtype=\""
+	<< static_cast<int>( counter.numberingType ) << "\" lefttext=\"" << correctQString( counter.counterLeftText ).latin1() << "\" righttext=\""
+	<< correctQString( counter.counterRightText ).latin1() << "\" bulletfont=\"" << correctQString( counter.bulletFont ).latin1() << "\"/>" << endl;
+    out << indent << "<LEFTBORDER red=\"" << left.color.red() << "\" green=\"" << left.color.green() << "\" blue=\""
+	<< left.color.blue() << "\" style=\"" << static_cast<int>( left.style ) << "\" width=\"" << left.ptWidth << "\"/>" << endl;
+    out << indent << "<RIGHTBORDER red=\"" << right.color.red() << "\" green=\"" << right.color.green() << "\" blue=\""
+	<< right.color.blue() << "\" style=\"" << static_cast<int>( right.style ) << "\" width=\"" << right.ptWidth << "\"/>" << endl;
+    out << indent << "<TOPBORDER red=\"" << top.color.red() << "\" green=\"" << top.color.green() << "\" blue=\""
+	<< top.color.blue() << "\" style=\"" << static_cast<int>( top.style ) << "\" width=\"" << top.ptWidth << "\"/>" << endl;
+    out << indent << "<BOTTOMBORDER red=\"" << bottom.color.red() << "\" green=\"" << bottom.color.green() << "\" blue=\""
+	<< bottom.color.blue() << "\" style=\"" << static_cast<int>( bottom.style ) << "\" width=\"" << bottom.ptWidth << "\"/>" << endl;
+    out << otag << "<FORMAT>" << endl;
+    format.save( out );
+    out << etag << "</FORMAT> " << endl;
 
-    QDomElement c = doc.createElement( "COUNTER" );
-    layout.appendChild( c );
-    c.setAttribute( "type", (int)counter.counterType );
-    c.setAttribute( "depth", (int)counter.counterDepth );
-    c.setAttribute( "bullet", (int)counter.counterBullet.unicode() );
-    c.setAttribute( "start", counter.startCounter );
-    c.setAttribute( "numbering-type", (int)counter.numberingType );
-    c.setAttribute( "left-text", counter.counterLeftText );
-    c.setAttribute( "right-text", counter.counterRightText );
-    c.setAttribute( "bullet-font", counter.bulletFont );
-
-    QDomElement b = doc.createElement( "LEFTBORDER" );
-    b.setAttribute( "color", colorToName( left.color ) );
-    b.setAttribute( "width", (int)left.ptWidth );
-    b.setAttribute( "style", (int)left.style );
-    layout.appendChild( b );
-
-    b = doc.createElement( "RIGHTBORDER" );
-    b.setAttribute( "color", colorToName( right.color ) );
-    b.setAttribute( "width", (int)right.ptWidth );
-    b.setAttribute( "style", (int)right.style );
-    layout.appendChild( b );
-
-    b = doc.createElement( "TOPBORDER" );
-    b.setAttribute( "color", colorToName( top.color ) );
-    b.setAttribute( "width", (int)top.ptWidth );
-    b.setAttribute( "style", (int)top.style );
-    layout.appendChild( b );
-
-    b = doc.createElement( "BOTTOMBORDER" );
-    b.setAttribute( "color", colorToName( bottom.color ) );
-    b.setAttribute( "width", (int)bottom.ptWidth );
-    b.setAttribute( "style", (int)bottom.style );
-    layout.appendChild( b );
-
-    // TOOD: Use only the id of the format
-    QDomElement f = format->save( doc );
-    if ( f.isNull() )
-	return f;
-    layout.appendChild( f );
-
-    QDomElement tabs = doc.createElement( "TABULATORS" );
-    layout.appendChild( tabs );
     for ( unsigned int i = 0; i < tabList.count(); i++ )
-    {
-	QDomElement tab = doc.createElement( "TABULATOR" );
-	if ( tab.isNull() )
-	    return tab;
-	tabs.appendChild( tab );
-	tab.setAttribute( "pos-mm", tabList.at( i )->mmPos );
-	tab.setAttribute( "pos-pt", tabList.at( i )->ptPos );
-	tab.setAttribute( "pos-inch", tabList.at( i )->inchPos );
-	tab.setAttribute( "type", (int)tabList.at( i )->type );
-    }
-
-    return layout;
+	out << indent << "<TABULATOR mmpos=\"" << tabList.at( i )->mmPos << "\" ptpos=\"" << tabList.at( i )->ptPos
+	    << "\" inchpos=\"" << tabList.at( i )->inchPos << "\" type=\"" << static_cast<int>( tabList.at( i )->type ) << "\"/>" << endl;
 }
 
 /*================================================================*/
-bool KWParagLayout::load( const QDomElement& layout )
+void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 {
-    name = layout.attribute( "name" );
-    followingParagLayout = layout.attribute( "following-parag-layout" );
-    flow = (Flow)layout.attribute( "flow" ).toInt();
-    firstLineLeftIndent.setPT_MM_INCH( layout.attribute( "first-line-left-indent-pt" ).toInt(),
-				       layout.attribute( "first-line-left-indent-mm" ).toInt(),
-				       layout.attribute( "first-line-left-indent-inch" ).toInt() );
-    leftIndent.setPT_MM_INCH( layout.attribute( "left-indent-pt" ).toInt(),
-			      layout.attribute( "left-indent-mm" ).toInt(),
-			      layout.attribute( "left-indent-inch" ).toInt() );
-    lineSpacing.setPT_MM_INCH( layout.attribute( "line-spacing-pt" ).toInt(),
-			       layout.attribute( "line-spacing-mm" ).toInt(),
-			       layout.attribute( "line-spacing-inch" ).toInt() );
-    paragHeadOffset.setPT_MM_INCH( layout.attribute( "head-offset-pt" ).toInt(),
-				   layout.attribute( "head-offset-mm" ).toInt(),
-				   layout.attribute( "head-offset-inch" ).toInt() );
-    paragFootOffset.setPT_MM_INCH( layout.attribute( "foot-offset-pt" ).toInt(),
-				   layout.attribute( "foot-offset-mm" ).toInt(),
-				   layout.attribute( "foot-offset-inch" ).toInt() );
+    string tag;
+    string _name;
+    unsigned int pt;
+    float mm, inch;
 
+    while ( parser.open( 0L, tag ) )
+    {
+	KOMLParser::parseTag( tag.c_str(), _name, lst );
 
-    QDomElement c = layout.namedItem( "COUNTER" ).toElement();
-    if ( c.isNull() )
-	return false;
-    counter.counterType = (CounterType)c.attribute( "type" ).toInt();
-    counter.counterDepth = c.attribute( "depth" ).toInt();
-    counter.counterBullet = QChar( c.attribute( "bullet" ).toInt() );
-    counter.startCounter = c.attribute( "start" );
-    counter.numberingType = (NumType)c.attribute( "numbering-type" ).toInt();
-    counter.counterLeftText = c.attribute( "left-text" );
-    counter.counterRightText = c.attribute( "right-text" );
-    counter.bulletFont = c.attribute( "bullet-font" );
+	// name
+	if ( _name == "NAME" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "value" )
+		    name = correctQString( ( *it ).m_strValue.c_str() );
+	    }
+	}
 
-    QDomElement b = layout.namedItem( "LEFTBORDER" ).toElement();
-    if ( b.isNull() )
-	return false;
-    left.color = QColor( b.attribute( "color" ) );
-    left.ptWidth = b.attribute( "width" ).toInt();
-    left.style = (BorderStyle)b.attribute( "style" ).toInt();
+	// following parag layout
+	else if ( _name == "FOLLOWING" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "name" )
+		    followingParagLayout = correctQString( ( *it ).m_strValue.c_str() );
+	    }
+	}
 
-    b = layout.namedItem( "TOPBORDER" ).toElement();
-    if ( b.isNull() )
-	return false;
-    top.color = QColor( b.attribute( "color" ) );
-    top.ptWidth = b.attribute( "width" ).toInt();
-    top.style = (BorderStyle)b.attribute( "style" ).toInt();
+	// following parag layout
+	else if ( _name == "TABULATOR" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    KoTabulator *tab = new KoTabulator;
+	    bool noinch = true;
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "mmpos" )
+		    tab->mmPos = atof( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "ptpos" )
+		    tab->ptPos = atoi( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "inchpos" )
+		{
+		    noinch = false;
+		    tab->inchPos = atof( ( *it ).m_strValue.c_str() );
+		}
+		if ( ( *it ).m_strName == "type" )
+		    tab->type = static_cast<KoTabulators>( atoi( ( *it ).m_strValue.c_str() ) );
+	    }
+	    if ( noinch ) tab->inchPos = MM_TO_INCH( tab->mmPos );
+	    tabList.append( tab );
+	}
 
-    b = layout.namedItem( "RIGHTBORDER" ).toElement();
-    if ( b.isNull() )
-	return false;
-    right.color = QColor( b.attribute( "color" ) );
-    right.ptWidth = b.attribute( "width" ).toInt();
-    right.style = (BorderStyle)b.attribute( "style" ).toInt();
+	// flow
+	else if ( _name == "FLOW" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "value" )
+		    flow = static_cast<Flow>( atoi( ( *it ).m_strValue.c_str() ) );
+	    }
+	}
 
-    b = layout.namedItem( "BOTTOMBORDER" ).toElement();
-    if ( b.isNull() )
-	return false;
-    bottom.color = QColor( b.attribute( "color" ) );
-    bottom.ptWidth = b.attribute( "width" ).toInt();
-    bottom.style = (BorderStyle)b.attribute( "style" ).toInt();
+	// head offset
+	else if ( _name == "OHEAD" )
+	{
+	    pt = 0;
+	    mm = inch = 0.0;
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "pt" )
+		    pt = atoi( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "mm" )
+		    mm = atof( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "inch" )
+		    inch = atof( ( *it ).m_strValue.c_str() );
+	    }
+	    paragHeadOffset.setPT_MM_INCH( pt, mm, inch );
+	}
 
-    KWFormat form( document );
-    QDomElement f = layout.namedItem( "FORMAT" ).toElement();
-    if ( f.isNull() )
-	return false;
-    if ( !form.load( f, document ) )
- 	return false;
-    setFormat( form );
+	// foot offset
+	else if ( _name == "OFOOT" )
+	{
+	    pt = 0;
+	    mm = inch = 0.0;
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "pt" )
+		    pt = atoi( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "mm" )
+		    mm = atof( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "inch" )
+		    inch = atof( ( *it ).m_strValue.c_str() );
+	    }
+	    paragFootOffset.setPT_MM_INCH( pt, mm, inch );
+	}
 
-    QDomElement tabs = layout.namedItem( "TABULATORS" ).toElement();
-    QDomElement ta = tabs.firstChild().toElement();
-    for( ; !ta.isNull(); ta = ta.nextSibling().toElement() ) {
-	KoTabulator *tab = new KoTabulator;
-	tab->mmPos = ta.attribute( "pos-mm" ).toInt();
-	tab->ptPos = ta.attribute( "pos-pt" ).toInt();
-	tab->inchPos = ta.attribute( "pos-inch" ).toInt();
-	tab->type = (KoTabulators)ta.attribute( "type" ).toInt();
-	tabList.append( tab );
+	// first left line indent
+	else if ( _name == "IFIRST" )
+	{
+	    pt = 0;
+	    mm = inch = 0.0;
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "pt" )
+		    pt = atoi( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "mm" )
+		    mm = atof( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "inch" )
+		    inch = atof( ( *it ).m_strValue.c_str() );
+	    }
+	    firstLineLeftIndent.setPT_MM_INCH( pt, mm, inch );
+	}
+
+	// left indent
+	else if ( _name == "ILEFT" )
+	{
+	    pt = 0;
+	    mm = inch = 0.0;
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "pt" )
+		    pt = atoi( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "mm" )
+		    mm = atof( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "inch" )
+		    inch = atof( ( *it ).m_strValue.c_str() );
+	    }
+	    leftIndent.setPT_MM_INCH( pt, mm, inch );
+	}
+
+	// linespacing
+	else if ( _name == "LINESPACE" )
+	{
+	    pt = 0;
+	    mm = inch = 0.0;
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "pt" )
+		    pt = atoi( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "mm" )
+		    mm = atof( ( *it ).m_strValue.c_str() );
+		if ( ( *it ).m_strName == "inch" )
+		    inch = atof( ( *it ).m_strValue.c_str() );
+	    }
+	    lineSpacing.setPT_MM_INCH( pt, mm, inch );
+	}
+
+	// offsets ( old but supported for compatibility )
+	else if ( _name == "OFFSETS" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "head" )
+		    paragHeadOffset.setMM( atof( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "foot" )
+		    paragFootOffset.setMM( atof( ( *it ).m_strValue.c_str() ) );
+	    }
+	}
+
+	// indents ( old but supported for compatibility )
+	else if ( _name == "INDENTS" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "first" )
+		    firstLineLeftIndent.setMM( atof( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "left" )
+		    leftIndent.setMM( atof( ( *it ).m_strValue.c_str() ) );
+	    }
+	}
+
+	// line spacing ( old but supported for compatibility )
+	else if ( _name == "LINESPACING" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "value" )
+		    lineSpacing.setPT( atoi( ( *it ).m_strValue.c_str() ) );
+	    }
+	}
+
+	// counter
+	else if ( _name == "COUNTER" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "type" )
+		    counter.counterType = static_cast<CounterType>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "depth" )
+		    counter.counterDepth = atoi( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "bullet" )
+		    counter.counterBullet = QChar( static_cast<unsigned short>( atoi( ( *it ).m_strValue.c_str() ) ) );
+		else if ( ( *it ).m_strName == "lefttext" )
+		    counter.counterLeftText = correctQString( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "righttext" )
+		    counter.counterRightText = correctQString( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "start" )
+		    counter.startCounter = correctQString( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "numberingtype" )
+		    counter.numberingType = static_cast<NumType>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "bulletfont" )
+		    counter.bulletFont = correctQString( ( *it ).m_strValue.c_str() );
+	    }
+	}
+
+	// left border
+	else if ( _name == "LEFTBORDER" )
+	{
+	    unsigned int r = 0, g = 0, b = 0;
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "red" )
+		{
+		    r = atoi( ( *it ).m_strValue.c_str() );
+		    left.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "green" )
+		{
+		    g = atoi( ( *it ).m_strValue.c_str() );
+		    left.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "blue" )
+		{
+		    b = atoi( ( *it ).m_strValue.c_str() );
+		    left.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "style" )
+		    left.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "width" )
+		    left.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+	    }
+	}
+
+	// right border
+	else if ( _name == "RIGHTBORDER" )
+	{
+	    unsigned int r = 0, g = 0, b = 0;
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "red" )
+		{
+		    r = atoi( ( *it ).m_strValue.c_str() );
+		    right.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "green" )
+		{
+		    g = atoi( ( *it ).m_strValue.c_str() );
+		    right.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "blue" )
+		{
+		    b = atoi( ( *it ).m_strValue.c_str() );
+		    right.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "style" )
+		    right.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "width" )
+		    right.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+	    }
+	}
+
+	// bottom border
+	else if ( _name == "BOTTOMBORDER" )
+	{
+	    unsigned int r = 0, g = 0, b = 0;
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "red" )
+		{
+		    r = atoi( ( *it ).m_strValue.c_str() );
+		    bottom.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "green" )
+		{
+		    g = atoi( ( *it ).m_strValue.c_str() );
+		    bottom.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "blue" )
+		{
+		    b = atoi( ( *it ).m_strValue.c_str() );
+		    bottom.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "style" )
+		    bottom.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "width" )
+		    bottom.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+	    }
+	}
+
+	// top border
+	else if ( _name == "TOPBORDER" )
+	{
+	    unsigned int r = 0, g = 0, b = 0;
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "red" )
+		{
+		    r = atoi( ( *it ).m_strValue.c_str() );
+		    top.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "green" )
+		{
+		    g = atoi( ( *it ).m_strValue.c_str() );
+		    top.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "blue" )
+		{
+		    b = atoi( ( *it ).m_strValue.c_str() );
+		    top.color.setRgb( r, g, b );
+		}
+		else if ( ( *it ).m_strName == "style" )
+		    top.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "width" )
+		    top.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+	    }
+	}
+
+	else if ( _name == "FORMAT" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+	    }
+	    format.load( parser, lst, document );
+	}
+
+	else
+	    cerr << "Unknown tag '" << tag << "' in PARAGRAPHLAYOUT" << endl;
+
+	if ( !parser.close( tag ) )
+	{
+	    cerr << "ERR: Closing Child" << endl;
+	    return;
+	}
     }
-
-    return true;
 }
 
 /*================================================================*/

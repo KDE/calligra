@@ -37,11 +37,12 @@
 #include "kspread_interpreter.h"
 #include "kspread_doc.h"
 
+#include <koStream.h>
+#include <komlWriter.h>
+#include <torben.h>
 #include <kformula.h>
 #include <klocale.h>
 #include <kscript_parsenode.h>
-
-#include <koApplication.h>
 
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
 #define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateCell( this, m_iColumn, m_iRow );
@@ -1944,7 +1945,7 @@ void KSpreadCell::setText( const QString& _text )
    */
   else if ( !m_strText.isEmpty() && m_strText[0] == '!' )
   {
-    m_pQML = new QSimpleRichText( m_strText.mid(1), QApplication::font() );//, m_pTable->widget() );
+    m_pQML = new QSimpleRichText( m_strText.mid(1),  QApplication::font() );//, m_pTable->widget() );
 
     m_bValue = false;
     m_bBool = false;
@@ -2191,76 +2192,73 @@ void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row 
   }
 }
 
-QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
+bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset )
 {
-  QDomElement cell = doc.createElement( "cell" );
-  cell.setAttribute( "row", m_iRow - _y_offset );
-  cell.setAttribute( "column", m_iColumn - _x_offset );
+  out << otag << "<CELL row=\"" << m_iRow - _y_offset
+      << "\" column=\"" << m_iColumn - _x_offset << "\">" << endl;
 
-  QDomElement format = doc.createElement( "format" );
-  cell.appendChild( format );
-  format.setAttribute( "align", (int)m_eAlign );
+  out << indent << "<FORMAT align=\"" << (unsigned int)m_eAlign << '"';
 
   if ( m_bgColor != Qt::white )
-    format.setAttribute( "bgcolor", colorToName( m_bgColor ) );
+    out << " bgcolor=\"" << m_bgColor << '"';
   if ( multiRow() )
-    format.setAttribute( "multirow", "yes" );
+    out << " multirow";
 
   if ( isForceExtraCells() )
-  {
-    format.setAttribute( "colspan", extraXCells() );
-    format.setAttribute( "rowspan", extraYCells() );
-  }
+    out << " colspan=\"" << extraXCells() << "\" rowspan=\"" << extraYCells() << '"';
 
-  format.setAttribute( "precision", precision() );
-  if ( !prefix().isEmpty() )
-    format.setAttribute( "prefix", prefix() );
-  if ( !postfix().isEmpty() )
-    format.setAttribute( "postfix", postfix() );
+  out << " precision=\"" << precision() << '"';
+  if ( prefix() )
+    out << " prefix=\"" << prefix() << '"';
+  if ( postfix() )
+    out << " postfix=\"" << postfix() << '"';
 
-  format.setAttribute( "float", (int)floatFormat() );
-  format.setAttribute( "floatcolor", (int)floatColor() );
-  format.setAttribute( "faktor", m_dFaktor );
+  out << " float=\"" << (unsigned int)floatFormat() << "\" floatcolor=\"" << (unsigned int)floatColor()
+      << "\" faktor=\"" << m_dFaktor << "\"/>" << endl;
 
   if ( m_textFont != m_pTable->defaultCell()->textFont() )
-    format.appendChild( doc.createElement( "font", m_textFont ) );
+    out << indent << m_textFont << endl;
   if ( m_textPen != m_pTable->defaultCell()->textPen() )
-    format.appendChild( doc.createElement( "pen", m_textPen ) );
+    out << indent << m_textPen << endl;
 
-  QDomElement left = doc.createElement( "left-border" );
-  left.appendChild( doc.createElement( "pen", m_leftBorderPen ) );
-  format.appendChild( left );
-
-  QDomElement top = doc.createElement( "top-border" );
-  top.appendChild( doc.createElement( "pen", m_topBorderPen ) );
-  format.appendChild( top );
+  if ( m_leftBorderPen != m_pTable->defaultCell()->leftBorderPen() )
+    out << indent << "<LEFTBORDER>" << m_leftBorderPen << "</LEFTBORDER>" << endl;
+  if ( m_topBorderPen != m_pTable->defaultCell()->topBorderPen() )
+    out << indent << "<TOPBORDER>" << m_topBorderPen << "</TOPBORDER>" << endl;
 
   if ( !m_strText.isEmpty() )
   {
     if ( isFormular() )
     {
-      QDomElement text = doc.createElement( "text" );
-      text.appendChild( doc.createTextNode( encodeFormular() ) );
-      cell.appendChild( text );
+      // TODO: Not unicode here!
+      out << indent << encodeFormular().utf8() << endl;
+      // out << indent << encodeFormular().ascii() << endl;
     }
     else
-    {
-      QDomElement text = doc.createElement( "text" );
-      text.appendChild( doc.createTextNode( m_strText ) );
-      cell.appendChild( text );
-    }
+      out << indent << m_strText.utf8() << endl;
   }
 
-  return cell;
+  out << etag << "</CELL>" << endl;
+
+  return true;
 }
 
-bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift )
+bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _xshift, int _yshift )
 {
-  bool ok;
-  m_iRow = cell.attribute( "row" ).toInt( &ok );
-  if ( !ok ) return false;
-  m_iColumn = cell.attribute( "column" ).toInt( &ok );
-  if ( !ok ) return false;
+  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
+  for( ; it != _attribs.end(); it++ )
+  {
+    if ( (*it).m_strName == "row" )
+    {
+      m_iRow = atoi( (*it).m_strValue.c_str() ) + _yshift;
+    }
+    else if ( (*it).m_strName == "column" )
+    {
+      m_iColumn = atoi( (*it).m_strValue.c_str() ) + _xshift;
+    }
+    else
+      cerr << "Unknown attrib 'CELL:" << (*it).m_strName << "'" << endl;
+  }
 
   // Validation
   if ( m_iRow < 1 || m_iRow > 0xFFFF )
@@ -2274,134 +2272,207 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift )
     return false;
   }
 
-  QDomElement f = cell.namedItem( "format" ).toElement();
-  if ( !f.isNull() )
+  string tag;
+  vector<KOMLAttrib> lst;
+  string name;
+  tstring text;
+  string tmp;
+
+  bool res;
+  // FORMAT, LEFTBORDER, TOPBORDER, FONT, PEN
+  do
   {
-    if ( f.hasAttribute( "align" ) )
-    {
-      Align a = (Align)f.attribute("align").toInt( &ok );
-      if ( !ok )
-	return false;
-      // Validation
-      if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
-      {
-	cerr << "Value of of range Cell::align=" << (unsigned int)a << endl;
-	return false;
-      }
-      // Assignment
-      setAlign( a );
-    }
-    if ( f.hasAttribute( "bgcolor" ) )
-      setBgColor( QColor( f.attribute( "bgcolor" ) ) );
-    if ( f.hasAttribute( "multirow" ) )
-      setMultiRow( true );
-    if ( f.hasAttribute( "colspan" ) )
-    {
-      int i = f.attribute("colspan").toInt( &ok );
-      if ( !ok ) return false;
-      // Validation
-      if ( i < 0 || i > 0xFFF )
-      {
-	cerr << "Value out of range Cell::colspan=" << i << endl;
-	return false;
-      }
-      m_iExtraXCells = i;
-      if ( i > 0 )
-	m_bForceExtraCells = true;	
-    }
-    if ( f.hasAttribute( "rowspan" ) )
-    {
-      int i = f.attribute("rowspan").toInt( &ok );
-      if ( !ok ) return false;
-      // Validation
-      if ( i < 0 || i > 0xFFF )
-      {
-	cerr << "Value out of range Cell::rowspan=" << i << endl;
-	return false;
-      }
-      m_iExtraYCells = i;
-      if ( i > 0 )
-	m_bForceExtraCells = true;	
-    }
-    if ( f.hasAttribute( "precision" ) )
-    {
-      int i = f.attribute("rowspan").toInt( &ok );
-      if ( i < -1 )
-      {
-	cerr << "Value out of range Cell::precision=" << i << endl;
-	return false;
-      }
-      m_iPrecision = i;
-    }
-    if ( f.hasAttribute( "float" ) )
-    {
-      FloatFormat a = (FloatFormat)f.attribute("float").toInt( &ok );
-      if ( !ok ) return false;
-      if ( (unsigned int)a < 1 || (unsigned int)a > 3 )
-      {
-	cerr << "Value of of range Cell::float=" << (unsigned int)a << endl;
-	return false;
-      }
-      // Assignment
-      setFloatFormat( a );
-    }
-    if ( f.hasAttribute( "floatcolor" ) )
-    {
-      FloatColor a = (FloatColor)f.attribute("floatcolor").toInt( &ok );
-      if ( !ok ) return false;
-      if ( (unsigned int)a < 1 || (unsigned int)a > 2 )
-      {
-	cerr << "Value of of range Cell::floatcolor=" << (unsigned int)a << endl;
-	return false;
-      }
-      // Assignment
-      setFloatColor( a );
-    }
-    if ( f.hasAttribute( "faktor" ) )
-    {
-      m_dFaktor = f.attribute("faktor").toDouble( &ok );
-      if ( !ok ) return false;
-    }
+    if ( parser.readText( tmp ) )
+      text += tmp.c_str();
 
-    QDomElement pen = f.namedItem( "pen" ).toElement();
-    if ( !pen.isNull() )
-      setTextPen( pen.toPen() );
-
-    QDomElement font = f.namedItem( "font" ).toElement();
-    if ( !font.isNull() )
-      setTextFont( font.toFont() );
-
-    QDomElement left = f.namedItem( "left-border" ).toElement();
-    if ( !left.isNull() )
+    if ( ( res = parser.open( 0L, tag ) ) )
     {
-      QDomElement pen = left.namedItem( "pen" ).toElement();
-      if ( !pen.isNull() )
-	setLeftBorderPen( pen.toPen() );
+      KOMLParser::parseTag( tag.c_str(), name, lst );
+
+      if ( name == "FORMAT" )
+        {
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for( ; it != lst.end(); it++ )
+	  {
+	    if ( (*it).m_strName == "align" )
+	    {
+	      Align a = (Align)atoi( (*it).m_strValue.c_str() );
+	      // Validation
+	      if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
+	      {
+		cerr << "Value of of range Cell::align=" << (unsigned int)a << endl;
+		return false;
+	      }
+	      // Assignment
+	      setAlign( a );
+	    }
+	    else if ( (*it).m_strName == "bgcolor" )
+	    {
+	      setBgColor( strToColor( (*it).m_strValue.c_str() ) );
+	    }
+	    else if ( (*it).m_strName == "multirow" )
+	    {
+	      setMultiRow( true );
+	    }
+	    else if ( (*it).m_strName == "colspan" )
+	    {
+	      int i = atoi( (*it).m_strValue.c_str() );
+	      // Validation
+	      if ( i < 0 || i > 0xFFF )
+	      {
+		cerr << "Value out of range Cell::colspan=" << m_iExtraXCells << endl;
+		return false;
+	      }
+	      m_iExtraXCells = i;
+	      if ( i > 0 )
+		m_bForceExtraCells = true;	
+	    }
+	    else if ( (*it).m_strName == "rowspan" )
+	    {
+	      int i = atoi( (*it).m_strValue.c_str() );
+	      // Validation
+	      if ( i < 0 || i > 0xFFF )
+	      {
+		cerr << "Value out of range Cell::rowspan=" << m_iExtraYCells << endl;
+		return false;
+	      }
+	      m_iExtraYCells = i;
+	      if ( m_iExtraYCells > 0 )
+		m_bForceExtraCells = true;
+	    }
+	    else if ( (*it).m_strName == "precision" )
+	    {
+	      int i = atoi( (*it).m_strValue.c_str() );
+	      if ( i < -1 )
+	      {
+		cerr << "Value out of range Cell::precision=" << i << endl;
+		return false;
+	      }
+	      m_iPrecision = i;
+	    }
+	    else if ( (*it).m_strName == "prefix" )
+	    {
+#ifdef HAVE_MINI_STL
+	      if ( !((*it).m_strValue.size() == 0 ) )
+#else
+	      if ( !((*it).m_strValue.empty() ) )
+#endif
+		m_strPrefix = (*it).m_strValue.c_str();
+	    }
+	    else if ( (*it).m_strName == "postfix" )
+	    {
+#ifdef HAVE_MINI_STL
+	      if ( !((*it).m_strValue.size() == 0) )
+#else
+	      if ( !((*it).m_strValue.empty() ) )
+#endif
+		m_strPostfix = (*it).m_strValue.c_str();
+	    }
+	    else if ( (*it).m_strName == "float" )
+	    {
+	      FloatFormat f = (FloatFormat)atoi( (*it).m_strValue.c_str() );
+	      // Validation
+	      if ( (unsigned int)f < 1 || (unsigned int)f > 3 )
+	      {
+		cerr << "Value of of range Cell::float=" << (unsigned int)f << endl;
+		return false;
+	      }
+	      // Assignment
+	      setFloatFormat( f );
+	    }
+	    else if ( (*it).m_strName == "floatcolor" )
+	    {
+	      FloatColor f = (FloatColor)atoi( (*it).m_strValue.c_str() );
+	      // Validation
+	      if ( (unsigned int)f < 1 || (unsigned int)f > 2 )
+	      {
+		cerr << "Value of of range Cell::floatcolor=" << (unsigned int)f << endl;
+		return false;
+	      }
+	      // Assignment
+	      setFloatColor( f );
+	    }
+	    else if ( (*it).m_strName == "faktor" )
+	    {
+	      double f = atof( (*it).m_strValue.c_str() );
+	      m_dFaktor = f;
+	    }
+	    else
+	      cerr << "Unknown attrib FORMAT:'" << (*it).m_strName << "'" << endl;
+	  }
+	}
+	else if ( name == "PEN" )
+        {
+	  setTextPen( tagToPen( lst ) );
+	}
+	else if ( name == "FONT" )
+        {
+	  setTextFont( tagToFont( lst ) );
+	}
+	else if ( name == "LEFTBORDER" )
+        {
+	  // PEN
+	  while( parser.open( 0L, tag ) )
+	  {
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	
+	    if ( name == "PEN" )
+	    {
+	      setLeftBorderPen( tagToPen( lst ) );
+	    }
+	    else
+	      cerr << "Unknown tag '" << tag << "' in LEFTBORDER" << endl;
+	
+	    if ( !parser.close( tag ) )
+	    {
+	      cerr << "ERR: Closing Child" << endl;
+	      return false;
+	    }
+	  }
+	}
+	else if ( name == "TOPBORDER" )
+	{
+	  // PEN
+	  while( parser.open( 0L, tag ) )
+	  {
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	
+	    if ( name == "PEN" )
+	    {
+	      setTopBorderPen( tagToPen( lst ) );
+	    }
+	    else
+	      cerr << "Unknown tag '" << tag << "' in RIGHTBORDER" << endl;
+	
+	    if ( !parser.close( tag ) )
+	    {
+	      cerr << "ERR: Closing Child" << endl;
+	      return false;
+	    }
+	  }
+	}
+	else
+	  cerr << "Unknown tag '" << tag << "' in CELL" << endl;
+	
+	if ( !parser.close( tag ) )
+        {
+	  cerr << "ERR: Closing Child" << endl;
+	  return false;
+	}
+
     }
+  } while( res );
 
-    QDomElement top = f.namedItem( "top-border" ).toElement();
-    if ( !top.isNull() )
-    {
-      QDomElement pen = top.namedItem( "pen" ).toElement();
-      if ( !pen.isNull() )
-	setTopBorderPen( pen.toPen() );
-    }
+  // Set the text of the cell
+  QString t;
+  // HACK: Once we have Unicode in KOML we dont need that
+  t = QString::fromUtf8( text.c_str() );
+  t = t.stripWhiteSpace();
 
-    m_strPrefix = f.attribute( "prefix" );
-    m_strPostfix = f.attribute( "postfix" );
-  }
+  if ( t[0] == '=' )
+    t = decodeFormular( t, m_iColumn, m_iRow );
 
-  QDomElement text = cell.namedItem( "text" ).toElement();
-  if ( !text.isNull() )
-  {
-    QString t = text.text();
-    t = t.stripWhiteSpace();
-
-    if ( t[0] == '=' )
-      t = decodeFormular( t, m_iColumn, m_iRow );
-
-    setText( t );
-  }
+  setText( t );
 
   return true;
 }

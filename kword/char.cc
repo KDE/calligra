@@ -3,27 +3,33 @@
 #include "frame.h"
 #include "font.h"
 #include "defs.h"
-#include "footnote.h"
 
+#include <string.h>
 #include <assert.h>
+
+#include <komlMime.h>
+#include <koStream.h>
+
+#include <strstream>
+#include <fstream>
 #include <unistd.h>
 
 #include <qimage.h>
 
 /******************************************************************/
-/* Class: KWString						  */
+/* Class: KWString                                                */
 /******************************************************************/
 
 /*================================================================*/
 KWString::KWString( QString _str, KWordDocument *_doc )
 {
     if ( _str == 0L )
- {
-     _data_ = 0L;
-     _len_ = 0;
-     _max_ = 0;
-     return;
- }
+    {
+        _data_ = 0L;
+        _len_ = 0;
+        _max_ = 0;
+        return;
+    }
 
     _len_ = strlen( _str );
     _max_ = _len_;
@@ -32,7 +38,7 @@ KWString::KWString( QString _str, KWordDocument *_doc )
 
     unsigned int i = 0;
     while( _str[ i ] != 0L )
-	_data_[ i ].c = _str[ i++ ];
+        _data_[ i ].c = _str[ i++ ];
 
     doc = _doc;
 }
@@ -64,11 +70,11 @@ KWChar* KWString::alloc( unsigned int _len )
 
     KWChar *p = c;
     for ( unsigned int i = 0; i < _len; ++i )
- {
-     p->c = KWSpecialChar;
-     p->attrib = 0L;
-     p++;
- }
+    {
+        p->c = KWSpecialChar;
+        p->attrib = 0L;
+        p++;
+    }
 
     return c;
 }
@@ -77,7 +83,7 @@ KWChar* KWString::alloc( unsigned int _len )
 void KWString::free( KWChar* _data, unsigned int _len )
 {
     for ( unsigned int i = 0; i < _len; ++i )
-	freeChar( _data[ i ], doc );
+        freeChar( _data[ i ], doc );
 }
 
 /*================================================================*/
@@ -88,10 +94,10 @@ void KWString::append( KWChar *_text, unsigned int _len )
     KWChar *_data = copy( _text, _len );
 
     for ( unsigned int i = 0; i < _len; i++ )
- {
-     _data_[ oldlen + i ].c = _data[ i ].c;
-     _data_[ oldlen + i ].attrib = _data[ i ].attrib;
- }
+    {
+        _data_[ oldlen + i ].c = _data[ i ].c;
+        _data_[ oldlen + i ].attrib = _data[ i ].attrib;
+    }
 }
 
 /*================================================================*/
@@ -117,13 +123,13 @@ void KWString::insert( unsigned int _pos, QString _text )
     resize( _len_ + nl );
 
     if ( _pos < l )
-	memmove( _data_ + _pos + nl, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
+        memmove( _data_ + _pos + nl, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
 
     for ( unsigned int i = 0; i < nl; ++i )
- {
-     _data_[ _pos + i ].c = _text[ i ];
-     _data_[ _pos + i ].attrib = 0L;
- }
+    {
+        _data_[ _pos + i ].c = _text[ i ];
+        _data_[ _pos + i ].attrib = 0L;
+    }
 }
 
 /*================================================================*/
@@ -138,13 +144,13 @@ void KWString::insert( unsigned int _pos, KWString *_text )
     resize( _len_ + nl );
 
     if ( _pos < l )
-	memmove( _data_ + _pos + nl, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
+        memmove( _data_ + _pos + nl, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
 
     for ( unsigned int i = 0; i < nl; ++i )
- {
-     _data_[ _pos + i ].c = _text->data()[ i ].c;
-     _data_[ _pos + i ].attrib = _text->data()[ i ].attrib;
- }
+    {
+        _data_[ _pos + i ].c = _text->data()[ i ].c;
+        _data_[ _pos + i ].attrib = _text->data()[ i ].attrib;
+    }
 }
 
 /*================================================================*/
@@ -157,7 +163,7 @@ void KWString::insert( unsigned int _pos, const char _c )
     resize( _len_ + 1 );
 
     if ( _pos < l )
-	memmove( _data_ + _pos + 1, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
+        memmove( _data_ + _pos + 1, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
 
     _data_[ _pos ].c = _c;
     _data_[ _pos ].attrib = 0L;
@@ -173,7 +179,7 @@ void KWString::insert( unsigned int _pos, KWCharImage *_image )
     resize( _len_ + 1 );
 
     if ( _pos < l )
-	memmove( _data_ + _pos + 1, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
+        memmove( _data_ + _pos + 1, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
 
     _data_[ _pos ].c = KWSpecialChar;
     _data_[ _pos ].attrib = _image;
@@ -189,7 +195,7 @@ void KWString::insert( unsigned int _pos, KWCharTab *_tab )
     resize( _len_ + 1 );
 
     if ( _pos < l )
-	memmove( _data_ + _pos + 1, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
+        memmove( _data_ + _pos + 1, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
 
     _data_[ _pos ].c = KWSpecialChar;
     _data_[ _pos ].attrib = _tab;
@@ -205,7 +211,7 @@ void KWString::insert( unsigned int _pos, KWCharVariable *_var )
     resize( _len_ + 1 );
 
     if ( _pos < l )
-	memmove( _data_ + _pos + 1, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
+        memmove( _data_ + _pos + 1, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
 
     _data_[ _pos ].c = KWSpecialChar;
     _data_[ _pos ].attrib = _var;
@@ -221,7 +227,7 @@ void KWString::insert( unsigned int _pos, KWCharFootNote *_fn )
     resize( _len_ + 1 );
 
     if ( _pos < l )
-	memmove( _data_ + _pos + 1, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
+        memmove( _data_ + _pos + 1, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
 
     _data_[ _pos ].c = KWSpecialChar;
     _data_[ _pos ].attrib = _fn;
@@ -237,15 +243,15 @@ void KWString::clear()
 bool KWString::remove( unsigned int _pos, unsigned int _len )
 {
     if ( _pos + _len <= _len_ && ( int )_pos >= 0 )
- {
-     for ( unsigned int i = _pos; i < _pos + _len; i++ )
-	 freeChar( _data_[ i ], doc );
+    {
+        for ( unsigned int i = _pos; i < _pos + _len; i++ )
+            freeChar( _data_[ i ], doc );
 
-     memmove( _data_ + _pos, _data_ + _pos + _len, sizeof( KWChar ) * ( _len_ - _pos - _len ) );
-     resize( _len_ - _len, false );
+        memmove( _data_ + _pos, _data_ + _pos + _len, sizeof( KWChar ) * ( _len_ - _pos - _len ) );
+        resize( _len_ - _len, false );
 
-     return true;
- }
+        return true;
+    }
     return false;
 }
 
@@ -255,10 +261,10 @@ KWChar* KWString::split( unsigned int _pos )
     KWChar *_data, *__data;
     _data = alloc( _len_ - _pos );
     for ( unsigned int i = _pos; i < _len_; i++ )
- {
-     _data[ i - _pos ].c = _data_[ i ].c;
-     _data[ i - _pos ].attrib = _data_[ i ].attrib;
- }
+    {
+        _data[ i - _pos ].c = _data_[ i ].c;
+        _data[ i - _pos ].attrib = _data_[ i ].attrib;
+    }
 
     __data = copy( _data, _len_ - _pos );
     resize( _pos );
@@ -278,356 +284,312 @@ QString KWString::toString( unsigned int _pos, unsigned int _len )
     char c = 1;
 
     if ( _pos + _len <= _len_ )
- {
-     for ( unsigned int i = _pos; i <= _len + _pos; i++ )
- {
-     if ( static_cast<int>( i ) > static_cast<int>( size() - 1 ) ) break;
-     if ( _data_[ i ].c != KWSpecialChar )
-	 str += _data_[ i ].c;
-     else
-	 str += c;
- }
- }
+    {
+        for ( unsigned int i = _pos; i <= _len + _pos; i++ )
+        {
+            if ( static_cast<int>( i ) > static_cast<int>( size() - 1 ) ) break;
+            if ( _data_[ i ].c != KWSpecialChar )
+                str += _data_[ i ].c;
+            else
+                str += c;
+        }
+    }
 
     return QString( str );
 }
 
 /*================================================================*/
-QDomElement KWString::save( QDomDocument& d )
+void KWString::saveFormat( ostream &out )
 {
-    QDomElement e = d.createElement( "TEXT" );
+    unsigned int start = 0;
 
-    if ( _len_ == 0 )
-	return e;
-
-    QDomElement f = _data_[0].attrib->save( d );
-    if ( f.isNull() )
-	return f;
-    e.appendChild( f );
-
-    QString buffer;
-
-    for ( unsigned int i = 0; i < _len_; i++ ) {
-	if ( i > 0 ) {
-	    if ( formatChanged( _data_[ i ].attrib, _data_[ i-1 ].attrib ) ) {
-		if ( !buffer.isEmpty() ) {
-		    f.appendChild( d.createTextNode( buffer ) );
-		    buffer = QString::null;
-		}
-		f = _data_[i].attrib->save( d );
-		if ( f.isNull() )
-		    return f;
-		e.appendChild( f );
-	    }
-	}
-	buffer += _data_[i].c;
-    }
-
-    if ( !buffer.isEmpty() ) {
-	f.appendChild( d.createTextNode( buffer ) );
-	buffer = QString::null;
-    }
-
-    return e;
-}
-
-/*================================================================*/
-bool KWString::load( const QDomElement &element, KWordDocument* doc )
-{
-    QDomElement t = element.firstChild().toElement();
-    for( ; !t.isNull(); t = t.nextSibling().toElement() )
+    for ( unsigned int i = 0; i < _len_; i++ )
     {
-	if ( t.tagName() == "STYLE" )
+        if ( _data_[ i ].attrib->getClassId() != ID_KWCharFormat )
         {
-	    if ( !KWCharFormat::load( t, doc, this ) )
-		return FALSE;
-	}
-	else if ( t.tagName() == "VARIABLE" )
+            if ( start < i )
+            {
+                out << otag << "<FORMAT id=\"" << _data_[ start ].attrib->getClassId() << "\" pos=\"" << start
+                    << "\" len=\"" << i - start << "\">" << endl;
+                _data_[ start ].attrib->save( out );
+                out << etag << "</FORMAT>" << endl;
+            }
+            switch ( _data_[ i ].attrib->getClassId() )
+            {
+            case ID_KWCharImage:
+            {
+                out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
+                _data_[ i ].attrib->save( out );
+                out << etag << "</FORMAT>" << endl;
+            } break;
+            case ID_KWCharTab:
+            {
+                out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
+                out << etag << "</FORMAT>" << endl;
+            } break;
+            case ID_KWCharVariable:
+            {
+                out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
+                _data_[ i ].attrib->save( out );
+                out << etag << "</FORMAT>" << endl;
+            } break;
+            case ID_KWCharFootNote:
+            {
+                out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
+                _data_[ i ].attrib->save( out );
+                out << etag << "</FORMAT>" << endl;
+            } break;
+            default: break;
+            }
+            start = i + 1;
+        }
+        else if ( i > 0 && _data_[ i ].attrib->getClassId() == ID_KWCharFormat &&
+                  !( *( ( KWCharFormat* )_data_[ i ].attrib ) == *( ( KWCharFormat* )_data_[ i - 1 ].attrib ) ) )
         {
-	    KWChar c;
-	    c.c = KWSpecialChar;	    
-	    c.attrib = new KWCharVariable();
-	    if ( !((KWCharVariable*)c.attrib)->load( t, doc ) )
-		return FALSE;
-	    append( c );
-
-	}
-	else if ( t.tagName() == "FOOTNOTE" )
-        {
-	    KWChar c;
-	    c.c = KWSpecialChar;
-	    c.attrib = new KWCharFootNote();
-	    if ( !((KWCharFootNote*)c.attrib)->load( t, doc ) )
-		return FALSE;
-	    append( c );
-	}
-	else if ( t.tagName() == "TAB" )
-        {
-	    KWChar c;
-	    c.c = KWSpecialChar;
-	    c.attrib = new KWCharTab();
-	    if ( !((KWCharTab*)c.attrib)->load( t, doc ) )
-		return FALSE;
-	    append( c );
-	}
-	else if ( t.tagName() == "IMAGE" )
-        {
-	    unsigned int oldlen = _len_;
-	    resize( 1 + _len_ );
-
-	    _data_[ oldlen ].c = KWSpecialChar;
-	    _data_[ oldlen ].attrib = new KWCharImage();;
-	    if ( !((KWCharImage*)_data_[ oldlen ].attrib)->load( t, doc ) )
-		return FALSE;
-	}
-	else
-	    ASSERT( 0 );
+            if ( start < i )
+            {
+                out << otag << "<FORMAT id=\"" << _data_[ start ].attrib->getClassId() << "\" pos=\"" << start
+                    << "\" len=\"" << i - start << "\">" << endl;
+                _data_[ start ].attrib->save( out );
+                out << etag << "</FORMAT>" << endl;
+            }
+            start = i;
+        }
     }
 
-    // insert( 0, "A woooooooooooooonsinn!" );
-    return TRUE;
+    if ( start < _len_ )
+    {
+        out << otag << "<FORMAT id=\"" << _data_[ start ].attrib->getClassId() << "\" pos=\"" << start
+            << "\" len=\"" << _len_ - start << "\">" << endl;
+        _data_[ start ].attrib->save( out );
+        out << etag << "</FORMAT>" << endl;
+    }
 }
 
 /*================================================================*/
-bool KWString::formatChanged( KWCharAttribute *a1, KWCharAttribute *a2 )
+void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *_doc, KWTextFrameSet * )
 {
-    if ( !a1 || !a2 )
-	return TRUE;
+    string tag;
+    string name;
 
-    if ( a1->getClassId() != a2->getClassId() )
-	return TRUE;
+    while ( parser.open( 0L, tag ) )
+    {
+        KOMLParser::parseTag( tag.c_str(), name, lst );
 
-    if ( a1->getClassId() == ID_KWCharFormat )
-	return *(KWCharFormat*)a1 != *(KWCharFormat*)a2;
+        // format
+        if ( name == "FORMAT" )
+        {
+            ClassIDs _id = ID_KWCharNone;
+            unsigned int __pos = 0, __len = 0;
+            KWFormat *_format = 0L, *format = 0L;
+            KWImage *_image = 0L; // , *image = 0L;
+            KWCharImage *_kwimage = 0L;
+            KWCharFormat *_kwformat = 0L;
+            KWCharTab *_kwtab = 0L;
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            bool _load = false;
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "id" )
+                {
+                    _id = static_cast<ClassIDs>( atoi( ( *it ).m_strValue.c_str() ) );
+                    _load = true;
+                }
+                else if ( ( *it ).m_strName == "pos" )
+                    __pos = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "len" )
+                    __len = atoi( ( *it ).m_strValue.c_str() );
+            }
+            if ( _load )
+            {
+                switch ( _id )
+                {
+                case ID_KWCharFormat:
+                {
+                    _format = new KWFormat();
+                    _format->load( parser, lst, _doc );
+                    format = _doc->getFormatCollection()->getFormat( *_format );
+                    for ( unsigned int i = __pos; i < __pos + __len; i++ )
+                    {
+                        if ( static_cast<int>( i ) > static_cast<int>( size() - 1 ) ) break;
+                        freeChar( _data_[ i ], doc );
+                        _kwformat = new KWCharFormat( format );
+                        _data_[ i ].attrib = _kwformat;
+                        format->incRef();
+                    }
+                    format->decRef();
+                    delete _format;
+                    _format = 0;
+                } break;
+                case ID_KWCharImage:
+                {
+                    _image = new KWImage();
+                    _image->load( parser, lst, _doc );
+//                     QString key;
+//                     image = _doc->getImageCollection()->getImage( *_image, key );
+                    _kwimage = new KWCharImage( 0L );
+                    doc->addImageRequest( _image->getFilename(), _kwimage );
+                    freeChar( _data_[ __pos ], doc );
+                    _data_[ __pos ].c = KWSpecialChar;
+                    _data_[ __pos ].attrib = _kwimage;
+                    delete _image;
+                    _image = 0;
+                } break;
+                case ID_KWCharTab:
+                {
+                    _kwtab = new KWCharTab();
+                    freeChar( _data_[ __pos ], doc );
+                    _data_[ __pos ].c = KWSpecialChar;
+                    _data_[ __pos ].attrib = _kwtab;
+                } break;
+                case ID_KWCharVariable:
+                {
+                    VariableType vart;
+                    KWVariable *var = 0L;
+                    KWCharVariable *v = 0L;
 
-    return TRUE;
+                    while ( parser.open( 0L, tag ) )
+                    {
+                        KOMLParser::parseTag( tag.c_str(), name, lst );
+
+                        if ( name == "TYPE" )
+                        {
+                            KOMLParser::parseTag( tag.c_str(), name, lst );
+                            vector<KOMLAttrib>::const_iterator it = lst.begin();
+                            for( ; it != lst.end(); it++ )
+                            {
+                                if ( ( *it ).m_strName == "type" )
+                                {
+                                    vart = static_cast<VariableType>( atoi( ( *it ).m_strValue.c_str() ) );
+                                    switch ( vart )
+                                    {
+                                    case VT_DATE_FIX:
+                                        var = new KWDateVariable( _doc );
+                                        break;
+                                    case VT_DATE_VAR:
+                                        var = new KWDateVariable( _doc );
+                                        break;
+                                    case VT_TIME_FIX:
+                                        var = new KWTimeVariable( _doc );
+                                        break;
+                                    case VT_TIME_VAR:
+                                        var = new KWTimeVariable( _doc );
+                                        break;
+                                    case VT_PGNUM:
+                                        var = new KWPgNumVariable( _doc );
+                                        break;
+                                    default: break;
+                                    }
+
+                                    var->setVariableFormat( _doc->getVarFormats().find( static_cast<int>( vart ) ) );
+                                    v = new KWCharVariable( var );
+                                }
+                            }
+                        }
+                        else if ( name == "FRMAT" && v )
+                        {
+                            _format = new KWFormat();
+                            _format->load( parser, lst, _doc );
+                            format = _doc->getFormatCollection()->getFormat( *_format );
+                            freeChar( _data_[ __pos ], doc );
+                            v->setFormat( format );
+                            _data_[ __pos ].attrib = v;
+                            _data_[ __pos ].c = KWSpecialChar;
+                            delete _format;
+                            _format = 0;
+                        }
+                        else
+                        {
+                            if ( var )
+                                var->load( name, tag, lst );
+                        }
+
+                        if ( !parser.close( tag ) )
+                        {
+                            cerr << "ERR: Closing Child" << endl;
+                            return;
+                        }
+                    }
+                } break;
+                case ID_KWCharFootNote:
+                {
+                    KWFootNote *fn = new KWFootNote( doc, new QList<KWFootNote::KWFootNoteInternal>() );
+                    KWCharFootNote *v = new KWCharFootNote( fn );
+
+                    while ( parser.open( 0L, tag ) )
+                    {
+                        KOMLParser::parseTag( tag.c_str(), name, lst );
+
+                        if ( name == "FRMAT" && v )
+                        {
+                            _format = new KWFormat();
+                            _format->load( parser, lst, _doc );
+                            format = _doc->getFormatCollection()->getFormat( *_format );
+                            freeChar( _data_[ __pos ], doc );
+                            v->setFormat( format );
+                            _data_[ __pos ].attrib = v;
+                            _data_[ __pos ].c = KWSpecialChar;
+                            delete _format;
+                            _format = 0;
+                        }
+                        else
+                        {
+                            if ( fn )
+                                fn->load( name, tag, parser, lst );
+                        }
+
+                        if ( !parser.close( tag ) )
+                        {
+                            cerr << "ERR: Closing Child" << endl;
+                            return;
+                        }
+                    }
+
+                    doc->getFootNoteManager().insertFootNoteInternal( fn );
+                } break;
+                default: break;
+                }
+                _load = false;
+            }
+        }
+
+        if ( !parser.close( tag ) )
+        {
+            cerr << "ERR: Closing Child" << endl;
+            return;
+        }
+    }
 }
-
-/*================================================================*/
-// #### todo
-// void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *_doc, KWTextFrameSet * )
-// {
-//     string tag;
-//     string name;
-
-//     while ( parser.open( 0L, tag ) )
-//     {
-//	   KOMLParser::parseTag( tag.c_str(), name, lst );
-
-//	   // format
-//	   if ( name == "FORMAT" )
-//	   {
-//	       ClassIDs _id = ID_KWCharNone;
-//	       unsigned int __pos = 0, __len = 0;
-//	       KWFormat *_format = 0L, *format = 0L;
-//	       KWImage *_image = 0L; // , *image = 0L;
-//	       KWCharImage *_kwimage = 0L;
-//	       KWCharFormat *_kwformat = 0L;
-//	       KWCharTab *_kwtab = 0L;
-//	       KOMLParser::parseTag( tag.c_str(), name, lst );
-//	       vector<KOMLAttrib>::const_iterator it = lst.begin();
-//	       bool _load = false;
-//	       for( ; it != lst.end(); it++ )
-//	       {
-//		   if ( ( *it ).m_strName == "id" )
-//		   {
-//		       _id = static_cast<ClassIDs>( atoi( ( *it ).m_strValue.c_str() ) );
-//		       _load = true;
-//		   }
-//		   else if ( ( *it ).m_strName == "pos" )
-//		       __pos = atoi( ( *it ).m_strValue.c_str() );
-//		   else if ( ( *it ).m_strName == "len" )
-//		       __len = atoi( ( *it ).m_strValue.c_str() );
-//	       }
-//	       if ( _load )
-//	       {
-//		   switch ( _id )
-//		   {
-//		   case ID_KWCharFormat:
-//		   {
-//		       _format = new KWFormat();
-//		       _format->load( parser, lst, _doc );
-//		       format = _doc->getFormatCollection()->getFormat( *_format );
-//		       for ( unsigned int i = __pos; i < __pos + __len; i++ )
-//		       {
-//			   if ( static_cast<int>( i ) > static_cast<int>( size() - 1 ) ) break;
-//			   freeChar( _data_[ i ], doc );
-//			   _kwformat = new KWCharFormat( format );
-//			   _data_[ i ].attrib = _kwformat;
-//			   format->incRef();
-//		       }
-//		       format->decRef();
-//		       delete _format;
-//		       _format = 0;
-//		   } break;
-//		   case ID_KWCharImage:
-//		   {
-//		       _image = new KWImage();
-//		       _image->load( parser, lst, _doc );
-// //			  QString key;
-// //			  image = _doc->getImageCollection()->getImage( *_image, key );
-//		       _kwimage = new KWCharImage( 0L );
-//		       doc->addImageRequest( _image->getFilename(), _kwimage );
-//		       freeChar( _data_[ __pos ], doc );
-//		       _data_[ __pos ].c = KWSpecialChar;
-//		       _data_[ __pos ].attrib = _kwimage;
-//		       delete _image;
-//		       _image = 0;
-//		   } break;
-//		   case ID_KWCharTab:
-//		   {
-//		       _kwtab = new KWCharTab();
-//		       freeChar( _data_[ __pos ], doc );
-//		       _data_[ __pos ].c = KWSpecialChar;
-//		       _data_[ __pos ].attrib = _kwtab;
-//		   } break;
-//		   case ID_KWCharVariable:
-//		   {
-//		       VariableType vart;
-//		       KWVariable *var = 0L;
-//		       KWCharVariable *v = 0L;
-
-//		       while ( parser.open( 0L, tag ) )
-//		       {
-//			   KOMLParser::parseTag( tag.c_str(), name, lst );
-
-//			   if ( name == "TYPE" )
-//			   {
-//			       KOMLParser::parseTag( tag.c_str(), name, lst );
-//			       vector<KOMLAttrib>::const_iterator it = lst.begin();
-//			       for( ; it != lst.end(); it++ )
-//			       {
-//				   if ( ( *it ).m_strName == "type" )
-//				   {
-//				       vart = static_cast<VariableType>( atoi( ( *it ).m_strValue.c_str() ) );
-//				       switch ( vart )
-//				       {
-//				       case VT_DATE_FIX:
-//					   var = new KWDateVariable( _doc );
-//					   break;
-//				       case VT_DATE_VAR:
-//					   var = new KWDateVariable( _doc );
-//					   break;
-//				       case VT_TIME_FIX:
-//					   var = new KWTimeVariable( _doc );
-//					   break;
-//				       case VT_TIME_VAR:
-//					   var = new KWTimeVariable( _doc );
-//					   break;
-//				       case VT_PGNUM:
-//					   var = new KWPgNumVariable( _doc );
-//					   break;
-//				       default: break;
-//				       }
-
-//				       var->setVariableFormat( _doc->getVarFormats().find( static_cast<int>( vart ) ) );
-//				       v = new KWCharVariable( var );
-//				   }
-//			       }
-//			   }
-//			   else if ( name == "FRMAT" && v )
-//			   {
-//			       _format = new KWFormat();
-//			       _format->load( parser, lst, _doc );
-//			       format = _doc->getFormatCollection()->getFormat( *_format );
-//			       freeChar( _data_[ __pos ], doc );
-//			       v->setFormat( format );
-//			       _data_[ __pos ].attrib = v;
-//			       _data_[ __pos ].c = KWSpecialChar;
-//			       delete _format;
-//			       _format = 0;
-//			   }
-//			   else
-//			   {
-//			       if ( var )
-//				   var->load( name, tag, lst );
-//			   }
-
-//			   if ( !parser.close( tag ) )
-//			   {
-//			       cerr << "ERR: Closing Child" << endl;
-//			       return;
-//			   }
-//		       }
-//		   } break;
-//		   case ID_KWCharFootNote:
-//		   {
-//		       KWFootNote *fn = new KWFootNote( doc, new QList<KWFootNote::KWFootNoteInternal>() );
-//		       KWCharFootNote *v = new KWCharFootNote( fn );
-
-//		       while ( parser.open( 0L, tag ) )
-//		       {
-//			   KOMLParser::parseTag( tag.c_str(), name, lst );
-
-//			   if ( name == "FRMAT" && v )
-//			   {
-//			       _format = new KWFormat();
-//			       _format->load( parser, lst, _doc );
-//			       format = _doc->getFormatCollection()->getFormat( *_format );
-//			       freeChar( _data_[ __pos ], doc );
-//			       v->setFormat( format );
-//			       _data_[ __pos ].attrib = v;
-//			       _data_[ __pos ].c = KWSpecialChar;
-//			       delete _format;
-//			       _format = 0;
-//			   }
-//			   else
-//			   {
-//			       if ( fn )
-//				   fn->load( name, tag, parser, lst );
-//			   }
-
-//			   if ( !parser.close( tag ) )
-//			   {
-//			       cerr << "ERR: Closing Child" << endl;
-//			       return;
-//			   }
-//		       }
-
-//		       doc->getFootNoteManager().insertFootNoteInternal( fn );
-//		   } break;
-//		   default: break;
-//		   }
-//		   _load = false;
-//	       }
-//	   }
-
-//	   if ( !parser.close( tag ) )
-//	   {
-//	       cerr << "ERR: Closing Child" << endl;
-//	       return;
-//	   }
-//     }
-// }
 
 /*================================================================*/
 void KWString::resize( unsigned int _size, bool del )
 {
     if ( _size == _len_ )
-	return;
+        return;
 
     if ( _size < _len_ )
- {
-     if ( del ) free( _data_ + _size, _len_ - _size );
-     _len_ = _size;
+    {
+        if ( del ) free( _data_ + _size, _len_ - _size );
+        _len_ = _size;
 
-     return;
- }
+        return;
+    }
 
     /* _size > _len_ */
     if (_size < _max_)
- {
-     _len_ = _size;
-     return;
- }
+    {
+        _len_ = _size;
+        return;
+    }
 
     // Alloc some bytes more => faster when increasing size in steps of 1
     KWChar *d = alloc( _size + 10 );
     if ( _data_ )
- {
-     memcpy( d, _data_, _len_ * sizeof( KWChar ) );
-     delete [] _data_;
- }
+    {
+        memcpy( d, _data_, _len_ * sizeof( KWChar ) );
+        delete [] _data_;
+    }
 
     _data_ = d;
     _len_ = _size;
@@ -643,53 +605,52 @@ KWChar* KWString::copy( KWChar *_data, unsigned int _len )
 
     unsigned int i = 0;
     for ( i = 0; i < _len; i++ )
- {
-     __data[ i ].c = _data[ i ].c;
-     if ( _data[ i ].attrib )
- {
-     switch ( _data[ i ].attrib->getClassId() )
- {
- case ID_KWCharFormat:
-     {
-	 KWCharFormat *attrib = ( KWCharFormat* )_data[ i ].attrib;
-	 attrib->getFormat()->incRef();
-	 KWCharFormat *f = new KWCharFormat( attrib->getFormat() );
-	 __data[ i ].attrib = f;
-     } break;
- case ID_KWCharImage:
-     {
-	 KWCharImage *attrib = ( KWCharImage* )_data[ i ].attrib;
-	 if ( attrib->getImage() )
-	     attrib->getImage()->incRef();
-	 KWCharImage *f = new KWCharImage( attrib->getImage() );
-	 __data[ i ].attrib = f;
-     } break;
- case ID_KWCharTab:
-     {
-	 KWCharTab *f = new KWCharTab();
-	 __data[ i ].attrib = f;
-     } break;
- case ID_KWCharVariable:
-     {
-	 KWCharFormat *attrib = dynamic_cast<KWCharVariable*>( _data[ i ].attrib );
-	 attrib->getFormat()->incRef();
-	 KWCharVariable *f = new KWCharVariable( dynamic_cast<KWCharVariable*>( _data[ i ].attrib )->getVar()->copy() );
-	 f->setFormat( attrib->getFormat() );
-	 __data[ i ].attrib = f;
-     } break;
- case ID_KWCharFootNote:
-     {
-	 KWCharFootNote *attrib = dynamic_cast<KWCharFootNote*>( _data[ i ].attrib );
-	 attrib->getFormat()->incRef();
-	 KWCharFootNote *f = new KWCharFootNote( dynamic_cast<KWCharFootNote*>( _data[ i ].attrib )->getFootNote()->copy() );
-	 f->setFormat( attrib->getFormat() );
-	 __data[ i ].attrib = f;
-     } break;
- }
- }
-     else __data[ i ].attrib = 0L;
-     __data[ i ].autoformat = 0L;
- }
+    {
+        __data[ i ].c = _data[ i ].c;
+        if ( _data[ i ].attrib )
+        {
+            switch ( _data[ i ].attrib->getClassId() )
+            {
+            case ID_KWCharFormat:
+            {
+                KWCharFormat *attrib = ( KWCharFormat* )_data[ i ].attrib;
+                attrib->getFormat()->incRef();
+                KWCharFormat *f = new KWCharFormat( attrib->getFormat() );
+                __data[ i ].attrib = f;
+            } break;
+            case ID_KWCharImage:
+            {
+                KWCharImage *attrib = ( KWCharImage* )_data[ i ].attrib;
+                attrib->getImage()->incRef();
+                KWCharImage *f = new KWCharImage( attrib->getImage() );
+                __data[ i ].attrib = f;
+            } break;
+            case ID_KWCharTab:
+            {
+                KWCharTab *f = new KWCharTab();
+                __data[ i ].attrib = f;
+            } break;
+            case ID_KWCharVariable:
+            {
+                KWCharFormat *attrib = dynamic_cast<KWCharVariable*>( _data[ i ].attrib );
+                attrib->getFormat()->incRef();
+                KWCharVariable *f = new KWCharVariable( dynamic_cast<KWCharVariable*>( _data[ i ].attrib )->getVar()->copy() );
+                f->setFormat( attrib->getFormat() );
+                __data[ i ].attrib = f;
+            } break;
+            case ID_KWCharFootNote:
+            {
+                KWCharFootNote *attrib = dynamic_cast<KWCharFootNote*>( _data[ i ].attrib );
+                attrib->getFormat()->incRef();
+                KWCharFootNote *f = new KWCharFootNote( dynamic_cast<KWCharFootNote*>( _data[ i ].attrib )->getFootNote()->copy() );
+                f->setFormat( attrib->getFormat() );
+                __data[ i ].attrib = f;
+            } break;
+            }
+        }
+        else __data[ i ].attrib = 0L;
+        __data[ i ].autoformat = 0L;
+    }
     return __data;
 }
 
@@ -700,47 +661,46 @@ KWChar& KWString::copy( KWChar _c )
 
     c->c = _c.c;
     if ( _c.attrib )
- {
-     switch ( _c.attrib->getClassId() )
- {
- case ID_KWCharFormat:
-     {
-	 KWCharFormat *attrib = ( KWCharFormat* )_c.attrib;
-	 attrib->getFormat()->incRef();
-	 KWCharFormat *f = new KWCharFormat( attrib->getFormat() );
-	 c->attrib = f;
-     } break;
- case ID_KWCharImage:
-     {
-	 KWCharImage *attrib = ( KWCharImage* )_c.attrib;
-	 if ( attrib->getImage() )
-	     attrib->getImage()->incRef();
-	 KWCharImage *f = new KWCharImage( attrib->getImage() );
-	 c->attrib = f;
-     } break;
- case ID_KWCharTab:
-     {
-	 KWCharTab *f = new KWCharTab();
-	 c->attrib = f;
-     } break;
- case ID_KWCharVariable:
-     {
-	 KWCharFormat *attrib = dynamic_cast<KWCharVariable*>( _c.attrib );
-	 attrib->getFormat()->incRef();
-	 KWCharVariable *f = new KWCharVariable( dynamic_cast<KWCharVariable*>( _c.attrib )->getVar()->copy() );
-	 f->setFormat( attrib->getFormat() );
-	 c->attrib = f;
-     } break;
- case ID_KWCharFootNote:
-     {
-	 KWCharFootNote *attrib = dynamic_cast<KWCharFootNote*>( _c.attrib );
-	 attrib->getFormat()->incRef();
-	 KWCharFootNote *f = new KWCharFootNote( dynamic_cast<KWCharFootNote*>( _c.attrib )->getFootNote()->copy() );
-	 f->setFormat( attrib->getFormat() );
-	 c->attrib = f;
-     } break;
- }
- }
+    {
+        switch ( _c.attrib->getClassId() )
+        {
+        case ID_KWCharFormat:
+        {
+            KWCharFormat *attrib = ( KWCharFormat* )_c.attrib;
+            attrib->getFormat()->incRef();
+            KWCharFormat *f = new KWCharFormat( attrib->getFormat() );
+            c->attrib = f;
+        } break;
+        case ID_KWCharImage:
+        {
+            KWCharImage *attrib = ( KWCharImage* )_c.attrib;
+            attrib->getImage()->incRef();
+            KWCharImage *f = new KWCharImage( attrib->getImage() );
+            c->attrib = f;
+        } break;
+        case ID_KWCharTab:
+        {
+            KWCharTab *f = new KWCharTab();
+            c->attrib = f;
+        } break;
+        case ID_KWCharVariable:
+        {
+            KWCharFormat *attrib = dynamic_cast<KWCharVariable*>( _c.attrib );
+            attrib->getFormat()->incRef();
+            KWCharVariable *f = new KWCharVariable( dynamic_cast<KWCharVariable*>( _c.attrib )->getVar()->copy() );
+            f->setFormat( attrib->getFormat() );
+            c->attrib = f;
+        } break;
+        case ID_KWCharFootNote:
+        {
+            KWCharFootNote *attrib = dynamic_cast<KWCharFootNote*>( _c.attrib );
+            attrib->getFormat()->incRef();
+            KWCharFootNote *f = new KWCharFootNote( dynamic_cast<KWCharFootNote*>( _c.attrib )->getFootNote()->copy() );
+            f->setFormat( attrib->getFormat() );
+            c->attrib = f;
+        } break;
+        }
+    }
     else c->attrib = 0L;
     c->autoformat = 0L;
 
@@ -754,53 +714,53 @@ int KWString::find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _ind
     int res = str.find( _expr, _index, _cs );
 
     if ( res != -1 )
- {
-     if ( !_format && !_whole ) return res;
+    {
+        if ( !_format && !_whole ) return res;
 
-     if ( !_format && _whole )
- {
-     if ( ( res == 0 || res > 0 && str[ res - 1 ] == ' ' ) &&
-	  ( res + static_cast<int>( _expr.length() ) == static_cast<int>( _len_ ) || res + static_cast<int>( _expr.length() ) <
-	    static_cast<int>( _len_ ) && str[ res + _expr.length() ] == ' ' ) )
-	 return res;
-     return -2;
- }
+        if ( !_format && _whole )
+        {
+            if ( ( res == 0 || res > 0 && str[ res - 1 ] == ' ' ) &&
+                 ( res + static_cast<int>( _expr.length() ) == static_cast<int>( _len_ ) || res + static_cast<int>( _expr.length() ) <
+                   static_cast<int>( _len_ ) && str[ res + _expr.length() ] == ' ' ) )
+                return res;
+            return -2;
+        }
 
-     KWFormat *format;
-     for ( unsigned int i = 0; i < _expr.length(); i++ )
- {
-     if ( _data_[ i + res ].attrib->getClassId() != ID_KWCharFormat )
-	 return -2;
+        KWFormat *format;
+        for ( unsigned int i = 0; i < _expr.length(); i++ )
+        {
+            if ( _data_[ i + res ].attrib->getClassId() != ID_KWCharFormat )
+                return -2;
 
-     format = dynamic_cast<KWCharFormat*>( _data_[ i + res ].attrib )->getFormat();
+            format = dynamic_cast<KWCharFormat*>( _data_[ i + res ].attrib )->getFormat();
 
-     if ( _format->checkFamily && _format->family != format->getUserFont()->getFontName() )
-	 return -2;
-     if ( _format->checkColor && _format->color != format->getColor() )
-	 return -2;
-     if ( _format->checkSize && _format->size != format->getPTFontSize() )
-	 return -2;
-     if ( _format->checkBold && _format->bold != ( format->getWeight() == QFont::Bold ) )
-	 return -2;
-     if ( _format->checkItalic && _format->italic != format->getItalic() )
-	 return -2;
-     if ( _format->checkUnderline && _format->underline != format->getUnderline() )
-	 return -2;
-     if ( _format->checkVertAlign && _format->vertAlign != format->getVertAlign() )
-	 return -2;
- }
+            if ( _format->checkFamily && _format->family != format->getUserFont()->getFontName() )
+                return -2;
+            if ( _format->checkColor && _format->color != format->getColor() )
+                return -2;
+            if ( _format->checkSize && _format->size != format->getPTFontSize() )
+                return -2;
+            if ( _format->checkBold && _format->bold != ( format->getWeight() == QFont::Bold ) )
+                return -2;
+            if ( _format->checkItalic && _format->italic != format->getItalic() )
+                return -2;
+            if ( _format->checkUnderline && _format->underline != format->getUnderline() )
+                return -2;
+            if ( _format->checkVertAlign && _format->vertAlign != format->getVertAlign() )
+                return -2;
+        }
 
-     if ( !_whole )
-	 return res;
-     else
- {
-     if ( ( res == 0 || res > 0 && str[ res - 1 ] == ' ' ) &&
-	  ( res + static_cast<int>( _expr.length() ) == static_cast<int>( _len_ ) || res + static_cast<int>( _expr.length() ) <
-	    static_cast<int>( _len_ ) && str[ res + _expr.length() ] == ' ' ) )
-	 return res;
-     return -2;
- }
- }
+        if ( !_whole )
+            return res;
+        else
+        {
+            if ( ( res == 0 || res > 0 && str[ res - 1 ] == ' ' ) &&
+                 ( res + static_cast<int>( _expr.length() ) == static_cast<int>( _len_ ) || res + static_cast<int>( _expr.length() ) <
+                   static_cast<int>( _len_ ) && str[ res + _expr.length() ] == ' ' ) )
+                return res;
+            return -2;
+        }
+    }
     else return -1;
 }
 
@@ -813,35 +773,35 @@ int KWString::find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _i
     int res = _regexp.match( str, _index, &_len );
 
     if ( res != -1 )
- {
-     if ( !_format ) return res;
+    {
+        if ( !_format ) return res;
 
-     KWFormat *format;
-     for ( int i = 0; i < _len; i++ )
- {
-     if ( _data_[ i + res ].attrib->getClassId() != ID_KWCharFormat )
-	 return -2;
+        KWFormat *format;
+        for ( int i = 0; i < _len; i++ )
+        {
+            if ( _data_[ i + res ].attrib->getClassId() != ID_KWCharFormat )
+                return -2;
 
-     format = dynamic_cast<KWCharFormat*>( _data_[ i + res ].attrib )->getFormat();
+            format = dynamic_cast<KWCharFormat*>( _data_[ i + res ].attrib )->getFormat();
 
-     if ( _format->checkFamily && _format->family != format->getUserFont()->getFontName() )
-	 return -2;
-     if ( _format->checkColor && _format->color != format->getColor() )
-	 return -2;
-     if ( _format->checkSize && _format->size != format->getPTFontSize() )
-	 return -2;
-     if ( _format->checkBold && _format->bold != ( format->getWeight() == QFont::Bold ) )
-	 return -2;
-     if ( _format->checkItalic && _format->italic != format->getItalic() )
-	 return -2;
-     if ( _format->checkUnderline && _format->underline != format->getUnderline() )
-	 return -2;
-     if ( _format->checkVertAlign && _format->vertAlign != format->getVertAlign() )
-	 return -2;
- }
+            if ( _format->checkFamily && _format->family != format->getUserFont()->getFontName() )
+                return -2;
+            if ( _format->checkColor && _format->color != format->getColor() )
+                return -2;
+            if ( _format->checkSize && _format->size != format->getPTFontSize() )
+                return -2;
+            if ( _format->checkBold && _format->bold != ( format->getWeight() == QFont::Bold ) )
+                return -2;
+            if ( _format->checkItalic && _format->italic != format->getItalic() )
+                return -2;
+            if ( _format->checkUnderline && _format->underline != format->getUnderline() )
+                return -2;
+            if ( _format->checkVertAlign && _format->vertAlign != format->getVertAlign() )
+                return -2;
+        }
 
-     return res;
- }
+        return res;
+    }
     else return -1;
 }
 
@@ -852,53 +812,53 @@ int KWString::findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, int _
     int res = str.findRev( _expr, _index, _cs );
 
     if ( res != -1 )
- {
-     if ( !_format && !_whole ) return res;
+    {
+        if ( !_format && !_whole ) return res;
 
-     if ( !_format && _whole )
- {
-     if ( ( res == 0 || res > 0 && str[ res - 1 ] == ' ' ) &&
-	  ( res + static_cast<int>( _expr.length() ) == static_cast<int>( _len_ ) || res + static_cast<int>( _expr.length() ) <
-	    static_cast<int>( _len_ ) && str[ res + _expr.length() ] == ' ' ) )
-	 return res;
-     return -2;
- }
+        if ( !_format && _whole )
+        {
+            if ( ( res == 0 || res > 0 && str[ res - 1 ] == ' ' ) &&
+                 ( res + static_cast<int>( _expr.length() ) == static_cast<int>( _len_ ) || res + static_cast<int>( _expr.length() ) <
+                   static_cast<int>( _len_ ) && str[ res + _expr.length() ] == ' ' ) )
+                return res;
+            return -2;
+        }
 
-     KWFormat *format;
-     for ( unsigned int i = 0; i < _expr.length(); i++ )
- {
-     if ( _data_[ i + res ].attrib->getClassId() != ID_KWCharFormat )
-	 return -2;
+        KWFormat *format;
+        for ( unsigned int i = 0; i < _expr.length(); i++ )
+        {
+            if ( _data_[ i + res ].attrib->getClassId() != ID_KWCharFormat )
+                return -2;
 
-     format = dynamic_cast<KWCharFormat*>( _data_[ i + res ].attrib )->getFormat();
+            format = dynamic_cast<KWCharFormat*>( _data_[ i + res ].attrib )->getFormat();
 
-     if ( _format->checkFamily && _format->family != format->getUserFont()->getFontName() )
-	 return -2;
-     if ( _format->checkColor && _format->color != format->getColor() )
-	 return -2;
-     if ( _format->checkSize && _format->size != format->getPTFontSize() )
-	 return -2;
-     if ( _format->checkBold && _format->bold != ( format->getWeight() == QFont::Bold ) )
-	 return -2;
-     if ( _format->checkItalic && _format->italic != format->getItalic() )
-	 return -2;
-     if ( _format->checkUnderline && _format->underline != format->getUnderline() )
-	 return -2;
-     if ( _format->checkVertAlign && _format->vertAlign != format->getVertAlign() )
-	 return -2;
- }
+            if ( _format->checkFamily && _format->family != format->getUserFont()->getFontName() )
+                return -2;
+            if ( _format->checkColor && _format->color != format->getColor() )
+                return -2;
+            if ( _format->checkSize && _format->size != format->getPTFontSize() )
+                return -2;
+            if ( _format->checkBold && _format->bold != ( format->getWeight() == QFont::Bold ) )
+                return -2;
+            if ( _format->checkItalic && _format->italic != format->getItalic() )
+                return -2;
+            if ( _format->checkUnderline && _format->underline != format->getUnderline() )
+                return -2;
+            if ( _format->checkVertAlign && _format->vertAlign != format->getVertAlign() )
+                return -2;
+        }
 
-     if ( !_whole )
-	 return res;
-     else
- {
-     if ( ( res == 0 || res > 0 && str[ res - 1 ] == ' ' ) &&
-	  ( res + static_cast<int>( _expr.length() ) == static_cast<int>( _len_ ) || res + static_cast<int>( _expr.length() ) <
-	    static_cast<int>( _len_ ) && str[ res + _expr.length() ] == ' ' ) )
-	 return res;
-     return -2;
- }
- }
+        if ( !_whole )
+            return res;
+        else
+        {
+            if ( ( res == 0 || res > 0 && str[ res - 1 ] == ' ' ) &&
+                 ( res + static_cast<int>( _expr.length() ) == static_cast<int>( _len_ ) || res + static_cast<int>( _expr.length() ) <
+                   static_cast<int>( _len_ ) && str[ res + _expr.length() ] == ' ' ) )
+                return res;
+            return -2;
+        }
+    }
     else return -1;
 }
 
@@ -909,7 +869,7 @@ int KWString::findRev( QRegExp /*_regexp*/, KWSearchDia::KWSearchEntry */*_forma
 }
 
 /*================================================================*/
-/* QString KWString::decoded()
+QString KWString::decoded()
 {
     QString str = toString( 0, size() );
 
@@ -921,182 +881,60 @@ int KWString::findRev( QRegExp /*_regexp*/, KWSearchDia::KWSearchEntry */*_forma
     str.remove( str.length() - 1, 1 );
 
     return QString( str );
-} */
+}
 
 /*================================================================*/
-/* QCString KWString::utf8( bool _decoded )
+QCString KWString::utf8( bool _decoded )
 {
     QString str;
     if ( _decoded )
-	str = decoded();
+        str = decoded();
     else
-	str = toString( 0, size() );
+        str = toString( 0, size() );
 
     return QCString( str.utf8() );
-} */
+}
 
 /*================================================================*/
 void freeChar( KWChar& _char, KWordDocument *_doc )
 {
     if ( _char.attrib )
     {
-	switch( _char.attrib->getClassId() )
+        switch( _char.attrib->getClassId() )
         {
-	case ID_KWCharFormat:
-	case ID_KWCharImage:
-	case ID_KWCharTab:
-	case ID_KWCharVariable:
-	    delete _char.attrib;
-	    break;
-	case ID_KWCharFootNote:
-	{
-	    _doc->getFootNoteManager().removeFootNote( dynamic_cast<KWCharFootNote*>( _char.attrib )->getFootNote() );
-	    delete _char.attrib;
-	}
-	break;
-	default: ; //assert( 0 );
-	}
-	_char.attrib = 0L;
-	if ( _char.autoformat )
-	    delete _char.autoformat;
-	_char.autoformat = 0L;
+        case ID_KWCharFormat:
+        case ID_KWCharImage:
+        case ID_KWCharTab:
+        case ID_KWCharVariable:
+            delete _char.attrib;
+            break;
+        case ID_KWCharFootNote:
+        {
+            _doc->getFootNoteManager().removeFootNote( dynamic_cast<KWCharFootNote*>( _char.attrib )->getFootNote() );
+            delete _char.attrib;
+        } break;
+        default: ; //assert( 0 );
+        }
+        _char.attrib = 0L;
+        if ( _char.autoformat )
+            delete _char.autoformat;
+        _char.autoformat = 0L;
     }
 }
 
 /*================================================================*/
-QDomElement KWCharFormat::save( QDomDocument& doc )
+ostream& operator<<( ostream &out, KWString &_string )
 {
-    QDomElement e = doc.createElement( "STYLE" );
-    e.setAttribute( "id", format->getId() );
+    char c = 1;
 
-    return e;
-}
-
-/*================================================================*/
-bool KWCharFormat::load( const QDomElement& element, KWordDocument* doc, KWString* text )
-{
-    if ( !element.hasAttribute( "id" ) )
-	return FALSE;
-
-    KWFormat* format = doc->getFormatCollection()->getFormat( element.attribute( "id" ).toInt() );
-
-    // Load the text
-    QString t = element.text();
-    int start = text->size();
-    text->insert( start, t );
-
-    // Fill with attributes
-    // ### todo: Reggie: you should use chared KWCharFormat here
-    uint len = t.length();
-    KWChar* p = text->data();
-    for( uint i = 0; i < len; ++i )
+    for ( unsigned int i = 0; i < _string.size(); i++ )
     {
-	format->incRef();
-	p[ start + i ].attrib = new KWCharFormat( format );
+        if ( _string.data()[ i ].c != KWSpecialChar )
+            out << _string.data()[ i ].c;
+        else
+            out << c;
     }
-    format->decRef();
 
-    return TRUE;
+    return out;
 }
 
-/*================================================================*/
-QDomElement KWCharImage::save( QDomDocument& doc )
-{
-    return image->save( doc );
-}
-
-/*================================================================*/
-bool KWCharImage::load( const QDomElement& element, KWordDocument* doc )
-{
-    doc->addImageRequest( element.attribute( "filename" ), this );
-
-    return TRUE;
-}
-
-/*================================================================*/
-QDomElement KWCharTab::save( QDomDocument& doc )
-{
-    QDomElement e = doc.createElement( "TAB" );
-    return e;
-}
-
-/*================================================================*/
-bool KWCharTab::load( const QDomElement&, KWordDocument* )
-{
-    return TRUE;
-}
-
-/*================================================================*/
-QDomElement KWCharVariable::save( QDomDocument& doc )
-{
-    QDomElement v = var->save( doc );
-    if ( v.isNull() )
-	return v;
-    v.setAttribute( "id", format->getId() );
-
-    return v;
-}
-
-/*================================================================*/
-bool KWCharVariable::load( const QDomElement& element, KWordDocument* doc )
-{
-    if ( var )
-	delete var;
-    if ( format )
-	format->decRef();
-    format = doc->getFormatCollection()->getFormat( element.attribute( "id" ).toInt() );
-	
-    int vart = element.attribute( "type" ).toInt();
-    switch ( vart )
-    {
-    case VT_DATE_FIX:
-	var = new KWDateVariable( doc );
-	break;
-    case VT_DATE_VAR:
-	var = new KWDateVariable( doc );
-	break;
-    case VT_TIME_FIX:
-	var = new KWTimeVariable( doc );
-	break;
-    case VT_TIME_VAR:
-	var = new KWTimeVariable( doc );
-	break;
-    case VT_PGNUM:
-	var = new KWPgNumVariable( doc );
-	break;
-    default: break;
-    }
-    var->setVariableFormat( doc->getVarFormats().find( (int)vart ) );
-
-    if ( !var->load( element ) )
-	return false;
-
-    return true;
-}
-
-/*================================================================*/
-QDomElement KWCharFootNote::save( QDomDocument& doc )
-{
-    QDomElement e = fn->save( doc );
-    if ( e.isNull() )
-	return e;
-
-    e.setAttribute( "id", format->getId() );
-
-    return e;
-}
-
-/*================================================================*/
-bool KWCharFootNote::load( const QDomElement& element, KWordDocument* doc )
-{
-    if ( !fn->load( element ) )
-	return false;
-
-    if ( format )
-	format->decRef();
-    format = doc->getFormatCollection()->getFormat( element.attribute( "id" ).toInt() );
-
-    return true;
-}
-
-					

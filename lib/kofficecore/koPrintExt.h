@@ -22,14 +22,9 @@
 
 #include "koffice.h"
 
-class QPicture;
-class QPaintDevice;
+#include <qpicture.h>
+#include <qpainter.h>
 
-/**
- * All office components which want to allow printing
- * must inherit from this class. KoPrintExt is an abstract
- * basis class. You must implement the @ref #draw method.
- */
 class KoPrintExt : virtual public KOffice::Print_skel
 {
 public:
@@ -37,10 +32,10 @@ public:
   KoPrintExt();
   
   // IDL
-  /**
-   * Draws the document in a QPicture and sends it to the caller.
-   */
-  KOffice::Print::Picture* picture( CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale );
+  char* encodedMetaFile( CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale );
+
+  // C++
+  QPicture* picture();
 
 protected:
   /**
@@ -53,14 +48,14 @@ protected:
    * in the constructor of your document to register the new interface.
    * Lets have an example taken from KImage:
    * <pre>
-   * class ImageDocument : public QObject,
-   *                       virtual public KoDocument,
-   *                       virtual public KoPrintExt,
-   *                       virtual public KImage::ImageDocument_skel
+   * class ImageDocument_impl : public QObject,
+   *                            virtual public KoDocument,
+   *                            virtual public KoPrintExt,
+   *                            virtual public KImage::ImageDocument_skel
    * </pre>
    * Your constructor must then look like
    * <pre>
-   * ImageDocument::ImageDocument()
+   * ImageDocument_impl::ImageDocument_impl()
    * {
    *   ADD_INTERFACE( "IDL:OPParts/Print:1.0" );
    *   ....
@@ -69,6 +64,9 @@ protected:
    */
   virtual void draw( QPaintDevice*, CORBA::Long _width, CORBA::Long _height,
 		     CORBA::Float _scale ) = 0;
+  virtual void draw( CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale );
+
+  QPicture* m_pPicture;
 };
 
 #endif

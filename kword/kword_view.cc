@@ -185,7 +185,7 @@ void KWordView::init()
     if ( gui )
 	gui->setDocument( m_pKWordDoc );
 
-    format = *m_pKWordDoc->getDefaultParagLayout()->getFormat();
+    format = m_pKWordDoc->getDefaultParagLayout()->getFormat();
     if ( gui )
 	gui->getPaperWidget()->formatChanged( format );
 
@@ -683,7 +683,7 @@ void KWordView::updateStyle( QString _styleName, bool _updateFormat )
     if ( _styleName == "Bullet List" )
 	m_vToolBarText->setButton( ID_USORT_LIST, true );
 
-    setFormat( *m_pKWordDoc->findParagLayout( _styleName )->getFormat(), false, _updateFormat, false );
+    setFormat( m_pKWordDoc->findParagLayout( _styleName )->getFormat(), false, _updateFormat, false );
 
     gui->getHorzRuler()->setTabList( m_pKWordDoc->findParagLayout( _styleName )->getTabList() );
 }
@@ -1332,7 +1332,7 @@ void KWordView::textStyleSelected( const CORBA::WChar *_style )
 {
     QString style = C2Q( _style );
     gui->getPaperWidget()->applyStyle( style );
-    format = *m_pKWordDoc->findParagLayout( style )->getFormat();
+    format = m_pKWordDoc->findParagLayout( style )->getFormat();
     gui->getPaperWidget()->formatChanged( format );
     updateStyle( style, false );
 }
@@ -2985,7 +2985,7 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
     QValueList<int> l;
     l << 0;
     panner->setSizes( l );
-
+        
     KoPageLayout layout;
     KoColumns cols;
     KoKWHeaderFooter hf;

@@ -6,10 +6,10 @@
 #include "paraglayout.h"
 
 #include <assert.h>
+#include <iostream>
 
+#include <koStream.h>
 #include <koRuler.h>
-
-#include <qdom.h>
 
 class KWVariable;
 class KWFootNote;
@@ -147,8 +147,8 @@ public:
     bool deleteText( unsigned int _pos, unsigned int _len = 1 );
     void setFormat( unsigned int _pos, unsigned int _len, const KWFormat &format );
 
-    QDomElement save( QDomDocument& doc );
-    bool load( const QDomElement& element );
+    void save( ostream &out );
+    void load( KOMLParser&, vector<KOMLAttrib>& );
 
     int *getCounterData() { return counterData; }
 
@@ -165,22 +165,22 @@ public:
     bool hasHardBreak() { return hardBreak; }
 
     QString getParagName() { return paragName; }
-    void setParagName( const QString &name )
+    void setParagName( const QString &name ) 
     { paragName = name; }
 
-    void setFrameSet( KWTextFrameSet *_fs )
+    void setFrameSet( KWTextFrameSet *_fs ) 
     { frameSet = _fs; }
 
-    void setDocument( KWordDocument *_doc )
+    void setDocument( KWordDocument *_doc ) 
     { document = _doc; }
-
+    
     Info getInfo() { return info; }
     void setInfo( Info _info ) { info = _info; }
 
     static void correctFormat( KWParag *newParag, KWParag *oldParag );
 
     KWordDocument* getDocument() { return document; }
-
+    
 protected:
     /**
      * Pointer to the previous paragraph or 0L if this is the first one.

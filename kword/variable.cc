@@ -1,26 +1,30 @@
 /******************************************************************/
-/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998	  */
-/* Version: 0.0.1						  */
-/* Author: Reginald Stadlbauer, Torben Weis			  */
-/* E-Mail: reggie@kde.org, weis@kde.org				  */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
-/* needs c++ library Qt (http://www.troll.no)			  */
-/* written for KDE (http://www.kde.org)				  */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
-/* needs OpenParts and Kom (weis@kde.org)			  */
-/* License: GNU GPL						  */
+/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
+/* Version: 0.0.1                                                 */
+/* Author: Reginald Stadlbauer, Torben Weis                       */
+/* E-Mail: reggie@kde.org, weis@kde.org                           */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
+/* needs c++ library Qt (http://www.troll.no)                     */
+/* written for KDE (http://www.kde.org)                           */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
+/* needs OpenParts and Kom (weis@kde.org)                         */
+/* License: GNU GPL                                               */
 /******************************************************************/
-/* Module: Variable						  */
+/* Module: Variable                                               */
 /******************************************************************/
 
 #include "variable.h"
 #include "parag.h"
 #include "defs.h"
 
+#include <komlMime.h>
+#include <strstream>
+#include <fstream>
+
 #include <unistd.h>
 
 /******************************************************************/
-/* Class: KWVariablePgNumFormat					  */
+/* Class: KWVariablePgNumFormat                                   */
 /******************************************************************/
 
 /*================================================================*/
@@ -34,8 +38,8 @@ QString KWVariablePgNumFormat::convert( KWVariable *_var )
 {
     if ( _var->getType() != VT_PGNUM )
     {
-	warning( "Can't convert variable of type %d to a page num!!!", _var->getType() );
-	return QString();
+        warning( "Can't convert variable of type %d to a page num!!!", _var->getType() );
+        return QString();
     }
 
     QString str;
@@ -46,7 +50,7 @@ QString KWVariablePgNumFormat::convert( KWVariable *_var )
 }
 
 /******************************************************************/
-/* Class: KWVariableDateFormat					  */
+/* Class: KWVariableDateFormat                                    */
 /******************************************************************/
 
 /*================================================================*/
@@ -60,8 +64,8 @@ QString KWVariableDateFormat::convert( KWVariable *_var )
 {
     if ( _var->getType() != VT_DATE_FIX && _var->getType() != VT_DATE_VAR )
     {
-	warning( "Can't convert variable of type %d to a date!!!", _var->getType() );
-	return QString();
+        warning( "Can't convert variable of type %d to a date!!!", _var->getType() );
+        return QString();
     }
 
     // for now...
@@ -69,7 +73,7 @@ QString KWVariableDateFormat::convert( KWVariable *_var )
 }
 
 /******************************************************************/
-/* Class: KWVariableTimeFormat					  */
+/* Class: KWVariableTimeFormat                                    */
 /******************************************************************/
 
 /*================================================================*/
@@ -83,8 +87,8 @@ QString KWVariableTimeFormat::convert( KWVariable *_var )
 {
     if ( _var->getType() != VT_TIME_FIX && _var->getType() != VT_TIME_VAR )
     {
-	warning( "Can't convert variable of type %d to a time!!!", _var->getType() );
-	return QString();
+        warning( "Can't convert variable of type %d to a time!!!", _var->getType() );
+        return QString();
     }
 
     // for now...
@@ -92,66 +96,66 @@ QString KWVariableTimeFormat::convert( KWVariable *_var )
 }
 
 /******************************************************************/
-/* Class: KWVariable						  */
+/* Class: KWVariable                                              */
 /******************************************************************/
 
 /*================================================================*/
-QDomElement KWVariable::save( QDomDocument& doc )
+void KWVariable::save( ostream &out )
 {
-    QDomElement var = doc.createElement( "VARIABLE" );
-    var.setAttribute( "type", (int)getType() );
-
-    QDomElement pos = doc.createElement( "POS" );
-    var.appendChild( pos );
-    pos.setAttribute( "frameSet", frameSetNum );
-    pos.setAttribute( "frame", frameNum );
-    pos.setAttribute( "pageNum", pageNum );
-
-    return var;
+    out << indent << "<TYPE type=\"" << static_cast<int>( getType() ) << "\"/>" << endl;
+    out << indent << "<POS frameSet=\"" << frameSetNum << "\" frame=\"" << frameNum
+        << "\" pageNum=\"" << pageNum << "\"/>" << endl;
 }
 
 /*================================================================*/
-bool KWVariable::load( const QDomElement& element )
+void KWVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
 {
-    frameSetNum = element.attribute( "frameSet" ).toInt();
-    frameNum = element.attribute( "frame" ).toInt();
-    pageNum = element.attribute( "page" ).toInt();
-	    
-    return TRUE;
+    if ( name == "POS" )
+    {
+        KOMLParser::parseTag( tag.c_str(), name, lst );
+        vector<KOMLAttrib>::const_iterator it = lst.begin();
+        for( ; it != lst.end(); it++ )
+        {
+            if ( ( *it ).m_strName == "frameSet" )
+                frameSetNum = atoi( ( *it ).m_strValue.c_str() );
+            else if ( ( *it ).m_strName == "frame" )
+                frameNum = atoi( ( *it ).m_strValue.c_str() );
+            else if ( ( *it ).m_strName == "pgNum" )
+                pageNum = atoi( ( *it ).m_strValue.c_str() );
+        }
+    }
 }
 
 /******************************************************************/
-/* Class: KWPgNumVariable					  */
+/* Class: KWPgNumVariable                                         */
 /******************************************************************/
 
 /*================================================================*/
-QDomElement KWPgNumVariable::save( QDomDocument& doc )
+void KWPgNumVariable::save( ostream &out )
 {
-    QDomElement var = KWVariable::save( doc );
-
-    QDomElement pgnum = doc.createElement( "PGNUM" );
-    var.appendChild( pgnum );
-    pgnum.setAttribute( "value", (int)pgNum );
-
-    return var;
+    KWVariable::save( out );
+    out << indent << "<PGNUM value=\"" << pgNum << "\"/>" << endl;
 }
 
 /*================================================================*/
-bool KWPgNumVariable::load( const QDomElement& element )
+void KWPgNumVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
 {
-    if ( !KWVariable::load( element ) )
-	return FALSE;
-    
-    QDomElement e = element.namedItem( "PGNUM" ).toElement();
-    if ( e.isNull() )
-	return FALSE;
-    pgNum = e.attribute( "value" ).toInt();
-    
-    return TRUE;
+    KWVariable::load( name, tag, lst );
+
+    if ( name == "PGNUM" )
+    {
+        KOMLParser::parseTag( tag.c_str(), name, lst );
+        vector<KOMLAttrib>::const_iterator it = lst.begin();
+        for( ; it != lst.end(); it++ )
+        {
+            if ( ( *it ).m_strName == "value" )
+                pgNum = atoi( ( *it ).m_strValue.c_str() );
+        }
+    }
 }
 
 /******************************************************************/
-/* Class: KWDateVariable					  */
+/* Class: KWDateVariable                                          */
 /******************************************************************/
 
 /*================================================================*/
@@ -159,9 +163,9 @@ KWDateVariable::KWDateVariable( KWordDocument *_doc, bool _fix, QDate _date )
     : KWVariable( _doc ), fix( _fix )
 {
     if ( !fix )
-	date = QDate::currentDate();
+        date = QDate::currentDate();
     else
-	date = _date;
+        date = _date;
 
     recalc();
 }
@@ -172,39 +176,45 @@ void KWDateVariable::recalc()
 }
 
 /*================================================================*/
-QDomElement KWDateVariable::save( QDomDocument& doc )
+void KWDateVariable::save( ostream &out )
 {
-    QDomElement var = KWVariable::save( doc );
-
-    QDomElement dt = doc.createElement( "DATE" );
-    var.appendChild( dt );
-    dt.setAttribute( "year", date.year() );
-    dt.setAttribute( "month", date.month() );
-    dt.setAttribute( "day", date.day() );
-    dt.setAttribute( "fix", fix );
-
-    return var;
+    KWVariable::save( out );
+    out << indent << "<DATE year=\"" << date.year() << "\" month=\"" << date.month()
+        << "\" day=\"" << date.day() << "\" fix=\"" << static_cast<int>( fix ) << "\"/>" << endl;
 }
 
 /*================================================================*/
-bool KWDateVariable::load( const QDomElement& element )
+void KWDateVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
 {
-    if ( !KWVariable::load( element ) )
-	return FALSE;
+    KWVariable::load( name, tag, lst );
 
-    QDomElement e = element.namedItem( "DATE" ).toElement();
-    fix = (bool)e.attribute( "fix" );
-    
-    int y = e.attribute( "year" ).toInt();
-    int m = e.attribute( "month" ).toInt();
-    int d = e.attribute( "day" ).toInt();
-    date = QDate( y, m, d );
-    
-    return TRUE;
+    int y, m, d;
+
+    if ( name == "DATE" )
+    {
+        KOMLParser::parseTag( tag.c_str(), name, lst );
+        vector<KOMLAttrib>::const_iterator it = lst.begin();
+        for( ; it != lst.end(); it++ )
+        {
+            if ( ( *it ).m_strName == "year" )
+                y = atoi( ( *it ).m_strValue.c_str() );
+            else if ( ( *it ).m_strName == "month" )
+                m = atoi( ( *it ).m_strValue.c_str() );
+            else if ( ( *it ).m_strName == "day" )
+                d = atoi( ( *it ).m_strValue.c_str() );
+            else if ( ( *it ).m_strName == "fix" )
+                fix = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+        }
+    }
+
+    if ( fix )
+        date.setYMD( y, m, d );
+    else
+        date = QDate::currentDate();
 }
 
 /******************************************************************/
-/* Class: KWTimeVariable					  */
+/* Class: KWTimeVariable                                          */
 /******************************************************************/
 
 /*================================================================*/
@@ -212,9 +222,9 @@ KWTimeVariable::KWTimeVariable( KWordDocument *_doc, bool _fix, QTime _time )
     : KWVariable( _doc ), fix( _fix )
 {
     if ( !fix )
-	time = QTime::currentTime();
+        time = QTime::currentTime();
     else
-	time = _time;
+        time = _time;
 
     recalc();
 }
@@ -225,36 +235,44 @@ void KWTimeVariable::recalc()
 }
 
 /*================================================================*/
-QDomElement KWTimeVariable::save( QDomDocument& doc )
+void KWTimeVariable::save( ostream &out )
 {
-    QDomElement var = KWVariable::save( doc );
-
-    QDomElement tm = doc.createElement( "TIME" );
-    var.appendChild( tm );
-    tm.setAttribute( "hour", time.hour() );
-    tm.setAttribute( "minute", time.minute() );
-    tm.setAttribute( "second", time.second() );
-    tm.setAttribute( "msecond", time.msec() );
-    tm.setAttribute( "fix", fix );
-
-    return var;
+    KWVariable::save( out );
+    out << indent << "<TIME hour=\"" << time.hour() << "\" minute=\"" << time.minute()
+        << "\" second=\"" << time.second() << "\" msecond=\"" << time.msec()
+        << "\" fix=\"" << static_cast<int>( fix ) << "\"/>" << endl;
 }
 
 /*================================================================*/
-bool KWTimeVariable::load( const QDomElement& element )
+void KWTimeVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
 {
-    if ( !KWVariable::load( element ) )
-	return FALSE;
+    KWVariable::load( name, tag, lst );
 
-    QDomElement e = element.namedItem( "TIME" ).toElement();
-    fix = (bool)e.attribute( "fix" );
-    
-    int h = e.attribute( "hour" ).toInt();
-    int m = e.attribute( "minute" ).toInt();
-    int s = e.attribute( "second" ).toInt();
-    int ms = e.attribute( "second" ).toInt();
-    time = QTime( h, m, s, ms );
-    
-    return TRUE;
+    int h, m, s, ms;
+
+    if ( name == "TIME" )
+    {
+        KOMLParser::parseTag( tag.c_str(), name, lst );
+        vector<KOMLAttrib>::const_iterator it = lst.begin();
+        for( ; it != lst.end(); it++ )
+        {
+            if ( ( *it ).m_strName == "hour" )
+                h = atoi( ( *it ).m_strValue.c_str() );
+            else if ((*it).m_strName == "minute")
+                m = atoi( ( *it ).m_strValue.c_str() );
+            else if ( ( *it ).m_strName == "second" )
+                s = atoi( ( *it ).m_strValue.c_str() );
+            else if ( ( *it ).m_strName == "msecond" )
+                ms = atoi( ( *it ).m_strValue.c_str() );
+            else if ( ( *it ).m_strName == "fix" )
+                fix = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+        }
+    }
+
+    if ( fix )
+        time.setHMS( h, m, s, ms );
+    else
+        time = QTime::currentTime();
 }
+
 

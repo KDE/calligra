@@ -162,14 +162,6 @@ protected:
     virtual void mousePressEvent( QMouseEvent* _ev );
     virtual void mouseReleaseEvent( QMouseEvent* _ev );
     virtual void mouseMoveEvent( QMouseEvent* _ev );
-    /**
-      * Avoid clickering on focus change.
-      */
-    virtual void focusInEvent( QFocusEvent* _ev );
-    /**
-      * Avoid clickering on focus change.
-      */
-    virtual void focusOutEvent( QFocusEvent* _ev );
 
 private:
     /**

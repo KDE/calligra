@@ -17,6 +17,7 @@
 #include <klocale.h>
 #include "afchoose.moc"
 #include <qvbox.h>
+#include <kstddirs.h>
 
 /******************************************************************/
 /* class AFChoose                                                 */
@@ -43,7 +44,7 @@ AFChoose::~AFChoose()
 void AFChoose::getGroups()
 {
   // global autoforms
-  QString afDir = qstrdup(KApplication::kde_datadir());
+  QString afDir = locate( "data", "." );
   afDir += "/kpresenter/autoforms/";
   QString str;
   char* c = new char[256];

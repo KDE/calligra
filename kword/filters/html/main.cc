@@ -16,6 +16,7 @@
 #include "main.h"
 #include "main.moc"
 
+#include <iostream>
 #include <stdio.h>
 #include <assert.h>
 
@@ -26,6 +27,15 @@
 #include <qstring.h>
 #include <qfile.h>
 #include <qtextstream.h>
+
+#include <komlMime.h>
+#include <koStream.h>
+#include <komlParser.h>
+#include <komlStreamFeed.h>
+#include <komlWriter.h>
+
+#include <strstream.h>
+#include <string.h>
 
 typedef KOMAutoLoader<Factory> MyAutoLoader;
 
@@ -113,7 +123,7 @@ void Filter::filter( KOffice::Filter::Data& data, const char *_from, const char 
         str += "<TEXT>";
 
         bool add = true;
-
+        
         for ( CORBA::ULong i = 0 ;i < len ; ++i )
         {
             QChar c = buffer[ i ];
