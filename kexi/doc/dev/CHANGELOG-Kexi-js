@@ -194,6 +194,8 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
     K_EXPORT_COMPONENT_FACTORY( libname, KGenericFactory<partClass>(aboutData) )
 - add gui for viewing full part information
 
+=== General TODO ===
+- avoid using veryvery long names for objects
 
 === USABILITY TODO ===
 -string2Identifier(): convert national chars like 'ó³¿æ' to similar latin-1, instead of '_'
@@ -220,6 +222,7 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 -use one and multi-key relations from kexidb
 
 === Table View TODO ====
+- combobox tv: fix row highlighting for 'related table data' model
 - add a functions for moving/cutting/copying/pasting rows
 - extended support for enums (combo boxes)
 - add top-left button that allow select all rows
@@ -233,14 +236,19 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 -add a function for editing indices (including multi-field indices)
   2 methods: 1) in additional dock 2) in property editor
 -add all missing properties (even when most are not working)
--add "key" information icon @ the left hand of line with primary key(s)
 -add "index" information icon @ the left hand of line with key(s) that is/are indexed
--save schema changes before switching to "view mode"
 -in propeditor: auto-sync pkey, unique, required & indexed properties on changing;
   add message boxes if needed
 -for 'column width' property: add 'default' value at the beginning
 -propose index key (ask for name) on saving tables without index (allow to bypass this message)
+- re-add "tablepart_toggle_pkey" action after shared toggle actions fix:
+--when propeditor is focused, there's a problem with syncing on/off state of toolbar button
+  of "tablepart_toggle_pkey" action 
+  --> altertable view doesn't receive the signal about toggling (because it's not focused)
 
+==== Forms TODO ====
+-make forms db aware
+--add record navigator
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -281,13 +289,13 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 
 
 ==== Main window TODO ====
-...
+- propeditor dock window is hidden when a window in data view mode is active 
+  (or no window is present). This feature is partially disabled 
+  (using PROPEDITOR_VISIBILITY_CHANGES), though,
+  --REENABLE when blinking and dock width changes will be removed in KMDI
 
 
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
-
-HOT TODO:
--combobox tv: fix row highlighting for 'related table data' model
 
 CCPASTEUR: 
 	-why pixmap's code is in kexiproperty/kexipropertybuffer?
@@ -326,18 +334,6 @@ CCPASTEUR:
 	(so recreating database will be available even 
 	if you have only access to one database).
 - GRANT privileges for non-root (current?) user for newly created db
-- remove --password option, add CLI password entering mode
-
-=== 2004 LT TODO ===
--improve sql parser
--improve sql gui designer
---criteria
---totals (sum, avg)
--make forms db aware
---add record navigator
---disable non-sqlite drivers (on compile-time)
--simple docs
-
 
 === Mimetypes/icons TODO ===
 - new mimetypes: 
@@ -355,7 +351,16 @@ CCPASTEUR:
 ** Ask SQLite devs for a possibility for adding a field to indicate kexi-sqlite 
    format without opening database
 
-CCMAIL: dkite@shaw.ca
+
+=== 2004 LT TODO ===
+-improve sql parser
+-improve sql gui designer
+--criteria
+--totals (sum, avg)
+--disable non-sqlite drivers (on compile-time)
+-simple docs
+-add newly created table to tables list in query designer
+-installer: add checking for existing kexi version
 
 TableView
 - record navigator
@@ -365,6 +370,64 @@ TableView
    when we're editing autonumber field and it's empty
 - disable "delete row" action on row editing
 - add and enable "cancel row editing" action on row editing
+
+CCMAIL: dkite@shaw.ca
+
+===================== Kexi 0.1 Beta 5 "Helloween" =====================
+
+2004-10-22
+TableView
+- KexiDateTimeTableEdit, KexiTimeTableEdit implemented
+Table Designer
+- BLOB types ifdefed using KEXI_SHOW_UNIMPLEMENTED
+KexiDB
+- DriverManager does not list derver-based projects 
+  when KEXI_SERVER_SUPPORT is undefined
+Startup
+- added error message when explicity provided db driver name not found
+
+2004-10-21
+Startup
+- KexiStartupFileDialog: filename handling fixed for win32; fixed focusing
+- avoid asking for conversion when '--dbdriver sqlite2' 
+  or '--createdb' CL option is present
+TableView
+- highlighting for int and float types fixed
+- fixed initializing for date picker
+- added 'datetime' and 'time' types support
+- adding empty rows when possible also for db-aware table views
+  (ie. RowEditoBuffer can be empty on insert)
+- it's now allowed to click "+" button in record navigator to insert rows 
+  (current editing is accepted)
+- on failed row insert/update, user is informed 
+  about "data_cancel_row_changes" action availability
+- on invalid value entered in a cell (after a msg box is closed),
+  the cell's editor is focused again
+Compile-time switches
+- KEXI_STARTUP_SHOW_TEMPLATES, KEXI_STARTUP_SHOW_RECENT,
+  KEXI_SERVER_SUPPORT, KEXI_FORMS_SUPPORT added (currently all enabled by default)
+Main
+- copy/paset/cut on navigator items enabled only for KEXI_SHOW_UNIMPLEMENTED
+- toolbars redesigned: now "design" toolbar is for kexipart's design view
+  and "data" is for data view. This avoids toolbars duplication.
+- propeditor dock window is hidden when a window in data view mode is active 
+  (or no window is present). This feature is partially disabled 
+  (using PROPEDITOR_VISIBILITY_CHANGES), though,
+  --REENABLE when blinking and dock width changes will be removed in KMDI
+- "data_cancel_row_changes" action added
+KexiDB
+- FORMAT CHANGED: SQLite Driver: 'date', 'datetime' and 'time' 
+  types support fixed: Qt::ISODate format is used
+- FieldList: simple methods made inline; fixed bug in hasField()
+- findRef() instead of find() used in few places for speedup
+- a hack needed because QVariant(QTime) has broken isNull():
+  Internally: null time value is now null QDateTime(), not-null time value
+  is now QDateTime(QDate(0,1,2),time); This allows to store 00:00:00 times.
+  See also stringToHackedQTime(const QString& s).
+Table Designer
+- "tablepart_toggle_pkey" action temporary removed from toolbar
+  (will be re-added after shared toggle actions fix);
+- "tablepart_toggle_pkey" action added to popup menu and to Edit menu
 
 
 2004-10-20
@@ -837,7 +900,7 @@ Form Designer
 Form Designer
 - some strings fixed
 
-===================== Kexi 0.1 Beta 4 =====================
+===================== Kexi 0.1 Beta 4 "FireDuck" =====================
 
 2004-07-15
 Forms
@@ -1122,7 +1185,7 @@ KFormDesigner, Kexi Forms
 KexiDB:
 - fixed bug: Connection::resultExists() now properly closes temp. cursor
 
-===================== Kexi 0.1 Beta 3 =====================
+===================== Kexi 0.1 Beta 3 "United Europe" =====================
 
 2004-05-08
 Form Designer: Extra widgets
@@ -1822,7 +1885,7 @@ Property Editor:
 	  setColumnStretchEnabled()
 
 
-===================== Kexi 0.1 Beta 2 =====================
+===================== Kexi 0.1 Beta 2 "Warsaw By Night" =====================
 
 2004-01-20
 - kmdi captions fix backported to kexi_compat
