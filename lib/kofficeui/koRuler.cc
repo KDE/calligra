@@ -638,8 +638,16 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                 if ( d->flags & F_TABS )
                     searchTab(mx);
             } else {
-                // Note: All limits should be 0, but KWord crashes currently, when the
-                // page is too small (infinite loop in the line breaking algorithm)! (Werner)
+                // Calculate the new value.
+                int newPos=mx;
+                if( newPos!=right && gridSize!=0.0 && (e->state() & ShiftButton)==0) { // apply grid.
+                    double grid=zoomIt(gridSize * 16);
+                    newPos=qRound( ((newPos * 16 / grid) * grid) / 16 );
+                }
+                if(newPos-left < 0) newPos=left;
+                else if (right-newPos < 0) newPos=right;
+                double newValue = unZoomIt(static_cast<double>(newPos) - frameStart + diffx);
+
                 switch ( d->action ) {
                     case A_BR_LEFT: {
                         if ( d->canvas && mx < right-10 && mx+diffx-2 > 0) {
@@ -701,67 +709,39 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     } break;
                     case A_FIRST_INDENT: {
                         if ( d->canvas ) {
-                            if ( mx - left >= 0 && right - mx >= 10 )
-                                drawLine( d->oldMx, mx);
-                            else
-                                return;
-                            i_first = unZoomIt(static_cast<double>(mx - left));
-                            d->oldMx = mx;
-                            d->oldMy = my;
+                            if(newValue == i_first) break;
+                            drawLine( d->oldMx, newPos);
+                            d->oldMx=newPos;
+                            i_first = newValue;
                             repaint( false );
                         }
                     } break;
                     case A_LEFT_INDENT: {
                         if ( d->canvas ) {
-                            if ( mx - left >= 0 && right - mx >= 10 )
-                                drawLine( d->oldMx, mx);
-                            else
-                                return;
-                            int oldDiff = ip_first-ip_left;
-                            ip_left = mx - left;
-                            ip_first = ip_left + oldDiff;
-                            if( ip_first < 0)
-                                ip_first=0;
-                            else if( ip_first > right-left-10 )
-                                ip_first=right-left-10;
-                            i_left=unZoomIt(static_cast<double>(ip_left));
-                            i_first=unZoomIt(static_cast<double>(ip_first));
-                            d->oldMx = mx;
-                            d->oldMy = my;
+                            if(newValue == i_left) break;
+                            double newFirst =(i_first - i_left) + newValue;
+                            if(zoomIt(newFirst) + left > right) break;
+
+                            drawLine( d->oldMx, newPos);
+                            i_first = newFirst;
+                            i_left = newValue;
+                            d->oldMx = newPos;
                             repaint( false );
                         }
                     } break;
                     case A_RIGHT_INDENT: {
                         if ( d->canvas ) {
-                            if ( mx - left >= 10 && right - mx >= 0 )
-                                drawLine( d->oldMx, mx);
-                            else
-                                return;
-                            d->i_right=unZoomIt(static_cast<double>(right - mx));
-                            d->oldMx = mx;
-                            d->oldMy = my;
+                            double rightValue = unZoomIt(right - newPos);
+                            if(rightValue == d->i_right) break;
+                            drawLine( d->oldMx, newPos);
+                            d->i_right=rightValue;
+                            d->oldMx = newPos;
                             repaint( false );
                         }
                     } break;
                     case A_TAB: {
                         if ( d->canvas) {
-                            int newPos;
-                            if(mx-left < 0) newPos=left;
-                            else if (right-mx < 0) newPos=right;
-                            else newPos=mx;
-
-                            double newValue = unZoomIt(static_cast<double>(newPos) - frameStart + diffx);
-                            if( newPos!=right && gridSize!=0.0 && (e->state() & ShiftButton)==0) {
-                                // use grid
-                                double diff = (*d->currTab).ptPos - newValue;
-
-                                if(diff < 0) diff=0-diff;
-                                if(diff*2 < gridSize) break; // diff less then gridSize; skip
-
-                                newValue = static_cast<int>((newValue / gridSize) + 0.5) * gridSize;
-                                if(newValue > unZoomIt(static_cast<double>(right)  - frameStart + diffx) )
-                                    newValue = unZoomIt(static_cast<double>(right)  - frameStart + diffx);
-                            } else if(newValue == (*d->currTab).ptPos) break; // no change
+                            if(newValue == (*d->currTab).ptPos) break; // no change
                             QPainter p( d->canvas );
                             p.setRasterOp( Qt::NotROP );
                             double pt = zoomIt((*d->currTab).ptPos);
@@ -782,6 +762,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     default: break;
                 }
             }
+            return;
         } break;
         case Qt::Vertical: {
             if ( !d->mousePressed ) {
