@@ -96,6 +96,9 @@ private:
     KoPoint m_tl, m_br;
 };
 
-
+KoRect operator|(const KoRect &lhs, const KoRect &rhs);
+KoRect operator&(const KoRect &lhs, const KoRect &rhs);
+bool operator==(const KoRect &lhs, const KoRect &rhs);
+bool operator!=(const KoRect &lhs, const KoRect &rhs);
 
 #endif

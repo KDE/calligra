@@ -33,6 +33,7 @@ public:
 
     KoPoint &operator=(const KoPoint &rhs) { m_x=rhs.x(); m_y=rhs.y(); return *this; }
     bool operator==(const KoPoint &rhs) const { return m_x==rhs.x() && m_y==rhs.y(); }
+    bool operator!=(const KoPoint &rhs) const { return m_x!=rhs.x() || m_y!=rhs.y(); }
 
     double x() const { return m_x; }
     double y() const { return m_y; }
