@@ -1,0 +1,98 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>ImportDialogUI</class>
+<comment>Export dialog for KWord's HTML export filter</comment>
+<author>Nicolas GOUTTE &lt;nicog@snafu.de&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>ImportDialogUI</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>412</width>
+            <height>558</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Plain Text Import Dialog</string>
+    </property>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>buttonGroupEncoding</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>20</y>
+                <width>135</width>
+                <height>130</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Encoding</string>
+        </property>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>11</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>radioEncodingUTF8</cstring>
+                </property>
+                <property name="text">
+                    <string>UTF-&amp;8</string>
+                </property>
+                <property name="checked">
+                    <bool>false</bool>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>radioEncodingLocal</cstring>
+                </property>
+                <property name="text">
+                    <string>&amp;Local Encoding</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>radioEncodingOther</cstring>
+                </property>
+                <property name="text">
+                    <string>&amp;Other Encoding:</string>
+                </property>
+                <property name="checked">
+                    <bool>false</bool>
+                </property>
+                <property name="buttonGroupId">
+                    <number>2</number>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <property name="name">
+                    <cstring>comboBoxEncoding</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>5</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+            </widget>
+        </vbox>
+    </widget>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

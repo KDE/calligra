@@ -30,7 +30,7 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qregexp.h>
-#include <qtextstream.h>
+#include <qtextcodec.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qdom.h>
@@ -45,6 +45,7 @@
 
 #include <asciiimport.h>
 #include <asciiimport.moc>
+#include "ImportDialog.h"
 
 class ASCIIImportFactory : KGenericFactory<ASCIIImport, KoFilter>
 {
@@ -91,8 +92,6 @@ void ASCIIImport::prepareDocument(QDomDocument& mainDocument, QDomElement& mainF
     element.setAttribute("unit","mm");
     elementDoc.appendChild(element);
 
-    // <PAPER> will be partialy changed by an AbiWord <pagesize> element.
-    // default paper format of AbiWord is "Letter"
     QDomElement elementPaper=mainDocument.createElement("PAPER");
     elementPaper.setAttribute("format",paperFormat);
     elementPaper.setAttribute("width" ,KoPageFormat::width (paperFormat,paperOrientation) * 72.0 / 25.4);
@@ -197,17 +196,33 @@ void ASCIIImport::prepareDocument(QDomDocument& mainDocument, QDomElement& mainF
 
 bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
                          const QString& from, const QString& to,
-                         const QString &) {
-
-
-  QStringList paragraph;  // lines of the paragraph
-  int linecount = 0;  // line counter used to position tables
-  int table_no = 0;  // used for table identifiers
-  int numLines; // Number of lines of the paragraph
-
-
-    if(to!="application/x-kword" || from!="text/plain")
+                         const QString &)
+{
+    if (to!="application/x-kword" || from!="text/plain")
         return false;
+
+    AsciiImportDialog* dialog = new AsciiImportDialog();
+
+    if (!dialog)
+    {
+        kdError(30502) << "Dialog has not been created! Aborting!" << endl;
+        return false;
+    }
+
+    if (!dialog->exec())
+    {
+        kdError(30502) << "Dialog was aborted! Aborting filter!" << endl;
+        return false;
+    }
+
+    QTextCodec* codec=dialog->getCodec();
+
+    delete dialog;
+
+    QStringList paragraph;  // lines of the paragraph
+    int linecount = 0;  // line counter used to position tables
+    //int table_no = 0;  // used for table identifiers
+    int numLines; // Number of lines of the paragraph
 
     QFile in(fileIn);
     if(!in.open(IO_ReadOnly)) {
@@ -220,10 +235,22 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
 
     QDomDocument mainDocument;
     QDomElement mainFramesetElement;
-    
+
     prepareDocument(mainDocument,mainFramesetElement);
 
     QTextStream stream(&in);
+
+    if (!codec)
+    {
+        kdError(30502) << "Could not create QTextCodec! Aborting" << endl;
+        in.close();
+        return false;
+    }
+
+    kdDebug(30502) << "Charset used: " << codec->name() << endl;
+
+    stream.setCodec(codec);
+
     bool lastCharWasCr=false; // Was the previous character a Carriage Return?
     QString strLine;
 
