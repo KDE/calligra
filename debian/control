@@ -49,7 +49,7 @@ Description: a vector graphics application for the KDE Office Suite
  Karbon is a vector graphics application.
  .
  Note that the KDE Office Suite comes with two graphics applications --
- Kontour (which is vector-based) and Krita (which is raster-based).
+ Karbon (which is vector-based) and Krita (which is raster-based).
  .
  This package is part of the KDE Office Suite.
 
@@ -134,7 +134,7 @@ Description: an image editor for the KDE Office Suite
  with painting techniques and composing images using brushes and layers.
  .
  Note that the KDE Office Suite comes with two graphics applications --
- Kontour (which is vector-based) and Krita (which is raster-based).
+ Karbon (which is vector-based) and Krita (which is raster-based).
  .
  This package is part of the KDE Office Suite.
 
