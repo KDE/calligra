@@ -8,5 +8,5 @@ kwmailmerge_kexi_la_LIBADD = $(LIB_KDEUI) -lkwmailmerge_interface -lDCOP
 
 METASOURCES = AUTO
 
-servicedir=$(kde_servicedir)
+servicesdir=$(kde_servicedir)
 services_DATA = kwserialletter_kexi.desktop
