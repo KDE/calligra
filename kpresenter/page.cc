@@ -1763,7 +1763,8 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 
 		_time.restart();
 	      }
-	    if ((_pix2.width()/(2 * _steps)) * _step >= _pix2.width() / 2) break;
+	    if ((_pix2.width()/(2 * _steps)) * _step >= _pix2.width() / 2
+		&& (_pix2.height()/(2 * _steps)) * _step >= _pix2.height() / 2) break;
 	  }
       } break;
     case PEF_OPEN_HORZ:
