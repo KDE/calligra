@@ -88,7 +88,7 @@ AC_ARG_WITH(pgsqldir,
 pgsql_incdirs="$ac_pgsql_dir/pgsql/include /usr/include/pgsql /usr/include /usr/local/include"
 AC_FIND_FILE(libpq++.h, $pgsql_incdirs, pgsql_incdir)
 if test ! -r $pgsql_incdir/libpq++.h; then
-  AC_MSG_ERROR(libpq++.h not found.)
+  AC_MSG_WARN(libpq++.h not found.)
   KATABASE_DIR=''
 else
   KATABASE_DIR='katabase'
@@ -101,7 +101,7 @@ AC_SUBST(PGSQLINC)
 pgsql_libdirs="$ac_pgsql_dir/pgsql/lib /usr/lib /usr/local/lib"
 AC_FIND_FILE(libpq.a, $pgsql_libdirs, pgsql_libdir)
 if test ! -r $pgsql_libdir/libpq++.a; then
-  AC_MSG_ERROR(libpq++ not found.)
+  AC_MSG_WARN(libpq++ not found.)
 fi
 
 PGSQLLIB=-L$pgsql_libdir
