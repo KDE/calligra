@@ -285,7 +285,7 @@ FormManager::startCreatingConnection()
 		}
 		delete l;
 	}
-
+	delete m_connection;
 	m_connection = new Connection();
 	m_drawingSlot = true;
 	m_dragConnection->setChecked(true);
@@ -926,6 +926,7 @@ FormManager::editConnections()
 
 	ConnectionDialog *dialog = new ConnectionDialog(activeForm()->widget()->topLevelWidget());
 	dialog->exec(activeForm());
+	delete dialog;
 }
 
 void
