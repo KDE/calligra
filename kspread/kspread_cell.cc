@@ -3319,8 +3319,12 @@ void KSpreadCell::decPrecision()
 
 void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
 {
+    QString ctext = _text;
+    if( ctext.length() > 5000 )
+      ctext = ctext.left( 5000 );
+	
     QString oldText=m_strText;
-    setDisplayText( _text, updateDepends );
+    setDisplayText( ctext, updateDepends );
     if(!m_pTable->isLoading() && !testValidity() )
     {
       //reapply old value if action == stop
