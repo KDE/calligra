@@ -35,3 +35,5 @@ OPTIMIZATION:
 MAKE IT NICE:
 -	pass all dialogs a parent
 -	introduce centerOfMass() for vsegmentlist. problem: CM for beziers?
+-	investigate whether we can use a KToolBar with an appropriate layout to replace
+	our current non-conforming solution.
