@@ -1,0 +1,8 @@
+DONE		kservicetype/kservice
+		(see koffice/servicetypes,
+		kpart::componentfactory finds it out for us)
+
+NOT NEEDED	mouseMoveEvent->setCursor()
+		see kword/kwcanvas.cc 429
+		(for kexiform)
+		don't forget setMouseTracking(true)

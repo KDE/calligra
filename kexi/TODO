@@ -1,0 +1,26 @@
+TODO:
+
+- everything
+
++ near future :)
+	+ gui
+		- mid-windows should have a better geometry on constructing
+		- each window, providing actions should be a guiclient (for standard kaction merging mechanisms) (jowenn)
+
+	+ project
+		- allow port specifications (don't forget the "new project wizzard")
+		  look what we need for a local database (e.g. "/tmp/mysql.socket")
+	
+	+ table
+		- incremental table search...
+		- look for repaintbugs
+		- don't display everything as text
+
+		- allow update and insert
+ 
+	+ kexiDB
+		FIXED	check why plugins are not beeing loaded
+		  	(have to check Makefiles, .desktops and sources
+
+	+ general
+		- add from / to XML
