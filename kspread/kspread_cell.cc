@@ -294,7 +294,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
     tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
     tmp += context.exception()->toString();
     QMessageBox::critical( 0, i18n("KSpread error"), tmp, i18n("OK"));
-    return false;
+    return;
   }
 
   KSContext& context2 = m_pTable->doc()->context();
