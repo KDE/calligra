@@ -3,5 +3,5 @@
 	section=Apps/Tools\
 	title="KOffice Workspace"\
 	command=koshell\
-	icon=""
+	icon="/usr/share/icons/locolor/16x16/apps/koshell.png"
 
