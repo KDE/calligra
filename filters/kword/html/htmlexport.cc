@@ -691,70 +691,73 @@ bool HTMLExport::filter(const QString  &filenameIn,
         return false;
     }
 
-    QString param=dialog->getState();
-
     ClassExportFilterBase* exportFilter=NULL;
 
-    kdDebug(30503) << "Received parameters = :" << param << ":" << endl;
-
-    if (param=="XHTML-SPARTAN")
-    { // spartan XHTML 1.0
-        kdDebug(30503) << "Spartan XHTML option" << endl;
-        exportFilter=new ClassExportFilterXHtmlSpartan;
-    }
-    else if (param=="HTML-SPARTAN")
-    { // spartan HTML 4.01
-        kdDebug(30503) << "Spartan HTML option" << endl;
-        exportFilter=new ClassExportFilterHtmlSpartan;
-    }
-    else if (param=="XHTML-TRANSITIONAL")
-    { // transitional XHTML 1.0
-        kdDebug(30503) << "Transitional XHTML option" << endl;
-        exportFilter=new ClassExportFilterXHtmlTransitional;
-    }
-    else if (param=="HTML-TRANSITIONAL")
-    { // transitional HTML 4.01
-        kdDebug(30503) << "Transitional HTML option" << endl;
-        exportFilter=new ClassExportFilterHtmlTransitional;
-    }
-    else if (param=="XHTML-STYLE")
-    { // Style XHTML 1.0
-        kdDebug(30503) << "Style XHTML option" << endl;
-        exportFilter=new ClassExportFilterXHtmlStyle;
-    }
-    else if (param=="HTML-STYLE")
-    { // Style HTML 4.01
-        kdDebug(30503) << "Style HTML option" << endl;
-        exportFilter=new ClassExportFilterHtmlStyle;
-    }
-    else if (param.contains("XHTML",false)>0)
-    { //XHTML 1.0 Transitional
-        kdDebug(30503) << "Unknown XHTML option" << endl;
-        exportFilter=new ClassExportFilterXHtmlTransitional;
-    }
-    else if (param.contains("HTML",false)>0)
-    { //XHTML 1.0 Transitional
-        kdDebug(30503) << "Unknown HTML option" << endl;
-        exportFilter=new ClassExportFilterHtmlTransitional;
+    if (dialog->isXHtml())
+    {
+        // XHTML 1.0
+        switch (dialog->getMode())
+        {
+        case 0:
+            { // "Spartan" XHTML 1.0
+                kdDebug(30503) << "Spartan XHTML option" << endl;
+                exportFilter=new ClassExportFilterXHtmlSpartan;
+                break;
+            }
+        case 1:
+            { // "Direct" XHTML 1.0
+                kdDebug(30503) << "Direct XHTML option" << endl;
+                exportFilter=new ClassExportFilterXHtmlTransitional;
+                break;
+            }
+        case 2:
+        default:
+            { // "Style" XHTML 1.0
+                kdDebug(30503) << "Style XHTML option" << endl;
+                exportFilter=new ClassExportFilterXHtmlStyle;
+                break;
+            }
+        }
     }
     else
-    { // default: XHTML 1.0 Transitional
-        kdDebug(30503) << "Unknown option" << endl;
-        exportFilter=new ClassExportFilterXHtmlTransitional;
+    {
+        // HTML 4.01
+        switch (dialog->getMode())
+        {
+        case 0:
+            { // "Spartan" HTML 4.01
+                kdDebug(30503) << "Spartan HTML option" << endl;
+                exportFilter=new ClassExportFilterHtmlSpartan;
+                break;
+            }
+        case 1:
+            { // "Direct" HTML 4.01
+                kdDebug(30503) << "Direct HTML option" << endl;
+                exportFilter=new ClassExportFilterHtmlTransitional;
+                break;
+            }
+        case 2:
+        default:
+            { // "Style" HTML 4.01
+                kdDebug(30503) << "Style HTML option" << endl;
+                exportFilter=new ClassExportFilterHtmlStyle;
+                break;
+            }
+       }
     }
+
+    delete dialog;
 
     if (!exportFilter)
     {
         kdError(30503) << "No (X)HTML filter created! Aborting! (Memory problem?)" << endl;
-        delete dialog;
         return false;
     }
 
     // Do the work!
-    bool result = exportFilter->filter(filenameIn,filenameOut);
+    const bool result = exportFilter->filter(filenameIn,filenameOut);
 
     delete exportFilter;
-    delete dialog;
 
     return result;
 }

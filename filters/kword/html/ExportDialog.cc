@@ -46,27 +46,27 @@ HtmlExportDialog :: ~HtmlExportDialog(void)
     kapp->setOverrideCursor(Qt::waitCursor);
 }
 
-QString HtmlExportDialog::getState(void)
+bool HtmlExportDialog::isXHtml(void) const
 {
-    QString result;
-
     if(m_dialog->radioDocType1==m_dialog->buttonGroup1->selected())
-        result += "HTML";
+        return false;
     else if(m_dialog->radioDocType2==m_dialog->buttonGroup1->selected())
-        result += "XHTML";
-    else
-        result += "XHTML";
+        return true;
+    return true;
+}
 
-    result += '-';
+int HtmlExportDialog::getMode(void) const
+{
+    int result;
 
     if(m_dialog->radioMode1==m_dialog->buttonGroup2->selected())
-        result += "SPARTAN";
+        result=0;
     else if(m_dialog->radioMode2==m_dialog->buttonGroup2->selected())
-        result += "TRANSITIONAL";
+        result=1;
     else if(m_dialog->radioMode3==m_dialog->buttonGroup2->selected())
-        result += "STYLE";
+        result=2;
     else
-        result += "STYLE";
+        result=2;
 
     return result;
 }

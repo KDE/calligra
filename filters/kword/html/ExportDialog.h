@@ -40,7 +40,8 @@ public:
 
     HtmlExportDialog(QWidget* parent=NULL);
     ~HtmlExportDialog(void);
-    QString getState(void);
+    bool isXHtml(void) const;
+    int getMode(void) const;
 private:
     ExportDialogUI* m_dialog;
 };
