@@ -330,7 +330,8 @@ int KoTextFormat::ascent() const
     {
         // Calculate ascent using 100%-zoom font
         int h = refFontMetrics().ascent();
-        h += QABS(offsetFromBaseLine());
+        if ( offsetFromBaseLine()>0 )
+            h += offsetFromBaseLine();
         if ( vAlign() == KoTextFormat::AlignSuperScript )
             h += refFontMetrics().height()/2;
         // Then scale to LU
