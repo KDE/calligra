@@ -674,3 +674,10 @@ same think
 -Now you can rotate text into cell
 -Remove some duplicate functions or code (column_label->util_column_label
 etc...)
+
+2000-06-24-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Apply patch of Robert Wall <rwall@esatclear.ie> thanks a lot
+Now you can goto cell or range directly.
+KSpreadLocationEditWidget displays cell pos or range, and allows to
+enter cell pos or range.

@@ -4732,19 +4732,6 @@ void KSpreadTable::removeCellBinding( CellBinding *_bind )
   m_pDoc->setModified( true );
 }
 
-/*const char *KSpreadTable::columnLabel(int column)
-{
-  if ( column <= 26 )
-    sprintf( m_arrColumnLabel, "%c", 'A' + column - 1 );
-  else if ( column <= 26 * 26 )
-    sprintf( m_arrColumnLabel, "%c%c",'A'+((column-1)/26)-1,'A'+((column-1)%26));
-  else
-    sprintf( m_arrColumnLabel, "%c%c",'Y','Z');
-    //strcpy( m_arrColumnLabel,"@@@");
-
-  return m_arrColumnLabel;
-}*/
-
 KSpreadTable* KSpreadTable::findTable( const QString & _name )
 {
   if ( !m_pMap )
@@ -4801,7 +4788,7 @@ void KSpreadTable::updateCell( KSpreadCell *cell, int _column, int _row )
     // Need to make layout ?
     if ( cell->layoutDirtyFlag() )
 	cell->makeLayout( painter(), _column, _row );
-	
+
     // Perhaps the size changed now ?
     right = QMAX( right, left + cell->extraWidth() );
     bottom = QMAX( bottom, top + cell->extraHeight() );

@@ -29,6 +29,24 @@ class QPainter;
 #define XBORDER_HEIGHT 20
 
 
+ /**
+ * A widget that allows the user to enter an arbitrary
+ * cell location to goto or cell selection to highlight
+ */
+class KSpreadLocationEditWidget : public QLineEdit
+{
+	Q_OBJECT
+public:
+	KSpreadLocationEditWidget( QWidget *_parent, KSpreadView * _canvas );
+
+protected:
+	virtual void keyPressEvent( QKeyEvent * _ev );
+private:
+	KSpreadView * m_pView;
+signals:
+	void gotoLocation( int, int );
+};
+
 /**
  * The widget that appears above the table and allows to
  * edit the cells content.
@@ -266,6 +284,8 @@ public:
 
     void showComment(int row=-1,int col=-1);
 
+    void updatePosWidget();
+
     // Created by the view since it's layout is managed there,
     // but is in fact a sibling of the canvas, which needs to know about it.
     void setEditWidget( KSpreadEditWidget * ew ) { m_pEditWidget = ew; }
@@ -392,7 +412,8 @@ private:
      */
     int m_iYOffset;
 
-    QLabel *m_pPosWidget;
+    //QLabel *m_pPosWidget;
+    KSpreadLocationEditWidget *m_pPosWidget;
     KSpreadEditWidget *m_pEditWidget;
     KSpreadCellEditor *m_pEditor;
 

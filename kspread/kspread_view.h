@@ -39,7 +39,7 @@ class KSpreadHBorder;
 class KSpreadVBorder;
 class KSpreadChild;
 class KSpreadCell;
-
+class KSpreadLocationEditWidget;
 class KoDocumentEntry;
 
 class KSelectColorAction;
@@ -56,7 +56,8 @@ class DCOPObject;
 
 #include <qlist.h>
 #include <qscrollbar.h>
-#include <qlabel.h>
+//#include <qlabel.h>
+#include <qframe.h>
 #include <qbutton.h>
 #include <qpoint.h>
 
@@ -82,7 +83,8 @@ public:
     QScrollBar* horzScrollBar() { return m_pHorzScrollBar; }
     QScrollBar* vertScrollBar() { return m_pVertScrollBar; }
     KSpreadEditWidget* editWidget() { return m_pEditWidget; }
-    QLabel* posWidget() { return m_pPosWidget; }
+    //QLabel* posWidget() { return m_pPosWidget; }
+    KSpreadLocationEditWidget* posWidget() { return m_pPosWidget; }
 
     KSpreadDoc* doc() { return m_pDoc; }
 
@@ -364,7 +366,8 @@ private:
     QButton *m_pOkButton;
     QButton *m_pCancelButton;
     KSpreadTabBar *m_pTabBar;
-    QLabel *m_pPosWidget;
+    //QLabel *m_pPosWidget;
+    KSpreadLocationEditWidget *m_pPosWidget;
 
     KToggleAction* m_bold;
     KToggleAction* m_italic;

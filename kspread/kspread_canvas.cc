@@ -19,7 +19,49 @@
 #include <qlabel.h>
 #include <qpainter.h>
 
-/****************************************************************
+KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent, KSpreadView * _view )
+	: QLineEdit( _parent, "KSpreadLocationEditWidget" )
+{
+	m_pView = _view;
+}
+
+void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
+{
+	//Do not handle special keys and accelerators
+	if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) ) {
+		QLineEdit::keyPressEvent( _ev );
+		return;
+	}
+
+	switch( _ev->key() ) {
+		case Key_Return:
+		case Key_Enter:
+			if ( text().upper().contains( ':' ) ) //Selection entered in location widget
+				m_pView->canvasWidget()->gotoLocation( KSpreadRange( text(), m_pView->doc()->map() ) );
+			else //Location entered in location widget
+				m_pView->canvasWidget()->gotoLocation( KSpreadPoint( text(), m_pView->doc()->map() ));
+                        m_pView->canvasWidget()->setFocus();
+			_ev->accept();
+			break;
+		case Key_Escape://Escape pressed, restore original value
+			if ( m_pView->activeTable()->selectionRect().left() == 0 ) {
+				setText( util_columnLabel( m_pView->canvasWidget()->markerColumn() ) + QString::number( m_pView->canvasWidget()->markerRow() ) );
+			} else {
+				setText( util_columnLabel( m_pView->activeTable()->selectionRect().left() )
+											+ QString::number( m_pView->activeTable()->selectionRect().top() )
+											+ ":"
+											+ util_columnLabel( m_pView->activeTable()->selectionRect().right() )
+											+ QString::number( m_pView->activeTable()->selectionRect().bottom() ) );
+			}
+                        m_pView->canvasWidget()->setFocus();
+			_ev->accept();
+			break;
+		default:
+			QLineEdit::keyPressEvent( _ev );
+	}
+}
+
+ /****************************************************************
  *
  * KSpreadEditWidget
  * The line-editor that appears above the table and allows to
@@ -256,7 +298,7 @@ void KSpreadCanvas::gotoLocation( const KSpreadRange & _range )
 	if ( !_range.isValid() )
 	{
 		KMessageBox::error( this, i18n( "Invalid cell reference" ) );
-		return;
+                return;
 	}
 	KSpreadTable * table = activeTable();
 	if ( _range.isTableKnown() )
@@ -264,7 +306,7 @@ void KSpreadCanvas::gotoLocation( const KSpreadRange & _range )
 	if ( !table )
 	{
 		KMessageBox::error( this, i18n("Unknown table name %1" ).arg( _range.tableName ) );
-		return;
+                return;
 	}
 
 	gotoLocation( _range.range.left(), _range.range.top(), table, false );
@@ -361,6 +403,7 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
   // In this case we may not touch the EditWidget
   if ( !m_pEditor )
     m_pView->updateEditWidget();
+  updatePosWidget();
 }
 
 void KSpreadCanvas::chooseGotoLocation( int x, int y, KSpreadTable* table, bool make_select )
@@ -629,6 +672,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     vertScrollBar()->setValue( yOffset() + ( ypos + rl->height( this ) - height() ) );
   }
 
+  updatePosWidget();
   showMarker();
 
   m_bMouseMadeSelection = true;
@@ -890,7 +934,9 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     gotoLocation( KSpreadPoint( m_strAnchor, m_pDoc->map() ) );
   }
 
+  updatePosWidget();
   showMarker();
+
 
   // Context menu ?
   if ( _ev->button() == RightButton )
@@ -1541,70 +1587,6 @@ void KSpreadCanvas::drawMarker( QPainter * _painter )
     delete _painter;
   }
 
-  //char buffer[ 20 ];
-  //sprintf( buffer, "%s%d", activeTable()->columnLabel( m_iMarkerColumn ), m_iMarkerRow );
-  QString buffer;
-  QString tmp;
-  if ( (selection.left() == selection.right() ) && (selection.top() ==
-  selection.bottom() ))
-  	{
-  	if(activeTable()->getLcMode())
-  		{
-  		buffer="L"+tmp.setNum(m_iMarkerRow);
-	  	buffer+="C"+tmp.setNum(m_iMarkerColumn);
-  		}
-  	else
-  		{
-  		buffer=util_columnLabel( m_iMarkerColumn );
-  		buffer+=tmp.setNum(m_iMarkerRow);
-  		}
-  	}
-  else if(selection.right() != 0x7fff && selection.bottom() != 0x7fff )
-  	{
- 	if(activeTable()->getLcMode())
-  		{
-  		buffer=tmp.setNum( (selection.bottom()-m_iMarkerRow+1) )+"Lx";
-		buffer+=tmp.setNum((selection.right()-m_iMarkerColumn+1))+"C";
-		}
-	else
-		{
-  		buffer=util_columnLabel( m_iMarkerColumn );
-  		buffer+=tmp.setNum(m_iMarkerRow);
-  		buffer+=":";
-  		buffer+=util_columnLabel( selection.right() );
-  		buffer+=tmp.setNum(selection.bottom());
-  		}
-  	}
-  else
-  	{
-
-  	if(activeTable()->getLcMode())
-  		{
- 	 	//buffer="L"+tmp.setNum(m_iMarkerRow);
-	  	//buffer+="C"+tmp.setNum(m_iMarkerColumn);
-                buffer=tmp.setNum( (selection.bottom()-selection.top()+1) )+"Lx";
-                if(selection.right()==0x7FFF)
-                        buffer+=tmp.setNum((26*26-selection.left()+1))+"C";
-                else
-                        buffer+=tmp.setNum((selection.right()-selection.left()+1))+"C";
-  		}
-  	else
-  		{
-	  	//Problem columnLabel return @@@@ when column >26*26
- 	 	//=> it's not a good display
-  		//=> for the moment I display pos of marker
-  		buffer=util_columnLabel( selection.left() );
-  		buffer+=tmp.setNum(selection.top());
-  		buffer+=":";
-  		buffer+=util_columnLabel( selection.right() );
-  		buffer+=tmp.setNum(selection.bottom());
-  		//buffer=activeTable()->columnLabel( m_iMarkerColumn );
-  		//buffer+=tmp.setNum(m_iMarkerRow);
-  		}
-  	}
-
-  m_pPosWidget->setText(buffer);
-
 }
 
 void KSpreadCanvas::updateChooseMarker( const QRect& _old, const QRect& _new )
@@ -1687,6 +1669,70 @@ void KSpreadCanvas::updateChooseMarker( const QRect& _old, const QRect& _new )
   */
   // m_pEditor->setFocus();
 }
+
+void KSpreadCanvas::updatePosWidget()
+{
+  QRect selection = m_pView->activeTable()->selectionRect();
+  QString buffer;
+  QString tmp;
+  if ( (selection.left() == selection.right() ) && (selection.top() ==
+ 	selection.bottom() ))
+  	{
+  	if(activeTable()->getLcMode())
+  		{
+  		buffer="L"+tmp.setNum(m_iMarkerRow);
+	  	buffer+="C"+tmp.setNum(m_iMarkerColumn);
+  		}
+  	else
+  		{
+  		buffer=util_columnLabel( m_iMarkerColumn );
+  		buffer+=tmp.setNum(m_iMarkerRow);
+  		}
+  	}
+  /*else if(selection.right() != 0x7fff && selection.bottom() != 0x7fff )
+  	{
+ 	if(activeTable()->getLcMode())
+  		{
+ 		buffer=tmp.setNum( (selection.bottom()-m_iMarkerRow+1) )+"Lx";
+		buffer+=tmp.setNum((selection.right()-m_iMarkerColumn+1))+"C";
+		}
+	else
+		{
+                buffer=util_columnLabel( m_iMarkerColumn );
+  		buffer+=tmp.setNum(m_iMarkerRow);
+  		buffer+=":";
+  		buffer+=util_columnLabel( selection.right() );
+  		buffer+=tmp.setNum(selection.bottom());
+  		}
+  	}*/
+  else
+  	{
+  	if(activeTable()->getLcMode())
+  		{
+                buffer=tmp.setNum( (selection.bottom()-selection.top()+1) )+"Lx";
+                if(selection.right()==0x7FFF)
+                        buffer+=tmp.setNum((26*26-selection.left()+1))+"C";
+                else
+                        buffer+=tmp.setNum((selection.right()-selection.left()+1))+"C";
+  		}
+  	else
+  		{
+	  	//Problem columnLabel return @@@@ when column >26*26
+ 	 	//=> it's not a good display
+  		//=> for the moment I display pos of marker
+  		buffer=util_columnLabel( selection.left() );
+  		buffer+=tmp.setNum(selection.top());
+  		buffer+=":";
+  		buffer+=util_columnLabel( selection.right() );
+  		buffer+=tmp.setNum(selection.bottom());
+  		//buffer=activeTable()->columnLabel( m_iMarkerColumn );
+  		//buffer+=tmp.setNum(m_iMarkerRow);
+  		}
+  	}
+
+  m_pPosWidget->setText(buffer);
+}
+
 
 void KSpreadCanvas::drawChooseMarker()
 {
@@ -2285,7 +2331,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 
     ypos += row_lay->height( m_pCanvas );
   }
-
+  m_pCanvas->updatePosWidget();
   painter.end();
 }
 
@@ -2520,6 +2566,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
       m_pCanvas->horzScrollBar()->setValue( m_pCanvas->xOffset() +
                                             ( x + cl->width( m_pCanvas ) - m_pCanvas->width() ) );
     }
+
   }
   // Perhaps we have to modify the cursor
   else
@@ -2653,7 +2700,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
         }
     xpos += col_lay->width( m_pCanvas );
   }
-
+  m_pCanvas->updatePosWidget();
   painter.end();
 }
 

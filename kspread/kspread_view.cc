@@ -145,9 +145,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     QHBoxLayout* hbox = new QHBoxLayout( m_pToolWidget );
     hbox->addSpacing( 2 );
 
-    m_pPosWidget = new QLabel( m_pToolWidget );
-    m_pPosWidget->setAlignment( AlignCenter );
-    m_pPosWidget->setFrameStyle( QFrame::WinPanel|QFrame::Sunken );
+    //m_pPosWidget = new QLabel( m_pToolWidget );
+    //m_pPosWidget->setAlignment( AlignCenter );
+    //m_pPosWidget->setFrameStyle( QFrame::WinPanel|QFrame::Sunken );
+    m_pPosWidget = new KSpreadLocationEditWidget( m_pToolWidget, this );
 
     m_pPosWidget->setMinimumWidth( 100 );
     hbox->addWidget( m_pPosWidget );

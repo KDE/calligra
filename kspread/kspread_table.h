@@ -532,12 +532,6 @@ public:
      */
     bool isOnNewPageY( int _row );
 
-    /**
-     * convert the column from int to ascii format
-     * (e.g. 1 -> 'A', 27 -> 'AA' , ...)
-     */
-    //const char *columnLabel( int _column );
-
     void addCellBinding( CellBinding *_bind );
     void removeCellBinding( CellBinding *_bind );
     CellBinding* firstCellBinding() { return m_lstCellBindings.first(); }
