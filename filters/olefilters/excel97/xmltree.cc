@@ -1597,18 +1597,8 @@ bool XMLTree::_scl(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_setup(Q_UINT16, QDataStream& body)
+bool XMLTree::_setup(Q_UINT16, QDataStream&)
 {
-  Q_UINT16 nOpt;
-  body >> nOpt;
-  //kdDebug() <<"!( nOpt & 0x0004 ) :"<<(!( nOpt & 0x0004 ))<<endl;
-  
-  if( !( nOpt & 0x0004 ) )
-    {
-      kdDebug()<<"Landscpe-------------------\n";
-    }
-
-  kdDebug()<<"Setup\n";
   return true;
 }
 
@@ -1667,8 +1657,12 @@ bool XMLTree::_sst(Q_UINT16, QDataStream& body)
     return true;
 }
 
-bool XMLTree::_standardwidth(Q_UINT16, QDataStream&)
+bool XMLTree::_standardwidth(Q_UINT16, QDataStream&body)
 {
+  Q_UINT16 width;
+  body >> width;
+  //kdDebug()<<"Standard width :"<<width<<endl;
+  kdDebug()<<"Standard width not implemented in kspread\n";
   return true;
 }
 
