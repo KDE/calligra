@@ -34,7 +34,6 @@
 #include <koFilterManager.h>
 
 #include <unistd.h>
-#include <assert.h>
 #include <config.h>
 
 class KoFilterManagerPrivate {
@@ -235,8 +234,8 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
             if ( t && mime == t->name() )
             {
                 KoFilterDialog *filterdia=vec1[i].createFilterDialog();
-                ASSERT(filterdia);
-
+                if (!filterdia)
+                    continue;
                 QStringList patterns = t->patterns();
                 QString tmp;
                 unsigned short k;
@@ -384,7 +383,15 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
     // just in case that there are more than one filters
     while(i<vec.count() && !ok) {
         KoFilter* filter = vec[i].createFilter();
-        ASSERT( filter );
+        if( !filter )
+        {
+            QString tmp = i18n("Could not import file of type\n%1").arg( t->name() );
+            QApplication::restoreOverrideCursor();
+            // ### use KLibLoader::lastErrorMessage() here
+            KMessageBox::error( 0L, tmp, i18n("Import filter failed") );
+            // ## set busy cursor again
+            continue;
+        }
 
         // Allow for document to be null, since we might be invoked from a context where
         // it is not available (e.g. within an OLEfilter filter).
@@ -474,18 +481,28 @@ QString KoFilterManager::prepareExport( const QString & file,
 
     while(i<vec.count() && !ok) {
         KoFilter* filter = vec[i].createFilter();
-        ASSERT( filter );
-        QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
-        if(vec[i].implemented.lower()=="file")
-            tmpFileNeeded=true;
-        else if(vec[i].implemented.lower()=="kodocument") {
-            ok=filter->E_filter(file, document, _native_format, outputFormat, d->config);
-            // if(ok)
-            //  document->changedByFilter();
-            const_cast<KoDocument*>(document)->slotProgress(-1);
+        if ( !filter )
+        {
+            QApplication::restoreOverrideCursor();
+            KMessageBox::error( 0L, i18n("Could not export file of type\n%1").arg( outputFormat ),
+                                i18n("Export filter failure") );
+            // ### use KLibLoader::lastErrorMessage() here. Was it in kdelibs-2.1 ?
+            // ## set busy cursor again
         }
-        QObject::disconnect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
-        delete filter;
+        else
+        {
+            QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
+            if(vec[i].implemented.lower()=="file")
+                tmpFileNeeded=true;
+            else if(vec[i].implemented.lower()=="kodocument") {
+                ok=filter->E_filter(file, document, _native_format, outputFormat, d->config);
+                // if(ok)
+                //  document->changedByFilter();
+                const_cast<KoDocument*>(document)->slotProgress(-1);
+            }
+            QObject::disconnect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
+            delete filter;
+        }
         ++i;
     }
 
@@ -509,7 +526,8 @@ bool KoFilterManager::export_() {
     while(i<d->m_vec.count() && !ok) {
         if(d->m_vec[i].implemented.lower()=="file") {
             KoFilter* filter = d->m_vec[i].createFilter();
-            ASSERT( filter );
+            if( !filter )
+                return false; // error already emitted in prepareExport
             QObject::connect(filter, SIGNAL(sigProgress(int)), d->document, SLOT(slotProgress(int)));
             ok=filter->filter(d->tmpFile, d->exportFile, d->native_format, d->mime_type, d->config );
             const_cast<KoDocument*>(d->document)->slotProgress(-1);
