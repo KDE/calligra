@@ -96,19 +96,41 @@ public:
     double resolutionX() const { return m_resolutionX; }
     double resolutionY() const { return m_resolutionY; }
 
+    /**
+     * Zoom factor for X. Equivalent to zoomedResolutionX()/resolutionX()
+     */
+    double zoomFactorX() const { return m_zoomedResolutionX / m_resolutionX; }
+    /**
+     * Zoom factor for Y. Equivalent to zoomedResolutionY()/resolutionY()
+     */
+    double zoomFactorY() const { return m_zoomedResolutionY / m_resolutionY; }
+
 
     /**
      * Set a resolution for X and Y, when no zoom applies (e.g. when painting an
      * embedded document. This will set the zoom to 100, and it will set
      * zoomedResolution[XY] to the resolution[XY] parameters
+     * Helper method, equivalent to setZoomAndResolution(100,...).
      */
-    virtual void setResolution( double resolutionX, double resolutionY );
+    void setResolution( double resolutionX, double resolutionY );
+
+    /**
+     * Set the zoomed resolution for X and Y.
+     * Compared to the setZoom... methods, this allows to set a different
+     * zoom factor for X and for Y.
+     */
+    virtual void setZoomedResolution( double zoomedResolutionX, double zoomedResolutionY );
 
     /**
      * Change the zoom level, keeping the resolution unchanged.
+     * @param zoom the zoom factor (e.g. 100 for 100%)
      */
     void setZoom( int zoom );
 
+    /**
+     * @return the global zoom factor (e.g. 100 for 100%).
+     * Only use this to display to the user, don't use in calculations
+     */
     int zoom() const { return m_zoom; }
 
     // Input: pt. Output: pixels. Resolution and zoom are applied.
@@ -163,12 +185,8 @@ public:
     //// Support for WYSIWYG text layouting /////
 
     /** The "[zoomed] view pixel" -> "layout unit pixel" conversions. */
-    int pixelToLayoutUnitX( int x ) const
-      // No need to apply the resolution here.
-    { return qRound( static_cast<double>( x * m_layoutUnitFactor * 100 ) / static_cast<double>(m_zoom) ); }
-    int pixelToLayoutUnitY( int y ) const
-      // Same as pixelToLayoutUnitX nowadays
-    { return qRound( static_cast<double>( y * m_layoutUnitFactor * 100 ) / static_cast<double>(m_zoom) ); }
+    int pixelToLayoutUnitX( int x ) const;
+    int pixelToLayoutUnitY( int y ) const;
     QPoint pixelToLayoutUnit( const QPoint &p ) const
     { return QPoint( pixelToLayoutUnitX( p.x() ),
                      pixelToLayoutUnitY( p.y() ) ); }
@@ -177,13 +195,8 @@ public:
                     pixelToLayoutUnit( r.bottomRight() ) ); }
 
     /** The "layout unit pixel" -> "[zoomed] view pixel" conversions. */
-    int layoutUnitToPixelX( int lupix ) const
-      // No need to apply the resolution here.
-      // qRound replaced with a truncation, too many problems (e.g. bottom of parags)
-    { return int( static_cast<double>( lupix * m_zoom ) / static_cast<double>( m_layoutUnitFactor * 100 ) ); }
-    int layoutUnitToPixelY( int lupix ) const
-      // Same as layoutUnitToPixelX nowadays
-    { return layoutUnitToPixelX( lupix ); }
+    int layoutUnitToPixelX( int lupix ) const;
+    int layoutUnitToPixelY( int lupix ) const;
 
     /** This variant converts a width, using a reference X position.
      * This prevents rounding problems. */

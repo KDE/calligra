@@ -41,6 +41,13 @@ void KoTextFormat::KoTextFormatPrivate::clearCache()
     memset( m_screenWidths, 0, 256 * sizeof( ushort ) );
 }
 
+void KoTextFormat::zoomChanged()
+{
+    delete d->m_screenFontMetrics; d->m_screenFontMetrics = 0;
+    delete d->m_screenFont; d->m_screenFont = 0;
+    memset( d->m_screenWidths, 0, 256 * sizeof( ushort ) );
+}
+
 KoTextFormat::KoTextFormat()
 {
     //linkColor = TRUE;
@@ -1080,8 +1087,8 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
     if( c->isCustom() ) {
 	 if( c->customItem()->placement() == KoTextCustomItem::PlaceInline ) {
              // customitem width is in LU pixels. Convert to 100%-zoom-pixels (pt2pt==pix2pix)
-             int w = qRound( KoTextZoomHandler::layoutUnitPtToPt( c->customItem()->width ) );
-             return applyZoom ? ( w * zh->zoom() / 100 ) : w;
+             double w = KoTextZoomHandler::layoutUnitPtToPt( c->customItem()->width );
+             return qRound( applyZoom ? ( w * zh->zoomFactorX() ) : w );
          }
          else
              return 0;
@@ -1132,21 +1139,6 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
         }
         pixelww = fontMetrics.charWidth( str, off );
     }
-
-#if 0
-    // Add room for the shadow - hmm, this is wrong. A word with a shadow
-    // doesn't need to space its chars so that the shadow never runs into
-    // the next char. The usual effect is that it DOES run into other chars.
-    if ( d->m_shadowDistanceX != 0 )
-    {
-        // pt to pixel conversion
-        int shadowpix = (int)(POINT_TO_INCH( static_cast<double>( KoGlobal::dpiX() ) ) * QABS( d->m_shadowDistanceX ) );
-        //kdDebug(32500) << "d->m_shadowDistanceX=" << d->m_shadowDistanceX << " -> shadowpix=" << shadowpix
-        //      << ( applyZoom ? " and applying zoom " : " (100% zoom) " )
-        //      << " -> adding " << ( applyZoom ? (  shadowpix * zh->zoom() / 100 ) : shadowpix ) << endl;
-        pixelww += applyZoom ? ( shadowpix * zh->zoom() / 100 ) : shadowpix;
-    }
-#endif
 
 #if 0
         kdDebug(32500) << "KoTextFormat::charWidth: char=" << QString(c->c) << " format=" << key()
@@ -1758,6 +1750,14 @@ void KoTextFormatCollection::remove( KoTextFormat *f )
     if ( cachedFormat == f )
 	cachedFormat = 0;
     cKey.remove( f->key() );
+}
+
+void KoTextFormatCollection::zoomChanged()
+{
+    QDictIterator<KoTextFormat> it( cKey );
+    for ( ; it.current(); ++it ) {
+        it.current()->zoomChanged();
+    }
 }
 
 #if 0

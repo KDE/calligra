@@ -360,6 +360,9 @@ public:
     void printDebug();
 #endif
 
+    // Called when the zoom or resolution changes
+    void zoomChanged();
+
 protected:
     QChar displayedChar( QChar c )const;
     void generateKey();
@@ -421,6 +424,9 @@ public:
     // Only used for the default format
 //    /*virtual*/ KoTextFormat *createFormat( const QFont &f, const QColor &c, const QString & _language, bool hyphen ) { return new KoTextFormat( f, c, _language, hyphen, this ); }
     void debug();
+
+    // Called when the zoom or resolution changes
+    void zoomChanged();
 
     //void setPainter( QPainter *p );
     //QStyleSheet *styleSheet() const { return sheet; }

@@ -1920,7 +1920,28 @@ KCommand *KoTextObject::setParagLayoutFormatCommand( KoTextCursor* cursor, int s
         cmd = setAlignCommand( cursor, newLayout->alignment, selectionId );
         break;
     case KoParagLayout::Margins:
-        cmd = setMarginCommand( cursor, (QStyleSheetItem::Margin)marginIndex, newLayout->margins[marginIndex], selectionId );
+        if ( marginIndex == -1 ) {
+            KMacroCommand* macroCmd = new KMacroCommand( QString::null );
+            cmd = setMarginCommand( cursor, QStyleSheetItem::MarginFirstLine, newLayout->margins[QStyleSheetItem::MarginFirstLine], selectionId );
+            macroCmd->addCommand( cmd );
+            cmd = setMarginCommand( cursor, QStyleSheetItem::MarginLeft, newLayout->margins[QStyleSheetItem::MarginLeft], selectionId );
+            macroCmd->addCommand( cmd );
+            cmd = setMarginCommand( cursor, QStyleSheetItem::MarginRight, newLayout->margins[QStyleSheetItem::MarginRight], selectionId );
+            macroCmd->addCommand( cmd );
+            cmd = setMarginCommand( cursor, QStyleSheetItem::MarginTop, newLayout->margins[QStyleSheetItem::MarginTop], selectionId );
+            macroCmd->addCommand( cmd );
+            cmd = setMarginCommand( cursor, QStyleSheetItem::MarginBottom, newLayout->margins[QStyleSheetItem::MarginBottom], selectionId );
+            macroCmd->addCommand( cmd );
+            return macroCmd;
+        }
+        else
+            cmd = setMarginCommand( cursor, (QStyleSheetItem::Margin)marginIndex, newLayout->margins[marginIndex], selectionId );
+        break;
+    case KoParagLayout::LineSpacing:
+        cmd = setLineSpacingCommand( cursor, newLayout->lineSpacingValue(), newLayout->lineSpacingType, selectionId );
+        break;
+    case KoParagLayout::Borders:
+        cmd = setBordersCommand( cursor, newLayout->leftBorder, newLayout->rightBorder, newLayout->topBorder, newLayout->bottomBorder, selectionId );
         break;
     case KoParagLayout::Tabulator:
         cmd = setTabListCommand( cursor, newLayout->tabList(), selectionId );
@@ -1928,6 +1949,8 @@ KCommand *KoTextObject::setParagLayoutFormatCommand( KoTextCursor* cursor, int s
     case KoParagLayout::BulletNumber:
         cmd = setCounterCommand( cursor, c, selectionId );
         break;
+    // TODO case KoParagLayout::PageBreaking:
+    // Currently not used since this is only called (for the parag dialog) from KPresenter
     default:
         break;
     }

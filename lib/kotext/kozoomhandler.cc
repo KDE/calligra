@@ -55,6 +55,15 @@ void KoZoomHandler::setResolution( double resolutionX, double resolutionY )
     m_zoomedResolutionY = resolutionY;
 }
 
+void KoZoomHandler::setZoomedResolution( double zoomedResolutionX, double zoomedResolutionY )
+{
+    // m_zoom doesn't matter, it's only used in setZoom() to calculated the zoomed resolutions
+    // Here we know them. The whole point of this method is to allow a different zoom factor
+    // for X and for Y, as can be useful for e.g. fullscreen kpresenter presentations.
+    m_zoomedResolutionX = zoomedResolutionX;
+    m_zoomedResolutionY = zoomedResolutionY;
+}
+
 void KoZoomHandler::setZoom( int zoom )
 {
     m_zoom = zoom;
@@ -77,9 +86,12 @@ int KoZoomHandler::fontSizeToLayoutUnit( double ptSizeFloat, bool forPrint ) con
 
 double KoZoomHandler::layoutUnitToFontSize( int luSize, bool /*forPrint*/ ) const
 {
-    // Pt to pt conversion, we don't need to care about pixel sizes and x11AppDpiY ...
-    return layoutUnitPtToPt( luSize ) * static_cast<double>(m_zoom) / 100.0;
-    // ### Same calculation as layoutUnitToPixel !
+    // Qt will use QPaintDevice::x11AppDpiY() to go from pt to pixel for fonts
+    return layoutUnitPtToPt( luSize ) * m_zoomedResolutionY
+#ifdef Q_WS_X11
+        / POINT_TO_INCH(QPaintDevice::x11AppDpiY())
+#endif
+        ;
 }
 
 int KoZoomHandler::layoutUnitToPixelX( int x, int w ) const
@@ -96,5 +108,30 @@ int KoZoomHandler::layoutUnitToPixelY( int y, int h ) const
     // and then determine the height from the result (i.e. bottom-top+1).
     // Calling layoutUnitToPixelY(h) leads to rounding problems.
     return layoutUnitToPixelY( y + h - 1 ) - layoutUnitToPixelY( y ) + 1;
+}
+
+int KoZoomHandler::layoutUnitToPixelX( int lupix ) const
+{
+    return int( static_cast<double>( lupix * m_zoomedResolutionX )
+                / ( static_cast<double>( m_layoutUnitFactor ) * m_resolutionX ) );
+}
+
+int KoZoomHandler::layoutUnitToPixelY( int lupix ) const
+{
+    // qRound replaced with a truncation, too many problems (e.g. bottom of parags)
+    return int( static_cast<double>( lupix * m_zoomedResolutionY )
+                / ( static_cast<double>( m_layoutUnitFactor ) * m_resolutionY ) );
+}
+
+int KoZoomHandler::pixelToLayoutUnitX( int x ) const
+{
+    return qRound( static_cast<double>( x * m_layoutUnitFactor * m_resolutionX )
+                   / m_zoomedResolutionX );
+}
+
+int KoZoomHandler::pixelToLayoutUnitY( int y ) const
+{
+    return qRound( static_cast<double>( y * m_layoutUnitFactor * m_resolutionY )
+                   / m_zoomedResolutionY );
 }
 

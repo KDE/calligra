@@ -1629,7 +1629,7 @@ QString KoTextParag::toString( int from, int length ) const
     if ( from == 0 && m_layout.counter )
         str += m_layout.counter->text( this ) + ' ';
     if ( length == -1 )
-        length = this->length() - from;
+        length = this->length() - 1 /*trailing space*/ - from;
     for ( int i = from ; i < (length+from) ; ++i )
     {
         KoTextStringChar *ch = at( i );
@@ -1883,8 +1883,14 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     {
         writer.startElement( "text:numbered-paragraph" );
         writer.addAttribute( "text:level", (int)paragCounter->depth() );
-        // TODO restart if ( m_paragLayout.counter->...
+        if ( paragCounter->restartCounter() )
+            writer.addAttribute( "text:start-value", paragCounter->startNumber() );
+
+        KoGenStyle listStyle( KoGenStyle::STYLE_LIST /*, no family*/ );
         // TODO save the parag counter into a list style
+
+        QString autoListStyleName = mainStyles.lookup( listStyle, "L", true );
+        writer.addAttribute( "text:style-name", autoListStyleName );
     }
     // TODO: level for headings
     writer.startElement( outline ? "text:p" : "text:h", false /*no indent inside this tag*/ );
