@@ -205,7 +205,7 @@ VTransformCmd::visitVImage( VImage &img )
 VTranslateCmd::VTranslateCmd( VDocument *doc, double d1, double d2, bool duplicate )
 		: VTransformCmd( doc, i18n( "Translate Objects" ), "14_select", duplicate )
 {
-	if( !m_selection || m_selection->objects().count() == 1 )
+	if( !duplicate && ( !m_selection || m_selection->objects().count() == 1 ) )
 		setName( i18n( "Translate Object" ) );
 
 	m_mat.translate( d1, d2 );
