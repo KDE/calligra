@@ -142,21 +142,43 @@ bool KWordParser::startElementFrameset( const QString& name, const QXmlAttribute
     const int frameType = frameTypeStr.toInt();
     const int frameInfo = frameInfoStr.toInt();
     
-    if ( frameType == 1 && frameInfo == 0 )
+    if ( frameType == 1 )
     {
+        stackItem->elementType = ElementTypeFrameset;
+        KWordTextFrameset* frameset = new KWordTextFrameset( frameType, frameInfo, attributes.value( "name" ) );
+        
         // Normal text frame (in or outside a table)
-        if ( attributes.value( "grpMgr" ).isEmpty() )
+        if ( ( !frameInfo ) && attributes.value( "grpMgr" ).isEmpty() )
         {
-            stackItem->elementType = ElementTypeFrameset;
-            
-            KWordNormalTextFrameset* frameset = new KWordNormalTextFrameset( frameType, frameInfo, attributes.value( "name" ) );
             m_kwordDocument->m_normalTextFramesetList.append( frameset );
             stackItem->m_currentFrameset = m_kwordDocument->m_normalTextFramesetList.current();
         }
-        else
+        else if ( !frameInfo )
         {
             qDebug("Tables are not supported yet!");
-            stackItem->elementType = ElementTypeUnknownFrameset;
+            // ### PROVISORY
+            m_kwordDocument->m_otherFramesetList.append( frameset );
+            stackItem->m_currentFrameset = m_kwordDocument->m_otherFramesetList.current();
+        }
+        else if ( frameInfo >= 1 && frameInfo <= 6 )
+        {
+            m_kwordDocument->m_headerFooterFramesetList.append( frameset );
+            stackItem->m_currentFrameset = m_kwordDocument->m_headerFooterFramesetList.current();
+        }
+        else if ( frameInfo == 7 )
+        {
+            m_kwordDocument->m_footEndNoteFramesetList.append( frameset );
+            stackItem->m_currentFrameset = m_kwordDocument->m_footEndNoteFramesetList.current();
+        }
+        // ### frameType == 2 or 5 : image/picture or clipart
+        // ### frameType == 6 : horizontal line (however KWord did not save it correctly)
+        // ### frameType == 4 : formula
+        // ### frametype == 3 : embedded (but only in <SETTINGS>)
+        else
+        {
+            qDebug("Unknown text frameset!");
+            m_kwordDocument->m_otherFramesetList.append( frameset );
+            stackItem->m_currentFrameset = m_kwordDocument->m_otherFramesetList.current();
         }
     }
     else
@@ -165,6 +187,9 @@ bool KWordParser::startElementFrameset( const QString& name, const QXmlAttribute
         //kdWarning(30520) << "Unknown/unsupported <FRAMESET> type! Type: " << frameTypeStr << " Info: " << frameInfoStr << emdl;
         qDebug("Unknown <FRAMESET> type! Type: %i Info: %i", frameType, frameInfo);
         stackItem->elementType = ElementTypeUnknownFrameset;
+        KWordFrameset* frameset = new KWordFrameset( frameType, frameInfo, attributes.value( "name" ) );
+        m_kwordDocument->m_otherFramesetList.append( frameset );
+        stackItem->m_currentFrameset = m_kwordDocument->m_otherFramesetList.current();
     }
     return true;
 }
