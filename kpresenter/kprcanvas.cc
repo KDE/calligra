@@ -123,6 +123,8 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         m_drawCubicBezierCurve = false;
         m_drawLineWithCubicBezierCurve = true;
         m_oldCubicBezierPointArray.putPoints( 0, 4, 0,0, 0,0, 0,0, 0,0 );
+        //for test
+        //m_view->kPresenterDoc()->addHorizHelpline(30.0);
     } else {
         m_view = 0;
         hide();
@@ -134,9 +136,13 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     installEventFilter( this );
     KCursor::setAutoHideCursor( this, true, true );
     m_zoomBeforePresentation=100;
-    m_activePage=m_view->kPresenterDoc()->pageList().getFirst();
-    connect( m_view->kPresenterDoc(), SIGNAL( sig_terminateEditing( KPTextObject * ) ),
-             this, SLOT( terminateEditing( KPTextObject * ) ) );
+
+    if( m_view)
+    {
+        m_activePage=m_view->kPresenterDoc()->pageList().getFirst();
+        connect( m_view->kPresenterDoc(), SIGNAL( sig_terminateEditing( KPTextObject * ) ),
+                 this, SLOT( terminateEditing( KPTextObject * ) ) );
+    }
 
 }
 
@@ -265,7 +271,10 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         if ( !editMode )
             selectionMode = SM_NONE; // case of screen presentation mode
         drawObjects( &bufPainter, crect, true, selectionMode, true );
-
+/*
+        if( editMode && m_view->kPresenterDoc()->showHelplines())
+            drawHelplines( &bufPainter, crect);
+*/
         bufPainter.end();
 
         bitBlt( this, paintEvent->rect().topLeft(), &buffer, paintEvent->rect() );
@@ -392,6 +401,9 @@ void KPrCanvas::drawObjects( QPainter *painter, const QRect& rect, bool drawCurs
     drawObjectsInPage( painter, rect2, drawCursor, selectionMode, doSpecificEffects,
 		       stickyPage()->objectList());
 
+    if( editMode && m_view->kPresenterDoc()->showHelplines())
+        drawHelplines( painter, rect2);
+
 }
 
 void KPrCanvas::drawHelplines(QPainter *painter, const KoRect &rect)
@@ -402,20 +414,17 @@ void KPrCanvas::drawHelplines(QPainter *painter, const KoRect &rect)
     QValueList<double>::Iterator i;
     for(i = doc->horizHelplines().begin(); i != doc->horizHelplines().end(); ++i)
     {
-/*
-        int vi = qRound(*i * zoomFactor()) + mYOffset;
-        if(vi >= rect.top() && vi <= rect.bottom())
-        painter->drawHorizLineRGB(rect.left(), rect.right(), vi, Qt::blue);
-*/
+        double vi = *i - m_view->zoomHandler()->zoomItY(diffy());
+        if( rect.contains(rect.x(), vi) )
+            painter->drawLine(m_view->zoomHandler()->zoomItX(rect.left()), m_view->zoomHandler()->zoomItY(vi), m_view->zoomHandler()->zoomItX(rect.right()), m_view->zoomHandler()->zoomItY(vi));
+
     }
 
     for(i = doc->vertHelplines().begin(); i != doc->vertHelplines().end(); ++i)
     {
-/*
-        int hi = qRound(*i * zoomFactor()) + mXOffset;
-        if(hi >= rect.left() && hi <= rect.right())
-        painter->drawVertLineRGB(hi, rect.top(), rect.bottom(), Qt::blue);
-*/
+        double vi = *i - m_view->zoomHandler()->zoomItX(diffx());
+        if( rect.contains(vi, rect.y()) )
+            painter->drawLine(m_view->zoomHandler()->zoomItX(vi), m_view->zoomHandler()->zoomItY(rect.top()), m_view->zoomHandler()->zoomItX(vi), m_view->zoomHandler()->zoomItY(rect.bottom()));
     }
 }
 
@@ -1268,6 +1277,16 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     }
                 }
 	    }
+            if( m_view->kPresenterDoc()->indexOfHorizHelpline(e->pos().y())!=-1)
+            {
+                setCursor ( Qt::sizeVerCursor );
+                cursorAlreadySet = true;
+            }
+            else if ( m_view->kPresenterDoc()->indexOfVertHelpline(e->pos().x())!=-1)
+            {
+                setCursor ( Qt::sizeHorCursor );
+                cursorAlreadySet = true;
+            }
             //kdDebug()<<" horizontal helpline :"<< (m_view->kPresenterDoc()->indexOfHorizHelpline(e->pos().y()))<<endl;
             //kdDebug()<<" vertical helpline :"<< (m_view->kPresenterDoc()->indexOfVertHelpline(e->pos().x()))<<endl;
 
