@@ -743,6 +743,7 @@ void KWView::setupActions()
     lst << KoBorder::getStyle( KoBorder::DOT );
     lst << KoBorder::getStyle( KoBorder::DASH_DOT );
     lst << KoBorder::getStyle( KoBorder::DASH_DOT_DOT );
+    lst << KoBorder::getStyle( KoBorder::DOUBLE_LINE );
     actionBorderStyle->setItems( lst );
     actionBorderWidth = new KSelectAction( i18n( "Border Width" ), 0,
                                                  actionCollection(), "border_width" );
