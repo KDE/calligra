@@ -74,7 +74,8 @@ KoTextView::KoTextView( KoTextObject *textobj )
     blinkTimer = new QTimer( this );
     connect( blinkTimer, SIGNAL( timeout() ),
              this, SLOT( blinkCursor() ) );
-    blinkTimer->start( QApplication::cursorFlashTime() / 2 );
+    if ( QApplication::cursorFlashTime() > 0 )
+        blinkTimer->start( QApplication::cursorFlashTime() / 2 );
 
     dragStartTimer = new QTimer( this );
     connect( dragStartTimer, SIGNAL( timeout() ),
@@ -845,7 +846,8 @@ void KoTextView::drawCursor( bool visible )
 
 void KoTextView::focusInEvent()
 {
-    blinkTimer->start( QApplication::cursorFlashTime() / 2 );
+    if ( QApplication::cursorFlashTime() > 0 )
+        blinkTimer->start( QApplication::cursorFlashTime() / 2 );
     showCursor();
 }
 
