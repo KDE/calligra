@@ -48,8 +48,10 @@
 #include "KPTextObjectIface.h"
 #include <kooasiscontext.h>
 #include <koStyleStack.h>
+#include <ktempfile.h>
 
 #include <qfont.h>
+#include <qfile.h>
 
 #include "kptextobject.moc"
 #include "kprcanvas.h"
@@ -372,7 +374,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
 {
     // Never draw shadow (in text objects, it's a character property, not an object property)
     KPrPage *p = m_doc->pageList().at( pageNum );
-    recalcPageNum( p ); 
+    recalcPageNum( p );
     if ( drawingShadow ) return;
     paint( _painter, _zoomHandler, false, 0L, true, drawContour );
 }
@@ -1493,7 +1495,7 @@ void KPTextObject::highlightPortion( KoTextParag * parag, int index, int length,
     }
 }
 
-KCommand * KPTextObject::pasteKPresenter( KoTextCursor * cursor, const QCString & data, bool removeSelected )
+KCommand * KPTextObject::pasteOasis( KoTextCursor * cursor, const QCString & data, bool removeSelected )
 {
     // Having data as a QCString instead of a QByteArray seems to fix the trailing 0 problem
     // I tried using QDomDocument::setContent( QByteArray ) but that leads to parse error at the end
@@ -1508,7 +1510,7 @@ KCommand * KPTextObject::pasteKPresenter( KoTextCursor * cursor, const QCString 
 
     // We have our own command for this.
     // Using insert() wouldn't help storing the parag stuff for redo
-    KPrPasteTextCommand * cmd = new KPrPasteTextCommand( textDocument(), cursor->parag()->paragId(), cursor->index(), data );
+    KPrOasisPasteTextCommand * cmd = new KPrOasisPasteTextCommand( textDocument(), cursor->parag()->paragId(), cursor->index(), data );
     textDocument()->addCommand( cmd );
 
     macroCmd->addCommand( new KoTextCommand( m_textobj, /*cmd, */QString::null ) );
@@ -1815,7 +1817,9 @@ void KPTextView::paste()
         if ( arr.size() )
         {
             kdDebug(33001)<<"QCString( arr ) :"<<QCString( arr.data(), arr.size()+1 )<<endl;
-            kpTextObject()->kPresenterDocument()->addCommand(kpTextObject()->pasteKPresenter( cursor(), QCString( arr.data(), arr.count()+1 ), true ));
+            KCommand *cmd = kpTextObject()->pasteOasis( cursor(), QCString( arr.data(), arr.count()+1 ), true );
+            if ( cmd )
+                kpTextObject()->kPresenterDocument()->addCommand(cmd);
         }
     }
     else
@@ -2258,6 +2262,7 @@ void KPTextView::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, b
 
 KPrTextDrag * KPTextView::newDrag( QWidget * parent )
 {
+#if 0 //old koffice-1.3 format
     KoTextCursor c1 = textDocument()->selectionStartCursor( KoTextDocument::Standard );
     KoTextCursor c2 = textDocument()->selectionEndCursor( KoTextDocument::Standard );
 
@@ -2286,11 +2291,50 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent )
         text += c2.parag()->toString( 0, c2.index() );
         m_kptextobj->saveParagraph( domDoc, c2.parag(), elem, 0, c2.index()-1 );
     }
+#else
+    KoGenStyles mainStyles;
+    KoSavingContext savingContext( mainStyles );
+
+    // Save user styles as KoGenStyle objects ######### needed?
+    KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
+    KoSavingContext::StyleNameMap map = doc->styleCollection()->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
+    savingContext.setStyleNameMap( map );
+
+    QBuffer buff;
+    buff.open( IO_WriteOnly );
+    KoXmlWriter contentWriter( &buff, "office:document-content" );
+    // not sure how to avoid copy/pasting that code...
+    KTempFile contentTmpFile;
+    contentTmpFile.setAutoDelete( true );
+    QFile* tmpFile = contentTmpFile.file();
+    KoXmlWriter contentTmpWriter( tmpFile, 1 );
+    contentTmpWriter.startElement( "office:body" );
+    contentTmpWriter.startElement( "office:text" );
+
+    const QString plainText = textDocument()->copySelection( contentTmpWriter, savingContext, KoTextDocument::Standard );
+
+    contentTmpWriter.endElement(); // office:text
+    contentTmpWriter.endElement(); // office:body
+
+    // Done with writing out the contents to the tempfile, we can now write out the automatic styles
+    KPresenterDoc::writeAutomaticStyles( contentWriter, mainStyles );
+
+    // And now we can copy over the contents from the tempfile to the real one
+    tmpFile->close();
+    contentWriter.addCompleteElement( tmpFile );
+    contentTmpFile.close();
+    contentWriter.endElement(); // document-content
+    contentWriter.endDocument();
+
+    const QByteArray data = buff.buffer();
+    const QCString cstr( data.data(), data.size() + 1 ); // null-terminate
+
+#endif
     KPrTextDrag *kd = new KPrTextDrag( parent );
-    kd->setPlain( text );
+    kd->setPlain( plainText );
     kd->setTextObjectNumber( m_canvas->textObjectNum(kpTextObject()) );
-    kd->setKPresenter( domDoc.toCString() );
-    kdDebug(33001) << "KPTextView::newDrag " << domDoc.toCString() << endl;
+    kd->setKPresenter( cstr );
+    kdDebug(33001) << "KPTextView::newDrag " << cstr << endl;
     return kd;
 }
 
@@ -2372,7 +2416,7 @@ void KPTextView::dropEvent( QDropEvent * e )
         {
             QByteArray arr = e->encodedData( KPrTextDrag::selectionMimeType() );
             if ( arr.size() )
-                macroCmd->addCommand(kpTextObject()->pasteKPresenter( cursor(), QCString(arr, arr.size()+1), false ));
+                macroCmd->addCommand(kpTextObject()->pasteOasis( cursor(), QCString(arr, arr.size()+1), false ));
         }
         else
         {

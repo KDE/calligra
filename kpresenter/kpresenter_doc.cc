@@ -974,33 +974,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 	contentTmpWriter.endElement(); //office:presentation
     contentTmpWriter.endElement(); //office:body
 
-    // Done with writing out the contents to the tempfile, we can now write out the automatic styles
-    contentWriter.startElement( "office:automatic-styles" );
-    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
-    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::STYLE_LIST );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        ( *it ).style->writeStyle( &contentWriter, mainStyles, "text:list-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( STYLE_BACKGROUNDPAGEAUTO );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:drawing-page-properties" );
-    }
-
-    styles = mainStyles.styles( STYLE_GRAPHICAUTO );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
-    }
-
-    contentWriter.endElement(); // office:automatic-styles
+    writeAutomaticStyles( contentWriter, mainStyles );
 
     // And now we can copy over the contents from the tempfile to the real one
     tmpFile->close();
@@ -1080,6 +1054,36 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     setModified( false );
 
     return true;
+}
+
+void KPresenterDoc::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles )
+{
+    contentWriter.startElement( "office:automatic-styles" );
+    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
+    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::STYLE_LIST );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        ( *it ).style->writeStyle( &contentWriter, mainStyles, "text:list-style", (*it).name, 0 );
+    }
+
+    styles = mainStyles.styles( STYLE_BACKGROUNDPAGEAUTO );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:drawing-page-properties" );
+    }
+
+    styles = mainStyles.styles( STYLE_GRAPHICAUTO );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
+    }
+
+    contentWriter.endElement(); // office:automatic-styles
 }
 
 void KPresenterDoc::saveOasisHeaderFooter( KoXmlWriter & stickyTmpWriter , KoSavingContext& context )

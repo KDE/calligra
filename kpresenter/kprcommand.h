@@ -752,6 +752,32 @@ protected:
 };
 
 /**
+ * Command created when pasting oasis-formatted text
+ */
+class KPrOasisPasteTextCommand : public KoTextDocCommand
+{
+public:
+    KPrOasisPasteTextCommand( KoTextDocument *d, int parag, int idx,
+                             const QCString & data );
+    KoTextCursor *execute( KoTextCursor *c );
+    KoTextCursor *unexecute( KoTextCursor *c );
+protected:
+    int m_parag;
+    int m_idx;
+    QCString m_data;
+    // filled in by execute(), for unexecute()
+    int m_lastParag;
+    int m_lastIndex;
+    KoParagLayout* m_oldParagLayout;
+};
+
+struct ParagBookmark {
+    QString m_bookName;
+    int m_startParagIndex;
+    int m_endParagIndex;
+};
+
+/**
  * Command to change variable setting
  */
 class KPrChangeStartingPageCommand : public KNamedCommand

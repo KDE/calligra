@@ -349,7 +349,7 @@ DeleteCmd::DeleteCmd( const QString &_name, QPtrList<KPObject> &_objects,
 , m_oldObjectList( _page->objectList() )
 , m_objectsToDelete( _objects )
 , m_doc( _doc )
-, m_page( _page )  
+, m_page( _page )
 {
     QPtrListIterator<KPObject> it( m_oldObjectList );
     for ( ; it.current() ; ++it )
@@ -376,7 +376,7 @@ void DeleteCmd::execute()
         {
             it.current()->setSelected( false );
             it.current()->removeFromObjList();
-            
+
             if ( !textObj && it.current()->getType() == OT_TEXT )
             {
                 KPTextObject * tmp = dynamic_cast<KPTextObject *>( it.current() );
@@ -393,7 +393,7 @@ void DeleteCmd::execute()
     }
 
     m_page->setObjectList( newObjectList );
-    
+
     for ( itDelete.toFirst(); itDelete.current(); ++itDelete )
     {
         QRect oldRect = m_doc->zoomHandler()->zoomRect( itDelete.current()->getBoundingRect() );
@@ -491,7 +491,7 @@ GroupObjCmd::GroupObjCmd( const QString &_name,
 , m_objectsToGroup( _objects )
 , m_oldObjectList( _page->objectList() )
 , m_doc( _doc )
-, m_page( _page )  
+, m_page( _page )
 {
     QPtrListIterator<KPObject> it( m_oldObjectList );
     for ( ; it.current() ; ++it )
@@ -564,7 +564,7 @@ UnGroupObjCmd::UnGroupObjCmd( const QString &_name,
 : KNamedCommand( _name )
 , m_groupedObjects( grpObj_->getObjects() )
 , m_doc( _doc )
-, m_page( _page )  
+, m_page( _page )
 {
     QPtrListIterator<KPObject> it( m_groupedObjects );
     for ( ; it.current() ; ++it )
@@ -1762,6 +1762,103 @@ KoTextCursor * KPrPasteTextCommand::unexecute( KoTextCursor *c )
     doc->removeSelectedText( KoTextDocument::Temp, c /* sets c to the correct position */ );
     if ( m_idx == 0 )
         static_cast<KoTextParag *>( firstParag )->setParagLayout( m_oldParagLayout );
+    return c;
+}
+
+
+// ###### TODO: this command can probably move to kotext
+// (it would take as additional arguments: KoDocument *, KoVariableCollection& varColl, KoStyleCollection&)
+KPrOasisPasteTextCommand::KPrOasisPasteTextCommand( KoTextDocument *d, int parag, int idx,
+                                const QCString & data )
+    : KoTextDocCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data ), m_oldParagLayout( 0 )
+{
+}
+
+KoTextCursor * KPrOasisPasteTextCommand::execute( KoTextCursor *c )
+{
+    KoTextParag *firstParag = doc->paragAt( m_parag );
+    if ( !firstParag ) {
+        qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
+        return 0;
+    }
+    //kdDebug() << "KWOasisPasteCommand::execute m_parag=" << m_parag << " m_idx=" << m_idx
+    //          << " firstParag=" << firstParag << " " << firstParag->paragId() << endl;
+    cursor.setParag( firstParag );
+    cursor.setIndex( m_idx );
+    c->setParag( firstParag );
+    c->setIndex( m_idx );
+    QDomDocument domDoc;
+    domDoc.setContent( m_data );
+    QDomElement content = domDoc.documentElement();
+
+    QDomElement body ( content.namedItem( "office:body" ).toElement() );
+    if ( body.isNull() ) {
+        kdError(30518) << "No office:body found!" << endl;
+        return 0;
+    }
+    body = body.namedItem( "office:text" ).toElement();
+    if ( body.isNull() ) {
+        kdError(30518) << "No office:text found!" << endl;
+        return 0;
+    }
+    KPrTextDocument * textdoc = static_cast<KPrTextDocument *>(c->parag()->document());
+
+    KoOasisStyles oasisStyles;
+    oasisStyles.createStyleMap( domDoc );
+    KPresenterDoc *doc = textdoc->textObject()->kPresenterDocument();
+    KoOasisContext context( doc, *doc->getVariableCollection(), oasisStyles, 0 /*TODO store*/ );
+    *c = textdoc->pasteOasisText( body, context, cursor, doc->styleCollection() );
+    textdoc->textObject()->textObject()->setNeedSpellCheck( true );
+    // In case loadFormatting queued any image request
+
+
+    m_lastParag = c->parag()->paragId();
+    m_lastIndex = c->index();
+    return c;
+}
+
+KoTextCursor * KPrOasisPasteTextCommand::unexecute( KoTextCursor *c )
+{
+    KoTextParag *firstParag = doc->paragAt( m_parag );
+    if ( !firstParag ) {
+        qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
+        return 0;
+    }
+    cursor.setParag( firstParag );
+    cursor.setIndex( m_idx );
+    doc->setSelectionStart( KoTextDocument::Temp, &cursor );
+
+    KoTextParag *lastParag = doc->paragAt( m_lastParag );
+    if ( !lastParag ) {
+        qWarning( "can't locate parag at %d, last parag: %d", m_lastParag, doc->lastParag()->paragId() );
+        return 0;
+    }
+    Q_ASSERT( lastParag->document() );
+    // Get hold of the document before deleting the parag
+    KoTextDocument* textdoc = lastParag->document();
+
+    //kdDebug() << "Undoing paste: deleting from (" << firstParag->paragId() << "," << m_idx << ")"
+    //          << " to (" << lastParag->paragId() << "," << m_lastIndex << ")" << endl;
+
+    cursor.setParag( lastParag );
+    cursor.setIndex( m_lastIndex );
+#if 0
+    doc->setSelectionEnd( KoTextDocument::Temp, &cursor );
+    // Delete all custom items
+    KWDeleteCustomItemVisitor visitor;
+    doc->visitSelection( KoTextDocument::Temp, &visitor );
+
+    doc->removeSelectedText( KoTextDocument::Temp, c /* sets c to the correct position */ );
+
+    KWTextFrameSet * textFs = static_cast<KWTextDocument *>(textdoc)->textFrameSet();
+
+    textFs->renumberFootNotes();
+#endif
+    if ( m_idx == 0 ) {
+        Q_ASSERT( m_oldParagLayout );
+        if ( m_oldParagLayout )
+            firstParag->setParagLayout( *m_oldParagLayout );
+    }
     return c;
 }
 

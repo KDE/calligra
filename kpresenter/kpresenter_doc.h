@@ -495,6 +495,9 @@ public slots:
 
     void slotRepaintVariable();
 
+    static void writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles );
+
+
 signals:
     void enablePaste( bool );
     void sig_refreshMenuCustomVariable();
