@@ -176,7 +176,7 @@ public:
 
     virtual void emitNewCommand(KCommand *)=0;
     virtual void highlightPortion(Qt3::QTextParag * parag, int index, int length, KoTextDocument *textdoc)=0;
-
+    void changeListObject(const QPtrList<KoTextObject> & lstObject);
 protected:
     bool findInFrameSet( KoTextObject * textObj, Qt3::QTextParag * firstParag, int firstIndex,
                          Qt3::QTextParag * lastParag, int lastIndex );

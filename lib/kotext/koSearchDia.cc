@@ -283,6 +283,14 @@ KoFindReplace::~KoFindReplace()
     // If the KWView was destroyed, it destroyed the child dialog already
 }
 
+void KoFindReplace::changeListObject(const QPtrList<KoTextObject> & lstObject)
+{
+    m_lstObject=lstObject;
+    //for kpresenter when we switch in other page we close textview object
+    //for the future perhaps add a reference to textview.
+    m_textView=0L;
+}
+
 void KoFindReplace::proceed()
 {
     KoTextObject *firstTextObj=0;
