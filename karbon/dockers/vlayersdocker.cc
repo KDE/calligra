@@ -127,7 +127,7 @@ VLayersDocker::VLayersDocker( KarbonView* view )
 	setWidget( mainWidget );
 } // VLayerDocker::VLayerDocker
 
-void VLayersDocker::selectionChanged( QListViewItem* item, const QPoint& p, int col )
+void VLayersDocker::selectionChanged( QListViewItem* item, const QPoint &, int col )
 {
 	if ( item )
 	{
@@ -203,10 +203,11 @@ void VLayersDocker::updateLayers()
 	m_layersListView->clear();
 	QPtrVector<VLayer> vector;
 	m_view->part()->document().layers().toVector( &vector );
+	VLayerListViewItem* item;
 	for( int i = vector.count() - 1; i >= 0; i-- )
 	{
 		if ( vector[i]->state() != VObject::deleted )
-			VLayerListViewItem* item = new VLayerListViewItem( m_layersListView, m_view, vector[i] );
+			item = new VLayerListViewItem( m_layersListView, m_view, vector[i] );
 	}
 	m_layersListView->sort();
 } // VLayersDocker::updateLayers

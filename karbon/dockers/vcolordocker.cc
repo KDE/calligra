@@ -178,7 +178,7 @@ void VColorDocker::updateOpacity()
 }
 
 void
-VColorDocker::mouseReleaseEvent( QMouseEvent *e )
+VColorDocker::mouseReleaseEvent( QMouseEvent * )
 {
 	updateCanvas();
 }
@@ -214,7 +214,8 @@ void VColorDocker::updateSliders()
 	disconnect( mOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateOpacity() ) );
 	
 	//Update sliders
-	switch ( m_Color->colorSpace() ) {
+	switch( m_Color->colorSpace() )
+	{
 	case VColor::rgb:
 		mRedSlider->setValue( int ( m_Color->operator[](0) * 255 ) );
 		mGreenSlider->setValue( int ( m_Color->operator[](1) * 255 ) );
@@ -230,6 +231,7 @@ void VColorDocker::updateSliders()
 		mOpacity->setValue( int ( m_Color->opacity() * 100 ) );
 		mTabWidget->showPage( mCMYKWidget );
 		break;
+	default: break;
 	}
 	
 	//Reconnect sliders again
