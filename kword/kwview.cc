@@ -409,8 +409,8 @@ void KWView::setupActions()
     actionViewTextMode = new KToggleAction( i18n( "Text Mode" ), 0,
                                             this, SLOT( viewTextMode() ),
                                             actionCollection(), "view_textmode" );
-    actionViewTextMode->setToolTip( i18n( "Text mode." ) );
-    actionViewTextMode->setWhatsThis( i18n( "Text mode." ) );
+    actionViewTextMode->setToolTip( i18n( "Only show the text of the document." ) );
+    actionViewTextMode->setWhatsThis( i18n( "Do not show any pictures, formatting or layout.  KWord will display only the text for editing." ) );
 
     actionViewTextMode->setExclusiveGroup( "viewmodes" );
     actionViewPageMode = new KToggleAction( i18n( "&Page Mode" ), 0,
@@ -484,17 +484,26 @@ void KWView::setupActions()
     actionInsertComment = new KAction( i18n( "Comment..." ), 0,
                                     this, SLOT( insertComment() ),
                                     actionCollection(), "insert_comment" );
+    actionInsertComment->setToolTip( i18n( "Insert a comment about the selected text." ) );
+    actionInsertComment->setWhatsThis( i18n( "Insert a comment about the selected text.  These comments are not desinged to appear on the final page." ) );
+    
     actionEditComment = new KAction( i18n("Edit Comment..."), 0,
                                   this,SLOT(editComment()),
                                   actionCollection(), "edit_comment");
+    actionEditComment->setToolTip( i18n( "Change the content of a comment." ) );
+    actionEditComment->setWhatsThis( i18n( "Change the content of a comment" ) );
 
     actionRemoveComment = new KAction( i18n("Remove Comment"), 0,
                                      this,SLOT(removeComment()),
                                      actionCollection(), "remove_comment");
+    actionRemoveComment->setToolTip( i18n( "Remove the selected document comment." ) );
+    actionRemoveComment->setWhatsThis( i18n( "Remove the selected document comment." ) );
 
     actionInsertFootEndNote = new KAction( i18n( "&Footnote..." ), 0,
                                            this, SLOT( insertFootNote() ),
                                            actionCollection(), "insert_footendnote" );
+    actionInsertFootEndNote->setToolTip( i18n( "Insert a footnote referencing the selected text." ) );
+    actionInsertFootEndNote->setWhatsThis( i18n( "Insert a footnote referencing the selected text." ) );
 
     actionInsertContents = new KAction( i18n( "Table of &Contents" ), 0,
                                         this, SLOT( insertContents() ),
@@ -545,7 +554,7 @@ void KWView::setupActions()
                                               this, SLOT( insertPicture() ),
                                               actionCollection(), "insert_picture" );
     actionToolsCreatePix->setToolTip( i18n( "Create a new frame for a picture." ) );
-    actionToolsCreatePix->setWhatsThis( i18n( "Create a new frame for a picture." ) );
+    actionToolsCreatePix->setWhatsThis( i18n( "Create a new frame for a picture or diagram." ) );
 
     actionToolsCreatePix->setExclusiveGroup( "tools" );
     actionInsertFormula = new KAction( i18n( "For&mula" ), "frame_formula", Key_F4,
@@ -792,6 +801,8 @@ void KWView::setupActions()
     actionTableResizeCol = new KAction( i18n( "Resize Column..." ), 0,
                                this, SLOT( tableResizeCol() ),
                                actionCollection(), "table_resizecol" );
+    actionTableResizeCol->setToolTip( i18n( "Change the width of the currently selected column." ) );
+    actionTableResizeCol->setWhatsThis( i18n( "Change the width of the currently selected column." ) );
 
 
     actionTableJoinCells = new KAction( i18n( "&Join Cells" ), 0,
@@ -809,6 +820,8 @@ void KWView::setupActions()
     actionTableProtectCells= new KToggleAction( i18n( "Protect Cells" ), 0,
                                          this, SLOT( tableProtectCells() ),
                                          actionCollection(), "table_protectcells" );
+    actionTableProtectCells->setToolTip( i18n( "Prevent changes to content of selected cells." ) );
+    actionTableProtectCells->setWhatsThis( i18n( "Toggles cell protection on and off.<br><br>When cell protection is on, the user can not alter the content or formatting of the text within the cell." ) );
 
     actionTableUngroup = new KAction( i18n( "&Ungroup Table" ), 0,
                                       this, SLOT( tableUngroupTable() ),
@@ -829,6 +842,8 @@ void KWView::setupActions()
     actionAllowAutoFormat = new KToggleAction( i18n( "Enable Autocorrection" ), 0,
                                              this, SLOT( slotAllowAutoFormat() ),
                                           actionCollection(), "enable_autocorrection" );
+    actionAllowAutoFormat->setToolTip( i18n( "Toggle autocorrection on and off." ) );
+    actionAllowAutoFormat->setWhatsThis( i18n( "Toggle autocorrection on and off." ) );
 
     actionAutoFormat = new KAction( i18n( "&Autocorrection..." ), 0,
                         this, SLOT( extraAutoFormat() ),
@@ -846,7 +861,7 @@ void KWView::setupActions()
                                      this, SLOT( changeCaseOfText() ),
                                      actionCollection(), "change_case" );
     actionChangeCase->setToolTip( i18n( "Alter the capitalization of selected text." ) );
-    actionChangeCase->setWhatsThis( i18n( "Alter the capitalization of selected text to one of three pre-defined patterns.<p>You can also switch all letters from uppercase to lower case and from lower case to upper case in one move." ) );
+    actionChangeCase->setWhatsThis( i18n( "Alter the capitalization of selected text to one of five pre-defined patterns.<p>You can also switch all letters from uppercase to lower case and from lower case to upper case in one move." ) );
 
     //------------------------ Settings menu
     actionConfigure = KStdAction::preferences(this, SLOT(configure()), actionCollection(), "configure" );
@@ -855,6 +870,8 @@ void KWView::setupActions()
     actionChangePicture=new KAction( i18n( "Change Picture..." ),"frame_image",0,
                                      this, SLOT( changePicture() ),
                                      actionCollection(), "change_picture" );
+    actionChangePicture->setToolTip( i18n( "Change the picture in the currently selected frame." ) );
+    actionChangePicture->setWhatsThis( i18n( "You can specify a different picture in the current frame.<br><br>KWord automatically resizes the new picture to fit within the old frame." ) );
 
     actionChangeClipart=new KAction( i18n( "Change Clipart..." ), "frame_image",0,
                                      this, SLOT( changeClipart() ),
@@ -862,16 +879,26 @@ void KWView::setupActions()
     actionConfigureHeaderFooter=new KAction( i18n( "Configure Header/Footer..." ), 0,
                                      this, SLOT( configureHeaderFooter() ),
                                      actionCollection(), "configure_headerfooter" );
+    actionConfigureHeaderFooter->setToolTip( i18n( "Configure the currently selected header or footer." ) );
+    actionConfigureHeaderFooter->setWhatsThis( i18n( "Configure the currently selected header or footer." ) );
 
     actionInlineFrame = new KToggleAction( i18n( "Inline Frame" ), 0,
                                             this, SLOT( inlineFrame() ),
                                             actionCollection(), "inline_frame" );
+    actionInlineFrame->setToolTip( i18n( "Convert current frame to an inline frame." ) );
+    actionInlineFrame->setWhatsThis( i18n( "Convert the current frame to an inline frame.<br><br>Place the inline frame within the text at the point nearest to the frames current position." ) );
+    
     actionOpenLink = new KAction( i18n( "Open Link" ), 0,
                                      this, SLOT( openLink() ),
                                      actionCollection(), "open_link" );
+    actionOpenLink->setToolTip( i18n( "Open the link with the appropriate application." ) );
+    actionOpenLink->setWhatsThis( i18n( "Open the link with the appropriate application.<br><br>Web addresses are opened in a browser.<br>Email addresses begin a new message addressed to the link.<br>File links are opened by the appropriate viewer or editor." ) );
+
     actionChangeLink=new KAction( i18n("Change Link..."), 0,
                                   this,SLOT(changeLink()),
                                   actionCollection(), "change_link");
+    actionChangeLink->setToolTip( i18n( "Change the content of the currently selected link." ) );
+    actionChangeLink->setWhatsThis( i18n( "Change the details of the currently selected link." ) );
 
 
     actionShowDocStruct = new KToggleAction( i18n( "Show Doc Structure" ), 0,
@@ -880,10 +907,10 @@ void KWView::setupActions()
     actionShowDocStruct->setToolTip( i18n( "Open document structure sidebar." ) );
     actionShowDocStruct->setWhatsThis( i18n( "Open document structure sidebar.<p>This sidebar helps you organize your document and quickly find pictures, tables, etc." ) );
 
-	actionShowRuler = new KToggleAction( i18n( "Show Ruler" ), 0,
+	actionShowRuler = new KToggleAction( i18n( "Show Rulers" ), 0,
 										this, SLOT( showRuler() ),
 										actionCollection(), "show_ruler" );
-	actionShowRuler->setToolTip( i18n( "Shows or hides ruler." ) );
+	actionShowRuler->setToolTip( i18n( "Shows or hides rulers." ) );
 	actionShowRuler->setWhatsThis( i18n("The rulers are the white measuring spaces top and left of the "
                     "document. The rulers show the position and width of pages and of frames and can "
                     "be used to position tabulators among others.<p>Uncheck this to disable "
@@ -892,6 +919,8 @@ void KWView::setupActions()
     actionConfigureCompletion = new KAction( i18n( "&Configure Completion..." ), 0,
                         this, SLOT( configureCompletion() ),
                         actionCollection(), "configure_completion" );
+    actionConfigureCompletion->setToolTip( i18n( "Change the words and options for autocompletion." ) );
+    actionConfigureCompletion->setWhatsThis( i18n( "Add words or change the options for autocompletion." ) );
 
 
     // ------------------- Actions with a key binding and no GUI item
@@ -927,17 +956,26 @@ void KWView::setupActions()
     actionApplyAutoFormat= new KAction( i18n( "Apply AutoFormat" ), 0,
                                         this, SLOT( applyAutoFormat() ),
                                         actionCollection(), "apply_autoformat" );
+    actionApplyAutoFormat->setToolTip( i18n( "Manually force KWord to scan the entire document and apply autocorrection." ) );
+    actionApplyAutoFormat->setWhatsThis( i18n( "Manually force KWord to scan the entire document and apply autocorrection." ) );
 
     actionCreateStyleFromSelection = new KAction( i18n( "Create Style From Selection" ), 0,
                                         this, SLOT( createStyleFromSelection()),
                                         actionCollection(), "create_style" );
+    actionCreateStyleFromSelection->setToolTip( i18n( "Create a new style based on the currently selected text." ) );
+    actionCreateStyleFromSelection->setWhatsThis( i18n( "Create a new style based on the currently selected text." ) );
+
     actionConfigureFootEndNote = new KAction( i18n( "Configure Footnote/Endnote" ), 0,
                                         this, SLOT( configureFootEndNote()),
                                         actionCollection(), "configure_footendnote" );
+    actionConfigureFootEndNote->setToolTip( i18n( "Change the look of footnotes." ) );
+    actionConfigureFootEndNote->setWhatsThis( i18n( "Change the look of footnotes." ) );
 
     actionEditFootEndNote= new KAction( i18n( "Edit Footnote/Endnote" ), 0,
                                         this, SLOT( editFootEndNote()),
                                         actionCollection(), "edit_footendnote" );
+    actionEditFootEndNote->setToolTip( i18n( "Change the content of the currently selected footnote." ) );
+    actionEditFootEndNote->setWhatsThis( i18n( "Change the content of the currently selected footnote." ) );
 
 
     actionChangeFootNoteType = new KAction( i18n("Change Footnote/Endnote Parameter"), 0,
@@ -947,6 +985,8 @@ void KWView::setupActions()
     actionSavePicture= new KAction( i18n("Save Picture..."), 0,
                                     this, SLOT( savePicture() ),
                                     actionCollection(), "save_picture");
+    actionSavePicture->setToolTip( i18n( "Save the picture in a seperate file." ) );
+    actionSavePicture->setWhatsThis( i18n( "Save the picture in the currently selected frame in a seperate file, outside the KWord document." ) );
 
     actionSaveClipart= new KAction( i18n("Save Clipart..."), 0,
                                     this, SLOT( saveClipart() ),
