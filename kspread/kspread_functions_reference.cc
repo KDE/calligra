@@ -31,12 +31,14 @@
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
+#include <kspread_doc.h>
 #include <kspread_functions.h>
+#include <kspread_interpreter.h>
+#include <kspread_sheet.h>
 #include <kspread_util.h>
 #include <kspread_value.h>
 
 // prototypes (sorted alphabetically)
-#if 0
 bool kspreadfunc_address( KSContext & context );
 bool kspreadfunc_areas( KSContext & context );
 bool kspreadfunc_choose( KSContext & context );
@@ -46,13 +48,11 @@ bool kspreadfunc_indirect( KSContext & context );
 bool kspreadfunc_lookup( KSContext & context );
 bool kspreadfunc_row( KSContext & context );
 bool kspreadfunc_rows( KSContext & context );
-#endif
 
 // registers all reference functions
 void KSpreadRegisterReferenceFunctions()
 {
   KSpreadFunctionRepository * repo = KSpreadFunctionRepository::self();
-#if 0
   repo->registerFunction( "ADDRESS",  kspreadfunc_address );
   repo->registerFunction( "AREAS",    kspreadfunc_areas );
   repo->registerFunction( "CHOOSE",   kspreadfunc_choose );
@@ -62,10 +62,8 @@ void KSpreadRegisterReferenceFunctions()
   repo->registerFunction( "LOOKUP",   kspreadfunc_lookup );
   repo->registerFunction( "ROW",      kspreadfunc_row );
   repo->registerFunction( "ROWS",     kspreadfunc_rows );
-#endif
 }
 
-#if 0
 // Function: ADDRESS
 bool kspreadfunc_address( KSContext & context )
 {
@@ -251,7 +249,6 @@ bool kspreadfunc_areas( KSContext & context )
 bool kspreadfunc_choose( KSContext & context )
 {
   QValueList<KSValue::Ptr> & args = context.value()->listValue();
-  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
 
   QValueList<KSValue::Ptr>::Iterator it  = args.begin();
   QValueList<KSValue::Ptr>::Iterator end = args.end();
@@ -261,7 +258,7 @@ bool kspreadfunc_choose( KSContext & context )
 
   for( ; it != end; ++it )
   {
-    if ( index == - 1 )
+    if ( index == -1 )
     {
       if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
         return false;
@@ -273,20 +270,65 @@ bool kspreadfunc_choose( KSContext & context )
     }
     else
     {
-      // TODO: handle list values!
-      if ( !KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-        return false;
-
-      if ( count == index )
+      if ( KSUtil::checkType( context, *it, KSValue::ListType, true ) )
       {
-        /*
-          if ( extra.count() > count )
+        QValueList<KSValue::Ptr> list( (*it)->listValue() );
+
+        QValueList<KSValue::Ptr>::Iterator listIter = list.begin();
+        QValueList<KSValue::Ptr>::Iterator listEnd  = list.end();
+
+        if ( KSUtil::checkType( context, *listIter, KSValue::ListType, true ) )
+        {
+          list = (*listIter)->listValue();
+
+          listIter = list.begin();
+          listEnd  = list.end();
+        }
+
+        while ( listIter != listEnd )
+        {
+          if ( count == index )
           {
-          context.setValue( new KSValue( extra[count] ) );
-          return true;
+            if ( KSUtil::checkType( context, *listIter, KSValue::StringType, true ) )
+              context.setValue( new KSValue( (*listIter)->stringValue()  ) );
+            else if ( KSUtil::checkType( context, *listIter, KSValue::DoubleType, true ) )
+              context.setValue( new KSValue( (*listIter)->doubleValue()  ) );
+            else if ( KSUtil::checkType( context, *listIter, KSValue::BoolType, true ) )
+              context.setValue( new KSValue( (*listIter)->boolValue()  ) );
+            else if ( KSUtil::checkType( context, *listIter, KSValue::IntType, true ) )
+              context.setValue( new KSValue( (*listIter)->intValue()  ) );
+            else if ( KSUtil::checkType( context, *listIter, KSValue::DateType, true ) )
+              context.setValue( new KSValue( (*listIter)->dateValue()  ) );
+            else if ( KSUtil::checkType( context, *listIter, KSValue::TimeType, true ) )
+              context.setValue( new KSValue( (*listIter)->timeValue()  ) );
+            else
+            {
+              kdDebug() << "Unkown type" << endl;
+              return false;
+            }
+
+            return true;
           }
-        */
-        context.setValue( new KSValue( (*it)->doubleValue() ) );
+          ++count;
+          ++listIter;
+        }        
+      }
+      else if ( count == index )
+      {
+        if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
+          context.setValue( new KSValue( (*it)->stringValue()  ) );
+        else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+          context.setValue( new KSValue( (*it)->doubleValue()  ) );
+        else if ( KSUtil::checkType( context, *it, KSValue::BoolType, true ) )
+          context.setValue( new KSValue( (*it)->boolValue()  ) );
+        else if ( KSUtil::checkType( context, *it, KSValue::IntType, true ) )
+          context.setValue( new KSValue( (*it)->intValue()  ) );
+        else if ( KSUtil::checkType( context, *it, KSValue::DateType, true ) )
+          context.setValue( new KSValue( (*it)->dateValue()  ) );
+        else if ( KSUtil::checkType( context, *it, KSValue::TimeType, true ) )
+          context.setValue( new KSValue( (*it)->timeValue()  ) );
+        else
+          return false;
         return true;
       }
     }
@@ -301,7 +343,6 @@ bool kspreadfunc_column( KSContext & context )
 {
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
 
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
   KSpreadCell *  cell  = ((KSpreadInterpreter *) context.interpreter() )->cell();
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "COLUMN", false ) )
@@ -424,7 +465,7 @@ bool kspreadfunc_columns( KSContext & context )
 bool kspreadfunc_indirect( KSContext & context )
 {
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
-  QValueList<KSValue::Ptr> & extra = context.value()->listValue();
+  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "INDIRECT", true ) )
     return false;
@@ -440,10 +481,16 @@ bool kspreadfunc_indirect( KSContext & context )
     r1c1 = !args[1]->boolValue();
   }
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
+  QString ref;
 
-  QString ref( args[0]->stringValue() );
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+  {
+    if ( !KSUtil::checkType( context, extra[0], KSValue::StringType, true ) )
+      return false;
+    ref = extra[0]->stringValue();
+  }
+  else
+    ref = args[0]->stringValue();
 
   if ( ref.isEmpty() )
     return false;
@@ -458,13 +505,14 @@ bool kspreadfunc_indirect( KSContext & context )
   KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->table();
 
   KSpreadPoint p( ref, map, sheet );
-  if ( !p.isValid() || !p.isTableKnown() )
+
+  if ( !p.isValid() )
     return false;
 
   KSpreadCell * cell = sheet->cellAt( p.pos.x(), p.pos.y() );
   if ( cell )
   {
-    if ( cell->isString() )
+    if ( cell->value().isString() )
       context.setValue( new KSValue( cell->value().asString() ) );
     else if ( cell->value().isNumber() )
       context.setValue( new KSValue( cell->value().asFloat() ) );
@@ -474,6 +522,8 @@ bool kspreadfunc_indirect( KSContext & context )
       context.setValue( new KSValue( cell->valueDate() ) );
     else if ( cell->isTime() )
       context.setValue( new KSValue( cell->valueTime() ) );
+    else if ( cell->value().isEmpty() || cell->isEmpty() || cell->isDefault() )
+      context.setValue( new KSValue( (int) 0 ) );
     else
       context.setValue( new KSValue( cell->strOutText() ) );
 
@@ -486,20 +536,19 @@ bool kspreadfunc_indirect( KSContext & context )
 static bool isEqualLess( KSContext & context, KSpreadValue::Type type, KSValue::Ptr const & value,
                          double dValue, QString const & sValue, bool bValue )
 {
-  if ( ( type == KSpreadValue::Type::Float )
+  if ( ( type == KSpreadValue::Float )
        && ( KSUtil::checkType( context, value, KSValue::DoubleType, true ) ) )
   {
-    kdDebug() << "Values: " << value->doubleValue() << endl;
     if ( dValue <= value->doubleValue() )
       return true;
 
     return false;
   }
 
-  else if ( type == KSpreadCell::NumericData )
+  else if ( type == KSpreadValue::Integer || type == KSpreadValue::Float )
     return true;
 
-  else if ( ( type == KSpreadCell::StringData )
+  else if ( ( type == KSpreadValue::String )
             && ( KSUtil::checkType( context, value, KSValue::StringType, true ) ) )
   {
     if ( sValue.lower() <= value->stringValue().lower() )
@@ -508,10 +557,10 @@ static bool isEqualLess( KSContext & context, KSpreadValue::Type type, KSValue::
     return false;
   }
 
-  else if ( type == KSpreadCell::StringData )
+  else if ( type == KSpreadValue::String )
     return true;
 
-  else if ( ( type == KSpreadCell::BoolData )
+  else if ( ( type == KSpreadValue::Boolean )
             && ( KSUtil::checkType( context, value, KSValue::BoolType, true ) ) )
   {
     if ( (int) bValue <= (int) value->boolValue() )
@@ -546,21 +595,18 @@ bool kspreadfunc_lookup( KSContext & context )
     </Function>
 */
   QValueList<KSValue::Ptr> & args  = context.value()->listValue();
-  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
 
   if ( !KSUtil::checkArgumentsCount( context, 3, "LOOKUP", true ) )
     return false;
 
-  kdDebug() << "H1 " << endl;
   KSpreadValue::Type type;
 
   if ( KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
-    type = KSpreadCell::BoolData;
+    type = KSpreadValue::Boolean;
   else if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    type = KSpreadCell::NumericData;
+    type = KSpreadValue::Float;
   else
     return false;
-  kdDebug() << "H2 " << endl;
 
   int index = -1;
 
@@ -568,11 +614,11 @@ bool kspreadfunc_lookup( KSContext & context )
   QString sValue;
   bool bValue = false;
 
-  if ( type == KSpreadCell::NumericData )
+  if ( type == KSpreadValue::Float || type == KSpreadValue::Integer )
     dValue = args[0]->doubleValue();
-  if ( type == KSpreadCell::StringData )
+  if ( type == KSpreadValue::String )
     sValue = args[0]->stringValue();
-  if ( type == KSpreadCell::BoolData )
+  if ( type == KSpreadValue::Boolean )
     bValue = args[0]->boolValue();
 
   // single value / no list
@@ -581,8 +627,7 @@ bool kspreadfunc_lookup( KSContext & context )
     if ( KSUtil::checkType( context, args[2], KSValue::ListType, true ) )
       return false;
 
-    kdDebug() << "Here1 " << endl;
-    if ( ( type == KSpreadCell::NumericData )
+    if ( ( type == KSpreadValue::Float || type == KSpreadValue::Integer )
          && ( KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) ) )
     {
       if ( dValue <= args[1]->doubleValue() )
@@ -593,12 +638,12 @@ bool kspreadfunc_lookup( KSContext & context )
       return false;
     }
     else
-    if ( type == KSpreadCell::NumericData )
+    if ( type == KSpreadValue::Float || type == KSpreadValue::Integer )
     {
       context.setValue( new KSValue( args[2] ) );
       return true;
     }
-    else if ( ( type == KSpreadCell::StringData )
+    else if ( ( type == KSpreadValue::String )
               && ( KSUtil::checkType( context, args[1], KSValue::StringType, true ) ) )
     {
       if ( sValue.lower() <= args[1]->stringValue().lower() )
@@ -608,12 +653,12 @@ bool kspreadfunc_lookup( KSContext & context )
       }
       return false;
     }
-    else if ( type == KSpreadCell::StringData )
+    else if ( type == KSpreadValue::String )
     {
       context.setValue( new KSValue( args[2] ) );
       return true;
     }
-    else if ( ( type == KSpreadCell::BoolData )
+    else if ( ( type == KSpreadValue::Boolean )
               && ( KSUtil::checkType( context, args[1], KSValue::BoolType, true ) ) )
     {
       if ( bValue <= args[1]->boolValue() )
@@ -626,18 +671,13 @@ bool kspreadfunc_lookup( KSContext & context )
     return false;
   }
 
-  kdDebug() << "Here2 " << endl;
   QValueList<KSValue::Ptr> lookup( args[1]->listValue() );
   QValueList<KSValue::Ptr> & result = args[2]->listValue();
 
   if ( lookup.count() != result.count() )
     return false;
 
-  QValueList<KSValue::Ptr>::Iterator it  = lookup.begin();
-  QValueList<KSValue::Ptr>::Iterator end = lookup.end();
-
   index = -1;
-  kdDebug() << "Start" << endl;
   int l = lookup.count();
   for ( int i = 0; i < l; ++i ) // ( ; it != end; ++it )
   {
@@ -669,7 +709,6 @@ bool kspreadfunc_row( KSContext & context )
 {
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
 
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
   KSpreadCell *  cell  = ((KSpreadInterpreter *) context.interpreter() )->cell();
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "ROW", false ) )
@@ -773,4 +812,4 @@ bool kspreadfunc_rows( KSContext & context )
 
   return false;
 }
-#endif
+
