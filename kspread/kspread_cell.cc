@@ -3215,13 +3215,13 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
   /**
    * QML
    */
-  else if ( !m_strText.isEmpty() && m_strText[0] == '!' )
+/*  else if ( !m_strText.isEmpty() && m_strText[0] == '!' )
   {
     m_pQML = new QSimpleRichText( m_strText.mid(1),  QApplication::font() );//, m_pTable->widget() );
     setFlag(Flag_LayoutDirty);
     m_content = RichText;
     m_dataType = OtherData;
-  }
+  }*/
   /**
    * Some numeric value or a string.
    */
