@@ -15,13 +15,15 @@
 #include "kdchart/KDChartParams.h"
 
 #include <qpainter.h>
+#include <qcursor.h>
+#include <qpopupmenu.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <dcopobject.h>
-
+#include <kxmlguifactory.h>
 
 using namespace std;
 
@@ -338,6 +340,13 @@ void KChartView::ringChart()
   else
     m_chartring->setChecked( true ); // always one has to be checked !
 
+}
+
+void KChartView::mousePressEvent ( QMouseEvent * )
+{
+    if(!koDocument()->isReadWrite() )
+        return;
+    ((QPopupMenu*)factory()->container("action_popup",this))->popup(QCursor::pos());
 }
 
 #include "kchart_view.moc"

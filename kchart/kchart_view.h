@@ -48,6 +48,8 @@ protected:
 
     virtual void updateReadWrite( bool readwrite );
 
+    virtual void mousePressEvent ( QMouseEvent * );
+
 private:
     KAction* m_cut;
     KAction* m_wizard;
