@@ -681,19 +681,29 @@ void Outline::rebuildItems()
             KPObject* object = list.at( j );
             new OutlineObjectItem( item, object, j+1, false );
         }
+        
+        KPObject* header = 0;
+        KPObject* footer = 0;
 
-        // add sticky objects
+        // add sticky objects, exclude header and footer
         QPtrListIterator<KPObject> it( doc->stickyPage()->objectList() );
         for ( ; it.current() ; ++it )
         {
             KPObject* object = it.current();
-            QString name = QString::null;
 
-            if( doc->hasHeader() && doc->isHeader( object ) ) name = i18n( "Header" );
-            if( doc->hasFooter() && doc->isFooter( object ) ) name = i18n( "Footer" );
-
-            new OutlineObjectItem( item, object, 0, true, name );
+            if( doc->hasHeader() && doc->isHeader( object ) ) 
+                header = object;
+            else if( doc->hasFooter() && doc->isFooter( object ) ) 
+                footer = object;
+            else
+                new OutlineObjectItem( item, object, 0, true );
         }
+        
+        // add header and footer (if any)
+        if( footer ) 
+            new OutlineObjectItem( item, footer, 0, true, i18n("Footer") );
+        if( header ) 
+            new OutlineObjectItem( item, header, 0, true, i18n("Header") );
 
     }
 }
