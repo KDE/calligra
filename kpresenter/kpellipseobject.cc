@@ -50,7 +50,7 @@ KPEllipseObject::KPEllipseObject( const QPen &_pen, const QBrush &_brush, FillTy
 
     if ( fillType == FT_GRADIENT )
     {
-        gradient = new KPGradient( gColor1, gColor2, gType, QSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, unbalanced, xfactor, yfactor );
         redrawPix = true;
         pix.resize( getSize().toQSize() );
     }
@@ -76,7 +76,7 @@ void KPEllipseObject::setFillType( FillType _fillType )
     }
     if ( fillType == FT_GRADIENT && !gradient )
     {
-        gradient = new KPGradient( gColor1, gColor2, gType, QSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, unbalanced, xfactor, yfactor );
         redrawPix = true;
     }
 }

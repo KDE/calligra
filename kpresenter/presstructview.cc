@@ -57,7 +57,7 @@ void KPSlidePreview::setPage( QListViewItem *item )
     QRect rect=doc->pageList().at(i)->getZoomPageRect();
     QPixmap pix( rect.size() );
     pix.fill( Qt::white );
-    view->getCanvas()->drawPageInPix2( pix, i );
+    view->getCanvas()->drawPageInPix( pix, i );
 
     int w = rect.width();
     int h = rect.height();

@@ -32,7 +32,8 @@ const QPixmap& KPGradientCollection::getGradient( const QColor &_color1, const Q
     KPGradient *cachedGradient = inGradientList( _color1, _color2, _bcType, _size, _unbalanced, _xfactor, _yfactor );
 
     if ( !cachedGradient ) {
-	KPGradient *kpgradient = new KPGradient( _color1, _color2, _bcType, _size, _unbalanced, _xfactor, _yfactor );
+	KPGradient *kpgradient = new KPGradient( _color1, _color2, _bcType, _unbalanced, _xfactor, _yfactor );
+        kpgradient->setSize( _size );
 	gradientList.append( kpgradient );
 
 	if ( addref )

@@ -209,7 +209,7 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
         int pgNum = slideInfos[i].pageNumber;
         pix.resize( doc->pageList().at(pgNum)->getZoomPageRect().size() );
         pix.fill( Qt::white );
-        view->getCanvas()->drawPageInPix2( pix, pgNum );
+        view->getCanvas()->drawPageInPix( pix, pgNum );
         filename = QString( "%1/pics/slide_%2.%3" ).arg( path ).arg( i + 1 ).arg( format );
         if ( zoom != 100 ) {
             QWMatrix m;

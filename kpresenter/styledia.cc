@@ -364,9 +364,7 @@ void StyleDia::setupTab2()
     connect( yfactor, SIGNAL( valueChanged( int ) ),
 	     this, SLOT( updateBrushConfiguration() ) );
 
-    // Note: size probably doesn't matter [:)], see resizeEvent
-    gradient = new KPGradient( Qt::red, Qt::green, BCT_GHORZ, QSize( chooseBCol->width(), 25 ),
-			       false, 100, 100 );
+    gradient = new KPGradient( Qt::red, Qt::green, BCT_GHORZ, false, 100, 100 );
 
     (void)new QWidget( gradientConfig );
     (void)new QWidget( left );

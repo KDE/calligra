@@ -60,7 +60,7 @@ KPPolygonObject::KPPolygonObject( const KoPointArray &_points, const KoSize &_si
     redrawPix = false;
 
     if ( fillType == FT_GRADIENT ) {
-        gradient = new KPGradient( gColor1, gColor2, gType, QSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, unbalanced, xfactor, yfactor );
         redrawPix = true;
     }
     else
@@ -204,7 +204,7 @@ void KPPolygonObject::setFillType( FillType _fillType )
     }
 
     if ( fillType == FT_GRADIENT && !gradient ) {
-        gradient = new KPGradient( gColor1, gColor2, gType, QSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, unbalanced, xfactor, yfactor );
         redrawPix = true;
     }
 }

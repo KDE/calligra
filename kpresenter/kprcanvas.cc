@@ -2280,9 +2280,9 @@ bool KPrCanvas::isOneObjectSelected()
 /*================================================================*/
 // This one is used to generate the pixmaps for the HTML presentation,
 // for the pres-structure-dialog, for the sidebar previews, for template icons.
-void KPrCanvas::drawPageInPix2( QPixmap &_pix, int pgnum )
+void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum )
 {
-    //kdDebug(33001) << "Page::drawPageInPix2" << endl;
+    //kdDebug(33001) << "Page::drawPageInPix" << endl;
     currPresPage = pgnum + 1;
 
     QPainter p;
@@ -4401,7 +4401,7 @@ void KPrCanvas::exitEditMode()
             emit objectSelectedChanged();
 
         } else if ( kpobject->getType() == OT_PART ) {
-            kpobject->deactivate();
+            static_cast<KPPartObject *>(kpobject)->deactivate();
             _repaint( kpobject );
             return;
         }

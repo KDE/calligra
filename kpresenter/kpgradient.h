@@ -39,7 +39,7 @@ class KPGradient
 {
 public:
     KPGradient( const QColor &_color1, const QColor &_color2, BCType _bcType,
-                const QSize &_size, bool _unbalanced, int _xfactor, int _yfactor );
+                bool _unbalanced, int _xfactor, int _yfactor );
     ~KPGradient() {}
 
     QColor getColor1() const { return color1; }

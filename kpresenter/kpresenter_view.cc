@@ -1119,7 +1119,7 @@ void KPresenterView::extraCreateTemplate()
     pix.fill( Qt::white );
     int i = getCurrPgNum() - 1;
     //todo fix me
-    m_canvas->drawPageInPix2( pix, i );
+    m_canvas->drawPageInPix( pix, i );
 
     QWMatrix m;
     m.scale( 60.0 / (float)pix.width(), 45.0 / (float)pix.height() );

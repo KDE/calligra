@@ -31,13 +31,13 @@
 
 /*======================= constructor ============================*/
 KPGradient::KPGradient( const QColor &_color1, const QColor &_color2, BCType _bcType,
-                        const QSize &_size, bool _unbalanced, int _xfactor, int _yfactor )
+                        bool _unbalanced, int _xfactor, int _yfactor )
     : color1( _color1 ), color2( _color2 ), bcType( _bcType ),
       m_pixmap(), refCount( 0 ),
       xFactor( _xfactor ), yFactor( _yfactor ),
       unbalanced( _unbalanced ), m_bDirty( true )
 {
-    m_pixmap.resize( _size );
+    //m_pixmap.resize( _size );
 }
 
 void KPGradient::setParameters(const QColor &c1, const QColor &c2, BCType _type,

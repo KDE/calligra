@@ -182,11 +182,6 @@ public:
     virtual bool intersects( const KoRect & _rect ) const;
     virtual QCursor getCursor( const KoPoint &_point, ModifyType &_modType ) const;
 
-    virtual void activate( QWidget * /*_widget*/)
-    {; }
-    virtual void deactivate()
-    {; }
-
     virtual void removeFromObjList()
     { inObjList = false; doDelete(); }
     virtual void addToObjList()

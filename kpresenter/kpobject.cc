@@ -697,7 +697,7 @@ KP2DObject::KP2DObject( const QPen &_pen, const QBrush &_brush, FillType _fillTy
     yfactor = _yfactor;
 
     if ( fillType == FT_GRADIENT )
-        gradient = new KPGradient( gColor1, gColor2, gType, QSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, unbalanced, xfactor, yfactor );
     else
         gradient = 0;
 }
@@ -717,7 +717,7 @@ void KP2DObject::setFillType( FillType _fillType )
         gradient = 0;
     }
     if ( fillType == FT_GRADIENT && !gradient )
-        gradient = new KPGradient( gColor1, gColor2, gType, QSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, unbalanced, xfactor, yfactor );
 }
 
 QDomDocumentFragment KP2DObject::save( QDomDocument& doc,int offset )
