@@ -406,7 +406,7 @@ void KoShellWindow::slotFileOpen()
     return;
   }
 
-  KService::Ptr service = KService::service( "Konqueror" );
+  KService::Ptr service = KService::serviceByName( "Konqueror" );
 
   if ( !service )
     return;
