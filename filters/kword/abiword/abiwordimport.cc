@@ -274,6 +274,7 @@ static inline double IndentPos( const QString& _str )
 {
     return ValueWithLengthUnit(_str);
 }
+
 void PopulateProperties(StackItem* stackItem,
                         const QXmlAttributes& attributes,
                         AbiPropsMap& abiPropsMap, const bool allowInit)
@@ -419,7 +420,7 @@ static void AddFormat(QDomElement& formatElementOut, StackItem* stackItem, QDomD
 
     if (stackItem->red || stackItem->green || stackItem->blue)
     {
-        // FIXME: we surely need black is the style is non-black
+        // FIXME: we surely need black if the style is non-black
         QDomElement fontElementOut=mainDocument.createElement("COLOR");
         fontElementOut.setAttribute("red",stackItem->red);
         fontElementOut.setAttribute("green",stackItem->green);
@@ -429,7 +430,7 @@ static void AddFormat(QDomElement& formatElementOut, StackItem* stackItem, QDomD
 
     if (stackItem->textBgRed || stackItem->textBgGreen || stackItem->textBgBlue)
     {
-        // FIXME: we surely need black is the style is non-black
+        // FIXME: we surely need black if the style is non-black
         QDomElement fontElementOut=mainDocument.createElement("TEXTBACKGROUNDCOLOR");
         fontElementOut.setAttribute("red",stackItem->textBgRed);
         fontElementOut.setAttribute("green",stackItem->textBgGreen);
@@ -637,7 +638,6 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomDocument& 
         }
     }
 
-    // TODO: put FORMAT in <p> together we what we need in <c>
     QDomElement formatElementOut=mainDocument.createElement("FORMAT");
     layoutElement.appendChild(formatElementOut);
 
@@ -818,7 +818,7 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
     // For page format that KWord knows, use our own values in case the values in the file would be wrong.
 
 	KoFormat kwordFormat = KoPageFormat::formatFromString(strPageType);
-	
+
     if (kwordFormat==PG_CUSTOM)
 	{
         kdDebug(30506) << "Custom or other page format found: " << strPageType << endl;
@@ -849,6 +849,8 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
         }
         else
         {
+            kwordHeight = 0.0;
+            kwordWidth  = 0.0;
             kdWarning(30506) << "Unknown unit type: " << strUnits << endl;
         }
     }
@@ -1207,7 +1209,60 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
 
     kdDebug(30506)<<"AbiWord to KWord Import filter"<<endl;
 
-    //At first, find the last extension
+    QDomDocument qDomDocumentOut("DOC");
+    qDomDocumentOut.appendChild(
+        qDomDocumentOut.createProcessingInstruction(
+        "xml","version=\"1.0\" encoding=\"UTF-8\""));
+
+    QDomElement elementDoc;
+    elementDoc=qDomDocumentOut.createElement("DOC");
+    elementDoc.setAttribute("editor","KWord's AbiWord Import Filter");
+    elementDoc.setAttribute("mime","application/x-kword");
+    elementDoc.setAttribute("syntaxVersion",2);
+    qDomDocumentOut.appendChild(elementDoc);
+
+    QDomElement element;
+    element=qDomDocumentOut.createElement("ATTRIBUTES");
+    element.setAttribute("processing",0);
+    element.setAttribute("standardpage",1);
+    element.setAttribute("hasHeader",0);
+    element.setAttribute("hasFooter",0);
+    element.setAttribute("unit","mm");
+    elementDoc.appendChild(element);
+
+    QDomElement elementPaper;
+    // <PAPER> will be partialy changed by an AbiWord <pagesize> element.
+    // default paper format of AbiWord is "Letter"
+    elementPaper=qDomDocumentOut.createElement("PAPER");
+    elementPaper.setAttribute("format",PG_US_LETTER);
+    elementPaper.setAttribute("width",MillimetresToPoints(KoPageFormat::width (PG_US_LETTER,PG_PORTRAIT)));
+    elementPaper.setAttribute("height",MillimetresToPoints(KoPageFormat::height(PG_US_LETTER,PG_PORTRAIT)));
+    elementPaper.setAttribute("orientation",PG_PORTRAIT);
+    elementPaper.setAttribute("columns",1);
+    elementPaper.setAttribute("columnspacing",2);
+    elementPaper.setAttribute("hType",0);
+    elementPaper.setAttribute("fType",0);
+    elementPaper.setAttribute("spHeadBody",9);
+    elementPaper.setAttribute("spFootBody",9);
+    elementPaper.setAttribute("zoom",100);
+    elementDoc.appendChild(elementPaper);
+
+    element=qDomDocumentOut.createElement("PAPERBORDERS");
+    element.setAttribute("left",28);
+    element.setAttribute("top",42);
+    element.setAttribute("right",28);
+    element.setAttribute("bottom",42);
+    elementPaper.appendChild(element);
+
+    kdDebug(30506) << "Header " << endl << qDomDocumentOut.toString() << endl;
+
+    StructureParser handler(qDomDocumentOut);
+
+    //We arbitrarily decide that Qt can handle the encoding in which the file was written!!
+    QXmlSimpleReader reader;
+    reader.setContentHandler( &handler );
+
+    //Find the last extension
     QString strExt;
     const int result=fileIn.findRev('.');
     if (result>=0)
@@ -1216,35 +1271,6 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     }
 
     kdDebug(30506) << "File extension: -" << strExt << "-" << endl;
-
-    //Initiate QDomDocument (TODO: is there are better way?)
-    QString strHeader("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    strHeader+="<DOC editor=\"KWord's AbiWord Import Filter\"";
-    strHeader+=" mime=\"application/x-kword\" syntaxVersion=\"2\" >\n";
-    strHeader+="<ATTRIBUTES processing=\"0\" standardpage=\"1\" hasHeader=\"0\" hasFooter=\"0\" unit=\"mm\" />\n";
-
-    // <PAPER> will be partialy changed by an AbiWord <pagesize> element.
-    // default paper format of AbiWord is "Letter"
-    strHeader+=QString("<PAPER format=\"%1\" width=\"%2\" height=\"%3\"")
-        .arg(PG_US_LETTER)
-        .arg(MillimetresToPoints(KoPageFormat::width (PG_US_LETTER,PG_PORTRAIT)))
-        .arg(MillimetresToPoints(KoPageFormat::height(PG_US_LETTER,PG_PORTRAIT)));
-    strHeader+=" orientation=\"0\" columns=\"1\" columnspacing=\"2\"";
-    strHeader+=" hType=\"0\" fType=\"0\" spHeadBody=\"9\" spFootBody=\"9\" zoom=\"100\">\n";
-
-    strHeader+="<PAPERBORDERS left=\"28\" top=\"42\" right=\"28\" bottom=\"42\" />\n";
-    strHeader+="</PAPER>\n</DOC>\n";
-
-    QDomDocument qDomDocumentOut(fileOut);
-    qDomDocumentOut.setContent(strHeader);
-
-    StructureParser handler(qDomDocumentOut);
-
-    //We arbitrarily decide that Qt can handle the encoding in which the file was written!!
-    QXmlSimpleReader reader;
-    reader.setContentHandler( &handler );
-
-    // We have an AbiWord file that may be compressed
 
     QString strMime; // Mime type of the compressor (default: unknown)
 
@@ -1294,10 +1320,10 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
 
     //Write the document!
     QCString strOut=qDomDocumentOut.toCString();
-    out.write((const char*)strOut, strOut.length());
+    out.write(strOut);
     out.close();
 
-#if 1
+#if 0
     kdDebug(30506) << qDomDocumentOut.toString();
 #endif
 
