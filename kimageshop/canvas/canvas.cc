@@ -609,4 +609,4 @@ canvas::paintBrush(QPoint pt, brush *brsh)
 }
 
 
-#include "canvas.mcc"
+#include "canvas.moc"

@@ -191,4 +191,4 @@ layer::setPixel(int x, int y, uchar val)
 }
 
 
-#include "layer.mcc"
+#include "layer.moc"

@@ -148,4 +148,4 @@ numSlider::setValue(float val)
 }
 
 
-#include "numSlider.mcc"
+#include "numSlider.moc"

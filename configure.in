@@ -74,6 +74,12 @@ AC_SUBST(KOFFICE_LIBS)
 KOFFICE_INCLUDES='-I$(top_srcdir)/lib $(KOFFICEUI_INCLUDES) $(KOFFICECORE_INCLUDES) $(KOML_INCLUDES) $(KSTORE_INCLUDES)'
 AC_SUBST(KOFFICE_INCLUDES)
 
+dnl ====================
+dnl checks for KATASBASE
+dnl ====================
+
+KATABASE_DIR=''
+
 dnl check for PostgreSQL headers and libraries
 dnl if present compile Katabase 
 AC_MSG_CHECKING([for PostgreSQL])
@@ -89,11 +95,9 @@ pgsql_incdirs="$ac_pgsql_dir/pgsql/include /usr/include/pgsql /usr/include /usr/
 AC_FIND_FILE(libpq++.h, $pgsql_incdirs, pgsql_incdir)
 if test ! -r $pgsql_incdir/libpq++.h; then
   AC_MSG_WARN(libpq++.h not found.)
-  KATABASE_DIR=''
 else
   KATABASE_DIR='katabase'
 fi
-AC_SUBST(KATABASE_DIR)
 
 PGSQLINC=-I$pgsql_incdir
 AC_SUBST(PGSQLINC)
@@ -111,6 +115,7 @@ AC_MSG_RESULT([headers $pgsql_incdir, libraries $pgsql_libdir])
  
 KATABASE_LIBS="-lpq++"
 AC_SUBST(KATABASE_LIBS)
+AC_SUBST(KATABASE_DIR)
 
 dnl add here all your Makefiles. These are created by configure
 AC_OUTPUT( \
@@ -145,6 +150,7 @@ AC_OUTPUT( \
 	kimage/Makefile \
 	kimage/pics/Makefile \
 	kimageshop/Makefile \
+	kimageshop/canvas/Makefile \
 	kimageshop/pics/Makefile \
    	kpresenter/Makefile \
 	kpresenter/autoformEdit/Makefile \
