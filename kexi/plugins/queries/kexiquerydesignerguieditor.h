@@ -25,6 +25,7 @@
 #include <qmap.h>
 
 #include "kexiquerydesigner.h"
+#include "kexidataprovider.h"
 
 class QGridLayout;
 class QFrame;
@@ -73,6 +74,7 @@ class KexiQueryDesignerGuiEditor : public QWidget
 		~KexiQueryDesignerGuiEditor();
 
 		QString			getQuery();
+		void getParameters(KexiDataProvider::ParameterList &);
 		KexiParameterListEditor	*paramList() { return m_paramList; }
 //		QString			getParam(const QString &name, bool escape);
 

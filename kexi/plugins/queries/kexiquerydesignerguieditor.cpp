@@ -188,6 +188,20 @@ KexiQueryDesignerGuiEditor::slotItemChanged(KexiTableItem *item, int col)
 	}
 }
 
+
+void
+KexiQueryDesignerGuiEditor::getParameters(KexiDataProvider::ParameterList &list)
+{
+	list.clear();
+	kdDebug()<<"KexiQueryDesignerGuiEditor::getParameters()"<<endl;
+	for ( QListViewItem *it=m_paramList->list->firstChild();it;it=it->nextSibling())
+	{
+		kdDebug()<<"KexiQueryDesignerGuiEditor::getParameters():  adding parameter"<<endl;
+		list.append(KexiDataProvider::Parameter(it->text(0),
+			KexiDataProvider::Parameter::Text));
+	}
+}
+
 QString
 KexiQueryDesignerGuiEditor::getQuery()
 {

@@ -21,6 +21,7 @@
 #define KEXIQUERYDESIGNER_H
 
 #include "kexidialogbase.h"
+#include "kexidataprovider.h"
 
 class QTabWidget;
 class KexiView;
@@ -50,9 +51,6 @@ class KexiQueryDesigner : public KexiDialogBase
 		void	queryExecuted(QString statement, bool succeed);
 
 	protected:
-		QString	processQuery();
-		QString	getParam(const QString &name, bool escape=false);
-
 		virtual void print(KPrinter &p);
 
 	protected slots:
@@ -64,6 +62,7 @@ class KexiQueryDesigner : public KexiDialogBase
 
 		int				m_currentView;
 		QString				m_statement;
+		KexiDataProvider::ParameterList m_parameters;
 
 		KexiQueryDesignerGuiEditor	*m_editor;
 		KexiQueryDesignerSQL		*m_sql;

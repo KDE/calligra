@@ -1,0 +1,63 @@
+/* This file is part of the KDE project
+   Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; see the file COPYING.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+ */
+
+
+#include "kexidynamicqueryparameterdialog.h"
+#include "kexidynamicqueryparameterdialog.moc"
+
+#include <qvbox.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <qlineedit.h>
+#include <qobjectlist.h>
+
+KexiDynamicQueryParameterDialog::KexiDynamicQueryParameterDialog(
+	KexiDataProvider::Parameters *values, const KexiDataProvider::ParameterList &list):
+		KDialogBase(0, "paramddialog", true, i18n("Query Parameterrs"),
+		KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true )
+{
+	m_values=values;
+	int y;
+	m_mainView=new QVBox(this);
+
+	for (KexiDataProvider::ParameterList::const_iterator it=list.begin();
+		it!=list.end();++it) {
+		QLineEdit *le=new QLineEdit(m_mainView,(*it).name.utf8());
+		le->setText((*values)[(*it).name]);
+	}
+
+	setMainWidget(m_mainView);
+}
+
+KexiDynamicQueryParameterDialog::~KexiDynamicQueryParameterDialog() {}
+
+void KexiDynamicQueryParameterDialog::slotOk() {
+	QObjectList *l=queryList(0,"kexi_.*",true,true);
+	QObjectListIt it(*l);
+	QObject *obj;
+	kdDebug()<<"KexiDynamicQueryParameterDialog::slotOk()"<<endl;
+	while ((obj=it.current())!=0) {
+		kdDebug()<<"KexiDynamicQueryParameterDialog::slotOk()::loop"<<endl;
+		(*m_values)[QString().fromUtf8(obj->name())]=
+			(dynamic_cast<QLineEdit*>(obj))->text();
+		++it;
+	}
+	delete l;
+	KDialogBase::slotOk();
+}

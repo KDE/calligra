@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2002,2003 Joseph Wenninger <jowenn@kde.org>
    		 2003 Lucijan Busch    <lucijan@gmx.at>
 
    This program is free software; you can redistribute it and/or
@@ -21,19 +21,22 @@
 #include <qdom.h>
 #include <qstring.h>
 #include <qvariant.h>
+#include <qregexp.h>
 
 #include <kexiquerypartitem.h>
 #include <kexiquerydesigner.h>
+#include <kexidynamicqueryparameterdialog.h>
 #include <kexiproject.h>
 #include <kdebug.h>
 #include <koStore.h>
 #include <kexitablelist.h>
 #include <kexitableitem.h>
+#include <kmessagebox.h>
 
 KexiQueryPartItem::KexiQueryPartItem(KexiProjectHandler *parent,
 		const QString& name, const QString& mime,
 		const QString& identifier)
-	:KexiProjectHandlerItem(parent,name,mime,identifier)
+ :KexiProjectHandlerItem(parent,name,mime,identifier)
 {
 	m_client = 0;
 
@@ -48,7 +51,7 @@ KexiQueryPartItem::KexiQueryPartItem(KexiProjectHandler *parent,
 }
 
 void
-KexiQueryPartItem::setParameterList(const KexiDataProvider::ParameterList& params)
+KexiQueryPartItem::setParameters(const KexiDataProvider::ParameterList& params)
 {
 	m_params=params;
 }
@@ -195,10 +198,48 @@ KexiQueryPartItem::load(KoStore* store)
 
 KexiDBRecord *KexiQueryPartItem::records(KexiDataProvider::Parameters params) {
 	if(m_sql.isEmpty()) return 0;
+
+	QString query=m_sql;
+	if (m_params.count())
+	{
+		for (KexiDataProvider::ParameterList::const_iterator
+			it=m_params.begin();it!=m_params.end();++it)
+		{
+			if (!params.contains((*it).name)) {
+				KexiDynamicQueryParameterDialog d(&params,m_params);
+				if (d.exec()==QDialog::Accepted) {
+
+					KexiDataProvider::Parameters::Iterator it;
+        				for ( it = params.begin(); it != params.end();++it ) {
+						kdDebug()<<"["<<it.key()<<"]="
+						<<it.data()<<endl;
+					}
+				} else return 0;
+				//show an input dialog
+				//KMessageBox::sorry(0,"missing parameters");
+				break;
+			}
+		}
+#warning "HERE SHOULD BE A TRANLATION EG. OF DATE INPUTS TO DATABASSE SPECIFIC FORMATS"
+		KexiDataProvider::Parameters::Iterator it;
+		for ( it = params.begin(); it != params.end();++it ) {
+			QRegExp exp1(QString("%1\\W").arg(it.key()),false);
+
+			//not sure if that is needed will have to test that later
+			QRegExp exp2(QString("%1$").arg(it.key()),false);
+
+			query.replace(exp1,it.data());
+			query.replace(exp2,it.data());
+			kdDebug()<<"["<<it.key()<<"]="
+			<<it.data()<<endl;
+		}
+	}
+
+	kdDebug()<<"resulting query string: "<<query<<endl;
 	KexiDBRecord *rec;
         try
         {
-                rec = projectPart()->kexiProject()->db()->queryRecord(m_sql, true);
+                rec = projectPart()->kexiProject()->db()->queryRecord(query, true);
         }
         catch(KexiDBError &err)
         {

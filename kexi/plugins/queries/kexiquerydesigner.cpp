@@ -80,19 +80,7 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char 
 		m_statement = item->sql();
 		m_tab->setCurrentPage(2);
 
-		bool success = false;
-		try
-		{
-			if(m_view->executeQuery(processQuery()))
-				success = true;
-		}
-		catch(KexiDBError &err)
-		{
-			err.toUser(this);
-			emit queryExecuted(m_statement, success);
-		}
-
-		emit queryExecuted(m_statement, success);
+		query();
 	}
 
 	m_item = item;
@@ -104,6 +92,7 @@ void
 KexiQueryDesigner::query()
 {
 	m_item->setSQL(m_statement);
+	m_item->setParameters(m_parameters);
 	KexiDBRecord *rec=m_item->records();
 	if (rec) {
 		m_view->setDataSet(rec);
@@ -131,6 +120,7 @@ KexiQueryDesigner::viewChanged(QWidget *w)
 		if(m_currentView == 0)
 		{
 			m_statement = m_editor->getQuery();
+			m_editor->getParameters(m_parameters);
 			query();
 		}
 		else
@@ -153,40 +143,6 @@ KexiQueryDesigner::print(KPrinter &p)
 	m_view->print(p);
 }
 
-QString
-KexiQueryDesigner::processQuery()
-{
-	kdDebug() << "KexiQueryDesigner::processQuery(): on " << m_statement << endl;
-	if(m_statement.contains("kexi_"))
-	{
-		QString statement = m_statement;
-		QRegExp exp("kexi_[a-zA-Z0-9]*");
-		exp.search(statement);
-		statement.replace(exp, getParam(exp.cap(), true));
-		return statement;
-	}
-
-	return m_statement;
-}
-
-QString
-KexiQueryDesigner::getParam(const QString &name, bool escape)
-{
-	kdDebug() << "KexiQueryDesignerGuiEditor::getParam(): e=" << m_editor << endl;
-	if(m_editor->paramList()->list->findItem(name, 0))
-	{
-		bool ok;
-		QString result = KLineEditDlg::getText(i18n("Query"), name, "", &ok, this);
-		if(escape)
-			return QString("\"" + result + "\"");
-		else
-			return result;
-	}
-	else
-	{
-		return name;
-	}
-}
 
 void
 KexiQueryDesigner::saveBack()
@@ -208,6 +164,8 @@ KexiQueryDesigner::saveBack()
 	if(m_currentView == 0)
 	{
 		m_item->setSQL(m_editor->getQuery());
+		m_editor->getParameters(m_parameters);
+		m_item->setParameters(m_parameters);
 	}
 	else if(m_currentView == 1)
 	{

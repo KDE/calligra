@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2002,2003 Joseph Wenninger <jowenn@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -40,7 +40,7 @@ public:
 			const QString& identifier);
 	virtual ~KexiQueryPartItem();
 
-	void setParameterList(const KexiDataProvider::ParameterList& params);
+	void setParameters(const KexiDataProvider::ParameterList& params);
 	const KexiDataProvider::ParameterList parameters();
 
 	KexiTableList	*designData() { return m_designData; }
