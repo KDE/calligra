@@ -32,13 +32,13 @@ class QPaintDevice;
 class QColor;
 class QPen;
 class QBrush;
-class QRect;
 class QImage;
 
 class VStroke;
 class VFill;
 
 class KoPoint;
+class KoRect;
 
 class VPainter
 {
@@ -50,7 +50,7 @@ public:
 	virtual void resize( unsigned int w, unsigned int h ) = 0;
 	virtual void begin() = 0;
 	virtual void end() = 0;
-	virtual void blit( const QRect & ) = 0;
+	virtual void blit( const KoRect & ) = 0;
 	virtual void clear( const QColor & ) = 0;
 
 	// matrix manipulation

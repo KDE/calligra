@@ -38,7 +38,7 @@ public:
 	virtual void resize( unsigned int w, unsigned int h );
 	virtual void begin();
 	virtual void end();
-	virtual void blit( const QRect & );
+	virtual void blit( const KoRect & );
 	virtual void clear( const QColor & );
 
 	// matrix manipulation

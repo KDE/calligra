@@ -154,7 +154,7 @@ void
 VCanvas::viewportPaintEvent( QPaintEvent *e )
 {
 	//kdDebug() << " e->rect() : " << e->rect().x() << ", " << e->rect().y() << ", " << e->rect().width() << ", " << e->rect().height() << endl;
-	QRect rect( e->rect().x() - 1, e->rect().y() - 2, e->rect().width() + 2, e->rect().height() + 4 );
+	KoRect rect( e->rect().x() - 1, e->rect().y() - 2, e->rect().width() + 2, e->rect().height() + 4 );
 	VPainter *p = m_view->painterFactory()->painter();
 	if( m_bScrolling )
 	{
@@ -183,7 +183,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	qpainter.setZoomFactor( m_view->zoom() );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
-	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect );
+	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect.toQRect() );
 	//bitBlt( this, QPoint( rect.x(), rect.y() - 20 ), p->device(), rect );
 }
 
@@ -244,7 +244,7 @@ VCanvas::repaintAll( const KoRect & )
 	//if( m_view->layersDocker() )
 //		m_view->layersDocker()->updatePreviews();
 	VPainter *p = m_view->painterFactory()->painter();
-	QRect rect( rect().x(), rect().y(), rect().width(), rect().height() );
+	KoRect rect( rect().x(), rect().y(), rect().width(), rect().height() );
 	p->blit( rect );
 
 	// draw handle:
@@ -257,7 +257,7 @@ VCanvas::repaintAll( const KoRect & )
 	qpainter.setZoomFactor( m_view->zoom() );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
-	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect );
+	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect.toQRect() );
 }
 
 void

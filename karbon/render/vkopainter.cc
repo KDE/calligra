@@ -157,7 +157,7 @@ VKoPainter::end()
 }
 
 void
-VKoPainter::blit( const QRect &r )
+VKoPainter::blit( const KoRect &r )
 {
 	//kdDebug() << "m_width : " << m_width << endl;
 	//kdDebug() << "m_height : " << m_height << endl;

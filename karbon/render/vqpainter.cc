@@ -51,7 +51,7 @@ VQPainter::resize( unsigned int w, unsigned int h )
 }
 
 void
-VQPainter::blit( const QRect & )
+VQPainter::blit( const KoRect & )
 {
 	end();
 }
