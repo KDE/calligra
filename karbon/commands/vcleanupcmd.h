@@ -22,10 +22,13 @@
 
 #include "vcommand.h"
 
-
 class VLayer;
 
-
+/*
+ * This visitor visits all layers and destroys all objects
+ * that are in a deleted state. Note that this operation
+ * is permanent!
+ */
 class VCleanUpCmd : public VCommand
 {
 public:

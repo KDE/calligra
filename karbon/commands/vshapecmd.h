@@ -21,14 +21,16 @@
 #ifndef __VSHAPECMD_H__
 #define __VSHAPECMD_H__
 
-
 #include "vcommand.h"
 
 class VComposite;
 
-
-// Provides a common base class for creation commands since they all have
-// a similar execute / unexecute behaviour and all build a VComposite.
+/*
+ * Provides a common base class for creation commands since they all have
+ * a similar execute / unexecute behaviour and all build a VComposite. Upon
+ * execution() the shape will be added to the document and selected, upon undoing
+ * it will be set to the deleted state.
+ */
 class VShapeCmd : public VCommand
 {
 public:
@@ -40,7 +42,7 @@ public:
 
 protected:
 	/// Pointer to the created shape.
-	VComposite* m_shape;
+	VComposite *m_shape;
 };
 
 #endif
