@@ -1903,17 +1903,25 @@ void KSpreadView::spellCheckerFinished()
 
 void KSpreadView::initialPosition()
 {
+  ElapsedTime et( "KSpreadView::initialPosition" );
+
     // Set the initial position for the marker as store in the XML file,
     // (1,1) otherwise
     int col = m_pDoc->map()->initialMarkerColumn();
-    if ( col <= 0 ) col = 1;
+    if ( col <= 0 ) 
+      col = 1;
     int row = m_pDoc->map()->initialMarkerRow();
-    if ( row <= 0 ) row = 1;
+    if ( row <= 0 ) 
+      row = 1;
+
     m_pCanvas->gotoLocation( col, row );
 
-    //init toggle button
     updateBorderButton();
+
+    // make paint effective:
+    m_pDoc->decreaseNumOperation();
     updateShowTableMenu();
+
     m_tableFormat->setEnabled(false);
     m_sort->setEnabled(false);
     m_mergeCell->setEnabled(false);
@@ -1935,6 +1943,7 @@ void KSpreadView::initialPosition()
     slotUpdateView( activeTable() );
     m_bLoading =true;
 
+    
     if ( koDocument()->isReadWrite() )
       initConfig();
 
@@ -5895,7 +5904,7 @@ void KSpreadView::slotRefreshView()
 
 void KSpreadView::slotUpdateView( KSpreadSheet *_table )
 {
-
+  ElapsedTime et( "KSpreadView::slotUpdateView" );
     // Do we display this table ?
     if ( _table != m_pTable )
         return;
@@ -6326,7 +6335,6 @@ void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 
     m_pDoc->emitEndOperation();
     KoView::guiActivateEvent( ev );
-    m_pDoc->decreaseNumOperation(); //from now on: paint...
 }
 
 void KSpreadView::openPopupMenuMenuPage( const QPoint & _point )
