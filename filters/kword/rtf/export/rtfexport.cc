@@ -35,6 +35,7 @@
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
+#include <kimageio.h>
 #include <koFilterChain.h>
 
 #include <KWEFBaseWorker.h>
@@ -63,6 +64,7 @@ KoFilter::ConversionStatus RTFExport::convert( const QCString& from, const QCStr
         return KoFilter::NotImplemented;
     }
 
+    KImageIO::registerFormats();
 
     RTFWorker* worker=new RTFWorker();
 
