@@ -61,3 +61,38 @@ void KPQuadricBezierCurveObjectIface::setLineEnd( const QString & type)
         kdDebug()<<"Error in KPQuadricBezierCurveObjectIface::setLineEnd\n";
 
 }
+
+QString KPQuadricBezierCurveObjectIface::lineBegin()const
+{
+    LineEnd type=obj->getLineBegin();
+    switch(type)
+    {
+    case L_NORMAL:
+        return QString("NORMAL");
+    case L_ARROW:
+        return QString("ARROW");
+    case L_SQUARE:
+        return QString("SQUARE");
+    case L_CIRCLE:
+        return QString("CIRCLE");
+    }
+    return QString::null;
+}
+
+QString KPQuadricBezierCurveObjectIface::lineEnd() const
+{
+    LineEnd type=obj->getLineEnd();
+    switch(type)
+    {
+    case L_NORMAL:
+        return QString("NORMAL");
+    case L_ARROW:
+        return QString("ARROW");
+    case L_SQUARE:
+        return QString("SQUARE");
+    case L_CIRCLE:
+        return QString("CIRCLE");
+    }
+    return QString::null;
+
+}

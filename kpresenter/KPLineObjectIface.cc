@@ -61,3 +61,38 @@ void KPLineObjectIface::setLineEnd( const QString & type)
         kdDebug()<<"Error in KPLineObjectIface::setLineEnd\n";
 
 }
+
+QString KPLineObjectIface::lineBegin()const
+{
+    LineEnd type=obj->getLineBegin();
+    switch(type)
+    {
+    case L_NORMAL:
+        return QString("NORMAL");
+    case L_ARROW:
+        return QString("ARROW");
+    case L_SQUARE:
+        return QString("SQUARE");
+    case L_CIRCLE:
+        return QString("CIRCLE");
+    }
+    return QString::null;
+}
+
+QString KPLineObjectIface::lineEnd() const
+{
+    LineEnd type=obj->getLineEnd();
+    switch(type)
+    {
+    case L_NORMAL:
+        return QString("NORMAL");
+    case L_ARROW:
+        return QString("ARROW");
+    case L_SQUARE:
+        return QString("SQUARE");
+    case L_CIRCLE:
+        return QString("CIRCLE");
+    }
+    return QString::null;
+
+}

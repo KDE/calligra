@@ -38,6 +38,8 @@ k_dcop:
 
     virtual void setLineBegin( const QString & );
     virtual void setLineEnd( const QString & );
+    QString lineBegin()const;
+    QString lineEnd() const;
 
 private:
     KPQuadricBezierCurveObject *obj;
