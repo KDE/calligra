@@ -26,7 +26,8 @@
 #include <kdialogbase.h>
 #include <keditlistbox.h>
 
-#include "extrawidgets.h"
+#include "richtextdialog.h"
+#include "editlistviewdialog.h"
 #include "resizehandle.h"
 #include "objpropbuffer.h"
 #include "formmanager.h"

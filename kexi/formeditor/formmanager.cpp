@@ -57,7 +57,8 @@
 #include "formIO.h"
 #include "objecttreeview.h"
 #include "commands.h"
-#include "extrawidgets.h"
+#include "tabstopdialog.h"
+#include "connectiondialog.h"
 #include "pixmapcollection.h"
 #include "events.h"
 
