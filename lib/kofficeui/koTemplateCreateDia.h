@@ -60,7 +60,7 @@ private slots:
 
     void slotAddGroup();
     void slotRemove();
-
+    void slotItemClicked(QListViewItem * );
 private:
     void updatePixmap();
     void fillGroupTree();
