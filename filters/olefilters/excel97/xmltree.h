@@ -24,6 +24,7 @@
 #include <qqueue.h>
 #include <qobject.h>
 #include <qintdict.h>
+#include <klocale.h>
 
 const int BIFF_5_7 = 0x0500;
 const int BIFF_8 = 0x0600;
@@ -159,6 +160,8 @@ private:
   QIntDict<format_rec> formats;
 
   QQueue<QDomElement> tables;
+
+  KLocale m_locale;
 
   QDomElement doc, paper, map, borders, *table;
 

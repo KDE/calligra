@@ -65,6 +65,10 @@ XMLTree::XMLTree():QObject(),table(0L), fontCount(0), footerCount(0),
 
     map = root->createElement("map");
     doc.appendChild(map);
+
+    // ### David: I added m_locale to xmltree.h to make this compile
+    //     But setting the language on that locale isn't done at all in here...
+    m_locale.setLanguage("C"); // ##### FIXME
 }
 
 XMLTree::~XMLTree()
