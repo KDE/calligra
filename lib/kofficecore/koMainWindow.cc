@@ -143,7 +143,7 @@ void KoMainWindow::createFileMenu( OPMenuBar* _menubar )
   {
     m_pFileMenu = new OPMenu( _menubar );
 
-    _menubar->insertItem( i18n( "&File" ), m_pFileMenu );
+    _menubar->insertItem( i18n( "&File" ), m_pFileMenu, -1, 0 );
   }
   else
     m_pFileMenu->insertSeparator();    
