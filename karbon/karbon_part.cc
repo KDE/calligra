@@ -45,21 +45,32 @@ KarbonPart::initDoc()
 {
 // TODO: remove the whole test code:
 
-	VCCmdEllipse e( this, 100, 100, 250, 250 );
+	VCCmdEllipse e( this, 100, 100, 200, 200 );
 	VPath* elly = e.createPath();
 
-	VCCmdEllipse r( this, 120, 120, 150, 150 );
+	VCCmdEllipse r( this, 120, 140, 140, 160 );
 	VPath* rect = r.createPath();
 
 	elly->combine( *rect );
 	delete( rect );
-/*
-	VCCmdEllipse s( this, 160, 160, 180, 180 );
+
+	VCCmdEllipse s( this, 140, 120, 160, 140 );
 	rect = s.createPath();
 
 	elly->combine( *rect );
 	delete( rect );
-*/
+
+	VCCmdEllipse t( this, 160, 140, 180, 160 );
+	rect = t.createPath();
+
+	elly->combine( *rect );
+	delete( rect );
+
+	VCCmdEllipse u( this, 140, 160, 160, 180 );
+	rect = u.createPath();
+
+	elly->combine( *rect );
+	delete( rect );
 
 	insertObject( elly );
 //	insertObject( rect );

@@ -71,7 +71,7 @@ VPath::draw( QPainter& painter, const QRect& rect,
 		// draw holes:
 		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
 		{
-			m_fill.draw( *( holeItr.current() ) );
+			m_fill.draw( *( holeItr.current() ), true );
 		}
 
 		m_fill.end_draw();

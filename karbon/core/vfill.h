@@ -15,7 +15,7 @@ public:
 	VFill();
 
 	void begin_draw( QPainter& painter, const double zoomFactor );
-	void draw( const VSegmentList& list );
+	void draw( const VSegmentList& list, bool hole = false );
 	void end_draw();
 
 	virtual bool begin( const KoPoint& p );
@@ -33,6 +33,7 @@ private:
 	QPainter* m_painter;
 	double m_zoomFactor;
 	QPointArray m_pa;
+	bool m_hasHoles;	// otherwise spirals suck
 };
 
 #endif

@@ -12,7 +12,7 @@
 		<Action name="edit_select_all"/>
 		<Action name="edit_delete"/>
 		<Separator/>
-		<Menu name="object">
+		<Menu name="edit_purge">
 			<text>P&amp;urge</text>
 			<Action name="edit_purge_history"/>
 		</Menu>
@@ -20,10 +20,20 @@
 	<Menu name="object">
 		<text>&amp;Object</text>
 		<Separator/>
+		<Menu name="object_insert">
+			<text>&amp;Insert Shape</text>
+			<Action name="tool_ellipse"/>
+			<Action name="tool_polygon"/>
+			<Action name="tool_rectangle"/>
+			<Action name="tool_roundrect"/>
+			<Action name="tool_sinus"/>
+			<Action name="tool_spiral"/>
+			<Action name="tool_star"/>
+			</Menu>
 	</Menu>
-		<Menu name="text">
+	<Menu name="text">
 		<text>&amp;Text</text>
-		<Separator/>
+	<Separator/>
 	</Menu>
 	<Menu name="view">
 		<text>&amp;View</text>

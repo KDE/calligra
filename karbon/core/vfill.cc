@@ -18,12 +18,20 @@ VFill::begin_draw( QPainter& painter, const double zoomFactor )
 	m_painter = &painter;
 	m_zoomFactor = zoomFactor;
 	m_pa.resize( 0 );
+	m_hasHoles = false;
 }
 
 void
-VFill::draw( const VSegmentList& list )
+VFill::draw( const VSegmentList& list, bool hole )
 {
+	if( hole )
+		m_hasHoles = true;
+
 	VSegment::traverse( list, *this );
+
+	// append the first point again to avoid mess with holes:
+	m_pa.resize( m_pa.size() + 1 );
+	m_pa.setPoint( m_pa.size() - 1, m_pa.point( 0 ) );
 }
 
 void
@@ -31,7 +39,7 @@ VFill::end_draw()
 {
 	m_painter->setPen( Qt::NoPen );
 	m_painter->setBrush( QColor( 210, 210, 210 ) );
-	m_painter->drawPolygon( m_pa );
+	m_painter->drawPolygon( m_pa, !m_hasHoles );	// otherwise spirals suck
 }
 
 bool
