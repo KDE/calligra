@@ -16,6 +16,7 @@
 #include "kpresenter_doc.h"
 
 #include "delpagedia.h"
+#include <klocale.h>
 #include "delpagedia.moc"
 
 /******************************************************************/

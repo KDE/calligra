@@ -34,6 +34,7 @@
 #include <kapp.h>
 #include <kstdaccel.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 KoMainWindow::KoMainWindow( const char *_name )
 {

@@ -16,6 +16,7 @@
 #include "optiondia.h"
 #include "optiondia.moc"
 #include <kapp.h>
+#include <klocale.h>
 
 /******************************************************************/
 /* class OptionDia                                                */

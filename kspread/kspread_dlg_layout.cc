@@ -29,6 +29,7 @@
 #include <qlabel.h>
 #include <qpainter.h>
 #include <kcolordlg.h>
+#include <klocale.h>
 
 KSpreadPatternSelect::KSpreadPatternSelect( QWidget *parent, const char * ) : QFrame( parent )
 {

@@ -29,6 +29,7 @@
 #include <opMainWindowIf.h>
 #include <kapp.h>
 #include <qmsgbox.h>
+#include <klocale.h>
 
 QList<KSpreadShell>* KSpreadShell::s_lstShells = 0L;
 

@@ -28,6 +28,7 @@
 #include <kfiledialog.h>
 
 #include "preview.h"
+#include <klocale.h>
 
 QList<KPresenterShell>* KPresenterShell::s_lstShells = 0L;
 bool KPresenterShell::previewHandlerRegistered = false;

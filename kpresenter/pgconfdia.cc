@@ -15,6 +15,7 @@
 
 #include <kapp.h>
 #include "pgconfdia.h"
+#include <klocale.h>
 #include "pgconfdia.moc"
 
 /******************************************************************/

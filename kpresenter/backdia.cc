@@ -17,6 +17,7 @@
 #include <page.h>
 
 #include "backdia.h"
+#include <klocale.h>
 #include "backdia.moc"
 
 /******************************************************************/

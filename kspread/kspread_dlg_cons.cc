@@ -26,6 +26,7 @@
 
 #include <kapp.h>
 #include <qmessagebox.h>
+#include <klocale.h>
 
 #include <list>
 

@@ -17,6 +17,7 @@
 #include "kpresenter_view.h"
 #include "page.h"
 #include "presstructview.h"
+#include <klocale.h>
 #include "presstructview.moc"
 
 /******************************************************************/

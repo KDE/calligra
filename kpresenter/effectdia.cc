@@ -15,6 +15,7 @@
 
 #include "kpresenter_view.h"
 #include "effectdia.h"
+#include <klocale.h>
 #include "effectdia.moc"
 
 /******************************************************************/

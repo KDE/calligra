@@ -16,6 +16,7 @@
 #include "styledia.h"
 #include "styledia.moc"
 #include <kapp.h>
+#include <klocale.h>
 
 /******************************************************************/
 /* class Pen and Brush preview                                    */

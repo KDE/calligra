@@ -25,6 +25,7 @@
 #include <kmimemagic.h>
 #include <kio_job.h>
 #include <kurl.h>
+#include <klocale.h>
 
 /******************************************************************/
 /* class Page - Page                                              */

@@ -19,6 +19,7 @@
 
 #include <koApplication.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 KoApplication::KoApplication(int &argc, char **argv, 
 			     const QString& rAppName)

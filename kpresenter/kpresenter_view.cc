@@ -20,6 +20,7 @@
 #include "page.h"
 #include <opUIUtils.h>
 #include <koQueryTypes.h>
+#include <klocale.h>
 
 #define DEBUG
 

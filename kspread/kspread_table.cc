@@ -52,6 +52,7 @@
 #include <torben.h>
 
 #include <strstream.h>
+#include <klocale.h>
 
 /*****************************************************************************
  *

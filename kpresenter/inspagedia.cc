@@ -16,6 +16,7 @@
 #include "kpresenter_doc.h"
 
 #include "inspagedia.h"
+#include <klocale.h>
 #include "inspagedia.moc"
 
 /******************************************************************/

@@ -19,6 +19,7 @@
 #include "page.h"
 #include "kpresenter_view.h"
 #include "ktextobject.h"
+#include <klocale.h>
 
 /******************************************************************/
 /* class KPresenterChild                                          */
