@@ -194,15 +194,17 @@ LoadIconDialog::setIcon(const QString &icon)
 void
 LoadIconDialog::changeIconSize(int index)
 {
-	int size = 0;
+	int size = KIcon::SizeMedium;
 	switch(index)
 	{
 		case 0: size = KIcon::SizeSmall; break;
 		//case 1: size = KIcon::SizeSmallMedium; break;
 		case 1: size = KIcon::SizeMedium; break;
 		case 2: size = KIcon::SizeLarge; break;
+#if !defined(Q_WS_WIN) && KDE_IS_VERSION(3,1,9)
 		case 3: size = KIcon::SizeHuge; break;
-		default: return;
+#endif
+		default:;
 	}
 
 	m_button->setIconSize(size);

@@ -318,6 +318,10 @@ KFormDesigner, Kexi Forms
 - all "widgets" actions and "pointer" action are mutually exclusive
 
 
+2004-05-15
+KexiDB:
+- fixed bug: Connection::resultExists() now properly closes temp. cursor
+
 ===================== Kexi 0.1 Beta 3 =====================
 
 2004-05-08
