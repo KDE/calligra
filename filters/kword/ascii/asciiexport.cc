@@ -276,6 +276,7 @@ bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& lay
                 break;
             }
         }
+        ProcessParagraphData ( paraText, paraFormatDataList);
         m_counterList++; // Increment the list counter
     }
     else
