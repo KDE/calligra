@@ -86,8 +86,13 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
 	break;
 	
     default:
+	
 	 if( _ev->key()==Key_Equal)
        		setActivate(true);
+
+         if( (isActivate()==false) && (text().left(1)=="="))
+         	setActivate(true);
+         	
          QLineEdit::keyPressEvent( _ev );
     }
 }

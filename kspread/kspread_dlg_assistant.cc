@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-
+   Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -67,18 +67,34 @@ KSpreadassistant::KSpreadassistant( KSpreadView* parent, const char* name,QStrin
 
 void KSpreadassistant::slotOk()
 {
-
-
+table->unselect();
 table->setText( dy, dx , m_pRef->text() );
-//m_pView->canvasWidget()->setMarkerColumn(dx);
-//m_pView->canvasWidget()->setMarkerRow(dy);
-
+m_pView->canvasWidget()->hideMarker();
+m_pView->canvasWidget()->setMarkerColumn(dx);
+m_pView->canvasWidget()->setMarkerRow(dy);
+m_pView->editWidget()->setText( m_pRef->text() );
+m_pView->canvasWidget()->showMarker();
+m_pView->editWidget()->setFocus();
+m_pView->editWidget()->setActivate(true);
 accept();
 }
 
 void KSpreadassistant::slotClose()
 {
-  reject();
+table->unselect();
+table->setText( dy, dx , m_pRef->text() );
+m_pView->canvasWidget()->hideMarker();
+m_pView->canvasWidget()->setMarkerColumn(dx);
+m_pView->canvasWidget()->setMarkerRow(dy);
+if ( m_pRef->text() != 0L )
+    m_pView->editWidget()->setText( formula );
+else
+    m_pView->editWidget()->setText( "" );
+m_pView->canvasWidget()->showMarker();
+m_pView->editWidget()->setFocus();
+//reactivate the combobox
+m_pView->editWidget()->setActivate(true);
+reject();
 }
 
 
@@ -88,7 +104,8 @@ void KSpreadassistant::slotSelectionChanged( KSpreadTable* _table, const QRect& 
   if ( _selection.left() == 0 || _selection.top() == 0 ||
        _selection.right() == 0 || _selection.bottom() == 0 )
   {
-    m_pRef->setText( "" );
+    formula=formula+"(:)";
+    m_pRef->setText( formula );
     return;
   }
 
