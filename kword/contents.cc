@@ -61,11 +61,8 @@ KoTextCursor * KWInsertTOCCommand::execute( KoTextCursor *c )
     KWTextParag *prevTOCParag = parag;
     QMap<KWTextParag *, KWTextParag *> paragMap;     // Associate a paragraph form the TOC with the real one from the body
     while ( p ) {
-        // We recognize headers by the "numbering" property of the paragraph
-        // This way, we don't rely on a particular name (breaks when renaming)
-        // nor on whether the user used styles or not.
-        // It even lets a user create two styles for the same level of chapter.
-        if ( p->counter() && p->counter()->numbering() == KoParagCounter::NUM_CHAPTER )
+        // Include this paragraph in the TOC depending on the isOutline flag of the style
+        if ( p->style() && p->style()->isOutline() )
         {
             parag = static_cast<KWTextParag *>(textdoc->createParag( textdoc, prevTOCParag /*prev*/, body /*next*/, true ));
             QString txt = p->string()->toString();
@@ -139,8 +136,9 @@ KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *
     while ( p )
     {
         KWTextParag * parag = static_cast<KWTextParag *>(p);
-        if ( parag->style() && ( parag->style()->name().startsWith( "Contents Head" ) ||
-            parag->style()->name() == "Contents Title" ) )
+        if ( parag->style() && (
+                 parag->style()->name().startsWith( "Contents Head" ) ||
+                 parag->style()->name() == "Contents Title" ) )
         {
             kdDebug() << "KWContents::createContents Deleting paragraph " << p << " " << p->paragId() << endl;
             // This paragraph is part of the TOC -> remove

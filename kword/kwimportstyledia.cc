@@ -89,26 +89,12 @@ void KWImportStyleDia::loadFile()
 
                     KWStyle *sty = new KWStyle( QString::null );
                     // Load the paraglayout from the <STYLE> element
-                    KoParagLayout lay = KoStyle::loadStyle( styleElem,m_doc->syntaxVersion() );
-                    // This way, KWTextParag::setParagLayout also sets the style pointer, to this style
-                    lay.style = sty;
-                    sty->paragLayout() = lay;
+                    sty->loadStyle( styleElem, m_doc->syntaxVersion() );
 
-                    QDomElement nameElem = styleElem.namedItem("NAME").toElement();
-                    if ( !nameElem.isNull() )
-                    {
-                        sty->setName( nameElem.attribute("value") );
-                        //kdDebug(32001) << "KWStyle created  name=" << sty->name() << endl;
-                    } else
-                        kdWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
-
-                    QString name =sty->name();
+                    QString name = sty->name();
                     if ( m_list.findIndex( name )!=-1 )
                         sty->setName(generateStyleName( sty->translatedName() + QString( "-%1")));
                     insertStyle.insert( name, sty->name());
-
-                    // followingStyle is set by KWDocument::loadStyleTemplates after loading all the styles
-                    sty->setFollowingStyle( sty );
 
                     QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
                     if ( !formatElem.isNull() )

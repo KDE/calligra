@@ -198,7 +198,7 @@ KWBookMark::~KWBookMark()
 /******************************************************************/
 /* Class: KWDocument                                              */
 /******************************************************************/
-const int KWDocument::CURRENT_SYNTAX_VERSION = 2;
+const int KWDocument::CURRENT_SYNTAX_VERSION = 3;
 
 KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
@@ -1561,21 +1561,20 @@ void KWDocument::loadStyleTemplates( const QDomElement &stylesElem )
         QDomElement styleElem = listStyles.item( item ).toElement();
 
         KWStyle *sty = new KWStyle( QString::null );
-        // Load the paraglayout from the <STYLE> element
-        KoParagLayout lay = KoStyle::loadStyle( styleElem,syntaxVersion() );
-        // This way, KWTextParag::setParagLayout also sets the style pointer, to this style
-        lay.style = sty;
-        sty->paragLayout() = lay;
+        // Load the style from the <STYLE> element
+        sty->loadStyle( styleElem, m_syntaxVersion );
 
-        QDomElement nameElem = styleElem.namedItem("NAME").toElement();
-        if ( !nameElem.isNull() )
+        //kdDebug(32001) << "KoStyle created name=" << sty->name() << endl;
+
+        if ( m_syntaxVersion < 3 )
         {
-            sty->setName( nameElem.attribute("value") );
-            //kdDebug(32001) << "KWStyle created  name=" << sty->name() << endl;
-        } else
-            kdWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
+            // Convert old style (up to 1.2.x included)
+            // "include in TOC if chapter numbering" to the new attribute
+            if ( sty->paragLayout().counter && sty->paragLayout().counter->numbering() == KoParagCounter::NUM_CHAPTER )
+                sty->setOutline( true );
+        }
 
-        // followingStyle is set by KWDocument::loadStyleTemplates after loading all the styles
+        // the real value of followingStyle is set below after loading all styles
         sty->setFollowingStyle( sty );
 
         QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
