@@ -2762,9 +2762,7 @@ void KPrCanvas::setIncreaseFontSize()
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    int size=12;
-    if(!lst.isEmpty())
-        size=static_cast<int>( KoTextZoomHandler::layoutUnitPtToPt(lst.first()->currentFormat()->font().pointSize()));
+    int size = it.current()->currentFormat()->pointSize();
     KMacroCommand* macroCmd =0L;
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setPointSizeCommand( size+1 );
@@ -2784,9 +2782,7 @@ void KPrCanvas::setDecreaseFontSize()
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    int size=12;
-    if(!lst.isEmpty())
-        size=static_cast<int>( KoTextZoomHandler::layoutUnitPtToPt(lst.first()->currentFormat()->font().pointSize()));
+    int size = it.current()->currentFormat()->pointSize();
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setPointSizeCommand( size-1 );

@@ -295,6 +295,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_dcop = 0;
     dcopObject(); // build it
     m_bLoading =false;
+    
+    m_pInsertHandle = 0;
 
     m_selectionInfo = new KSpreadSelection(this);
 
@@ -409,10 +411,11 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     initializeRowColumnActions();
     initializeBorderActions();
 
-    KSpreadTable *tbl;
-    for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
-      addTable( tbl );
-    tbl = 0L;
+    QPtrListIterator<KSpreadTable> it( m_pDoc->map()->tableList() );
+    for( ; it.current(); ++it )
+      addTable( it.current() );
+
+    KSpreadTable *tbl = 0L;
     if ( m_pDoc->isEmbedded() )
     {
         tbl = m_pDoc->displayTable();
@@ -522,10 +525,13 @@ void KSpreadView::initializeInsertActions()
                                   SLOT( insertChart() ), actionCollection(),
                                   "insertChart" );
   m_insertChartFrame->setToolTip(i18n("Insert a chart."));
+
+#ifndef QT_NO_SQL
   m_insertFromDatabase = new KAction( i18n("From &Database..."), 0, this,
                                       SLOT( insertFromDatabase() ),
                                       actionCollection(), "insertFromDatabase");
   m_insertFromDatabase->setToolTip(i18n("Insert data from a SQL database"));
+#endif
   m_insertFromTextfile = new KAction( i18n("From &Text File..."), 0, this,
                                       SLOT( insertFromTextfile() ),
                                       actionCollection(), "insertFromTextfile");
@@ -1239,6 +1245,8 @@ KSpreadView::~KSpreadView()
     delete m_popupListChoose;
     delete m_sbCalcLabel;
     delete m_dcop;
+    delete m_pInsertHandle;
+    m_pInsertHandle = 0;
 }
 
 
@@ -1426,7 +1434,7 @@ void KSpreadView::startKSpell()
     if(m_pDoc->getKSpellConfig())
     {
         m_pDoc->getKSpellConfig()->setIgnoreList(m_pDoc->spellListIgnoreAll());
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
         m_pDoc->getKSpellConfig()->setReplaceAllList(m_spell.replaceAll);
 #endif
 
@@ -1457,7 +1465,7 @@ void KSpreadView::startKSpell()
   QObject::connect( m_spell.kspell, SIGNAL( ignoreall (const QString & ) ),
                     this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
 
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
   QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
 #endif
 
@@ -1567,7 +1575,7 @@ void KSpreadView::spellCleanup()
   m_spell.firstSpellTable   = 0L;
   m_spell.currentSpellTable = 0L;
   m_spell.currentCell       = 0L;
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
   m_spell.replaceAll.clear();
 #endif
 
@@ -1713,7 +1721,7 @@ void KSpreadView::spellCheckerDone( const QString & )
             }
         }
     }
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
     m_spell.replaceAll.clear();
 #endif
 
@@ -1733,7 +1741,7 @@ void KSpreadView::spellCheckerFinished()
   m_spell.kspell->cleanUp();
   delete m_spell.kspell;
   m_spell.kspell = 0L;
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
   m_spell.replaceAll.clear();
 #endif
 
@@ -1779,6 +1787,7 @@ void KSpreadView::initialPosition()
     updateBorderButton();
     updateShowTableMenu();
     m_tableFormat->setEnabled(false);
+    m_sort->setEnabled(false);
     m_mergeCell->setEnabled(false);
     m_insertChartFrame->setEnabled(false);
 
@@ -3096,12 +3105,14 @@ void KSpreadView::insertHyperlink()
 
 void KSpreadView::insertFromDatabase()
 {
+#ifndef QT_NO_SQL
     m_pCanvas->closeEditor();
 
     QRect rect = m_selectionInfo->selection();
 
     KSpreadDatabaseDlg dlg(this, rect, "KSpreadDatabaseDlg");
     dlg.exec();
+#endif
 }
 
 void KSpreadView::insertFromTextfile()
@@ -4335,7 +4346,11 @@ void KSpreadView::insertObject()
     if ( e.isEmpty() )
         return;
 
-    (void)new KSpreadInsertHandler( this, m_pCanvas, e );
+    //Don't start handles more than once
+    if( m_pInsertHandle )
+        delete m_pInsertHandle;
+
+    m_pInsertHandle = new KSpreadInsertHandler( this, m_pCanvas, e );
 }
 
 void KSpreadView::insertChart()
@@ -4352,7 +4367,11 @@ void KSpreadView::insertChart()
         return;
     }
 
-    (void)new KSpreadInsertHandler( this, m_pCanvas, vec[0], TRUE );
+    //Don't start handles more than once
+    if( m_pInsertHandle )
+        delete m_pInsertHandle;
+
+    m_pInsertHandle = new KSpreadInsertHandler( this, m_pCanvas, vec[0], TRUE );
 }
 
 
@@ -4462,7 +4481,7 @@ void KSpreadView::slotUpdateView( KSpreadTable *_table, const QRect& _rect )
     if ( _table != m_pTable )
         return;
 
-    m_pCanvas->updateCellRect( _rect );
+    m_pCanvas->updateCellRect( _rect, TRUE );
 }
 
 void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )
@@ -4511,6 +4530,7 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table,
 			   colSelected || rowSelected;
 
     m_tableFormat->setEnabled( !simpleSelection );
+    m_sort->setEnabled( !simpleSelection );
     m_mergeCell->setEnabled( !simpleSelection );
     m_insertChartFrame->setEnabled( !simpleSelection );
 

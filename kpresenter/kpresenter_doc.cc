@@ -57,6 +57,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
+#include <kprocess.h>
 
 #include <koTemplateChooseDia.h>
 #include <koRuler.h>
@@ -165,9 +166,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     //kdDebug() << "KPresenterDoc::KPresenterDoc[2] ptSize=" << ptSize << endl;
     // Ok, this is KPresenter. A default font of 10 makes no sense. Let's go for 20.
     ptSize = QMAX( 20, ptSize );
-
-    // Zoom its size to layout units
-    m_defaultFont.setPointSize( m_zoomHandler->ptToLayoutUnitPt( ptSize ) );
 
     m_standardStyle->format().setFont( m_defaultFont );
 
@@ -2177,7 +2175,7 @@ QString KPresenterDoc::templateFileName(bool chooseTemplate, const QString &theF
 	    return QString("");
 	QFileInfo fileInfo( _template );
 	fileName = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt";
-	QString cmd = "cp " + fileName + " " + locateLocal( "appdata", "default.kpr" );
+	QString cmd = "cp " + KShellProcess::quote(fileName) + " " + KShellProcess::quote( locateLocal( "appdata", "default.kpr" ) );
 	system( QFile::encodeName(cmd) );
     }
     return fileName;

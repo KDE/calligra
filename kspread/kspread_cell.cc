@@ -692,10 +692,13 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     /* but reobscure the ones that are forced obscuring */
     forceExtraCells(m_iColumn, m_iRow, m_iMergedXCells, m_iMergedYCells);
 
-    ColumnLayout *cl1 = m_pTable->columnLayout( column() );
-    RowLayout *rl1 = m_pTable->rowLayout( row() );
+    ColumnLayout *cl1 = m_pTable->columnLayout( _col );
+    RowLayout *rl1 = m_pTable->rowLayout( _row );
     if( cl1->isHide() || (rl1->height()<=2))
+    {
+        clearFlag(Flag_LayoutDirty);
         return;
+    }
     /**
      * RichText
      */
@@ -815,7 +818,10 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     {
         m_strOutText = QString::null;
         if ( isDefault() )
+        {
+            clearFlag(Flag_LayoutDirty);
             return;
+        }
     }
 
     //
@@ -950,11 +956,11 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     int a = defineAlignX();
     //apply indent if text is align to left not when text is at right or middle
     if(  a==KSpreadCell::Left && !isEmpty())
-        indent=getIndent(column(),row());
+        indent=getIndent( _col, _row );
 
-    if( verticalText( column(), row() ) ||getAngle(column(), row())!=0)
+    if( verticalText( _col, _row ) || getAngle( _col, _row ) != 0)
     {
-       RowLayout *rl = m_pTable->rowLayout( row() );
+       RowLayout *rl = m_pTable->rowLayout( _row );
 
        if(m_iOutTextHeight>=rl->height())
        {
@@ -1024,6 +1030,58 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         setFlag(Flag_CellTooShort);
       }
     }
+
+    // Do we have to occupy additional cells at the bottom ?
+    if ( ( m_pQML || multiRow( _col, _row ) ) && 
+         m_iOutTextHeight > h - 2 * BORDER_SPACE -
+         topBorderWidth( _col, _row ) - bottomBorderWidth( _col, _row ) )
+    {
+      int r = m_iRow;
+      int end = 0;
+      // Find free cells bottom to this one
+      while ( !end )
+      {
+        RowLayout *rl2 = m_pTable->rowLayout( r + 1 );
+        KSpreadCell *cell = m_pTable->visibleCellAt( m_iColumn, r + 1 );
+        if ( cell->isEmpty() )
+        {
+          h += rl2->dblHeight() - 1.0;
+          r++;
+
+          // Enough space ?
+          if ( m_iOutTextHeight <= h - 2 * BORDER_SPACE -
+               topBorderWidth( _col, _row ) - bottomBorderWidth( _col, _row ) )
+            end = 1;
+        }
+        // Not enough space, but the next cell is not empty
+        else
+          end = -1;
+      }
+
+      /* Check to make
+         sure we haven't already force-merged enough cells
+      */
+      if( r - m_iRow > m_iMergedYCells )
+      {
+        m_iExtraYCells = r - m_iRow;
+        m_dExtraHeight = h;
+        for( int i = m_iRow + 1; i <= r; ++i )
+        {
+          KSpreadCell *cell = m_pTable->nonDefaultCell( m_iColumn, i );
+          cell->obscure( this );
+        }
+        //Not enough space
+        if( end == -1 )
+        {
+//          setFlag( Flag_CellTooShort );
+        }
+      }
+      else
+      {
+//        setFlag( Flag_CellTooShort );
+      }
+    }
+
     clearFlag(Flag_LayoutDirty);
 
     return;
@@ -1189,12 +1247,15 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     QString localizedNumber= locale()->formatNumber( value, p );
     int pos = 0;
 
-    // round the number, based on desired precision
-    double m[] = { 1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10 };
-    double mm = (p > 10) ? pow(10.0,p) : m[p];
-    bool neg = value < 0;
-    value = floor( fabs(value)*mm + 0.5 ) / mm;
-    if( neg ) value = -value;
+    // round the number, based on desired precision if not scientific is choosen (scientific has relativ precision)
+    if( formatType() != Scientific )
+    {
+        double m[] = { 1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10 };
+        double mm = (p > 10) ? pow(10.0,p) : m[p];
+        bool neg = value < 0;
+        value = floor( fabs(value)*mm + 0.5 ) / mm;
+        if( neg ) value = -value;
+    }
 
     switch( formatType() )
     {
@@ -1551,6 +1612,8 @@ bool KSpreadCell::calc(bool delay)
   if ( !testFlag(Flag_CalcDirty) )
     return true;
 
+  QString strFormulaOutBegin = m_strFormulaOut;
+
   if (delay)
   {
     if ( m_pTable->doc()->delayCalculation() )
@@ -1723,7 +1786,7 @@ bool KSpreadCell::calc(bool delay)
   }
   else
   {
-      delete m_pQML;
+    delete m_pQML;
 
     m_pQML = 0;
     clearAllErrors();
@@ -1752,7 +1815,7 @@ bool KSpreadCell::calc(bool delay)
   clearFlag(Flag_Progress);
 
   // if our value changed the cells that depend on us need to be updated
-  if ( m_strFormulaOut != m_strOutText )
+  if ( m_strFormulaOut != strFormulaOutBegin )
   {
     setFlag(Flag_UpdatingDeps);
 
@@ -1940,20 +2003,40 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
        while already drawing the obscuring cell -- don't want to cause an
        infinite loop
     */
-    // Determine the dimension of the cell.
+    
+    /*
+      Store the obscuringCells list in a list of QPoint(column, row)
+      This avoids crashes during the iteration through obscuringCells,
+      when the cells may get non valid or the list itself gets changed
+      during a call of obscuringCell->paintCell (this happens e.g. when
+      there is an updateDepend)
+    */
+    QValueList<QPoint> listPoints;
     QValueList<KSpreadCell*>::iterator it = m_ObscuringCells.begin();
     QValueList<KSpreadCell*>::iterator end = m_ObscuringCells.end();
-    for ( ; it != end; ++it ) {
+    for ( ; it != end; ++it )
+    {
       KSpreadCell *obscuringCell = *it;
-      QPoint obscuringCellRef( obscuringCell->column(), obscuringCell->row() );
-      double x = m_pTable->dblColumnPos( obscuringCell->column() );
-      double y = m_pTable->dblRowPos( obscuringCell->row() );
-      QPair<double,double> corner = qMakePair( x, y );
-      painter.save();
+      listPoints.append( QPoint( obscuringCell->column(), obscuringCell->row() ) );
+    }
 
-      obscuringCell->paintCell( rect, painter, view,
-                                corner, obscuringCellRef );
-      painter.restore();
+    QValueList<QPoint>::iterator it1 = listPoints.begin();
+    QValueList<QPoint>::iterator end1 = listPoints.end();
+    for ( ; it1 != end1; ++it1 )
+    {
+      QPoint obscuringCellRef = *it1;
+      KSpreadCell *obscuringCell = m_pTable->cellAt( obscuringCellRef.x(), obscuringCellRef.y() );
+      if( obscuringCell != 0 )
+      {
+        double x = m_pTable->dblColumnPos( obscuringCellRef.x() );
+        double y = m_pTable->dblRowPos( obscuringCellRef.y() );
+        QPair<double,double> corner = qMakePair( x, y );
+        painter.save();
+
+        obscuringCell->paintCell( rect, painter, view,
+                                  corner, obscuringCellRef );
+        painter.restore();
+      }
     }
   }
 
@@ -3796,7 +3879,7 @@ void KSpreadCell::updateDepending()
     {
       for (int r = d->Top(); r <= d->Bottom(); r++)
       {
-        kdDebug() << "Cell: " << c << ", " << r << endl;
+        kdDebug(36001) << "Cell: " << c << ", " << r << endl;
         cell = d->Table()->cellAt( c, r );
         cell->setCalcDirtyFlag();
         cell->calc();
@@ -4551,7 +4634,7 @@ bool KSpreadCell::loadCellData(const QDomElement &text, Operation op )
   }
   else if (t[0] == '!' )
   {
-      kdDebug()<<" text :"<<t<<endl;
+      kdDebug(36001)<<" text :"<<t<<endl;
       m_pQML = new QSimpleRichText( t.mid(1),  QApplication::font() );//, m_pTable->widget() );
       m_strText = t;
 

@@ -1043,7 +1043,7 @@ void KWView::setupActions()
     // Necessary for the actions that are not plugged anywhere
     // Deprecated with KDE-3.1.
     // Note entirely sure it's necessary for 3.0, please test and report.
-#if KDE_VERSION < 305
+#if KDE_VERSION <= 305
     KAccel * accel = new KAccel( this );
     actNbsp->plugAccel( accel );
     actSoftHyphen->plugAccel( accel );
@@ -1673,7 +1673,7 @@ void KWView::showFormat( const KoTextFormat &currentFormat )
     // update the gui with the current format.
     //kdDebug() << "KWView::setFormat font family=" << currentFormat.font().family() << endl;
     actionFormatFontFamily->setFont( currentFormat.font().family() );
-    actionFormatFontSize->setFontSize( currentFormat.font().pointSize() );
+    actionFormatFontSize->setFontSize( currentFormat.pointSize() );
     actionFormatBold->setChecked( currentFormat.font().bold());
     actionFormatItalic->setChecked( currentFormat.font().italic() );
     actionFormatUnderline->setChecked( currentFormat.underline());
@@ -1928,7 +1928,7 @@ void KWView::updateStyleList()
     // to individual actions
     QStringList lstWithAccels;
     // Generate unique accelerators for the menu items
-#if KDE_VERSION >= 305  // but only if the '&' will be removed from the combobox
+#if KDE_VERSION > 305  // but only if the '&' will be removed from the combobox
     KAccelGen::generate( lst, lstWithAccels );
 #else
     lstWithAccels = lst;
@@ -1998,7 +1998,7 @@ void KWView::updateFrameStyleList()
     // to individual actions
     QStringList lstWithAccels;
     // Generate unique accelerators for the menu items
-#if KDE_VERSION >= 305  // but only if the '&' will be removed from the combobox
+#if KDE_VERSION > 305  // but only if the '&' will be removed from the combobox
     KAccelGen::generate( lst, lstWithAccels );
 #else
     lstWithAccels = lst;
@@ -2073,7 +2073,7 @@ void KWView::updateTableStyleList()
     // to individual actions
     QStringList lstWithAccels;
     // Generate unique accelerators for the menu items
-#if KDE_VERSION >= 305  // but only if the '&' will be removed from the combobox
+#if KDE_VERSION > 305  // but only if the '&' will be removed from the combobox
     KAccelGen::generate( lst, lstWithAccels );
 #else
     lstWithAccels = lst;
@@ -2446,7 +2446,7 @@ void KWView::deleteFrame( bool _warning )
 
         Q_ASSERT( !fs->isAHeader() ); // the action is disabled for such cases
         Q_ASSERT( !fs->isAFooter() );
-        if ( fs->isAFooter() || fs->isAHeader() || fs->isFootEndNote() )
+        if ( fs->isMainFrameset() ||fs->isAFooter() || fs->isAHeader() || fs->isFootEndNote() )
             return;
 
         // frame is part of a table?
@@ -3452,7 +3452,7 @@ void KWView::slotHRulerDoubleClicked()
     bool state = (mode!="ModeText");
     if ( !state )
         return;
-    if ( m_gui->getHorzRuler()->flags() & KoRuler::F_TABS )
+    if ( (m_gui->getHorzRuler()->flags() & KoRuler::F_TABS)&&currentTextEdit() )
         formatParagraph();
     else
         formatPage();
@@ -4979,7 +4979,7 @@ void KWView::startKSpell()
     if(m_doc->getKSpellConfig())
     {
         m_doc->getKSpellConfig()->setIgnoreList(m_doc->spellListIgnoreAll());
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
         m_doc->getKSpellConfig()->setReplaceAllList(m_spell.replaceAll);
 #endif
     }
@@ -5000,7 +5000,7 @@ void KWView::startKSpell()
     QObject::connect( m_spell.kspell, SIGNAL( ignoreall (const QString & ) ),
                       this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
 
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
     QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
 #endif
 
@@ -5432,8 +5432,7 @@ void KWView::frameSelectedChanged()
         return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
     KoTextFormat format=*(lst.first()->currentFormat());
-    format.setPointSize((int)KoTextZoomHandler::layoutUnitPtToPt(format.font().pointSize()));
-    showFormat(format );
+    showFormat( format );
 
     const KoParagLayout * paragLayout=lst.first()->currentParagLayoutFormat();
     KoParagCounter counter;

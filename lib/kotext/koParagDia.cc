@@ -618,7 +618,6 @@ KoStylePreview::KoStylePreview( const QString& title, const QString& text, QWidg
     setMinimumHeight(80);
     m_zoomHandler = new KoZoomHandler;
     QFont font = KoGlobal::defaultFont();
-    font.setPointSize( KoTextZoomHandler::ptToLayoutUnitPt( font.pointSize() ) );
     m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( font, QColor() ));
     //m_textdoc->setWidth( KoTextZoomHandler::ptToLayoutUnitPt( 1000 ) );
     KoTextParag * parag = m_textdoc->firstParag();
@@ -1132,7 +1131,7 @@ KoParagBorderWidget::KoParagBorderWidget( QWidget * parent, const char * name )
     grid->addWidget( lColor, 4, 0 );
 
     bColor = new KColorButton( black,
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
                                 black,
 #endif
                                 this );
@@ -1955,7 +1954,7 @@ KoParagShadowWidget::KoParagShadowWidget( QWidget * parent, const char * name )
     QLabel *lcolor = new QLabel( i18n( "Color:" ), shadow );
     grid2->addWidget(lcolor,0,0);
     color = new KColorButton( black,
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
                               black,
 #endif
                               shadow );

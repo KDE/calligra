@@ -221,8 +221,8 @@ void KSpreadPaperLayout::slotOk()
 
     if ( pl.format == PG_CUSTOM )
     {
-        m_table->setPaperHeight(pl.ptWidth);
-        m_table->setPaperWidth(pl.ptHeight);
+        m_table->setPaperWidth( qRound( POINT_TO_MM( pl.ptWidth ) *1000 ) / 1000 );
+        m_table->setPaperHeight( qRound( POINT_TO_MM( pl.ptHeight ) *1000 ) / 1000 );
     }
 
     m_table->setPaperLayout( POINT_TO_MM(pl.ptLeft), POINT_TO_MM(pl.ptTop), POINT_TO_MM(pl.ptRight), POINT_TO_MM(pl.ptBottom), pl.format, pl.orientation );

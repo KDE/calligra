@@ -28,9 +28,19 @@ ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	INSTALL_PROGRAM += -s
 endif
 
+# GCC 3.2 defines
+export CC=gcc-3.2
+export CXX=g++-3.2
+export CPP=cpp-3.2
+
 ifeq ($(DEB_BUILD_GNU_TYPE),alpha-linux)
   export CFLAGS +=-O0 -mieee
   export CXXFLAGS +=-O0 -mieee
+endif
+
+ifeq ($(DEB_BUILD_GNU_TYPE),hppa-linux)
+  export CFLAGS +=-Os -ffunction-sections -Wl,--stub-group-size=50000
+  export CXXFLAGS +=-Os -ffunction-sections -Wl,--stub-group-size=50000
 endif
 
 ifeq ($(DEB_BUILD_GNU_TYPE),i386-linux)
@@ -130,11 +140,11 @@ install: build
 
 	# Generate HTML docs.
 	for i in `find debian/tmp -name "index.docbook"`; do \
-	  pushd . > /dev/null; cd `dirname $$i`; meinproc `basename $$i`; \
-	  popd > /dev/null; done
+	  ( cd `dirname $$i`; meinproc `basename $$i` ); \
+	done
 
 	# Split into separate binary packages.
-	dh_install --list-missing
+	dh_install --sourcedir=debian/tmp --list-missing
 
 	# Install standard documentation links.
 	for pkg in `dh_listpackages`; do \

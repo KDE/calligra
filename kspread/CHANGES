@@ -1,6 +1,10 @@
 Changes since 1.2
 =================
 Bugfixes:
+- Fix for crashes when working with long text which overlaps several cells
+  or when working with merged cells.
+- Fix popup menue, when row is selected and right click on column header.
+  Now the column below right click is selected.
 - Fix rendering bugs of cell borders (when scrolled up)
 - Fix crash on printout when printrange was one row or one column only
 - Small fix: "14: 4 am" is now "14:04 am"
@@ -13,6 +17,20 @@ Bugfixes:
 - Fix autoscroll on selection with mouse, when mouse is not moved
 - Fix printout of thick borders on page borders
 - Fix flicker of embedded objects
+- Fix applying changes for bold and italic attribute with cell layout dialog
+- Fix paper size for custom layout in paper layout dialog
+- Fix enable/disable sort button when we select just one cel
+- Fix precision when displaying numbers in scientific format
+- Fix moving widgets in validity dialog
+- Fix in formula dialog when inserting strings as arguments
+- Fix compilation, when QT is compiled without SQL framework
+- Fix painting of cell content in several cases
+  (merging cells, return from edit mode, dragging cell content).
+- Fix display of cells overlapping in vertical direction
+- Set a minimum size for embedded objects (so it cannot have a size of 0).
+- Fix for endless loop when calculating formulas.
+- Clicking several times on insert object, inserts now only the last clicked object.
+- Fix width/height of column/row during copy & paste operation
 
 
 Changes from 1.1 to 1.2
