@@ -1854,6 +1854,48 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
                 styleobjectauto.addProperty( "draw:fill","solid" );
                 styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
             }
+            else if ( brush.style() == Qt::Dense1Pattern )
+            {
+                styleobjectauto.addProperty( "draw:transparency", "94%" );
+                styleobjectauto.addProperty( "draw:fill","solid" );
+                styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+            }
+            else if ( brush.style() == Qt::Dense2Pattern )
+            {
+                styleobjectauto.addProperty( "draw:transparency", "88%" );
+                styleobjectauto.addProperty( "draw:fill","solid" );
+                styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+            }
+            else if ( brush.style() == Qt::Dense3Pattern )
+            {
+                styleobjectauto.addProperty( "draw:transparency", "63%" );
+                styleobjectauto.addProperty( "draw:fill","solid" );
+                styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+            }
+            else if ( brush.style() == Qt::Dense4Pattern )
+            {
+                styleobjectauto.addProperty( "draw:transparency", "50%" );
+                styleobjectauto.addProperty( "draw:fill","solid" );
+                styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+            }
+            else if ( brush.style() == Qt::Dense5Pattern )
+            {
+                styleobjectauto.addProperty( "draw:transparency", "37%" );
+                styleobjectauto.addProperty( "draw:fill","solid" );
+                styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+            }
+            else if ( brush.style() == Qt::Dense6Pattern )
+            {
+                styleobjectauto.addProperty( "draw:transparency", "12%" );
+                styleobjectauto.addProperty( "draw:fill","solid" );
+                styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+            }
+            else if ( brush.style() == Qt::Dense7Pattern )
+            {
+                styleobjectauto.addProperty( "draw:transparency", "6%" );
+                styleobjectauto.addProperty( "draw:fill","solid" );
+                styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+            }
             else //otherstyle
             {
                 styleobjectauto.addProperty( "draw:fill","hatch" );
@@ -1890,28 +1932,6 @@ QString KP2DObject::saveOasisHatchStyle( KoGenStyles& mainStyles ) const
     //hatchStyle.addAttribute( "draw:distance", m_distance ); not implemented into kpresenter
     switch( brush.style() )
     {
-        //transparency
-    case Qt::Dense1Pattern:
-        hatchStyle.addAttribute( "draw:transparency", "94%" );
-        break;
-    case Qt::Dense2Pattern:
-        hatchStyle.addAttribute( "draw:transparency", "88%" );
-        break;
-    case Qt::Dense3Pattern:
-        hatchStyle.addAttribute( "draw:transparency", "63%" );
-        break;
-    case Qt::Dense4Pattern:
-        hatchStyle.addAttribute( "draw:transparency", "50%" );
-        break;
-    case Qt::Dense5Pattern:
-        hatchStyle.addAttribute( "draw:transparency", "37%" );
-        break;
-    case Qt::Dense6Pattern:
-        hatchStyle.addAttribute( "draw:transparency", "12%" );
-        break;
-    case Qt::Dense7Pattern:
-        hatchStyle.addAttribute( "draw:transparency", "6%" );
-        break;
     case Qt::HorPattern:
         hatchStyle.addAttribute( "draw:style", "single" );
         hatchStyle.addAttribute( "draw:rotation", 0);
@@ -2082,21 +2102,62 @@ QString KP2DObject::saveOasisGradientStyle( KoGenStyles& mainStyles ) const
 void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
     kdDebug()<<"void KP2DObject::loadOasis(const QDomElement &element)\n";
+    QBrush tmpBrush;
 
     KPShadowObject::loadOasis(element, context, info);
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
+
+
     if ( styleStack.hasAttribute( "draw:fill" ) )
     {
         const QString fill = styleStack.attribute( "draw:fill" );
         kdDebug()<<" load object gradient fill type :"<<fill<<endl;
-        QBrush tmpBrush;
 
         if ( fill == "solid" )
         {
             tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 1 ) );
             if ( styleStack.hasAttribute( "draw:fill-color" ) )
                 tmpBrush.setColor(styleStack.attribute( "draw:fill-color" ) );
+            if ( styleStack.hasAttribute( "draw:transparency" ) )
+            {
+                QString transparency = styleStack.attribute( "draw:transparency" );
+                if ( transparency == "94%" )
+                {
+                    tmpBrush.setStyle(Qt::Dense1Pattern);
+                }
+                else if ( transparency == "88%" )
+                {
+                    tmpBrush.setStyle(Qt::Dense2Pattern);
+                }
+                else if ( transparency == "63%" )
+                {
+                    tmpBrush.setStyle(Qt::Dense3Pattern);
+
+                }
+                else if ( transparency == "50%" )
+                {
+                    tmpBrush.setStyle(Qt::Dense4Pattern);
+
+                }
+                else if ( transparency == "37%" )
+                {
+                    tmpBrush.setStyle(Qt::Dense5Pattern);
+
+                }
+                else if ( transparency == "12%" )
+                {
+                    tmpBrush.setStyle(Qt::Dense6Pattern);
+
+                }
+                else if ( transparency == "6%" )
+                {
+                    tmpBrush.setStyle(Qt::Dense7Pattern);
+
+                }
+                else
+                    kdDebug()<<" transparency is not defined into kpresenter :"<<transparency<<endl;
+            }
             setBrush(tmpBrush );
         }
         else if ( fill == "hatch" )
@@ -2128,45 +2189,6 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
                 if( draw->hasAttribute("draw:display-name"))
                 {
                     //todo implement it into kpresenter
-                }
-                if ( draw->hasAttribute( "draw:transparency" ) )
-                {
-                    QString transparency = draw->attribute( "draw:transparency" );
-                    if ( transparency == "94%" )
-                    {
-                        tmpBrush.setStyle(Qt::Dense1Pattern);
-                    }
-                    else if ( transparency == "88%" )
-                    {
-                        tmpBrush.setStyle(Qt::Dense2Pattern);
-                    }
-                    else if ( transparency == "63%" )
-                    {
-                        tmpBrush.setStyle(Qt::Dense3Pattern);
-
-                    }
-                    else if ( transparency == "50%" )
-                    {
-                        tmpBrush.setStyle(Qt::Dense4Pattern);
-
-                    }
-                    else if ( transparency == "37%" )
-                    {
-                        tmpBrush.setStyle(Qt::Dense5Pattern);
-
-                    }
-                    else if ( transparency == "12%" )
-                    {
-                        tmpBrush.setStyle(Qt::Dense6Pattern);
-
-                    }
-                    else if ( transparency == "6%" )
-                    {
-                        tmpBrush.setStyle(Qt::Dense7Pattern);
-
-                    }
-                    else
-                        kdDebug()<<" transparency is not defined into kpresenter :"<<transparency<<endl;
                 }
                 if( draw->hasAttribute( "draw:style" ))
                 {
