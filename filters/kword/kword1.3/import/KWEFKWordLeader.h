@@ -96,6 +96,8 @@ class KWEFKWordLeader
         double m_columnspacing;
         /// Name of the current frame set
         QString m_currentFramesetName;
+        /// Number of paragraph in each frameset (for bookmarks)
+        QMap<QString,uint> m_paraCountMap;
 
     private:
         KoFilterChain* m_chain;

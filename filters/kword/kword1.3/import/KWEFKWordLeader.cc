@@ -116,6 +116,13 @@ static void ProcessParagraphTag ( QDomNode         myNode,
 
     AllowNoAttributes (myNode);
 
+    // We need to adjust the paragraph number (0 if first)
+    QMap<QString,uint>::Iterator it = leader->m_paraCountMap.find( leader->m_currentFramesetName );
+    if ( it == leader->m_paraCountMap.end() )
+        leader->m_paraCountMap.insert( leader->m_currentFramesetName, 0 );
+    else
+        ++(*it);
+
     ParaData paraData;
 
     QValueList<TagProcessing> tagProcessingList;
