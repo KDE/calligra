@@ -1,4 +1,4 @@
-application_DATA = x-kplato.desktop mathml+xml.desktop
+application_DATA = mathml+xml.desktop
 
 applicationdir = $(kde_mimedir)/application
 
