@@ -378,7 +378,7 @@ MathFontsConfigurePage::MathFontsConfigurePage( Document* document, QWidget* vie
     vLayout = new QVBoxLayout( 0, 0, 6 );
 
     moveUp = new KPushButton( fontWidget );
-    moveUp->setText( i18n( "up" ) );
+    moveUp->setText( i18n( "Up" ) );
     vLayout->addWidget( moveUp );
 
     requestedFonts = new KListView( fontWidget );
@@ -386,7 +386,7 @@ MathFontsConfigurePage::MathFontsConfigurePage( Document* document, QWidget* vie
     vLayout->addWidget( requestedFonts );
 
     moveDown = new KPushButton( fontWidget );
-    moveDown->setText( i18n( "down" ) );
+    moveDown->setText( i18n( "Down" ) );
     vLayout->addWidget( moveDown );
 
     hLayout->addLayout( vLayout );

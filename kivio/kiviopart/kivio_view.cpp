@@ -1259,10 +1259,10 @@ void KivioView::setHParaAlign( int i )
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
-    KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Horizontal Alignement"));
+    KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Horizontal Alignment"));
     while( pStencil )
     {
-        KivioChangeStencilHAlignmentCommand * cmd = new KivioChangeStencilHAlignmentCommand( i18n("Change Stencil Horizontal Alignement"), m_pActivePage, pStencil, pStencil->hTextAlign(), i);
+        KivioChangeStencilHAlignmentCommand * cmd = new KivioChangeStencilHAlignmentCommand( i18n("Change Stencil Horizontal Alignment"), m_pActivePage, pStencil, pStencil->hTextAlign(), i);
 
         pStencil->setHTextAlign(i);
         pStencil = m_pActivePage->selectedStencils()->next();
@@ -1278,11 +1278,11 @@ void KivioView::setVParaAlign( int i )
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
-    KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Vertical Alignement"));
+    KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Vertical Alignment"));
 
     while( pStencil )
     {
-        KivioChangeStencilVAlignmentCommand * cmd = new KivioChangeStencilVAlignmentCommand( i18n("Change Stencil Vertical Alignement"), m_pActivePage, pStencil, pStencil->vTextAlign(), i);
+        KivioChangeStencilVAlignmentCommand * cmd = new KivioChangeStencilVAlignmentCommand( i18n("Change Stencil Vertical Alignment"), m_pActivePage, pStencil, pStencil->vTextAlign(), i);
 
 
         pStencil->setVTextAlign( i );
