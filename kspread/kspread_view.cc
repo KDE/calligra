@@ -5257,7 +5257,6 @@ QWMatrix KSpreadView::matrix() const
 {
     QWMatrix m;
 //    m.translate( -int( m_pCanvas->xOffset() ), -int( m_pCanvas->yOffset() ) );
-//     m.scale( zoom(), zoom() );
     return m;
 }
 
