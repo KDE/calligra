@@ -343,3 +343,7 @@ void KSpreadSheetIface::setFooterRight(const QString & text)
                               footLeft(), footMid(),text );
 }
 
+bool KSpreadSheetIface::isProtected() const
+{
+    return m_table->isProtected();
+}

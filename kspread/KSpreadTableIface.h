@@ -73,7 +73,7 @@ k_dcop:
     void setFooterLeft(const QString & text);
     void setFooterMiddle(const QString & text);
     void setFooterRight(const QString & text);
-
+    bool isProtected() const;
 private:
     KSpreadSheet* m_table;
     KSpreadCellProxy* m_proxy;
