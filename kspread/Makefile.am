@@ -18,6 +18,7 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_layout.cc kspread_map.cc kspread_dlg_layout.cc \
 	kspread_dlg_scripts.cc kspread_cell.cc kspread_table.cc \
 	kspread_dlg_cons.cc kspread_util.cc \
+        kspread_dlg_database.cc \
 	kspread_editors.cc \
 	kspread_dlg_reference.cc\
 	kspread_dlg_comment.cc kspread_dlg_angle.cc kspread_dlg_goto.cc\
@@ -72,6 +73,7 @@ noinst_HEADERS = kspread_doc.h kspread_functions.h \
 	kspread_factory.h kspread_handler.h \
 	kspread_dlg_validity.h  kspread_dlg_showColRow.h \
 	kspread_dlg_list.h \
+	kspread_dlg_database.h \
 	kspread_events.h kspread_global.h  \
 	kspread_dlg_show.h kspread_dlg_insert.h kspread_dlg_pasteinsert.h KSpreadViewIface.h \
 	KSpreadCellIface.h KSpreadMapIface.h KSpreadTableIface.h KSpreadDocIface.h \

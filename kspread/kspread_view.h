@@ -210,6 +210,9 @@ public slots:
     void defaultSelection();
     void paperLayoutDlg();
     void insertObject();
+    void insertFromDatabase();
+    void insertFromTextfile();
+    void insertFromClipboard();
     void editGlobalScripts();
     void editLocalScripts();
     void reloadScripts();
@@ -470,6 +473,9 @@ private:
     KAction* m_undo;
     KAction* m_redo;
     KAction* m_paperLayout;
+    KAction* m_insertFromDatabase;
+    KAction* m_insertFromTextfile;
+    KAction* m_insertFromClipboard;
     KAction* m_insertTable;
     KAction* m_removeTable;
     KAction* m_renameTable;

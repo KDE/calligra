@@ -43,8 +43,15 @@
   <Action name="insertFormula"/>
   <Action name="series"/>
   <Action name="insertHyperlink"/>
+  <Separator/>       
   <Action name="insertPart"/>
   <Action name="insertChart"/>
+  <Separator/>
+  <Menu name="ExternalData"><text>&amp;External data</text>
+    <Action name="insertFromDatabase"/>
+    <Action name="insertFromTextfile"/>
+    <Action name="insertFromClipboard"/>
+  </Menu>        
  </Menu>
  <Menu name="Format"><text>F&amp;ormat</text>
   <Action name="cellLayout"/>
