@@ -366,3 +366,8 @@ int KWordViewIface::currentPage()
 {
     return view->currentPage();
 }
+
+void KWordViewIface::convertTableToText()
+{
+    view->convertTableToText();
+}

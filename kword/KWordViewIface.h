@@ -115,6 +115,7 @@ k_dcop:
     void changeAutoSpellCheckStatus(bool b);
     void deselectAllFrames();
     int currentPage();
+    void convertTableToText();
 private:
     KWView *view;
 
