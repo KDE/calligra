@@ -256,7 +256,7 @@ void OLEFilter::convert(const QString &dirname) {
         // Get the name of the part (dirname==key)
         char *tmp=0L;
         slotPart(dirname, &tmp);
-        if(!store->open(tmp, "")) {
+        if(!store->open(tmp)) {
             success=false;
             kdError(30510) << "OLEFilter::convert(): Could not open KoTarStore!" << endl;
             return;
