@@ -54,7 +54,7 @@ class QButton;
 class QScrollBar;
 class LayerPanel;
 class KoColor;
-
+class KoColorChooser;
 class KontourView : public KoView
 {
 Q_OBJECT
@@ -172,6 +172,7 @@ private:
   
   /* Panels */
   LayerPanel *mLayerPanel;
+  KoColorChooser *mPaintPanel;
 
   // Actions
   KAction *m_copy;

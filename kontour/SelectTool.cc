@@ -167,12 +167,14 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
       for(; it.current(); ++it)
         page->selectObject(it.current());
 //      state = S_Pick;
-        state = S_Init;
+      state = S_Init;
+      canvas->repaint(r);
     }
     else
     {
       /* no object found - repaint canvas to remove the rubberband */
-      canvas->repaint(r);
+	  canvas->updateBuf();
+      canvas->repaint();
       state = S_Init;
     }
   }

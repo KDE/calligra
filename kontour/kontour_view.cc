@@ -50,6 +50,7 @@
 #include "kontour_factory.h"
 #include "GDocument.h"
 #include "GPage.h"
+#include "GObject.h"
 #include "Canvas.h"
 #include "Ruler.h"
 #include "TabBar.h"
@@ -317,9 +318,9 @@ void KontourView::setupPanels()
   win1->setResizeEnabled(true);
   QTabWidget *tab = new QTabWidget(win1, "Tab");
   tab->setTabShape(QTabWidget::Triangular);
-  KoColorChooser *mColorPanel = new KoColorChooser(tab);
-  connect(mColorPanel, SIGNAL(colorChanged(const KoColor &)), this, SLOT(changePaintColor(const KoColor &)));
-  tab->insertTab(mColorPanel, "Color");
+  mPaintPanel = new KoColorChooser(tab);
+  connect(mPaintPanel, SIGNAL(colorChanged(const KoColor &)), this, SLOT(changePaintColor(const KoColor &)));
+  tab->insertTab(mPaintPanel, "Color");
   // TODO : add some content here :)
   tab->insertTab(new QWidget(tab), "Gradient");
   tab->insertTab(new QWidget(tab), "Pattern");
@@ -550,7 +551,8 @@ void KontourView::changePaintColor(const KoColor &c)
 
 void KontourView::changeSelection()
 {
-  if(activeDocument()->activePage()->selectionIsEmpty())
+  GPage *page = activeDocument()->activePage();
+  if(page && page->selectionIsEmpty())
   {
     m_copy->setEnabled(false);
     m_cut->setEnabled(false);
@@ -561,6 +563,8 @@ void KontourView::changeSelection()
     m_copy->setEnabled(true);
     m_cut->setEnabled(true);
     m_convertToPath->setEnabled(true);
+	// set selection style here
+	//mPaintPanel->slotChangeColor(page->getSelection().first()->style().fillColor());
   }
 }
 
