@@ -22,6 +22,7 @@
 #include "kozoomhandler.h"
 #include <kdebug.h>
 #include <klocale.h>
+#include <assert.h>
 
 void KoTextFormat::KoTextFormatPrivate::clearCache()
 {
