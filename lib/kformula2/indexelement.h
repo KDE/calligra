@@ -34,7 +34,7 @@ class IndexElement : public BasicElement {
 public:
 
     // each index has its own number.
-    enum { contentPos, upperLeftPos, lowerLeftPos, upperRightPos, lowerRightPos };
+    enum { upperLeftPos, lowerLeftPos, contentPos, upperRightPos, lowerRightPos };
     
     IndexElement(BasicElement* parent = 0);
     ~IndexElement();
@@ -153,6 +153,11 @@ public:
      */
     virtual void normalize(FormulaCursor*, Direction);
     
+    /**
+     * Returns the child at the cursor.
+     */
+    virtual BasicElement* getChild(FormulaCursor*, Direction = beforeCursor);
+
     /**
      * Returns wether the element has no more useful
      * children (except its main child) and should therefore

@@ -593,6 +593,34 @@ bool IndexElement::isSenseless()
 }
 
 
+/**
+ * Returns the child at the cursor.
+ */
+BasicElement* IndexElement::getChild(FormulaCursor* cursor, Direction direction)
+{
+    int pos = cursor->getPos();
+    /*
+      It makes no sense to care for the direction.
+    if (direction == beforeCursor) {
+        pos -= 1;
+    }
+    */
+    switch (pos) {
+    case contentPos:
+        return content;
+    case upperLeftPos:
+        return upperLeft;
+    case lowerLeftPos:
+        return lowerLeft;
+    case upperRightPos:
+        return upperRight;
+    case lowerRightPos:
+        return lowerRight;
+    }
+    return 0;
+}
+
+
 // SequenceElement* IndexElement::requireUpperLeft()
 // {
 //     if (!hasUpperLeft()) {

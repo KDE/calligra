@@ -63,6 +63,14 @@ public:
      */
     void draw(QPainter&);
 
+    
+    // simple cursor movement.
+    
+    void moveLeft();
+    void moveRight();
+    void moveUp();
+    void moveDown();
+    
     /**
      * Inserts the child at the current position.
      * Ignores the selection.

@@ -201,9 +201,9 @@ public:
     /**
      * Moves the cursor inside the main child.
      */
-    virtual void moveToMainChild(FormulaCursor*) {}
+    //virtual void moveToMainChild(FormulaCursor*) {}
 
-    virtual void selectMainChildContent(FormulaCursor*) {}
+    //virtual void selectMainChildContent(FormulaCursor*) {}
 
     
     // basic support

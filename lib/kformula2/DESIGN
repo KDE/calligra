@@ -22,15 +22,14 @@ Responsebilities
 - knows its children. Actually BasicElement doesn't have any. But it
   already defines that children must be known by their parent.
 - knows its bounding rectangle (its size.) The children are included
-  in this rect. (Only width and height are needed. Positions are
-  handled by the parent)
+  in this rect. (The position is relative to the parent.)
 //- knows its middle line. (for alignment)
 - knows it's zero point for midline (vertical alignment) and 
   keep open the possibility of negative positions (out of bounding rect)
 - draws itself (given a painter); children are drawn, too
 - knows all positions where the cursor is allowed to be. (see below)
 - knows its parent; The topmost element has no parent; there is a
-  implicit garantie that the topmost element is always a
+  implicit guaranty that the topmost element is always a
   SequenceElement.
 - can save and load itself. different formates. (see below)
 - all children must be a SequenceElement. Except for SequenceElement's
@@ -167,6 +166,8 @@ to give the user the possibilty of introduce its strange operator that we
 do not provide as a font. There problems with the scalability but we will
 include as fonts (or vectorial images) in kformula all TeX operators so we
 hope there is no need to use pixamps for a standard use of KFormula
+
+
 
 Navigation
 ##########

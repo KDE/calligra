@@ -64,6 +64,10 @@ public:
     virtual void draw(QPainter& painter, ContextStyle& context,
                       int parentSize, const QPoint& parentOrigin);
 
+    /**
+     * If the cursor is inside a sequence it needs to be drawn.
+     */
+    void drawCursor(FormulaCursor* cursor, QPainter& painter);
     
     // navigation
     // 
@@ -145,6 +149,12 @@ public:
      */
     //void replaceElementByMainChild(FormulaCursor* cursor, BasicElement* child);
 
+    /**
+     * Returns the child at the cursor.
+     */
+    virtual BasicElement* getChild(FormulaCursor*, Direction = beforeCursor);
+
+    //BasicElement* getChildAt(int pos);
     
 private:
 

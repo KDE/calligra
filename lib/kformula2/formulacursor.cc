@@ -64,29 +64,36 @@ void FormulaCursor::setMark(int mark)
 
 void FormulaCursor::draw(QPainter& painter)
 {
-    /*
-    BasicElement* currentChild = getElement()->getChild(this);
-    QPoint point = currentChild->widgetPos();
-    int height = currentChild->getHeight();
-        
-    if (isSelection()) {
-        QPoint markPoint = getElement()->widgetPos(getMark());
+    // We only draw the cursor if its normalized.
+    SequenceElement* sequence = dynamic_cast<SequenceElement*>(current);
 
-        int x = QMIN(point.x(), markPoint.x());
-        int width = abs(point.x() - markPoint.x());
-        painter.setRasterOp(Qt::XorROP);
-        //#painter.setRasterOp(Qt.OrROP)
-        painter.fillRect(x, point.y(), width, height, Qt::white);
-        //#painter.drawLine(point.x(), point.y()-2,
-        //#                 point.x(), point.y()+height+2)
-        painter.setRasterOp(Qt::CopyROP);
+    if (sequence != 0) {
+        sequence->drawCursor(this, painter);
     }
-    else {
-        painter.setPen(Qt::blue);
-        painter.drawLine(point.x(), point.y()-2,
-                         point.x(), point.y()+height+2);
-    }
-    */
+}
+
+void FormulaCursor::moveLeft()
+{
+    BasicElement* element = getElement();
+    element->moveLeft(this, element);
+}
+
+void FormulaCursor::moveRight()
+{
+    BasicElement* element = getElement();
+    element->moveRight(this, element);
+}
+
+void FormulaCursor::moveUp()
+{
+    BasicElement* element = getElement();
+    element->moveUp(this, element);
+}
+
+void FormulaCursor::moveDown()
+{
+    BasicElement* element = getElement();
+    element->moveDown(this, element);
 }
 
 

@@ -127,6 +127,52 @@ void SequenceElement::draw(QPainter& painter, ContextStyle& context,
 }
 
 
+/**
+ * If the cursor is inside a sequence it needs to be drawn.
+ */
+void SequenceElement::drawCursor(FormulaCursor* cursor, QPainter& painter)
+{
+    QPoint point = widgetPos();
+    int height = getHeight();
+
+    int posX;
+    uint pos = cursor->getPos();
+    if (pos < children.count()) {
+        posX = children.at(pos)->getX();
+    }
+    else {
+        if (children.count() > 0) {
+            posX = getWidth();
+        }
+        else {
+            posX = 2;
+        }
+    }
+
+    if (cursor->isSelection()) {
+        int markX;
+        uint mark = cursor->getMark();
+        if (mark < children.count()) {
+            markX = children.at(mark)->getX();
+        }
+        else {
+            markX = getWidth();
+        }
+        
+        int x = QMIN(posX, markX);
+        int width = abs(posX - markX);
+        painter.setRasterOp(Qt::XorROP);
+        painter.fillRect(point.x()+x, point.y(), width, height, Qt::white);
+        painter.setRasterOp(Qt::CopyROP);
+    }
+    else {
+        painter.setPen(Qt::blue);
+        painter.drawLine(point.x()+posX, point.y()-2,
+                         point.x()+posX, point.y()+height+2);
+    }
+}
+
+
 // navigation
 // 
 // The elements are responsible to handle cursor movement themselves.
@@ -192,12 +238,13 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
 
     // We already owned the cursor. Ask next child then.
     else if (from == this) {
-        if (cursor->getPos() < children.count()) {
+        uint pos = cursor->getPos();
+        if (pos < children.count()) {
             if (cursor->isSelection()) {
-                cursor->setTo(this, cursor->getPos()+1);
+                cursor->setTo(this, pos+1);
             }
             else {
-                children.at(cursor->getPos())->moveRight(cursor, this);
+                children.at(pos)->moveRight(cursor, this);
             }
         }
         else {
@@ -404,3 +451,24 @@ void SequenceElement::removeChild(QList<BasicElement>& removedChildren, int pos)
 // {
 //     // How to undo this?
 // }
+
+/**
+ * Returns the child at the cursor.
+ */
+BasicElement* SequenceElement::getChild(FormulaCursor* cursor, Direction direction)
+{
+    if (direction == beforeCursor) {
+        int pos = cursor->getPos()-1;
+        if (pos >= 0) {
+            return children.at(pos);
+        }
+    }
+    else {
+        uint pos = cursor->getPos();
+        if (pos < children.count()) {
+            return children.at(pos);
+        }
+    }
+    return 0;
+}
+
