@@ -171,7 +171,7 @@ bool KWordChild::save( QTextStream& out )
 
 /*================================================================*/
 KWordDocument::KWordDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ), defaultUserFont(0L),
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ), cUserFont(0L), defaultUserFont(0L),
       formatCollection( this ), imageCollection( this ), selStart( this, 1 ), selEnd( this, 1 ),
       ret_pix( KWBarIcon( "return" ) ), unit( "mm" ), numParags( 0 ), footNoteManager( this ),
       autoFormat( this ), urlIntern(), pglChanged( TRUE )
@@ -195,7 +195,6 @@ KWordDocument::KWordDocument(QWidget *parentWidget, const char *widgetName, QObj
     _footer = FALSE;
     _needRedraw = FALSE;
 
-    cUserFont = 0L;
     cParagLayout = 0L;
     cDisplayFont = 0L;
 

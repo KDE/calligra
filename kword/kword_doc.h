@@ -432,6 +432,7 @@ protected:
 
     unsigned int ptColumnWidth;
 
+    KWUserFont *cUserFont;
     KWUserFont *defaultUserFont;
     KWFormatCollection formatCollection;
     KWImageCollection imageCollection;
@@ -458,7 +459,6 @@ protected:
 
     bool _header, _footer;
 
-    KWUserFont *cUserFont;
     KWDisplayFont *cDisplayFont;
     KWParagLayout *cParagLayout;
 
