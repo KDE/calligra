@@ -372,7 +372,6 @@ bool OoImpressImport::appendHelpLine( QDomDocument &doc,const QDomElement &setti
                         //kdDebug()<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
                         if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")=="SnapLinesDrawing" ) )
                         {
-                            kdDebug()<<"SnapLinesDrawing****************:"<<viewItem.text()<<endl;
                             parseHelpLine( doc, helpLineElement, viewItem.text() );
                             //display it by default
                             helpLineElement.setAttribute( "show", true );
@@ -402,7 +401,7 @@ void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElem
             str = text.mid( pos+1, ( newPos-pos ) );
             QDomElement point=doc.createElement("HelpPoint");
 
-            kdDebug()<<" point element  :"<< str <<endl;
+            //kdDebug()<<" point element  :"<< str <<endl;
             QStringList listVal = QStringList::split( ",", str );
             int posX = ( listVal[0].toInt()/100 );
             int posY = ( listVal[1].toInt()/100 );
@@ -423,7 +422,7 @@ void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElem
             QDomElement lines=doc.createElement("Vertical");
             //vertical element
             str = text.mid( pos+1, ( newPos-pos ) );
-            kdDebug()<<" vertical  :"<< str <<endl;
+            //kdDebug()<<" vertical  :"<< str <<endl;
             int posX = ( str.toInt()/100 );
             QString pt_x;
             pt_x.setNum(posX);
@@ -439,8 +438,7 @@ void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElem
             //horizontal element
             QDomElement lines=doc.createElement("Horizontal");
             str = text.mid( pos+1, ( newPos-pos ) );
-            kdDebug()<<" horizontal  :"<< str <<endl;
-
+            //kdDebug()<<" horizontal  :"<< str <<endl;
             int posY = ( str.toInt()/100 );
             QString pt_y;
             pt_y.setNum(posY);
