@@ -153,7 +153,8 @@ bool KexiStartupFileDialog::checkURL()
 		return false;
 	}
 	
-	kdDebug() << "KexiStartupFileDialog::checkURL(): " << path  << endl;
+	kdDebug() << "KexiStartupFileDialog::checkURL() path: " << path  << endl;
+	kdDebug() << "KexiStartupFileDialog::checkURL() fname: " << url.fileName() << endl;
 	if ( url.isLocalFile() ) {
 		QFileInfo fi(path);
 		if (mode() & KFile::ExistingOnly) {
@@ -213,7 +214,9 @@ void KexiStartupFileDialog::setLocationText(const QString& fn)
 	//js @todo
 	setSelection(fn);
 #else
+	setSelection(fn);
 	locationWidget()->setCurrentText(fn);
+	locationWidget()->lineEdit()->setEdited( true );
 #endif
 }
 
