@@ -3531,14 +3531,34 @@ void KWView::extraSpelling()
     m_spell.macroCmdSpellCheck=0L;
     m_spell.replaceAll.clear();
     m_spell.textFramesets.clear();
+    m_spell.bSpellSelection = false;
+    m_spell.selectionStartPos=0;
     // Ask each frameset to complete the list of text framesets.
     // This way table cells are checked too.
     // ## TODO replace this with 'KWFrameSet::nextTextFrameSet( KWTextFrameSet * )'
     // to be able to iterate over a changing list of framesets - as needed by background
     // spell checking in KWDocument.
-    for ( unsigned int i = 0; i < m_doc->getNumFrameSets(); i++ ) {
-        KWFrameSet *frameset = m_doc->frameSet( i );
-        frameset->addTextFrameSets(m_spell.textFramesets);
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit && edit->textFrameSet()->hasSelection())
+    {
+        m_spell.textFramesets.append(edit->textFrameSet());
+        m_spell.bSpellSelection = true;
+        m_spell.selectionStartPos = 0;
+        KoTextCursor start = edit->textDocument()->selectionStartCursor( KoTextDocument::Standard );
+        m_spell.selectionStartPos =start.index();
+        for ( int i = 0 ; i < start.parag()->paragId(); i++)
+        {
+            m_spell.selectionStartPos += start.parag()->document()->paragAt( i )->string()->length();
+        }
+        kdDebug()<<" m_spell.selectionStartPos after :"<<m_spell.selectionStartPos<<endl;
+
+    }
+    else
+    {
+        for ( unsigned int i = 0; i < m_doc->getNumFrameSets(); i++ ) {
+            KWFrameSet *frameset = m_doc->frameSet( i );
+            frameset->addTextFrameSets(m_spell.textFramesets);
+        }
     }
     startKSpell();
 }
@@ -5051,6 +5071,10 @@ void KWView::spellCheckerReady()
         //kdDebug() << "KWView::spellCheckerReady spell-checking frameset " << m_spellCurrFrameSetNum << endl;
 
         QString text = textfs->textDocument()->plainText();
+        if ( m_spell.bSpellSelection)
+        {
+            text = textfs->textDocument()->selectedText(KoTextDocument::Standard);
+        }
         bool textIsEmpty=true;
         // Determine if text has any non-space character, otherwise there's nothing to spellcheck
         for ( uint i = 0 ; i < text.length() ; ++ i )
@@ -5086,6 +5110,7 @@ void KWView::spellCheckerMisspelling( const QString &old, const QStringList &, u
     Q_ASSERT( fs );
     if ( !fs ) return;
     KoTextParag * p = fs->textDocument()->firstParag();
+    pos += m_spell.selectionStartPos;
     while ( p && (int)pos >= p->length() )
     {
         pos -= p->length();
@@ -5100,7 +5125,7 @@ void KWView::spellCheckerMisspelling( const QString &old, const QStringList &, u
 void KWView::spellCheckerCorrected( const QString &old, const QString &corr, unsigned int pos )
 {
     //kdDebug() << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
-
+    pos += m_spell.selectionStartPos;
     KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
     Q_ASSERT( fs );
     if ( !fs ) return;
@@ -5135,7 +5160,13 @@ void KWView::spellCheckerDone( const QString & )
     m_spell.kspell->cleanUp();
     delete m_spell.kspell;
     m_spell.kspell = 0;
+    if ( m_spell.bSpellSelection )
+    {
+        KMessageBox::information(this,
+                                 i18n("SpellCheck selection finished."),
+                                 i18n("Spell checking"));
 
+    }
     if ( result != KS_CANCEL && result != KS_STOP )
     {
         // Try to check another frameset
@@ -5144,12 +5175,19 @@ void KWView::spellCheckerDone( const QString & )
     else
     {
         m_doc->setReadWrite(true);
-        m_spell.textFramesets.clear();
-        m_spell.replaceAll.clear();
-        if(m_spell.macroCmdSpellCheck)
-            m_doc->addCommand(m_spell.macroCmdSpellCheck);
-        m_spell.macroCmdSpellCheck=0L;
+        clearSpellChecker();
     }
+}
+
+void KWView::clearSpellChecker()
+{
+    m_spell.textFramesets.clear();
+    m_spell.replaceAll.clear();
+    if(m_spell.macroCmdSpellCheck)
+        m_doc->addCommand(m_spell.macroCmdSpellCheck);
+    m_spell.macroCmdSpellCheck=0L;
+    m_spell.bSpellSelection= false;
+    m_spell.selectionStartPos = 0;
 }
 
 void KWView::spellCheckerFinished()
@@ -5175,12 +5213,7 @@ void KWView::spellCheckerFinished()
             fs->removeHighlight();
     }
     m_doc->setReadWrite(true);
-    m_spell.textFramesets.clear();
-    m_spell.replaceAll.clear();
-    if(m_spell.macroCmdSpellCheck)
-        m_doc->addCommand(m_spell.macroCmdSpellCheck);
-    m_spell.macroCmdSpellCheck=0L;
-
+    clearSpellChecker();
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
         edit->drawCursor( TRUE );

@@ -265,3 +265,6 @@ Layout:
 Crashes:
 - Fixed crash when removing pages (and the page number is shown in header/footer)
 
+Changes after KWord-1.2
+=======================
+- Spellchecker can spell check only a selection

@@ -423,6 +423,7 @@ protected:
     void tableSplitCells(int col, int row);
 
     void startKSpell();
+    void clearSpellChecker();
 
     QValueList<QString> getInlineFramesets( const QDomNode &framesetElem );
 
@@ -653,6 +654,8 @@ private:
 	QPtrList<KWTextFrameSet> textFramesets;
 	KMacroCommand * macroCmdSpellCheck;
         QStringList replaceAll;
+        bool bSpellSelection;
+        int selectionStartPos;
      } m_spell;
 
     KWFrameSet *fsInline;
