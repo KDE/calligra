@@ -5952,13 +5952,14 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
                               (int)( MM_TO_POINT ( paperHeight() - 10.0 ) ),
                               footRight( pagenr, m_strName ) );
 
-        painter.translate( MM_TO_POINT ( leftBorder()),
-                           MM_TO_POINT ( topBorder() ));
+        painter.translate( MM_TO_POINT ( leftBorder() ),
+                           MM_TO_POINT ( topBorder()  ));
+
         // Print the page
         printPage( painter, *it, *fit, *fito );
 
-        painter.translate( - MM_TO_POINT ( leftBorder()),
-                           - MM_TO_POINT ( topBorder() ));
+        painter.translate( - MM_TO_POINT ( leftBorder() ),
+                           - MM_TO_POINT ( topBorder()  ));
 
         if ( pagenr < (int)page_list.count() )
             _printer->newPage();
@@ -5976,6 +5977,13 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 {
     // kdDebug(36001) << "Rect x=" << page_range->left() << " y=" << page_range->top() << ", w="
     // << page_range->width() << " h="  << page_range->height() << endl;
+
+    //Don't paint on the page borders
+    QRegion clipRegion( MM_TO_POINT ( leftBorder() ), 
+                        MM_TO_POINT ( topBorder() ), 
+                        _childOffset.x() + page_range.width(), 
+                        _childOffset.y() + page_range.height() );
+    _painter.setClipRegion( clipRegion );
 
     //
     // Draw the cells.
@@ -6016,6 +6024,12 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
         }
         ypos_Start = ypos;
         xpos_Start = xpos;
+        //Don't let obscuring cells and children overpaint this area
+        clipRegion -= QRegion ( MM_TO_POINT ( leftBorder() ), 
+                                MM_TO_POINT ( topBorder() ), 
+                                xpos, 
+                                ypos );
+        _painter.setClipRegion( clipRegion );
     }
 
     //Check if we have to repeat some rows
@@ -6042,6 +6056,12 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
             ypos += row_lay->height();
         }
         ypos_Start = ypos;
+        //Don't let obscuring cells and children overpaint this area
+        clipRegion -= QRegion( MM_TO_POINT ( leftBorder() + xpos_Start ), 
+                               MM_TO_POINT ( topBorder() ), 
+                               xpos - xpos_Start, 
+                               ypos );
+        _painter.setClipRegion( clipRegion );
     }
 
     //Check if we have to repeat some columns
@@ -6068,6 +6088,12 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
             ypos += row_lay->height();
         }
         xpos_Start = xpos;
+        //Don't let obscuring cells and children overpaint this area
+        clipRegion -= QRegion( MM_TO_POINT ( leftBorder() ), 
+                               MM_TO_POINT ( topBorder() + ypos_Start ), 
+                               xpos, 
+                               ypos - ypos_Start );
+        _painter.setClipRegion( clipRegion );
     }
 
     //Print the cells
