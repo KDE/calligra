@@ -1,3 +1,6 @@
+dnl Excluded from KDE 1.9x and 2.0 releases
+DO_NOTCOMPILE="$DO_NOT_COMPILE kimageshop"
+
 dnl ====================
 dnl Checks for KImageShop
 dnl =====================
