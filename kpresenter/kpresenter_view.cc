@@ -5742,24 +5742,24 @@ void KPresenterView::removeHelpLine()
 
 void KPresenterView::changeHelpLinePosition()
 {
-    int pos = 0;
-    int limitTop = 0;
-    int limitBottom = 0;
-    QRect r=m_canvas->activePage()->getZoomPageRect();
+    double pos = 0.0;
+    double limitTop = 0.0;
+    double limitBottom = 0.0;
+    KoRect r=m_canvas->activePage()->getPageRect();
     if ( m_canvas->tmpHorizHelpLine() != -1)
     {
-        pos = zoomHandler()->zoomItY (m_pKPresenterDoc->horizHelplines()[m_canvas->tmpHorizHelpLine()]);
+        pos = m_pKPresenterDoc->horizHelplines()[m_canvas->tmpHorizHelpLine()];
         limitTop = r.top();
         limitBottom = r.bottom();
     }
     else if ( m_canvas->tmpVertHelpLine() != -1)
     {
-        pos = zoomHandler()->zoomItX( m_pKPresenterDoc->vertHelplines()[m_canvas->tmpVertHelpLine()]);
+        pos = m_pKPresenterDoc->vertHelplines()[m_canvas->tmpVertHelpLine()];
         limitTop = r.left();
         limitBottom = r.right();
     }
 
-    KPrMoveHelpLineDia *dlg= new KPrMoveHelpLineDia(this, pos, limitTop , limitBottom);
+    KPrMoveHelpLineDia *dlg= new KPrMoveHelpLineDia(this, pos, limitTop , limitBottom,  m_pKPresenterDoc);
     if ( dlg->exec())
     {
         m_canvas->changeHelpLinePosition( dlg->newPosition() );
@@ -5776,16 +5776,16 @@ void KPresenterView::openPopupMenuHelpLine( const QPoint & _point )
 
 void KPresenterView::addHelpLine()
 {
-    QRect r=m_canvas->activePage()->getZoomPageRect();
+    KoRect r=m_canvas->activePage()->getPageRect();
 
-    KPrInsertHelpLineDia *dlg= new KPrInsertHelpLineDia(this, r);
+    KPrInsertHelpLineDia *dlg= new KPrInsertHelpLineDia(this, r,  m_pKPresenterDoc);
     if ( dlg->exec())
     {
         double pos = dlg->newPosition();
         if ( dlg->addHorizontalHelpLine() )
-            m_pKPresenterDoc->addHorizHelpline(zoomHandler()->zoomItY( pos ));
+            m_pKPresenterDoc->addHorizHelpline( pos );
         else
-            m_pKPresenterDoc->addVertHelpline( zoomHandler()->zoomItX( pos ));
+            m_pKPresenterDoc->addVertHelpline( pos );
     }
     delete dlg;
     m_pKPresenterDoc->setModified( true );

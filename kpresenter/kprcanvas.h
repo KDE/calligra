@@ -215,7 +215,7 @@ public:
 
     unsigned int objNums() const;
     void removeHelpLine();
-    void changeHelpLinePosition( int newPos);
+    void changeHelpLinePosition( double newPos);
 
     int tmpHorizHelpLine() const { return  m_tmpHorizHelpline;}
     int tmpVertHelpLine() const { return m_tmpVertHelpline;}

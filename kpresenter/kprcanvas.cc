@@ -6357,12 +6357,12 @@ void KPrCanvas::removeHelpLine()
     repaint(false);
 }
 
-void KPrCanvas::changeHelpLinePosition( int newPos )
+void KPrCanvas::changeHelpLinePosition( double newPos )
 {
     if ( m_tmpVertHelpline != -1)
-        m_view->kPresenterDoc()->updateVertHelpline( m_tmpVertHelpline, m_view->zoomHandler()->zoomItX( newPos ) );
+        m_view->kPresenterDoc()->updateVertHelpline( m_tmpVertHelpline, newPos  );
     else if ( m_tmpHorizHelpline != -1)
-        m_view->kPresenterDoc()->updateHorizHelpline( m_tmpHorizHelpline, m_view->zoomHandler()->zoomItY( newPos ));
+        m_view->kPresenterDoc()->updateHorizHelpline( m_tmpHorizHelpline, newPos );
     m_tmpHorizHelpline = -1;
     m_tmpVertHelpline = -1;
     m_view->kPresenterDoc()->setModified(true);

@@ -25,29 +25,35 @@
 #include <knuminput.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
-
-KPrMoveHelpLineDia::KPrMoveHelpLineDia( QWidget *parent, int value, int limitTop, int limitBottom,const char *name)
+#include "kpresenter_doc.h"
+#include <koUnit.h>
+#include <klineedit.h>
+#include <knumvalidator.h>
+KPrMoveHelpLineDia::KPrMoveHelpLineDia( QWidget *parent, double value, double limitTop, double limitBottom, KPresenterDoc *_doc, const char *name)
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
+    m_doc=_doc;
     setCaption( i18n("Change Help Line position") );
     QVBox *page = makeVBoxMainWidget();
-    QLabel *lab=new QLabel(i18n("Position:"), page);
-    position = new KIntNumInput(value, page);
-    position->setRange( limitTop,  limitBottom,  1,  false);
+    QLabel *lab=new QLabel(i18n("Position:(%1)").arg(m_doc->getUnitName()), page);
+    position = new KLineEdit(page);
+    position->setText( KoUnit::userValue( QMAX(0.00, value), m_doc->getUnit() ) );
+    position->setValidator(new KFloatValidator( 0,9999,true,position ) );
+
     resize( 300,100 );
 }
 
-int KPrMoveHelpLineDia::newPosition()
+double KPrMoveHelpLineDia::newPosition()
 {
-    return position->value();
+    return KoUnit::fromUserValue( position->text(), m_doc->getUnit() );
 }
 
 
-KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const QRect & _pageRect ,const char *name)
+KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const KoRect & _pageRect , KPresenterDoc *_doc, const char *name)
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
     limitOfPage=_pageRect;
-
+    m_doc=_doc;
     setCaption( i18n("Add new help line") );
     QVBox *page = makeVBoxMainWidget();
     QButtonGroup *group = new QButtonGroup( 1, QGroupBox::Horizontal,"", page );
@@ -58,16 +64,19 @@ KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const QRect & _page
 
     connect( group , SIGNAL( clicked( int) ), this, SLOT( slotRadioButtonClicked() ));
 
-    QLabel *lab=new QLabel(i18n("Position:"), page);
-    position = new KIntNumInput(0, page);
-    position->setRange( limitOfPage.top(),  limitOfPage.bottom(),  1,  false);
+    QLabel *lab=new QLabel(i18n("Position:(%1)").arg(m_doc->getUnitName()), page);
+    position = new KLineEdit(page);
+    position->setText( KoUnit::userValue( 0.00, m_doc->getUnit() ) );
+    position->setValidator(new KFloatValidator( 0,9999,true,position ) );
+
     m_rbHoriz->setChecked( true );
     resize( 300,100 );
 }
 
-int KPrInsertHelpLineDia::newPosition()
+double KPrInsertHelpLineDia::newPosition()
 {
-    return position->value();
+    return KoUnit::fromUserValue( position->text(), m_doc->getUnit() );
+
 }
 
 bool KPrInsertHelpLineDia::addHorizontalHelpLine()
@@ -79,11 +88,11 @@ void KPrInsertHelpLineDia::slotRadioButtonClicked()
 {
     if ( m_rbHoriz->isChecked() )
     {
-        position->setRange( limitOfPage.top(), limitOfPage.bottom(), 1, false);
+        // position->setRange( limitOfPage.top(), limitOfPage.bottom(), 1, false);
     }
     else if ( m_rbVert->isChecked() )
     {
-        position->setRange( limitOfPage.left(), limitOfPage.right(), 1, false);
+        //position->setRange( limitOfPage.left(), limitOfPage.right(), 1, false);
     }
 }
 
