@@ -50,6 +50,11 @@ KoInsertLinkDia::KoInsertLinkDia( QWidget */*parent*/, const char */*name*/ )
   page=addVBoxPage(i18n("File"), QString::null,BarIcon("filenew",KIcon::SizeMedium));
   fileLink = new  fileLinkPage(page );
   connect(fileLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
+
+  page=addVBoxPage(i18n("Bookmark"), QString::null,BarIcon("bookmark",KIcon::SizeMedium));
+  bookmarkLink = new  bookmarkLinkPage(page );
+  connect(bookmarkLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
+
   slotTextChanged ( );
   resize(400,300);
 }
@@ -60,12 +65,12 @@ void KoInsertLinkDia::slotTextChanged ( )
     enableButtonOK( !(linkName().isEmpty()  || hrefName().isEmpty()));
 }
 
-bool KoInsertLinkDia::createLinkDia(QString & _linkName, QString & _hrefName)
+bool KoInsertLinkDia::createLinkDia(QString & _linkName, QString & _hrefName, QStringList bkmlist)
 {
     bool res = false;
 
     KoInsertLinkDia *dlg = new KoInsertLinkDia( 0L, "Insert Link" );
-    dlg->setHrefLinkName(_hrefName,_linkName);
+    dlg->setHrefLinkName(_hrefName,_linkName, bkmlist);
     if ( dlg->exec() == Accepted )
     {
         _linkName = dlg->linkName();
@@ -77,8 +82,9 @@ bool KoInsertLinkDia::createLinkDia(QString & _linkName, QString & _hrefName)
     return res;
 }
 
-void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link)
+void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link, const QStringList & bkmlist)
 {
+    bookmarkLink->setBookmarkList(bkmlist);
     if( _href.isEmpty())
         return;
     if(_href.find("http://")!=-1 ||_href.find("ftp://")!=-1 )
@@ -99,6 +105,12 @@ void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link
         mailLink->setLinkName(_link);
         showPage(1);
     }
+    else if(_href.find("bkm://")!=-1)
+    {
+        bookmarkLink->setHrefName(_href.mid(6));
+        bookmarkLink->setLinkName(_link);
+        showPage(3);
+    }
     slotTextChanged ( );
 }
 
@@ -115,6 +127,9 @@ QString KoInsertLinkDia::linkName()const
       break;
     case 2:
       result=fileLink->linkName();
+      break;
+    case 3:
+      result=bookmarkLink->linkName();
       break;
     default:
       kdDebug()<<"Error in linkName\n";
@@ -135,6 +150,9 @@ QString KoInsertLinkDia::hrefName()
       break;
     case 2:
       result=fileLink->hrefName();
+      break;
+    case 3:
+      result=bookmarkLink->hrefName();
       break;
     default:
       kdDebug()<<"Error in hrefName\n";
@@ -216,6 +234,85 @@ QString internetLinkPage::hrefName()
 }
 
 void internetLinkPage::textChanged ( const QString & )
+{
+    emit textChanged();
+}
+
+bookmarkLinkPage::bookmarkLinkPage( QWidget *parent , char *name  )
+  : QWidget(parent,name)
+{
+  QVBoxLayout *lay1 = new QVBoxLayout( this );
+  lay1->setMargin( KDialog::marginHint() );
+  lay1->setSpacing( KDialog::spacingHint() );
+  QVBoxLayout *lay2 = new QVBoxLayout( lay1);
+  lay2->setSpacing( KDialog::spacingHint() );
+
+  QLabel* tmpQLabel = new QLabel( this);
+
+  lay2->addWidget(tmpQLabel);
+  tmpQLabel->setText(i18n("Comment:"));
+
+  m_linkName = new QLineEdit( this );
+  lay2->addWidget(m_linkName);
+
+  tmpQLabel = new QLabel( this);
+  lay2->addWidget(tmpQLabel);
+
+  tmpQLabel->setText(i18n("Bookmark name:"));
+  m_hrefName = new QComboBox( this );
+
+  lay2->addWidget(m_hrefName);
+
+  m_linkName->setFocus();
+
+  connect(m_linkName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
+  connect(m_hrefName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
+  KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
+  bar1->setFixedHeight( 10 );
+  lay2->addWidget( bar1 );
+}
+
+QString bookmarkLinkPage::createBookmarkLink()
+{
+    QString result=m_hrefName->currentText();
+
+    if(result.isEmpty())
+        return result;
+
+    if(result.find("bkm://")==-1)
+        result = "bkm://"+result;
+    return result;
+}
+
+
+void bookmarkLinkPage::setLinkName(const QString & _name)
+{
+    m_linkName->setText(_name);
+}
+
+void bookmarkLinkPage::setHrefName(const QString &_name)
+{
+    m_hrefName->setCurrentText(_name);
+}
+
+void bookmarkLinkPage::setBookmarkList(const QStringList & bkmlist)
+{
+    m_hrefName->clear();
+    m_hrefName->insertStringList(bkmlist, 0);
+    m_hrefName->setEditable(true);
+}
+
+QString bookmarkLinkPage::linkName()const
+{
+  return m_linkName->text();
+}
+
+QString bookmarkLinkPage::hrefName()
+{
+  return createBookmarkLink();
+}
+
+void bookmarkLinkPage::textChanged ( const QString & )
 {
     emit textChanged();
 }

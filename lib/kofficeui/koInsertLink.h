@@ -44,6 +44,26 @@ signals:
   void textChanged();
 };
 
+class bookmarkLinkPage : public QWidget
+{
+  Q_OBJECT
+public:
+  bookmarkLinkPage( QWidget *parent = 0, char *name = 0 );
+  QString linkName()const;
+  QString hrefName();
+    void setLinkName(const QString & _name);
+    void setHrefName(const QString &_name);
+    void setBookmarkList(const QStringList &bkmlist);
+private:
+  QString createBookmarkLink();
+  QLineEdit* m_linkName;
+  QComboBox *m_hrefName;
+private slots:
+  void textChanged ( const QString & );
+signals:
+  void textChanged();
+};
+
 class mailLinkPage : public QWidget
 {
   Q_OBJECT
@@ -89,12 +109,12 @@ class KoInsertLinkDia : public KDialogBase
     Q_OBJECT
 public:
     KoInsertLinkDia( QWidget *parent, const char *name = 0 );
-    static bool createLinkDia(QString & linkName, QString & hrefName);
+    static bool createLinkDia(QString & linkName, QString & hrefName, QStringList bkmlist);
 
     //internal
     QString linkName()const;
     QString hrefName();
-    void setHrefLinkName(const QString &_href, const QString &_link);
+    void setHrefLinkName(const QString &_href, const QString &_link, const QStringList & bkmlist);
 protected slots:
     virtual void slotOk();
     void slotTextChanged (  );
@@ -103,6 +123,7 @@ private:
     fileLinkPage *fileLink;
     mailLinkPage *mailLink;
     internetLinkPage *internetLink;
+    bookmarkLinkPage *bookmarkLink;
 };
 
 #endif

@@ -3146,7 +3146,7 @@ void KWView::insertLink()
         return;
     QString link;
     QString ref;
-    if(KoInsertLinkDia::createLinkDia(link, ref))
+    if(KoInsertLinkDia::createLinkDia(link, ref, m_doc->listOfBookmarkName(0)))
     {
         if(!link.isEmpty() && !ref.isEmpty())
             edit->insertLink(link, ref);
@@ -5814,6 +5814,12 @@ void KWView::inlineFrame()
 void KWView::openLink()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
+    if(edit && edit->refLink().startsWith("bkm://") && m_doc->bookMarkByName(edit->refLink().mid(6)))
+    {
+	edit->cursor()->setParag(m_doc->bookMarkByName(edit->refLink().mid(6))->startParag());
+	edit->ensureCursorVisible();
+	return;
+    }
     if ( edit )
         edit->openLink();
 }
@@ -5830,7 +5836,7 @@ void KWView::changeLink()
             QString oldLinkName=var->value();
             QString link=oldLinkName;
             QString ref=oldhref;
-            if(KoInsertLinkDia::createLinkDia(link, ref))
+            if(KoInsertLinkDia::createLinkDia(link, ref, m_doc->listOfBookmarkName(0)))
             {
                 if(!link.isEmpty() && !ref.isEmpty())
                 {
