@@ -47,6 +47,7 @@
 #include "KWordTextFrameSetEditIface.h"
 #include "KWordFormulaFrameSetIface.h"
 #include "KWordFormulaFrameSetEditIface.h"
+#include "KWordPictureFrameSetIface.h"
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -1419,6 +1420,15 @@ KWPictureFrameSet::KWPictureFrameSet( KWDocument *_doc, const QString & name )
 
 KWPictureFrameSet::~KWPictureFrameSet() {
 }
+
+KWordFrameSetIface* KWPictureFrameSet::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KWordPictureFrameSetIface( this );
+
+    return dcop;
+}
+
 
 void KWPictureFrameSet::loadImage( const QString & fileName, const QSize &_imgSize )
 {

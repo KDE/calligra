@@ -641,6 +641,8 @@ public:
     KWPictureFrameSet( KWDocument *_doc, const QString & name );
     virtual ~KWPictureFrameSet();
 
+    virtual KWordFrameSetIface* dcopObject();
+
     /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */

@@ -26,7 +26,8 @@ libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
 		KWordTextFrameSetEditIface.skel KWordTextFrameSetEditIface.cc \
 		KWordFrameSetIface.skel KWordFrameSetIface.cc \
 		KWordFormulaFrameSetIface.skel KWordFormulaFrameSetIface.cc \
-		KWordFormulaFrameSetEditIface.skel KWordFormulaFrameSetEditIface.cc
+		KWordFormulaFrameSetEditIface.skel KWordFormulaFrameSetEditIface.cc \
+		KWordPictureFrameSetIface.skel KWordPictureFrameSetIface.cc
 
 libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la -lkspell ./libkwmailmerge_interface.la
