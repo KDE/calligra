@@ -1,5 +1,5 @@
 /*
- *  kis_tool_airbrush.cc - part of KImageShop
+ *  kis_tool_airbrush.cc - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
  *
@@ -20,6 +20,7 @@
 
 #include <kapp.h>
 #include <kdebug.h>
+
 #include "kis_tool_airbrush.h"
 #include "kis_brush.h"
 #include "kis_doc.h"
@@ -38,15 +39,6 @@ AirBrushTool::AirBrushTool(KisDoc *doc, KisView *view, const KisBrush *_brush)
     m_dragdist = 0;
     
     density = 64;
-    
-#if 0
-    brushWidth = (unsigned int) m_pBrush->width();
-    brushHeight = (unsigned int) m_pBrush->height();
-    
-    // set the point array to same size as brush    
-    brushArray.resize(brushWidth * brushHeight);
-    brushArray.fill(0);
-#endif
     
     pos.setX(-1);
     pos.setY(-1);
@@ -74,14 +66,17 @@ void AirBrushTool::timeoutPaint()
 void AirBrushTool::setBrush(const KisBrush *_brush)
 {
     m_pBrush = _brush;
-    brushWidth = (unsigned int) m_pBrush->width();
+    brushWidth =  (unsigned int) m_pBrush->width();
     brushHeight = (unsigned int) m_pBrush->height();
     
-    // set the point array to same size as brush    
+    // set the array of points to same size as brush    
     brushArray.resize(brushWidth * brushHeight);
     brushArray.fill(0);
-    kdDebug() << "setBrush():brushWidth*brushHeight: " 
-        << brushWidth*brushHeight << endl;
+
+    kdDebug() << "setBrush(): "
+        << "brushwidth "   << brushWidth 
+        << " brushHeight " << brushHeight
+        << endl;
 }
 
 
@@ -107,6 +102,16 @@ void AirBrushTool::mousePress(QMouseEvent *e)
     brushArray.fill(0);
     nPoints = 0;
         
+    kdDebug() << "mousePress(): "
+        << "brushwidth " << brushWidth 
+        << " brushHeight " << brushHeight  
+        << endl;
+
+    kdDebug() << "mousePress(): "
+        << "m_pBrush->hotSpot().x() " << m_pBrush->hotSpot().x() 
+        << "m_pBrush->hotSpot().y() " << m_pBrush->hotSpot().y()  
+        << endl;
+
     // Start the timer - 50 milliseconds or 
     // 20 timeouts/second (multishot)
     timer->start(50, FALSE);
@@ -116,27 +121,29 @@ void AirBrushTool::mousePress(QMouseEvent *e)
 bool AirBrushTool::paint(QPoint pos, bool timeout)
 {
     KisImage * img = m_pDoc->current();
+    if (!img)	    return false;    
+
     KisLayer *lay = img->getCurrentLayer();
-    
-    if (!img)	    return false;
-    if (!lay)       return false;
+    if (!lay)       return false;    
+
     if (!m_pBrush)  return false;
 
-    // FIXME: Implement this for non-RGB modes.
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
 	    return false;
     
     if(!m_dragging) return false;
     
-    int startx = (pos - m_pBrush->hotSpot()).x();
-    int starty = (pos - m_pBrush->hotSpot()).y();
+    int hotX = m_pBrush->hotSpot().x();
+    int hotY = m_pBrush->hotSpot().y();
+    
+    int startx = pos.x() - hotX;
+    int starty = pos.y() - hotY;
 
     QRect clipRect(startx, starty, m_pBrush->width(), m_pBrush->height());
-
-    if (!clipRect.intersects(img->getCurrentLayer()->imageExtents()))
+    if (!clipRect.intersects(lay->imageExtents()))
         return false;
   
-    clipRect = clipRect.intersect(img->getCurrentLayer()->imageExtents());
+    clipRect = clipRect.intersect(lay->imageExtents());
 
     int sx = clipRect.left() - startx;
     int sy = clipRect.top() - starty;
@@ -148,9 +155,9 @@ bool AirBrushTool::paint(QPoint pos, bool timeout)
     uchar r, g, b, a;
     int   v;
 
-    int red = m_pView->fgColor().R();
+    int red   = m_pView->fgColor().R();
     int green = m_pView->fgColor().G();
-    int blue = m_pView->fgColor().B();
+    int blue  = m_pView->fgColor().B();
 
     bool alpha = (img->colorMode() == cm_RGBA);
   
@@ -160,22 +167,26 @@ bool AirBrushTool::paint(QPoint pos, bool timeout)
 
         for (int x = sx; x <= ex; x++)
 	    {
-            /* get a truly random number and divide it by  
+            /* get a truly ??? random number and divide it by  
             desired density - if x is that number, paint 
             a pixel from brush there this turn */
             int nRandom = KApplication::random();
 
             bool paintPoint = false;
-            if((nRandom % density) == (x - sx))
+            
+            if((nRandom % density) == ((x - sx) % density))
                 paintPoint = true;
             
             // don't keep painting over points already painted
             // this makes image too dark and grany, eventually -
             // that effect is good with the regular brush tool,
             // but not with an airbrush or with the pen tool
-            if(timeout && (brushArray[brushWidth * (y-sy) + (x-sx)] > 0))
+            if(timeout && (brushArray[brushWidth * (y-sy) 
+            + (x-sx) ] > 0))
+            {    
                 paintPoint = false;
-                
+            }    
+            
             if(paintPoint)     
             {
 	            r = lay->pixel(0, startx + x, starty + y);
@@ -293,7 +304,7 @@ void AirBrushTool::mouseRelease(QMouseEvent *e)
     // stop the timer - restart when mouse pressed again
     timer->stop();
     
-    //reset point array 
+    //reset array of points
     brushArray.fill(0);
     nPoints = 0;
     
@@ -301,6 +312,3 @@ void AirBrushTool::mouseRelease(QMouseEvent *e)
 }
 
 #include "kis_tool_airbrush.moc"
-
-
-

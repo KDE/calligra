@@ -1,10 +1,10 @@
 /*
- *  kis_view.h - part of KImageShop
+ *  kis_view.h - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *                1999 Michael Koch    <koch@kde.org>
  *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
- *
+ *      
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -67,10 +67,12 @@ class ZoomTool;
 class KisGradient;
 class GradientTool;
 class LineTool;
+class PolyLineTool;
 class RectangleTool;
 class EllipseTool;
 class ColorPicker;
 class Fill;
+class StampTool;
 class QButton;
 
 
@@ -181,11 +183,13 @@ class KisView : public KoView
     void tool_eraser();
     void tool_gradient();
     void tool_line();
+    void tool_polyline();
     void tool_rectangle();
     void tool_ellipse();
     void tool_colorpicker();
     void tool_fill();
-
+    void tool_stamp();
+    
     // settings action slots
     void showMenubar();
     void showToolbar();
@@ -261,10 +265,12 @@ class KisView : public KoView
     KToggleAction *m_side_bar;
 
     // tool actions (main toolbar & menu)
-    KToggleAction *m_tool_select_rect, *m_tool_select_polygon, *m_tool_move, 
-    *m_tool_zoom, *m_tool_brush, *m_tool_draw, *m_tool_pen, *m_tool_gradient, 
-    *m_tool_colorpicker, *m_tool_fill, *m_tool_airbrush, *m_tool_eraser,
-    *m_tool_line, *m_tool_rectangle, *m_tool_ellipse;
+    KToggleAction *m_tool_select_rect, *m_tool_select_polygon, 
+    *m_tool_move, *m_tool_zoom, 
+    *m_tool_brush, *m_tool_draw, *m_tool_pen, *m_tool_gradient, 
+    *m_tool_colorpicker, *m_tool_fill, *m_tool_stamp, 
+    *m_tool_airbrush, *m_tool_eraser,
+    *m_tool_line, *m_tool_polyline, *m_tool_rectangle, *m_tool_ellipse;
 
     KisDoc                *m_pDoc;  // inherited a lot by tools
     KisTool               *m_pTool; // currently active tool
@@ -281,10 +287,12 @@ class KisView : public KoView
     KisGradient     *m_pGradient;
     GradientTool    *m_pGradientTool;
     LineTool        *m_pLineTool;
+    PolyLineTool    *m_pPolyLineTool;
     RectangleTool   *m_pRectangleTool;
     EllipseTool     *m_pEllipseTool;   
     ColorPicker     *m_pColorPicker;
     Fill            *m_pFill;
+    StampTool       *m_pStampTool;
     
     const KisKrayon       *m_pKrayon;   // current krayon for this view   
     const KisBrush        *m_pBrush;    // current brush for this view

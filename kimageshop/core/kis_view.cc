@@ -76,11 +76,13 @@
 #include "kis_tool_pen.h"
 #include "kis_tool_gradient.h"
 #include "kis_tool_line.h"
+#include "kis_tool_polyline.h"
 #include "kis_tool_rectangle.h"
 #include "kis_tool_ellipse.h"
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_eraser.h"
 #include "kis_tool_fill.h"
+#include "kis_tool_stamp.h"
 
 //#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
 
@@ -295,10 +297,12 @@ void KisView::setupTools()
     m_pZoomTool = new ZoomTool(this);
     m_pGradientTool = new GradientTool( m_pDoc, this, m_pCanvas, m_pGradient );
     m_pLineTool = new LineTool( m_pDoc, this, m_pCanvas );
+    m_pPolyLineTool = new PolyLineTool( m_pDoc, this, m_pCanvas );
     m_pRectangleTool = new RectangleTool( m_pDoc, this, m_pCanvas );
     m_pEllipseTool = new EllipseTool( m_pDoc, this, m_pCanvas );
     m_pFill = new Fill( m_pDoc, this );
-
+    m_pStampTool = new StampTool(m_pDoc, this, m_pCanvas, m_pPattern);
+    
     // start with pen as active tool
     m_tool_pen->setChecked( true );
     activateTool(m_pPenTool);
@@ -447,6 +451,12 @@ void KisView::setupActions()
 
     m_tool_fill->setExclusiveGroup( "tools" );
 
+    m_tool_stamp = new KToggleAction( i18n("&Stamp tool"),
+        "stamp", 0, this, SLOT( tool_stamp() ),
+        actionCollection(), "tool_stamp");
+
+    m_tool_stamp->setExclusiveGroup( "tools" );
+
     m_tool_eraser = new KToggleAction( i18n("&Eraser tool"),
         "eraser", 0, this, SLOT( tool_eraser() ),actionCollection(),
         "tool_eraser");
@@ -470,6 +480,12 @@ void KisView::setupActions()
         actionCollection(), "tool_line");
 
     m_tool_line->setExclusiveGroup( "tools" );
+
+    m_tool_polyline = new KToggleAction( i18n("&Polyline tool"),
+        "polyline", 0, this, SLOT( tool_polyline() ),
+        actionCollection(), "tool_polyline");
+
+    m_tool_polyline->setExclusiveGroup( "tools" );
 
     m_tool_rectangle = new KToggleAction( i18n("&Rectangle tool"),
         "rectangle", 0, this, SLOT( tool_rectangle() ),
@@ -1076,6 +1092,11 @@ void KisView::tool_line()
   activateTool( m_pLineTool );
 }
 
+void KisView::tool_polyline()
+{
+  activateTool( m_pPolyLineTool );
+}
+
 void KisView::tool_rectangle()
 {
   activateTool( m_pRectangleTool );
@@ -1089,6 +1110,11 @@ void KisView::tool_ellipse()
 void KisView::tool_fill()
 {
   activateTool( m_pFill );
+}
+
+void KisView::tool_stamp()
+{
+  activateTool( m_pStampTool );
 }
 
 /*
@@ -1623,9 +1649,10 @@ void KisView::slotSetPattern(const KisPattern* p)
 {
     m_pPattern = p;
     
+    if (m_pStampTool)
+        m_pStampTool->setPattern(p);
+
 /*
-    if (m_pPatternPaintTool)
-        m_pPatternPaintTool->setPattern(p);
     if (m_pPenTool)
         m_pPenTool->setPattern(p);
     if (m_pStarDustTool)
@@ -1633,7 +1660,6 @@ void KisView::slotSetPattern(const KisPattern* p)
     if (m_pEraserTool)
         m_pEraserTool->setPattern(p);
 */
-
     m_pSideBar->slotSetPattern(*p);
 }
 

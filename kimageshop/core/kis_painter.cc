@@ -1,6 +1,6 @@
 /*
- *  kis_painter.cc - part of Krayon
- *
+ *   kis_painter.cc - part of Krayon
+ * 
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -31,6 +31,17 @@
 #include "kis_util.h"
 #include "kis_painter.h"
 
+/*
+    KisPainter allows use of QPainter methods to indirectly draw into
+    Krayon's layers.  While there is some overhead in using QPainter
+    instead of native methods, this is a useful tenative solution to
+    use existing routines for lines, ellipses, polgons, curves and
+    other shapes, and text rendering.  Most of these will eventually
+    be replaced with native methods which draw directly into krayon's
+    layers for performance, except text and curved line segments which 
+    have been well implemented by Qt and/or for which killustrator can 
+    be used as an embedded part within krayon.  
+*/ 
 
 KisPainter::KisPainter(KisDoc *doc, KisView *view)
 {
@@ -106,10 +117,10 @@ bool KisPainter::toLayer(QRect paintRect)
     
     QRect clipRect(paintRect);
 
-    if (!clipRect.intersects(img->getCurrentLayer()->imageExtents()))
+    if (!clipRect.intersects(lay->imageExtents()))
         return false;
   
-    clipRect = clipRect.intersect(img->getCurrentLayer()->imageExtents());
+    clipRect = clipRect.intersect(lay->imageExtents());
 
     int sx = clipRect.left();
     int sy = clipRect.top();
@@ -166,9 +177,11 @@ bool KisPainter::toLayer(QRect paintRect)
 	        }
 	    } 
     }
-    
+
+    // pView->updateCanvas(clipRect);    
     img->markDirty(clipRect);
     clearRectangle(clipRect);
+
     return true;
 }
 
@@ -193,6 +206,7 @@ void KisPainter::drawLine(int x1, int y1, int x2, int y2)
     if(!toLayer(ur))
         kdDebug() << "error drawing line" << endl; 
 }
+
 
 void KisPainter::drawRectangle(QRect & rect)
 {

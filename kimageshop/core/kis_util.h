@@ -1,5 +1,5 @@
 /*
- *  kis_util.h - part of KImageShop
+ *  kis_util.h - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
  *
@@ -24,6 +24,7 @@
 #include <qrect.h>
 #include <qpoint.h>
 #include <qstring.h>
+#include <qimage.h>
 
 #include "kis_global.h"
 
@@ -32,20 +33,22 @@ template<class T> inline T max(T a, T b) { return (a>b)?a:b; }
 
 class KisUtil
 {
- public:
-  KisUtil() {}
+public:
+    KisUtil() {}
 
-  static void printRect( const QRect&, const QString& name = "Rect" );
-  static void printPoint( const QPoint&, const QString& name = "Point" );
+    static void printRect( const QRect&, const QString& name = "Rect" );
+    static void printPoint( const QPoint&, const QString& name = "Point" );
 
-  static void enlargeRectToContainPoint( QRect& r, QPoint p );
-  static QRect findTileExtents( QRect r );
+    static void enlargeRectToContainPoint( QRect& r, QPoint p );
+    static QRect findTileExtents( QRect r );
 
-  static QString channelIdtoString(cId);
+    static QString channelIdtoString(cId);
 
-  static QString readFilters();
-  static QString writeFilters();
+    static QString readFilters();
+    static QString writeFilters();
+  
+    static QImage roughScaleQImage(QImage & src, int width, int height);
+    static QImage roughScaleQImageAA(QImage & src, int width, int height);
 };
-                      
 
 #endif

@@ -30,11 +30,13 @@
   <Action name="tool_brush"/>
   <Action name="tool_airbrush"/>
   <Action name="tool_line"/>
+  <Action name="tool_polyline"/>
   <Action name="tool_rectangle"/>
   <Action name="tool_ellipse"/>      
   <Action name="tool_gradient"/>
   <Action name="tool_eraser"/>
   <Action name="tool_fill"/>
+  <Action name="tool_stamp"/>
   <Action name="current_tool_properties"/>  
 </Menu>
 <Menu name="Image"><text>Image</text>
@@ -138,11 +140,13 @@
   <Action name="tool_brush"/>
   <Action name="tool_airbrush"/>
   <Action name="tool_line"/>    
+  <Action name="tool_polyline"/>
   <Action name="tool_rectangle"/>
   <Action name="tool_ellipse"/>      
   <Action name="tool_gradient"/>
   <Action name="tool_eraser"/>
   <Action name="tool_fill"/>
+  <Action name="tool_stamp"/>
   <Action name="current_tool_properties"/>      
 </ToolBar>
 </kpartgui>

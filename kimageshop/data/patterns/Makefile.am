@@ -3,7 +3,6 @@ datadir = $(prefix)/share/apps/krayon/patterns
 
 data_DATA = Circle.xpm \
 Cloth.xpm \
-Clouds.xpm \
 Concrete.xpm \
 Dark_Wood.xpm \
 Dry.xpm \

@@ -1,5 +1,5 @@
 /*
- *  iconchooser.cc - part of KImageShop
+ *  iconchooser.cc - part of Krayon
  *
  *  A general chooserwidget, showing items represented by pixmaps
  *
@@ -91,7 +91,7 @@ void IconChooser::clear()
 
 
 // return the pointer of the item at (row,col) - beware, resizing disturbs
-// rows and cols!
+// rows and cols! 
 // return 0L if item is not found
 IconItem* IconChooser::itemAt( int row, int col )
 {
@@ -124,8 +124,9 @@ void IconChooser::setCurrentItem( IconItem *item )
 {
     int index = iconList.find( item );
 
+    // item is available
     if ( index != -1 && nCols > 0 ) 
-    { // item is available
+    { 
         int oldRow = curRow;
         int oldCol = curCol;
 
@@ -189,7 +190,9 @@ void IconChooser::paintCell( QPainter *p, int row, int col )
 
     if ( item ) 
     {
-        const QPixmap& pix = item->pixmap();
+        const QPixmap& pix   = item->pixmap();
+        const QPixmap& thumbpix = item->thumbPixmap();
+        
         int x  = margin; 		int y  = margin;
         int pw = pix.width(); 	int ph = pix.height();
         int cw = cellWidth(); 	int ch = cellHeight();
@@ -199,10 +202,14 @@ void IconChooser::paintCell( QPainter *p, int row, int col )
             x = (cw - pw) / 2;
         if ( ph < itemHeight )
             y = (cw - ph) / 2;
+        
+        if( (!item->hasValidThumb()) || (pw <= itemWidth && ph <= itemHeight) )
+            p->drawPixmap( x, y, pix, 0, 0, itemWidth, itemHeight );
+        else
+            p->drawPixmap( x, y, thumbpix, 0, 0, itemWidth, itemHeight );        
 
-        p->drawPixmap( x, y, pix, 0, 0, itemWidth, itemHeight );
-
-        if ( row == curRow && col == curCol )  // highlight current item
+        // highlight current item
+        if ( row == curRow && col == curCol )  
         {
 	        p->setPen(blue);
 	        p->drawRect( 0, 0, cw, ch );

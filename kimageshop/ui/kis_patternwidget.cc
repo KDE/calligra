@@ -1,5 +1,5 @@
 /*
- *  kis_patternwidget.cc - part of KImageShop
+ *  kis_patternwidget.cc - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter  <elter@kde.org>
  *
@@ -49,13 +49,23 @@ void KisPatternWidget::drawContents ( QPainter *p )
     int x = 0;
     int y = 0;
 
+#if 0
     if (m_pPattern->width() < contentsRect().x())
         x = (contentsRect().x() - m_pPattern->width()) / 2;
 
     if (m_pPattern->height() < contentsRect().y())
         y = (contentsRect().y() - m_pPattern->height()) / 2;
+#endif
 
-    p->drawPixmap(x, y, m_pPattern->pixmap()); 
+    if (m_pPattern->width() < contentsRect().x() 
+    ||  m_pPattern->height() < contentsRect().y())
+    {
+        p->drawPixmap(x, y, m_pPattern->pixmap()); 
+    }    
+    else
+    {    
+        p->drawPixmap(x, y, m_pPattern->thumbPixmap()); 
+    }    
 }
 
 void KisPatternWidget::mousePressEvent ( QMouseEvent * )

@@ -1,5 +1,5 @@
 /*
- *  kis_pattern.cc - part of KImageShop
+ *  kis_pattern.cc - part of Krayon
  *
  *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
  *
@@ -27,17 +27,23 @@
 
 #include "kis_pattern.h"
 
+#define THUMB_SIZE 30
+
+
 KisPattern::KisPattern(QString file)
-  : /* IconItem() */ KisKrayon()
+  : KisKrayon()
 {
     m_valid    = false;
+    m_spacing  = 10;
     loadViaQImage(file);
 }
 
 KisPattern::KisPattern(int formula)
-  : /* IconItem() */ KisKrayon()
+  : KisKrayon()
 {
-    m_valid    = false;
+    m_valid = false;
+    validThumb = false;
+    m_spacing  = 10;    
     loadViaFormula(formula);
 }
 
@@ -62,7 +68,29 @@ void KisPattern::loadViaQImage(QString file)
 
     // create pixmap for preview dialog
     m_pPixmap = new QPixmap;
-    m_pPixmap->convertFromImage(*m_pImage, QPixmap::AutoColor);
+    QImage img = *m_pImage;
+    m_pPixmap->convertFromImage(img, QPixmap::AutoColor);
+
+     // scale a pixmap for iconview cell to size of cell
+    m_pThumbPixmap = new QPixmap;
+    
+    int xsize = THUMB_SIZE;
+    int ysize = THUMB_SIZE;
+    
+    if(img.width() > img.height())
+    {
+        float yFactor = (float)(img.height()/img.width());
+        ysize = (int)(yFactor * THUMB_SIZE);
+    }
+    else if(img.width() < img.height())
+    {
+        float xFactor = (float)(img.width()/img.height());
+        xsize = (int)(xFactor * THUMB_SIZE);
+    }
+    
+    QImage thumbImg = img.smoothScale(xsize, ysize);
+    m_pThumbPixmap->convertFromImage(thumbImg, QPixmap::AutoColor);    
+    validThumb = true;
 
     m_w = m_pImage->width();
     m_h = m_pImage->height();
@@ -107,15 +135,4 @@ void KisPattern::loadViaFormula(int formula)
     qDebug("Loading pattern: %d", formula);
 }
 
-#if 0
-QPixmap& KisPattern::pixmap() const 
-{
-    return *m_pPixmap;
-}
-
-QImage* KisPattern::image() const 
-{
-    return m_pImage;
-}
-#endif
 

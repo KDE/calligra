@@ -1,5 +1,5 @@
 /*
- *  kis_patternchooser.cc - part of KImageShop
+ *  kis_patternchooser.cc - part of Krayon
  *
  *  A chooser for KisPatterns. Makes use of the IconChooser class and maintains
  *  all available brushes for KIS.

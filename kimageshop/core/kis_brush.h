@@ -1,5 +1,5 @@
 /*
- *  kis_brush.h - part of KImageShop
+ *  kis_brush.h - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *
@@ -28,28 +28,22 @@
 class QPoint;
 class QPixmap;
 
-//class KisBrush : public IconItem
 class KisBrush : public KisKrayon
 {
  public:
     KisBrush(QString file, bool monochrome = false, bool special = false);
     virtual ~KisBrush();
 
-    void      setSpacing(int s)             { m_spacing = s;     }
-    int       spacing()   	      const { return m_spacing;  }
-    bool      isValid()   	      const { return m_valid;    }
+    void      setSpacing(int s) { m_spacing = s; }
+    int       spacing() const { return m_spacing; }
+    bool      isValid() const { return m_valid; }
     void      setHotSpot(QPoint);
-    QPoint    hotSpot()   	      const { return m_hotSpot;  }
+    QPoint    hotSpot() const { return m_hotSpot; }
 
-    //QPixmap&  pixmap() const;
-    //QSize     size()                    const { return QSize(m_w, m_h); } 
-    //int       width()                   const { return m_w; }
-    //int       height()                  const { return m_h; }
     uchar     value(int x, int y) const;
     uchar*    scanline(int) const;
     uchar*    bits() const;
-
-    // debug
+   
     void      dump() const;
 
  private:
@@ -59,11 +53,7 @@ class KisBrush : public KisKrayon
     bool      m_valid;
     int       m_spacing;
     QPoint    m_hotSpot;
-
-    //int       m_w, m_h;
     uchar*    m_pData;
-
-    //QPixmap  *m_pPixmap;
 };
 
 #endif

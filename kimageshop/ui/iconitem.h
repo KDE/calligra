@@ -1,5 +1,5 @@
 /*
- *  iconitem.h - part of KImageShop
+ *  iconitem.h - part of Krayon
  *
  *  A simple item for the IconChooser widget. Inherit from this class to create
  *  custom items.
@@ -31,9 +31,14 @@ class IconItem
 public:
   IconItem() {}
   virtual ~IconItem() {}
-
+  
+  bool hasValidPixmap() { return validPixmap; }  
+  bool validPixmap;
+  bool hasValidThumb() { return validThumb; }  
+  bool validThumb;
+  
   virtual QPixmap& pixmap() const = 0;
-
+  virtual QPixmap& thumbPixmap() const = 0;  
 };
 
 

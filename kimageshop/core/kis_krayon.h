@@ -1,7 +1,7 @@
 /*
- *  kis_pattern.h - part of KImageShop
+ *  kis_krayon.h - part of Krayon
  *
- *  Copyright (c) 2000 Matthias Elter  <elter@kde.org>
+ *  Copyright (c) 2000 John Califf  <jcaliff@compuzone.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ class QPoint;
 class QPixmap;
 class QImage;
 
-//class KisPattern : public IconItem
 class KisKrayon : public IconItem
 {
     public:
@@ -40,6 +39,7 @@ class KisKrayon : public IconItem
         void      setValidKrayon(bool valid);  
 
         QPixmap&  pixmap()  const;
+        QPixmap&  thumbPixmap() const;
         QImage*   image()   const;
         QSize     size()    const { return QSize(m_w, m_h); } 
         int       width()   const { return m_w; }
@@ -49,6 +49,7 @@ class KisKrayon : public IconItem
         int       m_w, m_h;
         QImage   *m_pImage;
         QPixmap  *m_pPixmap;
+        QPixmap  *m_pThumbPixmap;
 
     private:
         bool      m_validKrayon;

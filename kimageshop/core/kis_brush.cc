@@ -1,5 +1,5 @@
 /*
- *  kis_brush.cc - part of KImageShop
+ *  kis_brush.cc - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
  *
@@ -26,14 +26,20 @@
 
 #include <kimageeffect.h>
 #include <ksimpleconfig.h>
+#include <kdebug.h>
 
 #include "kis_brush.h"
+#include "kis_util.h"
+
+#define THUMB_SIZE 30
 
 KisBrush::KisBrush(QString file, bool monochrome, bool special)
-  : /* IconItem() */ KisKrayon()
+  : KisKrayon()
 {
     // set defaults
-    m_valid    = false;
+    m_valid     = false;
+    validThumb  = false;
+    validPixmap = false;
     m_spacing  = 3;
 
     // load the brush image data
@@ -59,8 +65,16 @@ KisBrush::KisBrush(QString file, bool monochrome, bool special)
 
 KisBrush::~KisBrush()
 {
-    delete [] m_pData;
-    delete m_pPixmap;
+    if(hasValidPixmap())
+    {
+        delete [] m_pData;
+        delete m_pPixmap;
+    }    
+
+    if(hasValidThumb())
+    {
+        delete m_pThumbPixmap;
+    }    
 }
 
 
@@ -73,20 +87,17 @@ void KisBrush::readBrushInfo(QString file)
     int hotspotX = config.readNumEntry("hotspotX", m_hotSpot.x());
     int hotspotY = config.readNumEntry("hotspotY", m_hotSpot.y());
 
-    if (spacing > 0)
-        m_spacing = spacing;
-
-    m_hotSpot = QPoint(hotspotX, hotspotY);
+    if(spacing > 0) m_spacing = spacing;
+    if(hotspotX > 0 && hotspotY > 0) m_hotSpot = QPoint(hotspotX, hotspotY);
 }
 
 
 /*
-    why grayscale brushes?  don't make sense
+    Load from file, actually
 */
 
 void KisBrush::loadViaQImage(QString file, bool monochrome)
 {
-    // load via QImage
     QImage img(file);
 
     if (img.isNull())
@@ -95,20 +106,65 @@ void KisBrush::loadViaQImage(QString file, bool monochrome)
         qDebug("Failed to load brush: %s", file.latin1());
     }
 
+    // scale a pixmap for iconview cell to size of cell
+    // rough scale - no smoothing or depth conversion or 
+    // format conversion for thumbnails
+    
+    if(img.width() > THUMB_SIZE || img.height() > THUMB_SIZE)
+    { 
+        QImage thumbimg(img);
+
+        m_pThumbPixmap = new QPixmap;
+    
+        int xsize = THUMB_SIZE;
+        int ysize = THUMB_SIZE;
+    
+        if(thumbimg.width() > thumbimg.height())
+        {
+            float yFactor = (float)(thumbimg.height()/thumbimg.width());
+            ysize = (int)(yFactor * THUMB_SIZE);
+        }
+        else if(thumbimg.width() < thumbimg.height())
+        {
+            float xFactor = (float)(thumbimg.width()/thumbimg.height());
+            xsize = (int)(xFactor * THUMB_SIZE);
+        }
+
+        thumbimg = KisUtil::roughScaleQImage(thumbimg, xsize, ysize); 
+        if (!thumbimg.isNull())
+        {
+            kdDebug() << "thumb image is not null" << endl;                    
+            m_pThumbPixmap->convertFromImage(thumbimg, QPixmap::AutoColor);    
+            if(!m_pThumbPixmap->isNull())
+            {
+                kdDebug() << "thumb pixmap is not null" << endl;                        
+                validThumb = true;
+            }    
+            else
+            {
+                kdDebug() << "thumb pixmap is null" << endl;            
+                delete m_pThumbPixmap;
+            }    
+        }
+        else
+        {
+            kdDebug() << "thumb image is null" << endl;
+        }    
+    }
+    
     img = img.convertDepth(32);
     
     if(monochrome)
-        img = KImageEffect::toGray(img, true); // jwc no grayscale!!!
-
-    // create pixmap for preview dialog
+        img = KImageEffect::toGray(img, true); 
+        
+    // create pixmap for preview
     m_pPixmap = new QPixmap;
     m_pPixmap->convertFromImage(img, QPixmap::AutoColor);
-
+    
     m_w = img.width();
     m_h = img.height();
 
     m_pData = new uchar[m_h * m_w];
-
     uint *p;
 
     for (int h = 0; h < m_h; h++)
@@ -117,26 +173,22 @@ void KisBrush::loadViaQImage(QString file, bool monochrome)
         
         for (int w = 0; w < m_w; w++)
 	    {
-	        // no need to use qGray here, we have converted the image 
-            // to grayscale already 
+	        // no need to use qGray here, we have 
+            // converted the image to grayscale already 
             if(monochrome)
 	            m_pData[m_w * h + w] = 255 - qRed(*(p+w)); 
             else    
-	            m_pData[m_w * h + w] = *(p+w); // jwc            
+	            m_pData[m_w * h + w] = *(p+w);             
 	    }      
     }
  
     m_valid = true;
+    validPixmap = true;
     
-    // qDebug("Loading brush: %s",file.latin1());
+    qDebug("Loading brush: %s",file.latin1());
 }
 
-#if 0
-QPixmap& KisBrush::pixmap() const 
-{
-    return *m_pPixmap;
-}
-#endif
+
 
 void KisBrush::setHotSpot(QPoint pt)
 {

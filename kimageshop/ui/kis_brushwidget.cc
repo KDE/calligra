@@ -23,38 +23,39 @@
 #include "kis_brush.h"
 #include "kis_brushwidget.h"
 
-KisBrushWidget::KisBrushWidget( QWidget* parent, const char* name ) : QFrame( parent, name )
+KisBrushWidget::KisBrushWidget( QWidget* parent, const char* name ) 
+    : QFrame( parent, name )
 {
-  setBackgroundColor( white );
-  setFrameStyle( Panel | Sunken );
+    setBackgroundColor( white );
+    setFrameStyle( Panel | Sunken );
 }
 
 void KisBrushWidget::slotSetBrush( const KisBrush& b)
 {
-  m_pBrush = &b;
-  repaint();
+    m_pBrush = &b;
+    repaint();
 }
 
 void KisBrushWidget::drawContents ( QPainter *p )
 {
-  if (!m_pBrush || !m_pBrush->isValid())
-    return;
+    if (!m_pBrush || !m_pBrush->isValid())
+        return;
   
-  int x = 0;
-  int y = 0;
+    int x = 0;
+    int y = 0;
 
-  if (m_pBrush->width() < contentsRect().x())
-    x = (contentsRect().x() - m_pBrush->width()) / 2;
+    if (m_pBrush->width() < contentsRect().x())
+        x = (contentsRect().x() - m_pBrush->width()) / 2;
 
-  if (m_pBrush->height() < contentsRect().y())
-    y = (contentsRect().y() - m_pBrush->height()) / 2;
+    if (m_pBrush->height() < contentsRect().y())
+        y = (contentsRect().y() - m_pBrush->height()) / 2;
 
-  p->drawPixmap(x, y, m_pBrush->pixmap()); 
+    p->drawPixmap(x, y, m_pBrush->pixmap()); 
 }
 
 void KisBrushWidget::mousePressEvent ( QMouseEvent * )
 {
-  emit clicked();
+    emit clicked();
 }
 
 #include "kis_brushwidget.moc"

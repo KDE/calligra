@@ -1,5 +1,5 @@
 /*
- *  kis_brushchooser.cc - part of KImageShop
+ *  kis_brushchooser.cc - part of Krayon
  *
  *  A chooser for KisBrushes. Makes use of the IconChooser class and maintains
  *  all available brushes for KIS.
@@ -44,78 +44,75 @@
 KisBrushChooser::KisBrushChooser( QWidget *parent, const char *name )
   : QWidget( parent, name )
 {
+    lbSpacing = new QLabel( i18n("Spacing:"), this );
+    slSpacing = new IntegerWidget( 1, 100, this, "int widget" );
 
-  lbSpacing = new QLabel( i18n("Spacing:"), this );
-  slSpacing = new IntegerWidget( 1, 100, this, "int widget" );
-
-  slSpacing->setTickmarks( QSlider::Below );
-  slSpacing->setTickInterval( 10 );
-  QObject::connect( slSpacing, SIGNAL( valueChanged(int) ),
+    slSpacing->setTickmarks( QSlider::Below );
+    slSpacing->setTickInterval( 10 );
+    QObject::connect( slSpacing, SIGNAL( valueChanged(int) ),
 		    this, SLOT( slotSetBrushSpacing(int) ));
 
-  // only serves as beautifier for the iconchooser
-  frame = new QHBox( this );
-  frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-  chooser = new IconChooser( frame, QSize(30,30), "icon chooser" );  
+    // only serves as beautifier for the iconchooser
+    frame = new QHBox( this );
+    frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    chooser = new IconChooser( frame, QSize(30,30), "icon chooser" );  
 
-  //container = new QWidget(frame);  
-  //chooser = new IconChooser( container, QSize(30,30), "icon chooser" );
-
-  QList<KisBrush> bList = KisFactory::rServer()->brushes();
+    QList<KisBrush> bList = KisFactory::rServer()->brushes();
   
-  for (KisBrush *brush = bList.first(); brush != 0; brush = bList.next())
+    for (KisBrush *brush = bList.first(); brush != 0; brush = bList.next())
     {
-      if ( brush->isValid() )
-	chooser->addItem( (IconItem *) brush );
+        if ( brush->isValid() )
+	        chooser->addItem( (IconItem *) brush );
     }
   
-  QObject::connect( chooser, SIGNAL( selected( IconItem * ) ),
+    QObject::connect( chooser, SIGNAL( selected( IconItem * ) ),
 		    this, SLOT( slotItemSelected( IconItem * )));
   
-  initGUI();
+    initGUI();
 
-  const KisBrush *brush = currentBrush();
-  if ( brush )
-    slSpacing->setValue( brush->spacing() );
+    const KisBrush *brush = currentBrush();
+    if ( brush )
+        slSpacing->setValue( brush->spacing() );
 }
 
 
 KisBrushChooser::~KisBrushChooser()
 {
-  delete lbSpacing;
-  delete slSpacing;
-  // delete container;
-  delete chooser;
-  delete frame;
+    delete lbSpacing;
+    delete slSpacing;
+
+    // delete container;
+    delete chooser;
+    delete frame;
 }
 
 
 // set the active brush in the chooser - does NOT emit selected() (should it?)
 void KisBrushChooser::setCurrentBrush( const KisBrush *brush )
 {
-  chooser->setCurrentItem( (IconItem *) brush );
-  slSpacing->setValue( brush->spacing() );
+    chooser->setCurrentItem( (IconItem *) brush );
+    slSpacing->setValue( brush->spacing() );
 }
 
 
 // return the active brush
 const KisBrush * KisBrushChooser::currentBrush() const
 {
-  return (const KisBrush *) chooser->currentItem();
+    return (const KisBrush *) chooser->currentItem();
 }
 
 
 void KisBrushChooser::initGUI()
 {
-  QVBoxLayout *mainLayout = new QVBoxLayout( this, 2, -1, "main layout" );
-  QHBoxLayout *spacingLayout = new QHBoxLayout( -1, "spacing layout" );
+    QVBoxLayout *mainLayout = new QVBoxLayout( this, 2, -1, "main layout" );
+    QHBoxLayout *spacingLayout = new QHBoxLayout( -1, "spacing layout" );
 
-  mainLayout->addWidget( frame, 10 );
-  mainLayout->addLayout( spacingLayout, 1 );
+    mainLayout->addWidget( frame, 10 );
+    mainLayout->addLayout( spacingLayout, 1 );
 
-  spacingLayout->addWidget( lbSpacing, 0 );
-  spacingLayout->addStretch();
-  spacingLayout->addWidget( slSpacing, 1 );
+    spacingLayout->addWidget( lbSpacing, 0 );
+    spacingLayout->addStretch();
+    spacingLayout->addWidget( slSpacing, 1 );
 }
 
 
@@ -123,23 +120,18 @@ void KisBrushChooser::initGUI()
 // set the slider to the correct position
 void KisBrushChooser::slotItemSelected( IconItem *item )
 {
-  const KisBrush *brush = (KisBrush *) item;
-  slSpacing->setValue( brush->spacing() );
-  emit selected( brush );
+    const KisBrush *brush = (KisBrush *) item;
+    slSpacing->setValue( brush->spacing() );
+    emit selected( brush );
 }
 
 
 // sliderposition (spacing) changed, apply that to the current brush
 void KisBrushChooser::slotSetBrushSpacing( int spacing )
 {
-  KisBrush *brush = (KisBrush *) currentBrush();
-  if ( brush )
-    brush->setSpacing( spacing );
+    KisBrush *brush = (KisBrush *) currentBrush();
+    if ( brush )
+        brush->setSpacing( spacing );
 }
 
 #include "kis_brushchooser.moc"
-
-
-
-
-

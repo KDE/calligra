@@ -46,6 +46,11 @@ QPixmap& KisKrayon::pixmap() const
     return *m_pPixmap;
 }
 
+QPixmap& KisKrayon::thumbPixmap() const 
+{
+    return *m_pThumbPixmap;
+}
+
 QImage* KisKrayon::image() const 
 {
     return m_pImage;

@@ -1,7 +1,7 @@
 /*
- *  kis_tool_paste.cc - part of KImageShop
+ *  kis_tool_paste.cc - part of Krayon
  *
- *  Copyright (c) 1999 Matthias Elter <me@kde.org>
+ *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -101,7 +101,6 @@ bool PasteTool::pasteColor(QPoint pos)
 
     QImage *qimg = &qImage;
     
-    // FIXME: Implement this for non-RGB modes.
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
     {
         kdDebug(0) << "colormode is not RGB or RGBA!" << endl;
@@ -110,8 +109,7 @@ bool PasteTool::pasteColor(QPoint pos)
     /* if dealing with 1 or 8 bit images, convert to 16 bit */
     if(qimg->depth() < 16)
     {
-        QImage Converted = qimg->smoothScale(qimg->width(), 
-            qimg->height());
+        QImage Converted = qimg->smoothScale(qimg->width(), qimg->height());
         qimg = &Converted;
     }
     
@@ -131,12 +129,14 @@ bool PasteTool::pasteColor(QPoint pos)
     int ey = clipRect.bottom() - starty;
 
     uchar r, g, b, a;
-    // int   v;
+    int   v = 255;
+    int   bv = 0;
+    
+    int red     = m_pView->fgColor().R();
+    int green   = m_pView->fgColor().G();
+    int blue    = m_pView->fgColor().B();
 
-    // int red     = m_pView->fgColor().R();
-    // int green   = m_pView->fgColor().G();
-    // int blue    = m_pView->fgColor().B();
-
+    bool grayscale = false;
     bool alpha = (img->colorMode() == cm_RGBA);
   
     for (int y = sy; y <= ey; y++)
@@ -159,12 +159,14 @@ bool PasteTool::pasteColor(QPoint pos)
             if (alpha)
 	        {
 	            a = lay->pixel(3, startx + x, starty + y);
-
-                /* v = a + bv;
-		        if (v < 0 ) v = 0;
-		        if (v > 255 ) v = 255;
-		        a = (uchar) v; */
-			  
+                if(grayscale)
+                {
+                    v = a + bv;
+		            if (v < 0 ) v = 0;
+		            if (v > 255 ) v = 255;
+		            a = (uchar) v; 
+			    }
+                
 		        lay->setPixel(3, startx + x, starty + y, a);
 	        }
 	    } 
