@@ -7,12 +7,15 @@
 
 #include <qframe.h>
 
+class VKoPainter;
+
 class VStrokeFillPreview : public QFrame
 {
 	Q_OBJECT
 
 public:
 	VStrokeFillPreview( QWidget* parent = 0L, const char* name = 0L );
+	~VStrokeFillPreview();
 
 	virtual QSize sizeHint() const
 		{ return QSize( 50, 50 ); }
@@ -25,6 +28,7 @@ protected:
 	virtual void paintEvent( QPaintEvent* event );
 
 private:
+	VKoPainter* m_painter;
 };
 
 #endif
