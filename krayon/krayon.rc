@@ -2,8 +2,8 @@
 
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
-  <Action name="undo"/>
-  <Action name="redo"/>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
   <Separator/>
   <Action name="copy"/>
   <Action name="cut"/>
@@ -138,14 +138,6 @@
   <Action name="toggle_paint_offset"/>
   <Separator/>          
 </Menu>
-
-<!--
-<Menu name="history"><text>History</text>
-  <Action name="undo"/>
-  <Action name="redo"/>
-  <Action name="history_dialog"/>
-</Menu>
--->
 
 </MenuBar>
 
