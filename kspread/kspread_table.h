@@ -437,8 +437,16 @@ public:
     void paste( const QByteArray& data, const QPoint &_marker,bool makeUndo=false, PasteMode=Normal, Operation=OverWrite,bool insert=false,int insertTo=0 );
     void defaultSelection( const QPoint &_marker );
 
-    bool replace( const QPoint &_marker,QString _find,QString _replace,bool b_sensitive, bool b_whole );
-    QString replaceText( QString cellText,QString _find,QString _replace,bool b_sensitive, bool b_whole );
+    /**
+     * Find support.
+     */
+    void find( const QPoint &_marker, QString _find, long options );
+
+    /**
+     * Find'n'Replace support.
+     */
+    void replace( const QPoint &_marker, QString _find, QString _replace, long options );
+
     void sortByRow( int ref_row, SortingOrder = Increase );
     void sortByColumn( int ref_column, SortingOrder = Increase );
     void swapCells( int x1, int y1, int x2, int y2 );
@@ -816,6 +824,11 @@ public:
     const QPen& emptyPen() const { return m_emptyPen; }
     const QBrush& emptyBrush() const { return m_emptyBrush; }
     const QColor& emptyColor() const { return m_emptyColor; }
+
+private slots:
+
+    void highlight( QString &text, int matchingIndex, int matchedLength, QRect &cellRect );
+    void replace( QString &newText, int index, int replacedLength, QRect &cellRect );
 
 signals:
     void sig_updateView( KSpreadTable *_table );

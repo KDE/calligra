@@ -49,13 +49,15 @@
 #include <kcoloractions.h>
 #include <kaction.h>
 
-#include <kprocess.h> 
+#include <kprocess.h>
 
 #include <dcopclient.h>
 #include <dcopref.h>
 
+#include <koFind.h>
 #include <koPartSelectDia.h>
 #include <koQueryTrader.h>
+#include <koReplace.h>
 #include <koMainWindow.h>
 
 
@@ -71,7 +73,6 @@
 #include "kspread_view.h"
 #include "kspread_dlg_formula.h"
 #include "kspread_dlg_special.h"
-#include "kspread_dlg_replace.h"
 #include "kspread_dlg_sort.h"
 #include "kspread_dlg_anchor.h"
 #include "kspread_dlg_layout.h"
@@ -327,7 +328,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_reloadScripts = new KAction( i18n("Reload Scripts"), 0, this, SLOT( reloadScripts() ), actionCollection(), "reloadScripts" );
     m_showPageBorders = new KToggleAction( i18n("Show page borders"), 0, actionCollection(), "showPageBorders");
     connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this, SLOT( togglePageBorders( bool ) ) );
-    m_replace = new KAction( i18n("Find and Replace..."), "find",CTRL + Key_F, this, SLOT( replace() ), actionCollection(), "replace" );
+    KStdAction::find(this, SLOT(find()), actionCollection());
+    KStdAction::replace(this, SLOT(replace()), actionCollection());
     m_conditional = new KAction( i18n("Conditional cell attributes..."), 0, this, SLOT( conditional() ), actionCollection(), "conditional" );
     m_validity = new KAction( i18n("Validity..."), 0, this, SLOT( validity() ), actionCollection(), "validity" );
     m_sort = new KAction( i18n("Sort..."), 0, this, SLOT( sort() ), actionCollection(), "sort" );
@@ -449,7 +451,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
              this, SLOT( slotChildUnselected( KoDocumentChild* ) ) );
 
     QTimer::singleShot( 0, this, SLOT( initialPosition() ) );
-
+    m_findOptions = 0;
 }
 
 KSpreadView::~KSpreadView()
@@ -1588,10 +1590,43 @@ void KSpreadView::gotoCell()
   dlg.exec();
 }
 
+void KSpreadView::find()
+{
+    KoFindDialog dlg( this, "Find", m_findOptions, &m_findStrings );
+    if ( KoFindDialog::Accepted != dlg.exec() )
+    {
+        return;
+    }
+    m_findOptions = dlg.options();
+    m_findStrings = dlg.findHistory();
+
+    // Do the finding!
+    QPoint m_marker=QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+    activeTable()->find( m_marker, dlg.pattern(), dlg.options() );
+}
+
 void KSpreadView::replace()
 {
-    KSpreadReplaceDlg dlg( this, "Replace" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
-    dlg.exec();
+    KoReplaceDialog dlg( this, "Replace", m_findOptions, &m_findStrings, &m_replaceStrings );
+    if ( KoReplaceDialog::Accepted != dlg.exec() )
+    {
+        return;
+    }
+    m_findOptions = dlg.options();
+    m_findStrings = dlg.findHistory();
+    m_replaceStrings = dlg.replacementHistory();
+
+    // Do the replacement.
+    QPoint m_marker=QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+    activeTable()->replace( m_marker, dlg.pattern(), dlg.replacement(), dlg.options() );
+
+    // Refresh the editWidget
+    KSpreadCell *cell = activeTable()->cellAt( canvasWidget()->markerColumn(),
+                                                        canvasWidget()->markerRow() );
+    if ( cell->text() != 0L )
+        editWidget()->setText( cell->text() );
+    else
+        editWidget()->setText( "" );
 }
 
 void KSpreadView::conditional()

@@ -12,7 +12,8 @@
   <Action name="copy"/>
   <Action name="paste"/>
   <Action name="specialPaste"/>
-  <Action name="replace"/>
+  <Action name="edit_find"/>
+  <Action name="edit_replace"/>
   <Menu name="Clear"><text>Clear</text>
         <Action name="cleartext"/>
         <Action name="clearcomment"/>

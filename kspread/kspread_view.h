@@ -61,6 +61,7 @@ class DCOPObject;
 #include <qlist.h>
 #include <qpoint.h>
 #include <qguardedptr.h>
+#include <qstringlist.h>
 
 #include <koView.h>
 #include <koDocument.h>
@@ -205,6 +206,7 @@ public slots:
     void reloadScripts();
     void runLocalScript();
     void togglePageBorders( bool );
+    void find();
     void replace();
     void conditional();
     void validity();
@@ -458,7 +460,6 @@ private:
     KAction* m_editGlobalScripts;
     KAction* m_editLocalScripts;
     KAction* m_reloadScripts;
-    KAction* m_replace;
     KAction* m_conditional;
     KAction* m_validity;
     KAction* m_sort;
@@ -616,6 +617,14 @@ private:
      * Holds a guarded pointer to the transformation toolbox.
      */
     QGuardedPtr<KoTransformToolBox> m_transformToolBox;
+
+    /**
+     * Find and Replace context. We remember the options and the strings used
+     * previously.
+     */
+    long m_findOptions;
+    QStringList m_findStrings;
+    QStringList m_replaceStrings;
 };
 
 #endif

@@ -42,6 +42,8 @@
 
 #include <klocale.h>
 #include <kglobal.h>
+#include <koFind.h>
+#include <koReplace.h>
 
 #include "kspread_table.h"
 #include "kspread_undo.h"
@@ -2785,178 +2787,165 @@ void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, C
   }
 }
 
-bool KSpreadTable::replace( const QPoint &_marker, QString _find, QString _replace,
-                            bool b_sensitive, bool b_whole )
+void KSpreadTable::find( const QPoint &_marker, QString _find, long options )
 {
-    m_pDoc->setModified( true );
-
-    bool selected = ( m_rctSelection.left() != 0 );
-    bool b_replace=false;
-    // Complete rows selected ?
-    if ( selected && m_rctSelection.right() == 0x7FFF )
+    // Identify the region of interest.
+    QRect region( m_rctSelection );
+    if (options & KoFindDialog::SelectedText)
     {
-        if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-                KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, m_rctSelection );
-                m_pDoc->undoBuffer()->appendUndo( undo );
-        }
-        KSpreadCell* c = m_cells.firstCell();
-        for( ;c; c = c->nextCell() )
-        {
-            int row = c->row();
-            if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
-            && !c->isObscured())
-            {
-                if(!c->isValue() && !c->isBool() &&!c->isFormular() &&!c->isDefault()&&!c->text().isEmpty())
-                {
-                    QString text;
-                    if((text=replaceText(c->text(), _find, _replace,b_sensitive,b_whole))!=c->text())
-                    {
-                        c->setDisplayDirtyFlag();
-                        c->setCellText(text);
-                        c->clearDisplayDirtyFlag();
-                        b_replace=true;
-                    }
-                }
-            }
-        }
+        bool selectionValid = ( m_rctSelection.left() != 0 );
 
-        emit sig_updateView( this, m_rctSelection );
-        return b_replace;
-    }
-    // Complete columns selected ?
-    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
-    {
-        if ( !m_pDoc->undoBuffer()->isLocked() )
+        // Complete rows selected ?
+        if ( selectionValid && m_rctSelection.right() == 0x7FFF )
         {
-                KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, m_rctSelection );
-                m_pDoc->undoBuffer()->appendUndo( undo );
         }
-        KSpreadCell* c = m_cells.firstCell();
-        for( ;c; c = c->nextCell() )
+        // Complete columns selected ?
+        else if ( selectionValid && m_rctSelection.bottom() == 0x7FFF )
         {
-            int col = c->column();
-            if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
-            && !c->isObscured())
-            {
-                if(!c->isValue() && !c->isBool() &&!c->isFormular() &&!c->isDefault()&&!c->text().isEmpty())
-                {
-                    QString text;
-                    if((text=replaceText(c->text(), _find, _replace,b_sensitive,b_whole))!=c->text())
-                    {
-                        c->setDisplayDirtyFlag();
-                        c->setCellText(text);
-                        c->clearDisplayDirtyFlag();
-                        b_replace=true;
-                    }
-                }
-            }
         }
-
-        emit sig_updateView( this, m_rctSelection );
-        return b_replace;
+        else
+        {
+            if ( !selectionValid )
+                region.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+        }
     }
     else
     {
-        QRect r( m_rctSelection );
-        if ( !selected )
-            r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+        // All cells.
+        region.setCoords( 0, 0, 0x7FFF, 0x7FFF );
+    }
 
-        if ( !m_pDoc->undoBuffer()->isLocked() )
+    // Create the class that handles all the actual Find stuff, and connect it to its
+    // local slots.
+    KoFind dialog( _find, options );
+    QObject::connect(
+        &dialog, SIGNAL( highlight( QString &, int, int, QRect & ) ),
+        this, SLOT( highlight( QString &, int, int, QRect & ) ) );
+
+    // Now do the finding...
+    KSpreadCell *cell;
+    QRect cellRegion( 0, 0, 0, 0 );
+    bool bck = options & KoFindDialog::FindBackwards;
+
+    cell = m_cells.firstCell();
+    if ( cell && bck )
+        while ( cell->nextCell() )
+            cell = cell->nextCell();
+    for ( ; cell; cell = (bck ? cell->previousCell() : cell->nextCell() ) )
+    {
+        int row = cell->row();
+        int col = cell->column();
+        if ( region.top() <= row && region.bottom() >= row &&
+            region.left() <= col && region.right() >= col )
         {
-                KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, r );
-                m_pDoc->undoBuffer()->appendUndo( undo );
-        }
-        for ( int x = r.left(); x <= r.right(); x++ )
-            for ( int y = r.top(); y <= r.bottom(); y++ )
+            if ( !cell->isObscured() && !cell->isValue() && !cell->isBool() && !cell->isFormular() )
             {
-                KSpreadCell *cell = cellAt( x, y );
-                if( !cell->isObscured())
-                {
-                  if ( cell == m_pDefaultCell )
-                  {
-                    cell = new KSpreadCell( this, x, y );
-                    m_cells.insert( cell, x, y );
-                  }
-                  if(!cell->isValue() && !cell->isBool() &&!cell->isFormular() &&!cell->isDefault()&&!cell->text().isEmpty())
-                  {
-                    QString text;
-                    if((text=replaceText(cell->text(), _find, _replace,b_sensitive,b_whole))!=cell->text())
-                    {
-                        cell->setDisplayDirtyFlag();
-                        cell->setCellText(text);
-                        cell->clearDisplayDirtyFlag();
-                        b_replace=true;
-                    }
-                  }
-                }
-            }
+                QString text;
 
-        emit sig_updateView( this, r );
-        return b_replace;
+                text = cell->text();
+                cellRegion.setTop( row );
+                cellRegion.setLeft( col );
+                dialog.find( text, cellRegion );
+            }
+        }
     }
 }
 
-QString KSpreadTable::replaceText(QString _cellText,QString _find,QString _replace, bool b_sensitive,bool b_whole)
+// Used by find() and replace() logic to highlight a cell.
+void KSpreadTable::highlight( QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/, QRect &cellRect )
 {
-    QString findText;
-    QString replaceText;
-    QString realCellText;
-    int index=0;
-    int lenreplace=0;
-    int lenfind=0;
-    if(b_sensitive)
+    // Which cell was this again?
+    KSpreadCell *cell = cellAt( cellRect.left(), cellRect.top() );
+
+    // ...now I remember, update it!
+    // TBD: highlight it!
+}
+
+void KSpreadTable::replace( const QPoint &_marker, QString _find, QString _replace, long options )
+{
+    // Identify the region of interest.
+    QRect region( m_rctSelection );
+    if (options & KoReplaceDialog::SelectedText)
     {
-        realCellText=_cellText;
-        findText=_find;
-        replaceText=_replace;
-        if( realCellText.find(findText) >=0)
+        bool selectionValid = ( m_rctSelection.left() != 0 );
+
+        // Complete rows selected ?
+        if ( selectionValid && m_rctSelection.right() == 0x7FFF )
         {
-            do
-            {
-                index=realCellText.find(findText,index+lenreplace);
-                int len=realCellText.length();
-                lenfind=findText.length();
-                lenreplace=replaceText.length();
-                if(!b_whole)
-                    realCellText=realCellText.left(index)+replaceText+realCellText.right(len-index-lenfind);
-                else if(b_whole)
-                {
-                    if (((index==0 || realCellText.mid(index-1,1)==" ")
-                         && (realCellText.mid(index+lenfind,1)==" "||(index+lenfind)==len)))
-                        realCellText=realCellText.left(index)+replaceText+realCellText.right(len-index-lenfind);
-                }
-            }
-            while( realCellText.find(findText,index+lenreplace) >=0);
         }
-        return realCellText;
+        // Complete columns selected ?
+        else if ( selectionValid && m_rctSelection.bottom() == 0x7FFF )
+        {
+        }
+        else
+        {
+            if ( !selectionValid )
+                region.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+        }
     }
     else
     {
-        realCellText=_cellText;
-        findText=_find.lower();
-        replaceText=_replace;
-        if( realCellText.lower().find(findText) >=0)
-        {
-            do
-            {
-                index=realCellText.lower().find(findText,index+lenreplace);
-                int len=realCellText.length();
-                lenfind=findText.length();
-                lenreplace=replaceText.length();
-                if(!b_whole)
-                    realCellText=realCellText.left(index)+replaceText+realCellText.right(len-index-lenfind);
-                else if(b_whole)
-                {
-                    if (((index==0 || realCellText.mid(index-1,1)==" ")
-                         && (realCellText.mid(index+lenfind,1)==" "||(index+lenfind)==len)))
-                        realCellText=realCellText.left(index)+replaceText+realCellText.right(len-index-lenfind);
-                }
-            }
-            while( realCellText.lower().find(findText,index+lenreplace) >=0);
-        }
-        return realCellText;
+        // All cells.
+        region.setCoords( 0, 0, 0x7FFF, 0x7FFF );
     }
+
+    // Create the class that handles all the actual replace stuff, and connect it to its
+    // local slots.
+    KoReplace dialog( _find, _replace, options );
+    QObject::connect(
+        &dialog, SIGNAL( highlight( QString &, int, int, QRect & ) ),
+        this, SLOT( highlight( QString &, int, int, QRect & ) ) );
+    QObject::connect(
+        &dialog, SIGNAL( replace( QString &, int, int, QRect & ) ),
+        this, SLOT( replace( QString &, int, int, QRect & ) ) );
+
+    // Now do the replacing...
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+        KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, region );
+        m_pDoc->undoBuffer()->appendUndo( undo );
+    }
+
+    KSpreadCell *cell;
+    QRect cellRegion( 0, 0, 0, 0 );
+    bool bck = options & KoReplaceDialog::FindBackwards;
+
+    cell = m_cells.firstCell();
+    if ( cell && bck )
+        while ( cell->nextCell() )
+            cell = cell->nextCell();
+    for ( ; cell; cell = (bck ? cell->previousCell() : cell->nextCell() ) )
+    {
+        int row = cell->row();
+        int col = cell->column();
+        if ( region.top() <= row && region.bottom() >= row &&
+            region.left() <= col && region.right() >= col )
+        {
+            if ( !cell->isObscured() && !cell->isValue() && !cell->isBool() && !cell->isFormular() )
+            {
+                QString text;
+
+                text = cell->text();
+                cellRegion.setTop( row );
+                cellRegion.setLeft( col );
+                dialog.replace( text, cellRegion );
+            }
+        }
+    }
+}
+
+// Used by replace() logic to modify a cell.
+void KSpreadTable::replace( QString &newText, int /*index*/, int /*replacedLength*/, QRect &cellRect )
+{
+    // Which cell was this again?
+    KSpreadCell *cell = cellAt( cellRect.left(), cellRect.top() );
+
+    // ...now I remember, update it!
+    cell->setDisplayDirtyFlag();
+    cell->setCellText( newText );
+    cell->clearDisplayDirtyFlag();
+    updateCell( cell, cellRect.left(), cellRect.top() );
+    m_pDoc->setModified( true );
 }
 
 void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
