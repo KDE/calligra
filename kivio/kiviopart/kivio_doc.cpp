@@ -172,10 +172,10 @@ QPtrList<KivioDoc>& KivioDoc::documents()
 
 bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
-  if (flags==KoDocument::InitDocEmpty)
-  {
-    KivioPage *t = createPage();
-    m_pMap->addPage( t );
+  KivioPage *t = createPage();
+  m_pMap->addPage( t );
+
+  if(flags == KoDocument::InitDocEmpty) {
     setEmpty();
     return true;
   }
@@ -184,7 +184,7 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
   KoTemplateChooseDia::ReturnType ret;
   KoTemplateChooseDia::DialogType dlgtype;
 
-  if (flags != KoDocument::InitDocFileNew) {
+  if(flags != KoDocument::InitDocFileNew) {
     dlgtype = KoTemplateChooseDia::Everything;
     initConfig();
   } else {
@@ -194,7 +194,7 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
   ret = KoTemplateChooseDia::choose( KivioFactory::global(), f,
                                      dlgtype, "kivio_template", parentWidget );
 
-  if ( ret == KoTemplateChooseDia::File ) {
+  if( ret == KoTemplateChooseDia::File ) {
     KURL url(f);
     return openURL(url);
   } else if ( ret == KoTemplateChooseDia::Template ) {
@@ -207,8 +207,6 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     setEmpty();
     return ok;
   } else if ( ret == KoTemplateChooseDia::Empty ) {
-    KivioPage *t = createPage();
-    m_pMap->addPage( t );
     setEmpty();
     return true;
   } else {
@@ -406,6 +404,7 @@ bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, c
 
   QDomNode node = body.firstChild();
   QString localName;
+  m_pMap->clear();
 
   // TODO: port to forEachElement
   while(!node.isNull()) {
@@ -426,6 +425,7 @@ bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, c
 
   loadOasisSettings( settings );
 
+  emit updateActivePage(m_pMap->firstPage());
   return true;
 }
 
@@ -498,14 +498,6 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
     node = node.nextSibling();
   }
 
-  // <map>
-  //QDomElement mymap = kivio.namedItem( "map" ).toElement();
-  //if ( !mymap.isNull() )
-  //  if ( !m_pMap->loadXML(mymap) ) {
-  //    m_bLoading = false;
-  //    return false;
-  //  }
-
   QString us = kivio.attribute("units", Kivio::Config::unit());
   bool isInt = false;
   int u = us.toInt(&isInt);
@@ -520,6 +512,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
     gridData.load(kivio,"grid");
   }
 
+  emit updateActivePage(m_pMap->firstPage());
   return true;
 }
 

@@ -131,6 +131,9 @@ void KivioMap::saveOasis(KoStore* store, KoXmlWriter* docWriter, KoGenStyles* st
 
 bool KivioMap::loadXML( const QDomElement& mymap )
 {
+  m_lstPages.clear();
+  m_lstDeletedPages.clear();
+
   // FIXME: make this load the real page units and whatever
   // else
   QDomNode n = mymap.firstChild();
@@ -222,4 +225,10 @@ QStringList KivioMap::hiddenPages() const
   }
   
   return pages;
+}
+
+void KivioMap::clear()
+{
+  m_lstPages.clear();
+  m_lstDeletedPages.clear();
 }

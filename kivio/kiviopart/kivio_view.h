@@ -95,7 +95,6 @@ class KIVIO_EXPORT KivioView : public KoView
 
     void addPage( KivioPage* );
     void removePage( KivioPage* );
-    void setActivePage( KivioPage* );
     KivioPage* activePage() const;
 
     void setActiveSpawnerSet( KivioStencilSpawnerSet* );
@@ -213,6 +212,8 @@ class KIVIO_EXPORT KivioView : public KoView
     void initStatusBarProgress();
     void setStatusBarProgress(int progress);
     void removeStatusBarProgress();
+
+    void setActivePage( KivioPage* );
 
   protected slots:
     void slotAddPage( KivioPage *_page );

@@ -111,6 +111,8 @@ class KivioMap : public QObject
   
     virtual DCOPObject* dcopObject();
 
+    void clear();
+
   private:
     QPtrList<KivioPage> m_lstPages;
     QPtrList<KivioPage> m_lstDeletedPages;

@@ -177,6 +177,8 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     void progress(int);
     void endProgress();
 
+    void updateActivePage(KivioPage*);
+
   protected:
     bool checkStencilsForSpawner( KivioStencilSpawner * );
     bool checkGroupForSpawner( KivioStencil *, KivioStencilSpawner *);

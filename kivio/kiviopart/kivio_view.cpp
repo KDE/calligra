@@ -270,6 +270,8 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect( m_pDoc, SIGNAL( sig_pageNameChanged(KivioPage*,const QString&)), SLOT(slotPageRenamed(KivioPage*,const QString&)) );
 
   connect( m_pDoc, SIGNAL( sig_updateGrid()),SLOT(slotUpdateGrid()));
+  
+  connect(m_pDoc, SIGNAL(updateActivePage(KivioPage*)), this, SLOT(setActivePage(KivioPage*)));
 
   initActions();
 
@@ -595,10 +597,10 @@ void KivioView::addPage( KivioPage* page )
 
 void KivioView::insertPage( KivioPage* page )
 {
-    if( !page->isHidden() ) {
+  if(!page->isHidden()) {
     m_pTabBar->addTab(page->pageName());
     setActivePage(page);
-  updateMenuPage();
+    updateMenuPage();
   }
 }
 
