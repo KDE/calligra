@@ -23,10 +23,11 @@
 #include "koBgSpellCheck.moc"
 #include <qtimer.h>
 #include <kdebug.h>
-#include <kospell.h>
 #include <kotextobject.h>
 #include <klocale.h>
 #include <koSconfig.h>
+#include <koSpell.h>
+
 
 //#define DEBUG_BGSPELLCHECKING
 
@@ -173,8 +174,29 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
         d->startTimer->start( 1000, true );
         return;
     }
+#if 0
+    if ( !m_bgSpell.kspell ) // reuse if existing
+    {
+#if 0
+        if(m_doc->getKOSpellConfig())
+        {
+            m_doc->getKOSpellConfig()->setIgnoreList(m_doc->spellListIgnoreAll());
+            m_doc->getKOSpellConfig()->setReplaceAllList(m_spell.replaceAll);
+        }
+#endif
+        m_bgSpell.kspell = KOSpell::createKoSpell( 0L, i18n( "Spell Checking" ), this,SLOT( spellCheckerReady() ) ,spellConfig(), true,true /*FIXME !!!!!!!!!*/ );
 
-    bool needsWait = false;
+        connect( m_bgSpell.kspell, SIGNAL( death() ),
+                 this, SLOT( spellCheckerFinished() ) );
+        connect( m_bgSpell.kspell, SIGNAL( misspelling( const QString &, const QStringList &, unsigned int ) ),
+                 this, SLOT( spellCheckerMisspelling( const QString &, const QStringList &, unsigned int ) ) );
+        connect( m_bgSpell.kspell, SIGNAL( done( const QString & ) ),
+                 this, SLOT( spellCheckerDone( const QString & ) ) );
+
+        connect( m_bgSpell.kspell, SIGNAL( spellCheckerReady()), this, SLOT( spellCheckerReady()));
+        m_bgSpell.kspell->hide ();
+    }
+#endif
 #if 0
     if ( !m_bgSpell.kspell ) // reuse if existing
     {
@@ -358,12 +380,12 @@ void KoBgSpellCheck::spellCheckerFinished()
 #ifdef DEBUG_BGSPELLCHECKING
     kdDebug(32500) << "--- KoBgSpellCheck::spellCheckerFinished ---" << endl;
 #endif
-    KoSpell::spellStatus status = m_bgSpell.kspell->status();
+    KOSpell::spellStatus status = m_bgSpell.kspell->status();
     delete m_bgSpell.kspell;
     m_bgSpell.kspell = 0;
     m_bgSpell.currentParag = 0;
     m_bgSpell.currentTextObj = 0;
-    if (status == KoSpell::Error)
+    if (status == KOSpell::Error)
     {
         // KSpell badly configured... what to do?
         kdWarning() << "ISpell/ASpell not configured correctly." << endl;
@@ -374,7 +396,7 @@ void KoBgSpellCheck::spellCheckerFinished()
         }
         return;
     }
-    else if (status == KoSpell::Crashed)
+    else if (status == KOSpell::Crashed)
     {
         kdWarning() << "ISpell/ASpell seems to have crashed." << endl;
         return;

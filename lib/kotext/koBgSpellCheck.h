@@ -24,8 +24,9 @@
 
 #include <qobject.h>
 #include <qstringlist.h>
+#include <koSpell.h>
 class KoTextObject;
-class KoSpell;
+class KOSpell;
 class KoDocument;
 class KOSpellConfig;
 class KoTextParag;
@@ -75,7 +76,7 @@ protected:
         KoBGSpell() : kspell(0L), currentTextObj(0L), currentParag(0L) {}
 
         // KSpell object for the background spellcheck
-	KoSpell *kspell;
+	KOSpell *kspell;
         // The text frameset currently being checked
 	// TODO change current text frameset, and implementing nextTextFrameSet, see kwview.cc
         // TODO implement "skip unchanged framesets" and "stop timer after all checked and until
