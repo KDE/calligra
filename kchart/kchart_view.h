@@ -9,7 +9,7 @@
 
 #include <koView.h>
 
-class QAction;
+class KAction;
 class QPaintEvent;
 
 class KChartPart;
@@ -38,17 +38,17 @@ protected:
     virtual void updateReadWrite( bool readwrite );
 
 private:
-    QAction* m_cut;
-    QAction* m_wizard;
-    QAction* m_edit;
-    QAction* m_config;
-    QAction* m_saveconfig;
-    QAction* m_loadconfig;
-    QAction* m_defaultconfig;
-    QAction* m_chartpie;
-    QAction* m_chartareas;
-    QAction* m_chartbars;
-    QAction* m_chartline;
+    KAction* m_cut;
+    KAction* m_wizard;
+    KAction* m_edit;
+    KAction* m_config;
+    KAction* m_saveconfig;
+    KAction* m_loadconfig;
+    KAction* m_defaultconfig;
+    KAction* m_chartpie;
+    KAction* m_chartareas;
+    KAction* m_chartbars;
+    KAction* m_chartline;
 };
 
 #endif
