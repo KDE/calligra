@@ -448,6 +448,10 @@ Forms
  www.kexi-project.org/wiki/wikiview/index.php?Forms%20embedded%20inside%20Kexi#3.5._
 - fixed Tab/BackTab ordering when there're widgets without TabFocus focus policy set
 - TabOrder dialog: "dirty" flag is always set to the curent form when the dialog is accepted
+KexiDB
+- Connection::dropTable(): be sure that we handle the correct TableSchema object
+- Connection::storeObjectSchemaData() if we already have stored a schema data 
+  with the same name and type - just update it's properties as it would be existing object
 
 KexiRecordMarker
 2005-02-23..25
