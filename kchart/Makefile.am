@@ -27,10 +27,7 @@ libkchartpart_la_SOURCES = kchart_part.cc \
 	kchartWizardSetupAxesPage.cc \
 	kchartWizardSetupDataPage.cc \
 	kchartDataEditor.cc \
-	parser.cc \
-	sheet.cc \
-	sheetdlg.cc \
-	table.cc qttableview.cpp KChartViewIface.skel KChartViewIface.cc \
+	KChartViewIface.skel KChartViewIface.cc \
 	kchartLegendConfigPage.cc kchart_params.cc KChartParamsIface.skel \
 	KChartParamsIface.cc kchartHeaderFooterConfigPage.cc \
 	kchartLine3dConfigPage.cc kchartParameterPolarConfigPage.cc kchartPageLayout.cc \
@@ -72,10 +69,6 @@ noinst_HEADERS =  kchart_part.h \
 		kchartWizardSetupAxesPage.h \
 		kchartWizardSetupDataPage.h \
 		kchartDataEditor.h \
-		parser.h \
-		sheet.h \
-		sheetdlg.h \
-		table.h qttableview.h \
 		kchart_aboutdata.h	\
 		kchartcolorarray.h KChartViewIface.h \
 		kchartLegendConfigPage.h  kchart_params.h \

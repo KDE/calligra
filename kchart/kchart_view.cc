@@ -215,8 +215,8 @@ void KChartView::edit()
     ed.setAxisLabelTextShort( ( (KChartPart*)koDocument() )->axisLabelTextShort() );
     ed.setAxisLabelTextLong( ( (KChartPart*)koDocument() )->axisLabelTextLong() );
 #endif
-    // Set the legend in the editor.
 #if 0
+    // Set the legend in the editor.
     QStringList  lst;
     for( uint i =0; i < dat->rows(); i++ )
         lst << params->legendText( i );

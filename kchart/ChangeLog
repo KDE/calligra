@@ -1,11 +1,21 @@
-2005-03-11  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+2005-03-12  Inge Wallin  <inge@lysator.liu.se>
+
+	Clean up the data editor and remove old cruft.
+	* kchartDataEditor.{h,cc}: Remove all #if 0:ed code.
+	* Makefile.am (libkchartpart_la_SOURCES): Removed parser.cc,
+	sheet.cc, sheetdlg.cc, table.cc qttableview.cpp
+	(noinst_HEADERS): Removed parser.h sheet.h sheetdlg.h table.h
+	qttableview.h 
+	Files mentioned above: Removed.
+
+2005-03-11  Inge Wallin  <inge@lysator.liu.se>
 
 	Move Tooltips and Whatsthis help from the old data editor to the
 	new one.
 	* kchartDataEditor.cc (addDocs): New method
 	(constructor): Clean up by moving all help generation to addDocs().
 
-2005-03-11  Inge Wallin  <inge@lysator.liu.se>
+	----------------------------------------------------------------
 
 	Enable "Finish" button for all pages in the wizard.
 	* kchartWizard.cc (KChartWizard): Enable Finish button for

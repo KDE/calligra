@@ -32,11 +32,6 @@ public:
     void getXLabel(KChartParams* params);
     void setXLabel(const QStringList &xlbl);
 
-#if 0
-    void setAxisLabelTextLong( QStringList *_longLabels ) { longLabels = _longLabels; }
-    void setAxisLabelTextShort( QStringList *_shortLabels ){ shortLabels = _shortLabels; }
-#endif
-
 private:
     void  addDocs();
 
@@ -50,7 +45,9 @@ protected slots:
 
 private:
     // Data Editor, Old version.  Soon to be removed.
+#if 0
     SheetDlg *_widget;
+#endif
     QStringList *longLabels;
     QStringList *shortLabels;
 
