@@ -24,6 +24,9 @@
 Border::Border()
     : color( Qt::black ), style( SOLID ), ptWidth( 1 ) { }
 
+Border::Border( const QColor & c, BorderStyle s, unsigned int width )
+    : color( c ), style( s ), ptWidth( width ) { }
+
 bool Border::operator==( const Border _brd ) const {
     return ( style == _brd.style && color == _brd.color && ptWidth == _brd.ptWidth );
 }

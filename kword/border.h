@@ -29,9 +29,11 @@ class Border : public Qt {
 public:
     enum BorderStyle {SOLID = 0, DASH = 1, DOT = 2, DASH_DOT = 3, DASH_DOT_DOT = 4};
     Border();
+    Border( const QColor & c, BorderStyle s, unsigned int width );
     QColor color;
     BorderStyle style;
     unsigned int ptWidth;
+
     bool operator==( const Border _brd ) const;
     bool operator!=( const Border _brd ) const;
 

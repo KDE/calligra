@@ -193,6 +193,12 @@ KWStyle * KWContents::findOrCreateTOCStyle( int depth )
         style = new KWStyle( name );
         style->format().setBold(true);
         style->format().setPointSize( depth==-1 ? 20 : depth==0 ? 16 : 12 );
+        if ( depth == -1 )
+        {
+            style->paragLayout().topBorder = Border( Qt::black, Border::SOLID, 1 );
+            style->paragLayout().bottomBorder = Border( Qt::black, Border::SOLID, 1 );
+            style->paragLayout().alignment = Qt::AlignCenter;
+        }
         m_doc->addStyleTemplate( style );             // register the new style
         m_doc->updateAllStyleLists();                 // show it in the UI
     }
