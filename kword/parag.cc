@@ -266,7 +266,7 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 
     for ( unsigned int i = 0; i < _len; i++ )
     {
-        if ( text.data()[ _pos + i ].c == 0 )
+        if ( text.data()[ _pos + i ].c == KWSpecialChar )
         {
             switch ( text.data()[ _pos + i ].attrib->getClassId() )
             {
@@ -574,21 +574,21 @@ int KWParag::find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _inde
 }
 
 /*================================================================*/
-int KWParag::find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, 
+int KWParag::find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format,
 		   int _index, int &_len, bool _cs, bool _wildcard )
 {
     return text.find( _regexp, _format, _index, _len, _cs, _wildcard );
 }
 
 /*================================================================*/
-int KWParag::findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, 
+int KWParag::findRev( QString _expr, KWSearchDia::KWSearchEntry *_format,
 		      int _index, bool _cs, bool _whole )
 {
     return text.findRev( _expr, _format, _index, _cs, _whole );
 }
 
 /*================================================================*/
-int KWParag::findRev( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, 
+int KWParag::findRev( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format,
 		      int _index, int &_len, bool _cs, bool _wildcard )
 {
     return text.findRev( _regexp, _format, _index, _len, _cs, _wildcard );

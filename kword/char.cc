@@ -72,7 +72,7 @@ KWChar* KWString::alloc( unsigned int _len )
     KWChar *p = c;
     for ( unsigned int i = 0; i < _len; ++i )
     {
-        p->c = 0;
+        p->c = KWSpecialChar;
         p->attrib = 0L;
         p++;
     }
@@ -182,7 +182,7 @@ void KWString::insert( unsigned int _pos, KWCharImage *_image )
     if ( _pos < l )
         memmove( _data_ + _pos + 1, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
 
-    _data_[ _pos ].c = 0;
+    _data_[ _pos ].c = KWSpecialChar;
     _data_[ _pos ].attrib = _image;
 }
 
@@ -198,7 +198,7 @@ void KWString::insert( unsigned int _pos, KWCharTab *_tab )
     if ( _pos < l )
         memmove( _data_ + _pos + 1, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
 
-    _data_[ _pos ].c = 0;
+    _data_[ _pos ].c = KWSpecialChar;
     _data_[ _pos ].attrib = _tab;
 }
 
@@ -214,7 +214,7 @@ void KWString::insert( unsigned int _pos, KWCharVariable *_var )
     if ( _pos < l )
         memmove( _data_ + _pos + 1, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
 
-    _data_[ _pos ].c = 0;
+    _data_[ _pos ].c = KWSpecialChar;
     _data_[ _pos ].attrib = _var;
 }
 
@@ -230,7 +230,7 @@ void KWString::insert( unsigned int _pos, KWCharFootNote *_fn )
     if ( _pos < l )
         memmove( _data_ + _pos + 1, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
 
-    _data_[ _pos ].c = 0;
+    _data_[ _pos ].c = KWSpecialChar;
     _data_[ _pos ].attrib = _fn;
 }
 
@@ -289,7 +289,7 @@ QString KWString::toString( unsigned int _pos, unsigned int _len )
         for ( unsigned int i = _pos; i <= _len + _pos; i++ )
         {
             if ( static_cast<int>( i ) > static_cast<int>( size() - 1 ) ) break;
-            if ( _data_[ i ].c != QChar( static_cast<char>( 0 ) ) )
+            if ( _data_[ i ].c != KWSpecialChar )
                 str += _data_[ i ].c;
             else
                 str += c;
@@ -431,7 +431,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
                     image = _doc->getImageCollection()->getImage( *_image, key );
                     _kwimage = new KWCharImage( image );
                     freeChar( _data_[ __pos ], doc );
-                    _data_[ __pos ].c = 0;
+                    _data_[ __pos ].c = KWSpecialChar;
                     _data_[ __pos ].attrib = _kwimage;
                     delete _image;
                     _image = 0;
@@ -440,7 +440,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
                 {
                     _kwtab = new KWCharTab();
                     freeChar( _data_[ __pos ], doc );
-                    _data_[ __pos ].c = 0;
+                    _data_[ __pos ].c = KWSpecialChar;
                     _data_[ __pos ].attrib = _kwtab;
                 } break;
                 case ID_KWCharVariable:
@@ -495,7 +495,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
                             freeChar( _data_[ __pos ], doc );
                             v->setFormat( format );
                             _data_[ __pos ].attrib = v;
-                            _data_[ __pos ].c = 0;
+                            _data_[ __pos ].c = KWSpecialChar;
                             delete _format;
                             _format = 0;
                         }
@@ -529,7 +529,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
                             freeChar( _data_[ __pos ], doc );
                             v->setFormat( format );
                             _data_[ __pos ].attrib = v;
-                            _data_[ __pos ].c = 0;
+                            _data_[ __pos ].c = KWSpecialChar;
                             delete _format;
                             _format = 0;
                         }
@@ -929,7 +929,7 @@ ostream& operator<<( ostream &out, KWString &_string )
 
     for ( unsigned int i = 0; i < _string.size(); i++ )
     {
-        if ( _string.data()[ i ].c != QChar( static_cast<char>( 0 ) ) )
+        if ( _string.data()[ i ].c != KWSpecialChar )
             out << _string.data()[ i ].c;
         else
             out << c;
@@ -937,3 +937,4 @@ ostream& operator<<( ostream &out, KWString &_string )
 
     return out;
 }
+

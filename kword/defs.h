@@ -54,6 +54,8 @@ enum InsertPos {I_BEFORE, I_AFTER};
 
 enum KWUnits {U_MM, U_PT, U_INCH};
 
+const QChar KWSpecialChar( static_cast<char>( 0 ) );
+
 class KWUnit
 {
 public:

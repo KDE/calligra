@@ -2009,7 +2009,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
                     bool goneForward = false;
                     if ( _fc.getUnderline() && _fc.getTextPos() > _fc.getLineStartPos() && _fc.getTextPos() < _fc.getLineEndPos() - 1 )
                     {
-                        if ( text[ _fc.getTextPos() - 1 ].c != 0 && text[ _fc.getTextPos() + 1 ].c != 0 )
+                        if ( text[ _fc.getTextPos() - 1 ].c != KWSpecialChar && text[ _fc.getTextPos() + 1 ].c != KWSpecialChar )
                         {
                             KWCharFormat *f1 = ( KWCharFormat* )text[ _fc.getTextPos() - 1 ].attrib;
                             KWCharFormat *f2 = ( KWCharFormat* )text[ _fc.getTextPos() + 1 ].attrib;

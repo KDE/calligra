@@ -51,7 +51,7 @@ KWFormatContext::~KWFormatContext()
 
 
 /*================================================================*/
-void KWFormatContext::init( KWParag *_parag, QPainter &_painter, 
+void KWFormatContext::init( KWParag *_parag, QPainter &_painter,
 			    bool _updateCounters, bool _fromStart ,
                             int _frame, int _page )
 {
@@ -108,7 +108,7 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter,
 }
 
 /*================================================================*/
-void KWFormatContext::enterNextParag( QPainter &_painter, 
+void KWFormatContext::enterNextParag( QPainter &_painter,
 				      bool /* _updateCounters */ )
 {
     // Set the context to the given paragraph
@@ -575,7 +575,7 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
     bool _break = false;
     while ( pos < _textpos && !_break )
     {
-        if ( text[ pos ].c == 0 )
+        if ( text[ pos ].c == KWSpecialChar )
         {
             // Handle specials here
             switch ( text[ pos ].attrib->getClassId() )
@@ -772,7 +772,7 @@ int KWFormatContext::cursorGotoNextChar( QPainter &  )
     KWChar *text = parag->getText();
     KWParagLayout *lay = parag->getParagLayout();
     int pos = textPos;
-    if ( text[ pos ].c == 0 )
+    if ( text[ pos ].c == KWSpecialChar )
     {
         // Handle specials here
         switch ( text[ pos ].attrib->getClassId() )
@@ -872,13 +872,13 @@ int KWFormatContext::cursorGotoNextChar( QPainter &  )
     if ( isCursorAtLineEnd() )
         return -2;
 
-    if ( parag->getText()[ textPos ].c != 0 && 
-	 parag->getText()[ textPos ].attrib == 0 ||
-         textPos - 1 >= 0 && parag->getText()[ textPos - 1 ].c != 0 &&
+    if ( parag->getText()[ textPos ].c != KWSpecialChar &&
+         parag->getText()[ textPos ].attrib == 0 ||
+         (int)textPos - 1 >= 0 && parag->getText()[ textPos - 1 ].c != KWSpecialChar &&
          *( ( KWCharFormat* )parag->getText()[ textPos - 1 ].attrib ) == *( ( KWCharFormat* )parag->getText()[ textPos ].attrib ) )
         return 1;
 
-    if ( parag->getText()[ textPos ].c != 0 )
+    if ( parag->getText()[ textPos ].c != KWSpecialChar )
         return 0;
 
     assert( parag->getText()[ textPos ].attrib != 0L );
@@ -1043,9 +1043,9 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects,
                          !_broken ) &&
             textPos < parag->getTextLen() )
     {
-        char c = text[ textPos ].c;
+        QChar c = text[ textPos ].c;
 
-        if ( c != 0 && text[ textPos ].attrib )
+        if ( c != KWSpecialChar && text[ textPos ].attrib )
         {
             // Handle font formats here.
             assert( text[ textPos ].attrib->getClassId() == ID_KWCharFormat );
@@ -1056,7 +1056,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects,
         }
 
         // do the autoformat stuff
-        if ( c != 0 )
+        if ( c != KWSpecialChar )
         {
             document->getAutoFormat().doTypographicQuotes( parag, this );
             document->getAutoFormat().doAutoFormat( parag, this );
@@ -1064,7 +1064,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects,
         }
 
         // if we will not fit into the line anymore, let us leave the loop
-        if ( c != 0 )
+        if ( c != KWSpecialChar )
         {
             if ( ptPos + displayFont->getPTWidth( c ) >=
                  xShift + ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->width() -
@@ -1072,7 +1072,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects,
                             document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBRight().pt() ) - indent - _right && _broken )
                 break;
         }
-        else if ( c == 0 && text[ textPos ].attrib->getClassId() == ID_KWCharImage )
+        else if ( c == KWSpecialChar && text[ textPos ].attrib->getClassId() == ID_KWCharImage )
         {
             if ( ( ( KWCharImage* )text[ textPos ].attrib )->getImage()->width() + ptPos >=
                  xShift + ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->width() -
@@ -1080,7 +1080,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects,
                             document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBRight().pt() ) - indent - _right && _broken )
                 break;
         }
-        else if ( c == 0 && text[ textPos ].attrib->getClassId() == ID_KWCharVariable )
+        else if ( c == KWSpecialChar && text[ textPos ].attrib->getClassId() == ID_KWCharVariable )
         {
             if ( displayFont->getPTWidth( dynamic_cast<KWCharVariable*>( text[ textPos ].attrib )->getText() ) + ptPos >=
                  xShift + ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->width() -
@@ -1088,7 +1088,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects,
                             document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->getBRight().pt() ) - indent - _right && _broken )
                 break;
         }
-        else if ( c == 0 && text[ textPos ].attrib->getClassId() == ID_KWCharFootNote )
+        else if ( c == KWSpecialChar && text[ textPos ].attrib->getClassId() == ID_KWCharFootNote )
         {
             if ( displayFont->getPTWidth( dynamic_cast<KWCharFootNote*>( text[ textPos ].attrib )->getText() ) + ptPos >=
                  xShift + ( document->getFrameSet( frameSet - 1 )->getFrame( frame - 1 )->width() -
@@ -1111,7 +1111,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects,
         }
 
         // Do we have some format definition here ?
-        if ( c == 0 )
+        if ( c == KWSpecialChar )
         {
             switch ( text[ textPos ].attrib->getClassId() )
             {
