@@ -2,7 +2,7 @@
 #define __koStoreStream_h__
 
 #include <fstream>
-#include "koStore.h"
+#include <koStoreIf.h>
 #include <kdebug.h>
 
 /**
@@ -15,6 +15,9 @@
 
 // (Werner) I've translated the comments - there migth be
 // some errors, though :(
+// (David) Thanks !!!
+
+class KoStore;
 
 class ostorestreambuffer : public streambuf
 {

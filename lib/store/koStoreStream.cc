@@ -1,7 +1,9 @@
 #include "koStoreStream.h"
+#include "koStore.h"
 
-// (Werner) I've translated the comments - there migth be
+// (Werner) I've translated the comments - there might be
 // some errors, though :(
+// (David) Thanks !!!
 
 int istorestreambuffer::underflow ()
 {
@@ -82,3 +84,4 @@ int ostorestreambuffer::emptybuffer()
     pbump (-anz);    // restore "write-pointer" position
     return anz;
 }
+
