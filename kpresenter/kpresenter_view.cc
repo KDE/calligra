@@ -42,6 +42,7 @@
 #include "shadowdialogimpl.h"
 #include <presstructview.h>
 
+#include "kprautoformat.h"
 
 #include <confpiedia.h>
 #include <confrectdia.h>

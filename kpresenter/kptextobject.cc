@@ -48,7 +48,7 @@
 
 #include "kptextobject.moc"
 #include "kprcanvas.h"
-#include <koAutoFormat.h>
+#include "kprautoformat.h"
 #include <koparagcounter.h>
 #include <kaction.h>
 #include <kotextparag.h>
@@ -1159,7 +1159,7 @@ void KPTextView::ensureCursorVisible()
 
 void KPTextView::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch )
 {
-    KoAutoFormat * autoFormat = m_kptextobj->kPresenterDocument()->getAutoFormat();
+    KPrAutoFormat * autoFormat = m_kptextobj->kPresenterDocument()->getAutoFormat();
     if ( autoFormat )
         autoFormat->doAutoFormat( cursor, parag, index, ch, textObject());
 }

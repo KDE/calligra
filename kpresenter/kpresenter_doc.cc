@@ -64,7 +64,7 @@
 #include <koStore.h>
 #include <koStoreDevice.h>
 #include <koQueryTrader.h>
-#include <koAutoFormat.h>
+#include "kprautoformat.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -145,7 +145,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     dcop = 0;
     m_kpresenterView = 0;
     m_initialActivePage=0;
-    m_autoFormat = new KoAutoFormat(this);
+    m_autoFormat = new KPrAutoFormat(this);
     _clean = true;
     _spInfinitLoop = false;
     _spManualSwitch = true;
