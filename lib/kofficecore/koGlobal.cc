@@ -24,6 +24,9 @@
 #include <qfont.h>
 #include <qfontinfo.h>
 #include <kglobalsettings.h>
+#include <kglobal.h>
+#include <ksimpleconfig.h>
+#include <kstandarddirs.h>
 
 int KoPageFormat::printerPageSize( KoFormat format )
 {
@@ -353,6 +356,8 @@ QStringList KoPageFormat::allFormats()
 }
 
 int KoGlobal::s_pointSize = -1;
+QStringList KoGlobal::s_languageList = QStringList();
+QStringList KoGlobal::s_languageTag = QStringList();
 
 QFont KoGlobal::defaultFont()
 {
@@ -369,4 +374,42 @@ QFont KoGlobal::defaultFont()
     //kdDebug()<<k_funcinfo<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize()<<endl;
     //kdDebug()<<k_funcinfo<<"font.name() :"<<font.family ()<<endl;
     return font;
+}
+
+QStringList KoGlobal::listOfLanguage()
+{
+    if ( s_languageList.count()==0 )
+    {
+        QStringList alllang = KGlobal::dirs()->findAllResources("locale",
+                                                                QString::fromLatin1("*/entry.desktop"));
+        QStringList langlist=alllang;
+        kdDebug()<<" alllang :"<<alllang.count()<<endl;
+        for ( QStringList::ConstIterator it = langlist.begin();
+              it != langlist.end(); ++it )
+        {
+            KSimpleConfig entry(*it);
+            entry.setGroup("KCM Locale");
+            QString name = entry.readEntry("Name",
+                                           KGlobal::locale()->translate("without name"));
+
+            QString tag = *it;
+            int index = tag.findRev('/');
+            tag = tag.left(index);
+            index = tag.findRev('/');
+            tag = tag.mid(index+1);
+            s_languageList.append(name);
+            s_languageTag.append(tag);
+        }
+    }
+    return s_languageList;
+}
+
+QString KoGlobal::tagOfLanguage( const QString & _lang)
+{
+    int pos = s_languageList.findIndex( _lang );
+    if ( pos != -1)
+    {
+        return s_languageTag[ pos ];
+    }
+    return QString::null;
 }

@@ -227,10 +227,15 @@ public:
      * never a pixel size (see @ref QFont).
      */
     static QFont defaultFont();
+
+    static QStringList listOfLanguage();
+    static QString tagOfLanguage( const QString & _lang);
 protected:
     KoGlobal(){} // don't use
 private:
     static int s_pointSize;
+    static QStringList s_languageList;
+    static QStringList s_languageTag;
 };
 
 #endif // koGlobal
