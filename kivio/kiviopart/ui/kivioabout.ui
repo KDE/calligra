@@ -1,4 +1,5 @@
 <!DOCTYPE UI><UI>
+<include location="global">ktextbrowser.h</include>
 <class>KivioAbout</class>
 <widget>
     <class>QDialog</class>
