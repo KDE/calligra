@@ -101,10 +101,12 @@ public:
     QFont getSymbolFont()     const { return symbolFont; }
 
 
-    double getReductionFactor(TextStyle tstyle) const;
-    //double getDistanceX(TextStyle tstyle) const;
-    //double getDistanceY(TextStyle tstyle) const;
+    double getReductionFactor( TextStyle tstyle ) const;
+
     double getBaseSize() const;
+    /** Sets the base size as point value. Unzoomed. */
+    void setBaseSize( int pointSize );
+
     TextStyle getBaseTextStyle() const { return m_baseTextStyle; }
     bool isScript( TextStyle tstyle ) const { return ( tstyle == scriptStyle ) ||
                                                      ( tstyle == scriptScriptStyle ); }
@@ -197,6 +199,13 @@ public:
     }
     double zoomItY( double z ) const {
         return m_zoomedResolutionY * z;
+    }
+
+    double unzoomItX( double z ) const {
+        return z / m_zoomedResolutionX;
+    }
+    double unzoomItY( double z ) const {
+        return z / m_zoomedResolutionY;
     }
 
 private:

@@ -93,6 +93,12 @@ public:
 
     void setSmallCursor(bool small);
 
+    /** @returns whether the cursor is at the first position. */
+    bool isHome() const;
+
+    /** @returns whether the cursor is at the last position. */
+    bool isEnd() const;
+
 signals:
 
     /**

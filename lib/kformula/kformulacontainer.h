@@ -192,6 +192,12 @@ public:
     QRect boundingRect();
 
     /**
+     * @returns the distance between the upper bound and the formulas
+     * base line.
+     */
+    int baseline() const;
+
+    /**
      * Moves the formula to a new location.
      */
     void moveTo(int x, int y);
@@ -217,6 +223,11 @@ public:
     KFormulaDocument* getDocument() const;
 
     virtual const SymbolTable& getSymbolTable() const;
+
+    /**
+     * Sets the base font size of this formula.
+     */
+    void setFontSize( int pointSize );
 
 signals:
 

@@ -115,6 +115,12 @@ public:
     void moveHome(int flag = NormalMovement);
     void moveEnd(int flag = NormalMovement);
 
+    /** @returns whether the cursor is at the first position. */
+    bool isHome() const;
+
+    /** @returns whether the cursor is at the last position. */
+    bool isEnd() const;
+
     // how to travel
 
     bool getLinearMovement() const { return linearMovement; }
@@ -221,6 +227,7 @@ public:
      * removal.
      */
     BasicElement* getElement() { return current; }
+    const BasicElement* getElement() const { return current; }
 
 
     /**
@@ -349,6 +356,7 @@ private:
      * Returns the sequence the cursor is in if we are normal. If not returns 0.
      */
     SequenceElement* getNormal();
+    const SequenceElement* getNormal() const;
 
     /**
      * Returns the child the cursor points to. Depending on the

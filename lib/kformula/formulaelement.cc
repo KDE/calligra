@@ -30,7 +30,7 @@
 KFORMULA_NAMESPACE_BEGIN
 
 FormulaElement::FormulaElement(FormulaDocument* container)
-    : document(container)
+    : document( container ), baseSize( 0 )
 {
 }
 
@@ -64,18 +64,22 @@ void FormulaElement::changed()
 /**
  * Calculates the formulas sizes and positions.
  */
-void FormulaElement::calcSizes(const ContextStyle& context)
+void FormulaElement::calcSizes( ContextStyle& context )
 {
-    inherited::calcSizes(context, context.getBaseTextStyle(), ContextStyle::normal);
+    context.setBaseSize( getBaseSize() );
+    inherited::calcSizes( context, context.getBaseTextStyle(),
+                          ContextStyle::normal );
 }
 
 /**
  * Draws the whole thing.
  */
-void FormulaElement::draw(QPainter& painter, const QRect& r,
-                          const ContextStyle& context)
+void FormulaElement::draw( QPainter& painter, const QRect& r,
+                           ContextStyle& context )
 {
-    inherited::draw(painter, r, context, context.getBaseTextStyle(), ContextStyle::normal, KoPoint());
+    context.setBaseSize( getBaseSize() );
+    inherited::draw( painter, r, context, context.getBaseTextStyle(),
+                     ContextStyle::normal, KoPoint() );
 }
 
 

@@ -198,7 +198,7 @@ KFormulaDocument::~KFormulaDocument()
 }
 
 
-const ContextStyle& KFormulaDocument::getContextStyle(bool forPrinting) const
+ContextStyle& KFormulaDocument::getContextStyle( bool forPrinting )
 {
     // Make sure not to change anything depending on `forPrinting' that
     // would require a new calculation of the formula.

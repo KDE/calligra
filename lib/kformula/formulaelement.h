@@ -77,12 +77,12 @@ public:
     /**
      * Calculates the formulas sizes and positions.
      */
-    void calcSizes(const ContextStyle& context);
+    void calcSizes( ContextStyle& context );
 
     /**
      * Draws the whole thing.
      */
-    void draw(QPainter& painter, const QRect& r, const ContextStyle& context);
+    void draw( QPainter& painter, const QRect& r, ContextStyle& context );
 
     /**
      * @returns our documents symbol table
@@ -94,6 +94,9 @@ public:
      * of the element's children
      */
     virtual QString toLatex();
+
+    int getBaseSize() const { return baseSize; }
+    void setBaseSize( int size ) { baseSize = size; }
 
 protected:
 
@@ -129,6 +132,11 @@ private:
      * The document that owns (is) this formula.
      */
     FormulaDocument* document;
+
+    /**
+     * The base font size.
+     */
+    int baseSize;
 };
 
 KFORMULA_NAMESPACE_END

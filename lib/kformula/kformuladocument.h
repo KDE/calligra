@@ -64,7 +64,7 @@ public:
     /**
      * @returns the documents context style.
      */
-    const ContextStyle& getContextStyle(bool forPrinting = false) const;
+    ContextStyle& getContextStyle( bool forPrinting = false );
 
     double getXResolution() const;
     double getYResolution() const;

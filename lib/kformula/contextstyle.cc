@@ -135,20 +135,18 @@ double ContextStyle::getThickSpace( TextStyle tstyle ) const
     return zoomItX( textStyleValues[ tstyle ].thickSpace() );
 }
 
-// double ContextStyle::getDistanceX(TextStyle tstyle) const
-// {
-//     return zoomItX( distance*getReductionFactor( tstyle ))+.5;
-// }
-
-// double ContextStyle::getDistanceY(TextStyle tstyle) const
-// {
-//     return zoomItY( distance*getReductionFactor( tstyle ))+.5;
-// }
 
 double ContextStyle::getBaseSize() const
 {
     return zoomItY( baseSize );
 }
+
+void ContextStyle::setBaseSize( int size )
+{
+    baseSize = unzoomItY( size );
+    setup();
+}
+
 
 double ContextStyle::getLineWidth() const
 {

@@ -374,6 +374,16 @@ void KFormulaView::setSmallCursor(bool small)
     smallCursor() = small;
 }
 
+bool KFormulaView::isHome() const
+{
+    return cursor()->isHome();
+}
+
+bool KFormulaView::isEnd() const
+{
+    return cursor()->isEnd();
+}
+
 void KFormulaView::emitCursorChanged()
 {
     if (cursor()->hasChanged() || cursorHasChanged()) {

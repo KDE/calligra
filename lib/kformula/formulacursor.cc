@@ -175,6 +175,16 @@ void FormulaCursor::moveEnd(int flag)
     }
 }
 
+bool FormulaCursor::isHome() const
+{
+    return ( getElement() == getElement()->formula() ) && ( getPos() == 0 );
+}
+
+bool FormulaCursor::isEnd() const
+{
+    return ( getElement() == getElement()->formula() ) &&
+                  ( getPos() == getNormal()->countChildren() );
+}
 
 void FormulaCursor::mousePress(const QPoint& pos, int flag)
 {
@@ -673,6 +683,11 @@ void FormulaCursor::setCursorData(FormulaCursor::CursorData* data)
  * Returns the sequence the cursor is in if we are normal. If not returns 0.
  */
 SequenceElement* FormulaCursor::getNormal()
+{
+    return dynamic_cast<SequenceElement*>(current);
+}
+
+const SequenceElement* FormulaCursor::getNormal() const
 {
     return dynamic_cast<SequenceElement*>(current);
 }

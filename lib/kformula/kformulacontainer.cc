@@ -608,11 +608,26 @@ QRect KFormulaContainer::boundingRect()
                  rootElement()->getWidth(), rootElement()->getHeight());
 }
 
+int KFormulaContainer::baseline() const
+{
+    return static_cast<int>( rootElement()->getBaseline() );
+}
+
 void KFormulaContainer::moveTo(int x, int y)
 {
     rootElement()->setX(x);
     rootElement()->setY(y);
 }
+
+
+void KFormulaContainer::setFontSize( int pointSize )
+{
+    if ( rootElement()->getBaseSize() != pointSize ) {
+        rootElement()->setBaseSize( pointSize );
+        recalc();
+    }
+}
+
 
 QDomDocument KFormulaContainer::domData()
 {
