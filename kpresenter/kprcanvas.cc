@@ -4225,8 +4225,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
                         }
                         f.close();
                     }
-//FIXME
-                    //m_activePage->insertTextObject( QRect( e->pos().x(), e->pos().y(), 250, 250 ), text, m_view );
+                    m_activePage->insertTextObject( m_view->zoomHandler()->unzoomRect(QRect( e->pos().x(), e->pos().y(), 250, 250 )), text, m_view );
 
                     setCursor( c );
                 }
@@ -4243,8 +4242,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
 
         QString text;
         QTextDrag::decode( e, text );
-//FIXME
-        //m_activePage->insertTextObject( QRect( e->pos().x(), e->pos().y(), 250, 250 ), text, m_view );
+        m_activePage->insertTextObject( m_view->zoomHandler()->unzoomRect( QRect( e->pos().x(), e->pos().y(), 250, 250 )), text, m_view );
         e->accept();
     } else
         e->ignore();

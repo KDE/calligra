@@ -193,12 +193,11 @@ int KPrPage::numSelected() const
 
 KPObject* KPrPage::getSelectedObj()
 {
-    KPObject *kpobject = 0;
-    // ### Use iterator!
-    for ( int i = 0; i < static_cast<int>( m_objectList.count() ); i++ ) {
-	kpobject = m_objectList.at( i );
-	if ( kpobject->isSelected() )
-            return kpobject;
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->isSelected())
+            return it.current();
     }
     return 0L;
 }

@@ -1971,18 +1971,17 @@ void KPresenterView::extraPenWidth10()
 /*===============================================================*/
 void KPresenterView::setExtraPenWidth( unsigned int width )
 {
-    //KPresenterDoc *doc = m_pKPresenterDoc;
-    KPrPage *doc=m_canvas->activePage();
-    QPen e_pen = QPen( (doc->getPen( pen )).color(), width,
-                       (doc->getPen( pen )).style() );
-    doc->setPenBrush( e_pen,
-                      doc->getBrush( brush ), doc->getLineBegin( lineBegin ),
-                      doc->getLineEnd( lineEnd ), doc->getFillType( fillType ),
-                      doc->getGColor1( gColor1 ),
-                      doc->getGColor2( gColor2 ), doc->getGType( gType ),
-                      doc->getGUnbalanced( gUnbalanced ),
-                      doc->getGXFactor( gXFactor ), doc->getGYFactor( gYFactor ),
-                      doc->getSticky( sticky ) );
+    KPrPage *page=m_canvas->activePage();
+    QPen e_pen = QPen( (page->getPen( pen )).color(), width,
+                       (page->getPen( pen )).style() );
+    page->setPenBrush( e_pen,
+                      page->getBrush( brush ), page->getLineBegin( lineBegin ),
+                      page->getLineEnd( lineEnd ), page->getFillType( fillType ),
+                      page->getGColor1( gColor1 ),
+                      page->getGColor2( gColor2 ), page->getGType( gType ),
+                      page->getGUnbalanced( gUnbalanced ),
+                      page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ),
+                      page->getSticky( sticky ) );
 }
 
 /*===============================================================*/
@@ -2836,8 +2835,6 @@ void KPresenterView::afChooseOk( const QString & c )
 			       fileInfo.dirPath( false ) + "/" + fileInfo.baseName() + ".atf",
 			       KPresenterFactory::global() );
 
-    //m_canvas->deSelectAllObj();
-
     m_canvas->deSelectAllObj();
     m_canvas->setToolEditMode( INS_AUTOFORM );
     m_canvas->setAutoForm( fileName );
@@ -3553,8 +3550,6 @@ void KPresenterView::skipToPage( int num )
         notebar->setCurrentNoteText( text );
     }
     refreshPageButton();
-//FIXME
-    //yOffset = 0;//kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height() * currPg;
     //(Laurent) deselect object when we change page.
     //otherwise you can change object properties on other page
     m_canvas->deSelectAllObj();
