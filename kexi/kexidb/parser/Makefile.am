@@ -15,7 +15,7 @@ parser:
 	cd $(srcdir); \
 	lex -osqlscanner.cpp sqlscanner.l; \
 	bison -dv sqlparser.y; \
-	echo '#include <field.h>' > sqlparser.h; \
+	echo '#include "field.h"' > sqlparser.h; \
 	echo '#include "parser.h"' >> sqlparser.h; \
 	echo '#include "sqltypes.h"' >> sqlparser.h; \
 	echo '' >> sqlparser.h; \
