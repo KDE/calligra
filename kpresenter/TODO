@@ -1,21 +1,17 @@
 BUGS :
 ======
-Text editor : fix Home, End, ....
-   copy&paste with mouse (MMB) bugs (ah, QT 2 bug)
-   '^' + 'e' = 'e' !
-   selecting several lines : first line gets unselected
-   paragraph spacing doesn't apply to several paragraphs selected together
+- Text editor : fix Home, End, ....
+  - copy&paste with mouse (MMB) bugs (ah, QT 2 bug)
+    '^' + 'e' = 'e' !
+  - selecting several lines : first line gets unselected
 
 MISSING FEATURES :
 ==================
-Restart with last presentation (suggesting it in initial "open" dialog)
+- Restart with last presentation (suggesting it in initial "open" dialog)
   (using kapp->getConfig)
-View current page full-screen
-Resize an image keeping contrainsts (e.g. Ctrl+click)
-Window title : kpresenter - filename
-Current "align objects" aligns in relation with the page, is there a
- way to align the h or v centers of several objects ?
-At the moment all the objects simply appear at a certain moment and stay there
- forever. What about letting them vanish again (probably with a nice effect
- e.g. explode, dissolve, tear apart,...). Maybe it is even possible to achieve
- some irritating flashing-effects :)
+- View current page full-screen
+- Resize an image keeping contrainsts (e.g. Ctrl+click)
+- Window title : kpresenter - filename
+- Current "align objects" aligns in relation with the page, is there a
+  way to align the h or v centers of several objects ?
+- Copy page

@@ -1819,26 +1819,17 @@ public:
     /**
      * Set the depth for the current paragraph.
      */
-    void setDepth( int d )
-    { paragraphList.at( txtCursor->positionParagraph() )->setDepth( d ); recalc(); repaint( true ); }
+    void setDepth( int d );
 
     /**
      * Increase the depth for the current paragraph.
      */
-    void incDepth() {
-        paragraphList.at( txtCursor->positionParagraph() )->setDepth( paragraphList.at( txtCursor->positionParagraph() )->getDepth() + 1 < 16 ?
-                                                                      paragraphList.at( txtCursor->positionParagraph() )->getDepth() + 1 : 15 );
-        recalc(); repaint( true );
-    }
+    void incDepth();
 
     /**
      * Decrease the depth for the current paragraph.
      */
-    void decDepth() {
-        paragraphList.at( txtCursor->positionParagraph() )->setDepth( paragraphList.at( txtCursor->positionParagraph() )->getDepth() - 1 >= 0 ?
-                                                                      paragraphList.at( txtCursor->positionParagraph() )->getDepth() - 1 : 0 );
-        recalc(); repaint( true );
-    }
+    void decDepth();
 
     /**
      * Returns line spacing of the current paragraph.

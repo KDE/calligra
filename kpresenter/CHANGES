@@ -259,3 +259,9 @@ Reggie, 28.5.1999:
 - Objects disappearing in screenpresentations works (ony without effects at the moment,
   but effects will come!)
 - Creating webpresentations works again (API of QWizard changed a bit...)
+
+Reggie, 30.5.1999:
+------------------
+- Setting linespacing, parag-dist (before and after) and depth is applied
+  to all selected parags if there are selected some.
+- First effects for disappearing objects are working (go to left, right, top and bottom)
