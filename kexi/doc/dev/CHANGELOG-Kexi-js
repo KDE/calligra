@@ -86,6 +86,22 @@ TODO: add server version info retrieval
 TODO: add schema to kexi__* tables on createTable()
 TODO: add support for creation temporary databases
 
+FIX: corrupted database can be created sometimes (eg. for tests/newapi sqlite dbcreation)
+        --reason: maybe file was not flushed and app too early exited?
+
+TODO: improove Expression class, add code for generationg expression 
+ strings in Connection::queryStatement()
+
+
+2003-10-11
+- Transaction::isNull() fixed 
+- now tables creation seems to be ok ('tests/newapi sqlite tables' works)
+- sources synced again with win32 target
+- kexidb/parser and kexidb/tests/parser ported to win32
+- KexiDB::Expression introduced
+- isSystemObjectName() now checks for "kexi__" prefixes
+- checks on create table: if name is not system, if table is not empty. if fields are not system
+
 2003-10-10
 - FIX: creating kexidb system tables schema objects on useDatabase()
 - KexiDB::Object::debugError() added for convenience
@@ -99,7 +115,6 @@ TODO: add support for creation temporary databases
 - added tables creation subtest to kexidb/tests/newapi
 - SQLite* classes: last operation's result is now stored for later checking
 
-TODO: fix commiting after second table (CARS) - rollback is called - BAD
 
 2003-10-09
 KexiDB::Connection: 
