@@ -365,33 +365,32 @@ same as selecting <guilabel>Lower Frame</guilabel> from the menubar.</para></tip
 </sect2>
 
 <sect2 id="hard-break">
-<title>Hard Frame Breaks</title>
+<title>Page Breaks</title>
 
-<para>A hard frame break is a special formatting character.  It is
+<para>A page break is a special formatting character.  It is
 invisible on the final printed output.</para>
 
-<para>The purpose of a hard frame break, is to force all the text that
+<para>The purpose of a page break, is to force all the text that
 follows it into the next frame in the frameset.</para>
 
 <para>If we have the following sentence:  <quote>We have nothing to
 fear but fear itself</quote></para>
 
-<para>and we insert a Hard Frame Break, just before the word
+<para>and we insert a Page Break, just before the word
 <emphasis>but</emphasis>.</para>
 
 <para>We will end up with one frame containing <quote>We have nothing
 to fear</quote>, and the next frame in the frameset begining with
 <quote>but fear itself</quote>.</para>
 
-<para>To add a Hard Frame Break, you should first place the keyboard
+<para>To add a Page Break, you should first place the keyboard
 cursor where you want the break to be located in the document.</para>
 
-<para>A Hard Frame Break can be inserted one of two ways:</para>
+<para>A Page Break can be inserted one of two ways:</para>
 
 <itemizedlist>
 <listitem>
-<para>Select <menuchoice> <guimenu>Insert</guimenu><guimenuitem>Hard
-Frame Break</guimenuitem></menuchoice> from the menubar</para>
+<para>Select <menuchoice> <guimenu>Insert</guimenu><guimenuitem>Page Break</guimenuitem></menuchoice> from the menubar</para>
 </listitem>
 
 <listitem>
@@ -400,7 +399,7 @@ Frame Break</guimenuitem></menuchoice> from the menubar</para>
 </listitem>
 </itemizedlist>
 
-<para>If you want to remove a Hard Frame Break, you simply delete it
+<para>If you want to remove a Page Break, you simply delete it
 like you would any other character.</para>
 <tip><para>Since this is not a character that
 you can normally see in &kword;, it will be easier to delete a Hard Frame Break with the following proceedure.</para>
@@ -411,9 +410,9 @@ you can normally see in &kword;, it will be easier to delete a Hard Frame Break 
 <guimenu>View</guimenu><guimenuitem>Formatting
 Characters</guimenuitem></menuchoice> from the menubar.  This will make the paragraph marks visible.</para></listitem>
 
-<listitem><para>Find the newly revealed Hard Frame Break, labled <guilabel>---Frame Break---</guilabel>.
+<listitem><para>Find the newly revealed Page Break, labled <guilabel>---</guilabel>.
   Place the mouse pointer in
-front of this and click once with the &LMB;. This will place the cursor directly in front of the hard frame break.</para></listitem>
+front of this and click once with the &LMB;. This will place the cursor directly in front of the page break.</para></listitem>
 
 <listitem><para>Now press the <keycap>Delete</keycap> key.</para></listitem>
 </orderedlist></tip>

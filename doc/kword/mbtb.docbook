@@ -329,6 +329,17 @@ Document</link>.</para>
 </varlistentry>
 
 <varlistentry>
+<term id="menu-reload">
+<menuchoice>
+<guimenu>File</guimenu><guimenuitem>Reload File</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Reloads the current file from disk, erasing any changes to the document since the last time it was saved.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term id="menu-template-create">
 <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Create Template from
@@ -642,6 +653,41 @@ action="simul">&Ctrl;<keycap>F</keycap></keycombo> or clicking
 using the menubar.</para></listitem></varlistentry>
 
 <varlistentry>
+<term id="menu-findnext">
+<menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>F3</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Find Next</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Repeat the last search for characters starting at the current cursor position.</action>
+The find features of &kword; are covered in more detail under <link
+linkend="search-and-replace">Searching for Text</link>.</para>
+
+<para>Typing <keycombo action="simul"><keycap>F3</keycap></keycombo> is equivalent to
+using the menubar.</para></listitem></varlistentry>
+
+<varlistentry>
+<term id="menu-findprev">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Shift;<keycap>F3</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Find Previous</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Repeat the last search for characters starting at the current cursor positon and moving backwards.</action>
+The find features of &kword; are covered in more detail under <link
+linkend="search-and-replace">Searching for Text</link>.</para>
+
+<para>Typing <keycombo action="simul">&Shift;<keycap>F3</keycap></keycombo> is equivalent to
+using the menubar.</para></listitem></varlistentry>
+
+
+<varlistentry>
 <term id="menu-replace">
 <menuchoice>
 <shortcut>
@@ -658,6 +704,16 @@ Text</link>.</para>
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>R</keycap></keycombo> is equivalent to
 using the menubar.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-del-page">
+<menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Delete Page</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Delete the current page.</action>  </para></listitem>
 </varlistentry>
 </variablelist>
 </sect2>
@@ -881,19 +937,40 @@ not found on the keyboard.</action></para>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>Return</keycap></keycombo>
 </shortcut>
-<guimenu>Insert</guimenu><guimenuitem>Hard Frame Break</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Page Break</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>This will enter a special character which will force text
 into the next connected text frame.</action> More information can be
-found at <link linkend="hard-break">Hard Frame Breaks</link> located in the <link linkend="frames">Working with Frames</link>
+found at <link linkend="hard-break">Page Breaks</link> located in the <link linkend="frames">Working with Frames</link>
 section.</para>
 
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>Return</keycap></keycombo> is equivalent to
 using the menubar. </para> 
 </listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-insert-hline">
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Horizontal Line...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This option will insert a horizontal line to seperate paragraphs at the cursor position.</action> More information can be
+found at <link linkend="hline">Horizontal lines</link> section.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-insert-page">
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Page</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This option will insert a new page at the current cursor position.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -996,7 +1073,7 @@ For more information refer to the section entitled
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Add Bookmark...</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Bookmark...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1037,7 +1114,7 @@ menubar.</para>
 <term id="menu-insert-picture">
 <menuchoice>
 <shortcut>
-<keycombo action="simul"><keycap>F3</keycap></keycombo>
+<keycombo action="simul">&Shift;<keycap>F5</keycap></keycombo>
 </shortcut>
 <guimenu>Insert</guimenu><guimenuitem>Picture...</guimenuitem>
 </menuchoice>
@@ -1058,7 +1135,7 @@ This will create a border which represents the final size of the picture
 in your document.  When you are happy with the size of the picture,
 release the mouse button and the picture will be inserted in your new
 frame.</para>
-<para>Typing <keycombo action="simul"><keycap>F3</keycap></keycombo> or
+<para>Typing <keycombo action="simul">&Shift;<keycap>F5</keycap></keycombo> or
 clicking <inlinemediaobject><imageobject><imagedata fileref="fpicture.png" 
 format="PNG"/></imageobject></inlinemediaobject>
 is equivalent to using the menubar.</para>
@@ -1194,7 +1271,7 @@ using the menubar.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Page...</guimenuitem>
+<guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1327,7 +1404,7 @@ linkend="headers-and-footers">Headers and Footers</link>.</para>
 <varlistentry>
 <term id="reconnect-frame">
 <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset...</guimenuitem>
+<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset Properties...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
