@@ -354,6 +354,10 @@ void KisView::setupActions()
     m_paste = KStdAction::paste( this, SLOT( paste() ),
         actionCollection(), "paste");
 
+    new KAction( i18n("Remove"),
+        "remove", 0, this, SLOT( removeSelection() ),
+        actionCollection(), "remove");
+
     m_crop = new KAction( i18n("Crop"),
         0,  this, SLOT( crop() ),
         actionCollection(), "crop");
@@ -543,6 +547,10 @@ void KisView::setupActions()
 
     (void) KStdAction::saveOptions( this, SLOT( saveOptions() ),
         actionCollection(), "save_options" );
+
+    (void) new KAction( i18n("Krayon Preferences"),
+        0, this, SLOT( preferences() ),
+        actionCollection(), "preferences");
 
 	// krayon box toolbar actions 
 
@@ -1085,6 +1093,27 @@ void KisView::cut()
     m_pDoc->current()->markDirty(updateRect);
 }
 
+/*
+    same as cut but don't paste to clipboard
+*/
+void KisView::removeSelection()
+{
+    kdDebug() << "REMOVE called" << endl;
+    
+    if(!m_pDoc->getSelection()->erase())
+        kdDebug() << "m_pDoc->m_Selection.erase() failed" << endl;
+
+    // clear old selection outline
+    if(m_pTool == m_pSelectTool)
+        m_pSelectTool->clearOld();
+
+    /* refresh canvas */
+    KisImage* img = m_pDoc->current();
+    QRect updateRect(0, 0, img->width(), img->height());
+    m_pDoc->current()->markDirty(updateRect);
+}
+
+
 void KisView::paste()
 {
     kdDebug() << "PASTE called" << endl;
@@ -1109,6 +1138,7 @@ void KisView::crop()
 
 void KisView::selectAll()
 {
+
 }
 
 void KisView::unSelectAll()
@@ -1408,18 +1438,18 @@ void KisView::preferences()
 int KisView::docWidth()
 {
     if (m_pDoc->current())
-	return m_pDoc->current()->width();
+	    return m_pDoc->current()->width();
     else
-	return 0;
+	    return 0;
 }
 
 
 int KisView::docHeight()
 {
     if (m_pDoc->current())
-	return m_pDoc->current()->height();
+	    return m_pDoc->current()->height();
     else
-	return 0;
+	    return 0;
 }
 
 

@@ -35,8 +35,8 @@ class Fill : public KisTool
     ~Fill();
   
     QString toolName() { return QString("Fill"); }
-    bool flood(int startx, int starty);
-
+    bool flood(int startX, int startY);
+    
   public slots:
     virtual void mousePress(QMouseEvent*); 
   
@@ -54,6 +54,9 @@ class Fill : public KisTool
     int sGreen;
     int sBlue;
     
+    // number of recursions of drawFlood()
+    int iterations;
 };
+
 #endif //__filltool_h__
 

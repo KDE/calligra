@@ -87,7 +87,7 @@ kdDebug(0) << "KisDoc::KisDoc() entering" << endl;
     m_Images.setAutoDelete(false);
     
 kdDebug(0) << "QPixmap::defaultDepth(): " << QPixmap::defaultDepth() << endl; 
-kdDebug(0) << "KisDoc::KisDoc() leavring" << endl;    
+kdDebug(0) << "KisDoc::KisDoc() leaving" << endl;    
 }
 
 /*
@@ -232,8 +232,8 @@ kdDebug(0) << "opacity: " <<  static_cast<int>(lay->opacity())  << endl;
 	    layer.setAttribute( "bitDepth", static_cast<int>(lay->bitDepth()) );
 	    layer.setAttribute( "cMode", static_cast<int>(lay->colorMode()) );
 
-kdDebug(0) << "opacity: " <<  static_cast<int>(lay->bitDepth())  << endl;
-kdDebug(0) << "opacity: " <<  static_cast<int>(lay->colorMode())  << endl;        
+kdDebug(0) << "bitDepth: " <<  static_cast<int>(lay->bitDepth())  << endl;
+kdDebug(0) << "colorMode: " <<  static_cast<int>(lay->colorMode())  << endl;        
 
 	    layers.appendChild( layer );
 
@@ -376,8 +376,7 @@ kdDebug(0) << "bitDepth: " << bd << endl;
 	    return false;
     }
 
-    //KisImage *img = newImage(name, w, h, colorMode, bd); //jwc
-    KisImage *img = newImage(name, w, h, colorMode, bd); //jwc  
+    KisImage *img = newImage(name, w, h, colorMode, bd);  
     if (!img) return false;
 
     img->setAuthor( image.attribute( "author" ));
@@ -520,7 +519,7 @@ kdDebug() << "KisDoc::setCurrentImage leaving" << endl;
 void KisDoc::setCurrentImage(const QString& _name)
 {
 
-kdDebug() << "KisDoc::setCurrentImage entering" << endl; //jwc
+kdDebug() << "KisDoc::setCurrentImage entering" << endl;
 
     KisImage *img = m_Images.first();
 
@@ -534,7 +533,7 @@ kdDebug() << "KisDoc::setCurrentImage entering" << endl; //jwc
         img = m_Images.next();
     }
    
-kdDebug() << "KisDoc::setCurrentImage leaving" << endl; //jwc   
+kdDebug() << "KisDoc::setCurrentImage leaving" << endl;   
 
 }
 
@@ -578,7 +577,6 @@ QStringList KisDoc::images()
     
     return lst;
 }
-
 
 
 bool KisDoc::isEmpty()
@@ -768,7 +766,6 @@ void KisDoc::CopyToLayer(KisView *pView)
     
     // clean up destiation pixmap    
     delete pixmap;
-
 }
 
 /*
@@ -818,7 +815,8 @@ bool KisDoc::QtImageToLayer(QImage *qimage, KisView *pView)
     int ey = clipRect.bottom() - starty;
 
     uchar *sl;
-    uchar bv, invbv;
+    uchar bv = 255;
+    uchar invbv = 0;
     uchar r, g, b, a;
     int   v = 255;
 
@@ -900,12 +898,12 @@ bool KisDoc::LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect)
     KisLayer *lay = img->getCurrentLayer();
     QImage   *qimg = qimage;
 
-    if (!img)	        return false;
-    if (!lay)           return false;
+    if (!img)  return false;
+    if (!lay)  return false;
 
     // FIXME: Implement this for non-RGB modes.
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-	  return false;
+	    return false;
 
     bool grayScale = false;
     
@@ -934,8 +932,9 @@ bool KisDoc::LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect)
 
     uchar *sl;
     uchar bv, invbv;
-    uchar r, g, b, a;
-    int   v;
+    uchar r, g, b;
+    uchar a = 255;
+    int v = 255;
 
     int red     = pView->fgColor().R();
     int green   = pView->fgColor().G();
@@ -953,8 +952,7 @@ bool KisDoc::LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect)
 	        r = lay->pixel(0, startx + x, starty + y);
 	        g = lay->pixel(1, startx + x, starty + y);
 	        b = lay->pixel(2, startx + x, starty + y);
-            if(grayScale)
-                 a = lay->pixel(3, startx + x, starty + y);        
+            if(alpha) a = lay->pixel(3, startx + x, starty + y);        
 
             if(grayScale)
             {
@@ -982,11 +980,7 @@ bool KisDoc::LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect)
             }
         
             uint *p = (uint *)qimg->scanLine(y) + x;
-            
-            if(!alpha)
-                *p = qRgb(r, g, b);
-            else
-                *p = qRgba(r, g, b, a);            
+            *p = alpha ? qRgba(r, g, b, a) : qRgb(r, g, b);            
 	    } 
     }
     
@@ -1039,8 +1033,12 @@ bool KisDoc::setClipImage( )
     // channel values of pixel in layer
     int r, g, b; 
     
-    // alpha channel value in layer
-    int a; 
+    // need to determine if image is rgb or rgba
+    bool alpha = (img->colorMode() == cm_RGBA);
+    
+    // alpha channel value in layer 
+    // 255 is opaque, 0 is transparent
+    int a = 255; 
     
     // ptr to data at scanline in QImage
     uint *p;
@@ -1055,11 +1053,12 @@ bool KisDoc::setClipImage( )
 	        r = lay->pixel(0, sx + x, sy + y);
 	        g = lay->pixel(1, sx + x, sy + y);
 	        b = lay->pixel(2, sx + x, sy + y);
+            if(alpha) a = lay->pixel(3, sx + x, sy + y);
             
             // dest binary data in scanline at x offset
-            // is set at this point
+            // is set at this point - uint (32 bit)
             p = (uint *)m_pClipImage->scanLine(y) + x;
-            *p = qRgb(r, g, b);
+            *p = alpha ? qRgba(r, g, b, a) : qRgb(r, g, b);
         }
     }
     
@@ -1067,12 +1066,13 @@ bool KisDoc::setClipImage( )
 }
 
 
-KisImage* KisDoc::newImage(const QString& n, int width, int height, cMode cm , uchar bitDepth )
+KisImage* KisDoc::newImage(const QString& n, int width, int height, 
+    cMode cm , uchar bitDepth )
 {
-    kdDebug() << "KisDoc::newImage: entering" << endl; 
+    kdDebug() << "KisDoc::newImage(): entering" << endl; 
 
     KisImage *img = new KisImage( n, width, height, cm, bitDepth );
-    kdDebug() << "KisDoc::newImage: returned from KisImage constuctor" << endl;
+    kdDebug() << "KisDoc::newImage(): returned from KisImage constuctor" << endl;
 
     m_Images.append(img);
     return img;
@@ -1081,16 +1081,15 @@ KisImage* KisDoc::newImage(const QString& n, int width, int height, cMode cm , u
 
 void KisDoc::removeImage( KisImage *img )
 {
+    m_Images.remove(img);
+    delete img;
+
     if(m_Images.count() > 1)
     {
-        m_Images.remove(img);
-        delete img;
         setCurrentImage(m_Images.first());
     }
-    else // last image
+    else 
     {
-        m_Images.remove(img);
-        delete img;
         setCurrentImage(0L);
     }
 }
@@ -1102,12 +1101,12 @@ void KisDoc::slotRemoveImage( const QString& _name )
 
     while (img)
     {
-      if (img->name() == _name)
-	  {
-	    removeImage(img);
-	    return;
-	  }
-      img = m_Images.next();
+        if (img->name() == _name)
+	    {
+	        removeImage(img);
+	        return;
+	    }
+        img = m_Images.next();
     }
 }
 
@@ -1118,20 +1117,30 @@ void KisDoc::slotRemoveImage( const QString& _name )
 
 bool KisDoc::slotNewImage()
 {
-    kdDebug() << "#### KisDoc::slotNewImage ####" << endl; 
+    kdDebug() << "KisDoc::slotNewImage" << endl; 
 
-    if (!m_pNewDialog) m_pNewDialog = new NewDialog();
-    m_pNewDialog->show();
+    kdDebug() << "KisDoc::slotNewImage:new NewDialog()" << endl; 
+    if (!m_pNewDialog) 
+        m_pNewDialog = new NewDialog();
 
+    kdDebug() << "KisDoc::slotNewImage:NewDialog()->exec()" << endl; 
+    // jwc - this causes bad drawable, probably qt spin buttons,
+    // seems harmless, though
+    m_pNewDialog->exec();
+    
     if(!m_pNewDialog->result() == QDialog::Accepted)
         return false;
 
+    kdDebug() << "KisDoc::slotNewImage:NewDialog()->newwidth()" << endl; 
     int w = m_pNewDialog->newwidth();
+    kdDebug() << "KisDoc::slotNewImage:NewDialog()->newheight()" << endl;     
     int h = m_pNewDialog->newheight();
+    kdDebug() << "KisDoc::slotNewImage:NewDialog()->backgroundMode()" << endl;     
     bgMode bg = m_pNewDialog->backgroundMode();
+    kdDebug() << "KisDoc::slotNewImage:NewDialog()->colorMode()" << endl;     
     cMode cm = m_pNewDialog->colorMode();
 
-    kdDebug() << "### KisDoc::slotNewImage: w: "<< w << "h: " << h << "###" << endl; 
+    kdDebug() << "KisDoc::slotNewImage: w: "<< w << "h: " << h << endl; 
 
     QString name, desiredName;
     int numero = 1;
@@ -1161,23 +1170,23 @@ bool KisDoc::slotNewImage()
     KisImage *img = newImage(name, w, h, cm, 8);
     if (!img) return false;
 
-    kdDebug() << "### KisDoc::slotNewImage: returned from newImage() ####" << endl; 
+    kdDebug() << "KisDoc::slotNewImage: returned from newImage()" << endl; 
 
     // add background layer
 
     if (bg == bm_White)
-	img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background");
+	    img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background");
 
     else if (bg == bm_Transparent)
-	img->addLayer(QRect(0, 0, w, h), KisColor::white(), true, "background");
+	    img->addLayer(QRect(0, 0, w, h), KisColor::white(), true, "background");
 
     else if (bg == bm_ForegroundColor)
-	img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background"); // FIXME
+	    img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background");
 
     else if (bg == bm_BackgroundColor)
-	img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background"); // FIXME
+	    img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background");
 
-    kdDebug() << "##### KisDoc::slotNewImage: returned from addLayer() #####" << endl; //jwc
+    kdDebug() << "KisDoc::slotNewImage: returned from addLayer()" << endl;
 
     img->markDirty(QRect(0, 0, w, h));
     setCurrentImage(img);
@@ -1241,12 +1250,11 @@ void KisDoc::paintContent( QPainter& painter,
 {
     if (m_pCurrent)
     {
-        // kdDebug(0) <<  "KisDoc::paintContent() called"  << endl; 
         m_pCurrent->paintPixmap( &painter, rect );
     }
     else
     {
-        kdDebug(0) <<  "###Error KisDoc::paintContent called - no m_pCurrent" << endl;     
+        kdDebug(0) <<  "Error KisDoc::paintContent() - no m_pCurrent" << endl; 
     }    
 }
 
@@ -1258,12 +1266,11 @@ void KisDoc::paintPixmap(QPainter *p, QRect area)
 {
     if (m_pCurrent)
     {
-        //kdDebug(0) <<  "KisDoc::paintPixmap() called" << endl;     
         m_pCurrent->paintPixmap(p, area);
     }
     else
     {
-        kdDebug(0) <<  "###Error KisDoc::paintPixmap() called - no m_pCurrent" << endl;     
+        kdDebug(0) <<  "Error KisDoc::paintPixmap() - no m_pCurrent" << endl;     
     }    
 }
 

@@ -21,14 +21,14 @@
 #ifndef __newdialog_h__
 #define __newdialog_h__
 
-#include <kdialog.h>
+#include <qdialog.h>
 #include <qspinbox.h>
 
 #include "kis_global.h"
 
 class QRadioButton;
 
-class NewDialog : public KDialog
+class NewDialog : public QDialog
 {
     Q_OBJECT
 

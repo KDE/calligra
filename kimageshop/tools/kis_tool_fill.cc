@@ -68,14 +68,20 @@ int Fill::checkTouching(KisLayer *lay, int x, int y, int r, int g, int b)
     limiting area is necessary by dividing into sections
 */
 
+#define MAX_ITERATIONS 4096
+
 void Fill::drawFlood(KisLayer *lay, QRect & layerRect, int x, int y)
 {
+    iterations++;
+
     // make sure desired pixel is in bounds - can operate on 
     // selection as well as entire image, so layerRect is not
     // always same as imageExtents (later)
-    if(!layerRect.contains(x, y)) 
+    if(!layerRect.contains(x, y))
+    {
         return;
-
+    }
+    
     // pixel is not same color as source pixel color, return
     if((lay->pixel(0, x, y) != sRed)
     || (lay->pixel(1, x, y) != sGreen) 
@@ -90,28 +96,44 @@ void Fill::drawFlood(KisLayer *lay, QRect & layerRect, int x, int y)
     && (lay->pixel(2, x, y) == nBlue))
     {
         return;
-    }
-
+    }        
+    
     // pixel is same as original color, set it to new color
     lay->setPixel(0, x, y, nRed);
     lay->setPixel(1, x, y, nGreen);
     lay->setPixel(2, x, y, nBlue);
     
-    if(layerRect.contains(x, y-1)) 
-        drawFlood(lay, layerRect, x, y-1);
-    if(layerRect.contains(x, y+1))         
+    // 1
+    if(layerRect.contains(x, y-1))
+    { 
+         drawFlood(lay, layerRect, x, y-1);
+    }   
+    // 2 
+    if(layerRect.contains(x, y+1))
+    {
         drawFlood(lay, layerRect, x, y+1);
-    if(layerRect.contains(x-1, y))         
+    }
+    // 3    
+    if(layerRect.contains(x-1, y))
+    {
         drawFlood(lay, layerRect, x-1, y);
-    if(layerRect.contains(x+1, y))         
+    }
+    // 4
+    if(layerRect.contains(x+1, y))
+    {
         drawFlood(lay, layerRect, x+1, y);
+    }    
+        
+    return;    
 }
 
 
-bool Fill::flood(int startx, int starty)
+bool Fill::flood(int startX, int startY)
 {
     bool global = false;
-
+    int startx = startX;
+    int starty = startY;
+    
     KisImage *img = m_pDoc->current();
     KisLayer *lay = img->getCurrentLayer();
     
@@ -121,7 +143,9 @@ bool Fill::flood(int startx, int starty)
     // FIXME: Implement this for non-RGB modes.
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
 	    return false;
-    
+
+    // bool alpha = (img->colorMode() == cm_RGBA);    
+
     // source color values of selected pixed
     sRed    = lay->pixel(0, startx, starty);
     sGreen  = lay->pixel(1, startx, starty);
@@ -133,28 +157,37 @@ bool Fill::flood(int startx, int starty)
     nGreen   = m_pView->fgColor().G();
     nBlue    = m_pView->fgColor().B();
 
-    QRect layerRect = lay->imageExtents();
+    QRect floodRect(lay->imageExtents());
+   
+    kdDebug() << "floodRect.left() " << floodRect.left() 
+              << "floodRect.top() "  << floodRect.top() << endl;
+              
     int maxWidth = zoomed(320);
     int maxHeight = zoomed(320);    
     int maxX = zoomed(160);
     int maxY = zoomed(160);
         
-    if(layerRect.width() > maxWidth)
+    if(floodRect.width() > maxWidth)
     { 
-        layerRect.setLeft(startx - maxX > 0 ? startx - maxX : 0);  
-        layerRect.setRight(startx + maxX < layerRect.right() ? startx + maxX :  layerRect.right());      
+        floodRect.setLeft(startx - maxX > floodRect.left() ? 
+            startx - maxX : floodRect.left());  
+        floodRect.setRight(startx + maxX < floodRect.right() ? 
+            startx + maxX :  floodRect.right());      
     }
     
-    if(layerRect.height() > maxHeight)
+    if(floodRect.height() > maxHeight)
     { 
-        layerRect.setTop(starty - maxY > 0 ? starty - maxY : 0);  
-        layerRect.setBottom(starty + maxY < layerRect.bottom() ? starty + maxY : layerRect.bottom());      
+        floodRect.setTop(starty - maxY > floodRect.top() ? 
+            starty - maxY : floodRect.top());  
+        floodRect.setBottom(starty + maxY < floodRect.bottom() ? 
+            starty + maxY : floodRect.bottom());      
     }
-     
-    // bool alpha = (img->colorMode() == cm_RGBA);
- 
-    drawFlood(lay, layerRect, startx, starty); 
 
+    iterations = 0;
+      
+    drawFlood(lay, floodRect, startx, starty); 
+    kdDebug() << "floodfill iterations: " << iterations << endl;
+    
     /* refresh canvas so changes show up */
     QRect updateRect(0, 0, img->width(), img->height());
     img->markDirty(updateRect);

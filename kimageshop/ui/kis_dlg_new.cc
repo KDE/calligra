@@ -35,7 +35,7 @@ const int INITIALHEIGHT = 512;
 
 
 NewDialog::NewDialog( QWidget *parent, const char *name )
-    : KDialog( parent, name, TRUE )
+    : QDialog( parent, name, TRUE )
 {
     setCaption( "New Image" );
 
@@ -64,13 +64,18 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
     // insert radiobuttons
 	cmode[cm_Indexed] = new QRadioButton( "&Indexed", cmodeg );
 	cmode[cm_Indexed]->setEnabled(false);
+
 	cmode[cm_Greyscale] = new QRadioButton( "&Greyscale", cmodeg );
     cmode[cm_Greyscale]->setEnabled(false);
+
     cmode[cm_RGB] = new QRadioButton( "&RGB", cmodeg );
+
 	cmode[cm_RGBA] = new QRadioButton( "RGB + &alpha channel", cmodeg );
 	cmode[cm_RGBA]->setChecked( true );
+
 	cmode[cm_CMYK] = new QRadioButton( "&CMYK", cmodeg );
     cmode[cm_CMYK]->setEnabled(false);
+
 	cmode[cm_CMYKA] = new QRadioButton( "CMY&K + alpha channel", cmodeg );
     cmode[cm_CMYKA]->setEnabled(false);
 
@@ -105,7 +110,8 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
     connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
     buttons->addWidget( cancel );
 
-    resize( 1, 1 );
+    //resize( 1, 1 );
+    resize(320,320);
 }
 
 bgMode NewDialog::backgroundMode()

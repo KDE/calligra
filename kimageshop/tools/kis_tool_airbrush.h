@@ -22,6 +22,7 @@
 #define __airbrushtool_h__
 
 #include <qpoint.h>
+#include <qpointarray.h>
 
 #include "kis_tool.h"
 
@@ -29,25 +30,37 @@ class KisBrush;
 
 class AirBrushTool : public KisTool
 {
- public:
-  AirBrushTool(KisDoc *doc, KisView *view, const KisBrush *_brush);
-  ~AirBrushTool();
+    Q_OBJECT
+    
+public:
+    AirBrushTool(KisDoc *doc, KisView *view, const KisBrush *_brush);
+    ~AirBrushTool();
   
-  QString toolName() { return QString("AirBrushTool"); }
-  
-  void setBrush(const KisBrush *_brush);
-  bool paint(QPoint pos);
-  
- public slots:
-  virtual void mousePress(QMouseEvent*); 
-  virtual void mouseMove(QMouseEvent*);
-  virtual void mouseRelease(QMouseEvent*);
-  
- protected:
-  QPoint 	m_dragStart;
-  bool   	m_dragging;
-  const KisBrush  	*m_pBrush;
-  float         m_dragdist;
+    QString toolName() { return QString("AirBrushTool"); }
+    void setBrush(const KisBrush *_brush);
+    bool paint(QPoint pos, bool timeout);
+      
+public slots:
+    virtual void mousePress(QMouseEvent*); 
+    virtual void mouseMove(QMouseEvent*);
+    virtual void mouseRelease(QMouseEvent*);
+    void timeoutPaint();  
+
+protected:
+    const KisBrush *m_pBrush;
+    QArray <int> brushArray; // array of points in brush
+    int nPoints; // number of points marked in array
+    
+    QPoint  pos; 
+    QPoint 	m_dragStart;
+    bool   	m_dragging;
+    float   m_dragdist;
+    int     density; 
+         
+    unsigned int brushWidth;
+    unsigned int brushHeight;
+    
+    QTimer *timer;
 };
 
 #endif //__airbrushtool_h__

@@ -7,6 +7,7 @@
   <Action name="copy"/>
   <Action name="cut"/>
   <Action name="paste"/>
+  <Action name="remove"/>
   <Action name="crop"/>
   <Separator/>
   <Action name="select_all"/>
@@ -96,6 +97,7 @@
   <Action name="show_statusbar"/>
   <Action name="show_sidebar"/>
   <Separator/>
+  <Action name="preferences"/>    
   <Action name="save_options"/>
   <Separator/>
   <Action name="configure"/>
@@ -105,6 +107,8 @@
   <Action name="copy"/>
   <Action name="cut"/>
   <Action name="paste"/>
+  <Action name="remove"/>  
+  <Action name="delete"/>
 </ToolBar>
 <ToolBar name="krayonbox" position="top"><Text>KrayonBox</Text>
   <Action name="colors_dialog"/>

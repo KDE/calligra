@@ -121,6 +121,7 @@ class KisView : public KoView
     void redo();
     void copy();
     void cut();
+    void removeSelection();
     void paste();
     void crop();
     void selectAll();
@@ -220,9 +221,7 @@ class KisView : public KoView
     void	zoom_out( int x, int y );
     float   zoomFactor();
     void    setZoomFactor( float zf );
-    
-    const KisImage* currentViewImage() { return m_pImage; } 
-      
+          
  private:
 
     // import/export actions
