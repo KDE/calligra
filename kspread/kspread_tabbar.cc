@@ -227,6 +227,10 @@ void KSpreadTabBar::slotRemove( )
     int ret = KMessageBox::warningYesNo( this, i18n("You are going to remove the active table.\nDo you want to continue?"), i18n("Remove table"));
     if ( ret == 3 )
     {
+        if ( m_pView->canvasWidget()->editor() )
+        {
+                m_pView->canvasWidget()->deleteEditor( false );
+        }
         KSpreadTable *tbl = m_pView->activeTable();
         tbl->removeTable();
         m_pView->doc()->map()->removeTable( tbl );

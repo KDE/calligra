@@ -1269,6 +1269,7 @@ void KSpreadView::changeTable( const QString& _name )
         kdDebug(36001) << "Unknown table " << _name << endl;
         return;
     }
+    m_pCanvas->closeEditor();
 
     setActiveTable( t,false );
 
@@ -1302,6 +1303,7 @@ void KSpreadView::slotScrollToLastTable()
 
 void KSpreadView::insertTable()
 {
+  m_pCanvas->closeEditor();
   KSpreadTable *t = m_pDoc->createTable();
   m_pDoc->addTable( t );
   updateEditWidget();
@@ -2278,6 +2280,10 @@ void KSpreadView::removeTable()
 
     if ( ret == 3 )
     {
+        if ( m_pCanvas->editor() )
+        {
+                m_pCanvas->deleteEditor( false );
+        }
         KSpreadTable *tbl = activeTable();
         tbl->removeTable();
 

@@ -256,6 +256,8 @@ public:
 
     void updatePosWidget();
 
+    void closeEditor();
+
     // Created by the view since it's layout is managed there,
     // but is in fact a sibling of the canvas, which needs to know about it.
     void setEditWidget( KSpreadEditWidget * ew ) { m_pEditWidget = ew; }

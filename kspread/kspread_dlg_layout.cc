@@ -2035,15 +2035,17 @@ void KSpreadBorderButton::unselect()
   setChanged(true);
 }
 
-KSpreadBord::KSpreadBord( QWidget *parent, const char *_name )
+KSpreadBorder::KSpreadBorder( QWidget *parent, const char *_name,bool _oneCol, bool _oneRow )
     : QFrame( parent, _name )
 {
+  oneCol=_oneCol;
+  oneRow=_oneRow;
 }
 
 
 #define OFFSETX 5
 #define OFFSETY 5
-void KSpreadBord::paintEvent( QPaintEvent *_ev )
+void KSpreadBorder::paintEvent( QPaintEvent *_ev )
 {
   QFrame::paintEvent( _ev );
   QPen pen;
@@ -2065,12 +2067,25 @@ void KSpreadBord::paintEvent( QPaintEvent *_ev )
 
   painter.drawLine( width()-OFFSETX, height()-OFFSETY, width() , height()-OFFSETY );
   painter.drawLine( width()-OFFSETX, height()-OFFSETY, width()-OFFSETX , height() );
-
+  if(oneCol==false)
+  {
+        painter.drawLine( width()/2, OFFSETY-5, width()/2 , OFFSETY );
+        painter.drawLine( width()/2-5, OFFSETY, width()/2+5 , OFFSETY );
+        painter.drawLine( width()/2, height()-OFFSETY, width()/2 , height() );
+        painter.drawLine( width()/2-5, height()-OFFSETY, width()/2+5 , height()-OFFSETY );
+  }
+  if(oneRow==false)
+  {
+        painter.drawLine( OFFSETX-5, height()/2, OFFSETX , height()/2 );
+        painter.drawLine( OFFSETX, height()/2-5, OFFSETX , height()/2+5 );
+        painter.drawLine( width()-OFFSETX, height()/2, width(), height()/2 );
+        painter.drawLine( width()-OFFSETX, height()/2-5, width()-OFFSETX , height()/2+5 );
+  }
   painter.end();
   emit redraw();
 }
 
-void KSpreadBord::mousePressEvent( QMouseEvent* _ev )
+void KSpreadBorder::mousePressEvent( QMouseEvent* _ev )
 {
   emit choosearea(_ev);
 }
@@ -2089,7 +2104,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
   QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,5,5,15,7);
 
-  area=new KSpreadBord(tmpQGroupBox,"area");
+  area=new KSpreadBorder(tmpQGroupBox,"area",dlg->oneCol,dlg->oneRow);
   grid2->addMultiCellWidget(area,1,3,1,3);
   area->setBackgroundColor( colorGroup().base() );
 
@@ -2835,6 +2850,11 @@ void CellLayoutPageBorder::draw()
       pen.setWidth( fallDiagonal->getPenWidth() );
       painter.setPen( pen );
       painter.drawLine( OFFSETX, OFFSETY, area->width()-OFFSETX, area->height()-OFFSETY );
+      if(dlg->oneCol==false&& dlg->oneRow==false)
+        {
+        painter.drawLine( area->width()/2, OFFSETY, area->width()-OFFSETX, area->height()/2 );
+        painter.drawLine( OFFSETX,area->height()/2 , area->width()/2, area->height()-OFFSETY );
+        }
     }
  if((goUpDiagonal->getPenStyle())!=Qt::NoPen)
     {
@@ -2844,6 +2864,12 @@ void CellLayoutPageBorder::draw()
       pen.setWidth( goUpDiagonal->getPenWidth() );
       painter.setPen( pen );
       painter.drawLine( OFFSETX, area->height()-OFFSETY , area->width()-OFFSETX , OFFSETY );
+      if(dlg->oneCol==false&& dlg->oneRow==false)
+        {
+        painter.drawLine( area->width()/2, OFFSETY, OFFSETX, area->height()/2 );
+        painter.drawLine( area->width()/2,area->height()-OFFSETY , area->width()-OFFSETX, area->height()/2 );
+        }
+
     }
  if((vertical->getPenStyle())!=Qt::NoPen)
     {

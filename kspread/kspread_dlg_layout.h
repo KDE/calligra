@@ -253,17 +253,19 @@ protected:
 
 
 
-class KSpreadBord : public QFrame
+class KSpreadBorder : public QFrame
 {
     Q_OBJECT
 public:
-    KSpreadBord( QWidget *parent,const char *_name  );
+    KSpreadBorder( QWidget *parent,const char *_name,bool _oneCol,bool _oneRow  );
 signals:
     void redraw();
     void choosearea(QMouseEvent * _ev);
 protected:
     virtual void paintEvent( QPaintEvent *_ev );
     virtual void mousePressEvent( QMouseEvent* _ev );
+    bool oneCol;
+    bool oneRow;
 };
 
 class KSpreadBorderButton : public QPushButton
@@ -341,7 +343,7 @@ protected:
     KColorButton* color;
 
     QColor currentColor;
-    KSpreadBord *area;
+    KSpreadBorder *area;
     CellLayoutDlg *dlg;
 };
 

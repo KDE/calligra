@@ -1636,6 +1636,17 @@ void KSpreadCanvas::createEditor( EditorType ed )
   }
 }
 
+void KSpreadCanvas::closeEditor()
+{
+   if(m_bChoose)
+        return;
+
+   if ( m_pEditor )
+   {
+        deleteEditor( true ); // save changes
+   }
+}
+
 //---------------------------------------------
 //
 // Drawing Engine
