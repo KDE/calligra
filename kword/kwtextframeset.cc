@@ -367,7 +367,7 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     // It's cumulative (the space of one break will be included in the further
     // paragraph's y position), which makes it easy to implement.
 
-    bool PARAGBREAK = false; // TODO make this a property of the parag
+    bool linesTogether = parag ? static_cast<KWTextParag *>(parag)->linesTogether() : false;
 
     int totalHeight = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
@@ -380,7 +380,7 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
 
         if ( yp < bottom && yp+h > bottom ) // This parag intersects with the bottom of the frame
         {
-            if ( !parag || PARAGBREAK ) // Paragraph-level breaking
+            if ( !parag || linesTogether ) // Paragraph-level breaking
             {
                 kdDebug(32002) << "KWTextFrameSet::adjustFlow ADJUSTING yp=" << yp << " w=" << w << " h=" << h << " r.bottom() [new value for yp]=" << bottom << endl;
                 yp = bottom; // Move down,  to the next frame's top (same as bottom, since this is in QRT coords).
