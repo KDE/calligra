@@ -185,6 +185,8 @@ public:
   const QImage& image() { return m_image; }
   int xOffset() { return m_iXOffset; }
   int yOffset() { return m_iYOffset; }
+
+  void transformImage( const QWMatrix& matrix );
   
 signals:
   // Document signals

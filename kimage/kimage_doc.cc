@@ -77,7 +77,7 @@ CORBA::Boolean KImageDoc::init()
 
 void KImageDoc::cleanUp()
 {
-  debug( "CLeanUp KImageDoc" );
+  debug( "CleanUp KImageDoc" );
 
   if ( m_bIsClean )
     return;
@@ -710,6 +710,22 @@ bool KImageDoc::saveDocument( const char *_filename, const char *_format )
   assert( !isEmpty() );
 
   return m_image.save( _filename, m_strImageFormat );
+}
+
+void KImageDoc::transformImage( const QWMatrix& matrix )
+{
+  QPixmap pix, newpix;
+
+  pix.convertFromImage( m_image );
+  newpix = pix.xForm( matrix );
+  debug( "Image manipulated with matrix" );
+  
+  m_image = newpix.convertToImage();
+
+  emit sig_updateView();
+
+  m_bModified = true;
+  m_bEmpty = false;
 }
 
 KImageDoc::~KImageDoc()

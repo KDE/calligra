@@ -47,41 +47,23 @@ public:
     ~KImageView();
 
     KImageDoc* doc() { return m_pDoc; }
-  
-    /**
-     * ToolBar
-     */
+
+    // IDL
     void fitToView();
-    /**
-     * ToolBar
-     */
     void fitWithProportions();
-    /**
-     * ToolBar
-     */
     void originalSize();
-    /**
-     * ToolBar
-     */
     void editImage();
-  
-    /**
-     * MenuBar
-     */
     void pageLayout();
-    /**
-     * MenuBar
-     */
     void importImage();
-    /**
-     * MenuBar
-     */
     void exportImage();
-    /**
-     * MenuBar
-     */
     void infoImage();
-  
+    void centered();
+    void rotateRight();
+    void rotateLeft();
+    void flipVertical();
+    void flipHorizontal();
+    void backgroundColor();
+
     virtual void cleanUp();
 
     CORBA::Boolean printDlg();
@@ -123,16 +105,26 @@ protected:
 
   // view menu
   OpenPartsUI::Menu_var m_vMenuView;
-  CORBA::Long m_idMenuEdit_Center;
+  CORBA::Long m_idMenuView_FitToView;
+  CORBA::Long m_idMenuView_FitWithProps;
+  CORBA::Long m_idMenuView_Original;
+  CORBA::Long m_idMenuView_Center;
+  CORBA::Long m_idMenuView_Info;
+  CORBA::Long m_idMenuView_BackgroundColor;
 
-  // zoom menu
-  OpenPartsUI::Menu_var m_vMenuZoom;
-  CORBA::Long m_idMenuZoom_FitToView;
-  CORBA::Long m_idMenuZoom_FitWithProps;
-  CORBA::Long m_idMenuZoom_Original;
-  
   // transform menu
   OpenPartsUI::Menu_var m_vMenuTransform;
+  CORBA::Long m_idMenuTransform_RotateRight;
+  CORBA::Long m_idMenuTransform_RotateLeft;
+  CORBA::Long m_idMenuTransform_FlipVertical;
+  CORBA::Long m_idMenuTransform_FlipHorizontal;
+  CORBA::Long m_idMenuTransform_ZoomFactor;
+  CORBA::Long m_idMenuTransform_ZoomIn10;
+  CORBA::Long m_idMenuTransform_ZoomOut10;
+  CORBA::Long m_idMenuTransform_ZoomDouble;
+  CORBA::Long m_idMenuTransform_ZoomHalf;
+  CORBA::Long m_idMenuTransform_ZoomMax;
+  CORBA::Long m_idMenuTransform_ZoomMaxAspect;
 
   // filter menu
   OpenPartsUI::Menu_var m_vMenuFilter;

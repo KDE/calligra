@@ -35,13 +35,18 @@ module KImage
 		slot void pageLayout();
 
 		// View
-
-		// Zoom
 		slot void fitToView();
 		slot void fitWithProportions();
 		slot void originalSize();
+		slot void centered();
+		slot void infoImage();
+		slot void backgroundColor();
 
 		// Transform
+		slot void rotateRight();
+		slot void rotateLeft();
+		slot void flipVertical();
+		slot void flipHorizontal();
 
 		// Filter
 

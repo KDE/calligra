@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <qkeycode.h>
 #include <qprndlg.h>
+#include <qwmatrix.h>
 #include <kfiledialog.h>
 
 #include <opUIUtils.h>
@@ -59,7 +60,7 @@ KImageView::KImageView( QWidget *_parent, const char *_name, KImageDoc* _doc ) :
   QObject::connect( m_pDoc, SIGNAL( sig_updateView() ), this, SLOT( slotUpdateView() ) );
 
   m_drawMode = 0;
-  m_centerMode = 1;
+  m_centerMode = 0;
 
   slotUpdateView();
 }
@@ -144,22 +145,22 @@ bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory 
 
   m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 
-  QString tmp = kapp->kde_icondir().copy();
-  tmp += "/mini/unknown.xpm";
+  QString tmp = kapp->kde_datadir().copy();
+  tmp += "/kimage/pics/fittoview.xpm";
   OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp );
   m_idButtonEdit_Lines = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ),
 							this, "fitToView", true,
 							i18n( "Fit image to view" ), -1 );
 
-  tmp = kapp->kde_icondir().copy();
-  tmp += "/mini/unknown.xpm";
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kimage/pics/fitwithprops.xpm";
   pix = OPUIUtils::loadPixmap( tmp );
   m_idButtonEdit_Areas = m_vToolBarEdit->insertButton2( pix, 2, SIGNAL( clicked() ),
 							this, "fitWithProportions",
 							true, i18n( "Fit to view and keep proportions" ), -1 );
 
-  tmp = kapp->kde_icondir().copy();
-  tmp += "/mini/unknown.xpm";
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kimage/pics/originalsize.xpm";
   pix = OPUIUtils::loadPixmap( tmp );
   m_idButtonEdit_Bars = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ),
 						       this, "originalSize", true,
@@ -245,8 +246,10 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   if ( CORBA::is_nil( _menubar ) )
   {
     m_vMenuEdit = 0L;
-    m_vMenuZoom = 0L;
+    m_vMenuView = 0L;
     m_vMenuTransform = 0L;
+    m_vMenuFilter = 0L;
+    m_vMenuPlugIns = 0L;
     return true;
   }
 
@@ -263,37 +266,52 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuEdit->insertSeparator( -1 );
 
   m_idMenuEdit_Page = m_vMenuEdit->insertItem( i18n("&Page Layout"), this, "pageLayout", CTRL + Key_L );
-  m_idMenuEdit_Page = m_vMenuEdit->insertItem( i18n("I&nfomations"), this, "infoImage", CTRL + Key_N );
 
   // View
   _menubar->insertMenu( i18n( "&View" ), m_vMenuView, -1, -1 );
 
-  m_idMenuEdit_Center = m_vMenuView->insertItem( i18n("&Centered"), this, "centered", CTRL + Key_C );
-
-  // Zoom
-  _menubar->insertMenu( i18n( "&Zoom" ), m_vMenuZoom, -1, -1 );
-
-  path = kapp->kde_icondir().copy();
-  path += "/mini/unknown.xpm";
+  path = kapp->kde_datadir().copy();
+  path += "/kimage/pics/fittoview.xpm";
   pix = OPUIUtils::loadPixmap( path );
-  m_idMenuZoom_FitToView = m_vMenuZoom->insertItem6( pix, i18n("Fit to &view"), this,
+  m_idMenuView_FitToView = m_vMenuView->insertItem6( pix, i18n("Fit to &view"), this,
 						     "fitToView", CTRL + Key_V, -1, -1 );
 
-  path = kapp->kde_icondir().copy();
-  path += "/mini/unknown.xpm";
+  path = kapp->kde_datadir().copy();
+  path += "/kimage/pics/fitwithprops.xpm";
   pix = OPUIUtils::loadPixmap( path );
-  m_idMenuZoom_FitWithProps = m_vMenuZoom->insertItem6( pix, i18n("Fit and keep &proportions"),
+  m_idMenuView_FitWithProps = m_vMenuView->insertItem6( pix, i18n("Fit and keep &proportions"),
 							this, "fitWithProportions",
 							CTRL + Key_P, -1, -1 );
 
-  path = kapp->kde_icondir().copy();
-  path += "/mini/unknown.xpm";
+  path = kapp->kde_datadir().copy();
+  path += "/kimage/pics/originalsize.xpm";
   pix = OPUIUtils::loadPixmap( path );
-  m_idMenuZoom_Original = m_vMenuZoom->insertItem6( pix, i18n("&Original size"), this,
+  m_idMenuView_Original = m_vMenuView->insertItem6( pix, i18n("&Original size"), this,
 						    "originalSize", CTRL + Key_O, -1, -1 );
+
+  m_vMenuView->insertSeparator( -1 );
+
+  m_idMenuView_Center = m_vMenuView->insertItem( i18n("&Centered"), this, "centered", CTRL + Key_C );
+  m_idMenuView_Info = m_vMenuView->insertItem( i18n("I&nfomations"), this, "infoImage", CTRL + Key_N );
+  m_idMenuView_BackgroundColor = m_vMenuView->insertItem( i18n("Background color"), this, "backgroundColor", CTRL + Key_N );
 
   // Transform
   _menubar->insertMenu( i18n( "&Transform" ), m_vMenuTransform, -1, -1 );
+
+  m_idMenuTransform_RotateRight = m_vMenuTransform->insertItem( i18n("Rotate clockwise"), this, "rotateRight", CTRL + Key_C );
+  m_idMenuTransform_RotateLeft = m_vMenuTransform->insertItem( i18n("Rotate anti-clockwise"), this, "rotateLeft", CTRL + Key_N );
+  m_idMenuTransform_FlipVertical = m_vMenuTransform->insertItem( i18n("Flip vertical"), this, "flipVertical", CTRL + Key_C );
+  m_idMenuTransform_FlipHorizontal = m_vMenuTransform->insertItem( i18n("Flip honrizontal"), this, "flipHorizontal", CTRL + Key_N );
+
+  m_vMenuTransform->insertSeparator( -1 );
+
+  m_idMenuTransform_ZoomFactor = m_vMenuTransform->insertItem( i18n("&Zoom..."), this, "zoomFactor", CTRL + Key_N );
+  m_idMenuTransform_ZoomIn10 = m_vMenuTransform->insertItem( i18n("Zoom &in 10%"), this, "zoomIn10", CTRL + Key_N );
+  m_idMenuTransform_ZoomOut10 = m_vMenuTransform->insertItem( i18n("Zoom &out 10%"), this, "zoomOut10", CTRL + Key_N );
+  m_idMenuTransform_ZoomDouble = m_vMenuTransform->insertItem( i18n("&Double size"), this, "zoomDouble", CTRL + Key_N );
+  m_idMenuTransform_ZoomHalf = m_vMenuTransform->insertItem( i18n("&Half size"), this, "zoomHalf", CTRL + Key_N );
+  m_idMenuTransform_ZoomMax = m_vMenuTransform->insertItem( i18n("&Max"), this, "zoomMax", CTRL + Key_N );
+  m_idMenuTransform_ZoomMaxAspect = m_vMenuTransform->insertItem( i18n("Max/&aspect"), this, "zoomMaxAspect", CTRL + Key_N );
 
   // Filter
   _menubar->insertMenu( i18n( "F&ilter" ), m_vMenuFilter, -1, -1 );
@@ -342,7 +360,24 @@ void KImageView::slotUpdateView()
   if ( m_pDoc->image().isNull() )
     return;
 
-  m_pixmap.convertFromImage( m_pDoc->image() );
+  double dh = (double)height()/(double)m_pDoc->image().height();
+  double dw = (double)width()/(double)m_pDoc->image().width();
+
+  double d = ( dh < dw ? dh : dw );
+	
+  switch ( m_drawMode )
+  {
+    default:
+  	case 0:
+	  m_pixmap.convertFromImage( m_pDoc->image() );
+  	  break;
+  	case 1:
+	  m_pixmap.convertFromImage( m_pDoc->image().smoothScale( width(), height() ) );
+  	  break;
+  	case 2:
+	  m_pixmap.convertFromImage( m_pDoc->image().smoothScale( int( d * m_pDoc->image().width() ), int ( d * m_pDoc->image().height() ) ) );
+  	  break;
+  }
 
   QWidget::update();
 }
@@ -352,9 +387,9 @@ void KImageView::fitToView()
   if ( m_pDoc->image().isNull() )
     return;
 
-  debug( "  Mach was !!!" );
-
-  QWidget::update();
+  m_drawMode = 1;
+  
+  slotUpdateView();
 }
 
 void KImageView::fitWithProportions()
@@ -362,9 +397,9 @@ void KImageView::fitWithProportions()
   if ( m_pDoc->image().isNull() )
     return;
 
-  debug( "  Mach was !!!" );
-
-  QWidget::update();
+  m_drawMode = 2;
+  
+  slotUpdateView();
 }
 
 void KImageView::originalSize()
@@ -372,17 +407,15 @@ void KImageView::originalSize()
   if ( m_pDoc->image().isNull() )
     return;
 
-  debug( "  Mach was !!!" );
-
-  QWidget::update();
+  m_drawMode = 0;
+  
+  slotUpdateView();
 }
 
 void KImageView::editImage()
 {
   if ( m_pDoc->image().isNull() )
     return;
-
-  debug( "  Mach was !!!" );
 
   QWidget::update();
 }
@@ -395,7 +428,6 @@ void KImageView::importImage()
 
   if ( file.isNull() )
   {
-  	debug( "nix" );
     return;
   }
   
@@ -440,6 +472,83 @@ void KImageView::infoImage()
   }
 }
 
+void KImageView::centered()
+{
+  if ( m_pDoc->isEmpty() )
+  {
+    QString tmp;
+    QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty\nNo information available."), i18n( "OK" ) );
+    return;
+  }
+
+  m_centerMode = 1 - m_centerMode;
+
+  slotUpdateView();
+}
+
+void KImageView::rotateRight()
+{
+  if ( m_pDoc->isEmpty() )
+    return;
+
+  debug( "Rotate Right" );
+
+  QWMatrix matrix;
+  matrix.rotate( 90 );
+  m_pDoc->transformImage( matrix );
+
+  slotUpdateView();
+}
+
+void KImageView::rotateLeft()
+{
+  if ( m_pDoc->isEmpty() )
+    return;
+
+  debug( "Rotate Left" );
+
+  QWMatrix matrix;
+  matrix.rotate( -90 );
+  m_pDoc->transformImage( matrix );
+
+  slotUpdateView();
+}
+
+void KImageView::flipVertical()
+{
+  if ( m_pDoc->isEmpty() )
+    return;
+
+  debug( "flipVertical" );
+
+  QWMatrix matrix;
+  QWMatrix matrix2( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+  matrix *= matrix2;
+  m_pDoc->transformImage( matrix );
+
+  slotUpdateView();
+}
+
+void KImageView::flipHorizontal()
+{
+  if ( m_pDoc->isEmpty() )
+    return;
+
+  debug( "flipHorizontal" );
+
+  QWMatrix matrix;
+  QWMatrix matrix2( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+  matrix2.rotate( 180 );
+  matrix *= matrix2;
+  m_pDoc->transformImage( matrix );
+
+  slotUpdateView();
+}
+
+void KImageView::backgroundColor()
+{
+}
+
 void KImageView::resizeEvent( QResizeEvent *_ev )
 {
   if ( m_pDoc->isEmpty() )
@@ -457,7 +566,7 @@ void KImageView::paintEvent( QPaintEvent *_ev )
   QPainter painter;
   painter.begin( this );
 
-  if ( m_centerMode )
+  if ( m_centerMode == 1 )
   {
     painter.drawPixmap( ( width() - m_pixmap.width() ) / 2, ( height() - m_pixmap.height() ) / 2, m_pixmap );
   }
