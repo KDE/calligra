@@ -1,6 +1,6 @@
 koffice (1:1.1-beta2-1) unstable; urgency=low
 
-  * New upstream release (closes: Bug#95931).
+  * New upstream release (closes: Bug#95931, Bug#75755).
   * Cosmetic changes to a few man pages.
 
  -- Ben Burton <benb@acm.org>  Wed,  9 May 2001 12:05:35 -0500
