@@ -7,8 +7,13 @@ libkwmf_la_LIBADD = $(LIB_KDECORE)
 
 ####### Files
 
-lib_LTLIBRARIES = libkwmf.la
+lib_LTLIBRARIES = libkwmf.la libkowmf.la
 
 libkwmf_la_SOURCES = kwmf.cc qwmf.cc
 
-noinst_HEADERS = kwmf.h qwmf.h metafuncs.h wmfstruct.h
+#include_HEADERS = kowmfread.h kowmfwrite.h kowmfpaint.h
+noinst_HEADERS = kwmf.h qwmf.h metafuncs.h wmfstruct.h kowmfreadprivate.h kowmfstack.h kowmfstruct.h
+
+libkowmf_la_SOURCES  = kowmfreadprivate.cc kowmfstack.cc kowmfread.cc kowmfwrite.cc kowmfpaint.cc
+libkowmf_la_LDFLAGS = $(all_libraries) -version-info 1:0:0  -no-undefined
+libkowmf_la_LIBADD = $(LIB_KDECORE)
