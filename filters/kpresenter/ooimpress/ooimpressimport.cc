@@ -472,13 +472,54 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
 {
     QDomElement p = doc.createElement( "P" );
 
-    QDomElement name = doc.createElement( "NAME" );
-    name.setAttribute( "value", paragraph.attribute( "text:style-name" ) );
-    p.appendChild( name );
+    // parse the paragraph-properties
+    QDomElement *style = m_styles[paragraph.attribute( "text:style-name" )];
+    QDomElement properties = style->namedItem( "style:properties" ).toElement();
+
+    if ( properties.hasAttribute( "fo:text-align" ) )
+    {
+        if ( properties.attribute( "fo:text-align" ) == "center" )
+            p.setAttribute( "align", 4 );
+        else if ( properties.attribute( "fo:text-align" ) == "justify" )
+            p.setAttribute( "align", 8 );
+        else if ( properties.attribute( "fo:text-align" ) == "start" )
+            p.setAttribute( "align", 0 );
+        else if ( properties.attribute( "fo:text-align" ) == "end" )
+            p.setAttribute( "align", 2 );
+    }
+    else
+        p.setAttribute( "align", 0 ); // use left aligned as default
 
     QDomElement text = doc.createElement( "TEXT" );
     text.appendChild( doc.createTextNode( paragraph.text() ) );
     p.appendChild( text );
+
+    // parse the text-properties if available
+    QDomNode textSpan = paragraph.namedItem( "text:span" );
+    if ( !textSpan.isNull() )
+    {
+        QDomElement ts = textSpan.toElement();
+        QDomElement *style = m_styles[ts.attribute( "text:style-name" )];
+        QDomElement properties = style->namedItem( "style:properties" ).toElement();
+
+        if ( properties.hasAttribute( "fo:color" ) )
+            text.setAttribute( "color", properties.attribute( "fo:color" ) );
+        if ( properties.hasAttribute( "fo:font-family" ) )
+            text.setAttribute( "family", properties.attribute( "fo:font-family" ).remove( "'" ) );
+        if ( properties.hasAttribute( "fo:font-size" ) )
+            text.setAttribute( "pointSize", properties.attribute( "fo:font-size" ).toDouble() );
+        if ( properties.hasAttribute( "fo:font-weight" ) )
+            if ( properties.attribute( "fo:font-weight" ) == "bold" )
+                text.setAttribute( "bold", 1 );
+        if ( properties.hasAttribute( "fo:font-style" ) )
+            if ( properties.attribute( "fo:font-style" ) == "italic" )
+                text.setAttribute( "italic", 1 );
+        if ( properties.hasAttribute( "style:text-underline" ) )
+        {
+            text.setAttribute( "underline", 1 );
+            text.setAttribute( "underlinestyleline", "solid" );
+        }
+    }
 
     return p;
 }
