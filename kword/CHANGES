@@ -950,3 +950,8 @@ Reggie, 20.3.1999:
 - Fixes
 - Fixed saving variables
 - Implemented loading variables
+
+Reggie, 21.3.1999:
+------------------
+- Copying multiple paragraphs with formats to clipboard works
+- Some fixes and improvements in pasting formatted text

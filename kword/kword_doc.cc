@@ -2303,7 +2303,7 @@ void KWordDocument::copySelectedText()
 
   QString clipString = "";
 
-  KWParag *firstParag = 0L,*parag = 0L;
+  KWParag *firstParag = 0L,*parag2 = 0L,*parag3 = 0L;
 
   if (selStart.getParag() == selEnd.getParag())
     {
@@ -2346,10 +2346,21 @@ void KWordDocument::copySelectedText()
 	}
 
       clipString = tmpFC1.getParag()->getKWString()->toString(tmpFC1.getTextPos(),tmpFC1.getParag()->getTextLen() - tmpFC1.getTextPos());
-
+      firstParag = new KWParag(*tmpFC1.getParag());
+      firstParag->setPrev(0L);
+      firstParag->setNext(0L);
+      firstParag->deleteText(0,tmpFC1.getTextPos());
+      parag3 = firstParag;
+      
       parag = tmpFC1.getParag()->getNext();
       while (parag && parag != tmpFC2.getParag())
 	{
+	  parag2 = new KWParag(*parag);
+	  parag3->setNext(parag2);
+	  parag2->setPrev(parag3);
+	  parag2->setNext(0L);
+	  parag3 = parag2;
+	  
 	  clipString += "\n";
 	  if (parag->getTextLen() > 0)
 	    clipString += parag->getKWString()->toString(0,parag->getTextLen());
@@ -2359,7 +2370,14 @@ void KWordDocument::copySelectedText()
 	}
       clipString += "\n";
       if (tmpFC2.getParag()->getTextLen() > 0)
-	clipString += tmpFC2.getParag()->getKWString()->toString(0,tmpFC2.getTextPos());
+	{
+	  clipString += tmpFC2.getParag()->getKWString()->toString(0,tmpFC2.getTextPos());
+	  parag2 = new KWParag(*tmpFC2.getParag());
+	  parag2->setPrev(parag3);
+	  parag3->setNext(parag2);
+	  parag2->setNext(0L);
+	  parag2->deleteText(tmpFC2.getTextPos(),tmpFC2.getParag()->getTextLen() - tmpFC2.getTextPos());
+	}
     }
 
   QClipboard *cb = QApplication::clipboard();
@@ -2367,14 +2385,14 @@ void KWordDocument::copySelectedText()
   string clip_string;
   tostrstream out(clip_string);
 
-  parag = firstParag;
+  parag2 = firstParag;
   out << otag << "<PARAGRAPHS>" << endl;
-  while (parag)
+  while (parag2)
     {
       out << otag << "<PARAGRAPH>" << endl;
-      parag->save(out);
+      parag2->save(out);
       out << etag << "</PARAGRAPH>" << endl;
-      parag = parag->getNext();
+      parag2 = parag2->getNext();
     }
   out << etag << "</PARAGRAPHS>" << endl;
 
@@ -2470,7 +2488,9 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWF
       istrstream in(_string.ascii());
       if (!in)
 	return;
-	
+
+      debug("%s",_string.ascii());
+      
       KOMLStreamFeed feed(in);
       KOMLParser parser(&feed);
 
@@ -2553,39 +2573,69 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWF
 	      delete firstParag;
 	    }
 	}
-      else if (strList.count() == 2)
+      else if ((_mime == "text/plain" && strList.count() == 2) || 
+	       (_mime == "application/x-kword" && !firstParag->getNext()->getNext()))
 	{
-	  QString str;
-	  unsigned int len;
-	  KWFormat *format = _format;
-	  if (!format)
+	  if (_mime == "text/plain")
 	    {
-	      format = new KWFormat(this);
-	      format->setDefaults(this);
+	      QString str;
+	      unsigned int len;
+	      KWFormat *format = _format;
+	      if (!format)
+		{
+		  format = new KWFormat(this);
+		  format->setDefaults(this);
+		}
+	      str = QString(strList.at(0));
+	      len = str.length();
+	      _fc->getParag()->insertText(_fc->getTextPos(),str);
+	      _fc->getParag()->setFormat(_fc->getTextPos(),len,*format);
+
+	      painter.begin(_page);
+	      for (unsigned int j = 0;j <= len;j++)
+		_fc->cursorGotoRight(painter);
+	      painter.end();
+
+	      QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
+	      _page->keyPressEvent(&ev);
+
+	      str = QString(strList.at(1));
+	      len = str.length();
+	      _fc->getParag()->insertText(_fc->getTextPos(),str);
+	      _fc->getParag()->setFormat(_fc->getTextPos(),len,*format);
+
+	      painter.begin(_page);
+	      for (unsigned int j = 0;j < len;j++)
+		_fc->cursorGotoRight(painter);
+	      painter.end();
+	      delete format;
 	    }
-	  str = QString(strList.at(0));
-	  len = str.length();
-	  _fc->getParag()->insertText(_fc->getTextPos(),str);
-	  _fc->getParag()->setFormat(_fc->getTextPos(),len,*format);
+	  else
+	    {
+	      KWString *str = new KWString();
+	      *str = *firstParag->getKWString();
+	      _fc->getParag()->insertText(_fc->getTextPos(),str);
 
-	  painter.begin(_page);
-	  for (unsigned int j = 0;j <= len;j++)
-	    _fc->cursorGotoRight(painter);
-	  painter.end();
+	      painter.begin(_page);
+	      for (unsigned int j = 0;j < firstParag->getTextLen();j++)
+		_fc->cursorGotoRight(painter);
+	      painter.end();
 
-	  QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
-	  _page->keyPressEvent(&ev);
+	      QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
+	      _page->keyPressEvent(&ev);
 
-	  str = QString(strList.at(1));
-	  len = str.length();
-	  _fc->getParag()->insertText(_fc->getTextPos(),str);
-	  _fc->getParag()->setFormat(_fc->getTextPos(),len,*format);
+	      KWString *str2 = new KWString();
+	      *str2 = *firstParag->getNext()->getKWString();
+	      _fc->getParag()->insertText(_fc->getTextPos(),str2);
 
-	  painter.begin(_page);
-	  for (unsigned int j = 0;j < len;j++)
-	    _fc->cursorGotoRight(painter);
-	  painter.end();
-	  delete format;
+	      painter.begin(_page);
+	      for (unsigned int j = 0;j < firstParag->getTextLen();j++)
+		_fc->cursorGotoRight(painter);
+	      painter.end();
+
+	      delete firstParag->getNext();
+	      delete firstParag;
+	    }
 	}
       else
 	{
