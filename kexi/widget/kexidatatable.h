@@ -51,7 +51,9 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 #ifndef KEXI_NO_PRINT
 		virtual void print(KPrinter &printer);
 #endif
-
+		bool readOnly();
+	public slots:
+		virtual void setFocus();
 	protected slots:
 		void slotItemChanged(KexiTableItem *i, int col, QVariant oldValue);
 		void slotContextMenu(KexiTableItem *i, int col, const QPoint &pos);

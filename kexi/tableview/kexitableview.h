@@ -204,6 +204,7 @@ protected slots:
 public slots:
 	void			sort();
 	void			setCursor(int row, int col = -1);
+	void			selectRow(int row);
 	void			selectNext();
 	void			selectPrev();
 	void			gotoNext();

@@ -37,6 +37,7 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 		virtual bool eventFilter(QObject* watched, QEvent* e);
 		void end(bool mark);
 		void backspace();
+		void clear();
 
 	protected slots:
 		void setRestrictedCompletion();

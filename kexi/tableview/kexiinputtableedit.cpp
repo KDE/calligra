@@ -27,13 +27,16 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kcompletionbox.h>
-
+#include <knumvalidator.h>
+	
 #include "kexiinputtableedit.h"
 
 KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QString ov, bool mark, QWidget *parent, const char *name, QStringList comp)
  : KexiTableEdit()
 {
-	m_type = type;
+	m_type = type; //TODO(js) remove m_type !
+	kdDebug() << "KexiInputTableEdit: value.typeName()==" << value.typeName() << endl;
+	kdDebug() << "KexiInputTableEdit: type== " << m_type << endl;
 	m_value = value;
 	m_cview = new KLineEdit(this, "tableLineEdit");
 	m_view = m_cview;
@@ -49,7 +52,7 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 	 m_cview->completionBox()->setTabHandling(true);
 
 
-	if(!ov.isNull())
+	if(!ov.isEmpty())
 	{
 		switch(m_type)
 		{
@@ -83,12 +86,35 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 	}
 	else
 	{
-		m_cview->setText(value.toString());
-		kdDebug() << "KexiInputTableEdit::KexiInputTableEdit(): have to mark! (%i)"
+		if (m_type==QVariant::Double) {
+			QString tmp_val = value.toString();
+			//TODO(js): get decimal places settings here...
+			QStringList sl = QStringList::split(".", tmp_val);
+			if (tmp_val.isEmpty())
+				m_cview->setText("");
+			else if (sl.count()==2) {
+				kdDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1] << endl;
+				tmp_val = sl[0] + KGlobal::locale()->decimalSymbol() + sl[1];
+			}
+			m_cview->setText(tmp_val);
+			QValidator *validator = new KDoubleValidator(m_cview);
+			m_cview->setValidator( validator );
+		}
+		else {
+			m_cview->setText(value.toString());
+		}
+		kdDebug() << "KexiInputTableEdit::KexiInputTableEdit(): have to mark! "
 			<< m_cview->text().length() << endl;
 //		m_cview->setSelection(0, m_cview->text().length());
-		QTimer::singleShot(0, m_view, SLOT(selectAll()));
+//		QTimer::singleShot(0, m_view, SLOT(selectAll()));
+
+#if 0
+//move to end is better by default
+//TODO(js): add configuration for this
 		m_cview->selectAll();
+#else
+		m_cview->end(false);
+#endif
 //		setRestrictedCompletion();
 	}
 
@@ -317,6 +343,12 @@ void
 KexiInputTableEdit::backspace()
 {
 	m_cview->backspace();
+}
+
+void
+KexiInputTableEdit::clear()
+{
+	m_cview->clear();
 }
 
 #include "kexiinputtableedit.moc"

@@ -737,7 +737,7 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 	{
 		int cw = columnWidth( m_curCol );
 		int rh = rowHeight( m_curRow );
-  updateCell( m_curRow, m_curCol );
+		updateCell( m_curRow, m_curCol );
 		ensureVisible( columnPos( m_curCol ) + cw / 2, rowPos( m_curRow ) + rh / 2, cw / 2, rh / 2 );
 		updateCell( oldRow, oldCol );
 		m_pVerticalHeader->setCurrentRow(m_curRow);
@@ -891,14 +891,23 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 #ifndef _WIN32
 	#warning this needs work!
 #endif
+	case Key_Enter:
 	case Key_Return:
+	case Key_F2:
 		if(columnType(m_curCol) != QVariant::Bool && columnEditable(m_curCol))
-			createEditor(m_curRow, m_curCol, "", false);
+			createEditor(m_curRow, m_curCol, QString::null, false);
 		break;
 
 	case Key_Backspace:
 		if(columnType(m_curCol) != QVariant::Bool && columnEditable(m_curCol))
 			createEditor(m_curRow, m_curCol, QString::null, true);
+		break;
+	case Key_Delete: //removes all chars
+		if(columnType(m_curCol) != QVariant::Bool && columnEditable(m_curCol))
+			createEditor(m_curRow, m_curCol, QString::null, false);
+		if (m_pEditor && m_pEditor->isA("KexiInputTableEdit")) {
+			static_cast<KexiInputTableEdit*>(m_pEditor)->clear();
+		}
 		break;
 	case Key_Space:
 		if(columnType(m_curCol) == QVariant::Bool && columnEditable(m_curCol))
@@ -907,12 +916,17 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			break;
 		}
     default:
-   	 qDebug("KexiTableView::KeyPressEvent(): default");
+   	 	qDebug("KexiTableView::KeyPressEvent(): default");
+		if (!e->text().isEmpty() && !e->text()[0].isPrint() ) {
+			kdDebug() << "NOT PRINTABLE" <<endl;
+			e->ignore();
+			return;
+		}
 		if(columnType(m_curCol) != QVariant::Bool && columnEditable(m_curCol))
 		{
 			qDebug("KexiTableView::KeyPressEvent(): ev pressed");
 //			if (e->text()[0].isPrint())
-				createEditor(m_curRow, m_curCol, e->text(), false);
+			createEditor(m_curRow, m_curCol, e->text(), false);
 		}
 	}
 	// if focus cell changes, repaint
@@ -947,11 +961,33 @@ void KexiTableView::boolToggled()
 
 void KexiTableView::selectNext()
 {
-	int oldRow = m_curRow;
-	m_curRow = QMIN( rows() - 1, m_curRow + 1 );
-
+//	int oldRow = m_curRow;
+//	m_curRow = QMIN( rows() - 1, m_curRow + 1 );
+	selectRow( QMIN( rows() - 1, m_curRow + 1 ) );
+/*js
 	if(m_curRow != oldRow)
 	{
+		int rh = rowHeight(m_curRow);
+
+		ensureVisible(0, rowPos(m_curRow) + rh / 2, 0, rh / 2);
+		if (hasFocus() || viewport()->hasFocus())
+		{
+			updateCell(oldRow, m_curCol);
+			updateCell(m_curRow, m_curCol);
+		}
+		m_pVerticalHeader->setCurrentRow(m_curRow);
+		m_pCurrentItem = itemAt(m_curRow);
+		emit itemSelected(m_pCurrentItem);
+	}*/
+}
+
+void KexiTableView::selectRow(int row)
+{
+	int oldRow = m_curRow;
+
+	if(m_curRow != row)
+	{
+		m_curRow = row;
 		int rh = rowHeight(m_curRow);
 
 		ensureVisible(0, rowPos(m_curRow) + rh / 2, 0, rh / 2);
@@ -968,9 +1004,11 @@ void KexiTableView::selectNext()
 
 void KexiTableView::selectPrev()
 {
-	int oldRow = m_curRow;
+//	int oldRow = m_curRow;
 
-	m_curRow = QMAX( 0, m_curRow - 1 );
+//	m_curRow = QMAX( 0, m_curRow - 1 );
+	selectRow( QMAX( 0, m_curRow - 1 ) );
+	/*js
 	if(m_curRow != oldRow)
 	{
 		int rh = rowHeight(m_curRow);
@@ -984,7 +1022,7 @@ void KexiTableView::selectPrev()
 		m_pVerticalHeader->setCurrentRow(m_curRow);
 		m_pCurrentItem = itemAt(m_curRow);
 		emit itemSelected(m_pCurrentItem);
-	}
+	}*/
 }
 
 void KexiTableView::gotoNext()

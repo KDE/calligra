@@ -138,15 +138,30 @@ void KexiDataTable::setDataSet(KexiDBRecordSet *rec)
 		record++;
 	}
 
-	if(!m_record->readOnly())
+	if(!readOnly())
 	{
 		KexiTableItem *insert = new KexiTableItem(m_tableView);
 		insert->setHint(QVariant(record));
 		insert->setInsertItem(true);
 	}
 
-	m_first = false;
+	//automatically set cursor on 0,0
+	m_tableView->setFocus();
+	m_tableView->setCursor(0,0);
 
+	/*}
+	else {
+		m_tableView->selectRow( m_tableView->rows()-1 );
+	}*/
+	//m_tableView->update();
+
+	m_first = false;
+}
+
+bool
+KexiDataTable::readOnly()
+{
+	return m_record ? m_record->readOnly() : true;
 }
 
 bool
@@ -349,6 +364,22 @@ KexiDataTable::~KexiDataTable()
 	kdDebug()<<"KexiDataTable::~KexiDataTable()"<<endl;
 	if (!m_record) kdDebug()<<"m_record == 0"<<endl;
 	delete m_record;
+}
+
+/*! Sets focus on:
+ - first row for read-only table
+ - last (new) row for r-w table
+*/
+void
+KexiDataTable::setFocus()
+{
+	m_tableView->setFocus();
+	if (readOnly()) {
+		m_tableView->selectRow(0);
+	}
+	else {
+		m_tableView->selectRow( m_tableView->rows()-1 );
+	}
 }
 
 #include "kexidatatable.moc"
