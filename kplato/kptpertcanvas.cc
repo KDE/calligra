@@ -113,6 +113,8 @@ KPTPertNodeItem *KPTPertCanvas::createNodeItem(KPTNode *node)
             kdDebug()<<k_funcinfo<<"Project nodes should not have relations"<<endl;
         else if (node->type() == KPTNode::Type_Subproject)
             item  = new KPTPertProjectItem(this, *node);
+        else if (node->type()== KPTNode::Type_Summarytask)
+            item  = new KPTPertTaskItem(this, *node);
         else if (node->type()== KPTNode::Type_Task)
             item  = new KPTPertTaskItem(this, *node);
         else if (node->type() == KPTNode::Type_Milestone)
