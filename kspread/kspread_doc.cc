@@ -145,7 +145,7 @@ PyObject * xcl_SetCell( PyObject*, PyObject *args)
   return Py_None;
 }
 
-PyObject * xcl_ParseRange( PyObject*, PyObject *args)
+PyObject * xcl_ParseRange( PyObject*, PyObject *)
 {
   /* const char* range;
   int docid;
@@ -355,7 +355,7 @@ bool KSpreadDoc::save( ostream& out, const char* /* format */ )
   return true;
 }
 
-bool KSpreadDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
+bool KSpreadDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 {
   cerr << "------------------------ LOADING --------------------" << endl;
 
@@ -944,7 +944,7 @@ void KSpreadDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _heig
     m_pMap->draw( _dev, _width, _height, _scale );
 }
 
-void KSpreadDoc::printMap( QPainter &_painter )
+void KSpreadDoc::printMap( QPainter & )
 {
   // TODO
   /*

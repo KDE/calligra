@@ -11,11 +11,11 @@ public:
 
     virtual bool isOk() { return TRUE; }
     
-    virtual QString openFile( const char *_file ) { return QString(); }
-    virtual bool updateFromFile( const char *_file ) { return false; }
-    virtual bool switchToBuffer( const char *_buffer ) { return false; }
-    virtual bool killBuffer( const char *_buffer ) { return false; }
-    virtual bool saveBuffer( const char *_buffer ) { return false; }
+    virtual QString openFile( const char * ) { return QString(); }
+    virtual bool updateFromFile( const char * ) { return false; }
+    virtual bool switchToBuffer( const char * ) { return false; }
+    virtual bool killBuffer( const char * ) { return false; }
+    virtual bool saveBuffer( const char * ) { return false; }
     virtual bool hide() { return false; }
     virtual bool show() { return false; }
 };
