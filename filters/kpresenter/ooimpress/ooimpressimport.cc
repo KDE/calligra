@@ -202,6 +202,12 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             manualElem.setAttribute("value", 1);
             docElement.appendChild(manualElem);
         }
+        if ( settings.hasAttributeNS( ooNS::presentation, "show") )
+        {
+            QDomElement defaultPage = doc.createElement("DEFAULTCUSTOMSLIDESHOWNAME");
+            defaultPage.setAttribute("name", settings.attributeNS( ooNS::presentation, "show", QString::null) );
+            docElement.appendChild(defaultPage);
+        }
     }
 
     QDomElement presentationShow;

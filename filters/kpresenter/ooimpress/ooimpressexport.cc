@@ -583,7 +583,7 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
     QDomNode infiniLoop = doc.namedItem( "INFINITLOOP" );
     QDomNode manualSwitch = doc.namedItem( "MANUALSWITCH" );
     QDomNode customSlideShow = doc.namedItem( "CUSTOMSLIDESHOWCONFIG" );
-
+    QDomNode customSlideShowDefault = doc.namedItem( "DEFAULTCUSTOMSLIDESHOWNAME" );
 
     QDomNode bgpage = background.firstChild();
 
@@ -641,13 +641,16 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
         if ( ok )
             manualSwitchValue = val;
     }
-    if ( infiniLoopValue != -1 || manualSwitchValue != -1 )
+    if ( infiniLoopValue != -1 || manualSwitchValue != -1 || !customSlideShowDefault.isNull())
     {
         QDomElement settings = doccontent.createElement( "presentation:settings" );
         if ( infiniLoopValue !=-1 )
             settings.setAttribute( "presentation:force-manual", ( manualSwitchValue==1 ) ? "true" : "false" );
         if ( manualSwitchValue != -1 )
             settings.setAttribute( "presentation:endless", ( infiniLoopValue==1 ) ? "true": "false" );
+        if ( !customSlideShowDefault.isNull() )
+            settings.setAttribute( "presentation:show", customSlideShowDefault.toElement().attribute( "name" ) );
+
         if ( !customSlideShow.isNull() )
         {
             for ( QDomNode customPage = customSlideShow.firstChild(); !customPage.isNull();
