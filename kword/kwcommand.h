@@ -325,7 +325,7 @@ protected:
     KWDocument *m_pDoc;
     FrameIndex frameIndex;
     KWTableFrameSet *m_pTable;
-    QList<FrameIndex> m_IndexFrame;
+    QList<KWFrameSet> m_ListFrame;
 };
 
 #endif

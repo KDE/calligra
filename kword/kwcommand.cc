@@ -728,12 +728,9 @@ KWUngroupTableCommand::KWUngroupTableCommand( const QString &name, KWDocument *_
     m_pDoc(_doc),
     m_pTable(_table)
 {
-    m_IndexFrame.clear();
+    m_ListFrame.clear();
     for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ ) {
-        FrameIndex *index=new FrameIndex;
-        index->m_pFrameSet=m_pTable->getCell( i );
-        index->m_iFrameIndex=0;
-        m_IndexFrame.append(index);
+        m_ListFrame.append(m_pTable->getCell( i ));
     }
 }
 
@@ -757,12 +754,12 @@ void KWUngroupTableCommand::unexecute()
 {
     ASSERT(m_pTable);
     m_pTable->group();
-    FrameIndex *tmp;
-    for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
+    KWFrameSet *tmp;
+    for ( tmp=m_ListFrame.first(); tmp != 0; tmp=m_ListFrame.next() )
     {
-        tmp->m_pFrameSet->setGroupManager(m_pTable);
-        m_pDoc->delFrameSet(tmp->m_pFrameSet,false);
-        KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(tmp->m_pFrameSet);
+        tmp->setGroupManager(m_pTable);
+        m_pDoc->delFrameSet(tmp,false);
+        KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(tmp);
         ASSERT(cell);
         m_pTable->addCell( cell );
     }
