@@ -38,6 +38,7 @@
 //#include "kexiview.h"
 //#include "kexiproject.h"
 
+
 KexiCreateProject::KexiCreateProject(QObject *project,const char* name, const QStringList &) : KWizard(0,name,true), KexiCreateProjectIface()
 {
 	m_project=KEXIPROJECT(project);
@@ -126,7 +127,7 @@ KexiCreateProject::next()
 
 		kdDebug() << "User = " << user << endl;
 		kdDebug() << "Socket = " << socket << " Port = " << port << endl;
-		
+
 		static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectHost(engine, host, user, pass, socket,
 			port, savePass);
 	}
@@ -152,7 +153,7 @@ KexiCreateProject::accept()
 			c = new KexiDBConnection(m_pageEngine->data("engine").toString(),
 			 QString::null);
 		}
-		
+
 		if(!project()->initDBConnection(c))
 			return;
 	}
@@ -198,6 +199,12 @@ KexiCreateProject::requireSection(const QString &section)
 			}
 		}
 	}
+}
+
+QString KexiCreateProject::projectFileName()
+{
+#warning "TODO"
+	return QString("/home/jowenn/kexidb");
 }
 
 KexiCreateProject::~KexiCreateProject()

@@ -27,7 +27,6 @@ Boston, MA 02111-1307, USA.
 #include <ktextbrowser.h>
 #include <kdialog.h>
 
-#include "kexiDB/kexidbdriver.h"
 #include "kexiDB/kexidbinterfacemanager.h"
 #include "kexicreateprojectpageengine.h"
 #include "kexiproject.h"

@@ -140,6 +140,9 @@ private:
 	bool		m_handlersLoaded;
 	KexiDBConnection *m_dbconnection;
 	KexiDBInterfaceManager *m_dbInterfaceManager;
+
+	KexiDBConnection *m_projectConnection;
+	KexiDB		*m_projectDB;
 };
 
 #endif

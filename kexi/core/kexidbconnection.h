@@ -74,6 +74,7 @@ class KexiDBConnection
 		/**
 		 * save database-connection infos
 		 */
+		void	writeInfo(KexiDB* destDB,int priority);
 		void	writeInfo(QDomDocument &doc);
 
 		void	flush(KoStore *store);

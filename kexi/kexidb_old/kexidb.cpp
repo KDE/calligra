@@ -113,6 +113,20 @@ KexiDB::createField(const QString& /*table*/, const QString& /*field*/, KexiDBFi
 	return false;
 }
 
+bool KexiDB::createTable(const KexiDBTable& tableDef) {
+	if (tableDef.count()<1) return false;
+	KexiDBTable::const_iterator it=tableDef.begin();
+	if (!createField(*it,KexiDBTableStruct(),true)) return false;
+	++it;
+	for(;it!=tableDef.end();++it)
+	{
+		if (!createField(*it,KexiDBTableStruct(),false))
+			return false;
+	}
+	return true;
+
+}
+
 bool
 KexiDB::alterField(const KexiDBField& changedField, unsigned int index,
 	KexiDBTableStruct fields)

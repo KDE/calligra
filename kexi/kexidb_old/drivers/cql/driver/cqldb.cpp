@@ -129,6 +129,20 @@ CqlDB::query(QString statement)
 	return true;
 }
 
+bool  CqlDB::commitWork() {
+	try
+	{
+		m_db->executeImmediate("COMMIT WORK");
+	}
+	catch(CqlException& ex)
+	{
+		m_error.setup(2,i18n("Commit Workk failed"));
+//		throw new KexiDBError(0, i18n("Query failed"));
+		return false;
+		cerr << ex << endl;
+	}
+}
+
 KexiDBRecord*
 CqlDB::queryRecord(QString statement, bool buffer)
 {
@@ -235,6 +249,165 @@ CqlDB::getInternalDataType(int t)
 		default:
 			return KexiDBField::SQLVarchar;
 	}
+}
+
+
+QString
+CqlDB::getNativeDataType(const KexiDBField::ColumnType& t)
+{
+	switch(t)
+	{
+		case KexiDBField::SQLLongVarchar:
+			return "LONGVARCHAR";
+		case KexiDBField::SQLVarchar:
+			return "VARCHAR";
+		case KexiDBField::SQLInteger:
+			return "INTEGER";
+		case KexiDBField::SQLSmallInt:
+			return "SMALLINT";
+		case KexiDBField::SQLTinyInt:
+			return "TINYINT";
+		case KexiDBField::SQLNumeric:
+			return "NUMERIC";
+		case KexiDBField::SQLDouble:
+			return "DOUBLE";
+		case KexiDBField::SQLBigInt:
+			return "BIGINT";
+		case KexiDBField::SQLDecimal:
+			return "DECIMAL";
+		case KexiDBField::SQLFloat:
+			return "FLOAT";
+		case KexiDBField::SQLBinary:
+			return "BINARY";
+		case KexiDBField::SQLLongVarBinary:
+			return "BINARY";
+		case KexiDBField::SQLVarBinary:
+			return "VARBINARY";
+		case KexiDBField::SQLDate:
+			return "DATE";
+		case KexiDBField::SQLTime:
+			return "TIME";
+		case KexiDBField::SQLTimeStamp:
+			return "TIMESTAMP";
+		case KexiDBField::SQLBoolean:
+			return "UNDEFINED";
+		case KexiDBField::SQLInterval:
+			return "UNDEFINED";
+		case KexiDBField::SQLInvalid:
+		case KexiDBField::SQLLastType:
+			return QString::null;
+	}
+
+	return QString::null;
+}
+
+
+bool CqlDB::createTable(const KexiDBTable& tableDef) {
+
+	if (tableDef.tableName().isEmpty()) return false;
+	if (tableDef.count()==0) return false;
+
+	QString qstr = "CREATE TABLE " + tableDef.tableName() + " (";
+	bool Comma=false;
+	for (KexiDBTable::const_iterator it=tableDef.begin();
+		it!=tableDef.end();++it) {
+
+		if (Comma) qstr +=',';
+
+		qstr +=(*it).name()+" ";
+		qstr += " " + createDefinition(*it);
+		Comma=true;
+	}
+	qstr += ")";
+
+	kdDebug()<<"CqlDB::createTable "<<qstr<<endl;
+	try
+	{
+		m_db->executeImmediate(qstr.latin1());
+	}
+	catch(CqlException& ex)
+	{
+		m_error.setup(1,i18n("Table could not be created"));
+//		throw new KexiDBError(0, i18n("Query failed"));
+		cerr << ex << endl;
+		return false;
+//
+	}
+	return true;
+}
+
+
+QString
+CqlDB::createDefinition(const KexiDBField& field)
+{
+	QString qstr = getNativeDataType(field.sqlType());
+	bool allowUnsigned = false;
+
+	switch(field.sqlType())
+	{
+		case KexiDBField::SQLInteger:
+		case KexiDBField::SQLSmallInt:
+		case KexiDBField::SQLTinyInt:
+		case KexiDBField::SQLBigInt:
+			allowUnsigned = true;
+			break;
+		case KexiDBField::SQLVarchar:
+			qstr += "(" + QString::number(field.length()) + ")";
+			break;
+		case KexiDBField::SQLDecimal:
+		case KexiDBField::SQLFloat:
+		case KexiDBField::SQLDouble:
+		case KexiDBField::SQLNumeric:
+			allowUnsigned = true;
+			qstr += "(" + QString::number(field.length()) + "," + QString::number(field.precision()) + ")";
+			break;
+		case KexiDBField::SQLInvalid:
+		case KexiDBField::SQLBinary:
+		case KexiDBField::SQLBoolean:
+		case KexiDBField::SQLDate:
+		case KexiDBField::SQLLongVarBinary:
+		case KexiDBField::SQLTime:
+		case KexiDBField::SQLTimeStamp:
+		case KexiDBField::SQLVarBinary:
+		case KexiDBField::SQLInterval:
+		case KexiDBField::SQLLongVarchar:
+		case KexiDBField::SQLLastType:
+			break;
+	}
+
+	if((field.constraints() & KexiDBField::CCNotNull) || field.primary_key())
+	{
+		qstr += " NOT NULL";
+	}
+	else
+	{
+		qstr += " ";
+	}
+
+	if (field.primary_key())
+		qstr+" PRIMARY KEY";
+
+	if(field.binary() && (field.sqlType() == KexiDBField::SQLVarchar))
+	{
+		qstr += " BINARY";
+	}
+
+	if(field.unsignedType() && allowUnsigned)
+	{
+		qstr += " UNSIGNED";
+	}
+
+	if(!field.defaultValue().toString().isEmpty())
+	{
+		qstr += " DEFAULT " + field.defaultValue().toString();
+	}
+
+	if(field.constraints() & KexiDBField::CCAutoInc)
+	{
+		qstr += " AUTO_INCREMENT";
+	}
+
+	return qstr;
 }
 
 KexiDBError *CqlDB::latestError()

@@ -44,19 +44,23 @@
 #include "kexiprojecthandler.h"
 #include "kexidbconnection.h"
 
+#undef JoWenn_VERY_EXPERIMENTAL
+
 
 KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject* parent,
          const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
       m_db(0),
-      m_handlersLoaded(false)
+      m_handlersLoaded(false),
+      m_projectConnection(0)
 {
 	dcop = 0;
 	setInstance( KexiFactory::global(), false );
 	//m_db = new KexiDB(this, "db");
-	m_dbInterfaceManager=KexiDBInterfaceManager::self(); //I think this class should be static
+	m_dbInterfaceManager=KexiDBInterfaceManager::self();
 	m_dbInterfaceManager->addRef();
 	m_dbconnection = new KexiDBConnection();
+	m_projectConnection=new KexiDBConnection();
 	m_relationManager=new KexiRelation(this);
 
 	m_parts = new PartList();
@@ -69,6 +73,8 @@ KexiProject::~KexiProject()
 {
 	m_dbconnection->clean();
 	delete dcop;
+	delete m_projectConnection;
+	delete m_projectDB;
 	m_dbInterfaceManager->remRef();
 }
 
@@ -106,17 +112,47 @@ bool KexiProject::completeLoading( KoStore* store )
 bool KexiProject::initDoc()
 {
 	QString filename;
-	KoTemplateChooseDia::ReturnType ret=KoTemplateChooseDia::choose(KexiFactory::global(),filename,"application/x-vnd.kde.kexi","*.kexi",
+	KoTemplateChooseDia::ReturnType ret=KoTemplateChooseDia::choose(
+		KexiFactory::global(),filename,"application/x-vnd.kde.kexi","*.kexi",
 		i18n("Kexi"),KoTemplateChooseDia::Everything,"kexi_template");
+
 	bool ok=false;
 	if (ret==KoTemplateChooseDia::Empty) {
 		clear();
 		loadHandlers();
-		QObject *newDlg = KParts::ComponentFactory::createInstanceFromLibrary<QObject>( "kexiprojectwizard", this );
-		ok=(static_cast<KexiCreateProjectIface*>(newDlg->qt_cast("KexiCreateProjectIface"))->execute())==QDialog::Accepted;
+
+
+		QObject *newDlg = KParts::ComponentFactory::
+			createInstanceFromLibrary<QObject>( "kexiprojectwizard", this );
+		ok=(static_cast<KexiCreateProjectIface*>(newDlg->
+			qt_cast("KexiCreateProjectIface"))->execute())==QDialog::Accepted;
+		QString newProjectFileName=(static_cast<KexiCreateProjectIface*>(newDlg->
+			qt_cast("KexiCreateProjectIface")))->projectFileName();
 		delete newDlg;
+
+		/*create the initial project, which will than be reopened for work*/
+		if (ok) {
+#ifdef JoWenn_VERY_EXPERIMENTAL
+			m_projectConnection= new KexiDBConnection("cql",
+			newProjectFileName,true); //fixme later
+
+			m_projectDB=m_projectConnection->connectDB(m_dbInterfaceManager);
+			if (!m_projectDB) {
+				KMessageBox::error(0, i18n("The CQL++ module for accessing the"
+					"project file failed to initialize"));
+					return false;
+			}
+			m_dbconnection->writeInfo(m_projectDB,0);
+#endif
+		}
 	} else if (ret==KoTemplateChooseDia::File) {
 		loadHandlers();
+#ifdef JoWenn_VERY_EXPERIMENTAL
+		m_projectConnection= new KexiDBConnection("cql",
+			"/home/jowenn/kexidb",true); //fixme later
+		m_projectDB=m_projectConnection->connectDB(m_dbInterfaceManager);
+		if (!m_projectDB) return false;
+#endif
 		KURL url(filename);
 		kdDebug()<<"kexi: opening file: "<<url.prettyURL()<<endl;
 		ok=openURL(url);

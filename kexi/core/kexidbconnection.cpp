@@ -215,6 +215,39 @@ KexiDBConnection::loadInfo(QDomElement &rootElement)
 */
 }
 
+
+void
+KexiDBConnection::writeInfo(KexiDB* destDB,int priority)
+{
+	bool firstEntry=false;
+	if (priority==0) {
+		/* try to create the needed table */
+		KexiDBTable kdbt("kexi_databaselist");
+		kdbt.addField(KexiDBField("id",KexiDBField::SQLInteger,
+			KexiDBField::CCUnique | KexiDBField::CCNotNull |
+			KexiDBField::CCPrimaryKey));
+		kdbt.addField(KexiDBField("type",KexiDBField::SQLVarchar,
+			KexiDBField::CCNotNull,20));
+		kdbt.addField(KexiDBField("engine",KexiDBField::SQLVarchar,
+			KexiDBField::CCNotNull,30));
+		kdbt.addField(KexiDBField("host",KexiDBField::SQLVarchar,
+			KexiDBField::CCNone,255));
+		kdbt.addField(KexiDBField("kexiuser",KexiDBField::SQLVarchar,
+			KexiDBField::CCNone,20));
+		kdbt.addField(KexiDBField("kexipassword",KexiDBField::SQLVarchar,
+			KexiDBField::CCNone,20));
+
+		firstEntry=!destDB->createTable(kdbt);
+		/* perhaps error checking should be done here */
+	}
+	if (firstEntry) {
+	} else {
+	/*  here checks for insert/update are needed */
+	}
+
+}
+
+
 void
 KexiDBConnection::writeInfo(QDomDocument &domDoc)
 {

@@ -59,6 +59,7 @@ class KexiCreateProject : public KWizard, public KexiCreateProjectIface {
 
 		KexiProject *project()const ;
 		int execute() {return exec();}
+		virtual QString projectFileName();
 	protected:
 		void			addItem(KexiCreateProjectPage *page, QString title, int index=-1);
 		/*! adds pages, needed for a section

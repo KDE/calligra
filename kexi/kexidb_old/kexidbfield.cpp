@@ -20,6 +20,21 @@
 
 #include "kexidbfield.h"
 
+KexiDBField::KexiDBField()
+{
+	m_table = "";
+	m_name = "";
+	m_constraints = KexiDBField::CCNone;
+	m_reference = "";
+	m_sqlType = KexiDBField::SQLInvalid;
+	m_length = 0;
+	m_precision = 0;
+	m_unsigned = false;
+	m_binary = false;
+	m_defaultValue = QVariant("");
+}
+
+
 KexiDBField::KexiDBField(const QString& t)
 {
 	m_table = t;
@@ -32,6 +47,15 @@ KexiDBField::KexiDBField(const QString& t)
 	m_unsigned = false;
 	m_binary = false;
 	m_defaultValue = QVariant("");
+}
+
+KexiDBField::KexiDBField(const QString& name, enum KexiDBField::ColumnType ctype,
+	int cconst,int length, int precision, bool isUnsigned,
+	bool isBinary, QVariant defaultValue):
+	m_name(name),m_constraints(cconst),m_sqlType(ctype),m_length(length),
+	m_precision(precision),m_unsigned(isUnsigned),m_binary(isBinary),
+	m_defaultValue(defaultValue)
+{
 }
 
 QVariant::Type
@@ -157,8 +181,7 @@ KexiDBField::length() const
 	return m_length;
 }
 
-KexiDBField::ColumnConstraints
-KexiDBField::constraints() const
+int KexiDBField::constraints() const
 {
 	return m_constraints;
 }
@@ -206,7 +229,7 @@ KexiDBField::setColumnType(ColumnType t)
 }
 
 void
-KexiDBField::setConstraints(ColumnConstraints c)
+KexiDBField::setConstraints(int c)
 {
 	m_constraints = c;
 }

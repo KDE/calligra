@@ -46,10 +46,13 @@ class CqlDB : public KexiDB
 		bool		query(QString statement);
 		KexiDBRecord*	queryRecord(QString query, bool buffer=false);
 
-		bool alterField(const QString& table, const QString& field, const QString& newFieldName,
-			KexiDBField::ColumnType dtype, int length, int precision, KexiDBField::ColumnConstraints constraints,
+		bool alterField(const QString& table, const QString& field,
+			const QString& newFieldName,
+			KexiDBField::ColumnType dtype, int length, int precision,
+			KexiDBField::ColumnConstraints constraints,
 			bool binary, bool unsignedType, const QString& defaultVal);
 
+		virtual bool createTable(const KexiDBTable& tableDef);
 
 		// internal cql->kexi convertations
 		static QString	cqlString(const CqlString &str);
@@ -57,8 +60,10 @@ class CqlDB : public KexiDB
 		static QString	errorText(CqlException &ex);
 		static KexiDBField::ColumnType getInternalDataType(int t);
 
+		QString createDefinition(const KexiDBField& field);
+		QString getNativeDataType(const KexiDBField::ColumnType& t);
                 virtual KexiDBError *latestError();
-
+		virtual bool commitWork();
 	private:
 		SqlHandle	*m_db;
                 KexiDBError     m_error;

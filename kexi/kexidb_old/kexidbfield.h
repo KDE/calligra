@@ -62,6 +62,13 @@ class KexiDBField
  		};
 
 		KexiDBField(const QString& t);
+		KexiDBField();
+
+		KexiDBField(const QString& name, enum ColumnType ctype,
+		int cconst=CCNone,int length=0, int precision=0,
+		bool isUnsigned=false,bool isBinary=false, QVariant defaultValue=QVariant(""));
+
+
 		virtual ~KexiDBField() {}
 
 		static QVariant::Type sql2qt(ColumnType sqltype);
@@ -93,7 +100,7 @@ class KexiDBField
 		/*!
 		 *	@returns the constraints on this column
 		 */
-		virtual ColumnConstraints		constraints() const;
+		virtual int		constraints() const;
 
 		/*!
 		 *	@returns the table.column that this field references or QString::null if !foreign_key()
@@ -111,7 +118,7 @@ class KexiDBField
 		void setTable(const QString& t);
 		void setName(const QString& n);
 		void setColumnType(ColumnType t);
-		void setConstraints(ColumnConstraints c);
+		void setConstraints(int c);
 		void setLength(int l);
 		void setPrecision(int p);
 		void setUnsigned(bool u);
@@ -128,7 +135,7 @@ class KexiDBField
 		QString m_name;
 		QString m_reference;
 		ColumnType m_sqlType;
-		ColumnConstraints m_constraints;
+		int m_constraints;
 		int m_length;
 		int m_precision;
 		bool m_unsigned;

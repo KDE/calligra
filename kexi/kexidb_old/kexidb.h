@@ -25,6 +25,7 @@ Boston, MA 02111-1307, USA.
 
 #include "kexidbresult.h"
 #include "kexidbfield.h"
+#include "kexidbtable.h"
 #include "kexidbwatcher.h"
 
 class KexiDBInterfaceManager;
@@ -94,7 +95,8 @@ class KexiDB : public QObject
 			unsigned int index, KexiDBTableStruct fields);
 		virtual bool createField(const KexiDBField& newField,
 			KexiDBTableStruct fields, bool createTable = false);
-
+		/* the createTable method should be overloaded to get betterperformance */
+		virtual bool createTable(const KexiDBTable& tableDef);
 		virtual KexiDBResult		*getResult();
 
 		virtual KexiDBTableStruct	getStructure(const QString& table);
@@ -105,6 +107,7 @@ class KexiDB : public QObject
 		virtual unsigned long		affectedRows();
 		virtual KexiDBWatcher		*watcher() { return m_dbwatcher; }
 
+		virtual bool commitWork() {return false;}
 
 		void setRelations(RelationList r) { m_relations = r; }
 		RelationList			relations() { return m_relations; }

@@ -24,6 +24,7 @@ class KexiCreateProjectIface {
 	KexiCreateProjectIface(){;}
 	virtual ~KexiCreateProjectIface(){;}
 	virtual int execute()=0;
+	virtual QString projectFileName()=0;
 };
 
 #endif
