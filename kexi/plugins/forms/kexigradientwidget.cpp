@@ -32,7 +32,7 @@
 KexiGradientWidget::KexiGradientWidget( QWidget *parent, const char *name, WFlags f )
 	: QWidget( parent, name, f ), p_displayMode( NoGradient ),
 	p_gradientType( VerticalGradient ), 
-	p_color1( Qt::red ), p_color2( Qt::blue ), p_currentChild( 0 ),
+	p_color1( Qt::white ), p_color2( Qt::blue ), p_currentChild( 0 ),
 	p_opacity( 0.5 ), p_cacheDirty( true )
 {
 	p_customBackgroundWidgets.setAutoDelete( false );
