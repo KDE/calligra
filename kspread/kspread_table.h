@@ -395,7 +395,7 @@ public:
     void sortByColumn( int ref_column, SortingOrder = Increase );
     bool isSorting() { return m_sort; }
     void setSort( bool sort ) { m_sort=sort; }
-    void setSeries( const QPoint &_marker,int start,int end,int step,Series mode );
+    void setSeries( const QPoint &_marker,int start,int end,int step,Series mode,Series type );
     /**
      * Insert or remove =>move cells
      */

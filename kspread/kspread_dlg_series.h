@@ -52,6 +52,8 @@ protected:
   QPushButton* m_pClose;
   QRadioButton* column;
   QRadioButton* row;
+  QRadioButton* linear;
+  QRadioButton* geometric;
   QPoint  marker;
 };
 

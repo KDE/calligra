@@ -11,5 +11,5 @@ enum PasteMode { Normal, Text, Format, NoBorder, NormalAndTranspose, TextAndTran
 		 FormatAndTranspose, NoBorderAndTranspose };
 enum Operation { OverWrite, Add, Mul, Sub, Div };
 enum Conditional { None, Equal,Superior,Inferior,SuperiorEqual,InferiorEqual,Between,Different};
-enum Series {Column,Row};
+enum Series {Column,Row,Linear,Geometric};
 #endif

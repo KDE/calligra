@@ -830,12 +830,12 @@ m_pDoc->setModified( true );
 		cell-> setBgColor(bg_Color);
 		cell->clearDisplayDirtyFlag();
 	    }
-	
+
 	emit sig_updateView( this, r );
     }
 }
 
-void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,Series mode)
+void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,Series mode,Series type)
 {
 m_pDoc->setModified( true );
 QRect r(_marker.x(), _marker.y(), _marker.x(), _marker.y() );
@@ -844,8 +844,9 @@ int y = r.top();
 int x = r.left();
 int posx=0;
 int posy=0;
-for ( int incr=start;incr<=end;incr=incr+step )
-	{
+//for ( int incr=start;incr<=end;incr=incr+step )
+for ( int incr=start;incr<=end; )
+        {
 	KSpreadCell *cell = cellAt( x+posx, y+posy );
 
 	if ( cell == m_pDefaultCell )
@@ -859,9 +860,17 @@ for ( int incr=start;incr<=end;incr=incr+step )
 
 	if(mode==Column)
 	    posy++;
-	else
+	else if(mode==Row)
 	    posx++;
-	
+        else
+            cout <<"Error in Series::mode\n";
+
+        if(type==Linear)
+	    incr=incr+step;
+	else if(type==Geometric)
+	    incr=incr*step;
+        else
+            cout <<"Error in Series::type\n";
 	}
 
 }

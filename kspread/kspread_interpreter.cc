@@ -1226,29 +1226,40 @@ static bool kspreadfunc_date( KSContext& context )
 static bool kspreadfunc_day( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
+  QString tmp;
   if ( !KSUtil::checkArgumentsCount( context,1, "day",true ) )
     return false;
 
   if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
     return false;
 
-  context.setValue( new KSValue(KGlobal::locale()->WeekDayName(args[0]->intValue())));
+  if(KGlobal::locale()->WeekDayName(args[0]->intValue()).isNull())
+        tmp="Err";
+  else
+        tmp= KGlobal::locale()->WeekDayName(args[0]->intValue());
 
+  //context.setValue( new KSValue(KGlobal::locale()->WeekDayName(args[0]->intValue())));
+  context.setValue( new KSValue(tmp));
   return true;
 }
 
 static bool kspreadfunc_month( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
+  QString tmp;
   if ( !KSUtil::checkArgumentsCount( context,1, "month",true ) )
     return false;
 
   if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
     return false;
 
-  context.setValue( new KSValue(KGlobal::locale()->MonthName(args[0]->intValue())));
+  if(KGlobal::locale()->MonthName(args[0]->intValue()).isNull())
+        tmp="Err";
+  else
+        tmp=KGlobal::locale()->MonthName(args[0]->intValue());
+
+  context.setValue( new KSValue(tmp));
+  //context.setValue( new KSValue(KGlobal::locale()->MonthName(args[0]->intValue())));
 
   return true;
 }
@@ -1363,7 +1374,7 @@ static bool kspreadfunc_fact( KSContext& context )
 
   result=fact((double)args[0]->intValue(),0);
   //In fact function val must be positive
-  tmp="err";
+  tmp="Err";
   if(result==-1)
         context.setValue( new KSValue(tmp));
   else
@@ -1387,7 +1398,7 @@ static bool kspreadfunc_arrang( KSContext& context )
   if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
     return false;
 
-  tmp="err";
+  tmp="Err";
   if((double)args[0]->intValue()<(double)args[1]->intValue())
           context.setValue( new KSValue(tmp ));
 
@@ -1423,7 +1434,7 @@ static bool kspreadfunc_combin( KSContext& context )
   if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
     return false;
 
-  tmp="err";
+  tmp="Err";
   if((double)args[0]->intValue()<(double)args[1]->intValue())
           context.setValue( new KSValue(tmp ));
 
@@ -1463,7 +1474,7 @@ static bool kspreadfunc_bino( KSContext& context )
   if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
     return false;
 
-  tmp="err";
+  tmp="Err";
   if(args[0]->doubleValue()<args[1]->doubleValue())
           context.setValue( new KSValue(tmp ));
 
@@ -1514,7 +1525,7 @@ static bool kspreadfunc_bino_inv( KSContext& context )
   if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
     return false;
 
-  tmp="err";
+  tmp="Err";
   if(args[0]->doubleValue()<args[1]->doubleValue())
           context.setValue( new KSValue(tmp ));
 

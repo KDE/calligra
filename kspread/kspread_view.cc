@@ -465,7 +465,7 @@ bool KSpreadView::eventKeyPressed( QKeyEvent* _event, bool choose )
 	}
 	else if ( choose )
 	    m_pTable->setChooseRect( QRect( m_pCanvas->chooseMarkerColumn(), m_pCanvas->chooseMarkerRow(), 1, 1 ) );
-	
+
 	(m_pCanvas->*showMarker)();
 
 	if ( !choose )
@@ -1225,7 +1225,7 @@ if ( m_pTable != 0L )
 		{
 		m_pTable->borderRight( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,m_borderColor->color());
 		}
-	}	
+	}
 }
 void KSpreadView::borderLeft()
 {
@@ -1496,6 +1496,7 @@ void KSpreadView::gotoCell()
 {
     KSpreadgoto* dlg = new KSpreadgoto( this, "GotoCell" );
     dlg->show();
+
 }
 
 void KSpreadView::replace()
@@ -2048,7 +2049,7 @@ void KSpreadView::defaultSelection()
 void KSpreadView::slotInsert()
 {
     KSpreadinsert* dlg = new KSpreadinsert( this, "Insert",QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow()),KSpreadinsert::Insert );
-    dlg->show();  	
+    dlg->show();
 }
 
 void KSpreadView::slotRemove()

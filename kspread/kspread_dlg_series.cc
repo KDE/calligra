@@ -31,56 +31,72 @@
 #include <kbuttonbox.h>
 #include <qbuttongroup.h>
 #include <knumvalidator.h>
+
 KSpreadseries::KSpreadseries( KSpreadView* parent, const char* name,const QPoint &_marker)
 	: QDialog( parent, name )
 {
   m_pView = parent;
   marker=_marker;
 
-
   setCaption( i18n("Series") );
-  QGridLayout *grid1 = new QGridLayout(this,2,2,15,7);
-  QButtonGroup* gb = new QButtonGroup( i18n("Linear series"), this );
+  QGridLayout *grid1 = new QGridLayout(this,3,2,15,7);
 
-  QGridLayout *grid2 = new QGridLayout(gb,2,4,15,7);
-  
-  column = new QRadioButton( i18n("Column"), gb );
+  QButtonGroup* gb1 = new QButtonGroup( i18n("Mode"), this );
+  QGridLayout *grid3 = new QGridLayout(gb1,2,2,15,7);
+  column = new QRadioButton( i18n("Column"), gb1 );
   column->resize( column->sizeHint() );
-  grid2->addWidget(column,0,0);
-  
-  row = new QRadioButton( i18n("Row"), gb );
+  grid3->addWidget(column,0,0);
+
+  row = new QRadioButton( i18n("Row"), gb1 );
   row->resize( row->sizeHint() );
-  grid2->addWidget(row,1,0);
+  grid3->addWidget(row,1,0);
 
   column->setChecked(true);
-  
-  
+
+
+  QButtonGroup* gb2 = new QButtonGroup( i18n("Type"), this );
+  QGridLayout *grid4 = new QGridLayout(gb2,2,2,15,7);
+  linear = new QRadioButton( i18n("Linear"), gb2 );
+  linear->resize( linear->sizeHint() );
+  grid4->addWidget(linear,0,0);
+
+  geometric = new QRadioButton( i18n("Geometric"), gb2 );
+  geometric->resize( geometric->sizeHint() );
+  grid4->addWidget(geometric,1,0);
+
+  linear->setChecked(true);
+
+
+  QButtonGroup* gb = new QButtonGroup( i18n("Parameters"), this );
+  QGridLayout *grid2 = new QGridLayout(gb,2,4,15,7);
+
   QLabel *tmplabel = new QLabel( i18n( "Start value" ), gb );
   tmplabel->resize( tmplabel->sizeHint() );
-  grid2->addWidget(tmplabel,0,1);
+  grid2->addWidget(tmplabel,0,0);
 
   start=new QLineEdit(gb);
   start->resize( start->sizeHint() );
-  grid2->addWidget(start,1,1);
+  grid2->addWidget(start,1,0);
   start->setValidator( new KIntValidator( start ) );
-  
+
   tmplabel = new QLabel( i18n( "End value" ), gb );
   tmplabel->resize( tmplabel->sizeHint() );
-  grid2->addWidget(tmplabel,0,2);
+  grid2->addWidget(tmplabel,0,1);
 
   end=new QLineEdit(gb);
   end->resize( end->sizeHint() );
-  grid2->addWidget(end,1,2);
+  grid2->addWidget(end,1,1);
   end->setValidator( new KIntValidator( end ) );
 
   tmplabel = new QLabel( i18n( "Step" ), gb );
   tmplabel->resize( tmplabel->sizeHint() );
-  grid2->addWidget(tmplabel,0,3);
+  grid2->addWidget(tmplabel,0,2);
 
   step=new QLineEdit(gb);
   step->resize( step->sizeHint() );
-  grid2->addWidget(step,1,3);
+  grid2->addWidget(step,1,2);
   step->setValidator( new KIntValidator( step ) );
+
 
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
@@ -88,11 +104,18 @@ KSpreadseries::KSpreadseries( KSpreadView* parent, const char* name,const QPoint
   m_pOk->setDefault( TRUE );
   m_pClose = bb->addButton( i18n( "Close" ) );
   bb->layout();
-  grid1->addWidget( bb,1,0 );
+  grid1->addWidget( bb,2,1 );
   grid2->setColStretch(0,20);
   grid2->activate();
-  grid1->addWidget(gb,0,0);
-  grid1->addRowSpacing(0,gb->height());
+
+  grid1->addWidget(gb1,0,0);
+  grid1->addRowSpacing(0,gb1->height());
+
+  grid1->addWidget(gb2,0,1);
+  grid1->addRowSpacing(0,gb2->height());
+
+  grid1->addMultiCellWidget(gb,1,1,0,1);
+  grid1->addRowSpacing(1,gb->height());
 
   grid1->activate();
 
@@ -105,6 +128,7 @@ void KSpreadseries::slotOk()
 {
 
 Series mode=Column;
+Series type=Linear;
 QString tmp;
 KSpreadTable *m_pTable;
 m_pTable=m_pView->activeTable();
@@ -113,6 +137,12 @@ if(column->isChecked())
 	mode=Column;
 else if(row->isChecked())
 	mode=Row;
+
+if(linear->isChecked())
+	type=Linear;
+else if(geometric->isChecked())
+	type=Geometric;
+
 if(step->text().isEmpty()||start->text().isEmpty()||end->text().isEmpty())
 	{
 	QMessageBox::warning( 0L, i18n("Error"), i18n("Area text is empty!"),
@@ -124,7 +154,7 @@ else
 		{
 		int val_end=QMAX(end->text().toInt(),start->text().toInt());
 		int val_start=QMIN(end->text().toInt(),start->text().toInt());
-		m_pTable->setSeries( marker,val_start,val_end,step->text().toInt(),mode );
+		m_pTable->setSeries( marker,val_start,val_end,step->text().toInt(),mode,type );
 
 		KSpreadCell *cell = m_pTable->cellAt( marker.x(),marker.y()  );
 		if ( cell->text() != 0L )
