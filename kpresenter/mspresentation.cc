@@ -30,6 +30,8 @@
 #include "kprcanvas.h"
 #include "kprpage.h"
 
+#include <kio/netaccess.h>
+
 #include <qdir.h>
 #include <qframe.h>
 #include <qfileinfo.h>
@@ -423,10 +425,9 @@ void KPMSPresentationSetup::finish()
     // If we fail to create a directory, or the user tells us not to bother creating it,
     // or the user doesn't want to overwrite it, go back.
     QString pathname = path->lineEdit()->text();
-    QFileInfo fi( pathname );
 
     // path doesn't exist. ask user if it should be created.
-    if ( !fi.exists() ) {
+    if ( !KIO::NetAccess::exists(pathname, this) ) {
         QString msg = i18n( "<qt>The directory <b>%1</b> does not exist.<br>"
                             "Do you want create it?</qt>" );
         if( KMessageBox::questionYesNo( this, msg.arg( pathname ),
@@ -435,7 +436,7 @@ void KPMSPresentationSetup::finish()
             {
                 // we are trying to create the directory
                 QDir dir;
-                bool ok = dir.mkdir( pathname );
+                bool ok = KIO::NetAccess::mkdir( pathname,this );
                 if( !ok ) {
                     // then directory couldn't be created
                     KMessageBox::sorry( this,
@@ -451,24 +452,12 @@ void KPMSPresentationSetup::finish()
         }
     }
 
-
-    if ( !fi.isDir() ) {
-        // path exists but it's not a valid directory. warn the user.
-        KMessageBox::error( this,
-                            i18n( "The path you entered is not a valid directory!\n"
-                                  "Please correct this." ),
-                            i18n( "Invalid Path" ) );
-        path->setFocus();
-        return;
-    }
-
-    QFile sppFile;
-    sppFile.setName( ( pathname + "/MSSONY/PJ/" + title->text() + ".SPP" ) );
-    if (sppFile.exists()) {
+    QString sppFile( pathname + "/MSSONY/PJ/" + title->text() + ".SPP" );
+    if (KIO::NetAccess::exists(sppFile,this ) ) {
         if ( KMessageBox::warningYesNo( 0,
                                    i18n( "You are about to overwrite an existing index "
                                          "file : %1.\n "
-                                         "Do you want to proceed?" ).arg( sppFile.name() ),
+                                         "Do you want to proceed?" ).arg( sppFile ),
                                    i18n( "Overwrite presentation" ) )
              == KMessageBox::No) {
             path->setFocus();

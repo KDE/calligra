@@ -923,10 +923,9 @@ void KPWebPresentationWizard::pageChanged()
     if ( currentPage() != page4 )
     {
         QString pathname = path->lineEdit()->text();
-        QFileInfo fi( pathname );
 
         // path doesn't exist. ask user if it should be created.
-        if ( !fi.exists() )
+        if ( !KIO::NetAccess::exists( pathname, true/*write*/,this ) )
         {
             QString msg = i18n( "<qt>The directory <b>%1</b> does not exist.<br>"
                                 "Do you want create it?</qt>" );
@@ -934,8 +933,7 @@ void KPWebPresentationWizard::pageChanged()
                                             i18n( "Directory Not Found" ) )
                 == KMessageBox::Yes)
             {
-                QDir dir;
-                bool ok = dir.mkdir( pathname );
+                bool ok = KIO::NetAccess::mkdir( pathname, this );
                 if( !ok )
                 {
                     KMessageBox::sorry( this,
@@ -952,19 +950,6 @@ void KPWebPresentationWizard::pageChanged()
                 showPage( page1 );
                 path->setFocus();
             }
-        }
-
-        // path exists but it's not a valid directory. warn the user.
-        else if ( !fi.isDir() )
-        {
-            KMessageBox::error( this,
-                                i18n( "The path you entered is not a valid directory!\n"
-                                      "Please correct this." ),
-                                i18n( "Invalid Path" ) );
-
-            // go back to first step
-            showPage( page1 );
-            path->setFocus();
         }
     } else
         finishButton()->setEnabled( true );
