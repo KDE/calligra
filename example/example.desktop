@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Example
+Exec=example
+X-KDE-Library=libexample
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=libcutesti.so
+Comment=Torben's Canossa Example
+MimeType=application/x-example
+Type=KOfficePart
+Icon=example.png
+MiniIcon=example.png
+ServiceTypes=KOfficePart,KPart
