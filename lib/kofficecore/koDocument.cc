@@ -181,6 +181,10 @@ bool KoDocument::saveFile()
 	    kdError(30003) << "Couldn't save in native format!" << endl;
 	else
 	    ret = KoFilterManager::self()->export_();
+    } else {
+      // How can this happen ? m_changed = true ?
+      kdDebug(30003) << "Document changed !??!?!?!!?" << endl;
+      ret = false;
     }
   } else {
     // Native format => normal save
