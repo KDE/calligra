@@ -2085,7 +2085,8 @@ void KPrCanvas::selectAllObj()
     QPtrListIterator<KPObject> it( stickyPage()->objectList() );
     for ( ; it.current() ; ++it )
     {
-        selectObj(it.current());
+        if ( !objectIsAHeaderFooterHidden(it.current()) )
+            selectObj(it.current());
         progress.setProgress( i );
         kapp->processEvents();
         i++;
