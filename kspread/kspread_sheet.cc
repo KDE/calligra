@@ -219,8 +219,10 @@ public:
 
   KSpreadMap *workbook;
   KSpreadDoc *doc;
+  DCOPObject* dcop;
   
   QString name;
+  int id;
     
   // clusters to hold objects
   KSpreadCluster cells;
@@ -229,8 +231,16 @@ public:
 
   // default objects
   KSpreadCell* defaultCell;
+  KSpreadFormat* defaultFormat;
   RowFormat* defaultRowFormat;
   ColumnFormat* defaultColumnFormat;
+  
+  // hold the print object
+  KSpreadSheetPrint* print;
+
+  // cells that need painting
+  QValueList<QRect> paintDirtyList;
+  
 };
  
 int KSpreadSheet::s_id = 0L;
@@ -253,16 +263,16 @@ KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &tableName, const cha
     
   d = new SheetPrivate;
 
-  m_id = s_id++;
-  s_mapTables->insert( m_id, this );
+  d->id = s_id++;
+  s_mapTables->insert( d->id, this );
   d->workbook = map;
   d->doc = map->doc();
 
-  m_defaultFormat = new KSpreadFormat( this, d->doc->styleManager()->defaultStyle() );
+  d->defaultFormat = new KSpreadFormat( this, d->doc->styleManager()->defaultStyle() );
 
   m_emptyPen.setStyle( Qt::NoPen );
 
-  m_dcop = 0;
+  d->dcop = 0;
 
   d->name = tableName;
 
@@ -312,7 +322,7 @@ KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &tableName, const cha
       s.sprintf("Sheet%i", s_id );
       QObject::setName( s.data() );
   }
-  m_pPrint = new KSpreadSheetPrint( this );
+  d->print = new KSpreadSheetPrint( this );
 }
 
 QString KSpreadSheet::sheetName() const
@@ -335,6 +345,11 @@ KSpreadMap* KSpreadSheet::map() const
   return d->workbook; 
 }
 
+int KSpreadSheet::id() const
+{
+  return d->id;
+}    
+
 bool KSpreadSheet::isEmpty( unsigned long int x, unsigned long int y ) const
 {
   const KSpreadCell* c = cellAt( x, y );
@@ -346,7 +361,17 @@ bool KSpreadSheet::isEmpty( unsigned long int x, unsigned long int y ) const
 
 KSpreadCell* KSpreadSheet::defaultCell() const
 {
-  return d->defaultCell;
+    return d->defaultCell;
+}
+
+KSpreadFormat* KSpreadSheet::defaultFormat() 
+{ 
+    return d->defaultFormat;
+};
+
+const KSpreadFormat* KSpreadSheet::defaultFormat() const 
+{ 
+    return d->defaultFormat; 
 }
 
 const ColumnFormat* KSpreadSheet::columnFormat( int _column ) const
@@ -384,6 +409,12 @@ RowFormat* KSpreadSheet::rowFormat( int _row )
 
     return d->defaultRowFormat;
 }
+
+KSpreadSheetPrint* KSpreadSheet::print() const 
+{ 
+    return d->print; 
+}
+
 
 void KSpreadSheet::setDefaultHeight( double height )
 {
@@ -2180,7 +2211,7 @@ bool KSpreadSheet::insertColumn( int col, int nbCol, bool makeUndo )
                                          nbCol + 1, undo );
 
     //update print settings
-    m_pPrint->insertColumn( col, nbCol );
+    d->print->insertColumn( col, nbCol );
 
     refreshChart( QPoint( col, 1 ), true, KSpreadSheet::ColumnInsert );
     refreshMergedCell();
@@ -2223,7 +2254,7 @@ bool KSpreadSheet::insertRow( int row, int nbRow, bool makeUndo )
                                          nbRow + 1, undo );
 
     //update print settings
-    m_pPrint->insertRow( row, nbRow );
+    d->print->insertRow( row, nbRow );
 
     refreshChart( QPoint( 1, row ), true, KSpreadSheet::RowInsert );
     refreshMergedCell();
@@ -2262,7 +2293,7 @@ void KSpreadSheet::removeColumn( int col, int nbCol, bool makeUndo )
                                          nbCol + 1, undo );
 
     //update print settings
-    m_pPrint->removeColumn( col, nbCol );
+    d->print->removeColumn( col, nbCol );
 
     refreshChart( QPoint( col, 1 ), true, KSpreadSheet::ColumnRemove );
     recalc();
@@ -2299,7 +2330,7 @@ void KSpreadSheet::removeRow( int row, int nbRow, bool makeUndo )
                                          nbRow + 1, undo );
 
     //update print settings
-    m_pPrint->removeRow( row, nbRow );
+    d->print->removeRow( row, nbRow );
 
     refreshChart( QPoint( 1, row ), true, KSpreadSheet::RowRemove );
     recalc();
@@ -6156,9 +6187,9 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
     table.setAttribute( "hidezero", (int)m_bHideZero);
     table.setAttribute( "firstletterupper", (int)m_bFirstLetterUpper);
     table.setAttribute( "grid", (int)m_bShowGrid );
-    table.setAttribute( "printGrid", (int)m_pPrint->printGrid() );
-    table.setAttribute( "printCommentIndicator", (int)m_pPrint->printCommentIndicator() );
-    table.setAttribute( "printFormulaIndicator", (int)m_pPrint->printFormulaIndicator() );
+    table.setAttribute( "printGrid", (int)d->print->printGrid() );
+    table.setAttribute( "printCommentIndicator", (int)d->print->printCommentIndicator() );
+    table.setAttribute( "printFormulaIndicator", (int)d->print->printFormulaIndicator() );
     if ( d->doc->specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
       table.setAttribute( "formular", (int)m_bShowFormula); //Was named different
     else
@@ -6179,61 +6210,61 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
 
     // paper parameters
     QDomElement paper = doc.createElement( "paper" );
-    paper.setAttribute( "format", m_pPrint->paperFormatString() );
-    paper.setAttribute( "orientation", m_pPrint->orientationString() );
+    paper.setAttribute( "format", d->print->paperFormatString() );
+    paper.setAttribute( "orientation", d->print->orientationString() );
     table.appendChild( paper );
 
     QDomElement borders = doc.createElement( "borders" );
-    borders.setAttribute( "left", m_pPrint->leftBorder() );
-    borders.setAttribute( "top", m_pPrint->topBorder() );
-    borders.setAttribute( "right", m_pPrint->rightBorder() );
-    borders.setAttribute( "bottom", m_pPrint->bottomBorder() );
+    borders.setAttribute( "left", d->print->leftBorder() );
+    borders.setAttribute( "top", d->print->topBorder() );
+    borders.setAttribute( "right", d->print->rightBorder() );
+    borders.setAttribute( "bottom", d->print->bottomBorder() );
     paper.appendChild( borders );
 
     QDomElement head = doc.createElement( "head" );
     paper.appendChild( head );
-    if ( !m_pPrint->headLeft().isEmpty() )
+    if ( !d->print->headLeft().isEmpty() )
     {
       QDomElement left = doc.createElement( "left" );
       head.appendChild( left );
-      left.appendChild( doc.createTextNode( m_pPrint->headLeft() ) );
+      left.appendChild( doc.createTextNode( d->print->headLeft() ) );
     }
-    if ( !m_pPrint->headMid().isEmpty() )
+    if ( !d->print->headMid().isEmpty() )
     {
       QDomElement center = doc.createElement( "center" );
       head.appendChild( center );
-      center.appendChild( doc.createTextNode( m_pPrint->headMid() ) );
+      center.appendChild( doc.createTextNode( d->print->headMid() ) );
     }
-    if ( !m_pPrint->headRight().isEmpty() )
+    if ( !d->print->headRight().isEmpty() )
     {
       QDomElement right = doc.createElement( "right" );
       head.appendChild( right );
-      right.appendChild( doc.createTextNode( m_pPrint->headRight() ) );
+      right.appendChild( doc.createTextNode( d->print->headRight() ) );
     }
     QDomElement foot = doc.createElement( "foot" );
     paper.appendChild( foot );
-    if ( !m_pPrint->footLeft().isEmpty() )
+    if ( !d->print->footLeft().isEmpty() )
     {
       QDomElement left = doc.createElement( "left" );
       foot.appendChild( left );
-      left.appendChild( doc.createTextNode( m_pPrint->footLeft() ) );
+      left.appendChild( doc.createTextNode( d->print->footLeft() ) );
     }
-    if ( !m_pPrint->footMid().isEmpty() )
+    if ( !d->print->footMid().isEmpty() )
     {
       QDomElement center = doc.createElement( "center" );
       foot.appendChild( center );
-      center.appendChild( doc.createTextNode( m_pPrint->footMid() ) );
+      center.appendChild( doc.createTextNode( d->print->footMid() ) );
     }
-    if ( !m_pPrint->footRight().isEmpty() )
+    if ( !d->print->footRight().isEmpty() )
     {
       QDomElement right = doc.createElement( "right" );
       foot.appendChild( right );
-      right.appendChild( doc.createTextNode( m_pPrint->footRight() ) );
+      right.appendChild( doc.createTextNode( d->print->footRight() ) );
     }
 
     // print range
     QDomElement printrange = doc.createElement( "printrange-rect" );
-    QRect _printRange = m_pPrint->printRange();
+    QRect _printRange = d->print->printRange();
     int left = _printRange.left();
     int right = _printRange.right();
     int top = _printRange.top();
@@ -6258,22 +6289,22 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
 
     // Print repeat columns
     QDomElement printRepeatColumns = doc.createElement( "printrepeatcolumns" );
-    printRepeatColumns.setAttribute( "left", m_pPrint->printRepeatColumns().first );
-    printRepeatColumns.setAttribute( "right", m_pPrint->printRepeatColumns().second );
+    printRepeatColumns.setAttribute( "left", d->print->printRepeatColumns().first );
+    printRepeatColumns.setAttribute( "right", d->print->printRepeatColumns().second );
     table.appendChild( printRepeatColumns );
 
     // Print repeat rows
     QDomElement printRepeatRows = doc.createElement( "printrepeatrows" );
-    printRepeatRows.setAttribute( "top", m_pPrint->printRepeatRows().first );
-    printRepeatRows.setAttribute( "bottom", m_pPrint->printRepeatRows().second );
+    printRepeatRows.setAttribute( "top", d->print->printRepeatRows().first );
+    printRepeatRows.setAttribute( "bottom", d->print->printRepeatRows().second );
     table.appendChild( printRepeatRows );
 
     //Save print zoom
-    table.setAttribute( "printZoom", m_pPrint->zoom() );
+    table.setAttribute( "printZoom", d->print->zoom() );
 
     //Save page limits
-    table.setAttribute( "printPageLimitX", m_pPrint->pageLimitX() );
-    table.setAttribute( "printPageLimitY", m_pPrint->pageLimitY() );
+    table.setAttribute( "printPageLimitX", d->print->pageLimitX() );
+    table.setAttribute( "printPageLimitY", d->print->pageLimitY() );
 
     // Save all cells.
     KSpreadCell* c = d->cells.firstCell();
@@ -6584,7 +6615,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
         QString range = tableElement.attribute( "table:print-ranges" );
         KSpreadRange p( translateOpenCalcPoint( range ) );
         if ( tableName() == p.tableName )
-            m_pPrint->setPrintRange( p.range );
+            d->print->setPrintRange( p.range );
     }
 
 
@@ -6677,7 +6708,7 @@ void KSpreadSheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
         }
         if ( str.contains( "grid" ) )
         {
-            m_pPrint->setPrintGrid( true );
+            d->print->setPrintGrid( true );
         }
         if ( str.contains( "annotations" ) )
         {
@@ -6729,13 +6760,13 @@ void KSpreadSheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
     }
     format = QString( "%1x%2" ).arg( width ).arg( height );
     kdDebug()<<" format : "<<format<<endl;
-    m_pPrint->setPaperLayout( left, top, right, bottom, format, orientation );
+    d->print->setPaperLayout( left, top, right, bottom, format, orientation );
 
     kdDebug()<<" left margin :"<<left<<" right :"<<right<<" top :"<<top<<" bottom :"<<bottom<<endl;
 //<style:properties fo:page-width="21.8cm" fo:page-height="28.801cm" fo:margin-top="2cm" fo:margin-bottom="2.799cm" fo:margin-left="1.3cm" fo:margin-right="1.3cm" style:writing-mode="lr-tb"/>
 //          QString format = paper.attribute( "format" );
 //      QString orientation = paper.attribute( "orientation" );
-//        m_pPrint->setPaperLayout( left, top, right, bottom, format, orientation );
+//        d->print->setPaperLayout( left, top, right, bottom, format, orientation );
 //      }
 }
 
@@ -7268,7 +7299,7 @@ bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, 
         QCString str = KCodecs::base64Encode( m_strPassword );
         xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );/* FIXME !!!!*/
     }
-    QRect _printRange = m_pPrint->printRange();
+    QRect _printRange = d->print->printRange();
     if ( _printRange != ( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) ) )
     {
         QString range= convertRangeToRef( d->name, _printRange );
@@ -7287,7 +7318,7 @@ QString KSpreadSheet::saveOasisTableStyleName( KoGenStyles &mainStyles )
     KoGenStyle pageStyle( KSpreadDoc::STYLE_PAGE, "table"/*FIXME I don't know if name is table*/ );
 
     KoGenStyle pageMaster( KSpreadDoc::STYLE_PAGEMASTER );
-    pageMaster.addAttribute( "style:page-layout-name", m_pPrint->saveOasisTableStyleLayout( mainStyles ) );
+    pageMaster.addAttribute( "style:page-layout-name", d->print->saveOasisTableStyleLayout( mainStyles ) );
 
     QBuffer buffer;
     buffer.open( IO_WriteOnly );
@@ -7431,17 +7462,17 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
     }
     if( table.hasAttribute( "printGrid" ) )
     {
-        m_pPrint->setPrintGrid( (int)table.attribute("printGrid").toInt( &ok ) );
+        d->print->setPrintGrid( (int)table.attribute("printGrid").toInt( &ok ) );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "printCommentIndicator" ) )
     {
-        m_pPrint->setPrintCommentIndicator( (int)table.attribute("printCommentIndicator").toInt( &ok ) );
+        d->print->setPrintCommentIndicator( (int)table.attribute("printCommentIndicator").toInt( &ok ) );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "printFormulaIndicator" ) )
     {
-        m_pPrint->setPrintFormulaIndicator( (int)table.attribute("printFormulaIndicator").toInt( &ok ) );
+        d->print->setPrintFormulaIndicator( (int)table.attribute("printFormulaIndicator").toInt( &ok ) );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "hide" ) )
@@ -7506,7 +7537,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
         float right = borders.attribute( "right" ).toFloat();
         float top = borders.attribute( "top" ).toFloat();
         float bottom = borders.attribute( "bottom" ).toFloat();
-        m_pPrint->setPaperLayout( left, top, right, bottom, format, orientation );
+        d->print->setPaperLayout( left, top, right, bottom, format, orientation );
       }
       QString hleft, hright, hcenter;
       QString fleft, fright, fcenter;
@@ -7538,7 +7569,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
         if ( !right.isNull() )
           fright = right.text();
       }
-      m_pPrint->setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
+      d->print->setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
     }
 
       // load print range
@@ -7559,7 +7590,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
           top = 1;
           bottom = KS_rowMax;
         }
-        m_pPrint->setPrintRange( QRect( QPoint( left, top ), QPoint( right, bottom ) ) );
+        d->print->setPrintRange( QRect( QPoint( left, top ), QPoint( right, bottom ) ) );
       }
 
       // load print zoom
@@ -7568,7 +7599,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
         double zoom = table.attribute( "printZoom" ).toDouble( &ok );
         if ( ok )
         {
-          m_pPrint->setZoom( zoom );
+          d->print->setZoom( zoom );
         }
       }
 
@@ -7578,7 +7609,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
         int pageLimit = table.attribute( "printPageLimitX" ).toInt( &ok );
         if ( ok )
         {
-          m_pPrint->setPageLimitX( pageLimit );
+          d->print->setPageLimitX( pageLimit );
         }
       }
 
@@ -7588,7 +7619,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
         int pageLimit = table.attribute( "printPageLimitY" ).toInt( &ok );
         if ( ok )
         {
-          m_pPrint->setPageLimitY( pageLimit );
+          d->print->setPageLimitY( pageLimit );
         }
       }
 
@@ -7647,7 +7678,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
     {
         int left = printrepeatcolumns.attribute( "left" ).toInt();
         int right = printrepeatcolumns.attribute( "right" ).toInt();
-        m_pPrint->setPrintRepeatColumns( qMakePair( left, right ) );
+        d->print->setPrintRepeatColumns( qMakePair( left, right ) );
     }
 
     // load print repeat rows
@@ -7656,7 +7687,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
     {
         int top = printrepeatrows.attribute( "top" ).toInt();
         int bottom = printrepeatrows.attribute( "bottom" ).toInt();
-        m_pPrint->setPrintRepeatRows( qMakePair( top, bottom ) );
+        d->print->setPrintRepeatRows( qMakePair( top, bottom ) );
     }
 
     if( !table.hasAttribute( "borders1.2" ) )
@@ -7910,7 +7941,7 @@ bool KSpreadSheet::saveChildren( KoStore* _store, const QString &_path )
 KSpreadSheet::~KSpreadSheet()
 {
     //kdDebug()<<" KSpreadSheet::~KSpreadSheet() :"<<this<<endl;
-    s_mapTables->remove( m_id );
+    s_mapTables->remove( d->id );
 
     //when you remove all table (close file)
     //you must reinit s_id otherwise there is not
@@ -7928,12 +7959,12 @@ KSpreadSheet::~KSpreadSheet()
     delete m_pPainter;
     delete m_pWidget;
 
-    delete m_defaultFormat;
+    delete d->defaultFormat;
     delete d->defaultCell;
     delete d->defaultRowFormat;
     delete d->defaultColumnFormat;
-    delete m_pPrint;
-    delete m_dcop;
+    delete d->print;
+    delete d->dcop;
     
     delete d;
 }
@@ -7965,10 +7996,10 @@ void KSpreadSheet::enableScrollBarUpdates( bool _enable )
 
 DCOPObject* KSpreadSheet::dcopObject()
 {
-    if ( !m_dcop )
-        m_dcop = new KSpreadSheetIface( this );
+    if ( !d->dcop )
+        d->dcop = new KSpreadSheetIface( this );
 
-    return m_dcop;
+    return d->dcop;
 }
 
 void KSpreadSheet::hideTable(bool _hide)
@@ -8110,8 +8141,8 @@ void KSpreadSheet::convertObscuringBorders()
 
 void KSpreadSheet::setRegionPaintDirty( QRect const & region )
 {
-  QValueList<QRect>::iterator it  = m_paintDirtyList.begin();
-  QValueList<QRect>::iterator end = m_paintDirtyList.end();
+  QValueList<QRect>::iterator it  = d->paintDirtyList.begin();
+  QValueList<QRect>::iterator end = d->paintDirtyList.end();
 
   while ( it != end )
   {
@@ -8121,18 +8152,18 @@ void KSpreadSheet::setRegionPaintDirty( QRect const & region )
     ++it;
   }
 
-  m_paintDirtyList.append( region );
+  d->paintDirtyList.append( region );
 }
 
 void KSpreadSheet::clearPaintDirtyData()
 {
-  m_paintDirtyList.clear();
+  d->paintDirtyList.clear();
 }
 
 bool KSpreadSheet::cellIsPaintDirty( QPoint const & cell )
 {
   QValueList<QRect>::iterator it;
-  QValueList<QRect>::iterator end = m_paintDirtyList.end();
+  QValueList<QRect>::iterator end = d->paintDirtyList.end();
   bool found = false;
 
   /* Yes, this seems an inefficient method....I just want to get it working
@@ -8140,7 +8171,7 @@ bool KSpreadSheet::cellIsPaintDirty( QPoint const & cell )
      And it might not matter -- this is going to be cleared every repaint
      of the screen, so it will never grow large
   */
-  for ( it = m_paintDirtyList.begin(); it != end && !found; ++it )
+  for ( it = d->paintDirtyList.begin(); it != end && !found; ++it )
   {
     found = (*it).contains( cell );
   }

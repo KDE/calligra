@@ -382,8 +382,8 @@ public:
 
     KSpreadCell* defaultCell() const;
 
-    KSpreadFormat* defaultFormat() { return m_defaultFormat; };
-    const KSpreadFormat* defaultFormat() const { return m_defaultFormat; }
+    KSpreadFormat* defaultFormat();
+    const KSpreadFormat* defaultFormat() const;
 
     QRect visibleRect( KSpreadCanvas const * const _canvas ) const;
     int topRow( double _ypos, double &_top, const KSpreadCanvas *_canvas = 0L ) const;
@@ -944,7 +944,7 @@ public:
 
     const QColorGroup& colorGroup() { return m_pWidget->colorGroup(); }
 
-    int id() const { return m_id; }
+    int id() const;
 
     /**
      * Return the currently maximum defined column of the horizontal scrollbar.
@@ -1144,7 +1144,7 @@ public:
    */
   KSpreadCell* getNextCellRight(int col, int row) const;
 
-  KSpreadSheetPrint * print() const { return m_pPrint; }
+  KSpreadSheetPrint * print() const;
 
 
 signals:
@@ -1243,7 +1243,6 @@ protected:
      */
     // QPtrList<KSpreadChild> m_lstChildren;
 
-    int m_id;
 
     /**
      * The highest row ever accessed by the user.
@@ -1270,7 +1269,6 @@ protected:
     bool m_bScrollbarUpdates;
     bool m_bRightToLeft;
 
-    DCOPObject* m_dcop;
     bool m_bTableHide;
 
     static int s_id;
@@ -1288,8 +1286,6 @@ protected:
     bool m_bHideZero;
     bool m_bFirstLetterUpper;
 
-    KSpreadFormat* m_defaultFormat;
-
     /**
      * @see #emptyPen
      */
@@ -1300,15 +1296,6 @@ protected:
     int m_iScrollPosX;
     int m_iScrollPosY;
 
-    /**
-     * Holds the pointer to the print object
-     */
-    KSpreadSheetPrint * m_pPrint;
-
-    /**
-     * Stores cells that need repainting
-     */
-    QValueList<QRect> m_paintDirtyList;
 
 public:
     // see kspread_sheet.cc for an explanation of this
