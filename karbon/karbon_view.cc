@@ -642,6 +642,18 @@ KarbonView::setZoomAt( double zoom, const KoPoint &p )
 }
 
 void
+KarbonView::viewZoomIn()
+{
+	setZoomAt( zoom() * 1.50 );
+}
+
+void
+KarbonView::viewZoomOut()
+{
+	setZoomAt( zoom() * 0.75 );
+}
+
+void
 KarbonView::zoomChanged( const KoPoint &p )
 {
 	double centerX;
@@ -815,6 +827,9 @@ KarbonView::initActions()
 	m_zoomAction->setItems( stl );
 	m_zoomAction->setEditable( true );
 	m_zoomAction->setCurrentItem( 7 );
+
+	KStdAction::zoomIn( this, SLOT( viewZoomIn() ), actionCollection(), "view_zoom_in" );
+	KStdAction::zoomOut( this, SLOT( viewZoomOut() ), actionCollection(), "view_zoom_out" );
 
 	// No need for the other actions in read-only (embedded) mode
 	if( !shell() )

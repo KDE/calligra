@@ -136,6 +136,10 @@ public slots:
 
 	void closePath();
 
+	//View:
+	void viewZoomIn();
+	void viewZoomOut();
+
 	// TODO: remove this someday:
 	void dummyForTesting();
 
