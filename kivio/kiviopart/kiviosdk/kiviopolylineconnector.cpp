@@ -108,7 +108,7 @@ namespace Kivio {
     QValueList<KoPoint>::iterator it;
     int i = 0;
     
-    for(it = m_points.begin(); it != m_points.end(); it++) {
+    for(it = m_points.begin(); it != m_points.end(); ++it) {
       pa.setPoint(i, zoom->zoomPoint(*it));
       i++;
     }
@@ -159,7 +159,7 @@ namespace Kivio {
     int x, y, flag;
     x = y = flag = 0;
     
-    for(it = m_points.begin(); it != m_points.end(); it++) {
+    for(it = m_points.begin(); it != m_points.end(); ++it) {
       x = zoomHandler->zoomItX((*it).x());
       y = zoomHandler->zoomItY((*it).y());    
       
@@ -331,7 +331,7 @@ namespace Kivio {
     QValueList<KoPoint>::Iterator it;
     bool retVal = true;
     
-    for(it = m_points.begin(); it != m_points.end(); it++) {
+    for(it = m_points.begin(); it != m_points.end(); ++it) {
       retVal = retVal && rect.contains((*it));
     }
     
