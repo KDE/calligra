@@ -73,7 +73,6 @@ public:
     bMainWindowGUIBuilt = false;
     m_activePart = 0L;
     m_activeView = 0L;
-    m_splitViewActionList=0L;
     m_splitter=0L;
     m_orientation=0L;
     m_removeView=0L;
@@ -90,7 +89,7 @@ public:
   KParts::Part *m_activePart;
   KoView *m_activeView;
 
-  QList<KAction> *m_splitViewActionList;
+  QList<KAction> m_splitViewActionList;
   QSplitter *m_splitter;
   KSelectAction *m_orientation;
   KAction *m_removeView;
@@ -141,29 +140,28 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KStdAction::reportBug( m_helpMenu, SLOT( reportBug() ), actionCollection(), "report_bug" );
 
     // set up the action list for the splitter stuff
-    d->m_splitViewActionList=new QList<KAction>;
-    d->m_splitViewActionList->append(new KAction(i18n("New View"), 0, 
+    d->m_splitViewActionList.append(new KAction(i18n("New View"), 0,
         this, SLOT(slotNewView()),
         actionCollection(), "view_newview"));
-    d->m_splitViewActionList->append(new KAction(i18n("Close All Views"), 0, 
+    d->m_splitViewActionList.append(new KAction(i18n("Close All Views"), 0,
         this, SLOT(slotCloseAllViews()),
         actionCollection(), "view_closeallviews"));
-    d->m_splitViewActionList->append(new KAction(i18n("Split View"), 0, 
+    d->m_splitViewActionList.append(new KAction(i18n("Split View"), 0,
         this, SLOT(slotSplitView()),
         actionCollection(), "view_split"));
-    d->m_removeView=new KAction(i18n("Remove View"), 0, 
+    d->m_removeView=new KAction(i18n("Remove View"), 0,
         this, SLOT(slotRemoveView()),
         actionCollection(), "view_rm_splitter");
-    d->m_splitViewActionList->append(d->m_removeView);
+    d->m_splitViewActionList.append(d->m_removeView);
     d->m_removeView->setEnabled(false);
-    d->m_orientation=new KSelectAction(i18n("Splitter Orientation"), 0, 
+    d->m_orientation=new KSelectAction(i18n("Splitter Orientation"), 0,
         this, SLOT(slotSetOrientation()),
         actionCollection(), "view_splitter_orientation");
     QStringList items;
     items << i18n("Vertical")
 	  << i18n("Horizontal");
     d->m_orientation->setItems(items);
-    d->m_splitViewActionList->append(d->m_orientation);
+    d->m_splitViewActionList.append(d->m_orientation);
 
     if ( instance )
       setInstance( instance );
@@ -221,9 +219,6 @@ KoMainWindow::~KoMainWindow()
 	s_lstMainWindows->removeRef( this );
 
     delete d->m_manager;
-    d->m_splitViewActionList->setAutoDelete(true);
-    d->m_splitViewActionList->clear();
-    delete d->m_splitViewActionList;
     delete d->m_splitter;
     d->m_splitter=0L;
     delete d;
@@ -434,7 +429,7 @@ bool KoMainWindow::queryClose(bool forQuit)
   kdDebug(30003) << "KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount() << endl;
   if ( !forQuit && rootDocument()->viewCount() > 1 )
         // there are more open, and we are closing just one, so no problem for closing
-    return true; 
+    return true;
 
   // see DTOR for a descr. for the 2nd test
   if ( rootDocument()->isModified() &&
@@ -629,11 +624,11 @@ void KoMainWindow::slotNewView() {
 
 void KoMainWindow::slotCloseAllViews() {
     kdDebug(30003) << "KoMainWindow::slotCloseAllViews() called" << endl;
-    
+
     if(queryClose(true)){
     kdDebug(30003) << "KoMainWindow::slotCloseAllViews doing a delete on the doc" << endl;
        delete d->m_rootDoc;
-    } 
+    }
 }
 
 
@@ -756,7 +751,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
       factory->addClient( *pIt );
 
     if(d->m_rootViews->findRef(d->m_activeView)!=-1)
-	factory->plugActionList(d->m_activeView, "view_split", *d->m_splitViewActionList );
+	factory->plugActionList(d->m_activeView, "view_split", d->m_splitViewActionList );
 
     // Create and plug toolbar list for Settings menu
     QListIterator<KToolBar> it = toolBarIterator();
