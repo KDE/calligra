@@ -219,6 +219,7 @@ bool KPTextObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
     saveOasisPosObject(xmlWriter );
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
+    m_textobj->saveOasisContent( xmlWriter, mainStyles );
     xmlWriter.endElement();
     return true;
 }

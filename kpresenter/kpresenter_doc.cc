@@ -989,7 +989,19 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
 void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const
 {
-    //todo
+    KoStoreDevice stylesDev( store );
+    KoXmlWriter stylesWriter( &stylesDev, "office:document-styles" );
+
+    stylesWriter.startElement( "office:styles" );
+    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( STYLE_USER );
+    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &stylesWriter, "style:style", (*it).name, "style:paragraph-properties" );
+    }
+    stylesWriter.endElement(); // office:styles
+//todo add other style
+    stylesWriter.endElement(); // root element (office:document-styles)
+    stylesWriter.endDocument();
 }
 
 bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles, KoStore*store )
