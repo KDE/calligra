@@ -514,8 +514,10 @@ void KoMainWindow::updateCaption()
               caption = static_cast<KoDocumentInfoAbout *>(page)->title();
       }
       if ( caption.isEmpty() )
-          // Fall back to document URL
-          caption = rootDocument()->url().prettyURL();
+      {
+          //Fall back to document URL, but don't show 'file' protocol
+          caption = rootDocument()->url().prettyURL( 0, KURL::StripFileProtocol );
+      }
 
       setCaption( caption, rootDocument()->isModified() );
   }
