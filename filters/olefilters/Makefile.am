@@ -8,7 +8,7 @@ LDADD = ./lib/libfilterbase.la ./lib/libklaola.la \
 
 ####### Files
 
-SUBDIRS = lib excel97 powerpoint97 winword97
+SUBDIRS = excel97 powerpoint97 winword97
 
 bin_PROGRAMS = ole_filter
 
@@ -16,4 +16,5 @@ ole_filter_SOURCES = main.cc olefilter.cc
 
 noinst_HEADERS = main.h olefilter.h
 
-ole_filter_METASOURCES = main.moc olefilter.moc
+ole_filter_METASOURCES = AUTO
+

@@ -1,0 +1,42 @@
+dnl ====================
+dnl checks for KATASBASE
+dnl ====================
+
+KATABASE_DIR=''
+
+dnl check for PostgreSQL headers and libraries
+dnl if present compile Katabase 
+AC_MSG_CHECKING([for PostgreSQL])
+ 
+AC_ARG_WITH(pgsqldir,
+[  --with-pgsqldir=pgsqldir   use pgsql installed in pgsqldir ],
+[
+  ac_pgsql_dir=$withval
+], ac_pgsql_dir=/usr/local
+)
+ 
+pgsql_incdirs="$ac_pgsql_dir/pgsql/include /usr/include/pgsql /usr/include /usr/local/include /usr/include/postgresql"
+AC_FIND_FILE(libpq++.h, $pgsql_incdirs, pgsql_incdir)
+if test ! -r $pgsql_incdir/libpq++.h; then
+  AC_MSG_WARN(libpq++.h not found.)
+else
+  KATABASE_DIR='katabase'
+fi
+
+PGSQLINC=-I$pgsql_incdir
+AC_SUBST(PGSQLINC)
+
+pgsql_libdirs="$ac_pgsql_dir/pgsql/lib /usr/lib /usr/local/lib"
+AC_FIND_FILE(libpq.a, $pgsql_libdirs, pgsql_libdir)
+if test ! -r $pgsql_libdir/libpq++.a; then
+  AC_MSG_WARN(libpq++ not found.)
+fi
+
+PGSQLLIB=-L$pgsql_libdir
+AC_SUBST(PGSQLLIB)
+ 
+AC_MSG_RESULT([headers $pgsql_incdir, libraries $pgsql_libdir])
+ 
+KATABASE_LIBS="-lpq++"
+AC_SUBST(KATABASE_LIBS)
+AC_SUBST(KATABASE_DIR)
