@@ -3716,9 +3716,17 @@ void KSpreadTable::copyCells( int x1, int y1, int x2, int y2, bool cpLayout )
 
   if ( sourceCell->isDefault() )
   {
-    // if the source is default there is nothing to copy
-    targetCell = nonDefaultCell( x2, y2 );
-    return;
+    // if the source and target is default there is nothing to copy
+    if ( targetCell->isDefault() )
+    {
+      return;
+    }
+    else // overwrite target with defaultcell
+    {
+      targetCell = nonDefaultCell( x2, y2 );
+      insertCell( targetCell );
+      return;
+    }
   }
 
   if ( targetCell->isDefault() )
@@ -6255,6 +6263,14 @@ KSpreadTable* KSpreadTable::findTable( const QString & _name )
 // ###### Torben: Use this one instead of m_cells.insert()
 void KSpreadTable::insertCell( KSpreadCell *_cell, bool _updateDepend )
 {
+  // First store the existing dependency list, before the old cell is deleted
+//  QPtrList<KSpreadDependency> _cellsDependOnMe = cellAt( _cell->column(), _cell->row() )->cellsDependOnMe();
+  if ( _updateDepend )
+  {
+    //Then set the existing dependency list to a new empty on, so the link to the list doesn't get deleted
+//    _cell->setCellsDependOnMe( QPtrList<KSpreadDependency>() );
+  }    
+  
   m_cells.insert( _cell, _cell->column(), _cell->row() );
 
   /* immediately check for cells that are depending on this one.  This can happen if a dependancy range
@@ -6266,6 +6282,9 @@ void KSpreadTable::insertCell( KSpreadCell *_cell, bool _updateDepend )
      anyway.  So this isn't any worse than what we've had */
   if ( _updateDepend )
   {
+//    cellAt( _cell->column(), _cell->row() )->setCellsDependOnMe( _cellsDependOnMe );
+    
+    
     QPtrListIterator<KSpreadTable> it( map()->tableList() );
     KSpreadCell* c;
     for( ; it.current(); ++it )
@@ -6279,6 +6298,7 @@ void KSpreadTable::insertCell( KSpreadCell *_cell, bool _updateDepend )
 	  }
 	}
     }
+
   }
   if ( m_bScrollbarUpdates )
   {                         
