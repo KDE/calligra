@@ -37,6 +37,7 @@
 #include <kspread_cell.h>
 #include <kspread_doc.h>
 #include <kspread_global.h>
+#include <kspread_map.h>
 #include <kspread_sheet.h>
 #include <kspread_util.h>
 #include <kspread_value.h>
@@ -424,6 +425,8 @@ void OpenCalcImport::convertFormula( QString & text, QString const & f ) const
       parameter += f[p];
 
     ++p;
+    if ( p == l )
+      checkForNamedAreas( parameter );
   }
 
   text = formula + parameter;
@@ -1182,6 +1185,29 @@ bool OpenCalcImport::parseBody( int numOfTables )
   if ( sheet.isNull() )
     return false;
 
+  while ( !sheet.isNull() )
+  {
+    QDomElement t = sheet.toElement();
+    if ( t.isNull() )
+    {
+      sheet = sheet.nextSibling();
+      continue;
+    }
+    if ( t.nodeName() != "table:table" )
+    {
+      sheet = sheet.nextSibling();
+      continue;
+    }
+
+    table = m_doc->createTable();
+    m_doc->addTable( table );
+
+    table->setTableName( t.attribute( "table:name" ), true, false );
+    sheet = sheet.nextSibling();
+  }
+
+  sheet = body.firstChild();
+
   int step = (int) ( 80 / numOfTables );
   int progress = 15;
 
@@ -1198,11 +1224,19 @@ bool OpenCalcImport::parseBody( int numOfTables )
       sheet = sheet.nextSibling();
       continue;
     }
+    if ( t.nodeName() != "table:table" )
+    {
+      sheet = sheet.nextSibling();
+      continue;
+    }
 
-    table = m_doc->createTable();
-    m_doc->addTable( table );
-
-    table->setTableName( t.attribute( "table:name" ), true, false );
+    table = m_doc->map()->findTable( t.attribute( "table:name" ) );
+    if ( !table )
+    {
+      KMessageBox::sorry( 0, i18n( "Skipping a table." ) );
+      sheet = sheet.nextSibling();
+      continue;
+    }
 
     KSpreadFormat * defaultStyle = m_defaultStyles[ "Default" ];
     if ( defaultStyle )
