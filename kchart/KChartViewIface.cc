@@ -83,3 +83,8 @@ void KChartViewIface::defaultConfig()
 {
     view->defaultConfig();
 }
+
+void KChartViewIface::configSubTypeChart()
+{
+    view->slotConfigSubTypeChart();
+}
