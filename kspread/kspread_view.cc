@@ -236,13 +236,13 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     connect( m_alignRight, SIGNAL( toggled( bool ) ), this, SLOT( alignRight( bool ) ) );
     m_alignRight->setExclusiveGroup( "Align" );
 
-    m_alignTop = new KToggleAction( i18n("Align top"), "top", 0, actionCollection(), "top");
+    m_alignTop = new KToggleAction( i18n("Align top"), "text_top", 0, actionCollection(), "top");
     connect( m_alignTop, SIGNAL( toggled( bool ) ), this, SLOT( alignTop( bool ) ) );
     m_alignTop->setExclusiveGroup( "Pos" );
     m_alignMiddle = new KToggleAction( i18n("Align middle"), "middle", 0, actionCollection(), "middle");
     connect( m_alignMiddle, SIGNAL( toggled( bool ) ), this, SLOT( alignMiddle( bool ) ) );
     m_alignMiddle->setExclusiveGroup( "Pos" );
-    m_alignBottom = new KToggleAction( i18n("Align bottom"), "bottom", 0, actionCollection(), "bottom");
+    m_alignBottom = new KToggleAction( i18n("Align bottom"), "text_bottom", 0, actionCollection(), "bottom");
     connect( m_alignBottom, SIGNAL( toggled( bool ) ), this, SLOT( alignBottom( bool ) ) );
     m_alignBottom->setExclusiveGroup( "Pos" );
 
