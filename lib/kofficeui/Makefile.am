@@ -31,7 +31,7 @@ include_HEADERS = \
 	koRect.h koPoint.h koSize.h koPictureFilePreview.h koUnitWidgets.h \
 	tkaction.h tkcoloractions.h tktoolbarbutton.h tkcombobox.h \
 	koCharSelectDia.h koInsertLink.h kotoolbutton.h koeditpath.h \
-	koSpellConfig.h kocommandhistory.h \
+	kocommandhistory.h \
 	koselectaction.h kolinewidthaction.h kolinestyleaction.h
 
 METASOURCES = AUTO
