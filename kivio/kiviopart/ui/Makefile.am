@@ -17,7 +17,10 @@ libui_la_SOURCES = \
 		kivio_protection_panel.cpp\
 		kiviooptionsdialog.cpp\
 		export_page_dialog_base.ui\
-		export_page_dialog.cpp
+		export_page_dialog.cpp \
+		kiviotextformatdlg.cpp \
+		kiviostencilformatdlg.cpp \
+		kivioarrowheadformatdlg.cpp
 EXTRA_DIST = \
 		aligndialog.ui\
 		kivio_birdeye_panel.cpp\
@@ -32,4 +35,10 @@ EXTRA_DIST = \
 		kiviooptionsdialog.h\
 		export_page_dialog_base.ui\
 		export_page_dialog.cpp\
-		export_page_dialog.h
+		export_page_dialog.h\
+		kiviotextformatdlg.cpp\
+		kiviotextformatdlg.h
+		kiviostencilformatdlg.cpp\
+		kiviostencilformatdlg.h\
+		kivioarrowheadformatdlg.cpp\
+		kivioarrowheadformatdlg.h

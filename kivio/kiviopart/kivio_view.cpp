@@ -117,8 +117,9 @@
 #include "kiviostencilsetaction.h"
 #include <qiconview.h>
 #include "kivioarrowheadaction.h"
-
-
+#include "kiviotextformatdlg.h"
+#include "kiviostencilformatdlg.h"
+#include "kivioarrowheadformatdlg.h"
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
 #define MOUSEPOS_TEXT 1000
@@ -392,8 +393,13 @@ void KivioView::setupActions()
   (void) new KAction( i18n("Bring to Front"), "bring_stencil_to_front", 0, this, SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" );
   (void) new KAction( i18n("Send to Back"), "send_stencil_to_back", 0, this, SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" );
 
+  (void) new KAction(i18n("&Text..."), "text", 0, this, SLOT(textFormat()),
+    actionCollection(), "textFormat");
+  (void) new KAction(i18n("&Stencils && Connectors..."), 0, 0, this, SLOT(stencilFormat()),
+    actionCollection(), "stencilFormat");
+  (void) new KAction(i18n("&Arrowheads..."), 0, 0, this, SLOT(arrowHeadFormat()),
+    actionCollection(), "arrowHeadFormat");
   /* Create the fg color button */
-  //FIXME: Port to KOffice!
   m_setFGColor = new TKSelectColorAction( i18n("Set Foreground Color"), TKSelectColorAction::LineColor, actionCollection(), "setFGColor" );
   connect(m_setFGColor,SIGNAL(activated()),SLOT(setFGColor()));
   m_setBGColor = new TKSelectColorAction( i18n("Set Background Color"), TKSelectColorAction::FillColor, actionCollection(), "setBGColor" );
@@ -420,9 +426,6 @@ void KivioView::setupActions()
   m_setUnderline = new KToggleAction( i18n("Toggle Underline Text"), "font_under", 0, actionCollection(), "setFontUnderline" );
   connect( m_setUnderline, SIGNAL(toggled(bool)), SLOT(toggleFontUnderline(bool)));
 
-  //FIXME: Port to KOffice!
-//  m_setHTextAlignment = new KivioParagraphAction( false, actionCollection(), "setHTextAlignment" );
-//  m_setVTextAlignment = new KivioParagraphAction( true, actionCollection(), "setVTextAlignment" );
   m_textAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", CTRL + Key_L,
                                     this, SLOT( textAlignLeft() ),
                                     actionCollection(), "textAlignLeft" );
@@ -444,8 +447,6 @@ void KivioView::setupActions()
                                             this, SLOT( textSubScript() ),
                                             actionCollection(), "textVAlignSub" );
   m_textVAlignSub->setExclusiveGroup( "valign" );
-//  connect( m_setHTextAlignment, SIGNAL(activated(int)), SLOT(setHParaAlign(int)) );
-//  connect( m_setVTextAlignment, SIGNAL(activated(int)), SLOT(setVParaAlign(int)) );
 
   QWidget* lineWidthWidget = new QWidget(this, "kde toolbar widget");
   QLabel* lineWidthLbl = new QLabel(lineWidthWidget, "kde toolbar widget");
@@ -2025,6 +2026,112 @@ void KivioView::showVAlign( int align )
     case Qt::AlignBottom:
       m_textVAlignSub->setChecked(true);
       break;
+  }
+}
+
+void KivioView::textFormat()
+{
+  KivioTextFormatDlg dlg(this);
+  KivioStencil* stencil = activePage()->selectedStencils()->getLast();
+
+  if(stencil) {
+    dlg.setFont(stencil->textFont());
+    dlg.setTextColor(stencil->textColor());
+    dlg.setHAlign(stencil->hTextAlign());
+    dlg.setVAlign(stencil->vTextAlign());
+  } else {
+    dlg.setFont(KoGlobal::defaultFont());
+    dlg.setTextColor(QColor(0, 0, 0));
+    dlg.setHAlign(Qt::AlignHCenter);
+    dlg.setVAlign(Qt::AlignVCenter);
+  }
+
+  if(dlg.exec()) {
+    QPtrListIterator<KivioStencil> it(*activePage()->selectedStencils());
+
+    while((stencil = it.current()) != 0) {
+      ++it;
+      stencil->setTextFont(dlg.font());
+      stencil->setTextColor(dlg.textColor());
+      stencil->setVTextAlign(dlg.valign());
+      stencil->setHTextAlign(dlg.halign());
+    }
+
+    updateToolBars();
+  }
+}
+
+void KivioView::stencilFormat()
+{
+  KivioStencilFormatDlg dlg(this);
+  KivioStencil* stencil = activePage()->selectedStencils()->getLast();
+
+  if(stencil) {
+    dlg.setLineWidth(stencil->lineWidth(), m_pDoc->units());
+    dlg.setLineColor(stencil->fgColor());
+    dlg.setFillColor(stencil->bgColor());
+  } else {
+    dlg.setLineWidth(1.0, m_pDoc->units());
+    dlg.setLineColor(QColor(0, 0, 0));
+    dlg.setFillColor(QColor(255, 255, 255));
+  }
+
+  if(dlg.exec()) {
+    QPtrListIterator<KivioStencil> it(*activePage()->selectedStencils());
+
+    while((stencil = it.current()) != 0) {
+      ++it;
+      stencil->setLineWidth(dlg.lineWidth());
+      stencil->setFGColor(dlg.lineColor());
+      stencil->setBGColor(dlg.fillColor());
+    }
+
+    updateToolBars();
+  }
+}
+
+void KivioView::arrowHeadFormat()
+{
+  KivioArrowHeadFormatDlg dlg(this);
+  dlg.setUnit(m_pDoc->units());
+  dlg.setStartAHType(0);
+  dlg.setEndAHType(0);
+  dlg.setStartAHWidth(10.0);
+  dlg.setStartAHHeight(10.0);
+  dlg.setEndAHWidth(10.0);
+  dlg.setEndAHHeight(10.0);
+
+  KivioStencil* stencil = activePage()->selectedStencils()->getLast();
+
+  if(stencil) {
+    if(stencil->type() == kstConnector) {
+      dlg.setUnit(m_pDoc->units());
+      dlg.setStartAHType(stencil->startAHType());
+      dlg.setEndAHType(stencil->endAHType());
+      dlg.setStartAHWidth(stencil->startAHWidth());
+      dlg.setStartAHHeight(stencil->startAHLength());
+      dlg.setEndAHWidth(stencil->endAHWidth());
+      dlg.setEndAHHeight(stencil->endAHLength());
+    }
+  }
+
+  if(dlg.exec()) {
+    QPtrListIterator<KivioStencil> it(*activePage()->selectedStencils());
+
+    while((stencil = it.current()) != 0) {
+      ++it;
+
+      if(stencil->type() == kstConnector) {
+        stencil->setStartAHType(dlg.startAHType());
+        stencil->setEndAHType(dlg.endAHType());
+        stencil->setStartAHWidth(dlg.startAHWidth());
+        stencil->setStartAHLength(dlg.startAHHeight());
+        stencil->setEndAHWidth(dlg.endAHWidth());
+        stencil->setEndAHLength(dlg.endAHHeight());
+      }
+    }
+
+    updateToolBars();
   }
 }
 

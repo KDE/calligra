@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="13">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="14">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="addStencilSet"/>
@@ -49,16 +49,21 @@
    <Separator/>
    <Action name="exportPage"/>
  </Menu>
- <Menu name="Selection"><text>F&amp;ormat</text>
+ <Menu name="Format"><text>F&amp;ormat</text>
+   <Action name="textFormat"/>
+   <Action name="stencilFormat"/>
+   <Action name="arrowHeadFormat"/>
+   <Separator/>
+   <Action name="paperLayout"/>
+   <Separator/>
+   <Action name="alignStencils"/>
+   <Separator/>
    <Action name="groupStencils"/>
    <Action name="ungroupStencils"/>
    <Separator/>
    <Action name="sendStencilToBack"/>
    <Action name="bringStencilToFront"/>
    <Separator/>
-   <Action name="alignStencils"/>
-   <Separator/>
-   <Action name="paperLayout"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
    <Separator group="settings_show"/>
@@ -80,12 +85,6 @@
   <Action name="viewZoom"/>
 </ToolBar>
 <ToolBar name="FormatToolBar" fullWidth="false"><text>Format</text>
-  <Action name="groupStencils"/>
-  <Action name="ungroupStencils"/>
-  <Separator lineSeparator="true" />
-  <Action name="sendStencilToBack"/>
-  <Action name="bringStencilToFront"/>
-  <Separator lineSeparator="true" />
   <Action name="arrowHeads"/>
   <Separator lineSeparator="true" />
   <Action name="setFGColor"/>
@@ -93,7 +92,7 @@
   <Separator lineSeparator="true" />
   <Action name="setLineWidth"/>
 </ToolBar>
-<ToolBar name="TextBar" fullWidth="false"><text>Format</text>
+<ToolBar name="TextBar" fullWidth="false"><text>Text Format</text>
   <Action name="setFontFamily"/>
   <Action name="setFontSize"/>
   <Separator lineSeparator="true" />

@@ -247,6 +247,10 @@ class KivioView : public KoView
     void rulerChangedUnit(QString u);
 
     void setLineWidthUnit(KoUnit::Unit u);
+
+    void textFormat();
+    void stencilFormat();
+    void arrowHeadFormat();
   protected:
     void setupActions();
     void initActions();
