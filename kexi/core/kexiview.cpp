@@ -167,7 +167,9 @@ void KexiView::initActions()
 //	KAction *actionProjectProps = new KAction(i18n("Project Properties"), "project_props", Key_F7,
 	KAction *actionProjectProps = new KAction(i18n("Project Properties"), "", Key_F7,
 	 actionCollection(), "project_props");
+#ifndef KEXI_NO_UNFINISHED
 	connect(actionProjectProps, SIGNAL(activated()), this, SLOT(slotShowProjectProps()));
+#endif
 
 #ifndef KEXI_NO_UNFINISHED
 	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
@@ -195,6 +197,8 @@ void KexiView::initActions()
   for (int i=0;i<parentCollection->count();i++)
     kdDebug() << parentCollection->action(i)->name() << endl;
 //	parentCollection->action("file_import_file")->setEnabled(false);
+#define INIT_UNF_ACT(act) \
+	{ if (act) connect(act, SIGNAL(activated()), this, SLOT(slotInfoUnfinished())); }
 #define INIT_UNF(act_name) \
 	{ KAction *act = parentCollection->action(act_name); \
 		if (act) connect(act, SIGNAL(activated()), this, SLOT(slotInfoUnfinished())); \
@@ -205,6 +209,7 @@ void KexiView::initActions()
 	INIT_UNF("file_export_file");
 	INIT_UNF("file_send_file");
 	INIT_UNF("help_contents");
+	INIT_UNF_ACT(actionProjectProps);
 #undef INIT_UNF
 #endif
 }
