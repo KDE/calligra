@@ -232,6 +232,12 @@ void KSModule::addObject( const QString& name, const KSValue::Ptr& v )
   m_space.insert( name, v );
 }
 
+void KSModule::removeObject( const QString& name )
+{
+  m_space.remove( name );
+}
+
+
 KSValue::Ptr KSModule::member( KSContext& context, const QString& name )
 {
   KSNamespace::Iterator it = m_space.find( name );

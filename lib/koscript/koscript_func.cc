@@ -351,6 +351,9 @@ KSModule::Ptr ksCreateModule_KScript( KSInterpreter* interp )
 {
   KSModule::Ptr module = new KSModule( interp, "koscript" );
 
+// ariya: for the time being, let's just disable KoScript built-in functions
+// because many have the same name as KSpread functions
+#ifdef 0
   module->addObject( "time", new KSValue( new KSBuiltinFunction( module, "time", ksfunc_time ) ) );
   module->addObject( "date", new KSValue( new KSBuiltinFunction( module, "date", ksfunc_date ) ) );
   module->addObject( "print", new KSValue( new KSBuiltinFunction( module, "print", ksfunc_print ) ) );
@@ -364,6 +367,7 @@ KSModule::Ptr ksCreateModule_KScript( KSInterpreter* interp )
   module->addObject( "toInt", new KSValue( new KSBuiltinFunction( module, "toInt", ksfunc_toInt ) ) );
   module->addObject( "toFloat", new KSValue( new KSBuiltinFunction( module, "toFloat", ksfunc_toFloat ) ) );
   module->addObject( "stringListSplit", new KSValue( new KSBuiltinFunction( module, "stringListSplit", ksfunc_stringListSplit ) ) );
+#endif
 
   return module;
 }

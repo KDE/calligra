@@ -98,6 +98,12 @@ public:
      */
     void addObject( const QString& name, const KSValue::Ptr& v );
     /**
+     * Removed a symbol in the modules namespace.
+     *
+     * This method is INTERNAL. Dont use!
+     */
+    void removeObject( const QString& name );
+    /**
      * @return the interpreter that loaded and executed the module.
      */
     KSInterpreter* interpreter() { return m_interpreter; }
