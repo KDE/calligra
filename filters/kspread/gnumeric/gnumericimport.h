@@ -22,14 +22,38 @@
 
 #include <koFilter.h>
 
-class GNUMERICFilter : public KoFilter {
+#include <qdatetime.h>
+#include <qdom.h>
 
+class KSpreadCell;
+class KSpreadTable;
+
+class GNUMERICFilter : public KoFilter 
+{
     Q_OBJECT
-
-public:
+ public:
     GNUMERICFilter(KoFilter *parent, const char *name, const QStringList&);
     virtual ~GNUMERICFilter() {}
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+
+
+ private:
+  class GnumericDate : public QDate
+  {
+   public:
+    static uint greg2jul( int y, int m, int d );
+    static void jul2greg( double num, int & y, int & m, int & d );
+    static QTime getTime( double num );
+
+  };
+
+  void dateInit();
+  QString convertVars( QString const & str, KSpreadTable * table ) const;
+  void ParsePrintInfo( QDomNode const & printInfo, KSpreadTable * table );
+  void ParseFormat(QString const & formatString, KSpreadCell * kspread_cell);
+  void setStyleInfo(QDomNode *sheet, KSpreadTable *table);
+  bool setType( KSpreadCell * kspread_cell, QString const & formatString, QString & cell_content );
+  
 };
 #endif // GNUMERICFILTER_H
