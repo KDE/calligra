@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,56 +28,56 @@
 using namespace KexiDB;
 
 Reference::Reference()
-	: m_index1(0)
-	, m_index2(0)
+	: m_masterIndex(0)
+	, m_detailsIndex(0)
 {
 	m_pairs.setAutoDelete(true);
 }
 
-Reference::Reference(IndexSchema* foreign, IndexSchema* referenced)
-	: m_index1(0)
-	, m_index2(0)
+Reference::Reference(IndexSchema* masterIndex, IndexSchema* detailsIndex)
+	: m_masterIndex(0)
+	, m_detailsIndex(0)
 {
 	m_pairs.setAutoDelete(true);
-	setIndices(foreign, referenced);
+	setIndices(masterIndex, detailsIndex);
 }
 
 Reference::~Reference()
 {
 }
 
-TableSchema* Reference::foreignSide() const
+TableSchema* Reference::masterTable() const
 {
-	return m_index1 ? m_index1->table() : 0;
+	return m_masterIndex ? m_masterIndex->table() : 0;
 }
 
-TableSchema* Reference::referencedSide() const
+TableSchema* Reference::detailsTable() const
 {
-	return m_index2 ? m_index2->table() : 0;
+	return m_detailsIndex ? m_detailsIndex->table() : 0;
 }
 
-void Reference::setIndices(IndexSchema* foreign, IndexSchema* referenced)
+void Reference::setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex)
 {
-	m_index1 = 0;
-	m_index2 = 0;
+	m_masterIndex = 0;
+	m_detailsIndex = 0;
 	m_pairs.clear();
-	if (!foreign || !referenced || !foreign->table() || !referenced->table() 
-	|| foreign->table()==referenced->table() || foreign->fieldCount()!=referenced->fieldCount())
+	if (!masterIndex || !detailsIndex || !masterIndex->table() || !detailsIndex->table() 
+	|| masterIndex->table()==detailsIndex->table() || masterIndex->fieldCount()!=detailsIndex->fieldCount())
 		return;
-	Field *f1 = foreign->fields()->first();
-	Field *f2 = referenced->fields()->first();
+	Field *f1 = masterIndex->fields()->first();
+	Field *f2 = detailsIndex->fields()->first();
 	while (f1 && f2) {
 		if (f1->type()!=f1->type()) {
-			KexiDBDbg << "Reference::setIndices(INDEX on '"<<foreign->table()->name()
-			<<"',INDEX on "<<referenced->table()->name()<<"): !equal field types: "
+			KexiDBDbg << "Reference::setIndices(INDEX on '"<<masterIndex->table()->name()
+			<<"',INDEX on "<<detailsIndex->table()->name()<<"): !equal field types: "
 			<<Driver::defaultSQLTypeName(f1->type())<<" "<<f1->name()<<", "
 			<<Driver::defaultSQLTypeName(f2->type())<<" "<<f2->name() <<endl;
 			m_pairs.clear();
 			return;
 		}
 		if ((f1->isUnsigned() && !f2->isUnsigned()) || (!f1->isUnsigned() && f1->isUnsigned())) {
-			KexiDBDbg << "Reference::setIndices(INDEX on '"<<foreign->table()->name()
-			<<"',INDEX on "<<referenced->table()->name()<<"): !equal signedness of field types: "
+			KexiDBDbg << "Reference::setIndices(INDEX on '"<<masterIndex->table()->name()
+			<<"',INDEX on "<<detailsIndex->table()->name()<<"): !equal signedness of field types: "
 			<<Driver::defaultSQLTypeName(f1->type())<<" "<<f1->name()<<", "
 			<<Driver::defaultSQLTypeName(f2->type())<<" "<<f2->name() <<endl;
 			m_pairs.clear();
@@ -87,15 +87,15 @@ void Reference::setIndices(IndexSchema* foreign, IndexSchema* referenced)
 		m_pairs.append( new Field::Pair(f1,f2) );
 	}
 	//ok: update information
-	if (m_index1) {//detach yourself
-		m_index1->detachReference(this);
+	if (m_masterIndex) {//detach yourself
+		m_masterIndex->detachReference(this);
 	}
-	if (m_index2) {//detach yourself
-		m_index2->detachReference(this);
+	if (m_detailsIndex) {//detach yourself
+		m_detailsIndex->detachReference(this);
 	}
-	m_index1 = foreign;
-	m_index2 = referenced;
-	m_index1->attachReference(this);
-	m_index2->attachReference(this);
+	m_masterIndex = masterIndex;
+	m_detailsIndex = detailsIndex;
+	m_masterIndex->attachReference(this);
+	m_detailsIndex->attachReference(this);
 }
 

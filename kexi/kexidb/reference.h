@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,28 +24,36 @@
 
 namespace KexiDB {
 
-/*! KexiDB::Reference provides information about reference between two tables.
- Reference is defined by a pair: 
- - foreign key
- - referenced key.
- Later, in this documentation, we will call table that owns fields of foreign key as "foreign side of relation"
- and table that owns fields of referenced key as "referenced side of relation". Use foreignSide()
-  and referencedSide() to get foreign-side-table and referenced-side-table, respectively.
+/*! KexiDB::Reference provides information about one-to-many reference between two tables.
+ Reference is defined by a pair of (potentially multi-field) indices: 
+ - "one" or "master" side: unique key
+ - "many" or "details" side: referenced foreign key
+ <pre>
+ [unique, master] ----< [fk, details]
+ </pre>
 
- Note: some engines (e.g. MySQL with InnoDB) requires that indices at foreign and referenced 
- side are explicity created. 
+ In this documentation, we will call table that owns fields of "one" side as 
+ "master side of the relation", and the table that owns foreign key fields of 
+ as "details side of the relation".
+ Use masterTable(), and detailsTable() to get one-side table and many-side table, respectively.
 
- \todo (js) It is planned that this will be handled by KexiDB internally.
+ Note: some engines (e.g. MySQL with InnoDB) requires that indices at both sides 
+ have to be explicity created. 
+
+ \todo (js) It is planned that this will be handled by KexiDB internally and transparently.
 
  Each (of the two) key can be defined (just like index) as list of fields owned by one table.
  Indeed, reference info can retrieved from Reference object in two ways:
- -# pair of indices; use foreignIndex(), referencedIndex() for that
- -# ordered list of field pairs (<foreign_field>,<referenced_field); use fieldPairs() for that
+ -# pair of indices; use masterIndex(), detailsIndex() for that
+ -# ordered list of field pairs (<master-side-field, details-side-field>); use fieldPairs() for that
 
  No assigned objects (like fields, indices) are owned by Reference object. The exception is that 
  list of field-pairs is internally created (on demand) and owned.
 
- Reference object is owned by IndexSchema object (the one that is defined at foreign reference's side).
+ Reference object is owned by IndexSchema object (the one that is defined at master-side of the 
+ reference).
+ Note also that IndexSchema objects are owned by appropriate tables, so thus 
+ there is implicit ownership between TableSchema and Reference.
  If Reference object is not attached to IndexSchema object, you should care about destroying it by hand.
 */
 
@@ -65,47 +73,47 @@ class KEXI_DB_EXPORT Reference
 		/*! Creates Reference object and initialises it just by 
 		 calling setIndices(). If setIndices() failed, object is still uninitialised.
 		*/
-		Reference(IndexSchema* foreign, IndexSchema* referenced);
+		Reference(IndexSchema* masterIndex, IndexSchema* detailsIndex);
 
 		virtual ~Reference();
 
-		/*! \return index defining foreign side of this reference
+		/*! \return index defining master side of this reference
 		 or null if there is no information defined. */
-		IndexSchema* foreignIndex() const { return m_index1; }
+		IndexSchema* masterIndex() const { return m_masterIndex; }
 
 		/*! \return index defining referenced side of this reference.
 		 or null if there is no information defined. */
-		IndexSchema* referencedIndex() const { return m_index2; }
+		IndexSchema* detailsIndex() const { return m_detailsIndex; }
 
 		/*! \return ordered list of field pairs -- alternative form 
-		 for representation of reference
-		 or null if there is no information defined. */
+		 for representation of reference or null if there is no information defined.
+		 Each pair has a form of <master-side-field, details-side-field>. */
 		Field::PairList* fieldPairs() { return &m_pairs; }
 
-		/*! \return table assigned at foreign side of this reference.
+		/*! \return table assigned at "master / one" side of this reference.
 		 or null if there is no information defined. */
-		TableSchema* foreignSide() const;
+		TableSchema* masterTable() const;
 
-		/*! \return table assigned at referenced side of this reference.
+		/*! \return table assigned at "details / many / foreign" side of this reference.
 		 or null if there is no information defined. */
-		TableSchema* referencedSide() const;
+		TableSchema* detailsTable() const;
 
-		/*! Sets \a foreign and \a referenced index for this reference.
-		 This automatically also sets information about foreign- and referenced-side tables.
+		/*! Sets \a masterIndex and \a detailsIndex indices for this reference.
+		 This also sets information about tables for master- and details- sides.
 		 Notes: 
 		 - both indices must contain the same number of fields
 		 - both indices must not be owned by the same table, and table (owner) must be not null.
 		 - corresponding filed types must be the same
 		 - corresponding filed types' signedness must be the same
-		 If above rules are not fulfilled, method information is cleared. 
-		 On success, Reference object is detached from previous IndexSchema object that 
-		 defined at foreign side, and is attached as a child to \a foreign IndexSchema object.
+		 If above rules are not fulfilled, information about this reference is cleared. 
+		 On success, this Reference object is detached from previous IndexSchema objects that were
+		 assigned before, and new are attached.
 		 */
-		void setIndices(IndexSchema* foreign, IndexSchema* referenced);
+		void setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex);
 
 	protected:
-		IndexSchema *m_index1;
-		IndexSchema *m_index2;
+		IndexSchema *m_masterIndex;
+		IndexSchema *m_detailsIndex;
 
 		Field::PairList m_pairs;
 

@@ -153,7 +153,12 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 KexiDB implementation, if the current one is newer than the one used 
 		 to build the database. */
 		static const QStringList& kexiDBSystemTableNames();
-		
+
+		//! Version information for this connection. Only valid when database is used.
+		//! It's usually compared to drivers' and KexiDB library version.
+		int versionMajor() const;
+		int versionMinor() const;
+
 		/*! \return ids of all table schema names stored in currently 
 		 used database. These ids can be later used as argument for tableSchema().
 		 This is a shortcut for objectIds(TableObjectType).
@@ -361,6 +366,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 \return true if query was successfully executed and first record has been found.
 		 */
 		bool querySingleString(const QString& sql, QString &value);
+
+		/*! Convenience function: executes \a sql query and stores first record's first field's number value 
+		 inside \a value. \sa querySingleString(). */
+		bool querySingleNumber(const QString& sql, int &number);
 
 		/*! Executes \a sql query and returns true if there is at least one record returned.
 		 Does not fetch any records. \a success will be set to false 
@@ -794,6 +803,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 	friend class KexiDB::Driver;
 	friend class KexiDB::Cursor;
 	friend class KexiDB::TableSchema; //!< for removeMe()
+	friend class ConnectionPrivate;
 
 		ConnectionPrivate *d;
 	private:

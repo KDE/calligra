@@ -48,6 +48,8 @@
 #define ERR_CANNOT_CREATE_EMPTY_OBJECT 170 //!< empty object cannot be created (e.g. table without fields)
 #define ERR_INVALID_DRIVER_IMPL 180 //! driver's implementation is invalid
 #define ERR_INCOMPAT_DRIVER_VERSION 181 //!< driver's version is incompatible
+#define ERR_INCOMPAT_DATABASE_VERSION 182 //!< db's version is incompatible with currently used Kexi version
+#define ERR_INVALID_DATABASE_CONTENTS 183 //!< db's contents are invalid (e.g. no enough information to open db)
 
 //! errors related to data updating on the server
 #define ERR_UPDATE_NULL_PKEY_FIELD 190 //!< null pkey field on updating

@@ -73,14 +73,17 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		 existing primary key ("primary" property of given IndexSchema object will be
 		 cleared then so this index becomes ordinary index, still existing on table indeices list). 
 		 
-		 If table already have primary key assigned, it is unassigned using setPrimaryKey(NULL) call.
+		 If this table already has primary key assigned, 
+		 it is unassigned using setPrimaryKey(NULL) call.
 		 
-		 Before assigning as primary key, you should add the index to indices list with addIndex()
-		 (this is not done automatically!).
+		 Before assigning as primary key, you should add the index to indices list 
+		 with addIndex() (this is not done automatically!).
 		*/
 		void setPrimaryKey(IndexSchema *pkey);
 
-		inline const IndexSchema::ListIterator indicesIterator() const { return IndexSchema::ListIterator(m_indices); }
+		inline const IndexSchema::ListIterator indicesIterator() const 
+			{ return IndexSchema::ListIterator(m_indices); }
+
 		inline const IndexSchema::List* indices() { return &m_indices; }
 
 //js		void addPrimaryKey(const QString& key);

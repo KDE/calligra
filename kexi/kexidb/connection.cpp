@@ -46,19 +46,29 @@ namespace KexiDB {
 class ConnectionPrivate
 {
 	public:
-		ConnectionPrivate() 
-		 : m_dont_remove_transactions(false)
+		ConnectionPrivate(Connection *conn) 
+		 : m_conn(conn)
+		 , m_versionMajor(-1)
+		 , m_versionMinor(-1)
+		 , m_dont_remove_transactions(false)
 		 , m_skip_databaseExists_check_in_useDatabase(false)
 		{
 		}
 		~ConnectionPrivate() { }
+
+		Connection *m_conn;
+
 		/*! Default transaction handle. 
 		If transactions are supported: Any operation on database (e.g. inserts)
 		that is started without specifing transaction context, will be performed
 		in the context of this transaction. */
 		Transaction m_default_trans;
 		QValueList<Transaction> m_transactions;
-		
+
+		//! Version information for this connection.
+		int m_versionMajor;
+		int m_versionMinor;
+
 		//! true if rollbackTransaction() and commitTransaction() shouldn't remove 
 		//! the transaction object from m_transactions list; used by closeDatabase()
 		bool m_dont_remove_transactions : 1; 
@@ -66,6 +76,11 @@ class ConnectionPrivate
 		//! used to avoid endless recursion between useDatabase() and databaseExists()
 		//! when useTemporaryDatabaseIfNeeded() works
 		bool m_skip_databaseExists_check_in_useDatabase : 1;
+
+		void errorInvalidDBContents(const QString& details) {
+			m_conn->setError( ERR_INVALID_DATABASE_CONTENTS, i18n("Invalid database contents. ")+details);
+		}
+
 };
 
 }
@@ -79,10 +94,12 @@ Connection::Connection( Driver *driver, ConnectionData &conn_data )
 	: QObject()
 	,KexiDB::Object()
 	,m_data(&conn_data)
-	,d(new ConnectionPrivate())
+	,d(new ConnectionPrivate(this))
 	,m_driver(driver)
 	,m_is_connected(false)
 	,m_autoCommit(true)
+	,m_tables_byname(101, false)
+	,m_queries_byname(101, false)
 	,m_destructor_started(false)
 {
 	m_tables.setAutoDelete(true);
@@ -95,8 +112,6 @@ Connection::Connection( Driver *driver, ConnectionData &conn_data )
 	//reasonable sizes: TODO
 	m_tables.resize(101);
 	m_queries.resize(101);
-	m_tables_byname.resize(101);
-	m_queries_byname.resize(101);
 	m_cursors.resize(101);
 //	d->m_transactions.resize(101);//woohoo! so many transactions?
 }
@@ -434,6 +449,35 @@ bool Connection::useDatabase( const QString &dbName )
 	if (!setupKexiDBSystemSchema())
 		return false;
 
+	//-get global database information
+	int num;
+	static QString notfound_str = i18n("\"%1\" database property not found");
+	if (!querySingleNumber(
+		"select db_value from kexi__db where db_property=\"kexidb_major_ver\"", num)) {
+		d->errorInvalidDBContents(notfound_str.arg("kexidb_major_ver"));
+		return false;
+	}
+	d->m_versionMajor = num;
+	if (!querySingleNumber(
+		"select db_value from kexi__db where db_property=\"kexidb_minor_ver\"", num)) {
+		d->errorInvalidDBContents(notfound_str.arg("kexidb_minor_ver"));
+		return false;
+	}
+	d->m_versionMinor = num;
+
+	//** error if major version does not match
+	if (m_driver->versionMajor()!=KexiDB::versionMajor()) {
+		setError(ERR_INCOMPAT_DATABASE_VERSION, 
+			i18n("Database version (%1) does not match Kexi application's version (%2)")
+			.arg( QString("%1.%2").arg(versionMajor()).arg(versionMinor()) )
+			.arg( QString("%1.%2").arg(KexiDB::versionMajor()).arg(KexiDB::versionMinor()) ) );
+		return false;
+	}
+	if (m_driver->versionMinor()!=KexiDB::versionMinor()) {
+		//js TODO: COMPATIBILITY CODE HERE!
+		//js TODO: CONVERSION CODE HERE (or signal that conversion is needed)
+	}
+
 	m_usedDatabase = my_dbName;
 	return true;
 }
@@ -600,6 +644,16 @@ const QStringList& Connection::kexiDBSystemTableNames()
 		;
 	}
 	return KexiDB_kexiDBSystemTableNames;
+}
+
+int Connection::versionMajor() const
+{
+	return d->m_versionMinor;
+}
+
+int Connection::versionMinor() const
+{
+	return d->m_versionMinor;
 }
 
 QValueList<int> Connection::queryIds()
@@ -1496,6 +1550,16 @@ bool Connection::querySingleString(const QString& sql, QString &value)
 	return deleteCursor(cursor);
 }
 
+bool Connection::querySingleNumber(const QString& sql, int &number)
+{
+	static QString str;
+	static bool ok;
+	if (!querySingleString(sql, str))
+		return false;
+	number = str.toInt(&ok);
+	return ok;
+}
+
 bool Connection::resultExists(const QString& sql, bool &success)
 {
 	KexiDB::Cursor *cursor;
@@ -1723,7 +1787,7 @@ bool Connection::setupKexiDBSystemSchema()
 	.addField( new Field("p_name", Field::Text) )
 	.addField( new Field("p_mime", Field::Text ) )
 	.addField( new Field("p_url", Field::Text ) );
-	
+
 	return true;
 }
 
