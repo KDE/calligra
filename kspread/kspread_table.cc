@@ -28,7 +28,7 @@
 #include <qkeycode.h>
 #include <qregexp.h>
 #include <qpoint.h>
-#include <qprinter.h>
+#include <kprinter.h>
 #include <qcursor.h>
 #include <qstack.h>
 #include <qbuffer.h>
@@ -6365,7 +6365,7 @@ bool KSpreadTable::testListChoose(const QPoint &_marker)
 
 
 
-void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
+void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
 {
     kdDebug(36001)<<"PRINTING ...."<<endl;
 

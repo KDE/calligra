@@ -24,7 +24,7 @@
 #include <dirent.h>
 #include <pwd.h>
 
-#include <qprinter.h>
+#include <kprinter.h>
 #include <qdom.h>
 #include <qtextstream.h>
 #include <qbuffer.h>
@@ -569,9 +569,9 @@ const char* KSpreadDoc::orientationString()
 {
     switch( m_orientation )
     {
-    case QPrinter::Portrait:
+    case KPrinter::Portrait:
         return "Portrait";
-    case QPrinter::Landscape:
+    case KPrinter::Landscape:
         return "Landscape";
     }
 

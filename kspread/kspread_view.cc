@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qprinter.h> // has to be first
+#include <kprinter.h> // has to be first
 
 #include <stdlib.h>
 #include <time.h>
@@ -1761,45 +1761,45 @@ void KSpreadView::insertHyperlink()
   dlg.exec();
 }
 
-void KSpreadView::print( QPrinter &prt )
+void KSpreadView::print( KPrinter &prt )
 {
     prt.setFullPage( TRUE );
     QPainter painter;
 
     //apply page layout parameters
-    prt.setOrientation((QPrinter::Orientation)m_pDoc->orientation());
+    prt.setOrientation((KPrinter::Orientation)m_pDoc->orientation());
     switch(m_pDoc->paperFormat())
       {
       case  PG_DIN_A3:
-	prt.setPageSize(QPrinter::A3);
+	prt.setPageSize(KPrinter::A3);
 	break;
       case PG_DIN_A4:
-	prt.setPageSize(QPrinter::A4);
+	prt.setPageSize(KPrinter::A4);
 	break;
       case PG_DIN_A5:
-	prt.setPageSize(QPrinter::A5);
+	prt.setPageSize(KPrinter::A5);
 	break;
       case PG_US_LETTER:
-	prt.setPageSize(QPrinter::Letter);
+	prt.setPageSize(KPrinter::Letter);
 	break;
       case PG_US_LEGAL:
-	prt.setPageSize(QPrinter::Legal);
+	prt.setPageSize(KPrinter::Legal);
 	break;
       case PG_SCREEN :
-	//prt.setPageSize(QPrinter::PG_SCREEN);
+	//prt.setPageSize(KPrinter::PG_SCREEN);
 	kdDebug(36001) <<"We can't define this size of page, so I used A4 format\n";
-	prt.setPageSize(QPrinter::A4);
+	prt.setPageSize(KPrinter::A4);
 	break;
       case PG_CUSTOM:
 	kdDebug(36001) <<"We can't define custom size of page, so I used A4 format \n";
 	//prt.setPageSize(QSize(m_pDoc->paperWidth(),m_pDoc->paperHeight()));
-	prt.setPageSize(QPrinter::A4);
+	prt.setPageSize(KPrinter::A4);
 	break;
       case PG_DIN_B5:
-	prt.setPageSize(QPrinter::B5);
+	prt.setPageSize(KPrinter::B5);
 	break;
       case PG_US_EXECUTIVE:
-	prt.setPageSize(QPrinter::Executive);
+	prt.setPageSize(KPrinter::Executive);
 	break;
       default:
 	kdDebug(36001) <<"Error in m_pDoc->paperFormat() \n";

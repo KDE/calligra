@@ -26,7 +26,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpainter.h>
-#include <qprinter.h>
+#include <kprinter.h>
 #include <qpushbt.h>
 #include <qradiobt.h>
 #include <qbttngrp.h>
@@ -160,7 +160,7 @@ private:
 	
     QPixmap      *bg_buf;
     QPointArray  *qa[8];        // Main Array
-    QPrinter     *printer;      // Printer
+    KPrinter     *printer;      // Printer
     QPopupMenu   *adhoc;        // Main Popup
     QColor       color[8];
     int			 pcnt[8];

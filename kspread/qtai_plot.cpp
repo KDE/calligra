@@ -110,7 +110,7 @@ void AIPlot::init()
   }
 
   // Setup defaults
-  printer = new QPrinter;
+  printer = new KPrinter;
   bg_buf=NULL;
 
   plottype=AI_PLOT_TREND;

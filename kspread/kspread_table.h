@@ -35,6 +35,7 @@ class QPainter;
 class QDomElement;
 
 class DCOPObject;
+class KPrinter;
 
 #include <koDocument.h>
 #include <koDocumentChild.h>
@@ -766,7 +767,7 @@ public:
      */
     void autofill( QRect &src, QRect &dest );
 
-    void print( QPainter &painter, QPrinter *_printer );
+    void print( QPainter &painter, KPrinter *_printer );
 
     /**
      * Deletes a child object. That will cause all views to update

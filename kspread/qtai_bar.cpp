@@ -42,7 +42,7 @@ AIBar::AIBar(QWidget *parent,const char *name,int n)
 {
   int i;
 
-  printer = new QPrinter;
+  printer = new KPrinter;
   brush = new QBrush(SolidPattern);
 
   nbars=n;

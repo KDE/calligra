@@ -16,7 +16,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpainter.h>
-#include <qprinter.h>
+#include <kprinter.h>
 #include <qpushbt.h>
 #include <qradiobt.h>
 #include <qbttngrp.h>
@@ -89,7 +89,7 @@ protected:
     bool    calc_limits;
 
 private:
-    QPrinter	 *printer;
+    KPrinter	 *printer;
 };
 
 /*******************************************************************/
