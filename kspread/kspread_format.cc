@@ -262,7 +262,8 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )
 
     if ( hasProperty( KSpreadFormat::PAngle,true ) || hasNoFallBackProperties( KSpreadFormat::PAngle ) )
     {
-        currentCellStyle.addProperty( "style:rotation-angle", QString::number( -1.0 * m_pStyle->rotateAngle() ) );
+        if ( m_pStyle->rotateAngle() != 0 )
+            currentCellStyle.addProperty( "style:rotation-angle", QString::number( -1.0 * m_pStyle->rotateAngle() ) );
     }
 
     if ( ( hasProperty( KSpreadFormat::PMultiRow,true ) || hasNoFallBackProperties( KSpreadFormat::PMultiRow ) )
@@ -433,7 +434,8 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, int _col, 
 
     if ( hasProperty( KSpreadFormat::PAngle ) || !hasNoFallBackProperties( KSpreadFormat::PAngle ) )
     {
-        currentCellStyle.addProperty( "style:rotation-angle", QString::number( -getAngle( _col, _row ) ) );
+        if ( getAngle( _col, _row ) != 0 )
+            currentCellStyle.addProperty( "style:rotation-angle", QString::number( -getAngle( _col, _row ) ) );
     }
 
     if ( hasProperty( KSpreadFormat::PMultiRow ) || !hasNoFallBackProperties( KSpreadFormat::PMultiRow ) )
@@ -1134,8 +1136,8 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
     {
         bool ok = false;
         int a = styleStack.attributeNS( KoXmlNS::style, "rotation-angle" ).toInt( &ok );
-        if ( ok )
-            setAngle( -a + 1 );
+        if ( ok && ( a != 0 ))
+            setAngle( -a );
     }
 
     if (  styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )

@@ -268,8 +268,11 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
         bool ok;
         int a = styleStack.attributeNS( KoXmlNS::style, "rotation-angle" ).toInt( &ok );
         kdDebug()<<" rotation-angle :"<<a<<endl;
-        m_rotateAngle= ( -a + 1 );
-        m_featuresSet |= SAngle;
+        if ( a != 0 )
+        {
+            m_rotateAngle= ( -a  );
+            m_featuresSet |= SAngle;
+        }
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
     {
