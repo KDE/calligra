@@ -59,7 +59,7 @@
 #include "kwtabletemplate.h"
 #include <X11/Xlib.h>
 #include <kglobalsettings.h>
-
+#include "kocommandhistory.h"
 //#define DEBUG_PAGES
 //#define DEBUG_SPEED
 
@@ -109,10 +109,10 @@ KoDocument* KWChild::hitTest( const QPoint& p, const QWMatrix& _matrix )
 /******************************************************************/
 /* Class: KWCommandHistory                                        */
 /******************************************************************/
-class KWCommandHistory : public KCommandHistory
+class KWCommandHistory : public KoCommandHistory
 {
 public:
-    KWCommandHistory( KWDocument * doc ) : KCommandHistory( doc->actionCollection(),  false ), m_pDoc( doc ) {}
+    KWCommandHistory( KWDocument * doc ) : KoCommandHistory( doc->actionCollection(),  true ), m_pDoc( doc ) {}
 public /*slots*/: // They are already slots in the parent. Running moc on the inherited class shouldn't be necessary AFAICS.
     virtual void undo();
     virtual void redo();
@@ -123,13 +123,13 @@ private:
 void KWCommandHistory::undo()
 {
     m_pDoc->clearUndoRedoInfos();
-    KCommandHistory::undo();
+    KoCommandHistory::undo();
 }
 
 void KWCommandHistory::redo()
 {
     m_pDoc->clearUndoRedoInfos();
-    KCommandHistory::redo();
+    KoCommandHistory::redo();
 }
 
 void KWDocument::clearUndoRedoInfos()

@@ -27,7 +27,7 @@
 #include <kaction.h>
 #include <kcommand.h>
 #include <kconfig.h>
-
+#include <kocommandhistory.h>
 #include "kformuladefs.h"
 
 KFORMULA_NAMESPACE_BEGIN
@@ -52,14 +52,14 @@ public:
      * @param history the undo stack to use. Creates its own if zero.
      */
     Document( KConfig* config,
-              KActionCollection* collection, KCommandHistory* history = 0 );
+              KActionCollection* collection, KoCommandHistory* history = 0 );
 
     /**
      * Creates a formula document that doesn't use actions.
      *
      * @param history the undo stack to use. Creates its own if zero.
      */
-    Document( KConfig* config, KCommandHistory* history = 0 );
+    Document( KConfig* config, KoCommandHistory* history = 0 );
 
     ~Document();
 
@@ -113,7 +113,7 @@ public:
     /**
      * @returns our undo stack so the formulas can use it.
      */
-    KCommandHistory* getHistory() const;
+    KoCommandHistory* getHistory() const;
 
     void undo();
     void redo();

@@ -26,7 +26,7 @@
 
 #include <kcommand.h>
 #include <koDocument.h>
-
+#include <kocommandhistory.h>
 #include <kformuladefs.h>
 
 #include "kformula_view.h"
@@ -82,7 +82,7 @@ private:
     /**
      * Our undo stack.
      */
-    KCommandHistory* history;
+    KoCommandHistory* history;
 
     /**
      * The place where all formula related work is done.

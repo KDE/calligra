@@ -110,7 +110,7 @@ struct Document::Document_Impl {
      * our parent and might contain not formula related commands
      * as well.
      */
-    KCommandHistory* history;
+    KoCommandHistory* history;
 
     /**
      * Tells whether we are responsible to remove our history.
@@ -147,7 +147,7 @@ struct Document::Document_Impl {
 double Document::getXResolution() const { return impl->contextStyle.zoomedResolutionX(); }
 double Document::getYResolution() const { return impl->contextStyle.zoomedResolutionY(); }
 
-KCommandHistory* Document::getHistory() const { return impl->history; }
+KoCommandHistory* Document::getHistory() const { return impl->history; }
 const SymbolTable& Document::getSymbolTable() const { return impl->contextStyle.symbolTable(); }
 
 KAction* Document::getAddNegThinSpaceAction()  { return impl->addNegThinSpaceAction; }
@@ -198,7 +198,7 @@ SymbolType Document::rightBracketChar() const { return impl->rightBracketChar; }
 
 Document::Document( KConfig* config,
                     KActionCollection* collection,
-                    KCommandHistory* his )
+                    KoCommandHistory* his )
 {
     impl = new Document_Impl( config );
 
@@ -209,7 +209,7 @@ Document::Document( KConfig* config,
     impl->syntaxHighlightingAction->setChecked( impl->contextStyle.syntaxHighlighting() );
 
     if (his == 0) {
-        impl->history = new KCommandHistory(collection);
+        impl->history = new KoCommandHistory(collection);
         impl->ownHistory = true;
     }
     else {
@@ -219,12 +219,12 @@ Document::Document( KConfig* config,
 }
 
 
-Document::Document( KConfig* config, KCommandHistory* his )
+Document::Document( KConfig* config, KoCommandHistory* his )
 {
     impl = new Document_Impl( config );
     impl->contextStyle.readConfig( impl->config );
     if (his == 0) {
-        impl->history = new KCommandHistory;
+        impl->history = new KoCommandHistory;
         impl->ownHistory = true;
     }
     else {

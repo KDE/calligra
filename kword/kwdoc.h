@@ -44,7 +44,7 @@ class KSpellConfig;
 class KSpell;
 class KoAutoFormat;
 class KCommand;
-class KCommandHistory;
+class KoCommandHistory;
 class KoVariable;
 class KoVariableFormatCollection;
 class KWVariableCollection;
@@ -80,6 +80,7 @@ class KoTextParag;
 #include <qfont.h>
 #include <qvaluevector.h>
 #include <kostyle.h>
+#include <kocommandhistory.h>
 class KWPartFrameSet;
 /******************************************************************/
 /* Class: KWChild                                              */
@@ -435,7 +436,7 @@ public:
 
     void addCommand( KCommand * cmd );
 
-    KCommandHistory * commandHistory() const { return m_commandHistory; }
+    KoCommandHistory * commandHistory() const { return m_commandHistory; }
     KoAutoFormat * getAutoFormat() const { return m_autoFormat; }
 
     // This is used upon loading, to delay certain things until completeLoading.
@@ -838,7 +839,7 @@ private:
 
     DCOPObject *dcop;
 
-    KCommandHistory * m_commandHistory;
+    KoCommandHistory * m_commandHistory;
     KoAutoFormat * m_autoFormat;
 
     // The viewmode used by all views.

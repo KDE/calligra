@@ -22,7 +22,7 @@ KFORMULA_NAMESPACE_BEGIN
 
 void TestCommands::setUp()
 {
-    history = new KCommandHistory;
+    history = new KoCommandHistory;
     document = new Document( kapp->config(), history );
     container = new Container(document);
     rootElement = container->rootElement();

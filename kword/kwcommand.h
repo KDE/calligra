@@ -19,8 +19,8 @@
 
 #ifndef KWORD_COMMAND_H
 #define KWORD_COMMAND_H
-
 #include <kcommand.h>
+#include <kocommandhistory.h>
 #include <koGlobal.h>
 #include <koRect.h>
 #include <koborder.h>

@@ -128,7 +128,7 @@ FormulaCursor* Container::createCursor()
 }
 
 
-KCommandHistory* Container::getHistory() const
+KoCommandHistory* Container::getHistory() const
 {
     return document()->getHistory();
 }

@@ -59,7 +59,7 @@ KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject*
     setInstance(KFormulaFactory::global(), false);
     //kdDebug(39001) << "General Settings" << endl;
 
-    history = new KCommandHistory(actionCollection());
+    history = new KoCommandHistory(actionCollection());
     document = new KFormula::Document( kapp->config(), actionCollection(), history );
     formula = new KFormula::Container( document );
 

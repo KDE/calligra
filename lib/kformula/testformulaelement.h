@@ -8,7 +8,7 @@
 
 #include "kformuladefs.h"
 
-class KCommandHistory;
+class KoCommandHistory;
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -34,7 +34,7 @@ private:
 
     void testPosition();
 
-    KCommandHistory* history;
+    KoCommandHistory* history;
     Document* document;
     Container* container;
     FormulaElement* rootElement;

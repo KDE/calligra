@@ -30,7 +30,7 @@
 #include <qstring.h>
 
 #include <kcommand.h>
-
+#include <kocommandhistory.h>
 #include "kformuladefs.h"
 
 class QColorGroup;
@@ -339,7 +339,7 @@ public:
 
 protected:
 
-    KCommandHistory* getHistory() const;
+    KoCommandHistory* getHistory() const;
 
 private:
 
