@@ -97,7 +97,7 @@ void KChartEngine::titleText() {
 
     kdDebug(35001) << "done with the title text" << endl;
 
-    if( !params->xtitle.isEmpty() )
+    if( !params->xtitle.isEmpty() && !params->isPie()  )
         {
         //QColor        titlecolor = params->XTitleColor == Qt::black ?
         //                PlotColor: params->XTitleColor;
