@@ -158,24 +158,69 @@ private:
    
 };
 
+/**
+  Class CellInfo represents a base class for records which provide information
+  about cells. Some important records like BlankRecord, LabelRecord, and others
+  inherit this class.   
+ */
 class CellInfo
 {
 public:
 
+  /**
+   * Creates a new cell information.
+   */
   CellInfo();
 
+  /**
+   * Destroys the cell information.
+   */
   virtual ~CellInfo();
 
+  /**
+   * Returns the row associated with the cell information. It is zero based,
+   * so the first row is 0.
+   *
+   * \sa setRow, column
+   */
   virtual unsigned row() const;
 
+  /**
+   * Returns the column associated with the cell information. It is zero based,
+   * so the first column is 0.
+   *
+   * \sa setColumn, row
+   */
   virtual unsigned column() const;
 
+  /**
+   * Returns the XF index for formatting of the cell.
+   *
+   * \sa setXfIndex
+   */
   virtual unsigned xfIndex() const;
 
+  /**
+   * Sets the row associated with the cell information. It is zero based,
+   * so the first row is 0.
+   *
+   * \sa setColumn, row
+   */
   virtual void setRow( unsigned r );
 
+  /**
+   * Sets the column associated with the cell information. It is zero based,
+   * so the first column is 0.
+   *
+   * \sa setRow, column
+   */
   virtual void setColumn( unsigned c );
 
+  /**
+   * Sets the XF index for formatting of the cell.
+   *
+   * \sa xfIndex
+   */
   virtual void setXfIndex( unsigned i );
 
 private:
@@ -187,20 +232,55 @@ private:
    Private* info;
 };
 
+/**
+  Class CellInfo represents a base class for records which provide information
+  about a span of columns. The information, like formatting index, should 
+  apply to columns (as specified) from firstColumn and lastColumn.
+ */
 class ColumnSpanInfo
 {
 public:
 
+  /**
+   * Creates a new column span information.
+   */
   ColumnSpanInfo();
 
+  /**
+   * Destroys the column span information.
+   */
   virtual ~ColumnSpanInfo();
 
+  /**
+   * Returns the first column associated with the span information. 
+   * Column index is zero based, so the first column is 0.
+   *
+   * \sa lastColumn, setFirstColumn
+   */
   virtual unsigned firstColumn() const;
 
+  /**
+   * Returns the last column associated with the span information. 
+   * Column index is zero based, so the first column is 0.
+   *
+   * \sa firstColumn, setLastColumn
+   */
   virtual unsigned lastColumn() const;
 
+  /**
+   * Sets the first column associated with the span information. 
+   * Column index is zero based, so the first column is 0.
+   *
+   * \sa setLastColumn, firstColumn
+   */
   virtual void setFirstColumn( unsigned c );
 
+  /**
+   * Sets the last column associated with the span information. 
+   * Column index is zero based, so the first column is 0.
+   *
+   * \sa setFirstColumn, lastColumn
+   */
   virtual void setLastColumn( unsigned c );
 
 private:
@@ -330,6 +410,10 @@ private:
    BlankRecord& operator=( const BlankRecord& );
 };
 
+/**
+  Class BOFRecord represents BoolErr record, which
+  is used to store boolean value or error code of a cell.
+ */
 class BoolErrRecord : public Record, public CellInfo
 {
 public:
@@ -348,24 +432,48 @@ public:
    ErrorNum, 
    ErrorNA };
 
+  /**
+   * Creates a new BoolErr record.
+   */
   BoolErrRecord();
 
+  /**
+   * Destroys the BoolErr record.
+   */
   virtual ~BoolErrRecord();
+
+  /**
+   * Returns true if the record specifies boolean value.
+   */
+  bool isBool() const;
+
+  /**
+   * Returns true if the record specifies error code.
+   */
+  bool isError() const;
+
+  /**
+   * Returns boolean value of the cell. It is valid only when isBool()
+   * returns true.
+   */
+  bool value() const;
+
+  /**
+   * Returns error code of the cell. It is valid only when isError()
+   * returns true.
+   */
+  unsigned errorCode() const;
+  
+  /**
+   * Returns error code of the cell as string. It is valid only when isError()
+   * returns true.
+   */
+  const char* errorCodeAsString() const;
 
   /**
    \reimpl
    */
   virtual void setData( unsigned size, const unsigned char* data );
-
-  bool isBool() const;
-
-  bool isError() const;
-
-  bool value() const;
-
-  unsigned errorCode() const;
-  
-  const char* errorCodeAsString() const;
 
   /**
    \reimpl
@@ -459,31 +567,68 @@ public:
 
   static const unsigned int id;
 
+  /**
+   * Creates a new BoundSheet record.
+   */
   BoundSheetRecord();
 
+  /**
+   * Destroys the BoundSheet record.
+   */
   virtual ~BoundSheetRecord();
   
   /**
-    Type of the sheet.
+   * Type of the sheet.
    */
   enum { Worksheet=0, Chart=2, VBModule=6 };
   
+  /**
+   * Sets the type of the BoundSheet. Possible values are 
+   * BoundSheet::Worksheet, BoundSheet::Chart and BoundSheet::VBModule.
+   */
   void setType( unsigned type );
   
+  /**
+   * Returns the type of the BoundSheet. Possible values are 
+   * BoundSheet::Worksheet, BoundSheet::Chart and BoundSheet::VBModule.
+   */
   unsigned type() const;
   
+  /**
+   * Returns the type of the BoundSheet as string. For example, if 
+   * type of BoundSheet is BoundSheet::Chart, then this function returns
+   * "Chart".
+   */
   const char* typeAsString() const;
   
+  /**
+   * Sets the visibility of the sheet.
+   */
   void setVisible( bool visible );
   
+  /**
+   * Returns true if the sheet is visible.
+   */
   bool visible() const;
   
+  /**
+   * Sets the name of the sheet.
+   */
   void setSheetName( const UString& name );
   
+  /**
+   * Returns the name of the sheet.
+   */
   UString sheetName() const;
   
+  /**
+   * Sets the position of the BOF record associated with this BoundSheet.
+   */
   void setBofPosition( unsigned pos );
   
+  /**
+   * Returns the position of the BOF record associated with this BoundSheet.
+   */
   unsigned bofPosition() const;
 
   /**
@@ -510,6 +655,10 @@ private:
   Private* d;
 };
 
+/**
+  Class ColInfoRecord represents ColInfo record, which provides information
+  (such as column width and formatting) for a span of columns.
+ */
 class ColInfoRecord : public Record, public ColumnSpanInfo
 {
 public:
@@ -626,6 +775,10 @@ private:
    Private *d;
 };
 
+/**
+  Class Date1904Record represents Date1904 record, which specifies
+  reference date for displaying date value of given serial number.
+ */
 class Date1904Record : public Record
 {
 public:
@@ -642,8 +795,20 @@ public:
    */
   ~Date1904Record();
   
+  /**
+   * Returns true if the reference date is 1st of January, 1904 or false
+   * if the reference date is 31st of December, 1899.
+   * 
+   * \sa setRef1904
+   */
   bool ref1904() const;
   
+  /**
+   * If r is true, sets the reference date to 1st of January, 1904. Else,
+   * sets the reference date to 31st of December, 1899.
+   * 
+   * \sa ref1904
+   */
   void setRef1904( bool r );
 
   /**
@@ -670,11 +835,27 @@ private:
   Private* d;
 };
 
+/**
+  Class EOFRecord represents Dimension record, which contains the range address 
+  of the used area in the current sheet.
+ */
 class DimensionRecord : public Record
 {
 public:
+
+  /**
+   * Creates a new Dimension record.
+   */
   DimensionRecord();
+  
+  /**
+   \reimpl
+   */
   virtual const char* name(){ return "DIMENSION"; }
+  
+  /**
+   \reimpl
+   */
   virtual void setData( unsigned size, const unsigned char* data );
 };
 
@@ -944,15 +1125,45 @@ public:
    */
   FormatRecord& operator=( const FormatRecord& fr );
   
+  /**
+   * Returns the index of the format. Each format specified by Format record
+   * has unique index which will be referred by XF Record.
+   *
+   * \sa setIndex
+   */
   unsigned index() const;
   
+  /**
+   * Sets the index of the format. Each format specified by Format record
+   * has unique index which will be referred by XF Record.
+   *
+   * \sa index
+   */
   void setIndex( unsigned i );
-  
+
+  /**
+   * Returns the formatting string of the format, e.g "0.00" for 2 decimal
+   * places number formatting.
+   *
+   * \sa setFormatString
+   */
   UString formatString() const;
   
+  /**
+   * Sets the formatting string of the format.
+   *
+   * \sa formatString
+   */
   void setFormatString( const UString& fs );
     
+  /**
+   \reimpl
+   */
   virtual const char* name(){ return "FORMAT"; }
+  
+  /**
+   \reimpl
+   */
   virtual void setData( unsigned size, const unsigned char* data );
 
 private:
@@ -985,8 +1196,14 @@ public:
    */
   virtual ~LabelRecord();
 
+  /**
+   * Returns the label string.
+   */
   UString label() const;
   
+  /**
+   * Sets the label string.
+   */
   void setLabel( const UString& l );
 
   /**
@@ -1038,6 +1255,10 @@ public:
    */
   virtual ~LabelSSTRecord();
 
+  /**
+   * Returns the SST index. This is the index to the global SST which hold
+   * every label strings used in SST record. 
+   */
   unsigned sstIndex() const;
 
   /**
@@ -1149,7 +1370,7 @@ public:
   virtual void setData( unsigned size, const unsigned char* data );
 
   /**
-   Returns XF index of ith column.
+   * Returns XF index of ith column.
    */
   unsigned xfIndex( unsigned i ) const;
 
@@ -1210,10 +1431,27 @@ public:
    */
   unsigned xfIndex( unsigned i ) const;
   
+  /**
+   * Returns true if the record holds an integer value.
+   *
+   * \sa asInteger
+   */
   bool isInteger( unsigned i ) const;
   
+  /**
+   * Returns the integer value specified by the record. It is only valid
+   * when isInteger returns true.
+   *
+   * \sa isInteger, asFloat
+   */
   int asInteger( unsigned i ) const;
   
+  /**
+   * Returns the floating-point value specified by the record. It is only valid
+   * when isInteger returns false.
+   *
+   * \sa asInteger
+   */
   double asFloat( unsigned i ) const;
   
   /**
@@ -1265,8 +1503,18 @@ public:
    */
   virtual void setData( unsigned size, const unsigned char* data );
   
+  /**
+   * Returns the floating-point value specified by the record.
+   *
+   * \sa setNumber
+   */
   double number() const;
   
+  /**
+   * Sets the floating-point value specified by the record.
+   *
+   * \sa number
+   */
   void setNumber( double f );
 
   /**
@@ -1426,16 +1674,48 @@ public:
    */
   virtual void setData( unsigned size, const unsigned char* data );
   
+  /**
+   * Returns true if the record holds an integer value.
+   *
+   * \sa asInteger, isFloat
+   */
   bool isInteger() const;
   
+  /**
+   * Returns true if the record holds a floating-point value.
+   *
+   * \sa asFloat, isInteger
+   */
   bool isFloat() const;
-  
+    
+  /**
+   * Returns the integer value specified by the record. It is only valid
+   * when isInteger returns true.
+   *
+   * \sa isInteger, asFloat
+   */
   int asInteger() const;
   
+  /**
+   * Returns the floating-point value specified by the record. It is only valid
+   * when isFloat returns true.
+   *
+   * \sa isFloat, asInteger
+   */
   double asFloat() const;
   
+  /**
+   * Sets the integer value to be specified by the record. 
+   *
+   * \sa setFloat
+   */
   void setInteger( int i );
   
+  /**
+   * Sets the floating-point value to be specified by the record. 
+   *
+   * \sa setFloat
+   */
   void setFloat( double f );
 
   /**
@@ -1483,8 +1763,18 @@ public:
    */
   virtual ~RStringRecord();
 
+  /**
+   * Returns the label string.
+   *
+   * \sa setLabel
+   */
   UString label() const;
   
+  /**
+   * Sets the label string.
+   *
+   * \sa label
+   */
   void setLabel( const UString& l );
 
   /**
