@@ -273,19 +273,19 @@ public:
     FxValue(const FxValue &v) : m_value(v.value()) { recalculate(); }
     ~FxValue() {}
 
-    FxValue &operator=(const FxValue &rhs);
+    inline FxValue &operator=(const FxValue &rhs);
 
     const double &value() const { return m_value; }
-    void setValue(const double &value);
+    inline void setValue(const double &value);
 
     const int &pxValue() const { return m_pixel; }
-    void setPxValue(const int &pixel);
+    inline void setPxValue(const int &pixel);
 
     // When the zoom factor and/or the resoltuion changes
     // we have to recalculate the pixel value
     // const, because it's more convenient and in fact the *real*
     // value remains the same... not bitwise const, though ;)
-    void recalculate() const;
+    inline void recalculate() const;
 
 private:
     double m_value;    // value in mm
@@ -293,8 +293,8 @@ private:
 };
 
 // compares the current pixel values!
-bool operator==(const FxValue &lhs, const FxValue &rhs);
-bool operator!=(const FxValue &lhs, const FxValue &rhs);
+inline bool operator==(const FxValue &lhs, const FxValue &rhs) { return lhs.pxValue()==rhs.pxValue(); }
+inline bool operator!=(const FxValue &lhs, const FxValue &rhs) { return lhs.pxValue()!=rhs.pxValue(); }
 
 
 class FxPoint {
@@ -338,23 +338,25 @@ private:
     FxValue m_x, m_y;
 };
 
+
 // compares the px values!
-bool operator==(const FxPoint &lhs, const FxPoint &rhs);
-bool operator!=(const FxPoint &lhs, const FxPoint &rhs);
+inline bool operator==(const FxPoint &lhs, const FxPoint &rhs) { return lhs.fx()==rhs.fx() && lhs.fy()==rhs.fy(); }
+inline bool operator!=(const FxPoint &lhs, const FxPoint &rhs) { return lhs.fx()!=rhs.fx() || lhs.fy()!=rhs.fy(); }
 
 
 class FxRect {
 
 public:
-    FxRect();   // isNull()==true
+    FxRect() : m_tl(0.0, 0.0), m_br(-DBL_MIN, -DBL_MIN) {}
     FxRect(const FxPoint &topleft, const FxPoint &bottomright) : m_tl(topleft), m_br(bottomright) {}
     FxRect(const FxPoint &topleft, const QSize &size);  // pxSize, current zoom/res
-    FxRect(const double &left, const double &top, const double &width, const double &height);
-    explicit FxRect(const QRect &rect);  // pxSize, current zoom/res
+    FxRect(const double &left, const double &top, const double &width, const double &height) :
+        m_tl(left, top), m_br(left+width, top+height) {}
+    explicit FxRect(const QRect &rect) { setRect(rect); }  // pxSize, current zoom/res
     ~FxRect() {}
 
-    bool isNull() const;
-    bool isEmpty() const;
+    inline bool isNull() const;
+    inline bool isEmpty() const;
 
     FxRect normalized() const;
     void normalize();
@@ -420,5 +422,34 @@ FxRect operator|(const FxRect &lhs, const FxRect &rhs);
 FxRect operator&(const FxRect &lhs, const FxRect &rhs);
 bool operator==(const FxRect &lhs, const FxRect &rhs);
 bool operator!=(const FxRect &lhs, const FxRect &rhs);
+
+// some inline methods...
+inline FxValue &FxValue::operator=(const FxValue &rhs) {
+    setValue(rhs.value());
+    return *this;
+}
+
+inline void FxValue::setValue(const double &value) {
+    m_value=value;
+    recalculate();
+}
+
+inline void FxValue::setPxValue(const int &pixel) {
+    m_value=static_cast<double>(pixel)/GraphiteGlobal::self()->zoomedResolution();
+    m_pixel=pixel;
+}
+
+inline void FxValue::recalculate() const {
+    m_pixel=qRound(m_value*GraphiteGlobal::self()->zoomedResolution());
+}
+
+
+inline bool FxRect::isNull() const {
+    return m_tl.x()==0.0 && m_tl.y()==0.0 && m_br.x()==-DBL_MIN && m_br.y()==-DBL_MIN;
+}
+
+inline bool FxRect::isEmpty() const {
+    return m_tl.x()>m_br.x() || m_tl.y()>m_br.y();
+}
 
 #endif // GRAPHITE_GLOBAL_H

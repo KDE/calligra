@@ -477,57 +477,9 @@ GraphiteGlobal::GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4),
 }
 
 
-FxValue &FxValue::operator=(const FxValue &rhs) {
-    setValue(rhs.value());
-    return *this;
-}
-
-void FxValue::setValue(const double &value) {
-    m_value=value;
-    recalculate();
-}
-
-void FxValue::setPxValue(const int &pixel) {
-    m_value=static_cast<double>(pixel)/GraphiteGlobal::self()->zoomedResolution();
-    m_pixel=pixel;
-}
-
-void FxValue::recalculate() const {
-    m_pixel=qRound(m_value*GraphiteGlobal::self()->zoomedResolution());
-}
-
-// compares the current pixel values!
-bool operator==(const FxValue &lhs, const FxValue &rhs) { return lhs.pxValue()==rhs.pxValue(); }
-bool operator!=(const FxValue &lhs, const FxValue &rhs) { return lhs.pxValue()!=rhs.pxValue(); }
-
-
-// compares the px values!
-bool operator==(const FxPoint &lhs, const FxPoint &rhs) { return lhs.fx()==rhs.fx() && lhs.fy()==rhs.fy(); }
-bool operator!=(const FxPoint &lhs, const FxPoint &rhs) { return lhs.fx()!=rhs.fx() || lhs.fy()!=rhs.fy(); }
-
-
-FxRect::FxRect() : m_tl(0.0, 0.0), m_br(-DBL_MIN, -DBL_MIN) {
-}
-
 FxRect::FxRect(const FxPoint &topleft, const QSize &size) : m_tl(topleft) {
     m_br.setPxPoint(m_tl.pxX()+size.width(),
         (m_tl.pxY()+size.height()));
-}
-
-FxRect::FxRect(const double &left, const double &top, const double &width, const double &height) :
-    m_tl(left, top), m_br(left+width, top+height) {
-}
-
-FxRect::FxRect(const QRect &rect) {
-    setRect(rect);
-}
-
-bool FxRect::isNull() const {
-    return m_tl.x()==0.0 && m_tl.y()==0.0 && m_br.x()==-DBL_MIN && m_br.y()==-DBL_MIN;
-}
-
-bool FxRect::isEmpty() const {
-    return m_tl.x()>m_br.x() || m_tl.y()>m_br.y();
 }
 
 FxRect FxRect::normalized() const {
