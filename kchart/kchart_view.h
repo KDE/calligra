@@ -15,13 +15,19 @@ class QPaintEvent;
 
 class KChartPart;
 
+class DCOPObject;
+
 class KChartView : public KoView
 {
     Q_OBJECT
 public:
     KChartView( KChartPart* part, QWidget* parent = 0, const char* name = 0 );
+    ~KChartView();
+
     void updateGuiTypeOfChart();
-protected slots:
+    virtual DCOPObject* dcopObject();
+
+public slots:
       void edit();
       void config();
       void wizard();
@@ -56,6 +62,8 @@ private:
     KToggleAction* m_chartline;
     KToggleAction* m_charthilo;
     KToggleAction* m_chartring;
+
+    DCOPObject *dcop;
 };
 
 #endif

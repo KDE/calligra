@@ -10,6 +10,7 @@
 #include "kchartWizard.h"
 #include "kchartDataEditor.h"
 #include "kchartBarConfigDialog.h"
+#include "KChartViewIface.h"
 
 #include "kdchart/KDChartParams.h"
 
@@ -19,6 +20,8 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <dcopobject.h>
+
 
 using namespace std;
 
@@ -29,6 +32,9 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
 {
     setInstance( KChartFactory::global() );
     setXMLFile( "kchart.rc" );
+
+    dcop = 0;
+    dcopObject(); // build it
 
     m_wizard = new KAction( i18n("Customize with &Wizard"),
                             "wizard", 0,
@@ -85,6 +91,19 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     // make sure there is always some test data
     createTempData();
     updateGuiTypeOfChart();
+}
+
+KChartView::~KChartView()
+{
+    delete dcop;
+}
+
+DCOPObject* KChartView::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KChartViewIface( this );
+
+    return dcop;
 }
 
 void KChartView::paintEvent( QPaintEvent* /*ev*/ )
