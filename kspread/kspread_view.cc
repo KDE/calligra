@@ -57,6 +57,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
   m_iMarkerRow = 1;
 
   m_bMarkerVisible = true;
+
+  m_pPopupMenu = 0L;
 }
 
 void KSpreadView::createGUI()

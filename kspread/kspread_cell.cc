@@ -19,6 +19,7 @@
 
 #include <koStream.h>
 #include <komlWriter.h>
+#include <torben.h>
 
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
 #define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateCell( this, m_iColumn, m_iRow );
@@ -1628,15 +1629,15 @@ bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset )
   out << " float=" << (unsigned int)floatFormat() << " floatcolor=" << (unsigned int)floatColor()
       << " faktor=" << m_dFaktor << "/>" << endl;
 
-  if ( m_textFont != m_pTable->defaultCell()->font() )
+  if ( m_textFont != m_pTable->defaultCell()->textFont() )
     out << indent << m_textFont << endl;
   if ( m_textPen != m_pTable->defaultCell()->textPen() )
     out << indent << m_textPen << endl;
 
   if ( m_leftBorderPen != m_pTable->defaultCell()->leftBorderPen() )
-    out << indent << "<LEFTBORDER>" << m_leftBorderPen << "</>" << endl;
+    out << indent << "<LEFTBORDER>" << m_leftBorderPen << "</LEFTBORDER>" << endl;
   if ( m_topBorderPen != m_pTable->defaultCell()->topBorderPen() )
-    out << indent << "<TOPBORDER>" << m_topBorderPen << "</>" << endl;
+    out << indent << "<TOPBORDER>" << m_topBorderPen << "</TOPBORDER>" << endl;
 
   if ( !m_strText.isEmpty() )
   {
@@ -1668,24 +1669,33 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs )
       m_iColumn = atoi( (*it).m_strValue.c_str() );
     }
     else
-      cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+      cerr << "Unknown attrib 'CELL:" << (*it).m_strName << "'" << endl;
   }
 
+  // Validation
+  if ( m_iRow < 1 || m_iRow > 0xFFFF )
+  {
+    cerr << "Value out of Range Cell:row=" << m_iRow << endl;
+    return false;
+  }
+  if ( m_iColumn < 1 || m_iColumn > 0xFFFF )
+  {
+    cerr << "Value out of Range Cell:column=" << m_iColumn << endl;
+    return false;
+  }
+  
   string tag;
   vector<KOMLAttrib> lst;
   string name;
-  string text;
+  tstring text;
   string tmp;
   
   bool res;
-  // FORMAT, LEFTBORDER, RIGHTBORDER, FONT
+  // FORMAT, LEFTBORDER, TOPBORDER, FONT, PEN
   do
   {
     if ( parser.readText( tmp ) )
-    {
-      cerr << "READ: '" << tmp << "'" << endl;
       text += tmp.c_str();
-    }
     
     if ( ( res = parser.open( 0L, tag ) ) )
     {
@@ -1693,66 +1703,180 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs )
       vector<KOMLAttrib>::const_iterator it = lst.begin();
 
       if ( name == "FORMAT" )
-      {
-      }
-      else if ( name == "FONT" )
-      {
-      }
-      else if ( name == "LEFTBORDER" )
-      {
-	// PEN
-	while( parser.open( 0L, tag ) )
-	{
-	  KOMLParser::parseTag( tag.c_str(), name, lst );
-	  
-	  if ( name == "PEN" )
-	  {    
-	    // tagToPen
-	  }
-	  else
-	    cerr << "Unknown tag '" << tag << "'" << endl;    
-	
-	  if ( !parser.close( tag ) )
+        {
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for( ; it != lst.end(); it++ )
 	  {
-	    cerr << "ERR: Closing Child" << endl;
-	    return false;
+	    if ( (*it).m_strName == "align" )
+	    {
+	      Align a = (Align)atoi( (*it).m_strValue.c_str() );
+	      // Validation
+	      if ( a < 1 || a > 4 )
+	      {
+		cerr << "Value of of range Cell::align=" << a << endl;
+		return false;
+	      }
+	      // Assignment
+	      setAlign( a );
+	    }
+	    else if ( (*it).m_strName == "bgcolor" )
+	    {
+	      setBgColor( strToColor( (*it).m_strValue.c_str() ) );
+	    }
+	    else if ( (*it).m_strName == "multirow" )
+	    {
+	      setMultiRow( true );
+	    }
+	    else if ( (*it).m_strName == "colspan" )
+	    {
+	      int i = atoi( (*it).m_strValue.c_str() );
+	      // Validation
+	      if ( i < 0 || i > 0xFFF )
+	      {
+		cerr << "Value out of range Cell::colspan=" << m_iExtraXCells << endl;
+		return false;
+	      }
+	      m_iExtraXCells = i;
+	      if ( i > 0 )
+		m_bForceExtraCells = true;	    
+	    }
+	    else if ( (*it).m_strName == "rowspan" )
+	    {
+	      int i = atoi( (*it).m_strValue.c_str() );
+	      // Validation
+	      if ( i < 0 || i > 0xFFF )
+	      {
+		cerr << "Value out of range Cell::rowspan=" << m_iExtraYCells << endl;
+		return false;
+	      }
+	      m_iExtraYCells = i;
+	      if ( m_iExtraYCells > 0 )
+		m_bForceExtraCells = true;
+	    }
+	    else if ( (*it).m_strName == "precision" )
+	    {
+	      int i = atoi( (*it).m_strValue.c_str() );
+	      if ( i < -1 )
+	      {
+		cerr << "Value out of range Cell::precision=" << i << endl;
+		return false;
+	      }
+	      m_iPrecision = i;
+	    }
+	    else if ( (*it).m_strName == "prefix" )
+	    {
+	      if ( !((*it).m_strValue.empty() ) )
+		m_strPrefix = (*it).m_strValue.c_str();
+	    }
+	    else if ( (*it).m_strName == "postfix" )
+	    {
+	    if ( !((*it).m_strValue.empty() ) )
+	      m_strPostfix = (*it).m_strValue.c_str();
+	    }
+	    else if ( (*it).m_strName == "float" )
+	    {
+	      FloatFormat f = (FloatFormat)atoi( (*it).m_strValue.c_str() );
+	      // Validation
+	      if ( f < 1 || f > 3 )
+	      {
+		cerr << "Value of of range Cell::float=" << f << endl;
+		return false;
+	      }
+	      // Assignment
+	      setFloatFormat( f );
+	    }
+	    else if ( (*it).m_strName == "floatcolor" )
+	    {
+	      FloatColor f = (FloatColor)atoi( (*it).m_strValue.c_str() );
+	      // Validation
+	      if ( f < 1 || f > 2 )
+	      {
+		cerr << "Value of of range Cell::floatcolor=" << f << endl;
+		return false;
+	      }
+	      // Assignment
+	      setFloatColor( f );
+	    }
+	    else if ( (*it).m_strName == "faktor" )
+	    {
+	      double f = atof( (*it).m_strValue.c_str() );
+	      m_dFaktor = f;
+	    }
+	    else
+	      cerr << "Unknown attrib FORMAT:'" << (*it).m_strName << "'" << endl;
 	  }
 	}
-      }
-      else if ( name == "RIGHTBORDER" )
-      {
-	// PEN
-	while( parser.open( 0L, tag ) )
-	{
-	  KOMLParser::parseTag( tag.c_str(), name, lst );
-	  
-	  if ( name == "PEN" )
-	  {    
-	    // tagToPen
-	  }
+	else if ( name == "PEN" )
+        {
+	  cerr << "!!!!!!!!!!!!!!!!!! PEN !!!!!!!!!!!!!!!!!!!!" << endl;
+	  setTextPen( tagToPen( lst ) );
+	}
+	else if ( name == "FONT" )
+        {
+	  cerr << "!!!!!!!!!!!!!!!!!! FONT !!!!!!!!!!!!!!!!!!!!" << endl;
+	  setTextFont( tagToFont( lst ) );
+	  if ( m_textFont.bold() )
+	    cerr << "!!!!! IS BOLD !!!!!!!!!" << endl;
 	  else
-	    cerr << "Unknown tag '" << tag << "'" << endl;    
-	
-	  if ( !parser.close( tag ) )
+	    cerr << "!!!!! IS NOT BOLD !!!!!!!!!" << endl;
+	}
+	else if ( name == "LEFTBORDER" )
+        {
+	  // PEN
+	  while( parser.open( 0L, tag ) )
 	  {
-	    cerr << "ERR: Closing Child" << endl;
-	    return false;
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    
+	    if ( name == "PEN" )
+	    {    
+	      setLeftBorderPen( tagToPen( lst ) );
+	    }
+	    else
+	      cerr << "Unknown tag '" << tag << "' in LEFTBORDER" << endl;    
+	    
+	    if ( !parser.close( tag ) )
+	    {
+	      cerr << "ERR: Closing Child" << endl;
+	      return false;
+	    }
 	  }
 	}
-      }
-      else
-	cerr << "Unknown tag '" << tag << "'" << endl;    
-
-      if ( !parser.close( tag ) )
-      {
-	cerr << "ERR: Closing Child" << endl;
-	return false;
-      }
+	else if ( name == "TOPBORDER" )
+	{
+	  // PEN
+	  while( parser.open( 0L, tag ) )
+	  {
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    
+	    if ( name == "PEN" )
+	    {    
+	      setTopBorderPen( tagToPen( lst ) );
+	    }
+	    else
+	      cerr << "Unknown tag '" << tag << "' in RIGHTBORDER" << endl;    
+	    
+	    if ( !parser.close( tag ) )
+	    {
+	      cerr << "ERR: Closing Child" << endl;
+	      return false;
+	    }
+	  }
+	}
+	else
+	  cerr << "Unknown tag '" << tag << "' in CELL" << endl;    
+	
+	if ( !parser.close( tag ) )
+        {
+	  cerr << "ERR: Closing Child" << endl;
+	  return false;
+	}
+      
     }
   } while( res );
 
+  text.stripWhiteSpace();
+  cerr << "TEXT: '" << text << "'" << endl;
   setText( text.c_str() );
-  cerr << "TEXT: '" << text.c_str() << "'" << endl;
   
   return true;
 }

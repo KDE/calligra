@@ -133,24 +133,6 @@ kspread_main.o: /usr/include/linux/time.h /usr/include/time.h
 kspread_main.o: /usr/include/sys/socket.h /usr/include/linux/socket.h
 kspread_main.o: /usr/include/asm/socket.h /usr/include/asm/sockios.h
 kspread_main.o: /usr/include/linux/sockios.h /usr/include/linux/uio.h
-kspread_main.o: /usr/local/include/ministl/string
-kspread_main.o: /usr/local/include/ministl/bstring.h /usr/include/ctype.h
-kspread_main.o: /usr/include/endian.h /usr/include/bytesex.h
-kspread_main.o: /usr/local/include/ministl/bool.h
-kspread_main.o: /usr/local/include/ministl/vector
-kspread_main.o: /usr/local/include/ministl/vector.h
-kspread_main.o: /usr/local/include/ministl/ministl.h
-kspread_main.o: /usr/local/include/ministl/defalloc.h
-kspread_main.o: /usr/local/include/ministl/map
-kspread_main.o: /usr/local/include/ministl/map.h
-kspread_main.o: /usr/local/include/ministl/function
-kspread_main.o: /usr/local/include/ministl/function.h
-kspread_main.o: /usr/local/include/ministl/pair
-kspread_main.o: /usr/local/include/ministl/pair.h
-kspread_main.o: /usr/local/include/ministl/set
-kspread_main.o: /usr/local/include/ministl/set.h
-kspread_main.o: /usr/local/include/ministl/list
-kspread_main.o: /usr/local/include/ministl/list.h
 kspread_main.o: /usr/local/include/mico/version.h
 kspread_main.o: /usr/local/include/mico/types.h
 kspread_main.o: /usr/local/include/mico/sequence.h
@@ -215,7 +197,7 @@ kspread_main.o: /usr/lib/qt/include/qpntarry.h /usr/lib/qt/include/qwmatrix.h
 kspread_main.o: /usr/lib/qt/include/qprinter.h kmetaedit.h kspread.h
 kspread_main.o: /opt/kde/idl/controls.h /opt/kde/idl/parts.h kspread_python.h
 kspread_main.o: ./Python-1.4/Include/Python.h
-kspread_main.o: ./Python-1.4/Include/allobjects.h ./Python-1.4/config.h
+kspread_main.o: ./Python-1.4/Include/allobjects.h /opt/kde/include/config.h
 kspread_main.o: ./Python-1.4/Include/myproto.h ./Python-1.4/Include/object.h
 kspread_main.o: ./Python-1.4/Include/objimpl.h ./Python-1.4/Include/pydebug.h
 kspread_main.o: ./Python-1.4/Include/accessobject.h
@@ -239,7 +221,7 @@ kspread_main.o: ./Python-1.4/Include/sliceobject.h
 kspread_main.o: ./Python-1.4/Include/pyerrors.h
 kspread_main.o: ./Python-1.4/Include/mymalloc.h
 kspread_main.o: ./Python-1.4/Include/modsupport.h
-kspread_main.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stdarg.h
+kspread_main.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/varargs.h
 kspread_main.o: ./Python-1.4/Include/ceval.h ./Python-1.4/Include/pythonrun.h
 kspread_main.o: ./Python-1.4/Include/sysmodule.h
 kspread_main.o: ./Python-1.4/Include/intrcheck.h
@@ -247,18 +229,19 @@ kspread_main.o: ./Python-1.4/Include/import.h
 kspread_main.o: ./Python-1.4/Include/bltinmodule.h
 kspread_main.o: ./Python-1.4/Include/abstract.h
 kspread_main.o: ./Python-1.4/Include/graminit.h kspread_undo.h
-kspread_main.o: kspread_layout.h kspread_cell.h kspread_table.h
-kspread_main.o: kspread_autofill.h kspread_dlg_layout.h
-kspread_main.o: /usr/lib/qt/include/qlistbox.h /usr/lib/qt/include/qgrpbox.h
-kspread_main.o: /usr/lib/qt/include/qtabdlg.h /usr/lib/qt/include/qdialog.h
-kspread_main.o: /usr/lib/qt/include/qmsgbox.h /usr/lib/qt/include/qbttngrp.h
-kspread_main.o: /usr/lib/qt/include/qchkbox.h /usr/lib/qt/include/qlcdnum.h
-kspread_main.o: /usr/lib/qt/include/qbitarry.h /usr/lib/qt/include/qradiobt.h
-kspread_main.o: /usr/lib/qt/include/qscrbar.h /usr/lib/qt/include/qrangect.h
-kspread_main.o: /usr/lib/qt/include/qdrawutl.h /usr/lib/qt/include/qtooltip.h
-kspread_main.o: /opt/kde/include/kcolordlg.h /opt/kde/include/kselect.h
-kspread_main.o: /usr/lib/qt/include/qstack.h kspread_view.h kspread_tabbar.h
-kspread_main.o: kspread_map.h kspread_shell.h
+kspread_main.o: kspread_layout.h /opt/kde/include/komlParser.h
+kspread_main.o: /opt/kde/include/torben.h /opt/kde/include/komlFeed.h
+kspread_main.o: kspread_cell.h kspread_table.h kspread_autofill.h
+kspread_main.o: kspread_dlg_layout.h /usr/lib/qt/include/qlistbox.h
+kspread_main.o: /usr/lib/qt/include/qgrpbox.h /usr/lib/qt/include/qtabdlg.h
+kspread_main.o: /usr/lib/qt/include/qdialog.h /usr/lib/qt/include/qmsgbox.h
+kspread_main.o: /usr/lib/qt/include/qbttngrp.h /usr/lib/qt/include/qchkbox.h
+kspread_main.o: /usr/lib/qt/include/qlcdnum.h /usr/lib/qt/include/qbitarry.h
+kspread_main.o: /usr/lib/qt/include/qradiobt.h /usr/lib/qt/include/qscrbar.h
+kspread_main.o: /usr/lib/qt/include/qrangect.h /usr/lib/qt/include/qdrawutl.h
+kspread_main.o: /usr/lib/qt/include/qtooltip.h /opt/kde/include/kcolordlg.h
+kspread_main.o: /opt/kde/include/kselect.h /usr/lib/qt/include/qstack.h
+kspread_main.o: kspread_view.h kspread_tabbar.h kspread_map.h kspread_shell.h
 kspread_main.o: /opt/kde/include/default_shell_impl.h
 kspread_main.o: /opt/kde/include/default_shell.h
 kspread_main.o: /opt/kde/include/koScanParts.h
@@ -283,24 +266,6 @@ kspread_shell.o: /usr/include/linux/time.h /usr/include/time.h
 kspread_shell.o: /usr/include/sys/socket.h /usr/include/linux/socket.h
 kspread_shell.o: /usr/include/asm/socket.h /usr/include/asm/sockios.h
 kspread_shell.o: /usr/include/linux/sockios.h /usr/include/linux/uio.h
-kspread_shell.o: /usr/local/include/ministl/string
-kspread_shell.o: /usr/local/include/ministl/bstring.h /usr/include/ctype.h
-kspread_shell.o: /usr/include/endian.h /usr/include/bytesex.h
-kspread_shell.o: /usr/include/string.h /usr/local/include/ministl/bool.h
-kspread_shell.o: /usr/local/include/ministl/vector
-kspread_shell.o: /usr/local/include/ministl/vector.h
-kspread_shell.o: /usr/local/include/ministl/ministl.h
-kspread_shell.o: /usr/local/include/ministl/defalloc.h
-kspread_shell.o: /usr/local/include/ministl/map
-kspread_shell.o: /usr/local/include/ministl/map.h
-kspread_shell.o: /usr/local/include/ministl/function
-kspread_shell.o: /usr/local/include/ministl/function.h
-kspread_shell.o: /usr/local/include/ministl/pair
-kspread_shell.o: /usr/local/include/ministl/pair.h
-kspread_shell.o: /usr/local/include/ministl/set
-kspread_shell.o: /usr/local/include/ministl/set.h
-kspread_shell.o: /usr/local/include/ministl/list
-kspread_shell.o: /usr/local/include/ministl/list.h
 kspread_shell.o: /usr/local/include/mico/version.h
 kspread_shell.o: /usr/local/include/mico/types.h
 kspread_shell.o: /usr/local/include/mico/sequence.h
@@ -337,11 +302,12 @@ kspread_shell.o: /usr/lib/qt/include/qobjdefs.h /usr/lib/qt/include/qglobal.h
 kspread_shell.o: /usr/lib/qt/include/qobject.h /usr/lib/qt/include/qstring.h
 kspread_shell.o: /usr/lib/qt/include/qarray.h /usr/lib/qt/include/qgarray.h
 kspread_shell.o: /usr/lib/qt/include/qshared.h /usr/lib/qt/include/qgeneric.h
-kspread_shell.o: /usr/lib/qt/include/qevent.h /usr/lib/qt/include/qrect.h
-kspread_shell.o: /usr/lib/qt/include/qsize.h /usr/lib/qt/include/qpoint.h
-kspread_shell.o: /usr/lib/qt/include/qpaintd.h /usr/lib/qt/include/qpalette.h
-kspread_shell.o: /usr/lib/qt/include/qcolor.h /usr/lib/qt/include/qcursor.h
-kspread_shell.o: /usr/lib/qt/include/qfont.h /usr/lib/qt/include/qfontmet.h
+kspread_shell.o: /usr/include/string.h /usr/lib/qt/include/qevent.h
+kspread_shell.o: /usr/lib/qt/include/qrect.h /usr/lib/qt/include/qsize.h
+kspread_shell.o: /usr/lib/qt/include/qpoint.h /usr/lib/qt/include/qpaintd.h
+kspread_shell.o: /usr/lib/qt/include/qpalette.h /usr/lib/qt/include/qcolor.h
+kspread_shell.o: /usr/lib/qt/include/qcursor.h /usr/lib/qt/include/qfont.h
+kspread_shell.o: /usr/lib/qt/include/qfontmet.h
 kspread_shell.o: /usr/lib/qt/include/qfontinf.h /usr/lib/qt/include/qlist.h
 kspread_shell.o: /usr/lib/qt/include/qglist.h /usr/lib/qt/include/qcollect.h
 kspread_shell.o: /opt/kde/include/ktoolbar.h /usr/lib/qt/include/qframe.h
@@ -380,7 +346,7 @@ kspread_shell.o: /usr/lib/qt/include/qwmatrix.h
 kspread_shell.o: /usr/lib/qt/include/qprinter.h kmetaedit.h kspread.h
 kspread_shell.o: /opt/kde/idl/controls.h /opt/kde/idl/parts.h
 kspread_shell.o: kspread_python.h ./Python-1.4/Include/Python.h
-kspread_shell.o: ./Python-1.4/Include/allobjects.h ./Python-1.4/config.h
+kspread_shell.o: ./Python-1.4/Include/allobjects.h /opt/kde/include/config.h
 kspread_shell.o: ./Python-1.4/Include/myproto.h ./Python-1.4/Include/object.h
 kspread_shell.o: ./Python-1.4/Include/objimpl.h
 kspread_shell.o: ./Python-1.4/Include/pydebug.h
@@ -405,7 +371,7 @@ kspread_shell.o: ./Python-1.4/Include/sliceobject.h
 kspread_shell.o: ./Python-1.4/Include/pyerrors.h
 kspread_shell.o: ./Python-1.4/Include/mymalloc.h
 kspread_shell.o: ./Python-1.4/Include/modsupport.h
-kspread_shell.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stdarg.h
+kspread_shell.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/varargs.h
 kspread_shell.o: ./Python-1.4/Include/ceval.h
 kspread_shell.o: ./Python-1.4/Include/pythonrun.h
 kspread_shell.o: ./Python-1.4/Include/sysmodule.h
@@ -414,13 +380,14 @@ kspread_shell.o: ./Python-1.4/Include/import.h
 kspread_shell.o: ./Python-1.4/Include/bltinmodule.h
 kspread_shell.o: ./Python-1.4/Include/abstract.h
 kspread_shell.o: ./Python-1.4/Include/graminit.h kspread_undo.h
-kspread_shell.o: kspread_layout.h kspread_cell.h kspread_table.h
-kspread_shell.o: kspread_autofill.h kspread_dlg_layout.h
-kspread_shell.o: /usr/lib/qt/include/qlistbox.h /usr/lib/qt/include/qgrpbox.h
-kspread_shell.o: /usr/lib/qt/include/qtabdlg.h /usr/lib/qt/include/qdialog.h
-kspread_shell.o: /usr/lib/qt/include/qmsgbox.h /usr/lib/qt/include/qbttngrp.h
-kspread_shell.o: /usr/lib/qt/include/qchkbox.h /usr/lib/qt/include/qlcdnum.h
-kspread_shell.o: /usr/lib/qt/include/qbitarry.h
+kspread_shell.o: kspread_layout.h /opt/kde/include/komlParser.h
+kspread_shell.o: /opt/kde/include/torben.h /opt/kde/include/komlFeed.h
+kspread_shell.o: kspread_cell.h kspread_table.h kspread_autofill.h
+kspread_shell.o: kspread_dlg_layout.h /usr/lib/qt/include/qlistbox.h
+kspread_shell.o: /usr/lib/qt/include/qgrpbox.h /usr/lib/qt/include/qtabdlg.h
+kspread_shell.o: /usr/lib/qt/include/qdialog.h /usr/lib/qt/include/qmsgbox.h
+kspread_shell.o: /usr/lib/qt/include/qbttngrp.h /usr/lib/qt/include/qchkbox.h
+kspread_shell.o: /usr/lib/qt/include/qlcdnum.h /usr/lib/qt/include/qbitarry.h
 kspread_shell.o: /usr/lib/qt/include/qradiobt.h /usr/lib/qt/include/qscrbar.h
 kspread_shell.o: /usr/lib/qt/include/qrangect.h
 kspread_shell.o: /usr/lib/qt/include/qdrawutl.h
@@ -449,24 +416,6 @@ kspread_doc.o: /usr/include/linux/time.h /usr/include/time.h
 kspread_doc.o: /usr/include/sys/socket.h /usr/include/linux/socket.h
 kspread_doc.o: /usr/include/asm/socket.h /usr/include/asm/sockios.h
 kspread_doc.o: /usr/include/linux/sockios.h /usr/include/linux/uio.h
-kspread_doc.o: /usr/local/include/ministl/string
-kspread_doc.o: /usr/local/include/ministl/bstring.h /usr/include/ctype.h
-kspread_doc.o: /usr/include/endian.h /usr/include/bytesex.h
-kspread_doc.o: /usr/include/string.h /usr/local/include/ministl/bool.h
-kspread_doc.o: /usr/local/include/ministl/vector
-kspread_doc.o: /usr/local/include/ministl/vector.h
-kspread_doc.o: /usr/local/include/ministl/ministl.h
-kspread_doc.o: /usr/local/include/ministl/defalloc.h
-kspread_doc.o: /usr/local/include/ministl/map
-kspread_doc.o: /usr/local/include/ministl/map.h
-kspread_doc.o: /usr/local/include/ministl/function
-kspread_doc.o: /usr/local/include/ministl/function.h
-kspread_doc.o: /usr/local/include/ministl/pair
-kspread_doc.o: /usr/local/include/ministl/pair.h
-kspread_doc.o: /usr/local/include/ministl/set
-kspread_doc.o: /usr/local/include/ministl/set.h
-kspread_doc.o: /usr/local/include/ministl/list
-kspread_doc.o: /usr/local/include/ministl/list.h
 kspread_doc.o: /usr/local/include/mico/version.h
 kspread_doc.o: /usr/local/include/mico/types.h
 kspread_doc.o: /usr/local/include/mico/sequence.h
@@ -497,38 +446,38 @@ kspread_doc.o: /opt/kde/include/component_impl.h /opt/kde/include/base_impl.h
 kspread_doc.o: /usr/lib/qt/include/qstring.h /usr/lib/qt/include/qarray.h
 kspread_doc.o: /usr/lib/qt/include/qgarray.h /usr/lib/qt/include/qshared.h
 kspread_doc.o: /usr/lib/qt/include/qglobal.h /usr/lib/qt/include/qgeneric.h
-kspread_doc.o: /usr/lib/qt/include/qlist.h /usr/lib/qt/include/qglist.h
-kspread_doc.o: /usr/lib/qt/include/qcollect.h /usr/lib/qt/include/qdict.h
-kspread_doc.o: /usr/lib/qt/include/qgdict.h /opt/kde/include/kom_var.h
-kspread_doc.o: /usr/lib/qt/include/qwidget.h /usr/lib/qt/include/qwindefs.h
-kspread_doc.o: /usr/lib/qt/include/qobjdefs.h /usr/lib/qt/include/qobject.h
-kspread_doc.o: /usr/lib/qt/include/qevent.h /usr/lib/qt/include/qrect.h
-kspread_doc.o: /usr/lib/qt/include/qsize.h /usr/lib/qt/include/qpoint.h
-kspread_doc.o: /usr/lib/qt/include/qpaintd.h /usr/lib/qt/include/qpalette.h
-kspread_doc.o: /usr/lib/qt/include/qcolor.h /usr/lib/qt/include/qcursor.h
-kspread_doc.o: /usr/lib/qt/include/qfont.h /usr/lib/qt/include/qfontmet.h
-kspread_doc.o: /usr/lib/qt/include/qfontinf.h /opt/kde/include/kwm.h
-kspread_doc.o: /usr/lib/qt/include/qapp.h /usr/lib/qt/include/qpixmap.h
-kspread_doc.o: /usr/include/X11/Xlib.h /usr/include/X11/X.h
-kspread_doc.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-kspread_doc.o: /opt/kde/include/kapp.h /opt/kde/include/kconfig.h
-kspread_doc.o: /opt/kde/include/kconfigbase.h /usr/lib/qt/include/qstrlist.h
-kspread_doc.o: /usr/lib/qt/include/qdstream.h /usr/lib/qt/include/qiodev.h
-kspread_doc.o: /opt/kde/include/kconfigdata.h /usr/lib/qt/include/qtstream.h
-kspread_doc.o: /usr/lib/qt/include/qfile.h /opt/kde/include/kdebug.h
-kspread_doc.o: /opt/kde/include/klocale.h /usr/lib/qt/include/qintdict.h
-kspread_doc.o: /opt/kde/include/drag.h /usr/lib/qt/include/qpopmenu.h
-kspread_doc.o: /usr/lib/qt/include/qtablevw.h /usr/lib/qt/include/qframe.h
-kspread_doc.o: /usr/lib/qt/include/qmenudta.h /opt/kde/include/parts.h
-kspread_doc.o: /opt/kde/include/part_impl.h /opt/kde/include/document_impl.h
-kspread_doc.o: /opt/kde/include/view_impl.h /usr/lib/qt/include/qpainter.h
-kspread_doc.o: /usr/lib/qt/include/qregion.h /usr/lib/qt/include/qpen.h
-kspread_doc.o: /usr/lib/qt/include/qbrush.h /usr/lib/qt/include/qpntarry.h
-kspread_doc.o: /usr/lib/qt/include/qwmatrix.h /usr/lib/qt/include/qprinter.h
-kspread_doc.o: kmetaedit.h kspread.h /opt/kde/idl/controls.h
-kspread_doc.o: /opt/kde/idl/parts.h kspread_python.h
+kspread_doc.o: /usr/include/string.h /usr/lib/qt/include/qlist.h
+kspread_doc.o: /usr/lib/qt/include/qglist.h /usr/lib/qt/include/qcollect.h
+kspread_doc.o: /usr/lib/qt/include/qdict.h /usr/lib/qt/include/qgdict.h
+kspread_doc.o: /opt/kde/include/kom_var.h /usr/lib/qt/include/qwidget.h
+kspread_doc.o: /usr/lib/qt/include/qwindefs.h /usr/lib/qt/include/qobjdefs.h
+kspread_doc.o: /usr/lib/qt/include/qobject.h /usr/lib/qt/include/qevent.h
+kspread_doc.o: /usr/lib/qt/include/qrect.h /usr/lib/qt/include/qsize.h
+kspread_doc.o: /usr/lib/qt/include/qpoint.h /usr/lib/qt/include/qpaintd.h
+kspread_doc.o: /usr/lib/qt/include/qpalette.h /usr/lib/qt/include/qcolor.h
+kspread_doc.o: /usr/lib/qt/include/qcursor.h /usr/lib/qt/include/qfont.h
+kspread_doc.o: /usr/lib/qt/include/qfontmet.h /usr/lib/qt/include/qfontinf.h
+kspread_doc.o: /opt/kde/include/kwm.h /usr/lib/qt/include/qapp.h
+kspread_doc.o: /usr/lib/qt/include/qpixmap.h /usr/include/X11/Xlib.h
+kspread_doc.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
+kspread_doc.o: /usr/include/X11/Xosdefs.h /opt/kde/include/kapp.h
+kspread_doc.o: /opt/kde/include/kconfig.h /opt/kde/include/kconfigbase.h
+kspread_doc.o: /usr/lib/qt/include/qstrlist.h /usr/lib/qt/include/qdstream.h
+kspread_doc.o: /usr/lib/qt/include/qiodev.h /opt/kde/include/kconfigdata.h
+kspread_doc.o: /usr/lib/qt/include/qtstream.h /usr/lib/qt/include/qfile.h
+kspread_doc.o: /opt/kde/include/kdebug.h /opt/kde/include/klocale.h
+kspread_doc.o: /usr/lib/qt/include/qintdict.h /opt/kde/include/drag.h
+kspread_doc.o: /usr/lib/qt/include/qpopmenu.h /usr/lib/qt/include/qtablevw.h
+kspread_doc.o: /usr/lib/qt/include/qframe.h /usr/lib/qt/include/qmenudta.h
+kspread_doc.o: /opt/kde/include/parts.h /opt/kde/include/part_impl.h
+kspread_doc.o: /opt/kde/include/document_impl.h /opt/kde/include/view_impl.h
+kspread_doc.o: /usr/lib/qt/include/qpainter.h /usr/lib/qt/include/qregion.h
+kspread_doc.o: /usr/lib/qt/include/qpen.h /usr/lib/qt/include/qbrush.h
+kspread_doc.o: /usr/lib/qt/include/qpntarry.h /usr/lib/qt/include/qwmatrix.h
+kspread_doc.o: /usr/lib/qt/include/qprinter.h kmetaedit.h kspread.h
+kspread_doc.o: /opt/kde/idl/controls.h /opt/kde/idl/parts.h kspread_python.h
 kspread_doc.o: ./Python-1.4/Include/Python.h
-kspread_doc.o: ./Python-1.4/Include/allobjects.h ./Python-1.4/config.h
+kspread_doc.o: ./Python-1.4/Include/allobjects.h /opt/kde/include/config.h
 kspread_doc.o: ./Python-1.4/Include/myproto.h ./Python-1.4/Include/object.h
 kspread_doc.o: ./Python-1.4/Include/objimpl.h ./Python-1.4/Include/pydebug.h
 kspread_doc.o: ./Python-1.4/Include/accessobject.h
@@ -552,37 +501,40 @@ kspread_doc.o: ./Python-1.4/Include/sliceobject.h
 kspread_doc.o: ./Python-1.4/Include/pyerrors.h
 kspread_doc.o: ./Python-1.4/Include/mymalloc.h
 kspread_doc.o: ./Python-1.4/Include/modsupport.h
-kspread_doc.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stdarg.h
+kspread_doc.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/varargs.h
 kspread_doc.o: ./Python-1.4/Include/ceval.h ./Python-1.4/Include/pythonrun.h
 kspread_doc.o: ./Python-1.4/Include/sysmodule.h
 kspread_doc.o: ./Python-1.4/Include/intrcheck.h ./Python-1.4/Include/import.h
 kspread_doc.o: ./Python-1.4/Include/bltinmodule.h
 kspread_doc.o: ./Python-1.4/Include/abstract.h
 kspread_doc.o: ./Python-1.4/Include/graminit.h kspread_undo.h
-kspread_doc.o: kspread_layout.h kspread_cell.h kspread_table.h
-kspread_doc.o: kspread_autofill.h kspread_dlg_layout.h
-kspread_doc.o: /usr/lib/qt/include/qlistbox.h /usr/lib/qt/include/qlined.h
-kspread_doc.o: /usr/lib/qt/include/qcombo.h /usr/lib/qt/include/qlabel.h
-kspread_doc.o: /usr/lib/qt/include/qgrpbox.h /usr/lib/qt/include/qtabdlg.h
-kspread_doc.o: /usr/lib/qt/include/qdialog.h /usr/lib/qt/include/qmsgbox.h
-kspread_doc.o: /usr/lib/qt/include/qbttngrp.h /usr/lib/qt/include/qchkbox.h
-kspread_doc.o: /usr/lib/qt/include/qbutton.h /usr/lib/qt/include/qlcdnum.h
-kspread_doc.o: /usr/lib/qt/include/qbitarry.h /usr/lib/qt/include/qpushbt.h
-kspread_doc.o: /usr/lib/qt/include/qradiobt.h /usr/lib/qt/include/qscrbar.h
-kspread_doc.o: /usr/lib/qt/include/qrangect.h /usr/lib/qt/include/qdrawutl.h
-kspread_doc.o: /usr/lib/qt/include/qtooltip.h /usr/lib/qt/include/qtimer.h
-kspread_doc.o: /opt/kde/include/kcolordlg.h /opt/kde/include/kselect.h
-kspread_doc.o: /usr/lib/qt/include/qstack.h kspread_view.h
-kspread_doc.o: /opt/kde/include/menu_impl.h /opt/kde/include/kmenubar.h
-kspread_doc.o: /usr/lib/qt/include/qmenubar.h /opt/kde/include/ktopwidget.h
-kspread_doc.o: /opt/kde/include/ktoolbar.h /opt/kde/include/kcombo.h
-kspread_doc.o: /opt/kde/include/klined.h /opt/kde/include/kstatusbar.h
-kspread_doc.o: /opt/kde/include/toolbar_impl.h kspread_tabbar.h kspread_map.h
-kspread_doc.o: /usr/include/unistd.h /usr/include/posix_opt.h
-kspread_doc.o: /usr/include/gnu/types.h /usr/include/confname.h
-kspread_doc.o: /opt/kde/include/kurl.h /usr/lib/qt/include/qdatetm.h
-kspread_doc.o: kspread_doc.moc /usr/lib/qt/include/qmetaobj.h
-kspread_doc.o: /usr/lib/qt/include/qconnect.h
+kspread_doc.o: kspread_layout.h /opt/kde/include/komlParser.h
+kspread_doc.o: /opt/kde/include/torben.h /opt/kde/include/komlFeed.h
+kspread_doc.o: kspread_cell.h kspread_table.h kspread_autofill.h
+kspread_doc.o: kspread_dlg_layout.h /usr/lib/qt/include/qlistbox.h
+kspread_doc.o: /usr/lib/qt/include/qlined.h /usr/lib/qt/include/qcombo.h
+kspread_doc.o: /usr/lib/qt/include/qlabel.h /usr/lib/qt/include/qgrpbox.h
+kspread_doc.o: /usr/lib/qt/include/qtabdlg.h /usr/lib/qt/include/qdialog.h
+kspread_doc.o: /usr/lib/qt/include/qmsgbox.h /usr/lib/qt/include/qbttngrp.h
+kspread_doc.o: /usr/lib/qt/include/qchkbox.h /usr/lib/qt/include/qbutton.h
+kspread_doc.o: /usr/lib/qt/include/qlcdnum.h /usr/lib/qt/include/qbitarry.h
+kspread_doc.o: /usr/lib/qt/include/qpushbt.h /usr/lib/qt/include/qradiobt.h
+kspread_doc.o: /usr/lib/qt/include/qscrbar.h /usr/lib/qt/include/qrangect.h
+kspread_doc.o: /usr/lib/qt/include/qdrawutl.h /usr/lib/qt/include/qtooltip.h
+kspread_doc.o: /usr/lib/qt/include/qtimer.h /opt/kde/include/kcolordlg.h
+kspread_doc.o: /opt/kde/include/kselect.h /usr/lib/qt/include/qstack.h
+kspread_doc.o: kspread_view.h /opt/kde/include/menu_impl.h
+kspread_doc.o: /opt/kde/include/kmenubar.h /usr/lib/qt/include/qmenubar.h
+kspread_doc.o: /opt/kde/include/ktopwidget.h /opt/kde/include/ktoolbar.h
+kspread_doc.o: /opt/kde/include/kcombo.h /opt/kde/include/klined.h
+kspread_doc.o: /opt/kde/include/kstatusbar.h /opt/kde/include/toolbar_impl.h
+kspread_doc.o: kspread_tabbar.h kspread_map.h
+kspread_doc.o: /opt/kde/include/komlStreamFeed.h
+kspread_doc.o: /opt/kde/include/komlWriter.h /usr/include/unistd.h
+kspread_doc.o: /usr/include/posix_opt.h /usr/include/gnu/types.h
+kspread_doc.o: /usr/include/confname.h /opt/kde/include/kurl.h
+kspread_doc.o: /usr/lib/qt/include/qdatetm.h kspread_doc.moc
+kspread_doc.o: /usr/lib/qt/include/qmetaobj.h /usr/lib/qt/include/qconnect.h
 kspread_dlg_paper.o: kspread_dlg_paper.h /usr/include/stdlib.h
 kspread_dlg_paper.o: /usr/include/features.h /usr/include/sys/cdefs.h
 kspread_dlg_paper.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stddef.h
@@ -702,20 +654,6 @@ kspread.o: /usr/include/linux/time.h /usr/include/time.h
 kspread.o: /usr/include/sys/socket.h /usr/include/linux/socket.h
 kspread.o: /usr/include/asm/socket.h /usr/include/asm/sockios.h
 kspread.o: /usr/include/linux/sockios.h /usr/include/linux/uio.h
-kspread.o: /usr/local/include/ministl/string
-kspread.o: /usr/local/include/ministl/bstring.h /usr/include/ctype.h
-kspread.o: /usr/include/endian.h /usr/include/bytesex.h /usr/include/string.h
-kspread.o: /usr/local/include/ministl/bool.h
-kspread.o: /usr/local/include/ministl/vector
-kspread.o: /usr/local/include/ministl/vector.h
-kspread.o: /usr/local/include/ministl/ministl.h
-kspread.o: /usr/local/include/ministl/defalloc.h
-kspread.o: /usr/local/include/ministl/map /usr/local/include/ministl/map.h
-kspread.o: /usr/local/include/ministl/function
-kspread.o: /usr/local/include/ministl/function.h
-kspread.o: /usr/local/include/ministl/pair /usr/local/include/ministl/pair.h
-kspread.o: /usr/local/include/ministl/set /usr/local/include/ministl/set.h
-kspread.o: /usr/local/include/ministl/list /usr/local/include/ministl/list.h
 kspread.o: /usr/local/include/mico/version.h /usr/local/include/mico/types.h
 kspread.o: /usr/local/include/mico/sequence.h /usr/local/include/mico/array.h
 kspread.o: /usr/local/include/mico/var.h /usr/local/include/mico/basic.h
@@ -753,24 +691,6 @@ kspread_undo.o: /usr/include/linux/time.h /usr/include/time.h
 kspread_undo.o: /usr/include/sys/socket.h /usr/include/linux/socket.h
 kspread_undo.o: /usr/include/asm/socket.h /usr/include/asm/sockios.h
 kspread_undo.o: /usr/include/linux/sockios.h /usr/include/linux/uio.h
-kspread_undo.o: /usr/local/include/ministl/string
-kspread_undo.o: /usr/local/include/ministl/bstring.h /usr/include/ctype.h
-kspread_undo.o: /usr/include/endian.h /usr/include/bytesex.h
-kspread_undo.o: /usr/include/string.h /usr/local/include/ministl/bool.h
-kspread_undo.o: /usr/local/include/ministl/vector
-kspread_undo.o: /usr/local/include/ministl/vector.h
-kspread_undo.o: /usr/local/include/ministl/ministl.h
-kspread_undo.o: /usr/local/include/ministl/defalloc.h
-kspread_undo.o: /usr/local/include/ministl/map
-kspread_undo.o: /usr/local/include/ministl/map.h
-kspread_undo.o: /usr/local/include/ministl/function
-kspread_undo.o: /usr/local/include/ministl/function.h
-kspread_undo.o: /usr/local/include/ministl/pair
-kspread_undo.o: /usr/local/include/ministl/pair.h
-kspread_undo.o: /usr/local/include/ministl/set
-kspread_undo.o: /usr/local/include/ministl/set.h
-kspread_undo.o: /usr/local/include/ministl/list
-kspread_undo.o: /usr/local/include/ministl/list.h
 kspread_undo.o: /usr/local/include/mico/version.h
 kspread_undo.o: /usr/local/include/mico/types.h
 kspread_undo.o: /usr/local/include/mico/sequence.h
@@ -803,38 +723,39 @@ kspread_undo.o: /opt/kde/include/component_impl.h
 kspread_undo.o: /opt/kde/include/base_impl.h /usr/lib/qt/include/qstring.h
 kspread_undo.o: /usr/lib/qt/include/qarray.h /usr/lib/qt/include/qgarray.h
 kspread_undo.o: /usr/lib/qt/include/qshared.h /usr/lib/qt/include/qglobal.h
-kspread_undo.o: /usr/lib/qt/include/qgeneric.h /usr/lib/qt/include/qlist.h
-kspread_undo.o: /usr/lib/qt/include/qglist.h /usr/lib/qt/include/qcollect.h
-kspread_undo.o: /usr/lib/qt/include/qdict.h /usr/lib/qt/include/qgdict.h
-kspread_undo.o: /opt/kde/include/kom_var.h /usr/lib/qt/include/qwidget.h
-kspread_undo.o: /usr/lib/qt/include/qwindefs.h /usr/lib/qt/include/qobjdefs.h
-kspread_undo.o: /usr/lib/qt/include/qobject.h /usr/lib/qt/include/qevent.h
-kspread_undo.o: /usr/lib/qt/include/qrect.h /usr/lib/qt/include/qsize.h
-kspread_undo.o: /usr/lib/qt/include/qpoint.h /usr/lib/qt/include/qpaintd.h
-kspread_undo.o: /usr/lib/qt/include/qpalette.h /usr/lib/qt/include/qcolor.h
-kspread_undo.o: /usr/lib/qt/include/qcursor.h /usr/lib/qt/include/qfont.h
-kspread_undo.o: /usr/lib/qt/include/qfontmet.h /usr/lib/qt/include/qfontinf.h
-kspread_undo.o: /opt/kde/include/kwm.h /usr/lib/qt/include/qapp.h
-kspread_undo.o: /usr/lib/qt/include/qpixmap.h /usr/include/X11/Xlib.h
-kspread_undo.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
-kspread_undo.o: /usr/include/X11/Xosdefs.h /opt/kde/include/kapp.h
-kspread_undo.o: /opt/kde/include/kconfig.h /opt/kde/include/kconfigbase.h
-kspread_undo.o: /usr/lib/qt/include/qstrlist.h /usr/lib/qt/include/qdstream.h
-kspread_undo.o: /usr/lib/qt/include/qiodev.h /opt/kde/include/kconfigdata.h
-kspread_undo.o: /usr/lib/qt/include/qtstream.h /usr/lib/qt/include/qfile.h
-kspread_undo.o: /opt/kde/include/kdebug.h /opt/kde/include/klocale.h
-kspread_undo.o: /usr/lib/qt/include/qintdict.h /opt/kde/include/drag.h
-kspread_undo.o: /usr/lib/qt/include/qpopmenu.h /usr/lib/qt/include/qtablevw.h
-kspread_undo.o: /usr/lib/qt/include/qframe.h /usr/lib/qt/include/qmenudta.h
-kspread_undo.o: /opt/kde/include/parts.h /opt/kde/include/part_impl.h
-kspread_undo.o: /opt/kde/include/document_impl.h /opt/kde/include/view_impl.h
-kspread_undo.o: /usr/lib/qt/include/qpainter.h /usr/lib/qt/include/qregion.h
-kspread_undo.o: /usr/lib/qt/include/qpen.h /usr/lib/qt/include/qbrush.h
-kspread_undo.o: /usr/lib/qt/include/qpntarry.h /usr/lib/qt/include/qwmatrix.h
-kspread_undo.o: /usr/lib/qt/include/qprinter.h kmetaedit.h kspread.h
-kspread_undo.o: /opt/kde/idl/controls.h /opt/kde/idl/parts.h kspread_python.h
+kspread_undo.o: /usr/lib/qt/include/qgeneric.h /usr/include/string.h
+kspread_undo.o: /usr/lib/qt/include/qlist.h /usr/lib/qt/include/qglist.h
+kspread_undo.o: /usr/lib/qt/include/qcollect.h /usr/lib/qt/include/qdict.h
+kspread_undo.o: /usr/lib/qt/include/qgdict.h /opt/kde/include/kom_var.h
+kspread_undo.o: /usr/lib/qt/include/qwidget.h /usr/lib/qt/include/qwindefs.h
+kspread_undo.o: /usr/lib/qt/include/qobjdefs.h /usr/lib/qt/include/qobject.h
+kspread_undo.o: /usr/lib/qt/include/qevent.h /usr/lib/qt/include/qrect.h
+kspread_undo.o: /usr/lib/qt/include/qsize.h /usr/lib/qt/include/qpoint.h
+kspread_undo.o: /usr/lib/qt/include/qpaintd.h /usr/lib/qt/include/qpalette.h
+kspread_undo.o: /usr/lib/qt/include/qcolor.h /usr/lib/qt/include/qcursor.h
+kspread_undo.o: /usr/lib/qt/include/qfont.h /usr/lib/qt/include/qfontmet.h
+kspread_undo.o: /usr/lib/qt/include/qfontinf.h /opt/kde/include/kwm.h
+kspread_undo.o: /usr/lib/qt/include/qapp.h /usr/lib/qt/include/qpixmap.h
+kspread_undo.o: /usr/include/X11/Xlib.h /usr/include/X11/X.h
+kspread_undo.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
+kspread_undo.o: /opt/kde/include/kapp.h /opt/kde/include/kconfig.h
+kspread_undo.o: /opt/kde/include/kconfigbase.h /usr/lib/qt/include/qstrlist.h
+kspread_undo.o: /usr/lib/qt/include/qdstream.h /usr/lib/qt/include/qiodev.h
+kspread_undo.o: /opt/kde/include/kconfigdata.h /usr/lib/qt/include/qtstream.h
+kspread_undo.o: /usr/lib/qt/include/qfile.h /opt/kde/include/kdebug.h
+kspread_undo.o: /opt/kde/include/klocale.h /usr/lib/qt/include/qintdict.h
+kspread_undo.o: /opt/kde/include/drag.h /usr/lib/qt/include/qpopmenu.h
+kspread_undo.o: /usr/lib/qt/include/qtablevw.h /usr/lib/qt/include/qframe.h
+kspread_undo.o: /usr/lib/qt/include/qmenudta.h /opt/kde/include/parts.h
+kspread_undo.o: /opt/kde/include/part_impl.h /opt/kde/include/document_impl.h
+kspread_undo.o: /opt/kde/include/view_impl.h /usr/lib/qt/include/qpainter.h
+kspread_undo.o: /usr/lib/qt/include/qregion.h /usr/lib/qt/include/qpen.h
+kspread_undo.o: /usr/lib/qt/include/qbrush.h /usr/lib/qt/include/qpntarry.h
+kspread_undo.o: /usr/lib/qt/include/qwmatrix.h /usr/lib/qt/include/qprinter.h
+kspread_undo.o: kmetaedit.h kspread.h /opt/kde/idl/controls.h
+kspread_undo.o: /opt/kde/idl/parts.h kspread_python.h
 kspread_undo.o: ./Python-1.4/Include/Python.h
-kspread_undo.o: ./Python-1.4/Include/allobjects.h ./Python-1.4/config.h
+kspread_undo.o: ./Python-1.4/Include/allobjects.h /opt/kde/include/config.h
 kspread_undo.o: ./Python-1.4/Include/myproto.h ./Python-1.4/Include/object.h
 kspread_undo.o: ./Python-1.4/Include/objimpl.h ./Python-1.4/Include/pydebug.h
 kspread_undo.o: ./Python-1.4/Include/accessobject.h
@@ -858,7 +779,7 @@ kspread_undo.o: ./Python-1.4/Include/sliceobject.h
 kspread_undo.o: ./Python-1.4/Include/pyerrors.h
 kspread_undo.o: ./Python-1.4/Include/mymalloc.h
 kspread_undo.o: ./Python-1.4/Include/modsupport.h
-kspread_undo.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stdarg.h
+kspread_undo.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/varargs.h
 kspread_undo.o: ./Python-1.4/Include/ceval.h ./Python-1.4/Include/pythonrun.h
 kspread_undo.o: ./Python-1.4/Include/sysmodule.h
 kspread_undo.o: ./Python-1.4/Include/intrcheck.h
@@ -875,17 +796,18 @@ kspread_undo.o: /opt/kde/include/kstatusbar.h /usr/lib/qt/include/qlabel.h
 kspread_undo.o: /opt/kde/include/toolbar_impl.h /usr/lib/qt/include/qpushbt.h
 kspread_undo.o: /usr/lib/qt/include/qscrbar.h /usr/lib/qt/include/qrangect.h
 kspread_undo.o: /usr/lib/qt/include/qdrawutl.h kspread_tabbar.h
-kspread_undo.o: kspread_table.h kspread_autofill.h kspread_layout.h
-kspread_undo.o: kspread_cell.h kspread_dlg_layout.h
-kspread_undo.o: /usr/lib/qt/include/qlistbox.h /usr/lib/qt/include/qgrpbox.h
-kspread_undo.o: /usr/lib/qt/include/qtabdlg.h /usr/lib/qt/include/qdialog.h
-kspread_undo.o: /usr/lib/qt/include/qmsgbox.h /usr/lib/qt/include/qbttngrp.h
-kspread_undo.o: /usr/lib/qt/include/qchkbox.h /usr/lib/qt/include/qlcdnum.h
-kspread_undo.o: /usr/lib/qt/include/qbitarry.h /usr/lib/qt/include/qradiobt.h
-kspread_undo.o: /usr/lib/qt/include/qtooltip.h /usr/lib/qt/include/qtimer.h
-kspread_undo.o: /opt/kde/include/kcolordlg.h /opt/kde/include/kselect.h
-kspread_undo.o: kspread_map.h /usr/lib/qt/include/qstack.h
-kspread_undo.o: /usr/lib/qt/include/qbuffer.h
+kspread_undo.o: kspread_table.h /opt/kde/include/komlParser.h
+kspread_undo.o: /opt/kde/include/torben.h /opt/kde/include/komlFeed.h
+kspread_undo.o: kspread_autofill.h kspread_layout.h kspread_cell.h
+kspread_undo.o: kspread_dlg_layout.h /usr/lib/qt/include/qlistbox.h
+kspread_undo.o: /usr/lib/qt/include/qgrpbox.h /usr/lib/qt/include/qtabdlg.h
+kspread_undo.o: /usr/lib/qt/include/qdialog.h /usr/lib/qt/include/qmsgbox.h
+kspread_undo.o: /usr/lib/qt/include/qbttngrp.h /usr/lib/qt/include/qchkbox.h
+kspread_undo.o: /usr/lib/qt/include/qlcdnum.h /usr/lib/qt/include/qbitarry.h
+kspread_undo.o: /usr/lib/qt/include/qradiobt.h /usr/lib/qt/include/qtooltip.h
+kspread_undo.o: /usr/lib/qt/include/qtimer.h /opt/kde/include/kcolordlg.h
+kspread_undo.o: /opt/kde/include/kselect.h kspread_map.h
+kspread_undo.o: /usr/lib/qt/include/qstack.h /usr/lib/qt/include/qbuffer.h
 kspread_view.o: kspread_view.h /opt/kde/include/part_frame_impl.h
 kspread_view.o: /opt/kde/include/control_frame.h /opt/kde/include/kom.h
 kspread_view.o: /usr/local/include/CORBA.h /usr/local/include/mico/rtti.h
@@ -905,24 +827,6 @@ kspread_view.o: /usr/include/linux/time.h /usr/include/time.h
 kspread_view.o: /usr/include/sys/socket.h /usr/include/linux/socket.h
 kspread_view.o: /usr/include/asm/socket.h /usr/include/asm/sockios.h
 kspread_view.o: /usr/include/linux/sockios.h /usr/include/linux/uio.h
-kspread_view.o: /usr/local/include/ministl/string
-kspread_view.o: /usr/local/include/ministl/bstring.h /usr/include/ctype.h
-kspread_view.o: /usr/include/endian.h /usr/include/bytesex.h
-kspread_view.o: /usr/include/string.h /usr/local/include/ministl/bool.h
-kspread_view.o: /usr/local/include/ministl/vector
-kspread_view.o: /usr/local/include/ministl/vector.h
-kspread_view.o: /usr/local/include/ministl/ministl.h
-kspread_view.o: /usr/local/include/ministl/defalloc.h
-kspread_view.o: /usr/local/include/ministl/map
-kspread_view.o: /usr/local/include/ministl/map.h
-kspread_view.o: /usr/local/include/ministl/function
-kspread_view.o: /usr/local/include/ministl/function.h
-kspread_view.o: /usr/local/include/ministl/pair
-kspread_view.o: /usr/local/include/ministl/pair.h
-kspread_view.o: /usr/local/include/ministl/set
-kspread_view.o: /usr/local/include/ministl/set.h
-kspread_view.o: /usr/local/include/ministl/list
-kspread_view.o: /usr/local/include/ministl/list.h
 kspread_view.o: /usr/local/include/mico/version.h
 kspread_view.o: /usr/local/include/mico/types.h
 kspread_view.o: /usr/local/include/mico/sequence.h
@@ -955,45 +859,47 @@ kspread_view.o: /opt/kde/include/component_impl.h
 kspread_view.o: /opt/kde/include/base_impl.h /usr/lib/qt/include/qstring.h
 kspread_view.o: /usr/lib/qt/include/qarray.h /usr/lib/qt/include/qgarray.h
 kspread_view.o: /usr/lib/qt/include/qshared.h /usr/lib/qt/include/qglobal.h
-kspread_view.o: /usr/lib/qt/include/qgeneric.h /usr/lib/qt/include/qlist.h
-kspread_view.o: /usr/lib/qt/include/qglist.h /usr/lib/qt/include/qcollect.h
-kspread_view.o: /usr/lib/qt/include/qdict.h /usr/lib/qt/include/qgdict.h
-kspread_view.o: /opt/kde/include/kom_var.h /usr/lib/qt/include/qwidget.h
-kspread_view.o: /usr/lib/qt/include/qwindefs.h /usr/lib/qt/include/qobjdefs.h
-kspread_view.o: /usr/lib/qt/include/qobject.h /usr/lib/qt/include/qevent.h
-kspread_view.o: /usr/lib/qt/include/qrect.h /usr/lib/qt/include/qsize.h
-kspread_view.o: /usr/lib/qt/include/qpoint.h /usr/lib/qt/include/qpaintd.h
-kspread_view.o: /usr/lib/qt/include/qpalette.h /usr/lib/qt/include/qcolor.h
-kspread_view.o: /usr/lib/qt/include/qcursor.h /usr/lib/qt/include/qfont.h
-kspread_view.o: /usr/lib/qt/include/qfontmet.h /usr/lib/qt/include/qfontinf.h
-kspread_view.o: /opt/kde/include/kwm.h /usr/lib/qt/include/qapp.h
-kspread_view.o: /usr/lib/qt/include/qpixmap.h /usr/include/X11/Xlib.h
-kspread_view.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
-kspread_view.o: /usr/include/X11/Xosdefs.h /opt/kde/include/kapp.h
-kspread_view.o: /opt/kde/include/kconfig.h /opt/kde/include/kconfigbase.h
-kspread_view.o: /usr/lib/qt/include/qstrlist.h /usr/lib/qt/include/qdstream.h
-kspread_view.o: /usr/lib/qt/include/qiodev.h /opt/kde/include/kconfigdata.h
-kspread_view.o: /usr/lib/qt/include/qtstream.h /usr/lib/qt/include/qfile.h
-kspread_view.o: /opt/kde/include/kdebug.h /opt/kde/include/klocale.h
-kspread_view.o: /usr/lib/qt/include/qintdict.h /opt/kde/include/drag.h
-kspread_view.o: /usr/lib/qt/include/qpopmenu.h /usr/lib/qt/include/qtablevw.h
-kspread_view.o: /usr/lib/qt/include/qframe.h /usr/lib/qt/include/qmenudta.h
-kspread_view.o: /opt/kde/include/parts.h /opt/kde/include/part_impl.h
-kspread_view.o: /opt/kde/include/view_impl.h /opt/kde/include/document_impl.h
-kspread_view.o: /opt/kde/include/menu_impl.h /opt/kde/include/kmenubar.h
-kspread_view.o: /usr/lib/qt/include/qmenubar.h /opt/kde/include/ktopwidget.h
-kspread_view.o: /opt/kde/include/ktoolbar.h /usr/lib/qt/include/qbutton.h
-kspread_view.o: /opt/kde/include/kcombo.h /usr/lib/qt/include/qcombo.h
-kspread_view.o: /opt/kde/include/klined.h /usr/lib/qt/include/qlined.h
-kspread_view.o: /opt/kde/include/kstatusbar.h /usr/lib/qt/include/qlabel.h
-kspread_view.o: /opt/kde/include/toolbar_impl.h /usr/lib/qt/include/qpushbt.h
-kspread_view.o: /usr/lib/qt/include/qscrbar.h /usr/lib/qt/include/qrangect.h
-kspread_view.o: /usr/lib/qt/include/qdrawutl.h /usr/lib/qt/include/qpainter.h
-kspread_view.o: /usr/lib/qt/include/qregion.h /usr/lib/qt/include/qpen.h
-kspread_view.o: /usr/lib/qt/include/qbrush.h /usr/lib/qt/include/qpntarry.h
-kspread_view.o: /usr/lib/qt/include/qwmatrix.h kspread_tabbar.h
-kspread_view.o: kspread_table.h kspread_autofill.h kspread_layout.h
-kspread_view.o: kspread_cell.h kspread_dlg_layout.h
+kspread_view.o: /usr/lib/qt/include/qgeneric.h /usr/include/string.h
+kspread_view.o: /usr/lib/qt/include/qlist.h /usr/lib/qt/include/qglist.h
+kspread_view.o: /usr/lib/qt/include/qcollect.h /usr/lib/qt/include/qdict.h
+kspread_view.o: /usr/lib/qt/include/qgdict.h /opt/kde/include/kom_var.h
+kspread_view.o: /usr/lib/qt/include/qwidget.h /usr/lib/qt/include/qwindefs.h
+kspread_view.o: /usr/lib/qt/include/qobjdefs.h /usr/lib/qt/include/qobject.h
+kspread_view.o: /usr/lib/qt/include/qevent.h /usr/lib/qt/include/qrect.h
+kspread_view.o: /usr/lib/qt/include/qsize.h /usr/lib/qt/include/qpoint.h
+kspread_view.o: /usr/lib/qt/include/qpaintd.h /usr/lib/qt/include/qpalette.h
+kspread_view.o: /usr/lib/qt/include/qcolor.h /usr/lib/qt/include/qcursor.h
+kspread_view.o: /usr/lib/qt/include/qfont.h /usr/lib/qt/include/qfontmet.h
+kspread_view.o: /usr/lib/qt/include/qfontinf.h /opt/kde/include/kwm.h
+kspread_view.o: /usr/lib/qt/include/qapp.h /usr/lib/qt/include/qpixmap.h
+kspread_view.o: /usr/include/X11/Xlib.h /usr/include/X11/X.h
+kspread_view.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
+kspread_view.o: /opt/kde/include/kapp.h /opt/kde/include/kconfig.h
+kspread_view.o: /opt/kde/include/kconfigbase.h /usr/lib/qt/include/qstrlist.h
+kspread_view.o: /usr/lib/qt/include/qdstream.h /usr/lib/qt/include/qiodev.h
+kspread_view.o: /opt/kde/include/kconfigdata.h /usr/lib/qt/include/qtstream.h
+kspread_view.o: /usr/lib/qt/include/qfile.h /opt/kde/include/kdebug.h
+kspread_view.o: /opt/kde/include/klocale.h /usr/lib/qt/include/qintdict.h
+kspread_view.o: /opt/kde/include/drag.h /usr/lib/qt/include/qpopmenu.h
+kspread_view.o: /usr/lib/qt/include/qtablevw.h /usr/lib/qt/include/qframe.h
+kspread_view.o: /usr/lib/qt/include/qmenudta.h /opt/kde/include/parts.h
+kspread_view.o: /opt/kde/include/part_impl.h /opt/kde/include/view_impl.h
+kspread_view.o: /opt/kde/include/document_impl.h /opt/kde/include/menu_impl.h
+kspread_view.o: /opt/kde/include/kmenubar.h /usr/lib/qt/include/qmenubar.h
+kspread_view.o: /opt/kde/include/ktopwidget.h /opt/kde/include/ktoolbar.h
+kspread_view.o: /usr/lib/qt/include/qbutton.h /opt/kde/include/kcombo.h
+kspread_view.o: /usr/lib/qt/include/qcombo.h /opt/kde/include/klined.h
+kspread_view.o: /usr/lib/qt/include/qlined.h /opt/kde/include/kstatusbar.h
+kspread_view.o: /usr/lib/qt/include/qlabel.h /opt/kde/include/toolbar_impl.h
+kspread_view.o: /usr/lib/qt/include/qpushbt.h /usr/lib/qt/include/qscrbar.h
+kspread_view.o: /usr/lib/qt/include/qrangect.h /usr/lib/qt/include/qdrawutl.h
+kspread_view.o: /usr/lib/qt/include/qpainter.h /usr/lib/qt/include/qregion.h
+kspread_view.o: /usr/lib/qt/include/qpen.h /usr/lib/qt/include/qbrush.h
+kspread_view.o: /usr/lib/qt/include/qpntarry.h /usr/lib/qt/include/qwmatrix.h
+kspread_view.o: kspread_tabbar.h kspread_table.h
+kspread_view.o: /opt/kde/include/komlParser.h /opt/kde/include/torben.h
+kspread_view.o: /opt/kde/include/komlFeed.h kspread_autofill.h
+kspread_view.o: kspread_layout.h kspread_cell.h kspread_dlg_layout.h
 kspread_view.o: /usr/lib/qt/include/qlistbox.h /usr/lib/qt/include/qgrpbox.h
 kspread_view.o: /usr/lib/qt/include/qtabdlg.h /usr/lib/qt/include/qdialog.h
 kspread_view.o: /usr/lib/qt/include/qmsgbox.h /usr/lib/qt/include/qbttngrp.h
@@ -1014,7 +920,7 @@ kspread_view.o: kspread_dlg_scripts.h kmetaedit.h kspread_dlg_paper.h
 kspread_view.o: kspread_dlg_paper_border.h kspread_dlg_paper_headings.h
 kspread_view.o: kspread_dlg_print.h /usr/lib/qt/include/qprinter.h
 kspread_view.o: kspread_doc.h kspread_python.h ./Python-1.4/Include/Python.h
-kspread_view.o: ./Python-1.4/Include/allobjects.h ./Python-1.4/config.h
+kspread_view.o: ./Python-1.4/Include/allobjects.h /opt/kde/include/config.h
 kspread_view.o: ./Python-1.4/Include/myproto.h ./Python-1.4/Include/object.h
 kspread_view.o: ./Python-1.4/Include/objimpl.h ./Python-1.4/Include/pydebug.h
 kspread_view.o: ./Python-1.4/Include/accessobject.h
@@ -1038,7 +944,7 @@ kspread_view.o: ./Python-1.4/Include/sliceobject.h
 kspread_view.o: ./Python-1.4/Include/pyerrors.h
 kspread_view.o: ./Python-1.4/Include/mymalloc.h
 kspread_view.o: ./Python-1.4/Include/modsupport.h
-kspread_view.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stdarg.h
+kspread_view.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/varargs.h
 kspread_view.o: ./Python-1.4/Include/ceval.h ./Python-1.4/Include/pythonrun.h
 kspread_view.o: ./Python-1.4/Include/sysmodule.h
 kspread_view.o: ./Python-1.4/Include/intrcheck.h
@@ -1080,7 +986,7 @@ kspread_tabbar.o: /usr/lib/qt/include/qdstream.h /usr/lib/qt/include/qiodev.h
 kspread_tabbar.o: kspread_tabbar.moc /usr/lib/qt/include/qmetaobj.h
 kspread_tabbar.o: /usr/lib/qt/include/qconnect.h
 kspread_python.o: kspread_python.h ./Python-1.4/Include/Python.h
-kspread_python.o: ./Python-1.4/Include/allobjects.h ./Python-1.4/config.h
+kspread_python.o: ./Python-1.4/Include/allobjects.h /opt/kde/include/config.h
 kspread_python.o: /usr/include/stdio.h /usr/include/libio.h
 kspread_python.o: /usr/include/_G_config.h /usr/include/string.h
 kspread_python.o: /usr/include/features.h /usr/include/sys/cdefs.h
@@ -1112,7 +1018,7 @@ kspread_python.o: ./Python-1.4/Include/sliceobject.h
 kspread_python.o: ./Python-1.4/Include/pyerrors.h
 kspread_python.o: ./Python-1.4/Include/mymalloc.h
 kspread_python.o: ./Python-1.4/Include/modsupport.h
-kspread_python.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stdarg.h
+kspread_python.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/varargs.h
 kspread_python.o: ./Python-1.4/Include/ceval.h
 kspread_python.o: ./Python-1.4/Include/pythonrun.h
 kspread_python.o: ./Python-1.4/Include/sysmodule.h
@@ -1146,25 +1052,6 @@ kspread_dlg_print.o: /usr/include/linux/time.h /usr/include/time.h
 kspread_dlg_print.o: /usr/include/sys/socket.h /usr/include/linux/socket.h
 kspread_dlg_print.o: /usr/include/asm/socket.h /usr/include/asm/sockios.h
 kspread_dlg_print.o: /usr/include/linux/sockios.h /usr/include/linux/uio.h
-kspread_dlg_print.o: /usr/local/include/ministl/string
-kspread_dlg_print.o: /usr/local/include/ministl/bstring.h
-kspread_dlg_print.o: /usr/include/ctype.h /usr/include/endian.h
-kspread_dlg_print.o: /usr/include/bytesex.h /usr/include/string.h
-kspread_dlg_print.o: /usr/local/include/ministl/bool.h
-kspread_dlg_print.o: /usr/local/include/ministl/vector
-kspread_dlg_print.o: /usr/local/include/ministl/vector.h
-kspread_dlg_print.o: /usr/local/include/ministl/ministl.h
-kspread_dlg_print.o: /usr/local/include/ministl/defalloc.h
-kspread_dlg_print.o: /usr/local/include/ministl/map
-kspread_dlg_print.o: /usr/local/include/ministl/map.h
-kspread_dlg_print.o: /usr/local/include/ministl/function
-kspread_dlg_print.o: /usr/local/include/ministl/function.h
-kspread_dlg_print.o: /usr/local/include/ministl/pair
-kspread_dlg_print.o: /usr/local/include/ministl/pair.h
-kspread_dlg_print.o: /usr/local/include/ministl/set
-kspread_dlg_print.o: /usr/local/include/ministl/set.h
-kspread_dlg_print.o: /usr/local/include/ministl/list
-kspread_dlg_print.o: /usr/local/include/ministl/list.h
 kspread_dlg_print.o: /usr/local/include/mico/version.h
 kspread_dlg_print.o: /usr/local/include/mico/types.h
 kspread_dlg_print.o: /usr/local/include/mico/sequence.h
@@ -1203,7 +1090,7 @@ kspread_dlg_print.o: /usr/lib/qt/include/qarray.h
 kspread_dlg_print.o: /usr/lib/qt/include/qgarray.h
 kspread_dlg_print.o: /usr/lib/qt/include/qshared.h
 kspread_dlg_print.o: /usr/lib/qt/include/qglobal.h
-kspread_dlg_print.o: /usr/lib/qt/include/qgeneric.h
+kspread_dlg_print.o: /usr/lib/qt/include/qgeneric.h /usr/include/string.h
 kspread_dlg_print.o: /usr/lib/qt/include/qlist.h /usr/lib/qt/include/qglist.h
 kspread_dlg_print.o: /usr/lib/qt/include/qcollect.h
 kspread_dlg_print.o: /usr/lib/qt/include/qdict.h /usr/lib/qt/include/qgdict.h
@@ -1259,9 +1146,10 @@ kspread_dlg_print.o: /usr/lib/qt/include/qregion.h /usr/lib/qt/include/qpen.h
 kspread_dlg_print.o: /usr/lib/qt/include/qbrush.h
 kspread_dlg_print.o: /usr/lib/qt/include/qpntarry.h
 kspread_dlg_print.o: /usr/lib/qt/include/qwmatrix.h kspread_tabbar.h
-kspread_dlg_print.o: kspread_table.h kspread_autofill.h kspread_layout.h
-kspread_dlg_print.o: kspread_cell.h kspread_dlg_layout.h
-kspread_dlg_print.o: /usr/lib/qt/include/qlistbox.h
+kspread_dlg_print.o: kspread_table.h /opt/kde/include/komlParser.h
+kspread_dlg_print.o: /opt/kde/include/torben.h /opt/kde/include/komlFeed.h
+kspread_dlg_print.o: kspread_autofill.h kspread_layout.h kspread_cell.h
+kspread_dlg_print.o: kspread_dlg_layout.h /usr/lib/qt/include/qlistbox.h
 kspread_dlg_print.o: /usr/lib/qt/include/qgrpbox.h
 kspread_dlg_print.o: /usr/lib/qt/include/qtabdlg.h
 kspread_dlg_print.o: /usr/lib/qt/include/qdialog.h
@@ -1278,8 +1166,8 @@ kspread_dlg_print.o: kspread.h /opt/kde/idl/controls.h /opt/kde/idl/parts.h
 kspread_dlg_print.o: kspread_dlg_print.h /usr/lib/qt/include/qprinter.h
 kspread_dlg_print.o: kspread_doc.h kmetaedit.h kspread_python.h
 kspread_dlg_print.o: ./Python-1.4/Include/Python.h
-kspread_dlg_print.o: ./Python-1.4/Include/allobjects.h ./Python-1.4/config.h
-kspread_dlg_print.o: ./Python-1.4/Include/myproto.h
+kspread_dlg_print.o: ./Python-1.4/Include/allobjects.h
+kspread_dlg_print.o: /opt/kde/include/config.h ./Python-1.4/Include/myproto.h
 kspread_dlg_print.o: ./Python-1.4/Include/object.h
 kspread_dlg_print.o: ./Python-1.4/Include/objimpl.h
 kspread_dlg_print.o: ./Python-1.4/Include/pydebug.h
@@ -1304,7 +1192,7 @@ kspread_dlg_print.o: ./Python-1.4/Include/sliceobject.h
 kspread_dlg_print.o: ./Python-1.4/Include/pyerrors.h
 kspread_dlg_print.o: ./Python-1.4/Include/mymalloc.h
 kspread_dlg_print.o: ./Python-1.4/Include/modsupport.h
-kspread_dlg_print.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stdarg.h
+kspread_dlg_print.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/varargs.h
 kspread_dlg_print.o: ./Python-1.4/Include/ceval.h
 kspread_dlg_print.o: ./Python-1.4/Include/pythonrun.h
 kspread_dlg_print.o: ./Python-1.4/Include/sysmodule.h
@@ -1333,7 +1221,9 @@ kspread_autofill.o: /usr/lib/qt/include/qcollect.h
 kspread_autofill.o: /usr/lib/qt/include/qstrlist.h
 kspread_autofill.o: /usr/lib/qt/include/qdstream.h
 kspread_autofill.o: /usr/lib/qt/include/qiodev.h kspread_cell.h
-kspread_autofill.o: /usr/lib/qt/include/qpen.h /usr/lib/qt/include/qcolor.h
+kspread_autofill.o: /opt/kde/include/komlParser.h /opt/kde/include/torben.h
+kspread_autofill.o: /opt/kde/include/komlFeed.h /usr/lib/qt/include/qpen.h
+kspread_autofill.o: /usr/lib/qt/include/qcolor.h
 kspread_autofill.o: /usr/lib/qt/include/qwindefs.h
 kspread_autofill.o: /usr/lib/qt/include/qobjdefs.h
 kspread_autofill.o: /usr/lib/qt/include/qpainter.h
@@ -1363,24 +1253,6 @@ kspread_autofill.o: /usr/include/linux/time.h /usr/include/time.h
 kspread_autofill.o: /usr/include/sys/socket.h /usr/include/linux/socket.h
 kspread_autofill.o: /usr/include/asm/socket.h /usr/include/asm/sockios.h
 kspread_autofill.o: /usr/include/linux/sockios.h /usr/include/linux/uio.h
-kspread_autofill.o: /usr/local/include/ministl/string
-kspread_autofill.o: /usr/local/include/ministl/bstring.h /usr/include/ctype.h
-kspread_autofill.o: /usr/include/endian.h /usr/include/bytesex.h
-kspread_autofill.o: /usr/local/include/ministl/bool.h
-kspread_autofill.o: /usr/local/include/ministl/vector
-kspread_autofill.o: /usr/local/include/ministl/vector.h
-kspread_autofill.o: /usr/local/include/ministl/ministl.h
-kspread_autofill.o: /usr/local/include/ministl/defalloc.h
-kspread_autofill.o: /usr/local/include/ministl/map
-kspread_autofill.o: /usr/local/include/ministl/map.h
-kspread_autofill.o: /usr/local/include/ministl/function
-kspread_autofill.o: /usr/local/include/ministl/function.h
-kspread_autofill.o: /usr/local/include/ministl/pair
-kspread_autofill.o: /usr/local/include/ministl/pair.h
-kspread_autofill.o: /usr/local/include/ministl/set
-kspread_autofill.o: /usr/local/include/ministl/set.h
-kspread_autofill.o: /usr/local/include/ministl/list
-kspread_autofill.o: /usr/local/include/ministl/list.h
 kspread_autofill.o: /usr/local/include/mico/version.h
 kspread_autofill.o: /usr/local/include/mico/types.h
 kspread_autofill.o: /usr/local/include/mico/sequence.h
@@ -1445,7 +1317,8 @@ kspread_autofill.o: /usr/lib/qt/include/qdrawutl.h
 kspread_autofill.o: /usr/lib/qt/include/qtooltip.h
 kspread_autofill.o: /usr/lib/qt/include/qtimer.h /opt/kde/include/kcolordlg.h
 kspread_autofill.o: /opt/kde/include/kselect.h /usr/include/math.h
-kspread_autofill.o: /usr/include/huge_val.h /usr/include/nan.h
+kspread_autofill.o: /usr/include/huge_val.h /usr/include/endian.h
+kspread_autofill.o: /usr/include/bytesex.h /usr/include/nan.h
 kspread_autofill.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/float.h
 kspread_autofill.o: /usr/include/values.h /usr/include/ieee754.h
 kspread_autofill.o: /usr/include/ieee854.h
@@ -1468,24 +1341,6 @@ kspread_layout.o: /usr/include/linux/time.h /usr/include/time.h
 kspread_layout.o: /usr/include/sys/socket.h /usr/include/linux/socket.h
 kspread_layout.o: /usr/include/asm/socket.h /usr/include/asm/sockios.h
 kspread_layout.o: /usr/include/linux/sockios.h /usr/include/linux/uio.h
-kspread_layout.o: /usr/local/include/ministl/string
-kspread_layout.o: /usr/local/include/ministl/bstring.h /usr/include/ctype.h
-kspread_layout.o: /usr/include/endian.h /usr/include/bytesex.h
-kspread_layout.o: /usr/include/string.h /usr/local/include/ministl/bool.h
-kspread_layout.o: /usr/local/include/ministl/vector
-kspread_layout.o: /usr/local/include/ministl/vector.h
-kspread_layout.o: /usr/local/include/ministl/ministl.h
-kspread_layout.o: /usr/local/include/ministl/defalloc.h
-kspread_layout.o: /usr/local/include/ministl/map
-kspread_layout.o: /usr/local/include/ministl/map.h
-kspread_layout.o: /usr/local/include/ministl/function
-kspread_layout.o: /usr/local/include/ministl/function.h
-kspread_layout.o: /usr/local/include/ministl/pair
-kspread_layout.o: /usr/local/include/ministl/pair.h
-kspread_layout.o: /usr/local/include/ministl/set
-kspread_layout.o: /usr/local/include/ministl/set.h
-kspread_layout.o: /usr/local/include/ministl/list
-kspread_layout.o: /usr/local/include/ministl/list.h
 kspread_layout.o: /usr/local/include/mico/version.h
 kspread_layout.o: /usr/local/include/mico/types.h
 kspread_layout.o: /usr/local/include/mico/sequence.h
@@ -1520,10 +1375,11 @@ kspread_layout.o: /opt/kde/include/component_impl.h
 kspread_layout.o: /opt/kde/include/base_impl.h /usr/lib/qt/include/qstring.h
 kspread_layout.o: /usr/lib/qt/include/qarray.h /usr/lib/qt/include/qgarray.h
 kspread_layout.o: /usr/lib/qt/include/qshared.h /usr/lib/qt/include/qglobal.h
-kspread_layout.o: /usr/lib/qt/include/qgeneric.h /usr/lib/qt/include/qlist.h
-kspread_layout.o: /usr/lib/qt/include/qglist.h /usr/lib/qt/include/qcollect.h
-kspread_layout.o: /usr/lib/qt/include/qdict.h /usr/lib/qt/include/qgdict.h
-kspread_layout.o: /opt/kde/include/kom_var.h /usr/lib/qt/include/qwidget.h
+kspread_layout.o: /usr/lib/qt/include/qgeneric.h /usr/include/string.h
+kspread_layout.o: /usr/lib/qt/include/qlist.h /usr/lib/qt/include/qglist.h
+kspread_layout.o: /usr/lib/qt/include/qcollect.h /usr/lib/qt/include/qdict.h
+kspread_layout.o: /usr/lib/qt/include/qgdict.h /opt/kde/include/kom_var.h
+kspread_layout.o: /usr/lib/qt/include/qwidget.h
 kspread_layout.o: /usr/lib/qt/include/qwindefs.h
 kspread_layout.o: /usr/lib/qt/include/qobjdefs.h
 kspread_layout.o: /usr/lib/qt/include/qobject.h /usr/lib/qt/include/qevent.h
@@ -1564,9 +1420,10 @@ kspread_layout.o: /usr/lib/qt/include/qpainter.h
 kspread_layout.o: /usr/lib/qt/include/qregion.h /usr/lib/qt/include/qpen.h
 kspread_layout.o: /usr/lib/qt/include/qbrush.h /usr/lib/qt/include/qpntarry.h
 kspread_layout.o: /usr/lib/qt/include/qwmatrix.h kspread_tabbar.h
-kspread_layout.o: kspread_table.h kspread_autofill.h kspread_layout.h
-kspread_layout.o: kspread_cell.h kspread_dlg_layout.h
-kspread_layout.o: /usr/lib/qt/include/qlistbox.h
+kspread_layout.o: kspread_table.h /opt/kde/include/komlParser.h
+kspread_layout.o: /opt/kde/include/torben.h /opt/kde/include/komlFeed.h
+kspread_layout.o: kspread_autofill.h kspread_layout.h kspread_cell.h
+kspread_layout.o: kspread_dlg_layout.h /usr/lib/qt/include/qlistbox.h
 kspread_layout.o: /usr/lib/qt/include/qgrpbox.h /usr/lib/qt/include/qtabdlg.h
 kspread_layout.o: /usr/lib/qt/include/qdialog.h /usr/lib/qt/include/qmsgbox.h
 kspread_layout.o: /usr/lib/qt/include/qbttngrp.h
@@ -1576,17 +1433,19 @@ kspread_layout.o: /usr/lib/qt/include/qradiobt.h
 kspread_layout.o: /usr/lib/qt/include/qtooltip.h /usr/lib/qt/include/qtimer.h
 kspread_layout.o: /opt/kde/include/kcolordlg.h /opt/kde/include/kselect.h
 kspread_layout.o: kspread.h /opt/kde/idl/controls.h /opt/kde/idl/parts.h
-kspread_map.o: kspread_map.h /usr/lib/qt/include/qlist.h
-kspread_map.o: /usr/lib/qt/include/qglist.h /usr/lib/qt/include/qcollect.h
-kspread_map.o: /usr/lib/qt/include/qglobal.h /usr/lib/qt/include/qgeneric.h
-kspread_map.o: /usr/lib/qt/include/qstring.h /usr/lib/qt/include/qarray.h
-kspread_map.o: /usr/lib/qt/include/qgarray.h /usr/lib/qt/include/qshared.h
+kspread_layout.o: /opt/kde/include/komlWriter.h
+kspread_map.o: kspread_map.h /opt/kde/include/komlParser.h
 kspread_map.o: /usr/include/string.h /usr/include/features.h
 kspread_map.o: /usr/include/sys/cdefs.h
 kspread_map.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stddef.h
-kspread_map.o: kspread_table.h /opt/kde/include/document_impl.h
-kspread_map.o: /opt/kde/include/parts.h /usr/local/include/CORBA.h
-kspread_map.o: /usr/local/include/mico/rtti.h
+kspread_map.o: /opt/kde/include/torben.h /opt/kde/include/komlFeed.h
+kspread_map.o: /usr/lib/qt/include/qlist.h /usr/lib/qt/include/qglist.h
+kspread_map.o: /usr/lib/qt/include/qcollect.h /usr/lib/qt/include/qglobal.h
+kspread_map.o: /usr/lib/qt/include/qgeneric.h /usr/lib/qt/include/qstring.h
+kspread_map.o: /usr/lib/qt/include/qarray.h /usr/lib/qt/include/qgarray.h
+kspread_map.o: /usr/lib/qt/include/qshared.h kspread_table.h
+kspread_map.o: /opt/kde/include/document_impl.h /opt/kde/include/parts.h
+kspread_map.o: /usr/local/include/CORBA.h /usr/local/include/mico/rtti.h
 kspread_map.o: /usr/local/include/mico/config.h
 kspread_map.o: /usr/local/include/mico/assert.h /usr/include/stdlib.h
 kspread_map.o: /usr/include/errno.h /usr/include/linux/errno.h
@@ -1601,24 +1460,6 @@ kspread_map.o: /usr/include/linux/time.h /usr/include/time.h
 kspread_map.o: /usr/include/sys/socket.h /usr/include/linux/socket.h
 kspread_map.o: /usr/include/asm/socket.h /usr/include/asm/sockios.h
 kspread_map.o: /usr/include/linux/sockios.h /usr/include/linux/uio.h
-kspread_map.o: /usr/local/include/ministl/string
-kspread_map.o: /usr/local/include/ministl/bstring.h /usr/include/ctype.h
-kspread_map.o: /usr/include/endian.h /usr/include/bytesex.h
-kspread_map.o: /usr/local/include/ministl/bool.h
-kspread_map.o: /usr/local/include/ministl/vector
-kspread_map.o: /usr/local/include/ministl/vector.h
-kspread_map.o: /usr/local/include/ministl/ministl.h
-kspread_map.o: /usr/local/include/ministl/defalloc.h
-kspread_map.o: /usr/local/include/ministl/map
-kspread_map.o: /usr/local/include/ministl/map.h
-kspread_map.o: /usr/local/include/ministl/function
-kspread_map.o: /usr/local/include/ministl/function.h
-kspread_map.o: /usr/local/include/ministl/pair
-kspread_map.o: /usr/local/include/ministl/pair.h
-kspread_map.o: /usr/local/include/ministl/set
-kspread_map.o: /usr/local/include/ministl/set.h
-kspread_map.o: /usr/local/include/ministl/list
-kspread_map.o: /usr/local/include/ministl/list.h
 kspread_map.o: /usr/local/include/mico/version.h
 kspread_map.o: /usr/local/include/mico/types.h
 kspread_map.o: /usr/local/include/mico/sequence.h
@@ -1676,6 +1517,57 @@ kspread_map.o: /usr/lib/qt/include/qradiobt.h /usr/lib/qt/include/qscrbar.h
 kspread_map.o: /usr/lib/qt/include/qrangect.h /usr/lib/qt/include/qdrawutl.h
 kspread_map.o: /usr/lib/qt/include/qtooltip.h /usr/lib/qt/include/qtimer.h
 kspread_map.o: /opt/kde/include/kcolordlg.h /opt/kde/include/kselect.h
+kspread_map.o: kspread_doc.h /opt/kde/include/part_frame_impl.h
+kspread_map.o: /opt/kde/include/control_frame.h /opt/kde/include/kwm.h
+kspread_map.o: /usr/include/X11/Xlib.h /usr/include/X11/X.h
+kspread_map.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
+kspread_map.o: /opt/kde/include/kapp.h /opt/kde/include/kconfig.h
+kspread_map.o: /opt/kde/include/kconfigbase.h /opt/kde/include/kconfigdata.h
+kspread_map.o: /usr/lib/qt/include/qtstream.h /usr/lib/qt/include/qfile.h
+kspread_map.o: /opt/kde/include/kdebug.h /opt/kde/include/klocale.h
+kspread_map.o: /opt/kde/include/drag.h /usr/lib/qt/include/qpopmenu.h
+kspread_map.o: /usr/lib/qt/include/qmenudta.h /usr/lib/qt/include/qprinter.h
+kspread_map.o: kmetaedit.h kspread.h /opt/kde/idl/controls.h
+kspread_map.o: /opt/kde/idl/parts.h kspread_python.h
+kspread_map.o: ./Python-1.4/Include/Python.h
+kspread_map.o: ./Python-1.4/Include/allobjects.h /opt/kde/include/config.h
+kspread_map.o: ./Python-1.4/Include/myproto.h ./Python-1.4/Include/object.h
+kspread_map.o: ./Python-1.4/Include/objimpl.h ./Python-1.4/Include/pydebug.h
+kspread_map.o: ./Python-1.4/Include/accessobject.h
+kspread_map.o: ./Python-1.4/Include/intobject.h
+kspread_map.o: ./Python-1.4/Include/longobject.h
+kspread_map.o: ./Python-1.4/Include/floatobject.h
+kspread_map.o: ./Python-1.4/Include/complexobject.h
+kspread_map.o: ./Python-1.4/Include/rangeobject.h
+kspread_map.o: ./Python-1.4/Include/stringobject.h
+kspread_map.o: ./Python-1.4/Include/tupleobject.h
+kspread_map.o: ./Python-1.4/Include/listobject.h
+kspread_map.o: ./Python-1.4/Include/mappingobject.h
+kspread_map.o: ./Python-1.4/Include/methodobject.h
+kspread_map.o: ./Python-1.4/Include/moduleobject.h
+kspread_map.o: ./Python-1.4/Include/funcobject.h
+kspread_map.o: ./Python-1.4/Include/classobject.h
+kspread_map.o: ./Python-1.4/Include/fileobject.h
+kspread_map.o: ./Python-1.4/Include/cobject.h
+kspread_map.o: ./Python-1.4/Include/traceback.h
+kspread_map.o: ./Python-1.4/Include/sliceobject.h
+kspread_map.o: ./Python-1.4/Include/pyerrors.h
+kspread_map.o: ./Python-1.4/Include/mymalloc.h
+kspread_map.o: ./Python-1.4/Include/modsupport.h
+kspread_map.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/varargs.h
+kspread_map.o: ./Python-1.4/Include/ceval.h ./Python-1.4/Include/pythonrun.h
+kspread_map.o: ./Python-1.4/Include/sysmodule.h
+kspread_map.o: ./Python-1.4/Include/intrcheck.h ./Python-1.4/Include/import.h
+kspread_map.o: ./Python-1.4/Include/bltinmodule.h
+kspread_map.o: ./Python-1.4/Include/abstract.h
+kspread_map.o: ./Python-1.4/Include/graminit.h kspread_undo.h
+kspread_map.o: /usr/lib/qt/include/qstack.h kspread_view.h
+kspread_map.o: /opt/kde/include/menu_impl.h /opt/kde/include/kmenubar.h
+kspread_map.o: /usr/lib/qt/include/qmenubar.h /opt/kde/include/ktopwidget.h
+kspread_map.o: /opt/kde/include/ktoolbar.h /opt/kde/include/kcombo.h
+kspread_map.o: /opt/kde/include/klined.h /opt/kde/include/kstatusbar.h
+kspread_map.o: /opt/kde/include/toolbar_impl.h kspread_tabbar.h
+kspread_map.o: /opt/kde/include/komlWriter.h
 kspread_dlg_layout.o: /usr/include/stdio.h /usr/include/libio.h
 kspread_dlg_layout.o: /usr/include/_G_config.h /usr/include/stdlib.h
 kspread_dlg_layout.o: /usr/include/features.h /usr/include/sys/cdefs.h
@@ -1732,7 +1624,9 @@ kspread_dlg_layout.o: /usr/lib/qt/include/qwmatrix.h
 kspread_dlg_layout.o: /usr/lib/qt/include/qtooltip.h
 kspread_dlg_layout.o: /usr/lib/qt/include/qtimer.h
 kspread_dlg_layout.o: /opt/kde/include/kcolordlg.h /opt/kde/include/kselect.h
-kspread_dlg_layout.o: kspread_cell.h /usr/lib/qt/include/qlist.h
+kspread_dlg_layout.o: kspread_cell.h /opt/kde/include/komlParser.h
+kspread_dlg_layout.o: /opt/kde/include/torben.h /opt/kde/include/komlFeed.h
+kspread_dlg_layout.o: /usr/lib/qt/include/qlist.h
 kspread_dlg_layout.o: /usr/lib/qt/include/qglist.h
 kspread_dlg_layout.o: /usr/lib/qt/include/qcollect.h kspread_layout.h
 kspread_dlg_layout.o: kspread_undo.h kspread_doc.h
@@ -1751,25 +1645,6 @@ kspread_dlg_layout.o: /usr/include/linux/time.h /usr/include/time.h
 kspread_dlg_layout.o: /usr/include/sys/socket.h /usr/include/linux/socket.h
 kspread_dlg_layout.o: /usr/include/asm/socket.h /usr/include/asm/sockios.h
 kspread_dlg_layout.o: /usr/include/linux/sockios.h /usr/include/linux/uio.h
-kspread_dlg_layout.o: /usr/local/include/ministl/string
-kspread_dlg_layout.o: /usr/local/include/ministl/bstring.h
-kspread_dlg_layout.o: /usr/include/ctype.h /usr/include/endian.h
-kspread_dlg_layout.o: /usr/include/bytesex.h
-kspread_dlg_layout.o: /usr/local/include/ministl/bool.h
-kspread_dlg_layout.o: /usr/local/include/ministl/vector
-kspread_dlg_layout.o: /usr/local/include/ministl/vector.h
-kspread_dlg_layout.o: /usr/local/include/ministl/ministl.h
-kspread_dlg_layout.o: /usr/local/include/ministl/defalloc.h
-kspread_dlg_layout.o: /usr/local/include/ministl/map
-kspread_dlg_layout.o: /usr/local/include/ministl/map.h
-kspread_dlg_layout.o: /usr/local/include/ministl/function
-kspread_dlg_layout.o: /usr/local/include/ministl/function.h
-kspread_dlg_layout.o: /usr/local/include/ministl/pair
-kspread_dlg_layout.o: /usr/local/include/ministl/pair.h
-kspread_dlg_layout.o: /usr/local/include/ministl/set
-kspread_dlg_layout.o: /usr/local/include/ministl/set.h
-kspread_dlg_layout.o: /usr/local/include/ministl/list
-kspread_dlg_layout.o: /usr/local/include/ministl/list.h
 kspread_dlg_layout.o: /usr/local/include/mico/version.h
 kspread_dlg_layout.o: /usr/local/include/mico/types.h
 kspread_dlg_layout.o: /usr/local/include/mico/sequence.h
@@ -1826,7 +1701,8 @@ kspread_dlg_layout.o: /opt/kde/include/view_impl.h
 kspread_dlg_layout.o: /usr/lib/qt/include/qprinter.h kmetaedit.h kspread.h
 kspread_dlg_layout.o: /opt/kde/idl/controls.h /opt/kde/idl/parts.h
 kspread_dlg_layout.o: kspread_python.h ./Python-1.4/Include/Python.h
-kspread_dlg_layout.o: ./Python-1.4/Include/allobjects.h ./Python-1.4/config.h
+kspread_dlg_layout.o: ./Python-1.4/Include/allobjects.h
+kspread_dlg_layout.o: /opt/kde/include/config.h
 kspread_dlg_layout.o: ./Python-1.4/Include/myproto.h
 kspread_dlg_layout.o: ./Python-1.4/Include/object.h
 kspread_dlg_layout.o: ./Python-1.4/Include/objimpl.h
@@ -1852,7 +1728,7 @@ kspread_dlg_layout.o: ./Python-1.4/Include/sliceobject.h
 kspread_dlg_layout.o: ./Python-1.4/Include/pyerrors.h
 kspread_dlg_layout.o: ./Python-1.4/Include/mymalloc.h
 kspread_dlg_layout.o: ./Python-1.4/Include/modsupport.h
-kspread_dlg_layout.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stdarg.h
+kspread_dlg_layout.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/varargs.h
 kspread_dlg_layout.o: ./Python-1.4/Include/ceval.h
 kspread_dlg_layout.o: ./Python-1.4/Include/pythonrun.h
 kspread_dlg_layout.o: ./Python-1.4/Include/sysmodule.h
@@ -1964,9 +1840,10 @@ kspread_cell.o: /usr/lib/qt/include/qpntarry.h /usr/lib/qt/include/qwmatrix.h
 kspread_cell.o: /usr/lib/qt/include/qdrawutl.h /usr/lib/qt/include/qpalette.h
 kspread_cell.o: /usr/lib/qt/include/qkeycode.h /usr/lib/qt/include/qregexp.h
 kspread_cell.o: /usr/lib/qt/include/qprinter.h /usr/lib/qt/include/qcursor.h
-kspread_cell.o: kspread_table.h /opt/kde/include/document_impl.h
-kspread_cell.o: /opt/kde/include/parts.h /usr/local/include/CORBA.h
-kspread_cell.o: /usr/local/include/mico/rtti.h
+kspread_cell.o: kspread_table.h /opt/kde/include/komlParser.h
+kspread_cell.o: /opt/kde/include/torben.h /opt/kde/include/komlFeed.h
+kspread_cell.o: /opt/kde/include/document_impl.h /opt/kde/include/parts.h
+kspread_cell.o: /usr/local/include/CORBA.h /usr/local/include/mico/rtti.h
 kspread_cell.o: /usr/local/include/mico/config.h
 kspread_cell.o: /usr/local/include/mico/assert.h
 kspread_cell.o: ./Python-1.4/Include/assert.h /usr/include/sys/types.h
@@ -1977,23 +1854,6 @@ kspread_cell.o: /usr/include/linux/time.h /usr/include/time.h
 kspread_cell.o: /usr/include/sys/socket.h /usr/include/linux/socket.h
 kspread_cell.o: /usr/include/asm/socket.h /usr/include/asm/sockios.h
 kspread_cell.o: /usr/include/linux/sockios.h /usr/include/linux/uio.h
-kspread_cell.o: /usr/local/include/ministl/string
-kspread_cell.o: /usr/local/include/ministl/bstring.h
-kspread_cell.o: /usr/local/include/ministl/bool.h
-kspread_cell.o: /usr/local/include/ministl/vector
-kspread_cell.o: /usr/local/include/ministl/vector.h
-kspread_cell.o: /usr/local/include/ministl/ministl.h
-kspread_cell.o: /usr/local/include/ministl/defalloc.h
-kspread_cell.o: /usr/local/include/ministl/map
-kspread_cell.o: /usr/local/include/ministl/map.h
-kspread_cell.o: /usr/local/include/ministl/function
-kspread_cell.o: /usr/local/include/ministl/function.h
-kspread_cell.o: /usr/local/include/ministl/pair
-kspread_cell.o: /usr/local/include/ministl/pair.h
-kspread_cell.o: /usr/local/include/ministl/set
-kspread_cell.o: /usr/local/include/ministl/set.h
-kspread_cell.o: /usr/local/include/ministl/list
-kspread_cell.o: /usr/local/include/ministl/list.h
 kspread_cell.o: /usr/local/include/mico/version.h
 kspread_cell.o: /usr/local/include/mico/types.h
 kspread_cell.o: /usr/local/include/mico/sequence.h
@@ -2062,7 +1922,7 @@ kspread_cell.o: /opt/kde/include/kstatusbar.h /opt/kde/include/toolbar_impl.h
 kspread_cell.o: kspread_tabbar.h kspread.h /opt/kde/idl/controls.h
 kspread_cell.o: /opt/kde/idl/parts.h kspread_python.h
 kspread_cell.o: ./Python-1.4/Include/Python.h
-kspread_cell.o: ./Python-1.4/Include/allobjects.h ./Python-1.4/config.h
+kspread_cell.o: ./Python-1.4/Include/allobjects.h /opt/kde/include/config.h
 kspread_cell.o: ./Python-1.4/Include/myproto.h ./Python-1.4/Include/object.h
 kspread_cell.o: ./Python-1.4/Include/objimpl.h ./Python-1.4/Include/pydebug.h
 kspread_cell.o: ./Python-1.4/Include/accessobject.h
@@ -2086,7 +1946,7 @@ kspread_cell.o: ./Python-1.4/Include/sliceobject.h
 kspread_cell.o: ./Python-1.4/Include/pyerrors.h
 kspread_cell.o: ./Python-1.4/Include/mymalloc.h
 kspread_cell.o: ./Python-1.4/Include/modsupport.h
-kspread_cell.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stdarg.h
+kspread_cell.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/varargs.h
 kspread_cell.o: ./Python-1.4/Include/ceval.h ./Python-1.4/Include/pythonrun.h
 kspread_cell.o: ./Python-1.4/Include/sysmodule.h
 kspread_cell.o: ./Python-1.4/Include/intrcheck.h
@@ -2095,6 +1955,7 @@ kspread_cell.o: ./Python-1.4/Include/bltinmodule.h
 kspread_cell.o: ./Python-1.4/Include/abstract.h
 kspread_cell.o: ./Python-1.4/Include/graminit.h kspread_map.h kspread_doc.h
 kspread_cell.o: kmetaedit.h kspread_undo.h /usr/lib/qt/include/qstack.h
+kspread_cell.o: /opt/kde/include/koStream.h /opt/kde/include/komlWriter.h
 kspread_table.o: /usr/include/stdlib.h /usr/include/features.h
 kspread_table.o: /usr/include/sys/cdefs.h
 kspread_table.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stddef.h
@@ -2130,9 +1991,10 @@ kspread_table.o: /usr/lib/qt/include/qkeycode.h /usr/lib/qt/include/qregexp.h
 kspread_table.o: /usr/lib/qt/include/qprinter.h /usr/lib/qt/include/qstack.h
 kspread_table.o: /usr/lib/qt/include/qglist.h /usr/lib/qt/include/qcollect.h
 kspread_table.o: /usr/lib/qt/include/qbuffer.h /usr/lib/qt/include/qiodev.h
-kspread_table.o: kspread_table.h /opt/kde/include/document_impl.h
-kspread_table.o: /opt/kde/include/parts.h /usr/local/include/CORBA.h
-kspread_table.o: /usr/local/include/mico/rtti.h
+kspread_table.o: kspread_table.h /opt/kde/include/komlParser.h
+kspread_table.o: /opt/kde/include/torben.h /opt/kde/include/komlFeed.h
+kspread_table.o: /opt/kde/include/document_impl.h /opt/kde/include/parts.h
+kspread_table.o: /usr/local/include/CORBA.h /usr/local/include/mico/rtti.h
 kspread_table.o: /usr/local/include/mico/config.h
 kspread_table.o: /usr/local/include/mico/assert.h
 kspread_table.o: ./Python-1.4/Include/assert.h /usr/include/sys/types.h
@@ -2143,23 +2005,6 @@ kspread_table.o: /usr/include/linux/time.h /usr/include/time.h
 kspread_table.o: /usr/include/sys/socket.h /usr/include/linux/socket.h
 kspread_table.o: /usr/include/asm/socket.h /usr/include/asm/sockios.h
 kspread_table.o: /usr/include/linux/sockios.h /usr/include/linux/uio.h
-kspread_table.o: /usr/local/include/ministl/string
-kspread_table.o: /usr/local/include/ministl/bstring.h
-kspread_table.o: /usr/local/include/ministl/bool.h
-kspread_table.o: /usr/local/include/ministl/vector
-kspread_table.o: /usr/local/include/ministl/vector.h
-kspread_table.o: /usr/local/include/ministl/ministl.h
-kspread_table.o: /usr/local/include/ministl/defalloc.h
-kspread_table.o: /usr/local/include/ministl/map
-kspread_table.o: /usr/local/include/ministl/map.h
-kspread_table.o: /usr/local/include/ministl/function
-kspread_table.o: /usr/local/include/ministl/function.h
-kspread_table.o: /usr/local/include/ministl/pair
-kspread_table.o: /usr/local/include/ministl/pair.h
-kspread_table.o: /usr/local/include/ministl/set
-kspread_table.o: /usr/local/include/ministl/set.h
-kspread_table.o: /usr/local/include/ministl/list
-kspread_table.o: /usr/local/include/ministl/list.h
 kspread_table.o: /usr/local/include/mico/version.h
 kspread_table.o: /usr/local/include/mico/types.h
 kspread_table.o: /usr/local/include/mico/sequence.h
@@ -2228,7 +2073,7 @@ kspread_table.o: /opt/kde/include/kstatusbar.h
 kspread_table.o: /opt/kde/include/toolbar_impl.h kspread_tabbar.h kspread.h
 kspread_table.o: /opt/kde/idl/controls.h /opt/kde/idl/parts.h
 kspread_table.o: kspread_python.h ./Python-1.4/Include/Python.h
-kspread_table.o: ./Python-1.4/Include/allobjects.h ./Python-1.4/config.h
+kspread_table.o: ./Python-1.4/Include/allobjects.h /opt/kde/include/config.h
 kspread_table.o: ./Python-1.4/Include/myproto.h ./Python-1.4/Include/object.h
 kspread_table.o: ./Python-1.4/Include/objimpl.h
 kspread_table.o: ./Python-1.4/Include/pydebug.h
@@ -2253,7 +2098,7 @@ kspread_table.o: ./Python-1.4/Include/sliceobject.h
 kspread_table.o: ./Python-1.4/Include/pyerrors.h
 kspread_table.o: ./Python-1.4/Include/mymalloc.h
 kspread_table.o: ./Python-1.4/Include/modsupport.h
-kspread_table.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stdarg.h
+kspread_table.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/varargs.h
 kspread_table.o: ./Python-1.4/Include/ceval.h
 kspread_table.o: ./Python-1.4/Include/pythonrun.h
 kspread_table.o: ./Python-1.4/Include/sysmodule.h
@@ -2263,5 +2108,6 @@ kspread_table.o: ./Python-1.4/Include/bltinmodule.h
 kspread_table.o: ./Python-1.4/Include/abstract.h
 kspread_table.o: ./Python-1.4/Include/graminit.h kspread_dlg_print.h
 kspread_table.o: kspread_undo.h kspread_doc.h kmetaedit.h kspread_map.h
+kspread_table.o: /opt/kde/include/koIMR.h /opt/kde/include/komlWriter.h
 kspread_table.o: kspread_table.moc /usr/lib/qt/include/qmetaobj.h
 kspread_table.o: /usr/lib/qt/include/qconnect.h

@@ -1399,7 +1399,7 @@ void KSpreadTable::printPage( QPainter &_painter, QRect *page_range )
 
 bool KSpreadTable::save( ostream &out )
 {
-  out << otag << "<TABLE name=" << m_strName << '>' << endl;
+  out << otag << "<TABLE name=\"" << m_strName << "\">" << endl;
   
   // Save all cells.
   QIntDictIterator<KSpreadCell> it( m_dctCells );
@@ -1453,9 +1453,10 @@ bool KSpreadTable::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
   {
     if ( (*it).m_strName == "name" )
     {
+      m_strName = (*it).m_strValue.c_str();
     }
     else
-      cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+      cerr << "Unknown attrib 'TABLE:" << (*it).m_strName << "'" << endl;
   }
 
   string tag;
@@ -1476,17 +1477,17 @@ bool KSpreadTable::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
     else if ( name == "ROW" )
     {
       RowLayout *rl = new RowLayout( this, 0 );
-      insertRowLayout( rl );
       rl->load( parser, lst );
+      insertRowLayout( rl );
     }
     else if ( name == "COLUMN" )
     {
       ColumnLayout *cl = new ColumnLayout( this, 0 );
-      insertColumnLayout( cl );
       cl->load( parser, lst );
+      insertColumnLayout( cl );
     }
     else
-      cerr << "Unknown tag '" << tag << "'" << endl;
+      cerr << "Unknown tag '" << tag << "' in TABLE" << endl;
 
     if ( !parser.close( tag ) )
     {

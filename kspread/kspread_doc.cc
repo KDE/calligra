@@ -163,7 +163,7 @@ bool KSpreadDoc::save( const char *_url )
 bool KSpreadDoc::save( ostream& out )
 {
   out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=" << "weis@kde.org" << " editor=" << "KSpread"
-      << " mime=" << "application/x-kspread" << " >" << endl;
+      << " mime=" << "\"application/x-kspread\"" << " >" << endl;
   
   if ( m_pEditor && !m_editorBuffer.isNull() && m_editorBuffer.length() > 0 )
     m_pEditor->saveBuffer( m_editorBuffer );
@@ -271,7 +271,7 @@ bool KSpreadDoc::load( KOMLParser& parser )
 	{
 	}
 	else
-	  cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+	  cerr << "Unknown attrib PAPER:'" << (*it).m_strName << "'" << endl;
       }
 
       // PAPERBORDERS, HEAD, FOOT
@@ -298,7 +298,7 @@ bool KSpreadDoc::load( KOMLParser& parser )
 	    {
 	    }
 	    else
-	      cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+	      cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'" << endl;
 	  } 
 	}
       	else if ( name == "HEAD" )
@@ -317,7 +317,7 @@ bool KSpreadDoc::load( KOMLParser& parser )
 	    {
 	    }
 	    else
-	      cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+	      cerr << "Unknown attrib 'HEAD:" << (*it).m_strName << "'" << endl;
 	  } 
 	}
       	else if ( name == "FOOT" )
@@ -336,11 +336,11 @@ bool KSpreadDoc::load( KOMLParser& parser )
 	    {
 	    }
 	    else
-	      cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+	      cerr << "Unknown attrib 'FOOT:" << (*it).m_strName << "'" << endl;
 	  } 
 	}
 	else
-	  cerr << "Unknown tag '" << tag << "'" << endl;    
+	  cerr << "Unknown tag '" << tag << "' in PAPER" << endl;    
 	
 	if ( !parser.close( tag ) )
         {
@@ -355,7 +355,7 @@ bool KSpreadDoc::load( KOMLParser& parser )
 	return false;
     }
     else
-      cerr << "Unknown tag '" << tag << "'" << endl;    
+      cerr << "Unknown tag '" << tag << "' in TABLE" << endl;    
 
     if ( !parser.close( tag ) )
     {
@@ -417,7 +417,7 @@ KSpreadTable* KSpreadDoc::createTable()
 {
   char buffer[ 128 ];
   
-  sprintf( buffer, i18n( "KSpreadTable%i" ), m_iTableId++ );
+  sprintf( buffer, i18n( "Table %i" ), m_iTableId++ );
   KSpreadTable *t = new KSpreadTable( this, buffer );
   t->setMap( m_pMap );
   return t;

@@ -1,3 +1,7 @@
+Sat May  2 16:17:59 1998  Torben Weis  <weis@localhost>
+
+	* kspread_doc.cc (save): Enable saving & loading
+
 Thu Apr 30 02:00:53 1998  Torben Weis  <weis@localhost>
 
 	* kspread_main.cc (start): Changed to work with new

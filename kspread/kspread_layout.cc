@@ -4,6 +4,8 @@
 
 #include <komlWriter.h>
 
+#include <stdlib.h>
+
 /*****************************************************************************
  *
  * KSpreadLayout
@@ -160,12 +162,26 @@ bool RowLayout::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
   {
     if ( (*it).m_strName == "height" )
     {
+      m_fHeight = atof( (*it).m_strValue.c_str() );
     }
     else if ( (*it).m_strName == "row" )
     {
+      m_iRow = atoi( (*it).m_strValue.c_str() );
     }
     else
       cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+  }
+
+  // Validation
+  if ( m_fHeight < 1 )
+  {
+    cerr << "Value height=" << m_fHeight << " out of range" << endl;
+    return false;
+  }
+  if ( m_iRow < 1 || m_iRow >= 0xFFFF )
+  {
+    cerr << "Value row=" << m_iRow << " out of range" << endl;
+    return false;
   }
 
   return true;
@@ -269,12 +285,26 @@ bool ColumnLayout::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
   {
     if ( (*it).m_strName == "width" )
     {
+      m_fWidth = atof( (*it).m_strValue.c_str() );
     }
-    else if ( (*it).m_strName == "row" )
+    else if ( (*it).m_strName == "column" )
     {
+      m_iColumn = atoi( (*it).m_strValue.c_str() );
     }
     else
       cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+  }
+
+  // Validation
+  if ( m_fWidth < 1 )
+  {
+    cerr << "Value height=" << m_fWidth << " out of range" << endl;
+    return false;
+  }
+  if ( m_iColumn < 1 || m_iColumn >= 0xFFFF )
+  {
+    cerr << "Value row=" << m_iColumn << " out of range" << endl;
+    return false;
   }
 
   return true;

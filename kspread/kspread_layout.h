@@ -119,8 +119,11 @@ public:
     virtual const QPen& leftBorderPen() { return m_leftBorderPen; }
     virtual const QPen& topBorderPen() { return m_topBorderPen; }
   
-    virtual const QFont& font() { return m_textFont; }
     virtual const QPen& textPen() { return m_textPen; }
+
+    virtual void setTextPen( const QPen& _p ) { m_textPen = _p; m_textColor = _p.color(); }
+    virtual void setLeftBorderPen( const QPen& _p ) { m_leftBorderPen = _p; m_iLeftBorderWidth = _p.width(); }
+    virtual void setTopBorderPen( const QPen& _p ) { m_topBorderPen = _p; m_iTopBorderWidth = _p.width(); }
 
 protected:
     /**
