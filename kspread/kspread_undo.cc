@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include "kspread_global.h"
 #include "kspread_undo.h"
 #include "kspread_doc.h"
@@ -1491,16 +1492,16 @@ void KSpreadUndoDelete::createListCell( QCString &listCell,QValueList<columnSize
     //copy a column(s)
     if( util_isColumnSelected( m_selection ) )
     {
-        for( int y =m_selection.left() ; y <=m_selection.right() ; ++y )
+        for( int y = m_selection.left() ; y <= m_selection.right() ; ++y )
         {
-           ColumnFormat *cl=table->columnFormat(y);
-           if(!cl->isDefault())
-                {
+           ColumnFormat * cl = table->columnFormat( y );
+           if ( !cl->isDefault() )
+           {
                 columnSize tmpSize;
                 tmpSize.columnNumber=y;
                 tmpSize.columnWidth=cl->dblWidth();
                 listCol.append(tmpSize);
-                }
+           }
         }
     }
     //copy a row(s)
@@ -1618,6 +1619,101 @@ void KSpreadUndoDelete::redo()
     table->refreshView( m_selection );
     doc()->undoBuffer()->unlock();
 }
+
+/****************************************************************************
+ *
+ * KSpreadUndoDragDrop
+ *
+ ***************************************************************************/
+
+KSpreadUndoDragDrop::KSpreadUndoDragDrop( KSpreadDoc * _doc, KSpreadSheet * _table, const QRect & _source,
+                                          const QRect & _target )
+  : KSpreadUndoAction( _doc ),
+    m_selectionSource( _source ),
+    m_selectionTarget( _target )
+{
+    name = i18n( "Drag & Drop" );
+
+    m_tableName = _table->tableName();
+
+    saveCellRect( m_dataTarget, _table, _target );
+    if ( _source.left() > 0 )
+      saveCellRect( m_dataSource, _table, _source );
+}
+
+KSpreadUndoDragDrop::~KSpreadUndoDragDrop()
+{
+}
+
+void KSpreadUndoDragDrop::saveCellRect( QCString & cells, KSpreadSheet * table, 
+                                        QRect const & rect )
+{
+    QDomDocument doc = table->saveCellRect( rect );
+    // Save to buffer
+    QString buffer;
+    QTextStream str( &buffer, IO_WriteOnly );
+    str << doc;
+    
+    cells = buffer.utf8();
+    int len = cells.length();
+    char tmp = cells[ len - 1 ];
+    cells.resize( len );
+    *( cells.data() + len - 1 ) = tmp;
+}
+
+void KSpreadUndoDragDrop::undo()
+{
+    KSpreadSheet * table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    if ( m_selectionSource.left() > 0 )
+      saveCellRect( m_dataRedoSource, table, m_selectionSource );
+    saveCellRect( m_dataRedoTarget, table, m_selectionTarget );
+
+    doc()->undoBuffer()->lock();
+    doc()->emitBeginOperation();
+
+    table->deleteCells( m_selectionTarget );
+    table->paste( m_dataTarget, m_selectionTarget );
+
+    if ( m_selectionSource.left() > 0 )
+    {
+      table->deleteCells( m_selectionSource );
+      table->paste( m_dataSource, m_selectionSource );      
+    }
+
+    doc()->emitEndOperation();
+
+    if ( table->getAutoCalc() ) 
+      table->recalc();
+
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoDragDrop::redo()
+{
+    KSpreadSheet * table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    doc()->emitBeginOperation();
+
+    //move next line to refreshView
+    //because I must know what is the real rect
+    //that I must refresh, when there is cell Merged
+
+    table->paste( m_dataRedoTarget, m_selectionTarget );
+    if ( m_selectionSource.left() > 0 )
+      table->paste( m_dataRedoSource, m_selectionSource );
+
+    doc()->emitEndOperation();
+    table->refreshView( m_selectionSource );
+    table->refreshView( m_selectionTarget );
+    doc()->undoBuffer()->unlock();
+}
+
 
 /****************************************************************************
  *

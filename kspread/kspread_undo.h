@@ -390,6 +390,28 @@ protected:
     QString m_tableName;
 };
 
+class KSpreadUndoDragDrop : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoDragDrop( KSpreadDoc * _doc, KSpreadSheet * _table, const QRect & _source, const QRect & _target );
+    virtual ~KSpreadUndoDragDrop();
+
+    virtual void undo();
+    virtual void redo();
+
+protected:
+    QRect    m_selectionSource;
+    QRect    m_selectionTarget;
+    QCString m_dataSource;
+    QCString m_dataTarget;
+    QCString m_dataRedoSource;
+    QCString m_dataRedoTarget;
+    QString  m_tableName;
+
+    void saveCellRect( QCString & cells, KSpreadSheet * table, 
+                       QRect const & rect );
+};
+
 class KSpreadUndoSetTableName : public KSpreadUndoAction
 {
 public:

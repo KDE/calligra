@@ -5569,21 +5569,15 @@ void KSpreadSheet::deleteCells( const QRect& rect )
     m_pDoc->setModified( true );
 }
 
-void KSpreadSheet::deleteSelection( KSpreadSelection* selectionInfo)
+void KSpreadSheet::deleteSelection( KSpreadSelection* selectionInfo, bool undo )
 {
     QRect r( selectionInfo->selection() );
 
-    if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-            KSpreadUndoDelete *undo = new KSpreadUndoDelete( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
-        }
-
-    if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-            KSpreadUndoDelete *undo = new KSpreadUndoDelete( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
-        }
+    if ( undo && !m_pDoc->undoBuffer()->isLocked() )
+    {
+        KSpreadUndoDelete *undo = new KSpreadUndoDelete( m_pDoc, this, r );
+        m_pDoc->undoBuffer()->appendUndo( undo );
+    }
 
     // Entire rows selected ?
     if ( util_isRowSelected(r) )

@@ -510,7 +510,7 @@ public:
      *                In this case the cell on which the marker is will
      *                be deleted.
      */
-    void deleteSelection( KSpreadSelection* selectionInfo );
+    void deleteSelection( KSpreadSelection* selectionInfo, bool undo = true );
     /**
      * @param _marker is used if there is no selection currently.
      *                In this case the cell on which the marker is will

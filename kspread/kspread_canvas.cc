@@ -1445,13 +1445,27 @@ void KSpreadCanvas::dropEvent( QDropEvent * _ev )
 
   QByteArray b;
 
+  bool makeUndo = true;
+
   if ( _ev->provides( KSpreadTextDrag::selectionMimeType() ) )
   {
     if ( KSpreadTextDrag::target() == _ev->source() )
-      table->deleteSelection( selectionInfo() );
+    {
+      if ( !m_pDoc->undoBuffer()->isLocked() )
+      {
+        KSpreadUndoDragDrop * undo 
+          = new KSpreadUndoDragDrop( m_pDoc, table, selectionInfo()->selection(), 
+                                     QRect( col, row, selectionInfo()->selection().width(),
+                                            selectionInfo()->selection().height() ) );
+        m_pDoc->undoBuffer()->appendUndo( undo );
+        makeUndo = false;
+      }
+      table->deleteSelection( selectionInfo(), false );
+    }
+
 
     b = _ev->encodedData( KSpreadTextDrag::selectionMimeType() );
-    table->paste( b, QRect( col, row, 1, 1 ), true );
+    table->paste( b, QRect( col, row, 1, 1 ), makeUndo );
 
     if ( _ev->source() == this )
       _ev->acceptAction();
@@ -1465,8 +1479,8 @@ void KSpreadCanvas::dropEvent( QDropEvent * _ev )
       _ev->ignore();
       return;
     }
-    if ( KSpreadTextDrag::target() == _ev->source() )
-      table->deleteSelection( selectionInfo() );
+    //    if ( KSpreadTextDrag::target() == _ev->source() )
+    //      table->deleteSelection( selectionInfo() );
 
     table->pasteTextPlain( text, QRect( col, row, 1, 1 ) );
     _ev->accept();
