@@ -1,3 +1,19 @@
+REAL BUGS:
+-	mirror coordinate-system so origin is bottom-left
+-	dont always fill shapes especially when no fillShape() is called
+-	select first/last segment's knot if one of each other's knot is selected
+-	scale tool should only scale in one direction while dragging a slection node
+-	if selecting many shapes, the fill/stroke state should be "unknown",
+	preview widgets needs to paint questionmarks or something in this case
+-	examine the problem with non closed paths (polygonize combined.karbon for example
+	to make the inner circles rectangles)
+	lenny: "i still dont see any vpainter:close() function are anything similar in vpath::draw().
+	closed shapes' end where they started, but they are never closed. how could libart
+	ever know it needs to paint a join here?"
+-	use vflatten in vselectool for more precise selection (lenny)
+	maybe use libart instead ("art_drect_svp from art_rect_svp")
+-	compare ghostscript's "flatten" with our's (lenny)
+
 TODO:
 -	port path commands to vgroup::insertNewDeleteOld(), maybe add a vpathcommand
 	similar to vshapecommand
@@ -14,22 +30,6 @@ TODO:
 -	allow for multiple strokes and fills in VPath. Also allow for strokes to be under
 	fills for nice special effects.
 -	Ctrl or Shift (pressed) while dragging a shape should make the shape move along only one axis
-
-REAL BUGS:
--	mirror coordinate-system so origin is bottom-left
--	dont always fill shapes especially when no fillShape() is called
--	select first/last segment's knot if one of each other's knot is selected
--	scale tool should only scale in one direction while dragging a slection node
--	if selecting many shapes, the fill/stroke state should be "unknown",
-	preview widgets needs to paint questionmarks or something in this case
--	examine the problem with non closed paths (polygonize combined.karbon for example
-	to make the inner circles rectangles)
-	lenny: "i still dont see any vpainter:close() function are anything similar in vpath::draw().
-	closed shapes' end where they started, but they are never closed. how could libart
-	ever know it needs to paint a join here?"
--	use vflatten in vselectool for more precise selection (lenny)
-	maybe use libart instead ("art_drect_svp from art_rect_svp")
--	compare ghostscript's "flatten" with our's (lenny)
 
 OPTIMIZATION:
 -	make fill/stroke shared so copying for undo/redo is more efficient
