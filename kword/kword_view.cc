@@ -2047,7 +2047,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     sprintf( buffer, "%i", i );
     sizelist[i-4] = CORBA::string_dup( buffer );
   }
-  m_idComboText_FontSize = m_vToolBarText->insertCombo( sizelist, ID_FONT_SIZE, false, SIGNAL( activated( const QString & ) ),
+  m_idComboText_FontSize = m_vToolBarText->insertCombo( sizelist, ID_FONT_SIZE, true, SIGNAL( activated( const QString & ) ),
 							this, "textSizeSelected", true,
 							i18n( "Font Size"  ), 50, -1, OpenPartsUI::AtBottom );
   m_vToolBarText->setCurrentComboItem(ID_FONT_SIZE,8);
@@ -2059,7 +2059,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   fonts.length( fontList.count() );
   for(unsigned int i = 0;i < fontList.count(); i++ )
     fonts[i] = CORBA::string_dup( fontList.at(i) );
-  m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, false, SIGNAL( activated( const QString & ) ), this,
+  m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, true, SIGNAL( activated( const QString & ) ), this,
 							"textFontSelected", true, i18n("Font List"),
 							200, -1, OpenPartsUI::AtBottom );
   tbFont.setFamily(fontList.at(0));
@@ -2791,7 +2791,7 @@ void KWordView::sendFocusEvent()
 {
   QFocusEvent e((QEvent::Type) 9);
   QApplication::sendEvent(shell->getFrame(),&e);
-}  
+}
 
 /******************************************************************/
 /* Class: KWordGUI                                                */
