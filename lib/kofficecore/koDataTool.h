@@ -123,10 +123,6 @@ public:
     QStringList commands() const;
 
     /**
-     * @deprecated
-     */
-    KoDataTool* createTool( QObject* parent = 0, const char* name = 0 );
-    /**
      * Creates the data tool described by this KoDataToolInfo.
      * @param part the part (document) that creates this tool.
      * @return a pointer to the created data tool or 0 on error.

@@ -140,11 +140,6 @@ QStringList KoDataToolInfo::userCommands() const
     return QStringList::split( ',', m_service->comment() );
 }
 
-KoDataTool* KoDataToolInfo::createTool( QObject* parent, const char* name )
-{
-    createTool( 0L, parent, name );
-}
-
 KoDataTool* KoDataToolInfo::createTool( KoDocument* part, QObject* parent, const char* name ) const
 {
     if ( !m_service )
