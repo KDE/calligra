@@ -27,6 +27,7 @@
 #include <qdom.h>
 #include <qstring.h>
 #include <qptrlist.h>
+#include <qdict.h>
 
 class QTime;
 
@@ -62,7 +63,11 @@ class KPTResourceGroup {
 
           enum Type { Type_Work, Type_Material };
           
-          int id() const { return m_id; }
+          QString id() const { return m_id; }
+          bool setId(QString id);
+          void generateId();
+          static KPTResourceGroup *find(const QString id);
+          
 	      void setName(QString n) {m_name=n;}
 	      const QString &name() const {return m_name;}
           void setType(Type type) { m_type = type; }
@@ -133,7 +138,7 @@ class KPTResourceGroup {
 
     private:
         KPTProject  *m_project;
-        int m_id;   // unique id
+        QString m_id;   // unique id
         QString m_name;
         QPtrList<KPTResource> m_resources;
         QPtrList<KPTRisk> m_risks;
@@ -143,6 +148,9 @@ class KPTResourceGroup {
 
         KPTCalendar *m_defaultCalendar;
         Type m_type;
+        
+        static QDict<KPTResourceGroup> resourceGroupIdDict;
+
 };
 
 /**
@@ -162,7 +170,10 @@ class KPTResource {
         KPTResource(KPTResource *resource) { copy(resource); }
         ~KPTResource();
 
-        int id() const { return m_id; }
+        QString id() const { return m_id; }
+        bool setId(QString id);
+        void generateId();
+        static KPTResource *find(const QString id);
 
         enum Type { Type_Work, Type_Material };
         void setType(Type type) { m_type = type; }
@@ -244,7 +255,7 @@ class KPTResource {
     private:
         KPTProject *m_project;
         QPtrList<KPTAppointment> m_appointments; // TODO: Move appointments to KPTProject ????
-        int m_id; // unique id
+        QString m_id; // unique id
         QString m_name;
         QTime m_availableFrom;
         QTime m_availableUntil;
@@ -263,6 +274,9 @@ class KPTResource {
 
         KPTCalendar *m_calendar;
         QPtrList<KPTResourceRequest> m_requests;
+        
+        static QDict<KPTResource> resourceIdDict;
+        
 public:
 #ifndef NDEBUG
         void printDebug(QString ident);

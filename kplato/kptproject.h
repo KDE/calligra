@@ -103,15 +103,9 @@ public:
     bool canMoveTaskDown( KPTNode* node );
     bool moveTaskDown( KPTNode* node );
 
-    KPTNode *node(int id);
-    int mapNode(KPTNode *node);
-    int mapNode(int id, KPTNode *node);
+    KPTResourceGroup *group(QString id);
 
-    KPTResourceGroup *group(int id);
-    int groupId() { return ++m_maxGroupId; }
-
-    KPTResource *resource(int id);
-    int resourceId() { return ++m_maxResourceId; }
+    KPTResource *resource(QString id);
 
     /**
      * Returns the total planned cost for this project
@@ -164,14 +158,6 @@ protected:
     bool legalChildren(KPTNode *par, KPTNode *child);
 
 private:
-    // we need unique id's for referencing objects when saving/loading
-    QMap<int, KPTNode *>m_nodeMap;
-    int m_maxNodeId; // the highest id in map
-
-    int m_maxGroupId; // the highest id in use
-
-    int m_maxResourceId; // the highest id in map
-
     QPtrList<KPTNode> m_startNodes;
     QPtrList<KPTNode> m_endNodes;
     QPtrList<KPTNode> m_summarytasks;

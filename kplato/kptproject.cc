@@ -46,9 +46,6 @@ KPTProject::KPTProject(KPTNode *parent)
     m_startTime = KPTDateTime::currentDateTime();
     m_endTime = m_startTime;
 
-    m_maxGroupId = 0;
-    m_maxResourceId = 0;
-    
     m_standardWorktime = 0;
     
     m_calendars.setAutoDelete(true);
@@ -343,7 +340,6 @@ void KPTProject::save(QDomElement &element)  {
         m_standardWorktime->save(me);
     
     // save project resources, must be after calendars
-    m_maxGroupId = 0; m_maxResourceId = 0;  // we'll generate fresh ones
     QPtrListIterator<KPTResourceGroup> git(m_resourceGroups);
     for ( ; git.current(); ++git ) {
         git.current()->save(me);
@@ -570,49 +566,12 @@ bool KPTProject::moveTaskDown( KPTNode* node )
     return false;
 }
 
-// TODO: find a more elegant/efficient solution to this id stuff
-KPTNode *KPTProject::node(int id) {
-    if (m_nodeMap.contains(id)) {
-        return m_nodeMap[id];
-    }
-    return 0;
+KPTResourceGroup *KPTProject::group(QString id) {
+    return KPTResourceGroup::find(id);
 }
 
-int KPTProject::mapNode(KPTNode *node) {
-    m_nodeMap[++m_maxNodeId] = node;
-    return m_maxNodeId;
-}
-
-int KPTProject::mapNode(int id, KPTNode *node) {
-    if (id < 0) {
-        return -1;
-    }
-    if (id > m_maxNodeId) {
-        m_maxNodeId = id;
-    }
-    m_nodeMap[id] = node;
-    return id;
-}
-
-KPTResourceGroup *KPTProject::group(int id) {
-    QPtrListIterator<KPTResourceGroup> it(m_resourceGroups);
-    for (; it.current(); ++it) {
-        if (it.current()->id() == id)
-            return it.current();
-    }
-    return 0;
-}
-
-KPTResource *KPTProject::resource(int id) {
-    QPtrListIterator<KPTResourceGroup> it(m_resourceGroups);
-    for (; it.current(); ++it) {
-        QPtrListIterator<KPTResource> rit(it.current()->resources());
-        for (; rit.current(); ++rit) {
-            if (rit.current()->id() == id)
-                return rit.current();
-        }
-    }
-    return 0;
+KPTResource *KPTProject::resource(QString id) {
+    return KPTResource::find(id);
 }
 
 double KPTProject::plannedCost() {

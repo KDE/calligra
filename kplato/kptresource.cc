@@ -29,14 +29,63 @@
 namespace KPlato
 {
 
+QDict<KPTResourceGroup> KPTResourceGroup::resourceGroupIdDict;
+
 KPTResourceGroup::KPTResourceGroup(KPTProject *project) {
     m_project = project;
-    m_id = -1;
     m_type = Type_Work;
     m_resources.setAutoDelete(true);
+    generateId();
 }
 
 KPTResourceGroup::~KPTResourceGroup() {
+    resourceGroupIdDict.remove(m_id);
+}
+
+bool KPTResourceGroup::setId(QString id) {
+    //kdDebug()<<k_funcinfo<<id<<endl;
+    if (id.isEmpty()) {
+        kdError()<<k_funcinfo<<"id is empty"<<endl;
+        m_id = id;
+        return false;
+    }
+    KPTResourceGroup *g = resourceGroupIdDict.find(m_id);
+    if (g == this) {
+        //kdDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
+        resourceGroupIdDict.remove(m_id);
+    } else if (g) {
+        //Hmmm, shouldn't happen
+        kdError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different node: "<<g->name()<<endl;
+    }
+    if (resourceGroupIdDict.find(id)) {
+        kdError()<<k_funcinfo<<"id '"<<id<<"' is already used for different node: "<<resourceGroupIdDict.find(id)->name()<<endl;
+        m_id = QString(); // hmmm
+        return false;
+    }
+    m_id = id;
+    resourceGroupIdDict.insert(id, this);
+    //kdDebug()<<k_funcinfo<<m_name<<": inserted id="<<id<<endl;
+    return true;
+}
+
+void KPTResourceGroup::generateId() {
+    if (!m_id.isEmpty()) {
+        resourceGroupIdDict.remove(m_id);
+    }
+    for (int i=0; i<32000 ; ++i) {
+        m_id = m_id.setNum(i);
+        if (!resourceGroupIdDict.find(m_id)) {
+            resourceGroupIdDict.insert(m_id, this);
+            return;
+        }
+    }
+    m_id = QString();
+}
+
+KPTResourceGroup *KPTResourceGroup::find(const QString id) {
+    if (id.isEmpty())   // avoid QDict debug msg
+        return 0;
+    return resourceGroupIdDict.find(id);
 }
 
 void KPTResourceGroup::addResource(KPTResource* resource, KPTRisk*) {
@@ -70,7 +119,7 @@ void KPTResourceGroup::removeRequiredResource(int) {
 
 bool KPTResourceGroup::load(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
-    m_id = element.attribute("id", "-1").toInt();
+    setId(element.attribute("id"));
     m_name = element.attribute("name");
 
     QDomNodeList list = element.childNodes();
@@ -96,9 +145,6 @@ void KPTResourceGroup::save(QDomElement &element)  {
 
     QDomElement me = element.ownerDocument().createElement("resource-group");
     element.appendChild(me);
-
-    if (m_project)
-        m_id = m_project->groupId(); // get a fresh id
 
     me.setAttribute("id", m_id);
     me.setAttribute("name", m_name);
@@ -156,10 +202,12 @@ int KPTResourceGroup::units() {
     return u;
 }
 
+
+QDict<KPTResource> KPTResource::resourceIdDict;
+
 KPTResource::KPTResource(KPTProject *project) : m_project(project), m_appointments(), m_workingHours(), m_overbooked(false) {
     m_availableFrom = QTime(8,0,0);
     m_availableUntil = QTime(18,0,0);
-    m_id = -1;
     m_type = Type_Work;
     m_units = 100; // %
 
@@ -167,14 +215,63 @@ KPTResource::KPTResource(KPTProject *project) : m_project(project), m_appointmen
     cost.overtimeRate = 200;
     cost.fixed = 0;
     m_calendar = 0;
+
+    generateId();
 }
 
 KPTResource::~KPTResource() {
+    resourceIdDict.remove(m_id);
     QPtrListIterator<KPTResourceRequest> it = m_requests;
     for (; it.current(); ++it) {
         it.current()->setResource(0); // avoid the request to mess with my list
         it.current()->parent()->removeResourceRequest(it.current()); // deletes the request
     }
+}
+
+bool KPTResource::setId(QString id) {
+    //kdDebug()<<k_funcinfo<<id<<endl;
+    if (id.isEmpty()) {
+        kdError()<<k_funcinfo<<"id is empty"<<endl;
+        m_id = id;
+        return false;
+    }
+    KPTResource *r = resourceIdDict.find(m_id);
+    if (r == this) {
+        //kdDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
+        resourceIdDict.remove(m_id);
+    } else if (r) {
+        //Hmmm, shouldn't happen
+        kdError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different node: "<<r->name()<<endl;
+    }
+    if (resourceIdDict.find(id)) {
+        kdError()<<k_funcinfo<<"id '"<<id<<"' is already used for different node: "<<resourceIdDict.find(id)->name()<<endl;
+        m_id = QString(); // hmmm
+        return false;
+    }
+    m_id = id;
+    resourceIdDict.insert(id, this);
+    //kdDebug()<<k_funcinfo<<m_name<<": inserted id="<<id<<endl;
+    return true;
+}
+
+void KPTResource::generateId() {
+    if (!m_id.isEmpty()) {
+        resourceIdDict.remove(m_id);
+    }
+    for (int i=0; i<32000 ; ++i) {
+        m_id = m_id.setNum(i);
+        if (!resourceIdDict.find(m_id)) {
+            resourceIdDict.insert(m_id, this);
+            return;
+        }
+    }
+    m_id = QString();
+}
+
+KPTResource *KPTResource::find(const QString id) {
+    if (id.isEmpty())   // avoid QDict debug msg
+        return 0;
+    return resourceIdDict.find(id);
 }
 
 void KPTResource::setType(const QString &type) {
@@ -245,7 +342,7 @@ KPTDateTime *KPTResource::getBestAvailableTime(const KPTDateTime after, const KP
 
 bool KPTResource::load(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
-    m_id = element.attribute("id", "-1").toInt();
+    setId(element.attribute("id"));
     m_name = element.attribute("name");
     m_calendar = calendar(element.attribute("calendar-id", "-1").toInt());
     return true;
@@ -255,9 +352,6 @@ void KPTResource::save(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
     QDomElement me = element.ownerDocument().createElement("resource");
     element.appendChild(me);
-
-    if (m_project)
-        m_id = m_project->resourceId(); // get a fresh id
 
     if (m_calendar)
         me.setAttribute("calendar-id", m_calendar->id());
@@ -388,9 +482,9 @@ bool KPTAppointment::isBusy(const KPTDateTime &start, const KPTDateTime &end) {
 
 bool KPTAppointment::load(QDomElement &element, KPTProject &project) {
     //kdDebug()<<k_funcinfo<<endl;
-    int id  = element.attribute("resource-id").toInt();
-    if (!(m_resource = project.resource(id))) {
-        kdError()<<k_funcinfo<<"The referenced resource does not exists: resource id="<<id<<endl;
+    m_resource = project.resource(element.attribute("resource-id"));
+    if (m_resource == 0) {
+        kdError()<<k_funcinfo<<"The referenced resource does not exists: resource id="<<element.attribute("resource-id")<<endl;
         return false;
     }
     m_task = dynamic_cast<KPTTask *>(KPTNode::find(element.attribute("task-id")));
@@ -476,9 +570,9 @@ KPTResourceRequest::~KPTResourceRequest() {
 
 bool KPTResourceRequest::load(QDomElement &element, KPTProject *project) {
     //kdDebug()<<k_funcinfo<<endl;
-    int id  = element.attribute("resource-id").toInt();
-    if (!(m_resource = project->resource(id))) {
-        kdDebug()<<k_funcinfo<<"The referenced resource does not exist: resource id="<<id<<endl;
+    m_resource = project->resource(element.attribute("resource-id"));
+    if (m_resource == 0) {
+        kdDebug()<<k_funcinfo<<"The referenced resource does not exist: resource id="<<element.attribute("resource-id")<<endl;
         return false;
     }
     m_units  = element.attribute("units").toInt();
@@ -542,9 +636,9 @@ KPTResourceRequest *KPTResourceGroupRequest::find(KPTResource *resource) const {
 
 bool KPTResourceGroupRequest::load(QDomElement &element, KPTProject *project) {
     //kdDebug()<<k_funcinfo<<endl;
-    int id  = element.attribute("group-id").toInt();
-    if (!(m_group = project->group(id))) {
-        kdDebug()<<k_funcinfo<<"The referenced resource group does not exist: group id="<<id<<endl;
+    m_group = project->group(element.attribute("group-id"));
+    if (m_group == 0) {
+        kdDebug()<<k_funcinfo<<"The referenced resource group does not exist: group id="<<element.attribute("group-id")<<endl;
         return false;
     }
     m_units  = element.attribute("units").toInt();
