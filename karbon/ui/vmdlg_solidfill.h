@@ -6,13 +6,23 @@
 #ifndef __VMDLGSOLIDFILL_H__
 #define __VMDLGSOLIDFILL_H__
 
-#include <kdialogbase.h>
+#include <qtabdialog.h>
 
-class VMDlgSolidFill : public KDialogBase
+class QSpinBox;
+class KHSSelector;
+
+class VMDlgSolidFill : public QTabDialog
 {
 	Q_OBJECT
 public:
 	VMDlgSolidFill();
+
+private:
+	QWidget* mRGBWidget;
+	KHSSelector* mColorSelector;
+	QSpinBox* mRed;
+	QSpinBox* mGreen;
+	QSpinBox* mBlue;
 };
 
 #endif
