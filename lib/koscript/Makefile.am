@@ -23,8 +23,6 @@ noinst_HEADERS = koscript_locale.h \
 		 koscript_parser.h koscript_parsenode.h koscript.h koscript_util.h koscript_struct.h \
 		 koscript_ptr.h koscript_synext.h koscript_types.h koscript_method.h
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
-
 ####### Build rules
 
 parser:

@@ -1,7 +1,7 @@
 
 KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES = $(all_includes)
-LDFLAGS   = $(all_libraries)
+AM_LDFLAGS   = $(all_libraries)
 
 ####### Files
 
@@ -31,8 +31,6 @@ noinst_HEADERS = kscript_eval.h kscript_object.h kscript_class.h kscript_func.h 
 
 kscript_LDADD = ./libkscript.la
 kscript_LDFLAGS = $(KDE_RPATH)
-
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
 
 # SUBDIRS = ksidl
 
