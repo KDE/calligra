@@ -82,6 +82,14 @@ kexi__objects
 	o_caption varchar(200), //optional, enriched name that is not 
 	o_help varchar
 
+//This table contains object's data, such as form's xml def.
+kexi__objectdata
+	o_id integer REFERENCES kexi__objects(o_id),
+	o_data BLOB,
+	o_sub_id varchar(200) //sometimes single object can have more than one data 
+	                      //-these can be identified by o_sub_id
+                        //if not needed, leave it as NULL
+
 //This table contains additional information for query schemas
 kexi__querydata
 	q_id integer REFERENCES kexi__objects(o_id),

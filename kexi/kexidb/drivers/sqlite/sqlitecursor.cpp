@@ -437,6 +437,16 @@ QVariant SQLiteCursor::value(uint i)
 	return QVariant( d->curr_coldata[i] ); //default
 }
 
+/*! Stores string value taken from field number \a i to \a str.
+ \return false when range checking failed. 
+bool SQLiteCursor::storeStringValue(uint i, QString &str)
+{
+	if (i > (m_fieldCount-1)) //range checking
+		return false;
+	str = d->curr_coldata[i];
+	return true;
+}*/
+
 int SQLiteCursor::serverResult() const
 {
 	return d->res;

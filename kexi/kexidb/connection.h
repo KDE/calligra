@@ -355,6 +355,19 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 \return true if query was successfully executed and first record has been found. */
 		bool querySingleRecord(const QString& sql, KexiDB::RowData &data);
 
+		/*! Executes \a sql query and stores first record's first field's string value 
+		 inside \a value. Therefore, for efficiency it's recommended that a query defined by \a sql
+		 should have just one field (SELECT one_field FROM ....). 
+		 \return true if query was successfully executed and first record has been found.
+		 */
+		bool querySingleString(const QString& sql, QString &value);
+
+		/*! Executes \a sql query and returns true if there is at least one record returned.
+		 Does not fetch any records. \a success will be set to false 
+		 on query execution errors (true otherwise), so you can see a difference between 
+		 "no results" and "query execution error" states. */
+		bool resultExists(const QString& sql, bool &success);
+
 		//PROTOTYPE:
 		#define A , const QVariant&
 		#define H_INS_REC(args) bool insertRecord(TableSchema &tableSchema args)

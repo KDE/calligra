@@ -66,6 +66,12 @@ namespace KexiDB
 
 	/*! This methods works like above, but works on \a result's  members instead. */
 	KEXI_DB_EXPORT void getHTMLErrorMesage(Object* obj, ResultInfo *result);
+
+	/*! Function useful for building WHERE parts of sql statements.
+	Constructs an sql string like "fielname = value" for specific \a drv driver,
+	 field type \a t, \a fieldName and \a value. If \a value is null, "fieldname is NULL" 
+	 string is returned. */
+	KEXI_DB_EXPORT QString sqlWhere(KexiDB::Driver *drv, KexiDB::Field::Type t, const QString fieldName, const QVariant value);
 }
 
 #endif

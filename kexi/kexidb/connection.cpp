@@ -591,6 +591,7 @@ const QStringList& Connection::kexiDBSystemTableNames()
 	if (KexiDB_kexiDBSystemTableNames.isEmpty()) {
 		KexiDB_kexiDBSystemTableNames
 		<< "kexi__objects"
+		<< "kexi__objectdata"
 		<< "kexi__fields"
 		<< "kexi__querydata"
 		<< "kexi__queryfields"
@@ -1036,6 +1037,9 @@ bool Connection::removeObject( uint objId )
 	TableSchema *ts = m_tables_byname["kexi__objects"];
 	if (!KexiDB::deleteRow(*this, ts, "o_id", objId)) //schema entry
 		return false;
+	ts = m_tables_byname["kexi__objectdata"];
+	if (!KexiDB::deleteRow(*this, ts, "o_id", objId)) //schema entry
+		return false;
 	return true;
 }
 
@@ -1475,6 +1479,41 @@ bool Connection::querySingleRecord(const QString& sql, KexiDB::RowData &data)
 	return deleteCursor(cursor);
 }
 
+bool Connection::querySingleString(const QString& sql, QString &value)
+{
+	KexiDB::Cursor *cursor;
+	m_sql = sql;
+	if (!(cursor = executeQuery( m_sql ))) {
+		KexiDBDbg << "Connection::querySingleRecord(): !executeQuery()" << endl;
+		return false;
+	}
+	if (!cursor->moveFirst() || cursor->eof()) {
+		KexiDBDbg << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof()" << endl;
+		deleteCursor(cursor);
+		return false;
+	}
+	value = cursor->value(0).toString();
+	return deleteCursor(cursor);
+}
+
+bool Connection::resultExists(const QString& sql, bool &success)
+{
+	KexiDB::Cursor *cursor;
+	m_sql = sql;
+	if (!(cursor = executeQuery( m_sql ))) {
+		KexiDBDbg << "Connection::querySingleRecord(): !executeQuery()" << endl;
+		success = false;
+		return false;
+	}
+	success = true;
+	if (!cursor->moveFirst() || cursor->eof()) {
+		KexiDBDbg << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof()" << endl;
+		deleteCursor(cursor);
+		return false;
+	}
+	return true;
+}
+
 KexiDB::TableSchema* Connection::setupTableSchema( const KexiDB::RowData &data )//KexiDB::Cursor *table_cur )
 {
 	TableSchema *t = new TableSchema( this );
@@ -1639,6 +1678,11 @@ bool Connection::setupKexiDBSystemSchema()
 	.addField( new Field("o_caption", Field::Text ) )
 	.addField( new Field("o_desc", Field::LongText ) );
 
+	TableSchema *t_objectdata = newKexiDBSystemTableSchema("kexi__objectdata");
+	t_objectdata->addField( new Field("o_id", Field::Integer, Field::NotNull, Field::Unsigned) )
+	.addField( new Field("o_data", Field::BLOB) )
+	.addField( new Field("o_sub_id", Field::Text) );
+
 	TableSchema *t_fields = newKexiDBSystemTableSchema("kexi__fields");
 	t_fields->addField( new Field("t_id", Field::Integer, 0, Field::Unsigned) )
 	.addField( new Field("f_type", Field::Byte, 0, Field::Unsigned) )
@@ -1675,7 +1719,7 @@ bool Connection::setupKexiDBSystemSchema()
 	.addField( new Field("db_value", Field::LongText ) );
 
 	TableSchema *t_parts = newKexiDBSystemTableSchema("kexi__parts");
-	t_parts->addField( new Field("p_id", Field::Integer, Field::PrimaryKey, Field::Unsigned) )
+	t_parts->addField( new Field("p_id", Field::Integer, Field::PrimaryKey | Field::AutoInc, Field::Unsigned) )
 	.addField( new Field("p_name", Field::Text) )
 	.addField( new Field("p_mime", Field::Text ) )
 	.addField( new Field("p_url", Field::Text ) );

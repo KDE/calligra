@@ -319,6 +319,28 @@ TODO: reuse KexiNameWidget in KexiNewProjectWizard!
 
 CC_MAIL: dkite@shaw.ca
 
+2004-03-19
+2004-03-20
+KEXIDB:
+	<KEXIDB FORMAT CHANGED TO 1.2>
+	- 'kexi__obejctdata' table introduced: contains object's data, 
+	   such as form's xml def
+
+		kexi__objectdata
+			o_id integer REFERENCES kexi__objects(o_id),
+			o_data BLOB,
+			o_sub_id varchar(200)
+	</KEXIDB FORMAT CHANGED TO 1.2>
+
+	- Field::typeForString(typeString) Field::typeGroupForString(typeGroupString) added
+	- Connection::querySingleString() and Connection::resultExists() added
+	- KexiDB::sqlWhere() utility function added
+
+Alter Table Dialog
+	- Saving field types FIXED
+
+
+
 2004-03-17
 	-KexiProperty: fix for fix :) changes from null string to "" string (or vice-versa) are ignored
 	-Kexi Property editor receives signal KexiPropertyBuffer::propertyReset()

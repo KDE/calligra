@@ -160,6 +160,13 @@ class KEXI_DB_EXPORT Field
 		 not greater than Field::LastType) */
 		static QString typeString(uint type);
 
+		/*! \return type for a given \a typeString */
+		static Type typeForString(const QString typeString);
+
+		/*! \return type group for a given \a typeGroupString */
+		static TypeGroup typeGroupForString(const QString typeGroupString);
+
+		/*! \return group for \a type */
 		static TypeGroup typeGroup(uint type);
 
 		/*! \return a i18n'd group name for \a typeGroup 
@@ -429,9 +436,11 @@ class KEXI_DB_EXPORT Field
 
 		class KEXI_DB_EXPORT FieldTypeNames : public QValueVector<QString> {
 			public: FieldTypeNames();
+			QMap<QString,Type> str2num;
 		};
 		class KEXI_DB_EXPORT FieldTypeGroupNames : public QValueVector<QString> {
 			public: FieldTypeGroupNames();
+			QMap<QString,TypeGroup> str2num;
 		};
 
 		//! real i18n'd type names (and not-i18n'd type name strings)

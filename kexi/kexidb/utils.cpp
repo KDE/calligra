@@ -132,3 +132,9 @@ void KexiDB::getHTMLErrorMesage(Object* obj, ResultInfo *result)
 	getHTMLErrorMesage(obj, result->msg, result->desc);
 }
 
+QString KexiDB::sqlWhere(KexiDB::Driver *drv, KexiDB::Field::Type t, const QString fieldName, const QVariant value)
+{
+	if (value.isNull())
+		return fieldName + " is NULL";
+	return fieldName + "=" + drv->valueToSQL( t, value );
+}

@@ -160,6 +160,20 @@ QString Field::typeGroupString(uint typeGroup)
 	return (typeGroup <= LastTypeGroup) ? m_typeGroupNames.at((int)LastTypeGroup+1 + typeGroup) : QString("TypeGroup%1").arg(typeGroup);
 }
 
+Field::Type Field::typeForString(const QString typeString)
+{
+	if (m_typeNames.str2num.find(typeString)==m_typeNames.str2num.end())
+		return InvalidType;
+	return m_typeNames.str2num[typeString];
+}
+
+Field::TypeGroup Field::typeGroupForString(const QString typeGroupString)
+{
+	if (m_typeGroupNames.str2num.find(typeGroupString)==m_typeGroupNames.str2num.end())
+		return InvalidGroup;
+	return m_typeGroupNames.str2num[typeGroupString];
+}
+
 bool Field::isIntegerType( uint type )
 {
 	switch (type) {
@@ -534,9 +548,11 @@ void Field::setExpression(KexiDB::Expression *expr)
 
 //-------------------------------------------------------
 #define ADDTYPE(type, i18, str) this->at(Field::type) = i18; \
-	this->at(Field::type+Field::LastType+1) = str
+	this->at(Field::type+Field::LastType+1) = str; \
+	str2num.insert(str, type)
 #define ADDGROUP(type, i18, str) this->at(Field::type) = i18; \
-	this->at(Field::type+Field::LastTypeGroup+1) = str
+	this->at(Field::type+Field::LastTypeGroup+1) = str; \
+	str2num.insert(str, type)
 
 Field::FieldTypeNames::FieldTypeNames()
  : QValueVector<QString>()
@@ -565,6 +581,7 @@ Field::FieldTypeGroupNames::FieldTypeGroupNames()
  : QValueVector<QString>()
 {
 	resize((Field::LastTypeGroup + 1)*2);
+
 	ADDGROUP( InvalidGroup, I18N_NOOP("Invalid group"), "InvalidGroup" );
 	ADDGROUP( TextGroup, I18N_NOOP("Text"), "TextGroup" );
 	ADDGROUP( IntegerGroup, I18N_NOOP("Integer number"), "IntegerGroup" );
