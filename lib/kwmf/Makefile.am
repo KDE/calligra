@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(all_includes)
+INCLUDES= $(KOFFICECORE_INCLUDES) -I$(srcdir) $(all_includes)
 libkwmf_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 # We use kdecore for kdDebug :)
 libkwmf_la_LIBADD = $(LIB_KDECORE)

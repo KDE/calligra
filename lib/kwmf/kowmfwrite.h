@@ -30,7 +30,7 @@
 #include <qimage.h>
 #include <qptrlist.h>
 #include <qpointarray.h>
-
+#include <koffice_export.h>
 class KoWmfWritePrivate;
 
 /**
@@ -46,7 +46,7 @@ class KoWmfWritePrivate;
  *   wmf.end();
  *   </pre>
  */
-class KoWmfWrite
+class KOWMF_EXPORT KoWmfWrite
 {
 public:
     KoWmfWrite( const QString& fileName );
