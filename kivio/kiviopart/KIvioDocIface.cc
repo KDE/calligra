@@ -23,6 +23,8 @@
 #include "kivio_map.h"
 #include <dcopclient.h>
 #include <kapplication.h>
+#include "kivio_grid_data.h"
+
 KIvioDocIface::KIvioDocIface( KivioDoc *doc_ )
     : KoDocumentIface( doc_ )
 {
@@ -48,4 +50,17 @@ void KIvioDocIface::initConfig()
 void KIvioDocIface::saveConfig()
 {
     doc->saveConfig();
+}
+
+void KIvioDocIface::setShowGrid( bool b )
+{
+    KivioGridData d = doc->grid();
+    d.isShow = b;
+    doc->setGrid(d);
+}
+
+bool KIvioDocIface::showGrid() const
+{
+    KivioGridData d = doc->grid();
+    return d.isShow;
 }
