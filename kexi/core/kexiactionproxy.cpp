@@ -40,40 +40,16 @@ KexiActionProxy::~KexiActionProxy()
 	delete m_signal_parent; //this will delete all signals
 }
 
-/*
-typedef QPair<QObject*,const char *> ObjectActionPairBase;
-class ObjectActionPair : public ObjectActionPairBase
-{
-	public:
-		ObjectActionPair(QObject *o, const char *action_name) : ObjectActionPairBase(o, action_name)
-		{}
-		ObjectActionPair(const ObjectActionPair &oa) : ObjectActionPairBase(oa.first(), oa.second())
-		{}
-		ObjectActionPair() : ObjectActionPairBase(0, 0);
-		ObjectActionPair& operator=(const ObjectActionPair& oa) {
-
-		}
-		{}
-}*/
-
-/*
-void KexiMainWindow::plugAction(KexiActionProxy *proxy, const char *action_name)
-{
-	QPair<QObject*,const char *> p(proxy->receiver(), action_name)
-	QMap< QPair<QObject*,const char*>, KexiActionProxy*>
-	m[p]=receiver;
-}*/
-
-void KexiActionProxy::plugAction(const char *action_name, QObject* receiver, const char *slot)
+void KexiActionProxy::plugSharedAction(const char *action_name, QObject* receiver, const char *slot)
 {
 	QPair<QSignal*,bool> *p = new QPair<QSignal*,bool>( new QSignal(m_signal_parent), true );
 	p->first->connect( receiver, slot );
 	m_signals.insert(action_name, p);
 }
 
-void KexiActionProxy::plugAction(const char *action_name, QWidget* w)
+void KexiActionProxy::plugSharedAction(const char *action_name, QWidget* w)
 {
-	KAction *a = action(action_name);
+	KAction *a = sharedAction(action_name);
 	if (!a) {
 		kdWarning() << "KexiActionProxy::plugAction(): NO SUCH ACTION: " << action_name << endl;
 		return;
@@ -81,7 +57,7 @@ void KexiActionProxy::plugAction(const char *action_name, QWidget* w)
 	a->plug(w);
 }
 
-void KexiActionProxy::activateAction(const char *action_name)
+void KexiActionProxy::activateSharedAction(const char *action_name)
 {
 	QPair<QSignal*,bool> *p = m_signals[action_name];
 	if (!p || !p->second)
@@ -89,7 +65,7 @@ void KexiActionProxy::activateAction(const char *action_name)
 	p->first->activate();
 }
 
-KAction* KexiActionProxy::action(const char* name)
+KAction* KexiActionProxy::sharedAction(const char* name)
 {
 	return m_main->actionCollection()->action(name);
 }

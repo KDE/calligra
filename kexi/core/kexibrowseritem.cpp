@@ -31,7 +31,7 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiPart::Info *i)
 	m_info = i;
 	setPixmap(0, SmallIcon(i->groupIcon()));
 	setOpen(true);
-	setSelectable(false);
+//ugly	setSelectable(false);
 	initItem();
 	m_fifoSorting = 1; //because this is top level item
 }

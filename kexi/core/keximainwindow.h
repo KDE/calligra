@@ -104,9 +104,16 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		 */
 		void		storeSettings();
 		
-		/*! Creates shared action. */
+		/*! Creates shared action. Action's data is owned by the main window. */
 		KAction* createSharedAction(const QString &text, const QString &pix_name,
 			const KShortcut &cut, const char *name);
+
+		/*! Like above - creates shared action, but from standard action identified by \a id. 
+		 Action's data is owned by the main window. */
+		KAction* createSharedAction( KStdAction::StdAction id, const char *name);
+
+		/*! Helper function for createSharedAction(). */
+		KAction* createSharedActionInternal( KAction *action );
 
 		/** Invalidates availability of all actions for current application state.
 		*/
@@ -213,10 +220,6 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		void slotProjectProperties();
 		void slotProjectClose();
 		void slotQuit();
-
-		void slotEditCut();
-		void slotEditCopy();
-		void slotEditPaste();
 
 		void slotImportFile();
 

@@ -29,23 +29,31 @@ class KexiMainWindow;
 class QSignal;
 class KAction;
 
+//! Acts as proxy for shared actions within the application.
+/*!
+ For example, edit->copy action can be reused to copy different types of items.
+ Availability and meaning of given action depends on the context, while
+ the context changes e.g. when another window is activated.
+ This class is mostly used by subclassing in KExiDialogBase or KexiDockBase
+ - you can subclass in a similar way.
+*/
 class KEXICORE_EXPORT KexiActionProxy
 {
 	public:
 		KexiActionProxy(KexiMainWindow *main, QObject *receiver);
 		~KexiActionProxy();
 
-		void activateAction(const char *action_name);
+		void activateSharedAction(const char *action_name);
 
 	protected:
-		/*! Plugs action named \a action_name to slot \a slot in \a receiver.
+		/*! Plugs shared action named \a action_name to slot \a slot in \a receiver.
 		 \a Receiver is usually a child of _this_ widget. */
-		void plugAction(const char *action_name, QObject* receiver, const char *slot);
+		void plugSharedAction(const char *action_name, QObject* receiver, const char *slot);
 
 		/*! Typical version of plugAction() method -- plugs action named \a action_name
 		 to slot \a slot in _this_ widget. */
-		inline void plugAction(const char *action_name, const char *slot) {
-			plugAction(action_name, m_receiver, slot);
+		inline void plugSharedAction(const char *action_name, const char *slot) {
+			plugSharedAction(action_name, m_receiver, slot);
 		}
 
 		/*! Plugs action named \a action_name to a widget \a w, so the action is visible on this widget 
@@ -53,10 +61,10 @@ class KEXICORE_EXPORT KexiActionProxy
 		 Does nothing if no action found, so generally this is safer than just caling e.g.
 		 <code> action("myaction")->plug(myPopup); </code> 
 		 \sa action(), KAction::plug(QWidget*, int) */
-		void plugAction(const char *action_name, QWidget* w);
+		void plugSharedAction(const char *action_name, QWidget* w);
 
 		/*! \return action named with \a name or NULL if there is no such action. */
-		KAction* action(const char* name);
+		KAction* sharedAction(const char* name);
 
 		inline QObject *receiver() const { return m_receiver; }
 

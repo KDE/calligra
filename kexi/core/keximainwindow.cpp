@@ -240,9 +240,12 @@ KexiMainWindow::initActions()
 	KStdAction::quit( this, SLOT(slotQuit()), actionCollection(), "quit");
 
 	//EDIT MENU
-	d->action_edit_cut = KStdAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
-	d->action_edit_copy = KStdAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
-	d->action_edit_paste = KStdAction::paste( this, SLOT( slotEditPaste() ), actionCollection(), "edit_paste" );
+	d->action_edit_cut = createSharedAction( KStdAction::Cut, "edit_cut");
+	d->action_edit_copy = createSharedAction( KStdAction::Copy, "edit_copy");
+	d->action_edit_paste = createSharedAction( KStdAction::Paste, "edit_paste");
+//	d->action_edit_cut = KStdAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
+//	d->action_edit_copy = KStdAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
+//	d->action_edit_paste = KStdAction::paste( this, SLOT( slotEditPaste() ), actionCollection(), "edit_paste" );
 
 	d->action_edit_delete = createSharedAction(i18n("&Delete"), "button_cancel", Key_Delete, "edit_delete");
 	d->action_edit_delete_row = createSharedAction(i18n("Delete Row"), 0/*SmallIcon("button_cancel")*/, 
@@ -282,15 +285,33 @@ KexiMainWindow::initActions()
 	invalidateActions();
 }
 
+KAction* KexiMainWindow::createSharedActionInternal( KAction *action )
+{
+	connect(action,SIGNAL(activated()), d->actionMapper, SLOT(map()));
+	d->actionMapper->setMapping(action, action->name());
+	d->sharedActions.append( action );
+	return action;
+}
+
 KAction* KexiMainWindow::createSharedAction(const QString &text, const QString &pix_name, 
 	const KShortcut &cut, const char *name)
 {
-	KAction *a = new KAction(text, (pix_name.isEmpty() ? QIconSet() : SmallIconSet(pix_name)), cut, 0/*receiver*/, 0/*slot*/, 
-		actionCollection(), name);
+	return createSharedActionInternal( 
+		new KAction(text, (pix_name.isEmpty() ? QIconSet() : SmallIconSet(pix_name)),
+		cut, 0/*receiver*/, 0/*slot*/, actionCollection(), name)
+	);
+/*
 	connect(a,SIGNAL(activated()), d->actionMapper, SLOT(map()));
 	d->actionMapper->setMapping(a, name);
 	d->sharedActions.append( a );
-	return a;
+	return a;*/
+}
+
+KAction* KexiMainWindow::createSharedAction( KStdAction::StdAction id, const char *name)
+{
+	return createSharedActionInternal( 
+		KStdAction::create( id, name, 0/*receiver*/, 0/*slot*/, actionCollection() )
+	);
 }
 
 void KexiMainWindow::invalidateActions()
@@ -1036,18 +1057,6 @@ KexiMainWindow::slotProjectClose()
 {
 }
 
-void KexiMainWindow::slotEditCut()
-{
-}
-
-void KexiMainWindow::slotEditCopy()
-{
-}
-
-void KexiMainWindow::slotEditPaste()
-{
-}
-
 void KexiMainWindow::slotAction(const QString& act_id)
 {
 	QWidget *w = focusWindow(); //focusWidget();
@@ -1060,7 +1069,7 @@ void KexiMainWindow::slotAction(const QString& act_id)
 	KexiActionProxy * proxy = d->actionProxies[ w ];
 	if (!proxy)
 		return;
-	proxy->activateAction(act_id.latin1());
+	proxy->activateSharedAction(act_id.latin1());
 }
 
 void KexiMainWindow::slotImportFile() {
@@ -1316,9 +1325,16 @@ bool KexiMainWindow::removeObject( KexiPart::Item *item )
 {
 	if (!item)
 		return false;
-	
-//	if (KMessageBox::questionYesNo(this, i18n("Do you want to delete selected row?"), 0, 
-//			KStdGuiItem::yes(), KStdGuiItem::no(), "askBeforeDeleteRow"/*config entry*/)==KMessageBox::No)
+
+	KexiPart::Part *part = Kexi::partManager().part(item->mime());
+	QString typeName;
+	if (part)
+		typeName = part->instanceName();
+
+	if (KMessageBox::questionYesNo(this, "<b>"+i18n("Do you want to remove:")
+		+"<p>"+typeName+" \""+ item->name() + "\"?</b>",
+		0, KStdGuiItem::yes(), KStdGuiItem::no(), "askBeforeDeletePartItem"/*config entry*/)==KMessageBox::No)
+		return false;
 
 	return true;
 }

@@ -78,15 +78,15 @@ KexiDataTable::initActions()
 	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), actionCollection(), "tablepart_filter");
 	setXMLFile("kexidatatableui.rc");
 */
-	plugAction("edit_delete_row", m_view, SLOT(deleteCurrentRow()));
-	plugAction("edit_delete_row", m_view->popup());
-	m_view->plugSharedAction(action("edit_delete_row")); //for proper shortcut
+	plugSharedAction("edit_delete_row", m_view, SLOT(deleteCurrentRow()));
+	plugSharedAction("edit_delete_row", m_view->popup());
+	m_view->plugSharedAction(sharedAction("edit_delete_row")); //for proper shortcut
 
-	plugAction("edit_delete",m_view, SLOT(deleteAndStartEditCurrentCell()));
-	m_view->plugSharedAction(action("edit_delete")); //for proper shortcut
+	plugSharedAction("edit_delete",m_view, SLOT(deleteAndStartEditCurrentCell()));
+	m_view->plugSharedAction(sharedAction("edit_delete")); //for proper shortcut
 
-	plugAction("data_save_row",m_view, SLOT(acceptRowEdit()));
-	m_view->plugSharedAction(action("data_save_row")); //for proper shortcut
+	plugSharedAction("data_save_row",m_view, SLOT(acceptRowEdit()));
+	m_view->plugSharedAction(sharedAction("data_save_row")); //for proper shortcut
 }
 
 void

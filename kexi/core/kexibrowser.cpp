@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <klistview.h>
+#include <kmessagebox.h>
 
 #include "kexi.h"
 #include "kexipart.h"
@@ -36,6 +37,7 @@
 #include "kexiproject.h"
 #include "kexidialogbase.h"
 #include "keximainwindow.h"
+#include "kexi_utils.h"
 
 
 //KexiBrowser::KexiBrowser(KexiMainWindow *parent, QString mime, KexiPart::Info *part )
@@ -49,7 +51,11 @@ KexiBrowser::KexiBrowser(KexiMainWindow *parent )
 //	m_list->installEventFilter(this);
 //	m_ac = m_parent->actionCollection();
 //	KexiActionProxy ap;
-	plugAction("edit_delete",SLOT(slotRemove()));
+	//shared actions
+	plugSharedAction("edit_delete",SLOT(slotRemove()));
+	plugSharedAction("edit_cut",SLOT(slotCut()));
+	plugSharedAction("edit_copy",SLOT(slotCopy()));
+	plugSharedAction("edit_paste",SLOT(slotPaste()));
 
 	setCaption(i18n("Navigator"));
 	setIcon(*parent->icon());
@@ -68,7 +74,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *parent )
 //js todo: ADD OPTION for enable this:
 //connect(this, SIGNAL(doubleClicked(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
 	connect(m_list, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotSelectionChanged(QListViewItem*)));
-	connect(m_list, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotClicked(QListViewItem*)));
+//	connect(m_list, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotClicked(QListViewItem*)));
 	connect(m_list, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
 
 	//init popups
@@ -79,11 +85,16 @@ KexiBrowser::KexiBrowser(KexiMainWindow *parent )
 	a = new KAction(i18n("&Design"), SmallIcon("edit"), CTRL + Key_Enter, this, 
 		SLOT(slotDesignObject()), this, "design_object");
 	a->plug(m_itemPopup);
-	plugAction("edit_delete", m_itemPopup);
+	plugSharedAction("edit_delete", m_itemPopup);
+	m_itemPopup->insertSeparator();
+	plugSharedAction("edit_cut", m_itemPopup);
+	plugSharedAction("edit_copy", m_itemPopup);
 
 	m_partPopup = new KPopupMenu(this, "partPopup");
 	m_newObjectAction = new KAction("", 0, this, SLOT(slotNewObject()), this, "new_object");
 	m_newObjectAction->plug(m_partPopup);
+	m_partPopup->insertSeparator();
+	plugSharedAction("edit_paste", m_partPopup);
 }
 
 void
@@ -139,6 +150,8 @@ KexiBrowser::slotContextMenu(KListView *list, QListViewItem *item, const QPoint 
 		else
 			m_newObjectAction->setText(i18n("&Create Object..."));
 		m_newObjectAction->setIconSet( SmallIconSet(bit->info()->itemIcon()) );
+		m_list->setCurrentItem(item);
+		m_list->repaintItem(item);
 	}
 	pm->exec(pos);
 }
@@ -187,14 +200,23 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(i);
 	bool gotitem = it && it->item();
 	setAvailable("edit_delete",gotitem);
+	setAvailable("edit_cut",gotitem);
+	setAvailable("edit_copy",gotitem);
+	setAvailable("edit_paste",!gotitem);
 }
 
-void
+/*void
 KexiBrowser::slotClicked(QListViewItem* i)
 {
 	//workaround for non-selectable item
-	if (!i || !static_cast<KexiBrowserItem*>(i)->item())
-		slotSelectionChanged(i);
+	//if (!i || !static_cast<KexiBrowserItem*>(i)->item())
+		//slotSelectionChanged(i);
+}*/
+
+void KexiBrowser::installEventFilter ( const QObject * filterObj )
+{
+	m_list->installEventFilter ( filterObj );
+	KexiDockBase::installEventFilter ( filterObj );
 }
 
 void KexiBrowser::slotRemove()
@@ -235,11 +257,24 @@ void KexiBrowser::slotDesignObject()
 	emit openItem( it->item(), true/*designMode*/ );
 }
 
-void KexiBrowser::installEventFilter ( const QObject * filterObj )
+void KexiBrowser::slotCut()
 {
-	m_list->installEventFilter ( filterObj );
-	KexiDockBase::installEventFilter ( filterObj );
+	KEXI_UNFINISHED_SHARED_ACTION("edit_cut");
+	//TODO
 }
+
+void KexiBrowser::slotCopy()
+{
+	KEXI_UNFINISHED_SHARED_ACTION("edit_copy");
+	//TODO
+}
+
+void KexiBrowser::slotPaste()
+{
+	KEXI_UNFINISHED_SHARED_ACTION("edit_paste");
+	//TODO
+}
+
 
 #include "kexibrowser.moc"
 

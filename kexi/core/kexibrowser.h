@@ -74,13 +74,16 @@ class KEXICORE_EXPORT KexiBrowser : public KexiDockBase
 //		void		slotItemListChanged(KexiPart::Info *);
 		void		slotExecuteItem(QListViewItem *item);
 		void slotSelectionChanged(QListViewItem* i);
-		void slotClicked(QListViewItem* i);
+//		void slotClicked(QListViewItem* i);
 
 		void slotNewObject();
 		void slotOpenObject();
 		void slotDesignObject();
 		//! remove current item
 		void slotRemove();
+		void slotCut();
+		void slotCopy();
+		void slotPaste();
 
 	private:
 //		KexiView	*m_view;

@@ -212,6 +212,12 @@ TODO: on Connection::updateRow(): pass field's name together with error message
 
 TODO: win32: Fix saving config files via KConfig (now are ugly overwritten)
 
+2004-01-04
+- KexiActionProxy: "action" term in methods substituted by more readable: "sharedAction"
+- some actions (in browser) marked as KEXI_UNFINISHED
+- KexiMainWindow: KStdActions are now also acceptable as shared actions
+- copy/cut/paste actions are shared now; added to edit menu
+
 2004-01-03
 - KexiDB, core:
 	-ConnectionData and KexiProjectData now inherit QObject 
