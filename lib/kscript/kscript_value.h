@@ -149,7 +149,7 @@ public:
                                          return !stringValue().isEmpty(); }
     KScript::Double doubleValue() const { ASSERT( typ == DoubleType || typ == IntType ); if ( typ == DoubleType ) return val.d;
                                           return (double)val.i; }
-    const KScript::Char charValue() const { if ( typ == CharRefType ) return *((KScript::CharRef*)val.ptr);
+    KScript::Char charValue() const { if ( typ == CharRefType ) return *((KScript::CharRef*)val.ptr);
                                             ASSERT( typ == CharType ); return QChar( val.c ); }
     KScript::CharRef& charRefValue() { ASSERT( typ == CharRefType ); return *((KScript::CharRef*)val.ptr); }
     const KScript::CharRef& charRefValue() const { ASSERT( typ == CharRefType ); return *((KScript::CharRef*)val.ptr); }
