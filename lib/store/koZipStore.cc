@@ -20,6 +20,7 @@
 #include "koZipStore.h"
 #include <kzip.h>
 #include <kdebug.h>
+#include <kdeversion.h>
 #include <qbuffer.h>
 
 KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QCString & appIdentification )
