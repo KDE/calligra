@@ -1639,7 +1639,7 @@ void KWFrameSet::resizeFrameSetCoords( KWFrame* frame, double newLeft, double ne
     resizeFrame( frame, newRight - newLeft, newBottom - newTop, finalSize );
 }
 
-void KWFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize )
+void KWFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool /*finalSize*/ )
 {
     frame->setWidth( newWidth );
     frame->setHeight( newHeight );

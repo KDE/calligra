@@ -3792,7 +3792,7 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
     doc->getVariableCollection()->setVariableSelected(variable());
     if ( variable() )
     {
-        variableList = doc->getVariableCollection()->variableActionList();
+        variableList = variable()->actionList();
     }
 
     if( variableList.count()>0)

@@ -135,11 +135,6 @@ KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVaria
     }
 }
 
-QPtrList<KAction> KWVariableCollection::variableActionList()
-{
-    return selectedVariable()->actionList();
-}
-
 /******************************************************************/
 /* Class: KWPgNumVariable                                         */
 /******************************************************************/
