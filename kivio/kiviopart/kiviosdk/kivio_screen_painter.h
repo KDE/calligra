@@ -32,6 +32,8 @@ class KivioScreenPainter : public KivioPainter
 {
 protected:
     QPainter *m_pPainter;
+    float m_transX, m_transY;
+    float m_rotation;
 
 public:
     KivioScreenPainter();
@@ -89,6 +91,13 @@ public:
     void drawPixmap( float, float, const QPixmap & );    
 
     void drawHandle( float, float, int );
+
+    virtual void saveState();
+    virtual void restoreState();
+    virtual void setTranslation(float, float);
+    virtual void translateBy(float, float);
+    virtual void setRotation(float);
+    virtual void rotateBy(float);
 };
 
 #endif

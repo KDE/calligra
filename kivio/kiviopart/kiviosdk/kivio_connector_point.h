@@ -67,6 +67,8 @@ public:
     void setPosition( float, float, bool updateStencil=true );
     void setConnectable( bool b ) { m_connectable = b; if( b==false ) { disconnect(); } }
 
+    void moveBy( float _x, float _y, bool updateStencil=true );
+
     bool connectable() { return m_connectable; }
 
     void disconnect(bool removeFromTargetList=true);

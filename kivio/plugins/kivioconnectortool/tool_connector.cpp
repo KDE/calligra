@@ -152,22 +152,25 @@ bool ConnectorTool::startRubberBanding( QMouseEvent *e )
 
     startPoint = m_pCanvas->snapToGrid(m_pCanvas->mapFromScreen( e->pos() ));
 
+    // Create the stencil
     m_pStencil = (KivioStraightConnector*)ss->newStencil();
+
+    // Unselect everything, add the stencil to the page, and select it
+    pPage->unselectAllStencils();
+    pPage->addStencil(m_pStencil);
+    pPage->selectStencil(m_pStencil);
+
+    // Get drag info ready
     m_pDragData = new KivioCustomDragData();
     m_pDragData->page = pPage;
     m_pDragData->x = startPoint.x;
     m_pDragData->y = startPoint.y;
-    m_pDragData->id = kctCustom + 1;
+    m_pDragData->id = kctCustom + 2;
 
     m_pStencil->setStartPoint(startPoint.x+10.0f,startPoint.y+10.0f);
     m_pStencil->setEndPoint(startPoint.x,startPoint.y);
     m_pStencil->customDrag(m_pDragData);
 
-    pPage->unselectAllStencils();
-    pPage->addStencil(m_pStencil);
-    pPage->selectStencil(m_pStencil);
-
-    m_pStencil->searchForConnections(m_pCanvas->activePage());
 
     m_pCanvas->repaint();
     m_pCanvas->setCursor(*m_pConnectorCursor2);

@@ -149,6 +149,8 @@ public:
   void alignStencils( AlignData );
   void distributeStencils( DistributeData );
 
+  KivioConnectorTarget *connectPointToTarget( KivioConnectorPoint *, float );
+
 public slots:
   void deleteSelectedStencils();
   void groupSelectedStencils();

@@ -52,6 +52,7 @@
 #include "kivio_config.h"
 
 #include "kivio_common.h"
+#include "kivio_connector_point.h"
 #include "kivio_group_stencil.h"
 #include "kivio_layer.h"
 #include "kivio_painter.h"
@@ -1468,4 +1469,46 @@ void KivioPage::setPaperLayout(TKPageLayout l)
   doc()->updateView(this);
 }
 
+KivioConnectorTarget *KivioPage::connectPointToTarget( KivioConnectorPoint *p, float thresh)
+{
+   float oldX, oldY;
+   KivioLayer *pLayer, *pCurLayer;
+   bool doneSearching = false;
+   KivioConnectorTarget *pTarget;
+
+   if( !p )
+      return NULL;
+
+   if( p->connectable()==false )
+      return NULL;
+
+   oldX = p->x();
+   oldY = p->y();
+
+   pCurLayer = curLayer();
+   pLayer = firstLayer();
+
+   while( pLayer && doneSearching==false )
+   {
+      if( pLayer != pCurLayer )
+      {
+	 if( pLayer->connectable()==false || pLayer->visible()==false )
+	 {
+	    pLayer = nextLayer();
+	    continue;
+	 }
+      }
+
+      if( (pTarget=pLayer->connectPointToTarget(p, 8.0f )) )
+      {
+	 return pTarget;
+      }
+
+      pLayer = nextLayer();
+   }
+
+   return NULL;
+}
+
 #include "kivio_page.moc"
+

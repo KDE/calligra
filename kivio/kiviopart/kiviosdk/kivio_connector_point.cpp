@@ -204,3 +204,12 @@ QDomElement KivioConnectorPoint::saveXML( QDomDocument &doc )
 
     return e;
 }
+
+void KivioConnectorPoint::moveBy( float _x, float _y, bool updateStencil=true )
+{
+   m_x += _x;
+   m_y += _y;
+
+    if( updateStencil && m_pStencil )
+        m_pStencil->updateConnectorPoints(this, _x, _y);
+}

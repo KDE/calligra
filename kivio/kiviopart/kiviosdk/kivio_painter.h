@@ -135,6 +135,13 @@ public:
        cpfLock=0x10
     };
     virtual void drawHandle( float, float, int ) { ; }
+
+    virtual void saveState() {;}
+    virtual void restoreState() {;}
+    virtual void setTranslation(float, float) {;}
+    virtual void translateBy(float, float) {;}
+    virtual void setRotation(float) {;}
+    virtual void rotateBy(float) {;}
 };
 
 #endif

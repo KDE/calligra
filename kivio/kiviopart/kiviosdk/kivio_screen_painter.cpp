@@ -32,7 +32,9 @@
 KivioScreenPainter::KivioScreenPainter()
     : m_pPainter(NULL)
 {
-    
+   m_transX = 0.0f;
+   m_transY = 0.0f;
+   m_rotation = 0.0f;
 }
 
 KivioScreenPainter::~KivioScreenPainter()
@@ -973,4 +975,56 @@ void KivioScreenPainter::drawHandle( float x, float y, int flags )
 
       m_pPainter->fillRect(x-1,y-1,3,3, b);
    }
+}
+
+void KivioScreenPainter::saveState()
+{
+   PAINTER_CHECK();
+
+   m_pPainter->save();
+}
+
+void KivioScreenPainter::restoreState()
+{
+   PAINTER_CHECK();
+
+   m_pPainter->restore();
+}
+
+void KivioScreenPainter::setTranslation( float _x, float _y )
+{
+   PAINTER_CHECK();
+
+   m_transX = _x;
+   m_transY = _y;
+
+   m_pPainter->translate(_x, _y);
+}
+
+void KivioScreenPainter::translateBy( float _x, float _y )
+{
+   PAINTER_CHECK();
+
+   m_transX += _x;
+   m_transY += _y;
+
+   m_pPainter->translate( m_transX, m_transY );
+}
+
+void KivioScreenPainter::setRotation( float _d )
+{
+   PAINTER_CHECK();
+
+   m_rotation = _d;
+
+   m_pPainter->rotate(_d);
+}
+
+void KivioScreenPainter::rotateBy( float _d )
+{
+   PAINTER_CHECK();
+
+   m_rotation += _d;
+
+   m_pPainter->rotate(m_rotation);
 }

@@ -869,8 +869,6 @@ void Kivio1DStencil::drawText( KivioIntraStencilData *pData )
    _h = 10000000.0f;
 
    QFont f = m_pTextStyle->font();
-   kdDebug() << "Pre: " << _x << " " << _y << "\n";
-   kdDebug()  << "Point: " << (f.pointSize()*scale) << "\n";
 
    f.setPointSize( f.pointSize() * scale);
    painter->setFont(f);
@@ -881,9 +879,6 @@ void Kivio1DStencil::drawText( KivioIntraStencilData *pData )
 
    boundRect = painter->boundingRect( (int)_x, (int)_y, (int)_w, (int)_h, tf, m_pTextStyle->text() );
 
-   kdDebug() << "Drawing text " << boundRect.width() << " " << boundRect.height()  << " scale: " << scale << " " << m_pTextStyle->text() << "\n";
-
    painter->drawText( _x, _y, boundRect.width(), boundRect.height(), tf, m_pTextStyle->text() );
-//   painter->drawText( boundRect, tf, m_pTextStyle->text() );
 }
 

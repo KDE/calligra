@@ -295,10 +295,14 @@ void KivioSMLStencil::paintOutline( KivioIntraStencilData *pData )
 {
     KivioShape *pShape;
     KivioShapeData *pShapeData;
+    KivioPainter *painter = pData->painter;
+
 
     _scale = pData->scale;
     _xoff = m_x * _scale;
     _yoff = m_y * _scale;
+
+
 
     pShape = m_pShapeList->first();
     while( pShape )

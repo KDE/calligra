@@ -87,7 +87,7 @@ KAboutData* KivioFactory::aboutData()
     s_aboutData = new KAboutData( "kivio", I18N_NOOP("Kivio"),
                                   version, description, KAboutData::License_GPL,
                                   "theKompany.com - Kivio",0,"www.thekompany.com");
-    s_aboutData->addAuthor("Dave Marotti","Main author and the original author of Queesio, from which this source is based","landshark@ameritech.net");
+    s_aboutData->addAuthor("Dave Marotti","Main author and the original author of Queesio, from which this source is based","lndshark@speakeasy.net");
     s_aboutData->addAuthor("Max Judin","GUI widgets","max@thekompany.com");
   }
   return s_aboutData;
