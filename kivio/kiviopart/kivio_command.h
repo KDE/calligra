@@ -324,5 +324,26 @@ protected:
     bool beginArrow;
 };
 
+class KivioChangeBeginEndSizeArrowCommand : public KNamedCommand
+{
+public:
+    KivioChangeBeginEndSizeArrowCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, float _oldH,float _oldW, float _newH,float _newW, bool _beginArrow);
+
+    ~KivioChangeBeginEndSizeArrowCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioPage *m_page;
+    KivioStencil *m_stencil;
+    float oldWidth;
+    float oldLength;
+    float newWidth;
+    float newLength;
+
+    bool beginArrow;
+};
+
 #endif
 

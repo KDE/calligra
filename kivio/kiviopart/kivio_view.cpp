@@ -1295,12 +1295,25 @@ void KivioView::slotSetStartArrowSize()
 
     float w,h;
     m_setStartArrowSize->size(w,h);
+    KMacroCommand *macro = new KMacroCommand( i18n("Change Size of Begin Arrow"));
+    bool createMacro = false;
     while( pStencil )
     {
-        pStencil->setStartAHWidth(w);
-        pStencil->setStartAHLength(h);
+        if (pStencil->startAHLength() != h || pStencil->startAHWidth()!=w)
+        {
+            KivioChangeBeginEndSizeArrowCommand * cmd = new KivioChangeBeginEndSizeArrowCommand( i18n("Change Size of End Arrow"), m_pActivePage, pStencil, pStencil->startAHLength(),pStencil->startAHWidth(), h,w, true);
+
+            pStencil->setStartAHWidth(w);
+            pStencil->setStartAHLength(h);
+            macro->addCommand( cmd );
+            createMacro= true;
+        }
         pStencil = m_pActivePage->selectedStencils()->next();
     }
+    if (createMacro )
+        m_pDoc->addCommand( macro );
+    else
+        delete macro;
     m_pDoc->updateView(m_pActivePage);
 }
 
@@ -1312,12 +1325,24 @@ void KivioView::slotSetEndArrowSize()
 
     float w,h;
     m_setEndArrowSize->size(w,h);
+    KMacroCommand *macro = new KMacroCommand( i18n("Change Size of End Arrow"));
+    bool createMacro = false;
     while( pStencil )
     {
-        pStencil->setEndAHWidth(w);
-        pStencil->setEndAHLength(h);
+        if ( pStencil->endAHLength() != h || pStencil->endAHWidth()!=w)
+        {
+            KivioChangeBeginEndSizeArrowCommand * cmd = new KivioChangeBeginEndSizeArrowCommand( i18n("Change Size of End Arrow"), m_pActivePage, pStencil, pStencil->endAHLength(),pStencil->endAHWidth(), h,w, false);
+            pStencil->setEndAHWidth(w);
+            pStencil->setEndAHLength(h);
+            macro->addCommand( cmd );
+            createMacro= true;
+        }
         pStencil = m_pActivePage->selectedStencils()->next();
     }
+    if ( createMacro )
+        m_pDoc->addCommand( macro );
+    else
+        delete macro;
     m_pDoc->updateView(m_pActivePage);
 }
 
@@ -1327,15 +1352,24 @@ void KivioView::setHParaAlign( int i )
     if (!pStencil)
       return;
     KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Horizontal Alignment"));
+    bool createMacro = false;
     while( pStencil )
     {
-        KivioChangeStencilHAlignmentCommand * cmd = new KivioChangeStencilHAlignmentCommand( i18n("Change Stencil Horizontal Alignment"), m_pActivePage, pStencil, pStencil->hTextAlign(), i);
+        if ( pStencil->hTextAlign() != i)
+        {
+            KivioChangeStencilHAlignmentCommand * cmd = new KivioChangeStencilHAlignmentCommand( i18n("Change Stencil Horizontal Alignment"), m_pActivePage, pStencil, pStencil->hTextAlign(), i);
 
-        pStencil->setHTextAlign(i);
+            pStencil->setHTextAlign(i);
+            macro->addCommand( cmd );
+            createMacro = true;
+        }
         pStencil = m_pActivePage->selectedStencils()->next();
-        macro->addCommand( cmd );
+
     }
-    m_pDoc->addCommand( macro );
+    if (createMacro )
+        m_pDoc->addCommand( macro );
+    else
+        delete macro;
     m_pDoc->updateView(m_pActivePage);
 }
 
@@ -1346,17 +1380,23 @@ void KivioView::setVParaAlign( int i )
     if (!pStencil)
       return;
     KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Vertical Alignment"));
-
+    bool createMacro = false;
     while( pStencil )
     {
-        KivioChangeStencilVAlignmentCommand * cmd = new KivioChangeStencilVAlignmentCommand( i18n("Change Stencil Vertical Alignment"), m_pActivePage, pStencil, pStencil->vTextAlign(), i);
-
-
-        pStencil->setVTextAlign( i );
+        if ( pStencil->vTextAlign() != i )
+        {
+            KivioChangeStencilVAlignmentCommand * cmd = new KivioChangeStencilVAlignmentCommand( i18n("Change Stencil Vertical Alignment"), m_pActivePage, pStencil, pStencil->vTextAlign(), i);
+            pStencil->setVTextAlign( i );
+            macro->addCommand( cmd );
+            createMacro = true;
+        }
         pStencil =  m_pActivePage->selectedStencils()->next();
-        macro->addCommand( cmd );
+
     }
-    m_pDoc->addCommand( macro );
+    if ( createMacro )
+        m_pDoc->addCommand( macro );
+    else
+        delete macro;
     m_pDoc->updateView(m_pActivePage);
 }
 

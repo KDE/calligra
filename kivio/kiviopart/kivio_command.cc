@@ -509,3 +509,52 @@ void KivioChangeBeginEndArrowCommand::unexecute()
     m_page->doc()->updateView(m_page);
     m_page->doc()->slotSelectionChanged();
 }
+
+
+KivioChangeBeginEndSizeArrowCommand::KivioChangeBeginEndSizeArrowCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, float _oldH,float _oldW, float _newH,float _newW, bool _beginArrow)
+    :KNamedCommand( _name),
+     m_page(_page),
+     m_stencil( _stencil ),
+     oldWidth( _oldW),
+     oldLength( _oldH),
+     newWidth( _newW),
+     newLength( _newH),
+     beginArrow(_beginArrow)
+{
+}
+
+KivioChangeBeginEndSizeArrowCommand::~KivioChangeBeginEndSizeArrowCommand()
+{
+}
+
+void KivioChangeBeginEndSizeArrowCommand::execute()
+{
+    if (beginArrow)
+    {
+        m_stencil->setStartAHWidth(newWidth);
+        m_stencil->setStartAHLength(newLength);
+    }
+    else
+    {
+        m_stencil->setEndAHWidth(newWidth);
+        m_stencil->setEndAHLength(newLength);
+    }
+    m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
+}
+
+void KivioChangeBeginEndSizeArrowCommand::unexecute()
+{
+    if (beginArrow)
+    {
+        m_stencil->setStartAHWidth(oldWidth);
+        m_stencil->setStartAHLength(oldLength);
+    }
+    else
+    {
+        m_stencil->setEndAHWidth(oldWidth);
+        m_stencil->setEndAHLength(oldLength);
+    }
+    m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
+}
