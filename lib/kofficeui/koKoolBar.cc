@@ -218,7 +218,7 @@ KoKoolBarBox::KoKoolBarBox( KoKoolBar *_bar ) :
   setFrameShape( StyledPanel );
   setFrameShadow( Sunken );
   // setBackgroundMode( PaletteBase );
-  setBackgroundColor( darkGray );
+  setBackgroundColor( colorGroup().background() );
 }
 
 void KoKoolBarBox::setActiveGroup( KoKoolBarGroup *_grp )
