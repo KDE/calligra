@@ -2850,7 +2850,7 @@ void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
 
         QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
-            sty->format() = KPTextObject::loadFormat( formatElem, 0L, defaultFont() );
+            sty->format() = KPTextObject::loadFormat( formatElem, 0L, defaultFont(), globalLanguage() );
         else
             kdWarning(33001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 

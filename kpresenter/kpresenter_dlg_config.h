@@ -112,7 +112,7 @@ private:
     int m_oldStartingPage;
     double m_oldTabStopWidth;
     bool m_oldBackupFile;
-
+    QString m_oldLanguage;
     KPresenterView* m_pView;
     KConfig* config;
     QFont *font;

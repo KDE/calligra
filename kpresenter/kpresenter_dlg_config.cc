@@ -614,6 +614,17 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     m_pView=_view;
     config = KPresenterFactory::global()->config();
     KPresenterDoc *doc = m_pView->kPresenterDoc();
+    oldAutoSaveValue =  doc->defaultAutoSave()/60;
+    m_oldBackupFile = true;
+    m_oldLanguage = doc->globalLanguage();
+    if( config->hasGroup("Interface") ) {
+        config->setGroup( "Interface" );
+        oldAutoSaveValue = config->readNumEntry( "AutoSave", oldAutoSaveValue );
+        m_oldBackupFile=config->readBoolEntry("BackupFile",m_oldBackupFile);
+        m_oldLanguage = config->readEntry( "language", m_oldLanguage );
+
+    }
+
     QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document Defaults"), box, "GroupBox" );
     gbDocumentDefaults->setMargin( 10 );
     gbDocumentDefaults->setInsideSpacing( 5 );
@@ -663,20 +674,6 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     QVGroupBox* gbDocumentSettings = new QVGroupBox( i18n("Document Settings"), box );
     gbDocumentSettings->setMargin( 10 );
     gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
-
-    oldAutoSaveValue =  doc->defaultAutoSave()/60;
-
-    if( config->hasGroup("Interface") ) {
-        config->setGroup( "Interface" );
-        oldAutoSaveValue = config->readNumEntry( "AutoSave", oldAutoSaveValue );
-    }
-
-    m_oldBackupFile = true;
-    if( config->hasGroup("Interface") )
-    {
-        config->setGroup( "Interface" );
-        m_oldBackupFile=config->readBoolEntry("BackupFile",m_oldBackupFile);
-    }
 
     m_createBackupFile = new QCheckBox( i18n("Create Backup File"), gbDocumentSettings);
     m_createBackupFile->setChecked( m_oldBackupFile );
@@ -756,7 +753,10 @@ KCommand *ConfigureDefaultDocPage::apply()
     //global language will change after re-launch kword
     QString lang = KoGlobal::tagOfLanguage( m_globalLanguage->currentText() );
     config->writeEntry( "language" , lang);
-    doc->setGlobalLanguage( lang );
+    m_oldLanguage = lang;
+    //don't call this fiunction otherwise we can have a textobject with
+    // a default language and other textobject with other default language.
+    //doc->setGlobalLanguage( lang );
 
 
     KMacroCommand *macro = 0L;

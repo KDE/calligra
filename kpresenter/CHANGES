@@ -140,3 +140,4 @@ Changes after KPresenter 1.2
 - Now we can change backup path
 - Now kotextformat support language
 - Use kocommandhistory
+- Add support for global language

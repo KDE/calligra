@@ -664,7 +664,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem )
                         lastParag->remove( 0, 1 ); // Remove current trailing space
                         firstTextTag = false;
                     }
-                    KoTextFormat fm = loadFormat( n, lastParag->paragraphFormat(), m_doc->defaultFont() );
+                    KoTextFormat fm = loadFormat( n, lastParag->paragraphFormat(), m_doc->defaultFont(), m_doc->globalLanguage() );
 
                     QString txt = n.firstChild().toText().data();
 
@@ -733,7 +733,7 @@ void KPTextObject::loadVariable( QValueList<QDomElement> & listVariable,KoTextPa
             if ( var )
             {
                 var->load( varElem );
-                KoTextFormat format = loadFormat( *it, lastParag->paragraphFormat(), m_doc->defaultFont() );
+                KoTextFormat format = loadFormat( *it, lastParag->paragraphFormat(), m_doc->defaultFont(), m_doc->globalLanguage() );
                 lastParag->setCustomItem( index, var, lastParag->document()->formatCollection()->format( &format ));
                 var->recalc();
             }
@@ -742,7 +742,7 @@ void KPTextObject::loadVariable( QValueList<QDomElement> & listVariable,KoTextPa
 
 }
 
-KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat, const QFont & defaultFont )
+KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat, const QFont & defaultFont, const QString & defaultLanguage )
 {
     KoTextFormat format;
     QFont fn;
@@ -849,6 +849,10 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
         format.setAttributeFont( KoTextFormat::stringToAttributeFont(n.attribute("fontattribute") )  );
     if ( n.hasAttribute("language"))
         format.setLanguage( n.attribute("language"));
+    else
+    {   // No reference format and no language tag -> use default font
+        format.setLanguage( defaultLanguage);
+    }
 
     //kdDebug(33001)<<"loadFormat :"<<format.key()<<endl;
     return format;
