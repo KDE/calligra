@@ -1,42 +1,49 @@
-# $Id$
+INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
+KDE_CXXFLAGS = $(USE_RTTI)
+kformula_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+kformula_LDADD = libkformula.la
 
-SUBDIRS = . pics
+libkformula_la_LDFLAGS = -module -avoid-version
 
-INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) 
-LDFLAGS	= $(all_libraries) $(KDE_RPATH)
-LDADD = ../lib/kofficeui/libkofficeui.la 
+libkformula_la_LIBADD = ../lib/kofficeui/libkofficeui.la
 
 ####### Files
 
 bin_PROGRAMS = kformula
+lib_LTLIBRARIES = libkformula.la
 
-kformula_SOURCES =  kformula_shell.cc  kformula_view.cc matrixwidget.cc \
-	kformula_main.cc kformula_doc.cc kformula.idl BasicElement.cc \
+libkformula_la_SOURCES = kformula_shell.cc kformula_doc.cc \
+	kformula_view.cc kformula_factory.cc BasicElement.cc \
 	RootElement.cc TextElement.cc BracketElement.cc FractionElement.cc\
-	MatrixElement.cc PrefixedElement.cc formula_container.cc
+	MatrixElement.cc PrefixedElement.cc formula_container.cc matrixwidget.cc
 
-noinst_HEADERS = kformula_main.h kformula_doc.h kformula_view.h formuladef.h \
-	kformula_shell.h BasicElement.h RootElement.h TextElement.h\
-	BracketElement.h FractionElement.h MatrixElement.h PrefixedElement.h \
-	matrixwidget.h formula_container.h
+kformula_SOURCES = main.cc
 
-METASOURCES = kformula_main.moc kformula_view.moc kformula_doc.moc \
-	kformula_shell.moc matrixwidget.moc formula_container.moc
+noinst_HEADERS =  kformula_global.h \
+		  kformula_shell.h kformula_doc.h \
+		  kformula_view.h kformula_factory.h  formuladef.h \
+	          BasicElement.h RootElement.h TextElement.h\
+		  BracketElement.h FractionElement.h MatrixElement.h PrefixedElement.h \
+		  matrixwidget.h formula_container.h
 
-idl_DATA = kformula.idl
-kformula.h : $(top_builddir)/lib/kofficecore/koffice.idl
 
-kde_icon_DATA = kformula.xpm
+libkformula_la_METASOURCES = kformula_shell.moc kformula_doc.moc kformula_view.moc kformula_factory.moc \
+			     matrixwidget.moc 
+#			     formula_container.moc
+
+rcdir = $(kde_datadir)/kformula
+rc_DATA = kformula.rc kformula_shell.rc
+
 
 kdelnk_DATA = kformula.desktop
 kdelnkdir = $(kde_appsdir)/Applications/KOffice
 
-####### Implicit rules
+kdemime_DATA = x-kformula.desktop
+kdemimedir = $(kde_mimedir)/application
 
-####### Build rules
-
-IDL_FLAGS = --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir)
+SUBDIRS =  pics 
 
 messages:
-	$(XGETTEXT) -kklocale *.cc -o $(podir)/kformula.pot
+#	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po $(podir)/kformula.pot
+
 

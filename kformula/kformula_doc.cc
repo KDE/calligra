@@ -1,7 +1,9 @@
-#include <qprinter.h>
 #include "kformula_doc.h"
+#include "kformula_view.h"
 #include "kformula_shell.h"
-
+#include "BasicElement.h"
+#include <qpainter.h>
+#include <qprinter.h>
 #include "formuladef.h"
 #include "BasicElement.h"
 #include "TextElement.h"
@@ -10,8 +12,6 @@
 #include "BracketElement.h"
 #include "MatrixElement.h"
 #include "PrefixedElement.h"
-
-#include <komlMime.h>
 
 #include <kurl.h>
 #include <kiconloader.h>
@@ -25,63 +25,31 @@
 
 #include <unistd.h>
 #include <klocale.h>
+#include <kstddirs.h>
+#include <kaboutdialog.h>
+#include "kformula_factory.h"
 
 //#define FIXEDSPACE 1             // Space between 2 blocks
-#define DEFAULT_FONT_SIZE 24
-
-KFormulaDoc::KFormulaDoc()
-{
-    //    setFocusPolicy( ClickFocus );
-    thePosition=0;
-    thePainter = new QPainter();
-    warning("General Settings");
-    theFont.setFamily( "utopia" );
-    theFont.setPointSize(DEFAULT_FONT_SIZE);  
-    theFont.setWeight( QFont::Normal );
-    theFont.setItalic( false );
-    theColor=black;
-    warning("General Font OK");
-    //    theActiveElement = 0;
-
-    // Use CORBA mechanism for deleting views
-    m_lstViews.setAutoDelete( false );
-
-    m_bModified = false;
-    m_bEmpty = true;
-
-    theFirstElement= new BasicElement(this,0L,-1,0L,"");
-    addElement(theFirstElement, 0);
-    addElement(theFirstElement, -1);
-    eList.at(0);
-    thePosition=0;
-
-    warning("SIZE OF:  basic:%i,text:%i,root:%i",sizeof(BasicElement),
-	    sizeof(TextElement),sizeof(RootElement));
-}
-
-CORBA::Boolean KFormulaDoc::initDoc()
-{
-    return true;
-}
+//#define DEFAULT_FONT_SIZE 24
 
 KFormulaDoc::~KFormulaDoc()
 {
-    cleanUp();
+//    cleanUp();
 }
 
 void KFormulaDoc::cleanUp()
 {
-    if ( m_bIsClean )
-	return;
+//    if ( m_bIsClean )
+//	return;
 
-    assert( m_lstViews.count() == 0 );
+//    assert( m_lstViews.count() == 0 );
 
-    KoDocument::cleanUp();
+//    KoDocument::cleanUp();
 }
 
 bool KFormulaDoc::save( ostream& out, const char* /* format */ )
 {
-#warning TODO if someone implements saving, do it right :)
+//#warning TODO if someone implements saving, do it right :)
 #if 0
     out << "<?xml version=\"1.0\"?>" << endl;
     out << otag << "<DOC author=\"" << "Andrea Rizzi" << "\" email=\""
@@ -99,7 +67,7 @@ bool KFormulaDoc::save( ostream& out, const char* /* format */ )
  
     return true;
 }
-
+/*
 KOffice::MainWindow_ptr KFormulaDoc::createMainWindow()
 {
     KFormulaShell* shell = new KFormulaShell;
@@ -108,12 +76,14 @@ KOffice::MainWindow_ptr KFormulaDoc::createMainWindow()
 
     return KOffice::MainWindow::_duplicate( shell->koInterface() );
 }
-
+*/
+/*
 int KFormulaDoc::viewCount()
 {
     return m_lstViews.count();
 }
-
+*/
+/*
 void KFormulaDoc::viewList( OpenParts::Document::ViewList*& _list )
 {
     (*_list).length( m_lstViews.count() );
@@ -125,33 +95,35 @@ void KFormulaDoc::viewList( OpenParts::Document::ViewList*& _list )
 	    (*_list)[i++] = OpenParts::View::_duplicate( it.current() );
 	}
 }
-
+*/
+/*
 void KFormulaDoc::addView( KFormulaView *_view )
 {
     m_lstViews.append( _view );
 }
-
+*/
+/*
 void KFormulaDoc::removeView( KFormulaView *_view )
 {
     m_lstViews.setAutoDelete( false );
     m_lstViews.removeRef( _view );
     m_lstViews.setAutoDelete( true );
 }
-
+*/
 KFormulaView* KFormulaDoc::createFormulaView( QWidget* _parent )
 {
-    KFormulaView *p = new KFormulaView( _parent, 0L, this );
+    KFormulaView *p = new KFormulaView( this, _parent, 0L);
     //p->QWidget::show();
-    m_lstViews.append( p );
+//    m_lstViews.append( p );
 
     return p;
 }
-
+/*
 OpenParts::View_ptr KFormulaDoc::createView()
 {
     return OpenParts::View::_duplicate( createFormulaView() );
 }
-
+*/
 void KFormulaDoc::emitModified()
 {
     m_bModified = true;
@@ -678,5 +650,94 @@ void KFormulaDoc::setActiveElement(BasicElement* c)
 
 
 
+
+
+
+KFormulaDoc::KFormulaDoc( KoDocument* parent, const char* name )
+    : KoDocument( parent, name ) 
+{
+
+    //    setFocusPolicy( ClickFocus );
+    thePosition=0;
+    thePainter = new QPainter();
+    warning("General Settings");
+    theFont.setFamily( "utopia" );
+    theFont.setPointSize(DEFAULT_FONT_SIZE);  
+    theFont.setWeight( QFont::Normal );
+    theFont.setItalic( false );
+    theColor=black;
+    warning("General Font OK");
+    //    theActiveElement = 0;
+
+    // Use CORBA mechanism for deleting views
+    m_lstViews.setAutoDelete( false );
+
+    m_bModified = false;
+    m_bEmpty = true;
+
+    theFirstElement= new BasicElement(this,0L,-1,0L,"");
+    addElement(theFirstElement, 0);
+    addElement(theFirstElement, -1);
+    eList.at(0);
+    thePosition=0;
+
+    warning("SIZE OF:  basic:%i,text:%i,root:%i",sizeof(BasicElement),
+	    sizeof(TextElement),sizeof(RootElement));
+
+
+
+}
+ 
+bool KFormulaDoc::initDoc()
+{
+    // If nothing is loaded, do initialize here
+    return TRUE;
+}
+
+QCString KFormulaDoc::mimeType() const
+{
+    return "application/x-kformula";
+}
+
+KoView* KFormulaDoc::createView( QWidget* parent, const char* name )
+{
+    KFormulaView* view = new KFormulaView( this, parent, name );
+    addView( view );
+
+    return view;
+}
+
+KoMainWindow* KFormulaDoc::createShell()
+{
+    KoMainWindow* shell = new KFormulaShell;
+//    shell->setRootPart( this );
+    shell->show();
+
+    return shell;}
+
+void KFormulaDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/ )
+{
+    // ####### handle transparency
+    
+    // Need to draw only the document rectangle described in the parameter rect.
+    QPainter *old=thePainter;
+    thePainter=&painter;
+    theFirstElement->checkSize();
+    if(currentElement()!=0L)
+	currentElement()->setActive(false);
+    theFirstElement->draw(QPoint(5,5)-theFirstElement->getSize().topLeft());
+    if(currentElement()!=0L)
+	currentElement()->setActive(true);
+    thePainter=old;
+
+}
+
+QString KFormulaDoc::configFile() const
+{
+//    return readConfigFile( locate( "data", "kformula/kformula.rc",
+//				   KFormulaFactory::global() ) );
+
+//    return readConfigFile( "kformula.rc" );
+}
 
 #include "kformula_doc.moc"

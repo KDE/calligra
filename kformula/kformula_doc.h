@@ -1,17 +1,15 @@
-#ifndef __kformula_doc_h__
-#define __kformula_doc_h__
+#ifndef KFORMULA_PART_H
+#define KFORMULA_PART_H
+#include "formula_container.h"
+#include <koDocument.h>
+#include "BasicElement.h"
 
 class KFormulaDoc;
 
 #include "formuladef.h"
 #include "BasicElement.h"
-#include <koDocument.h>
-
 #include <iostream>
-
 #include "kformula_view.h"
-#include "kformula.h"
-
 #include <qlist.h>
 #include <qobject.h>
 #include <qrect.h>
@@ -20,20 +18,31 @@ class KFormulaDoc;
 #include <qstring.h>
 #include <qpainter.h>
 
-#include "formula_container.h"
-
 #define MIME_TYPE "application/x-kformula"
 
-class KFormulaDoc : public KFormulaContainer, 
-		    virtual public KoDocument,
-		    virtual public KFormula::Document_skel
+
+
+class KFormulaDoc :    virtual public KoDocument,public KFormulaContainer
+
 {
     Q_OBJECT
-	public:
-    // C++
-    KFormulaDoc();
+public:
+    KFormulaDoc( KoDocument* parent = 0, const char* name = 0 );
     ~KFormulaDoc();
+    virtual KoView* createView( QWidget* parent = 0, const char* name = 0 );
+    virtual KoMainWindow* createShell();
+
+    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
+
+    virtual bool initDoc();
+
+    virtual QCString mimeType() const;
     
+protected:
+    virtual QString configFile() const;
+
+
+public:    
     /*int addBlock( int Type = -1, int ID = -1, int nextID = -1, int prevID = -1,
       QString Cont = "", int Child1 = -1, int Child2 = -1, int Child3 = -1 );
       void checkAndCreate( FormulaBlock *bl );
@@ -56,7 +65,7 @@ class KFormulaDoc : public KFormulaContainer,
 
   
     // C++
-    virtual int viewCount();
+//    virtual int viewCount();
 
  protected:
     /**
@@ -66,32 +75,21 @@ class KFormulaDoc : public KFormulaContainer,
   
  public:
     // IDL
-    virtual CORBA::Boolean initDoc();
+//    virtual CORBA::Boolean initDoc();
 
     /**
      * We dont load any children.
      */
-    virtual bool loadChildren( KOStore::Store_ptr ) { return true; }
+//    virtual bool loadChildren( KOStore::Store_ptr ) { return true; }
 
     virtual bool save( ostream& out, const char* _format );
 
-    // IDL
-    virtual OpenParts::View_ptr createView();
     // C++
     KFormulaView* createFormulaView( QWidget* _parent = 0 );
   
-    // IDL
-    virtual void viewList( OpenParts::Document::ViewList*& _list );
-
-    virtual char* mimeType() { return CORBA::string_dup( MIME_TYPE ); }
-  
-    virtual CORBA::Boolean isModified() { return m_bModified; }
-
-    virtual KOffice::MainWindow_ptr createMainWindow();
- 
     // C++
-    virtual void addView( KFormulaView *_view );
-    virtual void removeView( KFormulaView *_view );
+//    virtual void addView( KFormulaView *_view );
+//    virtual void removeView( KFormulaView *_view );
 
     virtual void emitModified();
     virtual bool isEmpty() { return m_bEmpty; };
@@ -139,7 +137,9 @@ class KFormulaDoc : public KFormulaContainer,
     
     QRect theCursor;
 
+
+
+
 };
 
 #endif
-

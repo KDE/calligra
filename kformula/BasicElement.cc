@@ -390,36 +390,36 @@ void  BasicElement::load(istream& )
 
 void BasicElement::makeList(bool active) 
 {
-    warning("make list %p " ,this);
+//    warning("make list %p " ,this);
     bool basic;
     basic=(typeid(*this) == typeid(BasicElement));
     if(!basic)
 	formula->addElement(this, 0);
-    warning("append");
+//    warning("append");
 
     beActive=0;
 
     for(int i=0;i<2;i++)
 	if(index[i]!=0) {
-	    warning("call for index%d %p",i,index[i]);
+	//    warning("call for index%d %p",i,index[i]);
 	    index[i]->makeList(active);
 	}
-    warning("index OK");
+//    warning("index OK");
 
     for(int i=0;i<childrenNumber;i++)
 	if(child[i]!=0)
 	    {
-		warning("call for child%d %p",i,child[i]);
+	//	warning("call for child%d %p",i,child[i]);
 		child[i]->makeList(active);
 	    }
     if(basic) 
 	formula->addElement(this);
 
-    warning("children done");
+//    warning("children done");
 
     for(int i=2;i<4;i++)
 	if(index[i]!=0) {
-	    warning("call for index%d %p",i,index[i]);
+//	    warning("call for index%d %p",i,index[i]);
 	    index[i]->makeList(active);
 	}
 

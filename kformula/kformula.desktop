@@ -1,18 +1,13 @@
 [Desktop Entry]
 Name=KFormula
-Name[eo]=Formulo
-Name[no]=Formel
 Exec=kformula
-Icon=kformula
-Comment=The Formula Editor
-Comment[cs]=Editor vzorců
-Comment[de]=Der Formeleditor
-Comment[eo]=Redaktilo por matematikaj formuloj
-Comment[fi]=Kaavamuokkain
-Comment[hu]=Matematikai kifejezés szerkesztő
-Comment[no]=Formelregidereren
-Comment[sl]=Urejevalnik matematičnih izrazov
+X-KDE-Library=libkformula
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+Comment=Andrea's Formula Editor
 MimeType=application/x-kformula
 Type=Application
-ServiceTypes=KOfficePart,KPart
+Icon=kformula
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart,text/plain
 X-KDE-NativeMimeType=application/x-kformula

@@ -1,5 +1,6 @@
+
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,27 +18,39 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __kformula_shell_h__
-#define __kformula_shell_h__
+#include "kformula_doc.h"
+#include "kformula_shell.h"
 
-#include <koMainWindow.h>
+#include <koApplication.h>
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <klocale.h>
+#include "kformula_factory.h"
 
-class KFormulaShell : public KoMainWindow
+
+static const KCmdLineOptions options[]=
 {
-    Q_OBJECT
-public:
-    KFormulaShell( QWidget* parent = 0, const char* name = 0 );
-    ~KFormulaShell();
-
-    /**
-     * Change these according to your native mimetype.
-     */
-    QString nativeFormatPattern() const { return "*.xmpl"; }
-    QString nativeFormatName() const { return "KFormula"; }
-
-protected:
-//    virtual QString configFile() const;
-    virtual KoDocument* createDoc();
+	{"+[file]", I18N_NOOP("File To Open"),0},
+	{0,0,0}
 };
 
-#endif
+extern "C"
+{
+    void* init_libkformula();
+}
+
+int main( int argc, char **argv )
+{
+    KCmdLineArgs::init( argc, argv, KFormulaFactory::aboutData());
+    KCmdLineArgs::addCmdLineOptions( options );
+
+    KoApplication app;
+
+    init_libkformula();
+
+    app.start();
+
+    app.exec();
+
+    return 0;
+}

@@ -9,8 +9,9 @@
 struct PosType;
 class BasicElement;
 
-class KFormulaContainer : public QObject {
-    Q_OBJECT
+class KFormulaContainer //: public QObject 
+{
+//    Q_OBJECT
 	
  public:
     
