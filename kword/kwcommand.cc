@@ -260,10 +260,12 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
         return 0;
     }
     body = body.namedItem( "office:text" ).toElement();
+#if 0 //don't test it otherwise we can't dnd between kword and kpresenter
     if ( body.isNull() ) {
         kdError(30518) << "No office:text found!" << endl;
         return 0;
     }
+#endif
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(c->parag()->document());
     KWTextFrameSet * textFs = textdoc->textFrameSet();
     KWDocument * doc = textFs->kWordDocument();
