@@ -515,7 +515,7 @@ void KSpreadCanvas::gotoLocation( QPoint location, KSpreadTable* table,
 
     if (m_bChoose)
     {
-      updateChooseRect(bottomRight, topLeft);
+      updateChooseRect(topLeft, topLeft);
     }
     else
     {
