@@ -209,7 +209,9 @@ class BasicElement
    * adding a:
    *	BasicElement *child[n]
    */
-  BasicElement *child[1]; //I'm sorry it is unused but I need it
+  QArray<BasicElement *> child;
+
+//  BasicElement *child[1]; //I'm sorry it is unused but I need it
     
   /*
    * The number of children.

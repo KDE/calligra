@@ -20,6 +20,7 @@ BracketElement::BracketElement(FormulaClass *Formula,BasicElement *Prev=0L,int R
   */
   usePixmap=FALSE;
   childrenNumber=1;
+  child.resize(childrenNumber);
 }
 
 BracketElement::~BracketElement()

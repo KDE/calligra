@@ -20,6 +20,7 @@ RootElement::RootElement(FormulaClass *Formula,BasicElement *Prev=0L,int Relatio
   */
   usePixmap=FALSE;
   childrenNumber=1;
+  child.resize(childrenNumber);
 }
 
 RootElement::~RootElement()
