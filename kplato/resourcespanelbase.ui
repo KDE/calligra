@@ -89,11 +89,11 @@
             <property name="title">
                 <string>Resource</string>
             </property>
-            <grid>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget" row="0" column="0">
+                <widget class="QLayoutWidget">
                     <property name="name">
                         <cstring>layout51</cstring>
                     </property>
@@ -121,22 +121,14 @@
                         </widget>
                     </vbox>
                 </widget>
-                <widget class="QLayoutWidget" row="0" column="1">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>layout52</cstring>
+                        <cstring>layout5</cstring>
                     </property>
                     <vbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>bAddResource</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Add...</string>
-                            </property>
-                        </widget>
                         <widget class="QPushButton">
                             <property name="name">
                                 <cstring>bEditResource</cstring>
@@ -153,6 +145,14 @@
                                 <string>Remove</string>
                             </property>
                         </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>bAddResource</cstring>
+                            </property>
+                            <property name="text">
+                                <string>New...</string>
+                            </property>
+                        </widget>
                         <spacer>
                             <property name="name">
                                 <cstring>spacer9</cstring>
@@ -166,13 +166,13 @@
                             <property name="sizeHint">
                                 <size>
                                     <width>20</width>
-                                    <height>238</height>
+                                    <height>220</height>
                                 </size>
                             </property>
                         </spacer>
                     </vbox>
                 </widget>
-            </grid>
+            </hbox>
         </widget>
     </grid>
 </widget>
