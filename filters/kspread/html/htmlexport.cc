@@ -92,6 +92,9 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
     QString html_row_options = "";
     QString html_cell_tag = "td";
     QString html_cell_options = "";
+    QString html_bold = "b";
+    QString html_italic = "i";
+    QString html_underline = "u";
 
     // Ah ah ah - the document is const, but the map and table aren't. Safety:0.
     QString str;
@@ -212,7 +215,7 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
             text = cell->prefix(currentrow, currentcolumn) + " " + text + " " 
                  + cell->postfix(currentrow, currentcolumn);
             line += "  <" + html_cell_tag + html_cell_options;
-            if (bgcolor.name()!="#ffffff") // change color only for non-white cells
+            if (bgcolor.isValid() && bgcolor.name()!="#ffffff") // change color only for non-white cells
               line += " bgcolor=\"" + bgcolor.name() + "\"";
             if (cell->extraXCells()>0)
             {
@@ -233,6 +236,28 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
                   .replace (regExpGt  , strGt);
             }
             line += ">\n";
+
+            if (cell->textFontBold(currentcolumn,currentrow))
+            {
+              text.insert(0, "<" + html_bold + ">");
+              text.append("</" + html_bold + ">");
+            }
+            if (cell->textFontItalic(currentcolumn,currentrow))
+            {
+              text.insert(0, "<" + html_italic + ">");
+              text.append("</" + html_italic + ">");
+            }
+            if (cell->textFontUnderline(currentcolumn,currentrow))
+            {
+              text.insert(0, "<" + html_underline + ">");
+              text.append("</" + html_underline + ">");
+            }
+            QColor textColor = cell->textColor(currentcolumn,currentrow);
+            if (textColor.isValid() && textColor.name()!="#000000") // change color only for non-default text
+            {
+              text.insert(0, "<font color=\"" + textColor.name() + "\">");
+              text.append("</font>");
+            }
             line += "  " + text;
             line += "\n  </" + html_cell_tag + ">\n";
         }
