@@ -783,9 +783,12 @@ void KWFrameDia::slotFloatingToggled(bool b)
     grp1->setEnabled( !b ); // Position doesn't make sense for a floating frame
     if (tab1) {
         cbCopy->setEnabled( !b ); // 'copy' irrelevant for floating frames.
-        rAppendFrame->setEnabled( !b ); // 'create new page' irrelevant for floating frames.
-        if ( b && rAppendFrame->isChecked() )
-            rNoShow->setChecked( true );
+        if ( rAppendFrame )
+        {
+            rAppendFrame->setEnabled( !b ); // 'create new page' irrelevant for floating frames.
+            if ( b && rAppendFrame->isChecked() )
+                rNoShow->setChecked( true );
+        }
         // 'what happens on new page' is irrelevant for floating frames
         reconnect->setEnabled( !b );
         noFollowup->setEnabled( !b );
