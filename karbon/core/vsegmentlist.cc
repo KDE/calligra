@@ -128,7 +128,7 @@ VSegmentList::VSegmentList( const VSegmentList& list )
 	VSegment* segment = list.m_first;
 	while( segment )
 	{
-		append( segment );
+		append( new VSegment( *segment ) );
 		segment = segment->m_next;
 	}
 }
