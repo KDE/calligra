@@ -21,7 +21,7 @@
 #define XMLTREE_H
 
 #include <qdom.h>
-#include <qarray.h>
+#include <qptrarray.h>
 #include <qtextstream.h>
 
 class XMLTree

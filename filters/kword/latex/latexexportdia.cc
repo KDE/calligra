@@ -32,7 +32,7 @@
    License version 2.
 */
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <latexexportdia.h>
 #include <latexexportdia.moc>
 
@@ -42,7 +42,7 @@ LATEXExportDia::LATEXExportDia(QWidget *parent, const char *name) :
 {
 	kapp->restoreOverrideCursor();
 	resize(size());
-	QWidget *page = new QWidget( this ); 
+	QWidget *page = new QWidget( this );
 	setMainWidget(page);
 	QBoxLayout *mainLayout = new QVBoxLayout(page, 0, spacingHint());
 	styleBox = new QVButtonGroup(i18n("Document Style"), page);
@@ -125,7 +125,7 @@ QString LATEXExportDia::state()
 	else if(latin1RBtn == langBox->selected())
 		result += "LATIN1";
 	result += '-';
-	
+
 	if(latexStyleRBtn == styleBox->selected())
 		result += "LATEX";
 	else if(kwordStyleRBtn == styleBox->selected())

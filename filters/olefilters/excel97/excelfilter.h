@@ -20,7 +20,6 @@
 #define EXCELFILTER_H
 
 #include <filterbase.h>
-#include <qarray.h>
 
 class QDataStream;
 class XMLTree;

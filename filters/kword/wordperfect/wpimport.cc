@@ -27,7 +27,7 @@
 #include <qregexp.h>
 #include <qdatastream.h>
 #include <qptrlist.h>
-#include <qarray.h>
+#include <qmemarray.h>
 
 #include <qdom.h>
 

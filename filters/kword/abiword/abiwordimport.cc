@@ -120,7 +120,8 @@ enum StackItemElementType{
     ElementTypeAbiWord,     // <abiword>
     ElementTypeSection,     // <section>
     ElementTypeParagraph,   // <p>
-    ElementTypeContent      // <c>
+    ElementTypeContent,     // <c>
+    ElementTypeField        // <field>
 };
 
 struct ListTabulator
@@ -784,6 +785,48 @@ bool EndElementP (StackItem* stackItem)
     return true;
 }
 
+bool StartElementField(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttributes& attributes)
+{
+    // <field> element elements can be nested in <p>
+    if (stackCurrent->elementType==ElementTypeParagraph)
+    {
+        QString strType=attributes.value("type").stripWhiteSpace();
+        kdDebug()<<"field type ****************************:"<<strType<<endl;
+        AbiPropsMap abiPropsMap;
+        PopulateProperties(stackItem,attributes,abiPropsMap,true);
+
+        stackItem->elementType=ElementTypeField;
+        stackItem->stackElementParagraph=stackCurrent->stackElementParagraph;   // <PARAGRAPH>
+        stackItem->stackElementText=stackCurrent->stackElementText;   // <TEXT>
+        stackItem->stackElementFormatsPlural=stackCurrent->stackElementFormatsPlural; // <FORMATS>
+        stackItem->pos=stackCurrent->pos; //Propagate the position
+    }
+    else
+    {//we are not nested correctly, so consider it a parse error!
+        kdError(30506) << "Abiword Import: parse error <field> tag not nested in neither a <p>" << endl;
+        return false;
+    }
+    return true;
+}
+
+bool charactersElementField (StackItem* stackItem, QDomDocument& mainDocument, const QString & ch)
+{
+//todo
+    return true;
+}
+
+bool EndElementField (StackItem* stackItem, StackItem* stackCurrent)
+{
+    if (!stackItem->elementType==ElementTypeField)
+    {
+        kdError(30506) << "Wrong element type!! Aborting! (</field> in StructureParser::endElement)" << endl;
+        return false;
+    }
+    stackItem->stackElementText.normalize();
+    stackCurrent->pos=stackItem->pos; //Propagate the position back to the parent element
+    return true;
+}
+
 // <br> (forced line break)
 // <cbr> (forced column break, not supported)
 // <pbr> (forced page break)
@@ -1204,6 +1247,11 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         stackItem->stackElementText=structureStack.current()->stackElementText; // TODO: reason?
         success=StartElementPageSize(mainDocument,attributes);
     }
+    else if (name=="field")
+    {
+        kdDebug()<<"A Field ------------------------------------\n";
+        success=StartElementField(stackItem,structureStack.current(),attributes);
+    }
     else
     {
         stackItem->elementType=ElementTypeUnknown;
@@ -1243,6 +1291,10 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     {
         success=EndElementP(stackItem);
     }
+    else if (name=="field")
+    {
+        success=EndElementField(stackItem,structureStack.current());
+    }
     else
     {
         success=true; // No problem, so authorisation to continue parsing
@@ -1281,6 +1333,10 @@ bool StructureParser :: characters ( const QString & ch )
     else if (stackItem->elementType==ElementTypeParagraph)
     { // <p>
         success=charactersElementC(stackItem,mainDocument,ch);
+    }
+    else if (stackItem->elementType==ElementTypeField)
+    {
+        success=charactersElementField(stackItem,mainDocument,ch);
     }
     else if (stackItem->elementType==ElementTypeEmpty)
     {

@@ -22,7 +22,7 @@
 
 #include <document.h>
 #include <properties.h>
-#include <qarray.h>
+#include <qmemarray.h>
 #include <qobject.h>
 #include <qstring.h>
 #include <qdom.h>
@@ -161,7 +161,7 @@ private:
     // the original Word cells. We accumulate all the known edges for a given
     // table in an array, and store the per-table arrays in a vector.
 
-    QPtrVector< QArray<unsigned> > m_cellEdges;
+    QPtrVector< QMemArray<unsigned> > m_cellEdges;
     int cacheCellEdge(
         unsigned tableNumber,
         unsigned cellEdge);

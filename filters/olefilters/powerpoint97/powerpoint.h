@@ -29,7 +29,7 @@ DESCRIPTION
 
 #include <myfile.h>
 #include <qdatastream.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qmap.h>
 
 class Powerpoint

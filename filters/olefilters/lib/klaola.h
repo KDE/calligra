@@ -30,7 +30,7 @@ DESCRIPTION
 #include <kdebug.h>
 #include <myfile.h>
 #include <qstring.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class KLaola {
 

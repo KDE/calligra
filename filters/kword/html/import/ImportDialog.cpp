@@ -22,7 +22,7 @@
 
 #include <qstring.h>
 #include <kdebug.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 
 
@@ -104,7 +104,7 @@ int HtmlImportDialog::getHint(void)
 
     // Encoding that will be used, if user has chosen so
     QString strHintCharset=dialog->getHintCharset();
-    
+
     // Do we use the encdoing given by the user:
     //  0: never
     //  1: only if we have no clue

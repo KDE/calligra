@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <config.h>
 #include <qstring.h>
 #include <kdebug.h>
@@ -37,7 +37,7 @@ PasswordPrompt::~PasswordPrompt() {
 }
 
 
-PasswordPrompt::PasswordPrompt(bool import, QWidget *parent, const char *name) 
+PasswordPrompt::PasswordPrompt(bool import, QWidget *parent, const char *name)
 : KDialog(parent, name, true) {
    _password = QString::null;
    _importer = import;

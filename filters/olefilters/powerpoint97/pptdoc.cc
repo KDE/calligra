@@ -24,7 +24,7 @@ DESCRIPTION
 
 #include <kdebug.h>
 #include <pptdoc.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 PptDoc::PptDoc(
     const myFile &mainStream,

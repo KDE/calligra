@@ -20,9 +20,8 @@
 #define XMLTREE_H
 
 #include <qdom.h>
-#include <qarray.h>
-#include <qqueue.h>
-#include <qlist.h>
+#include <qptrqueue.h>
+#include <qptrlist.h>
 #include <qobject.h>
 #include <qintdict.h>
 #include <klocale.h>

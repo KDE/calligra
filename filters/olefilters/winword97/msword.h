@@ -33,7 +33,7 @@ DESCRIPTION
 #include <kdebug.h>
 #include <mswordgenerated.h>
 #include <myfile.h>
-#include <qarray.h>
+#include <qmemarray.h>
 
 class Properties;
 
@@ -298,7 +298,7 @@ public:
         CHPXFKP data;
     } CHPX;
 
-    typedef QArray<CHPX> CHPXarray;
+    typedef QMemArray<CHPX> CHPXarray;
 
 protected:
     virtual void gotDocumentInformation(

@@ -28,7 +28,7 @@
 #include <dom/html_table.h>
 #include <khtmlview.h>
 #include <qwidget.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <dom/html_misc.h>
 
 
@@ -83,7 +83,7 @@ HTMLReader_state *KHTMLReader::pushNewState() {
 }
 
 void KHTMLReader::popState() {
-	
+
 	HTMLReader_state *s=_state.pop();
 	state()->paragraph=s->paragraph;
 	state()->format=_writer->startFormat(state()->paragraph,state()->format);
@@ -92,12 +92,12 @@ void KHTMLReader::popState() {
 
 
 void KHTMLReader::completed() {
-        qApp->exit_loop();	
+        qApp->exit_loop();
 	DOM::Document doc=_html->document(); // FIXME parse <HEAD> too
 	DOM::Node docbody=doc.getElementsByTagName("BODY").item(0);
 	parseNode(docbody);
 	_writer->cleanUpParagraph(state()->paragraph);
-	
+
         _it_worked=_writer->writeDoc();
 }
 
@@ -109,14 +109,14 @@ void KHTMLReader::parseNode(DOM::Node node) {
 	   _writer->addText(state()->paragraph,t.data().string());
 	   return; // no children anymore...
 	}
-	
+
 	state()->format=_writer->currentFormat(state()->paragraph,true);
 	state()->layout=_writer->currentLayout(state()->paragraph);
-	
+
 	pushNewState();
-	
+
 	 //FIXME fix this
-	
+
 	DOM::Element e=node;
 	bool go_recursive=true;
 	if (!e.isNull()) {
@@ -127,7 +127,7 @@ void KHTMLReader::parseNode(DOM::Node node) {
 	}
 	if (go_recursive)
 		for (DOM::Node q=node.firstChild(); !q.isNull(); q=q.nextSibling()) {
-			
+
 			parseNode(q);
 		}
 	popState();
@@ -147,14 +147,14 @@ bool KHTMLReader::parseTag(DOM::Element e) {
 	_PP(OL);
 	_PP(FONT);
 	_PP(HR);
-	
+
 	// FIXME we can get rid of these, make things tons more simple
 	// when khtml finally implements getComputedStyle
 	_PF(B,WEIGHT,value,75);
 	_PF(STRONG,WEIGHT,value,75);
 	_PF(U,UNDERLINE,value,1);
 	_PF(I,ITALIC,value,1);
-	
+
 	_PL(CENTER,FLOW,align,center);
 	_PL(RIGHT,FLOW,align,right);
 	_PL(LEFT,FLOW,align,left);
@@ -169,10 +169,10 @@ void KHTMLReader::parseStyle(DOM::Element e) {
      DOM::CSSStyleDeclaration s2=doc.defaultView().getComputedStyle(e,"");
      				//FIXME: wait until getComputedStyle is more than
      				// 'return 0' in khtml
-     				
+
      if (PROPV("font-weight") == "bolder")
 	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
-     	
+
      // debugging code.
      qWarning("e.style()");
      for (unsigned int i=0;i<s1.length();i++) {
@@ -186,25 +186,25 @@ void KHTMLReader::parseStyle(DOM::Element e) {
 }
 
 void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
-	
+
 	QDomElement qf=state()->format;
 	QDomElement ql=state()->layout;
-	
+
 	_writer->cleanUpParagraph(state()->paragraph);
         if ((startnewlayout==true) || ql.isNull())
         	{state()->paragraph=_writer->addParagraph(state()->frameset);}
-        else	
+        else
 	        {state()->paragraph=
 	        	_writer->addParagraph(state()->frameset,state()->layout);}
-	        	
-	        	
+
+
 
         if (qf.isNull() || (startnewformat==true)) {
 	        state()->format=_writer->startFormat(state()->paragraph/*,state()->format*/);
 	}  else {
 		state()->format=_writer->startFormat(state()->paragraph,qf);
-	}	
-	
+	}
+
 	QString ct=_writer->getLayoutAttribute(state()->paragraph,"COUNTER","type");
 	if ((ct != QString::null) && (ct != "0")) {
 		_writer->layoutAttribute(state()->paragraph,"COUNTER","type","0");
@@ -212,7 +212,7 @@ void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
 		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext","");
 		int currdepth=(_writer->getLayoutAttribute(state()->paragraph,"COUNTER","depth")).toInt();
 		_writer->layoutAttribute(state()->paragraph,"COUNTER","depth",QString("%1").arg(currdepth+1));
-	}	
+	}
 }
 
 KHTMLReader::~KHTMLReader(){
@@ -258,7 +258,7 @@ bool KHTMLReader::parse_BR(DOM::Element e) {
 		// a BR tag affects something 'up' in the hierarchy
 
 	startNewParagraph(false,false);
-	
+
 	//_state.push(s);
 	return false; // a BR tag has no childs.
 }
@@ -349,11 +349,11 @@ bool KHTMLReader::parse_IMG(DOM::Element e) {
 bool KHTMLReader::parse_PRE(DOM::Element e) {
 	DOM::Text prething=e.firstChild();
 	if (prething.isNull()) return false;
-	
+
 	QStringList k=QStringList::split("\n",prething.data().string());
-	
+
 	startNewParagraph();
-	
+
 	for (QStringList::Iterator b=k.begin();b!=k.end();++b) {
 		_writer->addText(state()->paragraph,*b);
 		startNewParagraph();
@@ -404,11 +404,11 @@ bool KHTMLReader::parse_UL(DOM::Element e) {
 	                  		_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","1");
         	          		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext",".");
 	                  		}
-	                  	else		                  		
+	                  	else
 	                  		{
 	                  		_writer->layoutAttribute(state()->paragraph,"COUNTER","type","10");
 	                  		_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","");
-        	          		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext","");	                  		
+        	          		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext","");
 	                  		}
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","depth",QString("%1").arg(_list_depth-1));
                   		parseNode(items);

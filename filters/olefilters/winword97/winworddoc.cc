@@ -109,7 +109,7 @@ int WinWordDoc::cacheCellEdge(
     unsigned tableNumber,
     unsigned cellEdge)
 {
-    QArray<unsigned> *edges = m_cellEdges[tableNumber - 1];
+    QMemArray<unsigned> *edges = m_cellEdges[tableNumber - 1];
     unsigned i;
     unsigned *data;
     unsigned index;
@@ -779,7 +779,7 @@ void WinWordDoc::gotTableBegin(
     // Add an entry for the column computation data for this table.
 
     m_cellEdges.resize(tableNumber);
-    m_cellEdges.insert(tableNumber - 1, new QArray<unsigned>);
+    m_cellEdges.insert(tableNumber - 1, new QMemArray<unsigned>);
     m_body.append("<PARAGRAPH>\n<TEXT>");
     m_body.append(Document::s_anchor);
     m_body.append("</TEXT>\n");

@@ -9,7 +9,7 @@
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 
 CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString seperator)
