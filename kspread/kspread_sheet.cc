@@ -2297,7 +2297,7 @@ void KSpreadSheet::changeCellTabName( QString const & old_name, QString const & 
     KSpreadCell* c = d->cells.firstCell();
     for( ;c; c = c->nextCell() )
     {
-        if(c->isFormula() || c->content()==KSpreadCell::RichText)
+        if( c->isFormula() )
         {
             if(c->text().find(old_name)!=-1)
             {
@@ -5506,7 +5506,7 @@ struct GetWordSpellingWorker : public KSpreadSheet::CellWorker {
     void doWork( KSpreadCell* c, bool cellRegion, int, int ) {
 	if ( !c->isObscured() || cellRegion /* ### ??? */ ) {
 	    if ( !c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty() && !c->isTime()
-		 && !c->isDate() && c->content() != KSpreadCell::VisualFormula
+		 && !c->isDate() 
 		 && !c->text().isEmpty())
 	    {
 		listWord+=c->text()+'\n';
@@ -5541,7 +5541,7 @@ struct SetWordSpellingWorker : public KSpreadSheet::CellWorker {
     {
 	if ( !c->isObscured() || cellRegion /* ### ??? */ ) {
 	    if ( !c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty() && !c->isTime()
-		 && !c->isDate() && c->content() != KSpreadCell::VisualFormula
+		 && !c->isDate()
 		 && !c->text().isEmpty())
 	    {
 
@@ -6310,8 +6310,7 @@ bool KSpreadSheet::testListChoose(KSpreadSelection* selectionInfo)
             !(col==marker.x() && c->row()==marker.y()))
 	 {
 	   if(!c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty()
-	      && !c->isTime() &&!c->isDate()
-	      && c->content() != KSpreadCell::VisualFormula)
+	      && !c->isTime() &&!c->isDate() )
 	     {
                  if(c->text()!=tmp)
                      different=true;
@@ -8533,14 +8532,10 @@ void KSpreadSheet::printDebug()
                 //cellDescr += QString::number(currentrow).rightJustify(3,'0') + ',';
                 //cellDescr += QString::number(currentcolumn).rightJustify(3,'0') + ' ';
                 cellDescr += " | ";
-                static const char* s_contentString[] = {
-                        "Text    ", "RichTxt ", "Formula ", "VisForm ", "ERROR   " };
-                cellDescr += s_contentString[ cell->content() ];
-                cellDescr += " | ";
                 cellDescr += cell->value().type();
                 cellDescr += " | ";
                 cellDescr += cell->text();
-                if ( cell->content() == KSpreadCell::Formula )
+                if ( cell->isFormula() )
                     cellDescr += QString("  [result: %1]").arg( cell->value().asString() );
                 kdDebug(36001) << cellDescr << endl;
             }
