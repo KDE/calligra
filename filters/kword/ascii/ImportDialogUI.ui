@@ -10,7 +10,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>393</width>
+            <width>404</width>
             <height>255</height>
         </rect>
     </property>
@@ -94,7 +94,7 @@
                     </property>
                 </widget>
                 <spacer row="2" column="3">
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer6</cstring>
                     </property>
                     <property name="orientation">
@@ -145,7 +145,7 @@
                         <cstring>radioParagraphSentence</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Sentence: if end of line is the end of a sentence</string>
+                        <string>&amp;Sentence: if the end of line is the end of a sentence</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -153,13 +153,13 @@
                         <cstring>radioParagraphOldWay</cstring>
                     </property>
                     <property name="text">
-                        <string>Old &amp;Way: smart choice</string>
+                        <string>Old &amp;Way: if the line is empty or has less than 40 characters</string>
                     </property>
                 </widget>
             </vbox>
         </widget>
         <spacer>
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer2</cstring>
             </property>
             <property name="orientation">
