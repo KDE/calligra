@@ -712,14 +712,11 @@ KarbonView::pathWhirlPinch()
 void
 KarbonView::viewModeChanged()
 {
+	canvasWidget()->pixmap()->fill();
 	if( m_viewAction->currentItem() == 1 )
-	{
-		m_painterFactory->setWireframePainter( canvasWidget()->viewport(), width(), height() );
-	}
+		m_painterFactory->setWireframePainter( canvasWidget()->pixmap(), width(), height() );
 	else
-	{
 		m_painterFactory->setPainter( canvasWidget()->pixmap(), width(), height() );
-	}
 	m_canvas->repaintAll();
 }
 

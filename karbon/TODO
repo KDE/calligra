@@ -7,7 +7,6 @@ REAL BUGS:
 -	shape creation: the last temporary shape looks slightly different than the final shape
 -	shear tool: the last temporary shape looks slightly different than the final shape
 -	canvas doesn't repaint correctly while scrolling with the scrollbar
--	changing preview mode to wireframe doesn't refresh the canvas (shapes remain filled)
 
 TODO:
 -	remove defaultFill/Stroke stuff from VDocument and just use VSelection's fill/stroke.
