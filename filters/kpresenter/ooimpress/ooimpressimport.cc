@@ -738,75 +738,85 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
             QDomElement brush = doc.createElement( "BRUSH" );
             brush.setAttribute( "style", 1 );
             if ( m_styleStack.hasAttribute( "draw:fill-color" ) )
-                {
-                    if( draw->hasAttribute( "draw:rotation" ))
-                        {
-                            int angle = (draw->attribute( "draw:rotation" ).toInt())/10;
-                            switch( angle )
-                                {
-                                case 0:
-                                case 180:
-                                    brush.setAttribute( "style", 9 );
-                                    break;
-                                case 45:
-                                case 225:
-                                    brush.setAttribute( "style", 12 );
-                                    break;
-                                case 90:
-                                case 270:
-                                    brush.setAttribute( "style", 10 );
-                                    break;
-                                case 135:
-                                case 315:
-                                    brush.setAttribute( "style", 13 );
-                                    break;
-                                default:
-                                    //todo fixme when we will have a kopaint
-                                    kdDebug()<<" angle : "<<angle<<endl;
-                                    break;
-                                }
-                        }
-                    
-                    brush.setAttribute( "color", draw->attribute( "draw:color" ) );
-                }
+                brush.setAttribute( "color", m_styleStack.attribute( "draw:fill-color" ) );
             e.appendChild( brush );
         }
         else if ( fill == "hatch" )
         {
             QDomElement brush = doc.createElement( "BRUSH" );
             QString style = m_styleStack.attribute( "draw:fill-hatch-name" );
-            if ( style == "Black 0 Degrees" )
-                brush.setAttribute( "style", 9 );
-            else if ( style == "Black 90 Degrees" )
-                brush.setAttribute( "style", 10 );
-            else if ( style == "Red Crossed 0 Degrees" )
-                {
-                    brush.setAttribute( "style", 11 );
-                    brush.setAttribute( "color", QColor(Qt::red).name() );
-                }
-            else if ( style == "Blue Crossed 0 Degrees" )
-                {
-                    brush.setAttribute( "style", 11 );
-                    brush.setAttribute( "color", QColor(Qt::blue).name() );
-                }
-            else if ( style == "Black 45 Degrees" || style == "Black 45 Degrees Wide" )
-                brush.setAttribute( "style", 12 );
-            else if ( style == "Black -45 Degrees" )
-                brush.setAttribute( "style", 13 );
-            else if ( style == "Red Crossed 45 Degrees" )
-                {
-                    brush.setAttribute( "style", 14 );
-                    brush.setAttribute( "color", QColor(Qt::red).name() );
-                }
-            else if ( style == "Blue Crossed 45 Degrees" )
-                {
-                    brush.setAttribute( "style", 14 );
-                    brush.setAttribute( "color", QColor(Qt::blue).name() );
-                }
             QDomElement* draw = m_draws[style];
-            if ( draw && draw->hasAttribute( "draw:color" ) )
-                brush.setAttribute( "color", draw->attribute( "draw:color" ) );
+            if ( draw ) 
+                {
+                    if( draw->hasAttribute( "draw:color" ) )
+                        brush.setAttribute( "color", draw->attribute( "draw:color" ) );
+                    int angle = 0;
+                    if( draw->hasAttribute( "draw:rotation" ))
+                        {
+                            angle = (draw->attribute( "draw:rotation" ).toInt())/10;
+                            kdDebug()<<"angle :"<<angle<<endl;
+                        }
+                    if( draw->hasAttribute( "draw:style" ))
+                        {
+                            QString styleHash = draw->attribute( "draw:style" );
+                            if( styleHash == "single")
+                                {
+                                    switch( angle )
+                                        {
+                                        case 0:
+                                        case 180:
+                                            brush.setAttribute( "style", 9 );
+                                            break;
+                                        case 45:
+                                        case 225:
+                                            brush.setAttribute( "style", 12 );
+                                            break;
+                                        case 90:
+                                        case 270:
+                                            brush.setAttribute( "style", 10 );
+                                            break;
+                                        case 135:
+                                        case 315:
+                                            brush.setAttribute( "style", 13 );
+                                            break;
+                                        default:
+                                            //todo fixme when we will have a kopaint
+                                            kdDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
+                                            break;
+                                        }                                  
+                                }
+                            else if( styleHash == "double")
+                                {
+                                    switch( angle )
+                                        {
+                                        case 0:
+                                        case 180:
+                                        case 90:
+                                        case 270:
+                                            brush.setAttribute("style", 11 );
+                                            break;
+                                        case 45:
+                                        case 135:
+                                        case 225:
+                                        case 315:
+                                            brush.setAttribute("style",14 );
+                                            break;
+                                        default:
+                                            //todo fixme when we will have a kopaint
+                                            kdDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
+                                            break;
+                                        }                                  
+
+                                }
+                            else if( styleHash == "triple")
+                                {
+                                    kdDebug()<<" it is not implemented :( \n";
+                                }
+                            
+                        }
+                }
             e.appendChild( brush );
+
         }
         else if ( fill == "gradient" )
         {
