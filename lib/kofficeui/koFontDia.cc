@@ -27,11 +27,13 @@
 #include <qgroupbox.h>
 #include <qpushbutton.h>
 
-KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSuperScript )
+KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSuperScript, uint fontListCriteria)
     : QWidget( parent, name )
 {
     QVBoxLayout *lay1 = new QVBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
-    m_chooseFont = new KFontChooser(this);
+    QStringList list;
+    KFontChooser::getFontList(list,fontListCriteria);
+    m_chooseFont = new KFontChooser(this, "FontList", false, list);
     lay1->addWidget(m_chooseFont);
 
     QGroupBox *grp = new QGroupBox(this);

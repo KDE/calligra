@@ -28,7 +28,14 @@ class KoFontChooser : public QWidget
 {
     Q_OBJECT
 public:
-    KoFontChooser( QWidget * parent, const char* name = 0L, bool _withSubSuperScript = true );
+    /**
+     * Constructor
+     * @param fontListCriteria should contain all the restrictions for font selection as OR-ed values
+     *        @see KFontChooser::FontListCriteria for the individual values
+     */
+    KoFontChooser( QWidget * parent, const char* name = 0L, 
+            bool _withSubSuperScript = true,
+            uint fontListCriteria=0);
     virtual ~KoFontChooser() {}
 
     void setFont( const QFont &_font, bool _subscript, bool _superscript );
