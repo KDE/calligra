@@ -190,6 +190,19 @@ void KWFrame::updateResizeHandles() {
     }
 }
 
+
+void KWFrame::updateRulerHandles(){
+    if(isSelected())
+        updateResizeHandles();
+    else
+    {
+        KWDocument *doc = getFrameSet()->kWordDocument();
+        if(doc)
+            doc->updateRulerFrameStartEnd();
+    }
+
+}
+
 void KWFrame::setSelected( bool _selected )
 {
     bool s = selected;

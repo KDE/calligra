@@ -689,11 +689,8 @@ void KWFrameResizeCommand::execute()
 
     if(frameSet->isAHeader() || frameSet->isAFooter())
         doc->recalcFrames();
+    frame->updateRulerHandles();
 
-    if(frame->isSelected())
-        frame->updateResizeHandles();
-
-    doc->updateRulerFrameStartEnd();
     doc->frameChanged( frame );
 }
 
@@ -722,9 +719,9 @@ void KWFrameResizeCommand::unexecute()
     KWDocument * doc = frameSet->kWordDocument();
     if(frameSet->isAHeader() || frameSet->isAFooter())
         doc->recalcFrames();
-    if(frame->isSelected())
-        frame->updateResizeHandles();
-    doc->updateRulerFrameStartEnd();
+
+    frame->updateRulerHandles();
+
     //update frames
     doc->frameChanged( frame );
 }
@@ -756,9 +753,7 @@ void KWFrameMoveCommand::execute()
         else
             frame->setCoords(tmpFrameMove->sizeOfEnd.left(),tmpFrameMove->sizeOfEnd.top(),tmpFrameMove->sizeOfEnd.right(),tmpFrameMove->sizeOfEnd.bottom());
 
-        if(frame->isSelected())
-            frame->updateResizeHandles();
-
+        frame->updateRulerHandles();
         needRelayout = needRelayout || ( frame->runAround() != KWFrame::RA_NO );
     }
     if ( doc )
@@ -766,6 +761,7 @@ void KWFrameMoveCommand::execute()
         doc->updateAllFrames();
         if ( needRelayout )
             doc->layout();
+
         doc->updateRulerFrameStartEnd();
         doc->repaintAllViews();
     }
@@ -790,8 +786,7 @@ void KWFrameMoveCommand::unexecute()
         else
             frame->setCoords(tmpFrameMove->sizeOfBegin.left(),tmpFrameMove->sizeOfBegin.top(),tmpFrameMove->sizeOfBegin.right(),tmpFrameMove->sizeOfBegin.bottom());
 
-        if(frame->isSelected())
-            frame->updateResizeHandles();
+        frame->updateRulerHandles();
         needRelayout = needRelayout || ( frame->runAround() != KWFrame::RA_NO );
     }
 
@@ -800,7 +795,6 @@ void KWFrameMoveCommand::unexecute()
         doc->updateAllFrames();
         if ( needRelayout )
             doc->layout();
-        doc->updateRulerFrameStartEnd();
         doc->repaintAllViews();
     }
 }

@@ -158,6 +158,7 @@ public:
     void removeResizeHandlesForPage(KWCanvas *canvas);
     void removeResizeHandles();
     void updateResizeHandles();
+    void updateRulerHandles();
 
     QBrush getBackgroundColor() const { return backgroundColor; }
     void setBackgroundColor( QBrush _color ) { backgroundColor = _color; }
