@@ -67,6 +67,11 @@ struct Reference
 class KSpreadDoc : public KoDocument, public KoZoomHandler
 {
   Q_OBJECT
+  Q_PROPERTY( bool getShowRowHeader READ getShowRowHeader )
+  Q_PROPERTY( bool getShowColHeader READ getShowColHeader )
+  Q_PROPERTY( int getIndentValue READ getIndentValue WRITE setIndentValue )
+  Q_PROPERTY( bool getShowMessageError READ getShowMessageError WRITE setShowMessageError)
+
 public:
   KSpreadDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
   ~KSpreadDoc();

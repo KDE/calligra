@@ -20,10 +20,6 @@ k_dcop:
     virtual bool save();
     virtual bool saveAs( const QString& url );
 
-    bool showColHeader()const;
-    bool showRowHeader()const;
-    int indentValue()const;
-    void setIndentValue(int _val);
     bool showTabBar()const;
 
     void setShowVerticalScrollBar(bool _show);
@@ -38,8 +34,6 @@ k_dcop:
     bool showFormulaBar()const;
     bool showStatusBar()const;
 
-    void setShowMessageError(bool _show);
-    bool showMessageError()const;
 
     QColor pageBorderColor() const;
     void changePageBorderColor( const QColor & _color);

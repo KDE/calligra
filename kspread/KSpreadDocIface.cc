@@ -34,26 +34,6 @@ bool KSpreadDocIface::saveAs( const QString& )
 }
 
 
-bool KSpreadDocIface::showColHeader()const
-{
-    return doc->getShowColHeader();
-}
-
-bool KSpreadDocIface::showRowHeader()const
-{
-    return doc->getShowRowHeader();
-}
-
-int KSpreadDocIface::indentValue()const
-{
-    return doc->getIndentValue();
-}
-
-void KSpreadDocIface::setIndentValue(int _val)
-{
-    doc->setIndentValue(_val);
-}
-
 void KSpreadDocIface::changeDefaultGridPenColor( const QColor &_col)
 {
     doc->changeDefaultGridPenColor(_col);
@@ -119,16 +99,6 @@ void KSpreadDocIface::setShowCommentIndicator(bool _show)
 {
     doc->setShowCommentIndicator(_show);
     doc->refreshInterface();
-}
-
-void KSpreadDocIface::setShowMessageError(bool _show)
-{
-    doc->setShowMessageError(_show);
-}
-
-bool KSpreadDocIface::showMessageError()const
-{
-    return doc->getShowMessageError();
 }
 
 void KSpreadDocIface::changePageBorderColor( const QColor & _color)
