@@ -647,6 +647,7 @@ KSpreadUndoPaperLayout::KSpreadUndoPaperLayout( KSpreadDoc *_doc, KSpreadSheet *
     m_printRange = _table->print()->printRange();
     m_printRepeatColumns = _table->print()->printRepeatColumns();
     m_printRepeatRows = _table->print()->printRepeatRows();
+    m_dZoom = _table->print()->zoom();
 }
 
 KSpreadUndoPaperLayout::~KSpreadUndoPaperLayout()
@@ -692,6 +693,9 @@ void KSpreadUndoPaperLayout::undo()
     m_printRepeatRowsRedo = print->printRepeatRows();
     print->setPrintRepeatRows( m_printRepeatRows );
 
+    m_dZoomRedo = print->zoom();
+    print->setZoom( m_dZoom );
+
     doc()->undoBuffer()->unlock();
 }
 
@@ -719,6 +723,8 @@ void KSpreadUndoPaperLayout::redo()
     print->setPrintRange( m_printRangeRedo );
     print->setPrintRepeatColumns( m_printRepeatColumnsRedo );
     print->setPrintRepeatRows( m_printRepeatRowsRedo );
+
+    print->setZoom( m_dZoomRedo );
 
     doc()->undoBuffer()->unlock();
 }

@@ -195,7 +195,7 @@
 
 		name	               the name of the table
                 columnnumber           display column header as number
-                borders                show/hide page border (hide = "0", show = "1") 
+                borders                show/hide page border (hide = "0", show = "1")
                 hide                   hide/show table (hide ="1", show="0")
                 hidezero               don't show zero value (hide="1",show="0")
                 firstletterupper       Upper first letter (upper="1",nothing="0")
@@ -204,14 +204,15 @@
                 printCommentIndicator  show/hide comment indicator on printout (hide="1", show="0")
                 printFormulaIndicator  show/hide formula indicator on printout (hide="1", show="0")
                 printGrid              show/hide grid on printout (hide="1", show="0")
+                printGrid              zoom factor on printout (100%="1.0")
                 showFormula            show/hide formula
                 showFormulaIndicator   show/hide formula indicator on screen (hide="1", show="0")
-                lcmode                 write on LxCx area selected 
+                lcmode                 write on LxCx area selected
 -->
 <!ELEMENT table (paper|cell|chart|column|row|printrange-rect|printrepeatcolumns|printrepeatrows)*>
 <!ATTLIST table  name                   CDATA #REQUIRED
                  columnnumber           CDATA #REQUIRED
-                 borders                CDATA #REQUIRED     
+                 borders                CDATA #REQUIRED
                  hide                   CDATA #REQUIRED
                  hidezero               CDATA #REQUIRED
                  firstletterupper       CDATA #REQUIRED
@@ -221,6 +222,7 @@
                  printFormulaIndicator  CDATA #REQUIRED
                  showFormula            CDATA #REQUIRED
                  showFormulaIndicator   CDATA #REQUIRED
+                 printZoom              CDATA #REQUIRED
                  lcmode                 CDATA #REQUIRED
                  borders1.2             CDATA #REQUIRED>
 

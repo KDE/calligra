@@ -287,6 +287,8 @@ protected:
     QPair<int, int> m_printRepeatColumnsRedo;
     QPair<int, int> m_printRepeatRows;
     QPair<int, int> m_printRepeatRowsRedo;
+    double m_dZoom;
+    double m_dZoomRedo;
 };
 
 

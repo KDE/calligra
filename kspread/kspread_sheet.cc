@@ -5972,6 +5972,9 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
     printRepeatRows.setAttribute( "bottom", m_pPrint->printRepeatRows().second );
     table.appendChild( printRepeatRows );
 
+    //Save print zoom
+    table.setAttribute( "printZoom", m_pPrint->zoom() );
+
     // Save all cells.
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
@@ -6226,6 +6229,16 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
           bottom = KS_rowMax;
         }
         m_pPrint->setPrintRange( QRect( QPoint( left, top ), QPoint( right, bottom ) ) );
+      }
+
+      // load print range
+      if( table.hasAttribute( "printZoom" ) )
+      {
+        double zoom = table.attribute( "printZoom" ).toDouble( &ok );
+        if ( ok )
+        {
+          m_pPrint->setZoom( zoom );
+        }
       }
 
     // Load the cells
