@@ -461,10 +461,10 @@ bool KPresenterDoc::saveChildren( KoStore* _store )
         for( ; it.current(); ++it ) {
             // Don't save children that are only in the undo/redo history
             // but not anymore in the presentation
-            KPrPage *page;
-            for ( page = m_pageList.first(); page ; page = m_pageList.next() )
+            QPtrListIterator<KPrPage> pageIt( m_pageList );
+            for ( ; pageIt.current(); ++pageIt )
             {
-                QPtrListIterator<KPObject> oIt(page->objectList());
+                QPtrListIterator<KPObject> oIt(pageIt.current()->objectList());
                 for (; oIt.current(); ++oIt )
                 {
                     if ( oIt.current()->getType() == OT_PART &&
@@ -713,9 +713,9 @@ void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl, QDom
 
 void KPresenterDoc::enableEmbeddedParts( bool f )
 {
-    KPrPage *page=0L;
-    for(page=m_pageList.first(); page; page=m_pageList.next())
-        page->enableEmbeddedParts(f);
+    QPtrListIterator<KPrPage> it( m_pageList );
+    for ( ; it.current(); ++it )
+        it.current()->enableEmbeddedParts(f);
 }
 
 QDomDocumentFragment KPresenterDoc::saveBackground( QDomDocument &doc )
@@ -1842,9 +1842,9 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 
 
         if ( saveOnlyPage == -1 ) {
-            KPrPage *page;
-            for ( page = m_pageList.first(); page ; page = m_pageList.next() )
-                page->completeLoading( _clean, lastObj );
+            QPtrListIterator<KPrPage> it( m_pageList );
+            for ( ; it.current(); ++it )
+                it.current()->completeLoading( _clean, lastObj );
         }
     } else {
         if ( _clean )
@@ -2565,11 +2565,12 @@ KPrPage * KPresenterDoc::findSideBarPage(KPObject *object)
         //kdDebug(33001) << "Object is on sticky page" << endl;
         return m_stickyPage;
     }
-    for ( KPrPage *page=m_pageList.first(); page; page=m_pageList.next() ) {
-        QPtrList<KPObject> list( page->objectList() );
+    QPtrListIterator<KPrPage> it( m_pageList );
+    for ( ; it.current(); ++it ) {
+        QPtrList<KPObject> list( it.current()->objectList() );
         if ( list.findRef( object ) != -1 ) {
-            //kdDebug(33001) << "Object is on page " << m_pageList.findRef(page) + 1 << endl;
-            return page;
+            //kdDebug(33001) << "Object is on page " << m_pageList.findRef(it.current()) + 1 << endl;
+            return it.current();
         }
     }
     kdDebug(33001) << "Object not found on a page" << endl;
@@ -2674,9 +2675,9 @@ void KPresenterDoc::recalcVariables( int type )
 
 void KPresenterDoc::slotRepaintVariable()
 {
-    KPrPage *page=0L;
-    for(page=pageList().first(); page; page=pageList().next())
-        page->slotRepaintVariable();
+    QPtrListIterator<KPrPage> it( m_pageList );
+    for ( ; it.current(); ++it )
+        it.current()->slotRepaintVariable();
     m_stickyPage->slotRepaintVariable();
 }
 
@@ -2711,9 +2712,9 @@ void KPresenterDoc::updateRuler()
 
 void KPresenterDoc::recalcPageNum()
 {
-    KPrPage *page=0L;
-    for(page=pageList().first(); page; page=pageList().next())
-        page->recalcPageNum();
+    QPtrListIterator<KPrPage> it( m_pageList );
+    for ( ; it.current(); ++it )
+        it.current()->recalcPageNum();
     m_stickyPage->recalcPageNum();
 }
 
