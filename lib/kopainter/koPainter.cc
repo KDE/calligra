@@ -34,8 +34,8 @@
 #include "koVectorPath.h"
 #include "koOutline.h"
 
-#include <support/xlibrgb.h>
-#include <X11/Xlib.h>
+//#include <support/xlibrgb.h>
+//#include <X11/Xlib.h>
 
 KoPainter::KoPainter(QWidget *aWidget, int w, int h)
 {
@@ -45,8 +45,8 @@ KoPainter::KoPainter(QWidget *aWidget, int w, int h)
   mBuffer = new QImage(w, h, 32);
   mWidth = w;
   mHeight = h;
-  xlib_rgb_init_with_depth(mWidget->x11Display(), XScreenOfDisplay(mWidget->x11Display(), mWidget->x11Screen()), mWidget->x11Depth());
-  gc = XCreateGC(mWidget->x11Display(), mWidget->handle(), 0, 0);
+//  xlib_rgb_init_with_depth(mWidget->x11Display(), XScreenOfDisplay(mWidget->x11Display(), mWidget->x11Screen()), mWidget->x11Depth());
+//  gc = XCreateGC(mWidget->x11Display(), mWidget->handle(), 0, 0);
 }
 
 KoPainter::~KoPainter()
@@ -178,7 +178,7 @@ void KoPainter::drawVectorPath(KoVectorPath *vp)
 void KoPainter::blit()
 {
 //  xlib_draw_rgb_image(mWidget->handle(), gc, 0, 0, mWidth, mHeight, XLIB_RGB_DITHER_NONE, mBuffer->bits(), mWidth * 3);
-  xlib_draw_rgb_32_image(mWidget->handle(), gc, 0, 0, mWidth, mHeight, XLIB_RGB_DITHER_NONE, mBuffer->bits(), mWidth * 4);
+//  xlib_draw_rgb_32_image(mWidget->handle(), gc, 0, 0, mWidth, mHeight, XLIB_RGB_DITHER_NONE, mBuffer->bits(), mWidth * 4);
 }
 
 void KoPainter::memset(QRgb *p, int n, QRgb c)

@@ -63,7 +63,7 @@ private:
   QImage *mBuffer;
   int mWidth;
   int mHeight;
-  GC gc;
+//  GC gc;
 
   KoOutline *mOutline;
   KoFill *mFill;
