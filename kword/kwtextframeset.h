@@ -177,10 +177,13 @@ public:
     virtual bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace,
         ulong & words, ulong& sentences, ulong & syllables );
 
-    // reimplemented from QTextFlow
+    /** reimplemented from QTextFlow, implements flowing around frames etc. */
     virtual int adjustLMargin( int yp, int h, int margin, int space );
+    /** reimplemented from QTextFlow, implements flowing around frames etc. */
     virtual int adjustRMargin( int yp, int h, int margin, int space );
-    virtual void adjustFlow( int &yp, int w, int h, QTextParag *parag, bool pages = TRUE );
+
+    /** Called by KWTextFrameSet. Implements page breaking, breaking around frames, etc. */
+    int formatVertically( QTextParag *parag );
 
     /** Make sure this paragraph is formatted */
     void ensureFormatted( QTextParag * parag );

@@ -34,7 +34,7 @@ class KWTextDocument : public KoTextDocument
     Q_OBJECT
 public:
     /** A real text document inside a frameset */
-    KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KoTextFormatCollection *fc );
+    KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KoTextFormatCollection *fc, KoTextFormatter *formatter = 0L );
     /** A standalone text document, for a preview */
     KWTextDocument( KoZoomHandler * zoomHandler );
 

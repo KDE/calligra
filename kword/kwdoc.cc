@@ -205,9 +205,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_defaultFont = KGlobalSettings::generalFont();
     KGlobal::charsets()->setQFont(m_defaultFont, KGlobal::locale()->charset());
 
-    // Layout text at 1440 DPI
-    setPtToLayoutUnitFactor( 20 );
-
     m_defaultFont.setPointSize( ptToLayoutUnit( m_defaultFont.pointSize() ) );
 
     m_syntaxVersion = CURRENT_SYNTAX_VERSION;

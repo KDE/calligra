@@ -51,7 +51,7 @@ void KWAnchor::move( int x, int y )
     xpos = x;
     ypos = y;
     kdDebug() << this << " KWAnchor::move " << x << "," << y << " paragy=" << paragy << endl;
-    KoZoomHandler * zh = textDocument()->zoomHandler();
+    //KoZoomHandler * zh = textDocument()->zoomHandler();
 
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
     KoPoint dPoint;

@@ -49,6 +49,7 @@
 #include <koDataTool.h>
 #include <kotextobject.h>
 #include <kocommand.h>
+#include <kotextformatter.h>
 
 #include <kdebug.h>
 #include <assert.h>
@@ -61,6 +62,25 @@
 
 //#define DEBUG_DTI
 //#define DEBUG_ITD
+
+/**
+ * KWord's text formatter.
+ * It derives from KoTextFormatter and simply forwards formatVertically to KWTextFrameSet,
+ * since only KWTextFrameSet knows about page-breaking, overlapping frames etc.
+ */
+class KWTextFormatter : public KoTextFormatter
+{
+public:
+    KWTextFormatter( KWTextFrameSet *textfs ) : m_textfs( textfs ) {}
+    virtual ~KWTextFormatter() {}
+
+    virtual int formatVertically( QTextDocument*, QTextParag* parag )
+    {
+        return m_textfs->formatVertically( parag );
+    }
+private:
+    KWTextFrameSet *m_textfs;
+};
 
 KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     : KWFrameSet( _doc )
@@ -76,10 +96,10 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     m_framesInPage.setAutoDelete( true );
     m_firstPage = 0;
     // Create the text document to set in the text object
-    KWTextDocument* textdoc = new KWTextDocument(
-        this, 0, new KoTextFormatCollection( _doc->defaultFont() ) );
+    KWTextDocument* textdoc = new KWTextDocument( this, 0,
+        new KoTextFormatCollection( _doc->defaultFont() ), new KWTextFormatter( this ) );
     textdoc->setFlow( this );
-    textdoc->setVerticalBreak( true );              // get QTextFlow methods to be called
+    textdoc->setPageBreakEnabled( true );              // get verticalBreak to be called
 
     m_textobj = new KoTextObject( textdoc, m_doc->findStyle( "Standard" ),
                                   this, (m_name+"-textobj").utf8() );
@@ -844,8 +864,14 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, QTextParag * parag, 
     return false;
 }
 
-void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, bool /*pages*/ )
+int KWTextFrameSet::formatVertically( QTextParag * _parag )
 {
+    QRect paragRect( _parag->rect() );
+    int yp = paragRect.y();
+    int hp = paragRect.height();
+    int oldHeight = hp;
+    int oldY = yp;
+
     // This is called since the 'vertical break' QRT flag is true.
     // End of frames/pages lead to those "vertical breaks".
     // What we do, is adjust the Y accordingly,
@@ -855,7 +881,6 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
     // But don't forget that adjustFlow is called twice for every parag, since the formatting
     // is re-done after moving down.
 
-    int breaked = false;
     KWTextParag *parag = static_cast<KWTextParag *>( _parag );
     bool linesTogether = parag ? parag->linesTogether() : false;
     bool hardFrameBreak = parag ? parag->hardFrameBreakBefore() : false;
@@ -910,17 +935,15 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
             kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
 #endif
             // don't move down parags that have only one line and are bigger than the page (e.g. floating tables)
-            if ( h < frameHeight || ( parag && parag->lineStartList().count() > 1 ) )
+            if ( hp < frameHeight || ( parag && parag->lineStartList().count() > 1 ) )
             {
                 // breakBegin==breakEnd==bottom, since the next frame's top is the same as bottom, in QRT coords.
-                breaked = ( checkVerticalBreak( yp, h, parag, linesTogether, bottom, bottom ) );
+                (void) checkVerticalBreak( yp, hp, parag, linesTogether, bottom, bottom );
+                // Some people write a single paragraph over 3 frames! So we have to keep looking, that's why we ignore the return value
             }
-            // Some people write a single paragraph over 3 frames! So we have to keep looking...
-            //if ( breaked )
-            //    break;
 
         }
-        if ( yp+h < bottom )
+        if ( yp+hp < bottom )
             break; // we've been past the parag, so stop here
         totalHeight = bottom;
     }
@@ -934,16 +957,15 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
             KoRect rectOnTop = (*fIt).intersection;
             QPoint iTop, iBottom; // top and bottom in internal coordinates
             if ( documentToInternal( rectOnTop.topLeft(), iTop ) &&
-                 iTop.y() <= yp + h &&
+                 iTop.y() <= yp + hp &&
                  documentToInternal( rectOnTop.bottomLeft(), iBottom ) &&
-                 checkVerticalBreak( yp, h, parag, linesTogether,
+                 checkVerticalBreak( yp, hp, parag, linesTogether,
                                      iTop.y(), iBottom.y() ) )
             {
-                kdDebug(32002) << "KWTextFrameSet::adjustFlow breaking around RA_SKIP frame yp="<<yp<<" h=" << h << endl;
+                kdDebug(32002) << "KWTextFrameSet::adjustFlow breaking around RA_SKIP frame yp="<<yp<<" hp=" << hp << endl;
                 // We don't "break;" here because there could be another such frame below the first one
                 // We assume that the frames on top are in order ( top to bottom ), btw.
                 // They should be, since updateFrames reorders before updating frames-on-top
-                breaked = true;
             }
         }
     }
@@ -952,27 +974,21 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
     // leave no space by their side for any text (e.g. most tables)
     int breakBegin = 0;
     int breakEnd = 0;
-    getMargins( yp, h, 0L, 0L, &breakBegin, &breakEnd, parag ? QMAX( parag->firstLineMargin(), parag->leftMargin() ) : 0 );
+    getMargins( yp, hp, 0L, 0L, &breakBegin, &breakEnd, parag ? QMAX( parag->firstLineMargin(), parag->leftMargin() ) : 0 );
     if ( breakEnd )
     {
         kdDebug(32002) << "KWTextFrameSet::adjustFlow no-space case. breakBegin=" << breakBegin
-                       << " breakEnd=" << breakEnd << " h=" << h << endl;
+                       << " breakEnd=" << breakEnd << " hp=" << hp << endl;
         ASSERT( breakBegin <= breakEnd );
-        if ( checkVerticalBreak( yp, h, parag, linesTogether, breakBegin, breakEnd ) )
-        {
-            breaked = true;
-            //kdDebug(32002) << "checkVerticalBreak ok." << endl;
-        }
+        if ( checkVerticalBreak( yp, hp, parag, linesTogether, breakBegin, breakEnd ) )
+            ; //kdDebug(32002) << "checkVerticalBreak ok." << endl;
         else // shouldn't happen
             kdWarning(32002) << "checkVerticalBreak didn't find it" << endl;
     }
 
     // ## TODO loop around those three methods until we don't move anymore ?
 
-    int yp_ro = yp;
-    QTextFlow::adjustFlow( yp_ro, w, h, parag, FALSE );
-
-    // We also use adjustFlow as a hook into the formatting algo, to fix the parag rect if necessary.
+    // We also use verticalBreak as a hook into the formatting algo, to fix the parag rect if necessary.
     if ( parag && parag->hasBorder() )
     {
         parag->setWidth( textDocument()->width() - 1 );
@@ -996,6 +1012,8 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
             parag->setWidth( parag->rect().width() + lastFormat->width('x') );
         }
     }
+
+    return ( yp + hp ) - ( oldY + oldHeight );
 }
 
 KWTextFrameSet::~KWTextFrameSet()

@@ -574,7 +574,7 @@ void KWView::setupActions()
     for ( unsigned int i = 1; i < 10; i++ )
         lst << QString::number( i );
     actionBorderWidth->setItems( lst );
-
+    actionBorderWidth->setComboWidth( 30 );
 
     actionBorderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color" );
     connect(actionBorderColor,SIGNAL(activated()),SLOT(borderColor()));
@@ -1688,8 +1688,8 @@ void KWView::slotViewFrameBorders()
 
 void KWView::viewHeader()
 {
-    bool state=actionViewFooter->isChecked();
-    m_doc->setHeaderVisible( actionViewHeader->isChecked() );
+    bool state = actionViewHeader->isChecked();
+    m_doc->setHeaderVisible( state );
     KWTextFrameSetEdit * edit = currentTextEdit();
     if(!state )
     {
