@@ -54,6 +54,7 @@ bool kspreadfunc_len( KSContext& context );
 bool kspreadfunc_lower( KSContext& context );
 bool kspreadfunc_mid( KSContext& context );
 bool kspreadfunc_proper(KSContext & context);
+bool kspreadfunc_regexp(KSContext & context);
 bool kspreadfunc_replace( KSContext& context );
 bool kspreadfunc_rept( KSContext& context );
 bool kspreadfunc_rot( KSContext& context );
@@ -87,6 +88,7 @@ void KSpreadRegisterTextFunctions()
   repo->registerFunction( "LOWER",       kspreadfunc_lower );
   repo->registerFunction( "MID",         kspreadfunc_mid );
   repo->registerFunction( "PROPER",      kspreadfunc_proper );
+  repo->registerFunction( "REGEXP",      kspreadfunc_regexp );
   repo->registerFunction( "REPLACE",     kspreadfunc_replace );
   repo->registerFunction( "REPT",        kspreadfunc_rept );
   repo->registerFunction( "ROT",         kspreadfunc_rot ); // KSpread-specific, like OpenOffice's ROT13
@@ -529,6 +531,46 @@ bool kspreadfunc_proper(KSContext & context)
 
   context.setValue(new KSValue(str));
 
+  return true;
+}
+
+// Function: REGEXP
+bool kspreadfunc_regexp(KSContext & context)
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if (args.count() != 3)
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::StringType, true ) )
+    return false;
+
+  kdDebug() << "Got parameter" << endl;
+
+  QRegExp exp( args[1]->stringValue() );
+  //  exp.setWildcard( true );
+  if ( !exp.isValid() )
+    return false;
+
+  QString s( args[0]->stringValue() );
+  QString str( args[2]->stringValue() );
+
+  kdDebug() << "Search: " << args[1]->stringValue() << " in " << s 
+            << ", Result: " << exp.search( s ) << endl;
+
+  int pos = 0;
+  while ( ( pos = exp.search( s, pos ) ) != -1 ) 
+  {
+    int i = exp.matchedLength();
+    s = s.replace( pos, i, str );
+    pos += str.length();
+  }
+
+  context.setValue( new KSValue( s ) );
   return true;
 }
 
