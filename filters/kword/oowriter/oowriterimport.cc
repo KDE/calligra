@@ -67,16 +67,13 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
     prepareDocument( mainDocument, framesetsElem );
     createPageDocument( mainDocument, framesetsElem );
 
-    KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
-    if ( !out ) {
-        kdError(30502) << "Unable to open output file!" << endl;
-        return KoFilter::StorageCreationError;
+    KoStoreDevice* out = m_chain->storageFile( "maindoc.xml", KoStore::Write );
+    if ( out ) {
+        QCString cstr = mainDocument.toCString();
+        kdDebug()<<" cstr :"<<cstr<<endl;
+        // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
+        out->writeBlock( cstr, cstr.length() );
     }
-    QCString cstr = mainDocument.toCString();
-    kdDebug()<<" cstr :"<<cstr<<endl;
-    // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
-    out->writeBlock( cstr, cstr.length() );
-
 
     QDomDocument docinfo;
     createDocumentInfo( docinfo );
@@ -91,20 +88,36 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
         out->writeBlock( info , info.length() );
     }
 
+
     kdDebug() << "######################## OoWriterImport::convert done ####################" << endl;
     return KoFilter::OK;
 }
 
+void OoWriterImport::createDocumentContent( QDomDocument &doccontent )
+{
+    QDomDocument doc = KoDocument::createDomDocument( "kword", "DOC", "1.2" );
+    QDomElement docElement = doc.documentElement();
+    docElement.setAttribute( "editor", "KWord" );
+    docElement.setAttribute( "mime", "application/x-kword" );
+    docElement.setAttribute( "syntaxVersion", "2" );
+
+    QDomElement content = m_content.documentElement();
+
+    // content.xml contains some automatic-styles that we need to store
+    QDomNode automaticStyles = content.namedItem( "office:automatic-styles" );
+    if ( !automaticStyles.isNull() )
+        insertStyles( automaticStyles.toElement() );
+
+    QDomNode body = content.namedItem( "office:body" );
+    if ( body.isNull() )
+        return;
+
+    doccontent.appendChild( doc );
+}
+
 void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem )
 {
-    mainDocument.appendChild( mainDocument.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
-
-    QDomElement elementDoc;
-    elementDoc=mainDocument.createElement("DOC");
-    elementDoc.setAttribute("editor","KWord's OOWriter Import Filter");
-    elementDoc.setAttribute("mime","application/x-kword");
-    elementDoc.setAttribute("syntaxVersion",2);
-    mainDocument.appendChild(elementDoc);
+    createDocumentContent(mainDocument);
 
     framesetsElem=mainDocument.createElement("FRAMESETS");
     mainDocument.documentElement().appendChild(framesetsElem);

@@ -39,6 +39,7 @@ private:
     void createPageDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
     void createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool headerFooter );
     void createDocumentInfo( QDomDocument &docinfo );
+    void createDocumentContent( QDomDocument &doccontent );
     KoFilter::ConversionStatus openFile();
     bool createStyleMap( const QDomDocument & styles );
     void insertStyles( const QDomElement& element );
