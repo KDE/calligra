@@ -130,6 +130,8 @@ public:
    */
   void setOutlineWidth (float width);
 
+  void setOutlineShape (OutlineInfo::Shape s);
+
   /**
    * Retrieve the color of the object outline.
    *

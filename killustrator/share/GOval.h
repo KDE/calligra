@@ -51,6 +51,8 @@ public:
   void setStartPoint (const Coord& p);
   void setEndPoint (const Coord& p);
 
+  void setAngles (float a1, float a2);
+
   const Coord& startPoint () const { return sPoint; }
   const Coord& endPoint () const { return ePoint; }
   bool isCircle () const { return circleFlag; }

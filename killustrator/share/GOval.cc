@@ -197,6 +197,12 @@ bool GOval::contains (const Coord& p) {
   return false;
 }
 
+void GOval::setAngles (float a1, float a2) {
+  sAngle = a1;
+  eAngle = a2;
+  emit changed ();
+}
+
 void GOval::setStartPoint (const Coord& p) {
   sPoint = p;
   calcBoundingBox ();

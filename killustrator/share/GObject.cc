@@ -184,6 +184,12 @@ GObject::OutlineInfo GObject::getOutlineInfo () const {
   return outlineInfo;
 }
   
+void GObject::setOutlineShape (OutlineInfo::Shape s) {
+    outlineInfo.shape = s;
+  emit changed ();
+  emit propertiesChanged ();
+}
+
 void GObject::setOutlineColor (const QColor& color) {
   outlineInfo.color = color;
   emit changed ();
