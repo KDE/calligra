@@ -1,0 +1,90 @@
+'servicetype' 'KOMComponent'
+{
+  'Interface'<string> = 'IDL:KOM/Component:1.0';
+  'properties' 'properties'
+  {
+    'property' 'Comment' [ de = 'Kommentar' ]
+    {
+	'Type'<string> = 'string' ;
+    };
+    'property' 'Name'
+    {
+	'Type'<string> = 'string' ;
+    };
+    'property' 'Exec'
+    {
+	'Type'<string> = 'string' ;
+    };
+    'property' 'ActivationMode'
+    {
+	'Type'<string> = 'string' ;
+    };
+    'property' 'RepoID'
+    {
+	'Type'<string> = '@string' ;
+    };
+    'property' 'MiniIcon'
+    {
+	'Type'<string> = 'string' ;
+    };
+    'property' 'Icon'
+    {
+	'Type'<string> = 'string' ;
+    };
+  };
+};
+
+'servicetype' 'KOfficeDocument'
+{
+  'SuperTypes'<@string> = { 'KOMComponent' };
+  'Interface'<string> = 'IDL:KSpread/DocumentFactory:1.0';
+  'properties' 'properties'
+  {
+    'property' 'MimeTypes'
+    {
+	'Type'<string> = '@string' ;
+    };
+  };
+};
+
+'servicetype' 'KOfficeDataTool'
+{
+  'SuperTypes'<@string> = { 'KOMComponent' };
+  'Interface'<string> = 'IDL:DataTools/Tool:1.0';
+  'properties' 'properties'
+  {
+    'property' 'MimeTypes'
+    {
+	'Type'<string> = '@string' ;
+    };
+    'property' 'Commands'
+    {
+	'Type'<string> = '@string' ;
+    };
+    'property' 'CommandsI18N'
+    {
+	'Type'<string> = '@string' ;
+    };
+  };
+};
+
+'servicetype' 'KOMPlugin'
+{
+  'SuperTypes'<@string> = { 'KOMComponent' };
+  'Interface'<string> = 'IDL:KSpread/DocumentFactory:1.0';
+  'properties' 'properties'
+  {
+    'property' 'RequiredInterfaces'
+    {
+	'Type'<string> = '@string' ;
+    };
+    'property' 'MenuEntries'
+    {
+	'Type'<string> = '@string' ;
+    };    
+    'property' 'ToolBarEntries'
+    {
+	'Type'<string> = '@string' ;
+    };    
+  };
+};
