@@ -56,6 +56,10 @@ public:
      */
     void setReadOnly(bool ro);
 
+public slots:
+    
+    void slotSelectAll();
+    
 signals:
 
     /**

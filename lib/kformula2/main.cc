@@ -48,7 +48,7 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_4: document->addRoot(); return;
             case Qt::Key_5: document->addFraction(); return;
             case Qt::Key_6: document->addMatrix(); return;
-                //case Qt::Key_A: slotSelectAll(); return;
+            case Qt::Key_A: slotSelectAll(); return;
             case Qt::Key_C: document->copy(); return;
             case Qt::Key_D: document->replaceElementWithMainChild(BasicElement::afterCursor); return;
             case Qt::Key_G: document->makeGreek(); return;

@@ -141,4 +141,10 @@ FormulaCursor* KFormulaWidget::getCursor()
     return formulaView.getCursor();
 }
 
+
+void KFormulaWidget::slotSelectAll()
+{
+    formulaView.slotSelectAll();
+}
+
 #include "kformulawidget.moc"
