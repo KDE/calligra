@@ -17,12 +17,12 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <koRuler.h>
-
 #include <gcanvas.h>
-#include <graphiteview.h>
+
 #include <kdebug.h>
 
+#include <graphiteview.h>
+#include <ruler.h>
 
 GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     : QScrollView(view, "GCanvas", Qt::WNorthWestGravity | Qt::WResizeNoErase | Qt::WRepaintNoErase),
@@ -35,17 +35,17 @@ GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     viewport()->setBackgroundMode(QWidget::PaletteLight);
     installEventFilter(viewport());
     setFrameStyle(QFrame::NoFrame);
-    resizeContents(1000,1000);
+    resizeContents(1000,1400);
 }
 
-void GCanvas::setRulers(KoRuler *hruler, KoRuler *vruler) {
+void GCanvas::setRulers(Ruler *hruler, Ruler *vruler) {
     m_horizontal=hruler;
     m_vertical=vruler;
 }
 
-void GCanvas::showMousePos(bool pos) {
-    m_vertical->showMousePos(pos);
-    m_horizontal->showMousePos(pos);
+void GCanvas::showMousePos(bool show) {
+    m_vertical->showMousePos(show);
+    m_horizontal->showMousePos(show);
 }
 
 void GCanvas::contentsMouseMoveEvent(QMouseEvent *e) {
@@ -54,7 +54,7 @@ void GCanvas::contentsMouseMoveEvent(QMouseEvent *e) {
     m_doc->mouseMoveEvent(e, m_view);
 }
 
-void GCanvas::viewportPaintEvent(QPaintEvent *e) {
+void GCanvas::viewportPaintEvent(QPaintEvent */*e*/) {
 
     QPainter p(viewport());
     //QRect clipRect=

@@ -25,7 +25,7 @@
 
 class QResizeEvent;
 class QMouseEvent;
-class KoRuler;
+class Ruler;
 class KSelectAction;
 class GraphitePart;
 
@@ -47,7 +47,7 @@ protected slots:
     void slotViewZoom(const QString &text);
 
     void recalcRulers(int x, int y);
-    void rulerUnitChanged(QString unit);
+    void rulerUnitChanged(GraphiteGlobal::Unit);
 
 protected:
     void resizeEvent(QResizeEvent *e);
@@ -58,9 +58,11 @@ private:
     void setupActions();
     void setupRulers();
 
+    GraphitePart *m_doc;
     GCanvas *m_canvas;
-    KoRuler *m_vert, *m_horiz;
+    Ruler *m_vert, *m_horiz;
     int m_oldX, m_oldY;
     KSelectAction *m_zoomAction;
 };
+
 #endif

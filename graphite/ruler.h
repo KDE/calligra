@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+                 2001 Werner Trobin <trobin@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,175 +21,82 @@
 #ifndef ruler_h
 #define ruler_h
 
-//#include <koPageLayoutDia.h>
-
-//#include <kapp.h>
-
 #include <qframe.h>
-//#include <qwidget.h>
-#include <qpainter.h>
-//#include <qcolor.h>
-//#include <qpen.h>
-//#include <qbrush.h>
-//#include <qstring.h>
-//#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qrect.h>
-//#include <qevent.h>
-#include <qcursor.h>
 #include <qpixmap.h>
-#include <qlist.h>
-#include <qpopupmenu.h>
-#include <qpoint.h>
+#include <graphiteglobal.h>
 
-//#include <koGlobal.h>
-//#include <koTabChooser.h>
+class QPopupMenu;
 
-class RulerPrivate;
+class Ruler : public QFrame {
 
-/******************************************************************/
-/* Class: Ruler                                                 */
-/******************************************************************/
-
-class Ruler : public QFrame
-{
     Q_OBJECT
 
 public:
-    Ruler( QWidget *_parent,  QWidget *_canvas, Orientation _orientation,
-             KoPageLayout _layout, int _flags, KoTabChooser *_tabChooser = 0L );
+    Ruler(QWidget *parent, QWidget *canvas, Qt::Orientation orientation,
+          const Graphite::PageLayout &layout, const double &zoomedRes);
     ~Ruler();
 
-    void setUnit( const QString& _unit );
+    void setUnit(const GraphiteGlobal::Unit &unit);
+    void setPageLayout(const Graphite::PageLayout &layout) { m_layout=layout; repaint(false); }
 
-    void setZoom( const double& zoom=1.0 );
-    const double& zoom() const { return m_zoom; }
-
-    void setPageLayout( KoPageLayout _layout )
-    { layout = _layout; repaint( false ); }
-
-    void showMousePos( bool _showMPos )
-    { showMPos = _showMPos; hasToDelete = false; mposX = -1; mposY = -1; repaint( false ); }
+    void showMousePos(bool showMPos);
     // Not zoomed - real pixel coords!
-    void setMousePos( int mx, int my );
+    void setMousePos(int mx, int my);
 
-    void setOffset( int _diffx, int _diffy )
-    { diffx = _diffx; diffy = _diffy; repaint( false ); }
+    void setOffset(int dx, int dy) { m_dx=dx; m_dy=dy; repaint(false); }
 
-    void setLeftIndent( double _left )
-    { i_left = makeIntern( _left ); repaint( false ); }
-    void setFirstIndent( double _first )
-    { i_first = makeIntern( _first ); repaint( false ); }
+    void setEditable(bool editable) { m_editable=editable; }
+    bool editable() const { return m_editable; }
 
-    void setTabList( const QList<KoTabulator>* _tabList );
-    void setFrameStart( int _frameStart ) { frameStart = _frameStart; repaint( false ); }
-
-    void setAllowUnits( bool _allow ) { allowUnits = _allow; }
+    void setZoomedRes(const double &zoomedRes);
 
 signals:
-    void newPageLayout( KoPageLayout );
-    void newLeftIndent( double );
-    void newFirstIndent( double );
+    void pageLayoutChanged(const Graphite::PageLayout &);
+    void unitChanged(GraphiteGlobal::Unit);
     void openPageLayoutDia();
-    void tabListChanged( QList<KoTabulator>* );
-    void unitChanged( QString );
 
 protected:
-    enum Action {A_NONE, A_BR_LEFT, A_BR_RIGHT, A_BR_TOP, A_BR_BOTTOM,
-                 A_LEFT_INDENT, A_FIRST_INDENT, A_TAB};
+    void mousePressEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mouseDoubleClickEvent(QMouseEvent *);
+    void resizeEvent(QResizeEvent *e);
 
-    void drawContents( QPainter *_painter )
-    { orientation == Qt::Horizontal ? drawHorizontal( _painter ) : drawVertical( _painter ); }
+    void drawContents(QPainter *painter) { m_orientation==Qt::Horizontal ? drawHorizontal(painter) : drawVertical(painter); }
 
-    void drawHorizontal( QPainter *_painter );
-    void drawVertical( QPainter *_painter );
-    void drawTabs( QPainter &_painter );
+private slots:
+    void rbPT() { setUnit(GraphiteGlobal::Pt); emit unitChanged(GraphiteGlobal::Pt); }
+    void rbMM() { setUnit(GraphiteGlobal::MM); emit unitChanged(GraphiteGlobal::MM); }
+    void rbINCH() { setUnit(GraphiteGlobal::Inch); emit unitChanged(GraphiteGlobal::Inch); }
 
-    void mousePressEvent( QMouseEvent *e );
-    void mouseReleaseEvent( QMouseEvent *e );
-    void mouseMoveEvent( QMouseEvent *e );
-    void mouseDoubleClickEvent( QMouseEvent* );
-    void resizeEvent( QResizeEvent *e );
+private:
+    Ruler(const Ruler &rhs);
+    Ruler &operator=(const Ruler &rhs);
+    enum Action { A_NONE, A_BR_LEFT, A_BR_RIGHT, A_BR_TOP, A_BR_BOTTOM };
 
-    double makeIntern( double _v );
-    double zoomIt(const double &value) const;
-    int zoomIt(const int &value) const;
-    unsigned int zoomIt(const unsigned int &value) const;
-    double unZoomIt(const double &value) const;
-    int unZoomIt(const int &value) const;
-    unsigned int unZoomIt(const unsigned int &value) const;
-    int double2Int(const double &value) const;
-    void setupMenu();
-    void uncheckMenu();
+    void drawHorizontal(QPainter *painter);
+    void drawVertical(QPainter *painter);
 
-    RulerPrivate *d;
-
-    Qt::Orientation orientation;
-    int diffx, diffy;
-    double i_left, i_first;
-    KoPageLayout layout;
-    QPixmap buffer;
-    double m_zoom, m_1_zoom;
-    QString unit;
-    bool hasToDelete;
-    bool showMPos;
-    int mposX, mposY;
-    int frameStart;
-    bool allowUnits;
-
-protected slots:
-    void rbPT() { setUnit( QString::fromLatin1("pt") ); emit unitChanged( QString::fromLatin1("pt") ); }
-    void rbMM() { setUnit( QString::fromLatin1("mm") ); emit unitChanged( QString::fromLatin1("mm") ); }
-    void rbINCH() { setUnit( QString::fromLatin1("inch") ); emit unitChanged( QString::fromLatin1("inch") ); }
-    void pageLayoutDia() { emit openPageLayoutDia(); }
-    void rbRemoveTab();
+    QWidget *m_canvas;
+    Qt::Orientation m_orientation;
+    Graphite::PageLayout m_layout;
+    double m_zoomedRes;
+    double m_1_zoomedRes; // 1/m_zoomedRes
+    QPixmap m_buffer;
+    GraphiteGlobal::Unit m_unit;
+    int m_dx, m_dy;
+    int m_MX, m_MY;
+    int m_oldMX, m_oldMY;
+    Ruler::Action m_action;
+    unsigned short m_mousePressed : 1;
+    unsigned short m_showMPos : 1;
+    unsigned short m_haveToDelete : 1;
+    unsigned short m_movingFirstBorder : 1;
+    unsigned short m_movingSecondBorder : 1;
+    unsigned short m_editable : 1;
+    QPopupMenu *m_menu;
+    int m_MMIndex, m_PTIndex, m_INCHIndex;
 
 };
-
-inline double Ruler::zoomIt(const double &value) const {
-    if (m_zoom==1.0)
-        return value;
-    return m_zoom*value;
-}
-
-inline int Ruler::zoomIt(const int &value) const {
-    if (m_zoom==1.0)
-        return value;
-    return double2Int(m_zoom*value);
-}
-
-inline unsigned int Ruler::zoomIt(const unsigned int &value) const {
-    if (m_zoom==1.0)
-        return value;
-    return static_cast<unsigned int>(double2Int(m_zoom*value));
-}
-
-inline double Ruler::unZoomIt(const double &value) const {
-    if(m_zoom==1.0)
-        return value;
-    return value*m_1_zoom;
-}
-
-inline int Ruler::unZoomIt(const int &value) const {
-    if(m_zoom==1.0)
-        return value;
-    return double2Int(value*m_1_zoom);
-}
-
-inline unsigned int Ruler::unZoomIt(const unsigned int &value) const {
-    if(m_zoom==1.0)
-        return value;
-    return static_cast<unsigned int>(double2Int(value*m_1_zoom));
-}
-
-inline int Ruler::double2Int(const double &value) const {
-
-    if( static_cast<double>((value-static_cast<int>(value)))>=0.5 )
-        return static_cast<int>(value)+1;
-    else if( static_cast<double>((value-static_cast<int>(value)))<=-0.5 )
-        return static_cast<int>(value)-1;
-    else
-        return static_cast<int>(value);
-}
 
 #endif

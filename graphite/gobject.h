@@ -142,6 +142,9 @@ protected:
     QList<QRect> *handles() const { return m_handles; }
 
 private:
+    GObjectM9r(const GObjectM9r &rhs);
+    GObjectM9r &operator=(const GObjectM9r &rhs);
+
     GObject *m_object;
     Mode m_mode;
     GraphitePart *m_part;     // we need that for the history
@@ -174,6 +177,9 @@ protected:
     virtual void createPropertyDialog();
 
 private:
+    G1DObjectM9r(const G1DObjectM9r &rhs);
+    G1DObjectM9r &operator=(const G1DObjectM9r &rhs);
+
     QSpinBox *m_width;
     KColorButton *m_color;
     QComboBox *m_style;
@@ -206,6 +212,8 @@ private slots:
     void slotBalance();   // activate/deactivate the sliders (xfactor/yfactor)
 
 private:
+    G2DObjectM9r(const G2DObjectM9r &rhs);
+    G2DObjectM9r &operator=(const G2DObjectM9r &rhs);
     void updatePreview(int btn);
 
     QVButtonGroup *m_style;

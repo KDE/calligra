@@ -38,9 +38,6 @@ GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObjec
 
     setInstance(GraphiteFactory::global());
     m_history=new KCommandHistory(actionCollection());
-    m_pageSize=QPrinter::A4; // make that configurable!!! (TODO)
-    m_pageOrientation=PG_PORTRAIT; // make that configurable!!! (TODO)
-    // TODO: read the page border sizes from config
 
     KStdAction::cut(this, SLOT(edit_cut()), actionCollection(), "edit_cut" );
 
@@ -57,18 +54,61 @@ bool GraphitePart::initDoc() {
     return true;
 }
 
+QPrinter::PageSize GraphitePart::pageSize() const {
+    return m_pageLayout.layout==Graphite::PageLayout::Norm ? m_pageLayout.size : QPrinter::NPageSize;
+}
+
+void GraphitePart::pageSize(double &width, double &height) const {
+
+    if(m_pageLayout.layout==Graphite::PageLayout::Norm) {
+        if(m_pageLayout.orientation==PG_PORTRAIT) {
+            width=Graphite::pageWidth[m_pageLayout.size];
+            height=Graphite::pageHeight[m_pageLayout.size];
+        }
+        else {
+            height=Graphite::pageWidth[m_pageLayout.size];
+            width=Graphite::pageHeight[m_pageLayout.size];
+        }
+    }
+    else {
+        if(m_pageLayout.orientation==PG_PORTRAIT) {
+            width=m_pageLayout.customWidth;
+            height=m_pageLayout.customHeight;
+        }
+        else {
+            height=m_pageLayout.customWidth;
+            width=m_pageLayout.customHeight;
+        }
+    }
+}
+
 void GraphitePart::setPageSize(const QPrinter::PageSize &pageSize) {
-    m_pageSize=pageSize;
+    m_pageLayout.size=pageSize;
+    m_pageLayout.layout=Graphite::PageLayout::Norm;
+    // TODO -- update
+}
+
+void GraphitePart::setPageSize(const double &width, const double &height) {
+
+    if(m_pageLayout.orientation==PG_PORTRAIT) {
+        m_pageLayout.customWidth=width;
+        m_pageLayout.customHeight=height;
+    }
+    else {
+        m_pageLayout.customWidth=height;
+        m_pageLayout.customHeight=width;
+    }
+    m_pageLayout.layout=Graphite::PageLayout::Custom;
     // TODO -- update
 }
 
 void GraphitePart::setPageOrientation(const KoOrientation &orientation) {
-    m_pageOrientation=orientation;
+    m_pageLayout.orientation=orientation;
     // TODO -- update
 }
 
 void GraphitePart::setPageBorders(const Graphite::PageBorders &pageBorders) {
-    m_pageBorders=pageBorders;
+    m_pageLayout.borders=pageBorders;
     // TODO -- update
 }
 

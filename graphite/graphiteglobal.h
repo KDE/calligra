@@ -20,7 +20,9 @@
 #ifndef GRAPHITE_GLOBAL_H
 #define GRAPHITE_GLOBAL_H
 
+#include <qprinter.h>
 #include <kimageeffect.h>
+#include <koGlobal.h>
 #include <float.h>
 
 class QColor;
@@ -103,6 +105,22 @@ struct PageBorders {
     double top;
     double right;
     double bottom;
+};
+
+struct PageLayout {
+    // TODO: read the defaults from a KConfig object
+    PageLayout() : orientation(PG_PORTRAIT), layout(Norm),
+        size(QPrinter::A4), customWidth(-1.0), customHeight(-1.0) {}
+
+    double width() const;
+    double height() const;
+
+    KoOrientation orientation;
+    enum { Norm, Custom } layout;
+    QPrinter::PageSize size;
+    double customWidth;
+    double customHeight;
+    PageBorders borders;
 };
 
 }; //namespace Graphite

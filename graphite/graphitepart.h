@@ -20,11 +20,7 @@
 #ifndef GRAPHITE_PART_H
 #define GRAPHITE_PART_H
 
-#include <qprinter.h>
-
 #include <koDocument.h>
-#include <koGlobal.h>
-
 #include <graphiteglobal.h>
 
 class QPainter;
@@ -52,12 +48,16 @@ public:
 
     KCommandHistory *history() { return m_history; }
 
-    QPrinter::PageSize pageSize() const { return m_pageSize; }
-    void setPageSize(const QPrinter::PageSize &pageSize);
-    KoOrientation pageOrientation() const { return m_pageOrientation; }
+    // will return NPageSize if "Custom"!
+    QPrinter::PageSize pageSize() const;
+    void pageSize(double &width, double &height) const;
+    void setPageSize(const QPrinter::PageSize &pageSize); // Norm
+    void setPageSize(const double &width, const double &height); // Custom
+    KoOrientation pageOrientation() const { return m_pageLayout.orientation; }
     void setPageOrientation(const KoOrientation &orientation);
-    Graphite::PageBorders pageBorders() const { return m_pageBorders; }
+    Graphite::PageBorders pageBorders() const { return m_pageLayout.borders; }
     void setPageBorders(const Graphite::PageBorders &pageBorders);
+    const Graphite::PageLayout &pageLayout() const { return m_pageLayout; }
 
     // The canvas forwards the Events to us. We test if any
     // object has been hit (z-order!) and handle the event.
@@ -89,12 +89,8 @@ private:
     // TODO: If an object is selected, store a pointer
     //       to its M9r here and draw the handles after
     //       drawing the whole tree.
-
     // TODO: Do we need isLoading() like in KSpread?
-
-    QPrinter::PageSize m_pageSize;
-    KoOrientation m_pageOrientation;
-    Graphite::PageBorders m_pageBorders;
+    Graphite::PageLayout m_pageLayout;
 };
 
 #endif

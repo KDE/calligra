@@ -25,18 +25,19 @@
 #include <qscrollview.h>
 #include <graphitepart.h>
 
-class KoRuler;
+class Ruler;
 class GraphiteView;
 
 class GCanvas : public QScrollView {
 
     Q_OBJECT
+
 public:
     GCanvas(GraphiteView *view, GraphitePart *doc);
     virtual ~GCanvas() {}
 
-    void setRulers(KoRuler *hruler, KoRuler *vruler);
-    void showMousePos(bool pos);
+    void setRulers(Ruler *hruler, Ruler *vruler);
+    void showMousePos(bool show);
 
 protected:
     virtual void contentsMousePressEvent(QMouseEvent *e) { m_doc->mousePressEvent(e, m_view); }
@@ -58,7 +59,7 @@ protected:
 private:
     GraphitePart *m_doc;
     GraphiteView *m_view;
-    KoRuler *m_vertical, *m_horizontal;
+    Ruler *m_vertical, *m_horizontal;
 };
 
 #endif // gcanvas_h

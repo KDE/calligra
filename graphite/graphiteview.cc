@@ -19,18 +19,15 @@
 
 #include <kaction.h>
 #include <klocale.h>
-#include <kdebug.h>
-#include <koRuler.h>
-#include <koPageLayoutDia.h>
 
+#include <ruler.h>
 #include <graphitepart.h>
 #include <graphitefactory.h>
 #include <graphiteview.h>
 
-
 GraphiteView::GraphiteView(GraphitePart *doc, QWidget *parent,
                            const char *name) : KoView(doc, parent, name),
-                                               m_oldX(1), m_oldY(1) {
+                                               m_doc(doc), m_oldX(1), m_oldY(1) {
     setInstance(GraphiteFactory::global());
     setXMLFile(QString::fromLatin1("graphite.rc"));
     setupActions();
@@ -139,17 +136,15 @@ void GraphiteView::slotViewZoom(const QString &t) {
             m_zoomAction->setCurrentItem(1); // 100%
     }
 
-    // propagate the new zoom value
-    m_horiz->setZoom(zoomValue);
-    m_horiz->repaint(false);
-    m_vert->setZoom(zoomValue);
-    m_vert->repaint(false);
+    // propagate the new zoom (*res) value
+    double zr=zoomValue*GraphiteGlobal::self()->resolution();
+    m_horiz->setZoomedRes(zr);
+    m_vert->setZoomedRes(zr);
     setZoom(zoomValue);
 }
 
 void GraphiteView::recalcRulers(int x, int y) {
 
-    kdDebug() << "GraphiteView::recalcRulers   x: " << x << " y: " << y << endl;
     if(x!=m_oldX)
         m_horiz->setOffset(x, y);
     if(y!=m_oldY)
@@ -158,7 +153,7 @@ void GraphiteView::recalcRulers(int x, int y) {
     m_oldY=y;
 }
 
-void GraphiteView::rulerUnitChanged(QString unit) {
+void GraphiteView::rulerUnitChanged(GraphiteGlobal::Unit unit) {
     m_vert->setUnit(unit);
     m_horiz->setUnit(unit);
 }
@@ -171,7 +166,11 @@ void GraphiteView::resizeEvent(QResizeEvent *e) {
     recalcRulers(m_canvas->contentsX(), m_canvas->contentsY());
 }
 
-void GraphiteView::updateReadWrite(bool /*readwrite*/) {
+void GraphiteView::updateReadWrite(bool readwrite) {
+    m_vert->setEditable(readwrite);
+    m_vert->showMousePos(false);
+    m_horiz->setEditable(readwrite);
+    m_horiz->showMousePos(false);
 }
 
 void GraphiteView::setupActions() {
@@ -194,18 +193,17 @@ void GraphiteView::setupActions() {
 
 void GraphiteView::setupRulers() {
 
-    // FIXME
-    KoPageLayout layout=KoPageLayoutDia::standardLayout();
-
-    m_vert=new KoRuler(this, m_canvas->viewport(), Qt::Vertical, layout, 0);
+    m_vert=new Ruler(this, m_canvas->viewport(), Qt::Vertical,
+                     m_doc->pageLayout(), GraphiteGlobal::self()->zoomedResolution());
     m_vert->showMousePos(true);
-    connect(m_vert, SIGNAL(unitChanged(QString)), this,
-            SLOT(rulerUnitChanged(QString)));
+    connect(m_vert, SIGNAL(unitChanged(GraphiteGlobal::Unit)), this,
+            SLOT(rulerUnitChanged(GraphiteGlobal::Unit)));
 
-    m_horiz=new KoRuler(this, m_canvas->viewport(), Qt::Horizontal, layout, 0);
+    m_horiz=new Ruler(this, m_canvas->viewport(), Qt::Horizontal,
+                     m_doc->pageLayout(), GraphiteGlobal::self()->zoomedResolution());
     m_horiz->showMousePos(true);
-    connect(m_horiz, SIGNAL(unitChanged(QString)), this,
-            SLOT(rulerUnitChanged(QString)));
+    connect(m_horiz, SIGNAL(unitChanged(GraphiteGlobal::Unit)), this,
+            SLOT(rulerUnitChanged(GraphiteGlobal::Unit)));
 
     m_canvas->setRulers(m_horiz, m_vert);
     connect(m_canvas, SIGNAL(contentsMoving(int, int)), this,

@@ -174,6 +174,38 @@ void scalePoint(FxPoint &p, const double &xfactor, const double &yfactor, const 
     p.setY(py);
 }
 
+double PageLayout::width() const {
+
+    if(layout==Graphite::PageLayout::Norm) {
+        if(orientation==PG_PORTRAIT)
+            return Graphite::pageWidth[size];
+        else
+            return Graphite::pageHeight[size];
+    }
+    else {
+        if(orientation==PG_PORTRAIT)
+            return customWidth;
+        else
+            return customHeight;
+    }
+}
+
+double PageLayout::height() const {
+
+    if(layout==Graphite::PageLayout::Norm) {
+        if(orientation==PG_PORTRAIT)
+            return Graphite::pageHeight[size];
+        else
+            return Graphite::pageWidth[size];
+    }
+    else {
+        if(orientation==PG_PORTRAIT)
+            return customHeight;
+        else
+            return customWidth;
+    }
+}
+
 }; //namespace Graphite
 
 
@@ -221,7 +253,7 @@ void GraphiteGlobal::setZoom(const double &zoom) {
 }
 
 void GraphiteGlobal::setResoltuion(const int &resolution) {
-    m_resolution=Graphite::inch2mm(resolution);
+    m_resolution=1.0/Graphite::inch2mm(1.0/static_cast<double>(resolution));
     m_zoomedResolution=m_zoom*m_resolution;
 }
 
@@ -340,7 +372,7 @@ GraphiteGlobal::GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4),
                                    m_handleOffset(2), m_rotHandleOffset(2),
                                    m_unit(MM), m_zoom(1.0) {
     m_unitString=QString::fromLatin1("mm");
-    m_resolution=Graphite::inch2mm(QPaintDevice::x11AppDpiY());  // we use *only* Y, because Qt also does that :)
+    m_resolution=1.0/Graphite::inch2mm(1.0/static_cast<double>(QPaintDevice::x11AppDpiY()));  // we use *only* Y, because Qt also does that :)
     m_zoomedResolution=m_zoom*m_resolution;
 }
 
