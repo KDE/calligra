@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
 Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+Copyright (C) 2003   Joseph Wenninger<jowenn@kde.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public
@@ -46,7 +47,7 @@ typedef struct UpdateItem
 	bool done;
 };
 
-typedef QValueList<int> InsertList;
+typedef QPtrList<KexiDBUpdateRecord> InsertList;
 typedef QValueList<UpdateItem> UpdateBuffer;
 typedef QMap<QString , QVariant> ContentBuffer;
 typedef QValueVector<QString> FieldName;
@@ -66,7 +67,9 @@ class MySqlRecord : public KexiDBRecordSet, public MySqlResult
 		bool readOnly();
 
 		void reset();
-		bool commit(unsigned int record, bool insertBuffer);
+		KexiDBUpdateRecord* writeOut();
+		bool writeOut(KexiDBUpdateRecord * ur);
+//		bool commit(unsigned int record, bool insertBuffer);
 
 		QVariant value(unsigned int field);
 		QVariant value(QString field);
@@ -85,7 +88,10 @@ class MySqlRecord : public KexiDBRecordSet, public MySqlResult
 
 		bool deleteRecord(uint record);
 
-		int insert();
+		KexiDBUpdateRecord *insert();
+		KexiDBUpdateRecord *updateCurrent();
+		KexiDBUpdateRecord *update(unsigned long record){}
+		KexiDBUpdateRecord *update(QMap<QString,QVariant> fieldNameValueMap);
 
 		MySqlRecord *operator++();
 		MySqlRecord *operator--();
@@ -99,7 +105,7 @@ class MySqlRecord : public KexiDBRecordSet, public MySqlResult
 		bool next();
 		bool prev();
 
-		bool isForignField(uint field);
+		bool isForeignField(uint field);
 
 		unsigned long last_id();
 
@@ -112,7 +118,7 @@ class MySqlRecord : public KexiDBRecordSet, public MySqlResult
 
 	protected:
 		bool		findKey(); /* finds the key for updateing */
-		QString		forignUpdate(const QString &field, const QString &value, const QString &key, bool n);
+		QString		foreignUpdate(const QString &field, const QString &value, const QString &key, bool n);
 
 		MySqlDB		*m_db;
 

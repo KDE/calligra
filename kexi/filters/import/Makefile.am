@@ -3,5 +3,5 @@ mdb_dir =
 #mdb
 #endif
 
-SUBDIRS = #csv $(mdb_dir)
+SUBDIRS = csv $(mdb_dir)
 

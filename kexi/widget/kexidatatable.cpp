@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
-   Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -19,12 +19,7 @@
    Boston, MA 02111-1307, USA.
  */
 
-/*#include <qsqlquery.h>
-#include <qsqlrecord.h>
-#include <qsqlcursor.h>
-#include <qsqlquery.h>
-#include <qsqlerror.h>
-#include <qsqlindex.h> */
+
 #include <qvariant.h>
 #include <qlayout.h>
 #include <qstatusbar.h>
@@ -43,6 +38,7 @@
 
 #include "kexiDB/kexidb.h"
 #include "kexiDB/kexidbrecordset.h"
+#include "kexiDB/kexidbupdaterecord.h"
 #include "kexiDB/kexidberror.h"
 #include "kexiDB/kexidbwatcher.h"
 
@@ -70,7 +66,7 @@ KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, QString caption, co
 	g->addMultiCellWidget(m_tableView,	1,	1,	0,	1);
 	g->addMultiCellWidget(m_statusBar,	2,	2,	0,	1);
 
-	connect(m_tableView, SIGNAL(itemChanged(KexiTableItem *, int)), this, SLOT(slotItemChanged(KexiTableItem *, int)));
+	connect(m_tableView, SIGNAL(itemChanged(KexiTableItem *, int,QVariant)), this, SLOT(slotItemChanged(KexiTableItem *, int,QVariant)));
 	connect(m_tableView, SIGNAL(contextMenuRequested(KexiTableItem *, int, const QPoint &)), this,
 	 SLOT(slotContextMenu(KexiTableItem *, int, const QPoint &)));
 
@@ -172,17 +168,21 @@ KexiDataTable::executeQuery(const QString &queryStatement)
 }
 
 void
-KexiDataTable::slotItemChanged(KexiTableItem *i, int col)
+KexiDataTable::slotItemChanged(KexiTableItem *i, int col,QVariant oldValue)
 {
 	if(i->isInsertItem())
 	{
 		i->setInsertItem(false);
-		i->setHint(QVariant(m_record->insert()));
-		m_record->update(i->getHint().toInt(), col, i->getValue(col));
+		i->setHint("UPDATING");//;QVariant(m_record->insert()));
+		KexiDBUpdateRecord *urec=m_record->insert();
+		urec->setValue(col,i->getValue(col));
 
-		if (!m_record->commit(i->getHint().toInt(), true))
+//		m_record->update(i->getHint().toInt(), col, i->getValue(col));
+
+		KexiDBUpdateRecord *updR;
+		if ((!m_record->writeOut(updR))) //i->getHint().toInt(), true))
 		{
-			KMessageBox::detailedError(this, i18n("Error occupied while updating table"), m_record->latestError()->message(),
+			KMessageBox::detailedError(this, i18n("Error occurred while updating table"), m_record->latestError()->message(),
 			 i18n("Database Error"));
 //			err.toUser(this);
 			return;
@@ -199,6 +199,17 @@ KexiDataTable::slotItemChanged(KexiTableItem *i, int col)
 	}
 	else
 	{
+
+
+		QMap<QString,QVariant> fnvm;
+		for (int c=0;c<m_tableView->cols();c++)
+			fnvm[m_tableView->column(c)]=((c==col)?oldValue:i->getValue(c));
+		KexiDBUpdateRecord *ur=m_record->update(fnvm);
+		if (ur) {
+			ur->setValue(col,i->getValue(col));
+			m_record->writeOut();
+		}
+#if 0
 		int record = i->getHint().toInt();
 		kdDebug() << "KexiDataTable::slotItemChanged(" << record << ")" << endl;
 		if(m_record->update(record, col, i->getValue(col)))
@@ -208,8 +219,8 @@ KexiDataTable::slotItemChanged(KexiTableItem *i, int col)
 			m_db->watcher()->update(this, fi->table(), fi->name(), i->getHint().toUInt(),
 			 i->getValue(col));
 		}
+#endif
 	}
-
 }
 
 void

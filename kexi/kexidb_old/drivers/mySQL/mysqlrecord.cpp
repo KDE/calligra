@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
 Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+Copyright (C) 2003   Joseph Wenninger<jowenn@kde.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public
@@ -33,6 +34,7 @@ MySqlRecord::MySqlRecord(MYSQL_RES *result, MySqlDB *db, const char *name, bool 
 	m_db = db;
 	m_lastItem = 0;
 	m_readOnly = findKey();
+	m_insertList.setAutoDelete(true);
 }
 
 bool
@@ -68,9 +70,86 @@ MySqlRecord::reset()
 	}
 }
 
+
 bool
-MySqlRecord::commit(unsigned int record, bool insertBuffer)
+MySqlRecord::writeOut(KexiDBUpdateRecord * ur)
 {
+	QString fieldList;
+	QString valueList;
+
+	QVariant tmpValue;
+	QString tmpField;
+
+#warning " \" should be escaped within values";
+
+	if (ur->isInsert()) {
+		for (bool valid=ur->firstUpdateField(tmpField, tmpValue);
+			valid; valid=ur->nextUpdateField(tmpField,tmpValue)) {
+
+			if (!fieldList.isEmpty()) {
+				fieldList+=",";
+				valueList+=",";
+			}
+
+			fieldList+=tmpField;
+			valueList+="\""+tmpValue.asString()+"\"";
+		}
+		if (!fieldList.isEmpty())
+		{
+			QString statement="insert into "+m_table+" ("+fieldList+") VALUES ("+valueList+");";
+			kdDebug()<<"INSERT STATEMENT:"<<statement<<endl;
+			m_db->query(statement);
+
+		}
+	}
+	else
+	{
+
+		QString statement;
+		for (bool valid=ur->firstUpdateField(tmpField, tmpValue);
+			valid; valid=ur->nextUpdateField(tmpField,tmpValue)) {
+
+			if (!statement.isEmpty()) statement+=",";
+			statement+=tmpField+"=\""+tmpValue.asString()+"\"";
+		}
+
+		if (!statement.isEmpty())
+		{
+			QMap<QString,QVariant> pk=ur->primaryKeys();
+			QString primkeys;
+
+			QMap<QString,QVariant>::Iterator it;
+			for ( it = pk.begin(); it != pk.end(); ++it ) {
+				if (!primkeys.isEmpty()) primkeys+=" AND ";
+				primkeys+=(it.key()+"=\""+it.data().asString()+"\"");
+			}
+			statement="update "+m_table+" set "+statement + " where " +
+			primkeys;
+			kdDebug()<<"UPDATE STATEMENT:"<<statement<<endl;
+			m_db->query(statement);
+		}
+	}
+
+	m_insertList.remove(ur);
+	return true; //ERROR HANDLING NEEDED
+}
+
+
+KexiDBUpdateRecord*
+MySqlRecord::writeOut()
+{
+
+	kdDebug()<<"bool MySqlRecord::commit(unsigned int record, bool insertBuffer) entered"<<endl;
+
+	for (KexiDBUpdateRecord *record=m_insertList.first();record;record=m_insertList.first()) {
+		if (!writeOut(record)) return record;
+	}
+
+
+
+
+//	} else {
+#if 0
 	kdDebug() << "MySqlRecord::commit()" << endl;
 	for(UpdateBuffer::Iterator it = m_updateBuffer.begin(); it != m_updateBuffer.end(); it++)
 	{
@@ -102,7 +181,7 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 				}
 				else
 				{
-					statement = forignUpdate((*it).field, value, key, false);
+					statement = foreignUpdate((*it).field, value, key, false);
 				}
 				kdDebug() << "MySqlRecord::commit(): query: " << statement << endl;
 				m_db->query(statement);
@@ -120,7 +199,7 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 				}
 				else
 				{
-					statement = forignUpdate((*it).field, value, "", true);
+					statement = foreignUpdate((*it).field, value, "", true);
 				}
 				kdDebug() << "MySqlRecord::commit(insert): " << statement << endl;
 				m_db->query(statement);
@@ -148,14 +227,17 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 			}
 		}
 	}
-	return true;
+#endif
+//}
+	return 0;
 }
 
 QString
-MySqlRecord::forignUpdate(const QString &field, const QString &value, const QString &key, bool n)
+MySqlRecord::foreignUpdate(const QString &field, const QString &value, const QString &key, bool n)
 {
-	kdDebug() << "MySqlRecord::commit(): forign manipulation!" << endl;
-	//working out forign key field
+#if 0
+	kdDebug() << "MySqlRecord::commit(): foreign manipulation!" << endl;
+	//working out foreign key field
 	QString ftable = fieldInfo(field)->table();
 	QString ffield = fieldInfo(field)->name();
 
@@ -164,7 +246,7 @@ MySqlRecord::forignUpdate(const QString &field, const QString &value, const QStr
 
 	QString fkeyq("SELECT * FROM " + ftable + " WHERE " +
 	 ffield + " = " + "'" + value + "'");
-	kdDebug() << "MySqlRecord::forignUpdate(): fm: " << fkeyq << endl;
+	kdDebug() << "MySqlRecord::foreignUpdate(): fm: " << fkeyq << endl;
 	KexiDBRecordSet *r = m_db->queryRecord(fkeyq, false);
 	if(r)
 	{
@@ -188,17 +270,17 @@ MySqlRecord::forignUpdate(const QString &field, const QString &value, const QStr
 
 						if(create)
 						{
-							kdDebug() << "MySqlRecord::forignUpdate(): creating..." << endl;
+							kdDebug() << "MySqlRecord::foreignUpdate(): creating..." << endl;
 							uint buffer = r->insert();
 							r->update(buffer, ffield, QVariant(value));
 							r->commit(buffer, true);
 							delete r;
-							return forignUpdate(field, value, key, n);
+							return foreignUpdate(field, value, key, n);
 						}
 
 						if(!n)
 						{
-							kdDebug() << "MySqlRecord::forignUpdate(): update" << endl;
+							kdDebug() << "MySqlRecord::foreignUpdate(): update" << endl;
 							updateq = "update " + m_table + " set " + local + "='" +
 							 m_db->encode(fkey) + "' where " + m_keyField + "='" + m_db->encode(key) + "'";
 						}
@@ -209,7 +291,7 @@ MySqlRecord::forignUpdate(const QString &field, const QString &value, const QStr
 
 						}
 
-						kdDebug() << "MySqlRecord::forignUpdate(): u: " << updateq << endl;
+						kdDebug() << "MySqlRecord::foreignUpdate(): u: " << updateq << endl;
 //						delete r;
 
 //						break;
@@ -222,10 +304,11 @@ MySqlRecord::forignUpdate(const QString &field, const QString &value, const QStr
 		}
 
 	}
-	kdDebug() << "MySqlRecord::forignUpdate(): done 0!" << endl;
+	kdDebug() << "MySqlRecord::foreignUpdate(): done 0!" << endl;
 	delete r;
-	kdDebug() << "MySqlRecord::forignUpdate(): done 1!" << endl;
+	kdDebug() << "MySqlRecord::foreignUpdate(): done 1!" << endl;
 	return updateq;
+#endif
 }
 
 QVariant
@@ -311,17 +394,70 @@ MySqlRecord::update(unsigned int record, QString field, QVariant value)
 	return true;
 }
 
-int
+KexiDBUpdateRecord *
+MySqlRecord::updateCurrent()
+{
+	kdDebug()<<"KexiDBUpdateRecord * MySqlRecord::updateCurrent() entered "<<endl;
+	if (readOnly()) return 0; //perhaps a kexidberror should be set here too
+	KexiDBUpdateRecord *rec=new KexiDBUpdateRecord(false);
+	for (int i=0;i<fieldCount();i++) {
+		KexiDBField *f=fieldInfo(i);
+		rec->addField(f->name(),f->defaultValue());
+		if (f->primary_key()) {
+			rec->addPrimaryKey(f->name(),value(f->name()));
+		}
+	}
+	m_insertList.append(rec);
+
+//	int record = m_lastItem;
+	m_lastItem++;
+
+	return rec;
+}
+
+
+KexiDBUpdateRecord *
+MySqlRecord::update(QMap<QString,QVariant> fieldNameValueMap)
+{
+	QString tableName=fieldInfo(0)->table();
+	QStringList primaryKeys=m_db->table(tableName)->primaryKeys();
+	KexiDBUpdateRecord *rec=new KexiDBUpdateRecord(false);
+	for (int i=0;i<fieldCount();i++) {
+		KexiDBField *f=fieldInfo(i);
+		rec->addField(f->name(),f->defaultValue());
+		if (f->primary_key()) {
+			if (fieldNameValueMap.contains(f->name())) {
+				rec->addPrimaryKey(f->name(),fieldNameValueMap[f->name()]);
+				primaryKeys.remove(f->name());
+			}
+		}
+	}
+	if (primaryKeys.count()!=0) {
+		delete rec;
+		kdDebug()<<"UNIQUENESS COULDN'T BE ENSURED"<<endl;
+#warning generate some error here
+		return 0;
+	}
+	m_insertList.append(rec);
+	return  rec;
+
+}
+
+KexiDBUpdateRecord *
 MySqlRecord::insert()
 {
-//	return 0;
-	if(readOnly())
-		return -1;
-
-	m_insertList.append(m_lastItem);
-	int record = m_lastItem;
+	kdDebug()<<"KexiDBUpdateRecord * MySqlRecord::insert() entered "<<endl;
+	if (readOnly()) return 0; //perhaps a kexidberror should be set here too
+	KexiDBUpdateRecord *rec=new KexiDBUpdateRecord(true);
+	for (int i=0;i<fieldCount();i++) {
+		KexiDBField *f=fieldInfo(i);
+		rec->addField(f->name(),f->defaultValue());
+	}
+	m_insertList.append(rec);
+//	int record = m_lastItem;
 	m_lastItem++;
-	return record;
+
+	return rec;
 }
 
 bool
@@ -392,7 +528,7 @@ MySqlRecord::last_id()
 }
 
 bool
-MySqlRecord::isForignField(uint f)
+MySqlRecord::isForeignField(uint f)
 {
 	if(fieldInfo(f)->table() == m_table)
 		return false;

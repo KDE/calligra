@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
 Daniel Molkentin <molkentin@kde.org>
+Copyright (C) 2003   Joseph Wenninger<jowenn@kde.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public
@@ -22,6 +23,7 @@ Boston, MA 02111-1307, USA.
 
 #include <qvariant.h>
 #include <qfile.h>
+#include <qdict.h>
 
 #include <kgenericfactory.h>
 #include <kdebug.h>
@@ -29,6 +31,8 @@ Boston, MA 02111-1307, USA.
 #include "mysqldb.h"
 #include "mysqlresult.h"
 #include "mysqlrecord.h"
+
+#include "kexidbfield.h"
 
 K_EXPORT_COMPONENT_FACTORY(keximysqlinterface, KGenericFactory<MySqlDB>( "mysqlinterface" ));
 
@@ -178,7 +182,7 @@ MySqlDB::databases()
 }
 
 QStringList
-MySqlDB::tables()
+MySqlDB::tableNames()
 {
 	if(!m_connectedDB)
 		return QStringList();
@@ -197,7 +201,53 @@ MySqlDB::tables()
 	}
 
 	delete result;
+
+	m_tableDefs.clear();
+	for(QStringList::const_iterator it=s.begin();it!=s.end();++it) {
+		m_tableDefs.insert((*it),createTableDef(*it));
+	}	
+
 	return s;
+}
+
+const KexiDBTable * const MySqlDB::table(const QString& name) {
+	return m_tableDefs[name];
+}
+
+
+KexiDBTable * MySqlDB::createTableDef(const QString& name) {
+	kdDebug()<<"MySQLDB::createTableDef: entered"<<endl;
+
+        if(!m_connectedDB)
+                return 0;
+
+	kdDebug()<<"MySQLDB::createTableDef: connection exists"<<endl;
+
+	kdDebug()<<"MySQLDB::createTableDef: querying"<< ("select * from "+name+" limit 0")<<endl;
+
+        query("select * from "+name+" limit 0");
+        MySqlResult *result = storeResult();
+
+        if(!result)
+                return 0;
+
+	kdDebug()<<"MySQLDB::createTableDef: there is a result"<<endl;
+
+	KexiDBTable *t=new KexiDBTable(name);
+
+	KexiDBField *f;
+        for(int i=0; f=result->fieldInfo(i);i++)
+	{
+		t->addField(*f);
+//should we support other unique keys here too ?
+		if (f->primary_key()) t->addPrimaryKey(f->name());
+		kdDebug()<<"MySQLDB::createTableDef: addField:"<<f->name()<<endl;
+	}
+
+	delete result;
+
+	return t;
+
 }
 
 bool

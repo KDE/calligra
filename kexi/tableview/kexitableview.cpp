@@ -2,6 +2,7 @@
    Copyright (C) 2002 Till Busch <till@bux.at>
    Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003   Joseph Wenninger<jowenn@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -931,8 +932,10 @@ void KexiTableView::emitSelected()
 void KexiTableView::boolToggled()
 {
 	int s = m_pCurrentItem->getInt(m_curCol);
+	QVariant oldValue=m_pCurrentItem->getValue(m_curCol);
 	m_pCurrentItem->setInt(m_curCol, (s ? 0 : 1));
 	updateCell(m_curRow, m_curCol);
+	emit itemChanged(m_pCurrentItem, m_curCol,oldValue);
 	emit itemChanged(m_pCurrentItem, m_curCol);
 }
 
@@ -1294,8 +1297,10 @@ void KexiTableView::editorOk()
 	if (!m_pEditor)
 		return;
 //	m_pCurrentItem->setText(m_curCol, m_pEditor->text());
+	QVariant oldValue=m_pCurrentItem->getValue(m_curCol);
 	m_pCurrentItem->setValue(m_curCol, m_pEditor->value());
 	editorCancel();
+	emit itemChanged(m_pCurrentItem, m_curCol,oldValue);
 	emit itemChanged(m_pCurrentItem, m_curCol);
 }
 
@@ -1453,5 +1458,8 @@ KexiTableHeader* KexiTableView::recordMarker()
 {
 	return m_pVerticalHeader;
 }
+
+QString KexiTableView::column(int section) { return m_pTopHeader->label(section);}
+
 
 #include "kexitableview.moc"

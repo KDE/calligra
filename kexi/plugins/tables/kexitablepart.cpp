@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2002   Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2002,2003   Joseph Wenninger <jowenn@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -92,7 +92,7 @@ KexiTablePart::getTables()
 	list->clear();
 
 	if (kexiProject()->db()) {
-		m_tableNames = kexiProject()->db()->tables();
+		m_tableNames = kexiProject()->db()->tableNames();
 
 		for ( QStringList::Iterator it = m_tableNames.begin(); it != m_tableNames.end(); ++it )
 		{

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003   Joseph Wenninger<jowenn@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -30,6 +31,7 @@
 
 #include "kexiDB/kexidb.h"
 #include "kexiDB/kexidbrecordset.h"
+#include "kexiDB/kexidbtable.h"
 
 #include "kexiproject.h"
 #include "kexirelationview.h"
@@ -46,8 +48,8 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 
 	m_tableCombo = new QComboBox(hbox);
 	m_tableCombo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-	m_tableCombo->insertStringList(kexiProject()->db()->tables());
-	QStringList tmp=kexiProject()->db()->tables();
+	m_tableCombo->insertStringList(kexiProject()->db()->tableNames());
+	QStringList tmp=kexiProject()->db()->tableNames();
 	for (QStringList::iterator it=tmp.begin();it!=tmp.end();++it)
 		kdDebug()<<"KexiRelationDialog::KexiRelationDialog: Adding table: "<<(*it)<<endl;
 	m_tableCombo->show();
@@ -94,16 +96,16 @@ KexiRelationDialog::slotAddTable()
 	if (m_tableCombo->currentItem()!=-1) //(m_tableCombo->count() > 0)
 	{
 		QString tname = m_tableCombo->text(m_tableCombo->currentItem());
-		KexiDBRecordSet *r = m_db->queryRecord("select * from " + tname + " limit 1");
-		QStringList fields;
-		for(uint i=0; i < r->fieldCount(); i++)
+		const KexiDBTable * const  t=m_db->table(tname);
+		if (t)
 		{
-			fields.append(r->fieldInfo(i)->name());
+			QStringList fields;
+			for(uint i=0; i < t->fieldCount(); i++)
+				fields.append(t->field(i).name());
+			m_view->addTable(tname, fields);
+			kdDebug() << "KexiRelationDialog::slotAddTable(): adding table " << tname << endl;
 		}
-		m_view->addTable(tname, fields);
-		kdDebug() << "KexiRelationDialog::slotAddTable(): adding table " << tname << endl;
 
-		delete r;
 		int oi=m_tableCombo->currentItem();
 		kdDebug()<<"KexiRelationDialog::slotAddTable(): removing a table from the combo box"<<endl;
 		m_tableCombo->removeItem(m_tableCombo->currentItem());

@@ -16,7 +16,7 @@
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
- 
+
    Original Author:  Till Busch <till@bux.at>
    Original Project: buX (www.bux.at)
 */
@@ -127,6 +127,9 @@ public:
 		return (float)m_columns[col].toDouble();
 	}
 
+	void setUserData(void* userData) {m_userData=userData;}
+	void* getUserData() const {return m_userData;}
+
 protected:
 	QValueVector<QVariant>	 m_columns;
 	QVariant		m_hint;
@@ -135,6 +138,9 @@ protected:
 	bool			m_insertItem;
 
 	int			m_position;
+
+private:
+	void *			m_userData;
 };
 
 #endif

@@ -1,26 +1,28 @@
 /* This file is part of the KDE project
-Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003   Joseph Wenninger<jowenn@kde.org>
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public
-License as published by the Free Software Foundation; either
-version 2 of the License, or (at your option) any later version.
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-General Public License for more details.
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; see the file COPYING.  If not, write to
-the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-Boston, MA 02111-1307, USA.
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #ifndef KEXIDBRECORD_H
 #define KEXIDBRECORD_H
 
 #include "kexidbfield.h"
+#include "kexidbupdaterecord.h"
 #include "kdebug.h"
 #include <qobject.h>
 
@@ -65,17 +67,11 @@ class KexiDBRecordSet : public QObject
 		virtual void reset() = 0;
 
 		/*!
-		 *  commits updates
-		 *  use commit(true) if you wan't to commit the insert buffers too
-		 *  returns true if the commit succeeded
-		 *
-		 *  note: if you use commit on a insert-buffer, it will automaticaly get a stand-alone buffer
-		 *  and commit on the base-buffer won't work for the insertBuffer anymore!
-		 *
+		 * executes the sql statments for insert/update operations
+                 * returns the first record, which failed to update/insert
 		 */
-		virtual bool commit(unsigned int record, bool insertBuffer=false) = 0;
-
-
+		virtual KexiDBUpdateRecord *writeOut()=0;
+		virtual bool writeOut(KexiDBUpdateRecord*)=0;
 		/*!
 		 *  returns the value of the nth field
 		 */
@@ -117,19 +113,6 @@ class KexiDBRecordSet : public QObject
 		 */
 		virtual KexiDBField* fieldInfo(QString field) = 0;
 
-		/*!
-		 *  sets the nth field in the buffer to "value"
-		 *  the changes have to be commited in order to take effect
-		 *  returns true, if update is possible
-		 */
-		virtual bool update(unsigned int record, unsigned int field, QVariant value) = 0;
-
-		/*!
-		 *  sets the field "field" in the buffer to "value"
-		 *  the changes have to be commited in order to take effect
-		 *  returns true, if update is possible
-		 */
-		virtual bool update(unsigned int record, QString field, QVariant value) = 0;
 
 		/*!
 		 *  deletes the current record
@@ -146,7 +129,19 @@ class KexiDBRecordSet : public QObject
 		 *
 		 *  @returns a record-identification integer
 		 */
-		virtual int insert() = 0;
+		virtual KexiDBUpdateRecord *insert() = 0;
+
+
+		/*!
+                 * creates an updatee record, which can be used during a writeOut
+		 * for modifying the current record
+		 * if there is no current record 0 should be returned
+		 * if uniqueness can't be quaranteed 0 should be returned too
+                 */
+		virtual KexiDBUpdateRecord *updateCurrent()=0;
+		virtual KexiDBUpdateRecord *update(unsigned long record)=0;
+		// That's the important one, since it is the only one used at the moment
+		virtual KexiDBUpdateRecord *update(QMap<QString,QVariant> fieldNameValueMap)=0;
 
 		/*!
 		 *  directly changes to the nth record

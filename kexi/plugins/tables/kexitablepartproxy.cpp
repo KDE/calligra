@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2002   Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2002,2003   Joseph Wenninger <jowenn@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -60,19 +60,7 @@ KexiTablePartProxy::groupContext()
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
 	m->insertAction(i18n("Create Table..."), SLOT(slotCreate()));
 	m->insertAction(i18n("Import Tables/Data..."),SLOT(slotImport()));
-#if 0
-	Filters f = m_tablePart->filters()->importFilters();
-	if(f.count() > 0)
-	{
-		QPopupMenu *menuImport = new QPopupMenu(m);
-		for(KexiTableFilterMeta *it = f.first(); it; it = f.next())
-		{
-			menuImport->insertItem(it->comment());
-		}
-		m->insertItem("Import", menuImport);
-		connect(menuImport, SIGNAL(activated(int)), this, SLOT(slotImport(int)));
-	}
-#endif
+
 	return m;
 }
 
@@ -170,17 +158,6 @@ void
 KexiTablePartProxy::slotImport(/*int filter*/)
 {
 	m_tablePart->kexiProject()->filterManager()->import(KexiFilterManager::Data);
-#if 0
-	KexiTableFilterMeta *meta = m_tablePart->filters()->importFilters().at(0);
-	kdDebug() << "KexiTablePartProxy::slotImport(): f=" << filter << "meta: " << meta << endl;
-
-	if(!meta)
-		return;
-
-	KexiTableImportFilter *f = static_cast<KexiTableImportFilter*>(m_tablePart->filters()->getFilter(meta));
-	f->open(m_tablePart->kexiProject()->db());
-	m_tablePart->getTables();
-#endif
 }
 
 #include "kexitablepartproxy.moc"

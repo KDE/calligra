@@ -1,19 +1,19 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2003   Joseph Wenninger<jowenn@kde.org>
 
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
 
-   This program is distributed in the hope that it will be useful,
+   This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+   Library General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program; see the file COPYING.  If not, write to
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
  */
@@ -72,12 +72,19 @@ KexiDB::driverName()
 	return QString::fromLatin1("NONE");
 }
 
+/*
 QStringList
-KexiDB::tables()
+KexiDB::tableNames()
 {
 	return QStringList();
 }
 
+const KexiDBTable *const KexiDB::table(const QString&)
+{
+	return 0;
+}
+
+*/
 
 bool
 KexiDB::query(QString)
@@ -115,13 +122,13 @@ KexiDB::createField(const QString& /*table*/, const QString& /*field*/, KexiDBFi
 }
 
 bool KexiDB::createTable(const KexiDBTable& tableDef) {
-	if (tableDef.count()<1) return false;
-	KexiDBTable::const_iterator it=tableDef.begin();
-	if (!createField(*it,KexiDBTableStruct(),true)) return false;
-	++it;
-	for(;it!=tableDef.end();++it)
+	if (tableDef.fieldCount()<1) return false;
+	KexiDBField f=tableDef.field(0);
+	if (!createField(f,KexiDBTableStruct(),true)) return false;
+	for(int i=1;i<tableDef.fieldCount();i++)
 	{
-		if (!createField(*it,KexiDBTableStruct(),false))
+		f=tableDef.field(i);
+		if (!createField(f,KexiDBTableStruct(),false))
 			return false;
 	}
 	return true;

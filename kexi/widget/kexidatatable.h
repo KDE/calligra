@@ -50,7 +50,7 @@ class KexiDataTable : public KexiDialogBase
 		virtual void print(KPrinter &printer);
 
 	protected slots:
-		void slotItemChanged(KexiTableItem *i, int col);
+		void slotItemChanged(KexiTableItem *i, int col, QVariant oldValue);
 		void slotContextMenu(KexiTableItem *i, int col, const QPoint &pos);
 
 		void slotRemoveCurrentRecord();

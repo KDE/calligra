@@ -1,3 +1,4 @@
+
 /***************************************************************************
                           kmultitabbar.h -  description
                              -------------------
@@ -47,6 +48,7 @@ public:
 	~KMultiTabBar(){;}
 
 	enum KMultiTabBarPosition{Left, Right, Top, Bottom};
+	enum KMultiTabBarStyle{VSNET=0, KDEV3=1, KONQSBC=2};
  	//int insertButton(QPixmap,int=-1,const QString& =QString::null);
  	int appendButton(const QPixmap &,int=-1,QPopupMenu* =0,const QString& =QString::null);
 	void removeButton(int);
@@ -58,6 +60,7 @@ public:
 	class KMultiTabBarTab *getTab(int);
 	QPtrList<class KMultiTabBarButton> buttons;
 	void setPosition(KMultiTabBarPosition pos);
+	void setStyle(KMultiTabBarStyle style);
         QPtrList<KMultiTabBarTab>* tabs();
 	void showActiveTabTexts(bool show=true);
 
@@ -73,17 +76,20 @@ class KMultiTabBarButton: public QPushButton
 	Q_OBJECT
 public:
 	KMultiTabBarButton(const QPixmap& pic,const QString&, QPopupMenu *popup,
-		int id,QWidget *parent, KMultiTabBar::KMultiTabBarPosition pos);
+		int id,QWidget *parent, KMultiTabBar::KMultiTabBarPosition pos, KMultiTabBar::KMultiTabBarStyle style);
 	~KMultiTabBarButton(){;}
 	int id(){return m_id;}
 
 public slots:
 	void setPosition(KMultiTabBar::KMultiTabBarPosition);
+	void setStyle(KMultiTabBar::KMultiTabBarStyle);
 	void setText(const QString &);
 	
 protected:
 	KMultiTabBar::KMultiTabBarPosition position;
+	KMultiTabBar::KMultiTabBarStyle m_style;
 	QString m_text;
+
 private:
 	int m_id;
 signals:
@@ -98,7 +104,7 @@ class KMultiTabBarTab: public KMultiTabBarButton
 	Q_OBJECT
 public:
 	KMultiTabBarTab(const QPixmap& pic,const QString&,int id,QWidget *parent,
-		KMultiTabBar::KMultiTabBarPosition pos);
+		KMultiTabBar::KMultiTabBarPosition pos,KMultiTabBar::KMultiTabBarStyle style);
 	~KMultiTabBarTab(){;}
 	void setState(bool);
 	void showActiveTabText(bool show);
@@ -110,6 +116,8 @@ private:
 protected:
 	void updateState();
 	virtual void drawButton(QPainter *);
+	void drawButtonStyled(QPainter *);
+	void drawButtonClassic(QPainter *);
 protected slots:
 	virtual void slotClicked();
 public slots:
@@ -125,16 +133,19 @@ public:
 	KMultiTabBarTab *getTab(int);
 	void removeTab(int);
 	void setPosition(enum KMultiTabBar::KMultiTabBarPosition pos);
+	void setStyle(enum KMultiTabBar::KMultiTabBarStyle style);
 	void showActiveTabTexts(bool show);
 	QPtrList<KMultiTabBarTab>* tabs(){return &m_tabs;}
 private:
+	friend class KMultiTabBar;
 	QHBox *box;
 	QPtrList<KMultiTabBarTab> m_tabs;
 	enum KMultiTabBar::KMultiTabBarPosition position;
 	bool m_showActiveTabTexts;
+	enum  KMultiTabBar::KMultiTabBarStyle m_style;
 protected:
 	virtual void drawContents ( QPainter *, int, int, int, int);
-
+	
 	/**
 	 * [contentsM|m]ousePressEvent are reimplemented from QScrollView 
 	 * in order to ignore all mouseEvents on the viewport, so that the

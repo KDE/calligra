@@ -2,6 +2,7 @@
    Copyright (C) 2002 Till Busch <till@bux.at>
    Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003   Joseph Wenninger<jowenn@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -75,6 +76,7 @@ public:
 	virtual void addColumn(QString name, QVariant::Type type, bool editable, QVariant defaultValue = QVariant(""),
 		int width=100, bool autoinc=false);
 
+	QString column(int section);
 	void setSorting(int col, bool ascending=true);
 
 	QVariant::Type			columnType(int col);
@@ -212,6 +214,7 @@ signals:
 	void			itemReturnPressed(KexiTableItem *, int);
 	void			itemDblClicked(KexiTableItem *, int);
 	void			itemChanged(KexiTableItem *, int);
+	void			itemChanged(KexiTableItem *, int,QVariant oldValue);
 	void			itemRemoveRequest(KexiTableItem *);
 	void			addRecordRequest();
 	void			dropped(QDropEvent *);

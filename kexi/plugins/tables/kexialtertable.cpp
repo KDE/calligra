@@ -71,6 +71,7 @@ KexiAlterTable::initView()
 	m_fieldTable->addColumn(i18n("Primary Key"), QVariant::Bool, true);
 
 	m_propList = new PropertyEditor(splitter, true);
+	splitter->setResizeMode(m_propList,QSplitter::KeepSize);
 	m_propList->setFullWidth(true);
 	m_nameItem = new PropertyEditorItem(m_propList, i18n("Field Name"), QVariant::String, "");
 	m_datatypeItem = new PropertyEditorItem(m_propList, i18n("Datatype"), QVariant::StringList, KexiDBField::SQLVarchar - 1, strings);

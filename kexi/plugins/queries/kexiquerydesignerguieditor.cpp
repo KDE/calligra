@@ -68,7 +68,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	m_designTable->viewport()->setAcceptDrops(true);
 	m_designTable->addDropFilter("kexi/field");
 
-	m_sourceList = view->project()->db()->tables();
+	m_sourceList = view->project()->db()->tableNames();
 	m_sourceList.prepend(i18n("[no table]"));
 
 	m_designTable->addColumn(i18n("source"), QVariant::StringList, true, QVariant(m_sourceList));
