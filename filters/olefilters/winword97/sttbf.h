@@ -30,7 +30,7 @@ class QStringList;
 struct STTBF {
     unsigned short extraDataLen;
     QStringList stringList;
-    QList< QArray<unsigned char> > extraData;
+    QList< unsigned char* > extraData;
 
     bool ok;
 };

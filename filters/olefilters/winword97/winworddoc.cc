@@ -63,23 +63,23 @@ WinWordDoc::~WinWordDoc() {
     m_styleSheet=0L;
 
     m_grpXst.stringList.clear();
-    for(QArray<unsigned char> *tmp=m_grpXst.extraData.first(); tmp!=0L; tmp=m_grpXst.extraData.next()) {
-        delete tmp;
-        tmp=0L;
+    for(unsigned char **tmp=m_grpXst.extraData.first(); tmp!=0L; tmp=m_grpXst.extraData.next()) {
+        delete [] *tmp;
+        *tmp=0L;
     }
     m_grpXst.extraData.clear();
 
     m_atnbkmk.stringList.clear();
-    for(QArray<unsigned char> *tmp=m_atnbkmk.extraData.first(); tmp!=0L; tmp=m_atnbkmk.extraData.next()) {
-        delete tmp;
-        tmp=0L;
+    for(unsigned char **tmp=m_atnbkmk.extraData.first(); tmp!=0L; tmp=m_atnbkmk.extraData.next()) {
+        delete [] *tmp;
+        *tmp=0L;
     }
     m_atnbkmk.extraData.clear();
 
     m_assocStrings.stringList.clear();
-    for(QArray<unsigned char> *tmp=m_assocStrings.extraData.first(); tmp!=0L; tmp=m_assocStrings.extraData.next()) {
-        delete tmp;
-        tmp=0L;
+    for(unsigned char **tmp=m_assocStrings.extraData.first(); tmp!=0L; tmp=m_assocStrings.extraData.next()) {
+        delete [] *tmp;
+        *tmp=0L;
     }
     m_assocStrings.extraData.clear();
 }
@@ -279,12 +279,14 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
 
                 if(sttbf.extraDataLen!=0) {
                     kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): extra data");
-                    QArray<unsigned char> *tmpArray=new QArray<unsigned char>;
-                    tmpArray->resize(sttbf.extraDataLen);
-                    for(j=0; j<sttbf.extraDataLen; ++j)
-                        tmpArray[j]=*(stream+base+j);
-                    base+=j;
-                    sttbf.extraData.append(tmpArray);
+                    unsigned char *tmpArray=new unsigned char[sttbf.extraDataLen];
+                    kdebug(KDEBUG_INFO, 31000, "STILL ALIVE 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number(sttbf.extraDataLen));
+                    for(j=0; j<sttbf.extraDataLen; ++base)
+                        tmpArray[j]=*(stream+base);
+                    kdebug(KDEBUG_INFO, 31000, "STILL ALIVE 3 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    sttbf.extraData.append(&tmpArray);
+                    kdebug(KDEBUG_INFO, 31000, "STILL ALIVE 4 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
             }
         }
@@ -309,12 +311,14 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
 
                 if(sttbf.extraDataLen!=0) {
                     kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): extra data");
-                    QArray<unsigned char> *tmpArray=new QArray<unsigned char>;
-                    tmpArray->resize(sttbf.extraDataLen);
-                    for(j=0; j<sttbf.extraDataLen; ++j)
-                        tmpArray[j]=*(stream+base+j);
-                    base+=j;
-                    sttbf.extraData.append(tmpArray);
+                    unsigned char *tmpArray=new unsigned char[sttbf.extraDataLen];
+                    kdebug(KDEBUG_INFO, 31000, "STILL ALIVE 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number(sttbf.extraDataLen));
+                    for(j=0; j<sttbf.extraDataLen; ++base)
+                        tmpArray[j]=*(stream+base);
+                    kdebug(KDEBUG_INFO, 31000, "STILL ALIVE 3 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    sttbf.extraData.append(&tmpArray);
+                    kdebug(KDEBUG_INFO, 31000, "STILL ALIVE 4 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
             }
         }

@@ -19,15 +19,14 @@
 
 #include <xmltree.h>
 
+
 XMLTree::XMLTree(const QString & inputFileName)
 {
   root = new QDomDocument("spreadsheet");
 
-  QDomProcessingInstruction pro;
-  pro = root->createProcessingInstruction("xml", "version=\"1.0\"");
-  root->appendChild(pro);
+  root->appendChild( root->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+  doc = root->createElement( "spreadsheet" );
 
-  doc = root->createElement("spreadsheet");
   doc.setAttribute("editor", "KSpread CSV Filter");
   doc.setAttribute("mime", "application/x-kspread");
   root->appendChild(doc);
@@ -35,12 +34,19 @@ XMLTree::XMLTree(const QString & inputFileName)
   QDomElement paper = root->createElement("paper");
   paper.setAttribute("format", "A4");
   paper.setAttribute("orientation", "Portrait");
+  QDomElement borders = root->createElement( "borders" );
+  borders.setAttribute( "left", 20 );
+  borders.setAttribute( "top", 20 );
+  borders.setAttribute( "right", 20 );
+  borders.setAttribute( "bottom", 20 );
+  paper.appendChild( borders );
   doc.appendChild(paper);
 
   map = root->createElement("map");
   doc.appendChild(map);
 
   table = root->createElement("table");
+
   table.setAttribute("name", inputFileName);
   map.appendChild(table);
 
@@ -59,8 +65,7 @@ const QString XMLTree::part()
   QString s;
   QTextStream t(s, IO_WriteOnly);
 
-  t << "<?xml version=\"1.0\"?>\n";
-  doc.save(t);
+  root->save(t);
   t << '\0';
 
   return s;

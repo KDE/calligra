@@ -41,7 +41,7 @@ const bool CSVFilter::filter(const QCString &fileIn, const QCString &fileOut,
     }
 
     QTextStream inputStream(&in);
-    XMLTree tree("");
+    XMLTree tree("foo");
 
     /*
     KGlobal::locale()->enableNumericLocale();
