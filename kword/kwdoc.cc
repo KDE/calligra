@@ -18,7 +18,7 @@
 */
 
 #include <qcolor.h>
-#include <qprinter.h>
+#include <kprinter.h>
 #include <qevent.h>
 #include <qregion.h>
 #include <kmessagebox.h>
@@ -2194,7 +2194,7 @@ KWFrameSet *KWDocument::getFirstSelectedFrameSet() {
 }
 
 /*================================================================*/
-void KWDocument::print( QPainter */*painter*/, QPrinter */*printer*/,
+void KWDocument::print( QPainter */*painter*/, KPrinter */*printer*/,
                            float /*left_margin*/, float /*top_margin*/ )
 {
 #if 0

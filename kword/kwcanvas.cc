@@ -32,7 +32,6 @@
 #include <qclipboard.h>
 #include <qdragobject.h>
 #include <qprogressdialog.h>
-#include <qprinter.h>
 #include <kaction.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -106,7 +105,7 @@ void KWCanvas::repaintAll( bool erase /* = false */ )
     viewport()->repaint( erase );
 }
 
-void KWCanvas::print( QPainter *painter, QPrinter *printer )
+void KWCanvas::print( QPainter *painter, KPrinter *printer )
 {
     kdDebug(32001) << "KWCanvas::print from=" << printer->fromPage() << " to=" << printer->toPage() << endl;
     QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),

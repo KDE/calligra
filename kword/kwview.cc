@@ -19,7 +19,6 @@
 
 #include "kwcanvas.h"
 #undef Unsorted
-#include <qprinter.h>
 #include <qpainter.h>
 #include <qstring.h>
 #include <qkeycode.h>
@@ -659,7 +658,7 @@ void KWView::clipboardDataChanged()
 }
 
 /*=========================== file print =======================*/
-void KWView::setupPrinter( QPrinter &prt )
+void KWView::setupPrinter( KPrinter &prt )
 {
     prt.setMinMax( 1, doc->getPages() );
     bool makeLandscape = FALSE;
@@ -667,38 +666,38 @@ void KWView::setupPrinter( QPrinter &prt )
     KoPageLayout pgLayout = doc->pageLayout();
 
     switch ( pgLayout.format ) {
-    case PG_DIN_A3: prt.setPageSize( QPrinter::A3 );
+    case PG_DIN_A3: prt.setPageSize( KPrinter::A3 );
         break;
-    case PG_DIN_A4: prt.setPageSize( QPrinter::A4 );
+    case PG_DIN_A4: prt.setPageSize( KPrinter::A4 );
         break;
-    case PG_DIN_A5: prt.setPageSize( QPrinter::A5 );
+    case PG_DIN_A5: prt.setPageSize( KPrinter::A5 );
         break;
-    case PG_US_LETTER: prt.setPageSize( QPrinter::Letter );
+    case PG_US_LETTER: prt.setPageSize( KPrinter::Letter );
         break;
-    case PG_US_LEGAL: prt.setPageSize( QPrinter::Legal );
+    case PG_US_LEGAL: prt.setPageSize( KPrinter::Legal );
         break;
-    case PG_US_EXECUTIVE: prt.setPageSize( QPrinter::Executive );
+    case PG_US_EXECUTIVE: prt.setPageSize( KPrinter::Executive );
         break;
-    case PG_DIN_B5: prt.setPageSize( QPrinter::B5 );
+    case PG_DIN_B5: prt.setPageSize( KPrinter::B5 );
         break;
     case PG_SCREEN: {
         kdWarning() << "You use the page layout SCREEN. Printing in DIN A4 LANDSCAPE." << endl;
-        prt.setPageSize( QPrinter::A4 );
+        prt.setPageSize( KPrinter::A4 );
         makeLandscape = TRUE;
     } break;
     default: {
-        kdWarning() << "The used page layout is not supported by QPrinter. Printing in A4." << endl;
-        prt.setPageSize( QPrinter::A4 );
+        kdWarning() << "The used page layout is not supported by KPrinter. Printing in A4." << endl;
+        prt.setPageSize( KPrinter::A4 );
     } break;
     }
 
     if ( pgLayout.orientation == PG_LANDSCAPE || makeLandscape )
-        prt.setOrientation( QPrinter::Landscape );
+        prt.setOrientation( KPrinter::Landscape );
     else
-        prt.setOrientation( QPrinter::Portrait );
+        prt.setOrientation( KPrinter::Portrait );
 }
 
-void KWView::print( QPrinter &prt )
+void KWView::print( KPrinter &prt )
 {
     if (shell()) shell()->setCursor( waitCursor );
 
@@ -707,7 +706,7 @@ void KWView::print( QPrinter &prt )
     int oldZoom = doc->zoom();
     QPaintDeviceMetrics metrics( &prt );
     double hackFactor = 1.0; // 2.0 for the hack (improving print-preview's quality)
-    // The real solution is Qt-3.0's QPrinter::setResolution.
+    // The real solution is Qt-3.0's KPrinter::setResolution.
     doc->setZoomAndResolution( 100, metrics.logicalDpiX()*hackFactor, metrics.logicalDpiY()*hackFactor, false );
 
     bool serialLetter = FALSE;

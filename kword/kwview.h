@@ -20,6 +20,7 @@
 #ifndef kwview_h
 #define kwview_h
 
+#include <kprinter.h>
 #include <qwidget.h>
 #include <qlist.h>
 #include <qcolor.h>
@@ -128,8 +129,8 @@ public:
      */
     void canvasAddChild( KoViewChild *child );
 
-    virtual void setupPrinter( QPrinter &printer );
-    virtual void print( QPrinter &printer );
+    virtual void setupPrinter( KPrinter &printer );
+    virtual void print( KPrinter &printer );
     void openPopupMenuEditText(const QPoint &);
     void openPopupMenuEditFrame(const QPoint &);
     void openPopupMenuChangeAction( const QPoint & );

@@ -21,7 +21,7 @@
 #define kwdoc_h
 
 class KWDocument;
-class QPrinter;
+class KPrinter;
 //class KWCharImage;
 class KWPictureFrameSet;
 class KWSerialLetterDataBase;
@@ -218,7 +218,7 @@ public:
     int getFrameSetNum( KWFrameSet* fs ) { return frames.findRef( fs ); }
     KWFrameSet *getFirstSelectedFrameSet();
 
-    void print( QPainter *painter, QPrinter *printer, float left_margin, float top_margin );
+    void print( QPainter *painter, KPrinter *printer, float left_margin, float top_margin );
 
     void updateAllFrames();
 

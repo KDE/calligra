@@ -20,6 +20,7 @@
 #ifndef KWCANVAS_H
 #define KWCANVAS_H
 
+#include <kprinter.h>
 #include <qscrollview.h>
 #include <qstylesheet.h>
 #include <qrichtext_p.h>
@@ -63,7 +64,7 @@ public:
     KWFrameSetEdit *currentFrameSetEdit() const { return m_currentFrameSetEdit; }
 
     void repaintAll( bool erase = false );
-    void print( QPainter *painter, QPrinter *printer );
+    void print( QPainter *painter, KPrinter *printer );
     bool eventFilter( QObject *o, QEvent *e );
     bool focusNextPrevChild( bool );
 
