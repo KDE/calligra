@@ -8,7 +8,7 @@ karbon_zoomtoolplugin_la_LIBADD = $(LIB_KPARTS) $(LIB_KOFFICEUI) \
 									../../tools/libkarbontools.la \
 									../../render/libvpainter.la \
 									../../dockers/libkarbondockers.la \
-									../../libkarbonpart.la
+									../../libkarbonbase.la
 
 karbon_zoomtoolplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 
