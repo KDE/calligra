@@ -65,7 +65,7 @@ VToolDocker::VToolDocker( KarbonPart* part, KarbonView* parent, const char* /*na
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( selectNodesToolActivated() ) );
 	m_btngroup->insert( button );
 
-    button = new QToolButton( m_btngroup );
+	button = new QToolButton( m_btngroup );
 	pixmap = BarIcon( "14_rotate", KarbonFactory::instance() );
 	button->setPixmap( pixmap );
 	button->setToggleButton( true );
@@ -114,7 +114,7 @@ VToolDocker::VToolDocker( KarbonPart* part, KarbonView* parent, const char* /*na
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( starToolActivated() ) );
 	m_btngroup->insert( button );
 
-    button = new QToolButton( m_btngroup );
+	button = new QToolButton( m_btngroup );
 	pixmap = BarIcon( "14_sinus", KarbonFactory::instance() );
 	button->setPixmap( pixmap );
 	button->setToggleButton( true );
