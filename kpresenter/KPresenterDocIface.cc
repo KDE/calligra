@@ -33,12 +33,12 @@ KPresenterDocIface::KPresenterDocIface( KPresenterDoc *doc_ )
    doc = doc_;
 }
 
-int KPresenterDocIface::getNumPages()
+int KPresenterDocIface::numPages()
 {
     return doc->getPageNums();
 }
 
-DCOPRef KPresenterDocIface::getPage( int num )
+DCOPRef KPresenterDocIface::page( int num )
 {
     if( num>= doc->getPageNums())
       return DCOPRef();
@@ -46,7 +46,7 @@ DCOPRef KPresenterDocIface::getPage( int num )
 		    doc->pageList().at( num )->dcopObject()->objId() );
 }
 
-double KPresenterDocIface::getIndentValue()
+double KPresenterDocIface::indentValue()
 {
     return doc->getIndentValue();
 }

@@ -44,13 +44,13 @@ k_dcop:
     QColor shadowColor();
     QSize getSize();
     QPoint getOrig();
-    int getEffect();
-    int getEffect2();
-    int getPresNum();
-    int getSubPresSteps();
-    bool getDisappear();
-    int getDisappearNum();
-    int getEffect3();
+    int effect();
+    int effect2();
+    int presNum();
+    int subPresSteps();
+    bool disappear();
+    int disappearNum();
+    int effect3();
 
     void setSelected( bool _selected );
     void rotate( float _angle );
@@ -67,6 +67,17 @@ k_dcop:
     void setDisappearSoundEffect( bool b );
     void setAppearSoundEffectFileName( const QString & _a_fileName );
     void setDisappearSoundEffectFileName( const QString &_d_fileName );
+
+    void setPresNum( int _presNum );
+
+    void setDisappear( bool b );
+
+    int appearTimer() const;
+    int disappearTimer() const;
+    bool appearSoundEffect() const;
+    bool disappearSoundEffect() const;
+    QString appearSoundEffectFileName() const;
+    QString disappearSoundEffectFileName() const;
 
 private:
     KPObject *obj;

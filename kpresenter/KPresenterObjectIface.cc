@@ -77,37 +77,37 @@ QPoint KPresenterObjectIface::getOrig()
     //return obj->getOrig();
 }
 
-int KPresenterObjectIface::getEffect()
+int KPresenterObjectIface::effect()
 {
     return (int)obj->getEffect();
 }
 
-int KPresenterObjectIface::getEffect2()
+int KPresenterObjectIface::effect2()
 {
     return (int)obj->getEffect2();
 }
 
-int KPresenterObjectIface::getPresNum()
+int KPresenterObjectIface::presNum()
 {
     return obj->getPresNum();
 }
 
-int KPresenterObjectIface::getSubPresSteps()
+int KPresenterObjectIface::subPresSteps()
 {
     return obj->getSubPresSteps();
 }
 
-bool KPresenterObjectIface::getDisappear()
+bool KPresenterObjectIface::disappear()
 {
     return obj->getDisappear();
 }
 
-int KPresenterObjectIface::getDisappearNum()
+int KPresenterObjectIface::disappearNum()
 {
     return obj->getDisappearNum();
 }
 
-int KPresenterObjectIface::getEffect3()
+int KPresenterObjectIface::effect3()
 {
     return (int)obj->getEffect3();
 }
@@ -170,3 +170,44 @@ void KPresenterObjectIface::setDisappearSoundEffectFileName( const QString &_d_f
 {
     obj->setDisappearSoundEffectFileName(_d_fileName);
 }
+
+void KPresenterObjectIface::setPresNum( int _presNum )
+{
+    obj->setPresNum(_presNum);
+}
+
+void KPresenterObjectIface::setDisappear( bool b )
+{
+    obj->setDisappear(b);
+}
+
+int KPresenterObjectIface::appearTimer() const
+{
+    return obj->getAppearTimer();
+}
+
+int KPresenterObjectIface::disappearTimer() const
+{
+    return obj->getDisappearTimer();
+}
+
+bool KPresenterObjectIface::appearSoundEffect() const
+{
+    return obj->getAppearSoundEffect();
+}
+
+bool KPresenterObjectIface::disappearSoundEffect() const
+{
+    return obj->getDisappearSoundEffect();
+}
+
+QString KPresenterObjectIface::appearSoundEffectFileName() const
+{
+    return obj->getAppearSoundEffectFileName();
+}
+
+QString KPresenterObjectIface::disappearSoundEffectFileName() const
+{
+    return obj->getDisappearSoundEffectFileName();
+}
+

@@ -34,9 +34,9 @@ public:
     KPresenterDocIface( KPresenterDoc *doc_ );
 
 k_dcop:
-    virtual int getNumPages();
-    virtual DCOPRef getPage( int num );
-    virtual double getIndentValue();
+    virtual int numPages();
+    virtual DCOPRef page( int num );
+    virtual double indentValue();
     virtual void setIndentValue(double _ind);
 
     virtual bool dontCheckUpperWord();
