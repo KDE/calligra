@@ -1,0 +1,10 @@
+usr/bin/krita
+usr/lib/krita.la
+usr/lib/krita.so
+usr/lib/kde3/libkritapart.la
+usr/lib/kde3/libkritapart.so
+usr/lib/kde3/libmagickimport.la
+usr/lib/kde3/libmagickimport.so
+usr/share/applnk/Office/krita.desktop
+usr/share/apps/krita/
+usr/share/services/krita_magick_import.desktop

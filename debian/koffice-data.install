@@ -81,7 +81,6 @@ usr/share/services/ole_excel97_import.desktop
 usr/share/services/ole_hancomword_import.desktop
 usr/share/services/ole_winword97_import.desktop
 usr/share/services/ole_powerpoint97_import.desktop
-usr/share/services/otherofficethumbnail.desktop
 usr/share/services/thesaurustool.desktop
 usr/share/services/xslt_export.desktop
 usr/share/services/xslt_import.desktop
