@@ -32,7 +32,6 @@
 #include <klineeditdlg.h>
 
 #include <koPartSelectDia.h>
-#include <koAboutDia.h>
 
 #include "kintegerinputdialog.h"
 #include "zoomfactordlg.h"

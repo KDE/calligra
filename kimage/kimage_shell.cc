@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qmessagebox.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kapp.h>
@@ -24,7 +25,6 @@
 #include <kstddirs.h>
 #include <kmimemagic.h>
 
-#include <koAboutDia.h>
 #include <koFilterManager.h>
 
 #include "kimage_shell.h"

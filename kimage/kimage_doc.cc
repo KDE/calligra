@@ -22,8 +22,6 @@
 #include <qpainter.h>
 #include <qrect.h>
 
-#include <kapp.h> // FIXME: is this needed ?
-#include <kimgio.h> // FIXME: remove this
 #include <kstddirs.h>
 
 /*
@@ -48,8 +46,6 @@
 KImageDocument::KImageDocument( KoDocument* parent, const char* name )
   : KoDocument( parent, name )
 {
-  // FIXME: move this to main() or init_libkimage()
-  kimgioRegister();
 }
 
 KImageDocument::~KImageDocument()
