@@ -509,7 +509,7 @@ QDomDocument GDocument::saveToXml () {
 	"portrait", "landscape"
 	    };
 
-    QDomDocument document("killustator");
+    QDomDocument document("killustrator");
     document.appendChild( document.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
     QDomElement killustrator=document.createElement("killustaror");
     killustrator.setAttribute("editor", "KIllustrator");
@@ -560,28 +560,29 @@ QDomDocument GDocument::saveToXml () {
 	    continue;
 
 	QDomElement layer;
+	layer=document.createElement("layer");
 	if (save_layer_info) {
 	    int flags = ((*li)->isVisible () ? LAYER_VISIBLE : 0) +
 			((*li)->isPrintable () ? LAYER_PRINTABLE : 0) +
 			((*li)->isEditable () ? LAYER_EDITABLE : 0);
-	    layer=document.createElement("layer");
 	    layer.setAttribute ("id", (*li)->name ());
 	    layer.setAttribute ("flags", flags);
-	    killustrator.appendChild(layer);
+	    kdDebug() << "fooooooooooooooo - layer" << endl;
 	}
 	list<GObject*>& contents = (*li)->objects ();
 	for (list<GObject*>::iterator oi = contents.begin ();
 	     oi != contents.end (); oi++)
 	    layer.appendChild((*oi)->writeToXml (document));
+	killustrator.appendChild(layer);
     }
-
     setModified (false);
     return document;
 }
 
 bool GDocument::insertFromXml (const QDomDocument &document, list<GObject*>& newObjs) {
 
-    if ( document.doctype().name() != "doc" )
+    kdDebug() << document.doctype().name() << endl;
+    if ( document.doctype().name() != "killustrator" )
 	return false;
     QDomElement doc = document.documentElement();
 
@@ -595,6 +596,7 @@ bool GDocument::parseBody (const QDomElement &element, std::list<GObject*>& newO
     GObject* obj = 0L;
     QDict<GObject> refDict;
 
+    kdDebug() << "parseBody() <---------------------------" << endl;
     QDomElement layerelem = element.firstChild().toElement();
     for( ; !layerelem.isNull(); layerelem = element.nextSibling().toElement() ) {
 	if (layerelem.tagName() != "layer")
@@ -648,14 +650,18 @@ bool GDocument::parseBody (const QDomElement &element, std::list<GObject*>& newO
 
 bool GDocument::readFromXml (const  QDomDocument &document) {
 
+    kdDebug() << "readFromXml() <-----------------------" << endl;
+    kdDebug() << document.doctype().name() << endl;
     if ( document.doctype().name() != "killustrator" )
 	return false;
 
     QDomElement killustrator = document.documentElement();
 
+    kdDebug() << "here we go..." << endl;
     if ( killustrator.attribute( "mime" ) != KILLUSTRATOR_MIMETYPE )
 	return false;
 
+    kdDebug() << "still here..." << endl;
     comment=killustrator.attribute("comment");
     keywords=killustrator.attribute("keywords");
 
@@ -712,11 +718,17 @@ bool GDocument::readFromXml (const  QDomDocument &document) {
 	    vHelplines.push_back(l.attribute("pos").toFloat());
     }
 
+    kdDebug() << "fooooooooooooooooooooooooooobaaaaaaaaaaaaaaaaaaar" << endl;
     // update page layout
     setPageLayout (pLayout);
 
     list<GObject*> dummy;
     bool result = parseBody (killustrator, dummy, false);
+
+    if(result)
+	kdDebug() << "okay :)" << endl;
+    else
+	kdDebug() << "not okay :(" << endl;
 
     setModified (false);
     emit gridChanged ();
