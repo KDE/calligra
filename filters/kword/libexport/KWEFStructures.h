@@ -59,11 +59,11 @@ class TextFormatting
 {
     public:
         TextFormatting(): italic (false), underline (false), underlineWord(false),
-            strikeout (false),
+            strikeout (false), strikeoutWord( false ),
             weight (50), fontSize (0), verticalAlignment (0), missing (true) {}
 
         TextFormatting(const bool newMissing) : italic (false),
-            underline (false), underlineWord(false), strikeout (false),
+            underline (false), underlineWord(false), strikeout (false), strikeoutWord( false ),
             weight (50), fontSize (0), verticalAlignment (0),
             missing (newMissing) {}
 
@@ -77,7 +77,7 @@ class TextFormatting
                          QColor  bg,
                          int     v) :
             fontName (f), italic (i), underline (u), underlineWord(false),
-            strikeout(s),
+            strikeout(s), strikeoutWord( false ),
             weight (w), fontSize (sz), fgColor (fg),
             bgColor (bg), verticalAlignment (v), missing (false) {}
 
@@ -95,6 +95,7 @@ class TextFormatting
         bool    strikeout;             ///< true if strikeout
         QString strikeoutType;         ///< type of strikeout: single, bold, double
         QString strikeoutLineStyle;    ///< type of the strikeout line: solid, dash, dot, ....
+	bool 	strikeoutWord;	///< \todo: not finished ###
 
         int     weight;
         int     fontSize;
