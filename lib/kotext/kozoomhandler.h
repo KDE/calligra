@@ -135,10 +135,15 @@ public:
 
     //// Support for WYSIWYG text layouting /////
 
+    // The pixel <-> layout unit conversions
+    // apply both the pt<->LU conversion, and the zoom level.
+    // Understand that LU is "pixels in the layout unit system",
+    // so there is no need for applying the resolution here.
+    // We call ptToLayoutUnit but we mean pixelToPixelsInLayoutUnit.
     int pixelToLayoutUnitX( int x ) const
-    { return ptToLayoutUnit( unzoomItX( x ) ); }
+    { return ptToLayoutUnit( x * 100.0 / static_cast<double>(m_zoom) ); }
     int pixelToLayoutUnitY( int y ) const
-    { return ptToLayoutUnit( unzoomItY( y ) ); }
+    { return ptToLayoutUnit( y * 100.0 / static_cast<double>(m_zoom) ); }
     QPoint pixelToLayoutUnit( const QPoint &p ) const
     { return QPoint( pixelToLayoutUnitX( p.x() ),
                      pixelToLayoutUnitY( p.y() ) ); }
@@ -147,9 +152,9 @@ public:
                     pixelToLayoutUnit( r.bottomRight() ) ); }
 
     int layoutUnitToPixelX( int x ) const
-    { return zoomItX( layoutUnitToPt( x ) ); }
+    { return qRound( layoutUnitToPt( x ) * static_cast<double>(m_zoom) / 100.0 ); }
     int layoutUnitToPixelY( int y ) const
-    { return zoomItY( layoutUnitToPt( y ) ); }
+    { return qRound( layoutUnitToPt( y ) * static_cast<double>(m_zoom) / 100.0 ); }
 
     // This variant converts a height, using y as reference.
     // This prevents rounding problems.
