@@ -178,9 +178,9 @@ bool KWordDocument::initDoc()
 	resetURL();
 	ok = loadNativeFormat( fileName );
     } else if ( ret == KoTemplateChooseDia::File ) {
-	QString fileName( _template );
-        KURL::encode( fileName );
-	ok = openURL( KURL( fileName ) );
+        KURL url;
+        url.setPath( _template);
+	ok = openURL( url );
     } else if ( ret == KoTemplateChooseDia::Empty ) {
 	QString fileName( locate( "kword_template", "Wordprocessing/PlainText.kwt" , KWordFactory::global() ) );
 	resetURL();
@@ -2569,7 +2569,9 @@ void KWordDocument::drawSelection( QPainter &_painter, int xOffset, int yOffset,
 	_selEnd = &selEnd;
 
     if ( !_selStart->getParag() || !selEnd.getParag() )
+    {
 	return;
+    }
 
     _painter.save();
     RasterOp rop = _painter.rasterOp();
@@ -2614,7 +2616,6 @@ void KWordDocument::drawSelection( QPainter &_painter, int xOffset, int yOffset,
 	    parag = parag->getNext();
 	}
     }
-
     if ( tmpFC1.getPTY() == tmpFC2.getPTY() )
 	_painter.drawRect( tmpFC1.getPTPos() - xOffset, tmpFC2.getPTY() - yOffset,
 			   tmpFC2.getPTPos() - tmpFC1.getPTPos(), tmpFC2.getLineHeight() );
