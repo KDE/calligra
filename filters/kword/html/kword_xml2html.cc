@@ -1179,7 +1179,7 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                     iBlankLine = 0;
                     iPutPre = 0;
                     Scratch = QCString(&(pHTMLTree->u.TextStruct.zText[iPosition]),
-                            pFormat->iLength);
+                              pFormat->iLength+1);
                     Scratch.resize(pFormat->iLength+1); // make room for trailing 0
                     iPosition+=pFormat->iLength;
                     /* Note:  "iPosition" walks the current text fragment, while
@@ -1677,7 +1677,7 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                     else {
                         iPutPre = 0;
                         Scratch=QCString(&(pCurrentTableText->
-                                          sTextAttributes.zText[iPosition]),pFormat->iLength);
+                                          sTextAttributes.zText[iPosition]),pFormat->iLength+1);
                         Scratch.resize(pFormat->iLength+1); // make room for trailing 0
                         iPosition+=pFormat->iLength;
                         /* Note:  "iPosition" walks the current text fragment, while
