@@ -33,7 +33,7 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(
 	m_combo->clear();
 //	m_combo->insertStringList(f.enumHints());
 	QValueVector<QString> hints = f.enumHints();
-	for(int i=0; i < hints.size(); i++)
+	for(uint i=0; i < hints.size(); i++)
 	{
 		if(!hints.at(i).isEmpty())
 			m_combo->insertItem(hints.at(i));
