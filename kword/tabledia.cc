@@ -69,89 +69,13 @@ void KWTablePreview::paintEvent( QPaintEvent * )
 }
 
 /******************************************************************/
-/* Class: KWTableConf                                             */
-/******************************************************************/
-
-/*================================================================*/
-KWTableConf::KWTableConf( QWidget *_parent, KWordDocument *_doc )
-    : QWidget( _parent )
-{
-    doc = _doc;
-
-    readTableStyles();
-    setupPage();
-}
-
-/*================================================================*/
-void KWTableConf::readTableStyles()
-{
-}
-
-/*================================================================*/
-void KWTableConf::setupPage()
-{
-    grid1 = new QGridLayout( this, 4, 3, 15, 7 );
-
-    lStyles = new QLabel( i18n( "Styles" ), this );
-    lStyles->resize( lStyles->sizeHint() );
-    grid1->addWidget( lStyles, 0, 0 );
-
-    lbStyles = new QListBox( this );
-    lbStyles->resize( lbStyles->sizeHint() );
-    grid1->addWidget( lbStyles, 1, 0 );
-
-    preview = new QWidget( this );
-    preview->setBackgroundColor( white );
-    grid1->addMultiCellWidget( preview, 1, 1, 1, 2 );
-
-    bgHeader = new QButtonGroup( i18n( "Apply for Header" ), this );
-    grid1->addWidget( bgHeader, 2, 0 );
-
-    bgFirstCol = new QButtonGroup( i18n( "Apply for First Column" ), this );
-    grid1->addWidget( bgFirstCol, 2, 1 );
-
-    bgBody = new QButtonGroup( i18n( "Apply for Body" ), this );
-    grid1->addWidget( bgBody, 2, 2 );
-
-    cbHeaderOnAllPages = new QCheckBox( i18n( "When a table flows over multiple pages, "
-					      "copy header to each page begin" ), this );
-    cbHeaderOnAllPages->resize( cbHeaderOnAllPages->sizeHint() );
-    grid1->addMultiCellWidget( cbHeaderOnAllPages, 3, 3, 0, 2 );
-
-    grid1->addRowSpacing( 0, lStyles->height() );
-    grid1->addRowSpacing( 1, lbStyles->height() );
-    grid1->addRowSpacing( 1, 200 );
-    grid1->addRowSpacing( 2, bgHeader->height() );
-    grid1->addRowSpacing( 2, bgFirstCol->height() );
-    grid1->addRowSpacing( 2, bgBody->height() );
-    grid1->addRowSpacing( 3, cbHeaderOnAllPages->height() );
-    grid1->setRowStretch( 0, 0 );
-    grid1->setRowStretch( 1, 1 );
-    grid1->setRowStretch( 2, 0 );
-    grid1->setRowStretch( 3, 0 );
-
-    grid1->addColSpacing( 0, lStyles->width() );
-    grid1->addColSpacing( 0, lbStyles->width() );
-    grid1->addColSpacing( 0, bgHeader->width() );
-    grid1->addColSpacing( 1, 100 );
-    grid1->addColSpacing( 1, bgFirstCol->width() );
-    grid1->addColSpacing( 2, 100 );
-    grid1->addColSpacing( 2, bgBody->width() );
-    grid1->setColStretch( 0, 1 );
-    grid1->setColStretch( 1, 1 );
-    grid1->setColStretch( 2, 1 );
-
-    grid1->activate();
-}
-
-/******************************************************************/
 /* Class: KWTableDia                                              */
 /******************************************************************/
 
 /*================================================================*/
 KWTableDia::KWTableDia( QWidget* parent, const char* name, KWPage *_page, KWordDocument *_doc,
 			int rows, int cols, KWTblCellSize wid, KWTblCellSize hei )
-    : QTabDialog( parent, name, true )
+    : KDialogBase( Tabbed, i18n("Table settings"), Ok | Cancel, Ok, parent, name, true)
 {
     page = _page;
     doc = _doc;
@@ -159,99 +83,93 @@ KWTableDia::KWTableDia( QWidget* parent, const char* name, KWPage *_page, KWordD
     setupTab1( rows, cols, wid, hei );
     setupTab2();
 
-    setCancelButton( i18n( "Cancel" ) );
-    setOkButton( i18n( "OK" ) );
-
-    resize( 500, 400 );
+    setInitialSize( QSize(500, 400) );
 }
 
 /*================================================================*/
 void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize hei )
 {
-    tab1 = new QWidget( this );
+    tab1 = addPage( i18n( "Geometry" ) );
 
-    grid1 = new QGridLayout( tab1, 9, 2, 15, 7 );
+    QGridLayout *grid = new QGridLayout( tab1, 9, 2, 15, 7 );
 
     lRows = new QLabel( i18n( "Number of Rows:" ), tab1 );
     lRows->resize( lRows->sizeHint() );
-    grid1->addWidget( lRows, 0, 0 );
+    grid->addWidget( lRows, 0, 0 );
 
     nRows = new QSpinBox( 1, 128, 1, tab1 );
     nRows->resize( nRows->sizeHint() );
     nRows->setValue( rows );
-    grid1->addWidget( nRows, 1, 0 );
+    grid->addWidget( nRows, 1, 0 );
 
     lCols = new QLabel( i18n( "Number of Columns:" ), tab1 );
     lCols->resize( lCols->sizeHint() );
-    grid1->addWidget( lCols, 2, 0 );
+    grid->addWidget( lCols, 2, 0 );
 
     nCols = new QSpinBox( 1, 128, 1, tab1 );
     nCols->resize( nCols->sizeHint() );
     nCols->setValue( cols );
-    grid1->addWidget( nCols, 3, 0 );
+    grid->addWidget( nCols, 3, 0 );
 
     lHei = new QLabel( i18n( "Cell Heights:" ), tab1 );
     lHei->resize( lHei->sizeHint() );
-    grid1->addWidget( lHei, 4, 0 );
+    grid->addWidget( lHei, 4, 0 );
 
     cHei = new QComboBox( FALSE, tab1 );
     cHei->resize( cHei->sizeHint() );
     cHei->insertItem( i18n( "Automatic" ) );
     cHei->insertItem( i18n( "Manual" ) );
     cHei->setCurrentItem( (int)hei );
-    grid1->addWidget( cHei, 5, 0 );
+    grid->addWidget( cHei, 5, 0 );
 
     lWid = new QLabel( i18n( "Cell Widths:" ), tab1 );
     lWid->resize( lWid->sizeHint() );
-    grid1->addWidget( lWid, 6, 0 );
+    grid->addWidget( lWid, 6, 0 );
 
     cWid = new QComboBox( FALSE, tab1 );
     cWid->resize( cWid->sizeHint() );
     cWid->insertItem( i18n( "Automatic" ) );
     cWid->insertItem( i18n( "Manual" ) );
     cWid->setCurrentItem( (int)wid );
-    grid1->addWidget( cWid, 7, 0 );
+    grid->addWidget( cWid, 7, 0 );
 
     preview = new KWTablePreview( tab1, rows, cols );
     preview->setBackgroundColor( white );
-    grid1->addMultiCellWidget( preview, 0, 8, 1, 1 );
+    grid->addMultiCellWidget( preview, 0, 8, 1, 1 );
 
-    grid1->addRowSpacing( 0, lRows->height() );
-    grid1->addRowSpacing( 1, nRows->height() );
-    grid1->addRowSpacing( 2, lCols->height() );
-    grid1->addRowSpacing( 3, nCols->height() );
-    grid1->addRowSpacing( 4, lHei->height() );
-    grid1->addRowSpacing( 5, cHei->height() );
-    grid1->addRowSpacing( 6, lWid->height() );
-    grid1->addRowSpacing( 7, cWid->height() );
-    grid1->addRowSpacing( 8, 150 - ( lRows->height() + nRows->height() + lCols->height() + nCols->height() ) );
-    grid1->setRowStretch( 0, 0 );
-    grid1->setRowStretch( 1, 0 );
-    grid1->setRowStretch( 2, 0 );
-    grid1->setRowStretch( 3, 0 );
-    grid1->setRowStretch( 4, 0 );
-    grid1->setRowStretch( 5, 0 );
-    grid1->setRowStretch( 6, 0 );
-    grid1->setRowStretch( 7, 0 );
-    grid1->setRowStretch( 8, 1 );
+    grid->addRowSpacing( 0, lRows->height() );
+    grid->addRowSpacing( 1, nRows->height() );
+    grid->addRowSpacing( 2, lCols->height() );
+    grid->addRowSpacing( 3, nCols->height() );
+    grid->addRowSpacing( 4, lHei->height() );
+    grid->addRowSpacing( 5, cHei->height() );
+    grid->addRowSpacing( 6, lWid->height() );
+    grid->addRowSpacing( 7, cWid->height() );
+    grid->addRowSpacing( 8, 150 - ( lRows->height() + nRows->height() + lCols->height() + nCols->height() ) );
+    grid->setRowStretch( 0, 0 );
+    grid->setRowStretch( 1, 0 );
+    grid->setRowStretch( 2, 0 );
+    grid->setRowStretch( 3, 0 );
+    grid->setRowStretch( 4, 0 );
+    grid->setRowStretch( 5, 0 );
+    grid->setRowStretch( 6, 0 );
+    grid->setRowStretch( 7, 0 );
+    grid->setRowStretch( 8, 1 );
 
-    grid1->addColSpacing( 0, lRows->width() );
-    grid1->addColSpacing( 0, nRows->width() );
-    grid1->addColSpacing( 0, lCols->width() );
-    grid1->addColSpacing( 0, nCols->width() );
-    grid1->addColSpacing( 0, lHei->width() );
-    grid1->addColSpacing( 0, cHei->width() );
-    grid1->addColSpacing( 0, lWid->width() );
-    grid1->addColSpacing( 0, cWid->width() );
-    grid1->addColSpacing( 1, 150 );
-    grid1->setColStretch( 0, 0 );
-    grid1->setColStretch( 1, 1 );
+    grid->addColSpacing( 0, lRows->width() );
+    grid->addColSpacing( 0, nRows->width() );
+    grid->addColSpacing( 0, lCols->width() );
+    grid->addColSpacing( 0, nCols->width() );
+    grid->addColSpacing( 0, lHei->width() );
+    grid->addColSpacing( 0, cHei->width() );
+    grid->addColSpacing( 0, lWid->width() );
+    grid->addColSpacing( 0, cWid->width() );
+    grid->addColSpacing( 1, 150 );
+    grid->setColStretch( 0, 0 );
+    grid->setColStretch( 1, 1 );
 
-    grid1->activate();
+    grid->activate();
 
-    addTab( tab1, i18n( "Geometry" ) );
-
-    connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( insertTable() ) );
     connect( nRows, SIGNAL( valueChanged( int ) ), this, SLOT( rowsChanged( int ) ) );
     connect( nCols, SIGNAL( valueChanged( int ) ), this, SLOT( colsChanged( int ) ) );
 }
@@ -259,17 +177,87 @@ void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize
 /*================================================================*/
 void KWTableDia::setupTab2()
 {
-    tab2 = new KWTableConf( this, doc );
-    addTab( tab2, i18n( "Properties" ) );
+    readTableStyles();
+  
+    tab2 = addPage( i18n("Properties"));
+    QGridLayout *grid = new QGridLayout( tab2, 4, 3, 15, 7 );
+
+    lStyles = new QLabel( i18n( "Styles" ), tab2 );
+    lStyles->resize( lStyles->sizeHint() );
+    grid->addWidget( lStyles, 0, 0 );
+
+    lbStyles = new QListBox( tab2 );
+    lbStyles->resize( lbStyles->sizeHint() );
+    grid->addWidget( lbStyles, 1, 0 );
+
+    preview2 = new QWidget( tab2 );
+    preview2->setBackgroundColor( white );
+    grid->addMultiCellWidget( preview2, 1, 1, 1, 2 );
+
+    bgHeader = new QButtonGroup( i18n( "Apply for Header" ), tab2 );
+    grid->addWidget( bgHeader, 2, 0 );
+
+    bgFirstCol = new QButtonGroup( i18n( "Apply for First Column" ), tab2 );
+    grid->addWidget( bgFirstCol, 2, 1 );
+
+    bgBody = new QButtonGroup( i18n( "Apply for Body" ), tab2 );
+    grid->addWidget( bgBody, 2, 2 );
+
+    cbHeaderOnAllPages = new QCheckBox( i18n( "When a table flows over multiple pages, "
+					      "copy header to each page begin" ), tab2 );
+    cbHeaderOnAllPages->resize( cbHeaderOnAllPages->sizeHint() );
+    grid->addMultiCellWidget( cbHeaderOnAllPages, 3, 3, 0, 2 );
+
+    grid->addRowSpacing( 0, lStyles->height() );
+    grid->addRowSpacing( 1, lbStyles->height() );
+    grid->addRowSpacing( 1, 200 );
+    grid->addRowSpacing( 2, bgHeader->height() );
+    grid->addRowSpacing( 2, bgFirstCol->height() );
+    grid->addRowSpacing( 2, bgBody->height() );
+    grid->addRowSpacing( 3, cbHeaderOnAllPages->height() );
+    grid->setRowStretch( 0, 0 );
+    grid->setRowStretch( 1, 1 );
+    grid->setRowStretch( 2, 0 );
+    grid->setRowStretch( 3, 0 );
+
+    grid->addColSpacing( 0, lStyles->width() );
+    grid->addColSpacing( 0, lbStyles->width() );
+    grid->addColSpacing( 0, bgHeader->width() );
+    grid->addColSpacing( 1, 100 );
+    grid->addColSpacing( 1, bgFirstCol->width() );
+    grid->addColSpacing( 2, 100 );
+    grid->addColSpacing( 2, bgBody->width() );
+    grid->setColStretch( 0, 1 );
+    grid->setColStretch( 1, 1 );
+    grid->setColStretch( 2, 1 );
+
+    grid->activate();
 }
 
 /*================================================================*/
-void KWTableDia::insertTable()
+void KWTableDia::readTableStyles()
+{
+#ifdef __GNUC__
+#warning TODO
+#endif
+}
+
+/*================================================================*/
+bool KWTableDia::insertTable()
 {
     page->setTableConfig( nRows->value(), nCols->value(),
 			  (KWTblCellSize)cWid->currentItem(),
 			  (KWTblCellSize)cHei->currentItem() );
     page->mmTable();
+    return true;
+}
+
+void KWTableDia::slotOk()
+{
+   if (insertTable())
+   {
+      KDialogBase::slotOk();
+   }
 }
 
 /*================================================================*/
