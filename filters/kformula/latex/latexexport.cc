@@ -20,7 +20,6 @@
 #include <qstring.h>
 #include <qtextstream.h>
 #include <qfile.h>
-#include <qobject.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -28,7 +27,6 @@
 #include <kmessagebox.h>
 
 #include <koFilterChain.h>
-#include <koStore.h>
 #include <koStoreDevice.h>
 
 #include <kformuladocument.h>
@@ -53,20 +51,17 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
     if ( to != "text/x-tex" || from != "application/x-kformula" )
         return KoFilter::NotImplemented;
 
-    KoStore* in = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
-    if(!in || !in->open("root")) {
+    KoStoreDevice* in = m_chain->storageFile( "root", KoStore::Read );
+    if(!in) {
         QApplication::restoreOverrideCursor();
         KMessageBox::error( 0, i18n( "Failed to read data." ), i18n( "LaTeX Export Error" ) );
-        delete in;
-        return KoFilter::FileNotFound;
+        return KoFilter::StorageCreationError;
     }
 
-    KoStoreDevice device( in );
     QDomDocument dom( "KFORMULA" );
-    if ( !dom.setContent( &device, false ) ) {
+    if ( !dom.setContent( in, false ) ) {
         QApplication::restoreOverrideCursor();
         KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "LaTeX Export Error" ) );
-        delete in;
         return KoFilter::WrongFormat;
     }
 
@@ -74,7 +69,6 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
     if( !f.open( IO_Truncate | IO_ReadWrite ) ) {
         QApplication::restoreOverrideCursor();
         KMessageBox::error( 0, i18n( "Failed to write file." ), i18n( "LaTeX Export Error" ) );
-        delete in;
         return KoFilter::FileNotFound;
     }
 
@@ -93,7 +87,6 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
 
     delete formula;
     delete doc;
-    delete in;
 
     return KoFilter::OK;
 }

@@ -5,8 +5,6 @@
 #ifndef __SVGEXPORT_H__
 #define __SVGEXPORT_H__
 
-#include <qobject.h>
-
 #include <koFilter.h>
 
 class QDomElement;

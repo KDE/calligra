@@ -5,7 +5,6 @@
 #ifndef __AIIMPORT_H__
 #define __AIIMPORT_H__
 
-#include <qobject.h>
 #include <koFilter.h>
 
 #include "karbonaiparserbase.h"

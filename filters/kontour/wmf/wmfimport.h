@@ -24,7 +24,6 @@ DESCRIPTION
 #define WMFIMPORT_H
 
 #include <koFilter.h>
-#include <qobject.h>
 #include <qstring.h>
 #include <kwmf.h>
 

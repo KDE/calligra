@@ -9,32 +9,16 @@
 #include <qcolor.h>
 
 #include <kgenericfactory.h>
-#include <koFilter.h>
 #include <koFilterChain.h>
 #include <koStore.h>
 
 #include <kdebug.h>
 
-#include <stdio.h>
-
 #include "svgexport.h"
 
+typedef KGenericFactory<SvgExport, KoFilter> SvgExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libkarbonsvgexport, SvgExportFactory( "karbonsvgexport" ) );
 
-class SvgExportFactory : KGenericFactory<SvgExport, KoFilter>
-{
-public:
-	SvgExportFactory( void )
-		: KGenericFactory<SvgExport, KoFilter>( "karbonsvgexport" )
-	{}
-
-protected:
-	virtual void setupTranslations( void )
-	{
-		KGlobal::locale()->insertCatalogue( "karbonsvgfilter" );
-	}
-};
-
-K_EXPORT_COMPONENT_FACTORY( libkarbonsvgexport, SvgExportFactory() );
 
 SvgExport::SvgExport( KoFilter*, const char*, const QStringList& )
 	: KoFilter()
@@ -49,24 +33,16 @@ SvgExport::convert( const QCString& from, const QCString& to )
 		return KoFilter::NotImplemented;
 	}
 
-	KoStore* storeIn = KoStore::createStore( m_chain->inputFile(), KoStore::Read );
-	if( !storeIn->open( "root" ) )
-	{
-		delete storeIn;
+	KoStoreDevice* storeIn = m_chain->storageFile( "root", KoStore::Read );
+	if( !storeIn )
 		return KoFilter::StupidError;
-	}
 
 	QFile fileOut( m_chain->outputFile() );
-	if( !fileOut.open( IO_WriteOnly ) ) {
-		delete storeIn;
+	if( !fileOut.open( IO_WriteOnly ) )
 		return KoFilter::StupidError;
-	}
-
-	QByteArray byteArrayIn = storeIn->read( storeIn->size() );
-	storeIn->close();
 
 	QDomDocument domIn;
-	domIn.setContent( byteArrayIn );
+	domIn.setContent( storeIn );
 	QDomElement docNode = domIn.documentElement();
 
 	QTextStream s( &fileOut );
@@ -77,7 +53,7 @@ SvgExport::convert( const QCString& from, const QCString& to )
 		"<?xml version=\"1.0\" standalone=\"no\"?>\n" <<
 		"<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" <<
 	endl;
-	
+
 	// TODO: add width and height. Has to be supported by karbon first. For now use standard 600x800
 	s <<
 		"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"800\">" <<
@@ -95,12 +71,11 @@ SvgExport::convert( const QCString& from, const QCString& to )
 				exportDocument( s, e );
 		}
 	}
-	
+
 	// end-tag
 	s << "</svg>" << endl;
 
 	fileOut.close();
-	delete storeIn;
 	return KoFilter::OK;
 }
 
@@ -143,7 +118,7 @@ SvgExport::exportPath( QTextStream& s, const QDomElement& node )
 {
 
 	s << "<path";
-	
+
 	// has to be set here since fillRule is specified in the <PATH> tag.
 	fill_rule = node.attribute( "fillRule" ).toInt();
 
@@ -228,21 +203,21 @@ SvgExport::exportSegments( QTextStream& s, const QDomElement& node )
 			}
 			else if( e.tagName() == "LINE" )
 			{
-				s <<	
+				s <<
 					"L" <<
 					e.attribute( "x" ) << " " <<
 					e.attribute( "y" ) << " ";
 			}
 			else if( e.tagName() == "MOVE" )
 			{
-				s <<	
+				s <<
 					"M" <<
 					e.attribute( "x" ) << " " <<
 					e.attribute( "y" ) << " ";
 			}
 		}
 	}
-	
+
 	if( node.attribute( "isClosed" ).toInt() == 1);
 		s << "Z";
 
@@ -262,7 +237,7 @@ SvgExport::exportFill( QTextStream& s, const QDomElement& node )
 
 			if( e.tagName() == "COLOR" )
 			{
-			
+
 				// make sure getHexColor returns something
 				// shouldn't be needed really
 				if( !e.attribute( "colorSpace" ).isNull() )
@@ -336,7 +311,7 @@ SvgExport::exportStroke( QTextStream& s, const QDomElement& node )
 
 			if( e.tagName() == "COLOR" )
 			{
-			
+
 				// make sure getHexColor returns something
 				// shouldn't be needed really
 				if( !e.attribute( "colorSpace" ).isNull() )
@@ -385,13 +360,13 @@ SvgExport::getHexColor( QTextStream& s, const QDomElement& node )
 	{
 		Output.sprintf( "#%02x%02x%02x", int( node.attribute( "v1" ).toFloat() * 255 ), int( node.attribute( "v2" ).toFloat() * 255 ), int( node.attribute( "v3" ).toFloat() * 255 ) );
 	}
-	
+
 	// cmyk
 	else if( node.attribute( "colorSpace" ).toInt() == 1 )
 	{
 		Output.sprintf( "#%02x%02x%02x", int( ( 1 - node.attribute( "v1" ).toFloat() - node.attribute( "v4" ).toFloat() ) * 255 ), int( ( 1 - node.attribute( "v2" ).toFloat() - node.attribute( "v4" ).toFloat() ) * 255 ), int( ( 1 - node.attribute( "v3" ).toFloat() - node.attribute( "v4" ).toFloat() ) * 255 ) );
 	}
-	
+
 	// hsb
 	else if( node.attribute( "colorSpace" ).toInt() == 2 )
 	{
@@ -405,13 +380,13 @@ SvgExport::getHexColor( QTextStream& s, const QDomElement& node )
 
 		Output.sprintf( "#%02x%02x%02x", rComponent, gComponent, bComponent );
 	}
-	
+
 	// grey
 	else if( node.attribute( "colorSpace" ).toInt() == 3 )
 	{
 		Output.sprintf( "#%02x%02x%02x", int( node.attribute( "v" ).toFloat() * 255 ), int( node.attribute( "v" ).toFloat() * 255 ), int( node.attribute( "v" ).toFloat() * 255 ) );
 	}
-	
+
 	s << Output;
 
 }
@@ -423,27 +398,27 @@ SvgExport::exportText( QTextStream& s, const QDomElement& node )
 	// TODO: set placement once karbon supports it
 
 	s << "<text";
-	
+
 	if( !node.attribute( "size" ).isNull() )
 	{
 		s << " font-size=\"" << node.attribute( "size" ) << "\"";
 	}
-	
+
 	if( !node.attribute( "family" ).isNull() )
 	{
 		s << " font-family=\"" << node.attribute( "family" ) << "\"";
 	}
-	
+
 	if( !node.attribute( "bold" ).isNull() )
 	{
 		s << " font-weight=\"bold\"";
 	}
-	
+
 	if( !node.attribute( "italic" ).isNull() )
 	{
 		s << " font-style=\"italic\"";
 	}
-	
+
 	QDomNodeList list = node.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
 	{
@@ -459,13 +434,13 @@ SvgExport::exportText( QTextStream& s, const QDomElement& node )
 	}
 
 	s << ">";
-	
+
 
 	if( !node.attribute( "text" ).isNull() )
 	{
 		s << node.attribute( "text" );
 	}
-	
+
 	s << "</text>" << endl;
 
 }

@@ -22,12 +22,11 @@ DESCRIPTION
 
 #include <config.h>
 #include <kdebug.h>
-#include <koStore.h>
+#include <koStoreDevice.h>
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
 #include <qpointarray.h>
 #include <wmfimport.h>
-#include <wmfimport.moc>
 
 typedef KGenericFactory<WMFImport, KoFilter> WMFImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libwmfimport, WMFImportFactory( "wmfimport" ) );
@@ -188,3 +187,5 @@ void WMFImport::pointArray(
                      "\"/>\n";
     }
 }
+
+#include <wmfimport.moc>

@@ -29,7 +29,6 @@
 #include "header.h"		/* class header file.      */
 //#include "layer.h"		/* Layer contains all elements. */
 #include "page.h"
-#include <koStore.h>
 
 enum EGenerate
 {
@@ -42,6 +41,8 @@ enum LatexType
 {
 	LT_PSTRICKS
 };
+
+class KoStoreDevice;
 
 /***********************************************************************/
 /* Class: Document                                                     */
@@ -56,7 +57,6 @@ class Document: public XmlParser
 	QFile       _file;
 	QTextStream _out;
 	QString     _filename;
-	//const KoStore& _in;
 
 	/* CHILDREN */
 	//Layer  _layer;
@@ -89,7 +89,7 @@ class Document: public XmlParser
 		 *
 		 * Creates a new instance of Document from an input file in a koStore.
 		 */
-		Document(const KoStore&, QString, QString);
+		Document(KoStoreDevice*, QString, QString);
 
 
 		/**

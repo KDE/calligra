@@ -20,6 +20,7 @@
 */
 
 #include <kdebug.h>
+#include <koStoreDevice.h>
 
 #include "xmlparser.h"
 #include "qfile.h"
@@ -31,7 +32,6 @@ bool XmlParser::_useUnicode = false;
 bool XmlParser::_useLatexStyle = true;
 double XmlParser::_maxX = 0;
 double XmlParser::_maxY = 0;
-KoStore* XmlParser::_in = NULL;
 
 XmlParser::XmlParser(QString filename):
 		_filename(filename)
@@ -53,18 +53,10 @@ XmlParser::XmlParser(QByteArray in)
 	_document.setContent(in);
 }
 
-XmlParser::XmlParser(const KoStore& in)
+XmlParser::XmlParser(KoStoreDevice* in)
 {
-	_in = const_cast<KoStore*>(&in);
-	if(!_in->open("root"))
-	{
-	        kdError(30503) << "Unable to open input file!" << endl;
-        	_in->close();
-	        return;
-	}
 	/* input file Reading */
-	QByteArray array = _in->read(_in->size());
-	_document.setContent(array);
+	_document.setContent(in);
 }
 
 XmlParser::XmlParser()
@@ -75,8 +67,6 @@ XmlParser::XmlParser()
 XmlParser::~XmlParser()
 {
 	//kdDebug() << "Destruction of XmlParser (tree)" << endl;
-	if(_in != NULL)
-		_in->close();
 }
 
 /*QDomNode XmlParser::getChild(QString name)

@@ -20,9 +20,6 @@ noinst_HEADERS = kocryptimport.h kocryptexport.h  \
 
 METASOURCES = AUTO
 
-mimelnk_DATA = x-kword-crypt.desktop x-kspread-crypt.desktop
-mimelnkdir = $(kde_mimedir)/application
-
 service_DATA = kword_crypto_import.desktop kword_crypto_export.desktop    \
 	kspread_crypto_import.desktop kspread_crypto_export.desktop
 

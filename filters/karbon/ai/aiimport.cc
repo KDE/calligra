@@ -8,7 +8,6 @@
 #include <qstring.h>
 
 #include <kgenericfactory.h>
-#include <koFilter.h>
 #include <koFilterChain.h>
 #include <koStore.h>
 
@@ -17,21 +16,9 @@
 #include "aiimport.h"
 
 
-class AiImportFactory : KGenericFactory<AiImport, KoFilter>
-{
-public:
-	AiImportFactory( void )
-		: KGenericFactory<AiImport, KoFilter>( "karbonaiimport" )
-	{}
+typedef KGenericFactory<AiImport, KoFilter> AiImportFactory;
+K_EXPORT_COMPONENT_FACTORY( libkarbonaiimport, AiImportFactory( "karbonaiimport" ) );
 
-protected:
-	virtual void setupTranslations( void )
-	{
-		KGlobal::locale()->insertCatalogue( "karbonaifilter" );
-	}
-};
-
-K_EXPORT_COMPONENT_FACTORY( libkarbonaiimport, AiImportFactory() );
 
 AiImport::AiImport( KoFilter*, const char*, const QStringList& )
 	: KoFilter(), m_result ()
@@ -73,7 +60,7 @@ kdDebug() << m_result << endl;
 	}
 
 	QCString cStr = m_result.latin1();
-	storeOut->writeBlock( cStr, cStr.length() );
+	storeOut->writeBlock( cStr, cStr.size() - 1 );
 
 	return KoFilter::OK;
 }

@@ -18,7 +18,6 @@
 */
 
 #include <texgraphexport.h>
-#include <texgraphexport.moc>
 
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
@@ -42,15 +41,11 @@ KoFilter::ConversionStatus TEXGRAPHExport::convert(const QCString& from, const Q
     if(to != "text/x-tex" || from != "application/x-kontour")
         return KoFilter::NotImplemented;
 
-    KoStore in(QString(m_chain->inputFile()), KoStore::Read);
-    if(!in.open("root")) {
+    KoStoreDevice* in = m_chain->storageFile( "root", KoStore::Read );
+    if(!in) {
         kdError(30503) << "Unable to open input file!" << endl;
-        in.close();
-        return KoFilter::FileNotFound;;
+        return KoFilter::StorageCreationError;
     }
-    /* input file Reading */
-    //QByteArray array = in.read(in.size());
-    in.close();
 
     TEXGRAPHExportDia* dialog = new TEXGRAPHExportDia(in);
     dialog->setOutputFile(m_chain->outputFile());
@@ -59,3 +54,5 @@ KoFilter::ConversionStatus TEXGRAPHExport::convert(const QCString& from, const Q
 
     return KoFilter::OK;
 }
+
+#include <texgraphexport.moc>

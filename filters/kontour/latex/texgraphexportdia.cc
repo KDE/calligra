@@ -45,19 +45,18 @@
 	createDialog();
 }*/
 
-TEXGRAPHExportDia::TEXGRAPHExportDia(const KoStore& in, QWidget *parent, const char *name) :
+TEXGRAPHExportDia::TEXGRAPHExportDia(const KoStoreDevice* in, QWidget *parent, const char *name) :
 			KDialogBase(parent, name, true,
 			i18n("Latex export filter parameters"), Ok|Cancel), _in(in)
 {
 	kapp->restoreOverrideCursor();
-	//_in = new KoStore(in);
 	createDialog();
 }
 
 void TEXGRAPHExportDia::createDialog()
 {
 	resize(size());
-	QWidget *page = new QWidget( this ); 
+	QWidget *page = new QWidget( this );
 	setMainWidget(page);
 	QBoxLayout *mainLayout = new QVBoxLayout(page, 0, spacingHint());
 	/*styleBox = new QVButtonGroup(i18n("Document Style"), this);

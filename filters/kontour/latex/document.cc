@@ -47,10 +47,9 @@
 /*******************************************/
 /* Constructor                             */
 /*******************************************/
-Document::Document(const KoStore& in, QString fileOut, QString config):
-						XmlParser(in), _file(fileOut)
+Document::Document(KoStoreDevice* in, QString fileOut, QString config):
+    XmlParser(in), _file(fileOut)
 {
-	//_in = new KoStore(in);
 	kdDebug() << fileOut.latin1() << endl;
 	_filename = fileOut;
 	setFileHeader(_fileHeader);
@@ -111,7 +110,7 @@ void Document::analysePreambule(const QDomNode balise)
 void Document::analyseDocument(const QDomNode balise)
 {
 	_header.analyse(getChild(balise, "head"));
-	
+
 	for(int index = 1; index < getNbChild(balise); index++)
 	{
 		Page* page = 0;

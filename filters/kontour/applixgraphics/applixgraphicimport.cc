@@ -17,7 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 #define FAKTOR 39.4  // 1000 dots/inch / 2.54 cm/inch    =   394 dots/cm  = 39.4 dots/mm
-#define PI 3.1415926
 
 #include <config.h>
 
@@ -29,7 +28,6 @@
 #include <qtextstream.h>
 #include <qmessagebox.h>
 #include <applixgraphicimport.h>
-#include <applixgraphicimport.moc>
 #include <kdebug.h>
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
@@ -400,8 +398,8 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
             b = agLine.ptY[2] / 2;
             for (int i=0; i<nsides; i++)
 	    {
-              x[i] = qRound (a * cos (wink*PI/180));
-              y[i] = qRound (b * sin (wink*PI/180));
+              x[i] = qRound (a * cos (wink*M_PI/180));
+              y[i] = qRound (b * sin (wink*M_PI/180));
 	      wink += (360/nsides);
 	    }
 
@@ -800,8 +798,10 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
     }
 
     QCString cstring = str.utf8();
-    out->writeBlock ( (const char*)cstring, cstring.length() );
+    out->writeBlock ( (const char*)cstring, cstring.size() - 1 );
 
     in.close  ();
     return KoFilter::OK;
 }
+
+#include <applixgraphicimport.moc>

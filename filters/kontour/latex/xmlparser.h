@@ -26,10 +26,10 @@
 #include <qstring.h>
 #include <qdom.h>
 //#include <qbytearray.h>
-#include <koStore.h>
 //#include "document.h"
 
 class Header;
+class KoStoreDevice;
 
 class XmlParser
 {
@@ -45,19 +45,18 @@ class XmlParser
 	static bool _useUnicode;
 
 	protected:
-		/* All the inherit class must be have a link with 
+		/* All the inherit class must be have a link with
 		 * the header to specify to use special package
 		 */
 		static Header *_fileHeader;
 		static double _maxX;
 		static double _maxY;
-		static KoStore*    _in;
 		//static Document*   _root;
 
 	public:
 		XmlParser(QString);
 		XmlParser(QByteArray);	/* deprecated */
-		XmlParser(const KoStore&);
+		XmlParser(KoStoreDevice*);
 		XmlParser();
 		virtual ~XmlParser();
 

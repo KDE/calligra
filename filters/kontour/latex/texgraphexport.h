@@ -20,14 +20,7 @@
 #ifndef __TEXGRAPHEXPORT_H__
 #define __TEXGRAPHEXPORT_H__
 
-#include <qfile.h>
-#include <qobject.h>
-
 #include <koFilter.h>
-#include <koStore.h>
-
-#include "document.h"
-
 
 class TEXGRAPHExport : public KoFilter
 {

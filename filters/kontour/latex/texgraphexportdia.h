@@ -42,10 +42,11 @@
 #include <qvbuttongroup.h>
 
 #include <klocale.h>
-#include <koStore.h>
 
 #include <kdialogbase.h>
 #include "document.h"
+
+class KoStoreDevice;
 
 class TEXGRAPHExportDia : public KDialogBase
 {
@@ -54,11 +55,11 @@ class TEXGRAPHExportDia : public KDialogBase
 	QString _fileIn;
 	QString _fileOut;
 	QByteArray _arrayIn;
-	const KoStore& _in;	/* the zipped file containing all pictures, part, ... */
+	KoStoreDevice* _in;
 
 	public:
 		TEXGRAPHExportDia(QWidget *parent=0L, const char *name=0L);	/* deprecated */
-		TEXGRAPHExportDia(const KoStore&, QWidget *parent=0L, const char *name=0L);
+		TEXGRAPHExportDia(const KoStoreDevice*, QWidget *parent=0L, const char *name=0L);
 
 		virtual ~TEXGRAPHExportDia() {}
 		void createDialog();
