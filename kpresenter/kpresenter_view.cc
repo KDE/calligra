@@ -2141,6 +2141,7 @@ void KPresenterView::effectOk()
 /*=================== rotate dialog ok ===========================*/
 void KPresenterView::rotateOk()
 {
+    bool newAngle=false;
     KPObject *kpobject = 0;
     QList<KPObject> _objects;
     QList<RotateCmd::RotateValues> _oldRotate;
@@ -2157,12 +2158,14 @@ void KPresenterView::rotateOk()
 	if ( kpobject->isSelected() ) {
 	    tmp = new RotateCmd::RotateValues;
 	    tmp->angle = kpobject->getAngle();
+            if(tmp->angle!= _newAngle)
+                newAngle=true;
 	    _oldRotate.append( tmp );
 	    _objects.append( kpobject );
 	}
     }
 
-    if ( !_objects.isEmpty() ) {
+    if ( !_objects.isEmpty() && newAngle ) {
 	RotateCmd *rotateCmd = new RotateCmd( i18n( "Change Rotation" ),
 					      _oldRotate, _newAngle, _objects, kPresenterDoc() );
 	kPresenterDoc()->commands()->addCommand( rotateCmd );
