@@ -24,7 +24,7 @@
 #include <klocale.h>
 
 static const char* description=I18N_NOOP("KOffice Presentation Tool");
-static const char* version="1.2 RC1";
+static const char* version="1.2";
 
 KAboutData * newKPresenterAboutData()
 {
