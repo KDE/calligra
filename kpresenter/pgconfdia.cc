@@ -103,7 +103,7 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc *, const char* name,
     lSlides->setSorting( -1 );
 
     slides->hide();
-    
+
     connect( slides, SIGNAL( clicked( int ) ),
              this, SLOT( presSlidesChanged( int ) ) );
 
@@ -122,6 +122,7 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc *, const char* name,
     connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
 
     presSlidesChanged( 0 );
+    resize( 300, 350 );
 }
 
 /*================================================================*/
