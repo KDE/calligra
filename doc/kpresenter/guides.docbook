@@ -15,6 +15,14 @@
 <address><email>tateneni@pluto.njcc.com</email></address>
 </affiliation>
 </author>
+<author>
+<firstname>Brad</firstname>
+<surname>Hards</surname>
+<affiliation>
+<address><email>bradh@frogmouth.net</email></address>
+</affiliation>
+</author>
+
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo>
@@ -197,6 +205,160 @@ then works the same as a &kpresenter; slideshow.</para>
 
 <para>&FTP; it all to your website, remembering to keep the folder
 structure intact, and the world can admire your work.</para>
+
+</sect1>
+
+<sect1 id="ms-export">
+<title>Exporting &kpresenter; presentations to Sony <trademark>Memory Stick</trademark></title>
+<para>
+Some Sony projectors have the ability to run a presentation directly
+from a <trademark>Memory Stick</trademark>, without needing to connect a
+computer. &kpresenter; can export presentations to the format required
+to make this work, and this tutorial will show you how to export your
+presentation.
+</para>
+
+<para>
+Each exported slideshow consists of a series of image files (one for
+each slide in the original presentation, plus two title slides) and an
+index file. They are created in a fairly complex directory structure
+that allows more than one presentation to be stored on a single memory
+stick. A simple example is shown below, consisting of two
+presentations.
+</para>
+
+<mediaobject id="ms-export-directory-structure">
+<imageobject>
+<imagedata format="PNG" fileref="msexport4.png"/>
+</imageobject>
+<textobject><phrase><trademark>Memory Stick</trademark> directory structure</phrase></textobject>
+</mediaobject>
+
+<procedure>
+
+
+<step>
+<para>
+If the presentation that you want to use is not already open, use the
+<guimenu>File</guimenu> menu and choose <guimenu>Open...</guimenu> to
+select the presentation that you want to export.
+</para>
+</step>
+
+<step>
+<para>
+Now use the <guimenu>File</guimenu> menu and choose <guimenu>Create
+Memory Stick Slideshow...</guimenu>.
+</para>
+
+<screenshot>
+<screeninfo>The &kpresenter; <guimenu>Create Memory Stick
+Slideshow...</guimenu> menu selection.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="msexport1.png"/>
+</imageobject>
+<textobject><phrase>The &kpresenter; <guimenu>Create Memory Stick
+Slideshow...</guimenu> menu selection.</phrase></textobject>
+</mediaobject>
+</screenshot>
+</step>
+
+<step>
+<para>
+This will bring up the <guilabel>Create Memory Stick
+Slideshow</guilabel> dialog. Select the <guibutton>Set
+Colors</guibutton> option to expand the dialog.
+</para>
+
+<screenshot>
+<screeninfo>The &kpresenter; <guilabel>Create Memory Stick
+Slideshow</guilabel> dialog.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="msexport2.png"/>
+</imageobject>
+<textobject><phrase>The &kpresenter; <guilabel>Create Memory Stick
+Slideshow</guilabel> dialog.</phrase></textobject>
+</mediaobject>
+</screenshot>
+</step>
+
+<step>
+<para>
+The <guilabel>Path</guilabel> is the directory in which the top level
+directories (<filename>DCIM</filename> and
+<filename>MSSONY</filename>, see the <link
+linkend="ms-export-directory-structure">directory structure
+diagram</link> above) will be created. If you have the memory stick
+mounted, and have appropriate rights, you may wish to export directly
+to the removable media, in which case you would enter the mount point
+in this text box.
+</para>
+
+<para>
+The <guilabel>Title</guilabel> is used for both the name of the index
+file, and as a text label on the title slide.  Note that this title
+does not affect the titles on any of the normal presentation slides -
+the title slide is visible using the Sony projector setup prior to
+starting the actual presentation display.
+</para>
+
+<para>
+The two color selectors in the <guilabel>Preliminary
+Slides</guilabel> group box are also only used for the title slide. It
+can be useful to change the title slides to make the presentations
+easier to identify when working on the projector, but it is safe and
+normal to leave them as the default.
+</para>
+</step>
+
+<step>
+<para>
+You can then select <guibutton>OK</guibutton> to proceed with the
+actual export process. This will close the current dialog, and bring
+up another dialog that advises of progress as the export takes place.
+</para>
+
+<screenshot>
+<screeninfo>The &kpresenter; <guilabel>Create Memory Stick
+Slideshow</guilabel> progress dialog.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="msexport3.png"/>
+</imageobject>
+<textobject><phrase>The &kpresenter; <guilabel>Create Memory Stick
+Slideshow</guilabel> progress dialog.</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+When the export is complete, you can select the
+<guibutton>Done</guibutton> button, and the dialog will close.
+</para>
+</step>
+
+<step>
+<para>
+If you did not create the slideshow directly onto a mounted memory
+stick, you will need to copy over the correct files. As noted above,
+you need to copy over the correct directories and files starting at
+<filename>DCIM</filename> and <filename>MSSONY</filename> into the
+"root" of the <trademark>Memory Stick</trademark>. It is
+critical that the directory structure is maintained, and you may
+find it easiest to copy the whole of <filename>DCIM</filename> and
+<filename>MSSONY</filename> directories. 
+</para>
+
+<para>
+If necessary, you can safely rename the index file (which is
+<filename>Slideshow.SPP</filename> by default), however you cannot
+rename the slide images, nor can you change the name of the directory,
+as these are encoded into the index file.
+</para>
+</step>
+
+</procedure>
 
 </sect1>
 
