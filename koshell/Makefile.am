@@ -1,8 +1,8 @@
 
-INCLUDES  = $(PYTHONINC) $(MICO_INCLUDES) $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) -I$(idldir)
+INCLUDES  = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = $(KOFFICE_LIBS) $(LIB_KIMGIO) $(PYTHONLIB) -lkparts -lkpartsui \
-	-lkom $(LIB_KIO) $(LIBMICO) $(LIBPYTHON) $(LIB_KFILE)
+LDADD = $(KOFFICE_LIBS) -lkparts -lkpartsui \
+	-lkom $(LIB_KIO) $(LIB_KFILE) $(LIB_KIMGIO) $(LIBMICO) 
 
 ####### Files
 

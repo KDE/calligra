@@ -1,8 +1,8 @@
 
-INCLUDES  = $(KOFFICE_INCLUDES) $(PYTHONINC) $(MICO_INCLUDES) -I$(interfacedir) $(all_includes) -I$(idldir)
-LDFLAGS   = $(LIB_KIMGIO) $(all_libraries) $(PYTHONLIB) $(MICO_LDFLAGS) $(KDE_RPATH)
+INCLUDES  = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) -I$(idldir)
+LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = $(KOFFICE_LIBS) -lkparts -lkpartsui \
-	-lkom $(LIB_KIO) $(LIBMICO) $(LIBPYTHON) $(LIB_KFILE) 
+	-lkom $(LIB_KIO) $(LIB_KFILE) $(LIB_KIMGIO) $(LIBMICO)
 
 ####### Files
 
@@ -40,7 +40,7 @@ kimage.h: kimage.idl
 	$(IDL) $(IDL_FLAGS) $(srcdir)/kimage.idl
 
 kimage.cc: kimage.h
-kimage_doc.cc: kimage.h 
+kimage_doc.cc: kimage.h
 kimage_main.cc: kimage.h
-kimage_shell.cc: kimage.h 
-kimage_view.cc: kimage.h 
+kimage_shell.cc: kimage.h
+kimage_view.cc: kimage.h
