@@ -610,7 +610,7 @@ KoVariable * KoVariableCollection::createVariable( int type, short int subtype, 
             else
             {
                 QCString result = KoDateVariable::formatStr(_correct);
-                if ( result == 0 )//we cancel insert variable
+                if ( result.isNull() )//we cancel insert variable
                     return 0L;
                 varFormat = coll->format( result );
             }
@@ -622,7 +622,12 @@ KoVariable * KoVariableCollection::createVariable( int type, short int subtype, 
             if ( _forceDefaultFormat )
                 varFormat = coll->format( KoTimeVariable::defaultFormat() );
             else
-                varFormat = coll->format( KoTimeVariable::formatStr(_correct) );
+            {
+                QCString result = KoTimeVariable::formatStr(_correct);
+                if ( result.isNull() )//we cancel insert variable
+                    return 0L;
+                varFormat = coll->format( result );
+            }
             break;
         }
         case VT_PGNUM:
