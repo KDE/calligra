@@ -6839,13 +6839,13 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
         if( !rowElement.isNull() )
         {
             kdDebug()<<" KSpreadSheet::loadOasis rowElement.tagName() :"<<rowElement.tagName()<<endl;
-            if ( rowElement.tagName()=="table:table-column" )
+            if ( rowElement.tagName()=="table-column" )
             {
                 kdDebug ()<<" table-column found : index column before "<< indexCol<<endl;
                 loadColumnFormat( rowElement, oasisStyles, indexCol );
                 kdDebug ()<<" table-column found : index column after "<< indexCol<<endl;
             }
-            else if( rowElement.tagName() == "table:table-row" )
+            else if( rowElement.tagName() == "table-row" )
             {
                 kdDebug()<<" table-row found :index row before "<<rowIndex<<endl;
                 loadRowFormat( rowElement, rowIndex, oasisStyles, rowNode.isNull() );
@@ -7115,6 +7115,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
 
 bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )
 {
+    kdDebug()<<"KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )***********\n";
     double height = -1.0;
     KSpreadFormat layout( this , doc()->styleManager()->defaultStyle() );
     KoStyleStack styleStack;
@@ -7204,7 +7205,8 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
         if( !cellElement.isNull() )
         {
             ++columnIndex;
-            if( cellElement.tagName() == "table:table-cell" )
+            kdDebug()<<"bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast ) cellElement.tagName() :"<<cellElement.tagName()<<endl;
+            if( cellElement.tagName() == "table-cell" )
             {
                 kdDebug()<<" create cell at row index :"<<backupRow<<endl;
                 KSpreadCell* cell = nonDefaultCell( columnIndex, backupRow );
