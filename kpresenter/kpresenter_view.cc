@@ -126,6 +126,8 @@
 #include <kostyle.h>
 #include "kprstylemanager.h"
 
+#include <kstdaccel.h>
+
 #define DEBUG
 
 static const char * const pageup_xpm[] = {
@@ -2956,7 +2958,7 @@ void KPresenterView::setupActions()
                                           actionCollection(), "view_allowAutoFormat" );
 
 
-    KAction* actAutoComplete = new KAction( i18n( "AutoComplete" ), CTRL+Key_T,
+    KAction* actAutoComplete = new KAction( i18n( "AutoComplete" ), KStdAccel::shortcut(KStdAccel::TextCompletion),
                                             this, SLOT( slotAutoComplete() ), actionCollection(), "auto_complete" );
 
     // Necessary for the actions that are not plugged anywhere
