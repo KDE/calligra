@@ -211,11 +211,13 @@ VKoPainter::fillPath()
 	else
 		m_path[ m_index++ ].code = ART_END;
 
+	if( m_fill && m_fill->type() != fill_none )
+	{
+		ArtVpath *path;
+		path = art_bez_path_to_vec( m_path , 0.25 );
 
-	ArtVpath *path;
-	path = art_bez_path_to_vec( m_path , 0.25 );
-
-	drawVPath( path );
+		drawVPath( path );
+	}
 
 	m_index--;
 	//art_free( path );

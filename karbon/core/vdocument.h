@@ -12,6 +12,8 @@
 #include "vcolor.h"
 #include "vlayer.h"
 #include "vobject.h"
+#include "vstroke.h"
+#include "vfill.h"
 
 class QDomDocument;
 class QDomElement;
@@ -88,8 +90,8 @@ public:
 	void moveSelectionDown();
 	void moveSelectionUp();
 
-	void setDefaultStrokeColor( const VColor &color ) { m_defaultStrokeColor = color; }
-	void setDefaultFillColor( const VColor &color ) { m_defaultFillColor = color; }
+	void setDefaultStrokeColor( const VColor &color ) { m_defaultStroke.setColor( color ); }
+	void setDefaultFillColor( const VColor &color ) { m_defaultFill.setColor( color ); }
 	/// all newly created shapes in this document get the default color by using this method
 	void applyDefaultColors( VObject & ) const;
 
@@ -102,8 +104,8 @@ private:
 	VSelection* m_selection;		// selected objects.
 	VLayer* m_activeLayer;			// the active/current layer.
 
-	VColor m_defaultStrokeColor;        /// keep track of a default stroke color for created shapes
-	VColor m_defaultFillColor;          /// keep track of a default fill color for created shapes
+	VStroke m_defaultStroke;      /// keep track of a default stroke color for created shapes
+	VFill m_defaultFill;          /// keep track of a default fill color for created shapes
 
 	QString m_mime;
 	QString m_version;

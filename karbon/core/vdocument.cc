@@ -25,10 +25,6 @@ VDocument::VDocument()
 	m_layers.setAutoDelete( true );
 	m_layers.append( new VLayer() );
 	m_activeLayer = m_layers.getLast();
-
-	// set a default fill color of white
-	float r = 1.0, g = 1.0, b = 1.0;
-	m_defaultFillColor.setValues( &r, &g, &b, 0L );
 }
 
 VDocument::VDocument( const VDocument& document )
@@ -377,13 +373,7 @@ VDocument::moveSelectionToBottom()
 void
 VDocument::applyDefaultColors( VObject& obj ) const
 {
-	VStroke stroke;
-	VFill fill;
-
-	stroke.setColor( m_defaultStrokeColor );
-	fill.setColor( m_defaultFillColor );
-
-	obj.setStroke( stroke );
-	obj.setFill( fill );
+	obj.setStroke( m_defaultStroke );
+	obj.setFill( m_defaultFill );
 }
 
