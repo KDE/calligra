@@ -31,12 +31,14 @@ DESCRIPTION
 #include "kwcommand.h"
 #include "kwviewmode.h"
 #include "kwview.h"
+#include "kwdrag.h"
 #include <kotextobject.h> // for customItemChar !
 #include <qpopupmenu.h>
 #include <dcopobject.h>
 #include "KWordFrameSetIface.h"
 #include "KWordTableFrameSetIface.h"
 #include <kmessagebox.h>
+#include <qclipboard.h>
 
 KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
     KWFrameSet( doc )
@@ -2099,6 +2101,27 @@ void KWTableFrameSet::setZOrder()
     for( cell=m_cells.first();cell;cell=m_cells.next() ) {
         cell->setZOrder();
     }
+
+}
+
+void KWTableFrameSet::convertTableToText()
+{
+    QDomDocument domDoc( "PARAGRAPHS" );
+    QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
+    domDoc.appendChild( elem );
+    QString text;
+    for (unsigned int i =0; i < m_cells.count(); i++)
+    {
+        m_cells.at(i)->textDocument()->selectAll( KoTextDocument::Temp );
+        text += m_cells.at(i)->copyTextParag( elem, KoTextDocument::Temp );
+        m_cells.at(i)->textDocument()->removeSelection( KoTextDocument::Temp );
+    }
+    KWTextDrag *kd = new KWTextDrag( 0L );
+    kd->setPlain( text );
+    kd->setFrameSetNumber( -1 );
+    kd->setKWord( domDoc.toCString() );
+    kdDebug(32001) << "KWTextFrameSetEdit::newDrag " << domDoc.toCString() << endl;
+    QApplication::clipboard()->setData( kd );
 
 }
 

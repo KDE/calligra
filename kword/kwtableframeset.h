@@ -331,6 +331,8 @@ public:
      */
     void setZOrder();
 
+    void convertTableToText();
+
 #ifndef NDEBUG
     virtual void printDebug( KWFrame * frame );
     virtual void printDebug();

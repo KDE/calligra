@@ -285,3 +285,4 @@ Changes after KWord-1.2
 - Add time/date variable offset
 - Fix #24242 add variable : created/modified/printed document date
 - Now we can copy text of comment.
+- Add support for convert table to text

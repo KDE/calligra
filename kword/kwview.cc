@@ -94,6 +94,7 @@
 #include "kwcreatebookmarkdia.h"
 #include "kwimportstyledia.h"
 #include "kwframe.h"
+#include "kwanchor.h"
 
 #undef Bool
 #include <kspell.h>
@@ -946,6 +947,10 @@ void KWView::setupActions()
     connect( actionTableStyle, SIGNAL( activated( int ) ),
              this, SLOT( tableStyleSelected( int ) ) );
     updateTableStyleList();
+
+    actionConvertTableToText = new KAction( i18n( "Convert table to text" ), 0,
+                        this, SLOT( convertTableToText() ),
+                        actionCollection(), "convert_table_to_text" );
 
     // ---------------------- Tools menu
 
@@ -6692,6 +6697,50 @@ void KWView::insertDirectCursor(bool b)
 void KWView::updateDirectCursorButton()
 {
     actionInsertDirectCursor->setChecked(m_doc->insertDirectCursor());
+}
+
+void KWView::convertTableToText()
+{
+    KWCanvas * canvas = m_gui->canvasWidget();
+    KWTableFrameSet *table = canvas->getCurrentTable();
+    if (table && table->isFloating())
+    {
+        table->convertTableToText();
+        KWAnchor * anchor = table->findAnchor( 0 );
+        if ( anchor )
+        {
+            KWTextFrameSet *frameset= table->anchorFrameset();
+            KoTextParag *parag = anchor->paragraph();
+            int pos = anchor->index();
+            KMacroCommand *macro = new KMacroCommand(i18n("Convert table to text"));
+            KCommand *cmd =table->anchorFrameset()->deleteAnchoredFrame( anchor );
+            if ( cmd )
+                macro->addCommand( cmd);
+
+            m_gui->canvasWidget()->emitFrameSelectedChanged();
+            deleteFrame( false );
+            m_gui->canvasWidget()->editTextFrameSet( frameset, parag, pos,true );
+            QMimeSource *data = QApplication::clipboard()->data();
+            // Hmm, we could reuse the result of KWView::checkClipboard...
+            if ( data->provides( KWTextDrag::selectionMimeType() ) )
+            {
+                QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
+                if ( arr.size() )
+                {
+                    KWTextFrameSetEdit* edit = currentTextEdit();
+                    if ( edit && edit->textFrameSet())
+                    {
+                        KCommand *cmd =edit->textFrameSet()->pasteKWord( edit->cursor(), QCString( arr ), true );
+                        if ( cmd )
+                            macro->addCommand( cmd);
+                        m_doc->addCommand(cmd);
+                    }
+                }
+            }
+            m_doc->addCommand(macro);
+
+        }
+    }
 }
 
 /******************************************************************/
