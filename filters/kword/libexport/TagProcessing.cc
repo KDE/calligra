@@ -44,14 +44,6 @@
 // #define DEBUG_KWORD_IGNORED_TAGS
 
 
-// The class TagProcessing and the two functions ProcessSubtags () and
-// AllowNoSubtags () allow for easing parsing of subtags in the
-// current tag. If don't expect any subtags you call AllowNoSubtags ().
-// Otherwise you create a list of TagProcessing elements and pass that
-// to ProcessSubtags () which will go through all subtags it can find,
-// call the corresponding processing function, and do all the
-// necessary error handling.
-
 void ProcessSubtags ( const QDomNode             &parentNode,
                       QValueList<TagProcessing>  &tagProcessingList,
                       KWEFKWordLeader            *leader)
@@ -93,7 +85,7 @@ void ProcessSubtags ( const QDomNode             &parentNode,
 
             if ( !found )
             {
-                kdWarning(30508) << "Unexpected tag " << childNode.nodeName ()
+                kdDebug(30508) << "Unexpected tag " << childNode.nodeName ()
                     << " in " << parentNode.nodeName () << "!" << endl;
             }
         }
@@ -101,28 +93,16 @@ void ProcessSubtags ( const QDomNode             &parentNode,
     //kdDebug(30508) << "Ending ProcessSubtags for node: " << parentNode.nodeName() << endl;
 }
 
-#ifdef DEBUG_KWORD_TAGS
-// Version for debugging (process all sub tags)
 void AllowNoSubtags ( const QDomNode& myNode, KWEFKWordLeader *leader )
 {
+#ifdef DEBUG_KWORD_TAGS
     QString outputText;
     QValueList<TagProcessing> tagProcessingList;
     ProcessSubtags (myNode, tagProcessingList, leader);
-}
 #else
-// Normal version: no subtags expected, so do not search any!
-void AllowNoSubtags ( const QDomNode&, KWEFKWordLeader* )
-{
-}
+    @_UNUSED( leader ):
 #endif
-
-// The class AttrProcessing and the two functions ProcessAttributes ()
-// and AllowNoSubtags () allow for easing parsing of the current tag's
-// attributes. If don't expect any attributes you call AllowNoAttributes ().
-// Otherwise you create a list of AttrProcessing elements and pass
-// that to ProcessAttributes () which will go through all attributes
-// it can find, retrieve the value in the datatype defined, and do all
-// the necessary error handling.
+}
 
 AttrProcessing::AttrProcessing ( const QString& n, const QString& t, void *d )
     : name (n), data (d)
@@ -216,7 +196,7 @@ void ProcessAttributes ( const QDomNode              &myNode,
                             break;
                         default:
                             {
-                                kdWarning(30508) << "Unexpected data type " << int( (*attrProcessingIt).type )
+                                kdDebug(30508) << "Unexpected data type " << int( (*attrProcessingIt).type )
                                     << " in " << myNode.nodeName ()
                                     << " attribute " << (*attrProcessingIt).name
                                     << endl;
@@ -246,16 +226,12 @@ void ProcessAttributes ( const QDomNode              &myNode,
     //kdDebug(30508) << "Ending ProcessAttributes for node: " << myNode.nodeName() << endl;
 }
 
-#ifdef DEBUG_KWORD_TAGS
-// Version for debugging (process all attributes)
 void AllowNoAttributes ( const QDomNode & myNode )
 {
+#ifdef DEBUG_KWORD_TAGS
     QValueList<AttrProcessing> attrProcessingList;
     ProcessAttributes (myNode, attrProcessingList);
-}
 #else
-// Normal version: no attributes expected, so do not process any!
-void AllowNoAttributes ( const QDomNode & )
-{
-}
+    Q_UNUSED( myNode );
 #endif
+}

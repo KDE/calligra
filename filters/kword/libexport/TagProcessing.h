@@ -39,6 +39,7 @@
 #include <qdom.h>
 #include <qvaluelist.h>
 
+#include <kdemacros.h>
 #include <kdebug.h>
 
 class KWEFKWordLeader;
@@ -65,7 +66,8 @@ class TagProcessing
         {}
 
         /**
-         * No-op constructor
+         * @brief No-op constructor
+         *
          * Avoids a warning that a tag is unknown.
          */
         TagProcessing (const QString& _name) : name(_name), processor(0), data(0)
@@ -101,39 +103,43 @@ public:
         { AttrNull = 0, AttrInt, AttrDouble, AttrBool, AttrQString };
 
     /**
-     * Default constructor
+     * @brief Default constructor
      */
     AttrProcessing () : type( AttrNull ), data(0) {}
 
     /**
-     * Old constructor (without type checking)
-     * Deprecated, do not use for new code
+     * @brief Old constructor (without type checking)
+     * @deprecated do not use for new code
      */
-    AttrProcessing ( const QString& n, const QString& t, void *d );
+    AttrProcessing ( const QString& n, const QString& t, void *d ) KDE_DEPRECATED;
 
     /**
-     * No-op constructor
+     * @brief No-op constructor
+     *
      * This just avoids that a warning is triggered that an attribute is not known
      */
     AttrProcessing ( const QString& _name )
         : name( _name ), type( AttrNull ), data( 0 ) {}
 
     /**
-     * Integer constructor
+     * @brief Integer constructor
+     *
      * Get the attribute value as an integer
      */
     AttrProcessing ( const QString& _name, int& i )
         : name( _name ), type( AttrInt ), data( &i ) {}
 
     /**
-     * Double constructor
+     * @brief Double constructor
+     *
      * Get the attribute value as a double
      */
     AttrProcessing ( const QString& _name, double& d )
         : name( _name ), type( AttrDouble ), data( &d ) {}
 
     /**
-     * Boolean constructor
+     * @brief Boolean constructor
+     *
      * Get the attribute value as a bool
      * (The values "yes,", "no", "true", "false", "0" and "1" are supported)
      */
@@ -141,7 +147,8 @@ public:
         : name( _name ), type( AttrBool ), data( &flag ) {}
 
     /**
-     * String constructor
+     * @brief String constructor
+     *
      * Get the attribute value as a QString
      */
     AttrProcessing ( const QString& _name, QString& str )
