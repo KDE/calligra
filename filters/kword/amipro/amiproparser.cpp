@@ -263,18 +263,12 @@ AmiProListener::~AmiProListener()
 {
 }
 
-bool AmiProListener::doOpenDocument()
-{
-  return true;
-}
+#define DO_TRUE_DEFINITION(string) \
+    bool AmiProListener::string \
+    {\
+        return true;\
+    }
 
-bool AmiProListener::doCloseDocument()
-{
-  return true;
-}
-
-bool AmiProListener::doParagraph( const QString& text, AmiProFormatList formatList )
-{
-   qDebug( "%s", text.latin1() );
-  return true;
-}
+DO_TRUE_DEFINITION(doOpenDocument())
+DO_TRUE_DEFINITION(doCloseDocument())
+DO_TRUE_DEFINITION(doParagraph(const QString& text, AmiProFormatList formatList))
