@@ -2,7 +2,14 @@
 [Desktop Entry]
 MimeType=application/x-kgraph
 Comment=KGraph - Graphs for Engineers
-Comment[de]=KGraph - Diagramme f�r Ingenieure
+Comment[ca]=KGraph - Gràfics per a enginyers
+Comment[de]=Kgraph - Graphiken für technisch Interessierte
+Comment[hu]=KGrafikon - grafikonok mérnököknek
+Comment[no]=KGraph - grafikk for ingeniører
+Comment[no_NY]=KGraph - Grafar for ingeniørar
+Comment[ro]=Grafice pentru ingineri
+Comment[sl]=KGraph - grafi za inženirje
 DefaultApp=KGraph
 Type=MimeType
 Patterns=*.kgr;
+X-KDE-AutoEmbed=false

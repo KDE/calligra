@@ -2,6 +2,9 @@
 [Desktop Entry]
 MimeType=application/x-kimageshop
 Comment=KImageShop
+Comment[eo]=Bildmanipulilo
+Comment[ro]=Document KImageShop
 DefaultApp=KImageShop
 Type=MimeType
 Patterns=*.kis;
+X-KDE-AutoEmbed=false

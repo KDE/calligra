@@ -2,7 +2,12 @@
 [Desktop Entry]
 MimeType=application/x-killustrator
 Comment=KIllustrator
+Comment[eo]=Ilustranto
+Comment[hu]=KIllusztrátor
+Comment[ro]=Document KIllustrator
+Comment[sv]=Illustrationer
 DefaultApp=KIllustrator
 Icon=killustrator
 Type=MimeType
 Patterns=*.kil;
+X-KDE-AutoEmbed=false
