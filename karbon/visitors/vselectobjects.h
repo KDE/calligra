@@ -28,27 +28,24 @@
 #include "vtext.h"
 #include "vvisitor.h"
 
-
+/***
+ * This visitor visits a selection and selects objects that are contained
+ * in a paramater selection rectangle. For composites it makes a more accurate test, if the
+ * selection rectangle intersects with any part of the composite, it is selected.
+ * Also this visitor can be used to deselect objects.
+ */
 class VSelectObjects : public VVisitor
 {
 public:
 	VSelectObjects( VObjectList& selection, bool select = true )
-		: m_selection( selection )
-	{
-		m_select = select;
-	}
+		: m_selection( selection ), m_select( select ) {}
 
 	VSelectObjects( VObjectList& selection, const KoRect& rect, bool select = true )
-		: m_selection( selection )
-	{
-		m_select = select;
-		m_rect = rect;
-	}
+		: m_selection( selection ), m_select( select ), m_rect( rect ) {}
 
 	virtual void visitVGroup( VGroup& group )
 		{ visitVObject( group ); }
-	virtual void visitVComposite( VComposite& composite )
-		{ visitVObject( composite ); }
+	virtual void visitVComposite( VComposite& composite );
 	virtual void visitVText( VText& text )
 		{ visitVObject( text ); }
 	virtual void visitVLayer( VLayer& layer );
