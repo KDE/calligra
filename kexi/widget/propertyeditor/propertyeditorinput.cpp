@@ -152,7 +152,7 @@ PropertyEditorBool::PropertyEditorBool(QWidget *parent, KexiProperty *property, 
 	m_toggle = new QToolButton(this);
 	m_toggle->setToggleButton(true);
 	m_toggle->setUsesTextLabel(true);
-	m_toggle->setTextPosition(QToolButton::BesideIcon);
+	m_toggle->setTextPosition(QToolButton::Right); //js BesideIcon -didnt work before qt3.2);
 	m_toggle->resize(width(), height());
 	
 	connect(m_toggle, SIGNAL(toggled(bool)), this, SLOT(setState(bool)));
