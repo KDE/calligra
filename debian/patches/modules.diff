@@ -44,7 +44,7 @@
  ## The executable
 --- koffice/kivio/kiviopart/Makefile.am	2002/07/14 12:31:28	1.24
 +++ koffice/kivio/kiviopart/Makefile.am	2002/09/08 00:33:31
-@@ -98,7 +98,7 @@ EXTRA_DIST = \
+@@ -97,7 +97,7 @@ EXTRA_DIST = \
  
  lib_LTLIBRARIES = kivio.la
  kivio_la_SOURCES = main.cpp
