@@ -71,6 +71,8 @@ protected:
 private:
     CanvasReportItem *moving;
     QPoint moving_start;
+    double moving_offsetY;
+    double moving_offsetX;
     CanvasReportItem *resizing;
     bool selectionStarted;
 
@@ -79,6 +81,8 @@ private:
     RequestType request;
 
     QPtrList<CanvasBox> selected;
+
+    void fixMinValues(double &pos,double minv,double &offset);
 
 //    std::map<QString, PropPtr > selProps;
 

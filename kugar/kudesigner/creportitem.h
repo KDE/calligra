@@ -56,6 +56,7 @@ public:
     virtual void drawHolders(QPainter &painter);
 
 protected:
+    friend class ReportCanvas;
     CanvasBand *parentSection;
 };
 

@@ -237,6 +237,8 @@ void ReportCanvas::startMoveOrResizeOrSelectItem(QCanvasItemList &l,
 	    item->topRightResizableRect().contains(e->pos()) ||
 	    item->bottomRightResizableRect().contains(e->pos()))*/
             moving_start = p;
+            moving_offsetX=0;
+	    moving_offsetY=0;
             if (item->bottomRightResizableRect().contains(e->pos()))
             {
                 moving = 0;
@@ -344,6 +346,30 @@ void ReportCanvas::contentsMouseReleaseEvent(QMouseEvent* e)
     }
 }
 
+
+void ReportCanvas::fixMinValues(double &pos,double minv,double &offset)
+{
+	if (pos<minv)
+	{
+		offset=offset+pos-minv;
+		pos=minv;
+	}
+	else
+	{
+		if (offset<0)
+		{
+			offset=offset+pos-minv;
+			if (offset<0)
+				pos=minv;
+			else
+			{
+				pos=offset+minv;
+				offset=0;
+			}
+		}
+	}
+}
+
 void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 {
     QPoint p = inverseWorldMatrix().map(e->pos());
@@ -363,8 +389,14 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 
     if ( moving )
     {
-        moving->moveBy(p.x() - moving_start.x(),
-            p.y() - moving_start.y());
+	double newXPos=moving->x()+p.x()-moving_start.x();
+	double newYPos=moving->y()+p.y()-moving_start.y();
+	fixMinValues(newYPos,moving->parentSection->y(),moving_offsetY);
+	fixMinValues(newXPos,moving->parentSection->x(),moving_offsetX);
+
+	moving->move(newXPos,newYPos);
+        //moving->moveBy(p.x() - moving_start.x(),
+        //    p.y() - moving_start.y());
 /*	attempt to prevent item collisions
         QCanvasItemList l=canvas()->collisions(moving->rect());
 	if (l.count() > 2)
