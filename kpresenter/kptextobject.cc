@@ -226,17 +226,18 @@ void KPTextObject::draw( QPainter *_painter )
         return;
     }
 
-    draw( _painter,0, 0, false, 0L, true );
+    draw( _painter, false, 0L, true );
 }
 
-void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy,
+void KPTextObject::draw( QPainter *_painter,
                          bool onlyChanged, QTextCursor* cursor, bool resetChanged )
 {
     _painter->save();
     setupClipRegion( _painter, getBoundingRect(  ) );
 
-    int ox = orig.x() - _diffx;
-    int oy = orig.y() - _diffy;
+    int ox = orig.x();// - _diffx;
+    int oy = orig.y();// - _diffy;
+    //kdDebug() << "Painting text object at " << ox << "," << oy << ":" << m_textobj->textDocument()->text() << endl;
     int ow = ext.width();
     int oh = ext.height();
 
@@ -883,6 +884,7 @@ void KPTextObject::drawParags( QPainter *painter, const QColorGroup& cg, int fro
 
 void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KPrCanvas* canvas )
 {
+    // Painter is already translated for diffx/diffy, but not for the object yet
     p->translate( orig.x(), orig.y() );
     KoTextParag* parag = static_cast<KoTextParag *>(cursor->parag());
 

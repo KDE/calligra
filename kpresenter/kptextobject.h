@@ -77,8 +77,7 @@ public:
     virtual int load(const QDomElement &element);
 
     virtual void draw( QPainter *_painter );
-    void draw( QPainter *_painter, int _diffx, int _diffy,
-               bool onlyChanged, QTextCursor* cursor, bool resetChanged );
+    void draw( QPainter *_painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged );
     void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KPrCanvas* /*canvas*/ );
 
     virtual void zoom( float _fakt );

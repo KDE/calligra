@@ -75,9 +75,8 @@
 
 /*====================== constructor =============================*/
 KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
-    : QWidget( parent, name ), buffer( size() )
+    : QWidget( parent, name, WStaticContents|WResizeNoErase|WRepaintNoErase ), buffer( size() )
 {
-    setWFlags( WResizeNoErase );
     presMenu = 0;
     m_currentTextObjectView=0L;
     m_activePage=0L;
@@ -150,14 +149,14 @@ void KPrCanvas::scrollX( int x )
 {
     int oldXOffset = m_xOffset;
     m_xOffset = x;
-    scroll( x - oldXOffset, 0 );
+    scroll( oldXOffset - x, 0 );
 }
 
 void KPrCanvas::scrollY( int y )
 {
     int oldYOffset = m_yOffset;
     m_yOffset = y;
-    scroll( 0, y - oldYOffset );
+    scroll( 0, oldYOffset - y );
 }
 
 bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
@@ -223,16 +222,17 @@ bool KPrCanvas::focusNextPrevChild( bool )
 
 void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 {
-    //kdDebug(33001) << "KPrCanvas::paintEvent " << paintEvent->rect().x() << "," << paintEvent->rect().y()
-    //               << " " << paintEvent->rect().width() << "x" << paintEvent->rect().height() << endl;
-
     if ( isUpdatesEnabled() )
     {
         QPainter bufPainter;
-        bufPainter.begin( &buffer ); // double-buffering - (the buffer is as big as the page)
+        bufPainter.begin( &buffer, this ); // double-buffering - (the buffer is as big as the widget)
+        bufPainter.translate( -diffx(), -diffy() );
+        bufPainter.setBrushOrigin( -diffx(), -diffy() );
 
         QRect crect( paintEvent->rect() ); // the rectangle that needs to be repainted, in widget coordinates
+        kdDebug(33001) << "KPrCanvas::paintEvent " << DEBUGRECT( crect ) << endl;
         crect.moveBy( diffx(), diffy() ); // now in contents coordinates
+          kdDebug(33001) << "KPrCanvas::paintEvent after applying diffx/diffy: " << DEBUGRECT( crect ) << endl;
 
         if ( editMode || !fillBlack )
             bufPainter.fillRect( crect, white );
@@ -244,19 +244,19 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 
         bufPainter.end();
 
-        QPoint dest( crect.left() - diffx(), crect.top() - diffy() );
-        bitBlt( this, dest, &buffer, crect );
+        bitBlt( this, paintEvent->rect().topLeft(), &buffer, paintEvent->rect() );
     }
 }
 
 /*======================= draw background ========================*/
-void KPrCanvas::drawBackground( QPainter *painter, QRect rect, bool ignoreSkip )
+void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect )
 {
     QRegion grayRegion( rect );
     if ( editMode )
     {
         //kdDebug(33001) << "KPrCanvas::drawBackground drawing bg for page " << i+1 << " editMode=" << editMode << endl;
         QRect pageRect = m_activePage->getZoomPageRect();//getPageRect( 0, _presFakt );
+        //kdDebug() << "KPrCanvas::drawBackground pageRect=" << DEBUGRECT(pageRect) << endl;
         if ( rect.intersects( pageRect ) )
             m_activePage->background()->draw( painter, true ); // TODO pass rect ?
         // Include the border now
@@ -353,7 +353,7 @@ void KPrCanvas::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceR
 }
 
 /*========================= draw objects =========================*/
-void KPrCanvas::drawObjects( QPainter *painter, QRect rect, bool drawCursor, bool ignoreSkip )
+void KPrCanvas::drawObjects( QPainter *painter, const QRect& rect, bool drawCursor )
 {
     int pgNum = editMode ? (int)m_view->getCurrPgNum() : currPresPage;
     //kdDebug(33001) << "Page::drawObjects ----- pgNum=" << pgNum << " currPresStep=" << currPresStep << " drawCursor=" << drawCursor << endl;
@@ -363,8 +363,6 @@ void KPrCanvas::drawObjects( QPainter *painter, QRect rect, bool drawCursor, boo
     {
 
         //if (i<10) kdDebug(33001) << "Page::drawObjects object " << i << " page " << pg << " getPresNum=" << kpobject->getPresNum() << endl;
-
-        it.current()->draw( painter );
 	if ( it.current()->isSticky() || editMode ||
 	     ( rect.intersects( it.current()->getBoundingRect( ) ) && editMode ) ||
 	     ( !editMode &&
@@ -382,10 +380,6 @@ void KPrCanvas::drawObjects( QPainter *painter, QRect rect, bool drawCursor, boo
 		it.current()->doSpecificEffects( true, false );
 	    }
 
-	    if ( !ignoreSkip && !it.current()->isSticky() &&
-		 editMode && painter->device()->devType() != QInternal::Printer )
-		continue;
-
 	    QPoint op;
 	    if ( it.current()->isSticky() ) {
 		op = it.current()->getOrig();
@@ -397,13 +391,12 @@ void KPrCanvas::drawObjects( QPainter *painter, QRect rect, bool drawCursor, boo
             {
                 KPTextObject* textObject = static_cast<KPTextObject*>( it.current() );
                 if ( m_currentTextObjectView->kpTextObject() == textObject ) // This is the object we are editing
-                    textObject->draw( painter, diffx(), diffy(),
+                    textObject->draw( painter,
                                        false /*onlyChanged. Pass as param ?*/,
                                        m_currentTextObjectView->cursor(), true /* idem */);
             }
             else
             {
-                kdDebug()<<"draw objects------------------------\n";
                 it.current()->draw( painter );
             }
 	    it.current()->setSubPresStep( 0 );
@@ -2418,10 +2411,10 @@ void KPrCanvas::drawPageInPix2( QPixmap &_pix, int __diffy, int pgnum, float /*_
 
     bool _editMode = editMode;
     editMode = false;
-    drawBackground( &p, _pix.rect(), true );
+    drawBackground( &p, _pix.rect() );
     editMode = _editMode;
 
-    drawObjects( &p, _pix.rect(), false, true );
+    drawObjects( &p, _pix.rect(), false );
 
     p.end();
 
@@ -2442,8 +2435,8 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int __diffy )
     QPainter p;
     p.begin( &_pix );
 
-    drawBackground( &p, _pix.rect(), true );
-    drawObjects( &p, _pix.rect(), false, true );
+    drawBackground( &p, _pix.rect() );
+    drawObjects( &p, _pix.rect(), false );
 
     p.end();
 
@@ -2459,8 +2452,8 @@ void KPrCanvas::printPage( QPainter* painter, int pageNum )
     //int _yOffset = diffy();
     //view->setDiffY( __diffy );
 
-    drawBackground( painter, rect, true );
-    drawObjects( painter, rect, false, true );
+    drawBackground( painter, rect );
+    drawObjects( painter, rect, false );
 
     //view->setDiffY( _yOffset );
 }
@@ -3632,8 +3625,8 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float left_margin, 
     fillBlack = false;
     _presFakt = 1.0;
 
-    int _xOffset = diffx();
-    int _yOffset = diffy();
+    //int _xOffset = diffx();
+    //int _yOffset = diffy();
 
     currPresStep = 1000;
     subPresStep = 1000;

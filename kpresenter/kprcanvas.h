@@ -232,8 +232,8 @@ protected:
     // functions for displaying
     virtual void paintEvent( QPaintEvent* );
     void paintBackground( QPainter*, QRect );
-    void drawBackground( QPainter*, QRect, bool ignoreSkip = false );
-    void drawObjects( QPainter*, QRect, bool drawCursor, bool ignoreSkip = false );
+    void drawBackground( QPainter*, const QRect& );
+    void drawObjects( QPainter*, const QRect&, bool drawCursor );
     virtual void mousePressEvent( QMouseEvent *e );
     virtual void mouseReleaseEvent( QMouseEvent *e );
     virtual void mouseMoveEvent( QMouseEvent *e );
