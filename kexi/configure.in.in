@@ -1,6 +1,7 @@
 
 #DO_NOT_COMPILE="$DO_NOT_COMPILE kexi"
 
+KEXI_VERSION=0.1b1.91
 
 # -- Check for KDE 3.1 and enable the compat dir --------------------
 
@@ -26,7 +27,24 @@ AC_TRY_COMPILE([
 	AC_MSG_RESULT(yes)
 ,
 	use_kexi_compat_qextmdi="yes"
-	AC_SUBST(LIB_KEXI_KMDI_INCLUDES, '-I$(top_srcdir)/../kexi_compat/qextmdi')
+	kexi_compat_qextmdi_lib=libkexi_compat_qextmdi.so
+	
+	# lets find qextmdi includes and lib:
+	
+	dnl looking for $kexi_compat_qextmdi_lib
+	kexi_compat_qextmdi_errmsg="For kde3.1 qextmdi library is needed from http://kexi-project.org/resources"
+	AC_FIND_FILE($kexi_compat_qextmdi_lib, $kde_libraries, kexi_compat_qextmdi_dir)
+	if test ! -r "$kexi_compat_qextmdi_dir/$kexi_compat_qextmdi_lib"; then
+		AC_MSG_ERROR([No $kexi_compat_qextmdi_lib found in $kde_libraries !
+		$kexi_compat_qextmdi_errmsg])
+	fi
+	AC_FIND_FILE(dockmainwindow_compat.h, $kde_includes/kexi/compat/qextmdi, kexi_compat_qextmdi_includes)
+	if test ! -r "$kexi_compat_qextmdi_includes"; then
+		AC_MSG_ERROR([No kexi/compat/qextmdi includes found in $kde_includes !
+		$kexi_compat_qextmdi_errmsg])
+	fi
+	
+	AC_SUBST(LIB_KEXI_KMDI_INCLUDES, '-I'$kexi_compat_qextmdi_includes)
 	AC_SUBST(LIB_KEXI_KMDI, -lkexi_compat_qextmdi)
 	
 	AC_MSG_RESULT(no)
