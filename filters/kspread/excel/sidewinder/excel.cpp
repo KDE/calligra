@@ -2272,6 +2272,10 @@ public:
   unsigned topBorderColor;
   unsigned bottomBorderStyle;
   unsigned bottomBorderColor;
+  bool diagonalTopLeft;
+  bool diagonalBottomLeft;
+  unsigned diagonalStyle;
+  unsigned diagonalColor;
 };
 
 XFRecord::XFRecord():  Record()
@@ -2297,6 +2301,10 @@ XFRecord::XFRecord():  Record()
   d->topBorderColor = 0;
   d->bottomBorderStyle = 0;
   d->bottomBorderColor = 0;
+  d->diagonalTopLeft = false;
+  d->diagonalBottomLeft = false;
+  d->diagonalStyle = 0;
+  d->diagonalColor = 0;
 }
 
 XFRecord::~XFRecord()
@@ -2332,6 +2340,10 @@ XFRecord& XFRecord::operator=( const XFRecord& xf )
   d->topBorderColor      = xf.topBorderColor();
   d->bottomBorderStyle   = xf.bottomBorderStyle();
   d->bottomBorderColor   = xf.bottomBorderColor();
+  d->diagonalTopLeft     = xf.diagonalTopLeft();
+  d->diagonalBottomLeft  = xf.diagonalBottomLeft();
+  d->diagonalStyle       = xf.diagonalStyle();
+  d->diagonalColor       = xf.diagonalColor();
   return *this;
 }
 
@@ -2566,6 +2578,46 @@ void XFRecord::setBottomBorderColor( unsigned color )
   d->bottomBorderColor = color;
 }
 
+bool XFRecord::diagonalTopLeft() const
+{
+  return d->diagonalTopLeft;
+}
+
+void XFRecord::setDiagonalTopLeft( bool dd )
+{
+  d->diagonalTopLeft = dd;
+}
+
+bool XFRecord::diagonalBottomLeft() const
+{
+  return d->diagonalBottomLeft;
+}
+
+void XFRecord::setDiagonalBottomLeft( bool dd )
+{
+  d->diagonalBottomLeft = d;
+}
+
+unsigned XFRecord::diagonalStyle() const
+{
+  return d->diagonalStyle;
+}
+
+void XFRecord::setDiagonalStyle( unsigned style )
+{
+  d->diagonalStyle = style;
+}
+
+unsigned XFRecord::diagonalColor() const
+{
+  return d->diagonalColor;
+}
+
+void XFRecord::setDiagonalColor( unsigned color )
+{
+  d->diagonalColor = color;
+}
+
 void XFRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 20 ) return;
@@ -2593,17 +2645,24 @@ void XFRecord::setData( unsigned size, const unsigned char* data )
   setShrinkContent( options & 0x10 );
   
   unsigned linestyle = readU16( data + 10 );
+  unsigned color1 = readU16( data + 12 );
+  unsigned color2 = readU16( data + 14 );
+  unsigned flag = readU16( data + 16 );
+  
   setLeftBorderStyle( linestyle & 0xf );
   setRightBorderStyle( ( linestyle >> 4 ) & 0xf );
   setTopBorderStyle( ( linestyle >> 8 ) & 0xf );
   setBottomBorderStyle( ( linestyle >> 12 ) & 0xf );
   
-  unsigned color1 = readU16( data + 12 );
-  unsigned color2 = readU16( data + 14 );
   setLeftBorderColor( color1 & 0x7f );
   setRightBorderColor( ( color1 >> 7 ) & 0x7f );
   setTopBorderColor( color1 & 0x7f );
   setBottomBorderColor( ( color1 >> 7 ) & 0x7f );
+  
+  setDiagonalTopLeft( color1 & 0x40 );
+  setDiagonalBottomLeft( color1 & 0x40 );
+  setDiagonalStyle( ( flag >> 4 ) & 0x1e  );
+  setDiagonalColor( ( ( flag & 0x1f ) << 2 ) + (  ( color1 >> 14 ) & 3 ));
 }
 
 void XFRecord::dump( std::ostream& out ) const

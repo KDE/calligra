@@ -2482,6 +2482,64 @@ public:
    * \sa bottomBorderColor, setBottomBorderStyle
    */
   void setBottomBorderColor( unsigned color );
+  
+  /**
+   * Returns true if there is a diagonal line from top left to right bottom.
+   *
+   * \sa diagonalStyle, diagonalColor, setDiagonalTopLeft
+   */
+  bool diagonalTopLeft() const;
+  
+  /**
+   * Sets whether there should be a diagonal line from top left to right bottom.
+   *
+   * \sa diagonalTopLeft, setDiagonalStlye, setDiagonalColor
+   */
+  void setDiagonalTopLeft( bool d );
+  
+  /**
+   * Returns true if there is a diagonal line from bottom left to right top.
+   *
+   * \sa diagonalStyle, diagonalColor, setDiagonalBottomLeft
+   */
+  bool diagonalBottomLeft() const;
+  
+  /**
+   * Sets whether there should be a diagonal line from bottom left to right top.
+   *
+   * \sa diagonalBottomLeft, setDiagonalStlye, setDiagonalColor
+   */
+  void setDiagonalBottomLeft( bool d );
+  
+  /**
+   * Returns the diagonal line style.
+   *
+   * \sa diagonalTopLeft, diagonalBottomLeft, setDiagonalStyle
+   */
+  unsigned diagonalStyle() const;
+  
+  /**
+   * Sets the line style for diagonal line.
+   *
+   * \sa diagonalBorderStyle, setDiagonalTopLeft, setDiagonalBottomLeft
+   */
+  void setDiagonalStyle( unsigned style );
+  
+  /**
+   * Returns the color for diagonal line. This is an index to color palette
+   * specified in Palette record.
+   *
+   * \sa setDiagonalColor, diagonalStyle
+   */
+  unsigned diagonalColor() const;
+  
+  /**
+   * Sets the color for diagonal line. This is an index to color palette
+   * specified in Palette record.
+   *
+   * \sa diagonalColor, setDiagonalStyle
+   */
+  void setDiagonalColor( unsigned color );
     
   /**
    \reimpl
