@@ -137,6 +137,9 @@ preference::preference( KSpreadView* _view, QVBox *box, char *name )
   m_pFormula= new QCheckBox(i18n("Show &formula"),tmpQGroupBox);
   m_pFormula->setChecked(m_pView->activeTable()->getShowFormula());
 
+  m_pFormulaIndicator= new QCheckBox(i18n("Show &formula indicator"),tmpQGroupBox);
+  m_pFormulaIndicator->setChecked(m_pView->activeTable()->getShowFormulaIndicator());
+
   m_pGrid=new QCheckBox( i18n("Show &grid"), tmpQGroupBox );
   m_pGrid->setChecked( m_pView->activeTable()->getShowGrid() );
 
@@ -164,6 +167,7 @@ preference::preference( KSpreadView* _view, QVBox *box, char *name )
 void preference::slotDefault()
 {
   m_pFormula->setChecked(false);
+  m_pFormula->setChecked(true);
   m_pAutoCalc->setChecked(true);
   m_pGrid->setChecked(true);
   m_pPrintGrid->setChecked(true);
@@ -178,6 +182,7 @@ void preference::apply()
   if(m_pView->activeTable()->getLcMode()==m_pLcMode->isChecked()
   && m_pView->activeTable()->getShowColumnNumber()==m_pColumn->isChecked()
   && m_pView->activeTable()->getShowFormula()==m_pFormula->isChecked()
+  && m_pView->activeTable()->getShowFormulaIndicator()==m_pFormulaIndicator->isChecked()
   && m_pView->activeTable()->getAutoCalc()==m_pAutoCalc->isChecked()
   && m_pView->activeTable()->getShowGrid()==m_pGrid->isChecked()
   && m_pView->activeTable()->getPrintGrid()==m_pPrintGrid->isChecked()
@@ -193,6 +198,7 @@ void preference::apply()
         m_pView->activeTable()->setShowGrid(m_pGrid->isChecked());
         m_pView->activeTable()->setPrintGrid(m_pPrintGrid->isChecked());
         m_pView->activeTable()->setShowFormula(m_pFormula->isChecked());
+        m_pView->activeTable()->setShowFormulaIndicator(m_pFormulaIndicator->isChecked());
         m_pView->activeTable()->setAutoCalc(m_pAutoCalc->isChecked());
         m_pView->activeTable()->setHideZero(m_pHideZero->isChecked());
         m_pView->activeTable()->setFirstLetterUpper(m_pFirstLetterUpper->isChecked());

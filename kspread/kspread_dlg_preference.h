@@ -44,6 +44,7 @@ public:
 
 protected:
   QCheckBox *m_pFormula;
+  QCheckBox *m_pFormulaIndicator;
   QCheckBox *m_pAutoCalc;
   QCheckBox *m_pGrid;
   QCheckBox *m_pPrintGrid;

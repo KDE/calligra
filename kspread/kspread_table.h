@@ -708,9 +708,20 @@ public:
      */
     void setPrintGrid( bool _printGrid ) { m_bPrintGrid=_printGrid; }
 
+    /**
+     * Sets, if formula shall be shown instead of the result
+     */
     bool getShowFormula() const {return m_bShowFormula;}
 
     void setShowFormula(bool _showFormula) {m_bShowFormula=_showFormula;}
+
+    /**
+     * Sets, if indicator must be shown when the cell holds a formula
+     */
+    bool getShowFormulaIndicator() const {return m_bShowFormulaIndicator;}
+
+    void setShowFormulaIndicator(bool _showFormulaIndicator) 
+        {m_bShowFormulaIndicator=_showFormulaIndicator;}
 
     bool getLcMode() const {return m_bLcMode;}
 
@@ -1314,6 +1325,7 @@ protected:
      */
     bool m_bPrintGrid;
     bool m_bShowFormula;
+    bool m_bShowFormulaIndicator;
     bool m_bAutoCalc;
     bool m_bLcMode;
     bool m_bShowColumnNumber;

@@ -251,6 +251,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   m_bShowGrid=true;
   m_bPrintGrid=false;
   m_bShowFormula=false;
+  m_bShowFormulaIndicator=true;
   m_bLcMode=false;
   m_bShowColumnNumber=false;
   m_bHideZero=false;

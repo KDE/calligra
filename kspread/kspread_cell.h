@@ -967,6 +967,7 @@ private:
     void paintMoreTextIndicator(QPainter& painter, QPoint corner,
                                 QPoint cellRef);
     void paintCommentIndicator(QPainter& painter, QPoint corner, QPoint cellRef);
+    void paintFormulaIndicator(QPainter& painter, QPoint corner, QPoint cellRef);
     void paintDefaultBorders(QPainter& painter, QPoint corner, QPoint cellRef);
     void paintBackground(QPainter& painter, QPoint corner, QPoint cellRef,
                          bool selected);

@@ -1767,6 +1767,7 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
     /* don't paint content if this cell is obscured */
   {
     paintCommentIndicator(painter, corner, cellRef);
+    paintFormulaIndicator(painter, corner, cellRef);
     paintMoreTextIndicator(painter, corner, cellRef);
 
   /**
@@ -2035,6 +2036,21 @@ void KSpreadCell::paintCommentIndicator(QPainter& painter, QPoint corner,
   }
 }
 
+// small blue rectangle if this cell holds a formula
+void KSpreadCell::paintFormulaIndicator(QPainter& painter, QPoint corner,
+                                        QPoint cellRef)
+{
+  if( isFormula() && m_pTable->getShowFormulaIndicator() )
+  {
+    QPointArray point( 3 );
+    point.setPoint( 0, corner.x(), corner.y() + height() - 5 );
+    point.setPoint( 1, corner.x(), corner.y() + height() );
+    point.setPoint( 2, corner.x() + 5, corner.y() + height() );
+    painter.setBrush( QBrush(Qt::blue ) );
+    painter.setPen( Qt::NoPen );
+    painter.drawPolygon( point );
+  }
+}
 void KSpreadCell::paintMoreTextIndicator(QPainter& painter, QPoint corner,
                                          QPoint cellRef)
 {
