@@ -122,6 +122,12 @@ public:
     static const int U_TABS;
     static const int U_SMART;
     */
+    
+    /** when in position to select rows/cols from a table (slightly on the left/top of the table),
+        * where exactly is the table? if it's NONE, we are not in position to select rows/cols */
+    enum TableToSelectPosition {TABLE_POSITION_NONE = 0, TABLE_POSITION_RIGHT = 1, TABLE_POSITION_BOTTOM = 2};
+
+    static const int DISTANCE_TABLE_SELECT_ROWCOL = 15;
 
     static const int CURRENT_SYNTAX_VERSION;
 
@@ -568,6 +574,8 @@ public:
 
     double tabStopValue() const { return m_tabStop; }
     void setTabStopValue ( double _tabStop );
+
+    TableToSelectPosition positionToSelectRowcolTable(const QPoint& nPoint, KWTableFrameSet **ppTable =0L);
 
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );

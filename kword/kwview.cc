@@ -786,17 +786,17 @@ void KWView::setupActions()
     actionTableInsertCol->setToolTip( i18n( "Insert one or more columns into the current table." ) );
     actionTableInsertCol->setWhatsThis( i18n( "Insert one or more columns into the current table." ) );
 
-    actionTableDelRow = new KAction( i18n( "&Delete Row..." ), "delete_table_row", 0,
+    actionTableDelRow = new KAction( i18n( "&Delete Selected Rows..." ), "delete_table_row", 0,
                                      this, SLOT( tableDeleteRow() ),
                                      actionCollection(), "table_delrow" );
-    actionTableDelRow->setToolTip( i18n( "Delete one row from the current table." ) );
-    actionTableDelRow->setWhatsThis( i18n( "Delete one row from the current table.<p>Your cursor does not need to be in the row to be deleted. You will be given the opportunity to specify which row to delete." ) );
+    actionTableDelRow->setToolTip( i18n( "Delete selected rows from the current table." ) );
+    actionTableDelRow->setWhatsThis( i18n( "Delete selected rows from the current table." ) );
 
-    actionTableDelCol = new KAction( i18n( "D&elete Column..." ), "delete_table_col", 0,
+    actionTableDelCol = new KAction( i18n( "D&elete Selected Columns..." ), "delete_table_col", 0,
                                      this, SLOT( tableDeleteCol() ),
                                      actionCollection(), "table_delcol" );
-    actionTableDelCol->setToolTip( i18n( "Delete one column from the current table." ) );
-    actionTableDelCol->setWhatsThis( i18n( "Delete one column from the current table.<p>Your cursor does not need to be in the column to be deleted. You will be given the opportunity to specify which row to delete.." ) );
+    actionTableDelCol->setToolTip( i18n( "Delete selected columns from the current table." ) );
+    actionTableDelCol->setWhatsThis( i18n( "Delete selected column from the current table." ) );
 
     actionTableResizeCol = new KAction( i18n( "Resize Column..." ), 0,
                                this, SLOT( tableResizeCol() ),
@@ -1650,6 +1650,8 @@ void KWView::showMouseMode( int _mouseMode )
     actionTableSplitCells->setEnabled( FALSE );
     actionTableProtectCells->setEnabled( false );
     actionFormatFrameSet->setEnabled(FALSE);
+    actionTableDelRow->setEnabled( false );
+    actionTableDelCol->setEnabled( false );
 }
 
 void KWView::showStyle( const QString & styleName )
@@ -4680,6 +4682,8 @@ void KWView::frameSelectedChanged()
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     actionTableJoinCells->setEnabled( table && (nbFrame>1));
+    actionTableDelRow->setEnabled( table && table->isRowsSelected());
+    actionTableDelCol->setEnabled( table && table->isColsSelected());
 
     bool state=(table && nbFrame==1);
 
@@ -4689,8 +4693,6 @@ void KWView::frameSelectedChanged()
 
     actionTableInsertRow->setEnabled( state);
     actionTableInsertCol->setEnabled( state);
-    actionTableDelRow->setEnabled( state );
-    actionTableDelCol->setEnabled( state );
     actionTableDelete->setEnabled( state );
     actionTableUngroup->setEnabled( state );
     actionTableResizeCol->setEnabled( state );

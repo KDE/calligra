@@ -52,6 +52,7 @@ class KWordFrameSetIface;
  * can be used to describe the same thing: one table-cell
  */
 
+
 class KWTableFrameSet : public KWFrameSet
 {
     Q_OBJECT
@@ -70,6 +71,9 @@ public:
         unsigned int m_row, m_col;
         unsigned int m_rows, m_cols;
         virtual void addFrame(KWFrame *_frame, bool recalc = true);
+
+        uint getRow() const {return m_row;}
+        uint getColumn() const {return m_col;}
 
         bool isAboveOrLeftOf( unsigned row, unsigned col );
 
@@ -161,6 +165,12 @@ public:
     /** returns the fact if one cell (==frame) has been selected */
     bool hasSelectedFrame();
 
+    /** select a row */
+    void selectRow(uint number);
+
+    /** select a column */
+    void selectCol(uint number);
+
     /** deselect all frames */
     void deselectAll();
 
@@ -177,7 +187,17 @@ public:
     /** convenience method */
     void selectUntil( double x, double y);
 
-    bool getFirstSelected(unsigned int &row, unsigned int &col );
+    bool getFirstSelected(unsigned int &row, unsigned int &col);
+
+    bool isRowSelected(uint row);
+    bool isColSelected(uint column);
+
+    /** is at least one row selected on the whole table?*/
+    bool isRowsSelected();
+
+    /** is at least one col selected on the whole table?*/
+    bool isColsSelected();
+
     /** Return true if exactly one frame is selected. The parameters row
     *  and col will receive the values of the active row and col.<br>
     *  When no frame or more then one frame is selected row and col will
@@ -293,7 +313,7 @@ public:
     virtual void printDebug( KWFrame * frame );
     virtual void printDebug();
 #endif
-	static const uint m_sDefaultColWidth = 60;
+    static const uint m_sDefaultColWidth = 60;
 protected:
     /* Overloaded methods, look for docu in kwframe.h */
     virtual void deleteAnchors();

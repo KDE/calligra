@@ -41,6 +41,7 @@ KWDeleteDia::KWDeleteDia( QWidget *parent, const char *name, KWTableFrameSet *_t
     table = _table;
     doc = _doc;
     canvas = _canvas;
+    m_toRemove.clear();
 
     setupTab1();
     setButtonOKText(i18n("&Delete"), type == ROW ?
@@ -54,51 +55,70 @@ void KWDeleteDia::setupTab1()
 {
     tab1 = plainPage();
     grid1 = new QGridLayout( tab1, 4, 1, 0, spacingHint() );
+    QString message =type == ROW ? i18n( "Delete Row(s):" ) : i18n( "Delete Column(s):" );
+    bool firstSelectedCell = true; // used to know whether to add a ", " to the message string.
 
-    rc = new QLabel( type == ROW ? i18n( "Delete row:" ) : i18n( "Delete column:" ), tab1 );
+    uint max = (type == ROW) ? table->getRows() : table->getCols(); // max row/col to loop up to
+    for (uint i=0;i<max; i++)
+    {
+        if ( ( (type == ROW) && table->isRowSelected(i)) ||
+                ( (type == COL) && table->isColSelected(i) ) )
+        {
+            if (!firstSelectedCell)
+                message += ", "; // i18n??
+            message += QString::number(i +1);
+            m_toRemove.push_back(i);
+            firstSelectedCell = false;
+       }
+    }
+    Q_ASSERT(m_toRemove.count() > 0);
+
+    if (m_toRemove.count() == ( (type == ROW) ? table->getRows() : table->getCols() ) )
+        // all the columns are selected and the user asked to remove columns or the same with rows
+        // => we want to delete the whole table
+        message = i18n("Delete the whole table");
+
+    // do not display hugely long dialogs if many rows/cells are selected
+    if (m_toRemove.count() > 10)
+        message = ROW ? i18n("Delete all selected rows") : i18n("Delete all selected cells");
+
+    rc = new QLabel( message , tab1 );
     rc->resize( rc->sizeHint() );
     rc->setAlignment( AlignLeft | AlignBottom );
     grid1->addWidget( rc, 1, 0 );
-
-    value = new QSpinBox( 1, type == ROW ? table->getRows() : table->getCols(), 1, tab1 );
-    value->resize( value->sizeHint() );
-    unsigned int rowSelected;
-    unsigned int colSelected;
-    bool ret = table->getFirstSelected(rowSelected, colSelected );
-    if ( !ret )
-        value->setValue( type == ROW ? table->getRows() : table->getCols() );
-    else
-        value->setValue( type == ROW ? (rowSelected+1) : (colSelected+1) );
-    grid1->addWidget( value, 2, 0 );
-
-    grid1->addRowSpacing( 1, rc->height() );
-    grid1->addRowSpacing( 2, value->height() );
-    grid1->setRowStretch( 0, 1 );
-    grid1->setRowStretch( 1, 0 );
-    grid1->setRowStretch( 2, 0 );
-    grid1->setRowStretch( 3, 1 );
-
-    grid1->addColSpacing( 0, rc->width() );
-    grid1->addColSpacing( 0, value->width() );
-    grid1->setColStretch( 0, 1 );
 }
 
 bool KWDeleteDia::doDelete()
 {
-    unsigned int remove= value->value() - 1;
-    if ( type == ROW )
-    {
-        KWRemoveRowCommand *cmd = new KWRemoveRowCommand( i18n("Remove Row"), table, remove);
-        cmd->execute();
-        doc->addCommand(cmd);
-        //table->deleteRow( value->value() - 1 );
+    KCommand *globalCommand;
+
+    if (m_toRemove.count() == ( (type == ROW) ? table->getRows() : table->getCols() ) )
+    {   // we have to delete the whole table
+        //globalCommand = new KWDeleteTableCommand(i18n("Remove table"), table);
+        doc->deleteTable(table);
     }
     else
-    {
-        KWRemoveColumnCommand *cmd = new KWRemoveColumnCommand( i18n("Remove Column"), table, remove);
-        cmd->execute();
-        doc->addCommand(cmd);
-        //table->deleteCol( value->value() - 1 );
+    {   // we will just delete some row/cols
+        if ( type == ROW )
+        {
+            globalCommand = new KMacroCommand(i18n("Remove rows"));
+            for (uint i=0;i<m_toRemove.count();i++)
+            {
+                KWRemoveRowCommand *cmd = new KWRemoveRowCommand( i18n("Remove row"), table, m_toRemove[i] );
+                static_cast<KMacroCommand*>(globalCommand)->addCommand(cmd);
+            }
+        }
+        else
+        {
+            globalCommand = new KMacroCommand(i18n("Remove columns"));
+            for (uint i=0;i<m_toRemove.count();i++)
+            {
+                KWRemoveColumnCommand *cmd = new KWRemoveColumnCommand( i18n("Remove column"), table, m_toRemove[i] );
+                static_cast<KMacroCommand*>(globalCommand)->addCommand(cmd);
+            }
+        }
+        globalCommand->execute();
+        doc->addCommand(globalCommand);
     }
 
     return true;

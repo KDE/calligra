@@ -27,6 +27,7 @@
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kspell.h>
+#include <kcursor.h>
 
 #include <koTemplateChooseDia.h>
 #include <koMainWindow.h>
@@ -2368,13 +2369,19 @@ KWFrame * KWDocument::frameUnderMouse( const QPoint& nPoint, bool* border, bool 
     return candidate;
 }
 
+
 QCursor KWDocument::getMouseCursor( const QPoint &nPoint, bool controlPressed )
 {
     bool border=true;
-    KWFrame *frame = frameUnderMouse(nPoint, &border );
-    if (frame) {
+
+    if (positionToSelectRowcolTable(nPoint) != TABLE_POSITION_NONE)
+        return KCursor::handCursor();
+
+    KWFrame *frameundermouse = frameUnderMouse(nPoint, &border );
+
+    if (frameundermouse) {
         QCursor cursor;
-        KWFrameSet *frameSet = frame->frameSet();
+        KWFrameSet *frameSet = frameundermouse->frameSet();
         if ( frameSet->getMouseCursor(nPoint, controlPressed, cursor))
             return cursor;
     }
@@ -2393,6 +2400,54 @@ QString KWDocument::generateFramesetName( const QString & templateName )
     } while ( exists );
     return name;
 }
+
+/** if we are close on the left or the top of a table,
+ * the user can select rows/cols */
+KWDocument::TableToSelectPosition KWDocument::positionToSelectRowcolTable(const QPoint& nPoint, KWTableFrameSet **ppTable /*=0L*/) {
+    KWFrame *frameundermouse, *frameclosetomouseright, *frameclosetomouseunder;
+
+    TableToSelectPosition result = TABLE_POSITION_NONE;
+
+    // now simply check the actual frame under the mouse
+    bool border=true;
+    frameundermouse = frameUnderMouse(nPoint, &border );
+
+    // now get a frame close to the mouse pointer
+    // slightly on the right (could it be that it is a table?)
+    QPoint pointTestTableSelect = nPoint;
+    pointTestTableSelect.rx() += KWDocument::DISTANCE_TABLE_SELECT_ROWCOL;
+    frameclosetomouseright = frameUnderMouse(pointTestTableSelect, &border);
+
+    pointTestTableSelect = nPoint;
+    pointTestTableSelect.ry() += KWDocument::DISTANCE_TABLE_SELECT_ROWCOL;
+    frameclosetomouseunder = frameUnderMouse(pointTestTableSelect, &border);
+
+    KWFrame *frameclosetomouse; // the frame that we are going to test to know whether it is a table
+
+    if ( frameclosetomouseright && frameclosetomouseright->frameSet()->getGroupManager() ) {
+        // ok, we can test the right frame
+        frameclosetomouse = frameclosetomouseright;
+        result = TABLE_POSITION_RIGHT;
+    }
+    else {
+        // right frame is not good. maybe the one under?
+        frameclosetomouse = frameclosetomouseunder;
+        result = TABLE_POSITION_BOTTOM;
+    }
+
+    // is there a frame close to the cursor?
+    if (frameclosetomouse) {
+        if ( frameclosetomouse->frameSet()->getGroupManager() && (!frameundermouse || !frameundermouse->frameSet()->getGroupManager()) ) {
+            // there is a frame, it is a table, and the cursor is NOT on a table ATM
+            if (ppTable)
+                *ppTable =frameclosetomouse->frameSet()->getGroupManager();
+            // place the cursor to say that we can select row/columns
+            return result;
+        }
+    }
+    return TABLE_POSITION_NONE;
+}
+
 
 // TODO pass viewmode for isVisible
 QPtrList<KWFrame> KWDocument::getSelectedFrames() const {

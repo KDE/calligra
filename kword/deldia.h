@@ -55,6 +55,8 @@ protected:
     KWDocument *doc;
     DeleteType type;
     KWCanvas *canvas;
+    
+    QValueList<uint> m_toRemove; // not really sure i should hold this here but ok.
 
 protected slots:
     virtual void slotOk();

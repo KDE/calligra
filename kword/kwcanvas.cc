@@ -314,6 +314,11 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
             KoPoint docPoint( m_doc->unzoomPoint( nPoint ) );
             table->selectUntil( docPoint.x(), docPoint.y() );
         }
+        else if ( ( e->state() & ShiftButton ) && (m_doc->positionToSelectRowcolTable( nPoint, &table) != KWDocument::TABLE_POSITION_NONE) ) // we are in position to select full row/cells of a table + hold shift
+        {
+            KoPoint docPoint( m_doc->unzoomPoint( nPoint ) );
+            table->selectUntil( table->boundingRect().right(), docPoint.y() );
+        }
         else if ( frame && !frame->isSelected() ) // clicked on a frame that wasn't selected
         {
             if ( ! ( e->state() & ShiftButton || e->state() & ControlButton ) )
@@ -506,6 +511,26 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 else if(m_frameInlineType==FT_PICTURE)
                     m_gui->getView()->insertInlinePicture();
                 m_frameInline=false;
+            }
+        }
+ 
+        KWTableFrameSet *table = 0L;
+        KWDocument::TableToSelectPosition ePositionTable = m_doc->positionToSelectRowcolTable(e->pos(), &table);
+        // are we in the situation to select row/cols of a table?
+        if (ePositionTable != KWDocument::TABLE_POSITION_NONE)
+        {   // YES => select row/col
+            if (ePositionTable == KWDocument::TABLE_POSITION_RIGHT)
+            {  // in position to select a ROW
+                // here the cursor is on the left of the table. the y is OK, but the x is not,
+                // hence finding a proper x with the table object
+                KWTableFrameSet::Cell *cell = table->getCellByPos( table->boundingRect().left(), m_doc->unzoomItY(e->pos().y())  );
+                table->selectRow( cell->getRow() );
+            }
+            else
+            { // in position to select a COLUMN
+              // here the cursor is on top of the table. the x is ok, but the y is not.
+                KWTableFrameSet::Cell *cell = table->getCellByPos( m_doc->unzoomItX(e->pos().x()), table->boundingRect().top()  );
+                table->selectCol( cell->getColumn() );
             }
         }
         m_scrollTimer->start( 50 );

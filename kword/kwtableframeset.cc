@@ -745,6 +745,22 @@ kdDebug(32004) << "KWTableFrameSet::moveBy(" << dx<<","<<dy<<")\n";
     }
 }
 
+void KWTableFrameSet::selectRow(uint row)
+{
+    Q_ASSERT(row < m_rows);
+
+    for ( uint i = 0; i < getCols(); i++ )
+        getCell(row, i)->frame(0)->setSelected( true );
+}
+
+void KWTableFrameSet::selectCol(uint col)
+{
+    Q_ASSERT(col < m_colPositions.count()-1);
+
+    for ( uint i = 0; i < getRows(); i++ )
+        getCell(i, col)->frame(0)->setSelected( true );
+}
+
 void KWTableFrameSet::deselectAll()
 {
     for ( unsigned int i = 0; i < m_cells.count(); i++ )
@@ -838,6 +854,54 @@ bool KWTableFrameSet::isOneSelected(unsigned int &row, unsigned int &col) {
         row=m_cells.at(selectedCell)->m_row;
         col=m_cells.at(selectedCell)->m_col;
         return true;
+    }
+    return false;
+}
+
+bool KWTableFrameSet::isRowSelected(uint row) {
+    Q_ASSERT(row <= getRows());
+    // if just one cell of the row is not selected, the row is not selected
+    for ( uint i = 0; i < m_cells.count(); i++ ) {
+        if (!m_cells.at( i )->frame( 0 )->isSelected()) {
+            if (m_cells.at( i )->m_row == row)
+            {
+                kdDebug() << "row " << row << " row is not selected" << endl;
+                return false;
+            }
+        }
+    }
+    kdDebug() << "row " << row << " row is selected" << endl;
+    return true;
+}
+
+bool KWTableFrameSet::isColSelected(uint column) {
+    Q_ASSERT(column <= getCols());
+    // if just one cell of the col is not selected, the col is not selected
+    for ( uint i = 0; i < m_cells.count(); i++ ) {
+        if (!m_cells.at( i )->frame( 0 )->isSelected()) {
+            if (m_cells.at( i )->m_col == column)
+            {
+                kdDebug() << "column " << column << " column is not selected" << endl;
+                return false;
+            }
+        }
+    }
+    kdDebug() << "column " << column << " column is selected" << endl;
+    return true;
+}
+
+bool KWTableFrameSet::isRowsSelected() {
+    for (uint i=0;i<getRows();i++) {
+        if (isRowSelected(i))
+            return true;
+    }
+    return false;
+}
+
+bool KWTableFrameSet::isColsSelected() {
+    for (uint i=0;i<getCols();i++) {
+        if (isColSelected(i))
+            return true;
     }
     return false;
 }

@@ -557,7 +557,7 @@ private:
     QPtrList<KAction> m_variableActionList;
 
     int m_currentPage; // 0-based current page number
-
+ 
     // Statusbar items
     QLabel * m_sbPageLabel; // 'Current page number and page count' label
     QLabel * m_sbFramesLabel; // Info about selected frames
