@@ -30,7 +30,6 @@
 #include <koView.h>
 #include <koPrintExt.h>
 #include <koStore.h>
-#include <koIMR.h>
 
 #include "KIllustrator.h"
 #include "GDocument.h"
@@ -41,6 +40,7 @@
 
 class KIllustratorDocument;
 class KIllustratorView;
+class KoDocumentEntry;
 
 class KIllustratorChild : public KoDocumentChild {
 public:

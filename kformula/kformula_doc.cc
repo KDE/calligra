@@ -11,7 +11,6 @@
 #include "MatrixElement.h"
 #include "PrefixedElement.h"
 
-#include <koIMR.h>
 #include <komlMime.h>
 #include <koStream.h>
 

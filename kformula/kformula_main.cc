@@ -1,6 +1,5 @@
 #include <qprinter.h>
 #include <koQueryTypes.h>
-#include <koIMR.h>
 #include <koFactory.h>
 #include <koDocument.h>
 #include <opAutoLoader.h>

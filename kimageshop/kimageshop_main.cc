@@ -21,7 +21,6 @@
 
 #include <opAutoLoader.h>
 
-#include <koIMR.h>
 #include <koFactory.h>
 #include <koDocument.h>
 #include <koQueryTypes.h>

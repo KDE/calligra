@@ -1,6 +1,5 @@
 #include "kformula_doc.h"
 
-#include <koIMR.h>
 #include <komlMime.h>
 #include <koStream.h>
 

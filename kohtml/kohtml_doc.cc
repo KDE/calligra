@@ -27,7 +27,6 @@
 
 #include <unistd.h>
 
-#include <koIMR.h>
 #include <qmsgbox.h>
 #include <qpaintdevice.h>
 

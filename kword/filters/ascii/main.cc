@@ -26,7 +26,6 @@
 #include <qmsgbox.h>
 #include <qstring.h>
 
-#include <koIMR.h>
 #include <komlMime.h>
 #include <koStream.h>
 #include <komlParser.h>

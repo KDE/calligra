@@ -19,7 +19,6 @@
 
 #include <qprinter.h>
 #include "kdiagramm_main.h"
-#include <koIMR.h>
 #include <koFactory.h>
 #include <koDocument.h>
 #include <koApplication.h>

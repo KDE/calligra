@@ -28,7 +28,6 @@
 #include <qfile.h>
 #include <qtextstream.h>
 
-#include <koIMR.h>
 #include <komlMime.h>
 #include <koStream.h>
 #include <komlParser.h>

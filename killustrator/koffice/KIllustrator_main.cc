@@ -32,7 +32,6 @@
 #include <koFactory.h>
 #include <koDocument.h>
 #include <opAutoLoader.h>
-#include <koIMR.h>
 
 bool withGUI = true;
 list<string> openFiles;

@@ -18,7 +18,6 @@
 #include <koAboutDia.h>
 #include <koFrame.h>
 #include <koQueryTypes.h>
-#include <koQueryTrader.h>
 #include <koKoolBar.h>
 
 QList<KoShellWindow>* KoShellWindow::s_lstShells = 0L;
