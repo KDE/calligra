@@ -4947,6 +4947,7 @@ void KSpreadCell::loadOasisConditional( QDomElement * style )
     if ( style )//safe
     {
         QDomElement elementItem = style->firstChild().toElement();
+        kdDebug()<<" elementItem.tagName() :"<<elementItem.tagName()<<endl;
         elementItem = elementItem.firstChild().toElement();
         kdDebug()<<"elementItem.isNull () :"<< elementItem.isNull ()<<endl;
         if ( !elementItem.isNull() )
@@ -4968,6 +4969,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     {
         kdDebug()<<"bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles )****************************** loadOasisConditionsal\n";
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
+        kdDebug()<<" bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles ) str :"<<str<<endl;
         QDomElement * style = oasisStyles.styles()[str];
         kdDebug()<<" style :"<<style<<endl;
         KoStyleStack styleStack;

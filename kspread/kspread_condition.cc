@@ -416,7 +416,7 @@ void KSpreadConditions::loadOasisConditions( const QDomElement & element )
     while ( !elementItem.isNull() )
     {
         kdDebug()<<"elementItem.tagName() :"<<elementItem.tagName()<<endl;
-        if ( elementItem.tagName()== "style:map"  )
+        if ( elementItem.tagName()== "map" && elementItem.namespaceURI() == KoXmlNS::style  )
         {
             bool ok = true;
             kdDebug()<<"elementItem.attribute(style:condition ) :"<<elementItem.attributeNS( KoXmlNS::style, "condition", QString::null )<<endl;
