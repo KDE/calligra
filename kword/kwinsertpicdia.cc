@@ -18,7 +18,7 @@
 */
 
 #include "kwinsertpicdia.h"
-#include "preview.h"
+#include <koPictureFilePreview.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <qframe.h>
@@ -207,7 +207,7 @@ bool KWInsertPicDia::selectClipartDia( QString &filename, const QString & _path)
 
 QString KWInsertPicDia::selectPicture( KFileDialog & fd )
 {
-    fd.setPreviewWidget( new Preview( &fd ) );
+    fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
         url = fd.selectedURL();

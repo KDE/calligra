@@ -98,8 +98,6 @@
 
 #include <stdlib.h>
 
-#include "preview.h"
-
 KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
 {
