@@ -6,14 +6,14 @@ LDADD = ../lib/kofficeui/libkofficeui.la -lkformula $(LIBPYTHON)
 
 bin_PROGRAMS = kspread
 
-kspread_SOURCES = kspread.cc kspread_canvas.cc kmetaedit.cc kspread_emacs.cc kspread_main.cc \
+kspread_SOURCES = kspread.idl kspread_canvas.cc kmetaedit.cc kspread_emacs.cc kspread_main.cc \
 	kspread_shell.cc kspread_doc.cc \
 	kspread_undo.cc kspread_view.cc kspread_tabbar.cc \
 	kspread_python.cc kspread_autofill.cc \
 	kspread_layout.cc kspread_map.cc kspread_dlg_layout.cc \
 	kspread_dlg_scripts.cc kspread_cell.cc kspread_table.cc \
-	chart.cc kspread_calc.cc y.tab.c lex.yy.c dep.tab.c lex.dep.c \
-	kspread_dlg_cons.cc datatools.cc kspread_util.cc \
+	chart.idl kspread_calc.cc y.tab.c lex.yy.c dep.tab.c lex.dep.c \
+	kspread_dlg_cons.cc datatools.idl kspread_util.cc \
 	kspread_corba_util.cc kspread_editors.cc
 
 noinst_HEADERS = kmetaedit.h kspread_emacs.h kspread_main.cc \
@@ -35,7 +35,7 @@ METASOURCES = kspread_main.moc kspread_shell.moc kspread_doc.moc \
 idl_DATA = kspread.idl
 idl_HEADERS = kspread.h chart.h
 
-DISTCLEANFILES = $(idl_HEADERS:.h=.cc) $(idl_HEADERS) KOStore.py KOffice.py KSpread.py OpenPartsUI.py OpenParts.py KOM.py datatools.h datatools.cc
+DISTCLEANFILES = KOStore.py KOffice.py KSpread.py OpenPartsUI.py OpenParts.py KOM.py 
 
 kdelnk_DATA = kspread.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
@@ -48,9 +48,13 @@ kdemimedir = $(kde_mimedir)/application
 
 SUBDIRS =  pics scripts dtd filters toolbar
 
-####### Implicit rules
+chart.idl: $(interfacedir)/chart.idl
+	-rm -f chart.idl
+	$(LN_S) $(interfacedir)/chart.idl chart.idl
 
-####### Build rules
+datatools.idl: $(idldir)/datatools.idl
+	-rm -f datatools.idl
+	$(LN_S) $(idldir)/datatools.idl datatools.idl  
 
 parser:
 	flex lex.l
@@ -62,29 +66,6 @@ IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kspread.pot
-
-kspread.cc: kspread.h
-kspread.h: kspread.idl $(top_srcdir)/lib/kofficecore/koffice.idl $(micodir)/include/CORBA.h
-	$(IDL) $(IDL_FLAGS) $(srcdir)/kspread.idl
-
-chart.cc: chart.h
-chart.h: $(interfacedir)/chart.idl $(micodir)/include/CORBA.h
-	$(IDL) $(IDL_FLAGS) $(interfacedir)/chart.idl
-
-datatools.cc: datatools.h
-datatools.h: $(idldir)/datatools.idl $(micodir)/include/CORBA.h
-	$(IDL) $(IDL_FLAGS) $(idldir)/datatools.idl
-
-kspread_canvas.cc: kspread.h chart.h
-kspread_doc.cc: kspread.h 
-kspread_main.cc: kspread.h kspread_table.h 
-kspread_part.cc: kspread.h 
-kspread_shell.cc: kspread.h 
-kspread_tabbar.cc: kspread.h 
-kspread_table.cc: kspread.h 
-kspread_view.cc: kspread.h  kspread_table.h chart.h
-kspread_table.h: chart.h
-kspread_util.h: kspread.h
 
 KOM.py: KSpread.py
 KOStore.py: KSpread.py

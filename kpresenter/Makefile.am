@@ -8,7 +8,7 @@ LDADD = autoformEdit/libaf.a ../lib/kofficeui/libkofficeui.la $(LIBQIMGIO) $(LIB
 bin_PROGRAMS = kpresenter
 
 kpresenter_SOURCES = kpresenter_view.cc kpresenter_main.cc \
-	kpresenter_doc.cc kpresenter_shell.cc kpresenter.cc \
+	kpresenter_doc.cc kpresenter_shell.cc kpresenter.idl \
 	backdia.cc page.cc ktextobject.cc styledia.cc \
 	formats.cc qwmf.cc kenumlistdia.cc \
 	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc \
@@ -61,28 +61,13 @@ METASOURCES =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 idl_DATA =	kpresenter.idl
 idl_HEADERS =	kpresenter.h
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
-
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
 
 SUBDIRS = autoformEdit autoforms pics toolbar templates dtd slideshow
 
-####### Implicit rules
-
-####### Build rules
-
 messages:
 	$(XGETTEXT) -C -ki18n -ktranslate -x $(includedir)/kde.pot */*.cc *.cc *.h && mv messages.po ../po/kpresenter.pot
 
-kpresenter.h: kpresenter.idl $(micodir)/include/CORBA.h
-	rm -f kpresenter.h
-	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kpresenter.idl
+IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) 
 
-kpresenter.cc: kpresenter.h
-kpresenter_main.cc: kpresenter.h
-kpresenter_shell.cc: kpresenter.h
-kpresenter_view.cc: kpresenter.h
-page.cc:  kpresenter.h
-webpresentation.cc: webpresentation.moc
-footer_header.cc: footer_header.moc

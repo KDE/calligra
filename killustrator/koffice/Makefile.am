@@ -14,7 +14,7 @@ killustrator_SOURCES = KIllustrator_main.cc \
 	KIllustrator_doc.cc \
 	KIllustrator_shell.cc \
 	KIllustrator_view.cc \
-	KIllustrator.cc \
+	KIllustrator.idl \
 	InsertPartTool.cc \
 	GPart.cc \
 	GfxWrapper.cc
@@ -23,7 +23,6 @@ noinst_HEADERS = KIllustrator_main.h \
 	KIllustrator_doc.h \
 	KIllustrator_shell.h \
 	KIllustrator_view.h \
-	KIllustrator.h \
 	InsertPartTool.h \
 	GPart.h \
 	GfxWrapper.h
@@ -35,22 +34,11 @@ METASOURCES = KIllustrator_main.moc \
 	InsertPartTool.moc \
 	GPart.moc
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
-
 idl_DATA = KIllustrator.idl
 idl_HEADERS = KIllustrator.h
 
 kdelnk_DATA = killustrator.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
 
-####### Implicit rules
-
-####### Build rules
-
-KIllustrator.cc: KIllustrator.h
-KIllustrator.h: KIllustrator.idl $(micodir)/include/CORBA.h
-	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/KIllustrator.idl
-
-
-
+IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir)
 

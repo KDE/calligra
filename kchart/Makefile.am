@@ -11,16 +11,12 @@ LDADD =  $(LIB_KOFFICEUI)
 
 bin_PROGRAMS = kchart
 
-kchart_SOURCES = kchart_main.cc kchart_doc.cc kchart_view.cc kchart.cc kchart_shell.cc chart.cc \
+kchart_SOURCES = kchart_main.cc kchart_doc.cc kchart_view.cc kchart.idl kchart_shell.cc chart.idl \
 		sheet.cc sheetdlg.cc table.cc parser.cc
 noinst_HEADERS = kchart_main.h kchart_doc.h kchart_view.h kchart.h kchart_shell.h chart.h \
 		sheet.h sheetdlg.h table.h parser.h
 METASOURCES =	kchart_main.moc kchart_view.moc kchart_doc.moc kchart_shell.moc \
 		sheet.moc sheetdlg.moc table.moc
-
-DISTCLEANFILES = $(idl_HEADERS:.h=.cc) $(idl_HEADERS) $(METASOURCES)
-
-IDL_INCLUDES = -I$(idldir) -I$(interfacedir)
 
 idl_DATA = kchart.idl
 idl_HEADERS = kchart.h chart.h
@@ -35,21 +31,5 @@ kdelnkdir = $(kde_datadir)/koffice/partlnk
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc */*.cpp && mv messages.po ../po/kchart.pot
 
-kchart.h: kchart.idl $(micodir)/include/CORBA.h
-	@echo $(IDL) --query-server-for-narrow $(IDL_INCLUDES) kchart.idl ;\
-	rm -f kchart.h kchart.cc ;\
-	$(IDL) --relative-paths --query-server-for-narrow $(IDL_INCLUDES) $(srcdir)/kchart.idl
+IDL_FLAGS = --query-server-for-narrow -I$(idldir) -I$(interfacedir)
 
-chart.h: $(interfacedir)/chart.idl $(micodir)/include/CORBA.h
-	$(IDL) --query-server-for-narrow -I$(idldir) $(interfacedir)/chart.idl
-
-kchart.cc: kchart.h
-kchart_view.h: kchart.h
-kchart_shell.h: kchart.h
-kchart_main.cc:  kchart.h chart.h
-kchart_main.cc: kchart_view.h kchart.h
-kchart.h: chart.h
-sheet.cc: sheet.h 
-sheetdlg.cc: sheetdlg.h 
-parser.cc: parser.h
-table.cc: table.h 

@@ -11,26 +11,23 @@ LDADD = ../lib/kofficeui/libkofficeui.la
 bin_PROGRAMS = kformula
 
 kformula_SOURCES =  kformula_shell.cc  kformula_view.cc matrixwidget.cc \
-	kformula_main.cc kformula_doc.cc kformula.cc BasicElement.cc \
+	kformula_main.cc kformula_doc.cc kformula.idl BasicElement.cc \
 	RootElement.cc TextElement.cc BracketElement.cc FractionElement.cc\
 	MatrixElement.cc PrefixedElement.cc formula_container.cc
 
 noinst_HEADERS = kformula_main.h kformula_doc.h kformula_view.h formuladef.h \
-	kformula.h kformula_shell.h BasicElement.h RootElement.h TextElement.h\
+	kformula_shell.h BasicElement.h RootElement.h TextElement.h\
 	BracketElement.h FractionElement.h MatrixElement.h PrefixedElement.h \
 	matrixwidget.h formula_container.h
 
 METASOURCES = kformula_main.moc kformula_view.moc kformula_doc.moc \
 	kformula_shell.moc matrixwidget.moc formula_container.moc
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
-
-IDL_INCLUDES = -I$(idldir)
-
 idl_DATA = kformula.idl
 idl_HEADERS = kformula.h
-pics_DATA = kformula.xpm
-picsdir = $(kde_icondir)
+
+kde_icon_DATA = kformula.xpm
+
 kdelnk_DATA = kformula.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
 
@@ -38,15 +35,8 @@ kdelnkdir = $(kde_appsdir)/KOffice
 
 ####### Build rules
 
-kformula.cc: kformula.h
-kformula.h: kformula.idl $(micodir)/include/CORBA.h
-	rm -f kformula.h
-	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kformula.idl
+IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir)
 
 messages:
 	$(XGETTEXT) -C -ki18n -kklocale -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kformula.pot
 
-kformula_view.h: kformula.h
-kformula_shell.h: kformula.h
-$(srcdir)/kformula_main.cc: kformula_view.h kformula.h
-$(srcdir)/kformula_view.cc: kformula.h

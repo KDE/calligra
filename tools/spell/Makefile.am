@@ -7,28 +7,21 @@ LDADD = -lkom $(LIB_KIMGIO) -lkspell $(LIBMICO) $(LIB_KFILE)
 
 bin_PROGRAMS = spell_tool
 
-spell_tool_SOURCES = main.cc datatools.cc
+spell_tool_SOURCES = main.cc datatools.idl
 
 noinst_HEADERS = main.h datatools.h
 
-METASOURCES =	main.moc
-
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) datatools.h datatools.cc
+METASOURCES = main.moc
 
 service_DATA = spell_tool.desktop
 servicedir = $(kde_servicesdir)
 
-####### Implicit rules
-
-####### Build rules
-
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../po/spell_tool.pot
 
-datatools.cc: datatools.h
-datatools.h: $(idldir)/datatools.idl
-	rm -f datatools.h
-	rm -f datatools.cc
-	$(IDL) --query-server-for-narrow --relative-paths --any -I$(idldir) $(idldir)/datatools.idl
+IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(idldir)
 
-main.cc: main.h
+datatools.idl: $(idldir)/datatools.idl
+	-rm -f datatools.idl
+	$(LN_S) $(idldir)/datatools.idl datatools.idl
+

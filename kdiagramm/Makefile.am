@@ -9,8 +9,8 @@ LDADD = ../lib/kofficeui/libkofficeui.la
 
 bin_PROGRAMS = kdiagramm
 
-kdiagramm_SOURCES = kdiagramm.cc kdiagramm_main.cc kdiagramm_shell.cc \
-			kdiagramm_doc.cc kdiagramm_view.cc koDiagramm.cc chart.cc \
+kdiagramm_SOURCES = kdiagramm.idl kdiagramm_main.cc kdiagramm_shell.cc \
+			kdiagramm_doc.cc kdiagramm_view.cc koDiagramm.cc chart.idl \
 			sheet.cc table.cc parser.cc sheetdlg.cc KChartAreaPainter.cpp \
 			KChartAxesPainter.cpp KChartBarsPainter.cpp KChartLinesPainter.cpp\
 			KChartLinesPointsPainter.cpp KChartPainter.cpp \
@@ -41,6 +41,10 @@ noinst_HEADERS =	kdiagramm_main.h kdiagramm_shell.h kdiagramm_doc.h \
 					KoDiagrammGeometryConfigPage.h
 
 
+chart.idl: $(interfacedir)/chart.idl
+	-rm -f chart.idl
+	$(LN_S) $(interfacedir)/chart.idl chart.idl
+
 METASOURCES = kdiagramm_main.moc kdiagramm_shell.moc kdiagramm_doc.moc \
 	kdiagramm_view.moc koDiagramm.moc table.moc sheet.moc sheetdlg.moc \
 	KoDiagrammColorConfigPage.moc KoDiagrammBarConfigDialog.moc \
@@ -56,8 +60,6 @@ noinst_HEADERS = kdiagramm_main.h kdiagramm_shell.h kdiagramm_doc.h \
 idl_DATA = kdiagramm.idl
 idl_HEADERS = kdiagramm.h
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) chart.h chart.cc
-
 kdelnk_DATA = kdiagramm.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
 
@@ -69,13 +71,4 @@ IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kdiagramm.pot
-
-kdiagramm.cc: kdiagramm.h
-kdiagramm.h: kdiagramm.idl $(micodir)/include/CORBA.h
-	$(IDL) $(IDL_FLAGS) $(srcdir)/kdiagramm.idl
-
-chart.cc: chart.h
-chart.h: $(interfacedir)/chart.idl $(micodir)/include/CORBA.h
-	$(IDL) $(IDL_FLAGS) $(interfacedir)/chart.idl
-
 

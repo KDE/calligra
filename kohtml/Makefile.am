@@ -8,7 +8,7 @@ LDADD = ../lib/kofficeui/libkofficeui.la $(LIB_KHTML)
 bin_PROGRAMS = kohtml
 
 kohtml_SOURCES = kohtml_main.cc kohtml_doc.cc kohtml_view.cc \
-	kohtml_shell.cc kohtml.cc htmwidget.cc htmview.cc \
+	kohtml_shell.cc kohtml.idl htmwidget.cc htmview.cc \
 	kfileio.cc kpropcheck.cc kpropcolor.cc kpropcombo.cc kpropdlg.cc \
 	kpropfont.cc kpropgroup.cc kpropradio.cc kpropspin.cc kproptext.cc \
 	settingsdlg.cc edithtmldlg.cc kohtmljob.cc openurldlg.cc
@@ -24,8 +24,6 @@ METASOURCES = kohtml_main.moc kohtml_view.moc kohtml_shell.moc kohtml_doc.moc \
 	kpropcolor.moc kpropcombo.moc kpropdlg.moc kpropfont.moc kpropgroup.moc \
 	kpropradio.moc kpropspin.moc kproptext.moc settingsdlg.moc edithtmldlg.moc \
 	kohtmljob.moc openurldlg.moc
-
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 
 idl_DATA = kohtml.idl
 idl_HEADERS =  kohtml.h
@@ -45,8 +43,5 @@ SUBDIRS = toolbar
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../po/kohtml.pot
 
-kohtml_main.cc: kohtml.h
-kohtml.h: kohtml.idl $(micodir)/include/CORBA.h
-	rm -f kohtml.h
-	$(IDL) --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kohtml.idl
+IDL_FLAGS =  --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir)
 
