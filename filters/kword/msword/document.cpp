@@ -61,7 +61,10 @@ void Document::paragraphEnd()
 
 void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
 {
-    m_paragraph += QString( reinterpret_cast<const QChar*>( text.data() ), text.length() );
+    QConstString newText( reinterpret_cast<const QChar*>( text.data() ), text.length() );
+    m_paragraph += newText.string();
+
+    kdDebug() << "runOfText: " << newText.string() << endl;
 
     QDomElement format( m_mainDocument.createElement( "FORMAT" ) );
     format.setAttribute( "id", 1 );
@@ -90,6 +93,7 @@ void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const w
         format.appendChild( fontElem );
     }
 
+    kdDebug() << "        font size: " << chp->hps/2 << endl;
     QDomElement fontSize( m_mainDocument.createElement( "SIZE" ) );
     fontSize.setAttribute( "value", (int)(chp->hps / 2) ); // hps is in half points
     format.appendChild( fontSize );
@@ -186,12 +190,12 @@ QString Document::getFont(unsigned fc) const
     if ( !ffn )
         return QString::null;
 
-    QConstString fontName( (QChar *)ffn->xszFfn.data(), ffn->xszFfn.length() );
+    QConstString fontName( reinterpret_cast<const QChar*>( ffn->xszFfn.data() ), ffn->xszFfn.length() );
     QString font = fontName.string();
 
-#ifdef FONT_DEBUG
-    kdDebug() << "MS-FONT: " << font << endl;
-#endif
+//#ifdef FONT_DEBUG
+    kdDebug() << "    MS-FONT: " << font << endl;
+//#endif
 
     static const unsigned ENTRIES = 6;
     static const char* const fuzzyLookup[ENTRIES][2] =
@@ -222,7 +226,7 @@ QString Document::getFont(unsigned fc) const
     }
 
 #ifdef FONT_DEBUG
-    kdDebug() << "FUZZY-FONT: " << font << endl;
+    kdDebug() << "    FUZZY-FONT: " << font << endl;
 #endif
 
     // Use Qt to look up our canonical equivalent of the font name.
@@ -230,7 +234,7 @@ QString Document::getFont(unsigned fc) const
     QFontInfo info( xFont );
 
 #ifdef FONT_DEBUG
-    kdDebug() << "QT-FONT: " << info.family() << endl;
+    kdDebug() << "    QT-FONT: " << info.family() << endl;
 #endif
 
     return info.family();
