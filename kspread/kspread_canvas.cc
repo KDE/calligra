@@ -460,7 +460,8 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* )
   }
   else if ( m_eMouseAction == AutoFill )
   {
-    table->autofill( m_rctAutoFillSrc, table->selectionRect() );
+    QRect dest = table->selectionRect();
+    table->autofill( m_rctAutoFillSrc, dest );
 	
     // m_pView->doc()->setModified( TRUE );
     selection.setCoords( 0, 0, 0, 0 );
