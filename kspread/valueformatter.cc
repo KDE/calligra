@@ -28,6 +28,7 @@
 #include <kcalendarsystem.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kstaticdeleter.h>
 
 #include <float.h>
 #include <math.h>
@@ -35,6 +36,7 @@
 using namespace KSpread;
 
 ValueFormatter* ValueFormatter::_self = 0;
+static KStaticDeleter<ValueFormatter> valueformatter_sd;
 
 ValueFormatter::ValueFormatter ()
 {
@@ -48,7 +50,7 @@ ValueFormatter::~ValueFormatter ()
 ValueFormatter * ValueFormatter::self ()
 {
   if (!_self)
-    _self = new ValueFormatter;
+    valueformatter_sd.setObject( _self, new ValueFormatter() );
   return _self;
 }
 
