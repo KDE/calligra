@@ -164,7 +164,8 @@ public:
 
     // Style
     KWStyle *style() const { return m_layout.style; }
-    void setStyle( KWStyle * style ) { m_layout.style = style; } // doesn't _apply_ the style
+    void setStyle( KWStyle *style ) { m_layout.style = style; } // doesn't _apply_ the style
+    void applyStyle( KWStyle *style ); // applies the style (without undo/redo!)
 
     // The type of page-breaking behaviour
     void setPageBreaking( int pb ); // warning this sets all the flags!

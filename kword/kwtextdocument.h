@@ -36,8 +36,11 @@ class KWTextDocument : public QTextDocument
 {
     Q_OBJECT
 public:
+    // A real text document inside a frameset
     KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KWTextFormatCollection *fc );
-    KWTextDocument( KWZoomHandler * zoomHandler, KWTextFormatCollection *fc );
+    // A standalone text document, for a preview
+    KWTextDocument( KWZoomHandler * zoomHandler );
+
     ~KWTextDocument();
 
     virtual QTextParag * createParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE );

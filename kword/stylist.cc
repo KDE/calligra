@@ -45,6 +45,7 @@
 #include <kapp.h>
 #include <kcolordlg.h>
 #include <klocale.h>
+#include <kwtextdocument.h>
 
 #include <kdebug.h>
 
@@ -115,12 +116,6 @@ void KWStyleManager::addTab( KWStyleManagerTab * tab )
 
 void KWStyleManager::setupWidget()
 {
-    // This takes space, and no other dialog has a frame around it -> removed (DF)
-    //QVBoxLayout *form1Layout = new QVBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
-    //QFrame *frame1 = new QFrame( this );
-    //frame1->setFrameShape( QFrame::StyledPanel );
-    //frame1->setFrameShadow( QFrame::Raised );
-
     QFrame * frame1 = makeMainWidget();
     QGridLayout *frame1Layout = new QGridLayout( frame1, 0, 0, // auto
                                                  KDialog::marginHint(), KDialog::spacingHint() );
@@ -162,7 +157,7 @@ void KWStyleManager::addGeneralTab() {
     tabLayout->setSpacing( 6 );
     tabLayout->setMargin( 11 );
 
-    preview = new KWStylePreview( i18n( "Preview" ), tab, m_currentStyle );
+    preview = new KWStylePreview( i18n( "Preview" ), tab );
 
     tabLayout->addMultiCellWidget( preview, 2, 2, 0, 1 );
 
@@ -221,6 +216,7 @@ void KWStyleManager::switchTabs()
     // Called when the user switches tabs
     // We call save() to update our style, for the preview on the 1st tab
     save();
+    updatePreview();
 }
 
 int KWStyleManager::getStyleByName(const QString & name) {
@@ -253,7 +249,11 @@ void KWStyleManager::updateGUI() {
 
     // update delete button (can't delete first style);
     m_deleteButton->setEnabled(m_stylesList->currentItem() != 0);
+    updatePreview();
+}
 
+void KWStyleManager::updatePreview()
+{
     preview->setStyle(m_currentStyle);
     preview->repaint(true);
 }
@@ -267,7 +267,6 @@ void KWStyleManager::save() {
         m_currentStyle->setName( m_nameString->text() );
         m_currentStyle->setFollowingStyle(m_changedStyles.at(getStyleByName(m_styleCombo->currentText())));
     }
-    preview->repaint(true);
 }
 
 void KWStyleManager::addStyle() {
@@ -394,28 +393,50 @@ void KWStyleManager::renameStyle(const QString &theText) {
 /******************************************************************/
 /* Class: KWStylePreview                                          */
 /******************************************************************/
-void KWStylePreview::drawContents( QPainter *painter ) {
+KWStylePreview::KWStylePreview( const QString &title, QWidget *parent )
+    : QGroupBox( title, parent, "" )
+{
+    m_zoomHandler = new KWZoomHandler;
+    m_textdoc = new KWTextDocument( m_zoomHandler );
+    KWTextParag * parag = static_cast<KWTextParag *>(m_textdoc->firstParag());
+    parag->insert( 0, i18n( "KWord, KOffice's Word Processor" ) );
+}
+
+KWStylePreview::~KWStylePreview()
+{
+    delete m_textdoc;
+    delete m_zoomHandler;
+}
+
+void KWStylePreview::setStyle( KWStyle *style )
+{
+    KWTextParag * parag = static_cast<KWTextParag *>(m_textdoc->firstParag());
+    parag->applyStyle( style );
+    repaint(true);
+}
+
+void KWStylePreview::drawContents( QPainter *painter )
+{
+    // see also KWNumPreview::drawContents
+    painter->save();
     QRect r = contentsRect();
-    QFontMetrics fm( font() );
 
-    painter->fillRect( r.x() + fm.width( 'W' ), r.y() + fm.height(),
-                       r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height(), white );
-    painter->setClipRect( r.x() + fm.width( 'W' ), r.y() + fm.height(),
-                          r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height() );
+    QRect whiteRect( r.x() + 10, r.y() + 10,
+                     r.width() - 20, r.height() - 20 );
+    QColorGroup cg = QApplication::palette().active();
+    painter->fillRect( whiteRect, cg.brush( QColorGroup::Base ) );
 
-    QFont f( style->format().font() );
-    QColor c( style->format().color() );
+    KWTextParag * parag = static_cast<KWTextParag *>(m_textdoc->firstParag());
+    parag->format();
+    QRect textRect = parag->rect();
+    textRect.moveTopLeft( QPoint( r.x() + ( r.width() - textRect.width() ) / 2,
+                                  r.y() + ( r.height() - textRect.height() ) / 2 ) );
+    //kdDebug() << "KWStylePreview::drawContents textRect=" << DEBUGRECT(textRect) << endl;
+    painter->setClipRect( textRect );
+    painter->translate( textRect.x(), textRect.y() );
 
-    painter->setPen( QPen( c ) );
-    painter->setFont( f );
-
-    fm = QFontMetrics( f );
-    int y = height() / 2 - fm.height() / 2;
-
-    painter->drawText( 20 + (int)( style->paragLayout().margins[QStyleSheetItem::MarginFirstLine]
-                                   + style->paragLayout().margins[QStyleSheetItem::MarginLeft] ),
-                       y, fm.width( i18n( "KWord, KOffice's Word Processor" ) ),
-                       fm.height(), 0, i18n( "KWord, KOffice's Word Processor" ) );
+    m_textdoc->draw( painter, 0, 0, textRect.width(), textRect.height(), cg );
+    painter->restore();
 }
 
 /////////////

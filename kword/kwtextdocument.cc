@@ -30,10 +30,12 @@ KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KWTex
     init();
 }
 
-KWTextDocument::KWTextDocument( KWZoomHandler * zoomHandler, KWTextFormatCollection *fc )
-    : QTextDocument( 0, fc ), m_textfs( 0 ), m_zoomHandler( zoomHandler ), m_bDestroying( false )
+KWTextDocument::KWTextDocument( KWZoomHandler * zoomHandler )
+    : QTextDocument( 0, new KWTextFormatCollection( QFont("helvetica") /*unused*/ ) ),
+      m_textfs( 0 ), m_zoomHandler( zoomHandler ), m_bDestroying( false )
 {
     init();
+    setWidth( 1000 );
 }
 
 

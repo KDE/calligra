@@ -335,11 +335,8 @@ QPen KWBorderPreview::setBorderPen( Border _brd )
 KWNumPreview::KWNumPreview( QWidget* parent, const char* name )
     : QGroupBox( i18n( "Preview" ), parent, name ) {
     setMinimumHeight(80);
-    // Hmm, we need a doc for KWTextParag's method that need it to zoom values
-    // Maybe we should make KWDocument inherit a simple KWZoomHandler class or so.
     m_zoomHandler = new KWZoomHandler;
-    m_textdoc = new KWTextDocument( m_zoomHandler, new KWTextFormatCollection( QFont("helvetica") /*unused*/ ) );
-    m_textdoc->setWidth( 1000 );
+    m_textdoc = new KWTextDocument( m_zoomHandler );
     KWTextParag * parag = static_cast<KWTextParag *>(m_textdoc->firstParag());
     parag->insert( 0, i18n("Normal paragraph text") );
 }
@@ -360,14 +357,13 @@ void KWNumPreview::setCounter( const Counter & counter )
 void KWNumPreview::setStyle( KWStyle * style )
 {
     KWTextParag * parag = static_cast<KWTextParag *>(m_textdoc->firstParag());
-    parag->setParagLayout( style->paragLayout() );
-    KWTextFormat *newFormat = &style->format();
-    parag->setFormat( 0, parag->string()->length(), newFormat, true );
-    parag->setFormat( newFormat );
+    parag->setStyle( style );
     repaint(true);
 }
 
-void KWNumPreview::drawContents( QPainter* painter ) {
+void KWNumPreview::drawContents( QPainter* painter )
+{
+    // see also KWStylePreview::drawContents
     painter->save();
     QRect r = contentsRect();
     QFontMetrics fm( font() );

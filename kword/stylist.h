@@ -57,6 +57,7 @@ protected:
     void addGeneralTab();
     void apply();
     void updateGUI();
+    void updatePreview();
     void save();
     int getStyleByName(const QString & name);
 
@@ -95,15 +96,16 @@ class KWStylePreview : public QGroupBox
     Q_OBJECT
 
 public:
-    KWStylePreview( const QString &title, QWidget *parent, KWStyle *_style ) : QGroupBox( title, parent, "" )
-    { style = _style; }
+    KWStylePreview( const QString &title, QWidget *parent );
+    virtual ~KWStylePreview();
 
-    void setStyle(KWStyle *_style) { style= _style; }
+    void setStyle(KWStyle *_style);
 
 protected:
     void drawContents( QPainter *painter );
 
-    KWStyle *style;
+    KWTextDocument *m_textdoc;
+    KWZoomHandler *m_zoomHandler;
 };
 
 class KWStyleManagerTab : public QWidget {

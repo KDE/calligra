@@ -959,6 +959,14 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
     }
 }
 
+void KWTextParag::applyStyle( KWStyle *style )
+{
+    setParagLayout( style->paragLayout() );
+    KWTextFormat *newFormat = &style->format();
+    setFormat( 0, string()->length(), newFormat, true );
+    setFormat( newFormat );
+}
+
 void KWTextParag::setParagLayout( const KWParagLayout & layout, int flags )
 {
     //kdDebug() << "KWTextParag::setParagLayout flags=" << flags << endl;
