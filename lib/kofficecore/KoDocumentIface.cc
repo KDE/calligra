@@ -48,6 +48,11 @@ KoDocumentIface::~KoDocumentIface()
     delete m_actionProxy;
 }
 
+void KoDocumentIface::openURL( QString url )
+{
+  m_pDoc->openURL( KURL( url ) );
+}
+
 QString KoDocumentIface::url()
 {
   return m_pDoc->url().url();
