@@ -8,18 +8,111 @@
 <address><email>pamroberts@blueyonder.co.uk</email></address>
 </affiliation>
 </author>
+<author>
+<firstname>Raphael</firstname>
+<surname>Langerhorst</surname>
+<affiliation>
+<address><email>raphael-langerhorst@gmx.at</email></address>
+</affiliation>
+</author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo> 
 <title>Spreadsheet Formatting</title>
 
-<sect1 id="formatfonts">
-<title>Fonts, Text, Borders and Colors</title>
-<para>To change the appearance of selected cell(s), row(s) or column(s) use
+<sect1 id="formatcells">
+<!--<title>Fonts, Text, Borders and Colors</title>-->
+<title>Cell Format</title>
+<para>To change the format and appearance of selected cell(s), row(s) or column(s) use
 the <guimenuitem>Cell Format...</guimenuitem> option from the <guimenu>Format
 </guimenu> menu or from the <mousebutton>right</mousebutton> mouse button pop
-up menu. This will bring up the <guilabel>Cell Format</guilabel> dialog box
+up menu.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat0.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Right mouse button context menu.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>This will bring up the <guilabel>Cell Format</guilabel> dialog box
 which has several tabbed pages:</para>
+<sect2 id="formatdata">
+<title>Data Formats and Representation</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Data Format page.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>The <guilabel>Data Format</guilabel> page of the Cell Format dialog box 
+lets you control how the values of cells are displayed.</para>
+<para>The top part of this page lets you select the format to be used when 
+displaying numeric values, dates or times.
+</para>
+<para>The lower part of the <guilabel>Data Format</guilabel> page lets you add 
+a <guilabel>Prefix</guilabel> such as a $ symbol at the start of each item or 
+a <guilabel>Postfix</guilabel> such as $HK to the end. You can also control 
+how many digits are displayed after the decimal point for numeric values, 
+whether positive values are displayed with a leading + sign and whether 
+negative values are shown in red.
+</para>
+</sect2>
+
+<sect2 id="formattext">
+<title>Fonts and Text Settings</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Text page.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>The <guilabel>Text</guilabel> page lets you select the font style, size 
+and color, including some additional options like underlined or striked out text.
+The lower part of the page gives a preview of the selected text format.</para>
+</sect2>
+
+<sect2 id="formatposition">
+<title>Text Position and Rotation</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Position page.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>From the <guilabel>Position</guilabel> page you can control the position 
+of text within a cell by making suitable selections in the <guilabel>Horizontal
+</guilabel> and <guilabel>Vertical</guilabel> areas or by setting the 
+<guilabel>Indent</guilabel> value. You can also choose to have the text 
+appear vertically rather than horizontally, or even at an angle.</para>
+</sect2>
+
+<sect2 id="formatborder">
+<title>Cell Border</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Border page.</phrase>
+</textobject>
+</mediaobject>
+</para>
 <para>The <guilabel>Border</guilabel> page lets you set the appearance of the
 cell borders. If you have selected more than one cell you can apply different
 styles to the borders between the cells and that surrounding the selected area.
@@ -31,33 +124,32 @@ different parts of the border by clicking on the appropriate button in the
 </guilabel> buttons. The left hand button in the <guilabel>Preselect
 </guilabel> section will clear any previously applied border(s). Note that you 
 can also add a diagonal strike-through line to the cell(s).</para>
-<para>The <guilabel>Text</guilabel> page lets you select the font style, size 
-and color. The cell background pattern and color can be selected from the 
+</sect2>
+<sect2 id="formatbackground">
+<title>Cell Background</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat5.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Background page.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>The cell background pattern and color can be selected from the 
 <guilabel>Background</guilabel> page.</para>
-<para>From the <guilabel>Position</guilabel> page you can control the position 
-of text within a cell by making suitable selections in the <guilabel>Horizontal
-</guilabel> and <guilabel>Vertical</guilabel> areas or by setting the 
-<guilabel>Indent</guilabel> value. You can also choose to have the text 
-appear vertically rather than horizontally, or even at an angle.</para>
+<para>Simply choose a desired pattern, then select the pattern color
+and the background color.</para>
+<para>At the bottom of this page you can see a preview of the configured
+cell background.</para>
+
+</sect2>
 </sect1>
 
-<sect1 id="formatdata">
-<title>Data Formats and Representation</title>
+<!-- TODO find out about Cell Protection and add some description here - raphael -->
 
-<para>The <guilabel>Data Format</guilabel> page of the Cell Format dialog box 
-lets you control how the values of cells are displayed.</para>
-<para>The top part of this page lets you select the format to be used when 
-displaying numeric values, dates or times.
-</para>
-
-<para>The lower part of the <guilabel>Data Format</guilabel> page lets you add 
-a <guilabel>Prefix</guilabel> such as a $ symbol at the start of each item or 
-a <guilabel>Postfix</guilabel> such as $HK to the end. You can also control 
-how many digits are displayed after the decimal point for numeric values, 
-whether positive values are displayed with a leading + sign and whether 
-negative values are shown in red.
-</para>
-<sect2 id="conditional">
+<sect1 id="conditional">
 <title>Conditional Cell Attributes</title>
 <para>You can make the appearance of a cell change according to the value it 
 contains, useful perhaps if you are using &kspread; to keep track of your 
@@ -72,8 +164,6 @@ if the previous condition(s) are not met.</para>
 <para>Use <menuchoice><guisubmenu>Clear</guisubmenu><guimenuitem>Conditional 
 Cell Attributes</guimenuitem></menuchoice> from the <guimenu>Edit</guimenu> 
 menu to clear any conditional attributes from selected cells.</para>
-</sect2>
-
 </sect1>
 
 <sect1 id="cellsize">
