@@ -1,3 +1,9 @@
+koffice (2.0-20001002-0) unstable; urgency=low
+ 
+  * KDE 2.0 RC1
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Mon, 02 Oct 2000 01:30:00 -0700
+                                                                                
 koffice (2.0-20000925-0) unstable; urgency=low
  
   * More upstream fixes
