@@ -3,7 +3,9 @@
 #include <qdom.h>
 
 KSpreadLocale::KSpreadLocale()
+	: KLocale("kspread")
 {
+	insertCatalogue("koffice");
 }
 
 void KSpreadLocale::load( const QDomElement& element )

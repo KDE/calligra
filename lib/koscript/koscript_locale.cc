@@ -1,6 +1,7 @@
 #include "koscript_locale.h"
 
-KSLocale::KSLocale()
+KSLocale::KSLocale() :
+	KLocale("koffice")
 {
     _decimalSymbol = ".";
     _thousandsSeparator = "";
