@@ -1,6 +1,6 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
-   Copyright (C) 2001, Laurent Montel <lmontel@mandrakesoft.com>
+   Copyright (C) 2001,2004 Laurent Montel <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -50,8 +50,6 @@ bool KPrTextDrag::provides( QMimeSource* e , const char* mimeType, const char* a
     {
         if ( !qstricmp(mimeType,fmt) || QString( fmt ).startsWith( acceptMimeType ))
         {
-            kdDebug()<<" mimeType :"<<mimeType<<endl;
-            kdDebug()<<" fmt :"<<fmt<<endl;
             returnedTypeMime = fmt;
             return TRUE;
         }
