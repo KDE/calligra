@@ -734,9 +734,12 @@ void KWPage::vmpCreatePixmap( int mx, int my )
 }
 
 /*================================================================*/
+/* pastes the clipboard to cursor position 
+ */
 void KWPage::vmpMidButton()
 {
     QClipboard *cb = QApplication::clipboard();
+    bool emptyMessage = FALSE;
 
     if ( cb->data()->provides( MIME_TYPE ) ) {
         if ( cb->data()->encodedData( MIME_TYPE ).size() )
@@ -746,7 +749,44 @@ void KWPage::vmpMidButton()
             editPaste( cb->data()->encodedData( "text/plain" ) );
     }
     else if ( !cb->text().isEmpty() )
-        editPaste( cb->text() );
+    {
+       // jwc - do not *paste* message about empty clipboard into document
+       // instead, show message that clipboard is empty.  The Qt clipboard
+       // contents can be not empty, but still null. The <empty message> 
+       // text inserted into clipboard when clipboard is empty is a Kde
+       // klipper bug but until that is fixed checking for that message
+       // is needed to avoid improper insertion of the message text
+       
+        if( !cb->text().isNull() )
+        {
+            QString text = cb->text();
+            text.simplifyWhiteSpace();
+            if(text.compare("<empty clipboard>"))
+                editPaste( cb->text() );
+        else
+            emptyMessage = TRUE;
+        }
+        else
+            emptyMessage = TRUE;
+    }
+    else 
+        emptyMessage = TRUE;
+
+    if(emptyMessage)
+    {
+        maybeDrag = FALSE;
+
+/* This message is not really needed, and I dont want to introduce any messages, since we
+ * are in a message freeze (TZ)*/
+        //KMessageBox::sorry(0,  
+        //   i18n("KWord is unable to paste. The clipboard is empty."));
+
+        if ( doc->has_selection())
+        { 
+            doc->setSelection( FALSE );
+            repaintScreen( FALSE );
+        }
+    }
 }
 
 /*================================================================*/
@@ -833,48 +873,49 @@ void KWPage::viewportMousePressEvent( QMouseEvent *e )
     int mx = e->x() + contentsX();
     int my = e->y() + contentsY();
 
+    // focus change. 
+    QPainter _painter;
+    _painter.begin( viewport() );
+    if ( doc->has_selection() && *doc->getSelStart() == *doc->getSelEnd() 
+            && mouseMode != MM_EDIT ) {
+        doc->drawSelection( _painter, contentsX(), contentsY() );
+        doc->setSelection( FALSE );
+    }
+    _painter.end();
+
     switch ( e->button() ) {
-    case LeftButton: {
-        mousePressed = TRUE;
-
-        QPainter _painter;
-        _painter.begin( viewport() );
-
-        if ( doc->has_selection() && *doc->getSelStart() == *doc->getSelEnd() && mouseMode != MM_EDIT ) {
-            doc->drawSelection( _painter, contentsX(), contentsY() );
-            doc->setSelection( FALSE );
-        }
-
-        _painter.end();
-
-        switch ( mouseMode ) {
-        case MM_EDIT:
-            if ( !vmpEdit( mx, my ) )
-                return;
+        case LeftButton: {
+            mousePressed = TRUE;
+            switch ( mouseMode ) {
+            case MM_EDIT:
+                if ( !vmpEdit( mx, my ) )
+                    return;
+                break;
+            case MM_EDIT_FRAME:
+                vmpEditFrame( e, mx, my );
+                break;
+            case MM_CREATE_TEXT: case MM_CREATE_PART: case MM_CREATE_TABLE:
+            case MM_CREATE_FORMULA: case MM_CREATE_KSPREAD_TABLE:
+                vmpCreate( mx, my );
+                break;
+            case MM_CREATE_PIX:
+                vmpCreatePixmap( mx, my );
+                break;
+            default: break;
+            }
+            // The "edit" modes don't modify the doc. The "create" ones do.
+            if ( mouseMode != MM_EDIT && mouseMode != MM_EDIT_FRAME )
+                doc->setModified( TRUE );
+        } break;
+        case MidButton:
+            vmpMidButton();
             break;
-        case MM_EDIT_FRAME:
-            vmpEditFrame( e, mx, my );
-            break;
-        case MM_CREATE_TEXT: case MM_CREATE_PART: case MM_CREATE_TABLE:
-        case MM_CREATE_FORMULA: case MM_CREATE_KSPREAD_TABLE:
-            vmpCreate( mx, my );
-            break;
-        case MM_CREATE_PIX:
-            vmpCreatePixmap( mx, my );
+        case RightButton:
+           if ( !vmpEdit( mx, my ) )
+               return;
+            vmpRightButton( e, mx, my );
             break;
         default: break;
-        }
-        // The "edit" modes don't modify the doc. The "create" ones do.
-        if ( mouseMode != MM_EDIT && mouseMode != MM_EDIT_FRAME )
-            doc->setModified( TRUE );
-    } break;
-    case MidButton:
-        vmpMidButton();
-        break;
-    case RightButton:
-        vmpRightButton( e, mx, my );
-        break;
-    default: break;
     }
 
     mouseMoved = FALSE;
@@ -2442,50 +2483,55 @@ bool KWPage::kDown( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs )
 
 bool KWPage::kPrior( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs )
 {
-	// can't go to a negative pixel value - set new Y offset to
-	// zero if visible height of viewport is greater than offset
-	// from start of fc + top border height
-	
-	unsigned int newY = fc->getPTY();
-	if(newY <= ptTopBorder())  return FALSE;
-	
-	if(static_cast<int> (fc->getPTY()) >= visibleHeight())
-	{ 
-		newY = fc->getPTY() - visibleHeight();
-		if(newY <= ptTopBorder()) newY = ptTopBorder(); 
-	}	
-	else
-		newY = ptTopBorder();	
-	   
     if ( !doc->has_selection() && e->state() & ShiftButton )
         startKeySelection();
     else
         *oldFc = *fc;
 
     bool gotoPrevTableCell = FALSE;
-    if ( fs->getGroupManager() && !parag->getPrev() ) 
-	{
+    if ( fs->getGroupManager() && !parag->getPrev() )
+    {
         if ( fc->isCursorInFirstLine() )
             gotoPrevTableCell = TRUE;
     }
     
-	// move cursor up 1 visible height, keeping current x position
-	fc->cursorGotoPixelLine(fc->getPTPos(), newY);
-	
-    gui->getView()->setFormat( *( ( KWFormat* )fc ) );
-    gui->getView()->setFlow( fc->getParag()->getParagLayout()->getFlow() );
-    gui->getView()->setLineSpacing( fc->getParag()->getParagLayout()->getLineSpacing().pt() );
-    gui->getView()->setParagBorders( fc->getParag()->getParagLayout()->getLeftBorder(),
+     unsigned int curY  = fc->getPTY();
+     unsigned int oldY  = curY;
+     unsigned int newY  = curY;
+     unsigned int travY = 0;
+     newY = (unsigned int)visibleHeight();
+
+     // scroll cursor up until the total Y distance traversed is
+     // equal to a viewport height.  In framesets with colums it will
+     // go up and down columns with flow
+
+     while(travY < newY)
+     {
+        fc->cursorGotoUp();
+       travY += fc->getLineHeight();
+
+        gui->getView()->setFormat( *( ( KWFormat* )fc ) );
+        gui->getView()->setFlow( fc->getParag()->getParagLayout()->getFlow() );
+        gui->getView()->setLineSpacing( fc->getParag()->getParagLayout()->getLineSpacing().pt() );
+        gui->getView()->setParagBorders( fc->getParag()->getParagLayout()->getLeftBorder(),
                                      fc->getParag()->getParagLayout()->getRightBorder(),
                                      fc->getParag()->getParagLayout()->getTopBorder(),
                                      fc->getParag()->getParagLayout()->getBottomBorder() );
+       curY = fc->getPTY();
+       if(curY == oldY)
+           break;
+       else
+           oldY = curY;
+    }
+    fc->cursorGotoLineStart( );
+    scrollToCursor();
 
-    if ( continueSelection || e->state() & ShiftButton ) 
-	{
+    if ( continueSelection || e->state() & ShiftButton )
+    {
         continueKeySelection();
         return FALSE;
     } 
-	else if ( gotoPrevTableCell )
+        else if ( gotoPrevTableCell )
         cursorGotoPrevTableCell();
 
     return TRUE;
@@ -2499,7 +2545,7 @@ bool KWPage::kPrior( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs 
 
 bool KWPage::kNext( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs )
 {
-	if ( !doc->has_selection() && e->state() & ShiftButton )
+    if ( !doc->has_selection() && e->state() & ShiftButton )
         startKeySelection();
     else
         *oldFc = *fc;
@@ -2509,29 +2555,55 @@ bool KWPage::kNext( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs )
         if ( fc->isCursorInLastLine() )
             gotoNextTableCell = TRUE;
     }
-	
-	// move cursor down 1 visible height, keeping current x position
-	fc->cursorGotoPixelLine(fc->getPTPos(), fc->getPTY() + visibleHeight());
+    
+     unsigned int curY  = fc->getPTY();
+     unsigned int oldY  = curY;      
+     unsigned int newY  = curY;
+     unsigned int travY = 0;
+     newY = (unsigned int)visibleHeight(); 
+      	    
+      // move cursor down until the total Y distance traversed is
+      // equal to a viewport height.  In framesets with colums it will
+      // go up and down columns with flow
 
-    gui->getView()->setFormat( *( ( KWFormat* )fc ) );
-    gui->getView()->setFlow( fc->getParag()->getParagLayout()->getFlow() );
-    gui->getView()->setLineSpacing( fc->getParag()->getParagLayout()->getLineSpacing().pt() );
-    gui->getView()->setParagBorders( fc->getParag()->getParagLayout()->getLeftBorder(),
+     while(travY <= newY)   
+     {
+         fc->cursorGotoDown();
+	 travY += fc->getLineHeight();
+
+         gui->getView()->setFormat( *( ( KWFormat* )fc ) );
+         gui->getView()->setFlow( fc->getParag()->getParagLayout()->getFlow() );
+         gui->getView()->setLineSpacing( fc->getParag()->getParagLayout()->getLineSpacing().pt() );
+         gui->getView()->setParagBorders( fc->getParag()->getParagLayout()->getLeftBorder(),
                                      fc->getParag()->getParagLayout()->getRightBorder(),
                                      fc->getParag()->getParagLayout()->getTopBorder(),
                                      fc->getParag()->getParagLayout()->getBottomBorder() );
+	 
+         curY = fc->getPTY();
+         if(curY == oldY)
+	      break;
+         else
+	      oldY = curY;      
+      }
+      
+     fc->cursorGotoLineEnd( );
+     scrollToCursor();
 
-    if ( continueSelection || e->state() & ShiftButton ) 
-	{
+     // scroll view so that cursor is in middle of view - makes editing a whole
+     // lot easier than leaving it at bottom, ofen partly hidden by scroll bar
+
+    scrollToOffset( contentsX(), contentsY() + ((unsigned int)visibleHeight()) / 2 );
+
+    if ( continueSelection || e->state() & ShiftButton )
+    {
         continueKeySelection();
         return FALSE;
-    } 
-	else if ( gotoNextTableCell )
+    }
+        else if ( gotoNextTableCell )
         cursorGotoNextTableCell();
 
     return TRUE;
 }
-
 
 /*================================================================*/
 bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet )
@@ -2870,77 +2942,100 @@ void KWPage::keyPressEvent( QKeyEvent *e )
         if ( !kInsertTableRow() )
             STOP;
 
-    /*============================================ 
+    /*============================================
      scroll up or down by one paper page height, aligning top of view
      with top of page. Uses PageUp and PageDown with CTRL. key.
-    
+
      Note that pages returned from calcVisiblePages() start with 1, not 0.
      Note also that firstVisiblePage and lastVisiblePage are always different
      even when only one page is visible - first takes floor and last takes
      ceiling so there is always a difference of at least one!
      I adjust by always subtracting 1 from last visible page.
      if two or more pages are visible this will scroll up to the top of
-     higher one so such pages are not skipped, then scroll a full page 
+     higher one so such pages are not skipped, then scroll a full page
      on page alignments from there on.  Scrolling down does not have this
      problem as it always goes to the start of the next page after top
      page in view, even if the lower page is partially visible to start.
     ===========================================*/
-    
-    if ((e->key() == Key_Prior || e->key() == Key_Next) 
+
+    if ((e->key() == Key_Prior || e->key() == Key_Next)
     && (e->state() & ControlButton))
     {
           calcVisiblePages();
-	  int ifvPage = static_cast<int>(firstVisiblePage);
-          int ilvPage = static_cast<int>(lastVisiblePage) - 1;	  
-  
-          // determine whether current view is exactly aligned 
-	  // to page boundaries or is in the middle of a page somewhere
-          unsigned int topY = (unsigned int)contentsY();
-	  unsigned int leftover = topY % ptPaperHeight();
+          int ifvPage = static_cast<int>(firstVisiblePage);
+          int ilvPage = static_cast<int>(lastVisiblePage) - 1;
 
-          // kdDebug() << "leftover: " << leftover << endl;
-          
-	  if(e->key() == Key_Prior)
+          // determine whether current view is exactly aligned
+          // to page boundaries or is in the middle of a page somewhere
+
+          unsigned int topY = (unsigned int)contentsY();
+          unsigned int leftover = topY % ptPaperHeight();
+
+          if(e->key() == Key_Prior)
           {
-              stopProcessKeyEvent();	  
+              stopProcessKeyEvent();
               int priorPage = 0;
 
-              // kdDebug() << "ifvPage: " << ifvPage << " ilvPage: " << ilvPage << endl;
-	      
-              // scroll to top of next page       
-              if((ifvPage == ilvPage) && (leftover < 2)) 
+              // scroll to top of next page
+              if((ifvPage == ilvPage) && (leftover < 2))
               {
                   priorPage = ifvPage - 1;
-		  if(priorPage > 0)  priorPage -= 1;
+                  if(priorPage > 0)  priorPage -= 1;
               }
               else // scroll to top of current page
-              { 
+              {
                   priorPage = ifvPage;
-                  if(priorPage > 0) priorPage -= 1;		  
+                  if(priorPage > 0) priorPage -= 1;
               }
 
-              scrollToOffset( 0, (priorPage) * (ptPaperHeight()) + 1);
+              scrollToOffset( contentsX(), (priorPage) * (ptPaperHeight()) + 1);
           }
           else if(e->key() == Key_Next)
           {
               stopProcessKeyEvent();
               int nextPage = 1;
 
-              // kdDebug() << "ifvPage: " << ifvPage << " ilvPage: " << ilvPage << endl;	      	      
-
               if(ifvPage == ilvPage)
                   nextPage = ifvPage + 1;
               else
                   nextPage =  ifvPage + 1;
-  
-              scrollToOffset( 0, (nextPage - 1) * (ptPaperHeight()) + 1);
-          }  
-          // note: vmrEdit will set cursor at offset into document !!!
-	  // risky - will test later. jwc
-	  // vmrEdit(0, (nextPage - 1) * (ptPaperHeight()) + 1);      
+
+              scrollToOffset( contentsX(), (nextPage - 1) * (ptPaperHeight()) + 1);
+          }
+
+          unsigned int mx = contentsX() + ptLeftBorder();
+          unsigned int my = contentsY() + ptTopBorder();
+	      
+          int frameset = doc->getFrameSet(mx, my);
+
+          if ( frameset != -1 
+	  && doc->getFrameSet( frameset )->getFrameType() == FT_TEXT ) 
+	  {
+                fc->setFrameSet( frameset + 1 );
+                fc->cursorGotoPixelLine( mx, my );
+                fc->cursorGotoPixelInLine( mx, my );
+	  }
+
+          gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
+
+          if ( fc->getParag() ) 
+	  {
+                 gui->getView()->updateStyle( fc->getParag()->getParagLayout()->getName(), FALSE );
+                 gui->getView()->setFormat( *( ( KWFormat* )fc ), TRUE, FALSE );
+                 gui->getView()->setFlow( fc->getParag()->getParagLayout()->getFlow() );
+                 gui->getView()->setLineSpacing( fc->getParag()->getParagLayout()->getLineSpacing().pt() );
+                 gui->getView()->setParagBorders( fc->getParag()->getParagLayout()->getLeftBorder(),
+                                             fc->getParag()->getParagLayout()->getRightBorder(),
+                                             fc->getParag()->getParagLayout()->getTopBorder(),
+                                             fc->getParag()->getParagLayout()->getBottomBorder() );
+                 setRulerFirstIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getFirstLineLeftIndent() );
+                 setRulerLeftIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getLeftIndent() );
+                 gui->getHorzRuler()->setFrameStart( doc->getFrameSet( fc->getFrameSet() - 1 )->
+                                                getFrame( fc->getFrame() - 1 )->x() );
+                 gui->getHorzRuler()->setTabList( fc->getParag()->getParagLayout()->getTabList() );
+          }
           return;
     }
-    
     // other keys modified by ControlButton
     else if ( e->state() & ControlButton ) {
         if ( e->key() == Key_B ) {
@@ -2971,17 +3066,17 @@ void KWPage::keyPressEvent( QKeyEvent *e )
     switch( e->key() ) {
 
     case Key_Prior: // PageUp
-	{
+        {
         if ( !kPrior( e, oldPage, oldFrame, oldParag, frameSet ) )
             STOP;
         break;
-	}	
+        }
     case Key_Next: // PageDown
-	{
+        {
         if ( !kNext( e, oldPage, oldFrame, oldParag, frameSet ) )
-		  STOP;
+                  STOP;
         break;
-	}	
+        }
     case Key_Home:
         if ( !kHome( e, oldPage, oldFrame, oldParag, frameSet ) )
             STOP;
@@ -5054,7 +5149,7 @@ void KWPage::continueKeySelection()
         doc->drawSelection( painter, contentsX(), contentsY() );
         painter.end();
     } else {
-        scrollToCursor(); // WABA
+        scrollToCursor();
         doc->setSelEnd( *fc );
         QPainter painter;
         painter.begin( viewport() );
