@@ -36,10 +36,10 @@ KivioLayerItem::~KivioLayerItem()
 
 void KivioLayerItem::update()
 {
-  setPixmap(0, data->visible() ? BarIcon("layer_visible",KivioFactory::global()):BarIcon("layer_novisible",KivioFactory::global()));
-  setPixmap(1, true/*data->print()*/ ? BarIcon("layer_print",KivioFactory::global()):BarIcon("layer_noprint",KivioFactory::global()));
-  setPixmap(2, true/*data->edit()*/ ? BarIcon("layer_editable",KivioFactory::global()):BarIcon("layer_noeditable",KivioFactory::global()));
-  setPixmap(3, data->connectable() ? BarIcon("layer_connect",KivioFactory::global()):BarIcon("layer_noconnect",KivioFactory::global()));
+  setPixmap(0, data->visible() ? SmallIcon("layer_visible",KivioFactory::global()):SmallIcon("layer_novisible",KivioFactory::global()));
+  setPixmap(1, true/*data->print()*/ ? SmallIcon("layer_print",KivioFactory::global()):SmallIcon("layer_noprint",KivioFactory::global()));
+  setPixmap(2, true/*data->edit()*/ ? SmallIcon("layer_editable",KivioFactory::global()):SmallIcon("layer_noeditable",KivioFactory::global()));
+  setPixmap(3, data->connectable() ? SmallIcon("layer_connect",KivioFactory::global()):SmallIcon("layer_noconnect",KivioFactory::global()));
   setText(4,data->name());
 }
 /*********************************************************/
