@@ -601,7 +601,7 @@ void KOSpellConfig::getAvailDictsIspell () {
 void KOSpellConfig::setClient (int c)
 {
   iclient = c;
-  kdDebug()<<" c :"<<c<<endl;
+  //kdDebug()<<" c :"<<c<<endl;
   if (clientcombo)
       clientcombo->setCurrentItem(c);
 }
