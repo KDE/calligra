@@ -270,5 +270,5 @@ QString KoStyleStack::userStyleName() const
 
 void KoStyleStack::setTypeProperties( const char* typeProperties )
 {
-    m_propertiesTagName = typeProperties == 0 ? "properties" : ( QCString( typeProperties ) + "-properties" );
+    m_propertiesTagName = typeProperties == 0 ? QCString( "properties" ) : ( QCString( typeProperties ) + "-properties" );
 }
