@@ -21,15 +21,14 @@
 #ifndef __kspread_dlg_pasteinsert__
 #define __kspread_dlg_pasteinsert__
 
-#include <qdialog.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <kdialogbase.h>
 
 class KSpreadView;
 class KSpreadTable;
+class QCheckBox;
+class QRadioButton;
 
-class KSpreadpasteinsert : public QDialog
+class KSpreadpasteinsert : public KDialogBase
 {
     Q_OBJECT
 public:
@@ -37,13 +36,8 @@ public:
 
 public slots:
     void slotOk();
-    void slotCancel();
-
 private:
   KSpreadView* m_pView;
-
-  QPushButton* m_pOk;
-  QPushButton* m_pCancel;
   QRadioButton *rb1;
   QRadioButton *rb2;
   QRect  rect;

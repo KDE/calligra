@@ -31,6 +31,8 @@
 #include <koGlobal.h>
 #include <qlabel.h>
 #include <qlineedit.h>
+#include <qcombobox.h>
+#include <kcolorbutton.h>
 
 KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const QString &name )
         : QWidget( _parent )
@@ -288,32 +290,25 @@ return result;
 }
 
 KSpreadconditional::KSpreadconditional( KSpreadView* parent, const char* name,const QRect &_marker)
-        : QDialog( parent, name,TRUE )
+        : KDialogBase( parent, name,TRUE,i18n("Relational cell attributes"),Ok|Cancel )
 {
   m_pView = parent;
   marker=_marker;
-  setCaption( i18n("Relational cell attributes") );
+  QWidget *page = new QWidget( this );
+  setMainWidget(page);
 
-  QGridLayout *grid1 = new QGridLayout(this,4,1,15,7);
-  firstCond=new KSpreadWidgetconditional(this,i18n("First condition"));
+  QGridLayout *grid1 = new QGridLayout(page,4,1,15,7);
+  firstCond=new KSpreadWidgetconditional(page,i18n("First condition"));
   grid1->addWidget(firstCond,0,0);
 
-  secondCond=new KSpreadWidgetconditional(this,i18n("Second condition"));
+  secondCond=new KSpreadWidgetconditional(page,i18n("Second condition"));
   grid1->addWidget(secondCond,1,0);
 
-  thirdCond=new KSpreadWidgetconditional(this,i18n("Third condition"));
+  thirdCond=new KSpreadWidgetconditional(page,i18n("Third condition"));
   grid1->addWidget(thirdCond,2,0);
 
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-  m_pOk = bb->addButton( i18n("&OK") );
-  m_pOk->setDefault( TRUE );
-  m_pCancel= bb->addButton( i18n( "&Cancel" ) );
-  bb->layout();
-  grid1->addWidget(bb,3,0);
   init();
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
+  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 
 }
 
@@ -530,12 +525,6 @@ if(firstCond->typeOfCondition()!=None)
  accept();
 
 
-}
-
-
-void KSpreadconditional::slotCancel()
-{
-reject();
 }
 
 

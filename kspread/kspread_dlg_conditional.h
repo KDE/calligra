@@ -21,16 +21,16 @@
 #ifndef __kspread_dlg_conditional__
 #define __kspread_dlg_conditional__
 
-#include <qdialog.h>
-#include <qcombobox.h>
-#include <kcolorbutton.h>
-#include <qpushbutton.h>
-#include <qfont.h>
+#include <kdialogbase.h>
 #include "kspread_cell.h"
 class KSpreadView;
 class KSpreadTable;
 class QLabel;
 class QLineEdit;
+class QFont;
+class KColorButton;
+class QComboBox;
+
 
 class KSpreadWidgetconditional : public QWidget
 {
@@ -61,7 +61,7 @@ protected:
   QLineEdit *preview;
 };
 
-class KSpreadconditional : public QDialog
+class KSpreadconditional : public KDialogBase
 {
   Q_OBJECT
 public:
@@ -69,19 +69,14 @@ KSpreadconditional(KSpreadView* parent, const char* name,const QRect &_marker );
 void init();
 public slots:
   void slotOk();
-  void slotCancel();
 
 protected:
   KSpreadView* m_pView;
-  QPushButton* m_pOk;
-  QPushButton* m_pCancel;
   QRect  marker;
   KSpreadWidgetconditional *firstCond;
   KSpreadWidgetconditional *secondCond;
   KSpreadWidgetconditional *thirdCond;
   KSpreadConditional result;
 };
-
-
 
 #endif

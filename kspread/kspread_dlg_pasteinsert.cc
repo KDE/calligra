@@ -27,36 +27,28 @@
 #include <kbuttonbox.h>
 #include <qbuttongroup.h>
 #include <kdebug.h>
+#include <qradiobutton.h>
+#include <qcheckbox.h>
 
 KSpreadpasteinsert::KSpreadpasteinsert( KSpreadView* parent, const char* name,const QRect &_rect)
-	: QDialog( parent, name, TRUE )
+	: KDialogBase( parent, name, TRUE,i18n("Paste inserting cell(s)"),Ok|Cancel )
 {
   m_pView = parent;
   rect=_rect;
 
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
+  QWidget *page = new QWidget( this );
+  setMainWidget(page);
+  QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
 
-  QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Insert"),this);
+  QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Insert"),page);
   grp->setRadioButtonExclusive( TRUE );
   grp->layout();
   lay1->addWidget(grp);
   rb1 = new QRadioButton( i18n("Move towards right"), grp );
   rb2 = new QRadioButton( i18n("Move towards bottom"), grp );
-  setCaption( i18n("Paste inserting cell(s)") );
   rb1->setChecked(true);
 
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-  m_pOk = bb->addButton( i18n("&OK") );
-  m_pOk->setDefault( TRUE );
-  m_pCancel= bb->addButton( i18n( "&Cancel" ) );
-  bb->layout();
-  lay1->addWidget( bb );
-
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
+  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 }
 
 void KSpreadpasteinsert::slotOk()
@@ -68,11 +60,5 @@ void KSpreadpasteinsert::slotOk()
 
     accept();
 }
-
-void KSpreadpasteinsert::slotCancel()
-{
-  reject();
-}
-
 
 #include "kspread_dlg_pasteinsert.moc"
