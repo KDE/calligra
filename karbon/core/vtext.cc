@@ -191,8 +191,8 @@ VText::draw( VPainter* painter, const KoRect* /*rect*/ ) const
 				color.set( .3, .3, .3 );
 				color.setOpacity( 1. );
 			}
-			int shadowDx = m_shadowDistance * cos( m_shadowAngle / 360. * 6.2832 );
-			int shadowDy = m_shadowDistance * sin( m_shadowAngle / 360. * 6.2832 );
+			int shadowDx = int( m_shadowDistance * cos( m_shadowAngle / 360. * 6.2832 ) );
+			int shadowDy = int( m_shadowDistance * sin( m_shadowAngle / 360. * 6.2832 ) );
 		
 			for( itr.toFirst(); itr.current(); ++itr )
 			{
@@ -364,6 +364,9 @@ VText::load( const QDomElement& element )
 			}
 		}
 	}
+	// if no glyphs yet, trace them
+	if( m_glyphs.count() == 0 )
+		traceText();
 	m_boundingBoxIsInvalid = true;
 }
 
@@ -446,7 +449,7 @@ VText::traceText()
 	float l = 0;
 	QValueList<float> glyphXAdvance;
 	QValueList<float> glyphYAdvance;
-	for( int i = 0; i < m_text.length(); i++ )
+	for( unsigned int i = 0; i < m_text.length(); i++ )
 	{
 		// get the glyph index for the current character
 		QChar character = m_text.at( i );
@@ -502,7 +505,7 @@ VText::traceText()
 	float fsx = 0;
 	float yoffset = ( m_position == Above ? 0 : ( m_position == On ? m_font.pointSize() / 3 : m_font.pointSize() / 1.5 ) );
 	kdDebug() << "Position: " << m_position << " -> " << yoffset << endl;
-	for( int i = 0; i < m_text.length(); i++ )
+	for( unsigned int i = 0; i < m_text.length(); i++ )
 	{
 		VComposite* composite = m_glyphs.at( i );
 	
@@ -562,7 +565,7 @@ VText::traceText()
 QString
 VText::buildRequest( QString family, int weight, int slant, double size, int &id )
 {
-		// Strip those stupid [Xft or whatever]...
+	// Strip those stupid [Xft or whatever]...
 	int pos;
 	if( ( pos = family.find( '[' ) ) )
 		family = family.left( pos );
