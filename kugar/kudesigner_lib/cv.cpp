@@ -712,6 +712,13 @@ void ReportCanvas::keyPressEvent( QKeyEvent *e )
                 ( (MyCanvas*) canvas() )->templ->removeReportItem( item );
                 clearRequest();*/
 //                deleteSelected();
+                //FIXME: this disregards undo/redo
+                if (((MyCanvas*)canvas())->selected.count() > 0)
+                {
+                    DeleteReportItemsCommand *cmd = new DeleteReportItemsCommand(((MyCanvas*)canvas()), ((MyCanvas*)canvas())->selected);
+                    cmd->execute();
+                    delete cmd;
+                }
                 return;
 
             /* Adjust height with - and +  */
