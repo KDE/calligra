@@ -576,24 +576,24 @@ bool OOWriterWorker::doOpenBody(void)
     QValueList<FrameAnchor>::Iterator it;
 
     // We have to process all non-inline pictures
-    kdDebug(30520) << "=== Processing non-inlined pictures ===" << endl;
+    kdDebug(30518) << "=== Processing non-inlined pictures ===" << endl;
     for ( it = m_nonInlinedPictureAnchors.begin(); it != m_nonInlinedPictureAnchors.end(); ++it )
     {
         *m_streamOut << "  ";
         makePicture( *it, AnchorNonInlined );
         *m_streamOut << "\n";
     }
-    kdDebug(30520) << "=== Non-inlined pictures processed ===" << endl;
+    kdDebug(30518) << "=== Non-inlined pictures processed ===" << endl;
 
     // We have to process all non-inline tables
-    kdDebug(30520) << "=== Processing non-inlined tables ===" << endl;
+    kdDebug(30518) << "=== Processing non-inlined tables ===" << endl;
     for ( it = m_nonInlinedTableAnchors.begin(); it != m_nonInlinedTableAnchors.end(); ++it )
     {
         *m_streamOut << "  ";
         makeTable( *it, AnchorNonInlined );
         *m_streamOut << "\n";
     }
-    kdDebug(30520) << "=== Non-inlined tables processed ===" << endl;
+    kdDebug(30518) << "=== Non-inlined tables processed ===" << endl;
 
     return true;
 }
@@ -845,7 +845,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 
             if ( res >= 0 )
             {
-                kdDebug(30520) << "Language: " << lang << " => " << lang.left( res ) << " - " << lang.mid( res + 1 ) << endl;
+                kdDebug(30518) << "Language: " << lang << " => " << lang.left( res ) << " - " << lang.mid( res + 1 ) << endl;
                 strElement += "fo:language=\"";
                 strElement += lang.left( res );
                 strElement += "\" ";
@@ -855,7 +855,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
             }
             else
             {
-                kdDebug(30520) << "Language without country: " << lang << endl;
+                kdDebug(30518) << "Language without country: " << lang << endl;
                 strElement += "fo:language=\"";
                 strElement += lang;
                 strElement += "\" ";
@@ -1036,7 +1036,7 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
         {
             automaticCellStyle = makeAutomaticStyleName( tableName + ".Cell", cellNumber );
             mapCellStyleKeys [ key ] = automaticCellStyle;
-            kdDebug(30520) << "Creating automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
+            kdDebug(30518) << "Creating automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
             m_contentAutomaticStyles += "  <style:style";
             m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticCellStyle ) + "\"";
             m_contentAutomaticStyles += " style:family=\"table-cell\"";
@@ -1049,7 +1049,7 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
         else
         {
             automaticCellStyle = it.data();
-            kdDebug(30520) << "Using automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
+            kdDebug(30518) << "Using automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
         }
 
         *m_streamOut << "<table:table-cell table:value-type=\"string\" table:style-name=\""
@@ -1098,7 +1098,7 @@ static uint getColumnWidths( const Table& table, QMemArray<double>& widthArray, 
     for ( itCell = table.cellList.begin();
         itCell != table.cellList.end(); ++itCell )
     {
-        kdDebug(30520) << "Column: " << (*itCell).col << " (Row: " << (*itCell).row << ")" << endl;
+        kdDebug(30518) << "Column: " << (*itCell).col << " (Row: " << (*itCell).row << ")" << endl;
 
         if ( (*itCell).row != tryingRow )
         {
@@ -1152,7 +1152,7 @@ static uint getFirstRowColumnWidths( const Table& table, QMemArray<double>& widt
     for ( itCell = table.cellList.begin();
         itCell != table.cellList.end(); ++itCell )
     {
-        kdDebug(30520) << "Column: " << (*itCell).col << " (Row: " << (*itCell).row << ")" << endl;
+        kdDebug(30518) << "Column: " << (*itCell).col << " (Row: " << (*itCell).row << ")" << endl;
         if ( (*itCell).row != firstRowNumber )
             break; // We have finished the first row
 
@@ -1187,18 +1187,18 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     const QString automaticFrameStyle ( makeAutomaticStyleName( "TableFrame", m_textBoxNumber ) ); // It also increases m_textBoxNumber
     const QString translatedFrameName( i18n( "Object name", "Table Frame %1").arg( m_textBoxNumber ) );
 
-    kdDebug(30520) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
+    kdDebug(30518) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
 
     const QValueList<TableCell>::ConstIterator firstCell ( anchor.table.cellList.begin() );
 
     if ( firstCell == anchor.table.cellList.end() )
     {
-        kdError(30520) << "Table has not any cell!" << endl;
+        kdError(30518) << "Table has not any cell!" << endl;
         return false;
     }
 
     const int firstRowNumber = (*firstCell).row;
-    kdDebug(30520) << "First row: " << firstRowNumber << endl;
+    kdDebug(30518) << "First row: " << firstRowNumber << endl;
 
     QMemArray<double> widthArray(4);
 
@@ -1206,18 +1206,18 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
 
     if ( numberColumns <= 0 )
     {
-        kdDebug(30520) << "Could not get correct column widths, so approximating" << endl;
+        kdDebug(30518) << "Could not get correct column widths, so approximating" << endl;
         // There was a problem, the width array cannot be trusted, so try to do a column width array with the first row
         numberColumns = getFirstRowColumnWidths( anchor.table, widthArray, firstRowNumber );
         if ( numberColumns <= 0 )
         {
             // Still not right? Then it is an error!
-            kdError(30520) << "Cannot get column widths of table " << anchor.key.toString() << endl;
+            kdError(30518) << "Cannot get column widths of table " << anchor.key.toString() << endl;
             return false;
         }
     }
 
-    kdDebug(30520) << "Number of columns: " << numberColumns << endl;
+    kdDebug(30518) << "Number of columns: " << numberColumns << endl;
 
 
     double tableWidth = 0.0; // total width of table
@@ -1226,7 +1226,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     {
         tableWidth += widthArray.at( i );
     }
-    kdDebug(30520) << "Table width: " << tableWidth << endl;
+    kdDebug(30518) << "Table width: " << tableWidth << endl;
 
     // An inlined table, is an "as-char" text-box
     *m_streamOut << "<draw:text-box";
@@ -1254,7 +1254,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
 
     // Now we have enough information to generate the style for the table and its frame
 
-    kdDebug(30520) << "Creating automatic frame style: " << automaticFrameStyle /* << " key: " << styleKey */ << endl;
+    kdDebug(30518) << "Creating automatic frame style: " << automaticFrameStyle /* << " key: " << styleKey */ << endl;
     m_contentAutomaticStyles += "  <style:style"; // for frame
     m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticFrameStyle ) + "\"";
     m_contentAutomaticStyles += " style:family=\"graphics\"";
@@ -1270,7 +1270,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     m_contentAutomaticStyles += "/>\n";
     m_contentAutomaticStyles += "  </style:style>\n";
 
-    kdDebug(30520) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
+    kdDebug(30518) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
     m_contentAutomaticStyles += "  <style:style"; // for table
     m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticTableStyle ) + "\"";
     m_contentAutomaticStyles += " style:family=\"table\"";
@@ -1287,7 +1287,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     for ( i=0; i < numberColumns; ++i )
     {
         const QString automaticColumnStyle ( makeAutomaticStyleName( tableName + ".Column", columnNumber ) );
-        kdDebug(30520) << "Creating automatic column style: " << automaticColumnStyle /* << " key: " << styleKey */ << endl;
+        kdDebug(30518) << "Creating automatic column style: " << automaticColumnStyle /* << " key: " << styleKey */ << endl;
 
         m_contentAutomaticStyles += "  <style:style";
         m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticColumnStyle ) + "\"";
