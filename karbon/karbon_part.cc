@@ -46,6 +46,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
       m_unit( KoUnit::U_MM )
 {
+	setInstance( KarbonFactory::instance(), false );
 	m_commandHistory = new VCommandHistory( this );
 	m_bShowStatusBar = true;
 	m_maxRecentFiles = VGlobal::maxRecentFiles;

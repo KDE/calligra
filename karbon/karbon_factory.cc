@@ -47,17 +47,10 @@ KarbonFactory::KarbonFactory( QObject* parent, const char* name )
 
 KarbonFactory::~KarbonFactory()
 {
-	if ( s_instance )
-	{
-		delete s_instance;
-		s_instance = 0L;
-	}
-
-	if ( s_aboutData )
-	{
-		delete s_aboutData;
-		s_aboutData = 0L;
-	}
+	delete s_instance;
+	s_instance = 0L;
+	delete s_aboutData;
+	s_aboutData = 0L;
 }
 
 KParts::Part*
@@ -76,9 +69,6 @@ KarbonFactory::createPartObject( QWidget* parentWidget, const char* widgetName,
 
 	if ( !bWantKoDocument )
 	  part->setReadWrite( false );
-
-	// Tell the factory base class that we created the object (mandatory)
-	emit objectCreated( part );
 
 	return part;
 }
