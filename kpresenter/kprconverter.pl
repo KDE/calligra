@@ -9,7 +9,11 @@ $currentText="";
 $currentTextType=0;
 while (<INPUT>)
 {
-  if (/<TEXTOBJ/)
+  if (/<DOC/)
+    {
+      s/>$/syntaxVersion=\"2\">/;
+    }
+  elsif (/<TEXTOBJ/)
     {
       # Save object type of the TEXTOBJ tag
       $objType=$1 if (m/objType=(\"[0-9]+\")/);
