@@ -29,7 +29,7 @@
 #include <qpopupmenu.h>
 
 // class QPixmap;
-
+template<class type> class QValueVector;
 class QWidget;
 class KLineEdit;
 class QDomElement;
@@ -140,7 +140,8 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		virtual QWidget*	create(const QString &classname, QWidget *parent, const char *name,
 					 KFormDesigner::Container *container)=0;
 
-		virtual bool		createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container)=0;
+		virtual bool		createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu,
+		    KFormDesigner::Container *container, QValueVector<int> *menuIds)=0;
 
 		/*! Creates (if necessary) an editor to edit the contents of the widget directly in the Form
 		   (eg creates a line edit to change the text of a label). \a classname is the class the widget belongs to, \a w is the widget to edit

@@ -27,6 +27,7 @@
 #include <qstylefactory.h>
 #include <qmetaobject.h>
 #include <qregexp.h>
+#include <qvaluevector.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -82,6 +83,7 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 	m_domDoc.appendChild(m_domDoc.createElement("UI"));
 
 	m_popup = new KPopupMenu();
+	m_popup->insertTitle(QPixmap(), QString::null, MenuTitle);
 	m_popup->insertItem( SmallIconSet("editcopy"), i18n("&Copy"), this, SLOT(copyWidget()), 0, MenuCopy);
 	m_popup->insertItem( SmallIconSet("editcut"), i18n("Cu&t"), this, SLOT(cutWidget()), 0, MenuCut);
 	m_popup->insertItem( SmallIconSet("editpaste"), i18n("&Paste"), this, SLOT(pasteWidget()), MenuPaste);
@@ -755,39 +757,38 @@ FormManager::createSlotMenu(QWidget *w)
 }
 
 void
-FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemove)
+FormManager::createContextMenu(QWidget *w, Container *container/*, bool enableRemove*/)
 {
+	bool multiple = (container->form()->selectedWidgets()->count() > 1);
+	bool enableRemove = (w != m_active->objectTree()->widget());
+	// We only enablelayout creation if more than one widget with the same parent are selected
+	bool enableLayout = ((container->form()->selectedWidgets()->count() > 1) || (w == container->widget()));
+
 	m_menuWidget = w;
 	QString n = m_lib->displayName(w->className());
-	KPopupMenu *p = new KPopupMenu();
+	QValueVector<int> *menuIds = new QValueVector<int>();
 
-	int id;
-	bool ok = m_lib->createMenuActions(w->className(), w, p, container);
-	if(!ok) // the widget doesn't have menu items, so we disable it
+	if(!multiple)
 	{
-		id = m_popup->insertItem(SmallIconSet(m_lib->icon(w->className())), n);
-		m_popup->setItemEnabled(id, false);
+		if(w == container->form()->objectTree()->widget())
+			m_popup->changeTitle(MenuTitle, SmallIcon("form"), i18n("Form: ") + w->name() );
+		else
+			m_popup->changeTitle(MenuTitle, SmallIcon(m_lib->icon(w->className())), n + ": " + w->name() );
 	}
 	else
-		id = m_popup->insertItem(SmallIconSet(m_lib->icon(w->className())), n, p);
+		m_popup->changeTitle(MenuTitle, SmallIcon("multiple_obj"), i18n("Multiple Widgets"));
 
 	m_popup->setItemEnabled(MenuCopy, enableRemove);
 	m_popup->setItemEnabled(MenuCut, enableRemove);
 	m_popup->setItemEnabled(MenuDelete, enableRemove);
 	m_popup->setItemEnabled(MenuPaste, isPasteEnabled());
 
-	// We only enablelayout creation if more than one widget with the same parent are selected
-	bool enableLayout = false;
-	if((container->form()->selectedWidgets()->count() > 1) || (w == container->widget()))
-		enableLayout = true;
-
 	m_popup->setItemEnabled(MenuHBox, enableLayout);
 	m_popup->setItemEnabled(MenuVBox, enableLayout);
 	m_popup->setItemEnabled(MenuGrid, enableLayout);
 
 	// We create the buddy menu
-	int subid = 0;
-	if(w->inherits("QLabel") && ((QLabel*)w)->text().contains("&") && (((QLabel*)w)->textFormat() != RichText))
+	if(!multiple && w->inherits("QLabel") && ((QLabel*)w)->text().contains("&") && (((QLabel*)w)->textFormat() != RichText))
 	{
 		KPopupMenu *sub = new KPopupMenu(w);
 		QWidget *buddy = ((QLabel*)w)->buddy();
@@ -805,28 +806,43 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemo
 			if(item->widget() == buddy)
 				sub->setItemChecked(index, true);
 		}
-		subid = m_popup->insertItem(i18n("Choose Buddy..."), sub);
+
+		int id = m_popup->insertItem(i18n("Choose Buddy..."), sub);
+		menuIds->append(id);
 		connect(sub, SIGNAL(activated(int)), this, SLOT(buddyChoosed(int)));
 	}
 
-	// We create the signals menu
-	KPopupMenu *sigMenu = new KPopupMenu();
-	QStrList list = w->metaObject()->signalNames(true);
-	QStrListIterator it(list);
-	for(; it.current() != 0; ++it)
-		sigMenu->insertItem(*it);
-	int sigid = m_popup->insertItem(SmallIconSet(""), i18n("Events"), sigMenu);
-	if(list.isEmpty())
-		m_popup->setItemEnabled(sigid, false);
-	connect(sigMenu, SIGNAL(activated(int)), this, SLOT(menuSignalChoosed(int)));
+	//int sigid=0;
+	if(!multiple)
+	{
+		// We create the signals menu
+		KPopupMenu *sigMenu = new KPopupMenu();
+		QStrList list = w->metaObject()->signalNames(true);
+		QStrListIterator it(list);
+		for(; it.current() != 0; ++it)
+			sigMenu->insertItem(*it);
+
+		int id = m_popup->insertItem(SmallIconSet(""), i18n("Events"), sigMenu);
+		menuIds->append(id);
+		if(list.isEmpty())
+			m_popup->setItemEnabled(id, false);
+		connect(sigMenu, SIGNAL(activated(int)), this, SLOT(menuSignalChoosed(int)));
+	}
+
+	// Other items
+	if(!multiple)
+	{
+		menuIds->append( m_popup->insertSeparator() );
+		m_lib->createMenuActions(w->className(), w, m_popup, container, menuIds);
+	}
 
 	m_insertPoint = container->widget()->mapFromGlobal(QCursor::pos());
 	m_popup->exec(QCursor::pos());
 	m_insertPoint = QPoint();
 
-	m_popup->removeItem(id);
-	m_popup->removeItem(subid);
-	m_popup->removeItem(sigid);
+	QValueVector<int>::iterator it;
+	for(it = menuIds->begin(); it != menuIds->end(); ++it)
+		m_popup->removeItem(*it);
 }
 
 void

@@ -204,17 +204,13 @@ ObjectTreeView::slotColumnSizeChanged(int)
 void
 ObjectTreeView::displayContextMenu(KListView *list, QListViewItem *item, const QPoint &)
 {
-	if((list!= this) || !m_form)
+	if((list != this) || !m_form)
 		return;
 
 	QWidget *w = ((ObjectTreeViewItem*)item)->m_item->widget();
 	if(!w)  return;
 
-	bool enable = true;
-	if((w->isA("QWidget")) || (m_form->manager()->isTopLevel(w)))
-		enable = false;
-
-	m_form->manager()->createContextMenu(w, m_form->activeContainer(), enable);
+	m_form->manager()->createContextMenu(w, m_form->activeContainer());
 }
 
 ObjectTreeViewItem*

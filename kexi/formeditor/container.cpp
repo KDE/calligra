@@ -320,10 +320,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			if(mev->button() == RightButton) // Right-click -> context menu
 			{
-				bool enable = true;
-				if(((QWidget*)s)->isA("QWidget") || ((!m_toplevel) && (s == m_container)))
-					enable = false;
-				m_form->manager()->createContextMenu((QWidget*)s, this, enable);
+				m_form->manager()->createContextMenu((QWidget*)s, this);
 			}
 			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton) && (m_copyRect.isValid()))
 			{

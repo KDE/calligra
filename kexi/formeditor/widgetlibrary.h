@@ -25,6 +25,7 @@
 #include <qmap.h>
 
 template<class type> class QPtrList;
+template<class type> class QValueVector;
 class KActionCollection;
 class KAction;
 class QWidget;
@@ -97,7 +98,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		 */
 		QWidget	*createWidget(const QString &w, QWidget *parent, const char *name, Container *c);
 
-		bool	createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
+		bool	createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container, QValueVector<int> *menuIds);
 
 		QString  displayName(const QString &classname);
 		QString  namePrefix(const QString &classname);

@@ -125,7 +125,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		virtual void showPropertyBuffer(ObjectPropertyBuffer *buff);
 		/*! This function creates and displays the context menu corresponding to the widget \a w. The menu item are disabled if necessary, and
 		    the widget specific part is added (menu from the factory and buddy selection). */
-		void  createContextMenu(QWidget *w, Container *container, bool enableRemove);
+		void  createContextMenu(QWidget *w, Container *container/*, bool enableRemove*/);
 
 		void  emitCreateSlot(const QString &widget, const QString &value) { emit createFormSlot(m_active, widget, value); }
 
@@ -243,7 +243,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 	private:
 		// Enum for menu items indexes
-		enum { MenuCopy = 201, MenuCut, MenuPaste, MenuDelete, MenuHBox = 301, MenuVBox, MenuGrid, MenuNoBuddy = 501 };
+		enum { MenuTitle = 200, MenuCopy, MenuCut, MenuPaste, MenuDelete, MenuHBox = 301, MenuVBox, MenuGrid, MenuNoBuddy = 501 };
 
 		ObjectPropertyBuffer	*m_buffer;
 		WidgetLibrary		*m_lib;

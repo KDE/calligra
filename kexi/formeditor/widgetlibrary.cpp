@@ -144,13 +144,13 @@ WidgetLibrary::createWidget(const QString &w, QWidget *parent, const char *name,
 }
 
 bool
-WidgetLibrary::createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container)
+WidgetLibrary::createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container, QValueVector<int> *menuIds)
 {
 	Widget *wfactory = m_widgets[c];
 	if(!wfactory)
 		return false;
 
-	return wfactory->factory()->createMenuActions(c, w, menu, container);
+	return wfactory->factory()->createMenuActions(c, w, menu, container, menuIds);
 }
 
 void

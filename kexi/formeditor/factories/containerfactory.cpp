@@ -20,6 +20,7 @@
 #include <qevent.h>
 #include <qobjectlist.h>
 #include <qpainter.h>
+#include <qvaluevector.h>
 
 #include <kiconloader.h>
 #include <kgenericfactory.h>
@@ -99,7 +100,7 @@ HBox::paintEvent(QPaintEvent *)
 {
 	if(m_preview) return;
 	QPainter p(this);
-	p.setPen(QPen(red, 1));
+	p.setPen(QPen(red, 1, Qt::DashLine));
 	p.drawRect(0, 0, width()-1, height() - 1);
 }
 
@@ -112,7 +113,7 @@ VBox::paintEvent(QPaintEvent *)
 {
 	if(m_preview) return;
 	QPainter p(this);
-	p.setPen(QPen(blue, 1));
+	p.setPen(QPen(blue, 1, Qt::DashLine));
 	p.drawRect(0, 0, width()-1, height() - 1);
 }
 
@@ -125,7 +126,7 @@ Grid::paintEvent(QPaintEvent *)
 {
 	if(m_preview) return;
 	QPainter p(this);
-	p.setPen(QPen(green, 1));
+	p.setPen(QPen(darkGreen, 1, Qt::DashLine));
 	p.drawRect(0, 0, width()-1, height() - 1);
 }
 
@@ -239,7 +240,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	m_classes.append(wTabWidget);
 
 	KFormDesigner::Widget *wWidget = new KFormDesigner::Widget(this);
-	wWidget->setPixmap("widget");
+	wWidget->setPixmap("frame");
 	wWidget->setClassName("QWidget");
 	wWidget->setName(i18n("Basic container"));
 	wWidget->setNamePrefix(i18n("BasicContainer"));
@@ -418,16 +419,19 @@ ContainerFactory::previewWidget(const QString &classname, QWidget *widget, KForm
 }
 
 bool
-ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container)
+ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container, QValueVector<int> *menuIds)
 {
 	m_widget = w;
 	m_container = container;
 
 	if(classname == "KTabWidget")
 	{
-		menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(AddTabPage()) );
-		menu->insertItem(SmallIconSet("edit"), i18n("Rename Page"), this, SLOT(renameTabPage()));
-		int id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeTabPage()));
+		int id = menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(AddTabPage()) );
+		menuIds->append(id);
+		id = menu->insertItem(SmallIconSet("edit"), i18n("Rename Page"), this, SLOT(renameTabPage()));
+		menuIds->append(id);
+		id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeTabPage()));
+		menuIds->append(id);
 		if( ((KTabWidget*)w)->count() == 1)
 			menu->setItemEnabled(id, false);
 		return true;
@@ -436,9 +440,12 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 	{
 		m_widget = w->parentWidget()->parentWidget();
 		m_container = m_container->toplevel();
-		menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(AddTabPage()) );
-		menu->insertItem(SmallIconSet("edit"), i18n("Rename Page"), this, SLOT(renameTabPage()));
-		int id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeTabPage()));
+		int id = menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(AddTabPage()) );
+		menuIds->append(id);
+		id = menu->insertItem(SmallIconSet("edit"), i18n("Rename Page"), this, SLOT(renameTabPage()));
+		menuIds->append(id);
+		id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeTabPage()));
+		menuIds->append(id);
 		if( ((KTabWidget*)m_widget)->count() == 1)
 			menu->setItemEnabled(id, false);
 		return true;
@@ -448,17 +455,22 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 		m_widget = w->parentWidget();
 		QWidgetStack *stack = (QWidgetStack*)m_widget;
 		m_container = container->form()->objectTree()->lookup(m_widget->name())->parent()->container();
-		menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(AddStackPage()) );
 
-		int id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeStackPage()) );
+		int id = menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(AddStackPage()) );
+		menuIds->append(id);
+
+		id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeStackPage()) );
+		menuIds->append(id);
 		if( ((QWidgetStack*)m_widget)->children()->count() == 4) // == the stack has only one page
 			menu->setItemEnabled(id, false);
 
 		id = menu->insertItem(SmallIconSet("next"), i18n("Jump to Next Page"), this, SLOT(nextStackPage()));
+		menuIds->append(id);
 		if(!stack->widget(stack->id(stack->visibleWidget())+1))
 			menu->setItemEnabled(id, false);
 
 		id = menu->insertItem(SmallIconSet("previous"), i18n("Jump to Previous Page"), this, SLOT(prevStackPage()));
+		menuIds->append(id);
 		if(!stack->widget(stack->id(stack->visibleWidget()) -1) )
 			menu->setItemEnabled(id, false);
 		return true;

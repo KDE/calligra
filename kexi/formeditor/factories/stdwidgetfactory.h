@@ -64,7 +64,8 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 		virtual QString				name();
 		virtual KFormDesigner::WidgetList	classes();
 		virtual QWidget				*create(const QString &, QWidget *, const char *, KFormDesigner::Container *);
-		virtual bool				createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
+		virtual bool				createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu,
+		   KFormDesigner::Container *container, QValueVector<int> *menuIds);
 		virtual void		startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container);
 		virtual void		previewWidget(const QString &classname, QWidget *widget, KFormDesigner::Container *container);
 		virtual void		saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,

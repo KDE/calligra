@@ -19,6 +19,7 @@
 #include <qheader.h>
 #include <qdom.h>
 #include <qstyle.h>
+#include <qvaluevector.h>
 
 #include <klineedit.h>
 #include <kpushbutton.h>
@@ -373,19 +374,21 @@ StdWidgetFactory::previewWidget(const QString &classname, QWidget *widget, KForm
 }
 
 bool
-StdWidgetFactory::createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container)
+StdWidgetFactory::createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container, QValueVector<int> *menuIds)
 {
 	m_widget = w;
 	m_container = container;
 
 	if((classname == "QLabel") || (classname == "KTextEdit"))
 	{
-		menu->insertItem(SmallIconSet("edit"), i18n("Edit Rich Text"), this, SLOT(editText()));
+		int id = menu->insertItem(SmallIconSet("edit"), i18n("Edit Rich Text"), this, SLOT(editText()));
+		menuIds->append(id);
 		return true;
 	}
 	else if(classname == "KListView")
 	{
-		menu->insertItem(SmallIconSet("edit"), i18n("Edit Listview Contents"), this, SLOT(editListContents()));
+		int id = menu->insertItem(SmallIconSet("edit"), i18n("Edit Listview Contents"), this, SLOT(editListContents()));
+		menuIds->append(id);
 		return true;
 	}
 
