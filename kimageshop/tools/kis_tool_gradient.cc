@@ -21,12 +21,14 @@
 #include <qpainter.h>
 
 #include "kis_doc.h"
+#include "kis_view.h"
+#include "kis_color.h"
 #include "kis_canvas.h"
 #include "kis_gradient.h"
 #include "kis_tool_gradient.h"
 
-GradientTool::GradientTool( KisDoc* _doc, KisCanvas* _canvas, KisGradient* _gradient )
-  : KisTool( _doc )
+GradientTool::GradientTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas, KisGradient* _gradient )
+  : KisTool( _doc, _view )
   , m_dragging( false )
   , m_pCanvas( _canvas )
   , m_gradient( _gradient )
@@ -73,6 +75,7 @@ void GradientTool::mouseRelease( QMouseEvent* event )
   {
     drawLine( m_dragStart, m_dragEnd );
     m_dragging = false;
+    drawGradient( m_dragStart, m_dragEnd );
   }
 }
 
@@ -84,4 +87,76 @@ void GradientTool::drawLine( const QPoint& start, const QPoint& end )
   p.setRasterOp( Qt::NotROP );
   p.drawLine( start, end );
   p.end();
+}
+
+void GradientTool::drawGradient( const QPoint& start, const QPoint& end )
+{
+  int x1, x2, y1, y2;
+
+  x1 = start.x();
+  y1 = start.y();
+  x2 = end.x();
+  y2 = end.y();
+
+  if( x1 > x2 ) swap( x1, x2 );
+  if( y1 > y2 ) swap( y1, y2 );
+
+  // draw gradient
+
+  int length = y2 - y1;
+  // int length = sqrt( sqr(x1 - x2) + sqr(y1 - y2) );
+
+  KisColor startColor = m_pView->fgColor();
+  KisColor endColor = m_pView->bgColor();
+
+  if( ( startColor.native() == RGB ) &&
+      ( endColor.native() == RGB ) )
+  {
+    // draw RGB gradient
+
+    uint color;
+    uint mask = m_pDoc->getCurrentLayer()->getPixel( x1, y1 );
+
+    mask = color & 0xFF000000;
+
+    int rDiff = ( endColor.R() - startColor.R() );
+    int gDiff = ( endColor.G() - startColor.G() );
+    int bDiff = ( endColor.B() - startColor.B() );
+  
+    if( rDiff > 0 ) debug( "rDiff ist positiv" );
+    if( gDiff > 0 ) debug( "gDiff ist positiv" );
+    if( bDiff > 0 ) debug( "bDiff ist positiv" );
+  
+    register int rl = rDiff << 16;
+    register int gl = gDiff << 16;
+    register int bl = bDiff << 16;
+   
+    int rcDelta = ( 1<<16 ) / length * rDiff;
+    int gcDelta = ( 1<<16 ) / length * gDiff;
+    int bcDelta = ( 1<<16 ) / length * bDiff;
+    
+    // draw rect
+    for( int y = y1 ; y < y2 ; y++ )
+    {
+      // calc color
+
+      rl += rcDelta;
+      gl += gcDelta;
+      bl += bcDelta;
+
+      color = mask | ( ( rl>>16 ) * 0x010000 ) |
+                     ( ( gl>>16 ) * 0x000100 ) |
+                     ( bl>>16 );
+
+      // draw line of color
+      
+      for( int x = x1 ; x < x2 ; x++ )
+      {
+        m_pDoc->getCurrentLayer()->setPixel( x, y, color );
+      }
+    }
+    
+    QRect updateRect( x1, y1, x2, y2 );
+    m_pDoc->compositeImage(updateRect);
+  }
 }

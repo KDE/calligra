@@ -26,6 +26,7 @@
 #include "kis_tool.h"
 
 class KisDoc;
+class KisView;
 class KisCanvas;
 class KisGradient;
 
@@ -33,7 +34,7 @@ class GradientTool : public KisTool
 {
 public:
 
-  GradientTool( KisDoc* _doc, KisCanvas* _canvas, KisGradient* _gradient );
+  GradientTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas, KisGradient* _gradient );
   ~GradientTool();
 
   virtual QString toolName() { return QString( "GradientTool" ); }
@@ -45,6 +46,7 @@ public:
 protected:
 
   void drawLine( const QPoint&, const QPoint& );
+  void drawGradient( const QPoint&, const QPoint& );
 
 protected:
 

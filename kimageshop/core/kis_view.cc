@@ -210,7 +210,7 @@ void KisView::setupTools()
   m_pZoomTool = new ZoomTool(this);
  
   // gradient tool
-  m_pGradientTool = new GradientTool( m_pDoc, m_pCanvas, m_pGradient );
+  m_pGradientTool = new GradientTool( m_pDoc, this, m_pCanvas, m_pGradient );
  
   m_tool_brush->setChecked( true );
   activateTool(m_pBrushTool);
