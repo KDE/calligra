@@ -572,6 +572,23 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles 
     d->spellListIgnoreAll.clear();
 
     d->refs.clear();
+    
+    QDomElement content = doc.documentElement();
+    QDomElement body ( content.namedItem( "office:body" ).toElement() );
+    if ( body.isNull() )
+    {
+        setErrorMessage( i18n( "Invalid document. No office:body." ));
+        return false;
+    }
+
+    // TODO check versions and mimetypes etc.
+    
+    // all <table:table> goes to workbook
+    if ( !d->workbook->loadOasis( body ) )
+    {
+      d->isLoading = false;
+      return false;
+    }
 
     emit sigProgress( 90 );
     initConfig();
