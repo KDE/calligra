@@ -704,14 +704,11 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     }
 
     stylesWriter.endElement(); // office:automatic-styles
-    kdDebug()<<" save :::::::::::::::::::::\n";
     //code from kword
     stylesWriter.startElement( "office:master-styles" );
     KSPRSavingInfo::StylePageMap map = d->m_savingInfo->stylePageMap();
     KSPRSavingInfo::StylePageMap::const_iterator it2 = d->m_savingInfo->stylePageMap().begin();
     for ( ; it2 != map.end(); ++it2 ) {
-        kdDebug()<<" save page layout !!!!!!!!!!!!!!!!!!!!\n";
-        kdDebug()<<" it2.key() :"<<it2.key()<<" it2.data() :"<<it2.data()<<endl;
         stylesWriter.startElement( "style:master-page" );
         stylesWriter.addAttribute( "style:name", it2.data() );
         stylesWriter.addAttribute( "style:page-layout-name", it2.key() );

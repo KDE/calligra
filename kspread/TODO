@@ -368,6 +368,9 @@ Todo:
 -> save/load conditional cell attribute
 -> save/load font format
 -> save/load formula
+-> save/load header/footer
+-> save/load print range
+-> save/load options
 
 Done:
 -----
