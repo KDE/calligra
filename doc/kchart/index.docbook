@@ -507,10 +507,232 @@ page you want get more information on.
 <chapter id="kchartstandalone">
 <title>&kchart; as a standalone Application</title>
 <para>
-In this chapter we will take a look at &kchart; as a standalone
-application.
+The previous chapter described the user interface,
+various configuration options, data editing and the wizard
+in detail.
 </para>
-
+<para>
+This chapter gives real-life examples on how to use
+&kchart; in various situations as a standalone application.
+The purpose is to give you some understanding of the
+way &kchart; works and how various parts relate to each other.
+</para>
+<sect1 id="kchartexample-profit">
+<title>Presenting Sales Figures</title>
+<sect2>
+<title>Warming up</title>
+<para>
+This first example which might often be encountered in real
+life is presenting sales figures, or in this particular case
+profit.
+</para>
+<para>
+Imagine you own a company that has three main categories of
+business: sales, support and training. And you would like
+to present the profit of these categories over some years. Making
+a graphical statistics is certainly a good idea. &kchart; can
+help you here.
+</para>
+</sect2>
+<sect2>
+<title>Getting started</title>
+<para>
+Run &kchart; and select the blank template.
+</para>
+<screenshot>
+<screeninfo>Starting with a blank chart</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-1.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+Hit the OK button to get started. &kchart; will present to you
+a completely empty document. That's good, we just need to enter
+some data and do some basic configuration to get a nice chart.
+</para>
+<screenshot>
+<screeninfo>A blank chart</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-2.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</sect2>
+<sect2>
+<title>Getting the numbers in</title>
+<para>
+The first step, and probably the most important, is to get the
+actual data into the chart. This can easily be done with the
+&dataeditor;. As usual you can get to the data editor by
+clicking on the <inlinemediaobject><imageobject>
+<imagedata fileref="cr22-action-data.png" format="PNG"/>
+</imageobject></inlinemediaobject> icon in the toolbar.
+</para>
+<para>
+You will notice that no data is present. Also note that
+the number of data rows and columns is set to a minimum,
+which is 1.
+</para>
+<para>
+Now, just enter the data you see in the next screenshot.
+Note that you can increase the number of rows and columns
+with the spin boxes in the lower left corner. The names
+of the rows and columns themselves can be changed by
+clicking on them.
+</para>
+<screenshot>
+<screeninfo>The Data</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-3.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+Simply click the OK button when you are done. This will present
+to you a simple bar chart.
+</para>
+<screenshot>
+<screeninfo>Simple chart without fine tuning</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-4.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</sect2>
+<para>
+Read on to do some fine tuning!
+</para>
+<sect2>
+<title>Fine Tuning</title>
+<para>
+We will now do some fine tuning and put a title on the chart.
+And, we will add a nice 3D effect to the bars as well.
+</para>
+<para>
+Start up the configuration dialog by clicking on the
+<inlinemediaobject><imageobject>
+<imagedata fileref="cr22-action-options.png" format="PNG"/>
+</imageobject></inlinemediaobject> icon in the toolbar.
+</para>
+<sect3>
+<title>Title</title>
+<screenshot>
+<screeninfo>Options - Title</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-5.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+Let's start with labeling. Go to the <guimenu>Header/Footer</guimenu>
+page and enter the text like in the above screenshot.
+</para>
+</sect3>
+<sect3>
+<title>X-Axis Font Settings</title>
+<para>
+The next step is to make the font of the x axis a bit bigger. You
+can do this on the <guimenu>Font</guimenu> page.
+</para>
+<screenshot>
+<screeninfo>Options - Fonts</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-6.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+Choose the <guimenu>X-Axis</guimenu> item and click on the
+<guimenu>Font...</guimenu> button. Choose a somewhat
+larger font like in the following screenshot.
+</para>
+<screenshot>
+<screeninfo>Options - X-Axis Font</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-7.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+Note that the font is set to <guimenu>Relative</guimenu>.
+This means that the font is automatically scaled according
+to the overall chart size. This is quite usefull and most
+of the time what the average user expects.
+</para>
+</sect3>
+<sect3>
+<title>Giving it a 3D Look</title>
+<para>
+The final configuration page is <guimenu>3D Parameters</guimenu>.
+You might need to click on the right arrow at the top to get
+to it if the width of the dialog too small.
+</para>
+<screenshot>
+<screeninfo>Options - 3D Parameters</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-8.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+To get a 3D effect for the chart, simply activate
+<guimenu>3D bar</guimenu>.
+</para>
+<para>
+That's all what we need for a reasonable looking chart. Note
+that much of this configuration could also have been achieved
+with the wizard. It's basically a matter of taste what you
+use. Experienced users will likely use the full option dialog
+we used in this example.
+</para>
+<para>
+Simply accept the options by clicking on the <guimenu>OK</guimenu>
+button.
+</para>
+</sect3>
+</sect2>
+<sect2>
+<title>Final output</title>
+<para>
+The final chart will look like the next screenshot.
+</para>
+<screenshot>
+<screeninfo>Final Chart</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-9.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+You might want to enlarge the application window to see the chart
+in full size. Note how the fonts get larger in relation to the
+chart size.
+</para>
+<para>
+There are certainly aspects to improve further for your personal
+taste. For example try to make the title font even bigger.
+Just experiment further, this way you will get to know a lot
+of the &kchart; application.
+</para>
+<para>
+Finally you can save the application from the <guimenu>File</guimenu>
+menu and quit with
+<menuchoice><guimenu>File</guimenu>
+<guimenuitem>Quit...</guimenuitem>
+</menuchoice>
+</para>
+</sect2>
+</sect1>
 </chapter>
 
 
