@@ -37,6 +37,7 @@
 #include "kotextdocument.h"
 #include <knumvalidator.h>
 #include <kozoomhandler.h>
+#include <koGlobal.h>
 
 KoSpinBox::KoSpinBox( QWidget * parent, const char * name )
     : QSpinBox(parent,name)
@@ -316,7 +317,7 @@ KoNumPreview::KoNumPreview( QWidget* parent, const char* name )
     setMinimumHeight(80);
     m_zoomHandler = new KoZoomHandler;
     //FIXME QFONT()
-    m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( QFont() ));
+    m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( KoGlobal::defaultFont() ));
     KoTextParag * parag = static_cast<KoTextParag *>(m_textdoc->firstParag());
     parag->insert( 0, i18n("Normal paragraph text") );
 }

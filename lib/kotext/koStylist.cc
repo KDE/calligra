@@ -34,6 +34,7 @@
 #include <kdebug.h>
 #include "kotextparag.h"
 #include "kozoomhandler.h"
+#include <koGlobal.h>
 /******************************************************************/
 /* Class: KoStyleManager                                          */
 /******************************************************************/
@@ -475,7 +476,7 @@ KoStylePreview::KoStylePreview( const QString &title, QWidget *parent )
 {
     m_zoomHandler = new KoZoomHandler;
     //m_textdoc = new KoTextDocument( m_zoomHandler );
-    m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( QFont() ));
+    m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( KoGlobal::defaultFont() ));
     KoTextParag * parag = static_cast<KoTextParag *>(m_textdoc->firstParag());
     parag->insert( 0, i18n( "KWord, KOffice's Word Processor" ) );
 }

@@ -22,6 +22,7 @@
 
 #include <qstringlist.h>
 #include <koUnit.h>
+class QFont;
 // paper formats ( mm ) - public for compat reasons, but DO NOT USE in new programs !
 // See KoPageFormat's methods instead.
 #define PG_A3_WIDTH		297.0
@@ -249,6 +250,11 @@ struct KoKWHeaderFooter
 };
 
 
-
+class KoGlobal
+{
+ public:
+    KoGlobal(){};
+    static QFont defaultFont();
+};
 
 #endif // koGlobal
