@@ -212,6 +212,17 @@ KoRect KWTableFrameSet::boundingRect()
 {
     KWFrame *first = getCell( 0, 0 )->getFrame( 0 );
     ASSERT(first);
+    ASSERT(getCell( m_rows - 1, m_cols - 1 ));
+    //laurent
+    //when you insert a column or row
+    //we test last cell but you resize anchor
+    //each time that you add a cell you execute this function
+    //but cell(m_rows - 1, m_cols - 1) doesn't exist
+    //the first time.
+    //So return koRect() to fix crash
+    if(!getCell( m_rows - 1, m_cols - 1 ))
+        return KoRect();
+
     KWFrame *last = getCell( m_rows - 1, m_cols - 1 )->getFrame( 0 );
     ASSERT(last);
     if (!first || !last)
