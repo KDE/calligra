@@ -28,6 +28,8 @@ VTool::eventFilter( QEvent* event )
 		QPoint canvasCoordinate = view()->canvasWidget()->viewportToContents(
 			mouseEvent->pos() );
 
+		m_firstPointRaw.setX( mouseEvent->pos().x() );
+		m_firstPointRaw.setY( mouseEvent->pos().y() );
 		m_firstPoint.setX( canvasCoordinate.x() * view()->zoom() );
 		m_firstPoint.setY( canvasCoordinate.y() * view()->zoom() );
 
@@ -43,12 +45,14 @@ VTool::eventFilter( QEvent* event )
 		QPoint canvasCoordinate = view()->canvasWidget()->viewportToContents(
 			mouseEvent->pos() );
 
+		m_lastPointRaw.setX( mouseEvent->pos().x() );
+		m_lastPointRaw.setY( mouseEvent->pos().y() );
 		m_lastPoint.setX( canvasCoordinate.x() * view()->zoom() );
 		m_lastPoint.setY( canvasCoordinate.y() * view()->zoom() );
 
 		if( m_mouseButtonIsDown )
 		{
-			mouseDrag( m_lastPoint );
+			mouseDrag( KoPoint( mouseEvent->pos() ) );
 
 			m_isDragging = true;
 		}
@@ -63,6 +67,8 @@ VTool::eventFilter( QEvent* event )
 		QPoint canvasCoordinate = view()->canvasWidget()->viewportToContents(
 			mouseEvent->pos() );
 
+		m_lastPointRaw.setX( mouseEvent->pos().x() );
+		m_lastPointRaw.setY( mouseEvent->pos().y() );
 		m_lastPoint.setX( canvasCoordinate.x() * view()->zoom() );
 		m_lastPoint.setY( canvasCoordinate.y() * view()->zoom() );
 

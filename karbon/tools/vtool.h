@@ -65,8 +65,8 @@ protected:
 	/**
 	 * Most tools need to know the first mouse coordinate.
 	 */
-	const KoPoint& first() const { return m_firstPoint; }
-	const KoPoint& last() const { return m_lastPoint; }
+	const KoPoint& first( bool raw = false ) const { return raw ? m_firstPointRaw : m_firstPoint; }
+	const KoPoint& last( bool raw = false ) const { return raw ? m_lastPointRaw : m_lastPoint; }
 
 private:
 	/**
@@ -78,11 +78,13 @@ private:
 	 * First input mouse coordinate.
 	 */
 	KoPoint m_firstPoint;
+	KoPoint m_firstPointRaw;
 
 	/**
 	 * Last input mouse coordinate.
 	 */
 	KoPoint m_lastPoint;
+	KoPoint m_lastPointRaw;
 
 	/**
 	 * A tool state.

@@ -74,11 +74,11 @@ VSelectTool::draw()
 	{
 		painter->setPen( Qt::DotLine );
 		painter->newPath();
-		painter->moveTo( KoPoint( first().x(), first().y() ) );
-		painter->lineTo( KoPoint( m_current.x(), first().y() ) );
+		painter->moveTo( KoPoint( first( true ).x(), first( true ).y() ) );
+		painter->lineTo( KoPoint( m_current.x(), first( true ).y() ) );
 		painter->lineTo( KoPoint( m_current.x(), m_current.y() ) );
-		painter->lineTo( KoPoint( first().x(), m_current.y() ) );
-		painter->lineTo( KoPoint( first().x(), first().y() ) );
+		painter->lineTo( KoPoint( first( true ).x(), m_current.y() ) );
+		painter->lineTo( KoPoint( first( true ).x(), first( true ).y() ) );
 		painter->strokePath();
 
 		m_state = normal;
@@ -224,7 +224,7 @@ VSelectTool::setCursor( const KoPoint& current ) const
 void
 VSelectTool::mouseButtonPress( const KoPoint& current )
 {
-	m_current = current;
+	m_current = first( true );
 /*
 	m_fp.setX( mouse_event->pos().x() );
 	m_fp.setY( mouse_event->pos().y() );
@@ -364,7 +364,7 @@ VSelectTool::recalc()
 {
 	if( m_state == normal )
 	{
-		m_current = last();
+		m_current = last( true );
 	}
 	else
 	{
