@@ -2519,7 +2519,7 @@ KCommand * KPrPage::replaceObjs( bool createUndoRedo, unsigned int _orastX,unsig
 }
 
 
-QString KPrPage::getManualTitle()
+QString KPrPage::getManualTitle()const
 {
     return manualTitle;
 }

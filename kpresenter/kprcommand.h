@@ -726,5 +726,22 @@ protected:
     int newStartingPage;
 };
 
+/**
+ * Command to change title page name
+ */
+class KPrChangeTitlePageNameCommand : public KCommand
+{
+public:
+    KPrChangeTitlePageNameCommand( const QString &name, KPresenterDoc *_doc, const QString &_oldPageName, const QString &_newPageName, KPrPage *_page);
+    ~KPrChangeTitlePageNameCommand(){}
+
+    void execute();
+    void unexecute();
+protected:
+    KPresenterDoc *m_doc;
+    QString oldPageName;
+    QString newPageName;
+    KPrPage *m_page;
+};
 
 #endif

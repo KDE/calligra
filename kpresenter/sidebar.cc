@@ -35,6 +35,7 @@
 #include "kpresenter_view.h"
 #include "kprcanvas.h"
 #include <qapplication.h>
+#include "kprcommand.h"
 
 class OutlineItem: public QCheckListItem
 {
@@ -318,10 +319,10 @@ void Outline::renamePageTitle()
             renamePageTitle();
         }
         else if ( newTitle != activeTitle ) { // Title changed.
-            //(*doc->manualTitleList.at(pageNumber)) = newTitle;
-            doc->pageList().at(pageNumber)->insertManualTitle(newTitle);
-            updateItem(pageNumber);
-            view->kPresenterDoc()->setModified( true );
+            KPresenterDoc *doc=view->kPresenterDoc();
+            KPrChangeTitlePageNameCommand *cmd=new KPrChangeTitlePageNameCommand( i18n("Rename Tile Page"),doc, activeTitle, newTitle,doc->pageList().at(pageNumber)  );
+            cmd->execute();
+            doc->addCommand(cmd);
         }
     }
 }

@@ -303,6 +303,8 @@ public:
 
     void AddRemovePage();
 
+    void updateSideBarItem(int pgNum);
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );

@@ -1795,9 +1795,6 @@ KPrMovePageCmd::KPrMovePageCmd( const QString &_name,int _oldpos,int _newpos, KP
     oldPosition(_oldpos),
     newPosition(_newpos)
 {
-    kdDebug()<<"page :"<<m_page<<endl;
-    kdDebug()<<"newPosition :"<<newPosition<<endl;
-    kdDebug()<<"oldPosition:"<<oldPosition<<endl;
 }
 
 KPrMovePageCmd::~KPrMovePageCmd()
@@ -1819,4 +1816,28 @@ void KPrMovePageCmd::unexecute()
     doc->takePage(m_page);
     doc->insertPage(m_page,oldPosition);
     doc->AddRemovePage();
+}
+
+
+KPrChangeTitlePageNameCommand::KPrChangeTitlePageNameCommand( const QString &_name,KPresenterDoc *_doc, const QString &_oldPageName, const QString &_newPageName, KPrPage *_page ) :
+    KCommand(_name),
+    m_doc(_doc),
+    oldPageName(_oldPageName),
+    newPageName(_newPageName),
+    m_page(_page)
+{
+}
+
+void KPrChangeTitlePageNameCommand::execute()
+{
+    m_page->insertManualTitle(newPageName);
+    int pos=m_doc->pageList().findRef(m_page);
+    m_doc->updateSideBarItem(pos);
+}
+
+void KPrChangeTitlePageNameCommand::unexecute()
+{
+    m_page->insertManualTitle(oldPageName);
+    int pos=m_doc->pageList().findRef(m_page);
+    m_doc->updateSideBarItem(pos);
 }

@@ -1868,13 +1868,19 @@ void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
     m_selectedSlides[ pgNum ] = select;
     kdDebug(33001) << "KPresenterDoc::selectPage pgNum=" << pgNum << " select=" << select << endl;
     setModified(true);
+
+    updateSideBarItem(pgNum);
+
+    //update statusbar
+    emit pageNumChanged();
+}
+
+void KPresenterDoc::updateSideBarItem(int pgNum)
+{
     // Update the views
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         static_cast<KPresenterView*>(it.current())->updateSideBarItem( pgNum );
-
-    //update statusbar
-    emit pageNumChanged();
 }
 
 bool KPresenterDoc::isSlideSelected( int pgNum /* 0-based */ ) const

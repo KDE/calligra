@@ -46,7 +46,7 @@ public:
 
     void updateBackgroundSize();
 
-    QString getManualTitle();
+    QString getManualTitle()const;
     void insertManualTitle(const QString & title);
     QString pageTitle( const QString &_title ) const;
 
