@@ -272,7 +272,7 @@ void KoTabBarPrivate::drawTab( QPainter& painter, QRect& rect, const QString& te
     painter.setFont( f );
     QFontMetrics fm = painter.fontMetrics();
     int tx =  rect.x() + ( rect.width() - fm.width( text ) ) / 2;
-    int ty =  rect.y() + ( rect.height() - fm.ascent() - fm.descent() ) / 2 + fm.ascent();
+    int ty =  rect.y() + ( rect.height() - fm.height() ) / 2 + fm.ascent();
     painter.drawText( tx, ty, text );
     painter.restore();
 }
