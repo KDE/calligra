@@ -11,13 +11,9 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>186</width>
+            <width>182</width>
             <height>215</height>
         </rect>
-    </property>
-    <property stdset="1">
-        <name>caption</name>
-        <string>Export Page</string>
     </property>
     <property stdset="1">
         <name>baseSize</name>
@@ -25,6 +21,10 @@
             <width>0</width>
             <height>0</height>
         </size>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Export Page</string>
     </property>
     <widget>
         <class>QLabel</class>
@@ -105,12 +105,12 @@
                 <string>&amp;All Stencils</string>
             </property>
             <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>1</number>
-            </property>
-            <property stdset="1">
                 <name>checked</name>
                 <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>buttonGroupId</name>
+                <number>1</number>
             </property>
             <property>
                 <name>toolTip</name>
@@ -158,6 +158,10 @@ Export only the selected stencils to file.</string>
                 <cstring>m_checkCrop</cstring>
             </property>
             <property stdset="1">
+                <name>enabled</name>
+                <bool>false</bool>
+            </property>
+            <property stdset="1">
                 <name>geometry</name>
                 <rect>
                     <x>10</x>
@@ -169,10 +173,6 @@ Export only the selected stencils to file.</string>
             <property stdset="1">
                 <name>text</name>
                 <string>Crop picture to edges</string>
-            </property>
-            <property stdset="1">
-                <name>enabled</name>
-                <bool>false</bool>
             </property>
             <property>
                 <name>toolTip</name>
@@ -256,7 +256,7 @@ Places a blank border around the edges of the image.  This can be used if for on
         <property stdset="1">
             <name>geometry</name>
             <rect>
-                <x>10</x>
+                <x>100</x>
                 <y>180</y>
                 <width>80</width>
                 <height>28</height>
@@ -281,7 +281,7 @@ Abort the page export.</string>
         <property stdset="1">
             <name>geometry</name>
             <rect>
-                <x>100</x>
+                <x>10</x>
                 <y>180</y>
                 <width>80</width>
                 <height>28</height>

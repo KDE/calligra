@@ -38,7 +38,7 @@
 
 #include <qstrlist.h>
 #include <qimage.h>
-#include <qfiledialog.h>
+#include <kfiledialog.h>
 
 #include <kdialogbase.h>
 #include <kaction.h>
@@ -1394,9 +1394,9 @@ void KivioView::exportPage()
 
    extList = extList + ")";
 
-   QFileDialog fd( this, "Export To File", true );
+   //KFileDialog fd( this, "Export To File", true );
 
-   QString fileName = QFileDialog::getSaveFileName( "", extList );
+   QString fileName = KFileDialog::getSaveFileName( "", extList );
    if( fileName.isNull()==true )
    {
       return;
