@@ -206,7 +206,9 @@ void KWGroupManager::init()
 void KWGroupManager::recalcCols()
 {
     unsigned int row=0,col=0;
-    /*if(! cells.isEmpty() && isOneSelected(row,col))*/ {
+    if(! cells.isEmpty() ) {
+        //get selected cell
+        isOneSelected(row,col);
         // ** check/set sizes of frames **
         // we assume only left or only right pos has changed.
         // check if leftCoordinate is same as rest of tableRow
