@@ -47,6 +47,7 @@ class Layer : public QObject {
 	void    setName(QString name) { nameVal=name; };
 	void    findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const;
 	void    findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const;
+	QRect   tileRect(int tileNo);
 	uchar   *channelMem(int channel, int tileNo, int ox, int oy) const;
 	void    moveBy(int dx, int dy);
 	void    moveTo(int x, int y) const;
@@ -57,7 +58,7 @@ class Layer : public QObject {
 	void    setLinked(bool l) { linked=l; }
 
 	QRect   imageExtents() const;  // Extents of the image in canvas coords
-	QRect   tileExtents() const;   // Extents of the layers tiles in channel coords
+	QRect   tileExtents() const;   // Extents of the layers tiles in canv coords
 	QPoint  channelOffset() const; // TopLeft of the image in the channel
 	int     xTiles() const;
 	int     yTiles() const;
@@ -65,7 +66,7 @@ class Layer : public QObject {
 	int     channelLastTileOffsetY() const;
 	bool    boundryTileX(int tile) const;
 	bool    boundryTileY(int tile) const;
-	void    resizeToIncludePoint(QPoint p);
+	void    allocateRect(QRect _r);
 	void    setPixel(int x, int y, uchar val);
 
  signals:
@@ -81,8 +82,3 @@ class Layer : public QObject {
 };
 
 #endif
-
-
-
-
-

@@ -31,7 +31,7 @@ Layer::Layer(int ch, bool hasAlpha)
   alphaChannel=hasAlpha;
 
      for(int c=(alphaChannel ? 0 : 1); c<=channels; c++) {
-		channelPtrs[c]=new Channel(0,0);
+			 channelPtrs[c]=new Channel;
      }
 }
 
@@ -106,6 +106,11 @@ void Layer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const
 	*x=pt.x()%TILE_SIZE;
 }
 
+QRect Layer::tileRect(int tileNo)
+{
+	return(channelPtrs[1]->tileRect(tileNo));
+}
+
 uchar* Layer::channelMem(int channel, int tileNo, int ox, int oy) const
 {
 	return channelPtrs[channel]->tileBlock()[tileNo]+oy*TILE_SIZE+ox;
@@ -172,10 +177,10 @@ bool Layer::boundryTileY(int tile) const
 }
 
 void
-Layer::resizeToIncludePoint(QPoint p)
+Layer::allocateRect(QRect _r)
 {
 	for(int c=(alphaChannel ? 0 : 1); c<=channels; c++)
-		channelPtrs[c]->resizeChannel(p);
+		channelPtrs[c]->allocateRect(_r);
 }
 
 void

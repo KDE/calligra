@@ -32,7 +32,8 @@ Brush::Brush(QString file) : Layer(3, true), IconItem()
   validVal=true;
   loadBrush(file);
   spacingVal=5;
-  hotSpotVal=QPoint(0,0);
+	// default hotSpot in the centre
+  hotSpotVal=QPoint(imageExtents().width()/2, imageExtents().height()/2);
 }
 
 void Brush::loadBrush(QString file)

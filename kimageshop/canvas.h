@@ -77,7 +77,7 @@ public:
   { return layers.find( currentLayer ); }
 
   /**
-   *  Defines the current layedr.
+   *  Defines the current layer.
    */
   void setCurrentLayer( int _layer );
 
@@ -96,11 +96,11 @@ public:
   Layer* layerPtr( Layer *_layer );
   void setLayerOpacity( uchar _opacity, Layer *_layer = 0 );
 
-  void renderLayerIntoTile( QRect tileBoundary, const Layer *srcLay, Layer *dstLay, int dstTile );
+  void renderLayerIntoTile( QRect tileBoundary, const Layer *srcLay, 
+														Layer *dstLay, int dstTile );
   void moveLayer( int dx, int dy, Layer *lay = 0 );
   void moveLayerTo( int x, int y, Layer *lay = 0 );
-  void renderTileQuadrant( const Layer *srcLay, int srcTile, Layer *dstLay, int dstTile,
-  int srcX, int srcY, int dstX, int dstY, int w, int h );
+  void renderTileQuadrant( const Layer *srcLay, int srcTile, Layer *dstLay, int dstTile, int srcX, int srcY, int dstX, int dstY, int w, int h );
   void paintBrush( QPoint pt, const Brush *brush );
   LayerList layerList() { return layers; };
 

@@ -44,15 +44,15 @@ class Channel
 {
 
 public:
-	Channel(int w=0, int h=0);
+	Channel();
 
 	void loadViaQImage(QImage img, int channel);
-	void resizeChannel(QPoint newPoint, bool init=false);
+	void allocateRect(QRect newRect);
 	void moveBy(int dx, int dy);
 	void moveTo(int x, int y);
 	void setPixel(int x, int y, uchar val);
 	uchar getPixel(int x, int y);
-
+	QRect tileRect(int tileNo);
 
 	// Accessor methods
 	int     xTiles()       { return xTilesNo;  };
@@ -64,14 +64,13 @@ public:
 	int     height()       { return imageRect.height(); };
 	int lastTileOffsetX()  { return lastTileXOffset;    };
 	int lastTileOffsetY()  { return lastTileYOffset;    };
-	QPoint  offset()       { return offsetPoint; };
+	QPoint  offset()       { return imageRect.topLeft()-tilesRect.topLeft(); };
 
 	// Debugging
 	void dumpTileBlock();
 
  private:
 	QRect   imageRect, tilesRect;
-	QPoint  offsetPoint;
 	int     xTilesNo, yTilesNo, lastTileXOffset, lastTileYOffset;
 	uchar** tileInfo;
 };

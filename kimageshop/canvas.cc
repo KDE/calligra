@@ -69,7 +69,7 @@ Canvas::Canvas(int width, int height)
   currentLayer=0;
 
   compose=new Layer(channels, false);
-  compose->resizeToIncludePoint(QPoint(TILE_SIZE-1,TILE_SIZE-1));
+	compose->allocateRect(QRect(0,0, TILE_SIZE,TILE_SIZE));
   compose->setPixel(1,1, 0);
 
   // make this like the compose layer
@@ -77,7 +77,7 @@ Canvas::Canvas(int width, int height)
     background[c]=new uchar[TILE_SIZE*TILE_SIZE];
     for(int y=0;y<TILE_SIZE;y++)
       for(int x=0;x<TILE_SIZE;x++)
-	*(background[c]+y*TILE_SIZE+x)=128+63*((x/16+y/16)%2);
+				*(background[c]+y*TILE_SIZE+x)=128+63*((x/16+y/16)%2);
   }
 }
 
@@ -273,7 +273,7 @@ void Canvas::compositeTile(int x, int y, Layer *dstLay, int dstTile)
   // Set the background
   for(int c=1; c<=channels; c++)
     memcpy(dstLay->channelMem(c,dstTile,0,0), background[c],
-	   TILE_SIZE*TILE_SIZE);
+					 TILE_SIZE*TILE_SIZE);
 
   // Find the tiles boundary in Canvas coordinates
   QRect tileBoundary(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE);
@@ -284,7 +284,7 @@ void Canvas::compositeTile(int x, int y, Layer *dstLay, int dstTile)
     l++;
     //printf("layer: %s opacity=%d\n",lay->name().data(), lay->opacity());
     if ((lay->isVisible()) &&
-	(tileBoundary.intersects(lay->imageExtents()))) {
+				(tileBoundary.intersects(lay->imageExtents()))) {
       // The layer is part of the tile. Find out the 1-4 tiles of the channel
       // which are in it and render the appropriate proportions of each
       //TIME_START;
@@ -302,27 +302,28 @@ void Canvas::compositeImage(QRect r)
   for(int y=0;y<yTiles;y++)
     for(int x=0;x<xTiles;x++)
       if (r.isNull() ||
-	  r.intersects(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE))) {
-	compositeTile(x,y, compose, 0);
-	
-	convertTileToPixmap(compose, 0, tiles[y*xTiles+x]);
+					r.intersects(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE))) {
+				compositeTile(x,y, compose, 0);
+				
+				convertTileToPixmap(compose, 0, tiles[y*xTiles+x]);
       }
   TIME_END("compositeImage");
 }
 
-void Canvas::renderLayerIntoTile(QRect tileBoundary, const Layer *srcLay, Layer *dstLay,
-				 int dstTile)
-{
-  // calculate the position in the layer of the topLeft of the drawing tile
-  QPoint layerPoint=tileBoundary.topLeft()-srcLay->imageExtents().topLeft()
-    + srcLay->channelOffset();
 
+// Renders the part of srcLay which resides in dstTile of dstLay
+
+void Canvas::renderLayerIntoTile(QRect tileBoundary, const Layer *srcLay,
+																 Layer *dstLay, int dstTile)
+{
   int tileNo, tileOffsetX, tileOffsetY, xTile, yTile;
-  srcLay->findTileNumberAndPos(layerPoint, &tileNo,
-			       &tileOffsetX, &tileOffsetY);
+
+  srcLay->findTileNumberAndPos(tileBoundary.topLeft(), &tileNo,
+															 &tileOffsetX, &tileOffsetY);
   xTile=tileNo%srcLay->xTiles();
   yTile=tileNo/srcLay->xTiles();
   KIS_DEBUG(render, showi(tileNo); );
+
   bool renderQ1=true, renderQ2=true, renderQ3=true, renderQ4=true;
   if (tileOffsetX<0)
     renderQ1=renderQ3=false;
@@ -370,11 +371,10 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, const Layer *srcLay, Layer 
 
   KIS_DEBUG(render, {
     SHOW_POINT(tileBoundary.topLeft());
-    SHOW_POINT(layerPoint);
     printf("tileNo %d, tileOffsetX %d, tileOffsetY %d\n",
-	   tileNo, tileOffsetX, tileOffsetY);
+					 tileNo, tileOffsetX, tileOffsetY);
   });
-
+	
   int renderedToX, renderedToY;
 
   KIS_DEBUG(render, printf("Test 1: "); );
@@ -460,6 +460,8 @@ void Canvas::renderTileQuadrant(const Layer *srcLay, int srcTile,
   channelData[1]=srcLay->channelMem(1,srcTile,0,0);
   channelData[2]=srcLay->channelMem(2,srcTile,0,0);
   channelData[3]=srcLay->channelMem(3,srcTile,0,0);
+
+	if (channelData[1]==0) return;
 
   uchar opacity=srcLay->opacity();
 
@@ -594,8 +596,8 @@ void Canvas::convertTileToPixmap(Layer *lay, int tileNo, QPixmap *pix)
     for(int yy=0;yy<TILE_SIZE;yy++) {
       uchar *ptr=img.scanLine(yy)+c-1;
       for(int xx=TILE_SIZE;xx;xx--) {
-	*ptr=*comp++;
-	ptr+=4;
+				*ptr=*comp++;
+				ptr+=4;
       }
     }
   }
@@ -603,41 +605,70 @@ void Canvas::convertTileToPixmap(Layer *lay, int tileNo, QPixmap *pix)
   convertImageToPixmap(&img, pix);
 }
 
+// NB: painting is only allowed within the rectangle of the canvas
+// everything else is clipped. However, layers can extend outside the canvas
+
 void Canvas::paintBrush(QPoint pt, const Brush *brsh)
 {
   Layer *lay=layerPtr(0);
-  QPoint layPt=pt-brsh->hotSpot()-lay->imageExtents().topLeft();
-  QRect brushRect(layPt, brsh->brushSize());
 
-  int minYTile=brushRect.top()/TILE_SIZE;
-  int maxYTile=brushRect.bottom()/TILE_SIZE;
-  int minXTile=brushRect.left()/TILE_SIZE;
-  int maxXTile=brushRect.right()/TILE_SIZE;
+	// find the brush rect in canvas coords and clip the brush to the canvas
+	QRect brushCanvasRect=QRect(pt-brsh->hotSpot(), brsh->imageExtents().size());
+	brushCanvasRect=brushCanvasRect.intersect(QRect(0,0, w,h));
+	
+	if (brushCanvasRect.isEmpty())
+		return;
+	
+	// allocate out tiles if required
+	lay->allocateRect(brushCanvasRect);	
+	
+	// move the brust to the correct part of the canvas
+  QPoint brushTL=pt-brsh->hotSpot();
+  brsh->moveTo(brushTL.x(), brushTL.y());
+
+	// layerRect is in layer coords (offset from tileExtents.topLeft())
+	QRect layerRect=brushCanvasRect;
+	layerRect.moveTopLeft(brushCanvasRect.topLeft()-
+												lay->tileExtents().topLeft());
+
+ 	// workout which tiles in the layer need to be updated
+  int minYTile=layerRect.top()/TILE_SIZE;
+  int maxYTile=layerRect.bottom()/TILE_SIZE;
+  int minXTile=layerRect.left()/TILE_SIZE;
+  int maxXTile=layerRect.right()/TILE_SIZE;
 
   printf("paintBrush:: pt(%d,%d)\n",pt.x(),pt.y());
-  printf("paintBrush:: layPt(%d,%d)\n",layPt.x(),layPt.y());
-  printf("paintBrush:: y->(%d,%d) x->(%d,%d)\n",minYTile,maxYTile,minXTile,
-	 maxXTile);
+  printf("paintBrush:: brushTL(%d,%d)\n",brushTL.x(),brushTL.y());
+  printf("paintBrush:: tiles y->(%d,%d) x->(%d,%d)\n",minYTile,maxYTile,
+				 minXTile, maxXTile);
+	QRect tileBoundary;
+	
+	for(int y=minYTile; y<=maxYTile; y++)
+		for(int x=minXTile; x<=maxXTile; x++) {
+			printf("updating layer %d,%d\n",x,y);
+			int dstTile=y*lay->xTiles()+x;
+			tileBoundary=lay->tileRect(dstTile);
+			SHOW_RECT(tileBoundary);
+			renderLayerIntoTile(tileBoundary, brsh, lay, dstTile);
+		}
 
-  SHOW_POINT(lay->channelOffset());
-  QRect tileImage(layPt+lay->channelOffset(), brsh->imageExtents().size());
-  SHOW_RECT(tileImage);
-
-  brsh->moveTo(layPt.x(), layPt.y());
-  for(int y=minYTile; y<=maxYTile; y++)
-    for(int x=minXTile; x<=maxXTile; x++) {
-      printf("testing %d,%d\n",x,y);
-      if ((x>=0) && (y>=0) && (x<lay->xTiles()) && (y<lay->yTiles())) {
-	QRect tileBoundary(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE);
-	SHOW_RECT(tileBoundary);
-	if (tileBoundary.intersects(tileImage)) {
-	  renderLayerIntoTile(tileBoundary, brsh, lay, y*lay->xTiles()+x);
-	  compositeTile(x,y, compose, 0);
-	  convertTileToPixmap(compose, 0, tiles[y*xTiles+x]);
-	}
-      }
-    }
+	compositeImage(brushCanvasRect);
 }
+
+//   for(int y=minYTile; y<=maxYTile; y++)
+//     for(int x=minXTile; x<=maxXTile; x++) {
+//       printf("testing %d,%d\n",x,y);
+//       if ((x>=0) && (y>=0) && (x<lay->xTiles()) && (y<lay->yTiles())) {
+// 				QRect tileBoundary(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+// 				SHOW_RECT(tileBoundary);
+// 				if (tileBoundary.intersects(tileImage)) {
+// 					renderLayerIntoTile(tileBoundary, brsh, lay, y*lay->xTiles()+x);
+// 					compositeTile(x,y, compose, 0);
+// 					convertTileToPixmap(compose, 0, tiles[y*xTiles+x]);
+// 				}
+//       }
+//     }
+//}
 
 void Canvas::upperLayer( unsigned int _layer )
 {

@@ -83,7 +83,7 @@ CORBA::Boolean KImageShopDoc::initDoc()
 
   _image = locate("appdata", "images/cam6.jpg");
   addRGBLayer(_image);
-  moveLayer(240,280);
+  //moveLayer(240,280);
   setLayerOpacity(255);
 
   _image = locate("appdata", "images/img2.jpg");
