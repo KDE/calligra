@@ -1,14 +1,15 @@
 #ifndef EXPORT_PAGE_DIALOG_H
 #define EXPORT_PAGE_DIALOG_H
 
-#include "export_page_dialog_base.h"
+#include <kdialogbase.h>
 
+class ExportPageDialogBase;
 
-class ExportPageDialog : public ExportPageDialogBase
-{ Q_OBJECT
-public:
+class ExportPageDialog : public KDialogBase
+{
+  Q_OBJECT
+  public:
     ExportPageDialog(QWidget* parent=0, const char* name=0);
-    ~ExportPageDialog();
 
     int quality();
     int border();
@@ -16,6 +17,9 @@ public:
     bool crop();
     bool fullPage();
     bool selectedStencils();
+
+  private:
+    ExportPageDialogBase* m_view;
 };
 
 #endif

@@ -1,45 +1,43 @@
 #include "export_page_dialog.h"
-#include "export_page_dialog.moc"
 
 #include <qcheckbox.h>
-#include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
 
-ExportPageDialog::ExportPageDialog( QWidget *parent, const char *name )
-   : ExportPageDialogBase(parent, name, true)
-{
-   QObject::connect( m_ok, SIGNAL(clicked()),
-		     this, SLOT(accept()) );
-   QObject::connect( m_cancel, SIGNAL(clicked()),
-		     this, SLOT(reject()) );
-}
+#include <klocale.h>
 
-ExportPageDialog::~ExportPageDialog()
+#include "export_page_dialog_base.h"
+
+ExportPageDialog::ExportPageDialog( QWidget *parent, const char *name )
+   : KDialogBase(parent, name, true, i18n("Export Page"), Ok|Cancel, Ok)
 {
+  m_view = new ExportPageDialogBase(this);
+  setMainWidget(m_view);
 }
 
 int ExportPageDialog::quality()
 {
-   return m_spinQuality->value();
+   return m_view->m_spinQuality->value();
 }
 
 int ExportPageDialog::border()
 {
-   return m_spinBorder->value();
+   return m_view->m_spinBorder->value();
 }
 
 bool ExportPageDialog::crop()
 {
-   return m_checkCrop->isChecked();
+   return m_view->m_checkCrop->isChecked();
 }
 
 bool ExportPageDialog::fullPage()
 {
-   return m_radioFullPage->isChecked();
+   return m_view->m_radioFullPage->isChecked();
 }
 
 bool ExportPageDialog::selectedStencils()
 {
-   return m_radioSelectedStencils->isChecked();
+   return m_view->m_radioSelectedStencils->isChecked();
 }
+
+#include "export_page_dialog.moc"

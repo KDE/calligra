@@ -1,6 +1,6 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ExportPageDialogBase</class>
-<widget class="QDialog">
+<widget class="QWidget">
     <property name="name">
         <cstring>ExportPageDialogBase</cstring>
     </property>
@@ -9,51 +9,17 @@
             <x>0</x>
             <y>0</y>
             <width>290</width>
-            <height>224</height>
+            <height>204</height>
         </rect>
     </property>
-    <property name="baseSize">
-        <size>
-            <width>0</width>
-            <height>0</height>
-        </size>
-    </property>
     <property name="caption">
-        <string>Export Page</string>
+        <string>ExportPageDialogBase</string>
     </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
-        <widget class="QLabel" row="1" column="0">
-            <property name="name">
-                <cstring>TextLabel2</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Quality:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>m_spinQuality</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="2" column="0">
-            <property name="name">
-                <cstring>TextLabel3</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Border:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>m_spinBorder</cstring>
-            </property>
-        </widget>
-        <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="3">
+        <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>ButtonGroup1</cstring>
             </property>
@@ -147,7 +113,18 @@ This will cause the entire page to be exported to the file. This means that &lt;
                 </property>
             </widget>
         </widget>
-        <widget class="QSpinBox" row="1" column="1" rowspan="1" colspan="2">
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Quality:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_spinQuality</cstring>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="1" column="1">
             <property name="name">
                 <cstring>m_spinQuality</cstring>
             </property>
@@ -165,7 +142,7 @@ This will cause the entire page to be exported to the file. This means that &lt;
 Not all file formats use this. But for those that do, this affects the quality of the image that gets exported. 100 is the maximum quality. The higher the number, the better the picture looks. The downside is the higher the number, the larger the filesize.</string>
             </property>
         </widget>
-        <widget class="QSpinBox" row="2" column="1" rowspan="1" colspan="2">
+        <widget class="QSpinBox" row="2" column="1">
             <property name="name">
                 <cstring>m_spinBorder</cstring>
             </property>
@@ -180,31 +157,22 @@ Not all file formats use this. But for those that do, this affects the quality o
 Places a blank border around the edges of the image. This can be used if for one reason or another, the stencils don't fit into the export page with a 0-pixel border (default).</string>
             </property>
         </widget>
-        <widget class="QPushButton" row="3" column="2">
+        <widget class="QLabel" row="2" column="0">
             <property name="name">
-                <cstring>m_cancel</cstring>
+                <cstring>TextLabel3</cstring>
             </property>
             <property name="text">
-                <string>&amp;Cancel</string>
+                <string>&amp;Border:</string>
             </property>
-            <property name="whatsThis" stdset="0">
-                <string>&lt;b&gt;Cancel&lt;/b&gt;&lt;br&gt;
-Abort the page export.</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="3" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>m_ok</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;OK</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>&lt;b&gt;OK&lt;/b&gt;&lt;br&gt;
-Export the page with the current settings.</string>
+            <property name="buddy" stdset="0">
+                <cstring>m_spinBorder</cstring>
             </property>
         </widget>
     </grid>
 </widget>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>
