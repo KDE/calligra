@@ -34,7 +34,7 @@
 
 class QPainter;
 
-enum KoTabulators { T_LEFT = 0, T_CENTER = 1, T_RIGHT = 2, T_DEC_PNT = 3 };
+enum KoTabulators { T_LEFT = 0, T_CENTER = 1, T_RIGHT = 2, T_DEC_PNT = 3, T_INVALID = -1 };
 enum KoTabulatorFilling { TF_BLANK = 0, TF_DOTS = 1, TF_LINE = 2, TF_DASH = 3, TF_DASH_DOT = 4, TF_DASH_DOT_DOT = 5};
 
 /**
@@ -60,8 +60,11 @@ struct KoTabulator {
     double ptWidth;
 
     bool operator==( const KoTabulator & t ) const {
-        return ptPos == t.ptPos && type == t.type &&
-               filling == t.filling && ptWidth == t.ptWidth;
+        return QABS( ptPos - t.ptPos ) < 1E-4 && type == t.type &&
+               filling == t.filling && QABS( ptWidth - t.ptWidth ) < 1E-4;
+    }
+    bool operator!=( const KoTabulator & t ) const {
+        return !operator==(t);
     }
     // Operators used for sorting
     bool operator < ( const KoTabulator & t ) const {
