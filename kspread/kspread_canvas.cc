@@ -2447,7 +2447,7 @@ void KSpreadCanvas::closeEditor()
 }
 
 
-void KSpreadCanvas::updateChooseRect(QPoint newMarker, QPoint newAnchor)
+void KSpreadCanvas::updateChooseRect(const QPoint &newMarker, const QPoint &newAnchor)
 {
   KSpreadTable* table = activeTable();
 
@@ -2531,6 +2531,7 @@ void KSpreadCanvas::updateChooseRect(QPoint newMarker, QPoint newAnchor)
     m_pEditor->setText( res );
     ((KSpreadTextEditor*)m_pEditor)->blockCheckChoose( FALSE );
     m_pEditor->setCursorPosition( pos + length_namecell );
+    editWidget()->setText( res );
     //kdDebug(36001) << "old=" << old << " len=" << length_namecell << " pos=" << pos << endl;
   }
 }
@@ -3257,7 +3258,7 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
 
 void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 {
-  //Notes on zoom-support from Philipp: 
+  //Notes on zoom-support from Philipp:
   //Scaling here is not good (fonts and AA), so we need a different approach.
   //As long as the canvas is zoomed with scale, we need to simulate scaling here too.
   //Scaling means, we have at the end a qRound function.
@@ -3308,7 +3309,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     bool current  = ( !highlighted && y == m_pView->selection().top() );
 
     const RowLayout *row_lay = table->rowLayout( y );
-                                                                    
+
     //The height is the height of a column plus the the rest of the double ypos values, rounded because of scaling
     scaledHeight = qRound( int( dblYpos + row_lay->dblHeight() ) * m_pCanvas->zoom() ) - scaledYpos;
 
@@ -3344,7 +3345,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     int len = painter.fontMetrics().width(buffer );
     if(!row_lay->isHide())
         painter.drawText( ( YBORDER_WIDTH-len )/2, scaledYpos +
-                          ( scaledHeight + painter.fontMetrics().ascent() - 
+                          ( scaledHeight + painter.fontMetrics().ascent() -
                             painter.fontMetrics().descent() ) / 2, buffer );
 
     dblYpos += row_lay->dblHeight();
@@ -3817,7 +3818,7 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
 
 void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 {
-  //Notes on zoom-support from Philipp: 
+  //Notes on zoom-support from Philipp:
   //Scaling here is not good (fonts and AA), so we need a different approach.
   //As long as the canvas is zoomed with scale, we need to simulate scaling here too.
   //Scaling means, we have at the end a qRound function.
@@ -3889,7 +3890,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
     else
     {
       QBrush fill( colorGroup().brush( QColorGroup::Background ) );
-      qDrawShadePanel( &painter, scaledXpos, 0, scaledWidth, 
+      qDrawShadePanel( &painter, scaledXpos, 0, scaledWidth,
                        XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fill );
     }
 
