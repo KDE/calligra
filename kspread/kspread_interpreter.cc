@@ -2641,6 +2641,32 @@ static bool kspreadfunc_poisson( KSContext& context ) {
   return true;
 }
 
+static bool kspreadfunc_confidence( KSContext& context ) {
+  //returns the confidence interval for a population mean
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "CONFIDENCE", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
+    return false;
+
+  double alpha = args[0]->doubleValue();
+  double sigma = args[1]->doubleValue();
+  double n = args[2]->intValue();
+
+  if (sigma <= 0.0 || alpha <= 0.0 || alpha >= 1.0 || n < 1)
+    return false;
+  else
+    context.setValue( new KSValue(gaussinv_helper(1.0-alpha/2.0) * sigma/sqrt(n)));
+  
+  return true;
+}
+
 static double GetFDist(double x, double fF1, double fF2) {
   double arg = fF2/(fF2+fF1*x);
   double alpha = fF2/2.0;
@@ -5162,6 +5188,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "NORMINV", new KSValue( new KSBuiltinFunction( module, "NORMINV", kspreadfunc_norminv) ) );
   module->addObject( "GAMMALN", new KSValue( new KSBuiltinFunction( module, "GAMMALN", kspreadfunc_gammaln) ) );
   module->addObject( "POISSON", new KSValue( new KSBuiltinFunction( module, "POISSON", kspreadfunc_poisson) ) );
+  module->addObject( "CONFIDENCE", new KSValue( new KSBuiltinFunction( module, "CONFIDENCE", kspreadfunc_confidence) ) );
 
   return module;
 }

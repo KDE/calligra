@@ -2805,6 +2805,32 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>CONFIDENCE</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>level of the confidence interval</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>standard deviation for the total population</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>size of the total population</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Returns the confidence interval for a population mean. The alpha parameter
+          must be between 0 and 1 (non-inclusive), stddev must be positive and
+          size must be greater or equal to 1.
+        </Text>
+        <Syntax>CONFIDENCE(alphaa;stddev;size)</Syntax>
+        <Example>CONFIDENCE(0.05;1.5;100) equals 0.294059</Example>
+      </Help>
+    </Function>
+
   </Group>
   <Group>
     <GroupName>Financial</GroupName>
