@@ -25,9 +25,10 @@
 #include <klocale.h>
 
 #include "kexisettings.h"
+#include "kexi_global.h"
 
 KexiSettings::KexiSettings(QWidget *parent)
- : KDialogBase(IconList, i18n("Kexi Settings"), KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, parent, 0, true)
+ : KDialogBase(IconList, i18n("%1 Settings").arg(KEXI_APP_NAME), KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, parent, 0, true)
 {
 	addPage(i18n("Printing"), i18n("Default Printer Settings"), ListIcon("print_printer"));
 	QFrame *lnf = addPage(i18n("Look & Feel"), i18n("Look & Feel"), ListIcon("looknfeel"));

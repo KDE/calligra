@@ -52,6 +52,7 @@
 
 #include "kexicontexthelp.h"
 #include "kexi_factory.h"
+#include "kexi_global.h"
 
 KexiView::KexiView(KexiWindowMode winmode, KexiProject *part,QWidget *parent, const char *name ) : KoView(part,parent,name)
 {
@@ -147,7 +148,7 @@ void KexiView::initHelper(bool h)
 		m_help=new KexiContextHelp(this,m_actionHelper,m_workspace, "Context Help");
 //add that as we have a help!
 //		m_help->setContextHelp(i18n("Welcome"), i18n("kexi is based on <a href=\"help://kexi#glossary-relationaldatabase\">relational databases</a>. Before you start creating tables you should think about the general database design.<br><br>Further readings:<br><ul><li><a href=\"help://kexi#databasedesign\">Relational Database Design</a></li><li><a href=\"help://kexi#entityrelationship\">The entity relationship model</a></li></ul>"));
-		m_help->setContextHelp(i18n("Welcome"), i18n("kexi is in a early state of development, not all planed features are implemented<br>you can help with kexi development by filing <a href=\"http://bugs.kde.org/wizard.cgi?package=kexi\">feature-requests and bug reports</a><br><br><i>the kexi team wishes you fun and productive work</i>"));
+		m_help->setContextHelp(i18n("Welcome"), i18n("%1 is in a early state of development, not all planed features are implemented<br>you can help with kexi development by filing <a href=\"http://bugs.kde.org/wizard.cgi?package=kexi\">feature-requests and bug reports</a><br><br><i>the kexi team wishes you fun and productive work</i>").arg(KEXI_APP_NAME));
 
 	}
 	else

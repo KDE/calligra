@@ -21,33 +21,25 @@
 #ifndef _KEXI_ABOU_DATA_
 #define _KEXI_ABOU_DATA_
 
+#include "kexi_global.h"
 #include <kaboutdata.h>
-#include <klocale.h>
 #include <config.h>
 
 static const char *description =
 	I18N_NOOP("Database Management");
 
-#ifdef OOPL_VERSION
-# include "oopl_aboutdata.h"
-#else //default
-# define APP_NAME I18N_NOOP("Kexi")
-	static const char *version=VERSION;
-	const char **APP_LOGO = 0;
-#endif
-
 KAboutData *newKexiAboutData()
 {
-	KAboutData *aboutData=new KAboutData( "kexi", APP_NAME,
-		version, description, KAboutData::License_LGPL,
+	KAboutData *aboutData=new KAboutData( "kexi", KEXI_APP_NAME,
+		KEXI_VERSION, description, KAboutData::License_LGPL,
 		I18N_NOOP(	"(c) 2002, 2003, Kexi Team\n"
 					"(c) 2003, OpenOffice Polska Ltd.\n"), 
 		I18N_NOOP(	"This software is developed by Kexi Team - international group\n"
 					"of independent developers, with additional assistance and support\n"
 					"from OpenOffice Polska company.\n\n"
 					"Visit Company Home Page: http://www.openoffice.com.pl"),
-		"http://www.koffice.org/kexi"
-		,0 /*TODO: kexi bugs*/
+		"http://www.koffice.org/kexi",
+		"submit@bugs.kde.org"
 	);
 	aboutData->addAuthor("Lucijan Busch",I18N_NOOP("Developer & Maintainer"), "lucijan@kde.org");
 	aboutData->addAuthor("Peter Simonsson",I18N_NOOP("Developer"),"psn@linux.se");
@@ -61,7 +53,7 @@ KAboutData *newKexiAboutData()
 	aboutData->setTranslator(I18N_NOOP("_:NAME OF TRANSLATORS\nNames"), I18N_NOOP("_:EMAIL OF TRANSLATORS\ne-mail"));
 	aboutData->addCredit("Tomas Krassnig", I18N_NOOP("Coffie sponsoring"), "tkrass05@hak1.at");
 #ifdef OOPL_VERSION
-	aboutData->setProgramLogo(APP_LOGO);
+	aboutData->setProgramLogo(KEXI_APP_LOGO);
 #endif
 	return aboutData;
 }

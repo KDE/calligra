@@ -29,7 +29,7 @@
 
 KexiDynamicQueryParameterDialog::KexiDynamicQueryParameterDialog(QWidget *parent,
 	KexiDataProvider::Parameters *values, const KexiDataProvider::ParameterList &list):
-		KDialogBase(parent, "paramddialog", true, i18n("Query Parameterrs"),
+		KDialogBase(parent, "paramddialog", true, i18n("Query Parameters"),
 		KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true )
 {
 	m_values=values;

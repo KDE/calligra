@@ -29,7 +29,7 @@
 
 #include "kexidb.h"
 #include "kexidbinterfacemanager.h"
-
+#include "kexi_global.h"
 
 KexiDBInterfaceManager *KexiDBInterfaceManager::s_kexidbinterfacemanager=0;
 
@@ -82,9 +82,8 @@ KexiDBInterfaceManager::lookupDrivers()
 	}
 	else
 	{
-		KMessageBox::error(0, i18n("Kexi could not find any database drivers!"));
+		KMessageBox::error(0, i18n("%1 could not find any database drivers!").arg(KEXI_APP_NAME));
 #ifndef Q_WS_WIN
-    exit(0);
 		exit(0);
 #endif
 	}

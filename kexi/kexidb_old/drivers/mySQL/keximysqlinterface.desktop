@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name = mySQL
 Comment = mySQL is a fast database engine. It is used for personal purposes as well as for huge databases in big companies and organisations. We recommand using mySQL for projects shared in networks.
+Comment[pl] = mySQL jest szybkim silnikiem baz danych, u¿ywanym zarówno na potrzeby osobiste, jak te¿ dla zaawansowanych baz w wielkich korporacjach. Zalecamy u¿ywanie silnika mySQL dla projektów dzia³aj±cych w sieciach.
 X-KDE-Library = keximysqlinterface
 ServiceTypes = KexiDB/Interface
 Type= Service

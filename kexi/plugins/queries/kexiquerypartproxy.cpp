@@ -65,7 +65,7 @@ KexiQueryPartProxy::itemContext(const QString& identifier)
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
 	m->insertAction(i18n("Open Query"), SLOT(slotOpen(const QString &)));
 	m->insertAction(i18n("Edit Query"), SLOT(slotEdit(const QString &)));
-	m->insertAction(i18n("Delete Query"), SLOT(slotDelete(const QString &)));
+	m->insertAction(i18n("Delete Query..."), SLOT(slotDelete(const QString &)));
 
 	return m;
 }

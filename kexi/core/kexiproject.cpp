@@ -46,6 +46,7 @@
 #include "filters/kexifiltermanager.h"
 
 #include "koApplication.h"
+#include "kexi_global.h"
 
 #undef JoWenn_VERY_EXPERIMENTAL
 
@@ -126,7 +127,7 @@ bool KexiProject::initDoc()
 	
 	KoTemplateChooseDia::ReturnType ret=KoTemplateChooseDia::choose(
 		KexiFactory::global(),filename,"application/x-vnd.kde.kexi","*.kexi",
-		i18n("Kexi"),dlgtype,"kexi_template");
+		KEXI_APP_NAME,dlgtype,"kexi_template");
 
 	bool ok=false;
 	if (ret==KoTemplateChooseDia::Empty) {
