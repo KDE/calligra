@@ -67,7 +67,7 @@ KarbonPart::createViewInstance( QWidget* parent, const char* name )
 bool
 KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 {
-	return m_doc.load( document.documentElement() );
+	return m_doc.loadXML( document.documentElement() );
 }
 
 QDomDocument
