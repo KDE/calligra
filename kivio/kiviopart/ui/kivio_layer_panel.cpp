@@ -112,7 +112,7 @@ void KivioLayerPanel::addItem()
 void KivioLayerPanel::removeItem()
 {
   KivioLayerItem* item = (KivioLayerItem*)list->currentItem();
-  if (!item)
+  if (!item || (m_pView->activePage()->layers()->count() <= 1))
     return;
 
   itemActivated(item);
@@ -224,7 +224,12 @@ void KivioLayerPanel::updateButtons(QListViewItem* i)
     actUp->setEnabled(false);
     actDown->setEnabled(false);
   } else {
-    actDel->setEnabled(true);
+    if(m_pView->activePage()->layers()->count() > 1) {
+      actDel->setEnabled(true);
+    } else {
+      actDel->setEnabled(false);
+    }
+
     actRename->setEnabled(true);
     actUp->setEnabled(i->itemAbove());
     actDown->setEnabled(i->itemBelow());
