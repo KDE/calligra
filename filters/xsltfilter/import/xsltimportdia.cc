@@ -20,8 +20,7 @@
 #include "xsltimportdia.h"
 #include "xsltimportdia.moc"
 
-#include <stdio.h>
-#include <stdlib.h>
+//#include <stdio.h>
 
 #include <qcombobox.h>
 #include <qstringlist.h>
@@ -33,6 +32,7 @@
 #include <kglobal.h>
 #include <krecentdocument.h>
 #include <koFilterManager.h>
+#include <ktempfile.h>
 #include <kdebug.h>
 
 #include <xsltproc.h>
@@ -231,29 +231,26 @@ void XSLTImportDia::okSlot()
 	}
 	
 	/* Create a temp file */
-	//QString tempFileName = tempnam(NULL, "xslt");
-	char* temp = strdup("xsltXXXXXX");
-	QString tempFileName = QString(temp);
+	KTempFile temp("xsltimport-", "kwd");
+	temp.setAutoDelete(true);
 
-	QFile* tempFile = new QFile(tempFileName);
+	QFile* tempFile = temp.file();
 	tempFile->open(IO_WriteOnly);
-	tempFile->close();
 
 	/* Generate the data in the temp file */
-	XSLTProc* xsltproc = new XSLTProc(_fileIn.latin1(), tempFileName.latin1(),
+	XSLTProc* xsltproc = new XSLTProc(_fileIn.latin1(), temp.name(),
 							 stylesheet.latin1());
 	xsltproc->parse();
 
 	/* Save the temp file in the store */
 	tempFile->open(IO_ReadOnly);
 	_out->write(tempFile->readAll());
-	tempFile->close();
-	_out->close();
-
-	/* delete the temp file */
-	QFile::remove(tempFileName);
+	
 	delete tempFile;
 	delete xsltproc;
+
+	_out->close();
+	temp.close();
 
 	kdDebug() << "XSLT FILTER --> END" << endl;
 	reject();

@@ -21,9 +21,6 @@
 #include "xsltexportdia.h"
 #include "xsltexportdia.moc"
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include <qcombobox.h>
 #include <qstringlist.h>
 #include <qdir.h>
@@ -34,13 +31,14 @@
 #include <kglobal.h>
 #include <krecentdocument.h>
 #include <koFilterManager.h>
+#include <ktempfile.h>
 #include <kdebug.h>
 
 #include <xsltproc.h>
 
-#ifdef __FreeBSD__
+/*#ifdef __FreeBSD__
 #include <unistd.h>
-#endif
+#endif*/
 
 /*
  *  Constructs a XSLTExportDia which is a child of 'parent', with the
@@ -237,26 +235,25 @@ void XSLTExportDia::okSlot()
 
 	/* Save the input file in a temp file */
 	QByteArray array = _in->read(_in->size());
-	// use mkstemp, not tempname
-	char* temp = strdup("xsltXXXXXX");
-	mkstemp(temp);
-	QString tempFileName = QString(temp);
-	//QString tempFileName = tempnam(NULL, "xslt");
 	
-	QFile* tempFile = new QFile(tempFileName);
+	/* Temp file */
+	KTempFile temp("xsltexport-", "kwd");
+	temp.setAutoDelete(true);
+	
+	QFile* tempFile = temp.file();
 	tempFile->open(IO_WriteOnly);
 	tempFile->writeBlock(array);
-	tempFile->close();
 	kdDebug() << stylesheet << endl;
-	XSLTProc* xsltproc = new XSLTProc(tempFileName.latin1(), _fileOut.latin1(),
+	XSLTProc* xsltproc = new XSLTProc(temp.name(), _fileOut.latin1(),
 							 stylesheet.latin1());
 	xsltproc->parse();
 
-	/* delete the temp file */
-	QFile::remove(tempFileName);
 	delete tempFile;
 	delete xsltproc;
-	_in->close();
+
+	_in->close();	
+	temp.close();
+
 	kdDebug() << "XSLT FILTER --> END" << endl;
 	reject();
 }

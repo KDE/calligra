@@ -36,7 +36,7 @@ XSLTImport::XSLTImport(KoFilter *, const char *, const QStringList&) :
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus XSLTImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus XSLTImport::convert( const QCString&, const QCString& to )
 {
     QString config;
 
@@ -50,7 +50,7 @@ KoFilter::ConversionStatus XSLTImport::convert( const QCString& from, const QCSt
     KoStore* out = KoStore::createStore(QString(m_chain->outputFile()), KoStore::Write);
     if(!out || !out->open("root"))
     {
-        kdError(30503) << "Unable to create output file!" << endl;
+        kdError() << "Unable to create output file!" << endl;
         delete out;
         return KoFilter::FileNotFound;
     }

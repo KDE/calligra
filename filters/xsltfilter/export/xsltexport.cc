@@ -35,7 +35,7 @@ XSLTExport::XSLTExport(KoFilter *, const char *, const QStringList&) :
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus XSLTExport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus XSLTExport::convert( const QCString& from, const QCString&)
 {
     QString config;
     if(from != "application/x-kword" &&
