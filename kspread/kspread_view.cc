@@ -3465,96 +3465,112 @@ void KSpreadView::refreshView()
     m_pToolWidget->setGeometry( 0, 0, width(), /*30*/posFrame );
     int top = /*30*/posFrame;
 
+    int widthVScrollbar  = m_pVertScrollBar->sizeHint().width();// 16;
+    int heightHScrollbar = m_pHorzScrollBar->sizeHint().height();
 
-
+    if (m_pDoc->getShowTabBar())
+    {
+      m_pTabBarFirst->setGeometry( 0, height() - heightHScrollbar, 
+                                   heightHScrollbar, heightHScrollbar );
+      m_pTabBarLeft->setGeometry( heightHScrollbar, height() - heightHScrollbar, 
+                                  heightHScrollbar, heightHScrollbar );
+      m_pTabBarRight->setGeometry( heightHScrollbar * 2, height() - heightHScrollbar, 
+                                   heightHScrollbar, heightHScrollbar );
+      m_pTabBarLast->setGeometry( heightHScrollbar * 3, height() - heightHScrollbar, 
+                                  heightHScrollbar, heightHScrollbar );
+      m_pTabBarFirst->show();
+      m_pTabBarLeft->show();
+      m_pTabBarRight->show();
+      m_pTabBarLast->show();
+    }
+    else
+    {
+      m_pTabBarFirst->hide();
+      m_pTabBarLeft->hide();
+      m_pTabBarRight->hide();
+      m_pTabBarLast->hide();
+    }
+    
+    if (!m_pDoc->getShowHorizontalScrollBar())
+      m_pTabBar->setGeometry( heightHScrollbar * 4, height() - heightHScrollbar, 
+                              width() - heightHScrollbar * 4, heightHScrollbar );
+    else
+      m_pTabBar->setGeometry( heightHScrollbar * 4, height() - heightHScrollbar, 
+                              width() / 2 - heightHScrollbar * 4, heightHScrollbar );
     if(m_pDoc->getShowTabBar())
-      {
-	m_pTabBarFirst->setGeometry( 0, height() - 16, 16, 16 );
-	m_pTabBarLeft->setGeometry( 16, height() - 16, 16, 16 );
-	m_pTabBarRight->setGeometry( 32, height() - 16, 16, 16 );
-	m_pTabBarLast->setGeometry( 48, height() - 16, 16, 16 );
-	m_pTabBarFirst->show();
-	m_pTabBarLeft->show();
-	m_pTabBarRight->show();
-	m_pTabBarLast->show();
-      }
+      m_pTabBar->show();
     else
-      {
-	m_pTabBarFirst->hide();
-	m_pTabBarLeft->hide();
-	m_pTabBarRight->hide();
-	m_pTabBarLast->hide();
-      }
-
-
-
-    if(!m_pDoc->getShowHorizontalScrollBar())
-        m_pTabBar->setGeometry( 64, height() - 16, width() -64, 16 );
-    else
-        m_pTabBar->setGeometry( 64, height() - 16, width() / 2 - 64, 16 );
-     if(m_pDoc->getShowTabBar())
-       m_pTabBar->show();
-     else
-       m_pTabBar->hide();
-
+      m_pTabBar->hide();
+    
     // David's suggestion: move the scrollbars to KSpreadCanvas, but keep those resize statements
-    int widthScrollbarVertical=16;
     if(m_pDoc->getShowHorizontalScrollBar())
-        m_pHorzScrollBar->show();
+      m_pHorzScrollBar->show();
     else
-        m_pHorzScrollBar->hide();
+      m_pHorzScrollBar->hide();
+    
     if(!m_pDoc->getShowTabBar() && !m_pDoc->getShowHorizontalScrollBar())
-      m_pVertScrollBar->setGeometry( width() - 16, top , 15, height() - top );
+      m_pVertScrollBar->setGeometry( width() - widthVScrollbar, 
+                                     top, 
+                                     widthVScrollbar, 
+                                     height() - top );
     else
-      m_pVertScrollBar->setGeometry( width() - 16, top , 15, height() - 16 - top );
+      m_pVertScrollBar->setGeometry( width() - widthVScrollbar,
+                                     top, 
+                                     widthVScrollbar, 
+                                     height() - heightHScrollbar - top );
     m_pVertScrollBar->setSteps( 20 /*linestep*/, m_pVertScrollBar->height() /*pagestep*/);
-    if(m_pDoc->getShowVerticalScrollBar())
-        m_pVertScrollBar->show();
+    if (m_pDoc->getShowVerticalScrollBar())
+      m_pVertScrollBar->show();
     else
-        {
-        widthScrollbarVertical=0;
-        m_pVertScrollBar->hide();
-        }
-
-    int widthRowHeader=YBORDER_WIDTH;
-    if(m_pDoc->getShowRowHeader())
-        m_pVBorderWidget->show();
+    {
+      widthVScrollbar = 0;
+      m_pVertScrollBar->hide();
+    }
+    
+    int widthRowHeader = YBORDER_WIDTH;
+    if (m_pDoc->getShowRowHeader())
+      m_pVBorderWidget->show();
     else
-        {
-        widthRowHeader=0;
-        m_pVBorderWidget->hide();
-        }
+    {
+      widthRowHeader = 0;
+      m_pVBorderWidget->hide();
+    }
 
-    int heightColHeader=XBORDER_HEIGHT;
+    int heightColHeader = XBORDER_HEIGHT;
     if(m_pDoc->getShowColHeader())
-         m_pHBorderWidget->show();
+      m_pHBorderWidget->show();
     else
-        {
-        heightColHeader=0;
-        m_pHBorderWidget->hide();
-        }
-
-    if(statusBar())
-        {
-            if(m_pDoc->getShowStatusBar())
-                statusBar()->show();
-            else
-                statusBar()->hide();
-        }
-
-    m_pHorzScrollBar->setGeometry( width() / 2, height() - 16, width() / 2 - widthScrollbarVertical, 15 );
+    {
+      heightColHeader = 0;
+      m_pHBorderWidget->hide();
+    }
+    
+    if (statusBar())
+    {
+      if(m_pDoc->getShowStatusBar())
+        statusBar()->show();
+      else
+        statusBar()->hide();
+    }
+    
+    m_pHorzScrollBar->setGeometry( width() / 2, 
+                                   height() - heightHScrollbar,
+                                   width() / 2 - widthVScrollbar, 
+                                   heightHScrollbar );
     m_pHorzScrollBar->setSteps( 20 /*linestep*/, m_pHorzScrollBar->width() /*pagestep*/);
 
     if(!m_pDoc->getShowTabBar() && !m_pDoc->getShowHorizontalScrollBar())
-      m_pFrame->setGeometry( 0, top, width()-widthScrollbarVertical, height()  - top );
+      m_pFrame->setGeometry( 0, top, width() - widthVScrollbar, height() - top - heightHScrollbar);
     else
-      m_pFrame->setGeometry( 0, top, width()-widthScrollbarVertical, height() -16 - top );
+      m_pFrame->setGeometry( 0, top, width() - widthVScrollbar, 
+                             height() - heightHScrollbar - top );
     m_pFrame->show();
 
     m_pCanvas->setGeometry( widthRowHeader, heightColHeader,
                             m_pFrame->width() -widthRowHeader, m_pFrame->height() - heightColHeader );
 
-    m_pHBorderWidget->setGeometry( widthRowHeader + 1, 0, m_pFrame->width() - widthRowHeader, heightColHeader );
+    m_pHBorderWidget->setGeometry( widthRowHeader + 1, 0, 
+                                   m_pFrame->width() - widthRowHeader, heightColHeader );
 
     m_pVBorderWidget->setGeometry( 0,heightColHeader + 1, widthRowHeader,
                                    m_pFrame->height() - heightColHeader );
