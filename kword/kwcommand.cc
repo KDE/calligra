@@ -298,7 +298,8 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
     QString text;
 
     QDomNodeList listParagraphs = elem.elementsByTagName ( "PARAGRAPH" );
-    for (unsigned int item = 0; item < listParagraphs.count(); item++)
+    uint count =listParagraphs.count();
+    for (unsigned int item = 0; item < count; item++)
     {
         QDomElement paragElem = listParagraphs.item( item ).toElement();
         QString s = paragElem.namedItem( "TEXT" ).toElement().text();
@@ -310,11 +311,25 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
     cursor.insert( text, true );
 
     KWTextParag * parag = static_cast<KWTextParag *>(firstParag);
-    for (unsigned int item = 0; item < listParagraphs.count(); item++)
+    for (unsigned int item = 0; item < count; item++)
     {
         QDomElement paragElem = listParagraphs.item( item ).toElement();
-        if ( item == 0 ) // First line: apply offset to formatting, don't apply parag layout
+        // First line (if appending to non-empty line) : apply offset to formatting, don't apply parag layout
+        if ( item == 0 && m_idx > 0 )
         {
+            // First load the default format, but only apply it to our new chars
+            QDomElement layout = paragElem.namedItem( "LAYOUT" ).toElement();
+            if ( !layout.isNull() )
+            {
+                QDomElement formatElem = layout.namedItem( "FORMAT" ).toElement();
+                if ( !formatElem.isNull() )
+                {
+                    QTextFormat f = parag->loadFormat( formatElem, 0L );
+                    QTextFormat * defaultFormat = doc->formatCollection()->format( &f );
+                    parag->setFormat( m_idx, parag->string()->length()-1-m_idx, defaultFormat, TRUE );
+                }
+            }
+
             parag->loadFormatting( paragElem, m_idx );
         }
         else
@@ -328,7 +343,7 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
         parag->setChanged( TRUE );
         parag = static_cast<KWTextParag *>(parag->next());
     }
-    // Move to the end
+    // Move cursor to the end
     c->setParag( firstParag );
     c->setIndex( m_idx );
     for ( int i = 0; i < (int)text.length(); ++i )

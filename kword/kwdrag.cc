@@ -42,7 +42,7 @@ void KWDrag::setPlain( const QString &_plain )
 /*================================================================*/
 QByteArray KWDrag::encodedData( const char *mime ) const
 {
-    kdDebug() << "KWDrag::encodedData " << mime << endl;
+    //kdDebug() << "KWDrag::encodedData " << mime << endl;
     /*if ( strcmp(mime, "text/html") == 0 )
     {
         KWDrag *non_const_this = const_cast<KWDrag *>(this);

@@ -1013,7 +1013,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
     QDomElement formatsElem = attributes.namedItem( "FORMATS" ).toElement();
     if ( !formatsElem.isNull() )
     {
-        QTextFormatCollection *fc = formatCollection();
+        //QTextFormatCollection *fc = formatCollection();
         QDomNodeList listFormats = formatsElem.elementsByTagName( "FORMAT" );
         for (unsigned int item = 0; item < listFormats.count(); item++)
         {
@@ -1036,10 +1036,10 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
             if ( index + len > str->length() )
                 len = str->length() - 1 - index;
 
-            kdDebug() << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len " << endl;
             for ( int i = 0; i < len; ++i )
                 str->setFormat( i + index, format, true );
             */
+            kdDebug() << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
             setFormat( index, len, &f );
         }
     }

@@ -1689,7 +1689,7 @@ void KWCanvas::doAutoScroll()
 
 void KWCanvas::slotContentsMoving( int, int cy )
 {
-    //kdDebug() << "KWCanvas::slotContentsMoving " << cy << endl;
+    kdDebug() << "KWCanvas::slotContentsMoving " << cy << endl;
     // Update our "formatted paragraphs needs" in the text framesets
     QListIterator<KWFrameSet> fit = doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -1771,7 +1771,7 @@ void KWCanvas::printRTDebug()
     QTextDocument * textdoc = textfs->textDocument();
     for (QTextParag * parag = textdoc->firstParag(); parag ; parag = parag->next())
     {
-        kdDebug() << "Paragraph " << parag << "------------------ " << endl;
+        kdDebug() << "Paragraph " << parag << "   (" << parag->paragId() << ") ------------------ " << endl;
         QVector<QStyleSheetItem> vec = parag->styleSheetItems();
         for ( uint i = 0 ; i < vec.size() ; ++i )
         {
@@ -1781,8 +1781,9 @@ void KWCanvas::printRTDebug()
             kdDebug() << "        align=" << item->alignment() << " leftMargin=" << item->margin(QStyleSheetItem::MarginLeft) << " rightMargin=" << item->margin(QStyleSheetItem::MarginRight) << " topMargin=" << item->margin(QStyleSheetItem::MarginTop) << " bottomMargin=" << item->margin(QStyleSheetItem::MarginBottom) << endl;
             kdDebug() << "        displaymode=" << dm[item->displayMode()] << endl;
         }
-        kdDebug() << "  Text: " << parag->richText() << endl;
         KWTextParag * p = static_cast<KWTextParag *>(parag);
+        kdDebug() << "  Style: " << p->styleName() << endl;
+        kdDebug() << "  Text: " << parag->string()->toString() << endl;
         if ( p->counter() )
             kdDebug() << "  Counter style=" << p->counter()->style() << " depth=" << p->counter()->depth() << endl;
 

@@ -610,7 +610,7 @@ void KWTextFrameSet::load( QDomElement &attributes )
 
     // <PARAGRAPH>
     QDomNodeList listParagraphs = attributes.elementsByTagName ( "PARAGRAPH" );
-    int count = listParagraphs.count();
+    unsigned int count = listParagraphs.count();
     for (unsigned int item = 0; item < count; item++)
     {
         QDomElement paragraph = listParagraphs.item( item ).toElement();
@@ -852,7 +852,7 @@ void KWTextFrameSet::formatMore()
     // but make sure we format everything the views need
     for ( int i = 0; lastFormatted && bottom <= m_availableHeight && ( i < to || bottom <= viewsBottom ) ; ++i )
     {
-        kdDebug() << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
+        //kdDebug() << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
 	lastFormatted->format();
 	bottom = lastFormatted->rect().top() + lastFormatted->rect().height();
 	lastFormatted = lastFormatted->next();

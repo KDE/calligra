@@ -430,7 +430,7 @@ protected:
 
     // Statusbar items
     enum StatusBarIds {
-        statusPage = 0
+        statusPage = 1
         // More to be added
     };
 };
