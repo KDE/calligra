@@ -3069,7 +3069,6 @@ void Page::dropEvent(QDropEvent *e)
 	  if (!url.isLocalFile()) return;
 
 	  QString filename = url.path();
- 	  KMimeMagic::initStatic();
  	  KMimeMagicResult *res = KMimeMagic::self()->findFileType(filename);
 	  
 	  if (res && res->isValid())
