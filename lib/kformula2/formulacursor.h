@@ -27,7 +27,6 @@
 
 class FormulaElement;
 class IndexElement;
-class QKeyEvent;
 
 
 /**

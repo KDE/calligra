@@ -53,7 +53,103 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
     QPainter painter;
     painter.begin(this);
     cursor->draw(painter);
-    document->keyPressEvent(cursor, event);
+
+    QChar ch = event->text().at(0);
+    if (ch.isPrint()) {
+        int latin1 = ch.latin1();
+        switch (latin1) {
+        case '(':
+            document->addBracket(cursor, '(', ')');
+            break;
+        case '[':
+            document->addBracket(cursor, '[', ']');
+            break;
+        case '{':
+            break;
+        case '|':
+            document->addBracket(cursor, '|', '|');
+            break;
+        case '/':
+            document->addFraction(cursor);
+            break;
+        case '#':
+            // here we need a dialog!
+            document->addMatrix(cursor, 4, 5);
+            break;
+        case '\\':
+            document->addRoot(cursor);
+            break;
+        case '+':
+        case '-':
+        case '*':
+        case '=':
+        case '<':
+        case '>':
+            document->addOperator(cursor, ch);
+            break;
+        case '^':
+            document->addUpperRightIndex(cursor);
+            break;
+        case '_':
+            document->addLowerRightIndex(cursor);
+            break;
+        case ' ':
+            break;
+        default:
+            document->addText(cursor, ch);
+        }
+    }
+    else {
+        int action = event->key();
+        int state = event->state();
+	int flag=0;
+
+	if(state & Qt::ControlButton)
+	  flag+=FormulaCursor::WordMovement;
+
+	if(state & Qt::ShiftButton)
+	  flag+=FormulaCursor::SelectMovement;
+
+	switch (action) {
+	case Qt::Key_Left:
+            cursor->moveLeft(flag);
+            break;
+        case Qt::Key_Right:
+            cursor->moveRight(flag);
+            break;
+        case Qt::Key_Up:
+            cursor->moveUp(flag);
+            break;
+        case Qt::Key_Down:
+            cursor->moveDown(flag);
+            break;
+        case Qt::Key_BackSpace:
+            document->removeSelection(cursor, BasicElement::beforeCursor);
+            break;
+        case Qt::Key_Delete:
+            document->removeSelection(cursor, BasicElement::afterCursor);
+            break;
+        case Qt::Key_Home:
+            cursor->moveHome(flag);
+            break;
+        case Qt::Key_End:
+            cursor->moveEnd(flag);
+            break;
+        case Qt::Key_F1:
+            document->addSymbol(cursor, Artwork::product);
+            break;
+        case Qt::Key_F2:
+            document->addSymbol(cursor, Artwork::sum);
+            break;
+        case Qt::Key_F3:
+            document->addSymbol(cursor, Artwork::integral);
+            break;
+        }
+    }
+
+    //Is this necessary here ?
+    document->testDirty();
+
     cursor->draw(painter);
     painter.end();
 }

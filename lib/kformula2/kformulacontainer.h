@@ -70,11 +70,6 @@ public:
      */
     void draw(QPainter& painter);
 
-    /**
-     * One of our view got a key.
-     */
-    void keyPressEvent(FormulaCursor* cursor, QKeyEvent* event);
-
     
 signals:
 
@@ -105,13 +100,13 @@ public slots:
 
     void removeSelection(FormulaCursor* cursor, BasicElement::Direction);
 
-private:
     
     /**
      * Emits a formulaChanged signal if we are dirty.
      */
     void testDirty();
     
+private:
     /**
      * The element tree's root.
      */

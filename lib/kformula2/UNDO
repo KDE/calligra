@@ -1,0 +1,26 @@
+
+UNDO/REDO needs
+
+
+
+add element (except matrix) and nothing is selected *************************
+Info to store:
+cursorData before and after insert, text added
+
+Undo:
+Delete previous element of tmpCursor created
+with saved data of after insert cursor.
+
+Redo:
+tmpCursor created with saved data of before insert
+cursor.
+addXXX(tmpCursor[,textadded],NOUNDO);
+where XXX is the type of element
+
+addMatrix*******************************************************************
+the delete action is perfromed on "before insert" cursor
+instead of "after insert" cursor and in right direction
+
+
+For selected text:
+This depends on some behaviour we not yet decide.
