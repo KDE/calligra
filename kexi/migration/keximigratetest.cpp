@@ -19,11 +19,10 @@
  ***************************************************************************/
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+//#include <config.h>
 #endif
 
 #include "importwizard.h"
-#include "migratecontrol.h"
 #include <kapplication.h>
 
 /*
@@ -39,12 +38,7 @@ using namespace KexiMigration;
 int main(int argc, char *argv[])
 {
 	KApplication a(argc, argv, "Kexi Migrate Test");
-	/*
-	MigrateControl *mc = new MigrateControl();	
-	mc->setGeometry(100,100,100,100);
-	a.setMainWidget(mc);	
-	mc->show();
-	*/
+
 	importWizard* iw = new importWizard();
 	iw->setGeometry(300,300,300,250);
 	a.setMainWidget(iw);
