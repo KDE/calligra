@@ -193,9 +193,8 @@ public:
     void deSelectObj(KPObject *obj);
     void updateHeaderFooterButton();
 
-    KoPictureCollection *getImageCollection() { return &_imageCollection; }
+    KoPictureCollection *getPictureCollection() { return &m_pictureCollection; }
     KPGradientCollection *getGradientCollection() { return &_gradientCollection; }
-    KoPictureCollection *getClipartCollection() { return &_clipartCollection; }
 
     KoAutoFormat * getAutoFormat()const { return m_autoFormat; }
 
@@ -409,6 +408,8 @@ public:
     void spellCheckParagraphDeleted( KoTextParag *_parag,  KPTextObject *frm);
     void configureSpellChecker();
 
+    void loadPictureMap ( QDomElement& domElement );
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -496,22 +497,20 @@ protected:
 
     QPen _presPen;
 
-    KoPictureCollection _imageCollection;
+    KoPictureCollection m_pictureCollection;
     KPGradientCollection _gradientCollection;
-    KoPictureCollection _clipartCollection;
 
     KPTextObject *_header, *_footer;
     bool _hasHeader, _hasFooter;
 
-    QMap<KoPictureKey, QString> * m_pixmapMap;
-    QMap<KoPictureKey, QString> * m_clipartMap;
+    QMap<KoPictureKey, QString> m_pictureMap;
+
     KoPageLayout __pgLayout;
     int lastObj;
 
     QString urlIntern;
 
-    QValueList<KoPictureKey> usedPixmaps;
-    QValueList<KoPictureKey> usedCliparts;
+    QValueList<KoPictureKey> usedPictures;
     QStringList usedSoundFile, haveNotOwnDiskSoundFile;
     QPtrList<KTempFile> tmpSoundFileList;
     DCOPObject *dcop;

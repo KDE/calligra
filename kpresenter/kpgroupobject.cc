@@ -211,7 +211,7 @@ double KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
                         objects.append( kpautoformobject );
                     } break;
                     case OT_CLIPART: {
-                        KPClipartObject *kpclipartobject = new KPClipartObject( doc->getClipartCollection() );
+                        KPClipartObject *kpclipartobject = new KPClipartObject( doc->getPictureCollection() );
                         objOffset = kpclipartobject->load(current);
                         kpclipartobject->setOrig(kpclipartobject->getOrig().x(),objOffset);
                         objects.append( kpclipartobject );
@@ -223,7 +223,7 @@ double KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
                         objects.append( kptextobject );
                     } break;
                     case OT_PICTURE: {
-                        KPPixmapObject *kppixmapobject = new KPPixmapObject( doc->getImageCollection() );
+                        KPPixmapObject *kppixmapobject = new KPPixmapObject( doc->getPictureCollection() );
                         objOffset = kppixmapobject->load(current);
                         kppixmapobject->setOrig(kppixmapobject->getOrig().x(),objOffset);
                         objects.append( kppixmapobject );

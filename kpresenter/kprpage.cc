@@ -1608,10 +1608,10 @@ KCommand * KPrPage::alignObjsBottom(const KoRect &rect)
 
 void KPrPage::insertClipart( const QString &filename )
 {
-    KoPictureKey key = m_doc->getClipartCollection()->loadPicture( filename ).getKey();
+    KoPictureKey key = m_doc->getPictureCollection()->loadPicture( filename ).getKey();
     kdDebug(33001) << "KPresenterDoc::insertClipart key=" << key.toString() << endl;
 
-    KPClipartObject *kpclipartobject = new KPClipartObject(m_doc->getClipartCollection() , key );
+    KPClipartObject *kpclipartobject = new KPClipartObject(m_doc->getPictureCollection() , key );
     double x=(m_doc->zoomHandler()->unzoomItX(10)/m_doc->getGridX())*m_doc->getGridX();
     double y=(m_doc->zoomHandler()->unzoomItY(10)/m_doc->getGridY())*m_doc->getGridY();
     kpclipartobject->setOrig( x, y);
@@ -2562,14 +2562,14 @@ void KPrPage::changePicture( const QString & filename )
 {
     // filename has been chosen in KPresenterView with a filedialog,
     // so we know it exists
-    KoPicture image = m_doc->getImageCollection()->loadPicture( filename );
+    KoPicture image = m_doc->getPictureCollection()->loadPicture( filename );
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected() && it.current()->getType()==OT_PICTURE)
         {
-    	    KPPixmapObject *pix = new KPPixmapObject( m_doc->getImageCollection(), image.getKey() );
+    	    KPPixmapObject *pix = new KPPixmapObject( m_doc->getPictureCollection(), image.getKey() );
             KPPixmapObject* obj=dynamic_cast<KPPixmapObject*>( it.current() );
             if( obj)
             {
@@ -2588,7 +2588,7 @@ void KPrPage::changeClipart( const QString & filename )
 {
     // filename has been chosen in KPresenterView with a filedialog,
     // so we know it exists
-    KoPicture clipart = m_doc->getClipartCollection()->loadPicture( filename );
+    KoPicture clipart = m_doc->getPictureCollection()->loadPicture( filename );
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -2610,8 +2610,8 @@ void KPrPage::changeClipart( const QString & filename )
 
 void KPrPage::insertPicture( const QString &filename, int _x , int _y )
 {
-    KoPictureKey key = m_doc->getImageCollection()->loadPicture( filename ).getKey();
-    KPPixmapObject *kppixmapobject = new KPPixmapObject(m_doc->getImageCollection() , key );
+    KoPictureKey key = m_doc->getPictureCollection()->loadPicture( filename ).getKey();
+    KPPixmapObject *kppixmapobject = new KPPixmapObject(m_doc->getPictureCollection() , key );
     double x=m_doc->zoomHandler()->unzoomItX(_x);
     double y=m_doc->zoomHandler()->unzoomItY(_y);
 
@@ -2641,8 +2641,8 @@ void KPrPage::insertPicture( const QString &filename, int _x , int _y )
 
 void KPrPage::insertPicture( const QString &_file, const KoRect &_rect )
 {
-    KoPictureKey key = m_doc->getImageCollection()->loadPicture( _file ).getKey();
-    KPPixmapObject *kppixmapobject = new KPPixmapObject( m_doc->getImageCollection() , key );
+    KoPictureKey key = m_doc->getPictureCollection()->loadPicture( _file ).getKey();
+    KPPixmapObject *kppixmapobject = new KPPixmapObject( m_doc->getPictureCollection() , key );
 
     kppixmapobject->setOrig( _rect.x(), _rect.y() );
     kppixmapobject->setSize( _rect.width(), _rect.height() );
@@ -2656,10 +2656,10 @@ void KPrPage::insertPicture( const QString &_file, const KoRect &_rect )
 
 void KPrPage::insertClipart( const QString &_file, const KoRect &_rect )
 {
-    KoPictureKey key = m_doc->getClipartCollection()->loadPicture( _file ).getKey();
+    KoPictureKey key = m_doc->getPictureCollection()->loadPicture( _file ).getKey();
     kdDebug(33001) << "KPresenterDoc::insertClipart key=" << key.toString() << endl;
 
-    KPClipartObject *kpclipartobject = new KPClipartObject( m_doc->getClipartCollection() , key );
+    KPClipartObject *kpclipartobject = new KPClipartObject( m_doc->getPictureCollection() , key );
 
     kpclipartobject->setOrig( _rect.x(), _rect.y() );
     kpclipartobject->setSize( _rect.width(), _rect.height() );

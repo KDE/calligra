@@ -132,8 +132,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
       _gradientCollection(),
       _hasHeader( false ),
       _hasFooter( false ),
-      m_pixmapMap( NULL ),
-      m_clipartMap( NULL ),
       m_unit( KoUnit::U_MM )
 {
     setInstance( KPresenterFactory::global() );
@@ -248,7 +246,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     _presPen = QPen( red, 3, SolidLine );
     presSpeed = 2;
     ignoreSticky = TRUE;
-    m_pixmapMap = 0L;
     raiseAndLowerObject = false;
 
     m_gridColor=Qt::black;
@@ -638,15 +635,16 @@ QDomDocument KPresenterDoc::saveXML()
 
     makeUsedPixmapList();
 
-    QDomElement pixmaps = _imageCollection.saveXML( KoPictureCollection::CollectionImage, doc, usedPixmaps );
-    presenter.appendChild( pixmaps );
-
-    if ( saveOnlyPage == -1 )
-        emit sigProgress( 80 );
-
-    QDomElement cliparts = _clipartCollection.saveXML( KoPictureCollection::CollectionClipart, doc, usedCliparts );
-    presenter.appendChild( cliparts );
-
+    if (specialOutputFlag()==SaveAsKOffice1dot1)
+    {
+        m_pictureCollection.saveXMLAsKOffice1Dot1( doc, presenter, usedPictures );
+    }
+    else
+    {
+        QDomElement pictures = m_pictureCollection.saveXML( KoPictureCollection::CollectionPicture, doc, usedPictures );
+        presenter.appendChild( pictures );
+    }
+    
     if ( saveOnlyPage == -1 )
         emit sigProgress( 90 );
 
@@ -830,15 +828,14 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
         }
 	return true;
     }
+    
     if (specialOutputFlag()==SaveAsKOffice1dot1)
     {
-        _imageCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, usedPixmaps );
-        _clipartCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionClipart, _store, usedCliparts );
+        m_pictureCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, usedPictures );
     }
     else
     {
-        _imageCollection.saveToStore( KoPictureCollection::CollectionImage, _store, usedPixmaps );
-        _clipartCollection.saveToStore( KoPictureCollection::CollectionClipart, _store, usedCliparts );
+        m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, usedPictures );
     }
 
     saveUsedSoundFileToStore( _store, usedSoundFile );
@@ -969,10 +966,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
 {
     emit sigProgress( 0 );
     int activePage=0;
-    delete m_pixmapMap;
-    m_pixmapMap = NULL;
-    delete m_clipartMap;
-    m_clipartMap = NULL;
     lastObj = -1;
     bool allSlides = false;
     // clean
@@ -1246,10 +1239,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                     slide=slide.nextSibling().toElement();
                 }
             }
-        } else if(elem.tagName()=="PIXMAPS") {
-            m_pixmapMap = new QMap<KoPictureKey, QString>( _imageCollection.readXML( elem ) );
-        } else if(elem.tagName()=="CLIPARTS") {
-            m_clipartMap = new QMap<KoPictureKey, QString>( _clipartCollection.readXML( elem ) );
         } else if ( elem.tagName() == "SOUNDS" ) {
             loadUsedSoundFileFromXML( elem );
         }
@@ -1259,11 +1248,40 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         childCount += 1;
     }
 
+    loadPictureMap( document );
+
+
     if(activePage!=-1)
         m_initialActivePage=m_pageList.at(activePage);
     setModified(false);
 
     return true;
+}
+
+void KPresenterDoc::loadPictureMap ( QDomElement& domElement )
+{
+    m_pictureMap.clear();
+
+    // <PICTURES>
+    QDomElement picturesElem = domElement.namedItem( "PICTURES" ).toElement();
+    if ( !picturesElem.isNull() )
+    {
+       m_pictureCollection.readXML( picturesElem, m_pictureMap );
+    }
+
+    // <PIXMAPS>
+    QDomElement pixmapsElem = domElement.namedItem( "PIXMAPS" ).toElement();
+    if ( !pixmapsElem.isNull() )
+    {
+       m_pictureCollection.readXML( pixmapsElem, m_pictureMap );
+    }
+
+    // <CLIPARTS>
+    QDomElement clipartsElem = domElement.namedItem( "CLIPARTS" ).toElement();
+    if ( !clipartsElem.isNull() )
+    {
+       m_pictureCollection.readXML( pixmapsElem, m_pictureMap );
+    }
 }
 
 /*====================== load background =========================*/
@@ -1426,7 +1444,7 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     insertObjectInPage(offset, kpautoformobject);
             } break;
             case OT_CLIPART: {
-                KPClipartObject *kpclipartobject = new KPClipartObject( &_clipartCollection );
+                KPClipartObject *kpclipartobject = new KPClipartObject( getPictureCollection() );
                 offset=kpclipartobject->load(obj);
                 if ( sticky && !ignoreSticky)
                 {
@@ -1473,7 +1491,7 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     insertObjectInPage(offset, kptextobject);
             } break;
             case OT_PICTURE: {
-                KPPixmapObject *kppixmapobject = new KPPixmapObject( &_imageCollection );
+                KPPixmapObject *kppixmapobject = new KPPixmapObject( getPictureCollection() );
                 offset=kppixmapobject->load(obj);
                 if ( sticky && !ignoreSticky)
                 {
@@ -1761,19 +1779,13 @@ void KPresenterDoc::loadUsedSoundFileFromXML( const QDomElement &element )
 /*===================================================================*/
 bool KPresenterDoc::completeLoading( KoStore* _store )
 {
-    if ( _store ) {
-        if ( m_pixmapMap ) {
-            _imageCollection.readFromStore( _store, *m_pixmapMap );
-            delete m_pixmapMap;
-            m_pixmapMap = NULL;
-        }
-        emit sigProgress( 80 );
+    emit sigProgress( 80 );
 
-        if ( m_clipartMap ) {
-            _clipartCollection.readFromStore( _store, *m_clipartMap );
-            delete m_clipartMap;
-            m_clipartMap = NULL;
-        }
+    if ( _store ) {
+        m_pictureCollection.readFromStore( _store, m_pictureMap );
+        m_pictureMap.clear(); // Release memory
+
+
         emit sigProgress( 90 );
 
         if ( !usedSoundFile.isEmpty() )
@@ -1795,7 +1807,7 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
                 page->completeLoading( _clean, lastObj );
         }
     } else {
-	if ( _clean )
+        if ( _clean )
         {
 	    setPageLayout( __pgLayout );
         }
@@ -2325,8 +2337,7 @@ void KPresenterDoc::updateHeaderFooterButton()
 
 void KPresenterDoc::makeUsedPixmapList()
 {
-    usedPixmaps.clear();
-    usedCliparts.clear();
+    usedPictures.clear();
 
     for ( uint i = 0; i < m_pageList.count(); i++ ) {
 	if ( saveOnlyPage != -1 &&
@@ -2678,14 +2689,14 @@ void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
 
 void KPresenterDoc::insertPixmapKey( KoPictureKey key )
 {
-    if ( !usedPixmaps.contains( key ) )
-        usedPixmaps.append( key );
+    if ( !usedPictures.contains( key ) )
+        usedPictures.append( key );
 }
 
 void KPresenterDoc::insertClipartKey( KoPictureKey key )
 {
-    if ( !usedCliparts.contains( key ) )
-        usedCliparts.append( key );
+    if ( !usedPictures.contains( key ) )
+        usedPictures.append( key );
 }
 
 KPrPage * KPresenterDoc::initialActivePage() const

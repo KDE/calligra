@@ -550,7 +550,7 @@ void KPBackGround::removeGradient()
 
 KoPictureCollection * KPBackGround::imageCollection() const
 {
-    return m_page->kPresenterDoc()->getImageCollection();
+    return m_page->kPresenterDoc()->getPictureCollection();
 }
 
 KPGradientCollection * KPBackGround::gradientCollection() const
@@ -560,5 +560,5 @@ KPGradientCollection * KPBackGround::gradientCollection() const
 
 KoPictureCollection * KPBackGround::clipartCollection() const
 {
-    return m_page->kPresenterDoc()->getClipartCollection();
+    return m_page->kPresenterDoc()->getPictureCollection();
 }

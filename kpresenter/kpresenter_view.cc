@@ -32,6 +32,7 @@
 #include <qclipboard.h>
 #include <qradiobutton.h>
 #include <qdragobject.h>
+#include <qfile.h>
 
 #include <backdia.h>
 #include <autoformEdit/afchoose.h>
@@ -691,20 +692,21 @@ void KPresenterView::savePicture()
     m_canvas->savePicture();
 }
 
-void KPresenterView::savePicture( KPPixmapObject* obj )
+void KPresenterView::savePicture( const QString& oldName, KoPicture& picture)
 {
-    QString oldFile=obj->getFileName();
-
-    QStringList mimetypes;
-    mimetypes = KImageIO::mimeTypes( KImageIO::Reading );
-
+    QString oldFile(oldName);
     KURL url(oldFile);
     if (!QDir(url.directory()).exists())
         oldFile = url.fileName();
 
+    QString mimetype=picture.getMimeType();
+    kdDebug() << "Picture has mime type: " << mimetype << endl;
+    QStringList mimetypes;
+    mimetypes << mimetype;
+
     KFileDialog fd( oldFile, QString::null, 0, 0, TRUE );
     fd.setMimeFilter( mimetypes );
-    fd.setCaption(i18n("Save Image"));
+    fd.setCaption(i18n("Save Picture"));
     if ( fd.exec() == QDialog::Accepted )
     {
         url = fd.selectedURL();
@@ -717,7 +719,7 @@ void KPresenterView::savePicture( KPPixmapObject* obj )
         }
         QFile file( url.path() );
         if ( file.open( IO_ReadWrite ) ) {
-            obj->picture().save( &file );
+            picture.save( &file );
             file.close();
         } else {
             KMessageBox::error(this,
@@ -725,7 +727,13 @@ void KPresenterView::savePicture( KPPixmapObject* obj )
                                i18n("Save Picture"));
         }
     }
+}
 
+void KPresenterView::savePicture( KPPixmapObject* obj )
+{
+    QString oldFile=obj->getFileName();
+    KoPicture picture(obj->picture());
+    savePicture(oldFile, picture);
 }
 
 void KPresenterView::insertClipart()
@@ -766,35 +774,8 @@ void KPresenterView::saveClipart()
 void KPresenterView::saveClipart( KPClipartObject* obj )
 {
     QString oldFile=obj->getFileName();
-    QStringList mimetypes;
-    mimetypes = KoPictureFilePreview::clipartMimeTypes();
-    KURL url(oldFile);
-    if (!QDir(url.directory()).exists())
-        oldFile = url.fileName();
-
-    KFileDialog fd( oldFile, QString::null, 0, 0, TRUE );
-    fd.setMimeFilter( mimetypes );
-    fd.setCaption(i18n("Save Clipart"));
-    if ( fd.exec() == QDialog::Accepted )
-    {
-        url = fd.selectedURL();
-        if( url.isEmpty() )
-        {
-            KMessageBox::sorry( this,
-                                i18n("File name is empty"),
-                                i18n("Save Clipart"));
-            return;
-        }
-        QFile file( url.path() );
-        if ( file.open( IO_ReadWrite ) ) {
-            obj->clipart().save( &file );
-            file.close();
-        } else {
-            KMessageBox::error(this,
-                               i18n("Error during saving"),
-                               i18n("Save Clipart"));
-        }
-    }
+    KoPicture picture(obj->clipart());
+    savePicture(oldFile, picture);
 }
 
 void KPresenterView::toolsMouse()

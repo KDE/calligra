@@ -135,6 +135,7 @@ public:
     void updateHelpLineButton();
 
     void updateGridButton();
+    void savePicture( const QString& oldName, KoPicture& picture);
     void savePicture( KPPixmapObject* obj );
     void saveClipart( KPClipartObject* obj );
 
