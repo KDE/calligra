@@ -4625,7 +4625,6 @@ int KSpreadTable::adjustRow( KSpreadSelection* selectionInfo, int _row )
     {
       for ( int row = selection.top(); row <= selection.bottom(); ++row )
       {
-          kdDebug()<<" row :"<<row <<endl;
         KSpreadCell * c = getFirstCellRow( row );
         while ( c )
         {
