@@ -234,6 +234,7 @@ void KoReplaceDia::slotOk()
     m_findUI->setCtxOptions( KoReplaceDialog::options() );
     m_findUI->setCtxHistory( findHistory() );
     m_replaceUI->setCtxHistory( replacementHistory() );
+    m_replaceUI->setCtxOptions( KoReplaceDialog::options() );
 }
 
 
