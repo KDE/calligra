@@ -136,8 +136,8 @@ static QString EscapeSgmlText(const QTextCodec* codec,
     return strReturn;
 }
 
-// Escape only if the ecoding do not support the character
-// Speical SGML charcaters like < > & are supposed to be already escpaed.
+// Escape only if the encoding do not support the character
+// Special SGML characters like < > & are supposed to be already escaped.
 static QString EscapeEncodingOnly(const QTextCodec* codec, const QString& strIn)
 {
     QString strReturn;
@@ -491,51 +491,49 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 /*================================================================*/
 void KPWebPresentation::createMainPage( KProgress *progressBar )
 {
-    QString html;
-
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
 
-    const QString brtag ( "<br" + QString( isXML() ?" /":"") + ">" );
+    // create list of slides (with proper link)
+    QString toc;
+    for( unsigned int i = 0; i < slideInfos.count(); i++ )
+        toc.append( QString( "  <li><a href=\"html/slide_%1.html\">%2</a></li>\n" ).
+            arg( i+1 ).arg( slideInfos[ i ].slideTitle ) );
 
+    // footer: author name, e-mail
+    QString htmlAuthor = email.isEmpty() ? escapeHtmlText( codec, author ) :
+        QString("<a href=\"mailto:%1\">%2</a>").arg( escapeHtmlText( codec, email )).arg( escapeHtmlText( codec, author ));
+    QString footer = i18n( "Created on %1 by <i>%2</i> with %3" );
+    footer = footer.arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).
+        arg( htmlAuthor ).arg( "<a href=\"http://www.koffice.org/kpresenter\">KPresenter</a>" );
+    footer = EscapeEncodingOnly( codec, footer );
+
+    // construct the main page
+    QString mainPage = 
+      "<body bgcolor=\"%1\" text=\"%2\">\n"
+      "<h1 align=\"center\"><font color=\"%3\">%4</font></h1>\n"
+      "<p align=\"center\"><a href=\"html/slide_1.html\">%5</a></p>\n"
+      "<p>%6</p>\n"
+      "<ol>%7</ol>\n"
+      "<p>%8</p>\n"
+      "</body>\n"
+      "</html>\n";
+
+    mainPage = mainPage.arg( backColor.name() ).arg( textColor.name() ).arg( titleColor.name() ).
+       arg( title ).  arg( i18n("Click here to start the Slideshow") ).
+       arg( i18n("Table of Contents") ).
+       arg( toc ).arg( footer );
+
+    // create index file, write everything
     QFile file( QString( "%1/index.html" ).arg( path ) );
     file.open( IO_WriteOnly );
     QTextStream streamOut( &file );
     streamOut.setCodec( codec );
         
     writeStartOfHeader( streamOut, codec,  isXML() , i18n("Table of Contents") );
-    
     streamOut << "</head>\n";
-    streamOut << "<body bgcolor=\"" << backColor.name() << "\" text=\"" << textColor.name() << "\">\n";
 
-    streamOut << "<font color=\"" << titleColor.name() << "\">\n";
-    streamOut << brtag << "<center><h1>" << title << "</h1></center>\n";
-    streamOut << "</font>\n";
+    streamOut << mainPage;
 
-    streamOut << brtag << brtag << "<center><h3><a href=\"html/slide_1.html\">";
-    streamOut << i18n("Click here to start the Slideshow");
-    streamOut << "</a></h3></center>" << brtag << "\n";
-
-    streamOut << "<hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">" << "\n";
-
-    streamOut << brtag << brtag << "\n<b>" << i18n("Table of Contents") << "</b>" << brtag << "\n";
-    streamOut << "<ol>\n";
-
-    for ( unsigned int i = 0; i < slideInfos.count(); i++ )
-        streamOut << "  <li><a href=\"html/slide_" << i+1 << ".html\">" << slideInfos[ i ].slideTitle << "</a></li>\n";
-
-    streamOut << "</ol>\n";
-
-    streamOut << "<hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">" << "\n";
-    
-    QString htmlAuthor;
-    if (email.isEmpty())
-        htmlAuthor=escapeHtmlText( codec, author );
-    else
-        htmlAuthor=QString("<a href=\"mailto:%1\">%2</a>").arg( escapeHtmlText( codec, email )).arg( escapeHtmlText( codec, author ));
-    streamOut << EscapeEncodingOnly ( codec, i18n( "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/kpresenter\">KPresenter</a>" ) 
-        .arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).arg( htmlAuthor ) );
-
-    streamOut << "</body>\n</html>\n";
     file.close();
 
     progressBar->setProgress( progressBar->totalSteps() );
