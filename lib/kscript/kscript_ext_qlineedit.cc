@@ -11,7 +11,9 @@
 
 #include <qlineedit.h>
 
+#undef WIDGET
 #define WIDGET ((QLineEdit*)object())
+#undef CHECKTYPE
 #define CHECKTYPE( context, v, type ) if ( !checkType( context, v, type ) ) return FALSE;
 #define RETURN_LEFTEXPR( n, value ) if ( name == n ) { KSValue::Ptr ptr = value; ptr->setMode( KSValue::LeftExpr ); return ptr; }
 #define RETURN_RIGHTEXPR( n, value ) if ( name == n ) { return value; }

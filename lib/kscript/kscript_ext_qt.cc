@@ -12,6 +12,7 @@
 #include "kscript_util.h"
 #include "kscript.h"
 
+#undef CHECKTYPE
 #define CHECKTYPE( context, v, type ) if ( !checkType( context, v, type ) ) return FALSE;
 
 KSModule::Ptr ksCreateModule_Qt( KSInterpreter* interp )
