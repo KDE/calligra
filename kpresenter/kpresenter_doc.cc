@@ -2683,7 +2683,7 @@ void KPresenterDoc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
 }
 
 
-KPrPage * KPresenterDoc::stickyPage()
+KPrPage * KPresenterDoc::stickyPage() const
 {
     return m_stickyPage;
 }

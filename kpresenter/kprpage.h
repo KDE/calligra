@@ -95,7 +95,7 @@ public:
 
     void copyObjs(QDomDocument &doc, QDomElement &presenter);
 
-    KPObject* getSelectedObj();
+    KPObject* getSelectedObj() const;
     void groupObjects();
     void ungroupObjects();
     void raiseObjs( bool forward );
@@ -109,29 +109,29 @@ public:
     bool getPictureGrayscal( bool grayscal ) const;
     int getPictureBright( int bright ) const;
     QPixmap getPicturePixmap() const;
-    int getRndY( int _ry );
-    int getRndX( int _rx );
-    int getPieAngle( int pieAngle );
-    int getPieLength( int pieLength );
-    bool getSticky( bool s );
-    PieType getPieType( PieType pieType );
+    int getRndY( int _ry ) const;
+    int getRndX( int _rx ) const;
+    int getPieAngle( int pieAngle ) const;
+    int getPieLength( int pieLength ) const;
+    bool getSticky( bool s ) const;
+    PieType getPieType( PieType pieType ) const;
     int getGYFactor( int yfactor )const;
     int getGXFactor( int xfactor )const;
-    bool getGUnbalanced( bool  unbalanced );
-    bool getBackUnbalanced( unsigned int );
+    bool getGUnbalanced( bool  unbalanced ) const;
+    bool getBackUnbalanced( unsigned int ) const;
     BCType getGType( BCType gt )const;
     QColor getGColor2( const QColor &g2 ) const;
     QColor getGColor1( const QColor & g1)const;
-    FillType getFillType( FillType ft );
+    FillType getFillType( FillType ft ) const;
     QBrush getBrush( const QBrush &brush )const;
-    LineEnd getLineEnd( LineEnd le );
-    LineEnd getLineBegin( LineEnd lb );
+    LineEnd getLineEnd( LineEnd le ) const;
+    LineEnd getLineBegin( LineEnd lb ) const;
 
-    bool getProtect( bool p );
-    bool differentProtect( bool p);
+    bool getProtect( bool p ) const;
+    bool differentProtect( bool p) const;
 
-    bool getKeepRatio( bool p );
-    bool differentKeepRatio( bool p);
+    bool getKeepRatio( bool p ) const;
+    bool differentKeepRatio( bool p) const;
 
     bool getProtectContent(bool prot) const;
 
@@ -139,7 +139,7 @@ public:
     KCommand* setBrush( const QBrush &brush, FillType ft,const  QColor& g1, const QColor &g2,
                         BCType gt, bool unbalanced, int xfactor, int yfactor,QPtrList<KPObject> list);
 
-    QPen getPen( const QPen & pen );
+    QPen getPen( const QPen & pen ) const;
 
     // insert an object
     virtual KPPartObject* insertObject( const KoRect&, KoDocumentEntry& );
@@ -170,7 +170,7 @@ public:
     KCommand *alignObjsCenterV(const KoRect &rect= KoRect());
     KCommand *alignObjsBottom(const KoRect &rect= KoRect());
 
-    int getPenBrushFlags(QPtrList<KPObject>list );
+    int getPenBrushFlags( QPtrList<KPObject>list ) const;
     KCommand* setPieSettings( PieType pieType, int angle, int len );
     KCommand* setRectSettings( int _rx, int _ry );
     KCommand* setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
@@ -263,14 +263,14 @@ public:
     KPObject * getCursor(const KoPoint &pos );
 
     KPObject * getObjectResized(const KoPoint &pos, ModifyType modType, bool &desel, bool &_over, bool &_resize );
-    KPObject * getEditObj(const KoPoint & pos);
-    KPObject* getObjectAt( const KoPoint&pos );
-    KPPixmapObject * picViewOrigHelper();
+    KPObject * getEditObj(const KoPoint & pos) const;
+    KPObject* getObjectAt( const KoPoint&pos ) const;
+    KPPixmapObject * picViewOrigHelper() const;
     void applyStyleChange( KoStyle *changedStyle, int paragLayoutChanged, int formatChanged );
 
     void reactivateBgSpellChecking(bool refreshTextObj);
 
-    bool canMoveOneObject();
+    bool canMoveOneObject() const;
     KCommand *alignVertical( VerticalAlignmentType _type );
     void changeTabStopValue ( double _tabStop );
     bool saveClip(KPresenterView *_view);

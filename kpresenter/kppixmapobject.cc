@@ -373,7 +373,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     KPObject::draw( _painter, _zoomHandler, selectionMode, drawContour );
 }
 
-QPixmap KPPixmapObject::getOrignalPixmap()
+QPixmap KPPixmapObject::getOriginalPixmap()
 {
     QSize _pixSize = image.getOriginalSize();
     QPixmap _pixmap = image.generatePixmap( _pixSize );

@@ -71,8 +71,8 @@ public:
     void setRnds( int _rx, int _ry );
     void setPenBrush( const QPen &_pen, const QBrush &_brush );
 
-    int getRndX() { return xRnd; }
-    int getRndY() { return yRnd; }
+    int getRndX() const { return xRnd; }
+    int getRndY() const { return yRnd; }
 
 protected:
     QLabel *lRndX, *lRndY;

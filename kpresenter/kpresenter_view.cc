@@ -2887,7 +2887,7 @@ void KPresenterView::setupActions()
                      actionCollection(), "rename_page" );
 
     actionPicOriginalSize = new KAction( i18n( "Sca&le to Original Size" ), 0, this,
-                                         SLOT( picViewOrignalSize() ),
+                                         SLOT( picViewOriginalSize() ),
                                          actionCollection(), "pic_original_size" );
 
     actionPic640x480=new KAction(i18n( "640x480" ),0,this,
@@ -4655,9 +4655,9 @@ void KPresenterView::renamePageTitle()
         sidebar->renamePageTitle();
 }
 
-void KPresenterView::picViewOrignalSize()
+void KPresenterView::picViewOriginalSize()
 {
-    m_canvas->picViewOrignalSize();
+    m_canvas->picViewOriginalSize();
 }
 
 void KPresenterView::picViewOrig640x480()
@@ -6324,7 +6324,7 @@ void KPresenterView::zoomPlus()
     m_canvas->setToolEditMode( TEM_MOUSE );
 }
 
-int KPresenterView::getZoomEntirePage()
+int KPresenterView::getZoomEntirePage() const
 {
     double height = zoomHandler()->resolutionY() * m_pKPresenterDoc->pageLayout().ptHeight;
     double width = zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth;

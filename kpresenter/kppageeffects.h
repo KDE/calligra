@@ -27,7 +27,7 @@
 class QPixmap;
 
 void kPchangePages( QWidget *, const QPixmap&, const QPixmap&,
-                    PageEffect _effect, int _speedFaktor );
+                    PageEffect _effect, float _speedFaktor );
 
 #endif
 

@@ -701,7 +701,7 @@ void KPWebPresentationWizard::finish()
 
 
 /*================================================================*/
-bool KPWebPresentationWizard::isPathValid()
+bool KPWebPresentationWizard::isPathValid() const
 {
     QFileInfo fi( path->lineEdit()->text() );
 

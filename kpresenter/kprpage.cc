@@ -285,7 +285,7 @@ int KPrPage::numTextObject() const
     return num;
 }
 
-KPObject* KPrPage::getSelectedObj()
+KPObject* KPrPage::getSelectedObj() const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -327,7 +327,7 @@ void KPrPage::ungroupObjects()
 }
 
 /*=============================================================*/
-QPen KPrPage::getPen( const QPen &pen )
+QPen KPrPage::getPen( const QPen &pen ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -442,7 +442,7 @@ QPen KPrPage::getPen( const QPen &pen )
 }
 
 /*========================= get line begin ========================*/
-LineEnd KPrPage::getLineBegin( LineEnd lb )
+LineEnd KPrPage::getLineBegin( LineEnd lb ) const
 {
 
   QPtrListIterator<KPObject> it( m_objectList );
@@ -511,7 +511,7 @@ LineEnd KPrPage::getLineBegin( LineEnd lb )
 }
 
 /*========================= get line end =========================*/
-LineEnd KPrPage::getLineEnd( LineEnd le )
+LineEnd KPrPage::getLineEnd( LineEnd le ) const
 {
 
   QPtrListIterator<KPObject> it( m_objectList );
@@ -668,7 +668,7 @@ QBrush KPrPage::getBrush( const QBrush &brush )const
 }
 
 /*================================================================*/
-FillType KPrPage::getFillType( FillType ft )
+FillType KPrPage::getFillType( FillType ft ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -736,7 +736,7 @@ BCType KPrPage::getGType( BCType gt )const
 }
 
 /*================================================================*/
-bool KPrPage::getGUnbalanced( bool  unbalanced )
+bool KPrPage::getGUnbalanced( bool  unbalanced ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -787,7 +787,7 @@ int KPrPage::getGYFactor( int yfactor )const
 }
 
 /*================================================================*/
-PieType KPrPage::getPieType( PieType pieType )
+PieType KPrPage::getPieType( PieType pieType ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -803,7 +803,7 @@ PieType KPrPage::getPieType( PieType pieType )
     return pieType;
 }
 
-bool KPrPage::getSticky( bool s )
+bool KPrPage::getSticky( bool s ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -820,7 +820,7 @@ bool KPrPage::getSticky( bool s )
 }
 
 /*================================================================*/
-int KPrPage::getPieLength( int pieLength )
+int KPrPage::getPieLength( int pieLength ) const
 {
 
     QPtrListIterator<KPObject> it( m_objectList );
@@ -838,7 +838,7 @@ int KPrPage::getPieLength( int pieLength )
 }
 
 /*================================================================*/
-int KPrPage::getPieAngle( int pieAngle )
+int KPrPage::getPieAngle( int pieAngle ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -855,7 +855,7 @@ int KPrPage::getPieAngle( int pieAngle )
 }
 
 /*================================================================*/
-int KPrPage::getRndX( int _rx )
+int KPrPage::getRndX( int _rx ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -876,7 +876,7 @@ int KPrPage::getRndX( int _rx )
 }
 
 /*================================================================*/
-int KPrPage::getRndY( int _ry )
+int KPrPage::getRndY( int _ry ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -1033,7 +1033,7 @@ QPixmap KPrPage::getPicturePixmap() const
         {
             KPPixmapObject *obj = dynamic_cast<KPPixmapObject*>( it.current() );
             if( obj )
-                return obj->getOrignalPixmap();
+                return obj->getOriginalPixmap();
         }
     }
 
@@ -2027,7 +2027,7 @@ KCommand * KPrPage::setBrush( const QBrush &brush, FillType ft, const QColor &g1
     return cmd;
 }
 
-int KPrPage::getPenBrushFlags( QPtrList<KPObject>list )
+int KPrPage::getPenBrushFlags( QPtrList<KPObject>list ) const
 {
     int flags = 0;
 
@@ -3379,34 +3379,32 @@ KPObject * KPrPage::getObjectResized( const KoPoint &pos, ModifyType modType, bo
     return 0L;
 }
 
-KPObject * KPrPage::getEditObj(const KoPoint & pos)
+KPObject * KPrPage::getEditObj(const KoPoint & pos) const
 {
-    KPObject *kpobject=0L;
-    if ( (int)m_objectList.count() - 1 >= 0 ) {
-        for ( int i = m_objectList.count()  - 1; i >= 0; i-- ) {
-            kpobject = m_objectList.at( i );
-            if ( kpobject->contains( pos,m_doc->zoomHandler() ) ) {
-                return kpobject;
-            }
-        }
+    QPtrListIterator<KPObject> it( m_objectList );
+    KPObject *o = it.toLast();
+    while ( o ) {
+        if ( o->contains( pos, m_doc->zoomHandler() ) )
+            return o;
+        o = --it;
     }
     return 0L;
 }
 
-
-KPObject* KPrPage::getObjectAt( const KoPoint&pos )
+// ### identical to getEditObj() ! (Harri)
+KPObject* KPrPage::getObjectAt( const KoPoint&pos ) const
 {
-  KPObject *obj=0L;
-  for ( int i = m_objectList.count() - 1; i >= 0 ; i-- ) {
-    obj = m_objectList.at( i );
-    if ( obj->contains( pos,m_doc->zoomHandler() ) )
-      return obj;
-  }
-
-  return 0L;
+    QPtrListIterator<KPObject> it( m_objectList );
+    KPObject *o = it.toLast();
+    while ( o ) {
+        if ( o->contains( pos, m_doc->zoomHandler() ) )
+            return o;
+        o = --it;
+    }
+    return 0L;
 }
 
-KPPixmapObject * KPrPage::picViewOrigHelper( )
+KPPixmapObject * KPrPage::picViewOrigHelper() const
 {
   KPPixmapObject *obj=0L;
   QPtrListIterator<KPObject> it( m_objectList );
@@ -3446,7 +3444,7 @@ void KPrPage::reactivateBgSpellChecking(bool refreshTextObj)
     }
 }
 
-bool KPrPage::getProtect( bool p )
+bool KPrPage::getProtect( bool p ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -3460,7 +3458,7 @@ bool KPrPage::getProtect( bool p )
     return p;
 }
 
-bool KPrPage::differentProtect( bool p)
+bool KPrPage::differentProtect( bool p) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -3478,7 +3476,7 @@ bool KPrPage::differentProtect( bool p)
 }
 
 
-bool KPrPage::differentKeepRatio( bool p)
+bool KPrPage::differentKeepRatio( bool p) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -3495,7 +3493,7 @@ bool KPrPage::differentKeepRatio( bool p)
     return false;
 }
 
-bool KPrPage::getKeepRatio( bool p )
+bool KPrPage::getKeepRatio( bool p ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -3536,7 +3534,7 @@ KoRect KPrPage::getBoundingAllObjectRect(const KoRect &rect, KPresenterDoc *doc)
     return boundingRect;
 }
 
-bool KPrPage::canMoveOneObject()
+bool KPrPage::canMoveOneObject() const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )

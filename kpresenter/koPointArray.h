@@ -50,10 +50,10 @@ public:
     KoPointArray cubicBezier() const;
     static void cleanBuffers();
 
-    QPointArray zoomPointArray( KoZoomHandler* zoomHandler ) const;
+    QPointArray zoomPointArray( const KoZoomHandler* zoomHandler ) const;
     // Zoom the point array, taking into account the width of the pen
     // (reducing the figure as necessary)
-    QPointArray zoomPointArray( KoZoomHandler* zoomHandler, int penWidth ) const;
+    QPointArray zoomPointArray( const KoZoomHandler* zoomHandler, int penWidth ) const;
 
 protected:
     static uint splen;

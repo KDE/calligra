@@ -287,7 +287,7 @@ KoPointArray KoPointArray::cubicBezier() const
     }
 }
 
-QPointArray KoPointArray::zoomPointArray( KoZoomHandler* zoomHandler ) const
+QPointArray KoPointArray::zoomPointArray( const KoZoomHandler* zoomHandler ) const
 {
     QPointArray tmpPoints(size());
     for ( uint i= 0; i<size();i++ ) {
@@ -297,7 +297,7 @@ QPointArray KoPointArray::zoomPointArray( KoZoomHandler* zoomHandler ) const
     return tmpPoints;
 }
 
-QPointArray KoPointArray::zoomPointArray( KoZoomHandler* zoomHandler, int penWidth ) const
+QPointArray KoPointArray::zoomPointArray( const KoZoomHandler* zoomHandler, int penWidth ) const
 {
     double fx;
     double fy;

@@ -83,25 +83,16 @@ public:
     { zoom = _zoom; }
     void setEncoding( const QString &_encoding ) { m_encoding = _encoding; }
 
-    QString getAuthor()
-    { return author; }
-    QString getEmail()
-    { return email; }
-    QString getTitle()
-    { return title; }
-    QColor getBackColor()
-    { return backColor; }
-    QColor getTitleColor()
-    { return titleColor; }
-    QColor getTextColor()
-    { return textColor; }
-    ImageFormat getImageFormat()
-    { return imgFormat; }
-    QString getPath()
-    { return path; }
-    int getZoom()
-    { return zoom; }
-    QString getEncoding() { return m_encoding; }
+    QString getAuthor() const { return author; }
+    QString getEmail() const { return email; }
+    QString getTitle() const { return title; }
+    QColor getBackColor() const { return backColor; }
+    QColor getTitleColor() const { return titleColor; }
+    QColor getTextColor() const { return textColor; }
+    ImageFormat getImageFormat() const { return imgFormat; }
+    QString getPath() const { return path; }
+    int getZoom() const { return zoom; }
+    QString getEncoding() const { return m_encoding; }
 
     struct SlideInfo {
         int pageNumber; /* 0-based */
@@ -109,23 +100,22 @@ public:
     };
     // Each entry in this list is a page (number+title).
     // This allows to skip pages.
-    QValueList<SlideInfo> getSlideInfos() { return slideInfos; }
+    QValueList<SlideInfo> getSlideInfos() const { return slideInfos; }
 
     void setSlideTitle( int i, const QString &slideTitle )
     { slideInfos[i].slideTitle = slideTitle; }
 
     void setConfig( const QString &_config )
     { config = _config; }
-    QString getConfig()
-    { return config; }
+    QString getConfig() const { return config; }
 
     void loadConfig();
     void saveConfig();
 
-    int initSteps() { return 7; }
+    int initSteps() const { return 7; }
     int slides1Steps() { return slideInfos.count(); }
     int slides2Steps() { return slideInfos.count(); }
-    int mainSteps() { return 1; }
+    int mainSteps() const { return 1; }
 
     void initCreation( KProgress *progressBar );
     void createSlidesPictures( KProgress *progressBar );
@@ -167,7 +157,7 @@ protected:
     void setupPage2();
     void setupPage3();
 
-    bool isPathValid();
+    bool isPathValid() const;
 
     void closeEvent( QCloseEvent *e );
 

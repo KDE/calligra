@@ -138,7 +138,7 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
 }
 //todo used kozoomhandled
 /*================== get bounding with of figure =================*/
-KoSize getBoundingSize( LineEnd figure, int _w, KoZoomHandler*_zoomHandler )
+KoSize getBoundingSize( LineEnd figure, int _w, const KoZoomHandler*_zoomHandler )
 {
     switch ( figure )
     {

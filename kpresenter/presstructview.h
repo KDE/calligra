@@ -71,10 +71,10 @@ public:
     //now we can add specific text for example header/footer
     void setObject( KPObject *o, int num, bool sticky=false, const QString &name=QString::null );
     void setNum(int _num) {num = _num;};
-    int getNum() {return num;};
-    KPBackGround *getPage();
-    int getPageNum();
-    KPObject *getObject();
+    int getNum() const { return num;};
+    KPBackGround *getPage() const;
+    int getPageNum() const;
+    KPObject *getObject() const;
 
 protected:
     KPBackGround *page;

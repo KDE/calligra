@@ -71,7 +71,7 @@ public:
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 		       SelectionMode selectionMode, bool drawContour = FALSE );
 
-    QPixmap getOrignalPixmap();
+    QPixmap getOriginalPixmap();
     PictureMirrorType getPictureMirrorType() const { return mirrorType; }
     int getPictureDepth() const { return depth; }
     bool getPictureSwapRGB() const { return swapRGB; }

@@ -4733,7 +4733,7 @@ void KPrCanvas::gotoPage( int pg )
 }
 
 /*================================================================*/
-KPTextObject* KPrCanvas::kpTxtObj()
+KPTextObject* KPrCanvas::kpTxtObj() const
 {
     return ( ( editNum && editNum->getType() == OT_TEXT ) ?
              dynamic_cast<KPTextObject*>( editNum ) : 0 );
@@ -4994,7 +4994,7 @@ bool KPrCanvas::getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, KoSize *origS
 }
 
 /*================================================================*/
-void KPrCanvas::picViewOrignalSize()
+void KPrCanvas::picViewOriginalSize()
 {
     picViewOrigHelper( -1, -1 );
 }
@@ -5095,7 +5095,7 @@ void KPrCanvas::setTextBackground( KPTextObject */*obj*/ )
 #endif
 }
 
-QValueList<int> KPrCanvas::pages(const QString &range) {
+QValueList<int> KPrCanvas::pages(const QString &range) const {
 
     if(range.isEmpty())
         return QValueList<int> ();
@@ -5114,7 +5114,7 @@ QValueList<int> KPrCanvas::pages(const QString &range) {
     return list;
 }
 
-bool KPrCanvas::pagesHelper(const QString &chunk, QValueList<int> &list) {
+bool KPrCanvas::pagesHelper(const QString &chunk, QValueList<int> &list) const {
 
     bool ok=true;
     int mid=chunk.find('-');
@@ -6065,7 +6065,7 @@ QPtrList<KPTextObject>  KPrCanvas::listOfTextObjs() const
     return lst;
 }
 
-KPTextObject * KPrCanvas::textObjectByPos( int pos )
+KPTextObject * KPrCanvas::textObjectByPos( int pos ) const
 {
     if ( pos < 0 )
         return 0L;
@@ -6636,7 +6636,7 @@ QPoint KPrCanvas::applyGrid( const QPoint &pos,bool offset )
     return m_view->kPresenterDoc()->zoomHandler()->zoomPoint( newPos );
 }
 
-int KPrCanvas::applyGridOnPosX( int pos )
+int KPrCanvas::applyGridOnPosX( int pos ) const
 {
     double gridX = m_view->kPresenterDoc()->getGridX();
     double point = m_view->kPresenterDoc()->zoomHandler()->unzoomItX( pos );
@@ -6644,7 +6644,7 @@ int KPrCanvas::applyGridOnPosX( int pos )
     return m_view->kPresenterDoc()->zoomHandler()->zoomItX( result );
 }
 
-int KPrCanvas::applyGridOnPosY( int pos )
+int KPrCanvas::applyGridOnPosY( int pos ) const
 {
     double gridY = m_view->kPresenterDoc()->getGridY();
     double point = m_view->kPresenterDoc()->zoomHandler()->unzoomItY( pos );

@@ -171,19 +171,19 @@ void KPPresStructObjectItem::setObject( KPObject *o, int num, bool sticky,const 
 }
 
 /*================================================================*/
-KPBackGround *KPPresStructObjectItem::getPage()
+KPBackGround *KPPresStructObjectItem::getPage() const
 {
     return page;
 }
 
 /*================================================================*/
-KPObject *KPPresStructObjectItem::getObject()
+KPObject *KPPresStructObjectItem::getObject() const
 {
     return object;
 }
 
 /*================================================================*/
-int KPPresStructObjectItem::getPageNum()
+int KPPresStructObjectItem::getPageNum() const
 {
     return pageNum;
 }

@@ -28,7 +28,7 @@
 
 /*=========================== change pages =======================*/
 void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
-                    PageEffect effect, int speedFaktor )
+                    PageEffect effect, float speedFaktor )
 {
     Q_ASSERT( _pix1.size() == _pix2.size() );
     int width = _pix1.width();

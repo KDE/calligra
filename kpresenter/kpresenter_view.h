@@ -301,7 +301,7 @@ public slots:
     void extraChangeClip();
     void renamePageTitle();
 
-    void picViewOrignalSize();
+    void picViewOriginalSize();
     void picViewOrig640x480();
     void picViewOrig800x600();
     void picViewOrig1024x768();
@@ -685,7 +685,7 @@ protected:
     void openThePresentationDurationDialog();
     QString presentationDurationDataFormatChange( int _time );
 
-    int getZoomEntirePage();
+    int getZoomEntirePage() const;
 
     KCommand * applyAutoFormatToCurrentPage( const QPtrList<KoTextObject> & lst);
 

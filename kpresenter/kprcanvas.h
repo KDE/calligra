@@ -121,7 +121,7 @@ public:
     void setTextDefaultFormat( );
     void setIncreaseFontSize();
     void setDecreaseFontSize();
-    KPTextObject* kpTxtObj();
+    KPTextObject* kpTxtObj() const;
 
     // Start a screen presentation
     // All pages if curPgNum is -1, otherwise just curPgNum (1-based)
@@ -258,7 +258,7 @@ public:
 
     //return pos of kptextobj
     int textObjectNum( KPTextObject * obj ) const;
-    KPTextObject * textObjectByPos( int pos );
+    KPTextObject * textObjectByPos( int pos ) const;
 
     void alignObjLeft();
     void alignObjCenterH();
@@ -326,7 +326,7 @@ public slots:
 
     void chPic();
     void chClip();
-    void picViewOrignalSize();
+    void picViewOriginalSize();
     void picViewOrig640x480();
     void picViewOrig800x600();
     void picViewOrig1024x768();
@@ -463,8 +463,8 @@ protected:
     void moveHelpPoint( const QPoint & newPos );
     void scrollCanvas(const KoRect& oldPos);
 private:
-    QValueList<int> pages(const QString &range);
-    bool pagesHelper(const QString &chunk, QValueList<int> &list);
+    QValueList<int> pages(const QString &range) const;
+    bool pagesHelper(const QString &chunk, QValueList<int> &list) const;
     void picViewOrigHelper(int x, int y);
 
     void moveObject( int x, int y, bool key );
@@ -493,8 +493,8 @@ private:
 
     void rectSymetricalObjet();
     QPoint applyGrid( const QPoint &pos,bool offset );
-    int applyGridOnPosX( int pos );
-    int applyGridOnPosY( int pos );
+    int applyGridOnPosX( int pos ) const;
+    int applyGridOnPosY( int pos ) const;
 
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }

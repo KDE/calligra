@@ -30,67 +30,67 @@ KPresenterObjectIface::KPresenterObjectIface( KPObject *obj_ )
    obj = obj_;
 }
 
-int KPresenterObjectIface::getType()
+int KPresenterObjectIface::getType() const
 {
     return (int)obj->getType();
 }
 
-bool KPresenterObjectIface::isSelected()
+bool KPresenterObjectIface::isSelected() const
 {
     return obj->isSelected();
 }
 
-float KPresenterObjectIface::angle()
+float KPresenterObjectIface::angle() const
 {
     return obj->getAngle();
 }
 
-int KPresenterObjectIface::shadowDistance()
+int KPresenterObjectIface::shadowDistance() const
 {
     return obj->getShadowDistance();
 }
 
-int KPresenterObjectIface::shadowDirection()
+int KPresenterObjectIface::shadowDirection() const
 {
     return (int)obj->getShadowDirection();
 }
 
-QColor KPresenterObjectIface::shadowColor()
+QColor KPresenterObjectIface::shadowColor() const
 {
     return obj->getShadowColor();
 }
 
-int KPresenterObjectIface::effect()
+int KPresenterObjectIface::effect() const
 {
     return (int)obj->getEffect();
 }
 
-int KPresenterObjectIface::effect2()
+int KPresenterObjectIface::effect2() const
 {
     return (int)obj->getEffect2();
 }
 
-int KPresenterObjectIface::presNum()
+int KPresenterObjectIface::presNum() const
 {
     return obj->getPresNum();
 }
 
-int KPresenterObjectIface::subPresSteps()
+int KPresenterObjectIface::subPresSteps() const
 {
     return obj->getSubPresSteps();
 }
 
-bool KPresenterObjectIface::disappear()
+bool KPresenterObjectIface::disappear() const
 {
     return obj->getDisappear();
 }
 
-int KPresenterObjectIface::disappearNum()
+int KPresenterObjectIface::disappearNum() const
 {
     return obj->getDisappearNum();
 }
 
-int KPresenterObjectIface::effect3()
+int KPresenterObjectIface::effect3() const
 {
     return (int)obj->getEffect3();
 }

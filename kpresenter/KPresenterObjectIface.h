@@ -35,20 +35,20 @@ public:
     KPresenterObjectIface( KPObject *obj_ );
 
 k_dcop:
-    int getType();
+    int getType() const;
 
-    bool isSelected();
-    float angle();
-    int shadowDistance();
-    int shadowDirection();
-    QColor shadowColor();
-    int effect();
-    int effect2();
-    int presNum();
-    int subPresSteps();
-    bool disappear();
-    int disappearNum();
-    int effect3();
+    bool isSelected() const;
+    float angle() const;
+    int shadowDistance() const;
+    int shadowDirection() const;
+    QColor shadowColor() const;
+    int effect() const;
+    int effect2() const;
+    int presNum() const;
+    int subPresSteps() const;
+    bool disappear() const;
+    int disappearNum() const;
+    int effect3() const;
 
     void setEffect(const QString & effect);
     void setEffect3(const QString & effect);
@@ -57,7 +57,7 @@ k_dcop:
     void rotate( float _angle );
     void setShadowDistance( int _distance );
     void setSticky( bool b );
-    bool isSticky() const ;
+    bool isSticky() const;
 
     void shadowColor( const QColor & _color );
 

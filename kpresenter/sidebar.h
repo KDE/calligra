@@ -63,7 +63,7 @@ private slots:
   void itemClicked(QIconViewItem *i);
 
 private:
-  QPixmap getSlideThumb(int slideNr);
+  QPixmap getSlideThumb(int slideNr) const;
 
   KPresenterDoc *doc;
   KPresenterView *view;

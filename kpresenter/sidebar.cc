@@ -336,7 +336,7 @@ void ThumbBar::removeItem( int pos )
         delete itemToDelete;
 }
 
-QPixmap ThumbBar::getSlideThumb(int slideNr)
+QPixmap ThumbBar::getSlideThumb(int slideNr) const
 {
   //kdDebug(33001) << "ThumbBar::getSlideThumb: " << slideNr << endl;
   QRect rect = doc->pageList().at(slideNr)->getZoomPageRect();
@@ -463,7 +463,7 @@ void Outline::addItem( int pos )
 void Outline::moveItem( int oldPos, int newPos )
 {
     int page = 0;
-    
+
     int lowPage = oldPos > newPos ? newPos : oldPos;
     int highPage = oldPos < newPos ? newPos : oldPos;
     QListViewItemIterator it( this );
@@ -483,7 +483,7 @@ void Outline::moveItem( int oldPos, int newPos )
                 return;
         }
         page++;
-    } 
+    }
 }
 
 void Outline::removeItem( int pos )
