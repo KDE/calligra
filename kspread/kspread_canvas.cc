@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   
+
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
    Copyright 1999-2004 David Faure <faure@kde.org>
    Copyright 2002-2004 Ariya Hidayat <ariya@kde.org>
@@ -391,6 +391,7 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
 KSpreadCanvas::~KSpreadCanvas()
 {
   delete m_scrollTimer;
+  delete m_validationInfo;
 }
 
 
@@ -560,64 +561,141 @@ bool KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* table,
                                   bool extendSelection)
 {
-  //  kdDebug() << "GotoLocation: " << location.x() << ", " << location.x() << endl;
+    //  kdDebug() << "GotoLocation: " << location.x() << ", " << location.x() << endl;
 
-  if ( table && (table != activeTable() ))
-    m_pView->setActiveTable(table);
-  else
-    table = activeTable();
+    if ( table && (table != activeTable() ))
+        m_pView->setActiveTable(table);
+    else
+        table = activeTable();
 
-  if (extendSelection)
-  {
-    extendCurrentSelection(location);
-  }
-  else
-  {
-    QPoint topLeft(location);
-    KSpreadCell* cell = table->cellAt(location);
-    if ( cell->isObscured() && cell->isObscuringForced() )
+    if (extendSelection)
     {
-      cell = cell->obscuringCells().first();
-      topLeft = QPoint(cell->column(), cell->row());
-    }
-
-    if (m_bChoose)
-    {
-      updateChooseRect(topLeft, topLeft);
-      if( m_pEditor )
-      {
-        if( m_chooseStartTable != table )
-          m_pEditor->hide();
-        else
-          m_pEditor->show();
-      }
+        extendCurrentSelection(location);
     }
     else
     {
-      /* anchor and marker should be on the same cell here */
-      selectionInfo()->setSelection(topLeft, topLeft, table);
+        QPoint topLeft(location);
+        KSpreadCell* cell = table->cellAt(location);
+        if ( cell->isObscured() && cell->isObscuringForced() )
+        {
+            cell = cell->obscuringCells().first();
+            topLeft = QPoint(cell->column(), cell->row());
+        }
+
+        if (m_bChoose)
+        {
+            updateChooseRect(topLeft, topLeft);
+            if( m_pEditor )
+            {
+                if( m_chooseStartTable != table )
+                    m_pEditor->hide();
+                else
+                    m_pEditor->show();
+            }
+        }
+        else
+        {
+            /* anchor and marker should be on the same cell here */
+            selectionInfo()->setSelection(topLeft, topLeft, table);
+        }
     }
-  }
-  scrollToCell(location);
+    scrollToCell(location);
 
-  // Perhaps the user is entering a value in the cell.
-  // In this case we may not touch the EditWidget
-  if ( !m_pEditor && !m_bChoose )
-    m_pView->updateEditWidgetOnPress();
+    // Perhaps the user is entering a value in the cell.
+    // In this case we may not touch the EditWidget
+    if ( !m_pEditor && !m_bChoose )
+        m_pView->updateEditWidgetOnPress();
 
-  if ( m_validationInfo )
-      delete m_validationInfo;
-  else if ( selectionInfo()->singleCellSelection() )
-  {
-      KSpreadCell * cell = table->cellAt( selectionInfo()->marker().x(),selectionInfo()->marker().y() );
-      if ( cell && cell->getValidity() && cell->getValidity()->displayValidationInformation)
-      {
-          kdDebug()<<" display info validation\n";
-          //todo add pos
-          //m_validationInfo->show();
-      }
-  }
-  updatePosWidget();
+    if ( selectionInfo()->singleCellSelection() )
+    {
+        int col = selectionInfo()->marker().x();
+        int row = selectionInfo()->marker().y();
+        KSpreadCell * cell = table->cellAt( col,row );
+        if ( cell && cell->getValidity() && cell->getValidity()->displayValidationInformation)
+        {
+            QString title = cell->getValidity()->titleInfo;
+            QString message = cell->getValidity()->messageInfo;
+            if ( title.isEmpty() && message.isEmpty() )
+                return;
+
+            if ( !m_validationInfo )
+                m_validationInfo = new QLabel(  this );
+            kdDebug()<<" display info validation\n";
+            double u = cell->dblWidth( col );
+            double v = cell->dblHeight( row );
+            double xpos = table->dblColumnPos( markerColumn() ) - xOffset();
+            double ypos = table->dblRowPos( markerRow() ) - yOffset();
+            // Special treatment for obscured cells.
+            if ( cell->isObscured() && cell->isObscuringForced() )
+            {
+                cell = cell->obscuringCells().first();
+                int moveX = cell->column();
+                int moveY = cell->row();
+
+                // Use the obscuring cells dimensions
+                u = cell->dblWidth( moveX );
+                v = cell->dblHeight( moveY );
+                xpos = table->dblColumnPos( moveX );
+                ypos = table->dblRowPos( moveY );
+            }
+            //m_validationInfo->setGeometry( 3, y + 3, len + 2, hei + 2 );
+            m_validationInfo->setAlignment( Qt::AlignVCenter );
+            QPainter painter;
+            painter.begin( this );
+            int len = 0.0;
+            int hei = 0.0;
+            QString resultText;
+            if ( !title.isEmpty() )
+            {
+                len = painter.fontMetrics().width( title );
+                hei = painter.fontMetrics().height();
+                resultText = title + "\n";
+            }
+            if ( !message.isEmpty() )
+            {
+                int i = 0;
+                int pos = 0;
+                QString t;
+                do
+                {
+                    i = message.find( "\n", pos );
+                    if ( i == -1 )
+                        t = message.mid( pos, message.length() - pos );
+                    else
+                    {
+                        t = message.mid( pos, i - pos );
+                        pos = i + 1;
+                    }
+                    hei += painter.fontMetrics().height();
+                    len = QMAX( len, painter.fontMetrics().width( t ) );
+                }
+                while ( i != -1 );
+                resultText += message;
+            }
+            painter.end();
+            m_validationInfo->setText( resultText );
+
+            KoRect unzoomedMarker( xpos - xOffset()+u,
+                                   ypos - yOffset()+v,
+                                   len,
+                                   hei );
+            QRect marker( doc()->zoomRect( unzoomedMarker ) );
+
+            m_validationInfo->setGeometry( marker );
+            m_validationInfo->show();
+        }
+        else
+        {
+            delete m_validationInfo;
+            m_validationInfo = 0L;
+        }
+    }
+    else
+    {
+        delete m_validationInfo;
+        m_validationInfo = 0L;
+    }
+    updatePosWidget();
 }
 
 
