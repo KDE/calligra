@@ -61,6 +61,8 @@
 #include <kglobalsettings.h>
 #include <kcharsets.h>
 
+#include "koDocumentInfo.h"
+
 /******************************************************************/
 /* Class: KPWebPresentation                                       */
 /******************************************************************/
@@ -379,17 +381,15 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
 /*================================================================*/
 void KPWebPresentation::init()
 {
-    struct passwd* pw;
-    char str[ 80 ];
 
-    pw = getpwuid( getuid() );
-    if ( pw ) {
-        author = QString::fromLocal8Bit( pw->pw_gecos );
-        int i = author.find( ',' );
-        if ( i > 0 )
-            author.truncate( i );
-        gethostname( str, 79 );
-        email = QString::fromLocal8Bit( pw->pw_name ) + "@" + QString::fromLocal8Bit( str );
+    KoDocumentInfo * info = doc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+    else
+    {
+        author = authorPage->fullName();
+        email = authorPage->email();
     }
 
     title = i18n("Slideshow");
