@@ -449,10 +449,7 @@ public:
     void updateResizeHandles();
 
 signals:
-    void sig_imageModified();
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
-    void sig_updateChildGeometry( KWChild *_child ); // unused
-    void sig_removeObject( KWChild *_child );
     void sig_newContentsSize( int width, int height );
     void pageNumChanged();
 

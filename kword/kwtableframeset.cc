@@ -24,6 +24,7 @@ DESCRIPTION
 
 #include <kdebug.h>
 #include <kwdoc.h>
+#include <kwanchor.h>
 #include <kwtableframeset.h>
 #include "kwcanvas.h"
 
@@ -39,6 +40,7 @@ KWTableFrameSet::KWTableFrameSet( KWDocument *doc ) :
     m_isRendered = false;
     m_cells.setAutoDelete( true );
     frames.setAutoDelete(false);
+    m_anchor = 0L;
 }
 
 /*================================================================*/
@@ -54,6 +56,7 @@ KWTableFrameSet::KWTableFrameSet( KWTableFrameSet &original ) :
     m_active = original.m_active;
     m_isRendered = original.m_isRendered;
     m_cells.setAutoDelete( true );
+    m_anchor = 0L;
 
     // Copy all cells.
     for ( unsigned int i = 0; i < original.m_cells.count(); i++ )
@@ -68,6 +71,8 @@ KWTableFrameSet::KWTableFrameSet( KWTableFrameSet &original ) :
 /*================================================================*/
 KWTableFrameSet::~KWTableFrameSet()
 {
+    delete m_anchor;
+    m_anchor = 0L;
     if ( m_doc )
         m_doc->delFrameSet( this, false );
     m_doc = 0L;
@@ -109,6 +114,35 @@ void KWTableFrameSet::addDeleteAnchorCommand( int /*unused*/, KMacroCommand * /*
     // Do we really want to delete the whole table with a single 'Del' keystroke ? (honest question)
     // If yes, implement this method
     // If not, we need an "allowed to delete" bool in KWAnchor and test for it in KWTextFrameSet.
+}
+
+void KWTableFrameSet::updateAnchors( bool placeHolderExists /*= false */ /*only used when loading*/ )
+{
+    int index = m_anchorPos.index;
+    // TODO make one rect per page, and replace m_anchor with a QList<KWAnchor>
+    if ( !m_anchor )
+    {
+        // Anchor this frame, after the previous one
+        m_anchor = new KWAnchor( m_anchorPos.textfs->textDocument(), this, 0 /*....*/ );
+        if ( !placeHolderExists )
+            m_anchorPos.parag->insert( index, QChar('£') /*whatever*/ );
+        m_anchorPos.parag->setCustomItem( index, m_anchor, 0 );
+    }
+    m_anchorPos.parag->setChanged( true );
+    emit repaintChanged( m_anchorPos.textfs );
+}
+
+void KWTableFrameSet::deleteAnchors()
+{
+    findFirstAnchor();
+    int index = m_anchorPos.index;
+    if ( m_anchor )
+    {
+        // Delete anchor (after removing anchor char)
+        m_anchorPos.parag->removeCustomItem( index );
+        delete m_anchor;
+        m_anchor = 0L;
+    }
 }
 
 /*================================================================*/

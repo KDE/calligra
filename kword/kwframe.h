@@ -466,8 +466,8 @@ protected:
     // in the rectangle delimited by @p crect.
     QRegion frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect );
 
-    void deleteAnchors();
-    void updateAnchors( bool placeHolderExists = false );
+    virtual void deleteAnchors();
+    virtual void updateAnchors( bool placeHolderExists = false );
     void findFirstAnchor();
 
     KWDocument *m_doc;            // Document

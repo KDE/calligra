@@ -3090,6 +3090,10 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
         textFrameSet()->insert( cursor, m_currentFormat, QChar('&') /*whatever*/,
                                 false, false, i18n("Insert Variable"),
                                 customItemsMap );
+        // Recalc the var (e.g. if it depends on its position, like "Page Number")
+        var->recalc();
+        cursor->parag()->setChanged( true );
+        frameSet()->kWordDocument()->slotRepaintChanged( frameSet() );
     }
 }
 
@@ -3113,8 +3117,10 @@ void KWTextFrameSetEdit::updateUI()
     {
         if ( m_currentFormat )
             m_currentFormat->removeRef();
+#ifdef DEBUG_FORMATS
         kdDebug() << "Setting m_currentFormat from format " << cursor->parag()->at( i )->format()
                   << " ( character " << i << " in paragraph " << cursor->parag() << " )" << endl;
+#endif
         m_currentFormat = static_cast<KWTextFormat *>( textDocument()->formatCollection()->format( cursor->parag()->at( i )->format() ) );
         if ( m_currentFormat->isMisspelled() ) {
             m_currentFormat->removeRef();

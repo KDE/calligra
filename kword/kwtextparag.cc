@@ -802,7 +802,11 @@ void KWTextParag::printRTDebug( int info )
     if ( info == 0 ) // paragraph info
     {
         if ( counter() )
-            kdDebug() << "  Counter style=" << counter()->style() << " depth=" << counter()->depth() << " text=" << m_layout.counter->text( this ) << " width=" << m_layout.counter->width( this ) << endl;
+            kdDebug() << "  Counter style=" << counter()->style()
+                      << " numbering=" << counter()->numbering()
+                      << " depth=" << counter()->depth()
+                      << " text='" << m_layout.counter->text( this ) << "'"
+                      << " width=" << m_layout.counter->width( this ) << endl;
         kdDebug() << "rect() : " << DEBUGRECT( rect() ) << endl;
 
         kdDebug() << "topMargin()=" << topMargin() << " bottomMargin()=" << bottomMargin()

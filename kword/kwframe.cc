@@ -480,9 +480,8 @@ void KWFrameSet::updateAnchors( bool placeHolderExists /*= false */ /*only used 
         if ( ! frameIt.current()->anchor() )
         {
             // Anchor this frame, after the previous one
-            KWFrameSet * fs = frameIt.current()->getFrameSet();
-            KWAnchor * anchor = new KWAnchor( m_anchorPos.textfs->textDocument(), fs,
-                                              fs->getFrameFromPtr( frameIt.current() ) );
+            KWAnchor * anchor = new KWAnchor( m_anchorPos.textfs->textDocument(), this,
+                                              getFrameFromPtr( frameIt.current() ) );
             if ( !placeHolderExists )
                 m_anchorPos.parag->insert( index, QChar('@') /*whatever*/ );
             m_anchorPos.parag->setCustomItem( index, anchor, 0 );

@@ -223,7 +223,7 @@ public:
     virtual VariableType getType() const
     { return VT_PGNUM; }
 
-    // virtual void recalc(); // TODO !
+    virtual void recalc();
     int getPgNum() const { return pgNum; }
 
     virtual void save( QDomElement &parentElem );

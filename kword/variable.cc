@@ -92,7 +92,7 @@ QString KWVariableFieldFormat::convert( KWVariable *_var )
 QString KWVariableCustomFormat::convert( KWVariable *_var )
 {
     if ( _var->getType() != VT_CUSTOM ) {
-        kdWarning() << "Can't convert variable of type " << _var->getType() << " to a page num!!!" << endl;
+        kdWarning() << "Can't convert variable of type " << _var->getType() << " to a custom var!" << endl;
         return QString();
     }
 
@@ -105,7 +105,7 @@ QString KWVariableCustomFormat::convert( KWVariable *_var )
 QString KWVariableSerialLetterFormat::convert( KWVariable *_var )
 {
     if ( _var->getType() != VT_SERIALLETTER ) {
-        kdWarning() << "Can't convert variable of type " << _var->getType() << " to a page num!!!" << endl;
+        kdWarning() << "Can't convert variable of type " << _var->getType() << " to a serial letter!!!" << endl;
         return QString();
     }
 
@@ -250,6 +250,17 @@ void KWPgNumVariable::load( QDomElement& elem )
     }
 }
 
+void KWPgNumVariable::recalc()
+{
+    KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
+    KWTextFrameSet * fs = parag->textDocument()->textFrameSet();
+    QPoint iPoint = parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
+    QPoint cPoint;
+    KWFrame * frame = fs->internalToContents( iPoint, cPoint );
+    if ( frame )
+        pgNum = frame->pageNum() + 1;
+}
+
 /******************************************************************/
 /* Class: KWDateVariable                                          */
 /******************************************************************/
@@ -374,6 +385,8 @@ void KWFieldVariable::load( QDomElement& elem )
     if (!e.isNull())
     {
         m_subtype = e.attribute( "field" ).toInt();
+        if ( m_subtype == VST_NONE )
+            kdWarning() << "Field subtype of -1 found in the file !" << endl;
         m_value = e.attribute( "value" );
     } else
         kdWarning() << "FIELD element not found !" << endl;

@@ -49,8 +49,8 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     }
 
     int paragy = paragraph()->rect().y();
-    //kdDebug(32001) << "KWAnchor::draw " << x << "," << y << " paragy=" << paragy
-    //               << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
+    kdDebug(32001) << "KWAnchor::draw " << x << "," << y << " paragy=" << paragy
+                   << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
     KWDocument * doc = m_frameset->kWordDocument();
     KWTextFrameSet * fs = textDocument()->textFrameSet();
 
@@ -59,7 +59,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     QPoint cPoint;
     if ( fs->internalToContents( QPoint( x, y+paragy ), cPoint ) )
     {
-        //kdDebug(32001) << "KWAnchor::draw moving frame to [zoomed pos] " << cPoint.x() << "," << cPoint.y() << endl;
+        kdDebug(32001) << "KWAnchor::draw moving frame to [zoomed pos] " << cPoint.x() << "," << cPoint.y() << endl;
         // Move the frame to position x,y.
         m_frameset->moveFloatingFrame( m_frameNum, KoPoint( cPoint.x() / doc->zoomedResolutionX(), cPoint.y() / doc->zoomedResolutionY() ) );
     }

@@ -39,6 +39,7 @@ using namespace Qt3;
 class KWDocument;
 class KWTableFrameSetEdit;
 class QPainter;
+class KWAnchor;
 
 /**
  * Class: KWTableFrameSet
@@ -214,6 +215,11 @@ public:
     virtual void addDeleteAnchorCommand( int frameNum, KMacroCommand * macroCmd );
 
 protected:
+    virtual void deleteAnchors();
+    virtual void updateAnchors( bool placeHolderExists = false );
+    void addCell( Cell *cell );
+
+private:
     unsigned int m_rows, m_cols;
     KWTblCellSize m_widthMode;
     KWTblCellSize m_heightMode;
@@ -223,7 +229,7 @@ protected:
     bool m_isRendered;
     QList<Cell> m_cells;
     QValueList<int> m_pageBoundaries;
-    void addCell( Cell *cell );
+    KWAnchor* m_anchor;
 };
 
 /**
@@ -250,23 +256,23 @@ public:
     }
 
     // Forward all events to the current cell
-    virtual void keyPressEvent( QKeyEvent * e ) { m_currentCell->keyPressEvent( e ); }
+    virtual void keyPressEvent( QKeyEvent * e ) { if ( m_currentCell ) m_currentCell->keyPressEvent( e ); }
     virtual void mousePressEvent( QMouseEvent * e );
-    virtual void mouseMoveEvent( QMouseEvent * e ) { m_currentCell->mouseMoveEvent( e ); }
-    virtual void mouseReleaseEvent( QMouseEvent * e ) { m_currentCell->mouseReleaseEvent( e ); }
-    virtual void mouseDoubleClickEvent( QMouseEvent * e ) { m_currentCell->mouseDoubleClickEvent( e ); } // TODO check current cell
-    virtual void dragEnterEvent( QDragEnterEvent * e ) { m_currentCell->dragEnterEvent( e ); }
-    virtual void dragMoveEvent( QDragMoveEvent * e ) { m_currentCell->dragMoveEvent( e ); }
-    virtual void dragLeaveEvent( QDragLeaveEvent * e ) { m_currentCell->dragLeaveEvent( e ); }
-    virtual void dropEvent( QDropEvent * e ) { m_currentCell->dropEvent( e ); } // TODO check current cell
-    virtual void focusInEvent() { m_currentCell->focusInEvent(); }
-    virtual void focusOutEvent() { m_currentCell->focusOutEvent(); }
-    virtual void doAutoScroll( QPoint p ) { m_currentCell->doAutoScroll( p ); }
-    virtual void copy() { m_currentCell->copy(); }
-    virtual void cut() { m_currentCell->cut(); }
-    virtual void paste() { m_currentCell->paste(); }
+    virtual void mouseMoveEvent( QMouseEvent * e ) { if ( m_currentCell ) m_currentCell->mouseMoveEvent( e ); }
+    virtual void mouseReleaseEvent( QMouseEvent * e ) { if ( m_currentCell ) m_currentCell->mouseReleaseEvent( e ); }
+    virtual void mouseDoubleClickEvent( QMouseEvent * e ) { if ( m_currentCell ) m_currentCell->mouseDoubleClickEvent( e ); } // TODO check current cell
+    virtual void dragEnterEvent( QDragEnterEvent * e ) { if ( m_currentCell ) m_currentCell->dragEnterEvent( e ); }
+    virtual void dragMoveEvent( QDragMoveEvent * e ) { if ( m_currentCell ) m_currentCell->dragMoveEvent( e ); }
+    virtual void dragLeaveEvent( QDragLeaveEvent * e ) { if ( m_currentCell ) m_currentCell->dragLeaveEvent( e ); }
+    virtual void dropEvent( QDropEvent * e ) { if ( m_currentCell ) m_currentCell->dropEvent( e ); } // TODO check current cell
+    virtual void focusInEvent() { if ( m_currentCell ) m_currentCell->focusInEvent(); }
+    virtual void focusOutEvent() { if ( m_currentCell ) m_currentCell->focusOutEvent(); }
+    virtual void doAutoScroll( QPoint p ) { if ( m_currentCell ) m_currentCell->doAutoScroll( p ); }
+    virtual void copy() { if ( m_currentCell ) m_currentCell->copy(); }
+    virtual void cut() { if ( m_currentCell ) m_currentCell->cut(); }
+    virtual void paste() { if ( m_currentCell ) m_currentCell->paste(); }
     // should selectAll select all cells ? etc.
-    virtual void selectAll() { m_currentCell->selectAll(); }
+    virtual void selectAll() { if ( m_currentCell ) m_currentCell->selectAll(); }
 
     // Set the cell which is currently being edited
     void setCurrentCell( KWFrameSet * fs );

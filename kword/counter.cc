@@ -20,7 +20,6 @@
 #include "counter.h"
 #include "kwtextparag.h"
 #include "kwutils.h"
-#include "kwtextframeset.h"
 #include <kdebug.h>
 #include <qdom.h>
 
