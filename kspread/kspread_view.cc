@@ -3181,7 +3181,7 @@ void KSpreadView::statusBarClicked(int _id)
 {
     if(!koDocument()->isReadWrite() )
         return;
-    if(_id==0) //menu calc
+    if(_id==1) //menu calc
     {
         QPoint mousepos =QCursor::pos();
         ((QPopupMenu*)factory()->container("calc_popup",this))->popup(mousepos);
@@ -3351,6 +3351,7 @@ void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
     }
     else
     {
+         disconnect(statusBar(),SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
         statusBar()->removeItem(statusCalc);
     }
 
