@@ -64,7 +64,7 @@ class KEXI_MYSQL_IFACE_EXPORT MySqlDB : public KexiDB
 		KexiDBTableStruct	structure(const QString& table) const;
 		QString	nativeDataType(const KexiDBField::ColumnType& t) const;
 
-		QString escapeName(const QString &tn);
+		QString escapeName(const QString &tn) const;
 		
 	public slots:
 		KexiDBRecordSet	*queryRecord(const QString& querystatement, bool buffer=false);
@@ -89,8 +89,8 @@ class KEXI_MYSQL_IFACE_EXPORT MySqlDB : public KexiDB
 		bool		uhQuery(const QString& statement);
 //		int		realQuery(const char *statement, unsigned int length);
 
-		QString		escape(const QString &str);
-		QString		escape(const QByteArray& str);
+		QString		escape(const QString &str) const;
+		QString		escape(const QByteArray& str) const;
 		bool alterField(const KexiDBField& changedField,
 			unsigned int index, KexiDBTableStruct fields);
 		bool createField(const KexiDBField& newField,

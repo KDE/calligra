@@ -78,7 +78,7 @@ public:
 	virtual QStringList       databases();
 	virtual QStringList       tableNames()=0;
 	//Returns an escaped version of a named object, eg table...mysql uses `, postgres uses "
-	virtual QString	          escapeName(const QString &table) = 0;
+	virtual QString	          escapeName(const QString &table) const = 0;
 
 	//! Returns true if database named by dbName is considered as system database
 	virtual bool isSystemDatabase(QString &dbName)=0;
@@ -110,8 +110,8 @@ public slots:
 	virtual bool load(const QString& file, bool persistant=false);
 
 	virtual bool query(const QString& statement)  =0;
-	virtual QString escape(const QString &str)    =0;
-	virtual QString escape(const QByteArray& str) =0;
+	virtual QString escape(const QString &str)const    =0;
+	virtual QString escape(const QByteArray& str)const =0;
 	virtual bool alterField(const KexiDBField& changedField,
 													unsigned int index, KexiDBTableStruct fields) = 0;
 	virtual bool createField(const KexiDBField& newField,

@@ -351,7 +351,7 @@ MySqlDB::driverName() const
 }
 
 QString
-MySqlDB::escape(const QString &str)
+MySqlDB::escape(const QString &str) const
 {
 //	QCString val(encode(str));
 	char* escaped = (char*) malloc(str.length() * 2 + 2);
@@ -363,7 +363,7 @@ MySqlDB::escape(const QString &str)
 }
 
 QString
-MySqlDB::escape(const QByteArray& str)
+MySqlDB::escape(const QByteArray& str) const
 {
 	QString rval;
 
@@ -727,7 +727,7 @@ MySqlDB::~MySqlDB()
 	m_mysql = 0;
 }
 
-QString MySqlDB::escapeName(const QString &tn)
+QString MySqlDB::escapeName(const QString &tn) const
 {
 	QString en;
 
