@@ -93,6 +93,9 @@ This does NOT depend on the DPI settings. Qt takes care of pt->pixel conversion 
 When printing... TODO, double-check whether Qt does pt->pixel conversion correctly
 (apparently it didn't, in Qt 2).
 
+QFont multiplies by 10 and stores into a 'short'... So for QFont the maximum font size
+is 3276, and in KOffice the maximum font size in points is around 163.
+
 Justified spaces
 ================
 Although the user sees it as:
