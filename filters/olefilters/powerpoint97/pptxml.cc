@@ -261,3 +261,4 @@ void PptXml::gotSlide(
             "</OBJECT>";
     m_y += pageHeight;
 }
+#include "pptxml.moc"
