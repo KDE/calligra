@@ -1,6 +1,6 @@
 SUBDIRS = xrgbrender
 
-INCLUDES = $(KOFFICE_INCLUDES) \
+INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/xrgbrender \
 	-I$(srcdir)/../core \

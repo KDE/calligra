@@ -1,6 +1,11 @@
 /* This file is part of the KDE project
    Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
+ 
+   Original work :
+   kis_resourceserver.h - part of KImageShop
+ 
+   Copyright (c) 1999 Matthias Elter <elter@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,35 +23,28 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KARBON_FACTORY_H__
-#define __KARBON_FACTORY_H__
+#ifndef KARBONRESOURCESERVER_H
+#define KARBONRESOURCESERVER_H
 
-#include <koFactory.h>
+#include <qptrlist.h>
+#include <qstring.h>
 
-class KInstance;
-class KAboutData;
-class KarbonResourceServer;
+#include "vpattern.h"
 
-class KarbonFactory : public KoFactory
+class KarbonResourceServer
 {
-	Q_OBJECT
 public:
-	KarbonFactory( QObject* parent = 0, const char* name = 0 );
-	~KarbonFactory();
+	KarbonResourceServer();
+	virtual ~KarbonResourceServer();
 
-	virtual KParts::Part* createPartObject( QWidget *parentWidget = 0,
-		const char* widgetName = 0, QObject* parent = 0, const char* name = 0,
-		const char* classname = "KoDocument", const QStringList& args = QStringList() );
+	int patternCount() { return m_patterns.count(); }
+	QPtrList<KoIconItem> patterns() { return m_patterns; }
 
-	static KInstance* instance();
-	static KAboutData* aboutData();
-
-	static KarbonResourceServer *rServer();
-
+protected:
+	const VPattern* loadPattern( const QString& filename );
+ 
 private:
-	static KInstance*	s_instance;
-	static KAboutData*	s_aboutData;
-	static KarbonResourceServer   *s_rserver;
+	QPtrList<KoIconItem>  m_patterns;
 };
 
 #endif

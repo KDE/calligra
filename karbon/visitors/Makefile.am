@@ -1,5 +1,5 @@
 INCLUDES = \
-	$(KOFFICE_INCLUDES) \
+	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../core \
 	-I$(srcdir)/../tools \

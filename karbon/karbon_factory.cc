@@ -20,6 +20,8 @@
 
 #include <kaboutdata.h>
 #include <kinstance.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
@@ -27,6 +29,10 @@
 #include "karbon_part.h"
 
 #include <kdebug.h>
+
+#include "karbon_resourceserver.h"
+
+KarbonResourceServer* KarbonFactory::s_rserver = 0;
 
 extern "C"
 {
@@ -43,6 +49,8 @@ KarbonFactory::KarbonFactory( QObject* parent, const char* name )
 	: KoFactory( parent, name )
 {
 	instance();
+
+	s_rserver = new KarbonResourceServer;
 }
 
 KarbonFactory::~KarbonFactory()
@@ -51,6 +59,8 @@ KarbonFactory::~KarbonFactory()
 	s_instance = 0L;
 	delete s_aboutData;
 	s_aboutData = 0L;
+	delete s_rserver;
+	s_rserver = 0L;
 }
 
 KParts::Part*
@@ -117,8 +127,19 @@ KarbonFactory::instance()
 
 		// Tell the iconloader about share/apps/koffice/icons
 		s_instance->iconLoader()->addAppDir( "koffice" );
+
+		s_instance->dirs()->addResourceType("kis_brushes",
+						            KStandardDirs::kde_default("data") + "krita/brushes/");
+
+        s_instance->dirs()->addResourceType("kis_pattern",
+						            KStandardDirs::kde_default("data") + "krita/patterns/");
 	}
 	return s_instance;
+}
+
+KarbonResourceServer *KarbonFactory::rServer()
+{
+	return s_rserver;
 }
 
 #include "karbon_factory.moc"

@@ -21,8 +21,12 @@
 
 #include "vpattern.h"
 
+#define THUMB_SIZE 30
+
 VPattern::VPattern()
 {
+	m_valid = false;
+	validThumb = false;
 }
 
 VPattern::VPattern( const QString &tilename )
@@ -35,6 +39,32 @@ VPattern::load( const QString &tilename )
 {
 	m_tilename = tilename;
 	m_image.load( tilename );
+	m_image = m_image.convertDepth( 32 );
+	m_pixmap.convertFromImage(m_image, QPixmap::AutoColor);
+	if( m_image.width() > THUMB_SIZE || m_image.height() > THUMB_SIZE )
+	{
+		int xsize = THUMB_SIZE;
+        int ysize = THUMB_SIZE;
+        int picW  = m_image.width();
+        int picH  = m_image.height();
+		if( picW > picH )
+		{
+			float yFactor = (float)((float)(float)picH/(float)picW);
+			ysize = (int)(yFactor * (float)THUMB_SIZE);
+			if(ysize > 30) ysize = 30;
+		}
+		else if( picW < picH )
+		{
+			float xFactor = (float)((float)picW/(float)picH);
+			xsize = (int)(xFactor * (float)THUMB_SIZE);
+			if(xsize > 30) xsize = 30;
+		}
+
+		QImage thumbImg = m_image.smoothScale( xsize, ysize );
+		m_pixmapThumb.convertFromImage( thumbImg );
+		validThumb = true;
+	}
+	m_valid = true;
 }
 
 unsigned char *
@@ -88,5 +118,16 @@ VPattern::transform( const QWMatrix &m )
 	m_origin = m_origin.transform( m );	
 	m_vector = m_vector.transform( m );	
 }
+
+QPixmap& VPattern::pixmap() const
+{
+	return m_pixmap;
+}
+
+QPixmap& VPattern::thumbPixmap() const
+{
+	return m_pixmapThumb;
+}
+
 
 

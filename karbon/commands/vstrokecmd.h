@@ -33,6 +33,7 @@ class VPath;
 class VSelection;
 class VStroke;
 class VGradient;
+class VPattern;
 
 class VStrokeColorCmd : public VCommand
 {
@@ -69,6 +70,7 @@ class VStrokeCmd : public VCommand
 public:
 	VStrokeCmd( VDocument *doc,  const VStroke * );
 	VStrokeCmd( VDocument *doc, VGradient * );
+	VStrokeCmd( VDocument *doc, VPattern * );
 	virtual ~VStrokeCmd();
 
 	virtual void execute();
@@ -79,6 +81,7 @@ private:
 
 	const VStroke *m_stroke;
 	VGradient *m_gradient;
+	VPattern *m_pattern;
 
 	QValueVector<VStroke> m_oldcolors;
 };

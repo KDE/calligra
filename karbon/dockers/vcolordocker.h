@@ -44,9 +44,9 @@ public slots:
 	virtual void setFillDocker();
 	virtual void setStrokeDocker();
 	virtual void setColor( VColor *);
+	void slotItemSelected( KoIconItem * );
 
 private:
-	virtual void mouseReleaseEvent( QMouseEvent *e );
 	QWidget *mainWidget;
 	QTabWidget *mTabWidget;
 	QWidget *mRGBWidget;

@@ -21,12 +21,14 @@
 #define __VPATTERN_H__
 
 #include <koPoint.h>
+#include <koIconChooser.h>
 #include <qimage.h>
+#include <qpixmap.h>
 
 class QDomElement;
 
 
-class VPattern
+class VPattern : public KoIconItem
 {
 public:
 	VPattern();
@@ -49,12 +51,23 @@ public:
 
 	void transform( const QWMatrix& m );
 
+	// for KoIconItem
+    QPixmap& pixmap() const;
+    QPixmap& thumbPixmap() const;
+
+	bool isValid() const { return m_valid; }
+
+	QString tilename() const { return m_tilename; }
+
 private:
 	// coordinates:
 	KoPoint m_origin;
 	KoPoint m_vector;
 	QImage m_image;
+	QPixmap m_pixmap;
+	QPixmap m_pixmapThumb;
 	QString m_tilename;
+	bool m_valid;
 };
 
 #endif

@@ -1,4 +1,4 @@
-INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) \
+INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir) \
 	-I$(srcdir)/commands \
 	-I$(srcdir)/core \
@@ -19,6 +19,7 @@ kde_module_LTLIBRARIES = libkarbonpart.la
 
 libkarbonpart_la_SOURCES = \
 	karbon_factory.cc \
+	karbon_resourceserver.cc \
 	karbon_part.cc \
 	karbon_part_iface.cc \
 	karbon_part_iface.skel \
@@ -27,7 +28,7 @@ libkarbonpart_la_SOURCES = \
 	karbon_view_iface.skel
 
 libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN)
-libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) \
+libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT)  $(LIB_KOPAINTER) \
 	tools/libkarbontools.la \
 	dialogs/libkarbondialogs.la \
 	dockers/libkarbondockers.la \
