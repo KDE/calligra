@@ -466,7 +466,7 @@ void KivioCanvas::mousePressEvent(QMouseEvent* e)
         pressGuideline = 0;
 
         if ((e->state() & ~ShiftButton) == NoButton) {
-            KivioGuideLineData* gd = gl->find(p.x(),p.y(),2.0*m_pView->zoomHandler()->zoom());
+            KivioGuideLineData* gd = gl->find(p.x(),p.y(), m_pView->zoomHandler()->unzoomItY(2));
             if (gd) {
                 pressGuideline = gd;
                 if ((e->button() == RightButton) || ((e->button() & ShiftButton) == ShiftButton)) {
@@ -502,7 +502,7 @@ void KivioCanvas::mouseReleaseEvent(QMouseEvent* e)
     m_guideLinesTimer->stop();
     KoPoint p = mapFromScreen(e->pos());
     KivioGuideLines* gl = activePage()->guideLines();
-    KivioGuideLineData* gd = gl->find(p.x(),p.y(),2.0*m_pView->zoomHandler()->zoom());
+    KivioGuideLineData* gd = gl->find(p.x(),p.y(),m_pView->zoomHandler()->unzoomItY(2));
     if (gd) {
       setCursor(gd->orientation()==Qt::Vertical ? sizeHorCursor:sizeVerCursor);
     } else {
@@ -1246,8 +1246,9 @@ void KivioCanvas::updateGuidesCursor()
 
 bool KivioCanvas::eventFilter(QObject* o, QEvent* e)
 {
-/*  if ((o == m_pVRuler || o == m_pHRuler) && (e->type() == QEvent::MouseMove || e->type() == QEvent::MouseButtonRelease) && m_pView->isShowGuides()) {
-
+/*  if ((o == view()->vertRuler() || o == view()->horzRuler()) && (e->type() == QEvent::MouseMove || e->type() ==
+    QEvent::MouseButtonRelease) && m_pView->isShowGuides())
+  {
     QMouseEvent* me = (QMouseEvent*)e;
     QPoint p = mapFromGlobal(me->globalPos());
     KivioGuideLines* gl = activePage()->guideLines();
@@ -1260,11 +1261,11 @@ bool KivioCanvas::eventFilter(QObject* o, QEvent* e)
         eraseGuides();
         gl->unselectAll();
         KivioGuideLineData* gd;
-        TKPoint tp = mapFromScreen(p);
-        if (o == m_pVRuler)
-          gd = gl->add(tp.x,Qt::Vertical);
+        KoPoint tp = mapFromScreen(p);
+        if (o == view()->vertRuler())
+          gd = gl->add(tp.x(),Qt::Vertical);
         else
-          gd = gl->add(tp.y,Qt::Horizontal);
+          gd = gl->add(tp.y(),Qt::Horizontal);
 
         pressGuideline = gd;
         gl->select(gd);
@@ -1322,9 +1323,9 @@ bool KivioCanvas::eventFilter(QObject* o, QEvent* e)
       delete m;
       delegateThisEvent = true;
     }
-  }*/
+  }
 
-  return QWidget::eventFilter(o,e);
+  return QWidget::eventFilter(o,e);*/
 }
 
 void KivioCanvas::eraseGuides()
