@@ -1178,9 +1178,6 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
             if ( (*fIt)->runAround() == KWFrame::RA_SKIP )
             {
                 KoRect rectOnTop = frameIt.current()->intersect( (*fIt)->runAroundRect() );
-                double gap = (*fIt)->runAroundGap();
-                rectOnTop.rTop() -= gap;
-                rectOnTop.rBottom() += gap;
                 QPoint iTop, iBottom; // top and bottom in internal coordinates
                 if ( documentToInternal( rectOnTop.topLeft(), iTop ) &&
                      iTop.y() <= yp + hp &&
