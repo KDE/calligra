@@ -30,6 +30,12 @@
 
 #include <ImportDialogUI.h>
 #include <ImportDialog.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qradiobutton.h>
+#include <qvbuttongroup.h>
+#include <qcombobox.h>
+#include <qcheckbox.h>
 
 MSWriteImportDialog :: MSWriteImportDialog(QWidget* parent)
     : KDialogBase(parent, 0, true,  i18n("KWord's MS Write Import Filter"), Ok|Cancel, No, true),

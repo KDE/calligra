@@ -24,17 +24,10 @@
 #define _IMPORT_DIALOG_H
 
 #include <qwidget.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qradiobutton.h>
-#include <qvbuttongroup.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
 
 #include <kdialogbase.h>
 
 class ImportDialogUI;
-
 class MSWriteImportDialog : public KDialogBase
 {
     Q_OBJECT
