@@ -47,6 +47,7 @@ class KFormulaDoc : public QObject,
      */
     void mousePressEvent(QMouseEvent *a,  QWidget *wid); 
     void paintEvent( QPaintEvent *_ev, QWidget *paintGround );
+    void print( QPrinter *thePrt);
     void keyPressEvent( QKeyEvent *k );
 
     virtual void cleanUp();

@@ -1,3 +1,4 @@
+#include <qprinter.h>
 #include "kformula_view.h"
 #include "kformula_doc.h"
 #include "kformula_main.h"
@@ -350,10 +351,11 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
   m_vToolBarFont = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 
   OpenPartsUI::StrList fonts;
-  fonts.length( 3 );
+  fonts.length( 4 );
   fonts[0] = CORBA::string_dup( "utopia" );
   fonts[1] = CORBA::string_dup( "symbol" );
-  fonts[2] = CORBA::string_dup( "(default)" );
+  fonts[2] = CORBA::string_dup( "times" );
+  fonts[3] = CORBA::string_dup( "(default)" );
 
   m_idComboFont_FontFamily = m_vToolBarFont->insertCombo( fonts,   0, false, SIGNAL( activated( const QString & ) ), this,
 							    "fontSelected", true, i18n("Font Family"),
@@ -1075,6 +1077,19 @@ void KFormulaView::delimiterRight(const char *right)
     warning(content);
     m_pDoc->activeElement()->setContent(content);
     update();
+}
+
+CORBA::Boolean KFormulaView::printDlg()
+{
+
+  QPrinter thePrt;
+//  thePrt.setMinMax(1,1);
+  if (thePrt.setup(this))
+    {
+     if(m_pDoc!=0L)
+      m_pDoc->print(&thePrt);
+     }
+  return true;
 }
 
 #include "kformula_view.moc"

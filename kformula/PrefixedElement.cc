@@ -218,11 +218,12 @@ void PrefixedElement::checkSize()
     globalSize=globalSize.unite(nextDimension);
 
 }
-
+/*
 int PrefixedElement::takeAsciiFromKeyb(int)
 {
     return 2;
-}
+} */
+
 int PrefixedElement::takeActionFromKeyb(int)
 {
     return -1;

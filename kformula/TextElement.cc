@@ -138,10 +138,10 @@ void TextElement::checkSize()
 
 int TextElement::takeAsciiFromKeyb(char ch)
 {
-    warning("...pos:%i",position);
+//    warning("...pos:%i",position);
     content.insert(position,ch);
     position++;
-    warning("ins %i",position);
+//    warning("ins %i",position);
     return 1;
 }
 

@@ -173,7 +173,7 @@ void MatrixElement::checkSize()
     int cols=atoi(content.mid(6,3)); //Number of columns
     int midr=atoi(content.mid(9,3)); //Mid row
     int space=atoi(content.mid(12,3)); //Space between elments
-    warning("Rows:%i Cols:%i MidR:%i Space:%i",rows,cols,midr,space);
+//    warning("Rows:%i Cols:%i MidR:%i Space:%i",rows,cols,midr,space);
 
     if (next!=0L)
 	{
@@ -223,7 +223,7 @@ void MatrixElement::checkSize()
 			}
 		    for(c=0;c<(cols*r);c++)
 			{
-			    warning("N:%i MoveUp by:%i",c,downy);
+			//    warning("N:%i MoveUp by:%i",c,downy);
 			    childPoint[c]+=QPoint(0,downy);
 			}
 		}
@@ -231,7 +231,7 @@ void MatrixElement::checkSize()
 	    if(r==midr)
 		{
 
-		    warning("MIDROW");
+		    //warning("MIDROW");
 		    if(content[1]=='U')
 			correction=-sizeR.top();
 		    if(content[1]=='C')
@@ -294,9 +294,9 @@ And now columns!!
 	    sizeC=sizeC.unite(sizeE);
 	}
 	right=sizeR.width();
-	warning("C-X:%i,Y:%i,W:%i,E:%i",sizeC.x(),sizeC.y(),sizeC.height(),sizeC.width());
+//	warning("C-X:%i,Y:%i,W:%i,E:%i",sizeC.x(),sizeC.y(),sizeC.height(),sizeC.width());
 	sizeC.moveBy(hspace+right,0);
-	warning("C+X:%i,Y:%i,W:%i,E:%i",sizeC.x(),sizeC.y(),sizeC.height(),sizeC.width());
+//	warning("C+X:%i,Y:%i,W:%i,E:%i",sizeC.x(),sizeC.y(),sizeC.height(),sizeC.width());
 	for(r=0;r<rows;r++) {
 	    e=c+r*cols;
 	    x=sizeC.width()-child[e]->getSize().width();
@@ -306,9 +306,9 @@ And now columns!!
 		x=0;
 	    childPoint[e]=QPoint(x+right,childPoint[e].y());
 	}
-	warning("R-X:%i,Y:%i,W:%i,E:%i",sizeR.x(),sizeR.y(),sizeR.height(),sizeR.width());
+//	warning("R-X:%i,Y:%i,W:%i,E:%i",sizeR.x(),sizeR.y(),sizeR.height(),sizeR.width());
 	sizeR=sizeR.unite(sizeC);
-	warning("R+X:%i,Y:%i,W:%i,E:%i",sizeR.x(),sizeR.y(),sizeR.height(),sizeR.width());
+//	warning("R+X:%i,Y:%i,W:%i,E:%i",sizeR.x(),sizeR.y(),sizeR.height(),sizeR.width());
     }
     sizeR.setRight(sizeR.right()-hspace);
     familySize=familySize.unite(sizeR);
@@ -326,10 +326,10 @@ And now columns!!
     globalSize=globalSize.unite(nextDimension);
 }
 
-int MatrixElement::takeAsciiFromKeyb(int)
+/* int MatrixElement::takeAsciiFromKeyb(int)
 {
     return 2;
-}
+} */
 int MatrixElement::takeActionFromKeyb(int)
 {
     return -1;

@@ -32,7 +32,7 @@ class KFormulaView : public QWidget,
 
     // IDL
     virtual void newView();
-  
+    virtual CORBA::Boolean printDlg();   
 public slots:
     // Document signals
     void modifyMatrix(QString str);

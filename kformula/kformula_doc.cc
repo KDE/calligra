@@ -1,3 +1,4 @@
+#include <qprinter.h>
 #include "kformula_doc.h"
 #include "kformula_shell.h"
 
@@ -27,6 +28,7 @@
 #include <unistd.h>
 
 //#define FIXEDSPACE 1             // Space between 2 blocks
+#define DEFAULT_FONT_SIZE 24
 
 KFormulaDoc::KFormulaDoc()
 {
@@ -34,7 +36,7 @@ KFormulaDoc::KFormulaDoc()
     thePainter = new QPainter();
     warning("General Settings");
     theFont.setFamily( "utopia" );
-    theFont.setPointSize(24);
+    theFont.setPointSize(DEFAULT_FONT_SIZE);  
     theFont.setWeight( QFont::Normal );
     theFont.setItalic( false );
     theColor=black;
@@ -325,6 +327,7 @@ BasicElement * KFormulaDoc::addIndex(int index)
 	{
 	    oldIndexElement->insertElement(newElement = new BasicElement(this));
 	}
+    newElement->scaleNumericFont(FN_REDUCE | FN_P43 | FN_ELEMENT);	
     setActiveElement(newElement);
     emitModified();
     return(newElement);
@@ -511,6 +514,16 @@ void KFormulaDoc::paintEvent( QPaintEvent *, QWidget *paintGround )
 	thePainter->drawWinFocusRect(theCursor);
     thePainter->end();
 //    bitBlt(paintGround,0,0,&pm,0,0,-1,-1);
+}
+
+void KFormulaDoc::print( QPrinter *thePrt)
+{
+    setActiveElement(0L);
+    thePainter->begin(thePrt);
+    thePainter->setPen( black );
+    theFirstElement->checkSize();
+    theFirstElement->draw(QPoint(0,0)-theFirstElement->getSize().topLeft());
+    thePainter->end();
 }
 
 void KFormulaDoc::setActiveElement(BasicElement* c)

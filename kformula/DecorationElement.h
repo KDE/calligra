@@ -68,7 +68,7 @@ class DecorationElement : public BasicElement
     /*
      * If usePixmap is True we need a...
      */    
-    QPixmap *rootPixmap;
+    QPixmap *symbPixmap;
   
     bool usePixmap;
 /*
@@ -79,6 +79,7 @@ class DecorationElement : public BasicElement
    char[12..15] "Low Decoration Len. (in pixels) 0000=Auto"
   
    Decoration Names:
+   XXXX	   = Nothing
    ASL0    = Arrow Right to Left single line
    ASR0    =    "   Left to Right   "     "
    ASD0    = Double Arrow            "    "

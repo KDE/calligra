@@ -80,6 +80,7 @@ void KFormulaShell::setDocument( KFormulaDoc *_doc )
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
   }
   

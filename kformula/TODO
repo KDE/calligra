@@ -8,11 +8,13 @@ Elements:
 -implement openMe()  //Bad name :-(
 -usedColor fucntion 
 -Use shape & qpen better
--Bitmap drawing (for root,integral etc) // In a far future....
+-Bitmap drawing (for root,integral etc) // XXI Century
 -Slash fraction
 -Sum,product
 
 Interface/doc:
+-Fast keyboard input (work in progress)
+-Selection
 -Open/Save functions (need saveMe() )
 -General properties dialog
 -Font dialog
@@ -20,7 +22,7 @@ Interface/doc:
 -Print
 -(de)Activate element menu entries
 -Solve Focus/input problems
--Template (for lim, sup , inf, etc...)
+-Template (for lim, sup , inf, max ,min, etc...)
 -Delete Element !!!!!
 
 General:

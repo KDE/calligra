@@ -1,3 +1,6 @@
+
+I have to write a dtd but I don't know the syntax.
+
 Tag for KFormula files:
 <KFORMULA>				  //Begin of KFormula
 </KFORMULA>				  //End of KFormula
@@ -8,12 +11,14 @@ Tag for KFormula files:
 <ELEM INDEX=n TYPE=n>			   // Begin of Index[nn] element data
 </ELEM> 				   // End of Element
 
-COLOR=#nnnnnn			  
-NUMERICFONT=n			   	
-FONTFAMILY="family"		   
-CONTENT="string"			  
-FONTSTYLE="bold"
-FONTUNDERLINED
-FONTSTRIKEDOUT
-USERPIXMAP="name.xpm"
-
+				ELEM 	      FORMULA
+COLOR=#nnnnnn			  X	        X	 
+NUMERICFONT=n			  X 		X
+FONTFAMILY="family"		  X 		X
+CONTENT="string"	 	  X	 	 
+FONTSTYLE="bold"                  X 		X
+FONTUNDERLINED                    X 		X
+FONTSTRIKEDOUT                    X   		X
+USERPIXMAP="name.xpm"             X 
+BACKGROUNDCOLOR=#nnnnnn				X
+BACKGRONUDPIXMAP="blabla.xpm"			X

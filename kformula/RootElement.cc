@@ -61,8 +61,21 @@ void RootElement::draw(QPoint drawPoint,int resolution)
       x+familySize.x()+unit+ofs,y+familySize.bottom()+ofs);
       pen->drawLine(x+familySize.x()+unit+ofs,y+familySize.y()+3+ofs,
       x+familySize.right()+rootFont+1,y+familySize.y()+3+ofs);
-      }*/
-    warning("Array");
+      } */
+      
+      QColor elementColor(pen->pen().color());
+      pen->setBrush(elementColor);
+      pen->setPen(QPen(elementColor,ofs));
+      ofs=0;
+      pen->drawLine(x+familySize.x()+ofs,y+familySize.y()+unit+1,
+      x+familySize.x()+unit+ofs,y+familySize.bottom()+3+ofs);//familySize.y is < 0
+      pen->drawLine(x+familySize.x()+unit+ofs,y+familySize.y()+3+ofs,
+      x+familySize.x()+unit+ofs,y+familySize.bottom()+ofs);
+      pen->drawLine(x+familySize.x()+unit+ofs,y+familySize.y()+3+ofs,
+      x+familySize.right()+1,y+familySize.y()+3+ofs);
+      	
+      
+/*    warning("Array");
     QPointArray points(10);
     points.setPoint(1,x+familySize.x(),y+familySize.y()+unit);
     points.setPoint(2,x+familySize.x()+unit,y+familySize.bottom()+1);
@@ -76,7 +89,7 @@ void RootElement::draw(QPoint drawPoint,int resolution)
     points.setPoint(9,x+familySize.x()+ofs,y+familySize.y()+unit);
     pen->setBrush(pen->pen().color());
     pen->drawPolygon(points,FALSE,1,9);
-    /*
+*/    /*
       Draw child[0], it must exist
     */
     if( beActive )
