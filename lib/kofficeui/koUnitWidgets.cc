@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, Rob Buis(buis@kde.org)
+   Copyright (C) 2004, Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -92,8 +93,9 @@ double KoUnitDoubleBase::toDouble( const QString& str, bool* ok ) const
 }
 
 
-KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value, KoUnit::Unit unit, unsigned int precision, const char *name )
-	: KDoubleSpinBox( lower, upper, step, value, precision, parent, name ), KoUnitDoubleBase( unit, precision )
+KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value, KoUnit::Unit unit,       unsigned int precision, const char *name )
+    : KDoubleSpinBox( lower, upper, step, value, precision, parent, name ), KoUnitDoubleBase( unit, precision ),
+    m_lower( lower ), m_upper( upper ), m_step( step )
 {
 	m_validator = new KoUnitDoubleValidator( this, this );
 	QSpinBox::setValidator( m_validator );
@@ -110,12 +112,17 @@ KoUnitDoubleSpinBox::changeValue( double val )
 void
 KoUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
 {
-	double oldvalue = KoUnit::ptFromUnit( value(), m_unit );
-	setMinValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( minValue(), m_unit ), unit ) );
-	setMaxValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( maxValue(), m_unit ), unit ) );
-	KDoubleSpinBox::setValue( KoUnit::ptToUnit( oldvalue, unit ) );
-	m_unit = unit;
-	setSuffix( KoUnit::unitName( unit ).prepend( ' ' ) );
+    double oldvalue = KoUnit::ptFromUnit( value(), m_unit );
+    setMinValue( KoUnit::ptToUnit( m_lower, unit ) );
+    setMaxValue( KoUnit::ptToUnit( m_upper, unit ) );
+    KDoubleSpinBox::setValue( KoUnit::ptToUnit( oldvalue, unit ) );
+    m_unit = unit;
+    setSuffix( KoUnit::unitName( unit ).prepend( ' ' ) );
+}
+
+double KoUnitDoubleSpinBox::valueInPoints( void ) const
+{
+    return KoUnit::ptFromUnit( value(), m_unit );
 }
 
 
@@ -157,6 +164,11 @@ KoUnitDoubleLineEdit::eventFilter( QObject* o, QEvent* ev )
 	}
 	else
 		return QLineEdit::eventFilter( o, ev );
+}
+
+double KoUnitDoubleLineEdit::valueInPoints( void ) const
+{
+    return KoUnit::ptFromUnit( m_value, m_unit );
 }
 
 
@@ -228,6 +240,12 @@ KoUnitDoubleComboBox::eventFilter( QObject* o, QEvent* ev )
 		return QComboBox::eventFilter( o, ev );
 }
 
+double KoUnitDoubleComboBox::valueInPoints( void ) const
+{
+    return KoUnit::ptFromUnit( m_value, m_unit );
+}
+
+
 KoUnitDoubleSpinComboBox::KoUnitDoubleSpinComboBox( QWidget *parent, double lower, double upper, double step, double value, KoUnit::Unit unit, unsigned int precision, const char *name )
 	: QWidget( parent ), m_step( step )
 {
@@ -279,5 +297,10 @@ double
 KoUnitDoubleSpinComboBox::value() const
 {
 	return m_combo->value();
+}
+
+double KoUnitDoubleSpinComboBox::valueInPoints( void ) const
+{
+    return m_combo->valueInPoints();
 }
 

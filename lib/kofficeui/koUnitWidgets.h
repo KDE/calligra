@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, Rob Buis(buis@kde.org)
+   Copyright (C) 2004, Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -73,6 +74,15 @@ public:
 
 	virtual void changeValue( double );
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
+    /// @deprecated 
+    KDE_DEPRECATED double value() const { return KDoubleSpinBox::value(); }
+    /// Get the value, converted in points
+    double valueInPoints( void ) const;
+
+protected:
+    double m_lower; //< lowest value in points
+    double m_upper; //< highest value in points
+    double m_step;  //< step in points
 };
 
 class KoUnitDoubleLineEdit : public KLineEdit, public KoUnitDoubleBase
@@ -83,7 +93,10 @@ public:
 	virtual void changeValue( double );
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
-	double value() const { return m_value; }
+    /// @deprecated 
+    KDE_DEPRECATED double value() const { return m_value; }
+    /// Get the value, converted in points
+    double valueInPoints( void ) const;
 
 protected:
 	 bool eventFilter( QObject* obj, QEvent* ev );
@@ -104,7 +117,10 @@ public:
 	void updateValue( double );
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
-	double value() const { return m_value; }
+    /// @deprecated 
+     KDE_DEPRECATED double value() const { return m_value; }
+    /// Get the value, converted in points
+    double valueInPoints( void ) const;
 	void insertItem( double, int index = -1 );
 
 protected:
@@ -130,7 +146,10 @@ public:
 
 	void insertItem( double, int index = -1 );
 	void updateValue( double );
-	double value() const;
+    /// @deprecated 
+    double value() const KDE_DEPRECATED ;
+    /// Get the value, converted in points
+    double valueInPoints( void ) const;
 
 signals:
 	 void valueChanged(double);
