@@ -22,6 +22,10 @@
   <!ENTITY mbtb SYSTEM "kwordmbtb.docbook">
   <!ENTITY opt SYSTEM "kwordopt.docbook">
   <!ENTITY filedlg SYSTEM "kwordfiledlg.docbook">
+  <!ENTITY techstuff SYSTEM "kwordtechinfo.docbook">
+
+
+
   <!ENTITY deleteme SYSTEM "do_not_translate.docbook">
 
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
@@ -47,8 +51,8 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-26-01</date>
-<releaseinfo>1.01.00</releaseinfo>
+<date>2002-12-02</date>
+<releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
 <para>
@@ -1388,55 +1392,31 @@ action="simul">&Ctrl;<keycap>Q</keycap></keycombo></entry>
 <table>
 <title>Keybindings for Character Selection</title>
 <tgroup cols="2"><tbody>
+<row><entry>Move selection one character to the left.</entry><entry align="center"><keycombo action="simul">&Shift;<keycap>Left Arrow</keycap></keycombo></entry></row>
+<row><entry>Move selection one word to the left.</entry><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Left Arrow</keycap></keycombo></entry></row>
+<row><entry>Move selection one character to the Right.</entry><entry align="center"><keycombo action="simul">&Shift;<keycap>Right Arrow</keycap></keycombo></entry></row>
+<row><entry>Move selection one word to the Right.</entry><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Right Arrow</keycap></keycombo></entry></row>
 
-<row>
-<entry align="center">Move selection one character to the left.</entry>
-<entry><keycombo action="simul">&Shift;<keycap>Left
-Arrow</keycap></keycombo>
-</entry>
-</row>
+<row><entry>Selects all characters from the start of the selection, to the character directly up one line.</entry><entry align="center"><keycombo action="simul">&Shift;<keycap>Up Arrow</keycap></keycombo></entry></row>
+<row><entry>Selects all characters from the start of the selection, to the first character of the line directly above.</entry><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Up Arrow</keycap></keycombo></entry></row>
 
-<row>
-<entry align="center">Move selection one character to the Right.</entry>
-<entry><keycombo action="simul">&Shift;<keycap>Right
-Arrow</keycap></keycombo>
-</entry>
-</row>
+<row><entry>Selects all characters from the start of the selection, to the character directly down one line.</entry><entry align="center"><keycombo action="simul">&Shift;<keycap>Down Arrow</keycap></keycombo></entry></row>
+<row><entry>Selects all characters from the start of the selection, to the last character of the line directly below.</entry><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Down Arrow</keycap></keycombo></entry></row>
 
-<row>
-<entry align="center">Selects all characters from the start of the
-selection, to the character directly up one line.</entry>
-<entry><keycombo action="simul">&Shift;<keycap>Up
-Arrow</keycap></keycombo></entry>
-</row>
+<row><entry>Selects all characters from the start of the selection, to the beginning of the line.</entry><entry align="center"><keycombo action="simul">&Shift;<keycap>Home</keycap></keycombo></entry></row>
+<row><entry>Selects all characters from the start of the selection, to the beginning of the document.</entry><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Home</keycap></keycombo></entry></row>
 
-<row>
-<entry align="center">Selects all characters from the start of the
-selection, to the character directly down one line.</entry>
-<entry><keycombo action="simul">&Shift;<keycap>Down
-Arrow</keycap></keycombo></entry>
-</row>
+<row><entry>Selects all characters from the start of the selection, to the end of the line.</entry><entry align="center"><keycombo action="simul">&Shift;<keycap>End</keycap></keycombo></entry></row>
+<row><entry>Selects all characters from the start of the selection, to the end of the document.</entry><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>End</keycap></keycombo></entry></row>
 
-<row>
-<entry align="center">Selects all characters from the start of the
-selection, to the beginning of the line.</entry>
-<entry><keycombo
-action="simul">&Shift;<keycap>Home</keycap></keycombo></entry>
-</row>
+<row><entry>Moves the current endpoint one screen up.</entry><entry align="center"><keycombo action="simul">&Shift;<keycap>Page-Up</keycap></keycombo></entry></row>
+<row><entry>Moves the current endpoint one page up. The endpoint is located at the first character of this page.</entry><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Page-Up</keycap></keycombo></entry></row>
 
-<row>
-<entry align="center">Selects all characters from the start of the
-selection, to the end of the line.</entry>
-<entry><keycombo
-action="simul">&Shift;<keycap>End</keycap></keycombo></entry>
-</row>
 
-<row>
-<entry align="center">
-<link linkend="menu-select-all">Select All</link></entry>
-<entry><keycombo
-action="simul">&Ctrl;<keycap>A</keycap></keycombo></entry>
-</row>
+<row><entry>Moves the current endpoint down one screen.</entry><entry align="center"><keycombo action="simul">&Shift;<keycap>Page-Down</keycap></keycombo></entry></row>
+
+<row><entry>Moves the current endpoint down one page.  The endpoint is locate at the first character of this page.</entry><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Page-Down</keycap></keycombo></entry></row>
+
 </tbody>
 </tgroup>
 </table>
@@ -1582,6 +1562,13 @@ Parts Frame</link></entry>
 <entry><keycombo action="simul"><keycap>F12</keycap></keycombo></entry>
 </row>
 </tbody></tgroup></table>
+
+</appendix>
+
+<appendix id="technical-info">
+<title>KWord Technical details</title>
+
+&techstuff;
 
 </appendix>
 

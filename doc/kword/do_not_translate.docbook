@@ -38,9 +38,9 @@
 
 <row><entry>DG: Editing your Document </entry><entry></entry><entry></entry></row>
 <row><entry></entry><entry>Selecting Text </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Using Multiple Views </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>Undo/Redo </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>Cut/Copy/Paste and the Clipboard </entry><entry>Needs Updates</entry></row>
+<row><entry></entry><entry>Using Multiple Views </entry><entry>Done</entry></row>
+<row><entry></entry><entry>Undo/Redo </entry><entry>Done</entry></row>
+<row><entry></entry><entry>Cut/Copy/Paste and the Clipboard </entry><entry>Done</entry></row>
 <row><entry></entry><entry>Finding and Replacing Text </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>Spell Checking </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>Autocorrection </entry><entry>Needs Updates</entry></row>
@@ -135,6 +135,9 @@
 <row><entry></entry></row>
 
 <row><entry>Key Bindings Summary </entry><entry></entry><entry>Needs Updates</entry></row>
+<row><entry></entry></row>
+
+<row><entry>KWord file format </entry><entry></entry><entry>Done</entry></row>
 <row><entry></entry></row>
 
 <row><entry>Glossary</entry><entry></entry><entry>Needs Updates</entry></row>

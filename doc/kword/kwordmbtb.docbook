@@ -1445,6 +1445,17 @@ refer to the section entitled <link linkend="expressions">Expressions</link>.</p
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Begin mail merge.</action></para>
+</listitem>
+</varlistentry>
+
 </variablelist>
 
 </sect2>
