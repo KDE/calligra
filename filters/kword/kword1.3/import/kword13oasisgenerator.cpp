@@ -60,11 +60,7 @@ void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
 
 bool KWord13OasisGenerator::prepare( KWord13Document& kwordDocument )
 {
-    if ( !m_kwordDocument )
-    {
-        kdError(30520) << "No document declared!" << endl;
-    }
-    else if ( m_kwordDocument && ( (void*) m_kwordDocument ) != ( (void*) &kwordDocument ) )
+    if ( m_kwordDocument && ( (void*) m_kwordDocument ) != ( (void*) &kwordDocument ) )
     {
         kdWarning(30520) << "KWord Document is different!" <<endl;
     }
@@ -672,9 +668,12 @@ void KWord13OasisGenerator::writeStylesXml( void )
 // Inspired by KWDocument::saveOasisDocumentStyles
 {
     if ( !m_store || !m_kwordDocument )
+    {
+        kdError(30520) << "Not possible to generate style.xml" << endl;
         return;
+    }
 
-    m_store->open("meta.xml"); // ### TODO: check error!
+    m_store->open("styles.xml"); // ### TODO: check error!
     KoStoreDevice io ( m_store );
     io.open( IO_WriteOnly );  // ### TODO: check error!
     
@@ -812,7 +811,10 @@ void KWord13OasisGenerator::writeContentXml(void)
 {
 #if 1
     if ( !m_store || !m_kwordDocument )
+    {
+        kdError(30520) << "Not possible to generate content.xml" << endl;
         return;
+    }
 
     m_store->open("content.xml"); // ### TODO: check error!
     KoStoreDevice io ( m_store );
@@ -887,7 +889,10 @@ void KWord13OasisGenerator::writeContentXml(void)
 void KWord13OasisGenerator::writeMetaXml(void)
 {
     if ( !m_store || !m_kwordDocument )
+    {
+        kdError(30520) << "Not possible to generate meta.xml" << endl;
         return;
+    }
 
     m_store->open("meta.xml"); // ### TODO: check error!
     KoStoreDevice io ( m_store );
@@ -995,7 +1000,7 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     
     m_kwordDocument = &kwordDocument;
     
-    KoStore* m_store = KoStore::createStore( fileName, KoStore::Write, "application/vnd.sun.xml.writer", KoStore::Zip );
+    m_store = KoStore::createStore( fileName, KoStore::Write, "application/vnd.sun.xml.writer", KoStore::Zip );
     if ( ! m_store )
     {
         kdError(30520) << "Cannot create output KoStore" << endl;
