@@ -53,6 +53,8 @@
 #include <kprogress.h>
 #include <kstandarddirs.h>
 #include <kurlrequester.h>
+#include <kstdguiitem.h>
+#include <kpushbutton.h>
 
 KPMSPresentation::KPMSPresentation( KPresenterDoc *_doc, KPresenterView *_view )
 {
@@ -62,7 +64,7 @@ KPMSPresentation::KPMSPresentation( KPresenterDoc *_doc, KPresenterView *_view )
 }
 
 KPMSPresentation::KPMSPresentation( const KPMSPresentation &msPres )
-    : title( msPres.title ), 
+    : title( msPres.title ),
       slideInfos( msPres.slideInfos ), backColour( msPres.backColour ),
       textColour( msPres.textColour ), path( msPres.path )
 {
@@ -120,13 +122,13 @@ void KPMSPresentation::initCreation( KProgress *progressBar )
     progressBar->setProgress( ++p );
     kapp->processEvents();
 
-    // and put the specified title string on the first slide 
+    // and put the specified title string on the first slide
     QFont textFont( "SansSerif", 96 );
     painter.setFont( textFont );
     painter.setPen( textColour );
     painter.drawText( titleSlide.rect(), Qt::AlignCenter | Qt::WordBreak, title );
     titleSlide.save( path + slidePath + "/SPJT0001.JPG", "JPEG" );
-   
+
     p = progressBar->progress();
     progressBar->setProgress( ++p );
     kapp->processEvents();
@@ -171,7 +173,7 @@ void KPMSPresentation::createIndexFile( KProgress *progressBar )
     p = progressBar->progress();
     progressBar->setProgress( ++p );
     kapp->processEvents();
-    
+
     // We are doing little endian
     sppStream << (Q_UINT32)0x00505053; // SPP magic header
     sppStream << (Q_UINT32)0x00000000; // four null bytes
@@ -279,7 +281,7 @@ KPMSPresentationSetup::KPMSPresentationSetup( KPresenterDoc *_doc, KPresenterVie
     doc = _doc;
     view = _view;
 
-    
+
     QLabel *helptext = new QLabel( this );
     helptext->setAlignment( Qt::WordBreak | Qt::AlignTop| Qt::AlignLeft );
     helptext->setText( i18n( "Please enter the directory where the memory stick "
@@ -295,7 +297,7 @@ KPMSPresentationSetup::KPMSPresentationSetup( KPresenterDoc *_doc, KPresenterVie
     QHBoxLayout *pathLayout = new QHBoxLayout;
     pathLayout->addWidget(lable2);
     pathLayout->addWidget(path);
- 
+
     connect( path, SIGNAL( textChanged(const QString&) ),
              this, SLOT( slotChoosePath(const QString&) ) );
     connect( path, SIGNAL( urlSelected( const QString&) ),
@@ -337,7 +339,7 @@ KPMSPresentationSetup::KPMSPresentationSetup( KPresenterDoc *_doc, KPresenterVie
     lable3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     textColour = new KColorButton( msPres.getTextColour(), textColourLayout );
     lable3->setBuddy( textColour );
-    
+
     QHBox *backgroundColourLayout = new QHBox( colourGroup );
     QLabel *lable4 = new QLabel( i18n("Background color:"), backgroundColourLayout );
     lable4->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
@@ -346,17 +348,17 @@ KPMSPresentationSetup::KPMSPresentationSetup( KPresenterDoc *_doc, KPresenterVie
     colourGroup->setHidden( true );
 
     QHBox *buttonLayout = new QHBox( this );
-    QPushButton *createButton = new QPushButton( i18n("&OK"), buttonLayout );
+    KPushButton *createButton = new KPushButton( KStdGuiItem::ok(), buttonLayout );
     QWhatsThis::add( createButton,
                      i18n( "Selecting this button will proceed to generating "
                            "the presentation in the special Sony format." ) );
-    QPushButton *cancelButton = new QPushButton( i18n("&Cancel"), buttonLayout );
+    KPushButton *cancelButton = new KPushButton( KStdGuiItem::cancel(), buttonLayout );
     QWhatsThis::add( cancelButton,
                      i18n( "Selecting this button will cancel out of the "
                            "generation of the presentation, and return "
                            "to the normal KPresenter view. No files will "
                            "be affected." ) );
-    
+
     mainLayout = new QVBoxLayout( this );
     mainLayout->setMargin(11);
     mainLayout->setSpacing(6);
@@ -438,7 +440,7 @@ void KPMSPresentationSetup::finish()
         }
     }
 
-    
+
     if ( !fi.isDir() ) {
         // path exists but it's not a valid directory. warn the user.
         KMessageBox::error( this,
@@ -448,7 +450,7 @@ void KPMSPresentationSetup::finish()
         path->setFocus();
         return;
     }
-    
+
     QFile sppFile;
     sppFile.setName( ( pathname + "/MSSONY/PJ/" + title->text() + ".SPP" ) );
     if (sppFile.exists()) {
@@ -464,7 +466,7 @@ void KPMSPresentationSetup::finish()
     }
 
     close();
-        
+
     KPMSPresentationCreateDialog::createMSPresentation( doc, view, msPres );
 
 }
