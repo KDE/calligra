@@ -29,7 +29,7 @@
 #include "format.h"
 
 /***********************************************************************/
-/* Class: Anchor                                                     */
+/* Class: Anchor                                                       */
 /***********************************************************************/
 
 /**
@@ -42,17 +42,20 @@ class Anchor: public Format
 	QString _instance;
 
 	public:
+
 		/**
 		 * Constructors
-		 *
+		 */
+		
+		/**
 		 * Creates a new instances of Anchor.
 		 *
-		 * @param Para is the parent class
+		 * @param Para is the parent class.
 		 */
 		Anchor(Para* para = 0);
 		//Anchor(TextZone);
 
-		/* 
+		/**
 		 * Destructor
 		 *
 		 * Nothing to do
@@ -74,6 +77,7 @@ class Anchor: public Format
 		/**
 		 * Helpfull functions
 		 */
+
 		void analyse (const QDomNode);
 
 		void generate(QTextStream&);

@@ -292,7 +292,7 @@ bool Texte::isCloseEnum(Para* previous, Para* next)
 	if(previous->isList() && getSection() != SS_FOOTNOTES &&
 		getSection() != SS_HEADERS && getSection() != SS_FOOTERS)
 	{
-		if(next == 0 || !next->isEnum() ||
+		if(next == 0 || !next->isList() ||
 			  (next->isList() && next->getCounterDepth() < previous->getCounterDepth()) ||
 			  (next->isList() && next->getCounterType() != previous->getCounterType() &&
 			  	next->getCounterDepth() == previous->getCounterDepth()) ||
