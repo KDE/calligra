@@ -423,6 +423,11 @@ QStringList KWCustomVariable::actionTexts()
     return QStringList( i18n( "Custom..." ) );
 }
 
+void KWCustomVariable::recalc()
+{
+    resize();
+}
+
 
 /******************************************************************/
 /* Class: KWSerialLetterVariable                                  */

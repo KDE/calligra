@@ -257,6 +257,7 @@ public:
     virtual void load( QDomElement &elem );
 
     QString name() const { return m_name; }
+    virtual void recalc();
     virtual QString text() { return value(); } // use a format when they are customizable
     QString value() const;
     void setValue( const QString &v );

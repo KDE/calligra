@@ -36,10 +36,11 @@ KWZoomDia::KWZoomDia( KWView* parent, const char *name )
 {
     setCaption(i18n("Select Zoom"));
     QWidget *page = plainPage();
-    QGridLayout *grid = new QGridLayout( page, 1, 1, 15, 7 );
-
+    QGridLayout *grid = new QGridLayout( page, 1, 2, 7, 7 );
+    QLabel *label=new QLabel ( i18n("Zoom:"), page);
+    grid->addWidget(label,0,0);
     zoom=new QSpinBox ( 10, 500, 10,page );
-    grid->addWidget(zoom,0,0);
+    grid->addWidget(zoom,0,1);
     zoom->setFocus();
     zoom->setSuffix ( QString("%") ) ;
 
