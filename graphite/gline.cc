@@ -160,8 +160,8 @@ void GLine::drawHandles(QPainter &p, const QRect &/*rect*/, QList<QRect> *handle
 
     if(boundingRect().width()>GraphiteGlobal::self()->thirdHandleTrigger() ||
        boundingRect().height()>GraphiteGlobal::self()->thirdHandleTrigger())
-        r3=new QRect(m_a.pxX()+Graphite::double2Int((m_b.x()-m_a.x())*0.5)-offset,
-                     m_a.pxY()+Graphite::double2Int((m_b.y()-m_a.y())*0.5)-offset,
+        r3=new QRect(m_a.pxX()+qRound((m_b.x()-m_a.x())*0.5)-offset,
+                     m_a.pxY()+qRound((m_b.y()-m_a.y())*0.5)-offset,
                      size, size);
 
     if(state()==Handles) {
@@ -216,7 +216,7 @@ const GLine *GLine::hit(const QPoint &p) const {
         double dx=m_b.x()-m_a.x();
         double dy=m_b.y()-m_a.y();
         double r=std::sqrt( dx*dx + dy*dy );
-        int ir=Graphite::double2Int(r*GraphiteGlobal::self()->GraphiteGlobal::zoomedResolution());
+        int ir=qRound(r*GraphiteGlobal::self()->GraphiteGlobal::zoomedResolution());
         double alpha1=std::asin( Graphite::abs(dy)/r );
         double alpha;
 
@@ -235,7 +235,7 @@ const GLine *GLine::hit(const QPoint &p) const {
 
         // make it easier for the user to select something by
         // adding a (configurable) "fuzzy zone" :)
-        int w=Graphite::double2Int(static_cast<double>(pen().width())/2.0);
+        int w=qRound(static_cast<double>(pen().width())/2.0);
         int tmp1=fBorder-w;
         int tmp2=2*fBorder+w+1;
         QRect fuzzyZone=QRect( Graphite::min( m_a.pxX(), m_a.pxX() + ir ) - tmp1,

@@ -121,18 +121,18 @@ void Ruler::drawHorizontal(QPainter *painter) {
 
     double pw=m_layout.width()*m_zoomedRes;
     double zoom=m_zoomedRes/GraphiteGlobal::self()->resolution();
-    int i_pw=Graphite::double2Int(pw);
+    int i_pw=qRound(pw);
 
     p.setBrush(colorGroup().brush(QColorGroup::Light));
 
     QRect r;
     if(!m_movingFirstBorder)
-        r.setLeft(-m_dx+Graphite::double2Int(m_layout.borders.left*m_zoomedRes));
+        r.setLeft(-m_dx+qRound(m_layout.borders.left*m_zoomedRes));
     else
         r.setLeft(m_oldMX);
     r.setTop(0);
     if(!m_movingSecondBorder)
-        r.setRight(-m_dx+i_pw-Graphite::double2Int(m_layout.borders.right*m_zoomedRes));
+        r.setRight(-m_dx+i_pw-qRound(m_layout.borders.right*m_zoomedRes));
     else
         r.setRight(m_oldMX);
     r.setBottom(height());
@@ -158,18 +158,18 @@ void Ruler::drawHorizontal(QPainter *painter) {
             str+='0';
         if(m_unit==Graphite::Pt && j!=1) // x100
             str+=QString::fromLatin1("00");
-        p.drawText(Graphite::double2Int(i)-m_dx-Graphite::double2Int(fm.width(str)*0.5),
-                    Graphite::double2Int((height()-fm.height())*0.5),
+        p.drawText(qRound(i)-m_dx-qRound(fm.width(str)*0.5),
+                    qRound((height()-fm.height())*0.5),
                     fm.width(str), height(), AlignLeft | AlignTop, str);
     }
 
     for(double i=dist*0.5; i<=pw; i+=dist) {
-        int ii=Graphite::double2Int(i);
+        int ii=qRound(i);
         p.drawLine(ii-m_dx, 5, ii-m_dx, height()-5);
     }
 
     for(double i=dist*0.25; i<=pw; i+=dist*0.5) {
-        int ii=Graphite::double2Int(i);
+        int ii=qRound(i);
         p.drawLine(ii-m_dx, 7, ii-m_dx, height()-7);
     }
 
@@ -195,18 +195,18 @@ void Ruler::drawVertical(QPainter *painter) {
 
     double ph=m_layout.height()*m_zoomedRes;
     double zoom=m_zoomedRes/GraphiteGlobal::self()->resolution();
-    int i_ph=Graphite::double2Int(ph);
+    int i_ph=qRound(ph);
 
     p.setBrush(colorGroup().brush(QColorGroup::Light));
 
     QRect r;
     if(!m_movingFirstBorder)
-        r.setTop(-m_dy+Graphite::double2Int(m_layout.borders.top*m_zoomedRes));
+        r.setTop(-m_dy+qRound(m_layout.borders.top*m_zoomedRes));
     else
         r.setTop(m_oldMY);
     r.setLeft(0);
     if(!m_movingSecondBorder)
-        r.setBottom(-m_dy+i_ph-Graphite::double2Int(m_layout.borders.bottom*m_zoomedRes));
+        r.setBottom(-m_dy+i_ph-qRound(m_layout.borders.bottom*m_zoomedRes));
     else
         r.setBottom(m_oldMY);
     r.setRight(width());
@@ -232,18 +232,18 @@ void Ruler::drawVertical(QPainter *painter) {
             str+='0';
         if(m_unit==Graphite::Pt && j!=1)  // x100
             str+=QString::fromLatin1("00");
-        p.drawText(Graphite::double2Int((width()-fm.width(str))*0.5),
-                    Graphite::double2Int(i)-m_dy-Graphite::double2Int(fm.height()*0.5),
+        p.drawText(qRound((width()-fm.width(str))*0.5),
+                    qRound(i)-m_dy-qRound(fm.height()*0.5),
                     width(), fm.height(), AlignLeft | AlignTop, str);
     }
 
     for(double i=dist*0.5; i<=ph; i+=dist) {
-        int ii=Graphite::double2Int(i);
+        int ii=qRound(i);
         p.drawLine(5, ii-m_dy, width()-5, ii-m_dy);
     }
 
     for(double i=dist*0.25; i<=ph; i+=dist*0.5) {
-        int ii=Graphite::double2Int(i);
+        int ii=qRound(i);
         p.drawLine(7, ii-m_dy, width()-7, ii-m_dy);
     }
 
@@ -348,12 +348,12 @@ void Ruler::mouseMoveEvent(QMouseEvent *e) {
 
     m_haveToDelete=false;
 
-    int pw=Graphite::double2Int(m_layout.width()*m_zoomedRes);
-    int ph=Graphite::double2Int(m_layout.height()*m_zoomedRes);
-    int left=Graphite::double2Int(m_layout.borders.left*m_zoomedRes)-m_dx;
-    int top=Graphite::double2Int(m_layout.borders.top*m_zoomedRes)-m_dy;
-    int right=pw-Graphite::double2Int(m_layout.borders.right*m_zoomedRes)-m_dx;
-    int bottom=ph-Graphite::double2Int(m_layout.borders.bottom*m_zoomedRes)-m_dy;
+    int pw=qRound(m_layout.width()*m_zoomedRes);
+    int ph=qRound(m_layout.height()*m_zoomedRes);
+    int left=qRound(m_layout.borders.left*m_zoomedRes)-m_dx;
+    int top=qRound(m_layout.borders.top*m_zoomedRes)-m_dy;
+    int right=pw-qRound(m_layout.borders.right*m_zoomedRes)-m_dx;
+    int bottom=ph-qRound(m_layout.borders.bottom*m_zoomedRes)-m_dy;
 
     int mx=e->x()+m_dx<0 ? 0 : e->x();
     int my=e->y()+m_dy<0 ? 0 : e->y();

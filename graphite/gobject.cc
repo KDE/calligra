@@ -616,12 +616,12 @@ void GObject::drawHandles(QPainter &p, const QRect &/*rect*/, QList<QRect> *hand
     QRect *r=0L;
 
     if(boundingRect().width()>GraphiteGlobal::self()->thirdHandleTrigger()) {
-        int dx=Graphite::double2Int(static_cast<double>(boundingRect().width())*0.5)-offset;
+        int dx=qRound(static_cast<double>(boundingRect().width())*0.5)-offset;
         t=new QRect(boundingRect().left()+dx, boundingRect().top(), size, size);
         b=new QRect(boundingRect().left()+dx, boundingRect().bottom(), size, size);
     }
     if(boundingRect().height()>GraphiteGlobal::self()->thirdHandleTrigger()) {
-        int dy=Graphite::double2Int(static_cast<double>(boundingRect().height())*0.5)-offset;
+        int dy=qRound(static_cast<double>(boundingRect().height())*0.5)-offset;
         l=new QRect(boundingRect().left(), boundingRect().top()+dy, size, size);
         r=new QRect(boundingRect().right(), boundingRect().top()+dy, size, size);
     }

@@ -89,8 +89,8 @@ void GraphitePart::paintSelection(QPainter &painter, const QRect &rect, Graphite
 
 void GraphitePart::paintPageBorders(QPainter &painter, const QRect &rect) {
 
-    int right=Graphite::double2Int(m_pageLayout.width()*GraphiteGlobal::self()->zoomedResolution());
-    int bottom=Graphite::double2Int(m_pageLayout.height()*GraphiteGlobal::self()->zoomedResolution());
+    int right=qRound(m_pageLayout.width()*GraphiteGlobal::self()->zoomedResolution());
+    int bottom=qRound(m_pageLayout.height()*GraphiteGlobal::self()->zoomedResolution());
     if(rect.top()<=bottom) {
         if(rect.left()==0)
             painter.drawLine(0, rect.top(), 0, bottom);

@@ -51,28 +51,28 @@ void PreviewWidget::paintEvent(QPaintEvent *) {
     h=w*aspect;
     factor=w/m_layout.width();
     x=0;
-    y=Graphite::double2Int((static_cast<double>(height())-h)*0.5);
+    y=qRound((static_cast<double>(height())-h)*0.5);
 
     // ...then check whether they are okay and correct if neccessary...
     if(h>static_cast<double>(height())) {
         h=static_cast<double>(height());
         w=h/aspect;
-        x=Graphite::double2Int((static_cast<double>(width())-w)*0.5);
+        x=qRound((static_cast<double>(width())-w)*0.5);
         y=0;
         factor=h/m_layout.height();
     }
 
     // ... calculate the borders...
-    int left=x+Graphite::double2Int(m_layout.borders.left*factor);
-    int bw=x-left+Graphite::double2Int(w-m_layout.borders.right*factor);
-    int top=y+Graphite::double2Int(m_layout.borders.top*factor);
-    int bh=y-top+Graphite::double2Int(h-m_layout.borders.bottom*factor);
+    int left=x+qRound(m_layout.borders.left*factor);
+    int bw=x-left+qRound(w-m_layout.borders.right*factor);
+    int top=y+qRound(m_layout.borders.top*factor);
+    int bh=y-top+qRound(h-m_layout.borders.bottom*factor);
 
     // ...and paint the stuff :)
     QPainter p(this);
     p.setBrush(colorGroup().brush(QColorGroup::Light));
     p.setPen(Qt::black);
-    p.drawRect(x, y, Graphite::double2Int(w), Graphite::double2Int(h));
+    p.drawRect(x, y, qRound(w), qRound(h));
     p.setBrush(colorGroup().brush(QColorGroup::Midlight));
     p.drawRect(left, top, bw, bh);
     p.end();

@@ -24,6 +24,8 @@
 #include <koprinter.h>  // KPrinter enums
 #include <kimageeffect.h>   // KImageEffect enum
 
+#include <math.h>
+
 class QPoint;
 class QPen;
 class QDomDocument;
@@ -54,12 +56,12 @@ template<class T> inline T max(const T &a, const T &b) { return a > b ? a : b; }
 template<class T> inline T min(const T &a, const T &b) { return a < b ? a : b; }
 template<class T> inline T abs(const T &a) { return a < 0 ? -a : a; }
 
-double mm2inch(const double &mm);
-double mm2pt(const double &mm);
-double inch2mm(const double &inch);
-double inch2pt(const double &inch);
-double pt2mm(const double &pt);
-double pt2inch(const double &pt);
+inline double mm2inch(const double &mm) { return mm*0.039370147; }
+inline double mm2pt(const double &mm) { return mm*2.83465058; }
+inline double inch2mm(const double &inch) { return inch*25.399956; }
+inline double inch2pt(const double &inch) { return inch*72.0; }
+inline double pt2mm(const double &pt) { return pt*0.352777167; }
+inline double pt2inch(const double &pt) { return pt*0.01388888888889; }
 
 // I didn't need that up to now, but as I already coded it (and choose a different approach
 // afterwards)... maybe I need it later
@@ -76,12 +78,22 @@ double pt2inch(const double &pt);
 //                                  { &pt2mm, 0, &pt2inch },
 //                                  { &inch2mm, &inch2pt, 0 } };
 
-const int double2Int(const double &value);
+inline double rad2deg(const double &rad) {
+    return rad*180.0*M_1_PI;   // M_1_PI = 1/M_PI :)
+}
 
-const double rad2deg(const double &rad);
-const double deg2rad(const double &deg);
-const double normalizeRad(const double &rad);
-const double normalizeDeg(const double &deg);
+inline double deg2rad(const double &deg) {
+    return deg*M_PI/180.0;
+}
+
+inline double normalizeRad(const double &rad) {
+    static double twoPi=2*M_PI;
+    return rad-static_cast<double>(std::floor(rad/twoPi))*twoPi;
+}
+
+inline double normalizeDeg(const double &deg) {
+    return deg-static_cast<double>(std::floor(deg/360.0))*360.0;
+}
 
 void rotatePoint(int &x, int &y, const double &angle, const QPoint &center);
 void rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center);
