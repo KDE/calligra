@@ -98,6 +98,18 @@ k_dcop:
     void setTopBorder( const QColor & c,double width );
     void setBottomBorder(const QColor & c,double width );
 
+    //return border width in pt
+    double leftBorderWidth() const ;
+    double rightBorderWidth() const;
+    double topBorderWidth() const;
+    double bottomBorderWidth() const;
+
+    QColor leftBorderColor() const ;
+    QColor rightBorderColor() const;
+    QColor topBorderColor() const;
+    QColor bottomBorderColor() const;
+
+
 private:
     KoTextView *m_textView;
 

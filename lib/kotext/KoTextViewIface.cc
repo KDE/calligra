@@ -295,3 +295,56 @@ void KoTextViewIface::setBottomBorder(const QColor & c,double width )
     KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
     parag->setBottomBorder(KoBorder( c, KoBorder::SOLID, width ));
 }
+
+double KoTextViewIface::leftBorderWidth() const
+{
+    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    return  parag->leftBorder().ptWidth;
+}
+
+double KoTextViewIface::rightBorderWidth() const
+{
+    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    return parag->rightBorder().ptWidth;
+
+}
+double KoTextViewIface::topBorderWidth() const
+{
+    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    return parag->topBorder().ptWidth;
+
+}
+
+double KoTextViewIface::bottomBorderWidth() const
+{
+    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    return parag->bottomBorder().ptWidth;
+
+}
+
+QColor KoTextViewIface::leftBorderColor() const
+{
+    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    return parag->leftBorder().color;
+}
+
+QColor KoTextViewIface::rightBorderColor() const
+{
+    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    return parag->rightBorder().color;
+
+}
+
+QColor KoTextViewIface::topBorderColor() const
+{
+    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    return parag->topBorder().color;
+}
+
+QColor KoTextViewIface::bottomBorderColor() const
+{
+    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    return parag->bottomBorder().color;
+
+}
+
