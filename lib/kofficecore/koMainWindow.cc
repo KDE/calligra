@@ -129,6 +129,14 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KConfig * config = instance ? instance->config() : KGlobal::config();
     m_recent->loadEntries( config );
     config->sync();
+
+    // we need this for a proper layout of the toolbars upon startup,
+    // when no real view has been loaded, yet
+    m_dummyWidget = new QWidget( this );
+    setView( m_dummyWidget );
+
+    buildMainWindowGUI();
+    //createGUI( 0L ); // NOT this ! (duplicates shell entries !)
 }
 
 KoMainWindow::~KoMainWindow()
@@ -148,6 +156,7 @@ KoMainWindow::~KoMainWindow()
 
 void KoMainWindow::setRootDocument( KoDocument *doc )
 {
+  kdDebug(31000) <<  "KoMainWindow::setRootDocument this = " << this << " doc = " << doc << endl;
   KoView *oldRootView = d->m_rootView;
 
   if ( d->m_rootDoc )
@@ -162,6 +171,8 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     d->m_rootView->setPartManager( d->m_manager );
 
     setView( d->m_rootView );
+    if ( m_dummyWidget )
+      delete m_dummyWidget;
     d->m_rootView->show();
     d->m_rootDoc->addShell( this );
   }
@@ -226,8 +237,11 @@ bool KoMainWindow::openDocument( const KURL & url )
     else if ( doc && !doc->isEmpty() )
     {
         // Open in a new shell
+        // (Note : could create the shell first and the doc next for this
+        // particular case, that would give a better user feedback...)
         KoMainWindow *s = newdoc->createShell();
         s->show();
+        s->setRootDocument( newdoc );
     }
     else
     {
@@ -370,6 +384,7 @@ void KoMainWindow::slotFileNew()
     {
         KoMainWindow *s = newdoc->createShell();
         s->show();
+        s->setRootDocument( newdoc );
 	return;
     }
 
@@ -455,13 +470,37 @@ void KoMainWindow::slotHelpAbout()
     delete dia;
 }
 
+void KoMainWindow::buildMainWindowGUI()
+{
+  KXMLGUIFactory *factory = guiFactory();
+  QValueList<KXMLGUIClient *> plugins;
+  QValueList<KXMLGUIClient *>::ConstIterator pIt, pEnd;
+  if ( !d->bMainWindowGUIBuilt )
+  {
+    KParts::GUIActivateEvent ev( true );
+    QApplication::sendEvent( this, &ev );
+
+    factory->addClient( this );
+
+    plugins = KParts::Plugin::pluginClients( this );
+    pIt = plugins.begin();
+    pEnd = plugins.end();
+    for (; pIt != pEnd; ++pIt )
+      factory->addClient( *pIt );
+
+    d->bMainWindowGUIBuilt = true;
+  }
+}
+
 void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 {
-  qDebug( "void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )" );
+  kdDebug(31000) <<  "KoMainWindow::slotActivePartChanged( Part * newPart) newPart = " <<
+    newPart << endl;
+  kdDebug(31000) <<  "active part is " << d->m_activePart << endl;
 
   if ( d->m_activePart && d->m_activePart == newPart )
   {
-    qDebug( "no need to change the GUI" );
+    kdDebug(31000) << "no need to change the GUI" << endl;
     return;
   }
 
@@ -489,21 +528,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     factory->removeClient( (KXMLGUIClient *)d->m_activeView );
   }
 
-  if ( !d->bMainWindowGUIBuilt )
-  {
-    KParts::GUIActivateEvent ev( true );
-    QApplication::sendEvent( this, &ev );
-
-    factory->addClient( this );
-
-    plugins = KParts::Plugin::pluginClients( this );
-    pIt = plugins.begin();
-    pEnd = plugins.end();
-    for (; pIt != pEnd; ++pIt )
-      factory->addClient( *pIt );
-
-    d->bMainWindowGUIBuilt = true;
-  }
+  buildMainWindowGUI();
 
   if ( newPart && d->m_manager->activeWidget() && d->m_manager->activeWidget()->inherits( "KoView" ) )
   {

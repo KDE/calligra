@@ -122,7 +122,6 @@ bool KSpreadDoc::initDoc()
 KoMainWindow* KSpreadDoc::createShell()
 {
     KoMainWindow* shell = new KSpreadShell;
-    shell->setRootDocument( this );
     shell->show();
 
     return shell;

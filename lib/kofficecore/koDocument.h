@@ -177,8 +177,8 @@ public:
   virtual void paintContent( QPainter &painter, const QRect &rect, bool transparent = false ) = 0;
 
   /**
-   *  Initializes an empty document. You have to overlaod this method
-   *  to initalize all your document variables.
+   *  Initializes an empty document (or displays the template dialog).
+   *  You have to overload this method to initalize all your document variables.
    */
   virtual bool initDoc() = 0;
 

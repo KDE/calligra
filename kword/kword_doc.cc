@@ -1719,7 +1719,6 @@ void KWordDocument::removeView( KWordView *_view )
 KoMainWindow* KWordDocument::createShell()
 {
     KoMainWindow* shell = new KWordShell;
-    shell->setRootDocument( this );
     shell->show();
 
     return shell;

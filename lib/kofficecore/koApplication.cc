@@ -55,13 +55,20 @@ KoApplication::KoApplication()
 
 void KoApplication::start()
 {
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( KoDocument::nativeFormatMimeType() );
-
-    if ( entry.isEmpty() )
+    QCString nativeFormat = KoDocument::nativeFormatMimeType();
+    if ( nativeFormat.isEmpty() )
     {
         kdError() << "Couldn't find the native MimeType in " << kapp->name() << "'s desktop file. Check your installation !" << endl;
         ::exit(1);
     }
+
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( nativeFormat );
+    if ( entry.isEmpty() )
+    {
+        kdError() << "Unknown KOffice MimeType " << nativeFormat << ". Check your installation !" << endl;
+        ::exit(1);
+    }
+
 
     KCmdLineArgs *args= KCmdLineArgs::parsedArgs();
 
@@ -70,11 +77,11 @@ void KoApplication::start()
     // No argument
     if (!argsCount) {
         KoDocument* doc = entry.createDoc( 0, "Document" );
+        KoMainWindow* shell = doc->createShell();
+        shell->show();
         if ( doc && ( doc->initDoc() ) )
         {
-          KoMainWindow* shell = doc->createShell();
-          shell->show();
-          // setMainWidget( shell ); // probably bad idea, says Torben...
+          shell->setRootDocument( doc );
         }
         else
           ::exit(1);
@@ -85,12 +92,18 @@ void KoApplication::start()
         for(int i=0; i < argsCount; i++ )
         {
             KoDocument* doc = entry.createDoc( 0 );
-            if ( doc->openURL( args->url(i) ) )
+            if ( doc )
             {
-              KoMainWindow* shell = doc->createShell();
-              shell->show();
-              //setMainWidget( shell );
-              n++;
+                // show a shell asap
+                KoMainWindow* shell = doc->createShell();
+                shell->show();
+                if ( doc->openURL( args->url(i) ) )
+                {
+                  shell->setRootDocument( doc );
+                  n++;
+                } else {
+                  delete shell;
+                }
             }
         }
         if (n == 0) // no doc, all URLs were malformed

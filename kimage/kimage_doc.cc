@@ -88,7 +88,6 @@ KoView* KImageDocument::createView( QWidget* parent, const char* name )
 KoMainWindow* KImageDocument::createShell()
 {
   KoMainWindow* shell = new KImageShell;
-  shell->setRootDocument( this );
   shell->show();
 
   return shell;

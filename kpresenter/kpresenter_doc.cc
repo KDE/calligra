@@ -3847,7 +3847,6 @@ void KPresenterDoc::makeUsedPixmapList()
 KoMainWindow* KPresenterDoc::createShell()
 {
     KoMainWindow* shell = new KPresenterShell;
-    shell->setRootDocument( this );
     shell->show();
 
     return shell;

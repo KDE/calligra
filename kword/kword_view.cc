@@ -150,7 +150,7 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
     getFonts();
     setKeyCompression( TRUE );
     setAcceptDrops( TRUE );
-    createGUI();
+    createKWordGUI();
 }
 
 /*================================================================*/
@@ -625,7 +625,7 @@ void KWordView::construct()
 }
 
 /*======================== create GUI ==========================*/
-void KWordView::createGUI()
+void KWordView::createKWordGUI()
 {
     // setup GUI
     setupActions();

@@ -96,7 +96,7 @@ public:
     // C++
     KWordView( QWidget *_parent, const char *_name, KWordDocument *_doc );
     virtual ~KWordView();
-    virtual void createGUI();
+    virtual void createKWordGUI();
     virtual void construct();
     virtual void setFormat( const KWFormat &_format, bool _check = true,
 			    bool _update_page = true, bool _redraw = true );
@@ -253,7 +253,7 @@ public slots:
     virtual void formulaLeftSub();
     virtual void formulaProduct();
     virtual void formulaSum();
-    
+
     // C++
     virtual bool printDlg();
 

@@ -58,6 +58,7 @@ public:
 KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
  : QWidget( parent, name )
 {
+  //kdDebug(31000) << "KoView::KoView " << this << endl;
   d = new KoViewPrivate;
   d->m_doc = document;
   PartBase::setObject( this );
@@ -72,6 +73,7 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
 
 KoView::~KoView()
 {
+  //kdDebug(31000) << "KoView::~KoView " << this << endl;
   if ( d->m_manager && !koDocument()->singleViewMode() )
     d->m_manager->removePart( koDocument() );
 

@@ -151,7 +151,7 @@ bool KisDoc::save( ostream& out, const char* )
 		  channel.setAttribute( "cId", static_cast<int>(ch->channelId()) );
 		  channel.setAttribute( "bitDepth", static_cast<int>(ch->bitDepth()) );
 		  channels.appendChild( channel );
-		} 
+		}
 	}
 
   // Save to buffer
@@ -174,7 +174,7 @@ bool KisDoc::completeSaving( KoStore* store )
   if (!m_pCurrent)	return false;
 
   QList<KisLayer> layers = m_pCurrent->layerList();
-  
+
   for (KisLayer *lay = layers.first(); lay != 0; lay = layers.next())
 	{
 	  for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
@@ -199,7 +199,7 @@ bool KisDoc::load( istream& in, KoStore* store )
 {
   QBuffer buffer;
   buffer.open( IO_WriteOnly );
-  
+
   char buf[ 4096 ];
   int anz;
   do
@@ -208,14 +208,14 @@ bool KisDoc::load( istream& in, KoStore* store )
 	  anz = in.gcount();
 	  buffer.writeBlock( buf, anz );
     } while( anz > 0 );
-  
+
   buffer.close();
-  
+
   buffer.open( IO_ReadOnly );
   QDomDocument doc( &buffer );
-  
+
   bool b = loadXML( doc, store );
-  
+
   buffer.close();
   return b;
 }
@@ -224,7 +224,7 @@ bool KisDoc::loadXML( const QDomDocument& doc , KoStore* )
 {
   if ( doc.doctype().name() != "image" )
 	return false;
-  
+
   QDomElement image = doc.documentElement();
 
   if (image.attribute( "mime" ) != "application/x-kimageshop") return false;
@@ -257,7 +257,7 @@ bool KisDoc::loadXML( const QDomDocument& doc , KoStore* )
 	case 5:
 	  colorMode = cm_CMYKA;
 	  break;
-	case 6: 
+	case 6:
 	  colorMode = cm_Lab;
 	  break;
 	case 7:
@@ -293,7 +293,7 @@ bool KisDoc::loadXML( const QDomDocument& doc , KoStore* )
 
 	  // channel elements
 	  QDomNode c = channels.firstChild();
-	  
+	
 	  while (!c.isNull())
 		{
 		  QDomElement channel = c.toElement();
@@ -303,8 +303,8 @@ bool KisDoc::loadXML( const QDomDocument& doc , KoStore* )
 		  c = c.nextSibling();
 		}
 	  l = l.nextSibling();
-	}  
-  
+	}
+
   // add background layer
   img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background");
   img->markDirty(QRect(0, 0, w, h));
@@ -458,7 +458,7 @@ void KisDoc::slotNewImage()
   KisImage *img = newImage(name, w, h, cm, 8);
   if (!img)
     return;
-  
+
   // add background layer
   if (bg == bm_White)
 	img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background");
@@ -494,7 +494,6 @@ KoView* KisDoc::createView( QWidget* parent, const char* name )
 KoMainWindow* KisDoc::createShell()
 {
     KoMainWindow* shell = new KisShell;
-    shell->setRootDocument( this );
     shell->show();
 
     return shell;}

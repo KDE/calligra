@@ -196,6 +196,10 @@ protected slots:
 
 private:
 
+    void buildMainWindowGUI();
+
+    QWidget * m_dummyWidget;
+
     static QList<KoMainWindow>* s_lstMainWindows;
 
     KoMainWindowPrivate *d;

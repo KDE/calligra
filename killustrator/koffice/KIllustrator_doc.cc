@@ -185,7 +185,6 @@ KoView* KIllustratorDocument::createView( QWidget* parent, const char* name )
 KoMainWindow* KIllustratorDocument::createShell()
 {
     KoMainWindow* shell = new KIllustratorShell;
-    shell->setRootDocument( this );
     shell->show();
 
     return shell;
