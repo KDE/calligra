@@ -182,6 +182,7 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
     QRect pageRect;
     int paperWidth = doc->paperWidth();
     int paperHeight = doc->paperHeight();
+    //kdDebug() << "KWViewModePreview::drawPageBorders crect=" << DEBUGRECT( crect ) << endl;
     QRegion grayRegion( crect );
     for ( int page = 0; page < doc->getPages(); page++ )
     {
@@ -192,11 +193,20 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
                         paperWidth, paperHeight );
         drawOnePageBorder( painter, crect, pageRect, emptySpaceRegion );
         grayRegion -= pageRect;
-        grayRegion -= drawRightShadow( painter, crect, pageRect, s_shadowOffset );
-        grayRegion -= drawBottomShadow( painter, crect, pageRect, s_shadowOffset );
+        QRect rightShadow = drawRightShadow( painter, crect, pageRect, s_shadowOffset );
+        if ( !rightShadow.isEmpty() )
+            grayRegion -= rightShadow;
+        QRect bottomShadow = drawBottomShadow( painter, crect, pageRect, s_shadowOffset );
+        if ( !bottomShadow.isEmpty() )
+            grayRegion -= bottomShadow;
 
+        //kdDebug() << "KWViewModePreview::drawPageBorders grayRegion is now : " << endl;
+        //DEBUGREGION( grayRegion );
     }
     if ( !grayRegion.isEmpty() )
+    {
+        //kdDebug() << "KWViewModePreview::drawPageBorders grayRegion's bounding Rect = " << DEBUGRECT( grayRegion.boundingRect() ) << endl;
         m_canvas->kWordDocument()->eraseEmptySpace( painter, grayRegion, QApplication::palette().active().brush( QColorGroup::Mid ) );
+    }
     painter->restore();
 }
