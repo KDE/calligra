@@ -39,6 +39,7 @@
 #include <koPictureCollection.h>
 #include <kodom.h>
 #include <koxmlns.h>
+#include <koxmlwriter.h>
 #include <kotextobject.h> // for customItemChar!
 
 #include <kcursor.h>
@@ -47,7 +48,6 @@
 #include <kparts/partmanager.h>
 #include <kdebug.h>
 #include <dcopobject.h>
-#include <koxmlwriter.h>
 
 #include <qpopupmenu.h>
 #include <qdrawutil.h>
@@ -680,21 +680,9 @@ void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles ) co
     // the caller fills in the child element, then closes draw:frame
 }
 
-QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
+// shared between startOasisFrame and table cells
+void KWFrame::saveCommonStyleProperties( KoGenStyle& frameStyle ) const
 {
-    KoGenStyle frameStyle( KWDocument::STYLE_FRAME, "graphic" );
-    QString protect;
-    if ( frameSet()->protectContent() )
-        protect = "content";
-    if ( frameSet()->isProtectSize() ) // ## should be moved for frame
-    {
-        if ( !protect.isEmpty() )
-            protect+=" ";
-        protect+="size";
-    }
-    if ( !protect.isEmpty() )
-        frameStyle.addProperty( "style:protect", protect );
-
     // Background: color and transparency
     // OOo seems to use style:background-transparency="100%", but the schema allows background-color=transparent
     if ( m_backgroundColor.style() == Qt::NoBrush )
@@ -752,6 +740,24 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
 #if 0 // not allowed in the current OASIS spec
     }
 #endif
+}
+
+QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
+{
+    KoGenStyle frameStyle( KWDocument::STYLE_FRAME, "graphic" );
+    QString protect;
+    if ( frameSet()->protectContent() )
+        protect = "content";
+    if ( frameSet()->isProtectSize() ) // ## should be moved for frame
+    {
+        if ( !protect.isEmpty() )
+            protect+=" ";
+        protect+="size";
+    }
+    if ( !protect.isEmpty() )
+        frameStyle.addProperty( "style:protect", protect );
+
+    saveCommonStyleProperties( frameStyle );
 
     if ( runAround() == KWFrame::RA_SKIP )
         frameStyle.addProperty( "style:wrap", "none" );
@@ -794,7 +800,7 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
     return mainStyles.lookup( frameStyle, "fr" );
 }
 
-bool KWFrame::frameAtPos( const QPoint& point, bool borderOfFrameOnly) {
+bool KWFrame::frameAtPos( const QPoint& point, bool borderOfFrameOnly) const {
     // Forwarded to KWFrameSet to make it virtual
     return frameSet()->isFrameAtPos( this, point, borderOfFrameOnly );
 }
@@ -1261,7 +1267,7 @@ KCommand * KWFrameSet::anchoredObjectDeleteCommand( int frameNum )
     return new KWDeleteFrameCommand( QString::null, frame );
 }
 
-KWFrame * KWFrameSet::frameByBorder( const QPoint & nPoint )
+KWFrame * KWFrameSet::frameByBorder( const QPoint & nPoint ) const
 {
     QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt ) {
@@ -1271,7 +1277,7 @@ KWFrame * KWFrameSet::frameByBorder( const QPoint & nPoint )
     return 0L;
 }
 
-KWFrame * KWFrameSet::frameAtPos( double _x, double _y )
+KWFrame * KWFrameSet::frameAtPos( double _x, double _y ) const
 {
     KoPoint docPoint( _x, _y );
     QPtrListIterator<KWFrame> frameIt = frameIterator();
@@ -1281,9 +1287,10 @@ KWFrame * KWFrameSet::frameAtPos( double _x, double _y )
     return 0L;
 }
 
-KWFrame *KWFrameSet::frame( unsigned int _num )
+KWFrame *KWFrameSet::frame( unsigned int _num ) const
 {
-    return frames.at( _num );
+    // QPtrList sucks
+    return const_cast<KWFrameSet*>( this )->frames.at( _num );
 }
 
 int KWFrameSet::frameFromPtr( KWFrame *frame )
@@ -1980,7 +1987,7 @@ void KWFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight,
         frame->setMinFrameHeight( newHeight );
 }
 
-bool KWFrameSet::isFrameAtPos( KWFrame* frame, const QPoint& point, bool borderOfFrameOnly) {
+bool KWFrameSet::isFrameAtPos( const KWFrame* frame, const QPoint& point, bool borderOfFrameOnly) const {
     QRect outerRect( frame->outerRect( m_doc->viewMode() ) );
     // Give the user a bit of margin for clicking on it :)
     const int margin = 2;

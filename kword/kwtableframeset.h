@@ -157,7 +157,7 @@ public:
         /**
          * @brief Array of cells in the row.
          *
-         * If a cell has m_cols = N, the N-1 following entries are 0.
+         * If a cell has m_cols = N, N values in this array point to the same cell.
          * (Same thing is a cell from a row above has m_rows > 1)
          */
         QPtrVector< Cell > m_cellArray;
@@ -327,8 +327,8 @@ public:
                            KWFrameSetEdit *, KWViewMode *, bool ) {}
 
     // Frameset management
-    Cell *getCell( unsigned int row, unsigned int col );
-    Cell *getCellByPos( double x, double y );
+    Cell *getCell( unsigned int row, unsigned int col ) const;
+    Cell *getCellByPos( double x, double y ) const;
 
     enum CellSize {
         TblAuto = 0,
@@ -491,8 +491,9 @@ public:
     /** override save so we save in table style.. */
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
 
-    /// No-op
-    virtual void saveOasis( KoXmlWriter&, KoSavingContext& ) const {}
+    virtual void saveOasis( KoXmlWriter&, KoSavingContext& ) const;
+    void loadOasis( const QDomElement& tag, KoOasisContext& context );
+
 
     /** load one cell */
     Cell* loadCell( QDomElement &frameElem, bool loadFrames = true, bool useNames = true );
@@ -586,10 +587,16 @@ protected:
     virtual void deleteAnchors();
     /// \overload KWFrame::createAnchors
     virtual void createAnchors( KoTextParag * parag, int index, bool placeHolderExists = false, bool repaint = true );
-    void addCellToArray( Cell* cell );
 
 private:
-    /**
+    void addCellToArray( Cell* cell );
+    void afterLoadingCell( Cell* cell );
+    void parseInsideOfTable( const QDomElement& parent, KoOasisContext& context,
+                             const QMemArray<double> & columnLefts, uint& row, uint& column );
+    void loadOasisCell( const QDomElement& element, KoOasisContext& context,
+                        const QMemArray<double> & columnLefts, uint row, uint column );
+
+   /**
      * @brief position an individual cell in the grid
      *
      * Adjusts the size of the cell frames.
@@ -625,6 +632,7 @@ private:
      */
     Row* removeRowVector(uint index);
 
+private:
     unsigned int m_rows, m_cols, m_nr_cells;
     bool m_showHeaderOnAllPages;
     bool m_hasTmpHeaders;

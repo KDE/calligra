@@ -1723,8 +1723,6 @@ void KWDocument::endOfLoading()
         connect( frameset, SIGNAL( mainTextHeightChanged() ),
                  SIGNAL( mainTextHeightChanged() ) );
     }
-
-    deleteLoadingInfo();
 }
 
 void KWDocument::startBackgroundSpellCheck()
@@ -2198,6 +2196,7 @@ void KWDocument::loadImagesFromStore( KoStore *_store )
 
 bool KWDocument::completeLoading( KoStore *_store )
 {
+    kdDebug() << k_funcinfo << endl;
     // Old-XML stuff. No-op when loading OASIS.
     loadImagesFromStore( _store );
     processPictureRequests();
@@ -2210,7 +2209,7 @@ bool KWDocument::completeLoading( KoStore *_store )
     // The fields from documentinfo.xml just got loaded -> update vars
     recalcVariables( VT_FIELD );
 
-    // Finalize all the existing framesets
+    // Finalize all the existing [non-inline] framesets
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
         fit.current()->finalize();
@@ -2234,6 +2233,8 @@ bool KWDocument::completeLoading( KoStore *_store )
 
     // Load bookmarks
     initBookmarkList();
+
+    deleteLoadingInfo();
 
     return true;
 }
@@ -2261,7 +2262,7 @@ void KWDocument::processPictureRequests()
     }
     m_textImageRequests.clear();
 
-    kdDebug() << k_funcinfo << m_pictureRequests.count() << " picture requests." << endl;
+    //kdDebug(32001) << m_pictureRequests.count() << " picture requests." << endl;
     QPtrListIterator<KWPictureFrameSet> it3( m_pictureRequests );
     for ( ; it3.current() ; ++it3 )
         it3.current()->setPicture( m_pictureCollection->findPicture( it3.current()->key() ) );
@@ -2922,6 +2923,24 @@ void KWDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& 
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
     }
 
+    styles = mainStyles.styles( KWDocument::STYLE_TABLE );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:table-properties"  );
+    }
+
+    styles = mainStyles.styles( KWDocument::STYLE_TABLE_COLUMN );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:table-column-properties"  );
+    }
+
+    styles = mainStyles.styles( KWDocument::STYLE_TABLE_CELL );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:table-cell-properties"  );
+    }
+
     styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_DATE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
@@ -3007,9 +3026,12 @@ void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) 
         QPtrListIterator<KWFrameSet> fit = framesetsIterator();
         ++fit; // skip main text frameset
         for ( ; fit.current() ; ++fit ) {
-            if ( fit.current()->isVisible() && // HACK to avoid saving headers/footers for now
-                 !fit.current()->isFloating() )
-                fit.current()->saveOasis( writer, context );
+            KWFrameSet* fs = fit.current();
+            if ( fs->isVisible() && // HACK to avoid saving headers/footers for now
+                 !fs->isFloating() &&
+                 !fs->isDeleted() ) {
+                fs->saveOasis( writer, context );
+            }
         }
 
     } else {

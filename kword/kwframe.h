@@ -288,6 +288,7 @@ public:
 
     QString saveOasisFrameStyle( KoGenStyles& mainStyles ) const;
     void startOasisFrame( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles ) const;
+    void saveCommonStyleProperties( KoGenStyle& frameStyle ) const;
 
     void setMinFrameHeight(double h);
     double minFrameHeight(void)const {return m_minFrameHeight;}
@@ -296,7 +297,7 @@ public:
         @param point the point in normal coordinates.
         @param borderOfFrameOnly when true an additional check is done if the point
           is on the border.  */
-    bool frameAtPos( const QPoint& nPoint, bool borderOfFrameOnly=false );
+    bool frameAtPos( const QPoint& nPoint, bool borderOfFrameOnly=false ) const;
 
     /**
      * Only applicable to frames of the main text frameset.
@@ -505,19 +506,19 @@ public:
     void deleteAllCopies(); /// \note for headers/footers only
 
     /** retrieve frame from x and y coords (unzoomed coords) */
-    KWFrame *frameAtPos( double _x, double _y );
+    KWFrame *frameAtPos( double _x, double _y ) const;
 
     /** Return if the point is on the frame.
         @param point the point in normal coordinates.
         @param borderOfFrameOnly when true an additional check is done if the point
           is on the border.  */
-    bool isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool borderOfFrameOnly=false );
+    bool isFrameAtPos( const KWFrame* frame, const QPoint& nPoint, bool borderOfFrameOnly=false ) const;
 
     /** return a frame if nPoint in on one of its borders */
-    KWFrame *frameByBorder( const QPoint & nPoint );
+    KWFrame *frameByBorder( const QPoint & nPoint ) const;
 
     /** get a frame by number */
-    KWFrame *frame( unsigned int _num );
+    KWFrame *frame( unsigned int _num ) const;
 
     /** get the frame whose settings apply for @p frame
         (usually @p frame, but can also be the real frame if frame is a copy) */

@@ -1,6 +1,7 @@
 #ifndef KWOASISLOADER_H
 #define KWOASISLOADER_H
 
+class KWTableFrameSet;
 class KWLoadingInfo;
 class KoOasisContext;
 class QDomDocument;
@@ -29,6 +30,8 @@ public:
 
     KWFrame* loadOasisTextBox( const QDomElement& frame, const QDomElement& tag,
                                KoOasisContext& context );
+    KWTableFrameSet* loadOasisTable( const QDomElement& tag,
+                                     KoOasisContext& context );
 
 private:
     void loadOasisIgnoreList( const KoOasisSettings& settings );

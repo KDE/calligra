@@ -25,6 +25,8 @@
 #include "kwloadinginfo.h"
 #include "kwvariable.h"
 #include "kwanchor.h"
+#include "kwoasisloader.h"
+#include "kwtableframeset.h"
 
 #include <kooasiscontext.h>
 #include <koxmlns.h>
@@ -33,7 +35,6 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include "kwoasisloader.h"
 
 KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, KoTextFormatCollection *fc, KoTextFormatter *formatter )
     : KoTextDocument( textfs->kWordDocument(), fc, formatter, false ), m_textfs( textfs )
@@ -140,12 +141,13 @@ bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& c
         if ( frame )
             return true;
     }
-#if 0 // TODO OASIS table:table
+#if 0 // Anchored-to-paragraph table. This is the only supported way in OASIS currently.
+    // [this is being debated as we speak]
+    // TODO: support loading this; this is mandatory in any case.
+    // but for now - we don't save things that way, so no way to test.
     else if ( localName == "table" && tag.namespaceURI() == KoXmlNS::table )
     {
-        //todo
-        parseTable(tag, currentFramesetElement);
-        kdDebug(32002) << "Table found!" << endl;
+        loadOasisTable( tag, context );
         return true;
     }
 #endif
@@ -288,6 +290,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                 // Hmm, if this is a continuation frame of a non-inline frameset,
                 // it's going to inline the whole frameset...
                 // ###### In fact this shows we should inline frames, not framesets, in KWord (!!!!) (big TODO)
+                // ## well, for tables it's the whole frameset.
                 textData = KoTextObject::customItemChar();
                 fs->setAnchorFrameset( m_textfs );
                 customItem = fs->createAnchor( m_textfs->textDocument(), 0 /*frame number; TODO somehow*/ );
@@ -297,6 +300,18 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                 //fs->setAnchored( m_textfs, parag, pos, false /*no placeholder yet*/, false /*don't repaint yet*/ );
                 //++pos;
             }
+            return true;
+        }
+        // anchored-as-char table. Our "inline" tables - currently not supported by OASIS!
+        else if ( tag.namespaceURI() == KoXmlNS::table && localName == "table" )
+        {
+            KWDocument* doc = m_textfs->kWordDocument();
+            KWOasisLoader loader( doc );
+            KWTableFrameSet* table = loader.loadOasisTable( tag, context );
+            table->finalize();
+            textData = KoTextObject::customItemChar();
+            table->setAnchorFrameset( m_textfs );
+            customItem = table->createAnchor( m_textfs->textDocument(), 0 /*frame number*/ );
             return true;
         }
     }

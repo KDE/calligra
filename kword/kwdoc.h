@@ -157,7 +157,7 @@ public:
     void initEmpty();
 
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* store );
-    enum {  STYLE_FRAME = 20 };
+    enum {  STYLE_FRAME = 20, STYLE_TABLE, STYLE_TABLE_COLUMN, STYLE_TABLE_CELL };
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
     enum SaveFlag { SaveAll, SaveSelected }; // kpresenter will also have SavePage

@@ -23,25 +23,30 @@ DESCRIPTION
 */
 
 // ### TODO : multi page tables
-// ### TODO: Doxygen-ify the description above
-// ### TODO (JJ:) : change the QMAX into kMax and QMIN into kMin, especially if one parameter is a function
+// ### TODO: Doxygen-ify the .h
 
-#include <kdebug.h>
-#include <klocale.h>
+#include "kwtableframeset.h"
 #include "kwdoc.h"
 #include "kwanchor.h"
-#include "kwtableframeset.h"
 #include "kwcanvas.h"
 #include "kwcommand.h"
 #include "kwviewmode.h"
 #include "kwview.h"
 #include "kwdrag.h"
-#include <kotextobject.h> // for customItemChar !
-#include <qpopupmenu.h>
-#include <dcopobject.h>
 #include "KWordFrameSetIface.h"
 #include "KWordTableFrameSetIface.h"
+
+#include <kooasiscontext.h>
+#include <koxmlwriter.h>
+#include <kodom.h>
+#include <koxmlns.h>
+#include <kotextobject.h> // for customItemChar !
+
 #include <kmessagebox.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <dcopobject.h>
+#include <qpopupmenu.h>
 #include <qclipboard.h>
 
 
@@ -166,8 +171,8 @@ void KWTableFrameSet::deleteAnchors()
 
 void KWTableFrameSet::addCell( Cell* cell ) // called add but also used to 'update'
 {
-    m_rows = QMAX( cell->rowAfter(), m_rows );
-    m_cols = QMAX( cell->colAfter(), m_cols );
+    m_rows = kMax( cell->rowAfter(), m_rows );
+    m_cols = kMax( cell->colAfter(), m_cols );
 
     if ( m_rowArray.size() < cell->rowAfter() )
         m_rowArray.resize( cell->rowAfter() );
@@ -240,7 +245,7 @@ double KWTableFrameSet::topWithoutBorder()
     for (uint i = 0; i < getCols(); i++)
     {
         KWTableFrameSet::Cell *cell = getCell( 0, i );
-        top = QMAX( top, m_rowPositions[0] + cell->topBorder() );
+        top = kMax( top, m_rowPositions[0] + cell->topBorder() );
     }
     return top;
 }
@@ -252,13 +257,13 @@ double KWTableFrameSet::leftWithoutBorder()
     for (uint i=0; i < getRows(); i++)
     {
         KWTableFrameSet::Cell *cell = getCell( i, 0 );
-        left = QMAX( left, m_colPositions[0] + cell->leftBorder() );
+        left = kMax( left, m_colPositions[0] + cell->leftBorder() );
     }
     return left;
 }
 
 /* returns the cell that occupies row, col. */
-KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int col )
+KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int col ) const
 {
     if ( row < m_rowArray.size() && col < m_rowArray[row]->size() ) {
         Cell* cell = (*m_rowArray[row])[col];
@@ -273,7 +278,7 @@ KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int 
     return 0L;
 }
 
-KWTableFrameSet::Cell *KWTableFrameSet::getCellByPos( double x, double y )
+KWTableFrameSet::Cell *KWTableFrameSet::getCellByPos( double x, double y ) const
 {
     KWFrame *f = frameAtPos(x,y);
     if(f) return static_cast<KWTableFrameSet::Cell *> (f->frameSet());
@@ -401,8 +406,8 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
                   colCount < activeCell->colAfter() )
                 minHeightMyCol = thisColHeight;
             else {
-                minHeightOtherCols = QMAX(minHeightOtherCols, thisColHeight);
-                minHeightActiveRow = QMAX(minHeightActiveRow, thisColActiveRow);
+                minHeightOtherCols = kMax(minHeightOtherCols, thisColHeight);
+                minHeightActiveRow = kMax(minHeightActiveRow, thisColActiveRow);
             }
         } // for each column
 
@@ -418,9 +423,9 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             activeCell->frame(0)->setHeight(activeCell->frame(0)->minFrameHeight());
             //kdDebug(32004) << activeCell->getName() << " grew to its minheight: " << activeCell->frame(0)->minFrameHeight() << endl;
         } else { // wants to shrink
-            double newHeight=QMAX(activeCell->frame(0)->minFrameHeight(),minHeightActiveRow);
+            double newHeight=kMax(activeCell->frame(0)->minFrameHeight(),minHeightActiveRow);
             if(bottomRow) // I'm a strech cell
-                newHeight=QMAX(newHeight, minHeightOtherCols - (minHeightMyCol - activeCell->frame(0)->minFrameHeight()));
+                newHeight=kMax(newHeight, minHeightOtherCols - (minHeightMyCol - activeCell->frame(0)->minFrameHeight()));
             activeCell->frame(0)->setHeight(newHeight);
             //kdDebug(32004) << activeCell->getName() << " shrunk to: " << newHeight << endl;
         }
@@ -521,7 +526,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
                 pageNumber++;
                 pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
                 // kdDebug(32004) << "pageBottom; " << pageBottom << endl;
-                untilRow=QMAX(untilRow, *pageBound);
+                untilRow=kMax(untilRow, *pageBound);
                 pageBound++;
             }
         }
@@ -539,13 +544,13 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
                 kdDebug() << "i: " << i<< endl;
                 Cell *c= getCell(breakRow, i);
                 kdDebug() << "c: " << c->firstRow() << "," << c->m_col << " w: " << c->colSpan() << ", h: " << c->rowSpan() << endl;
-                if(getCell(breakRow,i)->firstRow() < breakRow) {
-                    breakRow = getCell(breakRow,i)->firstRow();
+                if(c->firstRow() < breakRow) {
+                    breakRow = c->firstRow();
                     i=-1;
                 }
             }
             kdDebug() << "breakRow: " << breakRow<< endl;
-            fromRow=QMIN(fromRow, breakRow);
+            fromRow=kMin(fromRow, breakRow);
             if(breakRow < lineNumber+1) {
                 for(unsigned int i=lineNumber+1; i > breakRow;i--)
                     kdDebug() << "j--";
@@ -786,7 +791,7 @@ void KWTableFrameSet::setBoundingRect( KoRect rect, CellSize widthMode, CellSize
     m_colPositions.clear();
     unsigned int cols=0;
     for (TableIter c(this); c; ++c)
-        cols = QMAX(cols, c.current()->colAfter());
+        cols = kMax(cols, c.current()->colAfter());
     double colWidth = rect.width() / cols;
     if ( widthMode == TblAuto ) {
         rect.setLeft( m_doc->ptLeftBorder() );
@@ -803,7 +808,7 @@ void KWTableFrameSet::setBoundingRect( KoRect rect, CellSize widthMode, CellSize
     double rowHeight = 0;
     if( heightMode != TblAuto )
         rowHeight = rect.height() / m_rows;
-    rowHeight=QMAX(rowHeight, 22); // m_doc->getDefaultParagLayout()->getFormat().ptFontSize()) // TODO use table style font-size
+    rowHeight=kMax(rowHeight, 22.0); // m_doc->getDefaultParagLayout()->getFormat().ptFontSize()) // TODO use table style font-size
 
     for(unsigned int i=0; i <= m_rows;i++) {
         m_rowPositions.append(rect.y() + rowHeight * i);
@@ -949,9 +954,9 @@ void KWTableFrameSet::selectUntil( Cell *cell)
     unsigned int fromRow = 0, fromCol = 0;
     getFirstSelected( fromRow, fromCol );
     if(cell->colSpan() != 1 )
-        fromCol = QMIN(fromCol, cell->firstCol());
+        fromCol = kMin(fromCol, cell->firstCol());
     if(cell->rowSpan() != 1 )
-        fromRow = QMIN(fromRow, cell->firstRow());
+        fromRow = kMin(fromRow, cell->firstRow());
 
 
 
@@ -1828,7 +1833,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                         if(cell) offset=cell->leftBorder();
                         if ( row > 0 ) {
                             Cell *c = getCell(row-1, col);
-                            if(c) offset=QMAX(offset, c->leftBorder());
+                            if(c) offset=kMax(offset, c->leftBorder());
                         }
                     }
                     double x = m_colPositions[col] + offset;
@@ -1864,7 +1869,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                         if(cell) offset=cell->leftBorder();
                         if ( row > 0 ) {
                             Cell *c = getCell(row-1, col);
-                            if(c) offset=QMAX(offset, c->leftBorder());
+                            if(c) offset=kMax(offset, c->leftBorder());
                         }
                     }
                     startPos = m_colPositions[col] - offset;
@@ -1939,8 +1944,8 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                         else
                             bottomRow = *(pageBound++);
 
-                        //kdDebug(32004) << "from: " << topRow << " to: " << QMIN((uint)row, bottomRow) << endl;
-                        //kdDebug(32004) << "from: " << m_rowPositions[topRow] << " to: " << m_rowPositions[QMIN((uint)row, bottomRow)] << endl;
+                        //kdDebug(32004) << "from: " << topRow << " to: " << kMin((uint)row, bottomRow) << endl;
+                        //kdDebug(32004) << "from: " << m_rowPositions[topRow] << " to: " << m_rowPositions[kMin((uint)row, bottomRow)] << endl;
                         double offset=0.0;
                         if(border->width() > 0) {
                             //kdDebug(32004) << "looking at topRow=" << topRow << " col=" << col << endl;
@@ -1948,18 +1953,18 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                             if(c) offset=c->topBorder();
                             if ( col > 0 ) {
                                 c=getCell(topRow,col-1);
-                                if(c) offset=QMAX(offset,c->topBorder());
+                                if(c) offset=kMax(offset,c->topBorder());
                             }
                             if(topRow==0) offset=0.0;
                         }
                         double top=m_rowPositions[topRow]-offset;
 
-                        unsigned int toRow=QMIN((uint)row,bottomRow);
+                        unsigned int toRow=kMin((uint)row,bottomRow);
                         offset=0.0;
                         if(border->width() > 0 && toRow!=bottomRow) {
                             if(cell) offset=cell->topBorder();
                             Cell *c=getCell(toRow,col-1);
-                            if(c) offset=QMAX(offset,c->topBorder());
+                            if(c) offset=kMax(offset,c->topBorder());
                         }
                         double bottom=m_rowPositions[toRow] + offset;
 
@@ -2050,6 +2055,229 @@ void KWTableFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progr
 }
 #endif
 
+// Called by KWAnchor for inline tables
+// TODO: for non-inline ones we need a text-box around us...
+// Well, even for inline-as-char ones.... Currently being debated with OASIS.
+void KWTableFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+{
+    writer.startElement( "table:table" );
+    writer.addAttribute( "table:name", getName() );
+    KoGenStyle tableStyle( KWDocument::STYLE_TABLE, "table" );
+    tableStyle.addProperty( "table:align", "margins" );
+    tableStyle.addPropertyPt( "style:width", m_colPositions.last()-m_colPositions[0] );
+    const QString tableStyleName = context.mainStyles().lookup( tableStyle, "table" );
+    writer.addAttribute( "table:style-name", tableStyleName );
+
+    // ### to minimize the XML, we could use table:number-columns-repeated here
+    // when a number of consecutive columns have the exact same style.
+    for ( uint colNr = 0; colNr < getCols(); ++colNr )
+    {
+        writer.startElement( "table:table-column" );
+        KoGenStyle columnStyle( KWDocument::STYLE_TABLE_COLUMN, "table-column" );
+        columnStyle.addPropertyPt( "style:column-width", m_colPositions[colNr+1] - m_colPositions[colNr] );
+        const QString colStyleName = context.mainStyles().lookup( columnStyle, "col" );
+        writer.addAttribute( "table:style-name", colStyleName );
+        writer.endElement(); // table:table-column
+    }
+
+    // TODO table-header-rows once supported
+
+    for ( uint row = 0; row < getRows(); ++row )
+    {
+        writer.startElement( "table:table-row" );
+        for ( uint col = 0; col < getCols(); ++col )
+        {
+            Cell* cell = getCell(row, col);
+            Q_ASSERT( cell );
+            if ( !cell )
+                continue;
+
+            if ( cell->isFirstGridPosnFast( row, col ) )
+            {
+                writer.startElement( "table:table-cell" );
+
+                // Style
+                KoGenStyle cellStyle( KWDocument::STYLE_TABLE_CELL, "table-cell" );
+                cell->frame( 0 )->saveCommonStyleProperties( cellStyle );
+                const QString colStyleName = context.mainStyles().lookup( cellStyle, "cell" );
+                writer.addAttribute( "table:style-name", colStyleName );
+
+                // Attributes
+                if ( cell->colSpan() > 1 )
+                    writer.addAttribute( "table:number-columns-spanned", cell->colSpan() );
+                if ( cell->rowSpan() > 1 )
+                    writer.addAttribute( "table:number-row-spanned", cell->rowSpan() );
+
+                // Content
+                cell->saveOasisContent( writer, context );
+
+                writer.endElement(); // table:table-cell
+            }
+            else
+            {
+                // Empty element for the covered cell
+                writer.startElement( "table:covered-table-cell" );
+                writer.endElement();
+            }
+        }
+        writer.endElement(); // table:table-row
+    }
+
+    writer.endElement(); // table:table
+}
+
+void KWTableFrameSet::loadOasis( const QDomElement& tableTag, KoOasisContext& context )
+{
+    // Left position of each column. The last one defined is the right position of the last cell/column.
+    QMemArray<double> columnLefts(4);
+    uint maxColumns = columnLefts.size() - 1;
+
+    uint col = 0;
+    columnLefts[0] = 0.0; // Initialize left of first cell
+    QDomElement elem;
+    forEachElement( elem, tableTag )
+    {
+        if ( elem.localName() == "table-column" && elem.namespaceURI() == KoXmlNS::table )
+        {
+            uint repeat = elem.attributeNS( KoXmlNS::table, "number-columns-repeated", "1").toUInt(); // Default 1 time
+            if (!repeat)
+                repeat=1; // At least one column defined!
+            KoStyleStack& styleStack = context.styleStack();
+            styleStack.setTypeProperties( "table-column" );
+            styleStack.save();
+            context.fillStyleStack( elem, KoXmlNS::table, "style-name" );
+
+            QString strWidth = styleStack.attributeNS( KoXmlNS::style, "column-width" );
+            double width = KoUnit::parseValue( strWidth );
+
+            if ( width < 1.0 ) // Something is wrong with the width
+            {
+                kdWarning(32004) << "Table column width ridiculous, assuming 1 inch!" << endl;
+                width = 72.0;
+            }
+            else
+                kdDebug(32004) << "- style width " << width << endl;
+
+            for ( uint j = 0; j < repeat; ++j )
+            {
+                ++col;
+                if ( col >= maxColumns )
+                {
+                    // We need more columns
+                    maxColumns += 4;
+                    columnLefts.resize( maxColumns+1, QGArray::SpeedOptim );
+                }
+                columnLefts[col] = width + columnLefts[col-1];
+                kdDebug(32004) << "Cell column " << col-1 << " left " << columnLefts[col-1] << " right " << columnLefts[col] << endl;
+            }
+            styleStack.restore();
+        }
+    }
+
+    uint row = 0;
+    uint column = 0;
+    parseInsideOfTable( tableTag, context, columnLefts, row, column );
+}
+
+void KWTableFrameSet::parseInsideOfTable( const QDomElement& parent, KoOasisContext& context,
+                                          const QMemArray<double> & columnLefts, uint& row, uint& column )
+{
+    kdDebug(32004) << "parseInsideOfTable: columnLefts.size()=" << columnLefts.size() << endl;
+    KoStyleStack& styleStack = context.styleStack();
+
+    QDomElement e;
+    forEachElement( e, parent )
+    {
+        styleStack.save();
+        const QString localName = e.localName();
+        const QString ns = e.namespaceURI();
+        if ( ns != KoXmlNS::table ) {
+            kdWarning(32004) << "Skipping element " << e.tagName() << " (in parseInsideOfTable)" << endl;
+            continue;
+        }
+
+        if ( localName == "table-cell" )
+        {
+            loadOasisCell( e, context, columnLefts, row, column );
+            ++column;
+        }
+        else if ( localName == "covered-table-cell" )
+        {
+            ++column;
+        }
+        else if ( localName == "table-row" )
+        {
+            context.fillStyleStack( e, KoXmlNS::table, "style-name" ); // just in case
+            column = 0;
+            parseInsideOfTable( e, context, columnLefts, row, column );
+            ++row;
+        }
+        else if ( localName == "table-header-rows" ) // ###TODO
+        {
+            parseInsideOfTable( e, context, columnLefts, row, column );
+        }
+        else if ( localName == "table-column" )
+        {
+            // Already treated in loadOasis, we do not need to do anything here!
+        }
+        // TODO sub-table
+        else
+        {
+            kdWarning(32004) << "Skipping element " << localName << " (in parseInsideOfTable)" << endl;
+        }
+
+        styleStack.restore();
+    }
+}
+
+void KWTableFrameSet::loadOasisCell( const QDomElement& element, KoOasisContext& context,
+                                     const QMemArray<double> & columnLefts, uint row, uint column )
+{
+    //kdDebug(32004) << k_funcinfo << element.localName() << " " << row << "," << column << endl;
+
+    KoStyleStack& styleStack = context.styleStack();
+    uint rowSpan = element.attributeNS( KoXmlNS::table, "number-rows-spanned", QString::null ).toUInt();
+    if ( rowSpan == 0 )
+        rowSpan = 1;
+    uint colSpan = element.attributeNS( KoXmlNS::table, "number-columns-spanned", QString::null ).toUInt();
+    if ( colSpan == 0 )
+        colSpan = 1;
+
+    // m_rowPositions / m_colPositions could be QMemArrays, or QValueVectors...
+    while(m_rowPositions.count() <= row + rowSpan + m_pageBoundaries.count()) {
+        m_rowPositions.append(0);
+    }
+    while(m_colPositions.count() <= column + colSpan) {
+        m_colPositions.append(0);
+    }
+
+    Cell *cell = new Cell( this, row, column, QString::null /*unused*/ );
+
+    cell->setRowSpan( rowSpan );
+    cell->setColSpan( colSpan );
+    addCell( cell ); // rowSpan/colSpan have changed -> update array
+
+    double width = columnLefts[ QMIN( column+colSpan, columnLefts.size()-1 ) ] - columnLefts[column];
+    KWFrame* frame = new KWFrame( cell, columnLefts[column], 0, width, 20 );
+    frame->setRunAround( KWFrame::RA_NO );
+    frame->setFrameBehavior( KWFrame::AutoExtendFrame );
+    frame->setNewFrameBehavior( KWFrame::NoFollowup );
+    cell->addFrame( frame, false );
+
+    styleStack.setTypeProperties( "table-cell" );
+    context.fillStyleStack( element, KoXmlNS::table, "style-name" );
+
+    // TODO
+    //loadCommonFrameProperties(frameElementOut);
+
+    cell->loadOasisContent( element, context );
+    afterLoadingCell( cell );
+
+    cell->layout(); // compute size
+    kdDebug() << k_funcinfo << *frame << endl;
+    frame->setMinFrameHeight( frame->height() );
+}
+
 QDomElement KWTableFrameSet::save( QDomElement &parentElem, bool saveFrames ) {
     // When saving to a file, we don't have anything specific to the frameset to save.
     // Save the cells only.
@@ -2092,7 +2320,7 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
     int _cols = KWDocument::getAttribute( framesetElem, "cols", 1 );
     if(_cols <0) _cols = 1;
 
-    // m_rowPositions / m_colPositions could be QMemArrays...
+    // m_rowPositions / m_colPositions could be QMemArrays, or QValueVectors...
     while(m_rowPositions.count() <= static_cast<unsigned int>(row + _rows + m_pageBoundaries.count())) {
         m_rowPositions.append(0);
     }
@@ -2106,8 +2334,19 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
     cell->load( framesetElem, loadFrames );
     cell->setRowSpan(_rows);
     cell->setColSpan(_cols);
-    addCell( cell ); // rowSpan()/m_cols have changed -> update array
+    addCell( cell ); // rowSpan/colSpan have changed -> update array
+    afterLoadingCell( cell );
+    if ( !useNames )
+        cell->setName( autoName );
+    return cell;
+}
 
+void KWTableFrameSet::afterLoadingCell( Cell* cell )
+{
+    uint row = cell->firstRow();
+    uint col = cell->firstCol();
+    uint rowSpan = cell->rowSpan();
+    uint colSpan = cell->colSpan();
     if(m_pageBoundaries.count() > 0) {
         unsigned int adjustment=0;
         QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
@@ -2118,14 +2357,14 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
         row+=adjustment;
     }
 
-    //kdDebug(32004) << "loading cell (" << row << "," << _col << ")\n";
+    kdDebug(32004) << "loading cell (" << row << "," << col << ")\n";
     if(cell->frame(0)) {
         cell->frame(0)->setMinFrameHeight(cell->frame(0)->height()); // TODO run the formatter over the text here
-        QValueList<double>::iterator tmp = m_colPositions.at(_col);
+        QValueList<double>::iterator tmp = m_colPositions.at(col);
         if(*tmp == 0) (*tmp) = cell->frame(0)->left();
         else (*tmp) = (cell->frame(0)->left() + *tmp) / 2;
 
-        tmp = m_colPositions.at(_col+_cols);
+        tmp = m_colPositions.at(col+colSpan);
         if(*tmp == 0) (*tmp) = cell->frame(0)->right();
         else (*tmp) = (cell->frame(0)->right() + *tmp) / 2;
 
@@ -2146,7 +2385,7 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
                 (*tmp) = (cell->frame(0)->top() + *tmp) / 2;
         }
 
-        tmp = m_rowPositions.at(row+_rows);
+        tmp = m_rowPositions.at( row + rowSpan );
         if(*tmp == 0)
             (*tmp) = cell->frame(0)->bottom();
         else { // untested...
@@ -2162,13 +2401,10 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
                 (*tmp) = (cell->frame(0)->bottom() + *tmp) / 2;
         }
     }
-    if ( !useNames )
-        cell->setName( autoName );
 
     if ( m_rowPositions.count() != m_rows + 1 ) {
         kdDebug() << getName() << " loadCell: m_rowPositions=" << m_rowPositions.count() << " m_rows= " << m_rows << endl;
     }
-    return cell;
 }
 
 int KWTableFrameSet::paragraphs()
@@ -2384,7 +2620,7 @@ void KWTableFrameSet::convertTableToText()
     kd->setPlain( text );
     kd->setFrameSetNumber( -1 );
     kd->setKWord( domDoc.toCString() );
-    kdDebug(32001) << "convertTableToText " << domDoc.toCString() << endl;
+    kdDebug(32004) << "convertTableToText " << domDoc.toCString() << endl;
     QApplication::clipboard()->setData( kd );
 #endif
 }
@@ -2980,7 +3216,7 @@ KWTableFrameSet::TableIterator<KWTableFrameSet::CHECKED>::TableIterator(KWTableF
     m_table(table)
 {
     Q_ASSERT(m_table);
-    set_limits(0, m_table->getCols() - 1, 0, m_table->getRows() - 1);
+    set_limits(0, (int)m_table->getCols() - 1, 0, (int)m_table->getRows() - 1);
 
     Cell *c = 0;
     for(uint i = m_limit[HIGH]; i <= m_limit[LOW]; ++i)
@@ -3063,7 +3299,6 @@ KWTableFrameSet::Row *RemovedRow::takeRow()
 
 RemovedColumn::RemovedColumn()
     : m_column(), m_removed(), m_index(0), m_width(0), m_initialized(false){ }
-
 
 
 #include "kwtableframeset.moc"

@@ -4,6 +4,7 @@
 #include "kwtextframeset.h"
 #include "kwframe.h"
 #include "kwloadinginfo.h"
+#include "kwtableframeset.h"
 
 #include <koStore.h>
 #include <kooasiscontext.h>
@@ -12,6 +13,7 @@
 #include <koOasisSettings.h>
 #include <koxmlns.h>
 #include <kodom.h>
+#include <koxmlns.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -266,4 +268,14 @@ KWFrame* KWOasisLoader::loadOasisTextBox( const QDomElement& frameTag, const QDo
         loadingInfo->storeNextFrame( frame, chainNextName );
     }
     return frame;
+}
+
+KWTableFrameSet* KWOasisLoader::loadOasisTable( const QDomElement& tag,
+                                                KoOasisContext& context )
+{
+    const QString name = tag.attributeNS( KoXmlNS::table, "name", i18n( "Unnamed Table" ) ); // ### check for unicity?
+    KWTableFrameSet* table = new KWTableFrameSet( m_doc, name );
+    m_doc->m_lstFrameSet.append( table );
+    table->loadOasis( tag, context );
+    return table;
 }

@@ -1701,17 +1701,12 @@ KWFrame* KWTextFrameSet::loadOasis( const QDomElement& frameTag, const QDomEleme
 
 void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const
 {
-    if ( frames.isEmpty() ) // Deleted frameset -> don't save
-        return;
     // TODO save protectContent
     m_textobj->saveOasisContent( writer, context );
 }
 
 void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
-    if ( frames.isEmpty() ) // Deleted frameset -> don't save
-        return;
-
     // Save first frame with the whole contents
     KWFrame* frame = frames.getFirst();
     frame->startOasisFrame( writer, context.mainStyles() );
