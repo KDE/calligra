@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Michael Koch <m_koch@bigfoot.de>
+   Copyright (C) 1998, 1999 Michael Koch <koch@kde.org
  
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __widgetwrapper_h__
 #define __widgetwrapper_h__
@@ -28,31 +28,32 @@ class WidgetWrapper : public QWidget
 
 public:
 
-  WidgetWrapper();
-  WidgetWrapper( QWidget* _widget, WFlags f = 0 );
+  enum SelectState { NoSelect, PrimarySelect, SecondarySelect };
 
+  WidgetWrapper( QWidget* _widget, WFlags f = 0 );
   ~WidgetWrapper();
 
-  virtual void mousePressEvent( QMouseEvent* _event );
-  virtual void resizeEvent( QResizeEvent* _event );
-  virtual void paintEvent( QPaintEvent* _event );
-
-  void select( bool _selected = TRUE );
-  bool selected();
-
-signals:
-
-  void clicked( WidgetWrapper* _widget );
+  SelectState selectState();
+  virtual bool eventFilter( QObject* _obj, QEvent* _event );
 
 public slots:
 
+  void slotSelectPrimary();
+  void slotSelectSecondary();
   void slotUnselect();
+
+signals:
+
+  void clicked( WidgetWrapper* );
+  void clickedShift( WidgetWrapper* );
 
 private:
 
-  bool m_selected;
+  void addExtraChilds( const QColor& _color );
+  void removeExtraChilds();
+
+  SelectState m_selectState;
   QWidget* m_widget;
 };
 
-#endif  // __widgetwrapper_h__
-
+#endif // __widgetwrapper_h__

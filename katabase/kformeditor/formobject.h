@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Michael Koch <m_koch@bigfoot.de>
+   Copyright (C) 1998, 1999 Michael Koch <koch@kde.org>
  
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,8 +43,8 @@ public:
    *  @param _sizex Horizontal size of the object.
    *  @param _sizey Vertical size of the object.
    */
-  FormObject( Type _type, int _posx, int _posy, int _sizex, int _sizey );
-  FormObject( Type _type, int _posx, int _posy, int _sizex, int _sizey, QString _text );
+  FormObject( Type _type, QString _name, int _posx, int _posy, int _sizex, int _sizey );
+  FormObject( Type _type, QString _name, int _posx, int _posy, int _sizex, int _sizey, QString _text );
 
   /**
    *  copy-Constructor.
@@ -83,7 +83,7 @@ public:
    *
    *  @return A Pointer to a widget.
    */
-  QWidget* create( QWidget* _parent = 0L, const char* _name = 0L );
+  QWidget* create( QWidget* _parent = 0L );
 
   Type type();
   QString action();
@@ -94,6 +94,7 @@ protected:
   void setGeometry( QWidget* _widget );
 
   Type m_type;
+  QString m_name;
   int m_posx;
   int m_posy;
   int m_sizex;

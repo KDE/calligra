@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Michael Koch <m_koch@bigfoot.de>
+   Copyright (C) 1998, 1999 Michael Koch <koch@kde.org>
  
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,14 +17,25 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qlayout.h>
+
 #include "formsizedlg.h"
 
 // only for debug
 #include <iostream.h>
 
-FormSizeDlg::FormSizeDlg()
-  : QDialog()
+FormSizeDlg::FormSizeDlg(  QWidget* _parent, const char* _name )
+  : QDialog( _parent, _name )
 {
+  QGridLayout* grid = new QGridLayout( 3, 3 );
+
+  // Michael Koch
+  //
+  // Oben zweimal jeweils ein Label mit einer Eingabezeile
+  // In die Eingabezeile koennen nur Zahlen eingeben werden
+  // Rechts neben jeder Eingabezeile sind Scroller zum
+  // Erhoehen und Erniedrigen. 
+  // Unten sind zwei Buttons: OK, Cancel
 }
 
 FormSizeDlg::~FormSizeDlg()

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1998, 1999 Michael Koch <koch@kde.org>
  
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -65,6 +65,10 @@ public:
 
   uint getFormWidth() { return m_FormWidth; };
   uint getFormHeight() { return m_FormHeight; };
+  void setBackgroundColor( const QColor& _color );
+  QColor backgroundColor();
+  void setFormName( const QString& _name );
+  QString formName();
 
 signals:
 
@@ -94,6 +98,8 @@ private:
 
   int m_FormWidth;
   int m_FormHeight;
+  QColor m_backgroundColor;
+  QString m_FormName;
 };
 
 #endif

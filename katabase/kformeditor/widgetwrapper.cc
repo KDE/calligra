@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Michael Koch <m_koch@bigfoot.de>
+   Copyright (C) 1998, 1999 Michael Koch <koch@kde.org>
  
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,104 +18,158 @@
 */
 
 #include <qpainter.h>
+#include <qobjectlist.h>
+#include <qscrollview.h>
 
 #include "widgetwrapper.h"
 
 // only for debug
 #include <iostream.h>
 
-WidgetWrapper::WidgetWrapper()
-  : m_widget( NULL ) 
-{
-}
-
 WidgetWrapper::WidgetWrapper( QWidget* _widget, WFlags f )
-  : m_selected ( FALSE ), m_widget( _widget )
+  : QWidget( 0, 0 ), m_selectState ( NoSelect ), m_widget( _widget )
 {
-  m_widget->reparent( this, f, QPoint( 0, 0 ), TRUE );
-  //reparent( m_widget, f, QPoint( 0, 0 ), TRUE );
-
+  setName( m_widget->name() );
   setFixedSize( m_widget->size() );
+  setMouseTracking( TRUE );
 
-  //m_widget->setBackgroundMode( NoBackground );
-  setBackgroundMode( NoBackground );
-
-  // TODO: child widget may not process events (only paint events)
-
-  // only for debugging
-  //m_widget->hide();
+  m_widget->reparent( this, f, QPoint( 0, 0 ), TRUE );
+  m_widget->installEventFilter( this );
 }
  
 WidgetWrapper::~WidgetWrapper()
 {
 }
 
-void WidgetWrapper::select( bool _selected )
+void WidgetWrapper::slotSelectPrimary()
 {
-  if( _selected )
-    cerr << "WidgetWrapper::select" << endl;
+  if( m_selectState == NoSelect )
+  {
+    cerr << "selecting primary : " << m_widget->name() << endl;
 
-  m_selected = _selected;
+    addExtraChilds( red );
+    m_selectState = PrimarySelect;
+  }
 
   QWidget::update();
 }
 
-bool WidgetWrapper::selected()
+void WidgetWrapper::slotSelectSecondary()
 {
-  return m_selected;
+  if( m_selectState == NoSelect )
+  {
+    cerr << "selecting secondary : " << m_widget->name() << endl;
+
+    addExtraChilds( green );
+    m_selectState = SecondarySelect;
+  }
+
+  QWidget::update();
 }
 
 void WidgetWrapper::slotUnselect()
 {
-  select( FALSE );
-}
-
-void WidgetWrapper::mousePressEvent( QMouseEvent*  )
-{
-  cerr << "WidgetWrapper::mousePressEvent()" << endl;
-
-  emit clicked( this );
-}
-
-void WidgetWrapper::resizeEvent( QResizeEvent*  )
-{
-}
-
-void WidgetWrapper::paintEvent( QPaintEvent* )
-{
-  m_widget->repaint();
-
-  if( m_selected )
+  if( m_selectState != NoSelect )
   {
-    QPainter p;
+    cerr << "unselecting : " << m_widget->name() << endl;
 
-    p.begin( this );
-
-    // paint the rectangle
-    p.drawRect( 2, 2, width() - 3, height() - 3 );
-
-    // paint the edge points
-    p.fillRect( 0, 0, 5, 5, QBrush( SolidPattern ) );
-    p.fillRect( width() - 5, 0, 5, 5, QBrush( SolidPattern ) );
-    p.fillRect( 0, height() - 5, 5, 5, QBrush( SolidPattern ) );
-    p.fillRect( width() - 5, height() - 5, 5, 5, QBrush( SolidPattern ) );
-
-    // paint the middle points on the horizontal line
-    if( width() > 27 )
-    {
-      p.fillRect( width() / 2 - 2, 0, 5, 5, QBrush( SolidPattern ) );
-      p.fillRect( width() / 2 - 2, height() - 5, 5, 5, QBrush( SolidPattern ) );
-    }
-
-    // paint the middle points on the vertical line
-    if( height() > 27 )
-    {
-      p.fillRect( 0, height() / 2 - 2, 5, 5, QBrush( SolidPattern ) );
-      p.fillRect( width() - 5, height() / 2 - 2, 5, 5, QBrush( SolidPattern ) );
-    }
-
-    p.end();
+    removeExtraChilds();
+    m_selectState = NoSelect;
   }
+ 
+  QWidget::update();
+}
+
+WidgetWrapper::SelectState WidgetWrapper::selectState()
+{
+  return m_selectState;
+}
+
+void WidgetWrapper::addExtraChilds( const QColor& _color )
+{
+  cerr << "adding extra childs" << endl;
+
+  QWidget* w = new QWidget( this );
+  w->resize( size() );
+  w->setBackgroundColor( _color );
+  w->raise();
+  w->show();
+  w->installEventFilter( this );
+  raise();
+}
+
+void WidgetWrapper::removeExtraChilds()
+{
+  cerr << "removing extra childs" << endl;
+
+  QWidget* obj;
+  QObjectList *list = QObject::queryList( "QWidget" );
+  QObjectListIt it( *list );             // iterate over all childs
+ 
+  while( ( obj = ( (QWidget*) it.current() ) ) != 0 )   // for each found object...
+  {
+    ++it;
+    if( obj != m_widget )
+    {
+      if( ( red == obj->backgroundColor() ) ||
+          ( green == obj->backgroundColor() ) )
+      {
+        obj->hide();
+        removeChild( obj );
+      }
+    }
+  }
+  delete list;                           // delete the list, not the objects
+}
+
+bool WidgetWrapper::eventFilter( QObject* _obj, QEvent* _event )
+{
+  if( _event->type() == QEvent::Paint )
+  {
+    return FALSE;
+  }
+
+  QMouseEvent* me;
+  static QPoint mpos;
+
+  if( _event->type() == QEvent::MouseButtonPress )
+  {
+    me = (QMouseEvent*) _event;
+    if( me->button() & LeftButton )
+    {
+      mpos = me->pos();
+
+      if( me->state() & ShiftButton )
+      {
+        cerr << "LMB clicking + Shift" << endl;
+
+        emit clickedShift( this );
+      }
+      else
+      {
+        cerr << "LMB clicking" << endl;
+
+        emit clicked( this );
+      }
+    }
+  }
+  if( _event->type() == QEvent::MouseMove )
+  {
+    me = (QMouseEvent*) _event;
+    if( me->state() & LeftButton )
+    {
+      move( x() - mpos.x() + me->x(), y() - mpos.y() + me->y() );
+    }
+  }
+  if( _event->type() == QEvent::MouseButtonRelease )
+  {
+    me = (QMouseEvent*) _event;
+    if( me->button() & LeftButton )
+    {
+//    cerr << "Dropping widget" << endl;
+    }
+  }
+  return TRUE;
 }
 
 #include "widgetwrapper.moc"

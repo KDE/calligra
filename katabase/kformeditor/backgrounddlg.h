@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Michael Koch <m_koch@bigfoot.de>
+   Copyright (C) 1998, 1999 Michael Koch <koch@kde.org>
  
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,8 +28,19 @@ class BackgroundDlg : public QDialog
 
 public:
 
-  BackgroundDlg();
+  BackgroundDlg( const QColor& _color, QWidget* _parent = 0, const char* _name = 0);
   ~BackgroundDlg();
+
+  void setColor( const QColor& _color );
+  QColor color();
+
+private slots:
+
+  void slotChooseColor();
+
+private:
+
+  QWidget* m_colorField;
 };
 
 #endif  // __backgrounddlg_h__

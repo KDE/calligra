@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1998, 1999 Michael Koch <koch@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +21,7 @@
 #include <qmsgbox.h>
 #include <qkeycode.h>
 #include <qprndlg.h>
+#include <qcolor.h>
 
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -42,8 +43,13 @@
 #include "kformeditor_doc.h"
 #include "kformeditor_view.h"
 #include "kformeditor_shell.h"
+
 #include "formobject.h"
 #include "widgetwrapper.h"
+
+#include "backgrounddlg.h"
+#include "formpropertydlg.h"
+#include "formsizedlg.h"
 
 /*****************************************************************************
  *
@@ -62,6 +68,7 @@ KformEditorView::KformEditorView( QWidget* _parent, const char* _name, KformEdit
   OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus );
 
   m_pDoc = _doc;
+  m_countSelectedWidgets = 0;
 
   QObject::connect( m_pDoc, SIGNAL( sigUpdateView() ), this, SLOT( slotUpdateView() ) );
 
@@ -156,6 +163,9 @@ void KformEditorView::cleanUp()
 
   m_pDoc->removeView( this );
 
+  m_background = NULL;
+  m_primaryWidget = NULL;
+
   KoViewIf::cleanUp();
 }
 
@@ -185,7 +195,7 @@ bool KformEditorView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fac
     kdebug( KDEBUG_INFO, 0, "Setting to nil" );
     m_vToolBarEdit = 0L;
     m_vToolBarInsert = 0L;
-    m_vToolBarOrientation = 0L;
+    m_vToolBarAlignment = 0L;
     return true;
   }
 
@@ -244,45 +254,45 @@ bool KformEditorView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fac
 
   m_vToolBarInsert->enable( OpenPartsUI::Show );
 
-  m_vToolBarOrientation = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+  m_vToolBarAlignment = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 
-  m_vToolBarOrientation->setFullWidth( false );
+  m_vToolBarAlignment->setFullWidth( false );
 
   tooltip = Q2C( i18n( "Fit view to form" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_idToolBarOrientation_Center = m_vToolBarOrientation->insertButton2( pix, 6, SIGNAL( clicked() ), this, "orientationFitViewToForm", true, tooltip, -1 );
+  m_idToolBarAlignment_Center = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentFitViewToForm", true, tooltip, -1 );
 
-  m_vToolBarOrientation->insertSeparator( -1 );
+  m_vToolBarAlignment->insertSeparator( -1 );
 
   tooltip = Q2C( i18n( "Center widgets" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_idToolBarOrientation_Center = m_vToolBarOrientation->insertButton2( pix, 6, SIGNAL( clicked() ), this, "orientationCenter", true, tooltip, -1 );
+  m_idToolBarAlignment_Center = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentCenter", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Widgets left" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_idToolBarOrientation_Left = m_vToolBarOrientation->insertButton2( pix, 6, SIGNAL( clicked() ), this, "orientationLeft", true, tooltip, -1 );
+  m_idToolBarAlignment_Left = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentLeft", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Widgets horizontal center" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_idToolBarOrientation_HorizontalCenter = m_vToolBarOrientation->insertButton2( pix, 6, SIGNAL( clicked() ), this, "orientationHorizontalCenter", true, tooltip, -1 );
+  m_idToolBarAlignment_HorizontalCenter = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentHorizontalCenter", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Widgets right" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_idToolBarOrientation_Right = m_vToolBarOrientation->insertButton2( pix, 6, SIGNAL( clicked() ), this, "orientationRight", true, tooltip, -1 );
+  m_idToolBarAlignment_Right = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentRight", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Widgets top" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_idToolBarOrientation_Top = m_vToolBarOrientation->insertButton2( pix, 6, SIGNAL( clicked() ), this, "orientationTop", true, tooltip, -1 );
+  m_idToolBarAlignment_Top = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentTop", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Widgets vertical center" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_idToolBarOrientation_VerticalCenter = m_vToolBarOrientation->insertButton2( pix, 6, SIGNAL( clicked() ), this, "orientationVerticalCenter", true, tooltip, -1 );
+  m_idToolBarAlignment_VerticalCenter = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentVerticalCenter", true, tooltip, -1 );
 
   tooltip = Q2C( i18n( "Widgets bottom" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_idToolBarOrientation_Bottom = m_vToolBarOrientation->insertButton2( pix, 6, SIGNAL( clicked() ), this, "orientationBottom", true, tooltip, -1 );
+  m_idToolBarAlignment_Bottom = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentBottom", true, tooltip, -1 );
 
-  m_vToolBarOrientation->enable( OpenPartsUI::Show );
+  m_vToolBarAlignment->enable( OpenPartsUI::Show );
 
   return true;
 }
@@ -334,6 +344,11 @@ bool KformEditorView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   text = Q2C( i18n( "&Background" ) );
   m_idMenuEdit_Background = m_vMenuEdit->insertItem( text, this, "editBackground", 0 );
 
+  m_vMenuEdit->insertSeparator( -1 );
+
+  text = Q2C( i18n( "&Form properties" ) );
+  m_idMenuEdit_FormSize = m_vMenuEdit->insertItem( text, this, "editFormSize", 0 );
+
   text = Q2C( i18n( "&Insert" ) );
   _menubar->insertMenu( text, m_vMenuInsert, -1, -1 );
 
@@ -357,42 +372,42 @@ bool KformEditorView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
   m_vMenuInsert->insertItem6( pix, text, this, "insertCheckBox", 0, -1, -1 );
 
-  text = Q2C( i18n( "&Orientation" ) );
-  _menubar->insertMenu( text, m_vMenuOrientation, -1, -1 );
+  text = Q2C( i18n( "&Alignment" ) );
+  _menubar->insertMenu( text, m_vMenuAlignment, -1, -1 );
 
   text = Q2C( i18n( "&Fit view to form" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_vMenuOrientation->insertItem6( pix, text, this, "orientationFitViewToForm", CTRL + Key_X, -1, -1 );
+  m_vMenuAlignment->insertItem6( pix, text, this, "alignmentFitViewToForm", CTRL + Key_X, -1, -1 );
 
-  m_vMenuOrientation->insertSeparator( -1 );
+  m_vMenuAlignment->insertSeparator( -1 );
 
   text = Q2C( i18n( "&Center widgets" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_vMenuOrientation->insertItem6( pix, text, this, "orientationCenter", CTRL + Key_X, -1, -1 );
+  m_vMenuAlignment->insertItem6( pix, text, this, "alignmentCenter", CTRL + Key_X, -1, -1 );
 
   text = Q2C( i18n( "&Left" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_vMenuOrientation->insertItem6( pix, text, this, "orientationLeft", CTRL + Key_X, -1, -1 );
+  m_vMenuAlignment->insertItem6( pix, text, this, "alignmentLeft", CTRL + Key_X, -1, -1 );
 
   text = Q2C( i18n( "&Horizontal center" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_vMenuOrientation->insertItem6( pix, text, this, "orientationHorizontalCenter", CTRL + Key_X, -1, -1 );
+  m_vMenuAlignment->insertItem6( pix, text, this, "alignmentHorizontalCenter", CTRL + Key_X, -1, -1 );
 
   text = Q2C( i18n( "&Right" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_vMenuOrientation->insertItem6( pix, text, this, "orientationRight", CTRL + Key_X, -1, -1 );
+  m_vMenuAlignment->insertItem6( pix, text, this, "alignmentRight", CTRL + Key_X, -1, -1 );
 
   text = Q2C( i18n( "&Top" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_vMenuOrientation->insertItem6( pix, text, this, "orientationTop", CTRL + Key_X, -1, -1 );
+  m_vMenuAlignment->insertItem6( pix, text, this, "alignmentTop", CTRL + Key_X, -1, -1 );
 
   text = Q2C( i18n( "&Vertical center" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_vMenuOrientation->insertItem6( pix, text, this, "orientationVerticalCenter", CTRL + Key_X, -1, -1 );
+  m_vMenuAlignment->insertItem6( pix, text, this, "alignmentVerticalCenter", CTRL + Key_X, -1, -1 );
 
   text = Q2C( i18n( "&Bottom" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_vMenuOrientation->insertItem6( pix, text, this, "orientationBottom", CTRL + Key_X, -1, -1 );
+  m_vMenuAlignment->insertItem6( pix, text, this, "alignmentBottom", CTRL + Key_X, -1, -1 );
 
   return true;
 }
@@ -440,114 +455,255 @@ void KformEditorView::initChilds()
       QScrollView::moveChild( obj, (*it)->posx(), (*it)->posy() );
  
       QObject::connect( obj,  SIGNAL( clicked( WidgetWrapper* ) ),
-                        this, SLOT( slotWidgetSelected( WidgetWrapper* ) ) );
+                        this, SLOT( slotClick( WidgetWrapper* ) ) );
+      QObject::connect( obj,  SIGNAL( clickedShift( WidgetWrapper* ) ),
+                        this, SLOT( slotShiftClick( WidgetWrapper* ) ) );
       QObject::connect( this, SIGNAL( unselectAll() ),
                         obj,  SLOT( slotUnselect() ) );
+      obj->setBackgroundColor( m_pDoc->backgroundColor() );
     }
   }
+  m_background = new QWidget( this );
+  QScrollView::addChild( m_background );
+  m_background->installEventFilter( this );
+  m_background->resize( m_pDoc->getFormWidth(), m_pDoc->getFormHeight() );
+  m_background->setBackgroundColor( m_pDoc->backgroundColor() );
+  m_background->lower();
+
+  m_primaryWidget = NULL;
+  m_countSelectedWidgets = 0;
+}
+
+void KformEditorView::drawContents( QPainter* _painter, int _clipx, int _clipy, int _clipw, int _cliph )
+{
+  QColor color( 80, 80, 80 );
+  _painter->fillRect( _clipx, _clipy, _clipw, _cliph, QBrush( color ) );
 }
 
 void KformEditorView::editUndo()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Undo" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Undo" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
 void KformEditorView::editRedo()
 {
-/*
   if( !CORBA::is_nil( m_vStatusBar ) )
-    m_vStatusBar->changeItem( Q2C( i18n ( "Redo" ) ), 1 );
-*/
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Redo" ) );
+
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
 void KformEditorView::editCut()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Cut widgets" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Cut widgets" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
 void KformEditorView::editCopy()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Copy widgets" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Copy widgets" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
 void KformEditorView::editPaste()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Paste widgets" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Paste widgets" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
 void KformEditorView::editFormSize()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Change form size" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Change form size" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
 void KformEditorView::editBackground()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Change background" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Change background" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
+
+  BackgroundDlg* dlg = new BackgroundDlg( m_pDoc->backgroundColor() );
+
+  if( dlg->exec() == QDialog::Accepted )
+  {
+    cerr << "Farbe setzen" << endl;
+
+    m_pDoc->setBackgroundColor( dlg->color() );
+
+    m_background->setBackgroundColor( dlg->color() );
+  }
+
+  slotUpdateView();
 }
 
 void KformEditorView::insertButton()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Insert Button" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Insert Button" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
 void KformEditorView::insertLabel()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Insert Label" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Insert Label" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
 void KformEditorView::insertLineEdit()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Insert LineEdit" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Insert LineEdit" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
 void KformEditorView::insertListBox()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Insert ListBox" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Insert ListBox" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
 void KformEditorView::insertCheckBox()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Insert CheckBox" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Insert CheckBox" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
-void KformEditorView::orientationFitViewToForm()
+void KformEditorView::alignmentFitViewToForm()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Fit view to form" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Fit view to form" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
-void KformEditorView::orientationCenter()
+void KformEditorView::alignmentCenter()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Center the selected widgets" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Center the selected widgets" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
-void KformEditorView::orientationLeft()
+void KformEditorView::alignmentLeft()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to left" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Position the selected widgets to left" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
-void KformEditorView::orientationHorizontalCenter()
+void KformEditorView::alignmentHorizontalCenter()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to horizontal center" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Position the selected widgets to horizontal center" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
-void KformEditorView::orientationRight()
+void KformEditorView::alignmentRight()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to right" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Position the selected widgets to right" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
-void KformEditorView::orientationTop()
+void KformEditorView::alignmentTop()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to top" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Position the selected widgets to top" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
-void KformEditorView::orientationVerticalCenter()
+void KformEditorView::alignmentVerticalCenter()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to vertical center" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Position the selected widgets to vertical center" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
 }
 
-void KformEditorView::orientationBottom()
+void KformEditorView::alignmentBottom()
 {
-//m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to bottom" ) ), 1 );
+  if( !CORBA::is_nil( m_vStatusBar ) )
+  {
+    CORBA::WString_var text = Q2C( i18n ( "Position the selected widgets to bottom" ) );
+ 
+    m_vStatusBar->changeItem( text, 1 );
+  }
+}
+
+bool KformEditorView::eventFilter( QObject* _obj, QEvent* _event )
+{
+  if( ( _event->type() == QEvent::MouseButtonPress ) ||
+      ( _event->type() == QEvent::MouseButtonDblClick ) )
+  {
+    cerr << "KformEditorView::eventFilter()" << endl;
+
+    return TRUE;
+  }
+
+  return FALSE;
 }
 
 void KformEditorView::resizeEvent( QResizeEvent* _event )
@@ -557,11 +713,6 @@ void KformEditorView::resizeEvent( QResizeEvent* _event )
   slotUpdateView();
 }
 
-void KformEditorView::mouseMoveEvent( QMouseEvent*  )
-{
-  cerr << "KformEditorView::mouseMoveEvent: moving" << endl;
-}
-
 void KformEditorView::slotUpdateView()
 {
   if( !m_pDoc->isEmpty() )
@@ -569,18 +720,92 @@ void KformEditorView::slotUpdateView()
     //want to make the backgound white
     //setPalette( QPalette( white ) );
 
+    cerr << "AAAAARRRRGGGGHHHHH" << endl;
+
     resizeContents( m_pDoc->getFormWidth(), m_pDoc->getFormHeight() );
   }
 
   QScrollView::update();
 }
 
-void KformEditorView::slotWidgetSelected( WidgetWrapper* _widget )
+void KformEditorView::slotClick( WidgetWrapper* _widget )
 {
-  cerr << "KformEditorView::slotWidgetSelected()" << endl;
+  cerr << "KformEditorView::slotClick()" << endl;
 
-  emit unselectAll();
-  _widget->select( TRUE );
+  if( m_countSelectedWidgets == 0 )
+  {
+    emit unselectAll();
+
+    m_primaryWidget = _widget;
+    m_primaryWidget->slotSelectPrimary();
+    m_countSelectedWidgets = 1;
+  }
+  else if( ( m_countSelectedWidgets == 1 ) &&
+           ( _widget->selectState() != WidgetWrapper::PrimarySelect ) )
+  {
+    emit unselectAll();
+
+    m_primaryWidget = _widget;
+    m_primaryWidget->slotSelectPrimary(); 
+    m_countSelectedWidgets = 1;
+  }
+  else if( ( m_countSelectedWidgets > 1 ) &&
+           ( _widget->selectState() == WidgetWrapper::SecondarySelect ) )
+  {
+    emit unselectAll();
+
+    m_primaryWidget = _widget;
+    m_primaryWidget->slotSelectPrimary();
+    m_countSelectedWidgets = 1;
+  }
+  else if( ( m_countSelectedWidgets > 0 ) &&
+           ( _widget->selectState() == WidgetWrapper::PrimarySelect ) )
+  {
+    // do nothing for now
+    // this mode is for moving widgets
+  }
+  else
+  {
+    cerr << "ERROR IN DESIGN : Impossible Mouse select" << endl;
+  }
+
+  slotUpdateView();
+}
+
+void KformEditorView::slotShiftClick( WidgetWrapper* _widget )
+{
+  cerr << "KformEditorView::slotShiftClick()" << endl;
+
+  if( m_countSelectedWidgets == 0 )
+  {
+    emit unselectAll();
+
+    m_primaryWidget = _widget;
+    m_primaryWidget->slotSelectPrimary();
+    m_countSelectedWidgets == 1;
+  }
+  else if( ( m_countSelectedWidgets == 1 ) &&
+           ( _widget->selectState() != WidgetWrapper::PrimarySelect ) )
+  {
+    _widget->slotSelectSecondary();
+    m_countSelectedWidgets++;
+  }
+  else if( ( m_countSelectedWidgets > 1 ) &&
+           ( _widget->selectState() == WidgetWrapper::SecondarySelect ) )
+  {
+    _widget->slotUnselect();
+    m_countSelectedWidgets--;
+  }
+  else if( ( m_countSelectedWidgets > 0 ) &&
+           ( _widget->selectState() == WidgetWrapper::PrimarySelect ) )
+  {
+    _widget->slotUnselect();
+    m_countSelectedWidgets = 0;
+  }
+  else
+  {
+    cerr << "ERROR IN DESIGN : Impossible Mouse select" << endl;
+  }
 
   slotUpdateView();
 }

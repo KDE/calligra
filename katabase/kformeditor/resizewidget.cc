@@ -15,24 +15,30 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
-#ifndef __kformeditor_main_h__
-#define __kformeditor_main_h__
+#include "resizewidget.h"
 
-#include <koApplication.h>
+// only for debug
+#include <iostream.h>
 
-class KformEditorShell;
-
-class KformEditorApp : public KoApplication
+ResizeWidget::ResizeWidget( Type _type, QColor _color, QWidget* _widget, WFlags f )
+  : QWidget( 0, 0 ), m_type ( _type ), m_color ( _color )
 {
-  Q_OBJECT
+  resize( 8, 8 );
+}
+ 
+ResizeWidget::~ResizeWidget()
+{
+}
 
-public:
-  KformEditorApp( int& argc, char** argv );
-  ~KformEditorApp() { };
+void ResizeWidget::mouseMoveEvent( QMouseEvent* _event )
+{
+  if( _event->state() & LeftButton )
+  {
+    // TODO: hier das parent resizen
+  }
+}
 
-  virtual KoMainWindow* createNewShell();
-};
+#include "resizewidget.moc"
 
-#endif

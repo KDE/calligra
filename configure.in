@@ -80,6 +80,10 @@ AC_OUTPUT( \
 	katabase/Makefile \
         katabase/kformviewer/Makefile \
         katabase/kformeditor/Makefile \
+	katabase/kformeditor/pics/Makefile \
+        katabase/kformeditor/toolbar/Makefile \
+        katabase/kformeditor/cursors/Makefile \
+        katabase/kformeditor/formassistent/Makefile \
 	kchart/Makefile	\
 	kchart/core/Makefile \
 	kchart/pics/Makefile \

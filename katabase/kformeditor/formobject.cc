@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Michael Koch <m_koch@bigfoot.de>
+   Copyright (C) 1998, 1999 Michael Koch <koch@kde.org>
  
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,8 +35,9 @@ FormObject::FormObject()
 {
 }
 
-FormObject::FormObject( Type _type, int _posx, int _posy, int _sizex, int _sizey )
+FormObject::FormObject( Type _type, QString _name, int _posx, int _posy, int _sizex, int _sizey )
   : m_type( _type )
+  , m_name( _name )
   , m_posx( _posx )
   , m_posy( _posy )
   , m_sizex( _sizex )
@@ -46,8 +47,9 @@ FormObject::FormObject( Type _type, int _posx, int _posy, int _sizex, int _sizey
 {
 }
 
-FormObject::FormObject( Type _type, int _posx, int _posy, int _sizex, int _sizey, QString _text )
+FormObject::FormObject( Type _type, QString _name, int _posx, int _posy, int _sizex, int _sizey, QString _text )
   : m_type( _type )
+  , m_name( _name )
   , m_posx( _posx )
   , m_posy( _posy )
   , m_sizex( _sizex )
@@ -94,25 +96,25 @@ FormObject::Type FormObject::type()
   return m_type;
 }
 
-QWidget* FormObject::create( QWidget* _parent, const char* _name)
+QWidget* FormObject::create( QWidget* _parent )
 {
   QWidget* widget;
 
   switch( m_type )
   {
     case Button: 
-      widget = new QPushButton( _parent, _name );
+      widget = new QPushButton( _parent, m_name );
       ((QPushButton*) widget)->setText( m_text );
       break;
     case LineEdit:
-      widget = new QLineEdit( _parent, _name );
+      widget = new QLineEdit( _parent, m_name );
       break;
     case ListBox:
-      widget = new QListBox( _parent, _name );
+      widget = new QListBox( _parent, m_name );
       break;
     default:
     case Label:
-      widget = new QLabel( _parent, _name );
+      widget = new QLabel( _parent, m_name );
       ((QLabel*) widget)->setText( m_text );
       break;
   }

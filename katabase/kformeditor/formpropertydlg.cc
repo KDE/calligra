@@ -15,24 +15,32 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
-#ifndef __kformeditor_main_h__
-#define __kformeditor_main_h__
+#include <qlayout.h>
 
-#include <koApplication.h>
+#include "formpropertydlg.h"
 
-class KformEditorShell;
+// only for debug
+#include <iostream.h>
 
-class KformEditorApp : public KoApplication
+FormPropertyDlg::FormPropertyDlg(  QWidget* _parent, const char* _name )
+  : QDialog( _parent, _name )
 {
-  Q_OBJECT
+  QGridLayout* grid = new QGridLayout( 3, 3 );
 
-public:
-  KformEditorApp( int& argc, char** argv );
-  ~KformEditorApp() { };
+  // Michael Koch
+  //
+  // Vielleicht waere es am besten alle Form-weiten Einstellungen in
+  // diesem Dialog zu machen ( dann aber von QTabDialog abgeleitet )
+  //
+  // Label mit Eingabezeile fuer den Namen des Formulars.
+  // zwei Buttons: OK, Cancel.
+}
 
-  virtual KoMainWindow* createNewShell();
-};
+FormPropertyDlg::~FormPropertyDlg()
+{
+}
 
-#endif
+#include "formpropertydlg.moc"
+

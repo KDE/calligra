@@ -1,0 +1,16 @@
+Form definition:
+
+<FORM>
+</FORM>
+
+Form data definition:
+
+<BGCOLOR>
+
+Widget definition:
+
+<BUTTON/>
+<LABEL/>
+<LINEEDIT/>
+<LISTBOX/>
+<CHECKBOX/>

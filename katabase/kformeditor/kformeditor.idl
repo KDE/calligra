@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1998, 1999 Michael Koch <koch@kde.org>
  
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -42,14 +42,14 @@ module KformEditor
     void insertListBox();
     void insertCheckBox();
 
-    void orientationFitViewToForm();
-    void orientationCenter();
-    void orientationLeft();
-    void orientationHorizontalCenter();
-    void orientationRight();
-    void orientationTop();
-    void orientationVerticalCenter();
-    void orientationBottom();
+    void alignmentFitViewToForm();
+    void alignmentCenter();
+    void alignmentLeft();
+    void alignmentHorizontalCenter();
+    void alignmentRight();
+    void alignmentTop();
+    void alignmentVerticalCenter();
+    void alignmentBottom();
   };
 
   interface Document : KOffice::Document, KOffice::Print

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1998, 1999 Michael Koch <koch@kde.org>
  
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -57,34 +57,37 @@ public:
   void insertLineEdit();
   void insertListBox();
   void insertCheckBox();
-  void orientationFitViewToForm();
-  void orientationCenter();
-  void orientationLeft();
-  void orientationHorizontalCenter();
-  void orientationRight();
-  void orientationTop();
-  void orientationVerticalCenter();
-  void orientationBottom();
+  void alignmentFitViewToForm();
+  void alignmentCenter();
+  void alignmentLeft();
+  void alignmentHorizontalCenter();
+  void alignmentRight();
+  void alignmentTop();
+  void alignmentVerticalCenter();
+  void alignmentBottom();
 
 signals:
+
   void unselectAll();
 
 public slots:
 
   void slotUpdateView();
-  void slotWidgetSelected( WidgetWrapper* _widget );
+  void slotClick( WidgetWrapper* _widget );
+  void slotShiftClick( WidgetWrapper* _widget );
 
 protected:
 
   virtual void init();
-  virtual bool event( const char* , const CORBA::Any& );
   virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr );
   virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr );
   virtual void newView();
   virtual void helpUsing();
+  virtual bool eventFilter( QObject*, QEvent* );
   void resizeEvent( QResizeEvent* _event );
-  void mouseMoveEvent( QMouseEvent* _event );
   void initChilds();
+  bool event( const char* _event, const CORBA::Any& _value );
+  void drawContents( QPainter* _painter, int _clipx, int _clipy, int _clipw, int _cliph );
 
 private:
 
@@ -104,15 +107,15 @@ private:
   CORBA::Long m_idMenuInsert_ListBox;
   CORBA::Long m_idMenuInsert_CheckBox;
 
-  OpenPartsUI::Menu_var m_vMenuOrientation;
-  CORBA::Long m_idMenuOrientation_FitViewToForm;
-  CORBA::Long m_idMenuOrientation_Center;
-  CORBA::Long m_idMenuOrientation_Left;
-  CORBA::Long m_idMenuOrientation_HorizontalCenter;
-  CORBA::Long m_idMenuOrientation_Right;
-  CORBA::Long m_idMenuOrientation_Top;
-  CORBA::Long m_idMenuOrientation_VerticalCenter;
-  CORBA::Long m_idMenuOrientation_Bottom;
+  OpenPartsUI::Menu_var m_vMenuAlignment;
+  CORBA::Long m_idMenuAlignment_FitViewToForm;
+  CORBA::Long m_idMenuAlignment_Center;
+  CORBA::Long m_idMenuAlignment_Left;
+  CORBA::Long m_idMenuAlignment_HorizontalCenter;
+  CORBA::Long m_idMenuAlignment_Right;
+  CORBA::Long m_idMenuAlignment_Top;
+  CORBA::Long m_idMenuAlignment_VerticalCenter;
+  CORBA::Long m_idMenuAlignment_Bottom;
 
   OpenPartsUI::ToolBar_var m_vToolBarEdit;
   CORBA::Long m_idToolBarEdit_Undo;
@@ -128,19 +131,22 @@ private:
   CORBA::Long m_idToolBarInsert_ListBox;
   CORBA::Long m_idToolBarInsert_CheckBox;
 
-  OpenPartsUI::ToolBar_var m_vToolBarOrientation;
-  CORBA::Long m_idToolBarOrientation_FitViewToForm;
-  CORBA::Long m_idToolBarOrientation_Center;
-  CORBA::Long m_idToolBarOrientation_Left;
-  CORBA::Long m_idToolBarOrientation_HorizontalCenter;
-  CORBA::Long m_idToolBarOrientation_Right;
-  CORBA::Long m_idToolBarOrientation_Top;
-  CORBA::Long m_idToolBarOrientation_VerticalCenter;
-  CORBA::Long m_idToolBarOrientation_Bottom;
+  OpenPartsUI::ToolBar_var m_vToolBarAlignment;
+  CORBA::Long m_idToolBarAlignment_FitViewToForm;
+  CORBA::Long m_idToolBarAlignment_Center;
+  CORBA::Long m_idToolBarAlignment_Left;
+  CORBA::Long m_idToolBarAlignment_HorizontalCenter;
+  CORBA::Long m_idToolBarAlignment_Right;
+  CORBA::Long m_idToolBarAlignment_Top;
+  CORBA::Long m_idToolBarAlignment_VerticalCenter;
+  CORBA::Long m_idToolBarAlignment_Bottom;
 
   OpenPartsUI::StatusBar_var m_vStatusBar;
   
-  KformEditorDoc* m_pDoc;  
+  KformEditorDoc* m_pDoc;
+  QWidget* m_background;
+  WidgetWrapper* m_primaryWidget;
+  int m_countSelectedWidgets;
 };
 
 #endif

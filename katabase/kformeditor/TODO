@@ -1,0 +1,46 @@
+TODO-list for kformviewer
+=========================
+
+- caption of shell shows form name
+
+- primary select of widgets
+
+- secondary select o widgets
+
+- moving widgets
+
+- resizable widgets
+
+- inserting widgets
+
+- alignment of widgets
+
+- cut & paste
+
+- property dialog for all widgets
+
+- FormPropertyDlg
+
+- form assistent
+
+- using KScript
+
+- Colors should be used over palettes
+
+- list of all inserted widgets
+  (on the left side of the shell)
+
+- listbox - wrapper bug
+  events are not put through wrapper. Why ?
+
+- context menu by clicking right mouse button
+
+and many more. feel free to add your ideas.
+
+Known bugs
+==========
+
+- X Error: BadWindow (invalid Window parameter) 3
+    Major opcode:  4
+
+  appears when several selecting actions are done  

@@ -17,22 +17,31 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#ifndef __kformeditor_main_h__
-#define __kformeditor_main_h__
+#ifndef __resizewidget_h__
+#define __resizewidget_h__
 
-#include <koApplication.h>
+#include <qwidget.h>
 
-class KformEditorShell;
-
-class KformEditorApp : public KoApplication
+class ResizeWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  KformEditorApp( int& argc, char** argv );
-  ~KformEditorApp() { };
 
-  virtual KoMainWindow* createNewShell();
+  enum Type { TopLeft, TopRight, BottomLeft, BottomRight, Top, Left, Right, Bottom };
+
+  ResizeWidget( Type _type, QColor _color, QWidget* _widget, WFlags f = 0 );
+  ~ResizeWidget();
+
+protected:
+
+  virtual void mouseMoveEvent( QMouseEvent* _event );
+
+private:
+
+  Type m_type;
+  QColor m_color;
 };
 
-#endif
+#endif  // __resizewidget_h__
+

@@ -17,22 +17,20 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#ifndef __kformeditor_main_h__
-#define __kformeditor_main_h__
+#ifndef __formpropertydlg_h__
+#define __formpropertydlg_h__
 
-#include <koApplication.h>
+#include <qdialog.h>
 
-class KformEditorShell;
-
-class KformEditorApp : public KoApplication
+class FormPropertyDlg : public QDialog
 {
   Q_OBJECT
 
 public:
-  KformEditorApp( int& argc, char** argv );
-  ~KformEditorApp() { };
 
-  virtual KoMainWindow* createNewShell();
+  FormPropertyDlg( QWidget* _parent = 0, const char* _name = 0 );
+  ~FormPropertyDlg();
 };
 
-#endif
+#endif  // __formpropertydlg_h__
+

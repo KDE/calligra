@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1998, 1999 Michael Koch <koch@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -50,6 +50,8 @@ KformEditorDoc::KformEditorDoc()
 
   m_FormWidth = DEFAULT_WIDTH;
   m_FormHeight = DEFAULT_HEIGHT;
+
+  m_FormName = "unnamed";
 }
 
 KformEditorDoc::~KformEditorDoc()
@@ -162,7 +164,7 @@ bool KformEditorDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr )
   {
     if ( it->m_strName == "name" )
     {
-      cout << "Form name = " + it->m_strValue << endl;
+      m_FormName = *it->m_strValue.c_str();
     }
     else if ( (*it).m_strName == "height" )
     {
@@ -180,9 +182,38 @@ bool KformEditorDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr )
   {
     KOMLParser::parseTag( tag.c_str(), name, lst );
 
-    // BUTTON
-    if ( name == "BUTTON" )
+    // BGCOLOR
+    if ( name == "BGCOLOR" )
     {
+      int red = 0;
+      int green = 0;
+      int blue = 0;
+
+      KOMLParser::parseTag( tag.c_str(), name, lst );
+      for( it = lst.begin(); it != lst.end(); it++ )
+      {
+        if ( (*it).m_strName == "red" )
+        {
+          red = atoi( (*it).m_strValue.c_str() );
+        }
+        else if ( (*it).m_strName == "green" )
+        {
+          green = atoi( (*it).m_strValue.c_str() );
+        }
+        else if ( (*it).m_strName == "blue" )
+        {
+          blue = atoi( (*it).m_strValue.c_str() );
+        }
+        else kdebug( KDEBUG_INFO, 0, "Unknown attrib BGCOLOR:'%s'", ( *it ).m_strName.c_str() );
+      }
+
+      setBackgroundColor( QColor( red, green, blue ) );
+    }
+
+    // BUTTON
+    else if ( name == "BUTTON" )
+    {
+      QString qname = "unbekannt";
       int posx = 0;
       int posy = 0;
       int width = 100;
@@ -190,12 +221,14 @@ bool KformEditorDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr )
       QString text = "Button";
       QString action = "quit";
 
-      cout << "BUTTON found" << endl;
-
       KOMLParser::parseTag( tag.c_str(), name, lst );
       for( it = lst.begin(); it != lst.end(); it++ )
       {
-        if ( (*it).m_strName == "posx" )
+        if ( (*it).m_strName == "name" )
+        {
+          qname = (*it).m_strValue.c_str();
+        }
+        else if ( (*it).m_strName == "posx" )
         {
           posx = atoi( (*it).m_strValue.c_str() ); 
         }
@@ -222,7 +255,7 @@ bool KformEditorDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr )
         else kdebug( KDEBUG_INFO, 0, "Unknown attrib BUTTON:'%s'", ( *it ).m_strName.c_str() );
       }
 
-      FormObject* button = new FormObject( FormObject::Button, posx, posy, width, height, text );
+      FormObject* button = new FormObject( FormObject::Button, qname, posx, posy, width, height, text );
       button->setAction( action );
       m_lstFormObjects.append( button );
     }
@@ -230,22 +263,25 @@ bool KformEditorDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     // LABEL
     else if ( name == "LABEL" )
     {
+      QString qname = "unbekannt";
       int posx = 0;
       int posy = 0;
       int width = 100;
       int height = 30;
       QString text = "Label";
  
-      cout << "LABEL found" << endl;
- 
       KOMLParser::parseTag( tag.c_str(), name, lst );
       for( it = lst.begin(); it != lst.end(); it++ )
       {
-        if ( (*it).m_strName == "posx" )
+        if ( (*it).m_strName == "name" )
+        {
+          qname = (*it).m_strValue.c_str();
+        }
+        else if ( (*it).m_strName == "posx" )
         {
           posx = atoi( (*it).m_strValue.c_str() );
         }                                                                                           
-         else if ( (*it).m_strName == "posy" )
+        else if ( (*it).m_strName == "posy" )
         {
            posy = atoi( (*it).m_strValue.c_str() );
         }
@@ -264,29 +300,32 @@ bool KformEditorDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr )
         else kdebug( KDEBUG_INFO, 0, "Unknown attrib LABEL:'%s'", ( *it ).m_strName.c_str() );
       }
  
-      FormObject* label = new FormObject( FormObject::Label, posx, posy, width, height, text );
+      FormObject* label = new FormObject( FormObject::Label, qname, posx, posy, width, height, text );
       m_lstFormObjects.append( label );
     }                                                                                               
 
     // LINEEDIT
     else if ( name == "LINEEDIT" )
     {
+      QString qname = "unbekannt";
       int posx = 0;
       int posy = 0;
       int width = 100;
       int height = 30;
       QString text = "Inputline";
  
-      cout << "LINEEDIT found" << endl;
- 
       KOMLParser::parseTag( tag.c_str(), name, lst );
       for( it = lst.begin(); it != lst.end(); it++ )
       {
-        if ( (*it).m_strName == "posx" )
+        if ( (*it).m_strName == "name" )
+        {
+          qname = (*it).m_strValue.c_str();
+        }
+        else if ( (*it).m_strName == "posx" )
         {
           posx = atoi( (*it).m_strValue.c_str() );
         }
-         else if ( (*it).m_strName == "posy" )
+        else if ( (*it).m_strName == "posy" )
         {
            posy = atoi( (*it).m_strValue.c_str() );
         }
@@ -301,29 +340,32 @@ bool KformEditorDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr )
         else kdebug( KDEBUG_INFO, 0, "Unknown attrib LINEEDIT:'%s'", ( *it ).m_strName.c_str() );
       }
  
-      FormObject* lineedit = new FormObject( FormObject::LineEdit, posx, posy, width, height, text );
+      FormObject* lineedit = new FormObject( FormObject::LineEdit, qname, posx, posy, width, height, text );
       m_lstFormObjects.append( lineedit );
     }                                                                                               
 
     // LISTBOX
     else if ( name == "LISTBOX" )
     {
+      QString qname = "unbekannt";
       int posx = 0;
       int posy = 0;
       int width = 100;
       int height = 30;
       QString text = "Label";
  
-      cout << "LISTBOX found" << endl;
- 
       KOMLParser::parseTag( tag.c_str(), name, lst );
       for( it = lst.begin(); it != lst.end(); it++ )
       {
-        if ( (*it).m_strName == "posx" )
+        if ( (*it).m_strName == "name" )
+        {
+          qname = (*it).m_strValue.c_str();
+        }
+        else if ( (*it).m_strName == "posx" )
         {
           posx = atoi( (*it).m_strValue.c_str() );
         }
-         else if ( (*it).m_strName == "posy" )
+        else if ( (*it).m_strName == "posy" )
         {
            posy = atoi( (*it).m_strValue.c_str() );
         }
@@ -338,7 +380,7 @@ bool KformEditorDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr )
         else kdebug( KDEBUG_INFO, 0, "Unknown attrib LISTBOX:'%s'", ( *it ).m_strName.c_str() );
       }
  
-      FormObject* label = new FormObject( FormObject::ListBox, posx, posy, width, height );
+      FormObject* label = new FormObject( FormObject::ListBox, qname, posx, posy, width, height );
       m_lstFormObjects.append( label );
     }                                                                                               
 
@@ -386,13 +428,36 @@ bool KformEditorDoc::completeLoading( KOStore::Store_ptr  )
   return true;
 }
 
-void KformEditorDoc::draw( QPaintDevice* , CORBA::Long _width, CORBA::Long _height,
-		      CORBA::Float  )
+void KformEditorDoc::setBackgroundColor( const QColor& _color )
+{
+  m_backgroundColor = _color;
+
+  emit sigUpdateView();
+};
+
+QColor KformEditorDoc::backgroundColor()
+{
+  return m_backgroundColor;
+};
+
+void KformEditorDoc::setFormName( const QString& _name )
+{
+  m_FormName = _name;
+
+  emit sigUpdateView();
+}
+
+QString KformEditorDoc::formName()
+{
+  return m_FormName;
+}
+
+void KformEditorDoc::draw( QPaintDevice* , CORBA::Long _width, CORBA::Long _height, CORBA::Float )
 {
   kdebug( KDEBUG_INFO, 0, "DRAWING w=%li h=%li", _width, _height );
 }
 
-bool KformEditorDoc::openDocument( const char *, const char * )
+bool KformEditorDoc::openDocument( const char*, const char* )
 {
   emit sigUpdateView();
 
