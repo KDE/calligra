@@ -129,7 +129,7 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const QPoint &p
         // Don't call any drawing method from here.
         // We are called from KWAnchor::draw, inside a paintevent, so
         // we are not allowed to create a paint event ourselves.
-        // KWAnchor draws the table in theory anyway!
+        // KWAnchor draws the table anyway!
     }
 }
 
@@ -536,14 +536,13 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
     for ( unsigned int j = 0; j < m_rows; j++ ) {
         y=nextY;
         unsigned int i = 0;
-        bool _addRow = false;
 
         for ( i = 0; i < m_cols; i++ ) {
             Cell *cell = getCell(j,i);
             if(!cell)
                 continue;
             if(!(cell && cell->getFrame(0))) { // sanity check.
-                kdDebug() << "screwy table cell!! row:" << cell->m_row << ", col: " << cell->m_col << endl;
+                kdDebug(32002) << "screwy table cell!! row:" << cell->m_row << ", col: " << cell->m_col << endl;
                 continue;
             }
             if(cell->m_col==i && cell->m_row==j) { // beware of multi cell frames.
@@ -556,6 +555,10 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
         // check all cells on this row if one might have fallen off the page.
         if( j == 0 ) continue;
         unsigned int fromRow=j;
+        bool _addRow = false;
+        bool hugeRow = false;
+        double pageBottom = (doingPage+1) * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
+        double pageHeight = m_doc->ptPaperHeight() - m_doc->ptBottomBorder() - m_doc->ptTopBorder();
         for(i = 0; i < m_cols; i++) {
             Cell *cell = getCell(j,i);
             if(!cell)
@@ -563,50 +566,66 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
             KWFrameSet *fs=cell;
             if(cell->m_row < fromRow)
                 fromRow = cell->m_row;
-            if ( fs->getFrame( 0 )->bottom() >  // fits on page?
-                  (doingPage+1) * m_doc->ptPaperHeight() - m_doc->ptBottomBorder()) { // no
-                y = (unsigned)( (doingPage+1) * m_doc->ptPaperHeight() + m_doc->ptTopBorder() );
-                _addRow = true;
+            if ( fs->getFrame( 0 )->bottom() > pageBottom ) {
+                 if ( fs->getFrame( 0 )->height() < pageHeight ) {
+                     // doesn't fit on the page - but would fit on an empty page
+                     kdDebug(32002) << "KWTableFrameSet::recalcRows cell " << j << " " << i << " doesn't fit on page " << doingPage << endl;
+                     y = (unsigned)( (doingPage+1) * m_doc->ptPaperHeight() + m_doc->ptTopBorder() );
+                     _addRow = true;
+                 } else
+                     hugeRow = true;
             }
         }
-        if ( _addRow ) {
+        if ( hugeRow ) {
+            // Row is too big, we don't split it nor insert a temp header
+            doingPage++;
+        }
+        else if ( _addRow ) {
             j=fromRow;
             doingPage++;
 
-            if ( y >=  m_doc->ptPaperHeight() * m_doc->getPages() )
+            if ( y >= m_doc->ptPaperHeight() * m_doc->getPages() )
                 m_doc->appendPage();
 
-            if ( m_showHeaderOnAllPages ) {
+            bool addHeaderRow = m_showHeaderOnAllPages;
+            if ( addHeaderRow )
+            {
+                // Refuse to create a huge header row, it makes no sense
+                // When the first line is the one that's higher than the page, we end up with an infinite loop
+                if ( !getCell( 0, 0 ) || getCell( 0, 0 )->getFrame(0)->height() > m_doc->ptPaperHeight() / 2 )
+                    addHeaderRow = false;
+            }
+            if ( addHeaderRow ) {
                 m_hasTmpHeaders = true;
                 QList<KWFrameSet> listFrameSet=QList<KWFrameSet>();
                 QList<KWFrame> listFrame=QList<KWFrame>();
-                insertRow( j,listFrameSet,listFrame, false, true );
+                insertRow( j, listFrameSet, listFrame, false, true );
             }
             for(i = 0; i < m_cells.count(); i++) {
                 Cell *cell = m_cells.at(i);
                 if(cell->m_row==j+1) cell->getFrame(0)->updateResizeHandles(); // reposition resize handles.
                 if(cell->m_row!=j) continue; //  wrong row
                 if(cell->m_col != 1) m_pageBoundaries.append(i); // new page boundary
-                if ( m_showHeaderOnAllPages ) {
-                    KWTextFrameSet *newFrameSet = dynamic_cast<KWTextFrameSet*>( cell );
-                    KWTextFrameSet *baseFrameSet = dynamic_cast<KWTextFrameSet*>( getCell( 0, cell->m_col ) );
+                if ( addHeaderRow ) {
+                    KWTextFrameSet *baseFrameSet = getCell( 0, cell->m_col );
+                    KWFrame *newFrame = cell->getFrame(0);
                     //newFrameSet->assign( baseFrameSet );
 
-                    newFrameSet->getFrame(0)->setBackgroundColor( baseFrameSet->getFrame( 0 )->getBackgroundColor() );
-                    newFrameSet->getFrame(0)->setLeftBorder( baseFrameSet->getFrame( 0 )->leftBorder() );
-                    newFrameSet->getFrame(0)->setRightBorder( baseFrameSet->getFrame( 0 )->rightBorder() );
-                    newFrameSet->getFrame(0)->setTopBorder( baseFrameSet->getFrame( 0 )->topBorder() );
-                    newFrameSet->getFrame(0)->setBottomBorder( baseFrameSet->getFrame( 0 )->bottomBorder() );
-                    newFrameSet->getFrame(0)->setBLeft( baseFrameSet->getFrame( 0 )->getBLeft() );
-                    newFrameSet->getFrame(0)->setBRight( baseFrameSet->getFrame( 0 )->getBRight() );
-                    newFrameSet->getFrame(0)->setBTop( baseFrameSet->getFrame( 0 )->getBTop() );
-                    newFrameSet->getFrame(0)->setBBottom( baseFrameSet->getFrame( 0 )->getBBottom() );
+                    newFrame->setBackgroundColor( baseFrameSet->getFrame( 0 )->getBackgroundColor() );
+                    newFrame->setLeftBorder( baseFrameSet->getFrame( 0 )->leftBorder() );
+                    newFrame->setRightBorder( baseFrameSet->getFrame( 0 )->rightBorder() );
+                    newFrame->setTopBorder( baseFrameSet->getFrame( 0 )->topBorder() );
+                    newFrame->setBottomBorder( baseFrameSet->getFrame( 0 )->bottomBorder() );
+                    newFrame->setBLeft( baseFrameSet->getFrame( 0 )->getBLeft() );
+                    newFrame->setBRight( baseFrameSet->getFrame( 0 )->getBRight() );
+                    newFrame->setBTop( baseFrameSet->getFrame( 0 )->getBTop() );
+                    newFrame->setBBottom( baseFrameSet->getFrame( 0 )->getBBottom() );
 
-                    newFrameSet->getFrame(0)->setHeight(baseFrameSet->getFrame(0)->height());
-                    newFrameSet->getFrame(0)->setMinFrameHeight(baseFrameSet->getFrame(0)->minFrameHeight());
+                    newFrame->setHeight(baseFrameSet->getFrame(0)->height());
+                    newFrame->setMinFrameHeight(baseFrameSet->getFrame(0)->minFrameHeight());
+                    //kdDebug(32002) << "KWTableFrameSet::recalcRows header created, height=" << newFrame->height() << endl;
                 }
                 cell->getFrame( 0 )->moveTopLeft( KoPoint( cell->getFrame( 0 )->x(), y ) );
-                //cell->getFrame( 0 )->setPageNum(doingPage);
                 if(cell->m_row + cell->m_rows -1 == j) {
                     nextY=cell->getFrame(0) -> bottom() + tableCellSpacing;
                 }
