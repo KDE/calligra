@@ -196,6 +196,7 @@ class KisView : public KoView
     void layer_rotate180();
     void layer_rotateleft90();
     void layer_rotateright90();
+    void layer_rotate_custom();
     void layer_mirrorX();
     void layer_mirrorY();
 
@@ -279,7 +280,7 @@ class KisView : public KoView
  private:
 
     // import/export actions
-    KAction *m_layer_rotate180, *m_layer_rotate270, *m_layer_rotate90,
+    KAction *m_layer_rotate180, *m_layer_rotate270, *m_layer_rotate90, *m_layer_rotate_custom,
         *m_layer_mirrorX, *m_layer_mirrorY; 
         
     // edit actions
@@ -289,9 +290,9 @@ class KisView : public KoView
     // tool settings dialog actions
     KAction *m_dialog_gradient;
 
-	// krayon box floating dialog actions
-	KToggleAction *m_dialog_colors, *m_dialog_krayons, *m_dialog_brushes,
-		*m_dialog_patterns, *m_dialog_layers, *m_dialog_channels;
+   // krayon box floating dialog actions
+   KToggleAction *m_dialog_colors, *m_dialog_krayons, *m_dialog_brushes,
+                 *m_dialog_patterns, *m_dialog_layers, *m_dialog_channels;
 
     // krayon box (sidebar)
     KToggleAction *m_side_bar, *m_float_side_bar, *m_lsidebar;

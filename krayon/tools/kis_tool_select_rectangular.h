@@ -43,9 +43,6 @@ public:
 
     virtual void clearOld();
 
-    void setSelectCursor();
-    void setMoveCursor();
-
 protected:
     void drawRect( const QPoint&, const QPoint& ); 
 
@@ -63,16 +60,10 @@ protected:
 
 private:
 
-    void setClipImage();
-    void dragSelectImage( QPoint dragPoint );
-    bool pasteClipImage( QPoint pos );
-
-    QRegion     m_selectRegion;
     bool        moveSelectArea;
     bool        dragSelectArea;
-    QPixmap     clipPixmap;
-    QImage      clipImage;
     QPoint      m_hotSpot, oldDragPoint;
+    QRegion     m_selectRegion;
     QRect       m_imageRect;
     bool        dragFirst;
     float       m_dragdist;

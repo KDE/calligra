@@ -50,9 +50,6 @@ protected:
 
 private:
 
-    QRect getDrawRect( QPointArray & points );
-    QPointArray zoomPointArray( QPointArray & points );
-
     int         lineThickness;
     int         lineOpacity;
     int         cornersValue;

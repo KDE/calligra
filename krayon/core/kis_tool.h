@@ -23,6 +23,8 @@
 
 #include <qobject.h>
 #include <qcursor.h>
+#include <qpixmap.h>
+#include <qimage.h>
 
 class KisDoc;
 class KisView;
@@ -41,6 +43,9 @@ class KisTool : public QObject
     
     virtual void optionsDialog();
     virtual void clearOld(){}
+
+    void setSelectCursor();
+    void setMoveCursor();
     
  public slots:
 
@@ -54,10 +59,20 @@ class KisTool : public QObject
     int zoomedX(int n);  
     int zoomedY(int n);
     QPoint zoomed(QPoint & point);
+
+    QRect getDrawRect( QPointArray & points );
+    QPointArray zoomPointArray( QPointArray & points );
+
+    void setClipImage();
+    void dragSelectImage( QPoint dragPoint, QPoint m_hotSpot );
+    bool pasteClipImage( QPoint pos );
   
     KisDoc  *m_pDoc;
     KisView *m_pView;
     QCursor  m_Cursor;
+
+    QPixmap clipPixmap;
+    QImage  clipImage;
 };
 
 #endif

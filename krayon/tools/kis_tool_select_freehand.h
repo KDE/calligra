@@ -34,7 +34,6 @@ class KisView;
 
 class FreehandSelectTool : public KisTool
 {
-
 public:
 
     FreehandSelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
@@ -51,21 +50,10 @@ public:
     void start( QPoint p );
     void finish( QPoint p ); 
 
-    void setSelectCursor();
-    void setMoveCursor();
-
 protected:
 
     void drawLine( const QPoint&, const QPoint& ); 
- 
-private:
 
-    void setClipImage();
-    void dragSelectImage( QPoint dragPoint );
-    bool pasteClipImage( QPoint pos );
-
-    QRect getDrawRect( QPointArray & points );
-    QPointArray zoomPointArray( QPointArray & points );
 
     QPoint      m_dragStart;
     QPoint      m_dragEnd;
@@ -79,16 +67,16 @@ private:
     KisView     *m_view;  
     KisCanvas   *m_canvas;
 
+private:
+
     QRect       m_selectRect;
     QPointArray m_pointArray;
     uint        m_index;
 
-    QRegion     m_selectRegion;
     bool        moveSelectArea;
     bool        dragSelectArea;
-    QPixmap     clipPixmap;
-    QImage      clipImage;
     QPoint      m_hotSpot, oldDragPoint;
+    QRegion     m_selectRegion;
     QRect       m_imageRect;
     bool        dragFirst;
     float       m_dragdist;

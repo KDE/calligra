@@ -777,6 +777,10 @@ void KisView::setupActions()
         0, this, SLOT( layer_rotateright90() ),
         actionCollection(), "layer_rotateright90");
 
+    m_layer_rotate_custom = new KAction( i18n("Rotate &Custom"),
+        0, this, SLOT( layer_rotate_custom() ),
+        actionCollection(), "layer_rotate_custom");
+
     m_layer_mirrorX = new KAction( i18n("Mirror &X"),
         0, this, SLOT( layer_mirrorX() ),
         actionCollection(), "layer_mirrorX");
@@ -886,9 +890,9 @@ void KisView::setupActions()
     m_undo->setEnabled( false );
     m_redo->setEnabled( false );
 
-    m_layer_rotate180->setEnabled( false );
-    m_layer_rotate270->setEnabled( false );
-    m_layer_rotate90->setEnabled( false );
+    //m_layer_rotate180->setEnabled( false );
+    //m_layer_rotate270->setEnabled( false );
+    //m_layer_rotate90->setEnabled( false );
     m_layer_mirrorX->setEnabled( false );
     m_layer_mirrorY->setEnabled( false );
 }
@@ -2828,6 +2832,11 @@ void KisView::layer_rotateleft90()
 }
 
 void KisView::layer_rotateright90()
+{
+
+}
+
+void KisView::layer_rotate_custom()
 {
 
 }

@@ -126,27 +126,33 @@ bool KisSelection::erase()
     for (int y = sy; y <= ey; y++)
     {
         for (int x = sx; x <= ex; x++)
-	    {
+        {
             // only erase pixels which are in the selection,
             // within the bounding rectangle
             if(array[(y - sy) * (ex - sx) + x - sx] != 1)
                 continue;
 
-            // destination binary values by channel
-	        r = lay->pixel(0, x,  y);
-	        g = lay->pixel(1, x,  y);
-	        b = lay->pixel(2, x,  y);
-
-	        lay->setPixel(0, x, y, 255);
-	        lay->setPixel(1, x, y, 255);
-	        lay->setPixel(2, x, y, 255);
-
             if (alpha)
-	        {
-	            //uchar a = lay->pixel(3, x, y);
-                lay->setPixel(3, x, y, 255);
-	        }
-	    }
+            {
+                uchar a = lay->pixel(3, x, y);
+                lay->setPixel(3, x, y, 0);
+            }
+            else {
+                // destination binary values by channel
+                r = lay->pixel(0, x,  y);
+                g = lay->pixel(1, x,  y);
+                b = lay->pixel(2, x,  y);
+
+                int red = pDoc->currentView()->bgColor().R();
+                int green = pDoc->currentView()->bgColor().G();
+                int blue = pDoc->currentView()->bgColor().B();
+
+                lay->setPixel(0, x, y, red);
+                lay->setPixel(1, x, y, green);
+                lay->setPixel(2, x, y, blue);
+            }
+            
+        }
     }
 
     return true;

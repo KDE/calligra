@@ -86,10 +86,11 @@
   <Separator/>  
   <Action name="insert_image_as_layer"/>
   <Action name="save_layer_as_image"/>
-<!--  
+<!--
   <Action name="layer_rotateright90"/>
   <Action name="layer_rotate180"/>
   <Action name="layer_rotateleft90"/>
+  <Action name="layer_rotate_custom"/>  
   <Separator/>
   <Action name="layer_mirrorX"/>
   <Action name="layer_mirrorY"/>
