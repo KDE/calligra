@@ -10,8 +10,7 @@ usr/share/mimelnk/application/x-kspread.desktop
 usr/share/services/kspreadcalc.desktop
 usr/share/services/kspread_csv_export.desktop
 usr/share/services/kspread_csv_import.desktop
-usr/share/icons/locolor/16x16/apps/kspread.png
-usr/share/icons/locolor/32x32/apps/kspread.png
+usr/share/icons/hicolor/16x16/apps/kspread.png
 usr/share/icons/hicolor/32x32/apps/kspread.png
 usr/share/icons/hicolor/48x48/apps/kspread.png
 usr/share/icons/locolor/16x16/apps/kspreadcalc.png
