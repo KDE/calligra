@@ -128,6 +128,7 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 			}
 		}
 	}
+	return true;
 }
 
 QVariant
