@@ -9,6 +9,7 @@
 #include <kcolordlg.h>
 #include <qlabel.h>
 #include <qspinbox.h>
+#include <qgroupbox.h>
 #include <kselect.h>
 
 #include "vmdlg_solidfill.h"
@@ -66,8 +67,9 @@ VMDlgSolidFill::VMDlgSolidFill() : QTabDialog ( 0L, 0, true )
 	mainLayout->addWidget( mSelector, 0, 5);
 
 	//Palette
-	mColorTable = new KPaletteTable(mRGBWidget);
-	mainLayout->addWidget(mColorTable, 0, 6);
+	QGroupBox* groupbox = new QGroupBox(1, Horizontal, i18n("KDE Colors"), mRGBWidget);
+	mColorTable = new KPaletteTable(groupbox);
+	mainLayout->addWidget(groupbox, 0, 6);
 	mColorPreview = new KColorPatch(mRGBWidget);
 	mColorPreview->setColor(QColor( "black" ) );
 	mColorPreview->setMaximumHeight(40);
@@ -79,7 +81,7 @@ VMDlgSolidFill::VMDlgSolidFill() : QTabDialog ( 0L, 0, true )
 	mainLayout->activate();
 
 	addTab(mRGBWidget, i18n("RGB"));
-	
+
 	setFixedSize(baseSize());
 }
 
