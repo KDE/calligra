@@ -3488,7 +3488,7 @@ void QTextParag::setFormat( int index, int len, QTextFormat *f, bool useCollecti
 	    str->setFormat( i + index, f, useCollection );
 	} else {
 #ifdef DEBUG_COLLECTION
-	    qDebug(" QTextParag::setFormat, will use format(of,f,flags) ");
+	    qDebug(" QTextParag::setFormat, will use format(of,f,flags) of=%p %s, f=%p %s", of, of->key().latin1(), f, f->key().latin1() );
 #endif
 	    QTextFormat *fm = fc->format( of, f, flags );
 #ifdef DEBUG_COLLECTION
@@ -4933,13 +4933,13 @@ QTextFormatCollection::~QTextFormatCollection()
     delete defFormat;
 }
 
-QTextFormat *QTextFormatCollection::format( QTextFormat *f )
+QTextFormat *QTextFormatCollection::format( const QTextFormat *f )
 {
     if ( f->parent() == this || f == defFormat ) {
 #ifdef DEBUG_COLLECTION
 	qDebug( " format(f) need '%s', best case!", f->key().latin1() );
 #endif
-	lastFormat = f;
+	lastFormat = const_cast<QTextFormat*>(f);
 	lastFormat->addRef();
 	return lastFormat;
     }
@@ -4992,11 +4992,17 @@ QTextFormat *QTextFormatCollection::format( QTextFormat *of, QTextFormat *nf, in
 	return cres;
     }
 
+#ifdef DEBUG_COLLECTION
+    qDebug(" format(of,nf,%d) calling createFormat(of=%p %s)",flags,of,of->key().latin1());
+#endif
     cres = createFormat( *of );
     kof = of->key();
     knf = nf->key();
     cflags = flags;
 
+#ifdef DEBUG_COLLECTION
+    qDebug(" format(of,nf,%d) calling copyFormat(nf=%p %s)",flags,nf,nf->key().latin1());
+#endif
     cres->copyFormat( *nf, flags );
 
     QTextFormat *fm = cKey.find( cres->key() );
@@ -6876,7 +6882,7 @@ QTextFormat::QTextFormat( const QTextFormat &f )
     : fm( f.fm )
 {
 #ifdef DEBUG_COLLECTION
-    qDebug("QTextFormat::QTextFormat %p copy ctor (copying %p). Will addRef.",this,&f);
+    //qDebug("QTextFormat::QTextFormat %p copy ctor (copying %p). Will addRef.",this,&f);
 #endif
     ref = 0;
     collection = 0;

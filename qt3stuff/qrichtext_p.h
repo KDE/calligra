@@ -1084,6 +1084,8 @@ public:
     void hide();
     bool isVisible() const { return visible; }
 
+    bool isLastInFrame() const { return lastInFrame; }
+
     QTextParag *prev() const;
     QTextParag *next() const;
     void setPrev( QTextParag *s );
@@ -1453,7 +1455,7 @@ public:
 
     void setDefaultFormat( QTextFormat *f );
     QTextFormat *defaultFormat() const;
-    QTextFormat *format( QTextFormat *f );
+    QTextFormat *format( const QTextFormat *f );
     virtual QTextFormat *format( QTextFormat *of, QTextFormat *nf, int flags );
     virtual QTextFormat *format( const QFont &f, const QColor &c );
     virtual void remove( QTextFormat *f );
