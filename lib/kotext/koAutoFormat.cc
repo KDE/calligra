@@ -110,6 +110,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
 {
     //load once this list not each time that we "readConfig"
     loadListOfWordCompletion();
+    m_listCompletion->setIgnoreCase( true );
 }
 
 KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
@@ -786,7 +787,10 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
         //kdDebug()<<" m_listCompletion->items() :"<<m_listCompletion->items()<<endl;
         if( m_completion && m_addCompletionWord && m_listCompletion->items().count() < m_nbMaxCompletionWord
             && lastWord.length()>= m_minCompletionWordLength )
-            m_listCompletion->addItem( lastWord.lower() );
+        {
+            if ( m_listCompletion->makeCompletion( lastWord.lower() ).isEmpty())
+                m_listCompletion->addItem( lastWord.lower() );
+        }
 
         detectStartOfLink(lastWord);
         //kdDebug() << "KoAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
