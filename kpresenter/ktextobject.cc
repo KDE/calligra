@@ -2604,14 +2604,12 @@ void KTextObject::deleteRegion( TxtCursor *_startCursor, TxtCursor *_stopCursor 
     _modified = true;
 
     // if we have only to delete some objs in one paragraph
-    if ( _startCursor->positionParagraph() == _stopCursor->positionParagraph() )
-    {
+    if ( _startCursor->positionParagraph() == _stopCursor->positionParagraph() ) {
 	if ( _startCursor->positionLine() == 0 && _startCursor->positionInLine() == 0 &&
 	     _stopCursor->positionLine() == paragraphAt( _startCursor->positionParagraph() )->lines() - 1 &&
 	     _stopCursor->positionInLine() ==
 	     paragraphAt( _startCursor->positionParagraph() )->lineAt( _stopCursor->positionLine() )->lineLength() -
-	     1 )
-	{
+	     1 ) {
 	    deleteParagraph( _startCursor->positionParagraph(), false );
 	    if ( paragraphs() == 0 ) clear();
 	    return;
@@ -2625,24 +2623,18 @@ void KTextObject::deleteRegion( TxtCursor *_startCursor, TxtCursor *_stopCursor 
 	    deleteRegion( _startCursor->positionAbs() - pos, _stopCursor->positionAbs() - pos );
 
 	recalc();
-    }
-
-    // if we have to delete objs in more paragraphs
-    else
-    {
+    } else { // if we have to delete objs in more paragraphs
 	bool join = false;
 	int start = _startCursor->positionParagraph();
 	int stop = _stopCursor->positionParagraph();
 
 	if ( _stopCursor->positionLine() == paragraphAt( _stopCursor->positionParagraph() )->lines() - 1 &&
 	     _stopCursor->positionInLine() ==
-	     paragraphAt( _stopCursor->positionParagraph() )->lineAt( _stopCursor->positionLine() )->lineLength() - 1 )
-	{
+	     paragraphAt( _stopCursor->positionParagraph() )->lineAt( _stopCursor->positionLine() )->
+	     lineLength() - 1 ) {
 	    deleteParagraph( _stopCursor->positionParagraph(), false );
 	    join = false;
-	}
-	else
-	{
+	} else {
 	    int pos = 0;
 	    for ( int i = 0; i < static_cast<int>( _stopCursor->positionParagraph() ); i++ )
 		pos += paragraphAt( i )->paragraphLength();
@@ -2655,20 +2647,16 @@ void KTextObject::deleteRegion( TxtCursor *_startCursor, TxtCursor *_stopCursor 
 
 	recalc();
 
-	if ( stop - start > 1 )
-	{
+	if ( stop - start > 1 ) {
 	    for ( int i = stop - 1; i > static_cast<int>( start ); i-- )
 		deleteParagraph( i, false );
 	    recalc();
 	}
 
-	if ( _startCursor->positionLine() == 0 && _startCursor->positionInLine() == 0 )
-	{
+	if ( _startCursor->positionLine() == 0 && _startCursor->positionInLine() == 0 ) {
 	    deleteParagraph( _startCursor->positionParagraph(), false );
 	    join = false;
-	}
-	else
-	{
+	} else {
 	    int pos = 0;
 	    for ( int i = 0; i < static_cast<int>( _startCursor->positionParagraph() ); i++ )
 		pos += paragraphAt( i )->paragraphLength();
@@ -2686,7 +2674,11 @@ void KTextObject::deleteRegion( TxtCursor *_startCursor, TxtCursor *_stopCursor 
 
     txtCursor->setMaxPosition( textLength() );
     txtCursor->setPositionAbs( _startCursor->positionAbs() );
-
+    int pos = QMAX( _startCursor->positionAbs(), _stopCursor->positionAbs() );
+    if ( pos > textLength() - 1 )
+	pos = textLength() - 1;
+    txtCursor->setPositionAbs( pos );
+    
     recalc();
 
     repaint( false );

@@ -432,3 +432,7 @@ Reggie, 29.8.1999:
 ------------------
 - Set a better default font for textobj
 - Fixes in textobj
+
+Reggie, 30.8.1999:
+------------------
+- Fix in deleting regions in the textobj
