@@ -1,2 +1,3 @@
-debian/filter_wrapper.1
+debian/koconverter.1
 debian/koscript.1
+debian/kthesaurus.1

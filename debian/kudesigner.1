@@ -2,7 +2,7 @@
 .\" First parameter, NAME, should be all caps
 .\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
 .\" other parameters are allowed: see man(7), man(1)
-.TH KOSHELL 1 "July 5, 2002"
+.TH KUDESIGNER 1 "July 5, 2002"
 .\" Please adjust this date whenever revising the manpage.
 .\"
 .\" Some roff macros, for reference:
@@ -16,30 +16,36 @@
 .\" .sp <n>    insert n+1 empty lines
 .\" for manpage-specific macros, see man(7)
 .SH NAME
-koshell \- the KDE Office Suite workspace
+kudesigner \- a report template designer for Kugar
 .SH SYNOPSIS
-.B koshell
-.RI "[ " generic-options " ]"
+.B kudesigner
+[ \fIgeneric-options\fP ] \fIfile\fP
 .SH DESCRIPTION
 This manual page documents briefly the
-.B koshell
+.B kudesigner
 command.
 This manual page was written for the Debian GNU/Linux distribution
 because the original program does not have a manual page.
 .PP
-\fBKOShell\fP (the KOffice workspace) is a desktop with easy one-click
-launchers for KOffice applications.
+\fBKuDesigner\fP is a tool for creating report templates to use with
+Kugar, the business report maker for KOffice.  Templates (which describe
+the layout of the data within a report) can be created in a visual
+drag-and-drop manner and then saved to file.
 .PP
 This application is part of the KDE Office Suite.
 .SH OPTIONS
-For a full summary of options, run \fIkoshell \-\-help\fP.
+For a full summary of options, run \fIkudesigner \-\-help\fP.
 .SH SEE ALSO
-Some documentation from the program author
-is available in \fI/usr/share/doc/koshell/\fP.
+.BR kugar (1).
+.PP
+The original documentation from the program author
+is available in \fI/usr/share/doc/kugar/\fP.
 .SH AUTHOR
-KOShell was written by Torben Weis <weis@kde.org>, Simon Hausmann
-<hausmann@kde.org>, David Faure <faure@kde.org> and Sven Lüppken
-<sven@kde.org>.
+KuDesigner was written by Alexander Dymo <cloudtemple@mksat.net>.
+.br
+Kugar was written by Mutiny Bay Software <info@mutinybaysoftware.com>,
+Phil Thompson <phil@river-bank.demon.co.uk> and
+Alexander Dymo <cloudtemple@mksat.net>.
 .br
 This manual page was prepared by Ben Burton <benb@acm.org>
 for the Debian GNU/Linux system (but may be used by others).
