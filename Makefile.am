@@ -1,5 +1,5 @@
 
-SUBDIRS = lib kspread kpresenter kword po 
+SUBDIRS = lib kspread kpresenter kword kformula tools po 
 
 acinclude.m4: admin/acinclude.m4.in admin/libtool.m4.in
 	cat admin/acinclude.m4.in admin/libtool.m4.in   > acinclude.m4 

@@ -92,7 +92,9 @@ AC_OUTPUT( \
 	lib/kofficeui/pics/Makefile \
 	lib/kofficeui/test/Makefile \
 	lib/koml/Makefile \
-	lib/store/Makefile
+	lib/store/Makefile \
+	tools/Makefile \
+	tools/spell/Makefile \
 	po/Makefile \
 	po/de/Makefile \
 	po/pt/Makefile \
