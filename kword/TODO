@@ -12,7 +12,6 @@ Missing or incomplete stuff:
 ----------------------------
 - Even/odd pages
  - Add SheetSide config in framedia 
-- runAroundGap does nothing
 - Tables should get a title (with positioning posibility)
   This will basicly be a new frame placed on top or at bottom of table.
   And it shouldn't be limited to tables - any frame could get that.
