@@ -50,6 +50,13 @@ protected:
             emit currentChanged( s );
         }
     }
+ 
+    virtual void keyPressEvent( QKeyEvent *e ) {
+        if ( e->key() == Key_Return || e->key() == Key_Enter )
+            e->ignore();
+        else
+            KIconCanvas::keyPressEvent( e );
+    }
 
 signals:
     void currentChanged( const QString & );
