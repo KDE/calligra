@@ -53,6 +53,7 @@
 #include "ExportTagProcessing.h"
 #include "ExportDialog.h"
 #include "ExportFilterBase.h"
+#include "ExportFilterSpartan.h"
 
 // Every tag has its own processing function. All of those functions
 // have the same parameters since the functions are passed to
@@ -369,33 +370,6 @@ QString ClassExportFilterBase::getHtmlOpeningTagExtraAttributes(void) const
 	    return " xmlns=\"http://www.w3.org/1999/xhtml\""; // Leading space is important!
 	}
 	return QString::null;
-}
-
-static void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatDataList)
-{
-    ValueListFormatData::Iterator  paraFormatDataIt;
-    int lastPos=0; // last position
-
-    paraFormatDataIt = paraFormatDataList.begin ();
-    while (paraFormatDataIt != paraFormatDataList.end ())
-    {
-        if ((*paraFormatDataIt).pos>lastPos)
-        {
-            //We must add a FormatData
-            FormatData formatData(lastPos,(*paraFormatDataIt).pos-lastPos);
-            formatData.missing=true;
-            paraFormatDataList.insert(paraFormatDataIt,formatData);
-        }
-        lastPos=(*paraFormatDataIt).pos+(*paraFormatDataIt).realLen;
-        paraFormatDataIt++; // To the next one, please!
-    }
-    // Add the last one if needed
-    if ((int)paraText.length()>lastPos)
-    {
-        FormatData formatData(lastPos,paraText.length()-lastPos);
-        formatData.missing=true;
-        paraFormatDataList.append(formatData);
-    }
 }
 
 static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase* exportFilter)
@@ -1149,164 +1123,6 @@ QString ClassExportFilterXHtmlTransitional::getDocType(void) const
     // We are TRANSITIONAL, as we want to use tags like <FONT>, <U> and explicit colours.
     // Note "html" is lower-case in XHTML, while "DOCTYPE" and "!PUBLIC" are upper-case!
     return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">";
-}
-
-//
-// ClassExportFilterHtmlSpartan (HTML 4.01 Strict, only document structure, no (HTML-)deprecated formattings)
-//
-
-class ClassExportFilterHtmlSpartan : public ClassExportFilterBase
-{
-    public:
-        ClassExportFilterHtmlSpartan (void) {}
-        virtual ~ClassExportFilterHtmlSpartan (void) {}
-    public: //virtual
-        virtual QString getDocType(void) const;
-        virtual QString getBodyOpeningTagExtraAttributes(void) const;
-        virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
-        virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
-        virtual QString getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout);
-};
-
-QString ClassExportFilterHtmlSpartan::getDocType(void) const
-{
-    // We are STRICT
-    return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">";
-}
-
-QString ClassExportFilterHtmlSpartan::getBodyOpeningTagExtraAttributes(void) const
-{
-    return QString::null;
-}
-
-void ClassExportFilterHtmlSpartan::ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText)
-{
-    if (! paraText.isEmpty() )
-    {
-
-        CreateMissingFormatData(paraText,paraFormatDataList);
-
-        ValueListFormatData::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
-
-        QString partialText;
-
-        for ( paraFormatDataIt = paraFormatDataList.begin ();
-              paraFormatDataIt != paraFormatDataList.end ();
-              paraFormatDataIt++ )
-        {
-            //Retrieve text
-            partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
-
-            if ((*paraFormatDataIt).missing)
-            {   //Format is not issued from KWord. Therefore is only the layout
-                // So it is only the text
-                if (outputText==" ")
-                {//Just a space as text. Therefore we must use a non-breaking space.
-                    outputText += "&nbsp;";
-                }
-                else
-                {
-                    //Code all possible predefined HTML entities
-                    outputText += escapeText(partialText);
-                }
-                continue; // And back to the loop
-            }
-
-            // TODO: first and last characters of partialText should not be a space (white space problems!)
-            // TODO: replace multiples spaces in non-breaking spaces!
-            // Opening elements
-            // <sub> and <sup> are not really considered being formatting by HTML, so we keep them here!
-            if ( 1==(*paraFormatDataIt).verticalAlignment )
-            {
-                outputText+="<sub>"; //Subscript
-            }
-            if ( 2==(*paraFormatDataIt).verticalAlignment )
-            {
-                outputText+="<sup>"; //Superscript
-            }
-
-            // The text
-            if (outputText==" ")
-            {//Just a space as text. Therefore we must use a non-breaking space.
-                outputText += "&nbsp;";
-            }
-            else
-            {
-                //Code all possible predefined HTML entities
-                outputText += escapeText(partialText);
-            }
-
-            // Closing elements
-            if ( 2==(*paraFormatDataIt).verticalAlignment )
-            {
-                outputText+="</sup>"; //Superscript
-            }
-            if ( 1==(*paraFormatDataIt).verticalAlignment )
-            {
-                outputText+="</sub>"; //Subscript
-            }
-        }
-    }
-}
-
-QString ClassExportFilterHtmlSpartan::getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)
-{
-    QString strResult;
-    switch (typeList)
-    {
-    case CounterData::STYLE_NONE:
-    default:
-        {
-            orderedList=false;
-            strResult="<ul>\n";
-            break;
-        }
-    case CounterData::STYLE_NUM:
-    case CounterData::STYLE_ALPHAB_L:
-    case CounterData::STYLE_ALPHAB_U:
-    case CounterData::STYLE_ROM_NUM_L:
-    case CounterData::STYLE_ROM_NUM_U:
-    case CounterData::STYLE_CUSTOM:
-        {
-            orderedList=true;
-            strResult="<ol>\n";
-            break;
-        }
-    }
-    return strResult;
-}
-
-QString ClassExportFilterHtmlSpartan::getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData&)
-{
-    QString strElement;
-    strElement+='<';
-    strElement+=strTag;
-    strElement+='>';
-    strElement+=strParagraphText;
-    strElement+="</";
-    strElement+=strTag;
-    strElement+=">\n";
-    return strElement;
-}
-
-//
-// ClassExportFilterXHtmlSpartan (HTML 4.01 Strict, only document structure, no (HTML-)deprecated formattings)
-//
-
-class ClassExportFilterXHtmlSpartan : public ClassExportFilterHtmlSpartan
-{
-    public:
-        ClassExportFilterXHtmlSpartan (void) {}
-        virtual ~ClassExportFilterXHtmlSpartan (void) {}
-    public: //virtual
-        virtual bool isXML(void) const {return true;}
-        virtual QString getDocType(void) const;
-};
-
-QString ClassExportFilterXHtmlSpartan::getDocType(void) const
-{
-    // We are STRICT
-    return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"DTD/xhtml1-strict.dtd\">";
 }
 
 // ClassExportFilterHtmlStyle (HTML 4.01 Strict, style using CSS2, no style sheets)

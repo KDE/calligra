@@ -138,6 +138,10 @@ public:
 
 };
 
+// Helper functions
+
+void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatDataList);
+
 // ClassExportFilterBase is the most important class for the HTML export filter
 
 class ClassExportFilterBase

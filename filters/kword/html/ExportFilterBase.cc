@@ -24,6 +24,33 @@
 
 // Most of the code is in htmlexport.cc
 
+void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatDataList)
+{
+    ValueListFormatData::Iterator  paraFormatDataIt;
+    int lastPos=0; // last position
+
+    paraFormatDataIt = paraFormatDataList.begin ();
+    while (paraFormatDataIt != paraFormatDataList.end ())
+    {
+        if ((*paraFormatDataIt).pos>lastPos)
+        {
+            //We must add a FormatData
+            FormatData formatData(lastPos,(*paraFormatDataIt).pos-lastPos);
+            formatData.missing=true;
+            paraFormatDataList.insert(paraFormatDataIt,formatData);
+        }
+        lastPos=(*paraFormatDataIt).pos+(*paraFormatDataIt).realLen;
+        paraFormatDataIt++; // To the next one, please!
+    }
+    // Add the last one if needed
+    if ((int)paraText.length()>lastPos)
+    {
+        FormatData formatData(lastPos,paraText.length()-lastPos);
+        formatData.missing=true;
+        paraFormatDataList.append(formatData);
+    }
+}
+
 bool ClassExportFilterBase::isXML(void) const
 {
     return false;
