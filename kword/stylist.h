@@ -37,47 +37,71 @@ class QLineEdit;
 class QLabel;
 class QCheckBox;
 class KWStyle;
+class QTabWidget;
+
+class KWStylePreview;
 
 /******************************************************************/
 /* Class: KWStyleManager                                          */
 /******************************************************************/
 
-class KWStyleManager : public KDialogBase
+class KWStyleManager : public QDialog
 {
     Q_OBJECT
 
 public:
     KWStyleManager( QWidget *_parent, KWDocument *_doc, QStringList _fontList );
 
+    class basicTab : public QWidget {
+        public:
+            basicTab(QWidget *parent) :QWidget(parent) {};
+
+            /** the new style which is to be displayed */
+            void setStyle(KWStyle *style) { m_style = style; }
+            /**  update the GUI from the current Style*/
+            virtual void update() = 0;
+            /**  return the (i18n-ed) name of the tab */
+            virtual QString getName() = 0;
+            /** save the GUI to the style */
+            virtual void save() = 0;
+        private:
+            KWStyle *m_style;
+    };
+
 protected:
-    void setupTab1();
-    void setupTab2();
-    bool apply();
+    KWDocument *m_doc;
+    QStringList m_fontList;
 
-    QWidget *tab1, *tab2;
-    QGridLayout *grid1, *grid2;
-    QListBox *lStyleList;
-    QPushButton *bEdit, *bDelete, *bAdd, *bUp, *bDown, *bCopy;
-    KButtonBox *bButtonBox;
-    QComboBox *cFont, *cColor, *cBorder, *cIndent, *cAlign, *cNumbering, *cTabs;
-    QCheckBox *cSmart;
+    void setupWidget();
+    void addGeneralTab();
+    void renameStyle(QString oldname, QString newname);
+    void apply();
+    void updateGUI();
+    void save();
 
-    KWDocument *doc;
-    KWStyleEditor *editor;
-    QStringList fontList;
+    QTabWidget *m_tabs;
+    QListBox *m_stylesList;
+    QLineEdit *m_nameString;
+    QComboBox *m_styleCombo;
+    QPushButton *m_okButton;
+    QPushButton *m_cancelButton;
+    QPushButton *m_deleteButton;
+    KWStylePreview *preview;
+
+    KWStyle *m_currentStyle;
+    QDict<KWStyle> m_changedStyles;   // internal list of changed styles (that have not been applied yet)
+    QDict<KWStyle> m_deletedStyles;   // internal list of deletedStyles, will be delete from the main doc on apply
+    QList<basicTab> m_tabsList;
+    int numStyles;
+    bool noSignals;
 
 protected slots:
     virtual void slotOk();
-    void editStyle();
-    void editStyle( int ) { editStyle(); }
+    virtual void slotCancel();
+    void switchStyle();
     void addStyle();
-    void copyStyle();
-    void upStyle();
-    void downStyle();
     void deleteStyle();
-    void updateStyleList();
-    void updateButtons( const QString & );
-    void smartClicked();
+    void renameStyle(const QString &);
 };
 
 /******************************************************************/
@@ -92,6 +116,8 @@ public:
     KWStylePreview( const QString &title, QWidget *parent, KWStyle *_style ) : QGroupBox( title, parent, "" )
     { style = _style; }
 
+    void setStyle(KWStyle *_style) { style= _style; }
+
 protected:
     void drawContents( QPainter *painter );
 
@@ -99,50 +125,20 @@ protected:
 
 };
 
-/******************************************************************/
-/* Class: KWStyleEditor                                           */
-/******************************************************************/
+/* 
+class KWStyleFontTab : public KWStyleManager::basicTab {
+    virtual void update();
+    virtual QString getName() { return i18n("Font"); }
+    virtual void save();
+}*/
 
-class KWStyleEditor : public KDialogBase
-{
-    Q_OBJECT
-
-public:
-    KWStyleEditor( QWidget *_parent, KWStyle *_style, KWDocument *_doc, QStringList _fontList );
-    ~KWStyleEditor();
-
-protected:
-    void setupTab1();
-    bool apply();
-
-    QWidget *tab1, *nwid;
-    QGridLayout *grid1, *grid2;
-    QPushButton *bFont, *bColor, *bSpacing, *bAlign, *bBorders, *bNumbering, *bTabulators;
-    KButtonBox *bButtonBox;
-    KWStylePreview *preview;
-    QLineEdit *eName;
-    QComboBox *cFollowing;
-
-    KWStyle *style, *ostyle;
-    KWDocument *doc;
-    KWParagDia *paragDia;
-    QStringList fontList;
-
-signals:
-    void updateStyleList();
-
-protected slots:
-    virtual void slotOk();
-    void changeFont();
-    void changeColor();
-    void changeSpacing();
-    void changeAlign();
-    void changeBorders();
-    void changeNumbering();
-    void changeTabulators();
-    void paragDiaOk();
-    void slotFontDiaOk();
-};
+/*
+Font            simple font dia
+Color           simple color dia
+Spacing and Indents     paragraph spacing dia (KWParagDia)
+alignments      KWParagDia alignment tab
+borders         KWParagDia  borders tab
+numbering       KWParagDia  tab numbering
+tabulators      KWParagDia  tab tabs */
 
 #endif
-
