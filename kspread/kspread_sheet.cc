@@ -6334,6 +6334,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
     }
 
     int rowIndex = 1;
+    QDomElement *style = 0L;
     QDomNode rowNode = tableElement.firstChild();
     while( !rowNode.isNull() )
     {
@@ -6345,10 +6346,12 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
             {
                 QString str = rowElement.attribute( "table:style-name" );
                 kdDebug()<<"style row !!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<str<<endl;
-                QDomElement *style = oasisStyles.styles()[str];
+                style = oasisStyles.styles()[str];
                 kdDebug()<<" style :"<<style<<endl;
-                loadRowFormat( rowElement, style, rowIndex, oasisStyles );
             }
+            rowNode = rowNode.nextSibling();
+            loadRowFormat( rowElement, style, rowIndex, oasisStyles, rowNode.isNull() );
+
             if( rowElement.tagName() == "table:table-row" )
             {
                 rowIndex++;
@@ -6424,9 +6427,11 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
     return true;
 }
 
-bool KSpreadSheet::loadRowFormat( const QDomElement& row, QDomElement * rowStyle, int &rowIndex,const KoOasisStyles& oasisStyles )
+bool KSpreadSheet::loadRowFormat( const QDomElement& row, QDomElement * rowStyle, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )
 {
-    QDomNode rowNode = rowStyle->firstChild();
+    QDomNode rowNode;
+    if ( rowStyle )
+        rowNode= rowStyle->firstChild();
     double height = -1.0;
     KSpreadFormat layout( this , doc()->styleManager()->defaultStyle() );
 
@@ -6457,7 +6462,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, QDomElement * rowStyle
         kdDebug() << "Row repeated: " << number << endl;
     }
     kdDebug()<<" height !!!!!!!!!!!!!!!!!!!!!!! :"<<height<<endl;
-#if 0
+    //code from opencalc filter, I don't know why it's necessary.
     if ( isLast )
     {
         if ( number > 30 )
@@ -6468,7 +6473,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, QDomElement * rowStyle
         if ( number > 256 )
             number = 256;
     }
-#endif
+
     for ( int i = 0; i < number; ++i )
     {
         kdDebug()<<" create non defaultrow format :"<<rowIndex<<endl;
