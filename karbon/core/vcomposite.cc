@@ -27,6 +27,7 @@
 #include <koRect.h>
 
 #include "vcomposite.h"
+#include "vcomposite_iface.h"
 #include "vfill.h"
 #include "vpainter.h"
 #include "vsegment.h"
@@ -80,6 +81,15 @@ VComposite::VComposite( const VComposite& composite )
 VComposite::~VComposite()
 {
 }
+
+DCOPObject* VComposite::dcopObject()
+{
+	if ( !m_dcop )
+		m_dcop = new VCompositeIface( this );
+
+	return m_dcop;
+}
+
 
 void
 VComposite::draw( VPainter* painter, const KoRect * /*rect*/ ) const

@@ -52,6 +52,8 @@ public:
 	VComposite( const VComposite& path );
 	virtual ~VComposite();
 
+	virtual DCOPObject* dcopObject();
+
 	/**
 	 * Returns the knot of the last segment of the last subpath.
 	 */

@@ -10,6 +10,7 @@ noinst_HEADERS = \
 	vcanvas.h \
 	vcolor.h \
 	vcomposite.h \
+	vcomposite_iface.h \
 	vdashpattern.h \
 	vdocument.h \
 	vfill.h \
@@ -37,6 +38,8 @@ libkarboncore_la_SOURCES = \
 	vcanvas.cc \
 	vcolor.cc \
 	vcomposite.cc \
+	vcomposite_iface.cc \
+	vcomposite_iface.skel \
 	vdashpattern.cc \
 	vdocument.cc \
 	vfill.cc \
