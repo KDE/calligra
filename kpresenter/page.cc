@@ -155,7 +155,7 @@ void Page::paintEvent( QPaintEvent* paintEvent )
     painter.end();
 
     bitBlt( this, paintEvent->rect().x(), paintEvent->rect().y(), &pix,
-            paintEvent->rect().x(), paintEvent->rect().y(), paintEvent->rect().width(), paintEvent->rect().height() );
+	    paintEvent->rect().x(), paintEvent->rect().y(), paintEvent->rect().width(), paintEvent->rect().height() );
 }
 
 /*======================= draw background ========================*/

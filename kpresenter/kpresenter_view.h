@@ -57,7 +57,7 @@ class RotateDia;
 class KSearchDialog;
 class KSearchReplaceDialog;
 class ShadowDia;
-class PresStructViewer;
+class KPPresStructView;
 class DelPageDia;
 class InsPageDia;
 class ConfPieDia;
@@ -644,7 +644,7 @@ protected:
     KSearchDialog *searchDia;
     KSearchReplaceDialog *replaceDia;
     ShadowDia *shadowDia;
-    PresStructViewer *presStructView;
+    KPPresStructView *presStructView;
     DelPageDia *delPageDia;
     InsPageDia *insPageDia;
     ConfPieDia *confPieDia;

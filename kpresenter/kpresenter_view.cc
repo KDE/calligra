@@ -882,7 +882,7 @@ void KPresenterView::screenPresStructView()
         page->deSelectAllObj();
         page->setToolEditMode( TEM_MOUSE );
 
-        presStructView = new PresStructViewer( this, "", kPresenterDoc(), this );
+        presStructView = new KPPresStructView( this, "", kPresenterDoc(), this );
         presStructView->setCaption( i18n( "KPresenter - Presentation structure viewer" ) );
         QObject::connect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
         presStructView->show();
@@ -3726,7 +3726,7 @@ void KPresenterView::restartPresStructView()
     presStructView = 0;
     page->deSelectAllObj();
 
-    presStructView = new PresStructViewer( this, "", kPresenterDoc(), this );
+    presStructView = new KPPresStructView( this, "", kPresenterDoc(), this );
     presStructView->setCaption( i18n( "KPresenter - Presentation structure viewer" ) );
     QObject::connect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
     presStructView->show();
