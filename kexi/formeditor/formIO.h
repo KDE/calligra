@@ -81,11 +81,12 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    \todo Add errors code and error dialog
 		*/
 		static int saveForm(Form *form, const QString &filename=QString::null);
+		static int saveFormToString(Form *form, QString &dest);
 		/*! \return 0 if saving failed, 1 otherwise\n
 		 *  Saves the \a form inside the \a dest QByteArray.
 		 *  \sa saveFormToDom(), saveForm()
 		 */
-		static int saveForm(Form *form, QByteArray &dest);
+		static int saveFormToByteArray(Form *form, QByteArray &dest);
 
 		/*! \return 0 if loading failed, 1 otherwise\n
 		    Loads a form from the \a domDoc QDomDocument. Called by loadForm() and loadFormData(). */
@@ -95,8 +96,8 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		 *   Loads a form from the \a src QByteArray.
 		 *  \sa loadFormFromDom(), loadForm().
 		 */
-		static int loadFormData(Form *form, QWidget *container, QByteArray &src, bool preview=false);
-
+		static int loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src, bool preview=false);
+		static int loadFormFromString(Form *form, QWidget *container, QString &src, bool preview=false);
 
 		/*! \return 0 if loading failed, 1 otherwise\n
 		   Load the .ui file \a filename in the Form \a form. If \a filename is null or not given,

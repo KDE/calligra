@@ -76,9 +76,8 @@ KexiSubForm::setFormName(const QString &name)
 	bool ok = view->connection()->loadDataBlock(id, data , QString::null);
 	if(!ok)
 		return;
-	QByteArray raw = data.utf8();
-	raw.truncate(raw.size() - 1);
-	KFormDesigner::FormIO::loadFormData(m_form, m_widget, raw);
+
+	KFormDesigner::FormIO::loadFormFromString(m_form, m_widget, data);
 	m_form->setDesignMode(false);
 
 	m_formName = name;

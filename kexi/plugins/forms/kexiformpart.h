@@ -47,7 +47,7 @@ class KexiFormPart : public KexiPart::Part
 		KexiFormPart(QObject *parent, const char *name, const QStringList &);
 		virtual ~KexiFormPart();
 
-		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item);
+		//virtual bool remove(KexiMainWindow *win, KexiPart::Item &item);
 
 		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog,
 			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
@@ -56,9 +56,6 @@ class KexiFormPart : public KexiPart::Part
 
 		void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
 
-		//QByteArray loadForm(KexiDB::Connection *, const KexiPart::Item &item);
-		//void saveForm(KexiDB::Connection *, const KexiPart::Item &item, const QByteArray &data);
-
 		class TempData : public KexiDialogTempData
 		{
 			public:
@@ -66,7 +63,7 @@ class KexiFormPart : public KexiPart::Part
 				~TempData();
 				QGuardedPtr<KFormDesigner::Form> form;
 				QGuardedPtr<KFormDesigner::Form> previewForm;
-				QByteArray  tempForm;
+				QString    tempForm;
 		};
 
 	protected:

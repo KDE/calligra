@@ -113,11 +113,20 @@ FormIO::saveForm(Form *form, const QString &filename)
 }
 
 int
-FormIO::saveForm(Form *form, QByteArray &dest)
+FormIO::saveFormToByteArray(Form *form, QByteArray &dest)
 {
 	QDomDocument domDoc;
 	saveFormToDom(form, domDoc);
 	dest = domDoc.toCString();
+	return 1;
+}
+
+int
+FormIO::saveFormToString(Form *form, QString &dest)
+{
+	QDomDocument domDoc;
+	saveFormToDom(form, domDoc);
+	dest = domDoc.toString();
 	return 1;
 }
 
@@ -179,7 +188,30 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 }
 
 int
-FormIO::loadFormData(Form *form, QWidget *container, QByteArray &src, bool preview)
+FormIO::loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src, bool preview)
+{
+	QString errMsg;
+	int errLine;
+	int errCol;
+
+	QDomDocument inBuf;
+	bool parsed = inBuf.setContent(src, false, &errMsg, &errLine, &errCol);
+
+	if(!parsed)
+	{
+		kdDebug() << "WidgetWatcher::load(): " << errMsg << endl;
+		kdDebug() << "WidgetWatcher::load(): line: " << errLine << " col: " << errCol << endl;
+		return 0;
+	}
+
+	loadFormFromDom(form, container, inBuf);
+	if(preview)
+		form->setDesignMode(false);
+	return 1;
+}
+
+int
+FormIO::loadFormFromString(Form *form, QWidget *container, QString &src, bool preview)
 {
 	QString errMsg;
 	int errLine;

@@ -63,7 +63,6 @@ KexiFormScrollView::setWidget(QWidget *w)
 	m_widget = w;
 }
 
-
 void
 KexiFormScrollView::refreshContentsSize()
 {
@@ -87,8 +86,8 @@ KexiFormScrollView::contentsMousePressEvent(QMouseEvent *ev)
 	if(!m_enableResizing)
 		return;
 
-	QRect r(m_widget->width(),  0, 4, m_widget->height() + 4);
-	QRect r2(0, m_widget->height(), m_widget->width() + 4, 4);
+	QRect r(m_widget->width(),  0, 4, m_widget->height() + 4); // right limit
+	QRect r2(0, m_widget->height(), m_widget->width() + 4, 4); // bottom limit
 	if(r.contains(ev->pos()) || r2.contains(ev->pos()))
 	{
 		m_resizing = true;
@@ -115,6 +114,7 @@ KexiFormScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 	if(m_resizing) // resize widget
 	{
 		int tmpx = ev->x(), tmpy = ev->y();
+		// we look for the max widget right() (or bottom()), which would be the limit for form resizing (not to hide widgets)
 		QObjectList *list = m_widget->queryList("QWidget", 0, true, false /* not recursive*/);
 		for(QObject *o = list->first(); o; o = list->next())
 		{
@@ -299,19 +299,16 @@ KexiFormView::loadForm()
 {
 	kdDebug() << "KexiDBForm::loadForm() Loading the form with id : " << parentDialog()->id() << endl;
 	// If we are previewing the Form, use the tempData instead of the form stored in the db
-	if(m_preview && (tempData()->tempForm.size() != 0) )
+	if(m_preview && !tempData()->tempForm.isNull() )
 	{
-		KFormDesigner::FormIO::loadFormData(form(), m_dbform, tempData()->tempForm);
+		KFormDesigner::FormIO::loadFormFromString(form(), m_dbform, tempData()->tempForm);
 		return;
 	}
 
 	// normal load
 	QString data;
-	loadDataBlock(data);//, QString::number(m_id));
-	QByteArray raw;
-	raw = data.utf8();
-	raw.truncate(raw.size() - 1);
-	KFormDesigner::FormIO::loadFormData(form(), m_dbform, raw);
+	loadDataBlock(data);
+	KFormDesigner::FormIO::loadFormFromString(form(), m_dbform, data);
 }
 
 void
@@ -327,10 +324,7 @@ KexiFormView::beforeSwitchTo(int mode, bool &, bool &dontStore)
 	// we don't store on db, but in our TempData
 	dontStore = true;
 	if(dirty() && (mode == Kexi::DataViewMode) && form()->objectTree())
-	{
-		KFormDesigner::FormIO::saveForm(form(), tempData()->tempForm);
-		tempData()->tempForm.truncate(tempData()->tempForm.size() - 1);
-	}
+		KFormDesigner::FormIO::saveFormToString(form(), tempData()->tempForm);
 
 	return true;
 }
@@ -373,10 +367,10 @@ bool
 KexiFormView::storeData(bool &)
 {
 	kdDebug(44000) << "KexiDBForm::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
-	QByteArray data;
-	KFormDesigner::FormIO::saveForm(tempData()->form, data);
-	storeDataBlock(data);//, QString::number(m_id));
-	tempData()->tempForm = QByteArray();
+	QString data;
+	KFormDesigner::FormIO::saveFormToString(tempData()->form, data);
+	storeDataBlock(data);
+	tempData()->tempForm = QString();
 
 	return true;
 }

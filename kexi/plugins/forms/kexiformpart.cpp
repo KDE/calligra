@@ -127,12 +127,12 @@ KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 
 	return view;
 }
-
+/*
 bool
 KexiFormPart::remove(KexiMainWindow *, KexiPart::Item &)
 {
 	return false;
-}
+}*/
 
 void
 KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
