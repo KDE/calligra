@@ -236,16 +236,13 @@ QPixmap *KPPixmapCollection::loadPixmap( const QImage &image, const Key &key, bo
     //kdDebug() << "     KPPixmapCollection::loadPixmap( image = " << !image.isNull() << ", key = " << key.toString() << ", insert = " << insert << " )" << endl;
 
     QPixmap *pixmap = new QPixmap;
-    pixmap->convertFromImage( image );
 
-    if ( !pixmap->isNull() ) {
+    if( !image.isNull() ) {
         QSize size = key.size;
-        if ( size != pixmap->size() && size != orig_size && pixmap->width() != 0 && pixmap->height() != 0 ) {
-            QWMatrix m;
-            m.scale( static_cast<float>( size.width() ) / static_cast<float>( pixmap->width() ),
-                     static_cast<float>( size.height() ) / static_cast<float>( pixmap->height() ) );
-            *pixmap = pixmap->xForm( m );
-        }
+        if ( size != image.size() && size != orig_size && image.width() != 0 && image.height() != 0 )
+            pixmap->convertFromImage( image.smoothScale( size.width(), size.height() ) );
+        else
+            pixmap->convertFromImage( image );
     }
 
     if ( insert ) {
