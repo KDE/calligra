@@ -104,7 +104,7 @@ void KPPresStructObjectItem::setObject( KPObject *o, int num )
         switch ( object->getType() ) {
         case OT_PICTURE:
             setText( 0, i18n( "Picture (%1)" ).arg( num + 1 ) );
-            setPixmap( 0, KPBarIcon( "mini_picture" ) );
+            setPixmap( 0, KPBarIcon( "frame_image" ) );
             break;
         case OT_LINE:
             setText( 0, i18n( "Line (%1)" ).arg( num + 1 ) );
@@ -120,7 +120,7 @@ void KPPresStructObjectItem::setObject( KPObject *o, int num )
             break;
         case OT_TEXT:
             setText( 0, i18n( "Text (%1)" ).arg( num + 1 ) );
-            setPixmap( 0, KPBarIcon( "mini_text" ) );
+            setPixmap( 0, KPBarIcon( "frame_text" ) );
             break;
         case OT_AUTOFORM:
             setText( 0, i18n( "Autoform (%1)" ).arg( num + 1 ) );
@@ -139,7 +139,7 @@ void KPPresStructObjectItem::setObject( KPObject *o, int num )
             break;
         case OT_PART:
             setText( 0, i18n( "Embedded Part (%1)" ).arg( num + 1 ) );
-            setPixmap( 0, KPBarIcon( "mini_part" ) );
+            setPixmap( 0, KPBarIcon( "frame_query" ) );
             break;
         case OT_GROUP:
             setText( 0, i18n( "Group Object (%1)" ).arg( num + 1 ) );

@@ -1797,7 +1797,7 @@ void KPresenterView::setupActions()
 					   actionCollection(), "tools_diagramm" );
     ( (KToggleAction*)actionToolsDiagramm )->setExclusiveGroup( "tools" );
 
-    actionToolsTable = new KToggleAction( i18n( "T&able"), "frame_spreadsheet", CTRL + Key_F1,
+    actionToolsTable = new KToggleAction( i18n( "Ta&ble"), "frame_spreadsheet", CTRL + Key_F1,
 					   this, SLOT( toolsTable() ),
 					   actionCollection(), "tools_table" );
     ( (KToggleAction*)actionToolsTable )->setExclusiveGroup( "tools" );
@@ -1894,7 +1894,7 @@ void KPresenterView::setupActions()
 					   actionCollection(), "text_inspgnum" );
 #endif
 
-    // ----------------- extra actions
+    // ----------------- format actions
 
     actionExtraPenBrush = new KAction( i18n( "&Pen and Brush..." ), "style", 0,
 				       this, SLOT( extraPenBrush() ),
@@ -1956,7 +1956,7 @@ void KPresenterView::setupActions()
 					 this, SLOT( extraBackground() ),
 					 actionCollection(), "extra_background" );
 
-    actionExtraLayout = new KAction( i18n( "Page &Layout..." ), 0,
+    actionExtraLayout = new KAction( i18n( "Page La&yout..." ), 0,
 				     this, SLOT( extraLayout() ),
 				     actionCollection(), "extra_layout" );
 
@@ -1977,7 +1977,7 @@ void KPresenterView::setupActions()
 					     this, SLOT( extraDefaultTemplate() ),
 					     actionCollection(), "extra_defaulttemplate" );
 
-    actionExtraAlignObjs = new KAction( i18n("Align Objects"), "alignobjs", 0,
+    actionExtraAlignObjs = new KAction( i18n("Align O&bjects"), "alignobjs", 0,
 					this, SLOT( extraAlignObjs() ),
 					actionCollection(), "extra_alignobjs" );
 
@@ -2040,7 +2040,7 @@ void KPresenterView::setupActions()
 				     this, SLOT( screenNext() ),
 				     actionCollection(), "screen_next" );
 
-    actionScreenLast = new KAction( i18n( "Go to End" ),
+    actionScreenLast = new KAction( i18n( "Go to &End" ),
 				     "finish", Key_End,
 				     this, SLOT( screenLast() ),
 				     actionCollection(), "screen_last" );
@@ -2050,7 +2050,7 @@ void KPresenterView::setupActions()
 				     this, SLOT( screenSkip() ),
 				     actionCollection(), "screen_skip" );
 
-    actionScreenPenColor = new KColorAction( i18n( "Pen &Color..." ), KColorAction::BackgroundColor, 0,
+    actionScreenPenColor = new KColorAction( i18n( "Pen Colo&r..." ), KColorAction::BackgroundColor, 0,
 					     this, SLOT( screenPenColor() ),
 					     actionCollection(), "screen_pencolor" );
 
