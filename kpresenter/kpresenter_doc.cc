@@ -193,7 +193,9 @@ bool KPresenterChild::load( KOMLParser& parser, QValueList<KOMLAttrib>& _attribs
 
 bool KPresenterChild::save( QTextStream& out )
 {
-    assert( document() );
+   if (document()==0)
+      return false;
+    //assert( document() );
 
     out << indent << "<OBJECT url=\"" << document()->url().url() << "\" mime=\""
 	<< document()->nativeFormatMimeType() << "\">"
@@ -332,8 +334,9 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
                    dynamic_cast<KPPartObject*>( kpobject )->getChild() == it.current() )
               {
                   QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
-                  if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
-                      return false;
+                  if (((KoDocumentChild*)(it.current()))->document()!=0)
+                     if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
+                        return false;
               }
           }
       }
@@ -748,7 +751,8 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 		    //vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    //for( ; it != lst.end(); it++ ) {
 		    //}
-		    kppartobject->load( parser, lst );
+          if (kppartobject!=0)
+             kppartobject->load( parser, lst );
 		} else
 		    kdError() << "Unknown tag '" << tag << "' in EMBEDDED" << endl;
 
@@ -971,7 +975,7 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 
 	    while ( parser.open( QString::null, tag ) ) {
 		KPPixmapDataCollection::Key key;
-		int year, month, day, hour, minute, second, msec;
+      int year(0), month(0), day(0), hour(0), minute(0), second(0), msec(0);
 		QString n;
 
 		parser.parseTag( tag, name, lst );
@@ -1022,7 +1026,7 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 
 	    while ( parser.open( QString::null, tag ) ) {
 		KPClipartCollection::Key key;
-		int year, month, day, hour, minute, second, msec;
+      int year(0), month(0), day(0), hour(0), minute(0), second(0), msec(0);
 		QString n;
 
 		parser.parseTag( tag, name, lst );
