@@ -7,6 +7,7 @@ Name[no]=Bilde
 Name[ru]=éÚÏÂÒÁÖÅÎÉÅ
 Exec=kimage.bin --server
 Comment=Torben's Image Viewer
+Comment[es]=El Visor de Imagenes de Torben
 Comment[fi]=Torbenin kuvannäyttäjä
 Comment[is]=Myndbirtir K vöndulsins
 Comment[no]=Torbens bildefremviser

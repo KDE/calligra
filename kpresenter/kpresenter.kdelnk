@@ -6,6 +6,7 @@ Name[no]=Presenterer
 Name[ru]=ğÒÅÚÅÎÔÁÃÉÉ
 Exec=kpresenter.bin --server
 Comment=Reggie's Presentation Software
+Comment[es]=El Software de Presentación de Reggie
 Comment[fi]=Reggien esitysohjelma
 Comment[is]=kpresenter:  Kerfi til ağ smíğa 'glærur' og halda kynningar
 Comment[no]=Reggies presentasjonsprogramvare
