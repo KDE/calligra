@@ -19,6 +19,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <kdebug.h>
+
 #include "kword13layout.h"
 #include "kword13frameset.h"
 #include "kword13document.h"
@@ -33,7 +35,8 @@ StackItem::~StackItem()
 }
 
 KWord13Parser::KWord13Parser( KWord13Document* kwordDocument ) 
-    : m_kwordDocument(kwordDocument), m_currentParagraph( 0 ), m_currentLayout( 0 )
+    : m_kwordDocument(kwordDocument), m_currentParagraph( 0 ), 
+    m_currentLayout( 0 ), m_currentFormat( 0 )
 {
     parserStack.setAutoDelete( true );
     StackItem* bottom = new StackItem;
@@ -46,6 +49,53 @@ KWord13Parser::~KWord13Parser( void )
     parserStack.clear();
     delete m_currentParagraph;
     delete m_currentLayout;
+    delete m_currentFormat;
+}
+
+bool KWord13Parser::startElementFormatOneProperty( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem)
+{
+    // ### TODO: check status
+    if ( m_currentFormat )
+    {
+        for (int i = 0; i < attributes.count(); ++i )
+        {
+            QString attrName ( name );
+            attrName += ':';
+            attrName += attributes.qName( i );
+            m_currentFormat->m_properties[ attrName ] = attributes.value( i );
+            kdDebug(30520) << "Format Property: " << attrName << " = " << attributes.value( i ) << endl;
+        }
+        stackItem->elementType = ElementTypeEmpty;
+        return true;
+    }
+    else
+    {
+        kdError(30520) << "No current layout for storing property: " << name << endl;
+        return false;
+    }
+}
+
+bool KWord13Parser::startElementLayoutProperty( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem)
+{
+    // ### TODO: check status
+    if ( m_currentLayout )
+    {
+        for (int i = 0; i < attributes.count(); ++i )
+        {
+            QString attrName ( name );
+            attrName += ':';
+            attrName += attributes.qName( i );
+            m_currentLayout->m_layoutProperties[ attrName ] = attributes.value( i );
+            kdDebug(30520) << "Layout Property: " << attrName << " = " << attributes.value( i ) << endl;
+        }
+        stackItem->elementType = ElementTypeEmpty;
+        return true;
+    }
+    else
+    {
+        kdError(30520) << "No current layout for storing property: " << name << endl;
+        return false;
+    }
 }
 
 bool KWord13Parser::startElementName( const QString&, const QXmlAttributes& attributes, StackItem *stackItem )
@@ -82,6 +132,7 @@ bool KWord13Parser::startElementLayout( const QString&, const QXmlAttributes& at
         qDebug("Current layout already defined!");
         delete m_currentLayout;
     }
+    
     m_currentLayout = new KWord13Layout;
     m_currentLayout->m_outline = ( attributes.value( "outline" ) == "true" );
     

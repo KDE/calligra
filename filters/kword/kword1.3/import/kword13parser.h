@@ -29,6 +29,7 @@ class KWordParagraph;
 class KWord13Document;
 class KWordFrameset;
 class KWord13Layout;
+class KWord13FormatOne;
 
 // ### TODO: stackItem and friends should be renamed to become unique (see AbiWord import filter), as Doxygen cannot handle multiple classes with the same name.
 
@@ -83,6 +84,10 @@ public:
     /// Process element's characters (between opening and closing tags)
     virtual bool characters ( const QString & ch );
 protected:
+    /// Process children of \<FORMAT id="1"\>
+    bool startElementFormatOneProperty( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem);
+    /// Process children of \<LAYOUT\> (with exceptions)
+    bool startElementLayoutProperty( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem);
     /// Process \<NAME\>
     bool startElementName( const QString&, const QXmlAttributes& attributes, StackItem *stackItem );
     /// Process \<LAYOUT\> and \<STYLE\>
@@ -102,6 +107,7 @@ protected:
     KWord13Document* m_kwordDocument;
     KWordParagraph* m_currentParagraph; ///< Current paragraph
     KWord13Layout* m_currentLayout; ///< Current layout (or style)
+    KWord13FormatOne* m_currentFormat; ///< Current character format 
 };
 
 #endif // KWORD_1_3_PARSER_H
