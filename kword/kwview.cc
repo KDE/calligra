@@ -219,6 +219,9 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
 
     connect (m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
              actionConvertToTextBox, SLOT(setEnabled(bool)));
+    connect (m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
+             actionAddPersonalExpression, SLOT(setEnabled(bool )));
+
 
     connect( m_gui->canvasWidget(), SIGNAL(frameSelectedChanged()),
              this, SLOT(frameSelectedChanged()));
@@ -5455,6 +5458,7 @@ void KWView::slotFrameSetEditChanged()
     actionInsertLink->setEnabled(state);
     actionCreateStyleFromSelection->setEnabled( state && hasSelection);
     actionConvertToTextBox->setEnabled( state && hasSelection);
+    actionAddPersonalExpression->setEnabled( state && hasSelection);
     bool goodleftMargin=false;
     if(state)
         goodleftMargin=(edit->currentLeftMargin()>0);
