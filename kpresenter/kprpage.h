@@ -273,6 +273,7 @@ public:
     void reactivateBgSpellChecking(bool refreshTextObj);
 
     bool canMoveOneObject();
+    KCommand *alignVertical( VerticalAlignmentType _type );
 
 protected:
 

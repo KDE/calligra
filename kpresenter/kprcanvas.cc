@@ -7755,3 +7755,26 @@ int KPrCanvas::applyGridOnPosY( int pos )
     double result = static_cast<int>( point / gridY ) * gridY;
     return m_view->kPresenterDoc()->zoomHandler()->zoomItY( result );
 }
+
+void KPrCanvas::alignVertical( VerticalAlignmentType _type )
+{
+    KMacroCommand *macro = new KMacroCommand( i18n("Change Vertical Aligment"));
+    bool createMacro = false;
+    KCommand *cmd = m_activePage->alignVertical( _type );
+    if ( cmd )
+    {
+        macro->addCommand(cmd );
+        createMacro = true;
+    }
+    cmd = stickyPage()->alignVertical( _type );
+    if ( cmd )
+    {
+        macro->addCommand(cmd );
+        createMacro = true;
+    }
+
+    if ( createMacro )
+        m_view->kPresenterDoc()->addCommand( macro );
+    else
+        delete macro;
+}

@@ -945,5 +945,20 @@ protected:
     MarginsStruct m_marginsEnd;
 };
 
+
+class KPrChangeVerticalAlignmentCommand : public KNamedCommand
+{
+public:
+    KPrChangeVerticalAlignmentCommand( const QString &name, KPTextObject *_obj, VerticalAlignmentType _oldAlign, VerticalAlignmentType _newAlign);
+    ~KPrChangeVerticalAlignmentCommand() {}
+
+    virtual void execute();
+    virtual void unexecute();
+protected:
+    KPTextObject *m_obj;
+    VerticalAlignmentType m_oldAlign;
+    VerticalAlignmentType m_newAlign;
+};
+
 #endif
 

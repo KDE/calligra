@@ -384,6 +384,11 @@ public slots:
     void applyAutoFormat();
     void createStyleFromSelection();
 
+    void alignVerticalTop();
+    void alignVerticalBottom();
+    void alignVerticalCenter();
+
+
 public:
     // create GUI
     virtual void createGUI();
@@ -967,6 +972,10 @@ private:
     KAction *actionApplyAutoFormat;
 
     KAction *actionCreateStyleFromSelection;
+
+    KToggleAction *actionAlignVerticalTop;
+    KToggleAction *actionAlignVerticalBottom;
+    KToggleAction *actionAlignVerticalCenter;
 
 
     QTimer automaticScreenPresTimer;

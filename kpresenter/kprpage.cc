@@ -3869,3 +3869,29 @@ bool KPrPage::canMoveOneObject()
     }
     return false;
 }
+
+KCommand *KPrPage::alignVertical( VerticalAlignmentType _type )
+{
+    KMacroCommand *macro = new KMacroCommand( i18n("Change Vertical Aligment"));
+    bool createMacro = false;
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->isSelected() && it.current()->getType()==OT_TEXT)
+        {
+            KPTextObject *obj = dynamic_cast<KPTextObject *>(it.current());
+            if ( obj  && !obj->isProtectContent())
+            {
+                KPrChangeVerticalAlignmentCommand * cmd = new KPrChangeVerticalAlignmentCommand( i18n("Change Vertical Aligment"), obj, obj->verticalAlignment(),_type);
+                macro->addCommand( cmd );
+                cmd->execute();
+                createMacro =true;
+            }
+	}
+    }
+    if (createMacro )
+        return macro;
+    delete macro;
+    return 0L;
+}
+

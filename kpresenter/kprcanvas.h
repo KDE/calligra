@@ -308,7 +308,7 @@ public:
     KCommand *setProtectContent( bool b );
     void closeObject(bool _close);
     void layout();
-
+    void alignVertical( VerticalAlignmentType _type );
 public slots:
     void exitEditMode();
 

@@ -3023,6 +3023,24 @@ void KPresenterView::setupActions()
                                      this, SLOT( closeObject()),
                                      actionCollection(), "close_object" );
 
+
+    actionAlignVerticalTop = new KToggleAction( i18n( "Align Top" ), 0,
+                                               this, SLOT( alignVerticalTop() ),
+                                               actionCollection(), "align_top" );
+    actionAlignVerticalTop->setExclusiveGroup( "vertical_alignment" );
+    actionAlignVerticalTop->setChecked( true );
+
+
+    actionAlignVerticalBottom = new KToggleAction( i18n( "Align Bottom" ), 0,
+                                                this, SLOT( alignVerticalBottom() ),
+                                                actionCollection(), "align_bottom" );
+    actionAlignVerticalBottom->setExclusiveGroup( "vertical_alignment" );
+
+    actionAlignVerticalCenter = new KToggleAction( i18n( "Align Middle" ), 0,
+                                                   this, SLOT( alignVerticalCenter() ),
+                                                   actionCollection(), "align_center" );
+    actionAlignVerticalCenter->setExclusiveGroup( "vertical_alignment" );
+
 }
 
 void KPresenterView::textSubScript()
@@ -6493,5 +6511,37 @@ void KPresenterView::viewSnapToGrid()
     m_pKPresenterDoc->setModified( true );
     m_pKPresenterDoc->updateGridButton();
 }
+
+void KPresenterView::alignVerticalTop()
+{
+    if ( actionAlignVerticalTop->isChecked() )
+    {
+        m_canvas->alignVertical(KP_TOP );
+    }
+    else
+        actionAlignVerticalTop->setChecked(true);
+}
+
+void KPresenterView::alignVerticalBottom()
+{
+    if ( actionAlignVerticalBottom->isChecked() )
+    {
+        m_canvas->alignVertical(KP_BOTTOM );
+    }
+    else
+        actionAlignVerticalBottom->setChecked(true);
+}
+
+void KPresenterView::alignVerticalCenter()
+{
+    if ( actionAlignVerticalBottom->isChecked() )
+    {
+        m_canvas->alignVertical(KP_CENTER );
+    }
+    else
+        actionAlignVerticalBottom->setChecked(true);
+}
+
+
 
 #include <kpresenter_view.moc>

@@ -55,8 +55,6 @@ public:
     KPTextObject( KPresenterDoc *doc );
     virtual ~KPTextObject();
 
-    enum VerticalAlignmentType { KP_CENTER=0, KP_TOP=1, KP_BOTTOM=2};
-
     virtual DCOPObject* dcopObject();
 
     virtual void setSize( double _width, double _height );
@@ -158,7 +156,7 @@ public:
     void resizeTextDocument();
 
     VerticalAlignmentType verticalAlignment() const { return m_textVertAlign; }
-    void setVerticalAligment( VerticalAlignmentType _type) { m_textVertAlign = _type;}
+    void setVerticalAligment( VerticalAlignmentType _type) ;
 
 signals:
     void repaintChanged( KPTextObject* );
@@ -178,6 +176,7 @@ protected:
     void invalidate();
     static QString lineStyleToString( KoTextFormat::LineStyle _lineType );
     static KoTextFormat::LineStyle stringToLineStyle( const QString & _str );
+    void recalcVerticalAlignment();
 protected slots:
     void slotNewCommand( KCommand *cmd );
     void slotAvailableHeightNeeded();
@@ -199,7 +198,7 @@ private:
     KoParagLayout m_paragLayout;
     VerticalAlignmentType m_textVertAlign;
     double bleft, bright, btop, bbottom; // margins
-
+    double alignVertical;
     bool drawEditRect, drawEmpty;
     bool editingTextObj;
 };

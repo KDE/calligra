@@ -242,6 +242,13 @@ enum PropValue {
     STATE_UNDEF = 2
 };
 
+enum VerticalAlignmentType {
+    KP_CENTER=0,
+    KP_TOP=1,
+    KP_BOTTOM=2
+};
+
+
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;
 

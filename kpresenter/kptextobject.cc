@@ -116,7 +116,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     btop = 0.0;
     bright = 0.0;
     bbottom = 0.0;
-
+    alignVertical = 0.0;
 
     connect( m_textobj, SIGNAL( newCommand( KCommand * ) ),
              SLOT( slotNewCommand( KCommand * ) ) );
@@ -1394,6 +1394,34 @@ double KPTextObject::innerHeight() const
 {
     return getRect().height() - bTop() - bBottom();
 }
+
+void KPTextObject::setVerticalAligment( VerticalAlignmentType _type)
+{
+    m_textVertAlign = _type;
+    recalcVerticalAlignment();
+}
+
+void KPTextObject::recalcVerticalAlignment()
+{
+    KoTextParag * parag = m_textobj->textDocument()->lastParag();
+    double txtHeight = m_doc->zoomHandler()->unzoomItY( m_doc->zoomHandler()->layoutUnitToPixelY( parag->rect().bottom() ))+btop+bbottom;
+    double diffy = getRect().height() - txtHeight;
+    if ( diffy <= 0.0 )
+        return;
+    switch( m_textVertAlign )
+    {
+    case KP_CENTER:
+        alignVertical = diffy/2.0;
+        break;
+    case KP_TOP:
+        alignVertical = 0.0;
+        break;
+    case KP_BOTTOM:
+        alignVertical = diffy;
+        break;
+    }
+}
+
 
 KPTextView::KPTextView( KPTextObject * txtObj,KPrCanvas *_canvas )
     : KoTextView( txtObj->textObject() )
