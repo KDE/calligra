@@ -40,7 +40,8 @@ struct KWChar;
 class KWAutoFormatEntry
 {
 public:
-    KWAutoFormatEntry();
+    KWAutoFormatEntry(const QString& find = QString::null, 
+                      const QString& replace = QString::null);
 
     void setFind( const QString &str );
     void setReplace( const QString &str );
@@ -60,24 +61,24 @@ public:
     void setVertAlign( KWFormat::VertAlign va );
 
 
-    QString getFind();
-    QString getReplace();
-    bool getCheckFamily();
-    bool getCheckColor();
-    bool getCheckSize();
-    bool getCheckBold();
-    bool getCheckItalic();
-    bool getCheckUnderline();
-    bool getCheckVertAlign();
-    QString getFamily();
-    QColor getColor();
-    int getSize();
-    bool getBold();
-    bool getItalic();
-    bool getUnderline();
-    bool getVertAlign();
+    QString getFind() const;
+    QString getReplace() const;
+    bool getCheckFamily() const;
+    bool getCheckColor() const;
+    bool getCheckSize() const;
+    bool getCheckBold() const;
+    bool getCheckItalic() const;
+    bool getCheckUnderline() const;
+    bool getCheckVertAlign() const;
+    QString getFamily() const;
+    QColor getColor() const ;
+    int getSize() const;
+    bool getBold() const;
+    bool getItalic() const;
+    bool getUnderline() const;
+    bool getVertAlign() const;
 
-    bool isValid()
+    bool isValid() const
     { return !find.isEmpty() && !replace.isEmpty(); }
 
 protected:
@@ -142,11 +143,11 @@ public:
     void configUpperCase( bool _uc );
     void configUpperUpper( bool _uu );
 
-    TypographicQuotes getConfigTypographicQuotes()
+    TypographicQuotes getConfigTypographicQuotes() const
     { return typographicQuotes; }
-    bool getConfigUpperCase()
+    bool getConfigUpperCase() const
     { return convertUpperCase; }
-    bool getConfigUpperUpper()
+    bool getConfigUpperUpper() const
     { return convertUpperUpper; }
 
     static bool isUpper( const QChar &c );
@@ -154,12 +155,10 @@ public:
     static bool isMark( const QChar &c );
     static bool isSeparator( const QChar &c );
 
-    void addAutoFormatEntry( KWAutoFormatEntry *entry ) {
-	if ( !entry )
-	    return;
-	entries.insert( entry->getFind(), *entry );
-	begins.append( entry->getFind()[ 0 ] );
-	lengths.append( entry->getFind().length() );
+    void addAutoFormatEntry( const KWAutoFormatEntry &entry ) {
+	entries.insert( entry.getFind(), entry );
+	begins.append( entry.getFind()[ 0 ] );
+	lengths.append( entry.getFind().length() );
 	buildMaxLen();
     }
 

@@ -28,10 +28,12 @@
 /******************************************************************/
 
 /*================================================================*/
-KWAutoFormatEntry::KWAutoFormatEntry()
+KWAutoFormatEntry::KWAutoFormatEntry(const QString& _find, 
+                                     const QString& _replace)
 {
     checkFamily = checkColor = checkSize = checkBold = checkItalic = checkUnderline = checkVertAlign = false;
-    find = replace = QString::null;
+    find = _find;
+    replace = _replace;
     family = "times";
     color = Qt::black;
     size = 12;
@@ -136,97 +138,97 @@ void KWAutoFormatEntry::setVertAlign( KWFormat::VertAlign va )
 }
 
 /*================================================================*/
-QString KWAutoFormatEntry::getFind()
+QString KWAutoFormatEntry::getFind() const 
 {
     return find;
 }
 
 /*================================================================*/
-QString KWAutoFormatEntry::getReplace()
+QString KWAutoFormatEntry::getReplace() const 
 {
     return replace;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getCheckFamily()
+bool KWAutoFormatEntry::getCheckFamily() const 
 {
     return checkFamily;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getCheckColor()
+bool KWAutoFormatEntry::getCheckColor() const 
 {
     return checkColor;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getCheckSize()
+bool KWAutoFormatEntry::getCheckSize() const 
 {
     return checkSize;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getCheckBold()
+bool KWAutoFormatEntry::getCheckBold() const 
 {
     return checkBold;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getCheckItalic()
+bool KWAutoFormatEntry::getCheckItalic() const 
 {
     return checkItalic;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getCheckUnderline()
+bool KWAutoFormatEntry::getCheckUnderline() const
 {
     return checkUnderline;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getCheckVertAlign()
+bool KWAutoFormatEntry::getCheckVertAlign() const 
 {
     return checkVertAlign;
 }
 
 /*================================================================*/
-QString KWAutoFormatEntry::getFamily()
+QString KWAutoFormatEntry::getFamily() const 
 {
     return family;
 }
 
 /*================================================================*/
-QColor KWAutoFormatEntry::getColor()
+QColor KWAutoFormatEntry::getColor() const 
 {
     return color;
 }
 
 /*================================================================*/
-int KWAutoFormatEntry::getSize()
+int KWAutoFormatEntry::getSize() const 
 {
     return size;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getBold()
+bool KWAutoFormatEntry::getBold() const 
 {
     return bold;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getItalic()
+bool KWAutoFormatEntry::getItalic() const 
 {
     return italic;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getUnderline()
+bool KWAutoFormatEntry::getUnderline() const 
 {
     return underline;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getVertAlign()
+bool KWAutoFormatEntry::getVertAlign() const 
 {
     return vertAlign;
 }

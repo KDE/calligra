@@ -1342,27 +1342,10 @@ bool KWordDocument::loadXML( QIODevice *, const QDomDocument & doc )
         contents->setEnd( end );
     }
 
-    KWAutoFormatEntry *entry;
-
-    entry = new KWAutoFormatEntry;
-    entry->setFind( "(C)" );
-    entry->setReplace( "©" );
-    autoFormat.addAutoFormatEntry( entry );
-
-    entry = new KWAutoFormatEntry;
-    entry->setFind( "(c)" );
-    entry->setReplace( "©" );
-    autoFormat.addAutoFormatEntry( entry );
-
-    entry = new KWAutoFormatEntry;
-    entry->setFind( "(R)" );
-    entry->setReplace( "®" );
-    autoFormat.addAutoFormatEntry( entry );
-
-    entry = new KWAutoFormatEntry;
-    entry->setFind( "(r)" );
-    entry->setReplace( "®" );
-    autoFormat.addAutoFormatEntry( entry );
+    autoFormat.addAutoFormatEntry( KWAutoFormatEntry("(C)", "©" ) );
+    autoFormat.addAutoFormatEntry( KWAutoFormatEntry("(c)", "©" ) );
+    autoFormat.addAutoFormatEntry( KWAutoFormatEntry("(R)", "®" ) );
+    autoFormat.addAutoFormatEntry( KWAutoFormatEntry("(r)", "®" ) );
 
     // do some sanity checking on document.
     for (int i = getNumFrameSets()-1; i>-1; i--) {
