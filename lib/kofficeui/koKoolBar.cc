@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include "koKoolBar.h"
 
@@ -51,11 +51,11 @@ int KoKoolBar::insertItem( int _grp, const QPixmap& _pix, const QString& _text,
   if ( !g )
     return -1;
   KoKoolBarItem *item = new KoKoolBarItem( g, _pix, _text );
-  
+
   if ( _obj != 0L && _slot != 0L )
     connect( item, SIGNAL( pressed( int, int ) ), _obj, _slot );
   g->append( item );
-  
+
   if ( g->id() == m_iActiveGroup )
     m_pBox->update();
 
@@ -69,7 +69,7 @@ void KoKoolBar::removeGroup( int _grp )
     return;
 
   m_mapGroups.remove( _grp );
-  
+
   if ( _grp == m_iActiveGroup )
   {
     if ( m_mapGroups.count() == 0 )
@@ -101,6 +101,22 @@ void KoKoolBar::removeItem( int _grp, int _id )
     m_pBox->update();
 }
 
+void KoKoolBar::renameItem( int _grp, int _id, const QString & _text )
+{
+  KoKoolBarGroup* g = m_mapGroups[ _grp ];
+  if ( !g )
+    return;
+
+  KoKoolBarItem * item = g->item( _id );
+  if ( !item )
+    return;
+
+  item->setText( _text );
+
+  if ( g->id() == m_iActiveGroup )
+    m_pBox->update();
+}
+
 void KoKoolBar::setActiveGroup( int _grp )
 {
   KoKoolBarGroup* g = m_mapGroups[ _grp ];
@@ -117,7 +133,7 @@ void KoKoolBar::resizeEvent( QResizeEvent * )
 {
   if ( m_iActiveGroup == -1 )
     return;
-  
+
   int buttonheight = fontMetrics().height() + 4;
 
   KoKoolBarGroup *g = m_mapGroups[ m_iActiveGroup ];
@@ -131,7 +147,7 @@ void KoKoolBar::resizeEvent( QResizeEvent * )
   // Position of g
   QIntDictIterator<KoKoolBarGroup> pos = it;
   ++it;
-  
+
   // How many left ?
   int result = 0;
   QIntDictIterator<KoKoolBarGroup> i = it;
@@ -140,15 +156,15 @@ void KoKoolBar::resizeEvent( QResizeEvent * )
     ++result;
     ++i;
   }
-  
+
   int y = height() - buttonheight * result;
   for( ; it.current(); ++it )
-  {    
+  {
     it.current()->button()->setGeometry( 0, y, width(), buttonheight );
     it.current()->button()->show();
     y += buttonheight;
   }
-  
+
   int y2 = 0;
   it.toFirst();
   ++pos;
@@ -169,7 +185,7 @@ void KoKoolBar::resizeEvent( QResizeEvent * )
     m_pBox->hide();
 
   if ( m_pBox->needsScrolling() )
-  {    
+  {
     if ( m_pButtonUp == 0L )
     {
       m_pButtonUp = new QPushButton( this );
@@ -229,7 +245,7 @@ void KoKoolBar::enableItem( int _grp, int _id, bool _enable )
     return;
   KoKoolBarItem *item = g->item( _id );
   if ( !item )
-    return; 
+    return;
   item->setEnabled( _enable );
 }
 
@@ -241,13 +257,13 @@ void KoKoolBar::enableGroup( int _grp, bool _enable )
   g->setEnabled( _enable );
 }
 
-KoKoolBarBox::KoKoolBarBox( KoKoolBar *_bar ) : 
+KoKoolBarBox::KoKoolBarBox( KoKoolBar *_bar ) :
   QWidget( _bar ), m_pBar( _bar )
 {
   m_iYOffset = 0;
   m_iYIcon = 0;
   m_pGroup = 0L;
-  
+
   // setBackgroundMode( PaletteBase );
   setBackgroundColor( darkGray );
 }
@@ -266,14 +282,14 @@ bool KoKoolBarBox::needsScrolling() const
     return false;
 
   int y = 0;
-  
+
   QIntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
   for ( ; it.current(); ++it )
     y += it.current()->height();
-  
+
   if ( y > height() )
     return true;
-  
+
   /** TODO **/
   return false;
 }
@@ -282,7 +298,7 @@ KoKoolBarItem* KoKoolBarBox::findByPos( int _abs_y ) const
 {
   if ( m_pGroup == 0L )
     return 0L;
-  
+
   int y = 0;
 
   QIntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
@@ -293,7 +309,7 @@ KoKoolBarItem* KoKoolBarBox::findByPos( int _abs_y ) const
       return it.current();
     y += dy;
   }
-  
+
   return 0L;
 }
 
@@ -316,7 +332,7 @@ bool KoKoolBarBox::isAtTop() const
 }
 
 bool KoKoolBarBox::isAtBottom() const
-{  
+{
   if ( m_pGroup->items() == 0 )
     return true;
   int h = maxHeight();
@@ -331,21 +347,21 @@ void KoKoolBarBox::scrollUp()
 {
   if ( isAtTop() )
     return;
-  
+
   int y = 0;
   int i = 0;
   m_iYIcon--;
 
   QIntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
   for ( ; i < m_iYIcon && it.current(); ++it )
-  {    
+  {
     y += it.current()->height();
     ++i;
   }
-  
+
   int old = m_iYOffset;
   m_iYOffset = y;
-  
+
   QWidget::scroll( 0, old - m_iYOffset );
 }
 
@@ -353,21 +369,21 @@ void KoKoolBarBox::scrollDown()
 {
   if ( isAtBottom() )
     return;
-  
+
   int y = 0;
   int i = 0;
   m_iYIcon++;
-  
+
   QIntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
   for ( ; i < m_iYIcon && it.current(); ++it )
-  {    
+  {
     y += it.current()->height();
     i++;
   }
-  
+
   int old = m_iYOffset;
   m_iYOffset = y;
-  
+
   QWidget::scroll( 0, old - m_iYOffset );
 }
 
@@ -379,15 +395,15 @@ void KoKoolBarBox::paintEvent( QPaintEvent * )
   static QColorGroup g2( black, white, white, darkGray, lightGray, white, black );
   static QBrush fill2( darkGray );
   qDrawShadePanel( &painter, 0, 0, width(), height(), g2, true, 1, &fill2 );
-  
+
   if ( m_pGroup == 0L )
   {
     painter.end();
     return;
   }
-  
+
   int y = -m_iYOffset;
-  
+
   QIntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
   for ( ; it.current(); ++it )
   {
@@ -396,14 +412,14 @@ void KoKoolBarBox::paintEvent( QPaintEvent * )
     if ( it.current()->text() != 0L && it.current()->text()[0] != 0 )
     {
       int y2 = y;
-      y2 += it.current()->pixmap().height() + 2; 
+      y2 += it.current()->pixmap().height() + 2;
       painter.drawText( ( width() - painter.fontMetrics().width( it.current()->text() ) ) / 2,
 			y2 + painter.fontMetrics().ascent(), it.current()->text() );
     }
-    
+
     y += it.current()->height();
   }
-  
+
   painter.end();
 }
 
@@ -411,11 +427,11 @@ KoKoolBarGroup::KoKoolBarGroup( KoKoolBar *_bar, const QString& _text ) :
   m_pBar( _bar )
 {
   m_mapItems.setAutoDelete( true );
-  
+
   m_pButton = new QPushButton( _text, _bar );
-  
+
   m_bEnabled = true;
-  
+
   connect( m_pButton, SIGNAL( clicked() ), this, SLOT( pressed() ) );
   m_id = g_koKoolBarId++;
 }
@@ -443,7 +459,7 @@ KoKoolBarItem::KoKoolBarItem( KoKoolBarGroup *_grp, const QPixmap& _pix, const Q
 void KoKoolBarItem::calc( QWidget *_widget )
 {
   m_iHeight = pixmap().height() + 8;
-  
+
   if ( !m_strText.isEmpty() )
     m_iHeight += _widget->fontMetrics().height() + 2;
 }
@@ -478,7 +494,7 @@ int main( int argc, char **argv )
   bar.insertGroup("Help");
   bar.setGeometry( 100, 100, 80, 300 );
   bar.show();
-  
+
   app.exec();
 }
 */
