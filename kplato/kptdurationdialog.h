@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KPTPRESOURCESPANEL_H
-#define KPTPRESOURCESPANEL_H
+#ifndef KPTDURATIONDIALOG_H
+#define KPTDURATIONDIALOG_H
 
 #include "kptduration.h"
 #include "durationpanelbase.h"
@@ -52,4 +52,4 @@ private:
     KPTDuration *duration;
 };
 
-#endif // KPTPRESOURCESPANEL_H
+#endif // KPTDURATIONDIALOG_H
