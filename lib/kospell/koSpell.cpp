@@ -261,10 +261,10 @@ QStringList KOSpell::resultCheckWord( const QString &_word )
 void KOSpell::spellWord( const QString &_word )
 {
     QStringList lst =resultCheckWord( _word );
-    if ( lst.isEmpty())
+    if ( lst.isEmpty() && (lastpos >= origbuffer.length()-1) )
     {
-        //emit death();
-        //todo death it !!! Emit death();
+        emit death();
+        return;
     }
     dialog( _word, lst);
 }

@@ -107,7 +107,7 @@ protected slots:
 
     void spellCheckAgain();
     void textChanged (const QString &);
-    void changeLanguage( const QString &);
+    void changeLanguage( int );
     void selected (int i);
     void highlighted (int i);
 

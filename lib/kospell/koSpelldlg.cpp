@@ -105,7 +105,7 @@ KOSpellDlg::KOSpellDlg(
 
   connect(this, SIGNAL(user1Clicked()), this, SLOT(stop()));
 
-  connect( language, SIGNAL( activated ( const QString &)), this, SLOT( changeLanguage( const QString &)));
+  connect( language, SIGNAL( activated ( int )), this, SLOT( changeLanguage( int)));
 
   buttonBox->layout();
 
@@ -173,7 +173,7 @@ void KOSpellDlg::spellCheckAgain()
     done (KS_CHECKAGAIN);
 }
 
-void KOSpellDlg::changeLanguage( const QString &)
+void KOSpellDlg::changeLanguage( int index)
 {
     //todo change language in config
     newword = word;
