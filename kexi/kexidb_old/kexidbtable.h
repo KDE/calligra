@@ -26,8 +26,10 @@
 class KEXIDB_EXPORT KexiDBTable {
 public:
 	KexiDBTable(const QString & name);
+	KexiDBTable();
 	~KexiDBTable();
 	const QString& tableName() const;
+	void setTableName(const QString& name);
 	unsigned int fieldCount() const;
 	KexiDBField field(unsigned int id) const;
 	QStringList primaryKeys() const;

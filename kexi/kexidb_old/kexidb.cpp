@@ -59,12 +59,22 @@ KexiDB::driverName() const
 bool KexiDB::createTable(const KexiDBTable& tableDef)
 {
 	if (tableDef.fieldCount()<1) return false;
+
+	// hack for now, tablestruct should vanish completeyl (jowenn)
+	KexiDBTableStruct s;
+	s.setAutoDelete(true);
+	for (int i=0;i<tableDef.fieldCount();i++) {
+		KexiDBField *tmp=new KexiDBField();
+		(*tmp)=tableDef.field(i);
+		s.append(tmp);
+	}
+	// (end) hack for now, tablestruct should vanish completeyl (jowenn)
 	KexiDBField f=tableDef.field(0);
-	if (!createField(f,KexiDBTableStruct(),true)) return false;
+	if (!createField(f,s,true)) return false;
 	for(int i=1;i<int(tableDef.fieldCount());i++)
 	{
 		f=tableDef.field(i);
-		if (!createField(f,KexiDBTableStruct(),false))
+		if (!createField(f,s,false))
 			return false;
 	}
 	return true;

@@ -431,7 +431,7 @@ MySqlDB::createDefinition(const QString& /*field*/, KexiDBField::ColumnType dtyp
 		case KexiDBField::SQLBigInt:
 			allowUnsigned = true;
 		case KexiDBField::SQLVarchar:
-			qstr += "(" + QString::number(length) + ")";
+			qstr += "(" + QString::number((length==0)?255:length) + ")";
 			break;
 		case KexiDBField::SQLDecimal:
 		case KexiDBField::SQLFloat:
@@ -480,7 +480,7 @@ MySqlDB::createDefinition(const QString& /*field*/, KexiDBField::ColumnType dtyp
 
 	if(constraints & KexiDBField::CCAutoInc)
 	{
-		qstr += " AUTO_INCREMENT";
+		qstr += " AUTO_INCREMENT PRIMARY KEY";
 	}
 
 	return qstr;
@@ -664,12 +664,15 @@ MySqlDB::createField(const KexiDBField& newField, KexiDBTableStruct fields,
 	{
 		ok = changeKeys(newField, -1, fields);
 	}
-  //<js> This is a fresh created table: add its def to our set of tabledefs:
-  //TODO: tableNames() do this on as a side effect -THIS IS BAD IMPL.- fix tableNames()
-  if (ok && createTable) {
-		m_tableDefs.insert(newField.table(),createTableDef(newField.table()));
-  }
-  //</js>
+
+	//<js> This is a fresh created table: add its def to our set of tabledefs:
+	//TODO: tableNames() do this on as a side effect -THIS IS BAD IMPL.- fix tableNames()
+	if (ok && createTable) {
+               m_tableDefs.insert(newField.table(),createTableDef(newField.table()));
+	}
+	//</js>
+
+
 	return ok;
 }
 
@@ -688,7 +691,7 @@ MySqlDB::createDefinition(const KexiDBField& field, int index,
 		case KexiDBField::SQLBigInt:
 			allowUnsigned = true;
 		case KexiDBField::SQLVarchar:
-			qstr += "(" + QString::number(field.length()) + ")";
+			qstr += "(" + QString::number((field.length()==0)?255:field.length()) + ")";
 			break;
 		case KexiDBField::SQLDecimal:
 		case KexiDBField::SQLFloat:
@@ -737,7 +740,7 @@ MySqlDB::createDefinition(const KexiDBField& field, int index,
 
 	if(field.constraints() & KexiDBField::CCAutoInc)
 	{
-		qstr += " AUTO_INCREMENT";
+		qstr += " AUTO_INCREMENT PRIMARY KEY";
 	}
 
 	return qstr;

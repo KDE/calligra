@@ -23,6 +23,10 @@
 KexiDBTable::KexiDBTable(const QString& name):m_tableName(name) {
 }
 
+KexiDBTable::KexiDBTable():m_tableName("") {
+}
+
+
 KexiDBTable::~KexiDBTable() {}
 
 void KexiDBTable::addField(KexiDBField field) {
@@ -40,6 +44,14 @@ QStringList KexiDBTable::primaryKeys() const{
 
 const QString& KexiDBTable::tableName() const {
 	return m_tableName;
+}
+
+void KexiDBTable::setTableName(const QString& name) {
+	m_tableName=name;
+	int fcnt=m_fields.count();
+	for (int i=0;i<fcnt;i++) {
+		m_fields[i].setTable(name);
+	}
 }
 
 KexiDBField KexiDBTable::field(unsigned int id) const {
