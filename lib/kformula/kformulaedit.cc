@@ -1185,13 +1185,18 @@ void KFormulaEdit::keyPressEvent(QKeyEvent *e)
   if(!(e->state() & (ControlButton | AltButton))  && e->ascii() >= 32 &&
      !strchr("{})]#", e->ascii())) {
     // the {}])# are chars that can't be typed
-
-    if(QChar(e->ascii()).isLetter() && nextGreek) insertChar(QChar(e->ascii() + SYMBOL_ABOVE));
-    else insertChar(QChar(e->ascii()));
+    if(QChar(e->ascii()).isLetter() && nextGreek) 
+      insertChar(QChar(e->ascii() + SYMBOL_ABOVE));
+    else 
+      insertChar(QChar(e->ascii()));
 
     MODIFIED
     redraw();
     UPDATE_SIZE
+    return;
+  }
+  else if(strchr("{})]#", e->ascii()))
+  {
     return;
   }
 
