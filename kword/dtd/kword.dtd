@@ -11,23 +11,26 @@ the original version were made.
 About the version
 -----------------
 
-Current dtd version is 2, look at the kword-v1.dtd file for the old 
-(obsolete) file format.
-KWord will read all file-formats but this is considered the most complete format,
-we highly encourage you to use this format.
+This is the DTD version 2, for KWord-1.0.
+It has changed a bit since the DTD version 1, for KWord-0.8 (the one included in KDE-2.0)
+KWord will read the previous versions of its own file format but this is considered
+the most complete format, we highly encourage you to use this format.
 
 
 KWord overview
 --------------
 
 The main structure of each KWord document is a header and a body. The header
-contains things like the paper size, the author and so on.
+contains things like the paper size, the margins and so on.
 
 The body is organised around the concept of frames. You might have noticed
 that you can do nearly everything with the frames in your KWord document (e.g.
 move them around, interlock them, let your text "flow" through them, etc.). To
 achieve this flexibility, the body actually has to store the data in a
 hierarchy including framesets, frames, paragraphs, and so on.
+
+Framesets hold the actual text. Frames represent the rectangles in which this
+text is "flowed".
 
 
 Some basic notes on XML
@@ -42,7 +45,7 @@ integer and fractional parts).
 
 - Unicode-letters (UTF-8 compressed) are used to store the text
 
-- Some special characters ('<', '>') are "escaped" ('&lt;', '&gt;')
+- Some special characters ('<', '>', '&') are "escaped" ('&lt;', '&gt;', '&amp;')
 
 - Please launch Kword and save an empty file - it is much easier to follow
 this documentation if you wade through an (almost empty) example document.
@@ -70,17 +73,17 @@ don't put a </?xml...> at the end of the file!).
             syntaxVersion:  Integer version of the syntax in the remainder of
                             this file:
 
-                                1...as for KDE 2.0
+                                1...as for KWord 0.8 and for KWord 1.0
+                            It's the same version since KWord can read both formats,
+                            so it doesn't need to know before hand.
 
-            url:            ?
 -->
 <!ELEMENT DOC
     (PAPER, ATTRIBUTES, FRAMESETS, STYLES, (EMBEDDED*))>
 <!ATTLIST DOC
     editor CDATA #IMPLIED
     mime CDATA "application/x-kword"
-    syntaxVersion CDATA #REQUIRED
-    url CDATA #IMPLIED>
+    syntaxVersion CDATA #REQUIRED>
 
 <!--    Describes the page format. Can have no or one PAPERBORDERS child that
         describes the margins. Normally this is the first tag in the "header".
@@ -208,7 +211,7 @@ don't put a </?xml...> at the end of the file!).
     (FRAMESET+)>
 
 
-<!--    One frameset that bundles a number of FRAME elements.
+<!--    A frameset that bundles a number of FRAME elements (at least one).
         In addition it can have a more specific element, depending on frameType.
 
         Attributes:
@@ -231,13 +234,13 @@ don't put a </?xml...> at the end of the file!).
             removable:      Whether the header-frame is removable or not:
                             Used in tables where header cells on new pages are 
                             auto created with this set to 1.
-                                0...no
+                                0...no (default)
                                 1...yes
 
             visible:        Whether the frame is visible or not:
 
                                 0...no
-                                1...yes
+                                1...yes (default)
 
             grpMgr:         If present, indicates that this frameset is
                             a cell in a table. The value is the name of the
@@ -265,8 +268,8 @@ don't put a </?xml...> at the end of the file!).
     name CDATA
     frameType CDATA #REQUIRED
     frameInfo CDATA #REQUIRED
-    removable CDATA #REQUIRED
-    visible CDATA #REQUIRED
+    removable CDATA #IMPLIED
+    visible CDATA #IMPLIED
     grpMgr CDATA #IMPLIED
     row CDATA #IMPLIED
     col CDATA #IMPLIED
@@ -284,20 +287,21 @@ don't put a </?xml...> at the end of the file!).
             bottom:             absolute coordinates in pt.
 
             runaround:          0...No run around
-                                1...frame repels text in overlapping frames
+                                1...Frame repels text in overlapping frames
                                 2...Text in overlapping frames will avoid the
                                     complete horizontal space of this frame.
 
             runaroundGap:       when runaround is 1 specify here the distance (in pt)
                                 between overlapping frames and runaround text
 
-            autocreatenewframe: 0...AutoExtendFrame
-                                1...AutoCreateNewFrame
+            autoCreateNewFrame: What to do if the text is bigger than the frame allows:
+                                0...AutoExtendFrame
+                                1...AutoCreateNewFrame (use this for the normal text body)
                                 2...Ignore extra text
 
-            newFrameBehaviour:  0...on new page creation; Reconnect frame
-                                    to current frameset.
-                                1...don't create a followup frame on the new
+            newFrameBehaviour:  0...On creating a new page, reconnect frame
+                                    to current frameset (use this for the normal text body).
+                                1...Don't create a followup frame on the new
                                     page.
                                 2...This frame will be shown on the new page
                                     as well (with the same content)
@@ -328,15 +332,14 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT PARAGRAPH
     (TEXT|FORMATS|LAYOUT)*>
 
-<!--    Just guess :) Currently the text is stored as UTF-8 compressed Unicode
+<!--    Just guess :) The text is stored as UTF-8 compressed Unicode
         glyphs. Note: the format-tags navigate in the text using an index
-        which starts at 0 and runs up till it reaches length-1. Also the
-        length of the text is used to express format-information.
+        which starts at 0 and runs up till it reaches length-1.
 -->
 <!ELEMENT TEXT
     (#PCDATA)>
 
-<!--     List of formats that apply to a given paragraph
+<!--    List of formats that apply to a given paragraph
 -->
 <!ELEMENT FORMATS
     (FORMAT*)>
@@ -346,14 +349,12 @@ don't put a </?xml...> at the end of the file!).
 
         Attributes:
 
-            removable:          Whether the header-frame is removable or not.
-
             id:                 type of format information:
 
                                     0...none (mustn't be in a file)
                                     1..."normal" text
                                     2...a picture - in that case, only IMAGE is specified
-                                    3...tabulator [DEPRECATED]
+                                    3...tabulator [Might become '\t' in the text instead. To be determined.]
                                     4...a variable - ...
                                     5...a footnote - ...
                                     6...an anchor for a floating frame - in that case, only ANCHOR is specified.
