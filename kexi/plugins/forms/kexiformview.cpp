@@ -382,7 +382,7 @@ void KexiFormView::initDataSource()
 			m_cursor = conn->executeQuery( *m_query );
 		}
 		m_scrollView->invalidateDataSources( invalidSources, m_query );
-		ok = cursor!=0;
+		ok = m_cursor!=0;
 	}
 //			delete m_data;
 	if (ok) {
