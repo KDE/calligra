@@ -13,7 +13,7 @@ int cursorsTest()
 		return 1;
 	}
 	
-	KexiDB::Cursor *cursor = conn->executeQuery( "select * from persons", KexiDB::Cursor::Buffered );
+	KexiDB::Cursor *cursor = conn->executeQuery( "select * from persons", cursor_options );//KexiDB::Cursor::Buffered );
 	kdDebug()<<"executeQuery() = "<<!!cursor<<endl;
 	if (!cursor)
 		return 1;

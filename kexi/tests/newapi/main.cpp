@@ -37,6 +37,7 @@ QCString prgname;
 QCString db_name;
 QCString drv_name;
 QCString test_name;
+int cursor_options = 0;
 
 KexiDB::ConnectionData conn_data;
 KexiDB::Connection *conn = 0;
@@ -57,8 +58,11 @@ void usage()
 	kdDebug() << prgname << " <driver_name> tableview <db_name>" << endl;
 	kdDebug() << "  - test for KexiDataTableView data-aware widget" << endl;
 	kdDebug() << " Notes:\n 'tables' test, automatically runs 'dbcreation' test.\n" 
-		<<" <new_db_name> is removed if already exists.\n"
-		<<" <db_name> must be a valid kexi database e.g. created with 'tables' test." 
+		" <new_db_name> is removed if already exists.\n"
+		" <db_name> must be a valid kexi database e.g. created with 'tables' test." 
+		<< endl;
+	kdDebug() << " Optional switches, you can append at the end:\n"
+		" -buffered-cursors -- turns cursors used in any tests to be buffered"
 		<< endl;
 }
 
@@ -94,20 +98,20 @@ int main(int argc, char** argv)
 		instance = new KInstance( prgname );
 	}
 
-	KexiDB::DriverManager *manager = new KexiDB::DriverManager;
-	QStringList names = manager->driverNames();
+	KexiDB::DriverManager manager;// = new KexiDB::DriverManager;
+	QStringList names = manager.driverNames();
 	kdDebug() << "DRIVERS: " << endl;
 	for (QStringList::iterator it = names.begin(); it != names.end() ; ++it)
 		kdDebug() << *it << endl;
-	if (manager->error() || names.isEmpty()) {
-		manager->debugError();
+	if (manager.error() || names.isEmpty()) {
+		manager.debugError();
 		RETURN(1);
 	}
 
 	//get driver
-	KexiDB::Driver *driver = manager->driver(drv_name);
-	if (!driver || manager->error()) {
-		manager->debugError();
+	KexiDB::Driver *driver = manager.driver(drv_name);
+	if (!driver || manager.error()) {
+		manager.debugError();
 		RETURN(1);
 	}
 	kdDebug() << "MIME type for '" << driver->name() << "': " << driver->fileDBDriverMime() << endl;
@@ -117,18 +121,25 @@ int main(int argc, char** argv)
 //	conn_data.password = "mypwd";
 
 //open connection
-/*	if (test_name == "cursors")
-		db_name = "mydb";
-	else if (test_name == "schema")
-		db_name = "db";
-	else {*/
-		if (argc<=3) {
-			kdDebug() << prgname << ": name for new db?" << endl;
+	
+	if (argc<=3) {
+		kdDebug() << prgname << ": database name?" << endl;
+		usage();
+		RETURN(1);
+	}
+	db_name = QCString(argv[3]);
+	//additional switches:
+	for (int i=4;i<argc;i++) {
+		if (QCString(argv[i]).contains("-buffered-cursors",false)) {
+			cursor_options |= KexiDB::Cursor::Buffered;
+		}
+		else {
+			kdDebug() << "Unknown switch: '" << QCString(argv[i]) << "'" << endl;
 			usage();
 			RETURN(1);
 		}
-		db_name = QCString(argv[3]);
-//	}
+	}
+	
 	conn_data.setFileName( db_name );
 
 	conn = driver->createConnection(conn_data);
@@ -163,12 +174,17 @@ int main(int argc, char** argv)
 	if (app && r==0)
 		app->exec();
 
-	r = conn ? (conn->disconnect() ? 0 : 1) : 0;
+	if (conn) {
+	    if (!conn->disconnect())
+		r = 1;
+	}
+	else
+	    r = 1;
 	
 	kdDebug() << "!!! KexiDB::Transaction::globalcount == " << KexiDB::Transaction::globalCount() << endl;
 	kdDebug() << "!!! KexiDB::TransactionData::globalcount == " << KexiDB::TransactionData::globalCount() << endl;
 
-	delete manager;
+//	delete manager;
 	delete instance;
 
 	RETURN(r);
