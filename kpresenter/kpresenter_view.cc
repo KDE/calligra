@@ -2090,15 +2090,40 @@ void KPresenterView::extraPenStyleNoPen()
 /*===============================================================*/
 void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
 {
-    KPrPage *doc = m_canvas->activePage();
-    QPen e_pen = QPen( (doc->getPen( pen )).color(), (doc->getPen( pen )).width(), style );
-    doc->setPenBrush( e_pen,
-                      doc->getBrush( brush ), doc->getLineBegin( lineBegin ),
-                      doc->getLineEnd( lineEnd ), doc->getFillType( fillType ),
-                      doc->getGColor1( gColor1 ),
-                      doc->getGColor2( gColor2 ), doc->getGType( gType ),
-                      doc->getGUnbalanced( gUnbalanced ),
-                      doc->getGXFactor( gXFactor ), doc->getGYFactor( gYFactor ) );
+    KPrPage *page = m_canvas->activePage();
+    QPen e_pen = QPen( (page->getPen( pen )).color(), (page->getPen( pen )).width(), style );
+
+    bool createMacro=false;
+    KMacroCommand *macro=new KMacroCommand(i18n( "Apply Styles" ) );
+
+    KCommand *cmd=m_canvas->activePage()->setPenBrush( e_pen,
+                      page->getBrush( brush ), page->getLineBegin( lineBegin ),
+                      page->getLineEnd( lineEnd ),page->getFillType( fillType ),
+                      page->getGColor1( gColor1 ),
+                      page->getGColor2( gColor2 ), page->getGType( gType ),
+                      page->getGUnbalanced( gUnbalanced ),
+                      page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ) );
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=stickyPage()->setPenBrush( e_pen,
+                      page->getBrush( brush ), page->getLineBegin( lineBegin ),
+                      page->getLineEnd( lineEnd ),page->getFillType( fillType ),
+                      page->getGColor1( gColor1 ),
+                      page->getGColor2( gColor2 ), page->getGType( gType ),
+                      page->getGUnbalanced( gUnbalanced ),
+                      page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ) );
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        kPresenterDoc()->addCommand(macro);
+    else
+        delete macro;
 }
 
 /*===============================================================*/
@@ -2167,13 +2192,38 @@ void KPresenterView::setExtraPenWidth( unsigned int width )
     KPrPage *page=m_canvas->activePage();
     QPen e_pen = QPen( (page->getPen( pen )).color(), width,
                        (page->getPen( pen )).style() );
-    page->setPenBrush( e_pen,
-                      page->getBrush( brush ), page->getLineBegin( lineBegin ),
-                      page->getLineEnd( lineEnd ), page->getFillType( fillType ),
-                      page->getGColor1( gColor1 ),
-                      page->getGColor2( gColor2 ), page->getGType( gType ),
-                      page->getGUnbalanced( gUnbalanced ),
-                      page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ) );
+
+    bool createMacro=false;
+    KMacroCommand *macro=new KMacroCommand(i18n( "Apply Styles" ) );
+
+    KCommand *cmd=m_canvas->activePage()->setPenBrush(e_pen,
+                                                      page->getBrush( brush ), page->getLineBegin( lineBegin ),
+                                                      page->getLineEnd( lineEnd ), page->getFillType( fillType ),
+                                                      page->getGColor1( gColor1 ),
+                                                      page->getGColor2( gColor2 ), page->getGType( gType ),
+                                                      page->getGUnbalanced( gUnbalanced ),
+                                                      page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ) );
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=stickyPage()->setPenBrush( e_pen,
+                                   page->getBrush( brush ), page->getLineBegin( lineBegin ),
+                                   page->getLineEnd( lineEnd ), page->getFillType( fillType ),
+                                   page->getGColor1( gColor1 ),
+                                   page->getGColor2( gColor2 ), page->getGType( gType ),
+                                   page->getGUnbalanced( gUnbalanced ),
+                                   page->getGXFactor( gXFactor ), page->getGYFactor( gYFactor ) );
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        kPresenterDoc()->addCommand(macro);
+    else
+        delete macro;
 }
 
 /*===============================================================*/
