@@ -407,7 +407,7 @@ void KWPage::vmmEditFrameResize( int mx, int my , bool top, bool bottom, bool le
     if(top && newY1 != my) {
         bool move=true;
         if(isAFooter(frame->getFrameSet()->getFrameInfo())) move=false;
-        if(newY2-my < minFrameHeight+5) my=newY2-minFrameHeight-5;
+        if(newY2-my < (int)(minFrameHeight+5)) my=newY2-minFrameHeight-5;
         if(my < (int)( frame->getPageNum() * ptPaperHeight()))
             my = frame->getPageNum() * ptPaperHeight();
 
@@ -415,7 +415,7 @@ void KWPage::vmmEditFrameResize( int mx, int my , bool top, bool bottom, bool le
     } else if(bottom && newY2 != my) {
         bool move=true;
         if(isAHeader(frame->getFrameSet()->getFrameInfo())) move=false;
-        if(my-newY1 < minFrameHeight+5) my=newY1+minFrameHeight+5;
+        if(my-newY1 < (int)(minFrameHeight+5)) my=newY1+minFrameHeight+5;
         if(my >= (int)((frame->getPageNum()+1) * ptPaperHeight()))
             my = (frame->getPageNum()+1) * ptPaperHeight();
 
@@ -426,7 +426,7 @@ void KWPage::vmmEditFrameResize( int mx, int my , bool top, bool bottom, bool le
         bool move=true;
         if(isAHeader(frame->getFrameSet()->getFrameInfo())) move=false;
         if(isAFooter(frame->getFrameSet()->getFrameInfo())) move=false;
-        if(newX2-mx < minFrameWidth) mx=newX2-minFrameHeight-5;
+        if(newX2-mx < (int)minFrameWidth) mx=newX2-minFrameHeight-5;
         if(mx <= 0) mx=0;
 
         if(move) newX1=mx;
@@ -434,7 +434,7 @@ void KWPage::vmmEditFrameResize( int mx, int my , bool top, bool bottom, bool le
         bool move=true;
         if(isAHeader(frame->getFrameSet()->getFrameInfo())) move=false;
         if(isAFooter(frame->getFrameSet()->getFrameInfo())) move=false;
-        if(mx-newX1 < minFrameWidth) mx=newX1+minFrameHeight+5;
+        if(mx-newX1 < (int)minFrameWidth) mx=newX1+minFrameHeight+5;
         if(mx > static_cast<int> (ptPaperWidth()))
             mx = ptPaperWidth();
 
