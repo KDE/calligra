@@ -721,48 +721,24 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
 
     subFile=chain->storageFile("root",KoStore::Read);
 
-    bool fileWasRead=false;
-
     if (!subFile)
     {
         kdDebug(30508) << "Could not get a device for root document!" << endl;
+        doAbortFile ();
+        return KoFilter::StupidError;
     }
     else if ( subFile->open ( IO_ReadOnly ) )
     {
         byteArrayIn = subFile->readAll();
         subFile->close ();
-        fileWasRead=true;
-
-        kdDebug (30508) << "Processing KWord File (KoStore)..." << endl;
+        kdDebug (30508) << "Processing root document..." << endl;
         ProcessStoreFile (byteArrayIn, ProcessDocTag, this);
     }
     else
     {
-        kdWarning(30508) << "Could not open root sub-file!" << endl;
-    }
-
-    if (!fileWasRead)
-    {
-        // We were not able to open maindoc.xml
-        // But perhaps we have an untarred, uncompressed file
-        //  (it might happen with koconverter)
-        // FIXME: this does not work, because the filter system has already a destination!
-        QFile file (chain->inputFile());
-        if (file.open (IO_ReadOnly))
-        {
-            byteArrayIn = file.readAll ();
-            file.close ();
-
-            kdDebug (30508) << "Processing KWord File (QFile)..." << endl;
-            ProcessStoreFile (byteArrayIn, ProcessDocTag, this);
-        }
-        else
-        {
-            // Despite the fall back, we are unable to open the file
-            kdError (30508) << "Unable to open input file!" << endl;
-            doAbortFile ();
-            return KoFilter::StupidError;
-        }
+        kdError(30508) << "Could not open root sub-file!" << endl;
+        doAbortFile ();
+        return KoFilter::StupidError;
     }
 
     doCloseDocument ();
