@@ -62,7 +62,7 @@ Field::Field(TableSchema *tableSchema)
 
 Field::Field(const QString& name, Type ctype,
  int cconst, int options, int length, int precision,
- QVariant defaultValue)
+ QVariant defaultValue, const QString& caption, const QString& helpText)
 	: m_parent(0)
 	,m_name(name)
 	,m_type(ctype)
@@ -71,6 +71,8 @@ Field::Field(const QString& name, Type ctype,
 	,m_options(options)
 	,m_defaultValue(defaultValue)
 	,m_order(-1)
+	,m_caption(caption)
+	,m_help(helpText)
 	,m_expr(0)
 {
 	setConstraints(cconst);

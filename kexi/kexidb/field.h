@@ -132,15 +132,15 @@ class KEXI_DB_EXPORT Field
 			int cconst=NoConstraints,
 			int options = NoOptions,
 			int length=0, int precision=0,
-			QVariant defaultValue=QVariant());
-
+			QVariant defaultValue=QVariant(),
+			const QString& caption = QString::null, const QString& helpText = QString::null);
 
 		virtual ~Field();
 
 		static QVariant::Type variantType(Type type);
 		static QString typeName(Type type);
 
-		virtual QString		name() const;
+		QString		name() const;
 		
 		/*! \return table schema of table that owns this field. */
 		virtual TableSchema* table() const;
@@ -171,22 +171,22 @@ class KEXI_DB_EXPORT Field
 		virtual QVariant::Type	variantType() const;
 		virtual Type type() const;
 		QString typeName() const;
-		virtual QVariant defaultValue() const;
+		QVariant defaultValue() const;
 		//! length of text is the field type is text
-		virtual int length() const;
+		int length() const;
 		//! for numeric and other fields that have both length and precision
-		virtual int precision() const; 
+		int precision() const; 
 		//!	\return the constraints defined for this field
-		virtual int constraints() const;
+		int constraints() const;
 		//! \return order of this field in containing table (counting starts from 0)
 		//! (-1 if unspecified)
-		virtual int order() const { return m_order; }
+		int order() const { return m_order; }
 		//! \return caption of this field
-		virtual QString caption() const { return m_caption; }
+		QString caption() const { return m_caption; }
 		//! \return halp text for this field
-		virtual QString helpText() const { return m_help; }
+		QString helpText() const { return m_help; }
 		
-		virtual bool isUnsigned() const; //! if the type has the unsigned attribute
+		bool isUnsigned() const; //! if the type has the unsigned attribute
 //		virtual bool isBinary() const;
 
 		void setType(Type t);
@@ -208,6 +208,8 @@ class KEXI_DB_EXPORT Field
 		void setUniqueKey(bool u);
 		void setForeignKey(bool f);
 		void setNotNull(bool n);
+		void setCaption(const QString& caption) { m_caption=caption; }
+		void setHelpText(const QString& helpText) { m_help=helpText; }
 
 		/*! There can be added asterisks (QueryAsterisk objects) 
 		 to query schemas' field list. QueryAsterisk subclasses Field class,
