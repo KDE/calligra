@@ -398,11 +398,11 @@ public:
 		// start document
 		// TODO: error checking
 		writeTextInternal ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-		writeTextInternal ("<!DOCTYPE DOC PUBLIC \"-//KDE//DTD kword 1.2//EN\" "
-									"\"http://www.koffice.org/DTD/kword-1.2.dtd\">");
+		writeTextInternal ("<!DOCTYPE DOC PUBLIC \"-//KDE//DTD kword 1.3//EN\" "
+									"\"http://www.koffice.org/DTD/kword-1.3.dtd\">");
 		writeTextInternal ("<DOC xmlns=\"http://www.koffice.org/DTD/kword\" "
 									"mime=\"application/x-kword\" "
-									"syntaxVersion=\"2\" editor=\"KWord\">");
+									"syntaxVersion=\"3\" editor=\"KWord\">");
 
 		writeTextInternal ("<PAPER format=\"1\" "
 									"width=\"%i\" height=\"%i\" "
