@@ -1823,7 +1823,6 @@ void CellLayoutPageFont::strike_chosen_slot()
 void CellLayoutPageFont::family_chosen_slot(const QString & family)
 {
   selFont.setFamily(family);
-  //display_example();
   emit fontSelected(selFont);
 }
 
@@ -1832,7 +1831,6 @@ void CellLayoutPageFont::size_chosen_slot(const QString & size)
   QString size_string = size;
 
   selFont.setPointSize(size_string.toInt());
-  //display_example();
   emit fontSelected(selFont);
 }
 
@@ -1844,7 +1842,6 @@ void CellLayoutPageFont::weight_chosen_slot(const QString & weight)
     selFont.setBold(false);
   if ( weight_string == QString(i18n("bold")))
        selFont.setBold(true);
-  // display_example();
   emit fontSelected(selFont);
 }
 
@@ -1856,7 +1853,6 @@ void CellLayoutPageFont::style_chosen_slot(const QString & style)
     selFont.setItalic(false);
   if ( style_string == QString(i18n("italic")))
     selFont.setItalic(true);
-  //  display_example();
   emit fontSelected(selFont);
 }
 
@@ -2055,32 +2051,38 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     mergeCell->setChecked(dlg->isMerged);
     mergeCell->setEnabled(!dlg->oneCell);
     grid2->addWidget(mergeCell,0,0);
-    //grid3->addMultiCellWidget(grp,2,2,0,1);
     grid3->addWidget(grp,2,0);
 
     grp = new QButtonGroup( i18n("Indent"),this);
     grid2 = new QGridLayout(grp,1,1,15,7);
     indent=new KIntNumInput(dlg->indent, grp, 10);
-    indent->setLabel(i18n("Indent :"));
     indent->setRange(0, 400, 1);
     grid2->addWidget(indent,0,0);
     grid3->addWidget(grp,2,1);
 
     grp = new QButtonGroup( i18n("Size of cell"),this);
-    grid2 = new QGridLayout(grp,2,2,15,7);
+    grid2 = new QGridLayout(grp,2,4,15,7);
+
+    QLabel *tmpLabel=new QLabel(grp,"label");
+    tmpLabel->setText(i18n("Width :"));
+    grid2->addWidget(tmpLabel,0,0);
+
     width=new KIntNumInput(dlg->widthSize, grp, 10);
-    width->setLabel(i18n("Width :"));
     width->setRange(20, 400, 1);
-    grid2->addWidget(width,0,0);
+    grid2->addWidget(width,0,1);
     defaultWidth=new QCheckBox(i18n("Default width (60)"),grp);
-    grid2->addWidget(defaultWidth,1,0);
+    grid2->addMultiCellWidget(defaultWidth,1,1,0,1);
+
+    tmpLabel=new QLabel(grp,"label1");
+    tmpLabel->setText(i18n("Height  :"));
+    grid2->addWidget(tmpLabel,0,2);
 
     height=new KIntNumInput(dlg->heigthSize, grp, 10);
-    height->setLabel(i18n("Height :"));
     height->setRange(20, 400, 1);
-    grid2->addWidget(height,0,1);
+    grid2->addWidget(height,0,3);
+
     defaultHeight=new QCheckBox(i18n("Default height (20)"),grp);
-    grid2->addWidget(defaultHeight,1,1);
+    grid2->addMultiCellWidget(defaultHeight,1,1,2,3);
 
     grid3->addMultiCellWidget(grp,3,3,0,1);
 
