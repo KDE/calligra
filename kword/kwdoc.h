@@ -330,6 +330,7 @@ public:
 //    void setNoteType( KWFootNoteManager::NoteType nt ) { footNoteManager.setNoteType( nt ); }
 //    KWFootNoteManager::NoteType getNoteType() const { return footNoteManager.getNoteType(); }
 
+    KCommandHistory * commandHistory() { return m_commandHistory; }
     KoAutoFormat * getAutoFormat() { return m_autoFormat; }
 
     // This is used upon loading, to delay certain things until completeLoading.

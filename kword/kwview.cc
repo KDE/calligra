@@ -1511,15 +1511,18 @@ void KWView::showParagBorders( const KoBorder& left, const KoBorder& right,
 
 void KWView::updateReadWrite( bool readwrite )
 {
-    // Disable everything if readonly.
+    // First disable or enable everything
+    QValueList<KAction*> actions = actionCollection()->actions();
+    // Also grab actions from the document
+    actions += m_doc->actionCollection()->actions();
+    QValueList<KAction*>::ConstIterator aIt = actions.begin();
+    QValueList<KAction*>::ConstIterator aEnd = actions.end();
+    for (; aIt != aEnd; ++aIt )
+        (*aIt)->setEnabled( readwrite );
+
     if ( !readwrite )
     {
-        QValueList<KAction*> actions = actionCollection()->actions();
-        QValueList<KAction*>::ConstIterator aIt = actions.begin();
-        QValueList<KAction*>::ConstIterator aEnd = actions.end();
-        for (; aIt != aEnd; ++aIt )
-            (*aIt)->setEnabled( readwrite );
-        // A few harmless actions
+        // Readonly -> re-enable a few harmless actions
         actionFileStatistics->setEnabled( true );
         actionExtraCreateTemplate->setEnabled( true );
         actionViewPageMode->setEnabled( true );
@@ -1538,72 +1541,23 @@ void KWView::updateReadWrite( bool readwrite )
         actionFormatBullet->setEnabled(true);
         actionFormatNumber->setEnabled( true);
 
-        KAction* newView = actionCollection()->action("edit_sldatabase");
-        if (newView)
-            newView->setEnabled( true );
+        KAction* act = actionCollection()->action("edit_sldatabase");
+        if (act)
+            act->setEnabled( true );
 
-        newView = actionCollection()->action("view_newview");
-        if (newView)
-            newView->setEnabled( true );
-        // Well, the view menu doesn't appear in konq, so this is currently useless...
+        // In fact the new view could be readwrite, so this is too dangerous
+        // (e.g. during spellchecking or during search-n-replace)
+        //act = actionCollection()->action("view_newview");
+        //if (act)
+        //    act->setEnabled( true );
     }
     else
     {
-        //store last status of undo/redo action
-        bool undoState = false;
-        KAction* newView = actionCollection()->action("edit_undo");
-        if (newView)
-            undoState=newView->isEnabled();
-        bool redoState = false;
-        newView = actionCollection()->action("edit_redo");
-        if (newView)
-            redoState=newView->isEnabled();
-
-        QValueList<KAction*> actions = actionCollection()->actions();
-        QValueList<KAction*>::ConstIterator aIt = actions.begin();
-        QValueList<KAction*>::ConstIterator aEnd = actions.end();
-        for (; aIt != aEnd; ++aIt )
-            (*aIt)->setEnabled( readwrite );
-
-        newView = actionCollection()->action("edit_undo");
-        if (newView)
-            newView->setEnabled( undoState );
-        newView = actionCollection()->action("edit_redo");
-        if (newView)
-            newView->setEnabled( redoState );
-
         slotFrameSetEditChanged();
         refreshCustomMenu();
 
-#if 0
-
-// Don't enable everything if readwrite. E.g. "undo" must be initially disabled.
-        slotFrameSetEditChanged();
-        // Insert
-        actionInsertTable->setEnabled( true );
-        actionToolsCreatePart->setEnabled( true );
-        actionToolsCreatePix->setEnabled( true );
-        actionToolsCreateText->setEnabled( true );
-        // Format
-        actionFormatStylist->setEnabled( true );
-        actionFormatPage->setEnabled( true );
-        // Tools
-        actionExtraSpellCheck->setEnabled( true );
-        actionAutoFormat->setEnabled( true );
-        refreshCustomMenu();
-        actionEditPersonnalExpr->setEnabled( true );
-        // Settings
-        actionConfigure->setEnabled( true );
-        actionBorderLeft->setEnabled( true );
-        actionBorderRight->setEnabled( true );
-        actionBorderTop->setEnabled( true );
-        actionBorderBottom->setEnabled( true );
-        actionBorderOutline->setEnabled( true );
-        actionBorderColor->setEnabled( true );
-        actionBorderWidth->setEnabled( true );
-        actionBorderStyle->setEnabled( true );
-        actionBackgroundColor->setEnabled( true );
-#endif
+        // Correctly enable or disable undo/redo actions again
+        m_doc->commandHistory()->updateActions();
     }
 }
 
