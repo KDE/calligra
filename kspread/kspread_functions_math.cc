@@ -154,7 +154,7 @@ void KSpreadRegisterMathFunctions()
   repo->registerFunction( "MULTIPLY",      kspreadfunc_mult );
   repo->registerFunction( "MULTINOMIAL",   kspreadfunc_multinomial );
   repo->registerFunction( "ODD",           kspreadfunc_odd );
-  repo->registerFunction( "POW",           kspreadfunc_pow );
+  repo->registerFunction( "POW",           kspreadfunc_pow ); // remove in 1.5
   repo->registerFunction( "POWER",         kspreadfunc_pow );
   repo->registerFunction( "QUOTIENT",      kspreadfunc_quotient );
   repo->registerFunction( "PRODUCT",       kspreadfunc_product );
