@@ -1246,7 +1246,9 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             static_cast<KWTableFrameSet *>( getFrameSet(i))->validate();
         } else if(! getFrameSet(i)->getFrame(0)) {
             kdWarning () << "frameset " << i << " has no frames" << endl;
-            delFrameSet(getFrameSet(i));
+            KWFrameSet * fs = getFrameSet(i);
+            removeFrameSet(fs);
+            delete fs;
         } else if (getFrameSet(i)->getFrameType() == FT_TEXT) {
             for (int f=getFrameSet(i)->getNumFrames()-1; f>=0; f--) {
                 if(getFrameSet(i)->getFrame(f)->height() < static_cast <int>(minFrameHeight)) {
@@ -2413,13 +2415,10 @@ void KWDocument::addFrameSet( KWFrameSet *f, bool finalize /*= true*/ )
     setModified( true );
 }
 
-void KWDocument::delFrameSet( KWFrameSet *f, bool deleteit)
+void KWDocument::removeFrameSet( KWFrameSet *f )
 {
     emit sig_terminateEditing( f );
-    if (deleteit)
-        frames.remove( f );
-    else
-        frames.take( frames.find(f) );
+    frames.take( frames.find(f) );
     setModified( true );
 }
 

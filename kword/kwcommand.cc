@@ -787,7 +787,7 @@ void KWUngroupTableCommand::execute()
         doc->addFrameSet(m_pTable->getCell( i ));
     }
     m_pTable->ungroup();
-    doc->delFrameSet(m_pTable,false);
+    doc->removeFrameSet(m_pTable);
 
     //when you ungroup a table
     // you must remove table item in docstruct
@@ -808,7 +808,7 @@ void KWUngroupTableCommand::unexecute()
     for ( tmp=m_ListFrame.first(); tmp != 0; tmp=m_ListFrame.next() )
     {
         tmp->setGroupManager(m_pTable);
-        doc->delFrameSet(tmp,false);
+        doc->removeFrameSet(tmp);
         KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(tmp);
         ASSERT(cell);
         m_pTable->addCell( cell );
@@ -830,10 +830,7 @@ KWDeleteTableCommand::KWDeleteTableCommand( const QString &name, KWDocument *_do
 
 void KWDeleteTableCommand::execute()
 {
-    m_pDoc->delFrameSet(m_pTable,false); // !!!!!!!!!!!
-    // I thought we said we'd never delete a frameset. By doing this, we certainly
-    // screw up redo-ing whatever was done inside that table.... (DF)
-
+    m_pDoc->removeFrameSet(m_pTable);
     m_pDoc->refreshDocStructure(FT_TABLE);
     m_pDoc->updateAllFrames();
     m_pDoc->layout();

@@ -173,7 +173,8 @@ public:
     // Prefer this over getFrameSet(i), if iterating over all of them
     QListIterator<KWFrameSet> framesetsIterator() const { return QListIterator<KWFrameSet>(frames); }
     void addFrameSet( KWFrameSet *f, bool finalize = true );
-    void delFrameSet( KWFrameSet *f, bool deleteit = true );
+    // Remove frameset from list (don't delete)
+    void removeFrameSet( KWFrameSet *f );
 
     // Frame/table deletion - with undo/redo support
     // Moved to KWDocument so that dialogs can call them if necessary

@@ -699,10 +699,6 @@ void KWTextFrameSet::eraseAfter( QTextParag * parag, QPainter * p, const QColorG
 KWTextFrameSet::~KWTextFrameSet()
 {
     //kdDebug(32001) << "KWTextFrameSet::~KWTextFrameSet" << endl;
-    // don't let us delete ourselves
-
-    if ( m_doc )
-        m_doc->delFrameSet(this, false);
     m_doc = 0L;
 }
 

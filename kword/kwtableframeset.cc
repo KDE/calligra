@@ -78,8 +78,6 @@ KWTableFrameSet::~KWTableFrameSet()
 {
     delete m_anchor;
     m_anchor = 0L;
-    if ( m_doc )
-        m_doc->delFrameSet( this, false );
     m_doc = 0L;
 }
 
