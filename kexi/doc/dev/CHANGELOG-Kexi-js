@@ -356,6 +356,13 @@ TODO: Kate Part: call qApp->processEvents() on highlighting schema loading,
 
 ===================== Kexi 0.1 Beta 4 =====================
 
+2004-07-14
+- polish translation updated (also for KFormDesigner)
+Core
+- "current mode" member is now reverted if afterSwitchFrom() failed
+Query Designer
+- storing and mode switching fixed
+
 2004-07-12..13
 KexiDB
 - Connection: selectStatement(): "SELECT FROM ..." queries (ie. without columns) 

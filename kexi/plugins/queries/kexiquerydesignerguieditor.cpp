@@ -278,62 +278,6 @@ KexiQueryDesignerGuiEditor::addRow(const QString &tbl, const QString &field)
 	setDirty(true);
 }
 
-/*KexiDB::QuerySchema *
-KexiQueryDesignerGuiEditor::schema()
-{
-	if (!m_doc)
-		return 0;
-	if(m_doc->schema())
-		m_doc->schema()->clear();
-	else
-		m_doc->setSchema(new KexiDB::QuerySchema());
-
-	QDict<KexiDB::TableSchema> tables;
-	for(KexiTableItem *it = m_data->first(); it; it = m_data->next())
-	{
-		QString tableName = it->at(0).toString();
-
-		if(tableName.isEmpty() || it->at(1).toString().isEmpty())
-			continue;
-
-		KexiDB::TableSchema *t = tables[it->at(0).toString()];
-		if(!t)
-		{
-			t = m_conn->tableSchema(tableName);
-			tables.insert(tableName, t);
-			m_doc->schema()->addTable(t);
-		}
-
-		KexiDB::Field *f = new KexiDB::Field();
-		f->setName(it->at(1).toString());
-		f->setTable(t);
-
-		m_doc->schema()->addField(f);
-	}
-
-	//this is temporary and will later be replaced by a intelligent master-table-finder in
-	//KexiDB::Connection::selectStatement()
-	m_doc->schema()->setParentTable(m_doc->schema()->tables()->first());
-	m_doc->schema()->setStatement("");
-
-	m_doc->setSchema(m_doc->schema());
-	return m_doc->schema();
-}*/
-
-/*void
-KexiQueryDesignerGuiEditor::restore()
-{
-	if(!m_doc || !m_doc->schema())
-		return;
-
-	m_dataTable->tableView()->clearData();
-	KexiDB::Field::Vector flist = m_doc->schema()->fieldsExpanded();
-	for(unsigned int i=0; i < flist.count(); i++)
-	{
-//		m_dataTable->tableView()->addRow(flist.at(i)->table()->name(), flist.at(i)->name());
-	}
-}*/
-
 KexiQueryPart::TempData *
 KexiQueryDesignerGuiEditor::tempData() const
 {	
@@ -544,28 +488,6 @@ bool KexiQueryDesignerGuiEditor::storeData()
 	}
 	return ok;
 }
-
-/*KexiDB::SchemaData*
-KexiQueryDesignerGuiEditor::loadData(const KexiDB::SchemaData& sdata)
-{
-	KexiQueryPart::TempData * temp = tempData();
-	QString sqlText;
-	if (!loadDataBlock( sqlText, "sql" )) {
-		return 0;
-	}
-	KexiDB::Parser *parser = mainWin()->project()->sqlParser();
-	parser->parse( sqlText );
-	KexiDB::QuerySchema *query = temp->query;
-	query = parser->query();
-	//error?
-	if (!query) {
-		//todo
-		return 0;
-	}
-	(KexiDB::SchemaData&)*query = sdata; //copy main attributes
-
-	return query;
-}*/
 
 void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 {

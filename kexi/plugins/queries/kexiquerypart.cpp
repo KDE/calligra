@@ -40,7 +40,6 @@ KexiQueryPart::KexiQueryPart(QObject *parent, const char *name, const QStringLis
 {
 	m_names["instance"] = i18n("Query");
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode | Kexi::TextViewMode;
-//	m_supportedViewModes = Kexi::TextViewMode;
 }
 
 KexiQueryPart::~KexiQueryPart()
@@ -68,12 +67,6 @@ KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Ite
 	return 0;
 }
 
-/*QString
-KexiQueryPart::instanceName() const
-{
-	return i18n("Query");
-}*/
-
 bool
 KexiQueryPart::remove(KexiMainWindow *win, KexiPart::Item &item)
 {
@@ -83,39 +76,6 @@ KexiQueryPart::remove(KexiMainWindow *win, KexiPart::Item &item)
 	KexiDB::QuerySchema *sch = conn->querySchema(item.identifier());
 	return conn->dropQuery( sch );
 }
-
-#if 0
-KexiQueryDocument *
-KexiQueryPart::data(KexiDB::Connection *conn, KexiPart::Item &i)
-{
-	KexiQueryDocument *doc = m_data[i.identifier()];
-	if(doc)
-		return doc;
-
-//	KexiDB::Cursor *cursor = conn->executeQuery(QString("SELECT q_sql FROM kexi__querydata WHERE q_id = %1").arg(i.identifier()));
-	KexiDB::RowData data;
-	if (!conn->querySingleRecord(QString("SELECT q_sql FROM kexi__querydata WHERE q_id=%1").arg(i.identifier()), data))
-	{
-		doc = new KexiQueryDocument(i.identifier(), conn, 0);
-		m_data.insert(i.identifier(), doc);
-		return doc;
-	}
-
-//	if (!cursor->moveFirst())
-//		return 0;
-//js NOT THIS WAY	if(cursor->eof())
-//		return 0;
-
-	KexiDB::Parser *parser = new KexiDB::Parser(conn);
-	parser->parse(data.at(0).toString());
-
-	doc = new KexiQueryDocument(i.identifier(), conn, parser->query());
-	m_data.insert(i.identifier(), doc);
-
-	delete parser;
-	return doc;
-}
-#endif
 
 KexiPart::DataSource *
 KexiQueryPart::dataSource()

@@ -261,19 +261,20 @@ bool
 KexiQueryDesignerSQLView::afterSwitchFrom(int mode, bool &cancelled)
 {
 	kdDebug() << "KexiQueryDesignerSQLView::afterSwitchFrom()" << endl;
-	if (mode==Kexi::DesignViewMode || mode==Kexi::DataViewMode) {
-		KexiQueryPart::TempData * temp = tempData();
-		if (!temp->query) {
-			//TODO msg
-			return false;
-		}
-		d->origStatement = mainWin()->project()->dbConnection()->selectStatement( *temp->query ).stripWhiteSpace();
-		d->editor->setText( d->origStatement );
-	}
+//	if (mode==Kexi::DesignViewMode || mode==Kexi::DataViewMode) {
+	KexiQueryPart::TempData * temp = tempData();
+	KexiDB::QuerySchema *query;
+	query = temp->query;
+	if (!temp->query) //try to just get saved schema, instead of temporary one
+		query = static_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());
 
-/*	if (d->doc && d->doc->schema()) {
-		d->editor->setText(d->doc->schema()->connection()->selectStatement(*d->doc->schema()));
-	}*/
+	if (!query) {
+		//TODO msg
+		return false;
+	}
+	d->origStatement = mainWin()->project()->dbConnection()->selectStatement( *query ).stripWhiteSpace();
+	d->editor->setText( d->origStatement );
+
 	return true;
 }
 
@@ -376,6 +377,8 @@ void KexiQueryDesignerSQLView::updateActions(bool activated)
 	if (activated) {
 		slotUpdateMode();
 	}
+	setAvailable("querypart_check_query", true);
+	setAvailable("querypart_view_toggle_history", true);
 	KexiViewBase::updateActions(activated);
 }
 
