@@ -33,6 +33,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <limits.h>
+#include <math.h>
 #include <signal.h>
 
 #include "kcalc.h"
