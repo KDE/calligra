@@ -31,6 +31,7 @@
 #include <kstdaction.h>
 #include <kapplication.h>
 #include <kiconloader.h>
+#include <klibloader.h>
 
 #include "form.h"
 #include "formIO.h"
@@ -45,14 +46,6 @@
 #define ENABLE_ACTION(name, enable) \
 	if(actionCollection()->action( name )) \
 		actionCollection()->action( name )->setEnabled( enable )
-
-extern "C"
-{
-	void* init_libkfd_part()
-	{
-		return new KFDFactory;
-	}
-};
 
 KInstance *KFDFactory::m_instance = 0L;
 
@@ -349,4 +342,7 @@ KFormDesignerPart::~KFormDesignerPart()
 	closeURL();
 }
 
+K_EXPORT_COMPONENT_FACTORY(libkfd_part, KFDFactory);
+
 #include "kfd_part.moc"
+
