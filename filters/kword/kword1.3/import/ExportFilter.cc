@@ -1211,6 +1211,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     const QString automaticTableStyle ( makeAutomaticStyleName( "Table", m_tableNumber ) );
     const QString tableName( QString( "Table" ) + QString::number( m_tableNumber ) ); // m_tableNumber was already increased
     const QString translatedName( i18n( "Object name", "Table %1").arg( m_tableNumber ) );
+    const QString translatedFrameName( i18n( "Object name", "Table Frame %1").arg( m_tableNumber ) );
 
     kdDebug(30520) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
 
@@ -1246,14 +1247,6 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 
     kdDebug(30520) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
 
-    *m_streamOut << "</text:p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
-    
-    *m_streamOut << "<table:table table:name=\""
-        << escapeOOText( translatedName )
-        << "\" table:style-name=\""
-        << escapeOOText( automaticTableStyle )
-        << "\" >\n";
-
     double tableWidth = 0.0; // total width of table
     uint i; // We need the loop variable 2 times
     for ( i=0; i < numberColumns; ++i )
@@ -1261,6 +1254,20 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         tableWidth += widthArray.at( i );
     }
     kdDebug(30520) << "Table width: " << tableWidth << endl;
+
+    // An inlined table, is an "as-char" text-box (Note: there is no explicit anchor!)
+    *m_streamOut << "<draw:text-box"; // ### TODO: style name
+    *m_streamOut << " draw:name=\"" << translatedFrameName << "\" text:anchor-type=\"as-char\"";
+    *m_streamOut << " svg:width=\"" << tableWidth << "pt\""; // ### TODO: any supplement to the width?
+    // ### TODO: a height!
+    *m_streamOut << ">\n";
+    
+    *m_streamOut << "<table:table table:name=\""
+        << escapeOOText( translatedName )
+        << "\" table:style-name=\""
+        << escapeOOText( automaticTableStyle )
+        << "\" >\n";
+
 
     // Now we have enough information to generate the style for the table
     m_contentAutomaticStyles += "  <style:style";
@@ -1302,7 +1309,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 
     *m_streamOut << "</table:table>\n";
     
-    *m_streamOut << "<text:p text:style-name=\"Standard\">\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
+    *m_streamOut << "</draw:text-box>"; // End of inline
     
 #endif
     return true;
