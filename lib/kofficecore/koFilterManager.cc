@@ -354,7 +354,7 @@ namespace  // in order not to mess with the global namespace ;)
                 }
             }
             else
-                kdDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " not available." << endl;
+                kdDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " doesn't apply." << endl;
         }
     }
 
@@ -442,14 +442,14 @@ bool KoFilterManager::filterAvailable( KoFilterEntry::Ptr entry )
     if ( entry->available != "check" )
         return true;
 
-    kdDebug( 30500 ) << "Checking whether " << entry->service()->name() << " is available." << endl;
+    //kdDebug( 30500 ) << "Checking whether " << entry->service()->name() << " applies." << endl;
     // generate some "unique" key
     QString key( entry->service()->name() );
     key += " - ";
     key += entry->service()->library();
 
     if ( !m_filterAvailable.contains( key ) ) {
-        kdDebug( 30500 ) << "Not cached, checking..." << endl;
+        //kdDebug( 30500 ) << "Not cached, checking..." << endl;
 
         KLibrary* library = KLibLoader::self()->library( QFile::encodeName( entry->service()->library() ) );
         if ( !library ) {

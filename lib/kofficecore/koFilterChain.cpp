@@ -850,7 +850,7 @@ namespace KOffice {
                 }
             }
             else
-                kdDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " not available." << endl;
+                kdDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " doesn't apply." << endl;
         }
     }
 
