@@ -57,7 +57,6 @@ class LayerPanel;
 class PaintPanel;
 class OutlinePanel;
 class KoColor;
-class KoColorChooser;
 class GStyle;
 class KontourView : public KoView
 {

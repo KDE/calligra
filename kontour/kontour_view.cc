@@ -43,7 +43,6 @@
 #include <kconfig.h>
 #include <kparts/event.h>
 #include <kstatusbar.h>
-#include <koColorChooser.h>
 #include <ktoolbarbutton.h>
 
 #include "kontour_global.h"
