@@ -37,6 +37,7 @@ KexiProperty::KexiProperty(const QString &name, QVariant value, const QStringLis
 {
 	m_name = name;
 	m_value = value;
+	m_changed = false;
 	m_list = new QStringList(list);
 	m_desc = name;
 	m_autosync = -1;
@@ -47,6 +48,7 @@ KexiProperty::KexiProperty(const QString &name, QVariant value, const QString &d
 {
 	m_name = name;
 	m_value = value;
+	m_changed = false;
 	m_desc = desc;
 	m_list = 0;
 	m_autosync = -1;
@@ -64,12 +66,27 @@ KexiProperty::KexiProperty(const KexiProperty &property)
 {
 	m_name = property.m_name;
 	m_value = property.m_value;
+	m_changed = false;
 	m_desc = property.m_desc;
 	m_autosync = property.m_autosync;
 	if(property.m_list)
 		m_list = new QStringList(*(property.m_list));
 	else
 		m_list=0;
+}
+
+KexiProperty::KexiProperty()
+{
+	m_name="";
+//	m_value=QVariant();
+	m_changed = false;
+	m_list=0;
+}
+
+KexiProperty::~KexiProperty()
+{
+	if(m_list)
+		delete m_list;
 }
 
 const KexiProperty&
@@ -85,6 +102,7 @@ KexiProperty::operator=(const KexiProperty &property)
 	
 	m_name = property.m_name;
 	m_value = property.m_value;
+	m_changed = property.m_changed;
 	m_desc = property.m_desc;
 	m_autosync = property.m_autosync;
 
@@ -104,9 +122,28 @@ QVariant::Type  KexiProperty::type() const
 		return m_value.type();
 }
 
-
-KexiProperty::~KexiProperty()
+void KexiProperty::setValue(const QVariant &v, bool saveOldValue)
 {
-	if(m_list)
-		delete m_list;
+	if (saveOldValue) {
+		if (!m_changed) {
+			m_oldValue = m_value; //store old
+		}
+		m_changed = true;
+	}
+	else {
+		m_oldValue = QVariant(); //clear old
+		m_changed = false;
+	}
+	m_value = v;
+}
+
+void KexiProperty::setChanged(bool set)
+{
+	if (m_changed==set)
+		return;
+	m_changed=set;
+	if (!m_changed)
+		m_oldValue = QVariant();
+	else
+		m_oldValue = m_value; //store
 }

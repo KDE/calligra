@@ -2,7 +2,7 @@ include $(top_srcdir)/kexi/Makefile.global
 
 lib_LTLIBRARIES = libkexipropertyeditor.la
 
-libkexipropertyeditor_la_SOURCES = kexiproperty.cpp kexipropertybuffer.cpp \
+libkexipropertyeditor_la_SOURCES = \
 	kexipropertyeditorview.cpp \
 	kexipropertyeditor.cpp kexipropertyeditoritem.cpp \
 	kexipropertysubeditor.cpp propertyeditorfile.cpp \

@@ -35,27 +35,43 @@ class KEXIPROPERTYEDITOR_EXPORT KexiProperty
 		KexiProperty(const QString &name, QVariant value, const QStringList &list);
 		KexiProperty(const KexiProperty &property);
 		//KexiProperty(const QString &name, QVariant value, QStringList *list);
-		KexiProperty() { m_name=""; m_value=QVariant(0);m_list=0;}
+		KexiProperty();
 		~KexiProperty();
 		
 		const KexiProperty& operator=(const KexiProperty &property);
 
 		QString		name() const { return m_name; }
+
 		QVariant	value() const { return m_value; }
+		/*! Sets this property value to a new value \a v. If this is a first change, 
+		 and \a saveOldValue is true, an old value is saved, and can be later retrieved
+		 using oldValue(). If \a saveOldValue if false, old value is cleared and the 
+		 property looks loke it was not changed.
+		*/
+		void setValue(const QVariant &v, bool saveOldValue = true);
+
+		/*! \return old preperty value. This makes only sense when changed() is true. 
+		 The old value is saved on first change.
+		*/
+		QVariant	oldValue() const { return m_oldValue; }
 		QString		desc() const { return m_desc; }
 		QVariant::Type  type() const;
 		QStringList*	list() const{ return m_list;}
 		int		autoSync() const { return m_autosync; }
 
-		void setValue(const QVariant &v) { m_value = v; }
 		void setAutoSync(int sync) { m_autosync = sync; }
 
+		//! \return true is this preperty value is changed. 
+		bool changed() const { return m_changed; }
+		void setChanged(bool set);
 	private:
 		QString		m_name;
 		QString		m_desc;
 		QVariant	m_value;
+		QVariant	m_oldValue;
 		QStringList	*m_list;
 		int		m_autosync;
+		bool m_changed : 1;
 };
 
 #endif

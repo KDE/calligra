@@ -39,7 +39,6 @@
 #include <kdeversion.h>
 #include <kglobalsettings.h>
 #include <kparts/componentfactory.h>
-#include <kdockwidget_private.h>
 
 #include <kexidb/connection.h>
 
@@ -78,7 +77,11 @@
 #define KEXI_NO_CTXT_HELP 1
 
 //show property editor
-#define KEXI_PROP_EDITOR 1
+//#define KEXI_PROP_EDITOR 1
+
+#ifdef KEXI_PROP_EDITOR
+#include <kdockwidget_private.h>
+#endif
 
 typedef QIntDict<KexiDialogBase> KexiDialogDict;
 
@@ -948,29 +951,29 @@ KexiMainWindowImpl::restoreWindowConfiguration(KConfig *config)
 {
 	kdDebug()<<"preparing session restoring"<<endl;
 	
-	d->config->setGroup("MainWindow");
+	config->setGroup("MainWindow");
 
 	QString dockGrp;
 
 	if (kapp->isRestored())
-		dockGrp=d->config->group()+"-Docking";
+		dockGrp=config->group()+"-Docking";
 	else
 		dockGrp="MainWindow0-Docking";
 
-	if (d->config->hasGroup(dockGrp))
-		readDockConfig(d->config,dockGrp);
+	if (config->hasGroup(dockGrp))
+		readDockConfig(config,dockGrp);
 }
 
 void
 KexiMainWindowImpl::storeWindowConfiguration(KConfig *config)
 {
 	kdDebug()<<"preparing session saving"<<endl;
-	d->config->setGroup("MainWindow");
+	config->setGroup("MainWindow");
 	QString dockGrp;
 
 #if KDE_IS_VERSION(3,1,9)
 	if (kapp->sessionSaving())
-		dockGrp=d->config->group()+"-Docking";
+		dockGrp=config->group()+"-Docking";
 	else
 #endif
 		dockGrp="MainWindow0-Docking";
@@ -1772,9 +1775,13 @@ int KexiMainWindowImpl::generatePrivateDocID()
 
 void KexiMainWindowImpl::propertyBufferSwitched(KexiDialogBase *dlg)
 {
-	if ((KexiDialogBase*)d->curDialog!=dlg)
+	kdDebug() << "KexiMainWindowImpl::propertyBufferSwitched()" << endl;
+	if (!d->propEditor)
 		return;
 
+	if ((KexiDialogBase*)d->curDialog!=dlg)
+		return;
+	
 	d->propBuffer = d->curDialog->propertyBuffer();
 	d->propEditor->editor()->setBuffer( d->propBuffer );
 }
