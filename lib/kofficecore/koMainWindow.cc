@@ -587,7 +587,7 @@ void KoMainWindow::slotToolbarToggled( bool toggle )
       bar->hide();
   }
   else
-    kdWarning(30003) << "slotToolbarToggled : Toolbar " << toolBarName << " not found!" << endl;
+    kdWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->name() << " not found!" << endl;
 }
 
 void KoMainWindow::slotHelpAbout()
