@@ -56,7 +56,7 @@ void AbiPropsMap::splitAndAddAbiProps(const QString& strProps)
             name=(*it).left(result);
             value=(*it).mid(result+1);
         }
-        kdDebug(30506) << "========== (Property :" << name << "=" << value <<":)"<<endl;
+        // kdDebug(30506) << "========== (Property :" << name.stripWhiteSpace()<< "=" << value.stripWhiteSpace() <<":)"<<endl;
         // Now set the property
         setProperty(name.stripWhiteSpace(),value.stripWhiteSpace());
     }
@@ -95,10 +95,8 @@ double ValueWithLengthUnit(const QString& _str)
                 << strUnit << " (ValueWithLengthUnit)" << endl;
             result=rawValue;
         }
-#if 1
-        kdDebug(30506) << "Value: " << _str << " Unit: " << strUnit
-            << " Result: " << result << endl;
-#endif
+
+        // kdDebug(30506) << "Value: " << _str << " Unit: " << strUnit << " Result: " << result << endl;
     }
     return result;
 }
