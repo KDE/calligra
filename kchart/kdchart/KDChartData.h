@@ -14,7 +14,7 @@
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+   General Public License for more details.
 
    You should have received a copy of the GNU General Public License
    along with this library; see the file COPYING.  If not, write to
@@ -38,20 +38,9 @@ class KDChartData
 {
 public:
     enum ValueType { NoValue, String, Double, DateTime };
-    KDChartData( double value ) {
-        dValue = value;
-        _valueType = Double;
-    }
-
-    KDChartData( const QString& value ) :
-        sValue( value ),
-        _valueType( String )
-    {}
-
-    KDChartData() {
-        _valueType = NoValue;
-    }
-
+    KDChartData( double value );
+    KDChartData( const QString& value );
+    KDChartData();
 
     ValueType valueType() const
     {

@@ -14,7 +14,7 @@
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+   General Public License for more details.
 
    You should have received a copy of the GNU General Public License
    along with this library; see the file COPYING.  If not, write to
@@ -715,11 +715,21 @@ void KDChartParams::activateDefaultAxes()
 
 QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
 {
+    QDomDocument document = p.saveXML();
+    s << document.toString();
+
+    return s;
+}
+
+
+QDomDocument KDChartParams::saveXML() const
+{
     // Create an inital DOM document
     QString docstart = "<ChartParams/>";
 
     QDomDocument doc( "ChartParams" );
     doc.setContent( docstart );
+    doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
     QDomElement docRoot = doc.documentElement();
     docRoot.setAttribute( "xmlns", "http://www.klaralvdalens-datakonsult.se/kdchart" );
@@ -730,20 +740,20 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
     QDomElement chartTypeElement = doc.createElement( "ChartType" );
     docRoot.appendChild( chartTypeElement );
     chartTypeElement.setAttribute( "primary",
-                                   KDChartParams::chartTypeToString( p._chartType ) );
+                                   KDChartParams::chartTypeToString( _chartType ) );
     chartTypeElement.setAttribute( "secondary",
-                                   KDChartParams::chartTypeToString( p._additionalChartType ) );
+                                   KDChartParams::chartTypeToString( _additionalChartType ) );
 
 
     // the NumValues element
-    createIntNode( doc, docRoot, "NumValues", p._numValues );
+    createIntNode( doc, docRoot, "NumValues", _numValues );
 
     // the ModeAndChartMap element
     QDomElement modeAndChartMapElement =
         doc.createElement( "ModeAndChartMap" );
     docRoot.appendChild( modeAndChartMapElement );
-    for( QMap<uint,KDChartParams::ModeAndChart>::ConstIterator it = p._dataSourceModeAndChart.begin();
-         it != p._dataSourceModeAndChart.end(); ++it ) {
+    for( QMap<uint,KDChartParams::ModeAndChart>::ConstIterator it = _dataSourceModeAndChart.begin();
+         it != _dataSourceModeAndChart.end(); ++it ) {
         // Dataset element
         QDomElement datasetElement = doc.createElement( "Dataset" );
         QDomText datasetContent =
@@ -758,11 +768,11 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
     }
 
     createBoolNode( doc, docRoot, "ChartSourceModeWasUsed",
-                    p._setChartSourceModeWasUsed );
+                    _setChartSourceModeWasUsed );
 
     // the MaxDatasetSourceMode element
     createIntNode( doc, docRoot, "MaxDatasetSourceMode",
-                   p._maxDatasetSourceMode );
+                   _maxDatasetSourceMode );
 
     // the ColorSettings element
     QDomElement colorSettingsElement =
@@ -772,47 +782,47 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
     {
         // the DataColors element
         createColorMapNode( doc, colorSettingsElement,
-                            "DataColors", p._dataColors );
+                            "DataColors", _dataColors );
 
         // the MaxDatasetColor element
         createIntNode( doc, colorSettingsElement, "MaxDatasetColor",
-                       p._maxDatasetColor );
+                       _maxDatasetColor );
 
         // the ShadowBrightnessFactor element
         createDoubleNode( doc, colorSettingsElement,
                           "ShadowBrightnessFactor",
-                          p._shadowBrightnessFactor );
+                          _shadowBrightnessFactor );
 
         // the ThreeDShadowColors element
         createBoolNode( doc, colorSettingsElement,
                         "ThreeDShadowColors",
-                        p._threeDShadowColors );
+                        _threeDShadowColors );
 
         // the DataColorsShadow1 element
         createColorMapNode( doc, colorSettingsElement,
                             "DataColorsShadow1",
-                            p._dataColorsShadow1 );
+                            _dataColorsShadow1 );
 
         // the DataColorsShadow2 element
         createColorMapNode( doc, colorSettingsElement,
                             "DataColorsShadow2",
-                            p._dataColorsShadow2 );
+                            _dataColorsShadow2 );
 
         // the OutlineDataColor element
         createColorNode( doc, colorSettingsElement,
                          "OutlineDataColor",
-                         p._outlineDataColor );
+                         _outlineDataColor );
 
         // the OutlineDataLineWidth element
         createIntNode( doc, colorSettingsElement,
                        "OutlineDataLineWidth",
-                       p._outlineDataLineWidth );
+                       _outlineDataLineWidth );
 
         // the OutlineDataLineStyle element
         QDomElement outlineDataLineStyleElement =
             doc.createElement( "OutlineDataLineStyle" );
         colorSettingsElement.appendChild( outlineDataLineStyleElement );
-        outlineDataLineStyleElement.setAttribute( "Style", penStyleToString( p._outlineDataLineStyle ) );
+        outlineDataLineStyleElement.setAttribute( "Style", penStyleToString( _outlineDataLineStyle ) );
     }
 
 
@@ -824,26 +834,26 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
     {
         // the SubType element
         createStringNode( doc, barSettingsElement,
-                          "SubType", KDChartParams::barChartSubTypeToString( p._barChartSubType ) );
+                          "SubType", KDChartParams::barChartSubTypeToString( _barChartSubType ) );
 
         createBoolNode( doc, barSettingsElement,
-                        "ThreeDBars", p._threeDBars );
+                        "ThreeDBars", _threeDBars );
 
         createDoubleNode( doc, barSettingsElement,
-                          "ThreeDBarDepth", p._threeDBarDepth );
+                          "ThreeDBarDepth", _threeDBarDepth );
 
         createIntNode( doc, barSettingsElement,
-                       "DatasetGap", p._datasetGap );
+                       "DatasetGap", _datasetGap );
 
         createBoolNode( doc, barSettingsElement,
-                        "DatasetGapIsRelative", p._datasetGapIsRelative );
+                        "DatasetGapIsRelative", _datasetGapIsRelative );
 
         createIntNode( doc, barSettingsElement,
-                       "ValueBlockGap", p._valueBlockGap );
+                       "ValueBlockGap", _valueBlockGap );
 
         createBoolNode( doc, barSettingsElement,
                         "ValueBlockGapIsRelative",
-                        p._valueBlockGapIsRelative );
+                        _valueBlockGapIsRelative );
     }
 
 
@@ -855,15 +865,15 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
     {
         // the SubType element
         createStringNode( doc, lineSettingsElement,
-                          "SubType", KDChartParams::lineChartSubTypeToString( p._lineChartSubType ) );
+                          "SubType", KDChartParams::lineChartSubTypeToString( _lineChartSubType ) );
 
         // the Marker element
         createBoolNode( doc, lineSettingsElement,
-                        "Marker", p._lineMarker );
+                        "Marker", _lineMarker );
 
         // the MarkerStyles elements
-        for( QMap<uint,KDChartParams::LineMarkerStyle>::ConstIterator it = p._lineMarkerStyles.begin();
-         it != p._lineMarkerStyles.end(); ++it ) {
+        for( QMap<uint,KDChartParams::LineMarkerStyle>::ConstIterator it = _lineMarkerStyles.begin();
+         it != _lineMarkerStyles.end(); ++it ) {
             QDomElement markerStyleElement = doc.createElement( "MarkerStyle" );
             lineSettingsElement.appendChild( markerStyleElement );
             markerStyleElement.setAttribute( "Dataset", it.key() );
@@ -872,11 +882,11 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
 
         // the MarkerSize element
         createSizeNode( doc, lineSettingsElement,
-                        "MarkerSize", p._lineMarkerSize );
+                        "MarkerSize", _lineMarkerSize );
 
         // the LineWidth element
         createIntNode( doc, lineSettingsElement,
-                       "LineWidth", p._lineWidth );
+                       "LineWidth", _lineWidth );
     }
 
 
@@ -888,11 +898,11 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
     {
         // the SubType element
         createStringNode( doc, areaSettingsElement, "SubType",
-                          KDChartParams::areaChartSubTypeToString( p._areaChartSubType ) );
+                          KDChartParams::areaChartSubTypeToString( _areaChartSubType ) );
 
         // the Location elemenet
         createStringNode( doc, areaSettingsElement, "Location",
-                          KDChartParams::areaLocationToString( p._areaLocation ) );
+                          KDChartParams::areaLocationToString( _areaLocation ) );
     }
 
 
@@ -904,41 +914,41 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
     {
         // the Explode element
         createBoolNode( doc, pieRingSettingsElement, "Explode",
-                        p._explode );
+                        _explode );
 
         // the DefaultExplodeFactor element
         createDoubleNode( doc, pieRingSettingsElement, "DefaultExplodeFactor",
-                          p._explodeFactor );
+                          _explodeFactor );
 
         // the ExplodeFactors element
         createDoubleMapNode( doc, pieRingSettingsElement, "ExplodeFactors",
-                             p._explodeFactors );
+                             _explodeFactors );
 
         // the ExplodeSegment element
-        for( QValueList<int>::ConstIterator it = p._explodeList.begin();
-             it != p._explodeList.end(); ++it )
+        for( QValueList<int>::ConstIterator it = _explodeList.begin();
+             it != _explodeList.end(); ++it )
             createIntNode( doc, pieRingSettingsElement,
                            "ExplodeSegment", *it );
 
         // the ThreeDPies element
         createBoolNode( doc, pieRingSettingsElement, "ThreeDPies",
-                        p._threeDPies );
+                        _threeDPies );
 
         // the ThreeDPieHeight element
         createIntNode( doc, pieRingSettingsElement, "ThreeDPieHeight",
-                       p._threeDPieHeight );
+                       _threeDPieHeight );
 
         // the PieStart element
         createIntNode( doc, pieRingSettingsElement, "PieStart",
-                       p._pieStart );
+                       _pieStart );
 
         // the RingStart element
         createIntNode( doc, pieRingSettingsElement, "RingStart",
-                       p._ringStart );
+                       _ringStart );
 
         // the RelativeRingThickness element
         createBoolNode( doc, pieRingSettingsElement,
-                        "RelativeRingThickness", p._relativeRingThickness );
+                        "RelativeRingThickness", _relativeRingThickness );
     }
 
     // the HiLoSettings element
@@ -948,63 +958,63 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
     {
         // the SubType element
         createStringNode( doc, hiLoSettingsElement, "SubType",
-                          KDChartParams::hiLoChartSubTypeToString( p._hiLoChartSubType ) );
+                          KDChartParams::hiLoChartSubTypeToString( _hiLoChartSubType ) );
 
         // the PrintLowValues element
         createBoolNode( doc, hiLoSettingsElement, "PrintLowValues",
-                        p._hiLoChartPrintLowValues );
+                        _hiLoChartPrintLowValues );
 
         // the LowValuesFont element
         createChartFontNode( doc, hiLoSettingsElement, "LowValuesFont",
-                             p._hiLoChartLowValuesFont,
-                             p._hiLoChartLowValuesUseFontRelSize,
-                             p._hiLoChartLowValuesFontRelSize );
+                             _hiLoChartLowValuesFont,
+                             _hiLoChartLowValuesUseFontRelSize,
+                             _hiLoChartLowValuesFontRelSize );
 
         // the LowValuesColor element
         createColorNode( doc, hiLoSettingsElement, "LowValuesColor",
-                         p._hiLoChartLowValuesColor );
+                         _hiLoChartLowValuesColor );
 
         // the PrintHighValues element
         createBoolNode( doc, hiLoSettingsElement, "PrintHighValues",
-                        p._hiLoChartPrintHighValues );
+                        _hiLoChartPrintHighValues );
 
         // the HighValuesFont element
         createChartFontNode( doc, hiLoSettingsElement, "HighValuesFont",
-                             p._hiLoChartHighValuesFont,
-                             p._hiLoChartHighValuesUseFontRelSize,
-                             p._hiLoChartHighValuesFontRelSize );
+                             _hiLoChartHighValuesFont,
+                             _hiLoChartHighValuesUseFontRelSize,
+                             _hiLoChartHighValuesFontRelSize );
 
         // the HighValuesColor element
         createColorNode( doc, hiLoSettingsElement, "HighValuesColor",
-                         p._hiLoChartHighValuesColor );
+                         _hiLoChartHighValuesColor );
 
         // the PrintOpenValues element
         createBoolNode( doc, hiLoSettingsElement, "PrintOpenValues",
-                        p._hiLoChartPrintOpenValues );
+                        _hiLoChartPrintOpenValues );
 
         // the OpenValuesFont element
         createChartFontNode( doc, hiLoSettingsElement, "OpenValuesFont",
-                             p._hiLoChartOpenValuesFont,
-                             p._hiLoChartOpenValuesUseFontRelSize,
-                             p._hiLoChartOpenValuesFontRelSize );
+                             _hiLoChartOpenValuesFont,
+                             _hiLoChartOpenValuesUseFontRelSize,
+                             _hiLoChartOpenValuesFontRelSize );
 
         // the OpenValuesColor element
         createColorNode( doc, hiLoSettingsElement, "OpenValuesColor",
-                         p._hiLoChartOpenValuesColor );
+                         _hiLoChartOpenValuesColor );
 
         // the PrintCloseValues element
         createBoolNode( doc, hiLoSettingsElement, "PrintCloseValues",
-                        p._hiLoChartPrintCloseValues );
+                        _hiLoChartPrintCloseValues );
 
         // the CloseValuesFont element
         createChartFontNode( doc, hiLoSettingsElement, "CloseValuesFont",
-                             p._hiLoChartCloseValuesFont,
-                             p._hiLoChartCloseValuesUseFontRelSize,
-                             p._hiLoChartCloseValuesFontRelSize );
+                             _hiLoChartCloseValuesFont,
+                             _hiLoChartCloseValuesUseFontRelSize,
+                             _hiLoChartCloseValuesFontRelSize );
 
         // the CloseValuesColor element
         createColorNode( doc, hiLoSettingsElement, "CloseValuesColor",
-                         p._hiLoChartCloseValuesColor );
+                         _hiLoChartCloseValuesColor );
 }
 
 
@@ -1015,92 +1025,92 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
     {
         // the SubType element
         createStringNode( doc, ganttSettingsElement, "SubType",
-                          KDChartParams::ganttChartSubTypeToString( p._ganttChartSubType ) );
+                          KDChartParams::ganttChartSubTypeToString( _ganttChartSubType ) );
 
         // the TemporalResolution element
         createStringNode( doc, ganttSettingsElement, "TemporalResolution",
-                          KDChartParams::ganttTemporalResolutionToString( p._ganttChartTemporalResolution ) );
+                          KDChartParams::ganttTemporalResolutionToString( _ganttChartTemporalResolution ) );
 
         // the PrintStartValues element
         createBoolNode( doc, ganttSettingsElement, "PrintStartValues",
-                        p._ganttChartPrintStartValues );
+                        _ganttChartPrintStartValues );
 
         // the StartValuesAlign element
         QDomElement startValuesAlignElement =
             doc.createElement( "StartValuesAlign" );
         ganttSettingsElement.appendChild( startValuesAlignElement );
         createStringNode( doc, startValuesAlignElement, "GanttAlign",
-                          KDChartParams::ganttTextAlignToString( p._ganttChartStartValuesAlign ) );
+                          KDChartParams::ganttTextAlignToString( _ganttChartStartValuesAlign ) );
 
         // the StartValuesDateTimeFormat element
         createStringNode( doc, ganttSettingsElement,
                           "StartValuesDateTimeFormat",
-                          p._ganttChartStartValuesDateTimeFormat );
+                          _ganttChartStartValuesDateTimeFormat );
 
         // the StartValuesFont element
         createChartFontNode( doc, ganttSettingsElement,
                              "StartValuesFont",
-                             p._ganttChartStartValuesFont,
-                             p._ganttChartStartValuesUseFontRelSize,
-                             p._ganttChartStartValuesFontRelSize );
+                             _ganttChartStartValuesFont,
+                             _ganttChartStartValuesUseFontRelSize,
+                             _ganttChartStartValuesFontRelSize );
 
         // the StartValuesColor element
         createColorNode( doc, ganttSettingsElement, "StartValuesColor",
-                         p._ganttChartStartValuesColor );
+                         _ganttChartStartValuesColor );
 
         // the PrintEndValues element
         createBoolNode( doc, ganttSettingsElement, "PrintEndValues",
-                        p._ganttChartPrintEndValues );
+                        _ganttChartPrintEndValues );
 
         // the EndValuesAlign element
         QDomElement endValuesAlignElement =
             doc.createElement( "EndValuesAlign" );
         ganttSettingsElement.appendChild( endValuesAlignElement );
         createStringNode( doc, endValuesAlignElement, "GanttAlign",
-                          KDChartParams::ganttTextAlignToString( p._ganttChartEndValuesAlign ) );
+                          KDChartParams::ganttTextAlignToString( _ganttChartEndValuesAlign ) );
 
         // the EndValuesDateTimeFormat element
         createStringNode( doc, ganttSettingsElement,
                           "EndValuesDateTimeFormat",
-                          p._ganttChartEndValuesDateTimeFormat );
+                          _ganttChartEndValuesDateTimeFormat );
 
         // the EndValuesFont element
         createChartFontNode( doc, ganttSettingsElement,
                              "EndValuesFont",
-                             p._ganttChartEndValuesFont,
-                             p._ganttChartEndValuesUseFontRelSize,
-                             p._ganttChartEndValuesFontRelSize );
+                             _ganttChartEndValuesFont,
+                             _ganttChartEndValuesUseFontRelSize,
+                             _ganttChartEndValuesFontRelSize );
 
         // the EndValuesColor element
         createColorNode( doc, ganttSettingsElement, "EndValuesColor",
-                         p._ganttChartEndValuesColor );
+                         _ganttChartEndValuesColor );
 
         // the PrintDurations element
         createBoolNode( doc, ganttSettingsElement, "PrintDurations",
-                        p._ganttChartPrintDurations );
+                        _ganttChartPrintDurations );
 
         // the DurationsAlign element
         QDomElement durationsAlignElement =
             doc.createElement( "DurationsAlign" );
         ganttSettingsElement.appendChild( durationsAlignElement );
         createStringNode( doc, durationsAlignElement, "GanttAlign",
-                          KDChartParams::ganttTextAlignToString( p._ganttChartDurationsAlign ) );
+                          KDChartParams::ganttTextAlignToString( _ganttChartDurationsAlign ) );
 
         // the DurationsDateTimeFormat element
         createStringNode( doc, ganttSettingsElement,
                           "DurationsDateTimeFormat",
-                          p._ganttChartDurationsDateTimeFormat );
+                          _ganttChartDurationsDateTimeFormat );
 
         // the DurationsFont element
         createChartFontNode( doc, ganttSettingsElement,
                              "DurationsFont",
-                             p._ganttChartDurationsFont,
-                             p._ganttChartDurationsUseFontRelSize,
-                             p._ganttChartDurationsFontRelSize );
+                             _ganttChartDurationsFont,
+                             _ganttChartDurationsUseFontRelSize,
+                             _ganttChartDurationsFontRelSize );
 
         // the DurationsColor element
         createColorNode( doc, ganttSettingsElement, "DurationsColor",
-                         p._ganttChartDurationsColor );
+                         _ganttChartDurationsColor );
     }
 
 
@@ -1111,15 +1121,15 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
     {
         // the Position element
         createStringNode( doc, legendSettingsElement, "Position",
-                          KDChartParams::legendPositionToString( p._legendPosition ) );
+                          KDChartParams::legendPositionToString( _legendPosition ) );
 
         // the Source element
         createStringNode( doc, legendSettingsElement, "Source",
-                          KDChartParams::legendSourceToString( p._legendSource ) );
+                          KDChartParams::legendSourceToString( _legendSource ) );
 
         // the Text elements
-        for( QMap<int,QString>::ConstIterator it = p._legendText.begin();
-         it != p._legendText.end(); ++it ) {
+        for( QMap<int,QString>::ConstIterator it = _legendText.begin();
+         it != _legendText.end(); ++it ) {
             QDomElement legendTextElement = doc.createElement( "LegendText" );
             legendTextElement.appendChild( legendSettingsElement );
             legendTextElement.setAttribute( "Dataset", it.key() );
@@ -1128,31 +1138,31 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
 
         // the TextColor element
         createColorNode( doc, legendSettingsElement, "TextColor",
-                         p._legendTextColor );
+                         _legendTextColor );
 
         // the TextFont element
         createChartFontNode( doc, legendSettingsElement, "TextFont",
-                             p._legendFont,
-                             p._legendFontUseRelSize,
-                             p._legendFontRelSize );
+                             _legendFont,
+                             _legendFontUseRelSize,
+                             _legendFontRelSize );
 
         // the TitleText element
         createStringNode( doc, legendSettingsElement, "TitleText",
-                          p._legendTitleText );
+                          _legendTitleText );
 
         // the TitleColor element
         createColorNode( doc, legendSettingsElement, "TitleColor",
-                         p._legendTitleTextColor );
+                         _legendTitleTextColor );
 
         // the TitleFont element
         createChartFontNode( doc, legendSettingsElement, "TitleFont",
-                             p._legendTitleFont,
-                             p._legendTitleFontUseRelSize,
-                             p._legendTitleFontRelSize );
+                             _legendTitleFont,
+                             _legendTitleFontUseRelSize,
+                             _legendTitleFontRelSize );
 
         // the Spacing element
         createIntNode( doc, legendSettingsElement, "Spacing",
-                       p._legendSpacing );
+                       _legendSpacing );
     }
 
     // the AxisSettings elements
@@ -1161,171 +1171,171 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
             doc.createElement( "AxisSettings" );
         docRoot.appendChild( axisSettingsElement );
         axisSettingsElement.setAttribute( "Dataset",
-                                          p._axisSettings[axis].dataset );
+                                          _axisSettings[axis].dataset );
         axisSettingsElement.setAttribute( "Dataset2",
-                                          p._axisSettings[axis].dataset2 );
+                                          _axisSettings[axis].dataset2 );
         axisSettingsElement.setAttribute( "Chart",
-                                          p._axisSettings[axis].chart );
+                                          _axisSettings[axis].chart );
         {
             // the Type element
             createStringNode( doc, axisSettingsElement, "Type",
-                              KDChartAxisParams::axisTypeToString( p._axisSettings[axis].params._axisType ) );
+                              KDChartAxisParams::axisTypeToString( _axisSettings[axis].params._axisType ) );
 
             // the Visible element
             createBoolNode( doc, axisSettingsElement, "Visible",
-                            p._axisSettings[axis].params._axisVisible );
+                            _axisSettings[axis].params._axisVisible );
 
             // the LabelsTouchEdges element
             createBoolNode( doc, axisSettingsElement, "LabelsTouchEdges",
-                            p._axisSettings[axis].params._axisLabelsTouchEdges );
+                            _axisSettings[axis].params._axisLabelsTouchEdges );
 
             // the AreaMode element
             createStringNode( doc, axisSettingsElement, "AreaMode",
-                              KDChartAxisParams::axisAreaModeToString( p._axisSettings[axis].params._axisAreaMode ) );
+                              KDChartAxisParams::axisAreaModeToString( _axisSettings[axis].params._axisAreaMode ) );
 
             // the AreaMin element
             createIntNode( doc, axisSettingsElement, "AreaMin",
-                           p._axisSettings[axis].params._axisAreaMin );
+                           _axisSettings[axis].params._axisAreaMin );
 
             // the AreaMax element
             createIntNode( doc, axisSettingsElement, "AreaMax",
-                           p._axisSettings[axis].params._axisAreaMax );
+                           _axisSettings[axis].params._axisAreaMax );
 
             // the CalcMode element
             createStringNode( doc, axisSettingsElement, "CalcMode",
-                              KDChartAxisParams::axisCalcModeToString( p._axisSettings[axis].params._axisCalcMode ) );
+                              KDChartAxisParams::axisCalcModeToString( _axisSettings[axis].params._axisCalcMode ) );
 
             // the TrueAreaSize element
             createIntNode( doc, axisSettingsElement, "TrueAreaSize",
-                           p._axisSettings[axis].params._axisTrueAreaSize );
+                           _axisSettings[axis].params._axisTrueAreaSize );
 
             // the TrueAreaRect element
             createRectNode( doc, axisSettingsElement, "TrueAreaRect",
-                            p._axisSettings[axis].params._axisTrueAreaRect );
+                            _axisSettings[axis].params._axisTrueAreaRect );
 
             // the ShowSubDelimiters element
             createBoolNode( doc, axisSettingsElement, "ShowSubDelimiters",
-                            p._axisSettings[axis].params._axisShowSubDelimiters );
+                            _axisSettings[axis].params._axisShowSubDelimiters );
 
             // the LineVisible element
             createBoolNode( doc, axisSettingsElement, "LineVisible",
-                            p._axisSettings[axis].params._axisLineVisible );
+                            _axisSettings[axis].params._axisLineVisible );
 
             // the LineWidth element
             createIntNode( doc, axisSettingsElement, "LineWidth",
-                           p._axisSettings[axis].params._axisLineWidth );
+                           _axisSettings[axis].params._axisLineWidth );
 
             // the TrueLineWidth element
             createIntNode( doc, axisSettingsElement, "TrueLineWidth",
-                           p._axisSettings[axis].params._axisTrueLineWidth );
+                           _axisSettings[axis].params._axisTrueLineWidth );
 
             // the LineColor element
             createColorNode( doc, axisSettingsElement, "LineColor",
-                             p._axisSettings[axis].params._axisLineColor );
+                             _axisSettings[axis].params._axisLineColor );
 
             // the ShowGrid element
             createBoolNode( doc, axisSettingsElement, "ShowGrid",
-                            p._axisSettings[axis].params._axisShowGrid );
+                            _axisSettings[axis].params._axisShowGrid );
 
             // the GridColor element
             createColorNode( doc, axisSettingsElement, "GridColor",
-                             p._axisSettings[axis].params._axisGridColor );
+                             _axisSettings[axis].params._axisGridColor );
 
             // the GridLineWidth element
             createIntNode( doc, axisSettingsElement, "GridLineWidth",
-                           p._axisSettings[axis].params._axisGridLineWidth );
+                           _axisSettings[axis].params._axisGridLineWidth );
 
             // the GridStyle element
             createStringNode( doc, axisSettingsElement, "GridStyle",
-                              penStyleToString( p._axisSettings[axis].params._axisGridStyle ) );
+                              penStyleToString( _axisSettings[axis].params._axisGridStyle ) );
 
             // the GridSubStyle element
             createStringNode( doc, axisSettingsElement, "GridSubStyle",
-                              penStyleToString( p._axisSettings[axis].params._axisGridSubStyle ) );
+                              penStyleToString( _axisSettings[axis].params._axisGridSubStyle ) );
 
             // the ZeroLineColor element
             createColorNode( doc, axisSettingsElement, "ZeroLineColor",
-                             p._axisSettings[axis].params._axisZeroLineColor );
+                             _axisSettings[axis].params._axisZeroLineColor );
 
             // the LabelsVisible element
             createBoolNode( doc, axisSettingsElement, "LabelsVisible",
-                            p._axisSettings[axis].params._axisLabelsVisible );
+                            _axisSettings[axis].params._axisLabelsVisible );
 
             // the LabelsFont element
             createChartFontNode( doc, axisSettingsElement, "LabelsFont",
-                                 p._axisSettings[axis].params._axisLabelsFont,
-                                 p._axisSettings[axis].params._axisLabelsFontUseRelSize,
-                                 p._axisSettings[axis].params._axisLabelsFontRelSize );
+                                 _axisSettings[axis].params._axisLabelsFont,
+                                 _axisSettings[axis].params._axisLabelsFontUseRelSize,
+                                 _axisSettings[axis].params._axisLabelsFontRelSize );
 
             // the LabelsColor element
             createColorNode( doc, axisSettingsElement, "LabelsColor",
-                             p._axisSettings[axis].params._axisLabelsColor );
+                             _axisSettings[axis].params._axisLabelsColor );
 
             // the SteadyValueCalc element
             createBoolNode( doc, axisSettingsElement, "SteadyValueCalc",
-                            p._axisSettings[axis].params._axisSteadyValueCalc );
+                            _axisSettings[axis].params._axisSteadyValueCalc );
 
             // the ValueStart element
             createChartValueNode( doc, axisSettingsElement, "ValueStart",
-                                  p._axisSettings[axis].params._axisValueStart );
+                                  _axisSettings[axis].params._axisValueStart );
 
             // the ValueEnd element
             createChartValueNode( doc, axisSettingsElement, "ValueEnd",
-                                  p._axisSettings[axis].params._axisValueEnd );
+                                  _axisSettings[axis].params._axisValueEnd );
 
             // the ValueDelta element
             createDoubleNode( doc, axisSettingsElement, "ValueDelta",
-                              p._axisSettings[axis].params._axisValueDelta );
+                              _axisSettings[axis].params._axisValueDelta );
 
             // the TrueLow element
             createDoubleNode( doc, axisSettingsElement, "TrueLow",
-                              p._axisSettings[axis].params._trueLow );
+                              _axisSettings[axis].params._trueLow );
 
             // the TrueHigh element
             createDoubleNode( doc, axisSettingsElement, "TrueHigh",
-                              p._axisSettings[axis].params._trueHigh );
+                              _axisSettings[axis].params._trueHigh );
 
             // the TrueDelta element
             createDoubleNode( doc, axisSettingsElement, "TrueDelta",
-                              p._axisSettings[axis].params._trueDelta );
+                              _axisSettings[axis].params._trueDelta );
 
             // the ZeroLineStart element
             QDomElement zeroLineStartElement = doc.createElement( "ZeroLineStart" );
             axisSettingsElement.appendChild( zeroLineStartElement );
-            zeroLineStartElement.setAttribute( "X", p._axisSettings[axis].params._axisZeroLineStartX );
-            zeroLineStartElement.setAttribute( "Y", p._axisSettings[axis].params._axisZeroLineStartY );
+            zeroLineStartElement.setAttribute( "X", _axisSettings[axis].params._axisZeroLineStartX );
+            zeroLineStartElement.setAttribute( "Y", _axisSettings[axis].params._axisZeroLineStartY );
 
             // the DigitsBehindComma element
             createIntNode( doc, axisSettingsElement, "DigitsBehindComma",
-                           p._axisSettings[axis].params._axisDigitsBehindComma );
+                           _axisSettings[axis].params._axisDigitsBehindComma );
 
             // the MaxEmptyInnerSpan element
             createIntNode( doc, axisSettingsElement, "MaxEmptyInnerSpan",
-                           p._axisSettings[axis].params._axisMaxEmptyInnerSpan );
+                           _axisSettings[axis].params._axisMaxEmptyInnerSpan );
 
             // the LabelsFromDataRow element
             createStringNode( doc, axisSettingsElement, "LabelsFromDataRow",
-                              KDChartAxisParams::labelsFromDataRowToString( p._axisSettings[axis].params._takeLabelsFromDataRow ) );
+                              KDChartAxisParams::labelsFromDataRowToString( _axisSettings[axis].params._takeLabelsFromDataRow ) );
 
             // the TextsDataRow element
             createIntNode( doc, axisSettingsElement, "TextsDataRow",
-                           p._axisSettings[axis].params._labelTextsDataRow );
+                           _axisSettings[axis].params._labelTextsDataRow );
 
             // the LabelString elements
             createStringListNodes( doc, axisSettingsElement, "LabelString",
-                                   p._axisSettings[axis].params._axisLabelStringList );
+                                   _axisSettings[axis].params._axisLabelStringList );
 
             // the ShortLabelString elements
             createStringListNodes( doc, axisSettingsElement, "ShortLabelString",
-                                   p._axisSettings[axis].params._axisShortLabelsStringList );
+                                   _axisSettings[axis].params._axisShortLabelsStringList );
 
             // the LabelText elements
             createStringListNodes( doc, axisSettingsElement, "LabelText",
-                                   &p._axisSettings[axis].params._axisLabelTexts );
+                                   &_axisSettings[axis].params._axisLabelTexts );
 
             // the LabelTextsDirty element
             createBoolNode( doc, axisSettingsElement, "LabelTextsDirty",
-                            p._axisSettings[axis].params._axisLabelTextsDirty );
+                            _axisSettings[axis].params._axisLabelTextsDirty );
         }
     }
 
@@ -1336,30 +1346,36 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
         docRoot.appendChild( hfSettingsElement );
         {
             createStringNode( doc, hfSettingsElement, "Text",
-                              p._hdFtParams[hf]._text );
+                              _hdFtParams[hf]._text );
             createChartFontNode( doc, hfSettingsElement, "Font",
-                                 p._hdFtParams[hf]._font,
-                                 p._hdFtParams[hf]._fontUseRelSize,
-                                 p._hdFtParams[hf]._fontRelSize );
+                                 _hdFtParams[hf]._font,
+                                 _hdFtParams[hf]._fontUseRelSize,
+                                 _hdFtParams[hf]._fontRelSize );
         }
     }
 
 
-    s << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
-    s << doc.toString();
-
-    return s;
+    return doc;
 }
+
 
 QTextStream& operator>>( QTextStream& s, KDChartParams& p )
 {
-    int curAxisSettings = 0;
-    int curHFSettings = 0;
-
     QDomDocument doc( "ChartParams" );
     // would be nicer if QDomDocument could read from a QTextStream...
     QString docString = s.read();
     doc.setContent( docString );
+
+    p.loadXML( doc );
+
+    return s;
+}
+
+
+bool KDChartParams::loadXML( const QDomDocument& doc )
+{
+    int curAxisSettings = 0;
+    int curHFSettings = 0;
 
     QDomElement docRoot = doc.documentElement(); // ChartParams element
     QDomNode node = docRoot.firstChild();
@@ -1369,13 +1385,13 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
             QString tagName = element.tagName();
             if( tagName == "ChartType" ) {
                 if( element.hasAttribute( "primary" ) )
-                    p._chartType = KDChartParams::stringToChartType( element.attribute( "primary" ) );
+                    _chartType = KDChartParams::stringToChartType( element.attribute( "primary" ) );
                 if( element.hasAttribute( "secondary" ) )
-                    p._additionalChartType = KDChartParams::stringToChartType( element.attribute( "secondary" ) );
+                    _additionalChartType = KDChartParams::stringToChartType( element.attribute( "secondary" ) );
             } else if( tagName == "NumValues" ) {
                 int numValues;
                 if( readIntNode( element, numValues ) )
-                    p._numValues = numValues;
+                    _numValues = numValues;
             } else if( tagName == "ModeAndChartMap" ) {
                 int dataset = -1;
                 QDomNode node = element.firstChild();
@@ -1393,10 +1409,11 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
                                 bool ok = false;
                                 uint chart = element.attribute( "Chart" ).toUInt( &ok );
                                 if( ok )
-                                    p._dataSourceModeAndChart[dataset] = KDChartParams::ModeAndChart( sourceMode, chart );
+                                    _dataSourceModeAndChart[dataset] = KDChartParams::ModeAndChart( sourceMode, chart );
                             }
                         } else {
                             qDebug( "Unknown subelement of ModeAndChartMap found: %s", tagName.latin1() );
+                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -1404,11 +1421,11 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
             } else if( tagName == "ChartSourceModeWasUsed" ) {
                 bool chartSourceModeWasUsed;
                 if( readBoolNode( element, chartSourceModeWasUsed ) )
-                    p._setChartSourceModeWasUsed = chartSourceModeWasUsed;
+                    _setChartSourceModeWasUsed = chartSourceModeWasUsed;
             } else if( tagName == "MaxDatasetSourceMode" ) {
                 int maxDatasetSourceMode;
                 if( readIntNode( element, maxDatasetSourceMode ) )
-                    p._maxDatasetSourceMode = maxDatasetSourceMode;
+                    _maxDatasetSourceMode = maxDatasetSourceMode;
             } else if( tagName == "ColorSettings" ) {
                 QDomNode node = element.firstChild();
                 while( !node.isNull() ) {
@@ -1416,39 +1433,40 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
                     if( !element.isNull() ) { // was really an element
                         QString tagName = element.tagName();
                         if( tagName == "DataColors" ) {
-                            QMap<uint,QColor>* map = &p._dataColors;
+                            QMap<uint,QColor>* map = &_dataColors;
                             readColorMapNode( element, map );
                         } else if( tagName == "MaxDatasetColor" ) {
                             int maxDatasetColor;
                             if( readIntNode( element, maxDatasetColor ) )
-                                p._maxDatasetColor = maxDatasetColor;
+                                _maxDatasetColor = maxDatasetColor;
                         } else if( tagName == "ShadowBrightnessFactor" ) {
                             double shadowBrightnessFactor;
                             if( readDoubleNode( element, shadowBrightnessFactor ) )
-                                p._shadowBrightnessFactor = shadowBrightnessFactor;
+                                _shadowBrightnessFactor = shadowBrightnessFactor;
                         } else if( tagName == "ThreeDShadowColors" ) {
                             bool threeDShadowColors;
                             if( readBoolNode( element, threeDShadowColors ) )
-                                p._threeDShadowColors = threeDShadowColors;
+                                _threeDShadowColors = threeDShadowColors;
                         } else if( tagName == "DataColorsShadow1" ) {
-                            QMap<uint,QColor>* map = &p._dataColorsShadow1;
+                            QMap<uint,QColor>* map = &_dataColorsShadow1;
                             readColorMapNode( element, map );
                         } else if( tagName == "DataColorsShadow2" ) {
-                            QMap<uint,QColor>* map = &p._dataColorsShadow2;
+                            QMap<uint,QColor>* map = &_dataColorsShadow2;
                             readColorMapNode( element, map );
                         } else if( tagName == "OutlineDataColor" ) {
                             QColor color;
                             if( readColorNode( element, color ) )
-                                p._outlineDataColor = color;
+                                _outlineDataColor = color;
                         } else if( tagName == "OutlineDataLineWidth" ) {
                             int outlineDataLineWidth;
                             if( readIntNode( element, outlineDataLineWidth ) )
-                                p._outlineDataLineWidth = outlineDataLineWidth;
+                                _outlineDataLineWidth = outlineDataLineWidth;
                         } else if( tagName == "OutlineDataLineStyle" ) {
                             if( element.hasAttribute( "Style" ) )
-                                p._outlineDataLineStyle = stringToPenStyle( element.attribute( "Style" ) );
+                                _outlineDataLineStyle = stringToPenStyle( element.attribute( "Style" ) );
                         } else {
                             qDebug( "!!!Unknown subelement of ColorSettings found: %s", tagName.latin1() );
+                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -1462,33 +1480,34 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
                         if( tagName == "SubType" ) {
                             QString value;
                             if( readStringNode( element, value ) )
-                                p._barChartSubType = KDChartParams::stringToBarChartSubType( value );
+                                _barChartSubType = KDChartParams::stringToBarChartSubType( value );
                         } else if( tagName == "ThreeDBars" ) {
                             bool threeDBars;
                             if( readBoolNode( element, threeDBars ) )
-                                p._threeDBars = threeDBars;
+                                _threeDBars = threeDBars;
                         } else if( tagName == "ThreeDBarDepth" ) {
                             double threeDBarDepth;
                             if( readDoubleNode( element, threeDBarDepth ) )
-                                p._threeDBarDepth = threeDBarDepth;
+                                _threeDBarDepth = threeDBarDepth;
                         } else if( tagName == "DatasetGap" ) {
                             int datasetGap;
                             if( readIntNode( element, datasetGap ) )
-                                p._datasetGap = datasetGap;
+                                _datasetGap = datasetGap;
                         } else if( tagName == "DatasetGapIsRelative" ) {
                             bool datasetGapIsRelative;
                             if( readBoolNode( element, datasetGapIsRelative ) )
-                                p._datasetGapIsRelative = datasetGapIsRelative;
+                                _datasetGapIsRelative = datasetGapIsRelative;
                         } else if( tagName == "ValueBlockGap" ) {
                             int valueBlockGap;
                             if( readIntNode( element, valueBlockGap ) )
-                                p._valueBlockGap = valueBlockGap;
+                                _valueBlockGap = valueBlockGap;
                         } else if( tagName == "ValueBlockGapIsRelative" ) {
                             bool valueBlockGapIsRelative;
                             if( readBoolNode( element, valueBlockGapIsRelative ) )
-                                p._valueBlockGapIsRelative = valueBlockGapIsRelative;
+                                _valueBlockGapIsRelative = valueBlockGapIsRelative;
                         } else {
                             qDebug( "Unknown subelement of BarSettings found: %s", tagName.latin1() );
+                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -1502,11 +1521,11 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
                         if( tagName == "SubType" ) {
                             QString value;
                             if( readStringNode( element, value ) )
-                                p._lineChartSubType = KDChartParams::stringToLineChartSubType( value );
+                                _lineChartSubType = KDChartParams::stringToLineChartSubType( value );
                         } else if( tagName == "Marker" ) {
                             bool marker;
                             if( readBoolNode( element, marker ) )
-                                p._lineMarker = marker;
+                                _lineMarker = marker;
                         } else if( tagName == "MarkerStyle" ) {
                             bool ok = true;
                             uint dataset;
@@ -1519,7 +1538,7 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
                             } else
                                 ok = false;
                             if( ok )
-                                p._lineMarkerStyles[dataset] = style;
+                                _lineMarkerStyles[dataset] = style;
                         } else if( tagName == "MarkerSize" ) {
                             int width, height;
                             bool ok = true;
@@ -1532,15 +1551,16 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
                                 ok = false;
 
                             if( ok ) {
-                                p._lineMarkerSize.setWidth( width );
-                                p._lineMarkerSize.setHeight( height );
+                                _lineMarkerSize.setWidth( width );
+                                _lineMarkerSize.setHeight( height );
                             }
                         } else if( tagName == "LineWidth" ) {
                             int lineWidth;
                             if( readIntNode( element, lineWidth ) )
-                                p._lineWidth = lineWidth;
+                                _lineWidth = lineWidth;
                         } else {
                             qDebug( "Unknown subelement of LineSettings found: %s", tagName.latin1() );
+                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -1554,13 +1574,14 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
                         if( tagName == "SubType" ) {
                             QString value;
                             if( readStringNode( element, value ) )
-                                p._areaChartSubType = KDChartParams::stringToAreaChartSubType( value );
+                                _areaChartSubType = KDChartParams::stringToAreaChartSubType( value );
                         } else if( tagName == "Location" ) {
                             QString string;
                             if( readStringNode( element, string ) )
-                                p._areaLocation = KDChartParams::stringToAreaLocation( string );
+                                _areaLocation = KDChartParams::stringToAreaLocation( string );
                         } else {
                             qDebug( "Unknown subelement of AreaSettings found: %s", tagName.latin1() );
+                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -1574,40 +1595,41 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
                         if( tagName == "Explode" ) {
                             bool explode;
                             if( readBoolNode( element, explode ) )
-                                p._explode = explode;
+                                _explode = explode;
                         } else if( tagName == "DefaultExplodeFactor" ) {
                             double defaultExplodeFactor;
                             if( readDoubleNode( element, defaultExplodeFactor ) )
-                                p._explodeFactor = defaultExplodeFactor;
+                                _explodeFactor = defaultExplodeFactor;
                         } else if( tagName == "ExplodeFactors" ) {
-                            QMap<int,double>* map = &p._explodeFactors;
+                            QMap<int,double>* map = &_explodeFactors;
                             readDoubleMapNode( element, map );
                         } else if( tagName == "ExplodeSegment" ) {
                             int explodeSegment;
                             if( readIntNode( element, explodeSegment ) )
-                                p._explodeList << explodeSegment;
+                                _explodeList << explodeSegment;
                         } else if( tagName == "ThreeDPies" ) {
                             bool threeDPies;
                             if( readBoolNode( element, threeDPies ) )
-                                p._threeDPies = threeDPies;
+                                _threeDPies = threeDPies;
                         } else if( tagName == "ThreeDPieHeight" ) {
                             int threeDPieHeight;
                             if( readIntNode( element, threeDPieHeight ) )
-                                p._threeDPieHeight = threeDPieHeight;
+                                _threeDPieHeight = threeDPieHeight;
                         } else if( tagName == "PieStart" ) {
                             int pieStart;
                             if( readIntNode( element, pieStart ) )
-                                p._pieStart = pieStart;
+                                _pieStart = pieStart;
                         } else if( tagName == "RingStart" ) {
                             int ringStart;
                             if( readIntNode( element, ringStart ) )
-                                p._ringStart = ringStart;
+                                _ringStart = ringStart;
                         } else if( tagName == "RelativeRingThickness" ) {
                             bool relativeRingThickness;
                             if( readBoolNode( element, relativeRingThickness ) )
-                                p._relativeRingThickness = relativeRingThickness;
+                                _relativeRingThickness = relativeRingThickness;
                         } else {
                             qDebug( "Unknown subelement of PieRingSettings found: %s", tagName.latin1() );
+                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -1621,61 +1643,62 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
                         if( tagName == "SubType" ) {
                             QString value;
                             if( readStringNode( element, value ) )
-                                p._hiLoChartSubType = KDChartParams::stringToHiLoChartSubType( value );
+                                _hiLoChartSubType = KDChartParams::stringToHiLoChartSubType( value );
                         } else if( tagName == "PrintLowValues" ) {
                             bool printLowValues;
                             if( readBoolNode( element, printLowValues ) )
-                                p._hiLoChartPrintLowValues = printLowValues;
+                                _hiLoChartPrintLowValues = printLowValues;
                         } else if( tagName == "LowValuesFont" ) {
                             readChartFontNode( element,
-                                               p._hiLoChartLowValuesFont,
-                                               p._hiLoChartLowValuesUseFontRelSize,
-                                               p._hiLoChartLowValuesFontRelSize );
+                                               _hiLoChartLowValuesFont,
+                                               _hiLoChartLowValuesUseFontRelSize,
+                                               _hiLoChartLowValuesFontRelSize );
                         } else if( tagName == "LowValuesColor" ) {
                             QColor color;
                             if( readColorNode( element, color ) )
-                                p._hiLoChartLowValuesColor = color;
+                                _hiLoChartLowValuesColor = color;
                         } else if( tagName == "PrintHighValues" ) {
                             bool printHighValues;
                             if( readBoolNode( element, printHighValues ) )
-                                p._hiLoChartPrintHighValues = printHighValues;
+                                _hiLoChartPrintHighValues = printHighValues;
                         } else if( tagName == "HighValuesFont" ) {
                             readChartFontNode( element,
-                                               p._hiLoChartHighValuesFont,
-                                               p._hiLoChartHighValuesUseFontRelSize,
-                                               p._hiLoChartHighValuesFontRelSize );
+                                               _hiLoChartHighValuesFont,
+                                               _hiLoChartHighValuesUseFontRelSize,
+                                               _hiLoChartHighValuesFontRelSize );
                         } else if( tagName == "HighValuesColor" ) {
                             QColor color;
                             if( readColorNode( element, color ) )
-                                p._hiLoChartHighValuesColor = color;
+                                _hiLoChartHighValuesColor = color;
                         } else if( tagName == "PrintOpenValues" ) {
                             bool printOpenValues;
                             if( readBoolNode( element, printOpenValues ) )
-                                p._hiLoChartPrintOpenValues = printOpenValues;
+                                _hiLoChartPrintOpenValues = printOpenValues;
                         } else if( tagName == "OpenValuesFont" ) {
                             readChartFontNode( element,
-                                               p._hiLoChartOpenValuesFont,
-                                               p._hiLoChartOpenValuesUseFontRelSize,
-                                               p._hiLoChartOpenValuesFontRelSize );
+                                               _hiLoChartOpenValuesFont,
+                                               _hiLoChartOpenValuesUseFontRelSize,
+                                               _hiLoChartOpenValuesFontRelSize );
                         } else if( tagName == "OpenValuesColor" ) {
                             QColor color;
                             if( readColorNode( element, color ) )
-                                p._hiLoChartOpenValuesColor = color;
+                                _hiLoChartOpenValuesColor = color;
                         } else if( tagName == "PrintCloseValues" ) {
                             bool printCloseValues;
                             if( readBoolNode( element, printCloseValues ) )
-                                p._hiLoChartPrintCloseValues = printCloseValues;
+                                _hiLoChartPrintCloseValues = printCloseValues;
                         } else if( tagName == "CloseValuesFont" ) {
                             readChartFontNode( element,
-                                               p._hiLoChartCloseValuesFont,
-                                               p._hiLoChartCloseValuesUseFontRelSize,
-                                               p._hiLoChartCloseValuesFontRelSize );
+                                               _hiLoChartCloseValuesFont,
+                                               _hiLoChartCloseValuesUseFontRelSize,
+                                               _hiLoChartCloseValuesFontRelSize );
                         } else if( tagName == "CloseValuesColor" ) {
                             QColor color;
                             if( readColorNode( element, color ) )
-                                p._hiLoChartCloseValuesColor = color;
+                                _hiLoChartCloseValuesColor = color;
                         } else {
                             qDebug( "Unknown subelement of HiLoSettings found: %s", tagName.latin1() );
+                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -1689,76 +1712,77 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
                         if( tagName == "SubType" ) {
                             QString value;
                             if( readStringNode( element, value ) )
-                                p._ganttChartSubType = KDChartParams::stringToGanttChartSubType( value );
+                                _ganttChartSubType = KDChartParams::stringToGanttChartSubType( value );
                         } else if( tagName == "TemporalResolution" ) {
                             QString string;
                             if( readStringNode( element, string ) )
-                                p._ganttChartTemporalResolution = KDChartParams::stringToGanttChartTemporalResolution( string );
+                                _ganttChartTemporalResolution = KDChartParams::stringToGanttChartTemporalResolution( string );
                         } else if( tagName == "PrintStartValues" ) {
                             bool printStartValues;
                             if( readBoolNode( element, printStartValues ) )
-                                p._ganttChartPrintStartValues = printStartValues;
+                                _ganttChartPrintStartValues = printStartValues;
                         } else if( tagName == "StartValuesAlign" ) {
                             QString string;
                             if( readStringNode( element, string ) )
-                                p._ganttChartStartValuesAlign = KDChartParams::stringToGanttChartTextAlign( string );
+                                _ganttChartStartValuesAlign = KDChartParams::stringToGanttChartTextAlign( string );
                         } else if( tagName == "StartValuesDateTimeFormat" ) {
                             QString string;
                             if( readStringNode( element, string ) )
-                                p._ganttChartStartValuesDateTimeFormat = string;
+                                _ganttChartStartValuesDateTimeFormat = string;
                         } else if( tagName == "StartValuesFont" ) {
                             readChartFontNode( element,
-                                               p._ganttChartStartValuesFont,
-                                               p._ganttChartStartValuesUseFontRelSize,
-                                               p._ganttChartStartValuesFontRelSize );
+                                               _ganttChartStartValuesFont,
+                                               _ganttChartStartValuesUseFontRelSize,
+                                               _ganttChartStartValuesFontRelSize );
                         } else if( tagName == "StartValuesColor" ) {
                             QColor color;
                             if( readColorNode( element, color ) )
-                                p._ganttChartStartValuesColor = color;
+                                _ganttChartStartValuesColor = color;
                         } else if( tagName == "PrintEndValues" ) {
                             bool printEndValues;
                             if( readBoolNode( element, printEndValues ) )
-                                p._ganttChartPrintEndValues = printEndValues;
+                                _ganttChartPrintEndValues = printEndValues;
                         } else if( tagName == "EndValuesAlign" ) {
                             QString string;
                             if( readStringNode( element, string ) )
-                                p._ganttChartEndValuesAlign = KDChartParams::stringToGanttChartTextAlign( string );
+                                _ganttChartEndValuesAlign = KDChartParams::stringToGanttChartTextAlign( string );
                         } else if( tagName == "EndValuesDateTimeFormat" ) {
                             QString string;
                             if( readStringNode( element, string ) )
-                                p._ganttChartEndValuesDateTimeFormat = string;
+                                _ganttChartEndValuesDateTimeFormat = string;
                         } else if( tagName == "EndValuesFont" ) {
                             readChartFontNode( element,
-                                               p._ganttChartEndValuesFont,
-                                               p._ganttChartEndValuesUseFontRelSize,
-                                               p._ganttChartEndValuesFontRelSize );
+                                               _ganttChartEndValuesFont,
+                                               _ganttChartEndValuesUseFontRelSize,
+                                               _ganttChartEndValuesFontRelSize );
                         } else if( tagName == "EndValuesColor" ) {
                             QColor color;
                             if( readColorNode( element, color ) )
-                                p._ganttChartEndValuesColor = color;
+                                _ganttChartEndValuesColor = color;
                         } else if( tagName == "PrintDurations" ) {
                             bool printDurations;
                             if( readBoolNode( element, printDurations ) )
-                                p._ganttChartPrintDurations = printDurations;
+                                _ganttChartPrintDurations = printDurations;
                         } else if( tagName == "DurationsAlign" ) {
                             QString string;
                             if( readStringNode( element, string ) )
-                                p._ganttChartDurationsAlign = KDChartParams::stringToGanttChartTextAlign( string );
+                                _ganttChartDurationsAlign = KDChartParams::stringToGanttChartTextAlign( string );
                         } else if( tagName == "DurationsDateTimeFormat" ) {
                             QString string;
                             if( readStringNode( element, string ) )
-                                p._ganttChartDurationsDateTimeFormat = string;
+                                _ganttChartDurationsDateTimeFormat = string;
                         } else if( tagName == "DurationsFont" ) {
                             readChartFontNode( element,
-                                               p._ganttChartDurationsFont,
-                                               p._ganttChartDurationsUseFontRelSize,
-                                               p._ganttChartDurationsFontRelSize );
+                                               _ganttChartDurationsFont,
+                                               _ganttChartDurationsUseFontRelSize,
+                                               _ganttChartDurationsFontRelSize );
                         } else if( tagName == "DurationsColor" ) {
                             QColor color;
                             if( readColorNode( element, color ) )
-                                p._ganttChartDurationsColor = color;
+                                _ganttChartDurationsColor = color;
                         } else {
                             qDebug( "Unknown subelement of GanttSettings found: %s", tagName.latin1() );
+                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -1772,11 +1796,11 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
                         if( tagName == "Position" ) {
                             QString string;
                             if( readStringNode( element, string ) )
-                                p._legendPosition = KDChartParams::stringToLegendPosition( string );
+                                _legendPosition = KDChartParams::stringToLegendPosition( string );
                         } else if( tagName == "Source" ) {
                             QString string;
                             if( readStringNode( element, string ) )
-                                p._legendSource = KDChartParams::stringToLegendSource( string );
+                                _legendSource = KDChartParams::stringToLegendSource( string );
                         } else if( tagName == "Text" ) {
                             bool ok = true;
                             uint dataset;
@@ -1789,42 +1813,43 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
                             } else
                                 ok = false;
                             if( ok )
-                                p._legendText[dataset] = text;
+                                _legendText[dataset] = text;
                         } else if( tagName == "TextColor" ) {
                             QColor color;
                             if( readColorNode( element, color ) )
-                                p._legendTextColor = color;
+                                _legendTextColor = color;
                         } else if( tagName == "TextFont" ) {
                             readChartFontNode( element,
-                                               p._legendFont,
-                                               p._legendFontUseRelSize,
-                                               p._legendFontRelSize );
+                                               _legendFont,
+                                               _legendFontUseRelSize,
+                                               _legendFontRelSize );
                         } else if( tagName == "TitleText" ) {
                             QString string;
                             if( readStringNode( element, string ) )
-                                p._legendTitleText = string;
+                                _legendTitleText = string;
                         } else if( tagName == "TitleColor" ) {
                             QColor color;
                             if( readColorNode( element, color ) )
-                                p._legendTitleTextColor = color;
+                                _legendTitleTextColor = color;
                         } else if( tagName == "TitleFont" ) {
                             readChartFontNode( element,
-                                               p._legendTitleFont,
-                                               p._legendTitleFontUseRelSize,
-                                               p._legendTitleFontRelSize );
+                                               _legendTitleFont,
+                                               _legendTitleFontUseRelSize,
+                                               _legendTitleFontRelSize );
                         } else if( tagName == "Spacing" ) {
                             int spacing;
                             if( readIntNode( element, spacing ) )
-                                p._legendSpacing = spacing;
+                                _legendSpacing = spacing;
                         } else {
                             qDebug( "Unknown subelement of LegendSettings found: %s", tagName.latin1() );
+                            return false;
                         }
                     }
                     node = node.nextSibling();
                 }
             } else if( tagName == "AxisSettings" ) {
                 KDChartAxisParams* axisSettings =
-                    &( p._axisSettings[ curAxisSettings ].params );
+                    &( _axisSettings[ curAxisSettings ].params );
                 QDomNode node = element.firstChild();
                 while( !node.isNull() ) {
                     QDomElement element = node.toElement();
@@ -2000,6 +2025,7 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
                                 axisSettings->_axisLabelTextsDirty = labelTextsDirty;
                         } else {
                             qDebug( "Unknown subelement of AxisSettings found: %s", tagName.latin1() );
+                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -2007,7 +2033,7 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
                 curAxisSettings++; // one axis settings entry finished
             } else if( tagName == "HeaderFooterSettings" ) {
                 KDChartParams::HdFtParams* hfSettings =
-                    &( p._hdFtParams[ curHFSettings ] );
+                    &( _hdFtParams[ curHFSettings ] );
                 QDomNode node = element.firstChild();
                 while( !node.isNull() ) {
                     QDomElement element = node.toElement();
@@ -2024,6 +2050,7 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
                                                hfSettings->_fontRelSize );
                         } else {
                             qDebug( "Unknown subelement of HeaderFooterSettings found: %s", tagName.latin1() );
+                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -2031,12 +2058,13 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
                 curHFSettings++; // one header/footer setting finished
             } else {
                 qDebug( "!!!Unknown element found: %s", tagName.latin1() );
+                return false;
             }
         }
         node = node.nextSibling();
     }
 
-    return s;
+    return true;
 }
 
 

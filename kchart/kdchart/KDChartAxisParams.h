@@ -14,7 +14,7 @@
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+   General Public License for more details.
 
    You should have received a copy of the GNU General Public License
    along with this library; see the file COPYING.  If not, write to
@@ -2153,6 +2153,7 @@ public:
 
     friend QTextStream& operator<<( QTextStream& s, const KDChartParams& p );
     friend QTextStream& operator>>( QTextStream& s, KDChartParams& p );
+    friend class KDChartParams;
 
 signals:
         /**

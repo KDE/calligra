@@ -14,7 +14,7 @@
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+   General Public License for more details.
 
    You should have received a copy of the GNU General Public License
    along with this library; see the file COPYING.  If not, write to
@@ -31,6 +31,7 @@
 #include <qmap.h>
 #include <qobject.h>
 #include <qtextstream.h>
+#include <qdom.h>
 
 #if defined( SUN7 )
 #include <math.h>
@@ -5013,6 +5014,25 @@ public:
        Destructor. Only defined to have it virtual.
     */
     virtual ~KDChartParams();
+
+
+    /**
+       Reads the parameters from an XML document.
+       \param doc the XML document to read from
+       \return true if the parameters could be read, false if a file
+       format error occurred
+       \sa saveXML
+    */
+    bool loadXML( const QDomDocument& doc );
+
+
+    /**
+       Saves the parameters to an XML document.
+
+       \return the XML document that represents the parameters
+       \sa loadXML
+    */
+    QDomDocument KDChartParams::saveXML() const;
 
 
     friend QTextStream& operator<<( QTextStream& s, const KDChartParams& p );

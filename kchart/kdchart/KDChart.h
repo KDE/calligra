@@ -14,7 +14,7 @@
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+   General Public License for more details.
 
    You should have received a copy of the GNU General Public License
    along with this library; see the file COPYING.  If not, write to
@@ -25,10 +25,10 @@
 #ifndef __KDCHART_H__
 #define __KDCHART_H__
 
-#include "KDChartTable.h"
-#include "KDChartUnknownTypeException.h"
-#include "KDChartParams.h"
-#include "KDChartDataRegion.h"
+#include <KDChartTable.h>
+#include <KDChartUnknownTypeException.h>
+#include <KDChartParams.h>
+#include <KDChartDataRegion.h>
 
 class KDChartPainter;
 class QPainter;
@@ -39,9 +39,9 @@ class KDChart
 public:
     static void paint( QPainter*, KDChartParams*, KDChartTableData*,
                        KDChartDataRegionList* regions = 0 )
-#ifdef USE_EXCEPTIONS
+    #ifdef USE_EXCEPTIONS
     throw( KDChartUnknownTypeException )
-#endif
+    #endif
     ;
 
 private:
