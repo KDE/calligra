@@ -157,9 +157,11 @@ void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
     numerator->draw(painter, r, style,
 		    style.convertTextStyleFraction( tstyle ),
 		    style.convertIndexStyleUpper( istyle ), myPos);
-    denominator->draw(painter, r, style,
+    if (denominator) { // Can be temporarily 0 see FractionElement::remove
+        denominator->draw(painter, r, style,
 		      style.convertTextStyleFraction( tstyle ),
 		      style.convertIndexStyleLower( istyle ), myPos);
+    }
 
     if ( withLine ) {
         painter.setPen( QPen( style.getDefaultColor(),
