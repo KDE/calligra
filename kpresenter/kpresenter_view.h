@@ -307,9 +307,6 @@ public:
 	m_vMenuExtra->setItemEnabled( m_idMenuExtra_WepPres, true );
     }
 
-    // create a pixmapstring from a color
-    static QString colorToPixString( QColor );
-
     // get fonts
     static void getFonts( QStringList &lst );
 

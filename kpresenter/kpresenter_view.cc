@@ -61,6 +61,7 @@
 #include <kcolordlg.h>
 #include <kfontdialog.h>
 #include <kglobal.h>
+#include <kimgio.h>
 
 #include <opUIUtils.h>
 #include <opToolBarIf.h>
@@ -71,7 +72,7 @@
 #include <koAboutDia.h>
 #include <koPageLayoutDia.h>
 #include <koRuler.h>
-#include <kimgio.h>
+#include <koUIUtils.h>
 
 #include <stdlib.h>
 #include <signal.h>
@@ -1205,9 +1206,8 @@ void KPresenterView::textColor()
 {
     if ( KColorDialog::getColor( tbColor ) )
     {
-	OpenPartsUI::Pixmap pix;
-	pix.data = CORBA::string_dup( colorToPixString( tbColor ) );
-	pix.onlyFilename = false;
+        OpenPartsUI::Pixmap_var pix = 
+            KOUIUtils::colorPixmap( tbColor, KOUIUtils::TXT_COLOR );
 	m_vToolBarText->setButtonPixmap( ID_TEXT_COLOR, pix );
 	page->setTextColor( &tbColor );
     }
@@ -1982,10 +1982,8 @@ void KPresenterView::colorChanged( QColor* color )
 {
     if ( color->operator!=( tbColor ) )
     {
-	OpenPartsUI::Pixmap pix;
-	pix.data = CORBA::string_dup( colorToPixString( color->rgb() ) );
-	pix.onlyFilename = false;
-
+        OpenPartsUI::Pixmap_var pix = 
+            KOUIUtils::colorPixmap( color->rgb(), KOUIUtils::TXT_COLOR );
 	tbColor.setRgb( color->rgb() );
 	m_vToolBarText->setButtonPixmap( ID_TEXT_COLOR, pix );
     }
@@ -3422,10 +3420,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
     tbFont.setUnderline( false );
 
     // color
-    OpenPartsUI::Pixmap* p = new OpenPartsUI::Pixmap;
-    p->data = CORBA::string_dup( colorToPixString( black ) );
-    p->onlyFilename = false;
-    pix = p;
+    pix = KOUIUtils::colorPixmap( black, KOUIUtils::TXT_COLOR );
     toolTip = Q2C( i18n( "Color" ) );
     m_idButtonText_Color = m_vToolBarText->insertButton2( pix, ID_TEXT_COLOR, SIGNAL( clicked() ), this, "textColor", true, toolTip, -1 );
     tbColor = black;
@@ -3857,35 +3852,6 @@ void KPresenterView::setTool( ToolEditMode toolEditMode )
 	m_vToolBarTools->setButton( ID_TOOL_AUTOFORM, true );
     } break;
     }
-}
-
-/*============== create a pixmapstring from a color ============*/
-QString KPresenterView::colorToPixString( QColor c )
-{
-    int r, g, b;
-    QString pix;
-    QString line;
-
-    c.rgb( &r, &g, &b );
-
-    pix = "/* XPM */\n";
-
-    pix += "static char * text_xpm[] = {\n";
-
-    line.sprintf( "%c 20 20 1 1 %c,\n", 34, 34 );
-    pix += line.copy();
-
-    line.sprintf( "%c c #%02X%02X%02X %c,\n", 34, r, g, b, 34 );
-    pix += line.copy();
-
-    line.sprintf( "%c                    %c,\n", 34, 34 );
-    for ( unsigned int i = 1; i <= 20; i++ )
-	pix += line.copy();
-
-    line.sprintf( "%c                    %c};\n", 34, 34 );
-    pix += line.copy();
-
-    return QString( pix );
 }
 
 /*===================== load not KDE installed fonts =============*/
