@@ -26,7 +26,7 @@
 #include <xsltexportdia.h>
 
 typedef KGenericFactory<XSLTExport, KoFilter> XSLTExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libxsltexport, XSLTExportFactory( "xsltexportfilter" ) )
+K_EXPORT_COMPONENT_FACTORY( libxsltexport, XSLTExportFactory( "kofficefilters" ) )
 
 // Check for XSLT files
 extern "C" {

@@ -23,6 +23,3 @@ METASOURCES = AUTO
 
 service_DATA = xslt_import.desktop
 servicedir = $(kde_servicesdir)
-
-messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/xsltimportfilter.pot

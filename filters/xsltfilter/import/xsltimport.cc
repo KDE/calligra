@@ -29,7 +29,7 @@
 
 
 typedef KGenericFactory<XSLTImport, KoFilter> XSLTImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libxsltimport, XSLTImportFactory( "xsltimportfilter" ) )
+K_EXPORT_COMPONENT_FACTORY( libxsltimport, XSLTImportFactory( "kofficefilters" ) )
 
 
 XSLTImport::XSLTImport(KoFilter *, const char *, const QStringList&) :

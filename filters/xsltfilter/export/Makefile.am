@@ -27,6 +27,3 @@ METASOURCES = AUTO
 service_DATA = xslt_export.desktop
 
 servicedir = $(kde_servicesdir)
-
-messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/xsltexportfilter.pot
