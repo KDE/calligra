@@ -1309,7 +1309,7 @@ void KWParagCounterWidget::save( KWParagLayout & lay )
 }
 
 /*================================================================*/
-KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, QWidget * parent, const char * name = 0 )
+KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, QWidget * parent, const char * name )
     : KWParagLayoutWidget( KWParagDia::PD_TABS, parent, name ), m_unit(unit)
 {
     QGridLayout *grid = new QGridLayout( this, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );

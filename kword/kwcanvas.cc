@@ -580,7 +580,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     double cy = my / doc->zoomedResolutionY();
     // Move the bounding rect containing all the selected frames
     KoRect oldBoundingRect = m_boundingRect;
-    int page = doc->getPageOfRect( m_boundingRect );
+    //int page = doc->getPageOfRect( m_boundingRect );
     //kdDebug() << "KWCanvas::mmEditFrameMove cx=" << cx << " page=" << page
     //          << "  boundingrect=" << DEBUGRECT(m_boundingRect) << endl;
 
@@ -1232,7 +1232,7 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
     QList<FrameIndex> frameindexListBottom;
 
     int m_IindexFrame;
-    int m_IindexFrameSet;
+    //int m_IindexFrameSet;
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
         FrameIndex *index=new FrameIndex;

@@ -1527,7 +1527,7 @@ void KWTableFrameSet::printDebug() {
 
 /////
 
-KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned int col, const QString & name ) :
+KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned int col, const QString &/*name*/ ) :
     KWTextFrameSet( table->m_doc, "." /*dummy and not empty, faster*/ )
 {
     m_table = table;

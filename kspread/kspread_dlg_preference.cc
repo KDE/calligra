@@ -52,7 +52,7 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 
   page=addVBoxPage(i18n("Local Parameters"), QString::null,BarIcon("gohome",KIcon::SizeMedium));
-  parameterLocale *_ParamLocal=new parameterLocale(parent,page );
+  //parameterLocale *_ParamLocal=new parameterLocale(parent,page );
   page=addVBoxPage(i18n("Interface"), QString::null,BarIcon("signature", KIcon::SizeMedium) );
   _configure = new  configure(parent,page );
   page=addVBoxPage(i18n("Misc"), QString::null,BarIcon("misc",KIcon::SizeMedium) );

@@ -2144,7 +2144,7 @@ void KSpreadTable::find( const QPoint &_marker, QString _find, long options )
 void KSpreadTable::highlight( const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/, const QRect &cellRect )
 {
     // Which cell was this again?
-    KSpreadCell *cell = cellAt( cellRect.left(), cellRect.top() );
+    //KSpreadCell *cell = cellAt( cellRect.left(), cellRect.top() );
 
     // ...now I remember, update it!
     // TBD: highlight it!

@@ -419,7 +419,7 @@ void KWFindReplace::highlight( const QString &, int matchingIndex, int matchingL
 }
 
 void KWFindReplace::replace( const QString &, int matchingIndex,
-                             int matchingLength, const QRect &expose )
+                             int matchingLength, const QRect &/*expose*/ )
 {
     int index = m_offset + matchingIndex;
     // highlight might not have happened (if 'prompt on replace' is off)

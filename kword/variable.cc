@@ -91,7 +91,7 @@ void KWVariable::resize()
     QTextString txt;
     txt.insert( 0, text(), &fmt );
     width = 0;
-    for ( uint i = 0 ; i < txt.length() ; ++i )
+    for ( int i = 0 ; i < txt.length() ; ++i )
         width += txt.width( i );
     //kdDebug() << "KWVariable::resize width=" << width << endl;
 }

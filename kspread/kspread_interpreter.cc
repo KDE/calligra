@@ -4021,14 +4021,14 @@ static bool kspreadfunc_decsex( KSContext& context )
 
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
     return false;
-  double inter;
+  int inter;
   double val=args[0]->doubleValue();
-  double hours,minutes,second;
+  int hours,minutes,second;
   if(val>0)
     inter=1;
   else
     inter=-1;
-  hours=inter*(int)(fabs(val));
+  hours=inter*(int)(std::fabs(val));
   minutes=(int)(60*val-60*(int)(val));
   second=(int)(3600*val-3600*(int)(val)-60*(int)(60*val-60*(int)(val)));
   QTime _time(hours,minutes,second);

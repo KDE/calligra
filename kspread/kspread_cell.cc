@@ -1972,7 +1972,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     if ( /*m_bCalcDirtyFlag*/calcDirtyFlag() && !override_obscured )
         calc();
 
-    bool old_layoutflag = m_bLayoutDirtyFlag;
+    //bool old_layoutflag = m_bLayoutDirtyFlag;
     // Need to make a new layout ?
     if ( m_bLayoutDirtyFlag && !override_obscured )
         makeLayout( _painter, _col, _row );
@@ -2420,8 +2420,8 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                 y=_ty + m_iTextY;
             else
                 y=_ty + m_iTextY+m_iOutTextHeight;
-            _painter.drawText( x*cos(angle*M_PI/180)+y*sin(angle*M_PI/180),
-                               -x*sin(angle*M_PI/180) + y*cos(angle*M_PI/180) , m_strOutText );
+            _painter.drawText( qRound(x*cos(angle*M_PI/180) + y*sin(angle*M_PI/180)),
+                               qRound(-x*sin(angle*M_PI/180) + y*cos(angle*M_PI/180)) , m_strOutText );
             _painter.rotate(-angle);
         }
         else if( multiRow(_col,_row) && !verticalText(_col,_row))

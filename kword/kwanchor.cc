@@ -124,7 +124,7 @@ void KWAnchor::save( QDomElement &formatElem )
     QDomElement anchorElem = formatElem.ownerDocument().createElement( "ANCHOR" );
     formatElem.appendChild( anchorElem );
     anchorElem.setAttribute( "type", "frameset" ); // the only possible value currently
-    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
+    //KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
     // ## TODO save the frame number as well ? Only the first frame ? to be determined
     // ## or maybe use len=<number of frames>. Difficult :}
     anchorElem.setAttribute( "instance", m_frameset->getName() );

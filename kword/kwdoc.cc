@@ -33,6 +33,7 @@
 #include <koMainWindow.h>
 #include <koQueryTrader.h>
 
+#include <kapp.h> // for KDE_VERSION
 #include <kurl.h>
 #include <klocale.h>
 #include <kstddirs.h>
