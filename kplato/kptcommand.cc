@@ -144,6 +144,8 @@ KPTTaskAddCmd::KPTTaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, 
     }
     node->setEarliestStart(node->startTime());
     node->setLatestFinish(node->endTime());
+    node->setWorkStartTime(node->startTime());
+    node->setWorkEndTime(node->endTime());
 }
 KPTTaskAddCmd::~KPTTaskAddCmd() {
     if (!m_added)
@@ -176,6 +178,8 @@ KPTSubtaskAddCmd::KPTSubtaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *
     node->setEndTime(node->startTime() + node->duration());
     node->setEarliestStart(node->startTime());
     node->setLatestFinish(node->endTime());
+    node->setWorkStartTime(node->startTime());
+    node->setWorkEndTime(node->endTime());
 }
 KPTSubtaskAddCmd::~KPTSubtaskAddCmd() {
     if (!m_added)

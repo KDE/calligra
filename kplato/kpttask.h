@@ -179,6 +179,33 @@ public:
     bool isEndNode() const;
     bool isStartNode() const;
     
+    /*
+     * Return the the duration that an activity's start can be delayed 
+     * without affecting the project completion date. 
+     * An activity with positive float is not on the critical path.
+     */
+    KPTDuration positiveFloat();
+    /*
+     * Return the duration by which the duration of an activity or path 
+     * has to be reduced in order to fullfill a timing constraint.
+     */
+    KPTDuration negativeFloat() { return KPTDuration(); }
+    /*
+     * Return the duration by which an activity can be delayed or extended 
+     * without affecting the start of any succeeding activity.
+     */
+    KPTDuration freeFloat() { return KPTDuration(); }
+    /*
+     * Return the duration from Early Start to Late Start.
+     */
+    KPTDuration startFloat() { return KPTDuration(); }
+    /*
+     * Return the duration the task has at its finish  before a successor task starts.
+     * This is the difference between the start time of the successor and
+     * the finish time of this task.
+     */
+    KPTDuration finishFloat() { return KPTDuration(); }
+    
     struct Progress {
         Progress() { started = finished = false; percentFinished = 0; }
         bool operator==(struct Progress &p) {
@@ -210,14 +237,15 @@ private:
     KPTDateTime calculatePredeccessors(const QPtrList<KPTRelation> &list, int use);
     KPTDateTime scheduleSuccessors(const QPtrList<KPTRelation> &list, int use);
     KPTDateTime schedulePredeccessors(const QPtrList<KPTRelation> &list, int use);
+    
+    KPTDateTime workStartAfter(const KPTDateTime &dt);
+    KPTDateTime workFinishBefore(const KPTDateTime &dt);
+
 private:
     QPtrList<KPTResourceGroup> m_resource;
 
     KPTResourceRequestCollection *m_requests;
  
-    KPTDuration m_durationForward;
-    KPTDuration m_durationBackward;
-
     QPtrList<KPTRelation> m_parentProxyRelations;
     QPtrList<KPTRelation> m_childProxyRelations;
       

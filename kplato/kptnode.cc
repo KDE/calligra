@@ -583,7 +583,6 @@ bool KPTNode::setId(QString id) {
 void KPTNode::setStartTime(KPTDateTime startTime) { 
     m_startTime = startTime; 
     m_dateOnlyStartDate = startTime.date();
-    kdDebug()<<k_funcinfo<<m_startTime.toString()<<" end date="<<m_dateOnlyEndDate.toString()<<endl;
 }
 
 void KPTNode::setEndTime(KPTDateTime endTime) { 
@@ -591,8 +590,6 @@ void KPTNode::setEndTime(KPTDateTime endTime) {
     m_dateOnlyEndDate = endTime.date();
     if (endTime.time().isNull() && m_dateOnlyEndDate > m_dateOnlyStartDate)
         m_dateOnlyEndDate = m_dateOnlyEndDate.addDays(-1);
-
-    kdDebug()<<k_funcinfo<<endTime.toString()<<" start date="<<m_dateOnlyStartDate.toString()<<" end date="<<m_dateOnlyEndDate.toString()<<endl;
 }
 
 KPTAppointment *KPTNode::findAppointment(KPTResource *resource) {

@@ -225,6 +225,7 @@ public:
 
     /**
       * getEarliestStart() returns earliest time this node can start
+      * given the constraints of the network.
       * @see earliestStart
       */
     KPTDateTime getEarliestStart() const { return earliestStart; }
@@ -240,6 +241,7 @@ public:
     KPTDateTime getLatestFinish() const { return latestFinish; }
     /**
       * setLatestFinish() sets latest time this node can finish
+      * given the constraints of the network.
       * @see latestFinish
       */
     void setLatestFinish(const KPTDateTime &dt) { latestFinish = dt; }
@@ -385,6 +387,14 @@ public:
     virtual void insertId(const QString &id, const KPTNode *node)
         { if (m_parent) m_parent->insertId(id, node); }
     
+    KPTDateTime &earliestStartForward() { return m_earliestStartForward; }
+    KPTDateTime &latestFinishBackward() { return m_latestFinishBackward; }
+    
+    KPTDateTime &workStartTime() { return m_workStartTime; }
+    void setWorkStartTime(const KPTDateTime &dt) { m_workStartTime = dt; }
+    KPTDateTime &workEndTime() { return m_workEndTime; }
+    void setWorkEndTime(const KPTDateTime &dt) { m_workEndTime = dt; }
+
 protected:
     QPtrList<KPTNode> m_nodes;
     QPtrList<KPTRelation> m_dependChildNodes;
@@ -462,6 +472,13 @@ protected:
  
     QPtrList<KPTAppointment> m_appointments;
  
+    KPTDateTime m_earliestStartForward;
+    KPTDuration m_durationForward;
+    KPTDateTime m_latestFinishBackward;
+    KPTDuration m_durationBackward;
+    KPTDateTime m_workStartTime;
+    KPTDateTime m_workEndTime;
+
 private:
     void init();
         

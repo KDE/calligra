@@ -76,6 +76,7 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     m_gantt = new KDGanttView(this, "Gantt view");
     m_gantt->setLinkItemsEnabled(true);
     m_showProgress = true; //FIXME
+    m_showPositiveFloat = true; //FIXME
     m_gantt->setHeaderVisible(true);
     m_gantt->setScale(KDGanttView::Day);
     m_gantt->setShowLegendButton(false);
@@ -391,13 +392,26 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
         item->setStartTime(QDateTime(task->startDate(), QTime()));
         item->setEndTime(QDateTime(task->endDate().addDays(1), QTime())); // hmmm
     } else {
-        item->setStartTime(task->startTime());
-        item->setEndTime(task->endTime());
+        item->setStartTime(task->workStartTime());
+        item->setEndTime(task->workEndTime());
     }
     //item->setOpen(true);
     item->setText(task->name());
     if (m_showProgress) {
         item->setProgress(task->progress().percentFinished);
+    } else {
+        item->setProgress(0);
+    }
+    if (m_showPositiveFloat) {
+        QDateTime t = task->workEndTime() + task->positiveFloat();
+        if (t.isValid() && t > task->endTime()) {
+            item->setFloatEndTime(t);
+        } else {
+            item->setFloatEndTime(QDateTime());
+        }
+    } else {
+        item->setFloatStartTime(QDateTime());
+        item->setFloatEndTime(QDateTime());
     }
     //TODO i18n
     QString w="Name: " + task->name();
@@ -464,6 +478,17 @@ void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
         item->setStartTime(task->startTime());
     //item->setOpen(true);
     item->setText(task->name());
+    if (m_showPositiveFloat) {
+        KPTDateTime t = task->endTime() + task->positiveFloat();
+        if (t.isValid() && t > task->startTime()) {
+            item->setFloatEndTime(t);
+        } else {
+            item->setFloatEndTime(QDateTime());
+        }
+    } else {
+        item->setFloatStartTime(QDateTime());
+        item->setFloatEndTime(QDateTime());
+    }
     //TODO i18n
     QString w="Name: " + task->name();
     w += "\n"; w += "Time: ";

@@ -146,6 +146,7 @@ private:
     KDGanttView *m_gantt;
     KPTTaskAppointmentsView *m_taskView;
     bool m_showProgress;
+    bool m_showPositiveFloat;
     bool m_firstTime;
     QPtrList<KDGanttViewTaskLink> m_taskLinks;
 };
