@@ -83,7 +83,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                                      "hilochart");
     m_charthilo->setExclusiveGroup( "charttypes" );
 
-    m_chartbw = new KToggleAction( i18n("Bo&x && Whiskers"), "chart_boxwhiskers", 0, this,
+    m_chartbw = new KToggleAction( i18n("Bo&x && Whiskers"), "chart_boxwhisker", 0, this,
                                      SLOT( bwChart() ), actionCollection(),
                                      "bwchart");
     m_chartbw->setExclusiveGroup( "charttypes" );
