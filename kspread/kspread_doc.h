@@ -270,6 +270,10 @@ public:
     void insertTable( KSpreadTable * table );
     void takeTable( KSpreadTable * table );
 
+    // The user-chosen global unit
+    QString getUnitName() { return KoUnit::unitName( m_unit ); }
+    KoUnit::Unit getUnit() { return m_unit; }
+    void setUnit( KoUnit::Unit _unit );
 
   /**
    * Returns the syntax version of the currently opened file
@@ -464,6 +468,7 @@ protected:
   bool m_bDontCheckUpperWord;
   bool m_bDontCheckTitleCase;
 
+  KoUnit::Unit m_unit;
 };
 
 #endif

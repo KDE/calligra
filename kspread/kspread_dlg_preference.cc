@@ -854,7 +854,7 @@ void configureLayoutPage::apply()
    {
      unsigned int unitPage=defaultUnit->currentItem();
      config->writeEntry( "Default unit page", unitPage);
-     m_pView->activeTable()->setPaperUnit((KoUnit::Unit)unitPage);
+     m_pView->doc()->setUnit((KoUnit::Unit)unitPage);
    }
 }
 

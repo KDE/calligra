@@ -3366,7 +3366,7 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
 
     QString tmpSize;
     if(m_iResizePos!=y)
-        tmpSize=i18n("Height: %1").arg((int)((m_iResizePos-y)/m_pCanvas->zoom()));
+        tmpSize=i18n("Height: %1 %2").arg(KoUnit::ptToUnit(((m_iResizePos-y)/m_pCanvas->zoom()) ,m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
     else
         tmpSize=i18n("Hide Row");
 
@@ -3912,7 +3912,7 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     painter.end();
     QString tmpSize;
     if(m_iResizePos !=x)
-        tmpSize=i18n("Width: %1").arg((int)((m_iResizePos-x)/m_pCanvas->zoom()));
+        tmpSize=i18n("Width: %1 %2").arg(KoUnit::ptToUnit(((m_iResizePos-x)/m_pCanvas->zoom()), m_pView->doc()->getUnit())).arg(m_pView->doc()->getUnitName());
     else
         tmpSize=i18n("Hide Column");
     painter.begin(this);

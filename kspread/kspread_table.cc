@@ -273,7 +273,6 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   m_topBorder = 20.0;
   m_bottomBorder = 20.0;
   m_paperFormat = PG_DIN_A4;
-  m_paperUnit = KoUnit::U_MM;
   m_paperWidth = PG_A4_WIDTH;
   m_paperHeight = PG_A4_HEIGHT;
   m_orientation = PG_PORTRAIT;
@@ -6871,7 +6870,7 @@ void KSpreadTable::paperLayoutDlg()
     hf.footRight = localizeHeadFootLine( footRight() );
     hf.footMid   = localizeHeadFootLine( footMid()   );
 
-    KoUnit::Unit unit = paperUnit();
+    KoUnit::Unit unit = m_pDoc->getUnit();
 
     if ( !KoPageLayoutDia::pageLayout( pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit ) )
         return;
@@ -6890,8 +6889,7 @@ void KSpreadTable::paperLayoutDlg()
                      localizeHeadFootLine( hf.footLeft  ),
                      localizeHeadFootLine( hf.footMid   ),
                      localizeHeadFootLine( hf.footRight ) );
-
-    setPaperUnit( unit );
+    m_pDoc->setUnit( unit );
 }
 
 

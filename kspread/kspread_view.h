@@ -83,15 +83,15 @@ public:
     ~KSpreadView();
 
     KSpreadCanvas* canvasWidget() const { return m_pCanvas; }
-    KSpreadHBorder* hBorderWidget() { return m_pHBorderWidget; }
-    KSpreadVBorder* vBorderWidget() { return m_pVBorderWidget; }
-    QScrollBar* horzScrollBar() { return m_pHorzScrollBar; }
-    QScrollBar* vertScrollBar() { return m_pVertScrollBar; }
-    KSpreadEditWidget* editWidget() { return m_pEditWidget; }
+    KSpreadHBorder* hBorderWidget()const { return m_pHBorderWidget; }
+    KSpreadVBorder* vBorderWidget()const { return m_pVBorderWidget; }
+    QScrollBar* horzScrollBar()const { return m_pHorzScrollBar; }
+    QScrollBar* vertScrollBar()const { return m_pVertScrollBar; }
+    KSpreadEditWidget* editWidget()const { return m_pEditWidget; }
     //QLabel* posWidget() { return m_pPosWidget; }
-    KSpreadLocationEditWidget* posWidget() { return m_pPosWidget; }
+    KSpreadLocationEditWidget* posWidget()const { return m_pPosWidget; }
 
-    KSpreadDoc* doc() { return m_pDoc; }
+    KSpreadDoc* doc()const { return m_pDoc; }
 
     void addTable( KSpreadTable *_t );
     //void removeTable( KSpreadTable *_t );
@@ -100,7 +100,7 @@ public:
 
     const KSpreadTable* activeTable() const { return m_pTable; }
     KSpreadTable* activeTable() { return m_pTable; }
-    KSpreadTabBar* tabBar() { return  m_pTabBar;}
+    KSpreadTabBar* tabBar()const { return  m_pTabBar;}
 
     void openPopupMenu( const QPoint &_global );
     void popupRowMenu(const QPoint & _point ) ;
@@ -170,7 +170,7 @@ public:
     */
     void refreshView();
 
-    bool isLoading() {return m_bLoading;}
+    bool isLoading()const {return m_bLoading;}
 
     /**
      * write in statusBar result of calc (Min, or Max, average, sum, count)

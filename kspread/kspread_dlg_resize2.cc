@@ -29,6 +29,7 @@
 #include <kdebug.h>
 #include <qcheckbox.h>
 #include <knuminput.h>
+#include <koUnit.h>
 
 KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resize re)
 	: KDialogBase( parent, name,TRUE,i18n("Default"),Ok|Cancel )
@@ -62,7 +63,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 		for(i=selection.top()+1;i<=selection.bottom();i++)
 			if(size!=m_pView->activeTable()->rowLayout(i)->height(m_pView->canvasWidget()))
 			equals=false;
-		label=i18n("Height (mm)");
+		label=i18n("Height (%1)").arg(m_pView->doc()->getUnitName());
 		tmpCheck+=" (20 mm)";
 		break;
 	case resize_column:
@@ -76,7 +77,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 			if(size!=m_pView->activeTable()->columnLayout(i)->width(m_pView->canvasWidget()))
 			equals=false;
 
-		label=i18n("Width (mm)");
+		label=i18n("Width (%1)").arg(m_pView->doc()->getUnitName());
 		tmpCheck+=" (60 mm)";
 		break;
 	default :

@@ -1350,16 +1350,9 @@ public:
      */
     QString paperFormatString()const;
 
-    /**
-     * @return the unit paper
-     */
-    KoUnit::Unit paperUnit()const { return m_paperUnit; }
-
     void setPaperFormat(KoFormat _format) {m_paperFormat=_format;}
 
     void setPaperOrientation(KoOrientation _orient) { m_orientation=_orient;}
-
-    void setPaperUnit(KoUnit::Unit _unit) { m_paperUnit=_unit;}
 
      /**
      * Changes the paper layout and repaints the currently displayed KSpreadTable.
@@ -1444,9 +1437,6 @@ protected:
      * Tells about the currently seleced paper size.
      */
     KoFormat m_paperFormat;
-
-    KoUnit::Unit m_paperUnit;
-
     /**
      * The paper width in millimeters. Dont change this value, it is calculated by
      * @ref #calcPaperSize from the value @ref #m_paperFormat.

@@ -122,6 +122,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 
   m_bDontCheckUpperWord=false;
   m_bDontCheckTitleCase=false;
+  m_unit = KoUnit::U_MM;
 }
 
 bool KSpreadDoc::initDoc()
@@ -772,6 +773,9 @@ void KSpreadDoc::takeTable( KSpreadTable * table )
 	((KSpreadView*)it.current())->removeTable( table );
 }
 
-
+void KSpreadDoc::setUnit( KoUnit::Unit _unit )
+{
+    m_unit = _unit;
+}
 #include "kspread_doc.moc"
 
