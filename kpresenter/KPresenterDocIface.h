@@ -54,6 +54,10 @@ k_dcop:
     virtual void setShowRuler(bool );
     virtual bool showRuler() const;
 
+    virtual void recalcVariables( int type );
+    virtual void recalcAllVariables();
+    virtual void recalcVariables(const QString &varName);
+
 private:
     KPresenterDoc *doc;
 

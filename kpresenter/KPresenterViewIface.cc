@@ -510,3 +510,8 @@ void KPresenterViewIface::extraAutoFormat()
 {
     view->extraAutoFormat();
 }
+
+void KPresenterViewIface::refreshAllVariable()
+{
+    view->extraAutoFormat();
+}

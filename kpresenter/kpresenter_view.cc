@@ -2613,6 +2613,12 @@ void KPresenterView::setupActions()
 
     addVariableActions( VT_PGNUM, KoPgNumVariable::actionTexts(), actionInsertVariable, QString::null );
 
+    actionInsertVariable->popupMenu()->insertSeparator();
+    actionRefreshAllVariable = new KAction( i18n( "&Refresh all variable" ), 0,
+                                    this, SLOT( refreshAllVariable() ),
+                                    actionCollection(), "refresh_all_variable" );
+    actionInsertVariable->insert(actionRefreshAllVariable);
+
     actionIncreaseFontSize = new KAction( i18n("Increase font size"),"fontsizeup", 0,
                                   this, SLOT( increaseFontSize() ),
                                   actionCollection(), "increaseFontSize" );
@@ -4652,6 +4658,10 @@ void KPresenterView::doFindReplace()
         m_findReplace = 0L;
 }
 
+void KPresenterView::refreshAllVariable()
+{
+    m_pKPresenterDoc->recalcVariables( VT_ALL );
+}
 
 
 

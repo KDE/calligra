@@ -502,6 +502,8 @@ protected slots:
     void getPageMouseWheelEvent( QWheelEvent *e );
     void updateRuler();
 
+    void refreshAllVariable();
+
 // end of protected slots
 protected:
 
@@ -756,7 +758,7 @@ private:
     KAction *actionIncreaseFontSize;
     KAction *actionDecreaseFontSize;
     KAction *actionChangeCase;
-
+    KAction *actionRefreshAllVariable;
     QTimer automaticScreenPresTimer;
     QTime automaticScreenPresTime;
     int automaticScreenPresWaitTime;
