@@ -50,7 +50,7 @@ VGradientDlg::VGradientDlg( QWidget* parent, const char* name )
 	m_gradientType = new KComboBox( false, group );
 	m_gradientType->insertItem( i18n( "Linear" ), 0 );
 	m_gradientType->insertItem( i18n( "Radial" ), 1 );
-	m_gradientType->insertItem( i18n( "Conical" ), 2 );
+	//m_gradientType->insertItem( i18n( "Conical" ), 2 );
 	group->setMinimumWidth( 300 );
 
 	// signals and slots:
