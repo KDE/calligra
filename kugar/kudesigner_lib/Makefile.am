@@ -1,5 +1,8 @@
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 
+# Temporary hack, to work around the KColorCombo bug with --enable-final
+KDE_OPTIONS = nofinal
+
 noinst_LTLIBRARIES =  libkudesignercommon.la
 libkudesignercommon_la_LDFLAGS = $(all_libraries)
 libkudesignercommon_la_METASOURCES = AUTO
