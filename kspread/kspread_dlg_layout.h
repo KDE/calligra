@@ -201,6 +201,7 @@ protected:
     QComboBox *format;
     QRadioButton *number;
     QRadioButton *percent;
+    QRadioButton *shortdate;
     QRadioButton *date;
     QRadioButton *money;
     QRadioButton *scientific;

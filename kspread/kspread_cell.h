@@ -40,6 +40,7 @@ class KSParseNode;
 #include <qlist.h>
 #include <qstrlist.h>
 #include <qobject.h>
+#include <qdatetime.h>
 
 #include "kspread_layout.h"
 #include "kspread_global.h"
@@ -116,7 +117,7 @@ class KSpreadCell : public KSpreadLayout
 public:
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
     enum Content { Text, RichText, Formula, VisualFormula };
-    enum formatNumber { Number=0,Money=10,Percentage=25,Scientific=30,Date=35, Time=50 };
+    enum formatNumber { Number=0,Money=10,Percentage=25,Scientific=30,ShortDate=35,TextDate=36, Time=50 };
 
     KSpreadCell( KSpreadTable *_table, int _column, int _row );
     /**
@@ -390,9 +391,11 @@ public:
     bool isValue() const { return m_bValue; }
     bool isBool() const {  return m_bBool; }
     bool valueBool() const { return ( m_dValue != 0.0 ); }
+    bool isDate() const {  return m_bDate; }
     double valueDouble() const { return m_dValue; }
     QString valueString() const;
     void setValue( double _d );
+    QDate valueDate() const {return m_Date;}
 
     /**
      * When you insert a cell at bottom or right
@@ -731,6 +734,8 @@ protected:
     bool m_bValue;
     bool m_bBool;
     bool m_bError;
+    bool m_bDate;
+    QDate m_Date;
 
     /**
      * Flag showing whether the current layout is OK.

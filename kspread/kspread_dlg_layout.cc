@@ -602,7 +602,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 
     //box = new QGroupBox( this, "Box");
     QButtonGroup *grp = new QButtonGroup( i18n("Format"),this);
-    grid = new QGridLayout(grp,5,1,15,7);
+    grid = new QGridLayout(grp,6,1,15,7);
     grp->setRadioButtonExclusive( TRUE );
     number=new QRadioButton(i18n("Number"),grp);
     grid->addWidget(number,0,0);
@@ -613,11 +613,14 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     money=new QRadioButton(i18n("Money"),grp);
     grid->addWidget(money,2,0);
 
-    date=new QRadioButton(i18n("Date"),grp);
+    date=new QRadioButton(i18n("Date Format"),grp);
     grid->addWidget(date,3,0);
 
+    shortdate=new QRadioButton(i18n("Date Format Short"),grp);
+    grid->addWidget(shortdate,4,0);
+
     scientific=new QRadioButton(i18n("Scientific"),grp);
-    grid->addWidget(scientific,4,0);
+    grid->addWidget(scientific,5,0);
     layout->addWidget(grp);
 
     if(!dlg->bFormatNumber)
@@ -632,11 +635,13 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
                 money->setChecked(true);
         else if(dlg->formatNumber==KSpreadCell::Scientific)
                 scientific->setChecked(true);
-        else if(dlg->formatNumber==KSpreadCell::Date)
+        else if(dlg->formatNumber==KSpreadCell::ShortDate)
+                shortdate->setChecked(true);
+        else if(dlg->formatNumber==KSpreadCell::TextDate)
                 date->setChecked(true);
 
         }
-    date->setEnabled(false);
+    //date->setEnabled(false);
 
     this->resize( 400, 400 );
 }
@@ -689,8 +694,10 @@ void CellLayoutPageFloat::apply( KSpreadCell *_obj )
         _obj->setFormatNumber(KSpreadCell::Percentage);
         _obj->setFaktor(100.0);
         }
+    else if(shortdate->isChecked())
+        _obj->setFormatNumber(KSpreadCell::ShortDate);
     else if(date->isChecked())
-        _obj->setFormatNumber(KSpreadCell::Date);
+        _obj->setFormatNumber(KSpreadCell::TextDate);
     else if(money->isChecked())
         _obj->setFormatNumber(KSpreadCell::Money);
     else if(scientific->isChecked())

@@ -706,3 +706,8 @@ For the moment Date format doesn't work (sorry david).
 Fixed tabbar colors (active table is not 'selected' -> using base())
 Speed up KSpreadTextEditor::checkChoose(), might fix i18n problem as well
 
+2000-06-30-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Now kspread support Date
+Date is saving in "international format", date can read in each language.
+

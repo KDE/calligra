@@ -85,6 +85,7 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_bCalcDirtyFlag = FALSE;
   m_bValue = FALSE;
   m_bBool = FALSE;
+  m_bDate = FALSE;
   m_bProgressFlag = FALSE;
   m_bDisplayDirtyFlag = false;
 
@@ -810,7 +811,6 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   }
 
   m_textPen.setColor( textColor() );
-
   if ( m_bBool )
   {
     if ( m_dValue == 0 )
@@ -818,6 +818,14 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     else
       m_strOutText = "True";
   }
+  else if( m_bDate)
+  {
+  if( m_eFormatNumber==ShortDate)
+        m_strOutText=KGlobal::locale()->formatDate(m_Date,true);
+  else if(m_eFormatNumber==TextDate)
+        m_strOutText=KGlobal::locale()->formatDate(m_Date,false);
+  }
+
   else if ( m_bValue &&!m_pTable->getShowFormular() )
   {
     // First get some locale information
@@ -954,7 +962,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   int a = m_eAlign;
   if ( a == KSpreadCell::Undefined )
   {
-    if ( m_bValue )
+    if ( m_bValue  || m_bDate)
       a = KSpreadCell::Right;
     else
       a = KSpreadCell::Left;
@@ -1165,8 +1173,8 @@ switch( m_eFormatNumber)
                         localizedNumber=localizedNumber.replace(pos,1,decimal_point);
 
                 break;
-        case Date :
-                //nothing here.
+        case ShortDate:
+        case TextDate :
                 break;
         default :
                 kdDebug(36001)<<"Error in m_eFormatNumber\n";
@@ -1350,7 +1358,7 @@ switch( m_eAlignY )
 
 if ( a == KSpreadCell::Undefined )
   {
-    if ( m_bValue )
+    if ( m_bValue || m_bDate)
       a = KSpreadCell::Right;
     else
       a = KSpreadCell::Left;
@@ -1580,6 +1588,7 @@ bool KSpreadCell::makeFormular()
     m_strFormularOut = "####";
     m_bBool = false;
     m_bValue = false;
+    m_bDate=false;
     m_dValue = 0.0;
     m_bLayoutDirtyFlag = true;
     DO_UPDATE;
@@ -1611,6 +1620,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bError = true;
     m_bValue = false;
     m_bBool = false;
+    m_bDate =false;
     m_strFormularOut = "####";
     m_bLayoutDirtyFlag = true;
     if ( m_style == ST_Select )
@@ -1655,6 +1665,7 @@ bool KSpreadCell::calc( bool _makedepend )
 	      m_strFormularOut = "####";
 	      m_bValue = false;
 	      m_bBool = false;
+              m_bDate=false;
 	      m_bProgressFlag = false;
 	      if ( m_style == ST_Select )
 	      {
@@ -1678,6 +1689,7 @@ bool KSpreadCell::calc( bool _makedepend )
 	  m_strFormularOut = "####";
 	  m_bValue = false;
 	  m_bBool = false;
+          m_bDate = false;
 	  m_bProgressFlag = false;
 	  // m_bLayoutDirtyFlag = true;
 	  if ( m_style == ST_Select )
@@ -1711,6 +1723,7 @@ bool KSpreadCell::calc( bool _makedepend )
       m_strFormularOut = "####";
       m_bValue = false;
       m_bBool = false;
+      m_bDate =false;
     }
     // m_bLayoutDirtyFlag = true;
     m_bProgressFlag = false;
@@ -1728,6 +1741,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_dValue = context.value()->doubleValue();
     m_bValue = true;
     m_bBool = false;
+    m_bDate =false;
     // m_strFormularOut.sprintf( "%f", m_dValue );
     m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
   }
@@ -1736,6 +1750,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_dValue = (double)context.value()->intValue();
     m_bValue = true;
     m_bBool = false;
+    m_bDate = false;
     // m_strFormularOut.sprintf( "%f", m_dValue );
     m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
   }
@@ -1743,6 +1758,7 @@ bool KSpreadCell::calc( bool _makedepend )
   {
     m_bValue = false;
     m_bBool = true;
+    m_bDate =false;
     m_dValue = context.value()->boolValue() ? 1.0 : 0.0;
     // (David): i18n'ed True and False - hope it's ok
     m_strFormularOut = context.value()->boolValue() ? i18n("True") : i18n("False");
@@ -1751,6 +1767,7 @@ bool KSpreadCell::calc( bool _makedepend )
   {
     m_bValue = false;
     m_bBool = false;
+    m_bDate=false;
     m_strFormularOut = context.value()->toString( context );
   }
 
@@ -2054,7 +2071,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	int a = m_eAlign;
 	if ( a == KSpreadCell::Undefined )
 	{
-	  if ( m_bValue )
+	  if ( m_bValue || m_bDate)
 	    a = KSpreadCell::Right;
 	  else
 	    a = KSpreadCell::Left;
@@ -2095,7 +2112,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	int a = m_eAlign;
 	if ( a == KSpreadCell::Undefined )
 	{
-	  if ( m_bValue )
+	  if ( m_bValue || m_bDate)
 	    a = KSpreadCell::Right;
 	  else
 	    a = KSpreadCell::Left;
@@ -2613,7 +2630,7 @@ const QColor& KSpreadCell::bottomBorderColor( int _col, int _row )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row + 1 );
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->topBorderColor();
 	else
@@ -2774,6 +2791,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
 
     m_bValue = false;
     m_bBool = false;
+    m_bDate=false;
     m_bLayoutDirtyFlag = true;
     m_content = RichText;
   }
@@ -2787,6 +2805,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
 
     m_bValue = false;
     m_bBool = false;
+    m_bDate = false;
     m_bLayoutDirtyFlag = true;
     m_content = VisualFormula;
   }
@@ -2844,6 +2863,7 @@ void KSpreadCell::setValue( double _d )
 
     m_bValue = true;
     m_bBool = false;
+    m_bDate =false;
     m_dValue = _d;
     m_bLayoutDirtyFlag = true;
     m_content = Text;
@@ -2915,6 +2935,7 @@ void KSpreadCell::checkValue()
       m_bValue = false;
       m_dValue = 0;
       m_bBool = false;
+      m_bDate = false;
       m_strOutText = "";
       return;
     }
@@ -2932,6 +2953,7 @@ void KSpreadCell::checkValue()
     {
       m_bValue = false;
       m_bBool = false;
+      m_bDate = false;
       return;
     }
 
@@ -2941,6 +2963,7 @@ void KSpreadCell::checkValue()
       m_bValue = false;
       m_dValue = 1.0;
       m_bBool = true;
+      m_bDate = false;
       return;
     }
     else if ( strcasecmp( p, "false" ) == 0 )
@@ -2948,6 +2971,7 @@ void KSpreadCell::checkValue()
       m_bValue = false;
       m_dValue = 0.0;
       m_bBool = true;
+      m_bDate = false;
       return;
     }
     m_bBool = false;
@@ -2973,7 +2997,12 @@ void KSpreadCell::checkValue()
     }
 
     if ( m_bValue )
+        {
 	m_dValue = atof( ptext );
+        m_bBool = false;
+        m_bDate = false;
+        return;
+        }
 
     //test if text is a percent value
     if(m_strText.at(m_strText.length()-1)=='%')
@@ -2986,6 +3015,8 @@ void KSpreadCell::checkValue()
         if(ok)
                 {
                 m_bValue=true;
+                m_bBool = false;
+                m_bDate = false;
                 m_dValue=val;
                 m_eFormatNumber=Percentage;
                 m_strText=tmp.setNum(m_dValue);
@@ -3010,6 +3041,8 @@ void KSpreadCell::checkValue()
                 if(ok)
                         {
                         m_bValue=true;
+                        m_bBool = false;
+                        m_bDate = false;
                         m_dValue=val;
                         m_eFormatNumber=Money;
                         m_strText=tmp.setNum(m_dValue);
@@ -3026,6 +3059,8 @@ void KSpreadCell::checkValue()
                 if(ok)
                         {
                         m_bValue=true;
+                        m_bBool = false;
+                        m_bDate = false;
                         m_dValue=val;
                         m_eFormatNumber=Money;
                         m_strText=tmp.setNum(m_dValue);
@@ -3034,6 +3069,26 @@ void KSpreadCell::checkValue()
                         return;
                         }
                 }
+        }
+    QDate tmpDate;
+    if((tmpDate=KGlobal::locale()->readDate(m_strText)).isValid())
+        {
+        m_bDate = true;
+        m_bValue = false;
+        m_dValue = 0;
+        m_bBool = false;
+        if( m_eFormatNumber!=TextDate)
+                m_eFormatNumber=ShortDate;
+        m_Date=tmpDate;
+        m_strText=KGlobal::locale()->formatDate(m_Date,true); //short format date
+        return;
+        }
+    else
+        {
+        m_bDate = false;
+        m_bValue = false;
+        m_dValue = 0;
+        m_bBool = false;
         }
     /* if ( old_value != bValue )
 	displayDirtyFlag = TRUE; */
@@ -3301,6 +3356,14 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
     {
       QDomElement text = doc.createElement( "text" );
       text.appendChild( doc.createCDATASection( m_strText ) );
+      cell.appendChild( text );
+    }
+    else if( (getFormatNumber()==ShortDate || getFormatNumber()==TextDate)&& m_bDate )
+    {
+      QDomElement text = doc.createElement( "text" );
+      QString tmp;
+      tmp=tmp.setNum(m_Date.year())+"/"+tmp.setNum(m_Date.month())+"/"+tmp.setNum(m_Date.day());
+      text.appendChild( doc.createTextNode( tmp ) );
       cell.appendChild( text );
     }
     else
@@ -3633,12 +3696,36 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     {
 	QString t = text.text();
 	t = t.stripWhiteSpace();
-
-	if ( t[0] == '=' )
+        if( t[0] == '=' )
+        {
 	    t = decodeFormular( t, m_iColumn, m_iRow );
 
+            // Set the cell's text, and don't calc dependencies yet (see comment for setCellText)
+            setCellText( pasteOperation( t, m_strText, op ), false );
+        }
+        else if( getFormatNumber()==ShortDate || getFormatNumber()==TextDate)
+        {
+        int pos;
+        int pos1;
+        int year=-1;
+        int month=-1;
+        int day=-1;
+        pos=t.find('/');
+        year=t.mid(0,pos).toInt();
+        pos1=t.find('/',pos+1);
+        month=t.mid(pos+1,((pos1-1)-pos)).toInt();
+        day=t.right(t.length()-pos1-1).toInt();
+        m_Date=QDate(year,month,day);
+        if(m_Date.isValid() )
+                setCellText(KGlobal::locale()->formatDate(m_Date,true),false);
+        else
+                setCellText( pasteOperation( t, m_strText, op ), false );
+        }
+        else
+        {
         // Set the cell's text, and don't calc dependencies yet (see comment for setCellText)
         setCellText( pasteOperation( t, m_strText, op ), false );
+        }
     }
 
     if ( !f.isNull() && f.hasAttribute( "style" ) )
