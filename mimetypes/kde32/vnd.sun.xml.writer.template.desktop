@@ -3,7 +3,7 @@ Encoding=UTF-8
 Comment=OpenOffice.org Text Document Template
 MimeType=application/vnd.sun.xml.writer.template
 Type=MimeType
-Icon=002_text_document.xpm
+Icon=wordprocessing
 Patterns=*.stw;*.STW;
 [Property::X-KDE-NativeExtension]
 Type=QString

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Comment=OpenOffice.org Presentation Template
+MimeType=application/vnd.sun.xml.impress.template
+Type=MimeType
+Icon=presentation
+Patterns=*.sti;*.STI;
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.sti

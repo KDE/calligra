@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Comment=OpenOffice.org Drawing Template
+MimeType=application/vnd.sun.xml.draw.template
+Type=MimeType
+Icon=image
+Patterns=*.std;*.STD;
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.std
