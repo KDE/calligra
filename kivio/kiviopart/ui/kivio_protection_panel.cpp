@@ -1,4 +1,5 @@
 #include "kivio_protection_panel.h"
+#include "kivio_protection_panel.moc"
 
 #include "kivio_doc.h"
 #include "kivio_layer.h"

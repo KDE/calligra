@@ -1,4 +1,5 @@
 #include "export_page_dialog.h"
+#include "export_page_dialog.moc"
 
 #include <qcheckbox.h>
 #include <qpushbutton.h>
