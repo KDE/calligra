@@ -84,7 +84,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
         _parameterfontpage = new KChartFontConfigPage(_params,this, dat );
         addTab( _parameterfontpage, i18n( "&Font" ) );
         _backgroundpixpage = new KChartBackgroundPixmapConfigPage( _params, this );
-        addTab( _backgroundpixpage, i18n( "&Background pixmap" ) );
+        addTab( _backgroundpixpage, i18n( "&Background" ) );
         _parameterLegend = new KChartLegendConfigPage(_params,this );
         addTab( _parameterLegend,i18n("Legend"));
         if( _params->chartType() != KDChartParams::Pie )	{
