@@ -53,14 +53,11 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
  : KexiDataTable(win, parent, name, false/*not db-aware*/)
 {
 	m_table = table; //orig table
-	if (m_table) //deep copy of the original table
-		m_newTable = new KexiDB::TableSchema(*m_table); 
-	else //new, empty table
-		m_newTable = new KexiDB::TableSchema(m_dialog->partItem()->name());
-	m_buffers.resize(MAX_FIELDS);
-	m_buffers.setAutoDelete(true);
-	m_row = -99;
-	m_currentBufferCleared = false;
+//	if (m_table) //deep copy of the original table
+//		m_newTable = new KexiDB::TableSchema(*m_table); 
+//	else //new, empty table
+//		m_newTable = new KexiDB::TableSchema(m_dialog->partItem()->name());
+//	m_currentBufferCleared = false;
 	init();
 }
 
@@ -71,15 +68,16 @@ KexiAlterTableDialog::~KexiAlterTableDialog()
 
 void KexiAlterTableDialog::init()
 {
-	KexiTableViewData *data = new KexiTableViewData();
-	data->setInsertingEnabled( false );
+
+	m_data = new KexiTableViewData();
+	m_data->setInsertingEnabled( false );
 	KexiTableViewColumn *col = new KexiTableViewColumn(i18n("Field name"), KexiDB::Field::Text);
 //		KexiDB::Field::PrimaryKey);
 	KexiValidator *vd = new Kexi::IdentifierValidator();
 	vd->setAcceptsEmptyValue(true);
 	col->setValidator( vd );
 
-	data->addColumn( col );
+	m_data->addColumn( col );
 	KexiDB::Field *f = new KexiDB::Field(i18n("Data type"), KexiDB::Field::Enum);
 //		KexiDB::Field::NotEmpty | KexiDB::Field::NotNull);
 	QValueVector<QString> types(KexiDB::Field::LastTypeGroup);
@@ -91,8 +89,8 @@ void KexiAlterTableDialog::init()
 	}
 	f->setEnumHints(types);
 
-	data->addColumn( new KexiTableViewColumn(*f) );
-	data->addColumn( new KexiTableViewColumn(i18n("Comments"), KexiDB::Field::Text) );
+	m_data->addColumn( new KexiTableViewColumn(*f) );
+	m_data->addColumn( new KexiTableViewColumn(i18n("Comments"), KexiDB::Field::Text) );
 
 /*	KexiTableItem *item = new KexiTableItem(0);
 	item->push_back(QVariant("name"));
@@ -100,35 +98,6 @@ void KexiAlterTableDialog::init()
 	item->push_back(QVariant(""));
 	data->append(item);
 */
-	
-	//add column data
-	for(unsigned int i=0; i < m_newTable->fieldCount(); i++)
-	{
-		KexiDB::Field *field = m_newTable->field(i);
-		KexiTableItem *item = new KexiTableItem(0);
-		item->push_back(QVariant(field->name()));
-		item->push_back(QVariant(field->typeGroup()-1)); //-1 because type groups are counted from 1
-		item->push_back(QVariant(field->description()));
-		data->append(item);
-
-		createPropertyBuffer( i, field );
-	}
-
-	//add empty space
-	for (int i=m_newTable->fieldCount(); i<MAX_FIELDS; i++) {
-//		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
-//		buff->insert("primaryKey", KexiProperty("pkey", QVariant(false, 4), i18n("Primary Key")));
-//		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
-//		m_fields.insert(i, buff);
-		KexiTableItem *item = new KexiTableItem(3);//3 empty fields
-		data->append(item);
-	}
-
-//	QSplitter *splitter = new QSplitter(Vertical, this);
-
-	kdDebug() << "KexiAlterTableDialog::init(): vector contains " << m_buffers.size() << " items" << endl;
-
-	m_view->setData(data);
 
 //	m_view = new KexiTableView(data, this, "tableview");
 //	QVBoxLayout *box = new QVBoxLayout(this);
@@ -144,16 +113,16 @@ void KexiAlterTableDialog::init()
 
 	connect(m_view, SIGNAL(cellSelected(int,int)), 
 		this, SLOT(slotCellSelected(int,int)));
-	connect(data, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant,KexiDB::ResultInfo*)),
+	connect(m_data, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant,KexiDB::ResultInfo*)),
 		this, SLOT(slotBeforeCellChanged(KexiTableItem*,int,QVariant,KexiDB::ResultInfo*)));
-	connect(data, SIGNAL(rowUpdated(KexiTableItem*)),
+	connect(m_data, SIGNAL(rowUpdated(KexiTableItem*)),
 		this, SLOT(slotRowUpdated(KexiTableItem*)));
-	connect(data, SIGNAL(aboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*)),
+	connect(m_data, SIGNAL(aboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*)),
 		this, SLOT(slotAboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*)));
 //	connect(data, SIGNAL(aboutToUpdateRow(KexiTableItem*,KexiDB::RowEditBuffer*,KexiDB::ResultInfo*)),
 //		this, SLOT(slotAboutToUpdateRow(KexiTableItem*,KexiDB::RowEditBuffer*,KexiDB::ResultInfo*)));
-	connect(data, SIGNAL(rowDeleted()), this, SLOT(slotRowDeleted()));
-	connect(data, SIGNAL(rowInserted(KexiTableItem*,uint)), 
+	connect(m_data, SIGNAL(rowDeleted()), this, SLOT(slotRowDeleted()));
+	connect(m_data, SIGNAL(rowInserted(KexiTableItem*,uint)), 
 		this, SLOT(slotEmptyRowInserted(KexiTableItem*,uint)));
 	
 
@@ -172,6 +141,45 @@ void KexiAlterTableDialog::init()
 //	resize( preferredSizeHint( m_view->sizeHint() ) );
 	m_view->setFocus();
 	initActions();
+}
+
+void KexiAlterTableDialog::initData()
+{
+	m_buffers.clear();
+
+	m_buffers.resize(MAX_FIELDS);
+	m_buffers.setAutoDelete(true);
+	m_row = -99;
+
+	//add column data
+	m_data->clear();
+	for(unsigned int i=0; i < m_table->fieldCount(); i++)
+	{
+		KexiDB::Field *field = m_table->field(i);
+		KexiTableItem *item = new KexiTableItem(0);
+		item->push_back(QVariant(field->name()));
+		item->push_back(QVariant(field->typeGroup()-1)); //-1 because type groups are counted from 1
+		item->push_back(QVariant(field->description()));
+		m_data->append(item);
+
+		createPropertyBuffer( i, field );
+	}
+
+	//add empty space
+	for (int i=m_table->fieldCount(); i<MAX_FIELDS; i++) {
+//		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
+//		buff->insert("primaryKey", KexiProperty("pkey", QVariant(false, 4), i18n("Primary Key")));
+//		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
+//		m_fields.insert(i, buff);
+		KexiTableItem *item = new KexiTableItem(3);//3 empty fields
+		m_data->append(item);
+	}
+
+//	QSplitter *splitter = new QSplitter(Vertical, this);
+
+	kdDebug() << "KexiAlterTableDialog::init(): vector contains " << m_buffers.size() << " items" << endl;
+
+	m_view->setData(m_data);
 }
 
 bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KexiPropertyBuffer& buf)
@@ -251,6 +259,8 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field )
 	buff->add( new KexiProperty("width", (int)field->width()/*200?*/, i18n("Column width")));
 
 	buff->add( prop = new KexiProperty("defaultValue", field->defaultValue()/*200?*/, i18n("Default value")));
+//TODO: show this after we get properly working editor for QVariant:
+	prop->setVisible(false);
 
 	buff->add(new KexiProperty("primaryKey", QVariant(field->isPrimaryKey(), 4), i18n("Primary Key")));
 
@@ -286,7 +296,7 @@ void KexiAlterTableDialog::slotCellSelected(int, int row)
 bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled)
 {
 	if (mode==Kexi::DesignViewMode) {
-		//todo
+		initData();
 		return true;
 	}
 	else if (mode==Kexi::DataViewMode) {

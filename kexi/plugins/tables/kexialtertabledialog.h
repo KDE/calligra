@@ -62,8 +62,12 @@ class KexiAlterTableDialog : public KexiDataTable
 
 
 	protected:
+		//! called just once from ctor
 		void init();
 		void initActions();
+
+		//! called whenever data should be reloaded (on switching to this view mode)
+		void initData();
 
 		/*! Creates a new property buffer for \a field. 
 		 The buffer will be asigned to \a row, and owned by this dialog. 
@@ -113,14 +117,16 @@ class KexiAlterTableDialog : public KexiDataTable
 
 	private:
 //		KexiTableView *m_view;
-		const KexiDB::TableSchema *m_table; //!< original table schema
-		KexiDB::TableSchema *m_newTable; //!< new table schema
+		KexiDB::TableSchema *m_table; //!< original table schema
+
+		KexiTableViewData *m_data;
+//		KexiDB::TableSchema *m_newTable; //!< new table schema
 //		KexiPropertyEditor *m_properties;
 		FieldsBuffer m_buffers; //!< buffer
 //		QPtrDict<KexiDB::Field> m_newFields; //!< newly created fields 
 //		                                     //!< assigned for property buffers
 		int m_row; //!< used to know if a new row is selected in slotCellSelected()
-		bool m_currentBufferCleared : 1;
+//		bool m_currentBufferCleared : 1;
 };
 
 #endif
