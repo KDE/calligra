@@ -429,7 +429,7 @@ OoDrawImport::appendBrush( VObject &obj )
 				if( type == "linear" )
 				{
 					gradient.setType( VGradient::linear );
-					/*int angle = draw->attribute( "draw:angle" ).toInt() / 10;
+					int angle = draw->attribute( "draw:angle" ).toInt() / 10;
 
 					// make sure the angle is between 0 and 359
 					angle = abs( angle );
@@ -448,42 +448,69 @@ OoDrawImport::appendBrush( VObject &obj )
 							break;
 						}
 					}
-
+					KoRect rect = obj.boundingBox();
+					KoPoint origin, vector;
 					// nearAngle should now be one of: 0, 45, 90, 135, 180...
+					kdDebug() << "nearAngle: " << nearAngle << endl;
 					if( nearAngle == 0 || nearAngle == 180 )
-						gradient.setAttribute( "type", 1 ); // horizontal
+					{
+						origin.setX( rect.x() + rect.width() );
+						origin.setY( rect.y() + rect.height());
+						vector.setX( rect.x() + rect.width() );
+						vector.setY( rect.y() );
+					}
 					else if( nearAngle == 90 || nearAngle == 270 )
-						gradient.setAttribute( "type", 2 ); // vertical
+					{
+						origin.setX( rect.x() );
+						origin.setY( rect.y() + rect.height() );
+						vector.setX( rect.x() + rect.width() );
+						vector.setY( rect.y() + rect.height() );
+					}
 					else if( nearAngle == 45 || nearAngle == 225 )
-						gradient.setAttribute( "type", 3 ); // diagonal 1
+					{
+						origin.setX( rect.x() );
+						origin.setY( rect.y() );
+						vector.setX( rect.x() + rect.width() );
+						vector.setY( rect.y() + rect.height() );
+					}
 					else if( nearAngle == 135 || nearAngle == 315 )
-						gradient.setAttribute( "type", 4 ); // diagonal 2 */
+					{
+						origin.setX( rect.x() + rect.width() );
+						origin.setY( rect.y() + rect.height() );
+						vector.setX( rect.x() );
+						vector.setY( rect.y() );
+					}
+
+					gradient.setOrigin( origin );
+					gradient.setVector( vector );
 				}
 				else if( type == "radial" || type == "ellipsoid" )
+				{
 					gradient.setType( VGradient::radial );
 //else if( type == "square" || type == "rectangular" )
 //gradient.setAttribute( "type", 6 ); // rectangle
 //else if( type == "axial" )
 //gradient.setAttribute( "type", 7 ); // pipecross
 
-				// Hard to map between x- and y-center settings of oodraw
-				// and (un-)balanced settings of kpresenter. Let's try it.
-				double x, y;
-				if( draw->hasAttribute( "draw:cx" ) )
-					x = draw->attribute( "draw:cx" ).remove( '%' ).toDouble() / 100.0;
-				else
-					x = 0.5;
+					// Hard to map between x- and y-center settings of oodraw
+					// and (un-)balanced settings of kpresenter. Let's try it.
+					double x, y;
+					if( draw->hasAttribute( "draw:cx" ) )
+						x = draw->attribute( "draw:cx" ).remove( '%' ).toDouble() / 100.0;
+					else
+						x = 0.5;
 
-				if( draw->hasAttribute( "draw:cy" ) )
-					y = draw->attribute( "draw:cy" ).remove( '%' ).toDouble() / 100.0;
-				else
-					y = 0.5;
+					if( draw->hasAttribute( "draw:cy" ) )
+						y = draw->attribute( "draw:cy" ).remove( '%' ).toDouble() / 100.0;
+					else
+						y = 0.5;
 
-				KoRect rect = obj.boundingBox();
-				gradient.setOrigin( KoPoint( rect.x() + x * rect.width(),
-											 rect.y() + y * rect.height() ) );
-				gradient.setVector( KoPoint( rect.x() + rect.width(),
-											 rect.y() + y * rect.height() ) );
+					KoRect rect = obj.boundingBox();
+					gradient.setOrigin( KoPoint( rect.x() + x * rect.width(),
+												 rect.y() + y * rect.height() ) );
+					gradient.setVector( KoPoint( rect.x() + rect.width(),
+												 rect.y() + y * rect.height() ) );
+				}
 				f.gradient() = gradient;
 				f.setType( VFill::grad );
 			}
