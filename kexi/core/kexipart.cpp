@@ -81,9 +81,13 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, const KexiPart::Item &it
 	dlg->setCaption( QString("%1 : %2").arg(item.name()).arg(instanceName()) );
 	dlg->setTabCaption( dlg->caption() );
 //	dlg->setIcon( SmallIcon( info()->itemIcon() ) );
-	dlg->setIcon( SmallIcon( dlg->itemIcon() ) );
 	dlg->setDocID(item.identifier());
 	dlg->registerDialog();
+	dlg->setIcon( SmallIcon( dlg->itemIcon() ) );
+	if (dlg->mdiParent())
+		dlg->mdiParent()->setIcon( *dlg->icon() );
+	if (dlg->mainWidget())
+		dlg->mainWidget()->setIcon( *dlg->icon() );
 	return dlg;
 }
 

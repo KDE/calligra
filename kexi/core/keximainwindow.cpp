@@ -1204,7 +1204,7 @@ KexiMainWindow::relationPart()
 void KexiMainWindow::detachWindow(KMdiChildView *pWnd,bool bShow)
 {
 	KMdiMainFrm::detachWindow(pWnd,bShow);
-	// update icon
+	// update icon - from small to large
 	pWnd->setIcon( DesktopIcon( static_cast<KexiDialogBase *>(pWnd)->itemIcon() ) );
 //	pWnd->setIcon( DesktopIcon( static_cast<KexiDialogBase *>(pWnd)->part()->info()->itemIcon() ) );
 }
@@ -1212,7 +1212,7 @@ void KexiMainWindow::detachWindow(KMdiChildView *pWnd,bool bShow)
 void KexiMainWindow::attachWindow(KMdiChildView *pWnd,bool bShow,bool bAutomaticResize)
 {
 	KMdiMainFrm::attachWindow(pWnd,true,bAutomaticResize);
-	// update icon
+	// update icon - from large to small
 	pWnd->mdiParent()->setIcon( SmallIcon( static_cast<KexiDialogBase *>(pWnd)->itemIcon() ) );
 //	pWnd->mdiParent()->setIcon( SmallIcon( static_cast<KexiDialogBase *>(pWnd)->part()->info()->itemIcon() ) );
 }
