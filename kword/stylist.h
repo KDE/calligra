@@ -21,6 +21,7 @@
 #include <qlistbox.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
+#include <qgroupbox.h>
 
 #include <kbuttonbox.h>
 #include <kapp.h>
@@ -28,6 +29,7 @@
 #include "paraglayout.h"
 
 class KWordDocument;
+class KWStyleEditor;
 
 /******************************************************************/
 /* Class: KWStyleManager                                          */
@@ -50,6 +52,53 @@ protected:
   KButtonBox *bButtonBox;
 
   KWordDocument *doc;
+  KWStyleEditor *editor;
+
+protected slots:
+  void editStyle();
+  void editStyle(int) { editStyle(); }
+  void updateStyles();
+
+};
+
+/******************************************************************/
+/* Class: KWStylePreview                                         */
+/******************************************************************/
+
+class KWStylePreview : public QGroupBox
+{
+  Q_OBJECT
+
+public:
+  KWStylePreview(const char *title,QWidget *parent = 0) : QGroupBox(title,parent,"")
+    {}
+
+};
+
+/******************************************************************/
+/* Class: KWStyleEditor                                           */
+/******************************************************************/
+
+class KWStyleEditor : public QTabDialog
+{
+  Q_OBJECT
+
+public:
+  KWStyleEditor(QWidget *_parent,KWParagLayout *_style);
+
+protected:
+  void setupTab1();
+
+  QWidget *tab1;
+  QGridLayout *grid1;
+  QPushButton *bFont,*bColor,*bSpacing,*bAlign,*bBorders,*bNumbering;
+  KButtonBox *bButtonBox;
+  KWStylePreview *preview;
+  
+  KWParagLayout *style;
+
+signals:
+  void updateStyles();
 
 };
 

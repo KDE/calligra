@@ -100,10 +100,10 @@ CORBA::Boolean KWordDocument::init()
   pageLayout.ptBottom = MM_TO_POINT(DEFAULT_BOTTOM_BORDER);  
   pageLayout.unit = PG_MM;
 
-  defaultUserFont = new KWUserFont(this,"times");
-  defaultParagLayout = new KWParagLayout(this);
-  defaultParagLayout->setName("Standard");
-  defaultParagLayout->setCounterNr(-1);
+//   defaultUserFont = new KWUserFont(this,"times");
+//   defaultParagLayout = new KWParagLayout(this);
+//   defaultParagLayout->setName("Standard");
+//   defaultParagLayout->setCounterNr(-1);
     
   pages = 1;
 

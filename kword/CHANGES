@@ -346,3 +346,7 @@ Reggie, 14.11.1998:
 - setting the text cursor with the mouse and selecting text with the mouse is faster for long textes now
 - started implementing style templates
 - the number of pages is calculated correctly now
+
+Reggie, 15.11.1998:
+-------------------
+- More work on style templates
