@@ -763,7 +763,7 @@ char *yytext;
 extern int idl_line_no;
 
 static bool s_kspread;
-static KLocale* s_locale = 0;
+KLocale* s_koscript_locale = 0;
 static KLocale* s_defaultLocale = 0;
 
 #include <qstring.h>
@@ -1610,7 +1610,7 @@ YY_RULE_SETUP
 {
 			  QString s( yytext );
 			  bool ok = TRUE;
-                          double f = s_locale->readNumber( s, &ok );
+                          double f = s_koscript_locale->readNumber( s, &ok );
 			  // if ( !ok )
 			  //	f = s.toDouble( &ok );
 			  if ( !ok )
@@ -2568,12 +2568,12 @@ int main()
 
 void kscriptInitFlex( const char *_code, int extension, KLocale* locale )
 {
-   s_locale = locale;
-   if ( !s_locale )
+   s_koscript_locale = locale;
+   if ( !s_koscript_locale )
    {
 	if ( !s_defaultLocale )
 		s_defaultLocale = new KSLocale;
-       s_locale = s_defaultLocale;
+       s_koscript_locale = s_defaultLocale;
    }
    if ( extension == KSCRIPT_EXTENSION_KSPREAD )
 	s_kspread = TRUE;
@@ -2584,12 +2584,12 @@ void kscriptInitFlex( const char *_code, int extension, KLocale* locale )
 
 void kscriptInitFlex( int extension, KLocale* locale )
 {
-   s_locale = locale;
-   if ( !s_locale )
+   s_koscript_locale = locale;
+   if ( !s_koscript_locale )
    {
 	if ( !s_defaultLocale )
 		s_defaultLocale = new KSLocale;
-       s_locale = s_defaultLocale;
+       s_koscript_locale = s_defaultLocale;
    }
    if ( extension == KSCRIPT_EXTENSION_KSPREAD )
 	s_kspread = TRUE;

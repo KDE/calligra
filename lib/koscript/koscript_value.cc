@@ -6,7 +6,9 @@
 #include "koscript_method.h"
 
 #include <klocale.h>
-#include <kglobal.h>
+
+// Imported from scanner.ll
+extern KLocale* s_koscript_locale;
 
 KSValue* KSValue::s_null = 0;
 
@@ -478,9 +480,9 @@ QString KSValue::toString( KSContext& context )
       return QString( "<property>" );
       break;
     case TimeType:
-	return KGlobal::locale()->formatTime( timeValue(), true );
+	return s_koscript_locale->formatTime( timeValue(), true );
     case DateType:
-	return KGlobal::locale()->formatDate( dateValue(), true );
+	return s_koscript_locale->formatDate( dateValue(), true );
     case StructClassType:
       return ( QString( "<struct class " ) + structClassValue()->name() + ">" );
       break;

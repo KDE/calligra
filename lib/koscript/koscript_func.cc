@@ -8,9 +8,11 @@
 #include <kapp.h>
 #include <dcopclient.h>
 #include <klocale.h>
-#include <kglobal.h>
 
 #include <iostream.h>
+
+// Imported from scanner.ll
+extern KLocale* s_koscript_locale;
 
 bool KSScriptFunction::call( KSContext& context )
 {
@@ -52,7 +54,7 @@ static bool ksfunc_time( KSContext& context )
 
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-    QTime t = KGlobal::locale()->readTime( args[0]->stringValue() );
+    QTime t = s_koscript_locale->readTime( args[0]->stringValue() );
     if ( !t.isValid() )
     {
         QString tmp( i18n("Non valid time format: %1") );
@@ -71,7 +73,7 @@ static bool ksfunc_date( KSContext& context )
 
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-    QDate t = KGlobal::locale()->readDate( args[0]->stringValue() );
+    QDate t = s_koscript_locale->readDate( args[0]->stringValue() );
     if ( !t.isValid() )
     {
         QString tmp( i18n("Non valid date format: %1") );
