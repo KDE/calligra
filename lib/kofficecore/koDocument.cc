@@ -34,6 +34,7 @@
 #include <komlStreamFeed.h>
 
 #include <kurl.h>
+#include <qdir.h>
 #include <klocale.h>
 #include <kapp.h>
 #include <kdebug.h>
@@ -373,7 +374,8 @@ bool KoDocument::loadFromURL( const QString & _url )
 {
   QApplication::setOverrideCursor( waitCursor );
   kdebug( KDEBUG_INFO, 30003, "KoDocument::loadFromURL( %s )", _url.ascii() );
-  KURL u( _url );
+
+  KURL u( QDir::currentDirPath()+"/", _url ); // allow URLs relative to current dir
   if ( u.isMalformed() )
   {
     kdebug( KDEBUG_INFO, 30003, "Malformed URL %s", _url.ascii() );
@@ -403,7 +405,7 @@ bool KoDocument::loadFromURL( const QString & _url )
 
   kdebug( KDEBUG_INFO, 30003, "PATTERN=%s", buf );
 
-  setURL( _url );
+  setURL( u.url() );
 
   // Is it plain XML ?
   if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
