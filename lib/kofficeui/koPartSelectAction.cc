@@ -49,7 +49,7 @@ void KoPartSelectAction::init()
     QValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
     for( ; it != m_lstEntries.end(); ++it ) {
         KService::Ptr serv = (*it).service();
-	KAction *action = new KAction( serv->comment(), serv->icon(), 0,
+	KAction *action = new KAction( serv->genericName(), serv->icon(), 0,
                                        this, SLOT( slotActionActivated() ),
                                        parentCollection(), serv->name().latin1() );
         insert( action );
