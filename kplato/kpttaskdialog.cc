@@ -30,6 +30,7 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <kdatepicker.h>
+#include <kptdurationwidget.h>
 #include <kcommand.h>
 
 #include <qtextedit.h>
@@ -62,6 +63,8 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, QWidget *p, const char *n)
     page = addPage(i18n("&Resources"));
     topLayout = new QVBoxLayout(page, 0, spacingHint());
     m_resourcesTab = new KPTRequestResourcesPanel(page, task);
+    m_resourcesTab->effort->setVisibleFields(
+        ~(KPTDurationWidget::Seconds | KPTDurationWidget::Milliseconds));
     topLayout->addWidget(m_resourcesTab);
     
     page = addPage(i18n("&Notes"));
