@@ -35,12 +35,13 @@ public:
 
     void setFont( const QFont &_font, bool _subscript, bool _superscript );
     void setColor( const QColor & col );
+    void setBackGroundColor( const QColor & col );
 
     bool getSuperScript() const { return m_superScript->isChecked(); }
     bool getSubScript() const { return m_subScript->isChecked(); }
     QFont getNewFont() const { return m_newFont; }
     QColor color() const { return m_color; }
-
+    QColor backGroundColor() const { return m_backGroundColor;}
     int changedFlags() const { return m_changedFlags; }
 
 protected slots:
@@ -50,7 +51,7 @@ protected slots:
     void slotStrikeOutClicked();
     void slotFontChanged(const QFont &);
     void slotChangeColor();
-
+    void slotChangeBackGroundColor();
 private:
     KFontChooser *m_chooseFont;
     QCheckBox *m_underline;
@@ -58,8 +59,10 @@ private:
     QCheckBox *m_subScript;
     QCheckBox *m_strikeOut;
     QPushButton *m_colorButton;
+    QPushButton *m_backGroundColorButton;
     QFont m_newFont;
     QColor m_color;
+    QColor m_backGroundColor;
     int m_changedFlags;
 };
 
@@ -69,12 +72,14 @@ class KWFontDia : public KDialogBase
 public:
     KWFontDia( QWidget* parent, const char* name, const QFont &_font,
                bool _subscript, bool _superscript, const QColor & color,
+	       const QColor & backGroundColor,
                bool _withSubSuperScript=true );
 
     bool getSuperScript() const { return m_chooser->getSuperScript(); }
     bool getSubScript() const { return m_chooser->getSubScript(); }
     QFont getNewFont() const { return m_chooser->getNewFont(); }
     QColor color() const { return m_chooser->color(); }
+    QColor backGroundColor() const {return m_chooser->backGroundColor();}
     int changedFlags() const { return m_chooser->changedFlags(); }
 
 private:

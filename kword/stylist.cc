@@ -593,6 +593,9 @@ void KWStyleFontTab::update()
     fn.setPointSize( (int)m_zoomHandler->layoutUnitToPt( fn.pointSize() ) );
     m_chooser->setFont( fn, subScript, superScript );
     m_chooser->setColor( m_style->format().color() );
+    QColor col=m_style->format().textBackgroundColor();
+    col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
+    m_chooser->setBackGroundColor(col);
 }
 
 void KWStyleFontTab::save()
@@ -607,6 +610,7 @@ void KWStyleFontTab::save()
     else
         m_style->format().setVAlign( QTextFormat::AlignNormal );
     m_style->format().setColor( m_chooser->color() );
+    m_style->format().setTextBackgroundColor(m_chooser->backGroundColor());
 }
 
 QString KWStyleFontTab::tabName()

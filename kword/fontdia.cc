@@ -64,11 +64,16 @@ KWFontChooser::KWFontChooser( QWidget* parent, const char* name, bool _withSubSu
     m_colorButton = new QPushButton( i18n( "Change &Color..." ), grp );
     grid->addWidget(m_colorButton,0,2);
 
+    m_backGroundColorButton = new QPushButton( i18n( "Change Background Color..." ), grp );
+    grid->addWidget(m_backGroundColorButton,1,2);
+
     connect( m_underline, SIGNAL(clicked()), this, SLOT( slotUnderlineClicked() ) );
     connect( m_strikeOut, SIGNAL(clicked()), this, SLOT( slotStrikeOutClicked() ) );
     connect( m_subScript, SIGNAL(clicked()), this, SLOT( slotSubScriptClicked() ) );
     connect( m_superScript, SIGNAL(clicked()), this, SLOT( slotSuperScriptClicked() ) );
     connect( m_colorButton, SIGNAL(clicked()), this, SLOT( slotChangeColor() ) );
+
+    connect( m_backGroundColorButton,  SIGNAL(clicked()), this, SLOT( slotChangeBackGroundColor() ) );
 
     connect( m_chooseFont, SIGNAL( fontSelected( const QFont & )),
              this, SLOT( slotFontChanged(const QFont &) ) );
@@ -93,6 +98,12 @@ void KWFontChooser::setColor( const QColor & col )
     // and use m_chooseFont->color() directly.
     m_color = col;
     m_chooseFont->setColor( col );
+    m_changedFlags = 0;
+}
+
+void KWFontChooser::setBackGroundColor ( const QColor & col )
+{
+    m_backGroundColor = col;
     m_changedFlags = 0;
 }
 
@@ -158,10 +169,23 @@ void KWFontChooser::slotChangeColor()
     }
 }
 
+void KWFontChooser::slotChangeBackGroundColor()
+{
+    QColor color = m_backGroundColor;
+    if ( KColorDialog::getColor( color ) )
+    {
+        if ( color != m_color )
+        {
+            m_changedFlags |= KoTextFormat::TextBackgroundColor;
+            m_backGroundColor = color;
+        }
+    }
+}
+
 
 KWFontDia::KWFontDia( QWidget* parent, const char* name, const QFont &_font,
                       bool _subscript, bool _superscript, const QColor & color,
-                      bool _withSubSuperScript )
+                      const QColor & backGroundColor ,bool _withSubSuperScript )
     : KDialogBase( parent, name, true,
                    i18n("Select Font"), Ok|Cancel, Ok )
 {
@@ -169,6 +193,7 @@ KWFontDia::KWFontDia( QWidget* parent, const char* name, const QFont &_font,
     setMainWidget( m_chooser );
     m_chooser->setFont( _font, _subscript, _superscript );
     m_chooser->setColor( color );
+    m_chooser->setBackGroundColor(backGroundColor);
 }
 
 #include "fontdia.moc"

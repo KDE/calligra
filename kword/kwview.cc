@@ -2074,9 +2074,11 @@ void KWView::formatFont()
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)
     {
+        QColor col=edit->textBackgroundColor();
+        col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
         KWFontDia *fontDia = new KWFontDia( this, "", edit->textFont(),
                                             actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
-                                            edit->textColor() );
+                                            edit->textColor(), col );
         fontDia->exec();
         int flags = fontDia->changedFlags();
         kdDebug() << "KWView::formatFont changedFlags = " << flags << endl;
@@ -2085,7 +2087,7 @@ void KWView::formatFont()
             // The "change all the format" call
             edit->setFont(fontDia->getNewFont(),
                           fontDia->getSubScript(), fontDia->getSuperScript(),
-                          fontDia->color(),
+                          fontDia->color(),fontDia->backGroundColor(),
                           flags);
         }
 
