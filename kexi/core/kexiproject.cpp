@@ -377,7 +377,7 @@ KexiProject::initDBConnection(KexiProjectConnectionData *connection, KoStore *st
 	}
 	if(!conn->useDatabase(db))
 	{
-		kdDebug() << conn->errorMsg() << endl;
+		kdDebug() << "KexiProject::initDBConnection(): error using: " << conn->errorMsg() << endl;
 		return 1;
 	}
 
