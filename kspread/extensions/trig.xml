@@ -122,7 +122,7 @@
       <Name>SINH</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (radian)</Comment>
+	<Comment>Angle (radians)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -154,7 +154,7 @@
       <Name>ACOSH</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (radian)</Comment>
+	<Comment>Angle (radians)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -186,7 +186,7 @@
       <Name>ATANH</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (radian)</Comment>
+	<Comment>Angle (radians)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
@@ -234,7 +234,7 @@
       <Name>RADIAN</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Angle (degree)</Comment>
+	<Comment>Angle (degrees)</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
