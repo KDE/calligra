@@ -37,6 +37,7 @@
 #include <qfileinfo.h>
 #include <qsplitter.h>
 #include <qprinter.h>
+#include <qobjectlist.h>
 
 #include <kstdaction.h>
 #include <kaction.h>
@@ -801,18 +802,35 @@ void KoMainWindow::slotSetOrientation() {
 }
 
 void KoMainWindow::slotProgress(int value) {
-
+    //kdDebug(30003) << "KoMainWindow::slotProgress " << value << endl;
     if(value==-1) {
-        statusBar()->removeWidget(d->m_progress);
-        delete d->m_progress;
-        d->m_progress=0L;
+        if ( d->m_progress )
+        {
+            statusBar()->removeWidget(d->m_progress);
+            delete d->m_progress;
+            d->m_progress=0L;
+        }
         d->m_firstTime=true;
         return;
     }
-    if(d->m_firstTime) {
-        statusBar()->removeWidget(d->m_progress);
-        delete d->m_progress;
-        d->m_progress=0L;
+    if(d->m_firstTime)
+    {
+        // The statusbar might not even be created yet.
+        // So check for that first, and create it if necessary
+        QObjectList *l = queryList( "QStatusBar" );
+        if ( !l || !l->first() ) {
+            statusBar()->show();
+            QApplication::sendPostedEvents( this, QEvent::ChildInserted );
+            setUpLayout();
+        }
+        delete l;
+
+        if ( d->m_progress )
+        {
+            statusBar()->removeWidget(d->m_progress);
+            delete d->m_progress;
+            d->m_progress=0L;
+        }
         statusBar()->setMaximumHeight(statusBar()->height());
         d->m_progress=new KProgress(statusBar());
         //d->m_progress->setMaximumHeight(statusBar()->height());
