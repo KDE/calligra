@@ -18,6 +18,7 @@ class KSpreadVBorder;
 class KSpreadTable;
 class KSpreadDoc;
 class KSpreadPoint;
+class KSpreadRange;
 class KSpreadCellEditor;
 class KSpreadCell;
 
@@ -200,6 +201,10 @@ public:
     KSpreadTable* activeTable();
     KSpreadTable* findTable( const QString& _name );
 
+    /**
+     * A convenience function.
+     */
+    void gotoLocation( const KSpreadRange & _range );
     /**
      * A convenience function.
      */

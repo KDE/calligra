@@ -636,3 +636,6 @@ even if default.
 because when you press on "cancel", it's not necessary to recalc all
 or refresh cell.
 -Used new icon loxx-action-delete_table.png
+-Insert code of patch created by ...
+Now you can go to a selection with kspread_dlg_goto for
+example A5:B5

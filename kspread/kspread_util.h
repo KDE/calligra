@@ -39,9 +39,9 @@ public:
     columnFixed = c.columnFixed;
     rowFixed = c.rowFixed;
   }
- 
+
   bool isValid() const { return ( pos.x() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
-  bool isTableKnown() const { return ( tableName.isEmpty() || table != 0 ); }
+  bool isTableKnown() const { return ( !tableName.isEmpty() || table != 0 ); }
 
   KSpreadCell* cell();
 
@@ -82,7 +82,7 @@ struct KSpreadRange
   }
 
   bool isValid() const { return ( range.left() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
-  bool isTableKnown() const { return ( tableName.isEmpty() || table != 0 ); }
+  bool isTableKnown() const { return ( !tableName.isEmpty() || table != 0 ); }
 
   KSpreadTable* table;
   QString tableName;

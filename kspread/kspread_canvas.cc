@@ -252,6 +252,27 @@ KSpreadTable* KSpreadCanvas::activeTable()
   return m_pView->activeTable();
 }
 
+void KSpreadCanvas::gotoLocation( const KSpreadRange & _range )
+{
+	if ( !_range.isValid() )
+	{
+		KMessageBox::error( this, i18n( "Invalid cell reference" ) );
+		return;
+	}
+	KSpreadTable * table = activeTable();
+	if ( _range.isTableKnown() )
+		table = _range.table;
+	if ( !table )
+	{
+		KMessageBox::error( this, i18n("Unknown table name %1" ).arg( _range.tableName ) );
+		return;
+	}
+
+	gotoLocation( _range.range.left(), _range.range.top(), table, false );
+	gotoLocation( _range.range.right(), _range.range.bottom(), table, true );
+}
+
+
 void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 {
   if ( !_cell.isValid() )
@@ -2249,7 +2270,7 @@ KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas,KSpread
 {
   m_pView = _view;
   m_pCanvas = _canvas;
-
+  size=0;
   setBackgroundMode( PaletteBackground );
   setMouseTracking( TRUE );
   m_bResize = FALSE;
@@ -2499,6 +2520,7 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     m_iResizePos = mouseX;
     int tmp;
     m_iResizeAnchor = table->leftColumn( mouseX - 3, tmp, m_pCanvas );
+
     int twenty = (int)( 20.0 * m_pCanvas->zoom() );
     // Dont make the column have a width < 20 pixels.
     int x = table->columnPos( m_iResizeAnchor, m_pCanvas );
