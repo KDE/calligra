@@ -2017,26 +2017,22 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent )
     domDoc.appendChild( elem );
     if ( c1.parag() == c2.parag() )
     {
-        //text = c1.parag()->toString( c1.index(), c2.index() - c1.index() );
-        text = realSelectedText( c1.parag(), c1.index(), c2.index() - c1.index());
+        text = c1.parag()->toString( c1.index(), c2.index() - c1.index() );
 
         m_kptextobj->saveParagraph( domDoc, c1.parag(), elem, c1.index(), c2.index()-2 );
     }
     else
     {
-        //text += c1.parag()->toString( c1.index() ) + "\n";
-        text += realSelectedText( c1.parag(), c1.index(), c1.parag()->length())+"\n";
+        text += c1.parag()->toString( c1.index() ) + "\n";
 
         m_kptextobj->saveParagraph( domDoc, c1.parag(), elem, c1.index(), c1.parag()->length()-1 );
         KoTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
-            //text += p->toString() + "\n";
-            text += realSelectedText( p, 0, p->length())+"\n";
+            text += p->toString() + "\n";
             m_kptextobj->saveParagraph( domDoc, p, elem, 0, p->length()-2 );
             p = p->next();
         }
-        //text += c2.parag()->toString( 0, c2.index() );
-        text += realSelectedText( c2.parag(), 0, c2.index());
+        text += c2.parag()->toString( 0, c2.index() );
         m_kptextobj->saveParagraph( domDoc, c2.parag(), elem, 0, c2.index()-1 );
     }
     KPrTextDrag *kd = new KPrTextDrag( parent );

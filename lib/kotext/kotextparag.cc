@@ -26,7 +26,7 @@
 #include <klocale.h>
 #include <assert.h>
 #include <kdebug.h>
-
+#include "koVariable.h"
 /////
 
 // Return the counter associated with this paragraph.
@@ -1329,5 +1329,19 @@ QString KoTextParag::toString( int from, int length ) const
     if ( from == 0 && m_layout.counter )
         str += m_layout.counter->text( this ) + ' ';
     // ### is this correct for RTL text?
-    return str + string()->toString().mid( from, length );
+    if ( length == 0xffffffff )
+        length=this->length()-1;
+    for ( int i = from ; i < (length+from) ; ++i )
+    {
+        KoTextStringChar *ch = at( i );
+        if ( ch->isCustom() )
+        {
+            KoVariable * var = dynamic_cast<KoVariable *>(ch->customItem());
+            if ( var )
+                str += var->text(true);
+        }
+        else
+            str += ch->c;
+    }
+    return str;
 }

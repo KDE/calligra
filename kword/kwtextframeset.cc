@@ -2802,26 +2802,22 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent )
     domDoc.appendChild( elem );
     if ( c1.parag() == c2.parag() )
     {
-        //text = c1.parag()->toString( c1.index(), c2.index() - c1.index() );
-        text = realSelectedText( c1.parag(), c1.index(), c2.index() - c1.index());
+        text = c1.parag()->toString( c1.index(), c2.index() - c1.index() );
+
         static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c2.index()-1, true );
     }
     else
     {
-        //text += c1.parag()->toString( c1.index() ) + "\n";
-        text += realSelectedText( c1.parag(), c1.index(), c1.parag()->length())+"\n";
+        text += c1.parag()->toString( c1.index() ) + "\n";
 
         static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c1.parag()->length()-2, true );
         KoTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
-            text += realSelectedText( p, 0, p->length())+"\n";
-
-            //text += p->toString() + "\n";
+            text += p->toString() + "\n";
             static_cast<KWTextParag *>(p)->save( elem, 0, p->length()-2, true );
             p = p->next();
         }
-        text += realSelectedText( c2.parag(), 0, c2.index());
-        //text += c2.parag()->toString( 0, c2.index() );
+        text += c2.parag()->toString( 0, c2.index() );
         static_cast<KWTextParag *>(c2.parag())->save( elem, 0, c2.index()-1, true );
     }
     textFrameSet()->zoom( false );
