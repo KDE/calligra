@@ -77,6 +77,19 @@ static FrameAnchor *findAnchor ( const KoPictureKey& key,
     return NULL;
 }
 
+static ParaData createTableMgr( const QString& grpMgr )
+{
+    ParaData  pData;
+    LayoutData lData;
+    FormatData fData;
+    fData.id = 6;
+    fData.frameAnchor.key  = KoPictureKey( grpMgr );
+    fData.frameAnchor.type = 6;
+    lData.formatData = fData;
+    pData.layout = lData;
+    pData.formattingList << fData;
+    return pData;
+}
 
 static void ProcessParagraphTag ( QDomNode         myNode,
                                   void            *tagData,
@@ -138,15 +151,75 @@ static void ProcessFrameTag ( QDomNode myNode, void *tagData,
 {
     FrameAnchor* frameAnchor= (FrameAnchor*) tagData;
 
+    int lRed, lBlue, lGreen;
+    int rRed, rBlue, rGreen;
+    int tRed, tBlue, tGreen;
+    int bRed, bBlue, bGreen;
+    int bkRed, bkBlue, bkGreen;
+
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList
-        << AttrProcessing ( "runaround", NULL,      NULL                 )
-        << AttrProcessing ( "top",       "double",  &frameAnchor->top    )
-        << AttrProcessing ( "bottom",    "double",  &frameAnchor->bottom )
-        << AttrProcessing ( "left",      "double",  &frameAnchor->left   )
-        << AttrProcessing ( "right",     "double",  &frameAnchor->right  )
+        << AttrProcessing ( "right",        "double",  &frameAnchor->frame.right  )
+        << AttrProcessing ( "left",         "double",  &frameAnchor->frame.left   )
+        << AttrProcessing ( "top",          "double",  &frameAnchor->frame.top    )
+        << AttrProcessing ( "bottom",       "double",  &frameAnchor->frame.bottom )
+
+        << AttrProcessing ( "min-height",   "double",  &frameAnchor->frame.minHeight )
+
+        << AttrProcessing ( "runaround",      "int",  &frameAnchor->frame.runaround         )
+        << AttrProcessing ( "runaroundSide",  "QString",  &frameAnchor->frame.runaroundSide )
+        << AttrProcessing ( "runaroundGap",   "double",  &frameAnchor->frame.runaroundGap   )
+
+        << AttrProcessing ( "autoCreateNewFrame",  "int",  &frameAnchor->frame.autoCreateNewFrame )
+        << AttrProcessing ( "newFrameBehavior",    "int",  &frameAnchor->frame.newFrameBehavior   )
+
+        << AttrProcessing ( "copy",       "int",  &frameAnchor->frame.copy      )
+        << AttrProcessing ( "sheetSide",  "int",  &frameAnchor->frame.sheetSide )
+
+        << AttrProcessing ( "lWidth",   "double",  &frameAnchor->frame.lWidth )
+        << AttrProcessing ( "rWidth",   "double",  &frameAnchor->frame.rWidth )
+        << AttrProcessing ( "tWidth",   "double",  &frameAnchor->frame.tWidth )
+        << AttrProcessing ( "bWidth",   "double",  &frameAnchor->frame.bWidth )
+
+        << AttrProcessing ( "lRed",     "int",  &lRed   )
+        << AttrProcessing ( "lGreen",   "int",  &lGreen )
+        << AttrProcessing ( "lBlue",    "int",  &lBlue  )
+
+        << AttrProcessing ( "rRed",     "int",  &rRed   )
+        << AttrProcessing ( "rGreen",   "int",  &rGreen )
+        << AttrProcessing ( "rBlue",    "int",  &rBlue  )
+
+        << AttrProcessing ( "tRed",     "int",  &tRed   )
+        << AttrProcessing ( "tGreen",   "int",  &tGreen )
+        << AttrProcessing ( "tBlue",    "int",  &tBlue  )
+
+        << AttrProcessing ( "bRed",     "int",  &bRed   )
+        << AttrProcessing ( "bGreen",   "int",  &bGreen )
+        << AttrProcessing ( "bBlue",    "int",  &bBlue  )
+
+        << AttrProcessing ( "lStyle",    "int",  &frameAnchor->frame.lStyle )
+        << AttrProcessing ( "rStyle",    "int",  &frameAnchor->frame.rStyle )
+        << AttrProcessing ( "tStyle",    "int",  &frameAnchor->frame.tStyle )
+        << AttrProcessing ( "bStyle",    "int",  &frameAnchor->frame.bStyle )
+
+        << AttrProcessing ( "bkRed",     "int",  &bkRed   )
+        << AttrProcessing ( "bkGreen",   "int",  &bkGreen )
+        << AttrProcessing ( "bkBlue",    "int",  &bkBlue  )
+
+        << AttrProcessing ( "bkStyle",    "int",  &frameAnchor->frame.bkStyle )
+
+        << AttrProcessing ( "bleftpt",     "double",  &frameAnchor->frame.bleftpt   )
+        << AttrProcessing ( "brightpt",    "double",  &frameAnchor->frame.brightpt  )
+        << AttrProcessing ( "btoppt",      "double",  &frameAnchor->frame.btoppt    )
+        << AttrProcessing ( "bbottompt",   "double",  &frameAnchor->frame.bbottompt )
         ;
     ProcessAttributes (myNode, attrProcessingList);
+
+    frameAnchor->frame.lColor  = QColor( lRed, lGreen, lBlue );
+    frameAnchor->frame.rColor  = QColor( rRed, rGreen, rBlue );
+    frameAnchor->frame.tColor  = QColor( tRed, tGreen, tBlue );
+    frameAnchor->frame.bColor  = QColor( bRed, bGreen, bBlue );
+    frameAnchor->frame.bkColor = QColor( bkRed, bkGreen, bkBlue );
 
     AllowNoSubtags (myNode, leader);
 }
@@ -186,17 +259,17 @@ static void ProcessFramesetTag ( QDomNode        myNode,
     QString grpMgr;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "name",      "QString", (void *) &name      )
-                       << AttrProcessing ( "frameType", "int",     (void *) &frameType )
-                       << AttrProcessing ( "frameInfo", "int",     (void *) &frameInfo )
-                       << AttrProcessing ( "removable", "",        NULL                )
-                       << AttrProcessing ( "visible",   "",        NULL                )
-                       << AttrProcessing ( "grpMgr",    "QString", (void *) &grpMgr    )
-                       << AttrProcessing ( "row",       "int",     (void *) &row       )
-                       << AttrProcessing ( "col",       "int",     (void *) &col       )
-                       << AttrProcessing ( "rows",      "int",     (void *) &rows      )
-                       << AttrProcessing ( "cols",      "int",     (void *) &cols      )
-                       << AttrProcessing ( "protectSize","",       NULL                )
+    attrProcessingList << AttrProcessing ( "name",        "QString", (void *) &name      )
+                       << AttrProcessing ( "frameType",   "int",     (void *) &frameType )
+                       << AttrProcessing ( "frameInfo",   "int",     (void *) &frameInfo )
+                       << AttrProcessing ( "removable",   "",        NULL                )
+                       << AttrProcessing ( "visible",     "",        NULL                )
+                       << AttrProcessing ( "grpMgr",      "QString", (void *) &grpMgr    )
+                       << AttrProcessing ( "row",         "int",     (void *) &row       )
+                       << AttrProcessing ( "col",         "int",     (void *) &col       )
+                       << AttrProcessing ( "rows",        "int",     (void *) &rows      )
+                       << AttrProcessing ( "cols",        "int",     (void *) &cols      )
+                       << AttrProcessing ( "protectSize", "",        NULL                )
                         ;
     ProcessAttributes (myNode, attrProcessingList);
 
@@ -275,7 +348,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                 {
                     // footer for odd page (or all page, if fType=0)
                     FooterData footer;
-                    footer.page = (leader->footerType() != 0) ? FooterData::PAGE_ODD : FooterData::PAGE_ALL; 
+                    footer.page = (leader->footerType() != 0) ? FooterData::PAGE_ODD : FooterData::PAGE_ALL;
                     QValueList<TagProcessing> tagProcessingList;
                     tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &footer.para ));
@@ -291,28 +364,23 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     {
 #if 0
                         kdDebug (30508) << "DEBUG - FRAMESET: table " << name << " col, row = "
-                                        << col << ", " << row << endl;
+                                        << col << ", " << row << ", Mgr = "<< grpMgr << endl;
 #endif
-
                         FrameAnchor *frameAnchor = findAnchor (grpMgr, *paraList);
-
-                        if ( frameAnchor )
-                        {
-                            frameAnchor->type = 6;
-
-                            QValueList<ParaData> cellParaList;
-
-                            QValueList<TagProcessing> tagProcessingList;
-                            tagProcessingList << TagProcessing ( "FRAME",     ProcessFrameTag,     frameAnchor   )
-                                              << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, &cellParaList );
-                            ProcessSubtags (myNode, tagProcessingList, leader);
-
-                            frameAnchor->table.addCell (col, row, cellParaList);
+                        if ( !frameAnchor ) {
+                            *paraList << createTableMgr( grpMgr );
+                            frameAnchor = &paraList->last().formattingList.first().frameAnchor;
                         }
-                        else
-                        {
-                            kdWarning (30508) << "ProcessFramesetTag (): Couldn't find anchor " << name << endl;
-                        }
+
+                        frameAnchor->type = 6;
+
+                        QValueList<ParaData> cellParaList;
+                        QValueList<TagProcessing> tagProcessingList;
+                        tagProcessingList << TagProcessing ( "FRAME",     ProcessFrameTag,     frameAnchor   )
+                                          << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, &cellParaList );
+                        ProcessSubtags (myNode, tagProcessingList, leader);
+
+                        frameAnchor->table.addCell (col, row, cellParaList);
                     }
                     else
                     {
@@ -381,7 +449,6 @@ static void ProcessFramesetsTag ( QDomNode        myNode,
                                   KWEFKWordLeader *leader )
 {
     AllowNoAttributes (myNode);
-
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "FRAMESET", ProcessFramesetTag, tagData );
     ProcessSubtags (myNode, tagProcessingList, leader);
@@ -390,7 +457,10 @@ static void ProcessFramesetsTag ( QDomNode        myNode,
 
 static void ProcessStyleTag (QDomNode myNode, void *, KWEFKWordLeader *leader )
 {
-    AllowNoAttributes (myNode);
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList
+        << AttrProcessing ( "outline",   "", NULL );
+    ProcessAttributes (myNode, attrProcessingList);
 
     LayoutData layout;
 
@@ -447,16 +517,22 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
     int fType       = -1;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "format",          "int",    (void *) &format      )
-                       << AttrProcessing ( "width",           "double", (void *) &width       )
-                       << AttrProcessing ( "height",          "double", (void *) &height      )
-                       << AttrProcessing ( "orientation",     "int",    (void *) &orientation )
-                       << AttrProcessing ( "columns",         "",       NULL                  )
-                       << AttrProcessing ( "columnspacing",   "",       NULL                  )
-                       << AttrProcessing ( "hType",           "int",    (void*) &hType        )
-                       << AttrProcessing ( "fType",           "int",    (void*) &fType        )
-                       << AttrProcessing ( "spHeadBody",      "",       NULL                  )
-                       << AttrProcessing ( "spFootBody",      "",       NULL                  );
+    attrProcessingList << AttrProcessing ( "format",              "int",    (void *) &format      )
+                       << AttrProcessing ( "width",               "double", (void *) &width       )
+                       << AttrProcessing ( "height",              "double", (void *) &height      )
+                       << AttrProcessing ( "orientation",         "int",    (void *) &orientation )
+                       << AttrProcessing ( "columns",             "",       NULL                  )
+                       << AttrProcessing ( "columnspacing",       "",       NULL                  )
+                       << AttrProcessing ( "pages",               "",       NULL                  )
+                       << AttrProcessing ( "hType",               "int",    (void*) &hType        )
+                       << AttrProcessing ( "fType",               "int",    (void*) &fType        )
+                       << AttrProcessing ( "spHeadBody",          "",       NULL                  )
+                       << AttrProcessing ( "spFootBody",          "",       NULL                  )
+                       << AttrProcessing ( "spFootNoteBody",      "",       NULL                  )
+                       << AttrProcessing ( "slFootNotePosition",  "",       NULL                  )
+                       << AttrProcessing ( "slFootNoteLength",    "",       NULL                  )
+                       << AttrProcessing ( "slFootNoteWidth",     "",       NULL                  )
+                       << AttrProcessing ( "slFootNoteType",      "",       NULL                  );
     ProcessAttributes (myNode, attrProcessingList);
 
     leader->setHeaderType( hType );
@@ -492,7 +568,16 @@ static void ProcessVariableSettingsTag (QDomNode myNode, void *, KWEFKWordLeader
                                            (void *) &vs.displaycomment )
                        << AttrProcessing ( "displayfieldcode",
                                            "bool",
-                                           (void *) &vs.displayfieldcode );
+                                           (void *) &vs.displayfieldcode )
+                       << AttrProcessing ( "lastPrintingDate",
+                                           "",
+                                           NULL )
+                       << AttrProcessing ( "creationDate",
+                                           "",
+                                           NULL )
+                       << AttrProcessing ( "modificationDate",
+                                           "",
+                                           NULL );
     ProcessAttributes (myNode, attrProcessingList);
 
     leader->doVariableSettings (vs);
@@ -607,12 +692,21 @@ static void ProcessFootnoteFramesetTag ( QDomNode myNode, void *tagData, KWEFKWo
 {
     QString frameName;
     int frameType = -1, frameInfo = -1;
+    bool visible = false;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList 
-        << AttrProcessing ( "name",      "QString", (void *) &frameName      )
-        << AttrProcessing ( "frameType", "int",     (void *) &frameType )
-        << AttrProcessing ( "frameInfo", "int",     (void *) &frameInfo )
+    attrProcessingList
+        << AttrProcessing ( "name",        "QString", (void *) &frameName      )
+        << AttrProcessing ( "frameType",   "int",     (void *) &frameType )
+        << AttrProcessing ( "frameInfo",   "int",     (void *) &frameInfo )
+        << AttrProcessing ( "removable",   "",        NULL                )
+        << AttrProcessing ( "visible",     "bool",    (void *) &visible )
+        << AttrProcessing ( "grpMgr",      "QString", NULL    )
+        << AttrProcessing ( "row",         "int",     NULL    )
+        << AttrProcessing ( "col",         "int",     NULL    )
+        << AttrProcessing ( "rows",        "int",     NULL    )
+        << AttrProcessing ( "cols",        "int",     NULL    )
+        << AttrProcessing ( "protectSize",  "",        NULL    )
         ;
     ProcessAttributes (myNode, attrProcessingList);
 
@@ -645,11 +739,13 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
     //kdDebug (30508) << "Entering ProcessDocTag" << endl;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "editor",        "", NULL )
-                       << AttrProcessing ( "mime",          "", NULL )
-                       << AttrProcessing ( "syntaxVersion", "", NULL );
-    ProcessAttributes (myNode, attrProcessingList);
 
+    attrProcessingList << AttrProcessing ( "xmlns",         "QString", 0  )
+                       << AttrProcessing ( "editor",        "QString", 0  )
+                       << AttrProcessing ( "mime",          "QString", 0  )
+                       << AttrProcessing ( "syntaxVersion", "int",     0  );
+
+    ProcessAttributes( myNode, attrProcessingList );
     // TODO: verify syntax version and perhaps mime
 
     leader->doOpenHead();
@@ -674,7 +770,7 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
 	kdWarning (30508) << "No <VARIABLESETTINGS>" << endl;
     else
 	ProcessVariableSettingsTag (nodeVariableSettings, NULL, leader);
-    
+
     // Then we process the styles
     QDomNode nodeStyles=myNode.namedItem("STYLES");
     if ( nodeStyles.isNull () )

@@ -442,11 +442,16 @@ static void AppendTagProcessingFormatOne(QValueList<TagProcessing>& tagProcessin
         << TagProcessing ( "ITALIC",              ProcessBoolIntValueTag, &formatData.text.italic            )
         << TagProcessing ( "UNDERLINE",           ProcessUnderlineTag,    &formatData.text                   )
         << TagProcessing ( "STRIKEOUT",           ProcessStrikeoutTag,    &formatData.text                   )
-        << TagProcessing ( "CHARSET",             NULL,                   NULL                               )
         << TagProcessing ( "VERTALIGN",           ProcessIntValueTag,     &formatData.text.verticalAlignment )
-        << TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessColorAttrTag,    &formatData.text.bgColor           )
+        << TagProcessing ( "SHADOW",              NULL,                   NULL                               )
         << TagProcessing ( "FONTATTRIBUTE",       ProcessStringValueTag,  &formatData.text.fontAttribute     )
         << TagProcessing ( "LANGUAGE",            NULL,                   NULL                               )
+        << TagProcessing ( "ANCHOR",              NULL,                   NULL                               )
+        << TagProcessing ( "IMAGE",               NULL,                   NULL                               )
+        << TagProcessing ( "PICTURE",             NULL,                   NULL                               )
+        << TagProcessing ( "VARIABLE",            NULL,                   NULL                               )
+        << TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessColorAttrTag,    &formatData.text.bgColor           )
+        << TagProcessing ( "OFFSETFROMBASELINE",  NULL,                   NULL                               )
         ;
 }
 
@@ -461,7 +466,10 @@ static void SubProcessFormatOneTag(QDomNode myNode,
         // It can happen in a child of <STYLE>, just put secure values
         formatPos=0;
         formatLen=0;
-        kdDebug (30508) << "Missing formatting! Style?" << endl;
+        kdDebug (30508) << "Missing formatting! Style? "
+                        << myNode.nodeName()
+                        << " = " << myNode.nodeValue()
+                        << endl;
     }
 
     FormatData formatData(1, formatPos, formatLen);
@@ -586,16 +594,18 @@ static void ProcessCounterTag ( QDomNode myNode, void *tagData, KWEFKWordLeader 
     CounterData *counter = (CounterData *) tagData;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "type",          "int",     (void *) &counter->style           );
-    attrProcessingList << AttrProcessing ( "depth",         "int",     (void *) &counter->depth           );
-    attrProcessingList << AttrProcessing ( "bullet",        "int",     (void *) &counter->customCharacter );
-    attrProcessingList << AttrProcessing ( "start",         "int",     (void *) &counter->start           );
-    attrProcessingList << AttrProcessing ( "numberingtype", "int",     (void *) &counter->numbering       );
-    attrProcessingList << AttrProcessing ( "lefttext",      "QString", (void *) &counter->lefttext        );
-    attrProcessingList << AttrProcessing ( "righttext",     "QString", (void *) &counter->righttext       );
-    attrProcessingList << AttrProcessing ( "bulletfont",    "QString", (void *) &counter->customFont      );
-    attrProcessingList << AttrProcessing ( "customdef",     "",        (void *) NULL                      );
-    attrProcessingList << AttrProcessing ( "text",          "QString", (void *) &counter->text            );
+    attrProcessingList << AttrProcessing ( "type",            "int",     (void *) &counter->style           );
+    attrProcessingList << AttrProcessing ( "depth",           "int",     (void *) &counter->depth           );
+    attrProcessingList << AttrProcessing ( "bullet",          "int",     (void *) &counter->customCharacter );
+    attrProcessingList << AttrProcessing ( "start",           "int",     (void *) &counter->start           );
+    attrProcessingList << AttrProcessing ( "numberingtype",   "int",     (void *) &counter->numbering       );
+    attrProcessingList << AttrProcessing ( "lefttext",        "QString", (void *) &counter->lefttext        );
+    attrProcessingList << AttrProcessing ( "righttext",       "QString", (void *) &counter->righttext       );
+    attrProcessingList << AttrProcessing ( "bulletfont",      "QString", (void *) &counter->customFont      );
+    attrProcessingList << AttrProcessing ( "customdef",       "",        (void *) NULL                      );
+    attrProcessingList << AttrProcessing ( "text",            "QString", (void *) &counter->text            );
+    attrProcessingList << AttrProcessing ( "display-levels",  "",                 NULL                      );
+    attrProcessingList << AttrProcessing ( "align",           "",                 NULL                      );
     ProcessAttributes (myNode, attrProcessingList);
 
     AllowNoSubtags (myNode, leader);

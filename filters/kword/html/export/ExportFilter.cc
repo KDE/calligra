@@ -175,9 +175,9 @@ bool HtmlWorker::makeClipart(const FrameAnchor& anchor)
     QString strImagePath(m_strFileDir);
     strImagePath+='/';
     strImagePath+=strImageName;
-    
-    const double height=anchor.bottom - anchor.top;
-    const double width =anchor.right  - anchor.left;
+
+    const double height = anchor.frame.bottom - anchor.frame.top;
+    const double width  = anchor.frame.right  - anchor.frame.left;
 
     QPicture picture;
 
@@ -259,7 +259,7 @@ void HtmlWorker::formatTextParagraph(const QString& strText,
 void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &paraText,
     const LayoutData& layout, const ValueListFormatData &paraFormatDataList)
 {
-    if (paraText.isEmpty())
+    if (paraText.isEmpty() && paraFormatDataList.first().id != 6)
     {
         openParagraph(strTag,layout);
         *m_streamOut << "&nbsp;" ; // A paragraph can never be empty in HTML
@@ -465,7 +465,7 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
     }
 
     m_streamOut=new QTextStream(m_ioDevice);
-    
+
     if (!getCodec())
     {
         kdError(30503) << "Could not create QTextCodec! Aborting" << endl;
@@ -534,7 +534,7 @@ bool HtmlWorker::doOpenDocument(void)
 
 bool HtmlWorker::doCloseDocument(void)
 {
-  kdDebug(30503) << __FILE__ << ":" << __LINE__ << endl;
+    kdDebug(30503) << __FILE__ << ":" << __LINE__ << endl;
     *m_streamOut << "</html>\n";
     return true;
 }

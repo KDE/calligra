@@ -62,10 +62,10 @@ static QString mapFieldName( const QString& kwordField )
   return rtfField;
 }
 
-RTFWorker::RTFWorker(): 
+RTFWorker::RTFWorker():
     m_ioDevice(NULL), m_streamOut(NULL), m_eol("\r\n"), m_inTable(false),
     m_paperOrientation(false), m_paperWidth(20), m_paperHeight(20),
-    m_paperMarginTop(72), m_paperMarginLeft(72), 
+    m_paperMarginTop(72), m_paperMarginLeft(72),
     m_paperMarginBottom(72), m_paperMarginRight(72)
 {
 }
@@ -150,10 +150,10 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
             return true;
         }
 
-  
+
     // find displayed width and height (in twips)
-    const long width  = (long)(PT_TO_TWIP(anchor.right  - anchor.left));
-    const long height = (long)(PT_TO_TWIP(anchor.bottom - anchor.top));
+    const long width  = (long)(PT_TO_TWIP(anchor.frame.right  - anchor.frame.left));
+    const long height = (long)(PT_TO_TWIP(anchor.frame.bottom - anchor.frame.top));
 
     // find original image width and height (in twips)
     long origWidth  = width;
@@ -164,7 +164,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
         // d7cdc69a is metaheader magic id
         Q_UINT8* data = (Q_UINT8*) image.data();
         if( ( data[0] == 0xd7 ) && ( data[1] == 0xcd ) &&
-            ( data[2] == 0xc6 ) && ( data[3] == 0x9a ) && 
+            ( data[2] == 0xc6 ) && ( data[3] == 0x9a ) &&
             ( image.size() > 22 ) )
         {
             // grab bounding box, find original size
@@ -180,7 +180,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
                 image.at(i) = image.at(i+22); // As we use uint, we need at()  ( [] uses int only .)
             image.resize( image.size()-22 );
         }
-    } 
+    }
     else
     {
         // It must be an image
@@ -297,15 +297,15 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
     {
         str += "\\super"; //Superscript
     }
-    
+
     str += " {";
 
     if (layout.pageBreakBefore)
         str += "\\page ";
-    
+
     if (!paraText.isEmpty())
     {
-    
+
         ValueListFormatData::ConstIterator  paraFormatDataIt;
 
         QString partialText;
@@ -444,7 +444,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
 
     if (layout.pageBreakAfter)
         str += "\\page";
-    
+
     // close paragraph
     str += "}";
 
@@ -888,7 +888,7 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
     // TODO: rename variable formatData
     QString strElement; // TODO: rename this variable
 
-    // Font name 
+    // Font name
     const QString fontName(formatData.fontName);
     if (!fontName.isEmpty()
         && (force || (formatOrigin.fontName!=formatData.fontName)))
@@ -945,7 +945,7 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
         if ( formatData.bgColor.isValid() )
         {
             strElement+=lookupColor("\\cb", formatData.bgColor);
-            strElement+=lookupColor("\\highlight", formatData.bgColor); // MS Word wants this 
+            strElement+=lookupColor("\\highlight", formatData.bgColor); // MS Word wants this
         }
     }
 
@@ -953,13 +953,13 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
     {
         if ( formatData.underline )
         {
-            QString underlineValue = formatData.underlineValue;  
-            QString underlineStyle = formatData.underlineStyle;  
-            bool underlineWord = formatData.underlineWord;  
+            QString underlineValue = formatData.underlineValue;
+            QString underlineStyle = formatData.underlineStyle;
+            bool underlineWord = formatData.underlineWord;
             QString ul = "\\ul1";  // fall-back: simple underline
 
-            if( underlineStyle.isEmpty() ) underlineStyle = "solid"; 
-            if( underlineValue == "1" ) underlineValue = "single"; 
+            if( underlineStyle.isEmpty() ) underlineStyle = "solid";
+            if( underlineValue == "1" ) underlineValue = "single";
 
             if( underlineValue == "double" )
                 ul = "\\uldb";
@@ -1114,7 +1114,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
            // "Custom" in KWord is like "Exactly" in MS Word
            strLayout += QString("\\sl-%1\\slmult0").arg(int(layout.lineSpacing)*20);
 
-        else 
+        else
         kdWarning(30515) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
     }
 

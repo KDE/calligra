@@ -129,7 +129,7 @@ void ProcessAttributes ( QDomNode                     myNode,
     //kdDebug(30508) << "Starting ProcessAttributes for node: " << myNode.nodeName() << endl;
 
     QDomNamedNodeMap myAttribs ( myNode.attributes () );
-
+    //kdDebug(30508) << "Attributes = " << myAttribs.length () <<endl;
     for ( uint i = 0; i <  myAttribs.length (); i++ )
     {
         QDomAttr myAttrib ( myAttribs.item (i).toAttr () );
@@ -144,6 +144,7 @@ void ProcessAttributes ( QDomNode                     myNode,
                   attrProcessingIt != attrProcessingList.end ();
                   attrProcessingIt++ )
             {
+              //kdDebug(30508) << "NAME: " << myAttrib.name () << " == " << (*attrProcessingIt).name <<endl;
                 if ( myAttrib.name () == (*attrProcessingIt).name )
                 {
                     found = true;

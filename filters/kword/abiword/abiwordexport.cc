@@ -233,7 +233,7 @@ bool AbiWordWorker::doOpenDocument(void)
     // *m_streamOut << " xmlns:awml=\"http://www.abisource.com/awml.dtd\"";
     *m_streamOut << " xmlns:xlink=\"http://www.w3.org/1999/xlink\"";
     // AbiWord CVS 2002-02-22 defines other namespaces, which we are not using.
-    // AbiWord CVS 2002-12-23 has no fileformat attribute anymore 
+    // AbiWord CVS 2002-12-23 has no fileformat attribute anymore
     // ### TODO: add document language and document direction of writing.
     *m_streamOut << " xml:space=\"preserve\" version=\"1.1.2\" template=\"false\" styles=\"unlocked\">\n";
     // Second magic: "<!-- This file is an AbiWord document."
@@ -495,7 +495,7 @@ bool AbiWordWorker::makeTable(const FrameAnchor& anchor)
         itCell!=anchor.table.cellList.end(); itCell++)
     {
         // ### TODO: rowspan, colspan
-       
+
         // AbiWord seems to work by attaching to the cell borders
         *m_streamOut << "<cell props=\"";
         *m_streamOut << "left-attach:" << (*itCell).col << "; ";
@@ -503,12 +503,12 @@ bool AbiWordWorker::makeTable(const FrameAnchor& anchor)
         *m_streamOut << "top-attach:" << (*itCell).row << "; ";
         *m_streamOut << "bot-attach:" << (*itCell).row + 1;
         *m_streamOut << "\">\n";
-        
+
         if (!doFullAllParagraphs(*(*itCell).paraList))
         {
             return false;
         }
-        
+
         *m_streamOut << "</cell>\n";
     }
 
@@ -523,8 +523,8 @@ bool AbiWordWorker::makePicture(const FrameAnchor& anchor)
     kdDebug(30506) << "New image/clipart: " << anchor.picture.koStoreName
         << " , " << anchor.picture.key.toString() << endl;
 
-    const double height=anchor.bottom - anchor.top;
-    const double width =anchor.right  - anchor.left;
+    const double height=anchor.frame.bottom - anchor.frame.top;
+    const double width =anchor.frame.right  - anchor.frame.left;
 
     // TODO: we are only using the filename, not the rest of the key
     // TODO:  (bad if there are two images of the same name, but of a different key)
@@ -675,7 +675,7 @@ void AbiWordWorker::processAnchor ( const QString&,
 {
     // We have an image or a table
     if ( (2==formatData.frameAnchor.type) // <IMAGE> or <PICTURE>
-        || (5==formatData.frameAnchor.type) ) // <CLIPART> 
+        || (5==formatData.frameAnchor.type) ) // <CLIPART>
     {
         makePicture(formatData.frameAnchor);
     }
@@ -1076,20 +1076,20 @@ bool AbiWordWorker::doFullSpellCheckIgnoreWord (const QString& ignoreword)
 bool AbiWordWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 {
     m_docInfo=docInfo;
-    
+
     *m_streamOut << "<metadata>\n";
-    
+
     // First all Dublin Core data
     *m_streamOut << "<m key=\"dc.format\">application/x-abiword</m>\n";
     if (!m_docInfo.title.isEmpty())
     {
-        *m_streamOut << "<m key=\"dc.title\">" << escapeAbiWordText(m_docInfo.title) << "</m>\n";    
+        *m_streamOut << "<m key=\"dc.title\">" << escapeAbiWordText(m_docInfo.title) << "</m>\n";
     }
     if (!m_docInfo.abstract.isEmpty())
     {
-        *m_streamOut << "<m key=\"dc.description\">" << escapeAbiWordText(m_docInfo.abstract) << "</m>\n";    
+        *m_streamOut << "<m key=\"dc.description\">" << escapeAbiWordText(m_docInfo.abstract) << "</m>\n";
     }
-    
+
     // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
     *m_streamOut << "<m key=\"abiword.generator\">KWord Export Filter";
 
@@ -1104,7 +1104,7 @@ bool AbiWordWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
     *m_streamOut << "<m key=\"abiword.date_last_changed\">"
          << escapeAbiWordText(now.toString(Qt::ISODate)) // ### PROBLEM: AbiWord uses an unlocalized Qt::TextDate
          << "</m>\n";
-    
+
     *m_streamOut << "</metadata>\n";
 
     return true;

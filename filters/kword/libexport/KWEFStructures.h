@@ -151,21 +151,53 @@ class Picture
         QString koStoreName;   // Picture store name: filename within kwd archive
 };
 
+/**
+ * For FRAME Tag.
+ * Look at kword.dtd for a complete description
+ * of individuals class members
+ */
+class FrameData
+{
+public:
+    double right;
+    double left;
+    double top;
+    double bottom;
+    double minHeight;
+    int runaround;
+    QString runaroundSide;
+    double runaroundGap;
+    int autoCreateNewFrame;
+    int newFrameBehavior;
+    int copy;
+    int sheetSide;
 
+    double lWidth, rWidth, tWidth, bWidth;
+
+    QColor lColor;
+    QColor rColor;
+    QColor tColor;
+    QColor bColor;
+
+    int lStyle, rStyle, tStyle, bStyle;
+
+    QColor bkColor;
+    int    bkStyle;
+    double bleftpt, brightpt, btoppt, bbottompt;
+};
+
+//This is basically FRAMESET tag
 class FrameAnchor
 {
    public:
       FrameAnchor ():
-       type(-1), top( 0.0 ), bottom( 0.0 ), left( 0.0 ), right( 0.0 ) {}
+       type(-1) {}
 
       FrameAnchor ( const KoPictureKey& n  ) : key (n), type (-1) {}
 
       KoPictureKey key; // KoPictureKey
       int     type;
-      double  top;      // Frame top
-      double  bottom;   // frame bottom
-      double  left;     // frame left
-      double  right;    // frame right
+      FrameData   frame;
 
       Picture picture;
       Table   table;

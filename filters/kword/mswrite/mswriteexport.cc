@@ -1210,18 +1210,18 @@ public:
 		kdDebug (30509) << "\tActual dimensions: width=" << imageActualWidth
 								<< " height=" << imageActualHeight << endl;
 
-		kdDebug (30509) << "\tKOffice position: left=" << frameAnchor.left
-								<< " right=" << frameAnchor.right
-								<< " top=" << frameAnchor.top
-								<< " bottom=" << frameAnchor.bottom
+		kdDebug (30509) << "\tKOffice position: left=" << frameAnchor.frame.left
+								<< " right=" << frameAnchor.frame.right
+								<< " top=" << frameAnchor.frame.top
+								<< " bottom=" << frameAnchor.frame.bottom
 								<< endl;
 
-		kdDebug (30509) << "\tIndent=" << MSWrite::Word (Point2Twip (frameAnchor.left)) - m_leftMargin << endl;
+		kdDebug (30509) << "\tIndent=" << MSWrite::Word (Point2Twip (frameAnchor.frame.left)) - m_leftMargin << endl;
 		if (ignoreIndent)
 			kdDebug (30509) << "\t\tIgnoring indent - already exported at least one image in a KWord paragraph" << endl;
 
-		double displayedWidth = Point2Twip (frameAnchor.right - frameAnchor.left + 1);
-		double displayedHeight = Point2Twip (frameAnchor.bottom - frameAnchor.top + 1);
+		double displayedWidth = Point2Twip (frameAnchor.frame.right - frameAnchor.frame.left + 1);
+		double displayedHeight = Point2Twip (frameAnchor.frame.bottom - frameAnchor.frame.top + 1);
 
 		kdDebug (30509) << "\tdisplayedWidth=" << displayedWidth
 								<< " displayedHeight=" << displayedHeight
@@ -1240,7 +1240,7 @@ public:
 		if (!ignoreIndent)
 		{
 			if (paraPropIn->getAlignment () != MSWrite::Alignment::Centre)
-				image.setIndent (MSWrite::Word (Point2Twip (frameAnchor.left)) - m_leftMargin);
+				image.setIndent (MSWrite::Word (Point2Twip (frameAnchor.frame.left)) - m_leftMargin);
 			else
 			{
 				// TODO: what is the image offset relative to (it's not always rel. to the left margin)?

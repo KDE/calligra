@@ -509,8 +509,8 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
 
     kdDebug(30518) << "Picture loaded: " << koStoreName << endl;
 
-    const double height=anchor.bottom - anchor.top;
-    const double width =anchor.right  - anchor.left;
+    const double height=anchor.frame.bottom - anchor.frame.top;
+    const double width =anchor.frame.right  - anchor.frame.left;
 
      // We need a 32 digit hex value of the picture number
      // Please note: it is an exact 32 digit value, truncated if the value is more than 512 bits wide. :-)
