@@ -1,18 +1,18 @@
 
-# startup/ wants deleted files like kexiprojectdata.*, and linking cannot find -lkexi_compat_qextmdi
-DO_NOT_COMPILE="$DO_NOT_COMPILE kexi"
+#DO_NOT_COMPILE="$DO_NOT_COMPILE kexi"
 
 
 # -- Check for KDE 3.1 and enable the compat dir --------------------
 
 AC_MSG_CHECKING([for kdelibs newer than 3.1.x])
 
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
 kcompat_save_CXXFLAGS="$CXXFLAGS"
 kcompat_safe_LIBS="$LIBS"
 LIBS="$LIBS $X_EXTRA_LIBS"
-if test "$GXX" = "yes"; then
+echo "all_includes=$all_includes"
 CXXFLAGS="$CXXFLAGS $all_includes"
-fi
 
 AC_TRY_COMPILE([
 #include <kdeversion.h>
@@ -35,6 +35,7 @@ AC_TRY_COMPILE([
 )
 CXXFLAGS="$kcompat_save_CXXFLAGS"
 LIBS="$kcompat_safe_LIBS"
+AC_LANG_RESTORE
 
 AM_CONDITIONAL(use_kexi_compat_qextmdi, test "$use_kexi_compat_qextmdi" == "yes")
 
