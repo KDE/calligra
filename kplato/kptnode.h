@@ -171,12 +171,14 @@ public:
     KPTRelation *findChildRelation(KPTNode *node);
     KPTRelation *findRelation(KPTNode *node);
 
-    void setStartTime(KPTDateTime startTime) { m_startTime=startTime; }
+    void setStartTime(KPTDateTime startTime);
     /// Return the (previously) calculated start time
     const KPTDateTime &startTime() const { return m_startTime; }
-    void setEndTime(KPTDateTime endTime) { m_endTime=endTime; }
+    const QDate &startDate() const { return m_dateOnlyStartDate; }
+    void setEndTime(KPTDateTime endTime);
     /// Return the (previously) calculated end time
     const KPTDateTime &endTime() const { return m_endTime; }
+    const QDate &endDate() const { return m_dateOnlyEndDate; }
 
     // These are entered by the project man. during the project
     void setActualStartTime(KPTDateTime startTime) { m_actualStartTime=startTime; }
@@ -424,6 +426,10 @@ protected:
     bool m_visitedForward;
     bool m_visitedBackward;
     
+    QDate m_dateOnlyStartDate;
+    QDate m_dateOnlyEndDate;
+    KPTDuration m_dateOnlyDuration;
+ 
  private:
     void init();
 
