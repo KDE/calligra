@@ -1621,8 +1621,11 @@ void KWView::setupPrinter( KPrinter &prt )
     //recalc time and date variable before to print
     //it's necessary otherwise we print a document
     //with a bad date and time
+    //TODO call once this function
     m_doc->recalcVariables(  VT_TIME );
     m_doc->recalcVariables(  VT_DATE );
+    m_doc->recalcVariables(  VT_STATISTIC );
+
     prt.setPageSelection( KPrinter::ApplicationSide );
     prt.setCurrentPage( currentPage() + 1 );
     prt.setMinMax( 1, m_doc->numPages() );
@@ -5817,6 +5820,7 @@ void KWView::docStructChanged(int _type)
     KWDocStruct *m_pDocStruct=m_gui->getDocStruct();
     if(m_pDocStruct)
         m_pDocStruct->getDocStructTree()->refreshTree(_type);
+    m_doc->recalcVariables(  VT_STATISTIC );
 }
 
 void KWView::setViewFrameBorders(bool b)
