@@ -1,0 +1,177 @@
+<!DOCTYPE autocorrection>
+<Word>
+ <items>
+  <item find="(C)" replace="©" />
+  <item find="(R)" replace="®" />
+  <item find="(c)" replace="©" />
+  <item find="(r)" replace="®" />
+  <item find="¿a donde" replace="¿a dónde" />
+  <item find="¿como" replace="¿cómo" />
+  <item find="¿cual" replace="¿cúal" />
+  <item find="¿cuales" replace="¿cúales" />
+  <item find="¿cuando" replace="¿cúando" />
+  <item find="¿cuanta" replace="¿cúanta" />
+  <item find="¿cuantas" replace="¿cúantas" />
+  <item find="¿cuanto" replace="¿cúanto" />
+  <item find="¿cuantos" replace="¿cúantos" />
+  <item find="¿donde" replace="¿dónde" />
+  <item find="¿para quien" replace="¿para quién" />
+  <item find="¿por que" replace="¿por qué" />
+  <item find="¿porque" replace="¿por qué" />
+  <item find="¿que" replace="¿qué" />
+  <item find="¿quien" replace="¿quién" />
+  <item find="¿quienes" replace="¿quiénes" />
+  <item find="desed" replace="desde" />
+  <item find="ed" replace="de" />
+  <item find="a drede" replace="adrede" />
+  <item find="abordo de" replace="a bordo de" />
+  <item find="abordo del" replace="a bordo del" />
+  <item find="acesorio" replace="accesorio" />
+  <item find="acesorios" replace="accesorios" />
+  <item find="acordarse que" replace="acordarse de que" />
+  <item find="acuestas" replace="a cuestas" />
+  <item find="aducí" replace="aduje" />
+  <item find="aduciste" replace="adujiste" />
+  <item find="aereolito" replace="aerolito" />
+  <item find="aereplano" replace="aerplano" />
+  <item find="aereoestática" replace="aeroestática" />
+  <item find="aereodromo" replace="aerodromo" />
+  <item find="agua fiestas" replace="aguafiestas" />
+  <item find="ahi" replace="ahí" />
+  <item find="al rededor" replace="alrededor" />
+  <item find="alegrarse que" replace="alegrarse de que" />
+  <item find="ambiguedad" replace="ambigüedad" />
+  <item find="andó" replace="anduvo" />
+  <item find="andaste" replace="anduviste" />
+  <item find="andaron" replace="anduvieron" />
+  <item find="andé" replace="anduve" />
+  <item find="anecdota" replace="anécdota" />
+  <item find="ante anoche" replace="anteanoche" />
+  <item find="ante ayer" replace="anteayer" />
+  <item find="antes de ayer" replace="anteayer" />
+  <item find="antidiluviano" replace="antediluviano" />
+  <item find="antiguedad" replace="antigüedad" />
+  <item find="antirobo" replace="antirrobo" />
+  <item find="aohra" replace="ahora" />
+  <item find="a pesar" replace="apesar" />
+  <item find="apriori" replace="a priori" />
+  <item find="arguir" replace="argüir" />
+  <item find="atras" replace="atrás" />
+  <item find="averigué" replace="averigüé" />
+  <item find="axfisia" replace="asfixia" />
+  <item find="barajear" replace="barajar" />
+  <item find="bilingue" replace="bilingüe" />
+  <item find="casos límites" replace="casos límite" />
+  <item find="claramnete" replace="claramente" />
+  <item find="cojer" replace="coger" />
+  <item find="conque" replace="con que" />
+  <item find="crocodilo" replace="cocodrilo" />
+  <item find="de imprevisto" replace="de improviso" />
+  <item find="decimoprimero" replace="undécimo" />
+  <item find="decimosegundo" replace="duodécimo" />
+  <item find="delante mio" replace="delante de mí" />
+  <item find="delante tuyo" replace="delante de tí" />
+  <item find="dentrifico" replace="dentifríco" />
+  <item find="dentrífico" replace="dentifríco" />
+  <item find="desarollo" replace="desarrollo" />
+  <item find="dentrífico" replace="dentifríco" />
+  <item find="desed" replace="desde" />
+  <item find="desinfestar" replace="desinfectar" />
+  <item find="detení" replace="detuve" />
+  <item find="deteniste" replace="detuviste" />
+  <item find="detenio" replace="detuvo" />
+  <item find="detras" replace="detrás" />
+  <item find="detrás mio" replace="detrás de mí" />
+  <item find="detrás tuyo" replace="detrás de tí" />
+  <item find="diezmil" replace="diez mil" />
+  <item find="diez y seis" replace="dieciseis" />
+  <item find="diez y siete" replace="diecisiete" />
+  <item find="diez y ocho" replace="dieciocho" />
+  <item find="diez y nueve" replace="diecinueve" />
+  <item find="diferiencia" replace="diferencia" />
+  <item find="difernete" replace="diferente" />
+  <item find="diverger" replace="divergir" />
+  <item find="dsde" replace="desde" />
+  <item find="dsede" replace="desde" />
+  <item find="doceavo" replace="duodécimo" />
+  <item find="elejir" replace="elegir" />
+  <item find="en favor" replace="a favor" />
+  <item find="enmedio" replace="en medio" />
+  <item find="eqiupo" replace="equipo" />
+  <item find="escojer" replace="escoger" />
+  <item find="esquies" replace="esquís" />
+  <item find="esquíes" replace="esquís" />
+  <item find="immediato" replace="inmediato" />
+  <item find="onceavo" replace="undécimo" />
+  <item find="treceavo" replace="decimotercero" />
+  <item find="preveer" replace="prever" />
+  <item find="Http://" replace="http://" />
+  <item find="htp://" replace="http://" />
+  <item find="htpp://" replace="http://" />
+  <item find="http:/" replace="http://" />
+  <item find="http:\\" replace="http://" />
+  <item find="Thorvalds" replace="Torvalds" />
+  <item find="Torvald" replace="Torvalds" />
+  <item find="X Windows" replace="X Window" />
+ </items>
+ <UpperCaseExceptions>
+  <word exception="admón." />
+  <word exception="ap." />
+  <word exception="art." />
+  <word exception="cf." />
+  <word exception="cfr." />
+  <word exception="cta." />
+  <word exception="cte." />
+  <word exception="cts." />
+  <word exception="dcha." />
+  <word exception="depto." />
+  <word exception="doc." />
+  <word exception="dto." />
+  <word exception="ej." />
+  <word exception="fasc." />
+  <word exception="grs." />
+  <word exception="gral." />
+  <word exception="pag." />
+  <word exception="pág." />
+  <word exception="págs." />
+  <word exception="tel." />
+  <word exception="teléf." />
+  <word exception="vol." />
+ </UpperCaseExceptions>
+ <TwoUpperLetterExceptions>
+  <word exception="KOffice" />
+  <word exception="KWord" />
+  <word exception="KSpread" />
+  <word exception="KPresenter" />
+  <word exception="KMail" />
+  <word exception="KTuberling" />
+  <word exception="KNode" />
+  <word exception="KStars" />
+  <word exception="KDevelop" />
+  <word exception="KBabel" />
+  <word exception="KPat" />
+  <word exception="MHz" />
+  <word exception="MWh" />
+  <word exception="GHz" />
+  <word exception="MW" />
+  <word exception="GW" />
+  <word exception="GWh" />
+  <word exception="MJ" />
+  <word exception="MT" />
+  <word exception="KByte" />
+  <word exception="MByte" />
+  <word exception="GByte" />
+  <word exception="TByte" />
+ </TwoUpperLetterExceptions>
+ <SuperScript>
+  <superscript find="1o" super="o" />
+  <superscript find="1a" super="a" />
+  <superscript find="othernb" super="o" />
+ </SuperScript>
+ <DoubleQuote>
+  <doublequote begin="«" end="»" />
+ </DoubleQuote>
+ <SimpleQuote>
+  <simplequote begin="'" end="'" />
+ </SimpleQuote>
+</Word>
