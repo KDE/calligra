@@ -989,6 +989,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         if ( m_styleStack.hasAttribute( "draw:fill" )
              || m_styleStack.hasAttribute( "presentation:transition-style" ))
         {
+            kdDebug()<<" load Background \n";
             m_pageList.at(pos)->background()->loadOasis( m_styleStack, oasisStyles);
         }
 

@@ -80,7 +80,7 @@ void KPRectObject::loadOasis(const QDomElement &element, const KoStyleStack &sty
     if ( element.hasAttribute( "draw:corner-radius" ) )
     {
         //todo FIXME, conversion is not good, oo give radius and kpresenter give xRnd and yRnd 0->99
-        double radius = KoUnit::parseValue( element.attribute( "draw:corner-radius" ) );
+        int radius = static_cast<int>( KoUnit::parseValue( element.attribute( "draw:corner-radius" ) ) );
         xRnd = radius;
         yRnd = radius;
         kdDebug()<<" KPRectObject : radius xRnd :"<<xRnd <<" yRnd :"<<yRnd<<endl;
