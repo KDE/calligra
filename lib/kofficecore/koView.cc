@@ -542,4 +542,5 @@ void KoViewChild::slotDocGeometryChanged()
   m_frame->setGeometry( borderRect );
 }
 
-#include <koView.moc>
+#include "koView.moc"
+

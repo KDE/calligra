@@ -69,7 +69,6 @@ KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name )
     if ( !obj || !obj->inherits( "KoDocument" ) )
     {
         delete obj;
-        delete factory;
         return 0;
     }
 
@@ -162,7 +161,6 @@ KoFilter* KoFilterEntry::createFilter( QObject* parent, const char* name )
     if ( !obj || !obj->inherits( "KoFilter" ) )
     {
         delete obj;
-        delete factory;
         return 0;
     }
 
@@ -215,7 +213,6 @@ KoFilterDialog* KoFilterDialogEntry::createFilterDialog( QObject* parent, const 
     if ( !obj || !obj->inherits( "KoFilterDialog" ) )
     {
         delete obj;
-        delete factory;
         return 0;
     }
 

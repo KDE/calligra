@@ -164,6 +164,7 @@ KoDocument::~KoDocument()
   d->m_shells.setAutoDelete( true );
   d->m_shells.clear();
 
+  delete d->m_dcopObject;
   delete d;
   s_documentList->removeRef(this);
 }
@@ -174,7 +175,7 @@ bool KoDocument::isSingleViewMode() const
 }
 
 bool KoDocument::isEmbedded() const {
-  return parent() && parent()->inherits( "KoDocument" );
+  return dynamic_cast<KoDocument *>( parent() ) != 0;
 }
 
 KoView *KoDocument::createView( QWidget *parent, const char *name ) {
@@ -904,4 +905,4 @@ DCOPObject * KoDocument::dcopObject()
   return d->m_dcopObject;
 }
 
-#include <koDocument.moc>
+#include "koDocument.moc"
