@@ -27,6 +27,8 @@
 
 class QLineEdit;
 class QCheckBox;
+class KURLRequester;
+
 
 /**
  *  "General"-tab for preferences dialog
@@ -59,7 +61,7 @@ public:
 
 private:
 
-	QLineEdit *m_pLineEdit;
+	KURLRequester *m_pLineEdit;
 };
 
 /* jwc - undo-redo not working yet */

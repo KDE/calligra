@@ -132,12 +132,11 @@ void KisBrushChooser::slotSetBrushSpacing( int spacing )
   KisBrush *brush = (KisBrush *) currentBrush();
   if ( brush )
     brush->setSpacing( spacing );
-  else
-    qDebug("setting spacing, but no current brush!");
 }
 
-
 #include "kis_brushchooser.moc"
+
+
 
 
 

@@ -27,6 +27,9 @@
 
 #include <klocale.h>
 #include <knuminput.h>
+#include <kfiledialog.h>
+#include <kurlrequester.h>
+#include <klineedit.h>
 
 #include "kis_dlg_preferences.h"
 
@@ -63,16 +66,18 @@ DirectoriesTab::DirectoriesTab( QWidget *_parent, const char *_name )
   QGridLayout* grid = new QGridLayout( this, 5, 1, 7, 15);
 
   // Inputline
-  m_pLineEdit = new QLineEdit( this, "tempDir" );
-  grid->addWidget( m_pLineEdit, 1, 0 );	
+  m_pLineEdit = new KURLRequester( this, "tempDir" );
+  m_pLineEdit->fileDialog()->setMode(KFile::Directory);
+  grid->addWidget( m_pLineEdit, 1, 0 );
 
   // Label
   label = new QLabel( m_pLineEdit, i18n( "Directory for temporary files" ) , this );
   grid->addWidget( label, 0, 0 );
 
   // Inputline
-  m_pLineEdit = new QLineEdit( this, "gimpGradientDir" );
-  grid->addWidget( m_pLineEdit, 3, 0 );	
+  m_pLineEdit = new KURLRequester( this, "gimpGradientDir" );
+  m_pLineEdit->fileDialog()->setMode(KFile::Directory);
+  grid->addWidget( m_pLineEdit, 3, 0 );
 
   // Label
   label = new QLabel( m_pLineEdit, i18n( "Directory of GIMP gradients" ) , this );
