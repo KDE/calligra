@@ -245,7 +245,7 @@ public:
      * Paint this frameset in "has focus" mode (e.g. with a cursor)
      */
     virtual void drawContents( QPainter *, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/,
-                               QWidget *, bool /*onlyChanged*/ ) {}
+                               QColorGroup &, bool /*onlyChanged*/ ) {}
 
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void keyPressEvent( QKeyEvent * ) {}
@@ -317,7 +317,7 @@ public:
      * When the frameset is being edited, KWFrameSetEdit's drawContents is called instead.
      */
     virtual void drawContents( QPainter *, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/,
-                               QWidget *, bool /*onlyChanged*/ )
+                               QColorGroup &, bool /*onlyChanged*/ )
     {}
 
     /** reshuffle frames so text is always displayed from top-left down and then right. */
@@ -417,7 +417,7 @@ public:
     virtual void load( QDomElement &attributes );
 
     virtual void drawContents( QPainter *painter, int cx, int cy, int cw, int ch,
-                               QWidget *, bool /*onlyChanged*/ );
+                               QColorGroup &, bool /*onlyChanged*/ );
 
 protected:
     KWImage *image;
@@ -449,7 +449,7 @@ public:
     virtual void update();
 
     void drawContents( QPainter * p, int cx, int cy, int cw, int ch,
-                       QWidget *, bool onlyChanged );
+                       QColorGroup &, bool onlyChanged );
 
     //void enableDrawing( bool f ) { _enableDrawing = f; }
 

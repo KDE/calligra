@@ -150,11 +150,11 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
              isAWrongFooter( fi, doc->getFooterType() ) ||
              !frameset->isVisible() )
             continue;
-
+        QColorGroup gb=QApplication::palette().active();
         if ( focus && frameset == m_currentFrameSet && m_currentFrameSetEdit )
-            m_currentFrameSetEdit->drawContents( painter, cx, cy, cw, ch, this, !drawAll );
+            m_currentFrameSetEdit->drawContents( painter, cx, cy, cw, ch, gb, !drawAll );
         else
-            frameset->drawContents( painter, cx, cy, cw, ch, this, !drawAll );
+            frameset->drawContents( painter, cx, cy, cw, ch, gb, !drawAll );
     }
 
 #if 0

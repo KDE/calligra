@@ -830,7 +830,7 @@ void KWPictureFrameSet::load( QDomElement &attributes )
 }
 
 void KWPictureFrameSet::drawContents( QPainter *painter, int cx, int cy, int cw, int ch,
-                                      QWidget *, bool /*onlyChanged*/ )
+                                      QColorGroup &, bool /*onlyChanged*/ )
 {
     QRect r = *frames.first();
     QImage img = image->smoothScale( r.width(), r.height() );
@@ -876,7 +876,7 @@ QPicture *KWPartFrameSet::getPicture()
 }
 
 void KWPartFrameSet::drawContents( QPainter * painter, int cx, int cy, int cw, int ch,
-                                   QWidget *, bool onlyChanged )
+                                   QColorGroup &, bool onlyChanged )
 {
     if (!onlyChanged)
     {

@@ -142,7 +142,7 @@ QPoint KWTextFrameSet::internalToContents( QPoint p ) const
     return p;
 }
 
-void KWTextFrameSet::drawContents( QPainter *p, int cx, int cy, int cw, int ch, QWidget *w, bool onlyChanged, bool drawCursor, QTextCursor *cursor )
+void KWTextFrameSet::drawContents( QPainter *p, int cx, int cy, int cw, int ch, QColorGroup &gb, bool onlyChanged, bool drawCursor, QTextCursor *cursor )
 {
     //if ( !cursorVisible )
          //drawCur = FALSE;
@@ -170,8 +170,8 @@ void KWTextFrameSet::drawContents( QPainter *p, int cx, int cy, int cw, int ch, 
             p->translate( frame->left(), frame->top() - totalHeight ); // translate to qrt coords
             r.moveBy( -frame->left(), -frame->top() + totalHeight );   // portion of the frame to be drawn, in qrt coords
             p->setClipRect( p->xForm( r ) );                           // don't draw out of the frame
-            QColorGroup cg = w->colorGroup();
-            m_lastFormatted = text->draw( p, r.x(), r.y(), r.width(), r.height(), cg, onlyChanged, drawCursor, cursor );
+            gb.setBrush(QColorGroup::Base,frame->getBackgroundColor());
+            m_lastFormatted = text->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor );
 
             // Blank area under the last paragraph
             if ( (m_lastFormatted == text->lastParag() || !m_lastFormatted))
@@ -180,7 +180,7 @@ void KWTextFrameSet::drawContents( QPainter *p, int cx, int cy, int cw, int ch, 
                 int docHeight = text->height();
                 QRect blank( 0, docHeight, frame->width(), totalHeight+frame->height() - docHeight );
                 //kdDebug() << "Blank: " << blank.x() << "," << blank.y() << " " << blank.width() << "x" << blank.height() << endl;
-                p->fillRect( blank, cg.brush( QColorGroup::Base ) );
+                p->fillRect( blank, gb.brush( QColorGroup::Base ) );
             }
             p->restore();
         }
@@ -221,8 +221,10 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, QWidget *w, b
 
             QPixmap *pix = 0;
             // cursor->parag()->document()->nextDoubleBuffered = TRUE; ################ we need that only if we have nested items/documents
+            QColorGroup cg=QApplication::palette().active();
+            cg.setBrush(QColorGroup::Base,frame->getBackgroundColor());
             text->drawParag( p, cursor->parag(), r.x(), r.y(), r.width(), r.height(),
-                             pix, w->colorGroup(), cursorVisible, cursor );
+                             pix, /*w->colorGroup()*/cg, cursorVisible, cursor );
             p->restore();
             drawn = true;
         }
