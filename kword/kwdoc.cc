@@ -4068,7 +4068,7 @@ void KWDocument::updateFrameStatusBarItem()
         it.current()->updateFrameStatusBarItem();
 }
 
-int KWDocument::undoRedoLimit()
+int KWDocument::undoRedoLimit() const
 {
     return m_commandHistory->undoLimit();
 }

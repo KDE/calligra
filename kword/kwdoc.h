@@ -153,6 +153,34 @@ private:
 class KWDocument : public KoDocument, public KoZoomHandler
 {
     Q_OBJECT
+    Q_PROPERTY( int numPages READ numPages )
+    Q_PROPERTY( double ptTopBorder READ ptTopBorder )
+    Q_PROPERTY( double ptBottomBorder READ ptBottomBorder )
+    Q_PROPERTY( double ptLeftBorder READ ptLeftBorder )
+    Q_PROPERTY( double ptRightBorder READ ptRightBorder )
+    Q_PROPERTY( double ptPaperHeight READ ptPaperHeight )
+    Q_PROPERTY( double ptPaperWidth READ ptPaperWidth )
+    Q_PROPERTY( double ptColumnWidth READ ptColumnWidth )
+    Q_PROPERTY( double ptColumnSpacing READ ptColumnSpacing )
+    Q_PROPERTY( double gridX READ gridX WRITE setGridX )
+    Q_PROPERTY( double gridY READ gridY WRITE setGridY )
+    Q_PROPERTY( double indentValue READ indentValue WRITE setIndentValue )
+    Q_PROPERTY( int nbPagePerRow READ nbPagePerRow WRITE setNbPagePerRow )
+    Q_PROPERTY( double defaultColumnSpacing READ defaultColumnSpacing WRITE setDefaultColumnSpacing )
+    Q_PROPERTY( int maxRecentFiles READ maxRecentFiles )
+    Q_PROPERTY( QString globalLanguage READ globalLanguage WRITE setGlobalLanguage )
+    Q_PROPERTY( QStringList horizontalLinePath READ horizontalLinePath WRITE setHorizontalLinePath )
+    Q_PROPERTY( bool insertDirectCursor READ insertDirectCursor WRITE setInsertDirectCursor )
+    Q_PROPERTY( QString picturePath READ picturePath WRITE setPicturePath )
+    Q_PROPERTY( QStringList personalExpressionPath READ personalExpressionPath WRITE setPersonalExpressionPath )
+    Q_PROPERTY( bool viewFormattingBreak READ viewFormattingBreak WRITE setViewFormattingBreak )
+    Q_PROPERTY( bool viewFormattingTabs READ viewFormattingTabs WRITE setViewFormattingTabs )
+    Q_PROPERTY( bool viewFormattingSpace READ viewFormattingSpace WRITE setViewFormattingSpace )
+    Q_PROPERTY( bool viewFormattingEndParag READ viewFormattingEndParag WRITE setViewFormattingEndParag )
+    Q_PROPERTY( bool cursorInProtectedArea READ cursorInProtectedArea WRITE setCursorInProtectedArea )
+    Q_PROPERTY( bool pgUpDownMovesCaret READ pgUpDownMovesCaret WRITE setPgUpDownMovesCaret )
+    Q_PROPERTY( bool allowAutoFormat READ allowAutoFormat WRITE setAllowAutoFormat )
+    Q_PROPERTY( int undoRedoLimit READ undoRedoLimit WRITE setUndoRedoLimit )
 
 public:
     KWDocument( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
@@ -673,7 +701,7 @@ public:
 
     virtual DCOPObject* dcopObject();
 
-    int undoRedoLimit();
+    int undoRedoLimit() const;
     void setUndoRedoLimit(int _val);
 
     void updateContentsSize(){emit newContentsSize();}

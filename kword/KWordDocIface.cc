@@ -48,12 +48,6 @@ DCOPRef KWordDocIface::frameSet( int num )
 		    doc->frameSet( num)->dcopObject()->objId() );
 }
 
-
-int KWordDocIface::numPages()const
-{
-    return doc->numPages();
-}
-
 int KWordDocIface::numFrameSets()const
 {
     return doc->getNumFrameSets();
@@ -64,116 +58,15 @@ unsigned int KWordDocIface::nbColumns()const
     return doc->getColumns();
 }
 
-double KWordDocIface::ptTopBorder()const
-{
-    return doc->ptTopBorder();
-}
-
-double KWordDocIface::ptBottomBorder()const
-{
-    return doc->ptBottomBorder();
-}
-
-double KWordDocIface::ptLeftBorder()const
-{
-    return doc->ptLeftBorder();
-}
-
-double KWordDocIface::ptRightBorder()const
-{
-    return doc->ptRightBorder();
-}
-
-double KWordDocIface::ptPaperHeight()const
-{
-    return doc->ptPaperHeight();
-}
-
-double KWordDocIface::ptPaperWidth()const
-{
-    return doc->ptPaperWidth();
-}
-
-double KWordDocIface::ptColumnWidth()const
-{
-    return doc->ptColumnWidth();
-}
-
-double KWordDocIface::ptColumnSpacing()const
-{
-    return doc->ptColumnSpacing();
-}
-
 double KWordDocIface::ptPageTop( int pgNum )const
 {
     return doc->ptPageTop(pgNum);
-}
-
-double KWordDocIface::gridX()const
-{
-    return doc->gridX();
-}
-
-double KWordDocIface::gridY()const
-{
-    return doc->gridY();
-}
-
-void KWordDocIface::setGridX(double _gridx)
-{
-    doc->setGridX(_gridx);
-}
-
-void KWordDocIface::setGridY(double _gridy)
-{
-    doc->setGridY(_gridy);
 }
 
 QString KWordDocIface::unitName()const
 {
     return doc->getUnitName();
 }
-
-double KWordDocIface::indentValue()const
-{
-    return doc->indentValue();
-}
-
-void KWordDocIface::setIndentValue(double _ind)
-{
-    doc->setIndentValue(_ind);
-}
-
-int KWordDocIface::nbPagePerRow()const
-{
-    return doc->nbPagePerRow();
-}
-
-void KWordDocIface::setNbPagePerRow(int _nb)
-{
-    doc->setNbPagePerRow(_nb);
-}
-
-double KWordDocIface::defaultColumnSpacing()const
-{
-    return doc->defaultColumnSpacing();
-}
-
-void KWordDocIface::setDefaultColumnSpacing(int _val)
-{
-    doc->setDefaultColumnSpacing(_val);
-}
-
-int KWordDocIface::maxRecentFiles()const
-{
-    return doc->maxRecentFiles();
-}
-
-void KWordDocIface::setUndoRedoLimit(int _val)
-{
-    doc->setUndoRedoLimit(_val);
-}
-
 
 void KWordDocIface::recalcAllVariables()
 {
@@ -471,16 +364,6 @@ void KWordDocIface::setConfigAutoReplaceNumber( bool b )
     doc->getAutoFormat()->configAutoReplaceNumber(b);
 }
 
-bool KWordDocIface::allowAutoFormat() const
-{
-    return doc->allowAutoFormat();
-}
-
-void KWordDocIface::setAllowAutoFormat(bool _b)
-{
-    doc->setAllowAutoFormat(_b);
-}
-
 void KWordDocIface::setConfigAutoNumberStyle( bool b )
 {
     doc->getAutoFormat()->configAutoNumberStyle(b);
@@ -594,16 +477,6 @@ void KWordDocIface::setConfigAutoSuperScript( bool b)
     doc->getAutoFormat()->configAutoSuperScript( b );
 }
 
-bool KWordDocIface::pgUpDownMovesCaret() const
-{
-    return doc->pgUpDownMovesCaret();
-}
-
-void KWordDocIface::setPgUpDownMovesCaret( bool b )
-{
-    doc->setPgUpDownMovesCaret( b );
-}
-
 void KWordDocIface::addIgnoreWordAll( const QString &word )
 {
     doc->addIgnoreWordAll( word );
@@ -639,57 +512,6 @@ double KWordDocIface::ptTabStopValue() const
 void KWordDocIface::setPtTabStopValue ( double _tabStop )
 {
     doc->setTabStopValue (_tabStop );
-}
-
-bool KWordDocIface::cursorInProtectedArea()const
-{
-    return doc->cursorInProtectedArea();
-}
-
-void KWordDocIface::setCursorInProtectedArea( bool b )
-{
-    doc->setCursorInProtectedArea(b);
-}
-
-
-bool KWordDocIface::viewFormattingEndParag() const
-{
-    return doc->viewFormattingEndParag();
-}
-
-void KWordDocIface::setViewFormattingEndParag(bool _b)
-{
-    doc->setViewFormattingEndParag(_b);
-}
-
-bool KWordDocIface::viewFormattingSpace() const
-{
-    return doc->viewFormattingSpace();
-}
-
-void KWordDocIface::setViewFormattingSpace(bool _b)
-{
-    doc->setViewFormattingSpace(_b);
-}
-
-bool KWordDocIface::viewFormattingTabs() const
-{
-    return doc->viewFormattingTabs();
-}
-
-void KWordDocIface::setViewFormattingTabs(bool _b)
-{
-    doc->setViewFormattingTabs( _b );
-}
-
-bool KWordDocIface::viewFormattingBreak() const
-{
-    return doc->viewFormattingBreak();
-}
-
-void KWordDocIface::setViewFormattingBreak(bool _b)
-{
-    doc->setViewFormattingBreak( _b );
 }
 
 int KWordDocIface::footNoteSeparatorLineLength() const
@@ -763,47 +585,6 @@ QString KWordDocIface::configAutoFormatLanguage( )const
     return doc->getAutoFormat()->getConfigAutoFormatLanguage( );
 }
 
-QStringList KWordDocIface::personalExpressionPath()const
-{
-    //return all list
-    return doc->personalExpressionPath();
-}
-
-QStringList KWordDocIface::horizontalLinePath() const
-{
-    return doc->horizontalLinePath();
-}
-
-QString KWordDocIface::picturePath()const
-{
-    return doc->picturePath();
-}
-
-void KWordDocIface::setPicturePath( const QString & _path )
-{
-    doc->setPicturePath( _path );
-}
-
-void KWordDocIface::setBackupFile( bool _b )
-{
-    doc->setBackupFile( _b);
-}
-
-bool KWordDocIface::backupFile()const
-{
-    return doc->backupFile();
-}
-
-bool KWordDocIface::insertDirectCursor() const
-{
-    return doc->insertDirectCursor();
-}
-
-void KWordDocIface::setInsertDirectCursor(bool _b)
-{
-    doc->setInsertDirectCursor( _b );
-}
-
 bool KWordDocIface::configCapitalizeNameOfDays() const
 {
     return doc->getAutoFormat()->getConfigCapitalizeNameOfDays();
@@ -814,13 +595,3 @@ void KWordDocIface::setConfigCapitalizeNameOfDays( bool b)
     doc->getAutoFormat()->configCapitalizeNameOfDays( b );
 }
 
-
-QString KWordDocIface::globalLanguage()const
-{
-    return doc->globalLanguage();
-}
-
-void KWordDocIface::setGlobalLanguage( const QString & _lang )
-{
-    doc->setGlobalLanguage( _lang );
-}

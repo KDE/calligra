@@ -37,37 +37,14 @@ k_dcop:
     virtual DCOPRef textFrameSet( int num );
     virtual DCOPRef frameSet( int num );
 
-    virtual int numPages()const;
     virtual int numFrameSets()const;
     virtual unsigned int nbColumns()const;
 
     //paper
-    virtual double ptTopBorder()const;
-    virtual double ptBottomBorder()const;
-    virtual double ptLeftBorder()const;
-    virtual double ptRightBorder()const;
-    virtual double ptPaperHeight()const;
-    virtual double ptPaperWidth()const;
-    virtual double ptColumnWidth()const;
-    virtual double ptColumnSpacing()const;
     virtual double ptPageTop( int pgNum )const;
 
     //configure
-    virtual double gridX()const;
-    virtual double gridY()const;
-    virtual void setGridX(double _gridx);
-    virtual void setGridY(double _gridy);
     virtual QString unitName()const;
-    virtual double indentValue()const;
-    virtual void setIndentValue(double _ind);
-
-    virtual int nbPagePerRow()const;
-    virtual void setNbPagePerRow(int _nb);
-    virtual double defaultColumnSpacing()const;
-    virtual void setDefaultColumnSpacing(int _val);
-    virtual int maxRecentFiles()const;
-
-    virtual void setUndoRedoLimit(int _val);
 
     virtual bool showRuler() const;
     virtual bool dontCheckUpperWord()const;
@@ -133,10 +110,6 @@ k_dcop:
     virtual bool showStatusBar() const;
     virtual void setShowStatusBar( bool _status );
 
-    virtual bool allowAutoFormat() const;
-    virtual void setAllowAutoFormat(bool _b);
-
-
     void setConfigAutoNumberStyle( bool b );
     bool configAutoNumberStyle() const;
 
@@ -167,9 +140,6 @@ k_dcop:
     bool configAutoSuperScript() const;
     void setConfigAutoSuperScript( bool b);
 
-    bool pgUpDownMovesCaret() const;
-    void setPgUpDownMovesCaret( bool b );
-
     void addIgnoreWordAll( const QString &);
     void clearIgnoreWordAll( );
     QStringList spellListIgnoreAll() const;
@@ -185,20 +155,6 @@ k_dcop:
     double ptTabStopValue() const;
     void setPtTabStopValue ( double _tabStop );
 
-    bool cursorInProtectedArea()const;
-    void setCursorInProtectedArea( bool b );
-
-    bool viewFormattingEndParag() const;
-    void setViewFormattingEndParag(bool _b);
-
-    bool viewFormattingSpace() const;
-    void setViewFormattingSpace(bool _b);
-
-    bool viewFormattingTabs() const;
-    void setViewFormattingTabs(bool _b);
-
-    bool viewFormattingBreak() const;
-    void setViewFormattingBreak(bool _b);
     int footNoteSeparatorLineLength() const;
     void setFootNoteSeparatorLineLength( int _length);
     void setFootNoteSeparatorLinePosition( const QString &pos);
@@ -215,23 +171,8 @@ k_dcop:
     void setDisplayFiedCode( bool b);
     QString configAutoFormatLanguage( )const;
 
-    QStringList personalExpressionPath()const;
-    QString picturePath()const;
-    void setPicturePath( const QString & _path );
-
-    void setBackupFile( bool _b );
-    bool backupFile()const;
-
-    bool insertDirectCursor() const;
-    void setInsertDirectCursor(bool _b);
-
     bool configCapitalizeNameOfDays() const;
     void setConfigCapitalizeNameOfDays( bool b);
-
-    QString globalLanguage()const;
-    void setGlobalLanguage( const QString & _lang );
-
-    QStringList horizontalLinePath() const;
 
 private:
     KWDocument *doc;
