@@ -309,22 +309,6 @@ void KivioBaseConnectorStencil::customDrag( KivioCustomDragData *pData )
             return;
         }
 
-        /*
-        pStencil = pLayer->lastStencil();
-        while( pStencil )
-        {
-            if( pStencil != this )
-            {
-                if( pStencil->connectToTarget( p, 8.0f ) )
-                {
-                    return;
-                }
-            }
-
-            pStencil = pLayer->prevStencil();
-        }
-        */
-
         pLayer = pData->page->nextLayer();
     }
 

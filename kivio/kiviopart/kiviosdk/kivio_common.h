@@ -25,30 +25,35 @@
 #include "kivio_point.h"
 #include "kivio_rect.h"
 
+class KivioConnectorPoint;
+
 extern "C" {
 
-KivioRect XmlReadRect( const QDomElement &, const QString &, const KivioRect & );
-void  XmlWriteRect( QDomElement &, const QString &, const KivioRect & );
+   KivioRect XmlReadRect( const QDomElement &, const QString &, const KivioRect & );
+   void  XmlWriteRect( QDomElement &, const QString &, const KivioRect & );
+   
+   QColor XmlReadColor( const QDomElement &, const QString &, const QColor & );
+   void  XmlWriteColor( QDomElement &, const QString &, const QColor & );
+   
+   int XmlReadInt( const QDomElement &, const QString &, const int & );
+   void  XmlWriteInt( QDomElement &, const QString &, const int & );
+   
+   uint XmlReadUInt( const QDomElement &, const QString &, const uint & );
+   void  XmlWriteUInt( QDomElement &, const QString &, const uint & );
+   
+   double XmlReadDouble( const QDomElement &, const QString &, const double & );
+   void  XmlWriteDouble( QDomElement &, const QString &, const double & );
+   
+   float XmlReadFloat( const QDomElement &, const QString &, const float & );
+   void  XmlWriteFloat( QDomElement &, const QString &, const float & );
+   
+   QString XmlReadString( const QDomElement &, const QString &, const QString & );
+   void    XmlWriteString( QDomElement &,  const QString &, const QString & );
+   
+   bool PointInPoly( KivioPoint *points, int numPoints, KivioPoint *hitPos );
+   
+   float shortestDistance( KivioConnectorPoint *pStart, KivioConnectorPoint *pEnd, KivioConnectorPoint *q );
 
-QColor XmlReadColor( const QDomElement &, const QString &, const QColor & );
-void  XmlWriteColor( QDomElement &, const QString &, const QColor & );
-
-int XmlReadInt( const QDomElement &, const QString &, const int & );
-void  XmlWriteInt( QDomElement &, const QString &, const int & );
-
-uint XmlReadUInt( const QDomElement &, const QString &, const uint & );
-void  XmlWriteUInt( QDomElement &, const QString &, const uint & );
-
-double XmlReadDouble( const QDomElement &, const QString &, const double & );
-void  XmlWriteDouble( QDomElement &, const QString &, const double & );
-
-float XmlReadFloat( const QDomElement &, const QString &, const float & );
-void  XmlWriteFloat( QDomElement &, const QString &, const float & );
-
-QString XmlReadString( const QDomElement &, const QString &, const QString & );
-void    XmlWriteString( QDomElement &,  const QString &, const QString & );
-
-bool PointInPoly( KivioPoint *points, int numPoints, KivioPoint *hitPos );
 }
 
 #endif

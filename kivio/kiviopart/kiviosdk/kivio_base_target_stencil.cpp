@@ -422,7 +422,9 @@ KivioConnectorTarget *KivioBaseTargetStencil::connectToTarget( KivioConnectorPoi
     return NULL;
 }
 
-KivioConnectorTarget *KivioBaseTargetStencil::connectToTarget( KivioConnectorPoint *p, int targetID )
+// we probably don't need targetID in the function since it's stored in p... but I don't remember so
+// i'm leaving it here for now.
+KivioConnectorTarget *KivioBaseTargetStencil::connectToTarget( KivioConnectorPoint *p, int /*targetID*/ )
 {
     int id = p->targetId();
 
@@ -477,4 +479,35 @@ int KivioBaseTargetStencil::generateIds( int nextAvailable )
 
     // Return the next availabe id
     return nextAvailable;
+}
+
+void KivioBaseTargetStencil::copyBasicInto( KivioBaseTargetStencil *pStencil )
+{
+    pStencil->setSpawner( m_pSpawner );
+
+    m_pFillStyle->copyInto( pStencil->m_pFillStyle );
+    m_pLineStyle->copyInto( pStencil->m_pLineStyle );
+    m_pTextStyle->copyInto( pStencil->m_pTextStyle );
+
+    // Copy the targets
+    KivioConnectorTarget *pSrcTarget, *pTgTarget;
+    pSrcTarget = m_pTargets->first();
+    pTgTarget = pStencil->m_pTargets->first();
+
+    while( pSrcTarget && pTgTarget )
+    {
+        pTgTarget->setPosition( pSrcTarget->x(), pSrcTarget->y() );
+
+        pSrcTarget = m_pTargets->next();
+        pTgTarget = pStencil->m_pTargets->next();
+    }
+
+    // Copy the geometry
+    pStencil->m_x = m_x;
+    pStencil->m_y = m_y;
+    pStencil->m_w = m_w;
+    pStencil->m_h = m_h;
+
+    *(pStencil->m_pProtection) = *m_pProtection;
+    *(pStencil->m_pCanProtect) = *m_pCanProtect;
 }

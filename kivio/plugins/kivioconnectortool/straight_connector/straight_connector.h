@@ -32,15 +32,12 @@ class KivioPage;
 #include <qcolor.h>
 #include <qdom.h>
 
-#include "kivio_base_connector_stencil.h"
+#include "kivio_1d_stencil.h"
 
 
-class KivioStraightConnector : public KivioBaseConnectorStencil
+class KivioStraightConnector : public Kivio1DStencil
 {
 protected:
-    KivioConnectorPoint *m_pStart;
-    KivioConnectorPoint *m_pEnd;
-
     KivioArrowHead *m_startAH;
     KivioArrowHead *m_endAH;
 
@@ -61,8 +58,8 @@ public:
     virtual void paint( KivioIntraStencilData * );
     virtual void paintOutline( KivioIntraStencilData * );
 
-    virtual bool loadXML( const QDomElement & );
-    virtual QDomElement saveXML( QDomDocument & );
+    virtual bool loadCustom( const QDomElement & );
+    virtual bool saveCustom( QDomElement &, QDomDocument & );
 
 
     virtual void setStartAHType( int i )        { m_startAH->setType(i); }

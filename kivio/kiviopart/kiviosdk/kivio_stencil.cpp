@@ -165,3 +165,9 @@ int KivioStencil::generateIds(int nextAvailable)
 void KivioStencil::searchForConnections( KivioPage * )
 {
 }
+
+void KivioStencil::updateConnectorPoints(KivioConnectorPoint *, float, float)
+{
+   // Default to just calling updateGeometry
+   updateGeometry();
+}

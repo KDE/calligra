@@ -17,8 +17,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include "kivio_common.h"
+#include "kivio_connector_point.h"
 #include <kdebug.h>
 #include <qstringlist.h>
+#include <math.h>
 
 /**
  * Read a floating point value from a @ref QDomElement.
@@ -420,4 +422,29 @@ KivioRect XmlReadRect( const QDomElement &e, const QString &att, const KivioRect
 void  XmlWriteRect( QDomElement &e, const QString &att, const KivioRect &val )
 {
     e.setAttribute( att, QString("[%1,%2,%3,%4]").arg(val.x()).arg(val.y()).arg(val.w()).arg(val.h()) );
+}
+
+
+float shortestDistance( KivioConnectorPoint *pStart, KivioConnectorPoint *pEnd, KivioConnectorPoint *q )
+{
+   float uX, uY;
+   float pqX, pqY;
+
+   uX = pStart->x() - pEnd->x();
+   uY = pStart->y() - pEnd->y();
+
+   pqX = pStart->x() - q->x();
+   pqY = pStart->y() - q->y();
+
+   float magTop = fabs(pqX*uY - (pqY*uX));
+
+   float magU = sqrt( uX*uX + uY*uY );
+   
+   if( magU == 0.0f )
+   {
+      kdDebug() << "shortestDistance() - SERIOUS ERROR: magU is 0.0f!\n";
+      return 10.0f;
+   }
+
+   return magTop / magU;
 }

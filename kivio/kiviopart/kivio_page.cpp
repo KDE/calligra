@@ -214,65 +214,65 @@ bool KivioPage::loadXML( const QDomElement& pageE )
         return false;
 
 
-	m_bPageHide = (int)pageE.attribute("hide").toInt();
-	
-	// Clear the layer list
-	KivioLayer *pLayer;
-	m_lstLayers.clear();
-	
-	QDomNode node = pageE.firstChild();
-	while( !node.isNull() )
-	{
-	    if( node.nodeName() == "KivioLayer" )
-	    {
-	        pLayer = new KivioLayer(this);
-	        if( pLayer->loadXML( node.toElement() )==false )
-	        {
-	            delete pLayer;
-	            pLayer = NULL;
-	        }
-	        else
-	        {
-	            m_lstLayers.append( pLayer );
-	            pLayer = NULL;
-	        }
-	    }
-	    else if( node.nodeName() == "PageLayout" )
-	    {
-	        loadLayout( node.toElement() );
-	    }
-	    else if ( node.nodeName() == "GuidesLayout" ) {
-        gLines->load(node.toElement());
-	    }
-	    else
-	    {
-	       kdDebug() << "KivioLayer::loadXML() - unknown node found, " <<  node.nodeName() << endl;
-	    }
-	
-	    node = node.nextSibling();
-	}
-	
-	m_pCurLayer = m_lstLayers.first();
-	if( !m_pCurLayer )
-	{
-	   kdDebug() << "KivioLayer::loadXML() - No layers loaded!! BIGGGGG PROBLEMS!" << endl;
-	}
-	
-	// Now that we are done loading, fix all the connections
-	KivioLayer *pLayerBak;
-	
-	pLayer = m_lstLayers.first();
-	while( pLayer )
-	{
-	    pLayerBak = pLayer;
-	        
-	    kdDebug() << "KivioLayer::loadXML() - loading layer connections" << endl;
-	    pLayer->searchForConnections(this);
-	    
-	    m_lstLayers.find( pLayerBak );
-	
-	    pLayer = m_lstLayers.next();
-	}
+    m_bPageHide = (int)pageE.attribute("hide").toInt();
+    
+    // Clear the layer list
+    KivioLayer *pLayer;
+    m_lstLayers.clear();
+    
+    QDomNode node = pageE.firstChild();
+    while( !node.isNull() )
+    {
+       if( node.nodeName() == "KivioLayer" )
+       {
+	  pLayer = new KivioLayer(this);
+	  if( pLayer->loadXML( node.toElement() )==false )
+	  {
+	     delete pLayer;
+	     pLayer = NULL;
+	  }
+	  else
+	  {
+	     m_lstLayers.append( pLayer );
+	     pLayer = NULL;
+	  }
+       }
+       else if( node.nodeName() == "PageLayout" )
+       {
+	  loadLayout( node.toElement() );
+       }
+       else if ( node.nodeName() == "GuidesLayout" ) {
+	  gLines->load(node.toElement());
+       }
+       else
+       {
+	  kdDebug() << "KivioLayer::loadXML() - unknown node found, " <<  node.nodeName() << endl;
+       }
+       
+       node = node.nextSibling();
+    }
+    
+    m_pCurLayer = m_lstLayers.first();
+    if( !m_pCurLayer )
+    {
+       kdDebug() << "KivioLayer::loadXML() - No layers loaded!! BIGGGGG PROBLEMS!" << endl;
+    }
+    
+    // Now that we are done loading, fix all the connections
+    KivioLayer *pLayerBak;
+    
+    pLayer = m_lstLayers.first();
+    while( pLayer )
+    {
+       pLayerBak = pLayer;
+       
+       kdDebug() << "KivioLayer::loadXML() - loading layer connections" << endl;
+       pLayer->searchForConnections(this);
+       
+       m_lstLayers.find( pLayerBak );
+       
+       pLayer = m_lstLayers.next();
+    }
 
   return true;
 }

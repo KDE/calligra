@@ -147,10 +147,10 @@ QString AddSpawnerSetAction::dirDesc( const QString& dir )
     QFile file( dir + "/desc" );
 
     if( file.exists()==false )
-        return "Unknown - .desc does not exist";
+        return QString("Unknown - desc does not exist in ") + dir;
 
     if( file.open( IO_ReadOnly )==false )
-        return "Unknown - .desc could not be opened";
+        return QString("Unknown - desc could not be opened in ") + dir;
 
     QString ret;
 

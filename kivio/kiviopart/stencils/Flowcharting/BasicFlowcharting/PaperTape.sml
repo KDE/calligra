@@ -21,7 +21,7 @@
     <KivioConnectorTarget x="72.0087" y="27.068"/>
     <KivioShape type="ClosedPath" name="Path">
         <KivioFillStyle colorStyle="1" color="#ffffff"/>
-        <KivioLineStyle color="#000000" width="1" capStyle="0x00" joinStyle="0x00"/>
+        <KivioLineStyle color="#000000" width="1" capStyle="32" joinStyle="128"/>
 
         <KivioPoint x="0" y="5.0" type="bezier"/>
         <KivioPoint x="0.0" y="5.0" type="bezier"/>

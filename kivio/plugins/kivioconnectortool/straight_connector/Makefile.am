@@ -34,7 +34,7 @@ install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 
 uninstall-libLTLIBRARIES:
 	@$(NORMAL_UNINSTALL)
-	$(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(libdir)/libstraight_connector.ksp;
+	$(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(libdir)/straight_connector.ksp;
 
 stencil_DATA = straight_connector.xpm
 stencildir = $(kde_datadir)/kivio/autoloadStencils

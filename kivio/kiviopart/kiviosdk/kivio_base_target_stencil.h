@@ -57,7 +57,8 @@ protected:
     virtual bool loadCustom( const QDomElement & );
     virtual bool loadProperties( const QDomElement & );
     virtual bool loadTargets( const QDomElement & );
-
+    
+    virtual void copyBasicInto( KivioBaseTargetStencil * );
 
 public:
     KivioBaseTargetStencil();

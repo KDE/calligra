@@ -125,7 +125,7 @@ bool KivioSMLStencilSpawner::load( const QString &file )
         }
         else
         {
-	   kdDebug() << "KivioSMLStencilSpawner::load() - Unknown node " << nodeName << endl;
+	   kdDebug() << "KivioSMLStencilSpawner::load() - Unknown node " << nodeName << " while loading " << file << endl;
         }
         
         node = node.nextSibling();    

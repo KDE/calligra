@@ -193,6 +193,7 @@ public:
     virtual QList<KivioStencil>* groupList() { return NULL; }
 
     virtual void updateGeometry();
+    virtual void updateConnectorPoints(KivioConnectorPoint *, float oldX, float oldY);
 
     // This attempts to connect based on position
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, float );

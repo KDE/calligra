@@ -38,9 +38,12 @@ protected:
     KivioStencil *m_pStencil;
 
     int m_targetId;
+    
+    bool m_connectable;
 
 
 public:
+    KivioConnectorPoint( KivioStencil *, bool conn=true );
     KivioConnectorPoint();
     virtual ~KivioConnectorPoint();
 
@@ -62,6 +65,9 @@ public:
     void setX( float, bool updateStencil=true );
     void setY( float, bool updateStencil=true );
     void setPosition( float, float, bool updateStencil=true );
+    void setConnectable( bool b ) { m_connectable = b; if( b==false ) { disconnect(); } }
+
+    bool connectable() { return m_connectable; }
 
     void disconnect(bool removeFromTargetList=true);
 };

@@ -51,7 +51,8 @@ EXTRA_DIST = \
 		tkpagelayout.cpp\
 		tkpagelayout.h\
 		tkcommon.cpp\
-		tkcommon.h
+		tkcommon.h\
+        tkmath.h
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$

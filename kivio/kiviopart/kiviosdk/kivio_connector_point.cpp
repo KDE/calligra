@@ -27,6 +27,16 @@ KivioConnectorPoint::KivioConnectorPoint()
     m_pTarget = NULL;
     m_pStencil = NULL;
     m_targetId = -1;
+    m_connectable = true;
+}
+
+KivioConnectorPoint::KivioConnectorPoint( KivioStencil *pParent, bool conn )
+{
+    m_x = m_y = 0.0f;
+    m_pTarget = NULL;
+    m_pStencil = pParent;
+    m_targetId = -1;
+    m_connectable = conn;
 }
 
 KivioConnectorPoint::~KivioConnectorPoint()
@@ -51,6 +61,11 @@ KivioConnectorPoint::~KivioConnectorPoint()
  */
 void KivioConnectorPoint::setTarget( KivioConnectorTarget *pTarget  )
 {
+   if( m_connectable == false )
+   {
+      return;
+   }
+
     if( m_pTarget )
     {
          m_pTarget->removeConnectorPointFromList( this );
@@ -77,10 +92,11 @@ void KivioConnectorPoint::setTarget( KivioConnectorTarget *pTarget  )
  */
 void KivioConnectorPoint::setX( float newX, bool updateStencil )
 {
+   float oldX = m_x;
     m_x = newX;
 
     if( updateStencil && m_pStencil )
-        m_pStencil->updateGeometry();
+        m_pStencil->updateConnectorPoints(this, oldX, m_y);
 }
 
 
@@ -95,10 +111,11 @@ void KivioConnectorPoint::setX( float newX, bool updateStencil )
  */
 void KivioConnectorPoint::setY( float newY, bool updateStencil )
 {
+   float oldY = m_y;
     m_y = newY;
 
     if( updateStencil && m_pStencil )
-        m_pStencil->updateGeometry();
+        m_pStencil->updateConnectorPoints(this, m_x, oldY);
 }
 
 
@@ -114,11 +131,14 @@ void KivioConnectorPoint::setY( float newY, bool updateStencil )
  */
  void KivioConnectorPoint::setPosition( float newX, float newY, bool updateStencil )
 {
+   float oldX = m_x;
+   float oldY = m_y;
+
     m_x = newX;
     m_y = newY;
 
     if( updateStencil && m_pStencil )
-        m_pStencil->updateGeometry();
+        m_pStencil->updateConnectorPoints(this, oldX, oldY);
 }
 
 
@@ -156,6 +176,7 @@ bool KivioConnectorPoint::loadXML( const QDomElement &e )
     m_x = XmlReadFloat( e, "x", 1.0f );
     m_y = XmlReadFloat( e, "y", 1.0f );
     m_targetId = XmlReadInt( e, "targetId", -1 );
+    m_connectable = (bool)XmlReadInt( e, "connectable", (int)true );
 
     return true;
 }
@@ -176,6 +197,7 @@ QDomElement KivioConnectorPoint::saveXML( QDomDocument &doc )
 
     XmlWriteFloat( e, "x", m_x );
     XmlWriteFloat( e, "y", m_y );
+    XmlWriteInt( e, "connectable", (int)m_connectable );
 
     if( m_targetId != -1 )
         XmlWriteInt( e, "targetId", m_targetId );
