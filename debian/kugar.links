@@ -1,4 +1,6 @@
 usr/share/apps/kugar/templates/sample1.kut usr/share/doc/kugar/examples/sample1.kut
 usr/share/apps/kugar/templates/sample2.kut usr/share/doc/kugar/examples/sample2.kut
 usr/share/apps/kugar/templates/sample3.kut usr/share/doc/kugar/examples/sample3.kut
+usr/share/icons/locolor/16x16/apps/kudesigner.png usr/share/icons/hicolor/16x16/apps/kudesigner.png
+usr/share/icons/locolor/32x32/apps/kudesigner.png usr/share/icons/hicolor/32x32/apps/kudesigner.png
 usr/share/doc/kde/HTML/en/kugar usr/share/doc/kugar/html

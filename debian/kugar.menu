@@ -7,3 +7,11 @@
 	icon="/usr/share/pixmaps/kugar.xpm"\
 	command=kugar
 
+?package(kugar):\
+	needs=x11\
+	section=Apps/Tools\
+	hints="KDE"\
+	kderemove="1"\
+	title="Kugar Report Designer"\
+	command=kudesigner
+
