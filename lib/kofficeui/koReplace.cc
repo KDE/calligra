@@ -152,7 +152,7 @@ bool KoReplace::replace(QString &text, const QRect &expose)
             }
             else
             {
-                slotUser3();
+                doReplace();
             }
         }
     }
@@ -231,6 +231,12 @@ void KoReplace::slotUser2()
 // Yes.
 void KoReplace::slotUser3()
 {
+    doReplace();
+    kapp->exit_loop();
+}
+
+void KoReplace::doReplace()
+{    
     int replacedLength;
 
     replacedLength = KoReplace::replace(m_text, m_replacement, m_index, m_matchedLength);
@@ -243,7 +249,6 @@ void KoReplace::slotUser3()
         m_index--;
     else
         m_index += replacedLength;
-    kapp->exit_loop();
 }
 
 #include "koReplace.moc"

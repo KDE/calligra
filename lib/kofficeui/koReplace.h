@@ -236,6 +236,7 @@ signals:
     void replace(const QString &text, int replacementIndex, int replacedLength, const QRect &expose);
 
 private:
+    void doReplace();
 
     QString m_pattern;
     QRegExp *m_regExp;
