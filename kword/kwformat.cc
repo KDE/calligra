@@ -68,3 +68,12 @@ void KWTextFormat::generateKey()
     setKey( k + QString::number( (int)(fn.pointSizeFloat() * 10) ) ); // SYNC with ::format above
     //kdDebug() << "generateKey textformat=" << this << " pointsizefloat=" << fn.pointSizeFloat() << endl;
 }
+
+
+void KWTextFormat::setStrikeOut(bool b)
+{
+  if ( fn.strikeOut() == b )
+        return;
+    fn.setStrikeOut( b );
+    update();
+}

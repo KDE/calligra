@@ -38,7 +38,7 @@ public:
 
     void setPointSizeFloat( float );
     float pointSizeFloat() const { return fn.pointSizeFloat(); }
-
+    void setStrikeOut(bool );
 protected:
     virtual void generateKey();
 };

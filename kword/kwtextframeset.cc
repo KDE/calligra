@@ -2753,9 +2753,7 @@ void KWTextFrameSetEdit::setUnderline( bool on ) {
 
 void KWTextFrameSetEdit::setStrikeOut( bool on ) {
     KWTextFormat format( *currentFormat );
-    QFont _font=currentFormat->font();
-    _font.setStrikeOut(on);
-    format.setFont( _font );
+    format.setStrikeOut( on);
     textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Format );
 }
 
