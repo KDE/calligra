@@ -35,28 +35,37 @@ VMToolHandle::instance( KarbonPart* part )
 }
 
 void
+drawBox( QPainter& painter, int cx, int cy, const double zoomFactor )
+{
+	painter.setPen( Qt::blue.light() );
+	painter.setBrush( Qt::white );
+	painter.drawRect( QRect( QPoint( cx - 2 / zoomFactor, cy - 2 / zoomFactor ),
+							 QPoint( cx + 2 / zoomFactor, cy + 2 / zoomFactor ) ) );
+}
+
+void
 VMToolHandle::draw( QPainter& painter, const double zoomFactor )
 {
 	painter.setBrush( Qt::NoBrush );
 	painter.setPen( Qt::blue.light() );
+	QWMatrix mat = painter.worldMatrix();
+	painter.setWorldMatrix( mat.scale( zoomFactor, zoomFactor ) );
 
 	if( part()->selection().count() > 0 )
-		painter.drawRect(
-			part()->selection().boundingBox( zoomFactor ) );
+	{
+		QRect bbox =  part()->selection().boundingBox( 1 );
+		painter.drawRect( bbox );
 
-/*
-	// draw boxes
-	painter.setPen( Qt::blue.light() );
-	painter.setBrush( Qt::white );
-	drawBox( painter, m_bbox.left(), m_bbox.top() );
-	drawBox( painter, m_bbox.left() + m_bbox.width() / 2, m_bbox.top() );
-	drawBox( painter, m_bbox.right(), m_bbox.top() );
-	drawBox( painter, m_bbox.right(), m_bbox.top() + m_bbox.height() / 2 );
-	drawBox( painter, m_bbox.right(), m_bbox.bottom() );
-	drawBox( painter, m_bbox.left() + m_bbox.width() / 2, m_bbox.bottom() );
-	drawBox( painter, m_bbox.left(), m_bbox.bottom() );
-	drawBox( painter, m_bbox.left(), m_bbox.top() + m_bbox.height() / 2 );
-*/
+		// draw boxes
+		drawBox( painter, bbox.left(), bbox.top(), zoomFactor );
+		drawBox( painter, bbox.left() + bbox.width() / 2, bbox.top(), zoomFactor );
+		drawBox( painter, bbox.right(), bbox.top(), zoomFactor );
+		drawBox( painter, bbox.right(), bbox.top() + bbox.height() / 2, zoomFactor );
+		drawBox( painter, bbox.right(), bbox.bottom(), zoomFactor );
+		drawBox( painter, bbox.left() + bbox.width() / 2, bbox.bottom(), zoomFactor );
+		drawBox( painter, bbox.left(), bbox.bottom(), zoomFactor );
+		drawBox( painter, bbox.left(), bbox.top() + bbox.height() / 2, zoomFactor );
+	}
 }
 
 bool

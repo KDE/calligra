@@ -67,6 +67,11 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		m_bScrolling = false;
 	}
 	p->blit( rect );
+
+	// draw handle:
+	QPainter qpainter( p->device() );
+	qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY()) );
+	VMToolHandle::instance( m_part )->draw( qpainter, m_zoomFactor );
 }
 
 void
