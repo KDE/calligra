@@ -2541,6 +2541,7 @@ void KPresenterView::initGui()
     m_pKPresenterDoc->updateZoomRuler();
     updatePageInfo();
     actionAllowBgSpellCheck->setChecked( m_pKPresenterDoc->backgroundSpellCheckEnabled());
+    updateDirectCursorButton();
     m_pKPresenterDoc->updatePresentationButton();
 }
 

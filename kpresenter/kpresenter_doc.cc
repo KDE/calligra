@@ -3377,6 +3377,9 @@ void KPresenterDoc::updateDirectCursorButton()
 void KPresenterDoc::setInsertDirectCursor(bool _b)
 {
     m_bInsertDirectCursor=_b;
+    KConfig *config = KPresenterFactory::global()->config();;
+    config->setGroup( "Interface" );
+    config->writeEntry( "InsertDirectCursor", _b );
     updateDirectCursorButton();
 }
 
