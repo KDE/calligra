@@ -6314,9 +6314,21 @@ void KSpreadSheet::checkContentDirection( QString const & name )
     emit sig_refreshView();
 }
 
-bool KSpreadSheet::loadOasis( const QDomElement& table )
+bool KSpreadSheet::loadOasis( const QDomElement& tableElement )
 {
-    //todo
+    QDomNode rowNode = tableElement.firstChild();
+    while( !rowNode.isNull() )
+    {
+        QDomElement rowElement = rowNode.toElement();
+        if( !rowElement.isNull() )
+        if( rowElement.tagName() == "table:table-row" )
+        {
+            // TODO load cells
+        }
+
+        rowNode = rowNode.nextSibling();
+    }
+    
     return true;
 }
 
