@@ -93,7 +93,7 @@ WidgetFactory::editList(QWidget *w, QStringList &list)
 	    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, false);
 
 	KEditListBox *edit = new KEditListBox(i18n("%1 contents").arg(w->name()), &dialog, "editlist");
-	dialog->setMainWidget(edit);
+	dialog.setMainWidget(edit);
 	edit->insertStringList(list);
 //	edit->show();
 
