@@ -222,10 +222,16 @@
 <Menu name="frame_popup">
  <Action name="format_frameset"/>
  <Action name="edit_delframe"/>
+ <Separator/> 
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
 </Menu>
 <Menu name="frame_popup_table">
  <Action name="format_frameset"/>
  <Action name="edit_delframe"/>
+ <Separator/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
  <Separator/>
  <Action name="table_joincells"/>
  <Action name="table_splitcells"/>
