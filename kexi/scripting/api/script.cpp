@@ -62,13 +62,15 @@ bool Script::execute()
     return interpreter->execute(m_code);
 }
 
-const QVariant& execute(const QString& name, const QVariant& args)
+const QVariant& Script::execute(const QString& name, const QVariant& args)
 {
     //TODO
 }
 
-Kross::Api::Object* execute(const QString& name, Kross::Api::List* args)
+Kross::Api::Object* Script::execute(const QString& name, Kross::Api::List* args)
 {
-    //TODO
+    Interpreter* interpreter = m_manager->getInterpreter(m_interpreter);
+    if(! interpreter) return false;
+    return interpreter->execute(m_code, name, args);
 }
 
