@@ -28,13 +28,13 @@
 #include <qlabel.h>
 #include <qradiobutton.h>
 #include <qvbox.h>
+#include <qhbox.h>
 
 #include <koCharSelectDia.h>
 #include <kcolorbutton.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
-//#include "kotextdocument.h"
 #include <knumvalidator.h>
 #include <kozoomhandler.h>
 #include <koGlobal.h>
@@ -48,61 +48,64 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
 {
     noSignals = true;
     QVBoxLayout *vbox = new QVBoxLayout( this,KDialog::marginHint(), KDialog::spacingHint() );
-    gStyle = new QGroupBox( this, "styleLayout" );
-    gStyle->setTitle( i18n( "Style" ) );
+    gStyle = new QGroupBox( i18n( "Style" ), this, "styleLayout" );
     vbox->addWidget( gStyle);
-    QGridLayout * grid = new QGridLayout(gStyle, 12, 5, 2*KDialog::marginHint(), 2*KDialog::spacingHint());
+    QGridLayout * grid = new QGridLayout(gStyle, 12, 5, KDialog::marginHint(), KDialog::spacingHint());
 
     makeCounterRepresenterList( stylesList, onlyStyleTypeLetter );
 
     lstStyle = new QListBox( gStyle, "styleListBox" );
-    grid->addMultiCellWidget( lstStyle, 0, 11, 0, 0);
+    grid->addMultiCellWidget( lstStyle, 1, 11, 0, 0);
     fillStyleCombo();
     connect( lstStyle, SIGNAL( selectionChanged() ), this, SLOT( numStyleChanged() ) );
 
 
     QLabel *lPrefix = new QLabel( gStyle, "lPrefix" );
     lPrefix->setText( i18n( "Prefix text:" ) );
-    grid->addWidget( lPrefix, 0, 1);
+    grid->addWidget( lPrefix, 1, 1);
 
     sPrefix = new QLineEdit( gStyle, "sPrefix" );
-    grid->addWidget( sPrefix, 0, 2);
+    grid->addWidget( sPrefix, 1, 2);
 
     QLabel *lSuffix = new QLabel( gStyle, "lSuffix" );
     lSuffix->setText( i18n( "Suffix text:" ) );
-    grid->addWidget( lSuffix, 0, 3);
+    grid->addWidget( lSuffix, 1, 3);
 
     sSuffix = new QLineEdit( gStyle, "sSuffix" );
-    grid->addWidget( sSuffix, 0, 4);
-
-    bCustom = new QPushButton( gStyle, "bCustom" );
-    bCustom->setText("");
-    grid->addWidget( bCustom, 3, 2);
-    connect( bCustom, SIGNAL( clicked() ), this, SLOT( selectCustomBullet() ) );
+    grid->addWidget( sSuffix, 1, 4);
 
     lStart = new QLabel( gStyle, "lStart" );
     lStart->setText( i18n( "Start at:" ) );
-    grid->addWidget( lStart, 1, 1);
+    grid->addWidget( lStart, 2, 1);
 
 
     spnDepth = new QSpinBox( 0, 15, 1, gStyle );
     if (  displayDepth )
-        grid->addWidget( spnDepth, 2, 2);
+        grid->addWidget( spnDepth, 3, 2);
     else
         spnDepth->hide();
 
-    lCustom = new QLabel( gStyle, "lCustom" );
-    lCustom->setText( i18n( "Custom character:" ) );
-    grid->addWidget( lCustom, 3, 1);
+    QHBoxLayout *customCharBox = new QHBoxLayout(0, 0, 6);
+    lCustom = new QLabel( i18n( "Custom character:" ), gStyle, "custom char label" );
+    customCharBox->addWidget( lCustom );
+
+    bCustom = new QPushButton( "", gStyle, "bCustom" );
+    customCharBox->addWidget( bCustom );
+    connect( bCustom, SIGNAL( clicked() ), this, SLOT( selectCustomBullet() ) );
+
+    QSpacerItem* spacer_2 = new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    customCharBox->addItem( spacer_2 );
+
+    grid->addMultiCellLayout(customCharBox, 4, 4, 1, 4, Qt::AlignLeft);
 
     spnStart = new KoSpinBox( gStyle );
     spnStart->setMinValue ( 1);
-    grid->addWidget( spnStart, 1, 2);
+    grid->addWidget( spnStart, 2, 2);
 
     QLabel *lDepth = new QLabel( gStyle, "lDepth" );
     lDepth->setText( i18n( "Depth:" ) );
     if ( displayDepth )
-        grid->addWidget( lDepth, 2, 1);
+        grid->addWidget( lDepth, 3, 1);
     else
         lDepth->hide();
 
