@@ -80,7 +80,7 @@ KexiRelation::KexiRelation(KexiView *view,QWidget *parent, const char *name, boo
 	if(!embedd)
 	{
 		registerAs(DocumentWindow);
-		showMaximized();
+//		showMaximized();
 	}
 }
 

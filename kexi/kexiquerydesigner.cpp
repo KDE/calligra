@@ -124,7 +124,7 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, QString ide
 	connect(kexi->project(), SIGNAL(saving(KoStore *)), this, SLOT(slotSave(KoStore *)));
 #endif
 	registerAs(DocumentWindow);
-	showMaximized();
+//	showMaximized();
 
 }
 
