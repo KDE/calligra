@@ -57,6 +57,7 @@
 #include <qfile.h>
 #include <kdebug.h>
 
+#include <stdlib.h>
 #include <math.h>
 
 /******************************************************************/
