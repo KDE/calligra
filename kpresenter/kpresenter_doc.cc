@@ -644,7 +644,7 @@ QDomDocument KPresenterDoc::saveXML()
         QDomElement pictures = m_pictureCollection.saveXML( KoPictureCollection::CollectionPicture, doc, usedPictures );
         presenter.appendChild( pictures );
     }
-    
+
     if ( saveOnlyPage == -1 )
         emit sigProgress( 90 );
 
@@ -828,7 +828,7 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
         }
 	return true;
     }
-    
+
     if (specialOutputFlag()==SaveAsKOffice1dot1)
     {
         m_pictureCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, usedPictures );
@@ -2703,6 +2703,12 @@ KPrPage * KPresenterDoc::initialActivePage() const
 {
     return m_initialActivePage;
 }
+
+void KPresenterDoc::displayActivePage(KPrPage * _page)
+{
+    m_initialActivePage = _page;
+}
+
 
 
 void KPresenterDoc::updateZoomRuler()

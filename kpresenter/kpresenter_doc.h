@@ -307,6 +307,8 @@ public:
     { emit sig_terminateEditing( textObj ); }
     KPrPage * initialActivePage() const;
 
+    void displayActivePage(KPrPage * _page);
+
     void updateZoomRuler();
     void newZoomAndResolution( bool updateViews, bool forPrint );
 

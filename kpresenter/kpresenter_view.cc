@@ -4490,6 +4490,9 @@ void KPresenterView::skipToPage( int num )
     //otherwise you can change object properties on other page
     m_canvas->deSelectAllObj();
     m_pKPresenterDoc->repaint( FALSE );
+
+    m_pKPresenterDoc->displayActivePage(m_pKPresenterDoc->pageList().at(currPg));
+
     updatePageParameter();
 }
 //update color gradient etc... when we skip page
