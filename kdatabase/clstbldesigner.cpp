@@ -26,3 +26,5 @@ bool clsTblDesigner::populateTblDesigner(QString tblName){
 
     return(true);
 }
+
+#include "clstbldesigner.moc"
