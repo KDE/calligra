@@ -764,30 +764,45 @@ QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles )
     //<number:am-pm/>
     //</number:time-style>
 
-    KoGenStyle currentCellStyle( KoGenStyle::STYLE_NUMERIC_TIME );
-    QBuffer buffer;
-    buffer.open( IO_WriteOnly );
-    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+    QString format;
+    bool locale = false;
     switch( m_formatType )
     {
     case Time_format:
+        //format = ;
+        break;
     case SecondeTime_format:
+        //format = ;
+        break;
     case Time_format1:
+        format = "h:mm AP";
+        break;
     case Time_format2:
-    case Time_format3:
+        format = "h:mm:ss AP";
+        break;
+    case Time_format3: // 9 h 01 min 28 s
+        //format = ;
+        break;
     case Time_format4:
+        format = "hh:mm";
+        break;
     case Time_format5:
+        format = "hh:mm:ss";
+        break;
     case Time_format6:
+        format = "m:ss";
+        break;
     case Time_format7:
+        format = "h:mm:ss";
+        break;
     case Time_format8:
+        format = "h:mm";
         break;
     default:
         kdDebug()<<"time format not defined :"<<m_formatType<<endl;
         break;
     }
-    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
-    currentCellStyle.addChildElement( "number", elementContents );
-    return mainStyles.lookup( currentCellStyle, "N" );
+    return KoOasisStyles::saveOasisTimeStyle( mainStyles, format, locale );
 }
 
 
