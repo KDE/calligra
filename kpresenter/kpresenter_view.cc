@@ -538,134 +538,162 @@ void KPresenterView::insertClipart()
 /*==============================================================*/
 void KPresenterView::toolsMouse()
 {
-    if ( !actionToolsMouse ->isChecked() )
-	return;
-    page->setToolEditMode( TEM_MOUSE, false );
+    if ( actionToolsMouse ->isChecked() )
+        page->setToolEditMode( TEM_MOUSE, false );
+    else
+        actionToolsMouse->setChecked(true);
     //page->deSelectAllObj();
 }
 
 /*=========================== insert line =======================*/
 void KPresenterView::toolsLine()
 {
-    if ( !actionToolsLine->isChecked() )
-	return;
-    page->setToolEditMode( INS_LINE, false );
-    page->deSelectAllObj();
+    if ( actionToolsLine->isChecked() )
+    {
+        page->setToolEditMode( INS_LINE, false );
+        page->deSelectAllObj();
+    }
+    else
+        actionToolsLine->setChecked(true);
 }
 
 /*===================== insert rectangle ========================*/
 void KPresenterView::toolsRectangle()
 {
-    if ( !actionToolsRectangle->isChecked() )
-	return;
-    page->deSelectAllObj();
-    page->setToolEditMode( INS_RECT, false );
+    if ( actionToolsRectangle->isChecked() )
+    {
+        page->deSelectAllObj();
+        page->setToolEditMode( INS_RECT, false );
+    }
+    else
+        actionToolsRectangle->setChecked(true);
 }
 
 /*===================== insert circle or ellipse ================*/
 void KPresenterView::toolsCircleOrEllipse()
 {
-    if ( !actionToolsCircleOrEllipse->isChecked() )
-	return;
-    page->deSelectAllObj();
-    page->setToolEditMode( INS_ELLIPSE, false );
+    if ( actionToolsCircleOrEllipse->isChecked() )
+    {
+        page->deSelectAllObj();
+        page->setToolEditMode( INS_ELLIPSE, false );
+    }
+    else
+        actionToolsCircleOrEllipse->setChecked(true);
 }
 
 /*==============================================================*/
 void KPresenterView::toolsPie()
 {
-    if ( !actionToolsPie->isChecked() )
-	return;
-    page->deSelectAllObj();
-    page->setToolEditMode( INS_PIE, false );
+    if ( actionToolsPie->isChecked() )
+    {
+        page->deSelectAllObj();
+        page->setToolEditMode( INS_PIE, false );
+    }
+    else
+        actionToolsPie->setChecked(true);
 }
 
 /*==============================================================*/
 void KPresenterView::toolsDiagramm()
 {
-    if ( !actionToolsDiagramm->isChecked() )
-	return;
-    page->deSelectAllObj();
-    page->setToolEditMode( INS_DIAGRAMM, false );
-
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kchart" );
-    if (entry.isEmpty())
+    if ( actionToolsDiagramm->isChecked() )
     {
-      KMessageBox::sorry( this, i18n( "Sorry, no chart component registered" ) );
-      page->setToolEditMode( TEM_MOUSE );
+        page->deSelectAllObj();
+        page->setToolEditMode( INS_DIAGRAMM, false );
+
+        KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kchart" );
+        if (entry.isEmpty())
+        {
+            KMessageBox::sorry( this, i18n( "Sorry, no chart component registered" ) );
+            page->setToolEditMode( TEM_MOUSE );
+        }
+        else
+            page->setPartEntry( entry );
     }
     else
-	page->setPartEntry( entry );
+        actionToolsDiagramm->setChecked(true);
 }
 
 /*==============================================================*/
 void KPresenterView::toolsTable()
 {
-    if ( !actionToolsTable->isChecked() )
-	return;
-    page->deSelectAllObj();
-    page->setToolEditMode( INS_TABLE, false );
-
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kspread" );
-    if (entry.isEmpty())
+    if ( actionToolsTable->isChecked() )
     {
-      KMessageBox::sorry( this, i18n( "Sorry, no table component registered" ) );
-      page->setToolEditMode( TEM_MOUSE );
+        page->deSelectAllObj();
+        page->setToolEditMode( INS_TABLE, false );
+
+        KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kspread" );
+        if (entry.isEmpty())
+        {
+            KMessageBox::sorry( this, i18n( "Sorry, no table component registered" ) );
+            page->setToolEditMode( TEM_MOUSE );
+        }
+        else
+            page->setPartEntry( entry );
     }
     else
-	page->setPartEntry( entry );
+        actionToolsTable->setChecked(true);
 }
 
 /*==============================================================*/
 void KPresenterView::toolsFormula()
 {
-    if ( !actionToolsFormula->isChecked() )
-	return;
-    page->deSelectAllObj();
-    page->setToolEditMode( INS_FORMULA, false );
-
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kformula" );
-    if (entry.isEmpty())
+    if ( actionToolsFormula->isChecked() )
     {
-      KMessageBox::sorry( this, i18n( "Sorry, no formula component registered" ) );
-      page->setToolEditMode( TEM_MOUSE );
+        page->deSelectAllObj();
+        page->setToolEditMode( INS_FORMULA, false );
+
+        KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kformula" );
+        if (entry.isEmpty())
+        {
+            KMessageBox::sorry( this, i18n( "Sorry, no formula component registered" ) );
+            page->setToolEditMode( TEM_MOUSE );
+        }
+        else
+            page->setPartEntry( entry );
     }
     else
-	page->setPartEntry( entry );
+        actionToolsFormula->setChecked(true);
 }
 
 /*===================== insert a textobject =====================*/
 void KPresenterView::toolsText()
 {
-    if ( !actionToolsText->isChecked() )
-	return;
-    page->deSelectAllObj();
-    page->setToolEditMode( INS_TEXT, false );
+    if ( actionToolsText->isChecked() )
+    {
+        page->deSelectAllObj();
+        page->setToolEditMode( INS_TEXT, false );
+    }
+    else
+        actionToolsText->setChecked(true);
 }
 
 /*===============================================================*/
 void KPresenterView::toolsAutoform()
 {
-    if ( !actionToolsAutoform->isChecked() )
-	return;
-    page->deSelectAllObj();
-    page->setToolEditMode( TEM_MOUSE, false );
-    if ( afChoose ) {
-	QObject::disconnect( afChoose, SIGNAL( formChosen( const QString & ) ),
-			     this, SLOT( afChooseOk( const QString & ) ) );
-	afChoose->close();
-	delete afChoose;
-	afChoose = 0;
-    }
-    afChoose = new AFChoose( this, i18n( "Autoform-Choose" ) );
-    afChoose->resize( 400, 300 );
-    afChoose->setCaption( i18n( "KPresenter - Insert an Autoform" ) );
+    if ( actionToolsAutoform->isChecked() )
+    {
+        page->deSelectAllObj();
+        page->setToolEditMode( TEM_MOUSE, false );
+        if ( afChoose ) {
+            QObject::disconnect( afChoose, SIGNAL( formChosen( const QString & ) ),
+                                 this, SLOT( afChooseOk( const QString & ) ) );
+            afChoose->close();
+            delete afChoose;
+            afChoose = 0;
+        }
+        afChoose = new AFChoose( this, i18n( "Autoform-Choose" ) );
+        afChoose->resize( 400, 300 );
+        afChoose->setCaption( i18n( "KPresenter - Insert an Autoform" ) );
 
-    QObject::connect( afChoose, SIGNAL( formChosen( const QString & ) ),
-		      this, SLOT( afChooseOk( const QString & ) ) );
-    QObject::connect( afChoose, SIGNAL( afchooseCanceled()),
-                      this,SLOT(slotAfchooseCanceled()));
-    afChoose->show();
+        QObject::connect( afChoose, SIGNAL( formChosen( const QString & ) ),
+                          this, SLOT( afChooseOk( const QString & ) ) );
+        QObject::connect( afChoose, SIGNAL( afchooseCanceled()),
+                          this,SLOT(slotAfchooseCanceled()));
+        afChoose->show();
+    }
+    else
+        actionToolsAutoform->setChecked(true);
 }
 
 /*===============================================================*/
@@ -1289,34 +1317,48 @@ void KPresenterView::textColor()
 
 void KPresenterView::textAlignLeft()
 {
-    if ( !actionTextAlignLeft->isChecked() )
-	return;
-    tbAlign = Qt::AlignLeft;
-    page->setTextAlign( tbAlign );
+    if ( actionTextAlignLeft->isChecked() )
+    {
+        tbAlign = Qt::AlignLeft;
+        page->setTextAlign( tbAlign );
+    }
+    else
+        actionTextAlignLeft->setChecked(true);
 }
 
 void KPresenterView::textAlignCenter()
 {
-    if ( !actionTextAlignCenter->isChecked() )
-	return;
-    tbAlign = Qt::AlignCenter;
-    page->setTextAlign( Qt::AlignCenter );
+    if ( actionTextAlignCenter->isChecked() )
+    {
+        tbAlign = Qt::AlignCenter;
+        page->setTextAlign( Qt::AlignCenter );
+    }
+    else
+         actionTextAlignCenter->setChecked(true);
 }
 
 void KPresenterView::textAlignRight()
 {
-    if ( !actionTextAlignRight->isChecked() )
-	return;
-    tbAlign = Qt::AlignRight;
-    page->setTextAlign( Qt::AlignRight );
+    if ( actionTextAlignRight->isChecked() )
+    {
+        tbAlign = Qt::AlignRight;
+        page->setTextAlign( Qt::AlignRight );
+    }
+    else
+        actionTextAlignRight->setChecked(true);
+
 }
 
 void KPresenterView::textAlignBlock()
 {
-    if ( !actionTextAlignBlock->isChecked() )
-        return;
-    tbAlign = Qt::AlignJustify;
-    page->setTextAlign(Qt::AlignJustify);
+    if ( actionTextAlignBlock->isChecked() )
+    {
+        tbAlign = Qt::AlignJustify;
+        page->setTextAlign(Qt::AlignJustify);
+    }
+    else
+        actionTextAlignBlock->setChecked(true);
+
 }
 
 void KPresenterView::textInsertPageNum()
