@@ -405,3 +405,39 @@ void KWFrameResizeCommand::unexecute()
     //update frames
     m_pDoc->refreshAllFrames();
 }
+
+
+KWFrameMoveCommand::KWFrameMoveCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_frameIndex,int _moveX, int _moveY ) :
+    KCommand(name),
+    m_IndexFrame(_frameIndex),
+    moveX(_moveX),
+    moveY(_moveY),
+    m_pDoc(_doc)
+{
+}
+
+void KWFrameMoveCommand::execute()
+{
+    FrameIndex *tmp;
+    for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
+    {
+        KWFrameSet *frameSet =m_pDoc->getFrameSet(tmp->m_iFrameSetIndex);
+        KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
+        frame->setRect(frame->x()+moveX,frame->y()+moveY,frame->width(),frame->height());
+    }
+
+    m_pDoc->refreshAllFrames();
+}
+
+void KWFrameMoveCommand::unexecute()
+{
+    FrameIndex *tmp;
+    for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
+    {
+        KWFrameSet *frameSet =m_pDoc->getFrameSet(tmp->m_iFrameSetIndex);
+        KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
+         frame->setRect(frame->x()-moveX,frame->y()-moveY,frame->width(),frame->height());
+    }
+
+    m_pDoc->refreshAllFrames();
+}

@@ -202,4 +202,23 @@ protected:
     FrameResizeStruct m_FrameResize;
     KWDocument *m_pDoc;
 };
+
+/**
+ * Command created when you move a frame
+ */
+class KWFrameMoveCommand : public KCommand
+{
+public:
+    KWFrameMoveCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_frameIndex,int _moveX,int moveY ) ;
+    ~KWFrameMoveCommand() {}
+    
+    void execute();
+    void unexecute();
+
+protected:
+    QList<FrameIndex> m_IndexFrame;	
+    int moveX;
+    int moveY;
+    KWDocument *m_pDoc;
+};
 #endif
