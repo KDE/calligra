@@ -46,4 +46,3 @@ void RotateCmd::execute () {
   }
 }
 
-#include <RotateCmd.moc>

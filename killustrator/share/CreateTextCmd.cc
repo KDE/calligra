@@ -54,7 +54,7 @@ CreateTextCmd::~CreateTextCmd () {
 void CreateTextCmd::execute () {
   if (object == 0L) {
     // create new text object
-    object = new GText ();
+    object = new GText (document);
     object->setOrigin (origin);
     object->setText (text);
     //    object->ref ();
@@ -66,4 +66,3 @@ void CreateTextCmd::unexecute () {
   document->deleteObject (object);
 }
 
-#include <CreateTextCmd.moc>

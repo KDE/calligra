@@ -25,14 +25,16 @@
 #include <TextTool.h>
 
 #include <qkeycode.h>
+#include <klocale.h>
 
-#include <GText.h>
+#include "GText.h"
 #include <GDocument.h>
 #include <Canvas.h>
 #include <Coord.h>
 #include <CreateTextCmd.h>
 #include <SetTextCmd.h>
 #include <CommandHistory.h>
+#include "ToolController.h"
 
 TextTool::TextTool (CommandHistory *history) : Tool (history)
 {
@@ -41,17 +43,21 @@ TextTool::TextTool (CommandHistory *history) : Tool (history)
   m_id=ToolText;
 }
 
-void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-    if (e->type () == QEvent::MouseButtonPress) {
-        QMouseEvent *me = (QMouseEvent *) e;
-        Coord pos (me->x (), me->y ());
+void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
+{
+   if (e->type () == QEvent::MouseButtonPress)
+   {
+      QMouseEvent *me = (QMouseEvent *) e;
+      Coord pos (me->x (), me->y ());
 
-        if (text != 0L) {
-            if (text->isEmpty ()) {
-                // an empty text was entered -> remove the object
-                doc->deleteObject (text);
-            }
-            else
+      if (text != 0L)
+      {
+         if (text->isEmpty ())
+         {
+            // an empty text was entered -> remove the object
+            doc->deleteObject (text);
+         }
+         else
                 text->showCursor (false);
         }
 
@@ -76,7 +82,7 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
             }
         }
         if (text == 0) {
-            text = new GText ();
+            text = new GText (doc);
             float xpos = me->x (), ypos = me->y ();
             canvas->snapPositionToGrid (xpos, ypos);
 
@@ -104,7 +110,7 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
                     text->restoreState (origState);
                 }
             }
-            emit operationDone ();
+            m_toolController->emitOperationDone (m_id);
         }
         if (text == 0L)
             return;
@@ -170,8 +176,10 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     return;
 }
 
-void TextTool::activate (GDocument* /*doc*/, Canvas* /*canvas*/) {
-  emit modeSelected ("");
+void TextTool::activate (GDocument* /*doc*/, Canvas* canvas)
+{
+   canvas->setCursor(Qt::ibeamCursor);
+   m_toolController->emitModeSelected (m_id,i18n("Write some prosa..."));
 }
 
 void TextTool::deactivate (GDocument *doc, Canvas*) {
@@ -197,4 +205,3 @@ void TextTool::deactivate (GDocument *doc, Canvas*) {
   }
 }
 
-#include <TextTool.moc>

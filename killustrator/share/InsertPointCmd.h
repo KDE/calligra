@@ -32,7 +32,6 @@ class GDocument;
 class GPolyline;
 
 class InsertPointCmd : public Command {
-  Q_OBJECT
 public:
   InsertPointCmd (GDocument* doc, GPolyline* o, int idx,
                   float x, float y);

@@ -61,4 +61,3 @@ void AddLineSegmentCmd::unexecute () {
   }
 }
 
-#include <AddLineSegmentCmd.moc>

@@ -31,7 +31,6 @@ class GDocument;
 class GBezier;
 
 class CreateBezierCmd : public Command {
-  Q_OBJECT
 public:
   CreateBezierCmd (GDocument* doc, GBezier* curve);
   ~CreateBezierCmd ();

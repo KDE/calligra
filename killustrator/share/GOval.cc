@@ -32,35 +32,40 @@
 #include <kapp.h>
 #include <qpainter.h>
 #include <klocale.h>
+#include "GDocument.h"
 
-GOval::GOval (bool cFlag) : circleFlag (cFlag) {
+GOval::GOval (GDocument *doc,bool cFlag)
+:GObject(doc)
+,circleFlag (cFlag)
+{
   sAngle = eAngle = 270;
 }
 
-GOval::GOval (const QDomElement &element, bool cFlag)
-  : GObject (element.namedItem("gobject").toElement()) {
+GOval::GOval (GDocument *doc, const QDomElement &element, bool cFlag)
+: GObject (doc, element.namedItem("gobject").toElement())
+{
 
-      float x = 0, y = 0, rx = 0, ry = 0;
-      sAngle = eAngle = 270;
+   float x = 0, y = 0, rx = 0, ry = 0;
+   sAngle = eAngle = 270;
 
-      x=element.attribute("x").toFloat();
-      y=element.attribute("y").toFloat();
-      rx=element.attribute("rx").toFloat();
-      ry=element.attribute("ry").toFloat();
-      sAngle=element.attribute("angle1").toFloat();
-      eAngle=element.attribute("angle2").toFloat();
-      QString v=element.attribute("kind");
-      if (v == "arc")
+   x=element.attribute("x").toFloat();
+   y=element.attribute("y").toFloat();
+   rx=element.attribute("rx").toFloat();
+   ry=element.attribute("ry").toFloat();
+   sAngle=element.attribute("angle1").toFloat();
+   eAngle=element.attribute("angle2").toFloat();
+   QString v=element.attribute("kind");
+   if (v == "arc")
           outlineInfo.shape = GObject::OutlineInfo::ArcShape;
-      else if (v == "pie")
-          outlineInfo.shape = GObject::OutlineInfo::PieShape;
-      else
-          outlineInfo.shape = GObject::OutlineInfo::DefaultShape;
+   else if (v == "pie")
+      outlineInfo.shape = GObject::OutlineInfo::PieShape;
+   else
+      outlineInfo.shape = GObject::OutlineInfo::DefaultShape;
 
-      sPoint.x (x - rx); sPoint.y (y - ry);
-      ePoint.x (x + rx); ePoint.y (y + ry);
-      circleFlag = cFlag;
-      calcBoundingBox ();
+   sPoint.x (x - rx); sPoint.y (y - ry);
+   ePoint.x (x + rx); ePoint.y (y + ry);
+   circleFlag = cFlag;
+   calcBoundingBox ();
 }
 
 GOval::GOval (const GOval& obj) : GObject (obj) {
@@ -94,7 +99,7 @@ void GOval::draw (QPainter& p, bool withBasePoints, bool outline) {
     p.setBrush (brush);
     if (gradientFill () &&
         outlineInfo.shape != GObject::OutlineInfo::ArcShape) {
-      if (! gShape.valid ())
+      //if (! gShape.valid ())
         updateGradientShape (p);
       gShape.draw (p);
     }
@@ -197,20 +202,22 @@ void GOval::setEndPoint (const Coord& p) {
   updateRegion ();
 }
 
-void GOval::calcBoundingBox () {
-  calcUntransformedBoundingBox (sPoint, Coord (ePoint.x (), sPoint.y ()),
-                                ePoint,
-                                Coord (sPoint.x (), ePoint.y ()));
-  update_segments ();
+void GOval::calcBoundingBox ()
+{
+   calcUntransformedBoundingBox (sPoint, Coord (ePoint.x (), sPoint.y ()),
+                                 ePoint,
+                                 Coord (sPoint.x (), ePoint.y ()));
+   update_segments ();
 }
 
 GObject* GOval::copy () {
   return new GOval (*this);
 }
 
-GObject* GOval::clone (const QDomElement &element) {
-  return new GOval (element);
-}
+/*GObject* GOval::create (GDocument *doc,const QDomElement &element)
+{
+  return new GOval (doc, element);
+}*/
 
 int GOval::getNeighbourPoint (const Coord& p) {
   for (int i = 1; i >= 0; i--) {
@@ -495,7 +502,7 @@ GCurve* GOval::convertToCurve () const {
                     -alen * 16);
   }
   unsigned int num = parray.size ();
-  GCurve* curve = new GCurve ();
+  GCurve* curve = new GCurve (m_gdoc);
 
   QApplication::setOverrideCursor(Qt::waitCursor);
   Coord p0 (parray[0].x (), parray[0].y ());

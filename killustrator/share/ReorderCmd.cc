@@ -86,4 +86,3 @@ void ReorderCmd::unexecute () {
     document->moveObjectToIndex (objects[i], oldpos[i]);
 }
 
-#include <ReorderCmd.moc>

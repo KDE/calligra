@@ -25,11 +25,10 @@
 #ifndef PStateManager_h_
 #define PStateManager_h_
 
-#include <qobject.h>
 #include <units.h>
 
-class PStateManager : public QObject {
-  Q_OBJECT
+class PStateManager
+{
 protected:
   PStateManager ();
 
@@ -38,23 +37,21 @@ public:
 
   void readDefaultSettings ();
 
-  MeasurementUnit defaultMeasurementUnit ();
-  void setDefaultMeasurementUnit (MeasurementUnit unit);
+  MeasurementUnit defaultMeasurementUnit () const {return defaultUnit;};
+  float smallStepSize () const                    {return smallStep;};
+  float bigStepSize () const                      {return bigStep;};
+  float duplicateXOffset () const                 {return dupXOff;};
+  float duplicateYOffset () const                 {return dupYOff;};
+  bool showSplashScreen () const                  {return showSplash;};
 
-  float smallStepSize ();
-  float bigStepSize ();
+  void setDuplicateOffsets (float x, float y);
+  void setDefaultMeasurementUnit (MeasurementUnit unit);
   void setStepSizes (float small, float big);
 
-  float duplicateXOffset ();
-  float duplicateYOffset ();
-  void setDuplicateOffsets (float x, float y);
+//signals:
+//  void settingsChanged ();
 
-  bool showSplashScreen ();
-
-signals:
-  void settingsChanged ();
-
-public slots:
+//public slots:
   void saveDefaultSettings ();
 
 private:

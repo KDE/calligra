@@ -22,19 +22,23 @@
 
 */
 
-#include <Tool.h>
-#include <GDocument.h>
+#include "Tool.h"
+#include "GDocument.h"
 #include <CommandHistory.h>
+#include "ToolController.h"
+#include "Canvas.h"
 
 Tool::Tool (CommandHistory *chist)
    :m_id(ToolDummy)
+   ,m_configRead(false)
 {
   history = chist;
 }
 
-void Tool::activate (GDocument* doc, Canvas*) {
-  doc->unselectAllObjects ();
-  emit modeSelected ("");
+void Tool::activate (GDocument* doc, Canvas* canvas)
+{
+   canvas->setCursor(Qt::crossCursor);
+   doc->unselectAllObjects ();
+   m_toolController->emitModeSelected(m_id,"");
 }
 
-#include <Tool.moc>

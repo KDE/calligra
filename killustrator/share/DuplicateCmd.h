@@ -31,7 +31,6 @@ class GDocument;
 class GObject;
 
 class DuplicateCmd : public Command {
-  Q_OBJECT
 public:
   DuplicateCmd (GDocument* doc);
   ~DuplicateCmd ();

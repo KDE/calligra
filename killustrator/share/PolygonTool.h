@@ -30,7 +30,6 @@
 class GPolygon;
 
 class PolygonTool : public Tool {
-  Q_OBJECT
 public:
    PolygonTool (CommandHistory* history);
 

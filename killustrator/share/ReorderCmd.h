@@ -36,7 +36,6 @@ enum ReorderPosition {
 };
 
 class ReorderCmd : public Command {
-  Q_OBJECT
 public:
   ReorderCmd (GDocument* doc, ReorderPosition pos);
   ~ReorderCmd ();

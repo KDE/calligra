@@ -56,7 +56,7 @@ CreateRectangleCmd::~CreateRectangleCmd () {
 void CreateRectangleCmd::execute () {
   if (object == 0L) {
     // create polygon
-    object = new GPolygon (sflag ? GPolygon::PK_Square :
+    object = new GPolygon (document, sflag ? GPolygon::PK_Square :
                            GPolygon::PK_Rectangle);
     object->addPoint (0, spos);
     object->addPoint (1, spos);
@@ -72,4 +72,3 @@ void CreateRectangleCmd::unexecute () {
   document->deleteObject (object);
 }
 
-#include <CreateRectangleCmd.moc>

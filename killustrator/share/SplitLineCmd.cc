@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <GDocument.h>
 #include <GPolyline.h>
+#include <kdebug.h>
 
 SplitLineCmd::SplitLineCmd (GDocument* doc, GPolyline* o, int idx)
   : Command(i18n("Split Line"))
@@ -49,13 +50,15 @@ void SplitLineCmd::execute () {
   if (obj2) obj2->unref ();
   obj1 = obj2 = 0L;
 
-  if (obj->splitAt (index, obj1, obj2)) {
+  if (obj->splitAt (index, obj1, obj2))
+  {
     pos = document->findIndexOfObject (obj);
     document->deleteObject (obj);
     document->unselectAllObjects ();
     document->insertObjectAtIndex (obj1, pos);
     document->selectObject (obj1);
-    if (obj2) {
+    if (obj2)
+    {
       document->insertObjectAtIndex (obj2, pos + 1);
       document->selectObject (obj2);
     }
@@ -69,4 +72,3 @@ void SplitLineCmd::unexecute () {
   document->selectObject (obj);
 }
 
-#include <SplitLineCmd.moc>

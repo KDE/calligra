@@ -35,22 +35,26 @@ class QWMatrix;
 
 class GText : public GObject {
   Q_OBJECT
+   private:
+      GText():GObject(0) {cout<<"GText ctor"<<endl; exit(1);};
 public:
 
-  struct TextInfo {
-    enum { Font = 1, Align = 2 };
-    unsigned int mask;
-    QFont font;
-    enum Alignment {
-      AlignLeft, AlignCenter, AlignRight
-    } align;
-  };
+   struct TextInfo
+   {
+      enum { Font = 1, Align = 2 };
+      unsigned int mask;
+      QFont font;
+      enum Alignment
+      {
+         AlignLeft, AlignCenter, AlignRight
+      } align;
+   };
 
   static void setDefaultTextInfo (const TextInfo& ti);
   static TextInfo getDefaultTextInfo ();
 
-  GText ();
-  GText (const QDomElement &element);
+  GText (GDocument* parent );
+  GText (GDocument* parent, const QDomElement &element);
   GText (const GText& obj);
   ~GText ();
 
@@ -90,7 +94,7 @@ public:
   virtual void restoreState (GOState* state);
 
   virtual GObject* copy ();
-  virtual GObject* clone (const QDomElement &element);
+  //virtual GObject* create (GDocument *doc, const QDomElement &element);
 
   virtual QDomElement writeToXml(QDomDocument &document);
 

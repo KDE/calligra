@@ -31,7 +31,6 @@ class GDocument;
 class GPolygon;
 
 class CreatePolygonCmd : public Command {
-  Q_OBJECT
 public:
   CreatePolygonCmd (GDocument* doc, GPolygon* obj);
   CreatePolygonCmd (GDocument* doc, const Coord& p0, const Coord& p1,

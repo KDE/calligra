@@ -66,4 +66,3 @@ void InsertObjCmd::unexecute () {
   }
 }
 
-#include <InsertObjCmd.moc>

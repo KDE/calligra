@@ -51,7 +51,9 @@ GText::TextInfo GText::getDefaultTextInfo () {
   return defaultTextInfo;
 }
 
-GText::GText () {
+GText::GText (GDocument *doc )
+:GObject(doc)
+{
   textInfo = defaultTextInfo;
   fm = new QFontMetrics (textInfo.font);
   cursx = cursy = 0;
@@ -62,8 +64,9 @@ GText::GText () {
   cmatrices.setAutoDelete(true);
 }
 
-GText::GText (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
-
+GText::GText (GDocument *doc, const QDomElement &element)
+:GObject(doc, element.namedItem("gobject").toElement())
+{
     textInfo = defaultTextInfo;
     fm = new QFontMetrics (textInfo.font);
     cursx = cursy = 0;
@@ -449,9 +452,9 @@ GObject* GText::copy () {
   return new GText (*this);
 }
 
-GObject* GText::clone (const QDomElement &element) {
+/*GObject* GText::clone (const QDomElement &element) {
   return new GText (element);
-}
+}*/
 
 QDomElement GText::writeToXml (QDomDocument &document) {
 
@@ -575,29 +578,32 @@ void GText::deletePathObject () {
   setPathObject (0L);
 }
 
-void GText::setPathObject (GObject* obj) {
-  if (pathObj != 0L) {
-    disconnect (pathObj, SIGNAL(changed(const Rect&)),
-                this, SLOT(updateMatricesForPath ()));
-    disconnect (pathObj, SIGNAL(deleted ()),
-                this, SLOT(deletePathObject ()));
-    pathObj->unref ();
-  }
-  pathObj = obj;
-  if (pathObj != 0L) {
-    pathObj->ref ();
-    // force generation of id for refering in XML
-    (void) pathObj->getId ();
+void GText::setPathObject (GObject* obj)
+{
+   if (pathObj != 0L)
+   {
+      disconnect (pathObj, SIGNAL(changed(const Rect&)),
+                  this, SLOT(updateMatricesForPath ()));
+      disconnect (pathObj, SIGNAL(deleted ()),
+                  this, SLOT(deletePathObject ()));
+      pathObj->unref ();
+   }
+   pathObj = obj;
+   if (pathObj != 0L)
+   {
+      pathObj->ref ();
+      // force generation of id for refering in XML
+      (void) pathObj->getId ();
 
-    connect (obj, SIGNAL(changed (const Rect&)),
-             this, SLOT(updateMatricesForPath ()));
-    connect (obj, SIGNAL(deleted ()),
-             this, SLOT(deletePathObject ()));
-    updateMatricesForPath ();
-  }
-  else {
-    updateRegion (true);
-  }
+      connect (obj, SIGNAL(changed (const Rect&)),this, SLOT(updateMatricesForPath ()));
+
+      connect (obj, SIGNAL(deleted ()),this, SLOT(deletePathObject ()));
+      updateMatricesForPath ();
+   }
+   else
+   {
+      updateRegion (true);
+   }
 }
 
 bool GText::isEmpty () const {

@@ -86,8 +86,13 @@ private:
 
     GDocument* document;
     CommandHistory* cmdHistory;
-    bool haveObjects, haveTextObjects, haveLineObjects,
-        haveEllipseObjects, haveRectangleObjects;
+    bool isGlobal:1;
+    bool haveTextObjects:1;
+    bool haveLineObjects:1;
+    bool haveEllipseObjects:1;
+    bool haveRectangleObjects:1;
+    bool haveFillObjects:1;
+    bool haveArrows:1;
 
     // Info Tab
     QLabel* infoLabel[5];

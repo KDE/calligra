@@ -31,7 +31,6 @@ class GDocument;
 class GObject;
 
 class EditPointCmd : public Command {
-  Q_OBJECT
 public:
   EditPointCmd (GDocument* doc, GObject* o, int idx,
                 float dx, float dy);

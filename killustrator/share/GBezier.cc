@@ -34,7 +34,7 @@
 #include <qpainter.h>
 #include <klocale.h>
 #include <kdebug.h>
-
+#include "GDocument.h"
 #define DELTA 0.05
 
 static bool bezier_segment_part_contains (int x0, int y0, int x1,int y1,
@@ -124,11 +124,15 @@ bool GBezier::bezier_segment_contains (const Coord& p0, const Coord& p1,
   return false;
 }
 
-GBezier::GBezier () : GPolyline () {
+GBezier::GBezier (GDocument *doc )
+: GPolyline (doc)
+{
   wSegment = 0; closed = false;
 }
 
-GBezier::GBezier (const QDomElement &element) : GPolyline (element.namedItem("polyline").toElement()) {
+GBezier::GBezier (GDocument *doc, const QDomElement &element)
+:GPolyline (doc, element.namedItem("polyline").toElement())
+{
 
     wSegment = -1;
     closed=(element.attribute("closed").toInt()==1);
@@ -254,7 +258,7 @@ void GBezier::draw (QPainter& p, bool withBasePoints, bool outline) {
         p.setBrush (brush);
 
         if (gradientFill ()) {
-          if (! gShape.valid ())
+          //if (! gShape.valid ())
             updateGradientShape (p);
           gShape.draw (p);
         }
@@ -395,9 +399,10 @@ GObject* GBezier::copy () {
   return new GBezier (*this);
 }
 
-GObject* GBezier::clone (const QDomElement &element) {
-  return new GBezier (element);
-}
+/*GObject* GBezier::create (GDocument *doc, const QDomElement &element)
+{
+  return new GBezier (doc, element);
+}*/
 
 void GBezier::initBasePoint (int idx) {
   Coord epoint = *(points.at (idx + 1));
@@ -708,7 +713,7 @@ bool GBezier::splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2) {
 
 GCurve* GBezier::convertToCurve () const {
   unsigned int nsegs = (points.count () - 3) / 3;
-  GCurve* curve = new GCurve ();
+  GCurve* curve = new GCurve (m_gdoc);
   curve->setOutlineInfo (outlineInfo);
   QListIterator<Coord> it (points);
   ++it;

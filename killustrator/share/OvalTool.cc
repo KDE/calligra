@@ -29,6 +29,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kapp.h>
+#include <kdebug.h>
 
 #include <GDocument.h>
 #include <Canvas.h>
@@ -37,7 +38,8 @@
 #include <EllipseConfigDialog.h>
 #include <units.h>
 #include <PStateManager.h>
-#include <GOval.h>
+#include "GOval.h"
+#include "ToolController.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -45,29 +47,24 @@
 OvalTool::OvalTool (CommandHistory *history) : Tool (history)
 {
   oval = 0L;
-  KConfig* config = kapp->config ();
-  QString oldgroup = config->group ();
-
-  config->setGroup("EllipseTool");
-  useFixedCenter = config->readBoolEntry("FixedCenter", false);
-  config->setGroup (oldgroup);
+  kdDebug()<<"OvalTool::OvalTool()"<<endl;
   m_id=ToolEllipse;
 }
 
-void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
+void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
+{
   if (e->type () == QEvent::MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
     float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     pos = Coord (xpos, ypos);
-    bool flag = me->state () & ControlButton;
-    oval = new GOval (flag);
+    bool flag = me->state () & Qt::ControlButton;
+    oval = new GOval (doc, flag);
     oval->setStartPoint (pos);
     oval->setEndPoint (pos);
     doc->insertObject (oval);
-    emit modeSelected (flag ? i18n ("Create Circle") :
-                       i18n ("Create Ellipse"));
+    m_toolController->emitModeSelected (m_id,flag?i18n("Create Circle"):i18n("Create Ellipse"));
   }
   else if (e->type () == QEvent::MouseMove) {
     if (oval == 0L)
@@ -118,7 +115,7 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     msgbuf+=QString(" ") + u + QString(", ");
     msgbuf+=QString::number(hval, 'f', 3);
     msgbuf+=QString(" ") + u + QString("]");
-    emit modeSelected (msgbuf);
+    m_toolController->emitModeSelected (m_id,msgbuf);
   }
   else if (e->type () == QEvent::MouseButtonRelease) {
     if (oval == 0L)
@@ -146,29 +143,38 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
   else if (e->type () == QEvent::KeyPress) {
     QKeyEvent *ke = (QKeyEvent *) e;
     if (ke->key () == Qt::Key_Escape)
-      emit operationDone ();
+      m_toolController->emitOperationDone (m_id);
   }
 }
 
-void OvalTool::activate (GDocument* , Canvas* /*canvas*/) {
-  emit modeSelected (i18n ("Create Ellipse"));
+void OvalTool::activate (GDocument* , Canvas* canvas)
+{
+   canvas->setCursor(Qt::crossCursor);
+   if (!m_configRead)
+   {
+      KConfig* config = kapp->config ();
+
+      config->setGroup("EllipseTool");
+      useFixedCenter = config->readBoolEntry("FixedCenter", false);
+      m_configRead=true;
+   };
+   m_toolController->emitModeSelected (m_id,i18n ("Create ellipses (Hold CTRL for circles)"));
 }
 
 void OvalTool::aroundFixedCenter (bool flag) {
   if (useFixedCenter != flag) {
     useFixedCenter = flag;
 
+    kdDebug()<<"OvalTool::aroundFixedCenter()"<<endl;
     KConfig* config = kapp->config ();
-    QString oldgroup = config->group ();
 
     config->setGroup ("EllipseTool");
     config->writeEntry ("FixedCenter", useFixedCenter);
-    config->setGroup (oldgroup);
   }
 }
 
-void OvalTool::configure () {
-  EllipseConfigDialog::setupTool (this);
+void OvalTool::configure ()
+{
+   EllipseConfigDialog::setupTool (this);
 }
 
-#include <OvalTool.moc>

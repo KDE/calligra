@@ -59,61 +59,95 @@
 #include <BrushCells.h>
 #include <UnitBox.h>
 
+#include <iostream.h>
+
 #define SOLID_BOX    0
 #define PATTERN_BOX  1
 #define GRADIENT_BOX 2
 #define NOFILL_BOX   3
 
 PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
-                                QWidget* parent, const char* name) :
-    KDialogBase(KDialogBase::Tabbed, i18n("Properties"),
-                KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok,
-                parent, name) {
+                                QWidget* parent, const char* name)
+:KDialogBase(KDialogBase::Tabbed, i18n("Properties"),
+             KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok,parent, name)
+,document(doc)
+,isGlobal(false)
+,haveTextObjects(false)
+,haveLineObjects(false)
+,haveEllipseObjects(false)
+,haveRectangleObjects(false)
+,haveFillObjects(false)
+,haveArrows(false)
+,leftArrows(0)
+,rightArrows(0)
+,roundnessSlider(0)
+,gradient(0)
+{
+   for (int i = 0; i < 3; i++)
+   {
+      ellipseKind[i] = 0L;
+      textAlign[i] = 0L;
+   }
 
-    leftArrows = rightArrows = 0L;
-    roundnessSlider = 0L;
-    for (int i = 0; i < 3; i++) {
-        ellipseKind[i] = 0L;
-        textAlign[i] = 0L;
-    }
-    gradient = 0L;
+   isGlobal = document->selectionIsEmpty ();
+   if (isGlobal)
+   {
+      haveTextObjects = true;
+      haveLineObjects = true;
+      haveArrows=true;
+      haveFillObjects=true;
+      //TODO
+      //haveEllipseObjects = true;
+      //haveRectangleObjects = true;
+   }
+   else
+   {
+      for (QListIterator<GObject> it(document->getSelection()); it.current(); ++it)
+      {
+         GObject* o = *it;
+         if (o->inherits ("GText"))
+            haveTextObjects = true;
+         if (o->inherits ("GPolyline") || o->inherits ("GOval"))
+         {
+            haveLineObjects = true;
+            haveFillObjects=true;
+         };
+         if ((o->isA("GBezier")) || (o->isA("GPolyline")))
+         {
+            haveArrows=true;
+         };
+         if (o->inherits("GOval"))
+            haveEllipseObjects = true;
+         if (o->inherits("GPolygon"))
+         {
+            GPolygon* polygon = (GPolygon *) o;
+            if (polygon->isRectangle ())
+               haveRectangleObjects = true;
+         }
+      }
+   };
 
-    document = doc;
-    haveObjects = ! document->selectionIsEmpty ();
-    haveTextObjects = false;
-    haveLineObjects = false;
-    haveEllipseObjects = false;
-    haveRectangleObjects = false;
+   cmdHistory = history;
 
-    if (haveObjects) {
-        for (QListIterator<GObject> it(document->getSelection()); it.current(); ++it) {
-            GObject* o = *it;
-            if (o->isA ("GText"))
-                haveTextObjects = true;
-            else if (o->isA ("GPolyline") || o->isA ("GBezier"))
-                haveLineObjects = true;
-            else if (o->isA ("GOval"))
-                haveEllipseObjects = true;
-            else if (o->isA ("GPolygon")) {
-                GPolygon* polygon = (GPolygon *) o;
-                if (polygon->isRectangle ())
-                    haveRectangleObjects = true;
-            }
-        }
-    }
-    cmdHistory = history;
+   createInfoWidget(addPage(i18n("Info")));
+   cout<<"afetr createInfoWidget()"<<endl;
+   if (haveLineObjects)
+      createOutlineWidget(addPage(i18n("Outline")));
+   cout<<"after createOutlineWidget()"<<endl;
+   if (haveFillObjects)
+      createFillWidget(addPage(i18n("Fill")));
+   cout<<"after createFillWidget()"<<endl;
 
-    createInfoWidget(addPage(i18n("Info")));
-    createOutlineWidget(addPage(i18n("Outline")));
-    createFillWidget(addPage(i18n("Fill")));
+   if (haveTextObjects)
+      createFontWidget(addPage(i18n("Font")));
+   cout<<"after createFontWidget()"<<endl;
 
-    if (!haveObjects || haveTextObjects)
-        createFontWidget(addPage(i18n("Font")));
-
-    readProperties ();
+   readProperties ();
+   cout<<"after readProps()"<<endl;
 }
 
-void PropertyEditor::createInfoWidget(QWidget* parent) {
+void PropertyEditor::createInfoWidget(QWidget* parent)
+{
 
     QGridLayout *layout=new QGridLayout(parent, 7, 4, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
@@ -154,144 +188,137 @@ void PropertyEditor::createInfoWidget(QWidget* parent) {
     layout->setColStretch(4, 1);
 }
 
-void PropertyEditor::createOutlineWidget (QWidget* parent) {
+void PropertyEditor::createOutlineWidget (QWidget* parent)
+{
+   QGridLayout *layout=new QGridLayout(parent, 7, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
+   int gridY(0);
 
-    QGridLayout *layout=new QGridLayout(parent, 5, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
+   QLabel *label = new QLabel(i18n("Width:"), parent);
+   layout->addWidget(label, gridY, 0);
 
-    QLabel *label = new QLabel(i18n("Width:"), parent);
-    layout->addWidget(label, 0, 0);
+   widthField = new UnitBox (parent);
+   widthField->setRange (0.0, 20.0);
+   widthField->setStep (0.1);
+   widthField->setEditable (true);
+   layout->addWidget(widthField, gridY, 1);
+   gridY++;
 
-    widthField = new UnitBox (parent);
-    widthField->setRange (0.0, 20.0);
-    widthField->setStep (0.1);
-    widthField->setEditable (true);
-    layout->addWidget(widthField, 0, 1);
+   label = new QLabel(i18n("Color:"), parent);
+   layout->addWidget(label, gridY, 0);
 
-    label = new QLabel(i18n("Color:"), parent);
-    layout->addWidget(label, 1, 0);
+   penColorBttn = new KColorButton(parent);
+   penColorBttn->setColor (Qt::white);
+   layout->addWidget(penColorBttn, gridY, 1);
+   gridY++;
 
-    penColorBttn = new KColorButton(parent);
-    penColorBttn->setColor (Qt::white);
-    layout->addWidget(penColorBttn, 1, 1);
+   label = new QLabel(i18n("Style:"), parent);
+   layout->addWidget(label, gridY, 0);
 
-    label = new QLabel(i18n("Style:"), parent);
-    layout->addWidget(label, 2, 0);
+   penStyleField = new QComboBox(parent);
+   layout->addWidget(penStyleField, gridY, 1);
+   QIntDictIterator<LineStyle> lit = LineStyle::getLineStyles ();
+   for (; lit.current (); ++lit)
+   {
+      LineStyle* style = lit.current ();
+      penStyleField->insertItem (style->pixmap ());
+   }
+   penStyleField->setCurrentItem (1);
+   gridY++;
 
-    penStyleField = new QComboBox(parent);
-    layout->addWidget(penStyleField, 2, 1);
-    QIntDictIterator<LineStyle> lit = LineStyle::getLineStyles ();
-    for (; lit.current (); ++lit) {
-        LineStyle* style = lit.current ();
-        penStyleField->insertItem (style->pixmap ());
-    }
-    penStyleField->setCurrentItem (1);
+   if (haveArrows)
+   {
+      label = new QLabel(i18n("Arrows:"), parent);
+      QHBox *hbox=new QHBox(parent);
+      leftArrows = new QComboBox (hbox);
+      rightArrows = new QComboBox (hbox);
+      QIntDictIterator<Arrow> iter = Arrow::getArrows ();
+      QPixmap empty (50, 20);
+      empty.fill (white);
+      leftArrows->insertItem (empty);
+      rightArrows->insertItem (empty);
+      for (; iter.current (); ++iter)
+      {
+         Arrow* arrow = iter.current ();
+         leftArrows->insertItem (arrow->leftPixmap ());
+         rightArrows->insertItem (arrow->rightPixmap ());
+      }
+      layout->addWidget(label, gridY, 0);
+      layout->addWidget(hbox, gridY, 1);
+      gridY++;
+   };
 
-    if (haveLineObjects || !haveObjects) {
-        label = new QLabel(i18n("Arrows:"), parent);
-        layout->addWidget(label, 3, 0);
-        QHBox *hbox=new QHBox(parent);
-        layout->addWidget(hbox, 3, 1);
-        leftArrows = new QComboBox (hbox);
-        rightArrows = new QComboBox (hbox);
-        QIntDictIterator<Arrow> iter = Arrow::getArrows ();
-        QPixmap empty (50, 20);
-        empty.fill (white);
-        leftArrows->insertItem (empty);
-        rightArrows->insertItem (empty);
-        for (; iter.current (); ++iter) {
-            Arrow* arrow = iter.current ();
-            leftArrows->insertItem (arrow->leftPixmap ());
-            rightArrows->insertItem (arrow->rightPixmap ());
-        }
-    }
-    else if (haveEllipseObjects) {
-        label = new QLabel(i18n("Shape:"), parent);
-        layout->addWidget(label, 3, 0);
+   if (haveEllipseObjects)
+   {
+      label = new QLabel(i18n("Shape:"), parent);
+      layout->addWidget(label, gridY, 0);
 
-        QButtonGroup *group = new QHButtonGroup(parent);
-        group->setFrameStyle(QFrame::NoFrame);
-        group->setExclusive (true);
-        layout->addWidget(group, 3, 1);
+      QButtonGroup *group = new QHButtonGroup(parent);
+      group->setFrameStyle(QFrame::NoFrame);
+      group->setExclusive (true);
+      layout->addWidget(group, gridY, 1);
 
-        ellipseKind[0] = new QPushButton(group);
-        ellipseKind[0]->setToggleButton(true);
-        ellipseKind[0]->setPixmap (UserIcon ("ellipse1"));
+      ellipseKind[0] = new QPushButton(group);
+      ellipseKind[0]->setToggleButton(true);
+      ellipseKind[0]->setPixmap (UserIcon ("ellipse1"));
 
-        ellipseKind[1] = new QPushButton (group);
-        ellipseKind[1]->setToggleButton (true);
-        ellipseKind[1]->setPixmap (UserIcon ("ellipse2"));
+      ellipseKind[1] = new QPushButton (group);
+      ellipseKind[1]->setToggleButton (true);
+      ellipseKind[1]->setPixmap (UserIcon ("ellipse2"));
 
-        ellipseKind[2] = new QPushButton (group);
-        ellipseKind[2]->setToggleButton (true);
-        ellipseKind[2]->setPixmap (UserIcon ("ellipse3"));
-    }
-    else if (haveRectangleObjects) {
-        label = new QLabel(i18n("Roundness:"), parent);
-        layout->addWidget(label, 3, 0);
+      ellipseKind[2] = new QPushButton (group);
+      ellipseKind[2]->setToggleButton (true);
+      ellipseKind[2]->setPixmap (UserIcon ("ellipse3"));
+      gridY++;
+   };
+   if (haveRectangleObjects)
+   {
+      label = new QLabel(i18n("Roundness:"), parent);
+      layout->addWidget(label, gridY, 0);
 
-        roundnessSlider = new QSlider(QSlider::Horizontal, parent);
-        roundnessSlider->setRange (0, 100);
-        roundnessSlider->setSteps (10, 50);
-        layout->addWidget(roundnessSlider, 3, 1);
-    }
-    else if (haveTextObjects) {
-        label = new QLabel(i18n("Alignment:"), parent);
-        layout->addWidget(label, 3, 0);
-
-        QButtonGroup *group = new QHButtonGroup(parent);
-        group->setFrameStyle(QFrame::NoFrame);
-        group->setExclusive (true);
-        layout->addWidget(group, 3, 1);
-
-        textAlign[0] = new QPushButton (group);
-        textAlign[0]->setToggleButton (true);
-        textAlign[0]->setPixmap (UserIcon ("tleftalign"));
-
-        textAlign[1] = new QPushButton (group);
-        textAlign[1]->setToggleButton (true);
-        textAlign[1]->setPixmap (UserIcon ("tcenteralign"));
-
-        textAlign[2] = new QPushButton (group);
-        textAlign[2]->setToggleButton (true);
-        textAlign[2]->setPixmap (UserIcon ("trightalign"));
-    }
-    layout->setRowStretch(4, 1);
-    layout->setColStretch(3, 1);
+      roundnessSlider = new QSlider(QSlider::Horizontal, parent);
+      roundnessSlider->setRange (0, 100);
+      roundnessSlider->setSteps (10, 50);
+      layout->addWidget(roundnessSlider, gridY, 1);
+      gridY++;
+   };
+   layout->setRowStretch(6, 1);
+   layout->setColStretch(3, 1);
 }
 
-void PropertyEditor::createFillWidget (QWidget* parent) {
+void PropertyEditor::createFillWidget (QWidget* parent)
+{
+   QBoxLayout *layout=new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
+   QBoxLayout *left=new QVBoxLayout(layout);
 
-    QBoxLayout *layout=new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
-    QBoxLayout *left=new QVBoxLayout(layout);
+   QButtonGroup* group = new QVButtonGroup(parent);
+   group->setFrameStyle (QFrame::NoFrame);
+   group->setExclusive (true);
+   left->addWidget(group);
 
-    QButtonGroup* group = new QVButtonGroup(parent);
-    group->setFrameStyle (QFrame::NoFrame);
-    group->setExclusive (true);
-    left->addWidget(group);
+   QStringList msg;
+   msg.append(i18n("Solid"));
+   msg.append(i18n("Pattern"));
+   msg.append(i18n("Gradient"));
+   msg.append(i18n("No Fill"));
+   for (int i = 0; i < 4; i++)
+   {
+      fillStyleBttn[i] = new QRadioButton(msg[i], group);
+      connect (fillStyleBttn[i], SIGNAL(clicked()),
+               this, SLOT(fillStyleChanged()));
+   }
+   left->addStretch(1);
+   layout->addSpacing(KDialogBase::spacingHint());
 
-    QStringList msg;
-    msg.append(i18n("Solid"));
-    msg.append(i18n("Pattern"));
-    msg.append(i18n("Gradient"));
-    msg.append(i18n("No Fill"));
-    for (int i = 0; i < 4; i++) {
-        fillStyleBttn[i] = new QRadioButton(msg[i], group);
-        connect (fillStyleBttn[i], SIGNAL(clicked()),
-                 this, SLOT(fillStyleChanged()));
-    }
-    left->addStretch(1);
-    layout->addSpacing(KDialogBase::spacingHint());
+   wstack = new QWidgetStack(parent);
+   layout->addWidget(wstack, 1);
 
-    wstack = new QWidgetStack(parent);
-    layout->addWidget(wstack, 1);
-
-    // ------ Solid Fill ------
-    QGroupBox *groupbox = new QVGroupBox(i18n("Solid Fill"), wstack);
-    wstack->addWidget(groupbox, SOLID_BOX);
-    QHBox *hbox=new QHBox(groupbox);
-    QLabel *label=new QLabel(i18n("Color:"), hbox);
-    fillSolidColor=new KColorButton(hbox);
-    fillSolidColor->setColor(Qt::white);
+   // ------ Solid Fill ------
+   QGroupBox *groupbox = new QVGroupBox(i18n("Solid Fill"), wstack);
+   wstack->addWidget(groupbox, SOLID_BOX);
+   QHBox *hbox=new QHBox(groupbox);
+   QLabel *label=new QLabel(i18n("Color:"), hbox);
+   fillSolidColor=new KColorButton(hbox);
+   fillSolidColor->setColor(Qt::white);
 
     // ------ Pattern Fill ------
     groupbox = new QVGroupBox(i18n("Pattern Fill"), wstack);
@@ -353,287 +380,362 @@ void PropertyEditor::createFillWidget (QWidget* parent) {
     wstack->raiseWidget (SOLID_BOX);
 }
 
-void PropertyEditor::createFontWidget (QWidget* parent) {
+void PropertyEditor::createFontWidget (QWidget* parent)
+{
+   QVBoxLayout *layout=new QVBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
+   fontChooser = new KFontChooser(parent);
+   layout->addWidget(fontChooser);
 
-    QVBoxLayout *layout=new QVBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
-    fontChooser = new KFontChooser(parent);
-    layout->addWidget(fontChooser);
+   QButtonGroup *group = new QHButtonGroup(parent);
+   group->setFrameStyle(QFrame::NoFrame);
+   layout->addWidget(group);
+
+   QLabel *label = new QLabel(i18n("Color:"), group);
+   penColorBttn = new KColorButton(group);
+   penColorBttn->setColor (Qt::white);
+
+   group = new QHButtonGroup(parent);
+   group->setFrameStyle(QFrame::NoFrame);
+   group->setExclusive (true);
+   layout->addWidget(group);
+
+   label = new QLabel(i18n("Alignment:"), group);
+
+   textAlign[0] = new QPushButton (group);
+   textAlign[0]->setToggleButton (true);
+   textAlign[0]->setPixmap (UserIcon ("tleftalign"));
+
+   textAlign[1] = new QPushButton (group);
+   textAlign[1]->setToggleButton (true);
+   textAlign[1]->setPixmap (UserIcon ("tcenteralign"));
+
+   textAlign[2] = new QPushButton (group);
+   textAlign[2]->setToggleButton (true);
+   textAlign[2]->setPixmap (UserIcon ("trightalign"));
 }
 
-void PropertyEditor::applyPressed () {
-    // Outline
-    GObject::OutlineInfo oinfo;
+void PropertyEditor::applyPressed ()
+{
+   // Outline
+   GObject::OutlineInfo oinfo;
+   GObject::FillInfo finfo;
+   GText::TextInfo tinfo;
+   if (haveLineObjects)
+   {
 
-    oinfo.width = widthField->getValue ();
-    oinfo.color = penColorBttn->color ();
-    oinfo.style = (Qt::PenStyle) penStyleField->currentItem ();
-    if (leftArrows != 0L && rightArrows != 0L) {
-        oinfo.startArrowId = leftArrows->currentItem ();
-        oinfo.endArrowId = rightArrows->currentItem ();
-    }
-    else if (ellipseKind[0] != 0L) {
-        if (ellipseKind[1]->isOn ())
+      oinfo.width = widthField->getValue ();
+      oinfo.color = penColorBttn->color ();
+      oinfo.style = (Qt::PenStyle) penStyleField->currentItem ();
+      if (leftArrows != 0L && rightArrows != 0L)
+      {
+         oinfo.startArrowId = leftArrows->currentItem ();
+         oinfo.endArrowId = rightArrows->currentItem ();
+      };
+      if (haveEllipseObjects)
+      {
+         if (ellipseKind[1]->isOn ())
             oinfo.shape = GObject::OutlineInfo::ArcShape;
-        else if (ellipseKind[2]->isOn ())
+         else if (ellipseKind[2]->isOn ())
             oinfo.shape = GObject::OutlineInfo::PieShape;
-        else
+         else
             oinfo.shape = GObject::OutlineInfo::DefaultShape;
-    }
-    else if (roundnessSlider != 0L) {
-        oinfo.roundness = roundnessSlider->value ();
-    }
-    oinfo.mask = GObject::OutlineInfo::Color | GObject::OutlineInfo::Style |
-                 GObject::OutlineInfo::Width | GObject::OutlineInfo::Custom;
+      };
+      if (haveRectangleObjects)
+      {
+         oinfo.roundness = roundnessSlider->value ();
+      }
+      oinfo.mask = GObject::OutlineInfo::Color | GObject::OutlineInfo::Style |
+         GObject::OutlineInfo::Width | GObject::OutlineInfo::Custom;
+   };
+   if (haveFillObjects)
+   {
+      // Fill
 
-    // Fill
-    GObject::FillInfo finfo;
+      finfo.mask = GObject::FillInfo::FillStyle;
+      if (fillStyleBttn[SOLID_BOX]->isChecked ())
+      {
+         finfo.fstyle = GObject::FillInfo::SolidFill;
+         finfo.color = fillSolidColor->color ();
+         finfo.mask |= GObject::FillInfo::Color;
+      }
+      else if (fillStyleBttn[GRADIENT_BOX]->isChecked ())
+      {
+         finfo.fstyle = GObject::FillInfo::GradientFill;
+         finfo.gradient = *gradient;
+         finfo.mask |= GObject::FillInfo::GradientInfo;
+      }
+      else if (fillStyleBttn[NOFILL_BOX]->isChecked ())
+         finfo.fstyle = GObject::FillInfo::NoFill;
+      else if (fillStyleBttn[PATTERN_BOX]->isChecked ())
+      {
+         finfo.fstyle = GObject::FillInfo::PatternFill;
+         finfo.pattern = brushCells->brushStyle ();
+         finfo.color = fillPatternColor->color ();
+         finfo.mask |= (GObject::FillInfo::Color | GObject::FillInfo::Pattern);
+      }
+      else
+         finfo.fstyle = GObject::FillInfo::SolidFill;
+   };
 
-    finfo.mask = GObject::FillInfo::FillStyle;
-    if (fillStyleBttn[SOLID_BOX]->isChecked ()) {
-        finfo.fstyle = GObject::FillInfo::SolidFill;
-        finfo.color = fillSolidColor->color ();
-        finfo.mask |= GObject::FillInfo::Color;
-    }
-    else if (fillStyleBttn[GRADIENT_BOX]->isChecked ()) {
-        finfo.fstyle = GObject::FillInfo::GradientFill;
-        finfo.gradient = *gradient;
-        finfo.mask |= GObject::FillInfo::GradientInfo;
-    }
-    else if (fillStyleBttn[NOFILL_BOX]->isChecked ())
-        finfo.fstyle = GObject::FillInfo::NoFill;
-    else if (fillStyleBttn[PATTERN_BOX]->isChecked ()) {
-        finfo.fstyle = GObject::FillInfo::PatternFill;
-        finfo.pattern = brushCells->brushStyle ();
-        finfo.color = fillPatternColor->color ();
-        finfo.mask |= (GObject::FillInfo::Color | GObject::FillInfo::Pattern);
-    }
-    else
-        finfo.fstyle = GObject::FillInfo::SolidFill;
-    SetPropertyCmd* cmd = 0L;
+   // Font
+   if ((haveTextObjects)&& (!isGlobal))
+   {
+      tinfo.mask = GText::TextInfo::Font | GText::TextInfo::Align;
+      tinfo.font = fontChooser->font ();
+      if (textAlign[0]->isOn ())
+         tinfo.align = GText::TextInfo::AlignLeft;
+      else if (textAlign[1]->isOn ())
+         tinfo.align = GText::TextInfo::AlignCenter;
+      else if (textAlign[2]->isOn ())
+         tinfo.align = GText::TextInfo::AlignRight;
+   }
+   if (!isGlobal)
+   {
+      SetPropertyCmd* cmd = 0L;
+      if (haveTextObjects)
+         cmd = new SetPropertyCmd (document, oinfo, finfo, tinfo);
+      else
+         cmd = new SetPropertyCmd (document, oinfo, finfo);
 
-    // Font
-    if (haveObjects) {
-        if (haveTextObjects) {
-            GText::TextInfo tinfo;
-            tinfo.mask = GText::TextInfo::Font | GText::TextInfo::Align;
-            tinfo.font = fontChooser->font ();
-            if (textAlign[0]->isOn ())
-                tinfo.align = GText::TextInfo::AlignLeft;
-            else if (textAlign[1]->isOn ())
-                tinfo.align = GText::TextInfo::AlignCenter;
-            else if (textAlign[2]->isOn ())
-                tinfo.align = GText::TextInfo::AlignRight;
-            cmd = new SetPropertyCmd (document, oinfo, finfo, tinfo);
-        }
-        else
-            cmd = new SetPropertyCmd (document, oinfo, finfo);
-        cmdHistory->addCommand (cmd, true);
-    }
-    else {
-        // set default values
-        GText::TextInfo tinfo;
-        tinfo.mask = GText::TextInfo::Font;
-        tinfo.font = fontChooser->font ();
+      cmdHistory->addCommand (cmd, true);
+   }
+   else
+   {
+      // set default values
+      tinfo.mask = GText::TextInfo::Font;
+      tinfo.font = fontChooser->font ();
 
-        GObject::setDefaultOutlineInfo (oinfo);
-        GObject::setDefaultFillInfo (finfo);
-        GText::setDefaultTextInfo (tinfo);
-    }
+      GObject::setDefaultOutlineInfo (oinfo);
+      GObject::setDefaultFillInfo (finfo);
+      GText::setDefaultTextInfo (tinfo);
+   }
 }
 
-void PropertyEditor::readProperties () {
+void PropertyEditor::readProperties ()
+{
+   cerr<<"1"<<endl;
+   QString buf;
+   PStateManager *psm = PStateManager::instance ();
+   MeasurementUnit munit = psm->defaultMeasurementUnit ();
+   QString ustr=" ";
+   ustr+=unitToString (munit);
 
-    QString buf;
-    PStateManager *psm = PStateManager::instance ();
-    MeasurementUnit munit = psm->defaultMeasurementUnit ();
-    QString ustr=" ";
-    ustr+=unitToString (munit);
+   if (document->selectionCount () == 1)
+   {
+      cerr<<"2"<<endl;
+      GObject* object = document->getSelection().first();
+      // Info tab
+      Rect boundingBox = object->boundingBox ();
+      infoLabel[0]->setText (QString (object->typeName ()));
+      buf.sprintf ("%5.2f", cvtPtToUnit (munit, boundingBox.left ()));
+      buf+=ustr;
+      infoLabel[1]->setText (buf);
+      buf.sprintf ("%5.2f", cvtPtToUnit (munit, boundingBox.top ()));
+      buf+=ustr;
+      infoLabel[2]->setText (buf);
+      buf.sprintf ("%5.2f", cvtPtToUnit (munit, boundingBox.width ()));
+      buf+=ustr;
+      infoLabel[3]->setText (buf);
+      buf.sprintf ("%5.2f", cvtPtToUnit (munit, boundingBox.height ()));
+      buf+=ustr;
+      infoLabel[4]->setText (buf);
 
-    if (document->selectionCount () == 1) {
-        GObject* object = document->getSelection().first();
-        // Info tab
-        Rect boundingBox = object->boundingBox ();
-        infoLabel[0]->setText (QString (object->typeName ()));
-        buf.sprintf ("%5.2f", cvtPtToUnit (munit, boundingBox.left ()));
-        buf+=ustr;
-        infoLabel[1]->setText (buf);
-        buf.sprintf ("%5.2f", cvtPtToUnit (munit, boundingBox.top ()));
-        buf+=ustr;
-        infoLabel[2]->setText (buf);
-        buf.sprintf ("%5.2f", cvtPtToUnit (munit, boundingBox.width ()));
-        buf+=ustr;
-        infoLabel[3]->setText (buf);
-        buf.sprintf ("%5.2f", cvtPtToUnit (munit, boundingBox.height ()));
-        buf+=ustr;
-        infoLabel[4]->setText (buf);
-
-        // Outline tab
-        GObject::OutlineInfo oInfo = object->getOutlineInfo ();
-        widthField->setValue (oInfo.width);
-        penColorBttn->setColor (oInfo.color);
-        penStyleField->setCurrentItem((int)oInfo.style);
-        if (object->isA ("GPolyline") || object->isA ("GBezier")) {
+      GObject::OutlineInfo oInfo = object->getOutlineInfo ();
+      if (haveLineObjects)
+      {
+         cerr<<"3"<<endl;
+         // Outline tab
+         //GObject::OutlineInfo oInfo = object->getOutlineInfo ();
+         widthField->setValue (oInfo.width);
+         penColorBttn->setColor (oInfo.color);
+         penStyleField->setCurrentItem((int)oInfo.style);
+         if (haveArrows)
+         {
             leftArrows->setCurrentItem (oInfo.startArrowId);
             rightArrows->setCurrentItem (oInfo.endArrowId);
-        }
-        else if (object->isA ("GPolygon")) {
-            GPolygon* polygon = (GPolygon *) object;
-            if (polygon->isRectangle ())
-                roundnessSlider->setValue (oInfo.roundness);
-        }
-        else if (object->isA ("GOval")) {
-            switch (oInfo.shape) {
-                case GObject::OutlineInfo::ArcShape:
-                    ellipseKind[1]->setOn (true);
-                    break;
-                case GObject::OutlineInfo::PieShape:
-                    ellipseKind[2]->setOn (true);
-                    break;
-                default:
-                    ellipseKind[0]->setOn (true);
-                    break;
-            }
-        }
-
-        // Fill tab
-        fillSolidColor->setColor (object->getFillColor ());
-        fillPatternColor->setColor (object->getFillColor ());
-        fillColorBtn1->setColor(object->getFillColor());
-        fillColorBtn2->setColor(object->getFillColor());
-        switch (object->getFillStyle ()) {
-            case GObject::FillInfo::NoFill:
-                fillStyleBttn[NOFILL_BOX]->setChecked (true);
-                wstack->raiseWidget (NOFILL_BOX);
-                break;
-            case GObject::FillInfo::SolidFill:
-                fillStyleBttn[SOLID_BOX]->setChecked (true);
-                wstack->raiseWidget (SOLID_BOX);
-                break;
-            case GObject::FillInfo::GradientFill:
+         };
+cerr<<"4"<<endl;
+         if (haveRectangleObjects)
+         {
+            roundnessSlider->setValue (oInfo.roundness);
+         };
+cerr<<"5"<<endl;
+         if (haveEllipseObjects)
+         {
+            switch (oInfo.shape)
             {
-                Gradient g = object->getFillGradient ();
-                fillStyleBttn[GRADIENT_BOX]->setChecked (true);
-                fillColorBtn1->setColor (g.getColor1 ());
-                fillColorBtn2->setColor (g.getColor2 ());
-                gradStyleCombo->setCurrentItem ((int) g.getStyle ());
-                gradientAngle->setEnabled(((int) g.getStyle ()== 0)?true:false);
-                gradientAngle->setValue(g.getAngle());
-                updateGradient ();
-                wstack->raiseWidget (GRADIENT_BOX);
+            case GObject::OutlineInfo::ArcShape:
+               ellipseKind[1]->setOn (true);
+               break;
+            case GObject::OutlineInfo::PieShape:
+               ellipseKind[2]->setOn (true);
+               break;
+            default:
+               ellipseKind[0]->setOn (true);
+               break;
+            }
+         }
+      };
+cerr<<"6"<<endl;
+      if (haveFillObjects)
+      {
+cerr<<"7"<<endl;
+         // Fill tab
+         fillSolidColor->setColor (object->getFillColor ());
+         fillPatternColor->setColor (object->getFillColor ());
+         fillColorBtn1->setColor(object->getFillColor());
+         fillColorBtn2->setColor(object->getFillColor());
+         switch (object->getFillStyle ())
+         {
+         case GObject::FillInfo::NoFill:
+            fillStyleBttn[NOFILL_BOX]->setChecked (true);
+            wstack->raiseWidget (NOFILL_BOX);
+            break;
+         case GObject::FillInfo::SolidFill:
+            fillStyleBttn[SOLID_BOX]->setChecked (true);
+            wstack->raiseWidget (SOLID_BOX);
+            break;
+         case GObject::FillInfo::GradientFill:
+            {
+               Gradient g = object->getFillGradient ();
+               fillStyleBttn[GRADIENT_BOX]->setChecked (true);
+               fillColorBtn1->setColor (g.getColor1 ());
+               fillColorBtn2->setColor (g.getColor2 ());
+               gradStyleCombo->setCurrentItem ((int) g.getStyle ());
+               gradientAngle->setEnabled(((int) g.getStyle ()== 0)?true:false);
+               gradientAngle->setValue(g.getAngle());
+               updateGradient ();
+               wstack->raiseWidget (GRADIENT_BOX);
             }
             break;
-            case GObject::FillInfo::PatternFill:
-                fillStyleBttn[PATTERN_BOX]->setChecked (true);
-                brushCells->setColor( object->getFillColor () );
-                brushCells->selectBrush (object->getFillPattern ());
-                wstack->raiseWidget (PATTERN_BOX);
-                break;
-            default:
-                break;
-        }
+         case GObject::FillInfo::PatternFill:
+            fillStyleBttn[PATTERN_BOX]->setChecked (true);
+            brushCells->setColor( object->getFillColor () );
+            brushCells->selectBrush (object->getFillPattern ());
+            wstack->raiseWidget (PATTERN_BOX);
+            break;
+         default:
+            break;
+         }
+      };
+cerr<<"8"<<endl;
+      if (haveTextObjects)
+      {
+cerr<<"9"<<endl;
+         penColorBttn->setColor (oInfo.color);
+         GText* tobj = (GText *) object;
+         GText::TextInfo tInfo = tobj->getTextInfo ();
+         fontChooser->setFont (tInfo.font);
+         switch (tInfo.align)
+         {
+         case GText::TextInfo::AlignCenter:
+            textAlign[1]->setOn (true);
+            break;
+         case GText::TextInfo::AlignRight:
+            textAlign[2]->setOn (true);
+            break;
+         default:
+            textAlign[0]->setOn (true);
+            break;
+         }
+      };
+   }
+   else
+   {
+      // more objects or no objects - use default values
+      // Info tab
+      Rect boundingBox = document->boundingBoxForSelection ();
+      if (isGlobal)
+         infoLabel[0]->setText (i18n ("no selection"));
+      else
+         infoLabel[0]->setText (i18n ("multiple selection"));
+      buf.sprintf ("%5.2f", cvtPtToUnit (munit, boundingBox.left ()));
+      buf+=ustr;
+      infoLabel[1]->setText (buf);
+      buf.sprintf ("%5.2f", cvtPtToUnit (munit, boundingBox.top ()));
+      buf+=ustr;
+      infoLabel[2]->setText (buf);
+      buf.sprintf ("%5.2f", cvtPtToUnit (munit, boundingBox.width ()));
+      buf+=ustr;
+      infoLabel[3]->setText (buf);
+      buf.sprintf ("%5.2f", cvtPtToUnit (munit, boundingBox.height ()));
+      buf+=ustr;
+      infoLabel[4]->setText (buf);
 
-        // Font tab
-        if (object->isA ("GText")) {
-            GText* tobj = (GText *) object;
-            GText::TextInfo tInfo = tobj->getTextInfo ();
-            fontChooser->setFont (tInfo.font);
-            switch (tInfo.align) {
-                case GText::TextInfo::AlignCenter:
-                    textAlign[1]->setOn (true);
-                    break;
-                case GText::TextInfo::AlignRight:
-                    textAlign[2]->setOn (true);
-                    break;
-                default:
-                    textAlign[0]->setOn (true);
-                    break;
-            }
-        }
-    }
-    else {
-        // more objects or no objects - use default values
-        // Info tab
-        Rect boundingBox = document->boundingBoxForSelection ();
-        if (! haveObjects)
-            infoLabel[0]->setText (i18n ("no selection"));
-        else
-            infoLabel[0]->setText (i18n ("multiple selection"));
-        buf.sprintf ("%5.2f", cvtPtToUnit (munit, boundingBox.left ()));
-        buf+=ustr;
-        infoLabel[1]->setText (buf);
-        buf.sprintf ("%5.2f", cvtPtToUnit (munit, boundingBox.top ()));
-        buf+=ustr;
-        infoLabel[2]->setText (buf);
-        buf.sprintf ("%5.2f", cvtPtToUnit (munit, boundingBox.width ()));
-        buf+=ustr;
-        infoLabel[3]->setText (buf);
-        buf.sprintf ("%5.2f", cvtPtToUnit (munit, boundingBox.height ()));
-        buf+=ustr;
-        infoLabel[4]->setText (buf);
-
-        // Outline tab
-        GObject::OutlineInfo oInfo = GObject::getDefaultOutlineInfo ();
-        widthField->setValue (oInfo.width);
-        penColorBttn->setColor (oInfo.color);
-        penStyleField->setCurrentItem(oInfo.style);
-        if(leftArrows)
+      if (haveLineObjects)
+      {
+         // Outline tab
+         GObject::OutlineInfo oInfo = GObject::getDefaultOutlineInfo ();
+         widthField->setValue (oInfo.width);
+         penColorBttn->setColor (oInfo.color);
+         penStyleField->setCurrentItem(oInfo.style);
+         if(leftArrows)
             leftArrows->setCurrentItem (oInfo.startArrowId);
-        if(rightArrows)
+         if(rightArrows)
             rightArrows->setCurrentItem (oInfo.endArrowId);
-
-        // Fill tab
-        GObject::FillInfo fInfo = GObject::getDefaultFillInfo ();
-        fillSolidColor->setColor(fInfo.color);
-        fillPatternColor->setColor(fInfo.color);
-        fillColorBtn1->setColor(fInfo.gradient.getColor1());
-        fillColorBtn2->setColor(fInfo.gradient.getColor2());
-        switch(fInfo.fstyle) {
-            case GObject::FillInfo::NoFill:
-                fillStyleBttn[NOFILL_BOX]->setChecked (true);
-                wstack->raiseWidget (NOFILL_BOX);
-                break;
-            case GObject::FillInfo::SolidFill:
-                fillStyleBttn[SOLID_BOX]->setChecked (true);
-                wstack->raiseWidget (SOLID_BOX);
-                break;
-            case GObject::FillInfo::GradientFill:
+      };
+      if (haveFillObjects)
+      {
+         // Fill tab
+         GObject::FillInfo fInfo = GObject::getDefaultFillInfo ();
+         fillSolidColor->setColor(fInfo.color);
+         fillPatternColor->setColor(fInfo.color);
+         fillColorBtn1->setColor(fInfo.gradient.getColor1());
+         fillColorBtn2->setColor(fInfo.gradient.getColor2());
+         switch(fInfo.fstyle) {
+         case GObject::FillInfo::NoFill:
+            fillStyleBttn[NOFILL_BOX]->setChecked (true);
+            wstack->raiseWidget (NOFILL_BOX);
+            break;
+         case GObject::FillInfo::SolidFill:
+            fillStyleBttn[SOLID_BOX]->setChecked (true);
+            wstack->raiseWidget (SOLID_BOX);
+            break;
+         case GObject::FillInfo::GradientFill:
             {
-                fillStyleBttn[GRADIENT_BOX]->setChecked (true);
-                gradStyleCombo->setCurrentItem ((int)fInfo.gradient.getStyle ());
-                gradientAngle->setEnabled(((int)fInfo.gradient.getStyle ()== 0)?true:false);
-                gradientAngle->setValue(fInfo.gradient.getAngle());
-                updateGradient();
-                wstack->raiseWidget (GRADIENT_BOX);
+               fillStyleBttn[GRADIENT_BOX]->setChecked (true);
+               gradStyleCombo->setCurrentItem ((int)fInfo.gradient.getStyle ());
+               gradientAngle->setEnabled(((int)fInfo.gradient.getStyle ()== 0)?true:false);
+               gradientAngle->setValue(fInfo.gradient.getAngle());
+               updateGradient();
+               wstack->raiseWidget (GRADIENT_BOX);
             }
             break;
-            case GObject::FillInfo::PatternFill:
-                fillStyleBttn[PATTERN_BOX]->setChecked (true);
-                brushCells->setColor(fInfo.color);
-                brushCells->selectBrush (fInfo.pattern);
-                wstack->raiseWidget (PATTERN_BOX);
-                break;
-            default:
-                break;
-        }
-
-        // Font tab
-        if (!haveObjects || haveTextObjects) {
-            GText::TextInfo tInfo = GText::getDefaultTextInfo ();
-            fontChooser->setFont (tInfo.font);
-        }
-        if(!haveObjects) {
-            if(fillStyleBttn[GRADIENT_BOX]->isChecked()) {
-                fillStyleBttn[NOFILL_BOX]->setChecked(true);
-                wstack->raiseWidget(NOFILL_BOX);
-            }
-            fillStyleBttn[GRADIENT_BOX]->setEnabled(false);
-        }
-    }
+         case GObject::FillInfo::PatternFill:
+            fillStyleBttn[PATTERN_BOX]->setChecked (true);
+            brushCells->setColor(fInfo.color);
+            brushCells->selectBrush (fInfo.pattern);
+            wstack->raiseWidget (PATTERN_BOX);
+            break;
+         default:
+            break;
+         }
+      };
+      // Font tab
+      if (haveTextObjects)
+      {
+         GText::TextInfo tInfo = GText::getDefaultTextInfo ();
+         fontChooser->setFont (tInfo.font);
+      }
+      if(isGlobal)
+      {
+         if(fillStyleBttn[GRADIENT_BOX]->isChecked())
+         {
+            fillStyleBttn[NOFILL_BOX]->setChecked(true);
+            wstack->raiseWidget(NOFILL_BOX);
+         }
+         fillStyleBttn[GRADIENT_BOX]->setEnabled(false);
+      }
+   }
+cerr<<"10"<<endl;
 }
 
-void PropertyEditor::fillStyleChanged() {
-    for (int i = 0; i < 5; i++) {
-        if ((QRadioButton *) sender () == fillStyleBttn[i]) {
+void PropertyEditor::fillStyleChanged()
+{
+   for (int i = 0; i < 5; i++)
+   {
+      if ((QRadioButton *) sender () == fillStyleBttn[i])
+      {
             if (i == GRADIENT_BOX)
                 updateGradient ();
             else if(i == PATTERN_BOX)
@@ -643,20 +745,24 @@ void PropertyEditor::fillStyleChanged() {
     }
 }
 
-void PropertyEditor::fillPatternColorChanged(const QColor& color){
+void PropertyEditor::fillPatternColorChanged(const QColor& color)
+{
     brushCells->setColor(color);
 }
 
-void PropertyEditor::gradientColorChanged (const QColor&) {
+void PropertyEditor::gradientColorChanged (const QColor&)
+{
     updateGradient ();
 }
 
-void PropertyEditor::gradientAngleChanged (int a) {
+void PropertyEditor::gradientAngleChanged (int a)
+{
     gradient->setAngle(a);
     updateGradient();
 }
 
-void PropertyEditor::gradientStyleChanged (int i) {
+void PropertyEditor::gradientStyleChanged (int i)
+{
     if(i == 0)
         gradientAngle->setEnabled(true);
     else
@@ -664,12 +770,9 @@ void PropertyEditor::gradientStyleChanged (int i) {
     updateGradient ();
 }
 
-void PropertyEditor::updateGradient () {
-
-    static Gradient::Style styles[] = {
-        Gradient::Linear, Gradient::Radial,
-            Gradient::Rectangular
-            };
+void PropertyEditor::updateGradient ()
+{
+    static Gradient::Style styles[] = {Gradient::Linear, Gradient::Radial,Gradient::Rectangular};
 
     if (gradient == 0L) {
         gradient = new Gradient (fillColorBtn1->color (),
@@ -685,12 +788,13 @@ void PropertyEditor::updateGradient () {
                                                     gradPreview->height ()));
 }
 
-int PropertyEditor::edit (CommandHistory* history, GDocument* doc) {
-    PropertyEditor dialog (history, doc, 0L, "Properties");
-    int res=dialog.exec();
-    if(res==QDialog::Accepted)
-        dialog.applyPressed();
-    return res;
+int PropertyEditor::edit (CommandHistory* history, GDocument* doc)
+{
+   PropertyEditor dialog (history, doc, 0L, "Properties");
+   int res=dialog.exec();
+   if(res==QDialog::Accepted)
+      dialog.applyPressed();
+   return res;
 }
 
 #include <PropertyEditor.moc>

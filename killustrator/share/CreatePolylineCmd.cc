@@ -54,7 +54,7 @@ CreatePolylineCmd::~CreatePolylineCmd () {
 void CreatePolylineCmd::execute () {
   if (object == 0L) {
     // create new object
-    object = new GPolyline ();
+    object = new GPolyline (document);
     QListIterator<Coord> it (points);
     for (int i = 0; it.current (); ++it, ++i)
       object->addPoint (i, *(it.current ()));
@@ -67,4 +67,3 @@ void CreatePolylineCmd::unexecute () {
   document->deleteObject (object);
 }
 
-#include <CreatePolylineCmd.moc>

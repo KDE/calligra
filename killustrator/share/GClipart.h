@@ -34,11 +34,13 @@ class QPainter;
 
 class GClipart : public GObject {
   Q_OBJECT
+   private:
+      GClipart():GObject(0) {cout<<"GClipart ctor"<<endl; exit(1);};
 public:
-  GClipart (QWinMetaFile& wmf, const QString &name);
-  GClipart (const QDomElement &element);
+  GClipart (GDocument* parent, QWinMetaFile& wmf, const QString &name);
+  GClipart (GDocument* parent, const QDomElement &element);
 
-  GClipart ();
+  GClipart (GDocument* parent );
   GClipart (const GClipart& obj);
   ~GClipart () {}
 
@@ -48,7 +50,7 @@ public:
   virtual QString typeName () const;
 
   virtual GObject* copy ();
-  virtual GObject* clone (const QDomElement &element);
+  //virtual GObject* create (GDocument *doc, const QDomElement &element);
 
   virtual QDomElement writeToXml(QDomDocument &document);
 

@@ -28,14 +28,18 @@
 #include <GObject.h>
 
 class Arrow;
+class GDocument;
 
 #define NEAR_DISTANCE 4
 
-class GPolyline : public GObject {
-  Q_OBJECT
+class GPolyline : public GObject
+{
+   Q_OBJECT
+   private:
+      GPolyline ():GObject(0) {cout<<"GPolyline ctor"<<endl; exit(1);};
 public:
-  GPolyline ();
-  GPolyline (const QDomElement &element);
+  GPolyline (GDocument* doc);
+  GPolyline (GDocument* doc, const QDomElement &element);
   GPolyline (const GPolyline& obj);
   ~GPolyline () {}
 
@@ -63,7 +67,7 @@ public:
   virtual QString typeName () const;
 
   virtual GObject* copy ();
-  virtual GObject* clone (const QDomElement &element);
+  //virtual GObject* create (GDocument *doc, const QDomElement &element);
 
   virtual QDomElement writeToXml (QDomDocument &document);
 
@@ -78,12 +82,10 @@ public:
   void calcBoundingBox ();
 
 protected:
+  virtual void updateProperties (GObject::Property prop, int mask);
   float calcArrowAngle (const Coord& p1, const Coord& p2, int direction);
 
   Rect calcEnvelope ();
-
-protected slots:
-  void updateProperties (GObject::Property prop, int mask);
 
 protected:
   QList<Coord> points;

@@ -65,4 +65,3 @@ void ScaleCmd::execute () {
   }
 }
 
-#include <ScaleCmd.moc>

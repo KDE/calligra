@@ -31,7 +31,6 @@ class GDocument;
 class GText;
 
 class SetTextCmd : public Command {
-  Q_OBJECT
 public:
   SetTextCmd (GDocument* doc, GText* obj, const QString& s);
   SetTextCmd (GDocument* doc, GText* obj, GOState* ostate);

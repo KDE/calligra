@@ -24,6 +24,7 @@
 
 #include <GradientShape.h>
 #include <qpainter.h>
+#include <iostream.h>
 
 GradientShape::GradientShape () : isValid (false) {
 }
@@ -43,12 +44,17 @@ void GradientShape::setGradient (const Gradient& g) {
   setInvalid ();
 }
 
-void GradientShape::draw (QPainter& p) {
-  p.save ();
-  p.setClipRegion (region);
-  p.setClipping (true);
-  p.drawPixmap (box.left (), box.top (), pixmap);
-  p.restore ();
+void GradientShape::draw (QPainter& p)
+{
+   cout<<"GShape::draw: box: x: "<<box.x()<<" y: "<<box.y()<<" w: "<<box.width()<<" h: "<<box.height()<<endl;
+   cout<<"region consists of "<<region.rects().count()<<" rects"<<endl;
+   if (region.rects().count()>0)
+      cout<<"GShape::draw: region: x: "<<region.rects()[0].x()<<" y: "<<region.rects()[0].y()<<" w: "<<region.rects()[0].width()<<" h: "<<region.rects()[0].height()<<endl;
+   p.save ();
+   p.setClipRegion (region);
+   p.setClipping (true);
+   p.drawPixmap (box.left (), box.top (), pixmap);
+   p.restore ();
 }
 
 void GradientShape::updatePixmap () {

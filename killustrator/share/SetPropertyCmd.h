@@ -30,7 +30,6 @@
 #include <GText.h>
 
 class SetPropertyCmd : public ObjectManipCmd {
-  Q_OBJECT
 public:
   SetPropertyCmd (GDocument* doc, const GObject::OutlineInfo& oinfo,
                   const GObject::FillInfo& finfo);

@@ -31,7 +31,6 @@ class QCursor;
 class GObject;
 
 class EditPointTool : public Tool {
-  Q_OBJECT
 public:
   enum Mode {
     MovePoint, InsertPoint, RemovePoint, Join, Split
@@ -47,8 +46,8 @@ public:
   void activate (GDocument* doc, Canvas* canvas);
   void deactivate (GDocument* doc, Canvas* canvas);
 
-signals:
-    void activated(bool);
+//signals:
+//    void activated(bool);
 
 private:
   Mode mode;

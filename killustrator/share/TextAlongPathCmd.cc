@@ -62,4 +62,3 @@ void TextAlongPathCmd::unexecute () {
   object->setPathObject (oldPath);
 }
 
-#include <TextAlongPathCmd.moc>

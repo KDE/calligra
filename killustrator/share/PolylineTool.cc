@@ -35,6 +35,8 @@
 #include <CreatePolygonCmd.h>
 #include <AddLineSegmentCmd.h>
 #include <CommandHistory.h>
+#include "ToolController.h"
+#include <qnamespace.h>
 
 #include <math.h>
 
@@ -91,13 +93,13 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
          if (line)
             doc->setLastObject (line);
          line = 0L; last = 0;
-         emit operationDone ();
+         m_toolController->emitOperationDone (m_id);
       }
    }
    else if (e->type () == QEvent::MouseButtonPress)
    {
       QMouseEvent *me = (QMouseEvent *) e;
-      if (me->button () != LeftButton)
+      if (me->button () != Qt::LeftButton)
          return;
 
       float xpos = me->x (), ypos = me->y ();
@@ -116,7 +118,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
 
          GPolyline* obj = 0L;
 
-         if (me->state () & ShiftButton)
+         if (me->state () & Qt::ShiftButton)
          {
             // magnetic mode
             GObject *o = 0L;
@@ -161,7 +163,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
          if (line == 0L)
          {
             // no polyline found, create a new one
-            line = new GPolyline ();
+            line = new GPolyline (doc);
             line->addPoint (0, Coord (xpos, ypos));
             last = 1;
             newObj = true;
@@ -177,7 +179,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
       QMouseEvent *me = (QMouseEvent *) e;
       float xpos = me->x (), ypos = me->y ();
 
-      if (me->state () & ControlButton)
+      if (me->state () & Qt::ControlButton)
       {
          Coord oldp = line->getPoint (last > 0 ? last - 1 : 0);
          if (fabs (xpos - oldp.x ()) > fabs (ypos - oldp.y ()))
@@ -196,7 +198,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
          return;
       QMouseEvent *me = (QMouseEvent *) e;
       float xpos = me->x (), ypos = me->y ();
-      if (me->state () & ControlButton)
+      if (me->state () & Qt::ControlButton)
       {
          Coord oldp = line->getPoint (last > 0 ? last - 1 : 0);
          if (fabs (xpos - oldp.x ()) > fabs (ypos - oldp.y ()))
@@ -211,19 +213,19 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
       if (! newObj)
          points.append (new Coord (xpos, ypos));
 
-      if ((me->button () == RightButton) || (me->button () == MidButton))
+      if ((me->button () == Qt::RightButton) || (me->button () == Qt::MidButton))
       {
          doc->unselectAllObjects ();
 
          if ((last > 0 && line->numOfPoints () >= 3 &&
               line->getNeighbourPoint (Coord (xpos, ypos)) == 0) ||
-             ((me->state () & ShiftButton) && line->numOfPoints () > 3))
+             ((me->state () & Qt::ShiftButton) && line->numOfPoints () > 3))
          {
-            if (me->state () & ShiftButton)
+            if (me->state () & Qt::ShiftButton)
             {
                line->removePoint (line->numOfPoints () - 1, false);
                // the polyline is closed, so convert it into a polygon
-               GPolygon* obj = new GPolygon (line->getPoints ());
+               GPolygon* obj = new GPolygon (doc, line->getPoints ());
                doc->deleteObject (line);
                if (obj->isValid ())
                {
@@ -290,13 +292,15 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
    return;
 }
 
-void PolylineTool::activate (GDocument* , Canvas*) {
-  emit modeSelected (i18n ("Create Polyline"));
+void PolylineTool::activate (GDocument* , Canvas* canvas)
+{
+   canvas->setCursor(Qt::crossCursor);
+   m_toolController->emitModeSelected (m_id,i18n ("Create Polyline"));
 }
 
-void PolylineTool::deactivate (GDocument*, Canvas*) {
+void PolylineTool::deactivate (GDocument*, Canvas*)
+{
   line = 0L;
   last = 0;
 }
 
-#include <PolylineTool.moc>

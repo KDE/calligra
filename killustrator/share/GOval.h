@@ -27,11 +27,14 @@
 
 #include <GObject.h>
 
-class GOval : public GObject {
+class GOval : public GObject
+{
   Q_OBJECT
+   private:
+      GOval():GObject(0) {cout<<"GOval ctor"<<endl; exit(1);};
 public:
-  GOval (bool cFlag = false);
-  GOval (const QDomElement &element, bool cFlag = false);
+  GOval (GDocument* parent, bool cFlag = false);
+  GOval (GDocument* parent, const QDomElement &element, bool cFlag = false);
   GOval (const GOval& obj);
   ~GOval () {}
 
@@ -51,7 +54,7 @@ public:
   virtual bool isValid ();
 
   virtual GObject* copy ();
-  virtual GObject* clone (const QDomElement &element);
+  //virtual GObject* create (GDocument *doc, const QDomElement &element);
 
   virtual QDomElement writeToXml(QDomDocument &document);
 

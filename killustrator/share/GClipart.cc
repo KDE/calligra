@@ -24,15 +24,20 @@
 #include <GClipart.h>
 #include <qwmf.h>
 #include <qdom.h>
+#include "GDocument.h"
 
 #include <klocale.h>
 
-GClipart::GClipart () {
+GClipart::GClipart (GDocument *doc)
+:GObject(doc)
+{
+
     pic = 0L;
 }
 
-GClipart::GClipart (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
-
+GClipart::GClipart (GDocument *doc, const QDomElement &element)
+: GObject (doc, element.namedItem("gobject").toElement())
+{
     url=element.attribute("src");
     QWinMetaFile wmf;
     if (url.isLocalFile () && wmf.load (url.path ())) {
@@ -48,7 +53,10 @@ GClipart::GClipart (const QDomElement &element) : GObject (element.namedItem("go
     calcBoundingBox ();
 }
 
-GClipart::GClipart (QWinMetaFile& wmf, const QString &name) : url (name) {
+GClipart::GClipart (GDocument *doc, QWinMetaFile& wmf, const QString &name)
+:GObject(doc)
+,url (name)
+{
   QRect r = wmf.bbox ();
 
   width = (r.right () - r.left ()) * 72.0 / wmf.dpi ();
@@ -58,7 +66,9 @@ GClipart::GClipart (QWinMetaFile& wmf, const QString &name) : url (name) {
   calcBoundingBox ();
 }
 
-GClipart::GClipart (const GClipart& obj) : GObject (obj) {
+GClipart::GClipart (const GClipart& obj)
+:GObject (obj)
+{
   url = obj.url;
   width = obj.width;
   height = obj.height;
@@ -106,9 +116,10 @@ GObject* GClipart::copy () {
   return new GClipart (*this);
 }
 
-GObject* GClipart::clone (const QDomElement &element) {
-  return new GClipart (element);
-}
+/*GObject* GClipart::create (GDocument *doc, const QDomElement &element)
+{
+  return new GClipart (doc, element);
+}*/
 
 QDomElement GClipart::writeToXml (QDomDocument &document) {
 

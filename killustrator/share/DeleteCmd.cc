@@ -66,4 +66,3 @@ void DeleteCmd::unexecute () {
   document->setAutoUpdate (true);
 }
 
-#include <DeleteCmd.moc>

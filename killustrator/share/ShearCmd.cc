@@ -47,4 +47,3 @@ void ShearCmd::execute () {
   }
 }
 
-#include <ShearCmd.moc>

@@ -27,11 +27,14 @@
 
 #include <GObject.h>
 
-class GGroup : public GObject {
-  Q_OBJECT
+class GGroup : public GObject
+{
+   Q_OBJECT
+   private:
+      GGroup():GObject(0) {cout<<"GGroup ctor"<<endl; exit(1);};
 public:
-  GGroup ();
-  GGroup (const QDomElement &element);
+  GGroup (GDocument* parent);
+  GGroup (GDocument* parent, const QDomElement &element);
   GGroup (const GGroup& obj);
   ~GGroup ();
 
@@ -44,7 +47,7 @@ public:
   virtual QString typeName () const;
 
   virtual GObject* copy ();
-  virtual GObject* clone (const QDomElement &element);
+  //virtual GObject* create (GDocument *doc, const QDomElement &element);
 
   virtual QDomElement writeToXml(QDomDocument &document);
 
@@ -52,8 +55,8 @@ public:
 
   void calcBoundingBox ();
 
-protected slots:
-  void propagateProperties (GObject::Property prop, int mask);
+protected:
+  virtual void updateProperties (GObject::Property prop, int mask);
 
 private:
   QList<GObject> members;

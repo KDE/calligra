@@ -30,8 +30,8 @@
 
 class GDocument;
 
-class Command : public QObject {
-  Q_OBJECT
+class Command
+{
 protected:
   Command (const QString& n) { name = n; }
 
@@ -51,8 +51,8 @@ private:
 
 };
 
-class ObjectManipCmd : public Command {
-  Q_OBJECT
+class ObjectManipCmd : public Command
+{
 protected:
   ObjectManipCmd (GDocument* doc, const QString& name);
   ObjectManipCmd (GObject* obj, const QString& name);

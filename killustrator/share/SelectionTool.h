@@ -33,7 +33,6 @@ class GDocument;
 class Canvas;
 
 class SelectionTool : public Tool {
-  Q_OBJECT
 public:
   SelectionTool (CommandHistory* history);
   ~SelectionTool() { delete cursor; }
@@ -59,8 +58,8 @@ public:
 
   void setPickMode () { state = S_Pick; }
 
-signals:
-  void partSelected (GObject *);
+//signals:
+//  void partSelected (GObject *);
 
 private:
   void processKeyPressEvent (QKeyEvent* e, GDocument* doc, Canvas* canvas);

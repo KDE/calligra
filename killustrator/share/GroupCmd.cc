@@ -57,7 +57,7 @@ GroupCmd::~GroupCmd () {
 
 void GroupCmd::execute () {
   if (!objects.isEmpty ()) {
-    group = new GGroup ();
+    group = new GGroup (document);
     group->ref();
 
     document->setAutoUpdate (false);
@@ -99,4 +99,3 @@ void GroupCmd::unexecute () {
   }
 }
 
-#include <GroupCmd.moc>

@@ -52,13 +52,17 @@
 #include <qdict.h>
 #include <qdom.h>
 
+#include <iostream.h>
+
 #define LAYER_VISIBLE   1
 #define LAYER_EDITABLE  2
 #define LAYER_PRINTABLE 4
 
-GDocument::GDocument (KIllustratorDocument *_doc) {
-  doc = _doc;
-  initialize ();
+GDocument::GDocument (KIllustratorDocument *_doc)
+:doc(_doc)
+,selHandle(this)
+{
+   initialize ();
 }
 
 GDocument::~GDocument () {
@@ -113,6 +117,11 @@ void GDocument::initialize () {
   autoUpdate = true;
   emit changed ();
 }
+
+void GDocument::emitHandleChanged()
+{
+   emit handleChanged();
+};
 
 void GDocument::setModified (bool flag) {
   modifyFlag = flag;
@@ -551,6 +560,7 @@ bool GDocument::insertFromXml (const QDomDocument &document, QList<GObject>& new
 
 bool GDocument::parseBody (const QDomElement &element, QList<GObject>& /*newObjs*/, bool /*markNew*/) {
 
+   cout<<"*********** parseBody()"<<endl;
     GObject* obj = 0L;
     QDict<GObject> refDict;
 
@@ -572,18 +582,21 @@ bool GDocument::parseBody (const QDomElement &element, QList<GObject>& /*newObjs
             while(!cn.isNull()) {
                 QDomElement child=cn.toElement();
                 obj=KIllustrator::objectFactory(child, document());
-                if(!obj) {
-                    GObject *proto = GObject::lookupPrototype (child.tagName());
-                    if (proto != 0L) {
-                        obj = proto->clone (child);
-                    }
-                    else
-                        kdDebug(38000) << "invalid object type: " << child.tagName() << endl;
-                }
+                if(!obj)
+//                {
+//                   GObject *proto = GObject::lookupPrototype (child.tagName());
+//                   if (proto != 0L)
+//                   {
+//                      cout<<"********** calling lookupPrototype"<<endl;
+//                      obj = proto->create (this, child);
+//                   }
+//                   else
+                      kdDebug(38000) << "invalid object type: " << child.tagName() << endl;
+//                }
                 if (child.tagName() == "group")
-                    ((GGroup*)obj)->setLayer (active_layer);
+                   ((GGroup*)obj)->setLayer (active_layer);
                 if(obj->hasId())
-                    refDict.insert(obj->getId(), obj);
+                   refDict.insert(obj->getId(), obj);
                 insertObject(obj);
                 cn=cn.nextSibling();
             }

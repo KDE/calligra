@@ -83,4 +83,3 @@ void CopyCmd::unexecute () {
   QApplication::clipboard ()->clear ();
 }
 
-#include <CopyCmd.moc>

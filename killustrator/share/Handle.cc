@@ -25,14 +25,14 @@
 #include <Handle.h>
 #include <Painter.h>
 #include <qpainter.h>
+#include <qnamespace.h>
+#include "GDocument.h"
 
-Handle::Handle () {
-  mode = HMode_Default;
-  showIt = true;
-}
-
-Handle::~Handle () {
-}
+Handle::Handle (GDocument* parent)
+:m_parentDoc(parent)
+,mode(HMode_Default)
+,showIt(true)
+{}
 
 void Handle::show (bool flag) {
   showIt = flag;
@@ -59,7 +59,7 @@ void Handle::setBox (const Rect& r) {
 
 void Handle::setRotCenter (const Coord& p) {
   rcenter = p;
-  emit handleChanged ();
+  m_parentDoc->emitHandleChanged();
 }
 
 void Handle::draw (QPainter& p) {
@@ -68,15 +68,15 @@ void Handle::draw (QPainter& p) {
 
   p.save ();
   if (mode == HMode_Default) {
-    QBrush brush (black);
+     QBrush brush (Qt::black);
     p.setBrush (brush);
     for (int i = 0; i < 8; i++)
       p.fillRect ((int) pos[i].x () - 2, (int) pos[i].y () - 2, 4, 4, brush);
   }
   else {
-    QBrush brush (black, SolidPattern);
+     QBrush brush (Qt::black, Qt::SolidPattern);
 
-    p.setPen (black);
+     p.setPen (Qt::black);
     p.drawPoint (qRound(rcenter.x ()), qRound(rcenter.y ()));
     p.drawEllipse (qRound (rcenter.x ()) - 5, qRound (rcenter.y ()) - 5,
                    10, 10);
@@ -134,10 +134,14 @@ int Handle::contains (const Coord& p) {
     Handle_Right|Handle_Bottom, Handle_Bottom,
     Handle_Bottom|Handle_Left, Handle_Left
     */
-    HPos_Left | HPos_Top, HPos_Top,
-    HPos_Top | HPos_Right, HPos_Right,
-    HPos_Right | HPos_Bottom, HPos_Bottom,
-    HPos_Bottom | HPos_Left, HPos_Left
+     HPos_Left | HPos_Top,
+     HPos_Top,
+     HPos_Top | HPos_Right,
+     HPos_Right,
+     HPos_Right | HPos_Bottom,
+     HPos_Bottom,
+     HPos_Bottom | HPos_Left,
+     HPos_Left
   };
 
   // Check if one of the outer handles is selected
@@ -153,11 +157,13 @@ int Handle::contains (const Coord& p) {
   return 0;
 }
 
-void Handle::setMode (Handle::Mode m, bool propagate) {
-  if (mode != m || propagate) {
-    mode = m;
-    emit handleChanged ();
-  }
+void Handle::setMode (Handle::Mode m, bool propagate)
+{
+   if (mode != m || propagate)
+   {
+      mode = m;
+      m_parentDoc->emitHandleChanged();
+   }
 }
 
 void Handle::drawArrow (QPainter& p, int x, int y, ArrowDirection d) {
@@ -185,4 +191,3 @@ void Handle::drawArrow (QPainter& p, int x, int y, ArrowDirection d) {
   p.drawPolygon (pt);
 }
 
-#include <Handle.moc>

@@ -31,7 +31,6 @@ class GDocument;
 class GObject;
 
 class InsertObjCmd : public Command {
-  Q_OBJECT
 public:
   InsertObjCmd (GDocument* doc, QList<GObject>& objs);
 

@@ -30,16 +30,20 @@
 
 #include <float.h>
 
-#include <BezierTool.h>
-#include <GDocument.h>
-#include <Canvas.h>
+#include "BezierTool.h"
+
+#include "GDocument.h"
+#include "Canvas.h"
 #include <Coord.h>
-#include <GBezier.h>
-#include <CreateBezierCmd.h>
-#include <AddLineSegmentCmd.h>
-#include <CommandHistory.h>
+#include "GBezier.h"
+#include "CreateBezierCmd.h"
+#include "AddLineSegmentCmd.h"
+#include "CommandHistory.h"
+#include "ToolController.h"
+
 #include <qkeycode.h>
 #include <klocale.h>
+
 
 BezierTool::BezierTool (CommandHistory* history)
    : Tool (history)
@@ -120,12 +124,12 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
             if (curve)
                 curve->setWorkingSegment (-1);
             curve = 0L; last = 0;
-            emit operationDone ();
+            m_toolController->emitOperationDone (m_id);
         }
     }
     else if (e->type () == QEvent::MouseButtonPress) {
         QMouseEvent *me = (QMouseEvent *) e;
-        if (me->button () != LeftButton)
+        if (me->button () != Qt::LeftButton)
             return;
 
         float xpos = me->x (), ypos = me->y ();
@@ -137,7 +141,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
             GBezier* obj = 0L;
 
-            if (me->state () & ShiftButton) {
+            if (me->state () & Qt::ShiftButton) {
                 // magnetic mode
                 GObject *o = 0L;
                 int idx = -1;
@@ -175,7 +179,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
             }
 
             if (curve == 0L) {
-                curve = new GBezier ();
+                curve = new GBezier (doc);
                 // base point #1
                 curve->addPoint (0, Coord (FLT_MAX, FLT_MAX));
                 // first end point
@@ -245,7 +249,8 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
         canvas->snapPositionToGrid (xpos, ypos);
 
         curve->setPoint (last, Coord (xpos, ypos));
-        if (me->button () == RightButton) {
+        if ((me->button () == Qt::RightButton) || (me->button () == Qt::MidButton))
+            {
             if ((addAtEnd && last >= 5 && (last % 3 == 2)) ||
                 (!addAtEnd && last == 0 && (curve->numOfPoints () % 3 == 0))) {
                 doc->setLastObject (curve);
@@ -288,8 +293,10 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     return;
 }
 
-void BezierTool::activate (GDocument* , Canvas*) {
-    emit modeSelected (i18n ("Create Bezier Curve"));
+void BezierTool::activate (GDocument* , Canvas* canvas)
+{
+   canvas->setCursor(Qt::crossCursor);
+   m_toolController->emitModeSelected (m_id,i18n ("Create Bezier Curve"));
 }
 
 void BezierTool::deactivate (GDocument*, Canvas*) {
@@ -299,4 +306,3 @@ void BezierTool::deactivate (GDocument*, Canvas*) {
     last = 0;
 }
 
-#include <BezierTool.moc>

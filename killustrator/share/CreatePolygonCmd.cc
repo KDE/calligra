@@ -59,7 +59,7 @@ CreatePolygonCmd::~CreatePolygonCmd () {
 void CreatePolygonCmd::execute () {
   if (object == 0L) {
     // create polygon
-    object = new GPolygon (GPolygon::PK_Polygon);
+    object = new GPolygon (document, GPolygon::PK_Polygon);
     object->setSymmetricPolygon (spos, epos, nCorners, isConcave, sharpness);
     //    object->ref ();
   }
@@ -70,4 +70,3 @@ void CreatePolygonCmd::unexecute () {
   document->deleteObject (object);
 }
 
-#include <CreatePolygonCmd.moc>

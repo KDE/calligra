@@ -56,4 +56,3 @@ void RemovePointCmd::unexecute () {
   }
 }
 
-#include <RemovePointCmd.moc>

@@ -26,8 +26,8 @@
 
 #include <klocale.h>
 
-#include <GDocument.h>
-#include <GOval.h>
+#include "GDocument.h"
+#include "GOval.h"
 
 CreateOvalCmd::CreateOvalCmd (GDocument* doc, GOval* oval) :
   Command(i18n("Create Oval"))
@@ -56,7 +56,7 @@ CreateOvalCmd::~CreateOvalCmd () {
 void CreateOvalCmd::execute () {
   if (object == 0L) {
     // create oval
-    object = new GOval (cflag);
+    object = new GOval (document, cflag);
     object->setStartPoint (spos);
     object->setEndPoint (epos);
     //    object->ref ();
@@ -68,4 +68,3 @@ void CreateOvalCmd::unexecute () {
   document->deleteObject (object);
 }
 
-#include <CreateOvalCmd.moc>

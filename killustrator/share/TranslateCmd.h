@@ -32,7 +32,6 @@
  * by the values of <tt>x</tt> and <tt>y</tt>.
  */
 class TranslateCmd : public ObjectManipCmd {
-  Q_OBJECT
 public:
   TranslateCmd (GDocument* doc, float x, float y);
 

@@ -26,35 +26,45 @@
 #include <qpainter.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <iostream.h>
+#include "GDocument.h"
 
-GGroup::GGroup () {
-  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
-           SLOT(propagateProperties (GObject::Property, int)));
+GGroup::GGroup (GDocument *doc)
+:GObject(doc)
+{
+   //connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,SLOT(propagateProperties (GObject::Property, int)));
 }
 
-GGroup::GGroup (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
+GGroup::GGroup (GDocument *doc, const QDomElement &element)
+:GObject(doc, element.namedItem("gobject").toElement())
+{
 
-    connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
-             SLOT(propagateProperties (GObject::Property, int)));
+   cout<<"********** GGroup::GGroup()"<<endl;
+   //connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,SLOT(propagateProperties (GObject::Property, int)));
+
     QDomElement child=element.firstChild().toElement();
     for( ; !child.isNull(); child = child.nextSibling().toElement() ) {
         if(child.tagName()=="gobject")
             continue;
-        GObject *obj=KIllustrator::objectFactory(child);
-        if(!obj) {
-            GObject *proto = GObject::lookupPrototype (child.tagName());
-            if (proto != 0L) {
-                obj = proto->clone (child);
-            }
-            else
-                kdDebug(38000) << "invalid object type: " << child.tagName() << endl;
-        }
+        GObject *obj=KIllustrator::objectFactory(child,doc->document());
+        if(!obj)
+//        {
+//           GObject *proto = GObject::lookupPrototype (child.tagName());
+//           if (proto != 0L)
+//           {
+//              cout<<"********** GGroup::GGroup() calling lookup"<<endl;
+//              obj = proto->create (m_gdoc, child);
+//           }
+//           else
+              kdDebug(38000) << "invalid object type: " << child.tagName() << endl;
+//        }
         if(obj)  // safer
             addObject(obj);
     }
 }
 
-GGroup::GGroup (const GGroup& obj) : GObject (obj) {
+GGroup::GGroup (const GGroup& obj) : GObject (obj)
+{
     QList<GObject> tmp=obj.getMembers();
     for (GObject *o=tmp.first(); o!=0L; o=tmp.next())
         members.append(o->copy());
@@ -98,9 +108,9 @@ GObject* GGroup::copy () {
   return new GGroup (*this);
 }
 
-GObject* GGroup::clone (const QDomElement &element) {
+/*GObject* GGroup::clone (const QDomElement &element) {
   return new GGroup (element);
-}
+}*/
 
 void GGroup::calcBoundingBox () {
   if (members.isEmpty ())
@@ -133,7 +143,8 @@ void GGroup::calcBoundingBox () {
   updateBoundingBox (mr);
 }
 
-void GGroup::propagateProperties (GObject::Property prop, int mask) {
+void GGroup::updateProperties (GObject::Property prop, int mask)
+{
     GObject *o=members.first();
     for (; o!=0L; o=members.next()) {
       if (prop == GObject::Prop_Outline) {
@@ -159,4 +170,4 @@ QDomElement GGroup::writeToXml (QDomDocument &document) {
     return element;
 }
 
-#include <GGroup.moc>
+#include "GGroup.moc"

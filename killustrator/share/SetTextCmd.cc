@@ -65,4 +65,3 @@ void SetTextCmd::unexecute () {
   object->restoreState (state);
 }
 
-#include <SetTextCmd.moc>

@@ -111,34 +111,36 @@ void GridDialog::setSnapToGridOn (bool flag) {
   gbutton->setChecked (flag);
 }
 
-void GridDialog::setDistances (float h, float v) {
-  hspinbox->setValue (h);
-  vspinbox->setValue (v);
+void GridDialog::setDistances (float h, float v)
+{
+   hspinbox->setValue (h);
+   vspinbox->setValue (v);
 }
 
 void GridDialog::setGridColor(QColor color)
- {
-  cbutton->setColor(color);
- }
+{
+   cbutton->setColor(color);
+}
 
 void GridDialog::setupGrid (Canvas* canvas)
- {
-  GridDialog dialog (0L, "Grid");
-  dialog.setShowGridOn (canvas->showGrid ());
-  dialog.setSnapToGridOn (canvas->snapToGrid ());
-  dialog.setDistances ((float) canvas->getHorizGridDistance (),
-                       (float) canvas->getVertGridDistance ());
-  dialog.setGridColor (canvas->gridColor());
+{
+   GridDialog dialog (0L, "Grid");
+   dialog.setShowGridOn (canvas->showGrid ());
+   dialog.setSnapToGridOn (canvas->snapToGrid ());
+   dialog.setDistances ((float) canvas->getHorizGridDistance (),
+                        (float) canvas->getVertGridDistance ());
+   dialog.setGridColor (canvas->gridColor());
 
-  if (dialog.exec() == Accepted)
+   if (dialog.exec() == Accepted)
    {
-    canvas->setGridDistance (dialog.horizontalDistance (),
-                             dialog.verticalDistance ());
-    canvas->showGrid (dialog.showGrid ());
-    canvas->snapToGrid (dialog.snapToGrid ());
-    canvas->setGridColor (dialog.gridColor());
-    canvas->repaint ();
+      canvas->setGridDistance (dialog.horizontalDistance (),
+                               dialog.verticalDistance ());
+      canvas->showGrid (dialog.showGrid ());
+      canvas->snapToGrid (dialog.snapToGrid ());
+      canvas->setGridColor (dialog.gridColor());
+      canvas->repaint ();
+      canvas->saveGridProperties();
    }
- }
+}
 
 #include <GridDialog.moc>

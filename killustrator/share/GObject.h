@@ -36,6 +36,9 @@
 #include <GradientShape.h>
 
 #include <math.h>
+#include <stdlib.h>
+#include <iostream.h>
+#include <typeinfo>
 
 #ifndef M_PI // not ANSI C++, so it maybe...
 #define M_PI            3.14159265358979323846  /* pi */
@@ -49,6 +52,7 @@ class GCurve;
 class QDomDocument;
 class QDomElement;
 class KIllustratorDocument;
+class GDocument;
 
 /**
  * The base class for all graphical objects.
@@ -58,16 +62,23 @@ class KIllustratorDocument;
  * @author  Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
  * @version $Revision$
  */
-class GObject : public QObject {
+class GObject : public QObject
+{
     Q_OBJECT
+private:
+   GObject () {cout<<"def ctor()"<<endl; exit(1);};
+   GObject (const QDomElement &element) {cout<<"QDom ctor()"<<endl; exit(1);};
 protected:
-    GObject ();
-    GObject (const QDomElement &element);
-    GObject (const GObject& obj);
+   GObject (GDocument* gdoc);
+   GObject (GDocument* gdoc, const QDomElement &element);
+   GObject (const GObject& obj);
 
+
+   protected:
     virtual void initState (GOState* state);
 
     void updateRegion (bool recalcBBox = true);
+    GDocument *m_gdoc;
 
 public:
     enum Property { Prop_Outline, Prop_Fill };
@@ -334,7 +345,7 @@ public:
      * @return A copy of this object.
      */
     virtual GObject* copy () = 0;
-    virtual GObject* clone (const QDomElement &element) = 0;
+    //virtual GObject* create (GDocument* ,const QDomElement &element) = 0;
 
     virtual QDomElement writeToXml (QDomDocument &document);
 
@@ -364,16 +375,17 @@ public:
     QString getRefId () { return refid; }
     bool hasRefId () const { return !refid.isEmpty(); }
 
-    static void registerPrototype (const QString &className, GObject *proto);
-    static GObject* lookupPrototype (const QString &className);
+//    static void registerPrototype (const QString &className, GObject *proto);
+//    static GObject* lookupPrototype (const QString &className);
 
 signals:
     void deleted ();
     void changed ();
     void changed (const Rect& r);
-    void propertiesChanged (GObject::Property p, int mask);
+    //void propertiesChanged (GObject::Property p, int mask);
 
 protected:
+   virtual void updateProperties (GObject::Property, int){};
     void initBrush (QBrush& b);
     void initPen (QPen& p);
 
@@ -402,7 +414,7 @@ protected:
     static OutlineInfo defaultOutlineInfo;
     static FillInfo defaultFillInfo;
 
-    static QDict<GObject> *prototypes;
+    //static QDict<GObject> *prototypes;
 };
 
 class GOState {

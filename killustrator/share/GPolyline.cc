@@ -33,10 +33,12 @@
 #include <Arrow.h>
 #include <Painter.h>
 #include <stdlib.h>
+#include "GDocument.h"
 
-GPolyline::GPolyline () {
-  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
-           SLOT(updateProperties (GObject::Property, int)));
+GPolyline::GPolyline (GDocument *doc)
+   :GObject(doc)
+{
+//  connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,SLOT(updateProperties (GObject::Property, int)));
   points.setAutoDelete (true);
   sArrow = (outlineInfo.startArrowId > 0 ?
             Arrow::getArrow (outlineInfo.startArrowId) : 0L);
@@ -47,10 +49,11 @@ GPolyline::GPolyline () {
   edx = edy = 0;
 }
 
-GPolyline::GPolyline (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
+GPolyline::GPolyline (GDocument *doc, const QDomElement &element)
+:GObject (doc,element.namedItem("gobject").toElement())
+{
 
-    connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
-             SLOT(updateProperties (GObject::Property, int)));
+//    connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,SLOT(updateProperties (GObject::Property, int)));
     points.setAutoDelete (true);
     sArrow = eArrow = 0L;
     sAngle = eAngle = 0;
@@ -77,9 +80,10 @@ GPolyline::GPolyline (const QDomElement &element) : GObject (element.namedItem("
     calcBoundingBox ();
 }
 
-GPolyline::GPolyline (const GPolyline& obj) : GObject (obj) {
-    connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
-             SLOT(updateProperties (GObject::Property, int)));
+GPolyline::GPolyline (const GPolyline& obj)
+: GObject (obj)
+{
+    //connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,SLOT(updateProperties (GObject::Property, int)));
     points.setAutoDelete (true);
     QListIterator<Coord> it (obj.points);
     for (; it.current (); ++it)
@@ -195,6 +199,7 @@ void GPolyline::removePoint (int idx, bool update)
    {
       GPolygon *poly = (GPolygon *) this;
       poly->setKind (GPolygon::PK_Polygon);
+      kdDebug()<<"setting kind to polygon"<<endl;
    };
 
    if (points.count () > 2)
@@ -275,9 +280,10 @@ GObject* GPolyline::copy () {
   return new GPolyline (*this);
 }
 
-GObject* GPolyline::clone (const QDomElement &element) {
-  return new GPolyline (element);
-}
+/*GObject* GPolyline::create (GDocument *doc, const QDomElement &element)
+{
+  return new GPolyline (doc, element);
+}*/
 
 void GPolyline::calcBoundingBox () {
   Rect r;
@@ -345,7 +351,8 @@ void GPolyline::calcBoundingBox () {
   updateBoundingBox (r);
 }
 
-void GPolyline::updateProperties (GObject::Property prop, int /*mask*/) {
+void GPolyline::updateProperties (GObject::Property prop, int /*mask*/)
+{
     if (prop == GObject::Prop_Fill)
         return;
   if ((sArrow == 0L && outlineInfo.startArrowId > 0) ||
@@ -515,29 +522,36 @@ void GPolyline::removeAllPoints () {
   points.clear ();
 }
 
-bool GPolyline::splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2) {
-  bool result = false;
+bool GPolyline::splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2)
+{
+   bool result = false;
 
-  if (idx > 0 && idx < points.count ()) {
-    GPolyline* other1 = (GPolyline *) this->copy ();
-    unsigned int i, num = points.count ();
-    for (i = idx + 1; i < num; i++)
-      other1->points.remove (idx + 1);
-    other1->calcBoundingBox ();
+   if (idx > 0 && idx < points.count ())
+   {
+      GPolyline* other1 = (GPolyline *) this->copy ();
+      unsigned int i, num = points.count ();
+      for (i = idx + 1; i < num; i++)
+      {
+         other1->points.remove (idx + 1);
+      };
+      other1->calcBoundingBox ();
 
-    GPolyline* other2 = (GPolyline *) this->copy ();
-    for (i = 0; i < idx; i++)
-      other2->points.remove ((unsigned int) 0);
-    other2->calcBoundingBox ();
-    result = true;
-    obj1 = other1;
-    obj2 = other2;
-  }
-  return result;
+      GPolyline* other2 = (GPolyline *) this->copy ();
+      for (i = 0; i < idx; i++)
+      {
+         other2->points.remove ((unsigned int) 0);
+      };
+      other2->calcBoundingBox ();
+      result = true;
+      obj1 = other1;
+      obj2 = other2;
+   }
+   return result;
 }
 
-GCurve* GPolyline::convertToCurve () const {
-  GCurve* curve = new GCurve ();
+GCurve* GPolyline::convertToCurve () const
+{
+  GCurve* curve = new GCurve (m_gdoc);
   curve->setOutlineInfo (outlineInfo);
   QListIterator<Coord> it (points);
   Coord p0 = it.current ()->transform (tmpMatrix);
@@ -550,4 +564,4 @@ GCurve* GPolyline::convertToCurve () const {
   return curve;
 }
 
-#include <GPolyline.moc>
+#include "GPolyline.moc"

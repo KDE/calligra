@@ -29,12 +29,18 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include "GDocument.h"
 
-GPixmap::GPixmap () {
+GPixmap::GPixmap (GDocument *doc )
+:GObject(doc)
+{
   pix = 0L;
 }
 
-GPixmap::GPixmap (const QString &filename) : url (filename) {
+GPixmap::GPixmap (GDocument *doc, const QString &filename)
+:GObject(doc)
+,url (filename)
+{
   if (url.isLocalFile ()) {
     pix = new QPixmap (url.path ());
     if (pix->isNull ()) {
@@ -51,7 +57,9 @@ GPixmap::GPixmap (const QString &filename) : url (filename) {
   calcBoundingBox ();
 }
 
-GPixmap::GPixmap (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
+GPixmap::GPixmap (GDocument *doc, const QDomElement &element)
+:GObject (doc, element.namedItem("gobject").toElement())
+{
 
     url=element.attribute("src");
     if (url.isLocalFile ()) {
@@ -69,7 +77,9 @@ GPixmap::GPixmap (const QDomElement &element) : GObject (element.namedItem("gobj
     calcBoundingBox ();
 }
 
-GPixmap::GPixmap (const GPixmap& obj) : GObject (obj) {
+GPixmap::GPixmap (const GPixmap& obj)
+: GObject (obj)
+{
   url = obj.url;
   if (obj.pix)
     pix = new QPixmap (*obj.pix);
@@ -118,9 +128,10 @@ GObject* GPixmap::copy () {
   return new GPixmap (*this);
 }
 
-GObject* GPixmap::clone (const QDomElement &element) {
-  return new GPixmap (element);
-}
+/*GObject* GPixmap::create (GDocument *doc, const QDomElement &element)
+{
+  return new GPixmap (doc, element);
+}*/
 
 QDomElement GPixmap::writeToXml (QDomDocument &document) {
 

@@ -73,4 +73,3 @@ void ToCurveCmd::unexecute () {
   }
 }
 
-#include <ToCurveCmd.moc>

@@ -33,23 +33,18 @@ class GDocument;
 class Coord;
 
 class ZoomTool : public Tool {
-  Q_OBJECT
 public:
   ZoomTool (CommandHistory *history);
 
   virtual void processEvent (QEvent* e, GDocument* _doc, Canvas* _canvas);
   virtual void activate (GDocument* _doc, Canvas* _canvas);
   
-  void zoomIn (int x, int y);
   void zoomIn (Canvas* cnv);
   void zoomOut (Canvas* cnv);
-  void zoomRegion(int x1,int y1, int x2, int y2);
+  void zoomInRegion(int x1,int y1, int x2, int y2);
+  void zoomOutRegion(int x1,int y1, int x2, int y2);
 
-  const QValueList<float>& getZoomFactors () const { return zoomFactors; }
-  int insertZoomFactor (float z);
-  
 protected:
-  void processButtonPressEvent (QMouseEvent* e);
   void processMouseMoveEvent (QMouseEvent* e);
   void processButtonReleaseEvent (QMouseEvent* e);
   
@@ -60,7 +55,6 @@ private:
   enum State { S_Init, S_Rubberband};
   State state;
   Coord selPoint[2];
-  QValueList<float> zoomFactors;
 };
 
 #endif

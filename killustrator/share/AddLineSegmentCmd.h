@@ -31,7 +31,6 @@ class GDocument;
 class GPolyline;
 
 class AddLineSegmentCmd : public Command {
-  Q_OBJECT
 public:
   AddLineSegmentCmd (GDocument* doc, GPolyline* obj, int idx,
                      QList<Coord>& pnts);

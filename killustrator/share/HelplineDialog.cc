@@ -118,9 +118,11 @@ void HelplineDialog::createVertLineWidget (QWidget* parent) {
     right->addStretch();
 }
 
-void HelplineDialog::applyPressed () {
+void HelplineDialog::applyPressed ()
+{
     canvas->setHorizHelplines (horizLines);
     canvas->setVertHelplines (vertLines);
+    canvas->saveGridProperties();
 }
 
 void HelplineDialog::initLists () {
@@ -235,7 +237,8 @@ void HelplineDialog::vertLineSelected (int idx) {
         vertValue->setValue (*vertLines.at(idx));
 }
 
-void HelplineDialog::setup (Canvas *c) {
+void HelplineDialog::setup (Canvas *c)
+{
   HelplineDialog *dialog = new HelplineDialog (c, 0L);
   if(dialog->exec()==Accepted)
       dialog->applyPressed();

@@ -96,4 +96,3 @@ void UngroupCmd::unexecute () {
   document->setAutoUpdate (true);
 }
 
-#include <UngroupCmd.moc>

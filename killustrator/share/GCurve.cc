@@ -33,6 +33,7 @@
 #include <GCurve.h>
 #include <GBezier.h>
 #include <Painter.h>
+#include "GDocument.h"
 
 static Coord computePoint (int idx, const GSegment& s1, const GSegment& s2) {
   // s1 == Line, s2 == Bezier
@@ -99,10 +100,14 @@ static GSegment blendSegments (const GSegment& s1, const GSegment& s2,
   return seg;
 }
 
-GSegment::GSegment (Kind sk) : skind (sk), bpoints (4) {
+GSegment::GSegment (Kind sk)
+:skind (sk)
+,bpoints (4)
+{
 }
 
-GSegment::GSegment(const QDomElement &element) {
+GSegment::GSegment(const QDomElement &element)
+{
 
     skind = (GSegment::Kind)element.attribute("kind").toInt();
     int i=0;
@@ -267,11 +272,15 @@ float GSegment::length () const {
   return len;
 }
 
-GCurve::GCurve () : GObject () {
+GCurve::GCurve (GDocument* doc)
+: GObject (doc)
+{
   closed = false;
 }
 
-GCurve::GCurve (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
+GCurve::GCurve (GDocument* doc, const QDomElement &element)
+:GObject (doc, element.namedItem("gobject").toElement())
+{
 
     closed=(element.attribute("closed").toInt()==1);
     QDomElement segment = element.firstChild().toElement();
@@ -283,7 +292,9 @@ GCurve::GCurve (const QDomElement &element) : GObject (element.namedItem("gobjec
         updatePath();
 }
 
-GCurve::GCurve (const GCurve& obj) : GObject (obj) {
+GCurve::GCurve (const GCurve& obj)
+:GObject(obj)
+{
   segments = obj.segments;
 }
 
@@ -302,7 +313,7 @@ void GCurve::draw (QPainter& p, bool withBasePoints, bool outline) {
       p.setBrush (brush);
 
       if (gradientFill ()) {
-        if (! gShape.valid ())
+        //if (! gShape.valid ())
           updateGradientShape (p);
         gShape.draw (p);
       }
@@ -400,9 +411,10 @@ GObject* GCurve::copy () {
   return new GCurve (*this);
 }
 
-GObject* GCurve::clone (const QDomElement &element) {
-  return new GCurve(element);
-}
+/*GObject* GCurve::create (GDocument *doc, const QDomElement &element)
+{
+  return new GCurve(doc, element);
+}*/
 
 QDomElement GCurve::writeToXml (QDomDocument &document) {
 

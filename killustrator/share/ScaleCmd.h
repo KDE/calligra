@@ -33,7 +33,6 @@
  * and the scaling factors <tt>x</tt> and <tt>y</tt>.
  */
 class ScaleCmd : public ObjectManipCmd {
-  Q_OBJECT
 public:
   ScaleCmd (GDocument* doc, int mask, float x, float y);
   ScaleCmd (GDocument* doc, int mask, float x, float y, Rect r);

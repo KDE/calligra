@@ -35,6 +35,7 @@
 #include <CreatePolygonCmd.h>
 #include <AddLineSegmentCmd.h>
 #include <CommandHistory.h>
+#include "ToolController.h"
 
 FreeHandTool::FreeHandTool (CommandHistory* history)
    :Tool (history)
@@ -50,7 +51,7 @@ FreeHandTool::FreeHandTool (CommandHistory* history)
 void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
   if (e->type () == QEvent::MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
-    if (me->button () != LeftButton)
+    if (me->button () != Qt::LeftButton)
       return;
 
     buttonIsDown = true;
@@ -91,7 +92,7 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       }
       if (line == 0L) {
         // no polyline found, create a new one
-        line = new GPolyline ();
+        line = new GPolyline (doc);
         line->addPoint (0, Coord (xpos, ypos));
         last = 1;
         newObj = true;
@@ -140,7 +141,7 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     if (last > 0 && line->numOfPoints () >= 3 &&
           line->getNeighbourPoint (Coord (xpos, ypos)) == 0) {
         // the polyline is closed, so convert it into a polygon
-        GPolygon* obj = new GPolygon (line->getPoints ());
+        GPolygon* obj = new GPolygon (doc, line->getPoints ());
         doc->deleteObject (line);
         doc->insertObject (obj);
         doc->setLastObject (obj);
@@ -169,14 +170,16 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
   else if (e->type () == QEvent::KeyPress) {
     QKeyEvent *ke = (QKeyEvent *) e;
     if (ke->key () == Qt::Key_Escape)
-      emit operationDone ();
+      m_toolController->emitOperationDone (m_id);
   }
   return;
 }
 
-void FreeHandTool::activate (GDocument* /*doc*/, Canvas*) {
-  buttonIsDown = false;
-  emit modeSelected (i18n ("Create FreeHand Line"));
+void FreeHandTool::activate (GDocument* /*doc*/, Canvas* canvas)
+{
+   canvas->setCursor(Qt::crossCursor);
+   buttonIsDown = false;
+   m_toolController->emitModeSelected (m_id,i18n ("Create FreeHand Line"));
 }
 
 void FreeHandTool::deactivate (GDocument*, Canvas*) {
@@ -185,4 +188,3 @@ void FreeHandTool::deactivate (GDocument*, Canvas*) {
   buttonIsDown = false;
 }
 
-#include <FreeHandTool.moc>

@@ -41,4 +41,3 @@ void TranslateCmd::execute () {
     objects[i]->transform (m, true);
 }
 
-#include <TranslateCmd.moc>

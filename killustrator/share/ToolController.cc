@@ -37,16 +37,32 @@ ToolController::ToolController (MainView* view) {
 ToolController::~ToolController () {
 }
 
-/*void ToolController::registerTool (int id, Tool* tool)
+void ToolController::emitModeSelected (Tool::ToolID id, const QString &msg)
 {
-  tools.insert ((long) id, tool);
-}*/
+   emit modeSelected(id, msg);
+};
+
+void ToolController::emitOperationDone (Tool::ToolID id)
+{
+   emit operationDone(id);
+};
+
+void ToolController::emitActivated (Tool::ToolID id, bool b)
+{
+   emit activated(id,b);
+};
+
+void ToolController::emitPartSelected (Tool::ToolID id, GObject *o)
+{
+   emit partSelected(id,o);
+};
 
 void ToolController::registerTool (Tool* tool)
 {
    if (tool==0)
       return;
   tools.insert ((long) tool->id(), tool);
+  tool->m_toolController=this;
 }
 
 Tool* ToolController::getActiveTool ()

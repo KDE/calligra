@@ -77,4 +77,3 @@ void ObjectManipCmd::unexecute () {
   }
 }
 
-#include <Command.moc>

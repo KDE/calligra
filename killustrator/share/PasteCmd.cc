@@ -76,7 +76,7 @@ void PasteCmd::execute () {
     }
     else {
         // plain text
-        GText *tobj = new GText ();
+        GText *tobj = new GText (document);
         tobj->setText ( QApplication::clipboard()->text() );
         objects.append(tobj);
         document->insertObject (tobj);
@@ -88,4 +88,3 @@ void PasteCmd::unexecute () {
         document->deleteObject(o);
 }
 
-#include <PasteCmd.moc>

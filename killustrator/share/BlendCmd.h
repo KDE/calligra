@@ -33,8 +33,6 @@ class GCurve;
 
 class BlendCmd : public Command {
 
-    Q_OBJECT
-
 public:
   BlendCmd (GDocument* doc, int steps);
   ~BlendCmd ();

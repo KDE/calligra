@@ -30,11 +30,13 @@
 
 class GPixmap : public GObject {
   Q_OBJECT
+   private:
+      GPixmap():GObject(0) {cout<<"GPixmap ctor"<<endl; exit(1);};
 public:
-  GPixmap (const QString &filename);
-  GPixmap (const QDomElement &element);
+  GPixmap (GDocument* parent, const QString &filename);
+  GPixmap (GDocument* parent, const QDomElement &element);
 
-  GPixmap ();
+  GPixmap (GDocument* parent);
   GPixmap (const GPixmap& obj);
   ~GPixmap ();
 
@@ -44,7 +46,7 @@ public:
   virtual QString typeName () const;
 
   virtual GObject* copy ();
-  virtual GObject* clone (const QDomElement &element);
+  //virtual GObject* create (GDocument *doc, const QDomElement &element);
 
   virtual QDomElement writeToXml(QDomDocument &document);
 

@@ -30,18 +30,17 @@
 
 class GText;
 
-class PathTextTool : public Tool {
-  Q_OBJECT
+class PathTextTool : public Tool
+{
 public:
   PathTextTool (CommandHistory* history);
 
   virtual void processEvent (QEvent* e, GDocument* doc, Canvas* canvas);
   virtual void activate (GDocument* doc, Canvas* canvas);
-  virtual void deactivate (GDocument*, Canvas*);
 
 private:
-  QCursor cursor, oldCursor;
-  GText *textObj;
+   QCursor cursor;
+   GText *textObj;
 };
 
 #endif

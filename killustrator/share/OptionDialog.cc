@@ -122,45 +122,46 @@ void OptionDialog::createEditWidget (QWidget* parent) {
     bigStep->setValue (psm->bigStepSize ());
 }
 
-int OptionDialog::setup () {
+int OptionDialog::setup ()
+{
 
-    OptionDialog dialog (0L, "Options");
+   OptionDialog dialog (0L, "Options");
 
-    int res=dialog.exec();
-    if(res == QDialog::Accepted) {
-        int selection = dialog.unit->currentItem ();
-        PStateManager* psm = PStateManager::instance ();
-        switch (selection) {
-            case 0:
-                psm->setDefaultMeasurementUnit (UnitPoint);
+   int res=dialog.exec();
+   if(res == QDialog::Accepted)
+   {
+      int selection = dialog.unit->currentItem ();
+      PStateManager* psm = PStateManager::instance ();
+      switch (selection)
+      {
+      case 0:
+         psm->setDefaultMeasurementUnit (UnitPoint);
+         break;
+      case 1:
+         psm->setDefaultMeasurementUnit (UnitMillimeter);
+         break;
+      case 2:
+         psm->setDefaultMeasurementUnit (UnitInch);
                 break;
-            case 1:
-                psm->setDefaultMeasurementUnit (UnitMillimeter);
-                break;
-            case 2:
-                psm->setDefaultMeasurementUnit (UnitInch);
-                break;
-            case 3:
-                psm->setDefaultMeasurementUnit (UnitPica);
-                break;
-            case 4:
-                psm->setDefaultMeasurementUnit (UnitCentimeter);
-                break;
-            case 5:
-                psm->setDefaultMeasurementUnit (UnitDidot);
-                break;
-            case 6:
-                psm->setDefaultMeasurementUnit (UnitCicero);
-                break;
-            default:
-                break;
-        }
-        psm->setStepSizes (dialog.smallStep->getValue (),
-                           dialog.bigStep->getValue ());
-        psm->setDuplicateOffsets (dialog.horiz->getValue (),
-                                  dialog.vert->getValue ());
-    }
-    return res;
+      case 3:
+         psm->setDefaultMeasurementUnit (UnitPica);
+         break;
+      case 4:
+         psm->setDefaultMeasurementUnit (UnitCentimeter);
+         break;
+      case 5:
+         psm->setDefaultMeasurementUnit (UnitDidot);
+         break;
+      case 6:
+         psm->setDefaultMeasurementUnit (UnitCicero);
+         break;
+      default:
+         break;
+      }
+      psm->setStepSizes (dialog.smallStep->getValue (),dialog.bigStep->getValue ());
+      psm->setDuplicateOffsets (dialog.horiz->getValue (),dialog.vert->getValue ());
+   }
+   return res;
 }
 
 #include <OptionDialog.moc>

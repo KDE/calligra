@@ -53,4 +53,3 @@ void EditPointCmd::unexecute () {
   obj->movePoint (index, -xoff, -yoff);
 }
 
-#include <EditPointCmd.moc>

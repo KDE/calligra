@@ -26,20 +26,23 @@
 #define Tool_h_
 
 #include <GObject.h>
+#include <qnamespace.h>
 
 class GDocument;
 class Canvas;
 class CommandHistory;
 class QEvent;
+class ToolController;
 
-class Tool : public QObject
+class Tool
 {
-  Q_OBJECT
+   friend ToolController;
 protected:
   Tool (CommandHistory* chist);
 
 public:
-  ~Tool () {}
+
+  virtual ~Tool () {}
   enum ToolID {ToolDummy, ToolSelect, ToolEditPoint, ToolFreeHand, ToolLine,\
   ToolBezier, ToolRectangle, ToolPolygon, ToolEllipse, ToolText, ToolZoom, ToolPathText, ToolInsertPart};
 
@@ -49,17 +52,14 @@ public:
 
   virtual void configure () {}
 
-  //virtual bool consumesRMBEvents () { return true; }
-  long int id() {return m_id;};
-
-signals:
-  void modeSelected (const QString &msg);
-  void operationDone ();
+  ToolID id() const {return m_id;};
 
 protected:
   CommandHistory* history;
   QString msgbuf;
   ToolID m_id;
+  bool m_configRead;
+  ToolController *m_toolController;
 };
 
 #endif

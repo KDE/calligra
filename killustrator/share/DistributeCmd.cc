@@ -183,4 +183,3 @@ void DistributeCmd::execute () {
   }
 }
 
-#include <DistributeCmd.moc>

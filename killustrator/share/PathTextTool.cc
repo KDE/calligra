@@ -35,6 +35,8 @@
 #include <GText.h>
 #include <CommandHistory.h>
 #include <TextAlongPathCmd.h>
+#include "ToolController.h"
+#include <qnamespace.h>
 
 #define bigarrow_width 32
 #define bigarrow_height 32
@@ -62,50 +64,55 @@ PathTextTool::PathTextTool (CommandHistory* history) : Tool (history)
   m_id=ToolPathText;
 }
 
-void PathTextTool::activate (GDocument* doc, Canvas* canvas) {
-  textObj = 0L;
-  oldCursor = canvas->cursor ();
+void PathTextTool::activate (GDocument* doc, Canvas* canvas)
+{
+   textObj = 0L;
 
-  if (doc->selectionCount () == 1) {
-    GObject* obj = doc->getSelection().first();
-    if (obj->isA ("GText"))
-      textObj = (GText *) obj;
-  }
-  if (textObj)
-    canvas->setCursor (cursor);
-  else
-    emit operationDone ();
+   if (doc->selectionCount () == 1)
+   {
+      GObject* obj = doc->getSelection().first();
+      if (obj->isA ("GText"))
+      {
+         textObj = (GText *) obj;
+         //canvas->setCursor (Qt::sizeHorCursor);
+         canvas->setCursor (cursor);
+         m_toolController->emitModeSelected(m_id,i18n("Select a path to align the text to"));
+         return;
+      };
+   };
+   m_toolController->emitOperationDone (m_id);
+   m_toolController->emitModeSelected(m_id,i18n("First select a text object"));
 }
 
-void PathTextTool::deactivate (GDocument*, Canvas* canvas) {
-  canvas->setCursor (oldCursor);
-}
-
-void PathTextTool::processEvent (QEvent* e, GDocument *doc, Canvas* /*canvas*/) {
-  if (e->type () == QEvent::KeyPress) {
-    QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == Qt::Key_Escape) {
-      /*
-       * Abort the last operation
-       */
-      textObj = 0L;
-      emit operationDone ();
-    }
-  }
-  else if (e->type () == QEvent::MouseButtonPress) {
-    QMouseEvent *me = (QMouseEvent *) e;
-    if (me->button () == LeftButton) {
-      int xpos = me->x (), ypos = me->y ();
-      GObject *obj = 0L;
-
-      if (textObj &&
-          (obj = doc->findContainingObject (xpos, ypos)) != 0L) {
-        TextAlongPathCmd *cmd = new TextAlongPathCmd (doc, textObj, obj);
-        history->addCommand (cmd, true);
+void PathTextTool::processEvent (QEvent* e, GDocument *doc, Canvas* /*canvas*/)
+{
+   if (e->type () == QEvent::KeyPress)
+   {
+      QKeyEvent *ke = (QKeyEvent *) e;
+      if (ke->key () == Qt::Key_Escape)
+      {
+         /*
+          * Abort the last operation
+          */
+         textObj = 0L;
+         m_toolController->emitOperationDone (m_id);
       }
-    }
-    emit operationDone ();
-  }
+   }
+   else if (e->type () == QEvent::MouseButtonPress)
+   {
+      QMouseEvent *me = (QMouseEvent *) e;
+      if (me->button () == Qt::LeftButton)
+      {
+         int xpos = me->x (), ypos = me->y ();
+         GObject *obj = 0L;
+
+         if (textObj && (obj = doc->findContainingObject (xpos, ypos)) != 0L)
+         {
+            TextAlongPathCmd *cmd = new TextAlongPathCmd (doc, textObj, obj);
+            history->addCommand (cmd, true);
+         }
+      }
+      m_toolController->emitOperationDone (m_id);
+   }
 }
 
-#include <PathTextTool.moc>

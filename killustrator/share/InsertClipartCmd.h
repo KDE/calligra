@@ -30,7 +30,6 @@
 class GDocument;
 
 class InsertClipartCmd : public Command {
-  Q_OBJECT
 public:
   InsertClipartCmd (GDocument* doc, const QString &fname);
   ~InsertClipartCmd ();

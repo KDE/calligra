@@ -30,7 +30,6 @@
 class GOval;
 
 class OvalTool : public Tool {
-  Q_OBJECT
 public:
   OvalTool (CommandHistory* history);
 

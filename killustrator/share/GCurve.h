@@ -57,9 +57,11 @@ private:
 
 class GCurve : public GObject {
   Q_OBJECT
+   private:
+      GCurve():GObject(0) {cout<<"GCurve ctor"<<endl; exit(1);};
 public:
-  GCurve ();
-  GCurve (const QDomElement &element);
+  GCurve (GDocument* parent);
+  GCurve (GDocument* parent, const QDomElement &element);
   GCurve (const GCurve& obj);
   ~GCurve () {}
 
@@ -69,7 +71,7 @@ public:
   virtual QString typeName () const;
 
   virtual GObject* copy ();
-  virtual GObject* clone (const QDomElement &element);
+  //virtual GObject* create (GDocument *doc, const QDomElement &element);
 
   virtual QDomElement writeToXml (QDomDocument &document);
 

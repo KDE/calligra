@@ -32,7 +32,6 @@
  * around the position <tt>center</tt> by the angle <tt>a</tt>.
  */
 class RotateCmd : public ObjectManipCmd {
-  Q_OBJECT
 public:
   RotateCmd (GDocument* doc, const Coord& center, float a);
 

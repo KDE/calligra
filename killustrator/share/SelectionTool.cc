@@ -44,6 +44,8 @@
 #include <stdio.h>
 #include <math.h>
 
+#include "ToolController.h"
+
 #define resize_ptr_width 16
 #define resize_ptr_height 16
 #define resize_ptr_x_hot 8
@@ -96,20 +98,22 @@ void SelectionTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
   }
 }
 
-void SelectionTool::processButtonReleaseForHelpline (QMouseEvent *,
-  GDocument *, Canvas* canvas) {
+void SelectionTool::processButtonReleaseForHelpline(QMouseEvent *,GDocument *, Canvas* canvas)
+{
 
-  if (dragHorizHelpline != -1) {
-    canvas->updateHelplines ();
-    dragHorizHelpline = -1;
-    canvas->setCursor(Qt::crossCursor);
-    ctype = C_Arrow;
-  }
-  else if (dragVertHelpline != -1) {
-    canvas->updateHelplines ();
-    dragVertHelpline = -1;
-    canvas->setCursor(Qt::crossCursor);
-    ctype = C_Arrow;
+   if (dragHorizHelpline != -1)
+   {
+      canvas->updateHelplines ();
+      dragHorizHelpline = -1;
+      canvas->setCursor(Qt::arrowCursor);
+      ctype = C_Arrow;
+   }
+   else if (dragVertHelpline != -1)
+   {
+      canvas->updateHelplines ();
+      dragVertHelpline = -1;
+      canvas->setCursor(Qt::arrowCursor);
+      ctype = C_Arrow;
   }
 }
 
@@ -159,7 +163,7 @@ void SelectionTool::processMouseMoveForHelpline (QMouseEvent *me,
   }
   else {
     if (ctype != C_Arrow) {
-      canvas->setCursor(Qt::crossCursor);
+      canvas->setCursor(Qt::arrowCursor);
       ctype = C_Arrow;
     }
   }
@@ -168,7 +172,7 @@ void SelectionTool::processMouseMoveForHelpline (QMouseEvent *me,
 void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
                                                GDocument *doc,
                                                Canvas* canvas) {
-  canvas->setCursor(Qt::crossCursor);
+  canvas->setCursor(Qt::arrowCursor);
   ctype = C_Arrow;
   Handle::Mode mode = Handle::HMode_Default;
 
@@ -209,7 +213,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
     //    canvas->snapPositionToGrid (xpos, ypos);
     float xoff = xpos - firstpos.x ();
     float yoff = ypos - firstpos.y ();
-    if (me->state () & ControlButton) {
+    if (me->state () & Qt::ControlButton) {
       if (fabs (xoff) > fabs (yoff)) {
         yoff = xoff;
         if ((oldmask & (Handle::HPos_Left | Handle::HPos_Bottom)) ||
@@ -233,7 +237,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
   }
   else if (state == S_Translate) {
     state = S_Pick;
-    if (me->state () & ControlButton) {
+    if (me->state () & Qt::ControlButton) {
       if (fabs (xpos - firstpos.x ()) > fabs (ypos - firstpos.y ()))
         ypos = firstpos.y ();
       else
@@ -287,8 +291,9 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
     //    doc->handle ().setMode (Handle::HMode_Default);
   }
   doc->handle ().setMode (mode, true);
-  if (doc->selectionIsEmpty ()) {
-    emit modeSelected (i18n ("Selection Mode"));
+  if (doc->selectionIsEmpty ())
+  {
+    m_toolController->emitModeSelected (m_id,i18n ("Selection Mode"));
   }
   else {
     Rect box = doc->boundingBoxForSelection ();
@@ -325,13 +330,14 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
       msgbuf+=QString::number(h, 'f', 3);
       msgbuf+=QString(" ") + u + QString("]");
     }
-    emit modeSelected (msgbuf);
+    m_toolController->emitModeSelected (m_id,msgbuf);
   }
   origbox = doc->boundingBoxForSelection ();
 }
 
 void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
-                                           Canvas* canvas) {
+                                           Canvas* canvas)
+{
   int hmask;
 
   if (state == S_Inactive)
@@ -339,13 +345,14 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
   /**********
    * S_Rubberband
    */
-  else if (state == S_Rubberband) {
+  else if (state == S_Rubberband)
+  {
     selPoint[1].x (me->x ());
     selPoint[1].y (me->y ());
     canvas->repaint ();
     QPainter painter;
     painter.save ();
-    QPen pen (blue, 1, DotLine);
+    QPen pen (Qt::blue, 1, Qt::DotLine);
     painter.begin (canvas);
     painter.setPen (pen);
     painter.translate(canvas->xOffset(), canvas->yOffset());
@@ -359,33 +366,67 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
     return;
   }
 
-  if (! doc->selectionIsEmpty ()) {
+  if (! doc->selectionIsEmpty ())
+  {
     float xpos = me->x (), ypos = me->y ();
 
     /**********
      * S_Pick
      */
-    if (state == S_Pick) {
+    if (state == S_Pick)
+    {
       hmask = doc->handle ().contains (Coord (me->x (), me->y ()));
-      if (hmask && hmask != Handle::HPos_Center) {
-        if (ctype != C_Size) {
-          ctype = C_Size;
-          canvas->setCursor(*cursor);
-        }
+      if (hmask && hmask != Handle::HPos_Center)
+      {
+         if (ctype != C_Size)
+         {
+            ctype = C_Size;
+            switch(hmask)
+            {
+            case (Handle::HPos_Left | Handle::HPos_Top):
+               canvas->setCursor(Qt::sizeFDiagCursor);
+               break;
+            case (Handle::HPos_Top):
+               canvas->setCursor(Qt::sizeVerCursor);
+               break;
+            case (Handle::HPos_Top | Handle::HPos_Right):
+               canvas->setCursor(Qt::sizeBDiagCursor);
+               break;
+            case (Handle::HPos_Right):
+               canvas->setCursor(Qt::sizeHorCursor);
+               break;
+            case (Handle::HPos_Right | Handle::HPos_Bottom):
+               canvas->setCursor(Qt::sizeFDiagCursor);
+               break;
+            case (Handle::HPos_Bottom):
+               canvas->setCursor(Qt::sizeVerCursor);
+               break;
+            case (Handle::HPos_Bottom | Handle::HPos_Left):
+               canvas->setCursor(Qt::sizeBDiagCursor);
+               break;
+            case (Handle::HPos_Left):
+               canvas->setCursor(Qt::sizeHorCursor);
+               break;
+            default:
+               canvas->setCursor(Qt::sizeAllCursor);
+               break;
+            };
+         }
       }
-      else if (ctype != C_Arrow) {
-        ctype = C_Arrow;
-        canvas->setCursor(Qt::crossCursor);
+      else if (ctype != C_Arrow)
+      {
+         ctype = C_Arrow;
+         canvas->setCursor(Qt::arrowCursor);
       }
 
-      if (me->state () & LeftButton)
+      if (me->state () & Qt::LeftButton)
         state = S_Translate;
     }
     /**********
      * S_Intermediate1
      */
     else if (state == S_Intermediate1) {
-      if (me->state () & LeftButton) {
+       if (me->state () & Qt::LeftButton) {
         //      hmask = doc->handle ().contains (Coord (me->x (), me->y ()));
         if (ctype == C_Size)
           state = S_Scale;
@@ -405,18 +446,50 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
      */
     else if (state == S_RotateSelect || state == S_Rotate) {
       hmask = doc->handle ().contains (Coord (me->x (), me->y ()));
-      if (hmask) {
-        if (ctype != C_Size) {
-          ctype = C_Size;
-          canvas->setCursor(*cursor);
+      if (hmask)
+      {
+         if (ctype != C_Size)
+         {
+            ctype = C_Size;
+            switch(hmask)
+            {
+            case (Handle::HPos_Left | Handle::HPos_Top):
+               canvas->setCursor(Qt::sizeBDiagCursor);
+               break;
+            case (Handle::HPos_Top):
+               canvas->setCursor(Qt::sizeHorCursor);
+               break;
+            case (Handle::HPos_Top | Handle::HPos_Right):
+               canvas->setCursor(Qt::sizeFDiagCursor);
+               break;
+            case (Handle::HPos_Right):
+               canvas->setCursor(Qt::sizeVerCursor);
+               break;
+            case (Handle::HPos_Right | Handle::HPos_Bottom):
+               canvas->setCursor(Qt::sizeBDiagCursor);
+               break;
+            case (Handle::HPos_Bottom):
+               canvas->setCursor(Qt::sizeHorCursor);
+               break;
+            case (Handle::HPos_Bottom | Handle::HPos_Left):
+               canvas->setCursor(Qt::sizeFDiagCursor);
+               break;
+            case (Handle::HPos_Left):
+               canvas->setCursor(Qt::sizeVerCursor);
+               break;
+            case (Handle::HPos_Center):
+            default:
+               canvas->setCursor(Qt::sizeAllCursor);
+               break;
+            };
         }
       }
       else if (ctype != C_Arrow) {
         ctype = C_Arrow;
-        canvas->setCursor(Qt::crossCursor);
+        canvas->setCursor(Qt::arrowCursor);
       }
     }
-    if (me->state () & LeftButton) {
+    if (me->state () & Qt::LeftButton) {
       //      canvas->snapPositionToGrid (xpos, ypos);
       float xoff = xpos - firstpos.x ();
       float yoff = ypos - firstpos.y ();
@@ -426,11 +499,13 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
       switch (state) {
       case S_Scale:
         {
-          if (ctype != C_Size) {
+           if (ctype != C_Size)
+           {
             ctype = C_Size;
+            //canvas->setCursor(Qt::forbiddenCursor);
             canvas->setCursor(*cursor);
           }
-          if (me->state () & ControlButton) {
+          if (me->state () & Qt::ControlButton) {
             if (fabs (xoff) > fabs (yoff)) {
               yoff = xoff;
               if ((oldmask & (Handle::HPos_Left | Handle::HPos_Bottom)) ||
@@ -458,7 +533,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
           ctype = C_Move;
           canvas->setCursor(Qt::sizeAllCursor);
         }
-        if (me->state () & ControlButton) {
+        if (me->state () & Qt::ControlButton) {
           if (fabs (xoff) > fabs (yoff))
             yoff = 0;
           else
@@ -492,7 +567,7 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
   firstpos.y (ypos);
 
   hmask = doc->handle ().contains (Coord (me->x (), me->y ()));
-  bool shiftFlag = me->state () & ShiftButton;
+  bool shiftFlag = me->state () & Qt::ShiftButton;
 
   if (state == S_Inactive)
     state = S_Init;
@@ -546,7 +621,7 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
             else if (selObj->isA ("GPart")) {
               kdDebug(38000) << "activate part !!!" << endl;
               state = S_Inactive;
-              emit partSelected (selObj);
+              m_toolController->emitPartSelected (m_id,selObj);
               return;
             }
           }
@@ -610,7 +685,7 @@ void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc,
   if (doc->selectionIsEmpty ())
     return;
 
-  if (ke->key () == Key_Escape) {
+  if (ke->key () == Qt::Key_Escape) {
       // clear selection
       doc->unselectAllObjects ();
       return;
@@ -619,22 +694,22 @@ void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc,
   float big_step = PStateManager::instance ()->bigStepSize ();
   float small_step = PStateManager::instance ()->smallStepSize ();
   float dx = 0, dy = 0;
-  bool shift = ke->state () & ShiftButton;
+  bool shift = ke->state () & Qt::ShiftButton;
 
   switch (ke->key ()) {
-  case Key_Left:
+  case Qt::Key_Left:
     dx = (shift ? -small_step : -big_step);
     break;
-  case Key_Right:
+  case Qt::Key_Right:
     dx = (shift ? small_step : big_step);
     break;
-  case Key_Up:
+  case Qt::Key_Up:
     dy = (shift ? -small_step : -big_step);
     break;
-  case Key_Down:
+  case Qt::Key_Down:
     dy = (shift ? small_step : big_step);
     break;
-  case Key_Tab:
+  case Qt::Key_Tab:
       kdDebug(38000) << "<tab>" << endl;
   default:
     break;
@@ -689,7 +764,7 @@ void SelectionTool::translate (GDocument* doc, Canvas* canvas,
   msgbuf+=QString(" ") + u + QString(", ");
   msgbuf+=QString::number(yval, 'f', 3);
   msgbuf+=QString(" ") + u + QString("]");
-  emit modeSelected (msgbuf);
+  m_toolController->emitModeSelected (m_id,msgbuf);
 }
 
 #include <iostream.h>
@@ -767,7 +842,7 @@ void SelectionTool::rotate (GDocument* doc, float , float ,
   msgbuf+=QString(" ") + u + QString(", ");
   msgbuf+=QString::number(yval, 'f', 3);
   msgbuf+=QString(" ") + u + QString("]");
-  emit modeSelected (msgbuf);
+  m_toolController->emitModeSelected (m_id,msgbuf);
 }
 
 void SelectionTool::scale (GDocument* doc, Canvas* canvas,
@@ -829,7 +904,7 @@ void SelectionTool::scale (GDocument* doc, Canvas* canvas,
   msgbuf+=QString(" %, ");
   msgbuf+=QString::number(sy * 100.0, 'f', 3);
   msgbuf+=QString(" %]");
-  emit modeSelected (msgbuf);
+  m_toolController->emitModeSelected (m_id,msgbuf);
 }
 
 void SelectionTool::shear (GDocument* doc, int mask, float dx, float dy,
@@ -874,7 +949,7 @@ void SelectionTool::shear (GDocument* doc, int mask, float dx, float dy,
   msgbuf+=QString(" %, ");
   msgbuf+=QString::number(sy * 100.0, 'f', 3);
   msgbuf+=QString(" %]");
-  emit modeSelected (msgbuf);
+  m_toolController->emitModeSelected (m_id,msgbuf);
 }
 
 void SelectionTool::processTabKeyEvent (GDocument* doc, Canvas*) {
@@ -885,9 +960,11 @@ void SelectionTool::processTabKeyEvent (GDocument* doc, Canvas*) {
   state = S_Pick;
 }
 
-void SelectionTool::activate (GDocument* doc, Canvas*canvas) {
+void SelectionTool::activate (GDocument* doc, Canvas *canvas)
+{
+   canvas->setCursor(Qt::arrowCursor);
  
-    dragHorizHelpline = dragVertHelpline = -1;
+   dragHorizHelpline = dragVertHelpline = -1;
 
     doc->handle ().show (true);
     if (doc->lastObject ()) {
@@ -902,7 +979,7 @@ void SelectionTool::activate (GDocument* doc, Canvas*canvas) {
     ctype = C_Arrow;
 
     if (doc->selectionIsEmpty ()) {
-        emit modeSelected (i18n("Selection Mode"));
+        m_toolController->emitModeSelected (m_id,i18n("Selection Mode"));
     }
     else {
         Rect box = doc->boundingBoxForSelection ();
@@ -939,7 +1016,7 @@ void SelectionTool::activate (GDocument* doc, Canvas*canvas) {
             msgbuf+=QString::number(h, 'f', 3);
             msgbuf+=QString(" ") + u + QString("]");
         }
-        emit modeSelected (msgbuf);
+        m_toolController->emitModeSelected (m_id,msgbuf);
     }
     canvas->repaint();
 }
@@ -949,4 +1026,3 @@ void SelectionTool::deactivate (GDocument* doc, Canvas* canvas) {
   canvas->repaint ();
 }
 
-#include <SelectionTool.moc>

@@ -92,6 +92,7 @@ public:
   void setGridDistance (float hdist, float vdist);
   float getHorizGridDistance () const { return hGridDistance; }
   float getVertGridDistance () const { return vGridDistance; }
+  void saveGridProperties ();
 
   void snapPositionToGrid (float& x, float& y);
   Rect snapTranslatedBoxToGrid (const Rect& r);
@@ -114,7 +115,6 @@ protected:
   float snapXPositionToGrid (float pos);
   float snapYPositionToGrid (float pos);
 
-  void saveGridProperties ();
   void readGridProperties ();
 
   bool eventFilter (QObject *, QEvent *);
@@ -132,13 +132,13 @@ protected:
 
 signals:
   void sizeChanged ();
-  void gridStatusChanged ();
+  //void gridStatusChanged ();
   void rightButtonAtObjectClicked (int x, int y, GObject *obj);
   void rightButtonAtSelectionClicked (int x, int y);
   void rightButtonClicked (int x, int y);
 
   void visibleAreaChanged (int x, int y);
-  void zoomFactorChanged (float zoom, int xpos, int ypos);
+  void zoomFactorChanged (float zoom);
 
   void mousePositionChanged (int x, int y);
 

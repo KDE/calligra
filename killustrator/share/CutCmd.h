@@ -31,7 +31,6 @@ class GDocument;
 class GObject;
 
 class CutCmd : public Command {
-    Q_OBJECT
 public:
     CutCmd (GDocument* doc);
     ~CutCmd ();

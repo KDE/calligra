@@ -29,9 +29,8 @@
 
 class GBezier;
 
-class BezierTool : public Tool {
-
-    Q_OBJECT
+class BezierTool : public Tool
+{
 
 public:
   BezierTool (CommandHistory* history);

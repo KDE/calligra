@@ -32,7 +32,6 @@ class GGroup;
 class GObject;
 
 class UngroupCmd : public Command {
-    Q_OBJECT
 public:
     UngroupCmd (GDocument* doc);
     ~UngroupCmd ();

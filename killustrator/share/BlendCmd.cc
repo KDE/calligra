@@ -94,4 +94,3 @@ void BlendCmd::unexecute () {
   document->setAutoUpdate (true);
 }
 
-#include <BlendCmd.moc>

@@ -31,7 +31,6 @@ class GDocument;
 class GObject;
 
 class CopyCmd : public Command {
-  Q_OBJECT
 public:
   CopyCmd (GDocument* doc);
   ~CopyCmd ();

@@ -40,17 +40,24 @@
 #include <Gradient.h>
 #include <GPixmap.h>
 #include <GCurve.h>
+#include "GDocument.h"
 #include "../koffice/GPart.h"
+#include "../koffice/KIllustrator_doc.h"
+
+#include <iostream.h>
 
 GObject::OutlineInfo GObject::defaultOutlineInfo;
 GObject::FillInfo GObject::defaultFillInfo;
 
-QDict<GObject> *GObject::prototypes=0L;
-namespace KIlluFooDeleter {
-static KStaticDeleter< QDict<GObject> > sd;
-};
+/*QDict<GObject> *GObject::prototypes=0L;
 
-void GObject::setDefaultOutlineInfo (const OutlineInfo& oi) {
+namespace KIlluFooDeleter
+{
+   static KStaticDeleter< QDict<GObject> > sd;
+};*/
+
+void GObject::setDefaultOutlineInfo (const OutlineInfo& oi)
+{
   if (oi.mask & OutlineInfo::Color)
     defaultOutlineInfo.color = oi.color;
   if (oi.mask & OutlineInfo::Style)
@@ -80,7 +87,9 @@ GObject::FillInfo GObject::getDefaultFillInfo () {
   return defaultFillInfo;
 }
 
-GObject::GObject () {
+GObject::GObject (GDocument* parent)
+:m_gdoc(parent)
+{
   sflag = false;
   layer = 0L;
   inWork = false;
@@ -97,7 +106,9 @@ GObject::GObject () {
   rcount = 1;
 }
 
-GObject::GObject (const QDomElement &element) {
+GObject::GObject (GDocument* parent, const QDomElement &element)
+:m_gdoc(parent)
+{
 
     sflag=false;
     layer = 0L;
@@ -142,6 +153,7 @@ GObject::GObject (const QDomElement &element) {
 
 GObject::GObject (const GObject& obj) : QObject()
 {
+   m_gdoc=obj.m_gdoc;
   sflag = false;
   outlineInfo = obj.outlineInfo;
   fillInfo = obj.fillInfo;
@@ -218,7 +230,9 @@ void GObject::setOutlineInfo (const GObject::OutlineInfo& info) {
     outlineInfo.endArrowId = info.endArrowId;
   }
   updateRegion (false);
-  emit propertiesChanged (Prop_Outline, info.mask);
+
+  updateProperties(Prop_Outline, info.mask);
+  //emit propertiesChanged (Prop_Outline, info.mask);
 }
 
 GObject::OutlineInfo GObject::getOutlineInfo () const {
@@ -228,25 +242,29 @@ GObject::OutlineInfo GObject::getOutlineInfo () const {
 void GObject::setOutlineShape (OutlineInfo::Shape s) {
   outlineInfo.shape = s;
   updateRegion ();
-  emit propertiesChanged (Prop_Outline, OutlineInfo::Custom);
+  updateProperties(Prop_Outline, OutlineInfo::Custom);
+  //emit propertiesChanged (Prop_Outline, OutlineInfo::Custom);
 }
 
 void GObject::setOutlineColor (const QColor& color) {
   outlineInfo.color = color;
   updateRegion (false);
-  emit propertiesChanged (Prop_Outline, OutlineInfo::Color);
+  updateProperties(Prop_Outline, OutlineInfo::Color);
+  //emit propertiesChanged (Prop_Outline, OutlineInfo::Color);
 }
 
 void GObject::setOutlineStyle (Qt::PenStyle style) {
   outlineInfo.style = style;
   updateRegion (false);
-  emit propertiesChanged (Prop_Outline, OutlineInfo::Style);
+  updateProperties(Prop_Outline, OutlineInfo::Style);
+  //emit propertiesChanged (Prop_Outline, OutlineInfo::Style);
 }
 
 void GObject::setOutlineWidth (float width) {
   outlineInfo.width = width;
   updateRegion (false);
-  emit propertiesChanged (Prop_Outline, OutlineInfo::Width);
+  updateProperties(Prop_Outline, OutlineInfo::Width);
+  //emit propertiesChanged (Prop_Outline, OutlineInfo::Width);
 }
 
 const QColor& GObject::getOutlineColor () const {
@@ -272,7 +290,8 @@ void GObject::setFillInfo (const GObject::FillInfo& info) {
     fillInfo.gradient = info.gradient;
   gShape.setInvalid ();
   updateRegion (false);
-  emit propertiesChanged (Prop_Fill, info.mask);
+  updateProperties(Prop_Fill, info.mask);
+  //emit propertiesChanged (Prop_Fill, info.mask);
 }
 
 GObject::FillInfo GObject::getFillInfo () const {
@@ -282,7 +301,8 @@ GObject::FillInfo GObject::getFillInfo () const {
 void GObject::setFillColor (const QColor& color) {
   fillInfo.color = color;
   updateRegion (false);
-  emit propertiesChanged (Prop_Fill, FillInfo::Color);
+  updateProperties(Prop_Fill, FillInfo::Color);
+  //emit propertiesChanged (Prop_Fill, FillInfo::Color);
 }
 
 const QColor& GObject::getFillColor () const {
@@ -292,21 +312,24 @@ const QColor& GObject::getFillColor () const {
 void GObject::setFillPattern (Qt::BrushStyle b) {
   fillInfo.pattern = b;
   updateRegion (false);
-  emit propertiesChanged (Prop_Fill, FillInfo::Pattern);
+  updateProperties(Prop_Fill, FillInfo::Pattern);
+  //emit propertiesChanged (Prop_Fill, FillInfo::Pattern);
 }
 
 void GObject::setFillGradient (const Gradient& g) {
   fillInfo.gradient = g;
   gShape.setInvalid ();
   updateRegion (false);
-  emit propertiesChanged (Prop_Fill, FillInfo::GradientInfo);
+  updateProperties(Prop_Fill, FillInfo::GradientInfo);
+  //emit propertiesChanged (Prop_Fill, FillInfo::GradientInfo);
 }
 
 void GObject::setFillStyle (GObject::FillInfo::Style s) {
   fillInfo.fstyle = s;
   gShape.setInvalid ();
   updateRegion (false);
-  emit propertiesChanged (Prop_Fill, FillInfo::FillStyle);
+  updateProperties(Prop_Fill, FillInfo::FillStyle);
+  //emit propertiesChanged (Prop_Fill, FillInfo::FillStyle);
 }
 
 GObject::FillInfo::Style GObject::getFillStyle () const {
@@ -466,7 +489,7 @@ QString GObject::getId () {
   return id;
 }
 
-void GObject::registerPrototype (const QString &className, GObject* proto) {
+/*void GObject::registerPrototype (const QString &className, GObject* proto) {
     if(prototypes==0L)
         prototypes=KIlluFooDeleter::sd.setObject(new QDict<GObject>);
     prototypes->insert(className, proto);
@@ -477,7 +500,7 @@ GObject* GObject::lookupPrototype (const QString &className) {
     if(prototypes==0L)
         return 0L;
     return prototypes->find (className);
-}
+}*/
 
 QDomElement KIllustrator::createMatrixElement(const QString &tag, const QWMatrix &matrix, QDomDocument &document) {
 
@@ -504,39 +527,43 @@ QWMatrix KIllustrator::toMatrix(const QDomElement &matrix) {
     return QWMatrix(m11, m12, m21, m22, dx, dy);
 }
 
-GObject *KIllustrator::objectFactory(const QDomElement &element, KIllustratorDocument *doc) {
-    if (element.tagName () == "object")
-        return new GPart (doc, element);
+GObject *KIllustrator::objectFactory(const QDomElement &element, KIllustratorDocument *doc)
+{
+   cout<<"******** objectFactory"<<endl;
     if (element.tagName () == "polyline")
-        return new GPolyline (element);
+        return new GPolyline (doc->gdoc(),element);
     else if (element.tagName () == "ellipse")
-        return new GOval (element);
+        return new GOval (doc->gdoc(),element);
     else if (element.tagName () == "bezier")
-        return new GBezier (element);
+        return new GBezier (doc->gdoc(),element);
     else if (element.tagName () == "rectangle")
-        return new GPolygon (element, GPolygon::PK_Rectangle);
+        return new GPolygon (doc->gdoc(),element, GPolygon::PK_Rectangle);
     else if (element.tagName () == "polygon")
-        return new GPolygon (element);
+        return new GPolygon (doc->gdoc(),element);
     else if (element.tagName () == "clipart")
-        return new GClipart (element);
+        return new GClipart (doc->gdoc(),element);
     else if (element.tagName () == "pixmap")
-        return new GPixmap (element);
+        return new GPixmap (doc->gdoc(),element);
     else if (element.tagName () == "curve")
-        return new GCurve (element);
+        return new GCurve (doc->gdoc(),element);
     else if (element.tagName() == "text")
-        return new GText(element);
+        return new GText(doc->gdoc(),element);
     else if (element.tagName() == "group")
-        return new GGroup (element);
-    else {
-        GObject *obj;
+        return new GGroup (doc->gdoc(),element);
+    else if (element.tagName() == "object")
+        return new GPart (doc->gdoc(),doc,element);
+/*    else
+    {
+       cout<<"******** objectFactory() calling lookup  "<<element.tagName().latin1()<<endl;
+        GObject *obj(0);
         GObject *proto = GObject::lookupPrototype (element.tagName());
         if (proto != 0L) {
-            obj = proto->clone (element);
+            obj = proto->create (doc->gdoc(), element);
         }
         else
             kdDebug(38000) << "invalid object type: " << element.tagName() << endl;
         return obj;
-    }
+    }*/
 }
 
 #include <GObject.moc>

@@ -44,7 +44,6 @@ enum DistributionMode {
 };
 
 class DistributeCmd : public ObjectManipCmd {
-  Q_OBJECT
 public:
   DistributeCmd (GDocument* doc, HorizDistribution hdistrib,
                  VertDistribution vdistrib, DistributionMode dmode);

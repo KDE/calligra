@@ -30,7 +30,6 @@
 class GDocument;
 
 class InsertPixmapCmd : public Command {
-  Q_OBJECT
 public:
   InsertPixmapCmd (GDocument* doc, const QString &fname);
   ~InsertPixmapCmd ();

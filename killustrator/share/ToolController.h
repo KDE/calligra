@@ -32,7 +32,10 @@ class GDocument;
 class Canvas;
 class MainView;
 
-class ToolController : public QObject {
+//this one serves also as a signal proxy for the various tools
+//this makes the tool objects smaller
+class ToolController : public QObject
+{
   Q_OBJECT
 public:
   ToolController (MainView* view);
@@ -44,11 +47,21 @@ public:
 
   void delegateEvent (QEvent *e, GDocument* doc, Canvas* canvas);
 
+  void emitModeSelected (Tool::ToolID id, const QString &msg);
+  void emitOperationDone (Tool::ToolID id);
+  void emitActivated (Tool::ToolID id, bool b);
+  void emitPartSelected (Tool::ToolID id, GObject *);
+
+
+signals:
+  void modeSelected (Tool::ToolID id, const QString &msg);
+  void operationDone (Tool::ToolID id );
+  void activated (Tool::ToolID id, bool);
+  void partSelected (Tool::ToolID id, GObject *);
+
 public slots:
    void toolSelected (Tool::ToolID id);
-  void configureTool (Tool::ToolID id);
-  //void toolSelected (int id);
-  //void configureTool (int id);
+   void configureTool (Tool::ToolID id);
 
   //  void reset ();
 

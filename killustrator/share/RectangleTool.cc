@@ -35,6 +35,7 @@
 #include <CommandHistory.h>
 #include <units.h>
 #include <PStateManager.h>
+#include "ToolController.h"
 
 #include <stdio.h>
 
@@ -44,23 +45,22 @@ RectangleTool::RectangleTool (CommandHistory* history) : Tool (history)
   m_id=ToolRectangle;
 }
 
-void RectangleTool::processEvent (QEvent* e, GDocument *doc,
-                                  Canvas* canvas) {
+void RectangleTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
+{
   if (e->type () == QEvent::MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
     float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
-    bool flag = me->state () & ControlButton;
-    rect = new GPolygon (flag ? GPolygon::PK_Square : GPolygon::PK_Rectangle);
+    bool flag = me->state () & Qt::ControlButton;
+    rect = new GPolygon (doc, flag ? GPolygon::PK_Square : GPolygon::PK_Rectangle);
 
     rect->addPoint (0, Coord (xpos, ypos));
     rect->addPoint (1, Coord (xpos, ypos));
     rect->addPoint (2, Coord (xpos, ypos));
     rect->addPoint (3, Coord (xpos, ypos));
     doc->insertObject (rect);
-    emit modeSelected (flag ? i18n ("Create Square") :
-                       i18n ("Create Rectangle"));
+    m_toolController->emitModeSelected(m_id,flag?i18n("Create Square"):i18n("Create Rectangle"));
   }
   else if (e->type () == QEvent::MouseMove) {
     if (rect == 0L)
@@ -70,7 +70,7 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc,
     float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
     rect->setEndPoint (Coord (xpos, ypos));
-    bool flag = me->state () & ControlButton;
+    bool flag = me->state () & Qt::ControlButton;
 
     Rect r = rect->boundingBox ();
     MeasurementUnit unit =
@@ -92,7 +92,7 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc,
     msgbuf+=QString(" ") + u + QString(", ");
     msgbuf+=QString::number(hval, 'f', 3);
     msgbuf+=QString(" ") + u + QString("]");
-    emit modeSelected (msgbuf);
+    m_toolController->emitModeSelected (m_id,msgbuf);
   }
   else if (e->type () == QEvent::MouseButtonRelease) {
     if (rect == 0L)
@@ -118,12 +118,13 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc,
   else if (e->type () == QEvent::KeyPress) {
     QKeyEvent *ke = (QKeyEvent *) e;
     if (ke->key () == Qt::Key_Escape)
-      emit operationDone ();
+      m_toolController->emitOperationDone (m_id);
   }
 }
 
-void RectangleTool::activate (GDocument*, Canvas* /*canvas*/) {
-  emit modeSelected (i18n ("Create Rectangle"));
+void RectangleTool::activate (GDocument*, Canvas* canvas)
+{
+   canvas->setCursor(Qt::crossCursor);
+   m_toolController->emitModeSelected (m_id,i18n ("Create rectangles (Hold CTRL for squares)"));
 }
 
-#include <RectangleTool.moc>

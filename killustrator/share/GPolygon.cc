@@ -91,13 +91,16 @@ static bool line_intersects (const Coord& p11, const Coord& p12,
   return false;
 }
 
-GPolygon::GPolygon (GPolygon::Kind pkind) : GPolyline () {
+GPolygon::GPolygon (GDocument *doc, GPolygon::Kind pkind)
+:GPolyline (doc)
+{
   points.setAutoDelete (true);
   kind = pkind;
 }
 
-GPolygon::GPolygon (const QDomElement &element, Kind pkind)
-  : GPolyline (element.namedItem("polyline").toElement()) {
+GPolygon::GPolygon (GDocument *doc, const QDomElement &element, Kind pkind)
+:GPolyline (doc, element.namedItem("polyline").toElement())
+{
 
       points.setAutoDelete (true);
       kind = pkind;
@@ -118,11 +121,15 @@ GPolygon::GPolygon (const QDomElement &element, Kind pkind)
       calcBoundingBox ();
 }
 
-GPolygon::GPolygon (const GPolygon& obj) : GPolyline (obj) {
+GPolygon::GPolygon (const GPolygon& obj)
+:GPolyline (obj)
+{
   kind = obj.kind;
 }
 
-GPolygon::GPolygon (QList<Coord>& coords) : GPolyline () {
+GPolygon::GPolygon (GDocument *doc, QList<Coord>& coords)
+:GPolyline (doc)
+{
   Coord *p1 = coords.first (), *p2 = 0L;
   bool ready = false;
 
@@ -140,11 +147,12 @@ GPolygon::GPolygon (QList<Coord>& coords) : GPolyline () {
   calcBoundingBox ();
 }
 
-void GPolygon::setKind (GPolygon::Kind k) {
-  if (k != PK_Polygon && points.count () == 4)
-    kind = k;
-  else if (k == PK_Polygon)
-    kind = k;
+void GPolygon::setKind (GPolygon::Kind k)
+{
+   if (k != PK_Polygon && points.count () == 4)
+      kind = k;
+   else if (k == PK_Polygon)
+      kind = k;
 }
 
 QString GPolygon::typeName () const {
@@ -160,63 +168,69 @@ bool GPolygon::isFilled () const {
   return fillInfo.fstyle != GObject::FillInfo::NoFill;
 }
 
-void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline) {
-  unsigned int i, num;
+void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline)
+{
+   unsigned int i, num;
 
-  QPen pen;
-  QBrush brush;
-  initPen (pen);
-  p.save ();
-  p.setPen (pen);
-  p.setWorldMatrix (tmpMatrix, true);
+   QPen pen;
+   QBrush brush;
+   initPen (pen);
+   p.save ();
+   p.setPen (pen);
+   p.setWorldMatrix (tmpMatrix, true);
 
-  if (! workInProgress () && !outline) {
-    initBrush (brush);
-    p.setBrush (brush);
+   if (! workInProgress () && !outline)
+   {
+      initBrush (brush);
+      p.setBrush (brush);
 
-    if (gradientFill ()) {
-      if (! gShape.valid ())
-        updateGradientShape (p);
-      gShape.draw (p);
-    }
-  }
+      if (gradientFill ())
+      {
+         //if (! gShape.valid ())
+            updateGradientShape (p);
+         gShape.draw (p);
+      }
+   }
 
-  num = points.count ();
-  if (kind == PK_Polygon) {
-    QPointArray parray (num);
-    for (i = 0; i < num; i++) {
-      parray.setPoint (i, (int) points.at (i)->x (),
-                       (int) points.at (i)->y ());
-    }
-    p.drawPolygon (parray);
-  }
-  else {
-    float xcorr = 0, ycorr = 0;
-    /*
-     * Qt draws a rectangle from xpos to (xpos + width - 1). This seems
-     * to be a bug, because a rectangle from position (20, 20) with a
-     * witdh of 20 doesn't align to a 20pt grid. Therefore we correct
-     * the width and height values...
-     */
-    const QWMatrix& m = p.worldMatrix ();
+   num = points.count ();
+   if (kind == PK_Polygon)
+   {
+      QPointArray parray (num);
+      for (i = 0; i < num; i++)
+      {
+         parray.setPoint (i, (int) points.at (i)->x (),
+                          (int) points.at (i)->y ());
+      }
+      p.drawPolygon (parray);
+   }
+   else
+   {
+      float xcorr = 0, ycorr = 0;
+      /*
+       * Qt draws a rectangle from xpos to (xpos + width - 1). This seems
+       * to be a bug, because a rectangle from position (20, 20) with a
+       * witdh of 20 doesn't align to a 20pt grid. Therefore we correct
+       * the width and height values...
+       */
+      const QWMatrix& m = p.worldMatrix ();
 
-    xcorr = 1.0 / m.m11 ();
-    ycorr = 1.0 / m.m22 ();
-    const Coord& p1 = *(points.at (0));
-    const Coord& p2 = *(points.at (2));
-    if (Roundness != 0)
-      p.drawRoundRect (p1.x (), p1.y (),
-                       qRound (p2.x () - p1.x () + xcorr),
-                       qRound (p2.y () - p1.y () + ycorr),
-                       Roundness, Roundness);
-    else
-    {
-      Painter::drawRect (p, p1.x (), p1.y (),
-                         qRound (p2.x () - p1.x () + xcorr),
-                         qRound (p2.y () - p1.y () + ycorr));
-      //kdDebug()<<"( "<<p1.x()<<" | "<<p1.y()<<" )    ( "<<p2.x()<<" | "<<p2.y()<<" )"<<endl;
-    };
-  }
+      xcorr = 1.0 / m.m11 ();
+      ycorr = 1.0 / m.m22 ();
+      const Coord& p1 = *(points.at (0));
+      const Coord& p2 = *(points.at (2));
+      if (Roundness != 0)
+         p.drawRoundRect (p1.x (), p1.y (),
+                          qRound (p2.x () - p1.x () + xcorr),
+                          qRound (p2.y () - p1.y () + ycorr),
+                          Roundness, Roundness);
+      else
+      {
+         Painter::drawRect (p, p1.x (), p1.y (),
+                            qRound (p2.x () - p1.x () + xcorr),
+                            qRound (p2.y () - p1.y () + ycorr));
+         kdDebug()<<"( "<<p1.x()<<" | "<<p1.y()<<" )    ( "<<p2.x()<<" | "<<p2.y()<<" )"<<endl;
+      };
+   }
 
   p.restore ();
   p.save ();
@@ -359,9 +373,9 @@ GObject* GPolygon::copy () {
   return new GPolygon (*this);
 }
 
-GObject* GPolygon::clone (const QDomElement &element) {
+/*GObject* GPolygon::clone (const QDomElement &element) {
   return new GPolygon (element);
-}
+}*/
 
 void GPolygon::calcBoundingBox () {
   GPolyline::calcBoundingBox ();
@@ -469,84 +483,95 @@ QDomElement GPolygon::writeToXml (QDomDocument &document) {
     return element;
 }
 
-void GPolygon::updateGradientShape (QPainter& p) {
-  // define the rectangular box for the gradient pixmap
-  // (in object coordinate system)
-  if (kind != PK_Polygon) {
-    const Coord& p1 = *(points.at (0));
-    const Coord& p2 = *(points.at (2));
-    gShape.setBox (Rect (p1, p2));
-  }
+void GPolygon::updateGradientShape (QPainter& p)
+{
+   // define the rectangular box for the gradient pixmap
+   // (in object coordinate system)
+   if (kind != PK_Polygon)
+   {
+      //kdDebug()<<"updategradientshape() rect"<<endl;
+      const Coord& p1 = *(points.at (0));
+      const Coord& p2 = *(points.at (2));
+      gShape.setBox (Rect (p1, p2));
+   }
   else
-    gShape.setBox (calcEnvelope ());
-
+  {
+     //kdDebug()<<"updategradientshape() no rect"<<endl;
+     gShape.setBox (calcEnvelope ());
+  };
   // define the clipping region
   QWMatrix matrix = p.worldMatrix ();
   unsigned int num = points.count ();
   QPointArray pnts (num);
   for (unsigned int i = 0; i < num; i++)
-    pnts.setPoint (i, qRound (points.at (i)->x ()),
-                   qRound (points.at (i)->y ()));
+     pnts.setPoint (i, qRound (points.at (i)->x ()),qRound (points.at (i)->y ()));
 
   if (kind == PK_Polygon ||
-      (kind != PK_Polygon && (Roundness == 0 || Roundness == 100))) {
-    if (kind == PK_Polygon || Roundness == 0) {
-      QRegion region (matrix.map (pnts));
-      gShape.setRegion (region);
-    }
-    else if (Roundness == 100) {
-      // special case: ellipse
-      unsigned int w, h;
-      w = pnts.point (2).x () - pnts.point (0).x ();
-      h = pnts.point (2).y () - pnts.point (0).y ();
-      QRect rect (pnts.point (0).x (), pnts.point (0).y (), w, h);
-      rect = rect.normalize ();
-      QPointArray epnts;
-      epnts.makeEllipse (rect.x (), rect.y (),
-                         rect.width (), rect.height ());
-      gShape.setRegion (QRegion (matrix.map (epnts)));
-    }
+      (kind != PK_Polygon && (Roundness == 0 || Roundness == 100)))
+  {
+     if (kind == PK_Polygon || Roundness == 0)
+     {
+        QRegion region (matrix.map (pnts));
+        gShape.setRegion (region);
+     }
+     else if (Roundness == 100)
+     {
+        //kdDebug()<<"updategradientshape() rect"<<endl;
+        // special case: ellipse
+        unsigned int w, h;
+        w = pnts.point (2).x () - pnts.point (0).x ();
+        h = pnts.point (2).y () - pnts.point (0).y ();
+        QRect rect (pnts.point (0).x (), pnts.point (0).y (), w, h);
+        rect = rect.normalize ();
+        QPointArray epnts;
+        epnts.makeEllipse (rect.x (), rect.y (),
+                           rect.width (), rect.height ());
+        gShape.setRegion (QRegion (matrix.map (epnts)));
+     }
   }
-  else if (kind != PK_Polygon) {
-    unsigned int w, h;
-    w = pnts.point (2).x () - pnts.point (0).x ();
-    h = pnts.point (2).y () - pnts.point (0).y ();
-    QRect rect (pnts.point (0), pnts.point (2));
-    QRect nrect = rect.normalize ();
+  else if (kind != PK_Polygon)
+  {
+     //rectangle
+     //kdDebug()<<"updategradientshape() rect"<<endl;
+     unsigned int w, h;
+     w = pnts.point (2).x () - pnts.point (0).x ();
+     h = pnts.point (2).y () - pnts.point (0).y ();
+     QRect rect (pnts.point (0), pnts.point (2));
+     QRect nrect = rect.normalize ();
 
-    float xrad = nrect.width () * Roundness / 200.0;
-    float yrad = nrect.height () * Roundness / 200.0;
+     float xrad = nrect.width () * Roundness / 200.0;
+     float yrad = nrect.height () * Roundness / 200.0;
 
-    QRect trect (nrect.x (), nrect.y () + yrad,
-                 nrect.width (), nrect.height () - 2 * yrad);
-    QPointArray tarray (trect, true);
-    QPointArray clip1 = matrix.map (tarray);
+     QRect trect (nrect.x (), nrect.y () + yrad,
+                  nrect.width (), nrect.height () - 2 * yrad);
+     QPointArray tarray (trect, true);
+     QPointArray clip1 = matrix.map (tarray);
 
-    trect = QRect (nrect.x () + xrad, nrect.y (),
-                   nrect.width () - 2 * xrad, nrect.height ());
-    tarray = QPointArray (trect, true);
-    QPointArray clip2 = matrix.map (tarray);
+     trect = QRect (nrect.x () + xrad, nrect.y (),
+                    nrect.width () - 2 * xrad, nrect.height ());
+     tarray = QPointArray (trect, true);
+     QPointArray clip2 = matrix.map (tarray);
 
 
-    QRegion region (clip1);
-    region = region.unite (QRegion (clip2));
+     QRegion region (clip1);
+     region = region.unite (QRegion (clip2));
 
-    tarray.makeEllipse (nrect.x (), nrect.y (), xrad * 2 , yrad * 2);
-    region = region.unite (matrix.map (tarray));
+     tarray.makeEllipse (nrect.x (), nrect.y (), xrad * 2 , yrad * 2);
+     region = region.unite (matrix.map (tarray));
 
-    tarray.makeEllipse (nrect.right () - (2 * xrad), nrect.y (),
-                        xrad * 2, yrad * 2);
-    region = region.unite (matrix.map (tarray));
+     tarray.makeEllipse (nrect.right () - (2 * xrad), nrect.y (),
+                         xrad * 2, yrad * 2);
+     region = region.unite (matrix.map (tarray));
 
-    tarray.makeEllipse (nrect.x (), nrect.bottom () - (2 * yrad),
-                        xrad * 2, yrad * 2);
-    region = region.unite (matrix.map (tarray));
+     tarray.makeEllipse (nrect.x (), nrect.bottom () - (2 * yrad),
+                         xrad * 2, yrad * 2);
+     region = region.unite (matrix.map (tarray));
 
-    tarray.makeEllipse (nrect.right () - (2 * xrad),
-                        nrect.bottom () - (2 * yrad), xrad * 2, yrad * 2);
-    region = region.unite (matrix.map (tarray));
+     tarray.makeEllipse (nrect.right () - (2 * xrad),
+                         nrect.bottom () - (2 * yrad), xrad * 2, yrad * 2);
+     region = region.unite (matrix.map (tarray));
 
-    gShape.setRegion (region);
+     gShape.setRegion (region);
   }
 
   // update the gradient information
@@ -595,12 +620,14 @@ bool GPolygon::splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2) {
   return result;
 }
 
-GCurve* GPolygon::convertToCurve () const {
-  GCurve* curve = new GCurve ();
+GCurve* GPolygon::convertToCurve () const
+{
+  GCurve* curve = new GCurve (m_gdoc);
   QListIterator<Coord> it (points);
   Coord p0 = it.current ()->transform (tmpMatrix), p = p0;
   ++it;
-  for (; it.current (); ++it) {
+  for (; it.current (); ++it)
+  {
     Coord p1 = it.current ()->transform (tmpMatrix);
     curve->addLineSegment (p0, p1);
     p0 = p1;

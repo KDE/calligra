@@ -30,7 +30,6 @@
 class GPolyline;
 
 class FreeHandTool : public Tool {
-  Q_OBJECT
 public:
   FreeHandTool (CommandHistory* history);
 

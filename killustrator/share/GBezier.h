@@ -30,9 +30,11 @@
 
 class GBezier : public GPolyline {
   Q_OBJECT
+   private:
+      GBezier():GPolyline(0) {cout<<"GBezier ctor"<<endl; exit(1);};
 public:
-  GBezier ();
-  GBezier (const QDomElement &element);
+  GBezier (GDocument* parent);
+  GBezier (GDocument* parent, const QDomElement &element);
   GBezier (const GBezier& obj);
   ~GBezier () {}
 
@@ -48,7 +50,7 @@ public:
   virtual QString typeName () const;
 
   virtual GObject* copy ();
-  virtual GObject* clone (const QDomElement &element);
+  //virtual GObject* create (GDocument *doc, const QDomElement &element);
 
   virtual QDomElement writeToXml (QDomDocument &document);
 

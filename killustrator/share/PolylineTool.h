@@ -29,8 +29,8 @@
 
 class GPolyline;
 
-class PolylineTool : public Tool {
-  Q_OBJECT
+class PolylineTool : public Tool
+{
 public:
   PolylineTool (CommandHistory* history);
 

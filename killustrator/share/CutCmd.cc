@@ -83,4 +83,3 @@ void CutCmd::unexecute () {
   }
 }
 
-#include <CutCmd.moc>

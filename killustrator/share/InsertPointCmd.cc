@@ -60,4 +60,3 @@ void InsertPointCmd::unexecute () {
   }
 }
 
-#include <InsertPointCmd.moc>

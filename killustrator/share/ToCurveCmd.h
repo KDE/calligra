@@ -32,7 +32,6 @@ class GObject;
 class GCurve;
 
 class ToCurveCmd : public Command {
-  Q_OBJECT
 public:
   ToCurveCmd (GDocument* doc);
   ~ToCurveCmd ();

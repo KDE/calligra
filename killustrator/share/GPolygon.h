@@ -29,13 +29,15 @@
 
 class GPolygon : public GPolyline {
   Q_OBJECT
+   private:
+      GPolygon():GPolyline(0) {cout<<"GPolygon ctor"<<endl; exit(1);};
 public:
   enum Kind { PK_Square, PK_Rectangle, PK_Polygon };
 
-  GPolygon (Kind pkind = PK_Polygon);
-  GPolygon (const QDomElement &element, Kind pkind = PK_Polygon);
+  GPolygon (GDocument* parent, Kind pkind = PK_Polygon);
+  GPolygon (GDocument* parent, const QDomElement &element, Kind pkind = PK_Polygon);
   GPolygon (const GPolygon& obj);
-  GPolygon (QList<Coord>& coords);
+  GPolygon (GDocument* parent, QList<Coord>& coords);
   ~GPolygon () {}
 
   virtual void movePoint (int idx, float dx, float dy, bool ctrlPressed=false);
@@ -61,7 +63,7 @@ public:
   virtual QString typeName () const;
 
   virtual GObject* copy ();
-  virtual GObject* clone (const QDomElement &element);
+  //virtual GObject* create (GDocument *doc, const QDomElement &element);
 
   virtual QDomElement writeToXml (QDomDocument &document);
 

@@ -30,7 +30,6 @@
 class GPolygon;
 
 class RectangleTool : public Tool {
-  Q_OBJECT
 public:
   RectangleTool (CommandHistory *history);
 

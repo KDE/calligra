@@ -99,4 +99,3 @@ void DuplicateCmd::setRepetitionOffset (float dx, float dy) {
   repeatCmd = true;
 }
 
-#include <DuplicateCmd.moc>

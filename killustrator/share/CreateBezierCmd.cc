@@ -50,4 +50,3 @@ void CreateBezierCmd::unexecute () {
   document->deleteObject (object);
 }
 
-#include <CreateBezierCmd.moc>

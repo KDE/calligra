@@ -67,4 +67,3 @@ void SetPropertyCmd::execute () {
   }
 }
 
-#include <SetPropertyCmd.moc>

@@ -27,8 +27,8 @@
 #include <qwmf.h>
 #include <klocale.h>
 
-#include <GClipart.h>
-#include <GDocument.h>
+#include "GClipart.h"
+#include "GDocument.h"
 
 InsertClipartCmd::InsertClipartCmd (GDocument* doc, const QString &fname) :
  Command(i18n("Insert Clipart"))
@@ -49,7 +49,7 @@ void InsertClipartCmd::execute () {
     clipart->unref ();
 
   if (wmf.load(filename)) {
-    clipart = new GClipart (wmf, filename);
+    clipart = new GClipart (document, wmf, filename);
     document->insertObject (clipart);
   }
 }
@@ -59,4 +59,3 @@ void InsertClipartCmd::unexecute () {
     document->deleteObject (clipart);
 }
 
-#include <InsertClipartCmd.moc>

@@ -30,7 +30,6 @@
 class GText;
 
 class TextTool : public Tool {
-  Q_OBJECT
 public:
   TextTool (CommandHistory* history);
 

@@ -46,7 +46,7 @@ void InsertPixmapCmd::execute () {
   if (pixmap)
     pixmap->unref ();
 
-  pixmap = new GPixmap (filename);
+  pixmap = new GPixmap (document, filename);
   document->insertObject (pixmap);
 }
 
@@ -55,4 +55,3 @@ void InsertPixmapCmd::unexecute () {
     document->deleteObject (pixmap);
 }
 
-#include <InsertPixmapCmd.moc>

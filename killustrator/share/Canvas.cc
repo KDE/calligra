@@ -70,11 +70,9 @@ Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidge
   connect(hBar, SIGNAL(valueChanged(int)), SLOT(scrollX(int)));
 
   connect (document, SIGNAL (changed ()), this, SLOT (repaint ()));
-  connect (document, SIGNAL (changed (const Rect&)),
-           this, SLOT (updateRegion (const Rect&)));
+  connect (document, SIGNAL (changed (const Rect&)), this, SLOT (updateRegion (const Rect&)));
   connect (document, SIGNAL (sizeChanged ()), this, SLOT (calculateSize ()));
-  connect (&(document->handle ()), SIGNAL (handleChanged ()),
-           this, SLOT (repaint ()));
+  connect (document, SIGNAL (handleChanged ()), this, SLOT (repaint ()));
   connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
 
   buffer = new QPixmap();
@@ -89,7 +87,6 @@ Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidge
 
   readGridProperties ();
   updateGridInfos ();
-
   calculateSize ();
   
   setFocusPolicy (StrongFocus);
@@ -131,15 +128,15 @@ QSize Canvas::actualPaperSizePt() const
  }
 
 void Canvas::updateScrollBars()
- {
-  hBar->setRange(-actualSize().width()/2,actualSize().width()/2);
-  vBar->setRange(-actualSize().height()/2,actualSize().height()/2);
+{
+   hBar->setRange(-actualSize().width()/2,actualSize().width()/2);
+   vBar->setRange(-actualSize().height()/2,actualSize().height()/2);
   
-  if(hBar->value() > hBar->maxValue() || hBar->value() < hBar->minValue())
-   hBar->setValue(0);
+   if(hBar->value() > hBar->maxValue() || hBar->value() < hBar->minValue())
+      hBar->setValue(0);
 
-  if(vBar->value() > vBar->maxValue() || vBar->value() < vBar->minValue())
-   vBar->setValue(0);
+   if(vBar->value() > vBar->maxValue() || vBar->value() < vBar->minValue())
+      vBar->setValue(0);
  }
 
 void Canvas::scrollX(int v)
@@ -247,7 +244,8 @@ void Canvas::setZoomFactor (float factor)
   repaint();
   emit sizeChanged ();
   emit visibleAreaChanged((width() - actualPaperSizePt().width())/2-xPaper,(height() - actualPaperSizePt().height())/2 -yPaper);
-//  emit zoomFactorChanged (zoomFactor, x/2 ,y/2);
+  //emit zoomFactorChanged (zoomFactor, x/2 ,y/2);
+  emit zoomFactorChanged (zoomFactor);
  }
 
 void Canvas::setToolController (ToolController* tc)
@@ -518,31 +516,34 @@ void Canvas::showGrid (bool flag)
   if (gridIsOn != flag) {
     gridIsOn = flag;
     repaint();
-    emit gridStatusChanged ();
-    saveGridProperties ();
+    //emit gridStatusChanged ();
+    //saveGridProperties ();
   }
  }
 
-void Canvas::snapToGrid (bool flag) {
-  if (gridSnapIsOn != flag) {
-    gridSnapIsOn = flag;
-    saveGridProperties ();
-    emit gridStatusChanged ();
-    document->setGrid (hGridDistance, vGridDistance, gridSnapIsOn);
-  }
+void Canvas::snapToGrid (bool flag)
+{
+   if (gridSnapIsOn != flag)
+   {
+      gridSnapIsOn = flag;
+      //saveGridProperties ();
+      //emit gridStatusChanged ();
+      document->setGrid (hGridDistance, vGridDistance, gridSnapIsOn);
+   }
 }
 
 void Canvas::setGridColor(QColor color)
- {
-  mGridColor = color;
-  saveGridProperties ();
- }
+{
+    mGridColor = color;
+    //saveGridProperties ();
+}
 
-void Canvas::setGridDistance (float hdist, float vdist) {
-  hGridDistance = hdist;
-  vGridDistance = vdist;
-  saveGridProperties ();
-  document->setGrid (hGridDistance, vGridDistance, gridSnapIsOn);
+void Canvas::setGridDistance (float hdist, float vdist)
+{
+   hGridDistance = hdist;
+   vGridDistance = vdist;
+   //saveGridProperties ();
+   document->setGrid (hGridDistance, vGridDistance, gridSnapIsOn);
 }
 
 Rect Canvas::snapTranslatedBoxToGrid (const Rect& r) {
@@ -704,6 +705,7 @@ void Canvas::drawGrid (QPainter& p) {
 }
 
 void Canvas::readGridProperties () {
+   kdDebug()<<"Canvas::readGridProps()"<<endl;
   KConfig* config = kapp->config ();
   QString oldgroup = config->group ();
 
@@ -719,11 +721,11 @@ void Canvas::readGridProperties () {
   helplinesAreOn = config->readBoolEntry ("showHelplines");
   helplinesSnapIsOn = config->readBoolEntry ("snapTopHelplines");
   document->layerForHelplines ()->setVisible (helplinesAreOn);
-
-  config->setGroup (oldgroup);
 }
 
-void Canvas::saveGridProperties () {
+void Canvas::saveGridProperties ()
+{
+   kdDebug()<<"Canvas::saveGridProps()"<<endl;
   KConfig* config = kapp->config ();
   QString oldgroup = config->group ();
 
@@ -743,19 +745,17 @@ void Canvas::saveGridProperties () {
   config->sync ();
 }
 
-
-
-
-
-void Canvas::updateGridInfos () {
-  document->getGrid (hGridDistance, vGridDistance, gridSnapIsOn);
-  document->getHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
-  if (helplinesAreOn != document->layerForHelplines ()->isVisible ())
-    showHelplines (document->layerForHelplines ()->isVisible ());
-  else {
-    saveGridProperties ();
-    emit gridStatusChanged ();
-  }
+void Canvas::updateGridInfos ()
+{
+   document->getGrid (hGridDistance, vGridDistance, gridSnapIsOn);
+   document->getHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
+   if (helplinesAreOn != document->layerForHelplines ()->isVisible ())
+      showHelplines (document->layerForHelplines ()->isVisible ());
+   else
+   {
+      //saveGridProperties ();
+      //emit gridStatusChanged ();
+   }
 }
 
 /***************************HELPLINES********************/
@@ -865,28 +865,35 @@ const QValueList<float>& Canvas::getVertHelplines () const {
   return vertHelplines;
 }
 
-void Canvas::alignToHelplines (bool flag) {
-  helplinesSnapIsOn = flag;
-  emit gridStatusChanged ();
-  document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
+void Canvas::alignToHelplines (bool flag)
+{
+   if (helplinesSnapIsOn!=flag)
+   {
+      helplinesSnapIsOn = flag;
+      //emit gridStatusChanged ();
+      document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
+   };
 }
 
 bool Canvas::alignToHelplines () {
   return helplinesSnapIsOn;
 }
 
-void Canvas::showHelplines (bool flag) {
-  if (helplinesAreOn != flag) {
-    helplinesAreOn = flag;
-    document->layerForHelplines ()->setVisible (helplinesAreOn);
-    repaint();
-    emit gridStatusChanged ();
-    saveGridProperties ();
-  }
+void Canvas::showHelplines (bool flag)
+{
+   if (helplinesAreOn != flag)
+   {
+      helplinesAreOn = flag;
+      document->layerForHelplines ()->setVisible (helplinesAreOn);
+      repaint();
+      //emit gridStatusChanged ();
+      //saveGridProperties ();
+   }
 }
 
-bool Canvas::showHelplines () {
-  return helplinesAreOn;
+bool Canvas::showHelplines ()
+{
+   return helplinesAreOn;
 }
 
 int Canvas::indexOfHorizHelpline (float pos) {
