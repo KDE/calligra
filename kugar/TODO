@@ -16,6 +16,7 @@ Kudesigner:
 - undo / redo
 - cut / copy / paste
 - DCOP interface
+- more flexible uncompressed file save (maybe export filter)
 
 - optimizations:
 -- create property editor widgets only once
@@ -55,6 +56,5 @@ Kugar engine:
 
 
 Kugar shell(part):
-- ???? review of current development status needed ???? (to Joseph Wenninger)
 - --print --from <number> --to <number> --copies <number> --printer <name>
     AD: have some pathes for kugar/lib and kugar/shell (deprecated shell)
