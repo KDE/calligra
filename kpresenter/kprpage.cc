@@ -1984,38 +1984,26 @@ void KPrPage::makeUsedPixmapListForGroupObject( KPObject *_obj )
     }
 }
 
-QValueList<int> KPrPage::reorderPage() const
+
+QValueList<int> KPrPage::getEffectSteps() const
 {
-    QValueList<int> orderList;
-    orderList.append( 0 );
-    QPtrListIterator<KPObject> oIt( m_objectList );
-    for ( ; oIt.current() ; ++oIt )
+    QMap<int,bool> stepmap;
+    stepmap[0] = true;
+
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current(); ++it )
     {
-        if ( orderList.find( oIt.current()->getPresNum() ) == orderList.end() )
+        stepmap[it.current()->getAppearStep()] = true;
+
+        if ( it.current()->getDisappear() )
         {
-            if ( orderList.isEmpty() )
-                orderList.append( oIt.current()->getPresNum() );
-            else
-            {
-                QValueList<int>::Iterator it = orderList.begin();
-                for ( ; *it < oIt.current()->getPresNum() && it != orderList.end(); ++it );
-                orderList.insert( it, oIt.current()->getPresNum() );
-            }
-        }
-        if ( oIt.current()->getDisappear() && orderList.find( oIt.current()->getDisappearNum() ) == orderList.end() )
-        {
-            if ( orderList.isEmpty() )
-                orderList.append( oIt.current()->getDisappearNum() );
-            else
-            {
-                QValueList<int>::Iterator it = orderList.begin();
-                for ( ; *it < oIt.current()->getDisappearNum() && it != orderList.end(); ++it );
-                orderList.insert( it, oIt.current()->getDisappearNum() );
-            }
+            stepmap[it.current()->getDisappearStep()] = true;
         }
     }
-    return orderList;
+    
+    return stepmap.keys();
 }
+
 
 void KPrPage::deSelectAllObj()
 {

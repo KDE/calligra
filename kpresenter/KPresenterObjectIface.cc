@@ -71,9 +71,9 @@ int KPresenterObjectIface::effect2() const
     return (int)obj->getEffect2();
 }
 
-int KPresenterObjectIface::presNum() const
+int KPresenterObjectIface::appearStep() const
 {
-    return obj->getPresNum();
+    return obj->getAppearStep();
 }
 
 int KPresenterObjectIface::subPresSteps() const
@@ -86,9 +86,9 @@ bool KPresenterObjectIface::disappear() const
     return obj->getDisappear();
 }
 
-int KPresenterObjectIface::disappearNum() const
+int KPresenterObjectIface::disappearStep() const
 {
-    return obj->getDisappearNum();
+    return obj->getDisappearStep();
 }
 
 int KPresenterObjectIface::effect3() const
@@ -159,9 +159,9 @@ void KPresenterObjectIface::setObjectName( const QString &_objectName )
     obj->setObjectName(_objectName);
 }
 
-void KPresenterObjectIface::setPresNum( int _presNum )
+void KPresenterObjectIface::setAppearStep( int _appearStep )
 {
-    obj->setPresNum(_presNum);
+    obj->setAppearStep(_appearStep);
 }
 
 void KPresenterObjectIface::setDisappear( bool b )

@@ -76,8 +76,8 @@ const QString &KPObject::attrStyle=KGlobal::staticQString("style");
 KPObject::KPObject()
     : orig(), ext(), shadowColor( Qt::gray ), sticky( FALSE )
 {
-    presNum = 0;
-    disappearNum = 1;
+    appearStep = 0;
+    disappearStep = 1;
     effect = EF_NONE;
     effect2 = EF2_NONE;
     effect3 = EF3_NONE;
@@ -135,8 +135,8 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
         elem.setAttribute(attrEffect2, static_cast<int>( effect2 ));
         fragment.appendChild(elem);
     }
-    if(presNum!=0)
-        fragment.appendChild(KPObject::createValueElement(tagPRESNUM, presNum, doc));
+    if(appearStep!=0)
+        fragment.appendChild(KPObject::createValueElement(tagPRESNUM, appearStep, doc));
     if(angle!=0.0) {
         elem=doc.createElement(tagANGLE);
         elem.setAttribute(attrValue, angle);
@@ -146,7 +146,7 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
         elem=doc.createElement(tagDISAPPEAR);
         elem.setAttribute(attrEffect, static_cast<int>( effect3 ));
         elem.setAttribute(attrDoit, static_cast<int>( disappear ));
-        elem.setAttribute(attrNum, disappearNum);
+        elem.setAttribute(attrNum, disappearStep);
         fragment.appendChild(elem);
     }
     if(appearTimer!=1 || disappearTimer!=1) {
@@ -240,10 +240,10 @@ double KPObject::load(const QDomElement &element) {
     e=element.namedItem(tagPRESNUM).toElement();
     if(!e.isNull()) {
         if(e.hasAttribute(attrValue))
-            presNum=e.attribute(attrValue).toInt();
+            appearStep=e.attribute(attrValue).toInt();
     }
     else
-        presNum=0;
+        appearStep=0;
     e=element.namedItem(tagDISAPPEAR).toElement();
     if(!e.isNull()) {
         if(e.hasAttribute(attrEffect))
@@ -251,12 +251,12 @@ double KPObject::load(const QDomElement &element) {
         if(e.hasAttribute(attrDoit))
             disappear=static_cast<bool>(e.attribute(attrDoit).toInt());
         if(e.hasAttribute(attrNum))
-            disappearNum=e.attribute(attrNum).toInt();
+            disappearStep=e.attribute(attrNum).toInt();
     }
     else {
         effect3=EF3_NONE;
         disappear=false;
-        disappearNum=1;
+        disappearStep=1;
     }
     e=element.namedItem("TIMER").toElement();
     if(!e.isNull()) {

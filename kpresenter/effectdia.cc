@@ -67,13 +67,13 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     topLayout->addWidget(grp1);
     QGridLayout *upperRow = new QGridLayout(grp1->layout(), 5, 4);
 
-    lNum = new QLabel( i18n( "Order of appearance:" ), grp1 );
-    lNum->setAlignment( AlignVCenter );
-    upperRow->addWidget(lNum, 0, 0);
+    lAppear = new QLabel( i18n( "Order of appearance:" ), grp1 );
+    lAppear->setAlignment( AlignVCenter );
+    upperRow->addWidget(lAppear, 0, 0);
 
-    eNum = new QSpinBox( 0, 100, 1, grp1 );
-    eNum->setValue( obj->getPresNum() );
-    upperRow->addWidget(eNum, 0, 1);
+    eAppearStep = new QSpinBox( 0, 100, 1, grp1 );
+    eAppearStep->setValue( obj->getAppearStep() );
+    upperRow->addWidget(eAppearStep, 0, 1);
 
     //( void )new QWidget( grp1 );
     //( void )new QWidget( grp1 );
@@ -198,9 +198,9 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     lDisappear->setAlignment( AlignVCenter );
     lowerRow->addWidget(lDisappear, 0, 0);
 
-    eDisappear = new QSpinBox( 0, 100, 1, grp2 );
-    eDisappear->setValue( obj->getDisappearNum() );
-    lowerRow->addWidget(eDisappear, 0, 1);
+    eDisappearStep = new QSpinBox( 0, 100, 1, grp2 );
+    eDisappearStep->setValue( obj->getDisappearStep() );
+    lowerRow->addWidget(eDisappearStep, 0, 1);
 
     lDEffect = new QLabel( i18n( "Effect (disappearing):" ), grp2 );
     lDEffect->setAlignment( AlignVCenter );
@@ -303,8 +303,8 @@ void EffectDia::slotEffectDiaOk()
     for ( unsigned int i = 0; i < objs.count(); ++i ) {
         KPObject *o = objs.at( i );
         EffectCmd::EffectStruct e;
-        e.presNum = o->getPresNum();
-        e.disappearNum = o->getDisappearNum();
+        e.appearStep = o->getAppearStep();
+        e.disappearStep = o->getDisappearStep();
         e.effect = o->getEffect();
         e.effect2 = o->getEffect2();
         e.effect3 = o->getEffect3();
@@ -319,8 +319,8 @@ void EffectDia::slotEffectDiaOk()
     }
 
     EffectCmd::EffectStruct eff;
-    eff.presNum = eNum->value();
-    eff.disappearNum = eDisappear->value();
+    eff.appearStep = eAppearStep->value();
+    eff.disappearStep = eDisappearStep->value();
     eff.effect = ( Effect )cEffect->currentItem();
     eff.effect2 = ( Effect2 )cEffect2->currentItem();
     eff.effect3 = ( Effect3 )cDisappear->currentItem();
@@ -347,7 +347,7 @@ void EffectDia::resizeEvent( QResizeEvent *e )
 void EffectDia::disappearChanged()
 {
     cDisappear->setEnabled( disappear->isChecked() );
-    eDisappear->setEnabled( disappear->isChecked() );
+    eDisappearStep->setEnabled( disappear->isChecked() );
 
     if ( !view->kPresenterDoc()->spManualSwitch() )
         timerOfDisappear->setEnabled( disappear->isChecked() );

@@ -234,7 +234,10 @@ public:
     bool getPageSoundEffect( )const;
     QString getPageSoundFileName()const;
 
-    QValueList<int> reorderPage() const;
+    /**
+     * return the list of steps where objects appear/disappear.
+     */
+    QValueList<int> getEffectSteps() const;
 
     bool isSlideSelected()const {return  m_selectedSlides;}
     void slideSelected(bool _b){m_selectedSlides=_b;}

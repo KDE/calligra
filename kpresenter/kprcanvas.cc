@@ -381,16 +381,16 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
             selectionMode=SM_PROTECT;
 
         if ( ( rect2.intersects( it.current()->getBoundingRect() ) && editMode )
-             || ( !editMode && it.current()->getPresNum() <= static_cast<int>( currPresStep )
+             || ( !editMode && it.current()->getAppearStep() <= static_cast<int>( currPresStep )
                   && ( !it.current()->getDisappear() || it.current()->getDisappear()
-                       && it.current()->getDisappearNum() > static_cast<int>( currPresStep ) ) ) )
+                       && it.current()->getDisappearStep() > static_cast<int>( currPresStep ) ) ) )
 
         {
-            if ( inEffect && it.current()->getPresNum() >= static_cast<int>( currPresStep ) )
+            if ( inEffect && it.current()->getAppearStep() >= static_cast<int>( currPresStep ) )
                 continue;
 
             if ( !editMode && doSpecificEffects && !goingBack
-                 && static_cast<int>( currPresStep ) == it.current()->getPresNum() )
+                 && static_cast<int>( currPresStep ) == it.current()->getAppearStep() )
             {
                 //kdDebug(33001) << "                 setSubPresStep " << subPresStep << endl;
                 it.current()->setSubPresStep( subPresStep );
@@ -3100,7 +3100,7 @@ bool KPrCanvas::pNext( bool )
     for ( int i = 0 ; oit.current(); ++oit, ++i )
     {
         KPObject *kpobject = oit.current();
-        if ( kpobject->getPresNum() == static_cast<int>( currPresStep )
+        if ( kpobject->getAppearStep() == static_cast<int>( currPresStep )
              && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE )
         {
             if ( static_cast<int>( subPresStep + 1 ) < kpobject->getSubPresSteps() )
@@ -3168,7 +3168,7 @@ bool KPrCanvas::pNext( bool )
         for (; oIt.current(); ++oIt )
             tmpObjs.append(oIt.current());
 
-        presStepList = doc->reorderPage( currPresPage-1 );
+        presStepList = doc->getPageEffectSteps( currPresPage-1 );
         currPresStep = *presStepList.begin();
 
 #if KDE_IS_VERSION(3,1,90)
@@ -3261,7 +3261,7 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
         return false;
     } else {
         if ( slideListIterator == slideList.begin() ) {
-            presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage - 1 );
+            presStepList = m_view->kPresenterDoc()->getPageEffectSteps( currPresPage - 1 );
             currPresStep = *presStepList.begin();
             repaint( false );
             return false;
@@ -3277,7 +3277,7 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
         QPtrListIterator<KPObject> oIt( getObjectList() );
         for (; oIt.current(); ++oIt )
             tmpObjs.append(oIt.current());
-        presStepList = doc->reorderPage( currPresPage - 1 );
+        presStepList = doc->getPageEffectSteps( currPresPage - 1 );
         currPresStep = *( --presStepList.end() );
 
         m_view->setPresentationDuration( currPresPage );
@@ -3490,7 +3490,7 @@ void KPrCanvas::doObjEffects()
     for ( int i = 0 ; oit.current(); ++oit, ++i )
     {
         KPObject *kpobject = oit.current();
-        if (  kpobject->getPresNum() == static_cast<int>( currPresStep ) )
+        if (  kpobject->getAppearStep() == static_cast<int>( currPresStep ) )
         {
             if ( !spManualSwitch() )
                 timer = kpobject->getAppearTimer();
@@ -3558,7 +3558,7 @@ void KPrCanvas::doObjEffects()
                 effects = true;
             }
         }
-        else if (  kpobject->getDisappear() && kpobject->getDisappearNum() == static_cast<int>( currPresStep ) )
+        else if (  kpobject->getDisappear() && kpobject->getDisappearStep() == static_cast<int>( currPresStep ) )
         {
             if ( !spManualSwitch() )
                 timer = kpobject->getDisappearTimer();
@@ -3698,7 +3698,7 @@ void KPrCanvas::doObjEffects()
                     Effect2 effect2 = kpobject->getEffect2();
 
                     if ( !kpobject->getDisappear() || kpobject->getDisappear()
-                         && kpobject->getDisappearNum() != static_cast<int>( currPresStep ) )
+                         && kpobject->getDisappearStep() != static_cast<int>( currPresStep ) )
                     {
                         switch ( kpobject->getEffect() )
                         {
@@ -4155,7 +4155,7 @@ void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y,
                             int _cx, int _cy )
 {
     if ( kpobject->getDisappear() &&
-         kpobject->getDisappearNum() < static_cast<int>( currPresStep ) )
+         kpobject->getDisappearStep() < static_cast<int>( currPresStep ) )
         return;
     int ox, oy, ow, oh;
     KoRect br = kpobject->getBoundingRect();
@@ -4173,7 +4173,7 @@ void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y,
         ownClipping = false;
     }
 
-    if ( !editMode && static_cast<int>( currPresStep ) == kpobject->getPresNum() && !goingBack )
+    if ( !editMode && static_cast<int>( currPresStep ) == kpobject->getAppearStep() && !goingBack )
     {
         kpobject->setSubPresStep( subPresStep );
         kpobject->doSpecificEffects( true );
@@ -4190,7 +4190,7 @@ void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y,
     for ( unsigned int i = tmpObjs.findRef( kpobject ) +1 ; i < tmpObjs.count(); i++ ) {
         obj = tmpObjs.at( i );
         if ( kpobject->getBoundingRect().intersects( obj->getBoundingRect() )
-             && obj->getPresNum() < static_cast<int>( currPresStep ) )
+             && obj->getAppearStep() < static_cast<int>( currPresStep ) )
             obj->draw( &p, m_view->zoomHandler(), SM_NONE, (obj->isSelected()) && drawContour);
     }
 
@@ -4905,7 +4905,7 @@ void KPrCanvas::gotoPage( int pg )
         slideListIterator = slideList.find( currPresPage );
         editMode = false;
         drawMode = false;
-        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage-1);
+        presStepList = m_view->kPresenterDoc()->getPageEffectSteps( currPresPage-1);
         currPresStep = *presStepList.begin();
         subPresStep = 0;
         //change active page

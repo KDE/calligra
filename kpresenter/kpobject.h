@@ -93,12 +93,12 @@ public:
         { effect = _effect; }
     virtual void setEffect2( Effect2 _effect2 )
         { effect2 = _effect2; }
-    virtual void setPresNum( int _presNum )
-        { presNum = _presNum; }
+    virtual void setAppearStep( int _appearStep )
+        { appearStep = _appearStep; }
     virtual void setDisappear( bool b )
         { disappear = b; }
-    virtual void setDisappearNum( int num )
-        { disappearNum = num; }
+    virtual void setDisappearStep( int num )
+        { disappearStep = num; }
     virtual void setEffect3( Effect3 _effect3)
         { effect3 = _effect3; }
     virtual void setAppearTimer( int _appearTimer )
@@ -169,14 +169,20 @@ public:
         { return a_fileName; }
     virtual QString getDisappearSoundEffectFileName() const
         { return d_fileName; }
-    virtual int getPresNum() const
-        { return presNum; }
+    /**
+     * get the step when the object appears on the site
+     */
+    virtual int getAppearStep() const
+        { return appearStep; }
     virtual int getSubPresSteps() const
         { return 0; }
     virtual bool getDisappear() const
         { return disappear; }
-    virtual int getDisappearNum() const
-        { return disappearNum; }
+    /**
+     * get the step when the object disappears from the site
+     */
+    virtual int getDisappearStep() const
+        { return disappearStep; }
 
     virtual void setOwnClipping( bool _ownClipping )
         { ownClipping = _ownClipping; }
@@ -277,7 +283,8 @@ protected:
     int appearTimer, disappearTimer;
     QString a_fileName, d_fileName;
     QString objectName;
-    int presNum, disappearNum;
+    // step when objects appears/disappears
+    int appearStep, disappearStep;
 
     bool disappear:1;
     bool appearSoundEffect:1;

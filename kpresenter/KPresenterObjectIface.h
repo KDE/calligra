@@ -45,10 +45,10 @@ k_dcop:
     QColor shadowColor() const;
     int effect() const;
     int effect2() const;
-    int presNum() const;
+    int appearStep() const;
     int subPresSteps() const;
     bool disappear() const;
-    int disappearNum() const;
+    int disappearStep() const;
     int effect3() const;
 
     void setEffect(const QString & effect);
@@ -72,7 +72,7 @@ k_dcop:
 
     void setObjectName( const QString &_objectName );
 
-    void setPresNum( int _presNum );
+    void setAppearStep( int _appearStep );
 
     void setDisappear( bool b );
 

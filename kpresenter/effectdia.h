@@ -55,8 +55,8 @@ protected:
     QString getSoundFileFilter() const;
 
     QComboBox *cEffect, *cEffect2, *cDisappear;
-    QLabel *lEffect, *lEffect2, *lNum, *lDisappear, *lDEffect;
-    QSpinBox *eNum,*eDisappear;
+    QLabel *lEffect, *lEffect2, *lAppear, *lDisappear, *lDEffect;
+    QSpinBox *eAppearStep,*eDisappearStep;
     QCheckBox *disappear;
     QBoxLayout *topLayout;
     KIntNumInput *timerOfAppear, *timerOfDisappear;

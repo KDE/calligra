@@ -223,7 +223,7 @@ class EffectCmd : public KNamedCommand
 {
 public:
     struct EffectStruct {
-        int presNum, disappearNum;
+        int appearStep, disappearStep;
         Effect effect;
         Effect2 effect2;
         Effect3 effect3;

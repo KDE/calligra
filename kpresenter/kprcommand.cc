@@ -428,12 +428,12 @@ void EffectCmd::execute()
     QPtrListIterator<KPObject> it( objs );
     for ( ; it.current() ; ++it )
     {
-        it.current()->setPresNum( newEffect.presNum );
+        it.current()->setAppearStep( newEffect.appearStep );
         it.current()->setEffect( newEffect.effect );
         it.current()->setEffect2( newEffect.effect2 );
         it.current()->setDisappear( newEffect.disappear );
         it.current()->setEffect3( newEffect.effect3 );
-        it.current()->setDisappearNum( newEffect.disappearNum );
+        it.current()->setDisappearStep( newEffect.disappearStep );
         it.current()->setAppearTimer( newEffect.appearTimer );
         it.current()->setDisappearTimer( newEffect.disappearTimer );
         it.current()->setAppearSoundEffect( newEffect.appearSoundEffect );
@@ -449,12 +449,12 @@ void EffectCmd::unexecute()
     for ( unsigned int i = 0; i < objs.count(); ++i ) {
         object = objs.at( i );
 
-        object->setPresNum( oldEffects[ i ].presNum );
+        object->setAppearStep( oldEffects[ i ].appearStep );
         object->setEffect( oldEffects[ i ].effect );
         object->setEffect2( oldEffects[ i ].effect2 );
         object->setDisappear( oldEffects[ i ].disappear );
         object->setEffect3( oldEffects[ i ].effect3 );
-        object->setDisappearNum( oldEffects[ i ].disappearNum );
+        object->setDisappearStep( oldEffects[ i ].disappearStep );
         object->setAppearTimer( oldEffects[ i ].appearTimer );
         object->setDisappearTimer( oldEffects[ i ].disappearTimer );
         object->setAppearSoundEffect( oldEffects[ i ].appearSoundEffect );

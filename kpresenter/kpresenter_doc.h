@@ -210,7 +210,11 @@ class KPresenterDoc : public KoDocument
     void repaint( KPObject* );
 
     // stuff for screen-presentations
-    QValueList<int> reorderPage( unsigned int );
+    /**
+     * return the list of steps for the selected page 
+     * where objects appear/disappear.
+     */
+    QValueList<int> getPageEffectSteps( unsigned int );
 
     QPen presPen() const { return _presPen; }
     void setPresPen( QPen p ) {_presPen = p; }

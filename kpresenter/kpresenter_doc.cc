@@ -2135,9 +2135,9 @@ void KPresenterDoc::repaint( KPObject *kpobject )
     repaint( m_zoomHandler->zoomRect(kpobject->getBoundingRect()) );
 }
 
-QValueList<int> KPresenterDoc::reorderPage( unsigned int num )
+QValueList<int> KPresenterDoc::getPageEffectSteps( unsigned int num )
 {
-    return m_pageList.at(num)->reorderPage();
+    return m_pageList.at(num)->getEffectSteps();
 }
 
 QRect KPresenterDoc::getPageRect( bool decBorders ) const
