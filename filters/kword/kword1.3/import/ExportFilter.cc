@@ -1254,39 +1254,80 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
 
     styleKey += ',';
 
-    // ### TODO: add support of at least, multiple...
-    if (!force
-        && ( layoutOrigin.lineSpacingType == layout.lineSpacingType )
-        && ( layoutOrigin.lineSpacing == layout.lineSpacing ) )
+    if (force
+        || ( layoutOrigin.lineSpacingType != layout.lineSpacingType )
+        || ( layoutOrigin.lineSpacing != layout.lineSpacing ) )
     {
-        // Do nothing!
+        switch ( layout.lineSpacingType )
+        {
+        case LayoutData::LS_CUSTOM:
+            {
+                // We have a custom line spacing (in points)
+                const QString height ( QString::number(layout.lineSpacing) ); // ### TODO: rounding?
+                props += "style:line-spacing=\"";
+                props += height;
+                props += "pt\" ";
+                styleKey += height;
+                styleKey += 'C';
+                break;
+            }
+        case LayoutData::LS_SINGLE:
+            {
+                props += "fo:line-height=\"normal\" "; // One
+                styleKey += "100%"; // One
+                break;
+            }
+        case LayoutData::LS_ONEANDHALF:
+            {
+                props += "fo:line-height=\"150%\" "; // One-and-half
+                styleKey += "150%";
+                break;
+            }
+        case LayoutData::LS_DOUBLE:
+            {
+                props += "fo:line-height=\"200%\" "; // Two
+                styleKey += "200%";
+                break;
+            }
+        case LayoutData::LS_MULTIPLE:
+            {
+                const QString mult ( QString::number( qRound( layout.lineSpacing ) * 100 ) );
+                props += "fo:line-height=\"";
+                props += mult;
+                props += "%\" ";
+                styleKey += mult;
+                styleKey += "%";
+                break;
+            }
+        case LayoutData::LS_FIXED:
+            {
+                // We have a fixed line height (in points)
+                const QString height ( QString::number(layout.lineSpacing) ); // ### TODO: rounding?
+                props += "fo:line-height=\"";
+                props += height;
+                props += "pt\" ";
+                styleKey += height;
+                styleKey += 'F';
+                break;
+            }
+        case LayoutData::LS_ATLEAST:
+            {
+                // We have a at-least line height (in points)
+                const QString height ( QString::number(layout.lineSpacing) ); // ### TODO: rounding?
+                props += "style:line-height-at-least=\"";
+                props += height;
+                props += "pt\" ";
+                styleKey += height;
+                styleKey += 'A';
+                break;
+            }
+        default:
+            {
+                kdWarning(30518) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+                break;
+            }
+        }
     }
-    else if (!layout.lineSpacingType)
-    {
-        // We have a custom line spacing (in points)
-        props += QString("fo:line-height=\"%1pt\" ").arg(layout.lineSpacing);
-        styleKey += QString::number(layout.lineSpacing);
-    }
-    // ### FIXME: it seems that it should be fo:line-height="normal"
-    else if ( 10==layout.lineSpacingType  )
-    {
-        styleKey += "100%"; // One
-    }
-    else if ( 15==layout.lineSpacingType  )
-    {
-        props += "fo:line-height=\"150%\" "; // One-and-half
-        styleKey += "150%";
-    }
-    else if ( 20==layout.lineSpacingType  )
-    {
-        props += "fo:line-height=\"200%\" "; // Two
-        styleKey += "200%";
-    }
-    else
-    {
-        kdWarning(30518) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
-    }
-
     styleKey += ',';
 
     if ( layout.pageBreakBefore )
