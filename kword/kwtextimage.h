@@ -48,7 +48,8 @@ public:
     virtual int widthHint() const { return width; }
     virtual int minimumWidth() const { return width; }
 
-    void setImage( const KoPicture &image );
+    void setImage( const KoPictureCollection & collection );
+
     KoPicture image() const { return m_image; }
 
     virtual void drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, const int offset );
@@ -59,6 +60,10 @@ public:
 
     void load( QDomElement & formatElem );
 
+    /**
+     * Get the key of the picture
+     */
+    KoPictureKey getKey( void ) const;
 private:
     Placement place;
     KoPicture m_image;

@@ -343,7 +343,7 @@ public:
 
     // This is used upon loading, to delay certain things until completeLoading.
     // For KWTextImage
-    void addImageRequest( const KoPictureKey &key, KWTextImage *img );
+    void addTextImageRequest( KWTextImage *img );
     // For KWPictureFrameSet
     void addImageRequest( KWPictureFrameSet *fs );
     // For KWClipartFrameSet
@@ -641,7 +641,7 @@ private:
     QMap<KoPictureKey, QString> * m_clipartMap;
 
     /// List used to help loading and saving images of the old type ("text image" of class KWTextImage)
-    QMap<KoPictureKey, KWTextImage *> m_imageRequests;
+    QPtrList<KWTextImage> m_textImageRequests;
     QPtrList<KWPictureFrameSet> m_imageRequests2;
     QPtrList<KWClipartFrameSet> m_clipartRequests;
     QMap<QString, KWAnchorPosition> m_anchorRequests;

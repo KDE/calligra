@@ -144,6 +144,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_lstChildren.setAutoDelete( true );
 //    varFormats.setAutoDelete(true);
     m_lstFrameSet.setAutoDelete( true );
+    // m_textImageRequests does not create or delete the KWTextImage classes
+    m_textImageRequests.setAutoDelete(false);
 
     m_styleColl=new KoStyleCollection();
 
@@ -776,7 +778,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     m_pixmapMap = 0L;
     delete m_clipartMap;
     m_clipartMap = 0L;
-    m_imageRequests.clear();
+    m_textImageRequests.clear();
     m_imageRequests2.clear();
     m_anchorRequests.clear();
     m_clipartRequests.clear();
@@ -1423,13 +1425,12 @@ bool KWDocument::completeLoading( KoStore *_store )
 
 void KWDocument::processImageRequests()
 {
-    QMapIterator<KoPictureKey,KWTextImage *> it2 = m_imageRequests.begin();
-    for ( ; it2 != m_imageRequests.end(); ++it2 )
+    QPtrListIterator<KWTextImage> it2 ( m_textImageRequests );
+    for ( ; it2.current() ; ++it2 )
     {
-        kdDebug(32001) << "KWDocument::completeLoading loading image " << it2.key().toString() << endl;
-        it2.data()->setImage( m_imageCollection.findPicture( it2.key() ) );
+        it2.current()->setImage( m_imageCollection );
     }
-    m_imageRequests.clear();
+    m_textImageRequests.clear();
 
     QPtrListIterator<KWPictureFrameSet> it3( m_imageRequests2 );
     for ( ; it3.current() ; ++it3 )
@@ -1674,7 +1675,7 @@ QDomDocument KWDocument::saveXML()
     QDomElement framesets = doc.createElement( "FRAMESETS" );
     kwdoc.appendChild( framesets );
 
-    m_imageRequests.clear(); // for KWTextImage
+    m_textImageRequests.clear(); // for KWTextImage
     QValueList<KoPictureKey> saveImages;
     QValueList<KoPictureKey> saveCliparts;
 
@@ -1708,10 +1709,10 @@ QDomDocument KWDocument::saveXML()
     }
 
     // Process the data of the KWTextImage classes.
-    QMapIterator<KoPictureKey,KWTextImage *> textIt;
-    for ( textIt  = m_imageRequests.begin(); textIt != m_imageRequests.end(); ++textIt )
+    QPtrListIterator<KWTextImage> textIt ( m_textImageRequests );
+    for ( ; textIt.current() ; ++textIt )
     {
-        KoPictureKey key = textIt.key();
+        KoPictureKey key = textIt.current()->getKey();
         kdDebug(32001) << "KWDocument::saveXML registering text image " << key.toString() << endl;
         if ( !saveImages.contains( key ) )
             saveImages.append( key );
@@ -1810,15 +1811,16 @@ bool KWDocument::completeSaving( KoStore *_store )
     QValueList<KoPictureKey> saveCliparts;
 
     // At first, we must process the data of the KWTextImage classes.
-    QMapIterator<KoPictureKey,KWTextImage *> textIt;
-    for ( textIt  = m_imageRequests.begin(); textIt != m_imageRequests.end(); ++textIt )
+    // Process the data of the KWTextImage classes.
+    QPtrListIterator<KWTextImage> textIt ( m_textImageRequests );
+    for ( ; textIt.current() ; ++textIt )
     {
-        KoPictureKey key = textIt.key();
-        kdDebug(32001) << "KWDocument::completeSaving registering text image " << key.toString() << endl;
+        KoPictureKey key = textIt.current()->getKey();
+        kdDebug(32001) << "KWDocument::saveXML registering text image " << key.toString() << endl;
         if ( !saveImages.contains( key ) )
             saveImages.append( key );
     }
-    m_imageRequests.clear(); // Save some memory!
+    m_textImageRequests.clear(); // Save some memory!
 
     // Now do the images/cliparts in frames.
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
@@ -2569,9 +2571,9 @@ void KWDocument::setFrameMargins( double l, double r, double t, double b )
     setModified(TRUE);
 }
 
-void KWDocument::addImageRequest( const KoPictureKey &key, KWTextImage *img )
+void KWDocument::addTextImageRequest( KWTextImage *img )
 {
-    m_imageRequests.insert( key, img );
+    m_textImageRequests.append( img );
 }
 
 void KWDocument::addImageRequest( KWPictureFrameSet *fs )

@@ -17,11 +17,15 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kwtextimage.h"
-#include "kwtextframeset.h"
+#include <kdebug.h>
+
+#include <koPictureCollection.h>
+
 #include "kwdoc.h"
 #include "defs.h"
-#include <kdebug.h>
+#include "kwtextframeset.h"
+
+#include "kwtextimage.h"
 
 KWTextImage::KWTextImage( KWTextDocument *textdoc, const QString & filename )
     : KoTextCustomItem( textdoc ), place( PlaceInline )
@@ -35,12 +39,12 @@ KWTextImage::KWTextImage( KWTextDocument *textdoc, const QString & filename )
     }
 }
 
-void KWTextImage::setImage( const KoPicture &image )
+void KWTextImage::setImage( const KoPictureCollection & collection )
 {
-    kdDebug() << "KWTextImage::setImage" << endl;
-    Q_ASSERT( !image.isNull() );
-    m_image = image;
-    kdDebug() << "size: " << m_image.getOriginalSize().width() << "x" << m_image.getOriginalSize().height() << endl;
+    kdDebug(32001) << "Loading text image " << m_image.getKey().toString() << " (in KWTextImage::setImage)" << endl;
+    m_image=collection.findPicture( m_image.getKey() );
+    Q_ASSERT( !m_image.isNull() );
+    kdDebug(32001) << "size: " << m_image.getOriginalSize().width() << "x" << m_image.getOriginalSize().height() << endl;
     resize();
 }
 
@@ -105,7 +109,7 @@ void KWTextImage::save( QDomElement & parentElem )
 #endif
     // Now we must take care that a <KEY> element will be written as child of <PIXMAPS>
     KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
-    doc->addImageRequest( image().getKey(), this );
+    doc->addTextImageRequest( this );
 }
 
 void KWTextImage::load( QDomElement & parentElem )
@@ -122,7 +126,8 @@ void KWTextImage::load( QDomElement & parentElem )
     {
         KoPictureKey key;
         key.loadAttributes( keyElement );
-        doc->addImageRequest( key , this );
+        m_image.setKey(key);
+        doc->addTextImageRequest( this );
     }
     else
     {
@@ -131,7 +136,8 @@ void KWTextImage::load( QDomElement & parentElem )
         if ( !filenameElement.isNull() )
         {
             QString filename = filenameElement.attribute( "value" );
-            doc->addImageRequest( KoPictureKey( filename ), this );
+            m_image.setKey( KoPictureKey( filename ) );
+            doc->addTextImageRequest( this );
         }
         else
         {
@@ -140,3 +146,7 @@ void KWTextImage::load( QDomElement & parentElem )
     }
 }
 
+KoPictureKey KWTextImage::getKey( void ) const
+{
+    return m_image.getKey();
+}
