@@ -45,22 +45,34 @@ KoSearchContextUI::KoSearchContextUI( KoSearchContext *ctx, QWidget *parent )
 {
     m_bOptionsShown = false;
     m_btnShowOptions = new QPushButton( i18n("Show Formatting Options"), parent );
+    m_btnNoOptions= new QPushButton( i18n("No options"), parent );
     connect( m_btnShowOptions, SIGNAL( clicked() ), SLOT( slotShowOptions() ) );
+    connect( m_btnNoOptions, SIGNAL( clicked() ), SLOT( slotNoOptions() ) );
+
     m_grid = new QGridLayout( m_parent, 1, 1, 0, 6 );
     m_grid->addWidget( m_btnShowOptions, 0, 0 );
+    m_grid->addWidget( m_btnNoOptions, 1, 0 );
     m_btnShowOptions->setEnabled( true );
+    m_btnNoOptions->setEnabled( false );
 }
 
 void KoSearchContextUI::slotShowOptions()
 {
     m_bOptionsShown = true;
-
+    m_btnNoOptions->setEnabled( true );
     KoFormatDia * dlg = new KoFormatDia( m_parent, m_ctx );
     if ( dlg->exec())
     {
         dlg->ctxOptions( );
     }
     delete dlg;
+}
+
+void KoSearchContextUI::slotNoOptions()
+{
+    m_bOptionsShown = false;
+    m_btnNoOptions->setEnabled( false);
+    m_ctx->m_optionsMask = 0;
 }
 
 void KoSearchContextUI::setCtxOptions( long options )
