@@ -1,8 +1,10 @@
 koffice (1:1.1-beta1-2) unstable; urgency=low
 
+  * Added HTML documentation (closes: Bug#95319).
   * koffice: Added missing Depends: kformula (closes: Bug#95362).
   * Fleshed out man pages.
   * Fixed the location of the kprconverter.pl man page.
+  * KIllustrator wishlist items fulfilled (closes: Bug#75751).
 
  -- Ben Burton <benb@acm.org>  Mon, 30 Apr 2001 16:15:49 -0500
 

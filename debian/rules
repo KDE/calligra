@@ -94,6 +94,9 @@ install-stamp: build
 	$(INSTALL_FILE) doc/kugar/kugar/*.gif $(kugar_docs)/kugar
 	$(INSTALL_FILE) doc/kugar/templateref/*.html $(kugar_docs)/templateref
 
+	# Install the new koffice-libs docs over the old koffice-libs docs.
+	$(INSTALL_FILE) doc/koffice/HTML/* $(tmp)/usr/share/doc/kde/HTML/en/koffice
+
 	perl -w admin/debianrules cleanup
 
 	for i in `find debian/ -type l -name "common"`; do \
