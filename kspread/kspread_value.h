@@ -118,13 +118,13 @@ class KSpreadValue
     KSpreadValue( const QDateTime& dt );
 
     /**
-     * Create a floating-point value from date.
+     * Create a floating-point value from time.
      * See also note above.
      */
     KSpreadValue( const QTime& time );
 
     /**
-     * Create a floating-point value from time.
+     * Create a floating-point value from date.
      * See also note above.
      */
     KSpreadValue( const QDate& date );
