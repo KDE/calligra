@@ -292,10 +292,11 @@ int KWFrame::getRightIndent( int _y, int _h )
     _right = 0;
     for ( unsigned int i = 0; i < reg.rects().size(); ++i ) {
 	if ( reg.rects()[ i ].right() == right() ) {
-	    if ( reg.rects()[ i ].width() == width() && reg.rects()[ i ].x() == x() )
+	    if ( reg.rects()[ i ].width() == width() && reg.rects()[ i ].x() == x() && 
+		 (int)(y() + height() + getBTop().pt() + getBBottom().pt() ) == reg.rects()[ i ].y() )
 		continue;
 	    _right = QMAX( _right, reg.rects()[ i ].width() );
-	}	    
+	}	
     }
     if ( _right > 0 )
 	_right += static_cast<int>(runAroundGap.pt());
