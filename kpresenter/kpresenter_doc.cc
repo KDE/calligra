@@ -1118,7 +1118,6 @@ unsigned int KPresenterDoc::insertNewPage( int diffx, int diffy, bool _restore )
 	repaint( false );
     }
 
-    setModified(true);
     return getPageNums();
 }
 
