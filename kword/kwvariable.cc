@@ -159,7 +159,9 @@ QPtrList<KAction> KWPgNumVariable::actionList()
     {
         if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
         {
-            KAction * act = new KAction( (*it));
+            KToggleAction * act = new KToggleAction( (*it));
+            if ( m_subtype == i )
+                act->setChecked( true );
             connect( act, SIGNAL(activated()),this, SLOT(slotChangeSubType()) );
 
             m_subTextMap.insert( act, i );
@@ -514,7 +516,9 @@ QPtrList<KAction> KWFieldVariable::actionList()
     {
         if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
         {
-            KAction * act = new KAction( (*it));
+            KToggleAction * act = new KToggleAction( (*it));
+            if ( variableSubType(i) == m_subtype )
+                act->setChecked( true );
             connect( act, SIGNAL(activated()),this, SLOT(slotChangeSubType()) );
 
             m_subTextMap.insert( act, i );
@@ -567,15 +571,19 @@ QPtrList<KAction> KWDateVariable::actionList()
     {
         if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
         {
-            KAction * act = new KAction( (*it));
+            KToggleAction * act = new KToggleAction( (*it));
             connect( act, SIGNAL(activated()),this, SLOT(slotChangeSubType()) );
-
+            if ( i == m_subtype)
+                act->setChecked( true );
             m_subTextMap.insert( act, i );
             listAction.append( act );
         }
     }
     list=subTypeFormat();
     it = list.begin();
+    KoVariableDateFormat *frm = static_cast<KoVariableDateFormat *>(variableFormat());
+    QString format = frm->m_strFormat;
+
     for ( int i = 0; it != list.end() ; ++it, ++i )
     {
         if( i == 0)
@@ -591,9 +599,11 @@ QPtrList<KAction> KWDateVariable::actionList()
                 v.translatedString=ct.toString(*it);
             v.format=*it;
 
-            KAction * act = new KAction(v.translatedString);
+            KToggleAction * act = new KToggleAction(v.translatedString);
             connect( act, SIGNAL(activated()),this, SLOT(slotChangeFormat()) );
             m_subFormatMap.insert( act, v );
+            if ( (*it) == format )
+                act->setChecked( true );
             listAction.append( act );
         }
     }
@@ -667,15 +677,20 @@ QPtrList<KAction> KWTimeVariable::actionList()
     {
         if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
         {
-            KAction * act = new KAction( (*it));
-            connect( act, SIGNAL(activated()),this, SLOT(slotChangeSubType()) );
+            KToggleAction * act = new KToggleAction( (*it));
+            if ( i == m_subtype)
+                act->setChecked( true );
 
+            connect( act, SIGNAL(activated()),this, SLOT(slotChangeSubType()) );
             m_subTextMap.insert( act, i );
             listAction.append( act );
         }
     }
     list=subTypeFormat();
     it = list.begin();
+    KoVariableTimeFormat *frm = static_cast<KoVariableTimeFormat *>(variableFormat());
+    QString format = frm->m_strFormat;
+
     for ( int i = 0; it != list.end() ; ++it, ++i )
     {
         if( i == 0)
@@ -691,7 +706,9 @@ QPtrList<KAction> KWTimeVariable::actionList()
                 v.translatedString=ct.toString(*it);
             v.format=*it;
 
-            KAction * act = new KAction(v.translatedString);
+            KToggleAction * act = new KToggleAction(v.translatedString);
+            if ( *it == format )
+                act->setChecked( true );
             connect( act, SIGNAL(activated()),this, SLOT(slotChangeFormat()) );
             m_subFormatMap.insert( act, v );
             listAction.append( act );
