@@ -1041,7 +1041,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
             ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
         kdDebug(32001) << "KWDocument::loadXML KWFrame created " << frame << endl;
-        frame->setFrameBehaviour(AutoExtendFrame);
+        frame->setFrameBehaviour( AutoExtendFrame );
+        frame->setNewFrameBehaviour( Copy );
         fs->addFrame( frame );
         frames.append( fs );
     }
@@ -1051,7 +1052,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         fs->setFrameInfo( FI_EVEN_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
             ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
-        frame->setFrameBehaviour(AutoExtendFrame);
+        frame->setFrameBehaviour( AutoExtendFrame );
+        frame->setNewFrameBehaviour( Copy );
         fs->addFrame( frame );
         frames.append( fs );
     }
@@ -1061,7 +1063,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         fs->setFrameInfo( FI_ODD_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
             ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
-        frame->setFrameBehaviour(AutoExtendFrame);
+        frame->setFrameBehaviour( AutoExtendFrame );
+        frame->setNewFrameBehaviour( Copy );
         fs->addFrame( frame );
         frames.append( fs );
     }
@@ -1072,7 +1075,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
             ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
             ptRightBorder(), 20 );
-        frame->setFrameBehaviour(AutoExtendFrame);
+        frame->setFrameBehaviour( AutoExtendFrame );
+        frame->setNewFrameBehaviour( Copy );
         fs->addFrame( frame );
         frames.append( fs );
     }
@@ -1083,7 +1087,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
             ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
             ptRightBorder(), 20 );
-        frame->setFrameBehaviour(AutoExtendFrame);
+        frame->setFrameBehaviour( AutoExtendFrame );
+        frame->setNewFrameBehaviour( Copy );
         fs->addFrame( frame );
         frames.append( fs );
     }
@@ -1094,7 +1099,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
             ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
             ptRightBorder(), 20 );
-        frame->setFrameBehaviour(AutoExtendFrame);
+        frame->setFrameBehaviour( AutoExtendFrame );
+        frame->setNewFrameBehaviour( Copy );
         fs->addFrame( frame );
         frames.append( fs );
     }
