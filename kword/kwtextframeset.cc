@@ -1638,10 +1638,11 @@ KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &
                 }
             }
         }
-        Q_ASSERT( res != 0 ); // this should have been already handled !
+        // res == 0 can't happen in theory, but in practice it happens when a frame has a height of 0
+        // (e.g. newly imported table without correct row heights)
         if ( res < 0 )
             n2 = mid - 1;
-        else // if ( res > 0 )
+        else // if ( res >= 0 )
             n1 = mid + 1;
 #ifdef DEBUG_ITD
         kdDebug() << "ITD: End of loop. n1=" << n1 << " n2=" << n2 << endl;
