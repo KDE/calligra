@@ -33,3 +33,23 @@ void KWordTextFrameSetEditIface::insertExpression(const QString &_c)
 {
     m_framesetedit->insertExpression(_c);
 }
+
+void KWordTextFrameSetEditIface::insertFrameBreak()
+{
+    m_framesetedit->insertFrameBreak();
+}
+
+void KWordTextFrameSetEditIface::insertVariable( int type, int subtype = 0 )
+{
+    m_framesetedit->insertVariable(type,subtype);
+}
+
+void KWordTextFrameSetEditIface::insertCustomVariable( const QString &name)
+{
+    m_framesetedit->insertCustomVariable(name);
+}
+
+void KWordTextFrameSetEditIface::insertLink(const QString &_linkName, const QString & hrefName)
+{
+    m_framesetedit->insertLink(_linkName,hrefName);
+}

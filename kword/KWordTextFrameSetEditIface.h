@@ -36,7 +36,10 @@ public:
 
 k_dcop:
     void insertExpression(const QString &_c);
-
+    void insertFrameBreak();
+    void insertVariable( int type, int subtype = 0 );
+    void insertCustomVariable( const QString &name);
+    void insertLink(const QString &_linkName, const QString & hrefName);
 private:
     KWTextFrameSetEdit *m_framesetedit;
 
