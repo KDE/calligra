@@ -1138,6 +1138,15 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         // TODO spFootBody (where is this in OOo?)
         // Answer: margins of the <style:header-footer> element
     }
+    else // this doesn't happen with normal documents, but it can happen if copying something,
+         // pasting into konq as foo.odt, then opening that...
+    {
+        __columns.columns = 1;
+        __columns.ptColumnSpacing = 2;
+        m_headerVisible = false;
+        m_footerVisible = false;
+	m_pageLayout = KoPageLayout::standardLayout();
+    }
 
     createLoadingInfo();
     KWOasisLoader oasisLoader( this );
