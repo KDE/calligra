@@ -93,6 +93,8 @@ KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _
   setOkButton("OK");
 
   retPressed = false;
+
+  setCaption("Page Layout");
 }
 
 /*===================== destructor ===============================*/
