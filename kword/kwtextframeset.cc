@@ -3114,8 +3114,8 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat, bool force )
     // Paragraph settings
     KWTextParag * parag = static_cast<KWTextParag *>(cursor()->parag());
 
-    if ( m_paragLayout.alignment != parag->alignment() || force ) {
-        m_paragLayout.alignment = parag->alignment();
+    if ( m_paragLayout.alignment != parag->resolveAlignment() || force ) {
+        m_paragLayout.alignment = parag->resolveAlignment();
         m_canvas->gui()->getView()->showAlign( m_paragLayout.alignment );
     }
 

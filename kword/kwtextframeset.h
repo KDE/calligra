@@ -356,7 +356,8 @@ public:
     { return textFrameSet()->setPageBreakingCommand( cursor(), pageBreaking ); }
 
 
-    const KoParagLayout & currentParagLayout() const { return m_paragLayout; }
+    //const KoParagLayout & currentParagLayout() const { return m_paragLayout; }
+    double currentLeftMargin() const { return m_paragLayout.margins[QStyleSheetItem::MarginLeft]; }
 
     void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
 

@@ -159,4 +159,6 @@ Changes between KWord-1.2-beta1 and KWord-1.2-beta2
 - The default width used by tab stops is now configurable
 - Headers and footers can be both "different on first page" and "different
   on odd/even pages" at the same time.
-- Now we can save image from document to disk
+- Ability to save an image from a document to the disk
+- Cursor position is saved into the file, to restore it when reopening the document
+- The "text" view mode is finally operationnal.

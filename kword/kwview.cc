@@ -1530,6 +1530,8 @@ void KWView::showRulerIndent( double _leftMargin, double _firstLine, double _rig
 void KWView::showAlign( int align ) {
     switch ( align ) {
         case Qt::AlignAuto: // In left-to-right mode it's align left. TODO: alignright if text->isRightToLeft()
+            kdWarning() << k_funcinfo << "shouldn't be called with AlignAuto" << endl;
+            // fallthrough
         case Qt::AlignLeft:
             actionFormatAlignLeft->setChecked( TRUE );
             break;
@@ -3909,7 +3911,7 @@ void KWView::textIncreaseIndent()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
     {
-        double leftMargin = edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
+        double leftMargin = edit->currentLeftMargin();
         double indent = m_doc->indentValue();
         double newVal = leftMargin + indent;
         // Test commented out. This breaks with the DTP case... The user can put
@@ -3928,7 +3930,7 @@ void KWView::textDecreaseIndent()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
     {
-        double leftMargin = edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
+        double leftMargin = edit->currentLeftMargin();
         if ( leftMargin > 0 )
         {
             double indent = m_doc->indentValue();
@@ -4215,7 +4217,7 @@ void KWView::newFirstIndent( double _firstIndent )
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (!edit) return;
-    double val = _firstIndent - edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
+    double val = _firstIndent - edit->currentLeftMargin();
     KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginFirstLine, val );
     if(cmd)
         m_doc->addCommand(cmd);
@@ -4587,7 +4589,7 @@ void KWView::slotFrameSetEditChanged()
     actionCreateStyleFromSelection->setEnabled( state && hasSelection);
     bool goodleftMargin=false;
     if(state)
-        goodleftMargin=(edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft]>0);
+        goodleftMargin=(edit->currentLeftMargin()>0);
 
     actionFormatDecreaseIndent->setEnabled(goodleftMargin && state);
     bool isFootNoteSelected = ((rw && edit && !edit->textFrameSet()->isFootEndNote())||(!edit&& rw));
@@ -4761,7 +4763,10 @@ void KWView::frameSelectedChanged()
     if(paragLayout->counter)
         counter = *(paragLayout->counter);
     showCounter( counter );
-    showAlign( paragLayout->alignment );
+    int align = paragLayout->alignment;
+    if ( align == Qt::AlignAuto )
+        align = Qt::AlignLeft; // ## seems hard to detect RTL here
+    showAlign( align );
 }
 
 void KWView::docStructChanged(int _type)
