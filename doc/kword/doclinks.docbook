@@ -11,7 +11,7 @@
 <title>Document Links </title>
 <indexterm><primary>document links</primary></indexterm>
 
-<para>&kword; has the ability to insert Internet addresses, email addresses and file locations with a descriptor.  This is most often used to
+<para>&kword; has the ability to insert Internet addresses, email addresses, locations within the current document (bookmarks) and external file locations with a descriptor.  This is most often used to
 create web pages in &kword;.</para>
 
 <para>Once inserted into the document, the descriptor will be visible in &kword;, but when saved as a web document, the descriptor will become
@@ -69,6 +69,9 @@ once on the document link with the &RMB;.  A submenu will appear.  Select <guila
 </sect2><sect2 id="links-delete"><title>Deleting a document link</title>
 <para>You can delete a document link like any other text in your document.</para>
 <para>Simply place the cursor at the end of the document link, and press &Backspace;.  The document link is deleted in its entirety.</para>
+</sect2>
+<sect2 id="links-remove"><title>Converting a document link to text</title>
+<para>If a document link is no longer needed as a link, but you want to preserve the text that is the link, click once on the document link with the &RMB;.  A submenu will appear.  Select <guilabel>Remove Link...</guilabel>.  The linked text will now become plain text, and the link will be deleted.</para>
 
 </sect2>
 

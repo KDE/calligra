@@ -60,7 +60,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2005-1-2</date>
+<date>2005-1-8</date>
 <releaseinfo>1.5</releaseinfo>
 
 <abstract>
@@ -84,34 +84,17 @@ This manual describes &kword; 1.4.
 
 <!--
 TODO:
-
+- Continue updates to documentation - starting at "Comments"
+- Update File Dialog
+- Update screenshots
 - Write Migrating section
 - Write Watermark procedure
 - Write Chapter Numbering
 - Personal expressions path
-- Word by word strikout and underline
-- Add offset from baseline
-- Convert table to text
 - How to change page numbering between different sections of the document procedure
 - Personal dictionary
-- Variable - date of last printing
-- "myspell = openoffice dictionary
-- Edit ignore all list - RMB, etc
-- Autocorrection - capitalize name of the day.
-- Undo/Redo has changed to listbox
-- Global document language
-- Add personal expression from selected text
-- Find prev/ Find next
-- Insert Page/Delete Page
-- wv2 for filters in installation
-- Create linked copy (MB and text)
-- create text box (MB and text)
-- Convert table to text (MB and text)
-- Sort text (MB and text)
-- type anywhere cursor
-- hyphenation
-- shadow text
-- Personal path page.
+- "Load from Address Book" Button in Document Information (When working)
+- Recheck "Spelling dialog" section for changes to UI
 
 -->
 
@@ -463,7 +446,7 @@ there are many possible authors (employees) and hundreds (or thousands) of docum
 information (email address, telephone numbers and physical address).</para>
 <tip><para>Every value entered in this dialog can be inserted as a
 <link linkend="variables">document variables</link>.</para></tip>
-<para>The second tab is labled <guilabel>About</guilabel>. Enter a document title and an abstract.</para>
+<para>The second tab is labled <guilabel>Document</guilabel>. Enter a document title, subject lines, keywords and an abstract.</para>
 <tip><para>Both the document title and the abstract can be accessed through
 <link linkend="variables">document variables</link>.</para></tip>
 <para>When finished entering the information, click <guibutton>OK</guibutton> to apply the changes.

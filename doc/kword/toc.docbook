@@ -43,7 +43,7 @@ table of contents.</para>
 <note><para>Once the table of contents is created, it will remain unchanged until &kword; is instructed to update it.</para>
 <para>To update the table of contents, click once with the &LMB; in the current table of contents.  Then select
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Update table of contents</guimenuitem></menuchoice> from
+<guimenu>Insert</guimenu><guimenuitem>Update Table of Contents</guimenuitem></menuchoice> from
 the menubar.</para>
 <para>&kword; will replace the old table of contents with a newly updated one.</para></note>
 </sect2>

@@ -27,7 +27,7 @@ for your expression.  This will bring up a list of expressions available to you.
 </sect2>
 <sect2 id="expressions-add"><title>Add, change and delete expression groups and expressions</title>
 <para>Adding an expression is accomplished by selecting <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Personal expressions...</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Edit Personal Expressions...</guimenuitem>
 </menuchoice> from the menubar. This will bring up a dialog box. </para>
 <screenshot>
 <mediaobject>
@@ -43,11 +43,11 @@ in the example above).
  will not allow the user to edit or remove any predefined expressions.  You create a new group by clicking on the
  <guibutton>New</guibutton> located <emphasis>below the group list</emphasis>.  A new group will be created
  with the name <emphasis>new group</emphasis>.  You can change the name of the new group by clicking on the
- newly created group in the group list on the left, then editing the text box on the right labeled <guilabel>Groupname</guilabel>.</para>
+ newly created group in the group list on the left, then editing the text box on the right labeled <guilabel>Group name</guilabel>.</para>
  </sect3>
 <sect3 id="expression-add-rename-group"><title>Change the name of a group</title>
 <para>To change the name of a group, simply click on the group in the list on the left side of the dialog.  Type the new name in the text
-box labeled <guilabel>Groupname</guilabel>.</para>
+box labeled <guilabel>Group name</guilabel>.</para>
 </sect3>
 <sect3 id="expression-add-delete-group"><title>Delete a group</title>
 <para>To delete a group, click on the group in the list on the left side of the dialog.</para>
@@ -64,14 +64,14 @@ expression from the menus.</para></note>
 clicking with the &LMB; on the name of the group.  The list on the right of the dialog labeled
 <guilabel>Expressions</guilabel> lists all the current expressions in the current group.</para>
 <para>To add an expression, click on the <guibutton>New</guibutton> located <emphasis>below the expression list</emphasis>.</para>
-<para>A new expression is created called <emphasis>empty</emphasis>.  Begin typing your new expression.</para>
+<para>A new expression is created called <emphasis>empty</emphasis>.  Type your new expression in the textbox below the list of expressions.</para>
 </sect3>
 <sect3 id="expression-change-expression"><title>Edit an expression in a group</title>
 <para>The left side of the dialog box lists all the available groups.  Select the group that contains your expression to by
 clicking with the &LMB; on the name of the group.  The list on the right of the dialog labeled
 <guilabel>Expressions</guilabel> lists all the current expressions in the current group.</para>
 <para>Click on the expression you want to edit in the expression list on the right.</para>
-<para>Click in the text box below the expression list.  You can now edit your expression.</para>
+<para>Click in the text box below the expression list.  You can now edit your expression in the textbox below the list of expressions.</para>
 <para>When you are finished adding new expressions, simply click <guibutton>OK</guibutton>.</para>
 </sect3>
 <sect3 id="expression-delete-expression"><title>Delete an expression</title>

@@ -67,9 +67,9 @@ format="PNG"/></imageobject></inlinemediaobject> on the toolbar.</para>
 <para>The left part of this box contains one button and two check boxes.</para>
 <variablelist>
 <varlistentry>
-<term><guibutton>Choose Image</guibutton></term>
+<term><guibutton>Choose Picture...</guibutton></term>
 <listitem><para>Click this button and &kword; will open a
-new file dialog to open a different picture.</para></listitem>
+new file dialog to choose a different picture.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Insert Picture Inline</guilabel></term>

@@ -47,7 +47,8 @@ a notice of the last date of modification (which would change with each passing 
 should be inserted and select
 <menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Date</guimenuitem>
-</menuchoice> from the menubar.  This will bring up two selections:
+</menuchoice> from the menubar.  This will bring up several selections. To insert the current date, select one of two 
+options:
 <guimenuitem>Current date (fixed)</guimenuitem> and <guimenuitem>Current date (variable)</guimenuitem>.</para>
 
 <variablelist>
@@ -83,21 +84,22 @@ Compare this choice to <guimenuitem>Current date (fixed)</guimenuitem></para></l
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Locale</guilabel></term>
+<term><guilabel>Locale date format</guilabel></term>
 <listitem><para>This inserts the date in the format specified in the
 &kde; Control Center.</para>
 <para>To select this option, simply make sure the upper combo box says
-<guilabel>Locale</guilabel>.  A preview of the date format will appear below the
-<guilabel>Custom</guilabel> check box.  If satisfied click <guibutton>OK</guibutton>.
+<guilabel>Locale</guilabel>.  A preview of the date format will appear above the
+<guibutton>OK</guibutton> button.  If satisfied click <guibutton>OK</guibutton>.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term>Preformatted date strings</term>
-<listitem><para>&kword; comes with 12 predefined date strings. These predefined strings will
+<listitem><para>&kword; comes with 19 predefined date strings. These predefined strings will
 be all that are needed in most circumstances. Simply select the predefined string in the upper
-combo box.  A preview of the date format will appear below the <guilabel>Custom</guilabel>
-check box.  If satisfied click <guibutton>OK</guibutton>.</para></listitem>
+combo box.  A preview of the date format will appear above the
+<guibutton>OK</guibutton> button.  If satisfied click <guibutton>OK</guibutton>.
+</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -132,9 +134,9 @@ specific rules (which are outlined below) to create the completed date.</para>
 <para>Simply combine placeholders with normal text (separators) to create completed date strings. </para>
 
 <para>For example:</para>
-<para><quote>MM/dd/yyyy</quote> is translated to 03/06/2002</para>
+<para><quote>MM/dd/yyyy</quote> is translated to 01/06/2004</para>
 <para>and</para>
-<para><quote>MMMM d, yyyy</quote> becomes March 6, 2002</para>
+<para><quote>MMMM d, yyyy</quote> becomes January 6, 2004</para>
 <para>Notice that only the placeholders change.  Spaces, commas, slashes and other text remains unchanged.</para>
 <note><para>It is important to remember that placeholders are case sensitive.
 <quote>DD</quote> is not a placeholder,
@@ -149,8 +151,12 @@ placeholder will be inserted into the date format string at the cursor location.
 </varlistentry>
 </variablelist>
 
+<para>There is a spinbox labeled <guilabel>Correct in Days</guilabel>.  You can use this spin box to adjust the date up or 
+down one or more days from the current date.</para>
+
 <para>A preview of the current date
-string is visible below the <guilabel>Custom></guilabel> check box.  Click <guibutton>OK</guibutton> when
+string is visible above the
+<guibutton>OK</guibutton> button.  Click <guibutton>OK</guibutton> when
 the date format string is correct to insert the variable into the document.</para>
 
 <tip><para>Once the date has been inserted into the document, it can be reformatted to a different layout
@@ -203,21 +209,21 @@ Compare this choice to <guimenuitem>Current time (fixed)</guimenuitem></para></l
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Locale</guilabel></term>
+<term><guilabel>Locale format</guilabel></term>
 <listitem><para>This inserts the time in the format specified in the
 &kde; Control Center.</para>
 <para>To select this option, simply make sure the upper combo box says
-<guilabel>Locale</guilabel>.  A preview of the time format will appear below the
-<guilabel>Custom</guilabel> check box.  If satisfied click <guibutton>OK</guibutton>.
+<guilabel>Locale</guilabel>.  A preview of the current time
+string is visible above the <guibutton>OK</guibutton> button.  If satisfied click <guibutton>OK</guibutton>.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term>Preformatted time strings</term>
-<listitem><para>&kword; comes with 5 predefined date strings. These predefined strings will
+<listitem><para>&kword; comes with 9 predefined date strings. These predefined strings will
 be all that are needed in most circumstances. Simply select the predefined string in the upper
-combo box.  A preview of the time format will appear below the <guilabel>Custom</guilabel>
-check box.  If satisfied click <guibutton>OK</guibutton>.</para></listitem>
+combo box.  A preview of the current time
+string is visible above the <guibutton>OK</guibutton> button. If satisfied click <guibutton>OK</guibutton>.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -280,14 +286,14 @@ you can select the format from the <guilabel>Insert:</guilabel>
 combo box, and the
 placeholder will be inserted into the time format string at the cursor location.</para>
 <para>A preview of the current time
-string is visible below the <guilabel>Custom></guilabel> check box.  Click <guibutton>OK</guibutton> when
+string is visible below the <guilabel>Custom</guilabel> check box.  Click <guibutton>OK</guibutton> when
 the time format string is correct to insert the variable into your document.</para>
 </listitem>
 </varlistentry>
 </variablelist>
 
 <para>A preview of the current time
-string is visible below the <guilabel>Custom></guilabel> check box.  Click <guibutton>OK</guibutton> when
+string is visible below the <guilabel>Custom</guilabel> check box.  Click <guibutton>OK</guibutton> when
 the time format string is correct to insert the variable into your document.</para>
 
 <tip><para>Once the time has been inserted into the document, it can be reformatted to a different layout
@@ -302,8 +308,9 @@ variable or new layout from the menu and the variable is immediately updated. </
 <indexterm><primary>insert page numbers</primary></indexterm>
 
 <para>Inserting page numbers is easy in &kword;.</para>
-<para>There are two variables that relate to page numbers:  <emphasis>Current page</emphasis>
-and <emphasis>Number of pages</emphasis></para>
+<para>There are four variables that relate to page numbers:  <guilabel>Current page</guilabel>, 
+<guilabel>Next Page</guilabel>, <guilabel>Previous Page</guilabel>,
+and <guilabel>Number of Pages</guilabel></para>
 <para>To insert the current page number, place the cursor where you want the page number and select
 <menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
@@ -314,6 +321,15 @@ and <emphasis>Number of pages</emphasis></para>
 <guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
 <guimenuitem>Number of Pages</guimenuitem>
 </menuchoice> from the menubar.  The total number of pages will be inserted.</para>
+<para>By selecting <menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
+<guimenuitem>Next Page</guimenuitem>
+</menuchoice> from the menubar, a reference to the page number after the current page.</para>
+<para>Likewise, by selecting <menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
+<guimenuitem>Previous Page</guimenuitem>
+</menuchoice> from the menubar, a reference to the page number before the current page.</para>
+
 <note><para>Page numbers are updated dynamically as the document
 is edited.</para></note>
 <tip><para>Page numbers are usually best located within
@@ -345,41 +361,31 @@ are specific to the document.  You can insert these variables by selecting
 <row><entry>Variable</entry><entry>Example</entry><entry>Details</entry></row>
 </thead>
 <tbody>
-<row><entry>Filename</entry><entry>Resume.kwd</entry><entry>Inserts the file name of the document.</entry></row>
-<row><entry>Author Name</entry><entry>Joseph User</entry><entry>The name of the author as specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>City</entry><entry>Philadelphia</entry><entry>The postal code specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Company Name</entry><entry>&kde;</entry><entry>The company name specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Country</entry><entry>United States</entry><entry>The country name specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Folder Name</entry><entry>/home/juser/kword</entry><entry>This is the folder name for
-the document. The filename is not included in the folder name variable.</entry></row>
-<row><entry>Folder and Filename</entry><entry>/home/juser/kword/Resume.kwd</entry><entry>The folder
-and filename of the current file.</entry></row>
-<row><entry>Document Abstract</entry><entry>This is a current resume.</entry>
-<entry>The document abstract specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Document Title</entry><entry>My Resume</entry><entry>The document title specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Email</entry><entry>joeuser@kde.org</entry><entry>The email address
-of the author as specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Fax</entry><entry>Any valid telephone number</entry><entry>The fax machine number specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Filename</entry><entry>Resume.kwd</entry><entry>The complete name of the file.</entry></row>
-<row><entry>Filename without extension</entry><entry>Resume</entry><entry>This removes the file name
-suffix (usually .kwd) from the filename.</entry></row>
-<row><entry>Postal code</entry><entry>Any valid postal code</entry><entry>The postal code specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Street</entry><entry>123 Main St.</entry><entry>The street address specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Telephone</entry><entry>Any valid telephone number</entry><entry>The telephone number specified in the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Title</entry><entry>Director of Information Systems</entry><entry>The title specified in the authors section of the
-<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Author Name</entry><entry>Joseph User</entry><entry>The name of the author as specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>City</entry><entry>Philadelphia</entry><entry>The postal code specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Company</entry><entry>&kde;</entry><entry>The company name specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Country</entry><entry>United States</entry><entry>The country name specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Date of File Creation</entry><entry>Any date format</entry><entry>The date this document created.</entry></row>
+<row><entry>Date of File Modification</entry><entry>Any date format</entry><entry>The date this document was edited.</entry></row>
+<row><entry>Date of Last Printing</entry><entry>Any date format</entry><entry>The date this document was last printed.</entry></row>
+<row><entry>Directory Name</entry><entry>/home/juser/kword</entry><entry>This is the folder name for the document. The filename is not included in the folder name variable.</entry></row>
+<row><entry>Directory &amp; Filename</entry><entry>/home/juser/kword/Resume.kwd</entry><entry>The folder and filename of the current file.</entry></row>
+<row><entry>Document Abstract</entry><entry>This is a current resume.</entry> <entry>The document abstract specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Document Keywords</entry><entry>Resume, job, application</entry> <entry>The document keywords specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Document Subject</entry><entry>My resume.</entry> <entry>The document subject line specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Document Title</entry><entry>My Resume</entry><entry>The document title specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Email</entry><entry>joeuser@kde.org</entry><entry>The email address of the author as specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Fax</entry><entry>Any valid telephone number</entry><entry>The fax machine number specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>File Name</entry><entry>Resume.kwd</entry><entry>The complete name of the file.</entry></row> 
+<row><entry>File Name without extension</entry><entry>Resume</entry><entry>This removes the file name suffix (usually .kwd) from the filename.</entry></row>
+<row><entry>Initials</entry><entry>JCU</entry><entry>The initials specified in the authors section of the <link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Postal code</entry><entry>Any valid postal code</entry><entry>The postal code specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Street</entry><entry>123 Main St.</entry><entry>The street address specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Telephone (work)</entry><entry>Any valid telephone number</entry><entry>The telephone number specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Telephone (private)</entry><entry>Any valid telephone number</entry><entry>The telephone number specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Title</entry><entry>Director of Information Systems</entry><entry>The title specified in the authors section of the <link linkend="documentinfo">Document information</link> box.</entry></row>
 </tbody></tgroup></informaltable></para>
+<para>Additionially, there are numerous variables under the <guilabel>Statistics</guilabel> submenu for inserting the number of words, lines, frames, etc.  These variables should be self explanitory.</para>
 <note><para>Uninitialized variables will appear as &lt;none&gt;, until you define their
 value in the
 <link linkend="documentinfo">Document information</link> box.</para></note>
