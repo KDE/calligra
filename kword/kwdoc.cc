@@ -405,6 +405,12 @@ void KWDocument::initConfig()
       kosconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
       kosconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
       kosconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
+
+      kosconfig.setIgnoreCase( config->readNumEntry( "KSpell_IgnoreCase", 0));
+      kosconfig.setIgnoreAccent( config->readNumEntry( "KSpell_IgnoreAccent", 0));
+      kosconfig.setSpellWordWithNumber( config->readNumEntry("KSpell_SpellWordWithNumber", false));
+
+
       setKOSpellConfig( kosconfig );
 
       setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
@@ -3823,6 +3829,10 @@ void KWDocument::setKOSpellConfig(KOSpellConfig _kspell)
   m_pKOSpellConfig->setDictionary(_kspell.dictionary ());
   m_pKOSpellConfig->setDictFromList(_kspell.dictFromList());
   m_pKOSpellConfig->setEncoding(_kspell.encoding());
+  m_pKOSpellConfig->setEncoding(_kspell.encoding());
+  m_pKOSpellConfig->setIgnoreCase ( _kspell.ignoreCase ());
+  m_pKOSpellConfig->setIgnoreAccent( _kspell.ignoreAccent());
+  m_pKOSpellConfig->setClient (_kspell.client());
   //FIXME
   //m_bgSpellCheck->setKSpellConfig(_kspell);
 }
