@@ -34,6 +34,8 @@
 
 #include <kdebug.h>
 
+#define PAGE_OFFSETX	20
+#define PAGE_OFFSETY	20
 
 VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
     : QScrollView( view, "canvas", WStaticContents/*WNorthWestGravity*/ | WResizeNoErase  |
@@ -74,8 +76,8 @@ VCanvas::eventFilter( QObject* object, QEvent* event )
 	QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
 
 	KoPoint canvasCoordinate = toContents( KoPoint( mouseEvent->pos() ) );
-	canvasCoordinate.setX( canvasCoordinate.x() - 20 / m_view->zoom() );
-	canvasCoordinate.setY( canvasCoordinate.y() - 20 / m_view->zoom() );
+	canvasCoordinate.setX( canvasCoordinate.x() - PAGE_OFFSETX / m_view->zoom() );
+	canvasCoordinate.setY( canvasCoordinate.y() - PAGE_OFFSETY / m_view->zoom() );
 	if( mouseEvent && m_view )
 		return m_view->mouseEvent( mouseEvent, canvasCoordinate );
 	else
@@ -121,7 +123,7 @@ VCanvas::setYMirroring( bool edit )
 		p = m_view->painterFactory()->painter();
 
 	mat.scale( 1, -1 );
-	mat.translate( 20, 20 );
+	mat.translate( PAGE_OFFSETX, PAGE_OFFSETY );
 
 	if( contentsHeight() > height() )
 		mat.translate( -contentsX(), contentsY() - contentsHeight() );
@@ -172,7 +174,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	// Y mirroring
 	QWMatrix mat;
 	mat.scale( 1, -1 );
-	mat.translate( 20, 20 );
+	mat.translate( PAGE_OFFSETX, PAGE_OFFSETY );
 	if( contentsHeight() > height() )
 		mat.translate( -contentsX(), contentsY() - contentsHeight() );
 	else
@@ -183,7 +185,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 
 	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect.toQRect() );
 	viewport()->setUpdatesEnabled( true );
-	//bitBlt( this, QPoint( rect.x(), rect.y() - 20 ), p->device(), rect );
+	//bitBlt( this, QPoint( rect.x(), rect.y() - PAGE_OFFSETY ), p->device(), rect );
 }
 
 void
@@ -219,7 +221,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const KoRect& rect, bool drawVObje
 	// Y mirroring
 	QWMatrix mat;
 	mat.scale( 1, -1 );
-	mat.translate( 20, 20 );
+	mat.translate( PAGE_OFFSETX, PAGE_OFFSETY );
 	if( contentsHeight() > height() )
 		mat.translate( -contentsX(), contentsY() - contentsHeight() );
 	else
@@ -256,7 +258,7 @@ VCanvas::repaintAll( const KoRect & )
 	// Y mirroring
 	QWMatrix mat;
 	mat.scale( 1, -1 );
-	mat.translate( 20, 20 );
+	mat.translate( PAGE_OFFSETX, PAGE_OFFSETY );
 	if( contentsHeight() > height() )
 		mat.translate( -contentsX(), contentsY() - contentsHeight() );
 	else
