@@ -355,7 +355,9 @@ bool KoMainWindow::saveDocument( bool saveas )
 	    }
         } while ( !bOk );
         m_recent->addURL( newURL );
-        return pDoc->saveAs( newURL );
+        bool ret = pDoc->saveAs( newURL );
+        updateCaption(); // in case we display the URL
+        return ret;
     }
     else
       return pDoc->save();
