@@ -4002,10 +4002,19 @@ void KSpreadTable::copyAsText( const QPoint &_marker )
         if( !cell->isDefault() )
         {
             int l = max - cell->strOutText().length();
-            if (x > m_rctSelection.left())
+            if (cell->align(x, y) == KSpreadLayout::Right)
+            {
               for ( int i = 0; i < l; ++i )
                 result += " ";
-            result += cell->strOutText();
+              result += cell->strOutText();
+            }
+            else
+            {
+              result += " ";
+              result += cell->strOutText();
+              for ( int i = 1; i < l; ++i ) // start with "1"
+                result += " ";
+            }
         }
         else
         {
@@ -5300,7 +5309,7 @@ void KSpreadTable::update()
 
 void KSpreadTable::updateCell( KSpreadCell *cell, int _column, int _row )
 {
-    if ( doc()->isLoading() || doc()->delayCalculation() )
+    if ( doc()->isLoading() || doc()->delayCalculation() || (!getAutoCalc()))
         return;
 
     // Get the size
