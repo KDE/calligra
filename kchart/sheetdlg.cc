@@ -34,8 +34,10 @@ SheetDlg::SheetDlg( QWidget *parent, const char *name )
   t->move(0,0);
   
   
-  QString rowwhatsthis = i18n("<p><b>Sets the number of rows in the data table.</b><br><br>Each row represents one data set.</p>");
-  QString colwhatsthis = i18n("<p><b>Sets the number of columns in the data table.</b><br><br>The number of columns defines the number of data values in each data set (row).</p>");
+  QString rowwhatsthis = i18n("<p><b>Sets the number of rows in the data table."
+      "</b><br><br>Each row represents one data set.</p>");
+  QString colwhatsthis = i18n("<p><b>Sets the number of columns in the data table."
+      "</b><br><br>The number of columns defines the number of data values in each data set (row).</p>");
   
   usedrowsLA = new QLabel( i18n("# Rows:" ), this );
   usedrowsLA->resize( usedrowsLA->sizeHint() );
