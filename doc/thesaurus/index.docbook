@@ -19,7 +19,7 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup> 
 
-<date>2002-05-02</date>
+<date>2002-06-16</date>
 <releaseinfo>0.90.00</releaseinfo>
 
 <copyright>
@@ -79,6 +79,8 @@ included in &koffice; &mdash; this introduces several limitations
 (compared to &wordnet;):</para>
 
 <itemizedlist>
+<listitem><para>Only exact matches are found, &eg; if you search for a plural
+form nothing will be found.</para></listitem>
 <listitem><para>Many not so common words have been removed.</para></listitem>
 <listitem><para>It doesn't distinguish between parts of speech, e.g. verbs and
 nouns are mixed up in the lists of words.</para></listitem>
