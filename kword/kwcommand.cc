@@ -141,7 +141,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
     textFs->zoom( false );
     // In case loadFormatting queued any image request
     KWDocument * doc = textFs->kWordDocument();
-    doc->processImageRequests();
+    doc->processPictureRequests();
 
     kdDebug() << "KWPasteTextCommand::execute calling doc->pasteFrames" << endl;
     // In case of any inline frameset
@@ -662,12 +662,12 @@ void KWFrameChangePictureClipartCommand::execute()
     if(m_isAPicture)
     {
         KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-        frameset->loadImage( m_newFile , doc->zoomRect( *frame ).size() );
+        frameset->loadPicture( m_newFile , doc->zoomRect( *frame ).size() );
     }
     else
     {
-        KWClipartFrameSet *frameset = static_cast<KWClipartFrameSet *>(frame->frameSet());
-        frameset->loadClipart( m_newFile );
+        KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
+        frameset->loadPicture( m_newFile );
     }
     doc->frameChanged( frame );
 }
@@ -680,12 +680,12 @@ void KWFrameChangePictureClipartCommand::unexecute()
     if(m_isAPicture)
     {
         KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-        frameset->loadImage( m_oldFile , doc->zoomRect( *frame ).size() );
+        frameset->loadPicture( m_oldFile , doc->zoomRect( *frame ).size() );
     }
     else
     {
-        KWClipartFrameSet *frameset = static_cast<KWClipartFrameSet *>(frame->frameSet());
-        frameset->loadClipart( m_oldFile );
+        KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
+        frameset->loadPicture( m_oldFile );
     }
 
 

@@ -203,7 +203,7 @@ void KWFrameDia::init() {
         if(! fs) // first creation
             showPage(2);
     }
-    else if(frameType == FT_PICTURE || frameType == FT_CLIPART)
+    else if(frameType == FT_PICTURE)
     {
         setupTab1();
         setupTab2();

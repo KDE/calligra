@@ -292,9 +292,10 @@ void KWordViewIface::savePicture()
     view->savePicture();
 }
 
+// ### TODO/FIXME: can be removed!
 void KWordViewIface::saveClipart()
 {
-    view->saveClipart();
+    view->savePicture();
 }
 
 void KWordViewIface::insertFile()

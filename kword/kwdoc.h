@@ -25,7 +25,6 @@ class KPrinter;
 class KWTextImage;
 class KWTextFrameSet;
 class KWPictureFrameSet;
-class KWClipartFrameSet;
 class KWMailMergeDataBase;
 class KWFrameSet;
 class KWTableFrameSet;
@@ -189,7 +188,7 @@ public:
     virtual bool loadXML( QIODevice *, const QDomDocument & dom );
     virtual bool loadChildren( KoStore *_store );
     virtual QDomDocument saveXML();
-    void processImageRequests();
+    void processPictureRequests();
     void processAnchorRequests();
     bool processFootNoteRequests();
 
@@ -343,8 +342,7 @@ public:
 
     int getPages() const { return m_pages; }
 
-    KoPictureCollection *imageCollection() { return &m_imageCollection; }
-    KoPictureCollection *clipartCollection() { return &m_clipartCollection; }
+    KoPictureCollection *pictureCollection() { return &m_pictureCollection; }
     KoVariableFormatCollection *variableFormatCollection() { return m_varFormatCollection; }
 
     QPtrList <KWView> getAllViews() { return m_lstViews; }
@@ -428,9 +426,7 @@ public:
     // For KWTextImage
     void addTextImageRequest( KWTextImage *img );
     // For KWPictureFrameSet
-    void addImageRequest( KWPictureFrameSet *fs );
-    // For KWClipartFrameSet
-    void addClipartRequest( KWClipartFrameSet *fs );
+    void addPictureRequest( KWPictureFrameSet *fs );
     // For KWTextParag
     void addAnchorRequest( const QString &framesetName, const KWAnchorPosition &anchorPos );
     // For KWFootNoteVariable
@@ -696,9 +692,7 @@ public:
     void paragraphDeleted( KoTextParag *_parag, KWFrameSet *frm);
     void initBookmarkList();
     void loadImagesFromStore( KoStore *_store );
-
-    void setPixmapMap( QMap<KoPictureKey, QString> * _map ) { m_pixmapMap = _map;}
-    void setClipartMap( QMap<KoPictureKey, QString> * _map ) { m_clipartMap = _map;}
+    void loadPictureMap ( QDomElement& domElement );
 
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
@@ -780,8 +774,8 @@ private:
     KoColumns m_pageColumns;
     KoKWHeaderFooter m_pageHeaderFooter;
 
-    KoPictureCollection m_imageCollection;
-    KoPictureCollection m_clipartCollection;
+    KoPictureCollection m_pictureCollection;
+    
     QPtrList<KWFrameSet> m_lstFrameSet;
 
     int m_pages;
@@ -804,13 +798,11 @@ private:
     // Shared between loadXML and loadComplete
     QString m_urlIntern;
 
-    QMap<KoPictureKey, QString> * m_pixmapMap;
-    QMap<KoPictureKey, QString> * m_clipartMap;
+    QMap<KoPictureKey, QString> m_pictureMap;
 
     /// List used to help loading and saving images of the old type ("text image" of class KWTextImage)
     QPtrList<KWTextImage> m_textImageRequests;
-    QPtrList<KWPictureFrameSet> m_imageRequests2;
-    QPtrList<KWClipartFrameSet> m_clipartRequests;
+    QPtrList<KWPictureFrameSet> m_pictureRequests;
     QMap<QString, KWAnchorPosition> m_anchorRequests;
     QMap<QString, KWFootNoteVariable *> m_footnoteVarRequests;
 

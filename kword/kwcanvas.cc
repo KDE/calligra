@@ -473,7 +473,7 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
             QRect viewportRect( contentsX(), contentsY(), visibleWidth(), visibleHeight() );
             if ( viewportRect.contains( vPoint ) ) // Don't move the mouse out of the viewport
                 QCursor::setPos( viewport()->mapToGlobal( vPoint ) );
-            emit docStructChanged(Cliparts);
+            emit docStructChanged(Cliparts); // ### TODO verify: why Cliparts?
         }
     }
 }
@@ -1253,19 +1253,13 @@ void KWCanvas::mrCreatePixmap()
     if ( m_insRect.width() > 0 /*m_doc->gridX()*/ && m_insRect.height() > 0 /*m_doc->gridY()*/ && !m_pictureFilename.isEmpty() )
     {
         KWFrameSet * fs = 0L;
-        if ( m_isClipart )
+        KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null /*automatic name*/ );
+        frameset->loadPicture( m_pictureFilename );
+        if ( !m_isClipart )
         {
-            KWClipartFrameSet *frameset = new KWClipartFrameSet( m_doc, QString::null /*automatic name*/ );
-            frameset->loadClipart( m_pictureFilename );
-            fs = frameset;
-        }
-        else
-        {
-            KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null /*automatic name*/ );
-            frameset->loadImage( m_pictureFilename, m_doc->zoomRect( m_insRect ).size() );
             frameset->setKeepAspectRatio( m_keepRatio );
-            fs = frameset;
         }
+        fs = frameset;
         m_insRect = m_insRect.normalize();
         KWFrame *frame = new KWFrame(fs, m_insRect.x(), m_insRect.y(), m_insRect.width(),
                                      m_insRect.height() );

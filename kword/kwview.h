@@ -352,7 +352,6 @@ public slots:
     void editFootEndNote();
     void changeFootNoteType();
     void savePicture();
-    void saveClipart();
 
     void autoSpellCheck();
     void goToFootEndNote();

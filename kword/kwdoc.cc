@@ -256,8 +256,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_headerVisible = false;
     m_footerVisible = false;
 
-    m_pixmapMap = 0L;
-    m_clipartMap = 0L;
     m_pasteFramesetsMap = 0L;
     m_initialEditing = 0L;
     m_bufPixmap = 0L;
@@ -937,20 +935,43 @@ bool KWDocument::loadChildren( KoStore *_store )
     return TRUE;
 }
 
+void KWDocument::loadPictureMap ( QDomElement& domElement )
+{
+    m_pictureMap.clear();
+
+    // <PICTURES>
+    QDomElement picturesElem = domElement.namedItem( "PICTURES" ).toElement();
+    if ( !picturesElem.isNull() )
+    {
+       m_pictureCollection.readXML( picturesElem, m_pictureMap );
+    }
+    
+    // <PIXMAPS>
+    QDomElement pixmapsElem = domElement.namedItem( "PIXMAPS" ).toElement();
+    if ( !pixmapsElem.isNull() )
+    {
+       m_pictureCollection.readXML( pixmapsElem, m_pictureMap );
+    }
+
+    // <CLIPARTS>
+    QDomElement clipartsElem = domElement.namedItem( "CLIPARTS" ).toElement();
+    if ( !clipartsElem.isNull() )
+    {
+       m_pictureCollection.readXML( pixmapsElem, m_pictureMap );
+    }
+}
+
+
 bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 {
     QTime dt;
     dt.start();
     emit sigProgress( 0 );
     //kdDebug(32001) << "KWDocument::loadXML" << endl;
-    delete m_pixmapMap;
-    m_pixmapMap = 0L;
-    delete m_clipartMap;
-    m_clipartMap = 0L;
+    m_pictureMap.clear();
     m_textImageRequests.clear();
-    m_imageRequests2.clear();
+    m_pictureRequests.clear();
     m_anchorRequests.clear();
-    m_clipartRequests.clear();
     m_footnoteVarRequests.clear();
     m_spellListIgnoreAll.clear();
 
@@ -1201,19 +1222,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     emit sigProgress(85);
 
-    // <PIXMAPS>
-    QDomElement pixmapsElem = word.namedItem( "PIXMAPS" ).toElement();
-    if ( !pixmapsElem.isNull() )
-    {
-        m_pixmapMap = new QMap<KoPictureKey, QString>( m_imageCollection.readXML( pixmapsElem ) );
-    }
-
-    // <CLIPARTS>
-    QDomElement clipartsElem = word.namedItem( "CLIPARTS" ).toElement();
-    if ( !clipartsElem.isNull() )
-    {
-        m_clipartMap = new QMap<KoPictureKey, QString>( m_clipartCollection.readXML( clipartsElem ) );
-    }
+    loadPictureMap( word );
 
     emit sigProgress(90);
 
@@ -1765,14 +1774,14 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
             }
         }
     } break;
-    case FT_PICTURE: {
+    case FT_CLIPART:
+    {
+        kdError(32001) << "FT_CLIPART used! (in KWDocument::loadFrameSet)" << endl;
+        // Do not break!
+    }
+    case FT_PICTURE:
+    {
         KWPictureFrameSet *fs = new KWPictureFrameSet( this, fsname );
-        fs->load( framesetElem, loadFrames );
-        m_lstFrameSet.append( fs );
-        return fs;
-    } break;
-    case FT_CLIPART: {
-        KWClipartFrameSet *fs = new KWClipartFrameSet( this, fsname );
         fs->load( framesetElem, loadFrames );
         m_lstFrameSet.append( fs );
         return fs;
@@ -1801,16 +1810,8 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
 void KWDocument::loadImagesFromStore( KoStore *_store )
 {
     if ( _store ) {
-        if ( m_pixmapMap ) {
-            m_imageCollection.readFromStore( _store, *m_pixmapMap );
-            delete m_pixmapMap;
-            m_pixmapMap = 0L;
-        }
-        if ( m_clipartMap ) {
-            m_clipartCollection.readFromStore( _store, *m_clipartMap );
-            delete m_clipartMap;
-            m_clipartMap = 0L;
-        }
+        m_pictureCollection.readFromStore( _store, m_pictureMap );
+        m_pictureMap.clear(); // Release memory
     }
 }
 
@@ -1818,7 +1819,7 @@ bool KWDocument::completeLoading( KoStore *_store )
 {
     loadImagesFromStore( _store );
 
-    processImageRequests();
+    processPictureRequests();
     processAnchorRequests();
     processFootNoteRequests();
 
@@ -1850,24 +1851,19 @@ bool KWDocument::completeLoading( KoStore *_store )
     return TRUE;
 }
 
-void KWDocument::processImageRequests()
+void KWDocument::processPictureRequests()
 {
     QPtrListIterator<KWTextImage> it2 ( m_textImageRequests );
     for ( ; it2.current() ; ++it2 )
     {
-        it2.current()->setImage( m_imageCollection );
+        it2.current()->setImage( m_pictureCollection );
     }
     m_textImageRequests.clear();
 
-    QPtrListIterator<KWPictureFrameSet> it3( m_imageRequests2 );
+    QPtrListIterator<KWPictureFrameSet> it3( m_pictureRequests );
     for ( ; it3.current() ; ++it3 )
-        it3.current()->setImage( m_imageCollection.findPicture( it3.current()->key() ) );
-    m_imageRequests2.clear();
-
-    QPtrListIterator<KWClipartFrameSet> it4( m_clipartRequests );
-    for ( ; it4.current() ; ++it4 )
-        it4.current()->setClipart( m_clipartCollection.findPicture( it4.current()->key() ) );
-    m_clipartRequests.clear();
+        it3.current()->setPicture( m_pictureCollection.findPicture( it3.current()->key() ) );
+    m_pictureRequests.clear();
 }
 
 void KWDocument::processAnchorRequests()
@@ -2025,6 +2021,11 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool
             case FT_TEXT:
                 type=(int)TextFrames;
                 break;
+            case FT_CLIPART:
+            {
+                kdError(32001) << "FT_CLIPART used! (in KWDocument::loadFrameSet)" << endl;
+                // Do not break!
+            }
             case FT_PICTURE:
                 type=(int)Pictures;
                 break;
@@ -2043,7 +2044,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool
             ref|=type;
         }
     }
-    processImageRequests();
+    processPictureRequests();
     processAnchorRequests();
     if ( processFootNoteRequests() )
     {
@@ -2170,8 +2171,7 @@ QDomDocument KWDocument::saveXML()
     kwdoc.appendChild( framesets );
 
     m_textImageRequests.clear(); // for KWTextImage
-    QValueList<KoPictureKey> saveImages;
-    QValueList<KoPictureKey> saveCliparts;
+    QValueList<KoPictureKey> savePictures;
 
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -2188,17 +2188,11 @@ QDomDocument KWDocument::saveXML()
         }
 
         // If picture frameset, make a note of the image it needs.
-        if ( !frameSet->isDeleted() && frameSet->type() == FT_PICTURE )
+        if ( !frameSet->isDeleted() && ( frameSet->type() == FT_PICTURE ) )
         {
             KoPictureKey key = static_cast<KWPictureFrameSet *>( frameSet )->key();
-            if ( !saveImages.contains( key ) )
-                saveImages.append( key );
-        }
-        if ( !frameSet->isDeleted() && frameSet->type() == FT_CLIPART )
-        {
-            KoPictureKey key = static_cast<KWClipartFrameSet *>( frameSet )->key();
-            if ( !saveCliparts.contains( key ) )
-                saveCliparts.append( key );
+            if ( !savePictures.contains( key ) )
+                savePictures.append( key );
         }
     }
 
@@ -2208,8 +2202,8 @@ QDomDocument KWDocument::saveXML()
     {
         KoPictureKey key = textIt.current()->getKey();
         kdDebug(32001) << "KWDocument::saveXML registering text image " << key.toString() << endl;
-        if ( !saveImages.contains( key ) )
-            saveImages.append( key );
+        if ( !savePictures.contains( key ) )
+            savePictures.append( key );
     }
 
     QDomElement styles = doc.createElement( "STYLES" );
@@ -2230,12 +2224,15 @@ QDomDocument KWDocument::saveXML()
     for ( KWTableStyle * p = m_tableStyleList.first(); p != 0L; p = m_tableStyleList.next() )
         saveTableStyle( p, tableStyles );
 
-    // Save the PIXMAPS list
-    QDomElement pixmaps = m_imageCollection.saveXML( KoPictureCollection::CollectionImage, doc, saveImages );
-    kwdoc.appendChild( pixmaps );
-    QDomElement cliparts = m_clipartCollection.saveXML(KoPictureCollection::CollectionClipart, doc, saveCliparts );
-    kwdoc.appendChild( cliparts );
-
+    if (specialOutputFlag()==SaveAsKOffice1dot1)
+    {
+        m_pictureCollection.saveXMLAsKOffice1Dot1( doc, kwdoc, savePictures );
+    }
+    else
+    {
+        QDomElement pictures = m_pictureCollection.saveXML( KoPictureCollection::CollectionPicture, doc, savePictures );
+        kwdoc.appendChild( pictures );
+    }
     // Not needed anymore
 #if 0
     // Write out the list of parags (id) that form the table of contents, see KWContents::createContents
@@ -2331,8 +2328,7 @@ bool KWDocument::completeSaving( KoStore *_store )
 
     QString u = KURL( url() ).path();
 
-    QValueList<KoPictureKey> saveImages;
-    QValueList<KoPictureKey> saveCliparts;
+    QValueList<KoPictureKey> savePictures;
 
     // At first, we must process the data of the KWTextImage classes.
     // Process the data of the KWTextImage classes.
@@ -2341,8 +2337,8 @@ bool KWDocument::completeSaving( KoStore *_store )
     {
         KoPictureKey key = textIt.current()->getKey();
         kdDebug(32001) << "KWDocument::saveXML registering text image " << key.toString() << endl;
-        if ( !saveImages.contains( key ) )
-            saveImages.append( key );
+        if ( !savePictures.contains( key ) )
+            savePictures.append( key );
     }
     m_textImageRequests.clear(); // Save some memory!
 
@@ -2352,28 +2348,20 @@ bool KWDocument::completeSaving( KoStore *_store )
     {
         KWFrameSet *frameSet = fit.current();
         // If picture frameset, make a note of the image it needs.
-        if ( !frameSet->isDeleted() && frameSet->type() == FT_PICTURE )
+        if ( !frameSet->isDeleted() && ( frameSet->type() == FT_PICTURE ) )
         {
             KoPictureKey key = static_cast<KWPictureFrameSet *>( frameSet )->key();
-            if ( !saveImages.contains( key ) )
-                saveImages.append( key );
-        }
-        if ( !frameSet->isDeleted() && frameSet->type() == FT_CLIPART )
-        {
-            KoPictureKey key = static_cast<KWClipartFrameSet *>( frameSet )->key();
-            if ( !saveCliparts.contains( key ) )
-                saveCliparts.append( key );
+            if ( !savePictures.contains( key ) )
+                savePictures.append( key );
         }
     }
     if (specialOutputFlag()==SaveAsKOffice1dot1)
     {
-        m_imageCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, saveImages );
-        m_clipartCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionClipart, _store, saveCliparts );
+        m_pictureCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, savePictures );
     }
     else
     {
-        m_imageCollection.saveToStore( KoPictureCollection::CollectionImage, _store, saveImages );
-        m_clipartCollection.saveToStore( KoPictureCollection::CollectionClipart, _store, saveCliparts );
+        m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, savePictures );
     }
     return TRUE;
 }
@@ -3176,14 +3164,9 @@ void KWDocument::addTextImageRequest( KWTextImage *img )
     m_textImageRequests.append( img );
 }
 
-void KWDocument::addImageRequest( KWPictureFrameSet *fs )
+void KWDocument::addPictureRequest( KWPictureFrameSet *fs )
 {
-    m_imageRequests2.append( fs );
-}
-
-void KWDocument::addClipartRequest( KWClipartFrameSet *fs )
-{
-    m_clipartRequests.append( fs );
+    m_pictureRequests.append( fs );
 }
 
 void KWDocument::addAnchorRequest( const QString &framesetName, const KWAnchorPosition &anchorPos )
@@ -3498,13 +3481,14 @@ void KWDocument::deleteFrame( KWFrame * frame )
         cmdName=i18n("Delete Formula Frame");
         docItem=FormulaFrames;
         break;
+    case FT_CLIPART:
+    {
+        kdError(32001) << "FT_CLIPART used! (in KWDocument::loadFrameSet)" << endl;
+        // Do not break!
+    }
     case FT_PICTURE:
         cmdName=i18n("Delete Picture Frame");
         docItem=Pictures;
-        break;
-    case FT_CLIPART:
-        cmdName=i18n("Delete Picture Frame"); // TODO "Delete clipart frame" after msg freeze
-        docItem=Cliparts;
         break;
     case FT_PART:
         cmdName=i18n("Delete Object Frame");
@@ -3634,9 +3618,6 @@ int KWDocument::typeItemDocStructure(FrameSetType _type)
             break;
         case FT_PICTURE:
             typeItem=(int)Pictures;
-            break;
-        case FT_CLIPART:
-            typeItem=(int)Cliparts;
             break;
         case FT_PART:
             typeItem=(int)Embedded;

@@ -1061,10 +1061,6 @@ void KWView::setupActions()
     actionSavePicture->setToolTip( i18n( "Save the picture in a seperate file." ) );
     actionSavePicture->setWhatsThis( i18n( "Save the picture in the currently selected frame in a seperate file, outside the KWord document." ) );
 
-    actionSaveClipart= new KAction( i18n("Save Clipart..."), 0,
-                                    this, SLOT( saveClipart() ),
-                                    actionCollection(), "save_clipart");
-
     actionAllowBgSpellCheck = new KToggleAction( i18n( "Autospellcheck" ), 0,
                                             this, SLOT( autoSpellCheck() ),
                                             actionCollection(), "tool_auto_spellcheck" );
@@ -2696,8 +2692,8 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
         uint height = 0;
         if ( isClipart )
         {
-            KWClipartFrameSet *frameset = new KWClipartFrameSet( m_doc, QString::null );
-            frameset->loadClipart( filename );
+            KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null );
+            frameset->loadPicture( filename );
             //frameset->setKeepAspectRatio( _keepRatio);
             fsInline = frameset;
             // Set an initial size
@@ -2718,7 +2714,7 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
             height = QMIN( height, m_doc->paperHeight() - m_doc->topBorder() - m_doc->bottomBorder() - m_doc->zoomItY( 10 ) );
 
             KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null );
-            frameset->loadImage( filename, QSize( width, height ) );
+            frameset->loadPicture( filename, QSize( width, height ) );
             frameset->setKeepAspectRatio( _keepRatio);
             fsInline = frameset;
         }
@@ -4628,13 +4624,13 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
         {
             KWFrame *frame=m_doc->getFirstSelectedFrame();
             KWFrameSet *frameSet=frame->frameSet();
-            if(frameSet->type()==FT_PICTURE)
+            if(frameSet->typeAsKOffice1Dot1()==FT_PICTURE)
             {
                 actionList.append(separator);
                 actionList.append(actionChangePicture);
                 actionList.append(actionSavePicture);
             }
-            else if(frameSet->type()==FT_CLIPART)
+            else if(frameSet->typeAsKOffice1Dot1()==FT_CLIPART)
             {
                 actionList.append(separator);
                 actionList.append(actionChangeClipart);
@@ -5040,7 +5036,7 @@ void KWView::frameSelectedChanged()
         QPtrListIterator<KWFrame> it( selectedFrames );
         for ( ; it.current(); ++it )
         {
-            if ( it.current()->frameSet()->type()!=FT_PART && it.current()->frameSet()->type()!=FT_CLIPART && it.current()->frameSet()->type()!= FT_PICTURE)
+            if ( it.current()->frameSet()->type()!=FT_PART && it.current()->frameSet()->type()!= FT_PICTURE)
             {
                 frameDifferentOfPart=true;
                 break;
@@ -5170,7 +5166,7 @@ void KWView::changePicture()
     {
          KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change Picture"), FrameIndex(frame), oldFile, file, true ) ;
 
-        frameset->loadImage( file, m_doc->zoomRect( *frame ).size() );
+        frameset->loadPicture( file, m_doc->zoomRect( *frame ).size() );
         m_doc->frameChanged( frame );
         m_doc->addCommand(cmd);
     }
@@ -5181,7 +5177,7 @@ void KWView::changeClipart()
     QString file,oldFile;
     KWFrame * frame = m_doc->getFirstSelectedFrame();
 
-    KWClipartFrameSet *frameset = static_cast<KWClipartFrameSet *>(frame->frameSet());
+    KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
     oldFile=frameset->key().filename();
     KURL url(oldFile);
     if (!QDir(url.directory()).exists())
@@ -5192,7 +5188,7 @@ void KWView::changeClipart()
 
         KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change Clipart"), FrameIndex( frame ), oldFile, file, false ) ;
 
-        frameset->loadClipart( file );
+        frameset->loadPicture( file );
         m_doc->frameChanged( frame );
         m_doc->addCommand(cmd);
     }
@@ -5208,11 +5204,17 @@ void KWView::savePicture()
         if (!QDir(url.directory()).exists())
             oldFile = url.fileName();
 
+        KoPicture picture(frameset->picture());
+        QString fileName("/tmp/temp.");
+        // ### TODO/FIXME: handle *.qpic (no mime type) and *.wmf (could be a QPicture)
+        fileName+=picture.getExtension();
+        QString mimetype=KMimeType::findByURL(fileName,0,true,true)->name();
+        kdDebug() << "Image is mime type: " << mimetype << endl;
         QStringList mimetypes;
-        mimetypes = KImageIO::mimeTypes( KImageIO::Reading );
+        mimetypes << mimetype;
         KFileDialog fd( oldFile, QString::null, 0, 0, TRUE );
         fd.setMimeFilter( mimetypes );
-        fd.setCaption(i18n("Save Image"));
+        fd.setCaption(i18n("Save Picture"));
         if ( fd.exec() == QDialog::Accepted )
         {
             url = fd.selectedURL();
@@ -5225,51 +5227,12 @@ void KWView::savePicture()
             }
             QFile file( url.path() );
             if ( file.open( IO_ReadWrite ) ) {
-                frameset->image().save( &file );
+                picture.save( &file );
                 file.close();
             } else {
                 KMessageBox::error(this,
                                    i18n("Error during saving"),
                                    i18n("Save Picture"));
-            }
-        }
-    }
-}
-
-void KWView::saveClipart()
-{
-    KWFrame * frame = m_doc->getFirstSelectedFrame();
-    if ( frame ) //test for dcop call
-    {
-        KWClipartFrameSet *frameset = static_cast<KWClipartFrameSet *>(frame->frameSet());
-        QString oldFile=frameset->key().filename();
-        QStringList mimetypes;
-        KURL url(oldFile);
-        if (!QDir(url.directory()).exists())
-            oldFile = url.fileName();
-
-        mimetypes = KoPictureFilePreview::clipartMimeTypes();
-        KFileDialog fd( oldFile, QString::null, 0, 0, TRUE );
-        fd.setMimeFilter( mimetypes );
-        fd.setCaption(i18n("Save Clipart"));
-        if ( fd.exec() == QDialog::Accepted )
-        {
-            url = fd.selectedURL();
-            if( url.isEmpty() )
-            {
-                KMessageBox::sorry( this,
-                                    i18n("File name is empty"),
-                                    i18n("Save Clipart"));
-                return;
-            }
-            QFile file( url.path() );
-            if ( file.open( IO_ReadWrite ) ) {
-                frameset->clipart().save( &file );
-                file.close();
-            } else {
-                KMessageBox::error(this,
-                                   i18n("Error during saving"),
-                                   i18n("Save Clipart"));
             }
         }
     }
@@ -5714,10 +5677,9 @@ void KWView::insertFile()
 
 void KWView::insertFile(const QString & path)
 {
+    bool hasPictures=false;
     // ### TODO network transparency
     KoStore* store=KoStore::createStore( path, KoStore::Read );
-    QMap<KoPictureKey, QString> *pixmapMap =0L;
-    QMap<KoPictureKey, QString> *clipartMap = 0L;
     if ( store )
     {
         bool b = store->open("maindoc.xml");
@@ -5733,19 +5695,10 @@ void KWView::insertFile(const QString & path)
         doc.setContent( store->device() );
         QDomElement word = doc.documentElement();
 
+        m_doc->loadPictureMap( word );
+        hasPictures=true; // ### TODO: we should be smarter!
         // <PIXMAPS>
-        QDomElement pixmapsElem = word.namedItem( "PIXMAPS" ).toElement();
-        if ( !pixmapsElem.isNull() )
-        {
-            pixmapMap = new QMap<KoPictureKey, QString>( m_doc->imageCollection()->readXML( pixmapsElem ) );
-        }
-
-        // <CLIPARTS>
-        QDomElement clipartsElem = word.namedItem( "CLIPARTS" ).toElement();
-        if ( !clipartsElem.isNull() )
-        {
-            clipartMap = new QMap<KoPictureKey, QString>( m_doc->clipartCollection()->readXML( clipartsElem ) );
-        }
+        
         QDomElement framesets = word.namedItem( "FRAMESETS" ).toElement();
         if ( !framesets.isNull() )
         {
@@ -5830,22 +5783,13 @@ void KWView::insertFile(const QString & path)
 
             }
         }
-        else
-        {
-            delete pixmapMap;
-            pixmapMap = 0L;
-            delete clipartMap;
-            clipartMap = 0L;
-        }
         store->close();
     }
 
-    if (store && (pixmapMap||clipartMap) )
+    if (store && hasPictures )
     {
-        m_doc->setPixmapMap( pixmapMap );
-        m_doc->setClipartMap( clipartMap );
         m_doc->loadImagesFromStore( store );
-        m_doc->processImageRequests();
+        m_doc->processPictureRequests();
     }
     delete store;
 }

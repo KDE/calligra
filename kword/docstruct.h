@@ -167,7 +167,7 @@ class KWDocStructClipartItem : public KWDocListViewItem
     Q_OBJECT
 
 public:
-    KWDocStructClipartItem( QListViewItem *_parent, QString _text, KWClipartFrameSet *_pic, KWGUI*__parent );
+    KWDocStructClipartItem( QListViewItem *_parent, QString _text, KWPictureFrameSet *_pic, KWGUI*__parent );
     virtual void selectFrameSet();
     virtual void editFrameSet();
 
@@ -176,7 +176,7 @@ public slots:
     void slotRightButtonClicked( QListViewItem *, const QPoint &, int );
 
 protected:
-    KWClipartFrameSet *clip;
+    KWPictureFrameSet *clip;
     KWGUI *gui;
 
 };

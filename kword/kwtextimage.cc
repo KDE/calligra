@@ -33,7 +33,7 @@ KWTextImage::KWTextImage( KWTextDocument *textdoc, const QString & filename )
     KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
     if ( !filename.isEmpty() )
     {
-        m_image = doc->imageCollection()->loadPicture( filename );
+        m_image = doc->pictureCollection()->loadPicture( filename );
         Q_ASSERT( !m_image.isNull() );
         resize(); // Zoom if necessary
     }
@@ -95,20 +95,20 @@ void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int
 void KWTextImage::save( QDomElement & parentElem )
 {
     // This code is similar to KWPictureFrameSet::save
-    QDomElement imageElem = parentElem.ownerDocument().createElement( "IMAGE" );
+    KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
+
+    QString strPicture;
+    if (doc->specialOutputFlag()==KoDocument::SaveAsKOffice1dot1)
+        strPicture="IMAGE"; // This compactibility is nearly useless, as KWord 1.1.x can not load text images.
+    else
+        strPicture="PICTURE";
+    QDomElement imageElem = parentElem.ownerDocument().createElement( strPicture );
     parentElem.appendChild( imageElem );
-#if 1
     //imageElem.setAttribute( "keepAspectRatio", "true" );
     QDomElement elem = parentElem.ownerDocument().createElement( "KEY" );
     imageElem.appendChild( elem );
     image().getKey().saveAttributes( elem );
-#else
-    QDomElement elem = parentElem.ownerDocument().createElement( "FILENAME" );
-    imageElem.appendChild( elem );
-    elem.setAttribute( "value", image().getKey().filename() );
-#endif
-    // Now we must take care that a <KEY> element will be written as child of <PIXMAPS>
-    KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
+    // Now we must take care that a <KEY> element will be written as a child of <PICTURES>
     doc->addTextImageRequest( this );
 }
 
@@ -116,10 +116,16 @@ void KWTextImage::load( QDomElement & parentElem )
 {
     // This code is similar to KWPictureFrameSet::load
     KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
-    // <IMAGE>
-    QDomElement image = parentElem.namedItem( "IMAGE" ).toElement();
+
+    // <IMAGE> (KOffice 1.0) or <PICTURE> (KWord 1.2)
+    QDomNode node=parentElem.namedItem( "PICTURE" );
+    if ( node.isNull() )
+    {
+        node=parentElem.namedItem( "IMAGE" );
+    }
+    QDomElement image = node.toElement();
     if ( image.isNull() )
-        image = parentElem;
+        image = parentElem; // The data is directly child of <FORMAT>
     // <KEY>
     QDomElement keyElement = image.namedItem( "KEY" ).toElement();
     if ( !keyElement.isNull() )

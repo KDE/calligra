@@ -139,10 +139,10 @@ don't put a </?xml...> at the end of the file!).
             spFootBody:     distance (in pt) between footers and the text body (only in
                             wordprocessing mode).
             spFootNoteBody: distance ( in pt ) betwwen footnote and text body
-           
-            slFootNotePosition: position of footnote separator line 
+
+            slFootNotePosition: position of footnote separator line
                                 centered, right, left
-            
+
             slFootNoteLength:   percentage of page width default is 20
             slFootNoteWidth:    width of line seperator default = 2pt
             slFootNoteType:     type of line seperator solid, dot, dash etc...
@@ -300,10 +300,11 @@ don't put a </?xml...> at the end of the file!).
 
             frameType:      0...Base frame (for internal use only!!!)
                             1...Text frame (contains PARAGRAPH tags)
-                            2...Picture frame (contains an IMAGE tag)
+                            2...Picture frame (contains a PICTURE tag, or an IMAGE tag for KWord 1.1)
                             3...Part frame (defined in EMBEDDED at the doc level)
                             4...Formula frame (contains a FORMULA tag)
-                            5...Clipart frame (contains a CLIPART tag)
+                            5...Clipart frame (contains a CLIPART ta, only for KWord 1.1)
+                            10..reserved (internally for tables)
 
             frameInfo:      0...normal text (TODO: also for non-text frames?)
                             1...header for first page
@@ -343,10 +344,10 @@ don't put a </?xml...> at the end of the file!).
                             can be 1 or greater.
 
             cols:           Ditto for columns.
-           
+
             protectcontent: Protect content of text object
 
-            protectSize:    Don't allow user to change size and position 
+            protectSize:    Don't allow user to change size and position
                             of frameset
 
                                 0...no (default )
@@ -355,7 +356,7 @@ don't put a </?xml...> at the end of the file!).
 
 -->
 <!ELEMENT FRAMESET
-    (FRAME|PARAGRAPH|IMAGE|CLIPART|FORMULA)*>  <!-- missing: defining FORMULA -->
+    (FRAME|PARAGRAPH|PICTURE|IMAGE|CLIPART|FORMULA)*>  <!-- missing: defining FORMULA -->
 <!ATTLIST FRAMESET
     name CDATA #REQUIRED
     frameType CDATA #REQUIRED
@@ -447,7 +448,7 @@ don't put a </?xml...> at the end of the file!).
 <!--    Just guess :) The text is stored as UTF-8 compressed Unicode
         glyphs. Note: the format-tags navigate in the text using an index
         which starts at 0 and runs up till it reaches length-1.
-        
+
         Attribues:
             
              xml:space:          "preserve" tells to keep white spaces
@@ -488,7 +489,7 @@ don't put a </?xml...> at the end of the file!).
         When FORMAT is used to specify the format of a style, pos and len are omitted.
 -->
 <!ELEMENT FORMAT
-    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|CHARSET|VERTALIGN|ANCHOR|IMAGE|VARIABLE|TEXTBACKGROUNDCOLOR)*>
+    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|CHARSET|VERTALIGN|ANCHOR|IMAGE|PICTURE|VARIABLE|TEXTBACKGROUNDCOLOR)*>
 <!ATTLIST FORMAT
     id CDATA #REQUIRED
     pos CDATA #IMPLIED
@@ -901,17 +902,26 @@ don't put a </?xml...> at the end of the file!).
     type CDATA #REQUIRED
     instance CDATA #REQUIRED>
 
+<!--    Definition of a picture - contains only one element, the key to the picture.
+-->
+<!ELEMENT PICTURE
+    KEY>
+<!ATTLIST PICTURE
+    keepAspectRatio CDATA #REQUIRED>
+
 <!--    Definition of an image - contains only one element, the key to the image.
+        Only for KWord 1.1. compactibility
 -->
 <!ELEMENT IMAGE
-    (KEY)>
+    KEY>
 <!ATTLIST IMAGE
     keepAspectRatio CDATA #REQUIRED>
 
 <!--    Definition of a clipart - contains only one element, the key to the clipart.
+        Only for KWord 1.1. compactibility
 -->
 <!ELEMENT CLIPART
-    (KEY)>
+    KEY>
 
 <!--    Variable
         A variable has always two child elements:

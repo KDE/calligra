@@ -428,6 +428,11 @@ public:
      *  the framesets. Each implementation will return a different frameType.
      */
     virtual FrameSetType type() { return FT_BASE; }
+    
+    /**
+     *  Return the type of FrameSet that would have been used in KWord 1.1
+     */
+    virtual FrameSetType typeAsKOffice1Dot1(void) { return type(); }
 
     virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/ ) {};
 
@@ -788,14 +793,19 @@ public:
      * The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */
-    virtual FrameSetType type() { return FT_PICTURE; }
+    virtual FrameSetType type( void );
 
-    void setImage( const KoPicture &image ) { m_image = image; }
+    virtual FrameSetType typeAsKOffice1Dot1( void );
+
+    void setPicture( const KoPicture &image ) { m_image = image; }
     KoPicture image() const { return m_image; }
+    KoPicture picture() const { return m_image; }
 
     KoPictureKey key() const { return m_image.getKey(); }
 
-    void loadImage( const QString &fileName, const QSize &_imgSize );
+    void loadPicture( const QString &fileName, const QSize &_imgSize );
+
+    void loadPicture( const QString &fileName );
 
     /**
      * @deprecated
@@ -823,52 +833,14 @@ public:
     virtual void printDebug( KWFrame* frame );
 #endif
 
-    bool keepAspectRatio() const { return m_keepAspectRatio; }
-    void setKeepAspectRatio( bool b ) { m_keepAspectRatio = b; }
+    bool keepAspectRatio() const;
+    void setKeepAspectRatio( bool b );
 protected:
     /// The image
     KoPicture m_image;
     bool m_keepAspectRatio;
     /// Cache the finalSize parameter of the method resizeFrame for drawFrame
     bool m_finalSize;
-};
-
-/******************************************************************/
-/* Class: KWClipartFrameSet                                       */
-/******************************************************************/
-class KWClipartFrameSet : public KWFrameSet
-{
-public:
-    KWClipartFrameSet( KWDocument *_doc, const QString & name );
-    virtual ~KWClipartFrameSet() {}
-
-    /** The type of frameset. Use this to differentiate between different instantiations of
-     *  the framesets. Each implementation will return a different frameType.
-     */
-    virtual FrameSetType type() { return FT_CLIPART; }
-
-    void setClipart( const KoPicture &clipart ) { m_clipart = clipart; }
-    KoPicture clipart() const { return m_clipart; }
-
-    KoPictureKey key() const { return m_clipart.getKey(); }
-
-    void loadClipart( const QString &fileName );
-    //void setSize( const QSize & _imgSize );
-
-    virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
-    virtual void load( QDomElement &attributes, bool loadFrames = true );
-
-    virtual void drawFrameContents( KWFrame * frame, QPainter * p, const QRect & crect,
-                                    QColorGroup &, // bool onlyChanged, bool resetChanged,
-                                    KWFrameSetEdit *edit, KWViewMode *viewMode );
-
-    // Cliparts can be transparent
-    virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
-
-    virtual bool isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool borderOfFrameOnly=false );
-protected:
-    /// The clipart
-    KoPicture m_clipart;
 };
 
 /******************************************************************/

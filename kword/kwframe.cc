@@ -1370,7 +1370,14 @@ void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
         return;
 
     // Save all the common attributes for framesets.
-    parentElem.setAttribute( "frameType", static_cast<int>( type() ) );
+    if (m_doc->specialOutputFlag()==KoDocument::SaveAsKOffice1dot1)
+    {
+        parentElem.setAttribute( "frameType", static_cast<int>( typeAsKOffice1Dot1() ) );
+    }
+    else
+    {
+        parentElem.setAttribute( "frameType", static_cast<int>( type() ) );
+    }
     parentElem.setAttribute( "frameInfo", static_cast<int>( m_info ) );
     parentElem.setAttribute( "name", m_name );
     parentElem.setAttribute( "visible", static_cast<int>( m_visible ) );
@@ -1643,7 +1650,7 @@ bool KWFrameSet::isFrameAtPos( KWFrame* frame, const QPoint& point, bool borderO
 #ifndef NDEBUG
 void KWFrameSet::printDebug()
 {
-    static const char * typeFrameset[] = { "base", "txt", "pic", "part", "formula", "clipart",
+    static const char * typeFrameset[] = { "base", "txt", "picture", "part", "formula", "clipart",
                                            "6", "7", "8", "9", "table",
                                            "ERROR" };
     static const char * infoFrameset[] = { "body", "first header", "odd headers", "even headers",
@@ -1730,10 +1737,15 @@ KWordFrameSetIface* KWPictureFrameSet::dcopObject()
 }
 
 
-void KWPictureFrameSet::loadImage( const QString & fileName, const QSize & /*_imgSize*/ )
+void KWPictureFrameSet::loadPicture( const QString & fileName, const QSize & /*_imgSize*/ )
 // _imgSize is not needed anymore with KoPicture
 {
-    KoPictureCollection *collection = m_doc->imageCollection();
+    loadPicture(fileName);
+}
+
+void KWPictureFrameSet::loadPicture( const QString & fileName)
+{
+    KoPictureCollection *collection = m_doc->pictureCollection();
 
     m_image = collection->loadPicture( fileName );
 }
@@ -1759,9 +1771,29 @@ QDomElement KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
 
     KWFrameSet::saveCommon( framesetElem, saveFrames );
 
-    QDomElement imageElem = parentElem.ownerDocument().createElement( "IMAGE" );
-    framesetElem.appendChild( imageElem );
-    imageElem.setAttribute( "keepAspectRatio", m_keepAspectRatio ? "true" : "false" );
+    QDomElement imageElem;
+
+    if (m_doc->specialOutputFlag()==KoDocument::SaveAsKOffice1dot1)
+    {
+        // KWord 1.1 file format
+        QString strElementName=m_image.isClipartAsKOffice1Dot1() ? QString( "CLIPART" ) : QString( "IMAGE" );
+        imageElem = parentElem.ownerDocument().createElement( strElementName );
+        framesetElem.appendChild( imageElem );
+        if ( !m_image.isClipartAsKOffice1Dot1() )
+        {
+            // KWord 1.1 does not save keepAspectRaio for a clipart
+            imageElem.setAttribute( "keepAspectRatio", m_keepAspectRatio ? "true" : "false" );
+        }
+    }
+    else
+    {
+        // KWord 1.2 file format
+        imageElem = parentElem.ownerDocument().createElement( "PICTURE" );
+        framesetElem.appendChild( imageElem );
+        // Do not use m_keepAspectRatio directly, as we need the cooked version of the method.
+        // (Cliparts do not support keepAscpectRatio=="true")
+        imageElem.setAttribute( "keepAspectRatio", keepAspectRatio() ? "true" : "false" );
+    }
     QDomElement elem = parentElem.ownerDocument().createElement( "KEY" );
     imageElem.appendChild( elem );
     m_image.getKey().saveAttributes( elem );
@@ -1772,10 +1804,22 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
 {
     KWFrameSet::load( attributes, loadFrames );
 
+    QString defaultRatio="true";
+    QDomNode node=attributes.namedItem( "PICTURE" );
+    if ( node.isNull() )
+    {
+        node=attributes.namedItem( "IMAGE" );
+        if ( node.isNull() )
+        {
+            node=attributes.namedItem( "CLIPART" );
+            defaultRatio="false";
+        }
+    }
+
     // <IMAGE>
-    QDomElement image = attributes.namedItem( "IMAGE" ).toElement();
+    QDomElement image = node.toElement();
     if ( !image.isNull() ) {
-        m_keepAspectRatio = image.attribute( "keepAspectRatio", "true" ) == "true";
+        m_keepAspectRatio = image.attribute( "keepAspectRatio", defaultRatio ) == "true";
         // <KEY>
         QDomElement keyElement = image.namedItem( "KEY" ).toElement();
         if ( !keyElement.isNull() )
@@ -1784,7 +1828,7 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
             key.loadAttributes( keyElement );
             m_image.clear();
             m_image.setKey( key );
-            m_doc->addImageRequest( this );
+            m_doc->addPictureRequest( this );
         }
         else
         {
@@ -1795,7 +1839,7 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
                 QString filename = filenameElement.attribute( "value" );
                 m_image.clear();
                 m_image.setKey( KoPictureKey( filename ) );
-                m_doc->addImageRequest( this );
+                m_doc->addPictureRequest( this );
             }
             else
             {
@@ -1803,7 +1847,7 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
             }
         }
     } else {
-        kdError(32001) << "Missing IMAGE tag in FRAMESET" << endl;
+        kdError(32001) << "Missing PICTURE/IMAGE/CLIPART tag in FRAMESET" << endl;
     }
 }
 
@@ -1819,9 +1863,30 @@ void KWPictureFrameSet::drawFrameContents( KWFrame *frame, QPainter *painter, co
 
 bool KWPictureFrameSet::isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool )
 {
-    // For pictures/cliparts there is nothing to do when clicking
+    // For pictures there is nothing to do when clicking
     // inside the frame, so the whole frame is a 'border' (clicking in it selects the frame)
     return KWFrameSet::isFrameAtPos( frame, nPoint, false );
+}
+
+FrameSetType KWPictureFrameSet::type( void )
+{
+    return FT_PICTURE;
+}
+
+FrameSetType KWPictureFrameSet::typeAsKOffice1Dot1( void )
+{
+    return m_image.isClipartAsKOffice1Dot1()?FT_CLIPART:FT_PICTURE;
+}
+
+bool KWPictureFrameSet::keepAspectRatio() const
+{
+    return ( m_keepAspectRatio && ( !m_image.isClipartAsKOffice1Dot1() ) );
+}
+
+void KWPictureFrameSet::setKeepAspectRatio( bool b )
+{
+    // Not sure if we can check if it is a clipart, as it might not be load yet
+    m_keepAspectRatio = b;
 }
 
 #ifndef NDEBUG
@@ -1834,87 +1899,6 @@ void KWPictureFrameSet::printDebug( KWFrame *frame )
     }
 }
 #endif
-
-/******************************************************************/
-/* Class: KWClipartFrameSet                                       */
-/******************************************************************/
-KWClipartFrameSet::KWClipartFrameSet( KWDocument *_doc, const QString & name )
-    : KWFrameSet( _doc )
-{
-    if ( name.isEmpty() )
-        m_name = _doc->generateFramesetName( i18n( "Clipart %1" ) );
-    else
-        m_name = name;
-}
-
-void KWClipartFrameSet::loadClipart( const QString & fileName )
-{
-    kdDebug(32001) << "KWClipartFrameSet::loadClipart " << fileName << endl;
-    KoPictureCollection *collection = m_doc->clipartCollection();
-    m_clipart = collection->loadPicture( fileName );
-}
-
-QDomElement KWClipartFrameSet::save( QDomElement & parentElem, bool saveFrames )
-{
-    if ( frames.isEmpty() ) // Deleted frameset -> don't save
-        return QDomElement();
-    QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
-    parentElem.appendChild( framesetElem );
-
-    KWFrameSet::saveCommon( framesetElem, saveFrames );
-
-    QDomElement imageElem = parentElem.ownerDocument().createElement( "CLIPART" );
-    framesetElem.appendChild( imageElem );
-    QDomElement elem = parentElem.ownerDocument().createElement( "KEY" );
-    imageElem.appendChild( elem );
-    m_clipart.getKey().saveAttributes( elem );
-    return framesetElem;
-}
-
-void KWClipartFrameSet::load( QDomElement &attributes, bool loadFrames )
-{
-    KWFrameSet::load( attributes, loadFrames );
-
-    // <CLIPART>
-    QDomElement image = attributes.namedItem( "CLIPART" ).toElement();
-    if ( !image.isNull() ) {
-        // <KEY>
-        QDomElement keyElement = image.namedItem( "KEY" ).toElement();
-        if ( !keyElement.isNull() )
-        {
-            KoPictureKey key;
-            key.loadAttributes( keyElement );
-            m_clipart.clear();
-            m_clipart.setKey( key );
-            m_doc->addClipartRequest( this );
-        }
-        else
-            kdError(32001) << "Missing KEY tag in CLIPART" << endl;
-    } else
-        kdError(32001) << "Missing CLIPART tag in FRAMESET" << endl;
-}
-
-void KWClipartFrameSet::drawFrameContents( KWFrame *frame, QPainter *painter, const QRect &crect,
-                                   QColorGroup &, KWFrameSetEdit *, KWViewMode * )
-{
-    if ( m_clipart.isNull() )
-    {
-        kdWarning(32001) << "Clipart " << &m_clipart << " is Null! (KWClipartFrameSet::drawFrame)" << endl;
-    }
-    else
-    {
-        kdDebug(32001) << "Trying to draw Clipart " << &m_clipart << endl;
-    }
-    m_clipart.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
-                    crect.x(), crect.y(), crect.width(), crect.height() );
-}
-
-bool KWClipartFrameSet::isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool )
-{
-    // For pictures/cliparts there is nothing to do when clicking
-    // inside the frame, so the whole frame is a 'border' (clicking in it selects the frame)
-    return KWFrameSet::isFrameAtPos( frame, nPoint, false );
-}
 
 /******************************************************************/
 /* Class: KWPartFrameSet                                          */

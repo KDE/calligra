@@ -202,7 +202,7 @@ void KWDocStructPictureItem::editFrameSet()
 /* Class: KWDocStrucClipartItem                                   */
 /******************************************************************/
 
-KWDocStructClipartItem::KWDocStructClipartItem( QListViewItem *_parent, QString _text, KWClipartFrameSet *_clip, KWGUI*__parent )
+KWDocStructClipartItem::KWDocStructClipartItem( QListViewItem *_parent, QString _text, KWPictureFrameSet *_clip, KWGUI*__parent )
     :KWDocListViewItem( _parent, _text )
 {
     clip = _clip;
@@ -633,10 +633,10 @@ void KWDocStructRootItem::setupCliparts()
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->frameSet( i );
-        if ( frameset->type() == FT_CLIPART && frameset->getNumFrames()>0)
+        if ( frameset->typeAsKOffice1Dot1() == FT_CLIPART && frameset->getNumFrames()>0)
         {
-            _name=i18n("Clipart (%1) %2").arg(dynamic_cast<KWClipartFrameSet*>( frameset )->key().filename()).arg(++j);
-            child = new KWDocStructClipartItem( this, _name, dynamic_cast<KWClipartFrameSet*>( frameset ), gui );
+            _name=i18n("Clipart (%1) %2").arg(dynamic_cast<KWPictureFrameSet*>( frameset )->key().filename()).arg(++j);
+            child = new KWDocStructClipartItem( this, _name, dynamic_cast<KWPictureFrameSet*>( frameset ), gui );
             QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
             QObject::connect( listView(), SIGNAL( returnPressed( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
             QObject::connect( listView(), SIGNAL(rightButtonClicked ( QListViewItem *, const QPoint &,int )), child, SLOT( slotRightButtonClicked( QListViewItem *, const QPoint &, int )));
@@ -862,10 +862,6 @@ bool KWDocStructTree::testExistTypeOfFrame(TypeStructDocItem _type)
                 break;
             case Pictures:
                 if ( frameset->type() == FT_PICTURE && frameset->getNumFrames()>0)
-                    return true;
-                break;
-            case Cliparts:
-                if ( frameset->type() == FT_CLIPART && frameset->getNumFrames()>0)
                     return true;
                 break;
             case Embedded:

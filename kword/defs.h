@@ -40,8 +40,8 @@ const unsigned int minFrameHeight=11;
 /** The different types of framesets
  * FT_BASE = unused <br>
  * FT_TEXT = text only, this is the only frameset that can have multiple frames. <br>
- * FT_PICTURE = One frame with an image<br>
- * FT_CLIPART = One frame with a clipart<br>
+ * FT_PICTURE = One frame with an picture (only image, if for KWord 1.1.x compactibility)<br>
+ * FT_CLIPART = One frame with a clipart (deprecated, only for KWord 1.1.x compactibility)<br>
  * FT_PART = one frame with an embedded part, can be a spreadsheet to a kword doc.<br>
  * FT_FORMULA = one frame with an embedded formula frame. This is semi-native
  * FT_TABLE = Frameset which contains table cells.
