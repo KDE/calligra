@@ -284,6 +284,8 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   m_paperHeight = PG_A4_HEIGHT;
   m_orientation = PG_PORTRAIT;
   m_printRange = QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) );
+  m_dPrintRepeatColumnsWidth = 0.0;
+  m_dPrintRepeatRowsHeight = 0.0;
   m_printRepeatColumns = qMakePair( 0, 0 );
   m_printRepeatRows = qMakePair( 0, 0 );
   calcPaperSize();
@@ -2234,6 +2236,23 @@ void KSpreadTable::removeColumn( int col, int nbCol, bool makeUndo )
         setPrintRange( QRect( QPoint( left, m_printRange.top() ), QPoint( right, m_printRange.bottom() ) ) );
     }
 
+    //update repeat columns, when it has been defined
+    if ( m_printRepeatColumns.first != 0 )
+    {
+        int left = m_printRepeatColumns.first;
+        int right = m_printRepeatColumns.second;
+
+        for( int i=0; i<=nbCol; i++ )
+        {
+            if ( left > col ) left--;
+            if ( right >= col ) right--;
+        }
+        //Validity checks
+        if ( left < 1 ) left = 1;
+        if ( right < 1 ) right = 1;
+        setPrintRepeatColumns ( qMakePair( left, right ) );
+    }
+
     refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove );
     recalc();
     refreshMergedCell();
@@ -2280,6 +2299,23 @@ void KSpreadTable::removeRow( int row, int nbRow, bool makeUndo )
         if ( top < 1 ) top = 1;
         if ( bottom < 1 ) bottom = 1;
         setPrintRange( QRect( QPoint( m_printRange.left(), top ), QPoint( m_printRange.right(), bottom ) ) );
+    }
+
+    //update repeat rows, when it has been defined
+    if ( m_printRepeatRows.first != 0 )
+    {
+        int top = m_printRepeatRows.first;
+        int bottom = m_printRepeatRows.second;
+
+        for( int i=0; i<=nbRow; i++ )
+        {
+            if ( top > row ) top--;
+            if ( bottom >= row ) bottom--;
+        }
+        //Validity checks
+        if ( top < 1 ) top = 1;
+        if ( bottom < 1 ) bottom = 1;
+        setPrintRepeatRows( qMakePair( top, bottom ) );
     }
 
     refreshChart( QPoint( 1, row ), true, KSpreadTable::RowRemove );
@@ -6881,7 +6917,7 @@ bool KSpreadTable::loadXML( const QDomElement& table )
       {
         int left = printrepeatcolumns.attribute( "left" ).toInt();
         int right = printrepeatcolumns.attribute( "right" ).toInt();
-        m_printRepeatColumns = qMakePair( left, right );
+        setPrintRepeatColumns( qMakePair( left, right ) );
       }
 
       // load print repeat rows
@@ -6890,7 +6926,7 @@ bool KSpreadTable::loadXML( const QDomElement& table )
       {
         int top = printrepeatrows.attribute( "top" ).toInt();
         int bottom = printrepeatrows.attribute( "bottom" ).toInt();
-        m_printRepeatRows = qMakePair( top, bottom );
+        setPrintRepeatRows( qMakePair( top, bottom ) );
       }
 
     // Load the cells
@@ -6990,7 +7026,11 @@ bool KSpreadTable::isOnNewPageX( int _column )
             if ( col == _column )
                 return TRUE;
             else
+            {
                 x = columnLayout( col )->mmWidth();
+                if ( col >= m_printRepeatColumns.first )
+                    x += m_dPrintRepeatColumnsWidth;
+            }
         }
 
         col++;
@@ -7015,7 +7055,11 @@ bool KSpreadTable::isOnNewPageY( int _row )
             if ( row == _row )
                 return TRUE;
             else
+            {
                 y = rowLayout( row )->mmHeight();
+                if ( row >= m_printRepeatRows.first )
+                    y += m_dPrintRepeatRowsHeight;
+            }
         }
         row++;
         y += rowLayout( row )->mmHeight();
@@ -7586,7 +7630,7 @@ void KSpreadTable::paperLayoutDlg()
 
         if ( tmpRepeatCols.isEmpty() )
         {
-            setPrintRepeatColumns ( qMakePair( 0, 0 ) );
+            setPrintRepeatColumns( qMakePair( 0, 0 ) );
         }
         else
         {
@@ -7601,12 +7645,12 @@ void KSpreadTable::paperLayoutDlg()
                     if ( col2 > 0 && col2 <= KS_colMax )
                     {
                         error = false;
-                        setPrintRepeatColumns ( qMakePair( col1, col2) );
+                        setPrintRepeatColumns ( qMakePair( col1, col2 ) );
                     }
                 }
             }
 
-            if ( error ) KMessageBox::information( 0, i18n( "Repeated columss range wrong, changes are ignored." ) );
+            if ( error ) KMessageBox::information( 0, i18n( "Repeated columss range wrong, changes are ignored.\nMust be in format column:column (i.e. 2:3)" ) );
         }
 
         if ( tmpRepeatRows.isEmpty() )
@@ -7626,12 +7670,12 @@ void KSpreadTable::paperLayoutDlg()
                     if ( row2 > 0 && row2 <= KS_rowMax )
                     {
                         error = false;
-                        setPrintRepeatRows ( qMakePair( row1, row2) );
+                        setPrintRepeatRows ( qMakePair( row1, row2 ) );
                     }
                 }
             }
 
-            if ( error ) KMessageBox::information( 0, i18n( "Repeated rows range wrong, changes are ignored." ) );
+            if ( error ) KMessageBox::information( 0, i18n( "Repeated rows range wrong, changes are ignored.\nMust be in format row:row (i.e. B:D)" ) );
         }
         m_pDoc->setModified( true );
     }
@@ -7988,6 +8032,7 @@ void KSpreadTable::setPrintGrid( bool _printGrid )
 
 void KSpreadTable::setPrintRepeatColumns( QPair<int, int> _printRepeatColumns )
 {
+  //Bring arguments in order
   if ( _printRepeatColumns.first > _printRepeatColumns.second )
   {
     int tmp = _printRepeatColumns.first;
@@ -7995,15 +8040,27 @@ void KSpreadTable::setPrintRepeatColumns( QPair<int, int> _printRepeatColumns )
     _printRepeatColumns.second = tmp;
   }
 
+  //If old are equal to the new setting, nothing is to be done at all
   if ( m_printRepeatColumns == _printRepeatColumns )
     return;
 
   m_printRepeatColumns = _printRepeatColumns;
+
+  //Recalcualte the space needed for the repeated columns
+  m_dPrintRepeatColumnsWidth = 0.0;
+  for ( int i = m_printRepeatColumns.first; i <= m_printRepeatColumns.second; i++)
+  {
+    m_dPrintRepeatColumnsWidth += columnLayout( i )->mmWidth();
+  }
+
+  //Refresh view, if page borders are shown
+  if ( m_bShowPageBorders ) emit sig_updateView( this );
   m_pDoc->setModified( true );
 }
 
 void KSpreadTable::setPrintRepeatRows( QPair<int, int> _printRepeatRows )
 {
+  //Bring arguments in order
   if ( _printRepeatRows.first > _printRepeatRows.second )
   {
     int tmp = _printRepeatRows.first;
@@ -8011,10 +8068,21 @@ void KSpreadTable::setPrintRepeatRows( QPair<int, int> _printRepeatRows )
     _printRepeatRows.second = tmp;
   }
 
+  //If old are equal to the new setting, nothing is to be done at all
   if ( m_printRepeatRows == _printRepeatRows )
     return;
 
   m_printRepeatRows = _printRepeatRows;
+  
+  //Recalcualte the space needed for the repeated rows
+  m_dPrintRepeatRowsHeight += 0.0;
+  for ( int i = m_printRepeatRows.first; i <= m_printRepeatRows.second; i++)
+  {
+    m_dPrintRepeatRowsHeight += rowLayout( i )->mmHeight();
+  }
+
+  //Refresh view, if page borders are shown
+  if ( m_bShowPageBorders ) emit sig_updateView( this );
   m_pDoc->setModified( true );
 }
 

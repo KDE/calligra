@@ -1614,6 +1614,15 @@ protected:
      */
     bool m_bPrintGrid;
 
+    /**
+     * Width of repeated columns in mm, stored for perfomance reasons
+     */
+    double m_dPrintRepeatColumnsWidth;
+    /**
+     * Height of repeated rows in mm, stored for perfomance reasons
+     */
+    double m_dPrintRepeatRowsHeight;
+
 public:
     // see kspread_table.cc for an explanation of this
     // this is for type B and also for type A (better use CellWorkerTypeA for that)
