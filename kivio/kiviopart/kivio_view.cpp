@@ -1688,7 +1688,9 @@ void KivioView::openPopupMenuMenuPage( const QPoint & _point )
 
 void KivioView::updateMenuPage()
 {
-    m_removePage->setEnabled((doc()->map()->count() > 1 && m_pTabBar->listshow().count()>1));
+    bool state = (doc()->map()->count() > 1 && m_pTabBar->listshow().count()>1);
+    m_removePage->setEnabled(state);
+    m_hidePage->setEnabled( state );
 }
 
 void KivioView::updateButton()
