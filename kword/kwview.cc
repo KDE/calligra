@@ -3490,13 +3490,13 @@ void KWView::canvasAddChild( KoViewChild *child )
 
 void KWView::changePicture()
 {
-    QString file;
-    if ( KWInsertPicDia::selectPictureDia(file ) )
+    QString file,oldFile;
+    KWFrame * frame = m_doc->getFirstSelectedFrame();
+    KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->getFrameSet());
+    oldFile=frameset->image().key().filename();
+    if ( KWInsertPicDia::selectPictureDia(file,oldFile ) )
     {
-        KWFrame * frame = m_doc->getFirstSelectedFrame();
-        KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->getFrameSet());
-
-         KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change picture"), FrameIndex(frame), frameset->image().key().filename(), file, true ) ;
+         KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change picture"), FrameIndex(frame), oldFile, file, true ) ;
 
         frameset->loadImage( file, m_doc->zoomRect( *frame ).size() );
         m_doc->frameChanged( frame );
@@ -3506,14 +3506,15 @@ void KWView::changePicture()
 
 void KWView::changeClipart()
 {
-    QString file;
-    if ( KWInsertPicDia::selectClipartDia(file ) )
+    QString file,oldFile;
+    KWFrame * frame = m_doc->getFirstSelectedFrame();
+
+    KWClipartFrameSet *frameset = static_cast<KWClipartFrameSet *>(frame->getFrameSet());
+    oldFile=frameset->key().filename();
+    if ( KWInsertPicDia::selectClipartDia(file,oldFile ) )
     {
-        KWFrame * frame = m_doc->getFirstSelectedFrame();
 
-        KWClipartFrameSet *frameset = static_cast<KWClipartFrameSet *>(frame->getFrameSet());
-
-        KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change clipart"), FrameIndex( frame ), frameset->key().filename(), file, false ) ;
+        KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change clipart"), FrameIndex( frame ), oldFile, file, false ) ;
 
         frameset->loadClipart( file );
         m_doc->frameChanged( frame );

@@ -43,9 +43,9 @@ public:
 
     bool keepRatio() const;
 
-    static bool selectClipartDia( QString &filename);
+    static bool selectClipartDia( QString &filename, const QString & _path=QString::null);
 
-    static bool selectPictureDia( QString &filename);
+    static bool selectPictureDia( QString &filename, const QString & _path=QString::null);
 
 protected slots:
     void slotChooseImage();

@@ -158,9 +158,9 @@ void KWInsertPicDia::slotChooseImage()
     }
 }
 
-bool KWInsertPicDia::selectPictureDia( QString &filename)
+bool KWInsertPicDia::selectPictureDia( QString &filename, const QString & _path)
 {
-    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Writing), 0, 0, TRUE );
+    KFileDialog fd( _path, KImageIO::pattern(KImageIO::Writing), 0, 0, TRUE );
     fd.setCaption(i18n("Choose Image"));
     QString file = selectPicture( fd );
     if ( !file.isEmpty() )
@@ -186,9 +186,9 @@ void KWInsertPicDia::slotChooseClipart()
 }
 
 
-bool KWInsertPicDia::selectClipartDia( QString &filename)
+bool KWInsertPicDia::selectClipartDia( QString &filename, const QString & _path)
 {
-    KFileDialog fd( QString::null, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
+    KFileDialog fd( _path, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
     fd.setCaption(i18n("Choose Clipart"));
     QString file = selectPicture( fd );
     if ( !file.isEmpty() )
