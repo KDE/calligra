@@ -42,6 +42,9 @@
 #include "Canvas.h"
 #include "ToolController.h"
 #include "TranslateCmd.h"
+#include "RotateCmd.h"
+#include "ScaleCmd.h"
+#include "ShearCmd.h"
 
 SelectTool::SelectTool(QString aId, ToolController *tc):
 Tool(aId, tc)
@@ -122,24 +125,6 @@ void SelectTool::processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *ca
       page->unselectAllObjects();
     }
   }
-  else if(state == S_Pick)
-  {
-    QRect r = canvas->onCanvas(page->boundingBoxForSelection());
-    if(r.contains(xpos, ypos))
-    {
-      state = S_Translate;
-      if(ctype != C_Move)
-      {
-        canvas->setCursor(Qt::SizeAllCursor);
-        ctype = C_Move;
-      } 
-    }
-    else
-    {
-      state = S_Rubberband;
-      page->unselectAllObjects();
-    }
-  }
 }
 
 void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canvas)
@@ -180,16 +165,14 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
   {
     if(e->state() & Qt::LeftButton)
     {
-      QRect r = canvas->onCanvas(page->boundingBoxForSelection());
-      if(r.contains(xpos, ypos))
-      {
+      if(ctype == C_Move)
         state = S_Translate;
-        if(ctype != C_Move)
-        {
-          canvas->setCursor(Qt::SizeAllCursor);
-          ctype = C_Move;
-        }
-	return;
+      if(ctype == C_Size)
+        state = S_Scale;
+      else
+      {
+        state = S_Rubberband;
+        page->unselectAllObjects();
       }
     }
     else
@@ -207,10 +190,11 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
       int hmask = page->handle().contains(KoPoint(x, y));
       if(hmask)
       {
+        oldmask = hmask;
         if(ctype != C_Size)
         {
           ctype = C_Size;
-          switch(hmask)
+          switch(oldmask)
           {
           case(Kontour::HPos_Left | Kontour::HPos_Top):
             canvas->setCursor(Qt::sizeFDiagCursor);
@@ -306,6 +290,30 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
     }
     translate(page, xpos - p1.x(), ypos - p1.y(), true);
   }
+  else if(state == S_Scale)
+  {
+    double xoff = xpos - p1.x();
+    double yoff = ypos - p1.y();
+    if(e->state() & Qt::ControlButton)
+    {
+      if(fabs(xoff) > fabs(yoff))
+      {
+        yoff = xoff;
+        if((oldmask & (Kontour::HPos_Left | Kontour::HPos_Bottom)) || (oldmask & (Kontour::HPos_Right | Kontour::HPos_Top)))
+          yoff = -yoff;
+      }
+      else
+      {
+        xoff = yoff;
+        if((oldmask & (Kontour::HPos_Left | Kontour::HPos_Bottom)) || (oldmask & (Kontour::HPos_Right | Kontour::HPos_Top)))
+          xoff = -xoff;
+      }
+    }
+    if(oldmask == (Kontour::HPos_Left | Kontour::HPos_Bottom) || oldmask == (Kontour::HPos_Left | Kontour::HPos_Top) || oldmask == (Kontour::HPos_Right | Kontour::HPos_Bottom) || oldmask == (Kontour::HPos_Right | Kontour::HPos_Top))
+      scale(page, oldmask, xoff, yoff, true);
+    else
+      scale(page, oldmask, xoff, yoff, false);
+  }
 }
 
 void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *canvas)
@@ -323,9 +331,8 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
       QPtrListIterator<GObject> it(olist);
       for(; it.current(); ++it)
         page->selectObject(it.current());
-//      state = S_Pick;
-      state = S_Init;
-	  canvas->updateBuf(r);
+      state = S_Pick;
+      canvas->updateBuf(r);
       canvas->repaint(r);
     }
     else
@@ -353,6 +360,32 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
     translate(page, xpos - p1.x(), ypos - p1.y(), true, true);
     canvas->setCursor(Qt::arrowCursor);
     ctype = C_Arrow;
+  }
+  else if(state == S_Scale)
+  {
+    state = S_Pick;
+    //    canvas->snapPositionToGrid (xpos, ypos);
+    double xoff = xpos - p1.x();
+    double yoff = ypos - p1.y();
+/*    if(e->state () & Qt::ControlButton)
+    {
+      if (fabs (xoff) > fabs (yoff)) {
+        yoff = xoff;
+        if ((oldmask & (Handle::HPos_Left | Handle::HPos_Bottom)) ||
+            (oldmask & (Handle::HPos_Right | Handle::HPos_Top)))
+          yoff = -yoff;
+      }
+      else {
+        xoff = yoff;
+        if ((oldmask & (Handle::HPos_Left | Handle::HPos_Bottom)) ||
+            (oldmask & (Handle::HPos_Right | Handle::HPos_Top)))
+          xoff = -xoff;
+      }
+    }*/
+    if(oldmask == (Kontour::HPos_Left | Kontour::HPos_Bottom) || oldmask == (Kontour::HPos_Left | Kontour::HPos_Top) || oldmask == (Kontour::HPos_Right | Kontour::HPos_Bottom) || oldmask == (Kontour::HPos_Right | Kontour::HPos_Top))
+      scale(page, oldmask, xoff, yoff, true, true);
+    else
+      scale(page, oldmask, xoff, yoff, false, true);
   }
 }
 
@@ -411,7 +444,7 @@ void SelectTool::translate(GPage *page, double dx, double dy, bool snap, bool pe
 //  kdDebug(38000) << "DX=" << dx << " DY=" << dy << endl;
   if(permanent)
   {
-    QListIterator<GObject> it(page->getSelection());
+    QPtrListIterator<GObject> it(page->getSelection());
     for(; it.current(); ++it)
       (*it)->setWorkInProgress(false);
     KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
@@ -445,6 +478,90 @@ void SelectTool::translate(GPage *page, double dx, double dy, bool snap, bool pe
   msgbuf += QString::number(yval, 'f', 3);
   msgbuf += QString(" ") + u + QString("]");
   toolController()->view()->setStatus(msgbuf);
+}
+
+void SelectTool::scale(GPage *page, int mask, double dx, double dy, bool type, bool permanent)
+{
+  KoRect origbox = page->boundingBoxForSelection();
+  KoRect newbox(origbox);
+  double sx = 1;
+  double sy = 1;
+
+  if(mask & Kontour::HPos_Right)
+    newbox.setRight(newbox.right() + dx);
+  if(mask & Kontour::HPos_Bottom)
+    newbox.setBottom(newbox.bottom() + dy);
+  if(mask & Kontour::HPos_Left)
+    newbox.setLeft(newbox.left() + dx);
+  if(mask & Kontour::HPos_Top)
+    newbox.setTop(newbox.top() + dy);
+
+  kdDebug() << "DX = " << dx << endl;
+  kdDebug() << "DY = " << dy << endl;
+  kdDebug() << "old width = " << origbox.width() << endl;
+  kdDebug() << "old height = " << origbox.height() << endl;
+  kdDebug() << "new width = " << newbox.width() << endl;
+  kdDebug() << "new height = " << newbox.height() << endl;
+
+/*  KoRect sbox = canvas->snapScaledBoxToGrid (newbox, mask);*/
+//  sx = sbox.width() / origbox.width();
+//  sy = sbox.height() / origbox.height();
+  sx = newbox.width() / origbox.width();
+  sy = newbox.height() / origbox.height();
+
+  if(type)
+    sx = sy;
+
+  if(permanent)
+  {
+    QPtrListIterator<GObject> it(page->getSelection());
+    for(; it.current(); ++it)
+      (*it)->setWorkInProgress(false);
+    KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
+    ScaleCmd *cmd = new ScaleCmd(page->document(), mask, sx, sy, origbox);
+    doc->history()->addCommand(cmd);
+  }
+  else
+  {
+    double xoff = origbox.x();
+    double yoff = origbox.y();
+    double xback = xoff;
+    double yback = yoff;
+    if(mask & Kontour::HPos_Left)
+      xback = r.left() + origbox.width() * (1.0 - sx);
+    if(mask & Kontour::HPos_Top)
+      yback = r.top() + origbox.height() * (1.0 - sy);
+    QWMatrix m1, m2, m3;
+    m1.translate(-xoff, -yoff);
+    m2.scale(sx, sy);
+    m3.translate(xback, yback);
+    for(QPtrListIterator<GObject> it(page->getSelection()); it.current(); ++it)
+    {
+      (*it)->setWorkInProgress(true);
+      (*it)->initTmpMatrix();
+      (*it)->ttransform(m1);
+      (*it)->ttransform(m2);
+      (*it)->ttransform(m3, true);
+    }
+  }
+
+  QString msgbuf = i18n("Scale");
+  msgbuf += " [";
+  msgbuf += QString::number(sx * 100.0, 'f', 3);
+  msgbuf += QString(" %, ");
+  msgbuf += QString::number(sy * 100.0, 'f', 3);
+  msgbuf += QString(" %]");
+  toolController()->view()->setStatus(msgbuf);
+}
+
+void SelectTool::shear(GPage *page, int mask, double dx, double dy, bool permanent)
+{
+
+}
+
+void SelectTool::rotate(GPage *page, double dx, double dy, double xp, double yp, bool permanent)
+{
+
 }
 
 #include "SelectTool.moc"

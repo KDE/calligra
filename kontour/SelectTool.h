@@ -42,6 +42,9 @@ public:
   void processEvent(QEvent *e);
 
   void translate(GPage *page, double dx, double dy, bool snap, bool permanent = false);
+  void scale(GPage *page, int mask, double dx, double dy, bool type = 0, bool permanent = false);
+  void shear(GPage *page, int mask, double dx, double dy, bool permanent = false);
+  void rotate(GPage *page, double dx, double dy, double xp, double yp, bool permanent = false);
 
 private:
   void processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *canvas);
@@ -50,7 +53,7 @@ private:
   void processKeyPressEvent(QKeyEvent *e, GPage *page, Canvas *canvas);
 
 private:
-  enum State{ S_Init, S_Rubberband, S_Pick, S_Translate, S_DragHorizHelpline, S_DragVertHelpline};
+  enum State{ S_Init, S_Rubberband, S_Pick, S_Translate, S_Scale, S_Shear, S_Rotate, S_DragHorizHelpline, S_DragVertHelpline};
   State state;
   enum CursorType{ C_Arrow, C_Size, C_Move, C_Rotate, C_Horiz, C_Vert};
   CursorType ctype;
@@ -58,6 +61,7 @@ private:
   QRect r;
   int mHL;
   int prevcoord;
+  int oldmask;
 };
 
 #endif

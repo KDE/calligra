@@ -26,19 +26,12 @@
 #include "ScaleCmd.h"
 
 #include <klocale.h>
+#include <kdebug.h>
 
+#include "kontour_global.h"
 #include "GDocument.h"
 #include "GPage.h"
 #include "GObject.h"
-
-ScaleCmd::ScaleCmd(GDocument *aGDoc, int mask, double x, double y):
-TransformationCmd(aGDoc, i18n("Scale"))
-{
-  box = document()->activePage()->boundingBoxForSelection();
-  sx = x;
-  sy = y;
-  hmask = mask;
-}
 
 ScaleCmd::ScaleCmd(GDocument *aGDoc, int mask, double x, double y, KoRect r):
 TransformationCmd(aGDoc, i18n("Scale"))
@@ -58,10 +51,12 @@ void ScaleCmd::execute()
   double xback = xoff;
   double yback = yoff;
 
-/*  if(hmask & Handle::HPos_Left)
+  kdDebug() << "SX = " << sx << " SY = " << sy << endl;
+
+  if(hmask & Kontour::HPos_Left)
     xback = box.left() + box.width() * (1.0 - sx);
-  if(hmask & Handle::HPos_Top)
-    yback = box.top() + box.height() * (1.0 - sy);*/
+  if(hmask & Kontour::HPos_Top)
+    yback = box.top() + box.height() * (1.0 - sy);
 
   m1.translate(-xoff, -yoff);
   m2.scale(sx, sy);
@@ -69,10 +64,10 @@ void ScaleCmd::execute()
 
   TransformationCmd::execute();
 
-/*  for(unsigned int i = 0; i < objects.count(); i++)
+  for(unsigned int i = 0; i < objects.count(); i++)
   {
     objects[i]->transform(m1);
     objects[i]->transform(m2);
     objects[i]->transform(m3, true);
-  }*/
+  }
 }

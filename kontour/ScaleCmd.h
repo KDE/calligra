@@ -32,7 +32,6 @@
 class ScaleCmd : public TransformationCmd
 {
 public:
-  ScaleCmd(GDocument *aGDoc, int mask, double x, double y);
   ScaleCmd(GDocument *aGDoc, int mask, double x, double y, KoRect r);
 
   void execute();
