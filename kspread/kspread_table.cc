@@ -7097,6 +7097,7 @@ void KSpreadTable::emit_updateRow( RowLayout *_layout, int _row )
 
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
+    emit sig_maxRow(maxRow());
     _layout->clearDisplayDirtyFlag();
 }
 
@@ -7112,6 +7113,7 @@ void KSpreadTable::emit_updateColumn( ColumnLayout *_layout, int _column )
 
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
+    emit sig_maxColumn(maxColumn());
     _layout->clearDisplayDirtyFlag();
 }
 

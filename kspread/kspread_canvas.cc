@@ -625,9 +625,11 @@ void KSpreadCanvas::slotScrollHorz( int _value )
 {
   if ( activeTable() == 0L )
     return;
-
   if ( _value < 0 )
     _value = 0;
+  int xpos = activeTable()->columnPos( m_pView->activeTable()->maxColumn()+10 , this );
+  if(_value>(xpos + m_iXOffset))
+      _value=xpos + m_iXOffset;
 
   activeTable()->enableScrollBarUpdates( false );
 
@@ -641,6 +643,7 @@ void KSpreadCanvas::slotScrollHorz( int _value )
   hBorderWidget()->scroll( dx, 0 );
 
   activeTable()->enableScrollBarUpdates( true );
+
 }
 
 void KSpreadCanvas::slotScrollVert( int _value )
@@ -650,6 +653,9 @@ void KSpreadCanvas::slotScrollVert( int _value )
 
   if ( _value < 0 )
     _value = 0;
+  int ypos = activeTable()->rowPos( m_pView->activeTable()->maxRow()+10 , this );
+  if(_value>(ypos + m_iYOffset))
+      _value=ypos + m_iYOffset;
 
   activeTable()->enableScrollBarUpdates( false );
 
@@ -665,7 +671,7 @@ void KSpreadCanvas::slotScrollVert( int _value )
 
 void KSpreadCanvas::slotMaxColumn( int _max_column )
 {
-  int xpos = activeTable()->columnPos( _max_column + 10, this );
+  int xpos = activeTable()->columnPos( _max_column+10 , this );
 
   horzScrollBar()->setRange( 0, xpos + xOffset() );
 }
