@@ -149,6 +149,7 @@ void KontourView::setupActions()
   m_duplicate = new KAction(i18n("Dup&licate"), 0, this, SLOT(slotDuplicate()), actionCollection(), "duplicate");
   m_delete = new KAction(i18n("&Delete"), "editdelete", 0, this, SLOT(slotDelete()), actionCollection(), "delete");
   m_selectAll = KStdAction::selectAll(this, SLOT(slotSelectAll()), actionCollection(), "selectAll");
+  m_deselectAll = KStdAction::deselect(this, SLOT(slotDeselectAll()), actionCollection(), "deselectAll");
 
   /* View menu */
 
@@ -617,6 +618,7 @@ void KontourView::changeSelection()
     m_forwardOne->setEnabled(false);
     m_backOne->setEnabled(false);
     m_convertToPath->setEnabled(false);
+    m_deselectAll->setEnabled(false);
   }
   else
   {
@@ -629,6 +631,7 @@ void KontourView::changeSelection()
     m_forwardOne->setEnabled(true);
     m_backOne->setEnabled(true);
     m_duplicate->setEnabled(true);
+    m_deselectAll->setEnabled(true);
   }
   if(page->objectCount() == page->selectionCount())
     m_selectAll->setEnabled(false);
@@ -712,6 +715,11 @@ void KontourView::slotSelectAll()
 {
   tcontroller->selectTool("Select");
   activeDocument()->activePage()->selectAllObjects();
+}
+
+void KontourView::slotDeselectAll()
+{
+  activeDocument()->activePage()->unselectAllObjects();
 }
 
 void KontourView::slotZoomIn()

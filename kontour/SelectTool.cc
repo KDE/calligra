@@ -179,12 +179,18 @@ void SelectTool::processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *ca
           page->unselectAllObjects();
         /* add the object to the selection */
         page->selectObject(obj);
+	page->updateSelection();
       }
       else
       {
         /* no object */
         state = S_Rubberband;
         page->unselectAllObjects();
+	page->updateSelection();
+	r.setLeft(xpos);
+	r.setRight(xpos);
+	r.setTop(ypos);
+	r.setBottom(ypos);
       }
     }
   }
@@ -506,14 +512,13 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
       QPtrListIterator<GObject> it(olist);
       for(; it.current(); ++it)
         page->selectObject(it.current());
-      state = S_Pick;
-      canvas->updateBuf(r);
+      page->updateSelection();
       canvas->repaint(r);
+      state = S_Pick;
     }
     else
     {
       /* no object found - repaint canvas to remove the rubberband */
-      canvas->updateBuf();
       canvas->repaint();
       state = S_Init;
     }
@@ -589,42 +594,44 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
 
 void SelectTool::processKeyPressEvent(QKeyEvent *e, GPage *page, Canvas *canvas)
 {
-  kdDebug(38000) << "SelectTool::processKeyPressEvent()" << endl;
-  if(page->selectionIsEmpty())
-    return;
-
-  if(e->key() == Qt::Key_Escape)
+  if(!page->selectionIsEmpty())
   {
-    /* clear selection */
-    page->unselectAllObjects ();
-    return;
+    if(e->key() == Qt::Key_Escape)
+    {
+      // clear selection
+      page->unselectAllObjects();
+      page->updateSelection();
+      return;
+    }
+    double big_step = 10.0;
+    double small_step = 2.0;
+    double dx = 0;
+    double dy = 0;
+    bool shift = e->state() & Qt::ShiftButton;
+    switch(e->key())
+    {
+    case Qt::Key_Left:
+      dx = (shift ? -small_step : -big_step);
+      break;
+    case Qt::Key_Right:
+      dx = (shift ? small_step : big_step);
+      break;
+    case Qt::Key_Up:
+      dy = (shift ? -small_step : -big_step);
+      break;
+    case Qt::Key_Down:
+      dy = (shift ? small_step : big_step);
+      break;
+    }
+    if(dx != 0 || dy != 0)
+      translate(page, dx, dy, false, true);
   }
 
-  double big_step = 10.0;
-  double small_step = 2.0;
-/*  float dx = 0, dy = 0;
-  bool shift = ke->state () & Qt::ShiftButton;
-
-  switch (ke->key ()) {
-  case Qt::Key_Left:
-    dx = (shift ? -small_step : -big_step);
-    break;
-  case Qt::Key_Right:
-    dx = (shift ? small_step : big_step);
-    break;
-  case Qt::Key_Up:
-    dy = (shift ? -small_step : -big_step);
-    break;
-  case Qt::Key_Down:
-    dy = (shift ? small_step : big_step);
-    break;
-  case Qt::Key_Tab:
-      kdDebug(38000) << "<tab>" << endl;
-  default:
-    break;
+  if(e->key() == Qt::Key_Tab)
+  {
+    page->selectNextObject();
+    page->updateSelection();
   }
-  if (dx != 0 || dy != 0)
-    translate (doc, canvas, dx, dy, false, true); */
 }
 
 void SelectTool::translate(GPage *page, double dx, double dy, bool snap, bool permanent)

@@ -125,6 +125,7 @@ public slots:
   void slotDuplicate();
   void slotDelete();
   void slotSelectAll();
+  void slotDeselectAll();
   void slotZoomIn();
   void slotZoomOut();
   void slotViewZoom(const QString &);
@@ -178,53 +179,53 @@ private:
   KPopupMenu *objMenu;
   KPopupMenu *rulerMenu;
 
-  /* Status bar */
+  // Status bar
+  QLabel              *mSBCoords;
+  QLabel              *mSBState;
 
-  QLabel *mSBCoords;  
-  QLabel *mSBState;
-
-  /* Panels */
-  LayerPanel      *mLayerPanel;
-  PaintPanel      *mPaintPanel;
-  OutlinePanel    *mOutlinePanel;
-  TransformPanel  *mTransformPanel;
+  // Panels
+  LayerPanel          *mLayerPanel;
+  PaintPanel          *mPaintPanel;
+  OutlinePanel        *mOutlinePanel;
+  TransformPanel      *mTransformPanel;
 
   // Actions
-  KAction *m_copy;
-  KAction *m_paste;
-  KAction *m_cut;
-  KAction *m_duplicate;
-  KAction *m_delete;
-  KAction *m_selectAll;
+  KAction             *m_copy;
+  KAction             *m_paste;
+  KAction             *m_cut;
+  KAction             *m_duplicate;
+  KAction             *m_delete;
+  KAction             *m_selectAll;
+  KAction             *m_deselectAll;
 
-  KAction *m_zoomIn;
-  KAction *m_zoomOut;
-  KSelectAction *m_viewZoom;
+  KAction             *m_zoomIn;
+  KAction             *m_zoomOut;
+  KSelectAction       *m_viewZoom;
 
-  KToggleAction *m_normal;
-  KToggleAction *m_outline;
+  KToggleAction       *m_normal;
+  KToggleAction       *m_outline;
 
-  KToggleAction *m_showRuler;
-  KToggleAction *m_showGrid;
-  KToggleAction *m_showHelplines;
-  KToggleAction *m_showPaintPanel;
-  KToggleAction *m_showOutlinePanel;
+  KToggleAction       *m_showRuler;
+  KToggleAction       *m_showGrid;
+  KToggleAction       *m_showHelplines;
+  KToggleAction       *m_showPaintPanel;
+  KToggleAction       *m_showOutlinePanel;
 
-  KToggleAction *m_snapToGrid;
-  KToggleAction *m_alignToHelplines;
+  KToggleAction       *m_snapToGrid;
+  KToggleAction       *m_alignToHelplines;
 
-  KAction *m_toFront;
-  KAction *m_toBack;
-  KAction *m_forwardOne;
-  KAction *m_backOne;
+  KAction             *m_toFront;
+  KAction             *m_toBack;
+  KAction             *m_forwardOne;
+  KAction             *m_backOne;
 
-  KSelectAction *m_styles;
-  KAction *m_addStyle;
-  KAction *m_deleteStyle;
+  KSelectAction       *m_styles;
+  KAction             *m_addStyle;
+  KAction             *m_deleteStyle;
 
-  KAction *m_convertToPath;
+  KAction             *m_convertToPath;
 
-  KAction *m_options;
+  KAction             *m_options;
 
   /* Tools */
   ToolController *tcontroller;

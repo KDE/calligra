@@ -244,7 +244,6 @@ void GPage::lowerLayer(GLayer *layer)
     layers.insert(pos-1, l);
     unselectAllObjects();
   }
-//  emit changed ();
 }
 
 unsigned int GPage::objectCount() const
@@ -259,11 +258,6 @@ void GPage::insertObject(GObject *obj)
 {
   obj->ref();
   mActiveLayer->insertObject(obj);
-//  connect(obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
-//  connect (obj, SIGNAL(changed(const KoRect&)), this, SLOT(objectChanged(const KoRect&)));
-//  setModified();
-//  if(autoUpdate)
-//    emit changed();
 }
 
 void GPage::deleteObject(GObject *obj)
@@ -299,11 +293,6 @@ void GPage::insertObjectAtIndex(GObject *obj, unsigned int idx)
   if(layer == 0L)
     layer = mActiveLayer;
   layer->insertObjectAtIndex (obj, idx);
-/*  if (autoUpdate)
-  {
-    emit changed ();
-    emit selectionChanged ();
-  }*/
 }
 
 void GPage::moveObjectToIndex(GObject *obj, unsigned int idx)
@@ -312,13 +301,6 @@ void GPage::moveObjectToIndex(GObject *obj, unsigned int idx)
   if (layer == 0L)
     layer = mActiveLayer;
   layer->moveObjectToIndex (obj, idx);
-
-  //setModified ();
-/*  if (autoUpdate)
-  {
-    emit changed ();
-    emit selectionChanged ();
-  }*/
 }
 
 void GPage::selectObject(GObject *obj)
@@ -332,7 +314,6 @@ void GPage::selectObject(GObject *obj)
       mConvertibleCount++;
     obj->ref();
     selection.append(obj);
-    updateSelection();
     document()->emitSelectionChanged();
   }
 }
@@ -396,24 +377,16 @@ void GPage::selectNextObject()
   else
   {
     GObject *oldSel = selection.first();
-    unsigned int idx = findIndexOfObject (oldSel);
-    if (++idx >= mActiveLayer->objects ().count())
+    unsigned int idx = findIndexOfObject(oldSel);
+    idx++;
+    if(idx >= mActiveLayer->objects().count())
       idx = 0;
-    newSel = mActiveLayer->objectAtIndex (idx);
+    kdDebug(38000) << "INDEX=" << idx << endl;
+    newSel = mActiveLayer->objectAtIndex(idx);
   }
-//  setAutoUpdate(false);
-//  unselectAllObjects();
-
-//  setAutoUpdate(true);
-//  if(newSel)
-//  {
-//    handle().show(true);
-//    selectObject(newSel);
-//   }
-}
-
-void GPage::selectPrevObject()
-{
+  unselectAllObjects();
+  if(newSel)
+    selectObject(newSel);
 }
 
 void GPage::deleteSelectedObjects()

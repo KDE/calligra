@@ -36,7 +36,7 @@
 
 extern "C"
 {
-  void* init_libkontourpart()
+  void *init_libkontourpart()
   {
     return new KontourFactory;
   }

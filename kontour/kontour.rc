@@ -11,6 +11,7 @@
   <Action name="delete"/>
   <Separator/>
   <Action name="selectAll"/>
+  <Action name="deselectAll"/>
  </Menu>
  <Menu name="view"><text>&amp;View</text>
   <Action name="zoomin"/>

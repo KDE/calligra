@@ -152,7 +152,10 @@ void RectTool::processEvent(QEvent *e)
       }
       QPainter p(canvas);
       p.setPen(blue);
-      p.drawRect(r);
+      if(mRoundness)
+        p.drawRoundRect(r);
+      else
+        p.drawRect(r);
     }
   }
   else if(e->type() == QEvent::MouseButtonRelease)

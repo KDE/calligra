@@ -114,7 +114,6 @@ public:
   void unselectAllObjects();
 
   void selectNextObject();
-  void selectPrevObject();
 
   void deleteSelectedObjects();
 

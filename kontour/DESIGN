@@ -1,0 +1,20 @@
+
+GObject--+->GRect
+         +->GOval
+	 +->GPolygon
+	 +->GPath
+	 +->GImage
+	 +->GText
+	 +->GPart
+	 +->GGroup
+
+
+Tools:
+* Select
+* EditPoint
+* Zoom
+* Freehand
+* Rect
+* Oval
+* Polygon
+* InsertImage
