@@ -224,6 +224,20 @@ KexiDBFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner:
 		KLineEdit *lineedit = static_cast<KLineEdit*>(w);
 		createEditor(lineedit->text(), lineedit, container, lineedit->geometry(), lineedit->alignment(), true);
 	}
+	else if(classname == "KexiLabel")
+	{
+		KexiLabel *label = static_cast<KexiLabel*>(w);
+/*		if(label->textFormat() == RichText)
+		{
+			m_widget = w;
+			// TODO - try to avoid reimplementing StdWidgetFactory::editText
+			// talk to jstaniek about this
+			//editText();
+		}
+		else*/
+			createEditor(label->text(), label, container, label->geometry(), label->alignment());
+		return;
+	}
 }
 
 void
