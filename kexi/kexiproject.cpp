@@ -351,7 +351,7 @@ KexiProject::initHostConnection(const Credentials &cred)
 	if(!m_db->connect(cred.host, cred.user, cred.password, cred.socket, cred.port))
 	{
 		m_cred = cred;
-                setModified( true );
+		setModified( true );
 		return false;
 	}
 	else

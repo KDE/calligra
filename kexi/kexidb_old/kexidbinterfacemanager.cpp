@@ -21,9 +21,10 @@
 
 #include <klibloader.h>
 #include <kparts/componentfactory.h>
-
 #include <ktrader.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
+#include <klocale.h>
 
 #include "kexidb.h"
 #include "kexidbinterfacemanager.h"
@@ -64,15 +65,22 @@ void
 KexiDBInterfaceManager::lookupDrivers()
 {
 	KTrader::OfferList tlist = KTrader::self()->query("KexiDB/Interface");
-	KTrader::OfferList::Iterator it(tlist.begin());
-	for(; it != tlist.end(); ++it)
-	{
-		KService::Ptr ptr = (*it);
+	if(tlist.count() > 0) {
+		KTrader::OfferList::Iterator it(tlist.begin());
+		for(; it != tlist.end(); ++it)
+		{
+			KService::Ptr ptr = (*it);
 
-		KexiDBDriver *driver = new KexiDBDriver(ptr->name());
-		driver->setService(*it);
-		m_driverList.insert(ptr->name(), driver);
-		kdDebug() << "KexiDBInterfaceManager::lookupDrivers(): registerd driver: " << ptr->name() << endl;
+			KexiDBDriver *driver = new KexiDBDriver(ptr->name());
+			driver->setService(*it);
+			m_driverList.insert(ptr->name(), driver);
+			kdDebug() << "KexiDBInterfaceManager::lookupDrivers(): registerd driver: " << ptr->name() << endl;
+		}
+	}
+	else
+	{
+		KMessageBox::error(0, i18n("Kexi could not find any database drivers!"));
+		exit(0);
 	}
 }
 
