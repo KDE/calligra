@@ -55,8 +55,13 @@ VZoomTool::contextHelp()
 void
 VZoomTool::activate()
 {
-	//view()->statusMessage()->setText( i18n( "Zoom Tool" ) );
 	//view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
+}
+
+QString
+VZoomTool::statusText()
+{
+	return i18n( "Zoom Tool" );
 }
 
 void
@@ -101,7 +106,7 @@ VZoomTool::mouseButtonRelease()
 	KoRect rect( last().x() - viewportX / 2.0, last().y() - viewportY / 2.0, viewportX, viewportY );
 	rect = rect.normalize();
 	view()->canvasWidget()->setContentsRect( rect );
-	view()->part()->repaintAllViews();
+	view()->canvasWidget()->repaintAll();
 }
 
 void
@@ -120,7 +125,7 @@ VZoomTool::mouseDragRelease()
 	KoRect rect( first().x(), first().y(), last().x() - first().x(), last().y() - first().y() );
 	rect = rect.normalize();
 	view()->canvasWidget()->setContentsRect( rect );
-	view()->part()->repaintAllViews( rect );
+	view()->canvasWidget()->repaintAll( rect );
 }
 
 void
@@ -141,7 +146,7 @@ VZoomTool::arrowKeyReleased( Qt::Key key )
 		KoRect rect( last().x() - viewportX / 2.0, last().y() - viewportY / 2.0, viewportX, viewportY );
 		rect = rect.normalize();
 		view()->canvasWidget()->setContentsRect( rect );
-		view()->part()->repaintAllViews();
+		view()->canvasWidget()->repaintAll();
 	}
 }
 

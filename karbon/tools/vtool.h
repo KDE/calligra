@@ -78,6 +78,8 @@ public:
 
 	virtual QString category() { return "misc"; }
 
+	virtual QString statusText() { return ""; }
+
 	/**
 	 * Position in toolbox. Zero means no preferred position, other
 	 * values indicate the true position.

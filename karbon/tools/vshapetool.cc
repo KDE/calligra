@@ -53,9 +53,14 @@ VShapeTool::contextHelp()
 void
 VShapeTool::activate()
 {
-	view()->statusMessage()->setText( name() );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 	view()->part()->document().selection()->showHandle( true );
+}
+
+QString
+VShapeTool::statusText()
+{
+	return name();
 }
 
 void

@@ -55,6 +55,7 @@ public:
 	virtual QString name() { return i18n( "Select tool" ); }
 	virtual QString icon() { return "14_select"; }
 	virtual QString category() { return "manipulation"; }
+	virtual QString statusText();
 	virtual uint priority() { return 1; }
 	virtual QString contextHelp();
 

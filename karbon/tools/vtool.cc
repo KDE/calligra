@@ -19,6 +19,7 @@
 */
 
 #include <qevent.h>
+#include <qlabel.h>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -53,6 +54,7 @@ void VTool::activateAll()
 	view()->toolOptionsDocker()->manageTool( this );
 	QPixmap Icon = BarIcon( icon() );
 	view()->contextHelpAction()->updateHelp( name(), contextHelp(), &Icon );
+	view()->statusMessage()->setText( statusText() );
 
 	activate();
 }

@@ -43,6 +43,7 @@ public:
 	virtual QString name() { return i18n( "Zoom Tool" ); }
 	virtual QString contextHelp();
 	virtual QString icon() { return "14_zoom"; }
+	virtual QString statusText();
 
 protected:
 	void draw();

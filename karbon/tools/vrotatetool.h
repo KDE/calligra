@@ -36,6 +36,7 @@ public:
 	virtual QString name() { return i18n( "Rotate tool" ); }
 	virtual QString icon() { return "14_rotate"; }
 	virtual QString category() { return "manipulation"; }
+	virtual QString statusText();
 	virtual uint priority() { return 3; }
 
 protected:

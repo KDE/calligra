@@ -34,6 +34,7 @@ public:
 	virtual QString name() { return i18n( "Shear tool" ); }
 	virtual QString icon() { return "14_shear"; }
 	virtual QString category() { return "manipulation"; }
+	virtual QString statusText();
 
 protected:
 	virtual void draw();
