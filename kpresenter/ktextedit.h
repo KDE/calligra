@@ -779,6 +779,7 @@ private:
     void doKeyboardAction( int action );
     void checkUndoRedoInfo( UndoRedoInfo::Type t );
     void repaintChanged();
+    QColor getColorTextBack();
 
 private:
     KTextEditDocument *doc;

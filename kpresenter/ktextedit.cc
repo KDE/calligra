@@ -167,7 +167,7 @@ void KTextEdit::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
     QSize s( doc->firstParag()->rect().size() );
 
     p->fillRect( 0, 0, width(), doc->y(),
-		 QBrush( kp_doc->txtBackCol() ) );
+		 QBrush( getColorTextBack() ) );
 
     if ( !doubleBuffer ) {
 	doubleBuffer = bufferPixmap( s );
@@ -208,7 +208,7 @@ void KTextEdit::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 	    painter.begin( doubleBuffer );
 	}
 	painter.fillRect( QRect( 0, 0, s.width(), s.height() ),
-			  QBrush( kp_doc->txtBackCol() ) );
+			  QBrush( getColorTextBack() ) );
 
 	parag->paint( painter, colorGroup(), drawCur ? cursor : 0, TRUE );
 
@@ -216,7 +216,7 @@ void KTextEdit::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 	if ( parag->rect().x() + parag->rect().width() < 0 + width() )
 	    p->fillRect( parag->rect().x() + parag->rect().width(), parag->rect().y(),
 			 ( 0 + width() ) - ( parag->rect().x() + parag->rect().width() ),
-			 parag->rect().height(), QBrush( kp_doc->txtBackCol() ) );
+			 parag->rect().height(), QBrush( getColorTextBack() ) );
 	parag = parag->next();
     }
 
@@ -224,7 +224,7 @@ void KTextEdit::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
     if ( parag->rect().y() + parag->rect().height() - 0 < height() )
 	p->fillRect( 0, parag->rect().y() + parag->rect().height(), width(),
 		     height() - ( parag->rect().y() + parag->rect().height() ),
-		     QBrush( kp_doc->txtBackCol() ) );
+		     QBrush( getColorTextBack() ) );
 
     cursorVisible = TRUE;
 }
@@ -600,7 +600,7 @@ void KTextEdit::drawCursor( bool visible )
 
     if ( fill )
 	painter.fillRect( chr->x, y, cw, h,
-			  QBrush( kp_doc->txtBackCol() ) );
+			  QBrush( getColorTextBack() ) );
 
     if ( chr->c != '\t' )
 	painter.drawText( chr->x, y + bl, chr->c );
@@ -608,7 +608,11 @@ void KTextEdit::drawCursor( bool visible )
     if ( visible ) {
 	int x = chr->x;
 	int w = 1;
-	painter.fillRect( QRect( x, y, w, h ), red );
+	QColor color = getColorTextBack();
+	if ( color.red() > color.green() && color.red() > color.blue() )
+	    painter.fillRect( QRect( x, y, w, h ), blue );
+	else
+	    painter.fillRect( QRect( x, y, w, h ), red );
     }
 
     p.drawPixmap( cursor->parag()->rect().topLeft() + QPoint( chr->x, y ), *doubleBuffer,
@@ -1550,6 +1554,11 @@ bool KTextEdit::event( QEvent * e )
         }
     }
     return QWidget::event( e );
+}
+
+QColor KTextEdit::getColorTextBack()
+{
+    return kp_doc->txtBackCol();
 }
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

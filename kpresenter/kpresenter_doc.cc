@@ -2966,8 +2966,18 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
         objStartY = -1;
     else
         objStartY = getPageRect( _page - 1, 0, 0 ).y() + getPageRect( _page - 1, 0, 0 ).height();
+
+    QColor tmp_txtBackCol = _txtBackCol;
+    unsigned int tmp_RastX = _rastX;
+    unsigned int tmp_RastY = _rastY;
+
     loadNativeFormat( fileName );
     objStartY = 0;
+
+    _txtBackCol = tmp_txtBackCol;
+    _rastX = tmp_RastX;
+    _rastY = tmp_RastY;
+
     _clean = true;
     setModified(true);
     KPBackGround *kpbackground = _backgroundList.at( _backgroundList.count() - 1 );

@@ -82,14 +82,12 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     lay1->setMargin( 20 );
     lay1->setSpacing( 10 );
 
-    int oldRastX = 10;
-    int oldRastY = 10;
+    int oldRastX = m_pView->kPresenterDoc()->rastX();
+    int oldRastY = m_pView->kPresenterDoc()->rastY();
     oldAutoSaveValue =  m_pView->kPresenterDoc()->defaultAutoSave()/60;
 
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
-        oldRastX = config->readNumEntry( "RastX", 10 );
-        oldRastY = config->readNumEntry( "RastY", 10 );
         oldAutoSaveValue = config->readNumEntry( "AutoSave", oldAutoSaveValue );
     }
 
@@ -122,8 +120,6 @@ void configureInterfacePage::apply()
 
     config->setGroup( "Interface" );
     if( rastX != oldRastX || rastY != oldRastX ) {
-        config->writeEntry( "RastX", rastX );
-        config->writeEntry( "RastY", rastY );
         doc->setRasters( rastX, rastY, true );
         doc->repaint( false );
     }
@@ -148,11 +144,7 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
     m_pView = _view;
     config = KPresenterFactory::global()->config();
 
-    oldBgColor = Qt::white;
-    if(  config->hasGroup( "KPresenter Color" ) ) {
-        config->setGroup( "KPresenter Color" );
-        oldBgColor = config->readColorEntry( "BackgroundColor", &oldBgColor );
-    }
+    oldBgColor = m_pView->kPresenterDoc()->txtBackCol();
 
     QVBoxLayout *box = new QVBoxLayout( this );
     box->setMargin( 5 );
@@ -178,8 +170,6 @@ void configureColorBackground::apply()
     KPresenterDoc * doc = m_pView->kPresenterDoc();
     if( oldBgColor != _col ) {
         doc->setTxtBackCol( _col );
-        config->setGroup( "KPresenter Color" );
-        config->writeEntry( "BackgroundColor", _col );
         doc->replaceObjs();
         doc->repaint( false );
     }
