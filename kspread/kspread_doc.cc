@@ -189,14 +189,6 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 
   setInstance( KSpreadFactory::global(), false );
 
-  // Set a name if there is no name specified
-  if ( !name )
-  {
-      QString tmp( "Document%1" );
-      tmp = tmp.arg( d->s_docId++ );
-      setName( tmp.local8Bit());//tmp.latin1() );
-  }
-
   d->tableId = 1;
   d->dcop = 0;
   d->isLoading = false;
@@ -207,8 +199,17 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   d->undoLocked = false;
   d->commandHistory = new KoCommandHistory( actionCollection() );
 
+
   // Make us scriptable if the document has a name
-  if ( name )
+  // Set a name if there is no name specified
+  if ( !name )
+  {
+      QString tmp( "Document%1" );
+      tmp = tmp.arg( d->s_docId++ );
+      setName( tmp.local8Bit());//tmp.latin1() );
+      dcopObject();
+  }
+  else
       dcopObject();
 
   // default document properties
