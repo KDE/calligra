@@ -1,1 +1,1 @@
-KDE_ICON = AUTO
+KDE_ICON = karbon
