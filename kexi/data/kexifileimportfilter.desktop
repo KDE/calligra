@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-Derived=Kexi/ImportFilter
+X-KDE-ServiceType=Kexi/FileImportFilter
+Comment=Service type for any kind of file based kexi import filters (table,forms,queries, ...)
+
+[PropertyDef::X-KEXI-OfficeChainImport]
+Type=bool
+
