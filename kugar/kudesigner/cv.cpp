@@ -242,7 +242,7 @@ void ReportCanvas::startMoveOrResizeOrSelectItem(QCanvasItemList &l,
 	    moving_offsetY=0;
             resizing_type=cb->isInHolder(p);
             if (resizing_type)
-            {		
+            {
 		kdDebug()<<"A Widget should be resized"<<endl;
                 moving = 0;
                 resizing = cb;
@@ -253,9 +253,31 @@ void ReportCanvas::startMoveOrResizeOrSelectItem(QCanvasItemList &l,
 			resizing_constraint.setY(item->section()->y());
 			resizing_constraint.setWidth(item->section()->width());
 			resizing_constraint.setHeight(item->section()->height());
+			if (cb->rtti()!=KuDesignerRttiCanvasLine)
+			{
+				resizing_minSize.setWidth(10);
+				resizing_minSize.setHeight(10);
+			}
+			else
+			{
+				resizing_minSize.setWidth(0);
+				resizing_minSize.setHeight(0);
+			}
 		}
 		else
-			resizing_constraint=QRect(0,0,1000,1000);
+			if (cb->rtti()>=KuDesignerRttiReportHeader)
+			{
+				resizing_constraint=QRect(0,0,1000,1000);
+				resizing_minSize.setWidth(0);
+				resizing_minSize.setHeight(
+					((CanvasBand*)cb)->minHeight());
+			}
+			else
+			{
+				resizing_constraint=QRect(0,0,1000,1000);
+				resizing_minSize.setWidth(0);
+				resizing_minSize.setHeight(10);
+			}
                 return;
             }
             else
@@ -469,7 +491,7 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 		h = h + p.y() - moving_start.y();
 		fixMaxValues(h,r->y(),resizing_constraint.bottom(),moving_offsetY);
 		if(resizing->rtti() != KuDesignerRttiCanvasLine)
-			fixMinValues(h,10,moving_offsetY);
+			fixMinValues(h,resizing_minSize.height(),moving_offsetY);
 	}
 	else
 		if (resizing_type & CanvasBox::ResizeTop)
@@ -478,19 +500,19 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 			newYPos=r->y()+p.y()-moving_start.y();
 			fixMinValues(newYPos,resizing_constraint.top(),moving_offsetY);
 			if(resizing->rtti() != KuDesignerRttiCanvasLine)
-				fixMaxValues(newYPos,10,r->y()+r->height(),moving_offsetY);
+				fixMaxValues(newYPos, resizing_minSize.height(),r->y()+r->height(),moving_offsetY);
 			h=h+(r->y()-newYPos);
 		}
 
 
-//horizontal resizing	
+//horizontal resizing
 	if (resizing_type & CanvasBox::ResizeRight)
 	{
 		kdDebug()<<"Resize right"<<endl;
         	w = w + p.x() - moving_start.x();
 		fixMaxValues(w,r->x(),resizing_constraint.right(),moving_offsetX);
 		if(resizing->rtti() != KuDesignerRttiCanvasLine)
-			fixMinValues(w,10,moving_offsetX);
+			fixMinValues(w,resizing_minSize.width(),moving_offsetX);
 
 	}
 	else
@@ -500,11 +522,11 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 			newXPos=r->x()+p.x()-moving_start.x();
 			fixMinValues(newXPos,resizing_constraint.left(),moving_offsetX);
 			if(resizing->rtti() != KuDesignerRttiCanvasLine)
-				fixMaxValues(newXPos,10,r->x()+r->width(),moving_offsetX);
+				fixMaxValues(newXPos, resizing_minSize.width(),r->x()+r->width(),moving_offsetX);
 			w=w+(r->x()-newXPos);
 		}
 
-	r->move(newXPos,newYPos);            
+	r->move(newXPos,newYPos);
 	r->setSize(w, h);
         moving_start = p;
         resizing->updateGeomProps();

@@ -94,6 +94,7 @@ public:
     virtual QString getXml();
     virtual int isInHolder(const QPoint );
     virtual void drawHolders(QPainter &);
+    int minHeight();
     QRect bottomMiddleResizableRect();
     void arrange(int base, bool destructive = TRUE);
     virtual void updateGeomProps();

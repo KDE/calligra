@@ -1,4 +1,4 @@
-/***************************************************************************
+	/***************************************************************************
                           cv.h  -  description
                              -------------------
     begin                : 07.06.2002
@@ -46,7 +46,7 @@ public:
     ReportCanvas(QCanvas * canvas, QWidget * parent = 0, const char * name = 0, WFlags f = 0);
     
     CanvasReportItem *itemToInsert;
-    
+
     enum RequestType {RequestNone = 0, RequestProps, RequestDelete};
     
     void setRequest(RequestType r);
@@ -81,13 +81,14 @@ private:
     double moving_offsetY;
     double moving_offsetX;
     QRect resizing_constraint;
+    QSize resizing_minSize;
     int resizing_type;
     CanvasBox *resizing;
     bool selectionStarted;
     KuDesignerPlugin *m_plugin;
 
     SelectionRect *selectionRect;
-    
+
     RequestType request;
 
     QPtrList<CanvasBox> selected;

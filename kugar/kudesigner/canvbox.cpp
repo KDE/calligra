@@ -117,7 +117,7 @@ CanvasKugarTemplate::CanvasKugarTemplate(int x, int y, int width, int height, QC
         m, i18n("Page orientation"), "0")));
     m.clear();
 
-    props["TopMargin"] = *(new PropPtr(new Property(IntegerValue, "TopMargin", i18n("Top margin"), "0"))); 
+    props["TopMargin"] = *(new PropPtr(new Property(IntegerValue, "TopMargin", i18n("Top margin"), "0")));
 
     props["BottomMargin"] = *(new PropPtr(new Property(IntegerValue, "BottomMargin", i18n("Bottom margin"), "0")));
 
@@ -355,6 +355,17 @@ void CanvasBand::arrange(int base, bool destructive)
         (*it)->hide();
         (*it)->show();
     }
+}
+
+int CanvasBand::minHeight()
+{
+	int result=y()+10;
+	for (QCanvasItemList::Iterator it=items.begin(); it!=items.end(); ++it)
+	{
+		result=QMAX(result,((QCanvasRectangle*)(*it))->y()+
+			((QCanvasRectangle*)(*it))->height());
+	}
+	return result-y();
 }
 
 QString CanvasBand::getXml()
