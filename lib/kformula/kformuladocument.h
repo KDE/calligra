@@ -109,6 +109,11 @@ public:
     bool loadXML( QDomDocument doc );
 
     /**
+     * Load a OASIS content.xml DomDocument
+     */
+    bool loadOasis( QDomDocument doc );
+    
+    /**
      * Load the document settings.
      */
     bool loadDocumentPart( QDomElement node );
