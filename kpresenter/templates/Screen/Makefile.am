@@ -14,7 +14,3 @@ templatesrc_DATA = \
  TwoColumnLandscape.kpt \
  emptyLandscape.kpt 
 templatesrcdir = $(kde_datadir)/kpresenter/templates/Screen/.source
-
-#templateicons_DATA = One.png Title.png Two.png
-#templateiconsdir = $(kde_datadir)/kpresenter/templates/Screen/.icon
-

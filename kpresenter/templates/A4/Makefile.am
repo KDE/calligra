@@ -18,5 +18,3 @@ templatesrc_DATA = \
  emptyLandscape.kpt \
  emptyPortrait.kpt
 templatesrcdir = $(kde_datadir)/kpresenter/templates/A4/.source
-
-
