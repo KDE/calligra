@@ -305,7 +305,7 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 === KexiDB Parser TODO ===
 - add clever query relatins parsing 
       (needed for switching back to GUI editor from text mode)
-- remove single-char token names with chars (more readable + more effective)
+- add flexible support for date/time constants
 
 === 2004 LT TODO ===
 KexiDB Drivers
