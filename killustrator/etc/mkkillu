@@ -30,7 +30,8 @@ sed -e "s#@GMOFILES@#$list#" po/Makefile.am > po/Makefile.am.new && mv po/Makefi
 echo 'dist-hook:' >> Makefile.am
 echo -e "\tcd \$(top_distdir) && perl \$(top_srcdir)/am_edit" >> Makefile.am
 echo "" >> Makefile.am
-echo "myown_dist = am_edit" >> Makefile.am
+sed 's#^myown_dist#myown_dist = am_edit#' Makefile.am > Makefile.am.2
+mv Makefile.am.2 Makefile.am
 aclocal
 autoheader
 automake

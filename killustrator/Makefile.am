@@ -5,6 +5,8 @@ SUBDIRS = share filter xmlutils standalone koffice pics doc
 # have all needed files, that a GNU package needs
 AUTOMAKE_OPTIONS = foreign
 
+myown_dist = 
+
 # only Tom may know, why make dist forgets configure
 # myown_dist lists some more files when a standalone package
 EXTRA_DIST = README kil.dtd killustrator.lsm $(myown_dist)
