@@ -4,9 +4,7 @@ TODO:
 
 + near future :)
 	+ gui
-		- look why item pixmaps for queries are supported but
-		  not for tables...
-		  
+	
 	+ project
 		- support for storing fileDB references in projectfile
 		- dbhandler ?

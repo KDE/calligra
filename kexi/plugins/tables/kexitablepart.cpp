@@ -70,13 +70,13 @@ KexiTablePart::visible()
 QPixmap
 KexiTablePart::groupPixmap()
 {
-	return kapp->iconLoader()->loadIcon(QString("tables"), KIcon::Small);
+	return kapp->iconLoader()->loadIcon("tables", KIcon::Small);
 }
 
 QPixmap
 KexiTablePart::itemPixmap()
 {
-	return QPixmap();
+	return kapp->iconLoader()->loadIcon("table", KIcon::Small);
 }
 
 void

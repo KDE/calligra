@@ -58,13 +58,13 @@ KexiQueryPart::visible()
 QPixmap
 KexiQueryPart::groupPixmap()
 {
-	return kapp->iconLoader()->loadIcon(QString("queries"), KIcon::Small);
+	return kapp->iconLoader()->loadIcon("queries", KIcon::Small);
 }
 
 QPixmap
 KexiQueryPart::itemPixmap()
 {
-	return kapp->iconLoader()->loadIcon(QString("queries"), KIcon::Small);
+	return kapp->iconLoader()->loadIcon("query", KIcon::Small);
 }
 
 void
