@@ -74,13 +74,11 @@ KoSpell::KoSpell(QWidget *_parent, QObject *obj, const char *slot, KSpellConfig 
 
 	proc=0;
 	ksconfig=0;
-
 	//won't be using the dialog in ksconfig, just the option values
 	if (_ksc!=0)
-		ksconfig = new KSpellConfig(_ksc);
+		ksconfig = new KSpellConfig(*_ksc);
 	else
 		ksconfig = new KSpellConfig;
-
 	codec = 0;
 	switch (ksconfig->encoding())
 	{
@@ -123,11 +121,6 @@ KoSpell::KoSpell(QWidget *_parent, QObject *obj, const char *slot, KSpellConfig 
 		case KS_E_KOI8U:
 			codec = QTextCodec::codecForName("KOI8-U");
 			break;
-		#if QT_VERSION >= 224
-		case KS_E_CP1251:
-			codec = QTextCodec::codecForName("CP1251");
-			break;
-		#endif
 		default:
 			break;
 	}
@@ -139,7 +132,7 @@ KoSpell::KoSpell(QWidget *_parent, QObject *obj, const char *slot, KSpellConfig 
 	// caller wants to know when kspell is ready
 	if ( obj && slot )
 		connect (this, SIGNAL(ready(KoSpell *)), obj, slot);
-	
+
 	proc=new KProcIO(codec);
 
 	trystart=0;
@@ -173,7 +166,7 @@ void KoSpell::startIspell()
 	 *	-C     Consider run-together words as legal compounds.
 	 *	-m     Make possible root/affix combinations that aren't in the dictionary.
 	 */
-	
+
 	*proc << "-a" << "-S";
 	if (ksconfig->noRootAffix())
 		*proc<<"-m";
@@ -182,7 +175,7 @@ void KoSpell::startIspell()
 		*proc << "-B";
 	else
 		*proc << "-C";
-	
+
 	if (trystart<2)
 	{
 		if (! ksconfig->dictionary().isEmpty())
@@ -273,7 +266,7 @@ void KoSpell::KoSpell2 (KProcIO *)
 		QTimer::singleShot(0, this, SLOT(emitDeath()));
 		return;
 	}
-	
+
 	// put ispell in "terse-mode" -- not outputing a '*' for each correct word
 	proc->fputs("!");
 
@@ -305,7 +298,7 @@ bool KoSpell::writePersonalDictionary()
 bool KoSpell::ignore(const QString & word)
 {
 	QString qs = word.simplifyWhiteSpace();
-	
+
 	//we'll let ispell do the work here b/c we can
 	if (qs.find (' ')!=-1 || qs.isEmpty())    // make sure it's a _word_
 		return FALSE;
@@ -428,7 +421,7 @@ void KoSpell::check2(KProcIO *)
 
 		/* UTF-8 encoding
 		 * source: http://www.cl.cam.ac.uk/~mgk25/unicode.html
-		 * 
+		 *
 		 * U-00000000 - U-0000007F: 	0xxxxxxx
 		 * U-00000080 - U-000007FF:	110xxxxx 10xxxxxx
 		 * U-00000800 - U-0000FFFF:	1110xxxx 10xxxxxx 10xxxxxx
@@ -456,13 +449,13 @@ void KoSpell::check2(KProcIO *)
 					else if(u > 0xffff)
 						pos-=3;
 					*/
-					
+
 				}
 //				kdDebug() << "KoSpell::misspelling(" << word << ", " << pos << ")" << endl;
 				emit misspelling(word, pos);
 				break;
 			}
-				
+
 			case SpellingDone:
 //				kdDebug() << "KoSpell::done()" << endl;
 				m_buffer.pop_front();

@@ -270,10 +270,16 @@ KSpellConfig* KoBgSpellCheck::spellConfig()
 void KoBgSpellCheck::setKSpellConfig(KSpellConfig _kspell)
 {
   (void)spellConfig();
+  delete m_bgSpell.kspell;
+  m_bgSpell.kspell = 0;
+  m_bgSpell.currentParag = 0;
+  m_bgSpell.currentTextObj = 0;
+
   m_pKSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
   m_pKSpellConfig->setRunTogether(_kspell.runTogether ());
   m_pKSpellConfig->setDictionary(_kspell.dictionary ());
   m_pKSpellConfig->setDictFromList(_kspell.dictFromList());
   m_pKSpellConfig->setEncoding(_kspell.encoding());
   m_pKSpellConfig->setClient(_kspell.client());
+  startBackgroundSpellCheck();
 }
