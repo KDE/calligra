@@ -1956,7 +1956,12 @@ void KWPage::viewportPaintEvent( QPaintEvent *e )
     painter.begin( viewport() );
     painter.setClipRect( e->rect() );
 
-    QRegion r( e->rect() );
+    QRegion cr( e->rect() );
+    QRegion r = cr;
+    if ( contentsX() == 0 ) {
+	r = QRegion( QRect( 1, 0, ptPaperWidth() - 2, visibleHeight() ) );
+	r = r.intersect( cr );
+    }
 
     if ( !_setErase )
 	_erase = e->erased();
@@ -2370,13 +2375,15 @@ bool KWPage::kDown( QKeyEvent *e, int, int, KWParag *, KWTextFrameSet * )
 /*================================================================*/
 bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet )
 {
-    redrawOnlyCurrFrameset = FALSE;
+    redrawOnlyCurrFrameset = TRUE;
 
     QString pln = fc->getParag()->getParagLayout()->getName();
     KWFormat _format( doc );
     _format = *( ( KWFormat* )fc );
     unsigned int tmpTextPos = fc->getTextPos();
 
+    int h_ = frameSet->getFrame( oldFrame - 1 )->height();
+    
     if ( fc->isCursorAtParagEnd() ) {
 	frameSet->insertParag( fc->getParag(), I_AFTER );
 	fc->setTextPos( 0 );
@@ -2406,6 +2413,9 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
 	}
     }
 
+    if ( h_ != frameSet->getFrame( oldFrame - 1 )->height() )
+	redrawOnlyCurrFrameset = FALSE;
+    
     recalcCursor( FALSE, 0 );
 
     int yp = contentsY();
@@ -2933,6 +2943,8 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack, QRegi
     QRect frame;
     bool should_draw;
 
+    int cf = currFrameSet == -1 ? fc->getFrameSet() - 1 : currFrameSet;
+
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
 	frameset = doc->getFrameSet( i );
 	if ( !frameset->isVisible() )
@@ -2962,31 +2974,42 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack, QRegi
 			   tmp->height() + 2 );
 
 	    if ( v_area.intersects( frame ) && should_draw && !frameset->getGroupManager() ) {
-		if ( !drawBack )
-		    _painter.setBrush( Qt::NoBrush );
-		_painter.drawRect( frame );
 		if ( region )
 		    *region = region->subtract( QRect( frame.x(), frame.y(), frame.width(), frame.height() ) );
+		if ( redrawOnlyCurrFrameset && cf != (int)i )
+		    ;
+		else {
+		    if ( !drawBack )
+			_painter.setBrush( Qt::NoBrush );
+		    _painter.drawRect( frame );
+		}
 	    }
-
+	    
 	    _painter.setBrush( Qt::NoBrush );
 	    if ( v_area.intersects( frame ) && frameset->getGroupManager() ) {
 		if ( region )
 		    *region = region->subtract( QRect( frame.x(), frame.y(), frame.width(), frame.height() ) );
-		_painter.fillRect( frame, tmp->getBackgroundColor() );
-		_painter.drawLine( tmp->right() - contentsX() + 1, tmp->y() - contentsY() - 1,
-				   tmp->right() - contentsX() + 1, tmp->bottom() - contentsY() + 1 );
-		_painter.drawLine( tmp->x() - contentsX() - 1, tmp->bottom() - contentsY() + 1,
-				   tmp->right() - contentsX() + 1, tmp->bottom() - contentsY() + 1 );
-		unsigned int row = 0, col = 0;
-		frameset->getGroupManager()->getFrameSet( frameset, row, col );
-		if ( row == 0 )
-		    _painter.drawLine( tmp->x() - contentsX() - 1, tmp->y() - contentsY() - 1,
-				       tmp->right() - contentsX() + 1, tmp->y() - contentsY() - 1 );
-		if ( col == 0 )
-		    _painter.drawLine( tmp->x() - contentsX() - 1, tmp->y() - contentsY() - 1,
-				       tmp->x() - contentsX() - 1, tmp->bottom() - contentsY() + 1 );
+		if ( redrawOnlyCurrFrameset && cf != (int)i )
+		    ;
+		else {
+		    _painter.fillRect( frame, tmp->getBackgroundColor() );
+		    _painter.drawLine( tmp->right() - contentsX() + 1, tmp->y() - contentsY() - 1,
+				       tmp->right() - contentsX() + 1, tmp->bottom() - contentsY() + 1 );
+		    _painter.drawLine( tmp->x() - contentsX() - 1, tmp->bottom() - contentsY() + 1,
+				       tmp->right() - contentsX() + 1, tmp->bottom() - contentsY() + 1 );
+		    unsigned int row = 0, col = 0;
+		    frameset->getGroupManager()->getFrameSet( frameset, row, col );
+		    if ( row == 0 )
+			_painter.drawLine( tmp->x() - contentsX() - 1, tmp->y() - contentsY() - 1,
+					   tmp->right() - contentsX() + 1, tmp->y() - contentsY() - 1 );
+		    if ( col == 0 )
+			_painter.drawLine( tmp->x() - contentsX() - 1, tmp->y() - contentsY() - 1,
+					   tmp->x() - contentsX() - 1, tmp->bottom() - contentsY() + 1 );
+		}
 	    }
+
+	    if ( redrawOnlyCurrFrameset && cf != (int)i )
+		continue;
 
 	    if ( mouseMode == MM_EDIT_FRAME && tmp->isSelected() ) {
 		_painter.save();
@@ -3067,12 +3090,13 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack, QRegi
     }
 
     _painter.setPen( red );
+    _painter.setBrush( Qt::NoBrush );
 
     for ( int k = 0; k < doc->getPages(); k++ ) {
 	QRect tmp2 = QRect( -contentsX(), ( k * doc->getPTPaperHeight() ) - contentsY(), doc->getPTPaperWidth(),
 			    doc->getPTPaperHeight() );
-	if ( v_area.intersects( tmp2 ) )
-	    _painter.drawRect( tmp2 );
+ 	if ( v_area.intersects( tmp2 ) )
+ 	    _painter.drawRect( tmp2 );
     }
 
     _painter.restore();
@@ -4448,7 +4472,7 @@ void KWPage::viewportDropEvent( QDropEvent *e )
     if ( KWordDrag::canDecode( e ) ) {
 	if ( drop->provides( MIME_TYPE ) ) {
 	    if ( drop->encodedData( MIME_TYPE ).size() ) {
-		if ( ( drop->source() == this || drop->source() == viewport() ) && 
+		if ( ( drop->source() == this || drop->source() == viewport() ) &&
 		     TRUE /*drop->action() == QDropEvent::Move*/ ) { // #### todo
 		    KWFormatContext oldFc( doc, fc->getFrameSet() );
 		    oldFc = *fc;

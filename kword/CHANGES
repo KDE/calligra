@@ -1461,3 +1461,8 @@ Reggie, 29.8.1999:
 Reggie, 31.8.1999:
 ------------------
 - Improved DnD, Copy/Move works now :-)
+
+Reggie, 1.9.1999:
+-----------------
+- Return/Enter is now more flickerfree
+- More redraw improvements
