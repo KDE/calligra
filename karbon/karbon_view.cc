@@ -1133,7 +1133,7 @@ KarbonView::paintEverything( QPainter& /*p*/, const QRect& /*rect*/,
 bool
 KarbonView::eventFilter( QObject* object, QEvent* event )
 {
-	if( object == m_canvas->viewport() )
+	if( m_currentTool && object == m_canvas->viewport() )
 		return m_currentTool->eventFilter( event );
 	else
 		return false;

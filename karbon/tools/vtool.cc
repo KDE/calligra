@@ -46,7 +46,7 @@ void VTool::activateAll()
 bool
 VTool::eventFilter( QEvent* event )
 {
-	if( !view()->part()->isReadWrite() )
+	if( !view() || !view()->part() || !view()->part()->isReadWrite() )
 		return false;
 
 
