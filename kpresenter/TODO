@@ -71,6 +71,6 @@ Bugs:
 In Progress:
 -> save/load animation group
 -> save/load sticky object
-
+	->specific object : header/footer is not sticky object into oo
 Reginald Stadlbauer <reggie@kde.org>
 Laurent Montel <montel@kde.org>

@@ -1209,8 +1209,31 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     QDomElement dp = drawPage.toElement();
     m_loadingInfo = new KPRLoadingInfo;
 
+    //code from kword
+    // TODO variable settings
+    // By default display real variable value
+    if ( !isReadWrite())
+        getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
+
+    KoOasisContext context( this, *m_varColl, oasisStyles, store );
+    Q_ASSERT( !oasisStyles.officeStyle().isNull() );
+
+    // Load all styles before the corresponding paragraphs try to use them!
+    m_styleColl->loadOasisStyleTemplates( context );
+
+
+
+
     QString masterPageName = "Standard"; // use default layout as fallback
     QDomElement *master = oasisStyles.masterPages()[ masterPageName];
+
+    kdDebug()<<" load sticky oasis object \n";
+    kdDebug()<<" master.isNull() :"<<master->isNull()<<endl;
+    QDomNode node = *master;
+    kdDebug()<<" node.isNull() :"<<node.isNull()<<endl;
+    loadOasisObject( -1 , m_stickyPage, node , context);
+    kdDebug()<<" end load sticky oasis object \n";
+
     Q_ASSERT( master );
     QDomElement *style =master ? oasisStyles.styles()[master->attribute( "style:page-layout-name" )] : 0;
     QDomElement *backgroundStyle = oasisStyles.styles()[ "Standard-background"];
@@ -1230,18 +1253,6 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         /// ### this has already been done, no?
         setPageLayout( __pgLayout );
     }
-
-    //code from kword
-    // TODO variable settings
-    // By default display real variable value
-    if ( !isReadWrite())
-        getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
-
-    KoOasisContext context( this, *m_varColl, oasisStyles, store );
-    Q_ASSERT( !oasisStyles.officeStyle().isNull() );
-
-    // Load all styles before the corresponding paragraphs try to use them!
-    m_styleColl->loadOasisStyleTemplates( context );
 
 
     int pos = 0;
@@ -1323,10 +1334,6 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         QDomElement o = object.toElement();
         QString name = o.tagName();
         kdDebug()<<" name :"<<name<<endl;
-#if 0
-        if( o.hasAttribute("draw:id"))
-            animationShow = m_loadingInfo->animationShowById(o.attribute("draw:id"));
-#endif
         context.styleStack().save();
 
         if ( name == "draw:text-box" ) // textbox
