@@ -1095,9 +1095,14 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 
     lineStartFormat = *this;
 
+    // This is always true if the cell with happens to be small enough..
+    // Causing an endless loop TODO
     if ( static_cast<int>( ptWidth ) < doc->getRastX() ) {
-        ptY = pFrame->getNextFreeYPos( ptY, getLineHeight() ) + 2;
-        return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
+        int newptY = pFrame->getNextFreeYPos( ptY, getLineHeight() );
+        if(ptY != newptY) {
+            ptY = newptY+2;
+            return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
+        } else return TRUE;
     }
 
     bool _broken = FALSE;
@@ -1245,7 +1250,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
                 textPos++;
             } break;
             }
-        } else { // A usual character ...
+        } else { // An usual character ...
             // Go right ...
             ptPos += displayFont->getPTWidth( c );
             // Increase the lines width
