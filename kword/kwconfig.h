@@ -21,55 +21,55 @@
 #define __kwconfig__
 
 #include <kdialogbase.h>
-#include <kconfig.h>
-#include <kspell.h>
-#include <knuminput.h>
 
 class KWView;
 class QCheckBox;
+class KIntNumInput;
+class KSpellConfig;
+class KConfig;
 
 class configureSpellPage : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  configureSpellPage( KWView *_view,QWidget *parent = 0, char *name = 0 );
-  void apply();
+    configureSpellPage( KWView *_view,QWidget *parent = 0, char *name = 0 );
+    void apply();
 private:
-  KWView* m_pView;
-  KSpellConfig *_spellConfig;
-  KConfig* config;
+    KWView* m_pView;
+    KSpellConfig *_spellConfig;
+    KConfig* config;
 };
 
 class configureInterfacePage : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  configureInterfacePage( KWView *_view,QWidget *parent = 0, char *name = 0 );
-  void apply();
-  void slotDefault();
+    configureInterfacePage( KWView *_view,QWidget *parent = 0, char *name = 0 );
+    void apply();
+    void slotDefault();
 private:
-  KWView* m_pView;
-  KIntNumInput *gridX,*gridY;
-  KIntNumInput *indent;
-  KIntNumInput * recentFiles;
-  KIntNumInput*autoSave;
-  QCheckBox *showRuler;
-  int oldNbRecentFiles;
-  KConfig* config;
-  int oldAutoSaveValue;
+    KWView* m_pView;
+    KIntNumInput* gridX,*gridY;
+    KIntNumInput* indent;
+    KIntNumInput* recentFiles;
+    KIntNumInput* autoSave;
+    QCheckBox *showRuler;
+    int oldNbRecentFiles;
+    KConfig* config;
+    int oldAutoSaveValue;
 };
 
 class KWConfig : public KDialogBase
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  KWConfig(  KWView* parent, const char* name=0);
+    KWConfig( KWView* parent );
 public slots:
-  void slotApply();
-  void slotDefault();
-private :
- configureSpellPage *_spellPage;
- configureInterfacePage *_interfacePage;
+    void slotApply();
+    void slotDefault();
+private:
+    configureSpellPage *_spellPage;
+    configureInterfacePage *_interfacePage;
 };
 
 

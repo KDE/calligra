@@ -231,7 +231,13 @@ void KWView::initGui()
 /*================================================================*/
 void KWView::setupActions()
 {
-    // -------------- File actions
+    // The actions here are grouped by menu, because this helps noticing
+    // accelerator clashes.
+
+    // -------------- File menu
+    actionExtraCreateTemplate = new KAction( i18n( "&Create Template from Document..." ), 0,
+                                             this, SLOT( extraCreateTemplate() ),
+                                             actionCollection(), "extra_template" );
     (void) new KAction( i18n( "Statistics" ), 0, this, SLOT( fileStatistics() ), actionCollection(), "file_statistics" );
 
     // -------------- Edit actions
@@ -241,20 +247,31 @@ void KWView::setupActions()
     KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
     KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
+    actionExtraSpellCheck = KStdAction::spelling( this, SLOT( extraSpelling() ), actionCollection(), "extra_spellcheck" );
+
+
+    (void) new KAction( i18n( "Serial &Letter Database..." ), 0,
+                        this, SLOT( editSerialLetterDataBase() ),
+                        actionCollection(), "edit_sldatabase" );
+
+    // -------------- Frame menu
     actionEditDelFrame = new KAction( i18n( "&Delete Frame" ), 0,
                                       this, SLOT( editDeleteFrame() ),
                                       actionCollection(), "edit_delframe" );
     actionEditReconnectFrame = new KAction( i18n( "&Reconnect Frame..." ), 0,
                                             this, SLOT( editReconnectFrame() ),
                                             actionCollection(), "edit_reconnect" );
-    actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
-                                        this, SLOT( editCustomVars() ),
-                                        actionCollection(), "edit_customvars" );
-    actionEditSlDataBase = new KAction( i18n( "Serial &Letter Database..." ), 0,
-                                        this, SLOT( editSerialLetterDataBase() ),
-                                        actionCollection(), "edit_sldatabase" );
+    actionToolsEdit = new KToggleAction( i18n( "Edit &Text" ), "edittool", Key_F4,
+                                         this, SLOT( toolsEdit() ),
+                                         actionCollection(), "tools_edit" );
+    actionToolsEdit->setExclusiveGroup( "tools" );
+    actionToolsEditFrames = new KToggleAction( i18n( "Edit &Frames" ), "frame_edit", Key_F5,
+                                               this, SLOT( toolsEditFrame() ),
+                                               actionCollection(), "tools_editframes" );
+    actionToolsEditFrames->setExclusiveGroup( "tools" );
 
-    // -------------- View actions
+
+    // -------------- View menu
     actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), 0,
                                                    this, SLOT( viewFormattingChars() ),
                                                    actionCollection(), "view_formattingchars" );
@@ -294,7 +311,8 @@ void KWView::setupActions()
     lst << "450%";
     lst << "500%";
     actionViewZoom->setItems( lst );
-    // -------------- Insert actions
+
+    // -------------- Insert menu
     (void) new KAction( i18n( "&Table" ), "inline_table", 0,
                         this, SLOT( insertTable() ),
                         actionCollection(), "insert_table" );
@@ -318,9 +336,26 @@ void KWView::setupActions()
                                            actionCollection(), "insert_footendnote" );
     actionInsertFootEndNote->setEnabled( false ); // ### TODO
 
-    actionInsertContents = new KAction( i18n( "&Table of Contents" ), 0,
+    actionInsertContents = new KAction( i18n( "Table of &Contents" ), 0,
                                         this, SLOT( insertContents() ),
                                         actionCollection(), "insert_contents" );
+
+    actionToolsCreateText = new KToggleAction( i18n( "Te&xt Frame" ), "frame_text", Key_F6,
+                                               this, SLOT( toolsCreateText() ),
+                                               actionCollection(), "tools_createtext" );
+    actionToolsCreateText->setExclusiveGroup( "tools" );
+    actionToolsCreatePix = new KToggleAction( i18n( "P&icture Frame" ), "frame_image", Key_F7,
+                                              this, SLOT( toolsCreatePix() ),
+                                              actionCollection(), "tools_createpix" );
+    actionToolsCreatePix->setExclusiveGroup( "tools" );
+    actionToolsCreateFormula = new KToggleAction( i18n( "For&mula Frame" ), "frame_formula", Key_F11,
+                                                  this, SLOT( toolsFormula() ),
+                                                  actionCollection(), "tools_formula" );
+    actionToolsCreateFormula->setExclusiveGroup( "tools" );
+    actionToolsCreatePart = new KToggleAction( i18n( "&Object Frame" ), "frame_query", Key_F12,
+                                               this, SLOT( toolsPart() ),
+                                               actionCollection(), "tools_part" );
+    actionToolsCreatePart->setExclusiveGroup( "tools" );
 
     actionInsertVarDateFix = new KAction( i18n( "Date (&fix)" ), 0,
                                           this, SLOT( insertVariableDateFix() ),
@@ -347,34 +382,8 @@ void KWView::setupActions()
                                                this, SLOT( insertVariableSerialLetter() ),
                                                actionCollection(), "insert_var_serialletter" );
 
-    // ---------------- Tools actions
-    actionToolsEdit = new KToggleAction( i18n( "Edit &Text" ), "edittool", Key_F4,
-                                         this, SLOT( toolsEdit() ),
-                                         actionCollection(), "tools_edit" );
-    actionToolsEdit->setExclusiveGroup( "tools" );
-    actionToolsEditFrames = new KToggleAction( i18n( "Edit &Frames" ), "frame_edit", Key_F5,
-                                               this, SLOT( toolsEditFrame() ),
-                                               actionCollection(), "tools_editframes" );
-    actionToolsEditFrames->setExclusiveGroup( "tools" );
-    actionToolsCreateText = new KToggleAction( i18n( "&Create Text Frame" ), "frame_text", Key_F6,
-                                               this, SLOT( toolsCreateText() ),
-                                               actionCollection(), "tools_createtext" );
-    actionToolsCreateText->setExclusiveGroup( "tools" );
-    actionToolsCreatePix = new KToggleAction( i18n( "&Create Picture Frame" ), "frame_image", Key_F7,
-                                              this, SLOT( toolsCreatePix() ),
-                                              actionCollection(), "tools_createpix" );
-    actionToolsCreatePix->setExclusiveGroup( "tools" );
-    actionToolsCreateFormula = new KToggleAction( i18n( "&Create Formula Frame" ), "frame_formula", Key_F11,
-                                                  this, SLOT( toolsFormula() ),
-                                                  actionCollection(), "tools_formula" );
-    actionToolsCreateFormula->setExclusiveGroup( "tools" );
-    actionToolsCreatePart = new KToggleAction( i18n( "&Create Object Frame" ), "frame_query", Key_F12,
-                                               this, SLOT( toolsPart() ),
-                                               actionCollection(), "tools_part" );
-    actionToolsCreatePart->setExclusiveGroup( "tools" );
 
-
-    // ------------------------- Format actions
+    // ------------------------- Format menu
     actionFormatFont = new KAction( i18n( "&Font..." ), ALT + CTRL + Key_F,
                                     this, SLOT( formatFont() ),
                                     actionCollection(), "format_font" );
@@ -384,16 +393,16 @@ void KWView::setupActions()
     actionFormatParag = new KAction( i18n( "&Paragraph..." ), ALT + CTRL + Key_P,
                                      this, SLOT( formatParagraph() ),
                                      actionCollection(), "format_paragraph" );
-    actionFormatFrameSet = new KAction( i18n( "&Frame/Frameset..." ), 0,
+    actionFormatFrameSet = new KAction( i18n( "F&rame/Frameset..." ), 0,
                                      this, SLOT( formatFrameSet() ),
                                      actionCollection(), "format_frameset" );
-    actionFormatPage = new KAction( i18n( "P&age..." ), 0,
-                                     this, SLOT( formatPage() ),
-                                    actionCollection(), "format_page" );
+    (void) new KAction( i18n( "P&age..." ), 0,
+                        this, SLOT( formatPage() ),
+                        actionCollection(), "format_page" );
 
-    actionFormatStylist = new KAction( i18n( "&Stylist..." ), ALT + CTRL + Key_S,
-                                      this, SLOT( extraStylist() ),
-                                      actionCollection(), "format_stylist" );
+    (void) new KAction( i18n( "&Stylist..." ), ALT + CTRL + Key_S,
+                        this, SLOT( extraStylist() ),
+                        actionCollection(), "format_stylist" );
 
     actionFormatFontSize = new KFontSizeAction( i18n( "Font Size" ), 0,
                                               actionCollection(), "format_fontsize" );
@@ -404,7 +413,7 @@ void KWView::setupActions()
     connect( actionFormatFontFamily, SIGNAL( activated( const QString & ) ),
              this, SLOT( textFontSelected( const QString & ) ) );
 
-    actionFormatStyle = new KSelectAction( i18n( "Style" ), 0,
+    actionFormatStyle = new KSelectAction( i18n( "St&yle" ), 0,
                                            actionCollection(), "format_style" );
     connect( actionFormatStyle, SIGNAL( activated( int ) ),
              this, SLOT( textStyleSelected( int ) ) );
@@ -539,7 +548,7 @@ void KWView::setupActions()
                                          this, SLOT( formulaSum() ),
                                       actionCollection(), "formula_sum" );
 
-    // ---------------------- Table actions
+    // ---------------------- Table menu
 
     actionTableInsertRow = new KAction( i18n( "&Insert Row..." ), "insert_table_row", 0,
                                this, SLOT( tableInsertRow() ),
@@ -566,23 +575,19 @@ void KWView::setupActions()
                                      this, SLOT( tableDelete() ),
                                      actionCollection(), "table_delete" );
 
-    // ---------------------- Extra actions
+    // ---------------------- Tools menu
 
-    actionExtraSpellCheck = KStdAction::spelling( this, SLOT( extraSpelling() ), actionCollection(), "extra_spellcheck" );
-    actionExtraAutocorrection = new KAction( i18n( "&Autocorrection..." ), 0,
-                                             this, SLOT( extraAutoFormat() ),
-                                             actionCollection(), "extra_autocorrection" );
+    actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
+                                        this, SLOT( editCustomVars() ),
+                                        actionCollection(), "edit_customvars" );
+    (void) new KAction( i18n( "&Autocorrection..." ), 0,
+                        this, SLOT( extraAutoFormat() ),
+                        actionCollection(), "extra_autocorrection" );
 
-    actionExtraOptions = new KAction( i18n( "&Options..." ), 0,
-                                      this, SLOT( extraOptions() ),
-                                      actionCollection(), "extra_options" );
-    actionExtraCreateTemplate = new KAction( i18n( "&Create Template from Document..." ), 0,
-                                             this, SLOT( extraCreateTemplate() ),
-                                             actionCollection(), "extra_template" );
-    //------------------------ Configure
-    actionExtraOptions = new KAction( i18n( "&Configure..." ),"configure",0,
-                                      this, SLOT( configure() ),
-                                      actionCollection(), "configure" );
+    //------------------------ Settings menu
+    (void) new KAction( i18n( "&Configure..." ),"configure",0,
+                        this, SLOT( configure() ),
+                        actionCollection(), "configure" );
 }
 
 void KWView::fileStatistics()
@@ -1684,15 +1689,12 @@ void KWView::extraCreateTemplate()
 }
 
 /*===============================================================*/
-void KWView::extraOptions()
-{
-}
-
-/*===============================================================*/
 void KWView::toolsEdit()
 {
     if ( actionToolsEdit->isChecked() )
         gui->canvasWidget()->setMouseMode( MM_EDIT );
+    else
+        actionToolsEdit->setChecked( true ); // always one has to be checked !
 }
 
 /*===============================================================*/
@@ -1700,6 +1702,8 @@ void KWView::toolsEditFrame()
 {
     if ( actionToolsEditFrames->isChecked() )
         gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
+    else
+        actionToolsEditFrames->setChecked( true ); // always one has to be checked !
 }
 
 /*===============================================================*/
@@ -1707,13 +1711,18 @@ void KWView::toolsCreateText()
 {
     if ( actionToolsCreateText->isChecked() )
         gui->canvasWidget()->setMouseMode( MM_CREATE_TEXT );
+    else
+        actionToolsCreateText->setChecked( true ); // always one has to be checked !
 }
 
 /*===============================================================*/
 void KWView::toolsCreatePix()
 {
     if ( !actionToolsCreatePix->isChecked() )
+    {
+        actionToolsCreatePix->setChecked( true ); // always one has to be checked !
         return;
+    }
     gui->canvasWidget()->setMouseMode( MM_EDIT );
 
     QString file;
@@ -1770,16 +1779,20 @@ void KWView::insertTable()
 /*===============================================================*/
 void KWView::toolsFormula()
 {
-    if ( !actionToolsCreateFormula->isChecked() )
-        return;
-    gui->canvasWidget()->setMouseMode( MM_CREATE_FORMULA );
+    if ( actionToolsCreateFormula->isChecked() )
+        gui->canvasWidget()->setMouseMode( MM_CREATE_FORMULA );
+    else
+        actionToolsCreateFormula->setChecked( true ); // always one has to be checked !
 }
 
 /*===============================================================*/
 void KWView::toolsPart()
 {
     if ( !actionToolsCreatePart->isChecked() )
+    {
+        actionToolsCreatePart->setChecked( true ); // always one has to be checked !
         return;
+    }
     gui->canvasWidget()->setMouseMode( MM_EDIT );
 
     KoDocumentEntry pe = KoPartSelectDia::selectPart( this );
@@ -2804,8 +2817,8 @@ void KWView::spellCheckerFinished( )
 /*================================================================*/
 void KWView::configure( )
 {
-    KWConfig *configDia = new KWConfig( this, "");
-    configDia->show();
+    KWConfig configDia( this );
+    configDia.show();
 }
 
 KWTextFrameSetEdit *KWView::currentTextEdit()

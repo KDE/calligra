@@ -17,23 +17,26 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qgroupbox.h>
-#include <kiconloader.h>
-#include <qlayout.h>
 #include <kapp.h>
-#include <klocale.h>
-#include <kdialogbase.h>
-#include <qvbox.h>
 #include <kconfig.h>
-#include <qlabel.h>
+#include <kdialogbase.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <knuminput.h>
+#include <kspell.h>
+
 #include <qcheckbox.h>
+#include <qgroupbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qvbox.h>
 
 #include "kwconfig.h"
 #include "kwview.h"
 #include "kwunit.h"
 #include "kwdoc.h"
 
-KWConfig::KWConfig( KWView* parent, const char* /*name*/)
+KWConfig::KWConfig( KWView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KWord") ,
 		KDialogBase::Ok | KDialogBase::Cancel| KDialogBase::Default,
 		KDialogBase::Ok)

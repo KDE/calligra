@@ -179,7 +179,6 @@ public slots:
     void extraSpelling();
     void extraAutoFormat();
     void extraStylist();
-    void extraOptions();
     void extraCreateTemplate();
 
     void toolsEdit();
@@ -289,7 +288,6 @@ protected:
     KAction *actionEditDelFrame;
     KAction *actionEditReconnectFrame;
     KAction *actionEditCustomVars;
-    KAction *actionEditSlDataBase;
 
     KToggleAction *actionViewFormattingChars;
     KToggleAction *actionViewFrameBorders;
@@ -334,8 +332,6 @@ protected:
     KToggleAction *actionFormatAlignBlock;
     KAction *actionFormatParag;
     KAction *actionFormatFrameSet;
-    KAction *actionFormatPage;
-    KAction *actionFormatStylist;
     KAction *actionFormatIncreaseIndent;
     KAction *actionFormatDecreaseIndent;
     KToggleAction *actionFormatList;
@@ -389,8 +385,6 @@ protected:
     KAction *actionTableDelete;
 
     KAction *actionExtraSpellCheck;
-    KAction *actionExtraAutocorrection;
-    KAction *actionExtraOptions;
     KAction *actionExtraCreateTemplate;
 
     KAction *actionConfigure;
@@ -460,7 +454,7 @@ public slots:
 
 protected slots:
     void unitChanged( QString );
-    
+
 
 protected:
     void resizeEvent( QResizeEvent *e );
