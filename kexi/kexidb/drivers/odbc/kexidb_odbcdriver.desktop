@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=ODBC
+Name[xx]=xxODBCxx
+Comment=Kexi Open Database Connectivity Driver
+X-KDE-Library=kexidb_odbcdriver
+ServiceTypes=Kexi/DBDriver
+Type=Service
+InitialPreference=8
+MimeType=text/plain
+X-Kexi-Location=RemoteDB
+X-Kexi-DriverName=ODBC
