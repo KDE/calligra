@@ -111,7 +111,6 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 
 	btngroup->setInsideSpacing(2);
 	btngroup->setInsideMargin(5);
-	connect(btngroup, SIGNAL(clicked(int)), this, SLOT(slotButton(int)));
 
 	//dialog buttons
 	dlggroup = new QButtonGroup( 2, Horizontal, this );
@@ -133,10 +132,6 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 	dlggroup->insert( button, Gradient);
 	dlggroup->setInsideSpacing(2);
 	dlggroup->setInsideMargin(5);
-}
-
-void VToolContainer::slotButton( int /*ID*/ )
-{
 }
 
 VToolContainer::~VToolContainer() { }

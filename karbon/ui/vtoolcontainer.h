@@ -22,8 +22,6 @@ public:
 private:
 	enum ButtonChoice { Select, Scale, Rotate, Shear, Ellipse, Rectangle, Roundrect, Polygon, Star, Sinus, Spiral, Text };
 	enum DlgChoice { Outline, SolidFill, Gradient };
-private slots:
-	void slotButton( int ID );
 signals:
 	// shape-tools:
 	void ellipseToolActivated();
