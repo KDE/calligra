@@ -22,6 +22,7 @@ DESCRIPTION
     This file implements KWord tables.
 */
 
+// ### TODO : multi page tables
 // ### TODO: Doxygen-ify the description above
 // ### TODO (JJ:) : change the QMAX into kMax and QMIN into kMin, especially if one parameter is a function
 
@@ -43,8 +44,6 @@ DESCRIPTION
 #include <kmessagebox.h>
 #include <qclipboard.h>
 
-// ### TODO : multi page tables
-#undef SUPPORT_MULTI_PAGE_TABLES
 
 KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
     KWFrameSet( doc )
@@ -99,32 +98,7 @@ void KWTableFrameSet::updateFrames( int flags )
 void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &position )
 {
     // TODO multi-page case
-#ifdef SUPPORT_MULTI_PAGE_TABLES
-    kdDebug(32004) << "KWTableFrameSet::moveFloatingFrame: " << position << endl;
-    const double dx = position.x() - m_colPositions[0];
-    const double dy = position.y() - m_rowPositions[0];
 
-    const int oldPageNumberStart = getCell(0,0)->frame(0)->pageNum();
-    const int oldPageNumberEnd = getCell( getRows(), 0 )->frame( 0 )->pageNum();
-
-    moveBy( dx, dy );
-
-    if ( dx || dy ) {
-        updateFrames();
-        const int newPageNumberStart = getCell(0,0)->frame(0)->pageNum();
-        const int newPageNumberEnd = getCell( getRows(), 0 )->frame( 0 )->pageNum();
-
-        // First modified page
-        const int startPageNumber = kMin( oldPageNumberStart, newPageNumberStart );
-        // Last modified page
-        const int endPageNumber = kMax( oldPageNumberEnd, newPageNumberEnd );
-
-        // ### TODO: can the end page change while processing? Probably, yes, so this code is not right
-        for ( int i = startPageNumber; i <= endPageNumber; ++i ) {
-            m_doc->updateFramesOnTopOrBelow( i );
-        }
-    }
-#else
     double dx = position.x() - m_colPositions[0];
     double dy = position.y() - m_rowPositions[0];
 
@@ -140,7 +114,6 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
         if ( oldPageNumber != newPageNumber )
             m_doc->updateFramesOnTopOrBelow( oldPageNumber );
     }
-#endif
 }
 
 KoSize KWTableFrameSet::floatingFrameSize( int /*frameNum*/ )
@@ -367,9 +340,6 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
     kdDebug(32004) << getName() << " KWTableFrameSet::recalcRows ("<< _col <<"," << _row << ")" << endl;
     //for(unsigned int i=0; i < m_rowPositions.count() ; i++) kdDebug(32004) << "row: " << i << " = " << m_rowPositions[i] << endl;
 
-#ifdef SUPPORT_MULTI_PAGE_TABLES
-    kdDebug(32004) << "Has temporary headers: " << m_hasTmpHeaders << endl;
-#endif
 
     // check/set sizes of frames
     unsigned int row=0,col=0;
@@ -436,29 +406,13 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             }
         } // for each column
 
-#ifdef SUPPORT_MULTI_PAGE_TABLES // 0
-    kdDebug(32004) << " activeCell: " << activeCell->firstRow() << ","<< activeCell->firstCol() << endl;
-    kdDebug(32004) << " activeCell height. Cur:  " << activeCell->frame(0)->height() << ", minFrameHeight: "<< activeCell->frame(0)->minFrameHeight() << endl;
-    kdDebug(32004) << " minHeightOtherCols: " << minHeightOtherCols << endl;
-    kdDebug(32004) << " minHeightActiveRow: " << minHeightActiveRow << endl;
-    kdDebug(32004) << " minHeightMyCol: " << minHeightMyCol << endl;
-    kdDebug(32004) << " rowSpan: " << rowSpan << endl;
-    kdDebug(32004) << " startRow: " << startRow << endl;
-#endif
-
         bool bottomRow = (startRow+rowSpan == activeCell->rowAfter());
         if(!bottomRow) {
             Cell *bottomCell=getCell(startRow+rowSpan-1, activeCell->firstCol());
             bottomCell->frame(0)->setHeight(bottomCell->frame(0)->minFrameHeight() +
                     minHeightOtherCols - minHeightMyCol);
 	    // ### RECURSE ###
-#ifdef SUPPORT_MULTI_PAGE_TABLES
-            kdDebug(32004) << "Entering recursion " << __FILE__ << ":" << __LINE__ << endl;
             recalcRows(bottomCell->firstCol(), bottomCell->firstRow());
-            kdDebug(32004) << "Leaving recursion " << __FILE__ << ":" << __LINE__ << endl;
-#else
-            recalcRows(bottomCell->firstCol(), bottomCell->firstRow());
-#endif
         }
         if(activeCell->frame(0)->minFrameHeight() > activeCell->frame(0)->height()) { // wants to grow
             activeCell->frame(0)->setHeight(activeCell->frame(0)->minFrameHeight());
@@ -560,25 +514,13 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
 
     double diff=0.0;
     double pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
-#ifdef SUPPORT_MULTI_PAGE_TABLES
-    kdDebug(32004) << "pageBottom; " << pageBottom << " (start)" << endl;
-    int nLoop = 0; // DEBUG
-#else
     // kdDebug(32004) << "pageBottom; " << pageBottom << endl;
-#endif
     while(++j!=m_rowPositions.end()) { // stuff for multipage tables.
-#ifdef SUPPORT_MULTI_PAGE_TABLES
-    kdDebug(32004) << "Loop: new row: " << ++nLoop << " lineNumber: " << lineNumber << endl;
-#endif
         if(pageBound!=m_pageBoundaries.end() && *pageBound == lineNumber ) {
             if(*j > pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder() ) { // next page marker exists, and is accurate...
                 pageNumber++;
                 pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
-#ifdef SUPPORT_MULTI_PAGE_TABLES
-                kdDebug(32004) << "pageBottom; " << pageBottom << " (loop)" << endl;
-#else
                 // kdDebug(32004) << "pageBottom; " << pageBottom << endl;
-#endif
                 untilRow=QMAX(untilRow, *pageBound);
                 pageBound++;
             }
@@ -631,11 +573,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
 
             // insert new pageBound. It points to last LINE on previous page
             pageBound = m_pageBoundaries.insert(pageBound, breakRow);
-#ifdef SUPPORT_MULTI_PAGE_TABLES
-            kdDebug(32004) << "inserting new pageBound: " << breakRow  << " at " << m_rowPositions[breakRow] << endl;
-#else
             //kdDebug(32004) << "inserting new pageBound: " << breakRow  << " at " << m_rowPositions[breakRow] << endl;
-#endif
             pageBound++;
             if(!hugeRow) {
                 // add header-rij toe. (en zet bool) TODO
@@ -646,36 +584,15 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             pageNumber++;
             pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
             //kdDebug(32004) << " pageBottom: " << pageBottom << " pageNumber=" << pageNumber << endl;
-#ifdef SUPPORT_MULTI_PAGE_TABLES
-            // A few new pages may be necessary
-             while ( int( pageNumber ) > m_doc->numPages()) {
-                const int num = m_doc->appendPage();
-                kdDebug(32004) << "Have appended page: " << num << " (multi page mode)" << endl;
-                m_doc->afterAppendPage( num );
-            }
-#else
             if((int)pageNumber > m_doc->numPages()) {
                 int num = m_doc->appendPage();
                 kdDebug(32004) << "Have appended page: " << num << " (one page mode!)" << endl;
                 m_doc->afterAppendPage( num );
             }
-#endif
         }
-#ifdef SUPPORT_MULTI_PAGE_TABLES
-        if(diff > 0)
-        {
-            kdDebug(32004) << "   adding " << diff << ", line " << lineNumber << " " << *(j) <<" -> " << *(j)+diff << endl;
-            (*j) += diff;
-        }
-        else if ( diff < 0 )
-        {
-            kdWarning(32004) << "Negative diff: " << diff << endl;
-        }
-#else
         //if(diff > 0)  kdDebug(32004) << "   adding " << diff << ", line " << lineNumber << " " << *(j) <<" -> " << *(j)+diff << endl;
         if(diff > 0)
             (*j) = (*j) + diff;
-#endif
         lineNumber++;
 
 #if 0 // def SUPPORT_MULTI_PAGE_TABLES
