@@ -5,9 +5,7 @@
   <item find="Allemange" replace="Allemagne" />
   <item find="Allo" replace="Allô" />
   <item find="Antrée" replace="Entrée" />
-  <item find="Août" replace="août" />
   <item find="Au moment ou" replace="Au moment où" />
-  <item find="Avril" replace="avril" />
   <item find="Ayant suivit" replace="Ayant suivi" />
   <item find="Basses Pyrénées" replace="Basses-Pyrénées" />
   <item find="Bien sur" replace="Bien sûr" />
@@ -20,31 +18,25 @@
   <item find="Cependent" replace="Cependant" />
   <item find="Charente Maritime" replace="Charente-Maritime" />
   <item find="Des lors" replace="Dès lors" />
-  <item find="Décembre" replace="décembre" />
   <item find="Esquimeau" replace="Esquimau" />
   <item find="Et bien," replace="Eh bien," />
   <item find="Et oui" replace="Eh oui" />
   <item find="Etant" replace="Étant" />
-  <item find="Février" replace="février" />
   <item find="Haiti" replace="Haïti" />
   <item find="Hors," replace="Or," />
   <item find="Http://" replace="http://" />
   <item find="Ile de France" replace="Île-de-France" />
   <item find="Irelande" replace="Irlande" />
   <item find="Irladne" replace="Irlande" />
-  <item find="Janvier" replace="janvier" />
   <item find="Le publique" replace="Le public" />
   <item find="Magreb" replace="Maghreb" />
   <item find="Magrébin" replace="Maghrébin" />
-  <item find="Mai" replace="mai" />
   <item find="Marseilles" replace="Marseille" />
   <item find="Met avis" replace="M'est avis" />
   <item find="Mr" replace="M." />
   <item find="Méditerrannée" replace="Méditerranée" />
   <item find="Noel" replace="Noël" />
   <item find="Nouvelle Calédonie" replace="Nouvelle-Calédonie" />
-  <item find="Novembre" replace="novembre" />
-  <item find="Octobre" replace="octobre" />
   <item find="On a pas" replace="On n'a pas" />
   <item find="On est pas" replace="On n'est pas" />
   <item find="Paques" replace="Pâques" />
@@ -55,7 +47,6 @@
   <item find="Quand à" replace="Quant à" />
   <item find="Quelque soit" replace="Quel que soit" />
   <item find="Qui peux" replace="Qui peut" />
-  <item find="Septembre" replace="septembre" />
   <item find="Sera t'il" replace="Sera-t-il" />
   <item find="Sera-t'il" replace="Sera-t-il" />
   <item find="Thorvalds" replace="Torvalds" />
@@ -364,7 +355,6 @@
   <item find="crèpes" replace="crêpes" />
   <item find="crète" replace="crête" />
   <item find="crètes" replace="crêtes" />
-  <item find="crées" replace="créées" />
   <item find="crûe" replace="crue" />
   <item find="crûs" replace="crus" />
   <item find="cuissse" replace="cuisse" />
@@ -376,6 +366,7 @@
   <item find="de mon plein grès" replace="de mon plein gré" />
   <item find="de plein grès" replace="de plein gré" />
   <item find="de son plein grès" replace="de son plein gré" />
+  <item find="de tel sorte" replace="de telle sorte" />
   <item find="demandes-lui" replace="demande-lui" />
   <item find="demi heure" replace="demi-heure" />
   <item find="demie heure" replace="demi-heure" />
@@ -642,7 +633,6 @@
   <item find="joaillers" replace="joailliers" />
   <item find="joalier" replace="joaillier" />
   <item find="joaliers" replace="joailliers" />
-  <item find="juillet" replace="Juillet" />
   <item find="jupiter" replace="Jupiter" />
   <item find="jusqu'a" replace="jusqu'à" />
   <item find="jutse" replace="juste" />
@@ -652,6 +642,7 @@
   <item find="l'équivalant" replace="l'équivalent" />
   <item find="la boite" replace="la boîte" />
   <item find="la foie" replace="la fois" />
+  <item find="la mêle chose" replace="la même chose" />
   <item find="la notre" replace="la nôtre" />
   <item find="la plais" replace="la plaie" />
   <item find="la plait" replace="la plaie" />
@@ -965,6 +956,8 @@
   <item find="recomandé" replace="recommandé" />
   <item find="recomandée" replace="recommandée" />
   <item find="recomandées" replace="recommandées" />
+  <item find="rectifier le tire" replace="rectifier le tir" />
+  <item find="rectifié le tire" replace="rectifié le tir" />
   <item find="reine claude" replace="reine-claude" />
   <item find="remplire" replace="remplir" />
   <item find="remue ménage" replace="remue-ménage" />
@@ -1110,6 +1103,7 @@
   <item find="un champs" replace="un champ" />
   <item find="un conseille" replace="un conseil" />
   <item find="un diagnostique" replace="un diagnostic" />
+  <item find="un détaille" replace="un détail" />
   <item find="un ecchymose" replace="une ecchymose" />
   <item find="un emise" replace="une mise" />
   <item find="un escarre" replace="une escarre" />
@@ -1140,6 +1134,7 @@
   <item find="une armistice" replace="un armistice" />
   <item find="une astérisque" replace="un astérisque" />
   <item find="une boite" replace="une boîte" />
+  <item find="une crois" replace="une croix" />
   <item find="une denticule" replace="un denticule" />
   <item find="une effluve" replace="un effluve" />
   <item find="une foie" replace="une fois" />
