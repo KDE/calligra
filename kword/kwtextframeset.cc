@@ -1812,6 +1812,14 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
         KWFrame::FrameBehavior frmBehavior = frames.last()->frameBehavior();
         if ( frmBehavior == KWFrame::AutoExtendFrame && isProtectSize())
             frmBehavior = KWFrame::Ignore;
+        if (  frmBehavior ==  KWFrame::AutoCreateNewFrame )
+        {
+            KWFrame *theFrame = settingsFrame( frames.last() );
+            double minHeight = minFrameHeight + theFrame->bTop() + theFrame->bBottom()+5;
+            if ( availHeight < minHeight )
+                frmBehavior = KWFrame::Ignore;
+        }
+
         switch ( frmBehavior ) {
         case KWFrame::AutoExtendFrame:
         {
