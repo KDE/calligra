@@ -35,5 +35,6 @@ tipdir = $(kde_datadir)/kformula
 tip_DATA = tips
 
 messages: rc.cpp
+	$(PREPARETIPS) >> rc.cpp
 	$(XGETTEXT) rc.cpp *.cc kformula_aboutdata.h -o $(podir)/kformula.pot
 kde_services_DATA = kformulapart.desktop
