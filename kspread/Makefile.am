@@ -42,7 +42,6 @@ libkspreadpart_la_SOURCES =  \
         kspread_locale.cc \
         kspread_map.cc \
         kspread_numformat.cc \
-        kspread_scripting.cc \
         kspread_selection.cc \
         kspread_style.cc  \
         kspread_style_manager.cc \
