@@ -19,6 +19,8 @@
    Boston, MA 02111-1307, USA.
  */
 
+#include "kexidatetableedit.h"
+
 #include <qpainter.h>
 #include <qvariant.h>
 #include <qrect.h>
@@ -41,9 +43,9 @@
 #include <kpopupmenu.h>
 #include <kdatewidget.h>
 
-#include "kexidatetableedit.h"
+#include "kexi_utils.h"
 
-KexiDateTableEdit::KexiDateTableEdit(KexiDB::Field &f, QWidget *parent)
+KexiDateTableEdit::KexiDateTableEdit(KexiDB::Field &f, QScrollView *parent)
  : KexiTableEdit(f, parent,"KexiDateTableEdit")
 {
 //	kdDebug() << "KexiDateTableEdit: Date = " << value.toString() << endl;
@@ -61,6 +63,10 @@ KexiDateTableEdit::KexiDateTableEdit(KexiDB::Field &f, QWidget *parent)
 	m_datePickerPopupMenu = new KPopupMenu(0, "date_popup");
 	connect(m_datePickerPopupMenu, SIGNAL(aboutToShow()), this, SLOT(slotShowDatePicker()));
 	m_datePicker = new KDatePicker(m_datePickerPopupMenu, QDate(), 0);
+
+	KDateTable *dt =Kexi::findFirstChild<KDateTable>(m_datePicker, "KDateTable");
+	if (dt)
+		connect(dt, SIGNAL(tableClicked()), this, SLOT(acceptDate()));
 	m_datePicker->setCloseButton(true);
 	m_datePicker->installEventFilter(this);
 //	, WType_TopLevel | WDestructiveClose | WStyle_Customize
@@ -178,9 +184,7 @@ KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
 			if (ke->key()==Key_Enter || ke->key()==Key_Return) {
 				//accepting picker
 //js				m_edit->setText( KGlobal::locale()->formatDate(m_datePicker->date(), true) );
-				m_edit->setDate(m_datePicker->date());
-				m_datePickerPopupMenu->hide();
-				kdDebug() << "accept" << endl;
+				acceptDate();
 				return true;
 			}
 			else if (ke->key()==Key_Escape) {
@@ -197,6 +201,13 @@ KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
 		}
 	}
 	return false;
+}
+
+void KexiDateTableEdit::acceptDate()
+{
+	m_edit->setDate(m_datePicker->date());
+	m_datePickerPopupMenu->hide();
+	kdDebug() << "accept" << endl;
 }
 
 bool KexiDateTableEdit::cursorAtStart()
@@ -241,7 +252,7 @@ KexiDateEditorFactoryItem::~KexiDateEditorFactoryItem()
 }
 
 KexiTableEdit* KexiDateEditorFactoryItem::createEditor(
-	KexiDB::Field &f, QWidget* parent)
+	KexiDB::Field &f, QScrollView* parent)
 {
 	return new KexiDateTableEdit(f, parent);
 }

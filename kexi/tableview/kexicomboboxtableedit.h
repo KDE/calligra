@@ -39,7 +39,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 	Q_OBJECT
 
 	public:
-		KexiComboBoxTableEdit(KexiDB::Field &f, QWidget *parent=0);
+		KexiComboBoxTableEdit(KexiDB::Field &f, QScrollView *parent=0);
 //		KexiComboBoxTableEdit(KexiDB::Field::Type t, const QStringList list,
 //			QWidget *parent=0, const char *name=0);
 
@@ -107,7 +107,7 @@ class KexiComboBoxEditorFactoryItem : public KexiCellEditorFactoryItem
 		virtual ~KexiComboBoxEditorFactoryItem();
 
 	protected:
-		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QWidget* parent = 0);
+		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QScrollView* parent = 0);
 };
 
 #endif

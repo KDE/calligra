@@ -22,7 +22,7 @@
 #define _KEXITABLEEDIT_H_
 
 #include <qvariant.h>
-#include <qwidget.h>
+#include <qscrollview.h>
 
 namespace KexiDB {
 	class Field;
@@ -35,7 +35,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 	Q_OBJECT
 
 	public:
-		KexiTableEdit(KexiDB::Field &f, QWidget* parent = 0, const char* name = 0);
+		KexiTableEdit(KexiDB::Field &f, QScrollView* parent = 0, const char* name = 0);
 
 		virtual ~KexiTableEdit();
 
@@ -160,6 +160,11 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		 for the editor, its events will be filtered, it will be resized when neede, and so on. */
 		void setView(QWidget *v);
 
+		/*! Moves child widget within the viewport. Use this for child widgets that 
+		 are outside of this editor widget, instead of calling QWidget::move(). */
+		void moveChild( QWidget * child, int x, int y ) {
+			m_scrollView->moveChild(child, x, y); }
+
 	//		virtual void paintEvent( QPaintEvent *pe );
 		QVariant m_origValue;
 		KexiDB::Field *m_field;
@@ -167,6 +172,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		int m_leftMargin;
 		int m_rightMargin;
 
+		QScrollView* m_scrollView;
 	private:
 		QWidget* m_view;
 };

@@ -100,7 +100,7 @@ class KexiTableViewPrivate
 #endif
 	KexiTableItem	*pInsertItem;
 	
-	QStringList		dropFilters;
+//	QStringList		dropFilters;
 
 	KexiTableView::ScrollDirection scrollDirection;
 
@@ -158,8 +158,11 @@ class KexiTableViewPrivate
 	*/
 	bool acceptsRowEditAfterCellAccepting : 1;
 
-	/*! if inserting empty rows are enabled (false by default) */
+	/*! true, if inserting empty rows are enabled (false by default) */
 	bool emptyRowInsertingEnabled : 1;
+
+	/*! true, if this table accepts dropping data on the rows (false by default). */
+	bool dropsAtRowEnabled : 1;
 
 	/*! 1 if table view is readOnly, 0 if not; 
 	 otherwise (-1 means "dont know") the 'readOnly' flag from table views' 
@@ -185,13 +188,17 @@ class KexiTableViewPrivate
 	uint scrollBarTipTimerCnt; //!< helper for timeout counting
 	
 	//! row colors
-	QColor baseColor; 
-	QColor altColor;
+	QColor baseColor, textColor, altColor, grayColor;
+	QBrush diagonalGrayPattern;
 
 	//! Actions pluged for this table view. \sa plugSharedAction()
 	QAsciiDict<KAction> sharedActions;
 
-
+	/*! Row number that over which user drags a mouse pointer.
+	 Used to indicate dropping possibility for that row. 
+	 Equal -1 if no indication is needed.
+	*/
+	int dragIndicatorLine;
 };
 
 #endif

@@ -107,7 +107,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	viewport()->setBackgroundMode(NoBackground);
 //	viewport()->setFocusPolicy(StrongFocus);
 	viewport()->setFocusPolicy(WheelFocus);
-	setFocusProxy(viewport());
+//	setFocusProxy(viewport());
 	viewport()->installEventFilter(this);
 
 	//setup colors defaults
@@ -115,7 +115,11 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	setEmptyAreaColor(palette().active().color(QColorGroup::Base));
 
 	d->baseColor = colorGroup().base();
+	d->textColor = colorGroup().text();
+
 	d->altColor = KGlobalSettings::alternateBackgroundColor();
+	d->grayColor = QColor(200,200,200);
+	d->diagonalGrayPattern = QBrush(d->grayColor, BDiagPattern);
 
 	setLineWidth(1);
 	horizontalScrollBar()->installEventFilter(this);
@@ -188,6 +192,9 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 
 	setBackgroundAltering(true);
 	setFullRowSelectionEnabled(false);
+
+	setAcceptDrops(true);
+	viewport()->setAcceptDrops(true);
 
 	// Connect header, table and scrollbars
 	connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), d->pTopHeader, SLOT(setOffset(int)));
@@ -358,7 +365,7 @@ void KexiTableView::setNavRowCount(int newrows)
 
 void KexiTableView::setData( KexiTableViewData *data, bool owner )
 {
-	if (m_owner && m_data) {
+	if (m_owner && m_data && m_data!=data/*don't destroy if it's the same*/) {
 		kdDebug(44021) << "KexiTableView::setData(): destroying old data (owned)" << endl;
 		delete m_data; //destroy old data
 		m_data = 0;
@@ -435,11 +442,11 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 //	resizeContents(s.width(),s.height());
 }
 
-void KexiTableView::addDropFilter(const QString &filter)
+/*void KexiTableView::addDropFilter(const QString &filter)
 {
 	d->dropFilters.append(filter);
 	viewport()->setAcceptDrops(true);
-}
+}*/
 
 void KexiTableView::setFont(const QFont &f)
 {
@@ -909,10 +916,7 @@ inline void KexiTableView::paintRow(KexiTableItem *item,
 	if (collast==-1)
 		collast=columns()-1;
 
-	int colp=0, colw;
-	colp = 0;
 	int transly = rowp-cy;
-	int c;
 
 	if(d->bgAltering && (r%2 != 0))
 		pb->fillRect(0, transly, maxwc, d->rowHeight, d->altColor);
@@ -921,11 +925,11 @@ inline void KexiTableView::paintRow(KexiTableItem *item,
 		pb->fillRect(0, transly, maxwc, d->rowHeight, d->baseColor);
 //		pb->fillRect(0, transly, maxwc, d->rowHeight - 1, d->baseColor);
 
-	for(c = colfirst; c <= collast; c++)
+	for(int c = colfirst; c <= collast; c++)
 	{
 		// get position and width of column c
-		colp = columnPos(c);
-		colw = columnWidth(c);
+		int colp = columnPos(c);
+		int colw = columnWidth(c);
 		int translx = colp-cx;
 
 		// Translate painter and draw the cell
@@ -933,6 +937,11 @@ inline void KexiTableView::paintRow(KexiTableItem *item,
 		pb->translate(translx, transly);
 			paintCell( pb, item, c, r, QRect(colp, rowp, colw, d->rowHeight));
 		pb->restoreWorldMatrix();
+	}
+
+	if (d->dragIndicatorLine>=0 && d->dragIndicatorLine==r) {
+		pb->setPen( QPen(d->textColor, 3) );
+		pb->drawLine(0, transly+1, maxwc, transly+1);
 	}
 }
 
@@ -1030,8 +1039,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	QPen pen(p->pen());
 
 	if (!d->fullRowSelectionEnabled) {
-		QColor gray(200,200,200);
-		p->setPen(gray);
+		p->setPen(d->grayColor);
 		p->drawLine( x2, 0, x2, y2 );	// right
 		p->drawLine( 0, y2, x2, y2 );	// bottom
 	}
@@ -1040,9 +1048,9 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	if (d->pEditor && row == d->curRow && col == d->curCol) //don't paint contents of edited cell
 		return;
 
-	KexiTableEdit *edit = editor( col );
-	if (!edit)
-		return;
+	KexiTableEdit *edit = editor( col, /*ignoreMissingEditor=*/true );
+//	if (!edit)
+//		return;
 
 /*
 #ifdef Q_WS_WIN
@@ -1055,7 +1063,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 
 //	const int ctype = columnType(col);*/
 //	int x=1;
-	int x = edit->leftMargin();
+	int x = edit ? edit->leftMargin() : 0;
 	int y_offset=0;
 
 	int align = SingleLine | AlignVCenter;
@@ -1072,8 +1080,9 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 		}
 	}
 
-	edit->setupContents( p, d->pCurrentItem == item && col == d->curCol, 
-		cell_value, txt, align, x, y_offset, w, h );
+	if (edit)
+		edit->setupContents( p, d->pCurrentItem == item && col == d->curCol, 
+			cell_value, txt, align, x, y_offset, w, h );
 
 /*
 	if (KexiDB::Field::isFPNumericType( ctype )) {
@@ -1154,9 +1163,10 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 /*		edit->paintSelectionBackground( p, isEnabled(), txt, align, x, y_offset, w, h,
 			has_focus ? colorGroup().highlight() : gray,
 			columnReadOnly, d->fullRowSelectionEnabled );*/
-		edit->paintSelectionBackground( p, isEnabled(), txt, align, x, y_offset, w, h,
-			isEnabled() ? colorGroup().highlight() : gray,
-			columnReadOnly, d->fullRowSelectionEnabled );
+		if (edit)
+			edit->paintSelectionBackground( p, isEnabled(), txt, align, x, y_offset, w, h,
+				isEnabled() ? colorGroup().highlight() : d->grayColor,
+				columnReadOnly, d->fullRowSelectionEnabled );
 	}
 
 /*
@@ -1174,7 +1184,11 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 			p->fillRect(bound, gray);
 	}
 */	
-	//	If we are in the focus cell, draw indication
+	if (!edit){
+		p->fillRect(0, 0, x2, y2, d->diagonalGrayPattern);
+	}
+
+//	If we are in the focus cell, draw indication
 	if(d->pCurrentItem == item && col == d->curCol //js: && !d->recordIndicator)
 		&& !d->fullRowSelectionEnabled) 
 	{
@@ -1185,10 +1199,13 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 		}
 		else {
 			QPen gray_pen(p->pen());
-			gray_pen.setColor(gray);
+			gray_pen.setColor(d->grayColor);
 			p->setPen(gray_pen);
 		}
-		edit->paintFocusBorders( p, cell_value, 0, 0, x2, y2 );
+		if (edit)
+			edit->paintFocusBorders( p, cell_value, 0, 0, x2, y2 );
+		else
+			p->drawRect(0, 0, x2, y2);
 	}
 	
 	// draw text
@@ -1353,7 +1370,7 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 		}
 #endif
 	}
-	QScrollView::contentsMousePressEvent( e );
+//ScrollView::contentsMousePressEvent( e );
 }
 
 void KexiTableView::contentsMouseReleaseEvent( QMouseEvent* e )
@@ -1829,7 +1846,7 @@ void KexiTableView::selectPrevRow()
 	selectRow( QMAX( 0, d->curRow - 1 ) );
 }
 
-KexiTableEdit *KexiTableView::editor( int col )
+KexiTableEdit *KexiTableView::editor( int col, bool ignoreMissingEditor )
 {
 	if (col<0 || col>=columns())
 		return 0;
@@ -1839,10 +1856,12 @@ KexiTableEdit *KexiTableView::editor( int col )
 	//find the editor for this column
 	KexiTableEdit *editor = d->editors[ tvcol ];
 	if (!editor) {//not found: create
-		editor = KexiCellEditorFactory::createEditor(*m_data->column(col)->field, viewport());
+		editor = KexiCellEditorFactory::createEditor(*m_data->column(col)->field, this);
 		if (!editor) {//create error!
-			//js TODO: show error???
-			cancelRowEdit();
+			if (!ignoreMissingEditor) {
+				//js TODO: show error???
+				cancelRowEdit();
+			}
 			return 0;
 		}
 		editor->hide();
@@ -1860,12 +1879,18 @@ KexiTableEdit *KexiTableView::editor( int col )
 	return editor;
 }
 
-void KexiTableView::editorShowFocus( int /*row*/, int col )
+void KexiTableView::editorShowFocus( int row, int col )
 {
 	KexiTableEdit *edit = editor( col );
+	/*nt p = rowPos(row);
+	 (!edit || (p < contentsY()) || (p > (contentsY()+clipper()->height()))) {
+		kdDebug()<< "KexiTableView::editorShowFocus() : OUT" << endl;
+		return;
+	}*/
 	if (edit) {
+		kdDebug()<< "KexiTableView::editorShowFocus() : IN" << endl;
 		QRect rect = cellGeometry( d->curRow, d->curCol );
-		rect.moveBy( -contentsX(), -contentsY() );
+//		rect.moveBy( -contentsX(), -contentsY() );
 		edit->showFocus( rect );
 	}
 }
@@ -2113,23 +2138,89 @@ void KexiTableView::showEvent(QShowEvent *e)
 	updateGeometries();
 }
 
+bool KexiTableView::dropsAtRowEnabled() const
+{
+	return d->dropsAtRowEnabled;
+}
+
+void KexiTableView::setDropsAtRowEnabled(bool set)
+{
+	const bool old = d->dropsAtRowEnabled;
+	if (!set)
+		d->dragIndicatorLine = -1;
+	if (d->dropsAtRowEnabled && !set) {
+		d->dropsAtRowEnabled = false;
+		update();
+	}
+	else {
+		d->dropsAtRowEnabled = set;
+	}
+}
 
 void KexiTableView::contentsDragMoveEvent(QDragMoveEvent *e)
 {
-	for(QStringList::Iterator it = d->dropFilters.begin(); it != d->dropFilters.end(); it++)
+	if (d->dropsAtRowEnabled) {
+		QPoint p = e->pos();
+		int row = rowAt(p.y());
+		KexiTableItem *item = m_data->at(row);
+		emit dragOverRow(item, row, e);
+		if (e->isAccepted()) {
+			if (d->dragIndicatorLine>=0 && d->dragIndicatorLine != row) {
+				//erase old indicator
+				updateRow(d->dragIndicatorLine);
+			}
+			if (d->dragIndicatorLine != row) {
+				d->dragIndicatorLine = row;
+				updateRow(d->dragIndicatorLine);
+			}
+		}
+		else {
+			if (d->dragIndicatorLine>=0) {
+				//erase old indicator
+				updateRow(d->dragIndicatorLine);
+			}
+			d->dragIndicatorLine = -1;
+		}
+	}
+	else
+		e->acceptAction(false);
+/*	for(QStringList::Iterator it = d->dropFilters.begin(); it != d->dropFilters.end(); it++)
 	{
 		if(e->provides((*it).latin1()))
 		{
 			e->acceptAction(true);
 			return;
 		}
-	}
-	e->acceptAction(false);
+	}*/
+//	e->acceptAction(false);
 }
 
 void KexiTableView::contentsDropEvent(QDropEvent *ev)
 {
-	emit dropped(ev);
+	if (d->dropsAtRowEnabled) {
+		//we're no longer dragging over the table
+		if (d->dragIndicatorLine>=0) {
+			int row2update = d->dragIndicatorLine;
+			d->dragIndicatorLine = -1;
+			updateRow(row2update);
+		}
+		QPoint p = ev->pos();
+		int row = rowAt(p.y());
+		KexiTableItem *item = m_data->at(row);
+		emit droppedAtRow(item, row, ev);
+	}
+}
+
+void KexiTableView::viewportDragLeaveEvent( QDragLeaveEvent * )
+{
+	if (d->dropsAtRowEnabled) {
+		//we're no longer dragging over the table
+		if (d->dragIndicatorLine>=0) {
+			int row2update = d->dragIndicatorLine;
+			d->dragIndicatorLine = -1;
+			updateRow(row2update);
+		}
+	}
 }
 
 void KexiTableView::updateCell(int row, int col)
@@ -3266,6 +3357,19 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 				return true;
 		}
 	}
+/*	else if (e->type()==QEvent::FocusOut && o->inherits("QWidget")) {
+		//hp==true if currently focused widget is a child of this table view
+		const bool hp = Kexi::hasParent( static_cast<QWidget*>(o), focusWidget());
+		if (!hp && Kexi::hasParent( this, static_cast<QWidget*>(o))) {
+			//accept row editing if focus is moved to foreign widget 
+			//(not a child, like eg. editor) from one of our table view's children
+			//or from table view itself
+			if (!acceptRowEdit()) {
+				static_cast<QWidget*>(o)->setFocus();
+				return true;
+			}
+		}
+	}*/
 	return QScrollView::eventFilter(o,e);
 }
 

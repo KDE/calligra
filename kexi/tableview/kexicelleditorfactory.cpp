@@ -75,7 +75,7 @@ void KexiCellEditorFactory::registerItem( uint type, KexiCellEditorFactoryItem& 
 	static_KexiCellEditorFactory.registerItem( type, item );
 }
 
-KexiTableEdit* KexiCellEditorFactory::createEditor(KexiDB::Field &f, QWidget* parent)
+KexiTableEdit* KexiCellEditorFactory::createEditor(KexiDB::Field &f, QScrollView* parent)
 {
 	KexiCellEditorFactoryItem *item = KexiCellEditorFactory::item( f.type() );
 	return item->createEditor(f, parent);

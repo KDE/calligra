@@ -34,7 +34,7 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 	Q_OBJECT
 
 	public:
-		KexiInputTableEdit(KexiDB::Field &f, QWidget *parent=0, const char* name = 0);
+		KexiInputTableEdit(KexiDB::Field &f, QScrollView *parent=0, const char* name = 0);
 
 		virtual ~KexiInputTableEdit();
 
@@ -92,7 +92,7 @@ class KexiInputEditorFactoryItem : public KexiCellEditorFactoryItem
 		virtual ~KexiInputEditorFactoryItem();
 
 	protected:
-		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QWidget* parent = 0);
+		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QScrollView* parent = 0);
 };
 
 #endif

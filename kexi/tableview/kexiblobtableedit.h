@@ -34,7 +34,7 @@ class KexiBlobTableEdit : public KexiTableEdit
 {
 	Q_OBJECT
 	public:
-		KexiBlobTableEdit(KexiDB::Field &f, QWidget *parent=0);
+		KexiBlobTableEdit(KexiDB::Field &f, QScrollView *parent=0);
 		virtual ~KexiBlobTableEdit();
 
 		bool valueIsNull();
@@ -73,7 +73,7 @@ class KexiBlobEditorFactoryItem : public KexiCellEditorFactoryItem
 		virtual ~KexiBlobEditorFactoryItem();
 
 	protected:
-		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QWidget* parent = 0);
+		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QScrollView* parent = 0);
 };
 
 #endif

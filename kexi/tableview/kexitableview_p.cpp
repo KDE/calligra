@@ -59,6 +59,8 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	internal_acceptsRowEditAfterCellAccepting = false;
 	acceptsRowEditAfterCellAccepting = false;
 	emptyRowInsertingEnabled = false;
+	dragIndicatorLine = -1;
+	dropsAtRowEnabled = false;
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()

@@ -27,10 +27,11 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-KexiTableEdit::KexiTableEdit(KexiDB::Field &f, QWidget* parent, const char* name)
-: QWidget(parent, name)
+KexiTableEdit::KexiTableEdit(KexiDB::Field &f, QScrollView* parent, const char* name)
+: QWidget(parent->viewport(), name)
  ,m_field(&f)
 // ,m_type(f.type()) //copied because the rest of code uses m_type
+ ,m_scrollView(parent)
  ,m_view(0)
 {
 	setPaletteBackgroundColor( palette().color(QPalette::Active, QColorGroup::Base) );
@@ -39,6 +40,7 @@ KexiTableEdit::KexiTableEdit(KexiDB::Field &f, QWidget* parent, const char* name
 	//margins
 	if (m_field->isFPNumericType()) {
 #ifdef Q_WS_WIN
+		m_leftMargin = 0;
 #else
 		m_leftMargin = 0;
 #endif
@@ -192,10 +194,10 @@ void KexiTableEdit::setupContents( QPainter *p, bool focused, QVariant val,
 	}
 	else if (m_field->type() == KexiDB::Field::Boolean) {
 		int s = QMAX(h - 5, 12);
-		s = QMIN( h-1, s );
-		s = QMIN( w-1, s );//avoid too large box
+		s = QMIN( h-3, s );
+		s = QMIN( w-3, s );//avoid too large box
 //		QRect r(w/2 - s/2 + x, h/2 - s/2 - 1, s, s);
-		QRect r( QMAX( w/2 - s/2, 0 ) , h/2 - s/2 - 1, s, s);
+		QRect r( QMAX( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s, s);
 		p->setPen(QPen(colorGroup().text(), 1));
 		p->drawRect(r);
 		if (val.asBool())

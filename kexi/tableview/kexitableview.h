@@ -57,7 +57,7 @@ namespace KexiDB {
 }
 
 //! default column width in pixels
-#define KEXITV_DEFAULT_COLUMN_WIDTH 100
+#define KEXITV_DEFAULT_COLUMN_WIDTH 120
 
 //! minimum column width in pixels
 #define KEXITV_MINIMUM_COLUMN_WIDTH 10
@@ -79,7 +79,7 @@ public:
 	/*! Sets data for this table view. if \a owner is true, the table view will own 
 	 \a data and therefore will destoy when required, else: \a data is (possibly) shared and
 	 not owned by the widget. 
-	 If widget already has data assigned (and owns this data),
+	 If widget already has _different_ data object assigned (and owns this data),
 	 old data is destroyed before new assignment.
 	 */
 	void setData( KexiTableViewData *data, bool owner = true );
@@ -268,7 +268,7 @@ public:
 	virtual QSize		minimumSizeHint() const;
 	void		setFont(const QFont &f);
 
-	void		addDropFilter(const QString &filter);
+//jsL NOT ENOUGH GENERIC 	void		addDropFilter(const QString &filter);
 
 //	void		inserted();
 
@@ -427,6 +427,18 @@ public slots:
 	 (i.e. after acceptEditor()). \sa acceptsRowEditAfterCellAccepting() */
 	void setAcceptsRowEditAfterCellAccepting(bool set);
 
+	/*! \return true, if this table accepts dropping data on the rows. 
+	*/
+	bool dropsAtRowEnabled() const;
+
+	/*! Specifies, if this table accepts dropping data on the rows. 
+	 If enabled:
+	 - dragging over row is indicated by drawing a line at bottom side of this row
+	 - dragOverRow() signal will be emitted on dragging,
+	  -droppedAtRow() will be emitted on dropping
+	 By default this flag is set to false. */
+	void setDropsAtRowEnabled(bool set);
+
 signals:
 	void itemSelected(KexiTableItem *);
 	void cellSelected(int col, int row);
@@ -434,6 +446,9 @@ signals:
 	void itemReturnPressed(KexiTableItem *, int row, int col);
 	void itemDblClicked(KexiTableItem *, int row, int col);
 	void itemMouseReleased(KexiTableItem *, int row, int col);
+
+	void dragOverRow(KexiTableItem *item, int row, QDragMoveEvent* e);
+	void droppedAtRow(KexiTableItem *item, int row, QDropEvent *e);
 
 #if 0 
 //MOC_SKIP_BEGIN 
@@ -464,7 +479,6 @@ signals:
 	void itemDeleteRequest(KexiTableItem *, int row, int col);
 	void currentItemDeleteRequest();
 	void addRecordRequest();
-	void dropped(QDropEvent *);
 //	void contextMenuRequested(KexiTableItem *,  int row, int col, const QPoint &);
 	void sortedColumnChanged(int col);
 
@@ -535,10 +549,14 @@ protected:
 	virtual void showEvent(QShowEvent *e);
 	virtual void contentsDragMoveEvent(QDragMoveEvent *e);
 	virtual void contentsDropEvent(QDropEvent *ev);
-
+	virtual void viewportDragLeaveEvent( QDragLeaveEvent * );
+	
 	/*! Internal: creates editor structure without filling it with data.
-	 Used in createEditor() and few places to be able to display cell contents dependending on its type. */
-	KexiTableEdit *editor( int col );
+	 Used in createEditor() and few places to be able to display cell contents 
+	 dependending on its type. If \a ignoreMissingEditor is false (the default),
+	 and editor cannot be instantiated, current row editing (if present) is cancelled.
+	 */
+	KexiTableEdit *editor( int col, bool ignoreMissingEditor = false );
 
 	/*! Updates editor's position, size and shows its focus (not the editor!) 
 	 for \a row and \a col, using editor(). Does nothing if editor not found. */

@@ -63,12 +63,12 @@ class KDownArrowPushButton : public KPushButton
 
 //======================================================
 
-KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::Field &f, QWidget *parent)
+KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::Field &f, QScrollView *parent)
  : KexiInputTableEdit(f, parent,"KexiComboBoxTableEdit")
 {
 //	QHBoxLayout* layout = new QHBoxLayout(this);
 	m_popup = 0;
-	m_button = new KDownArrowPushButton( parent );
+	m_button = new KDownArrowPushButton( parent->viewport() );
 	m_button->hide();
 	m_button->setFocusPolicy( NoFocus );
 	connect(m_button, SIGNAL(clicked()), this, SLOT(slotButtonClicked()));
@@ -143,9 +143,14 @@ void KexiComboBoxTableEdit::resize(int w, int h)
 void KexiComboBoxTableEdit::updateFocus( const QRect& r )
 {
 	if (m_button->width() > r.width())
+		moveChild(m_button, r.right() + 1, r.top());
+	else
+		moveChild(m_button, r.right() - m_button->width(), r.top() );
+
+/*	if (m_button->width() > r.width())
 		m_button->move( r.right() + 1, r.top() );
 	else
-		m_button->move( r.right() - m_button->width(), r.top() );
+		m_button->move( r.right() - m_button->width(), r.top() );*/
 }
 
 void KexiComboBoxTableEdit::hideFocus()
@@ -260,7 +265,8 @@ void KexiComboBoxTableEdit::showPopup()
 	if (!m_lineedit->isVisible())
 		emit editRequested();
 
-	KexiTableView *tv = Kexi::findParent<KexiTableView>(this, "KexiTableView");
+//	KexiTableView *tv = Kexi::findParent<KexiTableView>(this, "KexiTableView");
+	KexiTableView *tv = static_cast<KexiTableView*>(m_scrollView);
 	if (tv) {
 		m_popup->move( tv->viewport()->mapToGlobal(pos()) + QPoint(0,height()) );//+ rect().bottomLeft() ) );
 		m_popup->show();
@@ -380,7 +386,7 @@ KexiComboBoxEditorFactoryItem::~KexiComboBoxEditorFactoryItem()
 }
 
 KexiTableEdit* KexiComboBoxEditorFactoryItem::createEditor(
-	KexiDB::Field &f, QWidget* parent)
+	KexiDB::Field &f, QScrollView* parent)
 {
 	return new KexiComboBoxTableEdit(f, parent);
 }

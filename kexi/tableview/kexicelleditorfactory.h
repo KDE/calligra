@@ -21,7 +21,7 @@
 #define KEXICELLEDITORFACTORY_H
 
 #include <qvariant.h>
-#include <qwidget.h>
+#include <qscrollview.h>
 
 #include <kexidb/field.h>
 
@@ -42,7 +42,7 @@ class KexiCellEditorFactory
 		//! \return item for \a type. It no item found, the default is tried. Eventually, may return NULL.
 		static KexiCellEditorFactoryItem* item( uint type );
 
-		static KexiTableEdit* createEditor(KexiDB::Field &f, QWidget* parent = 0);
+		static KexiTableEdit* createEditor(KexiDB::Field &f, QScrollView* parent = 0);
 };
 
 class KexiCellEditorFactoryItem
@@ -52,7 +52,7 @@ class KexiCellEditorFactoryItem
 		virtual ~KexiCellEditorFactoryItem();
 
 	protected:
-		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QWidget* parent = 0) = 0;
+		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QScrollView* parent = 0) = 0;
 
 	friend class KexiCellEditorFactory;
 };

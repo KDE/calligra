@@ -56,7 +56,7 @@ class MyLineEdit : public KLineEdit
 
 //======================================================
 
-KexiInputTableEdit::KexiInputTableEdit(KexiDB::Field &f, QWidget *parent, const char* name)
+KexiInputTableEdit::KexiInputTableEdit(KexiDB::Field &f, QScrollView *parent, const char* name)
  : KexiTableEdit(f, parent, name ? name : "KexiInputTableEdit")
 {
 //	m_type = f.type(); //copied because the rest of code uses m_type
@@ -520,7 +520,7 @@ KexiInputEditorFactoryItem::~KexiInputEditorFactoryItem()
 }
 
 KexiTableEdit* KexiInputEditorFactoryItem::createEditor(
-	KexiDB::Field &f, QWidget* parent)
+	KexiDB::Field &f, QScrollView* parent)
 {
 	return new KexiInputTableEdit(f, parent);
 }
