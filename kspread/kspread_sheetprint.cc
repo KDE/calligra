@@ -68,6 +68,8 @@ KSpreadSheetPrint::KSpreadSheetPrint( KSpreadSheet* sheet )
     m_printRepeatColumns = qMakePair( 0, 0 );
     m_printRepeatRows = qMakePair( 0, 0 );
     m_dZoom = 1.0;
+    m_iPageLimitX = 0;
+    m_iPageLimitY = 0;
 
     calcPaperSize();
 }
@@ -100,6 +102,7 @@ QRect KSpreadSheetPrint::cellsPrintRange()
     int i;
     for( ; cit.current(); ++cit )
     {
+        //QRect, because KoChild doesn't use KoRect yet
         QRect bound = cit.current()->boundingRect();
 
         i = m_pSheet->leftColumn( bound.right(), dummy );
@@ -119,6 +122,8 @@ int KSpreadSheetPrint::pagesX( QRect& cellsPrintRange )
 {
     int pages = 0;
 
+    updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( cellsPrintRange.right() ) + printableWidthPts() ) );
+
     for( int i = cellsPrintRange.left(); i <= cellsPrintRange.right(); i++  )
     {
         if( isOnNewPageX( i ) )
@@ -130,6 +135,8 @@ int KSpreadSheetPrint::pagesX( QRect& cellsPrintRange )
 int KSpreadSheetPrint::pagesY( QRect& cellsPrintRange )
 {
     int pages = 0;
+
+    updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( cellsPrintRange.bottom() ) + printableHeightPts() ) );
 
     for( int i = cellsPrintRange.top(); i <= cellsPrintRange.bottom(); i++  )
     {
@@ -202,10 +209,8 @@ void KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
 
     //Ensure, that our newPage lists are generated for the whole sheet to print
     //For this we add to the lists the width/height of 1 page
-    bool tmp;
-    tmp = isOnNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( cell_range.right() ) + printableWidthPts() ) );
-    tmp = isOnNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( cell_range.bottom() ) + printableHeightPts() ) );
-//    tmp = isOnNewPageY( cell_range.bottom() + 1 );
+    updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( cell_range.right() ) + printableWidthPts() ) );
+    updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( cell_range.bottom() ) + printableHeightPts() ) );
 
     // Find out how many pages need printing
     // and which cells to print on which page.
@@ -580,7 +585,36 @@ void KSpreadSheetPrint::printHeaderFooter( QPainter &painter, int pageNo )
                           footRight( pageNo, m_pSheet->tableName() ) );
 }
 
+
 bool KSpreadSheetPrint::isOnNewPageX( int _column )
+{
+    if( _column > m_maxCheckedNewPageX )
+        updateNewPageX( _column );
+
+    //Are these the edges of the print range?
+    if ( _column == m_printRange.left() || _column == m_printRange.right() + 1 )
+    {
+        return TRUE;
+    }
+
+    //beyond the print range it's always false
+    if ( _column < m_printRange.left() || _column > m_printRange.right() )
+    {
+        return TRUE;
+    }
+
+    //Now check if we find the column already in the list
+    if ( m_lnewPageListX.findIndex( _column ) != -1 )
+    {
+        if( _column > m_maxCheckedNewPageX )
+            m_maxCheckedNewPageX = _column;
+        return TRUE;
+    }
+    return FALSE;
+}
+
+
+void KSpreadSheetPrint::updateNewPageX( int _column )
 {
     float offset = 0.0;
 
@@ -589,28 +623,20 @@ bool KSpreadSheetPrint::isOnNewPageX( int _column )
     {
         if( _column > m_maxCheckedNewPageX )
             m_maxCheckedNewPageX = _column;
-        return true;
+        return;
     }
 
-    //beyond the print range it's always false
+    //We don't check beyond the print range
     if ( _column < m_printRange.left() || _column > m_printRange.right() )
     {
         if( _column > m_maxCheckedNewPageX )
             m_maxCheckedNewPageX = _column;
-        return false;
+        return;
     }
 
     //If we start, then add the left printrange
     if ( m_lnewPageListX.empty() )
         m_lnewPageListX.append( m_printRange.left() ); //Add the first entry
-
-    //Now check if we find the column already in the list
-    if ( m_lnewPageListX.findIndex( _column ) != -1 )
-    {
-        if( _column > m_maxCheckedNewPageX )
-            m_maxCheckedNewPageX = _column;
-        return true;
-    }
 
     //If _column is greater than the last entry, we need to calculate the result
     if ( _column > m_lnewPageListX.last().startItem() &&
@@ -641,19 +667,13 @@ bool KSpreadSheetPrint::isOnNewPageX( int _column )
                 (*it).setSize( x - m_pSheet->columnFormat( col )->dblWidth() );
                 (*it).setOffset( offset );
 
-/*QValueList<KSpreadPrintNewPageEntry>::iterator itt;
-kdDebug(36001)<<"neuer Aufruf isOnNewPageX*************"<<endl;
-for( itt = m_lnewPageListX.begin(); itt != m_lnewPageListX.end(); ++itt )
-{
-    kdDebug(36001)<<"start: "<<(*itt).startItem()<<"  end: "<<(*itt).endItem()<<"  offset: "<<(*itt).offset()<<endl;
-}*/
                 //start a new page
                 startCol = col;
                 if ( col == _column )
                 {
                     if( _column > m_maxCheckedNewPageX )
                         m_maxCheckedNewPageX = _column;
-                    return TRUE;
+                    return;
                 }
                 else
                 {
@@ -673,11 +693,39 @@ for( itt = m_lnewPageListX.begin(); itt != m_lnewPageListX.end(); ++itt )
 
     if( _column > m_maxCheckedNewPageX )
         m_maxCheckedNewPageX = _column;
+}
+
+
+bool KSpreadSheetPrint::isOnNewPageY( int _row )
+{
+    if( _row > m_maxCheckedNewPageY )
+        updateNewPageY( _row );
+
+    //Are these the edges of the print range?
+    if ( _row == m_printRange.top() || _row == m_printRange.bottom() + 1 )
+    {
+        return FALSE;
+    }
+
+     //beyond the print range it's always false
+    if ( _row < m_printRange.top() || _row > m_printRange.bottom() )
+    {
+        return FALSE;
+    }
+
+    //Now check if we find the row already in the list
+    if ( m_lnewPageListY.findIndex( _row ) != -1 )
+    {
+        if( _row > m_maxCheckedNewPageY )
+            m_maxCheckedNewPageY = _row;
+        return TRUE;
+    }
 
     return FALSE;
 }
 
-bool KSpreadSheetPrint::isOnNewPageY( int _row )
+
+void KSpreadSheetPrint::updateNewPageY( int _row )
 {
     float offset = 0.0;
 
@@ -686,7 +734,7 @@ bool KSpreadSheetPrint::isOnNewPageY( int _row )
     {
         if( _row > m_maxCheckedNewPageY )
             m_maxCheckedNewPageY = _row;
-        return true;
+        return;
     }
 
      //beyond the print range it's always false
@@ -694,20 +742,12 @@ bool KSpreadSheetPrint::isOnNewPageY( int _row )
     {
         if( _row > m_maxCheckedNewPageY )
             m_maxCheckedNewPageY = _row;
-        return false;
+        return;
     }
 
     //If we start, then add the top printrange
     if ( m_lnewPageListY.empty() )
         m_lnewPageListY.append( m_printRange.top() ); //Add the first entry
-
-    //Now check if we find the row already in the list
-    if ( m_lnewPageListY.findIndex( _row ) != -1 )
-    {
-        if( _row > m_maxCheckedNewPageY )
-            m_maxCheckedNewPageY = _row;
-        return true;
-    }
 
     //If _column is greater than the last entry, we need to calculate the result
     if ( _row > m_lnewPageListY.last().startItem() &&
@@ -742,8 +782,9 @@ bool KSpreadSheetPrint::isOnNewPageY( int _row )
                 startRow = row;
                 if ( row == _row )
                 {
-                    m_maxCheckedNewPageY = _row;
-                    return TRUE;
+                    if( _row > m_maxCheckedNewPageY )
+                        m_maxCheckedNewPageY = _row;
+                    return;
                 }
                 else
                 {
@@ -755,6 +796,7 @@ bool KSpreadSheetPrint::isOnNewPageY( int _row )
                     }
                 }
             }
+
             row++;
             y += m_pSheet->rowFormat( row )->dblHeight();
         }
@@ -762,14 +804,14 @@ bool KSpreadSheetPrint::isOnNewPageY( int _row )
 
     if( _row > m_maxCheckedNewPageY )
         m_maxCheckedNewPageY = _row;
-
-    return FALSE;
 }
+
 
 void KSpreadSheetPrint::updateNewPageListX( int _col )
 {
     //If the new range is after the first entry, we need to delete the whole list
-    if ( m_lnewPageListX.first().startItem() != m_printRange.left() )
+    if ( m_lnewPageListX.first().startItem() != m_printRange.left() ||
+         _col == 0 )
     {
         m_lnewPageListX.clear();
         m_maxCheckedNewPageX = m_printRange.left();
@@ -803,7 +845,8 @@ void KSpreadSheetPrint::updateNewPageListX( int _col )
 void KSpreadSheetPrint::updateNewPageListY( int _row )
 {
     //If the new range is after the first entry, we need to delete the whole list
-    if ( m_lnewPageListY.first().startItem() != m_printRange.top() )
+    if ( m_lnewPageListY.first().startItem() != m_printRange.top() ||
+         _row == 0 )
     {
         m_lnewPageListY.clear();
         m_maxCheckedNewPageY = m_printRange.top();
@@ -1217,6 +1260,95 @@ void KSpreadSheetPrint::setPrintRange( QRect _printRange )
     emit sig_updateView( m_pSheet );
 }
 
+void KSpreadSheetPrint::setPageLimitX( int pages )
+{
+    if( m_iPageLimitX == pages )
+        return;
+
+    m_iPageLimitX = pages;
+
+    if( pages == 0 )
+        return;
+
+    calculateZoomForPageLimitX();
+}
+
+void KSpreadSheetPrint::setPageLimitY( int pages )
+{
+    if( m_iPageLimitY == pages )
+        return;
+
+    m_iPageLimitY = pages;
+
+    if( pages == 0 )
+        return;
+
+    calculateZoomForPageLimitY();
+}
+
+void KSpreadSheetPrint::calculateZoomForPageLimitX()
+{
+    if( m_iPageLimitX == 0 )
+        return;
+
+    double origZoom = m_dZoom;
+
+    if( m_dZoom < 1.0 )
+        m_dZoom = 1.0;
+
+    QRect printRange = cellsPrintRange();
+    updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( printRange.right() ) + printableWidthPts() ) );
+    int currentPages = pagesX( printRange );
+    while( ( currentPages > m_iPageLimitX ) && ( m_dZoom > 0.01 ) )
+    {
+        m_dZoom -= 0.01;
+        updatePrintRepeatColumnsWidth();
+        updateNewPageListX( 0 );
+        updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( printRange.right() ) + printableWidthPts() ) );
+        currentPages = pagesX( printRange );
+    }
+
+    if ( m_dZoom < origZoom )
+    {
+        double newZoom = m_dZoom;
+        m_dZoom += 1.0; //set it to something different
+        setZoom( newZoom, false );
+    }
+    else
+        m_dZoom = origZoom;
+}
+
+void KSpreadSheetPrint::calculateZoomForPageLimitY()
+{
+    if( m_iPageLimitY == 0 )
+        return;
+
+    double origZoom = m_dZoom;
+
+    if( m_dZoom < 1.0 )
+        m_dZoom = 1.0;
+
+    QRect printRange = cellsPrintRange();
+    updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( printRange.bottom() ) + printableHeightPts() ) );
+    int currentPages = pagesY( printRange );
+    while( ( currentPages > m_iPageLimitY ) && ( m_dZoom > 0.01 ) )
+    {
+        m_dZoom -= 0.01;
+        updatePrintRepeatRowsHeight();
+        updateNewPageListY( 0 );
+        currentPages = pagesY( printRange );
+    }
+
+    if ( m_dZoom < origZoom )
+    {
+        double newZoom = m_dZoom;
+        m_dZoom += 1.0; //set it to something different
+        setZoom( newZoom, false );
+    }
+    else
+        m_dZoom = origZoom;
+}
+
 void KSpreadSheetPrint::setPrintGrid( bool _printGrid )
 {
    if ( m_bPrintGrid == _printGrid )
@@ -1448,7 +1580,7 @@ void KSpreadSheetPrint::removeRow( int row, int nbRow )
     }
 }
 
-void KSpreadSheetPrint::setZoom( double _zoom )
+void KSpreadSheetPrint::setZoom( double _zoom, bool checkPageLimit )
 {
     if( m_dZoom == _zoom )
     {
@@ -1462,6 +1594,12 @@ void KSpreadSheetPrint::setZoom( double _zoom )
     updateNewPageListY( 0 );
     if( m_pSheet->isShowPageBorders() )
         emit sig_updateView( m_pSheet );
+
+    if( checkPageLimit )
+    {
+        calculateZoomForPageLimitX();
+        calculateZoomForPageLimitY();
+    }
 
     m_pDoc->setModified( true );
 }

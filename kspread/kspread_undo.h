@@ -289,6 +289,10 @@ protected:
     QPair<int, int> m_printRepeatRowsRedo;
     double m_dZoom;
     double m_dZoomRedo;
+    int m_iPageLimitX;
+    int m_iPageLimitXRedo;
+    int m_iPageLimitY;
+    int m_iPageLimitYRedo;
 };
 
 
@@ -408,7 +412,7 @@ protected:
     QCString m_dataRedoTarget;
     QString  m_tableName;
 
-    void saveCellRect( QCString & cells, KSpreadSheet * table, 
+    void saveCellRect( QCString & cells, KSpreadSheet * table,
                        QRect const & rect );
 };
 

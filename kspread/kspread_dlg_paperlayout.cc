@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Montel Laurent <lmontel@mandrakesoft.com>
+   2003 Philipp Müller <philipp.mueller@gmx.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,8 +29,9 @@
 
 #include <qcheckbox.h>
 #include <qlabel.h>
-#include <qlayout.h>
 #include <qlineedit.h>
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -57,56 +59,115 @@ void KSpreadPaperLayout::initTab()
     KSpreadSheetPrint* print = m_pSheet->print();
 
     QWidget *tab = addPage(i18n( "Options" ));
-    QGridLayout *grid = new QGridLayout( tab, 9, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QVBoxLayout *vbox = new QVBoxLayout( tab, KDialog::marginHint(), KDialog::spacingHint() );
 
     pApplyToAll = new QCheckBox ( i18n( "&Apply to all sheets" ), tab );
     pApplyToAll->setChecked( print->printGrid() );
-    grid->addWidget( pApplyToAll, 0, 0 );
+    vbox->addWidget( pApplyToAll );
 
-    pPrintGrid = new QCheckBox ( i18n("Print &grid"), tab );
+    //Range properties
+    initGeneralOptions( tab, vbox );
+
+    //Range properties
+    initRanges( tab, vbox );
+
+    //Scale properties
+    initScaleOptions( tab, vbox );
+
+    vbox->addStretch( 1 );
+}
+
+void KSpreadPaperLayout::initGeneralOptions( QWidget * tab, QVBoxLayout * vbox )
+{
+    KSpreadSheetPrint* print = m_pSheet->print();
+
+    QGroupBox *group = new QGroupBox( i18n("General options"), tab );
+    vbox->addWidget( group );
+
+    QVBoxLayout *optionsVbox = new QVBoxLayout( group,
+                                                2 * KDialog::marginHint(),
+                                                KDialog::spacingHint() );
+
+    pPrintGrid = new QCheckBox ( i18n("Print &grid"), group );
     pPrintGrid->setChecked( print->printGrid() );
-    grid->addWidget( pPrintGrid, 1, 0 );
+    optionsVbox->addWidget( pPrintGrid );
 
-    pPrintCommentIndicator = new QCheckBox ( i18n("Print &comment indicator"), tab );
+    pPrintCommentIndicator = new QCheckBox ( i18n("Print &comment indicator"), group );
     pPrintCommentIndicator->setChecked( print->printCommentIndicator() );
-    grid->addWidget( pPrintCommentIndicator, 2, 0 );
+    optionsVbox->addWidget( pPrintCommentIndicator );
 
-    pPrintFormulaIndicator = new QCheckBox ( i18n("Print &formula indicator"), tab );
+    pPrintFormulaIndicator = new QCheckBox ( i18n("Print &formula indicator"), group );
     pPrintFormulaIndicator->setChecked( print->printFormulaIndicator() );
-    grid->addWidget( pPrintFormulaIndicator, 3, 0 );
+    optionsVbox->addWidget( pPrintFormulaIndicator );
+}
 
-    QLabel *pPrintRange = new QLabel ( i18n("Print range:"), tab );
-    grid->addWidget( pPrintRange, 4, 0 );
+void KSpreadPaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
+{
+    KSpreadSheetPrint* print = m_pSheet->print();
 
-    ePrintRange = new QLineEdit( tab );
-    grid->addWidget( ePrintRange, 4, 1 );
+    QGroupBox *rangeGroup = new QGroupBox( i18n("Ranges"), tab );
+    vbox->addWidget( rangeGroup );
+
+    QGridLayout *grid = new QGridLayout( rangeGroup, 3, 2, 2*KDialog::marginHint(), KDialog::spacingHint() );
+
+    QLabel *pPrintRange = new QLabel ( i18n("Print range:"), rangeGroup );
+    grid->addWidget( pPrintRange, 0, 0 );
+
+    ePrintRange = new QLineEdit( rangeGroup );
     ePrintRange->setText( util_rangeName( print->printRange() ) );
+    grid->addWidget( ePrintRange, 0, 1 );
 
-    QLabel *pRepeatCols = new QLabel ( i18n("Repeat columns on each page:"), tab );
-    grid->addWidget( pRepeatCols, 5, 0 );
+    QLabel *pRepeatCols = new QLabel ( i18n("Repeat columns on each page:"), rangeGroup );
+    grid->addWidget( pRepeatCols, 1, 0 );
 
-    eRepeatCols = new QLineEdit( tab );
-    grid->addWidget( eRepeatCols, 5, 1 );
+    eRepeatCols = new QLineEdit( rangeGroup );
     if ( print->printRepeatColumns().first != 0 )
         eRepeatCols->setText( util_encodeColumnLabelText( print->printRepeatColumns().first ) +
                               ":" +
                               util_encodeColumnLabelText( print->printRepeatColumns().second ) );
+    grid->addWidget( eRepeatCols, 1, 1 );
 
-    QLabel *pRepeatRows = new QLabel ( i18n("Repeat rows on each page:"), tab );
-    grid->addWidget( pRepeatRows, 6, 0 );
+    QLabel *pRepeatRows = new QLabel ( i18n("Repeat rows on each page:"), rangeGroup );
+    grid->addWidget( pRepeatRows, 2, 0 );
 
-    eRepeatRows = new QLineEdit( tab );
-    grid->addWidget( eRepeatRows, 6, 1 );
+    eRepeatRows = new QLineEdit( rangeGroup );
     if ( print->printRepeatRows().first != 0 )
         eRepeatRows->setText( QString().setNum( print->printRepeatRows().first ) +
                               ":" +
                               QString().setNum( print->printRepeatRows().second ) );
+    grid->addWidget( eRepeatRows, 2, 1 );
 
-    QLabel *pZoom = new QLabel ( i18n("Zoom:"), tab );
-    grid->addWidget( pZoom, 7, 0 );
+    grid->addColSpacing( 0, pPrintRange->width() );
+    grid->addColSpacing( 0, pRepeatRows->width() );
+    grid->addColSpacing( 0, pRepeatCols->width() );
+    grid->addColSpacing( 1, ePrintRange->width() );
+    grid->addColSpacing( 1, eRepeatRows->width() );
+    grid->addColSpacing( 1, eRepeatCols->width() );
 
-    m_cZoom = new QComboBox( true, tab, "Zoom" );
-    grid->addWidget( m_cZoom, 7, 1, Qt::AlignLeft );
+    grid->addRowSpacing( 0, pPrintRange->height() );
+    grid->addRowSpacing( 0, ePrintRange->height() );
+    grid->addRowSpacing( 1, pRepeatRows->height() );
+    grid->addRowSpacing( 1, eRepeatRows->height() );
+    grid->addRowSpacing( 2, pRepeatCols->height() );
+    grid->addRowSpacing( 2, eRepeatCols->height() );
+}
+
+void KSpreadPaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
+{
+    KSpreadSheetPrint* print = m_pSheet->print();
+
+    QButtonGroup *zoomGroup = new QButtonGroup( i18n("Scale printout"), tab );
+    vbox->addWidget( zoomGroup );
+
+    QGridLayout *grid = new QGridLayout( zoomGroup, 2, 6,
+                                         2 * KDialog::marginHint(),
+                                         KDialog::spacingHint() );
+
+    m_rScalingZoom = new QRadioButton ( i18n("Zoom:"), zoomGroup );
+    grid->addWidget( m_rScalingZoom, 0, 0 );
+
+    m_cZoom = new QComboBox( true, zoomGroup, "Zoom" );
+    grid->addMultiCellWidget( m_cZoom, 0, 0, 1, 5, Qt::AlignLeft );
 
     QStringList lst;
     for( int i = 5; i < 500; i += 5 )
@@ -131,34 +192,77 @@ void KSpreadPaperLayout::initTab()
         }
     }
 
-    // --------------- main grid ------------------
-    grid->addColSpacing( 0, pApplyToAll->width() );
-    grid->addColSpacing( 0, pPrintGrid->width() );
-    grid->addColSpacing( 0, pPrintCommentIndicator->width() );
-    grid->addColSpacing( 0, pPrintFormulaIndicator->width() );
-    grid->addColSpacing( 0, pPrintRange->width() );
-    grid->addColSpacing( 0, pRepeatRows->width() );
-    grid->addColSpacing( 0, pRepeatCols->width() );
-    grid->addColSpacing( 0, pZoom->width() );
-    grid->addColSpacing( 1, ePrintRange->width() );
-    grid->addColSpacing( 1, eRepeatRows->width() );
-    grid->addColSpacing( 1, eRepeatCols->width() );
-    grid->addColSpacing( 1, m_cZoom->width() );
+    m_rScalingLimitPages = new QRadioButton ( i18n("Limit pages:"), zoomGroup );
+    grid->addWidget( m_rScalingLimitPages, 1, 0 );
 
-    grid->addRowSpacing( 0, pApplyToAll->height() );
-    grid->addRowSpacing( 1, pPrintGrid->height() );
-    grid->addRowSpacing( 2, pPrintCommentIndicator->height() );
-    grid->addRowSpacing( 3, pPrintFormulaIndicator->height() );
-    grid->addRowSpacing( 4, pPrintRange->height() );
-    grid->addRowSpacing( 4, ePrintRange->height() );
-    grid->addRowSpacing( 5, pRepeatRows->height() );
-    grid->addRowSpacing( 5, eRepeatRows->height() );
-    grid->addRowSpacing( 6, pRepeatCols->height() );
-    grid->addRowSpacing( 6, eRepeatCols->height() );
-    grid->addRowSpacing( 7, pZoom->height() );
-    grid->addRowSpacing( 7, m_cZoom->height() );
-    grid->setRowStretch( 8, 1 );
+    QLabel *pLimitPagesX = new QLabel ( i18n("X:"), zoomGroup );
+    grid->addWidget( pLimitPagesX, 1, 1 );
 
+    m_cLimitPagesX = new QComboBox( true, zoomGroup, "pagesX" );
+    grid->addWidget( m_cLimitPagesX, 1, 2 );
+
+    QStringList lstX;
+    lstX.append( i18n( "No Limit" ) );
+    for( int i = 1; i <= 20; i += 1 )
+    {
+        lstX.append( QString( "%1" ).arg( i ) );
+        if( print->pageLimitX() > 20 )
+        {
+            lstX.append( QString( "%1" ).arg( print->pageLimitX() ) );
+        }
+    }
+    m_cLimitPagesX->insertStringList( lstX );
+
+    if ( print->pageLimitX() <= 20 )
+        m_cLimitPagesX->setCurrentItem( print->pageLimitX() );
+    else
+        m_cLimitPagesX->setCurrentItem( 21 );
+
+    QLabel *pLimitPagesY = new QLabel ( i18n("Y:"), zoomGroup );
+    grid->addWidget( pLimitPagesY, 1, 3 );
+
+    m_cLimitPagesY = new QComboBox( true, zoomGroup, "pagesY" );
+    grid->addWidget( m_cLimitPagesY, 1, 4 );
+
+    QStringList lstY;
+    lstY.append( i18n( "No Limit" ) );
+    for( int i = 1; i <= 20; i += 1 )
+    {
+        lstY.append( QString( "%1" ).arg( i ) );
+        if( print->pageLimitY() > 20 )
+        {
+            lstY.append( QString( "%1" ).arg( print->pageLimitY() ) );
+        }
+    }
+    m_cLimitPagesY->insertStringList( lstY );
+
+    if ( print->pageLimitY() <= 20 )
+        m_cLimitPagesY->setCurrentItem( print->pageLimitY() );
+    else
+        m_cLimitPagesY->setCurrentItem( 21 );
+
+    if ( print->pageLimitY() != 0 || print->pageLimitX() != 0 )
+    {
+        m_rScalingLimitPages->setChecked( true );
+    }
+    else
+    {
+        m_rScalingZoom->setChecked( true );
+    }
+
+    connect( m_cZoom, SIGNAL( activated( int ) ), this, SLOT( slotChooseZoom( int ) ) );
+    connect( m_cLimitPagesX, SIGNAL( activated( int ) ), this, SLOT( slotChoosePageLimit( int ) ) );
+    connect( m_cLimitPagesY, SIGNAL( activated( int ) ), this, SLOT( slotChoosePageLimit( int ) ) );
+}
+
+void KSpreadPaperLayout::slotChooseZoom( int /*index*/ )
+{
+    m_rScalingZoom->setChecked( true );
+}
+
+void KSpreadPaperLayout::slotChoosePageLimit( int /*index*/ )
+{
+    m_rScalingLimitPages->setChecked( true );
 }
 
 void KSpreadPaperLayout::slotOk()
@@ -280,8 +384,22 @@ void KSpreadPaperLayout::slotOk()
           KMessageBox::information( 0, i18n( "Repeated rows range wrong, changes are ignored.\nMust be in format row:row (eg. 2:3)" ) );
       }
 
-      if( QString( "%1%" ).arg( qRound( print->zoom() * 100 ) ) != m_cZoom->currentText() )
-        print->setZoom( 0.01 * m_cZoom->currentText().toDouble() );
+      if ( m_rScalingZoom->isChecked() )
+      {
+        if( QString( "%1%" ).arg( qRound( print->zoom() * 100 ) ) != m_cZoom->currentText() )
+        {
+          if( m_cZoom->currentText().toDouble() != 0.0 )
+            print->setZoom( 0.01 * m_cZoom->currentText().toDouble() );
+        }
+      }
+      else
+      {
+        if( print->pageLimitX() != m_cLimitPagesX->currentText().toInt() )
+          print->setPageLimitX( m_cLimitPagesX->currentText().toInt() );
+
+        if( print->pageLimitY() != m_cLimitPagesY->currentText().toInt() )
+          print->setPageLimitY( m_cLimitPagesY->currentText().toInt() );
+      }
 
       sheet->doc()->setModified( true );
 

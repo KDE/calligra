@@ -1,3 +1,8 @@
+since 1.3 beta1
+===============
+- adjust print zoom to limit printout to m x n pages
+
+
 since 1.2 relase ( 'til 1.3 beta 1 :-)
 ======================================
 
@@ -81,7 +86,7 @@ Database (12):
   DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP
 
 Reference & Lookup (8):
-- ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, 
+- ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS,
   INDIRECT, ROW, ROWS
 
 Engineering (2):
@@ -93,7 +98,7 @@ Logical (2):
 Information (2):
 - ISNONTEXT, ISNUMBER
 
-Obsolete formulas 
+Obsolete formulas
 - stddev (was stddevp in fact)
 - day (is dayname now)
 - month (is monthname now)
@@ -101,8 +106,8 @@ Obsolete formulas
 Obsolete but still usable formulas (do not show up in dialog )
 - variance, pow, isnottext, isnum, effective
 
-    
-=====================================================    
+
+=====================================================
 After 1.2 above
 =====================================================
 
@@ -171,7 +176,7 @@ Until beta2:
 - insertion of series supports now doubles and decreasing series
 - support for inserting data from SQL databases
 - implemented "Goal Seek"
-- implemented new shortcuts for cell formating 
+- implemented new shortcuts for cell formating
 - implemented "Insert from text file" and "Insert formated clipboard data"
 - Added "Text to Column"
 - improved Data Consolidate, with more choices: Sum, Average, Count,
@@ -225,8 +230,8 @@ New functions added:
  logical:
    XOR
  statistical:
-   CHIDIST, FDIST, TDIST, CONFIDENCE, BETADIST, GAMMADIST, 
-   PHI, GAUSS, MEDIAN, POISSON, GAMMALN, NORMINV, NORMSINV, 
-   WEIBULL, EXPONDIST, NORMDIST, NORMSDIST, FISHER, 
+   CHIDIST, FDIST, TDIST, CONFIDENCE, BETADIST, GAMMADIST,
+   PHI, GAUSS, MEDIAN, POISSON, GAMMALN, NORMINV, NORMSINV,
+   WEIBULL, EXPONDIST, NORMDIST, NORMSDIST, FISHER,
    FISHERINV, LOGNORMDIST
-  
+

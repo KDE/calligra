@@ -182,6 +182,42 @@ public:
     void setPrintRange( QRect _printRange );
 
     /**
+     * Return the page limit in X direction.
+     * 0 means no limit
+     */
+    int pageLimitX() { return m_iPageLimitX; }
+
+    /**
+     * Return the page limit in Y direction.
+     * 0 means no limit
+     */
+    int pageLimitY() { return m_iPageLimitY; }
+
+    /**
+     * Sets the page limit in X direction. The zoom factor will be adjusted,
+     * so that there is a maximum of @arg pages pages in X direction.
+     * 0 releases the limit
+     */
+    void setPageLimitX( int pages );
+
+    /**
+     * Sets the page limit in Y direction. The zoom factor will be adjusted,
+     * so that there is a maximum of @arg pages pages in X direction.
+     * 0 releases the limit
+     */
+    void setPageLimitY( int pages );
+
+    /**
+     * Calculates the zoom factor, so that the printout fits on pages in X direction.
+     */
+    void calculateZoomForPageLimitX();
+
+    /**
+     * Calculates the zoom factor, so that the printout fits on pages in Y direction.
+     */
+    void calculateZoomForPageLimitY();
+
+    /**
      * Returns the columns, which are printed on each page.
      * Returns QPair (0, 0) if nothing is defined
      */
@@ -213,11 +249,21 @@ public:
     bool isOnNewPageX( int _column );
 
     /**
+     * Updates the new page list up to @ref _column
+     */
+    void updateNewPageX( int _column );
+
+    /**
      * Tests whether _row is the first row of a new page. In this
      * case the top border of this row may be drawn highlighted to show
      * that this is a page break.
      */
     bool isOnNewPageY( int _row );
+
+    /**
+     * Updates the new page list up to @ref _row
+     */
+    void updateNewPageY( int _row );
 
     /**
      * Updates the new page list for columns starting at column @arg _col
@@ -323,9 +369,11 @@ public:
     void removeRow( int row, int nbRow );
 
     /**
-     * Sets the zoom level of the printout
+     * Sets the zoom level of the printout to _zoom
+     * If checkPageLimit is false, then the zoom will be set,
+     * without checking that this zoom level fits to an availabl page limit
      */
-    void setZoom( double _zoom );
+    void setZoom( double _zoom, bool checkPageLimit = true );
 
     /**
      * Returns the zoom level of the printout as double
@@ -547,6 +595,16 @@ private:
      * Zoom level of printout
      */
     double m_dZoom;
+
+    /**
+     * Limit of pages in X direction. 0 means no limit
+     */
+
+    int m_iPageLimitX;
+    /**
+     * Limit of pages in Y direction. 0 means no limit
+     */
+    int m_iPageLimitY;
 };
 
 

@@ -1883,7 +1883,7 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
 }
 
 
-struct SetSelectionPercentWorker : public KSpreadSheet::CellWorkerTypeA 
+struct SetSelectionPercentWorker : public KSpreadSheet::CellWorkerTypeA
 {
     bool b;
     SetSelectionPercentWorker( bool _b ) : b( _b ) { }
@@ -6163,6 +6163,10 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
     //Save print zoom
     table.setAttribute( "printZoom", m_pPrint->zoom() );
 
+    //Save page limits
+    table.setAttribute( "printPageLimitX", m_pPrint->pageLimitX() );
+    table.setAttribute( "printPageLimitY", m_pPrint->pageLimitY() );
+
     // Save all cells.
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
@@ -6436,13 +6440,33 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
         m_pPrint->setPrintRange( QRect( QPoint( left, top ), QPoint( right, bottom ) ) );
       }
 
-      // load print range
+      // load print zoom
       if( table.hasAttribute( "printZoom" ) )
       {
         double zoom = table.attribute( "printZoom" ).toDouble( &ok );
         if ( ok )
         {
           m_pPrint->setZoom( zoom );
+        }
+      }
+
+      // load page limits
+      if( table.hasAttribute( "printPageLimitX" ) )
+      {
+        int pageLimit = table.attribute( "printPageLimitX" ).toInt( &ok );
+        if ( ok )
+        {
+          m_pPrint->setPageLimitX( pageLimit );
+        }
+      }
+
+      // load page limits
+      if( table.hasAttribute( "printPageLimitY" ) )
+      {
+        int pageLimit = table.attribute( "printPageLimitY" ).toInt( &ok );
+        if ( ok )
+        {
+          m_pPrint->setPageLimitY( pageLimit );
         }
       }
 

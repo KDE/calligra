@@ -651,6 +651,8 @@ KSpreadUndoPaperLayout::KSpreadUndoPaperLayout( KSpreadDoc *_doc, KSpreadSheet *
     m_printRepeatColumns = _table->print()->printRepeatColumns();
     m_printRepeatRows = _table->print()->printRepeatRows();
     m_dZoom = _table->print()->zoom();
+    m_iPageLimitX = _table->print()->pageLimitX();
+    m_iPageLimitY = _table->print()->pageLimitY();
 }
 
 KSpreadUndoPaperLayout::~KSpreadUndoPaperLayout()
@@ -699,6 +701,12 @@ void KSpreadUndoPaperLayout::undo()
     m_dZoomRedo = print->zoom();
     print->setZoom( m_dZoom );
 
+    m_iPageLimitXRedo = print->pageLimitX();
+    print->setPageLimitX( m_iPageLimitX );
+
+    m_iPageLimitYRedo = print->pageLimitY();
+    print->setPageLimitY( m_iPageLimitY );
+
     doc()->undoBuffer()->unlock();
 }
 
@@ -728,6 +736,9 @@ void KSpreadUndoPaperLayout::redo()
     print->setPrintRepeatRows( m_printRepeatRowsRedo );
 
     print->setZoom( m_dZoomRedo );
+
+    print->setPageLimitX( m_iPageLimitX );
+    print->setPageLimitY( m_iPageLimitY );
 
     doc()->undoBuffer()->unlock();
 }
@@ -868,7 +879,7 @@ void KSpreadUndoSetTableName::undo()
 
     m_redoName = table->tableName();
 
-    table->setTableName( m_name,false,false );    
+    table->setTableName( m_name,false,false );
 
     doc()->undoBuffer()->unlock();
 }
@@ -1646,7 +1657,7 @@ KSpreadUndoDragDrop::~KSpreadUndoDragDrop()
 {
 }
 
-void KSpreadUndoDragDrop::saveCellRect( QCString & cells, KSpreadSheet * table, 
+void KSpreadUndoDragDrop::saveCellRect( QCString & cells, KSpreadSheet * table,
                                         QRect const & rect )
 {
     QDomDocument doc = table->saveCellRect( rect );
@@ -1654,7 +1665,7 @@ void KSpreadUndoDragDrop::saveCellRect( QCString & cells, KSpreadSheet * table,
     QString buffer;
     QTextStream str( &buffer, IO_WriteOnly );
     str << doc;
-    
+
     cells = buffer.utf8();
     int len = cells.length();
     char tmp = cells[ len - 1 ];
@@ -1681,12 +1692,12 @@ void KSpreadUndoDragDrop::undo()
     if ( m_selectionSource.left() > 0 )
     {
       table->deleteCells( m_selectionSource );
-      table->paste( m_dataSource, m_selectionSource );      
+      table->paste( m_dataSource, m_selectionSource );
     }
 
     table->updateView();
 
-    if ( table->getAutoCalc() ) 
+    if ( table->getAutoCalc() )
       table->recalc();
 
     doc()->undoBuffer()->unlock();
@@ -1992,7 +2003,7 @@ void KSpreadUndoChangeAreaTextCell::undo()
     createList( m_lstRedoTextCell, table );
 
 
-    if ( !util_isRowSelected( m_rctRect ) 
+    if ( !util_isRowSelected( m_rctRect )
          && !util_isColumnSelected( m_rctRect ) )
     {
       int bottom = m_rctRect.bottom();
@@ -2019,7 +2030,7 @@ void KSpreadUndoChangeAreaTextCell::undo()
           else
             cell->setCellText( "", true, true );
         }
-      }      
+      }
     }
     else
     {
@@ -2051,7 +2062,7 @@ void KSpreadUndoChangeAreaTextCell::redo()
     doc()->undoBuffer()->lock();
     doc()->emitBeginOperation();
 
-    if ( !util_isRowSelected( m_rctRect ) 
+    if ( !util_isRowSelected( m_rctRect )
          && !util_isColumnSelected( m_rctRect ) )
     {
       int bottom = m_rctRect.bottom();
@@ -2078,7 +2089,7 @@ void KSpreadUndoChangeAreaTextCell::redo()
           else
             cell->setCellText( "", true, true );
         }
-      }      
+      }
     }
     else
     {
@@ -2227,7 +2238,7 @@ void KSpreadUndoAutofill::redo()
     table->deleteCells( m_selection );
     doc()->undoBuffer()->lock();
     table->paste( m_dataRedo, m_selection );
-    if ( table->getAutoCalc() ) 
+    if ( table->getAutoCalc() )
       table->recalc();
     table->updateView();
     doc()->undoBuffer()->unlock();

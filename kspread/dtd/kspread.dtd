@@ -23,7 +23,7 @@
                 syntaxVersion:  Integer version of the syntax. Currently 1.
 		mime:		The MIME type (must always have the value application/x-kspread)
 -->
-<!ELEMENT spreadsheet (paper, locale, areaname, map)>  
+<!ELEMENT spreadsheet (paper, locale, areaname, map)>
 <!ATTLIST spreadsheet   author CDATA #IMPLIED
                         email  CDATA #IMPLIED
                         editor CDATA #IMPLIED
@@ -129,7 +129,7 @@
                   monetaryThousandsSeparator     CDATA #REQUIRED
                   dateFormatShort                CDATA #REQUIRED>
 
- 
+
 <!--	Contains the areaname for the various tables.
         Attributes:
         any
@@ -207,6 +207,9 @@
                 printGrid              zoom factor on printout (100%="1.0")
                 showFormula            show/hide formula
                 showFormulaIndicator   show/hide formula indicator on screen (hide="1", show="0")
+                printZoom              zoom of the printout ("100" = 100%)
+                printPageLimitX        adjust zoom to limit of pages in x direction, 0 = no limit
+                printPageLimitY        adjust zoom to limit of pages in y direction, 0 = no limit
                 lcmode                 write on LxCx area selected
 -->
 <!ELEMENT table (paper|cell|chart|column|row|printrange-rect|printrepeatcolumns|printrepeatrows)*>
@@ -223,6 +226,8 @@
                  showFormula            CDATA #REQUIRED
                  showFormulaIndicator   CDATA #REQUIRED
                  printZoom              CDATA #REQUIRED
+                 printPageLimitX        CDATA #REQUIRED
+                 printPageLimitY        CDATA #REQUIRED
                  lcmode                 CDATA #REQUIRED
                  borders1.2             CDATA #REQUIRED>
 
@@ -257,7 +262,7 @@
 -->
 <!ELEMENT result (#PCDATA)>
 <!ATTLIST result dataType CDATA #IMPLIED>
- 
+
 <!--	Describes the format of one cell.
 
         TODO: describe attributes
@@ -296,12 +301,12 @@
 <!--	Describes validate format.
 
 		Attributes:
-                        valmin  Minimal value of the validate condition         
-                        cond    type of condition (None, Equal, Superior etc...)         
-                        valmax  Maximal value of the validate condition         
-                        allow   type of value allows (ALL, NUmber etc...)         
+                        valmin  Minimal value of the validate condition
+                        cond    type of condition (None, Equal, Superior etc...)
+                        valmax  Maximal value of the validate condition
+                        allow   type of value allows (ALL, NUmber etc...)
                         action  Action executes when it's not validate (Error, warning etc...)
-		
+
 -->
 <!ELEMENT param EMPTY>
 <!ATTLIST param         valmin           CDATA #REQUIRED
@@ -338,7 +343,7 @@
                         val1              CDATA #REQUIRED
                         val2              CDATA #REQUIRED
                         color             CDATA #REQUIRED>
- 
+
 <!ELEMENT second (font) >
 <!ATTLIST second        cond              CDATA #REQUIRED
                         val1              CDATA #REQUIRED

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Montel Laurent <lmontel@mandrakesoft.com>
+   2003 Philipp Müller <philipp.mueller@gmx.de>
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -19,12 +20,16 @@
 #ifndef __kspread_dlg_paperlayout__
 #define __kspread_dlg_paperlayout__
 
-#include <qcombobox.h>
 #include <kdialogbase.h>
 #include <koPageLayoutDia.h>
+
+#include <qcombobox.h>
+#include <qlayout.h>
+
 class KSpreadSheet;
 class QCheckBox;
 class QComboBox;
+class QRadioButton;
 class QLineEdit;
 class KSpreadView;
 
@@ -41,16 +46,25 @@ public:
   bool eventFilter( QObject* obj, QEvent* ev );
 
 protected slots:
-virtual void slotOk();
+  virtual void slotOk();
   virtual void slotCancel();
   void slotSelectionChanged( KSpreadSheet* _table, const QRect& _selection );
 
 protected:
   void initTab();
+
 protected:
   virtual void closeEvent ( QCloseEvent * );
 
+private slots:
+    void slotChooseZoom( int index );
+    void slotChoosePageLimit( int index );
+
 private:
+  void initGeneralOptions( QWidget * tab, QVBoxLayout * vbox );
+  void initRanges( QWidget * tab, QVBoxLayout * vbox );
+  void initScaleOptions( QWidget * tab, QVBoxLayout * vbox );
+
   KSpreadSheet * m_pSheet;
   KSpreadView  * m_pView;
   QCheckBox * pApplyToAll;
@@ -62,6 +76,10 @@ private:
   QLineEdit * eRepeatRows;
   QLineEdit * m_focus;
   QComboBox * m_cZoom;
+  QComboBox * m_cLimitPagesX;
+  QComboBox * m_cLimitPagesY;
+  QRadioButton * m_rScalingZoom;
+  QRadioButton * m_rScalingLimitPages;
 };
 
 #endif
