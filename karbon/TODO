@@ -1,29 +1,32 @@
 REAL BUGS:
--	select first/last segment's knot if one of each other's knot is selected
--	if selecting many shapes, the fill/stroke state should be "unknown",
-	preview widgets needs to paint questionmarks or something in this case
--	change flatness test in intersection code to a estimation used in gems code. otherwise
-	if the 2 input curves are the same our code runs forever.
--	shape creation: the last temporary shape looks slightly different than the final shape
--	changing preview mode to wireframe doesn't refresh the canvas (shapes remain filled)
--	canvas doesn't repaint correctly while scrolling with the scrollbar
-
-TODO:
--	don't create tools while being a r/o part
--	libart rendering uses the wrong fill rule (see filled spiral) => use even odd
--	remove defaultFill/Stroke stuff from VDocument and just use VSelection's fill/stroke.
 -	zooming has problems (zoom out: shapes and selection coords are different. zoom back:
 	canvas is "fragmented")
+-	libart rendering uses the wrong fill rule (see filled spiral) => use even odd
+-	if selecting many shapes, the fill/stroke state should be "unknown",
+	preview widgets needs to paint questionmarks or something in this case
+-	shape creation: the last temporary shape looks slightly different than the final shape
+-	shear tool: the last temporary shape looks slightly different than the final shape
+-	canvas doesn't repaint correctly while scrolling with the scrollbar
+-	changing preview mode to wireframe doesn't refresh the canvas (shapes remain filled)
+
+TODO:
+-	remove defaultFill/Stroke stuff from VDocument and just use VSelection's fill/stroke.
+-	select first/last segment's knot if one of each other's knot is selected
+-	don't create tools while being a r/o part
+-	investigate whether we can use a KToolBar with an appropriate layout to replace
+	our current non-conforming solution.
 -	port path commands to vgroup::insertNewDeleteOld(), maybe add a vpathcommand
 	similar to vshapecommand
 -	add undo/redo to shape commands like VFlattenCmd etc
--	painting (NotROP) while shape creation isnt good. creation should instead
-	insert a temporary object (state "edit") right from the start.
-	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.
 -	allow for multiple strokes and fills in VPath which get rendered in the order they occur.
 -	use inside/intersection tests in vpath::combine() for changing winding.
 -	use vflatten in vselectool for more precise selection (lenny)
 -	printing
+-	change flatness test in intersection code to a estimation used in gems code. otherwise
+	if the 2 input curves are the same our code runs forever.
+-	painting (NotROP) while shape creation isnt good. creation should instead
+	insert a temporary object (state "edit") right from the start.
+	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.
 
 WISHLIST:
 -	Ctrl or Shift (pressed) while dragging a shape should make the shape move along only one axis
@@ -38,13 +41,11 @@ OPTIMIZATION:
 
 MAKE IT NICE:
 -	being a kde/koffice app, we should use the global selection color for selections
--	use SVG's path notation natively
+-	use SVG's path notation natively (?)
 -	vroundcorners needs to be improved for beziers and big radii (lenny)
 -	can't we pass VTool::draw() a painter inseatd of each tool creating a painter itself?
 -	remove V*Tool::refreshUnit(). call this directly via dialog() instead
 -	pass all dialogs a parent
 -	introduce centerOfMass() for vsegmentlist. problem: CM for beziers?
--	investigate whether we can use a KToolBar with an appropriate layout to replace
-	our current non-conforming solution.
 -	think about using ghostscript's flatten algo (see comments in vflatten.cc)
 
