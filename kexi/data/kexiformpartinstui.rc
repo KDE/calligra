@@ -39,7 +39,7 @@
    <Action name="library_widget_KexiSubForm"/>
    <Action name="library_widget_QLabel"/>
    <Action name="library_widget_MyPicLabel"/>
-   <Action name="library_widget_KLineEdit"/>
+   <Action name="library_widget_KexiDBLineEdit"/>
    <Action name="library_widget_KIntSpinBox"/>
    <Action name="library_widget_KPushButton"/>
    <Action name="library_widget_KComboBox"/>
